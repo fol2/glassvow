@@ -64,6 +64,9 @@ func _build_ui() -> void:
 	top.offset_top = 10
 	top.add_theme_constant_override("separation", 24)
 	add_child(top)
+	var title: Label = _label("琉璃誓言")  # the vow itself — proves CJK shaping end to end
+	title.add_theme_color_override("font_color", Color(0.75, 0.85, 1.0, 0.85))
+	top.add_child(title)
 	_turn_label = _label("Turn 1")
 	top.add_child(_turn_label)
 	_gold_label = _label("")

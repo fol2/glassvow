@@ -10,6 +10,14 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 
 static func run(fails: Array[String]) -> void:
+	# The bundled UI font must shape the title glyphs (琉璃誓言) — guards a
+	# broken font import that headless runs would otherwise never notice.
+	var ui_font: FontFile = load("res://assets/fonts/NotoSansTC.ttf") as FontFile
+	_check(fails, ui_font != null, "NotoSansTC.ttf imports as a FontFile")
+	if ui_font != null:
+		for ch: String in ["琉", "璃", "誓", "言"]:
+			_check(fails, ui_font.has_char(ch.unicode_at(0)), "font has glyph %s" % ch)
+
 	var content: ContentDB = ContentDB.load_slice()
 
 	# ---- new_run builds a fresh core-only profile from content.player
