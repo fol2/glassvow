@@ -73,9 +73,11 @@ static func _replay(seed: int, content: ContentDB, fails: Array[String]) -> void
 				_check(seed, row, "combat", game.cb.to_dict(), row["combat"], fails)
 				_check_rng(seed, row, game, fails)
 			"reward":
-				# M4 owns reward-generation parity; resync the recorded outcome.
-				game.run.rng = Rng.new(StateBuild.ji(row["rngState"]))
-				var reward: Dictionary = row["reward"]
+				# Live reward parity (M4): recompute and assert the whole reward
+				# + cursor, then apply gold the way the web recorder did.
+				var reward: Dictionary = game.gen_combat_rewards(str(row["kind"]), game.cb.affix)
+				_check(seed, row, "reward", reward, row["reward"], fails)
+				_check_rng(seed, row, game, fails)
 				game.run.player.gold += StateBuild.ji(reward["gold"])
 		if fails.size() != before:
 			return  # state past the first divergence is meaningless

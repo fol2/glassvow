@@ -14,6 +14,11 @@ var relics: Dictionary = {}
 var arts: Dictionary = {}
 var affixes: Dictionary = {}
 var statuses: Dictionary = {}
+var card_pools: Dictionary = {}
+var relic_pools: Dictionary = {}
+var pool_gate_cards: Dictionary = {}
+var pool_gate_relics: Dictionary = {}
+var reward_gold: Array = []  # per act: {"normal": [a,b], "elite": [a,b], "boss": [a,b]}
 
 
 static func load_slice() -> ContentDB:
@@ -40,6 +45,16 @@ func _load(path: String) -> void:
 	arts = _section(root, "arts")
 	affixes = _section(root, "affixes")
 	statuses = _section(root, "statuses")
+	card_pools = _section(root, "cardPools")
+	relic_pools = _section(root, "relicPools")
+	var gate: Dictionary = _section(root, "poolGate")
+	pool_gate_cards = gate.get("cards", {})
+	pool_gate_relics = gate.get("relics", {})
+	var gold_v: Variant = root.get("rewardGold", [])
+	if typeof(gold_v) == TYPE_ARRAY:
+		reward_gold = gold_v
+	else:
+		push_error("ContentDB: rewardGold is not an array")
 
 
 func _section(root: Dictionary, key: String) -> Dictionary:

@@ -8,6 +8,7 @@ extends RefCounted
 
 var content: ContentDB
 var rules: CombatRules
+var rewards: RewardRules
 var run: RunState
 var cb: CombatState = null
 ## Return value of the last op (web playCard/usePotion return bool).
@@ -17,7 +18,14 @@ var last_ret: Variant = null
 func _init(content_db: ContentDB, run_state: RunState) -> void:
 	content = content_db
 	rules = CombatRules.new(content_db)
+	rewards = RewardRules.new(content_db)
 	run = run_state
+
+
+## Post-combat rewards (not a queued-event op; the app layer calls this after
+## a won fight, mirroring the web recorder's genCombatRewards call).
+func gen_combat_rewards(kind: String, affix: StringName = &"") -> Dictionary:
+	return rewards.gen_combat_rewards(run, kind, affix)
 
 
 func apply(cmd: Dictionary) -> Array[Dictionary]:

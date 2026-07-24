@@ -25,6 +25,11 @@ var aspect: int = 0
 var vow: int = 0
 var art: StringName = &""
 var uid: int = 1
+## Progressive-delivery reveals (web run.reveals). A fresh profile carries an
+## explicit list; `reveals_all` mirrors the web's null = legacy "everything
+## revealed" profile.
+var reveals_all: bool = false
+var reveals: Array[String] = []
 var player: Player = Player.new()
 
 
