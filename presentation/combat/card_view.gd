@@ -45,6 +45,9 @@ const INK: Color = Color(0.043, 0.055, 0.102)         # #0B0E1A — card stock
 const RULE: Color = Color(0.020, 0.027, 0.055)        # #05070E — borders
 const BODY_TEXT: Color = Color(0.776, 0.800, 0.875)   # #C6CCDF — rules
 const GEM_INK: Color = Color(0.141, 0.102, 0.020)     # #241A05 — cost numeral
+const GOLD_LIT: Color = Color(1.000, 0.914, 0.675)    # #FFE9AC — conic highlight
+const GOLD_MID: Color = Color(0.949, 0.757, 0.306)    # #F2C14E
+const GOLD_DIM: Color = Color(0.702, 0.514, 0.122)    # #B3831F — conic shadow
 const RARITY: Color = Color(0.235, 0.275, 0.369)      # #3C465E — pill
 
 var uid: int = 0
@@ -128,6 +131,32 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 		art_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		layer.add_child(art_rect)
 
+	# Art overlays, both from the benchmark's .card-art: a wide radial wash in the
+	# type tint, and a 1px light line along the top edge from its inset shadow.
+	# The dark line under the window is the `rule` below.
+	if art != null:
+		var wash: TextureRect = TextureRect.new()
+		wash.texture = GlassStyle.grad_tex(
+			PackedColorArray([Color(tint.r, tint.g, tint.b, 0.14),
+				Color(tint.r, tint.g, tint.b, 0.0)]),
+			PackedFloat32Array([0.0, 0.75]), true, Vector2(0.5, 0.45), Vector2(1.0, 0.45))
+		wash.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		wash.offset_left = EDGE
+		wash.offset_right = -EDGE
+		wash.offset_top = EDGE
+		wash.offset_bottom = EDGE + ART_H
+		wash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		layer.add_child(wash)
+		var lip: ColorRect = ColorRect.new()
+		lip.color = Color(1, 1, 1, 0.09)
+		lip.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		lip.offset_left = EDGE
+		lip.offset_right = -EDGE
+		lip.offset_top = EDGE
+		lip.offset_bottom = EDGE + 1.0
+		lip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		layer.add_child(lip)
+
 	var rule: ColorRect = ColorRect.new()
 	rule.color = RULE
 	rule.set_anchors_preset(Control.PRESET_TOP_WIDE)
@@ -189,34 +218,43 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	type_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(type_label)
 
-	# Web card text wraps keywords in @…@ / #…# markers, which the benchmark
-	# renders as inline tinted spans. Stripped here — inline colouring needs
-	# RichTextLabel and is a separate pass.
-	var rules_text: String = str(data.get("text", "")).replace("@", "").replace("#", "")
-	var body: Label = Label.new()
-	body.text = rules_text
+	var body: RichTextLabel = RichTextLabel.new()
+	body.bbcode_enabled = true
+	body.scroll_active = false
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_override("font", _font(GlassStyle.ALEGREYA_400, 0))
-	body.add_theme_font_size_override("font_size", 13)
+	body.text = "[center]%s[/center]" % rules_bbcode(str(data.get("text", "")), tint)
+	body.add_theme_font_override("normal_font", _font(GlassStyle.ALEGREYA_400, 0))
+	body.add_theme_font_override("bold_font", _font(GlassStyle.ALEGREYA_700, 0))
+	body.add_theme_font_size_override("normal_font_size", 13)
+	body.add_theme_font_size_override("bold_font_size", 13)
 	# Benchmark line-height is 16.9 on a 12.8 font — barely more than the face's
-	# natural leading. Godot's Label default adds 3 on top of that, which costs a
-	# whole line over four and clips the longest rules text ("Cinder", "Hex").
-	body.add_theme_constant_override("line_spacing", 0)
-	body.add_theme_color_override("font_color", BODY_TEXT)
-	# Centred in the stock below the rubric, matching the benchmark — a top-anchored
-	# block leaves one-liners floating with a hole under them.
-	body.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# Benchmark text box is 148x84.9 with 4/10/10 padding — Label has no padding,
-	# so it is baked into the offsets. The rarity pill floats over the tail of
-	# this box rather than reserving space, same as the benchmark.
-	body.set_anchors_preset(Control.PRESET_FULL_RECT)
-	body.offset_left = 10.0
-	body.offset_right = -10.0
-	body.offset_top = EDGE + ART_H + 1.0 + NAME_H + TYPE_H + 4.0
-	body.offset_bottom = -12.0
+	# natural leading. Godot's default adds 3 on top of that, which costs a whole
+	# line over four and clips the longest rules text ("Cinder", "Hex").
+	# RichTextLabel lays lines out slightly looser than Label at the same size, so
+	# the Label-era 0 overflowed by a line on the longest cards. -1 lands on the
+	# benchmark's 16.9 leading.
+	body.add_theme_constant_override("line_separation", -1)
+	body.add_theme_color_override("default_color", BODY_TEXT)
+	# Benchmark text box is 148x84.9 with 4/10/10 padding — baked into the offsets
+	# below, since neither node type has padding. The rarity pill floats over the
+	# tail of this box rather than reserving space, same as the benchmark.
+	#
+	# RichTextLabel has no vertical alignment, so short rules would sit against
+	# the rubric with a hole beneath. fit_content sizes it to its own text and a
+	# CenterContainer does the centring; the width is pinned because an autowrap
+	# RichTextLabel with no width constraint reports a one-glyph minimum.
+	body.fit_content = true
+	body.custom_minimum_size = Vector2(CARD_W - EDGE * 2.0 - 20.0, 0.0)
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(body)
+	var body_box: CenterContainer = CenterContainer.new()
+	body_box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	body_box.offset_left = 10.0
+	body_box.offset_right = -10.0
+	body_box.offset_top = EDGE + ART_H + 1.0 + NAME_H + TYPE_H + 2.0
+	body_box.offset_bottom = -8.0
+	body_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	body_box.add_child(body)
+	layer.add_child(body_box)
 
 	var pill: Panel = Panel.new()
 	var pill_sb: StyleBoxFlat = StyleBoxFlat.new()
@@ -259,13 +297,19 @@ func _build_cost_gem(cost: int, tint: Color) -> void:
 	holder.top_level = false
 	add_child(holder)
 
+	# Benchmark clip-path: polygon(50% 0, 93% 25, 93% 75, 50% 100, 7% 75, 7% 25).
 	var hex: Polygon2D = Polygon2D.new()
 	hex.polygon = PackedVector2Array([
-		Vector2(GEM * 0.5, 0.0), Vector2(GEM, GEM * 0.25),
-		Vector2(GEM, GEM * 0.75), Vector2(GEM * 0.5, GEM),
-		Vector2(0.0, GEM * 0.75), Vector2(0.0, GEM * 0.25),
+		Vector2(GEM * 0.50, 0.0), Vector2(GEM * 0.93, GEM * 0.25),
+		Vector2(GEM * 0.93, GEM * 0.75), Vector2(GEM * 0.50, GEM),
+		Vector2(GEM * 0.07, GEM * 0.75), Vector2(GEM * 0.07, GEM * 0.25),
 	])
-	hex.color = Color(0.847, 0.702, 0.361)
+	# The gem's gold is a conic sweep (#FFE9AC → #F2C14E → #B3831F → back). A
+	# per-vertex ramp reproduces the light-from-upper-left read for one polygon
+	# instead of a shader, which is all this 36px badge needs.
+	hex.vertex_colors = PackedColorArray([
+		GOLD_LIT, GOLD_MID, GOLD_DIM, GOLD_DIM, GOLD_MID, GOLD_LIT,
+	])
 	holder.add_child(hex)
 
 	var edge_line: Line2D = Line2D.new()
@@ -286,6 +330,44 @@ func _build_cost_gem(cost: int, tint: Color) -> void:
 	cost_label.set_anchors_preset(Control.PRESET_FULL_RECT)
 	cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	holder.add_child(cost_label)
+
+
+## Keywords the benchmark tints inline. It matches on this word list, not on the
+## @…@ / #…# markers — those carry only the numbers. Kept verbatim (and in this
+## order, so `Embers` beats `Ember`) from the benchmark's src/ui/tooltip.js.
+const KEYWORDS: Array = [
+	"Cracked", "Dimmed", "Brittle", "Smolder", "Fervor", "Poise", "Kindle",
+	"Ward", "Energy", "Embers", "Ember", "Chip", "Facets", "Facet", "Shatters",
+	"Shatter", "Staggered", "Unplayable", "Shard", "Hex", "Cinder",
+]
+
+
+## Card rules text → BBCode, replicating the benchmark's fmtText():
+##   @N@ / #N#  → the number in bold parchment (`.val`, weight 700, #E8DFC8)
+##   keywords   → the type tint, underlined (`.kw`)
+## The benchmark's underline is 1px dotted; RichTextLabel only draws solid, so
+## the rule reads slightly heavier than the original. Everything else matches.
+static func rules_bbcode(text: String, tint: Color) -> String:
+	var out: String = ""
+	var i: int = 0
+	# Numbers first: a marker never contains a keyword, so the passes can't collide.
+	while i < text.length():
+		var ch: String = text[i]
+		if ch == "@" or ch == "#":
+			var close: int = text.find(ch, i + 1)
+			if close > i:
+				out += "[b][color=#%s]%s[/color][/b]" % [
+					PARCHMENT.to_html(false), text.substr(i + 1, close - i - 1)]
+				i = close + 1
+				continue
+		out += ch
+		i += 1
+	var hex: String = tint.to_html(false)
+	for word: String in KEYWORDS:
+		# Whole words only — "Ward" must not fire inside "Warden".
+		var re: RegEx = RegEx.create_from_string("\\b%s\\b" % word)
+		out = re.sub(out, "[u][color=#%s]%s[/color][/u]" % [hex, word], true)
+	return out
 
 
 ## Cached FontVariations — one per (face, tracking) pair, built once per run.
