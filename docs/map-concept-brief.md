@@ -1,5 +1,14 @@
 # M6 — Horizontal World Map: concept brief
 
+> **SUPERSEDED IN PART (2026-07-24).** The "all procedural, no raster assets"
+> premise below is **withdrawn**. The visual standard for this port is now
+> `roguecardv2@6e069118` (the pre-Pixi build; local branch `pre-pixi`) — a
+> raster-art game carried by `src/assets/` (243 images at that commit).
+> Glassvow currently ships **zero** art assets and draws everything in `_draw()`;
+> closing that gap is the active work. §1 (Pilgrimage frame) and §4 (slice data)
+> are unaffected and still stand. Treat every "procedural" / "buildable" note
+> below as describing the *old* plan, not the target.
+
 Founding artifact for the map redesign. **Sign this before any map code is written.**
 The web map is a vertical 3D tower (a helix of lanterns climbed upward). The port
 replaces it with a horizontally traversed *glassvow world* — a parallax glass
@@ -191,10 +200,39 @@ over `edges`. No new transition tech — reuse the combat wipe.
   and arbitrary length — nothing here forecloses it.
 - **Events / shops / treasure content** — node *types* are designed above but the
   underlying encounters aren't ported; the slice omits them.
-- **Raster art** — everything is procedural night-glass for now. Whether the map
+- ~~**Raster art** — everything is procedural night-glass for now. Whether the map
   ever takes painted horizons/props is a separate asset-strategy gate, unchanged
-  by this brief.
+  by this brief.~~ **Withdrawn 2026-07-24.** The gate was decided: the port aligns
+  to `roguecardv2@6e069118`, which is raster throughout. Painted assets are the
+  target, not an open question. Known blocker: the map's four parallax bands are
+  one `_draw()` pass on a single Control (`world_map_screen.gd:243`), and Godot
+  renders children above a parent's `_draw()` — so bands must become `Node2D`
+  children with `z_index` before sprites can interleave with waystones. The
+  `-78.0` marker offset at `world_map_screen.gd:332` is a workaround for exactly
+  this and should disappear with the refactor.
 
 ---
 
 *Approve §1 (the Pilgrimage frame) and §4 (the slice data) to unblock M6 map code.*
+
+---
+
+## Addendum — what actually happened (2026-07-24)
+
+Recorded because the order of events matters to anyone reading this later.
+
+1. M6a map code (`presentation/map/`, commit `942f0a3`) was written and merged
+   **before** the §1/§4 sign-off this document asks for. It is functional and
+   staying (its camera, travel tween, reachability wiring and input are sound —
+   roughly 60% of those two files is art-independent); only the `_draw*` layer
+   is superseded.
+2. The user reviewed the running builds and confirmed **`roguecardv2@6e069118`
+   (pre-Pixi)** as the visual to align to. Reachable locally via branch
+   `pre-pixi`; a worktree sits at `../roguecardv2-prepixi`.
+3. The `main` branch of roguecardv2 is a *regression* from that reference (the
+   card layer most visibly). Tracking down which commit caused it is open work,
+   independent of the port.
+
+**Open, not yet decided:** whether audio ships too (`src/assets/musics`, `sfx`
+exist at the reference and Glassvow has neither), and how 243 source images map
+onto Godot import settings. Nothing has been imported yet.
