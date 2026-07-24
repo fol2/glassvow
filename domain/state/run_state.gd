@@ -88,6 +88,30 @@ static func _sji(v: Variant) -> int:
 	return int(float(str(v)))
 
 
+## Fresh-profile run built from content.player (web newRun with reveals:[]).
+## Not parity-pinned — the web newRun also rolls the tower map, which is
+## redesigned — but combat parity holds from any rng cursor. reveals stays []
+## (fresh profile = core only): omens/lamplighter/pool-waves gated off.
+static func new_run(content: ContentDB, run_seed: int) -> RunState:
+	var rs: RunState = RunState.new()
+	rs.seed = run_seed
+	rs.rng = Rng.new(run_seed)
+	var cp: Dictionary = content.player
+	rs.art = StringName(str(cp.get("art", "flare")))
+	rs.player.max_hp = _sji(cp.get("maxHp", 1))
+	rs.player.hp = rs.player.max_hp
+	rs.player.gold = _sji(cp.get("startGold", 0))
+	rs.player.energy_max = _sji(cp.get("energy", 3))
+	rs.player.relics.append(str(cp.get("startRelic", "")))
+	for _i: int in range(_sji(cp.get("potionSlots", 3))):
+		rs.player.potions.append("")
+	var deck_ids: Array = cp.get("startDeck", [])
+	for id_v: Variant in deck_ids:
+		rs.player.deck.append(CardInst.new(rs.next_uid(), StringName(str(id_v)), false))
+	rs.omens.append(null)  # act 0 top-up; fresh profile rolls no omen
+	return rs
+
+
 ## Load + validate a save envelope. Returns null on reject — any unknown
 ## content id drops the WHOLE save (stale-content shield; never partially
 ## heal by substituting items). Missing additive fields self-heal so a save
