@@ -52,15 +52,16 @@ static func _label(initial: String) -> Label:
 	return l
 
 
-## Full sync from an enemy snapshot (drain-idle truth).
-func sync(e: EnemyCombatant, dmg_preview: Variant, intent_text: String) -> void:
+## Full sync from an enemy snapshot (drain-idle truth). dmg_text is already
+## formatted by the screen ("" when the move deals no damage).
+func sync(e: EnemyCombatant, dmg_text: String, intent_text: String) -> void:
 	set_hp(e.hp, e.max_hp)
 	set_ward(e.block)
 	set_facets(mini(e.chips, e.facet_max), e.facet_max)
 	set_statuses(e.statuses)
 	var line: String = intent_text
-	if dmg_preview != null:
-		line += " %s" % str(dmg_preview)
+	if dmg_text != "":
+		line += "  %s" % dmg_text
 	set_intent(line)
 	if e.hp <= 0:
 		mark_dead()

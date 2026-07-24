@@ -17,6 +17,7 @@ var game: GlassvowGame
 var _screen: CombatScreen = null
 var _encounter_i: int = 0
 var _run_over: bool = false
+var _forced_seed: int = -1  # --seed=N: reproducible shots for layout diffing
 
 
 func _ready() -> void:
@@ -26,11 +27,30 @@ func _ready() -> void:
 	content.validate(fails)
 	for msg: String in fails:
 		push_error(msg)
+	# Screenshot-loop hook for agent iteration without the editor MCP:
+	# godot --path . -- --shot=/tmp/combat.png [--seed=N]
+	var shot_path: String = ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--shot="):
+			shot_path = arg.trim_prefix("--shot=")
+		elif arg.begins_with("--seed="):
+			_forced_seed = int(arg.trim_prefix("--seed="))
 	_new_run()
+	if shot_path != "":
+		_capture_and_quit(shot_path)
+
+
+func _capture_and_quit(path: String) -> void:
+	for _i: int in range(30):  # let layout + first paint settle
+		await get_tree().process_frame
+	var img: Image = get_viewport().get_texture().get_image()
+	img.save_png(path)
+	print("shot saved: " + path)
+	get_tree().quit(0)
 
 
 func _new_run() -> void:
-	var run_seed: int = randi() & 0x7FFFFFFF
+	var run_seed: int = _forced_seed if _forced_seed >= 0 else randi() & 0x7FFFFFFF
 	game = GlassvowGame.new(content, RunState.new_run(content, run_seed))
 	_encounter_i = 0
 	_run_over = false

@@ -500,6 +500,16 @@ func _on_busy_changed(busy: bool) -> void:
 		_sync_all()
 
 
+## "7" or "4×2" from the {"dmg", "times"} preview; "" for non-attacks.
+func _fmt_enemy_dmg(preview: Variant) -> String:
+	if preview == null:
+		return ""
+	var p: Dictionary = preview
+	var dmg: int = p.get("dmg", 0)
+	var times: int = p.get("times", 1)
+	return str(dmg) if times <= 1 else "%d×%d" % [dmg, times]
+
+
 func _refresh_intent(idx: int) -> void:
 	var view: EnemyView = _enemy_view(idx)
 	if view == null:
@@ -509,9 +519,9 @@ func _refresh_intent(idx: int) -> void:
 		return
 	var mv: Dictionary = e.move()
 	var line: String = str(mv.get("name", String(e.move_key)))
-	var dmg_preview: Variant = _rules.preview_enemy_dmg(game.cb, e)
-	if dmg_preview != null:
-		line += "  %s" % str(dmg_preview)
+	var dmg_text: String = _fmt_enemy_dmg(_rules.preview_enemy_dmg(game.cb, e))
+	if dmg_text != "":
+		line += "  %s" % dmg_text
 	view.set_intent(line)
 
 
@@ -539,10 +549,12 @@ func _sync_all() -> void:
 		if view == null:
 			continue
 		var intent_line: String = ""
+		var dmg_text: String = ""
 		if e.hp > 0:
 			var mv: Dictionary = e.move()
 			intent_line = str(mv.get("name", String(e.move_key)))
-		view.sync(e, _rules.preview_enemy_dmg(cb, e) if e.hp > 0 else null, intent_line)
+			dmg_text = _fmt_enemy_dmg(_rules.preview_enemy_dmg(cb, e))
+		view.sync(e, dmg_text, intent_line)
 	_hand.clear()
 	var first_living: int = -1
 	for e: EnemyCombatant in cb.enemies:

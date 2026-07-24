@@ -32,6 +32,13 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	custom_minimum_size = Vector2(150, 190)
 	size = custom_minimum_size
 	pivot_offset = custom_minimum_size * 0.5
+	var sb: StyleBoxFlat = StyleBoxFlat.new()
+	sb.bg_color = Color(0.11, 0.13, 0.19, 0.97)
+	sb.border_color = Color(0.42, 0.52, 0.72, 0.85)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(8)
+	sb.set_content_margin_all(9)
+	add_theme_stylebox_override("panel", sb)
 	var display_name: String = str(data.get("name", String(inst.id)))
 	if inst.up:
 		display_name += "+"
@@ -43,7 +50,12 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	var body: Label = Label.new()
 	body.text = "[%s]  %s\n\n%s" % [cost_line, display_name, rules_text]
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	# Pin the wrap width: an autowrap label sorted at ~0 width reports a
+	# one-glyph-per-line minimum height and the panel clamps up to fit it.
+	body.custom_minimum_size = Vector2(130, 0)
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.add_theme_font_size_override("font_size", 13)
+	body.add_theme_color_override("font_color", Color(0.92, 0.94, 1.0))
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE  # pointer belongs to the card
 	add_child(body)
 	mouse_entered.connect(func() -> void: hover_changed.emit(uid, true))

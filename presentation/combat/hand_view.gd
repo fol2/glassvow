@@ -11,7 +11,7 @@ signal card_drag_released(uid: int, global_pos: Vector2)
 
 const SLOP: float = 14.0
 const CARD_SPACING: float = 120.0
-const ARC_DROP: float = 14.0
+const ARC_DROP: float = 9.0
 const TILT_DEGREES: float = 4.0
 const HOVER_RAISE: float = 30.0
 
@@ -111,7 +111,7 @@ func _relayout() -> void:
 	if n > 1:
 		spacing = minf(CARD_SPACING, (size.x - 160.0) / float(n - 1))
 	var center_x: float = size.x * 0.5
-	var base_y: float = maxf(0.0, size.y - 200.0)
+	var base_y: float = maxf(0.0, size.y - 230.0)
 	for i: int in range(n):
 		var view: CardView = _views[_order[i]]
 		var t: float = float(i) - float(n - 1) * 0.5
