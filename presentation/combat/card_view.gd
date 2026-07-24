@@ -32,9 +32,28 @@ signal hover_changed(uid: int, hovering: bool)
 
 const ART_DIR: String = "res://assets/art/cards/"
 
+## THE CARD SHAPE. CARD_W x CARD_H with RADIUS corners is the silhouette, and it
+## is the one true edge of a card: nothing inside may paint past it.
+##
+## It is enforced by a dedicated mask node, not by the face. Godot's
+## clip_children masks children to the parent's *drawn content*, and a
+## StyleBoxFlat drop shadow is drawn content — so clipping against the face made
+## the boundary the silhouette PLUS an 8px shadow skirt, and the cursor glare
+## painted straight into it. The mask carries the shape alone.
+##
+## Consequence worth knowing before adding anything: whatever the mask draws IS
+## the card's edge. Give it a glow, an outline or a bloom and you have widened
+## the card for everything inside it. Effects that must exceed the silhouette
+## (the cost gem does) go outside the mask as siblings instead.
 const CARD_W: float = 152.0
 const CARD_H: float = 216.0
+const RADIUS: int = 11
 const EDGE: float = 2.0          # card border; the inner column is 148 wide
+## The rim tracks the border inwards, exactly as a CSS inner radius does.
+const RIM_RADIUS: int = RADIUS - int(EDGE)
+const SHADOW_COLOR: Color = Color(0, 0, 0, 0.55)
+const SHADOW_SIZE: int = 8
+const SHADOW_OFFSET: Vector2 = Vector2(0, 4)
 const ART_H: float = 91.0
 const NAME_H: float = 23.0
 const TYPE_H: float = 13.0
@@ -135,17 +154,29 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	sb.bg_color = INK
 	sb.border_color = RULE
 	sb.set_border_width_all(int(EDGE))
-	sb.set_corner_radius_all(11)
-	sb.shadow_color = Color(0, 0, 0, 0.55)
-	sb.shadow_size = 8
-	sb.shadow_offset = Vector2(0, 4)
+	sb.set_corner_radius_all(RADIUS)
+	sb.shadow_color = SHADOW_COLOR
+	sb.shadow_size = SHADOW_SIZE
+	sb.shadow_offset = SHADOW_OFFSET
 
-	# The face clips (art must not spill past the radius); the cost gem overhangs
-	# the corner and must not. So the card itself is a plain Control — a Container
-	# here would also re-fit the gem to the card rect and bury its numeral.
+	# The face: card stock, border and drop shadow. It draws; it clips nothing.
+	var face: Panel = Panel.new()
+	face.add_theme_stylebox_override("panel", sb)
+	face.set_anchors_preset(Control.PRESET_FULL_RECT)
+	face.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(face)
+
+	# The silhouette, as a pure mask — see THE CARD SHAPE above. Under
+	# CLIP_CHILDREN_ONLY this node is never drawn, so it costs no pixels and
+	# leaves no second antialiased edge over the face's; it exists only so its
+	# shape bounds the subtree. The cost gem overhangs the corner on purpose and
+	# so hangs off CardView as a sibling, outside the mask.
 	var layer: Panel = Panel.new()
-	layer.add_theme_stylebox_override("panel", sb)
-	layer.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
+	var mask_sb: StyleBoxFlat = StyleBoxFlat.new()
+	mask_sb.bg_color = Color(1, 1, 1, 1)
+	mask_sb.set_corner_radius_all(RADIUS)
+	layer.add_theme_stylebox_override("panel", mask_sb)
+	layer.clip_children = CanvasItem.CLIP_CHILDREN_ONLY
 	layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(layer)
@@ -190,7 +221,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	rim_sb.bg_color = Color(0, 0, 0, 0)
 	rim_sb.border_color = RARITY_RIM.get(rarity, Color(tint, 0.40))
 	rim_sb.set_border_width_all(1)
-	rim_sb.set_corner_radius_all(9)
+	rim_sb.set_corner_radius_all(RIM_RADIUS)
 	rim.add_theme_stylebox_override("panel", rim_sb)
 	rim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	rim.offset_left = EDGE
