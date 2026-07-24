@@ -37,8 +37,11 @@ func _ready() -> void:
 		push_error(msg)
 	# Screenshot-loop hook for agent iteration without the editor MCP:
 	# godot --path . -- --shot=/tmp/map.png [--seed=N] [--enter=0]
+	# godot --path . -- --cards[=id,id] --shot=/tmp/cards.png   (card designer)
 	var shot_path: String = ""
 	var enter_node: int = -1
+	var cards_lab: bool = false
+	var cards_only: PackedStringArray = PackedStringArray()
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -46,6 +49,17 @@ func _ready() -> void:
 			_forced_seed = int(arg.trim_prefix("--seed="))
 		elif arg.begins_with("--enter="):
 			enter_node = int(arg.trim_prefix("--enter="))
+		elif arg == "--cards":
+			cards_lab = true
+		elif arg.begins_with("--cards="):
+			cards_lab = true
+			cards_only = arg.trim_prefix("--cards=").split(",", false)
+	if cards_lab:
+		# The lab is a contact sheet, not a run — no game state is built.
+		add_child(CardLab.new(content, cards_only))
+		if shot_path != "":
+			_capture_and_quit(shot_path)
+		return
 	_new_run()
 	if enter_node >= 0 and _map_screen != null:
 		_map_screen.instant = true  # skip the travel tween, land on the fight
