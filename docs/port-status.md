@@ -33,13 +33,37 @@ no affix-pick rng draw fires. Damage law is **sequential floors**: `base+str →
 weak ⌊×0.75⌋ → vulnerable ⌊×1.5⌋ → max(0,·)`; every calc keeps its pure
 preview mirror in lockstep.
 
-## Next: M4 — run loop minus map-gen
+## M4 — rewards + saves: DONE (green)
 
-Rewards (`genCombatRewards` parity — the traces' reward rows carry expected
-output), `GameState.to/from_dict` + `SaveService` (`user://`),
-resume-via-pending-encounter, hand-authored horizontal slice map data.
-Verify: `test_save.gd` vs `saves/invalid-cases.json` (reject-vs-heal loader
-semantics) + reward rows in the slice traces (stop resyncing rng there).
+- **M4a rewards**: `domain/rules/rewards.gd` ports genCombatRewards /
+  rollCardReward / randomRelic incl. the web **stale-cursor quirk** (the outer
+  closure's potion-roll write clobbers rollCardReward's cursor — card rolls
+  run on a detached chain whose cursor is discarded; net cursor = gold + potion
+  roll + elite relic tier draw) and the poolGate reveal filter (exporter stage
+  4 added `poolGate` to slice-content; executioner/momentum are poolWave2-
+  gated). The trace replayer computes all 16 reward rows live (gold, cards,
+  potion, relic, rngState). Law was pinned first with a Node scratch harness
+  against the frozen engine — do that for any future rng-order question.
+- **M4b saves**: `user://glassvow_save_v1.json` lineage; validation is pure
+  domain (`RunState.from_save_dict`): envelope v==1 → id shield (unknown
+  card/relic/potion/art/omen/reveal rejects the whole save) → additive heals
+  (art/unlocks/omens/boon/bossRelicAct/shards) → reveals check → per-act omen
+  top-up (null; rollOmen path unported). `application/save_service.gd` = file
+  IO only. `test_save.gd`: 9/9 fixture verdicts + 2 snapshot anchors through
+  a real file round-trip. Reveal registry ids load from core-mechanics.json
+  (`mechanics.REVEALS`).
+
+Deferred out of M4: resume-*flow* (pending fields persist; wiring needs the
+screen/map layer) and the hand-authored slice map data (no consumer until
+M5/M6 — author it with the map concept brief).
+
+## Next: M5 — combat screen (presentation slice)
+
+Desktop first: `event_sequencer.gd` await-pump over `GlassvowGame.apply`
+events, HandView arc + drag-to-play, EnemyViews, minimal VFX, audio buses,
+CJK font. First human visual checkpoint — opus-designer for craft, funplay
+MCP screenshot loop for iteration (editor must be open once for the MCP
+handshake).
 
 ## Contracts & gotchas
 
