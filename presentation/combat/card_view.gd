@@ -55,9 +55,14 @@ const CARD_W: float = 152.0
 const CARD_H: float = 216.0
 const RADIUS: int = 11
 const EDGE: float = 2.0          # card border; the inner column is 148 wide
+## The benchmark's `box-shadow: 0 8px 22px rgba(0,0,0,.55)`. A CSS blur of 22
+## reaches ~11px each side of the edge, which is what Godot's shadow_size means;
+## the 8px drop is what keeps the shadow UNDER the card rather than around it.
+## Undersized and barely dropped, it rings the silhouette evenly and reads as a
+## halo — the shape has to be lopsided for the eye to accept it as a shadow.
 const SHADOW_COLOR: Color = Color(0, 0, 0, 0.55)
-const SHADOW_SIZE: int = 8
-const SHADOW_OFFSET: Vector2 = Vector2(0, 4)
+const SHADOW_SIZE: int = 11
+const SHADOW_OFFSET: Vector2 = Vector2(0, 8)
 const ART_H: float = 91.0
 const NAME_H: float = 23.0
 const TYPE_H: float = 13.0
@@ -170,6 +175,7 @@ var _inner: SubViewport = null    # the 2D face, rendered offscreen
 var _stage: SubViewport = null    # the 3D room the slab sits in
 var _slab: MeshInstance3D = null
 var _shadow: Panel = null         # the table shadow — never tilts
+var _shadow_sb: StyleBoxFlat = null
 var _hovered: bool = false
 var _tilt: Vector2 = Vector2.ZERO         # (rot_x, rot_y) degrees
 var _tilt_v: Vector2 = Vector2.ZERO
@@ -198,16 +204,21 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# The table shadow, first and flat: a real object's shadow falls on the
 	# surface beneath it, so it lives OUTSIDE the slab and holds still (easing
 	# away slightly) while the card above it tilts and lifts.
-	var shadow_sb: StyleBoxFlat = StyleBoxFlat.new()
-	shadow_sb.draw_center = false
-	shadow_sb.set_corner_radius_all(RADIUS)
+	_shadow_sb = StyleBoxFlat.new()
+	# draw_center stays true over a transparent fill. Turn it off and Godot
+	# punches the shadow's core out along the OFFSET rect, leaving a ring
+	# hanging a dozen px clear of the card — measured as an unshadowed gap
+	# below the bottom edge. The card covers the core anyway; when it tilts
+	# off, what shows through is exactly what should: its shadow.
+	_shadow_sb.bg_color = Color(0, 0, 0, 0)
+	_shadow_sb.set_corner_radius_all(RADIUS)
 	# Rare cards cast a slightly warmer shadow — light through gilded glass.
-	shadow_sb.shadow_color = SHADOW_COLOR.lerp(Color(GOLD_DIM, 0.55), 0.18) \
+	_shadow_sb.shadow_color = SHADOW_COLOR.lerp(Color(GOLD_DIM, 0.55), 0.18) \
 		if rarity == "rare" else SHADOW_COLOR
-	shadow_sb.shadow_size = SHADOW_SIZE
-	shadow_sb.shadow_offset = SHADOW_OFFSET
+	_shadow_sb.shadow_size = SHADOW_SIZE
+	_shadow_sb.shadow_offset = SHADOW_OFFSET
 	_shadow = Panel.new()
-	_shadow.add_theme_stylebox_override("panel", shadow_sb)
+	_shadow.add_theme_stylebox_override("panel", _shadow_sb)
 	_shadow.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_shadow)
@@ -566,9 +577,12 @@ func _build_stage(content: Control, side_col: Color) -> void:
 	# logical pixels at z = 0 — so at rest this render IS the flat card.
 	var cam: Camera3D = Camera3D.new()
 	cam.fov = FOV_DEG
+	# ...measured to the FRONT face, not the slab's mid-plane. Frame the mid-
+	# plane instead and the face — nearer the lens by half the thickness —
+	# comes out half a percent oversize, overhanging its own shadow.
 	var dist: float = (CARD_H + 2.0 * PAD_3D) * 0.5 \
 		/ tan(deg_to_rad(FOV_DEG * 0.5))
-	cam.position = Vector3(0.0, 0.0, dist)
+	cam.position = Vector3(0.0, 0.0, dist + THICK * 0.5)
 	cam.near = dist * 0.5
 	cam.far = dist * 1.5
 	_stage.add_child(cam)
@@ -737,10 +751,14 @@ func _process(delta: float) -> void:
 
 	_slab.rotation_degrees = Vector3(_tilt.x, _tilt.y, 0.0)
 	_slab.position.z = _lift
-	# The pane rises off the table; its shadow eases down and away.
+	# The shadow stays on the table, but it is not inert: as the pane rises its
+	# shadow slides down, spreads and thins, and it slips out from under
+	# whichever side has lifted — the reading that ties the two together. It
+	# never rotates, because a shadow on a flat table cannot.
 	var h: float = _lift / MAX_LIFT
-	_shadow.position = Vector2(0.0, 3.0 * h)
-	_shadow.modulate.a = 1.0 - 0.18 * h
+	_shadow.position = Vector2(_tilt.y, _tilt.x) * 0.28 + Vector2(0.0, 4.0 * h)
+	_shadow.modulate.a = 1.0 - 0.22 * h
+	_shadow_sb.shadow_size = SHADOW_SIZE + roundi(4.0 * h)
 
 	if not _hovered and _tilt.length() < 0.02 and _tilt_v.length() < 0.05 \
 			and _lift < 0.05 and absf(_lift_v) < 0.1:
@@ -752,6 +770,7 @@ func _process(delta: float) -> void:
 		_slab.position.z = 0.0
 		_shadow.position = Vector2.ZERO
 		_shadow.modulate.a = 1.0
+		_shadow_sb.shadow_size = SHADOW_SIZE
 		_set_live(false)
 		set_process(false)
 
