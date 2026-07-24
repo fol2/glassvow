@@ -26,6 +26,10 @@ extends Control
 ## pointer surface for the hand's drag state machine — mouse and touch both
 ## arrive through _gui_input (no emulate_touch_from_mouse); hover exists only on
 ## the mouse path by nature.
+##
+## The card is not flat: the 2D face above renders offscreen and rides a glass
+## slab in a real 3D stage — see THE SLAB below. Callers never see any of it;
+## the node's rect, signals and input behave exactly as a flat Control.
 
 signal pressed_at(uid: int, global_pos: Vector2)
 signal moved_to(uid: int, global_pos: Vector2)
@@ -70,6 +74,32 @@ const BODY_Y: float = TYPE_Y + TYPE_H + 2.0
 ## an oversized disc keeps the falloff smooth when the cursor sits near an edge.
 const GLARE_D: float = 240.0
 const GLARE_FADE: float = 0.25
+
+## THE SLAB. A pane of glass is not a picture — it has thickness, and it sits
+## in space. The 2D face renders into an offscreen viewport at OVERSAMPLE
+## resolution; a rounded-rect prism carries that texture in a tiny 3D stage
+## with a long-lens camera. Head-on, the render is the flat card. On hover the
+## slab tilts toward the cursor and lifts a breath, and the prism's side band —
+## the physical cross-section of the glass — appears as a hairline of the
+## edge's colour along the leaning side. The edge system painted the light
+## trapped in the glass; the slab makes the glass itself.
+##
+## The shadow does not ride the slab: it is the card's shadow ON THE TABLE, a
+## separate flat panel behind the stage that stays put (and eases away) while
+## the pane above it moves.
+const OVERSAMPLE: float = 2.0    # inner render scale — crisp through the 3D pass
+const PAD_IN: float = 8.0        # inner texture margin: exactly the gem overhang
+const PAD_3D: float = 24.0       # stage margin: room for the tilted silhouette
+const THICK: float = 7.0         # slab thickness in px (~2.9 mm at card scale)
+const FOV_DEG: float = 20.0      # long lens — perspective present, never cartoon
+const MAX_TILT: float = 7.0      # degrees at full cursor throw
+const MAX_LIFT: float = 10.0     # px toward the camera while held
+const ARC_SEGS: int = 8          # prism corner-arc resolution
+## Tilt spring (omega, zeta): held is a critically damped chase — the card is
+## pinned under the cursor; released is slightly underdamped, so the pane
+## settles back with one soft ring, the way glass set down on velvet would.
+const SPR_HELD: Vector2 = Vector2(18.0, 1.0)
+const SPR_FREE: Vector2 = Vector2(11.0, 0.55)
 
 const PARCHMENT: Color = Color(0.910, 0.875, 0.784)   # #E8DFC8 — name
 const INK: Color = Color(0.043, 0.055, 0.102)         # #0B0E1A — card stock
@@ -136,6 +166,21 @@ var _glare: TextureRect = null
 var _glare_tw: Tween = null
 var _edge_mat: ShaderMaterial = null
 
+var _inner: SubViewport = null    # the 2D face, rendered offscreen
+var _stage: SubViewport = null    # the 3D room the slab sits in
+var _slab: MeshInstance3D = null
+var _shadow: Panel = null         # the table shadow — never tilts
+var _hovered: bool = false
+var _tilt: Vector2 = Vector2.ZERO         # (rot_x, rot_y) degrees
+var _tilt_v: Vector2 = Vector2.ZERO
+var _tilt_target: Vector2 = Vector2.ZERO
+var _lift: float = 0.0
+var _lift_v: float = 0.0
+
+## One prism serves every card — geometry depends only on the card constants.
+## Materials differ per card and live on the MeshInstance3D as overrides.
+static var _prism_cache: ArrayMesh = null
+
 
 func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	uid = inst.uid
@@ -150,6 +195,30 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	size = custom_minimum_size
 	pivot_offset = custom_minimum_size * 0.5
 
+	# The table shadow, first and flat: a real object's shadow falls on the
+	# surface beneath it, so it lives OUTSIDE the slab and holds still (easing
+	# away slightly) while the card above it tilts and lifts.
+	var shadow_sb: StyleBoxFlat = StyleBoxFlat.new()
+	shadow_sb.draw_center = false
+	shadow_sb.set_corner_radius_all(RADIUS)
+	# Rare cards cast a slightly warmer shadow — light through gilded glass.
+	shadow_sb.shadow_color = SHADOW_COLOR.lerp(Color(GOLD_DIM, 0.55), 0.18) \
+		if rarity == "rare" else SHADOW_COLOR
+	shadow_sb.shadow_size = SHADOW_SIZE
+	shadow_sb.shadow_offset = SHADOW_OFFSET
+	_shadow = Panel.new()
+	_shadow.add_theme_stylebox_override("panel", shadow_sb)
+	_shadow.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_shadow)
+
+	# Everything visual from here down builds under `content`, which renders
+	# offscreen into _inner rather than into this Control — see THE SLAB.
+	var content: Control = Control.new()
+	content.position = Vector2(PAD_IN, PAD_IN) * OVERSAMPLE
+	content.scale = Vector2.ONE * OVERSAMPLE
+	content.size = Vector2(CARD_W, CARD_H)
+
 	var sb: StyleBoxFlat = StyleBoxFlat.new()
 	# Benchmark stock is a 168deg gradient, not flat: the type tint bleeds in at
 	# 15% from the top-left and dies out by 58%. StyleBoxFlat has no gradient, so
@@ -157,18 +226,13 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# below everything else.
 	sb.bg_color = INK
 	sb.set_corner_radius_all(RADIUS)
-	# Rare cards cast a slightly warmer shadow — light through gilded glass.
-	sb.shadow_color = SHADOW_COLOR.lerp(Color(GOLD_DIM, 0.55), 0.18) \
-		if rarity == "rare" else SHADOW_COLOR
-	sb.shadow_size = SHADOW_SIZE
-	sb.shadow_offset = SHADOW_OFFSET
 
-	# The face: card stock, border and drop shadow. It draws; it clips nothing.
+	# The face: card stock and border. It draws; it clips nothing.
 	var face: Panel = Panel.new()
 	face.add_theme_stylebox_override("panel", sb)
 	face.set_anchors_preset(Control.PRESET_FULL_RECT)
 	face.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(face)
+	content.add_child(face)
 
 	# The silhouette, as a pure mask — see THE CARD SHAPE above. Under
 	# CLIP_CHILDREN_ONLY this node is never drawn, so it costs no pixels and
@@ -183,7 +247,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	layer.clip_children = CanvasItem.CLIP_CHILDREN_ONLY
 	layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(layer)
+	content.add_child(layer)
 
 	# Stock gradient, under the art and everything else. Keyed on the type, which
 	# is the only thing it reads — five textures serve the whole 61-card sheet.
@@ -302,8 +366,13 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(edge)
 
-	# The gem overhangs the corner, so it sits outside the clipped subtree.
-	_build_cost_gem(cost)
+	# The gem overhangs the corner, so it sits outside the clipped subtree —
+	# inside `content` still, because it is part of the pane and must tilt
+	# with it (PAD_IN exists exactly so its overhang lands on the texture).
+	_build_cost_gem(content, cost)
+
+	_build_stage(content, _side_color(
+		FINISH_LEADEN if ctype == "curse" else fin, tint))
 
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -384,12 +453,12 @@ static func _build_rarity_pill(rarity: String) -> Panel:
 
 
 ## A pointy-top hexagon in gold leaf, hung off the top-left corner at (-8, -8).
-func _build_cost_gem(cost: int) -> void:
+func _build_cost_gem(parent: Control, cost: int) -> void:
 	var holder: Control = Control.new()
 	holder.position = Vector2(-8.0, -8.0)
 	holder.size = Vector2(GEM, GEM)
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(holder)
+	parent.add_child(holder)
 
 	# Benchmark clip-path: polygon(50% 0, 93% 25, 93% 75, 50% 100, 7% 75, 7% 25).
 	var hex: Polygon2D = Polygon2D.new()
@@ -441,6 +510,252 @@ func _build_cost_gem(cost: int) -> void:
 	holder.add_child(cost_label)
 
 
+## ── THE SLAB ─────────────────────────────────────────────────────────────
+## Offscreen face → glass prism → long-lens camera → back onto this Control.
+
+
+func _build_stage(content: Control, side_col: Color) -> void:
+	_inner = SubViewport.new()
+	_inner.size = Vector2i(
+		int((CARD_W + 2.0 * PAD_IN) * OVERSAMPLE),
+		int((CARD_H + 2.0 * PAD_IN) * OVERSAMPLE))
+	_inner.transparent_bg = true
+	_inner.disable_3d = true
+	# Fonts rasterise per-viewport: without this the 2x canvas scale draws 1x
+	# glyph bitmaps stretched — the exact blur content_scale_factor avoids on
+	# the window. This is the same mechanism, told the same factor.
+	_inner.oversampling_override = OVERSAMPLE
+	_inner.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	_inner.add_child(content)
+	add_child(_inner)
+
+	_stage = SubViewport.new()
+	_stage.size = Vector2i(
+		int((CARD_W + 2.0 * PAD_3D) * OVERSAMPLE),
+		int((CARD_H + 2.0 * PAD_3D) * OVERSAMPLE))
+	_stage.own_world_3d = true
+	_stage.transparent_bg = true
+	_stage.msaa_3d = Viewport.MSAA_4X
+	_stage.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(_stage)
+
+	if _prism_cache == null:
+		_prism_cache = _prism_mesh()
+	_slab = MeshInstance3D.new()
+	_slab.mesh = _prism_cache
+
+	# Unshaded throughout: the 2D face paints its own light story, and the
+	# side band is a cross-section of the material, not a lit surface.
+	var side_mat: StandardMaterial3D = StandardMaterial3D.new()
+	side_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	side_mat.albedo_color = side_col
+	side_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_slab.set_surface_override_material(0, side_mat)
+
+	var face_mat: StandardMaterial3D = StandardMaterial3D.new()
+	face_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	face_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	face_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
+	face_mat.albedo_texture = _inner.get_texture()
+	_slab.set_surface_override_material(1, face_mat)
+	# The gem plate shares the face's material — same texture, same sampling.
+	_slab.set_surface_override_material(2, face_mat)
+	_stage.add_child(_slab)
+
+	# Head-on long lens, at the distance where the stage rect maps 1:1 onto
+	# logical pixels at z = 0 — so at rest this render IS the flat card.
+	var cam: Camera3D = Camera3D.new()
+	cam.fov = FOV_DEG
+	var dist: float = (CARD_H + 2.0 * PAD_3D) * 0.5 \
+		/ tan(deg_to_rad(FOV_DEG * 0.5))
+	cam.position = Vector3(0.0, 0.0, dist)
+	cam.near = dist * 0.5
+	cam.far = dist * 1.5
+	_stage.add_child(cam)
+
+	var display: TextureRect = TextureRect.new()
+	display.texture = _stage.get_texture()
+	display.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	display.stretch_mode = TextureRect.STRETCH_SCALE
+	display.position = Vector2(-PAD_3D, -PAD_3D)
+	display.size = Vector2(CARD_W + 2.0 * PAD_3D, CARD_H + 2.0 * PAD_3D)
+	display.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(display)
+
+
+## The pane outline in stage coordinates (x right, y up, origin at centre),
+## counterclockwise as seen from the camera. Shared by the face fan and the
+## side band.
+static func _outline() -> PackedVector2Array:
+	var pts: PackedVector2Array = PackedVector2Array()
+	var cx: float = CARD_W * 0.5 - float(RADIUS)
+	var cy: float = CARD_H * 0.5 - float(RADIUS)
+	var centers: Array = [
+		Vector2(cx, cy), Vector2(-cx, cy), Vector2(-cx, -cy), Vector2(cx, -cy),
+	]
+	for c: int in range(4):
+		var base: float = float(c) * PI * 0.5
+		for s: int in range(ARC_SEGS + 1):
+			var a: float = base + (float(s) / float(ARC_SEGS)) * PI * 0.5
+			var centre: Vector2 = centers[c]
+			pts.append(centre + Vector2(cos(a), sin(a)) * float(RADIUS))
+	return pts
+
+
+## Stage point → texture UV. The inner texture spans the card rect plus
+## PAD_IN on every side (the gem's overhang), so both map through here.
+static func _uv(x: float, y: float) -> Vector2:
+	return Vector2(
+		(x + CARD_W * 0.5 + PAD_IN) / (CARD_W + 2.0 * PAD_IN),
+		(CARD_H * 0.5 - y + PAD_IN) / (CARD_H + 2.0 * PAD_IN))
+
+
+## Surface 0: the side band — the glass's cross-section, visible only when
+## the pane leans. Surface 1: the front face, a fan over the outline; its
+## rounded silhouette is geometry, so the tilted card's edge stays clean
+## under MSAA rather than relying on texture alpha. Surface 2: the gem
+## plate — the cost gem overhangs the silhouette, so its corner square rides
+## just proud of the face sampling the same texture (where it re-covers the
+## face the texels are identical and opaque, so the overlap cannot show).
+static func _prism_mesh() -> ArrayMesh:
+	var pts: PackedVector2Array = _outline()
+	var n: int = pts.size()
+	var hz: float = THICK * 0.5
+	var mesh: ArrayMesh = ArrayMesh.new()
+
+	var side: SurfaceTool = SurfaceTool.new()
+	side.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i: int in range(n):
+		var a: Vector2 = pts[i]
+		var b: Vector2 = pts[(i + 1) % n]
+		var fa: Vector3 = Vector3(a.x, a.y, hz)
+		var fb: Vector3 = Vector3(b.x, b.y, hz)
+		var ba: Vector3 = Vector3(a.x, a.y, -hz)
+		var bb: Vector3 = Vector3(b.x, b.y, -hz)
+		side.add_vertex(fa)
+		side.add_vertex(fb)
+		side.add_vertex(bb)
+		side.add_vertex(fa)
+		side.add_vertex(bb)
+		side.add_vertex(ba)
+	side.commit(mesh)
+
+	# Godot's front faces wind CLOCKWISE seen from outside — the outline is
+	# counterclockwise from the camera, so each fan triangle goes centre → b → a.
+	var face: SurfaceTool = SurfaceTool.new()
+	face.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i: int in range(n):
+		var a: Vector2 = pts[i]
+		var b: Vector2 = pts[(i + 1) % n]
+		face.set_uv(_uv(0.0, 0.0))
+		face.add_vertex(Vector3(0.0, 0.0, hz))
+		face.set_uv(_uv(b.x, b.y))
+		face.add_vertex(Vector3(b.x, b.y, hz))
+		face.set_uv(_uv(a.x, a.y))
+		face.add_vertex(Vector3(a.x, a.y, hz))
+	face.commit(mesh)
+
+	var gem: SurfaceTool = SurfaceTool.new()
+	gem.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var gx0: float = -CARD_W * 0.5 - PAD_IN
+	var gx1: float = -CARD_W * 0.5 + GEM - PAD_IN
+	var gy0: float = CARD_H * 0.5 + PAD_IN
+	var gy1: float = CARD_H * 0.5 - GEM + PAD_IN
+	var gz: float = hz + 0.4
+	var quad: Array = [
+		Vector3(gx0, gy0, gz), Vector3(gx0, gy1, gz),
+		Vector3(gx1, gy1, gz), Vector3(gx1, gy0, gz),
+	]
+	for idx: int in [0, 2, 1, 0, 3, 2]:  # clockwise from the camera — see above
+		var p: Vector3 = quad[idx]
+		gem.set_uv(_uv(p.x, p.y))
+		gem.add_vertex(p)
+	gem.commit(mesh)
+	return mesh
+
+
+## The slab's cross-section colour: the edge system's band made physical.
+## Hue carries the type; brightness carries the finish. Leaden drinks light.
+static func _side_color(fin: int, tint: Color) -> Color:
+	match fin:
+		0:
+			return tint.lerp(Color(0.5, 0.5, 0.5), 0.45).darkened(0.58)
+		1:
+			return tint.darkened(0.40)
+		2:
+			return tint.darkened(0.15)
+		3:
+			return GOLD
+		_:
+			return Color(0.05, 0.06, 0.09)
+
+
+## Freeze both offscreen passes when nothing moves; UPDATE_ONCE paints one
+## last frame and sleeps. A 61-card lab must idle at zero render cost.
+func _set_live(on: bool) -> void:
+	var mode: SubViewport.UpdateMode = SubViewport.UPDATE_ALWAYS if on \
+		else SubViewport.UPDATE_ONCE
+	_inner.render_target_update_mode = mode
+	_stage.render_target_update_mode = mode
+
+
+func _ready() -> void:
+	set_process(false)
+	# GLASSVOW_TILT="nx,ny" (each -1..1): hold a static pose for screenshots —
+	# the tilt is cursor-driven and cannot otherwise exist in a scripted shot.
+	var dump: String = OS.get_environment("GLASSVOW_DUMP")
+	if dump != "":
+		for _i: int in range(10):
+			await get_tree().process_frame
+		_inner.get_texture().get_image().save_png("%s_inner_%d.png" % [dump, uid])
+		_stage.get_texture().get_image().save_png("%s_stage_%d.png" % [dump, uid])
+	var forced: String = OS.get_environment("GLASSVOW_TILT")
+	if forced != "":
+		var p: PackedStringArray = forced.split(",")
+		if p.size() == 2:
+			_tilt = Vector2(-float(p[1]), -float(p[0])) * MAX_TILT
+			_slab.rotation_degrees = Vector3(_tilt.x, _tilt.y, 0.0)
+		return  # stay live so the pose reaches the shot
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not _hovered:
+		_set_live(false)
+
+
+## The spring integrator. Runs only while the card is held or still
+## settling; the moment everything is at rest the viewports freeze again.
+func _process(delta: float) -> void:
+	var dt: float = minf(delta, 1.0 / 30.0)  # keep the spring stable on hitches
+	var spr: Vector2 = SPR_HELD if _hovered else SPR_FREE
+	var w2: float = spr.x * spr.x
+	var dampen: float = 2.0 * spr.y * spr.x
+	_tilt_v += ((_tilt_target - _tilt) * w2 - _tilt_v * dampen) * dt
+	_tilt += _tilt_v * dt
+	var lift_target: float = MAX_LIFT if _hovered else 0.0
+	_lift_v += ((lift_target - _lift) * w2 - _lift_v * dampen) * dt
+	_lift += _lift_v * dt
+
+	_slab.rotation_degrees = Vector3(_tilt.x, _tilt.y, 0.0)
+	_slab.position.z = _lift
+	# The pane rises off the table; its shadow eases down and away.
+	var h: float = _lift / MAX_LIFT
+	_shadow.position = Vector2(0.0, 3.0 * h)
+	_shadow.modulate.a = 1.0 - 0.18 * h
+
+	if not _hovered and _tilt.length() < 0.02 and _tilt_v.length() < 0.05 \
+			and _lift < 0.05 and absf(_lift_v) < 0.1:
+		_tilt = Vector2.ZERO
+		_tilt_v = Vector2.ZERO
+		_lift = 0.0
+		_lift_v = 0.0
+		_slab.rotation_degrees = Vector3.ZERO
+		_slab.position.z = 0.0
+		_shadow.position = Vector2.ZERO
+		_shadow.modulate.a = 1.0
+		_set_live(false)
+		set_process(false)
+
+
 static func _font(path: String, tracking: int) -> Font:
 	var key: String = path + "#" + str(tracking)
 	if _font_cache.has(key):
@@ -455,11 +770,16 @@ static func _font(path: String, tracking: int) -> Font:
 
 
 func _on_mouse_entered() -> void:
+	_hovered = true
+	_set_live(true)
+	set_process(true)
 	_fade_glare(1.0)
 	hover_changed.emit(uid, true)
 
 
 func _on_mouse_exited() -> void:
+	_hovered = false
+	_tilt_target = Vector2.ZERO
 	_fade_glare(0.0)
 	hover_changed.emit(uid, false)
 
@@ -484,6 +804,13 @@ func _track_glare(local_pos: Vector2) -> void:
 	if _glare != null:
 		_glare.position = local_pos - Vector2(GLARE_D, GLARE_D) * 0.5
 	_edge_mat.set_shader_parameter("mouse_px", local_pos)
+	# The corner under the cursor comes toward the viewer — the pane presents
+	# itself to be read, the way you angle glass to catch the light. In stage
+	# coordinates (y up, camera on +Z) that works out to rot = -n * MAX_TILT
+	# on both axes for a cursor at normalised n.
+	var n: Vector2 = (local_pos / Vector2(CARD_W, CARD_H)) * 2.0 - Vector2.ONE
+	n = n.clamp(-Vector2.ONE, Vector2.ONE)
+	_tilt_target = Vector2(-n.y, -n.x) * MAX_TILT
 
 
 func _gui_input(event: InputEvent) -> void:
