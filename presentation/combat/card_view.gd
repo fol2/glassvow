@@ -177,16 +177,22 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	body.add_theme_font_override("font", _font(GlassStyle.ALEGREYA_400, 0))
 	body.add_theme_font_size_override("font_size", 13)
-	body.add_theme_constant_override("line_spacing", 4)
+	# Benchmark line-height is 16.9 on a 12.8 font — barely more than the face's
+	# natural leading. Godot's Label default adds 3 on top of that, which costs a
+	# whole line over four and clips the longest rules text ("Cinder", "Hex").
+	body.add_theme_constant_override("line_spacing", 0)
 	body.add_theme_color_override("font_color", BODY_TEXT)
 	# Centred in the stock below the rubric, matching the benchmark — a top-anchored
 	# block leaves one-liners floating with a hole under them.
 	body.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# Benchmark text box is 148x84.9 with 4/10/10 padding — Label has no padding,
+	# so it is baked into the offsets. The rarity pill floats over the tail of
+	# this box rather than reserving space, same as the benchmark.
 	body.set_anchors_preset(Control.PRESET_FULL_RECT)
 	body.offset_left = 10.0
 	body.offset_right = -10.0
-	body.offset_top = EDGE + ART_H + 1.0 + NAME_H + TYPE_H
-	body.offset_bottom = -14.0
+	body.offset_top = EDGE + ART_H + 1.0 + NAME_H + TYPE_H + 4.0
+	body.offset_bottom = -12.0
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(body)
 

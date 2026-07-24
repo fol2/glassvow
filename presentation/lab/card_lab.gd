@@ -67,7 +67,11 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 	for id: String in ids:
 		var data: Dictionary = content.cards.get(id, {})
 		var inst: CardInst = CardInst.new(uid, StringName(id))
-		var cost_num: int = data.get("cost", 0)
+		# `cost` is present-but-null on the unplayable cards (burn, hex, wound),
+		# so Dictionary.get's default never fires — it only covers a missing key.
+		# Same read the domain does in combat.gd eff_cost().
+		var cost_v: Variant = data.get("cost")
+		var cost_num: int = 0 if cost_v == null else int(float(str(cost_v)))
 		var card: CardView = CardView.new(inst, data, cost_num)
 		# The lab is a contact sheet, not a hand: nothing here takes input.
 		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
