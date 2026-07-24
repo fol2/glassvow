@@ -4,8 +4,8 @@ extends RefCounted
 ## events / post / ret (+ preview mirror for attack rows). We reconstruct `pre`,
 ## run the op through CombatRules, and assert everything.
 ##
-## Staged coverage while M3 lands: rows whose tag matches SUPPORTED_TAG_PREFIXES
-## run; the rest are counted as pending (M3c adds special/ + potion/).
+## All 136 rows are covered; SUPPORTED_TAG_PREFIXES is the known tag surface,
+## so a regenerated fixture with a new tag family shows up as pending > 0.
 
 const SUPPORTED_TAG_PREFIXES: PackedStringArray = [
 	"attack/", "special/", "block/", "potion/", "previewBlock/", "previewEnemyDmg/",

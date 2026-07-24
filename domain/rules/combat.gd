@@ -606,6 +606,120 @@ func _apply_special(
 			push_error("CombatRules: unknown special %s" % sid)
 
 
+# ---------------------------------------------------------------- end of turn
+
+func end_turn(run: RunState, cb: CombatState) -> void:
+	if cb.over:
+		return
+	var p: PlayerCombatant = cb.player
+	cb.queue.append({"t": EventTypes.END_TURN})
+	# Hand end-of-turn penalties (burn / hex).
+	for c: CardInst in cb.hand.duplicate():
+		var d: Dictionary = card_data(c)
+		if d.get("endTurnDmg") != null:
+			damage_player(run, cb, _ji(d["endTurnDmg"]), "burn")
+		if d.get("endTurnLoseHp") != null:
+			damage_player(run, cb, _ji(d["endTurnLoseHp"]), "burn")
+		if cb.over:
+			return
+	var metallicize: int = _sget(p.statuses, "metallicize")
+	if metallicize > 0:
+		gain_block_player(cb, metallicize, false)
+	var regen: int = _sget(p.statuses, "regen")
+	if regen > 0:
+		heal_player(run, cb, regen)
+	# Discard hand.
+	var uids: Array = []
+	for c: CardInst in cb.hand:
+		uids.append(c.uid)
+	cb.discard.append_array(cb.hand)
+	cb.hand = []
+	cb.queue.append({"t": EventTypes.DISCARD_HAND, "uids": uids})
+	# Player debuffs (and turn-scoped buffs) tick down at end of your turn.
+	for s: String in ["vulnerable", "weak", "frail", "beacon"]:
+		_tick_status(p.statuses, s)
+
+	# ---- enemy phase
+	for e: EnemyCombatant in cb.enemies:
+		if e.hp <= 0 or cb.over:
+			continue
+		var poison: int = _sget(e.statuses, "poison")
+		if poison > 0:
+			e.hp -= poison
+			cb.queue.append({
+				"t": EventTypes.HIT_ENEMY,
+				"idx": e.idx,
+				"amount": poison,
+				"blocked": 0,
+				"hpAfter": maxi(0, e.hp),
+				"dead": e.hp <= 0,
+				"poison": true,
+			})
+			_tick_status(e.statuses, "poison")
+			if e.hp <= 0:
+				_on_enemy_death(run, cb, e)
+				continue
+		e.block = 0
+		if e.staggered:
+			# A shattered pane spends its turn reseaming: the move is skipped, but
+			# its key still enters last_moves so rotation scripts don't repeat-lock.
+			e.staggered = false
+			e.last_moves.append(String(e.move_key))
+			cb.queue.append({"t": EventTypes.STAGGERED, "idx": e.idx})
+		else:
+			var mv: Dictionary = e.move()
+			cb.queue.append({
+				"t": EventTypes.ENEMY_ACT,
+				"idx": e.idx,
+				"move": String(e.move_key),
+				"name": str(mv.get("name", "")),
+			})
+			e.last_moves.append(String(e.move_key))
+			if mv.get("dmg") != null:
+				var times: int = _ji(mv.get("times", 1))
+				for _t: int in range(times):
+					if cb.over:
+						break
+					damage_player(run, cb, _ji(mv["dmg"]), e.idx, true, e)
+				# ramp moves: no slice source
+			if cb.over:
+				return
+			if mv.get("block") != null:
+				gain_block_enemy(cb, e, _ji(mv["block"]))
+			# heal / addCards moves: no slice source
+			var mv_fx_v: Variant = mv.get("fx")
+			if mv_fx_v != null:
+				var mv_fx: Array = mv_fx_v
+				for s_v: Variant in mv_fx:
+					var s: Dictionary = s_v
+					var who: String = str(s.get("who", ""))
+					if who == "player":
+						add_status_player(cb, str(s["id"]), _ji(s["n"]))
+					elif who == "self":
+						add_status_enemy(cb, e, str(s["id"]), _ji(s["n"]))
+					# allies: no slice source
+		# Enemy end-of-action: ritual, debuff tick (a staggered turn still ticks).
+		var ritual: int = _sget(e.statuses, "ritual")
+		if ritual > 0:
+			add_status_enemy(cb, e, "str", ritual)
+		_tick_status(e.statuses, "vulnerable")
+		_tick_status(e.statuses, "weak")
+	if cb.over:
+		return
+	_compute_intents(run, cb)
+	_start_player_turn(run, cb)
+
+
+static func _tick_status(statuses: Dictionary, id: String) -> void:
+	var n: int = statuses.get(id, 0)
+	if n > 0:
+		n -= 1
+		if n == 0:
+			statuses.erase(id)
+		else:
+			statuses[id] = n
+
+
 # ---------------------------------------------------------------- kindle & the Lantern Art
 
 ## The universal rite: once per turn, feed any hand card to the lantern.

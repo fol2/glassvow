@@ -36,6 +36,8 @@ func apply(cmd: Dictionary) -> Array[Dictionary]:
 			var uid: int = cmd.get("uid", 0)
 			var target_v: Variant = cmd.get("target")
 			last_ret = rules.play_card(run, cb, uid, target_v)
+		"endTurn":
+			rules.end_turn(run, cb)
 		"kindleFromHand":
 			# The recorded traces carry ret:null for these ops — the web recorder
 			# only captures playCard's return — so last_ret stays null here.

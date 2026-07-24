@@ -13,24 +13,33 @@ Living status for the Glassvow Godot port. Spec = the frozen web engine
 - **M2** `content/content_db.gd` + `domain/rules/enemy_ai.gd` + `test_content` /
   `test_enemy_ai` (1710 AI cases, 672 rng-consuming — all parity-clean).
 
-## Next: M3 — combat core
+## M3 — combat core: DONE (green)
 
-Reimplement combat in `domain/` to match the web engine. Rough shape (split
-however lands cleanly, small PRs, each green before the next): states +
-`start_combat` + piles/draw/reshuffle → `play_card` + damage/block + effects →
-statuses + shatter/chips → kindle/embers/Lantern-Art + the slice specials
-(execute/momentum/doubleBlock) → enemy turn + `end_turn`.
+Landed as 4 commits (M3a state layer + start_combat · M3b play_card/damage/
+chips/shatter + previews + potions · M3c kindle + Lantern Art · M3d end_turn +
+enemy phase). Layout: `domain/state/{run_state,combat_state,player_combatant,
+enemy_combatant,card_inst}.gd`, `domain/rules/combat.gd` (the whole combat
+law; slice-inert systems documented in its docblock), `domain/events/
+event_types.gd`, `domain/game.gd` (`apply(cmd)` facade — cmd `t` values are
+the web trace op names verbatim). Proof: `test_combat_probes.gd` (136/136
+rows: events + post + ret + preview) and `test_combat_traces.gd` (all 4 slice
+traces replay to the end: events delta + rngState + combat/run snapshots per
+row; reward rows resync rng + gold pending M4).
 
-**Verify against fixtures, in order:**
-1. `tests/test_combat_probes.gd` — the 136 rows are rng-free; each carries
-   `pre`/`op`/`args`/`events`/`post` (+ `preview`). Reconstruct `pre`, run the
-   op, assert events + post + preview mirror.
-2. `tests/test_combat_traces.gd` — replay each trace's command stream; assert
-   the events-delta + `rngState` per step. Use `tests/support/diff.gd` `deep_eq`
-   for first-divergence (step, op, field path, expected/actual, last-good state).
+Parity notes for future waves: fixture card projections carry `up`/`bonus`
+only when set; kindle/useArt/endTurn trace steps record `ret:null` (only
+playCard's return is captured); the elite trace passes its affix explicitly so
+no affix-pick rng draw fires. Damage law is **sequential floors**: `base+str →
+weak ⌊×0.75⌋ → vulnerable ⌊×1.5⌋ → max(0,·)`; every calc keeps its pure
+preview mirror in lockstep.
 
-Damage law is **sequential floors**: `base+str → weak ⌊×0.75⌋ → vulnerable
-⌊×1.5⌋ → max(0,·)`; block = round. Every calc needs its pure preview mirror.
+## Next: M4 — run loop minus map-gen
+
+Rewards (`genCombatRewards` parity — the traces' reward rows carry expected
+output), `GameState.to/from_dict` + `SaveService` (`user://`),
+resume-via-pending-encounter, hand-authored horizontal slice map data.
+Verify: `test_save.gd` vs `saves/invalid-cases.json` (reject-vs-heal loader
+semantics) + reward rows in the slice traces (stop resyncing rng there).
 
 ## Contracts & gotchas
 

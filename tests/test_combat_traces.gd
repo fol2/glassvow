@@ -4,13 +4,15 @@ extends RefCounted
 ## command stream through GlassvowGame.apply, asserting per row: events delta,
 ## op return, rngState cursor, and the combat / run snapshots.
 ##
-## Staged coverage while M3 lands: ops listed in SUPPORTED_OPS are replayed;
-## the first unsupported op ends that seed's replay early (M3b-e grow the list
-## until all four traces replay to the end). Reward rows resync the rng cursor
-## and gold — reward *generation* parity is M4's suite.
+## All four traces replay to the end. SUPPORTED_OPS is the op surface the M3
+## combat core implements; an op outside it fails loudly here when fixtures
+## regenerate with new ops. Reward rows resync the rng cursor and gold —
+## reward *generation* parity is M4's suite.
 
 const SEEDS: PackedInt32Array = [101, 202, 303, 404]
-const SUPPORTED_OPS: PackedStringArray = ["playCard", "kindleFromHand", "useArt"]
+const SUPPORTED_OPS: PackedStringArray = [
+	"playCard", "kindleFromHand", "useArt", "endTurn", "addCardToDeck",
+]
 
 const Diff: GDScript = preload("res://tests/support/diff.gd")
 
@@ -58,8 +60,8 @@ static func _replay(seed: int, content: ContentDB, fails: Array[String]) -> void
 			"step":
 				var op: String = str(row["op"])
 				if not SUPPORTED_OPS.has(op):
-					print("  trace seed-%d: stopped before unsupported op %s (row %d)"
-						% [seed, op, StateBuild.ji(row["i"])])
+					fails.append("trace seed-%d row %d: unsupported op %s"
+						% [seed, StateBuild.ji(row["i"]), op])
 					return
 				var args: Dictionary = row["args"]
 				var events: Array[Dictionary] = game.apply(_step_cmd(op, args))
