@@ -15,6 +15,10 @@ extends Control
 ##   text      Alegreya 400 @ 12.8, line-height 16.9, #C6CCDF
 ##   rarity    24 x 5 pill, radius 3, #3C465E, bottom centre
 ##
+## The face is a stack of full-width bands, built top-down in _init the way the
+## card reads. Every band goes through _band() and every gradient through
+## _grad() — see those two for the traps they exist to close.
+##
 ## Art is `assets/art/cards/<id>.jpg`, keyed straight off the content id; a card
 ## with no art on disk falls back to a bare pane. Below the style sits the raw
 ## pointer surface for the hand's drag state machine — mouse and touch both
@@ -36,6 +40,13 @@ const NAME_H: float = 23.0
 const TYPE_H: float = 13.0
 const GEM: float = 36.0
 const PILL_W: float = 24.0
+## Each row's top derived from the one above it, so changing a band's height
+## carries the rest with it instead of leaving five hand-summed offsets behind.
+const ART_Y: float = EDGE
+const RULE_Y: float = ART_Y + ART_H              # 1px divider under the window
+const NAME_Y: float = RULE_Y + 1.0
+const TYPE_Y: float = NAME_Y + NAME_H
+const BODY_Y: float = TYPE_Y + TYPE_H + 2.0
 ## Glare disc diameter. The benchmark's gradient dies out at 55% of the card box;
 ## an oversized disc keeps the falloff smooth when the cursor sits near an edge.
 const GLARE_D: float = 240.0
@@ -46,10 +57,24 @@ const INK: Color = Color(0.043, 0.055, 0.102)         # #0B0E1A — card stock
 const RULE: Color = Color(0.020, 0.027, 0.055)        # #05070E — borders
 const BODY_TEXT: Color = Color(0.776, 0.800, 0.875)   # #C6CCDF — rules
 const GEM_INK: Color = Color(0.141, 0.102, 0.020)     # #241A05 — cost numeral
-const GOLD_LIT: Color = Color(1.000, 0.914, 0.675)    # #FFE9AC — conic highlight
-const GOLD_MID: Color = Color(0.949, 0.757, 0.306)    # #F2C14E
-const GOLD_DIM: Color = Color(0.702, 0.514, 0.122)    # #B3831F — conic shadow
-const GOLD: Color = Color(0.949, 0.757, 0.306)        # #F2C14E — var(--gold)
+## Gold leaf as a three-stop ramp: the gem's conic sweep, and GOLD alone
+## wherever the benchmark writes var(--gold).
+const GOLD_LIT: Color = Color(1.000, 0.914, 0.675)    # #FFE9AC — highlight
+const GOLD: Color = Color(0.949, 0.757, 0.306)        # #F2C14E
+const GOLD_DIM: Color = Color(0.702, 0.514, 0.122)    # #B3831F — shadow
+## Free cards get a green gem, not gold (.card-cost.free).
+const GREEN_LIT: Color = Color(0.851, 0.984, 0.906)   # #D9FBE7
+const GREEN: Color = Color(0.216, 0.839, 0.478)       # #37D67A
+const GREEN_DIM: Color = Color(0.090, 0.439, 0.243)   # #17703E
+
+## Benchmark type tints, sampled from the pre-Pixi build's computed styles.
+const TYPE_TINT: Dictionary = {
+	"attack": Color(1.000, 0.349, 0.392),     # #FF5964
+	"skill": Color(0.306, 0.659, 0.871),      # #4EA8DE
+	"power": Color(0.702, 0.533, 1.000),      # #B388FF
+	"status": Color(0.498, 0.682, 0.612),     # #7FAE9C
+	"curse": Color(0.780, 0.482, 0.831),      # #C77BD4
+}
 ## The rarity pill is not one colour — styles.css tiers it, and the two top tiers
 ## also glow. `special` has no rule there, so it falls through to the starter slate.
 const RARITY_PILL: Dictionary = {
@@ -58,10 +83,17 @@ const RARITY_PILL: Dictionary = {
 	"uncommon": Color(0.278, 0.761, 0.878),   # #47C2E0 → #7FE3F2
 	"rare": Color(0.949, 0.757, 0.306),       # gold → #FFE9AC
 }
-## Free cards get a green gem, not gold (.card-cost.free).
-const GREEN_LIT: Color = Color(0.851, 0.984, 0.906)   # #D9FBE7
-const GREEN_MID: Color = Color(0.216, 0.839, 0.478)   # #37D67A
-const GREEN_DIM: Color = Color(0.090, 0.439, 0.243)   # #17703E
+## Tiered inset rim: commons leaded in the type tint, uncommons silvered, rares
+## gilt. Absent tiers take the type tint, which is what the benchmark falls to.
+const RARITY_RIM: Dictionary = {
+	"uncommon": Color(0.659, 0.847, 0.933, 0.60),   # #A8D8EE
+	"rare": Color(0.949, 0.757, 0.306, 0.80),
+}
+
+## Cached FontVariations — one per (face, tracking) pair, built once per run.
+## Label wants a Font resource, and a fresh FontVariation per label would re-pay
+## the shaping setup on every card the hand deals.
+static var _font_cache: Dictionary = {}
 
 var uid: int = 0
 var card_id: StringName = &""
@@ -85,7 +117,8 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	var unplayable_flag: bool = data.get("unplayable", false)
 	unplayable = unplayable_flag
 	var ctype: String = str(data.get("type", ""))
-	var tint: Color = _type_tint(ctype)
+	var rarity: String = str(data.get("rarity", "starter"))
+	var tint: Color = TYPE_TINT.get(ctype, GlassStyle.GLASS)
 	custom_minimum_size = Vector2(CARD_W, CARD_H)
 	size = custom_minimum_size
 	pivot_offset = custom_minimum_size * 0.5
@@ -99,7 +132,6 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	sb.border_color = RULE
 	sb.set_border_width_all(int(EDGE))
 	sb.set_corner_radius_all(11)
-	sb.set_content_margin_all(0)
 	sb.shadow_color = Color(0, 0, 0, 0.55)
 	sb.shadow_size = 8
 	sb.shadow_offset = Vector2(0, 4)
@@ -115,88 +147,43 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	add_child(layer)
 
 	# Stock gradient, under the art and everything else.
-	var stock: TextureRect = TextureRect.new()
-	# grad_tex hands back a 256x256 texture, and TextureRect's default
-	# EXPAND_KEEP_SIZE makes that the node's *minimum* size — a 1px rule asked for
-	# in offsets still comes out 256px tall. Every gradient here must ignore it.
-	stock.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	stock.texture = GlassStyle.grad_tex(
+	var stock: TextureRect = _grad(
 		PackedColorArray([
-			Color(tint.r, tint.g, tint.b, 1.0).lerp(Color(0.063, 0.078, 0.141), 0.85),
+			Color(tint, 1.0).lerp(Color(0.063, 0.078, 0.141), 0.85),
 			Color(0.035, 0.043, 0.078)]),
 		PackedFloat32Array([0.0, 0.58]), false,
 		Vector2(0.12, 0.0), Vector2(0.88, 1.0))
 	stock.set_anchors_preset(Control.PRESET_FULL_RECT)
-	stock.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(stock)
 
-	var art_path: String = ART_DIR + String(inst.id) + ".jpg"
-	var art: Texture2D = null
-	if ResourceLoader.exists(art_path):
-		art = load(art_path) as Texture2D
+	var art: Texture2D = _load_art(inst.id)
 	if art != null:
 		var art_rect: TextureRect = TextureRect.new()
 		art_rect.texture = art
 		art_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		# Source art is 3:2 landscape, the window is 148x91 — cover, don't fit.
 		art_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		art_rect.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		art_rect.offset_left = EDGE
-		art_rect.offset_right = -EDGE
-		art_rect.offset_top = EDGE
-		art_rect.offset_bottom = EDGE + ART_H
-		art_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		layer.add_child(art_rect)
-
-	# Art overlays, both from the benchmark's .card-art: a wide radial wash in the
-	# type tint, and a 1px light line along the top edge from its inset shadow.
-	# The dark line under the window is the `rule` below.
-	if art != null:
-		var wash: TextureRect = TextureRect.new()
-		wash.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		wash.texture = GlassStyle.grad_tex(
-			PackedColorArray([Color(tint.r, tint.g, tint.b, 0.14),
-				Color(tint.r, tint.g, tint.b, 0.0)]),
-			PackedFloat32Array([0.0, 0.75]), true, Vector2(0.5, 0.45), Vector2(1.0, 0.45))
-		wash.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		wash.offset_left = EDGE
-		wash.offset_right = -EDGE
-		wash.offset_top = EDGE
-		wash.offset_bottom = EDGE + ART_H
-		wash.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		layer.add_child(wash)
+		layer.add_child(_band(art_rect, ART_Y, ART_H))
+		# Two overlays from the benchmark's .card-art: a wide radial wash in the
+		# type tint, and a 1px light line along the top edge from its inset
+		# shadow. The dark line *under* the window is `rule`, below.
+		layer.add_child(_band(_grad(
+			PackedColorArray([Color(tint, 0.14), Color(tint, 0.0)]),
+			PackedFloat32Array([0.0, 0.75]), true,
+			Vector2(0.5, 0.45), Vector2(1.0, 0.45)), ART_Y, ART_H))
 		var lip: ColorRect = ColorRect.new()
 		lip.color = Color(1, 1, 1, 0.09)
-		lip.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		lip.offset_left = EDGE
-		lip.offset_right = -EDGE
-		lip.offset_top = EDGE
-		lip.offset_bottom = EDGE + 1.0
-		lip.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		layer.add_child(lip)
+		layer.add_child(_band(lip, ART_Y, 1.0))
 
 	var rule: ColorRect = ColorRect.new()
 	rule.color = RULE
-	rule.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	rule.offset_left = EDGE
-	rule.offset_right = -EDGE
-	rule.offset_top = EDGE + ART_H
-	rule.offset_bottom = EDGE + ART_H + 1.0
-	rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(rule)
+	layer.add_child(_band(rule, RULE_Y, 1.0))
 
-	# 1px inset rim in the type tint — the benchmark's inner box-shadow.
+	# 1px inset rim — the benchmark's inner box-shadow.
 	var rim: Panel = Panel.new()
 	var rim_sb: StyleBoxFlat = StyleBoxFlat.new()
 	rim_sb.bg_color = Color(0, 0, 0, 0)
-	# Tiered rim: commons leaded in the type tint, uncommons silvered, rares gilt.
-	var rim_col: Color = Color(tint.r, tint.g, tint.b, 0.40)
-	var tier: String = str(data.get("rarity", "starter"))
-	if tier == "uncommon":
-		rim_col = Color(0.659, 0.847, 0.933, 0.60)   # #A8D8EE
-	elif tier == "rare":
-		rim_col = Color(GOLD.r, GOLD.g, GOLD.b, 0.80)
-	rim_sb.border_color = rim_col
+	rim_sb.border_color = RARITY_RIM.get(rarity, Color(tint, 0.40))
 	rim_sb.set_border_width_all(1)
 	rim_sb.set_corner_radius_all(9)
 	rim.add_theme_stylebox_override("panel", rim_sb)
@@ -208,29 +195,22 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	rim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(rim)
 
-	var display_name: String = str(data.get("name", String(inst.id)))
-	if inst.up:
-		display_name += "+"
 	var name_label: Label = Label.new()
-	name_label.text = display_name
+	name_label.text = str(data.get("name", String(inst.id)))
+	if inst.up:
+		name_label.text += "+"
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_override("font", _font(GlassStyle.CINZEL_700, 0))
 	name_label.add_theme_font_size_override("font_size", 14)
 	name_label.add_theme_color_override("font_color", PARCHMENT)
-	name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	name_label.offset_left = EDGE
-	name_label.offset_right = -EDGE
-	name_label.offset_top = EDGE + ART_H + 1.0
-	name_label.offset_bottom = EDGE + ART_H + 1.0 + NAME_H
-	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(name_label)
+	layer.add_child(_band(name_label, NAME_Y, NAME_H))
 
 	# The name plate is ruled top and bottom with a 1px gold line that fades out
 	# at both ends (styles.css .card-name carries them as background gradients).
 	# The lower one is the divider between the name and the type rubric.
-	_add_name_rule(layer, EDGE + ART_H + 1.0, 0.22, 0.14)
-	_add_name_rule(layer, EDGE + ART_H + 1.0 + NAME_H - 1.0, 0.14, 0.06)
+	_add_name_rule(layer, NAME_Y, 0.22)
+	_add_name_rule(layer, TYPE_Y - 1.0, 0.14)
 
 	var type_label: Label = Label.new()
 	type_label.text = ctype.to_upper()
@@ -241,13 +221,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	type_label.add_theme_font_override("font", _font(GlassStyle.ALEGREYA_400, 3))
 	type_label.add_theme_font_size_override("font_size", 10)
 	type_label.add_theme_color_override("font_color", tint)
-	type_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	type_label.offset_left = EDGE
-	type_label.offset_right = -EDGE
-	type_label.offset_top = EDGE + ART_H + 1.0 + NAME_H
-	type_label.offset_bottom = EDGE + ART_H + 1.0 + NAME_H + TYPE_H
-	type_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(type_label)
+	layer.add_child(_band(type_label, TYPE_Y, TYPE_H))
 
 	# Drawn, not laid out by a Label — RichTextLabel cannot do the benchmark's
 	# dotted keyword rule and exposes no per-run rects to patch one in. See
@@ -258,90 +232,106 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 		13, 16.9)
 	body.plain_color = BODY_TEXT
 	body.value_color = PARCHMENT
-	# Benchmark text box is 148x84.9 with 4/10/10 padding — baked into the offsets,
-	# since neither node type has padding. RulesText centres its own paragraph
-	# vertically, so short rules do not hang off the rubric. The rarity pill floats
-	# over the tail of this box rather than reserving space, as in the benchmark.
+	# Benchmark text box is 148x84.9 with 4/10/10 padding — 10 rather than EDGE on
+	# the sides, since neither node type has padding. RulesText centres its own
+	# paragraph vertically, so short rules do not hang off the rubric. The rarity
+	# pill floats over the tail of this box rather than reserving space.
 	body.set_anchors_preset(Control.PRESET_FULL_RECT)
 	body.offset_left = 10.0
 	body.offset_right = -10.0
-	body.offset_top = EDGE + ART_H + 1.0 + NAME_H + TYPE_H + 2.0
+	body.offset_top = BODY_Y
 	body.offset_bottom = -8.0
 	layer.add_child(body)
 
-	var rarity: String = str(data.get("rarity", "starter"))
-	var pill: Panel = Panel.new()
-	var pill_sb: StyleBoxFlat = StyleBoxFlat.new()
-	pill_sb.bg_color = RARITY_PILL.get(rarity, RARITY_PILL["starter"])
-	pill_sb.set_corner_radius_all(3)
-	# Uncommon and rare pills carry a glow in the benchmark; the lower tiers don't.
-	if rarity == "uncommon" or rarity == "rare":
-		pill_sb.shadow_color = Color(pill_sb.bg_color.r, pill_sb.bg_color.g,
-			pill_sb.bg_color.b, 0.55)
-		# Benchmark: 0 0 6px on uncommon, 0 0 8px on rare. Godot's shadow_size is a
-		# radius, so it reads heavier at the same number — halved.
-		pill_sb.shadow_size = 4 if rarity == "rare" else 3
-	pill.add_theme_stylebox_override("panel", pill_sb)
-	# 24x5, centred, 5px off the bottom. BOTTOM_WIDE anchors right at 1.0, so
-	# offset_right insets from the RIGHT edge and must be negative — a positive
-	# value pushes the pill past the card instead of centring it.
-	pill.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	pill.offset_left = (CARD_W - PILL_W) * 0.5
-	pill.offset_right = -(CARD_W - PILL_W) * 0.5
-	pill.offset_top = -10.0
-	pill.offset_bottom = -5.0
-	pill.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(pill)
+	layer.add_child(_build_rarity_pill(rarity))
 
 	# Cursor glare: the benchmark's .card-inner::before — a soft radial highlight
 	# that tracks the pointer and fades in over 0.25s. Lives above the art but
 	# below nothing else, and inside the clipped subtree so it respects the radius.
-	_glare = TextureRect.new()
-	_glare.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_glare.texture = GlassStyle.grad_tex(
+	_glare = _grad(
 		PackedColorArray([Color(1, 1, 1, 0.17), Color(1, 1, 1, 0.0)]),
 		PackedFloat32Array([0.0, 0.55]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
 	_glare.size = Vector2(GLARE_D, GLARE_D)
 	_glare.modulate = Color(1, 1, 1, 0)
-	_glare.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(_glare)
 
 	# The gem overhangs the corner, so it sits outside the clipped subtree.
-	_build_cost_gem(cost, tint)
+	_build_cost_gem(cost)
 
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
 
+## Place a node as a full-width band on the face, inset by the border.
+##
+## Under TOP_WIDE the right anchor sits at 1.0, so offset_right insets from the
+## RIGHT edge and must be negative. Doing that by hand at each of the eight band
+## sites is how the rarity pill once came out 140px wide: one positive number
+## pushed it clean past the card. Every band goes through here instead.
+static func _band(node: Control, y: float, h: float) -> Control:
+	node.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	node.offset_left = EDGE
+	node.offset_right = -EDGE
+	node.offset_top = y
+	node.offset_bottom = y + h
+	node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return node
+
+
+## A gradient as a TextureRect, sized by whoever places it.
+##
+## EXPAND_IGNORE_SIZE is not optional: grad_tex hands back a 256x256 texture and
+## TextureRect's default EXPAND_KEEP_SIZE makes that the node's *minimum* size,
+## so a 1px rule asked for in offsets still comes out 256px tall.
+static func _grad(colors: PackedColorArray, offsets: PackedFloat32Array,
+		radial: bool, from: Vector2, to: Vector2) -> TextureRect:
+	var tr: TextureRect = TextureRect.new()
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.texture = GlassStyle.grad_tex(colors, offsets, radial, from, to)
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return tr
+
+
+static func _load_art(id: StringName) -> Texture2D:
+	var path: String = ART_DIR + String(id) + ".jpg"
+	return load(path) as Texture2D if ResourceLoader.exists(path) else null
+
+
 ## One of the name plate's two hairlines: gold, brightest mid-span, transparent
-## at both ends. A three-stop horizontal gradient stands in for the CSS one.
-func _add_name_rule(parent: Control, y: float, mid_a: float, edge_a: float) -> void:
-	var rule_line: TextureRect = TextureRect.new()
-	rule_line.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	rule_line.texture = GlassStyle.grad_tex(
-		PackedColorArray([
-			Color(GOLD.r, GOLD.g, GOLD.b, 0.0),
-			Color(GOLD.r, GOLD.g, GOLD.b, mid_a),
-			Color(GOLD.r, GOLD.g, GOLD.b, mid_a),
-			Color(GOLD.r, GOLD.g, GOLD.b, edge_a * 0.0)]),
+## at both ends. A four-stop horizontal gradient stands in for the CSS one.
+static func _add_name_rule(parent: Control, y: float, mid_a: float) -> void:
+	parent.add_child(_band(_grad(
+		PackedColorArray([Color(GOLD, 0.0), Color(GOLD, mid_a),
+			Color(GOLD, mid_a), Color(GOLD, 0.0)]),
 		PackedFloat32Array([0.04, 0.18, 0.82, 0.96]), false,
-		Vector2(0.0, 0.5), Vector2(1.0, 0.5))
-	rule_line.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	rule_line.offset_left = EDGE
-	rule_line.offset_right = -EDGE
-	rule_line.offset_top = y
-	rule_line.offset_bottom = y + 1.0
-	rule_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	parent.add_child(rule_line)
+		Vector2(0.0, 0.5), Vector2(1.0, 0.5)), y, 1.0))
+
+
+## 24x5 tier bar, centred, 5px off the bottom.
+static func _build_rarity_pill(rarity: String) -> Panel:
+	var pill: Panel = Panel.new()
+	var sb: StyleBoxFlat = StyleBoxFlat.new()
+	sb.bg_color = RARITY_PILL.get(rarity, RARITY_PILL["starter"])
+	sb.set_corner_radius_all(3)
+	# Uncommon and rare pills carry a glow in the benchmark; the lower tiers
+	# don't. Benchmark: 0 0 6px on uncommon, 0 0 8px on rare. Godot's shadow_size
+	# is a radius, so it reads heavier at the same number — halved.
+	if rarity == "uncommon" or rarity == "rare":
+		sb.shadow_color = Color(sb.bg_color, 0.55)
+		sb.shadow_size = 4 if rarity == "rare" else 3
+	pill.add_theme_stylebox_override("panel", sb)
+	_band(pill, CARD_H - 10.0, 5.0)
+	pill.offset_left = (CARD_W - PILL_W) * 0.5
+	pill.offset_right = -(CARD_W - PILL_W) * 0.5
+	return pill
 
 
 ## A pointy-top hexagon in gold leaf, hung off the top-left corner at (-8, -8).
-func _build_cost_gem(cost: int, tint: Color) -> void:
+func _build_cost_gem(cost: int) -> void:
 	var holder: Control = Control.new()
 	holder.position = Vector2(-8.0, -8.0)
 	holder.size = Vector2(GEM, GEM)
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	holder.top_level = false
 	add_child(holder)
 
 	# Benchmark clip-path: polygon(50% 0, 93% 25, 93% 75, 50% 100, 7% 75, 7% 25).
@@ -356,7 +346,7 @@ func _build_cost_gem(cost: int, tint: Color) -> void:
 	# this 36px badge needs. Cost 0 is struck in green, not gold (.card-cost.free).
 	var free: bool = cost == 0 and not unplayable
 	var lit: Color = GREEN_LIT if free else GOLD_LIT
-	var mid: Color = GREEN_MID if free else GOLD_MID
+	var mid: Color = GREEN if free else GOLD
 	var dim: Color = GREEN_DIM if free else GOLD_DIM
 	hex.vertex_colors = PackedColorArray([lit, mid, dim, dim, mid, lit])
 	holder.add_child(hex)
@@ -379,7 +369,7 @@ func _build_cost_gem(cost: int, tint: Color) -> void:
 	pts.append(hex.polygon[0])
 	edge_line.points = pts
 	edge_line.width = 1.0
-	edge_line.default_color = Color(dim.r, dim.g, dim.b, 0.85)
+	edge_line.default_color = Color(dim, 0.85)
 	holder.add_child(edge_line)
 
 	var cost_label: Label = Label.new()
@@ -394,42 +384,17 @@ func _build_cost_gem(cost: int, tint: Color) -> void:
 	holder.add_child(cost_label)
 
 
-
-## Cached FontVariations — one per (face, tracking) pair, built once per run.
-## Label wants a Font resource, and a fresh FontVariation per label would re-pay
-## the shaping setup on every card the hand deals.
-static var _font_cache: Dictionary = {}
-
-
 static func _font(path: String, tracking: int) -> Font:
 	var key: String = path + "#" + str(tracking)
 	if _font_cache.has(key):
 		var hit: Font = _font_cache[key]
 		return hit
-	var base: FontFile = load(path) as FontFile
 	var fv: FontVariation = FontVariation.new()
-	fv.base_font = base
+	fv.base_font = load(path) as FontFile
 	if tracking != 0:
 		fv.spacing_glyph = tracking
 	_font_cache[key] = fv
 	return fv
-
-
-## Benchmark type tints, sampled from the pre-Pixi build's computed styles.
-static func _type_tint(ctype: String) -> Color:
-	match ctype:
-		"attack":
-			return Color(1.000, 0.349, 0.392)   # #FF5964
-		"skill":
-			return Color(0.306, 0.659, 0.871)   # #4EA8DE
-		"power":
-			return Color(0.702, 0.533, 1.000)   # #B388FF
-		"status":
-			return Color(0.498, 0.682, 0.612)   # #7FAE9C
-		"curse":
-			return Color(0.780, 0.482, 0.831)   # #C77BD4
-		_:
-			return GlassStyle.GLASS
 
 
 func _on_mouse_entered() -> void:

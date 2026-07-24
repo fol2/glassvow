@@ -19,8 +19,11 @@ const KIND_VALUE: int = 1
 const KIND_KEYWORD: int = 2
 
 ## Matched as whole words, not via the @…@ / #…# markers — those carry only the
-## numbers. Copied from the benchmark's src/ui/tooltip.js, and ordered so the
-## plural beats the singular ("Embers" must not match as "Ember" + "s").
+## numbers. Copied from the benchmark's src/ui/tooltip.js.
+##
+## The order is load-bearing: these become one alternation, and a regex takes
+## the first alternative that fits at a given position. Plural before singular,
+## or "Embers" matches as "Ember" and leaves a stray "s" unstyled.
 const KEYWORDS: Array = [
 	"Cracked", "Dimmed", "Brittle", "Smolder", "Fervor", "Poise", "Kindle",
 	"Ward", "Energy", "Embers", "Ember", "Chip", "Facets", "Facet", "Shatters",
@@ -32,6 +35,10 @@ const DOT_W: float = 1.0
 const DOT_STEP: float = 2.0
 const UNDERLINE_DROP: float = 2.0
 
+## Compiled once per run, not once per keyword per run. Lazy rather than a
+## static initialiser so it cannot race class load order.
+static var _kw_re: RegEx = null
+
 var plain_color: Color = Color(0.776, 0.800, 0.875)
 var value_color: Color = Color(0.910, 0.875, 0.784)
 var keyword_color: Color = Color(1, 1, 1)
@@ -41,7 +48,7 @@ var line_height: float = 17.0
 var _font_plain: Font
 var _font_bold: Font
 var _tokens: Array = []          # [{text:String, kind:int}]
-var _lines: Array = []           # [[{text, kind, w}]] after wrapping
+var _lines: Array = []           # [[{text, kind, w, space, space_w}]] after wrapping
 var _line_widths: PackedFloat32Array = PackedFloat32Array()
 
 
@@ -54,6 +61,15 @@ func _init(text: String, tint: Color, plain: Font, bold: Font, size: int,
 	line_height = leading
 	_tokens = tokenize(text)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+static func _keyword_re() -> RegEx:
+	if _kw_re == null:
+		var alts: PackedStringArray = PackedStringArray()
+		for w: String in KEYWORDS:
+			alts.append(w)
+		_kw_re = RegEx.create_from_string("\\b(?:%s)\\b" % "|".join(alts))
+	return _kw_re
 
 
 ## Split rules text into styled runs. Numbers first — a marker never contains a
@@ -91,24 +107,15 @@ static func tokenize(text: String) -> Array:
 
 static func _split_keywords(text: String) -> Array:
 	var out: Array = []
-	var rest: String = text
-	while true:
-		var best_at: int = -1
-		var best_word: String = ""
-		for word: String in KEYWORDS:
-			var re: RegEx = RegEx.create_from_string("\\b%s\\b" % word)
-			var m: RegExMatch = re.search(rest)
-			if m != null and (best_at < 0 or m.get_start() < best_at):
-				best_at = m.get_start()
-				best_word = word
-		if best_at < 0:
-			break
-		if best_at > 0:
-			out.append({"text": rest.substr(0, best_at), "kind": KIND_PLAIN})
-		out.append({"text": best_word, "kind": KIND_KEYWORD})
-		rest = rest.substr(best_at + best_word.length())
-	if rest != "":
-		out.append({"text": rest, "kind": KIND_PLAIN})
+	var at: int = 0
+	for m: RegExMatch in _keyword_re().search_all(text):
+		if m.get_start() > at:
+			out.append({
+				"text": text.substr(at, m.get_start() - at), "kind": KIND_PLAIN})
+		out.append({"text": m.get_string(), "kind": KIND_KEYWORD})
+		at = m.get_end()
+	if at < text.length():
+		out.append({"text": text.substr(at), "kind": KIND_PLAIN})
 	return out
 
 
@@ -131,30 +138,29 @@ func _color_for(kind: int) -> Color:
 func _wrap(width: float) -> void:
 	_lines = []
 	_line_widths = PackedFloat32Array()
-	# Split the whole paragraph once, not each run separately. A run boundary
-	# often falls mid-phrase ("Deal " | "4" | " damage."), and splitting per run
-	# drops the space that *begins* the next one — "Deal 4damage".
-	var chars: Array = []            # [{c:String, kind:int}] one entry per char
+	# Walk the whole paragraph as one character stream, not each run separately.
+	# A run boundary often falls mid-phrase ("Deal " | "4" | " damage."), and
+	# splitting per run drops the space that *begins* the next one — "Deal
+	# 4damage". A word takes the style of its first character.
+	var words: Array = []
+	var cur: String = ""
+	var cur_kind: int = KIND_PLAIN
 	for tok: Dictionary in _tokens:
 		var kind: int = tok["kind"]
 		var body: String = str(tok["text"])
 		for ci: int in range(body.length()):
-			chars.append({"c": body[ci], "kind": kind})
-	var words: Array = []
-	var cur: String = ""
-	var cur_kind: int = KIND_PLAIN
-	for entry: Dictionary in chars:
-		var c: String = str(entry["c"])
-		if c == " ":
-			if cur != "":
-				words.append({"text": cur, "kind": cur_kind, "space": true})
-				cur = ""
-			continue
-		if cur == "":
-			cur_kind = entry["kind"]
-		cur += c
+			var c: String = body[ci]
+			if c == " ":
+				if cur != "":
+					words.append({"text": cur, "kind": cur_kind, "space": true})
+					cur = ""
+				continue
+			if cur == "":
+				cur_kind = kind
+			cur += c
 	if cur != "":
 		words.append({"text": cur, "kind": cur_kind, "space": false})
+
 	var line: Array = []
 	var line_w: float = 0.0
 	for word: Dictionary in words:
@@ -165,19 +171,27 @@ func _wrap(width: float) -> void:
 		var space_w: float = f.get_string_size(" ",
 			HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
 		var has_space: bool = word["space"]
-		var add: float = ww + (space_w if has_space else 0.0)
 		if not line.is_empty() and line_w + ww > width:
-			_lines.append(line)
-			_line_widths.append(line_w)
+			_push_line(line, line_w)
 			line = []
 			line_w = 0.0
 		word["w"] = ww
 		word["space_w"] = space_w
 		line.append(word)
-		line_w += add
+		line_w += ww + (space_w if has_space else 0.0)
 	if not line.is_empty():
-		_lines.append(line)
-		_line_widths.append(line_w)
+		_push_line(line, line_w)
+
+
+## Close a line, dropping the last word's trailing space from the measured
+## width. CSS hangs a space at a break rather than counting it into the line
+## box, so counting it here would shove every wrapped line half a space left.
+func _push_line(line: Array, w: float) -> void:
+	var last: Dictionary = line[-1]
+	var trailing: bool = last["space"]
+	var space_w: float = last["space_w"]
+	_lines.append(line)
+	_line_widths.append(w - (space_w if trailing else 0.0))
 
 
 func paragraph_height() -> float:
@@ -201,9 +215,8 @@ func _draw() -> void:
 		var x: float = (size.x - _line_widths[li]) * 0.5
 		for word: Dictionary in line:
 			var kind: int = word["kind"]
-			var f: Font = _font_for(kind)
 			var w: float = word["w"]
-			draw_string(f, Vector2(x, y), str(word["text"]),
+			draw_string(_font_for(kind), Vector2(x, y), str(word["text"]),
 				HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, _color_for(kind))
 			if kind == KIND_KEYWORD:
 				_draw_dotted(x, y + UNDERLINE_DROP, w)
@@ -215,7 +228,7 @@ func _draw() -> void:
 
 ## The benchmark's `border-bottom: 1px dotted tint@60%`.
 func _draw_dotted(x: float, y: float, width: float) -> void:
-	var col: Color = Color(keyword_color.r, keyword_color.g, keyword_color.b, 0.6)
+	var col: Color = Color(keyword_color, 0.6)
 	var dx: float = 0.0
 	while dx < width:
 		draw_rect(Rect2(x + dx, y, minf(DOT_W, width - dx), 1.0), col)
