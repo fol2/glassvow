@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.1
+          use-dotnet: false
+      
+      - name: Import assets
+        run: godot --headless --import
+      
+      - name: Check GDScript syntax
+        run: |
+          git ls-files '*.gd' | grep -v '^addons/' | while read file; do
+            godot --headless --check-only -s "$file" || exit 1
+          done
+      
+      - name: Run tests
+        run: godot --headless -s res://tests/run_all.gd

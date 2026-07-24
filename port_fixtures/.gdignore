@@ -1,0 +1,2 @@
+# Keep port_fixtures out of the Godot editor resource index and export packs.
+# Headless tests still read these files via FileAccess.

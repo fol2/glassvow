@@ -1,0 +1,39 @@
+# Godot editor cache — never commit
+.godot/
+
+# Export / build artifacts
+build/
+export/
+*.apk
+*.aab
+*.ipa
+*.exe
+*.x86_64
+*.x86_32
+*.arm32
+*.arm64
+*.pck
+*.zip
+*.dmg
+*.tmp
+
+# C# / Mono (if enabled later)
+.mono/
+bin/
+obj/
+*.csproj.user
+*.sln.user
+*.user
+
+# IDE / OS
+.vs/
+.vscode/settings.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Local secrets / editor tokens (never commit)
+*.token
+.env
+.env.*
