@@ -606,6 +606,98 @@ func _apply_special(
 			push_error("CombatRules: unknown special %s" % sid)
 
 
+# ---------------------------------------------------------------- kindle & the Lantern Art
+
+## The universal rite: once per turn, feed any hand card to the lantern.
+## (crownOfTithes kindle limit 2: no slice source — the limit is 1.)
+func can_kindle(cb: CombatState, inst: CardInst) -> bool:
+	if inst == null or cb.over:
+		return false
+	if str(card_data(inst).get("type", "")) == "curse":
+		return false  # hexes cling to the hand
+	return not (cb.kindled_turn == cb.turn and cb.kindles_this_turn >= 1)
+
+
+func kindle_from_hand(run: RunState, cb: CombatState, uid: int) -> bool:
+	var i: int = -1
+	for k: int in range(cb.hand.size()):
+		if cb.hand[k].uid == uid:
+			i = k
+			break
+	if i < 0:
+		return false
+	var inst: CardInst = cb.hand[i]
+	if not can_kindle(cb, inst):
+		return false
+	if cb.kindled_turn != cb.turn:
+		cb.kindled_turn = cb.turn
+		cb.kindles_this_turn = 0
+	cb.kindles_this_turn += 1
+	cb.hand.remove_at(i)
+	cb.queue.append({"t": EventTypes.KINDLE, "uid": inst.uid, "id": String(inst.id)})
+	exhaust_card(run, cb, inst)
+	return true
+
+
+## The hero's one always-available answer, paid in embers.
+func can_use_art(run: RunState, cb: CombatState) -> bool:
+	if not content.arts.has(String(run.art)):
+		return false
+	var art: Dictionary = content.arts[String(run.art)]
+	return not cb.over and cb.art_used_turn != cb.turn and cb.embers >= _ji(art.get("cost", 0))
+
+
+func use_art(run: RunState, cb: CombatState) -> bool:
+	if not can_use_art(run, cb):
+		return false
+	var art: Dictionary = content.arts[String(run.art)]
+	cb.art_used_turn = cb.turn
+	gain_embers(run, cb, -_ji(art.get("cost", 0)))
+	cb.queue.append({"t": EventTypes.ART, "id": String(run.art)})
+	var effects: Array = art.get("effects", [])
+	for fx_v: Variant in effects:
+		if cb.over:
+			break
+		var fx: Dictionary = fx_v
+		_apply_art_effect(run, cb, fx)
+	return true
+
+
+## Lantern fire is not a blade: it ignores Fervor/Dimmed/Cracked and strikes everyone.
+func _apply_art_effect(run: RunState, cb: CombatState, fx: Dictionary) -> void:
+	var p: PlayerCombatant = cb.player
+	var kind: String = str(fx.get("kind", ""))
+	match kind:
+		"dmg":
+			for e: EnemyCombatant in cb.living_enemies():
+				if not cb.over:
+					hit_enemy(run, cb, e, _ji(fx["n"]), false)
+		"status":
+			var sid: String = str(fx["id"])
+			var sn: int = _ji(fx["n"])
+			if str(fx.get("who", "")) == "self":
+				add_status_player(cb, sid, sn)
+			else:
+				for e: EnemyCombatant in cb.living_enemies():
+					add_status_enemy(cb, e, sid, sn)
+		"block":
+			gain_block_player(cb, _ji(fx["n"]), false)
+		"heal":
+			heal_player(run, cb, _ji(fx["n"]))
+		"energy":
+			p.energy += _ji(fx["n"])
+			cb.queue.append({"t": EventTypes.ENERGY, "n": p.energy})
+		"draw":
+			draw_cards(run, cb, _ji(fx["n"]))
+		"chip":
+			for e: EnemyCombatant in cb.living_enemies():
+				apply_chips(run, cb, e, _ji(fx["n"]))
+		"ember":
+			gain_embers(run, cb, _ji(fx["n"]))
+		_:
+			push_error("CombatRules: unknown art effect kind %s" % kind)
+
+
 # ---------------------------------------------------------------- potions
 
 ## Slice potions: healing / strength / block / fire (swift / venom / energy

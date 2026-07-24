@@ -36,6 +36,17 @@ func apply(cmd: Dictionary) -> Array[Dictionary]:
 			var uid: int = cmd.get("uid", 0)
 			var target_v: Variant = cmd.get("target")
 			last_ret = rules.play_card(run, cb, uid, target_v)
+		"kindleFromHand":
+			# The recorded traces carry ret:null for these ops — the web recorder
+			# only captures playCard's return — so last_ret stays null here.
+			var kindle_uid: int = cmd.get("uid", 0)
+			rules.kindle_from_hand(run, cb, kindle_uid)
+		"useArt":
+			rules.use_art(run, cb)
+		"usePotion":
+			var slot: int = cmd.get("slot", 0)
+			var potion_target: Variant = cmd.get("target")
+			last_ret = rules.use_potion(run, cb, slot, potion_target)
 		"addCardToDeck":
 			var card_id: StringName = StringName(str(cmd.get("cardId", "")))
 			run.player.deck.append(CardInst.new(run.next_uid(), card_id, false))
