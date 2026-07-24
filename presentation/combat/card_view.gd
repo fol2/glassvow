@@ -8,6 +8,8 @@ extends Control
 ## Benchmark spec, in stage px:
 ##   card      152 x 216, radius 11, 2px #05070E border, 1px inset rim in the
 ##             type tint at 0.40 alpha, drop shadow rgba(0,0,0,.55) 0 8 22
+##             — border and rim are superseded by the edge system, the one
+##             deliberate step past the benchmark here: see card_edge.gdshader.
 ##   cost      36 x 36 hexagon hung at (-8, -8), Cinzel 800, ink #241A05
 ##   art       148 x 91 window, 1px #05070E rule beneath it
 ##   name      Cinzel 700 @ 13.5, letter-spacing 0.27, #E8DFC8
@@ -49,8 +51,6 @@ const CARD_W: float = 152.0
 const CARD_H: float = 216.0
 const RADIUS: int = 11
 const EDGE: float = 2.0          # card border; the inner column is 148 wide
-## The rim tracks the border inwards, exactly as a CSS inner radius does.
-const RIM_RADIUS: int = RADIUS - int(EDGE)
 const SHADOW_COLOR: Color = Color(0, 0, 0, 0.55)
 const SHADOW_SIZE: int = 8
 const SHADOW_OFFSET: Vector2 = Vector2(0, 4)
@@ -102,12 +102,15 @@ const RARITY_PILL: Dictionary = {
 	"uncommon": Color(0.278, 0.761, 0.878),   # #47C2E0 → #7FE3F2
 	"rare": GOLD,                             # → #FFE9AC
 }
-## Tiered inset rim: commons leaded in the type tint, uncommons silvered, rares
-## gilt. Absent tiers take the type tint, which is what the benchmark falls to.
-const RARITY_RIM: Dictionary = {
-	"uncommon": Color(0.659, 0.847, 0.933, 0.60),   # #A8D8EE
-	"rare": Color(GOLD, 0.80),
+## The edge system: type is the colour of the glass, rarity is the finish of
+## the cut. One shader owns border, rim, corner gold and hover glint — the
+## finish tiers are documented at the top of card_edge.gdshader. Curse
+## overrides its rarity to leaden: that glass drinks light instead.
+const EDGE_SHADER: Shader = preload("res://presentation/combat/card_edge.gdshader")
+const FINISH: Dictionary = {
+	"starter": 0, "common": 1, "uncommon": 2, "rare": 3, "special": 0,
 }
+const FINISH_LEADEN: int = 4
 
 ## Cached FontVariations — one per (face, tracking) pair, built once per run.
 ## Label wants a Font resource, and a fresh FontVariation per label would re-pay
@@ -131,6 +134,7 @@ var home_rotation: float = 0.0
 var _held: bool = false
 var _glare: TextureRect = null
 var _glare_tw: Tween = null
+var _edge_mat: ShaderMaterial = null
 
 
 func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
@@ -152,10 +156,10 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# the tint is folded into the flat fill and the gradient itself is a child
 	# below everything else.
 	sb.bg_color = INK
-	sb.border_color = RULE
-	sb.set_border_width_all(int(EDGE))
 	sb.set_corner_radius_all(RADIUS)
-	sb.shadow_color = SHADOW_COLOR
+	# Rare cards cast a slightly warmer shadow — light through gilded glass.
+	sb.shadow_color = SHADOW_COLOR.lerp(Color(GOLD_DIM, 0.55), 0.18) \
+		if rarity == "rare" else SHADOW_COLOR
 	sb.shadow_size = SHADOW_SIZE
 	sb.shadow_offset = SHADOW_OFFSET
 
@@ -214,22 +218,6 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	var rule: ColorRect = ColorRect.new()
 	rule.color = RULE
 	layer.add_child(_band(rule, RULE_Y, 1.0))
-
-	# 1px inset rim — the benchmark's inner box-shadow.
-	var rim: Panel = Panel.new()
-	var rim_sb: StyleBoxFlat = StyleBoxFlat.new()
-	rim_sb.bg_color = Color(0, 0, 0, 0)
-	rim_sb.border_color = RARITY_RIM.get(rarity, Color(tint, 0.40))
-	rim_sb.set_border_width_all(1)
-	rim_sb.set_corner_radius_all(RIM_RADIUS)
-	rim.add_theme_stylebox_override("panel", rim_sb)
-	rim.set_anchors_preset(Control.PRESET_FULL_RECT)
-	rim.offset_left = EDGE
-	rim.offset_top = EDGE
-	rim.offset_right = -EDGE
-	rim.offset_bottom = -EDGE
-	rim.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(rim)
 
 	var name_label: Label = Label.new()
 	name_label.text = str(data.get("name", String(inst.id)))
@@ -291,6 +279,28 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	_glare.size = Vector2(GLARE_D, GLARE_D)
 	_glare.modulate = Color(1, 1, 1, 0)
 	layer.add_child(_glare)
+
+	# The edge, last in the layer: the frame holds — glare passes under it, and
+	# the mask's silhouette is its outer cut (the shader fills past d = 0 and
+	# lets the mask do the antialiasing, so there is only ever one outer edge).
+	var edge: ColorRect = ColorRect.new()
+	_edge_mat = ShaderMaterial.new()
+	_edge_mat.shader = EDGE_SHADER
+	_edge_mat.set_shader_parameter("card_size", Vector2(CARD_W, CARD_H))
+	_edge_mat.set_shader_parameter("radius", float(RADIUS))
+	_edge_mat.set_shader_parameter("edge_w", EDGE)
+	var fin: int = FINISH.get(rarity, 0)
+	_edge_mat.set_shader_parameter("finish",
+		FINISH_LEADEN if ctype == "curse" else fin)
+	_edge_mat.set_shader_parameter("tint", tint)
+	_edge_mat.set_shader_parameter("rule_col", RULE)
+	_edge_mat.set_shader_parameter("gold_lit", GOLD_LIT)
+	_edge_mat.set_shader_parameter("gold", GOLD)
+	_edge_mat.set_shader_parameter("gold_dim", GOLD_DIM)
+	edge.material = _edge_mat
+	edge.set_anchors_preset(Control.PRESET_FULL_RECT)
+	edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(edge)
 
 	# The gem overhangs the corner, so it sits outside the clipped subtree.
 	_build_cost_gem(cost)
@@ -454,6 +464,9 @@ func _on_mouse_exited() -> void:
 	hover_changed.emit(uid, false)
 
 
+## One light source, two surfaces: the glare is the light ON the face, the
+## edge glint is the same light caught IN the glass. They fade and track
+## together so the card reads as one object under one lamp.
 func _fade_glare(to: float) -> void:
 	if _glare == null:
 		return
@@ -461,6 +474,8 @@ func _fade_glare(to: float) -> void:
 		_glare_tw.kill()
 	_glare_tw = create_tween()
 	_glare_tw.tween_property(_glare, "modulate:a", to, GLARE_FADE)
+	_glare_tw.parallel().tween_property(
+		_edge_mat, "shader_parameter/hover", to, GLARE_FADE)
 
 
 ## Centre the glare on the pointer. Called from _gui_input, so it only runs while
@@ -468,6 +483,7 @@ func _fade_glare(to: float) -> void:
 func _track_glare(local_pos: Vector2) -> void:
 	if _glare != null:
 		_glare.position = local_pos - Vector2(GLARE_D, GLARE_D) * 0.5
+	_edge_mat.set_shader_parameter("mouse_px", local_pos)
 
 
 func _gui_input(event: InputEvent) -> void:
