@@ -22,8 +22,15 @@ extends Control
 ## makes Godot re-rasterise the whole sheet at the larger size, which is the
 ## same canvas_items path the game uses on a high-DPI display.
 ##
-## Presentation-only and content-driven: it builds CardInst rows straight off
-## ContentDB, so a card that renders here renders in a fight the same way.
+## Presentation-only: rows are built from the card catalogue, so a card renders
+## here exactly as it would in a fight, whether or not the slice can deal it.
+
+## Every card's display fields, not just the slice's 15+3. Read straight here
+## rather than through ContentDB: that registry is the domain's, and the cards
+## the domain may legally deal are exactly the slice. This file carries no
+## effects, so nothing loaded from it can be played — see the emitter's note in
+## roguecardv2 tools/capture-port-fixtures.mjs.
+const CATALOG_PATH: String = "res://port_fixtures/content/card-catalog.json"
 
 const BACKDROP: Color = Color(0.043, 0.055, 0.102)   # #0B0E1A, the benchmark field
 const GAP_X: float = 26.0
@@ -38,6 +45,7 @@ const RARITY_ORDER: Array = ["starter", "common", "uncommon", "rare", "special"]
 
 var content: ContentDB
 
+var _catalog: Dictionary = {}        # id -> display fields, all 61 cards
 var _zoom: float = 1.0
 var _sheet: Control
 var _homes: Dictionary = {}          # CardView -> resting position
@@ -47,6 +55,25 @@ var _sheet_h: float = 0.0            # laid-out height, for scroll clamping
 var _ordered: Array[CardView] = []   # sheet order: rarity tier, then name
 var _tiers: Array[String] = []       # parallel to _ordered
 var _headings: Array[Label] = []
+
+
+## All 61 cards' display fields. Falls back to the slice's own registry if the
+## catalogue is absent — an older checkout still gets a working lab, just the
+## 18 cards the domain can deal, and says so rather than coming up empty.
+static func _load_catalog(fallback: ContentDB) -> Dictionary:
+	if ResourceLoader.exists(CATALOG_PATH) or FileAccess.file_exists(CATALOG_PATH):
+		var text: String = FileAccess.get_file_as_string(CATALOG_PATH)
+		if not text.is_empty():
+			var raw: Variant = JSON.parse_string(text)
+			if typeof(raw) == TYPE_DICTIONARY:
+				var doc: Dictionary = raw
+				var cards: Variant = doc.get("cards")
+				if typeof(cards) == TYPE_DICTIONARY:
+					var out: Dictionary = cards
+					return out
+	push_warning("card lab: %s unreadable — falling back to the slice registry"
+		% CATALOG_PATH)
+	return fallback.cards
 
 
 ## Place the sheet against the live stage size. Runs after any window resize, so
@@ -96,6 +123,7 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		zoom: float = 1.0) -> void:
 	content = content_ref
 	_zoom = maxf(1.0, zoom)
+	_catalog = _load_catalog(content_ref)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 
@@ -106,7 +134,7 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 	add_child(field)
 
 	var ids: Array[String] = []
-	for k: Variant in content.cards.keys():
+	for k: Variant in _catalog.keys():
 		ids.append(str(k))
 	ids.sort()
 	if not only.is_empty():
@@ -137,19 +165,19 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 	# then display name — so the sheet lines up against the benchmark gallery
 	# card for card instead of by internal id.
 	ids.sort_custom(func(a: String, b: String) -> bool:
-		var ra: int = RARITY_ORDER.find(str(content.cards.get(a, {}).get("rarity", "")))
-		var rb: int = RARITY_ORDER.find(str(content.cards.get(b, {}).get("rarity", "")))
+		var ra: int = RARITY_ORDER.find(str(_catalog.get(a, {}).get("rarity", "")))
+		var rb: int = RARITY_ORDER.find(str(_catalog.get(b, {}).get("rarity", "")))
 		if ra != rb:
 			return ra < rb
-		return str(content.cards.get(a, {}).get("name", a)) \
-			< str(content.cards.get(b, {}).get("name", b)))
+		return str(_catalog.get(a, {}).get("name", a)) \
+			< str(_catalog.get(b, {}).get("name", b)))
 
 	# Cards are built here but NOT placed. Column count depends on the stage
 	# width, and at zoom > 1 the window is resized in _ready() — after this runs.
 	# Laying out now would size the grid to the pre-resize stage and show one card.
 	var uid: int = 1
 	for id: String in ids:
-		var data: Dictionary = content.cards.get(id, {})
+		var data: Dictionary = _catalog.get(id, {})
 		var inst: CardInst = CardInst.new(uid, StringName(id))
 		# `cost` is present-but-null on the unplayable cards (burn, hex, wound),
 		# so Dictionary.get's default never fires — it only covers a missing key.
