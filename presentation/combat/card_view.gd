@@ -35,6 +35,10 @@ const ART_H: float = 91.0
 const NAME_H: float = 23.0
 const TYPE_H: float = 13.0
 const GEM: float = 36.0
+## Glare disc diameter. The benchmark's gradient dies out at 55% of the card box;
+## an oversized disc keeps the falloff smooth when the cursor sits near an edge.
+const GLARE_D: float = 240.0
+const GLARE_FADE: float = 0.25
 
 const PARCHMENT: Color = Color(0.910, 0.875, 0.784)   # #E8DFC8 — name
 const INK: Color = Color(0.043, 0.055, 0.102)         # #0B0E1A — card stock
@@ -54,6 +58,8 @@ var home_position: Vector2 = Vector2.ZERO
 var home_rotation: float = 0.0
 
 var _held: bool = false
+var _glare: TextureRect = null
+var _glare_tw: Tween = null
 
 
 func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
@@ -69,6 +75,10 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	pivot_offset = custom_minimum_size * 0.5
 
 	var sb: StyleBoxFlat = StyleBoxFlat.new()
+	# Benchmark stock is a 168deg gradient, not flat: the type tint bleeds in at
+	# 15% from the top-left and dies out by 58%. StyleBoxFlat has no gradient, so
+	# the tint is folded into the flat fill and the gradient itself is a child
+	# below everything else.
 	sb.bg_color = INK
 	sb.border_color = RULE
 	sb.set_border_width_all(int(EDGE))
@@ -87,6 +97,18 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(layer)
+
+	# Stock gradient, under the art and everything else.
+	var stock: TextureRect = TextureRect.new()
+	stock.texture = GlassStyle.grad_tex(
+		PackedColorArray([
+			Color(tint.r, tint.g, tint.b, 1.0).lerp(Color(0.063, 0.078, 0.141), 0.85),
+			Color(0.035, 0.043, 0.078)]),
+		PackedFloat32Array([0.0, 0.58]), false,
+		Vector2(0.12, 0.0), Vector2(0.88, 1.0))
+	stock.set_anchors_preset(Control.PRESET_FULL_RECT)
+	stock.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(stock)
 
 	var art_path: String = ART_DIR + String(inst.id) + ".jpg"
 	var art: Texture2D = null
@@ -209,11 +231,23 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	pill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(pill)
 
+	# Cursor glare: the benchmark's .card-inner::before — a soft radial highlight
+	# that tracks the pointer and fades in over 0.25s. Lives above the art but
+	# below nothing else, and inside the clipped subtree so it respects the radius.
+	_glare = TextureRect.new()
+	_glare.texture = GlassStyle.grad_tex(
+		PackedColorArray([Color(1, 1, 1, 0.17), Color(1, 1, 1, 0.0)]),
+		PackedFloat32Array([0.0, 0.55]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
+	_glare.size = Vector2(GLARE_D, GLARE_D)
+	_glare.modulate = Color(1, 1, 1, 0)
+	_glare.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(_glare)
+
 	# The gem overhangs the corner, so it sits outside the clipped subtree.
 	_build_cost_gem(cost, tint)
 
-	mouse_entered.connect(func() -> void: hover_changed.emit(uid, true))
-	mouse_exited.connect(func() -> void: hover_changed.emit(uid, false))
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
 
 
 ## A pointy-top hexagon in gold leaf, hung off the top-left corner at (-8, -8).
@@ -291,6 +325,32 @@ static func _type_tint(ctype: String) -> Color:
 			return GlassStyle.GLASS
 
 
+func _on_mouse_entered() -> void:
+	_fade_glare(1.0)
+	hover_changed.emit(uid, true)
+
+
+func _on_mouse_exited() -> void:
+	_fade_glare(0.0)
+	hover_changed.emit(uid, false)
+
+
+func _fade_glare(to: float) -> void:
+	if _glare == null:
+		return
+	if _glare_tw != null and _glare_tw.is_valid():
+		_glare_tw.kill()
+	_glare_tw = create_tween()
+	_glare_tw.tween_property(_glare, "modulate:a", to, GLARE_FADE)
+
+
+## Centre the glare on the pointer. Called from _gui_input, so it only runs while
+## the card is actually under the cursor.
+func _track_glare(local_pos: Vector2) -> void:
+	if _glare != null:
+		_glare.position = local_pos - Vector2(GLARE_D, GLARE_D) * 0.5
+
+
 func _gui_input(event: InputEvent) -> void:
 	var mb: InputEventMouseButton = event as InputEventMouseButton
 	if mb != null and mb.button_index == MOUSE_BUTTON_LEFT:
@@ -302,8 +362,10 @@ func _gui_input(event: InputEvent) -> void:
 		_press_release(st.pressed, get_global_transform() * st.position)
 		return
 	var mm: InputEventMouseMotion = event as InputEventMouseMotion
-	if mm != null and _held:
-		moved_to.emit(uid, mm.global_position)
+	if mm != null:
+		_track_glare(mm.position)
+		if _held:
+			moved_to.emit(uid, mm.global_position)
 		return
 	var sd: InputEventScreenDrag = event as InputEventScreenDrag
 	if sd != null and _held:
