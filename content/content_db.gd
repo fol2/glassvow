@@ -5,6 +5,7 @@ extends RefCounted
 ## the pure domain rules receive already-resolved data, never file paths.
 
 const SLICE_PATH: String = "res://port_fixtures/content/slice-content.json"
+const CORE_MECHANICS_PATH: String = "res://port_fixtures/content/core-mechanics.json"
 
 var id: String = ""
 var cards: Dictionary = {}
@@ -19,11 +20,14 @@ var relic_pools: Dictionary = {}
 var pool_gate_cards: Dictionary = {}
 var pool_gate_relics: Dictionary = {}
 var reward_gold: Array = []  # per act: {"normal": [a,b], "elite": [a,b], "boss": [a,b]}
+var player: Dictionary = {}
+var reveal_ids: Array[String] = []
 
 
 static func load_slice() -> ContentDB:
 	var db: ContentDB = ContentDB.new()
 	db._load(SLICE_PATH)
+	db._load_reveal_ids(CORE_MECHANICS_PATH)
 	return db
 
 
@@ -55,6 +59,27 @@ func _load(path: String) -> void:
 		reward_gold = gold_v
 	else:
 		push_error("ContentDB: rewardGold is not an array")
+	player = _section(root, "player")
+
+
+## The REVEALS registry ids (save-loader reveal validation) live in the
+## core-mechanics fixture, not the slice content projection.
+func _load_reveal_ids(path: String) -> void:
+	var text: String = FileAccess.get_file_as_string(path)
+	var raw: Variant = JSON.parse_string(text)
+	if typeof(raw) != TYPE_DICTIONARY:
+		push_error("ContentDB: cannot parse %s" % path)
+		return
+	var root: Dictionary = raw
+	var mechanics: Dictionary = root.get("mechanics", {})
+	var reveals_v: Variant = mechanics.get("REVEALS", [])
+	if typeof(reveals_v) != TYPE_ARRAY:
+		push_error("ContentDB: mechanics.REVEALS is not an array")
+		return
+	var reveals_list: Array = reveals_v
+	for entry_v: Variant in reveals_list:
+		var entry: Dictionary = entry_v
+		reveal_ids.append(str(entry.get("id", "")))
 
 
 func _section(root: Dictionary, key: String) -> Dictionary:
