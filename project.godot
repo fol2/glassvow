@@ -21,10 +21,15 @@ buses/default_bus_layout="res://default_bus_layout.tres"
 
 [debug]
 
+gdscript/warnings/exclude_addons=true
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/inferred_declaration=2
 gdscript/warnings/unsafe_cast=2
 gdscript/warnings/unsafe_call_argument=2
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/funplay_mcp/plugin.cfg")
 
 [display]
 
