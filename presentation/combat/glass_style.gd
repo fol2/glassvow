@@ -1,0 +1,121 @@
+class_name GlassStyle
+extends RefCounted
+## Shared procedural palette + stylebox factory for the combat screen. No art,
+## no deps — every surface is a StyleBoxFlat / GradientTexture2D tuned to the
+## stained-glass night-lantern key: deep indigo ground, pale glass-blue facets,
+## ember lantern-fire. Pure factory (RefCounted, static) so the presentation
+## layer stays a thin skin over the domain.
+
+const NIGHT_TOP: Color = Color(0.07, 0.08, 0.15)
+const NIGHT_MID: Color = Color(0.035, 0.045, 0.095)
+const NIGHT_BOT: Color = Color(0.015, 0.02, 0.045)
+const GLASS: Color = Color(0.56, 0.82, 1.0)      # #8fd0ff facet blue
+const EMBER: Color = Color(1.0, 0.60, 0.30)      # #ff9a4d lantern fire
+const INK: Color = Color(0.10, 0.12, 0.19)       # panel body
+const TEXT: Color = Color(0.86, 0.90, 1.0)
+const TEXT_DIM: Color = Color(0.58, 0.64, 0.80)
+const HP_RED: Color = Color(0.85, 0.33, 0.32)
+
+
+## Floating glass placard: translucent ink body, faint accent rim, soft glow.
+static func pane(accent: Color, alpha: float = 0.80) -> StyleBoxFlat:
+	var sb: StyleBoxFlat = StyleBoxFlat.new()
+	sb.bg_color = Color(INK.r, INK.g, INK.b, alpha)
+	sb.set_border_width_all(1)
+	sb.border_color = Color(accent.r, accent.g, accent.b, 0.42)
+	sb.set_corner_radius_all(14)
+	sb.set_content_margin_all(12)
+	sb.shadow_color = Color(accent.r, accent.g, accent.b, 0.14)
+	sb.shadow_size = 10
+	return sb
+
+
+## Small rounded pill (intent / ward / status).
+static func chip(fill: Color) -> StyleBoxFlat:
+	var sb: StyleBoxFlat = StyleBoxFlat.new()
+	sb.bg_color = Color(fill.r, fill.g, fill.b, 0.18)
+	sb.set_border_width_all(1)
+	sb.border_color = Color(fill.r, fill.g, fill.b, 0.72)
+	sb.set_corner_radius_all(11)
+	sb.content_margin_left = 11
+	sb.content_margin_right = 11
+	sb.content_margin_top = 3
+	sb.content_margin_bottom = 3
+	return sb
+
+
+## Bright circular gem for the card cost corner.
+static func gem(fill: Color) -> StyleBoxFlat:
+	var sb: StyleBoxFlat = StyleBoxFlat.new()
+	sb.bg_color = Color(fill.r, fill.g, fill.b, 0.95)
+	sb.set_corner_radius_all(16)
+	sb.set_border_width_all(2)
+	sb.border_color = Color(1.0, 1.0, 1.0, 0.35)
+	sb.shadow_color = Color(fill.r, fill.g, fill.b, 0.45)
+	sb.shadow_size = 6
+	return sb
+
+
+static func style_button(btn: Button, fill: Color) -> void:
+	var states: PackedStringArray = PackedStringArray(["normal", "hover", "pressed", "disabled"])
+	for state: String in states:
+		var sb: StyleBoxFlat = StyleBoxFlat.new()
+		var a: float = 0.24
+		if state == "hover":
+			a = 0.38
+		elif state == "pressed":
+			a = 0.15
+		elif state == "disabled":
+			a = 0.07
+		sb.bg_color = Color(fill.r, fill.g, fill.b, a)
+		sb.set_border_width_all(1)
+		var rim: float = 0.25 if state == "disabled" else 0.7
+		sb.border_color = Color(fill.r, fill.g, fill.b, rim)
+		sb.set_corner_radius_all(12)
+		sb.set_content_margin_all(10)
+		if state == "hover":
+			sb.shadow_color = Color(fill.r, fill.g, fill.b, 0.35)
+			sb.shadow_size = 8
+		btn.add_theme_stylebox_override(state, sb)
+	btn.add_theme_color_override("font_color", TEXT)
+	btn.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
+	btn.add_theme_color_override("font_disabled_color", TEXT_DIM)
+
+
+static func style_bar(bar: ProgressBar, fill: Color) -> void:
+	var bg: StyleBoxFlat = StyleBoxFlat.new()
+	bg.bg_color = Color(0.02, 0.03, 0.06, 0.92)
+	bg.set_corner_radius_all(5)
+	bg.set_border_width_all(1)
+	bg.border_color = Color(fill.r, fill.g, fill.b, 0.28)
+	var fg: StyleBoxFlat = StyleBoxFlat.new()
+	fg.bg_color = fill
+	fg.set_corner_radius_all(5)
+	bar.add_theme_stylebox_override("background", bg)
+	bar.add_theme_stylebox_override("fill", fg)
+
+
+static func grad_tex(colors: PackedColorArray, offsets: PackedFloat32Array,
+		radial: bool, from: Vector2, to: Vector2) -> GradientTexture2D:
+	var g: Gradient = Gradient.new()
+	g.offsets = offsets
+	g.colors = colors
+	var tex: GradientTexture2D = GradientTexture2D.new()
+	tex.gradient = g
+	tex.fill = GradientTexture2D.FILL_RADIAL if radial else GradientTexture2D.FILL_LINEAR
+	tex.fill_from = from
+	tex.fill_to = to
+	tex.width = 256
+	tex.height = 256
+	return tex
+
+
+## Root theme: default label/button color + size so children stay coherent
+## without per-node overrides.
+static func theme() -> Theme:
+	var t: Theme = Theme.new()
+	t.set_color("font_color", "Label", TEXT)
+	t.set_font_size("font_size", "Label", 15)
+	t.set_color("font_color", "Button", TEXT)
+	t.set_font_size("font_size", "Button", 15)
+	return t

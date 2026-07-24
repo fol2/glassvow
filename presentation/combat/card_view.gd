@@ -1,9 +1,11 @@
 class_name CardView
 extends PanelContainer
-## One card in the hand: cost / name / rules text, plus the raw pointer
-## surface for the hand's drag state machine. Mouse and touch both arrive
-## through _gui_input (no emulate_touch_from_mouse); hover exists only on
-## the mouse path by nature.
+## One card as a pane of night glass: a corner cost-gem, a name line over a
+## type-tinted divider, and the rules text. The card's type tints its rim, gem
+## and divider (ember attacks, glass-blue skills, violet powers). Below the
+## style sits the raw pointer surface for the hand's drag state machine — mouse
+## and touch both arrive through _gui_input (no emulate_touch_from_mouse); hover
+## exists only on the mouse path by nature.
 
 signal pressed_at(uid: int, global_pos: Vector2)
 signal moved_to(uid: int, global_pos: Vector2)
@@ -29,37 +31,97 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	target_kind = str(data.get("target", ""))
 	var unplayable_flag: bool = data.get("unplayable", false)
 	unplayable = unplayable_flag
-	custom_minimum_size = Vector2(150, 190)
+	var ctype: String = str(data.get("type", ""))
+	var tint: Color = _type_tint(ctype)
+	custom_minimum_size = Vector2(152, 194)
 	size = custom_minimum_size
 	pivot_offset = custom_minimum_size * 0.5
+
 	var sb: StyleBoxFlat = StyleBoxFlat.new()
-	sb.bg_color = Color(0.11, 0.13, 0.19, 0.97)
-	sb.border_color = Color(0.42, 0.52, 0.72, 0.85)
+	sb.bg_color = Color(0.085, 0.105, 0.17, 0.98)
+	sb.border_color = Color(tint.r, tint.g, tint.b, 0.55)
 	sb.set_border_width_all(1)
-	sb.set_corner_radius_all(8)
-	sb.set_content_margin_all(9)
+	sb.set_corner_radius_all(12)
+	sb.set_content_margin_all(0)
+	sb.shadow_color = Color(0, 0, 0, 0.5)
+	sb.shadow_size = 5
 	add_theme_stylebox_override("panel", sb)
+
+	var layer: Control = Control.new()
+	layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(layer)
+
+	var vbox: VBoxContainer = VBoxContainer.new()
+	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vbox.offset_left = 11
+	vbox.offset_right = -11
+	vbox.offset_top = 44
+	vbox.offset_bottom = -12
+	vbox.add_theme_constant_override("separation", 7)
+	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(vbox)
+
 	var display_name: String = str(data.get("name", String(inst.id)))
 	if inst.up:
 		display_name += "+"
-	var rules_text: String = str(data.get("text", ""))
-	# Web card text wraps numbers in @dmg@ / #block# markers; strip for now —
-	# rich text lands with the craft pass.
-	rules_text = rules_text.replace("@", "").replace("#", "")
-	var cost_line: String = "-" if unplayable else str(cost)
+	var name_label: Label = Label.new()
+	name_label.text = display_name
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 15)
+	name_label.add_theme_color_override("font_color", tint.lerp(GlassStyle.TEXT, 0.5))
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(name_label)
+
+	var divider: ColorRect = ColorRect.new()
+	divider.color = Color(tint.r, tint.g, tint.b, 0.4)
+	divider.custom_minimum_size = Vector2(0, 1)
+	divider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(divider)
+
+	# Web card text wraps numbers in @dmg@ / #block# markers; strip for now.
+	var rules_text: String = str(data.get("text", "")).replace("@", "").replace("#", "")
 	var body: Label = Label.new()
-	body.text = "[%s]  %s\n\n%s" % [cost_line, display_name, rules_text]
+	body.text = rules_text
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	# Pin the wrap width: an autowrap label sorted at ~0 width reports a
-	# one-glyph-per-line minimum height and the panel clamps up to fit it.
-	body.custom_minimum_size = Vector2(130, 0)
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_size_override("font_size", 13)
-	body.add_theme_color_override("font_color", Color(0.92, 0.94, 1.0))
-	body.mouse_filter = Control.MOUSE_FILTER_IGNORE  # pointer belongs to the card
-	add_child(body)
+	body.add_theme_font_size_override("font_size", 12)
+	body.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(body)
+
+	# Cost gem, top-left corner.
+	var gem: PanelContainer = PanelContainer.new()
+	gem.add_theme_stylebox_override("panel", GlassStyle.gem(tint))
+	gem.custom_minimum_size = Vector2(32, 32)
+	gem.position = Vector2(7, 6)
+	gem.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var cost_label: Label = Label.new()
+	cost_label.text = "-" if unplayable else str(cost)
+	cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cost_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	cost_label.add_theme_font_size_override("font_size", 16)
+	cost_label.add_theme_color_override("font_color", Color(0.04, 0.05, 0.09))
+	cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	gem.add_child(cost_label)
+	layer.add_child(gem)
+
 	mouse_entered.connect(func() -> void: hover_changed.emit(uid, true))
 	mouse_exited.connect(func() -> void: hover_changed.emit(uid, false))
+
+
+static func _type_tint(ctype: String) -> Color:
+	match ctype:
+		"attack":
+			return GlassStyle.EMBER
+		"power":
+			return Color(0.72, 0.56, 1.0)
+		"status", "curse":
+			return Color(0.52, 0.55, 0.64)
+		_:
+			return GlassStyle.GLASS
 
 
 func _gui_input(event: InputEvent) -> void:

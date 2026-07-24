@@ -57,13 +57,47 @@ Deferred out of M4: resume-*flow* (pending fields persist; wiring needs the
 screen/map layer) and the hand-authored slice map data (no consumer until
 M5/M6 — author it with the map concept brief).
 
-## Next: M5 — combat screen (presentation slice)
+## M5 — combat screen: functional slice DONE, craft pass in flight
 
-Desktop first: `event_sequencer.gd` await-pump over `GlassvowGame.apply`
-events, HandView arc + drag-to-play, EnemyViews, minimal VFX, audio buses,
-CJK font. First human visual checkpoint — opus-designer for craft, funplay
-MCP screenshot loop for iteration (editor must be open once for the MCP
-handshake).
+- **M5a skeleton**: `presentation/combat/` — `EventSequencer` (await-pump,
+  one event at a time, input locked while busy; `instant` mode drains
+  synchronously for headless tests), `CombatScreen` (event playback from
+  event-carried fields + drain-idle truth re-sync `_sync_all`), EnemyView /
+  CardView / HandView. `RunState.new_run` builds a fresh core-only profile
+  (reveals=[] — keeps omens off, combat parity holds from any cursor).
+  `application/main.gd` drives the trace encounter ladder (sporeling pair →
+  duskfang → waylayer → gravewarden elite); reward *display* on victory,
+  claiming deferred to the M6 RewardScreen. The startCombat batch is
+  hard-synced, not replayed (views don't exist until apply returns) —
+  opening-draw choreography is a craft-pass item.
+- **M5b input**: HandView owns the arc + gesture machine — fan layout, 14px
+  slop (below = tap-to-inspect, above = drag), hover raise mouse-only,
+  mouse + touch via gui_input (no emulate_touch_from_mouse; ScreenTouch/Drag
+  carry only control-local positions — lift to global via the control
+  transform). Targeted cards drop on an enemy pane's rect; kindle/untargeted
+  release above the hand line; failed drops snap back. Rules-gated
+  `request_play`/`request_kindle` on the screen.
+- **M5c font**: NotoSansTC (variable, OFL bundled) as `gui/theme/custom_font`;
+  琉璃誓言 in the combat top bar; test asserts the four title glyphs shape.
+  Music/SFX buses already existed from M0; audio assets = gate-time decision.
+- **Screenshot loop without the editor MCP**: `godot --path . --
+  --shot=/tmp/x.png [--seed=N]` captures the combat screen after first paint.
+  Gotcha caught with it: an autowrap Label sorted at ~0 width reports a
+  one-glyph-per-line minimum height and the PanelContainer clamps up to fit
+  (cards ballooned to 935px) — pin `custom_minimum_size.x` on wrap labels.
+- Suite is 9 checks in 8 test files (`test_presentation.gd` drives a real
+  fight headless through the instant drain via the same input paths).
+- **Craft pass (opus-designer) landed**: "night-glass placards" — layered
+  indigo gradient ground + ember glow + vignette; enemies as procedural
+  faceted glass crystals (`glass_gem.gd`, tinted by content hue, dim/crack
+  with HP, dark husk on death) on translucent panes with ember intent chips
+  and segmented facet pips (`facet_pips.gd`); cards as type-tinted glass
+  panes with corner cost-gems (`ember attack / glass-blue skill / violet
+  power`); shared palette + stylebox factory in `glass_style.gd`. Styling
+  only — zero logic changes, sequencer contract preserved.
+- **Remaining for M5**: the human visual checkpoint (user judges the look
+  against the web reference). Funplay MCP handshake still pending (editor
+  must be opened once) — the --shot loop covers agent iteration meanwhile.
 
 ## Contracts & gotchas
 
