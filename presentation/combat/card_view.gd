@@ -81,19 +81,23 @@ const RARITY_PILL: Dictionary = {
 	"starter": Color(0.235, 0.275, 0.369),    # #3C465E
 	"common": Color(0.365, 0.416, 0.533),     # #5D6A88
 	"uncommon": Color(0.278, 0.761, 0.878),   # #47C2E0 → #7FE3F2
-	"rare": Color(0.949, 0.757, 0.306),       # gold → #FFE9AC
+	"rare": GOLD,                             # → #FFE9AC
 }
 ## Tiered inset rim: commons leaded in the type tint, uncommons silvered, rares
 ## gilt. Absent tiers take the type tint, which is what the benchmark falls to.
 const RARITY_RIM: Dictionary = {
 	"uncommon": Color(0.659, 0.847, 0.933, 0.60),   # #A8D8EE
-	"rare": Color(0.949, 0.757, 0.306, 0.80),
+	"rare": Color(GOLD, 0.80),
 }
 
 ## Cached FontVariations — one per (face, tracking) pair, built once per run.
 ## Label wants a Font resource, and a fresh FontVariation per label would re-pay
 ## the shaping setup on every card the hand deals.
 static var _font_cache: Dictionary = {}
+## Gradient textures keyed by what actually varies. GradientTexture2D rasterises
+## 256x256, so a per-card texture costs ~256 KB — 244 of them for a 61-card
+## sheet. Everything here depends on the card's *type* at most, never its id.
+static var _tex_cache: Dictionary = {}
 
 var uid: int = 0
 var card_id: StringName = &""
@@ -146,13 +150,14 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(layer)
 
-	# Stock gradient, under the art and everything else.
+	# Stock gradient, under the art and everything else. Keyed on the type, which
+	# is the only thing it reads — five textures serve the whole 61-card sheet.
 	var stock: TextureRect = _grad(
 		PackedColorArray([
 			Color(tint, 1.0).lerp(Color(0.063, 0.078, 0.141), 0.85),
 			Color(0.035, 0.043, 0.078)]),
 		PackedFloat32Array([0.0, 0.58]), false,
-		Vector2(0.12, 0.0), Vector2(0.88, 1.0))
+		Vector2(0.12, 0.0), Vector2(0.88, 1.0), "stock:" + ctype)
 	stock.set_anchors_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(stock)
 
@@ -170,7 +175,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 		layer.add_child(_band(_grad(
 			PackedColorArray([Color(tint, 0.14), Color(tint, 0.0)]),
 			PackedFloat32Array([0.0, 0.75]), true,
-			Vector2(0.5, 0.45), Vector2(1.0, 0.45)), ART_Y, ART_H))
+			Vector2(0.5, 0.45), Vector2(1.0, 0.45), "wash:" + ctype), ART_Y, ART_H))
 		var lip: ColorRect = ColorRect.new()
 		lip.color = Color(1, 1, 1, 0.09)
 		layer.add_child(_band(lip, ART_Y, 1.0))
@@ -250,7 +255,8 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# below nothing else, and inside the clipped subtree so it respects the radius.
 	_glare = _grad(
 		PackedColorArray([Color(1, 1, 1, 0.17), Color(1, 1, 1, 0.0)]),
-		PackedFloat32Array([0.0, 0.55]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
+		PackedFloat32Array([0.0, 0.55]), true,
+		Vector2(0.5, 0.5), Vector2(1.0, 0.5), "glare")
 	_glare.size = Vector2(GLARE_D, GLARE_D)
 	_glare.modulate = Color(1, 1, 1, 0)
 	layer.add_child(_glare)
@@ -262,16 +268,17 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	mouse_exited.connect(_on_mouse_exited)
 
 
-## Place a node as a full-width band on the face, inset by the border.
+## Place a node as a horizontal band on the face, inset from both sides.
 ##
 ## Under TOP_WIDE the right anchor sits at 1.0, so offset_right insets from the
 ## RIGHT edge and must be negative. Doing that by hand at each of the eight band
 ## sites is how the rarity pill once came out 140px wide: one positive number
-## pushed it clean past the card. Every band goes through here instead.
-static func _band(node: Control, y: float, h: float) -> Control:
+## pushed it clean past the card. Every band goes through here instead — which
+## is why the inset is a parameter rather than something callers patch after.
+static func _band(node: Control, y: float, h: float, inset: float = EDGE) -> Control:
 	node.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	node.offset_left = EDGE
-	node.offset_right = -EDGE
+	node.offset_left = inset
+	node.offset_right = -inset
 	node.offset_top = y
 	node.offset_bottom = y + h
 	node.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -283,12 +290,23 @@ static func _band(node: Control, y: float, h: float) -> Control:
 ## EXPAND_IGNORE_SIZE is not optional: grad_tex hands back a 256x256 texture and
 ## TextureRect's default EXPAND_KEEP_SIZE makes that the node's *minimum* size,
 ## so a 1px rule asked for in offsets still comes out 256px tall.
+##
+## `cache_key` names what the gradient varies on, and is the caller's assertion
+## that nothing else feeds it. The node is always fresh — a Node has one parent —
+## but the texture behind it is a shared resource.
 static func _grad(colors: PackedColorArray, offsets: PackedFloat32Array,
-		radial: bool, from: Vector2, to: Vector2) -> TextureRect:
+		radial: bool, from: Vector2, to: Vector2,
+		cache_key: String = "") -> TextureRect:
 	var tr: TextureRect = TextureRect.new()
 	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	tr.texture = GlassStyle.grad_tex(colors, offsets, radial, from, to)
 	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if cache_key == "":
+		tr.texture = GlassStyle.grad_tex(colors, offsets, radial, from, to)
+		return tr
+	if not _tex_cache.has(cache_key):
+		_tex_cache[cache_key] = GlassStyle.grad_tex(colors, offsets, radial, from, to)
+	var hit: Texture2D = _tex_cache[cache_key]
+	tr.texture = hit
 	return tr
 
 
@@ -304,7 +322,7 @@ static func _add_name_rule(parent: Control, y: float, mid_a: float) -> void:
 		PackedColorArray([Color(GOLD, 0.0), Color(GOLD, mid_a),
 			Color(GOLD, mid_a), Color(GOLD, 0.0)]),
 		PackedFloat32Array([0.04, 0.18, 0.82, 0.96]), false,
-		Vector2(0.0, 0.5), Vector2(1.0, 0.5)), y, 1.0))
+		Vector2(0.0, 0.5), Vector2(1.0, 0.5), "name_rule:%.2f" % mid_a), y, 1.0))
 
 
 ## 24x5 tier bar, centred, 5px off the bottom.
@@ -320,9 +338,7 @@ static func _build_rarity_pill(rarity: String) -> Panel:
 		sb.shadow_color = Color(sb.bg_color, 0.55)
 		sb.shadow_size = 4 if rarity == "rare" else 3
 	pill.add_theme_stylebox_override("panel", sb)
-	_band(pill, CARD_H - 10.0, 5.0)
-	pill.offset_left = (CARD_W - PILL_W) * 0.5
-	pill.offset_right = -(CARD_W - PILL_W) * 0.5
+	_band(pill, CARD_H - 10.0, 5.0, (CARD_W - PILL_W) * 0.5)
 	return pill
 
 

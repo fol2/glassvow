@@ -161,6 +161,12 @@ func _wrap(width: float) -> void:
 	if cur != "":
 		words.append({"text": cur, "kind": cur_kind, "space": false})
 
+	# A space is the same width whatever word precedes it — it depends only on
+	# the face and the size. Measure the two faces once instead of once per word.
+	var space_plain: float = _font_plain.get_string_size(" ",
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+	var space_bold: float = _font_bold.get_string_size(" ",
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
 	var line: Array = []
 	var line_w: float = 0.0
 	for word: Dictionary in words:
@@ -168,8 +174,7 @@ func _wrap(width: float) -> void:
 		var f: Font = _font_for(wkind)
 		var ww: float = f.get_string_size(str(word["text"]),
 			HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
-		var space_w: float = f.get_string_size(" ",
-			HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
+		var space_w: float = space_bold if wkind == KIND_VALUE else space_plain
 		var has_space: bool = word["space"]
 		if not line.is_empty() and line_w + ww > width:
 			_push_line(line, line_w)
