@@ -2,9 +2,9 @@ class_name EnemyView
 extends PanelContainer
 ## One enemy pane: intent, name, HP bar, ward, facet gauge, statuses.
 ## Renders from explicit sync calls / event fields — never reads combat
-## state directly (the sequencer contract).
-
-signal clicked(idx: int)
+## state directly (the sequencer contract). Targeting is drop-based (the
+## hand's drag machine hit-tests this view's rect), so the pane takes no
+## pointer input of its own.
 
 var idx: int = 0
 
@@ -50,12 +50,6 @@ static func _label(initial: String) -> Label:
 	l.text = initial
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	return l
-
-
-func _gui_input(event: InputEvent) -> void:
-	var mb: InputEventMouseButton = event as InputEventMouseButton
-	if mb != null and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and not _dead:
-		clicked.emit(idx)
 
 
 ## Full sync from an enemy snapshot (drain-idle truth).

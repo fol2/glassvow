@@ -36,7 +36,23 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, screen._enemy_views.size() == 2, "two enemy views")
 	_check(fails, screen._hand.uids().size() == 5, "hand renders 5 cards")
 
-	# Play the first enemy-target card through the real input path (arm → click).
+	# Tap (below slop) = inspect, never a play.
+	var first_uid: int = game.cb.hand[0].uid
+	var hand_view: HandView = screen._hand
+	hand_view._on_card_pressed_at(first_uid, Vector2(100, 700))
+	hand_view._on_card_released_at(first_uid, Vector2(104, 703))
+	_check(fails, screen._inspect.visible, "tap opens the inspect panel")
+	_check(fails, game.cb.hand.size() == 5, "tap does not play the card")
+	screen._inspect.visible = false
+
+	# Drag past slop arms the drag machine; a dead-zone release snaps back.
+	hand_view._on_card_pressed_at(first_uid, Vector2(100, 700))
+	hand_view._on_card_moved_to(first_uid, Vector2(100, 660))
+	_check(fails, hand_view._dragging, "40px drag passes the slop threshold")
+	hand_view._on_card_released_at(first_uid, Vector2(100, 790))
+	_check(fails, game.cb.hand.size() == 5, "release inside the hand zone cancels")
+
+	# Play the first enemy-target card through the rules-gated play request.
 	var target_uid: int = -1
 	for c: CardInst in game.cb.hand:
 		var d: Dictionary = game.rules.card_data(c)
@@ -46,12 +62,11 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, target_uid >= 0, "an enemy-target card is in the opening hand")
 	if target_uid >= 0:
 		var hand_before: int = game.cb.hand.size()
-		screen._on_card_pressed(target_uid)
-		_check(fails, screen._armed_uid == target_uid, "card arms for targeting")
-		screen._on_enemy_clicked(0)
+		_check(fails, screen.request_play(target_uid, 0), "request_play accepts a valid target")
 		_check(fails, not screen.seq.is_busy(), "instant drain completes synchronously")
 		_check(fails, game.cb.hand.size() == hand_before - 1, "card left the hand")
 		_check(fails, screen._hand.uids().size() == game.cb.hand.size(), "hand view tracks state")
+		_check(fails, not screen.request_play(9999, 0), "unknown uid rejected")
 
 	# End the turn: enemy phase runs, next turn draws back to 5.
 	screen._on_end_turn_pressed()

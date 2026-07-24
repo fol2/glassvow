@@ -33,7 +33,8 @@ var _overlay: ColorRect
 var _overlay_title: Label
 var _overlay_body: Label
 var _overlay_button: Button
-var _armed_uid: int = -1
+var _inspect: PanelContainer
+var _inspect_label: Label
 var _over_emitted: bool = false
 
 
@@ -114,16 +115,26 @@ func _build_ui() -> void:
 	_kindle_toggle.toggled.connect(_on_kindle_toggled)
 	player_box.add_child(_kindle_toggle)
 
-	var hand_center: CenterContainer = CenterContainer.new()
-	hand_center.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	hand_center.offset_top = -250
-	hand_center.offset_left = 230
-	hand_center.offset_right = -230
-	hand_center.offset_bottom = -20
-	add_child(hand_center)
 	_hand = HandView.new()
-	_hand.card_pressed.connect(_on_card_pressed)
-	hand_center.add_child(_hand)
+	_hand.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	_hand.offset_top = -260
+	_hand.offset_left = 230
+	_hand.offset_right = -230
+	_hand.offset_bottom = -10
+	_hand.card_tapped.connect(_on_card_tapped)
+	_hand.card_drag_moved.connect(_on_card_drag_moved)
+	_hand.card_drag_released.connect(_on_card_drag_released)
+	add_child(_hand)
+
+	_inspect = PanelContainer.new()
+	_inspect.set_anchors_preset(Control.PRESET_CENTER)
+	_inspect.visible = false
+	_inspect.gui_input.connect(_on_inspect_input)
+	add_child(_inspect)
+	_inspect_label = _label("")
+	_inspect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_inspect_label.custom_minimum_size = Vector2(300, 0)
+	_inspect.add_child(_inspect_label)
 
 	var right_box: VBoxContainer = VBoxContainer.new()
 	right_box.anchor_left = 1.0
@@ -177,7 +188,6 @@ static func _label(initial: String) -> Label:
 
 func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> void:
 	_over_emitted = false
-	_armed_uid = -1
 	_encounter_label.text = encounter_text
 	# Live play rolls the elite affix inside start_combat (traces passed it
 	# explicitly only to skip the rng draw).
@@ -191,7 +201,6 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 			var affix_def: Dictionary = game.content.affixes.get(String(game.cb.affix), {})
 			display = "%s %s" % [str(affix_def.get("name", String(game.cb.affix))), e.name]
 		var view: EnemyView = EnemyView.new(e.idx, display)
-		view.clicked.connect(_on_enemy_clicked)
 		_enemy_row.add_child(view)
 		_enemy_views.append(view)
 	_sync_all()
@@ -206,40 +215,91 @@ func show_result(title: String, body: String, button_text: String) -> void:
 
 # ---------------------------------------------------------------- input
 
-func _on_card_pressed(uid: int) -> void:
+## Play through the rules gate; false leaves state untouched (drop snaps back).
+func request_play(uid: int, target: Variant) -> bool:
 	if seq.is_busy() or game.cb.over:
-		return
+		return false
+	var inst: CardInst = _find_card(uid)
+	if inst == null or not _rules.can_play(game.cb, inst, target):
+		return false
+	seq.enqueue(game.apply({"t": "playCard", "uid": uid, "target": target}))
+	return true
+
+
+func request_kindle(uid: int) -> bool:
+	if seq.is_busy() or game.cb.over:
+		return false
+	var inst: CardInst = _find_card(uid)
+	if inst == null or not _rules.can_kindle(game.cb, inst):
+		return false
+	seq.enqueue(game.apply({"t": "kindleFromHand", "uid": uid}))
+	return true
+
+
+func _on_card_tapped(uid: int) -> void:
 	var inst: CardInst = _find_card(uid)
 	if inst == null:
 		return
-	if _kindle_toggle.button_pressed:
-		if _rules.can_kindle(game.cb, inst):
-			_disarm()
-			seq.enqueue(game.apply({"t": "kindleFromHand", "uid": uid}))
-		return
+	var d: Dictionary = _rules.card_data(inst)
+	var display_name: String = str(d.get("name", String(inst.id)))
+	if inst.up:
+		display_name += "+"
+	var rules_text: String = str(d.get("text", "")).replace("@", "").replace("#", "")
+	_inspect_label.text = "%s\n\n%s" % [display_name, rules_text]
+	_inspect.visible = true
+
+
+func _on_inspect_input(event: InputEvent) -> void:
+	var mb: InputEventMouseButton = event as InputEventMouseButton
+	var st: InputEventScreenTouch = event as InputEventScreenTouch
+	if (mb != null and mb.pressed) or (st != null and st.pressed):
+		_inspect.visible = false
+
+
+func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
 	var view: CardView = _hand.card_view(uid)
-	if view != null and view.target_kind == "enemy":
-		if _armed_uid == uid:
-			_disarm()
-		else:
-			_arm(uid)
+	if view == null or view.target_kind != "enemy":
 		return
-	_disarm()
-	seq.enqueue(game.apply({"t": "playCard", "uid": uid}))
+	var hovered: int = _enemy_at(global_pos)
+	for ev: EnemyView in _enemy_views:
+		ev.set_targetable(ev.idx == hovered)
 
 
-func _on_enemy_clicked(idx: int) -> void:
-	if seq.is_busy() or game.cb.over or _armed_uid < 0:
+func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
+	for ev: EnemyView in _enemy_views:
+		ev.set_targetable(false)
+	_inspect.visible = false
+	var view: CardView = _hand.card_view(uid)
+	if view == null:
 		return
-	var uid: int = _armed_uid
-	_disarm()
-	seq.enqueue(game.apply({"t": "playCard", "uid": uid, "target": idx}))
+	if _kindle_toggle.button_pressed:
+		if _above_hand(global_pos) and request_kindle(uid):
+			return
+	elif view.target_kind == "enemy":
+		var idx: int = _enemy_at(global_pos)
+		if idx >= 0 and request_play(uid, idx):
+			return
+	elif _above_hand(global_pos) and request_play(uid, null):
+		return
+	_hand.snap_back(uid)
+
+
+func _above_hand(global_pos: Vector2) -> bool:
+	return global_pos.y < _hand.get_global_rect().position.y
+
+
+func _enemy_at(global_pos: Vector2) -> int:
+	for ev: EnemyView in _enemy_views:
+		if not ev.get_global_rect().has_point(global_pos):
+			continue
+		if ev.idx < game.cb.enemies.size() and game.cb.enemies[ev.idx].hp > 0:
+			return ev.idx
+	return -1
 
 
 func _on_end_turn_pressed() -> void:
 	if seq.is_busy() or game.cb.over:
 		return
-	_disarm()
 	seq.enqueue(game.apply({"t": "endTurn"}))
 
 
@@ -247,33 +307,13 @@ func _on_art_pressed() -> void:
 	if seq.is_busy() or game.cb.over:
 		return
 	if _rules.can_use_art(game.run, game.cb):
-		_disarm()
 		seq.enqueue(game.apply({"t": "useArt"}))
 
 
 func _on_kindle_toggled(on: bool) -> void:
 	_kindle_toggle.text = "Kindle: on" if on else "Kindle: off"
-	_disarm()
-
-
-func _arm(uid: int) -> void:
-	_disarm()
-	_armed_uid = uid
-	var view: CardView = _hand.card_view(uid)
-	if view != null:
-		view.set_armed(true)
-	for ev: EnemyView in _enemy_views:
-		ev.set_targetable(true)
-
-
-func _disarm() -> void:
-	if _armed_uid >= 0:
-		var view: CardView = _hand.card_view(_armed_uid)
-		if view != null:
-			view.set_armed(false)
-	_armed_uid = -1
-	for ev: EnemyView in _enemy_views:
-		ev.set_targetable(false)
+	_hand.cancel_drag()
+	_sync_all()  # playability flips between play-cost and kindle rules
 
 
 func _find_card(uid: int) -> CardInst:
@@ -448,6 +488,11 @@ func _on_busy_changed(busy: bool) -> void:
 	_end_turn.disabled = locked
 	_art_button.disabled = locked
 	_kindle_toggle.disabled = locked
+	_hand.locked = locked
+	if locked:
+		_hand.cancel_drag()
+		for ev: EnemyView in _enemy_views:
+			ev.set_targetable(false)
 	if not busy:
 		_sync_all()
 
