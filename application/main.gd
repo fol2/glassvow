@@ -42,6 +42,7 @@ func _ready() -> void:
 	var enter_node: int = -1
 	var cards_lab: bool = false
 	var cards_only: PackedStringArray = PackedStringArray()
+	var cards_zoom: float = 1.0
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -54,9 +55,11 @@ func _ready() -> void:
 		elif arg.begins_with("--cards="):
 			cards_lab = true
 			cards_only = arg.trim_prefix("--cards=").split(",", false)
+		elif arg.begins_with("--zoom="):
+			cards_zoom = float(arg.trim_prefix("--zoom="))
 	if cards_lab:
 		# The lab is a contact sheet, not a run — no game state is built.
-		add_child(CardLab.new(content, cards_only))
+		add_child(CardLab.new(content, cards_only, cards_zoom))
 		if shot_path != "":
 			_capture_and_quit(shot_path)
 		return

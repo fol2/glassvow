@@ -9,8 +9,13 @@ extends Control
 ## screen removes all three so a `--shot` here diffs directly against the same
 ## cards flattened in the browser.
 ##
-##   godot --path . -- --cards --shot=/tmp/cards.png
-##   godot --path . -- --cards=edge,ward,chisel --shot=/tmp/three.png
+##   godot --path . -- --cards                       # window, stays open
+##   godot --path . -- --cards --shot=/tmp/cards.png # headless contact sheet
+##   godot --path . -- --cards=strike,defend --zoom=3
+##
+## Zoom is an integer nearest-neighbour blow-up for inspecting a card against the
+## benchmark at pixel level. It scales the whole sheet, so a 1px hairline stays
+## 1px * zoom and misplacements stay visible rather than being resampled away.
 ##
 ## Presentation-only and content-driven: it builds CardInst rows straight off
 ## ContentDB, so a card that renders here renders in a fight the same way.
@@ -23,8 +28,10 @@ const MARGIN: float = 40.0
 var content: ContentDB
 
 
-func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()) -> void:
+func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray(),
+		zoom: float = 1.0) -> void:
 	content = content_ref
+	var z: float = maxf(1.0, zoom)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 
@@ -56,10 +63,13 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		ids = wanted
 
 	var grid: GridContainer = GridContainer.new()
-	grid.columns = maxi(1, int((1180.0 - MARGIN * 2.0 + GAP_X) / (CardView.CARD_W + GAP_X)))
+	# Columns are counted in zoomed space so a blown-up sheet still fits the stage.
+	var usable: float = (1180.0 - MARGIN * 2.0) / z
+	grid.columns = maxi(1, int((usable + GAP_X) / (CardView.CARD_W + GAP_X)))
 	grid.add_theme_constant_override("h_separation", int(GAP_X))
 	grid.add_theme_constant_override("v_separation", int(GAP_Y))
 	grid.position = Vector2(MARGIN, MARGIN)
+	grid.scale = Vector2(z, z)
 	grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(grid)
 
@@ -79,7 +89,9 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		uid += 1
 
 	var caption: Label = Label.new()
-	caption.text = "card lab · %d cards · 1:1 against roguecardv2@6e069118" % ids.size()
+	var scale_note: String = "1:1" if is_equal_approx(z, 1.0) else "%d:1" % int(z)
+	caption.text = "card lab · %d cards · %s against roguecardv2@6e069118" % [
+		ids.size(), scale_note]
 	caption.add_theme_font_size_override("font_size", 12)
 	caption.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	caption.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
