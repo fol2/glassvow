@@ -10,7 +10,7 @@ extends RefCounted
 ## and gold — reward *generation* parity is M4's suite.
 
 const SEEDS: PackedInt32Array = [101, 202, 303, 404]
-const SUPPORTED_OPS: PackedStringArray = []
+const SUPPORTED_OPS: PackedStringArray = ["playCard"]
 
 const Diff: GDScript = preload("res://tests/support/diff.gd")
 

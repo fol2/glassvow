@@ -32,6 +32,10 @@ func apply(cmd: Dictionary) -> Array[Dictionary]:
 			var affix: StringName = &"" if affix_v == null else StringName(str(affix_v))
 			cb = rules.start_combat(run, enemies, kind, affix)
 			q_before = 0
+		"playCard":
+			var uid: int = cmd.get("uid", 0)
+			var target_v: Variant = cmd.get("target")
+			last_ret = rules.play_card(run, cb, uid, target_v)
 		"addCardToDeck":
 			var card_id: StringName = StringName(str(cmd.get("cardId", "")))
 			run.player.deck.append(CardInst.new(run.next_uid(), card_id, false))

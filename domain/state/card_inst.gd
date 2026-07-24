@@ -21,6 +21,11 @@ func combat_copy() -> CardInst:
 	return CardInst.new(uid, id, up)
 
 
-## Fixture projection (web exporter projectCardInst).
+## Fixture projection (web exporter projectCardInst): up/bonus only when set.
 func to_dict() -> Dictionary:
-	return {"id": String(id), "uid": uid}
+	var out: Dictionary = {"id": String(id), "uid": uid}
+	if up:
+		out["up"] = true
+	if bonus != 0:
+		out["bonus"] = bonus
+	return out
