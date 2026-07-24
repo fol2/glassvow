@@ -248,43 +248,25 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	type_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(type_label)
 
-	var body: RichTextLabel = RichTextLabel.new()
-	body.bbcode_enabled = true
-	body.scroll_active = false
-	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	body.text = "[center]%s[/center]" % rules_bbcode(str(data.get("text", "")), tint)
-	body.add_theme_font_override("normal_font", _font(GlassStyle.ALEGREYA_400, 0))
-	body.add_theme_font_override("bold_font", _font(GlassStyle.ALEGREYA_700, 0))
-	body.add_theme_font_size_override("normal_font_size", 13)
-	body.add_theme_font_size_override("bold_font_size", 13)
-	# Benchmark line-height is 16.9 on a 12.8 font — barely more than the face's
-	# natural leading. Godot's default adds 3 on top of that, which costs a whole
-	# line over four and clips the longest rules text ("Cinder", "Hex").
-	# RichTextLabel lays lines out slightly looser than Label at the same size, so
-	# the Label-era 0 overflowed by a line on the longest cards. -1 lands on the
-	# benchmark's 16.9 leading.
-	body.add_theme_constant_override("line_separation", -1)
-	body.add_theme_color_override("default_color", BODY_TEXT)
-	# Benchmark text box is 148x84.9 with 4/10/10 padding — baked into the offsets
-	# below, since neither node type has padding. The rarity pill floats over the
-	# tail of this box rather than reserving space, same as the benchmark.
-	#
-	# RichTextLabel has no vertical alignment, so short rules would sit against
-	# the rubric with a hole beneath. fit_content sizes it to its own text and a
-	# CenterContainer does the centring; the width is pinned because an autowrap
-	# RichTextLabel with no width constraint reports a one-glyph minimum.
-	body.fit_content = true
-	body.custom_minimum_size = Vector2(CARD_W - EDGE * 2.0 - 20.0, 0.0)
-	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var body_box: CenterContainer = CenterContainer.new()
-	body_box.set_anchors_preset(Control.PRESET_FULL_RECT)
-	body_box.offset_left = 10.0
-	body_box.offset_right = -10.0
-	body_box.offset_top = EDGE + ART_H + 1.0 + NAME_H + TYPE_H + 2.0
-	body_box.offset_bottom = -8.0
-	body_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	body_box.add_child(body)
-	layer.add_child(body_box)
+	# Drawn, not laid out by a Label — RichTextLabel cannot do the benchmark's
+	# dotted keyword rule and exposes no per-run rects to patch one in. See
+	# rules_text.gd. Benchmark leading is 16.9 on a 12.8 font.
+	var body: RulesText = RulesText.new(
+		str(data.get("text", "")), tint,
+		_font(GlassStyle.ALEGREYA_400, 0), _font(GlassStyle.ALEGREYA_700, 0),
+		13, 16.9)
+	body.plain_color = BODY_TEXT
+	body.value_color = PARCHMENT
+	# Benchmark text box is 148x84.9 with 4/10/10 padding — baked into the offsets,
+	# since neither node type has padding. RulesText centres its own paragraph
+	# vertically, so short rules do not hang off the rubric. The rarity pill floats
+	# over the tail of this box rather than reserving space, as in the benchmark.
+	body.set_anchors_preset(Control.PRESET_FULL_RECT)
+	body.offset_left = 10.0
+	body.offset_right = -10.0
+	body.offset_top = EDGE + ART_H + 1.0 + NAME_H + TYPE_H + 2.0
+	body.offset_bottom = -8.0
+	layer.add_child(body)
 
 	var rarity: String = str(data.get("rarity", "starter"))
 	var pill: Panel = Panel.new()
@@ -405,43 +387,6 @@ func _build_cost_gem(cost: int, tint: Color) -> void:
 	cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	holder.add_child(cost_label)
 
-
-## Keywords the benchmark tints inline. It matches on this word list, not on the
-## @…@ / #…# markers — those carry only the numbers. Kept verbatim (and in this
-## order, so `Embers` beats `Ember`) from the benchmark's src/ui/tooltip.js.
-const KEYWORDS: Array = [
-	"Cracked", "Dimmed", "Brittle", "Smolder", "Fervor", "Poise", "Kindle",
-	"Ward", "Energy", "Embers", "Ember", "Chip", "Facets", "Facet", "Shatters",
-	"Shatter", "Staggered", "Unplayable", "Shard", "Hex", "Cinder",
-]
-
-
-## Card rules text → BBCode, replicating the benchmark's fmtText():
-##   @N@ / #N#  → the number in bold parchment (`.val`, weight 700, #E8DFC8)
-##   keywords   → the type tint, underlined (`.kw`)
-## The benchmark's underline is 1px dotted; RichTextLabel only draws solid, so
-## the rule reads slightly heavier than the original. Everything else matches.
-static func rules_bbcode(text: String, tint: Color) -> String:
-	var out: String = ""
-	var i: int = 0
-	# Numbers first: a marker never contains a keyword, so the passes can't collide.
-	while i < text.length():
-		var ch: String = text[i]
-		if ch == "@" or ch == "#":
-			var close: int = text.find(ch, i + 1)
-			if close > i:
-				out += "[b][color=#%s]%s[/color][/b]" % [
-					PARCHMENT.to_html(false), text.substr(i + 1, close - i - 1)]
-				i = close + 1
-				continue
-		out += ch
-		i += 1
-	var hex: String = tint.to_html(false)
-	for word: String in KEYWORDS:
-		# Whole words only — "Ward" must not fire inside "Warden".
-		var re: RegEx = RegEx.create_from_string("\\b%s\\b" % word)
-		out = re.sub(out, "[u][color=#%s]%s[/color][/u]" % [hex, word], true)
-	return out
 
 
 ## Cached FontVariations — one per (face, tracking) pair, built once per run.
