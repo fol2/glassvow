@@ -390,6 +390,12 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	_edge_mat.set_shader_parameter("gold_lit", GOLD_LIT)
 	_edge_mat.set_shader_parameter("gold", GOLD)
 	_edge_mat.set_shader_parameter("gold_dim", GOLD_DIM)
+	# A ShaderMaterial only exposes `shader_parameter/<name>` as an animatable
+	# property once that parameter has been ASSIGNED — a uniform with a default
+	# in the shader is not enough. Without this line the hover tween in
+	# _fade_glare fails every time with "does not exist" and the edge glint
+	# silently never fades in, which is how it shipped in the edge commit.
+	_edge_mat.set_shader_parameter("hover", 0.0)
 	edge.material = _edge_mat
 	edge.set_anchors_preset(Control.PRESET_FULL_RECT)
 	edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
