@@ -35,6 +35,7 @@ const ART_H: float = 91.0
 const NAME_H: float = 23.0
 const TYPE_H: float = 13.0
 const GEM: float = 36.0
+const PILL_W: float = 24.0
 ## Glare disc diameter. The benchmark's gradient dies out at 55% of the card box;
 ## an oversized disc keeps the falloff smooth when the cursor sits near an edge.
 const GLARE_D: float = 240.0
@@ -277,11 +278,16 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	if rarity == "uncommon" or rarity == "rare":
 		pill_sb.shadow_color = Color(pill_sb.bg_color.r, pill_sb.bg_color.g,
 			pill_sb.bg_color.b, 0.55)
-		pill_sb.shadow_size = 7 if rarity == "rare" else 6
+		# Benchmark: 0 0 6px on uncommon, 0 0 8px on rare. Godot's shadow_size is a
+		# radius, so it reads heavier at the same number — halved.
+		pill_sb.shadow_size = 4 if rarity == "rare" else 3
 	pill.add_theme_stylebox_override("panel", pill_sb)
+	# 24x5, centred, 5px off the bottom. BOTTOM_WIDE anchors right at 1.0, so
+	# offset_right insets from the RIGHT edge and must be negative — a positive
+	# value pushes the pill past the card instead of centring it.
 	pill.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	pill.offset_left = (CARD_W - 24.0) * 0.5
-	pill.offset_right = (CARD_W - 24.0) * 0.5 + 24.0
+	pill.offset_left = (CARD_W - PILL_W) * 0.5
+	pill.offset_right = -(CARD_W - PILL_W) * 0.5
 	pill.offset_top = -10.0
 	pill.offset_bottom = -5.0
 	pill.mouse_filter = Control.MOUSE_FILTER_IGNORE
