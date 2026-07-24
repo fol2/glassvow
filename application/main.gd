@@ -39,12 +39,14 @@ func _ready() -> void:
 	# godot --path . -- --shot=/tmp/map.png [--seed=N] [--enter=0]
 	# godot --path . -- --cards[=id,id] --shot=/tmp/cards.png   (card designer)
 	# godot --path . -- --cards=bastion --surfaces[=gilt,holofoil]  (materials)
+	# godot --path . -- --studio[=bastion] [--zoom=3]   (material bench)
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var cards_lab: bool = false
 	var cards_only: PackedStringArray = PackedStringArray()
 	var cards_zoom: float = 1.0
 	var surfaces: PackedStringArray = PackedStringArray()
+	var studio: bool = false
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -65,6 +67,19 @@ func _ready() -> void:
 		elif arg.begins_with("--surfaces="):
 			cards_lab = true
 			surfaces = arg.trim_prefix("--surfaces=").split(",", false)
+		elif arg == "--studio":
+			studio = true
+		elif arg.begins_with("--studio="):
+			studio = true
+			cards_only = arg.trim_prefix("--studio=").split(",", false)
+	if studio:
+		# The material bench: one card, four layer pickers, no game state. It
+		# takes --zoom for the PANEL's scale only; the card has its own size
+		# picker, because scaling the window there costs stage room.
+		add_child(CardStudio.new(content, cards_only, cards_zoom))
+		if shot_path != "":
+			_capture_and_quit(shot_path)
+		return
 	if cards_lab:
 		# The lab is a contact sheet, not a run — no game state is built.
 		add_child(CardLab.new(content, cards_only, cards_zoom, surfaces))

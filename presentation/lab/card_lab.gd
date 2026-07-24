@@ -68,9 +68,10 @@ var _caption_h: float = 0.0          # extra row height the captions need
 
 
 ## All 61 cards' display fields. Falls back to the slice's own registry if the
-## catalogue is absent — an older checkout still gets a working lab, just the
+## catalogue is absent. Public because the studio reads the same catalogue and
+## one JSON contract deserves one reader — an older checkout still gets a working lab, just the
 ## 18 cards the domain can deal, and says so rather than coming up empty.
-static func _load_catalog(fallback: ContentDB) -> Dictionary:
+static func load_catalog(fallback: ContentDB) -> Dictionary:
 	if ResourceLoader.exists(CATALOG_PATH) or FileAccess.file_exists(CATALOG_PATH):
 		var text: String = FileAccess.get_file_as_string(CATALOG_PATH)
 		if not text.is_empty():
@@ -137,7 +138,10 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		surfaces: PackedStringArray = PackedStringArray()) -> void:
 	content = content_ref
 	_zoom = maxf(1.0, zoom)
-	_catalog = _load_catalog(content_ref)
+	# The offscreen passes are sized in logical px, so they have to grow with
+	# the window's content scale or a zoomed sheet inspects a stretched card.
+	CardView.oversample = maxf(2.0, _zoom)
+	_catalog = load_catalog(content_ref)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 

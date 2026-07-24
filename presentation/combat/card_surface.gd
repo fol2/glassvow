@@ -28,7 +28,8 @@ extends RefCounted
 ## accidentally change how a finish reflects. `params()` folds them in stack
 ## order and hands the result to one shader (card_surface.gdshader) plus three
 ## non-optical properties the slab reads directly: thickness, shadow weight and
-## the release spring.
+## the release spring. `--studio` puts all four on pickers over a live card, so
+## a combination can be judged before it is worth naming.
 ##
 ## Angle, not time. The card freezes both its offscreen viewports when it comes
 ## to rest, so anything driven by TIME would silently stop. Every channel here
@@ -333,26 +334,44 @@ const BY_CARD: Dictionary = {}
 const FALLBACK: String = "card"
 
 
-## Which recipe a card wears. Highest authority first: whatever the content
-## says, then the authored exception table, then type, then rarity.
-static func recipe_of(id: StringName, data: Dictionary) -> String:
-	var named: String = str(data.get("surface", ""))
-	if RECIPES.has(named):
-		return named
-	if BY_CARD.has(String(id)):
-		return str(BY_CARD[String(id)])
-	var ctype: String = str(data.get("type", ""))
-	if BY_TYPE.has(ctype):
-		return str(BY_TYPE[ctype])
-	var rarity: String = str(data.get("rarity", ""))
-	return str(BY_RARITY.get(rarity, FALLBACK))
+## The four layer names a card wears, highest authority first: whatever the
+## content says, then the authored exception table, then type, then rarity.
+##
+## `surface` in the card data may either NAME a recipe or give the four layers
+## outright. The second form is what the studio uses to show a stack nobody has
+## named yet — and it is the reason this returns a stack rather than a name:
+## a combination is the real unit here, a recipe is only a nickname for one.
+static func stack_of(id: StringName, data: Dictionary) -> Array:
+	var named: Variant = data.get("surface")
+	if typeof(named) == TYPE_ARRAY:
+		var given: Array = named
+		if given.size() == 4:
+			return given
+	var by_name: String = str(named) if typeof(named) == TYPE_STRING else ""
+	if not RECIPES.has(by_name):
+		by_name = ""
+	if by_name == "" and BY_CARD.has(String(id)):
+		by_name = str(BY_CARD[String(id)])
+	if by_name == "":
+		by_name = str(BY_TYPE.get(str(data.get("type", "")), ""))
+	if by_name == "":
+		by_name = str(BY_RARITY.get(str(data.get("rarity", "")), FALLBACK))
+	var hit: Array = RECIPES.get(by_name, RECIPES[FALLBACK])
+	return hit
 
 
-## Fold a recipe's four layers into one flat parameter set. Layers own
-## disjoint keys, so this is a plain merge and the order cannot matter — the
-## assert is there to keep it that way if someone adds a key to two tables.
-static func params(recipe: String) -> Dictionary:
-	var stack: Array = RECIPES.get(recipe, RECIPES[FALLBACK])
+## The recipe that names this stack, or "" when the combination has no name.
+static func name_of(stack: Array) -> String:
+	for key: Variant in RECIPES:
+		if RECIPES[key] == stack:
+			return str(key)
+	return ""
+
+
+## Fold a stack's four layers into one flat parameter set. Layers own disjoint
+## keys, so this is a plain merge and the order cannot matter — the assert is
+## there to keep it that way if someone adds a key to two tables.
+static func params(stack: Array) -> Dictionary:
 	var out: Dictionary = {}
 	for pair: Array in [[MATERIAL, stack[0]], [TEXTURE, stack[1]],
 			[FINISH, stack[2]], [STOCK, stack[3]]]:

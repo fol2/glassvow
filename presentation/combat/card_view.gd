@@ -82,7 +82,7 @@ const GLARE_D: float = 240.0
 const GLARE_FADE: float = 0.25
 
 ## THE SLAB. A pane of glass is not a picture — it has thickness, and it sits
-## in space. The 2D face renders into an offscreen viewport at OVERSAMPLE
+## in space. The 2D face renders into an offscreen viewport at `oversample`
 ## resolution; a rounded-rect prism carries that texture in a tiny 3D stage
 ## with a long-lens camera. Head-on, the render is the flat card. On hover the
 ## slab tilts toward the cursor and lifts a breath, and the face takes real
@@ -102,7 +102,14 @@ const GLARE_FADE: float = 0.25
 ## The shadow does not ride the slab: it is the card's shadow ON THE TABLE, a
 ## separate flat panel behind the stage that stays put (and eases away) while
 ## the pane above it moves.
-const OVERSAMPLE: float = 2.0    # inner render scale — crisp through the 3D pass
+
+## Offscreen render scale. Not a const, because both offscreen passes are sized
+## in LOGICAL pixels while the window may be drawing at a larger content scale:
+## at 2 the card is rendered at 304px and displayed at 304 on a 2x window, but
+## a 4x window stretches the same 304 across 608 and the material goes soft.
+## Callers that scale the window (the lab, the studio) raise this to match, and
+## the game leaves it alone. Read at build time, so set it before any CardView.
+static var oversample: float = 2.0
 const PAD_IN: float = 8.0        # inner texture margin: exactly the gem overhang
 const PAD_3D: float = 24.0       # stage margin: room for the tilted silhouette
 const FOV_DEG: float = 20.0      # long lens — perspective present, never cartoon
@@ -184,10 +191,9 @@ var _tilt_target: Vector2 = Vector2.ZERO
 var _lift: float = 0.0
 var _lift_v: float = 0.0
 
-## The card's material, resolved once in _init: which recipe it wears, the
-## flattened four-layer parameter set, and the two stock properties the slab
-## reads every frame.
-var surface: String = ""
+## The card's material, resolved once in _init: the four layer names it wears,
+## and the two stock properties the slab reads every frame.
+var surface: Array = []
 var _spr_free: Vector2 = Vector2(11.0, 0.55)
 var _shadow_size: int = SHADOW_SIZE
 
@@ -212,7 +218,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# What this card is made of, before anything is built: the stock decides
 	# the slab's thickness, the cut of its edge, the weight of its shadow and
 	# how it springs back, so it has to be known first.
-	surface = CardSurface.recipe_of(inst.id, data)
+	surface = CardSurface.stack_of(inst.id, data)
 	var mat: Dictionary = CardSurface.params(surface)
 	_spr_free = mat["spring"]
 	var weight: float = mat["shadow"]
@@ -247,8 +253,8 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# Everything visual from here down builds under `content`, which renders
 	# offscreen into _inner rather than into this Control — see THE SLAB.
 	var content: Control = Control.new()
-	content.position = Vector2(PAD_IN, PAD_IN) * OVERSAMPLE
-	content.scale = Vector2.ONE * OVERSAMPLE
+	content.position = Vector2(PAD_IN, PAD_IN) * oversample
+	content.scale = Vector2.ONE * oversample
 	content.size = Vector2(CARD_W, CARD_H)
 
 	var sb: StyleBoxFlat = StyleBoxFlat.new()
@@ -535,22 +541,22 @@ func _build_stage(content: Control, mat: Dictionary, tint: Color) -> void:
 	var thick: float = mat["thick"]
 	_inner = SubViewport.new()
 	_inner.size = Vector2i(
-		int((CARD_W + 2.0 * PAD_IN) * OVERSAMPLE),
-		int((CARD_H + 2.0 * PAD_IN) * OVERSAMPLE))
+		int((CARD_W + 2.0 * PAD_IN) * oversample),
+		int((CARD_H + 2.0 * PAD_IN) * oversample))
 	_inner.transparent_bg = true
 	_inner.disable_3d = true
 	# Fonts rasterise per-viewport: without this the 2x canvas scale draws 1x
 	# glyph bitmaps stretched — the exact blur content_scale_factor avoids on
 	# the window. This is the same mechanism, told the same factor.
-	_inner.oversampling_override = OVERSAMPLE
+	_inner.oversampling_override = oversample
 	_inner.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_inner.add_child(content)
 	add_child(_inner)
 
 	_stage = SubViewport.new()
 	_stage.size = Vector2i(
-		int((CARD_W + 2.0 * PAD_3D) * OVERSAMPLE),
-		int((CARD_H + 2.0 * PAD_3D) * OVERSAMPLE))
+		int((CARD_W + 2.0 * PAD_3D) * oversample),
+		int((CARD_H + 2.0 * PAD_3D) * oversample))
 	_stage.own_world_3d = true
 	_stage.transparent_bg = true
 	_stage.msaa_3d = Viewport.MSAA_4X
@@ -711,6 +717,18 @@ static func _prism_mesh(thick: float) -> ArrayMesh:
 	return mesh
 
 
+## Park the slab at a fixed tilt, in the same normalised -1..1 the cursor
+## gives, and keep it rendering there. The material is angle-driven and the
+## angle is normally cursor-driven, so without this there is no way to LOOK at
+## a finish — the pose dies the moment you stop hovering to read the panel.
+## GLASSVOW_TILT and the studio's sliders are the only two callers; anything
+## that also wants the spring should drive the cursor instead.
+func hold_pose(n: Vector2) -> void:
+	_tilt = Vector2(-n.y, -n.x) * MAX_TILT
+	_slab.rotation_degrees = Vector3(_tilt.x, _tilt.y, 0.0)
+	_set_live(true)
+
+
 ## Freeze both offscreen passes when nothing moves; UPDATE_ONCE paints one
 ## last frame and sleeps. A 61-card lab must idle at zero render cost.
 func _set_live(on: bool) -> void:
@@ -734,8 +752,7 @@ func _ready() -> void:
 	if forced != "":
 		var p: PackedStringArray = forced.split(",")
 		if p.size() == 2:
-			_tilt = Vector2(-float(p[1]), -float(p[0])) * MAX_TILT
-			_slab.rotation_degrees = Vector3(_tilt.x, _tilt.y, 0.0)
+			hold_pose(Vector2(float(p[0]), float(p[1])))
 		return  # stay live so the pose reaches the shot
 	await get_tree().process_frame
 	await get_tree().process_frame
