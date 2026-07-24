@@ -60,6 +60,8 @@ uniform float pearl = 0.0;
 uniform float pearl_scale = 60.0;
 uniform float sparkle = 0.0;
 uniform float flake_px = 4.0;
+uniform float flake_big = 0.0;
+uniform float flake_hue = 0.0;
 uniform int mask = 0;
 
 float hash12(vec2 p) {
@@ -111,6 +113,48 @@ float grain_h(vec2 p) {
 // out to — scrambles it into drawn lines that no longer read as a surface.
 float depth_amp(float degrees, float period) {
 	return tan(radians(degrees)) * period / TAU;
+}
+
+// One layer of the confetti field — the pattern a cosmos holofoil sheet is.
+// Each cell holds one flake at a random offset, with its own facet tilt and
+// its own place on the spectrum, so neighbours come out different colours
+// while a tilt walks EVERY one of them along the spectrum together.
+//
+// That pairing is the whole effect, and either half alone fails: colours that
+// are only random read as glitter paint stuck to the card, and a single shared
+// band reads as cheap foil. A real sheet is a field of independent gratings —
+// same physics as the holo band above, chopped into pieces and rotated.
+//
+// `edge`/`soft` bound the disc (edge is its radius in cells, soft where the
+// falloff finishes), `lobe` is how narrow the flash is in angle, `tip` how far
+// the facet leans off the surface. Big flakes want a softer rim, a wider lobe
+// and a shallow tip.
+//
+// The 3x3 sweep is not optional. A flake sits at a random point in its cell,
+// so any disc wider than half a cell reaches into its neighbours — sample the
+// owning cell alone and every large flake comes out clipped square along the
+// lattice, which is exactly what it looks like: a grid, not a sky.
+vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
+		float tip, vec3 N, vec3 T, vec3 Bv, vec3 H, float g) {
+	vec2 cell = p / max(pitch, 0.5);
+	vec2 base = floor(cell);
+	vec3 sum = vec3(0.0);
+	for (int j = -1; j <= 1; j++) {
+		for (int i = -1; i <= 1; i++) {
+			vec2 ci = base + vec2(float(i), float(j));
+			float shape = smoothstep(edge, soft,
+				length(cell - ci - hash22(ci)));
+			if (shape <= 0.0) {
+				continue;
+			}
+			vec2 jt = hash22(ci + 19.7) - 0.5;
+			vec3 fn = normalize(N + (T * jt.x + Bv * jt.y) * tip);
+			vec3 hue = 0.5 + 0.5 * cos(TAU * (g + hash12(ci + 7.3)
+				+ vec3(0.0, 0.33, 0.67)));
+			sum += hue * shape * pow(max(dot(fn, H), 0.0), lobe);
+		}
+	}
+	return sum;
 }
 
 // Standard rounded-rect SDF, negative inside — the silhouette, for the
@@ -192,17 +236,20 @@ void fragment() {
 		0.5 + 0.5 * cos(TAU * (pearl_scale * (1.0 / ndv - 1.0)
 			+ vec3(0.0, 0.28, 0.56))), 0.6);
 
-	// Flakes: one microfacet per cell, each with its own tilt, each returning
-	// light over a couple of degrees only. That narrow lobe is the whole point
-	// — a flake that is always lit is glitter paint, not glitter.
-	float flake = 0.0;
+	// The confetti field — cosmos holofoil. Two layers of it: a dense layer of
+	// sharp pinpricks and a sparser layer of larger, softer, paler discs, which
+	// is the pairing a real cosmos sheet has and the reason it reads as depth
+	// rather than as glitter paint sprayed on.
+	vec3 flake = vec3(0.0);
 	if (sparkle > 0.0) {
-		vec2 cell = cp / max(flake_px, 0.5);
-		vec2 ci = floor(cell);
-		vec2 jt = hash22(ci + 19.7) - 0.5;
-		vec3 fn = normalize(N + (T * jt.x + Bv * jt.y) * 1.5);
-		flake = smoothstep(0.38, 0.05, length(fract(cell) - hash22(ci)))
-			* pow(max(dot(fn, H), 0.0), 220.0);
+		flake = confetti(cp, flake_px, 0.40, 0.08, 120.0, 1.2, N, T, Bv, H, g);
+		if (flake_big > 0.0) {
+			// Bigger facets are flatter, so they hold light over a wider angle
+			// and stay pale — they never reach the pinpricks' saturation.
+			vec3 disc = confetti(cp + 137.0, flake_big, 0.34, 0.20, 70.0, 0.9,
+				N, T, Bv, H, g);
+			flake += mix(disc, vec3(dot(disc, vec3(0.333))), 0.25) * 0.30;
+		}
 	}
 
 	// Where the coating actually is. Spot foil and reverse holo are masks, not
@@ -240,7 +287,12 @@ void fragment() {
 	vec3 add = ink_c * sheen * spec;
 	add += spectrum * holo * band;
 	add += film * pearl * band;
-	add += mix(vec3(1.0), ink_c, 0.5) * sparkle * flake;
+	// flake_hue decides whether the confetti keeps its own spectrum or takes the
+	// material's colour. Gold leaf throws gold sparks, not rainbows; a cosmos
+	// sheet is nothing BUT rainbows. The spectrum averages 0.5, so the hue-free
+	// branch is doubled to land at the same brightness either way.
+	float fi = dot(flake, vec3(0.333));
+	add += mix(ink_c * fi * 2.0, flake, flake_hue) * sparkle;
 
 	ALBEDO = col + add * m;
 	ALPHA = src.a;
