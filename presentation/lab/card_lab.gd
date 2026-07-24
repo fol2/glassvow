@@ -44,24 +44,52 @@ var _homes: Dictionary = {}          # CardView -> resting position
 var _tweens: Dictionary = {}         # CardView -> active hover tween
 var _panning: bool = false
 var _sheet_h: float = 0.0            # laid-out height, for scroll clamping
+var _ordered: Array[CardView] = []   # sheet order: rarity tier, then name
+var _tiers: Array[String] = []       # parallel to _ordered
+var _headings: Array[Label] = []
 
 
-func _tier_heading(rarity: String, n: int, y: float) -> Label:
-	var head: Label = Label.new()
-	head.text = "%s — %d" % [rarity.to_upper(), n]
-	head.add_theme_font_size_override("font_size", 13)
-	head.add_theme_color_override("font_color", GlassStyle.EMBER)
-	head.position = Vector2(2.0, y + 6.0)
-	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	return head
-
-
-func _count_tier(ids: Array[String], rarity: String) -> int:
-	var n: int = 0
-	for id: String in ids:
-		if str(content.cards.get(id, {}).get("rarity", "")) == rarity:
-			n += 1
-	return n
+## Place the sheet against the live stage size. Runs after any window resize, so
+## the column count reflects the window the user actually gets.
+func _layout_sheet() -> void:
+	for h: Label in _headings:
+		h.queue_free()
+	_headings.clear()
+	# Off the window, not this Control's `size` — the Control catches up a frame
+	# or more after a resize, and on the first pass it still reports the old
+	# stage, which lays out one column and looks like the zoom did nothing.
+	var stage_w: float = (float(get_window().size.x) / _zoom) - MARGIN * 2.0
+	var cols: int = maxi(1, int((stage_w + GAP_X) / (CardView.CARD_W + GAP_X)))
+	var col: int = 0
+	var y: float = 0.0
+	var tier: String = ""
+	for i: int in range(_ordered.size()):
+		if _tiers[i] != tier:
+			# New tier: close the current row, drop a heading, restart the grid.
+			# Only advance when the row is part-filled — a row that just wrapped
+			# has already moved y, and adding again leaves a blank row.
+			if tier != "" and col > 0:
+				y += CardView.CARD_H + GAP_Y
+			tier = _tiers[i]
+			col = 0
+			var head: Label = Label.new()
+			head.text = "%s — %d" % [tier.to_upper(), _tiers.count(tier)]
+			head.add_theme_font_size_override("font_size", 13)
+			head.add_theme_color_override("font_color", GlassStyle.EMBER)
+			head.position = Vector2(2.0, y + 6.0)
+			head.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_sheet.add_child(head)
+			_headings.append(head)
+			y += HEADING_H
+		var card: CardView = _ordered[i]
+		var home: Vector2 = Vector2(float(col) * (CardView.CARD_W + GAP_X), y)
+		card.position = home
+		_homes[card] = home
+		col += 1
+		if col >= cols:
+			col = 0
+			y += CardView.CARD_H + GAP_Y
+	_sheet_h = y + CardView.CARD_H
 
 
 func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray(),
@@ -105,10 +133,6 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 	_sheet.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_sheet)
 
-	# Columns are counted in the zoomed stage, which content_scale_factor shrinks.
-	var usable: float = (1180.0 / _zoom) - MARGIN * 2.0
-	var cols: int = maxi(1, int((usable + GAP_X) / (CardView.CARD_W + GAP_X)))
-
 	# Ordered the way the catalogue reads (docs/card-catalog.md) — rarity tier,
 	# then display name — so the sheet lines up against the benchmark gallery
 	# card for card instead of by internal id.
@@ -120,23 +144,12 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		return str(content.cards.get(a, {}).get("name", a)) \
 			< str(content.cards.get(b, {}).get("name", b)))
 
+	# Cards are built here but NOT placed. Column count depends on the stage
+	# width, and at zoom > 1 the window is resized in _ready() — after this runs.
+	# Laying out now would size the grid to the pre-resize stage and show one card.
 	var uid: int = 1
-	var col: int = 0
-	var y: float = 0.0
-	var tier: String = ""
 	for id: String in ids:
 		var data: Dictionary = content.cards.get(id, {})
-		var rarity: String = str(data.get("rarity", "?"))
-		if rarity != tier:
-			# New tier: close the current row, drop a heading, restart the grid.
-			# Only advance when the row is part-filled — a row that just wrapped
-			# has already moved y, and adding again leaves a blank row.
-			if tier != "" and col > 0:
-				y += CardView.CARD_H + GAP_Y
-			tier = rarity
-			col = 0
-			_sheet.add_child(_tier_heading(rarity, _count_tier(ids, rarity), y))
-			y += HEADING_H
 		var inst: CardInst = CardInst.new(uid, StringName(id))
 		# `cost` is present-but-null on the unplayable cards (burn, hex, wound),
 		# so Dictionary.get's default never fires — it only covers a missing key.
@@ -144,18 +157,12 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		var cost_v: Variant = data.get("cost")
 		var cost_num: int = 0 if cost_v == null else int(float(str(cost_v)))
 		var card: CardView = CardView.new(inst, data, cost_num)
-		var home: Vector2 = Vector2(float(col) * (CardView.CARD_W + GAP_X), y)
-		card.position = home
 		card.pivot_offset = Vector2(CardView.CARD_W, CardView.CARD_H) * 0.5
-		_homes[card] = home
 		card.hover_changed.connect(_on_card_hover.bind(card))
 		_sheet.add_child(card)
-		col += 1
-		if col >= cols:
-			col = 0
-			y += CardView.CARD_H + GAP_Y
+		_ordered.append(card)
+		_tiers.append(str(data.get("rarity", "?")))
 		uid += 1
-	_sheet_h = y + CardView.CARD_H
 
 	var caption: Label = Label.new()
 	var scale_note: String = "1:1" if is_equal_approx(_zoom, 1.0) else "%d:1" % int(_zoom)
@@ -172,9 +179,33 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 
 
 func _ready() -> void:
-	if not is_equal_approx(_zoom, 1.0):
-		# Re-rasterise at the larger size rather than magnifying pixels.
-		get_window().content_scale_factor = _zoom
+	_resize_for_zoom()
+	# One frame for the resize to reach `size`, then place the cards against it.
+	await get_tree().process_frame
+	_layout_sheet()
+	get_viewport().size_changed.connect(_layout_sheet)
+
+
+func _resize_for_zoom() -> void:
+	if is_equal_approx(_zoom, 1.0):
+		return
+	# Re-rasterise at the larger size rather than magnifying pixels.
+	var win: Window = get_window()
+	win.content_scale_factor = _zoom
+	# Grow the window with the zoom, or the stage shrinks to 1180/zoom logical px
+	# and a 3x sheet shows one card. Clamped to the usable screen — asking for
+	# 3540x2460 on a smaller display just gets whatever fits, and the sheet
+	# scrolls for the rest.
+	var usable: Rect2i = DisplayServer.screen_get_usable_rect(
+		DisplayServer.window_get_current_screen())
+	if usable.size.x <= 0 or usable.size.y <= 0:
+		return  # headless / no display: content_scale_factor alone is enough
+	var want: Vector2i = Vector2i(
+		int(1180.0 * _zoom), int(820.0 * _zoom))
+	var got: Vector2i = Vector2i(
+		mini(want.x, usable.size.x - 40), mini(want.y, usable.size.y - 60))
+	win.size = got
+	win.position = usable.position + (usable.size - got) / 2
 
 
 ## Raise on hover, exactly the benchmark's grid behaviour. The card is also
@@ -221,7 +252,7 @@ func _gui_input(event: InputEvent) -> void:
 ## Keep the sheet reachable: it may be dragged up to expose its tail, but never
 ## so far that every card leaves the stage and the lab looks empty.
 func _clamp_sheet() -> void:
-	var stage_h: float = size.y / _zoom
+	var stage_h: float = float(get_window().size.y) / _zoom
 	var min_y: float = minf(MARGIN, stage_h - _sheet_h - MARGIN)
 	_sheet.position.y = clampf(_sheet.position.y, min_y, MARGIN)
 	_sheet.position.x = clampf(_sheet.position.x, -_sheet_h, MARGIN * 4.0)

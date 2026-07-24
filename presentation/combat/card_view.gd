@@ -48,7 +48,19 @@ const GEM_INK: Color = Color(0.141, 0.102, 0.020)     # #241A05 — cost numeral
 const GOLD_LIT: Color = Color(1.000, 0.914, 0.675)    # #FFE9AC — conic highlight
 const GOLD_MID: Color = Color(0.949, 0.757, 0.306)    # #F2C14E
 const GOLD_DIM: Color = Color(0.702, 0.514, 0.122)    # #B3831F — conic shadow
-const RARITY: Color = Color(0.235, 0.275, 0.369)      # #3C465E — pill
+const GOLD: Color = Color(0.949, 0.757, 0.306)        # #F2C14E — var(--gold)
+## The rarity pill is not one colour — styles.css tiers it, and the two top tiers
+## also glow. `special` has no rule there, so it falls through to the starter slate.
+const RARITY_PILL: Dictionary = {
+	"starter": Color(0.235, 0.275, 0.369),    # #3C465E
+	"common": Color(0.365, 0.416, 0.533),     # #5D6A88
+	"uncommon": Color(0.278, 0.761, 0.878),   # #47C2E0 → #7FE3F2
+	"rare": Color(0.949, 0.757, 0.306),       # gold → #FFE9AC
+}
+## Free cards get a green gem, not gold (.card-cost.free).
+const GREEN_LIT: Color = Color(0.851, 0.984, 0.906)   # #D9FBE7
+const GREEN_MID: Color = Color(0.216, 0.839, 0.478)   # #37D67A
+const GREEN_DIM: Color = Color(0.090, 0.439, 0.243)   # #17703E
 
 var uid: int = 0
 var card_id: StringName = &""
@@ -103,6 +115,10 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 
 	# Stock gradient, under the art and everything else.
 	var stock: TextureRect = TextureRect.new()
+	# grad_tex hands back a 256x256 texture, and TextureRect's default
+	# EXPAND_KEEP_SIZE makes that the node's *minimum* size — a 1px rule asked for
+	# in offsets still comes out 256px tall. Every gradient here must ignore it.
+	stock.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	stock.texture = GlassStyle.grad_tex(
 		PackedColorArray([
 			Color(tint.r, tint.g, tint.b, 1.0).lerp(Color(0.063, 0.078, 0.141), 0.85),
@@ -136,6 +152,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# The dark line under the window is the `rule` below.
 	if art != null:
 		var wash: TextureRect = TextureRect.new()
+		wash.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		wash.texture = GlassStyle.grad_tex(
 			PackedColorArray([Color(tint.r, tint.g, tint.b, 0.14),
 				Color(tint.r, tint.g, tint.b, 0.0)]),
@@ -171,7 +188,14 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	var rim: Panel = Panel.new()
 	var rim_sb: StyleBoxFlat = StyleBoxFlat.new()
 	rim_sb.bg_color = Color(0, 0, 0, 0)
-	rim_sb.border_color = Color(tint.r, tint.g, tint.b, 0.40)
+	# Tiered rim: commons leaded in the type tint, uncommons silvered, rares gilt.
+	var rim_col: Color = Color(tint.r, tint.g, tint.b, 0.40)
+	var tier: String = str(data.get("rarity", "starter"))
+	if tier == "uncommon":
+		rim_col = Color(0.659, 0.847, 0.933, 0.60)   # #A8D8EE
+	elif tier == "rare":
+		rim_col = Color(GOLD.r, GOLD.g, GOLD.b, 0.80)
+	rim_sb.border_color = rim_col
 	rim_sb.set_border_width_all(1)
 	rim_sb.set_corner_radius_all(9)
 	rim.add_theme_stylebox_override("panel", rim_sb)
@@ -200,6 +224,12 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	name_label.offset_bottom = EDGE + ART_H + 1.0 + NAME_H
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(name_label)
+
+	# The name plate is ruled top and bottom with a 1px gold line that fades out
+	# at both ends (styles.css .card-name carries them as background gradients).
+	# The lower one is the divider between the name and the type rubric.
+	_add_name_rule(layer, EDGE + ART_H + 1.0, 0.22, 0.14)
+	_add_name_rule(layer, EDGE + ART_H + 1.0 + NAME_H - 1.0, 0.14, 0.06)
 
 	var type_label: Label = Label.new()
 	type_label.text = ctype.to_upper()
@@ -256,10 +286,16 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	body_box.add_child(body)
 	layer.add_child(body_box)
 
+	var rarity: String = str(data.get("rarity", "starter"))
 	var pill: Panel = Panel.new()
 	var pill_sb: StyleBoxFlat = StyleBoxFlat.new()
-	pill_sb.bg_color = RARITY
+	pill_sb.bg_color = RARITY_PILL.get(rarity, RARITY_PILL["starter"])
 	pill_sb.set_corner_radius_all(3)
+	# Uncommon and rare pills carry a glow in the benchmark; the lower tiers don't.
+	if rarity == "uncommon" or rarity == "rare":
+		pill_sb.shadow_color = Color(pill_sb.bg_color.r, pill_sb.bg_color.g,
+			pill_sb.bg_color.b, 0.55)
+		pill_sb.shadow_size = 7 if rarity == "rare" else 6
 	pill.add_theme_stylebox_override("panel", pill_sb)
 	pill.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	pill.offset_left = (CARD_W - 24.0) * 0.5
@@ -273,6 +309,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# that tracks the pointer and fades in over 0.25s. Lives above the art but
 	# below nothing else, and inside the clipped subtree so it respects the radius.
 	_glare = TextureRect.new()
+	_glare.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_glare.texture = GlassStyle.grad_tex(
 		PackedColorArray([Color(1, 1, 1, 0.17), Color(1, 1, 1, 0.0)]),
 		PackedFloat32Array([0.0, 0.55]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
@@ -286,6 +323,28 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
+
+
+## One of the name plate's two hairlines: gold, brightest mid-span, transparent
+## at both ends. A three-stop horizontal gradient stands in for the CSS one.
+func _add_name_rule(parent: Control, y: float, mid_a: float, edge_a: float) -> void:
+	var rule_line: TextureRect = TextureRect.new()
+	rule_line.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rule_line.texture = GlassStyle.grad_tex(
+		PackedColorArray([
+			Color(GOLD.r, GOLD.g, GOLD.b, 0.0),
+			Color(GOLD.r, GOLD.g, GOLD.b, mid_a),
+			Color(GOLD.r, GOLD.g, GOLD.b, mid_a),
+			Color(GOLD.r, GOLD.g, GOLD.b, edge_a * 0.0)]),
+		PackedFloat32Array([0.04, 0.18, 0.82, 0.96]), false,
+		Vector2(0.0, 0.5), Vector2(1.0, 0.5))
+	rule_line.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	rule_line.offset_left = EDGE
+	rule_line.offset_right = -EDGE
+	rule_line.offset_top = y
+	rule_line.offset_bottom = y + 1.0
+	rule_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(rule_line)
 
 
 ## A pointy-top hexagon in gold leaf, hung off the top-left corner at (-8, -8).
@@ -304,20 +363,35 @@ func _build_cost_gem(cost: int, tint: Color) -> void:
 		Vector2(GEM * 0.93, GEM * 0.75), Vector2(GEM * 0.50, GEM),
 		Vector2(GEM * 0.07, GEM * 0.75), Vector2(GEM * 0.07, GEM * 0.25),
 	])
-	# The gem's gold is a conic sweep (#FFE9AC → #F2C14E → #B3831F → back). A
-	# per-vertex ramp reproduces the light-from-upper-left read for one polygon
-	# instead of a shader, which is all this 36px badge needs.
-	hex.vertex_colors = PackedColorArray([
-		GOLD_LIT, GOLD_MID, GOLD_DIM, GOLD_DIM, GOLD_MID, GOLD_LIT,
-	])
+	# The gem's metal is a conic sweep. A per-vertex ramp reproduces the
+	# light-from-upper-left read for one polygon instead of a shader, which is all
+	# this 36px badge needs. Cost 0 is struck in green, not gold (.card-cost.free).
+	var free: bool = cost == 0 and not unplayable
+	var lit: Color = GREEN_LIT if free else GOLD_LIT
+	var mid: Color = GREEN_MID if free else GOLD_MID
+	var dim: Color = GREEN_DIM if free else GOLD_DIM
+	hex.vertex_colors = PackedColorArray([lit, mid, dim, dim, mid, lit])
 	holder.add_child(hex)
+
+	# Inner bevel: .card-cost::before, the same hexagon inset 3px carrying a
+	# 160deg white-to-black wash. It is what stops the badge reading as a decal.
+	var bevel: Polygon2D = Polygon2D.new()
+	var inset: PackedVector2Array = PackedVector2Array()
+	for p: Vector2 in hex.polygon:
+		inset.append(p.lerp(Vector2(GEM, GEM) * 0.5, 3.0 / (GEM * 0.5)))
+	bevel.polygon = inset
+	bevel.vertex_colors = PackedColorArray([
+		Color(1, 1, 1, 0.35), Color(1, 1, 1, 0.10), Color(0, 0, 0, 0.14),
+		Color(0, 0, 0, 0.22), Color(0, 0, 0, 0.10), Color(1, 1, 1, 0.22),
+	])
+	holder.add_child(bevel)
 
 	var edge_line: Line2D = Line2D.new()
 	var pts: PackedVector2Array = hex.polygon.duplicate()
 	pts.append(hex.polygon[0])
 	edge_line.points = pts
-	edge_line.width = 1.5
-	edge_line.default_color = Color(tint.r, tint.g, tint.b, 0.55)
+	edge_line.width = 1.0
+	edge_line.default_color = Color(dim.r, dim.g, dim.b, 0.85)
 	holder.add_child(edge_line)
 
 	var cost_label: Label = Label.new()
