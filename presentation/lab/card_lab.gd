@@ -12,6 +12,14 @@ extends Control
 ##   godot --path . -- --cards                       # window, stays open
 ##   godot --path . -- --cards --shot=/tmp/cards.png # headless contact sheet
 ##   godot --path . -- --cards=strike,defend --zoom=3
+##   godot --path . -- --cards=bastion --surfaces    # one card, every material
+##
+## The surfaces sheet is the other axis: the SAME card in every recipe from
+## CardSurface, captioned with the four layers it stacks. Cards differ there by
+## nothing but what they are made of, which is the only way to judge a material
+## — a rarity sheet varies art, text and tint at the same time and tells you
+## nothing. Materials are angle-driven, so hover one (or pose the whole sheet
+## with GLASSVOW_TILT) to see what a still frame cannot show.
 ##
 ## In the window: hover a card to raise it (the benchmark's `.card-grid .card:hover`
 ## — translateY(-8) scale(1.05) over 0.18s, plus the cursor glare), drag anywhere
@@ -55,6 +63,8 @@ var _sheet_h: float = 0.0            # laid-out height, for scroll clamping
 var _ordered: Array[CardView] = []   # sheet order: rarity tier, then name
 var _tiers: Array[String] = []       # parallel to _ordered
 var _headings: Array[Label] = []
+var _captions: Array[Label] = []     # parallel to _ordered; empty off the surfaces sheet
+var _caption_h: float = 0.0          # extra row height the captions need
 
 
 ## All 61 cards' display fields. Falls back to the slice's own registry if the
@@ -96,7 +106,7 @@ func _layout_sheet() -> void:
 			# Only advance when the row is part-filled — a row that just wrapped
 			# has already moved y, and adding again leaves a blank row.
 			if tier != "" and col > 0:
-				y += CardView.CARD_H + GAP_Y
+				y += CardView.CARD_H + GAP_Y + _caption_h
 			tier = _tiers[i]
 			col = 0
 			var head: Label = Label.new()
@@ -112,15 +122,19 @@ func _layout_sheet() -> void:
 		var home: Vector2 = Vector2(float(col) * (CardView.CARD_W + GAP_X), y)
 		card.position = home
 		_homes[card] = home
+		if i < _captions.size():
+			_captions[i].position = home + Vector2(0.0, CardView.CARD_H + 5.0)
+			_captions[i].size.x = CardView.CARD_W
 		col += 1
 		if col >= cols:
 			col = 0
-			y += CardView.CARD_H + GAP_Y
+			y += CardView.CARD_H + GAP_Y + _caption_h
 	_sheet_h = y + CardView.CARD_H
 
 
 func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray(),
-		zoom: float = 1.0) -> void:
+		zoom: float = 1.0,
+		surfaces: PackedStringArray = PackedStringArray()) -> void:
 	content = content_ref
 	_zoom = maxf(1.0, zoom)
 	_catalog = _load_catalog(content_ref)
@@ -172,12 +186,35 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		return str(_catalog.get(a, {}).get("name", a)) \
 			< str(_catalog.get(b, {}).get("name", b)))
 
+	# Two sheets out of one grid: every card at its own material, or ONE card
+	# wearing every material. The recipe rides in on the card data as `surface`
+	# — the same override seam content uses — so the lab gets no private path
+	# into CardSurface and cannot show a card the game could not build.
+	var plan: Array[Array] = []          # [[card id, recipe or ""], ...]
+	if surfaces.is_empty():
+		for id: String in ids:
+			plan.append([id, ""])
+	else:
+		var base: String = ids[0] if not ids.is_empty() else "strike"
+		for r: String in surfaces:
+			if not CardSurface.RECIPES.has(r):
+				push_warning("card lab: no such surface: %s" % r)
+				print("card lab: no such surface: %s" % r)
+				continue
+			plan.append([base, r])
+		_caption_h = 44.0
+
 	# Cards are built here but NOT placed. Column count depends on the stage
 	# width, and at zoom > 1 the window is resized in _ready() — after this runs.
 	# Laying out now would size the grid to the pre-resize stage and show one card.
 	var uid: int = 1
-	for id: String in ids:
+	for row: Array in plan:
+		var id: String = row[0]
+		var recipe: String = row[1]
 		var data: Dictionary = _catalog.get(id, {})
+		if recipe != "":
+			data = data.duplicate()
+			data["surface"] = recipe
 		var inst: CardInst = CardInst.new(uid, StringName(id))
 		# `cost` is present-but-null on the unplayable cards (burn, hex, wound),
 		# so Dictionary.get's default never fires — it only covers a missing key.
@@ -189,13 +226,22 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 		card.hover_changed.connect(_on_card_hover.bind(card))
 		_sheet.add_child(card)
 		_ordered.append(card)
-		_tiers.append(str(data.get("rarity", "?")))
+		# The surfaces sheet is one card over and over, so a tier heading would
+		# print the same word every row. Blank keeps _layout_sheet's grid plain.
+		_tiers.append(str(data.get("rarity", "?")) if recipe == "" else "")
+		if recipe != "":
+			_captions.append(_spec_label(recipe))
 		uid += 1
+	# After the cards, so a caption is never drawn under the card beside it.
+	for cap: Label in _captions:
+		_sheet.add_child(cap)
 
 	var caption: Label = Label.new()
 	var scale_note: String = "1:1" if is_equal_approx(_zoom, 1.0) else "%d:1" % int(_zoom)
 	caption.text = "card lab · %d cards · %s against roguecardv2@6e069118" % [
-		ids.size(), scale_note]
+		plan.size(), scale_note] if surfaces.is_empty() \
+		else "card surfaces · %s · %d materials · %s" % [
+			plan[0][0] if not plan.is_empty() else "-", plan.size(), scale_note]
 	caption.add_theme_font_size_override("font_size", 12)
 	caption.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	caption.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -204,6 +250,26 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 	caption.offset_bottom = -8
 	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(caption)
+
+
+## A recipe's spec sheet, read the way a print job would be quoted: the name,
+## then the four layers it stacks, in the order card_surface.gd folds them.
+static func _spec_label(recipe: String) -> Label:
+	var stack: Array = CardSurface.RECIPES[recipe]
+	var parts: PackedStringArray = PackedStringArray()
+	for layer: Variant in stack:
+		parts.append(str(layer))
+	var cap: Label = Label.new()
+	cap.text = "%s\n%s" % [recipe.to_upper(), " · ".join(parts)]
+	cap.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# Bounded to the card's own width, or a long stack runs under its neighbour
+	# and the sheet reads as one caption for the wrong card.
+	cap.custom_minimum_size = Vector2(CardView.CARD_W, 0.0)
+	cap.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	cap.add_theme_font_size_override("font_size", 9)
+	cap.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+	cap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return cap
 
 
 func _ready() -> void:

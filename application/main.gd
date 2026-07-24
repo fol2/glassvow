@@ -38,11 +38,13 @@ func _ready() -> void:
 	# Screenshot-loop hook for agent iteration without the editor MCP:
 	# godot --path . -- --shot=/tmp/map.png [--seed=N] [--enter=0]
 	# godot --path . -- --cards[=id,id] --shot=/tmp/cards.png   (card designer)
+	# godot --path . -- --cards=bastion --surfaces[=gilt,holofoil]  (materials)
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var cards_lab: bool = false
 	var cards_only: PackedStringArray = PackedStringArray()
 	var cards_zoom: float = 1.0
+	var surfaces: PackedStringArray = PackedStringArray()
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -57,9 +59,15 @@ func _ready() -> void:
 			cards_only = arg.trim_prefix("--cards=").split(",", false)
 		elif arg.begins_with("--zoom="):
 			cards_zoom = float(arg.trim_prefix("--zoom="))
+		elif arg == "--surfaces":
+			cards_lab = true
+			surfaces = PackedStringArray(CardSurface.RECIPES.keys())
+		elif arg.begins_with("--surfaces="):
+			cards_lab = true
+			surfaces = arg.trim_prefix("--surfaces=").split(",", false)
 	if cards_lab:
 		# The lab is a contact sheet, not a run — no game state is built.
-		add_child(CardLab.new(content, cards_only, cards_zoom))
+		add_child(CardLab.new(content, cards_only, cards_zoom, surfaces))
 		if shot_path != "":
 			_capture_and_quit(shot_path)
 		return

@@ -15,7 +15,9 @@ extends Control
 ##   name      Cinzel 700 @ 13.5, letter-spacing 0.27, #E8DFC8
 ##   type      Alegreya 400 @ 10, letter-spacing 2.8, uppercase, type tint
 ##   text      Alegreya 400 @ 12.8, line-height 16.9, #C6CCDF
-##   rarity    24 x 5 pill, radius 3, #3C465E, bottom centre
+##   rarity    a 24 x 5 pill, bottom centre — deliberately dropped. A real card
+##             does not label its own tier; you read it off the stock and the
+##             coating instead. See card_surface.gd.
 ##
 ## The face is a stack of full-width bands, built top-down in _init the way the
 ## card reads. Every band goes through _band() and every gradient through
@@ -67,7 +69,6 @@ const ART_H: float = 91.0
 const NAME_H: float = 23.0
 const TYPE_H: float = 13.0
 const GEM: float = 36.0
-const PILL_W: float = 24.0
 ## Each row's top derived from the one above it, so changing a band's height
 ## carries the rest with it instead of leaving five hand-summed offsets behind.
 const ART_Y: float = EDGE
@@ -90,12 +91,13 @@ const GLARE_FADE: float = 0.25
 ## The thickness is modelled and, at these numbers, deliberately invisible.
 ## The front face occludes the side band until the tilt passes the half-angle
 ## the card subtends at the lens, atan(CARD_W/2 / camera distance) ~= 5.8deg
-## sideways, and past that the band is at most THICK * sin(tilt) — 0.9px here.
-## Measured: renders at THICK 0.5 and THICK 20 come out pixel-identical, and a
-## 30px slab only slides the card sideways. That is also what a real 3mm glass
-## card does at 7deg, so it stays. Raising THICK alone can never show the cut
-## edge; THICK and MAX_TILT have to move together (16 with a 12deg throw puts
-## ~2px of glass along the leaning side; 26 with 18deg reads as a tile).
+## sideways, and past that the band is at most thick * sin(tilt) — under a
+## pixel at every stock in the catalogue. Measured: renders at 0.5 and 20 come
+## out pixel-identical, and a 30px slab only slides the card sideways. That is
+## also what a real glass card does at 7deg, so it stays. Thickness therefore
+## reaches the eye through the SHADOW and the EDGE CUT, not through a visible
+## band; showing the band would need the tilt to grow with it (16px at a 12deg
+## throw puts ~2px of glass along the leaning side; 26 at 18deg reads as a tile).
 ##
 ## The shadow does not ride the slab: it is the card's shadow ON THE TABLE, a
 ## separate flat panel behind the stage that stays put (and eases away) while
@@ -103,16 +105,16 @@ const GLARE_FADE: float = 0.25
 const OVERSAMPLE: float = 2.0    # inner render scale — crisp through the 3D pass
 const PAD_IN: float = 8.0        # inner texture margin: exactly the gem overhang
 const PAD_3D: float = 24.0       # stage margin: room for the tilted silhouette
-const THICK: float = 7.0         # slab thickness in px (~2.9 mm at card scale)
 const FOV_DEG: float = 20.0      # long lens — perspective present, never cartoon
 const MAX_TILT: float = 7.0      # degrees at full cursor throw
 const MAX_LIFT: float = 10.0     # px toward the camera while held
 const ARC_SEGS: int = 8          # prism corner-arc resolution
-## Tilt spring (omega, zeta): held is a critically damped chase — the card is
-## pinned under the cursor; released is slightly underdamped, so the pane
-## settles back with one soft ring, the way glass set down on velvet would.
+## Tilt spring (omega, zeta) while HELD: critically damped, because the card is
+## pinned under the cursor. The RELEASE spring is not a constant — it is the
+## stock's rigidity, and it is the one property of the material you feel
+## instead of see: thin stock rings back loose and long, a rigid plastic card
+## stops dead. See CardSurface.STOCK.
 const SPR_HELD: Vector2 = Vector2(18.0, 1.0)
-const SPR_FREE: Vector2 = Vector2(11.0, 0.55)
 
 const PARCHMENT: Color = Color(0.910, 0.875, 0.784)   # #E8DFC8 — name
 const INK: Color = Color(0.043, 0.055, 0.102)         # #0B0E1A — card stock
@@ -137,23 +139,14 @@ const TYPE_TINT: Dictionary = {
 	"status": Color(0.498, 0.682, 0.612),     # #7FAE9C
 	"curse": Color(0.780, 0.482, 0.831),      # #C77BD4
 }
-## The rarity pill is not one colour — styles.css tiers it, and the two top tiers
-## also glow. `special` has no rule there, so it falls through to the starter slate.
-const RARITY_PILL: Dictionary = {
-	"starter": Color(0.235, 0.275, 0.369),    # #3C465E
-	"common": Color(0.365, 0.416, 0.533),     # #5D6A88
-	"uncommon": Color(0.278, 0.761, 0.878),   # #47C2E0 → #7FE3F2
-	"rare": GOLD,                             # → #FFE9AC
-}
-## The edge system: type is the colour of the glass, rarity is the finish of
-## the cut. One shader owns border, rim, corner gold and hover glint — the
-## finish tiers are documented at the top of card_edge.gdshader. Curse
-## overrides its rarity to leaden: that glass drinks light instead.
+## The edge system: type is the colour of the glass, the STOCK is the cut. One
+## shader owns border, rim, corner gold and hover glint — the cut tiers are
+## documented at the top of card_edge.gdshader, and which cut a card gets is
+## the stock layer's call (CardSurface.STOCK.cut), not the rarity's.
 const EDGE_SHADER: Shader = preload("res://presentation/combat/card_edge.gdshader")
-const FINISH: Dictionary = {
-	"starter": 0, "common": 1, "uncommon": 2, "rare": 3, "special": 0,
-}
-const FINISH_LEADEN: int = 4
+## The face's material, over the same texture the flat card used. Everything
+## it adds is angle-driven, so at rest it costs the card almost nothing.
+const SURFACE_SHADER: Shader = preload("res://presentation/combat/card_surface.gdshader")
 
 ## Cached FontVariations — one per (face, tracking) pair, built once per run.
 ## Label wants a Font resource, and a fresh FontVariation per label would re-pay
@@ -191,9 +184,17 @@ var _tilt_target: Vector2 = Vector2.ZERO
 var _lift: float = 0.0
 var _lift_v: float = 0.0
 
-## One prism serves every card — geometry depends only on the card constants.
+## The card's material, resolved once in _init: which recipe it wears, the
+## flattened four-layer parameter set, and the two stock properties the slab
+## reads every frame.
+var surface: String = ""
+var _spr_free: Vector2 = Vector2(11.0, 0.55)
+var _shadow_size: int = SHADOW_SIZE
+
+## Geometry depends only on the card constants and the stock's thickness, so
+## one prism serves every card of a given stock — six meshes for the catalogue.
 ## Materials differ per card and live on the MeshInstance3D as overrides.
-static var _prism_cache: ArrayMesh = null
+static var _prism_cache: Dictionary = {}
 
 
 func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
@@ -203,11 +204,19 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	var unplayable_flag: bool = data.get("unplayable", false)
 	unplayable = unplayable_flag
 	var ctype: String = str(data.get("type", ""))
-	var rarity: String = str(data.get("rarity", "starter"))
 	var tint: Color = TYPE_TINT.get(ctype, GlassStyle.GLASS)
 	custom_minimum_size = Vector2(CARD_W, CARD_H)
 	size = custom_minimum_size
 	pivot_offset = custom_minimum_size * 0.5
+
+	# What this card is made of, before anything is built: the stock decides
+	# the slab's thickness, the cut of its edge, the weight of its shadow and
+	# how it springs back, so it has to be known first.
+	surface = CardSurface.recipe_of(inst.id, data)
+	var mat: Dictionary = CardSurface.params(surface)
+	_spr_free = mat["spring"]
+	var weight: float = mat["shadow"]
+	_shadow_size = int(roundf(float(SHADOW_SIZE) * weight))
 
 	# The table shadow, first and flat: a real object's shadow falls on the
 	# surface beneath it, so it lives OUTSIDE the slab and holds still (easing
@@ -220,10 +229,14 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# off, what shows through is exactly what should: its shadow.
 	_shadow_sb.bg_color = Color(0, 0, 0, 0)
 	_shadow_sb.set_corner_radius_all(RADIUS)
-	# Rare cards cast a slightly warmer shadow — light through gilded glass.
-	_shadow_sb.shadow_color = SHADOW_COLOR.lerp(Color(GOLD_DIM, 0.55), 0.18) \
-		if rarity == "rare" else SHADOW_COLOR
-	_shadow_sb.shadow_size = SHADOW_SIZE
+	# A shadow carries a breath of whatever the light had to get past, so a
+	# reflective material warms its own. Off the material rather than the tier:
+	# change what a rare is made of and its shadow follows without being told.
+	var ink: Color = mat["ink"]
+	var gives_back: float = mat["sheen"]
+	_shadow_sb.shadow_color = SHADOW_COLOR.lerp(
+		Color(ink.darkened(0.45), 0.55), 0.20 * gives_back)
+	_shadow_sb.shadow_size = _shadow_size
 	_shadow_sb.shadow_offset = SHADOW_OFFSET
 	_shadow = Panel.new()
 	_shadow.add_theme_stylebox_override("panel", _shadow_sb)
@@ -350,8 +363,6 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	body.offset_bottom = -8.0
 	layer.add_child(body)
 
-	layer.add_child(_build_rarity_pill(rarity))
-
 	# Cursor glare: the benchmark's .card-inner::before — a soft radial highlight
 	# that tracks the pointer and fades in over 0.25s. Lives above the art but
 	# below nothing else, and inside the clipped subtree so it respects the radius.
@@ -372,9 +383,8 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	_edge_mat.set_shader_parameter("card_size", Vector2(CARD_W, CARD_H))
 	_edge_mat.set_shader_parameter("radius", float(RADIUS))
 	_edge_mat.set_shader_parameter("edge_w", EDGE)
-	var fin: int = FINISH.get(rarity, 0)
-	_edge_mat.set_shader_parameter("finish",
-		FINISH_LEADEN if ctype == "curse" else fin)
+	var cut: int = mat["cut"]
+	_edge_mat.set_shader_parameter("finish", cut)
 	_edge_mat.set_shader_parameter("tint", tint)
 	_edge_mat.set_shader_parameter("rule_col", RULE)
 	_edge_mat.set_shader_parameter("gold_lit", GOLD_LIT)
@@ -390,8 +400,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# with it (PAD_IN exists exactly so its overhang lands on the texture).
 	_build_cost_gem(content, cost)
 
-	_build_stage(content, _side_color(
-		FINISH_LEADEN if ctype == "curse" else fin, tint))
+	_build_stage(content, mat, tint)
 
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -452,23 +461,6 @@ static func _add_name_rule(parent: Control, y: float, mid_a: float) -> void:
 			Color(GOLD, mid_a), Color(GOLD, 0.0)]),
 		PackedFloat32Array([0.04, 0.18, 0.82, 0.96]), false,
 		Vector2(0.0, 0.5), Vector2(1.0, 0.5), "name_rule:%.2f" % mid_a), y, 1.0))
-
-
-## 24x5 tier bar, centred, 5px off the bottom.
-static func _build_rarity_pill(rarity: String) -> Panel:
-	var pill: Panel = Panel.new()
-	var sb: StyleBoxFlat = StyleBoxFlat.new()
-	sb.bg_color = RARITY_PILL.get(rarity, RARITY_PILL["starter"])
-	sb.set_corner_radius_all(3)
-	# Uncommon and rare pills carry a glow in the benchmark; the lower tiers
-	# don't. Benchmark: 0 0 6px on uncommon, 0 0 8px on rare. Godot's shadow_size
-	# is a radius, so it reads heavier at the same number — halved.
-	if rarity == "uncommon" or rarity == "rare":
-		sb.shadow_color = Color(sb.bg_color, 0.55)
-		sb.shadow_size = 4 if rarity == "rare" else 3
-	pill.add_theme_stylebox_override("panel", sb)
-	_band(pill, CARD_H - 10.0, 5.0, (CARD_W - PILL_W) * 0.5)
-	return pill
 
 
 ## A pointy-top hexagon in gold leaf, hung off the top-left corner at (-8, -8).
@@ -533,7 +525,8 @@ func _build_cost_gem(parent: Control, cost: int) -> void:
 ## Offscreen face → glass prism → long-lens camera → back onto this Control.
 
 
-func _build_stage(content: Control, side_col: Color) -> void:
+func _build_stage(content: Control, mat: Dictionary, tint: Color) -> void:
+	var thick: float = mat["thick"]
 	_inner = SubViewport.new()
 	_inner.size = Vector2i(
 		int((CARD_W + 2.0 * PAD_IN) * OVERSAMPLE),
@@ -558,27 +551,43 @@ func _build_stage(content: Control, side_col: Color) -> void:
 	_stage.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	add_child(_stage)
 
-	if _prism_cache == null:
-		_prism_cache = _prism_mesh()
+	if not _prism_cache.has(thick):
+		_prism_cache[thick] = _prism_mesh(thick)
 	_slab = MeshInstance3D.new()
-	_slab.mesh = _prism_cache
+	_slab.mesh = _prism_cache[thick]
 
-	# Unshaded throughout: the 2D face paints its own light story, and the
-	# side band is a cross-section of the material, not a lit surface.
+	# The side band is a cross-section of the material, not a lit surface —
+	# unshaded, one flat colour, the only place you see the stock itself.
 	var side_mat: StandardMaterial3D = StandardMaterial3D.new()
 	side_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	side_mat.albedo_color = side_col
+	side_mat.albedo_color = CardSurface.body_color(mat, tint)
 	side_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	_slab.set_surface_override_material(0, side_mat)
 
-	var face_mat: StandardMaterial3D = StandardMaterial3D.new()
-	face_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	face_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	face_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
-	face_mat.albedo_texture = _inner.get_texture()
+	# The face carries the material. Everything the 2D pass painted comes
+	# through untouched; what this adds is the light the surface gives back,
+	# and every channel of it is angle-driven — see card_surface.gdshader.
+	var face_mat: ShaderMaterial = ShaderMaterial.new()
+	face_mat.shader = SURFACE_SHADER
+	face_mat.set_shader_parameter("face_tex", _inner.get_texture())
+	face_mat.set_shader_parameter("face_size",
+		Vector2(CARD_W, CARD_H) + Vector2(PAD_IN, PAD_IN) * 2.0)
+	face_mat.set_shader_parameter("face_pad", Vector2(PAD_IN, PAD_IN))
+	face_mat.set_shader_parameter("card_size", Vector2(CARD_W, CARD_H))
+	face_mat.set_shader_parameter("radius", float(RADIUS))
+	face_mat.set_shader_parameter("art_rect",
+		Vector4(EDGE, ART_Y, CARD_W - 2.0 * EDGE, ART_H))
+	CardSurface.apply(face_mat, mat, tint)
 	_slab.set_surface_override_material(1, face_mat)
-	# The gem plate shares the face's material — same texture, same sampling.
-	_slab.set_surface_override_material(2, face_mat)
+	# The gem plate does NOT take the finish. It is a struck badge applied over
+	# the stock, not part of it — leaf on leaf would read as a smear, and the
+	# gem already carries its own metal in the 2D pass.
+	var gem_mat: StandardMaterial3D = StandardMaterial3D.new()
+	gem_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	gem_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	gem_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
+	gem_mat.albedo_texture = _inner.get_texture()
+	_slab.set_surface_override_material(2, gem_mat)
 	_stage.add_child(_slab)
 
 	# Head-on long lens, at the distance where the stage rect maps 1:1 onto
@@ -590,7 +599,7 @@ func _build_stage(content: Control, side_col: Color) -> void:
 	# comes out half a percent oversize, overhanging its own shadow.
 	var dist: float = (CARD_H + 2.0 * PAD_3D) * 0.5 \
 		/ tan(deg_to_rad(FOV_DEG * 0.5))
-	cam.position = Vector3(0.0, 0.0, dist + THICK * 0.5)
+	cam.position = Vector3(0.0, 0.0, dist + thick * 0.5)
 	cam.near = dist * 0.5
 	cam.far = dist * 1.5
 	_stage.add_child(cam)
@@ -639,10 +648,10 @@ static func _uv(x: float, y: float) -> Vector2:
 ## plate — the cost gem overhangs the silhouette, so its corner square rides
 ## just proud of the face sampling the same texture (where it re-covers the
 ## face the texels are identical and opaque, so the overlap cannot show).
-static func _prism_mesh() -> ArrayMesh:
+static func _prism_mesh(thick: float) -> ArrayMesh:
 	var pts: PackedVector2Array = _outline()
 	var n: int = pts.size()
-	var hz: float = THICK * 0.5
+	var hz: float = thick * 0.5
 	var mesh: ArrayMesh = ArrayMesh.new()
 
 	var side: SurfaceTool = SurfaceTool.new()
@@ -696,22 +705,6 @@ static func _prism_mesh() -> ArrayMesh:
 	return mesh
 
 
-## The slab's cross-section colour: the edge system's band made physical.
-## Hue carries the type; brightness carries the finish. Leaden drinks light.
-static func _side_color(fin: int, tint: Color) -> Color:
-	match fin:
-		0:
-			return tint.lerp(Color(0.5, 0.5, 0.5), 0.45).darkened(0.58)
-		1:
-			return tint.darkened(0.40)
-		2:
-			return tint.darkened(0.15)
-		3:
-			return GOLD
-		_:
-			return Color(0.05, 0.06, 0.09)
-
-
 ## Freeze both offscreen passes when nothing moves; UPDATE_ONCE paints one
 ## last frame and sleeps. A 61-card lab must idle at zero render cost.
 func _set_live(on: bool) -> void:
@@ -748,7 +741,7 @@ func _ready() -> void:
 ## settling; the moment everything is at rest the viewports freeze again.
 func _process(delta: float) -> void:
 	var dt: float = minf(delta, 1.0 / 30.0)  # keep the spring stable on hitches
-	var spr: Vector2 = SPR_HELD if _hovered else SPR_FREE
+	var spr: Vector2 = SPR_HELD if _hovered else _spr_free
 	var w2: float = spr.x * spr.x
 	var dampen: float = 2.0 * spr.y * spr.x
 	_tilt_v += ((_tilt_target - _tilt) * w2 - _tilt_v * dampen) * dt
@@ -766,7 +759,7 @@ func _process(delta: float) -> void:
 	var h: float = _lift / MAX_LIFT
 	_shadow.position = Vector2(_tilt.y, _tilt.x) * 0.28 + Vector2(0.0, 4.0 * h)
 	_shadow.modulate.a = 1.0 - 0.22 * h
-	_shadow_sb.shadow_size = SHADOW_SIZE + roundi(4.0 * h)
+	_shadow_sb.shadow_size = _shadow_size + roundi(4.0 * h)
 
 	if not _hovered and _tilt.length() < 0.02 and _tilt_v.length() < 0.05 \
 			and _lift < 0.05 and absf(_lift_v) < 0.1:
@@ -778,7 +771,7 @@ func _process(delta: float) -> void:
 		_slab.position.z = 0.0
 		_shadow.position = Vector2.ZERO
 		_shadow.modulate.a = 1.0
-		_shadow_sb.shadow_size = SHADOW_SIZE
+		_shadow_sb.shadow_size = _shadow_size
 		_set_live(false)
 		set_process(false)
 
