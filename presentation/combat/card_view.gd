@@ -84,10 +84,18 @@ const GLARE_FADE: float = 0.25
 ## in space. The 2D face renders into an offscreen viewport at OVERSAMPLE
 ## resolution; a rounded-rect prism carries that texture in a tiny 3D stage
 ## with a long-lens camera. Head-on, the render is the flat card. On hover the
-## slab tilts toward the cursor and lifts a breath, and the prism's side band —
-## the physical cross-section of the glass — appears as a hairline of the
-## edge's colour along the leaning side. The edge system painted the light
-## trapped in the glass; the slab makes the glass itself.
+## slab tilts toward the cursor and lifts a breath, and the face takes real
+## perspective — the near corner genuinely larger, which is the whole payoff.
+##
+## The thickness is modelled and, at these numbers, deliberately invisible.
+## The front face occludes the side band until the tilt passes the half-angle
+## the card subtends at the lens, atan(CARD_W/2 / camera distance) ~= 5.8deg
+## sideways, and past that the band is at most THICK * sin(tilt) — 0.9px here.
+## Measured: renders at THICK 0.5 and THICK 20 come out pixel-identical, and a
+## 30px slab only slides the card sideways. That is also what a real 3mm glass
+## card does at 7deg, so it stays. Raising THICK alone can never show the cut
+## edge; THICK and MAX_TILT have to move together (16 with a 12deg throw puts
+## ~2px of glass along the leaning side; 26 with 18deg reads as a tile).
 ##
 ## The shadow does not ride the slab: it is the card's shadow ON THE TABLE, a
 ## separate flat panel behind the stage that stays put (and eases away) while
