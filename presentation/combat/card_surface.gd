@@ -269,14 +269,19 @@ const FINISH: Dictionary = {
 	# what the shader gates the second pass on. What goes is the sparse field of
 	# larger, flatter, paler discs; what stays is the 2.6px pinpricks, and they
 	# are the half that reads as a star field rather than as glitter stuck on.
-	# The big discs hold light over a wider angle by design, so dropping them
-	# costs some of the always-on shimmer and buys a sheet that only speaks when
-	# the light is actually near it.
+	#
+	# `sparkle` is 2.5x every other entry here and that is not this sheet being
+	# louder, it is this sheet being STEEPER. Flakes no longer take the room's
+	# light at face value (FLAKE_ROOM in the shader), so 0.50 is what it costs to
+	# come back to a quiet rest state — measured at 0.65x the shimmer it used to
+	# have at rest, and 1.4x the flash with the lamp on it. The sheet went from
+	# 1.8x to 3.9x between the two, which is the number the eye was reading when
+	# it said the lamp did nothing.
 	"cosmos-fine": {                           # cosmos, no big discs
 		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 34.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 0.0, "flake_hue": 1.0, "mask": 0,
+		"sparkle": 0.50, "flake_px": 2.6, "flake_big": 0.0, "flake_hue": 1.0, "mask": 0,
 	},
 	"dead": {                                  # the coating that gives nothing
 		"sheen": 0.0015, "tight": 12.0, "aniso": 0.0,

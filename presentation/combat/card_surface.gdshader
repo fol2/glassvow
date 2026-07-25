@@ -78,6 +78,56 @@ const float LAMP_WASH = 0.75;
 // Diffuse does none of this — LAMP_WASH is irradiance and stays where it is.
 const float LAMP_MIRROR = 2.0;
 
+// ...except for the FLAKES, which are the one channel that can afford the
+// gem's number. card_gem.gdshader lights the same card off the same lamp at a
+// 64x radiance swing between room and bare bulb, and it is right to: that ratio
+// is what a mirror really does. LAMP_MIRROR cannot be 64 because sheen and the
+// diffraction band cover the whole face and would go to white. A confetti field
+// covers 3 percent of it. So the flakes get their rest state pulled DOWN
+// instead, and the ratio they end up with is 3 / 0.28, about eleven.
+//
+// Measured on nebula, this is the actual bug the ratio fixes: before it the
+// field was 56 percent as active at rest as it was with the lamp on the card,
+// so carrying the light to it changed almost nothing. The lamp was never too
+// weak — the room was too strong. A broad source cannot make a confetti sheet
+// flash, and it should not be able to.
+const float FLAKE_ROOM = 0.28;
+
+// THE FLAKES ARE NOT ON THE SURFACE. A cosmos sheet is an embossed hologram
+// under a laminate: its bright points are a virtual image sitting BELOW the
+// face, which is the entire reason the effect reads as a star field you can
+// look into rather than as glitter stuck to a page.
+//
+// So each flake carries its own depth and appears SLID by it — the same
+// parallax card_gem.gdshader gets from refract(), for the same reason and to
+// the same end. Two things fall out of one hash. Statically the field shears
+// across the face, because the eye's angle is different at the top of the card
+// than at the bottom. In motion the deep flakes travel further than the shallow
+// ones and slide THROUGH them, and differential motion is the strongest depth
+// cue a single eye has.
+//
+// The unit is PITCHES, not pixels, so the depth of the layer scales with the
+// coarseness of the flake in it — and so the sweep's bound below can be one
+// number instead of a function of the pitch.
+const float FLAKE_DEEP = 3.0;
+// And that bound is not a taste knob, it is where the 3x3 sweep stops being
+// true. A flake owned by cell ci appears somewhere in ci + [0,1] plus its
+// slide, and lights out to its own radius (0.4) around that — so the fragments
+// it reaches still floor() into ci +/- 1 only while the slide stays under
+// 1 - 0.4. Past that, flakes drop out along the lattice, which is the same
+// "grid, not a sky" this sweep was built to prevent, arriving by a new road.
+//
+// It is par that gets clamped rather than the depth, and that is the whole
+// reason the depth above can be a big number: scaling par scales every flake by
+// the SAME factor, so the deep ones still travel further than the shallow ones
+// and the layering survives. All the clamp does is stop the field sliding
+// further once the card is already leaning hard.
+const float FLAKE_SLIDE = 0.55;
+// Depth costs light — the far flakes come back through more of the film and
+// through whatever is floating above them. It is the static half of the cue:
+// without it a still card has layers that are only provable by moving it.
+const float FLAKE_MURK = 0.55;
+
 // material
 uniform vec4 ink : source_color = vec4(1.0);
 uniform vec4 tint : source_color = vec4(1.0);
@@ -174,17 +224,26 @@ float depth_amp(float degrees, float period) {
 // The 3x3 sweep is not optional. A flake sits at a random point in its cell,
 // so any disc wider than half a cell reaches into its neighbours — sample the
 // owning cell alone and every large flake comes out clipped square along the
-// lattice, which is exactly what it looks like: a grid, not a sky.
+// lattice, which is exactly what it looks like: a grid, not a sky. It is also
+// what pays for the parallax below: a flake that has slid off its own cell is
+// still swept by its neighbours, so depth costs no extra taps.
+//
+// `par` is the eye's tangent in the card's own axes — how far a feature one
+// unit down appears to move. See FLAKE_DEEP.
 vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
-		float tip, vec3 N, vec3 T, vec3 Bv, vec3 H, float g) {
+		float tip, vec3 N, vec3 T, vec3 Bv, vec3 H, float g, vec2 par) {
 	vec2 cell = p / max(pitch, 0.5);
 	vec2 base = floor(cell);
 	vec3 sum = vec3(0.0);
 	for (int j = -1; j <= 1; j++) {
 		for (int i = -1; i <= 1; i++) {
 			vec2 ci = base + vec2(float(i), float(j));
-			float shape = smoothstep(edge, soft,
-				length(cell - ci - hash22(ci)));
+			// How far down this one sits, and so where it APPEARS: its own
+			// place in the cell, plus the slide its depth buys it. One hash
+			// gives the whole field a thickness.
+			float dep = hash12(ci + 3.1);
+			float shape = smoothstep(edge, soft, length(cell - ci
+				- hash22(ci) - par * (dep * FLAKE_DEEP)));
 			if (shape <= 0.0) {
 				continue;
 			}
@@ -192,7 +251,8 @@ vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
 			vec3 fn = normalize(N + (T * jt.x + Bv * jt.y) * tip);
 			vec3 hue = 0.5 + 0.5 * cos(TAU * (g + hash12(ci + 7.3)
 				+ vec3(0.0, 0.33, 0.67)));
-			sum += hue * shape * pow(max(dot(fn, H), 0.0), lobe);
+			sum += hue * shape * (1.0 - FLAKE_MURK * dep)
+				* pow(max(dot(fn, H), 0.0), lobe);
 		}
 	}
 	return sum;
@@ -306,12 +366,19 @@ void fragment() {
 	// rather than as glitter paint sprayed on.
 	vec3 flake = vec3(0.0);
 	if (sparkle > 0.0) {
-		flake = confetti(cp, flake_px, 0.40, 0.08, 120.0, 1.2, N, T, Bv, H, g);
+		// Where the eye is, as a tangent in the card's own axes: how far a
+		// feature one unit below the face appears to slide. Off Nf and not N,
+		// because depth is measured from the FACE — the relief's normal says
+		// how the coating catches light, not how thick it is.
+		vec2 par = vec2(dot(V, T), dot(V, Bv)) / max(dot(V, Nf), 0.3);
+		par *= min(1.0, FLAKE_SLIDE / max(FLAKE_DEEP * length(par), 1e-4));
+		flake = confetti(cp, flake_px, 0.40, 0.08, 120.0, 1.2,
+			N, T, Bv, H, g, par);
 		if (flake_big > 0.0) {
 			// Bigger facets are flatter, so they hold light over a wider angle
 			// and stay pale — they never reach the pinpricks' saturation.
 			vec3 disc = confetti(cp + 137.0, flake_big, 0.34, 0.20, 70.0, 0.9,
-				N, T, Bv, H, g);
+				N, T, Bv, H, g, par);
 			flake += mix(disc, vec3(dot(disc, vec3(0.333))), 0.25) * 0.30;
 		}
 	}
@@ -363,7 +430,12 @@ void fragment() {
 	// sheet is nothing BUT rainbows. The spectrum averages 0.5, so the hue-free
 	// branch is doubled to land at the same brightness either way.
 	float fi = dot(flake, vec3(0.333));
-	add += mix(ink_c * fi * 2.0, flake, flake_hue) * sparkle;
+	// ...and unlike every channel above it, this one does NOT settle for the
+	// shared LAMP_MIRROR. See FLAKE_ROOM: a mirror the size of a flake is
+	// entitled to the gem's ratio, and only the flakes are small enough to be
+	// given it without the face going white.
+	add += mix(ink_c * fi * 2.0, flake, flake_hue) * sparkle
+		* mix(FLAKE_ROOM, 1.0, lamp_gain);
 
 	// Everything the surface gives back is light the lamp delivered, so it all
 	// carries the same inverse square. Head-on at rest that is a 3.5% gradient
