@@ -46,8 +46,8 @@ const ART_DIR: String = "res://assets/art/cards/"
 ## It is enforced by a dedicated mask node, not by the face. Godot's
 ## clip_children masks children to the parent's *drawn content*, and a
 ## StyleBoxFlat drop shadow is drawn content — so clipping against the face made
-## the boundary the silhouette PLUS an 8px shadow skirt, and the cursor glare
-## painted straight into it. The mask carries the shape alone.
+## the boundary the silhouette PLUS an 8px shadow skirt, and whatever the face
+## painted went straight into it. The mask carries the shape alone.
 ##
 ## Consequence worth knowing before adding anything: whatever the mask draws IS
 ## the card's edge. Give it a glow, an outline or a bloom and you have widened
@@ -76,10 +76,28 @@ const RULE_Y: float = ART_Y + ART_H              # 1px divider under the window
 const NAME_Y: float = RULE_Y + 1.0
 const TYPE_Y: float = NAME_Y + NAME_H
 const BODY_Y: float = TYPE_Y + TYPE_H + 2.0
-## Glare disc diameter. The benchmark's gradient dies out at 55% of the card box;
-## an oversized disc keeps the falloff smooth when the cursor sits near an edge.
-const GLARE_D: float = 240.0
-const GLARE_FADE: float = 0.25
+## THE LAMP. The card is lit by a real point light standing in the 3D stage, and
+## the cursor is where you set it down. At rest it is the room's — 2000px up and
+## a touch left, which is the directional key the shader used to hard-code, the
+## same lamp moved to infinity. Point at the card and it comes DOWN to LAMP_H
+## above whatever the cursor is over.
+##
+## The distance is the whole point. At 2000 the direction to the lamp swings 8
+## degrees corner to corner: enough to matter, nowhere near enough to localise
+## anything, so every fragment shares a half-vector and a finish can only ever
+## be a wide band. At 150 that swing is 83 degrees, the half-vector 41 with it,
+## and the same material resolves into a pool about 68px across that you can
+## aim — which is what a lamp on a desk does to a foil card, and what no amount
+## of shader work can fake from a light that is nowhere.
+##
+## It replaces the 2D cursor glare outright: a white radial gradient painted
+## into the face texture, which could not tilt with the pane, could not fall
+## off, and greyed the card stock wherever it landed. What stands in for it is
+## the lamp's own diffuse term — see LAMP_WASH in card_surface.gdshader.
+const ROOM_LAMP: Vector3 = Vector3(-190.0, 572.0, 1906.0)
+const LAMP_H: float = 150.0      # how high the near lamp rides; sets the pool
+const LAMP_EASE: float = 18.0    # e-folds/sec as the lamp travels
+const LAMP_FADE: float = 0.25    # the edge glint's own crossfade
 
 ## THE SLAB. A pane of glass is not a picture — it has thickness, and it sits
 ## in space. The 2D face renders into an offscreen viewport at `oversample`
@@ -175,9 +193,9 @@ var home_position: Vector2 = Vector2.ZERO
 var home_rotation: float = 0.0
 
 var _held: bool = false
-var _glare: TextureRect = null
-var _glare_tw: Tween = null
+var _light_tw: Tween = null
 var _edge_mat: ShaderMaterial = null
+var _lit: Array[ShaderMaterial] = []   # every plate the lamp has to reach
 
 var _inner: SubViewport = null    # the 2D face, rendered offscreen
 var _stage: SubViewport = null    # the 3D room the slab sits in
@@ -192,6 +210,14 @@ var _tilt_target: Vector2 = Vector2.ZERO
 var _rest_tilt: Vector2 = Vector2.ZERO
 var _lift: float = 0.0
 var _lift_v: float = 0.0
+## The lamp: where it is now, how far in it has been brought, and the card-space
+## point it is standing over. `_rest_*` is where it goes home to — the studio's
+## sliders, and zero everywhere else.
+var _lamp: Vector3 = ROOM_LAMP
+var _lamp_gain: float = 0.0
+var _lamp_px: Vector2 = Vector2(CARD_W, CARD_H) * 0.5
+var _rest_lamp: Vector2 = Vector2(CARD_W, CARD_H) * 0.5
+var _rest_gain: float = 0.0
 
 ## The card's material, resolved once in _init: the four layer names it wears,
 ## and the two stock properties the slab reads every frame.
@@ -371,20 +397,9 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	body.offset_bottom = -8.0
 	layer.add_child(body)
 
-	# Cursor glare: the benchmark's .card-inner::before — a soft radial highlight
-	# that tracks the pointer and fades in over 0.25s. Lives above the art but
-	# below nothing else, and inside the clipped subtree so it respects the radius.
-	_glare = _grad(
-		PackedColorArray([Color(1, 1, 1, 0.17), Color(1, 1, 1, 0.0)]),
-		PackedFloat32Array([0.0, 0.55]), true,
-		Vector2(0.5, 0.5), Vector2(1.0, 0.5), "glare")
-	_glare.size = Vector2(GLARE_D, GLARE_D)
-	_glare.modulate = Color(1, 1, 1, 0)
-	layer.add_child(_glare)
-
-	# The edge, last in the layer: the frame holds — glare passes under it, and
-	# the mask's silhouette is its outer cut (the shader fills past d = 0 and
-	# lets the mask do the antialiasing, so there is only ever one outer edge).
+	# The edge, last in the layer: the frame holds, and the mask's silhouette is
+	# its outer cut (the shader fills past d = 0 and lets the mask do the
+	# antialiasing, so there is only ever one outer edge).
 	var edge: ColorRect = ColorRect.new()
 	_edge_mat = ShaderMaterial.new()
 	_edge_mat.shader = EDGE_SHADER
@@ -401,7 +416,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# A ShaderMaterial only exposes `shader_parameter/<name>` as an animatable
 	# property once that parameter has been ASSIGNED — a uniform with a default
 	# in the shader is not enough. Without this line the hover tween in
-	# _fade_glare fails every time with "does not exist" and the edge glint
+	# _light_up fails every time with "does not exist" and the edge glint
 	# silently never fades in, which is how it shipped in the edge commit.
 	_edge_mat.set_shader_parameter("hover", 0.0)
 	edge.material = _edge_mat
@@ -581,27 +596,16 @@ func _build_stage(content: Control, mat: Dictionary, tint: Color) -> void:
 	# The face carries the material. Everything the 2D pass painted comes
 	# through untouched; what this adds is the light the surface gives back,
 	# and every channel of it is angle-driven — see card_surface.gdshader.
-	var face_mat: ShaderMaterial = ShaderMaterial.new()
-	face_mat.shader = SURFACE_SHADER
-	face_mat.set_shader_parameter("face_tex", _inner.get_texture())
-	face_mat.set_shader_parameter("face_size",
-		Vector2(CARD_W, CARD_H) + Vector2(PAD_IN, PAD_IN) * 2.0)
-	face_mat.set_shader_parameter("face_pad", Vector2(PAD_IN, PAD_IN))
-	face_mat.set_shader_parameter("card_size", Vector2(CARD_W, CARD_H))
-	face_mat.set_shader_parameter("radius", float(RADIUS))
-	face_mat.set_shader_parameter("art_rect",
-		Vector4(EDGE, ART_Y, CARD_W - 2.0 * EDGE, ART_H))
-	CardSurface.apply(face_mat, mat, tint)
-	_slab.set_surface_override_material(1, face_mat)
+	_slab.set_surface_override_material(1, _plate(mat, tint))
 	# The gem plate does NOT take the finish. It is a struck badge applied over
 	# the stock, not part of it — leaf on leaf would read as a smear, and the
-	# gem already carries its own metal in the 2D pass.
-	var gem_mat: StandardMaterial3D = StandardMaterial3D.new()
-	gem_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	gem_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	gem_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
-	gem_mat.albedo_texture = _inner.get_texture()
-	_slab.set_surface_override_material(2, gem_mat)
+	# gem already carries its own metal in the 2D pass. It does take the LIGHT,
+	# through the same shader with every optical channel at zero: once the lamp
+	# became real, a gem holding its rest brightness while the card lit up
+	# around it was the one thing left on the card that read as a sticker.
+	_slab.set_surface_override_material(2,
+		_plate(CardSurface.params(CardSurface.BADGE), tint))
+	_push_lamp()   # the room's lamp, before the card has ever been touched
 	_stage.add_child(_slab)
 
 	# Head-on long lens, at the distance where the stage rect maps 1:1 onto
@@ -626,6 +630,26 @@ func _build_stage(content: Control, mat: Dictionary, tint: Color) -> void:
 	display.size = Vector2(CARD_W + 2.0 * PAD_3D, CARD_H + 2.0 * PAD_3D)
 	display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(display)
+
+
+## One plate on the slab, wearing `p`. The geometry uniforms are the same for
+## every plate — which texture, how it maps back to card pixels, the silhouette
+## — so only the material differs, and both plates end up on _lit so the lamp
+## reaches them through one loop instead of two formulas that can drift.
+func _plate(p: Dictionary, tint: Color) -> ShaderMaterial:
+	var m: ShaderMaterial = ShaderMaterial.new()
+	m.shader = SURFACE_SHADER
+	m.set_shader_parameter("face_tex", _inner.get_texture())
+	m.set_shader_parameter("face_size",
+		Vector2(CARD_W, CARD_H) + Vector2(PAD_IN, PAD_IN) * 2.0)
+	m.set_shader_parameter("face_pad", Vector2(PAD_IN, PAD_IN))
+	m.set_shader_parameter("card_size", Vector2(CARD_W, CARD_H))
+	m.set_shader_parameter("radius", float(RADIUS))
+	m.set_shader_parameter("art_rect",
+		Vector4(EDGE, ART_Y, CARD_W - 2.0 * EDGE, ART_H))
+	CardSurface.apply(m, p, tint)
+	_lit.append(m)
+	return m
 
 
 ## The pane outline in stage coordinates (x right, y up, origin at centre),
@@ -741,6 +765,48 @@ func hold_pose(n: Vector2) -> void:
 	_set_live(false)
 
 
+## Move the lamp's REST position, in the same normalised -1..1 the cursor gives,
+## and how far in it has been carried: 0 is the room's lamp, 1 is standing right
+## over the card. Same contract as hold_pose — it sets where the light comes
+## home to, not where it is, so the cursor still owns the lamp while it is on
+## the card. In the game nothing calls this and the lamp stays in the room.
+func hold_lamp(n: Vector2, gain: float = 1.0) -> void:
+	_rest_lamp = (n * 0.5 + Vector2(0.5, 0.5)) * Vector2(CARD_W, CARD_H)
+	_rest_gain = clampf(gain, 0.0, 1.0)
+	if _hovered or is_processing():
+		return          # the ease is already running; let it carry the lamp
+	_lamp = _lamp_goal()
+	_lamp_gain = _rest_gain
+	_push_lamp()
+	_set_live(false)
+
+
+## The lamp's world position for a cursor at `px` in card pixels: straight up
+## from the point it is over. Stage coordinates run y-up from the card's centre.
+static func _over(px: Vector2) -> Vector3:
+	return Vector3(px.x - CARD_W * 0.5, CARD_H * 0.5 - px.y, LAMP_H)
+
+
+## Where the lamp is heading. Gain zero means the room's light and nothing else,
+## so the POSITION has to go back to the room with it — leave it parked over the
+## last cursor point and the specular stays pooled there after the light is out.
+func _lamp_goal() -> Vector3:
+	if _hovered:
+		return _over(_lamp_px)
+	return _over(_rest_lamp) if _rest_gain > 0.0 else ROOM_LAMP
+
+
+func _push_lamp() -> void:
+	# Falloff normalised at the card's centre, so the inverse square reads as a
+	# gradient across the face instead of an exposure change every time the lamp
+	# moves. The centre travels with the lift, so it is measured, not assumed.
+	var ref: float = _lamp.distance_squared_to(Vector3(0.0, 0.0, _lift))
+	for m: ShaderMaterial in _lit:
+		m.set_shader_parameter("lamp", _lamp)
+		m.set_shader_parameter("lamp_gain", _lamp_gain)
+		m.set_shader_parameter("lamp_ref", ref)
+
+
 ## Freeze both offscreen passes when nothing moves; UPDATE_ONCE paints one
 ## last frame and sleeps. A 61-card lab must idle at zero render cost.
 func _set_live(on: bool) -> void:
@@ -752,20 +818,33 @@ func _set_live(on: bool) -> void:
 
 func _ready() -> void:
 	set_process(false)
-	# GLASSVOW_TILT="nx,ny" (each -1..1): hold a static pose for screenshots —
-	# the tilt is cursor-driven and cannot otherwise exist in a scripted shot.
+	# Both of these are cursor-driven and so cannot otherwise exist in a scripted
+	# shot: GLASSVOW_TILT="nx,ny" holds a pose, GLASSVOW_LAMP="x,y[,gain]" stands
+	# the lamp somewhere (all -1..1 but gain, which is 0..1). They are applied
+	# BEFORE the dump, not after — the other way round saves the card at rest and
+	# neither the pose nor the light ever reaches the file.
+	var held: bool = false
+	var lit: String = OS.get_environment("GLASSVOW_LAMP")
+	if lit != "":
+		var lp: PackedStringArray = lit.split(",")
+		if lp.size() >= 2:
+			hold_lamp(Vector2(float(lp[0]), float(lp[1])),
+				float(lp[2]) if lp.size() > 2 else 1.0)
+			held = true
+	var forced: String = OS.get_environment("GLASSVOW_TILT")
+	if forced != "":
+		var p: PackedStringArray = forced.split(",")
+		if p.size() == 2:
+			hold_pose(Vector2(float(p[0]), float(p[1])))
+			held = true
 	var dump: String = OS.get_environment("GLASSVOW_DUMP")
 	if dump != "":
 		for _i: int in range(10):
 			await get_tree().process_frame
 		_inner.get_texture().get_image().save_png("%s_inner_%d.png" % [dump, uid])
 		_stage.get_texture().get_image().save_png("%s_stage_%d.png" % [dump, uid])
-	var forced: String = OS.get_environment("GLASSVOW_TILT")
-	if forced != "":
-		var p: PackedStringArray = forced.split(",")
-		if p.size() == 2:
-			hold_pose(Vector2(float(p[0]), float(p[1])))
-		return  # hold_pose armed the repaint; the pose reaches the shot
+	if held:
+		return  # the hold armed the repaint; what it set reaches the shot
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if not _hovered:
@@ -785,17 +864,31 @@ func _process(delta: float) -> void:
 	_lift_v += ((lift_target - _lift) * w2 - _lift_v * dampen) * dt
 	_lift += _lift_v * dt
 
+	# The lamp travels rather than cutting: exponentially, so it is under the
+	# cursor within a frame or two and still takes a readable moment to walk
+	# back out to the room. No spring — a lamp is carried, not sprung, and the
+	# overshoot that gives the card its life would read as a wobbling bulb.
+	var k: float = 1.0 - exp(-LAMP_EASE * dt)
+	var goal: Vector3 = _lamp_goal()
+	_lamp += (goal - _lamp) * k
+	_lamp_gain += ((1.0 if _hovered else _rest_gain) - _lamp_gain) * k
+
 	# Settled: snap the last thousandth away and stop paying for the card.
-	# "Settled" is measured against _rest_tilt, not against flat — a card the
-	# studio has parked at an angle is at rest THERE, and comparing to zero
-	# would leave it spinning its viewports forever a few degrees from home.
+	# "Settled" is measured against _rest_tilt and _rest_gain, not against flat
+	# and dark — a card the studio has parked at an angle under a held lamp is
+	# at rest THERE, and comparing to zero would leave it spinning its viewports
+	# forever a few degrees from home.
 	var done: bool = not _hovered and _tilt.distance_to(_rest_tilt) < 0.02 \
-		and _tilt_v.length() < 0.05 and _lift < 0.05 and absf(_lift_v) < 0.1
+		and _tilt_v.length() < 0.05 and _lift < 0.05 and absf(_lift_v) < 0.1 \
+		and absf(_lamp_gain - _rest_gain) < 0.004 and _lamp.distance_to(goal) < 1.0
 	if done:
 		_tilt = _rest_tilt
 		_tilt_v = Vector2.ZERO
 		_lift = 0.0
 		_lift_v = 0.0
+		_lamp = goal
+		_lamp_gain = _rest_gain
+	_push_lamp()
 	_apply_transform()
 	if done:
 		_set_live(false)
@@ -833,36 +926,33 @@ func _on_mouse_entered() -> void:
 	_hovered = true
 	_set_live(true)
 	set_process(true)
-	_fade_glare(1.0)
+	_light_up(1.0)
 	hover_changed.emit(uid, true)
 
 
 func _on_mouse_exited() -> void:
 	_hovered = false
 	_tilt_target = _rest_tilt
-	_fade_glare(0.0)
+	_light_up(0.0)
 	hover_changed.emit(uid, false)
 
 
-## One light source, two surfaces: the glare is the light ON the face, the
-## edge glint is the same light caught IN the glass. They fade and track
-## together so the card reads as one object under one lamp.
-func _fade_glare(to: float) -> void:
-	if _glare == null:
-		return
-	if _glare_tw != null and _glare_tw.is_valid():
-		_glare_tw.kill()
-	_glare_tw = create_tween()
-	_glare_tw.tween_property(_glare, "modulate:a", to, GLARE_FADE)
-	_glare_tw.parallel().tween_property(
-		_edge_mat, "shader_parameter/hover", to, GLARE_FADE)
+## One lamp, two surfaces. The face's share is the point light itself, which
+## eases in _process; this is the EDGE's — light caught IN the glass rather than
+## on it. It stays a scalar because the edge is a canvas shader on the flat
+## Control and has no way to see the 3D stage the lamp stands in; it crossfades
+## on the same quarter-second so the two still read as one event.
+func _light_up(to: float) -> void:
+	if _light_tw != null and _light_tw.is_valid():
+		_light_tw.kill()
+	_light_tw = create_tween()
+	_light_tw.tween_property(_edge_mat, "shader_parameter/hover", to, LAMP_FADE)
 
 
-## Centre the glare on the pointer. Called from _gui_input, so it only runs while
-## the card is actually under the cursor.
-func _track_glare(local_pos: Vector2) -> void:
-	if _glare != null:
-		_glare.position = local_pos - Vector2(GLARE_D, GLARE_D) * 0.5
+## Set the lamp down on the pointer. Called from _gui_input, so it only runs
+## while the card is actually under the cursor.
+func _track_lamp(local_pos: Vector2) -> void:
+	_lamp_px = local_pos
 	_edge_mat.set_shader_parameter("mouse_px", local_pos)
 	# The corner under the cursor comes toward the viewer — the pane presents
 	# itself to be read, the way you angle glass to catch the light. In stage
@@ -885,7 +975,7 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	var mm: InputEventMouseMotion = event as InputEventMouseMotion
 	if mm != null:
-		_track_glare(mm.position)
+		_track_lamp(mm.position)
 		if _held:
 			moved_to.emit(uid, mm.global_position)
 		return

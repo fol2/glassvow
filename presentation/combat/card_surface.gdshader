@@ -10,9 +10,13 @@ render_mode blend_mix, depth_draw_opaque, unshaded;
 // the face is a plate in a 3D stage with a long lens, so every fragment has a
 // true eye direction, and it is DIFFERENT at each corner even at rest: the
 // card subtends ~11.6 degrees across its width and ~16.4 down its height at
-// this camera distance. That angular spread is the whole material budget. A
-// band of holo therefore exists as a real gradient across the face, and
-// tilting slides it, exactly as it does on a card in your hand.
+// this camera distance. A band of holo therefore exists as a real gradient
+// across the face, and tilting slides it, exactly as it does in your hand.
+//
+// The eye is only half the budget. The other half is the LAMP, and for the
+// same reason it has to be a point in that room rather than a direction: see
+// THE LAMP below. Between them the card gets a real half-vector field, which
+// is all a material has ever needed.
 //
 // Nothing here reads TIME. The card freezes both offscreen viewports the
 // moment it stops moving, so a time-driven finish would silently die; every
@@ -29,13 +33,40 @@ uniform vec2 card_size = vec2(152.0, 216.0);
 uniform float radius = 11.0;
 uniform vec4 art_rect = vec4(2.0, 2.0, 148.0, 91.0);   // x, y, w, h in card px
 
-// The room's lamp, a touch above the lens and a touch to the left — the same
-// light the face's own gradients already imply. It has to sit CLOSE to the
-// view axis: the card only turns 7 degrees, so a highlight parked 30 degrees
-// away could never be reached, and the finish would be a static print. At 17
-// degrees the specular band sits just off the top edge at rest and walks down
-// onto the face as the card leans, which is the behaviour worth having.
-uniform vec3 key_dir = vec3(-0.095, 0.286, 0.953);
+// THE LAMP. A POINT in the stage's own world, at card-pixel scale — not a
+// direction. That one word is the difference between a highlight that is
+// weather over the card and a light you can aim.
+//
+// A directional key is this same lamp moved to infinity, and infinity is the
+// pose it takes at rest: 2000px up and slightly left of the lens, ~17 degrees
+// off the view axis. It has to sit CLOSE to that axis, because the card only
+// turns 7 degrees and a highlight parked 30 away could never be reached.
+//
+// What being a point buys is that L is DIFFERENT at every fragment. At 2000 the
+// direction to the lamp swings 8 degrees corner to corner — enough to matter,
+// nowhere near enough to localise anything, so every fragment shares a
+// half-vector and the specular can only ever be a broad band. Bring the lamp to
+// 150, where the cursor puts it, and that swing is 83 degrees with the
+// half-vector taking 41, and the same material resolves into a pool the size of
+// your thumb. Nothing about the material changed; the light did.
+//
+// lamp_ref is |lamp - card centre|^2, so the inverse square is 1 at the centre
+// and a gradient from there out, rather than an exposure change every time the
+// lamp moves. The clamp only stops a lamp parked over one corner from
+// over-driving it.
+uniform vec3 lamp = vec3(-190.0, 572.0, 1906.0);
+uniform float lamp_ref = 3996120.0;
+// How much light the near lamp adds OVER the room's. Zero at rest on purpose:
+// the room light is already painted into the face, so all the lamp contributes
+// is what it adds by being carried close.
+uniform float lamp_gain = 0.0;
+
+// The near lamp's diffuse strength where it is aimed. Multiplicative, and that
+// is the whole argument against what it replaced: the old cursor glare added
+// WHITE at 0.17 alpha, which greyed the card stock wherever it landed. Real
+// light scales what is already there — black ink stays ink, and the parchment,
+// the gold rules and the art are what come up.
+const float LAMP_WASH = 0.75;
 
 // material
 uniform vec4 ink : source_color = vec4(1.0);
@@ -194,9 +225,15 @@ void fragment() {
 		N = normalize(Nf - T * (hx - h0) - Bv * (hy - h0));
 	}
 
-	vec3 L = normalize(key_dir);
+	// The lamp, resolved per fragment — these four lines are the whole feature.
+	// VERTEX is in view space here, so one matrix takes the shading point back
+	// to the room the lamp is standing in.
+	vec3 world = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec3 lv = lamp - world;
+	float r2 = max(dot(lv, lv), 1.0);
+	vec3 L = lv * inversesqrt(r2);
+	float fall = min(lamp_ref / r2, 1.0);
 	vec3 H = normalize(L + V);
-	float ndv = max(dot(N, V), 1e-3);
 
 	// Two envelopes off the same half-angle, because the channels are lit by
 	// different physics. Both exponents are large on purpose: the card only
@@ -222,18 +259,28 @@ void fragment() {
 	float spec = pow(max(ndh, 0.0), tight);
 
 	// Diffraction. A grating throws each wavelength off at its own angle, so
-	// the spectrum sweeps past the eye as the view direction turns — banded
-	// ACROSS the grooves, which is what separates holo from pearl by eye.
+	// the spectrum sweeps past the eye as the geometry turns — banded ACROSS
+	// the grooves, which is what separates holo from pearl by eye.
+	//
+	// The order that reaches you is set by sin(out) - sin(in), and the
+	// TANGENTIAL HALF-VECTOR is exactly that quantity. Driving it off V alone —
+	// all a fixed key light lets you get away with — nails the fan to the eye,
+	// so the rainbow can only ever answer the card. Off H it fans out of the
+	// lamp's own reflection, and moving the light moves the rainbow. That is
+	// the tell of real diffraction against a printed one.
 	float groove = radians(holo_dir);
-	float g = dot(vec2(dot(V, T), dot(V, Bv)),
+	float g = dot(vec2(dot(H, T), dot(H, Bv)),
 		vec2(cos(groove), sin(groove))) * holo_scale;
 	vec3 spectrum = 0.5 + 0.5 * cos(TAU * (g + vec3(0.0, 0.33, 0.67)));
 
 	// Thin-film interference. The path through the film grows as 1/cos(theta),
-	// which is zero at the point facing the lens and rises outward — so pearl
-	// rings AROUND the view axis rather than banding across the card.
+	// zero on the axis and rising outward — so pearl rings AROUND that axis
+	// rather than banding across the card. The axis is the lamp's reflection,
+	// not the eye: taken off the view vector the rings sit nailed to the screen
+	// while the card turns underneath them, which is the one thing a real pearl
+	// coat never does.
 	vec3 film = mix(vec3(1.0),
-		0.5 + 0.5 * cos(TAU * (pearl_scale * (1.0 / ndv - 1.0)
+		0.5 + 0.5 * cos(TAU * (pearl_scale * (1.0 / max(base, 0.2) - 1.0)
 			+ vec3(0.0, 0.28, 0.56))), 0.6);
 
 	// The confetti field — cosmos holofoil. Two layers of it: a dense layer of
@@ -274,7 +321,14 @@ void fragment() {
 	vec3 ink_c = mix(ink.rgb, tint.rgb, ink_tint);
 	vec3 col = src.rgb;
 	col *= 1.0 + (ph * 0.6 + gh * 0.4) * 0.02;   // ink pools in the valleys
-	col *= 1.0 - soak * broad;                   // lead drinks what lands on it
+	// The near lamp's own diffuse. It reads N, so the relief and the grain get
+	// SHADED by it rather than merely tinted — and Lambert is flat head-on and
+	// steep at a slant, so the weave shows most where the light rakes past it,
+	// beside the pool rather than under it. That is what raking a lamp across
+	// a textured stock does, and it is the reason texture and light had to end
+	// up on the same vector.
+	col *= 1.0 + lamp_gain * LAMP_WASH * max(dot(N, L), 0.0) * fall;
+	col *= 1.0 - soak * broad * fall;            // lead drinks what lands on it
 	// Subsurface: light that gets into the body comes back diffuse, so the
 	// blacks lift a little and they lift toward the material's own colour.
 	// It is why ink on paper is never as black as a screen's black.
@@ -294,6 +348,10 @@ void fragment() {
 	float fi = dot(flake, vec3(0.333));
 	add += mix(ink_c * fi * 2.0, flake, flake_hue) * sparkle;
 
-	ALBEDO = col + add * m;
+	// Everything the surface gives back is light the lamp delivered, so it all
+	// carries the same inverse square. Head-on at rest that is a 3.5% gradient
+	// corner to corner; with the lamp on the card it is most of why the far
+	// side stays quiet while the near side sings.
+	ALBEDO = col + add * m * fall;
 	ALPHA = src.a;
 }

@@ -73,6 +73,13 @@ var _tilt: Vector2 = Vector2(0.0, 0.4)
 var _sliders: Array[HSlider] = []
 var _sweeping: bool = false
 var _sweep_t: float = 0.0
+## Where the lamp stands and how far in it has been carried. Default is up and
+## to the left of centre, close: a raking light is what shows a texture, and
+## sliding it onto the specular is what shows a finish — one drag apart.
+var _beam: Vector2 = Vector2(-0.35, -0.35)
+var _beam_gain: float = 1.0
+var _beam_sliders: Array[HSlider] = []
+var _beam_sweeping: bool = false
 var _readout: RichTextLabel
 var _recipe_line: LineEdit
 
@@ -208,13 +215,43 @@ func _build_panel() -> Control:
 			_apply_pose())
 		_sliders.append(s)
 		col.add_child(s)
-	var sweep: CheckBox = CheckBox.new()
-	sweep.text = "sweep the pose"
-	sweep.add_theme_font_size_override("font_size", 12)
-	sweep.toggled.connect(func(on: bool) -> void:
-		_sweeping = on
-		set_process(on))
-	col.add_child(sweep)
+	col.add_child(_sweep_box("sweep the pose", func(on: bool) -> void:
+		_sweeping = on))
+
+	col.add_child(_heading("LAMP"))
+	# The card is lit by a real point light standing in its stage, and the
+	# cursor is normally the thing holding it. Same normalised -1..1 as the
+	# pose: which point on the card the lamp is standing over. The third slider
+	# is how far in it has been carried — 0 is the room's lamp, far off, which
+	# is what an untouched card gets and what the whole catalogue was tuned
+	# against; 1 is a reading lamp on the desk.
+	var beam_names: Array = ["over — left / right", "over — top / bottom",
+		"carried in — room / close"]
+	for axis: int in range(3):
+		col.add_child(_caption(str(beam_names[axis])))
+		var s: HSlider = HSlider.new()
+		s.min_value = -1.0 if axis < 2 else 0.0
+		s.max_value = 1.0
+		s.step = 0.01
+		var start: float = _beam_gain
+		if axis == 0:
+			start = _beam.x
+		elif axis == 1:
+			start = _beam.y
+		s.value = start
+		s.custom_minimum_size = Vector2(0.0, 18.0)
+		s.value_changed.connect(func(v: float) -> void:
+			if axis == 0:
+				_beam.x = v
+			elif axis == 1:
+				_beam.y = v
+			else:
+				_beam_gain = v
+			_apply_pose())
+		_beam_sliders.append(s)
+		col.add_child(s)
+	col.add_child(_sweep_box("sweep the lamp", func(on: bool) -> void:
+		_beam_sweeping = on))
 
 	col.add_child(_heading("GROUND"))
 	var ground_pick: OptionButton = _pick()
@@ -253,6 +290,18 @@ func _build_panel() -> Control:
 	_readout.custom_minimum_size = Vector2(0.0, 200.0)
 	col.add_child(_readout)
 	return frame
+
+
+## Either sweep's checkbox. `set` flips its own flag; _process runs whenever
+## EITHER is on, so the gate is recomputed here rather than by each caller.
+func _sweep_box(text: String, set: Callable) -> CheckBox:
+	var box: CheckBox = CheckBox.new()
+	box.text = text
+	box.add_theme_font_size_override("font_size", 12)
+	box.toggled.connect(func(on: bool) -> void:
+		set.call(on)
+		set_process(_sweeping or _beam_sweeping))
+	return box
 
 
 ## Every picker goes through here: clip_text is what keeps a long entry from
@@ -329,12 +378,12 @@ func _rebuild() -> void:
 	var cost_v: Variant = data.get("cost")
 	_card = CardView.new(CardInst.new(1, StringName(_card_id)), data,
 		0 if cost_v == null else int(float(str(cost_v))))
-	# The card keeps its own hover: glare, edge glint, tilt-toward-the-cursor,
-	# lift and the release spring all behave exactly as they do in a hand. They
-	# do not fight the sliders, because the sliders set the pose the card comes
-	# HOME to — let go of the card and it settles back onto whatever the panel
-	# is holding, not onto flat. Which of the two is driving is never ambiguous:
-	# the cursor is, whenever it is on the card.
+	# The card keeps its own hover: the lamp, the edge glint, tilt-toward-the-
+	# cursor, lift and the release spring all behave exactly as they do in a
+	# hand. They do not fight the sliders, because the sliders set what the card
+	# comes HOME to — let go and it settles back onto whatever the panel is
+	# holding, pose and lamp both, not onto flat and dark. Which of the two is
+	# driving is never ambiguous: the cursor is, whenever it is on the card.
 	_card.scale = Vector2.ONE * _scale
 	_stage.add_child(_card)
 	_centre()
@@ -346,8 +395,11 @@ func _centre() -> void:
 		_card.position = (_stage.size - Vector2(CardView.CARD_W, CardView.CARD_H)) * 0.5
 
 
+## Lamp first, pose second — both hold, and hold_pose is the one that arms the
+## card's single repaint, so it has to be the last thing said.
 func _apply_pose() -> void:
 	if _card != null:
+		_card.hold_lamp(_beam, _beam_gain)
 		_card.hold_pose(_tilt)
 
 
@@ -403,14 +455,22 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_centre)
 
 
-## The sweep is a Lissajous rather than a circle: at a 2:3 ratio the pose never
-## repeats the same path twice in a row, so a slow watch covers the whole
-## square instead of tracing one loop the material happens to look good on.
+## Each sweep is a Lissajous rather than a circle: at a 2:3 ratio the pose never
+## repeats the same path twice in a row, so a slow watch covers the whole square
+## instead of tracing one loop the material happens to look good on. The lamp
+## runs 3:5 against it, which is what keeps the two from locking into phase when
+## both are on — a lamp nailed to the tilt hides half of what a finish does.
 func _process(delta: float) -> void:
-	if not _sweeping:
+	if not _sweeping and not _beam_sweeping:
 		return
 	_sweep_t += delta * SWEEP_RATE
-	_tilt = Vector2(sin(_sweep_t * 2.0), cos(_sweep_t * 3.0))
-	for axis: int in range(2):
-		_sliders[axis].set_value_no_signal(_tilt.x if axis == 0 else _tilt.y)
+	if _sweeping:
+		_tilt = Vector2(sin(_sweep_t * 2.0), cos(_sweep_t * 3.0))
+		for axis: int in range(2):
+			_sliders[axis].set_value_no_signal(_tilt.x if axis == 0 else _tilt.y)
+	if _beam_sweeping:
+		_beam = Vector2(sin(_sweep_t * 3.0), cos(_sweep_t * 5.0))
+		for axis: int in range(2):
+			_beam_sliders[axis].set_value_no_signal(
+				_beam.x if axis == 0 else _beam.y)
 	_apply_pose()

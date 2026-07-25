@@ -171,9 +171,13 @@ const TEXTURE: Dictionary = {
 ##   aniso        -1..1 stretches the lobe along one card axis. Brushed metal
 ##                and satin are anisotropic; varnish is not.
 ##   holo         diffraction. A grating throws each wavelength to a different
-##                angle, so sweeping the view sweeps the spectrum past the eye.
-##                `holo_scale` is the grating pitch (cycles per unit sine),
-##                `holo_dir` the groove direction in degrees.
+##                angle, so sweeping either the view OR THE LAMP sweeps the
+##                spectrum past the eye — the order that reaches you is set by
+##                the tangential half-vector, which is why every pitch here is
+##                twice what it was when only the view drove it (H's tangential
+##                offset is half V's, exactly). `holo_scale` is the grating
+##                pitch in cycles per unit sine, `holo_dir` the groove
+##                direction in degrees.
 ##   pearl        thin-film interference: the path length through the film
 ##                grows as 1/cos(theta), so the colour rings AROUND the view
 ##                axis instead of banding across it. Softer, and radial —
@@ -221,19 +225,19 @@ const FINISH: Dictionary = {
 	},
 	"holo": {
 		"sheen": 0.024, "tight": 300.0, "aniso": 0.0,
-		"holo": 0.036, "holo_scale": 6.0, "holo_dir": 0.0,
+		"holo": 0.036, "holo_scale": 12.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
 	},
 	"rainbow": {
 		"sheen": 0.028, "tight": 260.0, "aniso": 0.0,
-		"holo": 0.045, "holo_scale": 13.0, "holo_dir": 24.0,
+		"holo": 0.045, "holo_scale": 26.0, "holo_dir": 24.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
 	},
 	"reverse-holo": {
 		"sheen": 0.02, "tight": 200.0, "aniso": 0.0,
-		"holo": 0.039, "holo_scale": 7.5, "holo_dir": 0.0,
+		"holo": 0.039, "holo_scale": 15.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 1,
 	},
@@ -245,19 +249,19 @@ const FINISH: Dictionary = {
 	},
 	"prismatic": {
 		"sheen": 0.048, "tight": 600.0, "aniso": 0.0,
-		"holo": 0.03, "holo_scale": 9.0, "holo_dir": 0.0,
+		"holo": 0.03, "holo_scale": 18.0, "holo_dir": 0.0,
 		"pearl": 0.024, "pearl_scale": 78.0,
 		"sparkle": 0.054, "flake_px": 3.6, "flake_big": 12.0, "flake_hue": 0.70, "mask": 0,
 	},
 	"cosmos": {                                # cosmos holofoil / confetti
 		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
-		"holo": 0.0, "holo_scale": 17.0, "holo_dir": 0.0,
+		"holo": 0.0, "holo_scale": 34.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0, "mask": 0,
 	},
 	"cosmos-art": {                            # the same sheet, art window only
 		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
-		"holo": 0.0, "holo_scale": 17.0, "holo_dir": 0.0,
+		"holo": 0.0, "holo_scale": 34.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0, "mask": 2,
 	},
@@ -313,6 +317,13 @@ const RECIPES: Dictionary = {
 	"crystal": ["acrylic", "glassy", "gloss", "rigid"],
 	"spot": ["stock", "smooth", "spot-foil", "premium"],
 }
+
+## What a plate wears when it sits OVER the card rather than being part of it —
+## today just the cost gem's badge. No coating worth the name, so it takes the
+## light like everything else and adds nothing optical of its own. It is an
+## ordinary stack, folded by the ordinary fold; that is the point of having the
+## layers be independent in the first place.
+const BADGE: Array = ["stock", "glassy", "dead", "standard"]
 
 ## The DEFAULT only. Rarity picks a recipe here and has no other say — every
 ## resolution step below outranks it, and the recipes themselves know nothing
