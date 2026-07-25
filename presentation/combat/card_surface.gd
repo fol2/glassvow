@@ -265,6 +265,19 @@ const FINISH: Dictionary = {
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0, "mask": 2,
 	},
+	# The same sheet cut with only the fine layer — flake_big at zero, which is
+	# what the shader gates the second pass on. What goes is the sparse field of
+	# larger, flatter, paler discs; what stays is the 2.6px pinpricks, and they
+	# are the half that reads as a star field rather than as glitter stuck on.
+	# The big discs hold light over a wider angle by design, so dropping them
+	# costs some of the always-on shimmer and buys a sheet that only speaks when
+	# the light is actually near it.
+	"cosmos-fine": {                           # cosmos, no big discs
+		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
+		"holo": 0.0, "holo_scale": 34.0, "holo_dir": 0.0,
+		"pearl": 0.0, "pearl_scale": 62.0,
+		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 0.0, "flake_hue": 1.0, "mask": 0,
+	},
 	"dead": {                                  # the coating that gives nothing
 		"sheen": 0.0015, "tight": 12.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
@@ -302,7 +315,7 @@ const RECIPES: Dictionary = {
 	"plain": ["pulp", "tooth", "matte", "thin"],
 	"card": ["stock", "smooth", "smooth-matte", "standard"],
 	"opal": ["glass", "linen", "pearlescent", "premium"],
-	"nebula": ["gold-leaf", "engine-turned", "cosmos-art", "gilded"],
+	"nebula": ["gold-leaf", "engine-turned", "cosmos-fine", "gilded"],
 	"velvet": ["stock", "soft-touch", "matte", "premium"],
 	"leaden": ["lead", "tooth", "dead", "cursed"],
 	# ──
