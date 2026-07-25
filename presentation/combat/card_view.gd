@@ -188,6 +188,8 @@ var _hovered: bool = false
 var _tilt: Vector2 = Vector2.ZERO         # (rot_x, rot_y) degrees
 var _tilt_v: Vector2 = Vector2.ZERO
 var _tilt_target: Vector2 = Vector2.ZERO
+## Where the spring comes home to. Zero everywhere but the studio.
+var _rest_tilt: Vector2 = Vector2.ZERO
 var _lift: float = 0.0
 var _lift_v: float = 0.0
 
@@ -717,16 +719,26 @@ static func _prism_mesh(thick: float) -> ArrayMesh:
 	return mesh
 
 
-## Park the slab at a fixed tilt, in the same normalised -1..1 the cursor
-## gives, and keep it rendering there. The material is angle-driven and the
-## angle is normally cursor-driven, so without this there is no way to LOOK at
-## a finish — the pose dies the moment you stop hovering to read the panel.
-## GLASSVOW_TILT and the studio's sliders are the only two callers; anything
-## that also wants the spring should drive the cursor instead.
+## Move the card's REST pose, in the same normalised -1..1 the cursor gives.
+## The material is angle-driven and the angle is normally cursor-driven, so
+## without this there is no way to LOOK at a finish — the pose dies the moment
+## you stop hovering to read the panel.
+##
+## It sets where the card comes back to, not where it is: the cursor still owns
+## the pose while it is on the card, and the spring returns here afterwards
+## rather than to flat. In the game nothing calls this, _rest_tilt stays zero,
+## and "returns to rest" means what it always did.
 func hold_pose(n: Vector2) -> void:
-	_tilt = Vector2(-n.y, -n.x) * MAX_TILT
-	_slab.rotation_degrees = Vector3(_tilt.x, _tilt.y, 0.0)
-	_set_live(true)
+	_rest_tilt = Vector2(-n.y, -n.x) * MAX_TILT
+	if _hovered or is_processing():
+		_tilt_target = _rest_tilt   # let the spring carry it, mid-flight
+		return
+	_tilt = _rest_tilt
+	_tilt_v = Vector2.ZERO
+	_apply_transform()
+	# One repaint at the new pose, then idle: UPDATE_ONCE re-arms each call, so
+	# dragging a slider costs a frame per step instead of running forever.
+	_set_live(false)
 
 
 ## Freeze both offscreen passes when nothing moves; UPDATE_ONCE paints one
@@ -753,7 +765,7 @@ func _ready() -> void:
 		var p: PackedStringArray = forced.split(",")
 		if p.size() == 2:
 			hold_pose(Vector2(float(p[0]), float(p[1])))
-		return  # stay live so the pose reaches the shot
+		return  # hold_pose armed the repaint; the pose reaches the shot
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if not _hovered:
@@ -773,30 +785,35 @@ func _process(delta: float) -> void:
 	_lift_v += ((lift_target - _lift) * w2 - _lift_v * dampen) * dt
 	_lift += _lift_v * dt
 
+	# Settled: snap the last thousandth away and stop paying for the card.
+	# "Settled" is measured against _rest_tilt, not against flat — a card the
+	# studio has parked at an angle is at rest THERE, and comparing to zero
+	# would leave it spinning its viewports forever a few degrees from home.
+	var done: bool = not _hovered and _tilt.distance_to(_rest_tilt) < 0.02 \
+		and _tilt_v.length() < 0.05 and _lift < 0.05 and absf(_lift_v) < 0.1
+	if done:
+		_tilt = _rest_tilt
+		_tilt_v = Vector2.ZERO
+		_lift = 0.0
+		_lift_v = 0.0
+	_apply_transform()
+	if done:
+		_set_live(false)
+		set_process(false)
+
+
+## Push the spring's state onto the slab and its shadow. The shadow stays on
+## the table, but it is not inert: as the pane rises its shadow slides down,
+## spreads and thins, and it slips out from under whichever side has lifted —
+## the reading that ties the two together. It never rotates, because a shadow
+## on a flat table cannot.
+func _apply_transform() -> void:
 	_slab.rotation_degrees = Vector3(_tilt.x, _tilt.y, 0.0)
 	_slab.position.z = _lift
-	# The shadow stays on the table, but it is not inert: as the pane rises its
-	# shadow slides down, spreads and thins, and it slips out from under
-	# whichever side has lifted — the reading that ties the two together. It
-	# never rotates, because a shadow on a flat table cannot.
 	var h: float = _lift / MAX_LIFT
 	_shadow.position = Vector2(_tilt.y, _tilt.x) * 0.28 + Vector2(0.0, 4.0 * h)
 	_shadow.modulate.a = 1.0 - 0.22 * h
 	_shadow_sb.shadow_size = _shadow_size + roundi(4.0 * h)
-
-	if not _hovered and _tilt.length() < 0.02 and _tilt_v.length() < 0.05 \
-			and _lift < 0.05 and absf(_lift_v) < 0.1:
-		_tilt = Vector2.ZERO
-		_tilt_v = Vector2.ZERO
-		_lift = 0.0
-		_lift_v = 0.0
-		_slab.rotation_degrees = Vector3.ZERO
-		_slab.position.z = 0.0
-		_shadow.position = Vector2.ZERO
-		_shadow.modulate.a = 1.0
-		_shadow_sb.shadow_size = _shadow_size
-		_set_live(false)
-		set_process(false)
 
 
 static func _font(path: String, tracking: int) -> Font:
@@ -822,7 +839,7 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	_hovered = false
-	_tilt_target = Vector2.ZERO
+	_tilt_target = _rest_tilt
 	_fade_glare(0.0)
 	hover_changed.emit(uid, false)
 

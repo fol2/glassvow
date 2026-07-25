@@ -15,7 +15,9 @@ extends Control
 ## judge from a screenshot. Worse, the angle is normally the CURSOR's — so the
 ## moment you look away from the card to read which layers it is wearing, the
 ## pose collapses. Here the pose is on sliders and the layers are on pickers,
-## so both can be held still at once and the card can be stared at.
+## so both can be held still at once and the card can be stared at. Hovering
+## the card still does everything it does in a fight — the sliders only decide
+## where it settles back to when the cursor leaves.
 ##
 ## The four pickers are independent by construction, because the layers are:
 ## pick any material with any texture with any finish with any stock and the
@@ -327,9 +329,12 @@ func _rebuild() -> void:
 	var cost_v: Variant = data.get("cost")
 	_card = CardView.new(CardInst.new(1, StringName(_card_id)), data,
 		0 if cost_v == null else int(float(str(cost_v))))
-	# Driven entirely from the panel: let the pointer through, or hovering the
-	# card would start the spring and fight the pose sliders.
-	_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The card keeps its own hover: glare, edge glint, tilt-toward-the-cursor,
+	# lift and the release spring all behave exactly as they do in a hand. They
+	# do not fight the sliders, because the sliders set the pose the card comes
+	# HOME to — let go of the card and it settles back onto whatever the panel
+	# is holding, not onto flat. Which of the two is driving is never ambiguous:
+	# the cursor is, whenever it is on the card.
 	_card.scale = Vector2.ONE * _scale
 	_stage.add_child(_card)
 	_centre()
