@@ -419,7 +419,15 @@ void fragment() {
 
 	// Where the coating actually is. Spot foil and reverse holo are masks, not
 	// materials — the same finish, laid on part of the card.
+	//
+	// `mf` is the second extent, and a real holo card needs two. The clear
+	// LAMINATE runs over the whole card — that is the gloss and the travelling
+	// wash, and it is why the whole thing is shiny in your hand. The foil EMBOSS
+	// is stamped under the art window alone, because that is where the stamp
+	// went. One mask cannot say that: whole-face puts the stars over the rules
+	// text, and masking the lot to the art takes the shine off half the card.
 	float m = 1.0;
+	float mf = 1.0;
 	if (mask != 0) {
 		vec2 a0 = art_rect.xy;
 		vec2 a1 = art_rect.xy + art_rect.zw;
@@ -431,6 +439,8 @@ void fragment() {
 			m = 1.0 - in_art;                    // reverse holo
 		} else if (mask == 2) {
 			m = in_art;                          // the art window alone
+		} else if (mask == 4) {
+			mf = in_art;                         // laminate whole, foil in art
 		} else {
 			m = smoothstep(-12.0, -9.0, sdf(cp, card_size * 0.5, radius));
 		}
@@ -468,7 +478,7 @@ void fragment() {
 	// shared LAMP_MIRROR. See FLAKE_ROOM: a mirror the size of a flake is
 	// entitled to the gem's ratio, and only the flakes are small enough to be
 	// given it without the face going white.
-	add += mix(ink_c * fi * 2.0, flake, flake_hue) * sparkle
+	add += mix(ink_c * fi * 2.0, flake, flake_hue) * sparkle * mf
 		* mix(FLAKE_ROOM, 1.0, lamp_gain);
 
 	// Everything the surface gives back is light the lamp delivered, so it all

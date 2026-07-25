@@ -185,7 +185,12 @@ const TEXTURE: Dictionary = {
 ##   sparkle      discrete flakes, each a microfacet with its own tilt, each
 ##                flashing over a few degrees only. `flake_px` is their pitch.
 ##   mask         0 whole face · 1 everything but the art (reverse holo) ·
-##                2 the art window only · 3 the frame band (spot foil)
+##                2 the art window only · 3 the frame band (spot foil) ·
+##                4 laminate whole-face, FOIL in the art window. The one value
+##                that names two extents, because a real holo card has two: a
+##                clear laminate over the whole card, and a foil emboss stamped
+##                under the art alone. 0 puts the stars over the rules text; 2
+##                takes the shine off half the card. Only 4 is the actual object.
 const FINISH: Dictionary = {
 	"matte": {
 		"sheen": 0.0030, "tight": 24.0, "aniso": 0.0,
@@ -288,7 +293,7 @@ const FINISH: Dictionary = {
 		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
 		"holo": 0.022, "holo_scale": 34.0, "holo_dir": 18.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.50, "flake_px": 2.6, "flake_big": 0.0, "flake_hue": 1.0, "mask": 0,
+		"sparkle": 0.50, "flake_px": 2.6, "flake_big": 0.0, "flake_hue": 1.0, "mask": 4,
 	},
 	"dead": {                                  # the coating that gives nothing
 		"sheen": 0.0015, "tight": 12.0, "aniso": 0.0,
