@@ -78,6 +78,25 @@ const float LAMP_WASH = 0.75;
 // Diffuse does none of this — LAMP_WASH is irradiance and stays where it is.
 const float LAMP_MIRROR = 2.0;
 
+// How far a flake may slide before the 3x3 sweep stops being true, and that is
+// not a taste knob. A flake owned by cell ci appears somewhere in ci + [0,1]
+// plus its slide, and lights out to its own radius (0.40 at most) around that —
+// so the fragments it reaches still floor() into ci +/- 1 only while the slide
+// stays under 1 - 0.40. Past that, flakes drop out along the lattice, which is
+// the same "grid, not a sky" the sweep was built to prevent, arriving by a new
+// road. 0.55 leaves five hundredths of a cell in hand.
+//
+// It is `par` that gets clamped rather than the depth, and that is what lets a
+// recipe ask for a thick emboss: scaling par scales every flake by the SAME
+// factor, so the deep ones still travel further than the shallow ones and the
+// layering survives. The clamp only stops the field sliding further once the
+// card is already leaning hard.
+const float FLAKE_SLIDE = 0.55;
+// Absorption per pitch of depth. Stated per unit so that a recipe naming a
+// thicker layer gets a deeper falloff for free, and so that zero depth is
+// exactly no falloff rather than nearly none.
+const float FLAKE_MURK = 0.18;
+
 // material
 uniform vec4 ink : source_color = vec4(1.0);
 uniform vec4 tint : source_color = vec4(1.0);
@@ -103,6 +122,8 @@ uniform float sparkle = 0.0;
 uniform float flake_px = 4.0;
 uniform float flake_big = 0.0;
 uniform float flake_hue = 0.0;
+uniform float flake_deep = 0.0;
+uniform float flake_wake = 0.0;
 uniform int mask = 0;
 
 float hash12(vec2 p) {
@@ -174,17 +195,43 @@ float depth_amp(float degrees, float period) {
 // The 3x3 sweep is not optional. A flake sits at a random point in its cell,
 // so any disc wider than half a cell reaches into its neighbours — sample the
 // owning cell alone and every large flake comes out clipped square along the
-// lattice, which is exactly what it looks like: a grid, not a sky.
+// lattice, which is exactly what it looks like: a grid, not a sky. It is also
+// what pays for `deep` below: a flake that has slid off its own cell is still
+// swept by its neighbours, so the depth costs no extra taps.
+//
+// DEPTH is what a holo sheet has that a glitter one does not, and it is not
+// about colour. A cosmos emboss puts its bright points at a range of depths
+// BELOW the face, so the eye's ray reaches each one at a different sideways
+// offset — the deep ones appear shifted further than the shallow ones, and when
+// the card turns they slide THROUGH each other. Differential motion is the
+// strongest depth cue a single eye has, and it is the whole of the effect.
+//
+// `deep` is the spread, in PITCHES, and the unit is what keeps the sweep
+// honest: the slide in cells is the eye's tangent times this, so stating it in
+// pixels would quietly make the bound below a function of the pitch. Zero is
+// exactly the flat sheet — `par * (dep * 0.0)` is not approximately the old
+// term, it IS it — which is how every finish that never asked for depth keeps
+// rendering to the pixel.
+//
+// `edge`/`soft` bound the disc (edge is its radius in cells, soft where the
+// falloff finishes), `lobe` is how narrow the flash is in angle, `tip` how far
+// the facet leans off the surface. Big flakes want a softer rim, a wider lobe
+// and a shallow tip.
 vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
-		float tip, vec3 N, vec3 T, vec3 Bv, vec3 H, float g) {
+		float tip, vec3 N, vec3 T, vec3 Bv, vec3 H, float g,
+		vec2 par, float deep) {
 	vec2 cell = p / max(pitch, 0.5);
 	vec2 base = floor(cell);
 	vec3 sum = vec3(0.0);
 	for (int j = -1; j <= 1; j++) {
 		for (int i = -1; i <= 1; i++) {
 			vec2 ci = base + vec2(float(i), float(j));
-			float shape = smoothstep(edge, soft,
-				length(cell - ci - hash22(ci)));
+			// How far down this one sits, and so where it APPEARS: its own
+			// place in the cell, plus the slide that depth buys it. One hash
+			// gives the whole field a thickness.
+			float dep = hash12(ci + 3.1);
+			float shape = smoothstep(edge, soft, length(cell - ci
+				- hash22(ci) - par * (dep * deep)));
 			if (shape <= 0.0) {
 				continue;
 			}
@@ -192,7 +239,12 @@ vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
 			vec3 fn = normalize(N + (T * jt.x + Bv * jt.y) * tip);
 			vec3 hue = 0.5 + 0.5 * cos(TAU * (g + hash12(ci + 7.3)
 				+ vec3(0.0, 0.33, 0.67)));
-			sum += hue * shape * pow(max(dot(fn, H), 0.0), lobe);
+			// Depth costs light, per unit of it, the way depth always does —
+			// the far ones came back through more film and past whatever floats
+			// above them. It is the STILL half of the cue: without it the
+			// layers exist but can only be proved by moving the card.
+			sum += hue * shape * max(1.0 - FLAKE_MURK * deep * dep, 0.0)
+				* pow(max(dot(fn, H), 0.0), lobe);
 		}
 	}
 	return sum;
@@ -306,13 +358,34 @@ void fragment() {
 	// rather than as glitter paint sprayed on.
 	vec3 flake = vec3(0.0);
 	if (sparkle > 0.0) {
-		flake = confetti(cp, flake_px, 0.40, 0.08, 120.0, 1.2, N, T, Bv, H, g);
+		// Where the eye is, as a tangent in the card's own axes: how far a
+		// feature one unit below the face appears to slide. Off Nf and not N,
+		// because depth is measured from the FACE — the relief's normal says
+		// how the coating catches light, not how thick it is.
+		vec2 par = vec2(0.0);
+		if (flake_deep > 0.0) {
+			par = vec2(dot(V, T), dot(V, Bv)) / max(dot(V, Nf), 0.3);
+			par *= min(1.0, FLAKE_SLIDE / max(flake_deep * length(par), 1e-4));
+		}
+		flake = confetti(cp, flake_px, 0.40, 0.08, 120.0, 1.2,
+			N, T, Bv, H, g, par, flake_deep);
 		if (flake_big > 0.0) {
 			// Bigger facets are flatter, so they hold light over a wider angle
 			// and stay pale — they never reach the pinpricks' saturation.
+			//
+			// Which is exactly why they need `flake_wake`. A wide lobe is a
+			// flake that is ALWAYS partly lit, so the big discs are the one
+			// channel a distant room can switch on, and a sheet whose coarse
+			// layer is on before you touch it reads as speckle printed on the
+			// stock. The pinpricks do not have this problem — a 120 exponent is
+			// 6 degrees of half-width and the room simply cannot find them.
+			// So the coarse layer alone is put on the lamp: at 1.0 it does not
+			// exist until a light is carried to it, and at 0.0 it behaves
+			// exactly as it always has, for the recipes that never asked.
 			vec3 disc = confetti(cp + 137.0, flake_big, 0.34, 0.20, 70.0, 0.9,
-				N, T, Bv, H, g);
-			flake += mix(disc, vec3(dot(disc, vec3(0.333))), 0.25) * 0.30;
+				N, T, Bv, H, g, par, flake_deep);
+			flake += mix(disc, vec3(dot(disc, vec3(0.333))), 0.25) * 0.30
+				* mix(1.0, lamp_gain, flake_wake);
 		}
 	}
 

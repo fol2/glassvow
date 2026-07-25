@@ -184,6 +184,20 @@ const TEXTURE: Dictionary = {
 ##                that is how you tell pearl from holo at a glance.
 ##   sparkle      discrete flakes, each a microfacet with its own tilt, each
 ##                flashing over a few degrees only. `flake_px` is their pitch.
+##   flake_deep   HOLO, and holo is not a synonym for rainbow. It is DEPTH: the
+##                emboss puts its bright points at a spread of depths below the
+##                face, so the eye reaches each at a different sideways offset
+##                and turning the card slides the deep ones THROUGH the shallow
+##                ones. Stated in pitches, so a coarser field implies a thicker
+##                layer. Zero is exactly the flat sheet, which is how the
+##                finishes that never asked for it stay pixel-identical.
+##   flake_wake   How much of the COARSE layer waits for a near light. Big
+##                flakes are flatter, so their lobe is wide, so a distant room
+##                can light them — and a sheet whose coarse layer is already on
+##                before you touch it reads as speckle printed on the stock. At
+##                1.0 those discs do not exist until a lamp is carried to them;
+##                the fine pinpricks are untouched, their 120 exponent being six
+##                degrees wide and beyond the room's reach anyway.
 ##   mask         0 whole face · 1 everything but the art (reverse holo) ·
 ##                2 the art window only · 3 the frame band (spot foil)
 const FINISH: Dictionary = {
@@ -191,85 +205,99 @@ const FINISH: Dictionary = {
 		"sheen": 0.0030, "tight": 24.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"smooth-matte": {
 		"sheen": 0.012, "tight": 90.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"satin": {
 		"sheen": 0.03, "tight": 260.0, "aniso": 0.35,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"gloss": {
 		"sheen": 0.056, "tight": 900.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"metallic": {
 		"sheen": 0.08, "tight": 900.0, "aniso": 0.50,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.036, "flake_px": 3.2, "flake_big": 0.0, "flake_hue": 0.15, "mask": 0,
+		"sparkle": 0.036, "flake_px": 3.2, "flake_big": 0.0, "flake_hue": 0.15,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"pearlescent": {
 		"sheen": 0.02, "tight": 200.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.03, "pearl_scale": 62.0,
-		"sparkle": 0.03, "flake_px": 4.5, "flake_big": 0.0, "flake_hue": 0.40, "mask": 0,
+		"sparkle": 0.03, "flake_px": 4.5, "flake_big": 0.0, "flake_hue": 0.40,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"holo": {
 		"sheen": 0.024, "tight": 300.0, "aniso": 0.0,
 		"holo": 0.036, "holo_scale": 12.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"rainbow": {
 		"sheen": 0.028, "tight": 260.0, "aniso": 0.0,
 		"holo": 0.045, "holo_scale": 26.0, "holo_dir": 24.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"reverse-holo": {
 		"sheen": 0.02, "tight": 200.0, "aniso": 0.0,
 		"holo": 0.039, "holo_scale": 15.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 1,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 1,
 	},
 	"spot-foil": {
 		"sheen": 0.104, "tight": 900.0, "aniso": 0.40,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 3,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 3,
 	},
 	"prismatic": {
 		"sheen": 0.048, "tight": 600.0, "aniso": 0.0,
 		"holo": 0.03, "holo_scale": 18.0, "holo_dir": 0.0,
 		"pearl": 0.024, "pearl_scale": 78.0,
-		"sparkle": 0.054, "flake_px": 3.6, "flake_big": 12.0, "flake_hue": 0.70, "mask": 0,
+		"sparkle": 0.054, "flake_px": 3.6, "flake_big": 12.0, "flake_hue": 0.70,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 	"cosmos": {                                # cosmos holofoil / confetti
 		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 34.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0, "mask": 0,
+		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0,
+		"flake_deep": 3.0, "flake_wake": 1.0, "mask": 0,
 	},
 	"cosmos-art": {                            # the same sheet, art window only
 		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 34.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0, "mask": 2,
+		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0,
+		"flake_deep": 3.0, "flake_wake": 1.0, "mask": 2,
 	},
 	"dead": {                                  # the coating that gives nothing
 		"sheen": 0.0015, "tight": 12.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0, "mask": 0,
+		"sparkle": 0.0, "flake_px": 4.0, "flake_big": 0.0, "flake_hue": 0.0,
+		"flake_deep": 0.0, "flake_wake": 0.0, "mask": 0,
 	},
 }
 
@@ -412,5 +440,6 @@ static func apply(mat: ShaderMaterial, p: Dictionary, tint: Color) -> void:
 	for key: String in ["ink", "ink_tint", "soak", "bleed",
 			"relief", "relief_kind", "relief_scale", "grain", "grain_scale",
 			"sheen", "tight", "aniso", "holo", "holo_scale", "holo_dir",
-			"pearl", "pearl_scale", "sparkle", "flake_px", "flake_big", "flake_hue", "mask"]:
+			"pearl", "pearl_scale", "sparkle", "flake_px", "flake_big", "flake_hue",
+			"flake_deep", "flake_wake", "mask"]:
 		mat.set_shader_parameter(key, p[key])
