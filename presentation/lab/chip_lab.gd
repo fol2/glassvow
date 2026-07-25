@@ -1,43 +1,48 @@
 class_name ChipLab
 extends Control
-## Contact sheet for the two chip widgets, at the size they ship.
+## Interactive bench for the two chip widgets. Not a contact sheet — the chips
+## here are the real Controls, so what you tune is what ships.
 ##
-##   godot --path . -- --chips [--shot=/tmp/chips.png]
+##   godot --path . -- --chips                  # the viewer
+##   godot --path . -- --chips --shot=/tmp/c.png  # same sheet, panel hidden
 ##
-## No shell variants: the web benchmark settles both designs, and it settles
-## them differently — the status chip has no shell at all, the intent chip is a
-## dark lozenge lit by one colour. This sheet exists to check the PORT, not to
-## audition alternatives.
+## WHAT YOU CAN DO
+##   · click any status in the grid to load it into the inspector
+##   · hover any chip for its name and rules text
+##   · drag GROUND through the four surfaces these have to hold against
+##   · drag the KNOBS — they are the five layers CSS does with blurs and Godot
+##     cannot, so their values are judgement calls, not measurements
+##   · BAKE prints the current knobs as GDScript, ready to paste back into the
+##     widgets as new DEFAULTs
 ##
-## Counts run 1 / 2 / 9 / 99 because 1 is the case that draws no numeral and 2
-## is the first that does — the interesting boundary is between them, not at 9.
+## The knobs are statics on the chip classes, so a drag here retunes every chip
+## on screen at once — which is the point. Nothing is persisted; BAKE is how a
+## setting leaves this window.
 
-## #0B0E1A, the benchmark's --ink. Held locally rather than reached out of
-## CardLab: four sessions share this tree, and importing one Color from a card
-## file chains this sheet to that file's compile state.
 const BACKDROP: Color = Color(0.043, 0.055, 0.102)
 
 ## The status row does NOT sit on flat indigo in the real game — it sits under
-## the enemy, over lit stone, lanterns and sprites. That is why the outline is
-## black. These are the grounds worth proving it against.
+## the enemy, over lit stone and lanterns. That is why its outline is black, and
+## why judging these on one ground is how you ship an invisible chip.
 const GROUNDS: Array[Color] = [
 	Color(0.043, 0.055, 0.102),   # --ink, the panel case
 	Color(0.24, 0.21, 0.20),      # shadowed stone
-	Color(0.46, 0.38, 0.28),      # lantern-lit stone, the worst case
+	Color(0.46, 0.38, 0.28),      # lantern-lit stone
+	Color(0.72, 0.70, 0.66),      # blown highlight, the worst case
 ]
-const GROUND_NAMES: Array[String] = ["--ink", "shadowed stone", "lantern-lit"]
+const GROUND_NAMES: Array[String] = ["--ink", "shadowed stone", "lantern-lit", "blown"]
 
-const MARGIN: float = 36.0
-const COLS: int = 4
-const CELL_W: float = 272.0
-const CELL_H: float = 58.0
+const PANEL_W: float = 330.0
+const MARGIN: float = 24.0
+const COLS: int = 3
+const CELL_W: float = 270.0
+const CELL_H: float = 56.0
 const CHIP_GAP: float = 6.0          ## .status-row { gap: 6px }
-const DETAIL_ZOOM: float = 3.0
+const INSPECT_TOP: float = 60.0
+const INSPECT_H: float = 176.0
 
 const COUNTS: Array[int] = [1, 2, 9, 99]
 
-## Five faces plus the three compound ids content actually ships. The compounds
-## render TWO icons, so they belong on the sheet as their own case.
 const INTENT_ROW: Array[Array] = [
 	["attack", "12"],
 	["block", "9"],
@@ -50,52 +55,253 @@ const INTENT_ROW: Array[Array] = [
 
 var content: ContentDB
 
+var _field: ColorRect
+var _sheet: Control                  ## everything that gets rebuilt on a change
+var _panel: PanelContainer
+var _ground: int = 0
+var _zoom: float = 3.0
+var _sel_id: StringName = &"vulnerable"
+var _sel_count: int = 99
+## Click targets for the status grid, filled during the rebuild.
+var _cells: Array[Dictionary] = []
+
 
 func _init(content_ref: ContentDB) -> void:
 	content = content_ref
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
+	# STOP, not IGNORE: the chips are MOUSE_FILTER_PASS so their clicks arrive
+	# here, at the parent, which is what makes the grid selectable without
+	# covering every cell in an invisible Button and killing the tooltips.
+	mouse_filter = Control.MOUSE_FILTER_STOP
 
-	var field: ColorRect = ColorRect.new()
-	field.color = BACKDROP
-	field.set_anchors_preset(Control.PRESET_FULL_RECT)
-	field.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(field)
+	_field = ColorRect.new()
+	_field.color = GROUNDS[_ground]
+	_field.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_field.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_field)
 
-	var y: float = MARGIN
-	y = _title("CHIPS — benchmark port", y)
-	y = _section("STATUSES · stacks 1 / 2 / 9 / 99 · 1 draws no numeral · actual size", y)
+	_sheet = Control.new()
+	_sheet.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_sheet.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_sheet)
+
+	_build_panel()
+	# --sheet drops the furniture for a clean contact sheet. A plain --shot
+	# captures the viewer as you see it, because the panel is the point now.
+	# --ground=N picks the surface, so a headless capture can check the one
+	# thing a still frame otherwise cannot: that the outline holds on stone.
+	for arg: String in OS.get_cmdline_user_args():
+		if arg == "--sheet":
+			_panel.visible = false
+		elif arg.begins_with("--ground="):
+			_ground = clampi(int(arg.trim_prefix("--ground=")), 0, GROUNDS.size() - 1)
+			_field.color = GROUNDS[_ground]
+	_rebuild()
+
+
+# ---------------------------------------------------------------- control panel
+
+func _build_panel() -> void:
+	_panel = PanelContainer.new()
+	_panel.add_theme_stylebox_override("panel", GlassStyle.pane(GlassStyle.GLASS, 0.92))
+	_panel.position = Vector2(1180.0 - PANEL_W, 0.0)
+	_panel.size = Vector2(PANEL_W, 820.0)
+	add_child(_panel)
+
+	var col: VBoxContainer = VBoxContainer.new()
+	col.add_theme_constant_override("separation", 7)
+	_panel.add_child(col)
+
+	_heading(col, "GROUND")
+	var grounds: HBoxContainer = HBoxContainer.new()
+	grounds.add_theme_constant_override("separation", 4)
+	col.add_child(grounds)
+	for g: int in range(GROUNDS.size()):
+		var b: Button = Button.new()
+		b.text = str(g + 1)
+		b.tooltip_text = GROUND_NAMES[g]
+		b.custom_minimum_size = Vector2(40.0, 26.0)
+		b.focus_mode = Control.FOCUS_NONE
+		GlassStyle.style_button(b, GlassStyle.GLASS)
+		b.pressed.connect(func() -> void:
+			_ground = g
+			_field.color = GROUNDS[_ground]
+			_rebuild())
+		grounds.add_child(b)
+
+	_heading(col, "INSPECTOR")
+	_slider(col, "zoom", 1.0, 5.0, 0.5, _zoom, func(v: float) -> void:
+		_zoom = v
+		_rebuild())
+	_slider(col, "count", 1.0, 99.0, 1.0, float(_sel_count), func(v: float) -> void:
+		_sel_count = int(v)
+		_rebuild())
+
+	_heading(col, "STATUS KNOBS")
+	_slider(col, "outline px", 0.0, 3.0, 0.1, StatusChip.outline_px, func(v: float) -> void:
+		StatusChip.outline_px = v
+		_rebuild())
+	_slider(col, "numeral ring", 0.0, 8.0, 1.0, float(StatusChip.num_outline),
+		func(v: float) -> void:
+			StatusChip.num_outline = int(v)
+			_rebuild())
+
+	_heading(col, "INTENT KNOBS")
+	_slider(col, "halo alpha", 0.0, 0.8, 0.02, IntentChip.glow_out, func(v: float) -> void:
+		IntentChip.glow_out = v
+		_rebuild())
+	_slider(col, "halo size", 0.0, 24.0, 1.0, float(IntentChip.glow_size),
+		func(v: float) -> void:
+			IntentChip.glow_size = int(v)
+			_rebuild())
+	_slider(col, "inset glow", 0.0, 0.5, 0.01, IntentChip.glow_in, func(v: float) -> void:
+		IntentChip.glow_in = v
+		_rebuild())
+	_slider(col, "icon rim", 0.0, 4.0, 0.1, IntentChip.icon_rim, func(v: float) -> void:
+		IntentChip.icon_rim = v
+		_rebuild())
+	_slider(col, "numeral bloom", 0.0, 10.0, 1.0, float(IntentChip.num_outline),
+		func(v: float) -> void:
+			IntentChip.num_outline = int(v)
+			_rebuild())
+
+	col.add_child(HSeparator.new())
+	var row: HBoxContainer = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	col.add_child(row)
+	var reset: Button = Button.new()
+	reset.text = "RESET"
+	reset.focus_mode = Control.FOCUS_NONE
+	reset.tooltip_text = "back to the shipped DEFAULTs"
+	GlassStyle.style_button(reset, GlassStyle.TEXT_DIM)
+	reset.pressed.connect(func() -> void:
+		StatusChip.reset_knobs()
+		IntentChip.reset_knobs()
+		_rebuild_panel())
+	row.add_child(reset)
+	var bake: Button = Button.new()
+	bake.text = "BAKE"
+	bake.focus_mode = Control.FOCUS_NONE
+	bake.tooltip_text = "print the current knobs to stdout as GDScript"
+	GlassStyle.style_button(bake, GlassStyle.EMBER)
+	bake.pressed.connect(_bake)
+	row.add_child(bake)
+
+
+## RESET has to move the slider handles too, and a slider's own signal would
+## fire back into the knob it is being restored from. Cheapest correct answer:
+## drop the panel and build a fresh one off the reset values.
+func _rebuild_panel() -> void:
+	_panel.queue_free()
+	_build_panel()
+	_rebuild()
+
+
+func _heading(col: VBoxContainer, text: String) -> void:
+	var lab: Label = Label.new()
+	lab.text = text
+	lab.add_theme_font_size_override("font_size", 11)
+	lab.add_theme_color_override("font_color", GlassStyle.EMBER)
+	col.add_child(lab)
+
+
+func _slider(col: VBoxContainer, name_text: String, lo: float, hi: float, step: float,
+		value: float, on_change: Callable) -> void:
+	var cap: Label = Label.new()
+	cap.add_theme_font_size_override("font_size", 11)
+	cap.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+	cap.text = "%s  %s" % [name_text, _fmt(value, step)]
+	col.add_child(cap)
+
+	var s: HSlider = HSlider.new()
+	s.min_value = lo
+	s.max_value = hi
+	s.step = step
+	s.value = value
+	s.custom_minimum_size = Vector2(0.0, 16.0)
+	s.focus_mode = Control.FOCUS_NONE
+	s.value_changed.connect(func(v: float) -> void:
+		cap.text = "%s  %s" % [name_text, _fmt(v, step)]
+		on_change.call(v))
+	col.add_child(s)
+
+
+func _fmt(v: float, step: float) -> String:
+	return str(roundi(v)) if step >= 1.0 else "%.2f" % v
+
+
+func _bake() -> void:
+	var lines: PackedStringArray = PackedStringArray([
+		"",
+		"--- status_chip.gd ---",
+		"const OUTLINE_PX_DEFAULT: float = %.2f" % StatusChip.outline_px,
+		"const NUM_OUTLINE_DEFAULT: int = %d" % StatusChip.num_outline,
+		"--- intent_chip.gd ---",
+		"const GLOW_OUT_DEFAULT: float = %.2f" % IntentChip.glow_out,
+		"const GLOW_SIZE_DEFAULT: int = %d" % IntentChip.glow_size,
+		"const GLOW_IN_DEFAULT: float = %.2f" % IntentChip.glow_in,
+		"const ICON_RIM_DEFAULT: float = %.2f" % IntentChip.icon_rim,
+		"const NUM_OUTLINE_DEFAULT: int = %d" % IntentChip.num_outline,
+		"",
+	])
+	print("\n".join(lines))
+
+
+# ------------------------------------------------------------------- selection
+
+func _gui_input(event: InputEvent) -> void:
+	var click: InputEventMouseButton = event as InputEventMouseButton
+	if click == null or not click.pressed or click.button_index != MOUSE_BUTTON_LEFT:
+		return
+	for cell: Dictionary in _cells:
+		var r: Rect2 = cell["rect"]
+		if r.has_point(click.position):
+			_sel_id = StringName(str(cell["id"]))
+			_rebuild()
+			return
+
+
+# --------------------------------------------------------------------- rebuild
+
+func _rebuild() -> void:
+	for child: Node in _sheet.get_children():
+		child.queue_free()
+	_cells.clear()
+
+	_title("CHIPS — benchmark port · click a status to inspect it")
+	_inspector()
+	var y: float = _section("STATUSES · 1 / 2 / 9 / 99 · 1 draws no numeral · actual size",
+		INSPECT_TOP + INSPECT_H)
 	y = _status_grid(y)
-	y = _section("SAME CHIPS OVER LIT GROUND · the black outline is what has to hold", y)
-	y = _ground_strip(y)
 	y = _section("INTENTS · last two are compound: two icons, primary's colour", y)
-	y = _intent_row(y)
-	y = _section("DETAIL ×%d · not shipping size" % int(DETAIL_ZOOM), y)
-	_detail_strip(y)
+	_intent_row(y)
 
 
-func _title(text: String, y: float) -> float:
+func _add(node: Control) -> void:
+	_sheet.add_child(node)
+
+
+func _title(text: String) -> void:
 	var lab: Label = Label.new()
 	lab.text = text
 	lab.add_theme_font_override("font", StatusChip.numeral_font())
-	lab.add_theme_font_size_override("font_size", 21)
+	lab.add_theme_font_size_override("font_size", 19)
 	lab.add_theme_color_override("font_color", GlassStyle.TEXT)
-	lab.position = Vector2(MARGIN, y)
-	add_child(lab)
-	return y + 34.0
+	lab.position = Vector2(MARGIN, MARGIN)
+	_add(lab)
 
 
 func _section(text: String, y: float) -> float:
 	var lab: Label = Label.new()
 	lab.text = text
-	lab.add_theme_font_size_override("font_size", 12)
+	lab.add_theme_font_size_override("font_size", 11)
 	lab.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	lab.position = Vector2(MARGIN, y)
-	add_child(lab)
-	return y + 24.0
+	_add(lab)
+	return y + 22.0
 
 
-## Cast at the boundary, once — content rows arrive as Variant.
 func _info(id: StringName) -> Dictionary:
 	var row: Dictionary = content.statuses.get(id, {})
 	return row
@@ -116,24 +322,63 @@ func _status_ids() -> Array[StringName]:
 	return ids
 
 
+## The selected status and a compound intent, blown up on the current ground —
+## the only place in this window where anything is drawn off-size.
+func _inspector() -> void:
+	# No plate behind the specimens: the GROUND buttons repaint the whole field,
+	# so the whole window IS the test surface — grid included.
+	var cap: Label = Label.new()
+	cap.text = "%s · %s · ×%.1f · %s" % [_display_name(_sel_id), _sel_id, _zoom,
+		GROUND_NAMES[_ground]]
+	cap.add_theme_font_size_override("font_size", 11)
+	cap.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+	cap.position = Vector2(MARGIN, INSPECT_TOP + INSPECT_H - 22.0)
+	_add(cap)
+
+	var holder: Control = Control.new()
+	holder.position = Vector2(MARGIN + 18.0, INSPECT_TOP + 16.0)
+	holder.scale = Vector2(_zoom, _zoom)
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_add(holder)
+
+	# Count 1 alongside the chosen count: the no-numeral case is the one most
+	# easily broken by a knob, so it stays on screen next to its sibling.
+	var x: float = 0.0
+	var shown: Array[int] = [1, _sel_count]
+	for n: int in shown:
+		var chip: StatusChip = StatusChip.new(_sel_id, n, _info(_sel_id))
+		chip.position = Vector2(x, 0.0)
+		holder.add_child(chip)
+		x += StatusChip.SIZE + CHIP_GAP
+	var intent: IntentChip = IntentChip.new(&"attack_block", "4×2")
+	intent.position = Vector2(x + 14.0, 0.0)
+	holder.add_child(intent)
+
+
 func _status_grid(y: float) -> float:
 	var col: int = 0
 	var row_y: float = y
 	for id: StringName in _status_ids():
 		var cell_x: float = MARGIN + float(col) * CELL_W
+		var chips_w: float = float(COUNTS.size()) * (StatusChip.SIZE + CHIP_GAP)
+		_cells.append({
+			"id": id,
+			"rect": Rect2(Vector2(cell_x, row_y), Vector2(chips_w, CELL_H - 4.0)),
+		})
 
 		var name_label: Label = Label.new()
 		name_label.text = "%s  ·  %s" % [_display_name(id), id]
 		name_label.add_theme_font_size_override("font_size", 11)
-		name_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+		name_label.add_theme_color_override("font_color",
+			GlassStyle.EMBER if id == _sel_id else GlassStyle.TEXT_DIM)
 		name_label.position = Vector2(cell_x, row_y)
-		add_child(name_label)
+		_add(name_label)
 
 		var chip_x: float = cell_x
 		for n: int in COUNTS:
 			var chip: StatusChip = StatusChip.new(id, n, _info(id))
 			chip.position = Vector2(chip_x, row_y + 16.0)
-			add_child(chip)
+			_add(chip)
 			chip_x += StatusChip.SIZE + CHIP_GAP
 		col += 1
 		if col >= COLS:
@@ -141,79 +386,23 @@ func _status_grid(y: float) -> float:
 			row_y += CELL_H
 	if col > 0:
 		row_y += CELL_H
-	return row_y + 6.0
+	return row_y + 4.0
 
 
-## Four representative statuses repeated over each ground, so a black silhouette
-## outline can be judged where it is actually hard: on lit stone.
-func _ground_strip(y: float) -> float:
-	var sample: Array[StringName] = [&"vulnerable", &"regen", &"poison", &"barricade"]
-	var swatch_w: float = 4.0 * (StatusChip.SIZE + CHIP_GAP) + 20.0
-	for g: int in range(GROUNDS.size()):
-		var x: float = MARGIN + float(g) * (swatch_w + 26.0)
-		var plate: ColorRect = ColorRect.new()
-		plate.color = GROUNDS[g]
-		plate.position = Vector2(x, y)
-		plate.size = Vector2(swatch_w, StatusChip.SIZE + 20.0)
-		plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(plate)
-
-		var cap: Label = Label.new()
-		cap.text = GROUND_NAMES[g]
-		cap.add_theme_font_size_override("font_size", 10)
-		cap.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-		cap.position = Vector2(x, y + StatusChip.SIZE + 22.0)
-		add_child(cap)
-
-		var cx: float = x + 10.0
-		for id: StringName in sample:
-			var chip: StatusChip = StatusChip.new(id, 9, _info(id))
-			chip.position = Vector2(cx, y + 10.0)
-			add_child(chip)
-			cx += StatusChip.SIZE + CHIP_GAP
-	return y + StatusChip.SIZE + 46.0
-
-
-func _intent_row(y: float) -> float:
+func _intent_row(y: float) -> void:
 	var x: float = MARGIN
 	for spec: Array in INTENT_ROW:
 		var intent: StringName = StringName(str(spec[0]))
 		var chip: IntentChip = IntentChip.new(intent, str(spec[1]))
 		chip.position = Vector2(x, y)
-		add_child(chip)
+		_add(chip)
 
 		var cap: Label = Label.new()
 		cap.text = String(intent)
 		cap.add_theme_font_size_override("font_size", 10)
 		cap.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 		cap.position = Vector2(x, y + IntentChip.HEIGHT + 6.0)
-		add_child(cap)
-		# +20 on the left of each step: the icon breaks out past the chip's own
-		# rect, so laying these out by width alone would overlap them.
-		x += maxf(chip.size.x, 86.0) + 30.0
-	return y + IntentChip.HEIGHT + 30.0
-
-
-## The two boundary cases blown up: a status with and without its numeral, and a
-## compound intent showing both faces.
-func _detail_strip(y: float) -> void:
-	var holder: Control = Control.new()
-	holder.position = Vector2(MARGIN + 20.0, y)
-	holder.scale = Vector2(DETAIL_ZOOM, DETAIL_ZOOM)
-	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(holder)
-
-	var x: float = 0.0
-	x = _detail_chip(holder, &"vulnerable", 1, x)
-	x = _detail_chip(holder, &"vulnerable", 99, x)
-	x = _detail_chip(holder, &"regen", 9, x)
-	var intent: IntentChip = IntentChip.new(&"attack_block", "4×2")
-	intent.position = Vector2(x + 8.0, 0.0)
-	holder.add_child(intent)
-
-
-func _detail_chip(holder: Control, id: StringName, count: int, x: float) -> float:
-	var chip: StatusChip = StatusChip.new(id, count, _info(id))
-	chip.position = Vector2(x, 0.0)
-	holder.add_child(chip)
-	return x + StatusChip.SIZE + CHIP_GAP
+		_add(cap)
+		# The icon breaks out past the chip's own rect, so stepping by width
+		# alone would overlap them.
+		x += maxf(chip.size.x, 84.0) + 24.0

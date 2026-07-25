@@ -25,8 +25,22 @@ const ICON_DIR: String = "res://assets/art/statuses/"
 ## `.schip` is a 32px square. The numeral hangs OUTSIDE it (right:-2, bottom:-4)
 ## and the row's 6px gap absorbs the overhang, so the box stays 32.
 const SIZE: float = 32.0
-const OUTLINE_PX: float = 0.9
 const NUM_SIZE: int = 12
+
+## The two values that are a JUDGEMENT, not a measurement. The CSS says dilate
+## 0.9px and a 1px 4-way text shadow, but Godot's ring outline is continuous
+## where the browser stamps corners, so the matching number is not the same
+## number. Exposed as statics so ChipLab can dial them against the live
+## benchmark; the DEFAULT consts are what shipped.
+const OUTLINE_PX_DEFAULT: float = 0.9
+const NUM_OUTLINE_DEFAULT: int = 2
+static var outline_px: float = OUTLINE_PX_DEFAULT
+static var num_outline: int = NUM_OUTLINE_DEFAULT
+
+
+static func reset_knobs() -> void:
+	outline_px = OUTLINE_PX_DEFAULT
+	num_outline = NUM_OUTLINE_DEFAULT
 const NUM_RIGHT: float = -2.0
 const NUM_BOTTOM: float = -4.0
 
@@ -89,7 +103,7 @@ func _init(status_id: StringName, count: int = 1, info: Dictionary = {}) -> void
 	# 2, not 4: the CSS stamps the shadow at 1px on four diagonals, and Godot's
 	# ring is continuous — matching the number gives a visibly fatter halo than
 	# the benchmark has. Checked against the real chip at 3x.
-	_count.add_theme_constant_override("outline_size", 2)
+	_count.add_theme_constant_override("outline_size", num_outline)
 	_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_count)
 
@@ -113,7 +127,7 @@ func _draw() -> void:
 	if _tex == null:
 		return
 	var box: Rect2 = Rect2(Vector2.ZERO, Vector2(SIZE, SIZE))
-	draw_outlined_texture(self, _tex, box, Color(0.0, 0.0, 0.0, 1.0), OUTLINE_PX)
+	draw_outlined_texture(self, _tex, box, Color(0.0, 0.0, 0.0, 1.0), outline_px)
 
 
 ## The `#status-outline` port, also used by IntentChip for its icon rim — same

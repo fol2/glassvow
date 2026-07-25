@@ -36,7 +36,6 @@ const ICON_2ND: float = 28.0         ## the smaller face of a compound intent
 const IC_MARGIN_L: float = -16.0     ## the break-out
 const IC_MARGIN_R: float = 2.0
 const IC_GAP: float = 2.0
-const ICON_RIM: float = 1.5          ## stands in for the 3 stacked drop-shadows
 const NUM_SIZE: int = 17             ## 16.5px in CSS; Godot font sizes are int
 
 const BORDER_COLOR: Color = Color(0.02, 0.027, 0.055)          # #05070E
@@ -44,8 +43,30 @@ const BODY_TOP: Color = Color(0.047, 0.059, 0.110, 0.85)       # rgba(12,15,28,.
 const BODY_BOT: Color = Color(0.027, 0.035, 0.071, 0.88)       # rgba(7,9,18,.88)
 const TOP_HAIRLINE: Color = Color(1.0, 1.0, 1.0, 0.12)
 const TINT_MIX: float = 0.20         ## currentcolor into the gradient's top
-const GLOW_OUT: float = 0.30
-const GLOW_IN: float = 0.13
+
+## The four layers CSS expresses as blurs and Godot has no primitive for. Each
+## DEFAULT is what shipped, eyeballed against the live benchmark at 3x; the
+## statics let ChipLab dial them side by side with the real thing. If a canvas
+## shader ever lands these collapse back into constants.
+const GLOW_OUT_DEFAULT: float = 0.30      ## outer halo alpha  (CSS: currentcolor/30%)
+const GLOW_SIZE_DEFAULT: int = 8          ## outer halo extent (CSS: 13px gaussian)
+const GLOW_IN_DEFAULT: float = 0.13       ## inset ring alpha  (CSS: currentcolor/18%)
+const ICON_RIM_DEFAULT: float = 1.5       ## icon rim-light    (CSS: 3 drop-shadows)
+const NUM_OUTLINE_DEFAULT: int = 3        ## numeral bloom     (CSS: 0 0 8px)
+
+static var glow_out: float = GLOW_OUT_DEFAULT
+static var glow_size: int = GLOW_SIZE_DEFAULT
+static var glow_in: float = GLOW_IN_DEFAULT
+static var icon_rim: float = ICON_RIM_DEFAULT
+static var num_outline: int = NUM_OUTLINE_DEFAULT
+
+
+static func reset_knobs() -> void:
+	glow_out = GLOW_OUT_DEFAULT
+	glow_size = GLOW_SIZE_DEFAULT
+	glow_in = GLOW_IN_DEFAULT
+	icon_rim = ICON_RIM_DEFAULT
+	num_outline = NUM_OUTLINE_DEFAULT
 
 var _accent: Color = Color(1.0, 0.553, 0.553)
 var _icons: Array[Texture2D] = []
@@ -114,7 +135,7 @@ func set_intent(intent: StringName, amount_text: String) -> void:
 		Color(_accent.r, _accent.g, _accent.b, 0.30))
 	# Kept tight. A wide ring is not a blur — past ~3 it stops reading as bloom
 	# and starts eating the glyph, which the benchmark's numeral never does.
-	_amount.add_theme_constant_override("outline_size", 3)
+	_amount.add_theme_constant_override("outline_size", num_outline)
 
 	# The outer 13px halo, borrowed from StyleBoxFlat's own shadow pass — body
 	# transparent, so all it contributes is the glow.
@@ -122,11 +143,11 @@ func set_intent(intent: StringName, amount_text: String) -> void:
 	_glow.bg_color = Color(0.0, 0.0, 0.0, 0.0)
 	_glow.set_border_width_all(0)
 	_glow.set_corner_radius_all(int(RADIUS))
-	_glow.shadow_color = Color(_accent.r, _accent.g, _accent.b, GLOW_OUT)
+	_glow.shadow_color = Color(_accent.r, _accent.g, _accent.b, glow_out)
 	# CSS says 13px, but that is a gaussian falloff; StyleBoxFlat's shadow holds
 	# its colour much further out, so 13 here is a cloud where the benchmark has
 	# a halo. 8 matches what the real chip looks like at 3x.
-	_glow.shadow_size = 8
+	_glow.shadow_size = glow_size
 
 	visible = not _icons.is_empty() or amount_text != ""   # .intent:empty
 	_relayout()
@@ -186,7 +207,7 @@ func _draw() -> void:
 	# reading as a glow and starts reading as a band.
 	for i: int in range(2):
 		var inset: float = BORDER + 1.0 + float(i) * 2.0
-		var a: float = GLOW_IN * (1.0 - float(i) / 2.0)
+		var a: float = glow_in * (1.0 - float(i) / 2.0)
 		_stroke(_rounded_rect(box.grow(-inset), maxf(RADIUS - inset, 1.0)),
 			Color(_accent.r, _accent.g, _accent.b, a), 1.5)
 
@@ -202,7 +223,7 @@ func _draw() -> void:
 		var px: float = ICON if i == 0 else ICON_2ND
 		var rect: Rect2 = Rect2(Vector2(x, (HEIGHT - px) * 0.5), Vector2(px, px))
 		StatusChip.draw_outlined_texture(self, _icons[i], rect,
-			Color(_accent.r, _accent.g, _accent.b, 0.85), ICON_RIM)
+			Color(_accent.r, _accent.g, _accent.b, 0.85), icon_rim)
 		x += px + IC_GAP
 
 
