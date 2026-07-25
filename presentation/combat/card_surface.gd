@@ -185,12 +185,7 @@ const TEXTURE: Dictionary = {
 ##   sparkle      discrete flakes, each a microfacet with its own tilt, each
 ##                flashing over a few degrees only. `flake_px` is their pitch.
 ##   mask         0 whole face · 1 everything but the art (reverse holo) ·
-##                2 the art window only · 3 the frame band (spot foil) ·
-##                4 laminate whole-face, FOIL in the art window. The one value
-##                that names two extents, because a real holo card has two: a
-##                clear laminate over the whole card, and a foil emboss stamped
-##                under the art alone. 0 puts the stars over the rules text; 2
-##                takes the shine off half the card. Only 4 is the actual object.
+##                2 the art window only · 3 the frame band (spot foil)
 const FINISH: Dictionary = {
 	"matte": {
 		"sheen": 0.0030, "tight": 24.0, "aniso": 0.0,
@@ -270,31 +265,6 @@ const FINISH: Dictionary = {
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0, "mask": 2,
 	},
-	# The same sheet cut with only the fine layer — flake_big at zero, which is
-	# what the shader gates the second pass on. What goes is the sparse field of
-	# larger, flatter, paler discs; what stays is the 2.6px pinpricks, and they
-	# are the half that reads as a star field rather than as glitter stuck on.
-	#
-	# `sparkle` is 2.5x every other entry here and that is not this sheet being
-	# louder, it is this sheet being STEEPER. Flakes no longer take the room's
-	# light at face value (FLAKE_ROOM in the shader), so 0.50 is what it costs
-	# to come back to a quiet rest state — the rest field measures within 10
-	# percent of what the sheet had before any of this, at the same peak, while
-	# the lamp now finds 2.9x the light it used to. The swing between the two is
-	# 4.8x; it was 1.8x when the eye said the lamp did nothing.
-	# And the LAMINATE under the stars is itself a hologram — the base foil of a
-	# cosmos sheet carries a broad soft rainbow that travels as the light does,
-	# and it is the half that says "holo" before a single flake has fired. The
-	# `holo` channel already is that wash; at scale 34 the tangential half-vector
-	# only buys one or two cycles across the face, so it comes out as wide slow
-	# bands, not stripes. holo_dir tips the grating off the card's axes because
-	# the emboss never ran square to the print.
-	"cosmos-fine": {                           # cosmos, no big discs
-		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
-		"holo": 0.022, "holo_scale": 34.0, "holo_dir": 18.0,
-		"pearl": 0.0, "pearl_scale": 62.0,
-		"sparkle": 0.50, "flake_px": 2.6, "flake_big": 0.0, "flake_hue": 1.0, "mask": 4,
-	},
 	"dead": {                                  # the coating that gives nothing
 		"sheen": 0.0015, "tight": 12.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
@@ -332,7 +302,7 @@ const RECIPES: Dictionary = {
 	"plain": ["pulp", "tooth", "matte", "thin"],
 	"card": ["stock", "smooth", "smooth-matte", "standard"],
 	"opal": ["glass", "linen", "pearlescent", "premium"],
-	"nebula": ["gold-leaf", "soft-touch", "cosmos-fine", "gilded"],
+	"nebula": ["gold-leaf", "engine-turned", "cosmos-art", "gilded"],
 	"velvet": ["stock", "soft-touch", "matte", "premium"],
 	"leaden": ["lead", "tooth", "dead", "cursed"],
 	# ──
