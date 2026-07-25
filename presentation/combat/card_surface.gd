@@ -272,14 +272,21 @@ const FINISH: Dictionary = {
 	#
 	# `sparkle` is 2.5x every other entry here and that is not this sheet being
 	# louder, it is this sheet being STEEPER. Flakes no longer take the room's
-	# light at face value (FLAKE_ROOM in the shader), so 0.50 is what it costs to
-	# come back to a quiet rest state — measured at 0.65x the shimmer it used to
-	# have at rest, and 1.4x the flash with the lamp on it. The sheet went from
-	# 1.8x to 3.9x between the two, which is the number the eye was reading when
-	# it said the lamp did nothing.
+	# light at face value (FLAKE_ROOM in the shader), so 0.50 is what it costs
+	# to come back to a quiet rest state — the rest field measures within 10
+	# percent of what the sheet had before any of this, at the same peak, while
+	# the lamp now finds 2.9x the light it used to. The swing between the two is
+	# 4.8x; it was 1.8x when the eye said the lamp did nothing.
+	# And the LAMINATE under the stars is itself a hologram — the base foil of a
+	# cosmos sheet carries a broad soft rainbow that travels as the light does,
+	# and it is the half that says "holo" before a single flake has fired. The
+	# `holo` channel already is that wash; at scale 34 the tangential half-vector
+	# only buys one or two cycles across the face, so it comes out as wide slow
+	# bands, not stripes. holo_dir tips the grating off the card's axes because
+	# the emboss never ran square to the print.
 	"cosmos-fine": {                           # cosmos, no big discs
 		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
-		"holo": 0.0, "holo_scale": 34.0, "holo_dir": 0.0,
+		"holo": 0.022, "holo_scale": 34.0, "holo_dir": 18.0,
 		"pearl": 0.0, "pearl_scale": 62.0,
 		"sparkle": 0.50, "flake_px": 2.6, "flake_big": 0.0, "flake_hue": 1.0, "mask": 0,
 	},

@@ -84,14 +84,14 @@ const float LAMP_MIRROR = 2.0;
 // is what a mirror really does. LAMP_MIRROR cannot be 64 because sheen and the
 // diffraction band cover the whole face and would go to white. A confetti field
 // covers 3 percent of it. So the flakes get their rest state pulled DOWN
-// instead, and the ratio they end up with is 3 / 0.28, about eleven.
+// instead, and the ratio they end up with is 3 / 0.15, twenty.
 //
 // Measured on nebula, this is the actual bug the ratio fixes: before it the
 // field was 56 percent as active at rest as it was with the lamp on the card,
 // so carrying the light to it changed almost nothing. The lamp was never too
 // weak — the room was too strong. A broad source cannot make a confetti sheet
 // flash, and it should not be able to.
-const float FLAKE_ROOM = 0.28;
+const float FLAKE_ROOM = 0.15;
 
 // THE FLAKES ARE NOT ON THE SURFACE. A cosmos sheet is an embossed hologram
 // under a laminate: its bright points are a virtual image sitting BELOW the
@@ -110,12 +110,14 @@ const float FLAKE_ROOM = 0.28;
 // coarseness of the flake in it — and so the sweep's bound below can be one
 // number instead of a function of the pitch.
 const float FLAKE_DEEP = 3.0;
-// And that bound is not a taste knob, it is where the 3x3 sweep stops being
+// And that bound is not a taste knob, it is where the 5x5 sweep stops being
 // true. A flake owned by cell ci appears somewhere in ci + [0,1] plus its
-// slide, and lights out to its own radius (0.4) around that — so the fragments
-// it reaches still floor() into ci +/- 1 only while the slide stays under
-// 1 - 0.4. Past that, flakes drop out along the lattice, which is the same
-// "grid, not a sky" this sweep was built to prevent, arriving by a new road.
+// slide, and lights out to its farthest reach around that — the halo, at 1.2
+// cells — so the fragments it touches still floor() into ci +/- 2 only while
+// slide + reach stays under 2. At 0.55 the headroom is 1.45, and the halo's
+// 1.2 and the largest torn disc's 0.7 both fit under it. Past the bound,
+// flakes drop out along the lattice, which is the same "grid, not a sky" the
+// sweep was built to prevent, arriving by a new road.
 //
 // It is par that gets clamped rather than the depth, and that is the whole
 // reason the depth above can be a big number: scaling par scales every flake by
@@ -127,6 +129,19 @@ const float FLAKE_SLIDE = 0.55;
 // through whatever is floating above them. It is the static half of the cue:
 // without it a still card has layers that are only provable by moving it.
 const float FLAKE_MURK = 0.55;
+// The halo. On a dark card a lit pinprick with no spill is a fleck of pigment;
+// with three pixels of soft glow it is a SOURCE. That is halation — the lens
+// and the eye blooming around anything much brighter than its ground — and it
+// is gated by the same angular lobe as the flash, so it exists only while the
+// flake is actually firing. Peak strength relative to the disc's own core.
+const float FLAKE_GLOW = 0.15;
+// The herd. A cosmos emboss is stamped in PATCHES a few millimetres wide, each
+// patch sharing one groove orientation — so a real sheet flashes a REGION at a
+// time, a wave rolling across the card as the angle sweeps. Flakes whose aim
+// and colour are both fully random can only ever read as noise, which is to
+// say as dust. This is how much of every flake's aim belongs to its patch
+// rather than to itself.
+const float FLAKE_HERD = 0.55;
 
 // material
 uniform vec4 ink : source_color = vec4(1.0);
@@ -221,12 +236,12 @@ float depth_amp(float degrees, float period) {
 // the facet leans off the surface. Big flakes want a softer rim, a wider lobe
 // and a shallow tip.
 //
-// The 3x3 sweep is not optional. A flake sits at a random point in its cell,
-// so any disc wider than half a cell reaches into its neighbours — sample the
-// owning cell alone and every large flake comes out clipped square along the
-// lattice, which is exactly what it looks like: a grid, not a sky. It is also
-// what pays for the parallax below: a flake that has slid off its own cell is
-// still swept by its neighbours, so depth costs no extra taps.
+// The 5x5 sweep is where the field's geometry is allowed to happen. A flake
+// sits at a random point in its cell, slides sideways by its depth, tears to
+// near double size, and throws a halo well past its own disc — sample the
+// owning cell alone and all of that comes back clipped square along the
+// lattice: a grid, not a sky. The bound that keeps five columns sufficient is
+// worked at FLAKE_SLIDE, and the halo is the reason three stopped being enough.
 //
 // `par` is the eye's tangent in the card's own axes — how far a feature one
 // unit down appears to move. See FLAKE_DEEP.
@@ -235,24 +250,43 @@ vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
 	vec2 cell = p / max(pitch, 0.5);
 	vec2 base = floor(cell);
 	vec3 sum = vec3(0.0);
-	for (int j = -1; j <= 1; j++) {
-		for (int i = -1; i <= 1; i++) {
+	for (int j = -2; j <= 2; j++) {
+		for (int i = -2; i <= 2; i++) {
 			vec2 ci = base + vec2(float(i), float(j));
 			// How far down this one sits, and so where it APPEARS: its own
 			// place in the cell, plus the slide its depth buys it. One hash
 			// gives the whole field a thickness.
 			float dep = hash12(ci + 3.1);
-			float shape = smoothstep(edge, soft, length(cell - ci
-				- hash22(ci) - par * (dep * FLAKE_DEEP)));
-			if (shape <= 0.0) {
+			float d = length(cell - ci - hash22(ci)
+				- par * (dep * FLAKE_DEEP));
+			// Foil tears unevenly. Most flakes are pinpricks; roughly one in
+			// sixteen came off near double size, and those are the ones that
+			// FLARE — a field with one fixed calibre is a print run.
+			float sz = mix(0.85, 1.7, pow(hash12(ci + 11.3), 4.0));
+			float shape = smoothstep(edge * sz, soft * sz, d);
+			float halo = max(1.0 - d / 1.2, 0.0);
+			if (shape + halo <= 0.0) {
 				continue;
 			}
-			vec2 jt = hash22(ci + 19.7) - 0.5;
+			// The herd: this flake's aim is mostly its patch's aim, and its
+			// place on the spectrum is mostly its patch's place. Two smooth
+			// fields at different scales, so the colour clouds and the flash
+			// regions never share an edge and nothing reads as tiles.
+			vec2 aim = vec2(vnoise(ci * 0.13 + 31.7),
+				vnoise(ci * 0.13 + 57.1)) - 0.5;
+			vec2 jt = mix(hash22(ci + 19.7) - 0.5, aim, FLAKE_HERD);
 			vec3 fn = normalize(N + (T * jt.x + Bv * jt.y) * tip);
-			vec3 hue = 0.5 + 0.5 * cos(TAU * (g + hash12(ci + 7.3)
+			float s = pow(max(dot(fn, H), 0.0), lobe);
+			vec3 hue = 0.5 + 0.5 * cos(TAU * (g + vnoise(ci * 0.16)
+				+ (hash12(ci + 7.3) - 0.5) * 0.35
 				+ vec3(0.0, 0.33, 0.67)));
-			sum += hue * shape * (1.0 - FLAKE_MURK * dep)
-				* pow(max(dot(fn, H), 0.0), lobe);
+			// At exact alignment every diffraction order lands together, so
+			// the CORE of a flash is white and the colour lives on its
+			// shoulder — s is the lobe itself, so s^2 whitens only its peak.
+			// Saturated dots that never clip are pigment; these are light.
+			sum += mix(hue, vec3(1.0), s * s)
+				* (shape + FLAKE_GLOW * halo * halo)
+				* (1.0 - FLAKE_MURK * dep) * s;
 		}
 	}
 	return sum;
