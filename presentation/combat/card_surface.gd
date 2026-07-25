@@ -315,7 +315,7 @@ const RECIPES: Dictionary = {
 	"plain": ["pulp", "tooth", "matte", "thin"],
 	"card": ["stock", "smooth", "smooth-matte", "standard"],
 	"opal": ["glass", "linen", "pearlescent", "premium"],
-	"nebula": ["gold-leaf", "engine-turned", "cosmos-fine", "gilded"],
+	"nebula": ["gold-leaf", "soft-touch", "cosmos-fine", "gilded"],
 	"velvet": ["stock", "soft-touch", "matte", "premium"],
 	"leaden": ["lead", "tooth", "dead", "cursed"],
 	# ──
