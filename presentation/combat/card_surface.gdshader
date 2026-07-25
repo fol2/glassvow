@@ -68,6 +68,16 @@ uniform float lamp_gain = 0.0;
 // the gold rules and the art are what come up.
 const float LAMP_WASH = 0.75;
 
+// A mirror shows the SOURCE, not the light that arrived. Every specular channel
+// below — the lobe, the diffraction band, the film, the flakes — is an image of
+// whatever is lighting the card, so what it returns follows the lamp's RADIANCE
+// and not its irradiance, and the two are not the same thing at all: a bare
+// lamp carried to 150 is a far fiercer thing to reflect than a room. That is
+// the whole reason foil is dull on a shelf and violent in your hand, and why a
+// confetti sheet goes off like a mirror ball the moment the light comes close.
+// Diffuse does none of this — LAMP_WASH is irradiance and stays where it is.
+const float LAMP_MIRROR = 2.0;
+
 // material
 uniform vec4 ink : source_color = vec4(1.0);
 uniform vec4 tint : source_color = vec4(1.0);
@@ -249,9 +259,16 @@ void fragment() {
 	// card axis before the power, which widens the lobe there — so the
 	// highlight comes out STRETCHED along the other axis. That is brushed
 	// metal and satin weave in three lines; varnish leaves it alone.
+	//
+	// The stretch used to be 1 + 7|a|, which is 4.5x at the metallic tier. That
+	// was harmless while the light was a fixed direction, because the highlight
+	// was already a band spanning the card and a wider band is still a band. A
+	// point lamp makes a POOL, and a pool stretched 4.5x is a horizontal bar
+	// lying across the card — which is what it looked like. 1 + 3|a| caps the
+	// tier at 2.5x, an unmistakable streak that is still a highlight.
 	float ndh = dot(N, H);
 	if (abs(aniso) > 0.001) {
-		float sq = 1.0 + 7.0 * abs(aniso);
+		float sq = 1.0 + 3.0 * abs(aniso);
 		vec2 ho = vec2(dot(H, T), dot(H, Bv));
 		ho = aniso >= 0.0 ? vec2(ho.x / sq, ho.y) : vec2(ho.x, ho.y / sq);
 		ndh = dot(N, normalize(T * ho.x + Bv * ho.y + N * dot(H, N)));
@@ -352,6 +369,6 @@ void fragment() {
 	// carries the same inverse square. Head-on at rest that is a 3.5% gradient
 	// corner to corner; with the lamp on the card it is most of why the far
 	// side stays quiet while the near side sings.
-	ALBEDO = col + add * m * fall;
+	ALBEDO = col + add * m * fall * (1.0 + LAMP_MIRROR * lamp_gain);
 	ALPHA = src.a;
 }

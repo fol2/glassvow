@@ -301,11 +301,19 @@ const STOCK: Dictionary = {
 const RECIPES: Dictionary = {
 	"plain": ["pulp", "tooth", "matte", "thin"],
 	"card": ["stock", "smooth", "smooth-matte", "standard"],
-	"satin": ["glass", "linen", "satin", "premium"],
-	"gilt": ["gold-leaf", "engine-turned", "metallic", "gilded"],
+	"opal": ["glass", "linen", "pearlescent", "premium"],
+	"nebula": ["gold-leaf", "engine-turned", "cosmos-art", "gilded"],
 	"velvet": ["stock", "soft-touch", "matte", "premium"],
 	"leaden": ["lead", "tooth", "dead", "cursed"],
 	# ──
+	# The two anisotropic tiers this replaced. They were tuned under a light
+	# that could not pool, and an elongated lobe reads as a wider band there;
+	# the moment the lamp became a real point the same lobe came out as a
+	# horizontal bar laid across the card. Only the FINISH changed — glass keeps
+	# its linen weave, gold leaf keeps its guilloche — which is the whole reason
+	# the layers are separate catalogues.
+	"satin": ["glass", "linen", "satin", "premium"],
+	"gilt": ["gold-leaf", "engine-turned", "metallic", "gilded"],
 	"holofoil": ["silver-leaf", "cross-etch", "holo", "gilded"],
 	"rainbow": ["silver-leaf", "smooth", "rainbow", "gilded"],
 	"reverse": ["stock", "smooth", "reverse-holo", "premium"],
@@ -332,8 +340,8 @@ const BADGE: Array = ["stock", "glassy", "dead", "standard"]
 const BY_RARITY: Dictionary = {
 	"starter": "plain",
 	"common": "card",
-	"uncommon": "satin",
-	"rare": "gilt",
+	"uncommon": "opal",
+	"rare": "nebula",
 	"special": "velvet",
 }
 ## Type outranks rarity, the way curse already overrides the edge cut.
