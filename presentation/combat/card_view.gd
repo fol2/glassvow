@@ -69,6 +69,46 @@ const ART_H: float = 91.0
 const NAME_H: float = 23.0
 const TYPE_H: float = 13.0
 const GEM: float = 36.0
+## THE CUT. The badge is a stone, not a decal, so it is cut like one — and what
+## a small stone gets is a ROSE CUT: a flat base and a dome of triangular facets
+## rising to a point. No table. Two bands of six, the inner one twisted half a
+## step so the facets alternate steep and shallow and no two neighbours ever
+## catch the light together, then six more closing on the apex. Eighteen mirrors
+## in three slopes. See _prism_mesh and card_gem.gdshader.
+##
+## Having no table is not stylistic. A flat table is one mirror covering a
+## quarter of the stone at zero degrees — which is exactly where the resting
+## lamp's half-vector already sits — so it flashes as a single sheet straight
+## over the numeral and the cost becomes unreadable whenever the cursor comes
+## near. Six star facets at 7 degrees replace it, and only the one wedge facing
+## the light blazes: the other five hold the engraving, and the blazing wedge
+## walks round the stone as the cursor circles it. Legibility and the pinwheel
+## are the same decision.
+##
+## The heights have the one right answer here, and the LAMP sets it. A facet
+## flashes when the half-vector reaches its slope, and from this corner that
+## vector only ever swings 4.5 degrees (lamp on the gem) to 34 (lamp at the far
+## corner). These numbers put the three families at 7, 16 and 29 — spread across
+## that window so something is always lit, and nothing is ever cut so steep that
+## it can never be lit at all. A deeper stone is not a livelier one; it is a
+## dead one.
+const GEM_MID: float = 0.639     # the inner ring, as a fraction of the girdle's
+const GEM_MID_H: float = 2.3     # its height in card px
+const GEM_CROWN: float = 3.6     # the apex — the cut's full height
+const GEM_SIT: float = 0.3       # clear of the face, so the base cannot z-fight
+## Where the stone stands, in stage coordinates. Same arithmetic the 2D holder
+## does in canvas space, and the reason PAD_IN is exactly the overhang.
+const GEM_AT: Vector2 = Vector2(-CARD_W * 0.5 + GEM * 0.5 - PAD_IN,
+	CARD_H * 0.5 - GEM * 0.5 + PAD_IN)
+## The benchmark's clip-path as a centred outline in fractions of GEM, wound
+## counterclockwise seen from the camera to match _outline(). It is a pointy-top
+## hexagon 0.6 percent narrower than regular — the 7%/93% in the CSS is a
+## rounded cos(30), and it stays rounded here so the silhouette is still the
+## benchmark's to the pixel.
+const HEX: Array = [
+	Vector2(0.00, 0.50), Vector2(-0.43, 0.25), Vector2(-0.43, -0.25),
+	Vector2(0.00, -0.50), Vector2(0.43, -0.25), Vector2(0.43, 0.25),
+]
 ## Each row's top derived from the one above it, so changing a band's height
 ## carries the rest with it instead of leaving five hand-summed offsets behind.
 const ART_Y: float = EDGE
@@ -146,14 +186,17 @@ const INK: Color = Color(0.043, 0.055, 0.102)         # #0B0E1A — card stock
 const RULE: Color = Color(0.020, 0.027, 0.055)        # #05070E — borders
 const BODY_TEXT: Color = Color(0.776, 0.800, 0.875)   # #C6CCDF — rules
 const GEM_INK: Color = Color(0.141, 0.102, 0.020)     # #241A05 — cost numeral
-## Gold leaf as a three-stop ramp: the gem's conic sweep, and GOLD alone
-## wherever the benchmark writes var(--gold).
+## The gem's two glasses, each as the two ENDS of what used to be a three-stop
+## ramp: leaf with nothing over it, and the same leaf a crown of body deeper.
+## Their middle stop is not a constant any more — it is wherever half a crown of
+## Beer-Lambert lands, which is most of the stone. GOLD survives only because
+## the benchmark also writes var(--gold) outside the badge (the name rules, the
+## edge); its green counterpart had no such job and went with the ramp.
 const GOLD_LIT: Color = Color(1.000, 0.914, 0.675)    # #FFE9AC — highlight
 const GOLD: Color = Color(0.949, 0.757, 0.306)        # #F2C14E
 const GOLD_DIM: Color = Color(0.702, 0.514, 0.122)    # #B3831F — shadow
-## Free cards get a green gem, not gold (.card-cost.free).
+## Free cards are cut from green glass, not amber (.card-cost.free).
 const GREEN_LIT: Color = Color(0.851, 0.984, 0.906)   # #D9FBE7
-const GREEN: Color = Color(0.216, 0.839, 0.478)       # #37D67A
 const GREEN_DIM: Color = Color(0.090, 0.439, 0.243)   # #17703E
 
 ## Benchmark type tints, sampled from the pre-Pixi build's computed styles.
@@ -172,6 +215,9 @@ const EDGE_SHADER: Shader = preload("res://presentation/combat/card_edge.gdshade
 ## The face's material, over the same texture the flat card used. Everything
 ## it adds is angle-driven, so at rest it costs the card almost nothing.
 const SURFACE_SHADER: Shader = preload("res://presentation/combat/card_surface.gdshader")
+## The cost gem's, which is a different model entirely — that one shades a
+## sheet, this one follows a ray through a solid. See card_gem.gdshader.
+const GEM_SHADER: Shader = preload("res://presentation/combat/card_gem.gdshader")
 
 ## Cached FontVariations — one per (face, tracking) pair, built once per run.
 ## Label wants a Font resource, and a fresh FontVariation per label would re-pay
@@ -427,9 +473,13 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# The gem overhangs the corner, so it sits outside the clipped subtree —
 	# inside `content` still, because it is part of the pane and must tilt
 	# with it (PAD_IN exists exactly so its overhang lands on the texture).
-	_build_cost_gem(content, cost)
+	# Cost 0 is cut from green glass, not amber (.card-cost.free). The floor and
+	# the stone over it have to agree about that, so the rule is read once here
+	# rather than twice from two places that could stop matching.
+	var free: bool = cost == 0 and not unplayable
+	_build_cost_gem(content, cost, free)
 
-	_build_stage(content, mat, tint)
+	_build_stage(content, mat, tint, free)
 
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -492,51 +542,46 @@ static func _add_name_rule(parent: Control, y: float, mid_a: float) -> void:
 		Vector2(0.0, 0.5), Vector2(1.0, 0.5), "name_rule:%.2f" % mid_a), y, 1.0))
 
 
-## A pointy-top hexagon in gold leaf, hung off the top-left corner at (-8, -8).
-func _build_cost_gem(parent: Control, cost: int) -> void:
+## THE STONE'S FLOOR — the leaf it is set over and the numeral struck into it,
+## and nothing else. What used to live here was a conic ramp for the metal, an
+## inset polygon for the bevel and a line for the girdle: three drawings of
+## light falling on a shape that did not exist. The shape exists now (see
+## _prism_mesh), so the drawings go, and what is left is the one part of a gem
+## that is genuinely flat — the thing underneath it.
+##
+## The footprint still gets painted even though the stone covers it exactly,
+## because the stone's rim is antialiased against whatever is behind it and the
+## leaf is what should be behind it. It is also where the shader's refracted
+## sample lands when the slide runs off the print near the girdle.
+func _build_cost_gem(parent: Control, cost: int, free: bool) -> void:
 	var holder: Control = Control.new()
 	holder.position = Vector2(-8.0, -8.0)
 	holder.size = Vector2(GEM, GEM)
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(holder)
 
-	# Benchmark clip-path: polygon(50% 0, 93% 25, 93% 75, 50% 100, 7% 75, 7% 25).
 	var hex: Polygon2D = Polygon2D.new()
-	hex.polygon = PackedVector2Array([
-		Vector2(GEM * 0.50, 0.0), Vector2(GEM * 0.93, GEM * 0.25),
-		Vector2(GEM * 0.93, GEM * 0.75), Vector2(GEM * 0.50, GEM),
-		Vector2(GEM * 0.07, GEM * 0.75), Vector2(GEM * 0.07, GEM * 0.25),
-	])
-	# The gem's metal is a conic sweep. A per-vertex ramp reproduces the
-	# light-from-upper-left read for one polygon instead of a shader, which is all
-	# this 36px badge needs. Cost 0 is struck in green, not gold (.card-cost.free).
-	var free: bool = cost == 0 and not unplayable
-	var lit: Color = GREEN_LIT if free else GOLD_LIT
-	var mid: Color = GREEN if free else GOLD
-	var dim: Color = GREEN_DIM if free else GOLD_DIM
-	hex.vertex_colors = PackedColorArray([lit, mid, dim, dim, mid, lit])
+	var half: Vector2 = Vector2(GEM, GEM) * 0.5
+	var pts: PackedVector2Array = PackedVector2Array()
+	for p: Vector2 in HEX:
+		pts.append(half + Vector2(p.x, -p.y) * GEM)   # HEX runs y-up; canvas is not
+	hex.polygon = pts
+	hex.color = GREEN_LIT if free else GOLD_LIT
 	holder.add_child(hex)
 
-	# Inner bevel: .card-cost::before, the same hexagon inset 3px carrying a
-	# 160deg white-to-black wash. It is what stops the badge reading as a decal.
-	var bevel: Polygon2D = Polygon2D.new()
-	var inset: PackedVector2Array = PackedVector2Array()
-	for p: Vector2 in hex.polygon:
-		inset.append(p.lerp(Vector2(GEM, GEM) * 0.5, 3.0 / (GEM * 0.5)))
-	bevel.polygon = inset
-	bevel.vertex_colors = PackedColorArray([
-		Color(1, 1, 1, 0.35), Color(1, 1, 1, 0.10), Color(0, 0, 0, 0.14),
-		Color(0, 0, 0, 0.22), Color(0, 0, 0, 0.10), Color(1, 1, 1, 0.22),
-	])
-	holder.add_child(bevel)
-
-	var edge_line: Line2D = Line2D.new()
-	var pts: PackedVector2Array = hex.polygon.duplicate()
-	pts.append(hex.polygon[0])
-	edge_line.points = pts
-	edge_line.width = 1.0
-	edge_line.default_color = Color(dim, 0.85)
-	holder.add_child(edge_line)
+	# The SEAT. A stone does not float on a card, it is set into one, and the
+	# hairline where the two meet is most of what tells the eye there is a stone
+	# there at all — the badge lost its whole silhouette when this went with the
+	# painted bevel. It lives on the floor rather than in the cut: the girdle is
+	# where the glass is thinnest, so it comes through undisplaced and reads as a
+	# dark line right at the edge, which is exactly what a bezel is.
+	var seat: Line2D = Line2D.new()
+	var ring: PackedVector2Array = pts.duplicate()
+	ring.append(pts[0])
+	seat.points = ring
+	seat.width = 1.0
+	seat.default_color = Color(GREEN_DIM if free else GOLD_DIM, 0.85)
+	holder.add_child(seat)
 
 	var cost_label: Label = Label.new()
 	cost_label.text = "-" if unplayable else str(cost)
@@ -554,7 +599,8 @@ func _build_cost_gem(parent: Control, cost: int) -> void:
 ## Offscreen face → glass prism → long-lens camera → back onto this Control.
 
 
-func _build_stage(content: Control, mat: Dictionary, tint: Color) -> void:
+func _build_stage(content: Control, mat: Dictionary, tint: Color,
+		free: bool) -> void:
 	var thick: float = mat["thick"]
 	_inner = SubViewport.new()
 	_inner.size = Vector2i(
@@ -597,14 +643,10 @@ func _build_stage(content: Control, mat: Dictionary, tint: Color) -> void:
 	# through untouched; what this adds is the light the surface gives back,
 	# and every channel of it is angle-driven — see card_surface.gdshader.
 	_slab.set_surface_override_material(1, _plate(mat, tint))
-	# The gem plate does NOT take the finish. It is a struck badge applied over
-	# the stock, not part of it — leaf on leaf would read as a smear, and the
-	# gem already carries its own metal in the 2D pass. It does take the LIGHT,
-	# through the same shader with every optical channel at zero: once the lamp
-	# became real, a gem holding its rest brightness while the card lit up
-	# around it was the one thing left on the card that read as a sticker.
-	_slab.set_surface_override_material(2,
-		_plate(CardSurface.params(CardSurface.BADGE), tint))
+	# The stone does NOT take the card's finish, and never could: a coating is a
+	# property of a sheet and there is no sheet here. It is set over the leaf,
+	# cut, and lit by the same lamp — see card_gem.gdshader.
+	_slab.set_surface_override_material(2, _gem_plate(free))
 	_push_lamp()   # the room's lamp, before the card has ever been touched
 	_stage.add_child(_slab)
 
@@ -632,23 +674,46 @@ func _build_stage(content: Control, mat: Dictionary, tint: Color) -> void:
 	add_child(display)
 
 
-## One plate on the slab, wearing `p`. The geometry uniforms are the same for
-## every plate — which texture, how it maps back to card pixels, the silhouette
-## — so only the material differs, and both plates end up on _lit so the lamp
-## reaches them through one loop instead of two formulas that can drift.
-func _plate(p: Dictionary, tint: Color) -> ShaderMaterial:
+## Anything on the slab that reads the face and takes the light. The two shaders
+## share nothing else — one shades a sheet, the other follows a ray through a
+## solid — but they agree on where the texture is and where the lamp is, and
+## both land on _lit so _push_lamp reaches them through one loop instead of two
+## formulas that can drift.
+func _shaded(sh: Shader) -> ShaderMaterial:
 	var m: ShaderMaterial = ShaderMaterial.new()
-	m.shader = SURFACE_SHADER
+	m.shader = sh
 	m.set_shader_parameter("face_tex", _inner.get_texture())
 	m.set_shader_parameter("face_size",
 		Vector2(CARD_W, CARD_H) + Vector2(PAD_IN, PAD_IN) * 2.0)
+	_lit.append(m)
+	return m
+
+
+## The stone's material: two colours and a height, which is all a cut needs once
+## the cut itself is real geometry.
+##
+## The two are the ENDS of the same three-stop ramp the benchmark painted across
+## this badge — leaf at no depth, shadow at a full crown. Its middle stop is not
+## passed at all and does not need to be: half a crown of glass is where the
+## light lands after Beer-Lambert, and half a crown is most of the crown. The
+## ramp is still there, it is just being computed by the thing that caused it.
+func _gem_plate(free: bool) -> ShaderMaterial:
+	var m: ShaderMaterial = _shaded(GEM_SHADER)
+	m.set_shader_parameter("foil", GREEN_LIT if free else GOLD_LIT)
+	m.set_shader_parameter("deep", GREEN_DIM if free else GOLD_DIM)
+	m.set_shader_parameter("crown", GEM_CROWN)
+	return m
+
+
+## One face plate on the slab, wearing `p`.
+func _plate(p: Dictionary, tint: Color) -> ShaderMaterial:
+	var m: ShaderMaterial = _shaded(SURFACE_SHADER)
 	m.set_shader_parameter("face_pad", Vector2(PAD_IN, PAD_IN))
 	m.set_shader_parameter("card_size", Vector2(CARD_W, CARD_H))
 	m.set_shader_parameter("radius", float(RADIUS))
 	m.set_shader_parameter("art_rect",
 		Vector4(EDGE, ART_Y, CARD_W - 2.0 * EDGE, ART_H))
 	CardSurface.apply(m, p, tint)
-	_lit.append(m)
 	return m
 
 
@@ -679,13 +744,46 @@ static func _uv(x: float, y: float) -> Vector2:
 		(CARD_H * 0.5 - y + PAD_IN) / (CARD_H + 2.0 * PAD_IN))
 
 
+## One ring of the cut, in stage coordinates: the badge outline scaled about the
+## gem's own centre and turned by `twist`, at height `z` above the leaf.
+static func _gem_ring(scale: float, twist: float, z: float) -> PackedVector3Array:
+	var out: PackedVector3Array = PackedVector3Array()
+	for p: Vector2 in HEX:
+		var q: Vector2 = GEM_AT + (p * GEM * scale).rotated(twist)
+		out.append(Vector3(q.x, q.y, z))
+	return out
+
+
+## One facet. Points arrive counterclockwise as seen from the camera with z
+## measured UP FROM THE LEAF, and leave wound clockwise (Godot's front face)
+## and translated onto the slab.
+##
+## All three vertices take the facet's own flat normal, and that single line is
+## the whole difference between a cut stone and a cabochon: smooth these and the
+## eighteen mirrors become one dome, which is exactly what the painted badge was.
+## z rides out to UV2 as well, because the shader needs to know how deep the
+## glass is under each fragment and only the cut knows that.
+static func _facet(st: SurfaceTool, base_z: float,
+		a: Vector3, b: Vector3, c: Vector3) -> void:
+	var n: Vector3 = (b - a).cross(c - a).normalized()
+	for p: Vector3 in [a, c, b]:
+		st.set_normal(n)
+		st.set_uv(_uv(p.x, p.y))
+		st.set_uv2(Vector2(p.z, 0.0))
+		st.add_vertex(Vector3(p.x, p.y, p.z + base_z))
+
+
 ## Surface 0: the side band — the glass's cross-section, visible only when
 ## the pane leans. Surface 1: the front face, a fan over the outline; its
 ## rounded silhouette is geometry, so the tilted card's edge stays clean
-## under MSAA rather than relying on texture alpha. Surface 2: the gem
-## plate — the cost gem overhangs the silhouette, so its corner square rides
-## just proud of the face sampling the same texture (where it re-covers the
-## face the texels are identical and opaque, so the overlap cannot show).
+## under MSAA rather than relying on texture alpha. Surface 2: the cost gem,
+## a rose cut standing proud of the corner — twelve facets and a table, over a
+## girdle that is the benchmark's own hexagon so the silhouette never moved.
+##
+## Its base sits ON the face rather than over it, which is what keeps the
+## painted footprint from peeking out from under the crown when the card leans:
+## a raised table shifts about half a pixel at full tilt, a base at the same
+## plane shifts none.
 static func _prism_mesh(thick: float) -> ArrayMesh:
 	var pts: PackedVector2Array = _outline()
 	var n: int = pts.size()
@@ -726,19 +824,20 @@ static func _prism_mesh(thick: float) -> ArrayMesh:
 
 	var gem: SurfaceTool = SurfaceTool.new()
 	gem.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var gx0: float = -CARD_W * 0.5 - PAD_IN
-	var gx1: float = -CARD_W * 0.5 + GEM - PAD_IN
-	var gy0: float = CARD_H * 0.5 + PAD_IN
-	var gy1: float = CARD_H * 0.5 - GEM + PAD_IN
-	var gz: float = hz + 0.4
-	var quad: Array = [
-		Vector3(gx0, gy0, gz), Vector3(gx0, gy1, gz),
-		Vector3(gx1, gy1, gz), Vector3(gx1, gy0, gz),
-	]
-	for idx: int in [0, 2, 1, 0, 3, 2]:  # clockwise from the camera — see above
-		var p: Vector3 = quad[idx]
-		gem.set_uv(_uv(p.x, p.y))
-		gem.add_vertex(p)
+	var g: PackedVector3Array = _gem_ring(1.0, 0.0, 0.0)
+	var m: PackedVector3Array = _gem_ring(GEM_MID, PI / 6.0, GEM_MID_H)
+	var apex: Vector3 = Vector3(GEM_AT.x, GEM_AT.y, GEM_CROWN)
+	var base_z: float = hz + GEM_SIT
+	for i: int in range(6):
+		var j: int = (i + 1) % 6
+		# Three facets per sixth, and they are three different mirrors. The star
+		# spans a girdle edge up to the ring point above it — the steep family,
+		# 29 degrees. Its neighbour hangs off the girdle point they share, at 16.
+		# The last closes on the apex at 7, and that one is what replaced the
+		# table: six shallow wedges instead of one flat sheet.
+		_facet(gem, base_z, g[i], g[j], m[i])
+		_facet(gem, base_z, m[i], g[j], m[j])
+		_facet(gem, base_z, m[i], m[j], apex)
 	gem.commit(mesh)
 	return mesh
 

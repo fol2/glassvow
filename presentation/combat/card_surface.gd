@@ -326,13 +326,6 @@ const RECIPES: Dictionary = {
 	"spot": ["stock", "smooth", "spot-foil", "premium"],
 }
 
-## What a plate wears when it sits OVER the card rather than being part of it —
-## today just the cost gem's badge. No coating worth the name, so it takes the
-## light like everything else and adds nothing optical of its own. It is an
-## ordinary stack, folded by the ordinary fold; that is the point of having the
-## layers be independent in the first place.
-const BADGE: Array = ["stock", "glassy", "dead", "standard"]
-
 ## The DEFAULT only. Rarity picks a recipe here and has no other say — every
 ## resolution step below outranks it, and the recipes themselves know nothing
 ## about tiers. Point "rare" at "plastic" and rares are plastic; nothing else
