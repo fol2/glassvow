@@ -40,8 +40,10 @@ func _ready() -> void:
 	# godot --path . -- --cards[=id,id] --shot=/tmp/cards.png   (card designer)
 	# godot --path . -- --cards=bastion --surfaces[=gilt,holofoil]  (materials)
 	# godot --path . -- --studio[=bastion] [--zoom=3]   (material bench)
+	# godot --path . -- --enemies|--chips|--hud|--reward [--shot=...]  (labs)
 	var shot_path: String = ""
 	var enter_node: int = -1
+	var lab_flag: String = ""
 	var cards_lab: bool = false
 	var cards_only: PackedStringArray = PackedStringArray()
 	var cards_zoom: float = 1.0
@@ -72,6 +74,8 @@ func _ready() -> void:
 		elif arg.begins_with("--studio="):
 			studio = true
 			cards_only = arg.trim_prefix("--studio=").split(",", false)
+		elif arg in ["--enemies", "--chips", "--hud", "--reward"]:
+			lab_flag = arg
 	if studio:
 		# The material bench: one card, four layer pickers, no game state. It
 		# takes --zoom for the PANEL's scale only; the card has its own size
@@ -83,6 +87,21 @@ func _ready() -> void:
 	if cards_lab:
 		# The lab is a contact sheet, not a run — no game state is built.
 		add_child(CardLab.new(content, cards_only, cards_zoom, surfaces))
+		if shot_path != "":
+			_capture_and_quit(shot_path)
+		return
+	# The other four labs, same deal: a screen over content, no run behind it.
+	# Built after the loop, not inside it, so two flags leak no orphan Control.
+	# Each lab owns any further args it wants — read OS.get_cmdline_user_args()
+	# there rather than growing this loop, so the four sessions never collide here.
+	var lab: Control = null
+	match lab_flag:
+		"--enemies": lab = EnemyLab.new(content)
+		"--chips": lab = ChipLab.new(content)
+		"--hud": lab = HudLab.new(content)
+		"--reward": lab = RewardLab.new(content)
+	if lab != null:
+		add_child(lab)
 		if shot_path != "":
 			_capture_and_quit(shot_path)
 		return
