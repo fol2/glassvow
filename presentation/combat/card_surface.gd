@@ -329,7 +329,15 @@ const STOCK: Dictionary = {
 const RECIPES: Dictionary = {
 	"plain": ["pulp", "tooth", "matte", "thin"],
 	"card": ["stock", "smooth", "smooth-matte", "standard"],
-	"opal": ["glass", "linen", "pearlescent", "premium"],
+	# Chosen on the bench. The name is now a nickname rather than a description:
+	# there is no nacre left in it. What uncommon carries instead is a deep gloss
+	# over a tooth — the two doing opposite jobs, which is the whole of it. Gloss
+	# is the tightest lobe in the catalogue (900, about 2 degrees of half-width)
+	# so it answers as a small hard pool rather than a wash; tooth is the
+	# coarsest relief that is not a weave, so that pool has to break over
+	# something on its way. No sparkle, no film, no diffraction. It reads as a
+	# varnished card, and it is a tier below the one that reads as foil.
+	"opal": ["glass", "tooth", "gloss", "premium"],
 	"nebula": ["gold-leaf", "engine-turned", "cosmos-art", "gilded"],
 	"velvet": ["stock", "soft-touch", "matte", "premium"],
 	"leaden": ["lead", "tooth", "dead", "cursed"],
