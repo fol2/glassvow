@@ -219,6 +219,25 @@ const BIG_HIT: int = 16
 ## `Math.min(1, ev.amount / 24)` — what counts as a full-power blow.
 const POWER_SCALE: float = 24.0
 
+## `artCast` (combat-presentation.js:787) — the art's own face rises off the
+## hero and goes. 900ms on `outSoft`, in two unequal phases: in over the first
+## 30% from 0.4 of its box, out over the remaining 70% while it grows a further
+## 5%. `size: 110` is the BOX, not a scale — every ramp below is measured in it.
+##
+## `assetUrl('arts', ev.id)` — six faces ship in the slice, one per art.
+const CAST_ART: String = "res://assets/art/arts/%s.png"
+const CAST_MS: float = 0.9
+const CAST_SIZE: float = 110.0
+## `sprite.y = y - 30` before anything moves: the ghost starts a head above the
+## body rather than inside it.
+const CAST_LIFT: float = 30.0
+const CAST_IN: float = 0.3
+const CAST_S0: float = 0.4
+const CAST_S1: float = 1.0
+const CAST_S2: float = 1.05
+const CAST_RISE_IN: float = 8.0
+const CAST_RISE_OUT: float = 32.0
+
 ## `setTimeout(..., 440)` (drain.js:412) — how long the lantern waits before it
 ## answers a spill. Just short of the 460ms flight, so the pop is starting as the
 ## last mote arrives rather than beginning after it.
@@ -311,6 +330,8 @@ var _overlay_button: Button
 var _vignette: ColorRect
 var _vignette_mat: ShaderMaterial
 var _sky: SkyField
+var _cast: TextureRect
+var _cast_home: Vector2 = Vector2.ZERO
 var _stage_dim: ColorRect
 var _stage_dim_mat: ShaderMaterial
 var _lantern: ColorRect
@@ -478,6 +499,16 @@ func _build_ui() -> void:
 	add_child(_vfx)
 	_floaters = Floaters.new()
 	add_child(_floaters)
+
+	# `artCastLayer` is the LAST child of the presentation root
+	# (combat-presentation.js:107), so an art's ghost is over the damage
+	# numerals as well as over the body it rose from.
+	_cast = TextureRect.new()
+	_cast.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_cast.stretch_mode = TextureRect.STRETCH_SCALE
+	_cast.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_cast.visible = false
+	add_child(_cast)
 
 	_sfx = SfxBus.new()
 	add_child(_sfx)
@@ -1491,6 +1522,52 @@ func _lantern_answers() -> void:
 	_vfx.chrome_pulse(_hud.lantern_rect(), EMBER_ORANGE)
 
 
+## `artCast` (combat-presentation.js:787). Awaited in full, because the
+## benchmark holds the drain for the whole 900ms and only then kicks the world —
+## an art is the one card play that is allowed its own ceremony.
+func _art_cast(id: String, at: Vector2) -> void:
+	if _cast == null:
+		return
+	var path: String = CAST_ART % id
+	if not ResourceLoader.exists(path):
+		# `if (!url) → { outcome: 'skipped', reason: 'no-asset' }` — an art with
+		# no face is not a reason to hold the queue up.
+		return
+	_cast.texture = load(path)
+	_cast_home = at - Vector2(0.0, CAST_LIFT)
+	_cast_step(0.0)
+	_cast.visible = true
+	if seq.instant:
+		_cast.visible = false
+		return
+	var tw: Tween = create_tween()
+	tw.tween_method(_cast_step, 0.0, 1.0, CAST_MS).set_trans(Tween.TRANS_LINEAR)
+	await tw.finished
+	_cast.visible = false
+
+
+## Linear time in; `outSoft` is applied to the progress and the two phases are
+## read off the EASED value, which is what the Pixi runner hands `onUpdate`.
+func _cast_step(x: float) -> void:
+	var t: float = Motion.ease(Motion.OUT_SOFT, x)
+	var s: float = CAST_S0
+	var rise: float = 0.0
+	var u: float = 0.0
+	if t <= CAST_IN:
+		u = t / CAST_IN
+		s = CAST_S0 + u * (CAST_S1 - CAST_S0)
+		_cast.modulate.a = u
+		rise = u * CAST_RISE_IN
+	else:
+		u = (t - CAST_IN) / (1.0 - CAST_IN)
+		s = CAST_S1 + u * (CAST_S2 - CAST_S1)
+		_cast.modulate.a = 1.0 - u
+		rise = CAST_RISE_IN + u * CAST_RISE_OUT
+	var box: Vector2 = Vector2.ONE * CAST_SIZE * s
+	_cast.size = box
+	_cast.position = _cast_home - box * 0.5 - Vector2(0.0, rise)
+
+
 func _enemy_view(idx: int) -> EnemyView:
 	if idx >= 0 and idx < _enemy_views.size():
 		return _enemy_views[idx]
@@ -1871,6 +1948,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.motes(hero_at, tone, 12)
 			_float(hero_at + Vector2(0.0, -84.0),
 				str(art.get("name", id)).to_upper(), "artf", tone)
+			await _art_cast(id, hero_at)
 			_sky.kick(0.7)
 			_sync_actors()
 			await _wait(0.12)
