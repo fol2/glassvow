@@ -30,6 +30,35 @@ const KEYWORDS: Array = [
 	"Shatter", "Staggered", "Unplayable", "Shard", "Hex", "Cinder",
 ]
 
+## The glossary behind the dotted rule (`KEYWORDS`, tooltip.js:14). Six of the
+## twenty-one are STATUSES and read their description out of the run's own
+## catalogue rather than out of a constant, so a status whose text is retuned
+## does not have to be retuned twice. That table maps them; the rest are fixed
+## UI copy (`ui.keywords`, i18n/en/ui.js:332) and live here.
+##
+## The aliases are the benchmark's: `Facets`, `Shatter` and `Shatters` all
+## explain the facet gauge, and `Embers` explains an ember.
+const KEYWORD_STATUS: Dictionary = {
+	"Cracked": "vulnerable", "Dimmed": "weak", "Brittle": "frail",
+	"Smolder": "poison", "Fervor": "str", "Poise": "dex",
+}
+const FACET_DESC: String = "Every creature is glass with a Facet gauge. Fill it and the glass Shatters — the creature loses its next action, is Cracked, and spills Embers into your lantern."
+const KEYWORD_TEXT: Dictionary = {
+	"Kindle": "Burned away for the rest of this combat — and the lantern gains 1 Ember.",
+	"Ward": "Held light that prevents damage. Expires at the start of your turn.",
+	"Energy": "Spent to play cards. Refreshes each turn.",
+	"Ember": "Fuel for your Lantern Art. Spilled by shatters, deaths and kindling; held in the lantern.",
+	"Embers": "Fuel for your Lantern Art. Spilled by shatters, deaths and kindling; held in the lantern.",
+	"Chip": "Strike at the glass itself: adds toward a Shatter, no blood required.",
+	"Facet": FACET_DESC, "Facets": FACET_DESC,
+	"Shatter": FACET_DESC, "Shatters": FACET_DESC,
+	"Staggered": "Shattered glass loses its next action while it reseams.",
+	"Unplayable": "This card cannot be played.",
+	"Shard": "Unplayable junk glass. It can still be kindled.",
+	"Hex": "Curse: lose 1 HP at end of turn while in hand. Cannot be kindled.",
+	"Cinder": "Take 2 damage at end of turn while in hand.",
+}
+
 ## CSS `dotted` at 1px is a 1px dot every 2px.
 const DOT_W: float = 1.0
 const DOT_STEP: float = 2.0
@@ -155,6 +184,15 @@ func _wrap(width: float) -> void:
 					words.append({"text": cur, "kind": cur_kind, "space": true})
 					cur = ""
 				continue
+			# A word also ends where its STYLE ends, not only where a space is.
+			# "Ward." is a keyword run followed by a plain one with no space
+			# between them; taking the kind of the first character alone made it
+			# one keyword word, which ran the dotted rule under the full stop and
+			# made the glossary look up "Ward." — a key no glossary has. The
+			# break carries `space: false`, so nothing is inserted between them.
+			if cur != "" and kind != cur_kind:
+				words.append({"text": cur, "kind": cur_kind, "space": false})
+				cur = ""
 			if cur == "":
 				cur_kind = kind
 			cur += c
@@ -176,7 +214,14 @@ func _wrap(width: float) -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
 		var space_w: float = space_bold if wkind == KIND_VALUE else space_plain
 		var has_space: bool = word["space"]
-		if not line.is_empty() and line_w + ww > width:
+		# A line may only break where a space was. Splitting a word at its style
+		# boundary created neighbours with no space between them ("Ward" + "."),
+		# and a greedy wrap would happily strand the full stop on the next line.
+		var can_break: bool = false
+		if not line.is_empty():
+			var prev: Dictionary = line[-1]
+			can_break = prev["space"]
+		if can_break and line_w + ww > width:
 			_push_line(line, line_w)
 			line = []
 			line_w = 0.0
@@ -229,6 +274,38 @@ func _draw() -> void:
 			var draw_space: bool = word["space"]
 			x += w + (sp if draw_space else 0.0)
 		y += line_height
+
+
+## Which keyword the point lands on, or "" for none.
+##
+## The benchmark can ask this of the DOM because each `.kw` is a real `<span>`
+## with its own box. Here the paragraph draws itself, so the hit box has to be
+## re-derived — by walking the SAME geometry `_draw` lays out, so the target is
+## exactly the run that carries the dotted rule and never drifts from it.
+##
+## The box is the glyph run plus its leading, not just the ascent: aiming at a
+## 13px word by its cap height alone is a worse target than the underline
+## suggests.
+func keyword_at(local: Vector2) -> String:
+	if _lines.is_empty():
+		_wrap(size.x)
+	var ascent: float = _font_plain.get_ascent(font_size)
+	var y: float = (size.y - paragraph_height()) * 0.5 + ascent
+	for li: int in range(_lines.size()):
+		var line: Array = _lines[li]
+		var x: float = (size.x - _line_widths[li]) * 0.5
+		var top: float = y - ascent
+		for word: Dictionary in line:
+			var kind: int = word["kind"]
+			var w: float = word["w"]
+			if kind == KIND_KEYWORD \
+					and Rect2(x, top, w, line_height).has_point(local):
+				return str(word["text"])
+			var sp: float = word["space_w"]
+			var draw_space: bool = word["space"]
+			x += w + (sp if draw_space else 0.0)
+		y += line_height
+	return ""
 
 
 ## The benchmark's `border-bottom: 1px dotted tint@60%`.

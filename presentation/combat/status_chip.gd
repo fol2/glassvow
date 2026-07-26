@@ -89,11 +89,18 @@ static func numeral_font() -> FontFile:
 	return _numerals
 
 
-## `info` is optional and only feeds the hover text — the chip needs nothing but
-## an id and a number to draw. The benchmark marks these `cursor: help`, so the
-## tooltip is parity, not decoration.
-func _init(status_id: StringName, count: int = 1, info: Dictionary = {}) -> void:
-	_tex = icon_for(status_id)
+## `info` is the content status row. The chip draws from the id and the number
+## alone, and the copy it carries is read back by the tooltip layer through the
+## screen's own catalogue — so this stays in the signature for callers that
+## already pass it, and the chip itself has no use for it.
+## The status this chip carries, so the tooltip layer can name it without the
+## row having to remember what it built.
+var status_id: StringName = &""
+
+
+func _init(id: StringName, count: int = 1, _info: Dictionary = {}) -> void:
+	status_id = id
+	_tex = icon_for(id)
 	custom_minimum_size = Vector2(SIZE, SIZE)
 	size = Vector2(SIZE, SIZE)
 	# Sampled through mipmaps: the source art is 512px drawn at 32.
@@ -102,8 +109,6 @@ func _init(status_id: StringName, count: int = 1, info: Dictionary = {}) -> void
 	# still reaches the pane behind, which hit-tests its own rect for drop
 	# targeting. Flip to IGNORE if assembly finds it steals a drop.
 	mouse_filter = Control.MOUSE_FILTER_PASS
-	if not info.is_empty():
-		tooltip_text = "%s\n%s" % [str(info.get("name", status_id)), str(info.get("desc", ""))]
 
 	_count = Label.new()
 	_count.add_theme_font_override("font", numeral_font())

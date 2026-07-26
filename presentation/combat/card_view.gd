@@ -249,6 +249,10 @@ var _slab: MeshInstance3D = null
 var _shadow: Panel = null         # the table shadow — never tilts
 var _shadow_sb: StyleBoxFlat = null
 var _hovered: bool = false
+## The rules paragraph, kept so the tooltip can ask which keyword a point is
+## over. It lives inside the face SubViewport and is not reachable by node path
+## from outside.
+var _body: RulesText = null
 var _tilt: Vector2 = Vector2.ZERO         # (rot_x, rot_y) degrees
 var _tilt_v: Vector2 = Vector2.ZERO
 var _tilt_target: Vector2 = Vector2.ZERO
@@ -442,6 +446,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	body.offset_top = BODY_Y
 	body.offset_bottom = -8.0
 	layer.add_child(body)
+	_body = body
 
 	# The edge, last in the layer: the frame holds, and the mask's silhouette is
 	# its outer cut (the shader fills past d = 0 and lets the mask do the
@@ -1102,3 +1107,25 @@ func snap_home() -> void:
 	position = home_position
 	rotation = home_rotation
 	scale = Vector2.ONE
+
+
+## Which keyword the pointer is over, or "" for none.
+##
+## The face renders offscreen and comes back on a tilted 3D slab, so a screen
+## point cannot be handed straight to the paragraph. Two conversions get it
+## there: the Control's own transform undoes the fan's rotation, and the face's
+## `content` root is positioned and scaled so that CARD-space and content-space
+## are the same numbers — which is why the paragraph's own offsets can be
+## subtracted directly.
+##
+## The slab's hover tilt is NOT undone. It is a few degrees of perspective on a
+## 168x246 face, so the word under the cursor moves by a pixel or two at the
+## edges; inverting the projection to recover them would cost a camera unproject
+## per frame to move a hit box less than the underline is thick.
+func keyword_at(global_pos: Vector2) -> String:
+	if _body == null:
+		return ""
+	var local: Vector2 = get_global_transform().affine_inverse() * global_pos
+	if not Rect2(Vector2.ZERO, size).has_point(local):
+		return ""
+	return _body.keyword_at(local - _body.position)

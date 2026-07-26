@@ -58,6 +58,20 @@ const SAY_GLASS_HOLDS: String = "THE GLASS HOLDS"
 const SAY_GUARD_SHATTERED: String = "GUARD SHATTERED"
 const SAY_RESHUFFLE: String = "Reshuffle"
 const SAY_PERFECT: String = "PERFECT"
+## Tooltip copy (`ui.combat.*`, i18n/en/ui.js:143). Keyword copy is not here —
+## it belongs with the vocabulary that produces it, in `RulesText`.
+const TIP_FACETS_TITLE: String = "Facets"
+const TIP_FACETS_BODY: String = "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass [b]shatters[/b] — it loses its next action, is Cracked, and spills Embers into your lantern."
+const TIP_STAGGERED_TITLE: String = "Staggered"
+const TIP_STAGGERED_BODY: String = "The glass has shattered — this creature loses its next action while it reseams."
+const TIP_LANTERN_TITLE: String = "The Lantern"
+const TIP_LANTERN_ART_TITLE: String = "Lantern Art — %s"
+const TIP_LANTERN_LEAD: String = "<b>%d Embers, once a turn:</b> %s<br><br>"
+const TIP_LANTERN_BODY: String = "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> — burn the card away for an ember, once a turn. Curses refuse the fire."
+const TIP_LANTERN_SUB: String = "A · use Art"
+const TIP_AFFIX_TITLE: String = "%s — an elite's title"
+const TIP_BUFF: String = "Buff"
+const TIP_DEBUFF: String = "Debuff"
 
 ## The palette the drain names inline. Every one of these is a literal in
 ## `drain.js`; they are the effect layer's own colours, not the theme's.
@@ -180,6 +194,9 @@ var _floaters: Floaters
 ## the only screen that has sound yet, and `main.gd` is the sole composition
 ## root, so a second owner would have to be handed one rather than find one.
 var _sfx: SfxBus
+## `#tooltip` at z 70 — above the hand, the chrome and the floaters, because
+## everything it explains is underneath it.
+var _tips: TooltipLayer
 ## `vfxSource.archetype` — which blow language the action now resolving speaks.
 ## Set by `play` from the card's own `vfx` field and by `enemyAct` from the
 ## body's kind, then read by every hit until the next action replaces it.
@@ -278,6 +295,10 @@ func _build_ui() -> void:
 
 	_sfx = SfxBus.new()
 	add_child(_sfx)
+
+	_tips = TooltipLayer.new()
+	_tips.source = _tip_at
+	add_child(_tips)
 
 	_inspect = PanelContainer.new()
 	_inspect.set_anchors_preset(Control.PRESET_CENTER)
@@ -1421,3 +1442,188 @@ func _sync_all() -> void:
 	if cb.over and not _over_emitted:
 		_over_emitted = true
 		combat_over.emit(cb.result)
+
+
+# ---------------------------------------------------------------- tooltips
+
+## `findTipped` (tooltip.js:49), inverted.
+##
+## The benchmark walks UP from whatever the pointer is over until it meets a
+## node carrying `_tip`. There is nothing to walk up here — a keyword inside a
+## card's rules paragraph is a run of glyphs the paragraph drew, not a node — so
+## the screen walks DOWN its own chrome instead, in front-to-back paint order,
+## and answers with the first tip it finds.
+##
+## Every sentence is assembled here rather than in the widget that was hit,
+## because a widget in `presentation/` does not read content and these are all
+## catalogue copy.
+func _tip_at(global_pos: Vector2) -> Dictionary:
+	if game.cb == null:
+		return {}
+	# The hand is above everything, and a keyword beats the card that holds it —
+	# the benchmark gets the same order for free, because a `.kw` span is a
+	# descendant of the `.card` and the walk stops at the first `_tip` it meets.
+	var word: String = _hand.keyword_at(global_pos)
+	if word != "":
+		return _keyword_tip(word)
+	var over_uid: int = _hand.card_at(global_pos)
+	if over_uid >= 0:
+		return _card_tip(over_uid)
+	if _hud != null and _hud.lantern_rect().has_point(global_pos):
+		return _lantern_tip()
+	for view: EnemyView in _enemy_views:
+		var hit: Array[StringName] = view.tip_zone(global_pos)
+		var zone: StringName = hit[0]
+		if zone == &"":
+			continue
+		var tip: Dictionary = {}
+		match zone:
+			&"status":
+				tip = _status_tip(view.idx, hit[1])
+			&"intent":
+				tip = _intent_tip(view.idx)
+			&"facets":
+				tip = {"title": TIP_FACETS_TITLE, "body": TIP_FACETS_BODY}
+			&"name":
+				tip = _affix_tip(view.idx)
+		# A zone that resolves to nothing is not a stop. A common foe's name
+		# line carries no `_tip` in the benchmark at all, so the walk keeps
+		# going rather than answering "nothing is tipped here".
+		if not tip.is_empty():
+			return tip
+	if _hero != null:
+		var hero_hit: Array[StringName] = _hero.tip_zone(global_pos)
+		if hero_hit[0] == &"status":
+			return _status_tip(-1, hero_hit[1])
+	return {}
+
+
+## `keywordLegend`'s glossary (tooltip.js:14). Six of the twenty-one read their
+## body out of the status catalogue so retuning a status retunes its keyword.
+func _keyword_tip(word: String) -> Dictionary:
+	var status_id: String = str(RulesText.KEYWORD_STATUS.get(word, ""))
+	if status_id != "":
+		var info: Dictionary = game.content.statuses.get(status_id, {})
+		return {"title": word, "body": str(info.get("desc", ""))}
+	return {"title": word, "body": str(RulesText.KEYWORD_TEXT.get(word, ""))}
+
+
+## `card._tip = { title: data.name, body: text }` (tooltip.js:199). The body is
+## the authored rules line with its markers stripped — the preview-resolved
+## numerals are on the face, and repeating them in the tip would state a
+## consequence twice and disagree with the face the moment a buff lands.
+func _card_tip(uid: int) -> Dictionary:
+	var inst: CardInst = _find_card(uid)
+	if inst == null:
+		return {}
+	var d: Dictionary = _rules.card_data(inst)
+	var title: String = str(d.get("name", String(inst.id)))
+	if inst.up:
+		title += "+"
+	var body: String = str(d.get("text", "")).replace("@", "").replace("#", "")
+	return {"title": title, "body": body}
+
+
+## `intentFor` (combat.js:997). The chip shows a number; the tip spells out
+## everything the move intends, in the order the benchmark lists it.
+func _intent_tip(idx: int) -> Dictionary:
+	if idx < 0 or idx >= game.cb.enemies.size():
+		return {}
+	var e: EnemyCombatant = game.cb.enemies[idx]
+	if e.staggered:
+		return {"title": TIP_STAGGERED_TITLE, "body": TIP_STAGGERED_BODY}
+	var mv: Dictionary = e.move()
+	var bits: PackedStringArray = PackedStringArray()
+	var preview: Variant = _rules.preview_enemy_dmg(game.cb, e)
+	if preview != null:
+		var pv: Dictionary = preview
+		var dmg: int = pv.get("dmg", 0)
+		var times: int = pv.get("times", 1)
+		var figure: String = "%d×%d" % [dmg, times] if times > 1 else str(dmg)
+		bits.append("attack for [b]%s[/b]" % figure)
+	var block_n: int = mv.get("block", 0)
+	if block_n > 0:
+		bits.append("gain Ward")
+	var heal_n: int = mv.get("heal", 0)
+	if heal_n > 0:
+		bits.append("heal itself")
+	var fx: Array = mv.get("fx", [])
+	var on_player: bool = false
+	var on_self: bool = false
+	for f_v: Variant in fx:
+		var f: Dictionary = f_v
+		if str(f.get("who", "")) == "player":
+			on_player = true
+		else:
+			on_self = true
+	if on_player:
+		bits.append("afflict you")
+	if on_self:
+		bits.append("empower")
+	var what: String = ", ".join(bits) if bits.size() > 0 else "act"
+	return {"title": str(mv.get("name", String(e.move_key))),
+		"body": "Intends to %s." % what}
+
+
+## `statusChips` (combat.js:993). `N` in the catalogue body stands for the
+## magnitude the chip is actually carrying, so the sentence reads as this
+## creature's condition rather than as a rule.
+func _status_tip(idx: int, id: StringName) -> Dictionary:
+	var statuses: Dictionary = game.cb.player.statuses if idx < 0 \
+		else game.cb.enemies[idx].statuses
+	var n: int = statuses.get(String(id), 0)
+	var info: Dictionary = game.content.statuses.get(String(id), {})
+	var kind: String = str(info.get("kind", "buff"))
+	if String(id) == "str" and n < 0:
+		kind = "debuff"
+	var body: String = str(info.get("desc", "")).replace("N", str(absi(n)))
+	return {"title": str(info.get("name", String(id))), "body": body,
+		"sub": TIP_DEBUFF if kind == "debuff" else TIP_BUFF}
+
+
+## `if (afx) $('.name', box)._tip = ...` (combat.js:622). The title belongs to
+## the ENCOUNTER, not to the creature — `startCombat` rolls one affix and hangs
+## it on every name line in the fight, elite or not, because it is what the
+## whole fight is wearing.
+func _affix_tip(idx: int) -> Dictionary:
+	if idx < 0 or idx >= game.cb.enemies.size():
+		return {}
+	var affix_id: String = str(game.cb.affix)
+	if affix_id.is_empty():
+		return {}
+	var affix: Dictionary = game.content.affixes.get(affix_id, {})
+	if affix.is_empty():
+		return {}
+	return {"title": TIP_AFFIX_TITLE % str(affix.get("name", affix_id)),
+		"body": str(affix.get("text", ""))}
+
+
+## `ce.lantern._tip` (combat.js:644). The art's own rule leads, then what the
+## lantern is for.
+func _lantern_tip() -> Dictionary:
+	var art_id: String = str(game.run.art)
+	var art: Dictionary = game.content.arts.get(art_id, {})
+	if art.is_empty():
+		return {"title": TIP_LANTERN_TITLE, "body": TIP_LANTERN_BODY,
+			"sub": TIP_LANTERN_SUB}
+	var art_cost: int = art.get("cost", 0)
+	var lead: String = TIP_LANTERN_LEAD % [art_cost, str(art.get("text", ""))]
+	return {"title": TIP_LANTERN_ART_TITLE % str(art.get("name", art_id)),
+		"body": lead + TIP_LANTERN_BODY, "sub": TIP_LANTERN_SUB}
+
+
+## A touchscreen has no hover, so the benchmark gives it a 380ms long press
+## instead (`pointerdown` → `setTimeout(..., 380)`, tooltip.js:104). The screen
+## forwards the gesture because the tooltip layer is deliberately pointer-inert
+## and would never see it.
+func _input(event: InputEvent) -> void:
+	var touch: InputEventScreenTouch = event as InputEventScreenTouch
+	if touch != null:
+		if touch.pressed:
+			_tips.press(touch.position)
+		else:
+			_tips.release()
+		return
+	var drag: InputEventScreenDrag = event as InputEventScreenDrag
+	if drag != null:
+		_tips.press_moved(drag.position)

@@ -516,3 +516,28 @@ func _on_card_hover(uid: int, hovering: bool) -> void:
 	if hovering:
 		view.position.y -= HOVER_RAISE
 		view.move_to_front()
+
+
+## Which card the pointer is over, or -1. Front to back, because a fanned hand
+## overlaps and the card you can see is the one you mean.
+func card_at(global_pos: Vector2) -> int:
+	for i: int in range(get_child_count() - 1, -1, -1):
+		var view: CardView = get_child(i) as CardView
+		if view == null:
+			continue
+		var local: Vector2 = view.get_global_transform().affine_inverse() * global_pos
+		if Rect2(Vector2.ZERO, view.size).has_point(local):
+			return view.uid
+	return -1
+
+
+## Which dotted keyword the pointer is over, or "". Same front-to-back walk.
+func keyword_at(global_pos: Vector2) -> String:
+	for i: int in range(get_child_count() - 1, -1, -1):
+		var view: CardView = get_child(i) as CardView
+		if view == null:
+			continue
+		var word: String = view.keyword_at(global_pos)
+		if word != "":
+			return word
+	return ""

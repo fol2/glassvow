@@ -1900,3 +1900,35 @@ func clear_intent() -> void:
 
 func set_statuses(statuses: Dictionary, infos: Dictionary = {}) -> void:
 	_statuses.sync(statuses, infos)
+
+
+## Which piece of this actor's chrome the pointer is over, as `[zone, id]`.
+##
+## Zones are `&"intent"`, `&"facets"`, `&"name"` and `&"status"` (whose `id` is
+## the status the chip carries); `[&"", &""]` is nothing. The copy is NOT built
+## here — a widget in `presentation/` does not read content, which is the same
+## reason `set_intent` is handed its move name rather than looking one up.
+## The screen owns the catalogue and turns a zone into a sentence.
+func tip_zone(global_pos: Vector2) -> Array[StringName]:
+	var none: Array[StringName] = [&"", &""]
+	if _dead:
+		return none
+	if _statuses != null and _statuses.visible:
+		for child: Node in _statuses.get_children():
+			var chip: StatusChip = child as StatusChip
+			if chip != null and chip.get_global_rect().has_point(global_pos):
+				var hit: Array[StringName] = [&"status", chip.status_id]
+				return hit
+	if _intent != null and _intent.visible \
+			and _intent.get_global_rect().has_point(global_pos):
+		var intent_hit: Array[StringName] = [&"intent", &""]
+		return intent_hit
+	if _facets != null and _facets.visible \
+			and _facets.get_global_rect().has_point(global_pos):
+		var facets_hit: Array[StringName] = [&"facets", &""]
+		return facets_hit
+	if _name_label != null and _name_label.visible \
+			and _name_label.get_global_rect().has_point(global_pos):
+		var name_hit: Array[StringName] = [&"name", &""]
+		return name_hit
+	return none
