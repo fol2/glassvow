@@ -78,6 +78,11 @@ const SEAT_Y: float = -272.0
 ## has to contract with the haul or the thin case reads as broken.
 const SEAT_Y_LEAN: float = -188.0
 const LEAN_FOOT: float = 188.0
+## What hangs below the rack: the take line, then the word row under it.
+const FOOT_REACH: float = 72.0
+## How far a seat slab reaches above its own centre, as a fraction of SEAT —
+## `_slab`'s highest vertex, with a little over for the spin.
+const SEAT_RISE: float = 0.58
 const ART_H: float = 74.0
 ## The bed: where the husk came down, and the only light in the scene. It gets
 ## its own band. Parked behind the rack its hot core sat squarely under three
@@ -109,6 +114,14 @@ var reward: Dictionary = {}
 var content: ContentDB
 var encounter_kind: String = "normal"
 var hue: float = EMBER_HUE
+## WHAT THE SCREEN MAY NOT DRAW INTO. This screen does not get the whole canvas.
+## In the viewer the lab's control strip lies across the top; in the game the
+## combat HUD will. The set-out is a column of fixed heights, so told what is
+## eating an edge it can move OFF that edge — which is the whole difference
+## between a layout that is wrong and a layout you simply cannot see. Both
+## default to zero, so the shipping screen and every `--shot` are unaffected.
+var safe_top: float = 0.0
+var safe_bottom: float = 0.0
 
 ## Every piece: a polygon in husk-local coordinates plus where it ends up.
 ## `seat` is -1 for debris, otherwise the spoil index it carries.
@@ -576,8 +589,23 @@ func _set_cool(v: float) -> void:
 	_bed.queue_redraw()
 
 
+## Where the column stands. Centred in whatever band is left once the insets
+## come off, and pinned to the TOP of that band when the band is shorter than
+## the column — the buttons running off the bottom is a thing you can still see
+## and scroll your eye to, the spoils hidden under the top edge is not, and the
+## spoils are what the screen is for. With no insets this lands within four
+## pixels of the raw centre, so nothing moves on a screen that owns its canvas.
+func _anchor() -> Vector2:
+	var rise: float = -(SEAT_Y_LEAN if _lean else SEAT_Y) + SEAT.y * SEAT_RISE
+	var drop: float = (LEAN_FOOT if _lean
+		else CARD_Y + CardView.CARD_H * CARD_SCALE) + FOOT_REACH
+	var band: float = size.y - safe_top - safe_bottom
+	return Vector2(size.x * 0.5,
+		safe_top + rise + maxf(0.0, (band - rise - drop) * 0.5))
+
+
 func _place() -> void:
-	_centre = size * 0.5
+	_centre = _anchor()
 	if _motes != null and _motes.stage.get_child_count() == 0:
 		_motes.embers(_light() + Vector2(0.0, 8.0), 340.0)
 	_field.queue_redraw()

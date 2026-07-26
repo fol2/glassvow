@@ -37,7 +37,7 @@ extends Control
 ## The same flags still drive a scripted shot, and the strip hides itself
 ## whenever --shot= is present so it never lands in the frame:
 ##   --case=    gold | cards | full | elite | tiers   (default full)
-##   --concept= rows|lancet|rose|embers|window|reliquary   (default rows)
+##   --concept= rows|lancet|rose|embers|window|reliquary   (default embers)
 ##   --bench    the benchmark ported straight — the floor the rest is diffed
 ##              against. Without it: one panel that deepens and seated spoils.
 ##   --pick     open the offering straight away — it is behind a row press,
@@ -112,12 +112,16 @@ const CONCEPTS: Array[String] = ["rows", "lancet", "rose", "embers", "window", "
 ## under it is the outer one, which is the same shape as the strip.
 const CONCEPT_KEYS: Array[int] = [KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y]
 const BAR_H: float = 78.0
+## What the footer log takes off the bottom, with a little air over it.
+const LOG_H: float = 30.0
 const LOG_LINES: int = 3
 
 var content: ContentDB
 
 var _case: String = "full"
-var _concept: String = "rows"
+## Embers is the chosen concept, so it is what the viewer opens on. The rest are
+## on their keys until they are archived.
+var _concept: String = "embers"
 var _bench: bool = false
 var _pick: bool = false
 var _leave: bool = false
@@ -130,7 +134,8 @@ var _bar: PanelContainer = null
 var _build_btn: Button = null
 var _log: Label = null
 var _events: Array[String] = []
-var _headless_shot: bool = false
+var _shot: bool = false            # a capture is happening: run the clock out
+var _headless_shot: bool = false   # ...and it carries the screen alone
 var _force_bar: bool = false
 
 
@@ -156,12 +161,14 @@ func _init(content_ref: ContentDB) -> void:
 		elif arg.begins_with("--take="):
 			_take = arg.trim_prefix("--take=").split(",", false)
 		elif arg.begins_with("--shot="):
-			_headless_shot = true
+			_shot = true
 		elif arg == "--strip":
 			_force_bar = true
-	if _force_bar:
-		_headless_shot = false   # shoot the viewer itself, strip and all
-	if _headless_shot:
+	# Dropping the chrome and running the clock out are two different things, and
+	# folding them into one flag meant a --strip shot — the one that documents the
+	# VIEWER — was the only one caught mid-entrance, which documents nothing.
+	_headless_shot = _shot and not _force_bar
+	if _shot:
 		# main captures 30 frames in, which lands mid-entrance on every concept
 		# — and a still of an entrance is a still of nothing. Running the clock
 		# fast makes the shot the SETTLED screen, which is the thing a layout is
@@ -175,7 +182,7 @@ func _init(content_ref: ContentDB) -> void:
 		push_warning("reward lab: no such concept: %s" % _concept)
 		print("reward lab: no such concept: %s — have %s"
 			% [_concept, ", ".join(CONCEPTS)])
-		_concept = "rows"
+		_concept = "embers"
 
 	_build_backdrop()
 	_build_bar()
@@ -226,6 +233,15 @@ func _rebuild() -> void:
 		"embers": _screen = RewardEmbers.new(reward, content, kind, _hue())
 		"reliquary": _screen = RewardReliquary.new(reward, content, kind)
 		_: _screen = RewardScreen.new(reward, content, kind, _bench)
+	# The strip is the LAB'S chrome and the screen is the thing being judged, so
+	# the screen is told what the chrome is eating rather than being parked under
+	# it. The spoils sit 66px off the top of the canvas and the strip is 78 tall:
+	# the one row of the layout that arrives first was the one row you could not
+	# see. In a --shot there is no strip and no log, and both insets stay zero.
+	var embers: RewardEmbers = _screen as RewardEmbers
+	if embers != null:
+		embers.safe_top = 0.0 if _bar == null else BAR_H
+		embers.safe_bottom = 0.0 if _bar == null else LOG_H
 	_screen.connect(&"claimed", _on_claimed)
 	_screen.connect(&"finished", _on_finished)
 	add_child(_screen)
