@@ -86,6 +86,23 @@ const CSS_EASE: Array[float] = [0.25, 0.1, 0.25, 1.0]
 ## strike: intent illuminates". A third of the way, not all of it.
 const DIM_AIM_LEAN: float = 0.3
 
+## `body.worldstop` (styles.css:101) — a boss dies and the world stops. Colour
+## drains to 7% saturation at 85% brightness over a 0.22s `ease`, holds for one
+## silent beat, and comes back the same way.
+##
+## DEPARTURE, and it is structural rather than a choice: there, the filter is put
+## on `#screen` so the `#mesh` canvas BESIDE it keeps its colour — every warped
+## body stays lit while the DOM world greys out. This port has no separate canvas
+## for bodies; an actor is a node in the same tree. So the drain takes the actors
+## with it. The shot survives because what it is actually about is white: the
+## doomed seams stroke pure `#ffffff`, and `saturate()` does nothing to white.
+const WORLDSTOP_SAT: float = 0.07
+const WORLDSTOP_BRIGHT: float = 0.85
+const WORLDSTOP_FADE: float = 0.22
+## `V.hitstop(110)` then `await sleep(820)` (drain.js:597).
+const WORLDSTOP_HOLD: float = 0.82
+const WORLDSTOP_STOP: float = 110.0
+
 ## `#grain` — opacity .05, and `grain 0.9s steps(1)` is eight discrete jumps.
 const GRAIN_AMOUNT: float = 0.05
 const GRAIN_STEP: float = 0.9 / 8.0
@@ -239,6 +256,12 @@ var _vignette: ColorRect
 var _vignette_mat: ShaderMaterial
 var _stage_dim: ColorRect
 var _stage_dim_mat: ShaderMaterial
+## The drain has no node of its own — it rides the grain's material, and
+## GRAIN_SHADER says why.
+var _worldstop_tween: Tween
+var _worldstop_from: float = 0.0
+var _worldstop_to: float = 0.0
+var _worldstop_at: float = 0.0
 var _grain: ColorRect
 var _grain_mat: ShaderMaterial
 var _atmos_t: float = 0.0
@@ -492,12 +515,34 @@ void fragment() {
 ## `mix-blend-mode: overlay` at 5%, against a noise field that jumps rather than
 ## slides. `CanvasItemMaterial` has no overlay mode, so the blend is done here
 ## against the screen this layer is the last thing drawn over.
+##
+## The world drain rides in the SAME shader, and that is not tidiness — it is the
+## only arrangement that works. **Godot takes one backbuffer copy per frame**,
+## positioned before the FIRST canvas item that declares `hint_screen_texture`,
+## and every such item samples that one copy. This layer is drawn last, reads it,
+## and writes back opaque across the whole screen — so anything drawn between the
+## copy and here is erased without a warning. A second screen-reading layer
+## beneath this one is silently a no-op; measured 2026-07-26 by holding an opaque
+## blue screen-reader inside `#shake` and watching it vanish the moment the grain
+## was visible, and reappear the moment it was hidden.
+##
+## The cost of folding them: the drain reaches the sparks, the floaters and the
+## arc, which `body.worldstop #screen` leaves lit — they are siblings of `#shake`
+## there, not children. It does not show, because the world-stop beat runs BEFORE
+## the rite throws anything: `#vfx` and `#floaties` are empty for its whole 820ms.
 const GRAIN_SHADER: String = """
 shader_type canvas_item;
 
 uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;
 uniform vec2 jitter = vec2(0.0);
 uniform float amount : hint_range(0.0, 1.0) = 0.05;
+// `filter: saturate(0.07) brightness(0.85)`, spelled out. CSS `saturate(s)` is
+// a lerp from luminance toward the original at `s` — the full feColorMatrix
+// reduces to exactly that — and `brightness(b)` is a straight multiply, both in
+// sRGB, which is the space the framebuffer is already in.
+uniform float drain : hint_range(0.0, 1.0) = 0.0;
+uniform float drain_sat = 0.07;
+uniform float drain_bright = 0.85;
 
 float hash(vec2 p) {
 	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -505,6 +550,10 @@ float hash(vec2 p) {
 
 void fragment() {
 	vec3 base = texture(screen_tex, SCREEN_UV).rgb;
+	// The drain first, because there it is a filter on the world UNDER the
+	// grain: the noise blends over an already-colourless frame.
+	vec3 lum = vec3(dot(base, vec3(0.213, 0.715, 0.072)));
+	base = mix(base, mix(lum, base, drain_sat) * drain_bright, drain);
 	// `feTurbulence baseFrequency 0.85` is grain at roughly the pixel, so one
 	// hash per pixel stands in for the tile. Whole-pixel jitter, so a jump
 	// re-rolls the field instead of resampling it blurrier.
@@ -659,6 +708,9 @@ func _build_grain() -> void:
 	sh.code = GRAIN_SHADER
 	_grain_mat.shader = sh
 	_grain_mat.set_shader_parameter("amount", GRAIN_AMOUNT)
+	_grain_mat.set_shader_parameter("drain_sat", WORLDSTOP_SAT)
+	_grain_mat.set_shader_parameter("drain_bright", WORLDSTOP_BRIGHT)
+	_grain_mat.set_shader_parameter("drain", 0.0)
 	_grain.material = _grain_mat
 	add_child(_grain)
 
@@ -1143,6 +1195,32 @@ func _update_stage_dim() -> void:
 		centre += (_aim_at - centre) * DIM_AIM_LEAN
 	_stage_dim_mat.set_shader_parameter("centre_px", centre - _stage_dim.global_position)
 	_stage_dim.modulate.a = 1.0 if t <= DIM_GUTTER_AT else _gutter_opacity()
+
+
+## `document.body.classList.toggle('worldstop')` against
+## `#bg3d, #screen { transition: filter 0.22s ease }` — the drain is a CSS
+## transition, so it ramps rather than snapping, and the same ramp brings the
+## colour back. Tweened through a linear 0→1 and eased inside the callback,
+## because Godot's `Tween` easings are a different family from cubic-bezier.
+func _set_worldstop(on: bool) -> void:
+	if _grain_mat == null:
+		return
+	if _worldstop_tween != null and _worldstop_tween.is_valid():
+		_worldstop_tween.kill()
+	_worldstop_from = _worldstop_at
+	_worldstop_to = 1.0 if on else 0.0
+	if is_equal_approx(_worldstop_from, _worldstop_to):
+		return
+	if seq.instant:
+		_worldstop_drain(1.0)
+		return
+	_worldstop_tween = create_tween()
+	_worldstop_tween.tween_method(_worldstop_drain, 0.0, 1.0, WORLDSTOP_FADE)
+
+
+func _worldstop_drain(x: float) -> void:
+	_worldstop_at = lerpf(_worldstop_from, _worldstop_to, Motion.ease(CSS_EASE, x))
+	_grain_mat.set_shader_parameter("drain", _worldstop_at)
 
 
 ## `@keyframes gutter` (styles.css:111) — a flame that is nearly out. Read at the
@@ -1708,9 +1786,18 @@ func _die(idx: int) -> void:
 	_ember_from = at
 	_has_ember_from = true
 	if boss:
-		# world-stop: one silent beat before the vessel is allowed to fail
-		_vfx.hitstop(110.0)
-		await _wait(0.82)
+		# `worldstop` (drain.js:594) — the world stops: colour drains, the cracks
+		# blaze with inner light, one silent beat, and only then is the vessel
+		# allowed to fail. The drain and the seams both come back off before the
+		# rite proper starts, because the rite has its own light.
+		_set_worldstop(true)
+		if view != null:
+			view.set_doomed(true)
+		_vfx.hitstop(WORLDSTOP_STOP)
+		await _wait(WORLDSTOP_HOLD)
+		_set_worldstop(false)
+		if view != null:
+			view.set_doomed(false)
 	if view != null:
 		await _wait(view.stagger())
 	var beat: float = 0.32 if boss else 0.2

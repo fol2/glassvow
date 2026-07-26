@@ -120,6 +120,16 @@ const FLARE_RISE: float = 0.09        ## hurtFlash peaks at 30% of its 0.3s
 const NUDGE_OUT: float = 7.0 / KICK_PX
 const NUDGE_BACK: float = -5.0 / KICK_PX
 
+## `doomTremble 0.09s linear infinite` (styles.css:104) — a boss under the
+## world-stop. Not the flinch: this is the vessel failing to hold still, a fast
+## sub-pixel-ish rattle in the art's own px, and it runs on `linear` because a
+## tremble that eases is a wobble. CSS y is screen-down and the vessel's is
+## world-up, so the y track is negated where it is read.
+const DOOM_PERIOD: float = 0.09
+const DOOM_AT: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
+const DOOM_X: Array[float] = [0.0, 1.6, -1.4, 1.0, 0.0]
+const DOOM_Y: Array[float] = [0.0, -1.0, 1.2, 1.4, 0.0]
+
 ## `choreoAttack` (combat-choreo.js:10) — the body throws itself at what it is
 ## striking. Three bodies, sorted by the enemy's `art.kind`, and the difference
 ## between them is the whole point: a golem cannot lunge, so it loads and
@@ -209,6 +219,8 @@ var _max_hp: int = 1
 ## segment needs an integer, and the rail's value is a float mid-tween.
 var _hp: int = 0
 var _marked: bool = false
+var _doomed: bool = false
+var _doom_t: float = 0.0
 var _intent: IntentChip
 var _gem: GlassGem
 var _name_label: Label
@@ -604,6 +616,11 @@ uniform vec3 warm = vec3(1.0, 0.62, 0.26);
 // undamaged creature — which has no seams — shows nothing, exactly as there.
 uniform float marked = 0.0;
 const vec3 MARK = vec3(1.0, 0.918, 0.875);
+// `.enemy.doomed .cracks path { stroke: #ffffff; opacity: 1 }` with a 7px white
+// drop-shadow — the world-stop beat before a boss's glass gives way. The same
+// Fresnel again, but PURE white at full opacity rather than the pale seam
+// colour: this is the light already escaping, not a warning that it might.
+uniform float doomed = 0.0;
 
 void fragment() {
 	vec3 n = normalize(NORMAL);
@@ -624,7 +641,8 @@ void fragment() {
 	// The fire wells up through the FRACTURES: Fresnel is high on the side band
 	// and the rim, near zero across the face.
 	EMISSION = warm * ignite * pow(f, 1.4) * 5.0 + c.rgb * ignite * 0.35
-		+ MARK * marked * pow(f, 1.4) * 1.6;
+		+ MARK * marked * pow(f, 1.4) * 1.6
+		+ vec3(1.0) * doomed * pow(f, 1.4) * 2.6;
 }
 """
 
@@ -1127,8 +1145,21 @@ func _process(delta: float) -> void:
 	if _idle_float > 0.0:
 		lift = maxf(0.0, _idle_float * FLOAT_PX * IDLE_INTENSITY
 			* sin(t * FLOAT_RATE + _phase * 0.7)) * UNIT
+	var tremble: Vector2 = _doom_tremble(delta)
 	_vessel.position = Vector3(
-		(_hit * KICK_PX + _lunge_x) * UNIT, lift + _lunge_up * UNIT, 0.0)
+		(_hit * KICK_PX + _lunge_x + tremble.x) * UNIT,
+		lift + (_lunge_up + tremble.y) * UNIT, 0.0)
+
+
+## `doomTremble` — the rattle, in the art's own px, composed into the idle the
+## same way the recoil is. Zero unless the world has stopped for this creature.
+func _doom_tremble(delta: float) -> Vector2:
+	if not _doomed:
+		return Vector2.ZERO
+	_doom_t = fmod(_doom_t + delta, DOOM_PERIOD)
+	var phase: float = _doom_t / DOOM_PERIOD
+	return Vector2(Motion.keyframe(phase, DOOM_AT, DOOM_X),
+		-Motion.keyframe(phase, DOOM_AT, DOOM_Y))
 
 
 # ---------------------------------------------------------------- striking
@@ -2675,6 +2706,18 @@ func set_marked(on: bool) -> void:
 	_marked = on
 	if _glass_mat != null:
 		_glass_mat.set_shader_parameter("marked", 1.0 if on else 0.0)
+
+
+## `.enemy.doomed` (drain.js:594) — the world-stop beat, and a boss's alone. The
+## seams blaze pure white and the body rattles; nothing else about the creature
+## changes, because what follows is the death rite it was already going to get.
+func set_doomed(on: bool) -> void:
+	if _doomed == on:
+		return
+	_doomed = on
+	_doom_t = 0.0
+	if _glass_mat != null:
+		_glass_mat.set_shader_parameter("doomed", 1.0 if on else 0.0)
 
 
 ## The panes an armed card would take, forwarded to the gauge that draws them.
