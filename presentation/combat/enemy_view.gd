@@ -125,27 +125,82 @@ const NUDGE_BACK: float = -5.0 / KICK_PX
 ## sub-pixel-ish rattle in the art's own px, and it runs on `linear` because a
 ## tremble that eases is a wobble. CSS y is screen-down and the vessel's is
 ## world-up, so the y track is negated where it is read.
-## `WARD_DEFAULTS` (ward-params.js) — every one of these is authored through the
-## benchmark's own `?vfxedit=1` panel and saved back to that file, so they are
-## values somebody chose, not defaults nobody touched.
-const WARD_PAD: float = 1.46          ## the shell stands this much proud of the body
+## The ward is a CUT GEM HELD IN FRONT of the creature, and that is a deliberate
+## departure from the benchmark rather than a port of it.
+##
+## What the port inherited was a shell whose facets were a **Voronoi second-nearest seam
+## over 37 sites** — which is, primitive for primitive, the construction of the disc crack
+## web `docs/glass-crack-rendering.md` §2.2 condemns and `CrackField` replaced. Two things
+## that must read as opposites were built out of the same part, so a guarded creature and a
+## damaged one spoke the same language. On the web there was no better option: a 192²
+## canvas bake cannot cheaply carry authored facet geometry. Here there is a shader.
+##
+## So the shell becomes a stone: a **table** (the flat centre) ringed by a **crown** of few,
+## large, hard-edged facets, each with a CONSTANT normal, alternating pitch, cut in as the
+## ward forms. Nothing about it is a distance to a set of scattered points.
+##
+## Three further changes follow from *held in front* rather than *worn*:
+##
+## * It hangs off `_ward_root` under the stage, not off `_vessel`, so it does not inherit
+##   the recoil SQUASH. `_vessel.scale` is the tell that mattered — a gem does not deform,
+##   and a shield that squashes with the body it protects is made of the body. Position it
+##   still follows, because a shield goes where its holder goes.
+## * It stands proud in Z, so the perspective camera gives it real parallax against the
+##   body when the stage shakes. The old shell shared the body's plane and was ordered in
+##   front only by `render_priority`, which is not depth.
+## * Its size comes from the box HEIGHT alone with the gem's own aspect, not from the
+##   body's own width and height scaled up. A narrow creature got a narrow shield.
+##
+## And it is ORDERED. Nothing about the stone is hashed, jittered or seeded, which is a
+## reversal of `reshuffleWardShape`'s whole intent — that generator existed to make "no two
+## guards in a fight the same stone", and a raw uneven crystal is what it produced.
+##
+## The opposite is the right answer here, and it settles the same problem the cut does but
+## at the level of meaning rather than of primitive. **A ward is manufactured and identical
+## every time; a fracture is natural and never repeats.** Order against chaos is a contrast
+## an eye reads instantly and without being taught, where "Voronoi cells of one size versus
+## Voronoi cells of another" is not a contrast at all. Every ward in the game is the same
+## regular stone because it is the same protection.
+##
+## `WARD_GROW`, `WARD_OPACITY`, `WARD_TINT` and `WARD_PULSE` are kept from `ward-params.js`
+## — those are values somebody chose through the benchmark's `?vfxedit=1` panel, and the cut
+## is what was wrong, not the timing or the colour.
 const WARD_OPACITY: float = 0.4
-const WARD_GROW: float = 0.56         ## growMs 560 — and the fade is the same, reversed
-const WARD_SITES: int = 32            ## ring facets, plus five interior ones
-const WARD_INNER_SITES: int = 5
+const WARD_GROW: float = 0.56         ## growMs 560 — and the break is faster; see WARD_BREAK
 const WARD_EDGE_SOFT: float = 0.01    ## all but a hard cut
-const WARD_SHAPE_VERTS: int = 8
-const WARD_SHAPE_JITTER: float = 0.55
-## `refraction: 2` multiplies `normalScale: 0.5` — and `thickness: 0`, which is
-## why none of this bends anything (see WARD_SHADER).
-const WARD_NORMAL_SCALE: float = 1.0
 const WARD_ROUGH: float = 0.0
 const WARD_ENV: float = 0.72
 const WARD_TINT: Color = Color(0.28627452, 0.5647059, 0.7490196)   # #4a90bf
-## Re-gaining ward keeps the silhouette and pulses the FACETS: they collapse to
-## 12% and re-cut. `growMs * 0.55`.
+## Re-gaining ward keeps the silhouette and re-cuts the FACETS: they collapse to
+## 12% and are cut again. `growMs * 0.55`.
 const WARD_PULSE: float = 0.56 * 0.55
 const WARD_PULSE_TO: float = 0.12
+
+## How many crown facets the stone is cut with.
+##
+## EIGHT, and both the count and its evenness are the argument. Thirty-seven Voronoi sites
+## over a body-sized pane give cells a few percent of the pane across — finer than the eye
+## resolves at any actor size, so it reads as texture, which is exactly how a crack web
+## reads. Eight facets are each an eighth of the stone: individually legible, individually
+## lit, and countable. **Even**, because the crown alternates two pitches and an odd ring
+## puts two of the same next to each other where it closes — one seam in a machined object
+## that does not match is the thing an eye finds first.
+const WARD_CUT_N: int = 8
+## Where the flat table ends, as a fraction of the outline's radius. The table is the part
+## that goes dead and mirror-flat, and it has to be large enough to be a face rather than a
+## hub — under about a third the stone reads as a rosette.
+const WARD_TABLE_R: float = 0.42
+## How far the stone stands in front of the body, in box heights. Small on purpose: the
+## camera is perspective, so this also magnifies the stone by `dist / (dist - z)` — at 0.15
+## of a box height against a camera 2.97 box heights out, that is 5 %, which is the amount
+## an interposed object should grow rather than a size change anybody notices.
+const WARD_LIFT: float = 0.15
+## The stone's own size, in box heights, and its own aspect. Not the body's box scaled up.
+const WARD_SIZE: float = 1.12
+const WARD_ASPECT: float = 0.86
+## How long the stone takes to come apart. Much shorter than the 560 ms it took to form, and
+## deliberately so: a thing is built slowly and gives way at once.
+const WARD_BREAK: float = 0.34
 
 const DOOM_PERIOD: float = 0.09
 const DOOM_AT: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
@@ -255,6 +310,11 @@ var _ward_pulsing: bool = false
 var _ward_pulse_from: float = 0.0
 var _ward_pulse_t: float = 0.0
 var _ward_sites_used: int = -1
+## The stone's own root, outside `_vessel` so the recoil squash cannot reach it, and the
+## break: 0 intact, 1 gone.
+var _ward_root: Node3D = null
+var _ward_breaking: bool = false
+var _ward_burst: float = 0.0
 var _doomed: bool = false
 var _doom_t: float = 0.0
 var _intent: IntentChip
@@ -838,49 +898,87 @@ void fragment() {
 ## StandardMaterial3D's `refraction_enabled` cannot do this job here: it forces
 ## ALPHA to 1 and reads a screen that, inside a transparent SubViewport, is
 ## empty — which is why the first pass came out as grey pebbles.
-## `meshWard` (mesh.js:1300) — the ward shell: a raw-gemstone pane that grows
-## over the creature when it takes guard. `syncWardMesh` is the only thing that
-## ever showed a ward as more than a number, and this port had the mote underlay
-## `archetypeHit` throws for it — vfx.js:492 says so in as many words:
-## "meshWard owns the gemstone shell; keep a light mote underlay only" — without
-## the shell the underlay is for.
+## The ward stone — a CUT GEM held in front of the creature. See `WARD_CUT_N` and the
+## `WARD_*` block for why this is a rewrite rather than a port, and what it replaced.
 ##
-## Two fields, both authored in `ward-params.js` and both computed here rather
-## than baked to a canvas as the reference does: a signed distance to an
-## irregular polygon for the SILHOUETTE, and a Voronoi second-nearest seam over
-## 37 facet sites for the NORMAL. 192² bakes are how you do this without a
-## shader; we have a shader, and 37 sites per fragment is nothing.
+## Descended from `meshWard` (mesh.js:1300) and keeps its silhouette generator: a signed
+## distance to an irregular 8-gon, so no two guards in a fight are the same stone. What it
+## does NOT keep is that shell's normal — a Voronoi second-nearest seam over 37 scattered
+## sites, which is the crack web's own construction and the reason a guarded creature and a
+## damaged one read alike.
 ##
-## What the shell is NOT is a refractor. `refraction: 2` scales `thickness`,
-## which is authored at 0 — so transmission bends nothing, and every bit of the
-## structure you see is the seam normal catching the key light at
-## `roughness: 0`. Reading the thickness first is what stops this becoming an
-## expensive screen-space effect that looks less like the benchmark, not more.
+## In its place, a cut. The stone is divided into `WARD_CUT_N` angular wedges and **the
+## normal is constant inside a wedge**, which is the entire trick: a constant normal is a
+## flat facet, and flat facets meeting at a jump are hard edges. Everything else follows —
+## a table where the wedges' inner ends are flat, an alternating crown pitch so no two
+## neighbours read as one larger face, and a bright rib exactly on each boundary, which is
+## both what a real gem edge does with light and what hides the normal discontinuity.
+##
+## What the stone is NOT is a refractor, and that is inherited reasoning worth keeping:
+## `refraction: 2` scales `thickness`, authored at 0, so transmission bends nothing there
+## either. Every bit of structure you see is a facet normal turning against the view at
+## `roughness: 0`. Reading the thickness first is what stops this becoming an expensive
+## screen-space effect that looks less like a gem, not more.
 const WARD_SHADER: String = """
 shader_type spatial;
 render_mode blend_mix, cull_disabled, depth_draw_never, specular_schlick_ggx;
 
 uniform vec2 outline[16];
 uniform int outline_n = 8;
-uniform vec2 sites[40];
-// How many of them are showing. Grow reveals a PREFIX of the list, so the
-// facets are cut into the shell as it forms rather than fading in as a set.
-uniform int site_n = 0;
+// How many crown facets have been CUT. Growth raises this, so the stone is cut as it forms
+// rather than faded in whole — which is the one thing worth keeping from the shell's
+// `syncWardNormalMap` behaviour.
+uniform int facet_n = 0;
+uniform int cut_n = 8;
+uniform float table_r = 0.42;
 uniform float grow = 0.0;
+// The stone coming apart, 0 intact to 1 gone. A shield that runs out is CONSUMED, and an
+// object that is consumed breaks — the fade this replaced was the only thing a shell could
+// do, because a shell has no pieces to break into. A cut does: its facets are its fracture
+// planes, so the same eight numbers that draw the stone also decide how it goes.
+uniform float burst = 0.0;
+// How far a facet travels by the end, in stone radii.
+const float BURST_D = 0.52;
 uniform vec4 tint : source_color = vec4(0.29, 0.565, 0.749, 1.0);
 uniform float shell_opacity = 0.4;
 uniform float edge_soft = 0.01;
-uniform float normal_scale = 1.0;
 uniform float rough = 0.0;
 uniform float env_gain = 0.72;
-// How the shell's 0.4 of opacity is spent: almost none on the pane, most of it
-// on the seams and the turning rim.
-const float FACE = 0.10;
-const float SEAM_A = 0.42;
-const float RIM_A = 0.70;
+// The key light's direction in the stone's own space, so a facet can be lit by the light
+// that actually exists rather than by a painted highlight. Swings with `set_light_angle`.
+uniform vec3 key_dir = vec3(-0.42, 0.55, 0.72);
+// How the stone's 0.4 of opacity is SPENT, and the total is what matters: these sum to
+// 0.79 before `shell_opacity`, so the most solid a facet ever gets is 0.32 and only the
+// flash goes past it. The first pass summed to 2.1 and buried the creature's head under a
+// pale slab — which is the same failure the shell this replaces recorded in its own comment
+// and then avoided only by having almost no lit area at all.
+//
+// Almost none on the table. The rest on the three things that are actually a gem: its
+// edges, how steeply each face is cut, and its flashes.
+const float FACE = 0.07;
+const float RIB_A = 0.34;
+// A face's own steepness, and this is where a Fresnel term was and should not have been. A
+// crown facet here is tilted about 40 degrees, and `1 - dot(N, V)` at 40 degrees is 0.06 —
+// so grading the facets by Fresnel graded them all to nothing, and the pane came back. The
+// pitch IS the quantity that separates one face from the next, so spend on it directly.
+// The alternating crown then reads as a 2:1 step between neighbours, which is the cut.
+const float FACET_A = 0.55;
+// A flash covers a WHOLE FACE. That follows from the normal being constant across one — a
+// tight lobe on a curved surface is a speck, and on a flat one it is the entire plate. The
+// first pass priced it as a speck at 0.85 and lit three faces to near-solid across the
+// creature's head.
+const float FLASH_A = 0.30;
+// How hard a crown facet tilts. TWO values, alternating around the ring, because two
+// adjacent facets at the same pitch have the same normal and therefore read as ONE larger
+// facet — the ring would come out as a bevel rather than as a cut.
+const float PITCH_MAIN = 0.66;
+const float PITCH_BREAK = 0.33;
+// A rib's half-width, in stone radii. A gem's edges are lines, not bands.
+const float RIB_W = 0.013;
 
-// `signedDistPoly` — negative inside. The winding test is the standard one; a
-// gem outline is not convex, so a half-plane test would eat the spikes.
+// `signedDistPoly` — negative inside. The winding test is the standard one. The outline is
+// convex now that it is a regular polygon and a half-plane test would do, but this is three
+// lines of already-correct code and the girdle is the one place a future cut might not be.
 float sd_poly(vec2 p) {
 	float d = dot(p - outline[0], p - outline[0]);
 	float s = 1.0;
@@ -899,56 +997,146 @@ void fragment() {
 	// The mask is measured in the same oval the reference bakes into:
 	// centre (0.5, 0.52), radii (0.46, 0.48).
 	vec2 q = vec2((UV.x - 0.5) / 0.46, (UV.y - 0.52) / 0.48);
-	float sd = sd_poly(q);
+	float fn = float(cut_n);
+	// TAU is a Godot shading-language built-in; declaring one here is a redefinition error.
+
+	// THE CUT. A wedge index around the centre, and inside a wedge the normal is CONSTANT.
+	// That is the whole mechanism: a constant normal is a flat facet, and two flat facets
+	// meeting at a jump is a hard edge. No smoothing and no hashing anywhere — the stone is
+	// a machined object and every facet is the same as its opposite number.
+	//
+	// THE BREAK is resolved in the same pass, because it is the same question asked of moved
+	// pieces: each crown facet travels out along its own axis, so a fragment shows whichever
+	// piece has ARRIVED at it and the geometry has to be looked up where that piece started.
+	//
+	// It has to be a search over the pieces and not a test of the fragment's own angle. The
+	// first version did the latter — cheaper, and wrong in a way that took a strip to see: a
+	// facet translated outward pushes its far corners past the angular wedge it came from, so
+	// clipping by the fragment's angle CUT EACH PLATE BACK as it left. Eight plates flying
+	// apart came out as one ring quietly expanding, which is a different event entirely.
+	//
+	// Eight iterations, entered only while the stone is breaking.
+	int hit = -1;
+	vec2 p = q;
+	float table_hit = 0.0;
+	if (burst <= 0.0) {
+		hit = int(floor(fract(atan(q.y, q.x) / TAU + 0.5) * fn));
+	} else {
+		// The table does not travel, so it is tested where the fragment is and tested first.
+		float u0 = fract(atan(q.y, q.x) / TAU + 0.5);
+		int k0 = int(floor(u0 * fn));
+		float off0 = (fract(u0 * fn) - 0.5) / fn * TAU;
+		if (length(q) <= table_r / max(0.25, cos(off0))) {
+			hit = k0;
+			table_hit = 1.0;
+		} else {
+			for (int i = 0; i < cut_n; i++) {
+				float m = ((float(i) + 0.5) / fn - 0.5) * TAU;
+				vec2 pi = q - vec2(cos(m), sin(m)) * burst * BURST_D;
+				if (int(floor(fract(atan(pi.y, pi.x) / TAU + 0.5) * fn)) == i) {
+					hit = i;
+					p = pi;
+					break;
+				}
+			}
+		}
+	}
+	if (hit < 0) { discard; }   // the gap a departed piece left behind
+
+	float k = float(hit);
+	// The wedge's own outward direction, recovered from the INDEX and not from the fragment,
+	// so every fragment in a facet gets the same vector. Screen y runs down against the
+	// world's up, so the y term is negated where the normal is built.
+	float mid = ((k + 0.5) / fn - 0.5) * TAU;
+	vec2 axis = vec2(cos(mid), sin(mid));
+
+	// The table is a POLYGON and not a disc: its boundary is a straight chord across each
+	// wedge, so at an angular offset from the wedge's centre its radius is the apothem over
+	// the cosine.
+	float within = fract(fract(atan(p.y, p.x) / TAU + 0.5) * fn);
+	float off = (within - 0.5) / fn * TAU;
+	float tr = table_r / max(0.25, cos(off));
+	float r = length(p);
+	bool on_table = table_hit > 0.5 || (burst <= 0.0 && r <= tr);
+	bool cut = hit < facet_n;
+
+	float sd = sd_poly(p);
 	float t = edge_soft <= 0.001
 		? (sd <= 0.0 ? 1.0 : 0.0)
 		: 1.0 - smoothstep(-edge_soft, 0.0, sd);
-	t *= grow;
+	// The table goes by fading — it is the face the crown was cut around and has nowhere to
+	// travel to — and it goes FASTER, so the plates are alone on screen at the end.
+	t *= grow * (on_table ? 1.0 - min(1.0, burst * 1.8) : 1.0 - burst);
 	if (t < 0.01) { discard; }
+	if (!on_table && r <= tr) { discard; }   // a plate is a plate, not a plate plus its table
 
-	// `bakeWardNormal` — the seam between the two nearest facet sites, and only
-	// within a hair of it. Everything else is flat glass.
-	float d1 = 1e12;
-	float d2 = 1e12;
-	vec2 s1 = vec2(0.0);
-	vec2 s2 = vec2(0.0);
-	for (int i = 0; i < site_n; i++) {
-		vec2 d = UV - sites[i];
-		float dd = dot(d, d);
-		if (dd < d1) { d2 = d1; s2 = s1; d1 = dd; s1 = sites[i]; }
-		else if (dd < d2) { d2 = dd; s2 = sites[i]; }
-	}
 	vec2 nrm = vec2(0.0);
-	if (site_n >= 2) {
-		float edge = sqrt(d2) - sqrt(d1);
-		float seam = 0.016;   // `SEAM = N * 0.016` at any bake size
-		if (edge < seam) {
-			vec2 v = s1 - s2;
-			float k = (1.0 - edge / seam) * 1.05;
-			nrm = vec2(v.x, -v.y) / max(1e-5, length(v)) * k;
-		}
+	if (cut && !on_table) {
+		// Strictly alternating, and nothing else. A machined cut has two facet angles and
+		// they take turns; `WARD_CUT_N` is even so the ring closes on the right one.
+		float pitch = mod(k, 2.0) < 1.0 ? PITCH_MAIN : PITCH_BREAK;
+		nrm = vec2(axis.x, -axis.y) * pitch;
 	}
-	nrm *= normal_scale;
 	NORMAL_MAP = vec3(nrm * 0.5 + 0.5, sqrt(max(0.05, 1.0 - dot(nrm, nrm))));
 
-	// `transmission: 1` with `thickness: 0` is CLEAR glass, and the reference
-	// says in as many words that "MeshPhysicalMaterial.opacity barely affects
-	// transmission glass" (mesh.js:680) — so `opacity: 0.4` is not a 40% wash
-	// over the creature. Read as one it buries the body under a coloured slab,
-	// which is what a first pass here did. The shell is nearly invisible across
-	// its face; what you actually see of it is the SEAMS catching light and the
-	// rim turning away from you.
-	float seam = clamp(length(nrm), 0.0, 1.0);
-	float rim = pow(1.0 - clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0), 3.0);
+	// The RIBS: the facet boundaries, as lines of constant width rather than of constant
+	// angle. `within` is angular, so the arc it stands for grows with radius — multiplying
+	// by `r` is what stops a rib being a hairline at the table and a wedge at the girdle.
+	//
+	// They are not decoration. A hard normal jump aliases, and a bright line sitting exactly
+	// on the jump both hides it and is what a real gem edge does with light.
+	//
+	// **Only outside the table**, and that is not a detail. Eight boundaries all measured to
+	// the centre meet there, so the first version drew eight spokes converging on a hub — a
+	// cartwheel, which is precisely the wrong object. A crown facet ends where the table
+	// begins; the ribs have to end there too.
+	float aa = max(fwidth(r), 0.0015);
+	float rib = 0.0;
+	if (cut && !on_table) {
+		float to_ray = min(within, 1.0 - within) / fn * TAU * r;
+		rib = 1.0 - smoothstep(RIB_W - aa, RIB_W + aa, min(to_ray, abs(r - tr)));
+	} else if (cut) {
+		// The table's own outline, from the inside.
+		rib = 1.0 - smoothstep(RIB_W - aa, RIB_W + aa, tr - r);
+	}
+	// A stone gives way at its edges first, so the ribs flare — but only a little. At 2.2 the
+	// flare turned every plate's boundary into a long bright spoke and the strip read as a
+	// star rather than as eight pieces leaving; the plates have to stay plates.
+	rib *= 1.0 + burst * 0.8;
+
+	// THE FACETS HAVE TO BE READ OFF THEIR OWN NORMAL, and the reason is a Godot mechanic
+	// rather than a taste: `NORMAL` still holds the GEOMETRIC normal while `fragment()` runs
+	// — the normal map is applied after it — so reading `dot(NORMAL, VIEW)` on a flat quad
+	// gives the same number for every fragment on the stone. The first version did exactly
+	// that and every facet came out identical, which is a faceted stone rendered as a pane.
+	//
+	// The quad faces the camera, so tangent space is view space here.
+	vec3 n = vec3(nrm, sqrt(max(0.05, 1.0 - dot(nrm, nrm))));
+	float facet = length(nrm);
+	// Against the REAL key, which is the project's standing rule applied to a stone: glass
+	// is read off its faces unevenly, as a function of each face's normal against a light
+	// that exists. A cut answers a light in flashes — whole faces at a time, and only the
+	// two or three whose normals happen to point that way.
+	vec3 h = normalize(key_dir + vec3(0.0, 0.0, 1.0));
+	float flash = pow(clamp(dot(n, h), 0.0, 1.0), 80.0);
+
+	// `transmission: 1` with `thickness: 0` is CLEAR glass, and the reference says in as
+	// many words that "MeshPhysicalMaterial.opacity barely affects transmission glass"
+	// (mesh.js:680) — so `opacity: 0.4` is not a 40% wash over the creature. Read as one it
+	// buries the body under a coloured slab, which is what a first pass here did and what
+	// this one had to be talked down from twice. The stone is nearly invisible across its
+	// table; what you see of it is the ribs, the pitch of each face, and whichever of them
+	// the key happens to be answering.
 	ALBEDO = tint.rgb;
-	ALPHA = clamp(t * shell_opacity * (FACE + seam * SEAM_A + rim * RIM_A), 0.0, 1.0);
+	ALPHA = clamp(t * shell_opacity
+		* (FACE + rib * RIB_A + facet * FACET_A + flash * FLASH_A), 0.0, 1.0);
 	ROUGHNESS = rough;
 	METALLIC = 0.0;
 	SPECULAR = 0.5 + env_gain * 0.5;
-	// The stage is dark and there is no environment map to catch, so the glint
-	// the `envMapIntensity` buys there is spent here as emission — at the seams
-	// and the rim only, which is the only place it lands there either.
-	EMISSION = (tint.rgb * rim * 0.30 + vec3(1.0) * seam * 0.13) * env_gain;
+	// The stage is dark and there is no environment map to catch, so the glint the
+	// `envMapIntensity` buys there is spent here as emission — at the ribs and in the
+	// flashes only, which is the only place it lands there either.
+	EMISSION = (tint.rgb * facet * 0.14 + vec3(1.0) * (rib * 0.14 + flash * 0.30)) * env_gain;
 }
 """
 
@@ -1622,13 +1810,28 @@ func _doom_tremble(delta: float) -> Vector2:
 # ---------------------------------------------------------------- striking
 
 
-## The ward shell. Built once and left hidden; `set_ward_shell` is what turns it
-## on, and `_step_ward` is what forms it.
+## The ward stone. Built once and left hidden; `set_ward_shell` is what turns it on, and
+## `_step_ward` is what cuts it.
+##
+## Hung off its OWN root under the stage rather than off `_vessel`, and that is the whole
+## structural half of this rewrite. `_vessel.scale` carries the recoil squash, so a stone
+## parented there stretched and flattened with the body it was protecting — which is the
+## single clearest way to say "this is made of the same stuff as the creature". Position is
+## mirrored across in `_step_ward` because a held shield does travel with its holder; scale
+## is refused.
 func _build_ward_shell() -> void:
+	_ward_root = Node3D.new()
+	_stage.add_child(_ward_root)
 	_ward_mesh = MeshInstance3D.new()
 	var qm: QuadMesh = QuadMesh.new()
-	qm.size = Vector2(_quad_w * WARD_PAD, _box_u * WARD_PAD)
+	# The stone's own size, from the box HEIGHT and the gem's own aspect. Deriving the width
+	# from `_quad_w` gave a narrow creature a narrow shield, which is a shield cut to fit
+	# rather than one held up.
+	qm.size = Vector2(_box_u * WARD_SIZE * WARD_ASPECT, _box_u * WARD_SIZE)
 	_ward_mesh.mesh = qm
+	# Proud in Z, so the perspective camera gives real parallax against the body when the
+	# stage shakes. `render_priority` orders draws; it does not make a thing be in front.
+	_ward_mesh.position = Vector3(0.0, 0.0, _box_u * WARD_LIFT)
 	var sh: Shader = Shader.new()
 	sh.code = WARD_SHADER
 	_ward_mat = ShaderMaterial.new()
@@ -1637,64 +1840,47 @@ func _build_ward_shell() -> void:
 	_ward_mat.set_shader_parameter("tint", WARD_TINT)
 	_ward_mat.set_shader_parameter("shell_opacity", WARD_OPACITY)
 	_ward_mat.set_shader_parameter("edge_soft", WARD_EDGE_SOFT)
-	_ward_mat.set_shader_parameter("normal_scale", WARD_NORMAL_SCALE)
 	_ward_mat.set_shader_parameter("rough", WARD_ROUGH)
 	_ward_mat.set_shader_parameter("env_gain", WARD_ENV)
+	_ward_mat.set_shader_parameter("cut_n", WARD_CUT_N)
+	_ward_mat.set_shader_parameter("table_r", WARD_TABLE_R)
 	_ward_mat.set_shader_parameter("grow", 0.0)
-	_ward_mat.set_shader_parameter("site_n", 0)
+	_ward_mat.set_shader_parameter("facet_n", 0)
 	_ward_mesh.set_surface_override_material(0, _ward_mat)
 	_ward_mesh.visible = false
-	_vessel.add_child(_ward_mesh)
-	_reshuffle_ward(0.0)
+	_ward_root.add_child(_ward_mesh)
+	_push_key_dir()
+	_cut_girdle()
 
 
-## `wardHash` (mesh.js:536) — the seeded 0..1 the whole silhouette is drawn from.
-static func _ward_hash(seed_v: float, i: int) -> float:
-	var x: float = sin(seed_v * 12.9898 + float(i) * 78.233) * 43758.5453
-	return x - floor(x)
-
-
-## `reshuffleWardShape` — a NEW silhouette every time the shell appears fresh, so
-## no two guards in a fight are the same stone. Held on the CPU and pushed as
-## uniforms; the reference bakes the same numbers into a 192² canvas.
-func _reshuffle_ward(seed_v: float) -> void:
+## THE GIRDLE, and it is the same stone every time.
+##
+## This replaces `reshuffleWardShape`, whose entire purpose was the opposite: uneven angular
+## spacing and radius spikes, reseeded on every guard, "so no two guards in a fight are the
+## same stone". A raw crystal. See the `WARD_*` block for why the reversal is the point —
+## the ward is a manufactured thing and the fracture is a natural one, and that contrast is
+## what stops the two speaking the same language.
+##
+## A regular `WARD_CUT_N`-gon with its VERTICES on the facet boundaries, so each crown facet
+## owns exactly one girdle edge and the outline is the cut seen from outside rather than a
+## Called on every fresh guard rather than once at build, and that is not vestigial: it also
+## clears `_ward_sites_used`, which is what forces the facet count back to the shader when a
+## stone is cut a second time.
+func _cut_girdle() -> void:
 	if _ward_mat == null:
 		return
-	# `wardOutline` — uneven angular spacing plus radius spikes, which is what
-	# makes it read as a raw crystal rather than a smooth oval.
 	var outline: PackedVector2Array = PackedVector2Array()
 	outline.resize(16)
-	for i: int in range(WARD_SHAPE_VERTS):
-		var ang_j: float = (_ward_hash(seed_v, i) - 0.5) * WARD_SHAPE_JITTER * 0.55
-		var ang: float = float(i) / float(WARD_SHAPE_VERTS) * TAU + seed_v * 0.31 + ang_j
-		var rad: float = 0.78 \
-			+ (_ward_hash(seed_v, i + 17) - 0.5) * WARD_SHAPE_JITTER * 0.42 \
-			+ 0.1 * sin(float(i) * 2.15 + seed_v) \
-			+ 0.06 * cos(float(i) * 3.7 - seed_v * 0.7)
-		rad = clampf(rad, 0.55, 1.18)
-		outline[i] = Vector2(cos(ang) * rad, sin(ang) * rad * 1.06)
+	for i: int in range(WARD_CUT_N):
+		# The facet boundaries sit at k/N of the turn measured from the same origin the
+		# shader uses, so the polygon's corners land exactly on the ribs. Getting this half a
+		# facet out puts a vertex in the middle of every face, which reads as a bevelled
+		# octagon rather than as a cut.
+		var ang: float = (float(i) / float(WARD_CUT_N) - 0.5) * TAU
+		outline[i] = Vector2(cos(ang), sin(ang))
 	_ward_mat.set_shader_parameter("outline", outline)
-	_ward_mat.set_shader_parameter("outline_n", WARD_SHAPE_VERTS)
-
-	# `wardSitesFor` — a ring of facets, then five interior ones "so the shell
-	# reads as cut glass, not a hollow ring only".
-	var sites: PackedVector2Array = PackedVector2Array()
-	sites.resize(40)
-	for i: int in range(WARD_SITES):
-		var a: float = float(i) / float(WARD_SITES) * TAU + seed_v * 0.17
-		var r: float = 0.28 + _ward_hash(seed_v, i + 40) * 0.12
-		sites[i] = Vector2(_clamp_uv(0.5 + cos(a) * r), _clamp_uv(0.52 + sin(a) * r * 0.92))
-	for i: int in range(WARD_INNER_SITES):
-		var a: float = seed_v + float(i) * 1.7
-		sites[WARD_SITES + i] = Vector2(
-			_clamp_uv(0.5 + cos(a) * 0.12), _clamp_uv(0.5 + sin(a) * 0.14))
-	_ward_mat.set_shader_parameter("sites", sites)
+	_ward_mat.set_shader_parameter("outline_n", WARD_CUT_N)
 	_ward_sites_used = -1
-
-
-## `clampUv` (mesh.js:1133) — a site never sits on the very edge of the map.
-static func _clamp_uv(x: float) -> float:
-	return clampf(x, 0.05, 0.95)
 
 
 ## Whether a shell is up or on its way up. Read by the sync that restores one on
@@ -1705,17 +1891,26 @@ func ward_shell_on() -> bool:
 
 ## `meshWard(el, on, {grow})`. Three cases, and the middle one is the reason this
 ## is not a boolean: gaining ward while you already have it keeps the stone and
-## PULSES its facets — they collapse to 12% and re-cut — so a second Ward card
-## reads as the shell being reinforced rather than as nothing happening.
+## re-cuts its facets — they collapse to 12% and are cut again — so a second Ward card
+## reads as the guard being reinforced rather than as nothing happening.
+##
+## Going OFF now BREAKS the stone rather than fading it, and the trigger is already exactly
+## right without touching the sequencer: `set_ward(0)` routes here, and the sequencer's own
+## `SAY_GUARD_SHATTERED` beat is the same instant. A ward is consumed, not dismissed.
 func set_ward_shell(on: bool, grow: bool = true) -> void:
 	if _ward_mat == null:
 		return
 	if not on:
 		if not _ward_on:
-			return   # already off or fading; do not restart the clock on a resync
+			return   # already off or breaking; do not restart the clock on a resync
 		_ward_on = false
 		_ward_pulsing = false
-		_ward_grow_from = _ward_grow
+		# The stone stays whole and `burst` does the work, so the silhouette does not shrink
+		# out from under the pieces that are leaving it.
+		_ward_grow = 1.0
+		_ward_grow_from = 1.0
+		_ward_breaking = true
+		_ward_burst = 0.0
 		_ward_t = 0.0
 		return
 	if _ward_on:
@@ -1728,9 +1923,12 @@ func set_ward_shell(on: bool, grow: bool = true) -> void:
 		_ward_pulse_t = 0.0
 		_ward_sites_used = -1
 		return
-	_reshuffle_ward(_rng.randf() * 10000.0)
+	_cut_girdle()
 	_ward_on = true
 	_ward_pulsing = false
+	_ward_breaking = false
+	_ward_burst = 0.0
+	_ward_mat.set_shader_parameter("burst", 0.0)
 	_ward_t = 0.0
 	_ward_grow = 0.0 if grow else 1.0
 	_ward_grow_from = _ward_grow
@@ -1754,12 +1952,17 @@ func _step_ward(delta: float) -> void:
 		var u: float = clampf(_ward_t / WARD_GROW, 0.0, 1.0)
 		_ward_grow = _ward_grow_from + (1.0 - _ward_grow_from) * (u * u * (3.0 - 2.0 * u))
 		_ward_site_f = _ward_grow
-	elif not _ward_on and _ward_grow > 0.0:
+	elif _ward_breaking:
 		_ward_t += delta
-		var u: float = clampf(_ward_t / WARD_GROW, 0.0, 1.0)
-		_ward_grow = _ward_grow_from * (1.0 - (u * u * (3.0 - 2.0 * u)))
-		_ward_site_f = _ward_grow
-		if _ward_grow < 0.02:
+		# EASE_OUT rather than smoothstep, and it is the opposite curve to the grow on
+		# purpose: forming is a thing being made and settles into place, breaking is a thing
+		# letting go and is fastest at the instant it gives.
+		var u: float = clampf(_ward_t / WARD_BREAK, 0.0, 1.0)
+		_ward_burst = 1.0 - (1.0 - u) * (1.0 - u)
+		_ward_site_f = 1.0
+		if u >= 1.0:
+			_ward_breaking = false
+			_ward_burst = 0.0
 			_ward_grow = 0.0
 			_ward_site_f = 0.0
 	elif _ward_on:
@@ -1767,13 +1970,21 @@ func _step_ward(delta: float) -> void:
 	_ward_mesh.visible = _ward_grow > 0.02
 	if not _ward_mesh.visible:
 		return
+	_ward_mat.set_shader_parameter("burst", _ward_burst)
+	# Travel with the holder, but do NOT deform with it. `_vessel.position` is the kick, the
+	# lunge, the float and the doom tremble — all things a held object shares. `_vessel.scale`
+	# is the recoil squash, which is the one it must not, and refusing it is why this hangs
+	# off its own root at all.
+	if _ward_root != null and _vessel != null:
+		_ward_root.position = _vessel.position
 	_ward_mat.set_shader_parameter("grow", _ward_grow)
-	# `syncWardNormalMap` only rebakes when the floored count steps. There is no
-	# bake here, but the uniform write is still worth not doing every frame.
-	var n: int = roundi(float(WARD_SITES + WARD_INNER_SITES) * _ward_site_f)
+	# `syncWardNormalMap` only rebaked when the floored count stepped. There is no bake here,
+	# but the uniform write is still worth not doing every frame — and with nine facets the
+	# count steps rarely enough that the guard earns more than it did over thirty-seven.
+	var n: int = roundi(float(WARD_CUT_N) * _ward_site_f)
 	if n != _ward_sites_used:
 		_ward_sites_used = n
-		_ward_mat.set_shader_parameter("site_n", n)
+		_ward_mat.set_shader_parameter("facet_n", n)
 
 
 ## `char-meta.chars[id].mesh` — the per-character idle the benchmark authors and
@@ -3033,7 +3244,18 @@ func set_glass_param(param: StringName, value: float) -> void:
 func set_light_angle(yaw_deg: float, pitch_deg: float) -> void:
 	if _key != null:
 		_key.rotation_degrees = Vector3(pitch_deg, yaw_deg, 0.0)
+	_push_key_dir()
 	_update_shadow()
+
+
+## The key's direction, handed to the ward stone so its facets answer the light that is
+## actually in the scene. A `DirectionalLight3D` shines down its own -Z, so the direction
+## light TRAVELS is `-basis.z` and the direction TOWARD it — which is what a dot against a
+## surface normal wants — is `+basis.z`.
+func _push_key_dir() -> void:
+	if _ward_mat == null or _key == null:
+		return
+	_ward_mat.set_shader_parameter("key_dir", _key.transform.basis.z.normalized())
 
 
 func _set_shadow_fade(v: float) -> void:

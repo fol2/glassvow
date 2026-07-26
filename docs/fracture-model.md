@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2681` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:2892` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -283,11 +283,11 @@ unrelated numbers would be tuned apart.
 
 Derived floor on `aperture`: the groove must be ≥ ~1.5 stage pixels at the smallest
 actor or it scintillates whatever the MSAA. At a 115 px sporeling with
-`oversample` = 2.0 (`enemy_view.gd:200` (`oversample`)) one body unit is ≈ 230
+`oversample` = 2.0 (`enemy_view.gd:255` (`oversample`)) one body unit is ≈ 230
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:1952` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:2163` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -462,7 +462,7 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:2200` (in `_prism`)), so
+  have**. The existing `_prism` calls it (`enemy_view.gd:2412` (in `_prism`)), so
   the ribbon needs authored crease normals, not the convenience path.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
@@ -766,9 +766,27 @@ the spikes. The heatmap is the reason `drive_at` is public.
   `CONCEPTS.md` will be updated; which direction is unconfirmed. §4 makes
   accumulation affordable either way, so this is a design question and no longer a
   performance one.
-- **Whether the ward-shatter `crack()` call survives** even if the ordinary-damage
-  one goes. A guard shattering is a glass event rather than attrition, so it has a
-  case the damage call does not.
+- ~~**Whether the ward-shatter `crack()` call survives.**~~ **Closed, and it was a
+  mislabel rather than a question.** There is no ward `crack()` call and there never was:
+  the ward path is `set_ward_shell` / `_restore_ward_shell` and it never touches the crack
+  model. The two calls are `combat_screen.gd:1802`, which is the **`SHATTER` event** — the
+  FACET gauge filling, `CONCEPTS.md` › Facet, and a wholly legitimate glass event on the
+  creature's body — and `combat_screen.gd:2098`, ordinary damage. Recorded rather than
+  quietly deleted because the wrong label survived several passes over this file, and a
+  question about a call that does not exist is worse than no question.
+- **The ward and the crack no longer share a primitive, and that was the real overlap.**
+  Not in the call graph — in the shader. The ported ward shell built its facets from a
+  **Voronoi second-nearest seam over 37 sites**, which is construction-for-construction the
+  disc web `glass-crack-rendering.md` §2.2 condemns and `CrackField` replaced, so a guarded
+  creature and a damaged one spoke the same language. Rewritten 2026-07-26 as a cut gem held
+  in front of the creature: eight large hard-edged facets, a table, and **nothing hashed,
+  jittered or seeded anywhere**. The order is the point, and it settles the problem at the
+  level of meaning rather than of primitive — *a ward is manufactured and identical every
+  time; a fracture is natural and never repeats*. That contrast an eye reads without being
+  taught; "Voronoi cells of one size against Voronoi cells of another" is not a contrast at
+  all. `CONCEPTS.md` › Benchmark is the rule that permits it: the web build is authority for
+  what the game does, never for a shape its own platform forced on it, and a 192² canvas
+  bake cannot carry authored facet geometry.
 - ~~**A blow into recently-broken glass can score literally nothing.**~~ **Fixed, and
   it was a modelling defect rather than the tuning question it looked like.** Measured
   at four of eight blows scoring zero on a duskfang. Screening is right for the far
@@ -814,7 +832,7 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - **Two silhouette readers coexist, and the prediction here was wrong.** This bullet used
   to say step 6 would delete `_alpha_at`/`_touches_art` along with the Voronoi cells it
   culls. It did not, and could not: the CARVE culls through the same
-  `_touches_art(cell, centre)` (`enemy_view.gd:2631` (in `_death_cells`)), because a shard
+  `_touches_art(cell, centre)` (`enemy_view.gd:2842` (in `_death_cells`)), because a shard
   covering no painting is a pane of empty box that the shard shader draws as nothing while
   the physics still tumbles it. So the older reader outlived the path it was written for.
   Both are still there — `body_mask()` at 256² for the model, `_alpha_at` at full

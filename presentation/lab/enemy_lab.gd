@@ -113,6 +113,9 @@ var _frac_stops: bool = false
 var _frac_field: bool = false
 var _frac_compare: bool = false
 var _pre_cracks: int = 0
+## Whether a strip's actor stands up already guarded. Set by `--ward`, which photographs the
+## stone breaking and therefore needs one to break.
+var _ward_up: bool = false
 
 
 ## The two heroes stand on the same ground line as the foes and get the same
@@ -221,6 +224,11 @@ func _init(content_ref: ContentDB) -> void:
 		elif arg.begins_with("--crack="):
 			_mode = "crack"
 			states_id = arg.trim_prefix("--crack=")
+		elif arg == "--ward":
+			_mode = "ward"
+		elif arg.begins_with("--ward="):
+			_mode = "ward"
+			states_id = arg.trim_prefix("--ward=")
 		elif arg == "--fracture":
 			_mode = "fracture"
 		elif arg.begins_with("--fracture="):
@@ -331,7 +339,7 @@ func _init(content_ref: ContentDB) -> void:
 	_roster = roster
 	_names = names
 	_ids = ids
-	if _mode == "rite" or _mode == "hit" or _mode == "crack":
+	if _mode == "rite" or _mode == "hit" or _mode == "crack" or _mode == "ward":
 		var pick_r: String = states_id
 		if pick_r == "" or not roster.has(pick_r):
 			pick_r = "duskfang" if roster.has("duskfang") else (str(ids[0]) if not ids.is_empty() else "")
@@ -621,11 +629,19 @@ func _build_states(id: String, def: Dictionary, locale: Dictionary) -> void:
 		view.set_hp(maxi(1, int(roundf(float(max_hp) * frac))), max_hp)
 		view.set_facets(cracks / 2, facet_max)
 		view.set_ward(ward)
+		# And the STONE, not only the number. `set_ward` is the chip beside the vial;
+		# `set_ward_shell` is the gem held in front, and this sheet never called it — so the
+		# one state named `warded` has been showing an unwarded creature with a warded chip
+		# for as long as the shell has existed. `grow = false` because a still cannot show a
+		# 560 ms form-up and a half-cut stone is not what this cell is for.
+		if ward > 0:
+			view.set_ward_shell(true, false)
 		view.clear_intent()
 		# EnemyView's cap, not a second copy of it. This file carried its own
 		# `MAX_SITES = 32` and the two drifted apart the moment the real cap moved.
 		for _c: int in range(mini(cracks, EnemyView.MAX_SITES)):
 			view.crack()
+		view.settle_cracks()
 		if ignite > 0.0:
 			view.set_ignite(ignite)
 		view.set_targetable(targeted)
@@ -807,9 +823,13 @@ func _build_panel() -> void:
 
 	var ward: CheckButton = CheckButton.new()
 	ward.text = "ward"
+	# Both halves. The bench is where the 560 ms form-up and the re-cut pulse can actually be
+	# judged, so this raises the STONE as well as the number — toggling it twice is the
+	# "gained ward while already warded" case, which is the only way to see the re-cut.
 	ward.toggled.connect(func(on: bool) -> void:
 		if _bench_actor != null:
-			_bench_actor.set_ward(8 if on else 0))
+			_bench_actor.set_ward(8 if on else 0)
+			_bench_actor.set_ward_shell(on, true))
 	rows.add_child(ward)
 
 	var aim: CheckButton = CheckButton.new()
@@ -1246,6 +1266,17 @@ func _ready() -> void:
 		await _shoot_strip(wall, "crack",
 			func(v: EnemyView) -> void: v.strike(Vector2(-1, -1), Vector2.ZERO, _frac_energy))
 		return
+	if _mode == "ward":
+		# The guard giving way. Slowed for the same reason `--crack` is — the break is 340 ms
+		# against a readback that costs 70 — and photographed from a stone that is ALREADY up,
+		# because this strip is about the break and not about the form-up.
+		Engine.time_scale = CRACK_SLOMO
+		var wall_w: Array[float] = []
+		for t: float in WARD_FRAMES:
+			wall_w.append(t / CRACK_SLOMO)
+		_ward_up = true
+		await _shoot_strip(wall_w, "ward", func(v: EnemyView) -> void: v.set_ward(0))
+		return
 	if _mode == "bench":
 		# No auto-fit here: the bench is driven, not framed. Zoom is the user's.
 		get_window().content_scale_factor = 1.0
@@ -1295,6 +1326,10 @@ const CRACK_FRAMES: Array[float] = [0.0, 0.02, 0.05, 0.09, 0.14, 0.24]
 ## How far the clock is slowed for the crack strip. 0.06 stretches a 170ms front over
 ## nearly three seconds, which is about twenty readbacks' worth of room for six cells.
 const CRACK_SLOMO: float = 0.06
+## The ward stone giving way, in BEAT seconds. `EnemyView.WARD_BREAK` is 340ms and the curve
+## is ease-out, so the pieces are already well clear by the third cell — the frames spread
+## further than the crack's for that reason rather than clustering harder.
+const WARD_FRAMES: Array[float] = [0.0, 0.05, 0.11, 0.18, 0.26, 0.36]
 
 
 ## Stand one actor up, run `action` on it, photograph `frames`, save the strip.
@@ -1323,6 +1358,11 @@ func _shoot_strip(frames: Array[float], label: String, action: Callable) -> void
 	# when the first cell is photographed, and a half-drawn star in frame one reads as a
 	# rendering fault rather than as the animation it is.
 	view.settle_cracks()
+	# Same argument for the guard: `--ward` photographs the BREAK, so the stone has to be
+	# already up and already cut when the first cell is taken.
+	if _ward_up:
+		view.set_ward(8)
+		view.set_ward_shell(true, false)
 	_rows = [{"ground": ground, "actors": [view], "width": view.size.x}]
 	_sheet_size = stage
 	_ground.size = stage
