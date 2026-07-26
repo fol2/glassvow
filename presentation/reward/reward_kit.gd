@@ -125,12 +125,28 @@ func veil(at_y: float, h: float, w: float) -> void:
 	put(tr, Rect2(0.0, at_y - h * 0.5, w, h))
 
 
-func embers(at: Vector2, spread: float) -> void:
+## A mote leaves the fire yellow-hot and reddens as it cools, so the ramp is not
+## one hue but a short walk down from the fire's own — which is why these take a
+## hue and not a colour. The offsets are what the hand-picked warm ramp already
+## was, measured off it: at the default they reproduce it exactly, and at a cold
+## hue the embers go cold with the fire instead of raining orange onto blue.
+const MOTE_YOUNG: float = 16.0
+const MOTE_PEAK: float = 19.0
+const MOTE_OLD: float = -1.0
+## Lantern-fire — Duskfang's own, and the hue the warm ramp was picked at.
+const LANTERN_HUE: float = 22.0
+
+
+static func _mote(hue: float, offset: float, sat: float, alpha: float) -> Color:
+	return Color(Color.from_hsv(fmod(hue + offset, 360.0) / 360.0, sat, 1.0), alpha)
+
+
+func embers(at: Vector2, spread: float, hue: float = LANTERN_HUE) -> void:
 	var p: GPUParticles2D = GPUParticles2D.new()
 	p.amount = 70
 	p.lifetime = 3.4
 	p.preprocess = 3.4          # already burning when the screen opens
-	p.texture = radial(Color(1.0, 0.78, 0.42))
+	p.texture = radial(_mote(hue, 15.0, 0.58, 1.0))
 	var pm: ParticleProcessMaterial = ParticleProcessMaterial.new()
 	pm.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
 	pm.emission_box_extents = Vector3(spread, 6.0, 1.0)
@@ -142,9 +158,9 @@ func embers(at: Vector2, spread: float) -> void:
 	pm.scale_min = 0.012
 	pm.scale_max = 0.045
 	var ramp: Gradient = Gradient.new()
-	ramp.set_color(0, Color(1.0, 0.80, 0.45, 0.0))
-	ramp.set_color(1, Color(1.0, 0.45, 0.16, 0.0))
-	ramp.add_point(0.18, Color(1.0, 0.86, 0.55, 0.95))
+	ramp.set_color(0, _mote(hue, MOTE_YOUNG, 0.55, 0.0))
+	ramp.set_color(1, _mote(hue, MOTE_OLD, 0.84, 0.0))
+	ramp.add_point(0.18, _mote(hue, MOTE_PEAK, 0.45, 0.95))
 	var ramp_t: GradientTexture1D = GradientTexture1D.new()
 	ramp_t.gradient = ramp
 	pm.color_ramp = ramp_t

@@ -607,7 +607,7 @@ func _anchor() -> Vector2:
 func _place() -> void:
 	_centre = _anchor()
 	if _motes != null and _motes.stage.get_child_count() == 0:
-		_motes.embers(_light() + Vector2(0.0, 8.0), 340.0)
+		_motes.embers(_light() + Vector2(0.0, 8.0), 340.0, hue)
 	_field.queue_redraw()
 	_bed.queue_redraw()
 	_place_faces()
