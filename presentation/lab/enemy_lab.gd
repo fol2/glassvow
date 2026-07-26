@@ -49,7 +49,6 @@ const ROW_GAP: float = 96.0
 const CAPTION_H: float = 34.0
 const CHROME_H: float = 96.0        # room the foot plate needs under the feet
 const ROW_MAX_W: float = 2900.0
-const MAX_SITES: int = 32
 const PANEL_W: float = 300.0
 
 ## The states an enemy actually has in the benchmark. `cracks` is how many crack
@@ -60,8 +59,8 @@ const STATES: Array[Array] = [
 	["targeted", 0.72, 0, 0, 0.0, true, false],
 	["warded", 0.72, 8, 0, 0.0, false, false],
 	["cracked", 0.40, 0, 6, 0.0, false, false],
-	["ignite", 0.05, 0, 9, 0.9, false, false],
-	["shattered", 0.0, 0, 9, 1.0, false, true],
+	["ignite", 0.05, 0, 8, 0.9, false, false],
+	["shattered", 0.0, 0, 8, 1.0, false, true],
 ]
 
 var content: ContentDB
@@ -411,7 +410,9 @@ func _build_states(id: String, def: Dictionary, locale: Dictionary) -> void:
 		view.set_facets(cracks / 2, facet_max)
 		view.set_ward(ward)
 		view.clear_intent()
-		for _c: int in range(mini(cracks, MAX_SITES)):
+		# EnemyView's cap, not a second copy of it. This file carried its own
+		# `MAX_SITES = 32` and the two drifted apart the moment the real cap moved.
+		for _c: int in range(mini(cracks, EnemyView.MAX_SITES)):
 			view.crack()
 		if ignite > 0.0:
 			view.set_ignite(ignite)

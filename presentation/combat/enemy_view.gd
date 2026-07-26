@@ -76,7 +76,33 @@ const FOV_DEG: float = 28.0
 ## Glass plate thickness as a fraction of the box — thin, but NOT zero: thickness
 ## is what makes a shard catch a highlight on its edge and refract at all.
 const GLASS_THICK: float = 0.035
-const MAX_SITES: int = 32
+## How many cracks one creature can ever carry. Owner's ruling, 2026-07-26: a
+## crack is NOT one per hit, and a mob caps out well under ten. Landing on eight
+## rather than five is arithmetic — the reference caps its own drawn cracks at the
+## same number (`addCrack`: `layer.children.length < 8`), and eight cut lines part
+## a body into roughly nine to sixteen pieces, which is where `_death_sites`'
+## rings were already tuned and where the rite is already approved. Five would
+## give about six, and `_death_sites` warns in the other direction: a piece must
+## stay big enough to carry a readable patch of the painting.
+##
+## The cap is a BACKSTOP, not the mechanism. Once the fracture model lands
+## (`docs/fracture-model.md`), a blow into already-relieved glass produces a crack
+## that arrests immediately, so the count self-limits for a causal reason — the
+## glass is already broken there — rather than because a counter filled up.
+const MAX_SITES: int = 8
+
+## `_voronoiParts` (src/vfx.js:236), in UV. Two crack sites closer than
+## `SITE_MERGE` are one crack. The filler grid steps by `GRID_STEP`, is jittered by
+## `GRID_JITTER` so it never reads as a lattice, and no filler point lands within
+## `GRID_EXCLUDE` of a real crack — which is what keeps a blow's own fine cells
+## from being diluted by the coarse background.
+const SITE_MERGE: float = 0.02
+const GRID_STEP: float = 0.21
+const GRID_JITTER: float = 0.06
+const GRID_EXCLUDE: float = 0.13
+## Smallest debris cell, as a fraction of the plate. The reference culls at
+## 0.3 of its 100×100 space, which is this number.
+const CELL_MIN_AREA: float = 0.00003
 const VP_MAX: int = 2048
 
 ## Being struck (benchmark `choreoHit` / `hurtFlash`). The displacement is the
@@ -214,7 +240,29 @@ var _lunge_kind: String = ""
 var _lunge_dir: float = 1.0
 var _lunge_tween: Tween = null
 var _flare_tween: Tween = null
+## The throwaway stream: camera shake only. Nothing whose position anyone will
+## ever compare between two runs may draw from it — see `_frac`.
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+## Everything that decides fracture GEOMETRY draws from here instead, and the
+## reason is a defect this replaces. `_rng` is advanced twice per frame by the
+## camera shake in `_process` while `_shake > 0`, and `shatter()` sets
+## `_shake = 1.0` — so a rite spent roughly 26 extra draws at 60 Hz and 53 at
+## 120 Hz, `reset_glass()` never reseeded, and re-running the rite gave a
+## different pattern every time in a frame-rate-dependent way. `CONCEPTS.md` ›
+## Lab states the lab exists to prove that a change meant to alter nothing
+## altered nothing; for the glass it could not. It also silently poisoned a
+## screenshot comparison earlier the same day, where the variance was put down to
+## particles alone.
+##
+## `Rng` rather than `RandomNumberGenerator` because it is the project's own pure
+## Mulberry32 and its state is readable, so a pattern can be reproduced from a
+## number rather than from a frame count.
+var _frac: Rng = Rng.new(0)
+## Kept so `reset_glass()` can rewind the stream. `art_id` is a build-time
+## parameter and is not retained, and re-deriving the seed is not the point: a
+## reset has to put the stream back where it started or the lab still cannot
+## repeat a rite.
+var _frac_seed: int = 0
 
 # --- the 3D stage
 var _stage: SubViewport = null
@@ -702,6 +750,8 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		custom_minimum_size = Vector2(art_size, art_size)
 		size = custom_minimum_size
 		_rng.seed = hash(String(art_id)) + enemy_idx
+		_frac_seed = _stable_seed(String(art_id), enemy_idx)
+		_frac = Rng.new(_frac_seed)
 		_build_stage(tex, enemy_idx)
 	else:
 		# No painting: the procedural gem, at the box it has always used. This is
@@ -1497,6 +1547,35 @@ func _rebuild_glass() -> void:
 		_shards.append(mi)
 
 
+## FNV-1a over the art id. `hash()` is deliberately not used: it carries no
+## cross-version guarantee in Godot, and this seed decides a shipped creature's
+## fracture pattern, so a golden-image suite built on `hash()` breaks on an engine
+## upgrade rather than on a change anyone made.
+static func _stable_seed(id: String, idx: int) -> int:
+	var h: int = 0x811C9DC5
+	for c: int in id.to_utf8_buffer():
+		h = ((h ^ c) * 0x01000193) & 0xFFFFFFFF
+	return (h + idx * 0x9E3779B9) & 0xFFFFFFFF
+
+
+## `Rng` exposes `next()` and integer helpers only. `domain/rng/rng.gd` is a
+## byte-exact port of the web engine's `makeRng` and is not this lane's to extend,
+## so the float range lives here.
+func _frand(a: float, b: float) -> float:
+	return a + (b - a) * _frac.next()
+
+
+## Body UV (y down, 0..1) ↔ quad-local world units (y up, centred on the plate).
+## Both directions exist because the reference reasons in UV — its spacings are
+## UV constants — while `_sites` and the meshes are in world units.
+func _to_uv(p: Vector2) -> Vector2:
+	return Vector2(p.x / _quad_w + 0.5, 0.5 - p.y / _box_u)
+
+
+func _from_uv(u: Vector2) -> Vector2:
+	return Vector2((u.x - 0.5) * _quad_w, (0.5 - u.y) * _box_u)
+
+
 ## Score a crack. `at` is in body UV; the sites drive the Voronoi that becomes
 ## the shards, exactly as crack sites do in the benchmark — except here they
 ## become geometry rather than a baked normal map.
@@ -1505,9 +1584,8 @@ func crack(at: Vector2 = Vector2(-1, -1)) -> void:
 		return
 	var p: Vector2 = at
 	if p.x < 0.0:
-		p = Vector2(_rng.randf_range(0.2, 0.8), _rng.randf_range(0.2, 0.8))
-	# UV (y down, 0..1) into quad-local world units (y up, centred).
-	_sites.append(Vector2((p.x - 0.5) * _quad_w, (0.5 - p.y) * _box_u))
+		p = Vector2(_frand(0.2, 0.8), _frand(0.2, 0.8))
+	_sites.append(_from_uv(p))
 	_rebuild_glass()
 
 
@@ -1523,6 +1601,9 @@ func reset_glass() -> void:
 	_hit_squash = 0.0
 	_set_flare(0.0)
 	_sites = PackedVector2Array()
+	# Rewind the fracture stream, not just the site list. Clearing one without the
+	# other is what made two runs of the same rite differ.
+	_frac = Rng.new(_frac_seed)
 	modulate = Color(1, 1, 1, 1)
 	if _debris != null:
 		if is_instance_valid(_debris):
@@ -1575,8 +1656,14 @@ func mark_dead(beat: float = 0.2) -> void:
 		_gem.set_state(_hue, 0.0, true)
 		modulate = Color(0.5, 0.5, 0.56, 0.5)
 		return
-	# A dying vessel cracks the rest of the way through first.
-	while _sites.size() < 9:
+	# A dying vessel cracks the rest of the way through first — up to the cap, which
+	# is the truer statement anyway: the rite is the vessel giving up whatever it
+	# had left. Counted rather than a `while _sites.size() < N` loop, and that is
+	# not style. `crack()` returns WITHOUT appending both at the cap and when
+	# `_glass_root` is null, so the old `while` form spun forever the moment N
+	# reached the cap — and hung outright, silently, for any vessel with no glass
+	# root. A bounded loop cannot, and `crack()` still self-limits.
+	for _i: int in range(MAX_SITES):
 		crack()
 	var tw: Tween = create_tween()
 	tw.tween_method(set_ignite, _ignite, 1.0, maxf(0.01, beat)).set_trans(Tween.TRANS_CUBIC)
@@ -1597,8 +1684,8 @@ func _death_sites(burst: Vector2) -> PackedVector2Array:
 		var rf: float = ring[0]
 		var n: int = ring[1]
 		for i: int in range(n):
-			var a: float = TAU * (float(i) + _rng.randf_range(-0.35, 0.35)) / float(n)
-			var r: float = reach * rf * _rng.randf_range(0.82, 1.22)
+			var a: float = TAU * (float(i) + _frand(-0.35, 0.35)) / float(n)
+			var r: float = reach * rf * _frand(0.82, 1.22)
 			var p: Vector2 = burst + Vector2(cos(a), sin(a)) * r
 			p.x = clampf(p.x, -_quad_w * 0.49, _quad_w * 0.49)
 			p.y = clampf(p.y, -_box_u * 0.49, _box_u * 0.49)
@@ -1606,12 +1693,72 @@ func _death_sites(burst: Vector2) -> PackedVector2Array:
 	return out
 
 
+## The body breaks along the cracks it was CARRYING. `_sites` is the standing web;
+## a sparse jittered background grid fills the intact glass, so the vessel comes
+## apart into fine cells where the blows landed and long slabs everywhere else.
+##
+## This is `_voronoiParts` (src/vfx.js:236), and it is the reference's PRIMARY
+## path. It was never ported. `_death_sites` was — and that is the reference's
+## `_radialParts()` FALLBACK: src/vfx.js:296 reads
+## `_voronoiParts(opts.sites) || _radialParts()`. So this port shipped the fallback
+## as its primary, `_sites` was never read at death, and the creature broke along a
+## pattern unrelated to its own cracks. `CONCEPTS.md` › Crack says cracks
+## "determine how the Vessel breaks apart when the Death rite runs"; until now
+## they did not, which made it a compliance defect rather than a divergence.
+##
+## Under three harvested sites the reference falls back and so does this: three
+## points cannot describe a fracture, and the radial map is the better guess.
+func _break_sites(burst: Vector2) -> PackedVector2Array:
+	if _sites.size() < 3:
+		return _death_sites(burst)
+	# Reasoned in UV, because the reference's spacings are UV constants and a
+	# creature's plate is not square — converting them to world units per axis
+	# would make the filler grid denser on the narrow one.
+	var uv: Array[Vector2] = []
+	for s: Vector2 in _sites:
+		var u: Vector2 = _to_uv(s)
+		var keep: bool = true
+		for q: Vector2 in uv:
+			if q.distance_to(u) < SITE_MERGE:
+				keep = false
+				break
+		if keep:
+			uv.append(u)
+	var gu: float = 0.1
+	while gu < 1.0:
+		var gv: float = 0.09
+		while gv < 1.0:
+			# Named rather than inline: unary minus on a typed const folds to
+			# Variant, and the gate treats that as an error at the call.
+			var jitter: float = GRID_JITTER
+			var p: Vector2 = Vector2(gu + _frand(-jitter, jitter),
+				gv + _frand(-jitter, jitter))
+			var free: bool = true
+			for q: Vector2 in uv:
+				if q.distance_to(p) < GRID_EXCLUDE:
+					free = false
+					break
+			if free:
+				uv.append(p)
+			gv += GRID_STEP
+		gu += GRID_STEP
+	var out: PackedVector2Array = PackedVector2Array()
+	for u: Vector2 in uv:
+		out.append(_from_uv(u))
+	return out
+
+
 ## Full-body panes, minus the empty ones. A cell whose every probe lands on
 ## transparent art would fly as an invisible slab wearing a glowing fracture
-## rim — which is exactly "shattering something that is not the mob".
+## rim — which is exactly "shattering something that is not the mob". Slivers go
+## too: a needle triangulates and extrudes perfectly well, then flies as a splinter
+## carrying no readable painting, which the reference culls for the same reason.
 func _death_cells(burst: Vector2) -> Array[PackedVector2Array]:
 	var out: Array[PackedVector2Array] = []
-	for cell: PackedVector2Array in _voronoi(_death_sites(burst), 0.0):
+	var floor_area: float = _quad_w * _box_u * CELL_MIN_AREA
+	for cell: PackedVector2Array in _voronoi(_break_sites(burst), 0.0):
+		if _area(cell) < floor_area:
+			continue
 		var centre: Vector2 = Vector2.ZERO
 		for v: Vector2 in cell:
 			centre += v
@@ -1619,6 +1766,16 @@ func _death_cells(burst: Vector2) -> Array[PackedVector2Array]:
 		if _touches_art(cell, centre):
 			out.append(cell)
 	return out
+
+
+## Shoelace, absolute. Cells arrive in either winding depending on which clips ran.
+static func _area(poly: PackedVector2Array) -> float:
+	var a: float = 0.0
+	for i: int in range(poly.size()):
+		var p: Vector2 = poly[i]
+		var q: Vector2 = poly[(i + 1) % poly.size()]
+		a += p.x * q.y - q.x * p.y
+	return absf(a) * 0.5
 
 
 func _touches_art(cell: PackedVector2Array, centre: Vector2) -> bool:
@@ -1732,21 +1889,21 @@ func shatter() -> void:
 		var dir: Vector3 = Vector3.UP
 		if out2.length() > _box_u * 0.001:
 			dir = Vector3(out2.x, out2.y, 0.0).normalized()
-		rb.linear_velocity = dir * _box_u * _rng.randf_range(0.45, 1.05) \
-			+ Vector3(0.0, _box_u * 0.35, _box_u * _rng.randf_range(0.6, 1.5))
+		rb.linear_velocity = dir * _box_u * _frand(0.45, 1.05) \
+			+ Vector3(0.0, _box_u * 0.35, _box_u * _frand(0.6, 1.5))
 		rb.angular_velocity = Vector3(
-			_rng.randf_range(-spin, spin) * 1.3,
-			_rng.randf_range(-spin, spin) * 1.3,
-			_rng.randf_range(-spin, spin) * 0.5)
+			_frand(-spin, spin) * 1.3,
+			_frand(-spin, spin) * 1.3,
+			_frand(-spin, spin) * 0.5)
 		var cool_t: Tween = rb.create_tween()
 		cool_t.tween_property(smat, "shader_parameter/heat", 0.0,
-			_rng.randf_range(0.9, 1.4)) \
+			_frand(0.9, 1.4)) \
 			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		# Short lives, staggered: most pieces crumble at or just after first
 		# bounce. A plate that settles flat shows the lens only its side band —
 		# debris left lying around is where the "standing glass" read came from.
 		var fade_t: Tween = rb.create_tween()
-		fade_t.tween_interval(_rng.randf_range(0.55, 1.05))
+		fade_t.tween_interval(_frand(0.55, 1.05))
 		fade_t.tween_property(smat, "shader_parameter/dissolve", 1.0, 0.35)
 		fade_t.tween_callback(rb.queue_free)
 	_spawn_burst_flash(burst)
