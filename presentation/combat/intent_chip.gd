@@ -159,6 +159,23 @@ func set_intent(intent: StringName, amount_text: String) -> void:
 	_relayout()
 
 
+## `teleFlash` (styles.css:921) — the chip blazes twice in the half-second
+## before its owner swings, so the blow is announced by the promise that made
+## it rather than arriving unheralded. 0.5s ease-in-out, TWO iterations, peaking
+## at 40% larger and near-double brightness halfway through each.
+func telegraph() -> void:
+	if not visible or not is_inside_tree() or size == Vector2.ZERO:
+		return
+	pivot_offset = size * 0.5
+	var tw: Tween = create_tween()
+	tw.set_loops(2)
+	tw.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(self, "scale", Vector2.ONE * 1.22, 0.25)
+	tw.parallel().tween_property(self, "modulate", Color(1.8, 1.8, 1.8), 0.25)
+	tw.tween_property(self, "scale", Vector2.ONE, 0.25)
+	tw.parallel().tween_property(self, "modulate", Color.WHITE, 0.25)
+
+
 func _icons_width() -> float:
 	if _icons.is_empty():
 		return 0.0

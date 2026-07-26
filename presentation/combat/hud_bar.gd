@@ -685,6 +685,105 @@ func pile_rect(which: StringName) -> Rect2:
 	return p.stack.get_global_rect()
 
 
+## `playReshuffleCeremony` (drain.js:132) — the discard walks back into the draw
+## pile. The faces belong to the piles, so the flight is flown from here rather
+## than from the hand: no CardView exists for a card nobody has drawn, and the
+## art in the air is the same pile back the stack is already drawing.
+##
+## Fire-and-forget: the caller waits `seconds` and then bumps the pile, exactly
+## as the drain awaits `flyCardBacks` and calls `bumpPile` after it.
+func fly_backs(from: StringName, to: StringName, n: int, seconds: float) -> void:
+	var src: Rect2 = pile_rect(from)
+	var dst: Rect2 = pile_rect(to)
+	var tex: Texture2D = icon("piles/" + str(from))
+	if tex == null or n <= 0:
+		return
+	# Staggered inside the same window the whole ceremony gets, so a six-card
+	# reshuffle reads as a stream rather than as one thick card.
+	var stagger: float = seconds * 0.35 / float(maxi(1, n))
+	var flight: float = maxf(0.12, seconds - stagger * float(n - 1))
+	for i: int in range(n):
+		var face: TextureRect = TextureRect.new()
+		face.texture = tex
+		face.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		face.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		face.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		face.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		face.size = src.size
+		face.pivot_offset = src.size * 0.5
+		face.position = src.position - global_position
+		face.modulate.a = 0.0
+		add_child(face)
+		# A lifted arc, so the stream bows over the stage instead of sliding
+		# along the bottom edge behind the hand.
+		var lift: float = 90.0 + float(i % 3) * 26.0
+		var p0: Vector2 = face.position
+		var p1: Vector2 = dst.position - global_position
+		var ctrl: Vector2 = (p0 + p1) * 0.5 - Vector2(0.0, lift)
+		var tw: Tween = face.create_tween()
+		tw.tween_interval(stagger * float(i))
+		tw.tween_method(func(x: float) -> void:
+			if not is_instance_valid(face):
+				return
+			var e: float = Motion.ease(Motion.OUT_SOFT, x)
+			face.position = Motion.quad(p0, ctrl, p1, e)
+			face.rotation = deg_to_rad(lerpf(0.0, 18.0, sin(e * PI)))
+			face.modulate.a = minf(1.0, e * 6.0),
+			0.0, 1.0, flight)
+		tw.tween_callback(face.queue_free)
+
+
+## Where the lantern hangs, in global px — embers spilled by dying glass fly to
+## it, and the drain needs the target before the flight can be aimed.
+func lantern_rect() -> Rect2:
+	if _lantern == null:
+		return Rect2(global_position + size * 0.5, Vector2.ZERO)
+	return _lantern.get_global_rect()
+
+
+## `pileBump` (styles.css:1453) — 0.28s ease-out, up 4px and 5% wider at 40%.
+## The pile answers the card that just landed in it; without it a flight ends in
+## silence and the deck reads as scenery.
+func bump_pile(which: StringName) -> void:
+	var p: Pile = _draw_pile
+	if which == &"discard":
+		p = _discard_pile
+	elif which == &"ashes":
+		p = _ashes_pile
+	if p == null or p.stack == null:
+		return
+	_keyframe_pop(p.stack, 1.05, -4.0, 0.28)
+
+
+## `chipPop` / `blockPulse` — 40% of the way through, the widget swells and
+## comes back. Which widget and how far is the caller's business.
+func pulse(which: StringName) -> void:
+	match which:
+		&"energy":
+			_keyframe_pop(_energy_orb, 1.35, 0.0, 0.35)
+		&"lantern":
+			_keyframe_pop(_lantern, 1.35, 0.0, 0.4)
+		&"ward":
+			_keyframe_pop(_ward_chip, 1.3, 0.0, 0.4)
+		_:
+			push_warning("HudBar: no widget named %s to pulse" % String(which))
+
+
+## The shared two-beat: out to `peak` scale and `lift` px at 40% of `seconds`,
+## then back. Pivoted on the widget's own centre so nothing walks sideways.
+func _keyframe_pop(node: Control, peak: float, lift: float, seconds: float) -> void:
+	if node == null or not node.is_inside_tree() or node.size == Vector2.ZERO:
+		return
+	node.pivot_offset = node.size * 0.5
+	var home: Vector2 = node.position
+	var tw: Tween = node.create_tween()
+	tw.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(node, "scale", Vector2.ONE * peak, seconds * 0.4)
+	tw.parallel().tween_property(node, "position", home + Vector2(0.0, lift), seconds * 0.4)
+	tw.tween_property(node, "scale", Vector2.ONE, seconds * 0.6)
+	tw.parallel().tween_property(node, "position", home, seconds * 0.6)
+
+
 ## One face per card, so the pile is its own gauge — the count text is only
 ## there for the tail past the cap. An empty pile hides the plate and keeps the
 ## name and the zero (`.pile-btn.is-empty .pile-stack { visibility: hidden }`).

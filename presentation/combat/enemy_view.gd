@@ -919,6 +919,36 @@ func _clear_lunge() -> void:
 ##
 ## `hurtFlash` is a foe's animation there, and a struck hero is shoved without
 ## flashing, so the flare is withheld from a hero rather than dimmed for one.
+## The middle of the painted body, in global px — where an effect aimed at this
+## actor starts. `presentation.enemyCenter` / `heroCenter` read the art element's
+## own box; here the actor's box IS the art box (the name plate is a child hung
+## off it), so the centre is the box centre and nothing has to know how the 3D
+## stage inside is padded.
+func body_centre() -> Vector2:
+	return global_position + size * 0.5
+
+
+## `choreoStagger` (combat-choreo.js:45) — the beat before the vessel fails: the
+## body sags 5px, tips two and a half degrees and darkens to 0.6 brightness over
+## 360ms, and STAYS there (`fill: 'forwards'`) because what follows is the
+## shatter, not a recovery.
+##
+## Slumped onto the display rather than the 3D vessel: `_process` rewrites the
+## vessel's transform every frame from the idle, so a tween on it would be
+## overwritten, and a body that is about to break has no business still
+## breathing. Returns how long the caller should wait.
+func stagger() -> float:
+	if _dead or _display == null:
+		return 0.0
+	_display.pivot_offset = _display.size * 0.5
+	var tw: Tween = create_tween()
+	tw.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(_display, "position", _display.position + Vector2(0.0, 5.0), 0.36)
+	tw.parallel().tween_property(_display, "rotation", deg_to_rad(-2.5), 0.36)
+	tw.parallel().tween_property(_display, "modulate", Color(0.6, 0.6, 0.6), 0.36)
+	return 0.36
+
+
 func take_hit(direct: bool = true) -> void:
 	if _dead:
 		return
@@ -1201,7 +1231,11 @@ func reset_glass() -> void:
 ## web races the glass — then the shards STOP being decoration and become
 ## rigid bodies. No hand-rolled ballistics: gravity, tumble and the floor bounce
 ## are the physics engine's, which is the whole reason to be in Godot.
-func mark_dead() -> void:
+## `beat` is `igniteVessel`'s hold (drain.js:607): how long the fire takes to
+## well up before the glass gives. The benchmark spends 200ms on it and 320 on a
+## boss; the caller waits the same beat and then throws the burst, so the sparks
+## leave at the instant the vessel fails rather than after it.
+func mark_dead(beat: float = 0.2) -> void:
 	if _dead:
 		return
 	# A hero does not break. The benchmark spends no crack, no ignition and no
@@ -1221,7 +1255,7 @@ func mark_dead() -> void:
 	while _sites.size() < 9:
 		crack()
 	var tw: Tween = create_tween()
-	tw.tween_method(set_ignite, _ignite, 1.0, 0.45).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_method(set_ignite, _ignite, 1.0, maxf(0.01, beat)).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_callback(shatter)
 
 
@@ -1762,6 +1796,14 @@ func set_intent(intent: StringName, amount_text: String, move_name: String = "")
 ## The telegraph has been spent, or there is nothing to telegraph. An intent
 ## with no kind and no figure draws nothing, so this is one call rather than a
 ## visibility flag someone downstream has to remember to restore.
+## The chip blazes in the beat before the body swings. Forwarded rather than
+## reached through, because the chip is this actor's own furniture and the drain
+## has no business knowing an EnemyView keeps one.
+func telegraph() -> void:
+	if _intent != null:
+		_intent.telegraph()
+
+
 func clear_intent() -> void:
 	set_intent(&"", "")
 
