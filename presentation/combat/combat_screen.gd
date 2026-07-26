@@ -1265,9 +1265,18 @@ func _coarse() -> bool:
 		and not DisplayServer.has_feature(DisplayServer.FEATURE_MOUSE)
 
 
-## `cardHover` (combat.js:1375). One tick per seat crossed, never per pixel.
+## The benchmark wires hover at all only behind `if (FINE)` (combat.js:960) —
+## `c.onmouseenter` sets the hovered card, ticks and relays out, and on a coarse
+## pointer that handler is never attached. `FINE` is
+## `matchMedia('(hover: hover) and (pointer: fine)')` (context.js:10).
+##
+## So a finger gets exactly ONE tick per card, from the COARSE first-tap branch
+## in `_on_card_pressed`. Godot synthesises mouse motion from touch, so this
+## handler runs there too and the port was ticking twice for one tap. The
+## previews still update — `layoutHand` recomputes them on the tap either way —
+## but the sound is the benchmark's and belongs to the fine pointer only.
 func _on_card_hover_changed(uid: int) -> void:
-	if uid >= 0:
+	if uid >= 0 and not _coarse():
 		_sfx.play(&"hover")
 	_update_previews()
 
@@ -2070,6 +2079,11 @@ func _hit_enemy(ev: Dictionary) -> void:
 			view.take_hit(true)  # choreoHit — the recoil and the hurt flash
 		if blocked > 0:
 			_sfx.play(&"blocked")
+			# The stone answers for having stopped it. Separate from `take_hit` above, which
+			# is the body recoiling — a warded creature does both, an unwarded one does only
+			# the recoil, and `ward_hit` is a no-op when there is no stone.
+			if view != null:
+				view.ward_hit(Vector2.LEFT)
 			_float(at + Vector2(0.0, 26.0), str(blocked), "blockedf",
 				Color(0, 0, 0, 0), 0.0, WARD_ICON, 19)
 			_vfx.burst(at + Vector2(0.0, 8.0), WARD_BLUE, 9, 210.0, TAU, 0.0,
@@ -2625,11 +2639,23 @@ func _input(event: InputEvent) -> void:
 ## only ever heard while a card is armed — nothing else on this screen answers a
 ## bare press on the stage.
 func _stage_pressed(at: Vector2) -> void:
-	if not _targeting:
-		return
-	# Hand seats resolve before the residual stage (pointer.js `resolveHit`), so a
-	# click that lands on a card is that card's, never the background's.
+	# A press that landed on a card or a foe is that thing's, never the
+	# background's — the benchmark's own first line, and it guards BOTH branches
+	# below rather than only the targeting one.
 	if _hand.card_at(at) >= 0:
+		return
+	if not _targeting:
+		# The other half of the same handler, and this port had none of it: with
+		# nothing armed, pressing the stage sets a lifted card back down. On a
+		# touchscreen the first tap on a card lifts it to be read, so without
+		# this there is no way to put it down again except by playing it.
+		if _hand.hovered_uid >= 0:
+			# `drop_seat` rather than a new lowering call: nothing is armed on
+			# this branch, so clearing `armed_uid` alongside the hover is a
+			# no-op, and `hand_view.gd` belongs to another lane.
+			_hand.drop_seat()
+			_update_previews()
+			get_viewport().set_input_as_handled()
 		return
 	var idx: int = _enemy_at(at)
 	if idx >= 0:
