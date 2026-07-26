@@ -220,9 +220,10 @@ A single game process kept running out of sight for a whole working session, so
 that photographing a screen — a Lab or a real run — costs no window of its own
 and does not take the desktop. Distinct from a one-off capture, which starts,
 photographs and quits; the host starts once and is then driven capture by
-capture. It does hold a window the whole time, parked where nobody sees it, and
-its one start still takes the desktop briefly — the saving is per photograph,
-not absolute.
+capture. It does hold a visible window the whole time — an attempt to park it
+off the desktop is refused by the platform — and its one start still takes the
+desktop briefly. The saving is *per photograph*: one interruption a session
+rather than one a shot, not an absence of one.
 
 A host re-reads the project's code and rebuilds the screen on demand, which is
 what lets it outlive an edit, and two consequences follow. Whatever run was in

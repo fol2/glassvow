@@ -181,13 +181,17 @@ GLASSVOW_TILT="0,0" GLASSVOW_LAMP="-0.35,-0.35,1" GLASSVOW_DUMP=after \
   tools/shot.sh --cards --shot=/tmp/cards.png
 ```
 
-Two details in that line are load-bearing. `tools/shot.sh` parks the window
-off-screen instead of taking the keyboard on every launch, and the env prefix
-survives it because the wrapper `exec`s godot in the same environment
-(`tools/shot.sh:33`); run it from the repo root, since `GLASSVOW_DUMP` writes
-relative filenames. The `--shot=` is what makes the run quit — `--cards` alone
-leaves the lab open, which is fine when the window is visible and a trap when it
-is parked off-screen and can only be killed.
+Two details in that line are load-bearing. `tools/shot.sh` is the repo's capture
+entry point, and the env prefix survives it because the wrapper `exec`s godot in
+the same environment (`tools/shot.sh:51`); run it from the repo root, since
+`GLASSVOW_DUMP` writes relative filenames. The `--shot=` is what makes the run
+quit — `--cards` alone leaves the lab open, and a scripted run that forgets it
+leaves a process behind to be killed by hand.
+
+Do not expect the wrapper to keep the window out of sight. It requests
+`--position -4000,-4000` and macOS clamps that back on screen, so each of the
+two runs takes the desktop for about a second. Here that is unavoidable rather
+than merely tolerated, because the recipe genuinely needs two processes (below).
 
 Do **not** reach for `tools/live.sh` here. The hooks are read once from the
 process environment (`card_view.gd:926-939`), so a single host cannot change its

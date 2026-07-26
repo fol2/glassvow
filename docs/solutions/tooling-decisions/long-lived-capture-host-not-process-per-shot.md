@@ -136,18 +136,41 @@ osascript -e 'tell application "System Events" to name of first process whose fr
    is strictly worse than doing nothing.
 
 That list is not archaeology; it is recorded in prose in the header comment of
-`tools/shot.sh:11-26` — the names, not the per-item measurements — so the next
+`tools/shot.sh:16-35` — the names, not the per-item measurements — so the next
 person who reaches for the NO_FOCUS flag reads it before spending the
 afternoon.
 
-### The one positive finding
+### The one positive finding, which turned out to be vacuous
 
-A window parked at `--position -4000,-4000` still renders a complete, correct
-frame. Captures taken off-screen were verified equivalent in content to
-on-screen ones by inspecting the PNGs. This is the finding that makes an
-invisible host viable at all, and it is why `-4000,-4000` is the default in both
-tools (`tools/shot.sh:31`, `tools/live.sh:23`, both overridable via
-`GLASSVOW_SHOT_POSITION`).
+This section used to record a finding: *a window parked at
+`--position -4000,-4000` still renders a complete, correct frame*, verified by
+comparing off-screen captures against on-screen ones and finding them
+equivalent. It was offered as the result that made an invisible host viable.
+
+It was not a finding. On 2026-07-26 the window bounds were read out of
+`CGWindowListCopyWindowInfo` while a capture ran, and macOS had been clamping
+the request the whole time: asking for `1400,900` put the window at roughly
+`1412,844`, tracking the request, while asking for `-4000,-4000` put it at
+roughly `422,234` — on the desktop. A window is constrained to stay on screen,
+so the "off-screen" captures in that comparison had never been off-screen. What
+was proved is that an on-screen capture matches an on-screen capture.
+
+The failure mode is the same one that produced the false all-clear recorded
+below, in a quieter form: an experiment was run against a state that the
+experiment never established. "Does an off-screen window render correctly?" is
+only answerable once something confirms the window went off-screen, and nothing
+did. Verify the precondition, not just the outcome.
+
+`-4000,-4000` remains the default in both tools (`tools/shot.sh:49`,
+`tools/live.sh:23`, both overridable via `GLASSVOW_SHOT_POSITION`) because it
+costs nothing and a platform that honoured it would be strictly better. Nothing
+downstream may assume that it works.
+
+**The conclusion survives this, and the reason is worth stating plainly.** The
+host's value was never that its window is invisible — it is that the window is
+created *once*. The focus grab is a boot cost, and a host boots once a session.
+Every measurement below about per-capture cost still holds; the only claim that
+does not is that you never see the window.
 
 ## Guidance
 
@@ -158,9 +181,9 @@ Four files implement this, and none of them touches the game.
 
 ### `tools/shot.sh` — the one-off, for when a host is overkill
 
-Twenty-five lines of comment and five lines of code. It parks the window off-screen
-and passes every argument straight through to `main.gd`'s `--shot` hook
-(`tools/shot.sh:33`):
+Forty-odd lines of comment and five lines of code. It requests an off-screen
+position — which macOS declines, see above — and passes every argument straight
+through to `main.gd`'s `--shot` hook (`tools/shot.sh:51`):
 
 ```sh
 exec "$GODOT" --path "$ROOT" --position "$POSITION" -- "$@"
@@ -447,8 +470,8 @@ final design is one boot per session, which was then measured and handed back
 ### Boot once, capture many
 
 ```bash
-tools/live.sh start --fight=duskfang --kind=elite   # boots off-screen, hands focus back
-tools/live.sh shot /tmp/a.png                       # no window, no focus grab
+tools/live.sh start --fight=duskfang --kind=elite   # the one boot; hands focus back
+tools/live.sh shot /tmp/a.png                       # no new window, no focus grab
 tools/live.sh key space
 tools/live.sh click 590 700
 tools/live.sh shot /tmp/b.png

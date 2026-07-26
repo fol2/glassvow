@@ -199,7 +199,7 @@ directly:
 
 | Command | Use |
 |---|---|
-| `tools/shot.sh <game args>` | one-off capture; identical arguments to the `--shot` hook, window parked off-screen |
+| `tools/shot.sh <game args>` | one-off capture; identical arguments to the `--shot` hook |
 | `tools/live.sh start <game args>` then `shot` / `reload` / `key` / `click` / `stop` | an iteration loop; boots once and hot-reloads code, so an edit costs no reboot |
 | `tools/check_anchors.py [--fix]` | verify `file:line` anchors in docs still point where they claim |
 
@@ -209,12 +209,19 @@ With six lanes capturing all day that is a steady tax on whoever is at the
 keyboard. Full reasoning and the seven rejected workarounds:
 `docs/solutions/tooling-decisions/long-lived-capture-host-not-process-per-shot.md`.
 
+**What the harness buys is fewer boots, not an invisible window.** Both scripts
+request `--position -4000,-4000`, and macOS declines it: a window is constrained
+to stay on screen, so the request is clamped and the window appears anyway
+(measured 2026-07-26 — see the shot.sh header). The live host is still the
+answer, because it boots *once*: the interruption is one per session instead of
+one per capture. Do not reach for `tools/shot.sh` expecting a capture nobody
+sees; reach for it when you want exactly one shot.
+
 Two caveats a lane will hit. A capture recipe that varies `GLASSVOW_*` between
 runs needs `tools/shot.sh`, not the live host — those hooks are read once from
 the process environment, so one host cannot change them between builds. And
 `--shot=` is what makes a lab run quit; a lab launched without it stays open,
-which is harmless when the window is visible and a trap when it is parked
-off-screen.
+so a scripted run that forgets it leaves a process to be killed by hand.
 
 ## Shared dependency: the visual benchmark
 
