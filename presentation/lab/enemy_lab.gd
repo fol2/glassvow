@@ -110,6 +110,7 @@ var _frac_energy: float = 1.2
 var _frac_stops: bool = false
 var _frac_field: bool = false
 var _frac_compare: bool = false
+var _pre_cracks: int = 0
 
 
 ## The two heroes stand on the same ground line as the foes and get the same
@@ -228,6 +229,15 @@ func _init(content_ref: ContentDB) -> void:
 			_frac_field = true
 		elif arg == "--compare":
 			_frac_compare = true
+		# Score N blows before whatever mode runs. `--hit --cracked=6` is the one that
+		# shows the groove moving WITH the creature rather than sliding over it.
+		elif arg.begins_with("--cracked="):
+			var pc: String = arg.trim_prefix("--cracked=")
+			if pc.is_valid_int() and pc.to_int() >= 0:
+				_pre_cracks = pc.to_int()
+			else:
+				push_warning("enemy lab: --cracked=%s not a count — keeping %d"
+					% [pc, _pre_cracks])
 		elif arg.begins_with("--energy="):
 			var en: String = arg.trim_prefix("--energy=")
 			if en.is_valid_float() and float(en) > 0.0:
@@ -1270,6 +1280,13 @@ func _shoot_strip(frames: Array[float], label: String, action: Callable) -> void
 	view.set_hp(_max_hp(def), _max_hp(def))
 	view.set_facets(0, _facet_max(def))
 	view.clear_intent()
+	# Pre-cracked, so a recoil strip can show the grooves riding the body. This is the
+	# whole difference the shipping renderer makes over the lab probe: the field is part
+	# of the body material, so it warps with the idle deform and shakes with the camera by
+	# construction. An overlay in screen space could not, and that is why the probe's
+	# output was only ever judged as a still.
+	for _c: int in range(_pre_cracks):
+		view.crack()
 	_rows = [{"ground": ground, "actors": [view], "width": view.size.x}]
 	_sheet_size = stage
 	_ground.size = stage
