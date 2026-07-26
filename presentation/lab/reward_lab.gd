@@ -13,6 +13,12 @@ extends Control
 ##   godot --path . -- --reward --case=tiers     # ...opened on a case
 ##   godot --path . -- --reward --concept=window # ...opened on a concept
 ##
+## ONE VIEWER. There were briefly two — this and a separate RewardDesigns with
+## its own cases, its own strip and its own keys — which made the six candidates
+## uncomparable in the only way that matters: side by side, same spoils, same
+## keystroke apart. All six now build here off one CASES table, so switching
+## concept changes exactly one thing.
+##
 ## COMPARING CONCEPTS. The benchmark is ported and settled; what is being chosen
 ## between now are whole answers to "what IS a reward screen", not tunings of
 ## one. They differ in what a reward is made of, so the only honest way to judge
@@ -21,17 +27,17 @@ extends Control
 ##
 ## In the window:
 ##   1..5   case: gold · cards · full · elite · tiers
-##   Q/W/E/T  concept: rows · window · embers · reliquary
+##   Q W E R T Y   concept: rows · lancet · rose · embers · window · reliquary
 ##   B      build: beyond ⇄ benchmark (rows only — the ported floor)
 ##   O      open the offering (rows only; the others have no second door)
-##   R      reset the screen
+##   0      reset the screen
 ##   and everything else is the screen itself — hover a row, claim it, hover a
 ##   card to bring the lamp down onto it, pick or skip.
 ##
 ## The same flags still drive a scripted shot, and the strip hides itself
 ## whenever --shot= is present so it never lands in the frame:
 ##   --case=    gold | cards | full | elite | tiers   (default full)
-##   --concept= rows | window | embers | reliquary   (default rows)
+##   --concept= rows|lancet|rose|embers|window|reliquary   (default rows)
 ##   --bench    the benchmark ported straight — the floor the rest is diffed
 ##              against. Without it: one panel that deepens and seated spoils.
 ##   --pick     open the offering straight away — it is behind a row press,
@@ -100,8 +106,11 @@ const ORDER: Array[String] = ["gold", "cards", "full", "elite", "tiers"]
 ## The concepts on offer, in the order they were built. "rows" is the settled
 ## benchmark port; everything after it is an answer to the same brief that does
 ## not begin from a list.
-const CONCEPTS: Array[String] = ["rows", "window", "embers", "reliquary"]
-const CONCEPT_KEYS: Array[int] = [KEY_Q, KEY_W, KEY_E, KEY_T]
+const CONCEPTS: Array[String] = ["rows", "lancet", "rose", "embers", "window", "reliquary"]
+## Six concepts need six keys, so reset moves off R and onto 0. Cases keep
+## 1..5 — the row of number keys is the inner choice and the row of letters
+## under it is the outer one, which is the same shape as the strip.
+const CONCEPT_KEYS: Array[int] = [KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y]
 const BAR_H: float = 78.0
 const LOG_LINES: int = 3
 
@@ -123,7 +132,6 @@ var _log: Label = null
 var _events: Array[String] = []
 var _headless_shot: bool = false
 var _force_bar: bool = false
-var _designs: bool = false   # --design= handed the lab to RewardDesigns
 
 
 func _init(content_ref: ContentDB) -> void:
@@ -151,15 +159,6 @@ func _init(content_ref: ContentDB) -> void:
 			_headless_shot = true
 		elif arg == "--strip":
 			_force_bar = true
-	# --design= hands the whole lab over to RewardDesigns, which carries its own
-	# cases, its own strip and its own arg parsing. It came from a parallel
-	# session on the same brief and is now in scope; rather than port it to be
-	# looked at, it is run as it stands.
-	for arg: String in OS.get_cmdline_user_args():
-		if arg.begins_with("--design="):
-			_designs = true
-			add_child(RewardDesigns.new(content_ref))
-			return
 	if _force_bar:
 		_headless_shot = false   # shoot the viewer itself, strip and all
 	if _headless_shot:
@@ -186,8 +185,6 @@ func _init(content_ref: ContentDB) -> void:
 
 
 func _ready() -> void:
-	if _designs:
-		return       # RewardDesigns owns the screen; do not build a second one
 	_rebuild()
 	# The scripted openings, applied to the first screen only. After that the
 	# strip owns the state and re-applying them on every rebuild would make a
@@ -223,6 +220,8 @@ func _rebuild() -> void:
 	var reward: Dictionary = sample["reward"]
 	var kind: String = str(sample["kind"])
 	match _concept:
+		"lancet": _screen = RewardLancet.new(reward, content, kind, _enemy())
+		"rose": _screen = RewardRose.new(reward, content, kind)
 		"window": _screen = RewardWindow.new(reward, content, kind)
 		"embers": _screen = RewardEmbers.new(reward, content, kind, _hue())
 		"reliquary": _screen = RewardReliquary.new(reward, content, kind)
@@ -245,6 +244,13 @@ func _rebuild() -> void:
 ## cases look different in a still.
 func _hue() -> float:
 	return 208.0 if _case == "elite" else 22.0
+
+
+## The lancet memorialises what you killed, and a reward Dictionary carries no
+## enemy either — same shape of gap as the hue above, same stand-in. Whoever
+## wires a memorial concept into main passes the id of what just died.
+func _enemy() -> String:
+	return "gravewarden" if _case == "elite" else "duskfang"
 
 
 func _set_case(name: String) -> void:
@@ -389,7 +395,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_toggle_build()
 	elif k.keycode == KEY_O:
 		_offering()
-	elif k.keycode == KEY_R:
+	elif k.keycode == KEY_0:
 		_rebuild()
 	else:
 		return
