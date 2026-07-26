@@ -1,9 +1,14 @@
 # The fracture model — specification
 
-Status, 2026-07-26: **specified, not built.** This is the design that survived two
-rounds of three-seat review. `docs/glass-crack-rendering.md` is the companion: it
-records why the present crack web is wrong, what was rejected, and the decision
-history. This file says what to build.
+Status, 2026-07-26: **§8 steps 0–3 are built; 4 onward are specified.** This is the
+design that survived two rounds of three-seat review.
+`docs/glass-crack-rendering.md` is the companion: it records why the present crack
+web is wrong, what was rejected, and the decision history. This file says what to
+build, and §8 says how far that has got.
+
+Line anchors are correct at the commit that wrote them and drift within hours —
+six lanes edit `presentation/` concurrently. Re-anchor with
+`python3 tools/check_anchors.py --fix` rather than trusting a number.
 
 Nothing here requires a change to `domain/`, to the save format, or to any
 fixture. The whole model is presentation.
@@ -72,7 +77,7 @@ presentation/combat/glass/           Node / Mesh / Shader allowed
 ```
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:1534` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:1831` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -209,11 +214,11 @@ unrelated numbers would be tuned apart.
 
 Derived floor on `aperture`: the groove must be ≥ ~1.5 stage pixels at the smallest
 actor or it scintillates whatever the MSAA. At a 115 px sporeling with
-`oversample` = 2.0 (`enemy_view.gd:142` (`oversample`)) one body unit is ≈ 230
+`oversample` = 2.0 (`enemy_view.gd:178` (`oversample`)) one body unit is ≈ 230
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:1150` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:1340` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -312,7 +317,7 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:1359` (in `_prism`)), so
+  have**. The existing `_prism` calls it (`enemy_view.gd:1561` (in `_prism`)), so
   the ribbon needs authored crease normals, not the convenience path.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
@@ -390,6 +395,29 @@ cannot reintroduce the stream pollution recorded as `glass-crack-rendering.md` �
 already has `get_state()`). **`Time`** is banned so propagation cannot become
 time-driven inside the model.
 
+**As built, 2026-07-26: both the gate and the invariants live in
+`tools/check_fracture.gd`, not in `tests/`.** `tests/` is not this lane's to write
+— the organiser owns the suite verdict — so the checker was written in the suite's
+own shape instead: `tests/run_all.gd` discovers `res://tests/test_*.gd` and calls a
+static `run(fails)`, which is exactly what that file provides. Folding it in is a
+verbatim copy to `tests/test_fracture.gd`, no edits. Run it standalone with
+
+```bash
+godot --headless -s res://tools/check_fracture.gd
+```
+
+Three of the five verified defects are properties of the net and the mask rather
+than of the propagator, so they are already gated: §3.2 by asserting a committed
+strand is byte-identical after later commits (and that mutating a returned strand
+cannot reach back in), §3.3 by a `reaches` test across a transparent band — a
+tendrilled painting in miniature, where `solid` says yes at both ends and only a
+swept test knows the two sides are unconnected — and §3.1 by the terminus
+vocabulary and the junction census. The remaining two need `FractureField`.
+
+The gate itself was verified by making it fail: a probe file naming `Time` and
+`Node` was reported on the right lines and the run went red, then green again when
+removed. A gate that has never failed is not known to work.
+
 `tests/test_presentation.gd` gains the invariant set, which turns the five verified
 breaks into a regression gate:
 
@@ -429,7 +457,7 @@ and `oversample` levers, and cannot help or hurt that budget.
 | 0 | Give fracture its own RNG stream — `glass-crack-rendering.md` §7 | nothing. Precondition for every render comparison |
 | 1 | `_death_cells()` reads `_sites` plus a sparse background grid — port `_voronoiParts`, the primary that was never ported | nothing. Fixes §3.4 today on convex input, and makes the network a two-consumer seam before any generator exists |
 | 2 | Resolve the ordinary-damage `crack()` call against `CONCEPTS.md` | owner |
-| 3 | `Blow` / `CrackNet` / `BodyMask` + the purity gate + invariants 1–3, no renderer | 1 |
+| 3 | ✅ **built** — `Blow` / `CrackNet` / `BodyMask` + the purity gate + the net and mask invariants, no renderer | 1 |
 | 4 | `FractureField.strike` with the §2.4 rule and the screening oracle. Draw it in the lab via `drive_at`. **Kill-test:** radial arms as a plain polyline overlay | 3 |
 | 5 | `CrackField` — the three-band groove, §5.3 | 4 reads as fracture |
 | 6 | `Carve` + `relieve`, and `shatter()` consumes it. Invariant 4 | 5 |
