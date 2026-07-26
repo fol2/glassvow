@@ -206,6 +206,9 @@ var _vignette_mat: ShaderMaterial
 var _grain: ColorRect
 var _grain_mat: ShaderMaterial
 var _atmos_t: float = 0.0
+## `pileVisualOverride` (drain.js:192) — what a pile is SHOWING while a wave is
+## in the air, as against what the engine says it holds. Empty means the engine.
+var _pile_override: Dictionary[StringName, int] = {}
 var _over_emitted: bool = false
 ## `choreoDone` — whether the card currently resolving has already been swung
 ## for. Starts spent, so nothing lunges before a card is ever played.
@@ -1126,18 +1129,31 @@ func _handle_event(ev: Dictionary) -> void:
 			var uid: int = ev["uid"]
 			var inst: CardInst = _find_card(uid)
 			if inst != null:
-				_sfx.play(&"draw")
-				_hand.add_card(inst, _rules.card_data(inst), _rules.eff_cost(inst))
 				# The wave is paced by its own size, so the handler asks how many
 				# draws it heads rather than guessing from the hand.
 				var wave: int = seq.run_length(EventTypes.DRAW)
+				# `replacePileVisualOverride` — opened on the FIRST card of the
+				# wave and holding what the pile had before the engine emptied it.
+				if not _pile_override.has(&"draw"):
+					_pile_override[&"draw"] = game.cb.draw.size() + wave
+				_sfx.play(&"draw")
+				_hand.add_card(inst, _rules.card_data(inst), _rules.eff_cost(inst))
+				# This card has now left the pile, so the pile is one lighter. The
+				# count walks down with the deal instead of arriving already spent.
+				_pile_override[&"draw"] = maxi(0, int(_pile_override[&"draw"]) - 1)
+				_push_hud()
 				_hand.deal_in(uid, _hud.pile_rect(&"draw"), 0.0,
 					HandView.deal_flight(wave))
 				# Only the stagger is waited on: the flights overlap, which is
 				# what makes a five-card draw read as one deal rather than five.
 				await _wait(HandView.deal_stagger(wave))
 				if seq.run_length(EventTypes.DRAW) == 1:
-					_land_in_pile(&"draw")  # the last of the wave bumps the pile
+					# `clearPileVisualOverride` + `bumpPile` (drain.js:263, :281) —
+					# the wave is over, so the pile goes back to telling the truth
+					# and takes its one bump for the whole deal.
+					_pile_override.erase(&"draw")
+					_land_in_pile(&"draw")
+					_push_hud()
 		EventTypes.RESHUFFLE:
 			var shuffled: int = ev.get("n", 0)
 			await _reshuffle_ceremony(shuffled)
@@ -1605,11 +1621,21 @@ func _reshuffle_ceremony(n: int) -> void:
 	if seq.instant:
 		return
 	_sfx.play(&"card")
+	# The same freeze the draw wave uses (drain.js:198): the engine has already
+	# moved the discard into the draw pile, so both piles would show the finished
+	# state while the backs are still flying between them. Held at what they were
+	# — an empty draw pile and a full discard — until the flight lands.
+	_pile_override[&"draw"] = 0
+	_pile_override[&"discard"] = n
+	_push_hud()
 	# `Array.from({ length: n })` — one back per card, capped: past eight the
 	# stream stops reading as more cards and starts reading as noise.
 	_hud.fly_backs(&"discard", &"draw", maxi(1, mini(n, 8)), 0.6)
 	await _wait(0.6)
+	_pile_override.erase(&"draw")
+	_pile_override.erase(&"discard")
 	_land_in_pile(&"draw")
+	_push_hud()
 	_float(_hud.pile_rect(&"draw").get_center() + Vector2(0.0, -46.0),
 		SAY_RESHUFFLE, "notice")
 
@@ -1624,9 +1650,16 @@ func _push_hud() -> void:
 	var cb: CombatState = game.cb
 	if cb == null or _hud == null:
 		return
+	# `replacePileVisualOverride` (drain.js:192) — the engine is ALREADY post-draw
+	# by the time the drain runs, so a pile left to read its own state has emptied
+	# before the first card has left it. The override holds the pre-wave count and
+	# is walked down one card at a time as they fly (`setPileVisualOverride`,
+	# drain.js:252), which is the only way the deck can be seen being dealt from.
+	var draw_n: int = _pile_override.get(&"draw", cb.draw.size())
+	var discard_n: int = _pile_override.get(&"discard", cb.discard.size())
 	_hud.set_values(maxi(0, cb.player.hp), cb.player.max_hp, cb.player.block,
 		game.run.player.gold, cb.player.energy, cb.player.energy_max,
-		cb.draw.size(), cb.discard.size(), cb.exhaust.size(), cb.hand.size())
+		draw_n, discard_n, cb.exhaust.size(), cb.hand.size())
 	# Embers are the number the lantern carries; the rules gate is whether it
 	# can be spent at all (docs/hud-handoff.md §3).
 	_hud.set_lantern(cb.embers, _rules.can_use_art(game.run, cb))
