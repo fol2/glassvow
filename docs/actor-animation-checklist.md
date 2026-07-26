@@ -88,7 +88,7 @@ Here: nothing. A foe acts and only a text label floats up
 
 Note the three weight classes — this is not one lunge with a duration knob.
 
-### 1.4 Hit recoil — **PORT**
+### 1.4 Hit recoil — **BUILT** (`5ff8204`), strength undecided
 
 Benchmark: `choreoHit` — `translateX(9×dir px) scale(.97,1.03)` with
 `brightness(1.9)`, 300ms `cubic-bezier(.22,1,.36,1)`, plus a 160ms material flash.
@@ -102,7 +102,7 @@ Here: nothing. The body does not move when struck.
 This is the single largest missing beat. The exclusion list matters as much as the
 animation: a recoil on every tick of poison would read as being punched by nothing.
 
-### 1.5 Hurt flash — **PORT**
+### 1.5 Hurt flash — **BUILT** (`5ff8204`), strength undecided
 
 Benchmark: `hurtFlash`, foes only, 0.3s — at 30% `brightness(2.6) saturate(.4)`
 with an 18px white glow and `X +7px`, at 60% `X -5px`. Fires on **every**
@@ -113,6 +113,19 @@ Here: nothing.
 
 Distinct from 1.4 and stacked with it: recoil is the body being moved, the flash is
 the glass being lit. Poison gets the flash without the recoil.
+
+Built as `take_hit(direct)` — one call, both beats, split by source. `flare_gain`
+is left at 1.0 and is **not** a decision: a 300ms beat cannot be judged from a
+still, so the bench drives it (`H` strikes, `J` poisons, a `struck flash` slider,
+`time scale` down to 0.05x). Three literal ports of the CSS filter were rejected
+along the way and are recorded in the shader — the short version is that
+`brightness`, a dilated-alpha halo and `saturate` all mean something different
+inside a lit shader than they do over a composited sprite.
+
+Still open in this pair: whether the benchmark's 9px shove is enough. It is kept as
+absolute pixels, so a sporeling is knocked 8% of its width sideways and a leviathan
+barely twitches — a CSS convenience that happens to read as mass. Judge in motion,
+across the size ladder, before changing it.
 
 ### 1.6 Stagger — **PORT**, and rewire
 
