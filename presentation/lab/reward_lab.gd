@@ -9,28 +9,36 @@ extends Control
 ## over it. So the lab keeps a control strip and rebuilds the screen live: every
 ## case, both builds, reset, all without relaunching.
 ##
-##   godot --path . -- --reward                # the viewer
-##   godot --path . -- --reward --case=tiers   # ...opened on a case
+##   godot --path . -- --reward                  # the viewer
+##   godot --path . -- --reward --case=tiers     # ...opened on a case
+##   godot --path . -- --reward --concept=window # ...opened on a concept
+##
+## COMPARING CONCEPTS. The benchmark is ported and settled; what is being chosen
+## between now are whole answers to "what IS a reward screen", not tunings of
+## one. They differ in what a reward is made of, so the only honest way to judge
+## is to flip between them over the SAME spoils without relaunching — Q/W/E do
+## that, and the case stays put across the switch.
 ##
 ## In the window:
 ##   1..5   case: gold · cards · full · elite · tiers
-##   B      build: beyond ⇄ benchmark (the ported floor)
-##   O      open the offering
+##   Q/W/E  concept: rows · window · embers
+##   B      build: beyond ⇄ benchmark (rows only — the ported floor)
+##   O      open the offering (rows only; the others have no second door)
 ##   R      reset the screen
 ##   and everything else is the screen itself — hover a row, claim it, hover a
 ##   card to bring the lamp down onto it, pick or skip.
 ##
 ## The same flags still drive a scripted shot, and the strip hides itself
 ## whenever --shot= is present so it never lands in the frame:
-##   --case=  gold | cards | full | elite | tiers   (default full)
-##   --bench  the benchmark ported straight — the floor the rest is diffed
-##            against. Without it: one panel that deepens, seated spoils, and a
-##            lamp carried across the offering.
-##   --pick   open the offering straight away — it is behind a row press, which
-##            a scripted shot cannot make
-##   --take=  gold,potion,relic,card — settle those rows first
-##   --leave  press Continue — with spoils unclaimed that raises the confirm
-##   --strip  keep the control strip in a --shot, for documenting the viewer
+##   --case=    gold | cards | full | elite | tiers   (default full)
+##   --concept= rows | window | embers   (default rows — the benchmark port)
+##   --bench    the benchmark ported straight — the floor the rest is diffed
+##              against. Without it: one panel that deepens and seated spoils.
+##   --pick     open the offering straight away — it is behind a row press,
+##              which a scripted shot cannot make
+##   --take=    gold,potion,relic,card — settle those rows first
+##   --leave    press Continue — with spoils unclaimed that raises the confirm
+##   --strip    keep the control strip in a --shot, for documenting the viewer
 ##
 ## The samples are HAND-WRITTEN, not rolled. gen_combat_rewards is seeded off
 ## the run and the slice's relic pools are all empty, so a real roll can never
@@ -89,17 +97,26 @@ const CASES: Dictionary = {
 }
 
 const ORDER: Array[String] = ["gold", "cards", "full", "elite", "tiers"]
-const BAR_H: float = 44.0
+## The concepts on offer, in the order they were built. "rows" is the settled
+## benchmark port; everything after it is an answer to the same brief that does
+## not begin from a list.
+const CONCEPTS: Array[String] = ["rows", "window", "embers"]
+const CONCEPT_KEYS: Array[int] = [KEY_Q, KEY_W, KEY_E, KEY_T]
+const BAR_H: float = 78.0
 const LOG_LINES: int = 3
 
 var content: ContentDB
 
 var _case: String = "full"
+var _concept: String = "rows"
 var _bench: bool = false
 var _pick: bool = false
 var _leave: bool = false
 var _take: PackedStringArray = PackedStringArray()
-var _screen: RewardScreen = null
+## Typed as Control, not RewardScreen: the concepts share a shape (same ctor,
+## same two signals, same mark_taken / request_leave) but no base class, and
+## inventing one to hold three prototypes would outlive two of them.
+var _screen: Control = null
 var _bar: PanelContainer = null
 var _build_btn: Button = null
 var _log: Label = null
@@ -119,6 +136,8 @@ func _init(content_ref: ContentDB) -> void:
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--case="):
 			_case = arg.trim_prefix("--case=")
+		elif arg.begins_with("--concept="):
+			_concept = arg.trim_prefix("--concept=")
 		elif arg == "--bench":
 			_bench = true
 		elif arg == "--pick":
@@ -133,10 +152,21 @@ func _init(content_ref: ContentDB) -> void:
 			_force_bar = true
 	if _force_bar:
 		_headless_shot = false   # shoot the viewer itself, strip and all
+	if _headless_shot:
+		# main captures 30 frames in, which lands mid-entrance on every concept
+		# — and a still of an entrance is a still of nothing. Running the clock
+		# fast makes the shot the SETTLED screen, which is the thing a layout is
+		# judged on. The entrance is judged live, in the viewer, where it plays.
+		Engine.time_scale = 9.0
 	if not CASES.has(_case):
 		push_warning("reward lab: no such case: %s" % _case)
 		print("reward lab: no such case: %s — have %s" % [_case, ", ".join(ORDER)])
 		_case = "full"
+	if not CONCEPTS.has(_concept):
+		push_warning("reward lab: no such concept: %s" % _concept)
+		print("reward lab: no such concept: %s — have %s"
+			% [_concept, ", ".join(CONCEPTS)])
+		_concept = "rows"
 
 	_build_backdrop()
 	_build_bar()
@@ -154,9 +184,19 @@ func _ready() -> void:
 		_screen.mark_taken(StringName(slot))
 		_note("marked taken: " + slot)
 	if _pick:
-		_screen.open_card_choice()
+		_offering()
 	if _leave:
 		_screen.request_leave()
+
+
+## Only the row concept keeps the offering behind a second door; the others put
+## it on the screen, so there is nothing to open. Asked anyway, say so rather
+## than failing silently — the flag is how a scripted shot reaches that state.
+func _offering() -> void:
+	if _screen.has_method("open_card_choice"):
+		_screen.call("open_card_choice")
+	else:
+		_note("%s has no second door — the offering is already on screen" % _concept)
 
 
 # ---------------------------------------------------------------- the screen
@@ -169,20 +209,42 @@ func _rebuild() -> void:
 		_screen.queue_free()
 	var sample: Dictionary = CASES[_case]
 	var reward: Dictionary = sample["reward"]
-	_screen = RewardScreen.new(reward, content, str(sample["kind"]), _bench)
-	_screen.claimed.connect(_on_claimed)
-	_screen.finished.connect(_on_finished)
+	var kind: String = str(sample["kind"])
+	match _concept:
+		"window": _screen = RewardWindow.new(reward, content, kind)
+		"embers": _screen = RewardEmbers.new(reward, content, kind, _hue())
+		_: _screen = RewardScreen.new(reward, content, kind, _bench)
+	_screen.connect(&"claimed", _on_claimed)
+	_screen.connect(&"finished", _on_finished)
 	add_child(_screen)
 	# Siblings draw and pick front-to-back in child order, so the strip and the
 	# log have to stay last or the screen's full-rect scrim swallows both.
 	if _bar != null:
 		move_child(_bar, -1)
 	move_child(_log, -1)
-	_note("%s · %s" % [_case, _build()])
+	_note("%s · %s%s" % [_concept, _case,
+		"" if _concept != "rows" else " · " + _build()])
+
+
+## The embers concept is painted in the dead enemy's hue, and a reward
+## Dictionary does not carry one — so the lab supplies what main will have to:
+## the `art.hue` of what just died. Elites run cold here purely so the two
+## cases look different in a still.
+func _hue() -> float:
+	return 208.0 if _case == "elite" else 22.0
 
 
 func _set_case(name: String) -> void:
 	_case = name
+	_rebuild()
+
+
+## Concept switches keep the case, which is the whole point of the switch: the
+## comparison is only worth anything over identical spoils.
+func _set_concept(name: String) -> void:
+	_concept = name
+	if _build_btn != null:
+		_build_btn.disabled = name != "rows"
 	_rebuild()
 
 
@@ -215,30 +277,52 @@ func _build_bar() -> void:
 	_bar.offset_bottom = BAR_H
 	add_child(_bar)
 
+	var stack: VBoxContainer = VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 5)
+	_bar.add_child(stack)
+
+	# Concepts on their own line and first, because it is the outer choice: the
+	# case below it means the same thing whichever concept is showing.
+	var top: HBoxContainer = HBoxContainer.new()
+	top.add_theme_constant_override("separation", 6)
+	top.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_child(top)
+	var concepts: ButtonGroup = ButtonGroup.new()
+	for i: int in range(CONCEPTS.size()):
+		var name: String = CONCEPTS[i]
+		var key: String = OS.get_keycode_string(CONCEPT_KEYS[i])
+		var b: Button = _bar_button("%s %s" % [key, name], GlassStyle.EMBER, true)
+		b.toggle_mode = true
+		b.button_group = concepts
+		b.button_pressed = name == _concept
+		b.pressed.connect(_set_concept.bind(name))
+		top.add_child(b)
+
 	var row: HBoxContainer = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	_bar.add_child(row)
+	stack.add_child(row)
 
 	# One radio set, so the strip always says which case you are looking at
 	# rather than leaving you to remember.
 	var group: ButtonGroup = ButtonGroup.new()
-	var i: int = 0
+	var n: int = 0
 	for name: String in ORDER:
-		var b: Button = _bar_button("%d %s" % [i + 1, name], GlassStyle.GLASS, true)
+		var b: Button = _bar_button("%d %s" % [n + 1, name], GlassStyle.GLASS, true)
 		b.toggle_mode = true
 		b.button_group = group
 		b.button_pressed = name == _case
 		b.pressed.connect(_set_case.bind(name))
 		row.add_child(b)
-		i += 1
+		n += 1
 	row.add_child(_gap(18.0))
 	_build_btn = _bar_button("build: %s" % _build(), GlassStyle.EMBER)
 	_build_btn.pressed.connect(_toggle_build)
+	_build_btn.disabled = _concept != "rows"
 	row.add_child(_build_btn)
 	row.add_child(_gap(18.0))
 	var offering: Button = _bar_button("offering", GlassStyle.GLASS)
-	offering.pressed.connect(func() -> void: _screen.open_card_choice())
+	offering.pressed.connect(_offering)
 	row.add_child(offering)
 	var reset: Button = _bar_button("reset", GlassStyle.GLASS)
 	reset.pressed.connect(_rebuild)
@@ -283,12 +367,15 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if k == null or not k.pressed or k.echo or _headless_shot:
 		return
 	var idx: int = k.keycode - KEY_1
+	var concept: int = CONCEPT_KEYS.find(k.keycode)
 	if idx >= 0 and idx < ORDER.size():
-		_press_case(ORDER[idx])
-	elif k.keycode == KEY_B:
+		_press(1, ORDER[idx], _set_case)
+	elif concept >= 0 and concept < CONCEPTS.size():
+		_press(0, CONCEPTS[concept], _set_concept)
+	elif k.keycode == KEY_B and _concept == "rows":
 		_toggle_build()
 	elif k.keycode == KEY_O:
-		_screen.open_card_choice()
+		_offering()
 	elif k.keycode == KEY_R:
 		_rebuild()
 	else:
@@ -296,17 +383,18 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	accept_event()
 
 
-## Drive the strip's own button rather than jumping straight to _set_case, or
-## the radio keeps showing whichever case the mouse last chose.
-func _press_case(name: String) -> void:
+## Drive the strip's own button rather than jumping straight to the setter, or
+## the radio keeps showing whichever one the mouse last chose. `line` is the row
+## within the strip: 0 concepts, 1 cases.
+func _press(line: int, name: String, setter: Callable) -> void:
 	if _bar == null:
-		_set_case(name)
+		setter.call(name)
 		return
-	for node: Node in _bar.get_child(0).get_children():
+	for node: Node in _bar.get_child(0).get_child(line).get_children():
 		var b: Button = node as Button
 		if b != null and b.text.ends_with(" " + name):
 			b.button_pressed = true
-			_set_case(name)
+			setter.call(name)
 			return
 
 
