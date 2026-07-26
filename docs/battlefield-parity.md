@@ -30,7 +30,7 @@ them; the other nine have no source in the slice and nothing to play back.
 | `die` | stagger → ignite → shatter → burst | ✅ | boss beat 320ms, common 200 |
 | `chip` | spark burst, `chipPop` on the gauge | ✅ | |
 | `shatter` | hitstop, ring, burst, float, shake, crack | ✅ | |
-| `staggered` | float, `reseaming` 720ms | ⚠️ | float only; no reseam shimmer |
+| `staggered` | float, `reseaming` 720ms | ⚠️ | float + sting; no reseam shimmer |
 | `blockGain` | float with shield, `blockPulse` | ✅ | |
 | `status` | float, motes on a buff | ✅ | debuff resolved from the catalogue |
 | `heal` | motes, float | ✅ | |
@@ -48,9 +48,16 @@ them; the other nine have no source in the slice and nothing to play back.
 | `defeat` | dark flash, lantern snuff | ⚠️ | flash only; the snuff is `.stage-dim` |
 | `bossIntro`, `variantDialogue`, `questReveal`, `questProgress`, `questComplete`, `questUnlock`, `monumentGift`, `hollowTithe`, `adamantHold`, `addCard`, `maxHp` | banners and floats | — | the domain emits none of these |
 
-**No sound at all.** `sfx.*` fires on nearly every branch above and this port
-has no audio layer. That is the largest single unmatched surface, and it is not
-an animation gap — it is a missing subsystem.
+**Sound is wired.** All thirty-four `sfx.*` calls in `drain.js` are answered
+from `presentation/audio/sfx_bus.gd`, off the benchmark's own `ashglass-v1`
+bank (36 ElevenLabs samples, carried across with their provenance manifest).
+The WebAudio oscillator fallback in `audio.js` is deliberately NOT ported: it
+guards against a sample that has not finished downloading, and a Godot project
+has its bank on disk before the window opens.
+
+Music is a separate subsystem and is not ported. `MUSIC_CATALOG` names 22
+tracks across title, map, act combat, bosses and run end; none of them belong
+to the battlefield alone, so they are out of this lane's scope.
 
 ## 2. The blow
 
@@ -79,6 +86,8 @@ an animation gap — it is a missing subsystem.
 | `sl-drift` plate parallax | ✅ built — 30/10/0, read off the DOM |
 | HP `.ghost` trail | ✅ built |
 | Per-character idle (`mesh` blocks in `char-meta.json`) | ✅ `breathe` / `sway` / `bob` read; `head`, `cloth`, `pin` have no rig to drive |
+| `pvPulse` — HP preview segment | ✅ built |
+| Aim outline (`meshAim` / `charAim`) | ✅ built — per-creature tint and width read |
 | `candleFlick` | ❌ |
 | ward pulse / gemstone shell (`syncWardMesh`) | ❌ |
 | `.cast-shadow-layer` | ❌ — each actor casts its own |
@@ -111,7 +120,38 @@ its `glow` at 0.55 of the rise. The spire, beacon and cloud sea are below the
 treeline at this camera and the plates cover them. If the 3D scene is ever
 ported, this comes out.
 
-## 6. Known differences, deliberate or open
+## 6. Input, and what it decides
+
+`drain.js` is only half the fight. The other half is `combat.js` +
+`pointer.js`, which decide what the player can DO — and three whole surfaces of
+it were missing rather than approximate.
+
+| Surface | Benchmark | Port |
+|---|---|---|
+| Tooltips | `_tip` on ten node kinds, mouse-follow, 380ms long-press on touch | ✅ built — see below |
+| Hover preview (`updatePreviews`) | aim rim, rail segment, ghost facets, death-mark | ✅ built |
+| Keyboard (`handleCombatKey`) | Esc / E / A / ←→ / ↑↓ / Enter / Space | ✅ built |
+| Drag arm | 26px UPWARD; 12px click slop | ✅ both, and both were wrong before |
+| `kindleOnly` free drag | an unaffordable card still drags, but only the lantern takes it | ❌ — this port kindles by a toggle (D4), so there is no lantern to drop on |
+| Enemy `targetGlow` idle pulse | a targetable foe breathes a red drop-shadow | ❌ |
+
+**The tooltip walk is inverted.** The benchmark hangs `_tip` on a DOM node and
+walks UP from the event target until it finds one. That walk cannot exist here:
+a keyword inside a card is a run of glyphs the paragraph drew, not a node. So
+the screen answers one question — `tip_at(global_pos)` — front to back, and
+the widgets it asks report a ZONE rather than a sentence. Every sentence is
+assembled at the screen, because a widget in `presentation/` does not read
+content and all of this is catalogue copy.
+
+**The preview rules are the whole of it**, and they are not "the foes it could
+hit": `allEnemies` reaches every living foe while a card is being READ or
+carried loose but never while aimed; a single-target card reaches the lone
+survivor, or once aiming only the foe under the pointer; and a foe that is a
+legal target but not the aimed one is DIMMED — it keeps its rail preview and
+loses the death-mark and the shatter ring, so a three-foe lineup cannot claim
+three kills at once.
+
+## 7. Known differences, deliberate or open
 
 - **The hero renders warmer** than the benchmark's, which is a dark-blue-robed
   sprite. Same `duskblade.png` (verified by hash); the difference is our 3D
@@ -127,4 +167,14 @@ ported, this comes out.
 - **Viewport support does not exist.** `project.godot` is `canvas_items` +
   `aspect=keep` at 1180×820, so the composition scales and letterboxes and
   nothing reflows. Real support needs `aspect="expand"` plus the benchmark's
-  five authored shape tables (`BF` / `UIC`) and a shape-aware `HudBar`.
+  five authored shape tables (`BF` / `UIC`) and a shape-aware `HudBar`. The
+  plate figures this port uses were re-checked against `battlefield-layout.js`
+  and are exactly `pad-landscape` → act 0: 640/280/drift 30, 1000/300/drift 10,
+  450/0/drift 0. `desktop-landscape` is a different table entirely, and reading
+  `--amp` off a wide browser window reads THAT one.
+- **The stage plates drift by moving their PAINT, not their box.**
+  `gui/common/snap_controls_to_pixels` defaults to true, so writing an offset
+  rounds a Control's rect before it draws, and a 30px sweep over 26 seconds
+  ticks rather than glides. Draw commands are not snapped. This also happens to
+  be what `sl-drift` does — a `transform` moves the painted image and leaves
+  layout alone.
