@@ -323,6 +323,8 @@ var _frac_seed: int = 0
 # --- the 3D stage
 var _stage: SubViewport = null
 var _display: TextureRect = null
+var _display_mat: ShaderMaterial = null
+var _reseam_tween: Tween = null
 var _quad: MeshInstance3D = null
 var _body_mat: ShaderMaterial = null
 ## `.enemy .name` and its two tier overrides (styles.css:807, :814, :821).
@@ -1130,7 +1132,48 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_display.position = Vector2(-pad, -pad)
 	_display.size = Vector2(_span, _span)
 	_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The reseam shimmer needs a channel `modulate` cannot give it, because
+	# `saturate()` is a mix towards luminance and not a multiply. At rest the
+	# shader is the identity, so this costs the frame nothing until a pane
+	# shatters.
+	_display_mat = ShaderMaterial.new()
+	var reseam_sh: Shader = Shader.new()
+	reseam_sh.code = RESEAM_SHADER
+	_display_mat.shader = reseam_sh
+	_display.material = _display_mat
 	add_child(_display)
+
+
+## `0.7s ease-out` with its only stop at 30%: the shimmer peaks fast and takes
+## more than twice as long to leave. CSS applies the timing function PER
+## INTERVAL, so ease-out runs once up to the peak and again back down — which is
+## not the same curve as one eased pass through 0 → 1 → 0.
+const RESEAM_MS: float = 0.7
+const RESEAM_AT: float = 0.3
+const RESEAM_BRIGHT: float = 1.55
+const RESEAM_SAT: float = 0.55
+## CSS `ease-out`, spelled out. `Motion` carries `ease-in-out` and the two
+## authored curves; this one is only ever asked for here.
+const CSS_EASE_OUT: Array[float] = [0.0, 0.0, 0.58, 1.0]
+
+## `.enemy.reseaming .enemy-art { animation: reseam 0.7s ease-out }` with
+## `@keyframes reseam { 30% { filter: brightness(1.55) saturate(0.55); } }`
+## (styles.css:1076). Two CSS filters, and neither is `modulate`: brightness IS a
+## multiply, but `saturate(s)` is `mix(luminance, base, s)` and a CanvasItem has
+## no channel for it. At the identity (1, 1) this shader hands the texture
+## straight back.
+const RESEAM_SHADER: String = """
+shader_type canvas_item;
+
+uniform float bright : hint_range(0.0, 4.0) = 1.0;
+uniform float sat : hint_range(0.0, 2.0) = 1.0;
+
+void fragment() {
+	vec4 src = texture(TEXTURE, UV);
+	vec3 lum = vec3(dot(src.rgb, vec3(0.213, 0.715, 0.072)));
+	COLOR = vec4(mix(lum, src.rgb, sat) * bright, src.a);
+}
+"""
 
 
 ## The cast shadow, and the reason it is nine knobs lighter than the benchmark's.
@@ -1742,6 +1785,34 @@ func stagger() -> float:
 	tw.parallel().tween_property(_display, "rotation", deg_to_rad(-2.5), 0.36)
 	tw.parallel().tween_property(_display, "modulate", Color(0.6, 0.6, 0.6), 0.36)
 	return 0.36
+
+
+## `x.root.classList.add('reseaming')` (drain.js:458) — a shattered pane spends
+## its turn knitting itself back together, and besides the intent plate reading
+## STAGGERED this is the only thing on screen that says so. The art flares and
+## half-desaturates in a fifth of a second, then bleeds back over half of one:
+## glass reseaming, not a body taking a hit.
+func reseam() -> void:
+	if _dead or _display_mat == null:
+		return
+	if _reseam_tween != null and _reseam_tween.is_valid():
+		_reseam_tween.kill()
+	_reseam_tween = create_tween()
+	_reseam_tween.tween_method(_set_reseam, 0.0, 1.0, RESEAM_MS) \
+		.set_trans(Tween.TRANS_LINEAR)
+
+
+## Linear time in, per-interval CSS easing out — the tween is only a clock.
+func _set_reseam(x: float) -> void:
+	if _display_mat == null:
+		return
+	var f: float = 0.0
+	if x < RESEAM_AT:
+		f = Motion.ease(CSS_EASE_OUT, x / RESEAM_AT)
+	else:
+		f = 1.0 - Motion.ease(CSS_EASE_OUT, (x - RESEAM_AT) / (1.0 - RESEAM_AT))
+	_display_mat.set_shader_parameter("bright", lerpf(1.0, RESEAM_BRIGHT, f))
+	_display_mat.set_shader_parameter("sat", lerpf(1.0, RESEAM_SAT, f))
 
 
 func take_hit(direct: bool = true) -> void:

@@ -1705,6 +1705,12 @@ func _handle_event(ev: Dictionary) -> void:
 			_sfx.play(&"stagger")
 			_float(_enemy_centre(idx) + Vector2(0.0, -76.0), SAY_STAGGERED,
 				"staggerf", WARM_GOLD)
+			# `.reseaming` for 720ms (drain.js:458) — the shimmer runs alongside
+			# the 520ms beat rather than holding it up, so it is still finishing
+			# as the queue moves on.
+			var staggered: EnemyView = _enemy_view(idx)
+			if staggered != null:
+				staggered.reseam()
 			# The intent chip becomes the STAGGERED plate here, not a beat later —
 			# `syncCombat` reads `en.staggered` and rewrites the telegraph.
 			_sync_actors()
