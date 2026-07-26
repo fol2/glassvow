@@ -158,5 +158,22 @@ benchmark's `pile-chrome.js`), same pixels, 48 nodes → 3.
 - Verified on Godot 4.7.1.stable, the version pinned by this project's
   `CLAUDE.md`.
 - The same question is worth asking of any other ported cluster that repeats a
-  node per value — status stacks and facet pips are the obvious next candidates,
-  and neither has been checked.
+  node per value. The two obvious candidates named when this was written —
+  status stacks and facet pips — **have since been checked, and both are
+  already clean**:
+  - `presentation/combat/status_chip.gd` creates exactly one child node (the
+    stack-count `Label`) and does everything else in a single `_draw()`. Its
+    outline is 9 *draw commands* within that one node, not 9 nodes, and the
+    file header records a deliberate decision to leave them as commands until
+    some screen shows dozens of chips.
+  - `presentation/combat/facet_pips.gd` has a `_draw()` and no `add_child` at
+    all — fully collapsed already.
+
+  Worth noting what this means for the pattern: draw-command count and node
+  count are different costs, and only the second is what this doc is about. A
+  widget can be node-clean and still issue many commands, which is usually fine.
+- [Derive authored compensations instead of transcribing them when porting](derive-authored-compensations-when-porting.md)
+  — the same question asked of *values* rather than *structure*. That doc asks
+  "if the source platform could have computed this, would the number still
+  exist?"; this one asks whether a node shape is a decision or the DOM's only
+  option. Together they cover both halves of what should survive a port.

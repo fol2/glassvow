@@ -155,9 +155,18 @@ measurement that matches what the eye reads.
   silent invisible widget, which is among the most expensive bug classes to
   trace — the symptom points at layout and the cause is a filename.
 
-- **A lab screenshot taken headless will fail.** `--headless` has no viewport
-  texture to capture, so `save_png` gets a null image. Run the lab windowed for
-  captures; keep `--headless` for `--check-only` parse gates.
+- **A lab screenshot taken headless does not fail fast — it hangs.**
+  `--headless` has no viewport texture, so `save_png` gets a null image and
+  raises. The process then never exits: measured at exit code 124 after a full
+  60s `timeout`, with the PNG never written. Always run lab captures windowed;
+  keep `--headless` for `--check-only` parse gates. If you must script the
+  combination, wrap it in `timeout` — without one it will sit forever.
+
+  ```
+  $ timeout 60 godot --path . --headless -- --chips --shot=/tmp/x.png
+  SCRIPT ERROR: Cannot call method 'save_png' on a null value.
+  exit code: 124   elapsed: 60s
+  ```
 
 ## Related Issues
 
