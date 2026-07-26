@@ -811,10 +811,16 @@ the spikes. The heatmap is the reason `drive_at` is public.
   diagnostic to hand: the pale surfaces are CAPS, and something in how a cap is lit —
   `generate_normals()` averaging the prism's crease is the first suspect, since §5.2
   already records that it destroys creases — is making a dark brown painting read cream.
-- **Two silhouette readers coexist.** `EnemyView.body_mask()` feeds the model at
-  256²; `_alpha_at`/`_touches_art` still feeds the death cull at full resolution.
-  Rewriting the older one now would change an already-approved death for a
-  refactor's sake, so step 6 deletes it along with the Voronoi cells it culls.
+- **Two silhouette readers coexist, and the prediction here was wrong.** This bullet used
+  to say step 6 would delete `_alpha_at`/`_touches_art` along with the Voronoi cells it
+  culls. It did not, and could not: the CARVE culls through the same
+  `_touches_art(cell, centre)` (`enemy_view.gd:2631` (in `_death_cells`)), because a shard
+  covering no painting is a pane of empty box that the shard shader draws as nothing while
+  the physics still tumbles it. So the older reader outlived the path it was written for.
+  Both are still there — `body_mask()` at 256² for the model, `_alpha_at` at full
+  resolution for the cull — and consolidating them would change an already-approved death
+  for a refactor's sake. Left, deliberately, with the reason stated rather than a second
+  prediction.
 - **The measurement that would settle nothing but is still worth having:** time
   step 4's propagator on the largest creature with a 20-blow turn. Measured so far:
   0.14–1.43 ms per strike on a duskfang, which is a whole frame's budget at the top
