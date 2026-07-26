@@ -35,6 +35,15 @@ They reached all five — including `pearlescent`, which at that moment was the
 finish in `opal` (`["glass", "linen", "pearlescent", "premium"]`), the shipping
 **uncommon** tier.
 
+`opal` has since been re-stacked to `["glass", "tooth", "gloss", "premium"]`
+(commit `fbb8d5e`), so that exact blast path is now closed — `gloss` carries
+`sparkle: 0.0` and never enters `confetti()`. Do not read that as the hazard
+having passed. It is the same hazard restated: **which tiers a shared helper
+reaches is a property of the `RECIPES` table on the day you edit it, not of the
+helper.** The table moved without `confetti()` changing at all, and it will move
+again. Re-check the reach before every shared-model edit; a blast radius
+memorised from last week is not evidence.
+
 The collateral was measured at 0.32%, then 1.3% RMSE, and reported as an
 acceptable trade-off — twice. That framing was itself the error. The user's
 words: *"i can see your settings are affecting all other cards already."*
