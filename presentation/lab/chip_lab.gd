@@ -97,7 +97,31 @@ func _init(content_ref: ContentDB) -> void:
 		elif arg.begins_with("--ground="):
 			_ground = clampi(int(arg.trim_prefix("--ground=")), 0, GROUNDS.size() - 1)
 			_field.color = GROUNDS[_ground]
+		elif arg.begins_with("--style="):
+			var key: String = arg.trim_prefix("--style=")
+			if STYLES.has(key):
+				StatusChip.style = STYLES[key]
+			else:
+				print("chip lab: no such style: %s — have %s"
+					% [key, ", ".join(PackedStringArray(STYLES.keys()))])
 	_rebuild()
+
+
+## `--style=setting|lamp|cabochon` picks a treatment past the port. Default stays
+## BENCH so every shot taken before this existed still reproduces exactly.
+const STYLES: Dictionary = {
+	"bench": StatusChip.Style.BENCH,
+	"setting": StatusChip.Style.SETTING,
+	"lamp": StatusChip.Style.LAMP,
+	"cabochon": StatusChip.Style.CABOCHON,
+}
+
+
+static func style_name() -> String:
+	for k: String in STYLES:
+		if StatusChip.style == STYLES[k]:
+			return k
+	return "bench"
 
 
 # ---------------------------------------------------------------- control panel
@@ -269,7 +293,7 @@ func _rebuild() -> void:
 		child.queue_free()
 	_cells.clear()
 
-	_title("CHIPS — benchmark port · click a status to inspect it")
+	_title("CHIPS — %s · click a status to inspect it" % style_name().to_upper())
 	_inspector()
 	var y: float = _section("STATUSES · 1 / 2 / 9 / 99 · 1 draws no numeral · actual size",
 		INSPECT_TOP + INSPECT_H)
