@@ -14,6 +14,10 @@ extends Control
 ##   tools/shot.sh --enemies --shot=/tmp/enemies.png
 ##   godot --path . -- --enemies --only=sporeling,leviathan  # detail, 1:1
 ##   godot --path . -- --enemies --states[=duskfang]         # the real states
+##   tools/shot.sh --enemies --fracture[=duskfang] --shot=/tmp/f.png
+##                     # THE KILL TEST: blows accumulating, as bare lines
+##   tools/shot.sh --enemies --fracture --stops --shot=/tmp/f2.png
+##   tools/shot.sh --enemies --fracture --field --energy=2.0 --shot=/tmp/f3.png
 ##   godot --path . -- --enemies --bench[=duskfang]          # INTERACTIVE bench
 ##   godot --path . -- --enemies --states=duskfang --msaa=2 --oversample=1.5
 ##                                                           # the memory knobs
@@ -92,9 +96,16 @@ var _strip_id: String = ""
 ## `--incidental` makes the struck beat a poison tick rather than a sword blow.
 var _hit_direct: bool = true
 var _picker: OptionButton = null
+var _probe: FractureProbe = null
+var _probe_readout: Label = null
 var _meta_rows: Dictionary = {}
 var _light_yaw: float = -32.0
 var _light_pitch: float = -38.0
+
+# --- the fracture sheet's three flags
+var _frac_energy: float = 1.2
+var _frac_stops: bool = false
+var _frac_field: bool = false
 
 
 ## The two heroes stand on the same ground line as the foes and get the same
@@ -198,6 +209,26 @@ func _init(content_ref: ContentDB) -> void:
 			states_id = arg.trim_prefix("--hit=")
 		elif arg == "--incidental":
 			_hit_direct = false
+		elif arg == "--fracture":
+			_mode = "fracture"
+		elif arg.begins_with("--fracture="):
+			_mode = "fracture"
+			states_id = arg.trim_prefix("--fracture=")
+		# The two extra views of the same sheet. Separate flags rather than one busy
+		# picture: the stop reasons answer "did every crack end for a real reason" and
+		# the drive field answers "are the six constants sane", and overlaying both
+		# makes neither legible.
+		elif arg == "--stops":
+			_frac_stops = true
+		elif arg == "--field":
+			_frac_field = true
+		elif arg.begins_with("--energy="):
+			var en: String = arg.trim_prefix("--energy=")
+			if en.is_valid_float() and float(en) > 0.0:
+				_frac_energy = float(en)
+			else:
+				push_warning("enemy lab: --energy=%s not a positive number — keeping %.2f"
+					% [en, _frac_energy])
 		# Put the burst flash, the embers and the fire flare back — the lab starts
 		# without them (see _init). `--bare` was the flag when the polarity was the
 		# other way round and is gone rather than left as a no-op, because a flag
@@ -288,6 +319,14 @@ func _init(content_ref: ContentDB) -> void:
 			want = "duskfang" if roster.has("duskfang") else (str(ids[0]) if not ids.is_empty() else "")
 		_build_panel()
 		_build_bench(want)
+	elif _mode == "fracture":
+		var pick_f: String = states_id
+		if pick_f == "" or not roster.has(pick_f):
+			pick_f = "duskfang" if roster.has("duskfang") else (
+				str(ids[0]) if not ids.is_empty() else "")
+		var def_f: Dictionary = roster.get(pick_f, {})
+		var loc_f: Dictionary = names.get(pick_f, {})
+		_build_fracture(pick_f, def_f, loc_f)
 	elif _mode == "states":
 		var pick: String = states_id
 		if pick == "" and not ids.is_empty():
@@ -401,6 +440,86 @@ func _build_roster(ids: Array[String], roster: Dictionary, names: Dictionary) ->
 		for a: Variant in row["actors"]:
 			var view: EnemyView = a
 			view.position.x += shift
+
+
+## THE KILL TEST (`docs/fracture-model.md` §8). One creature, the same blows
+## accumulating left to right, drawn as bare hairlines over the painting with the old
+## Voronoi web deliberately absent — `crack()` is never called here.
+##
+## If damage-proportional radial arms do not read as fracture at this rendering, which
+## is no rendering at all, then no amount of optics will rescue them and the honest
+## answer is to stop before building any. That is what this sheet is for and it is why
+## it is ugly.
+##
+## The last cell is the same eight blows with the rite run over them: every tip that
+## stopped for want of tension carried the rest of the way out. That cell answers the
+## owner's condition directly — the death shatter must break along the cracks the
+## creature was already carrying, not along a fresh unrelated pattern.
+const FRACTURE_STEPS: Array[int] = [1, 2, 3, 5, 8]
+
+
+func _build_fracture(id: String, def: Dictionary, locale: Dictionary) -> void:
+	var box: float = EnemyView.art_box(StringName(id))
+	if box <= 0.0:
+		box = 185.0
+	var max_hp: int = _max_hp(def)
+	var ground: float = MARGIN + box
+	var x: float = MARGIN
+	var actors: Array[EnemyView] = []
+	var cells: int = FRACTURE_STEPS.size() + 1
+	for c: int in range(cells):
+		var relieved: bool = c == FRACTURE_STEPS.size()
+		var blows: int = FRACTURE_STEPS[FRACTURE_STEPS.size() - 1] if relieved \
+			else FRACTURE_STEPS[c]
+		var view: EnemyView = _actor(id, def, locale, x, ground)
+		view.set_hp(max_hp, max_hp)
+		view.set_facets(0, _facet_max(def))
+		view.set_ward(0)
+		view.clear_intent()
+		# Every cell gets the SAME probe seed and the same blow positions, so cell N+1
+		# is cell N plus one more blow. Re-seeding per cell would make the sheet six
+		# unrelated fights and the accumulation unreadable.
+		var probe: FractureProbe = FractureProbe.new(view, StringName(id), hash(id))
+		probe.energy = _frac_energy
+		probe.show_drive = _frac_field
+		probe.show_termini = _frac_stops
+		view.add_child(probe)
+		var where: Rng = Rng.new(hash(id) ^ 0x5EED)
+		var mask: BodyMask = EnemyView.body_mask(StringName(id))
+		for _b: int in range(blows):
+			probe.strike(_body_point(where, mask))
+		if relieved:
+			probe.relieve()
+		view.align_plate(ground - (view.position.y + view.size.y))
+		actors.append(view)
+		var tag: Label = Label.new()
+		tag.text = "%d blows + rite" % blows if relieved else "%d blow%s" % [
+			blows, "" if blows == 1 else "s"]
+		tag.position = Vector2(x, ground + CHROME_H - 8.0)
+		tag.size = Vector2(box, 18.0)
+		tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tag.add_theme_font_size_override("font_size", 12)
+		tag.add_theme_color_override("font_color", GlassStyle.EMBER)
+		tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_sheet.add_child(tag)
+		print("fracture %s cell %d: %s" % [id, c, probe.describe()])
+		x += box + GAP_X
+	_rows.append({"ground": ground, "actors": actors})
+	_count = cells
+	_sheet_size = Vector2(x - GAP_X + MARGIN, ground + CHROME_H + MARGIN)
+
+
+## A blow point that is actually ON the creature. A fixed UV list would land in empty
+## air for half the roster — the paintings are tendrilled and holed, which is the
+## reason `BodyMask` exists at all — so the point is drawn and rejected until it is
+## solid, then walked toward the centre as a last resort.
+static func _body_point(rng: Rng, mask: BodyMask) -> Vector2:
+	for _t: int in range(32):
+		var p: Vector2 = Vector2(0.18 + 0.64 * rng.next(), 0.14 + 0.72 * rng.next())
+		if mask.solid(p):
+			return p
+	var q: Vector2 = Vector2(0.5, 0.5)
+	return q
 
 
 ## One enemy across the states it really has.
@@ -622,6 +741,80 @@ func _build_panel() -> void:
 			_bench_actor.set_targetable(on))
 	rows.add_child(aim)
 
+	# ---- the fracture model, drawn over the actor as bare lines.
+	#
+	# Kept in the bench rather than given its own mode on purpose: a click feeds BOTH
+	# the old Voronoi web and the new propagator, so the same blow can be seen scored
+	# two ways at once. Drag `glass alpha` to zero to judge the new geometry alone —
+	# that is the kill test (`docs/fracture-model.md` §8).
+	var fhead: Label = Label.new()
+	fhead.text = "FRACTURE MODEL"
+	fhead.add_theme_font_size_override("font_size", 12)
+	fhead.add_theme_color_override("font_color", GlassStyle.EMBER)
+	rows.add_child(fhead)
+	rows.add_child(_button("fracture lines   (V)", func() -> void: _toggle_probe()))
+	rows.add_child(_button("drive field   (B)", func() -> void:
+		if _probe != null:
+			_probe.show_drive = not _probe.show_drive
+			_probe.visible = true
+			_probe.queue_redraw()
+			_probe_status()))
+	rows.add_child(_button("stop reasons   (M)", func() -> void:
+		if _probe != null:
+			_probe.show_termini = not _probe.show_termini
+			_probe.visible = true
+			_probe.queue_redraw()
+			_probe_status()))
+	rows.add_child(_button("relieve — the rite   (N)", func() -> void: _probe_relieve()))
+	rows.add_child(_button("clear the net   (X)", func() -> void:
+		if _probe != null:
+			_probe.clear()
+			_probe_status()))
+
+	# Energy IS length: 1.0 buys one body-width of crack in total, split across the
+	# arms it can afford. This slider is the whole Griffith claim made draggable, and
+	# the range runs past what a hit will ever carry so the failure at each end is
+	# visible rather than inferred.
+	var e_lbl: Label = _dim("blow energy   1.20 body")
+	rows.add_child(e_lbl)
+	var e: HSlider = HSlider.new()
+	e.min_value = 0.05
+	e.max_value = 4.0
+	e.step = 0.05
+	e.value = 1.2
+	e.value_changed.connect(func(v: float) -> void:
+		e_lbl.text = "blow energy   %.2f body" % v
+		if _probe != null:
+			_probe.energy = v)
+	rows.add_child(e)
+
+	# `ANISO` is one of the invisible constants: with it at zero a slash and a stab
+	# fracture identically, which they do not. Nothing shows that but a swing.
+	var a_lbl: Label = _dim("blow angle   0")
+	rows.add_child(a_lbl)
+	var ang: HSlider = HSlider.new()
+	ang.min_value = -180.0
+	ang.max_value = 180.0
+	ang.step = 1.0
+	ang.value = 0.0
+	ang.value_changed.connect(func(v: float) -> void:
+		a_lbl.text = "blow angle   %d" % int(v)
+		if _probe != null:
+			_probe.angle_deg = v
+			_probe.face_on = false)
+	rows.add_child(ang)
+	var face: CheckButton = CheckButton.new()
+	face.text = "face-on (no direction)"
+	face.button_pressed = true
+	face.toggled.connect(func(on: bool) -> void:
+		if _probe != null:
+			_probe.face_on = on)
+	rows.add_child(face)
+
+	_probe_readout = _dim("")
+	_probe_readout.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rows.add_child(_probe_readout)
+
 	# ---- editor half: the numbers that belong to the creature, not the glass.
 	var head: Label = Label.new()
 	head.text = "CHAR-META"
@@ -642,7 +835,7 @@ func _build_panel() -> void:
 	_readout.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(_readout)
 
-	var hint: Label = _dim("H strike · J poison · F fireworks (off by default)\nclick the body to crack it there\ndrag to pan · wheel to zoom\n[ ] prev / next enemy\nthe rite is a foe's — H and J work on a hero, K and S do not")
+	var hint: Label = _dim("H strike · J poison · F fireworks (off by default)\nclick the body to crack it there — feeds BOTH models\nV lines · B drive field · M stop reasons · N relieve · X clear\nfor the new geometry alone, drag glass alpha to 0\ndrag to pan · wheel to zoom\n[ ] prev / next enemy\nthe rite is a foe's — H and J work on a hero, K and S do not")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(hint)
 
@@ -742,6 +935,13 @@ func _build_bench(id: String) -> void:
 		var at: int = _ids.find(id)
 		if at >= 0:
 			_picker.select(at)
+	# Added LAST, so it draws over the painting rather than under it — Control
+	# children draw in tree order. It dies with the actor it measures, which is right:
+	# "rebuild the vessel" should not leave the previous vessel's cracks floating.
+	_probe = FractureProbe.new(_bench_actor, StringName(id), hash(id))
+	_probe.visible = false
+	_bench_actor.add_child(_probe)
+	_probe_status()
 	# Re-frame per creature: 115px and 1120px cannot share one zoom, and a bench
 	# that opens with the subject a speck is a bench you have to fix before use.
 	_auto_zoom = true
@@ -749,6 +949,39 @@ func _build_bench(id: String) -> void:
 		_readout.text = "%s · %s · %d px box · foot %d,%d" % [
 			id, _tier_of(def), int(_bench_actor.art_size),
 			int(_bench_actor.foot.x), int(_bench_actor.foot.y)]
+
+
+## The overlay starts hidden, so the bench still opens on a plain creature. Blows
+## accumulate into the net whether it is shown or not — turning it on mid-fight shows
+## everything that has landed, which is what makes it usable as a check rather than
+## as a mode you have to remember to enable first.
+func _toggle_probe() -> void:
+	if _probe == null:
+		return
+	_probe.visible = not _probe.visible
+	_probe.queue_redraw()
+	_probe_status()
+
+
+func _probe_relieve() -> void:
+	if _probe == null:
+		return
+	var n: int = _probe.relieve()
+	_probe.visible = true
+	_probe_status()
+	if _probe_readout != null and n == 0:
+		_probe_readout.text = "nothing to relieve — no tip stopped for want of tension"
+
+
+func _probe_status() -> void:
+	if _probe_readout == null or _probe == null:
+		return
+	var flags: String = "lines" if _probe.visible else "hidden"
+	if _probe.show_drive:
+		flags += " + field"
+	if _probe.show_termini:
+		flags += " + stops"
+	_probe_readout.text = "%s\n%s" % [flags, _probe.describe()]
 
 
 func _apply_hp() -> void:
@@ -803,9 +1036,20 @@ func _gui_input(event: InputEvent) -> void:
 			if mb.pressed and _bench_actor != null:
 				var local: Vector2 = _bench_actor.get_global_transform().affine_inverse() \
 					* mb.global_position
-				var uv: Vector2 = local / _bench_actor.size
+				# Through the actor's own mapping, not `local / size`. The box is
+				# square and the painting is only as wide as its aspect ratio, so
+				# dividing by the box put every click on a non-square creature at the
+				# wrong x — the crack landed a little way from where it was asked for,
+				# and on a wide painting noticeably so.
+				var uv: Vector2 = _bench_actor.local_to_uv(local)
 				if uv.x >= 0.0 and uv.x <= 1.0 and uv.y >= 0.0 and uv.y <= 1.0:
+					# BOTH models from one click: the old Voronoi web and the new
+					# propagator, so the two can be compared on the same blow instead
+					# of from two screenshots taken minutes apart.
 					_bench_actor.crack(uv)
+					if _probe != null:
+						_probe.strike(uv)
+						_probe_status()
 					return
 			_panning = mb.pressed
 		elif mb.pressed and mb.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -845,6 +1089,26 @@ func _unhandled_key_input(event: InputEvent) -> void:
 				_bench_actor.shatter()
 		KEY_F:
 			EnemyView.rite_fx = not EnemyView.rite_fx
+		KEY_V:
+			_toggle_probe()
+		KEY_B:
+			if _probe != null:
+				_probe.show_drive = not _probe.show_drive
+				_probe.visible = true
+				_probe.queue_redraw()
+				_probe_status()
+		KEY_M:
+			if _probe != null:
+				_probe.show_termini = not _probe.show_termini
+				_probe.visible = true
+				_probe.queue_redraw()
+				_probe_status()
+		KEY_N:
+			_probe_relieve()
+		KEY_X:
+			if _probe != null:
+				_probe.clear()
+				_probe_status()
 		KEY_R:
 			_build_bench(_bench_id)
 			_relayout_bench()

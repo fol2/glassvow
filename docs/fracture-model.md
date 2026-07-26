@@ -141,32 +141,74 @@ cure for the exitless tuning loop recorded in
 because they open against *hoop* (circumferential) tension. The blow direction
 **modulates the magnitude**, producing anisotropy; it does not set the heading.
 
+The radial direction is a **restoring pull, never an assignment** — and that
+distinction is the difference between a fracture and a crosshair:
+
 ```gdscript
-var radial: Vector2 = (tip - origin).normalized()          ## the heading
-var bias: float = 1.0 + ANISO * absf(radial.dot(blow.dir)) ## the blow's preference
-var drive: float = _energy_here(tip) * bias - _screened(tip)
-tip += (radial.rotated(_rng.next_range(-jitter, jitter))) * step
+var radial: Vector2 = tip - blow.at
+heading = heading.rotated(heading.angle_to(radial) * RADIAL_PULL)  ## a bias, not a set
+heading = heading.rotated(_rand(-1.0, 1.0) * grain * step)         ## the grain
+var bias: float = 1.0 + ANISO * absf(heading.dot(blow.dir))        ## the blow's preference
+var drive: float = bias * (1.0 - relief_from_existing_cracks)
+tip += heading * step
 ```
 
-Recorded because one review seat produced the inverse — heading taken as
-`blow.dir.rotated(PI/2)`, a single direction everywhere, which makes every crack
-run parallel instead of radiating. Its prose was correct and its pseudocode was
-not. The closed-form Flamant point-load field it derived first *is* the right
-starting point; the simplification is what inverted it.
+Recorded because two versions of this were wrong in two different ways:
+
+* One review seat produced the **inverse** — heading taken as
+  `blow.dir.rotated(PI/2)`, a single direction everywhere, which makes every crack
+  run parallel instead of radiating. Its prose was correct and its pseudocode was
+  not. The closed-form Flamant point-load field it derived first *is* the right
+  starting point; the simplification is what inverted it.
+* The first built version **assigned** the heading from the radial each step. That
+  reads as the same statement and is not: assignment erases the accumulated grain
+  every step, so each arm was pinned to an exact ray. The kill-test sheet came out
+  as a surveyor's crosshair. It also silently deleted every bifurcation, because a
+  fork starts *on* its parent, so its radial **is** the parent's radial — the fork
+  angle was erased one step after the fork was made and the branch then arrested on
+  its own parent. Eight blows, twenty strands, not one branch. Caught by looking,
+  not by an invariant, which is why §8 makes the sheet a build step.
 
 Termination, in the order tested:
 
-1. `drive < toughness` → **`F`**, a free tip. Must taper to literally nothing.
-2. the segment fails `BodyMask.reaches` → **`S`**, the silhouette.
-3. the tip comes within `step` of any existing strand → **`T`**, a T-junction.
+1. the segment fails `BodyMask.reaches` → **`S`**, the silhouette.
+2. the tip comes within `step` of any existing strand → **`T`**, a T-junction.
+3. `drive < toughness` → **`T`** if within `capture_radius` of an existing crack,
+   otherwise **`F`**, a free tip that must taper to literally nothing.
+4. `spent >= budget` → **`F`**. The Griffith limit, and the ordinary ending.
 
-Rule 3 is the entire topology fix. Sequential arrest on an existing free surface
-is what makes impact fracture T-junctioned, where Voronoi's simultaneous
-construction gives Y-junctions at 120° — the signature of shrinkage, not impact.
+Rule 2 is the topology fix. Sequential arrest on an existing free surface is what
+makes impact fracture T-junctioned, where Voronoi's simultaneous construction gives
+Y-junctions at 120° — the signature of shrinkage, not impact.
+
+Rule 3's **capture** clause was added after the first sheet reported nine
+T-junctions where the eye counted crossings and the census counted none. The only
+thing that can lower the drive is an existing crack relieving it, so a tension death
+always happens *inside* that crack's process zone — and a crack approaching a free
+surface is steered into it by the relief gradient, terminating on it. Arresting a few
+steps short instead recorded `F` where the physics says `T`, and would have the
+renderer draw a groove stopping in mid-glass with a visible gap short of the seam it
+was running to. The captured strand's final vertex is the nearest point **on** the
+other crack, which the carve needs as much as the renderer does.
 
 A tip **bifurcates** when local drive exceeds `2 × toughness`. That factor is
 fixed on the mechanics — a single tip cannot dissipate much beyond 2 G_c — and is
 not exposed. The reference authors a 45 % fork probability; here it is derived.
+
+**What is emitted is filtered.** Arms leave the impact point together, so the
+angular jitter can put two within a third of a spacing and the trailing one arrests
+on its neighbour after two steps. Physically right, and a 0.02-body stub the renderer
+would have to draw as a speck. A strand under `MIN_ARM` is dropped from the output
+*and* from the in-flight buffer — a mark that does not exist cannot screen anything.
+`relieve()` is deliberately exempt: its continuations start on an existing tip, so a
+short one extends a visible line rather than being a speck of its own.
+
+**`relieve()` is idempotent**, and cannot be without help. The net is append-only, so
+a tip carried the rest of the way out keeps its `T_FREE` terminus; the continuation is
+a new strand starting on it and nothing rewrites the old one. "Terminus is free" and
+"still an open tip" are therefore different questions, and `CrackNet.open_tips()` is
+the second one. Asking the first would make a death beat firing twice double the
+entire network — which this codebase has done before (`c77b56b`).
 
 ### 2.5 Boundaries
 
@@ -191,19 +233,40 @@ one parameter set serve the 115 px sporeling and the 1120 px leviathan without
 per-creature authoring. Angles in radians. Energy dimensionless, normalised so 1.0
 buys one body-width of crack.
 
-**Material — four.**
+**Material — five.**
 
 | | name | unit | meaning | its one job |
 |---|---|---|---|---|
 | 1 | `toughness` | energy per unit length | Griffith's G_c — how hard this glass is | the arrest threshold; `relieve()` sets it to 0 |
 | 2 | `screen_radius` | body fraction | the process zone: how far a free surface relieves tension | how tightly a later crack bends toward an earlier one |
 | 3 | `heterogeneity` | radians per body fraction | grain — how much a running tip wanders | path jitter |
-| 4 | `sharp` | 0..1 | indenter acuity | the radial / concentric energy split |
+| 4 | `radial_pull` | fraction per step | how hard the hoop-tension direction restores a wandering tip | keeps an arm radial *in the mean* without pinning it to a ray |
+| 5 | `sharp` | 0..1 | indenter acuity | the radial / concentric energy split |
 
-**Numerics — one, plus one derived.** `step` (body fraction per Euler step), and
-`max_steps = ceil(1.5 / step)` because a crack cannot exceed 1.5 body diagonals.
-`step` carries a **convergence test**: halving it must move no tip by more than
-`step`. A numerics constant with a convergence test is an assertion, not a knob.
+`radial_pull` is fifth because the model was built without it and was wrong without
+it — see §2.4. It is not a taste knob: at 1.0 the model is the crosshair, at 0.0 the
+arms are a random walk with no radiation, and both failures are visible in one sheet.
+
+**Numerics — one, plus two derived.** `step` (body fraction per Euler step),
+`max_steps = ceil(1.5 / step)` because a crack cannot exceed 1.5 body diagonals, and
+`capture_radius = screen_radius / 2`, chosen only to sit comfortably outside the
+largest radius at which a tension death can occur (0.033 body — derived in §2.4), so
+it is a bound rather than a number. `step` carries a **convergence test**: halving it
+must move no tip by more than `step`. A numerics constant with a convergence test is
+an assertion, not a knob.
+
+**Legibility floors — two, both read off the renderer.** `min_arm` = 5 × the
+`aperture` floor below, because a mark must be several times longer than it is wide
+before the eye reads it as a line rather than a speck. And `arm_length`, the length a
+radial wants to be, which is what divides a blow's energy into arms.
+
+These were **one** constant and that was a bug. Dividing the budget by the legibility
+floor makes the arm count saturate at `max_arms` for any energy above 0.23 — so a tap
+and a killing blow both threw seven arms and only their length differed, which is the
+opposite of the intended story and of the reference's own behaviour (four arms
+normally, six for a big hit). Griffith held throughout: total length stayed exactly
+proportional to energy however the budget was split, which is precisely why no field
+invariant caught it. `_check_field_arm_count` is now the invariant that would have.
 
 **Renderer — one, plus one derived.** `aperture`, the crack mouth width at the
 origin. Opening displacement goes as √(*a* − *s*), so the whole profile follows
@@ -233,12 +296,41 @@ attacking archetype.
 | `_death_sites`' rings `[[0.16,4],[0.36,7],[0.62,9],[0.85,10]]` | **eight** authored numbers describing a shape |
 | `_clip`, `_disc`, `_cells`, `_rebuild_glass` | the disc machinery entire |
 
-Six authored numbers replace roughly thirteen — but that is not the argument.
-**None of the six describes a shape.** Four describe a material, one an
-integrator, one an optical width. Shapes are computed. A creature added tomorrow
-needs no fracture authoring, which is the same payoff
-`docs/solutions/design-patterns/derive-authored-compensations-when-porting.md`
-recorded for the shadow knobs.
+### The honest count
+
+An earlier draft of this section claimed "six authored numbers replace thirteen, and
+none of the six describes a shape". The first half was optimistic and the second half
+is no longer true, so both are corrected here rather than left to be discovered.
+
+What the built model actually carries:
+
+| group | count | authored or not |
+|---|---|---|
+| material (`toughness`, `screen_radius`, `heterogeneity`, `radial_pull`, `aniso`) | 5 | authored — they describe the glass |
+| numerics (`step`) | 1 | authored, and carries a convergence test |
+| derived from other constants (`max_steps`, `capture_radius`, `min_arm`) | 3 | not knobs |
+| fixed on the mechanics (`fork_drive` = 2 G_c, `max_arms` = 7) | 2 | not knobs |
+| the star's statistics (`arm_length`, `fork_angle`, `fork_share`, `fork_after`, `arm_spread` ×2) | 6 | authored, and these **do** describe a shape |
+
+So: **eleven authored numbers**, of which six describe what an impact star looks
+like. The claim that survives is narrower and worth stating precisely, because it is
+still the whole point:
+
+* **No constant describes a *particular* shape.** The star group is statistical — a
+  spread, an angle, a share — and one set of them serves every creature in the roster.
+  The reference's `[[0.16,4],[0.36,7],[0.62,9],[0.85,10]]` is eight numbers describing
+  one specific arrangement of rings, re-authored per look.
+* **No per-creature fracture authoring, at all.** A creature added tomorrow needs
+  none, which is the payoff
+  `docs/solutions/design-patterns/derive-authored-compensations-when-porting.md`
+  recorded for the shadow knobs.
+* **Every constant has exactly one job**, which is what the old set did not: the disc
+  machinery's `_glass_area` set coverage *and* radius, and `reach` switched between two
+  unrelated intents depending on the caller.
+
+The count going *up* while the model got better is the useful lesson here. Two of the
+six star constants (`arm_length`, `arm_spread`) exist because a single number was
+doing two jobs and the collapse was invisible until it was drawn.
 
 ### The one honest fudge
 
@@ -461,19 +553,54 @@ model can be asserted against invariants rather than golden images, and the enti
 defect list becomes a gate. The purity split and the injected mask exist **because
 of** these tests, not alongside them.
 
+### The invariants that were added because something got past the existing ones
+
+Each of these exists because a defect survived a green run. Listed with what let it
+through, since that is the reusable part:
+
+| invariant | what it caught | why nothing else did |
+|---|---|---|
+| `_check_field_arm_count` | the arm count saturated at 7 for any energy above 0.23 | Griffith held perfectly — total length stayed proportional to energy however it was split, so every length-based check passed |
+| the emission floor in `strike` | a 0.024-body stub, under the legibility floor | it was the *new* count invariant that surfaced it; nothing before it looked at individual arm length |
+| relieve idempotency | a second rite would double the whole network | the first call's behaviour was correct, and nothing called it twice |
+| the `T == 0` assertion inside `_check_field_termini` | `T ≥ Y` passing vacuously at zero junctions | a comparison of two zeroes is true |
+
+And two defects that **no** invariant caught, both found by drawing the model:
+
+* the radial assignment (§2.4) — every arm was a straight ray, which violates nothing
+  a test was asking about. Radiation, termini, energy, body-containment and
+  determinism were all satisfied by a crosshair.
+* the missing capture (§2.4) — nine crossings the eye could see and the census could
+  not, because a tip arresting 3 steps short of a crack is a legitimate `F`.
+
+The lesson worth keeping: invariants catch *contradictions*, and a model can be
+perfectly self-consistent and still not look like the thing it models. The sheet is
+not optional and §8 makes it a build step for that reason.
+
 ## 7. Cost
 
-| | when | cost |
-|---|---|---|
-| propagation, one blow | on a hit | ~320 Euler steps, O(1) screening each |
-| screening composite | on a hit | ~19 k byte writes, ~1 ms |
-| field rasterise | on a hit | one incremental composite |
-| carve, at death | once per rite | ~2.5–6 ms, amortised over a 200 ms rite ≈ 0.03 ms/frame |
-| per frame, steady state | every frame | **one texture fetch** |
-| memory | per damaged actor | 128² screening (16 KB) + render field sized from `_box_u` (64 KB at 256²) + ~77 KB of polylines |
+**Measured** where it says measured. Everything else is still an estimate and is
+labelled as one, because a table that mixes the two reads as though all of it were
+known.
+
+| | when | cost | how |
+|---|---|---|---|
+| propagation, one blow | on a hit | **0.14 – 1.43 ms** on a duskfang, 8 blows accumulated | measured, `FractureProbe.describe()` |
+| the screening query | inside propagation | direct, no cache. The 128² oracle below was not needed — see §4 | as built |
+| body mask | once per **painting**, not per actor | one 256² decompressed alpha image, ~256 KB, cached in `EnemyView._mask_cache` | as built |
+| drive-field heatmap | lab only, on toggle | 40² samples × every segment in the net — hundreds of ms on a busy net | measured; never runs in game |
+| carve, at death | once per rite | ~2.5–6 ms, amortised over a 200 ms rite ≈ 0.03 ms/frame | estimate |
+| per frame, steady state | every frame | **one texture fetch** | estimate, needs step 5 |
+| memory | per damaged actor | render field sized from `_box_u` (64 KB at 256²) + ~77 KB of polylines | estimate |
+
+The 1.43 ms upper end is the number to watch: it is most of a 60 fps frame, it grows
+with the net because the arrest test walks every segment, and the cap of 8 is what
+bounds it. It is also *not* per frame — it is once per landed blow, and the strike
+before it cost 0.14 ms, so the spread is about how much glass is already there rather
+than about the creature's size.
 
 Against the measured 113 MB per actor — dominated by the `SubViewport` colour and
-depth attachments — this is noise. The crack model is **orthogonal** to the MSAA
+depth attachments — the memory is noise. The crack model is **orthogonal** to the MSAA
 and `oversample` levers, and cannot help or hurt that budget.
 
 ## 8. Build order
@@ -484,14 +611,50 @@ and `oversample` levers, and cannot help or hurt that budget.
 | 1 | `_death_cells()` reads `_sites` plus a sparse background grid — port `_voronoiParts`, the primary that was never ported | nothing. Fixes §3.4 today on convex input, and makes the network a two-consumer seam before any generator exists |
 | 2 | Resolve the ordinary-damage `crack()` call against `CONCEPTS.md` | owner |
 | 3 | ✅ **built** — `Blow` / `CrackNet` / `BodyMask` + the purity gate + the net and mask invariants, no renderer | 1 |
-| 4 | 🔶 **half built** — `FractureField.strike` and `relieve` exist with the §2.4 rule, screening, forking and the four arrest cases, gated by nine invariants. Still to do: draw the field in the lab via `drive_at`, and the **kill-test** — radial arms as a plain polyline overlay | 3 |
-| 5 | `CrackField` — the three-band groove, §5.3 | 4 reads as fracture |
+| 4 | ✅ **built, and it passed** — `FractureField.strike` / `relieve` with the §2.4 rule, screening, capture, forking, the emission floor and five arrest cases, gated by nine field invariants (seventeen checks in all); plus `FractureProbe` and the lab's `--fracture` sheet | 3 |
+| 5 | `CrackField` — the three-band groove, §5.3 | 4 reads as fracture ✅ |
 | 6 | `Carve` + `relieve`, and `shatter()` consumes it. Invariant 4 | 5 |
 | 7 | Optional: `reveal(t)` propagation, ignite beams, `CrackRibbon` | 6 |
 
-Step 4 is the kill point. If radial arms with a damage-proportional length do not
-read as fracture when drawn as bare polylines, no amount of optics will rescue it,
-and the cheap answer is to stop there.
+### The kill test, and its verdict
+
+Step 4 was the kill point: if radial arms with a damage-proportional length do not
+read as fracture when drawn as bare polylines, no amount of optics rescues it and the
+cheap answer is to stop. The instrument is `presentation/lab/fracture_probe.gd`, drawn
+over a live actor at hairline width with no taper, no groove and no light — crude on
+purpose, because prettying it up destroys the evidence.
+
+```bash
+tools/shot.sh --enemies --fracture=duskfang --shot=/tmp/kill.png
+tools/shot.sh --enemies --fracture --stops --shot=/tmp/stops.png
+tools/shot.sh --enemies --fracture --field --energy=2.0 --shot=/tmp/field.png
+```
+
+Six cells: one blow, two, three, five, eight, then those eight with the rite run over
+them. Same seed and same blow positions in every cell, so cell N+1 is cell N plus one
+more blow and the accumulation is readable rather than six unrelated fights.
+
+**First run: failed.** A surveyor's crosshair — four straight arms at near-right
+angles, no branches, and `0T/0Y` across every cell. Three symptoms, two causes, both
+in §2.4: the radial assignment, and an even energy split.
+
+**Second run: passed.** Uneven arm lengths, visible curvature, branches, and a census
+that grows `0T → 2T → 5T → 9T` with `0Y` throughout — T-junctioned, which is the
+signature the whole model exists to produce. `31 strands · 3.62 body · F8 (0 open)`
+after the rite: every free tip carried out, so the network partitions the body and the
+carve of step 6 has something to cut along.
+
+Three things the sheet settled that no invariant could:
+
+* the arm count rule was degenerate (§3, legibility floors);
+* the T-junction census was reading nine crossings the eye could see and the model
+  had not made (§2.4, capture);
+* `relieve()` was not idempotent (§2.4).
+
+And one it settled the other way: the `--field` view showed the mask registering
+exactly on the silhouette — tail, spikes and legs — with a cold halo tracing every
+existing crack. What looked at first like cracks running off the body were cracks on
+the spikes. The heatmap is the reason `drive_at` is public.
 
 ## 9. Open
 
@@ -503,7 +666,21 @@ and the cheap answer is to stop there.
 - **Whether the ward-shatter `crack()` call survives** even if the ordinary-damage
   one goes. A guard shattering is a glass event rather than attrition, so it has a
   case the damage call does not.
+- **A blow into recently-broken glass can score literally nothing.** The sheet's
+  cell 1 and cell 2 are identical: the third blow landed inside the process zone of
+  the first two and every arm it threw fell under the emission floor. That is the
+  screening rule working, and it is also a legibility problem the game will feel —
+  "the glass tells you the truth about the fight" reads badly if a hit leaves no
+  mark at all. It is a tuning question (`screen_radius`, or energy from damage), not
+  a modelling one, and it wants an owner's ruling rather than a quiet adjustment.
+- **`FractureProbe` shares the model with the shipping renderer and must not become
+  it.** The moment it grows a taper it stops being evidence. Step 5 builds `CrackField`
+  beside it, not out of it.
+- **Two silhouette readers coexist.** `EnemyView.body_mask()` feeds the model at
+  256²; `_alpha_at`/`_touches_art` still feeds the death cull at full resolution.
+  Rewriting the older one now would change an already-approved death for a
+  refactor's sake, so step 6 deletes it along with the Voronoi cells it culls.
 - **The measurement that would settle nothing but is still worth having:** time
-  step 4's propagator plus screening oracle on the largest creature with a
-  20-blow turn. The design already assumes the oracle; the number tells you whether
-  `step` can afford to be finer.
+  step 4's propagator on the largest creature with a 20-blow turn. Measured so far:
+  0.14–1.43 ms per strike on a duskfang, which is a whole frame's budget at the top
+  of that range and worth knowing before the count is raised.

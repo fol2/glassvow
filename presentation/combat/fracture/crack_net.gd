@@ -113,6 +113,57 @@ func nearest(p: Vector2) -> float:
 	return dist_to_strands(_points, p)
 
 
+## Is a strand already growing out of this point?
+##
+## `relieve()` needs this and could not work without it. The net is append-only, so a
+## tip that has been carried the rest of the way out KEEPS its `T_FREE` terminus — the
+## continuation is a new strand starting on it, and nothing rewrites the old one. That
+## means "terminus is free" and "still an open tip" are different questions, and asking
+## the first when you meant the second makes `relieve()` non-idempotent: called twice,
+## it grows a second continuation from every tip it already continued.
+##
+## Worth guarding rather than documenting away — this codebase has already had a death
+## beat fire twice (`c77b56b`).
+func starts_at(p: Vector2, tol: float) -> bool:
+	for pts: PackedVector2Array in _points:
+		if pts[0].distance_to(p) <= tol:
+			return true
+	return false
+
+
+## Every tip that is still open: free terminus, and nothing continuing from it. This is
+## what the rite consumes and what a renderer must taper to nothing.
+func open_tips() -> Array[int]:
+	var out: Array[int] = []
+	for i: int in range(_points.size()):
+		if _termini[i] != T_FREE:
+			continue
+		var pts: PackedVector2Array = _points[i]
+		if not starts_at(pts[pts.size() - 1], 1e-5):
+			out.append(i)
+	return out
+
+
+## WHERE the nearest crack is, not just how far. The propagator needs this on exactly
+## one step — the one where a tip is captured by an existing crack and has to be given
+## a final vertex ON that crack rather than three steps short of it.
+##
+## Undefined on an empty net, and deliberately not given a sentinel: every caller
+## already holds a finite `nearest()` before it asks, and a `Vector2` sentinel would be
+## a value that arithmetic silently accepts.
+func nearest_point(p: Vector2) -> Vector2:
+	var best: Vector2 = p
+	var best_d: float = INF
+	for pts: PackedVector2Array in _points:
+		for i: int in range(pts.size() - 1):
+			var q: Vector2 = Geometry2D.get_closest_point_to_segment(p, pts[i], pts[i + 1])
+			var d: float = q.distance_squared_to(p)
+			if d < best_d:
+				best_d = d
+				best = q
+	return best
+
+
 ## Static so the propagator can ask the same question of its own in-flight buffer.
 ## A radial must be able to arrest on a sibling from the same blow — a crack
 ## arrests on any free surface regardless of when it was made — and the buffer is
@@ -124,6 +175,16 @@ static func dist_to_strands(strands: Array[PackedVector2Array], p: Vector2) -> f
 		if d < best:
 			best = d
 	return best
+
+
+## Total run of a polyline. `commit` keeps its own cumulative loop because it needs
+## the per-vertex array; this answers the other question — how long is it — which the
+## propagator asks before it decides a strand is worth emitting.
+static func arc_length(pts: PackedVector2Array) -> float:
+	var run: float = 0.0
+	for i: int in range(pts.size() - 1):
+		run += pts[i].distance_to(pts[i + 1])
+	return run
 
 
 static func dist_to_polyline(pts: PackedVector2Array, p: Vector2) -> float:

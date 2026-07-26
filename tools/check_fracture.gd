@@ -73,6 +73,7 @@ static func run(fails: Array[String]) -> void:
 	_check_field_termini(fails)
 	_check_field_body(fails)
 	_check_field_energy(fails)
+	_check_field_arm_count(fails)
 	_check_field_screening(fails)
 	_check_field_determinism(fails)
 	_check_field_convergence(fails)
@@ -302,7 +303,11 @@ static func _total_length(strands: Array[Dictionary]) -> float:
 ## elsewhere and are excluded by their first point.
 static func _check_field_radiates(fails: Array[String]) -> void:
 	var f: FractureField = _field(1234, BodyMask.rect())
-	var blow: Blow = Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.30, 0.5)
+	# Energy 1.2, not 0.30. Under the corrected count rule 0.30 buys ONE arm, and a
+	# single arm cannot be asked whether it radiates. The old figure passed only
+	# because the count rule was degenerate — it returned seven arms for any energy
+	# at all, so this check was reading a saturated cap and calling it radiation.
+	var blow: Blow = Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 1.2, 0.5)
 	var strands: Array[Dictionary] = f.strike(CrackNet.new(), blow)
 	var mean: Vector2 = Vector2.ZERO
 	var arms: int = 0
@@ -313,7 +318,7 @@ static func _check_field_radiates(fails: Array[String]) -> void:
 		mean += (pts[1] - pts[0]).normalized()
 		arms += 1
 	if arms < 4:
-		fails.append("field: expected at least 4 primary arms at energy 0.30, got %d"
+		fails.append("field: expected at least 4 primary arms at energy 1.20, got %d"
 			% arms)
 		return
 	var clustering: float = (mean / float(arms)).length()
@@ -327,9 +332,14 @@ static func _check_field_radiates(fails: Array[String]) -> void:
 static func _check_field_termini(fails: Array[String]) -> void:
 	var f: FractureField = _field(77, BodyMask.rect())
 	var net: CrackNet = CrackNet.new()
+	# Energies and spacing raised with `ARM_LENGTH`. At 0.24 energy and 0.08 apart —
+	# the old fixture — every blow after the first lands inside its predecessor's
+	# process zone and is screened into a sub-floor stub, so the network never grows
+	# the crossings this check exists to census. That is the screening rule working
+	# correctly; the fixture was simply calibrated against the degenerate arm count.
 	for i: int in range(4):
-		var blow: Blow = Blow.new(Vector2(0.35 + 0.08 * float(i), 0.45),
-			Vector2(1.0, 0.2), 0.24, 0.5)
+		var blow: Blow = Blow.new(Vector2(0.30 + 0.13 * float(i), 0.45),
+			Vector2(1.0, 0.2), 1.1, 0.5)
 		net.commit(f.strike(net, blow))
 	if net.strand_count() < 4:
 		fails.append("field: four blows produced only %d strands" % net.strand_count())
@@ -400,14 +410,66 @@ static func _check_field_energy(fails: Array[String]) -> void:
 			% [big, small])
 
 
+## Griffith says nothing about how the energy is SPLIT, which is how the arm count
+## rule managed to be degenerate while every other field check passed: total length
+## stayed exactly proportional to energy whether the budget went into one arm or
+## seven. So the count needs its own assertion — a heavier blow must throw a wider
+## star, not just a longer one, until the cap.
+##
+## Written after `FractureField.ARM_LENGTH` was split out of `MIN_ARM`. Before that
+## split every energy from 0.23 upward returned exactly `MAX_ARMS`.
+static func _check_field_arm_count(fails: Array[String]) -> void:
+	var counts: Array[int] = []
+	for e: float in [0.20, 0.60, 1.20, 2.40] as Array[float]:
+		var strands: Array[Dictionary] = _field(9, BodyMask.rect()).strike(
+			CrackNet.new(), Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, e, 0.5))
+		# Primaries only: forks do not leave the impact point, so counting them would
+		# measure branching rather than how the blow was divided.
+		var n: int = 0
+		for s: Dictionary in strands:
+			var pts: PackedVector2Array = s["points"]
+			if pts[0] == Vector2(0.5, 0.5):
+				n += 1
+		counts.append(n)
+	if counts[0] != 1:
+		fails.append("field: a 0.20 blow should buy a single arm, got %d" % counts[0])
+	for i: int in range(1, counts.size()):
+		if counts[i] <= counts[i - 1] and counts[i - 1] < FractureField.MAX_ARMS:
+			fails.append("field: arm count did not grow with energy — %s across 0.20/0.60/1.20/2.40"
+				% str(counts))
+			return
+	# And the arms must stay long enough to see once the count has capped, or the
+	# cap would be buying density at the cost of legibility.
+	var top: Array[Dictionary] = _field(9, BodyMask.rect()).strike(
+		CrackNet.new(), Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 2.40, 0.5))
+	for s: Dictionary in top:
+		var pts: PackedVector2Array = s["points"]
+		if pts[0] != Vector2(0.5, 0.5):
+			continue
+		var run: float = 0.0
+		for k: int in range(pts.size() - 1):
+			run += pts[k].distance_to(pts[k + 1])
+		if run < FractureField.MIN_ARM:
+			fails.append("field: a 2.40 blow threw an arm of only %.3f body, under the %.3f floor"
+				% [run, FractureField.MIN_ARM])
+			return
+
+
 ## The behaviour the old web could not express at all, and the one the owner
 ## described as missing: a blow into glass that is ALREADY broken finds the tension
 ## there released, so it scores less. Both fields share a seed and are struck at the
 ## same point with the same blow, so the only difference is what was already there.
 static func _check_field_screening(fails: Array[String]) -> void:
-	var blow: Blow = Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.40, 0.5)
+	# 1.2 rather than 0.40, so BOTH sides grow a real star. At one arm each the
+	# screened side is filtered to nothing and `0 < 0.40` passes while saying much
+	# less than it appears to: "less" is the claim, and a comparison of two non-zero
+	# lengths is the only way to see it.
+	var blow: Blow = Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 1.2, 0.5)
 	var virgin: float = _total_length(
 		_field(31, BodyMask.rect()).strike(CrackNet.new(), blow))
+	if virgin <= 0.0:
+		fails.append("field: the virgin strike grew nothing — the check cannot run")
+		return
 	# Placed by hand rather than struck, so the second field's RNG is untouched.
 	var broken: CrackNet = CrackNet.new()
 	broken.commit([{
@@ -468,10 +530,9 @@ static func _check_field_relieve(fails: Array[String]) -> void:
 	var net: CrackNet = CrackNet.new()
 	net.commit(f.strike(net, Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.18, 0.5)))
 	var free_tips: Array[Vector2] = []
-	for i: int in range(net.strand_count()):
-		if net.terminus(i) == CrackNet.T_FREE:
-			var p: PackedVector2Array = net.strand(i)
-			free_tips.append(p[p.size() - 1])
+	for i: int in net.open_tips():
+		var p: PackedVector2Array = net.strand(i)
+		free_tips.append(p[p.size() - 1])
 	if free_tips.is_empty():
 		fails.append("field: no free tips to relieve — the check cannot run")
 		return
@@ -491,3 +552,12 @@ static func _check_field_relieve(fails: Array[String]) -> void:
 				% pts[0])
 		if s["terminus"] == CrackNet.T_FREE:
 			fails.append("field: a continuation still ended free at toughness zero")
+	# Idempotent. An append-only net cannot re-terminate the strand it continued, so
+	# the rite has to recognise a tip that is already carried out by what GROWS from
+	# it. Without that, a death beat firing twice doubles the entire network — and this
+	# codebase has had a death fire twice before (`c77b56b`).
+	net.commit(extra)
+	var again: Array[Dictionary] = f.relieve(net)
+	if not again.is_empty():
+		fails.append("field: relieving twice grew %d more continuations — not idempotent"
+			% again.size())
