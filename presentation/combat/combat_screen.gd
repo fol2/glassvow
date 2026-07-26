@@ -178,8 +178,6 @@ var _overlay: ColorRect
 var _overlay_title: Label
 var _overlay_body: Label
 var _overlay_button: Button
-var _inspect: PanelContainer
-var _inspect_label: Label
 var _over_emitted: bool = false
 ## `choreoDone` — whether the card currently resolving has already been swung
 ## for. Starts spent, so nothing lunges before a card is ever played.
@@ -306,17 +304,6 @@ func _build_ui() -> void:
 	_tips = TooltipLayer.new()
 	_tips.source = _tip_at
 	add_child(_tips)
-
-	_inspect = PanelContainer.new()
-	_inspect.set_anchors_preset(Control.PRESET_CENTER)
-	_inspect.visible = false
-	_inspect.add_theme_stylebox_override("panel", GlassStyle.pane(GlassStyle.GLASS, 0.96))
-	_inspect.gui_input.connect(_on_inspect_input)
-	add_child(_inspect)
-	_inspect_label = _label("")
-	_inspect_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_inspect_label.custom_minimum_size = Vector2(300, 0)
-	_inspect.add_child(_inspect_label)
 
 	# Kindle is this port's own control: the benchmark's chrome has no seat for
 	# it, and HudBar reserves none. Parked under the strip rather than invented
@@ -663,24 +650,54 @@ func request_kindle(uid: int) -> bool:
 	return true
 
 
+## `onCardClick` (combat.js:1667). A click is not an inspection — it is the
+## primary way the fight is played, and what it does depends entirely on how many
+## things the card could be aimed at:
+##
+##   - nothing to choose (a `self` card, or an `enemy` card with one survivor
+##     left) → the card is PLAYED on the spot
+##   - something to choose → the card ARMS, the arc opens, and every living foe
+##     starts glowing until one of them is clicked
+##   - the armed card clicked again → it is put back down
+##   - unplayable, or unaffordable → a refusal sound and nothing else
+##
+## The port used to open a panel here that restated the card's own rules text.
+## Nothing in the benchmark does that: the card face already carries its text, so
+## the panel was a second copy of what the player is looking at, sitting on top of
+## the fight it was meant to explain.
 func _on_card_tapped(uid: int) -> void:
+	if seq.is_busy() or game.cb == null or game.cb.over:
+		return
 	var inst: CardInst = _find_card(uid)
 	if inst == null:
 		return
-	var d: Dictionary = _rules.card_data(inst)
-	var display_name: String = str(d.get("name", String(inst.id)))
-	if inst.up:
-		display_name += "+"
-	var rules_text: String = str(d.get("text", "")).replace("@", "").replace("#", "")
-	_inspect_label.text = "%s\n\n%s" % [display_name, rules_text]
-	_inspect.visible = true
+	# `COARSE && S.hoveredCard !== uid` — a finger has no hover, so the first tap
+	# buys the lift that a mouse gets for free and only the second commits.
+	if _coarse() and _hand.hovered_uid != uid and not (_targeting and _selected_uid == uid):
+		_hand.hovered_uid = uid
+		_hand.raise_seat(uid)
+		_sfx.play(&"hover")
+		_update_previews()
+		return
+	if _kindle_toggle.button_pressed:
+		if not request_kindle(uid):
+			_sfx.play(&"debuff")
+		return
+	# Clicking the card that is already armed is how you change your mind.
+	if _targeting and _selected_uid == uid:
+		_cancel_targeting()
+		return
+	_selected_uid = uid
+	_hand.hovered_uid = uid
+	_activate_selected()
 
 
-func _on_inspect_input(event: InputEvent) -> void:
-	var mb: InputEventMouseButton = event as InputEventMouseButton
-	var st: InputEventScreenTouch = event as InputEventScreenTouch
-	if (mb != null and mb.pressed) or (st != null and st.pressed):
-		_inspect.visible = false
+## `matchMedia('(pointer: coarse)')`. A machine with a touchscreen AND a mouse is
+## not coarse — the benchmark's query answers for the pointer actually in use, and
+## the closest honest reading here is "a touchscreen is all there is".
+func _coarse() -> bool:
+	return DisplayServer.is_touchscreen_available() \
+		and not DisplayServer.has_feature(DisplayServer.FEATURE_MOUSE)
 
 
 ## `cardHover` (combat.js:1375). One tick per seat crossed, never per pixel.
@@ -719,7 +736,6 @@ func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	_aim.clear_aim()
 	_aim_hover = -1
 	_clear_previews()
-	_inspect.visible = false
 	var view: CardView = _hand.card_view(uid)
 	if view == null:
 		return
@@ -739,9 +755,14 @@ func _above_hand(global_pos: Vector2) -> bool:
 	return global_pos.y < _hand.get_global_rect().position.y
 
 
+## `hitEnemy` (pointer.js:139) — **backwards**, `for (let i = enemies.length - 1;
+## i >= 0; i -= 1)`. Art boxes are squares and they overlap: an elite's box is
+## wide enough to swallow the centre of the sporeling standing beside it, and
+## walking forwards would hand every one of those presses to the elite.
 func _enemy_at(global_pos: Vector2) -> int:
-	for ev: EnemyView in _enemy_views:
-		if not ev.get_global_rect().has_point(global_pos):
+	for i: int in range(_enemy_views.size() - 1, -1, -1):
+		var ev: EnemyView = _enemy_views[i]
+		if ev == null or not ev.get_global_rect().has_point(global_pos):
 			continue
 		if ev.idx < game.cb.enemies.size() and game.cb.enemies[ev.idx].hp > 0:
 			return ev.idx
@@ -1643,12 +1664,61 @@ func _input(event: InputEvent) -> void:
 	if touch != null:
 		if touch.pressed:
 			_tips.press(touch.position)
+			_stage_pressed(touch.position)
 		else:
 			_tips.release()
 		return
 	var drag: InputEventScreenDrag = event as InputEventScreenDrag
 	if drag != null:
 		_tips.press_moved(drag.position)
+		return
+	var motion: InputEventMouseMotion = event as InputEventMouseMotion
+	if motion != null:
+		# `aimMove` runs on every stage pointermove with no gesture live: an armed
+		# card's arc reaches the CURSOR, not the foe under it, so a shot lining up
+		# between two bodies still looks aimed somewhere.
+		_aim_move(motion.position)
+		return
+	var mb: InputEventMouseButton = event as InputEventMouseButton
+	if mb != null and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
+		_stage_pressed(mb.position)
+
+
+## `onEnemyClick` (combat.js:1694) and `tapBackground` (combat.js:1372), which are
+## only ever heard while a card is armed — nothing else on this screen answers a
+## bare press on the stage.
+func _stage_pressed(at: Vector2) -> void:
+	if not _targeting:
+		return
+	# Hand seats resolve before the residual stage (pointer.js `resolveHit`), so a
+	# click that lands on a card is that card's, never the background's.
+	if _hand.card_at(at) >= 0:
+		return
+	var idx: int = _enemy_at(at)
+	if idx >= 0:
+		_commit_selected(idx)
+		get_viewport().set_input_as_handled()
+		return
+	# `!event.target?.closest?.('... button, a, input, textarea, [data-act]')` —
+	# chrome is not background, or ending the turn would first disarm the card and
+	# the press would be spent doing nothing visible.
+	if get_viewport().gui_get_hovered_control() is BaseButton:
+		return
+	_cancel_targeting()
+	get_viewport().set_input_as_handled()
+
+
+func _aim_move(at: Vector2) -> void:
+	if not _targeting or _selected_uid < 0:
+		return
+	_aim.draw_between(_hand.seat_centre(_selected_uid), at)
+	# `enemyHover` (combat.js:1493) — the aimed foe changes only when the pointer
+	# crosses a body, not on every pixel it travels.
+	var idx: int = _enemy_at(at)
+	if idx == _aim_hover:
+		return
+	_aim_hover = idx
+	_update_previews()
 
 
 # ---------------------------------------------------------------- previews
@@ -1675,7 +1745,9 @@ func _update_previews() -> void:
 	# `S.targeting ?? S.drag ?? S.hoveredCard` — an armed card outranks a
 	# dragged one, and a dragged one outranks whatever the cursor is merely
 	# resting on.
-	var uid: int = _hand.dragged_uid()
+	var uid: int = _selected_uid if _targeting else -1
+	if uid < 0:
+		uid = _hand.dragged_uid()
 	if uid < 0 and not seq.is_busy():
 		uid = _hand.hovered_uid
 	var inst: CardInst = _find_card(uid) if uid >= 0 else null
@@ -1688,7 +1760,9 @@ func _update_previews() -> void:
 		_clear_previews()
 		return
 	var target: String = str(d.get("target", ""))
-	var aiming: bool = _hand.is_aiming()
+	# Armed by a click and armed by a drag are the same posture: the card has been
+	# committed to and is now looking for something to land on.
+	var aiming: bool = _targeting or _hand.is_aiming()
 	var inspect: bool = not aiming
 	var living: int = 0
 	for e: EnemyCombatant in game.cb.enemies:
@@ -1711,6 +1785,7 @@ func _update_previews() -> void:
 			view.clear_preview()
 			continue
 		var hovered: bool = i == aimed
+		view.set_choose_hover(_targeting and hovered)
 		var aim_all: bool = target == "allEnemies" and (inspect or _hand.is_free_drag())
 		var aim_one: bool = target == "enemy" and (living == 1 or (aiming and hovered))
 		view.set_targetable(aim_all or aim_one)
@@ -1746,16 +1821,14 @@ func _clear_previews() -> void:
 		view.clear_preview()
 
 
-## Which foe the aim is resting on: the one under the pointer while dragging,
-## else `S.selectedEnemyIndex` — which `setTargeting` seeds with the first
-## survivor so a fight that has only one never needs a hover to resolve.
+## Which foe the aim is resting on. `x.root.classList.contains('target-hover')`,
+## and the important half is what it says when the answer is NOTHING: an armed
+## card with the pointer resting between two foes marks neither, and both stay
+## dimmed. A fallback to "the first survivor" would claim a kill the player has
+## not aimed at yet. The keyboard seeds this itself, which is what
+## `S.selectedEnemyIndex` is for.
 func _aim_target() -> int:
-	if _aim_hover >= 0:
-		return _aim_hover
-	for e: EnemyCombatant in game.cb.enemies:
-		if e.hp > 0:
-			return e.idx
-	return -1
+	return _aim_hover
 
 
 # ---------------------------------------------------------------- keyboard
@@ -1870,8 +1943,13 @@ func _activate_selected() -> void:
 		if living.size() == 1:
 			_commit_selected(living[0])
 			return
+		# `setTargeting` (combat.js:1702): every living foe is marked choosable, and
+		# `S.selectedEnemyIndex` opens on the first survivor so the keyboard has
+		# somewhere to start cycling from. The arc opens onto that foe, and the
+		# pointer takes it over from the next mouse move.
 		_targeting = true
 		_aim_hover = living[0] if not living.is_empty() else -1
+		_set_target_glow(true)
 		if _aim_hover >= 0:
 			_aim.draw_between(_hand.seat_centre(_selected_uid),
 				_enemy_centre(_aim_hover))
@@ -1891,7 +1969,19 @@ func _cancel_targeting() -> void:
 	_targeting = false
 	_selected_uid = -1
 	_aim_hover = -1
+	_set_target_glow(false)
 	_aim.clear_aim()
 	_hand.hovered_uid = -1
 	_hand.drop_seat()
 	_update_previews()
+
+
+## `.enemy.targetable` (styles.css:1241) — while a card is armed, EVERY living foe
+## breathes a red halo, and that is a different statement from the aim rim: the
+## halo says "this is a thing you may choose", the rim says "this is the thing you
+## have chosen". A fight with three foes shows three halos and at most one rim.
+func _set_target_glow(on: bool) -> void:
+	for view: EnemyView in _enemy_views:
+		if view.idx >= game.cb.enemies.size():
+			continue
+		view.set_choosable(on and game.cb.enemies[view.idx].hp > 0)

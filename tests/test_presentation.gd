@@ -44,14 +44,27 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, screen._enemy_views.size() == 2, "two enemy views")
 	_check(fails, screen._hand.uids().size() == 5, "hand renders 5 cards")
 
-	# Tap (below slop) = inspect, never a play.
-	var first_uid: int = game.cb.hand[0].uid
+	# `onCardClick` (combat.js:1667). A tap below the slop is a CLICK, and a click
+	# is how the fight is played: a card that must choose between two living foes
+	# arms and opens the arc; it does not play, and it does not open a panel.
+	var enemy_uid: int = -1
+	for c: CardInst in game.cb.hand:
+		var v: CardView = screen._hand.card_view(c.uid)
+		if v != null and v.target_kind == "enemy" and v.playable:
+			enemy_uid = c.uid
+			break
+	_check(fails, enemy_uid >= 0, "hand holds a playable single-target card")
 	var hand_view: HandView = screen._hand
-	hand_view._on_card_pressed_at(first_uid, Vector2(100, 700))
-	hand_view._on_card_released_at(first_uid, Vector2(104, 703))
-	_check(fails, screen._inspect.visible, "tap opens the inspect panel")
-	_check(fails, game.cb.hand.size() == 5, "tap does not play the card")
-	screen._inspect.visible = false
+	hand_view._on_card_pressed_at(enemy_uid, Vector2(100, 700))
+	hand_view._on_card_released_at(enemy_uid, Vector2(104, 703))
+	_check(fails, screen._targeting, "tap arms targeting when two foes live")
+	_check(fails, game.cb.hand.size() == 5, "arming does not play the card")
+	# Tapping the armed card again puts it back down.
+	hand_view._on_card_pressed_at(enemy_uid, Vector2(100, 700))
+	hand_view._on_card_released_at(enemy_uid, Vector2(104, 703))
+	_check(fails, not screen._targeting, "tapping the armed card disarms it")
+	_check(fails, game.cb.hand.size() == 5, "disarming does not play the card")
+	var first_uid: int = game.cb.hand[0].uid
 
 	# Drag past slop arms the drag machine; a dead-zone release snaps back.
 	hand_view._on_card_pressed_at(first_uid, Vector2(100, 700))
