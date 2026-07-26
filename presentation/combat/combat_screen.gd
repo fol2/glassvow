@@ -43,6 +43,10 @@ const HERO_HUE: float = 225.0  # HERO_LOOKS[0].hue in art.js
 ## overhang rather than left to work it out from where it happens to sit.
 const HAND_OVERHANG: float = 12.0
 
+## The damage sources that do not shove the body (drain.js:626). A blow throws
+## you; poison does not, and neither does your own burn.
+const INDIRECT_SOURCES: Array[String] = ["poison", "burn", "self", "thorns"]
+
 class Plate:
 	extends Control
 	var tex: Texture2D
@@ -87,6 +91,9 @@ var _overlay_button: Button
 var _inspect: PanelContainer
 var _inspect_label: Label
 var _over_emitted: bool = false
+## `choreoDone` — whether the card currently resolving has already been swung
+## for. Starts spent, so nothing lunges before a card is ever played.
+var _hero_swung: bool = true
 
 
 ## Fully constructed at new() — no tree dependency, so headless tests can
@@ -527,6 +534,25 @@ func _enemy_view(idx: int) -> EnemyView:
 	return null
 
 
+## `combatantView(en).kind` — the body shape `choreoAttack` sorts by. It rides on
+## the enemy's own content, so a golem loads in place and a wisp drifts without
+## anything here having to know which is which.
+func _foe_kind(idx: int) -> String:
+	if idx < 0 or idx >= game.cb.enemies.size():
+		return "humanoid"
+	var art: Dictionary = game.cb.enemies[idx].def.get("art", {})
+	return str(art.get("kind", "humanoid"))
+
+
+## `mvDef?.intent?.startsWith('attack')` — only an attacking move is thrown.
+func _move_is_attack(idx: int, move_key: String) -> bool:
+	if idx < 0 or idx >= game.cb.enemies.size():
+		return false
+	var moves: Dictionary = game.cb.enemies[idx].def.get("moves", {})
+	var mv: Dictionary = moves.get(move_key, {})
+	return str(mv.get("intent", "")).begins_with("attack")
+
+
 ## Fire-and-forget rising damage/heal number over a view.
 func _float_text(over: Control, msg: String, color: Color) -> void:
 	if seq.instant or over == null:
@@ -566,15 +592,26 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.PLAY:
 			var uid: int = ev["uid"]
 			_hand.remove_card(uid)
+			_hero_swung = false  # this card's swing is owed
 			await _wait(0.12)
 		EventTypes.HIT_ENEMY:
 			var idx: int = ev["idx"]
 			var amount: int = ev["amount"]
 			var hp_after: int = ev["hpAfter"]
+			# The domain flags a poison tick the same way the benchmark's drain
+			# reads `ev.poison`, so the two never have to agree by coincidence.
+			var poison: bool = ev.get("poison", false)
+			# `choreoDone` (drain.js:542): the hero swings once for the CARD and
+			# the blow lands after it, so a three-hit attack is one swing and
+			# three recoils rather than three swings.
+			if not poison and not _hero_swung and _hero != null:
+				_hero_swung = true
+				await _wait(_hero.lunge("humanoid"))
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
 				var e: EnemyCombatant = game.cb.enemies[idx]
 				view.set_hp(hp_after, e.max_hp)
+				view.take_hit(not poison)
 				_float_text(view, str(amount), Color(1, 0.45, 0.4))
 			await _wait(0.22)
 		EventTypes.HIT_PLAYER:
@@ -582,6 +619,9 @@ func _handle_event(ev: Dictionary) -> void:
 			var hp_after: int = ev["hpAfter"]
 			if _hero != null:
 				_hero.set_hp(maxi(0, hp_after), game.cb.player.max_hp)
+				# drain.js:626 splits by source: poison, burn, self and thorns
+				# take the quiet branch, and only a real blow shoves the body.
+				_hero.take_hit(not (str(ev.get("source", "")) in INDIRECT_SOURCES))
 				_float_text(_hero, str(amount), Color(1, 0.45, 0.4))
 			_push_hud()
 			await _wait(0.22)
@@ -665,7 +705,14 @@ func _handle_event(ev: Dictionary) -> void:
 				# name, and a chip is a promise, not a receipt.
 				view.clear_intent()
 				_float_text(view, str(ev.get("name", "")), Color(1, 0.85, 0.5))
+			# drain.js:905 — the name reads for 300ms, THEN the body moves. A
+			# move that does not attack simply holds the beat, so the enemy turn
+			# keeps its rhythm whether or not anything swings.
 			await _wait(0.3)
+			if view != null and _move_is_attack(idx, str(ev.get("move", ""))):
+				await _wait(view.lunge(_foe_kind(idx)))
+			else:
+				await _wait(0.32)
 		EventTypes.SMOLDER_JUMP:
 			await _wait(0.15)
 		EventTypes.RELIC_PROC:

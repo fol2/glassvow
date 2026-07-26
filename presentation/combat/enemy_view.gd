@@ -67,6 +67,38 @@ const FLARE_RISE: float = 0.09        ## hurtFlash peaks at 30% of its 0.3s
 const NUDGE_OUT: float = 7.0 / KICK_PX
 const NUDGE_BACK: float = -5.0 / KICK_PX
 
+## `choreoAttack` (combat-choreo.js:10) — the body throws itself at what it is
+## striking. Three bodies, sorted by the enemy's `art.kind`, and the difference
+## between them is the whole point: a golem cannot lunge, so it loads and
+## releases in place; a wisp drifts forward and up rather than stepping; anything
+## with legs winds back before it swings.
+##
+## Every frame below is that file's, converted only from CSS px to this port's
+## px. The keyframes are read at an already-eased `t` rather than being tweened
+## segment by segment, because a single `easing` over a Web Animations iteration
+## eases the WHOLE run and interpolates linearly between offsets — easing each
+## segment separately would put a settle in the middle of the swing.
+const HEAVY_KINDS: Array[String] = ["golem", "treeboss", "leviathan", "crab"]
+const FLOATY_KINDS: Array[String] = ["wisp", "shade", "siren", "eye", "cultist"]
+
+const HEAVY_TIME: float = 0.42
+const HEAVY_AT: Array[float] = [0.0, 0.35, 1.0]
+const HEAVY_SX: Array[float] = [1.0, 1.08, 1.0]
+const HEAVY_SY: Array[float] = [1.0, 0.86, 1.0]
+
+const FLOATY_TIME: float = 0.38
+const FLOATY_AT: Array[float] = [0.0, 0.4, 0.7, 1.0]
+const FLOATY_X: Array[float] = [0.0, 6.0, 10.0, 0.0]
+const FLOATY_UP: Array[float] = [0.0, 5.0, 2.0, 0.0]
+const FLOATY_SX: Array[float] = [1.0, 0.98, 1.0, 1.0]
+const FLOATY_SY: Array[float] = [1.0, 1.02, 1.0, 1.0]
+
+const SWING_TIME: float = 0.33
+const SWING_AT: Array[float] = [0.0, 0.3, 0.62, 1.0]
+const SWING_X: Array[float] = [0.0, -8.0, 34.0, 0.0]
+const SWING_SX: Array[float] = [1.0, 0.97, 1.02, 1.0]
+const SWING_SY: Array[float] = [1.0, 1.02, 0.99, 1.0]
+
 ## How hard the struck flash reads. Awaiting a decision, so it is a static the lab
 ## can sweep (`--flare=N`) rather than a number buried in the shader.
 static var flare_gain: float = 1.0
@@ -130,6 +162,16 @@ var _dead: bool = false
 var _hit: float = 0.0
 var _hit_squash: float = 0.0
 var _hit_tween: Tween = null
+## The lunge, composed onto the idle in `_process` the same way the recoil is.
+## Held as px and a plain scale multiplier so a blow landing mid-swing adds to
+## the swing rather than cancelling it — which is what two CSS animations on one
+## element do NOT do, and is the better read.
+var _lunge_x: float = 0.0
+var _lunge_up: float = 0.0
+var _lunge_scale: Vector2 = Vector2.ONE
+var _lunge_kind: String = ""
+var _lunge_dir: float = 1.0
+var _lunge_tween: Tween = null
 var _flare_tween: Tween = null
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -783,11 +825,80 @@ func _process(delta: float) -> void:
 	# would be erased before it was ever seen. `_hit` and `_hit_squash` are the
 	# tweened values; composing them here is what makes the two coexist.
 	_vessel.scale = Vector3(
-		k * (1.0 - SQUASH * _hit_squash), k * (1.0 + SQUASH * _hit_squash), 1.0)
+		k * (1.0 - SQUASH * _hit_squash) * _lunge_scale.x,
+		k * (1.0 + SQUASH * _hit_squash) * _lunge_scale.y, 1.0)
 	_vessel.rotation.z = _breathe * 0.017 * sin(t * 0.71)
 	_vessel.position = Vector3(
-		_hit * KICK_PX * UNIT,
-		_breathe * _box_u * 0.010 * sin(t * 0.83), 0.0)
+		(_hit * KICK_PX + _lunge_x) * UNIT,
+		_breathe * _box_u * 0.010 * sin(t * 0.83) + _lunge_up * UNIT, 0.0)
+
+
+# ---------------------------------------------------------------- striking
+
+## Read a keyframe track at `t`: linear between the offsets in `at`, held at the
+## ends. `at` is ascending and the two arrays are the same length.
+static func _keyframe(t: float, at: Array[float], v: Array[float]) -> float:
+	for i: int in range(1, at.size()):
+		if t <= at[i]:
+			var span: float = at[i] - at[i - 1]
+			var f: float = 0.0 if span <= 0.0 else (t - at[i - 1]) / span
+			return lerpf(v[i - 1], v[i], f)
+	return v[v.size() - 1]
+
+
+## Throw this body at what it is striking. `kind` is the enemy's `art.kind` from
+## content; anything unlisted swings. Returns how long the lunge takes, so a
+## caller that has to land the blow on the strike can wait for it.
+func lunge(kind: String) -> float:
+	if _dead or _vessel == null:
+		return 0.0
+	if _lunge_tween != null and _lunge_tween.is_valid():
+		_lunge_tween.kill()
+	_lunge_kind = kind
+	# A foe stands right of the hero and strikes left; the hero strikes right.
+	# The same fact `_away()` already derives, read from the other end.
+	_lunge_dir = -_away()
+	var seconds: float = SWING_TIME
+	if HEAVY_KINDS.has(kind):
+		seconds = HEAVY_TIME
+	elif FLOATY_KINDS.has(kind):
+		seconds = FLOATY_TIME
+	# TRANS_BACK / EASE_OUT is Godot's nearest reading of the benchmark's
+	# cubic-bezier(.34, 1.56, .64, 1) — the overshoot past 1 is the whole reason
+	# that curve was chosen, and a plain EASE_OUT loses it.
+	_lunge_tween = create_tween()
+	_lunge_tween.tween_method(_set_lunge, 0.0, 1.0, seconds) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_lunge_tween.tween_callback(_clear_lunge)
+	return seconds
+
+
+func _set_lunge(t: float) -> void:
+	var at: Array[float] = SWING_AT
+	if HEAVY_KINDS.has(_lunge_kind):
+		# A golem does not travel: it loads and releases where it stands.
+		_lunge_x = 0.0
+		_lunge_up = 0.0
+		_lunge_scale = Vector2(
+			_keyframe(t, HEAVY_AT, HEAVY_SX), _keyframe(t, HEAVY_AT, HEAVY_SY))
+		return
+	if FLOATY_KINDS.has(_lunge_kind):
+		at = FLOATY_AT
+		_lunge_x = _keyframe(t, at, FLOATY_X) * _lunge_dir
+		_lunge_up = _keyframe(t, at, FLOATY_UP)
+		_lunge_scale = Vector2(
+			_keyframe(t, at, FLOATY_SX), _keyframe(t, at, FLOATY_SY))
+		return
+	_lunge_x = _keyframe(t, at, SWING_X) * _lunge_dir
+	_lunge_up = 0.0
+	_lunge_scale = Vector2(
+		_keyframe(t, at, SWING_SX), _keyframe(t, at, SWING_SY))
+
+
+func _clear_lunge() -> void:
+	_lunge_x = 0.0
+	_lunge_up = 0.0
+	_lunge_scale = Vector2.ONE
 
 
 # ---------------------------------------------------------------- being struck
