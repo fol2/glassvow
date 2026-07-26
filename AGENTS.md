@@ -1,6 +1,35 @@
 # Agent Contract — Glassvow Godot
 
-**Glassvow** (琉璃誓言) is a Godot 4.7.1 reimplementation of the web-based roguelite deckbuilder, parallel-ported from the reference implementation frozen at [web-reference-v1](https://github.com/fol2/roguecardv2/tree/web-reference-v1). Parity is verified against deterministic test fixtures exported from the web version; the map system is a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions.
+**Glassvow** (琉璃誓言) is a Godot 4.7.1 reimplementation of the web-based roguelite deckbuilder, parallel-ported from the reference implementation. Parity is verified against deterministic test fixtures exported from the web version; the map system is a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions.
+
+## THE REFERENCE — read this before quoting any `file:line`
+
+**The reference is roguecardv2 at commit `6e06911` (2026-07-13). It is PRE-PIXI.**
+On this machine that checkout is **`~/Coding/roguecardv2-benchmark`**, and it is
+what `http://localhost:5190` serves. Confirm before reading:
+
+```bash
+git -C ~/Coding/roguecardv2-benchmark log -1 --format=%h   # must print 6e06911
+```
+
+**Do not read parity specs from `~/Coding/roguecardv2`.** That checkout is on
+`main`, tag `web-reference-v1` (`1343e1d`, 2026-07-24) — **284 commits ahead** and
+**post-Pixi**. It contains `src/ui/combat-gl.js`, `src/ui/combat-presentation.js`,
+`src/ui/combat-choreo.js`, `#uigl`, `chromePulse` and a Pixi `artCast`, none of
+which exist in the reference. `styles.css` differs by 725+/179−, `drain.js` by
+161+/186−, `mesh.js` by 118+/22−, `vfx.js` by 72+/7−. It is still the home of
+`tools/capture-port-fixtures.mjs` (see Fixture Provenance) — the fixture
+exporter's repo, not the visual reference.
+
+This line used to name `web-reference-v1` as the reference. It was wrong, and on
+2026-07-26 that error produced three commits ported against code the benchmark
+does not contain (`e071e34`, `d367e44`, `806272c` — reverted or redone).
+
+One rule that follows, learned the same day: **a function existing in the source
+is not evidence that it renders.** `ring()` and `slashArc()` push particles with
+no `vx`/`vy` while the draw loop does `p.x += p.vx * dt` unconditionally, so
+their coordinates go NaN before they draw. They have never appeared on screen at
+either commit. Measure on the running page; do not infer from the source.
 
 ## Verification (all from repo root)
 
