@@ -71,8 +71,8 @@ been re-checked; the values may or may not survive.
 
 1. **`presentation/combat/floaters.gd`** — its own docblock says *"the PIXI
    floater, not the CSS one"*, and cites `TIER_STYLE (combat-presentation.js:31)`.
-   The benchmark makes a DOM `<div class="floaty ...">` (`vfx.js:175`) and
-   carries the tiers in **19 `.floaty` CSS rules**. Highest risk on this list:
+   The benchmark makes a DOM `<div class="floaty ...">` (`vfx.js:177`) and
+   carries the tiers in **28 `.floaty` rule blocks**. Highest risk on this list:
    every damage numeral in the game goes through it.
 2. **`presentation/combat/aim_arc.gd`** — *"Ported verbatim from `paintAim`
    (`combat-gl.js:1254`)"*. `paintAim` does not exist in the benchmark.
