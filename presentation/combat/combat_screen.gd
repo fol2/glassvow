@@ -1338,6 +1338,19 @@ func _process(delta: float) -> void:
 		[0.0, 0.5, 1.0], [LOW_HP_ALPHA[0], LOW_HP_ALPHA[1], LOW_HP_ALPHA[0]]))
 
 
+## `if (cb.player.block > 0) syncWardMesh(heroSprite, true, true)`
+## (combat.js:2580, 2585) — a screen built onto a fighter who is ALREADY warded,
+## which is what a mid-combat restore is. Raised without the grow: the stone was
+## up before this screen existed, so it does not form again in front of you.
+##
+## It lives on the sync rather than in `set_ward` because `blockGain` raises the
+## shell BEFORE the sync it triggers — putting the raise inside `set_ward` lets
+## that sync answer the gain first and swallow the grow it was meant to start.
+func _restore_ward_shell(who: EnemyView, block: int) -> void:
+	if who != null and block > 0 and not who.ward_shell_on():
+		who.set_ward_shell(true, false)
+
+
 ## `updateLantern` (combat.js:404) — how far the light has failed, where it is
 ## standing, and whether it is guttering. Run every frame rather than at the
 ## benchmark's call sites: the pool is centred on a body that breathes, sways and
@@ -1685,15 +1698,22 @@ func _handle_event(ev: Dictionary) -> void:
 			var n: int = ev.get("n", total)
 			var at: Vector2 = _who_centre(who_v)
 			_sfx.play(&"block")
+			# `syncWardMesh(host, true, true)` (drain.js:663) — GAINING guard is the
+			# one call that passes `grow`, and that is the whole distinction: a
+			# resync only states that ward is still there, while this says it was
+			# just put up. The first one grows the stone; after that it pulses the
+			# facets, so a second Ward card is visibly a second Ward card.
 			if typeof(who_v) == TYPE_STRING:
 				if _hero != null:
 					_hero.set_ward(total)
+					_hero.set_ward_shell(true, true)
 				_hud.pulse(&"ward")
 			else:
 				var who_idx: int = who_v
 				var view: EnemyView = _enemy_view(who_idx)
 				if view != null:
 					view.set_ward(total)
+					view.set_ward_shell(true, true)
 			_float(at + Vector2(0.0, -10.0), str(n), "blockf", WARD_BLUE, 0.0,
 				WARD_ICON, 22)
 			_sync_actors()
@@ -2196,11 +2216,13 @@ func _sync_actors(reap: bool = false) -> void:
 	if _hero != null:
 		_hero.set_hp(maxi(0, cb.player.hp), cb.player.max_hp)
 		_hero.set_ward(cb.player.block)
+		_restore_ward_shell(_hero, cb.player.block)
 		_hero.set_statuses(cb.player.statuses, game.content.statuses)
 	for e: EnemyCombatant in cb.enemies:
 		var view: EnemyView = _enemy_view(e.idx)
 		if view == null:
 			continue
+		_restore_ward_shell(view, e.block)
 		var intent: StringName = &""
 		var move_name: String = ""
 		var dmg_text: String = ""

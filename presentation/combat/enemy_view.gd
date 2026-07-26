@@ -125,6 +125,28 @@ const NUDGE_BACK: float = -5.0 / KICK_PX
 ## sub-pixel-ish rattle in the art's own px, and it runs on `linear` because a
 ## tremble that eases is a wobble. CSS y is screen-down and the vessel's is
 ## world-up, so the y track is negated where it is read.
+## `WARD_DEFAULTS` (ward-params.js) — every one of these is authored through the
+## benchmark's own `?vfxedit=1` panel and saved back to that file, so they are
+## values somebody chose, not defaults nobody touched.
+const WARD_PAD: float = 1.46          ## the shell stands this much proud of the body
+const WARD_OPACITY: float = 0.4
+const WARD_GROW: float = 0.56         ## growMs 560 — and the fade is the same, reversed
+const WARD_SITES: int = 32            ## ring facets, plus five interior ones
+const WARD_INNER_SITES: int = 5
+const WARD_EDGE_SOFT: float = 0.01    ## all but a hard cut
+const WARD_SHAPE_VERTS: int = 8
+const WARD_SHAPE_JITTER: float = 0.55
+## `refraction: 2` multiplies `normalScale: 0.5` — and `thickness: 0`, which is
+## why none of this bends anything (see WARD_SHADER).
+const WARD_NORMAL_SCALE: float = 1.0
+const WARD_ROUGH: float = 0.0
+const WARD_ENV: float = 0.72
+const WARD_TINT: Color = Color(0.28627452, 0.5647059, 0.7490196)   # #4a90bf
+## Re-gaining ward keeps the silhouette and pulses the FACETS: they collapse to
+## 12% and re-cut. `growMs * 0.55`.
+const WARD_PULSE: float = 0.56 * 0.55
+const WARD_PULSE_TO: float = 0.12
+
 const DOOM_PERIOD: float = 0.09
 const DOOM_AT: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
 const DOOM_X: Array[float] = [0.0, 1.6, -1.4, 1.0, 0.0]
@@ -219,6 +241,20 @@ var _max_hp: int = 1
 ## segment needs an integer, and the rail's value is a float mid-tween.
 var _hp: int = 0
 var _marked: bool = false
+var _ward_mesh: MeshInstance3D = null
+var _ward_mat: ShaderMaterial = null
+## `wardOn` / `wardGrow` / `wardSiteF` — whether the shell is wanted, how much of
+## it has formed, and how many of its facets are cut. They are separate because
+## a re-gain moves the second without moving the first.
+var _ward_on: bool = false
+var _ward_grow: float = 0.0
+var _ward_grow_from: float = 0.0
+var _ward_t: float = 0.0
+var _ward_site_f: float = 0.0
+var _ward_pulsing: bool = false
+var _ward_pulse_from: float = 0.0
+var _ward_pulse_t: float = 0.0
+var _ward_sites_used: int = -1
 var _doomed: bool = false
 var _doom_t: float = 0.0
 var _intent: IntentChip
@@ -407,6 +443,9 @@ var _art_img: Image = null
 
 static var _meta: Dictionary = {}
 static var _fx_cache: Dictionary = {}
+## One mask per PAINTING, not per actor: eight duskfangs in a fight share one
+## silhouette, and the alpha read is the expensive part.
+static var _mask_cache: Dictionary = {}
 
 
 ## The body: a flat plate that takes REAL light. The painting has no normal map,
@@ -592,6 +631,121 @@ void fragment() {
 ## StandardMaterial3D's `refraction_enabled` cannot do this job here: it forces
 ## ALPHA to 1 and reads a screen that, inside a transparent SubViewport, is
 ## empty — which is why the first pass came out as grey pebbles.
+## `meshWard` (mesh.js:1300) — the ward shell: a raw-gemstone pane that grows
+## over the creature when it takes guard. `syncWardMesh` is the only thing that
+## ever showed a ward as more than a number, and this port had the mote underlay
+## `archetypeHit` throws for it — vfx.js:492 says so in as many words:
+## "meshWard owns the gemstone shell; keep a light mote underlay only" — without
+## the shell the underlay is for.
+##
+## Two fields, both authored in `ward-params.js` and both computed here rather
+## than baked to a canvas as the reference does: a signed distance to an
+## irregular polygon for the SILHOUETTE, and a Voronoi second-nearest seam over
+## 37 facet sites for the NORMAL. 192² bakes are how you do this without a
+## shader; we have a shader, and 37 sites per fragment is nothing.
+##
+## What the shell is NOT is a refractor. `refraction: 2` scales `thickness`,
+## which is authored at 0 — so transmission bends nothing, and every bit of the
+## structure you see is the seam normal catching the key light at
+## `roughness: 0`. Reading the thickness first is what stops this becoming an
+## expensive screen-space effect that looks less like the benchmark, not more.
+const WARD_SHADER: String = """
+shader_type spatial;
+render_mode blend_mix, cull_disabled, depth_draw_never, specular_schlick_ggx;
+
+uniform vec2 outline[16];
+uniform int outline_n = 8;
+uniform vec2 sites[40];
+// How many of them are showing. Grow reveals a PREFIX of the list, so the
+// facets are cut into the shell as it forms rather than fading in as a set.
+uniform int site_n = 0;
+uniform float grow = 0.0;
+uniform vec4 tint : source_color = vec4(0.29, 0.565, 0.749, 1.0);
+uniform float shell_opacity = 0.4;
+uniform float edge_soft = 0.01;
+uniform float normal_scale = 1.0;
+uniform float rough = 0.0;
+uniform float env_gain = 0.72;
+// How the shell's 0.4 of opacity is spent: almost none on the pane, most of it
+// on the seams and the turning rim.
+const float FACE = 0.10;
+const float SEAM_A = 0.42;
+const float RIM_A = 0.70;
+
+// `signedDistPoly` — negative inside. The winding test is the standard one; a
+// gem outline is not convex, so a half-plane test would eat the spikes.
+float sd_poly(vec2 p) {
+	float d = dot(p - outline[0], p - outline[0]);
+	float s = 1.0;
+	for (int i = 0, j = outline_n - 1; i < outline_n; j = i, i++) {
+		vec2 e = outline[j] - outline[i];
+		vec2 w = p - outline[i];
+		vec2 b = w - e * clamp(dot(w, e) / max(1e-6, dot(e, e)), 0.0, 1.0);
+		d = min(d, dot(b, b));
+		bvec3 c = bvec3(p.y >= outline[i].y, p.y < outline[j].y, e.x * w.y > e.y * w.x);
+		if (all(c) || all(not(c))) { s = -s; }
+	}
+	return s * sqrt(d);
+}
+
+void fragment() {
+	// The mask is measured in the same oval the reference bakes into:
+	// centre (0.5, 0.52), radii (0.46, 0.48).
+	vec2 q = vec2((UV.x - 0.5) / 0.46, (UV.y - 0.52) / 0.48);
+	float sd = sd_poly(q);
+	float t = edge_soft <= 0.001
+		? (sd <= 0.0 ? 1.0 : 0.0)
+		: 1.0 - smoothstep(-edge_soft, 0.0, sd);
+	t *= grow;
+	if (t < 0.01) { discard; }
+
+	// `bakeWardNormal` — the seam between the two nearest facet sites, and only
+	// within a hair of it. Everything else is flat glass.
+	float d1 = 1e12;
+	float d2 = 1e12;
+	vec2 s1 = vec2(0.0);
+	vec2 s2 = vec2(0.0);
+	for (int i = 0; i < site_n; i++) {
+		vec2 d = UV - sites[i];
+		float dd = dot(d, d);
+		if (dd < d1) { d2 = d1; s2 = s1; d1 = dd; s1 = sites[i]; }
+		else if (dd < d2) { d2 = dd; s2 = sites[i]; }
+	}
+	vec2 nrm = vec2(0.0);
+	if (site_n >= 2) {
+		float edge = sqrt(d2) - sqrt(d1);
+		float seam = 0.016;   // `SEAM = N * 0.016` at any bake size
+		if (edge < seam) {
+			vec2 v = s1 - s2;
+			float k = (1.0 - edge / seam) * 1.05;
+			nrm = vec2(v.x, -v.y) / max(1e-5, length(v)) * k;
+		}
+	}
+	nrm *= normal_scale;
+	NORMAL_MAP = vec3(nrm * 0.5 + 0.5, sqrt(max(0.05, 1.0 - dot(nrm, nrm))));
+
+	// `transmission: 1` with `thickness: 0` is CLEAR glass, and the reference
+	// says in as many words that "MeshPhysicalMaterial.opacity barely affects
+	// transmission glass" (mesh.js:694) — so `opacity: 0.4` is not a 40% wash
+	// over the creature. Read as one it buries the body under a coloured slab,
+	// which is what a first pass here did. The shell is nearly invisible across
+	// its face; what you actually see of it is the SEAMS catching light and the
+	// rim turning away from you.
+	float seam = clamp(length(nrm), 0.0, 1.0);
+	float rim = pow(1.0 - clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0), 3.0);
+	ALBEDO = tint.rgb;
+	ALPHA = clamp(t * shell_opacity * (FACE + seam * SEAM_A + rim * RIM_A), 0.0, 1.0);
+	ROUGHNESS = rough;
+	METALLIC = 0.0;
+	SPECULAR = 0.5 + env_gain * 0.5;
+	// The stage is dark and there is no environment map to catch, so the glint
+	// the `envMapIntensity` buys there is spent here as emission — at the seams
+	// and the rim only, which is the only place it lands there either.
+	EMISSION = (tint.rgb * rim * 0.30 + vec3(1.0) * seam * 0.13) * env_gain;
+}
+"""
+
+
 const GLASS_SHADER: String = """
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley,
@@ -710,6 +864,48 @@ static func meta(art_id: StringName) -> Dictionary:
 	return entry
 
 
+## Where a creature's painting lives. Static because the mask below needs the same
+## answer without an actor to ask, and two copies of the search order is two places
+## for a folder move to break.
+static func art_texture(art_id: StringName) -> Texture2D:
+	if art_id == &"":
+		return null
+	for pattern: String in ART_DIRS:
+		var path: String = pattern % art_id
+		if ResourceLoader.exists(path):
+			return load(path)
+	return null
+
+
+## Mask resolution. One propagator step is `FractureField.STEP` = 0.012 body, so at
+## 256 a step spans three texels and `BodyMask.reaches` gets three probes across it
+## — enough to catch any gap wide enough to stop a real crack. Full resolution would
+## buy nothing but a 4 MB CPU image per painting.
+const MASK_RES: int = 256
+
+
+## The creature's silhouette, for the fracture model. Cached, decompressed, and
+## downsampled — see `MASK_RES`. A creature with no painting gets the rectangle
+## rather than nothing, because a crack that runs to the box edge is a better
+## failure than one that arrests on its first step.
+static func body_mask(art_id: StringName) -> BodyMask:
+	if _mask_cache.has(art_id):
+		var hit: BodyMask = _mask_cache[art_id]
+		return hit
+	var mask: BodyMask = BodyMask.rect()
+	var tex: Texture2D = art_texture(art_id)
+	if tex != null:
+		var img: Image = tex.get_image()
+		if img != null:
+			img = img.duplicate()
+			if img.is_compressed():
+				img.decompress()
+			img.resize(MASK_RES, MASK_RES, Image.INTERPOLATE_BILINEAR)
+			mask = BodyMask.from_image(img)
+	_mask_cache[art_id] = mask
+	return mask
+
+
 ## The benchmark's own size formula: tierSizes[tier] * scale (bfEnemySize).
 static func art_box(art_id: StringName) -> float:
 	var entry: Dictionary = meta(art_id)
@@ -752,15 +948,9 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 	idx = enemy_idx
 	_hue = hue
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var tex: Texture2D = null
-	if art_id != &"":
-		for pattern: String in ART_DIRS:
-			var path: String = pattern % art_id
-			if ResourceLoader.exists(path):
-				tex = load(path)
-				break
-		if tex == null:
-			push_warning("enemy view: no painting for %s" % art_id)
+	var tex: Texture2D = art_texture(art_id)
+	if art_id != &"" and tex == null:
+		push_warning("enemy view: no painting for %s" % art_id)
 
 	if tex != null:
 		var entry: Dictionary = meta(art_id)
@@ -898,6 +1088,13 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 
 	_glass_root = Node3D.new()
 	_vessel.add_child(_glass_root)
+
+	# The shell hangs off the VESSEL, so it travels with the recoil and the sway,
+	# and carries its OWN geometry, so it does not bend with the idle: "own geo —
+	# shell shape/scale independent of body warp" (mesh.js:751). A warped ward is
+	# a ward made of the same stuff as the creature, which is the opposite of
+	# what it is.
+	_build_ward_shell()
 
 	# Outside the vessel: the ground does not breathe with the creature.
 	_build_shadow(tex)
@@ -1105,6 +1302,7 @@ func _process(delta: float) -> void:
 		var e: float = Motion.ease(Motion.EASE_IN_OUT, _preview_t / PREVIEW_PULSE)
 		_hp_preview.modulate.a = Motion.keyframe(e, [0.0, 0.5, 1.0],
 			[1.0, PREVIEW_DIP, 1.0])
+	_step_ward(delta)
 	if _cam != null and _shake > 0.0:
 		_shake = maxf(0.0, _shake - delta * 4.5)
 		var kick: float = _box_u * 0.02 * _shake * _shake
@@ -1163,6 +1361,161 @@ func _doom_tremble(delta: float) -> Vector2:
 
 
 # ---------------------------------------------------------------- striking
+
+
+## The ward shell. Built once and left hidden; `set_ward_shell` is what turns it
+## on, and `_step_ward` is what forms it.
+func _build_ward_shell() -> void:
+	_ward_mesh = MeshInstance3D.new()
+	var qm: QuadMesh = QuadMesh.new()
+	qm.size = Vector2(_quad_w * WARD_PAD, _box_u * WARD_PAD)
+	_ward_mesh.mesh = qm
+	var sh: Shader = Shader.new()
+	sh.code = WARD_SHADER
+	_ward_mat = ShaderMaterial.new()
+	_ward_mat.shader = sh
+	_ward_mat.render_priority = 4   # over the body and the crack glass
+	_ward_mat.set_shader_parameter("tint", WARD_TINT)
+	_ward_mat.set_shader_parameter("shell_opacity", WARD_OPACITY)
+	_ward_mat.set_shader_parameter("edge_soft", WARD_EDGE_SOFT)
+	_ward_mat.set_shader_parameter("normal_scale", WARD_NORMAL_SCALE)
+	_ward_mat.set_shader_parameter("rough", WARD_ROUGH)
+	_ward_mat.set_shader_parameter("env_gain", WARD_ENV)
+	_ward_mat.set_shader_parameter("grow", 0.0)
+	_ward_mat.set_shader_parameter("site_n", 0)
+	_ward_mesh.set_surface_override_material(0, _ward_mat)
+	_ward_mesh.visible = false
+	_vessel.add_child(_ward_mesh)
+	_reshuffle_ward(0.0)
+
+
+## `wardHash` (mesh.js:536) — the seeded 0..1 the whole silhouette is drawn from.
+static func _ward_hash(seed_v: float, i: int) -> float:
+	var x: float = sin(seed_v * 12.9898 + float(i) * 78.233) * 43758.5453
+	return x - floor(x)
+
+
+## `reshuffleWardShape` — a NEW silhouette every time the shell appears fresh, so
+## no two guards in a fight are the same stone. Held on the CPU and pushed as
+## uniforms; the reference bakes the same numbers into a 192² canvas.
+func _reshuffle_ward(seed_v: float) -> void:
+	if _ward_mat == null:
+		return
+	# `wardOutline` — uneven angular spacing plus radius spikes, which is what
+	# makes it read as a raw crystal rather than a smooth oval.
+	var outline: PackedVector2Array = PackedVector2Array()
+	outline.resize(16)
+	for i: int in range(WARD_SHAPE_VERTS):
+		var ang_j: float = (_ward_hash(seed_v, i) - 0.5) * WARD_SHAPE_JITTER * 0.55
+		var ang: float = float(i) / float(WARD_SHAPE_VERTS) * TAU + seed_v * 0.31 + ang_j
+		var rad: float = 0.78 \
+			+ (_ward_hash(seed_v, i + 17) - 0.5) * WARD_SHAPE_JITTER * 0.42 \
+			+ 0.1 * sin(float(i) * 2.15 + seed_v) \
+			+ 0.06 * cos(float(i) * 3.7 - seed_v * 0.7)
+		rad = clampf(rad, 0.55, 1.18)
+		outline[i] = Vector2(cos(ang) * rad, sin(ang) * rad * 1.06)
+	_ward_mat.set_shader_parameter("outline", outline)
+	_ward_mat.set_shader_parameter("outline_n", WARD_SHAPE_VERTS)
+
+	# `wardSitesFor` — a ring of facets, then five interior ones "so the shell
+	# reads as cut glass, not a hollow ring only".
+	var sites: PackedVector2Array = PackedVector2Array()
+	sites.resize(40)
+	for i: int in range(WARD_SITES):
+		var a: float = float(i) / float(WARD_SITES) * TAU + seed_v * 0.17
+		var r: float = 0.28 + _ward_hash(seed_v, i + 40) * 0.12
+		sites[i] = Vector2(_clamp_uv(0.5 + cos(a) * r), _clamp_uv(0.52 + sin(a) * r * 0.92))
+	for i: int in range(WARD_INNER_SITES):
+		var a: float = seed_v + float(i) * 1.7
+		sites[WARD_SITES + i] = Vector2(
+			_clamp_uv(0.5 + cos(a) * 0.12), _clamp_uv(0.5 + sin(a) * 0.14))
+	_ward_mat.set_shader_parameter("sites", sites)
+	_ward_sites_used = -1
+
+
+## `clampUv` (mesh.js:1133) — a site never sits on the very edge of the map.
+static func _clamp_uv(x: float) -> float:
+	return clampf(x, 0.05, 0.95)
+
+
+## Whether a shell is up or on its way up. Read by the sync that restores one on
+## a rebuilt screen, so it can tell "already warded" from "just warded".
+func ward_shell_on() -> bool:
+	return _ward_on
+
+
+## `meshWard(el, on, {grow})`. Three cases, and the middle one is the reason this
+## is not a boolean: gaining ward while you already have it keeps the stone and
+## PULSES its facets — they collapse to 12% and re-cut — so a second Ward card
+## reads as the shell being reinforced rather than as nothing happening.
+func set_ward_shell(on: bool, grow: bool = true) -> void:
+	if _ward_mat == null:
+		return
+	if not on:
+		if not _ward_on:
+			return   # already off or fading; do not restart the clock on a resync
+		_ward_on = false
+		_ward_pulsing = false
+		_ward_grow_from = _ward_grow
+		_ward_t = 0.0
+		return
+	if _ward_on:
+		if not grow:
+			return   # a sync says "still warded", not "warded again"
+		_ward_grow = 1.0
+		_ward_grow_from = 1.0
+		_ward_pulsing = true
+		_ward_pulse_from = _ward_site_f
+		_ward_pulse_t = 0.0
+		_ward_sites_used = -1
+		return
+	_reshuffle_ward(_rng.randf() * 10000.0)
+	_ward_on = true
+	_ward_pulsing = false
+	_ward_t = 0.0
+	_ward_grow = 0.0 if grow else 1.0
+	_ward_grow_from = _ward_grow
+	_ward_site_f = _ward_grow
+
+
+## The shell's own clock: grow in, fade out, or pulse its facets. Smoothstep on
+## both, and the fade is the grow reversed at the same duration.
+func _step_ward(delta: float) -> void:
+	if _ward_mat == null:
+		return
+	if _ward_pulsing:
+		_ward_pulse_t += delta
+		var u: float = clampf(_ward_pulse_t / WARD_PULSE, 0.0, 1.0)
+		_ward_site_f = lerpf(_ward_pulse_from, WARD_PULSE_TO, u * u * (3.0 - 2.0 * u))
+		if u >= 1.0:
+			_ward_site_f = 1.0
+			_ward_pulsing = false
+	elif _ward_on and _ward_grow < 1.0:
+		_ward_t += delta
+		var u: float = clampf(_ward_t / WARD_GROW, 0.0, 1.0)
+		_ward_grow = _ward_grow_from + (1.0 - _ward_grow_from) * (u * u * (3.0 - 2.0 * u))
+		_ward_site_f = _ward_grow
+	elif not _ward_on and _ward_grow > 0.0:
+		_ward_t += delta
+		var u: float = clampf(_ward_t / WARD_GROW, 0.0, 1.0)
+		_ward_grow = _ward_grow_from * (1.0 - (u * u * (3.0 - 2.0 * u)))
+		_ward_site_f = _ward_grow
+		if _ward_grow < 0.02:
+			_ward_grow = 0.0
+			_ward_site_f = 0.0
+	elif _ward_on:
+		_ward_site_f = 1.0
+	_ward_mesh.visible = _ward_grow > 0.02
+	if not _ward_mesh.visible:
+		return
+	_ward_mat.set_shader_parameter("grow", _ward_grow)
+	# `syncWardNormalMap` only rebakes when the floored count steps. There is no
+	# bake here, but the uniform write is still worth not doing every frame.
+	var n: int = roundi(float(WARD_SITES + WARD_INNER_SITES) * _ward_site_f)
+	if n != _ward_sites_used:
+		_ward_sites_used = n
+		_ward_mat.set_shader_parameter("site_n", n)
+
 
 ## `char-meta.chars[id].mesh` — the per-character idle the benchmark authors and
 ## this port has been ignoring since the actor was built. Four of the
@@ -1615,6 +1968,29 @@ func _from_uv(u: Vector2) -> Vector2:
 	return Vector2((u.x - 0.5) * _quad_w, (0.5 - u.y) * _box_u)
 
 
+## Body UV ↔ this Control's own local pixels. Public because two callers outside
+## need it and both were getting it wrong by hand: the bench's click-to-crack read
+## `local / size`, which is only right for a square painting, and anything drawing
+## over the actor needs the same mapping to land on the creature.
+##
+## Derived, not measured. The stage camera frames exactly `_span * UNIT` of world at
+## the plate and `_display` covers `-pad .. art_size + pad`, so world-to-pixel is
+## `1 / UNIT` flat and the world origin lands on the box centre — which is why the
+## aspect ratio has to enter through `_quad_w` and cannot be assumed away.
+func uv_to_local(u: Vector2) -> Vector2:
+	if _quad_w <= 0.0:
+		return u * size
+	var w: Vector2 = _from_uv(u)
+	return Vector2(art_size * 0.5 + w.x / UNIT, art_size * 0.5 - w.y / UNIT)
+
+
+func local_to_uv(p: Vector2) -> Vector2:
+	if _quad_w <= 0.0:
+		return Vector2(p.x / maxf(size.x, 1.0), p.y / maxf(size.y, 1.0))
+	return _to_uv(Vector2((p.x - art_size * 0.5) * UNIT,
+		(art_size * 0.5 - p.y) * UNIT))
+
+
 ## Score a crack. `at` is in body UV; the sites drive the Voronoi that becomes
 ## the shards, exactly as crack sites do in the benchmark — except here they
 ## become geometry rather than a baked normal map.
@@ -1828,6 +2204,12 @@ func _touches_art(cell: PackedVector2Array, centre: Vector2) -> bool:
 	return false
 
 
+## The OLDER of two silhouette readers, kept deliberately. `body_mask()` is the one
+## the fracture model uses; this one is full-resolution and feeds the death cull on a
+## visual that is already signed off, so it is not being rewritten underneath that
+## approval. Step 6 of `docs/fracture-model.md` deletes this path along with the
+## Voronoi cells it culls — until then, two readers and a note beats a silent
+## behaviour change to an approved death.
 func _alpha_at(p: Vector2) -> float:
 	var w: int = _art_img.get_width()
 	var h: int = _art_img.get_height()
@@ -2577,6 +2959,12 @@ func set_ward(block: int) -> void:
 	_ward_chip.visible = block > 0
 	if block > 0:
 		_ward.text = str(block)
+	# `if (en.block <= 0) syncWardMesh(x.art, false)` (combat.js:1053). A sync
+	# only ever takes the shell OFF — it is `blockGain` that puts one up, and
+	# routing both through here would let the resync that follows every gain
+	# swallow the grow it was supposed to start.
+	if block <= 0:
+		set_ward_shell(false)
 
 
 ## A hero has no facet gauge to move — structural integrity is a foe's concept.
