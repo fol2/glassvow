@@ -113,6 +113,20 @@ three lanes own. These wait for the organiser to sequence them.
    `docs/wrong-reference-audit.md`. `floaters.gd` is the one to do first: every
    damage numeral goes through it.
 
+   **Follow-up, same day — it is wider than four widgets.** All 174 `file:line`
+   anchors the port carries into the web reference were resolved mechanically
+   against both trees: **45 land in the benchmark, 119 land in the post-Pixi
+   tree.** The citations were written against the newer tree as the norm, not
+   the exception. Most of that is harmless line-number rot (76 anchors whose
+   symbol exists in both trees), and **`motion.gd` is now cleared** — its two
+   curves match `BASE_EASING` (`tokens.js:31`) exactly, so only its citation is
+   wrong. Fourteen anchors are not harmless: they resolve in the newer tree and
+   are missing from the benchmark. Every one was opened, and three real
+   regressions came out — mote-flight stagger, mote-flight scale, and the enemy
+   name's font weight. The classified table, progression by progression and
+   regression by regression, is `docs/benchmark-divergence.md`. It closes with
+   the checker the organiser should adopt into `tools/`.
+
 3. **CONTRADICTION — who owns the player's ward chip and HP rail?** Two lanes
    have written down opposite answers, in two documents, about a file neither of
    them owns:
