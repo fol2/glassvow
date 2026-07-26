@@ -165,6 +165,13 @@ builds a skew, squash, or projection matrix has to keep scale inside the basis.
 
 ## Related
 
+- [Web ports carry DOM node-per-layer thinking into Godot](dom-node-per-layer-in-godot.md)
+  — the same root cause in the *structural* dimension. That doc is about ported
+  **shape** (one node per visual layer, because the DOM had no other way); this one is
+  about ported **values**. Read together they are one principle: a port inherits the
+  source's intent, not the source's workarounds.
+- `CONCEPTS.md` › **Benchmark** — states the governing rule this doc applies: the web
+  build is authority for *what* the game does, never for *how* it had to achieve it.
 - Implemented in commit `0c8ed59` (`feat(actors): the shadow is projected, not
   authored — and heroes are actors too`), reachable from `main`.
 - `docs/commercial-game-delivery.md` — content-stability policy that makes a shrinking
