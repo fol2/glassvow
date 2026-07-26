@@ -104,6 +104,15 @@ var _tex: ImageTexture = null
 var _dirty: bool = true
 var _bake_us: int = 0
 
+## The reveal in flight: strands prepared once, rasterised in arc windows as the front
+## advances. Two parallel typed arrays rather than the `Array[Dictionary]` the model emits,
+## because the simplification and the terminus lookup are done ONCE here and re-doing them
+## per frame is the whole cost the incremental path exists to avoid.
+var _pend_pts: Array[PackedVector2Array] = []
+var _pend_tip: PackedFloat32Array = PackedFloat32Array()
+var _front: float = 0.0
+var _span: float = 0.0
+
 
 func _init() -> void:
 	clear()
@@ -117,18 +126,109 @@ func clear() -> void:
 	for i: int in range(RES * RES):
 		_px[i * 2] = NONE
 		_px[i * 2 + 1] = 0
+	_drop_pending()
 	_dirty = true
 
 
-## Composite strands into the field. Additive by construction — each texel keeps the
-## MINIMUM normalised distance it has seen — so this is incremental: a strike composites
-## only its own new strands and never re-walks the network. That is also what makes
-## `reveal(t)` cheap later (§5.1): composite the next segment, no rebuild.
+## Composite strands into the field, whole and at once. Additive by construction — each
+## texel keeps the MINIMUM normalised distance it has seen — so this is incremental: a
+## strike composites only its own new strands and never re-walks the network.
 ##
 ## Takes the same `Array[Dictionary]` shape `FractureField.strike` returns, so the
 ## caller can hand the renderer and the net the same value.
+##
+## `begin`/`reveal` below is the animated door to the same rasteriser, and this is the
+## immediate one — for the rite, which has no time to run a front, and for `rebuild`.
 func add(strands: Array) -> void:
 	var t0: int = Time.get_ticks_usec()
+	var pts: Array[PackedVector2Array] = []
+	var tips: PackedFloat32Array = PackedFloat32Array()
+	_prepare(strands, pts, tips)
+	for i: int in range(pts.size()):
+		_stroke(pts[i], tips[i], 0.0, INF)
+	_bake_us += Time.get_ticks_usec() - t0
+	_dirty = true
+
+
+# ------------------------------------------------------------------- the reveal
+
+## Start revealing `strands` rather than compositing them whole, and return the arc length
+## of the LONGEST of them in body units — the caller runs a front from 0 to that.
+##
+## This is `reveal(t)` of `docs/fracture-model.md` §5, and the seam is the point of it:
+## **the model has no clock.** It emits a finished strand and the renderer walks a front
+## along it, which is `CONCEPTS.md` › *Angle, not time* applied where it belongs. The
+## animation cannot desync from the geometry because there is only one geometry.
+##
+## The glints are laid IMMEDIATELY, not revealed. The glint is the impact mark, so it
+## belongs at t = 0 — the blow point flashes and the arms then run out of it, which is both
+## the order the physics happens in and the order that reads.
+##
+## Any reveal still in flight is finished first. Blows arrive on separate combat beats, so
+## overlapping stars is a case that does not occur; if it ever does, snapping the older one
+## to complete is the behaviour that cannot lose geometry.
+func begin(strands: Array) -> float:
+	finish()
+	_pend_pts = []
+	_pend_tip = PackedFloat32Array()
+	_prepare(strands, _pend_pts, _pend_tip)
+	_front = 0.0
+	_span = 0.0
+	for p: PackedVector2Array in _pend_pts:
+		_span = maxf(_span, CrackNet.arc_length(p))
+	if _span <= 0.0:
+		_drop_pending()
+	return _span
+
+
+## Advance the front to `arc`, an arc length in body units measured from each strand's own
+## origin. Monotone — the field is min-composited and a texel cannot be un-written, so a
+## front that retreated would leave the groove it had already drawn.
+##
+## The argument is an ARC LENGTH and not the normalised `t` §5 names, and that is the
+## physical statement: a crack front runs at a fixed fraction of the shear wave speed and
+## does not know how long its own arm will turn out to be. Normalising would have a short
+## arm crawl while a long one sprinted, which is the one thing about this animation an eye
+## would actually catch.
+func reveal(arc: float) -> void:
+	if _pend_pts.is_empty() or arc <= _front:
+		return
+	var t0: int = Time.get_ticks_usec()
+	var to: float = minf(arc, _span)
+	for i: int in range(_pend_pts.size()):
+		_stroke(_pend_pts[i], _pend_tip[i], _front, to)
+	_bake_us += Time.get_ticks_usec() - t0
+	_front = to
+	_dirty = true
+	if _front >= _span:
+		_drop_pending()
+
+
+## Snap a reveal in flight to complete. The rite calls this before it carves: the carve
+## reads the NET, which has been whole since the blow landed, so a half-drawn field would
+## throw shards along cracks the player was never shown.
+func finish() -> void:
+	if _pend_pts.is_empty():
+		return
+	reveal(_span)
+
+
+func growing() -> bool:
+	return not _pend_pts.is_empty()
+
+
+func _drop_pending() -> void:
+	_pend_pts = []
+	_pend_tip = PackedFloat32Array()
+	_front = 0.0
+	_span = 0.0
+
+
+## The model's emission shape into two typed arrays, simplified and with the terminus
+## resolved to a tip width — plus the glints, which are laid here because they are not
+## revealed (see `begin`).
+func _prepare(strands: Array, out_pts: Array[PackedVector2Array],
+		out_tip: PackedFloat32Array) -> void:
 	for s: Variant in strands:
 		if typeof(s) != TYPE_DICTIONARY:
 			continue
@@ -142,11 +242,21 @@ func add(strands: Array) -> void:
 			tip = TIP_CRACK
 		elif term == CrackNet.T_SILHOUETTE:
 			tip = TIP_EDGE
-		_stroke(_simplify(pts), tip)
+		out_pts.append(_simplify(pts))
+		out_tip.append(tip)
 		var origin: Vector2 = d.get("origin", pts[0])
 		_glint(origin)
-	_bake_us += Time.get_ticks_usec() - t0
-	_dirty = true
+
+
+## Texel-for-texel equality against another field. Public for the same reason `Carve.area`
+## is: the one invariant a reveal needs — that growing a groove in windows is byte-identical
+## to compositing it at once — cannot be computed from outside without it, and an invariant
+## that cannot be computed from outside is not an invariant (`tools/check_fracture.gd`).
+##
+## An exact comparison rather than a hash, because a hash of a 128 KB buffer would be
+## reporting a collision-free claim it has not earned and the buffers are right here.
+func same_as(other: CrackField) -> bool:
+	return _px == other._px
 
 
 ## Rebuild from a whole net. Only for a caller that has a net and no record of what
@@ -221,11 +331,18 @@ static func _simplify(pts: PackedVector2Array) -> PackedVector2Array:
 	return out
 
 
-## One strand. Walks segment by segment and touches only the texels inside each
-## segment's own expanded box, so the work is the groove's area rather than the field's.
-func _stroke(pts: PackedVector2Array, tip: float) -> void:
+## One strand, or the slice of it between two arc lengths. Walks segment by segment and
+## touches only the texels inside each segment's own expanded box, so the work is the
+## groove's area rather than the field's.
+##
+## `lo`/`hi` are arc lengths in body units and exist for the reveal. **The width law stays
+## bound to the strand's FULL length**, which is the load-bearing line in this function: a
+## window that measured its own length instead would taper to the tip value at the growing
+## front and leave a permanent pinch at every frame boundary — invisible during a 0.12 s
+## animation and there for the rest of the fight. `_check_field_reveal` pins it.
+func _stroke(pts: PackedVector2Array, tip: float, lo: float, hi: float) -> void:
 	var total: float = CrackNet.arc_length(pts)
-	if total <= 0.0:
+	if total <= 0.0 or hi <= lo:
 		return
 	# Opening displacement goes as √(a − s) (§5.4), so the half-width is a square root
 	# of the remaining arc — rescaled so it ends at `tip` rather than always at zero.
@@ -233,37 +350,64 @@ func _stroke(pts: PackedVector2Array, tip: float) -> void:
 	var run: float = 0.0
 	var pad: int = int(ceilf(APERTURE * REACH * float(RES))) + 2
 	for i: int in range(pts.size() - 1):
-		var a: Vector2 = pts[i]
-		var b: Vector2 = pts[i + 1]
-		var seg: float = a.distance_to(b)
+		var full: Vector2 = pts[i + 1] - pts[i]
+		var seg: float = full.length()
 		if seg <= 0.0:
 			continue
-		# Widths at the two ends, then LERPED across the segment rather than rooted per
-		# texel. The taper is smooth and a segment is a few texels long, so the
-		# difference is invisible and it saves a sqrt in the inner loop.
-		var wa: float = APERTURE * sqrt(maxf(0.0, 1.0 - span * (run / total)))
-		var wb: float = APERTURE * sqrt(maxf(0.0, 1.0 - span * ((run + seg) / total)))
+		var start: float = run
 		run += seg
+		# Wholly behind the window, or wholly ahead of it. Ahead ends the walk: arc only
+		# increases, so no later segment can be inside either.
+		if run <= lo:
+			continue
+		if start >= hi:
+			break
+		var t_lo: float = clampf((lo - start) / seg, 0.0, 1.0)
+		var t_hi: float = clampf((hi - start) / seg, 0.0, 1.0)
+		# Only the BOX is clipped to the window. Everything the value depends on is measured
+		# against the whole segment below, which is what makes the reveal lossless.
+		var a: Vector2 = pts[i] + full * t_lo
+		var b: Vector2 = pts[i] + full * t_hi
+		# Widths at the SEGMENT's two ends, then LERPED across it rather than rooted per
+		# texel. The taper is smooth and a segment is a few texels long, so the difference
+		# is invisible and it saves a sqrt in the inner loop.
+		#
+		# The ends are the segment's and NOT the window's, and that is the load-bearing
+		# detail. Anchoring the lerp to the window instead is the obvious reading of "draw
+		# this slice", it is what the first version did, and it fails: the true law is a
+		# square root, so lerping between two interior samples is a FINER approximation than
+		# lerping between the segment's ends. The slice would then be slightly wider than
+		# the same slice drawn whole — a reveal that quietly re-cut its own groove, caught
+		# by `_check_field_reveal` on the first run.
+		var wa: float = APERTURE * sqrt(maxf(0.0, 1.0 - span * (start / total)))
+		var wb: float = APERTURE * sqrt(maxf(0.0, 1.0 - span * (run / total)))
 		if wa <= 0.0 and wb <= 0.0:
 			continue
 		var lo_x: int = clampi(int(floorf(minf(a.x, b.x) * float(RES))) - pad, 0, RES - 1)
 		var hi_x: int = clampi(int(ceilf(maxf(a.x, b.x) * float(RES))) + pad, 0, RES - 1)
 		var lo_y: int = clampi(int(floorf(minf(a.y, b.y) * float(RES))) - pad, 0, RES - 1)
 		var hi_y: int = clampi(int(ceilf(maxf(a.y, b.y) * float(RES))) + pad, 0, RES - 1)
-		var ab: Vector2 = b - a
-		var len2: float = ab.length_squared()
+		var len2: float = full.length_squared()
 		for y: int in range(lo_y, hi_y + 1):
 			var row: int = y * RES
 			for x: int in range(lo_x, hi_x + 1):
 				var p: Vector2 = Vector2(
 					(float(x) + 0.5) / float(RES), (float(y) + 0.5) / float(RES))
-				# Projection parameter, clamped: gives the distance to the SEGMENT and
-				# the position along it for the width, from one dot product.
-				var t: float = clampf((p - a).dot(ab) / len2, 0.0, 1.0)
+				# ONE projection, two consumers. The WIDTH reads it against the whole
+				# segment, so the taper cannot depend on where a window boundary fell. The
+				# DISTANCE reads it clamped INTO the window, which is exactly projecting
+				# onto the slice — a slice shares its segment's line, so clamping the
+				# parameter is the whole difference.
+				#
+				# A texel whose projection lands outside the window therefore measures to
+				# the window's end and over-states its distance. That is correct and not a
+				# tolerance: the window holding its projection writes the true value, and
+				# the field keeps the minimum.
+				var t: float = clampf((p - pts[i]).dot(full) / len2, 0.0, 1.0)
 				var w: float = wa + (wb - wa) * t
 				if w <= 0.0:
 					continue
-				var d: float = p.distance_to(a + ab * t)
+				var d: float = p.distance_to(pts[i] + full * clampf(t, t_lo, t_hi))
 				var r: float = d / (w * REACH)
 				if r >= 1.0:
 					continue

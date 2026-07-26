@@ -422,6 +422,21 @@ var _cracks: CrackField = null
 ## (`CONCEPTS.md` › Crack).
 var _blows: int = 0
 var _art_id: StringName = &""
+## The propagation front, and where the light comes from when the vessel ignites.
+var _reveal_tween: Tween = null
+## Running centroid of every impact, in body UV — `bakeCrackBeams` takes the same
+## centroid for the same reason (`crack_hearth`). Centre until something lands.
+var _hearth: Vector2 = Vector2(0.5, 0.5)
+var _hearth_n: int = 0
+
+## How fast a crack front runs, in body widths per second.
+##
+## Not a physical number and it must not pretend to be: glass cracks at something like
+## 1500 m/s, so an honest duration would be a fraction of one frame. This is a LEGIBILITY
+## duration — long enough for the eye to read a star being thrown rather than appearing,
+## short enough to land inside the recoil it belongs to. At 2.6 a typical 0.3-body arm
+## takes 0.12 s, and the longest arm a blow can buy still finishes inside `HIT_TIME`.
+const CRACK_SPEED: float = 2.6
 
 ## What a hit costs in fracture when the caller does not say, in body widths of crack.
 ##
@@ -447,10 +462,11 @@ const DEFAULT_ENERGY: float = 1.1
 ## sat inside a visible circle and the circles stacked
 ## (`docs/glass-crack-rendering.md` §2.2). `CrackField` replaces it.
 ##
-## Kept behind a flag rather than deleted, for exactly as long as the death path still
-## consumes `_sites` — `shatter()` breaks the body along those cells, and step 6 of
-## `docs/fracture-model.md` is what replaces that with a carve along the net. Deleting
-## the web now would leave the rite with nothing to break along.
+## Kept behind a flag rather than deleted, and the reason has changed now that the carve
+## has landed: the rite no longer needs it. What survives is the COMPARISON — turning this
+## on renders both models over the same net in the running game, which is the only way to
+## judge a replacement against the thing it replaced. `_voronoi_cells()` is the separate
+## survival, for a vessel that shatters without ever having been struck.
 static var discs: bool = false
 var _span: float = 0.0          # padded box, in px
 var _box_u: float = 0.0         # box HEIGHT, in world units
@@ -607,6 +623,43 @@ uniform float crack_relief = 26.0;
 uniform float crack_ignite = 0.0;
 // The seam catching a rim light before the blow lands (§5.5's second cheap addition).
 uniform float crack_marked = 0.0;
+// The centroid of every impact, in body UV — where the light comes from when the vessel
+// ignites. `bakeCrackBeams` (mesh.js:460) takes the same centroid for the same reason.
+uniform vec2 crack_hearth = vec2(0.5, 0.5);
+
+// LIGHT ESCAPES THROUGH THE CRACKS — `bakeCrackBeams` (mesh.js:460), the first of §5.5's
+// two cheap additions. A zoom blur of the groove away from the hearth, so every crack
+// throws a shaft outward as the fire takes hold.
+//
+// The reference bakes it onto a plane padded 1.6x past the body precisely so the rays
+// LEAVE the sprite. This cannot, and the constraint is worth naming rather than hiding:
+// folded into the body material, the beams inherit the body's ALPHA, which is the
+// painting's own — so a ray past the silhouette lands on a transparent texel and
+// contributes nothing. What is here is the light bleeding along and out of the grooves,
+// which is most of the effect. The rays that leave the creature need the padded display
+// plane, and that is a different change with a different owner.
+
+// 24 taps, near the reference's 26, and the count is NOT padding. A zoom blur is a sum of
+// displaced copies, so the taps have to land closer together than the thing being smeared
+// is wide or they read as separate copies. At 8 the shafts came out as ladders of parallel
+// stripes: for a pixel 0.3 body from the hearth the spacing was 0.017, wider than the whole
+// groove. At 24 the spacing is a quarter of the groove's outer band and it reads continuous.
+//
+// It costs 24 texture fetches in the body fragment — paid only while the vessel is burning,
+// which is the two hundred milliseconds before it stops existing.
+const int BEAM_TAPS = 24;
+// How far the shafts stretch, in hearth distances. Well under the reference's 1.1, which it
+// can afford because its rays leave the sprite and these cannot: reach past the silhouette
+// is only paying for taps that land on a transparent texel.
+const float BEAM_REACH = 0.45;
+const float BEAM_DECAY = 1.55;   // how fast a ray dies along its length (mesh.js:40)
+// Peak brightness at the groove. Judged off an A/B on the `ignite` state, which is static
+// and so the only deterministic instrument here — a rite strip's frames land at different
+// points of the ramp on every run and cannot be diffed. At 1.15 the shafts washed the head
+// out and read as white paint rather than as light; at 0.65 they stay directional and the
+// armour panels underneath survive. The seams were already hot without them: the beams' job
+// is the DIRECTION, not the brightness.
+const float BEAM_GAIN = 0.65;
 
 float luma(vec2 uv) {
 	vec4 c = texture(body_tex, uv);
@@ -689,6 +742,30 @@ void fragment() {
 		// suggest the fire, not stage the death.
 		float heat = max(crack_ignite, crack_marked * 0.30);
 		EMISSION += WARM_CRACK * (core * heat * 1.6 + glint * heat * 0.9);
+
+		// The beams. On `crack_ignite` ALONE and not on `heat` — a previewed blow gets the
+		// rim light above and never the shafts, because a preview must suggest the fire and
+		// not stage the death, and shafts of light leaving the body are the death.
+		if (crack_ignite > 0.0) {
+			vec2 ray = uv - crack_hearth;
+			float beam = 0.0;
+			float wsum = 0.0;
+			for (int i = 0; i < BEAM_TAPS; i++) {
+				float bt = float(i) / float(BEAM_TAPS);
+				float w = pow(1.0 - bt, BEAM_DECAY);
+				// Read INWARD. The reference draws progressively LARGER copies of the seam
+				// outward from the hearth; gathering at a pixel from progressively nearer
+				// the hearth is the same operation with the loop turned inside out. Every
+				// tap lands between the hearth and this pixel, so all of them are in range
+				// and the sampler's wrap mode never comes into it.
+				float sr = texture(crack_tex, crack_hearth + ray / (1.0 + bt * BEAM_REACH)).r;
+				// The whole groove emits, not just the core: the light is escaping through
+				// the opening, and the opening is the outer band.
+				beam += (1.0 - smoothstep(0.0, crack_bands.x, sr)) * w;
+				wsum += w;
+			}
+			EMISSION += WARM_CRACK * (beam / max(wsum, 0.0001)) * BEAM_GAIN * crack_ignite;
+		}
 	}
 
 	NORMAL_MAP = normalize(vec3(relief, 1.0)) * 0.5 + 0.5;
@@ -2230,21 +2307,64 @@ func strike(at: Vector2 = Vector2(-1, -1), dir: Vector2 = Vector2.ZERO,
 		_net = CrackNet.new()
 		_frac_field = FractureField.new(_frac, body_mask(_art_id))
 		_cracks = CrackField.new()
+	# The NET is committed whole and immediately; only the FIELD runs a front over it. That
+	# ordering is the seam, not an accident: the next blow's screening has to see the crack
+	# that exists rather than the crack that has been drawn so far.
 	var grown: Array[Dictionary] = _frac_field.strike(_net, blow_of(p, dir, energy, sharp))
 	_net.commit(grown)
-	# The field composites only the NEW strands — never re-walks the network — so the
-	# eighth blow costs what the first did.
-	_cracks.add(grown)
-	_push_crack_field()
-	# `_sites` keeps filling whatever `discs` says. It is TWO things wearing one name:
-	# the standing web's cell seeds, and the death path's break pattern — `shatter()`
-	# partitions the body along cells grown from it. Skipping the append with the web
-	# off would send the rite to `_death_sites`, the unrelated ring fallback, which is
-	# precisely the "the shatter must equal the cracks it was carrying" condition being
-	# violated. Step 6 replaces this with a carve along the net and the field goes away.
+	# Running mean, so the hearth is the centroid of every impact without keeping the list.
+	_hearth = (_hearth * float(_hearth_n) + p) / float(_hearth_n + 1)
+	_hearth_n += 1
+	_begin_reveal(grown)
+	# `_sites` keeps filling whatever `discs` says, and now feeds only the comparison — the
+	# rite carves along the net (`_death_cells`). Left in place because a flag that renders
+	# the old model over the same blows is worth more than the four bytes.
 	_sites.append(_from_uv(p))
 	if discs:
 		_rebuild_glass()
+
+
+## Run the propagation front out over the new strands, so a blow THROWS a star rather than
+## revealing one. `docs/fracture-model.md` §5.
+##
+## `EASE_OUT`, because a crack front decelerates into its own arrest — it is losing the
+## stress that drives it the whole way out. Linear read as a line being drawn.
+func _begin_reveal(grown: Array[Dictionary]) -> void:
+	if _reveal_tween != null and _reveal_tween.is_valid():
+		_reveal_tween.kill()
+	# `begin` finishes whatever the killed tween had left, so no geometry is lost, and it
+	# lays the impact glints at once — the flash is the blow, not the propagation.
+	var span: float = _cracks.begin(grown)
+	_push_crack_field()
+	if span <= 0.0:
+		return
+	_reveal_tween = create_tween()
+	_reveal_tween.tween_method(_set_reveal, 0.0, span, span / CRACK_SPEED) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+func _set_reveal(arc: float) -> void:
+	_cracks.reveal(arc)
+	_push_crack_field()
+
+
+## Snap any propagation front to complete, for a caller building a STATE rather than playing
+## a beat — the lab's `--cracked=N` wants six blows already scored, not the sixth still on
+## its way out. Without it a pre-cracked strip photographs a half-drawn star in its first
+## cell and reads as a rendering fault.
+func settle_cracks() -> void:
+	_finish_reveal()
+
+
+## No front left running, and the field showing the whole net. The rite needs this before
+## it carves: the carve reads the net, which has been complete since the blow landed, so a
+## half-drawn field would throw shards along cracks the player was never shown.
+func _finish_reveal() -> void:
+	if _reveal_tween != null and _reveal_tween.is_valid():
+		_reveal_tween.kill()
+	if _cracks != null and _cracks.growing():
+		_cracks.finish()
+		_push_crack_field()
 
 
 ## A blow point that is actually ON the creature, for the callers that know a hit landed
@@ -2278,6 +2398,9 @@ static func blow_of(at: Vector2, dir: Vector2, energy: float, sharp: float) -> B
 func _relieve_net() -> void:
 	if _net == null or _frac_field == null or _cracks == null:
 		return
+	# Any front still running belongs to the last blow. The rite is not the moment to keep
+	# animating it, and the carve below must not cut along a groove that is half drawn.
+	_finish_reveal()
 	var extra: Array[Dictionary] = _frac_field.relieve(_net)
 	if extra.is_empty():
 		return
@@ -2291,6 +2414,7 @@ func _push_crack_field() -> void:
 		return
 	_body_mat.set_shader_parameter("crack_tex", _cracks.texture())
 	_body_mat.set_shader_parameter("crack_bands", CrackField.BANDS)
+	_body_mat.set_shader_parameter("crack_hearth", _hearth)
 	_body_mat.set_shader_parameter("crack_on", 1.0)
 
 
@@ -2312,6 +2436,12 @@ func reset_glass() -> void:
 	_blows = 0
 	_net = null
 	_frac_field = null
+	_hearth = Vector2(0.5, 0.5)
+	_hearth_n = 0
+	# The front before the field it draws into. A tween left running would compose the last
+	# vessel's arms onto the new one's blank buffer.
+	if _reveal_tween != null and _reveal_tween.is_valid():
+		_reveal_tween.kill()
 	if _cracks != null:
 		_cracks.clear()
 	if _body_mat != null:
@@ -3435,6 +3565,12 @@ func set_marked(on: bool) -> void:
 	_marked = on
 	if _glass_mat != null:
 		_glass_mat.set_shader_parameter("marked", 1.0 if on else 0.0)
+	# The BODY's seams too, which is §5.5's second cheap addition and was a real gap rather
+	# than a missing feature: `BODY_SHADER` has carried a `crack_marked` uniform and a
+	# docblock claiming it lights the fracture cores since the groove landed, and nothing
+	# ever set it. The ward glass was catching the preview and the cracks were not.
+	if _body_mat != null:
+		_body_mat.set_shader_parameter("crack_marked", 1.0 if on else 0.0)
 
 
 ## `.enemy.doomed` (drain.js:594) — the world-stop beat, and a boss's alone. The

@@ -26,6 +26,8 @@ extends Control
 ##                                                           # the memory knobs
 ##   tools/shot.sh --enemies --hit[=duskfang] [--incidental] --strip=/tmp/h.png
 ##                                    # the recoil, photographed across 320ms
+##   tools/shot.sh --enemies --crack[=duskfang] --strip=/tmp/c.png
+##                     # the PROPAGATION: one blow, its front photographed out to arrest
 ##
 ## --shot= and --strip= both quit when they are done, so those two go through
 ## tools/shot.sh; the rest leave a window open to work in. Neither form may
@@ -214,6 +216,11 @@ func _init(content_ref: ContentDB) -> void:
 			states_id = arg.trim_prefix("--hit=")
 		elif arg == "--incidental":
 			_hit_direct = false
+		elif arg == "--crack":
+			_mode = "crack"
+		elif arg.begins_with("--crack="):
+			_mode = "crack"
+			states_id = arg.trim_prefix("--crack=")
 		elif arg == "--fracture":
 			_mode = "fracture"
 		elif arg.begins_with("--fracture="):
@@ -324,7 +331,7 @@ func _init(content_ref: ContentDB) -> void:
 	_roster = roster
 	_names = names
 	_ids = ids
-	if _mode == "rite" or _mode == "hit":
+	if _mode == "rite" or _mode == "hit" or _mode == "crack":
 		var pick_r: String = states_id
 		if pick_r == "" or not roster.has(pick_r):
 			pick_r = "duskfang" if roster.has("duskfang") else (str(ids[0]) if not ids.is_empty() else "")
@@ -1222,6 +1229,23 @@ func _ready() -> void:
 		await _shoot_strip(HIT_FRAMES, "hit",
 			func(v: EnemyView) -> void: v.take_hit(_hit_direct))
 		return
+	if _mode == "crack":
+		# SLOWED, and this is the one strip mode that has to be. A front is over in about
+		# 170 ms while a strip cell costs a full-frame GPU readback, so sampled at wall-clock
+		# speed the FIRST cell already lands 64 % of the way along the arc — measured off a
+		# trace, not guessed, and the strip read as a still because of it. Slowing the clock
+		# keeps everything real: the same tween, the same easing, the same idle deform,
+		# photographed at a rate the readback can manage. The frames below are therefore
+		# BEAT time and are converted to the wall clock `_shoot_strip` waits against.
+		Engine.time_scale = CRACK_SLOMO
+		var wall: Array[float] = []
+		for t: float in CRACK_FRAMES:
+			wall.append(t / CRACK_SLOMO)
+		# Through `strike` rather than `crack()` so `--energy=` reaches it. A default blow
+		# buys four short arms, which is right in a fight and too small to judge a front by.
+		await _shoot_strip(wall, "crack",
+			func(v: EnemyView) -> void: v.strike(Vector2(-1, -1), Vector2.ZERO, _frac_energy))
+		return
 	if _mode == "bench":
 		# No auto-fit here: the bench is driven, not framed. Zoom is the user's.
 		get_window().content_scale_factor = 1.0
@@ -1263,6 +1287,14 @@ const RITE_FRAMES: Array[float] = [0.0, 0.12, 0.3, 0.55, 0.9, 1.5]
 ## The recoil is 300ms and its flash peaks at 90ms, so the frames cluster early.
 ## A strip evenly spaced across 300ms would miss the peak entirely.
 const HIT_FRAMES: Array[float] = [0.0, 0.04, 0.09, 0.15, 0.22, 0.32]
+## The propagation front, in BEAT seconds — see the `crack` branch for why the clock is
+## slowed and these are converted. A big star at `EnemyView.CRACK_SPEED` is over in ~170ms
+## and the tween is `EASE_OUT`, so half the arc is covered in the first third of that:
+## hence three cells inside the first 50ms and a long last one for the arrest.
+const CRACK_FRAMES: Array[float] = [0.0, 0.02, 0.05, 0.09, 0.14, 0.24]
+## How far the clock is slowed for the crack strip. 0.06 stretches a 170ms front over
+## nearly three seconds, which is about twenty readbacks' worth of room for six cells.
+const CRACK_SLOMO: float = 0.06
 
 
 ## Stand one actor up, run `action` on it, photograph `frames`, save the strip.
@@ -1287,6 +1319,10 @@ func _shoot_strip(frames: Array[float], label: String, action: Callable) -> void
 	# output was only ever judged as a still.
 	for _c: int in range(_pre_cracks):
 		view.crack()
+	# A pre-crack is a STATE, not a beat. Without this the last blow is still propagating
+	# when the first cell is photographed, and a half-drawn star in frame one reads as a
+	# rendering fault rather than as the animation it is.
+	view.settle_cracks()
 	_rows = [{"ground": ground, "actors": [view], "width": view.size.x}]
 	_sheet_size = stage
 	_ground.size = stage

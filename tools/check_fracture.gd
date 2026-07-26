@@ -79,6 +79,7 @@ static func run(fails: Array[String]) -> void:
 	_check_field_determinism(fails)
 	_check_field_convergence(fails)
 	_check_field_relieve(fails)
+	_check_field_reveal(fails)
 	_check_carve_accounts(fails)
 	_check_carve_separates(fails)
 	_check_carve_needs_relief(fails)
@@ -598,6 +599,57 @@ static func _check_field_relieve(fails: Array[String]) -> void:
 	if not again.is_empty():
 		fails.append("field: relieving twice grew %d more continuations — not idempotent"
 			% again.size())
+
+
+## THE REVEAL IS LOSSLESS. Growing a groove in arc windows must land texel-for-texel where
+## compositing it at once does.
+##
+## The only renderer check here, and it earns its place because the reveal is the one
+## feature that can silently corrupt the thing it animates. The trap is the width law:
+## `_stroke` tapers by the arc REMAINING, so a window that measured its own length instead
+## of the strand's would taper to the tip value at every growing front and leave a pinch at
+## each frame boundary — a beaded groove, invisible during a 0.12 s animation and there for
+## the rest of the fight. No render check would catch it either, because a beaded crack
+## still looks like a crack.
+##
+## It also pins the two properties the animation depends on and nothing else asserts: that a
+## partly-grown field is genuinely different (so the reveal is happening at all), and that
+## `finish()` leaves no front in flight (so the rite's flush is a flush).
+static func _check_field_reveal(fails: Array[String]) -> void:
+	var f: FractureField = _field(909, BodyMask.rect())
+	var net: CrackNet = CrackNet.new()
+	var grown: Array[Dictionary] = f.strike(
+		net, Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 1.4, 0.5))
+	if grown.is_empty():
+		fails.append("reveal: the blow scored nothing, so there is nothing to reveal")
+		return
+	var whole: CrackField = CrackField.new()
+	whole.add(grown)
+	var grow: CrackField = CrackField.new()
+	var span: float = grow.begin(grown)
+	if span <= 0.0:
+		fails.append("reveal: begin() reported no arc for %d strands" % grown.size())
+		return
+	grow.reveal(span * 0.31)
+	if grow.same_as(whole):
+		fails.append("reveal: a third-grown field already matches the finished one")
+	# Uneven steps on purpose. The tween is eased, so no two frames advance the front by the
+	# same amount and a window boundary can land anywhere in a segment — including twice
+	# inside one, which `0.33` after `0.31` is.
+	for t: float in [0.33, 0.62, 0.95]:
+		grow.reveal(span * t)
+	grow.finish()
+	if not grow.same_as(whole):
+		fails.append("reveal: growing in five windows differs from compositing at once")
+	if grow.growing():
+		fails.append("reveal: finish() left a front still in flight")
+	# Monotone. A front cannot retreat — the field is min-composited, so a texel already
+	# written stays written, and a renderer that believed otherwise would draw a groove it
+	# could not erase.
+	var before_back: bool = grow.same_as(whole)
+	grow.reveal(span * 0.1)
+	if grow.same_as(whole) != before_back:
+		fails.append("reveal: winding the front backwards changed the field")
 
 
 # ------------------------------------------------------------------- the carve

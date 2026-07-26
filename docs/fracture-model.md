@@ -1,7 +1,7 @@
 # The fracture model — specification
 
-Status, 2026-07-26: **§8 steps 0–3 are built; 4 onward are specified.** This is the
-design that survived two rounds of three-seat review.
+Status, 2026-07-26: **§8 is built, steps 0–7, with `CrackRibbon` declined for a reason
+§8 states.** This is the design that survived two rounds of three-seat review.
 `docs/glass-crack-rendering.md` is the companion: it records why the present crack
 web is wrong, what was rejected, and the decision history. This file says what to
 build, and §8 says how far that has got.
@@ -71,13 +71,19 @@ presentation/combat/fracture/        pure RefCounted — gated, §6
   fracture_field.gd  class_name FractureField   the mechanics
   body_mask.gd       class_name BodyMask        alpha + connectivity probe
   carve.gd           class_name Carve           net -> closed polygons
-presentation/combat/glass/           Node / Mesh / Shader allowed
+presentation/combat/                 Image / Shader allowed
   crack_field.gd     class_name CrackField      the field renderer — the target
-  crack_ribbon.gd    class_name CrackRibbon     the ribbon renderer — optional
 ```
 
+As built, one deviation from the plan above and one omission, both deliberate.
+`CrackField` sits directly in `presentation/combat/` rather than in a `glass/`
+subdirectory, because a directory holding one file is a directory that exists to make a
+diagram symmetrical; the gate is over `fracture/` and everything the gate does not cover
+lives where the rest of the actor code does. `crack_ribbon.gd` was never written — §8,
+step 7 records why, and the interface in §5 is still what it would implement.
+
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2551` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:2681` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -281,7 +287,7 @@ actor or it scintillates whatever the MSAA. At a 115 px sporeling with
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:1875` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:1952` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -419,6 +425,27 @@ material is a function of geometry, the event is a function of time, and they ar
 different objects. It also means the animation cannot desync from the geometry,
 because there is only one geometry.
 
+**As built it is `begin(strands) → span` then `reveal(arc)`, and the argument is an arc
+length rather than a normalised `t`.** That is the physical statement: a crack front runs
+at a fixed fraction of the shear wave speed and does not know how long its own arm will
+turn out to be. Normalising would have every arm of one blow finish together, so a short
+arm would crawl while a long one sprinted — the one thing about this animation an eye
+would actually catch. The blow's glints are laid at once and are not revealed, because a
+glint is the impact mark: the point flashes, and the arms then run out of it.
+
+Two things about it are load-bearing and neither is obvious:
+
+* **The width law must stay bound to the strand's full length, not the window's.** The
+  opening tapers by the arc remaining, so a window that measured its own length would
+  taper to the tip value at every growing front and leave a permanent pinch at each frame
+  boundary — a beaded groove, invisible during a 0.12 s animation and there for the rest of
+  the fight. No render check would catch it, because a beaded crack still looks like a
+  crack. `_check_field_reveal` asserts texel-for-texel equality against compositing whole,
+  and it failed on its first run for exactly this reason.
+* **The rite must flush the front before it carves.** The carve reads the net, which has
+  been complete since the blow landed, so a half-drawn field would throw shards along
+  cracks the player was never shown.
+
 ### 5.1 `CrackField` is the target
 
 It is **one concept — distance to the network — with four consumers**: the standing
@@ -435,7 +462,7 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:2124` (in `_prism`)), so
+  have**. The existing `_prism` calls it (`enemy_view.gd:2200` (in `_prism`)), so
   the ribbon needs authored crease normals, not the convenience path.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
@@ -493,6 +520,16 @@ Two cheap additions worth building after the groove reads correctly, in order:
 **light escaping through a crack during ignite** (the reference bakes this as
 `bakeCrackBeams`), and **the seam catching a rim light before the blow lands**,
 which the `marked` uniform already half does.
+
+**Both built, 2026-07-26, and both cost less than this section assumed.** The beams are a
+zoom blur of the groove away from the impact hearth, folded into `BODY_SHADER`'s existing
+emission — no bake, no plane, no extra draw call — at 24 taps paid only while the vessel
+burns. The rim light was not an addition at all: see §8, step 7. Two figures were judged
+rather than derived and are recorded as such. **24 taps**, because a zoom blur is a sum of
+displaced copies and at 8 they landed further apart than the groove is wide, so the shafts
+came out as ladders of parallel stripes. **Gain 0.65**, because at the reference's strength
+the shafts washed the head out and read as white paint; the seams were already hot without
+them, so the beams' job is the direction and not the brightness.
 
 ## 6. Tests and the purity gate
 
@@ -564,6 +601,7 @@ through, since that is the reusable part:
 | the emission floor in `strike` | a 0.024-body stub, under the legibility floor | it was the *new* count invariant that surfaced it; nothing before it looked at individual arm length |
 | relieve idempotency | a second rite would double the whole network | the first call's behaviour was correct, and nothing called it twice |
 | the `T == 0` assertion inside `_check_field_termini` | `T ≥ Y` passing vacuously at zero junctions | a comparison of two zeroes is true |
+| `_check_field_reveal` | the reveal's width law anchored to the window instead of the strand, beading every groove at each frame boundary | it is a *renderer* defect, and the only one here — the model was untouched and correct throughout. And a beaded crack still looks like a crack, so the sheet could not have caught it either |
 
 And two defects that **no** invariant caught, both found by drawing the model:
 
@@ -577,6 +615,15 @@ The lesson worth keeping: invariants catch *contradictions*, and a model can be
 perfectly self-consistent and still not look like the thing it models. The sheet is
 not optional and §8 makes it a build step for that reason.
 
+**The reveal check is the one that runs the other way, and it is worth naming as its own
+case.** It is the only invariant here that guards the renderer rather than the model, and
+it exists because the defect it catches is invisible to *both* of the other instruments: a
+beaded groove satisfies every model invariant, since the model never saw it, and it reads
+as a crack in every render, since a crack is a beaded-looking thing anyway. It was written
+before the code that would have shipped the defect, and it went red on the first run. That
+is the whole argument for writing the assertion first when the failure mode is one an eye
+cannot see.
+
 ## 7. Cost
 
 **Measured** where it says measured. Everything else is still an estimate and is
@@ -587,7 +634,8 @@ known.
 |---|---|---|---|
 | propagation, one blow | on a hit | **0.46 – 1.96 ms**, mean 1.1 ms over 8 accumulating blows on a duskfang | measured |
 | field rasterise, one blow | on a hit | **0.87 – 2.96 ms**, mean 1.6 ms, same run | measured |
-| texture upload | on a hit | **0.01 ms** — one `ImageTexture.update` of 128 KB | measured |
+| — the same, revealed | spread over the front | **1.2× the total, ÷10 per frame.** 4.7 / 8.3 / 11.4 ms whole becomes 0.62 / 0.95 / 1.40 ms per frame at ten windows, for energies 1.1 / 2.0 / 3.2 | measured |
+| texture upload | on a hit, or per frame while revealing | **0.01 ms** — one `ImageTexture.update` of 128 KB. Ten of them is still 0.1 ms | measured |
 | worst single hit | on a hit | **~4.5 ms**, propagate + rasterise + upload together | measured |
 | the screening query | inside propagation | direct, no cache. The 128² oracle below was not needed — see §4 | as built |
 | body mask | once per **painting**, not per actor | one 256² decompressed alpha image, ~256 KB, cached in `EnemyView._mask_cache` | as built |
@@ -604,6 +652,18 @@ cap of eight impacts is what bounds it. Two mitigations are already in and are t
 reason it is 4.5 and not 20: the field composites **only the new strands** rather than
 rebuilding, and each strand is Douglas–Peucker simplified before rasterising, which cuts
 five sixths of the segment boxes with no visible displacement.
+
+**The reveal turned out to be a third mitigation rather than a cost, which was not the
+expectation going in.** Rasterising in arc windows does more total work — 1.2× at ten
+windows, because every window re-walks the segment list and re-derives its boxes — but
+it removes the rasterise from the blow's own frame entirely. The spike that mattered was
+`propagate + rasterise + upload` in one frame; it is now `propagate + one window +
+upload`, roughly 3.4 ms, with the remainder spread across the ten frames the front takes.
+Propagation itself is **not** amortised and must not be: the model has no clock, the net
+is committed whole on the blow, and the next blow's screening reads it (§5). The overhead
+falls as the window count rises only because each window's fixed cost is amortised over
+more texels — do not read the ×1.05-at-six-windows row as an argument for fewer windows,
+since fewer windows is a coarser animation at a higher per-frame spike.
 
 If it ever needs to be cheaper, the rasteriser is the half to attack — it is a
 `PackedByteArray` inner loop in GDScript and the same work on the GPU is free.
@@ -630,7 +690,34 @@ and `oversample` levers, and cannot help or hurt that budget.
 | 4 | ✅ **built, and it passed** — `FractureField.strike` / `relieve` with the §2.4 rule, screening, capture, forking, the emission floor and five arrest cases, gated by nine field invariants (seventeen checks in all); plus `FractureProbe` and the lab's `--fracture` sheet | 3 |
 | 5 | ✅ **built** — `CrackField` + the three-band groove folded into `BODY_SHADER`; the old disc web is off behind `EnemyView.discs` | 4 reads as fracture ✅ |
 | 6 | ✅ **built** — `Carve`, `shatter()` consumes it, and invariant 4 is real. The shard count follows the damage | 5 |
-| 7 | Optional: `reveal(t)` propagation, ignite beams, `CrackRibbon` | 6 |
+| 7 | ✅ **built, in part deliberately** — `reveal()` propagation, the ignite beams, and `crack_marked` finally wired. `CrackRibbon` **declined**; see below | 6 |
+
+### Step 7, and why it is not all of step 7
+
+`reveal()` and the beams are built. **`CrackRibbon` is not, and that is a decision rather
+than a remainder.** §5.2 states its purpose exactly: it is a hedge against the memory gate
+forcing MSAA to 2×, where a field groove antialiases itself and an extruded ribbon breaks
+into a dim broken line. Nobody has made that decision, `CrackField` reads correctly at the
+MSAA the game ships with, and building a second renderer against a maybe is the
+gold-plating §5.2's own last sentence disclaims. The interface stays as specified so it
+remains buildable the day the gate moves; the row is closed rather than left open, because
+an open row that nobody should act on is worse than a closed one with a reason.
+
+Two things landed with the reveal that are worth separating from it:
+
+* **`crack_marked` was wired and dead.** `BODY_SHADER` has carried the uniform and a
+  docblock claiming it lights the fracture cores under a lethal preview since the groove
+  landed, and `set_marked()` only ever set the ward glass. §5.5's second cheap addition was
+  therefore not an addition at all — it was a two-line fix to something already written and
+  never connected. Recorded because "the uniform exists" reads as "the feature exists".
+* **The beams cannot leave the silhouette, and the constraint is architectural.** The
+  reference bakes them onto a plane padded 1.6× past the body precisely so the rays escape.
+  Folded into the body material — which is what `one-backbuffer-copy-per-frame.md` requires
+  — they inherit the painting's own `ALPHA`, so a ray past the silhouette lands on a
+  transparent texel and contributes nothing. What is built is the light bleeding along and
+  out of the grooves. The escaping rays need the padded display plane and are a separate
+  change; `BEAM_REACH` is set well under the reference's 1.1 for that reason, since a shaft
+  that would have travelled outside is only paying for taps that land on nothing.
 
 ### The kill test, and its verdict
 
@@ -694,6 +781,16 @@ the spikes. The heatmap is the reason `drive_at` is public.
   investigation: the arrest test became an intersection rather than a proximity (see
   §2.4), and `EnemyView`'s random blow point now consults the body mask, which was
   silently scoring a quarter of all blows in empty air.
+- **A strip cannot photograph a beat shorter than its own readback, and this is not
+  specific to cracks.** `_shoot_strip` waits against the wall clock and each cell costs a
+  `get_image()` of the whole 3620×2516 frame, which measured at roughly 70 ms — so the
+  propagation strip's *first* cell landed 64 % of the way along the arc and the six cells
+  read as one still. Traced, not guessed: a print inside `_set_reveal` showed the tween's
+  first step already at 0.286 of 0.444. `--crack` therefore sets `Engine.time_scale = 0.06`
+  and converts its frame list from beat time to wall time; everything photographed is still
+  the real tween, the real easing and the real idle deform. **`--hit`'s 90 ms flash peak
+  has the same problem and has not been checked for it** — it was framed and approved
+  before this was understood, so its cells may not be where its comment says they are.
 - **`FractureProbe` shares the model with the shipping renderer and must not become
   it.** The moment it grows a taper it stops being evidence. `CrackField` was built
   beside it, not out of it, and the probe's hairlines are unchanged.
