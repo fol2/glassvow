@@ -52,6 +52,40 @@ const LOW_HP_PERIOD: float = 1.6
 const LOW_HP_REACH: Array[float] = [120.0, 180.0]
 const LOW_HP_ALPHA: Array[float] = [0.12, 0.34]
 
+## `.stage-dim` (styles.css:701) — the light economy, and the one piece of this
+## screen that is a rule rather than a mood: your HP **is** the lantern. As the
+## player bleeds a pool of darkness closes in around them, and it darkens the
+## PAINTED GROUND ONLY — z 4 sits over the plates and under the cast shadows, the
+## warp canvas and the battlefield, so foes, bodies and chrome stay lit. That
+## restriction is the whole design: losing does not make the fight harder to
+## read, it makes the world around it shrink.
+##
+## The full-screen version of the same radial is `#lantern`, which is empty until
+## defeat — see `_build_lantern`.
+const DIM_DARK: Color = Color(0.011764706, 0.015686275, 0.039215688)  # rgb(3,4,10)
+## `transparent 42%, dark 100%` — the clear hole, as a fraction of the radius.
+const DIM_HOLE: float = 0.42
+## `la = t * 0.82` and `lr = 1500 - t * 1000`, where
+## `t = clamp((0.68 - hp/maxHp) / 0.53, 0, 1)`. Full HP is no darkness at all;
+## the pool starts closing at 68% and is at its tightest by 15%.
+const DIM_AT: float = 0.68
+const DIM_SPAN: float = 0.53
+const DIM_MAX_ALPHA: float = 0.82
+const DIM_RADIUS: Array[float] = [1500.0, 500.0]
+## `gutter 1.9s infinite` on the layer's own opacity, above `t > 0.55` — the
+## flame is failing, not the light level changing.
+const DIM_GUTTER_AT: float = 0.55
+const DIM_GUTTER_PERIOD: float = 1.9
+const DIM_GUTTER_OFFSETS: Array[float] = [0.0, 0.41, 0.45, 0.62, 0.78, 1.0]
+const DIM_GUTTER_VALUES: Array[float] = [1.0, 0.8, 0.97, 0.86, 0.96, 1.0]
+## CSS's default `animation-timing-function`, which — unlike a WAAPI keyframe
+## list — is applied to EACH interval rather than once to the iteration. That
+## difference is why `Motion.keyframe` cannot be used on its own here.
+const CSS_EASE: Array[float] = [0.25, 0.1, 0.25, 1.0]
+## `aimMove` (combat.js:1913) — "the lantern leans toward where you mean to
+## strike: intent illuminates". A third of the way, not all of it.
+const DIM_AIM_LEAN: float = 0.3
+
 ## `#grain` — opacity .05, and `grain 0.9s steps(1)` is eight discrete jumps.
 const GRAIN_AMOUNT: float = 0.05
 const GRAIN_STEP: float = 0.9 / 8.0
@@ -203,9 +237,16 @@ var _overlay_body: Label
 var _overlay_button: Button
 var _vignette: ColorRect
 var _vignette_mat: ShaderMaterial
+var _stage_dim: ColorRect
+var _stage_dim_mat: ShaderMaterial
 var _grain: ColorRect
 var _grain_mat: ShaderMaterial
 var _atmos_t: float = 0.0
+## Where the pointer last rested while a card was armed, so the lantern can lean
+## toward it. Separate from `_aim_hover`, which is a foe or nothing: the light
+## follows the pointer across empty stage too.
+var _aim_at: Vector2 = Vector2.ZERO
+var _has_aim_at: bool = false
 ## `pileVisualOverride` (drain.js:192) — what a pile is SHOWING while a wave is
 ## in the air, as against what the engine says it holds. Empty means the engine.
 var _pile_override: Dictionary[StringName, int] = {}
@@ -275,6 +316,10 @@ func _build_ui() -> void:
 	add_child(_shake_host)
 
 	_build_stage()
+
+	# Between the two, and that ORDER is the feature: the darkness covers the
+	# plates it is added after and nothing added later.
+	_build_stage_dim()
 
 	# `.battlefield` — inset 0 with `bottom: var(--ground-y)`. Actors are its only
 	# children and are placed by their FEET, so the container's bottom edge is
@@ -418,6 +463,32 @@ void fragment() {
 }
 """
 
+## `radial-gradient(circle var(--lr) at var(--lx) var(--ly), transparent 42%,
+## rgba(3,4,10,var(--la)) 100%)`. A CSS radial ramps LINEARLY between its stops
+## and holds the last colour past 100%, so the alpha is a clamped line rather
+## than a smoothstep — a soft edge here would put a visible halo on the floor
+## where the benchmark has a straight fall-off.
+##
+## Driven in px, not UV, because the circle must stay round on any window: the
+## radius is a distance on the stage, and dividing by a non-square UV would make
+## it an ellipse that changes shape as the window does.
+const STAGE_DIM_SHADER: String = """
+shader_type canvas_item;
+
+uniform vec4 dark : source_color = vec4(0.012, 0.016, 0.039, 1.0);
+uniform vec2 centre_px = vec2(590.0, 400.0);
+uniform vec2 stage_px = vec2(1180.0, 820.0);
+uniform float radius_px = 1500.0;
+uniform float hole = 0.42;
+uniform float la = 0.0;
+
+void fragment() {
+	float d = distance(UV * stage_px, centre_px) / max(1.0, radius_px);
+	float t = clamp((d - hole) / max(0.001, 1.0 - hole), 0.0, 1.0);
+	COLOR = vec4(dark.rgb, t * la);
+}
+"""
+
 ## `mix-blend-mode: overlay` at 5%, against a noise field that jumps rather than
 ## slides. `CanvasItemMaterial` has no overlay mode, so the blend is done here
 ## against the screen this layer is the last thing drawn over.
@@ -457,9 +528,10 @@ void fragment() {
 ## been sitting in `assets/art/stage/` unreferenced the whole time.
 ##
 ## Deferred on purpose, each cheap to add later and none of them load-bearing
-## for the layout: the plates' idle parallax drift (`--amp`), `.stage-dim`'s
-## live lamp tracking, and `.cast-shadow-layer` — EnemyView already projects its
-## own shadow, so a shared layer only earns its place once shadows interact.
+## for the layout: the plates' idle parallax drift (`--amp`), and
+## `.cast-shadow-layer` — EnemyView already projects its own shadow, so a shared
+## layer only earns its place once shadows interact. `.stage-dim` is no longer
+## among them: it is built by `_build_stage_dim`, immediately after this returns.
 func _build_stage() -> void:
 	# What is behind the plates. `body { background: #000 }` is the page, not the
 	# stage: the act's plate art has a transparent sky and `#bg3d` is what shows
@@ -546,6 +618,23 @@ func _build_vignette() -> void:
 	_vignette_mat.set_shader_parameter("low_tint", LOW_HP_TINT)
 	_vignette.material = _vignette_mat
 	add_child(_vignette)
+
+
+## `.stage-dim` — the HP lantern's pool, over the plates and under everything
+## that matters. Built empty; `_update_stage_dim` gives it its light each frame.
+func _build_stage_dim() -> void:
+	_stage_dim = ColorRect.new()
+	_stage_dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_stage_dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_stage_dim.color = Color.WHITE   # the shader writes every channel
+	_stage_dim_mat = ShaderMaterial.new()
+	var sh: Shader = Shader.new()
+	sh.code = STAGE_DIM_SHADER
+	_stage_dim_mat.shader = sh
+	_stage_dim_mat.set_shader_parameter("dark", DIM_DARK)
+	_stage_dim_mat.set_shader_parameter("hole", DIM_HOLE)
+	_stage_dim.material = _stage_dim_mat
+	_shake_host.add_child(_stage_dim)
 
 
 ## `#grain` (styles.css:74) — z 75, over everything including the tooltip.
@@ -941,6 +1030,7 @@ func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	# is mid-flight to a foe or mid-snap-back on its own clock.
 	_targeting = false
 	_selected_uid = -1
+	_has_aim_at = false
 	_hand.armed_uid = -1
 	_clear_previews()
 	var view: CardView = _hand.card_view(uid)
@@ -1008,6 +1098,7 @@ func _process(delta: float) -> void:
 	if _grain_mat != null:
 		var step: int = int(_atmos_t / GRAIN_STEP) % GRAIN_JUMPS.size()
 		_grain_mat.set_shader_parameter("jitter", GRAIN_JUMPS[step])
+	_update_stage_dim()
 	if _vignette_mat == null:
 		return
 	_vignette_mat.set_shader_parameter("stage_px", size)
@@ -1024,6 +1115,50 @@ func _process(delta: float) -> void:
 		[0.0, 0.5, 1.0], [LOW_HP_REACH[0], LOW_HP_REACH[1], LOW_HP_REACH[0]]))
 	_vignette_mat.set_shader_parameter("low_alpha", Motion.keyframe(e,
 		[0.0, 0.5, 1.0], [LOW_HP_ALPHA[0], LOW_HP_ALPHA[1], LOW_HP_ALPHA[0]]))
+
+
+## `updateLantern` (combat.js:404) — how far the light has failed, where it is
+## standing, and whether it is guttering. Run every frame rather than at the
+## benchmark's call sites: the pool is centred on a body that breathes, sways and
+## recoils, and a light that only moves when the HUD is rewritten slides off the
+## hero the moment they are hit.
+func _update_stage_dim() -> void:
+	if _stage_dim_mat == null:
+		return
+	var cb: CombatState = game.cb
+	if cb == null or cb.player.max_hp <= 0:
+		_stage_dim_mat.set_shader_parameter("la", 0.0)
+		_stage_dim.modulate.a = 1.0
+		return
+	var t: float = clampf(
+		(DIM_AT - float(cb.player.hp) / float(cb.player.max_hp)) / DIM_SPAN, 0.0, 1.0)
+	_stage_dim_mat.set_shader_parameter("la", t * DIM_MAX_ALPHA)
+	_stage_dim_mat.set_shader_parameter("radius_px", lerpf(DIM_RADIUS[0], DIM_RADIUS[1], t))
+	_stage_dim_mat.set_shader_parameter("stage_px", _stage_dim.size)
+	# `V.centerOf(S.ce.hero)` — the pool hangs off the body carrying the lantern.
+	# Taken in the layer's own space so the screen shake, which moves both, does
+	# not drag the light across the floor.
+	var centre: Vector2 = _hero_centre()
+	if _targeting and _has_aim_at:
+		centre += (_aim_at - centre) * DIM_AIM_LEAN
+	_stage_dim_mat.set_shader_parameter("centre_px", centre - _stage_dim.global_position)
+	_stage_dim.modulate.a = 1.0 if t <= DIM_GUTTER_AT else _gutter_opacity()
+
+
+## `@keyframes gutter` (styles.css:111) — a flame that is nearly out. Read at the
+## raw phase, then eased WITHIN the interval it lands in, because that is what a
+## CSS keyframe animation does with its timing function and what makes the dip at
+## 41% fall away slowly and snap back.
+func _gutter_opacity() -> float:
+	var phase: float = fmod(_atmos_t, DIM_GUTTER_PERIOD) / DIM_GUTTER_PERIOD
+	for i: int in range(1, DIM_GUTTER_OFFSETS.size()):
+		if phase > DIM_GUTTER_OFFSETS[i]:
+			continue
+		var span: float = DIM_GUTTER_OFFSETS[i] - DIM_GUTTER_OFFSETS[i - 1]
+		var f: float = 0.0 if span <= 0.0 else (phase - DIM_GUTTER_OFFSETS[i - 1]) / span
+		return lerpf(DIM_GUTTER_VALUES[i - 1], DIM_GUTTER_VALUES[i],
+			Motion.ease(CSS_EASE, f))
+	return DIM_GUTTER_VALUES[DIM_GUTTER_VALUES.size() - 1]
 
 
 func _find_card(uid: int) -> CardInst:
@@ -2017,6 +2152,10 @@ func _aim_move(at: Vector2) -> void:
 	if not _targeting or _selected_uid < 0:
 		return
 	_aim.draw_between(_hand.seat_centre(_selected_uid), at)
+	# The lantern leans on the pointer, not on the foe: it follows across empty
+	# stage too, which is what makes aiming feel like turning a light.
+	_aim_at = at
+	_has_aim_at = true
 	# `enemyHover` (combat.js:1493) — the aimed foe changes only when the pointer
 	# crosses a body, not on every pixel it travels.
 	var idx: int = _enemy_at(at)
@@ -2273,6 +2412,8 @@ func _cancel_targeting() -> void:
 	_targeting = false
 	_selected_uid = -1
 	_aim_hover = -1
+	# `updateLantern()` at the tail of `cancelTargeting` — hand the light back.
+	_has_aim_at = false
 	_aim.clear_aim()
 	_hand.hovered_uid = -1
 	_hand.drop_seat()
