@@ -19,10 +19,10 @@ extends Control
 ## states the domain cannot reach yet (999 ward) and assembly wires the signals
 ## without this widget learning what a RunState is.
 ##
-## One knowing deviation, marked below: the hero plate keeps a fixed-width HP bar
-## instead of letting the ward chip squeeze it to ~21px the way the benchmark's
-## flex does. Everything else — including the pile fan's 5°/30° rule and one
-## visible face per card — follows the benchmark's own pile-chrome.js.
+## The hero plate comes in both widths, because the reason for preferring one was
+## never checked: see PLATE_PARITY_W. Everything else — including the pile fan's
+## 5°/30° rule and one visible face per card — follows the benchmark's own
+## pile-chrome.js.
 
 signal end_turn_pressed
 signal menu_pressed
@@ -58,10 +58,40 @@ const BAR_H: float = 56.0
 const BAR_PAD: float = 16.0
 const BAR_GAP: float = 18.0
 const HP_WRAP_W: float = 170.0
-## The plate's bar is held at this width. The benchmark lets the ward chip eat
-## into it (flex), which drops it to ~21px on a warded turn — legible as a
-## colour, useless as a gauge. We have the room; it keeps its length.
-const PLATE_BAR_W: float = 110.0
+## The hero plate, in both widths, sharing one centre so an A/B is honest.
+##
+## PARITY is `.hpbar-wrap` verbatim: 150px holding [ward chip][gap 6][vial,
+## flex:1][gap 6][hp-label, 52 min]. `.block-chip` floors at 34px and never
+## sits there — its own content is a 34px shield, a 3px gap and the numeral
+## inside 7px of padding either side, so a two-digit ward carries it to ~53px
+## and leaves the vial around 33. Reading the floor instead of the content is
+## how this gets mis-measured: it says 52px, and the render says half that.
+##
+## WIDE is this port's answer: the same row at 240px with the vial's length
+## locked, so a warded turn does not shorten the gauge to a colour swatch.
+## Both are built, because the choice is a judgement about how long a health
+## bar has to be before it stops being one, and that is not settled in a
+## comment.
+const PLATE_PARITY_W: float = 150.0
+const PLATE_WIDE_W: float = 240.0
+const PLATE_WIDE_VIAL: float = 110.0
+## WIDE reserves the chip's slot whether or not the chip is in it. PARITY does
+## not, because `.block-chip.zero { display: none }` and a flex row closes up
+## behind a removed item. Both are deliberate: the point of the locked vial is
+## that a warded turn changes nothing about the gauge, and a gauge that slides
+## 66px sideways when the ward expires has changed plenty.
+const PLATE_WIDE_LEAD: float = 76.0
+const PLATE_CX: float = 245.0       # both widths hang off this centre
+const PLATE_Y: float = 614.0
+const PLATE_H: float = 34.0
+const PLATE_GAP: float = 6.0        # .hpbar-wrap gap
+const PLATE_LABEL_W: float = 52.0   # .hp-label min-width
+## `.hpbar` is 9px in a border-box layout — 9 including its 1px lead rim, so the
+## fill under a bare rail is 7. With the frame on, the benchmark hands the bezel
+## over to the art: `.hp-vial:has(.hp-vial-frame) .hpbar` drops the border and
+## the shadow, insets the rail 4px each side, and flattens the radius to 2.
+const RAIL_H: float = 9.0
+const RAIL_FRAMED_INSET: float = 4.0
 ## The fan, from the benchmark's pile-chrome.js: one visible face per card up to
 ## a cap, 5° between them, and the whole span averaged down once it would pass
 ## 30°. The count text stays the true size — the faces are how many you can see.
@@ -82,8 +112,16 @@ var _title_tail: Label
 var _deck_count: Label
 var _plate_fill: TextureRect
 var _plate_label: Label
+var _plate_rail: Panel
+var _plate_frame: TextureRect
 var _ward: Control  # chip and shield together — the shield is not on the chip
+var _ward_chip: PanelContainer
 var _ward_num: Label
+## The plate's row is resolved from these two: the wrap's width, and the vial's
+## length inside it — 0.0 meaning "take whatever the row has left" (flex:1).
+var _plate_w: float = PLATE_WIDE_W
+var _plate_vial_w: float = PLATE_WIDE_VIAL
+var _hp_ratio: float = 1.0
 var _energy_num: Label
 var _candle_field: Control
 var _candles: Array[TextureRect] = []
@@ -179,16 +217,34 @@ static func _font(path: String, tracking: int) -> Font:
 	return fv
 
 
-## `vial_frame` hangs hp-vial-frame.png over the plate's rail. The benchmark
-## ships the CSS rule for it and no art, and at 110x22 the leading squashes 8:1
-## vertically against 4:1 across — the diamonds come out as dashes. Off is the
-## benchmark's live look; the call is the user's, so both are one flag apart.
-func _init(vial_frame: bool = true) -> void:
+## Two flags, both A/B switches the lab drives rather than settled facts.
+##
+## `vial_frame` hangs hp-vial-frame.png over the plate's rail. The art is
+## 512x179 and the CSS box is 22px tall over the vial's length — so the frame is
+## squashed, but the benchmark squashes it by the same amount (`object-fit:
+## fill`), which makes the flattened leading the shipped look rather than our
+## error. What it costs is real: the rule it belongs to also strips the rail's
+## own bezel, and running the frame without that draws two bezels at once.
+##
+## `wide_plate` picks between the two widths at PLATE_PARITY_W.
+##
+## `plate` builds it at all. The benchmark's `.cplate` is not chrome — it sits
+## inside `.player-zone` at `top: 100%`, and the enemy carries identical markup,
+## so the ward chip and the HP rail belong to whichever actor they describe.
+## This widget hangs its own copy at a fixed stage coordinate, which is right in
+## a lab with no hero in it and wrong the moment a real hero stands somewhere
+## else. Assembly asks the question as D2 in `docs/assembly-integration-plan.md`;
+## passing false here is the answer that says the actor owns it.
+func _init(vial_frame: bool = true, wide_plate: bool = true,
+		plate: bool = true) -> void:
 	_vial_frame = vial_frame
+	_plate_w = PLATE_WIDE_W if wide_plate else PLATE_PARITY_W
+	_plate_vial_w = PLATE_WIDE_VIAL if wide_plate else 0.0
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE  # only the buttons take input
 	_build_top_bar()
-	_build_plate()
+	if plate:
+		_build_plate()
 	_build_energy()
 	_build_lantern()
 	# Three piles, not two, each wearing its own back — the blue vault, the warm
@@ -208,37 +264,42 @@ func _init(vial_frame: bool = true) -> void:
 
 ## The whole input surface. Plain ints — no run, no combat, no content.
 ## `exhaust_count` is the ash pile: the domain has carried `cb.exhaust` since
-## M4, and the benchmark gives it a third corner of its own.
+## M4, and the benchmark gives it a third corner of its own. `hand_count` is not
+## drawn anywhere; it is here because the deck seal counts the cards still in
+## the fight, and the hand is part of that.
 func set_values(hp: int, max_hp: int, block: int, gold: int,
 		energy: int, max_energy: int, draw_count: int, discard_count: int,
-		exhaust_count: int) -> void:
+		exhaust_count: int, hand_count: int = 0) -> void:
 	# Assembly will call this off a signal that fires for anything that moved,
 	# so most calls change nothing here. Setting a Label's text re-shapes it
 	# even when the string is identical; nine of those per call is a real cost
 	# for no change on screen. The piles already guarded themselves — this is
 	# the same guard for the whole surface.
 	var now: PackedInt32Array = PackedInt32Array([hp, max_hp, block, gold,
-		energy, max_energy, draw_count, discard_count, exhaust_count])
+		energy, max_energy, draw_count, discard_count, exhaust_count, hand_count])
 	if now == _last:
 		return
 	_last = now
-	var ratio: float = clampf(float(hp) / float(maxi(1, max_hp)), 0.0, 1.0)
+	_hp_ratio = clampf(float(hp) / float(maxi(1, max_hp)), 0.0, 1.0)
 	_hp_num.text = "%d / %d" % [hp, max_hp]
-	_hp_fill.size.x = HP_WRAP_W * ratio
-	_plate_fill.size.x = (PLATE_BAR_W - 2.0) * ratio
-	_plate_label.text = "%d/%d" % [hp, max_hp]
-
-	_ward.visible = block > 0  # .block-chip.zero { display: none }
-	_ward_num.text = str(block)
+	_hp_fill.size.x = HP_WRAP_W * _hp_ratio
+	# Absent, not empty, when the actor owns the plate instead — see `_init`.
+	if _plate_rail != null:
+		_plate_label.text = "%d/%d" % [hp, max_hp]
+		_ward.visible = block > 0  # .block-chip.zero { display: none }
+		_ward_num.text = str(block)
+		_layout_plate()  # the vial's length is what the chip eats into
 
 	_gold_num.text = str(gold)
 	_sync_pile(_draw_pile, draw_count)
 	_sync_pile(_discard_pile, discard_count)
 	_sync_pile(_ashes_pile, exhaust_count)
-	# The top-right seal opens the deck; during a fight the deck is draw plus
-	# discard — ash has left play and does not count. It is short by the hand,
-	# which is not one of the numbers this takes.
-	_deck_count.text = str(draw_count + discard_count)
+	# The top-right seal opens the deck. The benchmark counts the run's whole
+	# deck there (`p.deck.length`), a number that never moves during a fight;
+	# this port shows the cards still IN the fight instead — draw, hand and
+	# discard. Ash is excluded on purpose: a pile whose meaning is "removed from
+	# the fight" cannot also be in it.
+	_deck_count.text = str(draw_count + hand_count + discard_count)
 
 	_energy_num.text = str(energy)
 	_sync_candles(energy, max_energy)
@@ -413,9 +474,17 @@ func _build_top_bar() -> void:
 
 ## `.cplate` — the ward chip and the HP rail that live at the hero's feet. The
 ## chip's shield is bigger than the chip and hangs off its left edge.
+##
+## The row is a flex in the benchmark and is resolved by hand here. An
+## HBoxContainer would lay it out, but a Container owns its children's
+## positions, and two pieces of this row deliberately sit outside their own
+## slot: the shield overhangs the chip's left edge, and the frame stands 5px
+## proud of the rail at each end. `_layout_plate()` is that arithmetic, kept in
+## the same measured-absolute idiom as every other cluster in this file.
 func _build_plate() -> void:
 	var plate: Control = Control.new()
-	_place(plate, Rect2(125.0, 614.0, 240.0, 34.0), false, true)
+	_place(plate, Rect2(PLATE_CX - _plate_w * 0.5, PLATE_Y, _plate_w, PLATE_H),
+		false, true)
 	add_child(plate)
 
 	# Chip and shield hide together. The shield is not a child of the chip — it
@@ -424,7 +493,7 @@ func _build_plate() -> void:
 	_ward = Control.new()
 	_ward.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	plate.add_child(_ward)
-	var chip_box: PanelContainer = PanelContainer.new()
+	_ward_chip = PanelContainer.new()
 	var chip: StyleBoxFlat = _flat(Color(0.110, 0.231, 0.333, 1.0), 13)
 	chip.set_border_width_all(2)  # 1.5px in CSS; Godot borders are whole pixels
 	chip.border_color = BLK
@@ -434,48 +503,75 @@ func _build_plate() -> void:
 	chip.content_margin_bottom = 3.0
 	chip.shadow_color = Color(BLK.r, BLK.g, BLK.b, 0.35)
 	chip.shadow_size = 8
-	chip_box.add_theme_stylebox_override("panel", chip)
-	chip_box.position = Vector2(14.0, 4.0)
-	chip_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_ward.add_child(chip_box)
+	_ward_chip.add_theme_stylebox_override("panel", chip)
+	_ward_chip.position = Vector2(14.0, 4.0)
+	_ward_chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# `.block-chip` floors at 34px; this chip's own padding and numeral clear
+	# that on their own, so the floor never binds and is not restated here.
+	# Three digits widen it, and the vial behind it has to give the room back.
+	_ward_chip.resized.connect(_layout_plate)
+	_ward.add_child(_ward_chip)
 	_ward_num = _num_label(14.0, BLK_TEXT, GlassStyle.ALEGREYA_700, 0)
 	_ward_num.custom_minimum_size = Vector2(16.0, 0.0)
 	_ward_num.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	chip_box.add_child(_ward_num)
+	_ward_chip.add_child(_ward_num)
 	_ward.add_child(_icon_rect("ui/ward", 34.0))
 
-	var bar_x: float = 76.0
-	var rail: Panel = Panel.new()
-	rail.position = Vector2(bar_x, 12.0)
-	rail.size = Vector2(PLATE_BAR_W, 11.0)
+	_plate_rail = Panel.new()
+	_plate_rail.add_theme_stylebox_override("panel", _rail_style())
+	_plate_rail.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	plate.add_child(_plate_rail)
+	_plate_fill = _gradient_rect(PLATE_FILL_A, PLATE_FILL_B)
+	_plate_rail.add_child(_plate_fill)
+	# hp-vial-frame.png: the benchmark's `.hp-vial-frame` rule stretches it over
+	# the rail (object-fit: fill, 22px tall, 5px proud at each end). The rule
+	# that hands the bezel to the art lives in `_rail_style()`.
+	if _vial_frame:
+		_plate_frame = TextureRect.new()
+		_plate_frame.texture = icon("ui/hp-vial-frame")
+		_plate_frame.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		_plate_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_plate_frame.stretch_mode = TextureRect.STRETCH_SCALE
+		_plate_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		plate.add_child(_plate_frame)
+
+	_plate_label = _num_label(12.0, HP_LABEL, GlassStyle.ALEGREYA_700, 0)
+	plate.add_child(_plate_label)
+	_layout_plate()
+
+
+## The rail under the vial. Bare it carries its own lead bezel; under the frame
+## the art carries it instead, and keeping both draws two rims over one gauge.
+func _rail_style() -> StyleBoxFlat:
+	if _vial_frame:
+		return _flat(Color(0.0, 0.0, 0.0, 0.35), 2)
 	var track: StyleBoxFlat = _flat(Color(0.0, 0.0, 0.0, 0.55), 5)
 	track.set_border_width_all(1)
 	track.border_color = LEAD
-	rail.add_theme_stylebox_override("panel", track)
-	rail.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	plate.add_child(rail)
-	_plate_fill = _gradient_rect(PLATE_FILL_A, PLATE_FILL_B)
-	_plate_fill.position = Vector2(1.0, 1.0)
-	_plate_fill.size = Vector2(PLATE_BAR_W - 2.0, 9.0)
-	rail.add_child(_plate_fill)
-	# hp-vial-frame.png: the benchmark's `.hp-vial-frame` rule stretches it over
-	# the rail (object-fit: fill, 22px tall, 5px proud at each end) and strips
-	# the rail's own border underneath. The live build ships the rule without
-	# the art; this is that rule, wearing it.
-	if _vial_frame:
-		var frame: TextureRect = TextureRect.new()
-		frame.texture = icon("ui/hp-vial-frame")
-		frame.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		frame.stretch_mode = TextureRect.STRETCH_SCALE
-		frame.position = Vector2(bar_x - 5.0, 6.0)
-		frame.size = Vector2(PLATE_BAR_W + 10.0, 22.0)
-		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		plate.add_child(frame)
+	return track
 
-	_plate_label = _num_label(12.0, HP_LABEL, GlassStyle.ALEGREYA_700, 0)
-	_plate_label.position = Vector2(bar_x + PLATE_BAR_W + 12.0, 8.0)
-	plate.add_child(_plate_label)
+
+## Resolve `.hpbar-wrap`: the chip takes what it needs, the label its 52px, and
+## the vial either flexes into the gap or keeps the length it was given. Run at
+## build and again whenever the chip appears or leaves, since the vial's length
+## is what the chip is eating into.
+func _layout_plate() -> void:
+	var vial_w: float = _plate_vial_w
+	var vial_x: float = PLATE_WIDE_LEAD
+	if vial_w <= 0.0:
+		vial_x = (_ward_chip.size.x + 14.0 + PLATE_GAP) if _ward.visible else 0.0
+		vial_w = _plate_w - vial_x - PLATE_GAP - PLATE_LABEL_W
+	var inset: float = RAIL_FRAMED_INSET if _vial_frame else 0.0
+	var rim: float = 0.0 if _vial_frame else 1.0
+	_plate_rail.position = Vector2(vial_x + inset, (PLATE_H - RAIL_H) * 0.5)
+	_plate_rail.size = Vector2(maxf(2.0, vial_w - inset * 2.0), RAIL_H)
+	_plate_fill.position = Vector2(rim, rim)
+	_plate_fill.size = Vector2((_plate_rail.size.x - rim * 2.0) * _hp_ratio,
+		RAIL_H - rim * 2.0)
+	if _plate_frame != null:
+		_plate_frame.position = Vector2(vial_x - 5.0, (PLATE_H - 22.0) * 0.5)
+		_plate_frame.size = Vector2(vial_w + 10.0, 22.0)
+	_plate_label.position = Vector2(vial_x + vial_w + PLATE_GAP, 8.0)
 
 
 ## `.energy-orb` — a 44px numeral standing on a row of candles, overlapping them

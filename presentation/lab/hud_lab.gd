@@ -14,7 +14,10 @@ extends Control
 ##   godot --path . -- --hud              # bench: sliders, presets, live HUD
 ##   godot --path . -- --hud --state=2 --shot=/tmp/hud-2.png
 ##
-## Keys: 1-6 presets · ←/→ cycle · H hides the panel · F flips the vial frame.
+## Keys: 1-6 presets · ←/→ cycle · H hides the panel · F flips the vial frame ·
+## W flips the plate between the benchmark's 150px wrap and this port's 240px ·
+## P drops the plate entirely, which is how the fight will run it if the hero
+## actor carries its own — assembly's D2.
 ## A --shot run starts with the panel hidden, so a capture is the HUD alone.
 ##
 ## The stage under it is a stand-in for the battlefield — a night gradient and a
@@ -27,25 +30,26 @@ const BACKDROP: Color = Color(0.043, 0.055, 0.102)
 const PANEL_RECT: Rect2 = Rect2(380.0, 70.0, 300.0, 560.0)
 
 ## caption, hp, max_hp, ward, gold, energy, max_energy, draw, discard, ashes,
-## charge.
+## hand, charge.
 ## The last row is not a real fight — it is the layout's failure case, three
 ## digits everywhere at once, which is the only way to see what overflows.
 const STATES: Array = [
-	["full HP · turn 1", 72, 72, 0, 99, 3, 3, 5, 0, 0, 0],
-	["5% HP · one hit left", 4, 80, 0, 42, 1, 3, 2, 7, 1, 1],
-	["heavy ward", 41, 80, 32, 42, 2, 3, 3, 6, 2, 0],
-	["0 energy · turn spent", 41, 80, 12, 42, 0, 3, 0, 10, 3, 2],
-	["every candle lit · art ready", 62, 80, 0, 128, 5, 5, 5, 3, 4, 3],
-	["big numbers", 999, 999, 999, 999, 6, 6, 99, 99, 99, 9],
+	["full HP · turn 1", 72, 72, 0, 99, 3, 3, 5, 0, 0, 5, 0],
+	["5% HP · one hit left", 4, 80, 0, 42, 1, 3, 2, 7, 1, 3, 1],
+	["heavy ward", 41, 80, 32, 42, 2, 3, 3, 6, 2, 4, 0],
+	["0 energy · turn spent", 41, 80, 12, 42, 0, 3, 0, 10, 3, 0, 2],
+	["every candle lit · art ready", 62, 80, 0, 128, 5, 5, 5, 3, 4, 6, 3],
+	["big numbers", 999, 999, 999, 999, 6, 6, 99, 99, 99, 99, 9],
 ]
 
-## name, floor, ceiling — the eight values in set_values order, then the
-## lantern's charge, which rides its own setter.
+## name, floor, ceiling — the ten values in set_values order, then the lantern's
+## charge, which rides its own setter.
 const KNOBS: Array = [
 	["hit points", 0, 999], ["max hit points", 1, 999],
 	["ward", 0, 999], ["gold", 0, 999],
 	["energy", 0, 9], ["max energy", 1, 9],
 	["draw pile", 0, 99], ["discard pile", 0, 99], ["ash pile", 0, 99],
+	["hand", 0, 99],
 	["art charge", 0, 9],
 ]
 
@@ -57,9 +61,11 @@ var _status: Label
 var _readout: Label
 var _knobs: Array[HSlider] = []
 var _labels: Array[Label] = []
-var _vals: Array[int] = [72, 72, 0, 99, 3, 3, 5, 0, 0, 0]
+var _vals: Array[int] = [72, 72, 0, 99, 3, 3, 5, 0, 0, 5, 0]
 var _state: int = 0
 var _frame: bool = true
+var _wide: bool = true
+var _plate: bool = true
 
 
 func _init(content_ref: ContentDB) -> void:
@@ -75,6 +81,10 @@ func _init(content_ref: ContentDB) -> void:
 			force_panel = true
 		elif arg == "--noframe":
 			_frame = false  # the plate's rail bare, as the benchmark ships it
+		elif arg == "--narrow":
+			_wide = false  # the plate at the benchmark's own 150px wrap
+		elif arg == "--noplate":
+			_plate = false  # the chrome without it, as the fight may run it
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 
@@ -130,14 +140,15 @@ func _build_stage() -> void:
 	add_child(pool)
 
 
-## The vial frame is a constructor flag, so flipping it is a new widget. Kept
-## under the panel in the draw order — the chrome owns the edges, the panel the
-## middle, and a rebuilt HUD must not jump in front of the controls.
+## Both plate flags are constructor arguments, so flipping either is a new
+## widget. Kept under the panel in the draw order — the chrome owns the edges,
+## the panel the middle, and a rebuilt HUD must not jump in front of the
+## controls.
 func _rebuild_hud() -> void:
 	if _hud != null:
 		remove_child(_hud)
 		_hud.queue_free()
-	_hud = HudBar.new(_frame)
+	_hud = HudBar.new(_frame, _wide, _plate)
 	add_child(_hud)
 	move_child(_hud, 3)
 	_hud.end_turn_pressed.connect(_on_pressed.bind("end turn"))
@@ -170,7 +181,8 @@ func _build_panel() -> PanelContainer:
 	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(col)
 
-	col.add_child(_caption("1-6 presets · ←/→ cycle · H hides this · F flips the frame"))
+	col.add_child(_caption(
+		"1-6 · ←/→ cycle · H panel · F frame · W plate width · P plate on/off"))
 	col.add_child(_heading("STATES"))
 	var grid: GridContainer = GridContainer.new()
 	grid.columns = 2
@@ -201,6 +213,26 @@ func _build_panel() -> PanelContainer:
 		_frame = on
 		_rebuild_hud())
 	col.add_child(box)
+	# The A/B the decision is waiting on: 240px with the vial's length locked,
+	# against the benchmark's own 150px wrap where the ward chip eats into it.
+	var wide_box: CheckBox = CheckBox.new()
+	wide_box.text = "wide plate (240px) · off = benchmark 150px"
+	wide_box.button_pressed = _wide
+	wide_box.add_theme_font_size_override("font_size", 11)
+	wide_box.toggled.connect(func(on: bool) -> void:
+		_wide = on
+		_rebuild_hud())
+	col.add_child(wide_box)
+	# Assembly's D2: if the hero actor carries its own `.cplate`, the HUD must
+	# not carry a second one. This is what the chrome looks like without it.
+	var plate_box: CheckBox = CheckBox.new()
+	plate_box.text = "plate at all · off = the actor owns it"
+	plate_box.button_pressed = _plate
+	plate_box.add_theme_font_size_override("font_size", 11)
+	plate_box.toggled.connect(func(on: bool) -> void:
+		_plate = on
+		_rebuild_hud())
+	col.add_child(plate_box)
 
 	# What the eight sliders currently spell, in the shape the widget takes it —
 	# so a pose worth keeping can be typed straight into STATES.
@@ -264,13 +296,13 @@ func _apply() -> void:
 	var hp: int = mini(_vals[0], _vals[1])
 	var energy: int = mini(_vals[4], _vals[5])
 	_hud.set_values(hp, _vals[1], _vals[2], _vals[3], energy, _vals[5], _vals[6],
-		_vals[7], _vals[8])
-	_hud.set_lantern(_vals[9], _vals[9] > 0)
+		_vals[7], _vals[8], _vals[9])
+	_hud.set_lantern(_vals[10], _vals[10] > 0)
 	_hud.set_title("The Ashen Woods", "Floor I · The Rootheart")
 	if _readout != null:
-		_readout.text = "set_values(%d, %d, %d, %d, %d, %d, %d, %d, %d)" % [
+		_readout.text = "set_values(%d, %d, %d, %d, %d, %d, %d, %d, %d, %d)" % [
 			hp, _vals[1], _vals[2], _vals[3], energy, _vals[5], _vals[6], _vals[7],
-			_vals[8]]
+			_vals[8], _vals[9]]
 
 
 func _load_state(i: int) -> void:
@@ -285,8 +317,10 @@ func _load_state(i: int) -> void:
 			_labels[k].text = "%s — %d" % [str(KNOBS[k][0]), v]
 	_apply()
 	if _caption != null:
-		_status.text = "hud lab · state %d/%d · %s · vial frame %s" % [
-			_state + 1, STATES.size(), str(row[0]), "on" if _frame else "off"]
+		_status.text = "hud lab · state %d/%d · %s · vial frame %s · plate %s%s" % [
+			_state + 1, STATES.size(), str(row[0]), "on" if _frame else "off",
+			"240 wide" if _wide else "150 benchmark",
+			"" if _plate else " · no plate"]
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -303,6 +337,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		_panel.visible = not _panel.visible
 	elif key.keycode == KEY_F:
 		_frame = not _frame
+		_rebuild_hud()
+		_load_state(_state)
+	elif key.keycode == KEY_W:
+		_wide = not _wide
+		_rebuild_hud()
+		_load_state(_state)
+	elif key.keycode == KEY_P:
+		_plate = not _plate
 		_rebuild_hud()
 		_load_state(_state)
 
