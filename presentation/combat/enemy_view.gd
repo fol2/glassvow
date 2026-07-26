@@ -55,18 +55,38 @@ const VP_MAX: int = 2048
 ## The stage renders at this multiple of the box. At 1.0 a 176px creature is a
 ## 176px render being upscaled by the window's own content scale (and again by
 ## the bench's zoom), which is exactly the softness the first 3D pass had.
+##
+## It is also the more expensive of the two memory knobs: stage pixels go as its
+## SQUARE, so 2.5 → 1.5 is a 64% cut in area. See
+## docs/actor-stage-frame-budget.md — 113 MB of video memory per actor is the
+## floor everything else in this view is built on.
 static var oversample: float = 2.5
+
+## Anti-aliasing on the actor stage — the other half of the same trade, and the
+## largest single memory term because it multiplies both the colour and the depth
+## attachment (4x → 2x is −21% at four actors, off is −42%).
+##
+## A static, like `oversample`, so a lab can compare settings without editing the
+## file it is judging. Neither knob is free: this project's materials read off
+## narrow angular features (docs/card-angular-budget.md), which is exactly what
+## aliasing eats first.
+static var msaa: Viewport.MSAA = Viewport.MSAA_4X
 
 var idx: int = 0
 ## Placement offsets for whoever puts this actor on the battlefield. Feet are
 ## this box's bottom edge (benchmark bfEnemyFootX / bfEnemyFootY).
 var foot: Vector2 = Vector2.ZERO
 var art_size: float = 0.0
+## Which side this actor fights for, and how big it is — one field, because
+## char-meta already models a hero as a size class (`tierSizes.hero` = 285)
+## alongside normal, elite and boss. Nothing has to be passed in: the art id
+## resolves the tier the same way it already resolves the box and the folder.
+## An actor with no painting falls back to the gem, which is a foe's avatar.
+var tier: String = "normal"
 
 var _hue: float = 210.0
 var _max_hp: int = 1
-var _intent_chip: PanelContainer
-var _intent: Label
+var _intent: IntentChip
 var _gem: GlassGem
 var _name_label: Label
 var _hp_bar: ProgressBar
@@ -75,7 +95,7 @@ var _facets: FacetPips
 var _ward_chip: PanelContainer
 var _ward: Label
 var _ward_icon: TextureRect
-var _statuses: Label
+var _statuses: StatusRow
 var _plate: VBoxContainer
 var _dead: bool = false
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -355,6 +375,7 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 
 	if tex != null:
 		var entry: Dictionary = meta(art_id)
+		tier = str(entry.get("tier", "normal"))
 		art_size = art_box(art_id)
 		if art_size <= 0.0:
 			art_size = 185.0
@@ -396,7 +417,7 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_stage.size = Vector2i(vp_px, vp_px)
 	_stage.own_world_3d = true
 	_stage.transparent_bg = true
-	_stage.msaa_3d = Viewport.MSAA_4X
+	_stage.msaa_3d = msaa
 	_stage.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	add_child(_stage)
 
@@ -875,8 +896,15 @@ func reset_glass() -> void:
 func mark_dead() -> void:
 	if _dead:
 		return
+	# A hero does not break. The benchmark spends no crack, no ignition and no
+	# shatter on the player's own body — a defeat is the screen's overlay, not the
+	# vessel coming apart — so the rite is a foe's ending and this returns before
+	# scoring anything. Guarded here rather than left to the caller, because the
+	# rite is irreversible without rebuilding the actor.
+	if tier == "hero":
+		return
 	_dead = true
-	_intent_chip.visible = false
+	clear_intent()
 	if _gem != null:
 		_gem.set_state(_hue, 0.0, true)
 		modulate = Color(0.5, 0.5, 0.56, 0.5)
@@ -959,8 +987,10 @@ func _alpha_at(p: Vector2) -> float:
 func shatter() -> void:
 	if _vessel == null or not _vessel.visible:
 		return
+	if tier == "hero":
+		return  # see mark_dead(): a hero's vessel never breaks
 	_dead = true
-	_intent_chip.visible = false
+	clear_intent()
 	if _art_img == null and _body_mat != null:
 		var t: Texture2D = _body_mat.get_shader_parameter("body_tex")
 		if t != null:
@@ -1230,7 +1260,19 @@ func set_targetable(on: bool) -> void:
 
 # ---------------------------------------------------------------- chrome
 
+## A hero wears less chrome than a foe, and the benchmark's own DOM is the reason:
+## its `.top-chrome` holds the status row ALONE, and its `.cplate` holds the ward
+## chip, the HP vial and the HP label alone. A foe's crown adds `.intent`, and its
+## plate adds a name line and a `.facet-row`
+## (roguecardv2 src/ui/combat.js:215-257). Those three are therefore never built
+## for a hero rather than built and hidden — an invisible widget still holds a
+## slot open in a VBox, which is exactly the gap a hero's plate must not have.
+##
+## Every setter that would drive a missing widget is a no-op, so a caller does not
+## have to know which kind of actor it is holding.
 func _build_chrome(display_name: String) -> void:
+	var is_hero: bool = tier == "hero"
+
 	# ---- crown chrome: intent, then statuses. Anchored ABOVE the art box.
 	var crown: VBoxContainer = VBoxContainer.new()
 	crown.add_theme_constant_override("separation", 4)
@@ -1242,19 +1284,19 @@ func _build_chrome(display_name: String) -> void:
 	crown.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(crown)
 
-	# Session 3 owns the intent chip as a standalone widget and will swap it in
-	# here — these three lines are the current inline one, unchanged.
-	_intent_chip = _chip(GlassStyle.EMBER)
-	_intent = _chip_label(_intent_chip, GlassStyle.EMBER)
-	crown.add_child(_center(_intent_chip))
+	# The standalone widgets, swapped in for the inline ember chip and the text
+	# line that stood here. Both start empty: an intent with no kind and no
+	# figure draws nothing (`.intent:empty`), and an actor with no conditions
+	# has no row, rather than an invisible one holding a slot open.
+	if not is_hero:
+		_intent = IntentChip.new(&"", "")
+		crown.add_child(_center(_intent))
 
-	_statuses = _label("")
-	_statuses.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-	_statuses.add_theme_font_size_override("font_size", 12)
-	_statuses.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_statuses = StatusRow.new()
 	crown.add_child(_statuses)
 
-	# ---- foot plate: name, ward + HP vial, facets. Anchored BELOW the feet.
+	# ---- foot plate: name (foes only), ward + HP vial, facets (foes only).
+	# Anchored BELOW the feet.
 	_plate = VBoxContainer.new()
 	_plate.add_theme_constant_override("separation", 6)
 	_plate.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -1264,9 +1306,10 @@ func _build_chrome(display_name: String) -> void:
 	_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_plate)
 
-	_name_label = _label(display_name)
-	_name_label.add_theme_font_size_override("font_size", 14)
-	_plate.add_child(_name_label)
+	if not is_hero:
+		_name_label = _label(display_name)
+		_name_label.add_theme_font_size_override("font_size", 14)
+		_plate.add_child(_name_label)
 
 	var vial_row: HBoxContainer = HBoxContainer.new()
 	vial_row.add_theme_constant_override("separation", 6)
@@ -1313,29 +1356,16 @@ func _build_chrome(display_name: String) -> void:
 	_hp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hp_wrap.add_child(_hp_label)
 
-	_facets = FacetPips.new()
-	_facets.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_plate.add_child(_facets)
+	if not is_hero:
+		_facets = FacetPips.new()
+		_facets.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_plate.add_child(_facets)
 
 
 static func _label(initial: String) -> Label:
 	var l: Label = Label.new()
 	l.text = initial
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	return l
-
-
-static func _chip(accent: Color) -> PanelContainer:
-	var c: PanelContainer = PanelContainer.new()
-	c.add_theme_stylebox_override("panel", GlassStyle.chip(accent))
-	return c
-
-
-static func _chip_label(chip: PanelContainer, accent: Color) -> Label:
-	var l: Label = _label("")
-	l.add_theme_color_override("font_color", Color(accent.r, accent.g, accent.b, 0.95))
-	l.add_theme_font_size_override("font_size", 13)
-	chip.add_child(l)
 	return l
 
 
@@ -1357,17 +1387,16 @@ func align_plate(dy: float) -> void:
 
 # ---------------------------------------------------------------- state in
 
-## Full sync from an enemy snapshot (drain-idle truth). dmg_text is already
-## formatted by the screen ("" when the move deals no damage).
-func sync(e: EnemyCombatant, dmg_text: String, intent_text: String) -> void:
+## Full sync from an enemy snapshot (drain-idle truth). `dmg_text` is already
+## formatted by the screen ("" when the move deals no damage), `intent` is the
+## move's own kind, and `infos` is the content status table for the hover text.
+func sync(e: EnemyCombatant, dmg_text: String, intent: StringName,
+		move_name: String = "", infos: Dictionary = {}) -> void:
 	set_hp(e.hp, e.max_hp)
 	set_ward(e.block)
 	set_facets(mini(e.chips, e.facet_max), e.facet_max)
-	set_statuses(e.statuses)
-	var line: String = intent_text
-	if dmg_text != "":
-		line += "   %s" % dmg_text
-	set_intent(line)
+	set_statuses(e.statuses, infos)
+	set_intent(intent, dmg_text, move_name)
 	if e.hp <= 0:
 		mark_dead()
 
@@ -1392,19 +1421,36 @@ func set_ward(block: int) -> void:
 		_ward.text = str(block)
 
 
+## A hero has no facet gauge to move — structural integrity is a foe's concept.
 func set_facets(chips: int, facet_max: int) -> void:
+	if _facets == null:
+		return
 	_facets.set_pips(chips, facet_max)
 
 
-func set_intent(intent_text: String) -> void:
-	_intent.text = intent_text
-	_intent_chip.visible = intent_text.strip_edges() != ""
+## The telegraph. `intent` is the move's own `intent` field — `attack`,
+## `attack_block`, `debuff` — NOT its display name: the chip resolves both its
+## icons and the single colour everything on it tints to from that id.
+##
+## The name goes to the tooltip instead of onto the chip, which is what the
+## benchmark's `cursor: help` is for. It is passed in rather than looked up
+## because a widget in `presentation/` does not read content.
+##
+## A hero telegraphs nothing — it acts when the player plays a card, so there is
+## no next move to announce and no chip to announce it on.
+func set_intent(intent: StringName, amount_text: String, move_name: String = "") -> void:
+	if _intent == null:
+		return
+	_intent.set_intent(intent, amount_text)
+	_intent.tooltip_text = move_name
 
 
-func set_statuses(statuses: Dictionary) -> void:
-	var parts: Array[String] = []
-	for k: Variant in statuses.keys():
-		var n: int = statuses[k]
-		if n != 0:
-			parts.append("%s %d" % [str(k), n])
-	_statuses.text = " · ".join(parts)
+## The telegraph has been spent, or there is nothing to telegraph. An intent
+## with no kind and no figure draws nothing, so this is one call rather than a
+## visibility flag someone downstream has to remember to restore.
+func clear_intent() -> void:
+	set_intent(&"", "")
+
+
+func set_statuses(statuses: Dictionary, infos: Dictionary = {}) -> void:
+	_statuses.sync(statuses, infos)

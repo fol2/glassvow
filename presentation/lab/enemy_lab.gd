@@ -15,6 +15,8 @@ extends Control
 ##   godot --path . -- --enemies --only=sporeling,leviathan  # detail, 1:1
 ##   godot --path . -- --enemies --states[=duskfang]         # the real states
 ##   godot --path . -- --enemies --bench[=duskfang]          # INTERACTIVE bench
+##   godot --path . -- --enemies --states=duskfang --msaa=2 --oversample=1.5
+##                                                           # the memory knobs
 ##
 ## The bench is the one that answers questions a PNG cannot: refraction only
 ## reads when the thing behind it moves, the idle warp is motion, and the death
@@ -96,6 +98,22 @@ const HEROES: Dictionary = {
 }
 
 
+## `--msaa=off|2|4|8`. Anything else keeps the authored 4x rather than guessing,
+## because silently falling back to "off" would make a typo look like a saving.
+static func _msaa_of(text: String) -> Viewport.MSAA:
+	match text.to_lower():
+		"off", "0", "1":
+			return Viewport.MSAA_DISABLED
+		"2", "2x":
+			return Viewport.MSAA_2X
+		"4", "4x":
+			return Viewport.MSAA_4X
+		"8", "8x":
+			return Viewport.MSAA_8X
+	push_warning("enemy lab: --msaa=%s not understood — keeping 4x" % text)
+	return Viewport.MSAA_4X
+
+
 static func load_roster(fallback: ContentDB) -> Dictionary:
 	var text: String = FileAccess.get_file_as_string(CATALOG_PATH)
 	if not text.is_empty():
@@ -157,6 +175,15 @@ func _init(content_ref: ContentDB) -> void:
 			states_id = arg.trim_prefix("--rite=")
 		elif arg.begins_with("--strip="):
 			_strip_path = arg.trim_prefix("--strip=")
+		# The two memory knobs, priced in docs/actor-stage-frame-budget.md and left
+		# to this lane to judge. Read here rather than hard-coded so the same
+		# creature can be shot at several settings and the shots diffed at 1:1 —
+		# which is the only way to see what the saving costs. Set before any actor
+		# exists, because both are read while the stage is being built.
+		elif arg.begins_with("--oversample="):
+			EnemyView.oversample = maxf(0.25, float(arg.trim_prefix("--oversample=")))
+		elif arg.begins_with("--msaa="):
+			EnemyView.msaa = _msaa_of(arg.trim_prefix("--msaa="))
 
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
@@ -309,7 +336,7 @@ func _build_roster(ids: Array[String], roster: Dictionary, names: Dictionary) ->
 			view.set_hp(_max_hp(def), _max_hp(def))
 			view.set_facets(0, _facet_max(def))
 			view.set_ward(0)
-			view.set_intent("")
+			view.clear_intent()
 			view.align_plate(ground - (view.position.y + view.size.y))
 			actors.append(view)
 			x += view.art_size + GAP_X
@@ -351,7 +378,7 @@ func _build_states(id: String, def: Dictionary, locale: Dictionary) -> void:
 		view.set_hp(maxi(1, int(roundf(float(max_hp) * frac))), max_hp)
 		view.set_facets(cracks / 2, facet_max)
 		view.set_ward(ward)
-		view.set_intent("")
+		view.clear_intent()
 		for _c: int in range(mini(cracks, MAX_SITES)):
 			view.crack()
 		if ignite > 0.0:
@@ -629,7 +656,7 @@ func _build_bench(id: String) -> void:
 	# Placed at the origin; _relayout_bench frames it once the stage is known.
 	_bench_actor = _actor(id, def, locale, 0.0, 0.0)
 	_bench_actor.set_facets(0, _facet_max(def))
-	_bench_actor.set_intent("")
+	_bench_actor.clear_intent()
 	_bench_actor.set_ward(0)
 	for param: Variant in _knobs.keys():
 		var v: float = _knobs[param]
@@ -833,7 +860,7 @@ func _shoot_rite() -> void:
 	view.position = Vector2((stage.x - view.size.x) * 0.5, ground - view.size.y - view.foot.y)
 	view.set_hp(_max_hp(def), _max_hp(def))
 	view.set_facets(0, _facet_max(def))
-	view.set_intent("")
+	view.clear_intent()
 	_rows = [{"ground": ground, "actors": [view], "width": view.size.x}]
 	_sheet_size = stage
 	_ground.size = stage

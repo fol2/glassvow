@@ -22,7 +22,7 @@ var _encounter_label: Label
 var _player_hp: Label
 var _player_hp_bar: ProgressBar
 var _player_ward: Label
-var _player_statuses: Label
+var _player_statuses: StatusRow
 var _embers_label: Label
 var _gold_label: Label
 var _piles_label: Label
@@ -161,10 +161,7 @@ func _build_ui() -> void:
 	player_box.add_child(chip_row)
 	_player_ward = _chip_line(chip_row, GlassStyle.GLASS)
 	_embers_label = _chip_line(chip_row, GlassStyle.EMBER)
-	_player_statuses = _label("")
-	_player_statuses.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-	_player_statuses.add_theme_font_size_override("font_size", 12)
-	_player_statuses.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_player_statuses = StatusRow.new()
 	player_box.add_child(_player_statuses)
 	var pad: Control = Control.new()
 	pad.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -565,7 +562,10 @@ func _handle_event(ev: Dictionary) -> void:
 			var idx: int = ev["idx"]
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
-				view.set_intent(str(ev.get("name", "")))
+				# The telegraph has been spent — clear it rather than restating
+				# the move on it. The float text below is what announces the
+				# name, and a chip is a promise, not a receipt.
+				view.clear_intent()
 				_float_text(view, str(ev.get("name", "")), Color(1, 0.85, 0.5))
 			await _wait(0.3)
 		EventTypes.SMOLDER_JUMP:
@@ -613,11 +613,10 @@ func _refresh_intent(idx: int) -> void:
 	if e.hp <= 0:
 		return
 	var mv: Dictionary = e.move()
-	var line: String = str(mv.get("name", String(e.move_key)))
-	var dmg_text: String = _fmt_enemy_dmg(_rules.preview_enemy_dmg(game.cb, e))
-	if dmg_text != "":
-		line += "  %s" % dmg_text
-	view.set_intent(line)
+	view.set_intent(
+		StringName(str(mv.get("intent", ""))),
+		_fmt_enemy_dmg(_rules.preview_enemy_dmg(game.cb, e)),
+		str(mv.get("name", String(e.move_key))))
 
 
 func _sync_all() -> void:
@@ -632,12 +631,7 @@ func _sync_all() -> void:
 	_player_ward.text = "Ward %d" % cb.player.block
 	_embers_label.text = "Lantern %d / %d" % [cb.embers, cb.ember_cap]
 	_end_turn.text = "End Turn\nEnergy %d" % cb.player.energy
-	var status_parts: Array[String] = []
-	for k: Variant in cb.player.statuses.keys():
-		var n: int = cb.player.statuses[k]
-		if n != 0:
-			status_parts.append("%s %d" % [str(k), n])
-	_player_statuses.text = " · ".join(status_parts)
+	_player_statuses.sync(cb.player.statuses, game.content.statuses)
 	_piles_label.text = "Draw %d\nDiscard %d\nExhaust %d" % [
 		cb.draw.size(), cb.discard.size(), cb.exhaust.size()
 	]
@@ -645,13 +639,15 @@ func _sync_all() -> void:
 		var view: EnemyView = _enemy_view(e.idx)
 		if view == null:
 			continue
-		var intent_line: String = ""
+		var intent: StringName = &""
+		var move_name: String = ""
 		var dmg_text: String = ""
 		if e.hp > 0:
 			var mv: Dictionary = e.move()
-			intent_line = str(mv.get("name", String(e.move_key)))
+			intent = StringName(str(mv.get("intent", "")))
+			move_name = str(mv.get("name", String(e.move_key)))
 			dmg_text = _fmt_enemy_dmg(_rules.preview_enemy_dmg(cb, e))
-		view.sync(e, dmg_text, intent_line)
+		view.sync(e, dmg_text, intent, move_name, game.content.statuses)
 	_hand.clear()
 	var first_living: int = -1
 	for e: EnemyCombatant in cb.enemies:

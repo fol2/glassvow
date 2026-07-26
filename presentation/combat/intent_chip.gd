@@ -76,8 +76,14 @@ var _glow: StyleBoxFlat
 
 ## A compound id (`attack_block`) leads with its primary. The benchmark gives all
 ## four attack_* variants the SAME red, so the colour follows the primary too.
+##
+## An EMPTY id is a real state, not a caller's mistake: `.intent:empty` is the
+## chip with nothing to telegraph, and `visible` below already answers for it.
+## An empty string splits to an empty array, so this has to answer with nothing
+## rather than index past the end of one.
 static func primary(intent: StringName) -> String:
-	return String(intent).split("_", false)[0]
+	var parts: PackedStringArray = String(intent).split("_", false)
+	return parts[0] if not parts.is_empty() else ""
 
 
 static func accent_for(intent: StringName) -> Color:
