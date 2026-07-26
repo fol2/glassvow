@@ -20,57 +20,6 @@ extends Control
 ## ponytail: 9 draw calls per chip. A status row is <10 chips, so this is free —
 ## move it to a canvas_item shader only if some screen ever shows dozens.
 
-## ── BEYOND THE BENCHMARK ──────────────────────────────────────────────────
-## Three things the ported chip cannot do, and one finding that governs all of
-## them. `style` picks a treatment; BENCH is the port above, unchanged.
-##
-## THE FINDING: the chip does not say whether a status is HELPING you. Seventeen
-## statuses render as seventeen small dark jewels with the same black halo, and
-## the only difference between "you are Cracked" and "you are Annealed" is art
-## detail that does not survive being drawn at 32px. In a fight the first
-## question is never "which status is that" — it is "am I in trouble". The
-## benchmark answers that question nowhere, and a hover tooltip is not an
-## answer at combat speed on a device with no cursor.
-##
-## Every treatment below therefore carries VALENCE before it carries identity:
-## you should know the row is bad news before you have read a single icon.
-##
-## The second finding is the game's own vocabulary. The statuses are not
-## abstract buffs — they are named Annealed, Vitrified, Brittle, Cracked,
-## Splinters, Dimmed, Alight, Beacon, Warmth, Smolder. Every one of them is a
-## state of GLASS or a state of LIGHT. The material was chosen for us; the port
-## just never used it.
-##
-##   SETTING   the chip is a leaded pane. A came bezel in the game's own
-##             hexagon cut (GlassWaystone's) holds the art, lit from behind.
-##             Brass came = boon, cold iron = affliction, and an affliction's
-##             pane is fractured. Valence reads from the SILHOUETTE's colour
-##             before the art resolves at all.
-##   LAMP      no shell, keeping the benchmark's honesty — but lit. The art is
-##             glass with a lamp behind it, throwing its own colour onto the
-##             scene. Boons burn warm, afflictions go cold and soak. Stack
-##             depth is carried by how far the light reaches.
-##   CABOCHON  the card's answer, at chip scale: one shader, an analytic dome
-##             normal, a real specular from the room's lamp. See
-##             status_gem.gdshader. An affliction is the same gem, soaked and
-##             cracked — never a different shape.
-enum Style { BENCH, SETTING, LAMP, CABOCHON }
-static var style: Style = Style.BENCH
-
-## The four that are done TO you. Everything else is a boon. This is a
-## presentation fact, not a domain one — content carries no `tone` for any
-## status (all seventeen are null), so the split has to live somewhere, and the
-## screen that has to colour them is the honest place for it until content
-## grows the field.
-## ponytail: a 4-name list, not a lookup service. Move it into content the day
-## a status needs valence anywhere other than this chip.
-const AFFLICTIONS: Array[StringName] = [&"weak", &"frail", &"vulnerable", &"poison"]
-
-const CAME_BOON: Color = Color(0.784, 0.604, 0.188)     # #C89A30 brass
-const CAME_BAD: Color = Color(0.145, 0.157, 0.212)      # cold iron
-const GLOW_BOON: Color = Color(1.0, 0.60, 0.30)         # lantern fire
-const GLOW_BAD: Color = Color(0.42, 0.62, 0.95)         # cold, and wrong
-
 const ICON_DIR: String = "res://assets/art/statuses/"
 
 ## `.schip` is a 32px square. The numeral hangs OUTSIDE it (right:-2, bottom:-4)
@@ -89,11 +38,23 @@ static var outline_px: float = OUTLINE_PX_DEFAULT
 static var num_outline: int = NUM_OUTLINE_DEFAULT
 
 
+const NUM_RIGHT: float = -2.0
+
+## Where the digits actually SIT. `bottom:-4px` positions a BOX, but a box is not
+## what the eye reads — digits carry no descender, so the bottom of "99" IS its
+## baseline. Anchoring the baseline is also the only way this placement survives
+## a change to NUM_SIZE: the old box height (NUM_SIZE + 4) shifted the numeral
+## vertically whenever the size moved, which nobody asked it to do.
+##
+## 33.0 is where the ported chip already put it — validated at 3x against the
+## live benchmark. This states that number instead of arriving at it by accident
+## through a guessed line-height.
+const NUM_BASELINE: float = 33.0
+
+
 static func reset_knobs() -> void:
 	outline_px = OUTLINE_PX_DEFAULT
 	num_outline = NUM_OUTLINE_DEFAULT
-const NUM_RIGHT: float = -2.0
-const NUM_BOTTOM: float = -4.0
 
 ## Below 2 the benchmark renders no `.n` element at all — one stack of anything
 ## is just the icon. Showing "1" on every chip is noise the row cannot afford.
@@ -107,12 +68,8 @@ const RING: Array[Vector2] = [
 	Vector2(0.70710678, -0.70710678), Vector2(-0.70710678, -0.70710678),
 ]
 
-const GEM_SHADER: String = "res://presentation/combat/status_gem.gdshader"
-
 var _tex: Texture2D = null
 var _count: Label
-var _id: StringName = &""
-var _count_value: int = 1
 
 
 static func icon_for(status_id: StringName) -> Texture2D:
@@ -136,7 +93,6 @@ static func numeral_font() -> FontFile:
 ## an id and a number to draw. The benchmark marks these `cursor: help`, so the
 ## tooltip is parity, not decoration.
 func _init(status_id: StringName, count: int = 1, info: Dictionary = {}) -> void:
-	_id = status_id
 	_tex = icon_for(status_id)
 	custom_minimum_size = Vector2(SIZE, SIZE)
 	size = Vector2(SIZE, SIZE)
@@ -164,135 +120,45 @@ func _init(status_id: StringName, count: int = 1, info: Dictionary = {}) -> void
 	add_child(_count)
 
 	set_count(count)
-	_apply_style()
 
 
 func set_count(value: int) -> void:
-	_count_value = value
 	_count.visible = value >= MIN_SHOWN_COUNT
 	if not _count.visible:
 		return
 	_count.text = str(value)
-	var w: float = numeral_font().get_string_size(
+	var f: FontFile = numeral_font()
+	var w: float = f.get_string_size(
 		_count.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, NUM_SIZE).x
-	var h: float = float(NUM_SIZE) + 4.0
-	# right:-2 / bottom:-4 from the box's far edges, so the numeral overhangs.
-	_count.size = Vector2(w, h)
-	_count.position = Vector2(SIZE - w - NUM_RIGHT, SIZE - h - NUM_BOTTOM)
-
-
-## Boon or affliction. Positive is the default because most statuses are, and
-## because an unknown status should not look like a threat.
-static func is_affliction(status_id: StringName) -> bool:
-	return AFFLICTIONS.has(status_id)
-
-
-## The hexagon every emblem in this game is seated in — GlassWaystone cuts the
-## same shape for the map. The fight and the road should not disagree about what
-## a piece of set glass looks like.
-static func _pane(centre: Vector2, w: float, h: float) -> PackedVector2Array:
-	return PackedVector2Array([
-		Vector2(centre.x, centre.y - h),
-		Vector2(centre.x + w, centre.y - h * 0.45),
-		Vector2(centre.x + w, centre.y + h * 0.45),
-		Vector2(centre.x, centre.y + h),
-		Vector2(centre.x - w, centre.y + h * 0.45),
-		Vector2(centre.x - w, centre.y - h * 0.45),
-	])
+	# The font's REAL line height — 18 at 12px, where the old box was NUM_SIZE + 4
+	# = 16. A 12px Alegreya glyph needs 13 of ascent and 5 of descent, so the
+	# numeral was overflowing its own Control by 2px and only looked right
+	# because a Label does not clip.
+	# right:-2 still sets the right edge; the baseline sets the height.
+	_count.size = Vector2(w, f.get_height(NUM_SIZE))
+	_count.position = Vector2(SIZE - w - NUM_RIGHT, NUM_BASELINE - f.get_ascent(NUM_SIZE))
 
 
 func _draw() -> void:
-	if _tex == null:
-		return
 	var box: Rect2 = Rect2(Vector2.ZERO, Vector2(SIZE, SIZE))
-	match style:
-		Style.SETTING:
-			_draw_setting(box)
-		Style.LAMP:
-			_draw_lamp(box)
-		Style.CABOCHON:
-			# The material shades it, but something still has to be RASTERISED or
-			# the shader never runs. Drawing the art itself also gives the
-			# fragment stage a sane 0..1 UV across the chip, which draw_rect
-			# would not.
-			draw_texture_rect(_tex, box, false, Color.WHITE)
-		_:
-			draw_outlined_texture(self, _tex, box, Color(0.0, 0.0, 0.0, 1.0), outline_px)
-
-
-## SETTING — the art seated in lead, lit from behind.
-func _draw_setting(box: Rect2) -> void:
-	var bad: bool = is_affliction(_id)
-	var c: Vector2 = box.get_center()
-	var came: Color = CAME_BAD if bad else CAME_BOON
-	var lamp: Color = GLOW_BAD if bad else GLOW_BOON
-	var pane: PackedVector2Array = _pane(c, SIZE * 0.47, SIZE * 0.54)
-
-	# The light BEHIND the pane, spilling past its own edges. Additive, because
-	# unlit glass contributes nothing — there is no "off" colour to blend to.
-	draw_circle(c, SIZE * 0.62, Color(lamp.r, lamp.g, lamp.b, 0.10 if bad else 0.16))
-	draw_colored_polygon(pane, Color(0.02, 0.027, 0.055, 0.88))
-	draw_colored_polygon(pane, Color(lamp.r, lamp.g, lamp.b, 0.16 if bad else 0.26))
-
-	# The art, inset so the came reads as holding it rather than overlapping it.
-	var inset: float = SIZE * 0.17
-	draw_texture_rect(_tex, box.grow(-inset), false,
-		Color(1.0, 1.0, 1.0, 0.55 if bad else 1.0))
-
-	# An affliction's pane is broken. Three strikes, not a spiderweb — at 32px
-	# anything denser turns into a grey smudge over the art.
-	if bad:
-		var f: Color = Color(0.86, 0.92, 1.0, 0.62)
-		draw_line(c + Vector2(-11.0, -6.0), c + Vector2(4.0, 3.0), f, 1.1)
-		draw_line(c + Vector2(4.0, 3.0), c + Vector2(1.0, 12.0), f, 1.0)
-		draw_line(c + Vector2(4.0, 3.0), c + Vector2(12.0, -1.0), f, 1.0)
-
-	var ring: PackedVector2Array = pane.duplicate()
-	ring.append(pane[0])
-	draw_polyline(ring, Color(0.02, 0.027, 0.055, 0.95), 2.6, true)
-	draw_polyline(ring, Color(came.r, came.g, came.b, 0.95 if bad else 1.0), 1.3, true)
-
-
-## LAMP — no shell at all. The art IS the glass; the chip is what gets through.
-func _draw_lamp(box: Rect2) -> void:
-	var bad: bool = is_affliction(_id)
-	var c: Vector2 = box.get_center()
-	var lamp: Color = GLOW_BAD if bad else GLOW_BOON
-	# Stack depth is REACH. A single stack of Warmth is a candle; nine is a
-	# lantern. The numeral still says the exact figure, but the row can be read
-	# for how much trouble it is in without reading any of them.
-	var depth: float = clampf(log(float(_count_value) + 1.0) / log(10.0), 0.0, 1.0)
-	var reach: float = SIZE * (0.52 + 0.34 * depth)
-
-	for i: int in range(3):
-		var t: float = 1.0 - float(i) / 3.0
-		draw_circle(c, reach * t,
-			Color(lamp.r, lamp.g, lamp.b, (0.05 if bad else 0.085) * (0.4 + 0.6 * depth)))
-
-	# An affliction takes light instead of giving it: the art goes dark and only
-	# its rim survives, which is what a silhouette against a window looks like.
-	if bad:
-		draw_outlined_texture(self, _tex, box, Color(lamp.r, lamp.g, lamp.b, 0.85), 1.3)
-		draw_texture_rect(_tex, box, false, Color(0.30, 0.36, 0.52, 1.0))
-	else:
-		draw_outlined_texture(self, _tex, box, Color(0.0, 0.0, 0.0, 0.92), outline_px)
-
-
-## CABOCHON needs a material rather than draw calls, and SETTING/LAMP need it
-## cleared again — a ShaderMaterial left behind would silently re-tint every
-## later style the same node is switched to.
-func _apply_style() -> void:
-	if style != Style.CABOCHON:
-		material = null
+	if _tex == null:
+		_draw_missing(box)
 		return
-	var mat: ShaderMaterial = ShaderMaterial.new()
-	mat.shader = load(GEM_SHADER) as Shader
-	var bad: bool = is_affliction(_id)
-	mat.set_shader_parameter("icon", _tex)
-	mat.set_shader_parameter("tone", GLOW_BAD if bad else GLOW_BOON)
-	mat.set_shader_parameter("affliction", 1.0 if bad else 0.0)
-	mat.set_shader_parameter("crack", 1.0 if bad else 0.0)
-	material = mat
+	draw_outlined_texture(self, _tex, box, Color(0.0, 0.0, 0.0, 1.0), outline_px)
+
+
+## A status whose PNG is not on disk drew NOTHING — an invisible 32px hole with
+## a stack count floating next to it, which reads as a layout bug rather than a
+## missing file, and costs an afternoon to trace back to a filename. Content is
+## data-driven and the statuses will outrun their art at some point, so the gap
+## says so out loud.
+## ponytail: a red box, not a fallback glyph. Content carries a `glyph` per
+## status — use it here the day a missing icon has to look acceptable to a
+## PLAYER rather than obvious to us.
+func _draw_missing(box: Rect2) -> void:
+	var hole: Rect2 = box.grow(-3.0)
+	draw_rect(hole, Color(0.0, 0.0, 0.0, 0.55))
+	draw_rect(hole, Color(1.0, 0.35, 0.40, 0.90), false, 1.0)
 
 
 ## The `#status-outline` port, also used by IntentChip for its icon rim — same

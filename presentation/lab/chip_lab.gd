@@ -86,11 +86,6 @@ func _init(content_ref: ContentDB) -> void:
 	_sheet.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_sheet)
 
-	# Args are read BEFORE the panel is built, not after. The panel paints the
-	# selected treatment in ember, and building it first meant --style= landed
-	# after the buttons had already decided which of them was lit — the sheet
-	# said CABOCHON while the panel said BENCH.
-	#
 	# --sheet drops the furniture for a clean contact sheet. A plain --shot
 	# captures the viewer as you see it, because the panel is the point now.
 	# --ground=N picks the surface, so a headless capture can check the one
@@ -102,50 +97,9 @@ func _init(content_ref: ContentDB) -> void:
 		elif arg.begins_with("--ground="):
 			_ground = clampi(int(arg.trim_prefix("--ground=")), 0, GROUNDS.size() - 1)
 			_field.color = GROUNDS[_ground]
-		elif arg.begins_with("--style="):
-			var key: String = arg.trim_prefix("--style=")
-			if STYLES.has(key):
-				StatusChip.style = STYLES[key]
-			else:
-				print("chip lab: no such style: %s — have %s"
-					% [key, ", ".join(PackedStringArray(STYLES.keys()))])
 	_build_panel()
 	_panel.visible = not hide_panel
 	_rebuild()
-
-
-## `--style=setting|lamp|cabochon` picks a treatment past the port. Default stays
-## BENCH so every shot taken before this existed still reproduces exactly.
-const STYLES: Dictionary = {
-	"bench": StatusChip.Style.BENCH,
-	"setting": StatusChip.Style.SETTING,
-	"lamp": StatusChip.Style.LAMP,
-	"cabochon": StatusChip.Style.CABOCHON,
-}
-
-
-const STYLE_NOTES: Dictionary = {
-	"bench": "the ported chip, unchanged — the floor everything is diffed against",
-	"setting": "art seated in lead, lit from behind. brass came = boon, cold iron = affliction",
-	"lamp": "no shell. boons burn warm and reach further as they stack; afflictions take light",
-	"cabochon": "status_gem.gdshader — an analytic dome lit by the room's lamp",
-}
-
-
-static func style_name() -> String:
-	for k: String in STYLES:
-		if StatusChip.style == STYLES[k]:
-			return k
-	return "bench"
-
-
-## The panel is rebuilt rather than just re-tinted, because the selected button
-## carries the ember and every other one has to give it up.
-func _set_style(key: String) -> void:
-	if not STYLES.has(key):
-		return
-	StatusChip.style = STYLES[key]
-	_rebuild_panel()
 
 
 # ---------------------------------------------------------------- control panel
@@ -177,35 +131,6 @@ func _build_panel() -> void:
 			_field.color = GROUNDS[_ground]
 			_rebuild())
 		grounds.add_child(b)
-
-	# The treatment picker. Flipping between the four is the whole point of the
-	# bench right now, and relaunching to compare them makes the differences
-	# impossible to actually see — the eye needs them back to back, not a
-	# minute apart.
-	_heading(col, "TREATMENT")
-	var styles: VBoxContainer = VBoxContainer.new()
-	styles.add_theme_constant_override("separation", 4)
-	col.add_child(styles)
-	var pair: HBoxContainer = null
-	var n: int = 0
-	for key: String in STYLES:
-		if n % 2 == 0:
-			pair = HBoxContainer.new()
-			pair.add_theme_constant_override("separation", 4)
-			styles.add_child(pair)
-		var sb: Button = Button.new()
-		sb.text = key.to_upper()
-		sb.custom_minimum_size = Vector2(140.0, 28.0)
-		sb.focus_mode = Control.FOCUS_NONE
-		sb.tooltip_text = str(STYLE_NOTES.get(key, ""))
-		# The selected one takes the ember, so the panel always says which
-		# treatment you are looking at — the sheet's title alone is too far
-		# from the buttons to answer that while you are clicking.
-		var on: bool = StatusChip.style == STYLES[key]
-		GlassStyle.style_button(sb, GlassStyle.EMBER if on else GlassStyle.GLASS)
-		sb.pressed.connect(_set_style.bind(key))
-		pair.add_child(sb)
-		n += 1
 
 	_heading(col, "INSPECTOR")
 	_slider(col, "zoom", 1.0, 5.0, 0.5, _zoom, func(v: float) -> void:
@@ -327,19 +252,14 @@ func _bake() -> void:
 
 # ------------------------------------------------------------------- selection
 
-## 1-4 flip the treatment, G cycles the ground. Unhandled rather than _gui_input
-## because the sheet does not take focus and the panel's buttons would eat the
-## key the moment one of them had been clicked.
+## G cycles the ground. Unhandled rather than _gui_input because the sheet does
+## not take focus, and the panel's buttons would eat the key the moment one of
+## them had been clicked.
 func _unhandled_key_input(event: InputEvent) -> void:
 	var k: InputEventKey = event as InputEventKey
 	if k == null or not k.pressed or k.echo:
 		return
-	var order: PackedStringArray = PackedStringArray(STYLES.keys())
-	var idx: int = k.keycode - KEY_1
-	if idx >= 0 and idx < order.size():
-		accept_event()
-		_set_style(order[idx])
-	elif k.keycode == KEY_G:
+	if k.keycode == KEY_G:
 		accept_event()
 		_ground = (_ground + 1) % GROUNDS.size()
 		_field.color = GROUNDS[_ground]
@@ -365,7 +285,7 @@ func _rebuild() -> void:
 		child.queue_free()
 	_cells.clear()
 
-	_title("CHIPS — %s · click a status to inspect it" % style_name().to_upper())
+	_title("CHIPS — benchmark port · click a status to inspect it")
 	_inspector()
 	var y: float = _section("STATUSES · 1 / 2 / 9 / 99 · 1 draws no numeral · actual size",
 		INSPECT_TOP + INSPECT_H)
