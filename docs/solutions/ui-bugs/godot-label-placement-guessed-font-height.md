@@ -92,7 +92,7 @@ states the validated number — `33.0` — instead of arriving at it by accident
 through a guessed line-height.
 
 And make a missing asset loud rather than invisible
-([status_chip.gd:158](../../../presentation/combat/status_chip.gd#L158)):
+([status_chip.gd:142](../../../presentation/combat/status_chip.gd#L142)):
 
 ```gdscript
 func _draw() -> void:
@@ -161,9 +161,9 @@ measurement that matches what the eye reads.
 
 ## Related Issues
 
-No prior entries in `docs/solutions/` — this is the first. Related in-repo
-context:
-
+- [Tune one card-surface recipe with a per-recipe uniform](../conventions/per-recipe-shader-knobs.md)
+  — the same discipline applied to shader work: the visual impression was wrong
+  there too, and only a numeric diff against a control settled it.
 - `AGENTS.md` / `CLAUDE.md` — the repo's verification contract (parse gate,
   import, test suite).
 - `.claude/skills/glassvow-godot/SKILL.md` — the binding engine contract.

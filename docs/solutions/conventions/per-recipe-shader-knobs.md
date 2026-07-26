@@ -188,3 +188,6 @@ Do not pass `--headless` together with `--shot=` — that combination hangs.
   uniform block
 - Commit `6373297` — the revert that ended the shared-model attempt
 - Commit `006aaea` — the same feature re-landed as `flake_deep` / `flake_wake`
+- [Godot Label placement guessed at font height](../ui-bugs/godot-label-placement-guessed-font-height.md)
+  — the same discipline in a different corner of the presentation layer: a
+  plausible visual hypothesis that measurement refuted
