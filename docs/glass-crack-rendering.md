@@ -2,8 +2,9 @@
 
 Status, 2026-07-26: the **death shatter is shipped and approved**. The **standing
 crack web is not** — it reads as a stack of same-radius circles, and the cause is
-geometric rather than a tuning miss. This document records what is built, why the
-circles are there, and the options on the table. No option has been chosen.
+geometric rather than a tuning miss. §6 records a three-seat review that settled
+most of the design surface; a second round is refining the one option that
+survived. Two changes are cleared to build ahead of it, §7 and §6.4 step 1.
 
 ## Why this file exists
 
@@ -256,10 +257,195 @@ Four branches, six for a big hit; forks at 45 % probability; and — worth notin
 polygon". The author had already met the *my-arc-looks-wrong* artefact and fixed
 it.
 
-## 6. On the table
+## 6. Council round 1, consolidated
 
-Numbering follows the session discussion. **Option 1 (port the feather) is
-rejected** — see 4.3.
+Three independent reviews, 2026-07-26, with deliberately different charges:
+architecture and synthesis; the minimal model plus a line-count audit; and a red
+team. They were briefed from this document and from source, and did not see each
+other's work. What follows separates what they **settled** from what is still
+open, and records where a seat was wrong, because two of the findings that read
+most decisively did not survive checking.
+
+### 6.1 The simplification thesis: false in lines, true in coupling
+
+All three seats independently concluded that a physics-first model does **not**
+reduce GDScript line count. The decomposition that made this legible came from the
+architecture seat and was then explicitly endorsed by the audit seat:
+
+Of the ~416 lines of crack-and-shatter machinery, roughly **247 are death-rite
+staging** — `mark_dead`, `shatter`, `_spawn_embers`, `_bounce` — which **no option
+on this table changes**. `_prism` survives for debris regardless, and
+`_touches_art`/`_alpha_at` survive and gain a caller. What a physics model actually
+replaces is about **81 lines**: `_clip`, `_disc`, `_voronoi`, `_cells`,
+`_death_sites`, `_death_cells`, and the site-push in `crack`.
+
+| variant | replaces | born | net |
+|---|---:|---:|---|
+| full stack (morphology + field + budget + ribbons + carve) | 81 | ~240 GDScript + ~40 shader | **~3×** |
+| same, with option 6 instead of option 7 | 81 | ~145 | ~+95 |
+| **cracks confined to the rite, standing render path deleted** | 81 + `GLASS_SHADER` (54) + standing setup/teardown | ~150–170 | **~50 lines saved** |
+
+So the thesis holds in exactly one branch — the one that also happens to be the
+`CONCEPTS.md`-compliant branch (§4.1). The two conclusions are independent and
+they agree.
+
+**What actually shrinks is coupling, and that is the argument worth making.**
+`_glass_area` currently sets coverage *and* disc radius from one number; `reach` in
+`_voronoi` is a single parameter switching between two unrelated intents;
+`MAX_SITES` caps a quantity with no physical meaning. A physics model is larger and
+**sparse** — every parameter has one job and a unit. Coupling is what produced the
+exitless tuning loop recorded in
+`docs/solutions/design-patterns/procedural-glass-reads-off-its-edges.md`, so the
+trade is worth making. Sell it as *fewer things that can be wrong*, not as fewer
+lines, or the first line count will be read as a failure.
+
+### 6.2 Settled unanimously
+
+1. **Cracks belong to the death rite, not to attrition.** Reached independently by
+   all three seats, and it is what `CONCEPTS.md:115-120` already says (§4.1). The
+   three-crack variant is, in the audit seat's words, *"a knob, not a model
+   change"*.
+2. **The shatter must consume the crack network** (§3.4). Every seat named it.
+3. **Memory is a non-argument.** The standing mesh is a few hundred triangles —
+   tens of kilobytes. The 113 MB/actor figure is dominated by the `SubViewport`
+   colour and depth attachments, so the crack model is *orthogonal* to the MSAA and
+   `oversample` levers. Reached independently by the audit seat after the red team
+   asserted a 32 MB saving, which is not physically possible at that triangle
+   count.
+
+### 6.3 Independently converged: how to carve cells from curves
+
+The architecture and audit seats, without contact, proposed the **identical**
+construction, and both explicitly rejected writing a DCEL or arrangement:
+
+> At death, run every arrested crack tip to completion with the same propagator
+> and `toughness = 0`. Then `Geometry2D.offset_polyline` each completed polyline
+> into a thin knife polygon, `Geometry2D.clip_polygons` the body polygon by each
+> knife in turn, and send non-convex results through
+> `Geometry2D.decompose_polygon_in_convex` for the collision shape.
+> `triangulate_polygon` and `_prism` are unchanged.
+
+The reason completion is needed is worth stating, because it is the pit a naive
+plan walks into: **a physically correct arrested network does not partition the
+plane.** A crack that stops on `drive < toughness` is a dangling edge that
+separates nothing. That is a consequence of the physics being *right*, not a bug in
+it. Clipper does the robustness, and the kerf the knife removes is physically
+correct.
+
+Failure modes the audit seat named, to carry into any implementation: numerical
+ill-conditioning where two cracks meet near-tangentially (jitter, or snap to a T or
+X); `offset_polyline` silently vanishing segments shorter than the offset (clamp
+minimum segment length to ≥ 2× offset); and clipping each completed polyline
+against the body polygon *before* carving, since completion can otherwise run
+outside the silhouette.
+
+### 6.4 Sequencing: two seats disagreed, and the conflict dissolves
+
+The audit seat wanted a cheap kill-test first — radial arms drawn as a polyline
+overlay, hours not days — with the carve last. The architecture seat wanted the
+**opposite**: build the shatter's consumption of the network *first*, while its
+input is still trivially convex, because *"a seam with one consumer is not a
+seam"*. Its argument is organisational rather than technical: the rite is shipped
+and approved, the standing web is broken, and rewiring the shatter is the hardest
+piece — so the natural path is to fix the visible thing, ship it, and never touch
+the approved thing. Break 3.4, the causal one, then survives.
+
+These do not actually conflict, because the architecture seat's step **needs no
+model at all**. Resolved order:
+
+| | step | blocked by |
+|---|---|---|
+| 0 | Give fracture its own RNG stream (§7) | nothing — precondition for every render comparison |
+| 1 | `_death_cells()` reads `_sites` plus a sparse background grid — i.e. port `_voronoiParts`, the primary that was never ported (§3.4) | nothing — fixes 3.4 today, on convex input, and makes the network a two-consumer seam before any generator exists |
+| 2 | Resolve the ordinary-damage `crack()` call against `CONCEPTS.md` (§4.1) | owner |
+| 3 | Kill-test: radial arms, damage → length, drawn as a polyline overlay | 1, 2 |
+| 4 | Stress field and screening | 3 reads as fracture |
+| 5 | Swap the carve to offset / clip / decompose (§6.3) | 4 |
+| 6 | Optional: distance field or ribbons for a visible 200 ms propagation | 5 |
+
+Cost, from the audit seat: about **2.4 ms of CPU per rite**, amortised over the
+200 ms rite at roughly **0.012 ms per frame** — negligible. The accumulating
+variant is a different matter: the architecture seat costed a growing
+nearest-segment query at roughly **115 000 distance queries per hit** in GDScript,
+two orders of magnitude more, which is a further argument for confining the web to
+the rite.
+
+### 6.5 Where a seat was wrong
+
+Recorded because both claims read as decisive and neither survived checking.
+
+- **The red team costed the simplification thesis against a ~20-line baseline** —
+  only the two entry functions, `crack` and `_rebuild_glass`, ignoring `_clip`,
+  `_disc`, `_voronoi`, `_cells`, `_prism`, `_death_sites`, `_death_cells`,
+  `_touches_art` and `_alpha_at`. Its direction was right and its magnitude
+  ("3× the code") came from shrinking the comparison base about twentyfold.
+- **Its determinism objection assumed the model would be domain or run state.** It
+  is not: there is no crack state anywhere in `domain/`, `port_fixtures/` or
+  `tests/`; `EnemyView` already draws from a view-local `RandomNumberGenerator`
+  rather than the run's seeded stream; and `docs/commercial-game-delivery.md` §3
+  states outright that non-RNG sources "may affect scheduling or UI, but not the
+  run's outcome" — fixtures compare event traces, not pixels. What survives is one
+  narrow rule: keep the model in presentation, on a presentation-local stream, and
+  do not persist a stress field. The *real* determinism defect is unrelated to the
+  contract and is recorded as §7.
+
+The red team's durable contributions are the pathological-input list (§6.6) and
+the steelman of the do-nothing branch, which is now the settled position.
+
+### 6.6 Pathological inputs any model must survive
+
+From the red team, and worth treating as an acceptance list rather than as
+objections:
+
+- The size ladder, 115 px sporeling to 1120 px leviathan — which is what makes a
+  body-relative length budget (option 5) a requirement rather than a nicety.
+- Paintings whose alpha has holes, tendrils or disconnected regions. A crack
+  cannot cross a void, so arrest needs a connectivity test, not just an alpha
+  sample.
+- Twenty small hits in one turn versus one enormous hit. A single budget rule has
+  to serve both, and tuning it for one can break the other.
+- Poison and other `indirect` damage, which must not read as impact at all.
+
+### 6.7 Corrections to the option table below
+
+Three, all from the architecture seat:
+
+- **Option 6 can animate propagation.** The table below implies only option 7 can.
+  A `min()` composite is monotone and incremental, so a growing crack is literally
+  "composite the next segment" — no mesh rebuild per frame, and cheaper than the
+  ribbon.
+- **Option 3 is not an alternative to option 4 — it is option 4's death half.** Its
+  stated weakness, that a straight cut reads as *cut* rather than *propagated*,
+  does not apply to debris, because a debris edge **is** a cut. Keeping option 3 as
+  the standing-web fallback keeps the wrong half of it.
+- **Option 6's field must be sized from `_box_u`.** 256² is right for a sporeling
+  and mush on a leviathan.
+
+One rule to disarm in advance: `CONCEPTS.md` › *Angle, not time* is scoped to
+surface channels on a card that freezes its viewport. A one-shot 120 ms
+propagation on an actor is an **event**, not a material channel, and the rule
+should not be cited against it.
+
+### 6.8 What round 1 never examined
+
+Every seat discussed how cracks are **generated**. None examined how the glass is
+**rendered** — reflection, refraction, Fresnel, dispersion. The current
+`GLASS_SHADER` fakes refraction by offsetting the body-texture lookup
+(`uv + r.xy * bend`), which is not a light path. Round 2 carries that axis.
+
+### The options, with status
+
+Numbering follows the original session discussion.
+
+| | option | status |
+|---|---|---|
+| 1 | port `GLASS_FEATHER` | **rejected**, §4.3 |
+| 2 | radial and concentric per blow | folded into 4 as its morphology |
+| 3 | sequential splitting | **reclassified** as 4's death half, §6.7 |
+| 4 | stress-field propagation | **the surviving option**, refining in round 2 |
+| 5 | Griffith length budget | **required**, not optional — see §6.6 |
+| 6 | incremental distance field | live; can animate, §6.7 |
+| 7 | crack ribbons | live; real thickness and MSAA on the lip |
 
 ### Option 2 — Radial and concentric, one figure per blow
 
@@ -367,16 +553,16 @@ into one `SurfaceTool` mesh per actor.
 
 ### Recommendation
 
-**Morphology 2, stopping rules 4-lite, amount 5, rendering 7 with 6 as the
-fallback, and the shatter consuming the crack network in every case.** That
-combination removes the disc rather than hiding it, produces T-junctions,
-prevents old cracks from moving, ties crack quantity to damage, and buys crack
-growth — with the shatter finally breaking the body along the cracks it was
-carrying.
+Superseded by §6, which is the consolidated position. The original recommendation
+— morphology 2, stopping rules 4-lite, amount 5, rendering 7 with 6 as fallback,
+and the shatter consuming the network in every case — survived review largely
+intact, with three corrections (§6.7) and one reclassification: option 3 is not
+the low-risk alternative it was tabled as. It is option 4's death half, and
+keeping it as the standing-web fallback keeps the wrong half.
 
-**Option 3 stays on the table as the low-risk alternative.** It fixes 3.1 through
-3.5 with the machinery already in the file and no new rendering path. What it
-cannot do is propagate, and its cuts read as cuts.
+The criterion has also moved. Line count is no longer the measure — **elegance
+is**, on the owner's ruling of 2026-07-26, together with performance as the first
+constraint. §6.1 explains why the line count was never the argument that mattered.
 
 Sequence, if the recommendation is taken: decide §4.1 first (does standing
 accumulation exist at all), then 2+4-lite as a CPU-side crack generator behind
