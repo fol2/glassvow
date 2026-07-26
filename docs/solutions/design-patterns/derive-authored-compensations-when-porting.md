@@ -79,8 +79,8 @@ Three payoffs, in increasing order of importance:
    foes', and are simply never read — dead data, not tuning.)
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
-   (`presentation/combat/enemy_view.gd:768` (`_update_shadow`); the swing itself
-   enters at `enemy_view.gd:1639` (`set_light_angle`)). No amount of tuning the CSS version
+   (`presentation/combat/enemy_view.gd:903` (`_update_shadow`); the swing itself
+   enters at `enemy_view.gd:1815` (`set_light_angle`)). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.
 
@@ -114,7 +114,7 @@ colour, a timing curve, a silhouette exaggeration. Those are design; port them.
 | --- | --- |
 | `--sh-skew`, `--sh-x`, `--sh-y` | Key light direction — horizontal run per unit height |
 | `--sh-sx`, `--sh-sy` | Ground-plane tilt (`GROUND_TILT_DEG = 78.0`, cos ≈ 0.21) × cast length |
-| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha: lowest opaque row is the contact point, its horizontal centroid is where weight sits (`enemy_view.gd:713` (`_read_contact`)) |
+| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha: lowest opaque row is the contact point, its horizontal centroid is where weight sits (`enemy_view.gd:848` (`_read_contact`)) |
 | `--sh-blur` | Distance from the contact point — sharp at the feet, diffuse at the far end |
 | `--sh-o` | **Kept — but promoted to a single global.** Opacity is taste, not geometry, and one taste serves every actor. The per-creature values are no longer read. |
 
@@ -125,11 +125,11 @@ measured the gap.
 ### The art-direction clamp (the part that is not physics)
 
 The honest projection at the key light's authored pitch of −38°
-(`enemy_view.gd:570` (in `_build_stage`)) gives a horizontal run of roughly 1.6 body heights. That is
+(`enemy_view.gd:694` (in `_build_stage`)) gives a horizontal run of roughly 1.6 body heights. That is
 geometrically correct and reads badly: in a side-on view a long cast makes the
 creature look like it is hovering over its own shadow. The derivation is therefore
 bounded back into a ground pool that still leans with the light
-(`enemy_view.gd:704-705` (`CAST_MIN`)):
+(`enemy_view.gd:839-840` (`CAST_MIN`)):
 
 ```gdscript
 const CAST_MIN: float = 0.6
@@ -154,7 +154,7 @@ first attempt set the basis and then set `scale` separately, and the shadow vani
 _shadow.transform.basis = tilt * shear
 _shadow.scale = Vector3(s, s, 1.0)
 
-# RIGHT — fold the scale into the same basis (enemy_view.gd:783-787 (in _update_shadow))
+# RIGHT — fold the scale into the same basis (enemy_view.gd:918-922 (in _update_shadow))
 var shear: Basis = Basis.IDENTITY
 shear.x = Vector3(s, 0.0, 0.0)
 shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * s, run * s, 0.0)
