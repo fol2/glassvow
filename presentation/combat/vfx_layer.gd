@@ -10,9 +10,8 @@ extends Control
 ## per node, so the particles are split across two passes — additive and normal —
 ## and the flash rides a third on top, which is the paint order `tick()` uses.
 ##
-## Not ported: the weather emitter (`setWeather`) — it belongs to the theme
-## record, and the slice carries none — and `LITE`'s particle-count halving,
-## which is a coarse-pointer budget this build does not have to meet.
+## Not ported: `LITE`'s particle-count halving, a coarse-pointer budget this
+## build does not have to meet.
 
 ## `ARCHETYPE_TONES` (vfx.js:419). What colour a landed blow throws.
 const TONES: Dictionary = {
@@ -45,6 +44,27 @@ const MAX_PARTS: int = 400
 const SHAKE_DECAY: float = 0.001
 const SHAKE_FLOOR: float = 0.1
 
+## `theme.weather` for act 1 (`packs/core/themes.js:21`) — ash. One fleck a
+## second, falling slowly, and one in twenty is an ember climbing the other way.
+## Inlined because the slice exporter carries no theme record; the day it does,
+## `set_weather` takes one.
+const ASH_RATE: float = 1.0
+const ASH_COLOURS: Array[Color] = [
+	Color(0.72156864, 0.6901961, 0.627451),   # #b8b0a0
+	Color(0.5411765, 0.5137255, 0.47058824),  # #8a8378
+]
+const ASH_EMBER: Color = Color(1.0, 0.81960785, 0.4)  # #ffd166
+const ASH_VX: Vector2 = Vector2(-6.0, 6.0)
+const ASH_VY: Vector2 = Vector2(10.0, 26.0)
+const ASH_SIZE: Vector2 = Vector2(1.4, 2.6)
+const ASH_DRIFT: float = 0.4
+const ASH_EMBER_RATE: float = 0.5
+## `life: 9, fade: 3` — a fleck crosses the stage rather than blinking out.
+const ASH_LIFE: float = 9.0
+const ASH_FADE: float = 3.0
+## `weather.boss ? 1.4 : 1` — a boss's air is thicker.
+const ASH_BOSS_MULT: float = 1.4
+
 
 ## One live particle. A class rather than the benchmark's object literal because
 ## every field here is read once per frame per particle, and a Dictionary makes
@@ -71,6 +91,9 @@ class Part:
 	var dur: float = 0.14
 	var a0: float = 0.0
 	var arc: float = 0.0
+	## An ambient fleck rather than an event's spark: cleared wholesale when the
+	## weather changes, and never counted against a burst's budget.
+	var weather: bool = false
 
 
 ## A full-stage colour wash.
@@ -117,6 +140,11 @@ var _shake_v: float = 0.0
 var _shake_at: Vector2 = Vector2.ZERO
 var _hitstop_left: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+## `weather` / `weatherAcc` — off until a fight turns it on, and the accumulator
+## is what makes a fractional rate emit at all.
+var _weather: bool = false
+var _weather_mult: float = 1.0
+var _weather_acc: float = 0.0
 
 
 func _init(shake_host: Control = null) -> void:
@@ -151,12 +179,55 @@ func _process(delta: float) -> void:
 	if _hitstop_left > 0.0:
 		_hitstop_left -= dt
 		return
+	_step_weather(dt)
 	_step_parts(dt)
 	_step_flashes(dt)
 	_step_shake(dt)
 	_norm.queue_redraw()
 	_add.queue_redraw()
 	_flash_pass.queue_redraw()
+
+
+## `setWeather(theme.weather, {boss})` — the air the fight happens in. Off
+## clears the flecks already in it, which is what leaving combat does.
+func set_weather(on: bool, boss: bool = false) -> void:
+	_weather = on
+	_weather_mult = ASH_BOSS_MULT if boss else 1.0
+	_weather_acc = 0.0
+	if not on:
+		var kept: Array[Part] = []
+		for p: Part in _parts:
+			if not p.weather:
+				kept.append(p)
+		_parts = kept
+
+
+func _step_weather(dt: float) -> void:
+	if not _weather or size.x <= 0.0:
+		return
+	_weather_acc += dt * ASH_RATE * _weather_mult
+	while _weather_acc >= 1.0:
+		_weather_acc -= 1.0
+		var ember: bool = _rng.randf() < ASH_EMBER_RATE * 0.1
+		var p: Part = Part.new()
+		p.kind = "dot"
+		p.weather = true
+		p.pos = Vector2(_rng.randf() * size.x, size.y + 6.0 if ember else -6.0)
+		p.vel = Vector2(
+			randfr(ASH_VX),
+			-randfr(Vector2(14.0, 34.0)) if ember else randfr(ASH_VY))
+		p.size = randfr(ASH_SIZE) * (1.3 if ember else 1.0)
+		p.colour = ASH_EMBER if ember else ASH_COLOURS[_rng.randi() % ASH_COLOURS.size()]
+		p.drag = ASH_DRIFT * 0.1
+		p.life = ASH_LIFE
+		p.fade = ASH_FADE
+		p.additive = ember
+		p.alpha = 0.9 if ember else 0.35
+		_push(p)
+
+
+func randfr(range_v: Vector2) -> float:
+	return range_v.x + _rng.randf() * (range_v.y - range_v.x)
 
 
 func _step_parts(dt: float) -> void:

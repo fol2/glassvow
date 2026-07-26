@@ -299,11 +299,11 @@ func _build_ui() -> void:
 ## live lamp tracking, and `.cast-shadow-layer` — EnemyView already projects its
 ## own shadow, so a shared layer only earns its place once shadows interact.
 func _build_stage() -> void:
-	var night: ColorRect = ColorRect.new()  # body { background: #000 }
-	night.color = Color.BLACK
-	night.set_anchors_preset(Control.PRESET_FULL_RECT)
-	night.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_shake_host.add_child(night)
+	# What is behind the plates. `body { background: #000 }` is the page, not the
+	# stage: the act's plate art has a transparent sky and `#bg3d` is what shows
+	# through it. Black there is the single biggest reason a still frame of this
+	# fight read as flat next to the same frame on the benchmark.
+	_shake_host.add_child(SkyField.new())
 
 	# Draw order is the benchmark's paint order: the plates and the breath sit
 	# at z 0, the mist at 2, the ledge band at 3.
@@ -374,6 +374,9 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 	# must never wait on a tween that will not tick.
 	_floaters.instant = seq.instant
 	_floaters.clear_all()
+	# `V.setWeather(theme?.weather, { boss: kind === 'boss' })` — the air a fight
+	# happens in, thicker for a boss.
+	_vfx.set_weather(not seq.instant, kind == "boss")
 	# Live play rolls the elite affix inside start_combat (traces passed it
 	# explicitly only to skip the rng draw).
 	game.apply({"t": "startCombat", "enemies": enemy_ids, "kind": kind})
