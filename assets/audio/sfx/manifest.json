@@ -1,0 +1,368 @@
+{
+  "schema_version": 1,
+  "pack_id": "ashglass-v1",
+  "theme": "Ashglass Vigil",
+  "source": "docs/sfx-ledger.md",
+  "items": {
+    "art": {
+      "file": "art.mp3",
+      "bytes": 16762,
+      "duration_seconds": 0.974,
+      "requested_duration_seconds": 1.0,
+      "prompt_influence": 0.6,
+      "prompt": "Lantern Art cast: compact magical burst from a lantern, warm amber bloom, glass harmonics, controlled whoosh, small ember spray, no choir, no vocals, no pipe organ, no long cinematic tail.",
+      "usage": "Lantern Art cast",
+      "review_note": "Signature power, but not a music cue. Leave room for combat BGM."
+    },
+    "atkEnemyHeavy": {
+      "file": "atkEnemyHeavy.mp3",
+      "bytes": 12582,
+      "duration_seconds": 0.711,
+      "requested_duration_seconds": 0.9,
+      "prompt_influence": 0.6,
+      "prompt": "Heavy enemy attack: large monster slam into glass and lantern ward, deep short impact, heavy crack spread, shards and dust, brutal but not cinematic, no roar, no gore, no vocals, no long reverb.",
+      "usage": "Enemy hits player, heavy",
+      "review_note": "Can have low end; trim the tail aggressively."
+    },
+    "atkEnemyLight": {
+      "file": "atkEnemyLight.mp3",
+      "bytes": 8821,
+      "duration_seconds": 0.49,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.55,
+      "prompt": "Short light enemy attack: small claw or bite scratches against glass and lantern ward, rougher than hero attacks, tiny dull body hit, dry, no gore, no monster voice, no melody, no long tail.",
+      "usage": "Enemy hits player, light",
+      "review_note": "Dirty texture, but still compact."
+    },
+    "atkEnemyMed": {
+      "file": "atkEnemyMed.mp3",
+      "bytes": 10075,
+      "duration_seconds": 0.559,
+      "requested_duration_seconds": 0.65,
+      "prompt_influence": 0.6,
+      "prompt": "Medium enemy attack: feral claw or stone weapon hits a glass hero, rough scrape, dull impact, a few cracks, dark gothic fantasy, dry and close, no gore, no vocals, no musical tone.",
+      "usage": "Enemy hits player, medium",
+      "review_note": "Needs more low-mid than hero medium, but not muddy."
+    },
+    "atkHeroHeavy": {
+      "file": "atkHeroHeavy.mp3",
+      "bytes": 10911,
+      "duration_seconds": 0.604,
+      "requested_duration_seconds": 0.8,
+      "prompt_influence": 0.6,
+      "prompt": "Heavy hero attack: glass greatsword or chisel-maul strike, strong brittle crack burst with a short low stone thud, stained-glass shards scatter, powerful but controlled, no explosion, no vocals, no melody.",
+      "usage": "Hero hits enemy, heavy",
+      "review_note": "Big, but do not mask boss BGM for more than a beat."
+    },
+    "atkHeroLight": {
+      "file": "atkHeroLight.mp3",
+      "bytes": 7567,
+      "duration_seconds": 0.402,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.55,
+      "prompt": "Short light hero attack in a stained-glass roguelite: quick clean glass blade nick, tiny brittle impact tick, a few small shards, elegant and dry, no gore, no vocals, no melody, no long tail.",
+      "usage": "Hero hits enemy, light",
+      "review_note": "Smallest readable attack. Avoid heavy bass."
+    },
+    "atkHeroMed": {
+      "file": "atkHeroMed.mp3",
+      "bytes": 9657,
+      "duration_seconds": 0.545,
+      "requested_duration_seconds": 0.6,
+      "prompt_influence": 0.6,
+      "prompt": "Medium hero attack: clean arcing glass sword slash into a stained-glass creature, sharp swipe followed by brittle crack impact, warm lantern edge, dry and punchy, no gore, no vocals, no music.",
+      "usage": "Hero hits enemy, medium",
+      "review_note": "Main attack workhorse; should feel good without being huge."
+    },
+    "bigDeath": {
+      "file": "bigDeath.mp3",
+      "bytes": 20524,
+      "duration_seconds": 1.214,
+      "requested_duration_seconds": 1.4,
+      "prompt_influence": 0.75,
+      "prompt": "Same shatter family as the signature glass shatter, but much bigger and lower: massive stained-glass body shatters with a deep low brittle crack, heavy shard scatter, thick low-end glass collapse, ember release, denser and lower than normal shatter, dramatic but short, no choir, no vocals, no pipe organ, no trailer boom.",
+      "usage": "Elite / boss death; also boss intro sting when a boss fight starts",
+      "review_note": "Same family as shatter, but lower = bigger. Boss intro + elite/boss death."
+    },
+    "block": {
+      "file": "block.mp3",
+      "bytes": 8403,
+      "duration_seconds": 0.452,
+      "requested_duration_seconds": 0.75,
+      "prompt_influence": 0.7,
+      "prompt": "Protective Ward forms: two or three soft glass panes slide into place with warm lantern light and gentle rising shimmer. Dense continuous sound from the first frame, close and dry, no silence gap, no melody, no choir, no long magical wash.",
+      "usage": "Gain Ward",
+      "review_note": "Softer and more positive than `blocked`. Regenerated denser for body length."
+    },
+    "blocked": {
+      "file": "blocked.mp3",
+      "bytes": 7149,
+      "duration_seconds": 0.388,
+      "requested_duration_seconds": 0.65,
+      "prompt_influence": 0.75,
+      "prompt": "Ward absorbs a hit: bright stained-glass shield ping then small crackle and dull stopped impact, the glass holds. Dense continuous sound from start, dry and short, no silence, no full shatter, no vocals, no melody, no long reverb.",
+      "usage": "Damage absorbed by Ward; thorns ping; adamant hold; guard-shatter companion",
+      "review_note": "Must be distinct from `block`: this is impact stopped, not shield creation. Regenerated denser for body length."
+    },
+    "buff": {
+      "file": "buff.mp3",
+      "bytes": 9239,
+      "duration_seconds": 0.501,
+      "requested_duration_seconds": 0.65,
+      "prompt_influence": 0.5,
+      "prompt": "Positive combat buff: concise warm glass harmonic rise, amber light settling into stained glass, small sparkle finish, dry and close, no melody phrase, no vocals, no choir.",
+      "usage": "Buff apply; power settle into glass",
+      "review_note": "Good effect, but less triumphant than `victory`."
+    },
+    "card": {
+      "file": "card.mp3",
+      "bytes": 9239,
+      "duration_seconds": 0.504,
+      "requested_duration_seconds": 0.6,
+      "prompt_influence": 0.55,
+      "prompt": "Short fantasy card movement: a heavy paper card flick with a thin leaded-glass edge scrape and tiny shard shimmer, close-mic, tactile, dry, no melody, no vocals, no big whoosh.",
+      "usage": "Card play motion, toss phial, discard/exhaust fidget, shop remove, event remove-card",
+      "review_note": "Must not sound like a weapon attack; this is UI/card handling."
+    },
+    "chip": {
+      "file": "chip.mp3",
+      "bytes": 8821,
+      "duration_seconds": 0.475,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.65,
+      "prompt": "Single facet chip: tiny high stained-glass tick with a micro-crack, precise and brittle, dry close-mic, very short, no melody, no vocals, no reverb tail.",
+      "usage": "Facet chip tick",
+      "review_note": "Needs to be sharp but not painful; repeated often."
+    },
+    "click": {
+      "file": "click.mp3",
+      "bytes": 5895,
+      "duration_seconds": 0.303,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.5,
+      "prompt": "Single short game UI click: a tiny stained-glass crystal tick with a soft wooden button stop underneath, elegant gothic fantasy, dry and close, fast decay, no melody, no vocals, no reverb tail.",
+      "usage": "Buttons, menus, title / embark / vigil actions, pile buttons, overlay OK/skip/close, Audio panel interactions",
+      "review_note": "Should be satisfying but not sharp. It will be heard hundreds of times."
+    },
+    "coin": {
+      "file": "coin.mp3",
+      "bytes": 9657,
+      "duration_seconds": 0.53,
+      "requested_duration_seconds": 0.55,
+      "prompt_influence": 0.5,
+      "prompt": "Gold coin feedback in gothic glass UI: small handful of old coins clink with a tiny crystal sparkle, close and clean, no casino sound, no melody, no vocals, no long tail.",
+      "usage": "Gold pickup, shop spend, reward gold fly",
+      "review_note": "Should work for both gain and spend. Keep it tasteful."
+    },
+    "death": {
+      "file": "death.mp3",
+      "bytes": 11746,
+      "duration_seconds": 0.675,
+      "requested_duration_seconds": 0.85,
+      "prompt_influence": 0.7,
+      "prompt": "Same shatter family as the signature glass shatter, but a smaller creature death: sharp stained-glass body bursts into shards with a brief ember release, brittle crack and scatter, mid register, dry and short, no explosion, no gore, no vocals, no melody.",
+      "usage": "Normal enemy death",
+      "review_note": "Same family as shatter; slightly smaller/shorter."
+    },
+    "debuff": {
+      "file": "debuff.mp3",
+      "bytes": 10493,
+      "duration_seconds": 0.601,
+      "requested_duration_seconds": 0.65,
+      "prompt_influence": 0.55,
+      "prompt": "Negative status applied: short descending warped-glass scrape with a smoky low tick, uneasy gothic fantasy, dry, no voice, no choir, no melody, no long tail.",
+      "usage": "Debuff apply; burn / self damage; can\u2019t-afford shop feedback; notices",
+      "review_note": "Should feel bad but not horror-jumpscare."
+    },
+    "defeat": {
+      "file": "defeat.mp3",
+      "bytes": 16762,
+      "duration_seconds": 0.977,
+      "requested_duration_seconds": 1.4,
+      "prompt_influence": 0.55,
+      "prompt": "Short fight defeat sting: descending glass crack, low ember guttering out, soft dark thud, restrained gothic sadness, no full music cue, no choir, no vocals, no pipe organ, no long tail.",
+      "usage": "Fight-lost SFX sting; BGM `defeat` is separate, run-end only",
+      "review_note": "Emotional, but not a long lament."
+    },
+    "draw": {
+      "file": "draw.mp3",
+      "bytes": 7985,
+      "duration_seconds": 0.426,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.5,
+      "prompt": "Fast single card draw into hand: soft paper slide, small glassy shimmer at the end, light and clean, dry, no melody, no vocals, no long reverb, designed for repeated rapid triggering.",
+      "usage": "Draw-to-hand, staggered once per card drawn",
+      "review_note": "Needs to stack cleanly when drawing multiple cards."
+    },
+    "ember": {
+      "file": "ember.mp3",
+      "bytes": 8403,
+      "duration_seconds": 0.469,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.6,
+      "prompt": "Single ember gained: warm spark pulled into a lantern, tiny upward whoosh and soft glass ping, intimate and magical, very short, no melody, no vocals, no fire roar, no long tail.",
+      "usage": "Ember gain",
+      "review_note": "Should feel collectible and warm."
+    },
+    "energy": {
+      "file": "energy.mp3",
+      "bytes": 7985,
+      "duration_seconds": 0.429,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.55,
+      "prompt": "Energy candle gained: quick candle-flame whoosh with a bright crystal spark, warm amber, very short, game feedback, no melody, no vocals, no big fire burst, no long tail.",
+      "usage": "Energy gain sample",
+      "review_note": "Small but noticeable; should not fight piano attacks in BGM."
+    },
+    "heal": {
+      "file": "heal.mp3",
+      "bytes": 10911,
+      "duration_seconds": 0.624,
+      "requested_duration_seconds": 0.9,
+      "prompt_influence": 0.5,
+      "prompt": "Healing sound: warm lantern breath, soft glass repair shimmer, tiny golden sparks, gentle and close, no choir, no vocals, no musical flourish, no long reverb tail.",
+      "usage": "Heal feedback, combat heal, rest heal",
+      "review_note": "Should be comforting, not angelic."
+    },
+    "hit": {
+      "file": "hit.mp3",
+      "bytes": 13836,
+      "duration_seconds": 0.8,
+      "requested_duration_seconds": 0.8,
+      "prompt_influence": 0.5,
+      "prompt": "Heavy dull body impact thud with a short low punch, fleshy and solid, no scream.",
+      "usage": "legacy; sfx.hit() is a no-op",
+      "review_note": "Compatibility file only; do not regenerate for the live attack family."
+    },
+    "hover": {
+      "file": "hover.mp3",
+      "bytes": 6731,
+      "duration_seconds": 0.355,
+      "requested_duration_seconds": 0.5,
+      "prompt_influence": 0.45,
+      "prompt": "Very soft game UI hover glint: a faint crystal/celesta-like glass ping, airy and polite, extremely short, low volume, dry, no melody, no vocals, no magical whoosh, no long tail.",
+      "usage": "Card hover in hand, targeting / option hover, lamplighter art hover",
+      "review_note": "Quieter than `click`; safe under rapid mouse movement."
+    },
+    "kindle": {
+      "file": "kindle.mp3",
+      "bytes": 11328,
+      "duration_seconds": 0.63,
+      "requested_duration_seconds": 0.85,
+      "prompt_influence": 0.6,
+      "prompt": "Kindle a card into the lantern: paper and glass edge ignites inward, soft ember whoosh, small crackle, warm suction into flame, no roaring fire, no vocals, no melody, no long ambience.",
+      "usage": "Kindle / lantern feed",
+      "review_note": "More physical than `ember`; less explosive than `art`."
+    },
+    "map": {
+      "file": "map.mp3",
+      "bytes": 11328,
+      "duration_seconds": 0.636,
+      "requested_duration_seconds": 0.65,
+      "prompt_influence": 0.5,
+      "prompt": "Tower map node travel: lantern marker slides and locks onto a stone-and-glass spire map, soft paper/stone movement, tiny flame tick, dry and close, no melody, no vocals, no ambience bed.",
+      "usage": "Map enter / node travel one-shot, not map BGM",
+      "review_note": "Subtle navigation feedback; do not make it a whoosh transition."
+    },
+    "omen": {
+      "file": "omen.mp3",
+      "bytes": 20524,
+      "duration_seconds": 1.21,
+      "requested_duration_seconds": 1.2,
+      "prompt_influence": 0.65,
+      "prompt": "Omen banner reveal: dark bass breath, broken-glass rune vibration, short ominous swell, restrained gothic ceremony, no choir, no spoken whisper, no pipe organ, no horror scream, no long tail.",
+      "usage": "Omen banner / omen reveal on act entry",
+      "review_note": "Can be darker than other UI, but avoid over-scoring the BGM."
+    },
+    "poison": {
+      "file": "poison.mp3",
+      "bytes": 12164,
+      "duration_seconds": 0.681,
+      "requested_duration_seconds": 0.7,
+      "prompt_influence": 0.55,
+      "prompt": "Smolder status sound: tiny ember hiss on glass, warm crackle, faint acidic smoke texture, compact and close, no roaring fire, no vocals, no melody, no long ambience.",
+      "usage": "Smolder / poison apply or tick, enemy or player",
+      "review_note": "This represents Smolder more than literal poison. Warm + dangerous."
+    },
+    "potion": {
+      "file": "potion.mp3",
+      "bytes": 11328,
+      "duration_seconds": 0.65,
+      "requested_duration_seconds": 0.65,
+      "prompt_influence": 0.55,
+      "prompt": "Small phial sound: glass bottle cork pop, glowing liquid swirl, tiny crystal clink, magical but compact, dry, no water splash bed, no vocals, no melody, no long reverb.",
+      "usage": "Use or gain phial",
+      "review_note": "Needs to read as glass bottle, not big potion cauldron."
+    },
+    "relic": {
+      "file": "relic.mp3",
+      "bytes": 15090,
+      "duration_seconds": 0.88,
+      "requested_duration_seconds": 0.9,
+      "prompt_influence": 0.55,
+      "prompt": "Relic gained or monument claimed: antique glass-and-metal object settles into place, warm ceremonial chime, small stone thump, restrained gothic fantasy, no choir, no vocals, no full melody.",
+      "usage": "Relic gain, lamplighter confirm, unlock toasts, monument claim",
+      "review_note": "This is the premium reward sound; dignified, not flashy."
+    },
+    "shatter": {
+      "file": "shatter.mp3",
+      "bytes": 11328,
+      "duration_seconds": 0.65,
+      "requested_duration_seconds": 0.85,
+      "prompt_influence": 0.7,
+      "prompt": "Signature glass shatter: stained-glass creature bursts into sharp shards, ember releases from inside, strong brittle crack and scatter, controlled fantasy impact, no explosion, no gore, no vocals, no melody.",
+      "usage": "Shatter burst",
+      "review_note": "Core brand sound. It must beat `death` in clarity, not just volume."
+    },
+    "slash": {
+      "file": "slash.mp3",
+      "bytes": 9657,
+      "duration_seconds": 0.545,
+      "requested_duration_seconds": 0.6,
+      "prompt_influence": 0.6,
+      "prompt": "(legacy backup of atkHeroMed \u2014 not a live attack path)",
+      "usage": "legacy; sfx.slash() routes to medium hero attack",
+      "review_note": "Compatibility file only; do not regenerate for the live attack family."
+    },
+    "stagger": {
+      "file": "stagger.mp3",
+      "bytes": 10911,
+      "duration_seconds": 0.616,
+      "requested_duration_seconds": 0.65,
+      "prompt_influence": 0.55,
+      "prompt": "Enemy staggered: warped low glass wobble, brittle knees failing, short unstable scrape, dark fantasy, dry, no voice, no monster groan, no melody, no long reverb.",
+      "usage": "Enemy staggered",
+      "review_note": "Should read as denied action, not death."
+    },
+    "turn": {
+      "file": "turn.mp3",
+      "bytes": 10911,
+      "duration_seconds": 0.615,
+      "requested_duration_seconds": 0.7,
+      "prompt_influence": 0.5,
+      "prompt": "Elegant turn banner sound: two small glass chimes and a soft lantern sweep, clear game feedback, restrained gothic UI, dry, no melody beyond two notes, no vocals, no long tail.",
+      "usage": "\u201cYour turn\u201d banner, when turn number > 1",
+      "review_note": "Clear but not celebratory; it repeats often."
+    },
+    "upgrade": {
+      "file": "upgrade.mp3",
+      "bytes": 11746,
+      "duration_seconds": 0.672,
+      "requested_duration_seconds": 0.9,
+      "prompt_influence": 0.55,
+      "prompt": "Card upgrade at a forgotten forge: small metal tap, stained glass brightens, short rising sparkle, warm lantern heat, concise game reward, no music phrase, no vocals, no long reverb.",
+      "usage": "Card upgrade, rest / forge / event / reward",
+      "review_note": "Should feel transformative but shorter than a full reward fanfare."
+    },
+    "victory": {
+      "file": "victory.mp3",
+      "bytes": 15926,
+      "duration_seconds": 0.917,
+      "requested_duration_seconds": 1.2,
+      "prompt_influence": 0.55,
+      "prompt": "Short fight victory sting: uplifting stained-glass sparkle, three quick crystal notes and a warm lantern breath, concise game reward, no full music cue, no choir, no vocals, no long reverb.",
+      "usage": "Fight-won SFX sting; BGM `victory` is separate, run-end only",
+      "review_note": "This is combat win, not the dawn BGM. Keep it small."
+    }
+  }
+}

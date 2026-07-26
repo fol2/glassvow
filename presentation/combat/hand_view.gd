@@ -8,6 +8,15 @@ extends Control
 signal card_tapped(uid: int)
 signal card_drag_moved(uid: int, global_pos: Vector2)
 signal card_drag_released(uid: int, global_pos: Vector2)
+## Which card the pointer is over, or -1 for none. `cardHover` (combat.js:1375)
+## fires only when the answer CHANGES, which is what keeps `sfx.hover()` from
+## machine-gunning as the cursor crosses a seat.
+signal card_hover_changed(uid: int)
+## The drag armed, or was refused because the card can neither be played nor
+## burned. `beginCardDrag` (combat.js:1522) answers the first with a hover tick
+## and the second with a rejection.
+signal card_drag_armed(uid: int)
+signal card_drag_refused(uid: int)
 
 const SLOP: float = 14.0
 ## The fan's gap rule, from the benchmark (combat.js:460). `GAP_MAX` is the
@@ -68,6 +77,11 @@ var kindle_mode: bool = false
 ## is moved into place after that without ever changing size. The seats were laid
 ## out against a stale position and stayed there — 12px too low, every hand.
 var stage_overhang: float = 0.0
+
+## `S.hoveredCard` — the seat the pointer is over, -1 for none. Held here
+## rather than inferred per event so the change test has something to compare
+## against, and so a card leaving under the cursor cannot leave it stuck.
+var hovered_uid: int = -1
 
 var _views: Dictionary = {}  # uid -> CardView
 var _order: Array[int] = []  # layout order, independent of z-order changes
@@ -135,6 +149,9 @@ func remove_card(uid: int) -> void:
 	var view: CardView = _views.get(uid)
 	if view == null:
 		return
+	if hovered_uid == uid:
+		hovered_uid = -1
+		card_hover_changed.emit(-1)
 	if _drag_uid == uid:
 		_drag_uid = -1
 		_dragging = false
@@ -450,8 +467,10 @@ func _on_card_moved_to(uid: int, global_pos: Vector2) -> void:
 		if global_pos.distance_to(_press_pos) < SLOP:
 			return
 		if not view.playable:
+			card_drag_refused.emit(uid)
 			return  # unplayable cards can be tapped, never dragged
 		_dragging = true
+		card_drag_armed.emit(uid)
 		# `beginCardDrag` (combat.js:1547): a card that targets an enemy AIMS —
 		# it keeps its seat and the screen throws an arc from it — and every
 		# other card is carried. Kindle turns the whole hand into fuel, so
@@ -487,6 +506,12 @@ func _on_card_hover(uid: int, hovering: bool) -> void:
 	var view: CardView = _views.get(uid)
 	if view == null:
 		return
+	# `if (S.hoveredCard !== uid)` — the tick and the relayout are on the
+	# CHANGE, not on every move the pointer makes inside one seat.
+	var next: int = uid if hovering else -1
+	if next != hovered_uid and (hovering or hovered_uid == uid):
+		hovered_uid = next
+		card_hover_changed.emit(next)
 	view.snap_home()
 	if hovering:
 		view.position.y -= HOVER_RAISE

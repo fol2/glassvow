@@ -176,6 +176,10 @@ var _hero_swung: bool = true
 var _shake_host: Control
 var _vfx: VfxLayer
 var _floaters: Floaters
+## `sfx` (audio.js). Owned here rather than reached for globally: the fight is
+## the only screen that has sound yet, and `main.gd` is the sole composition
+## root, so a second owner would have to be handed one rather than find one.
+var _sfx: SfxBus
 ## `vfxSource.archetype` — which blow language the action now resolving speaks.
 ## Set by `play` from the card's own `vfx` field and by `enemyAct` from the
 ## body's kind, then read by every hit until the next action replaces it.
@@ -253,6 +257,9 @@ func _build_ui() -> void:
 	_hand.card_tapped.connect(_on_card_tapped)
 	_hand.card_drag_moved.connect(_on_card_drag_moved)
 	_hand.card_drag_released.connect(_on_card_drag_released)
+	_hand.card_hover_changed.connect(_on_card_hover_changed)
+	_hand.card_drag_armed.connect(_on_card_drag_armed)
+	_hand.card_drag_refused.connect(_on_card_drag_refused)
 	_shake_host.add_child(_hand)
 
 	# Above the hand: the arc launches 80px over the card it comes from, so it
@@ -268,6 +275,9 @@ func _build_ui() -> void:
 	add_child(_vfx)
 	_floaters = Floaters.new()
 	add_child(_floaters)
+
+	_sfx = SfxBus.new()
+	add_child(_sfx)
 
 	_inspect = PanelContainer.new()
 	_inspect.set_anchors_preset(Control.PRESET_CENTER)
@@ -645,6 +655,23 @@ func _on_inspect_input(event: InputEvent) -> void:
 		_inspect.visible = false
 
 
+## `cardHover` (combat.js:1375). One tick per seat crossed, never per pixel.
+func _on_card_hover_changed(uid: int) -> void:
+	if uid >= 0:
+		_sfx.play(&"hover")
+
+
+## `beginCardDrag` (combat.js:1534) — lifting a card ticks like hovering one.
+func _on_card_drag_armed(_uid: int) -> void:
+	_sfx.play(&"hover")
+
+
+## `beginCardDrag` (combat.js:1540) — a card that can neither be paid for nor
+## burned refuses out loud, so a dead drag is not mistaken for a dropped input.
+func _on_card_drag_refused(_uid: int) -> void:
+	_sfx.play(&"debuff")
+
+
 func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
 	if not _hand.is_aiming():
 		return
@@ -692,6 +719,7 @@ func _enemy_at(global_pos: Vector2) -> int:
 func _on_end_turn_pressed() -> void:
 	if seq.is_busy() or game.cb.over:
 		return
+	_sfx.play(&"click")
 	seq.enqueue(game.apply({"t": "endTurn"}))
 
 
@@ -700,6 +728,8 @@ func _on_art_pressed() -> void:
 		return
 	if _rules.can_use_art(game.run, game.cb):
 		seq.enqueue(game.apply({"t": "useArt"}))
+	else:
+		_sfx.play(&"debuff")
 
 
 func _on_kindle_toggled(on: bool) -> void:
@@ -805,6 +835,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var n: int = ev["n"]
 			_push_hud()
 			if n > 1:
+				_sfx.play(&"turn")
 				_floaters.banner(SAY_YOUR_TURN, "turn")
 				await _wait(0.5)
 			else:
@@ -813,12 +844,14 @@ func _handle_event(ev: Dictionary) -> void:
 			var idx: int = ev["idx"]
 			_refresh_intent(idx)
 		EventTypes.ENERGY:
+			_sfx.play(&"energy")
 			_push_hud()
 			_hud.pulse(&"energy")
 		EventTypes.DRAW:
 			var uid: int = ev["uid"]
 			var inst: CardInst = _find_card(uid)
 			if inst != null:
+				_sfx.play(&"draw")
 				_hand.add_card(inst, _rules.card_data(inst), _rules.eff_cost(inst))
 				# The wave is paced by its own size, so the handler asks how many
 				# draws it heads rather than guessing from the hand.
@@ -843,6 +876,7 @@ func _handle_event(ev: Dictionary) -> void:
 				_archetype = str(_rules.card_data(inst).get("vfx", "slash"))
 			_hit_seq = 0
 			_hero_swung = false  # this card's swing is owed
+			_sfx.play(&"card")
 			# `if (c && targetIdx != null && cb.enemies[targetIdx])` — a targeted
 			# attack does not go quietly to the discard from the hand. The card
 			# itself streaks into the foe, and the `toDiscard` that follows moves
@@ -863,6 +897,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var chips: int = ev["chips"]
 			var facet_max: int = ev["facetMax"]
 			var at: Vector2 = _enemy_centre(idx)
+			_sfx.play(&"chip")
 			_vfx.burst(at, Color(0.9098039, 0.95686275, 1.0), 5, 190.0,
 				TAU, 0.0, 1.8, 240.0)
 			var view: EnemyView = _enemy_view(idx)
@@ -873,6 +908,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var idx: int = ev["idx"]
 			var facet_max: int = ev["facetMax"]
 			var at: Vector2 = _enemy_centre(idx)
+			_sfx.play(&"shatter")
 			_vfx.hitstop(90.0)
 			_vfx.ring(at, GLASS_BLUE, 10.0, 700.0, 5.0)
 			_vfx.burst(at, GLASS_BLUE, 26, 430.0, TAU, 0.0, 2.4, 300.0)
@@ -886,6 +922,7 @@ func _handle_event(ev: Dictionary) -> void:
 			await _wait(0.38)
 		EventTypes.STAGGERED:
 			var idx: int = ev["idx"]
+			_sfx.play(&"stagger")
 			_float(_enemy_centre(idx) + Vector2(0.0, -76.0), SAY_STAGGERED,
 				"staggerf", WARM_GOLD)
 			await _wait(0.52)
@@ -894,6 +931,7 @@ func _handle_event(ev: Dictionary) -> void:
 			await _die(dead_idx)
 		EventTypes.EMBER:
 			var n: int = ev.get("n", 0)
+			_sfx.play(&"ember")
 			_push_hud()
 			if n > 0:
 				var to: Vector2 = _hud.lantern_rect().get_center()
@@ -907,6 +945,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var total: int = ev["total"]
 			var n: int = ev.get("n", total)
 			var at: Vector2 = _who_centre(who_v)
+			_sfx.play(&"block")
 			if typeof(who_v) == TYPE_STRING:
 				if _hero != null:
 					_hero.set_ward(total)
@@ -930,6 +969,11 @@ func _handle_event(ev: Dictionary) -> void:
 			# says so, or if it is strength going the wrong way.
 			var debuff: bool = str(info.get("kind", "buff")) == "debuff" \
 				or (id == "str" and n < 0)
+			# `(ev.id === 'poison' ? sfx.poison : isDebuff ? sfx.debuff : sfx.buff)()`
+			if id == "poison":
+				_sfx.play(&"poison")
+			else:
+				_sfx.play(&"debuff" if debuff else &"buff")
 			var sign: String = "+" if n > 0 else ""
 			_float(at + Vector2(0.0, -46.0), "%s%d %s" % [sign, n, display],
 				"debufff" if debuff else "bufff")
@@ -939,6 +983,7 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.HEAL:
 			var n: int = ev["n"]
 			var at: Vector2 = _who_centre(ev.get("who", "player"))
+			_sfx.play(&"heal")
 			_vfx.motes(at, HEAL_GREEN, 14)
 			_float(at + Vector2(0.0, -30.0), "+%d" % n, "healf")
 			_push_hud()
@@ -956,6 +1001,7 @@ func _handle_event(ev: Dictionary) -> void:
 			# settles into the glass. The card goes, and what travels to the hero
 			# is the power itself.
 			var uid: int = ev["uid"]
+			_sfx.play(&"buff")
 			var view: CardView = _hand.card_view(uid)
 			var from: Vector2 = view.get_global_rect().get_center() if view != null \
 				else Vector2(size.x * 0.5, size.y - 180.0)
@@ -967,6 +1013,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.motes(hero_at, POWER_LILAC, 8)
 		EventTypes.KINDLE:
 			var uid: int = ev["uid"]
+			_sfx.play(&"kindle")
 			# Burnt for embers is still burnt: `kindleFromHand` calls
 			# `exhaust_card` right after queueing this (combat.gd:752), so the
 			# card lands in ash. The EXHAUST that follows finds it already gone
@@ -994,6 +1041,7 @@ func _handle_event(ev: Dictionary) -> void:
 			if tone_hex.begins_with("#"):
 				tone = Color(tone_hex)
 			var hero_at: Vector2 = _hero_centre()
+			_sfx.play(&"art")
 			# An art is the lantern's doing: it flares there and settles on the
 			# body. The hero does not swing for it (`!startsWith('art:')`).
 			_archetype = "fire"
@@ -1006,9 +1054,12 @@ func _handle_event(ev: Dictionary) -> void:
 			_push_hud()
 			await _wait(0.12)
 		EventTypes.POTION:
+			_sfx.play(&"potion")
 			await _wait(0.12)
 		EventTypes.DISCARD_HAND:
 			var uids: Array = ev["uids"]
+			if not uids.is_empty():
+				_sfx.play(&"card")
 			var discard_rect: Rect2 = _hud.pile_rect(&"discard")
 			for uid_v: Variant in uids:
 				var uid_i: int = uid_v
@@ -1026,6 +1077,7 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.SMOLDER_JUMP:
 			var from_idx: int = ev.get("from", -1)
 			var to_idx: int = ev.get("to", -1)
+			_sfx.play(&"poison")
 			_vfx.fly_to(_enemy_centre(from_idx), _enemy_centre(to_idx),
 				POISON_TAN, 5, 7.0, 0.46)
 			await _wait(0.4)
@@ -1037,6 +1089,7 @@ func _handle_event(ev: Dictionary) -> void:
 			await _wait(0.09)
 		EventTypes.VICTORY:
 			await _wait(0.32)
+			_sfx.play(&"victory")
 			_vfx.flash(Color(1.0, 0.9137255, 0.6745098), 0.16, 0.6)
 			var perfect: bool = ev.get("perfect", false)
 			if perfect:
@@ -1044,6 +1097,7 @@ func _handle_event(ev: Dictionary) -> void:
 				await _wait(0.5)
 		EventTypes.DEFEAT:
 			await _wait(0.4)
+			_sfx.play(&"defeat")
 			_vfx.flash(Color(0.2, 0.0, 0.0), 0.5, 1.2)
 			await _wait(0.9)
 		_:
@@ -1066,6 +1120,7 @@ func _hit_enemy(ev: Dictionary) -> void:
 	var at: Vector2 = _enemy_centre(idx)
 
 	if poison:
+		_sfx.play(&"poison")
 		_vfx.motes(at, POISON_TAN, 14)
 		_float(at + Vector2(0.0, -20.0), str(amount), "poisonf", POISON_TAN)
 	else:
@@ -1076,10 +1131,12 @@ func _hit_enemy(ev: Dictionary) -> void:
 		if not _hero_swung and _hero != null:
 			_hero_swung = true
 			await _wait(_hero.lunge("humanoid"))
+		_sfx.attack(&"hero", amount, blocked)
 		_vfx.archetype_hit(at, _archetype, minf(1.0, float(amount) / POWER_SCALE))
 		if view != null:
 			view.take_hit(true)  # choreoHit — the recoil and the hurt flash
 		if blocked > 0:
+			_sfx.play(&"blocked")
 			_float(at + Vector2(0.0, 26.0), str(blocked), "blockedf",
 				Color(0, 0, 0, 0), 0.0, WARD_ICON, 19)
 			_vfx.burst(at + Vector2(0.0, 8.0), WARD_BLUE, 9, 210.0, TAU, 0.0,
@@ -1142,8 +1199,14 @@ func _hit_player(ev: Dictionary) -> void:
 	var at: Vector2 = _hero_centre()
 
 	if source == "poison":
+		_sfx.play(&"poison")
 		_vfx.motes(at, POISON_TAN, 14)
+	elif source == "burn" or source == "self":
+		_sfx.play(&"debuff")
+	elif source == "thorns":
+		_sfx.play(&"blocked")
 	elif not indirect:
+		_sfx.attack(&"enemy", amount, blocked)
 		if amount > 0:
 			_vfx.flash(Color(1.0, 0.13333334, 0.2), minf(0.05 + float(amount) * 0.012, 0.3), 0.3)
 		_vfx.archetype_hit(at, _archetype, minf(1.0, float(amount) / POWER_SCALE))
@@ -1151,6 +1214,7 @@ func _hit_player(ev: Dictionary) -> void:
 		_hero.set_hp(maxi(0, hp_after), game.cb.player.max_hp)
 		_hero.take_hit(not indirect)
 	if blocked > 0:
+		_sfx.play(&"blocked")
 		_float(at + Vector2(0.0, 30.0), str(blocked), "blockedf",
 			Color(0, 0, 0, 0), 0.0, WARD_ICON, 19)
 		_vfx.burst(at + Vector2(0.0, 8.0), WARD_BLUE, 9, 210.0, TAU, 0.0, 2.0, 260.0)
@@ -1191,6 +1255,7 @@ func _die(idx: int) -> void:
 	if view != null:
 		view.mark_dead(beat)
 	await _wait(beat)
+	_sfx.play(&"bigDeath" if (boss or elite) else &"death")
 	_vfx.burst(at, GLASS_BLUE, 30, 480.0, TAU, 0.0, 2.6, 340.0)
 	_vfx.burst(at, SOUL_VIOLET, 26, 380.0, TAU, 0.0, 3.2, 60.0, "dot")
 	_vfx.ring(at, REVIVE_LILAC, 12.0, 720.0, 6.0)
@@ -1235,6 +1300,7 @@ func _enemy_act(ev: Dictionary) -> void:
 func _reshuffle_ceremony(n: int) -> void:
 	if seq.instant:
 		return
+	_sfx.play(&"card")
 	# `Array.from({ length: n })` — one back per card, capped: past eight the
 	# stream stops reading as more cards and starts reading as noise.
 	_hud.fly_backs(&"discard", &"draw", maxi(1, mini(n, 8)), 0.6)
