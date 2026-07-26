@@ -62,6 +62,19 @@ const LOW_HP_ALPHA: Array[float] = [0.12, 0.34]
 ##
 ## The full-screen version of the same radial is `#lantern`, which is empty until
 ## defeat — see `_build_lantern`.
+## Ambient darkening, OFF by owner decision (2026-07-27).
+##
+## The benchmark dims the battlefield twice: `.stage-dim` lays the HP lantern's
+## pool over the plates with a hole cut around the hero, and `#vignette` rings
+## the screen. Both are faithful and both are switched off here — a deliberate
+## divergence, not a parity gap, and the only one on this screen.
+##
+## The layers are still BUILT. The pool carries the lantern's position for the
+## aim lean and hands its gradient to the defeat snuff; the vignette carries the
+## low-HP pulse. Deleting them would take those with it, so they are made
+## invisible instead and everything below keeps its numbers for the day the
+## decision is revisited.
+const DIM_SCREEN: bool = false
 const DIM_DARK: Color = Color(0.011764706, 0.015686275, 0.039215688)  # rgb(3,4,10)
 ## `transparent 42%, dark 100%` — the clear hole, as a fraction of the radius.
 const DIM_HOLE: float = 0.42
@@ -801,6 +814,7 @@ func _build_vignette() -> void:
 	_vignette_mat.set_shader_parameter("edge", VIGNETTE_EDGE)
 	_vignette_mat.set_shader_parameter("low_tint", LOW_HP_TINT)
 	_vignette.material = _vignette_mat
+	_vignette.visible = DIM_SCREEN
 	add_child(_vignette)
 
 
@@ -818,6 +832,7 @@ func _build_stage_dim() -> void:
 	_stage_dim_mat.set_shader_parameter("dark", DIM_DARK)
 	_stage_dim_mat.set_shader_parameter("hole", DIM_HOLE)
 	_stage_dim.material = _stage_dim_mat
+	_stage_dim.visible = DIM_SCREEN
 	_shake_host.add_child(_stage_dim)
 
 
