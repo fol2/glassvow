@@ -73,6 +73,8 @@ opened and compared against the benchmark's actual behaviour.
 | 21 | drag arm threshold | `DRAG_START_PX = 26`, upward only | `st.y0 - e.clientY > 26` | **C** |
 | 22 | hand fan law | gap 112/640/246, tilt 5/42, sag 3.2, base 26 | `layoutHand` — **all seven identical** | **C** |
 | 23 | aim arc geometry | P0 lifted 80, apex 120, quadratic | `M x,y-80 Q cx,cy x1,y1`, apex `min(y0,y1)-120` | **C** |
+| 24 | press the stage with nothing armed | returns early — a lifted card cannot be set down | `else if (S.hoveredCard != null) { … }` (`combat.js:359`) | **R** |
+| 25 | hover tick on a coarse pointer | fires — twice per tap, with the COARSE branch | `onmouseenter` is wired only `if (FINE)` (`combat.js:960`) | **R** |
 
 Twelve of the twenty-three are citation-only: the code was read correctly and
 written down against the wrong line. Row 12 is the clearest case — the comment
@@ -177,11 +179,42 @@ thing ends up cannot.
 |---|---|
 | 2 mote stagger, 3 mote scale, 4 mote path, plus a 2x size error found with them | `65ffac8` |
 | 5 enemy name weight — `Cinzel-500.woff2`, byte-identical to the benchmark's own | `d1c228d` |
+| 24 stage press lowers a lifted card, 25 hover tick behind the pointer test | `038f390` |
 
 The size error is the one worth remembering. `size` in `flyTo` is a DOM width,
 so a diameter; `size` in `vfx.js` is the argument to `arc()`, so a radius. The
 port carried `drain.js`'s 6 and 7 across into the second meaning and drew every
 mote at double. Nothing in the citation was wrong. The unit was.
+
+## The 30 anchors that sat in changed code — resolved, and clean
+
+The sweep left one open question: 112 of 148 resolvable anchors point at code
+identical in both trees, but **30 sit in regions that genuinely differ**, and
+symbol presence alone said nothing about whether the port's claim survived.
+All 30 were opened and compared body against body.
+
+**They came back clean on substance.** Every one of the port's behavioural
+claims holds against `6e06911` — the drag's two branches (`setTargeting` for
+`target === 'enemy'`, `st.free = true` for everything else, `combat.js:1141`),
+the click path's disarm-on-second-press, the unplayable rejection, the `armed`
+pose, the 200 ms spent-card flight, the 0.3 low-HP threshold, the sources that
+skip `choreoHit`. All 30 line numbers are wrong; none of the behaviour was.
+
+Five earlier pieces of work were positively validated in the process, because
+what they cite exists **only** in the benchmark:
+
+- `.art-cast` and its rule (`styles.css:1122`) — zero occurrences in the newer
+  tree, which moved the art cast to Pixi.
+- `choreoStagger` — one definition in the benchmark's `combat.js`, zero in the
+  newer tree's, which moved it to `combat-choreo.js`.
+- `choreoAttack` — identical in both trees, line for line, at the same number.
+- `flyTo`'s DOM path.
+- `layoutHand`'s `armed` handling, which the newer tree deleted entirely.
+
+Two new regressions did come out of it, both recorded above as rows 24 and 25,
+and neither was found by comparing bodies. They came from following a fact
+sideways: `tapBackground` is absent from the reference, and the handler that
+replaces it carries an `else` branch this port never had.
 
 ## Still open, all measured
 
