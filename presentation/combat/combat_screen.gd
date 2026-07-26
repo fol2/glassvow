@@ -1993,8 +1993,6 @@ func _die(idx: int) -> void:
 	_vfx.ring(at, REVIVE_LILAC, 12.0, 720.0, 6.0)
 	_vfx.flash(Color.WHITE, 0.24 if boss else 0.1, 0.3)
 	_vfx.shake(22.0 if boss else 12.0)
-	if elite and not boss:
-		_vfx.hitstop(60.0)  # an elite's ending gets a beat a common foe does not
 	await _wait(0.9 if boss else 0.5)
 
 
