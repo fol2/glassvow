@@ -199,9 +199,31 @@ var _lunge_tween: Tween = null
 var _flare_tween: Tween = null
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
+## `.enemy.targetable` (styles.css:1241) — while a card is armed, a choosable foe
+## breathes a red halo; the one under the pointer stops breathing and burns
+## steady. Two statements, and keeping them apart is the point: the halo says
+## "you may pick this", the aim rim (`set_targetable`) says "you have".
+##
+## `targetGlow 1s ease-in-out infinite` — `drop-shadow(0 0 6px rgba(255,89,100,
+## .5))` at the ends, `18px / .9` at the middle. Hover replaces the whole
+## animation with `22px / .95` and `brightness(1.25)`.
+const CHOOSE_TINT: Color = Color(1.0, 0.34901962, 0.39215687)
+const CHOOSE_PERIOD: float = 1.0
+const CHOOSE_PX: Array[float] = [6.0, 18.0]
+const CHOOSE_ALPHA: Array[float] = [0.5, 0.9]
+const CHOOSE_HOVER_PX: float = 22.0
+const CHOOSE_HOVER_ALPHA: float = 0.95
+const CHOOSE_HOVER_LIFT: float = 1.25
+
 # --- the 3D stage
 var _stage: SubViewport = null
 var _display: TextureRect = null
+## The halo, painted BEHIND the body from the body's own alpha.
+var _choose: TextureRect = null
+var _choose_mat: ShaderMaterial = null
+var _choosable: bool = false
+var _choose_hover: bool = false
+var _choose_t: float = 0.0
 var _quad: MeshInstance3D = null
 var _body_mat: ShaderMaterial = null
 ## How much of a creature's art box the creature itself occupies. The aim
@@ -256,6 +278,47 @@ var _art_img: Image = null
 
 static var _meta: Dictionary = {}
 static var _fx_cache: Dictionary = {}
+
+
+## `drop-shadow(0 0 Npx <red>)` on the finished actor. A drop-shadow follows the
+## SILHOUETTE, so this blurs the stage's own alpha rather than putting a disc
+## behind the body — a disc would glow out of a wisp's empty corners and a
+## sporeling would sit in a red circle twice its size.
+##
+## Two rings of ten taps rather than a separable gaussian: at 6–22 px on a body
+## this size the halo is a soft edge and no one can tell the kernels apart, and a
+## two-pass blur would cost a second viewport per actor for it.
+const CHOOSE_SHADER: String = """
+shader_type canvas_item;
+
+uniform vec4 tint : source_color = vec4(1.0, 0.349, 0.392, 1.0);
+uniform float radius : hint_range(0.0, 0.25) = 0.0;
+uniform float strength : hint_range(0.0, 1.0) = 0.0;
+
+const int RINGS = 2;
+const int TAPS = 10;
+
+void fragment() {
+	if (strength <= 0.0 || radius <= 0.0) {
+		COLOR = vec4(0.0);
+	} else {
+		float a = 0.0;
+		for (int r = 1; r <= RINGS; r++) {
+			// The inner ring is offset half a step round so twenty taps read as
+			// twenty directions rather than as ten spokes.
+			float rr = radius * float(r) / float(RINGS);
+			for (int i = 0; i < TAPS; i++) {
+				float th = TAU * (float(i) + 0.5 * float(r)) / float(TAPS);
+				vec2 p = UV + vec2(cos(th), sin(th)) * rr;
+				if (p.x < 0.0 || p.x > 1.0 || p.y < 0.0 || p.y > 1.0) { continue; }
+				a += texture(TEXTURE, p).a;
+			}
+		}
+		a /= float(RINGS * TAPS);
+		COLOR = vec4(tint.rgb, a * strength);
+	}
+}
+"""
 
 
 ## The body: a flat plate that takes REAL light. The painting has no normal map,
@@ -693,11 +756,35 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_cam.far = dist * 3.0
 	_stage.add_child(_cam)
 
+	var pad: float = art_size * PAD_FRAC
+
+	# Added BEFORE the body, because a drop-shadow is behind what casts it. It
+	# shares the body's texture and geometry exactly, so the halo cannot drift off
+	# the creature when the vessel breathes.
+	# Not under the dummy renderer: it has no shader compiler, so the material is
+	# born null and complains when the actor is freed. Every accessor below is
+	# already null-guarded, so a headless actor simply has no halo.
+	if DisplayServer.get_name() != "headless":
+		_choose = TextureRect.new()
+		_choose.texture = _stage.get_texture()
+		_choose.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_choose.stretch_mode = TextureRect.STRETCH_SCALE
+		_choose.position = Vector2(-pad, -pad)
+		_choose.size = Vector2(_span, _span)
+		_choose.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_choose.visible = false
+		_choose_mat = ShaderMaterial.new()
+		var choose_shader: Shader = Shader.new()
+		choose_shader.code = CHOOSE_SHADER
+		_choose_mat.shader = choose_shader
+		_choose_mat.set_shader_parameter("tint", CHOOSE_TINT)
+		_choose.material = _choose_mat
+		add_child(_choose)
+
 	_display = TextureRect.new()
 	_display.texture = _stage.get_texture()
 	_display.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_display.stretch_mode = TextureRect.STRETCH_SCALE
-	var pad: float = art_size * PAD_FRAC
 	_display.position = Vector2(-pad, -pad)
 	_display.size = Vector2(_span, _span)
 	_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -865,6 +952,11 @@ func _glass_material() -> ShaderMaterial:
 ## vessel failing to contain its own fire — and after the burst the camera
 ## carries a short shake while the shards own their own motion.
 func _process(delta: float) -> void:
+	# `targetGlow 1s ease-in-out infinite`. Only while choosable and unhovered —
+	# the hovered halo is steady and does not need a frame.
+	if _choosable and not _choose_hover:
+		_choose_t = fmod(_choose_t + delta, CHOOSE_PERIOD)
+		_apply_choose()
 	# `pvPulse 0.9s ease-in-out infinite` with `50% { opacity: 0.4 }`. The
 	# easing runs the whole iteration and the keyframes interpolate linearly
 	# between offsets, which is why the dip is read at an already-eased t.
@@ -1362,6 +1454,9 @@ func mark_dead(beat: float = 0.2) -> void:
 		return
 	_dead = true
 	clear_intent()
+	# Nothing that is dead is choosable, and a halo left burning round a corpse
+	# would outlive the body it was drawn from.
+	set_choosable(false)
 	if _gem != null:
 		_gem.set_state(_hue, 0.0, true)
 		modulate = Color(0.5, 0.5, 0.56, 0.5)
@@ -1737,6 +1832,59 @@ func set_targetable(on: bool) -> void:
 	modulate = Color(1.28, 1.14, 0.9, 1.0) if on else Color(1, 1, 1, 1)
 
 
+## `.enemy.targetable` — this foe is one of the things an armed card may be
+## aimed at. Every living foe gets this while a card is armed; only one of them
+## gets `set_targetable`.
+func set_choosable(on: bool) -> void:
+	var want: bool = on and not _dead
+	if want == _choosable:
+		return
+	_choosable = want
+	if not want:
+		_choose_hover = false
+	# The pulse opens at its own start rather than wherever the last one left it,
+	# so a row of foes arming together breathes together.
+	_choose_t = 0.0
+	_apply_choose()
+
+
+## `.enemy.targetable:hover` — the pointer is on this one. The pulse stops and
+## the halo goes wide and steady, because a halo still breathing under the cursor
+## reads as "still deciding".
+func set_choose_hover(on: bool) -> void:
+	if on == _choose_hover:
+		return
+	_choose_hover = on
+	_apply_choose()
+
+
+func _apply_choose() -> void:
+	if _choose == null or _choose_mat == null:
+		return
+	_choose.visible = _choosable
+	if _display != null:
+		var lift: float = CHOOSE_HOVER_LIFT if (_choosable and _choose_hover) else 1.0
+		# `self_modulate`, not `modulate`: the stagger tween owns `modulate`, and a
+		# body that is about to break must be allowed to darken past this.
+		_display.self_modulate = Color(lift, lift, lift, 1.0)
+	if not _choosable:
+		_choose_mat.set_shader_parameter("strength", 0.0)
+		return
+	var px: float = CHOOSE_HOVER_PX
+	var alpha: float = CHOOSE_HOVER_ALPHA
+	if not _choose_hover:
+		var e: float = Motion.ease(Motion.EASE_IN_OUT, _choose_t / CHOOSE_PERIOD)
+		# `0%, 100% { 6px } 50% { 18px }` — out and back inside one iteration, which
+		# is why the keyframe is read at an already-eased t rather than tweened.
+		var u: float = Motion.keyframe(e, [0.0, 0.5, 1.0],
+			[CHOOSE_PX[0], CHOOSE_PX[1], CHOOSE_PX[0]])
+		px = u
+		alpha = Motion.keyframe(e, [0.0, 0.5, 1.0],
+			[CHOOSE_ALPHA[0], CHOOSE_ALPHA[1], CHOOSE_ALPHA[0]])
+	_choose_mat.set_shader_parameter("radius", px / maxf(1.0, _span))
+	_choose_mat.set_shader_parameter("strength", alpha)
+
+
 # ---------------------------------------------------------------- chrome
 
 ## A hero wears less chrome than a foe, and the benchmark's own DOM is the reason:
@@ -1892,17 +2040,22 @@ func align_plate(dy: float) -> void:
 
 # ---------------------------------------------------------------- state in
 
-## Full sync from an enemy snapshot (drain-idle truth). `dmg_text` is already
-## formatted by the screen ("" when the move deals no damage), `intent` is the
-## move's own kind, and `infos` is the content status table for the hover text.
+## Full sync from an enemy snapshot. `dmg_text` is already formatted by the
+## screen ("" when the move deals no damage), `intent` is the move's own kind, and
+## `infos` is the content status table for the hover text.
+##
+## `reap` is `x.reaped` (combat.js:1060): a sync fired mid-drain must NOT bury a
+## foe whose HP has just reached zero, because the death rite that is about to run
+## is the whole point — the body still has to sag, crack and come apart. Only the
+## drain-idle sync, long after the rite, re-asserts the corpse.
 func sync(e: EnemyCombatant, dmg_text: String, intent: StringName,
-		move_name: String = "", infos: Dictionary = {}) -> void:
+		move_name: String = "", infos: Dictionary = {}, reap: bool = true) -> void:
 	set_hp(e.hp, e.max_hp)
 	set_ward(e.block)
 	set_facets(mini(e.chips, e.facet_max), e.facet_max)
 	set_statuses(e.statuses, infos)
 	set_intent(intent, dmg_text, move_name)
-	if e.hp <= 0:
+	if e.hp <= 0 and reap:
 		mark_dead()
 
 
