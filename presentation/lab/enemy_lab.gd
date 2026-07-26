@@ -181,7 +181,15 @@ func _init(content_ref: ContentDB) -> void:
 		# which is the only way to see what the saving costs. Set before any actor
 		# exists, because both are read while the stage is being built.
 		elif arg.begins_with("--oversample="):
-			EnemyView.oversample = maxf(0.25, float(arg.trim_prefix("--oversample=")))
+			# Validated, not clamped. `float("")` is 0.0, so a clamp would quietly
+			# turn a mistyped flag into the blurriest setting on the dial — and a
+			# blurry shot labelled as a saving is worse than no shot.
+			var raw: String = arg.trim_prefix("--oversample=")
+			if raw.is_valid_float() and float(raw) > 0.0:
+				EnemyView.oversample = float(raw)
+			else:
+				push_warning("enemy lab: --oversample=%s not a positive number — keeping %.2f"
+					% [raw, EnemyView.oversample])
 		elif arg.begins_with("--msaa="):
 			EnemyView.msaa = _msaa_of(arg.trim_prefix("--msaa="))
 

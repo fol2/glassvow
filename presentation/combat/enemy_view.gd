@@ -56,20 +56,27 @@ const VP_MAX: int = 2048
 ## 176px render being upscaled by the window's own content scale (and again by
 ## the bench's zoom), which is exactly the softness the first 3D pass had.
 ##
-## It is also the more expensive of the two memory knobs: stage pixels go as its
-## SQUARE, so 2.5 → 1.5 is a 64% cut in area. See
-## docs/actor-stage-frame-budget.md — 113 MB of video memory per actor is the
-## floor everything else in this view is built on.
-static var oversample: float = 2.5
+## **2.0, down from 2.5** — the one memory concession this view makes, worth −20%
+## of a 310 MB four-actor stage (docs/actor-stage-frame-budget.md). Stage pixels
+## go as the square of this, so it is the cheapest place to buy memory back.
+## Judged at 1:1 against MSAA in the lab: dropping it coarsens the lit lip along a
+## shard's edge but the lip stays lit, and 1.5 was too soft on the paintings.
+static var oversample: float = 2.0
 
-## Anti-aliasing on the actor stage — the other half of the same trade, and the
-## largest single memory term because it multiplies both the colour and the depth
-## attachment (4x → 2x is −21% at four actors, off is −42%).
+## Anti-aliasing on the actor stage — the same memory saving as `oversample`
+## (4x → 2x is −21% against that knob's −20%) for a much worse price, which is why
+## it is NOT the one that moved.
+##
+## MSAA is what makes a shard's edge *lit*; `oversample` only makes it *fine*. The
+## side band is a sub-pixel sliver, so its specular highlight lives or dies on
+## sub-pixel coverage: at 2x the continuous bright lip breaks into a dim broken
+## line and the piece stops reading as glass at all — see
+## docs/solutions/design-patterns/procedural-glass-reads-off-its-edges.md. The
+## aggregate difference is small (RMSE 0.005) because the affected area is a few
+## hundred pixels; those are the load-bearing ones.
 ##
 ## A static, like `oversample`, so a lab can compare settings without editing the
-## file it is judging. Neither knob is free: this project's materials read off
-## narrow angular features (docs/card-angular-budget.md), which is exactly what
-## aliasing eats first.
+## file it is judging.
 static var msaa: Viewport.MSAA = Viewport.MSAA_4X
 
 var idx: int = 0
