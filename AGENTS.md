@@ -20,8 +20,6 @@ godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS
 - **Fixture Provenance** — `port_fixtures/` is generated only by `roguecardv2/tools/capture-port-fixtures.mjs`; never edited here.
 - **Documented Solutions** — `docs/solutions/` — solved problems and conventions, by category, with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when implementing or debugging in a documented area.
 - **Shared Vocabulary** — `CONCEPTS.md` — domain terms with project-specific meaning; relevant when orienting to an area or settling on names.
-- **Documented Solutions** — `docs/solutions/` — solutions to past problems (bugs, patterns, conventions), organised by category with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when implementing or debugging in a documented area.
-- **Shared Vocabulary** — `CONCEPTS.md` — domain terms with project-specific meaning (entities, named processes, status concepts). Relevant when orienting to the codebase or discussing domain concepts.
 
 ---
 
