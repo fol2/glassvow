@@ -51,7 +51,19 @@ extends Control
 ## `art.hue` EnemyView already reads. Given nothing it falls back to ember, and
 ## the concept still works, it just stops being about the fight you had.
 
+## The player has taken something. `id` is "" for gold, which has no content id
+## — and ALSO for the card slot when the offering is declined, which is a real
+## outcome and not a missing value: "Leave it", and walking on without picking,
+## both arrive as `claimed(&"card", "")`. Whatever wires this up has to read an
+## empty card id as "no card", never as "not answered yet".
+##
+## Every spoil is announced exactly once. Walking on before the husk has
+## finished coming apart banks whatever the entrance had not reached yet and
+## THEN says it is finished — staging never decides what the player keeps — and
+## a spoil already settled by `mark_taken` is never announced again.
 signal claimed(what: StringName, id: String)
+## The screen is done with. Always last: every `claimed` for this reward has
+## already been emitted by the time this fires.
 signal finished()
 
 const EMBER_HUE: float = 22.0        # the fallback: lantern-fire, Duskfang's own
@@ -140,10 +152,16 @@ var _motes: RewardKit = null
 var _field: Control = null           # the wreckage; draws, takes no input
 var _plate: Control = null
 var _spoils: Array[Dictionary] = []
+## One flag per announcement, so there is a single place that knows whether a
+## spoil has already gone to the run — whether it got there by the entrance
+## reaching it, by the player walking on early, or by a resume arriving with it
+## already banked.
+var _banked: Array[bool] = []
 var _card_ids: Array[String] = []
 var _cards: Array[CardView] = []
 var _faces: Array[Control] = []
 var _picked: bool = false
+var _left: bool = false
 var _lean: bool = false
 var _take_line: Label = null
 var _bar: HBoxContainer = null
@@ -158,6 +176,7 @@ func _init(reward_ref: Dictionary, content_ref: ContentDB,
 	hue = EMBER_HUE if enemy_hue < 0.0 else enemy_hue
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_spoils = RewardSpoils.list(reward, content)
+	_banked.resize(_spoils.size())
 	_card_ids = RewardSpoils.card_ids(reward)
 	_lean = _card_ids.is_empty()
 
@@ -564,10 +583,19 @@ func _ready() -> void:
 		after.tween_property(seat, "position", _centre + home, CARD_IN + 0.08) \
 			.set_delay(wait).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	for i: int in range(_spoils.size()):
-		var what: StringName = _spoils[i]["what"]
-		var id: String = _spoils[i]["id"]
 		get_tree().create_timer(SIT + BLAZE + BURST * 0.66 + 0.05 * float(i)) \
-			.timeout.connect(func() -> void: claimed.emit(what, id))
+			.timeout.connect(_announce.bind(i))
+
+
+## The one door every announcement goes through. A timer that has been overtaken
+## — by a resume that arrived with this spoil already banked, or by the player
+## walking on before it fired — has to go quiet rather than fire late, because
+## on the far side of this signal is a run that will happily take the gold twice.
+func _announce(i: int) -> void:
+	if _banked[i]:
+		return
+	_banked[i] = true
+	claimed.emit(_spoils[i]["what"], _spoils[i]["id"])
 
 
 func _set_blaze(v: float) -> void:
@@ -651,6 +679,15 @@ func _skip() -> void:
 
 
 func _leave() -> void:
+	if _left:
+		return          # the button and request_leave() reach the same door
+	_left = true
+	# Whatever the entrance has not got to yet is banked NOW, before the screen
+	# says it is done. Walking on early is impatience, not a refusal of the gold
+	# — and a caller that has been told the screen is finished should never then
+	# be handed another claim out of it.
+	for i: int in range(_spoils.size()):
+		_announce(i)
 	if not _picked and not _card_ids.is_empty():
 		_take_card("")
 	finished.emit()
@@ -666,6 +703,9 @@ func mark_taken(what: StringName) -> void:
 	for i: int in range(_spoils.size()):
 		var mine: StringName = _spoils[i]["what"]
 		if mine == what:
+			# Settled before this screen existed — the entrance still plays it
+			# out, but its timer must not hand the run a second helping.
+			_banked[i] = true
 			_faces[i].modulate.a = 0.28
 
 
