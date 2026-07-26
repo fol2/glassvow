@@ -203,6 +203,12 @@ const HEAL_GREEN: Color = Color(0.56078434, 0.9098039, 0.627451) # #8fe8a0
 const BUFF_BLUE: Color = Color(0.62352943, 0.78431374, 1.0)     # #9fc8ff
 const WARD_ICON: Texture2D = preload("res://assets/art/ui/ward.png")
 
+## The four signatures that fire on the PLAY rather than on an impact
+## (drain.js:495) — they are the card's gesture, not its landing, so they must
+## not wait for something to be hit.
+const PLAY_TIME_BESPOKE: Array[String] = [
+	"ascension", "pyreheart", "emberdance", "limitBreak"]
+
 ## `big` (drain.js:540) — the damage at which a blow earns its own ceremony.
 const BIG_HIT: int = 16
 ## `Math.min(1, ev.amount / 24)` — what counts as a full-power blow.
@@ -343,6 +349,13 @@ var _tips: TooltipLayer
 ## Set by `play` from the card's own `vfx` field and by `enemyAct` from the
 ## body's kind, then read by every hit until the next action replaces it.
 var _archetype: String = "slash"
+## `vfxSource.cardId` — WHICH card is acting, as against what family its blows
+## belong to. Only this can select a signature effect: `BESPOKE_VFX` is keyed on
+## the card, `archetypeHit` on its `vfx` field, and both fire on the same blow.
+var _vfx_card_id: String = ""
+## `bespokeFired` — a signature is the moment of the PLAY, not of each hit, so a
+## card that strikes three times still gets exactly one.
+var _bespoke_fired: bool = false
 ## `hitSeq` — how many numbers this action has already thrown, so a multi-hit
 ## card fans its damage across three columns instead of stacking it in one.
 var _hit_seq: int = 0
@@ -1476,6 +1489,17 @@ func _enemy_centre(idx: int) -> Vector2:
 	return v.body_centre()
 
 
+## `cb.enemies.findIndex((e) => e.hp > 0)` — the foe a play-time signature aims
+## at when it has to aim at something.
+func _first_living() -> int:
+	if game.cb == null:
+		return -1
+	for e: EnemyCombatant in game.cb.enemies:
+		if e.hp > 0:
+			return e.idx
+	return -1
+
+
 func _hero_centre() -> Vector2:
 	if _hero == null:
 		return Vector2(HERO_X, size.y - GROUND_Y - 120.0)
@@ -1566,8 +1590,21 @@ func _handle_event(ev: Dictionary) -> void:
 			# `vfxSource` — the card decides what its blows look like, and every
 			# hit until the next action reads it back.
 			_archetype = "slash"
+			_vfx_card_id = ""
 			if inst != null:
 				_archetype = str(_rules.card_data(inst).get("vfx", "slash"))
+				_vfx_card_id = str(inst.id)
+			_bespoke_fired = false
+			# `['ascension','pyreheart','emberdance','limitBreak']` (drain.js:495) —
+			# four signatures that are not an impact at all. They fire on the PLAY,
+			# at the hero, before anything has been struck; only limitBreak reaches
+			# out, to the first living foe.
+			if PLAY_TIME_BESPOKE.has(_vfx_card_id):
+				var living: int = _first_living()
+				var from_at: Vector2 = _hero_centre()
+				if _vfx_card_id == "limitBreak" and living >= 0:
+					from_at = _enemy_centre(living)
+				_bespoke_fired = _vfx.bespoke(_vfx_card_id, from_at)
 			_hit_seq = 0
 			_hero_swung = false  # this card's swing is owed
 			_sfx.play(&"card")
@@ -1762,6 +1799,12 @@ func _handle_event(ev: Dictionary) -> void:
 			_hero_swung = true
 			_vfx.flash(tone, 0.12, 0.5)
 			_vfx.ring(_hud.lantern_rect().get_center(), tone, 10.0, 620.0, 5.0)
+			# `V.BESPOKE_VFX['art:'+id]?.(lx, ly)` (drain.js:435) — an art's own
+			# signature fires AT THE LANTERN, immediately, and is marked spent so
+			# the impacts that follow do not fire it a second time.
+			_vfx_card_id = "art:" + id
+			_bespoke_fired = _vfx.bespoke(_vfx_card_id,
+				_hud.lantern_rect().get_center())
 			_vfx.motes(hero_at, tone, 12)
 			_float(hero_at + Vector2(0.0, -84.0),
 				str(art.get("name", id)).to_upper(), "artf", tone)
@@ -1851,6 +1894,11 @@ func _hit_enemy(ev: Dictionary) -> void:
 			_hero_swung = true
 			await _wait(_hero.lunge("humanoid"))
 		_sfx.attack(&"hero", amount, blocked)
+		# The signature FIRST and the family under it (drain.js:545-549) — both fire
+		# on the same blow, and the latch is what keeps a three-hit card from
+		# throwing its signature three times.
+		if not _bespoke_fired and not _vfx_card_id.is_empty():
+			_bespoke_fired = _vfx.bespoke(_vfx_card_id, at)
 		_vfx.archetype_hit(at, _archetype, minf(1.0, float(amount) / POWER_SCALE))
 		if view != null:
 			view.take_hit(true)  # choreoHit — the recoil and the hurt flash
@@ -2009,6 +2057,11 @@ func _enemy_act(ev: Dictionary) -> void:
 	# debuff speaks void and a ward speaks ward.
 	var kind: String = _foe_kind(idx)
 	_archetype = VfxLayer.KIND_ARCHETYPE.get(kind, "slash")
+	# `cardId: null` (drain.js:896) — a foe has no signature. Cleared rather than
+	# left, or a thorns tick during the enemy phase would throw the hero's last
+	# card's effect back at them.
+	_vfx_card_id = ""
+	_bespoke_fired = false
 	var intent: String = _move_intent(idx, move_key)
 	if intent == "debuff":
 		_archetype = "void"

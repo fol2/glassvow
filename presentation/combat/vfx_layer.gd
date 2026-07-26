@@ -506,3 +506,134 @@ func impact_frame() -> void:
 	flash(Color.WHITE, 0.28, 0.09)
 	hitstop(90.0)
 
+
+## `BESPOKE_VFX` (vfx.js:501) — the signature moments. Eighteen cards and arts
+## that get their OWN effect on top of their archetype's, fired once at the
+## first impact of the play rather than on every hit of a multi-hit card.
+##
+## This is the layer that makes a big card feel big, and without it every card
+## in the game looked like its family and nothing more. `impact_frame` was built
+## with it in mind and then had no caller for the whole of M5.
+##
+## Written as a `match` rather than a table of `Callable`s: the reference's
+## object literal buys dispatch, which `match` already gives, and a dictionary of
+## lambdas is the kind of thing the typed gate cannot check.
+func bespoke(id: String, at: Vector2) -> bool:
+	match id:
+		"annihilate":
+			impact_frame()
+			flash(Color(1.0, 0.41568628, 0.22745098), 0.16, 0.5)
+			for dx: float in [-140.0, 0.0, 140.0]:
+				burst(at + Vector2(dx, 0.0), Color(1.0, 0.81960785, 0.4), 18, 300.0,
+					TAU, 0.0, 3.0, -100.0, "spark", true, 0.8)
+			shake(16.0)
+		"oblivionStrike":
+			impact_frame()
+			hitstop(140.0)
+			ring(at, Color(1.0, 0.84705883, 0.627451), 8.0, 900.0, 7.0)
+			ring(at, Color.WHITE, 4.0, 1200.0, 4.0)
+			shard_spray(at, Color(0.8745098, 0.91764706, 1.0), 22)
+			shake(20.0)
+		"tempest":
+			_volley(3, 0.09, at + Vector2(0.0, -60.0), 160.0,
+				Color(0.8117647, 0.9019608, 1.0), 12, &"shards")
+		"executioner":
+			impact_frame()
+			slash_arc(at, Color.WHITE)
+			ring(at, Color(1.0, 0.41960785, 0.41960785), 10.0, 700.0, 5.0)
+			shake(14.0)
+		"novaflare":
+			impact_frame()
+			flash(Color(1.0, 0.81960785, 0.4), 0.2, 0.45)
+			ring(at, Color(1.0, 0.81960785, 0.4), 6.0, 1000.0, 6.0)
+			burst(at, Color(1.0, 0.9529412, 0.8392157), 30, 520.0, TAU, 0.0,
+				3.0, -40.0, "spark", true, 0.9)
+		"shardstorm":
+			_volley(4, 0.07, at + Vector2(0.0, -40.0), 200.0,
+				Color(0.8745098, 0.91764706, 1.0), 10, &"shards")
+		"ascension":
+			ember_trail(at + Vector2(0.0, 120.0), at + Vector2(0.0, -120.0),
+				Color(1.0, 0.81960785, 0.4))
+			motes(at + Vector2(0.0, -40.0), Color(1.0, 0.9137255, 0.6745098), 16)
+		"limitBreak":
+			impact_frame()
+			ring(at, Color(0.56078434, 0.8156863, 1.0), 10.0, 800.0, 6.0)
+			shard_spray(at, Color(0.8117647, 0.9019608, 1.0), 18)
+			shake(12.0)
+		"phantomBlades":
+			_volley(4, 0.07, at, 0.0, Color(0.7882353, 0.6901961, 1.0), 0, &"blades")
+		"pyreheart":
+			burst(at, Color(1.0, 0.34901962, 0.39215687), 14, 180.0, TAU, 0.0,
+				3.0, -80.0, "dot", true, 0.9)
+			motes(at, Color(1.0, 0.81960785, 0.4), 10)
+		"emberdance":
+			_volley(3, 0.1, at, 0.0, Color(1.0, 0.6039216, 0.30196080), 0, &"embers")
+		"devour":
+			implosion(at, Color(0.7882353, 0.6039216, 1.0))
+			_after(0.18, _volley_step.bind(&"devour", at,
+				Color(1.0, 0.6039216, 0.30196080), 16, 0))
+		"art:flare":
+			flash(Color(1.0, 0.6039216, 0.30196080), 0.18, 0.4)
+			burst(at, Color(1.0, 0.81960785, 0.4), 26, 420.0, TAU, 0.0, 3.0, -60.0)
+			shake(10.0)
+		"art:mendglass":
+			ring(at, Color(0.49019608, 0.85882354, 0.56078434), 14.0, 420.0, 4.0)
+			motes(at, Color(0.8509804, 0.9843137, 0.90588236), 14)
+		"art:beacon":
+			flash(Color(1.0, 0.9137255, 0.6745098), 0.14, 0.5)
+			ember_trail(at + Vector2(0.0, 100.0), at + Vector2(0.0, -140.0),
+				Color(1.0, 0.9137255, 0.6745098))
+		"art:emberveil":
+			ring(at, Color(0.62352943, 0.83137256, 1.0), 10.0, 520.0, 5.0)
+			ring(at, Color(1.0, 0.81960785, 0.4), 20.0, 380.0, 3.0)
+		"art:stoke":
+			burst(at, Color(1.0, 0.41568628, 0.22745098), 18, 220.0, TAU, 0.0,
+				3.0, -140.0, "spark", true, 0.8)
+		"art:ashfall":
+			_volley(3, 0.12, at + Vector2(0.0, -80.0), 220.0,
+				Color(0.72156864, 0.6901961, 0.627451), 12, &"drops")
+		_:
+			return false
+	return true
+
+
+## The staggered volleys — `setTimeout(..., i * ms)` in four of the entries. The
+## scatter is `Math.random()` there, so it is drawn here rather than fixed: a
+## shardstorm that lands in the same four places every time is a pattern.
+func _volley(n: int, gap: float, at: Vector2, spread: float, tone: Color,
+		count: int, kind: StringName) -> void:
+	for i: int in range(n):
+		# Drawn now, not inside the callback: the scatter belongs to the shot
+		# that was scheduled, and the RNG will have moved on by the time it fires.
+		var jitter: Vector2 = Vector2((_rng.randf() - 0.5) * spread,
+			(_rng.randf() - 0.5) * 40.0 if kind == &"blades" else 0.0)
+		_after(gap * float(i), _volley_step.bind(kind, at + jitter, tone, count, i))
+
+
+## One shot of a volley. A bound method rather than a closure: a multi-line
+## lambda holding a `match` does not parse, and binding is what the gate can see.
+func _volley_step(kind: StringName, at: Vector2, tone: Color, count: int,
+		step: int) -> void:
+	match kind:
+		&"shards":
+			shard_spray(at, tone, count)
+		&"blades":
+			slash_arc(at, tone)
+		&"drops":
+			droplets(at, tone, count)
+		&"devour":
+			burst(at, tone, count, 260.0, TAU, 0.0, 3.0, -120.0)
+		&"embers":
+			var off: float = -80.0 + float(step) * 80.0
+			ember_trail(at + Vector2(off, 60.0), at + Vector2(-off, -60.0), tone)
+
+
+## `setTimeout` — fire and forget. A volley that is still owed when the fight
+## ends simply does not land, which is what the browser does with a pending
+## timeout on a torn-down screen.
+func _after(seconds: float, what: Callable) -> void:
+	if seconds <= 0.0 or not is_inside_tree():
+		what.call()
+		return
+	get_tree().create_timer(seconds).timeout.connect(what, CONNECT_ONE_SHOT)
+
