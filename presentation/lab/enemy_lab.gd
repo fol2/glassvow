@@ -17,6 +17,8 @@ extends Control
 ##   godot --path . -- --enemies --bench[=duskfang]          # INTERACTIVE bench
 ##   godot --path . -- --enemies --states=duskfang --msaa=2 --oversample=1.5
 ##                                                           # the memory knobs
+##   godot --path . -- --enemies --hit[=duskfang] [--incidental] --strip=/tmp/h.png
+##                                        # the recoil, photographed across 320ms
 ##
 ## The bench is the one that answers questions a PNG cannot: refraction only
 ## reads when the thing behind it moves, the idle warp is motion, and the death
@@ -81,7 +83,10 @@ var _panning: bool = false
 var _auto_zoom: bool = true
 var _readout: Label = null
 var _strip_path: String = "/tmp/enemy-rite.png"
-var _rite_id: String = ""
+## The subject of whichever strip mode is running — `--rite` or `--hit`.
+var _strip_id: String = ""
+## `--incidental` makes the struck beat a poison tick rather than a sword blow.
+var _hit_direct: bool = true
 var _picker: OptionButton = null
 var _meta_rows: Dictionary = {}
 var _light_yaw: float = -32.0
@@ -173,6 +178,20 @@ func _init(content_ref: ContentDB) -> void:
 		elif arg.begins_with("--rite="):
 			_mode = "rite"
 			states_id = arg.trim_prefix("--rite=")
+		elif arg == "--hit":
+			_mode = "hit"
+		elif arg.begins_with("--hit="):
+			_mode = "hit"
+			states_id = arg.trim_prefix("--hit=")
+		elif arg == "--incidental":
+			_hit_direct = false
+		elif arg.begins_with("--flare="):
+			var fr: String = arg.trim_prefix("--flare=")
+			if fr.is_valid_float() and float(fr) >= 0.0:
+				EnemyView.flare_gain = float(fr)
+			else:
+				push_warning("enemy lab: --flare=%s not a number — keeping %.2f"
+					% [fr, EnemyView.flare_gain])
 		elif arg.begins_with("--strip="):
 			_strip_path = arg.trim_prefix("--strip=")
 		# The two memory knobs, priced in docs/actor-stage-frame-budget.md and left
@@ -239,11 +258,11 @@ func _init(content_ref: ContentDB) -> void:
 	_roster = roster
 	_names = names
 	_ids = ids
-	if _mode == "rite":
+	if _mode == "rite" or _mode == "hit":
 		var pick_r: String = states_id
 		if pick_r == "" or not roster.has(pick_r):
 			pick_r = "duskfang" if roster.has("duskfang") else (str(ids[0]) if not ids.is_empty() else "")
-		_rite_id = pick_r
+		_strip_id = pick_r
 	elif _mode == "bench":
 		var want: String = states_id
 		if want == "" or not roster.has(want):
@@ -432,6 +451,9 @@ const KNOBS: Array[Array] = [
 	["glass alpha", "alpha", 0.0, 1.0, 0.55],
 	["relief (bump)", "bump", 0.0, 20.0, 3.5],
 	["idle motion", "breathe", 0.0, 4.0, 1.0],
+	## Awaiting a decision — the struck flash's strength. Judged here rather than
+	## from strips because a 300ms beat in a still is weak evidence for anything.
+	["struck flash", "flare_gain", 0.0, 3.0, 1.0],
 ]
 
 ## Per-creature layout, the values that live in char-meta.json. Editing these is
@@ -475,6 +497,17 @@ func _build_panel() -> void:
 		_build_bench(_ids[i])
 		_relayout_bench())
 	rows.add_child(_picker)
+
+	# The struck beat is 300ms and its flash peaks at 90ms, so it is unjudgeable
+	# from a still. Two buttons rather than one because the whole point of the port
+	# is that a sword blow and a poison tick are different events: the first shoves
+	# and squashes, the second only twitches.
+	rows.add_child(_button("strike it   (H)", func() -> void:
+		if _bench_actor != null:
+			_bench_actor.take_hit(true)))
+	rows.add_child(_button("poison it   (J)", func() -> void:
+		if _bench_actor != null:
+			_bench_actor.take_hit(false)))
 
 	rows.add_child(_button("+ crack   (C)", func() -> void:
 		if _bench_actor != null:
@@ -586,7 +619,7 @@ func _build_panel() -> void:
 	_readout.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(_readout)
 
-	var hint: Label = _dim("click the body to crack it there\ndrag to pan · wheel to zoom\n[ ] prev / next enemy")
+	var hint: Label = _dim("H strike · J poison\nclick the body to crack it there\ndrag to pan · wheel to zoom\n[ ] prev / next enemy\nthe rite is a foe's — H and J work on a hero, K and S do not")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(hint)
 
@@ -772,6 +805,12 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if k == null or not k.pressed or k.echo:
 		return
 	match k.keycode:
+		KEY_H:
+			if _bench_actor != null:
+				_bench_actor.take_hit(true)
+		KEY_J:
+			if _bench_actor != null:
+				_bench_actor.take_hit(false)
 		KEY_C:
 			if _bench_actor != null:
 				_bench_actor.crack()
@@ -816,7 +855,12 @@ func _draw_ground() -> void:
 func _ready() -> void:
 	_grow_window()
 	if _mode == "rite":
-		await _shoot_rite()
+		await _shoot_strip(RITE_FRAMES, "rite",
+			func(v: EnemyView) -> void: v.mark_dead())
+		return
+	if _mode == "hit":
+		await _shoot_strip(HIT_FRAMES, "hit",
+			func(v: EnemyView) -> void: v.take_hit(_hit_direct))
 		return
 	if _mode == "bench":
 		# No auto-fit here: the bench is driven, not framed. Zoom is the user's.
@@ -850,21 +894,28 @@ func _ready() -> void:
 		"1:1" if is_equal_approx(scale_at, 1.0) else "%d%%" % int(roundf(scale_at * 100.0))]
 
 
-## A still cannot show a death rite. This runs the real one — the same
-## mark_dead() combat calls, the same physics — and photographs it at intervals,
-## then lays the frames out as one strip. Deliberately NOT `--shot`: main.gd's
-## capture fires once after ~30 frames, which lands before the shards have moved.
+## A still cannot show a beat that is over in a fraction of a second. These run the
+## REAL thing — the same combat calls, the same tweens, the same physics — and
+## photograph it at intervals, then lay the frames out as one strip. Deliberately
+## NOT `--shot`: main.gd's capture fires once after ~30 frames, which for the rite
+## lands before the shards have moved and for a hit lands after it is over.
 const RITE_FRAMES: Array[float] = [0.0, 0.12, 0.3, 0.55, 0.9, 1.5]
+## The recoil is 300ms and its flash peaks at 90ms, so the frames cluster early.
+## A strip evenly spaced across 300ms would miss the peak entirely.
+const HIT_FRAMES: Array[float] = [0.0, 0.04, 0.09, 0.15, 0.22, 0.32]
 
 
-func _shoot_rite() -> void:
+## Stand one actor up, run `action` on it, photograph `frames`, save the strip.
+## Shared by `--rite` and `--hit` because only those three things differ; the
+## framing, the hi-dpi crop derivation and the tiling are the same job twice.
+func _shoot_strip(frames: Array[float], label: String, action: Callable) -> void:
 	get_window().content_scale_factor = 1.0
 	await get_tree().process_frame
-	var def: Dictionary = _roster.get(_rite_id, {})
-	var locale: Dictionary = _names.get(_rite_id, {})
+	var def: Dictionary = _roster.get(_strip_id, {})
+	var locale: Dictionary = _names.get(_strip_id, {})
 	var stage: Vector2 = size
 	var ground: float = stage.y * 0.72
-	var view: EnemyView = _actor(_rite_id, def, locale, 0.0, ground)
+	var view: EnemyView = _actor(_strip_id, def, locale, 0.0, ground)
 	view.position = Vector2((stage.x - view.size.x) * 0.5, ground - view.size.y - view.foot.y)
 	view.set_hp(_max_hp(def), _max_hp(def))
 	view.set_facets(0, _facet_max(def))
@@ -875,16 +926,19 @@ func _shoot_rite() -> void:
 	_ground.queue_redraw()
 	await get_tree().process_frame
 
-	view.mark_dead()
+	action.call(view)
 	# Photograph the whole frame first. The viewport texture's reported size and
 	# the size of the image it actually hands back do not always agree on a
 	# hi-dpi window, so the crop is derived from the FRAME, after the fact.
 	var shots: Array[Image] = []
-	var prev: float = 0.0
-	for t: float in RITE_FRAMES:
-		if t > prev:
-			await get_tree().create_timer(t - prev).timeout
-			prev = t
+	# Wait against ELAPSED time, not against the gap to the previous frame. Chaining
+	# deltas adds the `frame_post_draw` await to every step, so a six-frame strip
+	# drifted ~100 ms late by its last cell and a 90 ms flash looked as though it
+	# had already finished by the third.
+	var t0: float = float(Time.get_ticks_msec()) * 0.001
+	for t: float in frames:
+		while float(Time.get_ticks_msec()) * 0.001 - t0 < t:
+			await get_tree().process_frame
 		await RenderingServer.frame_post_draw
 		shots.append(get_viewport().get_texture().get_image())
 
@@ -899,8 +953,8 @@ func _shoot_rite() -> void:
 		int((bot - top) * k))
 	crop.size.x = mini(crop.size.x, shots[0].get_width() - crop.position.x)
 	crop.size.y = mini(crop.size.y, shots[0].get_height() - crop.position.y)
-	print("RITE stage=%s frame=%dx%d k=%.3f crop=%s" % [
-		stage, shots[0].get_width(), shots[0].get_height(), k, crop])
+	print("%s stage=%s frame=%dx%d k=%.3f crop=%s" % [
+		label.to_upper(), stage, shots[0].get_width(), shots[0].get_height(), k, crop])
 	var cells: Array[Image] = []
 	for img: Image in shots:
 		var cell: Image = Image.create_empty(
@@ -915,8 +969,8 @@ func _shoot_rite() -> void:
 		strip.blit_rect(shots[i], Rect2i(Vector2i.ZERO, crop.size),
 			Vector2i(crop.size.x * i, 0))
 	strip.save_png(_strip_path)
-	print("rite strip saved: %s  (%d frames at %s s)" % [
-		_strip_path, shots.size(), ", ".join(RITE_FRAMES.map(
+	print("%s strip saved: %s  (%d frames at %s s)" % [
+		label, _strip_path, shots.size(), ", ".join(frames.map(
 			func(v: float) -> String: return "%.2f" % v))])
 	get_tree().quit(0)
 

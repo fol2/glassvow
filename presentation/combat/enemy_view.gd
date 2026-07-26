@@ -52,6 +52,25 @@ const GLASS_THICK: float = 0.035
 const MAX_SITES: int = 32
 const VP_MAX: int = 2048
 
+## Being struck (benchmark `choreoHit` / `hurtFlash`). The displacement is the
+## benchmark's own 9 px, in the actor's own pixels rather than as a fraction of the
+## box — which means a sporeling is knocked 8% of its width sideways and a
+## leviathan barely twitches. That began as a CSS convenience, but it reads as
+## mass, so it is kept; scale it by the box if a giant ever needs to flinch harder.
+const KICK_PX: float = 9.0
+const SQUASH: float = 0.03            ## scale(.97, 1.03) at the peak
+const HIT_TIME: float = 0.3           ## the whole recoil, cubic-bezier(.22,1,.36,1)
+const FLARE_RISE: float = 0.09        ## hurtFlash peaks at 30% of its 0.3s
+## An incidental hit — poison, burn, thorns, self-damage — never gets the shove or
+## the squash, only `hurtFlash`'s own smaller two-phase wobble: +7 px then -5 px,
+## expressed against the 9 px kick so one constant governs the scale of all of it.
+const NUDGE_OUT: float = 7.0 / KICK_PX
+const NUDGE_BACK: float = -5.0 / KICK_PX
+
+## How hard the struck flash reads. Awaiting a decision, so it is a static the lab
+## can sweep (`--flare=N`) rather than a number buried in the shader.
+static var flare_gain: float = 1.0
+
 ## The stage renders at this multiple of the box. At 1.0 a 176px creature is a
 ## 176px render being upscaled by the window's own content scale (and again by
 ## the bench's zoom), which is exactly the softness the first 3D pass had.
@@ -105,6 +124,13 @@ var _ward_icon: TextureRect
 var _statuses: StatusRow
 var _plate: VBoxContainer
 var _dead: bool = false
+## The recoil, signed and in units of KICK_PX — tweened, then composed into the
+## idle by _process. Positive is away from the hero, which is where a foe is
+## knocked; a hero is knocked the other way (see _away).
+var _hit: float = 0.0
+var _hit_squash: float = 0.0
+var _hit_tween: Tween = null
+var _flare_tween: Tween = null
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # --- the 3D stage
@@ -165,6 +191,11 @@ uniform sampler2D body_tex : source_color, filter_linear_mipmap;
 uniform float bump = 3.5;
 uniform float emission_gain = 0.85;
 uniform float target_lit = 0.0;
+// Struck: 0 at rest, 1 at the peak of the flash. See take_hit().
+uniform float flare = 0.0;
+// How hard that peak hits. A knob rather than a constant because the CSS number
+// does not transfer (see the flare block) so it has to be judged by eye.
+uniform float flare_gain = 1.0;
 // The vessel leaving. A custom shader that writes ALPHA overrides
 // GeometryInstance3D.transparency outright, so the fade has to be a uniform.
 uniform float fade = 1.0;
@@ -199,7 +230,11 @@ void fragment() {
 	// the whole silhouette is the other half of the fog.
 	SPECULAR = 0.18;
 
-	if (target_lit > 0.0) {
+	// ONE dilated-alpha ring, two consumers: the targeting rim and the struck
+	// flare's glow. Same silhouette, different colour and gain — the six taps are
+	// the expensive part and there is no reason to pay for them twice.
+	float rim = 0.0;
+	if (target_lit > 0.0 || flare > 0.0) {
 		vec2 px = ts * 9.0;
 		float ring = 0.0;
 		ring = max(ring, texture(body_tex, uv + vec2(px.x, 0.0)).a);
@@ -208,9 +243,42 @@ void fragment() {
 		ring = max(ring, texture(body_tex, uv - vec2(0.0, px.y)).a);
 		ring = max(ring, texture(body_tex, uv + px * 0.72).a);
 		ring = max(ring, texture(body_tex, uv - px * 0.72).a);
-		float rim = clamp(ring - c.a, 0.0, 1.0) * target_lit;
-		EMISSION += rim * vec3(0.89, 0.84, 0.98) * 3.0;
-		ALPHA = max(ALPHA, rim);
+		rim = clamp(ring - c.a, 0.0, 1.0);
+	}
+	if (target_lit > 0.0) {
+		EMISSION += rim * target_lit * vec3(0.89, 0.84, 0.98) * 3.0;
+		ALPHA = max(ALPHA, rim * target_lit);
+	}
+	// Struck. The benchmark's `hurtFlash` peaks at brightness 2.6 with
+	// saturate .4 and an 18px white halo, so the glass goes briefly white-hot and
+	// the silhouette carries a rim of it. Desaturating FIRST is what stops a red
+	// creature simply going redder — the flash has to read as light, not as paint.
+	// Struck. Two rejected attempts are worth recording, because both were the
+	// CSS instruction taken literally:
+	//   * `brightness(2.6)` as an EMISSION term over the whole body washed the
+	//     creature out completely — a lit shader that already emits is not a
+	//     composited sprite, so the number does not transfer.
+	//   * the 18px halo as `ALPHA = max(ALPHA, rim)` widened the SILHOUETTE, which
+	//     reads as a sticker outline or a selection highlight, not as a blow. A
+	//     glow must sit over the body, never extend it.
+	// What is left flashes the glass the creature is already made of: the lit panes
+	// go white-hot, the dark armour between them does not, and the halo is a hint.
+	// A third rejected attempt: `saturate(.4)`, ported as a 0.35 mix toward grey,
+	// DOMINATED. On a warm creature under low light the desaturation lands before
+	// the added light does, so frames 0-2 read as the beast going briefly pale and
+	// frames 3-5 as it recovering its colour — the opposite event. CSS gets away
+	// with it because `brightness(2.6)` overwhelms the desaturation; here the
+	// light has to lead and the grey is a whisper on top of it.
+	if (flare > 0.0) {
+		float f = flare * flare_gain;
+		// pow(l, 1.4) rather than the body's own 3.2: the flash reaches further
+		// down the tonal range than the resting lantern glow, so a mid-tone pane
+		// lights up too — but it is still keyed to the painting, so the flash has
+		// the creature's own shape rather than being a wash over its box.
+		vec3 lit = ALBEDO * pow(l, 1.4) * f * 4.0;
+		float g = dot(ALBEDO, vec3(0.299, 0.587, 0.114));
+		ALBEDO = mix(ALBEDO, vec3(g), 0.10 * f) * (1.0 + 0.8 * f);
+		EMISSION += lit + rim * f * 0.3;
 	}
 }
 """
@@ -489,6 +557,7 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_body_mat = ShaderMaterial.new()
 	_body_mat.shader = sh
 	_body_mat.set_shader_parameter("body_tex", tex)
+	_body_mat.set_shader_parameter("flare_gain", flare_gain)
 	_body_mat.render_priority = -1   # drawn before the glass
 	_quad.set_surface_override_material(0, _body_mat)
 	_vessel.add_child(_quad)
@@ -709,9 +778,123 @@ func _process(delta: float) -> void:
 		return
 	var sw: float = sin(t * 1.05)
 	var k: float = 1.0 + _breathe * 0.016 * sw
-	_vessel.scale = Vector3(k, k, 1.0)
+	# The recoil rides ON the idle rather than being tweened onto the vessel: this
+	# function rewrites scale and position every frame, so a Tween aimed at either
+	# would be erased before it was ever seen. `_hit` and `_hit_squash` are the
+	# tweened values; composing them here is what makes the two coexist.
+	_vessel.scale = Vector3(
+		k * (1.0 - SQUASH * _hit_squash), k * (1.0 + SQUASH * _hit_squash), 1.0)
 	_vessel.rotation.z = _breathe * 0.017 * sin(t * 0.71)
-	_vessel.position.y = _breathe * _box_u * 0.010 * sin(t * 0.83)
+	_vessel.position = Vector3(
+		_hit * KICK_PX * UNIT,
+		_breathe * _box_u * 0.010 * sin(t * 0.83), 0.0)
+
+
+# ---------------------------------------------------------------- being struck
+
+## The body is struck.
+##
+## Two beats, and the benchmark separates them by *source* rather than by amount.
+## `hurtFlash` fires on every hit a foe takes — poison included — so the flash
+## does not distinguish; the shove does. A direct attack gets `choreoHit`'s full
+## shove and squash; poison, burn, thorns and self-damage get only hurtFlash's
+## smaller two-phase wobble, because a body recoiling hard from nothing visible
+## reads as being punched by an invisible hand.
+##
+## The two are not stacked. In the benchmark they are two animations on one
+## element, both writing `transform` and `filter`, so only one of them was ever
+## visible on a direct hit — porting the conflict rather than the result would be
+## transcribing a workaround.
+##
+## `hurtFlash` is a foe's animation there, and a struck hero is shoved without
+## flashing, so the flare is withheld from a hero rather than dimmed for one.
+func take_hit(direct: bool = true) -> void:
+	if _dead:
+		return
+	if _gem != null:
+		_gem_flash()
+		return
+	if _vessel == null:
+		return
+	if tier != "hero":
+		_flare()
+	if direct:
+		_shove()
+	else:
+		_nudge()
+
+
+## Which way a blow throws this actor. Derived rather than passed, on the same
+## reasoning as `tier`: the hero stands left of the foes, so a struck foe is
+## thrown right and a struck hero is thrown left.
+func _away() -> float:
+	return -1.0 if tier == "hero" else 1.0
+
+
+func _shove() -> void:
+	if _hit_tween != null and _hit_tween.is_valid():
+		_hit_tween.kill()
+	_hit = _away()
+	_hit_squash = 1.0
+	# TRANS_QUINT / EASE_OUT is the near-equivalent of the benchmark's
+	# cubic-bezier(.22, 1, .36, 1): almost all of the travel spent in the first
+	# third, so the blow lands hard and the settle is barely noticed.
+	_hit_tween = create_tween().set_parallel(true)
+	_hit_tween.tween_property(self, "_hit", 0.0, HIT_TIME) \
+		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	_hit_tween.tween_property(self, "_hit_squash", 0.0, HIT_TIME) \
+		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+
+
+## hurtFlash's own displacement: out, back past centre, settle. No squash — an
+## unstruck-looking body that merely twitches is the whole read for a poison tick.
+func _nudge() -> void:
+	if _hit_tween != null and _hit_tween.is_valid():
+		_hit_tween.kill()
+	_hit_squash = 0.0
+	var away: float = _away()
+	_hit_tween = create_tween()
+	_hit_tween.tween_property(self, "_hit", away * NUDGE_OUT, FLARE_RISE) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_hit_tween.tween_property(self, "_hit", away * NUDGE_BACK, FLARE_RISE) \
+		.set_trans(Tween.TRANS_SINE)
+	_hit_tween.tween_property(self, "_hit", 0.0, HIT_TIME - FLARE_RISE * 2.0) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+
+## Up in 90ms, down over the rest — hurtFlash peaks at 30% of its 0.3s and the
+## asymmetry is the point: a flash that faded as slowly as it rose would read as
+## the creature glowing rather than as it being hit.
+func _flare() -> void:
+	if _body_mat == null:
+		return
+	if _flare_tween != null and _flare_tween.is_valid():
+		_flare_tween.kill()
+	# SINE / EASE_IN_OUT both ways, which is what interpolating between CSS
+	# keyframes actually does. An EASE_OUT rise was tried and it front-loads so
+	# hard that the flash was already at 45% on the first frame — the ramp the
+	# benchmark spends 90ms on has to be visible as a ramp, or there was no reason
+	# to give it 30% of the animation.
+	_flare_tween = create_tween()
+	_flare_tween.tween_method(_set_flare, 0.0, 1.0, FLARE_RISE) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_flare_tween.tween_method(_set_flare, 1.0, 0.0, HIT_TIME - FLARE_RISE) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func _set_flare(v: float) -> void:
+	if _body_mat != null:
+		_body_mat.set_shader_parameter("flare", v)
+
+
+## The gem has no body to shove and no shader to flash, so the fallback avatar
+## takes the hit as a brightness pulse — the same channel set_targetable uses.
+func _gem_flash() -> void:
+	var tw: Tween = create_tween()
+	tw.tween_property(self, "modulate", Color(2.2, 2.0, 2.0, 1.0), FLARE_RISE) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(self, "modulate", Color(1, 1, 1, 1), HIT_TIME - FLARE_RISE) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
 
 # ---------------------------------------------------------------- the cracks
@@ -867,6 +1050,13 @@ func reset_glass() -> void:
 	_dead = false
 	_ignite = 0.0
 	_shake = 0.0
+	if _hit_tween != null and _hit_tween.is_valid():
+		_hit_tween.kill()
+	if _flare_tween != null and _flare_tween.is_valid():
+		_flare_tween.kill()
+	_hit = 0.0
+	_hit_squash = 0.0
+	_set_flare(0.0)
 	_sites = PackedVector2Array()
 	modulate = Color(1, 1, 1, 1)
 	if _debris != null:
@@ -1222,6 +1412,12 @@ func set_glass_param(param: StringName, value: float) -> void:
 		&"bump", &"emission_gain":
 			if _body_mat != null:
 				_body_mat.set_shader_parameter(param, value)
+		&"flare_gain":
+			# Both, deliberately: the material so the actor on screen changes now,
+			# and the static so the next actor the bench builds keeps the setting.
+			flare_gain = value
+			if _body_mat != null:
+				_body_mat.set_shader_parameter("flare_gain", value)
 		&"glass_area":
 			_glass_area = value
 			_rebuild_glass()
