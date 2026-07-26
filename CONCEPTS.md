@@ -186,6 +186,22 @@ and the whole row is relit when the next turn begins.
 
 ---
 
+## The reward
+
+### Spoils
+The part of a combat reward that is handed over rather than chosen — the gold,
+and any potion or relic the fight paid out. Spoils are announcements, not a
+menu: nobody declines gold, so rendering them as choices spends the player's
+attention on a decision that does not exist.
+
+### Offering
+The cards laid out after a fight for the player to take one of, or none at all.
+It is the only real decision a reward contains, and so outranks the Spoils for
+space and attention however the screen is drawn. A fight may make no Offering;
+a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
+
+---
+
 ## Flagged ambiguities
 
 - **"Holo" had been used for both depth and rainbow colour — these are
@@ -200,3 +216,7 @@ and the whole row is relit when the next turn begins.
 - **An enemy is an Actor, not a card.** Earlier work drew enemies as card-like
   placards; that framing is retired. The procedural gem survives only as the
   fallback avatar when a painting is missing, and as the world map's emblem.
+- **"Reward" had been used for both the whole bundle and the card choice — these
+  are distinct.** A reward is Spoils plus an Offering, and only the Offering is
+  chosen. Treating the two as one uniform list is what produces a screen asking
+  the player to click three times to acknowledge news.
