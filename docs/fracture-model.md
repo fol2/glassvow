@@ -77,7 +77,7 @@ presentation/combat/glass/           Node / Mesh / Shader allowed
 ```
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2213` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:2313` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -281,7 +281,7 @@ actor or it scintillates whatever the MSAA. At a 115 px sporeling with
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:1693` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:1736` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -435,7 +435,7 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:1914` (in `_prism`)), so
+  have**. The existing `_prism` calls it (`enemy_view.gd:2014` (in `_prism`)), so
   the ribbon needs authored crease normals, not the convenience path.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
