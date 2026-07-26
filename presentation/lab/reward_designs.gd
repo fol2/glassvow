@@ -47,7 +47,7 @@ extends Control
 ## All three run on one shader (leaded_glass.gdshader) and the art already in
 ## the tree. No new assets.
 
-const GLASS: Shader = preload("res://presentation/lab/leaded_glass.gdshader")
+const GLASS: Shader = preload("res://presentation/reward/leaded_glass.gdshader")
 const ART: String = "res://assets/art/"
 
 # ── the measured palette, carried over from the ported screen ──────────────

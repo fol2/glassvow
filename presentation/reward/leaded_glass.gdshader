@@ -62,6 +62,14 @@ uniform float seed = 0.0;
 uniform float ink = 0.0;                  // 1 = spent: keep the came, kill light
 uniform sampler2D tones : filter_nearest, source_color;
 
+// ── the liquid ────────────────────────────────────────────────────────────
+// >= 0 stands something in the light, filled to this share of its height. The
+// empty glass above stays glass — darker, still lit, still the same pane — and
+// a meniscus rides the surface, which is the line the eye actually reads. A
+// vial is a gauge you can read at a glance ONLY because of that bright line.
+uniform float fill = -1.0;
+uniform vec4 fill_tint : source_color = vec4(1.0, 0.35, 0.39, 1.0);
+
 
 float hash(vec2 p) {
 	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -175,6 +183,24 @@ void fragment() {
 	// Light that got in and did not get out: the glass keeps a floor of its own
 	// colour, so an unlit light is dark GLASS rather than a hole.
 	glass += glass_tone.rgb * 0.040;
+
+	// Something standing in the glass, filled from the bottom. The empty part
+	// is held back rather than blanked — it is the same pane, just with nothing
+	// behind it — and the meniscus is a real highlight, not a drawn rule: it is
+	// the only part of a vial the eye reads quickly, so it gets the light.
+	if (fill >= 0.0) {
+		float surface = size.y * (0.5 - clamp(fill, 0.0, 1.0));
+		float wet = smoothstep(surface - 1.0, surface + 1.0, p.y);
+		vec3 liquid = fill_tint.rgb * (0.20 + 0.80 * back) * body;
+		// The empty part is held back, NOT blanked. At 0.32 over already-dark
+		// glass the vessel went black and stopped reading as a vessel at all —
+		// an empty vial still has to look like glass or the gauge has no scale.
+		glass = mix(glass * 0.55, liquid, wet);
+		// Only when there IS a surface: a full or empty vial has no meniscus.
+		float edge = smoothstep(0.0, 0.03, fill) * smoothstep(1.0, 0.97, fill);
+		float men = exp(-pow((p.y - surface) / 2.2, 2.0)) * edge;
+		glass += fill_tint.rgb * men * 0.9;
+	}
 
 	// The cut edge next to the lead takes the light twice — once coming
 	// through, once off the cut itself. Thin, and most of the read.
