@@ -288,3 +288,54 @@ consequences are not subtle and they are silent:
 
 In Chrome the same page reports `visible`, the GL context is live, and the
 sporelings draw. `?mesh=0` is the fallback if only geometry is needed.
+
+## The geometry, measured on both sides
+
+With the recipe above, the benchmark and the port can be put in the same fight —
+two sporelings, seed 7 — and every box compared. Sixteen independent
+measurements, taken off the live DOM in design pixels and matched against the
+port's own constants:
+
+| element | benchmark, measured | port | |
+|---|---|---|:-:|
+| stage | 1180 x 820 | `STAGE` | ✓ |
+| hud bar | 1180 x 56 at the origin | `BAR_H 56` | ✓ |
+| end turn | 1060, 537 — 120 x 120 | `Rect2(1060, 537, 120, 120)` | ✓ |
+| lantern | 18, 448 — 104 x 104 | `Rect2(18, 448, 104, 104)` | ✓ |
+| draw pile | 16, 658 — 96 x 148 | `Rect2(16, 658, 96, 148)` | ✓ |
+| ashes pile | 952, 658 — 96 x 148 | `Rect2(952, 658, 96, 148)` | ✓ |
+| discard pile | 1062, 658 — 96 x 148 | `Rect2(1062, 658, 96, 148)` | ✓ |
+| card | 152 x 216 | `CARD_W` / `CARD_H` | ✓ |
+| pile fan | 5° step, 30° span, 16 faces | `FAN_STEP` / `FAN_SPAN` / `FAN_FACES` | ✓ |
+| ground line | 588 — enemy feet sit on it | `GROUND_Y 232` (820 − 232) | ✓ |
+| ledge lip | 14 | `LEDGE_LIP 14` | ✓ |
+| enemy slots, two foes | centres 820.5 and 1035.5 | `Vector2(820, 0)`, `Vector2(1035, 0)` | ✓ |
+| enemy art box | 115 x 115 | `char-meta.json` sporeling 115 | ✓ |
+| hero | centre 200, 190 x 285 | `HERO_X 200` | ✓ |
+| hp rail | inner bar 9 tall | `RAIL_H 9` | ✓ |
+| hand fan tilt | ±10° at five cards | `min(5, 42 / n)` | ✓ |
+
+**Sixteen for sixteen.** The chrome layout and the battlefield geometry are
+exact. Whatever else this port got wrong, it did not get the boxes wrong.
+
+The card measurement is worth one line of explanation, because the raw numbers
+look like they disagree. A five-card hand reports bounding boxes of 187, 170,
+152, 170, 187 — symmetric, and only the middle one is 152 x 216. That is not
+five different card sizes. It is one card size seen through five rotations: an
+axis-aligned bounding box grows with the tilt, and the middle seat has none.
+The ±10° that produces 187 from 152 is exactly `min(5, 42 / 5) × 2`.
+
+### The false regression this caught
+
+`battlefield-layout.js` gives `hero: { x: 179, w: 190, h: 285 }`. The port has
+`HERO_X = 200.0`. Read side by side in the source, that is a 21 px error in the
+hero's standing position, on a lane's own file, and it would have been "fixed".
+
+Measured, the hero's rendered centre is **200.0** — the port's number, to the
+decimal. `hero.x` is not the centre: the hero box spans 105 to 295, so 179 is
+neither its centre nor either edge. Whatever origin that field is expressed in,
+the layout does not put the hero there.
+
+This is the argument for the recipe above in one example. Reading two sources
+and diffing the numbers manufactures regressions that do not exist, in exactly
+the same way that reading the wrong tree hid the ones that do.
