@@ -15,6 +15,10 @@ extends RefCounted
 
 const OUT_SOFT: Array[float] = [0.22, 1.0, 0.36, 1.0]
 const SPRING: Array[float] = [0.34, 1.56, 0.64, 1.0]
+## The entrance curve — `heroIn` / `enemyIn` / `chromeIn` all share it
+## (styles.css:739). Softer out than OUT_SOFT, and no overshoot: a fight opens
+## by arriving, not by bouncing.
+const ENTER: Array[float] = [0.2, 0.75, 0.3, 1.0]
 ## Bisection depth for the x→t solve. 18 halvings resolve a 640ms curve to
 ## well under a frame, and the loop is bounded rather than convergence-tested.
 const SOLVE_STEPS: int = 18

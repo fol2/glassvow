@@ -134,6 +134,11 @@ var _discard_pile: Pile
 var _vial_frame: bool = true
 ## The last nine values drawn; empty forces the first pass through.
 var _last: PackedInt32Array = PackedInt32Array()
+## `chromeIn` (styles.css:741) names four clusters — the energy orb, the END
+## seal, the piles and the lantern — and not the top strip, which fades into the
+## scene rather than sliding into it. Collected at build time so the entrance
+## does not have to go looking for them.
+var _chrome_in: Array[Control] = []
 
 
 ## One pile's parts. A class rather than three sets of members or a dictionary
@@ -580,6 +585,7 @@ func _build_energy() -> void:
 	_energy_orb = Control.new()
 	_place(_energy_orb, Rect2(0.0, 568.0, 120.0, 90.0), false, true)
 	add_child(_energy_orb)
+	_chrome_in.append(_energy_orb)
 
 	_candle_field = Control.new()
 	_candle_field.position = Vector2(0.0, 34.0)
@@ -599,6 +605,7 @@ func _build_lantern() -> void:
 	_lantern = Control.new()
 	_place(_lantern, Rect2(18.0, 448.0, 104.0, 104.0), false, true)
 	add_child(_lantern)
+	_chrome_in.append(_lantern)
 	# The benchmark drop-shadows the lantern in its own firelight; a soft radial
 	# behind it is the cheap read of the same thing.
 	var glow: TextureRect = TextureRect.new()
@@ -635,6 +642,7 @@ func _build_pile(which: StringName, name_text: String, rect: Rect2,
 	_place(root, rect, from_right, true)
 	root.modulate = Color(1.0, 1.0, 1.0, fade)
 	add_child(root)
+	_chrome_in.append(root)
 
 	var btn: Button = _bare_button(rect.size)
 	btn.pressed.connect(func() -> void: pile_pressed.emit(which))
@@ -683,6 +691,34 @@ func pile_rect(which: StringName) -> Rect2:
 	if p == null or p.stack == null:
 		return Rect2(global_position + size * 0.5, Vector2.ZERO)
 	return p.stack.get_global_rect()
+
+
+## `chromeIn` (styles.css:741) — the furniture rises 44px into place a beat
+## behind the actors: 0.5s on a 0.4s delay, `backwards`, so it is already at its
+## start pose when the fight opens rather than snapping there.
+##
+## The top strip is deliberately not in the list. The benchmark names four
+## clusters and the strip is not one of them — it belongs to the scene, and a
+## bar that slides in reads as a second stage entrance competing with the first.
+func play_entrance() -> void:
+	if not is_inside_tree():
+		return
+	for node: Control in _chrome_in:
+		if node == null or not is_instance_valid(node):
+			continue
+		var home: Vector2 = node.position
+		var rest: float = node.modulate.a
+		node.position = home + Vector2(0.0, 44.0)
+		node.modulate.a = 0.0
+		var tw: Tween = node.create_tween()
+		tw.tween_interval(0.4)
+		tw.tween_method(func(x: float) -> void:
+			if not is_instance_valid(node):
+				return
+			var e: float = Motion.ease(Motion.ENTER, x)
+			node.position = home + Vector2(0.0, 44.0 * (1.0 - e))
+			node.modulate.a = rest * e,
+			0.0, 1.0, 0.5)
 
 
 ## `playReshuffleCeremony` (drain.js:132) — the discard walks back into the draw
@@ -812,6 +848,7 @@ func _build_end_turn() -> void:
 	var root: Control = Control.new()
 	_place(root, Rect2(1060.0, 537.0, 120.0, 120.0), true, true)
 	add_child(root)
+	_chrome_in.append(root)
 	var btn: Button = _bare_button(Vector2(120.0, 120.0))
 	btn.pressed.connect(func() -> void: end_turn_pressed.emit())
 	root.add_child(btn)

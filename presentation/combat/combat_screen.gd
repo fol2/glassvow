@@ -144,6 +144,10 @@ var _hit_seq: int = 0
 ## start at the body that gave them rather than at the hero.
 var _ember_from: Vector2 = Vector2.ZERO
 var _has_ember_from: bool = false
+## `targetIdx` — what the card about to resolve was aimed at, so `play` can
+## throw it there. Null for an untargeted card and for anything the engine
+## started on its own.
+var _play_target: Variant = null
 
 
 ## Fully constructed at new() — no tree dependency, so headless tests can
@@ -414,7 +418,7 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
 		_stand(view, slot.x, slot.y)
 	_sync_all()
-	_deal_opening_hand()
+	_open_fight(slots)
 
 
 ## The opening hand is BUILT by `_sync_all`, not replayed — the startCombat batch
@@ -422,15 +426,54 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 ## its draws never reach `_handle_event` and never fly. Dealt here on the same
 ## schedule, because otherwise the first thing a fight shows is five cards
 ## appearing out of nothing, and that is the moment the deal most needs to read.
-func _deal_opening_hand() -> void:
+## Everything that has to wait for the first layout pass. `HudBar._place` hangs
+## each cluster off the nearest window edge and `_stand` anchors each actor to
+## the ground line, and neither resolves until then — asked in the same frame,
+## the draw pile reports a box at y −162 and an actor reports position zero.
+func _open_fight(slots: Array[Vector2]) -> void:
 	if seq.instant or not is_inside_tree():
 		return
-	# One frame, and it is not optional. `HudBar._place` hangs each cluster off
-	# the nearest window edge, and those anchors do not resolve until the first
-	# layout pass — asked in this same frame, the draw pile reports a box at
-	# y −162, which is the difference between a card flying out of the pile and
-	# one dropping in from above the top edge.
 	await get_tree().process_frame
+	_play_entrance(slots)
+	_deal_opening_hand()
+
+
+## `.combat-screen.intro` (styles.css:739) — the hero walks in from the left,
+## the foes from the right, and the furniture rises a beat behind both.
+##
+## Position is tweened and then handed back to `_stand`, because an actor is
+## ANCHORED to the ground line: writing `position` rewrites its offsets, so the
+## entrance would quietly cost the layout that keeps its feet on the floor at
+## any window height. Re-standing it at the end restores that exactly.
+func _play_entrance(slots: Array[Vector2]) -> void:
+	if _hero != null:
+		_enter(_hero, -70.0, HERO_X, 0.0)
+	for idx: int in range(_enemy_views.size()):
+		var view: EnemyView = _enemy_views[idx]
+		if view == null:
+			continue
+		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
+		_enter(view, 90.0, slot.x, slot.y)
+	_hud.play_entrance()
+
+
+func _enter(view: EnemyView, dx: float, x: float, lift: float) -> void:
+	var home: Vector2 = view.position
+	var rest: float = view.modulate.a
+	view.position = home + Vector2(dx, 0.0)
+	view.modulate.a = 0.0
+	var tw: Tween = view.create_tween()
+	tw.tween_method(func(t: float) -> void:
+		if not is_instance_valid(view):
+			return
+		var e: float = Motion.ease(Motion.ENTER, t)
+		view.position = home + Vector2(dx * (1.0 - e), 0.0)
+		view.modulate.a = rest * e,
+		0.0, 1.0, 0.55)
+	tw.tween_callback(_stand.bind(view, x, lift))
+
+
+func _deal_opening_hand() -> void:
 	var opening: Array[int] = _hand.uids()
 	if opening.is_empty():
 		return
@@ -514,6 +557,9 @@ func request_play(uid: int, target: Variant) -> bool:
 	var inst: CardInst = _find_card(uid)
 	if inst == null or not _rules.can_play(game.cb, inst, target):
 		return false
+	# `drain(targetIdx)` — the drain is told what was aimed at, because the
+	# `play` event does not carry it and a targeted card flies at its foe.
+	_play_target = target
 	seq.enqueue(game.apply({"t": "playCard", "uid": uid, "target": target}))
 	return true
 
@@ -746,7 +792,16 @@ func _handle_event(ev: Dictionary) -> void:
 				_archetype = str(_rules.card_data(inst).get("vfx", "slash"))
 			_hit_seq = 0
 			_hero_swung = false  # this card's swing is owed
-			_hand.remove_card(uid)
+			# `if (c && targetIdx != null && cb.enemies[targetIdx])` — a targeted
+			# attack does not go quietly to the discard from the hand. The card
+			# itself streaks into the foe, and the `toDiscard` that follows moves
+			# the pile copy.
+			var aimed: int = _play_target if typeof(_play_target) == TYPE_INT else -1
+			_play_target = null
+			if aimed >= 0 and aimed < game.cb.enemies.size():
+				_hand.strike_to(uid, _enemy_centre(aimed))
+			else:
+				_hand.remove_card(uid)
 			await _wait(0.2)
 		EventTypes.HIT_ENEMY:
 			await _hit_enemy(ev)

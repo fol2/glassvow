@@ -49,6 +49,10 @@ const DEAL_STAGGER_MIN: float = 0.04
 ## `schedule: { flightDur: 200 }` at drain.js:866 — a spent card goes home
 ## faster than a drawn one arrives.
 const SPEND_FLIGHT: float = 0.2
+## `flyCardBacks([...], {x, y}, 270, ...)` with the anchor at `r.width * 0.22` —
+## how long a targeted card takes to reach its foe, and how small it gets there.
+const STRIKE_FLIGHT: float = 0.27
+const STRIKE_SCALE: float = 0.22
 
 ## Ignore pointer input while the sequencer is busy (input-lock contract).
 var locked: bool = false
@@ -290,6 +294,43 @@ func spend_to(uid: int, to: Rect2) -> void:
 	tw.tween_property(view, "scale", Vector2.ONE * shrink, SPEND_FLIGHT)
 	tw.tween_property(view, "rotation", 0.0, SPEND_FLIGHT)
 	tw.tween_property(view, "modulate:a", 0.0, SPEND_FLIGHT)
+	tw.chain().tween_callback(view.queue_free)
+	_relayout()
+
+
+## A targeted card does not leave the hand for a pile — it goes at the foe.
+## `drain.js:501`: the card streaks into the enemy and lands at 22% of its own
+## size, and only the `toDiscard` that follows moves the pile copy. 270ms, which
+## is the window the blow is waiting inside.
+func strike_to(uid: int, target: Vector2) -> void:
+	var view: CardView = _views.get(uid)
+	if view == null:
+		return
+	_views.erase(uid)
+	_order.erase(uid)
+	_flight_from.erase(uid)
+	if _drag_uid == uid:
+		_drag_uid = -1
+		_dragging = false
+		_aiming = false
+	if not is_inside_tree():
+		remove_child(view)
+		view.queue_free()
+		_relayout()
+		return
+	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	view.move_to_front()
+	view.pivot_offset = view.size * 0.5
+	var tw: Tween = create_tween().set_parallel(true)
+	tw.tween_property(view, "global_position",
+		target - view.size * 0.5 * STRIKE_SCALE, STRIKE_FLIGHT) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(view, "scale", Vector2.ONE * STRIKE_SCALE, STRIKE_FLIGHT)
+	tw.tween_property(view, "rotation", 0.0, STRIKE_FLIGHT)
+	# Held opaque for the first half: a card that fades as it launches never
+	# reads as having been thrown at anything.
+	tw.tween_property(view, "modulate:a", 0.0, STRIKE_FLIGHT * 0.45) \
+		.set_delay(STRIKE_FLIGHT * 0.55)
 	tw.chain().tween_callback(view.queue_free)
 	_relayout()
 
