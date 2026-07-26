@@ -32,6 +32,12 @@ const ART_DIRS: Array[String] = [
 ]
 const META_PATH: String = "res://assets/art/enemies/char-meta.json"
 const WARD_ICON: Texture2D = preload("res://assets/art/ui/ward.png")
+## `.hpbar > .ghost` — `rgba(255, 230, 160, .55)`, screened over the rail, with
+## `transition: width 0.9s ease 0.25s`. The delay is the whole point: the trail
+## has to sit still long enough to be read as the damage that was just done.
+const GHOST_WARM: Color = Color(1.0, 0.90196079, 0.627451, 0.55)
+const GHOST_HOLD: float = 0.25
+const GHOST_FALL: float = 0.9
 
 ## Chrome geometry (benchmark styles.css: .hpbar-wrap width 150, .cplate gap 6,
 ## .top-chrome bottom calc(100% + 8px)).
@@ -148,6 +154,9 @@ var _intent: IntentChip
 var _gem: GlassGem
 var _name_label: Label
 var _hp_bar: ProgressBar
+## The trail behind a loss — the same rail, a beat late.
+var _hp_ghost: ProgressBar
+var _ghost_tween: Tween = null
 var _hp_label: Label
 var _facets: FacetPips
 var _ward_chip: PanelContainer
@@ -1707,11 +1716,24 @@ func _build_chrome(display_name: String) -> void:
 	hp_wrap.custom_minimum_size = Vector2(PLATE_W, 16)
 	hp_wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vial_row.add_child(hp_wrap)
+	# `.hpbar > .ghost` (styles.css:849) — the warm trail the loss leaves behind.
+	# It carries the TRACK, and the live rail above it is given a transparent
+	# background, so the ghost shows in the gap the fill has just left instead of
+	# needing a blend mode Godot's CanvasItemMaterial does not have.
+	_hp_ghost = ProgressBar.new()
+	_hp_ghost.show_percentage = false
+	_hp_ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hp_ghost.set_anchors_preset(Control.PRESET_FULL_RECT)
+	GlassStyle.style_bar(_hp_ghost, GHOST_WARM)
+	hp_wrap.add_child(_hp_ghost)
 	_hp_bar = ProgressBar.new()
 	_hp_bar.show_percentage = false
 	_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar.set_anchors_preset(Control.PRESET_FULL_RECT)
 	GlassStyle.style_bar(_hp_bar, GlassStyle.HP_RED)
+	var clear_track: StyleBoxFlat = StyleBoxFlat.new()
+	clear_track.bg_color = Color(0, 0, 0, 0)
+	_hp_bar.add_theme_stylebox_override("background", clear_track)
 	hp_wrap.add_child(_hp_bar)
 	_hp_label = _label("")
 	_hp_label.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -1772,11 +1794,33 @@ func sync(e: EnemyCombatant, dmg_text: String, intent: StringName,
 ## gem with no painting has to say.
 func set_hp(hp: int, max_hp: int) -> void:
 	_max_hp = maxi(max_hp, 1)
+	var now: int = maxi(0, hp)
+	var was: float = _hp_bar.value
 	_hp_bar.max_value = _max_hp
-	_hp_bar.value = maxi(0, hp)
-	_hp_label.text = "%d / %d" % [maxi(0, hp), max_hp]
+	_hp_bar.value = now
+	_hp_label.text = "%d / %d" % [now, max_hp]
+	_ghost_to(was, float(now))
 	if _gem != null and not _dead:
-		_gem.set_state(_hue, float(maxi(0, hp)) / float(_max_hp), hp <= 0)
+		_gem.set_state(_hue, float(now) / float(_max_hp), hp <= 0)
+
+
+## The trail: hold at the old reading for a beat, then run down to the new one.
+## A gain skips the ceremony — the rail is already ahead of the ghost, so there
+## is nothing behind to show.
+func _ghost_to(was: float, now: float) -> void:
+	if _hp_ghost == null:
+		return
+	_hp_ghost.max_value = _max_hp
+	if now >= was or not is_inside_tree():
+		_hp_ghost.value = now
+		return
+	if _ghost_tween != null and _ghost_tween.is_valid():
+		_ghost_tween.kill()
+	_hp_ghost.value = maxf(_hp_ghost.value, was)
+	_ghost_tween = create_tween()
+	_ghost_tween.tween_interval(GHOST_HOLD)
+	_ghost_tween.tween_property(_hp_ghost, "value", now, GHOST_FALL) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 func set_ward(block: int) -> void:
