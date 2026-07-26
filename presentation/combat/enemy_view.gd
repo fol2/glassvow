@@ -48,17 +48,23 @@ const GHOST_FALL: float = 0.9
 ## Chrome geometry (benchmark styles.css: .hpbar-wrap width 150, .cplate gap 6,
 ## .top-chrome bottom calc(100% + 8px)).
 const PLATE_W: float = 150.0
-## `.hpbar` and the bezel that sits over it (styles.css:838-847).
+## `.hpbar` (styles.css:833) — the rule that actually paints. The stylesheet
+## carries a second one at :825 for a bezelled rail; it is keyed on
+## `:has(.hp-vial-frame)` and no such element exists at run time, so its radius
+## 2, its 0.35 track and its 4px side margin never apply to anything. This port
+## had all three.
 const RAIL_H: float = 9.0
-const RAIL_INSET: float = 4.0     # `margin: 0 4px` under the frame
-const RAIL_RADIUS: int = 2
-const RAIL_TRACK: Color = Color(0.0, 0.0, 0.0, 0.35)
+const RAIL_RADIUS: int = 5
+const RAIL_TRACK: Color = Color(0.0, 0.0, 0.0, 0.55)
+## `border: 1px solid var(--lead)`. The rule also carries
+## `inset 0 0 0 1px rgba(255,255,255,.06)` — a 6% white hairline immediately
+## inside the border. Not ported: a StyleBoxFlat has one border, and a second
+## box stacked under a 9px rail to carry six percent of white is more machinery
+## than the effect is worth. Recorded so nobody looks for it twice.
+const RAIL_EDGE: Color = Color(0.019607844, 0.02745098, 0.05490196)   # #05070e
 const RAIL_FROM: Color = Color(0.70980394, 0.16470589, 0.24313726)   # #b52a3e
 const RAIL_TO: Color = Color(1.0, 0.41568628, 0.36862746)            # #ff6a5e
 const VIAL_H: float = 14.0
-const VIAL_FRAME: String = "res://assets/art/ui/hp-vial-frame.png"
-const VIAL_FRAME_H: float = 22.0
-const VIAL_FRAME_PROUD: float = 5.0
 ## `.hp-label`
 const HP_LABEL_W: float = 52.0
 const HP_LABEL_PX: int = 12
@@ -114,6 +120,26 @@ const KICK_PX: float = 9.0
 const SQUASH: float = 0.03            ## scale(.97, 1.03) at the peak
 const HIT_TIME: float = 0.3           ## the whole recoil, cubic-bezier(.22,1,.36,1)
 const FLARE_RISE: float = 0.09        ## hurtFlash peaks at 30% of its 0.3s
+## `meshFlash(el, 160)` (mesh.js:1030) — the layer below this one had missed.
+##
+## A struck creature in the benchmark is hit by THREE things, not one. The
+## shader comment further down reasons carefully about `hurtFlash`, the CSS
+## filter, and rejects three literal ports of it for good reasons. It never
+## mentions this, and this is the one that whitens the body:
+##
+##     p.mat.uniforms.uFlash.value = 0.9;                        // mesh.js:1031
+##     gl_FragColor = vec4(base.rgb + uFlash * a, ...);          // mesh.js:245
+##
+## A FLAT 0.9 added to every channel across the whole silhouette, masked only by
+## the sprite's own alpha — indifferent to what is painted underneath, so a dark
+## creature goes as white as a bright one. Hard on, hard off after 160ms: no
+## ramp, because a `setTimeout` has none.
+##
+## That is why the flare alone never read as the benchmark's blow. The flare is
+## keyed to the creature's painting and is right to be; this is not keyed to
+## anything, and the two are meant to land together.
+const HIT_WHITE: float = 0.9
+const HIT_WHITE_HOLD: float = 0.16
 ## An incidental hit — poison, burn, thorns, self-damage — never gets the shove or
 ## the squash, only `hurtFlash`'s own smaller two-phase wobble: +7 px then -5 px,
 ## expressed against the 9 px kick so one constant governs the scale of all of it.
@@ -392,6 +418,7 @@ var _lunge_kind: String = ""
 var _lunge_dir: float = 1.0
 var _lunge_tween: Tween = null
 var _flare_tween: Tween = null
+var _white_tween: Tween = null
 ## The throwaway stream: camera shake only. Nothing whose position anyone will
 ## ever compare between two runs may draw from it — see `_frac`.
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -705,6 +732,10 @@ uniform float flare = 0.0;
 // How hard that peak hits. A knob rather than a constant because the CSS number
 // does not transfer (see the flare block) so it has to be judged by eye.
 uniform float flare_gain = 1.0;
+// `meshFlash`'s `uFlash` — flat white added across the silhouette, keyed to
+// nothing. Sits beside `flare` rather than inside it because the two answer to
+// different clocks: this one is a 160ms square wave, the flare is a ramp.
+uniform float hit_white = 0.0;
 // The vessel leaving. A custom shader that writes ALPHA overrides
 // GeometryInstance3D.transparency outright, so the fade has to be a uniform.
 uniform float fade = 1.0;
@@ -942,6 +973,10 @@ void fragment() {
 		ALBEDO = mix(ALBEDO, vec3(g), 0.10 * f) * (1.0 + 0.8 * f);
 		EMISSION += lit + rim * f * 0.3;
 	}
+	// `base.rgb + uFlash * a` (mesh.js:245). Added last and added flat: the
+	// benchmark does this AFTER its own lighting, so nothing above may shape it.
+	// The alpha mask is Godot's to apply at composite, which is what `* a` is.
+	EMISSION += vec3(hit_white);
 }
 """
 
@@ -2364,12 +2399,31 @@ func take_hit(direct: bool = true) -> void:
 		return
 	if _vessel == null:
 		return
+	# The white beat is everyone's. `choreoHit` calls `meshFlash` unconditionally
+	# and the drain calls `choreoHit` on both sides — `choreoHit(x.root, 1)` for a
+	# foe (drain.js:512), `choreoHit(ce.hero, -1)` for the hero (drain.js:596).
+	# Only the CSS flare below is a foe's, because `hurtFlash` hangs off
+	# `.enemy.hurt` and a hero is not `.enemy`.
+	_white_beat()
 	if tier != "hero":
 		_flare()
 	if direct:
 		_shove()
 	else:
 		_nudge()
+
+
+## `meshFlash(el, 160)` — a square wave, not a ramp: a `setTimeout` has no
+## easing. Held by a constant-value leg because a tween from 0.9 to 0.9 is how
+## that is spelled here.
+func _white_beat() -> void:
+	if _body_mat == null:
+		return
+	if _white_tween != null and _white_tween.is_valid():
+		_white_tween.kill()
+	_white_tween = create_tween()
+	_white_tween.tween_method(_set_hit_white, HIT_WHITE, HIT_WHITE, HIT_WHITE_HOLD)
+	_white_tween.tween_callback(_set_hit_white.bind(0.0))
 
 
 ## Which way a blow throws this actor. Derived rather than passed, on the same
@@ -2428,6 +2482,11 @@ func _flare() -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_flare_tween.tween_method(_set_flare, 1.0, 0.0, HIT_TIME - FLARE_RISE) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func _set_hit_white(v: float) -> void:
+	if _body_mat != null:
+		_body_mat.set_shader_parameter("hit_white", v)
 
 
 func _set_flare(v: float) -> void:
@@ -3602,15 +3661,12 @@ func _build_chrome(display_name: String) -> void:
 	vial.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vial_row.add_child(vial)
 
-	# `.hp-vial:has(.hp-vial-frame) .hpbar` (styles.css:838) — with the bezel
-	# present the rail loses its own lead border and inset hairline and becomes a
-	# 9px slot inset 4px at each end. The bezel supplies the frame; two frames
-	# would just fight.
+	# `.hpbar` (styles.css:833) — `flex: 1`, so it fills the vial edge to edge.
+	# The 4px side margin this used to carry belongs to the bezelled branch at
+	# :825, which never matches; with no bezel there is nothing to inset for.
 	var rail: Control = Control.new()
 	rail.set_anchors_preset(Control.PRESET_LEFT_WIDE)
 	rail.anchor_right = 1.0
-	rail.offset_left = RAIL_INSET
-	rail.offset_right = -RAIL_INSET
 	rail.anchor_top = 0.5
 	rail.anchor_bottom = 0.5
 	rail.offset_top = -RAIL_H * 0.5
@@ -3650,28 +3706,18 @@ func _build_chrome(display_name: String) -> void:
 	_hp_preview.anchor_bottom = 1.0
 	rail.add_child(_hp_preview)
 
-	# `.hp-vial-frame` (styles.css:831) — the bezel, 5px proud at each end and
-	# 22px tall over a 9px slot. The art has been in assets/art/ui the whole time
-	# and only the HUD lab ever loaded it.
-	var frame_tex: Texture2D = load(VIAL_FRAME) as Texture2D
-	if frame_tex != null:
-		var frame: TextureRect = TextureRect.new()
-		frame.texture = frame_tex
-		frame.stretch_mode = TextureRect.STRETCH_SCALE
-		# Without this a TextureRect's minimum size is its TEXTURE's size, and a
-		# minimum beats an anchor — the 512x179 bezel art laid itself across the
-		# whole screen instead of sitting in its 94x22 slot.
-		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		frame.set_anchors_preset(Control.PRESET_LEFT_WIDE)
-		frame.anchor_right = 1.0
-		frame.offset_left = -VIAL_FRAME_PROUD
-		frame.offset_right = VIAL_FRAME_PROUD
-		frame.anchor_top = 0.5
-		frame.anchor_bottom = 0.5
-		frame.offset_top = -VIAL_FRAME_H * 0.5
-		frame.offset_bottom = VIAL_FRAME_H * 0.5
-		vial.add_child(frame)
+	# NO BEZEL. `.hp-vial-frame` (styles.css:817) is a real rule and nothing in
+	# the reference ever inserts the element it styles: measured on the running
+	# benchmark in a two-foe fight, `.hp-vial-frame` matched **zero** nodes across
+	# all three rails, and no `<img>` on the page carries that art. `ui-chrome.js`
+	# names it in a preload list, which is not a use.
+	#
+	# The bezel was drawn here from that dead rule, and — worse — it dragged the
+	# rail's own numbers with it, because `styles.css:825` is
+	# `.hp-vial:has(.hp-vial-frame) .hpbar`. That branch only applies when the
+	# frame is present, so this port took radius 2, track alpha 0.35 and a 4px
+	# side margin from a selector that never matches. The live rule is
+	# `.hpbar` at :833. Its numbers are the ones above now.
 
 	# `.hp-label` (styles.css:850) — 12px 700 `#ffb9b9`, 52px min, left-aligned
 	# and tabular, so a rail that is losing digits does not shuffle sideways.
@@ -3703,6 +3749,11 @@ static func _style_rail(bar: ProgressBar, fill_tex: Texture2D, flat: Color) -> v
 	var track: StyleBoxFlat = StyleBoxFlat.new()
 	track.bg_color = RAIL_TRACK
 	track.set_corner_radius_all(RAIL_RADIUS)
+	# `border: 1px solid var(--lead)` — the rail's own edge, which the bezelled
+	# branch removes and which therefore never made it into this port. Godot
+	# draws a border inside the box, which is where CSS puts it too.
+	track.set_border_width_all(1)
+	track.border_color = RAIL_EDGE
 	bar.add_theme_stylebox_override("background", track)
 	if fill_tex == null:
 		var solid: StyleBoxFlat = StyleBoxFlat.new()
