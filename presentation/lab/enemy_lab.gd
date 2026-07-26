@@ -160,6 +160,15 @@ static func load_names() -> Dictionary:
 
 func _init(content_ref: ContentDB) -> void:
 	content = content_ref
+	# The lab opens BARE. Owner's ruling, 2026-07-26: the fireworks are additive and
+	# they cover the debris, so the default state of a tool for looking at glass has
+	# to be the one you can see glass in. `--fireworks` or F puts them back.
+	#
+	# This is the lab default only — `EnemyView.rite_fx` still ships true, so the
+	# game keeps its death flash. Turning it off there would be a visual design
+	# change to every death, which is a different decision from making a viewer
+	# usable.
+	EnemyView.rite_fx = false
 	var only: PackedStringArray = PackedStringArray()
 	var states_id: String = ""
 	# Each lab owns its own args (main.gd §labs), so the four lab sessions never
@@ -189,12 +198,12 @@ func _init(content_ref: ContentDB) -> void:
 			states_id = arg.trim_prefix("--hit=")
 		elif arg == "--incidental":
 			_hit_direct = false
-		# The rite's fireworks are additive and cover the debris completely, so a
-		# shatter frame cannot be read for whether the body broke along its own
-		# cracks while they are on. This is the flag that makes the shatter
-		# judgeable, and it is why it exists.
-		elif arg == "--bare":
-			EnemyView.rite_fx = false
+		# Put the burst flash, the embers and the fire flare back — the lab starts
+		# without them (see _init). `--bare` was the flag when the polarity was the
+		# other way round and is gone rather than left as a no-op, because a flag
+		# that does nothing is worse than a flag that has been removed.
+		elif arg == "--fireworks":
+			EnemyView.rite_fx = true
 		elif arg.begins_with("--flare="):
 			var fr: String = arg.trim_prefix("--flare=")
 			if fr.is_valid_float() and float(fr) >= 0.0:
@@ -633,7 +642,7 @@ func _build_panel() -> void:
 	_readout.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(_readout)
 
-	var hint: Label = _dim("H strike · J poison · F fireworks off (see the shards)\nclick the body to crack it there\ndrag to pan · wheel to zoom\n[ ] prev / next enemy\nthe rite is a foe's — H and J work on a hero, K and S do not")
+	var hint: Label = _dim("H strike · J poison · F fireworks (off by default)\nclick the body to crack it there\ndrag to pan · wheel to zoom\n[ ] prev / next enemy\nthe rite is a foe's — H and J work on a hero, K and S do not")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(hint)
 
