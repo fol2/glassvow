@@ -154,8 +154,7 @@ benchmark's `pile-chrome.js`), same pixels, 48 nodes → 3.
 
 - `presentation/combat/hud_bar.gd` — the widget this was found in. The
   node-per-layer version and its `.pile-layer` lineage are in this file's git
-  history on `main`; the `_draw()` version is in the working tree, uncommitted
-  as of this writing.
+  history on `main`; the `_draw()` version shipped in `4f52bd8`.
 - Verified on Godot 4.7.1.stable, the version pinned by this project's
   `CLAUDE.md`.
 - The same question is worth asking of any other ported cluster that repeats a
