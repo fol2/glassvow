@@ -3,8 +3,15 @@ extends Control
 ## Interactive bench for the two chip widgets. Not a contact sheet — the chips
 ## here are the real Controls, so what you tune is what ships.
 ##
-##   godot --path . -- --chips                  # the viewer
-##   godot --path . -- --chips --shot=/tmp/c.png  # same sheet, panel hidden
+##   godot --path . -- --chips                          # the viewer
+##   tools/shot.sh --chips --shot=/tmp/c.png            # the viewer, captured
+##   tools/shot.sh --chips --sheet --shot=/tmp/c.png    # ...panel dropped
+##   tools/shot.sh --chips --sheet --ground=2 --shot=/tmp/c.png   # ...on stone
+##
+## Dropping the panel takes --sheet: a plain --shot captures the viewer as you
+## see it, panel and all. Captures go through tools/shot.sh and never carry
+## --headless — a headless run has no viewport texture, so the capture hangs
+## instead of failing.
 ##
 ## WHAT YOU CAN DO
 ##   · click any status in the grid to load it into the inspector
@@ -88,8 +95,9 @@ func _init(content_ref: ContentDB) -> void:
 
 	# --sheet drops the furniture for a clean contact sheet. A plain --shot
 	# captures the viewer as you see it, because the panel is the point now.
-	# --ground=N picks the surface, so a headless capture can check the one
-	# thing a still frame otherwise cannot: that the outline holds on stone.
+	# --ground=N picks the surface, so a scripted capture can check the one thing
+	# it otherwise could not: that the outline holds on stone. Dragging GROUND is
+	# the only other way there, and a shot cannot drag.
 	var hide_panel: bool = false
 	for arg: String in OS.get_cmdline_user_args():
 		if arg == "--sheet":

@@ -12,7 +12,10 @@ extends Control
 ## everything between them, which is where a layout actually breaks.
 ##
 ##   godot --path . -- --hud              # bench: sliders, presets, live HUD
-##   godot --path . -- --hud --state=2 --shot=/tmp/hud-2.png
+##   tools/shot.sh --hud --state=2 --shot=/tmp/hud-2.png
+##
+## Captures go through tools/shot.sh and never carry --headless — a headless run
+## has no viewport texture, so the capture hangs instead of failing.
 ##
 ## Keys: 1-6 presets · ←/→ cycle · H hides the panel · F flips the vial frame ·
 ## W flips the plate between the benchmark's 150px wrap and this port's 240px ·

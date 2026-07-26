@@ -10,9 +10,14 @@ extends Control
 ## cards flattened in the browser.
 ##
 ##   godot --path . -- --cards                       # window, stays open
-##   godot --path . -- --cards --shot=/tmp/cards.png # headless contact sheet
+##   tools/shot.sh --cards --shot=/tmp/cards.png     # contact sheet, then quits
 ##   godot --path . -- --cards=strike,defend --zoom=3
 ##   godot --path . -- --cards=bastion --surfaces    # one card, every material
+##
+## --shot= is what makes a run quit; the lines without it leave a window open to
+## work in. Captures go through tools/shot.sh and never carry --headless — a
+## headless run has no viewport texture, so the capture hangs instead of failing.
+## See that script's header for what it does and does not spare you.
 ##
 ## The surfaces sheet is the other axis: the SAME card in every recipe from
 ## CardSurface, captioned with the four layers it stacks. Cards differ there by

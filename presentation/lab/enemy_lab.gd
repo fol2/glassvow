@@ -11,14 +11,19 @@ extends Control
 ## lines, feet anchored, so the ladder and the foot offsets are both visible.
 ##
 ##   godot --path . -- --enemies                             # scale chart
-##   godot --path . -- --enemies --shot=/tmp/enemies.png
+##   tools/shot.sh --enemies --shot=/tmp/enemies.png
 ##   godot --path . -- --enemies --only=sporeling,leviathan  # detail, 1:1
 ##   godot --path . -- --enemies --states[=duskfang]         # the real states
 ##   godot --path . -- --enemies --bench[=duskfang]          # INTERACTIVE bench
 ##   godot --path . -- --enemies --states=duskfang --msaa=2 --oversample=1.5
 ##                                                           # the memory knobs
-##   godot --path . -- --enemies --hit[=duskfang] [--incidental] --strip=/tmp/h.png
-##                                        # the recoil, photographed across 320ms
+##   tools/shot.sh --enemies --hit[=duskfang] [--incidental] --strip=/tmp/h.png
+##                                    # the recoil, photographed across 320ms
+##
+## --shot= and --strip= both quit when they are done, so those two go through
+## tools/shot.sh; the rest leave a window open to work in. Neither form may
+## carry --headless — a headless run has no viewport texture, so the capture
+## hangs instead of failing.
 ##
 ## The bench is the one that answers questions a PNG cannot: refraction only
 ## reads when the thing behind it moves, the idle warp is motion, and the death

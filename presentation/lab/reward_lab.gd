@@ -12,6 +12,10 @@ extends Control
 ##   godot --path . -- --reward                  # the viewer
 ##   godot --path . -- --reward --case=tiers     # ...opened on a case
 ##   godot --path . -- --reward --concept=window # ...opened on a concept
+##   tools/shot.sh --reward --case=tiers --shot=/tmp/r.png   # ...captured
+##
+## Captures go through tools/shot.sh and never carry --headless — a headless run
+## has no viewport texture, so the capture hangs instead of failing.
 ##
 ## ONE VIEWER. There were briefly two — this and a separate RewardDesigns with
 ## its own cases, its own strip and its own keys — which made the six candidates
@@ -65,7 +69,7 @@ extends Control
 ##
 ## Claims print rather than apply. Nothing here owns a run, so pressing a row
 ## proves the signal fires with the right id — the strip's log keeps the last
-## few, and stdout carries them out of a headless run.
+## few, and stdout carries them out of a scripted run.
 
 const CASES: Dictionary = {
 	# Gold and nothing else: what a dry pool leaves behind, and the case that
@@ -144,8 +148,10 @@ var _bar: PanelContainer = null
 var _build_btn: Button = null
 var _log: Label = null
 var _events: Array[String] = []
-var _shot: bool = false            # a capture is happening: run the clock out
-var _headless_shot: bool = false   # ...and it carries the screen alone
+var _shot: bool = false        # a capture is happening: run the clock out
+## ...and it carries the screen alone. NOT --headless, which a capture can never
+## be: headless has no viewport texture, so the run hangs instead of failing.
+var _bare_shot: bool = false
 var _force_bar: bool = false
 
 
@@ -177,7 +183,7 @@ func _init(content_ref: ContentDB) -> void:
 	# Dropping the chrome and running the clock out are two different things, and
 	# folding them into one flag meant a --strip shot — the one that documents the
 	# VIEWER — was the only one caught mid-entrance, which documents nothing.
-	_headless_shot = _shot and not _force_bar
+	_bare_shot = _shot and not _force_bar
 	if _shot:
 		# main captures 30 frames in, which lands mid-entrance on every concept
 		# — and a still of an entrance is a still of nothing. Running the clock
@@ -312,7 +318,7 @@ func _build() -> String:
 # ---------------------------------------------------------------- the strip
 
 func _build_bar() -> void:
-	if _headless_shot:
+	if _bare_shot:
 		return          # a captured frame carries the screen and nothing else
 	var sb: StyleBoxFlat = StyleBoxFlat.new()
 	sb.bg_color = Color(0.024, 0.031, 0.059, 0.88)
@@ -415,7 +421,7 @@ static func _gap(w: float) -> Control:
 ## the cards keep first claim on input.
 func _unhandled_key_input(event: InputEvent) -> void:
 	var k: InputEventKey = event as InputEventKey
-	if k == null or not k.pressed or k.echo or _headless_shot:
+	if k == null or not k.pressed or k.echo or _bare_shot:
 		return
 	var idx: int = k.keycode - KEY_1
 	var concept: int = CONCEPT_KEYS.find(k.keycode)

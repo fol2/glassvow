@@ -35,12 +35,18 @@ func _ready() -> void:
 	content.validate(fails)
 	for msg: String in fails:
 		push_error(msg)
-	# Screenshot-loop hook for agent iteration without the editor MCP:
-	# godot --path . -- --shot=/tmp/map.png [--seed=N] [--enter=0]
-	# godot --path . -- --cards[=id,id] --shot=/tmp/cards.png   (card designer)
+	# Screenshot-loop hook for agent iteration without the editor MCP. A run that
+	# carries --shot= captures and then quits, and goes through tools/shot.sh;
+	# without it the run is a viewer to work in, so it launches godot directly.
+	# Neither may add --headless — a headless run has no viewport texture, so the
+	# capture hangs rather than failing. For a LOOP of captures use tools/live.sh
+	# instead: it boots one instance and hot-reloads it, so only the first shot of
+	# a session takes the desktop off you.
+	# tools/shot.sh --shot=/tmp/map.png [--seed=N] [--enter=0]
+	# tools/shot.sh --cards[=id,id] --shot=/tmp/cards.png        (card designer)
+	# tools/shot.sh --enemies|--chips|--hud|--reward --shot=...  (labs)
 	# godot --path . -- --cards=bastion --surfaces[=gilt,holofoil]  (materials)
 	# godot --path . -- --studio[=bastion] [--zoom=3]   (material bench)
-	# godot --path . -- --enemies|--chips|--hud|--reward [--shot=...]  (labs)
 	# godot --path . -- --fight=id[,id] [--kind=normal|elite|boss]   (battlefield)
 	# godot --path . -- --vp=1280x720            (see the scaling, nothing reflows)
 	var shot_path: String = ""
