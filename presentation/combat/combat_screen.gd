@@ -215,6 +215,10 @@ var _play_target: Variant = null
 ## `target-hover` — the foe under the pointer while a card is aimed, -1 for
 ## none. Held here because the previews and the arc both read it.
 var _aim_hover: int = -1
+## `S.selectedCardUid` / `S.targeting` — the keyboard's cursor through the fan,
+## and whether the card it is on has been ARMED and is waiting for a target.
+var _selected_uid: int = -1
+var _targeting: bool = false
 
 
 ## Fully constructed at new() — no tree dependency, so headless tests can
@@ -1630,6 +1634,11 @@ func _lantern_tip() -> Dictionary:
 ## forwards the gesture because the tooltip layer is deliberately pointer-inert
 ## and would never see it.
 func _input(event: InputEvent) -> void:
+	var key: InputEventKey = event as InputEventKey
+	if key != null and key.pressed and not key.echo:
+		if _combat_key(key.keycode):
+			get_viewport().set_input_as_handled()
+		return
 	var touch: InputEventScreenTouch = event as InputEventScreenTouch
 	if touch != null:
 		if touch.pressed:
@@ -1747,3 +1756,142 @@ func _aim_target() -> int:
 		if e.hp > 0:
 			return e.idx
 	return -1
+
+
+# ---------------------------------------------------------------- keyboard
+
+## `handleCombatKey` (combat.js:1741). The whole fight is playable without a
+## pointer, and every branch below is one of the benchmark's — including which
+## keys are refused and when.
+##
+## E and A answer even mid-animation guard (they check `S.busy` themselves and
+## are no-ops when it is set); everything after the busy gate does not.
+func _combat_key(key: Key) -> bool:
+	if game.cb == null or game.cb.over:
+		return false
+	if key == KEY_ESCAPE:
+		if _hand.dragged_uid() >= 0 or _selected_uid >= 0:
+			_cancel_targeting()
+			return true
+		return false
+	if key == KEY_E:
+		_on_end_turn_pressed()
+		return true
+	if key == KEY_A:
+		_on_art_pressed()
+		return true
+	if seq.is_busy():
+		return false
+
+	var hand: Array[int] = _hand.uids()
+	var living: Array[int] = []
+	for e: EnemyCombatant in game.cb.enemies:
+		if e.hp > 0:
+			living.append(e.idx)
+	# `targetingMulti` — cycling foes only means anything once a card is armed
+	# AND there is more than one thing to choose between.
+	var aiming_multi: bool = _selected_uid >= 0 and _targeting and living.size() > 1
+
+	if aiming_multi and (key == KEY_UP or key == KEY_DOWN):
+		var at: int = living.find(_aim_hover)
+		if at < 0:
+			at = 0
+		elif key == KEY_UP:
+			at = (at - 1 + living.size()) % living.size()
+		else:
+			at = (at + 1) % living.size()
+		_aim_hover = living[at]
+		_aim.draw_between(_hand.seat_centre(_selected_uid),
+			_enemy_centre(_aim_hover))
+		_update_previews()
+		return true
+
+	if aiming_multi and (key == KEY_ENTER or key == KEY_KP_ENTER or key == KEY_SPACE):
+		if _aim_hover >= 0:
+			_commit_selected(_aim_hover)
+		return true
+
+	if key == KEY_LEFT or key == KEY_RIGHT:
+		if hand.is_empty():
+			return true
+		var at: int = hand.find(_selected_uid)
+		if at < 0:
+			at = 0
+		elif key == KEY_LEFT:
+			at = (at - 1 + hand.size()) % hand.size()
+		else:
+			at = (at + 1) % hand.size()
+		_select_card(hand[at])
+		return true
+
+	if key == KEY_ENTER or key == KEY_KP_ENTER or key == KEY_SPACE:
+		# A card already armed against a fight with one survivor commits without
+		# ever asking which one.
+		if _selected_uid >= 0 and _targeting and living.size() <= 1:
+			if not living.is_empty():
+				_commit_selected(living[0])
+			return true
+		if _selected_uid < 0 and not hand.is_empty():
+			_select_card(hand[0])
+			return true
+		if _selected_uid < 0:
+			return true
+		_activate_selected()
+		return true
+	return false
+
+
+## `S.selectedCardUid` — the keyboard's cursor through the fan. It also sets
+## the hover, which is what makes the previews follow it.
+func _select_card(uid: int) -> void:
+	_selected_uid = uid
+	_hand.hovered_uid = uid
+	_hand.raise_seat(uid)
+	_sfx.play(&"hover")
+	_update_previews()
+
+
+## `onCardClick` (combat.js:1667) reached from the keyboard: a card that needs
+## a target ARMS rather than plays, unless there is only one thing to hit.
+func _activate_selected() -> void:
+	var inst: CardInst = _find_card(_selected_uid)
+	if inst == null:
+		return
+	var d: Dictionary = _rules.card_data(inst)
+	var unplayable: bool = d.get("unplayable", false)
+	if unplayable or _rules.eff_cost(inst) > game.cb.player.energy:
+		_sfx.play(&"debuff")
+		return
+	if str(d.get("target", "")) == "enemy":
+		var living: Array[int] = []
+		for e: EnemyCombatant in game.cb.enemies:
+			if e.hp > 0:
+				living.append(e.idx)
+		if living.size() == 1:
+			_commit_selected(living[0])
+			return
+		_targeting = true
+		_aim_hover = living[0] if not living.is_empty() else -1
+		if _aim_hover >= 0:
+			_aim.draw_between(_hand.seat_centre(_selected_uid),
+				_enemy_centre(_aim_hover))
+		_update_previews()
+		return
+	_commit_selected(-1)
+
+
+func _commit_selected(target_idx: int) -> void:
+	var uid: int = _selected_uid
+	_cancel_targeting()
+	if uid >= 0:
+		request_play(uid, null if target_idx < 0 else target_idx)
+
+
+func _cancel_targeting() -> void:
+	_targeting = false
+	_selected_uid = -1
+	_aim_hover = -1
+	_aim.clear_aim()
+	_hand.hovered_uid = -1
+	_hand.drop_seat()
+	_update_previews()

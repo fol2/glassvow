@@ -18,7 +18,13 @@ signal card_hover_changed(uid: int)
 signal card_drag_armed(uid: int)
 signal card_drag_refused(uid: int)
 
-const SLOP: float = 14.0
+## `DRAG_START_PX` / `LONG_PRESS_CANCEL_PX` (pointer.js:5). Two different
+## numbers doing two different jobs: 26px of UPWARD travel arms a drag, and a
+## press that never armed is a tap only if it stayed inside 12px. A press that
+## wandered 20px sideways is neither — which is what stops a fumbled drag from
+## committing a card the player was only steadying.
+const DRAG_START_PX: float = 26.0
+const CLICK_SLOP: float = 12.0
 ## The fan's gap rule, from the benchmark (combat.js:460). `GAP_MAX` is the
 ## resting gap; `GAP_BUDGET / count` is what tightens it as the hand grows;
 ## `STAGE_MARGIN` is the room the chrome keeps at both ends of the stage.
@@ -464,7 +470,10 @@ func _on_card_moved_to(uid: int, global_pos: Vector2) -> void:
 	if view == null:
 		return
 	if not _dragging:
-		if global_pos.distance_to(_press_pos) < SLOP:
+		# `st.y0 - event.clientY < DRAG_START_PX` — UPWARD, not any direction.
+		# A card is lifted OFF the fan; sliding along it is not a lift, and
+		# arming on raw distance made a sideways drift throw a card.
+		if _press_pos.y - global_pos.y < DRAG_START_PX:
 			return
 		if not view.playable:
 			card_drag_refused.emit(uid)
@@ -496,8 +505,12 @@ func _on_card_released_at(uid: int, global_pos: Vector2) -> void:
 		return
 	if was_dragging:
 		card_drag_released.emit(uid, global_pos)
-	else:
+	elif global_pos.distance_to(_press_pos) < CLICK_SLOP:
 		card_tapped.emit(uid)
+	else:
+		# Moved too far to be a click and not far enough up to be a drag. The
+		# benchmark drops it on the floor too, deliberately.
+		snap_back(uid)
 
 
 func _on_card_hover(uid: int, hovering: bool) -> void:
@@ -516,6 +529,30 @@ func _on_card_hover(uid: int, hovering: bool) -> void:
 	if hovering:
 		view.position.y -= HOVER_RAISE
 		view.move_to_front()
+
+
+## Lift a seat without a pointer over it — the keyboard's cursor through the
+## fan does the same thing hovering does (`S.hoveredCard = S.selectedCardUid`).
+func raise_seat(uid: int) -> void:
+	for other: int in _order:
+		var v: CardView = _views.get(other)
+		if v != null and other != uid and not _flight_from.has(other):
+			v.snap_home()
+	var view: CardView = _views.get(uid)
+	if view == null or _flight_from.has(uid):
+		return
+	view.snap_home()
+	view.position.y -= HOVER_RAISE
+	view.move_to_front()
+
+
+func drop_seat() -> void:
+	for uid: int in _order:
+		var v: CardView = _views.get(uid)
+		# A card in flight is on its own clock; snapping it home would teleport
+		# it back to the fan mid-arc.
+		if v != null and not _flight_from.has(uid):
+			v.snap_home()
 
 
 ## Which card the pointer is over, or -1. Front to back, because a fanned hand
