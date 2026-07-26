@@ -269,7 +269,13 @@ var _shadow_mat: ShaderMaterial = null
 ## bottom (a floating creature casts a smaller, fainter, softer shadow).
 var _contact_u: float = 0.5
 var _lift: float = 0.0
-var _shadow_opacity: float = 0.55
+## How dark the contact is. **0.95, up from 0.55** — the old figure was
+## calibrated in the lab, where an actor stands on flat navy and a 55% black
+## smear is unmissable. The battlefield's floor is painted stone that is ALREADY
+## dark, and at 0.55 the shadow was drawn correctly and could not be seen at all:
+## the geometry, the silhouette and the fall-off were all fine and the whole
+## thing read as "the shadow is missing". Judged on the stage, not in the lab.
+var _shadow_opacity: float = 0.95
 var _ignite: float = 0.0
 ## Glass reach past each crack site, as a fraction of the box — the benchmark's
 ## GLASS_AREA. Under 1.0 the body is mostly bare, which is the point: glass
