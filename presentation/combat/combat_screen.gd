@@ -310,6 +310,7 @@ var _overlay_body: Label
 var _overlay_button: Button
 var _vignette: ColorRect
 var _vignette_mat: ShaderMaterial
+var _sky: SkyField
 var _stage_dim: ColorRect
 var _stage_dim_mat: ShaderMaterial
 var _lantern: ColorRect
@@ -666,7 +667,8 @@ func _build_stage() -> void:
 	# stage: the act's plate art has a transparent sky and `#bg3d` is what shows
 	# through it. Black there is the single biggest reason a still frame of this
 	# fight read as flat next to the same frame on the benchmark.
-	_shake_host.add_child(SkyField.new())
+	_sky = SkyField.new()
+	_shake_host.add_child(_sky)
 
 	# Draw order is the benchmark's paint order: the plates and the breath sit
 	# at z 0, the mist at 2, the ledge band at 3.
@@ -1690,6 +1692,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.burst(at, GLASS_BLUE, 26, 430.0, TAU, 0.0, 2.4, 300.0)
 			_float(at + Vector2(0.0, -58.0), SAY_SHATTER, "shatterf", GLASS_BLUE)
 			_vfx.shake(10.0)
+			_sky.kick(0.9)
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
 				view.set_facets(0, facet_max, true)
@@ -1862,6 +1865,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.motes(hero_at, tone, 12)
 			_float(hero_at + Vector2(0.0, -84.0),
 				str(art.get("name", id)).to_upper(), "artf", tone)
+			_sky.kick(0.7)
 			_sync_actors()
 			await _wait(0.12)
 		EventTypes.POTION:
@@ -1985,12 +1989,14 @@ func _hit_enemy(ev: Dictionary) -> void:
 			if view != null:
 				view.crack()  # addCrack(x.art, big)
 			_vfx.shake(minf(4.0 + float(amount) * 0.5, 15.0))
+			_sky.kick(minf(0.2 + float(amount) / 26.0, 1.0))
 			if big:
 				_vfx.hitstop(70.0)
 				_vfx.ring(at, WARM_GOLD, 10.0, 620.0, 5.0)
 			if killing:
 				# the blow that ends a life lands heavier — and overkill heavier still
 				_vfx.hitstop(130.0 if overkill >= 8 else 90.0)
+				_sky.kick(minf(1.6, 0.6 + float(overkill) * 0.06))
 				_vfx.ring(at, Color.WHITE, 8.0, 780.0, 5.0)
 				_vfx.ring(at, WARM_GOLD, 14.0, 900.0, 4.0)
 				_vfx.flash(Color(1.0, 0.9019608, 0.6901961), 0.09, 0.28)
@@ -2053,6 +2059,7 @@ func _hit_player(ev: Dictionary) -> void:
 		_float(at + Vector2(0.0, -30.0), str(amount),
 			"dmg-big" if amount >= BIG_HIT else "dmg", tone, dx)
 		_vfx.shake(minf(5.0 + float(amount) * 0.6, 18.0))
+		_sky.kick(minf(0.3 + float(amount) / 22.0, 1.2))
 		# no hero cracks (user call, 2026-07-07): the glass language is for foes
 	elif blocked == 0:
 		_float(at + Vector2(0.0, -30.0), "0", "blockedf")
@@ -2095,6 +2102,7 @@ func _die(idx: int) -> void:
 	_vfx.ring(at, REVIVE_LILAC, 12.0, 720.0, 6.0)
 	_vfx.flash(Color.WHITE, 0.24 if boss else 0.1, 0.3)
 	_vfx.shake(22.0 if boss else 12.0)
+	_sky.kick(2.0 if boss else 0.9)
 	await _wait(0.9 if boss else 0.5)
 
 

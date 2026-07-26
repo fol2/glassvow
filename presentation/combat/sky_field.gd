@@ -47,6 +47,43 @@ const R_MAX: float = 13.0
 const FOG_TOP: float = 0.28
 const FOG_BOTTOM: float = 0.72
 
+## `kick(power)` (scene3d.js:314) — the world takes the blow. Two numbers rise
+## together and then decay apart: `kickV` pulls the camera in and rattles its
+## roll, `speedMul` drives the mote field faster. Both are capped, so a chain of
+## hits builds to a ceiling rather than to the moon.
+const KICK_MAX: float = 2.2
+const KICK_SPEED: float = 2.4
+const SPEED_MAX: float = 7.0
+## `kickV *= 0.02^dt` — a 177ms half-life, so one blow is spent inside a third of
+## a second and a second blow inside that window still stacks onto it.
+const KICK_DECAY: float = 0.02
+## `speedMul += (1 - speedMul) * min(1, dt * 2.5)` — the field slows back down on
+## its own curve, much lazier than the camera's.
+const SPEED_RETURN: float = 2.5
+## `_posT.z = 10 + ... - kickV * 0.9` against a base of 10. A perspective
+## camera's scale goes as 1/distance, so a flat field says the same thing by
+## zooming 10 / (10 - 0.9·kickV) — 1.25x at the ceiling.
+const CAM_Z: float = 10.0
+const KICK_DOLLY: float = 0.9
+## `camera.position.lerp(_posT, min(1, dt * 2.2))` — the dolly is CHASED, never
+## snapped, and that lag is most of why a kick reads as a lurch and not a cut.
+const CAM_CHASE: float = 2.2
+## `camera.rotation.z += kickV * (Math.random() - 0.5) * 0.012` — a fresh roll
+## every frame, so the world rattles rather than tilting.
+const KICK_ROLL: float = 0.012
+## `bloom.strength = bloomBase + kickV * 0.55`, `bloomBase = 0.85`. There is no
+## bloom pass behind this field; the motes are the only thing in it bright enough
+## for one to have shown on, so they carry the flare as a colour gain.
+const BLOOM_BASE: float = 0.85
+const KICK_BLOOM: float = 0.55
+## The roll is applied about the field's centre, which uncovers up to
+## `(width / 2) · sin(θ)` at the top edge — about 8px at the ceiling. The zoom
+## covers far more than that once it has caught up, but it is chased and the roll
+## is not, so for a frame or two after a big hit it has not. Overhanging the
+## field is the fix; the benchmark never needs one because its camera lives in a
+## world with no edges.
+const OVERHANG: float = 12.0
+
 
 class Mote:
 	extends RefCounted
@@ -66,6 +103,9 @@ var _accent: Array[Mote] = []
 var _t: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _field: Control
+var _kick_v: float = 0.0
+var _speed: float = 1.0
+var _cam_z: float = CAM_Z
 
 
 class Field:
@@ -79,6 +119,10 @@ class Field:
 
 func _init() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	offset_left = -OVERHANG
+	offset_top = -OVERHANG
+	offset_right = OVERHANG
+	offset_bottom = OVERHANG
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_rng.seed = 0x5CA1E  # a fixed sky: two captures of the same frame match
 	_field = Field.new()
@@ -101,8 +145,12 @@ static func disc() -> GradientTexture2D:
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_RESIZED and _main.is_empty() and size.x > 0.0:
-		_seed_field()
+	if what == NOTIFICATION_RESIZED:
+		# The dolly and the roll are both about the middle of the world, not its
+		# corner, and the world is re-edged whenever the window is.
+		pivot_offset = size * 0.5
+		if _main.is_empty() and size.x > 0.0:
+			_seed_field()
 
 
 func _seed_field() -> void:
@@ -130,14 +178,34 @@ func _process(delta: float) -> void:
 		_seed_field()
 	var dt: float = minf(0.05, delta)
 	_t += dt
+	_step_kick(dt)
 	_drift(_main, dt, 1.0)
 	_drift(_accent, dt, ACCENT_RATE)
 	_field.queue_redraw()
 
 
+## The world takes a blow: `kickV` and `speedMul` both jump, and the ceiling is
+## on the value rather than on the rate, so ten hits in a second do not add up to
+## ten kicks. Called by the drain wherever `V.shake` is — they are two halves of
+## the same beat, one on the fight and one on the world behind it.
+func kick(power: float = 1.0) -> void:
+	_kick_v = minf(KICK_MAX, _kick_v + power)
+	_speed = minf(SPEED_MAX, _speed + power * KICK_SPEED)
+
+
+func _step_kick(dt: float) -> void:
+	_kick_v *= pow(KICK_DECAY, dt)
+	_speed += (1.0 - _speed) * minf(1.0, dt * SPEED_RETURN)
+	# The camera chases the pushed-in target; the roll does not chase anything,
+	# which is why the rattle arrives on the first frame and the dolly does not.
+	_cam_z += (CAM_Z - KICK_DOLLY * _kick_v - _cam_z) * minf(1.0, dt * CAM_CHASE)
+	scale = Vector2.ONE * (CAM_Z / maxf(0.001, _cam_z))
+	rotation = _kick_v * (_rng.randf() - 0.5) * KICK_ROLL
+
+
 func _drift(motes: Array[Mote], dt: float, rate: float) -> void:
 	for m: Mote in motes:
-		m.at.y -= dt * rate * m.rise * UNIT
+		m.at.y -= dt * rate * _speed * m.rise * UNIT
 		m.at.x += sin(_t * WOBBLE_RATE + m.seed) * dt * WOBBLE_AMP * UNIT
 		# `if (y > cy + 14) { y = cy - 14; x = random }` — the field wraps, and a
 		# recycled point is thrown somewhere new rather than tracking a column.
@@ -178,8 +246,11 @@ func _draw() -> void:
 func paint_motes(host: CanvasItem) -> void:
 	var tex: GradientTexture2D = disc()
 	var accent_a: float = ACCENT_ALPHA + sin(_t * 0.9) * ACCENT_BREATH
-	_stamp(host, tex, _main, PARTICLES, MAIN_ALPHA)
-	_stamp(host, tex, _accent, GLOW, accent_a)
+	# The bloom gain, as a ratio of its own base — the field is drawn additively,
+	# so a colour over 1.0 is light being added rather than a clipped white.
+	var flare: float = 1.0 + _kick_v * KICK_BLOOM / BLOOM_BASE
+	_stamp(host, tex, _main, PARTICLES * flare, MAIN_ALPHA)
+	_stamp(host, tex, _accent, GLOW * flare, accent_a)
 
 
 func _stamp(host: CanvasItem, tex: GradientTexture2D, motes: Array[Mote],
