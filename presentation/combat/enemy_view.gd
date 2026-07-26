@@ -358,8 +358,15 @@ var _ghost_tween: Tween = null
 var _hp_label: Label
 var _facets: FacetPips
 var _ward_chip: PanelContainer
+## Transparent seat for the ward numeral — carries the `blockPulse` glow only.
+## Empty at rest so the chip stays a painted lock, not a text pill.
+var _ward_chip_sb: StyleBoxFlat
 var _ward: Label
 var _ward_icon: TextureRect
+## Last ward shown on the chip. A gain (`block > _previous_ward`) fires
+## `blockPulse`; a fall or a same-value resync does not.
+var _previous_ward: int = 0
+var _block_pulse_tween: Tween = null
 var _statuses: StatusRow
 var _plate: VBoxContainer
 var _dead: bool = false
@@ -3542,11 +3549,24 @@ func _build_chrome(display_name: String) -> void:
 	_plate.add_child(vial_row)
 
 	# Ward is the painted lock, not a text pill — the same asset the benchmark
-	# hangs on the left of the vial.
+	# hangs on the left of the vial. The StyleBoxFlat is transparent at rest;
+	# `blockPulse` only ever borrows its shadow.
 	_ward_chip = PanelContainer.new()
-	_ward_chip.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	_ward_chip_sb = StyleBoxFlat.new()
+	_ward_chip_sb.bg_color = Color(0.0, 0.0, 0.0, 0.0)
+	_ward_chip_sb.set_border_width_all(0)
+	_ward_chip_sb.shadow_color = Color(0.498, 0.831, 1.0, 0.9)  # rgba(127,212,255,0.9)
+	_ward_chip_sb.shadow_size = 0
+	_ward_chip.add_theme_stylebox_override("panel", _ward_chip_sb)
 	_ward_chip.visible = false
 	_ward_chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The pivot has to follow the chip, not be read once when a pulse starts. A
+	# hidden child is skipped by its container's sort, so at the moment the FIRST
+	# gain makes the chip visible its size is still zero — reading the pivot there
+	# drops the one pulse the animation exists for. The numeral also widens from
+	# one digit to two mid-fight, which moves the centre again.
+	_ward_chip.resized.connect(func() -> void:
+		_ward_chip.pivot_offset = _ward_chip.size * 0.5)
 	var ward_box: HBoxContainer = HBoxContainer.new()
 	ward_box.add_theme_constant_override("separation", 2)
 	_ward_icon = TextureRect.new()
@@ -3850,12 +3870,35 @@ func set_ward(block: int) -> void:
 	_ward_chip.visible = block > 0
 	if block > 0:
 		_ward.text = str(block)
+	# `.block-chip.pulse` / `blockPulse` (styles.css:858-859, drain.js:628-630) —
+	# only a gain restarts the chip; a fall or a same-value sync stays quiet.
+	if block > _previous_ward:
+		_block_pulse()
+	_previous_ward = block
 	# `if (en.block <= 0) syncWardMesh(x.art, false)` (combat.js:1053). A sync
 	# only ever takes the shell OFF — it is `blockGain` that puts one up, and
 	# routing both through here would let the resync that follows every gain
 	# swallow the grow it was supposed to start.
 	if block <= 0:
 		set_ward_shell(false)
+
+
+## `.block-chip.pulse` — `blockPulse`, 0.4s ease-out: scale 1.3 and a 22px cyan
+## glow at 40%, then home. Kill/restart so a second gain does not stack tweens.
+func _block_pulse() -> void:
+	if _ward_chip == null or not is_inside_tree() or _ward_chip.size == Vector2.ZERO:
+		return
+	if _block_pulse_tween != null and _block_pulse_tween.is_valid():
+		_block_pulse_tween.kill()
+	_ward_chip.pivot_offset = _ward_chip.size * 0.5
+	_ward_chip.scale = Vector2.ONE
+	_ward_chip_sb.shadow_size = 0
+	_block_pulse_tween = create_tween()
+	_block_pulse_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	_block_pulse_tween.tween_property(_ward_chip, "scale", Vector2.ONE * 1.3, 0.16)
+	_block_pulse_tween.parallel().tween_property(_ward_chip_sb, "shadow_size", 22, 0.16)
+	_block_pulse_tween.tween_property(_ward_chip, "scale", Vector2.ONE, 0.24)
+	_block_pulse_tween.parallel().tween_property(_ward_chip_sb, "shadow_size", 0, 0.24)
 
 
 ## A hero has no facet gauge to move — structural integrity is a foe's concept.
