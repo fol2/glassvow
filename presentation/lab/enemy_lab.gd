@@ -30,6 +30,8 @@ extends Control
 ##                     # the PROPAGATION: one blow, its front photographed out to arrest
 ##   tools/shot.sh --enemies --ward[=duskfang] [--absorb] --strip=/tmp/w.png
 ##                     # the guard stone: breaking, or ringing from a blow it stopped
+##   tools/shot.sh --enemies --enter[=duskfang] --strip=/tmp/e.png
+##                     # the arrival — `enemyIn`, one actor without the lineup's stagger
 ##
 ## --shot= and --strip= both quit when they are done, so those two go through
 ## tools/shot.sh; the rest leave a window open to work in. Neither form may
@@ -225,6 +227,11 @@ func _init(content_ref: ContentDB) -> void:
 			_hit_direct = false
 		elif arg == "--absorb":
 			_ward_absorb = true
+		elif arg == "--enter":
+			_mode = "enter"
+		elif arg.begins_with("--enter="):
+			_mode = "enter"
+			states_id = arg.trim_prefix("--enter=")
 		elif arg == "--crack":
 			_mode = "crack"
 		elif arg.begins_with("--crack="):
@@ -345,7 +352,7 @@ func _init(content_ref: ContentDB) -> void:
 	_roster = roster
 	_names = names
 	_ids = ids
-	if _mode == "rite" or _mode == "hit" or _mode == "crack" or _mode == "ward":
+	if _mode in ["rite", "hit", "crack", "ward", "enter"]:
 		var pick_r: String = states_id
 		if pick_r == "" or not roster.has(pick_r):
 			pick_r = "duskfang" if roster.has("duskfang") else (str(ids[0]) if not ids.is_empty() else "")
@@ -1272,6 +1279,16 @@ func _ready() -> void:
 		await _shoot_strip(wall, "crack",
 			func(v: EnemyView) -> void: v.strike(EnemyView.ANYWHERE, Vector2.ZERO, _frac_energy))
 		return
+	if _mode == "enter":
+		# `enemyIn`, 550ms — slowed like the others so a readback-paced strip can sample it.
+		# No seat delay here: one actor cannot show a stagger, and the stagger is the lineup's
+		# half of the effect rather than the actor's.
+		Engine.time_scale = CRACK_SLOMO
+		var wall_e: Array[float] = []
+		for t: float in ENTER_FRAMES:
+			wall_e.append(t / CRACK_SLOMO)
+		await _shoot_strip(wall_e, "enter", func(v: EnemyView) -> void: v.enter(0.0))
+		return
 	if _mode == "ward":
 		# The guard giving way. Slowed for the same reason `--crack` is — the break is 340 ms
 		# against a readback that costs 70 — and photographed from a stone that is ALREADY up,
@@ -1344,6 +1361,9 @@ const CRACK_SLOMO: float = 0.06
 ## is ease-out, so the pieces are already well clear by the third cell — the frames spread
 ## further than the crack's for that reason rather than clustering harder.
 const WARD_FRAMES: Array[float] = [0.0, 0.05, 0.11, 0.18, 0.26, 0.36]
+## The arrival, in BEAT seconds. `EnemyView.ENTER_TIME` is 550ms on an ease-out, so most of
+## the travel is over by a third of it and the cells cluster there.
+const ENTER_FRAMES: Array[float] = [0.0, 0.06, 0.14, 0.25, 0.38, 0.56]
 
 
 ## Stand one actor up, run `action` on it, photograph `frames`, save the strip.

@@ -239,6 +239,22 @@ const FLOATY_SX: Array[float] = [1.0, 0.98, 1.0, 1.0]
 const FLOATY_SY: Array[float] = [1.0, 1.02, 1.0, 1.0]
 
 const SWING_TIME: float = 0.33
+
+## `heroIn` / `enemyIn` — 0.55s on cubic-bezier(.2,.75,.3,1), the hero from -70px and a foe
+## from +90px (styles.css:724-730). The asymmetry is the benchmark's and is kept: a foe has
+## further to come because it arrives from off the board rather than from the player's side
+## of it.
+##
+## MAGNITUDES. The sign comes from `_away()`, which already knows which side an actor
+## fights for and is what the lunge and the recoil read too — carrying the direction in
+## these constants as well would be the same fact written twice, free to disagree.
+const ENTER_TIME: float = 0.55
+const HERO_IN_PX: float = 70.0
+const FOE_IN_PX: float = 90.0
+## `160 + i * 130` (combat.js:345-351) — what a caller adds up per seat. Here so the lineup
+## and the actor agree on one figure.
+const ENTER_LEAD: float = 0.16
+const ENTER_STEP: float = 0.13
 const SWING_AT: Array[float] = [0.0, 0.3, 0.62, 1.0]
 const SWING_X: Array[float] = [0.0, -8.0, 34.0, 0.0]
 const SWING_SX: Array[float] = [1.0, 0.97, 1.02, 1.0]
@@ -358,6 +374,11 @@ var _hit_tween: Tween = null
 ## the swing rather than cancelling it — which is what two CSS animations on one
 ## element do NOT do, and is the better read.
 var _lunge_x: float = 0.0
+## The entrance slide, in the art's own px. Composed into the vessel's position beside the
+## lunge rather than tweened onto it — see `_set_enter`.
+var _enter_x: float = 0.0
+var _enter_from: float = 0.0
+var _enter_tween: Tween = null
 var _lunge_up: float = 0.0
 var _lunge_scale: Vector2 = Vector2.ONE
 var _lunge_kind: String = ""
@@ -1843,7 +1864,7 @@ func _process(delta: float) -> void:
 			* sin(t * FLOAT_RATE + _phase * 0.7)) * UNIT
 	var tremble: Vector2 = _doom_tremble(delta)
 	_vessel.position = Vector3(
-		(_hit * KICK_PX + _lunge_x + tremble.x) * UNIT,
+		(_hit * KICK_PX + _lunge_x + _enter_x + tremble.x) * UNIT,
 		lift + (_lunge_up + tremble.y) * UNIT, 0.0)
 
 
@@ -2186,6 +2207,42 @@ func lunge(kind: String) -> float:
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_lunge_tween.tween_callback(_clear_lunge)
 	return seconds
+
+
+## `heroIn` / `enemyIn` (styles.css:724-730) — the actor arrives instead of appearing.
+##
+## Two design facts ride on this and neither is decoration. The opposing DIRECTIONS say
+## which side an actor fights for before any chrome is read; the staggered DELAY says how
+## many foes there are before any of them is counted. `combat.js:345-351` sets the delay
+## per seat and this takes it as an argument, because a widget does not know its own index
+## in a lineup.
+##
+## `modulate.a` rides along because a slide that starts fully opaque reads as a shove
+## rather than as an arrival, and the benchmark's own keyframe fades from 0.
+func enter(delay: float = 0.0) -> void:
+	if _enter_tween != null and _enter_tween.is_valid():
+		_enter_tween.kill()
+	# The hero comes from the left and a foe from the right — `_away()` is the same fact
+	# read from the other end, and reusing it is what keeps the two from disagreeing the
+	# day a third tier appears.
+	_enter_from = _away() * (HERO_IN_PX if tier == "hero" else FOE_IN_PX)
+	_set_enter(0.0)
+	_enter_tween = create_tween()
+	if delay > 0.0:
+		_enter_tween.tween_interval(delay)
+	# TRANS_CUBIC / EASE_OUT against the benchmark's cubic-bezier(.2, .75, .3, 1): no
+	# overshoot in that curve, so unlike the lunge there is nothing here that a plain
+	# ease-out loses.
+	_enter_tween.tween_method(_set_enter, 0.0, 1.0, ENTER_TIME) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+## The slide is composed into `_lunge_x`, which `_step_idle` already folds into the
+## vessel's position every frame — a tween writing `position` directly would be erased,
+## which is the same trap the recoil docblock records.
+func _set_enter(t: float) -> void:
+	_enter_x = _enter_from * (1.0 - t)
+	modulate.a = t if t < 1.0 else 1.0
 
 
 func _set_lunge(t: float) -> void:

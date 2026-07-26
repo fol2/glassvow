@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:3029` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:3086` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -283,11 +283,11 @@ unrelated numbers would be tuned apart.
 
 Derived floor on `aperture`: the groove must be ≥ ~1.5 stage pixels at the smallest
 actor or it scintillates whatever the MSAA. At a 115 px sporeling with
-`oversample` = 2.0 (`enemy_view.gd:260` (`oversample`)) one body unit is ≈ 230
+`oversample` = 2.0 (`enemy_view.gd:276` (`oversample`)) one body unit is ≈ 230
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:2241` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:2299` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -502,8 +502,11 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:2482` (in `_prism`)), so
-  the ribbon needs authored crease normals, not the convenience path.
+  have**, so the ribbon needs authored crease normals rather than the convenience path.
+  This used to add "the existing `_prism` calls it" as evidence, and **it no longer does**:
+  the same mechanism was found to be doming every debris cap and `_prism` now writes its
+  own normals (§9). The warning stands and is stronger for having been paid once — what
+  changed is that the sentence pointing at a live example has to point at a fixed one.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
   because a shard's lit lip breaks into a dim broken line at 2×, and prices MSAA at
@@ -891,7 +894,7 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - **Two silhouette readers coexist, and the prediction here was wrong.** This bullet used
   to say step 6 would delete `_alpha_at`/`_touches_art` along with the Voronoi cells it
   culls. It did not, and could not: the CARVE culls through the same
-  `_touches_art(cell, centre)` (`enemy_view.gd:2942` (in `_death_cells`)), because a shard
+  `_touches_art(cell, centre)` (`enemy_view.gd:3036` (in `_death_cells`)), because a shard
   covering no painting is a pane of empty box that the shard shader draws as nothing while
   the physics still tumbles it. So the older reader outlived the path it was written for.
   Both are still there — `body_mask()` at 256² for the model, `_alpha_at` at full

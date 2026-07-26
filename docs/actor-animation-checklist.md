@@ -74,6 +74,16 @@ gap: the benchmark's idle is character, not decoration.
 carry the same intent as a transform or a light vertex shader. Port the intent and
 the per-character numbers, not the mesh machinery.*
 
+**BUILT — and this entry above is stale in every particular.** Recorded rather than
+rewritten, because the gap between what a checklist says and what the tree does is the
+thing a checklist exists to prevent, and it drifted anyway. As built: both layers are
+there — `EnemyView.IDLE_PROFILES` carries a per-KIND block for each of thirteen kinds,
+`set_profile()` selects it, and `_read_idle()` lays the character's own `mesh` block over
+the top, so the "never read — dead data" claim is false. The deform is in
+`BODY_SHADER`'s vertex stage weighted by height so the feet stay planted, which is the
+"light vertex shader" this paragraph asked for rather than the transform it settled for.
+A wisp, a slime and an armoured knight no longer breathe identically.
+
 ### 1.3 Attack lunge — **PORT**
 
 Benchmark: `choreoAttack` — wind back `-8×dir px` with `scale(.97,1.02)`, then
@@ -196,6 +206,32 @@ wired, one of them on the ordinary-damage branch, so the port accumulates toward
 comply with it. Full analysis, and what else follows from it, in
 `docs/glass-crack-rendering.md` §4.1.
 
+## ~~1.10 DECLINE~~ — **OVERRULED BY THE OWNER, 2026-07-26. The verdict above is dead.**
+
+Left standing rather than deleted, because how a verdict was reversed is worth more than
+a tidy file — and because everything above it is still an accurate reading of the
+benchmark. What changed is not the reading. It is that the benchmark stopped being the
+authority on this one.
+
+`CONCEPTS.md` › **Crack** was rewritten at the owner's direction and now says the
+opposite of what this entry cites it for: *"Cracks **are** driven by damage: a hit scores
+fracture where it landed, so a wounded creature visibly carries what has been done to
+it."* `CONCEPTS.md` › **Benchmark** is what permits that — the web build is authority for
+what the game does, and `COMBAT_CRACKS = false` is a decision it made, not a fact about
+this game.
+
+So the DECLINE is void and the code deliberately does not comply with it. What was built
+instead is the whole of `docs/fracture-model.md`: a propagated fracture model, a groove
+folded into `BODY_SHADER`, a carve that makes the death rite break along the cracks the
+creature was carrying, and — closing the last gap — the damage number itself converted to
+fracture energy through the calibrated `bite`. The cap is **eight impacts**, not the 32
+this entry warns about.
+
+The one thing this entry got right and worth keeping: accumulation had to be paid for.
+`docs/fracture-model.md` §4 is where that was answered.
+
+---
+
 ---
 
 ## 2. Cast shadow — **KEEP**
@@ -248,6 +284,26 @@ The pulse is a straight port. The shell is genuinely open: the *implementation* 
 WebGL material simulation, but "temporary protection reads as a glass envelope
 around the body" is a design idea, and this project's whole vocabulary is glass.
 See § Open decisions.
+
+**DECIDED AND BUILT, 2026-07-27 — and the decision went against "an envelope around the
+body".** The owner's call: the shell was too close to the damage crack, so in Godot it
+becomes a gem shield **on top of** the mob rather than worn with it, and it is therefore
+no longer part of the glass event at all.
+
+The overlap was not a resemblance. The ported shell's facets were a Voronoi
+second-nearest seam over 37 sites — primitive for primitive the construction of the disc
+crack web that `docs/glass-crack-rendering.md` §2.2 condemns. Two things that must read
+as opposites were made of one part.
+
+What replaced it, and the second half is the owner's steer too: a **cut gem**, eight
+large hard-edged facets around a flat table, held proud in front on its own root so it
+does not inherit the body's recoil squash — and **nothing hashed, jittered or seeded**.
+That reverses `reshuffleWardShape`, whose whole purpose was "no two guards in a fight the
+same stone", and it settles the problem at the level of meaning rather than of primitive:
+*a ward is manufactured and identical every time; a fracture is natural and never
+repeats.* It breaks along its own facets when consumed, and rings on the side it was
+struck. Full reasoning in the `WARD_*` block of `enemy_view.gd` and in
+`docs/fracture-model.md` §9.
 
 ### 3.3 Facet gauge — **PORT** `chipPop`, **DECLINE** `pvPulse`
 
@@ -609,9 +665,10 @@ the chip lane — §3.4 and §3.5 consume them, they are not to be re-designed h
 
 ## Open decisions
 
-1. **The ward shell (§3.2)** — build a glass envelope around a warded actor, or
-   keep ward as chrome only? The implementation was a browser workaround; the idea
-   may be design.
+1. ~~**The ward shell (§3.2)**~~ — settled 2026-07-27, and the answer was neither option
+   as posed. Not an envelope around the actor and not chrome only: a **cut gem held in
+   front of** it, ordered where the fracture is chaotic, breaking along its own facets
+   when consumed. See §3.2.
 2. ~~**`footY`**~~ — settled: keep as authored. See §5.2.
 3. **The battlefield has no floor (§5.2)** — the ledge, mid and backdrop art is in
    the repo and unused by combat. Placement cannot be judged until the actors have

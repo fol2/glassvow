@@ -1058,6 +1058,12 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		_enemy_views[idx] = view
 		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
 		_stand(view, slot.x, slot.y)
+		# `enemyIn` with `160 + i * 130` (combat.js:345-351). The stagger is what tells the
+		# player how many foes there are before a single name is read, so it is per SEAT and
+		# not one arrival for the lineup. Skipped when the sequencer is running instant —
+		# a trace replay has no beats to spend on an entrance.
+		if not seq.instant:
+			view.enter(EnemyView.ENTER_LEAD + float(idx) * EnemyView.ENTER_STEP)
 	_sync_all()
 	_open_fight(slots)
 
