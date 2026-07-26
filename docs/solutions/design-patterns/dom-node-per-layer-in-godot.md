@@ -27,7 +27,7 @@ element. So the benchmark's card piles are drawn as a stack of `.pile-layer`
 divs — one per visible card. The port mirrored that shape: one `TextureRect` per
 face, created lazily, shown/hidden and rotated as the count moved.
 
-At [hud_bar.gd:100](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
+At [hud_bar.gd:100](../../../presentation/combat/hud_bar.gd) (`FAN_FACES`) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
 to **48 Control nodes** — each with its own transform, style cache and layout
 slot — all drawing the *identical* texture.
@@ -65,7 +65,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[hud_bar.gd:831](../../../presentation/combat/hud_bar.gd):
+[hud_bar.gd:831](../../../presentation/combat/hud_bar.gd) (in `_keyframe_pop`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -104,7 +104,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves (`_fan_angle`, [hud_bar.gd:178](../../../presentation/combat/hud_bar.gd)).
+  resolves ([hud_bar.gd:178](../../../presentation/combat/hud_bar.gd) (`_fan_angle`)).
 
 ## Why This Matters
 

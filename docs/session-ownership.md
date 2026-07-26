@@ -186,6 +186,36 @@ probe gets re-run rather than the old prices re-used.
 deliberately not `tests/`: `tests/run_all.gd` discovers only
 `res://tests/test_*.gd`, so a probe there would never join the suite by accident.
 
+**`tools/` is read-write asymmetric, and that was never written down.** Every
+lane is expected to *run* what is in there; no lane may *edit* it. Read as
+"organiser-owned, stay out" alone, the section above would send a lane back to
+launching Godot by hand — which is the thing the harness below exists to stop.
+
+### The shared capture harness
+
+Added 2026-07-26 by session `b88ac67e`, which is not one of the six lanes above.
+Every lane should route captures through it rather than launching `godot`
+directly:
+
+| Command | Use |
+|---|---|
+| `tools/shot.sh <game args>` | one-off capture; identical arguments to the `--shot` hook, window parked off-screen |
+| `tools/live.sh start <game args>` then `shot` / `reload` / `key` / `click` / `stop` | an iteration loop; boots once and hot-reloads code, so an edit costs no reboot |
+| `tools/check_anchors.py [--fix]` | verify `file:line` anchors in docs still point where they claim |
+
+The reason is measured, not stylistic: on macOS a bare `godot …` launch takes
+the frontmost window on every boot, and nothing on the engine side declines it.
+With six lanes capturing all day that is a steady tax on whoever is at the
+keyboard. Full reasoning and the seven rejected workarounds:
+`docs/solutions/tooling-decisions/long-lived-capture-host-not-process-per-shot.md`.
+
+Two caveats a lane will hit. A capture recipe that varies `GLASSVOW_*` between
+runs needs `tools/shot.sh`, not the live host — those hooks are read once from
+the process environment, so one host cannot change them between builds. And
+`--shot=` is what makes a lab run quit; a lab launched without it stays open,
+which is harmless when the window is visible and a trap when it is parked
+off-screen.
+
 ## Shared dependency: the visual benchmark
 
 The visual standard is **`roguecardv2@6e069118`** — the pre-pixi approved visual.
