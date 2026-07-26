@@ -441,7 +441,7 @@ func _build_states(id: String, def: Dictionary, locale: Dictionary) -> void:
 # ---------------------------------------------------------------- the bench
 
 ## Every knob the glass has, with the benchmark's approved measures as the
-## starting point (docs/glass-crack-rendering.md §Approved measures). `warp` is
+## starting point (docs/glass-crack-rendering.md §4.2). `warp` is
 ## mesh.js INTENSITY; `seam_gain` is this port's own, because a seam that only
 ## lights during ignite is impossible to tune while it is dark.
 const KNOBS: Array[Array] = [

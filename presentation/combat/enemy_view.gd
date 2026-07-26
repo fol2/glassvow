@@ -18,8 +18,9 @@ extends Control
 ## patch of painting it covered — which tumble under real gravity, cool, and
 ## crumble to embers. The web benchmark had to fake every one of those: it
 ## hand-rolled ballistics in JS, baked crack normals to a 192px canvas, and
-## needed an opaque back-buffer pass to get transmission at all
-## (docs/glass-crack-rendering.md). Here the engine does it.
+## needed an opaque back-buffer pass to get transmission at all. Here the engine
+## does it. Both architectures, what this port did not carry across, and the open
+## question about the STANDING crack web are in docs/glass-crack-rendering.md.
 ##
 ## Renders from explicit sync calls / event fields — never reads combat state
 ## directly (the sequencer contract). Targeting is drop-based (the hand's drag
