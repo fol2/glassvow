@@ -24,9 +24,19 @@ const CHIPPED: Texture2D = preload("res://assets/art/ui/facet-empty.png")
 ## is already white and blows out if pushed. Lifted apart rather than together.
 const INTACT_LIFT: Color = Color(1.0, 1.0, 1.0, 1.0)
 const CHIPPED_LIFT: Color = Color(1.35, 1.35, 1.45, 1.0)
+## A pane that WOULD go, drawn as taken but held back from the lit one so the
+## eye can still tell a prediction from a fact.
+const WILL_LIFT: Color = Color(1.35, 1.35, 1.45, 0.55)
+## `.facet-row.willshatter .pip { border-color: #ffd8a0 }` — the gauge about to
+## fill rings itself in warm gold.
+const SHATTER_RING: Color = Color(1.0, 0.84705883, 0.627451, 1.0)
 
 var _filled: int = 0
 var _total: int = 0
+## `facetPips(en, ghost)` — how many panes the card under the cursor WOULD chip,
+## and whether that fills the gauge. The consequence, before the blow.
+var _ghost: int = 0
+var _will_shatter: bool = false
 
 
 func set_pips(filled: int, total: int) -> void:
@@ -36,6 +46,19 @@ func set_pips(filled: int, total: int) -> void:
 	var w: float = float(count) * PIP + float(maxi(count - 1, 0)) * GAP if _total <= MAX_PIPS \
 		else PIP + GAP + 46.0
 	custom_minimum_size = Vector2(w, ROW_H)
+	queue_redraw()
+
+
+## The panes an armed card would take, and whether taking them shatters the
+## glass. `.willchip` marks the panes; `.facet-row.willshatter` (styles.css:1061)
+## rings every pane in warm gold, because the gauge filling is the whole point
+## of aiming a chip card at this creature rather than the one beside it.
+func set_ghost(ghost: int, will_shatter: bool) -> void:
+	var n: int = maxi(ghost, 0)
+	if n == _ghost and will_shatter == _will_shatter:
+		return
+	_ghost = n
+	_will_shatter = will_shatter
 	queue_redraw()
 
 
@@ -58,7 +81,9 @@ func _draw() -> void:
 	var cy: float = size.y * 0.5
 	if _total > MAX_PIPS:
 		# One pane, then the count — the gauge a boss needs.
-		var text: String = "%d/%d" % [_filled, _total]
+		# `${en.chips}${ghost ? `<i>+${ghost}</i>` : ''}/${en.facetMax}`
+		var text: String = "%d+%d/%d" % [_filled, _ghost, _total] if _ghost > 0 \
+			else "%d/%d" % [_filled, _total]
 		var font: Font = get_theme_default_font()
 		var fs: int = 12
 		var tw: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs).x
@@ -73,7 +98,13 @@ func _draw() -> void:
 	var start_x: float = (size.x - span_w) * 0.5
 	for i: int in range(_total):
 		var chipped: bool = i < _filled
+		# `will = !filled && i < en.chips + ghost` — a pane the armed card would
+		# take draws as though it were already taken, which is what makes the
+		# gauge answer the card rather than the last blow.
+		var will: bool = not chipped and i < _filled + _ghost
 		var at: Rect2 = Rect2(
 			Vector2(start_x + float(i) * (PIP + GAP), cy - PIP * 0.5), Vector2(PIP, PIP))
-		draw_texture_rect(CHIPPED if chipped else INTACT, at, false,
-			CHIPPED_LIFT if chipped else INTACT_LIFT)
+		draw_texture_rect(CHIPPED if (chipped or will) else INTACT, at, false,
+			(WILL_LIFT if will else CHIPPED_LIFT) if (chipped or will) else INTACT_LIFT)
+		if _will_shatter:
+			draw_rect(at.grow(1.0), SHATTER_RING, false, 1.0)

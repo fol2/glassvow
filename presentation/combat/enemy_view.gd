@@ -35,6 +35,11 @@ const WARD_ICON: Texture2D = preload("res://assets/art/ui/ward.png")
 ## `.hpbar > .ghost` — `rgba(255, 230, 160, .55)`, screened over the rail, with
 ## `transition: width 0.9s ease 0.25s`. The delay is the whole point: the trail
 ## has to sit still long enough to be read as the damage that was just done.
+## `.pv` — the loss an armed card would take out of this rail.
+const PREVIEW_WARM: Color = Color(1.0, 0.9411765, 0.84705883, 0.9)
+## `pvPulse 0.9s ease-in-out infinite` with `50% { opacity: 0.4 }`.
+const PREVIEW_PULSE: float = 0.9
+const PREVIEW_DIP: float = 0.4
 const GHOST_WARM: Color = Color(1.0, 0.90196079, 0.627451, 0.55)
 const GHOST_HOLD: float = 0.25
 const GHOST_FALL: float = 0.9
@@ -150,12 +155,21 @@ var tier: String = "normal"
 
 var _hue: float = 210.0
 var _max_hp: int = 1
+## Current HP, kept beside the rail rather than read back off it: the preview
+## segment needs an integer, and the rail's value is a float mid-tween.
+var _hp: int = 0
+var _marked: bool = false
 var _intent: IntentChip
 var _gem: GlassGem
 var _name_label: Label
 var _hp_bar: ProgressBar
 ## The trail behind a loss — the same rail, a beat late.
 var _hp_ghost: ProgressBar
+## `.hpbar > .pv` (styles.css:969) — the slice of the rail an armed card would
+## take. Not a ProgressBar: it is a SEGMENT, anchored where the loss begins
+## rather than at the left edge.
+var _hp_preview: ColorRect
+var _preview_t: float = 0.0
 var _ghost_tween: Tween = null
 var _hp_label: Label
 var _facets: FacetPips
@@ -189,6 +203,14 @@ var _stage: SubViewport = null
 var _display: TextureRect = null
 var _quad: MeshInstance3D = null
 var _body_mat: ShaderMaterial = null
+## How much of a creature's art box the creature itself occupies. The aim
+## outline is authored against the fitted plane and drawn against the art, and
+## this is the conversion between them.
+const ART_TO_PLANE: float = 0.3
+
+## `charAim(id).color`, resolved once from the character table.
+var _aim_tint: Color = Color(0.894, 0.835, 0.984)
+var _aim_width: float = 0.012
 var _vessel: Node3D = null
 var _glass_root: Node3D = null
 var _breathe: float = 1.0
@@ -248,6 +270,14 @@ uniform sampler2D body_tex : source_color, filter_linear_mipmap;
 uniform float bump = 3.5;
 uniform float emission_gain = 0.85;
 uniform float target_lit = 0.0;
+// `charAim(id).color` — the aim outline is tinted per creature, and the
+// character table has carried the overrides all along (duskblade #6d9edf,
+// ashwarden #f9bd95). The default is CHAR_AIM_DEFAULT's #e4d5fb.
+uniform vec3 aim_tint = vec3(0.894, 0.835, 0.984);
+// `charAim(id).width` — 0.012 of the plane by default, 0.006 for the largest
+// body in the table. Carried in UV so it scales with the creature's own art
+// rather than with its pixel count, which is what the benchmark's shader does.
+uniform float aim_width = 0.012;
 // Struck: 0 at rest, 1 at the peak of the flash. See take_hit().
 uniform float flare = 0.0;
 // How hard that peak hits. A knob rather than a constant because the CSS number
@@ -292,7 +322,9 @@ void fragment() {
 	// the expensive part and there is no reason to pay for them twice.
 	float rim = 0.0;
 	if (target_lit > 0.0 || flare > 0.0) {
-		vec2 px = ts * 9.0;
+		// The struck flare wants a broad halo; the aim outline wants a LINE.
+		// One ring, two widths — the six taps are the expensive part.
+		vec2 px = target_lit > 0.0 ? vec2(aim_width) : ts * 9.0;
 		float ring = 0.0;
 		ring = max(ring, texture(body_tex, uv + vec2(px.x, 0.0)).a);
 		ring = max(ring, texture(body_tex, uv - vec2(px.x, 0.0)).a);
@@ -303,8 +335,11 @@ void fragment() {
 		rim = clamp(ring - c.a, 0.0, 1.0);
 	}
 	if (target_lit > 0.0) {
-		EMISSION += rim * target_lit * vec3(0.89, 0.84, 0.98) * 3.0;
-		ALPHA = max(ALPHA, rim * target_lit);
+		// A lit edge, not a floodlight. At gain 3 with the alpha forced opaque
+		// the outline blew to white and swallowed its own tint, so the per-
+		// creature colour the character table authors could not be seen at all.
+		EMISSION += rim * target_lit * aim_tint * 0.55;
+		ALPHA = max(ALPHA, rim * target_lit * 0.9);
 	}
 	// Struck. The benchmark's `hurtFlash` peaks at brightness 2.6 with
 	// saturate .4 and an 18px white halo, so the glass goes briefly white-hot and
@@ -366,6 +401,13 @@ uniform float rough = 0.12;
 uniform float ignite = 0.0;
 uniform vec3 tint = vec3(0.86, 0.93, 1.0);
 uniform vec3 warm = vec3(1.0, 0.62, 0.26);
+// `.enemy.marked .cracks` (styles.css:976) — the seams catch the light BEFORE
+// the blow is thrown, so a lethal preview is read off the creature rather than
+// off a number. Same Fresnel the death blaze uses, at a fraction of its gain
+// and in the pale #ffeadf the stylesheet strokes the seams with, so an
+// undamaged creature — which has no seams — shows nothing, exactly as there.
+uniform float marked = 0.0;
+const vec3 MARK = vec3(1.0, 0.918, 0.875);
 
 void fragment() {
 	vec3 n = normalize(NORMAL);
@@ -385,7 +427,8 @@ void fragment() {
 	SPECULAR = 0.5;
 	// The fire wells up through the FRACTURES: Fresnel is high on the side band
 	// and the rim, near zero across the face.
-	EMISSION = warm * ignite * pow(f, 1.4) * 5.0 + c.rgb * ignite * 0.35;
+	EMISSION = warm * ignite * pow(f, 1.4) * 5.0 + c.rgb * ignite * 0.35
+		+ MARK * marked * pow(f, 1.4) * 1.6;
 }
 """
 
@@ -515,6 +558,7 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		var fy: float = entry.get("footY", 0.0)
 		foot = Vector2(fx, fy)
 		_read_idle(entry)
+		_read_aim(entry)
 		custom_minimum_size = Vector2(art_size, art_size)
 		size = custom_minimum_size
 		_rng.seed = hash(String(art_id)) + enemy_idx
@@ -616,6 +660,9 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_body_mat.shader = sh
 	_body_mat.set_shader_parameter("body_tex", tex)
 	_body_mat.set_shader_parameter("flare_gain", flare_gain)
+	_body_mat.set_shader_parameter("aim_tint",
+		Vector3(_aim_tint.r, _aim_tint.g, _aim_tint.b))
+	_body_mat.set_shader_parameter("aim_width", _aim_width)
 	_body_mat.render_priority = -1   # drawn before the glass
 	_quad.set_surface_override_material(0, _body_mat)
 	_vessel.add_child(_quad)
@@ -817,6 +864,14 @@ func _glass_material() -> ShaderMaterial:
 ## vessel failing to contain its own fire — and after the burst the camera
 ## carries a short shake while the shards own their own motion.
 func _process(delta: float) -> void:
+	# `pvPulse 0.9s ease-in-out infinite` with `50% { opacity: 0.4 }`. The
+	# easing runs the whole iteration and the keyframes interpolate linearly
+	# between offsets, which is why the dip is read at an already-eased t.
+	if _hp_preview != null and _hp_preview.visible:
+		_preview_t = fmod(_preview_t + delta, PREVIEW_PULSE)
+		var e: float = Motion.ease(Motion.EASE_IN_OUT, _preview_t / PREVIEW_PULSE)
+		_hp_preview.modulate.a = Motion.keyframe(e, [0.0, 0.5, 1.0],
+			[1.0, PREVIEW_DIP, 1.0])
 	if _cam != null and _shake > 0.0:
 		_shake = maxf(0.0, _shake - delta * 4.5)
 		var kick: float = _box_u * 0.02 * _shake * _shake
@@ -867,6 +922,31 @@ func _read_idle(entry: Dictionary) -> void:
 	_breathe = breathe
 	_idle_sway = sway
 	_idle_bob = bob
+
+
+## `charAim(id)` (char-meta.js:113) — the global default with the character's
+## own partial laid over it. Only the colour is read: `style` is `solid` for
+## every creature in the table, and `speed`, `beams` and `dashes` only mean
+## anything to the spin/chase styles nobody uses.
+func _read_aim(entry: Dictionary) -> void:
+	var default_block: Dictionary = _meta.get("aimDefault", {})
+	var tint_hex: String = str(default_block.get("color", "#e4d5fb"))
+	var own: Dictionary = entry.get("aim", {})
+	if own.has("color"):
+		tint_hex = str(own["color"])
+	var width: float = default_block.get("width", 0.012)
+	if own.has("width"):
+		var own_width: float = own["width"]
+		width = own_width
+	# `Math.min(0.06, Math.max(0.006, width))` (mesh.js:1287), then out of the
+	# benchmark's units into ours. There, `width` is a fraction of the warped
+	# PLANE, which is fitted to the creature. Here the dilation walks the art's
+	# UV, and the art carries transparent margin around the creature — so the
+	# same number would draw a visibly fatter line. ART_TO_PLANE is that ratio.
+	_aim_width = clampf(width, 0.006, 0.06) * ART_TO_PLANE
+	if not tint_hex.begins_with("#"):
+		return
+	_aim_tint = Color(tint_hex)
 
 
 ## Read a keyframe track at `t`: linear between the offsets in `at`, held at the
@@ -1760,6 +1840,19 @@ func _build_chrome(display_name: String) -> void:
 	clear_track.bg_color = Color(0, 0, 0, 0)
 	_hp_bar.add_theme_stylebox_override("background", clear_track)
 	hp_wrap.add_child(_hp_bar)
+	# `background: rgba(255,240,216,0.9); mix-blend-mode: screen` — Godot has no
+	# screen blend on a CanvasItem, and additive over the rail's red lands within
+	# a couple of percent of what screen produces for these two colours.
+	_hp_preview = ColorRect.new()
+	_hp_preview.color = PREVIEW_WARM
+	_hp_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hp_preview.visible = false
+	var add_mat: CanvasItemMaterial = CanvasItemMaterial.new()
+	add_mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_hp_preview.material = add_mat
+	_hp_preview.anchor_top = 0.0
+	_hp_preview.anchor_bottom = 1.0
+	hp_wrap.add_child(_hp_preview)
 	_hp_label = _label("")
 	_hp_label.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_hp_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -1820,6 +1913,7 @@ func sync(e: EnemyCombatant, dmg_text: String, intent: StringName,
 func set_hp(hp: int, max_hp: int) -> void:
 	_max_hp = maxi(max_hp, 1)
 	var now: int = maxi(0, hp)
+	_hp = now
 	var was: float = _hp_bar.value
 	_hp_bar.max_value = _max_hp
 	_hp_bar.value = now
@@ -1932,3 +2026,56 @@ func tip_zone(global_pos: Vector2) -> Array[StringName]:
 		var name_hit: Array[StringName] = [&"name", &""]
 		return name_hit
 	return none
+
+
+## `updatePreviews` (combat.js:1606), the part that lands on this actor: the
+## slice of the rail an armed card would take, and the death-mark when the
+## number is lethal.
+##
+## `loss` is already block-eaten and vulnerability-multiplied by the engine's
+## own preview — the rail only has to say where it starts and how wide it is.
+## `dim` is a foe that is a legal target but not the one under the cursor: it
+## still shows the loss, but neither the death-mark nor the shatter ring, so a
+## three-foe lineup does not claim three kills.
+func set_preview(loss: int, lethal: bool) -> void:
+	if _hp_preview == null:
+		return
+	if loss <= 0 or _max_hp <= 0 or _dead:
+		_hp_preview.visible = false
+		set_marked(false)
+		return
+	var taken: float = float(mini(_hp, loss)) / float(_max_hp)
+	var from: float = float(maxi(0, _hp - loss)) / float(_max_hp)
+	_hp_preview.anchor_left = from
+	_hp_preview.anchor_right = minf(1.0, from + taken)
+	_hp_preview.offset_left = 0.0
+	_hp_preview.offset_right = 0.0
+	if not _hp_preview.visible:
+		_preview_t = 0.0
+		_hp_preview.visible = true
+	set_marked(lethal)
+
+
+func clear_preview() -> void:
+	if _hp_preview != null:
+		_hp_preview.visible = false
+	set_marked(false)
+	if _facets != null:
+		_facets.set_ghost(0, false)
+
+
+## `.enemy.marked .cracks` — the seams catch the light before the blow is
+## thrown. The crack overlay is the same one a real hit scores, held lit rather
+## than drawn anew, so a marked creature already looks like it is about to go.
+func set_marked(on: bool) -> void:
+	if _marked == on:
+		return
+	_marked = on
+	if _glass_mat != null:
+		_glass_mat.set_shader_parameter("marked", 1.0 if on else 0.0)
+
+
+## The panes an armed card would take, forwarded to the gauge that draws them.
+func set_facet_ghost(ghost: int, will_shatter: bool) -> void:
+	if _facets != null:
+		_facets.set_ghost(ghost, will_shatter)

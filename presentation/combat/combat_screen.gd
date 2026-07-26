@@ -212,6 +212,9 @@ var _has_ember_from: bool = false
 ## throw it there. Null for an untargeted card and for anything the engine
 ## started on its own.
 var _play_target: Variant = null
+## `target-hover` — the foe under the pointer while a card is aimed, -1 for
+## none. Held here because the previews and the arc both read it.
+var _aim_hover: int = -1
 
 
 ## Fully constructed at new() — no tree dependency, so headless tests can
@@ -680,11 +683,13 @@ func _on_inspect_input(event: InputEvent) -> void:
 func _on_card_hover_changed(uid: int) -> void:
 	if uid >= 0:
 		_sfx.play(&"hover")
+	_update_previews()
 
 
 ## `beginCardDrag` (combat.js:1534) — lifting a card ticks like hovering one.
 func _on_card_drag_armed(_uid: int) -> void:
 	_sfx.play(&"hover")
+	_update_previews()
 
 
 ## `beginCardDrag` (combat.js:1540) — a card that can neither be paid for nor
@@ -699,15 +704,17 @@ func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
 	# The arc reaches the POINTER, not the enemy under it — a shot that misses
 	# still has to look aimed somewhere.
 	_aim.draw_between(_hand.seat_centre(uid), global_pos)
-	var hovered: int = _enemy_at(global_pos)
-	for ev: EnemyView in _enemy_views:
-		ev.set_targetable(ev.idx == hovered)
+	# `hoverEnemyAt` (combat.js:1594): the rim is no longer set here. Which
+	# bodies light up is one decision with three rules in it, and it belongs
+	# where the card, the aim and the survivor count are all known.
+	_aim_hover = _enemy_at(global_pos)
+	_update_previews()
 
 
 func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	_aim.clear_aim()
-	for ev: EnemyView in _enemy_views:
-		ev.set_targetable(false)
+	_aim_hover = -1
+	_clear_previews()
 	_inspect.visible = false
 	var view: CardView = _hand.card_view(uid)
 	if view == null:
@@ -1353,6 +1360,9 @@ func _push_hud() -> void:
 	_hud.set_title(_encounter_text, "Turn %d" % cb.turn)
 
 
+## `!S.busy` guards the hover branch of `updatePreviews`: nothing is previewed
+## while the drain is resolving, because the state the preview would be read
+## against is mid-change.
 func _on_busy_changed(busy: bool) -> void:
 	var locked: bool = busy or game.cb == null or game.cb.over
 	# `ce.endTurn.classList.add('enemy-phase')` — the guard was already there in
@@ -1363,10 +1373,13 @@ func _on_busy_changed(busy: bool) -> void:
 	if locked:
 		_aim.clear_aim()
 		_hand.cancel_drag()
-		for ev: EnemyView in _enemy_views:
-			ev.set_targetable(false)
+		_aim_hover = -1
+		_clear_previews()
 	if not busy:
 		_sync_all()
+		# The hand the player is now holding is not the one the last preview was
+		# read against — the card may have been spent, or the foe may be dead.
+		_update_previews()
 
 
 ## "7" or "4×2" from the {"dmg", "times"} preview; "" for non-attacks.
@@ -1627,3 +1640,110 @@ func _input(event: InputEvent) -> void:
 	var drag: InputEventScreenDrag = event as InputEventScreenDrag
 	if drag != null:
 		_tips.press_moved(drag.position)
+
+
+# ---------------------------------------------------------------- previews
+
+## `updatePreviews` (combat.js:1606) — the consequence, spelled out.
+##
+## While a card is hovered, armed or being dragged, every foe it could touch
+## shows exactly what it would lose: an aim rim on the bodies the card would
+## reach, a bright segment on the rail where the damage would land, the facet
+## panes it would take, and — when the number is lethal — the seams lit.
+##
+## Which foes light up is not "the ones it could hit". Three rules, and the
+## middle one is the whole reason this is not a one-liner:
+##   - `allEnemies` reaches every living foe while INSPECTING (hovered, not yet
+##     armed) or while being carried loose
+##   - a single-target card reaches the lone survivor, or — once aiming — only
+##     the foe under the pointer, never all of them just because one was hovered
+##   - a foe that is a legal target but not the one aimed at is DIMMED: it keeps
+##     its rail preview and loses the death-mark and the shatter ring, so a
+##     three-foe lineup cannot claim three kills at once
+func _update_previews() -> void:
+	if game.cb == null or _hand == null:
+		return
+	# `S.targeting ?? S.drag ?? S.hoveredCard` — an armed card outranks a
+	# dragged one, and a dragged one outranks whatever the cursor is merely
+	# resting on.
+	var uid: int = _hand.dragged_uid()
+	if uid < 0 and not seq.is_busy():
+		uid = _hand.hovered_uid
+	var inst: CardInst = _find_card(uid) if uid >= 0 else null
+	if inst == null or game.cb.over:
+		_clear_previews()
+		return
+	var d: Dictionary = _rules.card_data(inst)
+	var unplayable: bool = d.get("unplayable", false)
+	if unplayable:
+		_clear_previews()
+		return
+	var target: String = str(d.get("target", ""))
+	var aiming: bool = _hand.is_aiming()
+	var inspect: bool = not aiming
+	var living: int = 0
+	for e: EnemyCombatant in game.cb.enemies:
+		if e.hp > 0:
+			living += 1
+	var aimed: int = _aim_target()
+
+	# `heroOn = inspect && d.target === 'self'` — a card that acts on you shows
+	# it on you, and only while it is being read rather than thrown.
+	if _hero != null:
+		_hero.set_targetable(inspect and target == "self")
+
+	for view: EnemyView in _enemy_views:
+		var i: int = view.idx
+		if i >= game.cb.enemies.size():
+			continue
+		var en: EnemyCombatant = game.cb.enemies[i]
+		if en.hp <= 0:
+			view.set_targetable(false)
+			view.clear_preview()
+			continue
+		var hovered: bool = i == aimed
+		var aim_all: bool = target == "allEnemies" and (inspect or _hand.is_free_drag())
+		var aim_one: bool = target == "enemy" and (living == 1 or (aiming and hovered))
+		view.set_targetable(aim_all or aim_one)
+
+		var preview: Variant = null
+		var dim: bool = false
+		if target == "allEnemies":
+			preview = _rules.preview_play(game.cb, inst, i)
+		elif target == "enemy" and (aiming or living == 1):
+			preview = _rules.preview_play(game.cb, inst, i)
+			dim = aiming and living > 1 and not hovered
+		if preview == null:
+			view.clear_preview()
+			continue
+		var pv: Dictionary = preview
+		var total: int = pv.get("total", 0)
+		var chips: int = pv.get("chips", 0)
+		if total <= 0 and chips <= 0:
+			view.clear_preview()
+			continue
+		var loss: int = pv.get("loss", 0)
+		var lethal: bool = pv.get("lethal", false)
+		var will_shatter: bool = pv.get("willShatter", false)
+		view.set_preview(loss, lethal and not dim)
+		view.set_facet_ghost(0 if dim else chips, will_shatter and not dim)
+
+
+func _clear_previews() -> void:
+	if _hero != null:
+		_hero.set_targetable(false)
+	for view: EnemyView in _enemy_views:
+		view.set_targetable(false)
+		view.clear_preview()
+
+
+## Which foe the aim is resting on: the one under the pointer while dragging,
+## else `S.selectedEnemyIndex` — which `setTargeting` seeds with the first
+## survivor so a fight that has only one never needs a hover to resolve.
+func _aim_target() -> int:
+	if _aim_hover >= 0:
+		return _aim_hover
+	for e: EnemyCombatant in game.cb.enemies:
+		if e.hp > 0:
+			return e.idx
+	return -1

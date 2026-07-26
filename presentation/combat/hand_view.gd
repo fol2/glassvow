@@ -520,6 +520,18 @@ func _on_card_hover(uid: int, hovering: bool) -> void:
 
 ## Which card the pointer is over, or -1. Front to back, because a fanned hand
 ## overlaps and the card you can see is the one you mean.
+## The card being carried or aimed, or -1. `S.drag.live` — a press that has
+## not yet cleared the slop is not a drag and previews nothing.
+func dragged_uid() -> int:
+	return _drag_uid if _dragging else -1
+
+
+## `S.drag.free` — the card is being CARRIED rather than aimed, which is what
+## lets an `allEnemies` card keep lighting every foe while it is in the air.
+func is_free_drag() -> bool:
+	return _dragging and not _aiming
+
+
 func card_at(global_pos: Vector2) -> int:
 	for i: int in range(get_child_count() - 1, -1, -1):
 		var view: CardView = get_child(i) as CardView
