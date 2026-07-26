@@ -3306,12 +3306,16 @@ static func _label(initial: String) -> Label:
 	return l
 
 
-## `.enemy .name` (styles.css:807). The face is Cinzel; the benchmark's own
-## `font-weight: normal` resolves to the 500 it loads (fonts.js:15) and this port
-## bundles only 700 and 800, so the name is one step heavier than the
-## benchmark's. Bundling a fourth weight is an assets change, not a lane change.
+## `.enemy .name` (styles.css:793). The face is Cinzel, and the rule names no
+## `font-weight` at all — so the browser asks for 400, and the benchmark's
+## `@font-face` set is 500/600/700/800. CSS matching checks 500 before anything
+## heavier when the desired weight is 400, so a foe's name is **500** on screen.
+##
+## This port shipped only 700 and 800 and drew every name a step too heavy.
+## `Cinzel-500.woff2` is byte-identical to the benchmark's own
+## `cinzel-latin-500-normal`, as are the 700 and 800 already here.
 func _name_style(l: Label, tint: Color) -> Label:
-	var cinzel: FontFile = load(GlassStyle.CINZEL_700)
+	var cinzel: FontFile = load(GlassStyle.CINZEL_500)
 	if cinzel != null:
 		# `letter-spacing: 0.1em` at 13.5px is 1.35px, and a glyph advance is an
 		# integer here.

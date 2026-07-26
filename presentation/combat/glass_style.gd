@@ -19,6 +19,11 @@ const HP_RED: Color = Color(0.85, 0.33, 0.32)
 ## The benchmark's two faces (roguecardv2@6e069118): Cinzel for display —
 ## names, cost numerals — and Alegreya for the reading text. Both OFL, bundled
 ## alongside NotoSansTC, which stays the UI face because these two carry no CJK.
+## The lightest weight the benchmark loads, and the one a rule that names no
+## `font-weight` lands on: CSS matching for a desired 400 checks 500 before it
+## checks anything heavier, and 400 is not in the set. `.enemy .name` is such a
+## rule, so a foe's name is 500 on screen and was 700 in this port.
+const CINZEL_500: String = "res://assets/fonts/Cinzel-500.woff2"
 const CINZEL_700: String = "res://assets/fonts/Cinzel-700.woff2"
 const CINZEL_800: String = "res://assets/fonts/Cinzel-800.woff2"
 const ALEGREYA_400: String = "res://assets/fonts/Alegreya-400.woff2"
