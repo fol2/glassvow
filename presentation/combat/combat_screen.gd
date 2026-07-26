@@ -90,22 +90,26 @@ class Plate:
 	## slides under the combatants standing on it.
 	var amp: float = 0.0
 	var period: float = 26.0
-	var _base_left: float = 0.0
-	var _width: float = 0.0
 	var _t: float = 0.0
+	var _dx: float = 0.0
 
-	## The anchored offsets are the plate's home; the drift is added to them each
-	## frame rather than written into `position`, because `position` on an
-	## anchored Control rewrites those offsets and the home would walk away.
+	## The box never moves; the PAINT does.
 	##
-	## The WIDTH is kept here rather than read back from `size`. Moving
-	## `offset_left` moves the left edge and changes the size with it, so a
-	## `offset_right = offset_left + size.x` written after it restores the old
-	## right edge and the box breathes instead of sliding — which, under
-	## `cover`, is a zoom rather than a parallax.
+	## Two reasons, and the first is fatal on its own.
+	## `gui/common/snap_controls_to_pixels` is true by default, so a Control's
+	## rect is rounded to whole pixels before it is drawn. A 30px sweep over 26
+	## seconds crosses a pixel boundary roughly twice a second at its fastest and
+	## far more slowly at the turns, so the backdrop does not glide — it ticks,
+	## holds, and ticks again. That is the stepping. Draw commands take floats
+	## and are not snapped (`snap_2d_vertices_to_pixel` is false), so moving the
+	## destination rect instead restores the sub-pixel glide.
+	##
+	## The second reason is that this is also what the benchmark does: `sl-drift`
+	## is a `transform: translateX`, which moves the painted image and leaves
+	## layout alone. Writing offsets re-sorts the container every frame and,
+	## because moving one edge resizes the box, re-derives the `cover` crop from
+	## a width that is no longer the one the plate was measured at.
 	func set_home(left: float, w: float) -> void:
-		_base_left = left
-		_width = w
 		offset_left = left
 		offset_right = left + w
 
@@ -114,10 +118,14 @@ class Plate:
 			set_process(false)
 			return
 		_t += delta
-		# `ease-in-out infinite alternate` over one period is a raised cosine to
-		# within a couple of percent, and it needs no phase bookkeeping.
-		offset_left = _base_left - amp * cos(PI * _t / period)
-		offset_right = offset_left + _width
+		# `infinite alternate`: one leg out, one leg back, and `ease-in-out`
+		# applied to each leg rather than to the pair. The curve is symmetric,
+		# so the mirrored leg reads from the same solve.
+		var u: float = fmod(_t, period * 2.0) / period
+		if u > 1.0:
+			u = 2.0 - u
+		_dx = lerpf(-amp, amp, Motion.ease(Motion.EASE_IN_OUT, u))
+		queue_redraw()
 
 	func _draw() -> void:
 		if tex == null:
@@ -130,7 +138,8 @@ class Plate:
 		var s: float = maxf(size.x / t.x, size.y / t.y)
 		var window: Vector2 = Vector2(size.x / s, size.y / s)
 		var origin: Vector2 = (t - window) * where
-		draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size), Rect2(origin, window))
+		draw_texture_rect_region(
+			tex, Rect2(Vector2(_dx, 0.0), size), Rect2(origin, window))
 
 
 var game: GlassvowGame
