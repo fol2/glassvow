@@ -98,6 +98,31 @@ const ASH_FADE: float = 3.0
 const ASH_BOSS_MULT: float = 1.4
 
 
+## A WAAPI flight riding on a particle: three control points, the keyframe
+## offsets, what scale and alpha read at each, and the one easing the iteration
+## runs through.
+##
+## `flyTo` (combat.js:1420) is the only thing in the benchmark's effect language
+## that is NOT a `vfx.js` particle. It builds DOM elements and hands them to
+## `Element.animate`, so nothing accelerates them — the browser interpolates a
+## position and the mote goes exactly there. A particle carrying a Flight
+## therefore skips the integrator entirely; `grav` and `drag` stay off.
+##
+## A quadratic Bézier and a projectile are the same parabola, so the physics
+## version of this was not wrong in shape. It was wrong in where it went: with
+## drag on and a fixed upward bias it under-lifted by roughly 5x and never
+## landed on the target, which is the whole point of a mote flight.
+class Flight:
+	extends RefCounted
+	var p0: Vector2 = Vector2.ZERO
+	var p1: Vector2 = Vector2.ZERO
+	var p2: Vector2 = Vector2.ZERO
+	var at: Array[float] = []
+	var scale: Array[float] = []
+	var alpha: Array[float] = []
+	var ease: Array[float] = []
+
+
 ## One live particle. A class rather than the benchmark's object literal because
 ## every field here is read once per frame per particle, and a Dictionary makes
 ## each of those a Variant unbox that the type gate then refuses to let through
@@ -115,6 +140,17 @@ class Part:
 	var fade: float = 0.3
 	var additive: bool = true
 	var alpha: float = 1.0
+	## What `life` started at. The fade tail is measured from the END of a life;
+	## a keyframe list is read from the START of one, so a part on a Flight needs
+	## both to know where in its own animation it is.
+	var life0: float = 0.5
+	## Held before the part exists at all — not drawn, not stepped, not aged.
+	## `delay: i * 46` is what makes a mote flight read as a stream leaving the
+	## body rather than a puff appearing at it.
+	var delay: float = 0.0
+	## Non-null on the mote flight only. Every other recipe wants the plain fade
+	## tail, so a null Flight leaves the old behaviour exactly where it was.
+	var flight: Flight = null
 	## ring
 	var r: float = 0.0
 	var vr: float = 0.0
@@ -262,11 +298,28 @@ func randfr(range_v: Vector2) -> float:
 	return range_v.x + _rng.randf() * (range_v.y - range_v.x)
 
 
+## How far through its own animation a part is, 0 at spawn and 1 at the end.
+static func _age01(p: Part) -> float:
+	return clampf(1.0 - p.life / maxf(0.001, p.life0), 0.0, 1.0)
+
+
 func _step_parts(dt: float) -> void:
 	var live: Array[Part] = []
 	for p: Part in _parts:
+		if p.delay > 0.0:
+			p.delay -= dt
+			live.append(p)
+			continue
 		p.life -= dt
 		if p.life <= 0.0:
+			continue
+		if p.flight != null:
+			var t: float = Motion.ease(p.flight.ease, _age01(p))
+			var u: float = 1.0 - t
+			p.pos = p.flight.p0 * (u * u) \
+				+ p.flight.p1 * (2.0 * u * t) \
+				+ p.flight.p2 * (t * t)
+			live.append(p)
 			continue
 		p.pos += p.vel * dt
 		p.vel.y += p.grav * dt
@@ -306,9 +359,16 @@ func _step_shake(dt: float) -> void:
 
 func paint_parts(host: CanvasItem, additive: bool) -> void:
 	for p: Part in _parts:
-		if p.additive != additive:
+		if p.additive != additive or p.delay > 0.0:
 			continue
 		var a: float = minf(1.0, p.life / maxf(0.001, p.fade))
+		# The size multiplier. Without a Flight it IS the fade, which is what
+		# every particle here has always done: shrink as it goes out.
+		var grow: float = a
+		if p.flight != null:
+			var t: float = Motion.ease(p.flight.ease, _age01(p))
+			grow = Motion.keyframe(t, p.flight.at, p.flight.scale)
+			a = Motion.keyframe(t, p.flight.at, p.flight.alpha)
 		var col: Color = p.colour
 		col.a = a * p.alpha
 		match p.kind:
@@ -317,10 +377,10 @@ func paint_parts(host: CanvasItem, additive: bool) -> void:
 				# flies the longer it reads.
 				var length: float = p.vel.length() * 0.045 + 2.0
 				var back: Vector2 = p.pos - p.vel.normalized() * length
-				host.draw_line(p.pos, back, col, maxf(0.5, p.size * a), true)
+				host.draw_line(p.pos, back, col, maxf(0.5, p.size * grow), true)
 			"ring":
 				host.draw_arc(p.pos, maxf(0.5, p.r), 0.0, TAU, 48, col,
-					maxf(0.5, p.size * a), true)
+					maxf(0.5, p.size * grow), true)
 			"slash":
 				var sweep: float = p.arc * p.prog
 				for i: int in range(3):
@@ -332,7 +392,7 @@ func paint_parts(host: CanvasItem, additive: bool) -> void:
 					host.draw_arc(p.pos, p.r + float(i) * 7.0, p.a0, p.a0 + sweep,
 						28, band, w, true)
 			_:
-				host.draw_circle(p.pos, maxf(0.5, p.size * a), col, true, -1.0, true)
+				host.draw_circle(p.pos, maxf(0.5, p.size * grow), col, true, -1.0, true)
 
 
 func paint_flashes(host: CanvasItem) -> void:
@@ -362,6 +422,7 @@ func _spawn(kind: String, at: Vector2, vel: Vector2, sz: float, colour: Color,
 	p.size = sz
 	p.colour = colour
 	p.life = life
+	p.life0 = life
 	p.fade = fade
 	_push(p)
 	return p
@@ -477,24 +538,51 @@ func shard_spray(at: Vector2, colour: Color, n: int = 12) -> void:
 		p.drag = 0.6
 
 
+## `delay: i * 46` — 46ms between motes (combat.js:1457). The single knob that
+## decides whether this reads as a stream leaving a body or a puff appearing at
+## one.
+const FLY_STAGGER: float = 0.046
+## The one easing, run over the whole iteration.
+const FLY_EASE: Array[float] = [0.32, 0.05, 0.35, 1.0]
+## The three keyframe stops. Opacity opens at 0 and never returns there: a mote
+## arrives and is gone with the animation, it does not fade out on the stage.
+const FLY_AT: Array[float] = [0.0, 0.45, 1.0]
+const FLY_SCALE: Array[float] = [0.5, 1.05, 0.55]
+const FLY_ALPHA: Array[float] = [0.0, 1.0, 0.95]
+## The mid control point: `(x0 + x1) / 2 ± 70` across, and 50 to 130 above
+## whichever end is higher. Every mote draws its own, which is the only reason
+## a flight of them reads as more than one line.
+const FLY_SPREAD: float = 140.0
+const FLY_LIFT: float = 50.0
+const FLY_LIFT_VARY: float = 80.0
+
+
 ## Embers travelling between two points — the spill toward the lantern, poison
-## jumping foes, a power settling into the hero. `presentation.flyTo` is a Pixi
-## sprite flight in the benchmark; here it is the same motes on a lifted arc,
-## which is what it reads as on screen.
+## jumping foes, a power settling into the hero. `flyTo` (combat.js:1420).
+##
+## `sz` is the benchmark's `size` and stays in the benchmark's units so a call
+## site can be read against `drain.js` — but there `size` sets a DOM element's
+## width, so it is a DIAMETER. Every other size in this file is a radius,
+## because `vfx.js` draws its particles with `arc(x, y, p.size * a)` (vfx.js:121)
+## and that argument is one. The port carried 6 and 7 straight across and drew
+## every mote at twice the benchmark's.
 func fly_to(from: Vector2, to: Vector2, colour: Color, n: int = 6,
 		sz: float = 6.0, dur: float = 0.5) -> void:
-	# Straight-line velocity plus an upward bias against gravity, so the stream
-	# bows over rather than crossing the stage flat.
-	var v: Vector2 = (to - from) / maxf(0.05, dur)
 	for i: int in range(n):
-		var jitter: Vector2 = Vector2(
-			(_rng.randf() - 0.5) * 26.0, (_rng.randf() - 0.5) * 26.0)
-		var p: Part = _spawn("dot", from + jitter,
-			Vector2(v.x * (0.85 + _rng.randf() * 0.3),
-				v.y * (0.85 + _rng.randf() * 0.3) - 90.0),
-			sz * (0.6 + _rng.randf() * 0.6), colour, dur, 0.35)
-		p.grav = 180.0
-		p.alpha = 0.95
+		var f: Flight = Flight.new()
+		f.p0 = from
+		f.p1 = Vector2(
+			(from.x + to.x) * 0.5 + (_rng.randf() - 0.5) * FLY_SPREAD,
+			minf(from.y, to.y) - FLY_LIFT - _rng.randf() * FLY_LIFT_VARY)
+		f.p2 = to
+		f.at = FLY_AT
+		f.scale = FLY_SCALE
+		f.alpha = FLY_ALPHA
+		f.ease = FLY_EASE
+		var p: Part = _spawn("dot", from, Vector2.ZERO, sz * 0.5, colour,
+			dur, dur)
+		p.flight = f
+		p.delay = float(i) * FLY_STAGGER
 
 
 ## `archetypeHit` (vfx.js:458) — the one entry point every landed blow goes
