@@ -248,3 +248,43 @@ tree the reference is not.
 Until it exists, the rule from the audit still stands — if a symbol is missing
 from `~/Coding/roguecardv2-benchmark`, it is not portable, however good it looks
 in the newer tree.
+
+## Putting the benchmark into a named fight — the reproducible recipe
+
+Everything above was measured from source. Measuring it on the screen needs the
+benchmark in a *known* fight, and until now nobody had a way to ask for one.
+There is one, and it was in the reference the whole time.
+
+```
+http://localhost:5190/?lab&shape=pad-landscape&scenario=<base64url>
+```
+
+- **`?lab`** boots the Content Lab (`main.js:20`, dev builds only).
+- **`?shape=pad-landscape`** forces the 1180x820 stage (`stage.js:33`). Without
+  it a wide desktop window resolves to **`desktop-landscape` (1458x820)** — a
+  genuinely different layout, not a scaled one. Any comparison made in that
+  shape is against the wrong chrome.
+- **`?scenario=`** is base64url JSON, decoded at `lab.js:673`. Required fields:
+  `v, mode, seed, aspectId, themeId, omenId, kind, enemies[{id,variantId}],
+  deck[{id,up}], hand`. Build it in the page — `await import('/src/dev/lab-scenario.js')`
+  then `encodeLabScenario(...)`; the validator names every missing field.
+
+Verified on 2026-07-27 with two sporelings at seed 7. The stage came up at
+exactly 1180x820 and three independently recorded numbers landed on the nose:
+`.end-turn` at 1060,537, `.hud-bar` 1180x56 at the origin, `.pile-draw` at
+16,658. Both enemy art boxes measured **115x115 at y 473**, x 763 and 978 —
+which is also what `assets/art/enemies/char-meta.json` gives a sporeling.
+
+**This must be done in a real browser.** The in-app Browser pane serves the page
+with `document.visibilityState === "hidden"`, which throttles rAF to a stop. The
+consequences are not subtle and they are silent:
+
+- **No creature ever appears.** Bodies are drawn on the WebGL `canvas#mesh`, and
+  `.mesh-live > .raster-art { opacity: 0 }` hides the DOM image that would
+  otherwise stand in. The stage, chrome, cards and backdrop all render normally,
+  so the screenshot looks healthy and the floor is empty.
+- **Screen transitions never settle.** `.combat-screen` keeps `screen-enter`
+  forever and inputs stop responding after the first one.
+
+In Chrome the same page reports `visible`, the GL context is live, and the
+sporelings draw. `?mesh=0` is the fallback if only geometry is needed.
