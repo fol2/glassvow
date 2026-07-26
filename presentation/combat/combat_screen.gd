@@ -651,16 +651,24 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 	_enemy_views.resize(game.cb.enemies.size())
 	for idx: int in order:
 		var e: EnemyCombatant = game.cb.enemies[idx]
-		var display: String = e.name
+		# The affix is NOT glued onto the name: it is its own span in its own tone
+		# (combat.js:606), so it is handed over separately and the plate keeps the
+		# two apart.
+		var affix_name: String = ""
+		var affix_tone: Color = EnemyView.NAME_DIM
 		if game.cb.affix != &"":
 			var affix_def: Dictionary = game.content.affixes.get(String(game.cb.affix), {})
-			display = "%s %s" % [str(affix_def.get("name", String(game.cb.affix))), e.name]
+			affix_name = str(affix_def.get("name", String(game.cb.affix)))
+			var tone_hex: String = str(affix_def.get("tone", ""))
+			if tone_hex.begins_with("#"):
+				affix_tone = Color(tone_hex)
 		var art: Dictionary = e.def.get("art", {})
 		var hue_num: int = art.get("hue", 210)
 		# The art id is the foe's own key: every slice foe has a painting under
 		# that name and char-meta types its box and its feet by the same one.
 		# Passing nothing here is what left the fight full of fallback gems.
-		var view: EnemyView = EnemyView.new(e.idx, display, float(hue_num), e.key)
+		var view: EnemyView = EnemyView.new(e.idx, e.name, float(hue_num), e.key)
+		view.set_affix(affix_name, affix_tone)
 		_battlefield.add_child(view)
 		_enemy_views[idx] = view
 		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
@@ -892,7 +900,6 @@ func _on_card_drag_armed(uid: int) -> void:
 	_targeting = view != null and view.target_kind == "enemy"
 	_selected_uid = uid if _targeting else -1
 	_aim_hover = -1
-	_set_target_glow(_targeting)
 	_hand.arm_seat(_selected_uid)
 	_update_previews()
 
@@ -924,7 +931,6 @@ func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	# is mid-flight to a foe or mid-snap-back on its own clock.
 	_targeting = false
 	_selected_uid = -1
-	_set_target_glow(false)
 	_hand.armed_uid = -1
 	_clear_previews()
 	var view: CardView = _hand.card_view(uid)
@@ -1773,9 +1779,15 @@ func _tip_at(global_pos: Vector2) -> Dictionary:
 	var word: String = _hand.keyword_at(global_pos)
 	if word != "":
 		return _keyword_tip(word)
-	var over_uid: int = _hand.card_at(global_pos)
-	if over_uid >= 0:
-		return _card_tip(over_uid)
+	# A card that is NOT under a keyword answers nothing, and it stops the walk:
+	# the tip must not fall through to whatever body the card happens to be
+	# covering. The benchmark hangs `{title: name, body: text}` on a hand card
+	# (combat.js:270) and it is redundant there and redundant here — the face
+	# already carries both, so the panel restates what the cursor is resting on.
+	# Only the glossary earns a tip, because a keyword's meaning is NOT on the
+	# card.
+	if _hand.card_at(global_pos) >= 0:
+		return {}
 	if _hud != null and _hud.lantern_rect().has_point(global_pos):
 		return _lantern_tip()
 	for view: EnemyView in _enemy_views:
@@ -1813,22 +1825,6 @@ func _keyword_tip(word: String) -> Dictionary:
 		var info: Dictionary = game.content.statuses.get(status_id, {})
 		return {"title": word, "body": str(info.get("desc", ""))}
 	return {"title": word, "body": str(RulesText.KEYWORD_TEXT.get(word, ""))}
-
-
-## `card._tip = { title: data.name, body: text }` (tooltip.js:199). The body is
-## the authored rules line with its markers stripped — the preview-resolved
-## numerals are on the face, and repeating them in the tip would state a
-## consequence twice and disagree with the face the moment a buff lands.
-func _card_tip(uid: int) -> Dictionary:
-	var inst: CardInst = _find_card(uid)
-	if inst == null:
-		return {}
-	var d: Dictionary = _rules.card_data(inst)
-	var title: String = str(d.get("name", String(inst.id)))
-	if inst.up:
-		title += "+"
-	var body: String = str(d.get("text", "")).replace("@", "").replace("#", "")
-	return {"title": title, "body": body}
 
 
 ## `intentFor` (combat.js:997). The chip shows a number; the tip spells out
@@ -2054,7 +2050,6 @@ func _update_previews() -> void:
 			view.clear_preview()
 			continue
 		var hovered: bool = i == aimed
-		view.set_choose_hover(_targeting and hovered)
 		var aim_all: bool = target == "allEnemies" and (inspect or _hand.is_free_drag())
 		var aim_one: bool = target == "enemy" and (living == 1 or (aiming and hovered))
 		view.set_targetable(aim_all or aim_one)
@@ -2218,7 +2213,6 @@ func _activate_selected() -> void:
 		# pointer takes it over from the next mouse move.
 		_targeting = true
 		_aim_hover = living[0] if not living.is_empty() else -1
-		_set_target_glow(true)
 		_hand.arm_seat(_selected_uid)
 		if _aim_hover >= 0:
 			_aim.draw_between(_hand.seat_centre(_selected_uid),
@@ -2239,19 +2233,7 @@ func _cancel_targeting() -> void:
 	_targeting = false
 	_selected_uid = -1
 	_aim_hover = -1
-	_set_target_glow(false)
 	_aim.clear_aim()
 	_hand.hovered_uid = -1
 	_hand.drop_seat()
 	_update_previews()
-
-
-## `.enemy.targetable` (styles.css:1241) — while a card is armed, EVERY living foe
-## breathes a red halo, and that is a different statement from the aim rim: the
-## halo says "this is a thing you may choose", the rim says "this is the thing you
-## have chosen". A fight with three foes shows three halos and at most one rim.
-func _set_target_glow(on: bool) -> void:
-	for view: EnemyView in _enemy_views:
-		if view.idx >= game.cb.enemies.size():
-			continue
-		view.set_choosable(on and game.cb.enemies[view.idx].hp > 0)
