@@ -19,11 +19,14 @@ extends Control
 ## keystroke apart. All six now build here off one CASES table, so switching
 ## concept changes exactly one thing.
 ##
-## COMPARING CONCEPTS. The benchmark is ported and settled; what is being chosen
-## between now are whole answers to "what IS a reward screen", not tunings of
-## one. They differ in what a reward is made of, so the only honest way to judge
-## is to flip between them over the SAME spoils without relaunching — Q/W/E do
-## that, and the case stays put across the switch.
+## THE CHOICE IS MADE: embers. The viewer opens on it, and it is the only
+## concept still being worked — everything from here is polish on that one
+## screen. The other five are kept exactly where they are rather than deleted: a
+## passed-over candidate is the cheapest thing in this repo to keep and the most
+## expensive to reconstruct, and they stay on their keys so that "is this
+## actually better than what we walked away from" is one keystroke away over the
+## SAME spoils, for as long as that question is worth asking. The case stays put
+## across a switch, which is the only way the comparison means anything.
 ##
 ## In the window:
 ##   1..5   case: gold · cards · full · elite · tiers
