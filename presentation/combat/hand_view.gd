@@ -53,21 +53,32 @@ const CARD_INSET: float = 8.0
 ## and rules text, which is what the assembled screen was doing.
 const BOTTOM_INSET: float = 40.0
 
-## A seat has four poses (`combat-gl.js:1096-1123`) and they do not stack — the
-## renderer picks one branch per card and writes the whole transform from it.
+## A seat has four poses and they do not stack — one branch per card writes the
+## whole transform. Two of them are CSS, and these are their numbers:
 ##
-## Hovered is a lift AND a growth AND a straightening: a card you are reading is
-## held up flat in front of you, not merely nudged. The port only nudged, and by
-## half again too far.
+##     .hand-zone .card.lifted .card-lift { transform: translateY(-92px) scale(1.38); }
+##     .hand-zone .card.armed  .card-lift { transform: translateY(-118px) scale(1.24); }
+##                                                              (styles.css:634-635)
 ##
-## Armed is its own pose and it is not "hovered, harder". The card slides 60% of
-## the way to the middle of the fan, keeps half its tilt and lifts 24px — it
-## leaves the row it was in, which is what says the choice has been made and the
-## card is now waiting on a target rather than on you.
-const HOVER_LIFT: float = 20.0
-const HOVER_SCALE: float = 1.08
-const ARMED_LIFT: float = 24.0
-const ARMED_SCALE: float = 1.08
+## This port had 20px at 1.08 and 24px at 1.08 — a quarter of the travel and a
+## fifth of the growth, on the gesture the entire hand is read through. The
+## previous citation here was `combat-gl.js:1096-1123`, a file the reference does
+## not contain; the poses were guessed from it rather than measured.
+##
+## The scale is the load-bearing half. A resting hand in the reference is CUT OFF
+## by the bottom of the stage on purpose — the middle card of five hangs 30px
+## past it and the outer ones more — so a card is unreadable until you hover it
+## and the lift is what makes it legible, not a flourish on top of legibility.
+## Godot scales about `pivot_offset`, which `card_view.gd` centres, so 1.38 on a
+## 216px card adds 41px above the centre as well: the top rises 133px, not 92.
+##
+## Armed is not "hovered, harder". It lifts FURTHER and grows LESS — the card
+## leaves the row entirely and settles, which is what says the choice is made and
+## it is now waiting on a target rather than on you.
+const HOVER_LIFT: float = 92.0
+const HOVER_SCALE: float = 1.38
+const ARMED_LIFT: float = 118.0
+const ARMED_SCALE: float = 1.24
 const ARMED_PULL: float = 0.4   # of the seat's own offset from the zone centre
 const ARMED_ROT: float = 0.5
 const DRAG_SCALE: float = 1.12
