@@ -30,14 +30,14 @@ deliberately does **not** share. This file describes what Godot actually builds.
 ## 1. What is built
 
 Two paths share one Voronoi routine, `_voronoi(sites, reach)`
-(`presentation/combat/enemy_view.gd:2069` (`_voronoi`)):
+(`presentation/combat/enemy_view.gd:2079` (`_voronoi`)):
 
 | | standing crack web | death shatter |
 |---|---|---|
-| entry | `crack()` (`enemy_view.gd:2229` (`crack`)) | `mark_dead()` (`enemy_view.gd:2377` (`mark_dead`)) |
+| entry | `crack()` (`enemy_view.gd:2239` (`crack`)) | `mark_dead()` (`enemy_view.gd:2387` (`mark_dead`)) |
 | sites | `_sites`, appended one per call, cap `MAX_SITES` | `_death_sites()` — graded rings around the burst |
-| cells | `_cells()` (`enemy_view.gd:2098` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:2499` (`_death_cells`)) — **`reach` = 0** |
-| body mask | none | `_touches_art()` (`enemy_view.gd:2524` (`_touches_art`)) |
+| cells | `_cells()` (`enemy_view.gd:2108` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:2510` (`_death_cells`)) — **`reach` = 0** |
+| body mask | none | `_touches_art()` (`enemy_view.gd:2563` (`_touches_art`)) |
 | geometry | `_prism()` → `MeshInstance3D` under `_glass_root` | `_prism()` with per-shard `origin` → `RigidBody3D` |
 | material | `GLASS_SHADER` — refraction + Fresnel | `SHARD_SHADER` — opaque cap, molten fracture face |
 
@@ -52,12 +52,12 @@ Four mechanisms, all verified in source, compounding.
 
 **2.1 The circle is a literal circle.** `_cells()` passes
 `_glass_area * minf(_quad_w, _box_u) * 0.5` as `reach`, and `_voronoi` clips
-every cell against `_disc(sites[i], reach)` (`enemy_view.gd:2056` (`_disc`)) — a
+every cell against `_disc(sites[i], reach)` (`enemy_view.gd:2066` (`_disc`)) — a
 20-gon of **constant radius**. The arc is not an artefact of shading or of
 sampling. It is drawn.
 
 **2.2 The arc wears the brightest treatment in the effect.** `_prism()`
-(`enemy_view.gd:2113` (`_prism`)) extrudes *every* edge of the cell into a side
+(`enemy_view.gd:2123` (`_prism`)) extrudes *every* edge of the cell into a side
 band tagged `COLOR.r = 1`, and `GLASS_SHADER` (`enemy_view.gd:450`
 (`GLASS_SHADER`)) lights that band by Fresnel: `ALBEDO` mixes toward white,
 `ALPHA` gains `f * 0.6`, `EMISSION` gains `pow(f, 1.4)` for both `ignite` and
@@ -85,7 +85,7 @@ boundary, and every arc shares one radius.
 characteristic radius; a set of co-radial arcs can only read as circles.
 
 **2.4 The first state the player sees is the worst one.** `_rebuild_glass()`
-(`enemy_view.gd:2149` (`_rebuild_glass`)) returns early below two sites, so the
+(`enemy_view.gd:2159` (`_rebuild_glass`)) returns early below two sites, so the
 first visible crack state is two half-moons — one straight chord and one large
 arc each. Maximum circle, minimum crack.
 
@@ -144,7 +144,7 @@ apart when the Death rite runs". They do not.
 **3.5 Sites do not cluster at the blow.** `crack()` with no argument picks
 uniformly from UV 0.2–0.8, so crack position is unrelated to where the hit landed
 or how hard. Real impact fragments finely at the strike and coarsely outward —
-and `_death_sites()` (`enemy_view.gd:2419` (`_death_sites`)) *already does this*,
+and `_death_sites()` (`enemy_view.gd:2422` (`_death_sites`)) *already does this*,
 with graded rings. The death path understands the grading; the standing path does
 not.
 

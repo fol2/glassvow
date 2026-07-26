@@ -79,6 +79,9 @@ static func run(fails: Array[String]) -> void:
 	_check_field_determinism(fails)
 	_check_field_convergence(fails)
 	_check_field_relieve(fails)
+	_check_carve_accounts(fails)
+	_check_carve_separates(fails)
+	_check_carve_needs_relief(fails)
 
 
 # ------------------------------------------------------------------ the gate
@@ -595,3 +598,81 @@ static func _check_field_relieve(fails: Array[String]) -> void:
 	if not again.is_empty():
 		fails.append("field: relieving twice grew %d more continuations — not idempotent"
 			% again.size())
+
+
+# ------------------------------------------------------------------- the carve
+
+## A struck, relieved net on a rectangular body — the state the rite carves from.
+static func _carved(seed_at: int, blows: int) -> Array:
+	var f: FractureField = _field(seed_at, BodyMask.rect())
+	var net: CrackNet = CrackNet.new()
+	for i: int in range(blows):
+		var at: Vector2 = Vector2(0.30 + 0.14 * float(i % 3), 0.32 + 0.17 * float(i / 3))
+		net.commit(f.strike(net, Blow.new(at, Vector2.ZERO, 1.3, 0.5)))
+	net.commit(f.relieve(net))
+	return [net, Carve.shards(net, CrackField.APERTURE)]
+
+
+## INVARIANT 4 (`docs/fracture-model.md` §6). The pieces must ACCOUNT for the body: no
+## area invented, and no more lost than the grooves can explain.
+##
+## This is the invariant a carve most needs, because every way of getting it wrong is
+## invisible in a render. Pieces that overlap look like pieces. Pieces that dropped a
+## third of the body look like pieces too — the missing third is simply never thrown, and
+## on a body that is already exploding nobody counts.
+static func _check_carve_accounts(fails: Array[String]) -> void:
+	var got: Array = _carved(404, 6)
+	var net: CrackNet = got[0]
+	var shards: Array[PackedVector2Array] = got[1]
+	if shards.is_empty():
+		fails.append("carve: produced no shards at all")
+		return
+	var total: float = 0.0
+	for s: PackedVector2Array in shards:
+		total += Carve.area(s)
+	# The kerf is the only thing allowed to eat area, and it can only eat what it covers:
+	# total crack length x the groove's full width, which is a bound rather than a guess
+	# because overlapping ribbons at junctions can only remove LESS than the sum.
+	var run: float = 0.0
+	for i: int in range(net.strand_count()):
+		run += net.length(i)
+	var most_lost: float = run * CrackField.APERTURE * 2.0
+	if total > 1.0 + 1e-4:
+		fails.append("carve: %d shards cover %.4f of a 1.0 body — area was invented, so pieces overlap"
+			% [shards.size(), total])
+	if total < 1.0 - most_lost - 0.02:
+		fails.append("carve: %d shards cover only %.4f of the body; the grooves can explain at most %.4f of loss"
+			% [shards.size(), total, most_lost])
+	for s: PackedVector2Array in shards:
+		if Geometry2D.is_polygon_clockwise(s):
+			fails.append("carve: a shard is wound clockwise — that is a hole, not a piece")
+			return
+
+
+## A network that crosses the body must SEPARATE it. One shard back means the knife never
+## cut through, which is the failure mode the `S`-terminus overshoot exists to prevent —
+## a crack that stopped at the silhouette leaves a bridge of empty box behind it, and
+## nothing in a render shows two shards that are secretly one.
+static func _check_carve_separates(fails: Array[String]) -> void:
+	var got: Array = _carved(77, 6)
+	var shards: Array[PackedVector2Array] = got[1]
+	if shards.size() < 4:
+		fails.append("carve: six relieved blows separated the body into only %d piece(s)"
+			% shards.size())
+
+
+## Relief is a PRECONDITION, not a decoration. An arrested crack is a dangling edge and
+## separates nothing, so carving an unrelieved net must give strictly fewer pieces —
+## which is also the assertion that `relieve()` is doing something.
+static func _check_carve_needs_relief(fails: Array[String]) -> void:
+	var f: FractureField = _field(303, BodyMask.rect())
+	var raw: CrackNet = CrackNet.new()
+	for i: int in range(6):
+		var at: Vector2 = Vector2(0.30 + 0.14 * float(i % 3), 0.32 + 0.17 * float(i / 3))
+		raw.commit(f.strike(raw, Blow.new(at, Vector2.ZERO, 1.3, 0.5)))
+	var before: int = Carve.shards(raw, CrackField.APERTURE).size()
+	raw.commit(f.relieve(raw))
+	var after: int = Carve.shards(raw, CrackField.APERTURE).size()
+	if after <= before:
+		fails.append("carve: relieving the net changed nothing — %d pieces before, %d after"
+			% [before, after])

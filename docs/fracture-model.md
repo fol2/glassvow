@@ -77,7 +77,7 @@ presentation/combat/glass/           Node / Mesh / Shader allowed
 ```
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2541` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:2580` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -281,7 +281,7 @@ actor or it scintillates whatever the MSAA. At a 115 px sporeling with
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:1865` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:1875` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -594,7 +594,8 @@ known.
 | drive-field heatmap | lab only, on toggle | 40² samples × every segment in the net — hundreds of ms on a busy net | measured; never runs in game |
 | per frame, steady state | every frame | **three texture fetches** — the value and two neighbours for the gradient, inside one `if` a clean creature never enters | as built |
 | memory | per damaged actor | 128 KB `RG8` field + ~77 KB of polylines | as built |
-| carve, at death | once per rite | ~2.5–6 ms, amortised over a 200 ms rite ≈ 0.03 ms/frame | estimate, needs step 6 |
+| carve, at death | once per rite | **0.7 ms at one blow, 8.6 ms at eight** — a single-frame spike, not amortised | measured |
+| shards produced | once per rite | **5 at one blow, 12 at two, 16 at eight**; the reference's band is 9–16 | measured |
 
 **~4.5 ms is the number to watch.** That is a quarter of a 60 fps frame on the worst
 single hit, it is paid once per landed blow and never per frame, and it grows with the
@@ -606,6 +607,13 @@ five sixths of the segment boxes with no visible displacement.
 
 If it ever needs to be cheaper, the rasteriser is the half to attack — it is a
 `PackedByteArray` inner loop in GDScript and the same work on the GPU is free.
+
+The carve's **8.6 ms is a spike on the shatter frame**, and it lands alongside spawning
+sixteen `RigidBody3D`s with meshes and colliders. It was budgeted here at 2.5–6 ms and
+amortised over the rite, which was wrong on both counts — it is not amortisable, it all
+happens in the frame the vessel hands off. The `_weld` fold is the expensive half and it
+is quadratic in ribbons before the AABB reject; welding by spatial bucket instead would
+be the fix if a death ever visibly hitches.
 
 Against the measured 113 MB per actor — dominated by the `SubViewport` colour and
 depth attachments — the memory is noise. The crack model is **orthogonal** to the MSAA
@@ -621,7 +629,7 @@ and `oversample` levers, and cannot help or hurt that budget.
 | 3 | ✅ **built** — `Blow` / `CrackNet` / `BodyMask` + the purity gate + the net and mask invariants, no renderer | 1 |
 | 4 | ✅ **built, and it passed** — `FractureField.strike` / `relieve` with the §2.4 rule, screening, capture, forking, the emission floor and five arrest cases, gated by nine field invariants (seventeen checks in all); plus `FractureProbe` and the lab's `--fracture` sheet | 3 |
 | 5 | ✅ **built** — `CrackField` + the three-band groove folded into `BODY_SHADER`; the old disc web is off behind `EnemyView.discs` | 4 reads as fracture ✅ |
-| 6 | `Carve` + `relieve`, and `shatter()` consumes it. Invariant 4 | 5 |
+| 6 | ✅ **built** — `Carve`, `shatter()` consumes it, and invariant 4 is real. The shard count follows the damage | 5 |
 | 7 | Optional: `reveal(t)` propagation, ignite beams, `CrackRibbon` | 6 |
 
 ### The kill test, and its verdict
@@ -689,12 +697,23 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - **`FractureProbe` shares the model with the shipping renderer and must not become
   it.** The moment it grows a taper it stops being evidence. `CrackField` was built
   beside it, not out of it, and the probe's hairlines are unchanged.
-- **The old disc web is off, not gone.** `EnemyView.discs` defaults false and
-  `--discs`-style comparison is still possible from code. It cannot be deleted until
-  step 6, because `shatter()` still partitions the body along Voronoi cells grown from
-  `_sites` — so `_sites` keeps filling even with the web dark, and `mark_dead()` tops it
-  up to the cap. That top-up is the one place `CONCEPTS.md` › Crack is not yet kept: the
-  shard count does not follow the damage until the carve lands.
+- **The old disc web is off, not gone.** `EnemyView.discs` defaults false and the
+  comparison is still available from code. What is left of it is now only a *fallback*:
+  `_voronoi_cells()` breaks a vessel that shatters without ever having been struck, which
+  the lab's `S` key does and any caller that skips to the ending can. `_sites`,
+  `_death_sites` and the ring table exist for that path alone and could be deleted the day
+  a struck-first precondition is acceptable.
+- **The debris's pale side bands are pre-existing, and the carve did not change them.**
+  Worth recording because it cost three attempts to establish. The shards read as plywood
+  rather than glass, and the obvious story — that a carved network throws slivers where a
+  Voronoi partition threw plates, so there is more fracture face on screen under a molten
+  treatment tuned for less — is wrong. Painting `COLOR.r` pure red settled it in one
+  frame: **the pale areas are not fracture faces at all**, and the same rite shot before
+  and after the carve is pixel-comparable. Every speculative change to `SHARD_SHADER` was
+  reverted. It remains worth someone's eye, as its own piece of work and with the
+  diagnostic to hand: the pale surfaces are CAPS, and something in how a cap is lit —
+  `generate_normals()` averaging the prism's crease is the first suspect, since §5.2
+  already records that it destroys creases — is making a dark brown painting read cream.
 - **Two silhouette readers coexist.** `EnemyView.body_mask()` feeds the model at
   256²; `_alpha_at`/`_touches_art` still feeds the death cull at full resolution.
   Rewriting the older one now would change an already-approved death for a

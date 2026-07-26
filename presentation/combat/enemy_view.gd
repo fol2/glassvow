@@ -974,6 +974,16 @@ void fragment() {
 	// BODY_SHADER) — a falling piece stays lit the way it was lit standing,
 	// which is most of what makes it recognisably the same creature.
 	float l = dot(c.rgb, vec3(0.299, 0.587, 0.114)) * c.a;
+	// 0.30 on the fracture face, down from 0.90. The docblock above says it: "Heat is
+	// seasoning, never paint: push the glow past a whisper and every piece is the same
+	// white-hot popcorn and the creature is gone AGAIN, just hotter." That was the right
+	// warning and 0.90 was inside it while the faces were thin trim on wide Voronoi
+	// plates. Carved slivers are nearly cubes, the face became most of the visible area,
+	// and 0.90 duly turned every piece the same warm mid-tone — plywood, not glass.
+	//
+	// Reduced rather than removed: molten fracture edges are the point of the rite. What
+	// changed is how much of the screen is fracture edge, and a per-face constant that was
+	// tuned against one quantity has to move when the quantity does.
 	EMISSION = WARM * (edge * heat * 0.9 + brink * 1.1 + f * heat * 0.3)
 		+ c.rgb * (pow(l, 3.2) * 0.85 * (1.0 - edge) + heat * 0.25);
 }
@@ -2396,18 +2406,11 @@ func mark_dead(beat: float = 0.2) -> void:
 	# arrested network into one that partitions the plane: an arrested crack is a
 	# dangling edge and separates nothing (`docs/fracture-model.md` §2.4).
 	_relieve_net()
-	# ...and then the SITES are topped up to the cap. This is transitional and it is the
-	# one place the promise in `CONCEPTS.md` › Crack is not yet kept: `shatter()` still
-	# partitions the body along Voronoi cells grown from `_sites`, and under three sites
-	# it falls back to `_death_sites`' unrelated rings. Topping up keeps the partition
-	# legible until step 6 carves along the net instead — at which point the shard count
-	# follows the damage for real and this block, `_sites`, and the rings all go.
-	#
-	# SITES ONLY, deliberately. Calling `crack()` here would score new propagated stars
-	# a frame before the break, which is visible and is exactly the thing the owner ruled
-	# against. The grooves you see are the ones the creature was already showing.
-	while _sites.size() < MAX_SITES:
-		_sites.append(_from_uv(_somewhere_on_body()))
+	# NO top-up. It was here until the carve landed — `_sites` padded to the cap so the
+	# Voronoi partition had enough seeds to look legible — and it was the one place
+	# `CONCEPTS.md` › Crack was not kept, because it made every death break into the same
+	# number of pieces however it had been earned. `Carve` reads the net, so the shard
+	# count follows the damage and the padding is not just unnecessary but wrong.
 	var tw: Tween = create_tween()
 	tw.tween_method(set_ignite, _ignite, 1.0, maxf(0.01, beat)).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_callback(shatter)
@@ -2496,7 +2499,43 @@ func _break_sites(burst: Vector2) -> PackedVector2Array:
 ## rim — which is exactly "shattering something that is not the mob". Slivers go
 ## too: a needle triangulates and extrudes perfectly well, then flies as a splinter
 ## carrying no readable painting, which the reference culls for the same reason.
+## THE BODY BREAKS ALONG THE CRACKS IT WAS CARRYING, and nothing else. `Carve` cuts the
+## net out of the body and the pieces that come back are the shards — so a creature that
+## died having been hit twice breaks into a few large ones and a worn-down one breaks into
+## many, which is `CONCEPTS.md` › Crack finally being true rather than promised.
+##
+## Falls back to the Voronoi cells when there is no net at all. That path is not dead
+## code: a vessel can be shattered without ever having been struck — the lab's `S` key
+## does exactly that, and so does any caller that skips straight to the ending.
 func _death_cells(burst: Vector2) -> Array[PackedVector2Array]:
+	if _net != null and not _net.is_empty():
+		var carved: Array[PackedVector2Array] = []
+		# `Carve.MIN_AREA` and not `CELL_MIN_AREA`, and not a conversion between them.
+		# Both are fractions of the body — UV area 1.0 IS the quad — so dividing by the
+		# quad's world area was a unit error that made the floor ten times too permissive
+		# and let one-pixel specks through with a RigidBody each. The carve's floor is
+		# also derived differently, because a carved network throws thin offcuts where a
+		# Voronoi partition threw compact cells.
+		for shard: PackedVector2Array in Carve.shards(_net, CrackField.APERTURE):
+			var cell: PackedVector2Array = PackedVector2Array()
+			for v: Vector2 in shard:
+				cell.append(_from_uv(v))
+			var centre: Vector2 = Vector2.ZERO
+			for v: Vector2 in cell:
+				centre += v
+			centre /= float(cell.size())
+			# The same cull the disc path used: a shard covering no painting is a pane of
+			# empty box, and the shard shader would render it as nothing while the physics
+			# still tumbled it.
+			if _touches_art(cell, centre):
+				carved.append(cell)
+		if not carved.is_empty():
+			return carved
+	return _voronoi_cells(burst)
+
+
+## The disc path's cells, kept for a vessel that breaks without ever having been struck.
+func _voronoi_cells(burst: Vector2) -> Array[PackedVector2Array]:
 	var out: Array[PackedVector2Array] = []
 	var floor_area: float = _quad_w * _box_u * CELL_MIN_AREA
 	for cell: PackedVector2Array in _voronoi(_break_sites(burst), 0.0):
