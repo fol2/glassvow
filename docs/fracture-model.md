@@ -77,7 +77,7 @@ presentation/combat/glass/           Node / Mesh / Shader allowed
 ```
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2313` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:2541` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -281,7 +281,7 @@ actor or it scintillates whatever the MSAA. At a 115 px sporeling with
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:1736` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:1865` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -435,7 +435,7 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:2014` (in `_prism`)), so
+  have**. The existing `_prism` calls it (`enemy_view.gd:2143` (in `_prism`)), so
   the ribbon needs authored crease normals, not the convenience path.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
@@ -585,19 +585,27 @@ known.
 
 | | when | cost | how |
 |---|---|---|---|
-| propagation, one blow | on a hit | **0.14 – 1.43 ms** on a duskfang, 8 blows accumulated | measured, `FractureProbe.describe()` |
+| propagation, one blow | on a hit | **0.46 – 1.96 ms**, mean 1.1 ms over 8 accumulating blows on a duskfang | measured |
+| field rasterise, one blow | on a hit | **0.87 – 2.96 ms**, mean 1.6 ms, same run | measured |
+| texture upload | on a hit | **0.01 ms** — one `ImageTexture.update` of 128 KB | measured |
+| worst single hit | on a hit | **~4.5 ms**, propagate + rasterise + upload together | measured |
 | the screening query | inside propagation | direct, no cache. The 128² oracle below was not needed — see §4 | as built |
 | body mask | once per **painting**, not per actor | one 256² decompressed alpha image, ~256 KB, cached in `EnemyView._mask_cache` | as built |
 | drive-field heatmap | lab only, on toggle | 40² samples × every segment in the net — hundreds of ms on a busy net | measured; never runs in game |
-| carve, at death | once per rite | ~2.5–6 ms, amortised over a 200 ms rite ≈ 0.03 ms/frame | estimate |
-| per frame, steady state | every frame | **one texture fetch** | estimate, needs step 5 |
-| memory | per damaged actor | render field sized from `_box_u` (64 KB at 256²) + ~77 KB of polylines | estimate |
+| per frame, steady state | every frame | **three texture fetches** — the value and two neighbours for the gradient, inside one `if` a clean creature never enters | as built |
+| memory | per damaged actor | 128 KB `RG8` field + ~77 KB of polylines | as built |
+| carve, at death | once per rite | ~2.5–6 ms, amortised over a 200 ms rite ≈ 0.03 ms/frame | estimate, needs step 6 |
 
-The 1.43 ms upper end is the number to watch: it is most of a 60 fps frame, it grows
-with the net because the arrest test walks every segment, and the cap of 8 is what
-bounds it. It is also *not* per frame — it is once per landed blow, and the strike
-before it cost 0.14 ms, so the spread is about how much glass is already there rather
-than about the creature's size.
+**~4.5 ms is the number to watch.** That is a quarter of a 60 fps frame on the worst
+single hit, it is paid once per landed blow and never per frame, and it grows with the
+net because both the crossing test and the rasteriser walk what is already there. The
+cap of eight impacts is what bounds it. Two mitigations are already in and are the
+reason it is 4.5 and not 20: the field composites **only the new strands** rather than
+rebuilding, and each strand is Douglas–Peucker simplified before rasterising, which cuts
+five sixths of the segment boxes with no visible displacement.
+
+If it ever needs to be cheaper, the rasteriser is the half to attack — it is a
+`PackedByteArray` inner loop in GDScript and the same work on the GPU is free.
 
 Against the measured 113 MB per actor — dominated by the `SubViewport` colour and
 depth attachments — the memory is noise. The crack model is **orthogonal** to the MSAA
@@ -612,7 +620,7 @@ and `oversample` levers, and cannot help or hurt that budget.
 | 2 | Resolve the ordinary-damage `crack()` call against `CONCEPTS.md` | owner |
 | 3 | ✅ **built** — `Blow` / `CrackNet` / `BodyMask` + the purity gate + the net and mask invariants, no renderer | 1 |
 | 4 | ✅ **built, and it passed** — `FractureField.strike` / `relieve` with the §2.4 rule, screening, capture, forking, the emission floor and five arrest cases, gated by nine field invariants (seventeen checks in all); plus `FractureProbe` and the lab's `--fracture` sheet | 3 |
-| 5 | `CrackField` — the three-band groove, §5.3 | 4 reads as fracture ✅ |
+| 5 | ✅ **built** — `CrackField` + the three-band groove folded into `BODY_SHADER`; the old disc web is off behind `EnemyView.discs` | 4 reads as fracture ✅ |
 | 6 | `Carve` + `relieve`, and `shatter()` consumes it. Invariant 4 | 5 |
 | 7 | Optional: `reveal(t)` propagation, ignite beams, `CrackRibbon` | 6 |
 
@@ -666,16 +674,27 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - **Whether the ward-shatter `crack()` call survives** even if the ordinary-damage
   one goes. A guard shattering is a glass event rather than attrition, so it has a
   case the damage call does not.
-- **A blow into recently-broken glass can score literally nothing.** The sheet's
-  cell 1 and cell 2 are identical: the third blow landed inside the process zone of
-  the first two and every arm it threw fell under the emission floor. That is the
-  screening rule working, and it is also a legibility problem the game will feel —
-  "the glass tells you the truth about the fight" reads badly if a hit leaves no
-  mark at all. It is a tuning question (`screen_radius`, or energy from damage), not
-  a modelling one, and it wants an owner's ruling rather than a quiet adjustment.
+- ~~**A blow into recently-broken glass can score literally nothing.**~~ **Fixed, and
+  it was a modelling defect rather than the tuning question it looked like.** Measured
+  at four of eight blows scoring zero on a duskfang. Screening is right for the far
+  field and wrong at the contact: right under an indenter the stress is set by the
+  contact pressure, which does not care that there is a free surface 0.05 body away, and
+  the material there is comminuted. `CONTACT_RADIUS` now arrests nothing inside it but
+  the body's edge — and because it is set above `MIN_ARM`, every arm gets enough clear
+  run that "a blow always marks" is structural rather than probabilistic.
+  `_check_field_always_marks` pins it. Two related fixes fell out of the same
+  investigation: the arrest test became an intersection rather than a proximity (see
+  §2.4), and `EnemyView`'s random blow point now consults the body mask, which was
+  silently scoring a quarter of all blows in empty air.
 - **`FractureProbe` shares the model with the shipping renderer and must not become
-  it.** The moment it grows a taper it stops being evidence. Step 5 builds `CrackField`
-  beside it, not out of it.
+  it.** The moment it grows a taper it stops being evidence. `CrackField` was built
+  beside it, not out of it, and the probe's hairlines are unchanged.
+- **The old disc web is off, not gone.** `EnemyView.discs` defaults false and
+  `--discs`-style comparison is still possible from code. It cannot be deleted until
+  step 6, because `shatter()` still partitions the body along Voronoi cells grown from
+  `_sites` — so `_sites` keeps filling even with the web dark, and `mark_dead()` tops it
+  up to the cap. That top-up is the one place `CONCEPTS.md` › Crack is not yet kept: the
+  shard count does not follow the damage until the carve lands.
 - **Two silhouette readers coexist.** `EnemyView.body_mask()` feeds the model at
   256²; `_alpha_at`/`_touches_art` still feeds the death cull at full resolution.
   Rewriting the older one now would change an already-approved death for a

@@ -144,6 +144,36 @@ func open_tips() -> Array[int]:
 	return out
 
 
+## Where the segment `a`→`b` first crosses an existing crack, or `null`.
+##
+## This is the arrest test, and it is an INTERSECTION test rather than a proximity one
+## because those are different questions and conflating them broke the model. Proximity
+## cannot tell a crack that has run head-on into another from one running *alongside* it a
+## few thousandths away — so near a cluster of blows, where the radials from each impact
+## necessarily run close and roughly parallel, every new arm died on its second step
+## against a neighbour it never touched. Six blows into a tight cluster and the sixth
+## scored nothing.
+##
+## Proximity is already modelled, and better, by the propagator's capture term: a tip
+## whose driving tension has been relieved to nothing by a nearby crack joins it. Two
+## mechanisms, two distinct jobs, neither doing the other's.
+##
+## Static so the propagator can ask the same question of its own in-flight buffer — a
+## crack arrests on any free surface regardless of when it was made.
+static func crossing(strands: Array[PackedVector2Array], a: Vector2, b: Vector2) -> Variant:
+	for pts: PackedVector2Array in strands:
+		for i: int in range(pts.size() - 1):
+			var hit: Variant = Geometry2D.segment_intersects_segment(
+				a, b, pts[i], pts[i + 1])
+			if hit != null:
+				return hit
+	return null
+
+
+func first_crossing(a: Vector2, b: Vector2) -> Variant:
+	return crossing(_points, a, b)
+
+
 ## WHERE the nearest crack is, not just how far. The propagator needs this on exactly
 ## one step — the one where a tip is captured by an existing crack and has to be given
 ## a final vertex ON that crack rather than three steps short of it.

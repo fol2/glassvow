@@ -75,6 +75,7 @@ static func run(fails: Array[String]) -> void:
 	_check_field_energy(fails)
 	_check_field_arm_count(fails)
 	_check_field_screening(fails)
+	_check_field_always_marks(fails)
 	_check_field_determinism(fails)
 	_check_field_convergence(fails)
 	_check_field_relieve(fails)
@@ -498,6 +499,39 @@ static func _check_field_determinism(fails: Array[String]) -> void:
 		if pa != pb:
 			fails.append("field: same seed diverged at strand %d" % i)
 			return
+
+
+## The other half of screening, and the half that was missing: a blow into broken glass
+## must do LESS, never NOTHING. `CONCEPTS.md` › Crack promises the glass tells the truth
+## about the fight, and a hit that leaves no mark at all breaks that promise.
+##
+## Written after measuring four of eight blows scoring zero strands on a duskfang. The
+## screening check above cannot catch this — it asserts `screened < virgin`, and zero
+## satisfies that perfectly.
+##
+## The fixture is a tight CLUSTER — eight blows inside a 0.09 box, so every one after the
+## first lands well within its predecessors' process zone (`SCREEN_RADIUS` is 0.08).
+##
+## Deliberately NOT eight blows onto one identical point, which was the first version and
+## which asserts something physically false. A point that already has six cracks
+## radiating out of it is comminuted: the glass there is fully relieved and pulverised,
+## and a seventh set of radials from it is not what happens. Real glass answers a repeat
+## hit on the exact same spot with a frosted crush zone, which this model does not
+## represent and does not claim to. What it must handle is the case the game actually
+## produces — blows landing NEAR each other — and that is what this asserts.
+static func _check_field_always_marks(fails: Array[String]) -> void:
+	var f: FractureField = _field(21, BodyMask.rect())
+	var net: CrackNet = CrackNet.new()
+	for i: int in range(8):
+		var at: Vector2 = Vector2(0.46 + 0.012 * float(i % 4 - 2),
+			0.46 + 0.013 * float(i / 4))
+		var grown: Array[Dictionary] = f.strike(
+			net, Blow.new(at, Vector2.ZERO, 1.1, 0.5))
+		if grown.is_empty():
+			fails.append("field: blow %d into a cluster scored NOTHING at %v — a hit must always mark"
+				% [i + 1, at])
+			return
+		net.commit(grown)
 
 
 ## `STEP`'s claim, run rather than asserted in prose: halve the integrator step and

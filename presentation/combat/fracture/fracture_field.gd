@@ -43,6 +43,25 @@ const TOUGHNESS: float = 0.34
 ## does less than the first, which is the behaviour the old web could not express.
 const SCREEN_RADIUS: float = 0.08
 
+## The contact zone: within this distance of the impact point, a tip is driven by the
+## indenter and not by the far field, so the screening cannot stop it.
+##
+## This is Hertzian contact, and it is also the fix for a real defect. Screening alone
+## made a blow into recently-broken glass score **literally nothing** — measured at four
+## of eight blows on a duskfang, because a body is narrow and blows cluster. Physically
+## right for the far field and wrong at the contact: right under an indenter the stress
+## is set by the contact pressure, which does not care that there is a free surface
+## 0.05 body away. A real impact always leaves a mark.
+##
+## It is also what the game needs, and the two agreeing is the reason this is a
+## mechanism rather than a fudge: `CONCEPTS.md` › Crack promises the glass tells the
+## truth about the fight, and a hit that leaves no mark breaks that promise. Screening
+## still makes the second blow do LESS — it just no longer makes it do nothing.
+##
+## Slightly larger than `MIN_ARM`, so an arm that survives only the contact zone still
+## clears the emission floor instead of being generated and then dropped.
+const CONTACT_RADIUS: float = 0.04
+
 ## Inside this distance of an existing crack, a tip whose tension has died is treated
 ## as having JOINED that crack rather than as having stopped near it. Half the process
 ## zone, which is comfortably outside the largest radius a tension death can occur at
@@ -296,30 +315,49 @@ func _grow(net: CrackNet, buffer: Array[PackedVector2Array], blow: Blow,
 		if not _mask.reaches(tip, next):
 			term = CrackNet.T_SILHOUETTE
 			break
-		# TWO distances, and keeping them apart is the physics rather than an
-		# optimisation. Contact reads the net AND this blow's own in-flight arms,
-		# because a crack cannot cross any free surface whenever it was made.
-		# Screening reads the net ONLY.
+		# ARREST IS A CROSSING, NOT A PROXIMITY. See `CrackNet.crossing` for the defect
+		# that distinction fixes — proximity cannot tell a crack that ran head-on into
+		# another from one running alongside it, so near a cluster of blows every new
+		# radial died against a parallel neighbour it never touched. Proximity is already
+		# modelled, and better, by the capture term below.
 		#
-		# Siblings from one blow form SIMULTANEOUSLY — one impact, one release — so
-		# they do not relieve each other's tension. Reading the buffer into the
-		# screening term instead makes every arm after the first die on its first
-		# step, since all arms leave the same point and are therefore inside each
-		# other's process zone. That is what `_check_field_radiates` caught: seven
-		# arms in, one arm out.
-		var d_contact: float = net.nearest(next)
-		if not buffer.is_empty():
-			d_contact = minf(d_contact, CrackNet.dist_to_strands(buffer, next))
-		if d_contact <= _step and pts.size() > 1:
-			# Arrest ON the crack it met, not a step short of it: the groove has to
-			# end at the seam or the renderer draws a gap.
-			pts.append(next)
-			term = CrackNet.T_CRACK
-			break
+		# Tested against the net AND this blow's own in-flight arms, because a crack
+		# cannot cross any free surface whenever it was made. Siblings from one blow are
+		# visible HERE and invisible to the screening term below: they form
+		# simultaneously — one impact, one release — so they do not relieve each other's
+		# tension, but they are real free surfaces the moment they exist. Reading the
+		# buffer into the screening term instead kills every arm after the first on its
+		# own first step, since all arms leave the same point and are therefore inside
+		# each other's process zone. Seven arms in, one arm out, which is what
+		# `_check_field_radiates` caught.
+		# THE CONTACT ZONE ARRESTS NOTHING but the body's edge. Inside it the indenter
+		# drives the tip and the material is comminuted — a crush zone, where new cracks
+		# do form across old ones — so neither a crossing nor a relieved far field can
+		# stop an arm here. See `CONTACT_RADIUS`.
+		#
+		# This is what makes "a blow always marks" STRUCTURAL rather than probabilistic:
+		# every arm gets a clear `CONTACT_RADIUS` of run, and that is deliberately set
+		# above `MIN_ARM`, so an arm cannot be generated and then dropped by the emission
+		# floor for having been stopped too early. Getting there took three attempts —
+		# exempting only the drive test left the crossing test killing arms at 0.02, and
+		# no fixture loosening would have been an honest fix for that.
+		var contact: bool = next.distance_to(blow.at) < CONTACT_RADIUS
+		if pts.size() > 1 and not contact:
+			var met: Variant = net.first_crossing(tip, next)
+			if met == null and not buffer.is_empty():
+				met = CrackNet.crossing(buffer, tip, next)
+			if met != null:
+				# Ends AT the crossing, so the groove neither overshoots the crack it met
+				# nor stops short of it. §5.4's `T` rule, and the carve needs the shared
+				# point as much as the renderer does.
+				var join: Vector2 = met
+				pts.append(join)
+				term = CrackNet.T_CRACK
+				break
 		var d_relief: float = net.nearest(next)
 		var drive: float = _bias(heading, blow) \
 			* (1.0 - (0.0 if d_relief == INF else exp(-d_relief / SCREEN_RADIUS)))
-		if drive < _toughness:
+		if drive < _toughness and not contact:
 			# CAPTURE, not arrest. The only thing that can reduce the drive is an
 			# existing crack relieving it, so a tension death always happens inside
 			# that crack's process zone — and a crack approaching a free surface is

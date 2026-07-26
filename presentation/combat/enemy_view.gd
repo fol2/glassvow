@@ -411,6 +411,47 @@ var _rim: OmniLight3D = null
 var _fire: OmniLight3D = null
 var _env: Environment = null
 var _sites: PackedVector2Array = PackedVector2Array()
+
+## The fracture model and its renderer. Built on the first blow, not at construction:
+## most actors in a fight never take one, and a `CrackField` is a 128 KB byte array.
+var _net: CrackNet = null
+var _frac_field: FractureField = null
+var _cracks: CrackField = null
+## Blows delivered, capped at `MAX_SITES`. Counted separately from `_sites` because
+## `_sites` only fills while `discs` is on, and the cap is on IMPACTS either way
+## (`CONCEPTS.md` › Crack).
+var _blows: int = 0
+var _art_id: StringName = &""
+
+## What a hit costs in fracture when the caller does not say, in body widths of crack.
+##
+## 1.1, which is `ARM_LENGTH × 4` — a four-armed star, the same figure the reference
+## authors by hand for an ordinary hit and the energy the kill-test sheet was judged at.
+##
+## First set to 0.34 on the reasoning that one arm per hit is the modest choice. That was
+## wrong and the render said so immediately: `int(0.34 / 0.26)` is one arm, and a single
+## isolated arm has no star, no branch and no junction, so six hits read as six scratches
+## rather than as broken glass. An impact star is the smallest unit that reads as
+## fracture at all — the arm is not.
+##
+## Much of this is refunded in practice: arms that reach the silhouette stop there, so
+## eight blows at 1.1 land ~2.9 body of crack rather than 8.8. The real number belongs to
+## the damage-to-energy conversion `docs/fracture-model.md` §3 calls the one honest
+## fudge, and arrives when `combat_screen.gd` passes damage through.
+const DEFAULT_ENERGY: float = 1.1
+
+## The old Voronoi disc web, OFF.
+##
+## This is the thing the owner identified: every cell hard-clipped to a constant-radius
+## 20-gon, given the brightest and most emissive treatment in the effect, so each crack
+## sat inside a visible circle and the circles stacked
+## (`docs/glass-crack-rendering.md` §2.2). `CrackField` replaces it.
+##
+## Kept behind a flag rather than deleted, for exactly as long as the death path still
+## consumes `_sites` — `shatter()` breaks the body along those cells, and step 6 of
+## `docs/fracture-model.md` is what replaces that with a carve along the net. Deleting
+## the web now would leave the rite with nothing to break along.
+static var discs: bool = false
 var _span: float = 0.0          # padded box, in px
 var _box_u: float = 0.0         # box HEIGHT, in world units
 ## Box WIDTH. The art box is square (the benchmark's hit rect) but the painting
@@ -536,6 +577,37 @@ uniform float flare_gain = 1.0;
 // GeometryInstance3D.transparency outright, so the fade has to be a uniform.
 uniform float fade = 1.0;
 
+// ---------------------------------------------------------------- the fracture
+//
+// The crack network as a distance field: R is the distance to the nearest crack,
+// normalised by that crack's own local half-width so the taper is already baked in,
+// and G is the glint at each impact point. Built by `CrackField` (see its docblock for
+// why a field and not drawn lines) and read HERE rather than in a layer of its own —
+// `docs/solutions/rendering/one-backbuffer-copy-per-frame.md`: a second pass under an
+// opaque one is silently erased, so effects fold into one shader.
+//
+// Folding it in also gets the thing an overlay could never have. The groove is part of
+// the body material, so it warps with the idle deform in vertex() and shakes with the
+// camera, by construction and with no code. That is why the lab's FractureProbe could
+// only ever be judged as a still.
+uniform sampler2D crack_tex : filter_linear;
+// The same lantern warmth the debris shader uses, so a crack that is about to become a
+// fracture edge does not change colour when it does.
+const vec3 WARM_CRACK = vec3(1.0, 0.60, 0.24);
+// 0 disables the whole block, including its three texture taps. A creature that has
+// not been hit pays nothing.
+uniform float crack_on = 0.0;
+// The three band thresholds, from CrackField.BANDS, which owns the numbers.
+uniform vec3 crack_bands = vec3(0.3333, 0.1552, 0.0805);
+// How hard the groove tilts the surface normal. This is the ONE knob that decides
+// whether the crack reads as a cut into glass or as a line drawn on top of it.
+uniform float crack_relief = 26.0;
+// Heat in the fractures, 0..1 — the death ramp. Only the innermost band may emit and
+// only under this or `crack_marked`; see the emission block for why.
+uniform float crack_ignite = 0.0;
+// The seam catching a rim light before the blow lands (§5.5's second cheap addition).
+uniform float crack_marked = 0.0;
+
 float luma(vec2 uv) {
 	vec4 c = texture(body_tex, uv);
 	return dot(c.rgb, vec3(0.299, 0.587, 0.114)) * c.a;
@@ -556,8 +628,7 @@ void fragment() {
 	float lx = luma(uv + vec2(ts.x, 0.0));
 	float ly = luma(uv + vec2(0.0, ts.y));
 	// UV y runs down, world y runs up — flip or every lamp lights from below.
-	NORMAL_MAP = normalize(vec3((l - lx) * bump, (ly - l) * bump, 1.0)) * 0.5 + 0.5;
-	NORMAL_MAP_DEPTH = 1.0;
+	vec2 relief = vec2((l - lx) * bump, (ly - l) * bump);
 
 	EMISSION = c.rgb * pow(l, 3.2) * emission_gain;
 	ROUGHNESS = 0.78;
@@ -565,6 +636,63 @@ void fragment() {
 	// Low specular: a painted body is not varnished, and a broad highlight over
 	// the whole silhouette is the other half of the fog.
 	SPECULAR = 0.18;
+
+	// THREE BANDS, AND ONLY THE INNERMOST MAY EMIT (docs/fracture-model.md §5.3).
+	//
+	// The rule exists because the old disc web broke it: `GLASS_SHADER` lights albedo,
+	// alpha AND emission on one contour, which is exactly why that boundary read as the
+	// loudest line on the actor. A standing web has to be visible without being loud,
+	// and this is the arrangement that achieves it — the groove is a DENT that catches
+	// the real key light, not a stroke that glows.
+	//
+	// So: albedo darkens (a groove is in shadow), the mid band takes the lit lip's
+	// roughness and specular so it catches the key, and emission is reserved for the
+	// core under heat. ALPHA is never touched.
+	if (crack_on > 0.0) {
+		vec2 cts = 1.0 / vec2(textureSize(crack_tex, 0));
+		vec2 cf = texture(crack_tex, uv).rg;
+		float r = cf.r;
+		float rx = texture(crack_tex, uv + vec2(cts.x, 0.0)).r;
+		float ry = texture(crack_tex, uv + vec2(0.0, cts.y)).r;
+		// Screen-space feather, so the groove antialiases itself at any zoom and at any
+		// MSAA level. This is the property §5.2 records as the reason a field groove
+		// survives a forced drop to 2x where an extruded ribbon does not.
+		float aa = max(fwidth(r), 0.008);
+		float dark = 1.0 - smoothstep(crack_bands.x - aa, crack_bands.x + aa, r);
+		float lite = 1.0 - smoothstep(crack_bands.y - aa, crack_bands.y + aa, r);
+		float core = 1.0 - smoothstep(crack_bands.z - aa, crack_bands.z + aa, r);
+		float glint = cf.g;
+
+		// The NORMAL. `r` rises away from the crack, so the groove floor is a valley in
+		// `r` and the tilt is the same form as the luma relief above — which is the whole
+		// argument for storing a distance field rather than drawing three strokes.
+		// Suppressed outside the outer band so the field's own quantisation cannot
+		// texture the clean body.
+		relief += vec2(r - rx, ry - r) * crack_relief * step(0.0001, dark);
+
+		// A groove is a shadowed slot; the lip beside it is bare glass.
+		//
+		// The lip is LIGHT, not paint. An earlier version added `vec3(0.26, 0.31, 0.38)`
+		// to the light band, which on the near-black armour between this creature's panes
+		// manufactured a pale grey line out of nothing — a chalk mark, unaffected by
+		// where the key actually was. The lift is multiplicative now, so an unlit groove
+		// on black armour stays black and only the specular below can brighten it. That
+		// is `procedural-glass-reads-off-its-edges.md` as a code change rather than as a
+		// quotation: glass is read off its edges, UNEVENLY, as a function of each edge's
+		// normal against a real light.
+		ALBEDO *= mix(1.0, 0.18, dark * 0.80);
+		ALBEDO = mix(ALBEDO, ALBEDO * 2.1 + vec3(0.02, 0.025, 0.032), lite * 0.62);
+		ROUGHNESS = mix(ROUGHNESS, 0.10, lite);
+		SPECULAR = mix(SPECULAR, 0.88, max(lite, glint));
+
+		// Heat. `marked` is deliberately a fraction of `ignite`: a previewed blow should
+		// suggest the fire, not stage the death.
+		float heat = max(crack_ignite, crack_marked * 0.30);
+		EMISSION += WARM_CRACK * (core * heat * 1.6 + glint * heat * 0.9);
+	}
+
+	NORMAL_MAP = normalize(vec3(relief, 1.0)) * 0.5 + 0.5;
+	NORMAL_MAP_DEPTH = 1.0;
 
 	// ONE dilated-alpha ring, two consumers: the targeting rim and the struck
 	// flare's glow. Same silhouette, different colour and gain — the six taps are
@@ -970,6 +1098,7 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		_rng.seed = hash(String(art_id)) + enemy_idx
 		_frac_seed = _stable_seed(String(art_id), enemy_idx)
 		_frac = Rng.new(_frac_seed)
+		_art_id = art_id
 		_build_stage(tex, enemy_idx)
 	else:
 		# No painting: the procedural gem, at the box it has always used. This is
@@ -2091,17 +2220,97 @@ func local_to_uv(p: Vector2) -> Vector2:
 		(art_size * 0.5 - p.y) * UNIT))
 
 
-## Score a crack. `at` is in body UV; the sites drive the Voronoi that becomes
-## the shards, exactly as crack sites do in the benchmark — except here they
-## become geometry rather than a baked normal map.
+## Score a crack. `at` is in body UV; a random point on the body if omitted, which is
+## what the two `combat_screen.gd` callers want — they know a hit landed and not where.
+##
+## Kept as the name every caller already uses. `strike()` below is the real entry point
+## and this is the zero-argument door to it, because a blow's energy and direction are
+## information `combat_screen.gd` does not have yet.
 func crack(at: Vector2 = Vector2(-1, -1)) -> void:
-	if _glass_root == null or _sites.size() >= MAX_SITES:
+	strike(at, Vector2.ZERO, DEFAULT_ENERGY, 0.5)
+
+
+## A BLOW, and the seam `docs/fracture-model.md` §2.5 specifies. Feeds the propagator,
+## the field the body shader reads, and — while `discs` is on — the old Voronoi web too,
+## so the two can be compared in the running game rather than only in the lab.
+##
+## `at` in body UV (y down); `dir` a unit heading, zero for face-on; `energy` in body
+## widths of crack bought, 1.0 being one; `sharp` 0..1 indenter acuity, accepted and
+## not yet spent (see `FractureField`'s docblock).
+func strike(at: Vector2 = Vector2(-1, -1), dir: Vector2 = Vector2.ZERO,
+		energy: float = DEFAULT_ENERGY, sharp: float = 0.5) -> void:
+	if _glass_root == null or _blows >= MAX_SITES:
 		return
 	var p: Vector2 = at
 	if p.x < 0.0:
-		p = Vector2(_frand(0.2, 0.8), _frand(0.2, 0.8))
+		p = _somewhere_on_body()
+	_blows += 1
+	if _net == null:
+		_net = CrackNet.new()
+		_frac_field = FractureField.new(_frac, body_mask(_art_id))
+		_cracks = CrackField.new()
+	var grown: Array[Dictionary] = _frac_field.strike(_net, blow_of(p, dir, energy, sharp))
+	_net.commit(grown)
+	# The field composites only the NEW strands — never re-walks the network — so the
+	# eighth blow costs what the first did.
+	_cracks.add(grown)
+	_push_crack_field()
+	# `_sites` keeps filling whatever `discs` says. It is TWO things wearing one name:
+	# the standing web's cell seeds, and the death path's break pattern — `shatter()`
+	# partitions the body along cells grown from it. Skipping the append with the web
+	# off would send the rite to `_death_sites`, the unrelated ring fallback, which is
+	# precisely the "the shatter must equal the cracks it was carrying" condition being
+	# violated. Step 6 replaces this with a carve along the net and the field goes away.
 	_sites.append(_from_uv(p))
-	_rebuild_glass()
+	if discs:
+		_rebuild_glass()
+
+
+## A blow point that is actually ON the creature, for the callers that know a hit landed
+## and not where — both `combat_screen.gd` calls, and the rite's top-up.
+##
+## The mask check is not a nicety. A flat `_frand(0.2, 0.8)` box was scoring blows in
+## empty air for a quarter of them, and a crack that starts off the body fails
+## `BodyMask.reaches` on its first step and produces nothing at all: the hit landed, the
+## damage applied, and the glass said nothing. Two of eight measured blows on a duskfang,
+## whose silhouette is a lean quadruped with a long tail and nothing like a filled box.
+##
+## Falls back to the centre, which for every painting in the roster is body.
+func _somewhere_on_body() -> Vector2:
+	var mask: BodyMask = body_mask(_art_id)
+	for _t: int in range(32):
+		var p: Vector2 = Vector2(_frand(0.16, 0.84), _frand(0.12, 0.88))
+		if mask.solid(p):
+			return p
+	return Vector2(0.5, 0.5)
+
+
+## Built here rather than inline so `mark_dead()` and the lab share one definition of
+## what a blow is.
+static func blow_of(at: Vector2, dir: Vector2, energy: float, sharp: float) -> Blow:
+	return Blow.new(at, dir, energy, sharp)
+
+
+## Run every open tip out to the silhouette. Idempotent — `CrackNet.open_tips()` is what
+## makes it so, and a death beat firing twice is not hypothetical in this codebase
+## (`c77b56b`).
+func _relieve_net() -> void:
+	if _net == null or _frac_field == null or _cracks == null:
+		return
+	var extra: Array[Dictionary] = _frac_field.relieve(_net)
+	if extra.is_empty():
+		return
+	_net.commit(extra)
+	_cracks.add(extra)
+	_push_crack_field()
+
+
+func _push_crack_field() -> void:
+	if _body_mat == null or _cracks == null:
+		return
+	_body_mat.set_shader_parameter("crack_tex", _cracks.texture())
+	_body_mat.set_shader_parameter("crack_bands", CrackField.BANDS)
+	_body_mat.set_shader_parameter("crack_on", 1.0)
 
 
 func reset_glass() -> void:
@@ -2116,6 +2325,16 @@ func reset_glass() -> void:
 	_hit_squash = 0.0
 	_set_flare(0.0)
 	_sites = PackedVector2Array()
+	# The net, the propagator and the field go with the sites. Clearing one and not the
+	# others is the same class of bug as clearing `_sites` without rewinding `_frac`,
+	# which is the note directly below.
+	_blows = 0
+	_net = null
+	_frac_field = null
+	if _cracks != null:
+		_cracks.clear()
+	if _body_mat != null:
+		_body_mat.set_shader_parameter("crack_on", 0.0)
 	# Rewind the fracture stream, not just the site list. Clearing one without the
 	# other is what made two runs of the same rite differ.
 	_frac = Rng.new(_frac_seed)
@@ -2171,15 +2390,24 @@ func mark_dead(beat: float = 0.2) -> void:
 		_gem.set_state(_hue, 0.0, true)
 		modulate = Color(0.5, 0.5, 0.56, 0.5)
 		return
-	# A dying vessel cracks the rest of the way through first — up to the cap, which
-	# is the truer statement anyway: the rite is the vessel giving up whatever it
-	# had left. Counted rather than a `while _sites.size() < N` loop, and that is
-	# not style. `crack()` returns WITHOUT appending both at the cap and when
-	# `_glass_root` is null, so the old `while` form spun forever the moment N
-	# reached the cap — and hung outright, silently, for any vessel with no glass
-	# root. A bounded loop cannot, and `crack()` still self-limits.
-	for _i: int in range(MAX_SITES):
-		crack()
+	# THE RITE RELEASES WHAT WAS CARRIED — it does not score a fresh pattern. Every tip
+	# that stopped for want of tension runs the rest of the way out to the silhouette at
+	# toughness zero, which is both the physically true statement and what turns an
+	# arrested network into one that partitions the plane: an arrested crack is a
+	# dangling edge and separates nothing (`docs/fracture-model.md` §2.4).
+	_relieve_net()
+	# ...and then the SITES are topped up to the cap. This is transitional and it is the
+	# one place the promise in `CONCEPTS.md` › Crack is not yet kept: `shatter()` still
+	# partitions the body along Voronoi cells grown from `_sites`, and under three sites
+	# it falls back to `_death_sites`' unrelated rings. Topping up keeps the partition
+	# legible until step 6 carves along the net instead — at which point the shard count
+	# follows the damage for real and this block, `_sites`, and the rings all go.
+	#
+	# SITES ONLY, deliberately. Calling `crack()` here would score new propagated stars
+	# a frame before the break, which is visible and is exactly the thing the owner ruled
+	# against. The grooves you see are the ones the creature was already showing.
+	while _sites.size() < MAX_SITES:
+		_sites.append(_from_uv(_somewhere_on_body()))
 	var tw: Tween = create_tween()
 	tw.tween_method(set_ignite, _ignite, 1.0, maxf(0.01, beat)).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_callback(shatter)
@@ -2613,6 +2841,9 @@ func set_ignite(v: float) -> void:
 		_fire.light_energy = 4.0 * _ignite
 	if _body_mat != null:
 		_body_mat.set_shader_parameter("emission_gain", 0.85 + 1.0 * _ignite)
+		# Only the groove's INNERMOST band may emit, and only under this (§5.3). The
+		# gate is in the shader; this is the ramp that opens it.
+		_body_mat.set_shader_parameter("crack_ignite", _ignite)
 	if _glass_mat != null:
 		_glass_mat.set_shader_parameter("ignite", _ignite)
 
