@@ -78,7 +78,7 @@ an animation gap — it is a missing subsystem.
 | `pileBump`, `chipPop`, `blockPulse` | ✅ built |
 | `sl-drift` plate parallax | ✅ built — 30/10/0, read off the DOM |
 | HP `.ghost` trail | ✅ built |
-| Per-character idle (`mesh` blocks in `char-meta.json`) | ❌ still dead data |
+| Per-character idle (`mesh` blocks in `char-meta.json`) | ✅ `breathe` / `sway` / `bob` read; `head`, `cloth`, `pin` have no rig to drive |
 | `candleFlick` | ❌ |
 | ward pulse / gemstone shell (`syncWardMesh`) | ❌ |
 | `.cast-shadow-layer` | ❌ — each actor casts its own |
