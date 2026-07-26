@@ -4,9 +4,9 @@ extends Control
 ##
 ## It is not a bar. The benchmark spreads the readouts around the fight: a strip
 ## across the top that fades into the scene, energy standing bottom-left over a
-## row of candles, the draw pile in that corner, the END seal and the discard
-## pile on the right, and the ward chip riding the hero's plate. This widget is
-## that whole chrome layer.
+## row of candles, the draw pile in that corner, the END seal on the right with
+## the ash and discard piles beneath it, and the ward chip riding the hero's
+## plate. This widget is that whole chrome layer.
 ##
 ## Every number below is measured, not guessed — the benchmark's combat screen
 ## is 1180x820, which is exactly this project's viewport, so its CSS pixels are
@@ -14,15 +14,15 @@ extends Control
 ## stylesheet (read 2026-07-25); `_place()` re-hangs each cluster off the nearest
 ## window edge so a taller window keeps the furniture in its corner.
 ##
-## Values in, signals out. No game dependency: `set_values()` takes eight ints,
+## Values in, signals out. No game dependency: `set_values()` takes nine ints,
 ## `set_title()` the location line, `set_lantern()` the art charge. The lab poses
 ## states the domain cannot reach yet (999 ward) and assembly wires the signals
 ## without this widget learning what a RunState is.
 ##
-## Two knowing deviations from the benchmark, both marked below: the piles fan
-## deck.png (the benchmark ships a dedicated piles/draw.png we do not have), and
-## the hero plate keeps a fixed-width HP bar instead of letting the ward chip
-## squeeze it to ~21px.
+## One knowing deviation, marked below: the hero plate keeps a fixed-width HP bar
+## instead of letting the ward chip squeeze it to ~21px the way the benchmark's
+## flex does. Everything else — including the pile fan's 5°/30° rule and one
+## visible face per card — follows the benchmark's own pile-chrome.js.
 
 signal end_turn_pressed
 signal menu_pressed
@@ -30,7 +30,7 @@ signal deck_pressed
 signal lantern_pressed
 signal pile_pressed(pile: StringName)
 
-const ART: String = "res://assets/art/ui/"
+const ART: String = "res://assets/art/"
 ## The benchmark's `.combat-screen`, and this project's viewport. Offsets are
 ## measured inside it, then hung off whichever edge each cluster belongs to.
 const SCREEN: Vector2 = Vector2(1180.0, 820.0)
@@ -62,10 +62,14 @@ const HP_WRAP_W: float = 170.0
 ## into it (flex), which drops it to ~21px on a warded turn — legible as a
 ## colour, useless as a gauge. We have the room; it keeps its length.
 const PLATE_BAR_W: float = 110.0
-## .pile-layer rotations, fanned about 50% 92% of the card back. The benchmark
-## fans five of a single back; deck.png is already a stack of two with a pale
-## rim, so five of it is five rims — three reads as one pile.
-const PILE_FAN: PackedFloat32Array = [-6.0, 0.0, 6.0]
+## The fan, from the benchmark's pile-chrome.js: one visible face per card up to
+## a cap, 5° between them, and the whole span averaged down once it would pass
+## 30°. The count text stays the true size — the faces are how many you can see.
+const FAN_STEP: float = 5.0    # PILE_FAN_DEG
+const FAN_SPAN: float = 30.0   # PILE_FAN_MAX_DEG
+const FAN_FACES: int = 16      # PILE_FAN_MAX_LAYERS
+## `.pile-exhaust { opacity: 0.9 }` — the ash pile sits a shade back.
+const ASH_FADE: float = 0.9
 
 static var _tex_cache: Dictionary = {}
 static var _font_cache: Dictionary = {}
@@ -86,9 +90,22 @@ var _candles: Array[TextureRect] = []
 var _energy_orb: Control
 var _lantern: Control
 var _lantern_count: Label
-var _draw_count: Label
-var _discard_count: Label
+var _draw_pile: Pile
+var _ashes_pile: Pile
+var _discard_pile: Pile
 var _vial_frame: bool = true
+
+
+## One pile's parts. A class rather than three sets of members or a dictionary
+## of dictionaries: the fan is rebuilt whenever the count moves, and the strict
+## gate wants every piece typed at that moment.
+class Pile:
+	var art: String
+	var face: float          # a card back's drawn width, and its height
+	var count: Label
+	var stack: Control
+	var faces: Array[TextureRect] = []
+	var shown: int = -1      # last count drawn; -1 forces the first build
 
 
 ## A mipmapped copy of one UI texture. The art is 512² and lands here between 14
@@ -138,18 +155,27 @@ func _init(vial_frame: bool = true) -> void:
 	_build_plate()
 	_build_energy()
 	_build_lantern()
-	_draw_count = _build_pile(Rect2(16.0, 658.0, 96.0, 148.0), false, "DRAW", &"draw")
-	_discard_count = _build_pile(Rect2(1062.0, 658.0, 96.0, 148.0), true, "DISCARD", &"discard")
+	# Three piles, not two, each wearing its own back — the blue vault, the warm
+	# discard, the charred ash. Boxes from the benchmark's ui-chrome-layout.js:
+	# draw {left 16, bottom 14}, ashes {right 132}, discard {right 22}, 96x148.
+	_draw_pile = _build_pile(&"draw", "DRAW", Rect2(16.0, 658.0, 96.0, 148.0), false, 1.0)
+	_ashes_pile = _build_pile(&"ashes", "ASHES", Rect2(952.0, 658.0, 96.0, 148.0),
+		true, ASH_FADE)
+	_discard_pile = _build_pile(&"discard", "DISCARD",
+		Rect2(1062.0, 658.0, 96.0, 148.0), true, 1.0)
 	_build_end_turn()
 	set_title("The Ashen Woods", "Floor I · The Rootheart")
-	set_values(72, 72, 0, 99, 3, 3, 5, 0)
+	set_values(72, 72, 0, 99, 3, 3, 5, 0, 0)
 
 
 # ---------------------------------------------------------------- values
 
 ## The whole input surface. Plain ints — no run, no combat, no content.
+## `exhaust_count` is the ash pile: the domain has carried `cb.exhaust` since
+## M4, and the benchmark gives it a third corner of its own.
 func set_values(hp: int, max_hp: int, block: int, gold: int,
-		energy: int, max_energy: int, draw_count: int, discard_count: int) -> void:
+		energy: int, max_energy: int, draw_count: int, discard_count: int,
+		exhaust_count: int) -> void:
 	var ratio: float = clampf(float(hp) / float(maxi(1, max_hp)), 0.0, 1.0)
 	_hp_num.text = "%d / %d" % [hp, max_hp]
 	_hp_fill.size.x = HP_WRAP_W * ratio
@@ -160,11 +186,12 @@ func set_values(hp: int, max_hp: int, block: int, gold: int,
 	_ward_num.text = str(block)
 
 	_gold_num.text = str(gold)
-	_draw_count.text = str(draw_count)
-	_discard_count.text = str(discard_count)
-	# The top-right seal opens the deck; during a fight the deck IS the two
-	# piles, so it counts them. It is short by the hand — the benchmark reads
-	# the master list, which is not one of the eight numbers this takes.
+	_sync_pile(_draw_pile, draw_count)
+	_sync_pile(_discard_pile, discard_count)
+	_sync_pile(_ashes_pile, exhaust_count)
+	# The top-right seal opens the deck; during a fight the deck is draw plus
+	# discard — ash has left play and does not count. It is short by the hand,
+	# which is not one of the numbers this takes.
 	_deck_count.text = str(draw_count + discard_count)
 
 	_energy_num.text = str(energy)
@@ -196,7 +223,7 @@ func _sync_candles(energy: int, max_energy: int) -> void:
 		if not c.visible:
 			continue
 		var lit: bool = i < energy
-		c.texture = icon("candle-lit" if lit else "candle-spent")
+		c.texture = icon("ui/candle-lit" if lit else "ui/candle-spent")
 		c.size = Vector2(side, side)
 		c.position = Vector2(cell * float(i) + (cell - side) * 0.5,
 			_candle_field.size.y - side)
@@ -257,7 +284,7 @@ func _build_top_bar() -> void:
 	hp_wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(hp_wrap)
 	var hp_stat: HBoxContainer = _stat_row()
-	hp_stat.add_child(_icon_rect("heart", 14.0))
+	hp_stat.add_child(_icon_rect("ui/heart", 14.0))
 	_hp_num = _num_label(17.0, HP_NUM, GlassStyle.CINZEL_700, 0)
 	hp_stat.add_child(_hp_num)
 	hp_wrap.add_child(hp_stat)
@@ -273,7 +300,7 @@ func _build_top_bar() -> void:
 	rail.add_child(_hp_fill)
 
 	var gold_stat: HBoxContainer = _stat_row()
-	gold_stat.add_child(_icon_rect("coin", 14.0))
+	gold_stat.add_child(_icon_rect("ui/coin", 14.0))
 	_gold_num = _num_label(17.0, GOLD, GlassStyle.CINZEL_700, 0)
 	gold_stat.add_child(_gold_num)
 	row.add_child(gold_stat)
@@ -302,7 +329,7 @@ func _build_top_bar() -> void:
 	var deck: Button = _bare_button(Vector2(44.0, 44.0))
 	deck.pressed.connect(func() -> void: deck_pressed.emit())
 	right.add_child(deck)
-	var seal: TextureRect = _icon_rect("deck", 56.0)
+	var seal: TextureRect = _icon_rect("ui/deck", 56.0)
 	seal.position = Vector2(-6.0, -6.0)
 	deck.add_child(seal)
 	_deck_count = _num_label(22.0, Color.WHITE, GlassStyle.CINZEL_800, 0)
@@ -325,7 +352,7 @@ func _build_top_bar() -> void:
 		menu.add_theme_stylebox_override(state, sb)
 	menu.pressed.connect(func() -> void: menu_pressed.emit())
 	right.add_child(menu)
-	var menu_ic: TextureRect = _icon_rect("menu", 19.0)
+	var menu_ic: TextureRect = _icon_rect("ui/menu", 19.0)
 	menu_ic.set_anchors_preset(Control.PRESET_CENTER)
 	menu_ic.offset_left = -9.5
 	menu_ic.offset_top = -9.5
@@ -367,7 +394,7 @@ func _build_plate() -> void:
 	_ward_num.custom_minimum_size = Vector2(16.0, 0.0)
 	_ward_num.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	chip_box.add_child(_ward_num)
-	_ward.add_child(_icon_rect("ward", 34.0))
+	_ward.add_child(_icon_rect("ui/ward", 34.0))
 
 	var bar_x: float = 76.0
 	var rail: Panel = Panel.new()
@@ -389,7 +416,7 @@ func _build_plate() -> void:
 	# the art; this is that rule, wearing it.
 	if _vial_frame:
 		var frame: TextureRect = TextureRect.new()
-		frame.texture = icon("hp-vial-frame")
+		frame.texture = icon("ui/hp-vial-frame")
 		frame.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		frame.stretch_mode = TextureRect.STRETCH_SCALE
@@ -443,7 +470,7 @@ func _build_lantern() -> void:
 	var btn: Button = _bare_button(Vector2(104.0, 104.0))
 	btn.pressed.connect(func() -> void: lantern_pressed.emit())
 	_lantern.add_child(btn)
-	var art: TextureRect = _icon_rect("lantern", 94.0)
+	var art: TextureRect = _icon_rect("ui/lantern", 94.0)
 	art.position = Vector2(5.0, 5.0)
 	btn.add_child(art)
 	_lantern_count = _num_label(26.0, PALE, GlassStyle.CINZEL_800, 0)
@@ -454,33 +481,34 @@ func _build_lantern() -> void:
 	btn.add_child(_lantern_count)
 
 
-## `.pile-btn` — a fanned stack of backs, the count on its shoulder, the name
-## underneath. The benchmark fans a dedicated piles/draw.png; we do not have
-## that art, so the deck seal stands in until it lands.
-func _build_pile(rect: Rect2, from_right: bool, name_text: String,
-		which: StringName) -> Label:
-	var pile: Control = Control.new()
-	_place(pile, rect, from_right, true)
-	add_child(pile)
+## `.pile-btn` — a fan of card backs, the count on its shoulder, the name
+## underneath. `.pile-stack` is inset 18px from the bottom to leave that name
+## room, and the faces are drawn at the box's own width.
+func _build_pile(which: StringName, name_text: String, rect: Rect2,
+		from_right: bool, fade: float) -> Pile:
+	var root: Control = Control.new()
+	_place(root, rect, from_right, true)
+	root.modulate = Color(1.0, 1.0, 1.0, fade)
+	add_child(root)
 
 	var btn: Button = _bare_button(rect.size)
 	btn.pressed.connect(func() -> void: pile_pressed.emit(which))
-	pile.add_child(btn)
+	root.add_child(btn)
 
-	var stack_h: float = rect.size.y - 18.0
-	for i: int in range(PILE_FAN.size()):
-		var layer: TextureRect = _icon_rect("deck", rect.size.x)
-		layer.position = Vector2(0.0, stack_h - rect.size.x)
-		layer.pivot_offset = Vector2(rect.size.x * 0.5, rect.size.x * 0.92)
-		layer.rotation = deg_to_rad(PILE_FAN[i])
-		btn.add_child(layer)
+	var p: Pile = Pile.new()
+	p.art = "piles/" + str(which)
+	p.face = rect.size.x
+	p.stack = Control.new()
+	p.stack.size = Vector2(rect.size.x, rect.size.y - 18.0)
+	p.stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	btn.add_child(p.stack)
 
-	var count: Label = _num_label(16.0, PARCHMENT, GlassStyle.CINZEL_800, 0)
-	count.position = Vector2(0.0, stack_h - 12.0)
-	count.size = Vector2(rect.size.x - 2.0, 16.0)
-	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_outline(count, 6)
-	btn.add_child(count)
+	p.count = _num_label(16.0, PARCHMENT, GlassStyle.CINZEL_800, 0)
+	p.count.position = Vector2(0.0, rect.size.y - 34.0)
+	p.count.size = Vector2(rect.size.x - 2.0, 16.0)
+	p.count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_outline(p.count, 6)
+	btn.add_child(p.count)
 
 	var tag: Label = _num_label(10.0, TEXT_DIM, GlassStyle.CINZEL_700, 1)
 	tag.text = name_text
@@ -489,7 +517,39 @@ func _build_pile(rect: Rect2, from_right: bool, name_text: String,
 	tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_outline(tag, 4)
 	btn.add_child(tag)
-	return count
+	return p
+
+
+## One face per card, so the pile is its own gauge — the count text is only
+## there for the tail past the cap. An empty pile hides the plate and keeps the
+## name and the zero (`.pile-btn.is-empty .pile-stack { visibility: hidden }`).
+func _sync_pile(p: Pile, n: int) -> void:
+	p.count.text = str(n)
+	if p.shown == n:
+		return  # the benchmark's own guard: rebuild only when the count moves
+	p.shown = n
+	var faces: int = mini(maxi(n, 0), FAN_FACES)
+	p.stack.visible = faces > 0
+	while p.faces.size() < faces:
+		var f: TextureRect = _icon_rect(p.art, p.face)
+		f.position = Vector2(0.0, p.stack.size.y - p.face)
+		f.pivot_offset = Vector2(p.face * 0.5, p.face * 0.92)
+		p.stack.add_child(f)
+		p.faces.append(f)
+	for i: int in range(p.faces.size()):
+		var f: TextureRect = p.faces[i]
+		f.visible = i < faces
+		if f.visible:
+			f.rotation = deg_to_rad(_fan_angle(i, faces))
+
+
+## pileFanAngleDeg: a flat centred fan, 5° a card, the span averaged down once
+## it would exceed 30° — so a 20-card pile is no wider than a 7-card one.
+static func _fan_angle(i: int, faces: int) -> float:
+	if faces <= 1:
+		return 0.0
+	var span: float = minf(float(faces - 1) * FAN_STEP, FAN_SPAN)
+	return -span * 0.5 + float(i) * (span / float(faces - 1))
 
 
 ## `.end-turn` — 120px of seal with END struck across it.
@@ -500,7 +560,7 @@ func _build_end_turn() -> void:
 	var btn: Button = _bare_button(Vector2(120.0, 120.0))
 	btn.pressed.connect(func() -> void: end_turn_pressed.emit())
 	root.add_child(btn)
-	btn.add_child(_icon_rect("end-turn", 120.0))
+	btn.add_child(_icon_rect("ui/end-turn", 120.0))
 	var lbl: Label = _num_label(18.0, PALE, GlassStyle.CINZEL_800, 3)
 	lbl.text = "END"
 	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
