@@ -152,7 +152,7 @@ const DOOM_AT: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
 const DOOM_X: Array[float] = [0.0, 1.6, -1.4, 1.0, 0.0]
 const DOOM_Y: Array[float] = [0.0, -1.0, 1.2, 1.4, 0.0]
 
-## `choreoAttack` (combat-choreo.js:10) — the body throws itself at what it is
+## `choreoAttack` (combat.js:1956) — the body throws itself at what it is
 ## striking. Three bodies, sorted by the enemy's `art.kind`, and the difference
 ## between them is the whole point: a golem cannot lunge, so it loads and
 ## releases in place; a wisp drifts forward and up rather than stepping; anything
@@ -856,7 +856,7 @@ void fragment() {
 
 	// `transmission: 1` with `thickness: 0` is CLEAR glass, and the reference
 	// says in as many words that "MeshPhysicalMaterial.opacity barely affects
-	// transmission glass" (mesh.js:694) — so `opacity: 0.4` is not a 40% wash
+	// transmission glass" (mesh.js:680) — so `opacity: 0.4` is not a 40% wash
 	// over the creature. Read as one it buries the body under a coloured slab,
 	// which is what a first pass here did. The shell is nearly invisible across
 	// its face; what you actually see of it is the SEAMS catching light and the
@@ -1232,7 +1232,7 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 
 	# The shell hangs off the VESSEL, so it travels with the recoil and the sway,
 	# and carries its OWN geometry, so it does not bend with the idle: "own geo —
-	# shell shape/scale independent of body warp" (mesh.js:751). A warped ward is
+	# shell shape/scale independent of body warp" (mesh.js:738). A warped ward is
 	# a ward made of the same stuff as the creature, which is the opposite of
 	# what it is.
 	_build_ward_shell()
@@ -1876,7 +1876,7 @@ func body_centre() -> Vector2:
 	return global_position + size * 0.5
 
 
-## `choreoStagger` (combat-choreo.js:45) — the beat before the vessel fails: the
+## `choreoStagger` (combat.js:1991) — the beat before the vessel fails: the
 ## body sags 5px, tips two and a half degrees and darkens to 0.6 brightness over
 ## 360ms, and STAYS there (`fill: 'forwards'`) because what follows is the
 ## shatter, not a recovery.
