@@ -38,6 +38,11 @@ const HERO_X: float = 200.0
 const HERO_ART: StringName = &"duskblade"
 const HERO_HUE: float = 225.0  # HERO_LOOKS[0].hue in art.js
 
+## `UIC.base.hand.bottom` — the hand box hangs this far past the stage's bottom
+## edge. The fan is clamped against the STAGE line, so HandView is told the
+## overhang rather than left to work it out from where it happens to sit.
+const HAND_OVERHANG: float = 12.0
+
 class Plate:
 	extends Control
 	var tex: Texture2D
@@ -64,6 +69,8 @@ var _rules: CombatRules
 var _enemy_views: Array[EnemyView] = []
 var _hand: HandView
 var _hud: HudBar
+## The targeting arc, drawn only while a card that targets an enemy is aimed.
+var _aim: AimArc
 ## The region above the ground line, and the only parent an actor ever has. Its
 ## bottom IS the ground line, so an actor placed at bottom 0 stands on it.
 var _battlefield: Control
@@ -128,11 +135,18 @@ func _build_ui() -> void:
 	_hand.offset_left = -HandView.zone_width(5, STAGE.x) * 0.5
 	_hand.offset_right = HandView.zone_width(5, STAGE.x) * 0.5
 	_hand.offset_top = -248.0
-	_hand.offset_bottom = 12.0
+	_hand.offset_bottom = HAND_OVERHANG
+	_hand.stage_overhang = HAND_OVERHANG
 	_hand.card_tapped.connect(_on_card_tapped)
 	_hand.card_drag_moved.connect(_on_card_drag_moved)
 	_hand.card_drag_released.connect(_on_card_drag_released)
 	add_child(_hand)
+
+	# Above the hand: the arc launches 80px over the card it comes from, so it
+	# clears the fan on its own, but the reticle must never end up behind a
+	# neighbouring card when aiming across the hand.
+	_aim = AimArc.new()
+	add_child(_aim)
 
 	_inspect = PanelContainer.new()
 	_inspect.set_anchors_preset(Control.PRESET_CENTER)
@@ -427,15 +441,18 @@ func _on_inspect_input(event: InputEvent) -> void:
 
 
 func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
-	var view: CardView = _hand.card_view(uid)
-	if view == null or view.target_kind != "enemy":
+	if not _hand.is_aiming():
 		return
+	# The arc reaches the POINTER, not the enemy under it — a shot that misses
+	# still has to look aimed somewhere.
+	_aim.draw_between(_hand.seat_centre(uid), global_pos)
 	var hovered: int = _enemy_at(global_pos)
 	for ev: EnemyView in _enemy_views:
 		ev.set_targetable(ev.idx == hovered)
 
 
 func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
+	_aim.clear_aim()
 	for ev: EnemyView in _enemy_views:
 		ev.set_targetable(false)
 	_inspect.visible = false
@@ -482,6 +499,8 @@ func _on_art_pressed() -> void:
 
 func _on_kindle_toggled(on: bool) -> void:
 	_kindle_toggle.text = "Kindle: on" if on else "Kindle: off"
+	_hand.kindle_mode = on
+	_aim.clear_aim()
 	_hand.cancel_drag()
 	_sync_all()  # playability flips between play-cost and kindle rules
 
@@ -689,6 +708,7 @@ func _on_busy_changed(busy: bool) -> void:
 	_kindle_toggle.disabled = locked
 	_hand.locked = locked
 	if locked:
+		_aim.clear_aim()
 		_hand.cancel_drag()
 		for ev: EnemyView in _enemy_views:
 			ev.set_targetable(false)

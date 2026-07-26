@@ -16,17 +16,51 @@ const SLOP: float = 14.0
 const GAP_MAX: float = 112.0
 const GAP_BUDGET: float = 640.0
 const STAGE_MARGIN: float = 246.0
-const ARC_DROP: float = 9.0
-const TILT_DEGREES: float = 4.0
+## The rest of the fan law, from `src/ui/hand-layout.js` — the benchmark's own
+## single source for resting seats. The tilt is a per-seat STEP that shrinks as
+## the hand grows (`min(5, 42 / n)`), and the sag is proportional to how far a
+## card is tilted, not to the square of its index. The two produce visibly
+## different fans: a flat 4-degree step with a `t * t` drop peaks in the middle
+## and flattens at the edges, which is the shape this port had and the benchmark
+## never did.
+const TILT_STEP_MAX: float = 5.0
+const TILT_TOTAL_DEG: float = 42.0
+const SAG_PER_DEG: float = 3.2
+const BASE_Y: float = 26.0
+## Seats stop being added past ten; an eleventh card sits on the tenth's seat.
+const MAX_CARDS: int = 10
+## `handCardBottomInset` for pad-landscape — a resting card's bottom edge sits
+## this far above the hand zone's own bottom.
+const CARD_INSET: float = 8.0
+## `HAND_BOTTOM_INSET` — the deepest a resting card may tuck below the stage
+## bottom before the WHOLE fan is lifted to keep it readable. Without this the
+## outer cards of a five-card hand hang 62px off the screen and lose their name
+## and rules text, which is what the assembled screen was doing.
+const BOTTOM_INSET: float = 40.0
 const HOVER_RAISE: float = 30.0
 
 ## Ignore pointer input while the sequencer is busy (input-lock contract).
 var locked: bool = false
+## Kindle turns every card into fuel, so nothing aims. Mirrors the benchmark's
+## `kindleOnly` branch, which sets `free` and clears targeting.
+var kindle_mode: bool = false
+## How far this box deliberately hangs past the stage's bottom edge — the screen
+## that placed it says so, because only the screen knows.
+##
+## The fan is clamped against the STAGE bottom, not this box's, and deriving that
+## line from `global_position` looked equivalent and was not: `_relayout` runs
+## when cards are added, `resized` only fires when the SIZE changes, and this box
+## is moved into place after that without ever changing size. The seats were laid
+## out against a stale position and stayed there — 12px too low, every hand.
+var stage_overhang: float = 0.0
 
 var _views: Dictionary = {}  # uid -> CardView
 var _order: Array[int] = []  # layout order, independent of z-order changes
 var _drag_uid: int = -1
 var _dragging: bool = false
+## True while the live drag is AIMING rather than carrying: the card holds its
+## seat and the screen draws an arc from it. See `is_aiming()`.
+var _aiming: bool = false
 var _press_pos: Vector2 = Vector2.ZERO
 
 
@@ -46,6 +80,22 @@ func card_view(uid: int) -> CardView:
 
 func uids() -> Array[int]:
 	return _order.duplicate()
+
+
+## Is the live drag an aim rather than a carry? The screen asks so it knows
+## whether to draw the arc.
+func is_aiming() -> bool:
+	return _dragging and _aiming
+
+
+## Where an aimed card's arc launches from: the centre of its RESTING seat, in
+## global coordinates. `handCardSeatBounds` reads the same thing — the seat, not
+## wherever a carried card happens to be.
+func seat_centre(uid: int) -> Vector2:
+	var view: CardView = _views.get(uid)
+	if view == null:
+		return Vector2.ZERO
+	return global_position + view.home_position + view.size * 0.5
 
 
 func add_card(inst: CardInst, data: Dictionary, cost: int) -> CardView:
@@ -70,6 +120,7 @@ func remove_card(uid: int) -> void:
 	if _drag_uid == uid:
 		_drag_uid = -1
 		_dragging = false
+		_aiming = false
 	_views.erase(uid)
 	_order.erase(uid)
 	remove_child(view)  # detach now — queue_free alone leaves a zombie until frame end
@@ -86,6 +137,7 @@ func clear() -> void:
 	_order.clear()
 	_drag_uid = -1
 	_dragging = false
+	_aiming = false
 
 
 ## Cancel an in-flight drag (input lock kicking in mid-gesture).
@@ -96,6 +148,7 @@ func cancel_drag() -> void:
 			view.snap_home()
 	_drag_uid = -1
 	_dragging = false
+	_aiming = false
 
 
 func snap_back(uid: int) -> void:
@@ -130,8 +183,29 @@ static func zone_width(count: int, stage_w: float) -> float:
 	return minf(stage_w - 24.0, maxf(CardView.CARD_W + 16.0, ceilf(span + 20.0)))
 
 
-## Fan the cards along a shallow arc: centered spread, outer cards sit lower
-## and tilt outward.
+## `handRotationDeg` — the tilt of seat `i`, in degrees, positive clockwise.
+static func rotation_deg(i: int, count: int) -> float:
+	var n: int = maxi(1, count)
+	if n <= 1:
+		return 0.0
+	return (float(i) - float(n - 1) * 0.5) * minf(TILT_STEP_MAX, TILT_TOTAL_DEG / float(n))
+
+
+## `handMaxDrop` — how far the lowest seat of an `n`-card fan hangs below the
+## resting baseline.
+static func max_drop(count: int) -> float:
+	var n: int = maxi(1, mini(MAX_CARDS, count))
+	return absf(rotation_deg(0, n)) * SAG_PER_DEG + BASE_Y
+
+
+## `handFanLift` — how far the whole fan rises, arc intact, so its lowest card
+## never tucks more than `BOTTOM_INSET` below the stage bottom.
+static func fan_lift(count: int, base_bottom: float, stage_bottom: float) -> float:
+	return maxf(0.0, base_bottom + max_drop(count) - (stage_bottom + BOTTOM_INSET))
+
+
+## Fan the cards along a shallow arc: centred spread, outer cards sit lower
+## and tilt outward. `layoutHandSeats` in the benchmark, seat for seat.
 func _relayout() -> void:
 	var n: int = _order.size()
 	if n == 0:
@@ -139,23 +213,31 @@ func _relayout() -> void:
 	# The stage the gap is measured against is the window, not this box — the
 	# box is sized BY the gap, so reading it here would be circular.
 	var stage_w: float = get_viewport_rect().size.x if is_inside_tree() else 1180.0
-	var spacing: float = fan_gap(n, stage_w)
 	# Anchored centred by the screen, so the zone resizes by moving its own
-	# edges and stays on the stage's centre line.
+	# edges and stays on the stage's centre line. The WIDTH is measured on the
+	# real count; the SEATS stop at ten, so an eleventh card doubles up.
 	var want: float = zone_width(n, stage_w)
 	if absf(want - size.x) > 0.5 and absf(anchor_left - 0.5) < 0.001:
 		offset_left = -want * 0.5
 		offset_right = want * 0.5
+	var seats: int = maxi(1, mini(MAX_CARDS, n))
+	var spacing: float = fan_gap(seats, stage_w)
 	var center_x: float = want * 0.5
-	var base_y: float = maxf(0.0, size.y - 230.0)
+	# The zone hangs past the stage bottom on purpose, so the line the fan is
+	# clamped against sits `stage_overhang` above this box's own bottom.
+	var base_bottom: float = size.y - CARD_INSET
+	var lift: float = fan_lift(seats, base_bottom, size.y - stage_overhang)
 	for i: int in range(n):
 		var view: CardView = _views[_order[i]]
-		var t: float = float(i) - float(n - 1) * 0.5
+		var idx: int = mini(i, seats - 1)
+		var rot: float = rotation_deg(idx, seats)
+		var offset_x: float = (float(idx) - float(seats - 1) * 0.5) * spacing
+		var sag: float = absf(rot) * SAG_PER_DEG + BASE_Y
 		view.home_position = Vector2(
-			center_x + t * spacing - view.size.x * 0.5,
-			base_y + t * t * ARC_DROP
+			center_x + offset_x - view.size.x * 0.5,
+			base_bottom - CardView.CARD_H + sag - lift
 		)
-		view.home_rotation = deg_to_rad(t * TILT_DEGREES)
+		view.home_rotation = deg_to_rad(rot)
 		if _drag_uid != view.uid or not _dragging:
 			view.snap_home()
 
@@ -182,9 +264,16 @@ func _on_card_moved_to(uid: int, global_pos: Vector2) -> void:
 		if not view.playable:
 			return  # unplayable cards can be tapped, never dragged
 		_dragging = true
-		view.move_to_front()
-		view.rotation = 0.0
-	view.global_position = global_pos - view.size * 0.5
+		# `beginCardDrag` (combat.js:1547): a card that targets an enemy AIMS —
+		# it keeps its seat and the screen throws an arc from it — and every
+		# other card is carried. Kindle turns the whole hand into fuel, so
+		# nothing aims, which is the benchmark's `kindleOnly` branch.
+		_aiming = view.target_kind == "enemy" and not kindle_mode
+		if not _aiming:
+			view.move_to_front()
+			view.rotation = 0.0
+	if not _aiming:
+		view.global_position = global_pos - view.size * 0.5
 	card_drag_moved.emit(uid, global_pos)
 
 
@@ -194,6 +283,7 @@ func _on_card_released_at(uid: int, global_pos: Vector2) -> void:
 	var was_dragging: bool = _dragging
 	_drag_uid = -1
 	_dragging = false
+	_aiming = false
 	if locked:
 		snap_back(uid)
 		return
