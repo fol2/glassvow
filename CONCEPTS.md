@@ -133,6 +133,17 @@ blank glass, and no debris is left standing once the rite completes.
 
 ## Combat state carried by an actor
 
+### Status
+A named condition stacked on a combatant, carrying a count and persisting across
+turns until it expires or is spent.
+
+Statuses are named for states of *glass* or of *light* rather than for their
+mechanics — annealed, vitrified, brittle, cracked, dimmed, smouldering. The
+vocabulary is deliberate and worth preserving when new ones are added; a status
+named after its numeric effect would be the odd one out. A single stack displays
+without a count, because a "1" on every condition is noise a crowded row cannot
+afford; the number appears only once there is more than one.
+
 ### Facet
 A unit of an enemy's structural integrity, drawn as a row of glass panes. A facet
 that has been chipped has gone dark; an unchipped facet still holds its light.
@@ -149,6 +160,12 @@ The move an enemy has telegraphed for its next turn, shown above the actor. It i
 pushed to the actor by the combat sequencer rather than read from combat state —
 an actor never inspects the game itself.
 
+An intent may name more than one action at once. When it does the first action is
+the **primary**: it decides the single colour the entire telegraph is tinted, and
+the further actions are shown alongside it rather than each carrying their own
+colour. A compound intent is therefore one telegraph in one colour, not several
+stacked — treating it as a fallback for "unknown intent" is a misreading.
+
 ---
 
 ## The port
@@ -163,6 +180,27 @@ Its combat screen and this project's viewport are the same size, so measured
 values transfer with no scaling step. That coincidence is what makes parity
 checkable, and it is also what tempts a port to carry structure across along
 with the numbers.
+
+### Lab
+A harness that stands one widget family up in isolation — no run, no game state
+behind it — reached by its own launch flag rather than by playing to the screen
+that uses it. Each presentation area has one.
+
+A Lab is not a screenshot rig. It exists so a surface can be judged and tuned
+against the Benchmark without playing a run to reach it, and so a change meant
+to alter nothing can be *proven* to have altered nothing — render every state
+before, render them after, diff them numerically. Values dialled in a Lab are
+not real until they are written back into the widget itself; the Lab holds no
+state of its own between launches.
+
+Labs come in two shapes, and the difference decides which one a task wants. A
+*contact sheet* renders every item at once so they can be compared against each
+other; a *bench* renders a single item with live controls so it can be tuned.
+Two traps come with the territory: a Lab may scale what it shows for
+inspection, which makes a magnified Lab screenshot the wrong evidence for
+judging sharpness — judge at actual size; and a Lab needs a real viewport to
+capture from, so a headless run can parse-check its code but cannot photograph
+it.
 
 ---
 
