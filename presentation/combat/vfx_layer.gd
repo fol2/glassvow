@@ -1,0 +1,437 @@
+class_name VfxLayer
+extends Control
+## The impact layer — sparks, rings, motes, screen flash, shake and hitstop.
+## Ported from `src/vfx.js`, which is a single 2D canvas over the stage plus a
+## shake transform on the world wrapper. Every coordinate here is stage px, the
+## same as the benchmark's, because this project's viewport IS `pad-landscape`.
+##
+## Blending is the one thing a canvas does that a CanvasItem cannot: the
+## benchmark flips `globalCompositeOperation` per particle. Godot fixes the mode
+## per node, so the particles are split across two passes — additive and normal —
+## and the flash rides a third on top, which is the paint order `tick()` uses.
+##
+## Not ported: the weather emitter (`setWeather`) — it belongs to the theme
+## record, and the slice carries none — and `LITE`'s particle-count halving,
+## which is a coarse-pointer budget this build does not have to meet.
+
+## `ARCHETYPE_TONES` (vfx.js:419). What colour a landed blow throws.
+const TONES: Dictionary = {
+	"slash": Color(1.0, 1.0, 1.0),
+	"pierce": Color(0.8117647, 0.9019608, 1.0),
+	"blunt": Color(1.0, 0.84705883, 0.627451),
+	"fire": Color(1.0, 0.6039216, 0.30196080),
+	"poison": Color(0.827451, 0.6313726, 0.3529412),
+	"void": Color(0.7882353, 0.6039216, 1.0),
+	"ward": Color(0.62352943, 0.83137256, 1.0),
+}
+
+## `ENEMY_KIND_VFX` (drain.js:60) — which blow language a body speaks.
+const KIND_ARCHETYPE: Dictionary = {
+	"beast": "slash", "rogue": "slash", "knight": "slash", "sovereign": "slash",
+	"humanoid": "slash",
+	"golem": "blunt", "treeboss": "blunt", "crab": "blunt", "leviathan": "blunt",
+	"zombie": "blunt",
+	"serpent": "pierce", "crawler": "pierce", "maw": "pierce", "plant": "pierce",
+	"wisp": "void", "shade": "void", "eye": "void", "siren": "void", "cultist": "void",
+	"slime": "poison",
+}
+
+## Above this many live particles the oldest are dropped rather than the newest
+## refused: a death throwing 56 sparks must not be starved by the burst before
+## it. The benchmark has no cap — a browser canvas can afford one more draw call
+## than we can, and 400 is roughly four simultaneous deaths.
+const MAX_PARTS: int = 400
+## Shake decays by this factor per second (`shakeV *= 0.001^dt`).
+const SHAKE_DECAY: float = 0.001
+const SHAKE_FLOOR: float = 0.1
+
+
+## One live particle. A class rather than the benchmark's object literal because
+## every field here is read once per frame per particle, and a Dictionary makes
+## each of those a Variant unbox that the type gate then refuses to let through
+## silently.
+class Part:
+	extends RefCounted
+	var kind: String = "dot"
+	var pos: Vector2 = Vector2.ZERO
+	var vel: Vector2 = Vector2.ZERO
+	var size: float = 3.0
+	var colour: Color = Color.WHITE
+	var grav: float = 0.0
+	var drag: float = 0.0
+	var life: float = 0.5
+	var fade: float = 0.3
+	var additive: bool = true
+	var alpha: float = 1.0
+	## ring
+	var r: float = 0.0
+	var vr: float = 0.0
+	## slash
+	var prog: float = 0.0
+	var dur: float = 0.14
+	var a0: float = 0.0
+	var arc: float = 0.0
+
+
+## A full-stage colour wash.
+class Wash:
+	extends RefCounted
+	var colour: Color = Color.WHITE
+	var alpha: float = 0.18
+	var dur: float = 0.25
+	var life: float = 0.25
+
+
+## One pass over the particle list. Two of these exist per layer, one additive
+## and one not, because the blend mode is a property of the node.
+class Pass:
+	extends Control
+	var src: VfxLayer
+	var additive: bool = false
+
+	func _draw() -> void:
+		if src != null:
+			src.paint_parts(self, additive)
+
+
+## The full-stage colour washes, painted last and never additively.
+class FlashPass:
+	extends Control
+	var src: VfxLayer
+
+	func _draw() -> void:
+		if src != null:
+			src.paint_flashes(self)
+
+
+var _parts: Array[Part] = []
+var _flashes: Array[Wash] = []
+var _norm: Pass
+var _add: Pass
+var _flash_pass: FlashPass
+## The node the shake moves. The benchmark shakes `#shake`, which wraps the
+## screen, the mesh, the lantern and the HUD — everything but the effect canvas
+## itself, which is why sparks hang still while the world jolts under them.
+var _shake_host: Control = null
+var _shake_v: float = 0.0
+var _shake_at: Vector2 = Vector2.ZERO
+var _hitstop_left: float = 0.0
+var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+
+
+func _init(shake_host: Control = null) -> void:
+	_shake_host = shake_host
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_norm = Pass.new()
+	_norm.src = self
+	_norm.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_norm.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_norm)
+	_add = Pass.new()
+	_add.src = self
+	_add.additive = true
+	_add.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_add.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var mat: CanvasItemMaterial = CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_add.material = mat
+	add_child(_add)
+	_flash_pass = FlashPass.new()
+	_flash_pass.src = self
+	_flash_pass.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_flash_pass.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_flash_pass)
+
+
+func _process(delta: float) -> void:
+	var dt: float = minf(0.05, delta)
+	# `if (t < hitstopUntil) return` — the sim holds and the canvas is not
+	# cleared, so the frame the blow landed on hangs in the air.
+	if _hitstop_left > 0.0:
+		_hitstop_left -= dt
+		return
+	_step_parts(dt)
+	_step_flashes(dt)
+	_step_shake(dt)
+	_norm.queue_redraw()
+	_add.queue_redraw()
+	_flash_pass.queue_redraw()
+
+
+func _step_parts(dt: float) -> void:
+	var live: Array[Part] = []
+	for p: Part in _parts:
+		p.life -= dt
+		if p.life <= 0.0:
+			continue
+		p.pos += p.vel * dt
+		p.vel.y += p.grav * dt
+		p.vel *= 1.0 - p.drag * dt
+		if p.kind == "ring":
+			p.r += p.vr * dt
+		elif p.kind == "slash":
+			p.prog = minf(1.0, p.prog + dt / p.dur)
+		live.append(p)
+	_parts = live
+
+
+func _step_flashes(dt: float) -> void:
+	var live: Array[Wash] = []
+	for f: Wash in _flashes:
+		f.life -= dt
+		if f.life > 0.0:
+			live.append(f)
+	_flashes = live
+
+
+## The spring in `tick()`: a random offset each frame, shrinking geometrically.
+func _step_shake(dt: float) -> void:
+	if _shake_host == null:
+		return
+	if _shake_v > SHAKE_FLOOR or absf(_shake_at.x) > SHAKE_FLOOR:
+		_shake_at = Vector2(
+			(_rng.randf() - 0.5) * _shake_v,
+			(_rng.randf() - 0.5) * _shake_v)
+		_shake_v *= pow(SHAKE_DECAY, dt)
+		_shake_host.position = _shake_at
+	elif _shake_host.position != Vector2.ZERO:
+		_shake_host.position = Vector2.ZERO
+		_shake_at = Vector2.ZERO
+		_shake_v = 0.0
+
+
+func paint_parts(host: CanvasItem, additive: bool) -> void:
+	for p: Part in _parts:
+		if p.additive != additive:
+			continue
+		var a: float = minf(1.0, p.life / maxf(0.001, p.fade))
+		var col: Color = p.colour
+		col.a = a * p.alpha
+		match p.kind:
+			"spark":
+				# A streak drawn back along its own velocity — the faster it
+				# flies the longer it reads.
+				var length: float = p.vel.length() * 0.045 + 2.0
+				var back: Vector2 = p.pos - p.vel.normalized() * length
+				host.draw_line(p.pos, back, col, maxf(0.5, p.size * a), true)
+			"ring":
+				host.draw_arc(p.pos, maxf(0.5, p.r), 0.0, TAU, 48, col,
+					maxf(0.5, p.size * a), true)
+			"slash":
+				var sweep: float = p.arc * p.prog
+				for i: int in range(3):
+					var band: Color = col
+					band.a = a * (0.9 - float(i) * 0.3)
+					var w: float = (p.size - float(i) * 3.0) * (1.0 - p.prog * 0.6)
+					if w <= 0.0:
+						continue
+					host.draw_arc(p.pos, p.r + float(i) * 7.0, p.a0, p.a0 + sweep,
+						28, band, w, true)
+			_:
+				host.draw_circle(p.pos, maxf(0.5, p.size * a), col, true, -1.0, true)
+
+
+func paint_flashes(host: CanvasItem) -> void:
+	for f: Wash in _flashes:
+		var col: Color = f.colour
+		col.a = (f.life / maxf(0.001, f.dur)) * f.alpha
+		host.draw_rect(Rect2(Vector2.ZERO, size), col)
+
+
+func _push(p: Part) -> void:
+	if _parts.size() >= MAX_PARTS:
+		_parts.remove_at(0)
+	_parts.append(p)
+
+
+func _spawn(kind: String, at: Vector2, vel: Vector2, sz: float, colour: Color,
+		life: float, fade: float) -> Part:
+	var p: Part = Part.new()
+	p.kind = kind
+	p.pos = at
+	p.vel = vel
+	p.size = sz
+	p.colour = colour
+	p.life = life
+	p.fade = fade
+	_push(p)
+	return p
+
+
+# ---------------------------------------------------------------- primitives
+
+func shake(power: float = 8.0) -> void:
+	_shake_v = maxf(_shake_v, power)
+
+
+func hitstop(ms: float = 60.0) -> void:
+	_hitstop_left = maxf(_hitstop_left, ms / 1000.0)
+
+
+func flash(colour: Color, alpha: float = 0.18, dur: float = 0.25) -> void:
+	var w: Wash = Wash.new()
+	w.colour = colour
+	w.alpha = alpha
+	w.dur = dur
+	w.life = dur
+	_flashes.append(w)
+
+
+## `burst` (vfx.js:171). `angle`/`spread` aim it; the default is a full circle.
+func burst(at: Vector2, colour: Color, n: int = 18, speed: float = 260.0,
+		spread: float = TAU, angle: float = 0.0, sz: float = 3.0,
+		grav: float = 300.0, kind: String = "spark", add: bool = true,
+		life: float = 0.5) -> void:
+	for i: int in range(n):
+		var a: float = angle + (_rng.randf() - 0.5) * spread
+		var v: float = speed * (0.35 + _rng.randf() * 0.75)
+		var p: Part = _spawn(kind, at, Vector2(cos(a), sin(a)) * v,
+			sz * (0.6 + _rng.randf() * 0.8), colour,
+			life * (0.6 + _rng.randf() * 0.8), 0.25)
+		p.grav = grav
+		p.drag = 1.6
+		p.additive = add
+
+
+func ring(at: Vector2, colour: Color, r0: float = 8.0, speed: float = 420.0,
+		sz: float = 4.0) -> void:
+	var p: Part = _spawn("ring", at, Vector2.ZERO, sz, colour, 0.45, 0.45)
+	p.r = r0
+	p.vr = speed
+
+
+func slash_arc(at: Vector2, colour: Color) -> void:
+	var p: Part = _spawn("slash", at, Vector2.ZERO, 13.0, colour, 0.3, 0.18)
+	p.r = 46.0 + _rng.randf() * 18.0
+	p.a0 = -PI * 0.85 + (_rng.randf() - 0.5) * 0.6
+	p.arc = PI * 0.8
+	p.dur = 0.14
+
+
+func motes(at: Vector2, colour: Color, n: int = 10) -> void:
+	for i: int in range(n):
+		var from: Vector2 = at + Vector2(
+			(_rng.randf() - 0.5) * 60.0, (_rng.randf() - 0.5) * 40.0)
+		var p: Part = _spawn("dot", from,
+			Vector2((_rng.randf() - 0.5) * 30.0, -40.0 - _rng.randf() * 60.0),
+			2.5 + _rng.randf() * 2.5, colour, 0.9 + _rng.randf() * 0.5, 0.5)
+		p.grav = -20.0
+		p.alpha = 0.9
+
+
+func ember_trail(from: Vector2, to: Vector2, colour: Color) -> void:
+	var n: int = 14
+	for i: int in range(n):
+		var t: float = float(i) / float(n)
+		var at: Vector2 = from.lerp(to, t) + Vector2(
+			(_rng.randf() - 0.5) * 26.0, (_rng.randf() - 0.5) * 26.0)
+		var p: Part = _spawn("dot", at,
+			Vector2((_rng.randf() - 0.5) * 40.0, -30.0 - _rng.randf() * 50.0),
+			2.0 + _rng.randf() * 2.4, colour, 0.5 + t * 0.4, 0.3)
+		p.grav = -30.0
+		p.alpha = 0.9
+
+
+func droplets(at: Vector2, colour: Color, n: int = 12) -> void:
+	for i: int in range(n):
+		var from: Vector2 = at + Vector2(
+			(_rng.randf() - 0.5) * 54.0, -10.0 + (_rng.randf() - 0.5) * 30.0)
+		var p: Part = _spawn("dot", from,
+			Vector2((_rng.randf() - 0.5) * 26.0, 60.0 + _rng.randf() * 120.0),
+			2.0 + _rng.randf() * 2.0, colour, 0.6 + _rng.randf() * 0.3, 0.35)
+		p.grav = 420.0
+		p.drag = 0.4
+
+
+## The void hit: a ring collapsing inward while sparks fall into the centre.
+func implosion(at: Vector2, colour: Color) -> void:
+	var r: Part = _spawn("ring", at, Vector2.ZERO, 3.5, colour, 0.4, 0.4)
+	r.r = 64.0
+	r.vr = -160.0
+	for i: int in range(16):
+		var a: float = _rng.randf() * TAU
+		var dir: Vector2 = Vector2(cos(a), sin(a))
+		var v: float = 220.0 + _rng.randf() * 120.0
+		var p: Part = _spawn("spark", at + dir * (46.0 + _rng.randf() * 30.0),
+			-dir * v, 2.2, colour, 0.34, 0.2)
+		p.drag = 2.4
+
+
+## Ward chipping off: a fan of shards thrown upward.
+func shard_spray(at: Vector2, colour: Color, n: int = 12) -> void:
+	for i: int in range(n):
+		var a: float = -PI / 2.0 + (_rng.randf() - 0.5) * 1.8
+		var v: float = 200.0 + _rng.randf() * 260.0
+		var p: Part = _spawn("spark", at, Vector2(cos(a), sin(a)) * v,
+			2.6 + _rng.randf() * 1.6, colour, 0.5 + _rng.randf() * 0.3, 0.22)
+		p.grav = 520.0
+		p.drag = 0.6
+
+
+## Embers travelling between two points — the spill toward the lantern, poison
+## jumping foes, a power settling into the hero. `presentation.flyTo` is a Pixi
+## sprite flight in the benchmark; here it is the same motes on a lifted arc,
+## which is what it reads as on screen.
+func fly_to(from: Vector2, to: Vector2, colour: Color, n: int = 6,
+		sz: float = 6.0, dur: float = 0.5) -> void:
+	# Straight-line velocity plus an upward bias against gravity, so the stream
+	# bows over rather than crossing the stage flat.
+	var v: Vector2 = (to - from) / maxf(0.05, dur)
+	for i: int in range(n):
+		var jitter: Vector2 = Vector2(
+			(_rng.randf() - 0.5) * 26.0, (_rng.randf() - 0.5) * 26.0)
+		var p: Part = _spawn("dot", from + jitter,
+			Vector2(v.x * (0.85 + _rng.randf() * 0.3),
+				v.y * (0.85 + _rng.randf() * 0.3) - 90.0),
+			sz * (0.6 + _rng.randf() * 0.6), colour, dur, 0.35)
+		p.grav = 180.0
+		p.alpha = 0.95
+
+
+## `archetypeHit` (vfx.js:458) — the one entry point every landed blow goes
+## through, so a slash and a blunt hit never have to be spelled out at the call
+## site. `power` is the damage normalised against 24.
+func archetype_hit(at: Vector2, archetype: String, power: float = 0.3) -> void:
+	var tone: Color = TONES.get(archetype, Color.WHITE)
+	var big: bool = power > 0.55
+	match archetype:
+		"slash":
+			slash_arc(at, Color(1.0, 0.84705883, 0.627451) if big else Color.WHITE)
+			burst(at, Color(1.0, 0.6039216, 0.41568628), 26 if big else 12,
+				420.0 if big else 260.0)
+		"pierce":
+			var a0: float = -PI * 0.78
+			var dir: Vector2 = Vector2(cos(a0), sin(a0))
+			for i: int in range(3 if big else 2):
+				var p: Part = _spawn("spark", at - dir * 70.0, dir * 900.0,
+					3.4, tone, 0.16 + float(i) * 0.03, 0.1)
+				p.grav = 0.0
+			burst(at, tone, 18 if big else 9, 300.0, 1.4, a0 + PI)
+		"blunt":
+			ring(at, tone, 6.0, 720.0 if big else 520.0, 6.0)
+			burst(at + Vector2(0.0, 6.0), Color(0.9098039, 0.84705883, 0.72156864),
+				24 if big else 12, 380.0 if big else 240.0, PI, -PI / 2.0,
+				3.0, 620.0, "dot")
+			shake(14.0 if big else 8.0)
+		"fire":
+			burst(at, Color(1.0, 0.81960785, 0.4), 22 if big else 12, 240.0,
+				TAU, 0.0, 3.0, -120.0, "spark", true, 0.7)
+			burst(at, Color(1.0, 0.41568628, 0.22745098), 14 if big else 8, 160.0,
+				TAU, 0.0, 3.6, -60.0, "dot", true, 0.8)
+		"poison":
+			droplets(at, Color(0.827451, 0.6313726, 0.3529412), 18 if big else 10)
+			motes(at, Color(0.72156864, 0.6901961, 0.627451), 8)
+		"void":
+			implosion(at, tone)
+			if big:
+				flash(Color(0.7882353, 0.6039216, 1.0), 0.08, 0.25)
+		"ward":
+			motes(at, tone, 8 if big else 5)
+
+
+## `impactFrame` (vfx.js:500) — the white blink the signature cards open with.
+func impact_frame() -> void:
+	flash(Color.WHITE, 0.28, 0.09)
+	hitstop(90.0)
+
