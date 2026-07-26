@@ -1,37 +1,66 @@
 class_name FacetPips
 extends Control
-## The facet gauge as segmented glass diamonds instead of "chips / max" text:
-## `filled` lit pips (chips accrued toward a shatter), the rest hollow. Pure
+## The facet gauge: one leaded pane per facet, painted rather than drawn. Pure
 ## _draw; the view pushes counts in through set_pips.
+##
+## The asset names are inverted against game state, and that is deliberate — a
+## filename describes the PANE, not the slot. A facet that has NOT been chipped
+## still holds its light, so it draws `facet-chipped.png` (bright glass, one
+## corner gone); a facet that HAS been chipped has gone dark, so it draws
+## `facet-empty.png` (the same pane, black). Same mapping the benchmark makes in
+## facetPips() — roguecardv2 src/ui/combat.js:1018.
 
-const GAP: float = 16.0
-const R: float = 5.0
+const PIP: float = 16.0
+const GAP: float = 5.0
+const ROW_H: float = 18.0
+## Past one row of panes the gauge stops being countable, so boss glass reads as
+## a number instead. The benchmark's own cutoff.
+const MAX_PIPS: int = 8
+
+const INTACT: Texture2D = preload("res://assets/art/ui/facet-chipped.png")
+const CHIPPED: Texture2D = preload("res://assets/art/ui/facet-empty.png")
+
+## The dark pane is near-black and would vanish on the night ground; the lit one
+## is already white and blows out if pushed. Lifted apart rather than together.
+const INTACT_LIFT: Color = Color(1.0, 1.0, 1.0, 1.0)
+const CHIPPED_LIFT: Color = Color(1.35, 1.35, 1.45, 1.0)
 
 var _filled: int = 0
 var _total: int = 0
 
 
 func set_pips(filled: int, total: int) -> void:
-	_filled = filled
-	_total = total
-	custom_minimum_size = Vector2(float(maxi(total, 1)) * GAP, 14.0)
+	_filled = maxi(filled, 0)
+	_total = maxi(total, 0)
+	var count: int = mini(_total, MAX_PIPS)
+	var w: float = float(count) * PIP + float(maxi(count - 1, 0)) * GAP if _total <= MAX_PIPS \
+		else PIP + GAP + 46.0
+	custom_minimum_size = Vector2(w, ROW_H)
 	queue_redraw()
 
 
 func _draw() -> void:
 	if _total <= 0:
 		return
-	var span: float = float(_total) * GAP
-	var start_x: float = (size.x - span) * 0.5 + GAP * 0.5
 	var cy: float = size.y * 0.5
+	if _total > MAX_PIPS:
+		# One pane, then the count — the gauge a boss needs.
+		var text: String = "%d/%d" % [_filled, _total]
+		var font: Font = get_theme_default_font()
+		var fs: int = 12
+		var tw: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs).x
+		var span: float = PIP + GAP + tw
+		var x: float = (size.x - span) * 0.5
+		draw_texture_rect(CHIPPED, Rect2(Vector2(x, cy - PIP * 0.5), Vector2(PIP, PIP)),
+			false, CHIPPED_LIFT)
+		draw_string(font, Vector2(x + PIP + GAP, cy + float(fs) * 0.36), text,
+			HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs, GlassStyle.TEXT)
+		return
+	var span_w: float = float(_total) * PIP + float(_total - 1) * GAP
+	var start_x: float = (size.x - span_w) * 0.5
 	for i: int in range(_total):
-		var cx: float = start_x + float(i) * GAP
-		var d: PackedVector2Array = PackedVector2Array([
-			Vector2(cx, cy - R), Vector2(cx + R, cy), Vector2(cx, cy + R), Vector2(cx - R, cy),
-		])
-		var lit: bool = i < _filled
-		var fill: Color = GlassStyle.GLASS if lit else Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.12)
-		draw_colored_polygon(d, fill)
-		var outline: PackedVector2Array = d.duplicate()
-		outline.append(d[0])
-		draw_polyline(outline, Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.55), 1.0)
+		var chipped: bool = i < _filled
+		var at: Rect2 = Rect2(
+			Vector2(start_x + float(i) * (PIP + GAP), cy - PIP * 0.5), Vector2(PIP, PIP))
+		draw_texture_rect(CHIPPED if chipped else INTACT, at, false,
+			CHIPPED_LIFT if chipped else INTACT_LIFT)
