@@ -69,6 +69,14 @@ static func run(fails: Array[String]) -> void:
 	_check_net_junctions(fails)
 	_check_mask_rect(fails)
 	_check_mask_void(fails)
+	_check_field_radiates(fails)
+	_check_field_termini(fails)
+	_check_field_body(fails)
+	_check_field_energy(fails)
+	_check_field_screening(fails)
+	_check_field_determinism(fails)
+	_check_field_convergence(fails)
+	_check_field_relieve(fails)
 
 
 # ------------------------------------------------------------------ the gate
@@ -266,3 +274,220 @@ static func _check_mask_void(fails: Array[String]) -> void:
 	# parallel to it must be unaffected.
 	if not m.reaches(Vector2(0.1, 0.1), Vector2(0.1, 0.9)):
 		fails.append("mask: reaches() refused a path parallel to the void")
+
+
+# ------------------------------------------------------------------- the field
+
+static func _field(seed_v: int, mask: BodyMask, tuning: Dictionary = {}) -> FractureField:
+	return FractureField.new(Rng.new(seed_v), mask, tuning)
+
+
+static func _total_length(strands: Array[Dictionary]) -> float:
+	var net: CrackNet = CrackNet.new()
+	net.commit(strands)
+	var sum: float = 0.0
+	for i: int in range(net.strand_count()):
+		sum += net.length(i)
+	return sum
+
+
+## THE check that guards the update rule. One review seat wrote the heading as
+## `blow.dir.rotated(PI/2)` — one direction everywhere — which makes every arm of
+## the star run parallel instead of radiating. Its prose was right and its
+## pseudocode was not, and nothing downstream would have caught it: the strands
+## would be valid, arrested, on the body, and wrong.
+##
+## Primary arms leave the blow point, so the mean of their unit headings is near
+## zero when they radiate and near one when they are parallel. Forks start
+## elsewhere and are excluded by their first point.
+static func _check_field_radiates(fails: Array[String]) -> void:
+	var f: FractureField = _field(1234, BodyMask.rect())
+	var blow: Blow = Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.30, 0.5)
+	var strands: Array[Dictionary] = f.strike(CrackNet.new(), blow)
+	var mean: Vector2 = Vector2.ZERO
+	var arms: int = 0
+	for s: Dictionary in strands:
+		var pts: PackedVector2Array = s["points"]
+		if pts[0] != blow.at or pts.size() < 2:
+			continue
+		mean += (pts[1] - pts[0]).normalized()
+		arms += 1
+	if arms < 4:
+		fails.append("field: expected at least 4 primary arms at energy 0.30, got %d"
+			% arms)
+		return
+	var clustering: float = (mean / float(arms)).length()
+	if clustering > 0.6:
+		fails.append("field: arms are not radiating — mean heading length %.2f over %d arms (parallel would be ~1.0)"
+			% [clustering, arms])
+
+
+## Every strand must have stopped for a stated reason, and a `T` must actually
+## touch something — otherwise the renderer draws a groove ending in mid-glass.
+static func _check_field_termini(fails: Array[String]) -> void:
+	var f: FractureField = _field(77, BodyMask.rect())
+	var net: CrackNet = CrackNet.new()
+	for i: int in range(4):
+		var blow: Blow = Blow.new(Vector2(0.35 + 0.08 * float(i), 0.45),
+			Vector2(1.0, 0.2), 0.24, 0.5)
+		net.commit(f.strike(net, blow))
+	if net.strand_count() < 4:
+		fails.append("field: four blows produced only %d strands" % net.strand_count())
+		return
+	for i: int in range(net.strand_count()):
+		if not CrackNet.TERMINI.has(net.terminus(i)):
+			fails.append("field: strand %d has terminus %s" % [i, net.terminus(i)])
+		if net.terminus(i) != CrackNet.T_CRACK:
+			continue
+		var pts: PackedVector2Array = net.strand(i)
+		var tip: Vector2 = pts[pts.size() - 1]
+		var others: Array[PackedVector2Array] = []
+		for j: int in range(net.strand_count()):
+			if j != i:
+				others.append(net.strand(j))
+		var d: float = CrackNet.dist_to_strands(others, tip)
+		if d > FractureField.STEP * 1.5:
+			fails.append("field: strand %d claims T but its tip is %.4f from any other strand"
+				% [i, d])
+	var j: Dictionary = net.junctions(FractureField.STEP * 1.5)
+	if j["T"] < j["Y"]:
+		fails.append("field: %d T-junctions vs %d Y — impact fracture is T-junctioned"
+			% [j["T"], j["Y"]])
+	# Without this the comparison above passes vacuously at T = 0, and "T-junctioned"
+	# would be a claim about a network that has no junctions at all. Four overlapping
+	# blows must produce arrests on each other's cracks or the arrest rule is not
+	# firing.
+	if j["T"] == 0:
+		fails.append("field: four overlapping blows produced no T-junction at all")
+
+
+## §3.3. Every vertex on the body, every segment staying on it. The void here is a
+## transparent column, so a crack aimed across it must stop at the edge.
+static func _check_field_body(fails: Array[String]) -> void:
+	var img: Image = Image.create(128, 128, false, Image.FORMAT_RGBA8)
+	img.fill(Color(1, 1, 1, 1))
+	img.fill_rect(Rect2i(72, 0, 10, 128), Color(0, 0, 0, 0))
+	var mask: BodyMask = BodyMask.from_image(img)
+	var f: FractureField = _field(9, mask)
+	var net: CrackNet = CrackNet.new()
+	net.commit(f.strike(net, Blow.new(Vector2(0.3, 0.5), Vector2.ZERO, 0.45, 0.5)))
+	if net.is_empty():
+		fails.append("field: no strands grown on a masked body")
+		return
+	for i: int in range(net.strand_count()):
+		var pts: PackedVector2Array = net.strand(i)
+		for k: int in range(pts.size()):
+			if not mask.solid(pts[k]):
+				fails.append("field: strand %d vertex %d at %v is off the body"
+					% [i, k, pts[k]])
+				break
+		for k: int in range(pts.size() - 1):
+			if not mask.reaches(pts[k], pts[k + 1]):
+				fails.append("field: strand %d segment %d crosses a void" % [i, k])
+				break
+
+
+## Griffith, as an assertion: energy buys length, monotonically.
+static func _check_field_energy(fails: Array[String]) -> void:
+	var small: float = _total_length(
+		_field(5, BodyMask.rect()).strike(CrackNet.new(),
+			Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.12, 0.5)))
+	var big: float = _total_length(
+		_field(5, BodyMask.rect()).strike(CrackNet.new(),
+			Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.60, 0.5)))
+	if not (big > small):
+		fails.append("field: 0.60 energy bought %.3f of crack, 0.12 bought %.3f"
+			% [big, small])
+
+
+## The behaviour the old web could not express at all, and the one the owner
+## described as missing: a blow into glass that is ALREADY broken finds the tension
+## there released, so it scores less. Both fields share a seed and are struck at the
+## same point with the same blow, so the only difference is what was already there.
+static func _check_field_screening(fails: Array[String]) -> void:
+	var blow: Blow = Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.40, 0.5)
+	var virgin: float = _total_length(
+		_field(31, BodyMask.rect()).strike(CrackNet.new(), blow))
+	# Placed by hand rather than struck, so the second field's RNG is untouched.
+	var broken: CrackNet = CrackNet.new()
+	broken.commit([{
+		"points": PackedVector2Array([Vector2(0.5, 0.44), Vector2(0.5, 0.56)]),
+		"terminus": CrackNet.T_SILHOUETTE, "origin": Vector2(0.5, 0.5)}])
+	var screened: float = _total_length(
+		_field(31, BodyMask.rect()).strike(broken, blow))
+	if not (screened < virgin):
+		fails.append("field: screening did nothing — %.3f of crack on broken glass vs %.3f on virgin"
+			% [screened, virgin])
+
+
+## Same seed, same result. Without this the lab cannot prove that a change meant to
+## alter nothing altered nothing, which is the defect recorded as
+## `docs/glass-crack-rendering.md` §7 in a different guise.
+static func _check_field_determinism(fails: Array[String]) -> void:
+	var blow: Blow = Blow.new(Vector2(0.45, 0.55), Vector2(0.6, -0.8), 0.35, 0.5)
+	var a: Array[Dictionary] = _field(4242, BodyMask.rect()).strike(CrackNet.new(), blow)
+	var b: Array[Dictionary] = _field(4242, BodyMask.rect()).strike(CrackNet.new(), blow)
+	if a.size() != b.size():
+		fails.append("field: same seed gave %d and %d strands" % [a.size(), b.size()])
+		return
+	for i: int in range(a.size()):
+		var pa: PackedVector2Array = a[i]["points"]
+		var pb: PackedVector2Array = b[i]["points"]
+		if pa != pb:
+			fails.append("field: same seed diverged at strand %d" % i)
+			return
+
+
+## `STEP`'s claim, run rather than asserted in prose: halve the integrator step and
+## no tip may move by more than one step. Grain is set to zero because the jitter is
+## a per-step random draw — with it on, halving the step changes the random sequence
+## and the test would measure noise instead of convergence.
+static func _check_field_convergence(fails: Array[String]) -> void:
+	var blow: Blow = Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.20, 0.5)
+	var coarse: float = FractureField.STEP
+	var a: Array[Dictionary] = _field(8, BodyMask.rect(),
+		{"heterogeneity": 0.0, "step": coarse}).strike(CrackNet.new(), blow)
+	var b: Array[Dictionary] = _field(8, BodyMask.rect(),
+		{"heterogeneity": 0.0, "step": coarse * 0.5}).strike(CrackNet.new(), blow)
+	if a.is_empty() or b.is_empty():
+		fails.append("field: convergence check grew nothing")
+		return
+	var pa: PackedVector2Array = a[0]["points"]
+	var pb: PackedVector2Array = b[0]["points"]
+	var moved: float = pa[pa.size() - 1].distance_to(pb[pb.size() - 1])
+	if moved > coarse * 1.5:
+		fails.append("field: halving the step moved the tip %.4f, more than one step (%.4f)"
+			% [moved, coarse])
+
+
+## The rite. Every tip that stopped for want of tension runs the rest of the way
+## out, and the continuation starts exactly where the old one ended — which is what
+## lets an append-only net describe a connected network.
+static func _check_field_relieve(fails: Array[String]) -> void:
+	var f: FractureField = _field(60, BodyMask.rect())
+	var net: CrackNet = CrackNet.new()
+	net.commit(f.strike(net, Blow.new(Vector2(0.5, 0.5), Vector2.ZERO, 0.18, 0.5)))
+	var free_tips: Array[Vector2] = []
+	for i: int in range(net.strand_count()):
+		if net.terminus(i) == CrackNet.T_FREE:
+			var p: PackedVector2Array = net.strand(i)
+			free_tips.append(p[p.size() - 1])
+	if free_tips.is_empty():
+		fails.append("field: no free tips to relieve — the check cannot run")
+		return
+	var extra: Array[Dictionary] = f.relieve(net)
+	if extra.size() != free_tips.size():
+		fails.append("field: %d free tips produced %d continuations"
+			% [free_tips.size(), extra.size()])
+	for s: Dictionary in extra:
+		var pts: PackedVector2Array = s["points"]
+		var joins: bool = false
+		for t: Vector2 in free_tips:
+			if pts[0].distance_to(t) < 1e-5:
+				joins = true
+				break
+		if not joins:
+			fails.append("field: a continuation starts at %v, which is no free tip"
+				% pts[0])
+		if s["terminus"] == CrackNet.T_FREE:
+			fails.append("field: a continuation still ended free at toughness zero")

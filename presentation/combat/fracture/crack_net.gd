@@ -137,26 +137,36 @@ static func dist_to_polyline(pts: PackedVector2Array, p: Vector2) -> float:
 
 
 ## Junction census, for the invariant that impact fracture is T-junctioned where
-## Voronoi is Y-junctioned. A `T` is one strand ending ON another; a `Y` is three
-## ends meeting at a point, which is what a simultaneous isotropic process makes
-## and an impact does not (`docs/glass-crack-rendering.md` §3.1).
+## Voronoi is Y-junctioned (`docs/glass-crack-rendering.md` §3.1).
+##
+## **Only TIPS count.** A strand's first point is where it was born — an impact
+## point, or a bifurcation off its parent — and a birth is not a meeting. Counting
+## starts as well reads a seven-armed star as seven Y-junctions, which inverts the
+## very thing the census is for: a star radiating from one impact is the signature
+## of impact fracture, and it is the opposite of the shrinkage pattern a Y means
+## here. That mistake was in the first version of this function and
+## `tools/check_fracture.gd` caught it by reporting 21 Y against 1 T on a set of
+## perfectly well-formed strikes.
+##
+## So: `T` is a strand that arrested ON another crack. `Y` is three or more strands
+## that all *ended* at the same place, which is what a simultaneous isotropic
+## process makes and sequential arrest structurally cannot.
 func junctions(tol: float) -> Dictionary:
 	var t: int = 0
 	for i: int in range(_points.size()):
 		if _termini[i] == T_CRACK:
 			t += 1
-	var y: int = 0
-	var ends: Array[Vector2] = []
+	var tips: Array[Vector2] = []
 	for pts: PackedVector2Array in _points:
-		ends.append(pts[0])
-		ends.append(pts[pts.size() - 1])
-	for i: int in range(ends.size()):
+		tips.append(pts[pts.size() - 1])
+	var y: int = 0
+	for i: int in range(tips.size()):
 		var near: int = 0
-		for j: int in range(ends.size()):
-			if i != j and ends[i].distance_to(ends[j]) <= tol:
+		for j: int in range(tips.size()):
+			if i != j and tips[i].distance_to(tips[j]) <= tol:
 				near += 1
 		if near >= 2:
 			y += 1
-	# Each Y is counted once per participating end, so three coincident ends read
-	# as three. Divided here so the number means "junctions", not "ends".
+	# Counted once per participating tip, so three coincident tips read as three.
+	# Divided so the number means "junctions" rather than "ends".
 	return {"T": t, "Y": y / 3}

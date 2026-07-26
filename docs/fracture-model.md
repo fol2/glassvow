@@ -255,6 +255,32 @@ Taste gets ported, not derived.
 
 ## 4. Screening, and why accumulation is affordable
 
+> **As built, 2026-07-26: the 128² oracle below was not needed, and the reason is
+> the owner's cap.** The whole cost problem in this section is that an
+> *unbounded* net makes the nearest-segment query O(blows²). With cracks capped at
+> eight strands the net never grows past a few hundred segments, so
+> `FractureField` queries `CrackNet.nearest` directly and the quadratic never
+> arrives. The section stands as the answer if the cap is ever lifted.
+>
+> Two corrections the invariants forced, both physics rather than code:
+>
+> **The contact test and the screening term must read different things.** Contact
+> reads the net *and* this blow's own in-flight arms, because a crack cannot cross
+> any free surface whenever it was made. Screening reads the net **only** —
+> siblings from one blow form simultaneously, one impact and one release, so they
+> do not relieve each other. Reading the buffer into the screening term makes every
+> arm after the first die on its first step, since all arms leave the same point
+> and are therefore inside each other's process zone. Seven arms in, one arm out.
+>
+> **A star centre is not a Y-junction.** The first junction census counted every
+> strand end, which reads a seven-armed star as seven Y-junctions — inverting the
+> thing the census exists for, since a star radiating from one impact *is* the
+> impact signature and the opposite of the shrinkage pattern a Y means here. Only
+> tips count: a birth is not a meeting.
+>
+> Both were caught by the invariants rather than by looking at a render, which is
+> the argument for the pure module stated as a result instead of as a hope.
+
 The naive screening query — distance to the nearest segment, walked over the whole
 net — is O(net) per Euler step, so O(blows²) over a fight. Costed properly: a
 30-blow fight leaves ≈ 9 600 segments, and blow 30 alone needs ≈ **3.1 M** distance
@@ -458,7 +484,7 @@ and `oversample` levers, and cannot help or hurt that budget.
 | 1 | `_death_cells()` reads `_sites` plus a sparse background grid — port `_voronoiParts`, the primary that was never ported | nothing. Fixes §3.4 today on convex input, and makes the network a two-consumer seam before any generator exists |
 | 2 | Resolve the ordinary-damage `crack()` call against `CONCEPTS.md` | owner |
 | 3 | ✅ **built** — `Blow` / `CrackNet` / `BodyMask` + the purity gate + the net and mask invariants, no renderer | 1 |
-| 4 | `FractureField.strike` with the §2.4 rule and the screening oracle. Draw it in the lab via `drive_at`. **Kill-test:** radial arms as a plain polyline overlay | 3 |
+| 4 | 🔶 **half built** — `FractureField.strike` and `relieve` exist with the §2.4 rule, screening, forking and the four arrest cases, gated by nine invariants. Still to do: draw the field in the lab via `drive_at`, and the **kill-test** — radial arms as a plain polyline overlay | 3 |
 | 5 | `CrackField` — the three-band groove, §5.3 | 4 reads as fracture |
 | 6 | `Carve` + `relieve`, and `shatter()` consumes it. Invariant 4 | 5 |
 | 7 | Optional: `reveal(t)` propagation, ignite beams, `CrackRibbon` | 6 |
