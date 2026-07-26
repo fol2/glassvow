@@ -192,6 +192,12 @@ var _body_mat: ShaderMaterial = null
 var _vessel: Node3D = null
 var _glass_root: Node3D = null
 var _breathe: float = 1.0
+## The other two thirds of the idle. They were riding on `_breathe`, which meant
+## every body swayed and bobbed in exact proportion to how hard it breathed —
+## and `char-meta` authors them as three separate knobs precisely because they
+## are not the same thing.
+var _idle_sway: float = 1.0
+var _idle_bob: float = 1.0
 var _phase: float = 0.0
 var _shards: Array[Node3D] = []
 var _key: DirectionalLight3D = null
@@ -508,6 +514,7 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		var fx: float = entry.get("footX", 0.0)
 		var fy: float = entry.get("footY", 0.0)
 		foot = Vector2(fx, fy)
+		_read_idle(entry)
 		custom_minimum_size = Vector2(art_size, art_size)
 		size = custom_minimum_size
 		_rng.seed = hash(String(art_id)) + enemy_idx
@@ -836,13 +843,31 @@ func _process(delta: float) -> void:
 	_vessel.scale = Vector3(
 		k * (1.0 - SQUASH * _hit_squash) * _lunge_scale.x,
 		k * (1.0 + SQUASH * _hit_squash) * _lunge_scale.y, 1.0)
-	_vessel.rotation.z = _breathe * 0.017 * sin(t * 0.71)
+	_vessel.rotation.z = _idle_sway * 0.017 * sin(t * 0.71)
 	_vessel.position = Vector3(
 		(_hit * KICK_PX + _lunge_x) * UNIT,
-		_breathe * _box_u * 0.010 * sin(t * 0.83) + _lunge_up * UNIT, 0.0)
+		_idle_bob * _box_u * 0.010 * sin(t * 0.83) + _lunge_up * UNIT, 0.0)
 
 
 # ---------------------------------------------------------------- striking
+
+## `char-meta.chars[id].mesh` — the per-character idle the benchmark authors and
+## this port has been ignoring since the actor was built. Four of the
+## twenty-nine characters carry a block and one of them is the HERO: `breathe
+## 1.6, sway 0.5, bob 0` — a body that fills its chest harder, leans less and
+## does not float. Everything defaults to 1.0, so a character without a block
+## idles exactly as it did.
+func _read_idle(entry: Dictionary) -> void:
+	var mesh: Dictionary = entry.get("mesh", {})
+	if mesh.is_empty():
+		return
+	var breathe: float = mesh.get("breathe", 1.0)
+	var sway: float = mesh.get("sway", 1.0)
+	var bob: float = mesh.get("bob", 1.0)
+	_breathe = breathe
+	_idle_sway = sway
+	_idle_bob = bob
+
 
 ## Read a keyframe track at `t`: linear between the offsets in `at`, held at the
 ## ends. `at` is ascending and the two arrays are the same length.
