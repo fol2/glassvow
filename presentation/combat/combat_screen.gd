@@ -24,13 +24,6 @@ const LEDGE_LIP: float = 14.0
 ## The stage the plates were measured in. Offsets resolve against the live
 ## viewport, so a taller window moves the ground rather than stretching the art.
 const STAGE: Vector2 = Vector2(1180.0, 820.0)
-## The act theme's glow (`themes.js` act 1: `glow: 6750110`), which tints the
-## ledge band, its lip and the breath. Our slice content carries no theme
-## section — `content_db.gd` loads no `themes` — so the act → plate + tint
-## mapping lives here rather than in data.
-## ponytail: move both to ContentDB the day `capture-port-fixtures.mjs` exports
-## themes. The shape is one dictionary per act, not a new system.
-const LEDGE: Color = Color(0.4, 1.0, 0.62)  # #66ff9e
 const STAGE_ART: String = "res://assets/art/stage/act1-%s.png"
 
 ## `BF.base.hero.x` merged with `shapes['pad-landscape']` — where the hero's
@@ -45,24 +38,6 @@ const HERO_X: float = 200.0
 const HERO_ART: StringName = &"duskblade"
 const HERO_HUE: float = 225.0  # HERO_LOOKS[0].hue in art.js
 
-## One breath blob and its phase. A class rather than a dictionary of parts,
-## for the reason `HudBar.Pile` is one: the strict gate wants every piece typed
-## at the moment it is read.
-class Breath:
-	var node: TextureRect
-	var delay: float = 0.0
-
-
-## One painted plate, drawn rather than stretched.
-##
-## The plates are `object-fit: cover`, which `STRETCH_KEEP_ASPECT_COVERED` is —
-## except that Godot's always crops about the MIDDLE, and the benchmark anchors
-## each plate somewhere else: the backdrop to its bottom edge, the mid to its
-## bottom-right, the ledge to its TOP-right. Cropping all three from the middle
-## shows a different part of every painting, which is what made this stage read
-## as the wrong art rather than as art in the wrong place.
-##
-## `where` is `object-position` as a fraction: (0.5, 1.0) is `50% 100%`.
 class Plate:
 	extends Control
 	var tex: Texture2D
@@ -84,7 +59,6 @@ class Plate:
 
 var game: GlassvowGame
 var seq: EventSequencer = EventSequencer.new()
-var _breaths: Array[Breath] = []
 
 var _rules: CombatRules
 var _enemy_views: Array[EnemyView] = []
@@ -121,21 +95,6 @@ func _init(game_ref: GlassvowGame) -> void:
 
 
 # ---------------------------------------------------------------- build
-
-## The ground breathes only once there is a tree to breathe in. Everything else
-## this screen owns is built in `_init()`; see the class docblock.
-func _ready() -> void:
-	for b: Breath in _breaths:
-		var tw: Tween = create_tween().set_loops()
-		if b.delay > 0.0:
-			tw.tween_interval(b.delay)
-		tw.tween_property(b.node, "modulate:a", 0.16, 7.0).set_trans(Tween.TRANS_SINE)
-		tw.parallel().tween_property(b.node, "scale", Vector2(1.06, 1.06),
-			7.0).set_trans(Tween.TRANS_SINE)
-		tw.tween_property(b.node, "modulate:a", 0.06, 7.0).set_trans(Tween.TRANS_SINE)
-		tw.parallel().tween_property(b.node, "scale", Vector2(0.94, 0.94),
-			7.0).set_trans(Tween.TRANS_SINE)
-
 
 func _build_ui() -> void:
 	_build_stage()
@@ -263,57 +222,18 @@ func _build_stage() -> void:
 	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95, Vector2(1.0, 1.0))
 	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, Vector2(1.0, 0.0), true)
 
-	# `.stage-breath` — 34cqw x 26cqh blobs, container-query units against the
-	# stage, so 401 x 213 here. Their opacity and scale breathe 7s alternating
-	# (`@keyframes breath`: .06/scale .94 → .16/scale 1.06).
-	_breath(0.06 * STAGE.x, GROUND_Y - 0.08 * STAGE.y, 0.0)
-	_breath(STAGE.x - 0.08 * STAGE.x - 0.34 * STAGE.x, GROUND_Y - 0.12 * STAGE.y, 3.2)
-
-	# `.combat-screen::after` — depth mist under the ground plate, 300px tall.
-	var mist: TextureRect = TextureRect.new()
-	mist.texture = GlassStyle.grad_tex(
-		PackedColorArray([Color(0.02, 0.027, 0.055, 0.0), Color(0.02, 0.027, 0.055, 0.55)]),
-		PackedFloat32Array([0.0, 0.75]), false, Vector2(0.5, 0.0), Vector2(0.5, 1.0))
-	mist.anchor_top = 1.0
-	mist.anchor_bottom = 1.0
-	mist.anchor_right = 1.0
-	mist.offset_top = -300.0
-	mist.stretch_mode = TextureRect.STRETCH_SCALE
-	mist.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	mist.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(mist)
-
-	# `.stage-ledge` — a 120px band whose TOP is the ground line, so the light
-	# pools in front of where the actors stand, not behind them.
-	var band: TextureRect = TextureRect.new()
-	band.texture = _ledge_tex()
-	band.anchor_top = 1.0
-	band.anchor_bottom = 1.0
-	band.anchor_right = 1.0
-	band.offset_top = -GROUND_Y
-	band.offset_bottom = -(GROUND_Y - 120.0)
-	band.stretch_mode = TextureRect.STRETCH_SCALE
-	# Without this a TextureRect's minimum size is its TEXTURE's size, so a
-	# 64px source silently forces the band 256px tall and the ground glow
-	# bleeds to the bottom of the screen. Same reason every gradient below
-	# says it too.
-	band.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	band.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(band)
-
-	# `.stage-ledge::before` — the lip: a hairline of caught light one lip-height
-	# above the ground line, faded out at both ends, with its own bloom under it.
-	var lip_tint: Color = LEDGE.lerp(Color.WHITE, 0.25)  # mix(ledge 75%, #fff)
-	# `box-shadow: 0 0 16px` is a glow that falls off; a flat band the same
-	# height is a BAR, and at 0.14 it read as one — a hard green stripe across a
-	# floor drawn in perspective. Spread over twice the blur radius at a third
-	# of the alpha it goes back to being light caught on an edge.
-	add_child(_lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.05), 34.0))
-	# 1.5, not 2: the CSS says 1.5px and a Control takes a fractional height.
-	# Judged at 1:1 against the source, never against a scaled-down capture —
-	# a hairline all but vanishes in a downscaled screenshot, which is how it
-	# nearly got 'corrected' out of existence here.
-	add_child(_lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.4), 1.5))
+	# NOT BUILT, and the benchmark's own stylesheet says why:
+	#
+	#   /* act-themed ground glow off — stage-ledge + stage-breath both tint
+	#      --ledge (act1 = green) */
+	#   .stage-ledge, .stage-breath { opacity: 0; animation: none; }
+	#
+	# The 120px ledge glow, its 1.5px lit lip and the two breathing blobs are all
+	# defined and then switched OFF at the visual standard, because every one of
+	# them tints `--ledge` and act 1 resolves that green. They were ported before
+	# that line was read, and the green band across the floor that followed was
+	# never a tuning problem — it was two layers that are not meant to exist.
+	# Putting them back is a deliberate departure, not a fix.
 
 
 ## One painted plate. `h` and `y` are stage px, `y` being the plate's bottom
@@ -355,83 +275,6 @@ func _plate(art: String, h: float, y: float, dx: float, zoom: float,
 	add_child(r)
 
 
-## One breath blob, phase-shifted by `delay` so the two never pulse together.
-func _breath(x: float, bottom: float, delay: float) -> void:
-	var b: TextureRect = TextureRect.new()
-	b.texture = GlassStyle.grad_tex(
-		PackedColorArray([LEDGE, Color(LEDGE.r, LEDGE.g, LEDGE.b, 0.0)]),
-		PackedFloat32Array([0.0, 0.7]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
-	b.stretch_mode = TextureRect.STRETCH_SCALE
-	b.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	b.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	b.anchor_top = 1.0
-	b.anchor_bottom = 1.0
-	var box: Vector2 = Vector2(0.34 * STAGE.x, 0.26 * STAGE.y)
-	b.offset_left = x
-	b.offset_right = x + box.x
-	b.offset_top = -(bottom + box.y)
-	b.offset_bottom = -bottom
-	b.pivot_offset = box * 0.5
-	b.modulate = Color(1.0, 1.0, 1.0, 0.06)
-	b.scale = Vector2(0.94, 0.94)
-	add_child(b)
-	# The tween waits for the tree. This screen is fully constructed at `new()`
-	# so headless tests can drive it without ever entering one (see the class
-	# docblock), and `create_tween()` is the one thing here that cannot honour
-	# that — so the breath starts in `_ready()` and simply never runs headless.
-	var held: Breath = Breath.new()
-	held.node = b
-	held.delay = delay
-	_breaths.append(held)
-
-
-## The lip and its bloom share a shape: a full-width band inset to 6%, fading
-## out over the first and last 14% of what remains.
-func _lip_band(tint: Color, h: float) -> TextureRect:
-	var t: TextureRect = TextureRect.new()
-	t.texture = GlassStyle.grad_tex(
-		PackedColorArray([Color(tint.r, tint.g, tint.b, 0.0), tint, tint,
-			Color(tint.r, tint.g, tint.b, 0.0)]),
-		PackedFloat32Array([0.0, 0.2, 0.8, 1.0]), false,
-		Vector2(0.0, 0.5), Vector2(1.0, 0.5))
-	t.anchor_left = 0.06
-	t.anchor_right = 0.94
-	t.anchor_top = 1.0
-	t.anchor_bottom = 1.0
-	t.offset_top = -(GROUND_Y + LEDGE_LIP + h * 0.5)
-	t.offset_bottom = t.offset_top + h
-	t.stretch_mode = TextureRect.STRETCH_SCALE
-	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	return t
-
-
-## The ledge band's own texture. The CSS puts a vertical fade under a horizontal
-## mask; a plain TextureRect has no mask, and the two ramps are separable, so
-## they are multiplied once into an image here instead of costing a shader.
-##   background: linear-gradient(180deg, LEDGE@9%, transparent 62%)
-##   mask:       linear-gradient(90deg, transparent, #000 14% 86%, transparent)
-static func _ledge_tex() -> ImageTexture:
-	var side: int = 64
-	var img: Image = Image.create_empty(side, side, false, Image.FORMAT_RGBA8)
-	for iy: int in range(side):
-		var down: float = clampf(1.0 - (float(iy) / float(side - 1)) / 0.62, 0.0, 1.0)
-		for ix: int in range(side):
-			var u: float = float(ix) / float(side - 1)
-			var across: float = clampf(u / 0.14, 0.0, 1.0) * clampf((1.0 - u) / 0.14, 0.0, 1.0)
-			img.set_pixel(ix, iy, Color(LEDGE.r, LEDGE.g, LEDGE.b, 0.09 * down * across))
-	return ImageTexture.create_from_image(img)
-
-
-static func _label(initial: String) -> Label:
-	var l: Label = Label.new()
-	l.text = initial
-	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	return l
-
-
-# ---------------------------------------------------------------- encounters
-
 func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> void:
 	_over_emitted = false
 	_encounter_text = encounter_text
@@ -448,7 +291,22 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		_battlefield.add_child(_hero)
 	_stand(_hero, HERO_X, 0.0)
 	var slots: Array[Vector2] = _slots(game.cb.enemies.size())
-	for e: EnemyCombatant in game.cb.enemies:
+	# `bfEnemyZOrder`: lower on screen draws in front, so a foe standing further
+	# up the ledge sits behind the one nearer the lip. Expressed as the order the
+	# actors are ADDED in, because child order is the only ordering that is
+	# relative to a sibling. `z_index` is measured against the whole canvas: a
+	# foe given z −42 does not go behind its neighbour, it goes behind the STAGE.
+	# That is what made two of three foes disappear entirely.
+	var order: Array[int] = []
+	for i: int in range(game.cb.enemies.size()):
+		order.append(i)
+	order.sort_custom(func(a: int, b: int) -> bool:
+		var la: float = slots[a].y if a < slots.size() else 0.0
+		var lb: float = slots[b].y if b < slots.size() else 0.0
+		return la > lb)
+	_enemy_views.resize(game.cb.enemies.size())
+	for idx: int in order:
+		var e: EnemyCombatant = game.cb.enemies[idx]
 		var display: String = e.name
 		if game.cb.affix != &"":
 			var affix_def: Dictionary = game.content.affixes.get(String(game.cb.affix), {})
@@ -460,12 +318,9 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		# Passing nothing here is what left the fight full of fallback gems.
 		var view: EnemyView = EnemyView.new(e.idx, display, float(hue_num), e.key)
 		_battlefield.add_child(view)
-		_enemy_views.append(view)
-		var slot: Vector2 = slots[e.idx] if e.idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
+		_enemy_views[idx] = view
+		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
 		_stand(view, slot.x, slot.y)
-		# bfEnemyZOrder: lower on screen draws in front, so a foe standing
-		# further up the ledge sits behind the one nearer the lip.
-		view.z_index = -int(roundf(slot.y))
 	_sync_all()
 
 
@@ -512,6 +367,13 @@ func _stand(view: EnemyView, x: float, lift: float) -> void:
 	view.offset_right = view.offset_left + box.x
 	view.offset_bottom = -(lift + view.foot.y)
 	view.offset_top = view.offset_bottom - box.y
+
+
+static func _label(initial: String) -> Label:
+	var l: Label = Label.new()
+	l.text = initial
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	return l
 
 
 func show_result(title: String, body: String, button_text: String) -> void:

@@ -41,9 +41,13 @@ func _ready() -> void:
 	# godot --path . -- --cards=bastion --surfaces[=gilt,holofoil]  (materials)
 	# godot --path . -- --studio[=bastion] [--zoom=3]   (material bench)
 	# godot --path . -- --enemies|--chips|--hud|--reward [--shot=...]  (labs)
+	# godot --path . -- --fight=id[,id] [--kind=normal|elite|boss]   (battlefield)
+	# godot --path . -- --vp=1280x720            (see the scaling, nothing reflows)
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var lab_flag: String = ""
+	var fight: PackedStringArray = PackedStringArray()
+	var fight_kind: String = "normal"
 	var cards_lab: bool = false
 	var cards_only: PackedStringArray = PackedStringArray()
 	var cards_zoom: float = 1.0
@@ -74,6 +78,22 @@ func _ready() -> void:
 		elif arg.begins_with("--studio="):
 			studio = true
 			cards_only = arg.trim_prefix("--studio=").split(",", false)
+		elif arg.begins_with("--fight="):
+			fight = arg.trim_prefix("--fight=").split(",", false)
+		elif arg.begins_with("--kind="):
+			fight_kind = arg.trim_prefix("--kind=")
+		elif arg.begins_with("--vp="):
+			# Resize the OS window to see how the screen holds up. Note what this
+			# does NOT do: the stretch mode is `canvas_items` with `aspect=keep`
+			# (project.godot), so the VIEWPORT stays 1180x820 and the whole
+			# composition is scaled and letterboxed into whatever size is asked
+			# for. Nothing reflows. That is the honest state of viewport support
+			# and this flag is the fastest way to see it for yourself.
+			var wh: PackedStringArray = arg.trim_prefix("--vp=").split("x", false)
+			if wh.size() == 2:
+				DisplayServer.window_set_size(Vector2i(int(wh[0]), int(wh[1])))
+			else:
+				push_warning("--vp wants WIDTHxHEIGHT, e.g. --vp=1280x720")
 		elif arg in ["--enemies", "--chips", "--hud", "--reward"]:
 			lab_flag = arg
 	if studio:
@@ -106,7 +126,9 @@ func _ready() -> void:
 			_capture_and_quit(shot_path)
 		return
 	_new_run()
-	if enter_node >= 0 and _map_screen != null:
+	if not fight.is_empty():
+		_start_fight(fight, fight_kind)
+	elif enter_node >= 0 and _map_screen != null:
 		_map_screen.instant = true  # skip the travel tween, land on the fight
 		_map_screen.choose(enter_node)
 	if shot_path != "":
@@ -170,6 +192,38 @@ func _start_encounter(n: MapNode) -> void:
 	var label: String = "%s  ·  waystone %d / %d" % [
 		n.type.capitalize(), _map.at + 1, _map.nodes.size()]
 	_screen.start_encounter(enemies, n.combat_kind(), label)
+
+
+## The battlefield bench: a REAL fight, not a mock — the same GlassvowGame, the
+## same CombatScreen and the same input paths the map route uses. It only skips
+## choosing a waystone, so any encounter can be stood up in one command:
+##
+##   godot --path . -- --fight=sporeling,sporeling
+##   godot --path . -- --fight=gravewarden --kind=elite --seed=7
+##   godot --path . -- --fight=duskfang --vp=1280x720
+##
+## Winning drops back onto the map, which is the honest continuation: the run
+## behind the bench is a real run.
+func _start_fight(ids: PackedStringArray, kind: String) -> void:
+	var known: Array[String] = []
+	for id: String in ids:
+		if content.enemies.has(id):
+			known.append(id)
+		else:
+			# Named, not skipped silently: a typo would otherwise open an empty
+			# battlefield and look like the screen was broken.
+			push_error("--fight: no enemy '%s' in the slice. Known: %s"
+				% [id, ", ".join(content.enemies.keys())])
+	if known.is_empty():
+		return
+	if _map_screen != null:
+		_map_screen.queue_free()
+		_map_screen = null
+	_screen = CombatScreen.new(game)
+	_screen.combat_over.connect(_on_combat_over)
+	_screen.result_continue.connect(_on_result_continue)
+	add_child(_screen)
+	_screen.start_encounter(known, kind, "Bench  ·  %s" % kind.capitalize())
 
 
 func _on_combat_over(result: String) -> void:
