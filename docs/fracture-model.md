@@ -77,7 +77,7 @@ presentation/combat/glass/           Node / Mesh / Shader allowed
 ```
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2580` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:2551` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -435,7 +435,7 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:2143` (in `_prism`)), so
+  have**. The existing `_prism` calls it (`enemy_view.gd:2124` (in `_prism`)), so
   the ribbon needs authored crease normals, not the convenience path.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely

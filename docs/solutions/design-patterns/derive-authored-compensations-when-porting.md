@@ -80,7 +80,7 @@ Three payoffs, in increasing order of importance:
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
    (`presentation/combat/enemy_view.gd:1427` (`_update_shadow`); the swing itself
-   enters at `enemy_view.gd:2932` (`set_light_angle`)). No amount of tuning the CSS version
+   enters at `enemy_view.gd:2903` (`set_light_angle`)). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.
 
