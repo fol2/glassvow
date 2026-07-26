@@ -707,9 +707,20 @@ func _on_card_hover_changed(uid: int) -> void:
 	_update_previews()
 
 
-## `beginCardDrag` (combat.js:1534) — lifting a card ticks like hovering one.
-func _on_card_drag_armed(_uid: int) -> void:
+## `beginCardDrag` (combat.js:1534) — lifting a card ticks like hovering one, and
+## a card lifted AT something arms exactly as a clicked one does: `beginCardDrag`
+## calls the same `setTargeting` (combat.js:1547), so the same halo comes up on
+## every living foe. A card that acts on you clears it and travels free instead.
+##
+## Without this the drag path lit nothing at all: `.targetable` has one setter in
+## the benchmark and both gestures go through it.
+func _on_card_drag_armed(uid: int) -> void:
 	_sfx.play(&"hover")
+	var view: CardView = _hand.card_view(uid)
+	_targeting = view != null and view.target_kind == "enemy"
+	_selected_uid = uid if _targeting else -1
+	_aim_hover = -1
+	_set_target_glow(_targeting)
 	_update_previews()
 
 
@@ -735,6 +746,12 @@ func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
 func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	_aim.clear_aim()
 	_aim_hover = -1
+	# The drag armed it (see `_on_card_drag_armed`), so the drag disarms it. Not
+	# `_cancel_targeting`: that snaps every seat home, and the card being released
+	# is mid-flight to a foe or mid-snap-back on its own clock.
+	_targeting = false
+	_selected_uid = -1
+	_set_target_glow(false)
 	_clear_previews()
 	var view: CardView = _hand.card_view(uid)
 	if view == null:
