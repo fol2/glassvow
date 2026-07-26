@@ -28,6 +28,8 @@ extends Control
 ##                                    # the recoil, photographed across 320ms
 ##   tools/shot.sh --enemies --crack[=duskfang] --strip=/tmp/c.png
 ##                     # the PROPAGATION: one blow, its front photographed out to arrest
+##   tools/shot.sh --enemies --ward[=duskfang] [--absorb] --strip=/tmp/w.png
+##                     # the guard stone: breaking, or ringing from a blow it stopped
 ##
 ## --shot= and --strip= both quit when they are done, so those two go through
 ## tools/shot.sh; the rest leave a window open to work in. Neither form may
@@ -114,8 +116,10 @@ var _frac_field: bool = false
 var _frac_compare: bool = false
 var _pre_cracks: int = 0
 ## Whether a strip's actor stands up already guarded. Set by `--ward`, which photographs the
-## stone breaking and therefore needs one to break.
+## stone breaking and therefore needs one to break. `--absorb` switches that strip to the
+## other event a stone has: a blow it stopped.
 var _ward_up: bool = false
+var _ward_absorb: bool = false
 
 
 ## The two heroes stand on the same ground line as the foes and get the same
@@ -219,6 +223,8 @@ func _init(content_ref: ContentDB) -> void:
 			states_id = arg.trim_prefix("--hit=")
 		elif arg == "--incidental":
 			_hit_direct = false
+		elif arg == "--absorb":
+			_ward_absorb = true
 		elif arg == "--crack":
 			_mode = "crack"
 		elif arg.begins_with("--crack="):
@@ -1264,7 +1270,7 @@ func _ready() -> void:
 		# Through `strike` rather than `crack()` so `--energy=` reaches it. A default blow
 		# buys four short arms, which is right in a fight and too small to judge a front by.
 		await _shoot_strip(wall, "crack",
-			func(v: EnemyView) -> void: v.strike(Vector2(-1, -1), Vector2.ZERO, _frac_energy))
+			func(v: EnemyView) -> void: v.strike(EnemyView.ANYWHERE, Vector2.ZERO, _frac_energy))
 		return
 	if _mode == "ward":
 		# The guard giving way. Slowed for the same reason `--crack` is — the break is 340 ms
@@ -1275,7 +1281,15 @@ func _ready() -> void:
 		for t: float in WARD_FRAMES:
 			wall_w.append(t / CRACK_SLOMO)
 		_ward_up = true
-		await _shoot_strip(wall_w, "ward", func(v: EnemyView) -> void: v.set_ward(0))
+		var act: Callable = func(v: EnemyView) -> void: v.set_ward(0)
+		if _ward_absorb:
+			# The other half of the stone's life: a blow it STOPPED. Same slowed clock, and
+			# the body is struck too, because the point of the cell is that the two read as
+			# separate events on the same frame.
+			act = func(v: EnemyView) -> void:
+				v.ward_hit(Vector2.LEFT)
+				v.take_hit(true)
+		await _shoot_strip(wall_w, "ward", act)
 		return
 	if _mode == "bench":
 		# No auto-fit here: the bench is driven, not framed. Zoom is the user's.

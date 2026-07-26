@@ -201,6 +201,11 @@ const WARD_ASPECT: float = 0.86
 ## How long the stone takes to come apart. Much shorter than the 560 ms it took to form, and
 ## deliberately so: a thing is built slowly and gives way at once.
 const WARD_BREAK: float = 0.34
+## How long an absorbed blow rings in the stone, and how far it drives it back in box
+## heights. Shorter than the body's own 300 ms recoil: the shield answers first and is done
+## before the creature has finished flinching, which is the order the two things happen in.
+const WARD_RING: float = 0.20
+const WARD_FLINCH: float = 0.055
 
 const DOOM_PERIOD: float = 0.09
 const DOOM_AT: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
@@ -315,6 +320,9 @@ var _ward_sites_used: int = -1
 var _ward_root: Node3D = null
 var _ward_breaking: bool = false
 var _ward_burst: float = 0.0
+## A blow the stone ate: how much is left of it, and which way it came from.
+var _ward_hit: float = 0.0
+var _ward_from: Vector2 = Vector2.LEFT
 var _doomed: bool = false
 var _doom_t: float = 0.0
 var _intent: IntentChip
@@ -510,10 +518,30 @@ const CRACK_SPEED: float = 2.6
 ## fracture at all — the arm is not.
 ##
 ## Much of this is refunded in practice: arms that reach the silhouette stop there, so
-## eight blows at 1.1 land ~2.9 body of crack rather than 8.8. The real number belongs to
-## the damage-to-energy conversion `docs/fracture-model.md` §3 calls the one honest
-## fudge, and arrives when `combat_screen.gd` passes damage through.
+## eight blows at 1.1 land ~2.9 body of crack rather than 8.8.
+##
+## It is now the FLOOR of the damage conversion below rather than the whole story, and it
+## still earns the name: a caller that knows a hit landed and not how hard gets this.
 const DEFAULT_ENERGY: float = 1.1
+
+## `bite` — the damage number becoming fracture energy, and `docs/fracture-model.md` §3's
+## one honest fudge. No physics connects a card's damage to joules, so this is a unit
+## conversion, which is the one class of constant allowed to be arbitrary. It is global
+## rather than per-creature, and it was CALIBRATED rather than dialled.
+##
+## The calibration §3 asks for: choose it so a blow removing all of a foe's health carves
+## into 9–14 shards, the band `_death_sites`' rings were tuned to and the rite is already
+## approved at. Measured over five seeds on three real silhouettes — one blow, relieved,
+## carved — 2.0 gives 11.4 on a duskfang, 12.4 on a gravewarden and 14.0 on an emberwisp.
+##
+## The measurement also said something the calibration did not ask for and is worth
+## keeping: the count SATURATES around 2.5 and then FALLS, reaching 8.6 by 6.0. More energy
+## past that point buys longer arms out of one impact rather than more of them —
+## `MAX_ARMS` caps the count — and long siblings arrest on each other, so the extra crack
+## makes T-junctions instead of through-cuts. There is no energy at which a single blow
+## shatters a body into dust, which is the right shape for the model to have and was not
+## designed in.
+const BITE: float = 2.0
 
 ## The old Voronoi disc web, OFF.
 ##
@@ -937,6 +965,14 @@ uniform float grow = 0.0;
 // do, because a shell has no pieces to break into. A cut does: its facets are its fracture
 // planes, so the same eight numbers that draw the stone also decide how it goes.
 uniform float burst = 0.0;
+// A blow ABSORBED, 0..1, decaying. This exists because taking the stone off `_vessel` took
+// away the only reaction it had: the old shell squashed with the body and so appeared to
+// answer a hit. An independent object that eats a full blow and does not move is worse than
+// one that never looked independent, so the decoupling owes this.
+uniform float ward_hit = 0.0;
+// Where the blow came FROM, in stone space, so the facets facing it answer hardest. A
+// shield lights where it was struck.
+uniform vec2 hit_from = vec2(-1.0, 0.0);
 // How far a facet travels by the end, in stone radii.
 const float BURST_D = 0.52;
 uniform vec4 tint : source_color = vec4(0.29, 0.565, 0.749, 1.0);
@@ -968,6 +1004,12 @@ const float FACET_A = 0.55;
 // first pass priced it as a speck at 0.85 and lit three faces to near-solid across the
 // creature's head.
 const float FLASH_A = 0.30;
+// The absorbed blow. Larger than any standing term, because it is the one moment the stone
+// is supposed to be the loudest thing on the actor — and it is gone in a fifth of a second.
+// 0.75 was too much: the whole stone went to a pale slab and buried the creature exactly as
+// the first alpha budget did, which is the second time this shader has had to be talked
+// down from the same mistake.
+const float HIT_A = 0.45;
 // How hard a crown facet tilts. TWO values, alternating around the ring, because two
 // adjacent facets at the same pitch have the same normal and therefore read as ONE larger
 // facet — the ring would come out as a bevel rather than as a cut.
@@ -1127,16 +1169,24 @@ void fragment() {
 	// this one had to be talked down from twice. The stone is nearly invisible across its
 	// table; what you see of it is the ribs, the pitch of each face, and whichever of them
 	// the key happens to be answering.
+	// THE BLOW ABSORBED. Weighted by how squarely each facet faces where it came from, so
+	// the struck side answers and the far side barely does — which is the same rule the
+	// flashes follow and the reason this is a per-facet term rather than a wash over the
+	// stone. A FIFTH of it is unweighted, because a struck gem does ring all over; at nearly
+	// half the direction stopped reading and the whole stone simply lit.
+	float took = ward_hit * (0.18 + 0.82 * max(0.0, dot(axis, -hit_from)));
+
 	ALBEDO = tint.rgb;
 	ALPHA = clamp(t * shell_opacity
-		* (FACE + rib * RIB_A + facet * FACET_A + flash * FLASH_A), 0.0, 1.0);
+		* (FACE + rib * RIB_A + facet * FACET_A + flash * FLASH_A + took * HIT_A), 0.0, 1.0);
 	ROUGHNESS = rough;
 	METALLIC = 0.0;
 	SPECULAR = 0.5 + env_gain * 0.5;
 	// The stage is dark and there is no environment map to catch, so the glint the
 	// `envMapIntensity` buys there is spent here as emission — at the ribs and in the
 	// flashes only, which is the only place it lands there either.
-	EMISSION = (tint.rgb * facet * 0.14 + vec3(1.0) * (rib * 0.14 + flash * 0.30)) * env_gain;
+	EMISSION = (tint.rgb * facet * 0.14 + vec3(1.0) * (rib * (0.14 + took * 0.5)
+		+ flash * 0.30)) * env_gain;
 }
 """
 
@@ -1889,6 +1939,23 @@ func ward_shell_on() -> bool:
 	return _ward_on
 
 
+## The stone ATE a blow. Rings the facets facing where it came from and drives it back.
+##
+## Separate from `take_hit` and not folded into it, because the two are different events
+## that happen to coincide: the body recoils from being struck, and the shield answers for
+## having stopped it. A creature with no ward gets only the first, and calling this on one
+## is a no-op rather than a caller's problem.
+##
+## `from` is a screen-space heading pointing at the creature — `Vector2.LEFT` for a foe
+## struck by the hero, which is the default because it is every case the sequencer has.
+func ward_hit(from: Vector2 = Vector2.LEFT) -> void:
+	if not _ward_on or _ward_mat == null:
+		return
+	_ward_hit = 1.0
+	_ward_from = from.normalized() if from.length() > 0.0 else Vector2.LEFT
+	_ward_mat.set_shader_parameter("hit_from", _ward_from)
+
+
 ## `meshWard(el, on, {grow})`. Three cases, and the middle one is the reason this
 ## is not a boolean: gaining ward while you already have it keeps the stone and
 ## re-cuts its facets — they collapse to 12% and are cut again — so a second Ward card
@@ -1935,11 +2002,14 @@ func set_ward_shell(on: bool, grow: bool = true) -> void:
 	_ward_site_f = _ward_grow
 
 
-## The shell's own clock: grow in, fade out, or pulse its facets. Smoothstep on
-## both, and the fade is the grow reversed at the same duration.
+## The stone's own clock: cut in, break, re-cut, or ring from a blow it ate.
 func _step_ward(delta: float) -> void:
 	if _ward_mat == null:
 		return
+	# The ring decays on its own clock and composes with everything else, so a stone can be
+	# struck while it is still forming and answer anyway.
+	if _ward_hit > 0.0:
+		_ward_hit = maxf(0.0, _ward_hit - delta / WARD_RING)
 	if _ward_pulsing:
 		_ward_pulse_t += delta
 		var u: float = clampf(_ward_pulse_t / WARD_PULSE, 0.0, 1.0)
@@ -1975,9 +2045,17 @@ func _step_ward(delta: float) -> void:
 	# lunge, the float and the doom tremble — all things a held object shares. `_vessel.scale`
 	# is the recoil squash, which is the one it must not, and refusing it is why this hangs
 	# off its own root at all.
+	#
+	# The stone's OWN flinch composes on top, along the blow rather than along the body's
+	# recoil axis: a shield is driven back by where it was struck.
 	if _ward_root != null and _vessel != null:
-		_ward_root.position = _vessel.position
+		var back: Vector2 = -_ward_from * _ward_hit * WARD_FLINCH * _box_u
+		_ward_root.position = _vessel.position + Vector3(back.x, -back.y, 0.0)
 	_ward_mat.set_shader_parameter("grow", _ward_grow)
+	# SQUARED on the way out. The decay above is linear because a linear clock is the easy
+	# thing to reason about; a ring is not linear, it spikes and drops, and squaring here
+	# keeps the clock honest while the light behaves.
+	_ward_mat.set_shader_parameter("ward_hit", _ward_hit * _ward_hit)
 	# `syncWardNormalMap` only rebaked when the floored count stepped. There is no bake here,
 	# but the uniform write is still worth not doing every frame — and with nine facets the
 	# count steps rarely enough that the guard earns more than it did over thirty-seven.
@@ -2489,14 +2567,36 @@ func local_to_uv(p: Vector2) -> Vector2:
 		(art_size * 0.5 - p.y) * UNIT))
 
 
-## Score a crack. `at` is in body UV; a random point on the body if omitted, which is
-## what the two `combat_screen.gd` callers want — they know a hit landed and not where.
+## The `at` a caller passes when it knows a hit landed and not where. Named because it was
+## a bare `Vector2(-1, -1)` in three files and a magic pair is not a contract.
+const ANYWHERE: Vector2 = Vector2(-1, -1)
+
+
+## Score a crack. `at` is in body UV, or `ANYWHERE`; `damage` is what the blow took off, and
+## 0 means the caller does not know — a sync, a lab key, or the `SHATTER` beat, which is the
+## facet gauge giving way rather than a damage number.
 ##
-## Kept as the name every caller already uses. `strike()` below is the real entry point
-## and this is the zero-argument door to it, because a blow's energy and direction are
-## information `combat_screen.gd` does not have yet.
-func crack(at: Vector2 = Vector2(-1, -1)) -> void:
-	strike(at, Vector2.ZERO, DEFAULT_ENERGY, 0.5)
+## Kept as the name every caller already uses. `strike()` below is the real entry point and
+## this is the door for a caller that has a damage number instead of a physics one.
+func crack(at: Vector2 = ANYWHERE, damage: int = 0) -> void:
+	strike(at, Vector2.ZERO, energy_of(damage), 0.5)
+
+
+## `bite`, applied. See `BITE` for the calibration and `docs/fracture-model.md` §3 for why a
+## unit conversion is the one arbitrary constant allowed here.
+##
+## AFFINE and not proportional, and the floor is the reason. A proportional map sends a
+## small hit to a small energy, and `int(0.2 / ARM_LENGTH)` is zero arms — clamped to one,
+## which `DEFAULT_ENERGY`'s docblock already records as the thing that reads as a scratch
+## rather than as broken glass. Zero is not a legible outcome, so the map runs from *a star*
+## to *the body comes apart* rather than from nothing: every hit says something, and every
+## damage number changes what it says. A tenth of a foe's health buys four arms; all of it
+## buys seven.
+func energy_of(damage: int) -> float:
+	if damage <= 0 or _max_hp <= 0:
+		return DEFAULT_ENERGY
+	var frac: float = clampf(float(damage) / float(_max_hp), 0.0, 1.0)
+	return DEFAULT_ENERGY + (BITE - DEFAULT_ENERGY) * frac
 
 
 ## A BLOW, and the seam `docs/fracture-model.md` §2.5 specifies. Feeds the propagator,
@@ -2506,7 +2606,7 @@ func crack(at: Vector2 = Vector2(-1, -1)) -> void:
 ## `at` in body UV (y down); `dir` a unit heading, zero for face-on; `energy` in body
 ## widths of crack bought, 1.0 being one; `sharp` 0..1 indenter acuity, accepted and
 ## not yet spent (see `FractureField`'s docblock).
-func strike(at: Vector2 = Vector2(-1, -1), dir: Vector2 = Vector2.ZERO,
+func strike(at: Vector2 = ANYWHERE, dir: Vector2 = Vector2.ZERO,
 		energy: float = DEFAULT_ENERGY, sharp: float = 0.5) -> void:
 	if _glass_root == null or _blows >= MAX_SITES:
 		return

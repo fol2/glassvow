@@ -2109,7 +2109,13 @@ func _hit_enemy(ev: Dictionary) -> void:
 			var tone: Color = VfxLayer.TONES.get(_archetype, Color.WHITE)
 			_float(at + Vector2(0.0, -24.0), str(amount), tier, tone, dx)
 			if view != null:
-				view.crack()  # addCrack(x.art, big)
+				# `addCrack(x.art, big)`, with the damage number passed through — the last
+				# gap in `docs/fracture-model.md`, whose §3 calls this conversion the one
+				# honest fudge. Until now every blow scored the same star whatever it cost,
+				# so a 3 and a 40 broke the glass identically. `EnemyView.energy_of` is the
+				# `bite` calibration; the view holds `_max_hp`, so it is handed the raw
+				# number rather than a fraction this file would have to derive.
+				view.crack(EnemyView.ANYWHERE, amount)
 			_vfx.shake(minf(4.0 + float(amount) * 0.5, 15.0))
 			_sky.kick(minf(0.2 + float(amount) / 26.0, 1.0))
 			if big:

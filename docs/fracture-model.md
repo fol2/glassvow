@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2892` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:2992` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -283,11 +283,11 @@ unrelated numbers would be tuned apart.
 
 Derived floor on `aperture`: the groove must be ≥ ~1.5 stage pixels at the smallest
 actor or it scintillates whatever the MSAA. At a 115 px sporeling with
-`oversample` = 2.0 (`enemy_view.gd:255` (`oversample`)) one body unit is ≈ 230
+`oversample` = 2.0 (`enemy_view.gd:260` (`oversample`)) one body unit is ≈ 230
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:2163` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:2241` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -349,7 +349,47 @@ not per-creature**; and it has a **calibration rather than a slider** — choose
 
 A second, smaller concession: the archetype → `sharp` mapping is taste. One number
 per archetype, beside the archetype tints (`VfxLayer.TONES` is the precedent).
-Taste gets ported, not derived.
+Taste gets ported, not derived. **Not built** — `sharp` is accepted by `Blow` and not yet
+spent by the propagator, so a per-archetype table would be a table nothing reads.
+
+### `bite`, as built — 2026-07-26
+
+**`BITE = 2.0`, and it was calibrated exactly as asked.** One blow, relieved, carved, over
+five seeds on three real silhouettes: 11.4 shards on a duskfang, 12.4 on a gravewarden,
+14.0 on an emberwisp — inside the 9–14 band on all three.
+
+The sweep said something the calibration did not ask for and is worth keeping. **The shard
+count saturates around 2.5 and then falls**, reaching 8.6 by 6.0. Past that point extra
+energy buys longer arms out of one impact rather than more of them — `MAX_ARMS` caps the
+count — and long siblings arrest on each other, so the extra crack length makes T-junctions
+instead of through-cuts. There is no energy at which one blow reduces a body to dust. That
+is the right shape for the model to have and nobody designed it in; it falls out of the arm
+cap meeting the screening term.
+
+**The map is AFFINE, not proportional**, and the floor is why. A proportional map sends a
+small hit to a small energy, and `int(0.2 / ARM_LENGTH)` is zero arms — clamped to one,
+which §8's kill test already recorded as the thing that reads as a scratch rather than as
+broken glass. Zero is not a legible outcome. So the conversion runs from *a star* to *the
+body comes apart*:
+
+> `energy = DEFAULT_ENERGY + (BITE − DEFAULT_ENERGY) × damage / max_hp`
+
+Measured across the range on a duskfang, which is the check that it is a gradient and not
+two cases:
+
+| damage | energy | arms | shards |
+|---|---|---|---|
+| 5 % | 1.15 | 4 | 6–8 |
+| 25 % | 1.33 | 5 | 9–10 |
+| 50 % | 1.55 | 5 | 8–10 |
+| 75 % | 1.77 | 6 | 11–12 |
+| 100 % | 2.00 | 7 | 12–13 |
+
+The floor is not a fudge on top of a fudge: `DEFAULT_ENERGY` had an independent
+justification before this existed — an impact star is the smallest unit that reads as
+fracture at all, and the arm is not — and this reuses it rather than inventing a second
+number. What changed is that it stopped being the *whole* answer and became the bottom of a
+range.
 
 ## 4. Screening, and why accumulation is affordable
 
@@ -462,7 +502,7 @@ rebuild per frame — cheaper than the ribbon, not merely equal to it.
 Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But:
 
 - `SurfaceTool.generate_normals()` **averages away the crease a V-groove exists to
-  have**. The existing `_prism` calls it (`enemy_view.gd:2412` (in `_prism`)), so
+  have**. The existing `_prism` calls it (`enemy_view.gd:2482` (in `_prism`)), so
   the ribbon needs authored crease normals, not the convenience path.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
@@ -832,7 +872,7 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - **Two silhouette readers coexist, and the prediction here was wrong.** This bullet used
   to say step 6 would delete `_alpha_at`/`_touches_art` along with the Voronoi cells it
   culls. It did not, and could not: the CARVE culls through the same
-  `_touches_art(cell, centre)` (`enemy_view.gd:2842` (in `_death_cells`)), because a shard
+  `_touches_art(cell, centre)` (`enemy_view.gd:2942` (in `_death_cells`)), because a shard
   covering no painting is a pane of empty box that the shard shader draws as nothing while
   the physics still tumbles it. So the older reader outlived the path it was written for.
   Both are still there — `body_mask()` at 256² for the model, `_alpha_at` at full
