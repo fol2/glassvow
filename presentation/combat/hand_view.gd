@@ -52,7 +52,25 @@ const CARD_INSET: float = 8.0
 ## outer cards of a five-card hand hang 62px off the screen and lose their name
 ## and rules text, which is what the assembled screen was doing.
 const BOTTOM_INSET: float = 40.0
-const HOVER_RAISE: float = 30.0
+
+## A seat has four poses (`combat-gl.js:1096-1123`) and they do not stack — the
+## renderer picks one branch per card and writes the whole transform from it.
+##
+## Hovered is a lift AND a growth AND a straightening: a card you are reading is
+## held up flat in front of you, not merely nudged. The port only nudged, and by
+## half again too far.
+##
+## Armed is its own pose and it is not "hovered, harder". The card slides 60% of
+## the way to the middle of the fan, keeps half its tilt and lifts 24px — it
+## leaves the row it was in, which is what says the choice has been made and the
+## card is now waiting on a target rather than on you.
+const HOVER_LIFT: float = 20.0
+const HOVER_SCALE: float = 1.08
+const ARMED_LIFT: float = 24.0
+const ARMED_SCALE: float = 1.08
+const ARMED_PULL: float = 0.4   # of the seat's own offset from the zone centre
+const ARMED_ROT: float = 0.5
+const DRAG_SCALE: float = 1.12
 ## `drawBatchSchedule` (pile-chrome.js:91) — how a wave of draws is paced. One
 ## card gets the full flight; a wave splits a 500ms budget into a stagger and
 ## what is left over, so five cards leave the pile 100ms apart and the whole
@@ -88,6 +106,9 @@ var stage_overhang: float = 0.0
 ## rather than inferred per event so the change test has something to compare
 ## against, and so a card leaving under the cursor cannot leave it stuck.
 var hovered_uid: int = -1
+## `model.targetingUid` — the card that has been committed to and is waiting on
+## a target. Its own pose, not a louder hover.
+var armed_uid: int = -1
 
 var _views: Dictionary = {}  # uid -> CardView
 var _order: Array[int] = []  # layout order, independent of z-order changes
@@ -488,6 +509,9 @@ func _on_card_moved_to(uid: int, global_pos: Vector2) -> void:
 		if not _aiming:
 			view.move_to_front()
 			view.rotation = 0.0
+			# `scale = model.drag.scale ?? 1.12` — a carried card is bigger than an
+			# armed one, because it is the thing the pointer is holding.
+			view.scale = Vector2.ONE * DRAG_SCALE
 	if not _aiming:
 		view.global_position = global_pos - view.size * 0.5
 	card_drag_moved.emit(uid, global_pos)
@@ -525,34 +549,65 @@ func _on_card_hover(uid: int, hovering: bool) -> void:
 	if next != hovered_uid and (hovering or hovered_uid == uid):
 		hovered_uid = next
 		card_hover_changed.emit(next)
-	view.snap_home()
-	if hovering:
-		view.position.y -= HOVER_RAISE
-		view.move_to_front()
+	_pose(uid)
 
 
 ## Lift a seat without a pointer over it — the keyboard's cursor through the
 ## fan does the same thing hovering does (`S.hoveredCard = S.selectedCardUid`).
 func raise_seat(uid: int) -> void:
-	for other: int in _order:
-		var v: CardView = _views.get(other)
-		if v != null and other != uid and not _flight_from.has(other):
-			v.snap_home()
-	var view: CardView = _views.get(uid)
-	if view == null or _flight_from.has(uid):
-		return
-	view.snap_home()
-	view.position.y -= HOVER_RAISE
-	view.move_to_front()
+	hovered_uid = uid
+	_pose_all()
+
+
+## `setTargeting` (combat.js:1706) — this card is the one waiting on a target.
+func arm_seat(uid: int) -> void:
+	armed_uid = uid
+	_pose_all()
 
 
 func drop_seat() -> void:
+	armed_uid = -1
+	hovered_uid = -1
+	_pose_all()
+
+
+func _pose_all() -> void:
 	for uid: int in _order:
-		var v: CardView = _views.get(uid)
-		# A card in flight is on its own clock; snapping it home would teleport
-		# it back to the fan mid-arc.
-		if v != null and not _flight_from.has(uid):
-			v.snap_home()
+		_pose(uid)
+
+
+## Write one seat's whole transform from whichever of the four poses it is in.
+## Branches, never accumulates — a card that is both hovered and armed is armed,
+## the same way the renderer's `if / else if` chain resolves it.
+func _pose(uid: int) -> void:
+	var view: CardView = _views.get(uid)
+	# A card in flight is on its own clock; posing it would teleport it back to
+	# the fan mid-arc.
+	if view == null or _flight_from.has(uid):
+		return
+	# A CARRIED card is written by the pointer on every move, so it is not posed
+	# from here at all. An AIMING one keeps its seat — `model.drag` is only set
+	# for a free drag (combat.js:274) — so it falls through to `armed` below,
+	# which is the pose `beginCardDrag`'s own `setTargeting` puts it in.
+	if _dragging and _drag_uid == uid and not _aiming:
+		return
+	view.snap_home()
+	if uid == armed_uid:
+		# `x = zoneCenterX + off.x * 0.4` — measured on the seat's CENTRE, then
+		# converted back to a top-left, because that is what `position` is.
+		var centre: float = size.x * 0.5
+		var seat: float = view.home_position.x + view.size.x * 0.5
+		view.position.x = centre + (seat - centre) * ARMED_PULL - view.size.x * 0.5
+		view.position.y -= ARMED_LIFT
+		view.rotation = view.home_rotation * ARMED_ROT
+		view.scale = Vector2.ONE * ARMED_SCALE
+		view.move_to_front()
+		return
+	if uid == hovered_uid and not locked and not _dragging:
+		view.position.y -= HOVER_LIFT
+		view.rotation = 0.0
+		view.scale = Vector2.ONE * HOVER_SCALE
+		view.move_to_front()
 
 
 ## Which card the pointer is over, or -1. Front to back, because a fanned hand

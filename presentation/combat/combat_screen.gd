@@ -893,6 +893,7 @@ func _on_card_drag_armed(uid: int) -> void:
 	_selected_uid = uid if _targeting else -1
 	_aim_hover = -1
 	_set_target_glow(_targeting)
+	_hand.arm_seat(_selected_uid)
 	_update_previews()
 
 
@@ -924,6 +925,7 @@ func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	_targeting = false
 	_selected_uid = -1
 	_set_target_glow(false)
+	_hand.armed_uid = -1
 	_clear_previews()
 	var view: CardView = _hand.card_view(uid)
 	if view == null:
@@ -2217,6 +2219,7 @@ func _activate_selected() -> void:
 		_targeting = true
 		_aim_hover = living[0] if not living.is_empty() else -1
 		_set_target_glow(true)
+		_hand.arm_seat(_selected_uid)
 		if _aim_hover >= 0:
 			_aim.draw_between(_hand.seat_centre(_selected_uid),
 				_enemy_centre(_aim_hover))
