@@ -238,6 +238,40 @@ const CAST_S2: float = 1.05
 const CAST_RISE_IN: float = 8.0
 const CAST_RISE_OUT: float = 32.0
 
+## THE LAYER STACK, and it is the benchmark's own numbers.
+##
+## `index.html` hangs `#bg3d`, `#vignette`, `#shake`, `#aim`, `#vfx`, `#uigl` and
+## `#floaties` off ONE parent as flat siblings, so every z-index below competes in
+## a single stacking context (styles.css:65-129):
+##
+##     #aim 45 · #vfx 50 · #uigl 51 · #floaties 55 · #grain 75
+##
+## `#uigl` is the Pixi combat renderer and it carries the candles, the lantern,
+## the piles, the actors' foot plates, the chrome, THE HAND, the aim and the
+## ceremony. It is ABOVE `#vfx` — so in the benchmark every `V.*` particle is
+## painted UNDER the cards, under the chrome and under the plates, and a
+## shockwave ring is cut by whatever furniture it crosses.
+##
+## This port had the effect layer over all of it, on a comment that read `#vfx`
+## against the DOM chrome at z 10 and never against the Pixi layer at 51. Two
+## rings from a killing blow therefore lay across the whole picture as unbroken
+## hoops. The numbers here are the fix and they are quoted, not invented.
+##
+## The one that is NOT `#uigl`'s: `chrome_pulse` is `pulseLayer`, INSIDE `#uigl`
+## and above the hand, so `VfxLayer` draws it on its own pass at `CHROME_Z`.
+## Every number below was read off the running benchmark's own sibling list
+## under `#stage`, not guessed from the stylesheet: bg3d 0 · vignette 4 ·
+## shake 10 · aim 45 · vfx 50 · floaties 55 · overlay 60 · tooltip 70 ·
+## wipe 72 · transit 73 · grain 75. `#uigl` is static in `index.html` between
+## `#vfx` and `#floaties`, so it joins the same list at 51 when combat mounts.
+const Z_VFX: int = 50
+const Z_CHROME: int = 51
+const Z_FLOAT: int = 55
+const Z_OVERLAY: int = 60
+const Z_TIP: int = 70
+const Z_TRANSIT: int = 73
+const Z_GRAIN: int = 75
+
 ## `setTimeout(..., 440)` (drain.js:412) — how long the lantern waits before it
 ## answers a spill. Just short of the 460ms flight, so the pop is starting as the
 ## last mote arrives rather than beginning after it.
@@ -457,6 +491,7 @@ func _build_ui() -> void:
 	_hud = HudBar.new(true, true, false)
 	_hud.end_turn_pressed.connect(_on_end_turn_pressed)
 	_hud.lantern_pressed.connect(_on_art_pressed)
+	_hud.z_index = Z_CHROME
 	_shake_host.add_child(_hud)
 
 	_hand = HandView.new()
@@ -479,6 +514,7 @@ func _build_ui() -> void:
 	_hand.card_hover_changed.connect(_on_card_hover_changed)
 	_hand.card_drag_armed.connect(_on_card_drag_armed)
 	_hand.card_drag_refused.connect(_on_card_drag_refused)
+	_hand.z_index = Z_CHROME
 	_shake_host.add_child(_hand)
 
 	# `#vignette` is a SIBLING of `#shake` carrying z 4, and `#shake` carries no
@@ -490,14 +526,20 @@ func _build_ui() -> void:
 	# clears the fan on its own, but the reticle must never end up behind a
 	# neighbouring card when aiming across the hand.
 	_aim = AimArc.new()
+	# `aimLayer` sits inside `#uigl` immediately after `handLayer`, so the arc is
+	# above the fan it launches from. The z-45 `#aim` SVG is the map's, not this
+	# one's; sharing the chrome's z and coming later in the tree is that order.
+	_aim.z_index = Z_CHROME
 	add_child(_aim)
 
 	# `#vfx` then `#floaties`, both siblings of `#shake` and both above `#aim`:
 	# a damage numeral is never hidden by the body it came off, and a spark is
 	# never hidden by the HUD.
 	_vfx = VfxLayer.new(_shake_host)
+	_vfx.z_index = Z_VFX
 	add_child(_vfx)
 	_floaters = Floaters.new()
+	_floaters.z_index = Z_FLOAT
 	add_child(_floaters)
 
 	# `artCastLayer` is the LAST child of the presentation root
@@ -508,6 +550,7 @@ func _build_ui() -> void:
 	_cast.stretch_mode = TextureRect.STRETCH_SCALE
 	_cast.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_cast.visible = false
+	_cast.z_index = Z_FLOAT
 	add_child(_cast)
 
 	_sfx = SfxBus.new()
@@ -515,6 +558,7 @@ func _build_ui() -> void:
 
 	_tips = TooltipLayer.new()
 	_tips.source = _tip_at
+	_tips.z_index = Z_TIP
 	add_child(_tips)
 
 	# Kindle is this port's own control: the benchmark's chrome has no seat for
@@ -532,12 +576,14 @@ func _build_ui() -> void:
 	_kindle_toggle.offset_bottom = 98
 	GlassStyle.style_button(_kindle_toggle, GlassStyle.EMBER)
 	_kindle_toggle.toggled.connect(_on_kindle_toggled)
+	_kindle_toggle.z_index = Z_CHROME
 	_shake_host.add_child(_kindle_toggle)
 
 	_overlay = ColorRect.new()
 	_overlay.color = Color(0.01, 0.015, 0.03, 0.8)
 	_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_overlay.visible = false
+	_overlay.z_index = Z_OVERLAY
 	add_child(_overlay)
 	var overlay_center: CenterContainer = CenterContainer.new()
 	overlay_center.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -826,6 +872,7 @@ func _build_transit() -> void:
 	_transit.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_transit.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_transit.visible = false
+	_transit.z_index = Z_TRANSIT
 	add_child(_transit)
 
 	var grad: Gradient = Gradient.new()
@@ -920,6 +967,7 @@ func _build_grain() -> void:
 	_grain_mat.set_shader_parameter("drain_bright", WORLDSTOP_BRIGHT)
 	_grain_mat.set_shader_parameter("drain", 0.0)
 	_grain.material = _grain_mat
+	_grain.z_index = Z_GRAIN
 	add_child(_grain)
 
 
