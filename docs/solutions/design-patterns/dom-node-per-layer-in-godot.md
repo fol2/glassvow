@@ -4,7 +4,7 @@ date: 2026-07-26
 category: design-patterns
 module: presentation/combat
 problem_type: design_pattern
-component: frontend_stimulus
+component: rails_view
 severity: medium
 applies_when:
   - Porting a DOM/CSS interface to Godot Control nodes
@@ -27,7 +27,7 @@ element. So the benchmark's card piles are drawn as a stack of `.pile-layer`
 divs — one per visible card. The port mirrored that shape: one `TextureRect` per
 face, created lazily, shown/hidden and rotated as the count moved.
 
-At [hud_bar.gd:70](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
+At [hud_bar.gd:100](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
 to **48 Control nodes** — each with its own transform, style cache and layout
 slot — all drawing the *identical* texture.
@@ -65,7 +65,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[hud_bar.gd:581](../../../presentation/combat/hud_bar.gd):
+[hud_bar.gd:831](../../../presentation/combat/hud_bar.gd):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -75,7 +75,18 @@ p.stack.queue_redraw()
 ```
 
 **Then prove the swap changed nothing, with pixels rather than with confidence.**
-Render every lab state before the refactor, render them again after, and diff:
+Render every lab state before the refactor, render them again after, and diff.
+Capture through the tooling, not through a bare `godot` launch — one host boots
+once and takes both sides, where a launch per state takes the keyboard once per
+state ([Capture through a long-lived
+host](../tooling-decisions/long-lived-capture-host-not-process-per-shot.md)):
+
+```bash
+tools/live.sh start --hud            # or tools/shot.sh <args> for a single state
+tools/live.sh shot /tmp/base/s0.png
+```
+
+Then diff:
 
 ```bash
 for st in 0 1 2 3 4 5; do
@@ -93,7 +104,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([hud_bar.gd:135](../../../presentation/combat/hud_bar.gd)).
+  resolves (`_fan_angle`, [hud_bar.gd:178](../../../presentation/combat/hud_bar.gd)).
 
 ## Why This Matters
 

@@ -181,6 +181,19 @@ values transfer with no scaling step. That coincidence is what makes parity
 checkable, and it is also what tempts a port to carry structure across along
 with the numbers.
 
+### Compensation
+A value or shape in the reference material that exists to work around a limit of
+the platform it was authored on, rather than to express an artistic decision.
+*Avoid:* calling these "the reference values" without sorting them.
+
+One question sorts them: if the source could have computed this, would the
+number still exist? If it would not, it is a Compensation and the port derives
+it from whatever the source lacked; if it would, it is a design decision and the
+port carries it across unchanged. The distinction has a structural form as well
+as a numeric one — a shape can be a Compensation when the source platform had no
+other way to express it. Deriving is not the same as obeying physics: derive the
+shape, then clamp it for art direction.
+
 ### Lab
 A harness that stands one widget family up in isolation — no run, no game state
 behind it — reached by its own launch flag rather than by playing to the screen
@@ -201,6 +214,24 @@ inspection, which makes a magnified Lab screenshot the wrong evidence for
 judging sharpness — judge at actual size; and a Lab needs a real viewport to
 capture from, so a headless run can parse-check its code but cannot photograph
 it.
+
+### Live host
+A single game process kept running out of sight for a whole working session, so
+that photographing a screen — a Lab or a real run — costs no window of its own
+and does not take the desktop. Distinct from a one-off capture, which starts,
+photographs and quits; the host starts once and is then driven capture by
+capture. It does hold a window the whole time, parked where nobody sees it, and
+its one start still takes the desktop briefly — the saving is per photograph,
+not absolute.
+
+A host re-reads the project's code and rebuilds the screen on demand, which is
+what lets it outlive an edit, and two consequences follow. Whatever run was in
+progress is discarded by every rebuild — that is what makes a capture
+reproducible rather than dependent on how the screen was reached. And a name
+that did not exist when the host started cannot be adopted by a rebuild, so
+introducing one is the edit that still costs a restart. A rebuild that cannot
+re-read a script reports the refusal rather than the success: the alternative is
+photographing stale code while believing it fresh.
 
 ---
 
@@ -225,6 +256,13 @@ and the whole row is relit when the next turn begins.
 ---
 
 ## The reward
+
+### 燼 (The Embers)
+The screen reached after a victory: the defeated body's glass drawn as cooling
+wreckage, with the run's winnings laid out on it. The name is the concept rather
+than a label for the layout, and the screen's lighting follows from it — what is
+on screen is a bed of embers, so light comes from the fire below rather than
+from a lamp above.
 
 ### Spoils
 The part of a combat reward that is handed over rather than chosen — the gold,
@@ -251,6 +289,10 @@ a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
   actor's key.** The Lamp belongs to a card and follows the cursor while that
   card is hovered. An actor's stage is lit by a fixed key and rim that do not
   track the pointer; the actor's cast shadow is a projection along that key.
+- **A Crack and a fracture edge are different things.** A Crack is scored on an
+  intact Vessel and rides with the body before it breaks; a fracture edge is the
+  lit boundary of a piece that has already broken away. Only the first is
+  accumulated state — the second is a property of debris.
 - **An enemy is an Actor, not a card.** Earlier work drew enemies as card-like
   placards; that framing is retired. The procedural gem survives only as the
   fallback avatar when a painting is missing, and as the world map's emblem.

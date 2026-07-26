@@ -19,7 +19,9 @@ tags: [godot, procedural-rendering, canvas-item, glass, lighting, additive-blend
 
 The reward screen concept 「燼」 draws the enemy's shattered body procedurally —
 polygons in `_draw`, no art, no viewport — deliberately mirroring `GlassGem`, the
-enemy avatar that is also pure `_draw`.
+fallback enemy avatar, which is also pure `_draw`. (Enemies normally render as
+painted Actors; the gem survives as the fallback when a painting is missing, and
+as the world map's emblem.)
 
 The first pass drew each shard the obvious way: a filled polygon plus an outline.
 It was rejected on sight; the note in the session was that the pieces read as
@@ -46,7 +48,7 @@ unevenly.** A body is comparatively dark; the edge gathers light along its lengt
 and throws it at the viewer, and how much it throws depends on which way that
 edge faces. Draw the rim **per edge**, with width and heat set by that edge's
 outward normal against a real light position in the scene
-(`presentation/reward/reward_embers.gd:391-415`):
+(`presentation/reward/reward_embers.gd:423-448`):
 
 ```gdscript
 var outward: Vector2 = edge.orthogonal().normalized()
@@ -64,15 +66,15 @@ Three corollaries follow, and skipping any of them keeps the paper look:
 1. **The rim goes white where it is hot.** A fracture's brightness is a *surface
    reflection*, not transmission, so it does not carry the glass's colour.
    Coloured glass with a coloured outline is a sticker
-   (`reward_embers.gd:413-414`).
+   (`reward_embers.gd:439-446`).
 2. **The body goes near-black.** Dark glass in a dark room is read off its edges
    and almost nothing else. A mid-toned body describes the piece twice and
    succeeds at neither — too dark to be a colour, too light to be a silhouette.
-   That is precisely the brown-paper look (`reward_embers.gd:351`).
+   That is precisely the brown-paper look (`reward_embers.gd:379-383`).
 3. **The inner glow is inset *and* pushed toward the light.** Centred, it reads
    as a shape with a hole in it; shifted, the bright region crowds the lit edge
    and the piece reads as something light enters from one side
-   (`reward_embers.gd:385`).
+   (`reward_embers.gd:413-419`).
 
 **The light has to actually exist in the scene**, or none of the above has an
 argument to take. That imposes two more rules:
@@ -81,7 +83,7 @@ argument to take. That imposes two more rules:
    alpha can only ever pull the background toward its own colour — it becomes a
    stain, not a glow. It needs its own `CanvasItemMaterial` with
    `BLEND_MODE_ADD`, beneath the matter layer so solids can still occlude it
-   (`reward_embers.gd:161`).
+   (`reward_embers.gd:192-193`).
 5. **A light source must be somewhere you can see it lighting things.** Staged
    behind three opaque cards, the fire's hot core was the brightest thing on the
    screen and entirely invisible; only its dim outer throw showed past the edges.
@@ -115,7 +117,8 @@ study it.
 
 Do **not** reach for this when the object is small, intact, and read at a glance;
 `GlassGem` at avatar size is correctly served by a uniform outline, and per-edge
-lighting there would be cost without benefit. The trigger is *size and
+lighting there would be cost without benefit — the more so now that it renders
+only as a fallback. The trigger is *size and
 attention*, not the material.
 
 The light-layer rules (4 and 5) apply more broadly than the edge rule: any
@@ -131,7 +134,7 @@ Both were hit in this session and both look like colour bugs:
 - **A stack of concentric `draw_circle` calls bands.** Nine nested ellipses used
   to fake a radial falloff rendered as nine visible rings — a target, not a fire.
   Replaced with three cached `GradientTexture2D` radials nested into a hot core
-  with a long throw (`reward_embers.gd:314-319`). Cache them: rebuilt inside
+  with a long throw (`reward_embers.gd:344-353`). Cache them: rebuilt inside
   `_draw` they allocate on every frame of an animation.
 - **A mid-toned body under a bright outline** reads as cardboard with a
   highlight. The fix is counter-intuitive — make the body *darker*, not more
@@ -158,5 +161,10 @@ for each edge:
   counterpart: tune one recipe's uniform, never the shared model.
 - `docs/solutions/design-patterns/dom-node-per-layer-in-godot.md` — the other
   "the obvious construction is the wrong one" learning in this presentation area.
+- [Derive authored compensations instead of transcribing them when porting](derive-authored-compensations-when-porting.md)
+  — the same move one layer up, in 3D: an authored constant replaced by a term
+  derived from the scene's own light. That doc also names the discipline this one
+  relies on without stating it — derive the shape, then clamp for art direction,
+  which is exactly what the coefficients above are doing.
 - `CONCEPTS.md` → **Angle, not time**, **Vessel**, **Crack** — the project's
   existing glass vocabulary this screen draws on.

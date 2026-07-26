@@ -143,12 +143,20 @@ measurement that matches what the eye reads.
   after and running `cmp`; byte-identical output is what "polish" should mean:
 
   ```bash
-  godot --path . -- --chips --sheet --shot=/tmp/after.png
+  tools/shot.sh --chips --sheet --shot=/tmp/after.png
   cmp -s /tmp/before.png /tmp/after.png && echo IDENTICAL
   ```
 
   Note the sheet's own title text is part of the capture — changing a caption
   will fail the diff for a reason that has nothing to do with the widget.
+
+  The capture goes through `tools/shot.sh` rather than `godot` directly: on
+  macOS a bare launch takes the keyboard on every boot, so a before/after diff
+  costs two focus grabs. For a tighter loop, `tools/live.sh start --chips
+  --sheet` then `shot` / `reload` / `shot` takes both sides from one process —
+  and because both come through the same capture path, byte-identity is still
+  the right test. See
+  [Capture through a long-lived host](../tooling-decisions/long-lived-capture-host-not-process-per-shot.md).
 
 - **Never let a missing asset render as nothing.** In a data-driven content
   system, content outruns art. An early `return` on a null texture produces a

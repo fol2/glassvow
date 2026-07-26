@@ -26,7 +26,7 @@ that exist only because the source platform could not compute them.
 
 The cast shadow was the clearest case. The web reference draws it as a black copy of
 the sprite squashed by a hand-authored CSS transform (`roguecardv2 src/styles.css:783`,
-a separate reference checkout):
+the reference checkout at `~/Coding/roguecardv2`):
 
 ```css
 .cast-shadow {
@@ -79,7 +79,8 @@ Three payoffs, in increasing order of importance:
    foes', and are simply never read — dead data, not tuning.)
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
-   (`presentation/combat/enemy_view.gd:613`). No amount of tuning the CSS version
+   (`presentation/combat/enemy_view.gd:752`, `_update_shadow`; the swing itself
+   enters at `:1605-1608`, `set_light_angle`). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.
 
@@ -113,7 +114,7 @@ colour, a timing curve, a silhouette exaggeration. Those are design; port them.
 | --- | --- |
 | `--sh-skew`, `--sh-x`, `--sh-y` | Key light direction — horizontal run per unit height |
 | `--sh-sx`, `--sh-sy` | Ground-plane tilt (`GROUND_TILT_DEG = 78.0`, cos ≈ 0.21) × cast length |
-| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha: lowest opaque row is the contact point, its horizontal centroid is where weight sits (`_read_contact`, `enemy_view.gd:558`) |
+| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha: lowest opaque row is the contact point, its horizontal centroid is where weight sits (`_read_contact`, `enemy_view.gd:697`) |
 | `--sh-blur` | Distance from the contact point — sharp at the feet, diffuse at the far end |
 | `--sh-o` | **Kept — but promoted to a single global.** Opacity is taste, not geometry, and one taste serves every actor. The per-creature values are no longer read. |
 
@@ -124,11 +125,11 @@ measured the gap.
 ### The art-direction clamp (the part that is not physics)
 
 The honest projection at the key light's authored pitch of −38°
-(`enemy_view.gd:432`) gives a horizontal run of roughly 1.6 body heights. That is
+(`enemy_view.gd:570`) gives a horizontal run of roughly 1.6 body heights. That is
 geometrically correct and reads badly: in a side-on view a long cast makes the
 creature look like it is hovering over its own shadow. The derivation is therefore
 bounded back into a ground pool that still leans with the light
-(`enemy_view.gd:549-550`):
+(`CAST_MIN`/`CAST_MAX`, `enemy_view.gd:688-689`):
 
 ```gdscript
 const CAST_MIN: float = 0.6
@@ -153,7 +154,7 @@ first attempt set the basis and then set `scale` separately, and the shadow vani
 _shadow.transform.basis = tilt * shear
 _shadow.scale = Vector3(s, s, 1.0)
 
-# RIGHT — fold the scale into the same basis (enemy_view.gd:625-632)
+# RIGHT — fold the scale into the same basis (enemy_view.gd:767-771)
 var shear: Basis = Basis.IDENTITY
 shear.x = Vector3(s, 0.0, 0.0)
 shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * s, run * s, 0.0)
@@ -170,6 +171,11 @@ builds a skew, squash, or projection matrix has to keep scale inside the basis.
   **shape** (one node per visual layer, because the DOM had no other way); this one is
   about ported **values**. Read together they are one principle: a port inherits the
   source's intent, not the source's workarounds.
+- [Procedural glass reads off its edges, not its fill](procedural-glass-reads-off-its-edges.md)
+  — the same move in the drawing layer, and in 2D: replace an authored appearance
+  constant with a per-element term computed against a light that actually exists
+  in the scene. Here it is the shadow's run from the key's pitch; there it is a
+  shard edge's brightness from its own outward normal.
 - `CONCEPTS.md` › **Benchmark** — states the governing rule this doc applies: the web
   build is authority for *what* the game does, never for *how* it had to achieve it.
 - Implemented in commit `0c8ed59` (`feat(actors): the shadow is projected, not

@@ -177,8 +177,24 @@ lamp somewhere fixed, and `GLASSVOW_DUMP=<prefix>` writes
 `<prefix>_inner_<uid>.png` and `<prefix>_stage_<uid>.png`.
 
 ```bash
-GLASSVOW_TILT="0,0" GLASSVOW_LAMP="-0.35,-0.35,1" GLASSVOW_DUMP=after godot --path . -- --cards
+GLASSVOW_TILT="0,0" GLASSVOW_LAMP="-0.35,-0.35,1" GLASSVOW_DUMP=after \
+  tools/shot.sh --cards --shot=/tmp/cards.png
 ```
+
+Two details in that line are load-bearing. `tools/shot.sh` parks the window
+off-screen instead of taking the keyboard on every launch, and the env prefix
+survives it because the wrapper `exec`s godot in the same environment
+(`tools/shot.sh:33`); run it from the repo root, since `GLASSVOW_DUMP` writes
+relative filenames. The `--shot=` is what makes the run quit — `--cards` alone
+leaves the lab open, which is fine when the window is visible and a trap when it
+is parked off-screen and can only be killed.
+
+Do **not** reach for `tools/live.sh` here. The hooks are read once from the
+process environment (`card_view.gd:926-939`), so a single host cannot change its
+dump prefix between the before and after builds — this recipe genuinely needs
+two processes. See
+[Capture through a long-lived host](../tooling-decisions/long-lived-capture-host-not-process-per-shot.md)
+for when a host does apply.
 
 Render the same recipe from both builds under an identical pose and lamp, then
 diff numerically — never by eye:
