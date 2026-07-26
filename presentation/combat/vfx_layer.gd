@@ -40,6 +40,38 @@ const KIND_ARCHETYPE: Dictionary = {
 ## it. The benchmark has no cap — a browser canvas can afford one more draw call
 ## than we can, and 400 is roughly four simultaneous deaths.
 const MAX_PARTS: int = 400
+## `ring` AND `slash` NEVER REACH THE SCREEN ON THE BENCHMARK, and that is not a
+## style call — it is a latent bug in `vfx.js` that this port accidentally
+## repaired into a visible effect.
+##
+## The draw loop advances every particle unconditionally (vfx.js:83):
+##
+##     for (const p of parts) { p.x += p.vx * dt; p.y += p.vy * dt; ... }
+##
+## and `ring()` (:179), `slashArc()` (:183) and `implosion()`'s collapsing ring
+## (:443) are the ONLY three pushes in the whole file that carry no `vx`/`vy`.
+## On their first frame `undefined * dt` turns BOTH coordinates into NaN, and
+## `ctx2.arc(NaN, NaN, r)` contributes nothing to the path. Every other kind sets
+## a velocity, so every other kind draws.
+##
+## Measured on the running benchmark rather than argued from the source: each
+## primitive fired on its own and the non-transparent pixels on `#vfx` counted —
+## burst 3054, motes 2016, ring 0, slashArc 0, at both 80ms and 200ms.
+##
+## `Part` below declares `vel: Vector2 = Vector2.ZERO`, so the same arithmetic is
+## a harmless add of nothing instead of a NaN. That one typed default is the
+## whole reason this port grew two expanding hoops on every killing blow and a
+## rainbow arc over every slash, neither of which the benchmark has ever drawn.
+##
+## THE CALL SITES STAY. All nineteen are faithful to `drain.js` and to
+## `archetypeHit`, and deleting them would throw away the record of what the
+## benchmark asks for. What changes is that the two kinds never enter the list.
+## Turning this on renders the benchmark's INTENT — which is a different game
+## from the benchmark, and so is a deliberate departure, not a fix.
+const DEAD_KINDS_RENDER: bool = false
+## The two kinds `vfx.js` NaNs out before they can draw.
+const DEAD_KINDS: Array[String] = ["ring", "slash"]
+
 ## Shake decays by this factor per second (`shakeV *= 0.001^dt`).
 const SHAKE_DECAY: float = 0.001
 const SHAKE_FLOOR: float = 0.1
@@ -346,6 +378,11 @@ func paint_flashes(host: CanvasItem) -> void:
 
 
 func _push(p: Part) -> void:
+	# See DEAD_KINDS_RENDER. Dropped here rather than at each of the nineteen
+	# call sites, so `implosion`'s ring is caught by the same rule that catches
+	# `ring()` — on the benchmark it is dead for exactly the same reason.
+	if not DEAD_KINDS_RENDER and DEAD_KINDS.has(p.kind):
+		return
 	if _parts.size() >= MAX_PARTS:
 		_parts.remove_at(0)
 	_parts.append(p)
