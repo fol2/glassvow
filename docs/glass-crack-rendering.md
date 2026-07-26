@@ -23,14 +23,14 @@ deliberately does **not** share. This file describes what Godot actually builds.
 ## 1. What is built
 
 Two paths share one Voronoi routine, `_voronoi(sites, reach)`
-(`presentation/combat/enemy_view.gd:1281` (`_voronoi`)):
+(`presentation/combat/enemy_view.gd:1228` (`_voronoi`)):
 
 | | standing crack web | death shatter |
 |---|---|---|
-| entry | `crack()` (`enemy_view.gd:1386` (`crack`)) | `mark_dead()` (`enemy_view.gd:1445` (`mark_dead`)) |
+| entry | `crack()` (`enemy_view.gd:1333` (`crack`)) | `mark_dead()` (`enemy_view.gd:1392` (`mark_dead`)) |
 | sites | `_sites`, appended one per call, cap `MAX_SITES` | `_death_sites()` — graded rings around the burst |
-| cells | `_cells()` (`enemy_view.gd:1310` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:1498` (`_death_cells`)) — **`reach` = 0** |
-| body mask | none | `_touches_art()` (`enemy_view.gd:1510` (`_touches_art`)) |
+| cells | `_cells()` (`enemy_view.gd:1257` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:1442` (`_death_cells`)) — **`reach` = 0** |
+| body mask | none | `_touches_art()` (`enemy_view.gd:1454` (`_touches_art`)) |
 | geometry | `_prism()` → `MeshInstance3D` under `_glass_root` | `_prism()` with per-shard `origin` → `RigidBody3D` |
 | material | `GLASS_SHADER` — refraction + Fresnel | `SHARD_SHADER` — opaque cap, molten fracture face |
 
@@ -45,12 +45,12 @@ Four mechanisms, all verified in source, compounding.
 
 **2.1 The circle is a literal circle.** `_cells()` passes
 `_glass_area * minf(_quad_w, _box_u) * 0.5` as `reach`, and `_voronoi` clips
-every cell against `_disc(sites[i], reach)` (`enemy_view.gd:1268` (`_disc`)) — a
+every cell against `_disc(sites[i], reach)` (`enemy_view.gd:1215` (`_disc`)) — a
 20-gon of **constant radius**. The arc is not an artefact of shading or of
 sampling. It is drawn.
 
 **2.2 The arc wears the brightest treatment in the effect.** `_prism()`
-(`enemy_view.gd:1325` (`_prism`)) extrudes *every* edge of the cell into a side
+(`enemy_view.gd:1272` (`_prism`)) extrudes *every* edge of the cell into a side
 band tagged `COLOR.r = 1`, and `GLASS_SHADER` (`enemy_view.gd:450`
 (`GLASS_SHADER`)) lights that band by Fresnel: `ALBEDO` mixes toward white,
 `ALPHA` gains `f * 0.6`, `EMISSION` gains `pow(f, 1.4)` for both `ignite` and
@@ -78,7 +78,7 @@ boundary, and every arc shares one radius.
 characteristic radius; a set of co-radial arcs can only read as circles.
 
 **2.4 The first state the player sees is the worst one.** `_rebuild_glass()`
-(`enemy_view.gd:1361` (`_rebuild_glass`)) returns early below two sites, so the
+(`enemy_view.gd:1308` (`_rebuild_glass`)) returns early below two sites, so the
 first visible crack state is two half-moons — one straight chord and one large
 arc each. Maximum circle, minimum crack.
 
@@ -112,15 +112,32 @@ exists to harvest the site UVs, `src/vfx.js:213` reads "the shatter breaks the b
 along the exact seams the crack shader showed", and its own doc says the handoff
 "harvests the sites … breaks the capture into its exact Voronoi cells".
 
+**More precisely: this port shipped the reference's fallback as its primary.**
+`src/vfx.js:296` reads
+
+```js
+const { parts: cells, ix, iy } = _voronoiParts(opts.sites) || _radialParts();
+```
+
+`_voronoiParts` is the primary and consumes the harvested crack sites plus a
+sparse background grid, so the body breaks finely where the blows landed and in
+coarse slabs elsewhere. `_radialParts()` is the **no-sites fallback**.
+`_death_sites()` is a port of the fallback. The primary was never ported, so the
+fix is not to invent anything — it is to port the path that already exists.
+
 This is a **causal** break rather than a cosmetic one — the cracks scored into a
 creature have no bearing on how it comes apart — and it is independent of every
 other item here. Whichever option below is chosen, the shatter should consume the
 crack network rather than invent a second one.
 
+**And it violates committed project vocabulary, not merely benchmark parity.**
+`CONCEPTS.md:117` (`Crack`) states that cracks "determine how the Vessel breaks
+apart when the Death rite runs". They do not.
+
 **3.5 Sites do not cluster at the blow.** `crack()` with no argument picks
 uniformly from UV 0.2–0.8, so crack position is unrelated to where the hit landed
 or how hard. Real impact fragments finely at the strike and coarsely outward —
-and `_death_sites()` (`enemy_view.gd:1475` (`_death_sites`)) *already does this*,
+and `_death_sites()` (`enemy_view.gd:1419` (`_death_sites`)) *already does this*,
 with graded rings. The death path understands the grading; the standing path does
 not.
 
@@ -143,14 +160,35 @@ everything shatters. The disc has no time to become a problem.
 
 This port calls `view.crack()` on **every landed hit** and again on ward shatter
 (`presentation/combat/combat_screen.gd`, two sites, both annotated `addCrack`),
-accumulating toward `MAX_SITES` (`enemy_view.gd:64` (`MAX_SITES`)) = 32. So the
+accumulating toward `MAX_SITES` (`enemy_view.gd:79` (`MAX_SITES`)) = 32. So the
 port runs a disabled experiment, for a whole fight instead of a fifth of a
 second.
 
-**Therefore the first question is not visual.** Should standing accumulation
-exist at all, or do cracks belong only to the death rite as the benchmark ships
-it? Keeping accumulation means going ahead of the reference and owning the
-design. That is allowed, but it should be a decision rather than a leftover.
+**And this project already ruled on it.** `CONCEPTS.md:115-120`, the shared
+vocabulary, under `Crack`:
+
+> They are deliberately *not* driven by ordinary damage — the glass vocabulary is
+> spent on death rather than on attrition, so a wounded creature does not visibly
+> craze.
+
+So standing accumulation from ordinary damage is **a compliance defect, not an
+open design question.** Six lines of `CONCEPTS.md` carry two rules and the code
+breaks both — this one, and the "determine how the Vessel breaks apart" clause
+that §3.4 violates.
+
+The compliant fix for this half is deleting the ordinary-damage `crack()` call,
+which takes a fight from roughly thirty accumulated sites to none. Whether the
+ward-shatter call also goes is a smaller judgement: a guard shattering *is* a
+glass event rather than attrition, so it has a case the damage call does not.
+
+If standing accumulation is wanted after all, that is legitimate — but it is then
+**an edit to `CONCEPTS.md`**, made deliberately, rather than a leftover defended
+after the fact.
+
+`docs/actor-animation-checklist.md` §1.10 previously recorded that `crack()` "is
+already only called from the lab". That was true when written and is now false:
+`combat_screen.gd` acquired both call sites when the drain was wired. Corrected
+there.
 
 **4.2 Two approved measures diverge.** From the benchmark's approved-measures
 table (user sign-off 2026-07-07):
@@ -344,7 +382,44 @@ Sequence, if the recommendation is taken: decide §4.1 first (does standing
 accumulation exist at all), then 2+4-lite as a CPU-side crack generator behind
 the existing `crack()` signature, then 7, then 5, then rewire the shatter.
 
-## 7. Verification
+## 7. A blocking precondition: the glass cannot be A/B'd today
+
+Before any option is built or judged, one defect has to go, because every
+comparison depends on it.
+
+`EnemyView` owns a single `RandomNumberGenerator` (`enemy_view.gd:200`
+(`_rng`)), seeded once when the stage is built from
+`hash(String(art_id)) + enemy_idx`. Three unrelated consumers share that one
+stream: crack placement (`crack`), the death pattern (`_death_sites`), and the
+debris ballistics in `shatter`.
+
+The fourth consumer is the problem. The camera shake in `_process` draws from it
+**twice per frame** while `_shake > 0`, and `shatter()` sets `_shake = 1.0` with a
+`delta * 4.5` decay — so a rite spends roughly 26 extra draws at 60 Hz and 53 at
+120 Hz. `reset_glass()` clears `_sites` but does not reseed.
+
+Consequences, in order of how much they cost:
+
+1. **Re-running the rite gives a different pattern every time, and the divergence
+   is frame-rate dependent.** `CONCEPTS.md` › `Lab` states the lab's purpose as
+   proving that "a change meant to alter nothing can be proven to have altered
+   nothing". For the glass it cannot.
+2. **Screenshot comparison on any glass frame is unsound.** A measurement pass
+   earlier on 2026-07-26 attributed run-to-run variance in shard frames entirely
+   to `CPUParticles3D` embers and the burst flash. That was incomplete: the
+   debris ballistics themselves read a stream the shake had already advanced by a
+   frame-rate-dependent amount.
+3. `hash()` carries no cross-version guarantee in Godot, so any golden-image
+   suite built on it is fragile across engine upgrades.
+
+The fix is small and the pieces exist: give fracture its own stream from
+`domain/rng/rng.gd` (`class_name Rng`, already pure, with `get_state()`), seed it
+from `(art_id, enemy_idx)` with a stable hash rather than `hash()`, and let the
+shake keep the throwaway generator. **This should land before any model work**,
+as its own change, because it is the precondition for every claim made by
+comparing two renders.
+
+## 8. Verification
 
 Numbers in §2.3 are derived from the source, not measured. Before building, the
 model is worth one render:

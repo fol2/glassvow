@@ -186,7 +186,15 @@ Dead at the visual standard. Do not build it.
 Only death forces cracks (`ui/combat.js:2001-2019`, `ui/drain.js:543-546`).
 
 Confirms `CONCEPTS.md` › **Crack**: the glass vocabulary is spent on death, not on
-attrition. Here, `crack()` is already only called from the lab — correct as is.
+attrition.
+
+**Correction, 2026-07-26.** This entry previously read "`crack()` is already only
+called from the lab — correct as is". That was true when written and is now false.
+`combat_screen.gd` acquired two `view.crack()` call sites when the drain was
+wired, one of them on the ordinary-damage branch, so the port accumulates toward
+`MAX_SITES` = 32 over a fight. The DECLINE verdict stands and the code does not
+comply with it. Full analysis, and what else follows from it, in
+`docs/glass-crack-rendering.md` §4.1.
 
 ---
 
