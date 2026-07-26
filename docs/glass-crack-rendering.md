@@ -2,9 +2,15 @@
 
 Status, 2026-07-26: the **death shatter is shipped and approved**. The **standing
 crack web is not** — it reads as a stack of same-radius circles, and the cause is
-geometric rather than a tuning miss. §6 records a three-seat review that settled
-most of the design surface; a second round is refining the one option that
-survived. Two changes are cleared to build ahead of it, §7 and §6.4 step 1.
+geometric rather than a tuning miss. §6 records two three-seat reviews: the first
+settled the design surface, the second refined the surviving option into
+`docs/fracture-model.md`, which is the buildable specification. Two changes are
+cleared to build ahead of everything else — §7 and §6.4 step 1.
+
+Line anchors here are correct at the commit that wrote them and drift within
+hours, because six lanes edit `presentation/` concurrently and one was editing
+`enemy_view.gd` while this was written. Re-anchor with
+`python3 tools/check_anchors.py --fix` rather than trusting a number.
 
 ## Why this file exists
 
@@ -24,14 +30,14 @@ deliberately does **not** share. This file describes what Godot actually builds.
 ## 1. What is built
 
 Two paths share one Voronoi routine, `_voronoi(sites, reach)`
-(`presentation/combat/enemy_view.gd:1228` (`_voronoi`)):
+(`presentation/combat/enemy_view.gd:1297` (`_voronoi`)):
 
 | | standing crack web | death shatter |
 |---|---|---|
-| entry | `crack()` (`enemy_view.gd:1333` (`crack`)) | `mark_dead()` (`enemy_view.gd:1392` (`mark_dead`)) |
+| entry | `crack()` (`enemy_view.gd:1402` (`crack`)) | `mark_dead()` (`enemy_view.gd:1461` (`mark_dead`)) |
 | sites | `_sites`, appended one per call, cap `MAX_SITES` | `_death_sites()` — graded rings around the burst |
-| cells | `_cells()` (`enemy_view.gd:1257` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:1442` (`_death_cells`)) — **`reach` = 0** |
-| body mask | none | `_touches_art()` (`enemy_view.gd:1454` (`_touches_art`)) |
+| cells | `_cells()` (`enemy_view.gd:1326` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:1523` (`_death_cells`)) — **`reach` = 0** |
+| body mask | none | `_touches_art()` (`enemy_view.gd:1523` (`_touches_art`)) |
 | geometry | `_prism()` → `MeshInstance3D` under `_glass_root` | `_prism()` with per-shard `origin` → `RigidBody3D` |
 | material | `GLASS_SHADER` — refraction + Fresnel | `SHARD_SHADER` — opaque cap, molten fracture face |
 
@@ -46,12 +52,12 @@ Four mechanisms, all verified in source, compounding.
 
 **2.1 The circle is a literal circle.** `_cells()` passes
 `_glass_area * minf(_quad_w, _box_u) * 0.5` as `reach`, and `_voronoi` clips
-every cell against `_disc(sites[i], reach)` (`enemy_view.gd:1215` (`_disc`)) — a
+every cell against `_disc(sites[i], reach)` (`enemy_view.gd:1284` (`_disc`)) — a
 20-gon of **constant radius**. The arc is not an artefact of shading or of
 sampling. It is drawn.
 
 **2.2 The arc wears the brightest treatment in the effect.** `_prism()`
-(`enemy_view.gd:1272` (`_prism`)) extrudes *every* edge of the cell into a side
+(`enemy_view.gd:1341` (`_prism`)) extrudes *every* edge of the cell into a side
 band tagged `COLOR.r = 1`, and `GLASS_SHADER` (`enemy_view.gd:450`
 (`GLASS_SHADER`)) lights that band by Fresnel: `ALBEDO` mixes toward white,
 `ALPHA` gains `f * 0.6`, `EMISSION` gains `pow(f, 1.4)` for both `ignite` and
@@ -79,7 +85,7 @@ boundary, and every arc shares one radius.
 characteristic radius; a set of co-radial arcs can only read as circles.
 
 **2.4 The first state the player sees is the worst one.** `_rebuild_glass()`
-(`enemy_view.gd:1308` (`_rebuild_glass`)) returns early below two sites, so the
+(`enemy_view.gd:1377` (`_rebuild_glass`)) returns early below two sites, so the
 first visible crack state is two half-moons — one straight chord and one large
 arc each. Maximum circle, minimum crack.
 
@@ -138,7 +144,7 @@ apart when the Death rite runs". They do not.
 **3.5 Sites do not cluster at the blow.** `crack()` with no argument picks
 uniformly from UV 0.2–0.8, so crack position is unrelated to where the hit landed
 or how hard. Real impact fragments finely at the strike and coarsely outward —
-and `_death_sites()` (`enemy_view.gd:1419` (`_death_sites`)) *already does this*,
+and `_death_sites()` (`enemy_view.gd:1488` (`_death_sites`)) *already does this*,
 with graded rings. The death path understands the grading; the standing path does
 not.
 
@@ -567,6 +573,57 @@ constraint. §6.1 explains why the line count was never the argument that matter
 Sequence, if the recommendation is taken: decide §4.1 first (does standing
 accumulation exist at all), then 2+4-lite as a CPU-side crack generator behind
 the existing `crack()` signature, then 7, then 5, then rewire the shatter.
+
+## 6.9 Council round 2: the design is specified in `docs/fracture-model.md`
+
+A second round refined option 4 into a buildable specification, which now lives in
+`docs/fracture-model.md`. This section records only what round 2 *settled*, and
+what it got wrong.
+
+**All three seats converged on the field renderer (option 6) over ribbons
+(option 7)** — including the architecture seat, which reversed its own round-1
+ordering. The arguments that decided it: the field is one concept (distance to the
+network) with four consumers, it adds no node and no draw call, propagation
+animation is free and incremental rather than merely possible, and — the
+architectural point — a ribbon groove is a *silhouette* edge and therefore inherits
+the **gated** MSAA 4× dependency, where a normal-mapped groove antialiases itself.
+If the memory gate later forces MSAA to 2×, the field renderer survives and the
+ribbon does not.
+
+**Accumulation is affordable, and the fix is one structure.** The architecture seat
+corrected its own round-1 figure upward by ~27×: a 30-blow fight leaves ≈ 9 600
+segments, so blow 30 alone needs ≈ 3.1 M nearest-segment queries — seconds in
+GDScript. Replacing the walk with a model-internal 128² quantised distance cache
+makes screening O(1) and constant in fight length. So whether standing accumulation
+exists is now purely a design question, not a performance one.
+
+**`min()`-compositing makes crack immutability structural in two independent
+places** — the screening cache and the render field. Neither can move an old crack.
+
+**Two corrections that had to be made before the round could be used:**
+
+- **The update rule was inverted by one seat.** Its prose was right — radials run
+  outward along maximum tensile stress — but its pseudocode took the heading as
+  `blow.dir.rotated(PI/2)`, a single direction everywhere, which makes every crack
+  run parallel instead of radiating. Radials advance along the **radial** direction
+  because they open against hoop tension; the blow direction modulates *magnitude*.
+  Corrected in `fracture-model.md` §2.4 and recorded there.
+- **"Pre-baked" was conflated with "offline asset".** Two seats described the
+  reference as baking one fixed figure per creature at import, and one concluded
+  from that a loss of damage-responsive morphology. The reference bakes at
+  **runtime, on each `meshCrack()` call, from the sites that exist at that moment**
+  — a memoisation of a per-fragment computation, fully impact-responsive. There are
+  three tiers, not two, and the middle one is both real calculation and
+  pre-calculation. `fracture-model.md` §1 states them.
+
+Three further claims did not survive checking and are not carried: that the shards
+are flat quads with no thickness (they are extruded prisms, `GLASS_THICK`); that
+screen-reading refraction "works" inside the `SubViewport` (the docblock above
+`GLASS_SHADER` records that it reads empty and came out as grey pebbles); and a
+"Griffith scale calculation" attributed to the benchmark, which contains no
+fracture mechanics at all. The last came from the seat that also produced a
+fabricated VRAM figure in round 1 — a pattern, and the reason every magnitude from
+that seat was re-derived.
 
 ## 7. A blocking precondition: the glass cannot be A/B'd today
 
