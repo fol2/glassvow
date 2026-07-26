@@ -38,6 +38,17 @@ const CARD_INSET: float = 8.0
 ## and rules text, which is what the assembled screen was doing.
 const BOTTOM_INSET: float = 40.0
 const HOVER_RAISE: float = 30.0
+## `drawBatchSchedule` (pile-chrome.js:91) — how a wave of draws is paced. One
+## card gets the full flight; a wave splits a 500ms budget into a stagger and
+## what is left over, so five cards leave the pile 100ms apart and the whole
+## deal is done in 680ms however big the hand is.
+const DEAL_BUDGET: float = 0.5
+const DEAL_FLIGHT_MAX: float = 0.28
+const DEAL_FLIGHT_MIN: float = 0.16
+const DEAL_STAGGER_MIN: float = 0.04
+## `schedule: { flightDur: 200 }` at drain.js:866 — a spent card goes home
+## faster than a drawn one arrives.
+const SPEND_FLIGHT: float = 0.2
 
 ## Ignore pointer input while the sequencer is busy (input-lock contract).
 var locked: bool = false
@@ -62,6 +73,9 @@ var _dragging: bool = false
 ## seat and the screen draws an arc from it. See `is_aiming()`.
 var _aiming: bool = false
 var _press_pos: Vector2 = Vector2.ZERO
+## uid -> the pile face it launched from, in global px. A card in here is
+## mid-flight and `_relayout` leaves its transform alone.
+var _flight_from: Dictionary = {}
 
 
 func _init() -> void:
@@ -123,6 +137,7 @@ func remove_card(uid: int) -> void:
 		_aiming = false
 	_views.erase(uid)
 	_order.erase(uid)
+	_flight_from.erase(uid)
 	remove_child(view)  # detach now — queue_free alone leaves a zombie until frame end
 	view.queue_free()
 	_relayout()
@@ -135,6 +150,7 @@ func clear() -> void:
 		view.queue_free()
 	_views.clear()
 	_order.clear()
+	_flight_from.clear()
 	_drag_uid = -1
 	_dragging = false
 	_aiming = false
@@ -182,6 +198,103 @@ static func zone_width(count: int, stage_w: float) -> float:
 		span = float(n - 1) * fan_gap(n, stage_w) + CardView.CARD_W
 	return minf(stage_w - 24.0, maxf(CardView.CARD_W + 16.0, ceilf(span + 20.0)))
 
+
+# ---------------------------------------------------------------- dealing
+
+## `drawBatchSchedule` — the gap between one card leaving the pile and the next.
+static func deal_stagger(count: int) -> float:
+	if count <= 1:
+		return 0.0
+	return maxf(DEAL_STAGGER_MIN, floorf(DEAL_BUDGET * 1000.0 / float(count)) * 0.001)
+
+
+## `drawBatchSchedule` — how long one card spends in the air.
+static func deal_flight(count: int) -> float:
+	if count <= 1:
+		return DEAL_FLIGHT_MAX
+	return maxf(DEAL_FLIGHT_MIN, minf(DEAL_FLIGHT_MAX, DEAL_BUDGET - deal_stagger(count)))
+
+
+## Fly a card that is already in the fan in from the draw pile: it waits on the
+## pile for its turn, then travels to its seat, growing from the pile's face to
+## a hand card's and taking on its seat's tilt as it lands.
+func deal_in(uid: int, from: Rect2, delay: float, flight: float) -> void:
+	var view: CardView = _views.get(uid)
+	if view == null or not is_inside_tree():
+		return
+	_flight_from[uid] = from
+	view.pivot_offset = view.size * 0.5
+	_fly_step(0.0, uid)
+	var tw: Tween = create_tween()
+	if delay > 0.0:
+		tw.tween_interval(delay)
+	tw.tween_method(_fly_step.bind(uid), 0.0, 1.0, flight) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_callback(_land.bind(uid))
+
+
+## The flight itself, as a function of progress rather than a tween aimed at a
+## fixed point. The seat is read LIVE on every step, because each further card
+## in the same wave re-fans the hand and moves the seat this one is heading for.
+## A tween that had been given the old target would land beside its seat and be
+## snapped into place a frame later.
+func _fly_step(t: float, uid: int) -> void:
+	var view: CardView = _views.get(uid)
+	if view == null:
+		return
+	var from: Rect2 = _flight_from.get(uid, Rect2())
+	var born: float = from.size.x / CardView.CARD_W if from.size.x > 0.0 else 1.0
+	var home: Vector2 = global_position + view.home_position
+	# Both ends are measured by the card's CENTRE, so a shrunken card leaves the
+	# pile's face rather than hanging off its corner.
+	var start: Vector2 = from.get_center() - view.size * 0.5 * born
+	view.global_position = start.lerp(home, t)
+	view.rotation = view.home_rotation * t
+	view.scale = Vector2.ONE * lerpf(born, 1.0, t)
+
+
+func _land(uid: int) -> void:
+	_flight_from.erase(uid)
+	var view: CardView = _views.get(uid)
+	if view != null:
+		view.scale = Vector2.ONE
+		view.snap_home()
+
+
+## A card leaves the hand for a pile. It is out of the fan the moment this is
+## called — the others close the gap immediately, as they do in the benchmark —
+## and the node lives only long enough to fly.
+func spend_to(uid: int, to: Rect2) -> void:
+	var view: CardView = _views.get(uid)
+	if view == null:
+		return
+	_views.erase(uid)
+	_order.erase(uid)
+	_flight_from.erase(uid)
+	if _drag_uid == uid:
+		_drag_uid = -1
+		_dragging = false
+		_aiming = false
+	if not is_inside_tree():
+		remove_child(view)
+		view.queue_free()
+		_relayout()
+		return
+	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	view.pivot_offset = view.size * 0.5
+	var shrink: float = to.size.x / CardView.CARD_W if to.size.x > 0.0 else 1.0
+	var tw: Tween = create_tween().set_parallel(true)
+	tw.tween_property(view, "global_position",
+		to.get_center() - view.size * 0.5 * shrink, SPEND_FLIGHT) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(view, "scale", Vector2.ONE * shrink, SPEND_FLIGHT)
+	tw.tween_property(view, "rotation", 0.0, SPEND_FLIGHT)
+	tw.tween_property(view, "modulate:a", 0.0, SPEND_FLIGHT)
+	tw.chain().tween_callback(view.queue_free)
+	_relayout()
+
+
+# ---------------------------------------------------------------- layout
 
 ## `handRotationDeg` — the tilt of seat `i`, in degrees, positive clockwise.
 static func rotation_deg(i: int, count: int) -> float:
@@ -238,6 +351,11 @@ func _relayout() -> void:
 			base_bottom - CardView.CARD_H + sag - lift
 		)
 		view.home_rotation = deg_to_rad(rot)
+		# A card being carried follows the pointer, and a card in flight is on its
+		# own clock — it reads the seat set just above on its next step, so the
+		# new seat is honoured without this function touching its transform.
+		if _flight_from.has(view.uid):
+			continue
 		if _drag_uid != view.uid or not _dragging:
 			view.snap_home()
 

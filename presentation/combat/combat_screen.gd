@@ -343,6 +343,31 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
 		_stand(view, slot.x, slot.y)
 	_sync_all()
+	_deal_opening_hand()
+
+
+## The opening hand is BUILT by `_sync_all`, not replayed — the startCombat batch
+## is hard-synced because the views do not exist until after `apply` returns, so
+## its draws never reach `_handle_event` and never fly. Dealt here on the same
+## schedule, because otherwise the first thing a fight shows is five cards
+## appearing out of nothing, and that is the moment the deal most needs to read.
+func _deal_opening_hand() -> void:
+	if seq.instant or not is_inside_tree():
+		return
+	# One frame, and it is not optional. `HudBar._place` hangs each cluster off
+	# the nearest window edge, and those anchors do not resolve until the first
+	# layout pass — asked in this same frame, the draw pile reports a box at
+	# y −162, which is the difference between a card flying out of the pile and
+	# one dropping in from above the top edge.
+	await get_tree().process_frame
+	var opening: Array[int] = _hand.uids()
+	if opening.is_empty():
+		return
+	var flight: float = HandView.deal_flight(opening.size())
+	var stagger: float = HandView.deal_stagger(opening.size())
+	var pile: Rect2 = _hud.pile_rect(&"draw")
+	for i: int in range(opening.size()):
+		_hand.deal_in(opening[i], pile, float(i) * stagger, flight)
 
 
 ## `bfSlots` — the authored formations for this shape, as (x centre, lift off
@@ -586,7 +611,14 @@ func _handle_event(ev: Dictionary) -> void:
 			var inst: CardInst = _find_card(uid)
 			if inst != null:
 				_hand.add_card(inst, _rules.card_data(inst), _rules.eff_cost(inst))
-			await _wait(0.08)
+				# The wave is paced by its own size, so the handler asks how many
+				# draws it heads rather than guessing from the hand.
+				var wave: int = seq.run_length(EventTypes.DRAW)
+				_hand.deal_in(uid, _hud.pile_rect(&"draw"), 0.0,
+					HandView.deal_flight(wave))
+				# Only the stagger is waited on: the flights overlap, which is
+				# what makes a five-card draw read as one deal rather than five.
+				await _wait(HandView.deal_stagger(wave))
 		EventTypes.RESHUFFLE:
 			await _wait(0.15)
 		EventTypes.PLAY:
@@ -677,10 +709,21 @@ func _handle_event(ev: Dictionary) -> void:
 			await _wait(0.15)
 		EventTypes.TO_DISCARD, EventTypes.EXHAUST, EventTypes.POWER_CONSUMED:
 			var uid: int = ev["uid"]
-			_hand.remove_card(uid)
+			# Each pile takes its own cards back. Ash is not the discard: a card
+			# that burns out has to be seen going somewhere else, or the two
+			# piles are the same pile wearing different labels.
+			var pile: StringName = &"discard"
+			if t == EventTypes.EXHAUST or t == EventTypes.POWER_CONSUMED:
+				pile = &"ashes"
+			_hand.spend_to(uid, _hud.pile_rect(pile))
 		EventTypes.KINDLE:
 			var uid: int = ev["uid"]
-			_hand.remove_card(uid)
+			# Burnt for embers is still burnt: `kindleFromHand` calls
+			# `exhaust_card` right after queueing this (combat.gd:752), so the
+			# card lands in ash. The EXHAUST that follows finds it already gone
+			# and does nothing, which is why it is flown from here rather than
+			# left for that event to move twice.
+			_hand.spend_to(uid, _hud.pile_rect(&"ashes"))
 			await _wait(0.2)
 		EventTypes.ART:
 			_float_text(_hero, "ART", Color(1, 0.7, 0.3))
@@ -690,9 +733,10 @@ func _handle_event(ev: Dictionary) -> void:
 			await _wait(0.15)
 		EventTypes.DISCARD_HAND:
 			var uids: Array = ev["uids"]
+			var discard_rect: Rect2 = _hud.pile_rect(&"discard")
 			for uid_v: Variant in uids:
 				var uid_i: int = uid_v
-				_hand.remove_card(uid_i)
+				_hand.spend_to(uid_i, discard_rect)
 			await _wait(0.15)
 		EventTypes.END_TURN:
 			await _wait(0.1)

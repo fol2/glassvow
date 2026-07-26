@@ -666,6 +666,25 @@ func _build_pile(which: StringName, name_text: String, rect: Rect2,
 	return p
 
 
+## Where a pile's faces actually sit, in global coordinates — the anchor a card
+## flies from when it is dealt and to when it is spent, and the size it is at
+## either end (`fromSize: 'pile'`).
+##
+## An accessor rather than a table the screen keeps its own copy of: `_place`
+## re-hangs every cluster off its nearest window edge, so a pile's position is
+## not a constant and a second copy of these numbers would be wrong the first
+## time the window is not 1180 wide.
+func pile_rect(which: StringName) -> Rect2:
+	var p: Pile = _draw_pile
+	if which == &"discard":
+		p = _discard_pile
+	elif which == &"ashes":
+		p = _ashes_pile
+	if p == null or p.stack == null:
+		return Rect2(global_position + size * 0.5, Vector2.ZERO)
+	return p.stack.get_global_rect()
+
+
 ## One face per card, so the pile is its own gauge — the count text is only
 ## there for the tail past the cap. An empty pile hides the plate and keeps the
 ## name and the zero (`.pile-btn.is-empty .pile-stack { visibility: hidden }`).

@@ -22,6 +22,20 @@ func is_busy() -> bool:
 	return _busy
 
 
+## How many events of type `t` this one heads, counting itself. A wave of draws
+## is paced by how big the wave is (`drawBatchSchedule`, pile-chrome.js:91), and
+## a handler that only ever sees one event at a time cannot know that without
+## asking. Only meaningful from inside `handler`, where the current event has
+## already left the queue.
+func run_length(t: StringName) -> int:
+	var n: int = 1
+	for ev: Dictionary in _queue:
+		if ev["t"] != t:
+			break
+		n += 1
+	return n
+
+
 func enqueue(events: Array[Dictionary]) -> void:
 	_queue.append_array(events)
 	if not _busy:
