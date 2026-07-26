@@ -219,24 +219,41 @@ const BIG_HIT: int = 16
 ## `Math.min(1, ev.amount / 24)` — what counts as a full-power blow.
 const POWER_SCALE: float = 24.0
 
-## `artCast` (combat-presentation.js:787) — the art's own face rises off the
-## hero and goes. 900ms on `outSoft`, in two unequal phases: in over the first
-## 30% from 0.4 of its box, out over the remaining 70% while it grows a further
-## 5%. `size: 110` is the BOX, not a scale — every ramp below is measured in it.
+## `.art-cast` (drain.js:403, styles.css:1122) — the art's own face rises off the
+## hero and goes. A DOM `<img>` appended to `#floaties`, 110px square,
+## `object-fit: contain`, at z 57 — one above `#floaties` itself, so the face is
+## over the damage numerals.
 ##
-## `assetUrl('arts', ev.id)` — six faces ship in the slice, one per art.
+## The WAAPI list, verbatim:
+##
+##     translate(-50%,-50%) scale(0.4)   opacity 0
+##     translate(-50%,-58%) scale(1)     opacity 1   offset 0.3
+##     translate(-50%,-70%) scale(1.05)  opacity 0
+##     duration 900, easing cubic-bezier(.2,.7,.3,1)
+##
+## The Y steps are PERCENTAGES OF THE ELEMENT'S OWN HEIGHT, not pixels: -50% is
+## the centring, so the travel is 8% and then a further 12% of 110px — 8.8px,
+## then 22px in total. Read as pixels it would rise nearly twice as far.
+##
+## A keyframe list interpolates LINEARLY between offsets with the easing applied
+## once to the whole iteration, so `Motion.ease` shapes the clock and
+## `Motion.keyframe` reads the three tracks off it.
 const CAST_ART: String = "res://assets/art/arts/%s.png"
 const CAST_MS: float = 0.9
 const CAST_SIZE: float = 110.0
-## `sprite.y = y - 30` before anything moves: the ghost starts a head above the
-## body rather than inside it.
+## `img.style.top = hy - 30` — the ghost starts a head above the body.
 const CAST_LIFT: float = 30.0
-const CAST_IN: float = 0.3
-const CAST_S0: float = 0.4
-const CAST_S1: float = 1.0
-const CAST_S2: float = 1.05
-const CAST_RISE_IN: float = 8.0
-const CAST_RISE_OUT: float = 32.0
+const CAST_EASE: Array[float] = [0.2, 0.7, 0.3, 1.0]
+const CAST_AT: Array[float] = [0.0, 0.3, 1.0]
+const CAST_SCALE: Array[float] = [0.4, 1.0, 1.05]
+const CAST_ALPHA: Array[float] = [0.0, 1.0, 0.0]
+const CAST_RISE: Array[float] = [0.0, 0.08, 0.2]
+## `filter: drop-shadow(0 0 24px rgba(255, 217, 122, .5))`. Godot has no CSS
+## drop-shadow, so the glow is the same texture drawn additively behind and
+## spread by the blur radius. It follows the silhouette, which a radial would
+## not; what it does not reproduce is a real gaussian's falloff.
+const CAST_GLOW: Color = Color(1.0, 0.8509804, 0.47843137, 0.5)
+const CAST_BLUR: float = 24.0
 
 ## `setTimeout(..., 440)` (drain.js:412) — how long the lantern waits before it
 ## answers a spill. Just short of the 460ms flight, so the pop is starting as the
@@ -331,6 +348,7 @@ var _vignette: ColorRect
 var _vignette_mat: ShaderMaterial
 var _sky: SkyField
 var _cast: TextureRect
+var _cast_glow: TextureRect
 var _cast_home: Vector2 = Vector2.ZERO
 var _stage_dim: ColorRect
 var _stage_dim_mat: ShaderMaterial
@@ -500,12 +518,21 @@ func _build_ui() -> void:
 	_floaters = Floaters.new()
 	add_child(_floaters)
 
-	# `artCastLayer` is the LAST child of the presentation root
-	# (combat-presentation.js:107), so an art's ghost is over the damage
-	# numerals as well as over the body it rose from.
+	# `.art-cast` carries z 57 against `#floaties`' 55 — the art's face is over
+	# the damage numerals, so it is added after them.
+	_cast_glow = TextureRect.new()
+	_cast_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_cast_glow.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_cast_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_cast_glow.modulate = CAST_GLOW
+	var glow_mat: CanvasItemMaterial = CanvasItemMaterial.new()
+	glow_mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_cast_glow.material = glow_mat
+	_cast_glow.visible = false
+	add_child(_cast_glow)   # behind the face it belongs to
 	_cast = TextureRect.new()
 	_cast.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_cast.stretch_mode = TextureRect.STRETCH_SCALE
+	_cast.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED  # object-fit: contain
 	_cast.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_cast.visible = false
 	add_child(_cast)
@@ -1522,50 +1549,54 @@ func _lantern_answers() -> void:
 	_vfx.chrome_pulse(_hud.lantern_rect(), EMBER_ORANGE)
 
 
-## `artCast` (combat-presentation.js:787). Awaited in full, because the
-## benchmark holds the drain for the whole 900ms and only then kicks the world —
-## an art is the one card play that is allowed its own ceremony.
+## `.art-cast` (drain.js:403). NOT awaited: the benchmark fires the animation and
+## walks straight on to `kick(0.7)`, `syncCombat()` and a 420ms beat, so the face
+## is still rising while the queue moves. Awaiting it would hold the drain for
+## 900ms the benchmark spends elsewhere.
 func _art_cast(id: String, at: Vector2) -> void:
 	if _cast == null:
 		return
 	var path: String = CAST_ART % id
 	if not ResourceLoader.exists(path):
-		# `if (!url) → { outcome: 'skipped', reason: 'no-asset' }` — an art with
-		# no face is not a reason to hold the queue up.
+		# `if (au)` — an art with no face simply does not cast one.
 		return
-	_cast.texture = load(path)
+	var tex: Texture2D = load(path)
+	_cast.texture = tex
+	_cast_glow.texture = tex
 	_cast_home = at - Vector2(0.0, CAST_LIFT)
 	_cast_step(0.0)
-	_cast.visible = true
 	if seq.instant:
-		_cast.visible = false
 		return
+	_cast.visible = true
+	_cast_glow.visible = true
 	var tw: Tween = create_tween()
 	tw.tween_method(_cast_step, 0.0, 1.0, CAST_MS).set_trans(Tween.TRANS_LINEAR)
-	await tw.finished
+	tw.tween_callback(_cast_done)
+
+
+## `onfinish = () => img.remove()`
+func _cast_done() -> void:
 	_cast.visible = false
+	_cast_glow.visible = false
 
 
-## Linear time in; `outSoft` is applied to the progress and the two phases are
-## read off the EASED value, which is what the Pixi runner hands `onUpdate`.
+## Linear time in, `cubic-bezier(.2,.7,.3,1)` shaping the clock, and the three
+## tracks read off it linearly between the offsets — the WAAPI contract.
 func _cast_step(x: float) -> void:
-	var t: float = Motion.ease(Motion.OUT_SOFT, x)
-	var s: float = CAST_S0
-	var rise: float = 0.0
-	var u: float = 0.0
-	if t <= CAST_IN:
-		u = t / CAST_IN
-		s = CAST_S0 + u * (CAST_S1 - CAST_S0)
-		_cast.modulate.a = u
-		rise = u * CAST_RISE_IN
-	else:
-		u = (t - CAST_IN) / (1.0 - CAST_IN)
-		s = CAST_S1 + u * (CAST_S2 - CAST_S1)
-		_cast.modulate.a = 1.0 - u
-		rise = CAST_RISE_IN + u * CAST_RISE_OUT
+	var t: float = Motion.ease(CAST_EASE, x)
+	var s: float = Motion.keyframe(t, CAST_AT, CAST_SCALE)
+	var a: float = Motion.keyframe(t, CAST_AT, CAST_ALPHA)
 	var box: Vector2 = Vector2.ONE * CAST_SIZE * s
+	# A percentage of the element's OWN height, so the rise grows with the scale.
+	var rise: float = Motion.keyframe(t, CAST_AT, CAST_RISE) * box.y
+	var top_left: Vector2 = _cast_home - box * 0.5 - Vector2(0.0, rise)
 	_cast.size = box
-	_cast.position = _cast_home - box * 0.5 - Vector2(0.0, rise)
+	_cast.position = top_left
+	_cast.modulate.a = a
+	var halo: Vector2 = box + Vector2.ONE * CAST_BLUR * 2.0
+	_cast_glow.size = halo
+	_cast_glow.position = top_left - Vector2.ONE * CAST_BLUR
+	_cast_glow.modulate.a = CAST_GLOW.a * a
 
 
 func _enemy_view(idx: int) -> EnemyView:
@@ -1948,10 +1979,10 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.motes(hero_at, tone, 12)
 			_float(hero_at + Vector2(0.0, -84.0),
 				str(art.get("name", id)).to_upper(), "artf", tone)
-			await _art_cast(id, hero_at)
+			_art_cast(id, hero_at)
 			_sky.kick(0.7)
 			_sync_actors()
-			await _wait(0.12)
+			await _wait(0.42)
 		EventTypes.POTION:
 			_sfx.play(&"potion")
 			await _wait(0.12)
