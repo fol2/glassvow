@@ -94,6 +94,38 @@ const DIM_AIM_LEAN: float = 0.3
 const SNUFF_ALPHA: float = 1.0
 const SNUFF_RADIUS: float = 160.0
 
+## `#transit` (styles.css:1532) — z 73, `display: none` until `.on`, and the two
+## leaves of it that the FIGHT fires rather than the navigator: `victory-out` and
+## `defeat` are called from `victoryFlow` / `defeatFlow` inside combat.js itself.
+##
+## `combat-in`'s iris and the `#wipe` sweep are not here. They belong to whoever
+## changes the screen, which in this port is `application/main.gd` — another
+## lane's file (docs/session-ownership.md).
+##
+## Both animate through WAAPI, so the easing runs over the WHOLE iteration and
+## the offsets interpolate linearly between themselves — `Motion.keyframe` at an
+## already-eased t, not a per-interval curve. That is the opposite of the CSS
+## keyframe rule the gutter needs, in the same file, ten lines apart.
+const TRANSIT_EASE: Array[float] = [0.4, 0.0, 0.2, 1.0]
+## `tr-bloom` — `radial-gradient(circle at 50% 45%, #ffe9ac 0%, #f2c14e55 30%,
+## transparent 70%)` over 900ms, `[0, 1 @ 0.4, 0]`. The last stop is the SAME
+## amber at zero alpha rather than `transparent`: a browser interpolates gradient
+## stops premultiplied, so `transparent` there does not drag the ramp toward
+## black, and Godot's `Gradient` — which interpolates raw RGBA — would.
+const BLOOM_MS: float = 0.9
+const BLOOM_CORE: Color = Color(1.0, 0.9137255, 0.6745098, 1.0)      # #ffe9ac
+const BLOOM_MID: Color = Color(0.9490196, 0.75686276, 0.30588236, 0.33333334)
+const BLOOM_STOPS: Array[float] = [0.0, 0.3, 0.7]
+const BLOOM_AT: Array[float] = [0.0, 0.4, 1.0]
+const BLOOM_TRACK: Array[float] = [0.0, 1.0, 0.0]
+## The gradient's default extent is farthest-corner from (50%, 45%).
+const BLOOM_CENTRE: Vector2 = Vector2(0.5, 0.45)
+## `tr-crack` — `rgba(3,4,10,.9)` over 700ms, `[0, 1]`.
+const CRACK_MS: float = 0.7
+const CRACK_TONE: Color = Color(0.011764706, 0.015686275, 0.039215688, 0.9)
+const CRACK_AT: Array[float] = [0.0, 1.0]
+const CRACK_TRACK: Array[float] = [0.0, 1.0]
+
 ## `body.worldstop` (styles.css:101) — a boss dies and the world stops. Colour
 ## drains to 7% saturation at 85% brightness over a 0.22s `ease`, holds for one
 ## silent beat, and comes back the same way.
@@ -269,6 +301,10 @@ var _lantern_mat: ShaderMaterial
 ## Once the lantern is out it stays out: the HP pool must not take the light back
 ## while the defeat beat is still being held.
 var _snuffed: bool = false
+var _transit: Control
+var _bloom: TextureRect
+var _crack: ColorRect
+var _transit_tween: Tween
 ## The drain has no node of its own — it rides the grain's material, and
 ## GRAIN_SHADER says why.
 var _worldstop_tween: Tween
@@ -470,6 +506,10 @@ func _build_ui() -> void:
 	GlassStyle.style_button(_overlay_button, GlassStyle.EMBER)
 	_overlay_button.pressed.connect(func() -> void: result_continue.emit())
 	overlay_box.add_child(_overlay_button)
+
+	# `#transit` at z 73 — above the result overlay (60) and the tooltip (70),
+	# below only the grain.
+	_build_transit()
 
 	# Last, because `#grain` carries z 75 — above the tooltip and above the
 	# overlay — and because it reads the screen it is blended onto.
@@ -720,6 +760,82 @@ func _build_lantern() -> void:
 	_lantern_mat.set_shader_parameter("la", 0.0)
 	_lantern.material = _lantern_mat
 	_shake_host.add_child(_lantern)
+
+
+## `#transit` — one host, both leaves, built empty. The bloom is a `TextureRect`
+## because a radial ramp IS a texture in Godot and a shader would buy nothing;
+## the crack is a flat plate.
+func _build_transit() -> void:
+	_transit = Control.new()
+	_transit.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_transit.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_transit.visible = false
+	add_child(_transit)
+
+	var grad: Gradient = Gradient.new()
+	grad.offsets = PackedFloat32Array(BLOOM_STOPS)
+	grad.colors = PackedColorArray([BLOOM_CORE, BLOOM_MID,
+		Color(BLOOM_MID.r, BLOOM_MID.g, BLOOM_MID.b, 0.0)])
+	var tex: GradientTexture2D = GradientTexture2D.new()
+	tex.gradient = grad
+	tex.fill = GradientTexture2D.FILL_RADIAL
+	tex.fill_from = BLOOM_CENTRE
+	# Farthest-corner, expressed in the texture's own UV so it re-solves against
+	# whatever the window is rather than against the stage it was measured in.
+	tex.fill_to = BLOOM_CENTRE + Vector2(0.5, 0.55)
+	tex.width = 256
+	tex.height = 256
+	_bloom = TextureRect.new()
+	_bloom.texture = tex
+	_bloom.stretch_mode = TextureRect.STRETCH_SCALE
+	_bloom.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_bloom.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bloom.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_bloom.visible = false
+	_transit.add_child(_bloom)
+
+	_crack = ColorRect.new()
+	_crack.color = CRACK_TONE
+	_crack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_crack.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_crack.visible = false
+	_transit.add_child(_crack)
+
+
+## `run(html, keyframes, duration)` (navigation.js:18) — one leaf is shown, its
+## opacity walked, and the host emptied again.
+func _transit_play(kind: StringName) -> void:
+	if _transit == null or seq.instant:
+		return
+	var blooming: bool = kind == &"bloom"
+	var leaf: Control = _bloom if blooming else _crack
+	# Spelled out rather than picked by a ternary: a conditional expression over
+	# two array literals yields an untyped `Array`, which the gate cannot see and
+	# which fails at the assignment — at runtime, in the one frame that matters.
+	var track: Array[float] = BLOOM_TRACK
+	var at: Array[float] = BLOOM_AT
+	if not blooming:
+		track = CRACK_TRACK
+		at = CRACK_AT
+	var seconds: float = BLOOM_MS if blooming else CRACK_MS
+	if _transit_tween != null and _transit_tween.is_valid():
+		_transit_tween.kill()
+	_transit.visible = true
+	_bloom.visible = kind == &"bloom"
+	_crack.visible = kind == &"crack"
+	leaf.modulate.a = 0.0
+	_transit_tween = create_tween()
+	_transit_tween.tween_method(
+		func(x: float) -> void:
+			leaf.modulate.a = Motion.keyframe(Motion.ease(TRANSIT_EASE, x), at, track),
+		0.0, 1.0, seconds)
+	# `.finally` — the host goes back to being an empty structural element, and
+	# the defeat plate does NOT linger: its own last keyframe is 1, so it is the
+	# screen change behind it that takes over, not this layer.
+	_transit_tween.tween_callback(func() -> void:
+		_transit.visible = false
+		_bloom.visible = false
+		_crack.visible = false)
 
 
 ## `#grain` (styles.css:74) — z 75, over everything including the tooltip.
@@ -2083,6 +2199,10 @@ func _sync_all() -> void:
 			view.set_playable(_rules.can_play(cb, c, target_probe))
 	if cb.over and not _over_emitted:
 		_over_emitted = true
+		# `victoryFlow` / `defeatFlow` (combat.js:2683, 2720) each open with their
+		# transition, before anything is torn down — the fight is what the wipe
+		# is covering, so it has to still be on screen when it starts.
+		_transit_play(&"bloom" if cb.result == "win" else &"crack")
 		combat_over.emit(cb.result)
 
 
