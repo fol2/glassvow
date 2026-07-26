@@ -86,6 +86,14 @@ const CSS_EASE: Array[float] = [0.25, 0.1, 0.25, 1.0]
 ## strike: intent illuminates". A third of the way, not all of it.
 const DIM_AIM_LEAN: float = 0.3
 
+## `#lantern.snuff` (styles.css:91, fired at drain.js:967) — you lose, and the
+## lantern goes out. The SAME radial `.stage-dim` paints, but full-screen and at
+## `--la: 1` with `--lr: 160px`: the whole view collapses to a dying point of
+## light around the body that was carrying it. Nothing transitions `#lantern`'s
+## background, so it snaps there and then gutters for the beat it is held.
+const SNUFF_ALPHA: float = 1.0
+const SNUFF_RADIUS: float = 160.0
+
 ## `body.worldstop` (styles.css:101) — a boss dies and the world stops. Colour
 ## drains to 7% saturation at 85% brightness over a 0.22s `ease`, holds for one
 ## silent beat, and comes back the same way.
@@ -256,6 +264,11 @@ var _vignette: ColorRect
 var _vignette_mat: ShaderMaterial
 var _stage_dim: ColorRect
 var _stage_dim_mat: ShaderMaterial
+var _lantern: ColorRect
+var _lantern_mat: ShaderMaterial
+## Once the lantern is out it stays out: the HP pool must not take the light back
+## while the defeat beat is still being held.
+var _snuffed: bool = false
 ## The drain has no node of its own — it rides the grain's material, and
 ## GRAIN_SHADER says why.
 var _worldstop_tween: Tween
@@ -352,6 +365,10 @@ func _build_ui() -> void:
 	_battlefield.offset_bottom = -GROUND_Y
 	_battlefield.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_shake_host.add_child(_battlefield)
+
+	# `#lantern` carries z 21 — over the actors, under the hand (22) and the
+	# chrome (24). It is empty for the whole fight and only paints on defeat.
+	_build_lantern()
 
 	# The whole chrome layer, in one widget, measured against the same
 	# 1180x820 the stage above is. `plate = false` because the ward chip and HP
@@ -686,6 +703,25 @@ func _build_stage_dim() -> void:
 	_shake_host.add_child(_stage_dim)
 
 
+## `#lantern` — the full-screen twin of `.stage-dim`, sharing its shader because
+## the stylesheet gives them the same gradient verbatim. Invisible until defeat.
+func _build_lantern() -> void:
+	_lantern = ColorRect.new()
+	_lantern.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_lantern.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_lantern.color = Color.WHITE
+	_lantern.visible = false
+	_lantern_mat = ShaderMaterial.new()
+	var sh: Shader = Shader.new()
+	sh.code = STAGE_DIM_SHADER
+	_lantern_mat.shader = sh
+	_lantern_mat.set_shader_parameter("dark", DIM_DARK)
+	_lantern_mat.set_shader_parameter("hole", DIM_HOLE)
+	_lantern_mat.set_shader_parameter("la", 0.0)
+	_lantern.material = _lantern_mat
+	_shake_host.add_child(_lantern)
+
+
 ## `#grain` (styles.css:74) — z 75, over everything including the tooltip.
 ## Opacity .05, `mix-blend-mode: overlay`, and a 240px noise tile that JUMPS
 ## eight times a second (`grain 0.9s steps(1)`) rather than sliding.
@@ -759,6 +795,10 @@ func _plate(art: String, h: float, y: float, dx: float, zoom: float,
 func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> void:
 	_over_emitted = false
 	_encounter_text = encounter_text
+	# A fight begins with the light in the player's hands again.
+	_snuffed = false
+	if _lantern != null:
+		_lantern.visible = false
 	# Headless playback takes no ceremony with it: a test driving the sequencer
 	# must never wait on a tween that will not tick.
 	_floaters.instant = seq.instant
@@ -1177,6 +1217,10 @@ func _process(delta: float) -> void:
 func _update_stage_dim() -> void:
 	if _stage_dim_mat == null:
 		return
+	if _snuffed:
+		# The light has been handed to `#lantern`; the stage pool is done.
+		_lantern.modulate.a = _gutter_opacity()
+		return
 	var cb: CombatState = game.cb
 	if cb == null or cb.player.max_hp <= 0:
 		_stage_dim_mat.set_shader_parameter("la", 0.0)
@@ -1195,6 +1239,28 @@ func _update_stage_dim() -> void:
 		centre += (_aim_at - centre) * DIM_AIM_LEAN
 	_stage_dim_mat.set_shader_parameter("centre_px", centre - _stage_dim.global_position)
 	_stage_dim.modulate.a = 1.0 if t <= DIM_GUTTER_AT else _gutter_opacity()
+
+
+## `L.classList.add('snuff', 'gutter')` (drain.js:969) — the light goes out. The
+## stage pool hands its light over rather than adding to it (`dim --la: 0`,
+## gutter off there): two radials at once would double-darken the floor, and the
+## one that matters now is the one that covers everything.
+func _snuff() -> void:
+	if _lantern_mat == null:
+		return
+	_snuffed = true
+	_lantern.visible = true
+	_lantern.modulate.a = 1.0
+	_lantern_mat.set_shader_parameter("la", SNUFF_ALPHA)
+	_lantern_mat.set_shader_parameter("radius_px", SNUFF_RADIUS)
+	_lantern_mat.set_shader_parameter("stage_px", _lantern.size)
+	# `--lx` / `--ly` are whatever `updateLantern` last wrote, so the view
+	# collapses onto the body that was carrying the lantern.
+	_lantern_mat.set_shader_parameter("centre_px",
+		_hero_centre() - _lantern.global_position)
+	if _stage_dim_mat != null:
+		_stage_dim_mat.set_shader_parameter("la", 0.0)
+		_stage_dim.modulate.a = 1.0
 
 
 ## `document.body.classList.toggle('worldstop')` against
@@ -1635,6 +1701,7 @@ func _handle_event(ev: Dictionary) -> void:
 			await _wait(0.4)
 			_sfx.play(&"defeat")
 			_vfx.flash(Color(0.2, 0.0, 0.0), 0.5, 1.2)
+			_snuff()
 			await _wait(0.9)
 		_:
 			push_warning("CombatScreen: unhandled event %s" % String(t))
