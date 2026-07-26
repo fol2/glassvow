@@ -128,6 +128,8 @@ var _candles: Array[TextureRect] = []
 var _energy_orb: Control
 var _lantern: Control
 var _lantern_count: Label
+## The END seal's own root — dimmed while the queue drains.
+var _end_turn: Control
 var _draw_pile: Pile
 var _ashes_pile: Pile
 var _discard_pile: Pile
@@ -693,6 +695,17 @@ func pile_rect(which: StringName) -> Rect2:
 	return p.stack.get_global_rect()
 
 
+## `.end-turn.enemy-phase` (styles.css:1397) — while the queue drains, the END
+## seal dims to 0.45 and stops taking the pointer. The screen already refuses a
+## press while the pump is busy; this is the half that says so.
+func set_locked(locked: bool) -> void:
+	if _end_turn == null:
+		return
+	_end_turn.modulate.a = 0.45 if locked else 1.0
+	_end_turn.mouse_filter = Control.MOUSE_FILTER_IGNORE if locked \
+		else Control.MOUSE_FILTER_PASS
+
+
 ## `chromeIn` (styles.css:741) — the furniture rises 44px into place a beat
 ## behind the actors: 0.5s on a 0.4s delay, `backwards`, so it is already at its
 ## start pose when the fight opens rather than snapping there.
@@ -849,6 +862,7 @@ func _build_end_turn() -> void:
 	_place(root, Rect2(1060.0, 537.0, 120.0, 120.0), true, true)
 	add_child(root)
 	_chrome_in.append(root)
+	_end_turn = root
 	var btn: Button = _bare_button(Vector2(120.0, 120.0))
 	btn.pressed.connect(func() -> void: end_turn_pressed.emit())
 	root.add_child(btn)

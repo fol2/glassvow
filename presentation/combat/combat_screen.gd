@@ -84,6 +84,40 @@ class Plate:
 	extends Control
 	var tex: Texture2D
 	var where: Vector2 = Vector2(0.5, 0.5)
+	## `sl-drift` (styles.css:687) — the diorama breathes sideways. `--amp` is
+	## overridden per layer by `battlefield-layout.js`, and the live values are
+	## 30px on the backdrop, 10 on the mid and 0 on the ledge, so the floor never
+	## slides under the combatants standing on it.
+	var amp: float = 0.0
+	var period: float = 26.0
+	var _base_left: float = 0.0
+	var _width: float = 0.0
+	var _t: float = 0.0
+
+	## The anchored offsets are the plate's home; the drift is added to them each
+	## frame rather than written into `position`, because `position` on an
+	## anchored Control rewrites those offsets and the home would walk away.
+	##
+	## The WIDTH is kept here rather than read back from `size`. Moving
+	## `offset_left` moves the left edge and changes the size with it, so a
+	## `offset_right = offset_left + size.x` written after it restores the old
+	## right edge and the box breathes instead of sliding — which, under
+	## `cover`, is a zoom rather than a parallax.
+	func set_home(left: float, w: float) -> void:
+		_base_left = left
+		_width = w
+		offset_left = left
+		offset_right = left + w
+
+	func _process(delta: float) -> void:
+		if amp <= 0.0 or period <= 0.0:
+			set_process(false)
+			return
+		_t += delta
+		# `ease-in-out infinite alternate` over one period is a raised cosine to
+		# within a couple of percent, and it needs no phase bookkeeping.
+		offset_left = _base_left - amp * cos(PI * _t / period)
+		offset_right = offset_left + _width
 
 	func _draw() -> void:
 		if tex == null:
@@ -310,9 +344,12 @@ func _build_stage() -> void:
 	# h, bottom, dx, zoom, opacity, object-position — all six measured off the
 	# running benchmark's own `.sl-*` elements at this shape and act, because
 	# the resolved values are what the DOM ends up with, not what BF says.
-	_plate("backdrop", 640.0, 280.0, 0.0, 1.0, 0.85, Vector2(0.5, 1.0))
-	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95, Vector2(1.0, 1.0))
-	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, Vector2(1.0, 0.0), true)
+	# The last two numbers are `--amp` and the drift period, read live off the
+	# running benchmark rather than from the stylesheet: `battlefield-layout.js`
+	# overrides the CSS fallbacks, and 30/10/0 is what the DOM actually resolves.
+	_plate("backdrop", 640.0, 280.0, 0.0, 1.0, 0.85, Vector2(0.5, 1.0), false, 30.0, 26.0)
+	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95, Vector2(1.0, 1.0), false, 10.0, 18.0)
+	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, Vector2(1.0, 0.0), true, 0.0, 12.0)
 
 	# NOT BUILT, and the benchmark's own stylesheet says why:
 	#
@@ -338,7 +375,8 @@ func _build_stage() -> void:
 ## and then measured off the running build: the mid plate lands at x 394 with a
 ## 600-wide box, which is 690 minus half of 600, not half of 1500.
 func _plate(art: String, h: float, y: float, dx: float, zoom: float,
-		alpha: float, where: Vector2, is_ledge: bool = false) -> void:
+		alpha: float, where: Vector2, is_ledge: bool = false,
+		amp: float = 0.0, period: float = 26.0) -> void:
 	var path: String = STAGE_ART % art
 	if not ResourceLoader.exists(path):
 		# Named rather than silent: a missing plate is otherwise an invisible
@@ -360,8 +398,9 @@ func _plate(art: String, h: float, y: float, dx: float, zoom: float,
 	r.anchor_right = 0.5
 	r.anchor_top = 1.0
 	r.anchor_bottom = 1.0
-	r.offset_left = -box.x * 0.5 + dx
-	r.offset_right = r.offset_left + box.x
+	r.amp = amp
+	r.period = period
+	r.set_home(-box.x * 0.5 + dx, box.x)
 	r.offset_top = -(bottom + base.y * zoom)
 	r.offset_bottom = -bottom
 	_shake_host.add_child(r)
@@ -1220,12 +1259,11 @@ func _push_hud() -> void:
 
 func _on_busy_changed(busy: bool) -> void:
 	var locked: bool = busy or game.cb == null or game.cb.over
-	# HudBar's buttons do not disable — they are bare art with plain signals —
-	# but `_on_end_turn_pressed` and `_on_art_pressed` already refuse while the
-	# pump is busy, so the guard holds and only the grey-out is missing.
-	# A `set_locked(bool)` on the widget would close that; it is a HUD-lane ask.
+	# `ce.endTurn.classList.add('enemy-phase')` — the guard was already there in
+	# `_on_end_turn_pressed`; `set_locked` is the half of it the player can see.
 	_kindle_toggle.disabled = locked
 	_hand.locked = locked
+	_hud.set_locked(locked)
 	if locked:
 		_aim.clear_aim()
 		_hand.cancel_drag()
