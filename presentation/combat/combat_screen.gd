@@ -53,6 +53,35 @@ class Breath:
 	var delay: float = 0.0
 
 
+## One painted plate, drawn rather than stretched.
+##
+## The plates are `object-fit: cover`, which `STRETCH_KEEP_ASPECT_COVERED` is —
+## except that Godot's always crops about the MIDDLE, and the benchmark anchors
+## each plate somewhere else: the backdrop to its bottom edge, the mid to its
+## bottom-right, the ledge to its TOP-right. Cropping all three from the middle
+## shows a different part of every painting, which is what made this stage read
+## as the wrong art rather than as art in the wrong place.
+##
+## `where` is `object-position` as a fraction: (0.5, 1.0) is `50% 100%`.
+class Plate:
+	extends Control
+	var tex: Texture2D
+	var where: Vector2 = Vector2(0.5, 0.5)
+
+	func _draw() -> void:
+		if tex == null:
+			return
+		var t: Vector2 = tex.get_size()
+		if t.x <= 0.0 or t.y <= 0.0 or size.x <= 0.0 or size.y <= 0.0:
+			return
+		# cover: the smallest scale that still fills the box, so the window we
+		# read out of the source is the box divided by it.
+		var s: float = maxf(size.x / t.x, size.y / t.y)
+		var window: Vector2 = Vector2(size.x / s, size.y / s)
+		var origin: Vector2 = (t - window) * where
+		draw_texture_rect_region(tex, Rect2(Vector2.ZERO, size), Rect2(origin, window))
+
+
 var game: GlassvowGame
 var seq: EventSequencer = EventSequencer.new()
 var _breaths: Array[Breath] = []
@@ -129,15 +158,16 @@ func _build_ui() -> void:
 	add_child(_hud)
 
 	_hand = HandView.new()
-	# `.hand-zone` — 680 wide, centred on the stage, hanging 12px past the
-	# bottom edge. Not an inset from both sides: the fan is a fixed box that
-	# stays put while the window changes around it.
+	# `.hand-zone` — centred on the stage, 260 tall, hanging 12px past the
+	# bottom edge. The WIDTH is not a constant: the benchmark sizes the box to
+	# hug the fan, so HandView re-edges itself on every relayout and this is
+	# only the resting five-card figure it starts at.
 	_hand.anchor_left = 0.5
 	_hand.anchor_right = 0.5
 	_hand.anchor_top = 1.0
 	_hand.anchor_bottom = 1.0
-	_hand.offset_left = -340.0
-	_hand.offset_right = 340.0
+	_hand.offset_left = -HandView.zone_width(5, STAGE.x) * 0.5
+	_hand.offset_right = HandView.zone_width(5, STAGE.x) * 0.5
 	_hand.offset_top = -248.0
 	_hand.offset_bottom = 12.0
 	_hand.card_tapped.connect(_on_card_tapped)
@@ -226,9 +256,12 @@ func _build_stage() -> void:
 
 	# Draw order is the benchmark's paint order: the plates and the breath sit
 	# at z 0, the mist at 2, the ledge band at 3.
-	_plate("backdrop", 640.0, 280.0, 0.0, 1.0, 0.85)
-	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95)
-	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, true)
+	# h, bottom, dx, zoom, opacity, object-position — all six measured off the
+	# running benchmark's own `.sl-*` elements at this shape and act, because
+	# the resolved values are what the DOM ends up with, not what BF says.
+	_plate("backdrop", 640.0, 280.0, 0.0, 1.0, 0.85, Vector2(0.5, 1.0))
+	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95, Vector2(1.0, 1.0))
+	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, Vector2(1.0, 0.0), true)
 
 	# `.stage-breath` — 34cqw x 26cqh blobs, container-query units against the
 	# stage, so 401 x 213 here. Their opacity and scale breathe 7s alternating
@@ -270,19 +303,30 @@ func _build_stage() -> void:
 
 	# `.stage-ledge::before` — the lip: a hairline of caught light one lip-height
 	# above the ground line, faded out at both ends, with its own bloom under it.
-	var lip_tint: Color = LEDGE.lerp(Color.WHITE, 0.25)
-	var bloom: TextureRect = _lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.14), 18.0)
-	add_child(bloom)
-	add_child(_lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.4), 2.0))
+	var lip_tint: Color = LEDGE.lerp(Color.WHITE, 0.25)  # mix(ledge 75%, #fff)
+	# `box-shadow: 0 0 16px` is a glow that falls off; a flat band the same
+	# height is a BAR, and at 0.14 it read as one — a hard green stripe across a
+	# floor drawn in perspective. Spread over twice the blur radius at a third
+	# of the alpha it goes back to being light caught on an edge.
+	add_child(_lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.05), 34.0))
+	# 1.5, not 2: the CSS says 1.5px and a Control takes a fractional height.
+	# Judged at 1:1 against the source, never against a scaled-down capture —
+	# a hairline all but vanishes in a downscaled screenshot, which is how it
+	# nearly got 'corrected' out of existence here.
+	add_child(_lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.4), 1.5))
 
 
 ## One painted plate. `h` and `y` are stage px, `y` being the plate's bottom
 ## above the stage bottom — except the ledge, which hangs off the ground line
-## instead (`combat.js:384`). `zoom` scales about the plate's own bottom-left,
-## which is the CSS order: the individual `scale` property resolves BEFORE
-## `transform`'s centring translate, so the centring uses the unscaled width.
+## instead (`combat.js:384`).
+##
+## The box is `h` tall by at least the stage's width (`min-width: 100%`), scaled
+## by `zoom`, and CENTRED BY ITS SCALED WIDTH on the stage's centre plus `dx`.
+## That last part was got wrong first time from reading the CSS transform order,
+## and then measured off the running build: the mid plate lands at x 394 with a
+## 600-wide box, which is 690 minus half of 600, not half of 1500.
 func _plate(art: String, h: float, y: float, dx: float, zoom: float,
-		alpha: float, is_ledge: bool = false) -> void:
+		alpha: float, where: Vector2, is_ledge: bool = false) -> void:
 	var path: String = STAGE_ART % art
 	if not ResourceLoader.exists(path):
 		# Named rather than silent: a missing plate is otherwise an invisible
@@ -292,20 +336,20 @@ func _plate(art: String, h: float, y: float, dx: float, zoom: float,
 	var tex: Texture2D = load(path)
 	var aspect: float = float(tex.get_width()) / maxf(1.0, float(tex.get_height()))
 	var base: Vector2 = Vector2(maxf(STAGE.x, h * aspect), h)  # `min-width: 100%`
+	var box: Vector2 = base * zoom
 	var bottom: float = maxf(0.0, GROUND_Y + LEDGE_LIP - h + y) if is_ledge else y
-	var r: TextureRect = TextureRect.new()
-	r.texture = tex
+	var r: Plate = Plate.new()
+	r.tex = tex
+	r.where = where
 	r.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	r.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	r.modulate = Color(1.0, 1.0, 1.0, alpha)
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	r.anchor_left = 0.5
 	r.anchor_right = 0.5
 	r.anchor_top = 1.0
 	r.anchor_bottom = 1.0
-	r.offset_left = -base.x * 0.5 + dx
-	r.offset_right = r.offset_left + base.x * zoom
+	r.offset_left = -box.x * 0.5 + dx
+	r.offset_right = r.offset_left + box.x
 	r.offset_top = -(bottom + base.y * zoom)
 	r.offset_bottom = -bottom
 	add_child(r)
