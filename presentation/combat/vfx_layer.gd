@@ -93,12 +93,6 @@ const CHROME_RIM_W: float = 3.0
 ## `g.scale = 0.5 + easeOutCubic(k) * 0.85`
 const CHROME_S0: float = 0.5
 const CHROME_S1: float = 0.85
-## The chrome beat is NOT a `V.*` particle in the benchmark and its layer
-## says so: `pulseLayer` sits inside `#uigl` (z 51), above `handLayer` and
-## above every widget it answers, while `#vfx` (z 50) is below all of them.
-## One absolute z above the chrome, so it reads on top of the lantern it rings
-## even though the particles under it are painted below the same lantern.
-const CHROME_Z: int = 52
 
 ## `theme.weather` for act 1 (`packs/core/themes.js:21`) — ash. One fleck a
 ## second, falling slowly, and one in twenty is an ember climbing the other way.
@@ -167,13 +161,10 @@ class Pass:
 	extends Control
 	var src: VfxLayer
 	var additive: bool = false
-	## `#vfx` and `pulseLayer` are two different layers of the benchmark, so the
-	## chrome beat is drawn by its own pass and skipped by the other two.
-	var chrome: bool = false
 
 	func _draw() -> void:
 		if src != null:
-			src.paint_parts(self, additive, chrome)
+			src.paint_parts(self, additive)
 
 
 ## The full-stage colour washes, painted last and never additively.
@@ -190,7 +181,6 @@ var _parts: Array[Part] = []
 var _flashes: Array[Wash] = []
 var _norm: Pass
 var _add: Pass
-var _chrome: Pass
 var _flash_pass: FlashPass
 ## The node the shake moves. The benchmark shakes `#shake`, which wraps the
 ## screen, the mesh, the lantern and the HUD — everything but the effect canvas
@@ -225,21 +215,6 @@ func _init(shake_host: Control = null) -> void:
 	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	_add.material = mat
 	add_child(_add)
-	# Above the chrome rather than under it — see CHROME_Z. `z_as_relative` off
-	# because the number is a position in the whole screen's stack, not an
-	# offset from whatever this layer happens to be parented at.
-	_chrome = Pass.new()
-	_chrome.src = self
-	_chrome.additive = true
-	_chrome.chrome = true
-	_chrome.z_as_relative = false
-	_chrome.z_index = CHROME_Z
-	_chrome.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_chrome.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var chrome_mat: CanvasItemMaterial = CanvasItemMaterial.new()
-	chrome_mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	_chrome.material = chrome_mat
-	add_child(_chrome)
 	_flash_pass = FlashPass.new()
 	_flash_pass.src = self
 	_flash_pass.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -260,7 +235,6 @@ func _process(delta: float) -> void:
 	_step_shake(dt)
 	_norm.queue_redraw()
 	_add.queue_redraw()
-	_chrome.queue_redraw()
 	_flash_pass.queue_redraw()
 
 
@@ -348,10 +322,8 @@ func _step_shake(dt: float) -> void:
 		_shake_v = 0.0
 
 
-func paint_parts(host: CanvasItem, additive: bool, chrome: bool = false) -> void:
+func paint_parts(host: CanvasItem, additive: bool) -> void:
 	for p: Part in _parts:
-		if (p.kind == "chrome") != chrome:
-			continue
 		if p.additive != additive:
 			continue
 		var a: float = minf(1.0, p.life / maxf(0.001, p.fade))
