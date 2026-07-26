@@ -782,16 +782,6 @@ func fly_backs(from: StringName, to: StringName, n: int, seconds: float) -> void
 		tw.tween_callback(face.queue_free)
 
 
-## `candleFrameCache.bounds` (combat-gl.js:1383) — the candle ROW, which is not
-## the orb and not the numeral above it. `chromePulse('energy')` sizes its beat
-## off `min(width, height)`, so handing back the whole 120x90 cluster would put
-## the ring high and at twice the radius.
-func energy_rect() -> Rect2:
-	if _candle_field == null:
-		return Rect2(global_position + size * 0.5, Vector2.ZERO)
-	return _candle_field.get_global_rect()
-
-
 ## Where the lantern hangs, in global px — embers spilled by dying glass fly to
 ## it, and the drain needs the target before the flight can be aimed.
 func lantern_rect() -> Rect2:

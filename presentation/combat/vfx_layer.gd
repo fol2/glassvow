@@ -76,24 +76,6 @@ const DEAD_KINDS: Array[String] = ["ring", "slash"]
 const SHAKE_DECAY: float = 0.001
 const SHAKE_FLOOR: float = 0.1
 
-## `spawnPulse` (combat-gl.js:954) — the chrome beat. Two additive discs under a
-## ring, blooming out of a widget's centre and gone in `DURATION_MS.quick`
-## (tokens.js:58 = 180ms, and `Math.max(160, ...)` never raises it).
-const CHROME_MS: float = 0.18
-## `R = max(12, min(width, height) * 0.62)` — sized off the widget's own box, so
-## one call reads right on a 34px ward chip and on a 120px candle row.
-const CHROME_R_MIN: float = 12.0
-const CHROME_R_OF: float = 0.62
-const CHROME_OUT_R: float = 0.72
-const CHROME_OUT_A: float = 0.14
-const CHROME_IN_R: float = 0.42
-const CHROME_IN_A: float = 0.20
-const CHROME_RIM_A: float = 0.85
-const CHROME_RIM_W: float = 3.0
-## `g.scale = 0.5 + easeOutCubic(k) * 0.85`
-const CHROME_S0: float = 0.5
-const CHROME_S1: float = 0.85
-
 ## `theme.weather` for act 1 (`packs/core/themes.js:21`) — ash. One fleck a
 ## second, falling slowly, and one in twenty is an ember climbing the other way.
 ## Inlined because the slice exporter carries no theme record; the day it does,
@@ -291,7 +273,7 @@ func _step_parts(dt: float) -> void:
 		p.vel *= 1.0 - p.drag * dt
 		if p.kind == "ring":
 			p.r += p.vr * dt
-		elif p.kind == "slash" or p.kind == "chrome":
+		elif p.kind == "slash":
 			p.prog = minf(1.0, p.prog + dt / p.dur)
 		live.append(p)
 	_parts = live
@@ -349,23 +331,6 @@ func paint_parts(host: CanvasItem, additive: bool) -> void:
 						continue
 					host.draw_arc(p.pos, p.r + float(i) * 7.0, p.a0, p.a0 + sweep,
 						28, band, w, true)
-			"chrome":
-				# The bloom is eased and the fade is not: `scale` rides an
-				# easeOutCubic to 1.35 while `alpha` falls as inv², so the beat
-				# opens on the first frame and leaves without a hard edge.
-				var inv: float = 1.0 - p.prog
-				var s: float = CHROME_S0 + (1.0 - inv * inv * inv) * CHROME_S1
-				var k: float = inv * inv
-				var disc: Color = col
-				disc.a = k * CHROME_OUT_A
-				host.draw_circle(p.pos, p.r * CHROME_OUT_R * s, disc, true, -1.0, true)
-				disc.a = k * CHROME_IN_A
-				host.draw_circle(p.pos, p.r * CHROME_IN_R * s, disc, true, -1.0, true)
-				# The ring is stroked on the Graphics object the scale is applied
-				# to, so its width grows with the bloom rather than staying 3px.
-				disc.a = k * CHROME_RIM_A
-				host.draw_arc(p.pos, p.r * s, 0.0, TAU, 48, disc,
-					CHROME_RIM_W * s, true)
 			_:
 				host.draw_circle(p.pos, maxf(0.5, p.size * a), col, true, -1.0, true)
 
@@ -410,29 +375,6 @@ func shake(power: float = 8.0) -> void:
 
 func hitstop(ms: float = 60.0) -> void:
 	_hitstop_left = maxf(_hitstop_left, ms / 1000.0)
-
-
-## `chromePulse` (combat.js:1975) → `spawnPulse` (combat-gl.js:954). A chrome
-## widget's value ticked; this is the beat that says so.
-##
-## Drawn OFF the widget rather than on it, and the benchmark states the reason in
-## its own comment: the painted chrome is rebuilt on every sync, so a glow living
-## on the widget would fight its repaint. It is the other half of the widget's
-## `.pop` — the scale beat is the widget moving, this is the light it throws.
-##
-## Returns false for a box with no area, which is the same answer the benchmark's
-## null bounds cache gives for a widget that is not up.
-func chrome_pulse(bounds: Rect2, tone: Color, dur: float = CHROME_MS) -> bool:
-	if bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
-		return false
-	# No `PULSE_MAX` twin: the benchmark caps at 24 because each pulse is a live
-	# Pixi Graphics object, and ours is three draw calls inside a pass that
-	# already exists. `MAX_PARTS` is the only ceiling that has to hold.
-	var p: Part = _spawn("chrome", bounds.get_center(), Vector2.ZERO, 0.0,
-		tone, dur, dur)
-	p.r = maxf(CHROME_R_MIN, minf(bounds.size.x, bounds.size.y) * CHROME_R_OF)
-	p.dur = dur
-	return true
 
 
 func flash(colour: Color, alpha: float = 0.18, dur: float = 0.25) -> void:
