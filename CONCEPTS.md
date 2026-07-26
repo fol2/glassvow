@@ -113,11 +113,24 @@ painting and its accumulated Cracks together, so a fracture scored into it canno
 drift off the creature it belongs to.
 
 ### Crack
-A scored fracture site on a Vessel. Cracks accumulate as geometry that rides with
-the body and determine how the Vessel breaks apart when the Death rite runs.
-They are deliberately *not* driven by ordinary damage — the glass vocabulary is
-spent on death rather than on attrition, so a wounded creature does not visibly
-craze.
+A fracture propagated into a Vessel by a blow. Cracks accumulate as geometry that
+rides with the body and determine how the Vessel breaks apart when the Death rite
+runs.
+
+Cracks **are** driven by damage: a hit scores fracture where it landed, so a
+wounded creature visibly carries what has been done to it and the glass tells the
+truth about the fight. What a Crack is not is *one line per hit* — a blow throws a
+star of several arms, and how many it throws and how far they run are bought with
+its energy, so a light hit leaves a short mark and a heavy one reaches across the
+body. A Vessel records at most **eight impacts**; the ninth blow scores nothing
+new. That is a legibility ceiling and not a rule about combat — past eight the body
+reads as frosted rather than as broken.
+
+The accumulated Cracks are the **only** thing the Death rite breaks along. It adds
+no new pattern of its own — it releases what the creature was already carrying,
+carrying every arrested crack tip the rest of the way out to the silhouette so the
+network finally separates the body into pieces. A creature that died having been
+hit twice breaks into few large shards; one that was worn down breaks into many.
 
 ### Death rite
 The sequence that replaces a defeated actor: the Vessel strains, the fire inside

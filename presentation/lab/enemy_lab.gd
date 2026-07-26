@@ -14,6 +14,9 @@ extends Control
 ##   tools/shot.sh --enemies --shot=/tmp/enemies.png
 ##   godot --path . -- --enemies --only=sporeling,leviathan  # detail, 1:1
 ##   godot --path . -- --enemies --states[=duskfang]         # the real states
+##   tools/shot.sh --enemies --fracture --compare --shot=/tmp/ab.png
+##                     # START HERE: today's disc web vs propagated fracture,
+##                     # same creature, same blows, same places. Which is glass?
 ##   tools/shot.sh --enemies --fracture[=duskfang] --shot=/tmp/f.png
 ##                     # THE KILL TEST: blows accumulating, as bare lines
 ##   tools/shot.sh --enemies --fracture --stops --shot=/tmp/f2.png
@@ -106,6 +109,7 @@ var _light_pitch: float = -38.0
 var _frac_energy: float = 1.2
 var _frac_stops: bool = false
 var _frac_field: bool = false
+var _frac_compare: bool = false
 
 
 ## The two heroes stand on the same ground line as the foes and get the same
@@ -222,6 +226,8 @@ func _init(content_ref: ContentDB) -> void:
 			_frac_stops = true
 		elif arg == "--field":
 			_frac_field = true
+		elif arg == "--compare":
+			_frac_compare = true
 		elif arg.begins_with("--energy="):
 			var en: String = arg.trim_prefix("--energy=")
 			if en.is_valid_float() and float(en) > 0.0:
@@ -457,38 +463,93 @@ func _build_roster(ids: Array[String], roster: Dictionary, names: Dictionary) ->
 ## creature was already carrying, not along a fresh unrelated pattern.
 const FRACTURE_STEPS: Array[int] = [1, 2, 3, 5, 8]
 
+## `--compare` uses four columns rather than six and drops the rite cell. Two rows of
+## six at this sheet's fit scale puts the new model's hairlines under one pixel, and a
+## comparison you have to squint at is not a comparison. The rite has its own sheet.
+const COMPARE_STEPS: Array[int] = [1, 3, 5, 8]
+
+
+## The question this sheet asks, printed ON it. Handing someone a picture of white
+## lines on a monster and expecting a verdict is not a test — it is a guessing game,
+## and the owner said so. State the question, name both rows, and say what a pass
+## looks like, so the sheet can be judged by someone who has not read §2.4.
+const COMPARE_ASK: String = "WHICH OF THESE LOOKS LIKE BROKEN GLASS?  ·  same creature, same blows, same places — only the model differs"
+const COMPARE_OLD: String = "TODAY — the disc web.  Look for: every crack sits inside its own circle, and the circles stack up as damage accumulates."
+const COMPARE_NEW: String = "PROPOSED — propagated fracture.  Look for: no circles. Lines start where the blow landed, curve, branch, and stop on each other or at the edge."
+
 
 func _build_fracture(id: String, def: Dictionary, locale: Dictionary) -> void:
 	var box: float = EnemyView.art_box(StringName(id))
 	if box <= 0.0:
 		box = 185.0
+	if not _frac_compare:
+		var w: float = _fracture_row(id, def, locale, box, MARGIN + box,
+			FRACTURE_STEPS, true, true)
+		_count = FRACTURE_STEPS.size() + 1
+		_sheet_size = Vector2(w, MARGIN + box + CHROME_H + MARGIN)
+		return
+	# Two rows, the old model above the new one, both driven by the same blow points.
+	_sheet.add_child(_banner(COMPARE_ASK, MARGIN, MARGIN - 26.0, GlassStyle.TEXT, 15))
+	var top: float = MARGIN + 34.0
+	_sheet.add_child(_banner(COMPARE_OLD, MARGIN, top - 4.0, GlassStyle.GLASS, 12))
+	var w_old: float = _fracture_row(id, def, locale, box, top + 18.0 + box,
+		COMPARE_STEPS, false, false)
+	var second: float = top + 18.0 + box + CHROME_H + ROW_GAP
+	_sheet.add_child(_banner(COMPARE_NEW, MARGIN, second - 4.0, GlassStyle.EMBER, 12))
+	var w_new: float = _fracture_row(id, def, locale, box, second + 18.0 + box,
+		COMPARE_STEPS, true, false)
+	_count = COMPARE_STEPS.size() * 2
+	_sheet_size = Vector2(maxf(w_old, w_new),
+		second + 18.0 + box + CHROME_H + MARGIN)
+
+
+static func _banner(text: String, x: float, y: float, tint: Color, size_px: int) -> Label:
+	var l: Label = Label.new()
+	l.text = text
+	l.position = Vector2(x, y)
+	l.add_theme_font_size_override("font_size", size_px)
+	l.add_theme_color_override("font_color", tint)
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return l
+
+
+## One row of the sheet. `propagated` picks the model: true strikes the probe and never
+## calls `crack()`, false calls `crack()` and never builds a probe — so each row shows
+## exactly one model with nothing of the other's on it. Returns the row's full width.
+func _fracture_row(id: String, def: Dictionary, locale: Dictionary, box: float,
+		ground: float, steps: Array[int], propagated: bool, with_rite: bool) -> float:
 	var max_hp: int = _max_hp(def)
-	var ground: float = MARGIN + box
 	var x: float = MARGIN
 	var actors: Array[EnemyView] = []
-	var cells: int = FRACTURE_STEPS.size() + 1
+	var cells: int = steps.size() + (1 if with_rite else 0)
 	for c: int in range(cells):
-		var relieved: bool = c == FRACTURE_STEPS.size()
-		var blows: int = FRACTURE_STEPS[FRACTURE_STEPS.size() - 1] if relieved \
-			else FRACTURE_STEPS[c]
+		var relieved: bool = with_rite and c == steps.size()
+		var blows: int = steps[steps.size() - 1] if relieved else steps[c]
 		var view: EnemyView = _actor(id, def, locale, x, ground)
 		view.set_hp(max_hp, max_hp)
 		view.set_facets(0, _facet_max(def))
 		view.set_ward(0)
 		view.clear_intent()
-		# Every cell gets the SAME probe seed and the same blow positions, so cell N+1
-		# is cell N plus one more blow. Re-seeding per cell would make the sheet six
-		# unrelated fights and the accumulation unreadable.
-		var probe: FractureProbe = FractureProbe.new(view, StringName(id), hash(id))
-		probe.energy = _frac_energy
-		probe.show_drive = _frac_field
-		probe.show_termini = _frac_stops
-		view.add_child(probe)
+		# The SAME seed and therefore the same blow points in every cell and in both
+		# rows. Cell N+1 is cell N plus one more blow, and the old row is struck exactly
+		# where the new row is — without that the sheet is twelve unrelated fights and
+		# compares nothing.
 		var where: Rng = Rng.new(hash(id) ^ 0x5EED)
 		var mask: BodyMask = EnemyView.body_mask(StringName(id))
+		var probe: FractureProbe = null
+		if propagated:
+			probe = FractureProbe.new(view, StringName(id), hash(id))
+			probe.energy = _frac_energy
+			probe.show_drive = _frac_field
+			probe.show_termini = _frac_stops
+			view.add_child(probe)
 		for _b: int in range(blows):
-			probe.strike(_body_point(where, mask))
-		if relieved:
+			var at: Vector2 = _body_point(where, mask)
+			if probe != null:
+				probe.strike(at)
+			else:
+				view.crack(at)
+		if relieved and probe != null:
 			probe.relieve()
 		view.align_plate(ground - (view.position.y + view.size.y))
 		actors.append(view)
@@ -502,11 +563,11 @@ func _build_fracture(id: String, def: Dictionary, locale: Dictionary) -> void:
 		tag.add_theme_color_override("font_color", GlassStyle.EMBER)
 		tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_sheet.add_child(tag)
-		print("fracture %s cell %d: %s" % [id, c, probe.describe()])
+		if probe != null:
+			print("fracture %s cell %d: %s" % [id, c, probe.describe()])
 		x += box + GAP_X
 	_rows.append({"ground": ground, "actors": actors})
-	_count = cells
-	_sheet_size = Vector2(x - GAP_X + MARGIN, ground + CHROME_H + MARGIN)
+	return x - GAP_X + MARGIN
 
 
 ## A blow point that is actually ON the creature. A fixed UV list would land in empty
