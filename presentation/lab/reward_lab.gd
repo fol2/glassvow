@@ -30,7 +30,8 @@ extends Control
 ##
 ## In the window:
 ##   1..5   case: gold · cards · full · elite · tiers
-##   Q W E R T Y   concept: rows · lancet · rose · embers · window · reliquary
+##   Q W E R T Y U concept: rows · lancet · rose · embers · window · reliquary
+##          ...and U, the 3D husk build stage — move the cursor to turn it
 ##   B      build: beyond ⇄ benchmark (rows only — the ported floor)
 ##   O      open the offering (rows only; the others have no second door)
 ##   0      reset the screen
@@ -40,7 +41,7 @@ extends Control
 ## The same flags still drive a scripted shot, and the strip hides itself
 ## whenever --shot= is present so it never lands in the frame:
 ##   --case=    gold | cards | full | elite | tiers   (default full)
-##   --concept= rows|lancet|rose|embers|window|reliquary   (default embers)
+##   --concept= rows|lancet|rose|embers|window|reliquary|husk  (default embers)
 ##   --bench    the benchmark ported straight — the floor the rest is diffed
 ##              against. Without it: one panel that deepens and seated spoils.
 ##   --pick     open the offering straight away — it is behind a row press,
@@ -109,11 +110,17 @@ const ORDER: Array[String] = ["gold", "cards", "full", "elite", "tiers"]
 ## The concepts on offer, in the order they were built. "rows" is the settled
 ## benchmark port; everything after it is an answer to the same brief that does
 ## not begin from a list.
-const CONCEPTS: Array[String] = ["rows", "lancet", "rose", "embers", "window", "reliquary"]
+## ...plus `husk`, which is not a reward screen and does not pretend to be. It is
+## stage 1 of `docs/reward-embers-3d-plan.md`: the 3D room with the dead enemy
+## standing in it and nothing else, so the one question that stage asks — does
+## this read as a solid object in a lit room — can be asked on its own. Move the
+## cursor to turn it; a material says nothing until the angle moves.
+const CONCEPTS: Array[String] = ["rows", "lancet", "rose", "embers", "window",
+	"reliquary", "husk"]
 ## Six concepts need six keys, so reset moves off R and onto 0. Cases keep
 ## 1..5 — the row of number keys is the inner choice and the row of letters
 ## under it is the outer one, which is the same shape as the strip.
-const CONCEPT_KEYS: Array[int] = [KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y]
+const CONCEPT_KEYS: Array[int] = [KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U]
 const BAR_H: float = 78.0
 ## What the footer log takes off the bottom, with a little air over it.
 const LOG_H: float = 30.0
@@ -200,12 +207,13 @@ func _ready() -> void:
 	# strip owns the state and re-applying them on every rebuild would make a
 	# case switch un-resettable.
 	for slot: String in _take:
-		_screen.mark_taken(StringName(slot))
-		_note("marked taken: " + slot)
+		if _screen.has_method("mark_taken"):
+			_screen.call("mark_taken", StringName(slot))
+			_note("marked taken: " + slot)
 	if _pick:
 		_offering()
-	if _leave:
-		_screen.request_leave()
+	if _leave and _screen.has_method("request_leave"):
+		_screen.call("request_leave")
 
 
 ## Only the row concept keeps the offering behind a second door; the others put
@@ -235,6 +243,7 @@ func _rebuild() -> void:
 		"window": _screen = RewardWindow.new(reward, content, kind)
 		"embers": _screen = RewardEmbers.new(reward, content, kind, _hue())
 		"reliquary": _screen = RewardReliquary.new(reward, content, kind)
+		"husk": _screen = RewardStage.new(_enemy(), _hue())
 		_: _screen = RewardScreen.new(reward, content, kind, _bench)
 	# The strip is the LAB'S chrome and the screen is the thing being judged, so
 	# the screen is told what the chrome is eating rather than being parked under
@@ -245,8 +254,12 @@ func _rebuild() -> void:
 	if embers != null:
 		embers.safe_top = 0.0 if _bar == null else BAR_H
 		embers.safe_bottom = 0.0 if _bar == null else LOG_H
-	_screen.connect(&"claimed", _on_claimed)
-	_screen.connect(&"finished", _on_finished)
+	# Guarded, because not everything the viewer can show is a reward screen: the
+	# husk build stage has a room and an object in it and no notion of a claim.
+	if _screen.has_signal(&"claimed"):
+		_screen.connect(&"claimed", _on_claimed)
+	if _screen.has_signal(&"finished"):
+		_screen.connect(&"finished", _on_finished)
 	add_child(_screen)
 	# Siblings draw and pick front-to-back in child order, so the strip and the
 	# log have to stay last or the screen's full-rect scrim swallows both.
@@ -419,6 +432,19 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	else:
 		return
 	accept_event()
+
+
+## The husk stage is judged by turning it, so the viewer hands it the cursor.
+## The stage takes no input of its own and must not: in the finished screen it is
+## the back layer, and a full-rect Control there would swallow every click meant
+## for a card.
+func _input(event: InputEvent) -> void:
+	var motion: InputEventMouseMotion = event as InputEventMouseMotion
+	if motion == null:
+		return
+	var stage: RewardStage = _screen as RewardStage
+	if stage != null:
+		stage.look_from(motion.position)
 
 
 ## Drive the strip's own button rather than jumping straight to the setter, or
