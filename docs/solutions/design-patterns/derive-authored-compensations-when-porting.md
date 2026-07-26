@@ -79,7 +79,7 @@ Three payoffs, in increasing order of importance:
    foes', and are simply never read — dead data, not tuning.)
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
-   (`presentation/combat/enemy_view.gd:1742` (`_update_shadow`); the swing itself
+   (`presentation/combat/enemy_view.gd:1743` (`_update_shadow`); the swing itself
    enters at `enemy_view.gd:3344` (`set_light_angle`)). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.

@@ -1289,16 +1289,17 @@ void fragment() {
 	// BODY_SHADER) — a falling piece stays lit the way it was lit standing,
 	// which is most of what makes it recognisably the same creature.
 	float l = dot(c.rgb, vec3(0.299, 0.587, 0.114)) * c.a;
-	// 0.30 on the fracture face, down from 0.90. The docblock above says it: "Heat is
-	// seasoning, never paint: push the glow past a whisper and every piece is the same
-	// white-hot popcorn and the creature is gone AGAIN, just hotter." That was the right
-	// warning and 0.90 was inside it while the faces were thin trim on wide Voronoi
-	// plates. Carved slivers are nearly cubes, the face became most of the visible area,
-	// and 0.90 duly turned every piece the same warm mid-tone — plywood, not glass.
+	// 0.90 on the fracture face, unchanged since the rite was built — and this comment used
+	// to claim 0.30, which the code beside it never was. That was mine: `c122bb3` proposed
+	// dropping it because carved slivers show more fracture face than Voronoi plates did, a
+	// diagnostic then disproved the premise, the code was reverted and the justification was
+	// not. A comment arguing for a number the file does not hold is worse than no comment,
+	// so the record of what actually happened replaces it.
 	//
-	// Reduced rather than removed: molten fracture edges are the point of the rite. What
-	// changed is how much of the screen is fracture edge, and a per-face constant that was
-	// tuned against one quantity has to move when the quantity does.
+	// The premise has now failed twice. Painting `COLOR.r` red proved the pale surfaces are
+	// not fracture faces; zeroing this whole term proved they are not emission at all. See
+	// `docs/fracture-model.md` §9 for where the tan does come from — it is the lighting, and
+	// it is not a defect in this shader.
 	EMISSION = WARM * (edge * heat * 0.9 + brink * 1.1 + f * heat * 0.3)
 		+ c.rgb * (pow(l, 3.2) * 0.85 * (1.0 - edge) + heat * 0.25);
 }
@@ -2465,21 +2466,58 @@ static func _prism(cell: PackedVector2Array, thick: float, box: Vector2,
 	var st: SurfaceTool = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var z: float = thick * 0.5
+	# The cell's own centre, for deciding which way "out" is along each edge below. Winding
+	# is not a reliable source for that here: the carve and the Voronoi path hand this
+	# function polygons wound to their own conventions, and the shard shader's Fresnel is
+	# only correct while the normals point out of the solid.
+	var mid: Vector2 = Vector2.ZERO
+	for p: Vector2 in cell:
+		mid += p
+	mid /= float(cell.size())
+
+	# CAPS. Normals AUTHORED rather than generated, and that is this function's whole bug
+	# history in one line.
+	#
+	# `generate_normals()` averages the faces meeting at a vertex, and on a shard EVERY cap
+	# vertex is on the outline — a carved piece has no interior vertices at all — so every
+	# one of them got averaged with the side band it touches. The result is not a flat cap
+	# with a bevelled rim; it is a cap that is bevelled EVERYWHERE, a dome. Measured by
+	# writing the Fresnel term straight to EMISSION: `f` sat at 0.45 across faces pointing
+	# at the camera, where a flat cap reads 0. `WARM * f * heat * 0.3` then poured warm light
+	# over the painting, and that is the "plywood" the debris has read as since the rite was
+	# built. `docs/fracture-model.md` §5.2 named the mechanism and expected it to bite the
+	# crack ribbon; it was already biting the debris.
+	#
+	# `set_smooth_group(-1)` did not fix it — tried, measured, still 0.45 — so the normals
+	# are written rather than asked for.
 	st.set_color(Color(0, 0, 0))
 	for face: int in range(2):
 		var zz: float = z if face == 0 else -z
+		st.set_normal(Vector3(0.0, 0.0, 1.0 if face == 0 else -1.0))
 		var i: int = 0
 		while i < tri.size():
 			for k: int in range(3):
-				var p: Vector2 = cell[tri[i + k]]
+				# The back cap is wound the other way. `triangulate_polygon` returns one
+				# winding; reusing it at -z leaves the back cap facing into the shard, which
+				# `cull_disabled` happily draws.
+				var at: int = tri[i + k] if face == 0 else tri[i + (2 - k)]
+				var p: Vector2 = cell[at]
 				st.set_uv(Vector2(p.x / box.x + 0.5, 0.5 - p.y / box.y))
 				st.add_vertex(Vector3(p.x - origin.x, p.y - origin.y, zz))
 			i += 3
-	# Side band, quad per edge — where the thickness actually shows.
+	# Side band, quad per edge — where the thickness actually shows. One flat outward normal
+	# per edge, perpendicular to it and turned to face away from the centre.
 	st.set_color(Color(1, 0, 0))
 	for i: int in range(cell.size()):
 		var a: Vector2 = cell[i]
 		var b: Vector2 = cell[(i + 1) % cell.size()]
+		var edge: Vector2 = b - a
+		if edge.length() <= 0.0:
+			continue
+		var out: Vector2 = Vector2(edge.y, -edge.x).normalized()
+		if out.dot((a + b) * 0.5 - mid) < 0.0:
+			out = -out
+		st.set_normal(Vector3(out.x, out.y, 0.0))
 		var quad: Array[Vector3] = [
 			Vector3(a.x, a.y, z), Vector3(b.x, b.y, z), Vector3(b.x, b.y, -z),
 			Vector3(a.x, a.y, z), Vector3(b.x, b.y, -z), Vector3(a.x, a.y, -z),
@@ -2487,7 +2525,6 @@ static func _prism(cell: PackedVector2Array, thick: float, box: Vector2,
 		for v: Vector3 in quad:
 			st.set_uv(Vector2(v.x / box.x + 0.5, 0.5 - v.y / box.y))
 			st.add_vertex(v - Vector3(origin.x, origin.y, 0.0))
-	st.generate_normals()
 	return st.commit()
 
 

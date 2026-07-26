@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:2992` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:3029` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -858,17 +858,36 @@ the spikes. The heatmap is the reason `drive_at` is public.
   the lab's `S` key does and any caller that skips to the ending can. `_sites`,
   `_death_sites` and the ring table exist for that path alone and could be deleted the day
   a struck-first precondition is acceptable.
-- **The debris's pale side bands are pre-existing, and the carve did not change them.**
-  Worth recording because it cost three attempts to establish. The shards read as plywood
-  rather than glass, and the obvious story — that a carved network throws slivers where a
-  Voronoi partition threw plates, so there is more fracture face on screen under a molten
-  treatment tuned for less — is wrong. Painting `COLOR.r` pure red settled it in one
-  frame: **the pale areas are not fracture faces at all**, and the same rite shot before
-  and after the carve is pixel-comparable. Every speculative change to `SHARD_SHADER` was
-  reverted. It remains worth someone's eye, as its own piece of work and with the
-  diagnostic to hand: the pale surfaces are CAPS, and something in how a cap is lit —
-  `generate_normals()` averaging the prism's crease is the first suspect, since §5.2
-  already records that it destroys creases — is making a dark brown painting read cream.
+- ~~**The debris reads as plywood.**~~ **Explained, and it is not a defect.** Established
+  by elimination, one capture per step, each writing the term under test straight to
+  `EMISSION` so the reading is unlit — the first pass wrote them to `ALBEDO` and measured
+  value × lighting, which is a trap worth naming.
+
+  | ruled out | how |
+  |---|---|
+  | the fracture-face treatment | `COLOR.r` painted red: the pale areas are **caps**, not faces |
+  | more fracture face after the carve | same rite before and after, pixel-comparable |
+  | domed cap normals | real, and fixed — see below — but the tan survived the fix |
+  | emission of any kind | whole `EMISSION` zeroed: **still tan** |
+
+  What is left is `ALBEDO × lighting`, and a cap's albedo is the painting untouched. So it
+  is the LIGHTING, and the reason is structural rather than a bug: **the body is a flat
+  quad nearly edge-on to the key, and a tumbling shard turns its faces square into it.**
+  The same dark painting lit as a real surface instead of as a front-lit pane goes tan.
+  That is a consequence of making 3D debris out of a 2D painting and it will not be tuned
+  away in `SHARD_SHADER`; if it is to change, it is an art-direction call about how much
+  key a shard should take, and it belongs to whoever owns that.
+
+- **Two real defects fell out of that hunt, and both are fixed.** Neither caused the tan.
+  * `generate_normals()` **domed every cap.** It averages the faces meeting at a vertex,
+    and a carved shard has NO interior vertices — every cap vertex is on the outline, so
+    every one of them averaged with the side band. Not a flat cap with a bevelled rim: a
+    cap bevelled everywhere. Measured at `f = 0.45` on faces pointing straight at the
+    camera, where a flat cap reads 0. §5.2 named this mechanism and expected it to bite the
+    crack ribbon; it had been biting the debris since the rite was built. `_prism` now
+    authors its normals. `set_smooth_group(-1)` was tried first and did not fix it.
+  * **The back cap was wound like the front**, so `triangulate_polygon`'s one winding left
+    it facing into the shard, which `cull_disabled` draws anyway.
 - **Two silhouette readers coexist, and the prediction here was wrong.** This bullet used
   to say step 6 would delete `_alpha_at`/`_touches_art` along with the Voronoi cells it
   culls. It did not, and could not: the CARVE culls through the same
