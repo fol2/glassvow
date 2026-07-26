@@ -33,6 +33,18 @@ const STAGE: Vector2 = Vector2(1180.0, 820.0)
 const LEDGE: Color = Color(0.4, 1.0, 0.62)  # #66ff9e
 const STAGE_ART: String = "res://assets/art/stage/act1-%s.png"
 
+## `BF.base.hero.x` merged with `shapes['pad-landscape']` — where the hero's
+## centre stands. Its BOX is not from here: char-meta types `duskblade` as tier
+## `hero` (`tierSizes.hero` = 285) and EnemyView sizes itself off that, the same
+## way it sizes a foe.
+const HERO_X: float = 200.0
+## The benchmark reads the hero's art off the run's aspect
+## (`runCatalogues().aspects[run.aspect].id`). Our slice content carries no
+## aspects section, and this port has called the player The Duskblade since M5.
+## ponytail: read the aspect the day the exporter carries one.
+const HERO_ART: StringName = &"duskblade"
+const HERO_HUE: float = 225.0  # HERO_LOOKS[0].hue in art.js
+
 ## One breath blob and its phase. A class rather than a dictionary of parts,
 ## for the reason `HudBar.Pile` is one: the strict gate wants every piece typed
 ## at the moment it is read.
@@ -48,19 +60,16 @@ var _breaths: Array[Breath] = []
 var _rules: CombatRules
 var _enemy_views: Array[EnemyView] = []
 var _hand: HandView
-var _turn_label: Label
-var _encounter_label: Label
-var _player_hp: Label
-var _player_hp_bar: ProgressBar
-var _player_ward: Label
-var _player_statuses: StatusRow
-var _embers_label: Label
-var _gold_label: Label
-var _piles_label: Label
-var _end_turn: Button
-var _art_button: Button
+var _hud: HudBar
+## The region above the ground line, and the only parent an actor ever has. Its
+## bottom IS the ground line, so an actor placed at bottom 0 stands on it.
+var _battlefield: Control
+## The player, as an actor rather than a panel. `char-meta` types `duskblade` as
+## tier `hero`, which is how EnemyView knows to leave off the intent chip, the
+## name line and the facet gauge without being told.
+var _hero: EnemyView
 var _kindle_toggle: Button
-var _enemy_row: HBoxContainer
+var _encounter_text: String = ""
 var _overlay: ColorRect
 var _overlay_title: Label
 var _overlay_body: Label
@@ -102,103 +111,35 @@ func _ready() -> void:
 func _build_ui() -> void:
 	_build_stage()
 
-	var top_panel: PanelContainer = PanelContainer.new()
-	top_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	var top_sb: StyleBoxFlat = StyleBoxFlat.new()
-	top_sb.bg_color = Color(0.02, 0.03, 0.06, 0.55)
-	top_sb.border_width_bottom = 1
-	top_sb.border_color = Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.22)
-	top_sb.content_margin_left = 20
-	top_sb.content_margin_right = 20
-	top_sb.content_margin_top = 9
-	top_sb.content_margin_bottom = 9
-	top_panel.add_theme_stylebox_override("panel", top_sb)
-	add_child(top_panel)
-	var top: HBoxContainer = HBoxContainer.new()
-	top.add_theme_constant_override("separation", 22)
-	top_panel.add_child(top)
-	var title: Label = _label("琉璃誓言")  # the vow itself — proves CJK shaping end to end
-	title.add_theme_font_size_override("font_size", 22)
-	title.add_theme_color_override("font_color", Color(0.78, 0.88, 1.0, 0.92))
-	top.add_child(title)
-	_turn_label = _label("Turn 1")
-	_turn_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-	top.add_child(_turn_label)
-	_gold_label = _label("")
-	_gold_label.add_theme_color_override("font_color", Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.9))
-	top.add_child(_gold_label)
-	var spacer: Control = Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top.add_child(spacer)
-	_encounter_label = _label("")
-	_encounter_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-	top.add_child(_encounter_label)
+	# `.battlefield` — inset 0 with `bottom: var(--ground-y)`. Actors are its only
+	# children and are placed by their FEET, so the container's bottom edge is
+	# the ground line and nothing has to convert coordinates to say so.
+	_battlefield = Control.new()
+	_battlefield.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_battlefield.offset_bottom = -GROUND_Y
+	_battlefield.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_battlefield)
 
-	var enemy_center: CenterContainer = CenterContainer.new()
-	enemy_center.anchor_left = 0.0
-	enemy_center.anchor_right = 1.0
-	enemy_center.anchor_top = 0.0
-	enemy_center.anchor_bottom = 0.0
-	enemy_center.offset_top = 90
-	enemy_center.offset_bottom = 400
-	add_child(enemy_center)
-	_enemy_row = HBoxContainer.new()
-	_enemy_row.add_theme_constant_override("separation", 28)
-	enemy_center.add_child(_enemy_row)
-
-	var hero: Color = Color(0.52, 0.6, 1.0)  # hero hue 225
-	var player_pane: PanelContainer = PanelContainer.new()
-	player_pane.anchor_top = 1.0
-	player_pane.anchor_bottom = 1.0
-	player_pane.offset_left = 16
-	player_pane.offset_top = -300
-	player_pane.offset_right = 228
-	player_pane.offset_bottom = -16
-	player_pane.add_theme_stylebox_override("panel", GlassStyle.pane(hero))
-	add_child(player_pane)
-	var player_box: VBoxContainer = VBoxContainer.new()
-	player_box.add_theme_constant_override("separation", 8)
-	player_pane.add_child(player_box)
-	var pname: Label = _label("The Duskblade")
-	pname.add_theme_font_size_override("font_size", 17)
-	pname.add_theme_color_override("font_color", hero.lerp(GlassStyle.TEXT, 0.55))
-	player_box.add_child(pname)
-	_player_hp = _label("")
-	player_box.add_child(_player_hp)
-	_player_hp_bar = ProgressBar.new()
-	_player_hp_bar.show_percentage = false
-	_player_hp_bar.custom_minimum_size = Vector2(0, 14)
-	GlassStyle.style_bar(_player_hp_bar, GlassStyle.HP_RED)
-	player_box.add_child(_player_hp_bar)
-	var chip_row: HBoxContainer = HBoxContainer.new()
-	chip_row.add_theme_constant_override("separation", 8)
-	chip_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	player_box.add_child(chip_row)
-	_player_ward = _chip_line(chip_row, GlassStyle.GLASS)
-	_embers_label = _chip_line(chip_row, GlassStyle.EMBER)
-	_player_statuses = StatusRow.new()
-	player_box.add_child(_player_statuses)
-	var pad: Control = Control.new()
-	pad.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	player_box.add_child(pad)
-	_art_button = Button.new()
-	_art_button.text = "Lantern Art"
-	GlassStyle.style_button(_art_button, hero)
-	_art_button.pressed.connect(_on_art_pressed)
-	player_box.add_child(_art_button)
-	_kindle_toggle = Button.new()
-	_kindle_toggle.text = "Kindle: off"
-	_kindle_toggle.toggle_mode = true
-	GlassStyle.style_button(_kindle_toggle, GlassStyle.EMBER)
-	_kindle_toggle.toggled.connect(_on_kindle_toggled)
-	player_box.add_child(_kindle_toggle)
+	# The whole chrome layer, in one widget, measured against the same
+	# 1180x820 the stage above is. `plate = false` because the ward chip and HP
+	# rail belong to the actor they describe — see docs/hud-handoff.md §2.
+	_hud = HudBar.new(true, true, false)
+	_hud.end_turn_pressed.connect(_on_end_turn_pressed)
+	_hud.lantern_pressed.connect(_on_art_pressed)
+	add_child(_hud)
 
 	_hand = HandView.new()
-	_hand.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	_hand.offset_top = -260
-	_hand.offset_left = 230
-	_hand.offset_right = -230
-	_hand.offset_bottom = -10
+	# `.hand-zone` — 680 wide, centred on the stage, hanging 12px past the
+	# bottom edge. Not an inset from both sides: the fan is a fixed box that
+	# stays put while the window changes around it.
+	_hand.anchor_left = 0.5
+	_hand.anchor_right = 0.5
+	_hand.anchor_top = 1.0
+	_hand.anchor_bottom = 1.0
+	_hand.offset_left = -340.0
+	_hand.offset_right = 340.0
+	_hand.offset_top = -248.0
+	_hand.offset_bottom = 12.0
 	_hand.card_tapped.connect(_on_card_tapped)
 	_hand.card_drag_moved.connect(_on_card_drag_moved)
 	_hand.card_drag_released.connect(_on_card_drag_released)
@@ -215,30 +156,22 @@ func _build_ui() -> void:
 	_inspect_label.custom_minimum_size = Vector2(300, 0)
 	_inspect.add_child(_inspect_label)
 
-	var right_box: VBoxContainer = VBoxContainer.new()
-	right_box.anchor_left = 1.0
-	right_box.anchor_right = 1.0
-	right_box.anchor_top = 1.0
-	right_box.anchor_bottom = 1.0
-	right_box.offset_left = -210
-	right_box.offset_right = -16
-	right_box.offset_top = -300
-	right_box.offset_bottom = -16
-	right_box.add_theme_constant_override("separation", 10)
-	add_child(right_box)
-	var pad_r: Control = Control.new()
-	pad_r.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	right_box.add_child(pad_r)
-	_piles_label = _label("")
-	_piles_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-	_piles_label.add_theme_font_size_override("font_size", 13)
-	right_box.add_child(_piles_label)
-	_end_turn = Button.new()
-	_end_turn.text = "End Turn"
-	_end_turn.custom_minimum_size = Vector2(0, 58)
-	GlassStyle.style_button(_end_turn, GlassStyle.EMBER)
-	_end_turn.pressed.connect(_on_end_turn_pressed)
-	right_box.add_child(_end_turn)
+	# Kindle is this port's own control: the benchmark's chrome has no seat for
+	# it, and HudBar reserves none. Parked under the strip rather than invented
+	# into the furniture, because where it belongs is a design question nobody
+	# has answered (docs/assembly-integration-plan.md D4).
+	_kindle_toggle = Button.new()
+	_kindle_toggle.text = "Kindle: off"
+	_kindle_toggle.toggle_mode = true
+	_kindle_toggle.anchor_top = 0.0
+	_kindle_toggle.anchor_bottom = 0.0
+	_kindle_toggle.offset_left = 16
+	_kindle_toggle.offset_right = 132
+	_kindle_toggle.offset_top = 66
+	_kindle_toggle.offset_bottom = 98
+	GlassStyle.style_button(_kindle_toggle, GlassStyle.EMBER)
+	_kindle_toggle.toggled.connect(_on_kindle_toggled)
+	add_child(_kindle_toggle)
 
 	_overlay = ColorRect.new()
 	_overlay.color = Color(0.01, 0.015, 0.03, 0.8)
@@ -446,19 +379,6 @@ static func _ledge_tex() -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
-## A pill chip holding one dynamic label; returns the inner label for text
-## updates. Used for player ward / lantern in the panel chip row.
-static func _chip_line(parent: Control, accent: Color) -> Label:
-	var chip: PanelContainer = PanelContainer.new()
-	chip.add_theme_stylebox_override("panel", GlassStyle.chip(accent))
-	parent.add_child(chip)
-	var l: Label = _label("")
-	l.add_theme_font_size_override("font_size", 13)
-	l.add_theme_color_override("font_color", Color(accent.r, accent.g, accent.b, 0.95))
-	chip.add_child(l)
-	return l
-
-
 static func _label(initial: String) -> Label:
 	var l: Label = Label.new()
 	l.text = initial
@@ -470,13 +390,20 @@ static func _label(initial: String) -> Label:
 
 func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> void:
 	_over_emitted = false
-	_encounter_label.text = encounter_text
+	_encounter_text = encounter_text
 	# Live play rolls the elite affix inside start_combat (traces passed it
 	# explicitly only to skip the rng draw).
 	game.apply({"t": "startCombat", "enemies": enemy_ids, "kind": kind})
 	for view: EnemyView in _enemy_views:
 		view.queue_free()
 	_enemy_views.clear()
+	# The hero outlives the encounter — it is the same body between fights, and
+	# rebuilding it would throw away a 3D stage for no reason.
+	if _hero == null:
+		_hero = EnemyView.new(-1, "", HERO_HUE, HERO_ART)
+		_battlefield.add_child(_hero)
+	_stand(_hero, HERO_X, 0.0)
+	var slots: Array[Vector2] = _slots(game.cb.enemies.size())
 	for e: EnemyCombatant in game.cb.enemies:
 		var display: String = e.name
 		if game.cb.affix != &"":
@@ -484,10 +411,63 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 			display = "%s %s" % [str(affix_def.get("name", String(game.cb.affix))), e.name]
 		var art: Dictionary = e.def.get("art", {})
 		var hue_num: int = art.get("hue", 210)
-		var view: EnemyView = EnemyView.new(e.idx, display, float(hue_num))
-		_enemy_row.add_child(view)
+		# The art id is the foe's own key: every slice foe has a painting under
+		# that name and char-meta types its box and its feet by the same one.
+		# Passing nothing here is what left the fight full of fallback gems.
+		var view: EnemyView = EnemyView.new(e.idx, display, float(hue_num), e.key)
+		_battlefield.add_child(view)
 		_enemy_views.append(view)
+		var slot: Vector2 = slots[e.idx] if e.idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
+		_stand(view, slot.x, slot.y)
+		# bfEnemyZOrder: lower on screen draws in front, so a foe standing
+		# further up the ledge sits behind the one nearer the lip.
+		view.z_index = -int(roundf(slot.y))
 	_sync_all()
+
+
+## `bfSlots` — the authored formations for this shape, as (x centre, lift off
+## the ground line). A count nobody authored interpolates between the outer two
+## of the widest one, which is what the benchmark does rather than crowding.
+static func _slots(count: int) -> Array[Vector2]:
+	var out: Array[Vector2] = []
+	if count == 1:
+		out.append(Vector2(980.0, 0.0))
+		return out
+	if count == 2:
+		out.append(Vector2(820.0, 0.0))
+		out.append(Vector2(1035.0, 0.0))
+		return out
+	if count == 3:
+		out.append(Vector2(698.0, 42.0))
+		out.append(Vector2(850.0, -18.0))
+		out.append(Vector2(996.0, 26.0))
+		return out
+	var lo: Vector2 = Vector2(698.0, 42.0)
+	var hi: Vector2 = Vector2(996.0, 26.0)
+	for i: int in range(maxi(count, 0)):
+		var t: float = 0.0 if count <= 1 else float(i) / float(count - 1)
+		out.append(Vector2(roundf(lo.x + (hi.x - lo.x) * t),
+			roundf(lo.y + (hi.y - lo.y) * t)))
+	return out
+
+
+## Stand an actor on the ground line: `x` is where its centre goes, `lift` how
+## far off the line it stands. `foot` comes from char-meta and is what lets a
+## painting whose feet are not at its own bottom edge still touch the ground.
+##
+## Anchored rather than positioned, because `_battlefield`'s bottom edge IS the
+## ground line — so layout does the arithmetic, at whatever size the window is,
+## and nothing here has to know the viewport's height.
+func _stand(view: EnemyView, x: float, lift: float) -> void:
+	var box: Vector2 = view.size
+	view.anchor_left = 0.0
+	view.anchor_right = 0.0
+	view.anchor_top = 1.0
+	view.anchor_bottom = 1.0
+	view.offset_left = roundf(x - box.x * 0.5 + view.foot.x)
+	view.offset_right = view.offset_left + box.x
+	view.offset_bottom = -(lift + view.foot.y)
+	view.offset_top = view.offset_bottom - box.y
 
 
 func show_result(title: String, body: String, button_text: String) -> void:
@@ -644,14 +624,12 @@ func _handle_event(ev: Dictionary) -> void:
 	var t: StringName = ev["t"]
 	match t:
 		EventTypes.TURN:
-			var n: int = ev["n"]
-			_turn_label.text = "Turn %d" % n
+			_push_hud()
 		EventTypes.INTENT:
 			var idx: int = ev["idx"]
 			_refresh_intent(idx)
 		EventTypes.ENERGY:
-			var n: int = ev["n"]
-			_end_turn.text = "End Turn\nEnergy %d" % n
+			_push_hud()
 		EventTypes.DRAW:
 			var uid: int = ev["uid"]
 			var inst: CardInst = _find_card(uid)
@@ -677,9 +655,10 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.HIT_PLAYER:
 			var amount: int = ev["amount"]
 			var hp_after: int = ev["hpAfter"]
-			_player_hp.text = "HP %d / %d" % [hp_after, game.cb.player.max_hp]
-			_player_hp_bar.value = maxi(0, hp_after)
-			_float_text(_player_hp, str(amount), Color(1, 0.45, 0.4))
+			if _hero != null:
+				_hero.set_hp(maxi(0, hp_after), game.cb.player.max_hp)
+				_float_text(_hero, str(amount), Color(1, 0.45, 0.4))
+			_push_hud()
 			await _wait(0.22)
 		EventTypes.CHIP:
 			var idx: int = ev["idx"]
@@ -710,14 +689,14 @@ func _handle_event(ev: Dictionary) -> void:
 				view.mark_dead()
 			await _wait(0.3)
 		EventTypes.EMBER:
-			var total: int = ev["total"]
-			_embers_label.text = "Lantern %d / %d" % [total, game.cb.ember_cap]
+			_push_hud()
 			await _wait(0.08)
 		EventTypes.BLOCK_GAIN:
 			var who_v: Variant = ev["who"]
 			var total: int = ev["total"]
 			if typeof(who_v) == TYPE_STRING:
-				_player_ward.text = "Ward %d" % total
+				if _hero != null:
+					_hero.set_ward(total)
 			else:
 				var who_idx: int = who_v
 				var view: EnemyView = _enemy_view(who_idx)
@@ -728,7 +707,8 @@ func _handle_event(ev: Dictionary) -> void:
 			await _wait(0.08)
 		EventTypes.HEAL:
 			var n: int = ev["n"]
-			_float_text(_player_hp, "+%d" % n, Color(0.5, 1, 0.6))
+			_float_text(_hero, "+%d" % n, Color(0.5, 1, 0.6))
+			_push_hud()
 			await _wait(0.15)
 		EventTypes.TO_DISCARD, EventTypes.EXHAUST, EventTypes.POWER_CONSUMED:
 			var uid: int = ev["uid"]
@@ -738,7 +718,8 @@ func _handle_event(ev: Dictionary) -> void:
 			_hand.remove_card(uid)
 			await _wait(0.2)
 		EventTypes.ART:
-			_float_text(_embers_label, "ART", Color(1, 0.7, 0.3))
+			_float_text(_hero, "ART", Color(1, 0.7, 0.3))
+			_push_hud()
 			await _wait(0.3)
 		EventTypes.POTION:
 			await _wait(0.15)
@@ -763,7 +744,7 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.SMOLDER_JUMP:
 			await _wait(0.15)
 		EventTypes.RELIC_PROC:
-			_float_text(_gold_label, str(ev.get("id", "")), Color(1, 0.85, 0.5))
+			_float_text(_hero, str(ev.get("id", "")), Color(1, 0.85, 0.5))
 			await _wait(0.2)
 		EventTypes.VICTORY, EventTypes.DEFEAT:
 			await _wait(0.25)
@@ -773,10 +754,32 @@ func _handle_event(ev: Dictionary) -> void:
 
 # ---------------------------------------------------------------- sync
 
+## Everything the chrome layer shows, in one call. `set_values()` guards on its
+## ten ints and returns immediately when none of them moved, so driving this
+## from an event handler as well as from the drain-idle sync costs one array
+## compare rather than ten label re-shapes.
+func _push_hud() -> void:
+	var cb: CombatState = game.cb
+	if cb == null or _hud == null:
+		return
+	_hud.set_values(maxi(0, cb.player.hp), cb.player.max_hp, cb.player.block,
+		game.run.player.gold, cb.player.energy, cb.player.energy_max,
+		cb.draw.size(), cb.discard.size(), cb.exhaust.size(), cb.hand.size())
+	# Embers are the number the lantern carries; the rules gate is whether it
+	# can be spent at all (docs/hud-handoff.md §3).
+	_hud.set_lantern(cb.embers, _rules.can_use_art(game.run, cb))
+	# The strip's middle carries the place. The turn rides its dim tail — the
+	# benchmark's own bar has no seat for a number it does not show, and the
+	# tail is the honest one (assembly-integration-plan.md D3).
+	_hud.set_title(_encounter_text, "Turn %d" % cb.turn)
+
+
 func _on_busy_changed(busy: bool) -> void:
 	var locked: bool = busy or game.cb == null or game.cb.over
-	_end_turn.disabled = locked
-	_art_button.disabled = locked
+	# HudBar's buttons do not disable — they are bare art with plain signals —
+	# but `_on_end_turn_pressed` and `_on_art_pressed` already refuse while the
+	# pump is busy, so the guard holds and only the grey-out is missing.
+	# A `set_locked(bool)` on the widget would close that; it is a HUD-lane ask.
 	_kindle_toggle.disabled = locked
 	_hand.locked = locked
 	if locked:
@@ -815,18 +818,13 @@ func _sync_all() -> void:
 	var cb: CombatState = game.cb
 	if cb == null:
 		return
-	_turn_label.text = "Turn %d" % cb.turn
-	_gold_label.text = "Gold %d" % game.run.player.gold
-	_player_hp.text = "HP %d / %d" % [maxi(0, cb.player.hp), cb.player.max_hp]
-	_player_hp_bar.max_value = cb.player.max_hp
-	_player_hp_bar.value = maxi(0, cb.player.hp)
-	_player_ward.text = "Ward %d" % cb.player.block
-	_embers_label.text = "Lantern %d / %d" % [cb.embers, cb.ember_cap]
-	_end_turn.text = "End Turn\nEnergy %d" % cb.player.energy
-	_player_statuses.sync(cb.player.statuses, game.content.statuses)
-	_piles_label.text = "Draw %d\nDiscard %d\nExhaust %d" % [
-		cb.draw.size(), cb.discard.size(), cb.exhaust.size()
-	]
+	_push_hud()
+	# The hero reads its own numbers, because the plate that shows them is the
+	# hero's — the same markup a foe carries (docs/hud-handoff.md §2).
+	if _hero != null:
+		_hero.set_hp(maxi(0, cb.player.hp), cb.player.max_hp)
+		_hero.set_ward(cb.player.block)
+		_hero.set_statuses(cb.player.statuses, game.content.statuses)
 	for e: EnemyCombatant in cb.enemies:
 		var view: EnemyView = _enemy_view(e.idx)
 		if view == null:
