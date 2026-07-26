@@ -13,8 +13,10 @@ extends Control
 ## THE GLASS IS ACTUALLY 3D. The body is a lit quad inside a SubViewport with
 ## its own World3D — the same trick card_view.gd uses for card stock — and the
 ## cracks are real extruded Voronoi shards with a refracting, clearcoated glass
-## material, lit by real lights against a real sky. On death they become
-## RigidBody3D and fall. The web benchmark had to fake every one of those: it
+## material, lit by real lights against a real sky. On death the vessel is
+## swapped, in ONE frame, for pieces of ITSELF — opaque shards each carrying the
+## patch of painting it covered — which tumble under real gravity, cool, and
+## crumble to embers. The web benchmark had to fake every one of those: it
 ## hand-rolled ballistics in JS, baked crack normals to a 192px canvas, and
 ## needed an opaque back-buffer pass to get transmission at all
 ## (docs/glass-crack-rendering.md). Here the engine does it.
@@ -97,8 +99,14 @@ var _ignite: float = 0.0
 ## exists ONLY where the creature is broken.
 var _glass_area: float = 0.45
 var _glass_mat: ShaderMaterial = null
+var _shard_shader: Shader = null
+var _debris: Node3D = null
+var _cam: Camera3D = null
+var _shake: float = 0.0
+var _art_img: Image = null
 
 static var _meta: Dictionary = {}
+static var _fx_cache: Dictionary = {}
 
 
 ## The body: a flat plate that takes REAL light. The painting has no normal map,
@@ -210,6 +218,55 @@ void fragment() {
 	// The fire wells up through the FRACTURES: Fresnel is high on the side band
 	// and the rim, near zero across the face.
 	EMISSION = warm * ignite * pow(f, 1.4) * 5.0 + c.rgb * ignite * 0.35;
+}
+"""
+
+
+## Death debris is NOT the overlay glass. A flying shard must BE a piece of the
+## creature — cap faces carry the painting at full strength (same alpha curve as
+## the body, so the union of shards at the handoff frame IS the body), fracture
+## faces run molten and cool, and the whole piece finally crumbles to nothing
+## through a blocky hash so debris never ghost-fades or litters the stage.
+const SHARD_SHADER: String = """
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley,
+	specular_schlick_ggx;
+
+uniform sampler2D body_tex : source_color, filter_linear_mipmap;
+uniform float heat = 1.0;      // molten fracture edges + inner glow, cools to 0
+uniform float dissolve = 0.0;  // 0 whole -> 1 burned away to nothing
+
+const vec3 WARM = vec3(1.0, 0.60, 0.24);
+
+void fragment() {
+	vec4 c = texture(body_tex, UV);
+	// _prism colors the side band red and the caps black: COLOR.r is literally
+	// "this face is a fracture surface".
+	float edge = COLOR.r;
+	// Blocky hash over BODY uv: the piece crumbles away cell by cell instead of
+	// ghost-fading, and neighbouring shards never vanish in sync.
+	float h = fract(sin(dot(floor(UV * 90.0), vec2(12.9898, 78.233))) * 43758.5453);
+	float gone = step(h, dissolve);
+	float brink = (1.0 - smoothstep(0.0, 0.2, h - dissolve)) * step(0.001, dissolve);
+	vec3 n = normalize(NORMAL);
+	vec3 v = normalize(VIEW);
+	float f = pow(1.0 - clamp(dot(n, v), 0.0, 1.0), 3.0);
+	// A cap is THE PAINTING — these are pieces of the mob, not glass in front of
+	// it. A fracture face is molten while hot, dark cooled glass after. Heat is
+	// seasoning, never paint: push the glow past a whisper and every piece is
+	// the same white-hot popcorn and the creature is gone AGAIN, just hotter.
+	ALBEDO = mix(c.rgb, WARM * 0.5, edge * (0.2 + 0.3 * heat));
+	float amask = smoothstep(0.05, 0.30, c.a);
+	ALPHA = mix(smoothstep(0.12, 0.45, c.a), amask, edge) * (1.0 - gone);
+	ROUGHNESS = mix(0.55, 0.9, edge);
+	METALLIC = 0.0;
+	SPECULAR = 0.3;
+	// The caps keep the body's own lantern glow (same pow(luma) curve as
+	// BODY_SHADER) — a falling piece stays lit the way it was lit standing,
+	// which is most of what makes it recognisably the same creature.
+	float l = dot(c.rgb, vec3(0.299, 0.587, 0.114)) * c.a;
+	EMISSION = WARM * (edge * heat * 0.9 + brink * 1.1 + f * heat * 0.3)
+		+ c.rgb * (pow(l, 3.2) * 0.85 * (1.0 - edge) + heat * 0.25);
 }
 """
 
@@ -399,13 +456,13 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	floor_body.physics_material_override = _bounce()
 	_stage.add_child(floor_body)
 
-	var cam: Camera3D = Camera3D.new()
-	cam.fov = FOV_DEG
+	_cam = Camera3D.new()
+	_cam.fov = FOV_DEG
 	var dist: float = (_span * UNIT) * 0.5 / tan(deg_to_rad(FOV_DEG * 0.5))
-	cam.position = Vector3(0.0, 0.0, dist)
-	cam.near = dist * 0.25
-	cam.far = dist * 3.0
-	_stage.add_child(cam)
+	_cam.position = Vector3(0.0, 0.0, dist)
+	_cam.near = dist * 0.25
+	_cam.far = dist * 3.0
+	_stage.add_child(_cam)
 
 	_display = TextureRect.new()
 	_display.texture = _stage.get_texture()
@@ -418,10 +475,10 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	add_child(_display)
 
 
-static func _bounce() -> PhysicsMaterial:
+static func _bounce(bounce: float = 0.28, friction: float = 0.7) -> PhysicsMaterial:
 	var pm: PhysicsMaterial = PhysicsMaterial.new()
-	pm.bounce = 0.28
-	pm.friction = 0.7
+	pm.bounce = bounce
+	pm.friction = friction
 	return pm
 
 
@@ -441,12 +498,28 @@ func _glass_material() -> ShaderMaterial:
 
 
 ## Idle. A standing creature that never moves reads as a sticker, so the vessel
-## leans and swells — as a TRANSFORM, which the glass rides along with. Stops the
-## moment the vessel breaks, because by then the shards own their own motion.
-func _process(_delta: float) -> void:
-	if _vessel == null or _dead:
+## leans and swells — as a TRANSFORM, which the glass rides along with. When the
+## rite begins the idle hands over to the STRAIN — a rising quiver and swell, the
+## vessel failing to contain its own fire — and after the burst the camera
+## carries a short shake while the shards own their own motion.
+func _process(delta: float) -> void:
+	if _cam != null and _shake > 0.0:
+		_shake = maxf(0.0, _shake - delta * 4.5)
+		var kick: float = _box_u * 0.02 * _shake * _shake
+		_cam.h_offset = _rng.randf_range(-kick, kick)
+		_cam.v_offset = _rng.randf_range(-kick, kick)
+	if _vessel == null:
 		return
 	var t: float = Time.get_ticks_msec() * 0.001 + _phase
+	if _dead:
+		if _vessel.visible and _ignite > 0.0:
+			var q: float = _ignite * _ignite
+			var amp: float = _box_u * 0.009 * q
+			_vessel.position = Vector3(
+				sin(t * 61.0) * amp, sin(t * 47.0) * amp * 0.7, 0.0)
+			var s: float = 1.0 + 0.03 * q
+			_vessel.scale = Vector3(s, s, 1.0)
+		return
 	var sw: float = sin(t * 1.05)
 	var k: float = 1.0 + _breathe * 0.016 * sw
 	_vessel.scale = Vector3(k, k, 1.0)
@@ -482,42 +555,63 @@ static func _disc(centre: Vector2, r: float) -> PackedVector2Array:
 	return out
 
 
-## Voronoi cells for the current sites, in world units, centred on the quad.
-func _cells() -> Array[PackedVector2Array]:
+## Voronoi cells for `sites`, in world units, centred on the quad. With
+## `reach` > 0 each cell is bounded to a disc around its own site — without that
+## every cell tiles the whole quad and the overlay "glass" becomes an opaque
+## pane over the art. reach <= 0 keeps the full tiling, which is exactly what
+## the death rite wants: the WHOLE body cut into panes.
+func _voronoi(sites: PackedVector2Array, reach: float) -> Array[PackedVector2Array]:
 	var out: Array[PackedVector2Array] = []
 	var h: float = _box_u * 0.5
 	var big: float = _box_u * 8.0
 	var box: PackedVector2Array = PackedVector2Array([
 		Vector2(-h, -h), Vector2(h, -h), Vector2(h, h), Vector2(-h, h),
 	])
-	for i: int in range(_sites.size()):
+	for i: int in range(sites.size()):
 		var cell: PackedVector2Array = box
-		for j: int in range(_sites.size()):
+		for j: int in range(sites.size()):
 			if i == j:
 				continue
-			cell = _clip(cell, _sites[i], _sites[j], big)
+			cell = _clip(cell, sites[i], sites[j], big)
 			if cell.is_empty():
 				break
 		if cell.size() < 3:
 			continue
-		# Then bound it to the site's own reach. Without this every cell tiles
-		# the whole quad and the "glass" becomes an opaque pane over the art.
+		if reach <= 0.0:
+			out.append(cell)
+			continue
 		var patch: Array[PackedVector2Array] = Geometry2D.intersect_polygons(
-			cell, _disc(_sites[i], _glass_area * _box_u * 0.5))
+			cell, _disc(sites[i], reach))
 		if not patch.is_empty() and patch[0].size() >= 3:
 			out.append(patch[0])
 	return out
 
 
+## The overlay cells: the crack web the creature carries while it still stands.
+func _cells() -> Array[PackedVector2Array]:
+	return _voronoi(_sites, _glass_area * _box_u * 0.5)
+
+
 ## Extrude a cell into a real plate with thickness. Thickness is the point: a
 ## zero-depth polygon cannot catch a highlight on its edge or bend anything.
-static func _prism(cell: PackedVector2Array, thick: float, box: float) -> ArrayMesh:
+##
+## `origin` re-centres the vertices while the UVs stay in body space. A debris
+## piece MUST be built around its own centroid: the first shatter pass left
+## vertices in body coordinates with the RigidBody at the origin, so every
+## shard's spin axis was the middle of the CREATURE — they swept arcs instead of
+## tumbling, landed on an edge, and stood there like headstones.
+##
+## Vertex color is the face tag: caps BLACK, side band RED — the shard shader
+## reads COLOR.r as "fracture surface" and pours the molten glow only there.
+static func _prism(cell: PackedVector2Array, thick: float, box: float,
+		origin: Vector2 = Vector2.ZERO) -> ArrayMesh:
 	var tri: PackedInt32Array = Geometry2D.triangulate_polygon(cell)
 	if tri.is_empty():
 		return null
 	var st: SurfaceTool = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var z: float = thick * 0.5
+	st.set_color(Color(0, 0, 0))
 	for face: int in range(2):
 		var zz: float = z if face == 0 else -z
 		var i: int = 0
@@ -525,9 +619,10 @@ static func _prism(cell: PackedVector2Array, thick: float, box: float) -> ArrayM
 			for k: int in range(3):
 				var p: Vector2 = cell[tri[i + k]]
 				st.set_uv(Vector2(p.x / box + 0.5, 0.5 - p.y / box))
-				st.add_vertex(Vector3(p.x, p.y, zz))
+				st.add_vertex(Vector3(p.x - origin.x, p.y - origin.y, zz))
 			i += 3
 	# Side band, quad per edge — where the thickness actually shows.
+	st.set_color(Color(1, 0, 0))
 	for i: int in range(cell.size()):
 		var a: Vector2 = cell[i]
 		var b: Vector2 = cell[(i + 1) % cell.size()]
@@ -537,7 +632,7 @@ static func _prism(cell: PackedVector2Array, thick: float, box: float) -> ArrayM
 		]
 		for v: Vector3 in quad:
 			st.set_uv(Vector2(v.x / box + 0.5, 0.5 - v.y / box))
-			st.add_vertex(v)
+			st.add_vertex(v - Vector3(origin.x, origin.y, 0.0))
 	st.generate_normals()
 	return st.commit()
 
@@ -583,12 +678,24 @@ func crack(at: Vector2 = Vector2(-1, -1)) -> void:
 func reset_glass() -> void:
 	_dead = false
 	_ignite = 0.0
+	_shake = 0.0
 	_sites = PackedVector2Array()
 	modulate = Color(1, 1, 1, 1)
+	if _debris != null:
+		if is_instance_valid(_debris):
+			_debris.queue_free()
+		_debris = null
+	if _vessel != null:
+		_vessel.visible = true
+		_vessel.transform = Transform3D.IDENTITY
+	if _cam != null:
+		_cam.h_offset = 0.0
+		_cam.v_offset = 0.0
 	if _glass_mat != null:
 		_glass_mat.set_shader_parameter("ignite", 0.0)
 	if _fire != null:
 		_fire.light_energy = 0.0
+		_fire.position = Vector3(0.0, 0.0, -_box_u * 0.25)
 	if _body_mat != null:
 		_body_mat.set_shader_parameter("fade", 1.0)
 		_body_mat.set_shader_parameter("emission_gain", 0.85)
@@ -621,78 +728,271 @@ func mark_dead() -> void:
 	tw.tween_callback(shatter)
 
 
-## Hand every shard to the physics engine and blow them off the body.
-func shatter() -> void:
-	if _glass_root == null:
-		return
-	if _sites.size() < 2:
-		crack()
-		crack()
-		crack()
-	var thick: float = _box_u * GLASS_THICK
-	var mat: ShaderMaterial = _glass_material()
-	mat.set_shader_parameter("ignite", 1.0)
-	for c: Node in _glass_root.get_children():
-		c.queue_free()
-	_shards.clear()
-	for cell: PackedVector2Array in _cells():
-		var mesh: ArrayMesh = _prism(cell, thick, _box_u)
-		if mesh == null:
-			continue
+## The radial fracture map. Sites ring the burst point — dense near it, sparse
+## far — which is how tempered glass actually fails: small hot cells at the
+## impact, long wedges toward the silhouette.
+func _death_sites(burst: Vector2) -> PackedVector2Array:
+	var out: PackedVector2Array = PackedVector2Array()
+	out.append(burst)
+	var reach: float = _box_u * 0.52
+	# Fewer, larger cells: a piece must be big enough to carry a readable patch
+	# of the painting, or the rite degrades into confetti.
+	var rings: Array[Array] = [[0.16, 4], [0.36, 7], [0.62, 9], [0.85, 10]]
+	for ring: Array in rings:
+		var rf: float = ring[0]
+		var n: int = ring[1]
+		for i: int in range(n):
+			var a: float = TAU * (float(i) + _rng.randf_range(-0.35, 0.35)) / float(n)
+			var r: float = reach * rf * _rng.randf_range(0.82, 1.22)
+			var p: Vector2 = burst + Vector2(cos(a), sin(a)) * r
+			p.x = clampf(p.x, -_box_u * 0.49, _box_u * 0.49)
+			p.y = clampf(p.y, -_box_u * 0.49, _box_u * 0.49)
+			out.append(p)
+	return out
+
+
+## Full-body panes, minus the empty ones. A cell whose every probe lands on
+## transparent art would fly as an invisible slab wearing a glowing fracture
+## rim — which is exactly "shattering something that is not the mob".
+func _death_cells(burst: Vector2) -> Array[PackedVector2Array]:
+	var out: Array[PackedVector2Array] = []
+	for cell: PackedVector2Array in _voronoi(_death_sites(burst), 0.0):
 		var centre: Vector2 = Vector2.ZERO
 		for v: Vector2 in cell:
 			centre += v
 		centre /= float(cell.size())
+		if _touches_art(cell, centre):
+			out.append(cell)
+	return out
+
+
+func _touches_art(cell: PackedVector2Array, centre: Vector2) -> bool:
+	if _art_img == null:
+		return true
+	if _alpha_at(centre) > 0.08:
+		return true
+	for v: Vector2 in cell:
+		if _alpha_at((centre + v) * 0.5) > 0.08:
+			return true
+	return false
+
+
+func _alpha_at(p: Vector2) -> float:
+	var w: int = _art_img.get_width()
+	var h: int = _art_img.get_height()
+	var x: int = clampi(int((p.x / _box_u + 0.5) * float(w)), 0, w - 1)
+	var y: int = clampi(int((0.5 - p.y / _box_u) * float(h)), 0, h - 1)
+	return _art_img.get_pixel(x, y).a
+
+
+## The vessel gives — and the CREATURE is what breaks. One frame it stands
+## whole; the next, the painting itself is cut into radial panes, every piece
+## opaque with the patch of art it covered, molten along its fracture edges.
+## The intact body is HIDDEN the same frame (the benchmark's meshHandoff):
+## nothing may remain behind the debris, because a mob still visible behind its
+## own shards reads as "a pane in front broke, and the monster left". Then real
+## physics carries the pieces — tumble biased out of the picture plane so
+## nothing lands balanced on an edge — and every piece cools and crumbles to
+## embers inside two seconds. Debris that lingers is scenery; debris that
+## disperses is an event.
+func shatter() -> void:
+	if _vessel == null or not _vessel.visible:
+		return
+	_dead = true
+	_intent_chip.visible = false
+	if _art_img == null and _body_mat != null:
+		var t: Texture2D = _body_mat.get_shader_parameter("body_tex")
+		if t != null:
+			_art_img = t.get_image()
+			if _art_img != null and _art_img.is_compressed():
+				_art_img.decompress()
+	# The handoff: the standing vessel vanishes THIS frame; its pieces replace it.
+	_vessel.transform = Transform3D.IDENTITY
+	_vessel.visible = false
+	if _debris != null and is_instance_valid(_debris):
+		_debris.queue_free()
+	_debris = Node3D.new()
+	_stage.add_child(_debris)
+	var burst: Vector2 = Vector2(0.0, _box_u * 0.05)
+	var body_tex: Variant = null
+	if _body_mat != null:
+		body_tex = _body_mat.get_shader_parameter("body_tex")
+	if _shard_shader == null:
+		_shard_shader = Shader.new()
+		_shard_shader.code = SHARD_SHADER
+	# Thinner than the overlay plate: a thick prism reads as a crouton, all
+	# fracture-face and no painting.
+	var thick: float = _box_u * GLASS_THICK * 0.9
+	var spin: float = 10.0 / maxf(1.0, sqrt(_box_u))
+	for cell: PackedVector2Array in _death_cells(burst):
+		var centre: Vector2 = Vector2.ZERO
+		for v: Vector2 in cell:
+			centre += v
+		centre /= float(cell.size())
+		var mesh: ArrayMesh = _prism(cell, thick, _box_u, centre)
+		if mesh == null:
+			continue
+		var smat: ShaderMaterial = ShaderMaterial.new()
+		smat.shader = _shard_shader
+		smat.set_shader_parameter("body_tex", body_tex)
+		# Explicit, not redundant: a ShaderMaterial returns nil for any uniform
+		# never set on the MATERIAL (defaults live in the shader), and a Tween
+		# with a nil start value refuses the property outright.
+		smat.set_shader_parameter("heat", 1.0)
+		smat.set_shader_parameter("dissolve", 0.0)
 		var rb: RigidBody3D = RigidBody3D.new()
-		rb.physics_material_override = _bounce()
+		rb.physics_material_override = _bounce(0.35, 0.4)
 		rb.gravity_scale = 2.4
-		rb.angular_damp = 0.35
+		rb.angular_damp = 0.6
 		var mi: MeshInstance3D = MeshInstance3D.new()
 		mi.mesh = mesh
-		mi.set_surface_override_material(0, mat)
+		mi.set_surface_override_material(0, smat)
 		rb.add_child(mi)
 		var shape: CollisionShape3D = CollisionShape3D.new()
 		var conv: ConvexPolygonShape3D = ConvexPolygonShape3D.new()
 		conv.points = mesh.get_faces()
 		shape.shape = conv
 		rb.add_child(shape)
-		rb.position = Vector3(0.0, 0.0, thick * 0.6)
-		_glass_root.add_child(rb)
-		# Blown outward from the middle, with a shove toward the lens so the
-		# break reads as depth rather than a flat card falling over.
-		var away: Vector3 = Vector3(centre.x, centre.y, 0.0).normalized()
-		if away == Vector3.ZERO:
-			away = Vector3(0.0, 1.0, 0.0)
-		rb.apply_impulse(away * _box_u * _rng.randf_range(0.7, 1.6)
-			+ Vector3(0.0, _box_u * 0.5, _box_u * _rng.randf_range(0.5, 1.4)))
+		rb.position = Vector3(centre.x, centre.y, 0.0)
+		_debris.add_child(rb)
+		# Blown outward from the burst with a shove toward the lens; tumble is
+		# biased around the in-plane axes so plates FLIP out of the picture
+		# plane rather than pinwheeling flat and settling upright.
+		var out2: Vector2 = centre - burst
+		var dir: Vector3 = Vector3.UP
+		if out2.length() > _box_u * 0.001:
+			dir = Vector3(out2.x, out2.y, 0.0).normalized()
+		rb.linear_velocity = dir * _box_u * _rng.randf_range(0.45, 1.05) \
+			+ Vector3(0.0, _box_u * 0.35, _box_u * _rng.randf_range(0.6, 1.5))
 		rb.angular_velocity = Vector3(
-			_rng.randf_range(-8.0, 8.0), _rng.randf_range(-8.0, 8.0),
-			_rng.randf_range(-8.0, 8.0))
-		_shards.append(rb)
-	# The body goes with the glass; what is left is the light it was holding.
-	if _quad != null:
-		var tw: Tween = create_tween()
-		tw.tween_method(_fade_body, 1.0, 0.0, 0.5).set_delay(0.12)
-	# ...and the fire ESCAPES. Held at full blaze the shards read as anonymous
-	# white chips; cooling them hands the creature back, so what lands on the
-	# floor is recognisably the thing that was standing there.
-	var cool: Tween = create_tween()
-	cool.tween_method(_cool_glass, 1.0, 0.15, 0.7).set_delay(0.15)
-
-
-func _cool_glass(v: float) -> void:
-	if _glass_mat != null:
-		_glass_mat.set_shader_parameter("ignite", v)
+			_rng.randf_range(-spin, spin) * 1.3,
+			_rng.randf_range(-spin, spin) * 1.3,
+			_rng.randf_range(-spin, spin) * 0.5)
+		var cool_t: Tween = rb.create_tween()
+		cool_t.tween_property(smat, "shader_parameter/heat", 0.0,
+			_rng.randf_range(0.9, 1.4)) \
+			.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		# Short lives, staggered: most pieces crumble at or just after first
+		# bounce. A plate that settles flat shows the lens only its side band —
+		# debris left lying around is where the "standing glass" read came from.
+		var fade_t: Tween = rb.create_tween()
+		fade_t.tween_interval(_rng.randf_range(0.55, 1.05))
+		fade_t.tween_property(smat, "shader_parameter/dissolve", 1.0, 0.35)
+		fade_t.tween_callback(rb.queue_free)
+	_spawn_burst_flash(burst)
+	_spawn_embers(burst)
+	# The flash: the vessel's fire escapes all at once, thrown FORWARD onto the
+	# flying pieces, then dies away with the embers.
 	if _fire != null:
-		_fire.light_energy = 4.0 * v
+		_fire.position = Vector3(burst.x, burst.y, _box_u * 0.5)
+		_fire.light_energy = 4.5
+		var flash_t: Tween = create_tween()
+		flash_t.tween_property(_fire, "light_energy", 0.0, 0.7) \
+			.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	_shake = 1.0
+	# The stage clears itself; nothing of the rite may stand around afterwards.
+	var d_t: Tween = _debris.create_tween()
+	d_t.tween_interval(2.4)
+	d_t.tween_callback(_debris.queue_free)
 
 
-func _fade_body(v: float) -> void:
-	if _body_mat != null:
-		_body_mat.set_shader_parameter("fade", v)
-		_body_mat.set_shader_parameter("emission_gain", 0.85 * v)
-	if _fire != null:
-		_fire.light_energy = 4.0 * v * _ignite
+## One-shot ember burst: sparks thrown with the shards, floating a beat longer.
+func _spawn_embers(burst: Vector2) -> void:
+	var emb: CPUParticles3D = CPUParticles3D.new()
+	emb.one_shot = true
+	emb.explosiveness = 1.0
+	emb.amount = 48
+	emb.lifetime = 0.9
+	emb.lifetime_randomness = 0.5
+	var qm: QuadMesh = QuadMesh.new()
+	qm.size = Vector2.ONE * _box_u * 0.05
+	emb.mesh = qm
+	emb.material_override = _add_mat(_fx_tex("ember"))
+	emb.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
+	emb.emission_sphere_radius = _box_u * 0.14
+	emb.direction = Vector3(0.0, 0.5, 1.0)
+	emb.spread = 180.0
+	emb.gravity = Vector3(0.0, -_box_u * 1.6, 0.0)
+	emb.initial_velocity_min = _box_u * 0.8
+	emb.initial_velocity_max = _box_u * 2.4
+	emb.damping_min = _box_u * 0.5
+	emb.damping_max = _box_u * 1.2
+	var grad: Gradient = Gradient.new()
+	grad.set_color(0, Color(1.0, 0.86, 0.5, 1.0))
+	grad.add_point(0.55, Color(1.0, 0.55, 0.2, 0.85))
+	grad.set_color(1, Color(0.9, 0.3, 0.08, 0.0))
+	emb.color_ramp = grad
+	var curve: Curve = Curve.new()
+	curve.add_point(Vector2(0.0, 1.0))
+	curve.add_point(Vector2(1.0, 0.0))
+	emb.scale_amount_curve = curve
+	emb.position = Vector3(burst.x, burst.y, _box_u * 0.1)
+	_debris.add_child(emb)
+	emb.finished.connect(emb.queue_free)
+
+
+## The impact frame: a radial flare that blooms and is gone in a quarter second.
+func _spawn_burst_flash(burst: Vector2) -> void:
+	var mi: MeshInstance3D = MeshInstance3D.new()
+	var qm: QuadMesh = QuadMesh.new()
+	qm.size = Vector2.ONE * _box_u * 1.1
+	mi.mesh = qm
+	var m: StandardMaterial3D = _add_mat(_fx_tex("burst"))
+	mi.material_override = m
+	mi.position = Vector3(burst.x, burst.y, _box_u * 0.3)
+	mi.scale = Vector3.ONE * 0.55
+	_debris.add_child(mi)
+	var tw: Tween = mi.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(mi, "scale", Vector3.ONE * 1.5, 0.28) \
+		.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	tw.tween_property(m, "albedo_color", Color(0, 0, 0, 0), 0.28) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.chain().tween_callback(mi.queue_free)
+
+
+## FX sprites are additive (black reads as transparent), loaded straight off
+## disk so no import pass is needed mid-session; a missing file falls back to a
+## procedural radial gradient. ponytail: Image.load_from_file bypasses the
+## import system, so an exported build must import these or keep the fallback.
+static func _fx_tex(fx_name: String) -> Texture2D:
+	if _fx_cache.has(fx_name):
+		var hit: Texture2D = _fx_cache[fx_name]
+		return hit
+	var path: String = "res://assets/art/enemies/fx/%s.png" % fx_name
+	var tex: Texture2D = null
+	if FileAccess.file_exists(path):
+		var img: Image = Image.load_from_file(path)
+		if img != null:
+			tex = ImageTexture.create_from_image(img)
+	if tex == null:
+		var g: Gradient = Gradient.new()
+		g.set_color(0, Color(1.0, 0.92, 0.7, 1.0))
+		g.add_point(0.35, Color(1.0, 0.55, 0.2, 1.0))
+		g.set_color(1, Color(0.0, 0.0, 0.0, 1.0))
+		var gt: GradientTexture2D = GradientTexture2D.new()
+		gt.gradient = g
+		gt.fill = GradientTexture2D.FILL_RADIAL
+		gt.fill_from = Vector2(0.5, 0.5)
+		gt.fill_to = Vector2(0.5, 0.0)
+		gt.width = 64
+		gt.height = 64
+		tex = gt
+	_fx_cache[fx_name] = tex
+	return tex
+
+
+static func _add_mat(tex: Texture2D) -> StandardMaterial3D:
+	var m: StandardMaterial3D = StandardMaterial3D.new()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	m.albedo_texture = tex
+	m.vertex_color_use_as_albedo = true
+	m.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	m.billboard_keep_scale = true
+	m.disable_receive_shadows = true
+	return m
 
 
 ## The death ramp, 0..1. Public so the bench can hold it at a frame the eye can
