@@ -48,6 +48,21 @@ const GHOST_FALL: float = 0.9
 ## Chrome geometry (benchmark styles.css: .hpbar-wrap width 150, .cplate gap 6,
 ## .top-chrome bottom calc(100% + 8px)).
 const PLATE_W: float = 150.0
+## `.hpbar` and the bezel that sits over it (styles.css:838-847).
+const RAIL_H: float = 9.0
+const RAIL_INSET: float = 4.0     # `margin: 0 4px` under the frame
+const RAIL_RADIUS: int = 2
+const RAIL_TRACK: Color = Color(0.0, 0.0, 0.0, 0.35)
+const RAIL_FROM: Color = Color(0.70980394, 0.16470589, 0.24313726)   # #b52a3e
+const RAIL_TO: Color = Color(1.0, 0.41568628, 0.36862746)            # #ff6a5e
+const VIAL_H: float = 14.0
+const VIAL_FRAME: String = "res://assets/art/ui/hp-vial-frame.png"
+const VIAL_FRAME_H: float = 22.0
+const VIAL_FRAME_PROUD: float = 5.0
+## `.hp-label`
+const HP_LABEL_W: float = 52.0
+const HP_LABEL_PX: int = 12
+const HP_LABEL_TINT: Color = Color(1.0, 0.7254902, 0.7254902)        # #ffb9b9
 const PLATE_GAP: float = 8.0
 const CROWN_GAP: float = 8.0
 const WARD_ICON_PX: float = 20.0
@@ -1858,10 +1873,41 @@ func _build_chrome(display_name: String) -> void:
 	_ward_chip.add_child(ward_box)
 	vial_row.add_child(_ward_chip)
 
-	var hp_wrap: Control = Control.new()
-	hp_wrap.custom_minimum_size = Vector2(PLATE_W, 16)
-	hp_wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vial_row.add_child(hp_wrap)
+	# `.hpbar-wrap` (styles.css:828) — 150px TOTAL holding three things in a row:
+	# the ward chip, a vial that takes whatever is left (`flex: 1`), and the
+	# reading BESIDE it. The port had the 150 on the vial alone and the numbers
+	# centred on top of the rail, which made the row wider than the plate and put
+	# white text over a red bar.
+	vial_row.custom_minimum_size = Vector2(PLATE_W, 0.0)
+	# `width: 150px` is a WIDTH, not a floor. The plate is as wide as the creature
+	# — 575px for an elite — and a row left to fill it hands every one of those
+	# pixels to the vial, which then stretches a 22px bezel across the whole body.
+	vial_row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+
+	# `.hp-vial` — the seat the bezel and the rail share. It is taller than the
+	# rail because the bezel overhangs it.
+	var vial: Control = Control.new()
+	vial.custom_minimum_size = Vector2(0.0, VIAL_H)
+	vial.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vial.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vial_row.add_child(vial)
+
+	# `.hp-vial:has(.hp-vial-frame) .hpbar` (styles.css:838) — with the bezel
+	# present the rail loses its own lead border and inset hairline and becomes a
+	# 9px slot inset 4px at each end. The bezel supplies the frame; two frames
+	# would just fight.
+	var rail: Control = Control.new()
+	rail.set_anchors_preset(Control.PRESET_LEFT_WIDE)
+	rail.anchor_right = 1.0
+	rail.offset_left = RAIL_INSET
+	rail.offset_right = -RAIL_INSET
+	rail.anchor_top = 0.5
+	rail.anchor_bottom = 0.5
+	rail.offset_top = -RAIL_H * 0.5
+	rail.offset_bottom = RAIL_H * 0.5
+	rail.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vial.add_child(rail)
+
 	# `.hpbar > .ghost` (styles.css:849) — the warm trail the loss leaves behind.
 	# It carries the TRACK, and the live rail above it is given a transparent
 	# background, so the ghost shows in the gap the fill has just left instead of
@@ -1870,17 +1916,16 @@ func _build_chrome(display_name: String) -> void:
 	_hp_ghost.show_percentage = false
 	_hp_ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_ghost.set_anchors_preset(Control.PRESET_FULL_RECT)
-	GlassStyle.style_bar(_hp_ghost, GHOST_WARM)
-	hp_wrap.add_child(_hp_ghost)
+	_style_rail(_hp_ghost, null, GHOST_WARM)
+	rail.add_child(_hp_ghost)
 	_hp_bar = ProgressBar.new()
 	_hp_bar.show_percentage = false
 	_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar.set_anchors_preset(Control.PRESET_FULL_RECT)
-	GlassStyle.style_bar(_hp_bar, GlassStyle.HP_RED)
-	var clear_track: StyleBoxFlat = StyleBoxFlat.new()
-	clear_track.bg_color = Color(0, 0, 0, 0)
-	_hp_bar.add_theme_stylebox_override("background", clear_track)
-	hp_wrap.add_child(_hp_bar)
+	# `linear-gradient(90deg, #b52a3e, #ff6a5e)` — the rail is NOT one red. The
+	# dark end is what makes a nearly-empty bar read as nearly empty.
+	_style_rail(_hp_bar, _rail_fill(), Color.WHITE)
+	rail.add_child(_hp_bar)
 	# `background: rgba(255,240,216,0.9); mix-blend-mode: screen` — Godot has no
 	# screen blend on a CanvasItem, and additive over the rail's red lands within
 	# a couple of percent of what screen produces for these two colours.
@@ -1893,18 +1938,91 @@ func _build_chrome(display_name: String) -> void:
 	_hp_preview.material = add_mat
 	_hp_preview.anchor_top = 0.0
 	_hp_preview.anchor_bottom = 1.0
-	hp_wrap.add_child(_hp_preview)
+	rail.add_child(_hp_preview)
+
+	# `.hp-vial-frame` (styles.css:831) — the bezel, 5px proud at each end and
+	# 22px tall over a 9px slot. The art has been in assets/art/ui the whole time
+	# and only the HUD lab ever loaded it.
+	var frame_tex: Texture2D = load(VIAL_FRAME) as Texture2D
+	if frame_tex != null:
+		var frame: TextureRect = TextureRect.new()
+		frame.texture = frame_tex
+		frame.stretch_mode = TextureRect.STRETCH_SCALE
+		# Without this a TextureRect's minimum size is its TEXTURE's size, and a
+		# minimum beats an anchor — the 512x179 bezel art laid itself across the
+		# whole screen instead of sitting in its 94x22 slot.
+		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		frame.set_anchors_preset(Control.PRESET_LEFT_WIDE)
+		frame.anchor_right = 1.0
+		frame.offset_left = -VIAL_FRAME_PROUD
+		frame.offset_right = VIAL_FRAME_PROUD
+		frame.anchor_top = 0.5
+		frame.anchor_bottom = 0.5
+		frame.offset_top = -VIAL_FRAME_H * 0.5
+		frame.offset_bottom = VIAL_FRAME_H * 0.5
+		vial.add_child(frame)
+
+	# `.hp-label` (styles.css:850) — 12px 700 `#ffb9b9`, 52px min, left-aligned
+	# and tabular, so a rail that is losing digits does not shuffle sideways.
 	_hp_label = _label("")
-	_hp_label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_hp_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_hp_label.add_theme_font_size_override("font_size", 11)
+	_hp_label.custom_minimum_size = Vector2(HP_LABEL_W, 0.0)
+	_hp_label.add_theme_font_size_override("font_size", HP_LABEL_PX)
+	_hp_label.add_theme_color_override("font_color", HP_LABEL_TINT)
+	var alegreya_bold: FontFile = load(GlassStyle.ALEGREYA_700)
+	if alegreya_bold != null:
+		_hp_label.add_theme_font_override("font", alegreya_bold)
 	_hp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hp_wrap.add_child(_hp_label)
+	vial_row.add_child(_hp_label)
 
 	if not is_hero:
 		_facets = FacetPips.new()
 		_facets.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_plate.add_child(_facets)
+
+
+## One rail. `fill_tex` paints the gradient the CSS declares on `.fill`; passing
+## null falls back to `flat`, which is what the ghost wants.
+##
+## The track is `rgba(0,0,0,.35)` with NO border: the bezel over it is the frame,
+## and `GlassStyle.style_bar`'s rim — tinted by the fill colour at 28% — was
+## drawing a red outline round a red bar.
+static func _style_rail(bar: ProgressBar, fill_tex: Texture2D, flat: Color) -> void:
+	var track: StyleBoxFlat = StyleBoxFlat.new()
+	track.bg_color = RAIL_TRACK
+	track.set_corner_radius_all(RAIL_RADIUS)
+	bar.add_theme_stylebox_override("background", track)
+	if fill_tex == null:
+		var solid: StyleBoxFlat = StyleBoxFlat.new()
+		solid.bg_color = flat
+		solid.set_corner_radius_all(RAIL_RADIUS)
+		bar.add_theme_stylebox_override("fill", solid)
+		return
+	# The live rail sits ON the ghost, so its own track must not hide it.
+	var clear: StyleBoxFlat = StyleBoxFlat.new()
+	clear.bg_color = Color(0, 0, 0, 0)
+	bar.add_theme_stylebox_override("background", clear)
+	var box: StyleBoxTexture = StyleBoxTexture.new()
+	box.texture = fill_tex
+	bar.add_theme_stylebox_override("fill", box)
+
+
+## `linear-gradient(90deg, #b52a3e, #ff6a5e)`. Stretched with the fill, exactly
+## as the CSS is: the gradient lives on the `.fill` element, so it compresses as
+## the element narrows rather than staying put behind it.
+static func _rail_fill() -> GradientTexture2D:
+	var g: Gradient = Gradient.new()
+	g.offsets = PackedFloat32Array([0.0, 1.0])
+	g.colors = PackedColorArray([RAIL_FROM, RAIL_TO])
+	var t: GradientTexture2D = GradientTexture2D.new()
+	t.gradient = g
+	t.fill_from = Vector2(0.0, 0.0)
+	t.fill_to = Vector2(1.0, 0.0)
+	t.width = 128
+	t.height = 8
+	return t
 
 
 static func _label(initial: String) -> Label:
