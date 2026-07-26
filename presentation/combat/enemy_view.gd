@@ -236,6 +236,47 @@ const NAME_BOSS: Color = Color(1.0, 0.60784316, 0.91764706)        # #ff9bea
 ## whichever body is being drawn.
 const AIM_REF_BOX: float = 185.0
 
+## `SEG_X`, `SEG_Y`, `INTENSITY` (mesh.js:20). The subdivision is what the idle
+## deformation has to bend; the intensity is the single global dial the benchmark
+## keeps in front of every term of it.
+const SEG_X: int = 24
+const SEG_Y: int = 36
+const IDLE_INTENSITY: float = 0.45
+
+## `PROFILE` (mesh.js:140) — an idle per `art.kind`, and the reason a golem does
+## not breathe like a wisp. Read as the BASE; `char-meta`'s own `mesh` block is
+## laid over it per creature, which is what `meshProfileFor` does.
+##
+## `float` is not a warp term: it is a whole-body lift in stage px (mesh.js:1271)
+## and it is applied to the vessel rather than to the vertices.
+const IDLE_PROFILES: Dictionary[StringName, Dictionary] = {
+	&"wisp": {"sway": 0.55, "bob": 1.85, "breathe": 0.95, "head": 0.4, "cloth": 0.0, "pin": 1.05, "float": 1.35},
+	&"beast": {"sway": 1.15, "bob": 0.85, "breathe": 0.65, "head": 0.55, "cloth": 0.2, "float": 0.0},
+	&"slime": {"sway": 0.55, "bob": 0.55, "breathe": 1.35, "head": 0.0, "cloth": 0.55, "pin": 1.2, "float": 0.25},
+	&"rogue": {"sway": 1.0, "bob": 1.0, "breathe": 1.0, "head": 1.0, "cloth": 0.8, "float": 0.0},
+	&"plant": {"sway": 0.7, "bob": 0.75, "breathe": 0.85, "head": 0.25, "cloth": 1.15, "pin": 1.1, "float": 0.55},
+	&"cultist": {"sway": 0.95, "bob": 0.95, "breathe": 1.0, "head": 0.85, "cloth": 0.7, "float": 0.0},
+	&"golem": {"sway": 0.28, "bob": 0.25, "breathe": 0.35, "head": 0.15, "cloth": 0.0, "float": 0.0},
+	&"treeboss": {"sway": 0.4, "bob": 0.3, "breathe": 0.5, "head": 0.2, "cloth": 0.6, "float": 0.0},
+	&"zombie": {"sway": 0.7, "bob": 0.5, "breathe": 0.6, "head": 0.4, "cloth": 0.3, "float": 0.0},
+	&"serpent": {"sway": 0.95, "bob": 0.65, "breathe": 0.45, "head": 0.35, "cloth": 0.15, "float": 0.15},
+	&"crawler": {"sway": 0.9, "bob": 0.6, "breathe": 0.55, "head": 0.45, "cloth": 0.1, "float": 0.0},
+	&"crab": {"sway": 0.5, "bob": 0.35, "breathe": 0.4, "head": 0.2, "cloth": 0.0, "float": 0.0},
+	&"maw": {"sway": 0.65, "bob": 0.45, "breathe": 0.7, "head": 0.5, "cloth": 0.0, "float": 0.1},
+	&"knight": {"sway": 0.85, "bob": 0.7, "breathe": 0.75, "head": 0.7, "cloth": 0.5, "float": 0.0},
+	&"siren": {"sway": 1.05, "bob": 1.25, "breathe": 0.8, "head": 0.6, "cloth": 0.9, "pin": 1.1, "float": 0.85},
+	&"leviathan": {"sway": 0.35, "bob": 0.25, "breathe": 0.45, "head": 0.3, "cloth": 0.2, "float": 0.0},
+	&"shade": {"sway": 0.9, "bob": 1.05, "breathe": 0.7, "head": 0.5, "cloth": 0.6, "pin": 1.1, "float": 0.7},
+	&"eye": {"sway": 0.35, "bob": 1.45, "breathe": 1.0, "head": 0.0, "cloth": 0.0, "pin": 0.95, "float": 1.2},
+	&"sovereign": {"sway": 0.45, "bob": 0.35, "breathe": 0.55, "head": 0.45, "cloth": 0.35, "float": 0.0},
+	&"humanoid": {"sway": 1.0, "bob": 1.0, "breathe": 1.0, "head": 1.0, "cloth": 0.85, "float": 0.0},
+}
+## `pin` is absent from most profiles; `pow(v, 1.6)` is the default weighting.
+const IDLE_PIN: float = 1.6
+## `float * 12 * INTENSITY` (mesh.js:1271), in stage px, never negative.
+const FLOAT_PX: float = 12.0
+const FLOAT_RATE: float = 1.15
+
 ## `charAim(id).color`, resolved once from the character table.
 var _aim_tint: Color = Color(0.894, 0.835, 0.984)
 ## In UV, so that `aim_px / art_size` is a CONSTANT number of screen pixels.
@@ -249,6 +290,14 @@ var _breathe: float = 1.0
 ## are not the same thing.
 var _idle_sway: float = 1.0
 var _idle_bob: float = 1.0
+var _idle_head: float = 1.0
+var _idle_cloth: float = 0.85
+var _idle_pin: float = IDLE_PIN
+var _idle_float: float = 0.0
+## `char-meta`'s own `mesh` block, kept so the kind's profile can be swapped in
+## underneath it later without losing the per-creature overrides on top.
+var _idle_over: Dictionary = {}
+var _idle_t: float = 0.0
 var _phase: float = 0.0
 var _shards: Array[Node3D] = []
 var _key: DirectionalLight3D = null
@@ -302,6 +351,62 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley,
 	specular_schlick_ggx;
 
 uniform sampler2D body_tex : source_color, filter_linear_mipmap;
+
+// `deformPlane` (mesh.js:914) — the idle, and the whole difference between a
+// creature that is alive and a picture that is being wobbled. Six terms, each
+// weighted by WHERE on the body it acts, so the feet stay planted and the head,
+// the chest and the hem move on their own clocks. Run in the vertex stage
+// rather than on the CPU: the benchmark walks its vertex array in JS every
+// frame, and there is no reason to pay that here.
+uniform float idle_t = 0.0;
+uniform float idle_seed = 0.0;
+uniform float p_sway = 1.0;
+uniform float p_bob = 1.0;
+uniform float p_breathe = 1.0;
+uniform float p_head = 1.0;
+uniform float p_cloth = 0.85;
+uniform float p_pin = 1.6;
+uniform float idle_gain = 1.0;
+
+// `bell(v, 0.62, 0.12)` — the chest. Breathing acts THERE, not everywhere, and
+// that is what stops a body from pulsing like a jellyfish.
+float idle_bell(float v, float c, float w) {
+	float d = (v - c) / w;
+	return exp(-d * d);
+}
+
+// Half the plane's width, so `VERTEX.x` can be read in the benchmark's own
+// units: its geometry is `PlaneGeometry(2, 2)`, i.e. half-extent 1.
+uniform float half_w = 1.0;
+
+void vertex() {
+	// UV.y 0 is the crown and 1 the feet, so `v` is height above the ground.
+	float v = 1.0 - UV.y;
+	// `w = pow(v, pin)` — pinned at the contact line. Everything that leans is
+	// scaled by this, so a creature sways from its feet rather than sliding.
+	float w = pow(max(v, 0.0), p_pin);
+	float t = idle_t;
+	float s = idle_seed;
+	float dx = 0.0;
+	float dy = 0.0;
+	// Sway: two harmonics, so the lean is not a metronome.
+	dx += 0.028 * w * p_sway * sin(t * 0.9 + s);
+	dx += 0.010 * w * w * p_sway * sin(t * 1.7 + 1.0 + s * 0.3);
+	// Breathe: the chest WIDENS (x scales about the centre) and rises.
+	float chest = idle_bell(v, 0.62, 0.12);
+	dx += (VERTEX.x / max(0.0001, half_w)) * 0.020 * chest * p_breathe
+		* sin(t * 2.2 + s * 0.5);
+	dy += 0.012 * chest * p_breathe * sin(t * 2.2 + s * 0.5);
+	// Bob.
+	dy += 0.014 * w * p_bob * sin(t * 1.1 + 0.4 + s);
+	// Head: the top fifth only.
+	dx += 0.012 * max(0.0, (v - 0.8) / 0.2) * p_head * sin(t * 0.7 + s);
+	// Cloth: a wave travelling DOWN the hem, below 45% height.
+	dx += 0.010 * max(0.0, (0.45 - v) / 0.45) * w * p_cloth * sin(v * 12.0 - t * 2.5 + s);
+	VERTEX.x += dx * idle_gain;
+	VERTEX.y += dy * idle_gain;
+}
+
 uniform float bump = 3.5;
 uniform float emission_gain = 0.85;
 uniform float target_lit = 0.0;
@@ -686,8 +791,15 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_phase = float(enemy_idx) * 1.7
 
 	_quad = MeshInstance3D.new()
-	var qm: QuadMesh = QuadMesh.new()
+	# `PlaneGeometry(2, 2, SEG_X, SEG_Y)` (mesh.js:314) — a SUBDIVIDED plane, and
+	# that is the whole reason the benchmark's creatures look alive: the idle is a
+	# vertex deformation, so a body bends. A single quad can only be moved
+	# rigidly, which is what this port was doing.
+	var qm: PlaneMesh = PlaneMesh.new()
 	qm.size = Vector2(_quad_w, _box_u)
+	qm.orientation = PlaneMesh.FACE_Z
+	qm.subdivide_width = SEG_X
+	qm.subdivide_depth = SEG_Y
 	_quad.mesh = qm
 	var sh: Shader = Shader.new()
 	sh.code = BODY_SHADER
@@ -695,6 +807,12 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_body_mat.shader = sh
 	_body_mat.set_shader_parameter("body_tex", tex)
 	_body_mat.set_shader_parameter("flare_gain", flare_gain)
+	# Their plane is 2 units across, so a displacement of 0.028 is 1.4% of the
+	# half-height. `idle_gain` puts that back into world units, INTENSITY and all.
+	_body_mat.set_shader_parameter("half_w", _quad_w * 0.5)
+	_body_mat.set_shader_parameter("idle_gain", _box_u * 0.5 * IDLE_INTENSITY)
+	_body_mat.set_shader_parameter("idle_seed", _phase)
+	_push_profile()
 	_body_mat.set_shader_parameter("aim_tint",
 		Vector3(_aim_tint.r, _aim_tint.g, _aim_tint.b))
 	_body_mat.set_shader_parameter("aim_width", _aim_width)
@@ -928,19 +1046,31 @@ func _process(delta: float) -> void:
 			var s: float = 1.0 + 0.03 * q
 			_vessel.scale = Vector3(s, s, 1.0)
 		return
-	var sw: float = sin(t * 1.05)
-	var k: float = 1.0 + _breathe * 0.016 * sw
+	# The idle is no longer here. It used to be three sine terms writing the
+	# vessel's scale, rotation and position — one rigid card being wobbled, which
+	# is a different animal from a body that BENDS. It now lives in the vertex
+	# stage (`deformPlane`), weighted by height so the feet stay planted, and this
+	# function is left with only the things that really do move the whole body.
+	_idle_t += delta
+	if _body_mat != null:
+		_body_mat.set_shader_parameter("idle_t", _idle_t)
 	# The recoil rides ON the idle rather than being tweened onto the vessel: this
 	# function rewrites scale and position every frame, so a Tween aimed at either
 	# would be erased before it was ever seen. `_hit` and `_hit_squash` are the
 	# tweened values; composing them here is what makes the two coexist.
 	_vessel.scale = Vector3(
-		k * (1.0 - SQUASH * _hit_squash) * _lunge_scale.x,
-		k * (1.0 + SQUASH * _hit_squash) * _lunge_scale.y, 1.0)
-	_vessel.rotation.z = _idle_sway * 0.017 * sin(t * 0.71)
+		(1.0 - SQUASH * _hit_squash) * _lunge_scale.x,
+		(1.0 + SQUASH * _hit_squash) * _lunge_scale.y, 1.0)
+	_vessel.rotation.z = 0.0
+	# `float` is the one idle term that is NOT a warp: a whole-body lift in stage
+	# px, never negative, so a wisp hangs above the line it was placed on rather
+	# than sinking through it.
+	var lift: float = 0.0
+	if _idle_float > 0.0:
+		lift = maxf(0.0, _idle_float * FLOAT_PX * IDLE_INTENSITY
+			* sin(t * FLOAT_RATE + _phase * 0.7)) * UNIT
 	_vessel.position = Vector3(
-		(_hit * KICK_PX + _lunge_x) * UNIT,
-		_idle_bob * _box_u * 0.010 * sin(t * 0.83) + _lunge_up * UNIT, 0.0)
+		(_hit * KICK_PX + _lunge_x) * UNIT, lift + _lunge_up * UNIT, 0.0)
 
 
 # ---------------------------------------------------------------- striking
@@ -952,15 +1082,49 @@ func _process(delta: float) -> void:
 ## does not float. Everything defaults to 1.0, so a character without a block
 ## idles exactly as it did.
 func _read_idle(entry: Dictionary) -> void:
-	var mesh: Dictionary = entry.get("mesh", {})
-	if mesh.is_empty():
+	_idle_over = entry.get("mesh", {})
+	_resolve_profile(&"humanoid")
+
+
+## `meshProfileFor(kind, id)` (mesh.js:1249) — the kind's profile, with the
+## character's own `mesh` block laid over it. The kind is passed rather than
+## looked up, on the same rule as everything else here: a widget in
+## `presentation/` does not read content.
+func set_profile(kind: String) -> void:
+	_resolve_profile(StringName(kind))
+	_push_profile()
+
+
+func _resolve_profile(kind: StringName) -> void:
+	var base: Dictionary = IDLE_PROFILES.get(kind, IDLE_PROFILES[&"humanoid"])
+	_breathe = _idle_knob(base, "breathe", 1.0)
+	_idle_sway = _idle_knob(base, "sway", 1.0)
+	_idle_bob = _idle_knob(base, "bob", 1.0)
+	_idle_head = _idle_knob(base, "head", 1.0)
+	_idle_cloth = _idle_knob(base, "cloth", 0.85)
+	_idle_pin = _idle_knob(base, "pin", IDLE_PIN)
+	_idle_float = _idle_knob(base, "float", 0.0)
+
+
+func _idle_knob(base: Dictionary, key: String, fallback: float) -> float:
+	if _idle_over.has(key):
+		var over: float = _idle_over[key]
+		return over
+	if base.has(key):
+		var v: float = base[key]
+		return v
+	return fallback
+
+
+func _push_profile() -> void:
+	if _body_mat == null:
 		return
-	var breathe: float = mesh.get("breathe", 1.0)
-	var sway: float = mesh.get("sway", 1.0)
-	var bob: float = mesh.get("bob", 1.0)
-	_breathe = breathe
-	_idle_sway = sway
-	_idle_bob = bob
+	_body_mat.set_shader_parameter("p_sway", _idle_sway)
+	_body_mat.set_shader_parameter("p_bob", _idle_bob)
+	_body_mat.set_shader_parameter("p_breathe", _breathe)
+	_body_mat.set_shader_parameter("p_head", _idle_head)
+	_body_mat.set_shader_parameter("p_cloth", _idle_cloth)
+	_body_mat.set_shader_parameter("p_pin", maxf(0.05, _idle_pin))
 
 
 ## `charAim(id)` (char-meta.js:113) — the global default with the character's

@@ -635,6 +635,10 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 	# rebuilding it would throw away a 3D stage for no reason.
 	if _hero == null:
 		_hero = EnemyView.new(-1, "", HERO_HUE, HERO_ART)
+		# `HERO_LOOKS[0].kind` — a hero is a rogue in the profile table, and
+		# char-meta's own `duskblade` block (breathe 1.6, sway 0.5, bob 0) is laid
+		# over it, which is why the player breathes harder and does not float.
+		_hero.set_profile("rogue")
 		_battlefield.add_child(_hero)
 	_stand(_hero, HERO_X, 0.0)
 	var slots: Array[Vector2] = _slots(game.cb.enemies.size())
@@ -672,6 +676,9 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		# Passing nothing here is what left the fight full of fallback gems.
 		var view: EnemyView = EnemyView.new(e.idx, e.name, float(hue_num), e.key)
 		view.set_affix(affix_name, affix_tone)
+		# `meshProfileFor(kind, id)` — a golem does not breathe like a wisp, and
+		# `art.kind` is the only thing that knows which it is.
+		view.set_profile(_foe_kind(e.idx))
 		_battlefield.add_child(view)
 		_enemy_views[idx] = view
 		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
