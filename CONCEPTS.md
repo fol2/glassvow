@@ -163,10 +163,11 @@ that has been chipped has gone dark; an unchipped facet still holds its light.
 Past one row the gauge stops being countable and reads as a number instead.
 
 ### Ward
-Temporary protection that absorbs damage before health does, shown as a painted
-lock beside the health vial. Absent rather than zero when a combatant has none.
-*Ward* is the word the game shows the player; *block* is the word the rules and
-the card data use for the same value.
+Temporary protection that absorbs damage before health does. Rendered in two parts: a chip
+beside the health vial showing the number, and a faceted gem shell in front of the creature —
+a regular 8-cut stone showing manufactured order against the glass's natural cracks, which
+flashes when struck and shatters as an expanding ring. Absent rather than zero when a combatant
+has none. *Ward* is the word the game shows the player; *block* is the rules' word.
 
 ### Intent
 The move an enemy has telegraphed for its next turn, shown above the actor. It is
