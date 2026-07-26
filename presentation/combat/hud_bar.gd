@@ -94,18 +94,47 @@ var _draw_pile: Pile
 var _ashes_pile: Pile
 var _discard_pile: Pile
 var _vial_frame: bool = true
+## The last nine values drawn; empty forces the first pass through.
+var _last: PackedInt32Array = PackedInt32Array()
 
 
 ## One pile's parts. A class rather than three sets of members or a dictionary
 ## of dictionaries: the fan is rebuilt whenever the count moves, and the strict
 ## gate wants every piece typed at that moment.
 class Pile:
-	var art: String
-	var face: float          # a card back's drawn width, and its height
 	var count: Label
-	var stack: Control
-	var faces: Array[TextureRect] = []
+	var stack: Fan
 	var shown: int = -1      # last count drawn; -1 forces the first build
+
+
+## The fan of card backs, drawn rather than assembled.
+##
+## A pile shows one face per card up to sixteen, so three piles at depth is up
+## to FORTY-EIGHT nodes — every one a full Control with its own transform,
+## style and layout slot, all of them drawing the identical texture. That is
+## how you would do it in a DOM, where a node is the only thing you can rotate;
+## in Godot the same picture is one `_draw()` per pile and nothing to allocate
+## when the count moves.
+##
+## The geometry is unchanged: each face is a `face`-square laid on the bottom of
+## the box and turned about a point at 50%/92% of it, which is where a real deck
+## pivots — near the bottom edge, not the middle.
+class Fan:
+	extends Control
+	var tex: Texture2D
+	var face: float = 96.0
+	var faces: int = 0
+
+	func _draw() -> void:
+		if tex == null or faces <= 0:
+			return
+		var pivot: Vector2 = Vector2(face * 0.5, size.y - face + face * 0.92)
+		var origin: Vector2 = Vector2(0.0, size.y - face) - pivot
+		for i: int in range(faces):
+			# Qualified: an inner class does not see the outer one's statics.
+			var a: float = HudBar._fan_angle(i, faces)
+			draw_set_transform(pivot, deg_to_rad(a), Vector2.ONE)
+			draw_texture_rect(tex, Rect2(origin, Vector2(face, face)), false)
 
 
 ## A mipmapped copy of one UI texture. The art is 512² and lands here between 14
@@ -116,7 +145,14 @@ static func icon(icon_name: String) -> Texture2D:
 	if _tex_cache.has(icon_name):
 		var hit: Texture2D = _tex_cache[icon_name]
 		return hit
-	var src: Texture2D = load(ART + icon_name + ".png") as Texture2D
+	var path: String = ART + icon_name + ".png"
+	if not ResourceLoader.exists(path):
+		# Checked rather than let load() fail: a missing icon otherwise becomes
+		# an invisible node with nothing in the log naming which one.
+		push_warning("hud: missing art %s" % path)
+		_tex_cache[icon_name] = null
+		return null
+	var src: Texture2D = load(path) as Texture2D
 	var made: Texture2D = src
 	if src != null:
 		var img: Image = src.get_image()
@@ -176,6 +212,16 @@ func _init(vial_frame: bool = true) -> void:
 func set_values(hp: int, max_hp: int, block: int, gold: int,
 		energy: int, max_energy: int, draw_count: int, discard_count: int,
 		exhaust_count: int) -> void:
+	# Assembly will call this off a signal that fires for anything that moved,
+	# so most calls change nothing here. Setting a Label's text re-shapes it
+	# even when the string is identical; nine of those per call is a real cost
+	# for no change on screen. The piles already guarded themselves — this is
+	# the same guard for the whole surface.
+	var now: PackedInt32Array = PackedInt32Array([hp, max_hp, block, gold,
+		energy, max_energy, draw_count, discard_count, exhaust_count])
+	if now == _last:
+		return
+	_last = now
 	var ratio: float = clampf(float(hp) / float(maxi(1, max_hp)), 0.0, 1.0)
 	_hp_num.text = "%d / %d" % [hp, max_hp]
 	_hp_fill.size.x = HP_WRAP_W * ratio
@@ -327,6 +373,7 @@ func _build_top_bar() -> void:
 	# .icon-btn.deck-btn — a 44px hit area under 56px of art, with the count
 	# sitting on the seal in white.
 	var deck: Button = _bare_button(Vector2(44.0, 44.0))
+	deck.tooltip_text = "Deck"
 	deck.pressed.connect(func() -> void: deck_pressed.emit())
 	right.add_child(deck)
 	var seal: TextureRect = _icon_rect("ui/deck", 56.0)
@@ -350,6 +397,7 @@ func _build_top_bar() -> void:
 		sb.set_border_width_all(1)
 		sb.border_color = GOLD if state == "hover" else Color(1.0, 1.0, 1.0, 0.14)
 		menu.add_theme_stylebox_override(state, sb)
+	menu.tooltip_text = "Menu"
 	menu.pressed.connect(func() -> void: menu_pressed.emit())
 	right.add_child(menu)
 	var menu_ic: TextureRect = _icon_rect("ui/menu", 19.0)
@@ -468,6 +516,7 @@ func _build_lantern() -> void:
 	_lantern.add_child(glow)
 
 	var btn: Button = _bare_button(Vector2(104.0, 104.0))
+	btn.tooltip_text = "Lantern — spend a charge"
 	btn.pressed.connect(func() -> void: lantern_pressed.emit())
 	_lantern.add_child(btn)
 	var art: TextureRect = _icon_rect("ui/lantern", 94.0)
@@ -496,10 +545,11 @@ func _build_pile(which: StringName, name_text: String, rect: Rect2,
 	root.add_child(btn)
 
 	var p: Pile = Pile.new()
-	p.art = "piles/" + str(which)
-	p.face = rect.size.x
-	p.stack = Control.new()
+	p.stack = Fan.new()
+	p.stack.tex = icon("piles/" + str(which))
+	p.stack.face = rect.size.x
 	p.stack.size = Vector2(rect.size.x, rect.size.y - 18.0)
+	p.stack.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	p.stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	btn.add_child(p.stack)
 
@@ -526,21 +576,12 @@ func _build_pile(which: StringName, name_text: String, rect: Rect2,
 func _sync_pile(p: Pile, n: int) -> void:
 	p.count.text = str(n)
 	if p.shown == n:
-		return  # the benchmark's own guard: rebuild only when the count moves
+		return  # the benchmark's own guard: redraw only when the count moves
 	p.shown = n
 	var faces: int = mini(maxi(n, 0), FAN_FACES)
 	p.stack.visible = faces > 0
-	while p.faces.size() < faces:
-		var f: TextureRect = _icon_rect(p.art, p.face)
-		f.position = Vector2(0.0, p.stack.size.y - p.face)
-		f.pivot_offset = Vector2(p.face * 0.5, p.face * 0.92)
-		p.stack.add_child(f)
-		p.faces.append(f)
-	for i: int in range(p.faces.size()):
-		var f: TextureRect = p.faces[i]
-		f.visible = i < faces
-		if f.visible:
-			f.rotation = deg_to_rad(_fan_angle(i, faces))
+	p.stack.faces = faces
+	p.stack.queue_redraw()
 
 
 ## pileFanAngleDeg: a flat centred fan, 5° a card, the span averaged down once
