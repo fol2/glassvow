@@ -147,6 +147,35 @@ func remove_card(uid: int) -> void:
 	_relayout()
 
 
+## Bring the fan in line with the engine's hand without rebuilding it.
+##
+## `presentation.syncHand` reconciles; this used to `clear()` and re-add every
+## card at every drain-idle, which destroys a CardView that is still flying. A
+## five-card deal overlaps its flights by design, so the last one was reliably
+## in the air when the pump went idle — and it did not land, it was replaced by
+## a fresh card already sitting in its seat.
+##
+## Returns the views now in the fan, in hand order, so the caller can set
+## playability without asking for each one back.
+func sync_hand(order: Array[int]) -> Array[CardView]:
+	var wanted: Dictionary = {}
+	for uid: int in order:
+		wanted[uid] = true
+	for uid_v: Variant in _views.keys():
+		var uid: int = uid_v
+		if not wanted.has(uid):
+			remove_card(uid)
+	_order.clear()
+	var out: Array[CardView] = []
+	for uid: int in order:
+		var view: CardView = _views.get(uid)
+		if view != null:
+			_order.append(uid)
+			out.append(view)
+	_relayout()
+	return out
+
+
 func clear() -> void:
 	for uid_v: Variant in _views.keys():
 		var view: CardView = _views[uid_v]

@@ -1343,6 +1343,15 @@ func shatter() -> void:
 	# Its shadow goes with it — nothing is standing there to cast one.
 	_vessel.transform = Transform3D.IDENTITY
 	_vessel.visible = false
+	# `setTimeout(() => x.root.classList.add('gone'), 830)` — the plate goes with
+	# the body it described. Left standing, a dead foe's name and its 0/13 rail
+	# sit on the empty ledge for the rest of the fight, which is what the port
+	# was doing: the rite broke the glass and then left the label behind.
+	if _plate != null:
+		var reap: Tween = create_tween()
+		reap.tween_interval(0.45)
+		reap.tween_property(_plate, "modulate:a", 0.0, 0.38)
+		reap.tween_callback(_plate.hide)
 	if _shadow != null:
 		var sfade: Tween = create_tween()
 		sfade.tween_method(_set_shadow_fade, 1.0, 0.0, 0.35)
@@ -1488,17 +1497,24 @@ func _spawn_burst_flash(burst: Vector2) -> void:
 	tw.chain().tween_callback(mi.queue_free)
 
 
-## FX sprites are additive (black reads as transparent), loaded straight off
-## disk so no import pass is needed mid-session; a missing file falls back to a
-## procedural radial gradient. ponytail: Image.load_from_file bypasses the
-## import system, so an exported build must import these or keep the fallback.
+## FX sprites are additive (black reads as transparent); a missing file falls
+## back to a procedural radial gradient.
+##
+## The IMPORTED resource first, and only then the raw file. `Image.load_from_file`
+## bypasses the import system, which is fine in the editor and is a hole in an
+## exported build — the engine says so on every death ("this will not work on
+## export"). Reading the resource means the shipped `.ctex` is what plays, and
+## the raw read stays as the mid-session path for art dropped in without a
+## reimport.
 static func _fx_tex(fx_name: String) -> Texture2D:
 	if _fx_cache.has(fx_name):
 		var hit: Texture2D = _fx_cache[fx_name]
 		return hit
 	var path: String = "res://assets/art/enemies/fx/%s.png" % fx_name
 	var tex: Texture2D = null
-	if FileAccess.file_exists(path):
+	if ResourceLoader.exists(path):
+		tex = load(path)
+	if tex == null and FileAccess.file_exists(path):
 		var img: Image = Image.load_from_file(path)
 		if img != null:
 			tex = ImageTexture.create_from_image(img)

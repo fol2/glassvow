@@ -1283,14 +1283,23 @@ func _sync_all() -> void:
 			move_name = str(mv.get("name", String(e.move_key)))
 			dmg_text = _fmt_enemy_dmg(_rules.preview_enemy_dmg(cb, e))
 		view.sync(e, dmg_text, intent, move_name, game.content.statuses)
-	_hand.clear()
 	var first_living: int = -1
 	for e: EnemyCombatant in cb.enemies:
 		if e.hp > 0:
 			first_living = e.idx
 			break
+	# Reconciled, not rebuilt. Adding is idempotent, so a card the drain already
+	# dealt keeps the node that is flying it; only what the engine no longer
+	# holds is taken out.
+	var order: Array[int] = []
 	for c: CardInst in cb.hand:
-		var view: CardView = _hand.add_card(c, _rules.card_data(c), _rules.eff_cost(c))
+		_hand.add_card(c, _rules.card_data(c), _rules.eff_cost(c))
+		order.append(c.uid)
+	_hand.sync_hand(order)
+	for c: CardInst in cb.hand:
+		var view: CardView = _hand.card_view(c.uid)
+		if view == null:
+			continue
 		var target_probe: Variant = first_living if view.target_kind == "enemy" else null
 		if _kindle_toggle.button_pressed:
 			view.set_playable(_rules.can_kindle(cb, c))
