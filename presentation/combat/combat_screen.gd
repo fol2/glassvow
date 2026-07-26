@@ -858,7 +858,7 @@ func _handle_event(ev: Dictionary) -> void:
 				TAU, 0.0, 1.8, 240.0)
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
-				view.set_facets(chips, facet_max)
+				view.set_facets(chips, facet_max, true)
 			await _wait(0.11)
 		EventTypes.SHATTER:
 			var idx: int = ev["idx"]
@@ -871,7 +871,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.shake(10.0)
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
-				view.set_facets(0, facet_max)
+				view.set_facets(0, facet_max, true)
 				view.crack()          # addCrack(x.art, true)
 				view.take_hit(false)  # the `hurt` flash without the shove
 			await _wait(0.38)

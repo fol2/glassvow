@@ -39,6 +39,19 @@ func set_pips(filled: int, total: int) -> void:
 	queue_redraw()
 
 
+## `.facet-row.pop` — `chipPop`, 0.4s ease-out, 35% larger at 40% through. The
+## gauge answers the blow that chipped it; without it a facet goes dark with no
+## more ceremony than a label changing.
+func pop() -> void:
+	if not is_inside_tree() or size == Vector2.ZERO:
+		return
+	pivot_offset = size * 0.5
+	var tw: Tween = create_tween()
+	tw.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(self, "scale", Vector2.ONE * 1.35, 0.16)
+	tw.tween_property(self, "scale", Vector2.ONE, 0.24)
+
+
 func _draw() -> void:
 	if _total <= 0:
 		return

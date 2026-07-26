@@ -1786,10 +1786,15 @@ func set_ward(block: int) -> void:
 
 
 ## A hero has no facet gauge to move — structural integrity is a foe's concept.
-func set_facets(chips: int, facet_max: int) -> void:
+## `pop` marks a facet that just went dark, as opposed to a drain-idle resync
+## restating a count that has not moved (`x.facets.classList.add('pop')` is only
+## in the `chip` and `shatter` branches).
+func set_facets(chips: int, facet_max: int, pop: bool = false) -> void:
 	if _facets == null:
 		return
 	_facets.set_pips(chips, facet_max)
+	if pop:
+		_facets.pop()
 
 
 ## The telegraph. `intent` is the move's own `intent` field — `attack`,
