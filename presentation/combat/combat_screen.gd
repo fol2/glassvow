@@ -11,8 +11,39 @@ extends Control
 signal combat_over(result: String)
 signal result_continue
 
+## Where the ground is, in stage px up from the bottom. This project's viewport
+## is 1180x820, which `src/stage.js:23` names `pad-landscape` — one of the
+## benchmark's five AUTHORED shapes, not an approximation of one — so
+## `BF.base.groundY` transfers verbatim rather than being fitted. The
+## battlefield ends on this line and every actor stands on it: an actor drawn at
+## bottom 0 has its feet here. Foes and the hero are the same animal, which is
+## the contract `enemy_view.gd` was already built against.
+const GROUND_Y: float = 232.0
+## `BF.base.ledgeLip` — how far the lit lip rides above the ground line.
+const LEDGE_LIP: float = 14.0
+## The stage the plates were measured in. Offsets resolve against the live
+## viewport, so a taller window moves the ground rather than stretching the art.
+const STAGE: Vector2 = Vector2(1180.0, 820.0)
+## The act theme's glow (`themes.js` act 1: `glow: 6750110`), which tints the
+## ledge band, its lip and the breath. Our slice content carries no theme
+## section — `content_db.gd` loads no `themes` — so the act → plate + tint
+## mapping lives here rather than in data.
+## ponytail: move both to ContentDB the day `capture-port-fixtures.mjs` exports
+## themes. The shape is one dictionary per act, not a new system.
+const LEDGE: Color = Color(0.4, 1.0, 0.62)  # #66ff9e
+const STAGE_ART: String = "res://assets/art/stage/act1-%s.png"
+
+## One breath blob and its phase. A class rather than a dictionary of parts,
+## for the reason `HudBar.Pile` is one: the strict gate wants every piece typed
+## at the moment it is read.
+class Breath:
+	var node: TextureRect
+	var delay: float = 0.0
+
+
 var game: GlassvowGame
 var seq: EventSequencer = EventSequencer.new()
+var _breaths: Array[Breath] = []
 
 var _rules: CombatRules
 var _enemy_views: Array[EnemyView] = []
@@ -53,39 +84,23 @@ func _init(game_ref: GlassvowGame) -> void:
 
 # ---------------------------------------------------------------- build
 
+## The ground breathes only once there is a tree to breathe in. Everything else
+## this screen owns is built in `_init()`; see the class docblock.
+func _ready() -> void:
+	for b: Breath in _breaths:
+		var tw: Tween = create_tween().set_loops()
+		if b.delay > 0.0:
+			tw.tween_interval(b.delay)
+		tw.tween_property(b.node, "modulate:a", 0.16, 7.0).set_trans(Tween.TRANS_SINE)
+		tw.parallel().tween_property(b.node, "scale", Vector2(1.06, 1.06),
+			7.0).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(b.node, "modulate:a", 0.06, 7.0).set_trans(Tween.TRANS_SINE)
+		tw.parallel().tween_property(b.node, "scale", Vector2(0.94, 0.94),
+			7.0).set_trans(Tween.TRANS_SINE)
+
+
 func _build_ui() -> void:
-	# Layered night ground: vertical indigo gradient, an ember lantern-glow
-	# pooled behind the enemies, then a vignette drawing the edges to black.
-	var bg: TextureRect = TextureRect.new()
-	bg.texture = GlassStyle.grad_tex(
-		PackedColorArray([GlassStyle.NIGHT_TOP, GlassStyle.NIGHT_MID, GlassStyle.NIGHT_BOT]),
-		PackedFloat32Array([0.0, 0.55, 1.0]), false, Vector2(0.5, 0.0), Vector2(0.5, 1.0))
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.stretch_mode = TextureRect.STRETCH_SCALE
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bg)
-
-	var glow: TextureRect = TextureRect.new()
-	glow.texture = GlassStyle.grad_tex(
-		PackedColorArray([Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.14),
-			Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.0)]),
-		PackedFloat32Array([0.0, 1.0]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
-	glow.anchor_left = 0.12
-	glow.anchor_right = 0.88
-	glow.anchor_top = 0.04
-	glow.anchor_bottom = 0.58
-	glow.stretch_mode = TextureRect.STRETCH_SCALE
-	glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(glow)
-
-	var vignette: TextureRect = TextureRect.new()
-	vignette.texture = GlassStyle.grad_tex(
-		PackedColorArray([Color(0, 0, 0, 0.0), Color(0, 0, 0, 0.0), Color(0.01, 0.01, 0.03, 0.62)]),
-		PackedFloat32Array([0.0, 0.55, 1.0]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.9))
-	vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
-	vignette.stretch_mode = TextureRect.STRETCH_SCALE
-	vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(vignette)
+	_build_stage()
 
 	var top_panel: PanelContainer = PanelContainer.new()
 	top_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
@@ -252,6 +267,183 @@ func _build_ui() -> void:
 	GlassStyle.style_button(_overlay_button, GlassStyle.EMBER)
 	_overlay_button.pressed.connect(func() -> void: result_continue.emit())
 	overlay_box.add_child(_overlay_button)
+
+
+# ---------------------------------------------------------------- the stage
+
+## The painted ground the fight happens on: three plates, a glow band pooled at
+## the ground line, the lit lip above it, depth mist, and two slow breaths.
+## Ported from `combat.js:215-223` and the `.sl` / `.stage-*` rules; the plate
+## geometry is `BF.base` merged with `shapes['pad-landscape']` at act 0.
+##
+## This replaces a procedural indigo gradient, an ember radial and a vignette —
+## a look the M5d craft pass invented rather than ported. The art it needed had
+## been sitting in `assets/art/stage/` unreferenced the whole time.
+##
+## Deferred on purpose, each cheap to add later and none of them load-bearing
+## for the layout: the plates' idle parallax drift (`--amp`), `.stage-dim`'s
+## live lamp tracking, and `.cast-shadow-layer` — EnemyView already projects its
+## own shadow, so a shared layer only earns its place once shadows interact.
+func _build_stage() -> void:
+	var night: ColorRect = ColorRect.new()  # body { background: #000 }
+	night.color = Color.BLACK
+	night.set_anchors_preset(Control.PRESET_FULL_RECT)
+	night.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(night)
+
+	# Draw order is the benchmark's paint order: the plates and the breath sit
+	# at z 0, the mist at 2, the ledge band at 3.
+	_plate("backdrop", 640.0, 280.0, 0.0, 1.0, 0.85)
+	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95)
+	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, true)
+
+	# `.stage-breath` — 34cqw x 26cqh blobs, container-query units against the
+	# stage, so 401 x 213 here. Their opacity and scale breathe 7s alternating
+	# (`@keyframes breath`: .06/scale .94 → .16/scale 1.06).
+	_breath(0.06 * STAGE.x, GROUND_Y - 0.08 * STAGE.y, 0.0)
+	_breath(STAGE.x - 0.08 * STAGE.x - 0.34 * STAGE.x, GROUND_Y - 0.12 * STAGE.y, 3.2)
+
+	# `.combat-screen::after` — depth mist under the ground plate, 300px tall.
+	var mist: TextureRect = TextureRect.new()
+	mist.texture = GlassStyle.grad_tex(
+		PackedColorArray([Color(0.02, 0.027, 0.055, 0.0), Color(0.02, 0.027, 0.055, 0.55)]),
+		PackedFloat32Array([0.0, 0.75]), false, Vector2(0.5, 0.0), Vector2(0.5, 1.0))
+	mist.anchor_top = 1.0
+	mist.anchor_bottom = 1.0
+	mist.anchor_right = 1.0
+	mist.offset_top = -300.0
+	mist.stretch_mode = TextureRect.STRETCH_SCALE
+	mist.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	mist.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(mist)
+
+	# `.stage-ledge` — a 120px band whose TOP is the ground line, so the light
+	# pools in front of where the actors stand, not behind them.
+	var band: TextureRect = TextureRect.new()
+	band.texture = _ledge_tex()
+	band.anchor_top = 1.0
+	band.anchor_bottom = 1.0
+	band.anchor_right = 1.0
+	band.offset_top = -GROUND_Y
+	band.offset_bottom = -(GROUND_Y - 120.0)
+	band.stretch_mode = TextureRect.STRETCH_SCALE
+	# Without this a TextureRect's minimum size is its TEXTURE's size, so a
+	# 64px source silently forces the band 256px tall and the ground glow
+	# bleeds to the bottom of the screen. Same reason every gradient below
+	# says it too.
+	band.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	band.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(band)
+
+	# `.stage-ledge::before` — the lip: a hairline of caught light one lip-height
+	# above the ground line, faded out at both ends, with its own bloom under it.
+	var lip_tint: Color = LEDGE.lerp(Color.WHITE, 0.25)
+	var bloom: TextureRect = _lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.14), 18.0)
+	add_child(bloom)
+	add_child(_lip_band(Color(lip_tint.r, lip_tint.g, lip_tint.b, 0.4), 2.0))
+
+
+## One painted plate. `h` and `y` are stage px, `y` being the plate's bottom
+## above the stage bottom — except the ledge, which hangs off the ground line
+## instead (`combat.js:384`). `zoom` scales about the plate's own bottom-left,
+## which is the CSS order: the individual `scale` property resolves BEFORE
+## `transform`'s centring translate, so the centring uses the unscaled width.
+func _plate(art: String, h: float, y: float, dx: float, zoom: float,
+		alpha: float, is_ledge: bool = false) -> void:
+	var path: String = STAGE_ART % art
+	if not ResourceLoader.exists(path):
+		# Named rather than silent: a missing plate is otherwise an invisible
+		# hole in the ground with nothing in the log saying which one.
+		push_warning("stage: missing plate %s" % path)
+		return
+	var tex: Texture2D = load(path)
+	var aspect: float = float(tex.get_width()) / maxf(1.0, float(tex.get_height()))
+	var base: Vector2 = Vector2(maxf(STAGE.x, h * aspect), h)  # `min-width: 100%`
+	var bottom: float = maxf(0.0, GROUND_Y + LEDGE_LIP - h + y) if is_ledge else y
+	var r: TextureRect = TextureRect.new()
+	r.texture = tex
+	r.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	r.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	r.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	r.modulate = Color(1.0, 1.0, 1.0, alpha)
+	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	r.anchor_left = 0.5
+	r.anchor_right = 0.5
+	r.anchor_top = 1.0
+	r.anchor_bottom = 1.0
+	r.offset_left = -base.x * 0.5 + dx
+	r.offset_right = r.offset_left + base.x * zoom
+	r.offset_top = -(bottom + base.y * zoom)
+	r.offset_bottom = -bottom
+	add_child(r)
+
+
+## One breath blob, phase-shifted by `delay` so the two never pulse together.
+func _breath(x: float, bottom: float, delay: float) -> void:
+	var b: TextureRect = TextureRect.new()
+	b.texture = GlassStyle.grad_tex(
+		PackedColorArray([LEDGE, Color(LEDGE.r, LEDGE.g, LEDGE.b, 0.0)]),
+		PackedFloat32Array([0.0, 0.7]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
+	b.stretch_mode = TextureRect.STRETCH_SCALE
+	b.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	b.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.anchor_top = 1.0
+	b.anchor_bottom = 1.0
+	var box: Vector2 = Vector2(0.34 * STAGE.x, 0.26 * STAGE.y)
+	b.offset_left = x
+	b.offset_right = x + box.x
+	b.offset_top = -(bottom + box.y)
+	b.offset_bottom = -bottom
+	b.pivot_offset = box * 0.5
+	b.modulate = Color(1.0, 1.0, 1.0, 0.06)
+	b.scale = Vector2(0.94, 0.94)
+	add_child(b)
+	# The tween waits for the tree. This screen is fully constructed at `new()`
+	# so headless tests can drive it without ever entering one (see the class
+	# docblock), and `create_tween()` is the one thing here that cannot honour
+	# that — so the breath starts in `_ready()` and simply never runs headless.
+	var held: Breath = Breath.new()
+	held.node = b
+	held.delay = delay
+	_breaths.append(held)
+
+
+## The lip and its bloom share a shape: a full-width band inset to 6%, fading
+## out over the first and last 14% of what remains.
+func _lip_band(tint: Color, h: float) -> TextureRect:
+	var t: TextureRect = TextureRect.new()
+	t.texture = GlassStyle.grad_tex(
+		PackedColorArray([Color(tint.r, tint.g, tint.b, 0.0), tint, tint,
+			Color(tint.r, tint.g, tint.b, 0.0)]),
+		PackedFloat32Array([0.0, 0.2, 0.8, 1.0]), false,
+		Vector2(0.0, 0.5), Vector2(1.0, 0.5))
+	t.anchor_left = 0.06
+	t.anchor_right = 0.94
+	t.anchor_top = 1.0
+	t.anchor_bottom = 1.0
+	t.offset_top = -(GROUND_Y + LEDGE_LIP + h * 0.5)
+	t.offset_bottom = t.offset_top + h
+	t.stretch_mode = TextureRect.STRETCH_SCALE
+	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return t
+
+
+## The ledge band's own texture. The CSS puts a vertical fade under a horizontal
+## mask; a plain TextureRect has no mask, and the two ramps are separable, so
+## they are multiplied once into an image here instead of costing a shader.
+##   background: linear-gradient(180deg, LEDGE@9%, transparent 62%)
+##   mask:       linear-gradient(90deg, transparent, #000 14% 86%, transparent)
+static func _ledge_tex() -> ImageTexture:
+	var side: int = 64
+	var img: Image = Image.create_empty(side, side, false, Image.FORMAT_RGBA8)
+	for iy: int in range(side):
+		var down: float = clampf(1.0 - (float(iy) / float(side - 1)) / 0.62, 0.0, 1.0)
+		for ix: int in range(side):
+			var u: float = float(ix) / float(side - 1)
+			var across: float = clampf(u / 0.14, 0.0, 1.0) * clampf((1.0 - u) / 0.14, 0.0, 1.0)
+			img.set_pixel(ix, iy, Color(LEDGE.r, LEDGE.g, LEDGE.b, 0.09 * down * across))
+	return ImageTexture.create_from_image(img)
 
 
 ## A pill chip holding one dynamic label; returns the inner label for text
