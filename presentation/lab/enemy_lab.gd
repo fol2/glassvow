@@ -189,6 +189,12 @@ func _init(content_ref: ContentDB) -> void:
 			states_id = arg.trim_prefix("--hit=")
 		elif arg == "--incidental":
 			_hit_direct = false
+		# The rite's fireworks are additive and cover the debris completely, so a
+		# shatter frame cannot be read for whether the body broke along its own
+		# cracks while they are on. This is the flag that makes the shatter
+		# judgeable, and it is why it exists.
+		elif arg == "--bare":
+			EnemyView.rite_fx = false
 		elif arg.begins_with("--flare="):
 			var fr: String = arg.trim_prefix("--flare=")
 			if fr.is_valid_float() and float(fr) >= 0.0:
@@ -524,6 +530,8 @@ func _build_panel() -> void:
 	rows.add_child(_button("run the death rite   (K)", func() -> void:
 		if _bench_actor != null:
 			_bench_actor.mark_dead()))
+	rows.add_child(_button("fireworks on/off   (F)", func() -> void:
+		EnemyView.rite_fx = not EnemyView.rite_fx))
 	rows.add_child(_button("rebuild the vessel   (R)", func() -> void:
 		_build_bench(_bench_id)
 		_relayout_bench()))
@@ -625,7 +633,7 @@ func _build_panel() -> void:
 	_readout.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(_readout)
 
-	var hint: Label = _dim("H strike · J poison\nclick the body to crack it there\ndrag to pan · wheel to zoom\n[ ] prev / next enemy\nthe rite is a foe's — H and J work on a hero, K and S do not")
+	var hint: Label = _dim("H strike · J poison · F fireworks off (see the shards)\nclick the body to crack it there\ndrag to pan · wheel to zoom\n[ ] prev / next enemy\nthe rite is a foe's — H and J work on a hero, K and S do not")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(hint)
 
@@ -826,6 +834,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_S:
 			if _bench_actor != null:
 				_bench_actor.shatter()
+		KEY_F:
+			EnemyView.rite_fx = not EnemyView.rite_fx
 		KEY_R:
 			_build_bench(_bench_id)
 			_relayout_bench()

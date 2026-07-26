@@ -183,6 +183,14 @@ static var oversample: float = 2.0
 ## file it is judging.
 static var msaa: Viewport.MSAA = Viewport.MSAA_4X
 
+## The rite's fireworks: the burst flash, the embers and the fire flare. Turning
+## them off is a LAB affordance and never a game setting — they are additive and
+## they cover the debris completely, so while they are on a screenshot of the
+## shatter cannot show whether the body broke along its own cracks. Judging the
+## fracture needs a frame with nothing in front of it.
+static var rite_fx: bool = true
+static var _fx_shader: Shader = null
+
 var idx: int = 0
 ## Placement offsets for whoever puts this actor on the battlefield. Feet are
 ## this box's bottom edge (benchmark bfEnemyFootX / bfEnemyFootY).
@@ -1910,7 +1918,7 @@ func shatter() -> void:
 	_spawn_embers(burst)
 	# The flash: the vessel's fire escapes all at once, thrown FORWARD onto the
 	# flying pieces, then dies away with the embers.
-	if _fire != null:
+	if _fire != null and rite_fx:
 		_fire.position = Vector3(burst.x, burst.y, _box_u * 0.5)
 		_fire.light_energy = 4.5
 		var flash_t: Tween = create_tween()
@@ -1925,6 +1933,8 @@ func shatter() -> void:
 
 ## One-shot ember burst: sparks thrown with the shards, floating a beat longer.
 func _spawn_embers(burst: Vector2) -> void:
+	if not rite_fx:
+		return
 	var emb: CPUParticles3D = CPUParticles3D.new()
 	emb.one_shot = true
 	emb.explosiveness = 1.0
@@ -1960,11 +1970,13 @@ func _spawn_embers(burst: Vector2) -> void:
 
 ## The impact frame: a radial flare that blooms and is gone in a quarter second.
 func _spawn_burst_flash(burst: Vector2) -> void:
+	if not rite_fx:
+		return
 	var mi: MeshInstance3D = MeshInstance3D.new()
 	var qm: QuadMesh = QuadMesh.new()
 	qm.size = Vector2.ONE * _box_u * 1.1
 	mi.mesh = qm
-	var m: StandardMaterial3D = _add_mat(_fx_tex("burst"))
+	var m: ShaderMaterial = _add_mat(_fx_tex("burst"))
 	mi.material_override = m
 	mi.position = Vector3(burst.x, burst.y, _box_u * 0.3)
 	mi.scale = Vector3.ONE * 0.55
@@ -1973,7 +1985,7 @@ func _spawn_burst_flash(burst: Vector2) -> void:
 	tw.set_parallel(true)
 	tw.tween_property(mi, "scale", Vector3.ONE * 1.5, 0.28) \
 		.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tw.tween_property(m, "albedo_color", Color(0, 0, 0, 0), 0.28) \
+	tw.tween_property(m, "shader_parameter/tint", Color(0, 0, 0, 0), 0.28) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	tw.chain().tween_callback(mi.queue_free)
 
@@ -2016,16 +2028,67 @@ static func _fx_tex(fx_name: String) -> Texture2D:
 	return tex
 
 
-static func _add_mat(tex: Texture2D) -> StandardMaterial3D:
-	var m: StandardMaterial3D = StandardMaterial3D.new()
-	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
-	m.albedo_texture = tex
-	m.vertex_color_use_as_albedo = true
-	m.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	m.billboard_keep_scale = true
-	m.disable_receive_shadows = true
+## Additive FX sprites, with alpha DERIVED rather than sampled — because there is
+## none to sample. `burst.png` and `ember.png` are both PNG colour type 2: RGB, no
+## alpha channel, so `texture().a` reads 1.0 at every texel.
+##
+## Under `BLEND_MODE_ADD` that is not harmless. Godot's additive blend accumulates
+## alpha alongside colour, so the black field of a 512px burst sprite added nothing
+## to the colour and drove this transparent SubViewport's alpha to 1 across the
+## whole quad. The result composited over the battlefield as an **opaque black
+## square**, roughly 1.65× the creature's height, behind every death — and it read
+## as part of the flash rather than as a bug, which is why it survived.
+##
+## An additive sprite authored on black wants alpha = its own brightness. That is
+## one line in a shader and would otherwise be an art change to two files.
+## `StandardMaterial3D` cannot express it: there is no derive-alpha-from-luminance
+## affordance on `BaseMaterial3D`.
+##
+## The vertex stage reproduces `BILLBOARD_ENABLED` + `billboard_keep_scale`
+## exactly, rather than dropping billboarding on the argument that this stage's
+## camera never rotates. It does not today, and the argument would be correct
+## today, and it would be a trap the first time one does.
+const FX_SHADER: String = """
+shader_type spatial;
+render_mode blend_add, unshaded, cull_disabled, shadows_disabled;
+
+uniform sampler2D tex : source_color, filter_linear_mipmap;
+uniform vec4 tint : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+void vertex() {
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(
+		INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
+	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(
+		vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0),
+		vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0),
+		vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0),
+		vec4(0.0, 0.0, 0.0, 1.0));
+}
+
+void fragment() {
+	vec4 c = texture(tex, UV);
+	// COLOR is the particle ramp — CPUParticles3D writes it, and the ember ramp
+	// fades its alpha to zero. A plain quad leaves COLOR white, so one path serves
+	// the flash and the sparks without a second material.
+	ALBEDO = c.rgb * COLOR.rgb * tint.rgb;
+	ALPHA = dot(c.rgb, vec3(0.299, 0.587, 0.114)) * COLOR.a * tint.a;
+}
+"""
+
+
+static func _add_mat(tex: Texture2D) -> ShaderMaterial:
+	if _fx_shader == null:
+		_fx_shader = Shader.new()
+		_fx_shader.code = FX_SHADER
+	var m: ShaderMaterial = ShaderMaterial.new()
+	m.shader = _fx_shader
+	m.set_shader_parameter("tex", tex)
+	# Assigned explicitly even though the shader declares a default: a uniform that
+	# has never been set is not yet a property on the material, so
+	# `tween_property(m, "shader_parameter/tint", ...)` fails at runtime with "does
+	# not exist in object". The declared default is for the shader; this is for the
+	# Tween.
+	m.set_shader_parameter("tint", Color(1, 1, 1, 1))
 	return m
 
 
