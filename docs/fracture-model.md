@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:3086` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:3198` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -283,11 +283,11 @@ unrelated numbers would be tuned apart.
 
 Derived floor on `aperture`: the groove must be ≥ ~1.5 stage pixels at the smallest
 actor or it scintillates whatever the MSAA. At a 115 px sporeling with
-`oversample` = 2.0 (`enemy_view.gd:276` (`oversample`)) one body unit is ≈ 230
+`oversample` = 2.0 (`enemy_view.gd:302` (`oversample`)) one body unit is ≈ 230
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:2299` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:2387` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -537,7 +537,7 @@ being loud, and that is the rule that achieves it.
 | 1 | the curve | `strand(i)`, ordered origin → tip — ordering is what lets `reveal(t)` animate without the model knowing about time |
 | 2 | arc length per vertex | `arc(i)` — the integrator already has it; drives taper and reveal timing |
 | 3 | opening width | **derived**, from `arc`, `length` and `aperture` via √(*a* − *s*). Width is optical; in the net it would let the renderer's taste leak into the model |
-| 4 | depth | **derived**, `GLASS_THICK × aperture(s)/aperture(0)`. `GLASS_THICK` already exists (`enemy_view.gd:78` (`GLASS_THICK`)) |
+| 4 | depth | **derived**, `GLASS_THICK × aperture(s)/aperture(0)`. `GLASS_THICK` already exists (`enemy_view.gd:84` (`GLASS_THICK`)) |
 | 5 | the glint | `origin(i)` |
 | 6 | terminus type | `terminus(i)` — the one non-geometric datum that matters: a `T` groove must not overshoot the crack it met, an `S` is hidden by the silhouette, and an `F` must taper to nothing or it reads as a *cut* |
 
@@ -894,7 +894,7 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - **Two silhouette readers coexist, and the prediction here was wrong.** This bullet used
   to say step 6 would delete `_alpha_at`/`_touches_art` along with the Voronoi cells it
   culls. It did not, and could not: the CARVE culls through the same
-  `_touches_art(cell, centre)` (`enemy_view.gd:3036` (in `_death_cells`)), because a shard
+  `_touches_art(cell, centre)` (`enemy_view.gd:3148` (in `_death_cells`)), because a shard
   covering no painting is a pane of empty box that the shard shader draws as nothing while
   the physics still tumbles it. So the older reader outlived the path it was written for.
   Both are still there — `body_mask()` at 256² for the model, `_alpha_at` at full

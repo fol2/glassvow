@@ -1504,6 +1504,52 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 	_build_chrome(display_name)
 
 
+func _ready() -> void:
+	if _stage == null:
+		return
+	# The stage is sized against the SCREEN, so it has to be resized when the
+	# window is. `_init` cannot do this: at that point the node is not in the
+	# tree, and even at `_ready` the window is still at its project size —
+	# measured here as scale 1.000 at `_ready` and 3.068 thirty frames later.
+	get_viewport().size_changed.connect(_fit_stage)
+	_fit_stage()
+
+
+## Canvas units are not pixels, and `oversample` is a promise about pixels.
+##
+## `stretch/mode = "canvas_items"` (project.godot) fixes the canvas at 1180x820
+## units whatever the window measures, so the whole composition is scaled by
+## `window / 1180` on its way to the screen. `_display` is `_span` canvas units
+## across, so a stage sized from `_span` alone is divided by exactly that scale.
+##
+## Measured with the window filling a 4112x2658 screen: canvas scale 3.068, an
+## elite's `_display` covering 1614 screen pixels, its stage supplying 1052
+## texels — **0.65 texels per pixel**. The 2.0 above was not a supersample at
+## all; it was a 1.53x MAGNIFICATION, and the silhouette on screen was a
+## bilinear blow-up of a render that never held the detail. Multiplying by the
+## scale is what makes the constant mean again what it was judged to mean.
+##
+## `VP_MAX` is where the promise runs out, and it is an arithmetic wall rather
+## than a round number. Stage memory runs about 49 MB per megapixel
+## (docs/actor-stage-frame-budget.md: 0.6 Mpx → 162 MB, 3.6 Mpx → 310 MB), the
+## proposed budget for a four-actor fight is 200 MB and the fight already spends
+## 248. Keeping the promise at scale 3.068 wants 9.4x the stage pixels — about
+## 1.2 GB. So above roughly a 2x window the cap binds on purpose and the actor
+## renders below the mark. **That shortfall is an architecture bill — one MSAA
+## 4x stage per actor — not a knob**, and `VP_MAX` is the single line to turn
+## down if the memory matters more than the edge.
+func _fit_stage() -> void:
+	if _stage == null or not is_inside_tree():
+		return
+	var scale: float = maxf(1.0, get_viewport_transform().get_scale().x)
+	var want: int = ceili(_span * scale * oversample)
+	# Quantised, because a live window drag would otherwise reallocate four
+	# render targets on every frame of the drag for sub-texel gains.
+	var px: int = clampi(ceili(want / 64.0) * 64, 64, VP_MAX)
+	if _stage.size.x != px:
+		_stage.size = Vector2i(px, px)
+
+
 # ---------------------------------------------------------------- the 3D stage
 
 func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
@@ -3937,8 +3983,17 @@ func set_ward(block: int) -> void:
 ## `.block-chip.pulse` — `blockPulse`, 0.4s ease-out: scale 1.3 and a 22px cyan
 ## glow at 40%, then home. Kill/restart so a second gain does not stack tweens.
 func _block_pulse() -> void:
-	if _ward_chip == null or not is_inside_tree() or _ward_chip.size == Vector2.ZERO:
+	if _ward_chip == null or not is_inside_tree():
 		return
+	if _ward_chip.size == Vector2.ZERO:
+		# The FIRST gain is the one this animation exists for, and it is the one
+		# that arrives with nothing to scale: the chip was hidden, so its container
+		# skipped it and it has neither size nor pivot until the next layout pass.
+		# Wait for that pass instead of returning — an early return here is how the
+		# first pulse was silently dropped.
+		await get_tree().process_frame
+		if _ward_chip == null or not is_inside_tree() or not _ward_chip.visible:
+			return
 	if _block_pulse_tween != null and _block_pulse_tween.is_valid():
 		_block_pulse_tween.kill()
 	_ward_chip.pivot_offset = _ward_chip.size * 0.5
