@@ -25,7 +25,11 @@ extends Control
 ## directly (the sequencer contract). Targeting is drop-based (the hand's drag
 ## machine hit-tests get_global_rect(), which is why the rect is the art box).
 
-const ART_PATH: String = "res://assets/art/enemies/%s.png"
+## Foes and heroes are the same animal — a painting standing at its own size on
+## the ground line — so one actor serves both and the art id decides the folder.
+const ART_DIRS: Array[String] = [
+	"res://assets/art/enemies/%s.png", "res://assets/art/heroes/%s.png",
+]
 const META_PATH: String = "res://assets/art/enemies/char-meta.json"
 const WARD_ICON: Texture2D = preload("res://assets/art/ui/ward.png")
 
@@ -92,7 +96,19 @@ var _fire: OmniLight3D = null
 var _env: Environment = null
 var _sites: PackedVector2Array = PackedVector2Array()
 var _span: float = 0.0          # padded box, in px
-var _box_u: float = 0.0         # box, in world units
+var _box_u: float = 0.0         # box HEIGHT, in world units
+## Box WIDTH. The art box is square (the benchmark's hit rect) but the painting
+## inside it is `contain`-fitted, and 6 of 27 foes plus both heroes are not
+## square — drawn on a square quad they stretch. Fit by height, narrow by aspect.
+var _quad_w: float = 0.0
+var _shadow: MeshInstance3D = null
+var _shadow_mat: ShaderMaterial = null
+## Where the painting actually touches the ground, read off its own alpha:
+## u across the quad, and the lift of the lowest opaque pixel above the box
+## bottom (a floating creature casts a smaller, fainter, softer shadow).
+var _contact_u: float = 0.5
+var _lift: float = 0.0
+var _shadow_opacity: float = 0.55
 var _ignite: float = 0.0
 ## Glass reach past each crack site, as a fraction of the box — the benchmark's
 ## GLASS_AREA. Under 1.0 the body is mostly bare, which is the point: glass
@@ -329,11 +345,13 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var tex: Texture2D = null
 	if art_id != &"":
-		var path: String = ART_PATH % art_id
-		if ResourceLoader.exists(path):
-			tex = load(path) as Texture2D
-		else:
-			push_warning("enemy view: no painting at %s" % path)
+		for pattern: String in ART_DIRS:
+			var path: String = pattern % art_id
+			if ResourceLoader.exists(path):
+				tex = load(path)
+				break
+		if tex == null:
+			push_warning("enemy view: no painting for %s" % art_id)
 
 	if tex != null:
 		var entry: Dictionary = meta(art_id)
@@ -367,6 +385,11 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_span = art_size * (1.0 + 2.0 * PAD_FRAC)
 	_box_u = art_size * UNIT
+	var aspect: float = 1.0
+	if tex.get_height() > 0:
+		aspect = float(tex.get_width()) / float(tex.get_height())
+	_quad_w = _box_u * aspect
+	_read_contact(tex)
 
 	_stage = SubViewport.new()
 	var vp_px: int = mini(int(_span * oversample), VP_MAX)
@@ -431,7 +454,7 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 
 	_quad = MeshInstance3D.new()
 	var qm: QuadMesh = QuadMesh.new()
-	qm.size = Vector2(_box_u, _box_u)
+	qm.size = Vector2(_quad_w, _box_u)
 	_quad.mesh = qm
 	var sh: Shader = Shader.new()
 	sh.code = BODY_SHADER
@@ -444,6 +467,9 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 
 	_glass_root = Node3D.new()
 	_vessel.add_child(_glass_root)
+
+	# Outside the vessel: the ground does not breathe with the creature.
+	_build_shadow(tex)
 
 	# Ground for the shards to land on, at the creature's own feet.
 	var floor_body: StaticBody3D = StaticBody3D.new()
@@ -473,6 +499,139 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_display.size = Vector2(_span, _span)
 	_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_display)
+
+
+## The cast shadow, and the reason it is nine knobs lighter than the benchmark's.
+##
+## The web shadow is a black copy of the sprite squashed by hand: --sh-sx/sy,
+## --sh-skew, --sh-x/y, --sh-blur, --foot-ox/oy, --sh-o, authored per creature
+## (styles.css .cast-shadow). Every one of those numbers is a person estimating
+## where a light they do not have would throw the silhouette, because CSS cannot
+## project. Here there IS a light, so the shape is derived: the lean and length
+## come from the key's direction, the contact point from the painting's own
+## alpha, the softening from distance off the ground. What is left to author is
+## opacity.
+const SHADOW_SHADER: String = """
+shader_type spatial;
+render_mode blend_mix, depth_draw_never, cull_disabled, unshaded, shadows_disabled;
+
+uniform sampler2D body_tex : source_color, filter_linear_mipmap;
+uniform float opacity = 0.55;
+uniform float softness = 1.0;
+
+void fragment() {
+	// UV.y 1 is the feet; the far end of the cast is the head. A real contact
+	// shadow is sharp where the body meets the ground and diffuses with
+	// distance, which is the whole job the authored blur radius was doing.
+	float far = 1.0 - UV.y;
+	float r = (0.003 + 0.035 * far) * softness;
+	float a = 0.0;
+	for (int i = -1; i <= 1; i++) {
+		for (int j = -1; j <= 1; j++) {
+			a += texture(body_tex, UV + vec2(float(i), float(j)) * r).a;
+		}
+	}
+	a /= 9.0;
+	ALBEDO = vec3(0.0);
+	ALPHA = smoothstep(0.04, 0.55, a) * opacity * (1.0 - far * 0.5);
+}
+"""
+
+## How far the ground plane is tipped from the picture plane. cos(78°) = 0.208,
+## near the benchmark's --sh-sy default of 0.24 — the same foreshortening,
+## except here it is a plane the light projects onto rather than a scale factor.
+const GROUND_TILT_DEG: float = 78.0
+## How far the cast may run, in body heights. The projection alone would put the
+## key's 38° pitch at 1.6 body heights, which is true and looks wrong: in a
+## side-on view a long cast reads as the creature hovering over its own shadow.
+## Clamped to a ground POOL that leans with the light instead of a dramatic
+## throw — the benchmark lands in the same place with sx 1.0 / sy 0.24.
+const CAST_MIN: float = 0.6
+const CAST_MAX: float = 1.15
+
+
+## Read the contact point off the painting instead of authoring --foot-ox/oy:
+## the lowest opaque row is where the creature meets the ground, and the
+## horizontal centroid of that band is where its weight sits. Downsampled first
+## — a contact point does not need 1024 rows, and a per-pixel scan of the full
+## image in GDScript would cost more than the whole stage build.
+func _read_contact(tex: Texture2D) -> void:
+	var img: Image = tex.get_image()
+	if img == null:
+		return
+	img = img.duplicate()
+	if img.is_compressed():
+		img.decompress()
+	img.resize(64, 64, Image.INTERPOLATE_BILINEAR)
+	var bottom: int = -1
+	for y: int in range(63, -1, -1):
+		for x: int in range(64):
+			if img.get_pixel(x, y).a > 0.15:
+				bottom = y
+				break
+		if bottom >= 0:
+			break
+	if bottom < 0:
+		return
+	var sum: float = 0.0
+	var weight: float = 0.0
+	for y: int in range(maxi(bottom - 4, 0), bottom + 1):
+		for x: int in range(64):
+			var a: float = img.get_pixel(x, y).a
+			sum += float(x) * a
+			weight += a
+	if weight > 0.0:
+		_contact_u = (sum / weight + 0.5) / 64.0
+	_lift = (1.0 - (float(bottom) + 1.0) / 64.0) * _box_u
+
+
+func _build_shadow(tex: Texture2D) -> void:
+	_shadow = MeshInstance3D.new()
+	var qm: QuadMesh = QuadMesh.new()
+	qm.size = Vector2(_quad_w, _box_u)
+	# Origin on the BOTTOM edge, so the quad tips away about the contact line
+	# rather than sinking half of itself through the floor.
+	qm.center_offset = Vector3(0.0, _box_u * 0.5, 0.0)
+	_shadow.mesh = qm
+	var sh: Shader = Shader.new()
+	sh.code = SHADOW_SHADER
+	_shadow_mat = ShaderMaterial.new()
+	_shadow_mat.shader = sh
+	_shadow_mat.render_priority = -2   # under the body (-1) and the glass (1)
+	_shadow_mat.set_shader_parameter("body_tex", tex)
+	_shadow.set_surface_override_material(0, _shadow_mat)
+	_shadow.position = Vector3(
+		(_contact_u - 0.5) * _quad_w, -_box_u * 0.5 + _lift * 0.15, 0.0)
+	_stage.add_child(_shadow)
+	_update_shadow()
+
+
+## Project the silhouette along the key light. This is the entire shadow model:
+## run per unit height gives the lean, its magnitude gives the length, and the
+## ground tilt does the foreshortening. Swing the key and the shadow swings —
+## which the authored version could never do at any number of knobs.
+func _update_shadow() -> void:
+	if _shadow == null or _key == null:
+		return
+	var l: Vector3 = -_key.transform.basis.z
+	# A light at or below the horizon would throw the shadow to infinity.
+	l.y = minf(l.y, -0.12)
+	var run: float = clampf(1.0 / -l.y, CAST_MIN, CAST_MAX)
+	# Lift is the gap between the lowest painted pixel and the ground line: a
+	# creature that floats casts a smaller, fainter, softer shadow, and one
+	# standing on the line casts a sharp one. Free, because the alpha knows.
+	var f: float = clampf(_lift / maxf(_box_u, 0.0001), 0.0, 0.6)
+	var s: float = 1.0 - f * 0.5
+	# Shear and shrink in ONE basis. Node3D.scale is DERIVED from the basis, so
+	# assigning it after a sheared basis re-orthonormalises and silently throws
+	# the shear away — the shadow then stands straight up behind the creature.
+	var shear: Basis = Basis.IDENTITY
+	shear.x = Vector3(s, 0.0, 0.0)
+	shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * s, run * s, 0.0)
+	_shadow.transform.basis = \
+		Basis(Vector3.RIGHT, deg_to_rad(-GROUND_TILT_DEG)) * shear
+	_shadow_mat.set_shader_parameter("opacity", _shadow_opacity * (1.0 - f * 1.2))
+	_shadow_mat.set_shader_parameter("softness", 1.0 + f * 4.0)
 
 
 static func _bounce(bounce: float = 0.28, friction: float = 0.7) -> PhysicsMaterial:
@@ -562,10 +721,11 @@ static func _disc(centre: Vector2, r: float) -> PackedVector2Array:
 ## the death rite wants: the WHOLE body cut into panes.
 func _voronoi(sites: PackedVector2Array, reach: float) -> Array[PackedVector2Array]:
 	var out: Array[PackedVector2Array] = []
-	var h: float = _box_u * 0.5
+	var hw: float = _quad_w * 0.5
+	var hh: float = _box_u * 0.5
 	var big: float = _box_u * 8.0
 	var box: PackedVector2Array = PackedVector2Array([
-		Vector2(-h, -h), Vector2(h, -h), Vector2(h, h), Vector2(-h, h),
+		Vector2(-hw, -hh), Vector2(hw, -hh), Vector2(hw, hh), Vector2(-hw, hh),
 	])
 	for i: int in range(sites.size()):
 		var cell: PackedVector2Array = box
@@ -589,7 +749,7 @@ func _voronoi(sites: PackedVector2Array, reach: float) -> Array[PackedVector2Arr
 
 ## The overlay cells: the crack web the creature carries while it still stands.
 func _cells() -> Array[PackedVector2Array]:
-	return _voronoi(_sites, _glass_area * _box_u * 0.5)
+	return _voronoi(_sites, _glass_area * minf(_quad_w, _box_u) * 0.5)
 
 
 ## Extrude a cell into a real plate with thickness. Thickness is the point: a
@@ -603,7 +763,7 @@ func _cells() -> Array[PackedVector2Array]:
 ##
 ## Vertex color is the face tag: caps BLACK, side band RED — the shard shader
 ## reads COLOR.r as "fracture surface" and pours the molten glow only there.
-static func _prism(cell: PackedVector2Array, thick: float, box: float,
+static func _prism(cell: PackedVector2Array, thick: float, box: Vector2,
 		origin: Vector2 = Vector2.ZERO) -> ArrayMesh:
 	var tri: PackedInt32Array = Geometry2D.triangulate_polygon(cell)
 	if tri.is_empty():
@@ -618,7 +778,7 @@ static func _prism(cell: PackedVector2Array, thick: float, box: float,
 		while i < tri.size():
 			for k: int in range(3):
 				var p: Vector2 = cell[tri[i + k]]
-				st.set_uv(Vector2(p.x / box + 0.5, 0.5 - p.y / box))
+				st.set_uv(Vector2(p.x / box.x + 0.5, 0.5 - p.y / box.y))
 				st.add_vertex(Vector3(p.x - origin.x, p.y - origin.y, zz))
 			i += 3
 	# Side band, quad per edge — where the thickness actually shows.
@@ -631,7 +791,7 @@ static func _prism(cell: PackedVector2Array, thick: float, box: float,
 			Vector3(a.x, a.y, z), Vector3(b.x, b.y, -z), Vector3(a.x, a.y, -z),
 		]
 		for v: Vector3 in quad:
-			st.set_uv(Vector2(v.x / box + 0.5, 0.5 - v.y / box))
+			st.set_uv(Vector2(v.x / box.x + 0.5, 0.5 - v.y / box.y))
 			st.add_vertex(v - Vector3(origin.x, origin.y, 0.0))
 	st.generate_normals()
 	return st.commit()
@@ -650,7 +810,7 @@ func _rebuild_glass() -> void:
 	var mat: ShaderMaterial = _glass_material()
 	var thick: float = _box_u * GLASS_THICK
 	for cell: PackedVector2Array in _cells():
-		var mesh: ArrayMesh = _prism(cell, thick, _box_u)
+		var mesh: ArrayMesh = _prism(cell, thick, Vector2(_quad_w, _box_u))
 		if mesh == null:
 			continue
 		var mi: MeshInstance3D = MeshInstance3D.new()
@@ -671,7 +831,7 @@ func crack(at: Vector2 = Vector2(-1, -1)) -> void:
 	if p.x < 0.0:
 		p = Vector2(_rng.randf_range(0.2, 0.8), _rng.randf_range(0.2, 0.8))
 	# UV (y down, 0..1) into quad-local world units (y up, centred).
-	_sites.append(Vector2((p.x - 0.5) * _box_u, (0.5 - p.y) * _box_u))
+	_sites.append(Vector2((p.x - 0.5) * _quad_w, (0.5 - p.y) * _box_u))
 	_rebuild_glass()
 
 
@@ -691,6 +851,7 @@ func reset_glass() -> void:
 	if _cam != null:
 		_cam.h_offset = 0.0
 		_cam.v_offset = 0.0
+	_update_shadow()
 	if _glass_mat != null:
 		_glass_mat.set_shader_parameter("ignite", 0.0)
 	if _fire != null:
@@ -745,7 +906,7 @@ func _death_sites(burst: Vector2) -> PackedVector2Array:
 			var a: float = TAU * (float(i) + _rng.randf_range(-0.35, 0.35)) / float(n)
 			var r: float = reach * rf * _rng.randf_range(0.82, 1.22)
 			var p: Vector2 = burst + Vector2(cos(a), sin(a)) * r
-			p.x = clampf(p.x, -_box_u * 0.49, _box_u * 0.49)
+			p.x = clampf(p.x, -_quad_w * 0.49, _quad_w * 0.49)
 			p.y = clampf(p.y, -_box_u * 0.49, _box_u * 0.49)
 			out.append(p)
 	return out
@@ -780,7 +941,7 @@ func _touches_art(cell: PackedVector2Array, centre: Vector2) -> bool:
 func _alpha_at(p: Vector2) -> float:
 	var w: int = _art_img.get_width()
 	var h: int = _art_img.get_height()
-	var x: int = clampi(int((p.x / _box_u + 0.5) * float(w)), 0, w - 1)
+	var x: int = clampi(int((p.x / _quad_w + 0.5) * float(w)), 0, w - 1)
 	var y: int = clampi(int((0.5 - p.y / _box_u) * float(h)), 0, h - 1)
 	return _art_img.get_pixel(x, y).a
 
@@ -807,8 +968,12 @@ func shatter() -> void:
 			if _art_img != null and _art_img.is_compressed():
 				_art_img.decompress()
 	# The handoff: the standing vessel vanishes THIS frame; its pieces replace it.
+	# Its shadow goes with it — nothing is standing there to cast one.
 	_vessel.transform = Transform3D.IDENTITY
 	_vessel.visible = false
+	if _shadow != null:
+		var sfade: Tween = create_tween()
+		sfade.tween_method(_set_shadow_fade, 1.0, 0.0, 0.35)
 	if _debris != null and is_instance_valid(_debris):
 		_debris.queue_free()
 	_debris = Node3D.new()
@@ -829,7 +994,7 @@ func shatter() -> void:
 		for v: Vector2 in cell:
 			centre += v
 		centre /= float(cell.size())
-		var mesh: ArrayMesh = _prism(cell, thick, _box_u, centre)
+		var mesh: ArrayMesh = _prism(cell, thick, Vector2(_quad_w, _box_u), centre)
 		if mesh == null:
 			continue
 		var smat: ShaderMaterial = ShaderMaterial.new()
@@ -1023,6 +1188,9 @@ func set_glass_param(param: StringName, value: float) -> void:
 		&"glass_area":
 			_glass_area = value
 			_rebuild_glass()
+		&"shadow":
+			_shadow_opacity = value
+			_update_shadow()
 		&"roughness":
 			_glass_material().set_shader_parameter("rough", value)
 		&"refraction":
@@ -1038,10 +1206,17 @@ func set_glass_param(param: StringName, value: float) -> void:
 				lamp.light_energy = value
 
 
-## Swing the key light. Real lighting only reads as real when it moves.
+## Swing the key light. Real lighting only reads as real when it moves — and
+## the shadow is a projection along this light, so it swings with it.
 func set_light_angle(yaw_deg: float, pitch_deg: float) -> void:
 	if _key != null:
 		_key.rotation_degrees = Vector3(pitch_deg, yaw_deg, 0.0)
+	_update_shadow()
+
+
+func _set_shadow_fade(v: float) -> void:
+	if _shadow_mat != null:
+		_shadow_mat.set_shader_parameter("opacity", _shadow_opacity * v)
 
 
 func set_targetable(on: bool) -> void:

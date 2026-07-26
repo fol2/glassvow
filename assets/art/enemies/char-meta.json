@@ -1,59 +1,39 @@
 {
+  "_note": "tier added here from core-mechanics ENEMIES so one art id resolves the whole size formula: tierSizes[tier] * scale.",
   "_source": "roguecardv2 src/char-meta.js + battlefield-layout.js BF.shared.sizes",
-  "tierSizes": {
-    "normal": 185,
-    "elite": 230,
-    "boss": 280
-  },
-  "layoutDefault": {
-    "scale": 1,
-    "footX": 0,
-    "footY": 0
-  },
-  "shadowDefault": {
-    "ox": 50,
-    "oy": 100,
-    "sx": 1,
-    "sy": 0.24,
-    "skew": 0,
-    "blur": 1.5,
-    "opacity": 0.62,
-    "dx": 0,
-    "dy": 0
-  },
   "aimDefault": {
-    "style": "solid",
-    "speed": 2.55,
+    "beams": 4.0,
     "color": "#e4d5fb",
-    "width": 0.012,
-    "beams": 4,
-    "dashes": 2
+    "dashes": 2.0,
+    "speed": 2.55,
+    "style": "solid",
+    "width": 0.012
   },
   "chars": {
     "abyssalKnight": {
-      "scale": 1.3,
-      "footY": -20,
-      "shadow": {
-        "ox": 38,
-        "oy": 87
-      },
+      "footY": -20.0,
       "mesh": {
-        "sway": 0,
-        "bob": 0,
+        "bob": 0.0,
         "breathe": 0.55,
-        "head": 1.05,
         "cloth": 1.7,
-        "pin": 1.5
+        "head": 1.05,
+        "pin": 1.5,
+        "sway": 0.0
+      },
+      "scale": 1.3,
+      "shadow": {
+        "ox": 38.0,
+        "oy": 87.0
       },
       "tier": "elite"
     },
     "alphaFang": {
-      "scale": 2,
-      "footX": -30,
-      "footY": -60,
+      "footX": -30.0,
+      "footY": -60.0,
+      "scale": 2.0,
       "shadow": {
-        "ox": 47,
-        "oy": 83,
+        "ox": 47.0,
+        "oy": 83.0,
         "sy": 0.33
       },
       "tier": "elite"
@@ -61,76 +41,76 @@
     "ashAcolyte": {
       "scale": 0.95,
       "shadow": {
-        "oy": 91
+        "oy": 91.0
       },
       "tier": "normal"
     },
     "chaosHound": {
       "scale": 1.05,
       "shadow": {
-        "ox": 53,
-        "oy": 87
+        "ox": 53.0,
+        "oy": 87.0
       },
       "tier": "normal"
     },
     "deepmaw": {
       "scale": 1.14,
       "shadow": {
-        "ox": 48,
-        "oy": 87
+        "ox": 48.0,
+        "oy": 87.0
       },
       "tier": "normal"
     },
     "drownedOne": {
       "scale": 0.8,
       "shadow": {
-        "ox": 51,
-        "oy": 88
+        "ox": 51.0,
+        "oy": 88.0
       },
       "tier": "normal"
     },
     "duskfang": {
-      "scale": 0.95,
+      "scale": 1.77,
       "shadow": {
-        "ox": 46,
-        "oy": 87
+        "ox": 46.0,
+        "oy": 87.0
       },
       "tier": "normal"
     },
     "gloomslime": {
       "scale": 0.95,
       "shadow": {
-        "ox": 52,
-        "oy": 86
+        "ox": 52.0,
+        "oy": 86.0
       },
       "tier": "normal"
     },
     "gravewarden": {
+      "footX": -40.0,
+      "footY": -50.0,
       "scale": 2.5,
-      "footX": -40,
-      "footY": -50,
       "shadow": {
-        "ox": 51,
-        "oy": 88
+        "ox": 51.0,
+        "oy": 88.0
       },
       "tier": "elite"
     },
     "heraldOfEnd": {
+      "footX": -50.0,
       "scale": 2.3,
-      "footX": -50,
       "shadow": {
-        "ox": 53,
-        "oy": 94
+        "ox": 53.0,
+        "oy": 94.0
       },
       "tier": "elite"
     },
     "leviathan": {
-      "scale": 4,
-      "footX": -150,
-      "footY": -200,
+      "footX": -150.0,
+      "footY": -200.0,
+      "scale": 4.0,
       "shadow": {
         "ox": 49.4,
-        "oy": 84
+        "oy": 84.0
       },
       "tier": "boss"
     },
@@ -138,7 +118,7 @@
       "scale": 0.9,
       "shadow": {
         "ox": 43.2,
-        "oy": 87
+        "oy": 87.0
       },
       "tier": "normal"
     },
@@ -151,60 +131,60 @@
       "tier": "normal"
     },
     "rootheart": {
+      "aim": {
+        "width": 0.006
+      },
+      "footX": -50.0,
+      "footY": -70.0,
       "scale": 2.6,
-      "footX": -50,
-      "footY": -70,
       "shadow": {
         "ox": 45.9,
         "oy": 93.4
-      },
-      "aim": {
-        "width": 0.006
       },
       "tier": "boss"
     },
     "shade": {
       "scale": 1.1,
       "shadow": {
-        "ox": 49.8,
-        "dy": 16
+        "dy": 16.0,
+        "ox": 49.8
       },
       "tier": "normal"
     },
     "shellback": {
       "scale": 1.09,
       "shadow": {
-        "ox": 56,
+        "ox": 56.0,
         "oy": 78.1
       },
       "tier": "normal"
     },
     "siren": {
+      "footX": -10.0,
+      "footY": -20.0,
       "scale": 1.6,
-      "footX": -10,
-      "footY": -20,
       "shadow": {
-        "ox": 48,
-        "oy": 99
+        "ox": 48.0,
+        "oy": 99.0
       },
       "tier": "elite"
     },
     "sovereign": {
+      "footX": -100.0,
+      "footY": 50.0,
       "scale": 1.45,
-      "footX": -100,
-      "footY": 50,
       "shadow": {
         "ox": 49.7,
-        "oy": 97
+        "oy": 97.0
       },
       "tier": "boss"
     },
     "sporeling": {
       "scale": 0.62,
       "shadow": {
+        "dy": 10.0,
         "ox": 54.8,
-        "skew": -4,
-        "dy": 10
+        "skew": -4.0
       },
       "tier": "normal"
     },
@@ -218,21 +198,21 @@
     "thornling": {
       "scale": 0.81,
       "shadow": {
-        "ox": 51,
-        "oy": 91
+        "ox": 51.0,
+        "oy": 91.0
       },
       "tier": "normal"
     },
     "tidecaller": {
       "shadow": {
-        "ox": 56,
+        "ox": 56.0,
         "oy": 89.5
       },
       "tier": "normal"
     },
     "voidColossus": {
+      "footX": -50.0,
       "scale": 2.5,
-      "footX": -50,
       "shadow": {
         "ox": 46.6,
         "oy": 97.3
@@ -242,37 +222,98 @@
     "voidWisp": {
       "scale": 0.67,
       "shadow": {
-        "ox": 51.3,
-        "dy": 9
+        "dy": 9.0,
+        "ox": 51.3
       },
       "tier": "normal"
     },
     "voltEel": {
-      "scale": 1.1,
-      "shadow": {
-        "dy": 13
-      },
       "mesh": {
         "float": 1.1
+      },
+      "scale": 1.1,
+      "shadow": {
+        "dy": 13.0
       },
       "tier": "normal"
     },
     "watcherEye": {
       "scale": 1.1,
       "shadow": {
-        "ox": 50.4,
-        "dy": 24
+        "dy": 24.0,
+        "ox": 50.4
       },
       "tier": "normal"
     },
     "waylayer": {
       "scale": 0.9,
       "shadow": {
-        "ox": 56,
-        "oy": 91
+        "ox": 56.0,
+        "oy": 91.0
       },
       "tier": "normal"
+    },
+    "ashwarden": {
+      "tier": "hero",
+      "scale": 1.0,
+      "shadow": {
+        "ox": 54.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "aim": {
+        "color": "#f9bd95"
+      },
+      "mesh": {
+        "sway": 0,
+        "bob": 0,
+        "breathe": 1.3,
+        "head": 0,
+        "cloth": 0
+      }
+    },
+    "duskblade": {
+      "tier": "hero",
+      "scale": 1.0,
+      "footY": -30.0,
+      "shadow": {
+        "ox": 47.0,
+        "oy": 95.0,
+        "skew": 5.0
+      },
+      "aim": {
+        "color": "#6d9edf"
+      },
+      "mesh": {
+        "sway": 0.5,
+        "bob": 0,
+        "breathe": 1.6,
+        "head": 1.35,
+        "cloth": 0.75,
+        "pin": 0.5
+      }
     }
   },
-  "_note": "tier added here from core-mechanics ENEMIES so one art id resolves the whole size formula: tierSizes[tier] * scale."
+  "layoutDefault": {
+    "footX": 0.0,
+    "footY": 0.0,
+    "scale": 1.0
+  },
+  "shadowDefault": {
+    "blur": 1.5,
+    "dx": 0.0,
+    "dy": 0.0,
+    "opacity": 0.62,
+    "ox": 50.0,
+    "oy": 100.0,
+    "skew": 0.0,
+    "sx": 1.0,
+    "sy": 0.24
+  },
+  "tierSizes": {
+    "boss": 280.0,
+    "elite": 230.0,
+    "normal": 185.0,
+    "hero": 285
+  }
 }

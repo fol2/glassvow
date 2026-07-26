@@ -86,6 +86,16 @@ var _light_yaw: float = -32.0
 var _light_pitch: float = -38.0
 
 
+## The two heroes stand on the same ground line as the foes and get the same
+## actor, so the bench can tune them side by side. They are not in the enemy
+## mechanics fixture (they are the player's aspects), so their bench-only
+## stat line lives here rather than being faked into the roster file.
+const HEROES: Dictionary = {
+	"duskblade": {"name": "Duskblade", "hp": [70, 70], "art": {"hue": 214}},
+	"ashwarden": {"name": "Ashwarden", "hp": [78, 78], "art": {"hue": 26}},
+}
+
+
 static func load_roster(fallback: ContentDB) -> Dictionary:
 	var text: String = FileAccess.get_file_as_string(CATALOG_PATH)
 	if not text.is_empty():
@@ -158,6 +168,8 @@ func _init(content_ref: ContentDB) -> void:
 	add_child(field)
 
 	var roster: Dictionary = load_roster(content_ref)
+	for hero_id: String in HEROES:
+		roster[hero_id] = HEROES[hero_id]
 	var names: Dictionary = load_names()
 	var ids: Array[String] = []
 	for k: Variant in roster.keys():
@@ -760,17 +772,10 @@ func _draw_ground() -> void:
 		# space, and one that stopped at the sheet edge would hang in mid-air.
 		_ground.draw_line(Vector2(-6000.0, ground), Vector2(6000.0, ground),
 			Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.18), 1.0)
-		for a: Variant in actors:
-			var view: EnemyView = a
-			# An ellipse where the feet meet the line. char-meta carries a full
-			# nine-knob cast shadow per creature; this is the blob fallback, the
-			# same one the benchmark keeps when the shadow art is off.
-			var w: float = view.size.x * 0.34
-			_ground.draw_set_transform(
-				Vector2(view.position.x + view.size.x * 0.5, ground), 0.0,
-				Vector2(1.0, 0.20))
-			_ground.draw_circle(Vector2.ZERO, w, Color(0.0, 0.0, 0.0, 0.5))
-			_ground.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		# No blob here any more. Each actor casts its own shadow inside its own
+		# stage, projected along the key light off its own silhouette — so it
+		# leans when the light swings and fades when the creature floats, which
+		# a circle drawn on the floor could never do.
 
 
 func _ready() -> void:
