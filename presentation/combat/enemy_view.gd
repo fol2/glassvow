@@ -1694,6 +1694,35 @@ func body_centre() -> Vector2:
 	return global_position + size * 0.5
 
 
+## `plate.plateBounds` / `plate.blockBounds` (combat-gl.js:2194) — the two boxes
+## `chromePulse` aims at on an actor: the foot plate for a facet beat, the ward
+## chip for a guard beat. Both are global px, both are empty when the widget is
+## not up, and an empty box is what `chrome_pulse` refuses on.
+## The height is the CONTENT's, not the box's. `_plate` is anchored bottom-wide
+## over a fixed 200px of room it lays its rows out at the top of, so its own rect
+## is four fifths empty air below the facets — and `R = min(width, height) · 0.62`
+## reads that as a plate three times its real depth, throwing a 124px ring
+## centred under the creature's feet instead of a 37px one on the plate.
+func plate_rect() -> Rect2:
+	if _plate == null or not _plate.is_visible_in_tree():
+		return Rect2(global_position + size * 0.5, Vector2.ZERO)
+	var box: Rect2 = _plate.get_global_rect()
+	box.size.y = minf(box.size.y, _plate.get_combined_minimum_size().y)
+	return box
+
+
+## `plate.blockBounds || plate.plateBounds` (combat-gl.js:950) — a guard beat on
+## an actor with no chip up falls back to the whole plate rather than vanishing.
+## The zero-width test is not paranoia: the chip lives in an HBoxContainer, so
+## the frame it is first shown on it is visible and still unsized, and a beat
+## aimed at it that frame would be silently dropped for having no area.
+func block_rect() -> Rect2:
+	if _ward_chip != null and _ward_chip.is_visible_in_tree() \
+			and _ward_chip.size.x > 0.0:
+		return _ward_chip.get_global_rect()
+	return plate_rect()
+
+
 ## `choreoStagger` (combat-choreo.js:45) — the beat before the vessel fails: the
 ## body sags 5px, tips two and a half degrees and darkens to 0.6 brightness over
 ## 360ms, and STAYS there (`fill: 'forwards'`) because what follows is the

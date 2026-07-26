@@ -201,6 +201,11 @@ const POWER_LILAC: Color = Color(0.7882353, 0.65882355, 1.0)    # #c9a8ff
 const HOLLOW_GREY: Color = Color(0.5686275, 0.627451, 0.6862745) # #91a0af
 const HEAL_GREEN: Color = Color(0.56078434, 0.9098039, 0.627451) # #8fe8a0
 const BUFF_BLUE: Color = Color(0.62352943, 0.78431374, 1.0)     # #9fc8ff
+## The two tones only `chromePulse` uses. Neither is a floater colour, and
+## neither matches the tone the same event gives its particles: a guard beat is
+## bluer than the ward mote and the candle beat is warmer than the ember.
+const GUARD_BLUE: Color = Color(0.49411765, 0.78431374, 1.0)    # 0x7ec8ff
+const CANDLE_GOLD: Color = Color(1.0, 0.7882353, 0.36862746)    # 0xffc95e
 const WARD_ICON: Texture2D = preload("res://assets/art/ui/ward.png")
 
 ## The four signatures that fire on the PLAY rather than on an impact
@@ -213,6 +218,11 @@ const PLAY_TIME_BESPOKE: Array[String] = [
 const BIG_HIT: int = 16
 ## `Math.min(1, ev.amount / 24)` — what counts as a full-power blow.
 const POWER_SCALE: float = 24.0
+
+## `setTimeout(..., 440)` (drain.js:412) — how long the lantern waits before it
+## answers a spill. Just short of the 460ms flight, so the pop is starting as the
+## last mote arrives rather than beginning after it.
+const EMBER_LAND: float = 0.44
 
 class Plate:
 	extends Control
@@ -1463,6 +1473,22 @@ func _wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
 
 
+## A one-shot timer that outlives the handler that scheduled it. `_wait` cannot
+## do this: it is awaited inside the drain and holds the queue up, while a
+## benchmark `setTimeout` deliberately runs alongside it.
+func _after(seconds: float, what: Callable) -> void:
+	if seq.instant:
+		what.call()
+		return
+	get_tree().create_timer(seconds).timeout.connect(what, CONNECT_ONE_SHOT)
+
+
+## What the lantern does once the embers have crossed the screen to it.
+func _lantern_answers() -> void:
+	_hud.pulse(&"lantern")
+	_vfx.chrome_pulse(_hud.lantern_rect(), EMBER_ORANGE)
+
+
 func _enemy_view(idx: int) -> EnemyView:
 	if idx >= 0 and idx < _enemy_views.size():
 		return _enemy_views[idx]
@@ -1564,6 +1590,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_sfx.play(&"energy")
 			_sync_actors()
 			_hud.pulse(&"energy")
+			_vfx.chrome_pulse(_hud.energy_rect(), CANDLE_GOLD)
 		EventTypes.DRAW:
 			var uid: int = ev["uid"]
 			var inst: CardInst = _find_card(uid)
@@ -1651,6 +1678,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
 				view.set_facets(chips, facet_max, true)
+				_vfx.chrome_pulse(view.plate_rect(), GLASS_BLUE)
 			await _wait(0.11)
 		EventTypes.SHATTER:
 			var idx: int = ev["idx"]
@@ -1689,7 +1717,11 @@ func _handle_event(ev: Dictionary) -> void:
 				var to: Vector2 = _hud.lantern_rect().get_center()
 				var from: Vector2 = _ember_from if _has_ember_from else _hero_centre()
 				_vfx.fly_to(from, to, EMBER_ORANGE, mini(n * 2, 5), 6.0, 0.46)
-				_hud.pulse(&"lantern")
+				# `setTimeout(..., 440)` (drain.js:412) — the pop, the chrome beat
+				# and the resync all wait out the 460ms flight, while the drain
+				# itself moves on at 300. The port fired the pop on the call, so
+				# the lantern answered embers that were still in the air.
+				_after(EMBER_LAND, _lantern_answers)
 				await _wait(0.3)
 			_has_ember_from = false
 		EventTypes.BLOCK_GAIN:
@@ -1707,6 +1739,7 @@ func _handle_event(ev: Dictionary) -> void:
 				if _hero != null:
 					_hero.set_ward(total)
 					_hero.set_ward_shell(true, true)
+					_vfx.chrome_pulse(_hero.block_rect(), GUARD_BLUE)
 				_hud.pulse(&"ward")
 			else:
 				var who_idx: int = who_v
@@ -1714,6 +1747,7 @@ func _handle_event(ev: Dictionary) -> void:
 				if view != null:
 					view.set_ward(total)
 					view.set_ward_shell(true, true)
+					_vfx.chrome_pulse(view.block_rect(), GUARD_BLUE)
 			_float(at + Vector2(0.0, -10.0), str(n), "blockf", WARD_BLUE, 0.0,
 				WARD_ICON, 22)
 			_sync_actors()
