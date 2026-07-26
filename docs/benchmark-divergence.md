@@ -64,19 +64,89 @@ opened and compared against the benchmark's actual behaviour.
 | 12 | `DEAL_BUDGET` deal pacing | 500 ms budget → 100 ms stagger, 680 ms total | `drawBatchSchedule` (`pile-chrome.js:58`) — arithmetic exact | **C** |
 | 13 | motion curves | `[0.22,1,0.36,1]` / `[0.34,1.56,0.64,1]` | `BASE_EASING` (`tokens.js:31`) — identical | **C** |
 | 14 | `archetypeHit`, `BESPOKE_VFX`, ward underlay | as ported | byte-identical between both trees | **C** |
-| 15 | damage floaters (`floaters.gd`) | ported from the Pixi floater | DOM `.floaty` div (`vfx.js:177`) + 28 CSS rule blocks | **?** |
-| 16 | aim arc (`aim_arc.gd`) | ported from `paintAim` | `paintAim` does not exist | **?** |
-| 17 | hand seat poses (`hand_view.gd`) | cites `combat-gl.js:1096-1123` | file does not exist | **?** |
-| 18 | drag / long-press thresholds | cites `pointer.js:5` | file does not exist; both constants absent | **?** |
-| 19 | hand fan law | cites `hand-layout.js` | file does not exist | **?** |
+| 15 | damage floaters (`floaters.gd`) | 4 tiers, 450/640 ms, no rotation, poison rises | 18 `.floaty` tiers, 1100/1250 ms, ±8°/±16°, **poison drips down** | **R** |
+| 16 | aim arc dashes | 10 dashes at 62% ink, scaled to the arc | `stroke-dasharray: 4 10` — 28.6% duty in path px | **R** |
+| 17 | aim arc ink | `#ff8a92` @0.92, plus a 9px glow pass @0.16 | one stroke, `rgba(255,89,100,.85)`, width 4, no glow | **R** |
+| 18 | aim reticle | r 11, width 2.5, plus a filled r-3 core | `r=9`, width 3, `rgba(255,89,100,.95)`, **no fill** | **R** |
+| 19 | hover / armed card pose | lift 24 px, scale 1.08 | `.lifted` −92 px @1.38, `.armed` −118 px @1.24 | **R** |
+| 20 | tap-after-drag guard | `CLICK_SLOP` — 12 px of travel | **time, not distance**: a click within 350 ms of a drag ends is swallowed | **R** |
+| 21 | drag arm threshold | `DRAG_START_PX = 26`, upward only | `st.y0 - e.clientY > 26` | **C** |
+| 22 | hand fan law | gap 112/640/246, tilt 5/42, sag 3.2, base 26 | `layoutHand` — **all seven identical** | **C** |
+| 23 | aim arc geometry | P0 lifted 80, apex 120, quadratic | `M x,y-80 Q cx,cy x1,y1`, apex `min(y0,y1)-120` | **C** |
 
-Nine of the nineteen are citation-only: the code was read correctly and written
-down against the wrong line. Row 12 is the clearest case — the comment claims a
-500 ms budget yields a 100 ms stagger, a 280 ms flight and a 680 ms total, and
-`drawBatchSchedule(5, 500)` returns exactly that. Whoever wrote it had the real
-function in front of them; only the line number came from elsewhere.
+Twelve of the twenty-three are citation-only: the code was read correctly and
+written down against the wrong line. Row 12 is the clearest case — the comment
+claims a 500 ms budget yields a 100 ms stagger, a 280 ms flight and a 680 ms
+total, and `drawBatchSchedule(5, 500)` returns exactly that. Whoever wrote it
+had the real function in front of them; only the line number came from
+elsewhere.
 
-## The two that are ours on purpose
+## What the four Pixi-sourced widgets turned out to be
+
+None of them needed the file it cited. Every one has a pre-Pixi original, and
+the results split three ways rather than the one way "ported from Pixi" implies.
+
+**The hand fan law was right all along (rows 21–22).** `hand-layout.js` does not
+exist at `6e06911`; the law is inline in `layoutHand` (`combat.js:466`). All
+seven constants match to the digit — `min(112, 640 / n, (stageW - 246) / (n-1))`
+for the gap, `min(5, 42 / n)` for the per-seat tilt step, `|rot| * 3.2` for the
+sag, `+ 26` for the base. So does the 26 px upward-only drag arm
+(`st.y0 - e.clientY > 26`, `combat.js:1038`). Nobody should re-derive these.
+
+**The card poses are not (row 19).** The benchmark lifts a hovered card
+**92 px at scale 1.38** and an armed one **118 px at 1.24**
+(`styles.css:634-635`). This port lifts 24 px at 1.08 — roughly a quarter of the
+travel, on the gesture the whole hand reads through.
+
+**`CLICK_SLOP` is invented, and the real guard is a different kind of thing
+(row 20).** There is no distance test for a tap that follows a drag. The
+benchmark stamps `dragConsumedAt` when a drag ends and drops any click inside
+350 ms of it (`combat.js:1262`). A distance slop cannot express that, and the
+two disagree exactly where it matters: a slow, short drag.
+
+**The aim arc is an SVG path, not a Pixi paint (rows 16–18, 23).** `aimMove`
+writes `#aim` (`combat.js:1063`) — a fixed full-stage `<svg>` at z-index 45 —
+with one quadratic path plus one circle:
+
+    M from.x,(from.y - 80)  Q cx,cy  mx,my
+      stroke rgba(255,89,100,.85)  width 4  dasharray "4 10"  linecap round
+    circle cx=mx cy=my r=9  stroke rgba(255,89,100,.95)  width 3  no fill
+
+The geometry this port ported is exactly right. Everything drawn along it is
+not: the dashes are a fixed 4-on/10-off in path pixels rather than ten cells at
+62% ink, there is one stroke rather than a glow pass under an ink pass, the ink
+is `#ff5964` rather than `#ff8a92`, and the reticle is an empty ring of r 9 at
+width 3 rather than an r-11 ring at 2.5 around a filled core.
+
+One behaviour worth keeping from the same function: when targeting is not a
+card the arc starts at `{stageW()/2, 60}`, not at a seat.
+
+**The floaters are the CSS ones (row 15).** `floaters.gd` says the stylesheet's
+`.floaty` variants are "explicitly the non-combat path" and quotes a comment
+about combat floaters being Pixi-owned. That comment belongs to the newer tree.
+At `6e06911` `floatText` (`vfx.js:175`) builds a `.floaty` div and `drain.js`
+calls it *during combat* — `blockf` on a block, `debufff` on the ember toll.
+
+The spec it should have been built from:
+
+- Base `.floaty` (`styles.css:1497`): Cinzel **800**, **32 px**, `#fff`,
+  tabular-nums, an eight-offset `#05070e` outline, `0 0 12px rgba(255,90,90,.9)`
+  and `0 3px 6px #000`.
+- **18 tiers**, not four. Sizes where they differ: `dmg-big` 42, `dmg-kill` 52,
+  `dmg-overkill` 62 with a 1.5 px white text-stroke, `crit` 47, `blockedf` /
+  `bufff` / `debufff` 22, `notice` 20, `movef` 14 in a bordered pill.
+- **Three animation shapes**, not one. Default 1100 ms, `-50% → -90% @0.18 →
+  -230%`, scale `0.6 → 1.15 → 0.95`, rotation ±8° for damage only. Crit 1250 ms
+  with a four-stop `brightness(3 → 1.9 → 1)` blaze and ±16°. Poison **drips
+  down**: `-50% → -26% @0.2 → +80%`.
+- Horizontal drift `(random - 0.5) * 40`, applied only at the last stop; easing
+  `cubic-bezier(.2,.7,.3,1)` over the whole iteration.
+- The Y figures are percentages of the element's own height, not pixels.
+
+Against that, this port runs 450/640 ms, four tiers, no rotation, no crit, and a
+poison numeral that rises.
+
+## The ones that are ours on purpose
 
 **Row 1, the ward restore.** The benchmark grows the shell again on a restore,
 including at combat start when a relic like `basaltIdol` grants block before
@@ -85,19 +155,40 @@ including at combat start when a relic like `basaltIdol` grants block before
 existed, so it should not build itself in front of you — and that reason is
 sound. What the comment gets wrong is quoting `syncWardMesh(heroSprite, true,
 true)` and then describing it as raised *without* the grow. The benchmark's
-third argument **is** the grow flag and it is `true`. The deviation should be
-labelled as a deviation.
+third argument **is** the grow flag and it is `true`. **Moot in practice: the
+ward is being redesigned**, so this row is recorded and not acted on.
 
-**Rows 4 and 6.** A particle system with gravity is a legitimate way to spend an
-arc that the web spends on three keyframes, and suppressing two primitives that
-the reference never draws is parity, not licence.
+**Row 6.** Suppressing two primitives the reference never draws is parity, not
+licence.
 
-## The three that are ours by accident
+**Row 4 was not one of them, and the distinction is the whole point of this
+document.** "A particle system instead of three keyframes" sounds like a
+mechanism choice. It was not: with drag on and a fixed upward bias the mote
+under-lifted about fivefold and arrived above the target rather than on it. A
+quadratic Bézier and a projectile are the same parabola, so the shape was never
+the argument — the pacing and the endpoint were, and both were wrong. Fixed in
+`65ffac8` by interpolating the benchmark's own three control points and leaving
+the renderer alone. The engine's way of drawing a thing can stay ours; where the
+thing ends up cannot.
 
-Rows 2, 3 and 5. None is a judgement call; each is a value nobody compared.
-Row 2 is the one to look at first: 46 ms between motes is the difference
-between a stream and a puff, and it costs one line. Row 5 needs a fourth Cinzel
-weight bundled, which is an assets change rather than a lane change.
+## Fixed
+
+| row | commit |
+|---|---|
+| 2 mote stagger, 3 mote scale, 4 mote path, plus a 2x size error found with them | `65ffac8` |
+| 5 enemy name weight — `Cinzel-500.woff2`, byte-identical to the benchmark's own | `d1c228d` |
+
+The size error is the one worth remembering. `size` in `flyTo` is a DOM width,
+so a diameter; `size` in `vfx.js` is the argument to `arc()`, so a radius. The
+port carried `drain.js`'s 6 and 7 across into the second meaning and drew every
+mote at double. Nothing in the citation was wrong. The unit was.
+
+## Still open, all measured
+
+Rows 15–20 are regressions with a full specification recorded above and no work
+done. Rows 15 (floaters) and 19 (card poses) are the two that touch every fight:
+one is every numeral on the screen, the other is the gesture the hand is read
+through. Rows 16–18 are one file and one afternoon.
 
 ## How to keep this from coming back
 
