@@ -38,6 +38,29 @@ const HERO_X: float = 200.0
 const HERO_ART: StringName = &"duskblade"
 const HERO_HUE: float = 225.0  # HERO_LOOKS[0].hue in art.js
 
+## `.combat-screen::after` — `rgba(5,7,14,.55)` reached at 75% of a 300px band.
+const MIST: Color = Color(0.019607844, 0.02745098, 0.05490196, 0.55)
+const MIST_H: float = 300.0
+
+## `#vignette` — `rgba(4,5,12,.55)` at the ellipse's rim.
+const VIGNETTE_EDGE: Color = Color(0.015686275, 0.019607844, 0.047058824, 0.55)
+## `@keyframes lowhp` — `rgba(255,40,40,.12)` over 120px to `.34` over 180px, and
+## back, over 1.6s. `.lowhp` is `hp / maxHp <= 0.3` (combat.js:451).
+const LOW_HP_TINT: Color = Color(1.0, 0.15686275, 0.15686275)
+const LOW_HP_AT: float = 0.3
+const LOW_HP_PERIOD: float = 1.6
+const LOW_HP_REACH: Array[float] = [120.0, 180.0]
+const LOW_HP_ALPHA: Array[float] = [0.12, 0.34]
+
+## `#grain` — opacity .05, and `grain 0.9s steps(1)` is eight discrete jumps.
+const GRAIN_AMOUNT: float = 0.05
+const GRAIN_STEP: float = 0.9 / 8.0
+## `translate(±3–7%)` of a 240px tile, in whole pixels so the noise re-rolls
+## rather than resampling itself.
+const GRAIN_JUMPS: Array[Vector2] = [
+	Vector2(0.0, 0.0), Vector2(-14.0, 7.0), Vector2(10.0, -17.0), Vector2(-7.0, 14.0),
+	Vector2(17.0, 5.0), Vector2(-14.0, -10.0), Vector2(7.0, 17.0), Vector2(-10.0, -7.0)]
+
 ## `UIC.base.hand.bottom` — the hand box hangs this far past the stage's bottom
 ## edge. The fan is clamped against the STAGE line, so HandView is told the
 ## overhang rather than left to work it out from where it happens to sit.
@@ -178,6 +201,11 @@ var _overlay: ColorRect
 var _overlay_title: Label
 var _overlay_body: Label
 var _overlay_button: Button
+var _vignette: ColorRect
+var _vignette_mat: ShaderMaterial
+var _grain: ColorRect
+var _grain_mat: ShaderMaterial
+var _atmos_t: float = 0.0
 var _over_emitted: bool = false
 ## `choreoDone` — whether the card currently resolving has already been swung
 ## for. Starts spent, so nothing lunges before a card is ever played.
@@ -284,6 +312,11 @@ func _build_ui() -> void:
 	_hand.card_drag_refused.connect(_on_card_drag_refused)
 	_shake_host.add_child(_hand)
 
+	# `#vignette` is a SIBLING of `#shake` carrying z 4, and `#shake` carries no
+	# z at all — so the darkening falls over the stage, the actors and the chrome
+	# alike, and only the arc, the sparks and the tips are above it.
+	_build_vignette()
+
 	# Above the hand: the arc launches 80px over the card it comes from, so it
 	# clears the fan on its own, but the reticle must never end up behind a
 	# neighbouring card when aiming across the hand.
@@ -350,6 +383,64 @@ func _build_ui() -> void:
 	_overlay_button.pressed.connect(func() -> void: result_continue.emit())
 	overlay_box.add_child(_overlay_button)
 
+	# Last, because `#grain` carries z 75 — above the tooltip and above the
+	# overlay — and because it reads the screen it is blended onto.
+	_build_grain()
+
+
+## `radial-gradient(ellipse at 50% 45%, transparent 55%, edge 100%)` and the
+## `inset 0 0 Npx` red glow composited over it. One shader because they are one
+## element there, and because the red has to sit ON the darkening rather than
+## be averaged into it — source-over, not a mix.
+const VIGNETTE_SHADER: String = """
+shader_type canvas_item;
+
+uniform vec4 edge : source_color = vec4(0.016, 0.02, 0.047, 0.55);
+uniform vec4 low_tint : source_color = vec4(1.0, 0.157, 0.157, 1.0);
+uniform float low_reach = 0.0;   // px the inset glow reaches in from the frame
+uniform float low_alpha = 0.0;
+uniform vec2 stage_px = vec2(1180.0, 820.0);
+
+void fragment() {
+	// The gradient's default extent is farthest-corner, so the radii are the
+	// distances from (50%, 45%) to the far edge in each axis: 0.5 and 0.55.
+	float r = length((UV - vec2(0.5, 0.45)) / vec2(0.5, 0.55));
+	float dark = smoothstep(0.55, 1.0, r) * edge.a;
+	vec2 px = UV * stage_px;
+	float d = min(min(px.x, stage_px.x - px.x), min(px.y, stage_px.y - px.y));
+	float glow = low_alpha * (1.0 - smoothstep(0.0, max(0.001, low_reach), d));
+	float a = glow + dark * (1.0 - glow);
+	vec3 c = (low_tint.rgb * glow + edge.rgb * dark * (1.0 - glow)) / max(0.001, a);
+	COLOR = vec4(c, a);
+}
+"""
+
+## `mix-blend-mode: overlay` at 5%, against a noise field that jumps rather than
+## slides. `CanvasItemMaterial` has no overlay mode, so the blend is done here
+## against the screen this layer is the last thing drawn over.
+const GRAIN_SHADER: String = """
+shader_type canvas_item;
+
+uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;
+uniform vec2 jitter = vec2(0.0);
+uniform float amount : hint_range(0.0, 1.0) = 0.05;
+
+float hash(vec2 p) {
+	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+void fragment() {
+	vec3 base = texture(screen_tex, SCREEN_UV).rgb;
+	// `feTurbulence baseFrequency 0.85` is grain at roughly the pixel, so one
+	// hash per pixel stands in for the tile. Whole-pixel jitter, so a jump
+	// re-rolls the field instead of resampling it blurrier.
+	vec3 g = vec3(hash(floor(FRAGCOORD.xy) + jitter));
+	vec3 over = mix(2.0 * base * g,
+		1.0 - 2.0 * (1.0 - base) * (1.0 - g), step(vec3(0.5), base));
+	COLOR = vec4(mix(base, over, amount), 1.0);
+}
+"""
+
 
 # ---------------------------------------------------------------- the stage
 
@@ -383,6 +474,7 @@ func _build_stage() -> void:
 	# overrides the CSS fallbacks, and 30/10/0 is what the DOM actually resolves.
 	_plate("backdrop", 640.0, 280.0, 0.0, 1.0, 0.85, Vector2(0.5, 1.0), false, 30.0, 26.0)
 	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95, Vector2(1.0, 1.0), false, 10.0, 18.0)
+	_build_mist()
 	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, Vector2(1.0, 0.0), true, 0.0, 12.0)
 
 	# NOT BUILT, and the benchmark's own stylesheet says why:
@@ -397,6 +489,86 @@ func _build_stage() -> void:
 	# that line was read, and the green band across the floor that followed was
 	# never a tuning problem — it was two layers that are not meant to exist.
 	# Putting them back is a deliberate departure, not a fix.
+
+
+## `.combat-screen::after` (styles.css:734) — the depth mist. 300px at the stage
+## bottom, `transparent → rgba(5,7,14,.55) 75%`, at z 2: BETWEEN the mid plate
+## and the ledge, which is the whole trick. It sinks the far plates into haze
+## while the floor the fight stands on stays clear, and without it the backdrop
+## and the ground read at the same distance.
+##
+## This was in `_build_stage`'s docstring as though it were built. It was not.
+func _build_mist() -> void:
+	var grad: Gradient = Gradient.new()
+	grad.offsets = PackedFloat32Array([0.0, 0.75, 1.0])
+	grad.colors = PackedColorArray([
+		Color(MIST.r, MIST.g, MIST.b, 0.0), MIST, MIST])
+	var tex: GradientTexture2D = GradientTexture2D.new()
+	tex.gradient = grad
+	tex.fill_from = Vector2(0.0, 0.0)
+	tex.fill_to = Vector2(0.0, 1.0)
+	tex.width = 8   # a vertical ramp needs no horizontal resolution
+	tex.height = 256
+	var rect: TextureRect = TextureRect.new()
+	rect.texture = tex
+	rect.stretch_mode = TextureRect.STRETCH_SCALE
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	rect.offset_top = -MIST_H
+	rect.offset_bottom = 0.0
+	_shake_host.add_child(rect)
+
+
+## `#vignette` (styles.css:66) and `body.low-hp` (styles.css:69), which are one
+## element in the benchmark and so are one here.
+##
+## The vignette is always on: `radial-gradient(ellipse at 50% 45%, transparent
+## 55%, rgba(4,5,12,.55) 100%)`. Nothing about the fight turns it on or off, and
+## its absence is why a still of this screen read as evenly lit to the corners
+## where the benchmark's falls away.
+##
+## The heartbeat is the other half and it is the only place the screen itself
+## tells you that you are dying: at 30% HP or less an inset red glow breathes in
+## from the frame, 120px at 12% to 180px at 34%, over 1.6s.
+func _build_vignette() -> void:
+	_vignette = ColorRect.new()
+	_vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_vignette.color = Color.WHITE   # the shader writes every channel
+	_vignette_mat = ShaderMaterial.new()
+	var sh: Shader = Shader.new()
+	sh.code = VIGNETTE_SHADER
+	_vignette_mat.shader = sh
+	_vignette_mat.set_shader_parameter("edge", VIGNETTE_EDGE)
+	_vignette_mat.set_shader_parameter("low_tint", LOW_HP_TINT)
+	_vignette.material = _vignette_mat
+	add_child(_vignette)
+
+
+## `#grain` (styles.css:74) — z 75, over everything including the tooltip.
+## Opacity .05, `mix-blend-mode: overlay`, and a 240px noise tile that JUMPS
+## eight times a second (`grain 0.9s steps(1)`) rather than sliding.
+##
+## Overlay is not one of `CanvasItemMaterial`'s blend modes, so it is done in the
+## shader against the screen — which is also the only way to get it, and costs
+## one screen read on a layer that is already the last thing drawn.
+##
+## Cheap to dismiss and the single most pervasive difference in a still frame:
+## every surface in the benchmark has this on it.
+func _build_grain() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	_grain = ColorRect.new()
+	_grain.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_grain.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_grain.color = Color.WHITE
+	_grain_mat = ShaderMaterial.new()
+	var sh: Shader = Shader.new()
+	sh.code = GRAIN_SHADER
+	_grain_mat.shader = sh
+	_grain_mat.set_shader_parameter("amount", GRAIN_AMOUNT)
+	_grain.material = _grain_mat
+	add_child(_grain)
 
 
 ## One painted plate. `h` and `y` are stage px, `y` being the plate's bottom
@@ -808,6 +980,32 @@ func _on_kindle_toggled(on: bool) -> void:
 	_aim.clear_aim()
 	_hand.cancel_drag()
 	_sync_all()  # playability flips between play-cost and kindle rules
+
+
+## The two things on this screen that never stop moving and belong to nothing in
+## the fight: the grain jumping, and the vignette's heartbeat once the player is
+## low enough for the screen itself to say so.
+func _process(delta: float) -> void:
+	_atmos_t += delta
+	if _grain_mat != null:
+		var step: int = int(_atmos_t / GRAIN_STEP) % GRAIN_JUMPS.size()
+		_grain_mat.set_shader_parameter("jitter", GRAIN_JUMPS[step])
+	if _vignette_mat == null:
+		return
+	_vignette_mat.set_shader_parameter("stage_px", size)
+	var low: bool = game.cb != null and game.cb.player.max_hp > 0 \
+		and float(game.cb.player.hp) / float(game.cb.player.max_hp) <= LOW_HP_AT
+	if not low:
+		_vignette_mat.set_shader_parameter("low_alpha", 0.0)
+		return
+	# `lowhp 1.6s ease-in-out infinite` — out and back inside one iteration, so
+	# the keyframe is read at an already-eased t rather than tweened in halves.
+	var e: float = Motion.ease(Motion.EASE_IN_OUT,
+		fmod(_atmos_t, LOW_HP_PERIOD) / LOW_HP_PERIOD)
+	_vignette_mat.set_shader_parameter("low_reach", Motion.keyframe(e,
+		[0.0, 0.5, 1.0], [LOW_HP_REACH[0], LOW_HP_REACH[1], LOW_HP_REACH[0]]))
+	_vignette_mat.set_shader_parameter("low_alpha", Motion.keyframe(e,
+		[0.0, 0.5, 1.0], [LOW_HP_ALPHA[0], LOW_HP_ALPHA[1], LOW_HP_ALPHA[0]]))
 
 
 func _find_card(uid: int) -> CardInst:
