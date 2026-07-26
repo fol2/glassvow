@@ -47,6 +47,39 @@ const HAND_OVERHANG: float = 12.0
 ## you; poison does not, and neither does your own burn.
 const INDIRECT_SOURCES: Array[String] = ["poison", "burn", "self", "thorns"]
 
+## `tr('ui.combat.*')` — the copy the drain announces with, from `i18n/en/ui.js`.
+## Held here rather than typed at each call site so the wording is one edit when
+## this port grows a locale table of its own.
+const SAY_YOUR_TURN: String = "YOUR TURN"
+const SAY_ENEMY_TURN: String = "ENEMY TURN"
+const SAY_SHATTER: String = "SHATTER"
+const SAY_STAGGERED: String = "STAGGERED"
+const SAY_GLASS_HOLDS: String = "THE GLASS HOLDS"
+const SAY_GUARD_SHATTERED: String = "GUARD SHATTERED"
+const SAY_RESHUFFLE: String = "Reshuffle"
+const SAY_PERFECT: String = "PERFECT"
+
+## The palette the drain names inline. Every one of these is a literal in
+## `drain.js`; they are the effect layer's own colours, not the theme's.
+const GLASS_BLUE: Color = Color(0.8745098, 0.91764706, 1.0)     # #dfeaff
+const WARD_BLUE: Color = Color(0.62352943, 0.83137256, 1.0)     # #9fd4ff
+const POISON_TAN: Color = Color(0.827451, 0.6313726, 0.3529412) # #d3a15a
+const WARM_GOLD: Color = Color(1.0, 0.84705883, 0.627451)       # #ffd8a0
+const EMBER_ORANGE: Color = Color(1.0, 0.7019608, 0.3529412)    # #ffb35a
+const SPARK_WHITE: Color = Color(1.0, 0.9529412, 0.8392157)     # #fff3d6
+const SOUL_VIOLET: Color = Color(0.7882353, 0.6901961, 1.0)     # #c9b0ff
+const REVIVE_LILAC: Color = Color(0.9098039, 0.8627451, 1.0)    # #e8dcff
+const POWER_LILAC: Color = Color(0.7882353, 0.65882355, 1.0)    # #c9a8ff
+const HOLLOW_GREY: Color = Color(0.5686275, 0.627451, 0.6862745) # #91a0af
+const HEAL_GREEN: Color = Color(0.56078434, 0.9098039, 0.627451) # #8fe8a0
+const BUFF_BLUE: Color = Color(0.62352943, 0.78431374, 1.0)     # #9fc8ff
+const WARD_ICON: Texture2D = preload("res://assets/art/ui/ward.png")
+
+## `big` (drain.js:540) — the damage at which a blow earns its own ceremony.
+const BIG_HIT: int = 16
+## `Math.min(1, ev.amount / 24)` — what counts as a full-power blow.
+const POWER_SCALE: float = 24.0
+
 class Plate:
 	extends Control
 	var tex: Texture2D
@@ -94,6 +127,23 @@ var _over_emitted: bool = false
 ## `choreoDone` — whether the card currently resolving has already been swung
 ## for. Starts spent, so nothing lunges before a card is ever played.
 var _hero_swung: bool = true
+## Everything the shake moves: `#shake` wraps the screen, the lantern and the
+## chrome, but NOT the effect canvas — which is why sparks hang still while the
+## world jolts under them.
+var _shake_host: Control
+var _vfx: VfxLayer
+var _floaters: Floaters
+## `vfxSource.archetype` — which blow language the action now resolving speaks.
+## Set by `play` from the card's own `vfx` field and by `enemyAct` from the
+## body's kind, then read by every hit until the next action replaces it.
+var _archetype: String = "slash"
+## `hitSeq` — how many numbers this action has already thrown, so a multi-hit
+## card fans its damage across three columns instead of stacking it in one.
+var _hit_seq: int = 0
+## `emberFrom` — where the last fire spilled, so the embers it feeds the lantern
+## start at the body that gave them rather than at the hero.
+var _ember_from: Vector2 = Vector2.ZERO
+var _has_ember_from: bool = false
 
 
 ## Fully constructed at new() — no tree dependency, so headless tests can
@@ -111,6 +161,15 @@ func _init(game_ref: GlassvowGame) -> void:
 # ---------------------------------------------------------------- build
 
 func _build_ui() -> void:
+	# `#shake` — the world wrapper the screen shake translates. Everything the
+	# fight happens in goes inside it; the effect canvas and the floaters do not,
+	# because `#vfx` and `#floaties` are its SIBLINGS in the benchmark and that
+	# is why a spark stays where it was thrown while the stage jolts under it.
+	_shake_host = Control.new()
+	_shake_host.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_shake_host.mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(_shake_host)
+
 	_build_stage()
 
 	# `.battlefield` — inset 0 with `bottom: var(--ground-y)`. Actors are its only
@@ -120,7 +179,7 @@ func _build_ui() -> void:
 	_battlefield.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_battlefield.offset_bottom = -GROUND_Y
 	_battlefield.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_battlefield)
+	_shake_host.add_child(_battlefield)
 
 	# The whole chrome layer, in one widget, measured against the same
 	# 1180x820 the stage above is. `plate = false` because the ward chip and HP
@@ -128,7 +187,7 @@ func _build_ui() -> void:
 	_hud = HudBar.new(true, true, false)
 	_hud.end_turn_pressed.connect(_on_end_turn_pressed)
 	_hud.lantern_pressed.connect(_on_art_pressed)
-	add_child(_hud)
+	_shake_host.add_child(_hud)
 
 	_hand = HandView.new()
 	# `.hand-zone` — centred on the stage, 260 tall, hanging 12px past the
@@ -147,13 +206,21 @@ func _build_ui() -> void:
 	_hand.card_tapped.connect(_on_card_tapped)
 	_hand.card_drag_moved.connect(_on_card_drag_moved)
 	_hand.card_drag_released.connect(_on_card_drag_released)
-	add_child(_hand)
+	_shake_host.add_child(_hand)
 
 	# Above the hand: the arc launches 80px over the card it comes from, so it
 	# clears the fan on its own, but the reticle must never end up behind a
 	# neighbouring card when aiming across the hand.
 	_aim = AimArc.new()
 	add_child(_aim)
+
+	# `#vfx` then `#floaties`, both siblings of `#shake` and both above `#aim`:
+	# a damage numeral is never hidden by the body it came off, and a spark is
+	# never hidden by the HUD.
+	_vfx = VfxLayer.new(_shake_host)
+	add_child(_vfx)
+	_floaters = Floaters.new()
+	add_child(_floaters)
 
 	_inspect = PanelContainer.new()
 	_inspect.set_anchors_preset(Control.PRESET_CENTER)
@@ -181,7 +248,7 @@ func _build_ui() -> void:
 	_kindle_toggle.offset_bottom = 98
 	GlassStyle.style_button(_kindle_toggle, GlassStyle.EMBER)
 	_kindle_toggle.toggled.connect(_on_kindle_toggled)
-	add_child(_kindle_toggle)
+	_shake_host.add_child(_kindle_toggle)
 
 	_overlay = ColorRect.new()
 	_overlay.color = Color(0.01, 0.015, 0.03, 0.8)
@@ -232,7 +299,7 @@ func _build_stage() -> void:
 	night.color = Color.BLACK
 	night.set_anchors_preset(Control.PRESET_FULL_RECT)
 	night.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(night)
+	_shake_host.add_child(night)
 
 	# Draw order is the benchmark's paint order: the plates and the breath sit
 	# at z 0, the mist at 2, the ledge band at 3.
@@ -293,12 +360,16 @@ func _plate(art: String, h: float, y: float, dx: float, zoom: float,
 	r.offset_right = r.offset_left + box.x
 	r.offset_top = -(bottom + base.y * zoom)
 	r.offset_bottom = -bottom
-	add_child(r)
+	_shake_host.add_child(r)
 
 
 func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> void:
 	_over_emitted = false
 	_encounter_text = encounter_text
+	# Headless playback takes no ceremony with it: a test driving the sequencer
+	# must never wait on a tween that will not tick.
+	_floaters.instant = seq.instant
+	_floaters.clear_all()
 	# Live play rolls the elite affix inside start_combat (traces passed it
 	# explicitly only to skip the rng draw).
 	game.apply({"t": "startCombat", "enemies": enemy_ids, "kind": kind})
@@ -413,6 +484,11 @@ func _stand(view: EnemyView, x: float, lift: float) -> void:
 	view.offset_right = view.offset_left + box.x
 	view.offset_bottom = -(lift + view.foot.y)
 	view.offset_top = view.offset_bottom - box.y
+	# The plate hangs off the GROUND, not off this actor's box. A painting with
+	# empty canvas under the creature sinks its box by `foot.y`, and a plate left
+	# on the box bottom goes with it — which is why the gravewarden stood on the
+	# ledge with its name and its HP rail somewhere under the hand.
+	view.align_plate(view.foot.y)
 
 
 static func _label(initial: String) -> Label:
@@ -569,43 +645,79 @@ func _foe_kind(idx: int) -> String:
 	return str(art.get("kind", "humanoid"))
 
 
-## `mvDef?.intent?.startsWith('attack')` — only an attacking move is thrown.
-func _move_is_attack(idx: int, move_key: String) -> bool:
+## `mvDef?.intent` — what the move about to resolve promises.
+func _move_intent(idx: int, move_key: String) -> String:
 	if idx < 0 or idx >= game.cb.enemies.size():
-		return false
+		return ""
 	var moves: Dictionary = game.cb.enemies[idx].def.get("moves", {})
 	var mv: Dictionary = moves.get(move_key, {})
-	return str(mv.get("intent", "")).begins_with("attack")
+	return str(mv.get("intent", ""))
 
 
-## Fire-and-forget rising damage/heal number over a view.
-func _float_text(over: Control, msg: String, color: Color) -> void:
-	if seq.instant or over == null:
-		return
-	var l: Label = Label.new()
-	l.text = msg
-	l.add_theme_font_size_override("font_size", 28)
-	l.add_theme_color_override("font_color", color)
-	l.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.8))
-	l.add_theme_constant_override("outline_size", 5)
-	add_child(l)
-	l.global_position = over.global_position + Vector2(over.size.x * 0.5 - 16, -6)
-	var tw: Tween = create_tween()
-	tw.tween_property(l, "position", l.position + Vector2(0, -46), 0.6)
-	tw.parallel().tween_property(l, "modulate:a", 0.0, 0.6)
-	tw.tween_callback(l.queue_free)
+## `mvDef?.intent?.startsWith('attack')` — only an attacking move is thrown.
+func _move_is_attack(idx: int, move_key: String) -> bool:
+	return _move_intent(idx, move_key).begins_with("attack")
 
+
+## `presentation.enemyCenter(idx)` — the middle of a foe's painted body, and the
+## point every effect aimed at it is thrown from.
+func _enemy_centre(idx: int) -> Vector2:
+	var v: EnemyView = _enemy_view(idx)
+	if v == null:
+		return size * 0.5
+	return v.body_centre()
+
+
+func _hero_centre() -> Vector2:
+	if _hero == null:
+		return Vector2(HERO_X, size.y - GROUND_Y - 120.0)
+	return _hero.body_centre()
+
+
+## Either side of a hit, by the `who` the domain speaks: a string for the player,
+## an index for a foe.
+func _who_centre(who: Variant) -> Vector2:
+	if typeof(who) == TYPE_STRING:
+		return _hero_centre()
+	var idx: int = who
+	return _enemy_centre(idx)
+
+
+## Fire-and-forget rising numeral. Thin so the drain branches below read as the
+## benchmark's do — `floatText(x, y, text, cls)` and nothing else.
+func _float(at: Vector2, msg: String, cls: String = "dmg",
+		tint: Color = Color(0, 0, 0, 0), dx: float = 0.0,
+		icon: Texture2D = null, icon_px: int = 0) -> void:
+	_floaters.float_text(at, msg, cls, tint, dx, icon, icon_px)
+
+
+## `presentation.holdPendingPileArrivals` in one line: a card in flight has
+## already left the engine's hand, so the pile it is heading for would otherwise
+## show its new count while the card is still mid-air. Nothing is held here yet —
+## the counts are corrected by `_sync_all` when the pump idles — but the bump is
+## the arrival the flight was missing.
+func _land_in_pile(which: StringName) -> void:
+	_hud.bump_pile(which)
 
 func _handle_event(ev: Dictionary) -> void:
 	var t: StringName = ev["t"]
 	match t:
 		EventTypes.TURN:
+			# `if (ev.n > 1)` — turn 1 opens the fight and needs no announcement;
+			# every turn after it gets the plate and a longer beat.
+			var n: int = ev["n"]
 			_push_hud()
+			if n > 1:
+				_floaters.banner(SAY_YOUR_TURN, "turn")
+				await _wait(0.5)
+			else:
+				await _wait(0.12)
 		EventTypes.INTENT:
 			var idx: int = ev["idx"]
 			_refresh_intent(idx)
 		EventTypes.ENERGY:
 			_push_hud()
+			_hud.pulse(&"energy")
 		EventTypes.DRAW:
 			var uid: int = ev["uid"]
 			var inst: CardInst = _find_card(uid)
@@ -619,103 +731,134 @@ func _handle_event(ev: Dictionary) -> void:
 				# Only the stagger is waited on: the flights overlap, which is
 				# what makes a five-card draw read as one deal rather than five.
 				await _wait(HandView.deal_stagger(wave))
+				if seq.run_length(EventTypes.DRAW) == 1:
+					_land_in_pile(&"draw")  # the last of the wave bumps the pile
 		EventTypes.RESHUFFLE:
-			await _wait(0.15)
+			var shuffled: int = ev.get("n", 0)
+			await _reshuffle_ceremony(shuffled)
 		EventTypes.PLAY:
 			var uid: int = ev["uid"]
-			_hand.remove_card(uid)
+			var inst: CardInst = _find_card(uid)
+			# `vfxSource` — the card decides what its blows look like, and every
+			# hit until the next action reads it back.
+			_archetype = "slash"
+			if inst != null:
+				_archetype = str(_rules.card_data(inst).get("vfx", "slash"))
+			_hit_seq = 0
 			_hero_swung = false  # this card's swing is owed
-			await _wait(0.12)
+			_hand.remove_card(uid)
+			await _wait(0.2)
 		EventTypes.HIT_ENEMY:
-			var idx: int = ev["idx"]
-			var amount: int = ev["amount"]
-			var hp_after: int = ev["hpAfter"]
-			# The domain flags a poison tick the same way the benchmark's drain
-			# reads `ev.poison`, so the two never have to agree by coincidence.
-			var poison: bool = ev.get("poison", false)
-			# `choreoDone` (drain.js:542): the hero swings once for the CARD and
-			# the blow lands after it, so a three-hit attack is one swing and
-			# three recoils rather than three swings.
-			if not poison and not _hero_swung and _hero != null:
-				_hero_swung = true
-				await _wait(_hero.lunge("humanoid"))
-			var view: EnemyView = _enemy_view(idx)
-			if view != null:
-				var e: EnemyCombatant = game.cb.enemies[idx]
-				view.set_hp(hp_after, e.max_hp)
-				view.take_hit(not poison)
-				_float_text(view, str(amount), Color(1, 0.45, 0.4))
-			await _wait(0.22)
+			await _hit_enemy(ev)
 		EventTypes.HIT_PLAYER:
-			var amount: int = ev["amount"]
-			var hp_after: int = ev["hpAfter"]
-			if _hero != null:
-				_hero.set_hp(maxi(0, hp_after), game.cb.player.max_hp)
-				# drain.js:626 splits by source: poison, burn, self and thorns
-				# take the quiet branch, and only a real blow shoves the body.
-				_hero.take_hit(not (str(ev.get("source", "")) in INDIRECT_SOURCES))
-				_float_text(_hero, str(amount), Color(1, 0.45, 0.4))
-			_push_hud()
-			await _wait(0.22)
+			await _hit_player(ev)
 		EventTypes.CHIP:
 			var idx: int = ev["idx"]
 			var chips: int = ev["chips"]
 			var facet_max: int = ev["facetMax"]
+			var at: Vector2 = _enemy_centre(idx)
+			_vfx.burst(at, Color(0.9098039, 0.95686275, 1.0), 5, 190.0,
+				TAU, 0.0, 1.8, 240.0)
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
 				view.set_facets(chips, facet_max)
-			await _wait(0.1)
+			await _wait(0.11)
 		EventTypes.SHATTER:
 			var idx: int = ev["idx"]
 			var facet_max: int = ev["facetMax"]
+			var at: Vector2 = _enemy_centre(idx)
+			_vfx.hitstop(90.0)
+			_vfx.ring(at, GLASS_BLUE, 10.0, 700.0, 5.0)
+			_vfx.burst(at, GLASS_BLUE, 26, 430.0, TAU, 0.0, 2.4, 300.0)
+			_float(at + Vector2(0.0, -58.0), SAY_SHATTER, "shatterf", GLASS_BLUE)
+			_vfx.shake(10.0)
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
 				view.set_facets(0, facet_max)
-				_float_text(view, "SHATTER", Color(0.6, 0.85, 1))
-			await _wait(0.3)
+				view.crack()          # addCrack(x.art, true)
+				view.take_hit(false)  # the `hurt` flash without the shove
+			await _wait(0.38)
 		EventTypes.STAGGERED:
 			var idx: int = ev["idx"]
-			var view: EnemyView = _enemy_view(idx)
-			if view != null:
-				_float_text(view, "staggered", Color(0.6, 0.85, 1))
-			await _wait(0.2)
+			_float(_enemy_centre(idx) + Vector2(0.0, -76.0), SAY_STAGGERED,
+				"staggerf", WARM_GOLD)
+			await _wait(0.52)
 		EventTypes.DIE:
-			var idx: int = ev["idx"]
-			var view: EnemyView = _enemy_view(idx)
-			if view != null:
-				view.mark_dead()
-			await _wait(0.3)
+			var dead_idx: int = ev["idx"]
+			await _die(dead_idx)
 		EventTypes.EMBER:
+			var n: int = ev.get("n", 0)
 			_push_hud()
-			await _wait(0.08)
+			if n > 0:
+				var to: Vector2 = _hud.lantern_rect().get_center()
+				var from: Vector2 = _ember_from if _has_ember_from else _hero_centre()
+				_vfx.fly_to(from, to, EMBER_ORANGE, mini(n * 2, 5), 6.0, 0.46)
+				_hud.pulse(&"lantern")
+				await _wait(0.3)
+			_has_ember_from = false
 		EventTypes.BLOCK_GAIN:
 			var who_v: Variant = ev["who"]
 			var total: int = ev["total"]
+			var n: int = ev.get("n", total)
+			var at: Vector2 = _who_centre(who_v)
 			if typeof(who_v) == TYPE_STRING:
 				if _hero != null:
 					_hero.set_ward(total)
+				_hud.pulse(&"ward")
 			else:
 				var who_idx: int = who_v
 				var view: EnemyView = _enemy_view(who_idx)
 				if view != null:
 					view.set_ward(total)
-			await _wait(0.1)
+			_float(at + Vector2(0.0, -10.0), str(n), "blockf", WARD_BLUE, 0.0,
+				WARD_ICON, 22)
+			await _wait(0.14)
 		EventTypes.STATUS:
-			await _wait(0.08)
+			var who_v: Variant = ev["who"]
+			var n: int = ev["n"]
+			var id: String = str(ev.get("id", ""))
+			var at: Vector2 = _who_centre(who_v)
+			var info: Dictionary = game.content.statuses.get(id, {})
+			var display: String = str(info.get("name", id))
+			# `isDebuff` (drain.js:681) — a status is bad news if the catalogue
+			# says so, or if it is strength going the wrong way.
+			var debuff: bool = str(info.get("kind", "buff")) == "debuff" \
+				or (id == "str" and n < 0)
+			var sign: String = "+" if n > 0 else ""
+			_float(at + Vector2(0.0, -46.0), "%s%d %s" % [sign, n, display],
+				"debufff" if debuff else "bufff")
+			if not debuff:
+				_vfx.motes(at, BUFF_BLUE, 6)
+			await _wait(0.17)
 		EventTypes.HEAL:
 			var n: int = ev["n"]
-			_float_text(_hero, "+%d" % n, Color(0.5, 1, 0.6))
+			var at: Vector2 = _who_centre(ev.get("who", "player"))
+			_vfx.motes(at, HEAL_GREEN, 14)
+			_float(at + Vector2(0.0, -30.0), "+%d" % n, "healf")
 			_push_hud()
-			await _wait(0.15)
-		EventTypes.TO_DISCARD, EventTypes.EXHAUST, EventTypes.POWER_CONSUMED:
+			await _wait(0.2)
+		EventTypes.TO_DISCARD, EventTypes.EXHAUST:
 			var uid: int = ev["uid"]
 			# Each pile takes its own cards back. Ash is not the discard: a card
 			# that burns out has to be seen going somewhere else, or the two
 			# piles are the same pile wearing different labels.
-			var pile: StringName = &"discard"
-			if t == EventTypes.EXHAUST or t == EventTypes.POWER_CONSUMED:
-				pile = &"ashes"
+			var pile: StringName = &"ashes" if t == EventTypes.EXHAUST else &"discard"
 			_hand.spend_to(uid, _hud.pile_rect(pile))
+			_land_in_pile(pile)
+		EventTypes.POWER_CONSUMED:
+			# `powerConsumed` (drain.js:935): a power is not discarded — it
+			# settles into the glass. The card goes, and what travels to the hero
+			# is the power itself.
+			var uid: int = ev["uid"]
+			var view: CardView = _hand.card_view(uid)
+			var from: Vector2 = view.get_global_rect().get_center() if view != null \
+				else Vector2(size.x * 0.5, size.y - 180.0)
+			_hand.remove_card(uid)
+			var hero_at: Vector2 = _hero_centre()
+			_vfx.fly_to(from, hero_at, POWER_LILAC, 7, 7.0, 0.56)
+			await _wait(0.3)
+			_vfx.ring(hero_at, POWER_LILAC, 12.0, 460.0, 4.0)
+			_vfx.motes(hero_at, POWER_LILAC, 8)
 		EventTypes.KINDLE:
 			var uid: int = ev["uid"]
 			# Burnt for embers is still burnt: `kindleFromHand` calls
@@ -723,49 +866,276 @@ func _handle_event(ev: Dictionary) -> void:
 			# card lands in ash. The EXHAUST that follows finds it already gone
 			# and does nothing, which is why it is flown from here rather than
 			# left for that event to move twice.
+			var view: CardView = _hand.card_view(uid)
+			if view != null:
+				# `emberFrom = V.centerOf(c)` — the fire this feeds the lantern
+				# leaves from the card that burned, not from the hero.
+				_ember_from = view.get_global_rect().get_center()
+				_has_ember_from = true
+				_vfx.burst(_ember_from, EMBER_ORANGE, 22, 190.0, TAU, 0.0,
+					2.4, -150.0, "spark", true, 0.85)
 			_hand.spend_to(uid, _hud.pile_rect(&"ashes"))
+			_land_in_pile(&"ashes")
 			await _wait(0.2)
 		EventTypes.ART:
-			_float_text(_hero, "ART", Color(1, 0.7, 0.3))
+			var id: String = str(ev.get("id", ""))
+			var art: Dictionary = game.content.arts.get(id, {})
+			# `art.tone` is authored in the benchmark's own art catalogue, which
+			# the slice exporter does not carry — the lantern's ember stands in
+			# until it does.
+			var tone: Color = EMBER_ORANGE
+			var tone_hex: String = str(art.get("tone", ""))
+			if tone_hex.begins_with("#"):
+				tone = Color(tone_hex)
+			var hero_at: Vector2 = _hero_centre()
+			# An art is the lantern's doing: it flares there and settles on the
+			# body. The hero does not swing for it (`!startsWith('art:')`).
+			_archetype = "fire"
+			_hero_swung = true
+			_vfx.flash(tone, 0.12, 0.5)
+			_vfx.ring(_hud.lantern_rect().get_center(), tone, 10.0, 620.0, 5.0)
+			_vfx.motes(hero_at, tone, 12)
+			_float(hero_at + Vector2(0.0, -84.0),
+				str(art.get("name", id)).to_upper(), "artf", tone)
 			_push_hud()
-			await _wait(0.3)
+			await _wait(0.12)
 		EventTypes.POTION:
-			await _wait(0.15)
+			await _wait(0.12)
 		EventTypes.DISCARD_HAND:
 			var uids: Array = ev["uids"]
 			var discard_rect: Rect2 = _hud.pile_rect(&"discard")
 			for uid_v: Variant in uids:
 				var uid_i: int = uid_v
 				_hand.spend_to(uid_i, discard_rect)
+			if not uids.is_empty():
+				_land_in_pile(&"discard")
 			await _wait(0.15)
 		EventTypes.END_TURN:
-			await _wait(0.1)
+			# `heroActing = false` — nothing swings again until a card is played.
+			_hero_swung = true
+			_floaters.banner(SAY_ENEMY_TURN, "turn")
+			await _wait(0.48)
 		EventTypes.ENEMY_ACT:
-			var idx: int = ev["idx"]
-			var view: EnemyView = _enemy_view(idx)
-			if view != null:
-				# The telegraph has been spent — clear it rather than restating
-				# the move on it. The float text below is what announces the
-				# name, and a chip is a promise, not a receipt.
-				view.clear_intent()
-				_float_text(view, str(ev.get("name", "")), Color(1, 0.85, 0.5))
-			# drain.js:905 — the name reads for 300ms, THEN the body moves. A
-			# move that does not attack simply holds the beat, so the enemy turn
-			# keeps its rhythm whether or not anything swings.
-			await _wait(0.3)
-			if view != null and _move_is_attack(idx, str(ev.get("move", ""))):
-				await _wait(view.lunge(_foe_kind(idx)))
-			else:
-				await _wait(0.32)
+			await _enemy_act(ev)
 		EventTypes.SMOLDER_JUMP:
-			await _wait(0.15)
+			var from_idx: int = ev.get("from", -1)
+			var to_idx: int = ev.get("to", -1)
+			_vfx.fly_to(_enemy_centre(from_idx), _enemy_centre(to_idx),
+				POISON_TAN, 5, 7.0, 0.46)
+			await _wait(0.4)
 		EventTypes.RELIC_PROC:
-			_float_text(_hero, str(ev.get("id", "")), Color(1, 0.85, 0.5))
-			await _wait(0.2)
-		EventTypes.VICTORY, EventTypes.DEFEAT:
-			await _wait(0.25)
+			# The chrome has no relic row yet (docs/hud-handoff.md D5), so the
+			# proc says its own name instead of lighting a chip that is not there.
+			_float(_hero_centre() + Vector2(0.0, -110.0),
+				str(ev.get("id", "")).to_upper(), "notice")
+			await _wait(0.09)
+		EventTypes.VICTORY:
+			await _wait(0.32)
+			_vfx.flash(Color(1.0, 0.9137255, 0.6745098), 0.16, 0.6)
+			var perfect: bool = ev.get("perfect", false)
+			if perfect:
+				await _floaters.banner(SAY_PERFECT, "perfect", 1.4)
+				await _wait(0.5)
+		EventTypes.DEFEAT:
+			await _wait(0.4)
+			_vfx.flash(Color(0.2, 0.0, 0.0), 0.5, 1.2)
+			await _wait(0.9)
 		_:
 			push_warning("CombatScreen: unhandled event %s" % String(t))
+
+
+# ------------------------------------------------------- the heavier branches
+
+## `hitEnemy` (drain.js:532). Poison ticks quietly; everything else is a swing,
+## an impact, a number and a shove, in that order.
+func _hit_enemy(ev: Dictionary) -> void:
+	var idx: int = ev["idx"]
+	var amount: int = ev["amount"]
+	var hp_after: int = ev["hpAfter"]
+	var blocked: int = ev.get("blocked", 0)
+	# The domain flags a poison tick the same way the benchmark's drain reads
+	# `ev.poison`, so the two never have to agree by coincidence.
+	var poison: bool = ev.get("poison", false)
+	var view: EnemyView = _enemy_view(idx)
+	var at: Vector2 = _enemy_centre(idx)
+
+	if poison:
+		_vfx.motes(at, POISON_TAN, 14)
+		_float(at + Vector2(0.0, -20.0), str(amount), "poisonf", POISON_TAN)
+	else:
+		var big: bool = amount >= BIG_HIT
+		# `choreoDone` (drain.js:542): the hero swings once for the CARD and the
+		# blows land after it, so a three-hit attack is one swing and three
+		# recoils rather than three swings.
+		if not _hero_swung and _hero != null:
+			_hero_swung = true
+			await _wait(_hero.lunge("humanoid"))
+		_vfx.archetype_hit(at, _archetype, minf(1.0, float(amount) / POWER_SCALE))
+		if view != null:
+			view.take_hit(true)  # choreoHit — the recoil and the hurt flash
+		if blocked > 0:
+			_float(at + Vector2(0.0, 26.0), str(blocked), "blockedf",
+				Color(0, 0, 0, 0), 0.0, WARD_ICON, 19)
+			_vfx.burst(at + Vector2(0.0, 8.0), WARD_BLUE, 9, 210.0, TAU, 0.0,
+				2.0, 260.0)  # ward chips off
+			if idx < game.cb.enemies.size() and game.cb.enemies[idx].block == 0 \
+					and amount == 0:
+				_floaters.banner(SAY_GUARD_SHATTERED, "guard-shattered")
+				_vfx.shard_spray(at, WARD_BLUE, 14)
+		if amount > 0:
+			var killing: bool = ev.get("killingBlow", false)
+			var overkill: int = ev.get("overkill", 0)
+			var tier: String = "dmg"
+			if killing and overkill >= 8:
+				tier = "dmg-overkill"
+			elif killing:
+				tier = "dmg-kill"
+			elif big:
+				tier = "dmg-big"
+			# `dx: (hitSeq++ % 3 - 1) * 34` — a multi-hit card lays its numbers
+			# in three columns so the second does not land on the first.
+			var dx: float = float(_hit_seq % 3 - 1) * 34.0
+			_hit_seq += 1
+			var tone: Color = VfxLayer.TONES.get(_archetype, Color.WHITE)
+			_float(at + Vector2(0.0, -24.0), str(amount), tier, tone, dx)
+			if view != null:
+				view.crack()  # addCrack(x.art, big)
+			_vfx.shake(minf(4.0 + float(amount) * 0.5, 15.0))
+			if big:
+				_vfx.hitstop(70.0)
+				_vfx.ring(at, WARM_GOLD, 10.0, 620.0, 5.0)
+			if killing:
+				# the blow that ends a life lands heavier — and overkill heavier still
+				_vfx.hitstop(130.0 if overkill >= 8 else 90.0)
+				_vfx.ring(at, Color.WHITE, 8.0, 780.0, 5.0)
+				_vfx.ring(at, WARM_GOLD, 14.0, 900.0, 4.0)
+				_vfx.flash(Color(1.0, 0.9019608, 0.6901961), 0.09, 0.28)
+				if overkill >= 8:
+					_vfx.flash(Color.WHITE, 0.12, 0.24)
+					_vfx.burst(at, SPARK_WHITE, 26, 620.0, TAU, 0.0, 2.6, 200.0)
+					_vfx.burst(at, Color(1.0, 0.84313726, 0.43137255), 12, 300.0,
+						TAU, 0.0, 3.4, 120.0)
+		elif blocked == 0:
+			_float(at + Vector2(0.0, -24.0), "0", "blockedf")
+
+	if view != null and idx < game.cb.enemies.size():
+		view.set_hp(hp_after, game.cb.enemies[idx].max_hp)
+		if poison:
+			view.take_hit(false)  # the `hurt` flash, with no shove behind it
+	await _wait(0.23)
+
+
+## `hitPlayer` (drain.js:625). The source decides whether the body is thrown:
+## a blow shoves, poison and your own burn do not.
+func _hit_player(ev: Dictionary) -> void:
+	var amount: int = ev["amount"]
+	var hp_after: int = ev["hpAfter"]
+	var blocked: int = ev.get("blocked", 0)
+	var source: String = str(ev.get("source", ""))
+	var indirect: bool = source in INDIRECT_SOURCES
+	var at: Vector2 = _hero_centre()
+
+	if source == "poison":
+		_vfx.motes(at, POISON_TAN, 14)
+	elif not indirect:
+		if amount > 0:
+			_vfx.flash(Color(1.0, 0.13333334, 0.2), minf(0.05 + float(amount) * 0.012, 0.3), 0.3)
+		_vfx.archetype_hit(at, _archetype, minf(1.0, float(amount) / POWER_SCALE))
+	if _hero != null:
+		_hero.set_hp(maxi(0, hp_after), game.cb.player.max_hp)
+		_hero.take_hit(not indirect)
+	if blocked > 0:
+		_float(at + Vector2(0.0, 30.0), str(blocked), "blockedf",
+			Color(0, 0, 0, 0), 0.0, WARD_ICON, 19)
+		_vfx.burst(at + Vector2(0.0, 8.0), WARD_BLUE, 9, 210.0, TAU, 0.0, 2.0, 260.0)
+		if game.cb.player.block == 0 and amount == 0:
+			_floaters.banner(SAY_GUARD_SHATTERED, "guard-shattered")
+			_vfx.shard_spray(at, WARD_BLUE, 14)
+	if amount > 0:
+		var dx: float = float(_hit_seq % 3 - 1) * 34.0
+		_hit_seq += 1
+		var tone: Color = VfxLayer.TONES.get(_archetype, Color.WHITE)
+		_float(at + Vector2(0.0, -30.0), str(amount),
+			"dmg-big" if amount >= BIG_HIT else "dmg", tone, dx)
+		_vfx.shake(minf(5.0 + float(amount) * 0.6, 18.0))
+		# no hero cracks (user call, 2026-07-07): the glass language is for foes
+	elif blocked == 0:
+		_float(at + Vector2(0.0, -30.0), "0", "blockedf")
+	_push_hud()
+	await _wait(0.24)
+
+
+## `die` (drain.js:589). The body sags, the fire wells up through its own
+## fractures, and at the instant the blaze peaks the glass gives.
+func _die(idx: int) -> void:
+	var view: EnemyView = _enemy_view(idx)
+	var at: Vector2 = _enemy_centre(idx)
+	var boss: bool = idx < game.cb.enemies.size() and game.cb.enemies[idx].boss
+	var elite: bool = idx < game.cb.enemies.size() and game.cb.enemies[idx].elite
+	# the fire inside spills toward the lantern
+	_ember_from = at
+	_has_ember_from = true
+	if boss:
+		# world-stop: one silent beat before the vessel is allowed to fail
+		_vfx.hitstop(110.0)
+		await _wait(0.82)
+	if view != null:
+		await _wait(view.stagger())
+	var beat: float = 0.32 if boss else 0.2
+	if view != null:
+		view.mark_dead(beat)
+	await _wait(beat)
+	_vfx.burst(at, GLASS_BLUE, 30, 480.0, TAU, 0.0, 2.6, 340.0)
+	_vfx.burst(at, SOUL_VIOLET, 26, 380.0, TAU, 0.0, 3.2, 60.0, "dot")
+	_vfx.ring(at, REVIVE_LILAC, 12.0, 720.0, 6.0)
+	_vfx.flash(Color.WHITE, 0.24 if boss else 0.1, 0.3)
+	_vfx.shake(22.0 if boss else 12.0)
+	if elite and not boss:
+		_vfx.hitstop(60.0)  # an elite's ending gets a beat a common foe does not
+	await _wait(0.9 if boss else 0.5)
+
+
+## `enemyAct` (drain.js:884). The chip blazes, the name reads, THEN the body
+## moves — a move that does not attack still holds the beat, so the enemy turn
+## keeps its rhythm whether or not anything swings.
+func _enemy_act(ev: Dictionary) -> void:
+	var idx: int = ev["idx"]
+	var view: EnemyView = _enemy_view(idx)
+	var move_key: String = str(ev.get("move", ""))
+	var attacking: bool = _move_is_attack(idx, move_key)
+	_hit_seq = 0
+	# `vfxSource` for the enemy phase: an attack speaks its body's language, a
+	# debuff speaks void and a ward speaks ward.
+	var kind: String = _foe_kind(idx)
+	_archetype = VfxLayer.KIND_ARCHETYPE.get(kind, "slash")
+	var intent: String = _move_intent(idx, move_key)
+	if intent == "debuff":
+		_archetype = "void"
+	elif intent == "buff" or intent == "block":
+		_archetype = "ward"
+	if view != null:
+		view.telegraph()
+		_float(_enemy_centre(idx) + Vector2(0.0, -90.0),
+			str(ev.get("name", "")), "movef")
+	await _wait(0.3)
+	if view != null and attacking:
+		await _wait(view.lunge(kind))
+	else:
+		await _wait(0.32)
+
+
+## `playReshuffleCeremony` (drain.js:132) — the discard walks back into the draw
+## pile as a stream of card backs, and the pile answers when they land.
+func _reshuffle_ceremony(n: int) -> void:
+	if seq.instant:
+		return
+	# `Array.from({ length: n })` — one back per card, capped: past eight the
+	# stream stops reading as more cards and starts reading as noise.
+	_hud.fly_backs(&"discard", &"draw", maxi(1, mini(n, 8)), 0.6)
+	await _wait(0.6)
+	_land_in_pile(&"draw")
+	_float(_hud.pile_rect(&"draw").get_center() + Vector2(0.0, -46.0),
+		SAY_RESHUFFLE, "notice")
 
 
 # ---------------------------------------------------------------- sync
