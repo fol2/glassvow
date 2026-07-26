@@ -886,7 +886,7 @@ func _handle_event(ev: Dictionary) -> void:
 			# `if (ev.n > 1)` — turn 1 opens the fight and needs no announcement;
 			# every turn after it gets the plate and a longer beat.
 			var n: int = ev["n"]
-			_push_hud()
+			_sync_actors()
 			if n > 1:
 				_sfx.play(&"turn")
 				_floaters.banner(SAY_YOUR_TURN, "turn")
@@ -894,11 +894,10 @@ func _handle_event(ev: Dictionary) -> void:
 			else:
 				await _wait(0.12)
 		EventTypes.INTENT:
-			var idx: int = ev["idx"]
-			_refresh_intent(idx)
+			_sync_actors()
 		EventTypes.ENERGY:
 			_sfx.play(&"energy")
-			_push_hud()
+			_sync_actors()
 			_hud.pulse(&"energy")
 		EventTypes.DRAW:
 			var uid: int = ev["uid"]
@@ -919,6 +918,7 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.RESHUFFLE:
 			var shuffled: int = ev.get("n", 0)
 			await _reshuffle_ceremony(shuffled)
+			_sync_actors()
 		EventTypes.PLAY:
 			var uid: int = ev["uid"]
 			var inst: CardInst = _find_card(uid)
@@ -940,6 +940,7 @@ func _handle_event(ev: Dictionary) -> void:
 				_hand.strike_to(uid, _enemy_centre(aimed))
 			else:
 				_hand.remove_card(uid)
+			_sync_actors()
 			await _wait(0.2)
 		EventTypes.HIT_ENEMY:
 			await _hit_enemy(ev)
@@ -953,6 +954,9 @@ func _handle_event(ev: Dictionary) -> void:
 			_sfx.play(&"chip")
 			_vfx.burst(at, Color(0.9098039, 0.95686275, 1.0), 5, 190.0,
 				TAU, 0.0, 1.8, 240.0)
+			# Sync FIRST, then the flourish — the benchmark restates the count and
+			# only then re-triggers `pop`, so the pane that pops is the new one.
+			_sync_actors()
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
 				view.set_facets(chips, facet_max, true)
@@ -972,12 +976,16 @@ func _handle_event(ev: Dictionary) -> void:
 				view.set_facets(0, facet_max, true)
 				view.crack()          # addCrack(x.art, true)
 				view.take_hit(false)  # the `hurt` flash without the shove
+			_sync_actors()
 			await _wait(0.38)
 		EventTypes.STAGGERED:
 			var idx: int = ev["idx"]
 			_sfx.play(&"stagger")
 			_float(_enemy_centre(idx) + Vector2(0.0, -76.0), SAY_STAGGERED,
 				"staggerf", WARM_GOLD)
+			# The intent chip becomes the STAGGERED plate here, not a beat later —
+			# `syncCombat` reads `en.staggered` and rewrites the telegraph.
+			_sync_actors()
 			await _wait(0.52)
 		EventTypes.DIE:
 			var dead_idx: int = ev["idx"]
@@ -1010,6 +1018,7 @@ func _handle_event(ev: Dictionary) -> void:
 					view.set_ward(total)
 			_float(at + Vector2(0.0, -10.0), str(n), "blockf", WARD_BLUE, 0.0,
 				WARD_ICON, 22)
+			_sync_actors()
 			await _wait(0.14)
 		EventTypes.STATUS:
 			var who_v: Variant = ev["who"]
@@ -1032,6 +1041,10 @@ func _handle_event(ev: Dictionary) -> void:
 				"debufff" if debuff else "bufff")
 			if not debuff:
 				_vfx.motes(at, BUFF_BLUE, 6)
+			# The chip has to appear WITH the number that announced it. Waiting for
+			# the pump to idle is what made a poison stack look like it had not
+			# been applied at all.
+			_sync_actors()
 			await _wait(0.17)
 		EventTypes.HEAL:
 			var n: int = ev["n"]
@@ -1039,7 +1052,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_sfx.play(&"heal")
 			_vfx.motes(at, HEAL_GREEN, 14)
 			_float(at + Vector2(0.0, -30.0), "+%d" % n, "healf")
-			_push_hud()
+			_sync_actors()
 			await _wait(0.2)
 		EventTypes.TO_DISCARD, EventTypes.EXHAUST:
 			var uid: int = ev["uid"]
@@ -1048,7 +1061,13 @@ func _handle_event(ev: Dictionary) -> void:
 			# piles are the same pile wearing different labels.
 			var pile: StringName = &"ashes" if t == EventTypes.EXHAUST else &"discard"
 			_hand.spend_to(uid, _hud.pile_rect(pile))
+			# `await presentation.flyCardBacks(..., 200, ...)` (drain.js:864) — the
+			# pile is bumped by the card ARRIVING, not by it setting off. Without
+			# the wait the count ticked while the card was still in the air and the
+			# next event opened over the top of the flight.
+			await _wait(HandView.SPEND_FLIGHT)
 			_land_in_pile(pile)
+			_sync_actors()
 		EventTypes.POWER_CONSUMED:
 			# `powerConsumed` (drain.js:935): a power is not discarded — it
 			# settles into the glass. The card goes, and what travels to the hero
@@ -1081,8 +1100,9 @@ func _handle_event(ev: Dictionary) -> void:
 				_vfx.burst(_ember_from, EMBER_ORANGE, 22, 190.0, TAU, 0.0,
 					2.4, -150.0, "spark", true, 0.85)
 			_hand.spend_to(uid, _hud.pile_rect(&"ashes"))
+			await _wait(HandView.SPEND_FLIGHT)
 			_land_in_pile(&"ashes")
-			await _wait(0.2)
+			_sync_actors()
 		EventTypes.ART:
 			var id: String = str(ev.get("id", ""))
 			var art: Dictionary = game.content.arts.get(id, {})
@@ -1104,7 +1124,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.motes(hero_at, tone, 12)
 			_float(hero_at + Vector2(0.0, -84.0),
 				str(art.get("name", id)).to_upper(), "artf", tone)
-			_push_hud()
+			_sync_actors()
 			await _wait(0.12)
 		EventTypes.POTION:
 			_sfx.play(&"potion")
@@ -1117,9 +1137,13 @@ func _handle_event(ev: Dictionary) -> void:
 			for uid_v: Variant in uids:
 				var uid_i: int = uid_v
 				_hand.spend_to(uid_i, discard_rect)
+			# Same rule as `toDiscard`: the pile is bumped on arrival. An end of turn
+			# that swept five cards used to tick the count before any of them
+			# reached it, so the enemy's banner opened over a hand still in flight.
 			if not uids.is_empty():
+				await _wait(HandView.SPEND_FLIGHT)
 				_land_in_pile(&"discard")
-			await _wait(0.15)
+			_sync_actors()
 		EventTypes.END_TURN:
 			# `heroActing = false` — nothing swings again until a card is played.
 			_hero_swung = true
@@ -1238,6 +1262,10 @@ func _hit_enemy(ev: Dictionary) -> void:
 		view.set_hp(hp_after, game.cb.enemies[idx].max_hp)
 		if poison:
 			view.take_hit(false)  # the `hurt` flash, with no shove behind it
+	# The ward that just absorbed the blow, the facet that just went dark and the
+	# rail all restate here. `reap` stays false: this hit may have been the killing
+	# one, and the death rite has not run yet.
+	_sync_actors()
 	await _wait(0.23)
 
 
@@ -1284,7 +1312,7 @@ func _hit_player(ev: Dictionary) -> void:
 		# no hero cracks (user call, 2026-07-07): the glass language is for foes
 	elif blocked == 0:
 		_float(at + Vector2(0.0, -30.0), "0", "blockedf")
-	_push_hud()
+	_sync_actors()
 	await _wait(0.24)
 
 
@@ -1431,7 +1459,15 @@ func _refresh_intent(idx: int) -> void:
 		str(mv.get("name", String(e.move_key))))
 
 
-func _sync_all() -> void:
+## `syncCombat` (combat.js:1039) — every body's numbers, and nothing else. The
+## hand is NOT here, which is the reason this exists apart from `_sync_all`: the
+## benchmark restates the bodies twenty-odd times inside a single drain and the
+## hand only where a card actually moved.
+##
+## Without it a status chip, a ward number and a facet count all waited for the
+## whole drain to idle, so a foe took three hits and a poison stack while showing
+## the readings it had before any of them landed.
+func _sync_actors(reap: bool = false) -> void:
 	var cb: CombatState = game.cb
 	if cb == null:
 		return
@@ -1449,12 +1485,28 @@ func _sync_all() -> void:
 		var intent: StringName = &""
 		var move_name: String = ""
 		var dmg_text: String = ""
-		if e.hp > 0:
+		if e.hp > 0 and e.staggered:
+			# `if (en.hp > 0 && en.flags.staggered)` (combat.js:1065) — a staggered
+			# foe's telegraph is REPLACED, not annotated. It has no move this turn,
+			# so showing the one it would have made is a lie about what is coming.
+			# The benchmark's `iconSvg('stagger')` has no counterpart in
+			# assets/art/ui, so the plate carries the word alone.
+			intent = &"staggered"
+			dmg_text = SAY_STAGGERED
+			move_name = SAY_STAGGERED
+		elif e.hp > 0:
 			var mv: Dictionary = e.move()
 			intent = StringName(str(mv.get("intent", "")))
 			move_name = str(mv.get("name", String(e.move_key)))
 			dmg_text = _fmt_enemy_dmg(_rules.preview_enemy_dmg(cb, e))
-		view.sync(e, dmg_text, intent, move_name, game.content.statuses)
+		view.sync(e, dmg_text, intent, move_name, game.content.statuses, reap)
+
+
+func _sync_all() -> void:
+	var cb: CombatState = game.cb
+	if cb == null:
+		return
+	_sync_actors(true)
 	var first_living: int = -1
 	for e: EnemyCombatant in cb.enemies:
 		if e.hp > 0:
