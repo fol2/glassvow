@@ -103,7 +103,17 @@ three lanes own. These wait for the organiser to sequence them.
    widget, not a redesign of it, which is the correct way to cross into another
    lane's file. **The chip lane should be told before it polishes on top of a
    file it no longer solely controls.**
-2. **CONTRADICTION — who owns the player's ward chip and HP rail?** Two lanes
+2. **THE PORT WAS READING THE WRONG REFERENCE.** `AGENTS.md` named
+   `web-reference-v1` (`1343e1d`, post-Pixi); the benchmark on localhost:5190 is
+   `6e06911`, **pre-Pixi**, 284 commits earlier, checked out at
+   `~/Coding/roguecardv2-benchmark`. The contract is fixed. Four widgets across
+   three lanes were ported from files the benchmark does not contain —
+   `floaters.gd`, `aim_arc.gd`, `hand_view.gd`, `motion.gd` — and none has been
+   re-checked. Full audit, including what was verified as CORRECT, in
+   `docs/wrong-reference-audit.md`. `floaters.gd` is the one to do first: every
+   damage numeral goes through it.
+
+3. **CONTRADICTION — who owns the player's ward chip and HP rail?** Two lanes
    have written down opposite answers, in two documents, about a file neither of
    them owns:
 
