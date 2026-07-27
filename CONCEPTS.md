@@ -189,17 +189,23 @@ Temporary protection that absorbs damage before health does. Absent rather than 
 combatant has none. *Ward* is the word the game shows the player; *block* is the rules' word.
 
 It is rendered in two parts, and **bare "ward" names the protection, never either part** —
-the parts have their own names because they live in different files under different owners:
+the parts have their own names because they are separately owned and separately timed:
 
-- **Ward chip** — the numeral beside the health vial. A foe's is the actor's own
-  (`presentation/combat/enemy_view.gd`); the hero's is the HUD's
-  (`presentation/combat/hud_bar.gd`).
+- **Ward chip** — the numeral beside the health vial. A foe's belongs to the actor; the
+  hero's belongs to the run chrome for as long as the hero has no actor plate of its own.
 - **Ward stone** — the regular faceted gem shell held in front of the creature, showing
   manufactured order against the glass's natural cracks. It flashes when struck and
-  shatters as an expanding ring. Actors only (`presentation/combat/enemy_view.gd`).
+  shatters as an expanding ring.
 
-The two do not share a clock. The chip appears and vanishes on the instant the number
-changes; the stone cuts itself in over 560 ms and breaks over 340 ms.
+The stone belongs to the **Actor**, and so to the hero exactly as much as to a foe — one
+class draws both, and a guarded hero raises, rings and breaks the same stone a guarded foe
+does. It is not a foe-only affordance, and reading it as one is how a hero-side gap goes
+unnoticed.
+
+The two parts do not share a clock. The chip appears and vanishes on the instant the
+number changes; the stone takes time to cut itself in, to answer a blow it stopped, and to
+break. Each of those is its own beat with its own duration, so a still frame can agree
+with the number and still be wrong about the stone.
 
 ### Intent
 The move an enemy has telegraphed for its next turn, shown above the actor. It is
@@ -495,9 +501,9 @@ a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
 - **Bare "ward" had been used for the protection and for each of its two parts —
   these are three things.** Ward is the protection. The Ward chip is the numeral;
   the Ward stone is the gem shell. An ownership sentence written about "the ward"
-  is unreadable, because a foe's chip, the hero's chip and the stone sit in two
-  files under two lanes — `docs/session-ownership.md` carries a contradiction that
-  is entirely this ambiguity.
+  is unreadable, because a foe's chip, the hero's chip and the stone are owned
+  separately — `docs/session-ownership.md` carries a contradiction that is entirely
+  this ambiguity.
 - **Two surfaces had both been called "funplay" — these are distinct.** The
   Funplay editor server needs the editor; the Funplay runtime bridge belongs to
   a running game and does not. One being unavailable says nothing about the
