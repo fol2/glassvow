@@ -160,7 +160,7 @@ The `_art_pad * 0.15` fudge is gone: the hinge sits on the lowest opaque row, no
 
 ### Read the ground line off the painting's own alpha, per column
 
-`_read_ground` (`presentation/combat/enemy_view.gd:2086`) takes the lowest opaque
+`_read_ground` (`presentation/combat/enemy_view.gd:2102` (`_read_ground`)) takes the lowest opaque
 row of each of 64 columns as a candidate contact. Those within `CONTACT_BAND` of
 the lowest are taken as real; the line is linearly interpolated between them
 across everything else (`presentation/combat/enemy_view.gd:2139` (`_interp`)). A
@@ -207,8 +207,8 @@ uniforms rather than composing a basis.
 ### `CONTACT_BAND = 0.15` is a gap, not a taste knob
 
 ```gdscript
-const CONTACT_BAND: float = 0.15   # presentation/combat/enemy_view.gd:2070
-const GROUND_N: int = 64           # presentation/combat/enemy_view.gd:2072
+const CONTACT_BAND: float = 0.15   # presentation/combat/enemy_view.gd:2086 (CONTACT_BAND)
+const GROUND_N: int = 64           # presentation/combat/enemy_view.gd:2088 (GROUND_N)
 ```
 
 The constant falls in the one gap the measurements leave between two populations.
@@ -369,9 +369,10 @@ as a divergence and should not "fix" it back.
   correction about a derived value measuring the wrong thing. This entry is a
   second instance of the same failure mode in the same subsystem: `_art_pad` was
   mistaken for lift there, and the lowest opaque row was mistaken for the ground
-  here. **That document is now partly contradicted by the code it cites** — it
-  quotes `CAST_MIN`/`CAST_MAX` at their pre-restatement values and presents the
-  `Basis`-shear composition as current practice. It needs a consolidation pass.
+  here. That pattern record now carries both later corrections: the restated
+  `CAST_MIN`/`CAST_MAX` clamp and the retirement of the `Basis`-shear path.
+  The two records agree and stay separate: one is the reusable porting rule,
+  while this one is the incident-level implementation and evidence.
 - [Drive the lab the way the game drives it, and photograph loops as well as beats](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md)
   — the verification half of the same failure: a defect survives when no instrument
   in the project could have shown it. Exposure is a second capture dimension the

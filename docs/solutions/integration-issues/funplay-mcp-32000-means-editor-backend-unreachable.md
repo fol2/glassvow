@@ -1,6 +1,7 @@
 ---
-title: "A funplay `-32000` means no Godot editor is open, not a broken config"
+title: "A funplay `-32000` means its configured editor backend is unreachable"
 date: 2026-07-27
+last_refreshed: 2026-07-27
 category: integration-issues
 module: addons/funplay_mcp
 problem_type: integration_issue
@@ -20,15 +21,21 @@ related_components:
 tags: [mcp, funplay, godot-editor, stdio-bridge, port-8765, version-skew, claude-code-config, diagnosis]
 ---
 
-# A funplay `-32000` means no Godot editor is open, not a broken config
+# A funplay `-32000` means its configured editor backend is unreachable
 
 ## Problem
 
 Claude Code's `/mcp` panel reported `Failed to reconnect to funplay: -32000` — a
 bare JSON-RPC error code with no message — while every piece of funplay
 configuration on the machine was correct. The `funplay` MCP server is a stdio
-*relay* to an HTTP server that lives inside the Godot editor, and no editor was
-open on the project, so there was nothing on the far end of the relay.
+*relay* to an HTTP server that lives inside the Godot editor. In this incident
+no editor was open on the project, so there was nothing on the far end of the
+relay.
+
+The code does not make “editor closed” the only possible cause. The editor
+plugin can be disabled, and a running server can select a fallback port when
+its configured port is occupied. The durable meaning of the error is narrower:
+the relay could not reach the editor backend at its configured URL.
 
 **This project already knew that, in two places, and it cost a full diagnosis
 anyway.** That is the part worth reading; the fix itself is one command.
@@ -77,13 +84,16 @@ untracked file outside this repository: nothing in a checkout can confirm or
 contradict it, and every quotation of it here is one session's reading of one
 developer's file on one machine.
 
-**The addon is enabled in the project.** `project.godot:32` (`enabled`) carries
-exactly one entry, and it is funplay:
+**The addon is enabled in the project.** `project.godot:32` (`enabled`) includes
+Funplay alongside the Web-export helper:
 
 ```ini
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/funplay_mcp/plugin.cfg")
+enabled=PackedStringArray(
+    "res://addons/funplay_mcp/plugin.cfg",
+    "res://addons/glassvow_web_export/plugin.cfg",
+)
 ```
 
 **The Godot-side settings agreed with the client.** The plugin persists to
@@ -163,7 +173,17 @@ That names the failure completely: the relay could not reach its backend.
 `-32000` and `Failed to reach Godot MCP at …: fetch failed` are the same event;
 only one of them is a diagnosis.
 
-### Start the editor
+### Restore the configured editor backend
+
+First distinguish an absent editor from a live editor whose server is disabled
+or listening on another port. The server can persist `server_enabled=false`,
+and `FunplayMcpServer.start()` can select a fallback from port 8766 upwards when
+the configured port is occupied
+(`addons/funplay_mcp/core/funplay_mcp_server.gd:44-75`, in `start`, and
+`:219-230`, in `_resolve_startup_port`). Read the live listener or the editor
+dock before changing the relay URL.
+
+When no editor process is serving the project, start it:
 
 ```bash
 nohup godot --editor --path . >/tmp/godot-editor.log 2>&1 &
@@ -353,11 +373,11 @@ never had to touch `project.godot`.
 
 ## Prevention
 
-- **Recognise the signature.** `-32000` from funplay with no message, plus a
-  dead `curl` to `127.0.0.1:8765`, is one thing: the editor is closed. Run
-  `lsof -nP -iTCP:8765` before opening a single config file. One command
-  separates "nothing is running" from every other cause, and "nothing is
-  running" is by far the most likely.
+- **Recognise the boundary.** `-32000` from funplay with no message means the
+  relay could not reach its configured editor URL. Check that exact URL with
+  `curl` and inspect listeners before opening a config file. No listener usually
+  means the editor or plugin is not running; a listener on another port means
+  the relay is stale.
 - **When a client gives you a code, run the server yourself to get the
   message.** The stdio contract makes this cheap — same `command`, same `env`, a
   two-line handshake on stdin. This generalises to every stdio MCP server, not
@@ -402,7 +422,7 @@ The addon is committed twice. `addons/funplay_mcp/` holds the full plugin, and
 `addons/plugin.gd`, `addons/core/`, `addons/runtime/`, `addons/ui/`). Both are
 tracked; the `.gd` sources are byte-identical and only the generated `.uid`
 files differ, which is what two unpacks of the same archive at different roots
-would produce. The enabled plugin is unambiguous — `project.godot:32`
+would produce. The enabled Funplay plugin is unambiguous — `project.godot:32`
 (`enabled`) points at `res://addons/funplay_mcp/plugin.cfg`, and nothing lists
 the root-level copy — so `addons/funplay_mcp/` is live and every citation here is
 against it. Whether the duplicate is harmless or should go was not investigated;
@@ -428,7 +448,7 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
   action.
 - `tools/live.gd:25` (`BRIDGE_SCRIPT_PATH`), `:42-48` (in `_ready`) — the
   capture host wiring that same bridge per-process instead of as an autoload.
-- `project.godot:32` (`enabled`) — the single enabled editor plugin, and the
+- `project.godot:32` (`enabled`) — the enabled Funplay plugin path, and the
   reason the root-level duplicate is not the live copy.
 - `application/main.tscn:5` (`Main`) — a root `Control` with a script and no
   children, which is why `children: []` is the correct answer.
@@ -448,9 +468,8 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
   configuration that reads back correctly is evidence about the configuration,
   not about the behaviour. Its subject is funplay's *runtime bridge*; nothing in
   that loop depends on the editor or on port 8765.
-- `docs/dev-tools.md` — the shared tool inventory. Untracked as of this writing,
-  and it names no funplay surface; its contract item 6 says "the existing runtime
-  bridge" in the singular, which is the surface that is *not* the MCP.
+- `docs/dev-tools.md` — the shared tool inventory. It distinguishes the
+  editor-bound MCP server from the runtime bridge used by Native Proof.
 - Auto-memory `godot-macos-capture-steals-focus` — the focus-cost reasoning that
   used to argue against opening the editor, relaxed on 2026-07-27 by the move to
   remote work. Corroborating context, not independent evidence.

@@ -36,7 +36,7 @@ without naming either — the omission is harmless only until someone resolves i
 against the wrong tree, which this project has already done once, for three
 commits.
 
-At [hud_bar.gd:104](../../../presentation/combat/hud_bar.gd) (`FAN_FACES`) the fan is capped at 16
+At [presentation/combat/hud_bar.gd:130](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
 to **48 Control nodes** — each with its own transform, style cache and layout
 slot — all drawing the *identical* texture.
@@ -74,7 +74,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[hud_bar.gd:907](../../../presentation/combat/hud_bar.gd) (in `_sync_pile`):
+[presentation/combat/hud_bar.gd:934](../../../presentation/combat/hud_bar.gd#L934) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -113,7 +113,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([hud_bar.gd:915](../../../presentation/combat/hud_bar.gd) (`_fan_angle`)).
+  resolves ([presentation/combat/hud_bar.gd:947](../../../presentation/combat/hud_bar.gd#L947) (`_fan_angle`)).
 
 ## Why This Matters
 
@@ -172,7 +172,8 @@ benchmark's `src/pile-chrome.js:4-8` — `PILE_FAN_DEG`, `PILE_FAN_MAX_DEG`,
 `PILE_FAN_MAX_LAYERS`), same pixels, 48 nodes → 3.
 
 **One live `add_child` loop in this file is the exemption, not a survivor.**
-`hud_bar.gd:818-828` still builds `TextureRect`s in a loop for `fly_backs` —
+`presentation/combat/hud_bar.gd:839-860` (in `fly_backs`) still builds
+`TextureRect`s in a loop for `fly_backs` —
 transient flyers that each need their own independent animation, which is
 exactly the case the rule above carves out. Left as is deliberately; a reader
 grepping for `add_child` should not read it as an unconverted instance.

@@ -1,6 +1,7 @@
 ---
 title: "Capture through a long-lived host, not a process per screenshot"
 date: 2026-07-26
+last_refreshed: 2026-07-27
 category: tooling-decisions
 module: tools/live
 problem_type: tooling_decision
@@ -31,8 +32,9 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:39-47` documents it and
-`application/main.gd:62-98` parses it out of `OS.get_cmdline_user_args()`:
+entry point. `application/main.gd:47-61` (in `_ready`) documents it and
+`application/main.gd:72-126` (in `_ready`) parses it out of
+`OS.get_cmdline_user_args()`:
 
 ```gdscript
 # Screenshot-loop hook for agent iteration without the editor MCP. A run that
@@ -42,10 +44,10 @@ entry point. `application/main.gd:39-47` documents it and
 # tools/shot.sh --shot=/tmp/map.png [--seed=N] [--enter=0]
 ```
 
-`--shot=PATH` is read at `application/main.gd:63-64`, and each of the four exit
-paths — studio, card lab, the four labs, and the real run — calls
-`_capture_and_quit()` (`application/main.gd:111`, `117`, `132`,
-`141`). That function is short and worth reading in full, because two of its
+`--shot=PATH` is read at `application/main.gd:73-74` (in `_ready`), and each
+route exit — studio, card lab, the lab branch, and the real run — calls
+`_capture_and_quit()` (`application/main.gd:141`, `147`, `166`, `175`, all in
+`_ready`). That function is short and worth reading in full, because two of its
 lines become load-bearing later:
 
 ```gdscript
@@ -58,8 +60,8 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:144-150`.) It waits 30 frames for the first paint, reads
-the viewport texture, and quits.
+(`application/main.gd:219` (`_capture_and_quit`).) It waits 30 frames for the
+first paint, reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
 constraint plainly: captures "must be run **windowed** — headless has no
@@ -110,7 +112,7 @@ the capture path needs to disprove one of them, rebuild the sampler from the
 
 Seven attempts, each measured against an AppleScript sampler polling the
 frontmost process. The sampler's primitive is the same query the shipped tool
-now uses at `tools/live.sh:41`:
+now uses at `tools/live.sh:42` (in `hand_back`):
 
 ```sh
 osascript -e 'tell application "System Events" to name of first process whose frontmost is true'
@@ -166,7 +168,7 @@ only answerable once something confirms the window went off-screen, and nothing
 did. Verify the precondition, not just the outcome.
 
 `-4000,-4000` remains the default in both tools (`tools/shot.sh:49`,
-`tools/live.sh:23`, both overridable via `GLASSVOW_SHOT_POSITION`) because it
+`tools/live.sh:24`, both overridable via `GLASSVOW_SHOT_POSITION`) because it
 costs nothing and a platform that honoured it would be strictly better. Nothing
 downstream may assume that it works.
 
@@ -225,9 +227,9 @@ reload re-parses the scripts the bridge would otherwise be answering from.
 
 ### `tools/live.sh` — the client
 
-`start` / `shot` / `reload` / `key` / `action` / `click` / `query` / `events` /
-`status` / `stop`, dispatched at `tools/live.sh:73-138`. Launch is one line
-(`tools/live.sh:83-84`):
+`start` / `shot` / `reload` / `key` / `action` / `click` / `drag` / `query` /
+`events` / `status` / `stop`, dispatched at `tools/live.sh:74-140`. Launch is
+one line (`tools/live.sh:84-85`):
 
 ```sh
 "$GODOT" --path "$ROOT" --position "$POSITION" res://tools/live.tscn -- "$@" \
@@ -235,14 +237,14 @@ reload re-parses the scripts the bridge would otherwise be answering from.
 ```
 
 Everything after that boot is a file write and a poll. `send()`
-(`tools/live.sh:56-71`) mints a fresh id per call, clears the response file,
+(`tools/live.sh:57` (`send`)) mints a fresh id per call, clears the response file,
 writes the command, and polls for up to 200 × 0.05s. `shot` asks the bridge to
 save under `user://shots/` and copies the result out
-(`tools/live.sh:94-101`). `reload` uses the host's own channel and polls for up
-to 400 × 0.05s (`tools/live.sh:103-119`).
+(`tools/live.sh:95-102`). `reload` uses the host's own channel and polls for up
+to 400 × 0.05s (`tools/live.sh:104-120`).
 
 **Do not pass `--shot` to the host.** That hook captures once and quits
-(`application/main.gd:144`), which is the exact behaviour the host exists to
+(`application/main.gd:219` (`_capture_and_quit`)), which is the exact behaviour the host exists to
 avoid. `tools/live.gd:22` and `tools/live.sh:14` both say so.
 
 ### Hot reload is the load-bearing part
@@ -305,7 +307,7 @@ to next.
 the rebuilt screen has painted comes back black; several early captures were
 fully black PNGs. The host waits 30 frames before announcing ready or replying
 to a reload — `SETTLE_FRAMES: int = 30` at `tools/live.gd:32`, deliberately
-matching `main.gd`'s own hook at `application/main.gd:145-146` (in `_capture_and_quit`). `_settle()` is
+matching `main.gd`'s own hook at `application/main.gd:220-221` (in `_capture_and_quit`). `_settle()` is
 awaited from both `_announce_ready()` (`tools/live.gd:151`) and the reload's
 success path (`tools/live.gd:128`), so **a successful reply doubles as "safe to
 capture now"** (`tools/live.gd:127`).
@@ -317,10 +319,10 @@ never quits, so it holds the desktop indefinitely — measured holding focus fro
 boot at 2.03s all the way to 10.95s, which is far worse than the 0.6s the host
 was built to eliminate.
 
-The fix is in the client, not the engine. `tools/live.sh:80` records the
+The fix is in the client, not the engine. `tools/live.sh:81` records the
 previously-frontmost application before launching, and `hand_back()`
-(`tools/live.sh:38-44`) reactivates it once the host writes its ready file
-(called at `tools/live.sh:87`):
+(`tools/live.sh:39` (`hand_back`)) reactivates it once the host writes its ready
+file (called at `tools/live.sh:88`):
 
 ```sh
 hand_back() {
@@ -385,7 +387,8 @@ with no further transitions across a subsequent `reload` and captures.
 
 - **Thirty frames is a frame count, not a duration — and a fight's actors have
   not arrived yet.** Both settle loops count frames: `_capture_and_quit` at
-  `application/main.gd:145-146` and `SETTLE_FRAMES` at `tools/live.gd:32`,
+  `application/main.gd:220-221` (in `_capture_and_quit`) and `SETTLE_FRAMES` at
+  `tools/live.gd:32`,
   `158`. Thirty frames is half a second at 60fps. A combat entrance is longer
   than that: each actor tweens for `ENTER_TIME` 0.55s after a stagger of
   `ENTER_LEAD` 0.16s plus `ENTER_STEP` 0.13s per index
@@ -520,7 +523,7 @@ tools/live.sh stop
 ```
 
 The usage block at `tools/live.sh:2-17` is the same list, and the bare
-invocation prints it (`tools/live.sh:134-137`) — note the printer stops at 17,
+invocation prints it (`tools/live.sh:136-138`) — note the printer stops at 17,
 so the `class_name` caveat on line 18 is in the file but not in the printed
 help.
 
@@ -638,7 +641,7 @@ subsequent `reload` and captures.
   focus attempts (`:11-26`). Tracked.
 - `tools/live.tscn` — six lines; a `Node` named `LiveHost` with `live.gd`
   attached. Tracked.
-- `application/main.gd:38-58`, `:144-150` (`_capture_and_quit`) — the `--shot`
+- `application/main.gd:47-61` (in `_ready`), `:219` (`_capture_and_quit`) — the `--shot`
   hook the host deliberately does not use, and the 30-frame settle the host
   copies. (The range here read `:138-144` until a refresh caught it: that stops
   at the function's own declaration and excludes the settle loop it claims to

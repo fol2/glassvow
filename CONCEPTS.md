@@ -97,10 +97,9 @@ One line serves the whole encounter, and it is a layout decision — it says whe
 actors are placed, not what any individual painting depicts. Where a given
 creature's own art touches down is its Contact line.
 
-Where the line SITS is per Stage shape and per act, and it is authored data
-rather than a constant: 232px up from the bottom on a pad held sideways, 250 on a
-phone in portrait, 132 held sideways. It is a distance from the stage's bottom
-edge — an Edge binding — so a taller stage lowers nothing.
+Where the line sits is authored per Stage shape and per act rather than held as
+one constant. It is a distance from the stage's bottom edge — an Edge binding —
+so a taller stage lowers nothing.
 
 ### Foot offset
 A per-character correction that slides an actor off its computed position so the
@@ -145,9 +144,9 @@ wounded creature visibly carries what has been done to it and the glass tells th
 truth about the fight. What a Crack is not is *one line per hit* — a blow throws a
 star of several arms, and how many it throws and how far they run are bought with
 its energy, so a light hit leaves a short mark and a heavy one reaches across the
-body. A Vessel records at most **eight impacts**; the ninth blow scores nothing
-new. That is a legibility ceiling and not a rule about combat — past eight the body
-reads as frosted rather than as broken.
+body. A Vessel caps recorded impacts for legibility; beyond the cap the body
+would read as frosted rather than as broken. The cap is a presentation rule, not
+a rule about combat.
 
 The accumulated Cracks are the **only** thing the Death rite breaks along. It adds
 no new pattern of its own — it releases what the creature was already carrying,
@@ -187,10 +186,10 @@ Past one row the gauge stops being countable and reads as a number instead.
 
 ### Ward
 Temporary protection that absorbs damage before health does. Rendered in two parts: a chip
-beside the health vial showing the number, and a faceted gem shell in front of the creature —
-a regular 8-cut stone showing manufactured order against the glass's natural cracks, which
-flashes when struck and shatters as an expanding ring. Absent rather than zero when a combatant
-has none. *Ward* is the word the game shows the player; *block* is the rules' word.
+beside the health vial showing the number, and a regular faceted gem shell in front of the
+creature showing manufactured order against the glass's natural cracks, which flashes when
+struck and shatters as an expanding ring. Absent rather than zero when a combatant has none.
+*Ward* is the word the game shows the player; *block* is the rules' word.
 
 ### Intent
 The move an enemy has telegraphed for its next turn, shown above the actor. It is
@@ -344,7 +343,7 @@ state of its own between launches.
 Labs come in two shapes, and the difference decides which one a task wants. A
 *contact sheet* renders every item at once so they can be compared against each
 other; a *bench* renders a single item with live controls so it can be tuned.
-Five traps come with the territory. A Lab may scale what it shows for
+Several traps come with the territory. A Lab may scale what it shows for
 inspection, which makes a magnified Lab screenshot the wrong evidence for
 judging sharpness — judge at actual size. A Lab needs a real viewport to
 capture from, so a headless run can parse-check its code but cannot photograph
@@ -354,13 +353,15 @@ construction and first paint has to be made here too, or the Lab is certifying
 an object the game never builds. And a Lab's set of capture modes bounds what
 can be found *missing* — a category of behaviour with no mode is invisible
 rather than absent, which is a stronger failure than a wrong value, because
-nothing ever raises it. And the narrowest of the five: a Lab inherits the
-timebase of what it verifies, so a clock knob only reaches the clocks the
-engine owns.
+nothing ever raises it. Its capture range matters too: a value the surface
+cannot resolve is invisible even when the right frame was sampled. Finally, a
+Lab inherits the timebase of what it verifies, so a clock knob only reaches the
+clocks the engine owns.
 
-The first two distort what a Lab shows; the last three decide whether it is
-showing production at all. "A change meant to alter nothing can be proven to
-have altered nothing" holds only of a Lab that is.
+Scaling, viewport and capture range distort what a Lab shows; production
+driving, capture modes and timebase decide whether it is showing production at
+all. "A change meant to alter nothing can be proven to have altered nothing"
+holds only of a Lab that is.
 
 ### Live host
 A single game process kept running out of sight for a whole working session, so
@@ -390,6 +391,14 @@ interruptions. The host is the default, not the universal answer.
 A session may hold a second long-lived process, and confusing the two is easy: a
 Godot editor open on the project serves its own set of agent tools. A Live host
 is neither that editor nor dependent on one — see *Flagged ambiguities*.
+
+### Funplay editor server
+The editor-bound agent surface for inspecting and mutating the project. It
+exists only while the editor is open and is independent of any running game.
+
+### Funplay runtime bridge
+The file-backed command surface loaded inside a running game so a Live host can
+be driven without an editor.
 
 ---
 
@@ -454,16 +463,14 @@ a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
   meeting the Ground line is placement; its shadow starting at its Contact line is
   rendering, and the two are computed from different things.
 - **"Stage" means two different things, and only one of them is a screen.** A
-  Stage shape is one of five authored SCREEN sizes the whole encounter is
-  composed for. An actor's stage is that actor's own private 3D `SubViewport` —
-  its lit box, one per creature. They share no code and no units: the first is
-  measured in stage px across the window, the second in world units inside a
-  single painting.
+  Stage shape is an authored screen composition for the whole encounter. An
+  actor's stage is that actor's own private 3D viewport — its lit box, one per
+  creature. They share no code and no units: the first is measured across the
+  window, the second inside a single painting.
 - **"Anchor" is taken; layout uses Edge binding instead.** An Anchor is a
-  `file:line` citation checked by `tools/check_anchors.py`. Where a widget hangs
-  is an Edge binding. Godot's `Control.anchor_left` and friends are a third
-  thing again — the engine mechanism an Edge binding is usually implemented
-  with, but not the concept.
+  `file:line` citation checked mechanically. Where a widget hangs is an Edge
+  binding. The engine's layout anchors are a third thing again — the mechanism
+  an Edge binding is usually implemented with, but not the concept.
 - **A Crack and a fracture edge are different things.** A Crack is scored on an
   intact Vessel and rides with the body before it breaks; a fracture edge is the
   lit boundary of a piece that has already broken away. Only the first is
@@ -475,11 +482,7 @@ a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
   are distinct.** A reward is Spoils plus an Offering, and only the Offering is
   chosen. Treating the two as one uniform list is what produces a screen asking
   the player to click three times to acknowledge news.
-- **Two surfaces are both called "funplay", and only one needs the editor.** One
-  is a server hosted *inside* the Godot editor, reached over a local network
-  port, serving the agent tools that inspect and edit the project; it exists
-  only while an editor is open, and nothing outside the editor can start it. The
-  other is a bridge loaded *inside a running game*, driven over files rather
-  than a port, which is what a Live host uses and which needs no editor at all.
-  The two are independent: the first being down says nothing about the second,
-  and the capture loop keeps working throughout.
+- **Two surfaces had both been called "funplay" — these are distinct.** The
+  Funplay editor server needs the editor; the Funplay runtime bridge belongs to
+  a running game and does not. One being unavailable says nothing about the
+  other.
