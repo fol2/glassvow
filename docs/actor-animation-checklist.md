@@ -56,8 +56,8 @@ arrive; `CombatScreen._enter` moved the Control with the exact `Motion.ENTER`
 curve, the hero's −70px and the `_stand` re-anchor, and had no stagger. The
 Control is the correct element and the stagger is the correct behaviour, so they
 are one function: `EnemyView.enter(delay, done)` owns the motion and the fill,
-`_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2621`,
-`combat_screen.gd:1122`). The `view.enter(...)` call in `_build_battlefield`,
+`_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2604` (`enter`),
+`combat_screen.gd:1134` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
 which fired a frame earlier and set foe alpha to zero under the other path's
 nose, is gone.
 
@@ -87,8 +87,8 @@ terms run in `BODY_SHADER` (`enemy_view.gd:496-526`,
 
 **The kind layer is built (2026-07-27).** All four shapes, at the source's own
 amplitudes and periods, composed onto the vessel beside the recoil rather than
-tweened onto it (`KIND_IDLE`, `enemy_view.gd:555`; applied at
-`enemy_view.gd:2150`):
+tweened onto it (`KIND_IDLE`, `enemy_view.gd:564`; applied at
+`enemy_view.gd:2156` (in `_process`)):
 
 | Shape | Kinds | Values |
 | --- | --- | --- |
@@ -118,9 +118,9 @@ too.
 
 **Two lab defects surfaced on the way.** The sheet never called `set_profile`, so
 every creature on the one surface built to judge the actors idled as a humanoid —
-an idle no fight ever runs (`enemy_lab.gd:407`). And there was no way to look at
+an idle no fight ever runs (`enemy_lab.gd:414` (in `_actor`)). And there was no way to look at
 the kind layer at all, which is the likelier reason nobody noticed: `--idle` is
-now a strip mode (`enemy_lab.gd:1292`). It runs in REAL time, unlike every other
+now a strip mode (`enemy_lab.gd:1303` (in `_ready`)). It runs in REAL time, unlike every other
 strip here, because the idle clock is `Time.get_ticks_msec` and `Engine.time_scale`
 cannot reach it.
 
@@ -278,13 +278,15 @@ Here: derived by projecting the silhouette along the key light
 (`enemy_view.gd:2034` (`_update_shadow`)). **Built out 2026-07-27** — the grade
 above was the shape; the lift response was neither matched nor alive.
 
-Two defects, both fixed. **It never ran.** `_update_shadow` was called at build
-and at reset and nowhere else, while the benchmark resynchronises against the
+Two defects, both fixed. **It never ran.** `_update_shadow` was called at build,
+at reset, and from two lab-bench setters no fight reaches — nothing else — while
+the benchmark resynchronises against the
 body's live transform on every frame of the rig loop
 (`src/ui/combat.js:1930-1932`). **And its one variable was the wrong quantity:**
 `_lift` was the transparent margin below the painting's lowest opaque row, which
 is a uniform export border, not height — bottom matches top to a tenth of a
-percent on most of the 27 (10.0/10.0, 5.2/5.2, 13.0/13.0, 20.7/20.6), the largest
+percent on 13 of the 27 and to within a percentage point on 18 (10.0/10.0,
+5.2/5.2, 13.0/13.0, 20.7/20.6), the largest
 belongs to `shellback` (a crab, flat on the floor) at 20.7%, and `voidWisp` has
 4.3%. The response was therefore inverted as well as frozen.
 

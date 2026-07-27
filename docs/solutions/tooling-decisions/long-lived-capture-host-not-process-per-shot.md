@@ -430,6 +430,15 @@ focus, a lock, a spinner, a stale cache, a first-paint artefact. Sample across
 the whole window, timestamp every sample, and read the timeline rather than the
 pass rate.
 
+The same error has a further level, found on 2026-07-27: a harness can be missing
+not just the *window* in which a defect appears but any *mode* in which a whole
+category of behaviour could appear at all. Five enemy-lab strip modes all
+photographed one-shot beats; none sampled a loop, so an entire per-kind idle layer
+was absent from the port and nothing in the project could have raised it. A
+harness that synchronises on the healthy state hides an instance; a harness with
+no mode for a shape hides a class. See
+[Drive the lab the way the game drives it](./drive-the-lab-the-way-the-game-drives-it.md).
+
 This also explains why the seven failed attempts are worth their space in
 `tools/shot.sh:11-26`. Each one *looked* plausible, and several of them
 (`no_focus` reading back `value=true`; the `LSUIElement` clone reporting

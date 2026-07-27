@@ -25,9 +25,9 @@ reward, shop and aspect screens and are out of scope here.
 
 | verdict | rows | |
 |---|--:|---|
-| **MATCH** | 20 | the port does this, with these numbers |
+| **MATCH** | 23 | the port does this, with these numbers |
 | **DIVERGES** | 10 | the port does something, with different numbers |
-| **DIVERGES (documented)** | 4 | different on purpose, and the port says why |
+| **DIVERGES (documented)** | 1 | different on purpose, and the port says why |
 | **ABSENT** | 22 | the port does not do this at all |
 | **N/A** | 5 | the rule never fires in the reference, or drives a renderer the port does not use |
 | **UNRESOLVED** | 1 | the audit answered a different question; needs a second look |
@@ -122,20 +122,39 @@ rules do not apply to it — those rows are N/A, not defects.
 | 1600 | `.enemy-svg .breathe` | `breathe` 3.4s | SVG path unused; breathing is a vertex shader | N/A |
 | 1606 | `.enemy-art svg` | transform .9s ease | SVG path unused | N/A |
 | 1609 | `.enemy-svg .hover-float` | `hoverFloat` 3s | SVG path unused | N/A |
-| 1612 | `.enemy-sprite.idle-wisp` | `idleFloat` 3.1s, 16px | `KIND_HOVER["wisp"] = (16.0, 3.1)` | MATCH |
+| 1612 | `.enemy-sprite.idle-wisp` | `idleFloat` 3.1s, 16px | `KIND_FLOAT_PX` 16.0 + `KIND_IDLE_PERIOD` 3.1 | MATCH |
 | 1613 | `.enemy-sprite.idle-eye` | `idleFloat` 3.4s, 18px | `(18.0, 3.4)` | MATCH |
 | 1614 | `…idle-siren, …idle-shade` | `idleFloat` 3.6s, 12px | `(12.0, 3.6)` both | MATCH |
 | 1615 | `.enemy-sprite.idle-plant` | `idleFloat` 3.8s, 9px | `(9.0, 3.8)` | MATCH |
-| 1616 | `.enemy-sprite.idle-slime` | `idleSlime` 4.2s, 3 keyframes | shader sine at 1.1 rad/s, per-kind weights | DIVERGES (documented) |
-| 1617 | `.enemy-sprite.idle-serpent` | `idleSway` 3.5s, 5px + 1.8° | shader sine at 0.9 and 1.7 rad/s | DIVERGES (documented) |
-| 1618 | `…idle-beast` and five more | `idleBreathe` 3.6s, scaleY 1.025 | chest-only shader breathing at 2.2 rad/s | DIVERGES (documented) |
+| 1616 | `.enemy-sprite.idle-slime` | `idleSlime` 4.2s, 3 keyframes | `SLIME_AT/_Y/_SX` — translateY 0/−4/+2, scaleX 1/1.04/.97 at 0/33/66%, 4.2s | MATCH |
+| 1617 | `.enemy-sprite.idle-serpent` | `idleSway` 3.5s, 5px + 1.8° | `SWAY_X 5.0`, `SWAY_DEG 1.8`, 3.5s | MATCH |
+| 1618 | `…idle-beast` and five more | `idleBreathe` 3.6s, scaleY 1.025 | `BREATHE_SY 1.025`, 3.6s, on the same six kinds | MATCH |
 | 1639 | `.enemy-svg .eye` | `eyeGlow` 2.6s | SVG path unused | N/A |
 
 The four `idleFloat` rows are the strongest MATCH in the whole census: amplitude
-and period agree exactly, creature for creature. The three DIVERGES are the port
-deliberately replacing a transform keyframe with a vertex deformation, and it says
-so at `enemy_view.gd` — *"one rigid card being wobbled, which is a different
-animal from a body that BENDS"*. A body that bends cannot be a `scaleY`.
+and period agree exactly, creature for creature.
+
+**Amended 2026-07-27.** Rows 1616-1618 were graded DIVERGES (documented) here, on
+the reading that the port had deliberately replaced a transform keyframe with a
+vertex deformation — *"one rigid card being wobbled, which is a different animal
+from a body that BENDS"*. That reading was wrong about the reference, which runs
+**both** layers at once: the WebGL plane tracks the CSS box every frame
+(`src/styles.css:1611`), so a vertex deformation there is *additional* to
+`idleSlime`, not a substitute for it. `df3cc64` built all three at the source's
+own amplitudes and periods, composed onto the vessel alongside the mesh layer, and
+the rows are now MATCH. The port's vertex deform was never the disagreement.
+
+Two cautions this section earned the hard way. The `idleFloat` verdicts above are
+correct about the shipping screen, but they were reached by reading a port-side
+constant — one only ever resolved through `set_profile()`, which the enemy lab did
+not call. So on the only surface anyone would have used to *watch* a floater
+float, the amplitude was zero and nothing floated: the census's own strongest
+MATCH was, in practice, unobservable. That is this document's fourth honest limit
+biting, and the precondition it assumes is written up in
+[`drive-the-lab-the-way-the-game-drives-it.md`](solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md).
+Second, `moteDrift` (`src/styles.css:1635`) and its `.idle-motes` carrier have no
+row in this census at all — the enumeration missed them. They were built in
+`df3cc64`; the row is still owed.
 
 ### Stage, entrance and buttons
 

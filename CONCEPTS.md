@@ -229,7 +229,10 @@ not deserve.
 Every Verdict in a Census carries quoted port code and its location; one with no
 evidence is discarded rather than believed. What a Census cannot settle is
 whether a matching value is attached to the thing the player actually watches —
-that still wants a Live host and a look.
+that still wants a Live host and a look. And the look has preconditions of its
+own: it must be at a surface that drives the subject the way a fight does, in a
+mode that shows the shape being checked. A look is worth only what the surface
+being looked at is worth.
 
 ### Verdict
 The judgement a Census records against one declaration of the Benchmark.
@@ -252,8 +255,19 @@ claim that can rot silently the moment anyone edits above it.
 
 Anchors are checked mechanically rather than trusted, because the failure is
 invisible from the prose side: the sentence still reads correctly while the line
-it points at has become something else entirely. Two consequences follow. An
-Anchor that drifts is repaired by moving the citation to where its subject went,
+it points at has become something else entirely.
+
+Know what the mechanical check actually proves. `tools/check_anchors.py` verifies
+that a citation's line and its `(in symbol)` annotation agree with each other; it
+cannot know what the surrounding *prose* claims is there. An Anchor that names the
+wrong function and the line that function starts on is internally consistent and
+passes clean — the 2026-07-27 refresh found one citing `hud_bar.gd:886` (in
+`_keyframe_pop`) for a snippet that lives 21 lines later in `_sync_pile`. A green
+run means no Anchor has rotted, not that every Anchor points where its sentence
+says. Only reading the cited line against the sentence establishes that.
+
+Two further consequences follow. An Anchor that drifts is repaired by moving the
+citation to where its subject went,
 never by editing the subject to match the citation. And drift caused by another
 lane's work in progress is left alone — re-anchoring against an uncommitted tree
 writes a claim that is false the moment that work changes shape.
@@ -309,6 +323,12 @@ that did not exist when the host started cannot be adopted by a rebuild, so
 introducing one is the edit that still costs a restart. A rebuild that cannot
 re-read a script reports the refusal rather than the success: the alternative is
 photographing stale code while believing it fresh.
+
+One class of capture a host cannot serve, and it is worth knowing before
+reaching for one. Anything a screen reads *once from the process environment* is
+fixed for the host's whole life, so a before/after pair that has to vary such a
+value — a dump prefix, a held pose — genuinely needs two processes and pays two
+interruptions. The host is the default, not the universal answer.
 
 ---
 

@@ -65,7 +65,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[hud_bar.gd:886](../../../presentation/combat/hud_bar.gd) (in `_keyframe_pop`):
+[hud_bar.gd:907](../../../presentation/combat/hud_bar.gd) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)

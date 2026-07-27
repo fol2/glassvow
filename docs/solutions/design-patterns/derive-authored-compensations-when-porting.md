@@ -149,6 +149,12 @@ Two things follow, and they are the general lesson rather than a shadow detail:
 - **A derive can be right and dead at the same time.** Nothing about the projection was
   incorrect. It was simply never asked again after the frame it was built on.
 
+What this record cannot say from the derivation side is how the deadness was allowed
+to persist for so long: no verification surface in the project could have shown a
+shadow that never moved, and the audit that graded this entry compared constants.
+That half is [Drive the lab the way the game drives it, and photograph loops as well
+as beats](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md).
+
 **And one authored knob came back.** `shadow.dy` — carried by exactly five creatures,
 `watcherEye` 24, `shade` 16, `voltEel` 13, `sporeling` 10, `voidWisp` 9, which are
 exactly the floaters — says the thing the alpha cannot: *this painting is of something

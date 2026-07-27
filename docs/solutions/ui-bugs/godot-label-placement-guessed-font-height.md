@@ -73,7 +73,7 @@ have "corrected" a non-problem and left the actual one in place.
 ## Solution
 
 Anchor the numeral to its **baseline**, using the font's real metrics
-([status_chip.gd:138](../../../presentation/combat/status_chip.gd#L138)):
+([status_chip.gd:143](../../../presentation/combat/status_chip.gd#L143)):
 
 ```gdscript
 # Before — box height invented, position derived from it
@@ -92,7 +92,7 @@ states the validated number — `33.0` — instead of arriving at it by accident
 through a guessed line-height.
 
 And make a missing asset loud rather than invisible
-([status_chip.gd:142](../../../presentation/combat/status_chip.gd#L142)):
+([status_chip.gd:150](../../../presentation/combat/status_chip.gd#L150)):
 
 ```gdscript
 func _draw() -> void:

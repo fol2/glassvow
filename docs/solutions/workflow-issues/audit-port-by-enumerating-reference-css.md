@@ -268,6 +268,15 @@ The honest limits matter as much as the method:
   question. Enumeration finds candidates; a screenshot or a live capture still
   has to confirm that the motion landed on the element the player watches.
 
+  That confirming step has two preconditions of its own, and this census was bitten
+  by both on the same rows. The surface you capture from must drive the subject the
+  way production drives it — the enemy lab did not call `set_profile`, so rows
+  1612-1615 were graded the strongest MATCH in the census off a constant that
+  resolved to zero on the only sheet anyone would have looked at. And for
+  loop-shaped behaviour a *capture mode* has to exist before a confirmation is even
+  possible; a still cannot falsify a per-frame claim. See
+  [Drive the lab the way the game drives it](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md).
+
 Do not apply the method as a substitute for reading the running page when the
 question is whether a declaration fires. Brace depth and overrides are visible
 in the stylesheet if you look for them; whether a canvas path draws is not.
