@@ -35,8 +35,11 @@ entry point. `application/main.gd:39-47` documents it and
 `application/main.gd:62-98` parses it out of `OS.get_cmdline_user_args()`:
 
 ```gdscript
-# Screenshot-loop hook for agent iteration without the editor MCP:
-# godot --path . -- --shot=/tmp/map.png [--seed=N] [--enter=0]
+# Screenshot-loop hook for agent iteration without the editor MCP. A run that
+# carries --shot= captures and then quits, and goes through tools/shot.sh;
+# without it the run is a viewer to work in, so it launches godot directly.
+# ...
+# tools/shot.sh --shot=/tmp/map.png [--seed=N] [--enter=0]
 ```
 
 `--shot=PATH` is read at `application/main.gd:63-64`, and each of the four exit
@@ -85,14 +88,15 @@ not read out of the engine source. That single sentence is what makes this a too
 rather than a configuration problem, and seven attempts to treat it as
 configuration are recorded below.
 
-**Status, stated honestly: the tooling described here is untracked and
-uncommitted.** `git status --porcelain tools/` lists this tooling as `?? tools/live.gd`,
-`?? tools/live.gd.uid`, `?? tools/live.sh`, `?? tools/live.tscn` and
-`?? tools/shot.sh` — alongside other lanes' untracked files, since the tree is
-shared. The only tracked files under `tools/` are `tools/bench_actor_stage.gd`
-and its `.uid`. Nothing here has been merged, and there is no PR
-to cite. This work was deliberately confined to new files under `tools/` because
-six parallel lanes share this tree — no existing game file was modified.
+**Status: landed.** When this document was written the tooling was untracked and
+uncommitted, and the paragraph here said so. It is no longer true —
+`tools/live.gd`, its `.uid`, `tools/live.sh`, `tools/live.tscn` and
+`tools/shot.sh` are all tracked, having landed on `main` the same day in
+`72b25ce` (*feat(tools): the capture host outlives the edit, and the desktop is
+handed back*) and `7d33899` (*fix(tools): the off-screen park never worked, and
+five documents said it did*), both ancestors of the current HEAD. This work was
+still deliberately confined to new files under `tools/` because six parallel
+lanes share this tree — no existing game file was modified.
 
 **And the evidence behind the numbers:** every measurement quoted here is this
 session's own, taken with an ad-hoc AppleScript sampler that was not kept. The
@@ -301,7 +305,7 @@ to next.
 the rebuilt screen has painted comes back black; several early captures were
 fully black PNGs. The host waits 30 frames before announcing ready or replying
 to a reload — `SETTLE_FRAMES: int = 30` at `tools/live.gd:32`, deliberately
-matching `main.gd`'s own hook at `application/main.gd:139`. `_settle()` is
+matching `main.gd`'s own hook at `application/main.gd:145-146` (in `_capture_and_quit`). `_settle()` is
 awaited from both `_announce_ready()` (`tools/live.gd:151`) and the reload's
 success path (`tools/live.gd:128`), so **a successful reply doubles as "safe to
 capture now"** (`tools/live.gd:127`).
@@ -494,7 +498,7 @@ final design is one boot per session, which was then measured and handed back
   `reload()`, suppress key status for the length of a rebuild only, and wait for
   the paint before reading the viewport.
 - **After adding or renaming a `class_name`, or editing an autoload,
-  `tools/live.gd`, or the funplay bridge** — `stop` and `start`. The host will
+  `tools/live.gd`, or the funplay runtime bridge** — `stop` and `start`. The host will
   now tell you, but restarting is the fix either way.
 - **Whenever measuring a transient** — focus, locks, first paint, cache
   staleness. Sample continuously from before the event; never synchronise the
@@ -627,25 +631,29 @@ subsequent `reload` and captures.
 
 - `tools/live.gd` — the host: bridge wiring (`:43-46`), command loop
   (`:51-65`), reload (`:86-147`), settle (`:157-160`), script collection with
-  the `addons`/`tools` skip (`:186-201`). Untracked as of this writing.
+  the `addons`/`tools` skip (`:186-201`). Tracked; landed in `72b25ce`.
 - `tools/live.sh` — the client: focus hand-back (`:38-44`), request/reply
-  (`:56-71`), boot (`:74-92`), reload channel (`:103-119`). Untracked.
+  (`:56-71`), boot (`:74-92`), reload channel (`:103-119`). Tracked.
 - `tools/shot.sh` — the one-off wrapper, and the record of all seven failed
-  focus attempts (`:11-26`). Untracked.
+  focus attempts (`:11-26`). Tracked.
 - `tools/live.tscn` — six lines; a `Node` named `LiveHost` with `live.gd`
-  attached. Untracked.
-- `application/main.gd:38-58`, `:138-144` — the `--shot` hook the host
-  deliberately does not use, and the 30-frame settle the host copies.
+  attached. Tracked.
+- `application/main.gd:38-58`, `:144-150` (`_capture_and_quit`) — the `--shot`
+  hook the host deliberately does not use, and the 30-frame settle the host
+  copies. (The range here read `:138-144` until a refresh caught it: that stops
+  at the function's own declaration and excludes the settle loop it claims to
+  cite. It survived because an anchor carrying no `(symbol)` annotation is not
+  validated in the checker's default mode — `tools/check_anchors.py:52-57`.)
 - `addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:3-6`, `:136-143` —
   the `user://` file paths and the `query_node` / `capture_view` / `send_input`
   / `get_events` dispatch the host reuses unchanged.
 - `docs/hud-handoff.md:157-173` — §8, the pre-existing record that captures must
   be windowed because headless has no viewport texture and hangs.
-- `docs/solutions/ui-bugs/godot-label-placement-guessed-font-height.md:158-170` —
+- `docs/solutions/ui-bugs/godot-label-placement-guessed-font-height.md:167-178` —
   the empirical backing for workaround #1, measured independently and earlier:
   a headless capture exits 124 after a 60s timeout and never writes the PNG.
   Cited rather than re-argued. The same rule appears again at
-  `docs/solutions/conventions/per-recipe-shader-knobs.md:190` and in the `Lab`
+  `docs/solutions/conventions/per-recipe-shader-knobs.md:210` and in the `Lab`
   entry of `CONCEPTS.md` — it is settled project knowledge, not a new finding.
 - `CONCEPTS.md`, `Live host` entry — the glossary definition this doc
   introduces, with the reload/restart rules stated for a reader who has not read

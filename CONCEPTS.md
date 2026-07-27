@@ -219,12 +219,21 @@ A Census is only possible where the reference states the behaviour declaratively
 not. Its value is the denominator: once the set is finite, "how much of this
 surface is unimplemented" has an answer rather than an impression, and missing
 work separates from hard work, because several absences turn out to be a call to
-something the port already has. Two traps sit inside the enumeration and both
-cost a wrong Verdict before they were named. A declaration can be switched off
-by a later unconditional one, so its presence is not evidence that it ever runs.
-And a declaration is worth only what triggers it — a transition on a property
-nothing ever changes is a no-op that will otherwise rank high on effort it does
-not deserve.
+something the port already has. Three traps sit inside the enumeration, and the
+first two cost a wrong Verdict before they were named. A declaration can be
+switched off by a later unconditional one, so its presence is not evidence that
+it ever runs. And a declaration is worth only what triggers it — a transition on
+a property nothing ever changes is a no-op that will otherwise rank high on
+effort it does not deserve.
+
+The third is the one that costs no Verdict at all, which is why it is the worst.
+An enumeration can silently under-enumerate: a declaration the extraction never
+matched has no row, and a Census with a missing row reads exactly as complete as
+one without. A wrong Verdict is visible in the table and argues for itself; an
+absent row argues for nothing. So the denominator a Census buys is completeness
+over what the extraction matched, not over the surface — which makes it a floor
+rather than a total until the row count has been reconciled against a raw count
+of the surface itself.
 
 Every Verdict in a Census carries quoted port code and its location; one with no
 evidence is discarded rather than believed. What a Census cannot settle is
@@ -257,14 +266,22 @@ Anchors are checked mechanically rather than trusted, because the failure is
 invisible from the prose side: the sentence still reads correctly while the line
 it points at has become something else entirely.
 
-Know what the mechanical check actually proves. `tools/check_anchors.py` verifies
-that a citation's line and its `(in symbol)` annotation agree with each other; it
-cannot know what the surrounding *prose* claims is there. An Anchor that names the
-wrong function and the line that function starts on is internally consistent and
-passes clean — the 2026-07-27 refresh found one citing `hud_bar.gd:886` (in
-`_keyframe_pop`) for a snippet that lives 21 lines later in `_sync_pile`. A green
-run means no Anchor has rotted, not that every Anchor points where its sentence
-says. Only reading the cited line against the sentence establishes that.
+Know what the mechanical check actually proves. It verifies that a citation's
+line and its symbol annotation agree with each other; it cannot know what the
+surrounding *prose* claims is there. An Anchor naming the wrong function, and the
+line that function happens to start on, is internally consistent and passes clean
+— one was found citing a line in one function for a snippet that lived twenty-one
+lines later in another. A green run means no Anchor has rotted, not that every
+Anchor points where its sentence says. Only reading the cited line against the
+sentence establishes that.
+
+A green run is also quieter than it looks, because two whole classes of Anchor
+go unexamined. A citation carrying no symbol annotation is not validated at all
+by default, so it may point anywhere and still pass. And an Anchor into another
+prose document is invisible to the check entirely — only citations into code are
+recognised as Anchors at all. The citations documents make about each other are
+therefore the least checked and the most quietly wrong, which is the opposite of
+how a clean report reads.
 
 Two further consequences follow. An Anchor that drifts is repaired by moving the
 citation to where its subject went,
@@ -329,6 +346,10 @@ reaching for one. Anything a screen reads *once from the process environment* is
 fixed for the host's whole life, so a before/after pair that has to vary such a
 value — a dump prefix, a held pose — genuinely needs two processes and pays two
 interruptions. The host is the default, not the universal answer.
+
+A session may hold a second long-lived process, and confusing the two is easy: a
+Godot editor open on the project serves its own set of agent tools. A Live host
+is neither that editor nor dependent on one — see *Flagged ambiguities*.
 
 ---
 
@@ -397,3 +418,11 @@ a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
   are distinct.** A reward is Spoils plus an Offering, and only the Offering is
   chosen. Treating the two as one uniform list is what produces a screen asking
   the player to click three times to acknowledge news.
+- **Two surfaces are both called "funplay", and only one needs the editor.** One
+  is a server hosted *inside* the Godot editor, reached over a local network
+  port, serving the agent tools that inspect and edit the project; it exists
+  only while an editor is open, and nothing outside the editor can start it. The
+  other is a bridge loaded *inside a running game*, driven over files rather
+  than a port, which is what a Live host uses and which needs no editor at all.
+  The two are independent: the first being down says nothing about the second,
+  and the capture loop keeps working throughout.

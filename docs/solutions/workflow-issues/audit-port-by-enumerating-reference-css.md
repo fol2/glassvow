@@ -72,14 +72,21 @@ rules, 45 `transition` declarations, 108 `animation` declarations and 70
 `@keyframes` bodies. Filtered to the combat surface that left 78 declarations,
 of which 67 are live (the other 11 are `prefers-reduced-motion` overrides).
 Sixty-two of those live ones fall on the combat screen proper. Of those
-sixty-two, twenty-two — **35%** — had no implementation in the port at all.
-Twenty matched. Ten diverged. Four diverged on purpose and the port said
-why. Five were N/A because the rule never fires in the reference or drives a
-renderer the port does not use. One was unresolved because the audit had
+sixty-two, twenty-two — **35%** — had no implementation in the port at all;
+twenty-three matched, ten diverged, one diverged on purpose and the port said
+why, five were N/A because the rule never fires in the reference or drives a
+renderer the port does not use, and one was unresolved because the audit had
 answered a different question. The numbers are in `docs/motion-census.md`,
 landed in `2c683fa` and corrected in `da8ffa2`. The first item on the ranked
 fix list — the two HP rails that snapped while their ghost already glided —
 was closed in `4e78410`.
+
+**The verdict table in the census is the authority for that split, not this
+paragraph.** It moves: the 2026-07-27 amendment regraded three rows from
+*diverges on purpose* to *match*, and this document carried the pre-amendment
+figures until a refresh caught it. A method document that restates numbers it
+does not own will drift from them — cite the table, and re-read it before
+quoting a count.
 
 ## Guidance
 
@@ -218,7 +225,7 @@ snap while the ghost beside them already glides. Next come `.intent.pop` and
 lantern, energy orb, facet row and pile; those two just never got wired to it.
 Then the 0.15s button transitions, then the two `artReady` beacons, then
 `targetGlow`. Items one through four are small, and two of them are calling a
-function the port already has. Twenty-four missing things is not the same list
+function the port already has. Twenty-two missing things is not the same list
 as twenty-two hard things. Without the census, the hard ones absorb the
 attention and the missing ones wait for another notice.
 
@@ -247,10 +254,19 @@ The honest limits matter as much as the method:
 - **CSS is enumerable.** That is the whole warrant. If the motion lives in a
   stylesheet as `transition` and `animation` declarations, extract them. Do not
   sample.
+- **But an enumeration can silently under-enumerate, and this one did.**
+  `moteDrift` and its `.idle-motes` carrier have no row in the census at all —
+  the extraction missed them (`docs/motion-census.md:155-156`). That is a worse
+  failure than a wrong verdict, because a wrong verdict is visible in the table
+  and a missing row is not: the census reads complete either way. Enumeration
+  buys you completeness *over what the extractor matched*, which is not the same
+  as completeness over the stylesheet. Reconcile the extractor's row count
+  against a raw count of `transition`/`animation` declarations before trusting a
+  total, and treat any denominator as a floor.
 - **Static appearance is enumerable the same way, and has not been done.**
   Colour, size, shadow, border and font can be pulled through
-  `getComputedStyle` on the live page at `6e06911`. A first sample already
-  has not yet been run. (A draft of this doc claimed `.intent` diverged — 30px in
+  `getComputedStyle` on the live page at `6e06911`. A first sample still needs
+  doing. (A draft of this doc claimed `.intent` diverged — 30px in
   the reference against 34 in the port. It does not: the chip is 30. The 34 was
   the crown ROW, which adds a 4px separation to an empty status row. The claim
   was mis-attributed and is withdrawn; the static pass is still owed.)

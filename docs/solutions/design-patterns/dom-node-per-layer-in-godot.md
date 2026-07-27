@@ -24,8 +24,17 @@ structure is wrong in Godot.
 
 In a browser, the only thing you can independently rotate, offset or fade is an
 element. So the benchmark's card piles are drawn as a stack of `.pile-layer`
-divs — one per visible card. The port mirrored that shape: one `TextureRect` per
+divs — one per visible card (`src/styles.css:1422`, built at
+`src/ui/combat.js:846`). The port mirrored that shape: one `TextureRect` per
 face, created lazily, shown/hidden and rotated as the count moved.
+
+**Reference citations in this document are against
+`~/Coding/roguecardv2-benchmark` at `6e06911`, the pre-Pixi checkout, and line
+numbers are that tree's.** They are not against `~/Coding/roguecardv2`, which is
+284 commits ahead and post-Pixi. This document originally quoted the reference
+without naming either — the omission is harmless only until someone resolves it
+against the wrong tree, which this project has already done once, for three
+commits.
 
 At [hud_bar.gd:104](../../../presentation/combat/hud_bar.gd) (`FAN_FACES`) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
@@ -159,7 +168,14 @@ p.stack.queue_redraw()
 ```
 
 Same geometry (same 50%/92% pivot, same 5°-per-card / 30°-span rule from the
-benchmark's `pile-chrome.js`), same pixels, 48 nodes → 3.
+benchmark's `src/pile-chrome.js:4-8` — `PILE_FAN_DEG`, `PILE_FAN_MAX_DEG`,
+`PILE_FAN_MAX_LAYERS`), same pixels, 48 nodes → 3.
+
+**One live `add_child` loop in this file is the exemption, not a survivor.**
+`hud_bar.gd:818-828` still builds `TextureRect`s in a loop for `fly_backs` —
+transient flyers that each need their own independent animation, which is
+exactly the case the rule above carves out. Left as is deliberately; a reader
+grepping for `add_child` should not read it as an unconverted instance.
 
 ## Related
 
