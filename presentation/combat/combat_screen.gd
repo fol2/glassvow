@@ -517,7 +517,6 @@ func _build_ui() -> void:
 	_hand.offset_right = HandView.zone_width(5, STAGE.x) * 0.5
 	_hand.offset_top = -248.0
 	_hand.offset_bottom = HAND_OVERHANG
-	_hand.stage_overhang = HAND_OVERHANG
 	_hand.card_tapped.connect(_on_card_tapped)
 	_hand.card_drag_moved.connect(_on_card_drag_moved)
 	_hand.card_drag_released.connect(_on_card_drag_released)

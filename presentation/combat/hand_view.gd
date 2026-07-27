@@ -46,12 +46,18 @@ const BASE_Y: float = 26.0
 const MAX_CARDS: int = 10
 ## `handCardBottomInset` for pad-landscape — a resting card's bottom edge sits
 ## this far above the hand zone's own bottom.
+##
+## The zone itself hangs 12px BELOW the stage, so a resting card's bottom lands at
+## 850 on an 820 stage — 30px off-screen for the middle of five, 62px for the
+## outer ones. Measured on the reference, not inferred: `.hand-zone` bottom 832,
+## `.hand-zone .card` computed `bottom: 8px`, resting transform `translate(…, 26px)`.
+##
+## This port used to lift the whole fan to stop that, on the reading that a card
+## losing its name and rules text was a bug. It is the design: a resting hand is
+## CUT OFF on purpose, and the 92px hover lift at 1.38 is what makes a card
+## legible. Lifting the fan spent the hover's job before the pointer arrived, and
+## it put the fan 22px higher than the reference for a five-card hand.
 const CARD_INSET: float = 8.0
-## `HAND_BOTTOM_INSET` — the deepest a resting card may tuck below the stage
-## bottom before the WHOLE fan is lifted to keep it readable. Without this the
-## outer cards of a five-card hand hang 62px off the screen and lose their name
-## and rules text, which is what the assembled screen was doing.
-const BOTTOM_INSET: float = 40.0
 
 ## A seat has four poses and they do not stack — one branch per card writes the
 ## whole transform. Two of them are CSS, and these are their numbers:
@@ -106,13 +112,6 @@ var kindle_mode: bool = false
 ## How far this box deliberately hangs past the stage's bottom edge — the screen
 ## that placed it says so, because only the screen knows.
 ##
-## The fan is clamped against the STAGE bottom, not this box's, and deriving that
-## line from `global_position` looked equivalent and was not: `_relayout` runs
-## when cards are added, `resized` only fires when the SIZE changes, and this box
-## is moved into place after that without ever changing size. The seats were laid
-## out against a stale position and stayed there — 12px too low, every hand.
-var stage_overhang: float = 0.0
-
 ## `S.hoveredCard` — the seat the pointer is over, -1 for none. Held here
 ## rather than inferred per event so the change test has something to compare
 ## against, and so a card leaving under the cursor cannot leave it stuck.
@@ -435,12 +434,6 @@ static func max_drop(count: int) -> float:
 	return absf(rotation_deg(0, n)) * SAG_PER_DEG + BASE_Y
 
 
-## `handFanLift` — how far the whole fan rises, arc intact, so its lowest card
-## never tucks more than `BOTTOM_INSET` below the stage bottom.
-static func fan_lift(count: int, base_bottom: float, stage_bottom: float) -> float:
-	return maxf(0.0, base_bottom + max_drop(count) - (stage_bottom + BOTTOM_INSET))
-
-
 ## Fan the cards along a shallow arc: centred spread, outer cards sit lower
 ## and tilt outward. `layoutHandSeats` in the benchmark, seat for seat.
 func _relayout() -> void:
@@ -460,10 +453,8 @@ func _relayout() -> void:
 	var seats: int = maxi(1, mini(MAX_CARDS, n))
 	var spacing: float = fan_gap(seats, stage_w)
 	var center_x: float = want * 0.5
-	# The zone hangs past the stage bottom on purpose, so the line the fan is
-	# clamped against sits `stage_overhang` above this box's own bottom.
+	# The zone hangs past the stage bottom on purpose, and the fan is left there.
 	var base_bottom: float = size.y - CARD_INSET
-	var lift: float = fan_lift(seats, base_bottom, size.y - stage_overhang)
 	for i: int in range(n):
 		var view: CardView = _views[_order[i]]
 		var idx: int = mini(i, seats - 1)
@@ -472,7 +463,7 @@ func _relayout() -> void:
 		var sag: float = absf(rot) * SAG_PER_DEG + BASE_Y
 		view.home_position = Vector2(
 			center_x + offset_x - view.size.x * 0.5,
-			base_bottom - CardView.CARD_H + sag - lift
+			base_bottom - CardView.CARD_H + sag
 		)
 		view.home_rotation = deg_to_rad(rot)
 		# A card being carried follows the pointer, and a card in flight is on its
