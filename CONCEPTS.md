@@ -246,6 +246,18 @@ explains in its own comments is not re-raised as a defect on every pass.
 *Unresolved* is not a softer absence: it means the question was answered about
 the wrong element, and it is held open rather than guessed.
 
+### Anchor
+A citation in prose that names both a file and a line, and therefore makes a
+claim that can rot silently the moment anyone edits above it.
+
+Anchors are checked mechanically rather than trusted, because the failure is
+invisible from the prose side: the sentence still reads correctly while the line
+it points at has become something else entirely. Two consequences follow. An
+Anchor that drifts is repaired by moving the citation to where its subject went,
+never by editing the subject to match the citation. And drift caused by another
+lane's work in progress is left alone — re-anchoring against an uncommitted tree
+writes a claim that is false the moment that work changes shape.
+
 ### Lab
 A harness that stands one widget family up in isolation — no run, no game state
 behind it — reached by its own launch flag rather than by playing to the screen

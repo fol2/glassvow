@@ -171,7 +171,7 @@ for key: String in ["ink", "ink_tint", ..., "sparkle", "flake_px",
 
 ### Proving the others did not move
 
-`card_view.gd:921` exposes three environment hooks for held-pose renders:
+`card_view.gd:941` exposes three environment hooks for held-pose renders:
 `GLASSVOW_TILT="nx,ny"` holds a pose, `GLASSVOW_LAMP="x,y[,gain]"` stands the
 lamp somewhere fixed, and `GLASSVOW_DUMP=<prefix>` writes
 `<prefix>_inner_<uid>.png` and `<prefix>_stage_<uid>.png`.
@@ -194,7 +194,7 @@ two runs takes the desktop for about a second. Here that is unavoidable rather
 than merely tolerated, because the recipe genuinely needs two processes (below).
 
 Do **not** reach for `tools/live.sh` here. The hooks are read once from the
-process environment (`card_view.gd:926-939`), so a single host cannot change its
+process environment (`card_view.gd:946-963`), so a single host cannot change its
 dump prefix between the before and after builds — this recipe genuinely needs
 two processes. See
 [Capture through a long-lived host](../tooling-decisions/long-lived-capture-host-not-process-per-shot.md)

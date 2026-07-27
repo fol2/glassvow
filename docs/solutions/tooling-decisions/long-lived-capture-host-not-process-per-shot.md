@@ -31,18 +31,18 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:38-45` documents it and
-`application/main.gd:56-98` parses it out of `OS.get_cmdline_user_args()`:
+entry point. `application/main.gd:39-47` documents it and
+`application/main.gd:62-98` parses it out of `OS.get_cmdline_user_args()`:
 
 ```gdscript
 # Screenshot-loop hook for agent iteration without the editor MCP:
 # godot --path . -- --shot=/tmp/map.png [--seed=N] [--enter=0]
 ```
 
-`--shot=PATH` is read at `application/main.gd:57-58`, and each of the four exit
+`--shot=PATH` is read at `application/main.gd:63-64`, and each of the four exit
 paths — studio, card lab, the four labs, and the real run — calls
-`_capture_and_quit()` (`application/main.gd:104-105`, `110-111`, `125-126`,
-`134-135`). That function is short and worth reading in full, because two of its
+`_capture_and_quit()` (`application/main.gd:111`, `117`, `132`,
+`141`). That function is short and worth reading in full, because two of its
 lines become load-bearing later:
 
 ```gdscript
@@ -55,7 +55,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:138-144`.) It waits 30 frames for the first paint, reads
+(`application/main.gd:144-150`.) It waits 30 frames for the first paint, reads
 the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
@@ -378,6 +378,34 @@ with no further transitions across a subsequent `reload` and captures.
   answering commands rather than take it down (`tools/live.gd:84-85`), which is
   why the failure paths return dictionaries instead of pushing errors and
   quitting.
+
+- **Thirty frames is a frame count, not a duration — and a fight's actors have
+  not arrived yet.** Both settle loops count frames: `_capture_and_quit` at
+  `application/main.gd:145-146` and `SETTLE_FRAMES` at `tools/live.gd:32`,
+  `158`. Thirty frames is half a second at 60fps. A combat entrance is longer
+  than that: each actor tweens for `ENTER_TIME` 0.55s after a stagger of
+  `ENTER_LEAD` 0.16s plus `ENTER_STEP` 0.13s per index
+  (`presentation/combat/enemy_view.gd:283`, `288-289`), so the third foe is
+  still travelling at 1.27s. A one-off `tools/shot.sh --fight=...` therefore
+  photographs an empty floor with healthy-looking chrome, and so does a
+  `live.sh shot` taken straight after a `reload` that rebuilt the scene. The
+  host itself is immune once it has been up a while — the entrance is long over
+  — which is a second reason to keep one running rather than boot per capture.
+  Nothing here is wrong with the settle loop; it settles layout and first paint,
+  which is what it was written for. It was never a wait for choreography.
+
+- **The host does not outlive the process group that launched it.** Measured
+  2026-07-27: a `tools/live.sh start` issued from a foreground shell reported
+  `host ready (pid 49755)` and served one `shot`, and the next invocation
+  answered `no host running`. The host's log ended with only the funplay
+  bridge's `_exit_tree` serialisation noise — no game error, no crash. Launching
+  the same command with the invocation backgrounded produced a host that
+  answered `status` across later, separate calls. So the daemon inherits its
+  launcher's process group and dies when that group is torn down. Any caller
+  that ends its shell between commands — an agent harness running one command
+  per tool call is the case that found this — must background the `start`, or it
+  pays the boot and the focus grab it was trying to avoid on every single
+  capture, which is precisely the cost this whole decision exists to remove.
 
 ## Why This Matters
 
