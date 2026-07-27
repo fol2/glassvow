@@ -25,7 +25,7 @@ handful of names; the catalogue behind them is much wider.
 The trap is that a request always arrives named after a *recipe* ("make nebula's
 cosmos deeper"), while the code that produces the effect lives in a *shared
 helper*. `confetti()` in `card_surface.gdshader:220` is called by every finish
-with `sparkle > 0` — five of the thirteen `FINISH` entries: `metallic`,
+with `sparkle > 0` — five of the fourteen `FINISH` entries: `metallic`,
 `pearlescent`, `prismatic`, `cosmos`, `cosmos-art`.
 
 On 2026-07-25 five commits were reverted for walking into exactly that. Depth,
@@ -76,7 +76,7 @@ Four rules, all load-bearing:
 
 3. **Set a non-zero value only on the recipes named in the request.** In
    `card_surface.gd` today, `flake_deep`/`flake_wake` are non-zero on exactly
-   two entries — `cosmos` and `cosmos-art`. The other eleven read `0.0, 0.0`.
+   two entries — `cosmos` and `cosmos-art`. The other twelve read `0.0, 0.0`.
    That column is reviewable at a glance, which is the point.
 
 4. **Prove the untouched recipes did not move beyond the shader-edit floor.**

@@ -60,7 +60,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:219` (`_capture_and_quit`).) It waits 30 frames for the
+(`application/main.gd:242` (`_capture_and_quit`).) It waits 30 frames for the
 first paint, reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
@@ -244,7 +244,7 @@ save under `user://shots/` and copies the result out
 to 400 × 0.05s (`tools/live.sh:104-120`).
 
 **Do not pass `--shot` to the host.** That hook captures once and quits
-(`application/main.gd:219` (`_capture_and_quit`)), which is the exact behaviour the host exists to
+(`application/main.gd:242` (`_capture_and_quit`)), which is the exact behaviour the host exists to
 avoid. `tools/live.gd:22` and `tools/live.sh:14` both say so.
 
 ### Hot reload is the load-bearing part
@@ -447,7 +447,7 @@ no mode for a shape hides a class. See
 [Drive the lab the way the game drives it](./drive-the-lab-the-way-the-game-drives-it.md).
 
 This also explains why the seven failed attempts are worth their space in
-`tools/shot.sh:11-26`. Each one *looked* plausible, and several of them
+`tools/shot.sh:28-35`. Each one *looked* plausible, and several of them
 (`no_focus` reading back `value=true`; the `LSUIElement` clone reporting
 `4.7.1.stable.official`) produced a satisfying intermediate confirmation that
 had nothing to do with the outcome. A configuration that reads back correctly is
@@ -491,7 +491,7 @@ final design is one boot per session, which was then measured and handed back
   where booting a host is not worth it.
 - **Before reaching for `WINDOW_FLAG_NO_FOCUS`, `display/window/size/no_focus`,
   `LSUIElement`, `LSBackgroundOnly`, or a focus-reclaiming watcher.** All five
-  were measured and all five failed; read `tools/shot.sh:11-26` first.
+  were measured and all five failed; read `tools/shot.sh:28-35` first.
 - **Before adding `--headless` to anything that captures a viewport.** Headless
   has no viewport texture and the run hangs rather than failing
   (`docs/hud-handoff.md:167-169`), and `godot --help` confirms the headless

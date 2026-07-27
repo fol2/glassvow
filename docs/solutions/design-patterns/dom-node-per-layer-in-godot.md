@@ -74,7 +74,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[presentation/combat/hud_bar.gd:934](../../../presentation/combat/hud_bar.gd#L934) (in `_sync_pile`):
+[presentation/combat/hud_bar.gd:947-950](../../../presentation/combat/hud_bar.gd#L947) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -113,7 +113,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([presentation/combat/hud_bar.gd:947](../../../presentation/combat/hud_bar.gd#L947) (`_fan_angle`)).
+  resolves ([presentation/combat/hud_bar.gd:972](../../../presentation/combat/hud_bar.gd#L955) (`_fan_angle`)).
 
 ## Why This Matters
 
@@ -171,12 +171,22 @@ Same geometry (same 50%/92% pivot, same 5°-per-card / 30°-span rule from the
 benchmark's `src/pile-chrome.js:4-8` — `PILE_FAN_DEG`, `PILE_FAN_MAX_DEG`,
 `PILE_FAN_MAX_LAYERS`), same pixels, 48 nodes → 3.
 
-**One live `add_child` loop in this file is the exemption, not a survivor.**
-`presentation/combat/hud_bar.gd:839-860` (in `fly_backs`) still builds
-`TextureRect`s in a loop for `fly_backs` —
-transient flyers that each need their own independent animation, which is
-exactly the case the rule above carves out. Left as is deliberately; a reader
-grepping for `add_child` should not read it as an unconverted instance.
+**Two live `add_child` loops in this file are exemptions, not survivors.**
+
+- `presentation/combat/hud_bar.gd:857-885` (in `fly_backs`) builds a
+  `TextureRect` per flyer and gives each its own `Tween` — transient nodes that
+  each need an independent animation, which is exactly the case the rule above
+  carves out.
+- `presentation/combat/hud_bar.gd:385-392` (in `_sync_candles`) builds one
+  non-interactive `TextureRect` per point of max energy. Node count scales with
+  a gameplay value that stays small, which is the second carve-out.
+
+**Corrected 2026-07-27:** this paragraph said "one" for a month and there were
+always two — `_sync_candles` predates the doc. The damage was in the sentence
+that followed, which told a reader grepping for `add_child` that a single hit
+was expected; the grep returns two, and the doc made the second one look like an
+unconverted instance. A count is a claim like any other, and this one was never
+checked because it read as scene-setting rather than as an assertion.
 
 ## Related
 

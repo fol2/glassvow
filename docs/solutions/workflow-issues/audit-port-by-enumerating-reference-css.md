@@ -179,7 +179,7 @@ const HP_EASE: Array[float] = [0.3, 1.0, 0.4, 1.0]
 ```
 
 ```gdscript
-# presentation/combat/hud_bar.gd:626 (_glide_hp) — travel; first sync snaps
+# presentation/combat/hud_bar.gd:643 (_glide_hp) — travel; first sync snaps
 func _glide_hp() -> void:
 	if not _hp_seeded:
 		_hp_seeded = true
@@ -404,7 +404,7 @@ fix, seeding at 50/72 then dropping to 30/72: first sync lands with no sweep;
 the second travels and settles on `170 × 30/72`. Two rails, two durations, one
 curve — `HP_BAR_TIME 0.4`, `HP_PLATE_TIME 0.35`, `HP_EASE [0.3, 1.0, 0.4, 1.0]`
 in `presentation/combat/hud_bar.gd:80-82`, driven by `_glide_hp` at
-`presentation/combat/hud_bar.gd:626` (`_glide_hp`). That is
+`presentation/combat/hud_bar.gd:643` (`_glide_hp`). That is
 the whole loop the method is for: extract the declaration, audit it as ABSENT
 with quoted evidence, rank it by how often a player sees it, then close the row
 with the numbers the stylesheet already named.

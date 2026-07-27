@@ -48,9 +48,9 @@ than in passing.
 It was building its actors wrong. `_actor`
 (`presentation/lab/enemy_lab.gd:434` (`_actor`)) constructed every
 view with `EnemyView.new(...)` and then placed it, and that was all. The shipping
-screen does one more thing: `presentation/combat/combat_screen.gd:1189`
+screen does one more thing: `presentation/combat/combat_screen.gd:1231`
 (in `start_encounter`) calls `view.set_profile(_foe_kind(e.idx))` for every foe,
-and `presentation/combat/combat_screen.gd:1147` (in `start_encounter`) calls
+and `presentation/combat/combat_screen.gd:1189` (in `start_encounter`) calls
 `_hero.set_profile("rogue")` for the player. Without that call an actor keeps the
 profile it is constructed with, and the construction default is not neutral —
 `_read_idle` ends by calling `_resolve_profile(&"humanoid")`
@@ -122,6 +122,16 @@ the paragraph above predicted:
   matters, because one specular pixel hit 185 where the answer averaged 2.6 and
   dividing by the maximum crushed it to black. The last cell is a free
   reference: every strip here is built to end after its beat.
+
+**And a fourth, which that pass did not find.** The three above are the defects
+behind the unreadable *cell*. A fourth sat in the same `--absorb` block and was
+outside that frame entirely: the strip drove every subject with a hard-coded
+`Vector2.LEFT`, the foe convention, so it could neither surface the missing
+hero-side `ward_hit` nor have caught a wrong heading. Enumerating "what made
+this cell unreadable" was the right question and it did not reach a defect in
+the same six lines, because that one damaged the strip's *verdict* rather than
+its legibility. Three-item lists invite the reading that the list is complete;
+this one was complete only for the question asked of it.
 
 The limit, stated because a general instrument invites over-trust: `--delta`
 answers *what changed*, and for this beat what changed most is the stone's
@@ -222,12 +232,13 @@ production without anyone re-testing that premise. (session history)
 
 ## Guidance
 
-### 1. Enumerate the calls production makes on the subject, and assert the harness makes the same ones
+### 1. Enumerate the calls production makes on the subject — and the arguments it passes — and assert the harness makes the same ones
 
 A lab that builds the subject with a constructor and nothing else is testing the
 constructor. Before trusting any verification surface, read the production call
 site end to end and list every method it invokes on the subject between
-construction and first paint. That list is the harness's contract. Here it was one
+construction and first paint, and the value it passes to each. That pair — call
+and argument — is the harness's contract. Here it was one
 call — `set_profile`
 (`presentation/combat/enemy_view.gd:2651` (`set_profile`)) — and the sheet's
 own comment now names the production line it mirrors
@@ -236,7 +247,25 @@ is a diff rather than an archaeology.
 
 The check is cheap and mechanical: `grep` the subject's public methods against
 both the production caller and the harness, and explain every method the first
-calls and the second does not. An intentional difference is fine — the lab
+calls and the second does not — **and every method both call with different
+arguments**. A literal in the harness where production has a derived value is a
+finding until a comment justifies it.
+
+That second half was added on 2026-07-27 because the rule above, as first
+written, passed a harness that was lying. The `--ward --absorb` strip called
+`ward_hit` exactly as production does and hard-coded `Vector2.LEFT` for every
+subject — including the two heroes on the lab's own roster
+(`presentation/lab/enemy_lab.gd:156` (`HEROES`)). It cleared the method check
+and could not have caught either the missing hero-side call in `_hit_player` or
+a wrong heading, because it supplied the parameter under test. See
+[The hero's ward stone never answered a blow it stopped](../ui-bugs/hero-ward-stone-never-answered-the-blow.md).
+
+The two failure modes are not equally visible, which is why the argument half
+matters more than it looks: a missing call renders as **nothing**, and someone
+eventually notices nothing. A wrong-but-plausible argument renders as a
+plausible effect, and nobody notices at all.
+
+An intentional difference is fine — the lab
 deliberately skips the seat delay in `--enter` because one actor cannot show a
 stagger (`presentation/lab/enemy_lab.gd:1296-1304`, in `_ready`) — but it has
 to be written down as a decision, not left as an omission.
@@ -413,7 +442,7 @@ body inside its 3D sub-viewport with the correct stagger, one moving the whole
 Control with the correct curve and the chrome — and neither looked broken in a
 still. That is now one function:
 `presentation/combat/enemy_view.gd:2806` (`enter`) owns the motion and the fill,
-`presentation/combat/combat_screen.gd:1234` (`_play_entrance`) owns the seat
+`presentation/combat/combat_screen.gd:1293` (`_play_entrance`) owns the seat
 delay and the re-anchor. It was found the same way, by giving a category of
 behaviour an instrument and then reading a number off it.
 
@@ -429,9 +458,9 @@ truth.
 ## When to Apply
 
 - **Whenever a lab, fixture, sandbox, or preview surface constructs the same
-  object production constructs.** Diff the call sequences before you trust a
-  verdict taken from it. This is the highest-yield check in the list and it costs
-  a `grep`.
+  object production constructs.** Diff the call sequences *and the argument
+  values* before you trust a verdict taken from it. This is the highest-yield
+  check in the list and it costs a `grep`.
 - **Before recording a verdict in a shared audit document.** State which
   instrument produced it. "Constants compared against the reference" and "watched
   it run and measured X" are different verdicts and must not share a word.
@@ -588,6 +617,12 @@ to make the body rise on a surface anyone was photographing.
   — the same distortion with the opposite sign: there the lab's own magnification
   manufactured a defect that was not in the chip. A lab misleads in both
   directions, which is the general case this doc argues from.
+- [The hero's ward stone never answered a blow it stopped](../ui-bugs/hero-ward-stone-never-answered-the-blow.md)
+  — the case that forced §1's argument clause. The harness made the same call
+  production makes and passed a constant where production derives a value, so it
+  cleared the method check and still certified a premise it had supplied itself.
+  Read together, the two docs are the same rule at two grains: *which* calls, and
+  *with what*.
 - `CONCEPTS.md` › **Lab** — where the vocabulary lives. This learning records
   the production-driving, capture-mode, timebase and exposure constraints that
   make a Lab trustworthy.

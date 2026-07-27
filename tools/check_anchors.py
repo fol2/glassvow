@@ -25,6 +25,22 @@ reported, never auto-fixed: nothing in the document says how far the interior
 line should have moved, and guessing would launder a wrong number into a
 confident one.
 
+Two limits worth knowing before trusting a green run.
+
+**`(in symbol)` cannot see drift INSIDE a function that grew.** The check is
+containment, so an anchor that was line 3 of a 20-line body and is now line 3 of
+a 190-line body still passes while pointing somewhere else entirely. Measured on
+2026-07-27: six citations into `application/main.gd`'s `_ready` had all moved
+10-11 lines and every one passed. Containment is the check that catches an
+anchor leaving its function; nothing here catches one drifting within it.
+
+**The regex is a whitelist of citation spellings, and the docs write more than
+one.** Three separate silent classes have now been found and closed — a bare
+basename that went ambiguous, a path-less `:NNNN`, and the markdown-link form
+whose annotation lands after the link's own closing paren. Each read as checked
+and was skipped. When adding a fourth spelling to the docs, add it here first,
+or it joins them.
+
 Usage:
     tools/check_anchors.py            # report; exit 1 if anything drifted
     tools/check_anchors.py --fix      # rewrite drifted line numbers in place
@@ -50,10 +66,41 @@ CODE_SUFFIXES = ("gd", "gdshader", "tscn", "py", "sh", "json", "cfg", "godot")
 # The optional trailing backtick matters: prose writes the anchor as its own
 # code span and the symbol as the next one — `enemy_view.gd:752` (`_update_shadow`)
 # — so the closing backtick sits between the two and must be allowed through.
+# The `sym` group tolerates three spellings of the same annotation, because the
+# docs use all three and a shape the regex does not know is a shape it silently
+# passes. Measured on 2026-07-27: the markdown-link spelling alone was hiding
+# three drifted anchors in one doc, including a `_sync_pile` citation that had
+# come to rest inside `_keyframe_pop` — the precise failure this module's own
+# docstring claims the symbol annotation prevents.
+#
+#     `enemy_view.gd:752` (`_update_shadow`)                 plain
+#     [hud_bar.gd:934](../../hud_bar.gd#L934) (in `_sync_pile`)   markdown link
+#     `enemy_lab.gd:1296-1304`, in `_ready`                  comma, no parens
 ANCHOR = re.compile(
     r"(?P<path>[\w./-]+\.(?:" + "|".join(CODE_SUFFIXES) + r"))"
     r":(?P<start>\d+)(?:-(?P<end>\d+))?"
-    r"(?P<sym>`?\s*\((?P<in>in\s+)?`?(?P<symbol>[A-Za-z_][\w]*)`?\))?"
+    r"(?P<sym>(?:\]\([^)]*\))?`?"
+    r"(?:\s*\((?P<in>in\s+)?`?(?P<symbol>[A-Za-z_][\w]*)`?\)"
+    r"|,\s*(?P<in2>in\s+)?`(?P<symbol2>[A-Za-z_][\w]*)`))?"
+)
+
+# The THIRD silent class, and the one that reads as the most trustworthy.
+#
+# A citation that drops the filename entirely — `` `:1374` (`HIT_FRAMES`) `` — is
+# invisible to ANCHOR above, which needs a path with a code suffix before it will
+# match anything. It carries a symbol annotation, so it looks like the checked
+# form; it is checked zero times. Measured on 2026-07-27: 50 of these across
+# three docs, and every one into `enemy_lab.gd` had drifted 38-75 lines while the
+# run over that same doc printed "anchors OK".
+#
+# This repo has now been bitten by the same shape twice. The first was the bare
+# basename that went ambiguous and was skipped in silence; the fix then was to
+# make the skip impossible rather than to resolve it. Same fix here: a path-less
+# anchor is REPORTED, never guessed at. The checker cannot know which file the
+# prose meant, and inventing one would launder a citation nobody wrote.
+BARE_ANCHOR = re.compile(
+    r"(?<![\w./-])`:(?P<start>\d+)(?:-(?P<end>\d+))?`"
+    r"(?P<sym>\s*\(`?(?:in\s+)?`?(?P<symbol>[A-Za-z_][\w]*)`?\))?"
 )
 
 # How a symbol is declared in the languages this repo actually uses. Ordered:
@@ -175,9 +222,16 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
 
     for doc in targets:
         for doc_line, line in enumerate(doc.read_text().splitlines(), start=1):
+            for b in BARE_ANCHOR.finditer(line):
+                named = b.group("symbol")
+                findings.append(Finding(
+                    doc, doc_line, b.group(0).strip(), "pathless",
+                    "names no file, so it was never checked — write the full"
+                    " repo-relative path" + (f" for `{named}`" if named else "")))
             for m in ANCHOR.finditer(line):
                 cited, start = m.group("path"), int(m.group("start"))
-                symbol = m.group("symbol")
+                # Either spelling of the annotation; see ANCHOR.
+                symbol = m.group("symbol") or m.group("symbol2")
                 text = m.group(0).strip()
 
                 target = resolve(cited, index)
@@ -213,7 +267,7 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
                 if actual is None:
                     findings.append(Finding(doc, doc_line, text, "missing",
                                             f"symbol `{symbol}` not found in {cited}"))
-                elif m.group("in"):
+                elif m.group("in") or m.group("in2"):
                     last = symbol_body(body, actual)
                     end = int(m.group("end") or start)
                     if not (actual <= start and end <= last):
@@ -235,7 +289,8 @@ def apply_fixes(repairs: dict[Path, list[tuple[int, int]]]) -> int:
         for old, new in pairs:
             # Rewrite only inside an anchor, never a bare number elsewhere.
             def sub(m: re.Match) -> str:
-                if int(m.group("start")) != old or m.group("symbol") is None:
+                if int(m.group("start")) != old or (
+                        m.group("symbol") is None and m.group("symbol2") is None):
                     return m.group(0)
                 end = m.group("end")
                 span = f"-{int(end) + (new - old)}" if end else ""
@@ -270,15 +325,21 @@ def main() -> int:
     # --fix cannot repair it. The doc has to name a full repo-relative path,
     # because the checker has no way to guess which same-named file was meant.
     vague = sum(1 for f in findings if f.kind == "ambiguous")
+    # Same standing as `vague`, and for the same reason: --fix cannot repair it
+    # and guessing the file would be worse than reporting it.
+    pathless = sum(1 for f in findings if f.kind == "pathless")
     if soft:
         print(f"\n{soft} anchor(s) carry no symbol and cannot be drift-checked.")
     if vague:
         print(f"\n{vague} anchor(s) cite a bare name this repo carries more than"
               " once, so they were never checked. Cite the full repo-relative path.")
+    if pathless:
+        print(f"\n{pathless} anchor(s) name no file at all, so they were never"
+              " checked despite carrying a symbol. Cite the full repo-relative path.")
     if drift:
         print(f"\n{drift} anchor(s) no longer point where they claim."
               " Run with --fix to re-anchor the drifted ones.")
-    if drift or vague:
+    if drift or vague or pathless:
         return 1
     print("anchors OK" + (f" ({soft} uncheckable)" if soft else ""))
     return 1 if (args.strict and soft) else 0

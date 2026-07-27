@@ -319,11 +319,21 @@ lines later in another. A green run means no Anchor has rotted, not that every
 Anchor points where its sentence says. Only reading the cited line against the
 sentence establishes that.
 
-A green run is also quieter than it looks, because two whole classes of Anchor
-go unexamined. A citation carrying no symbol annotation is not validated at all
-by default, so it may point anywhere and still pass. And an Anchor into another
-prose document is invisible to the check entirely — only citations into code are
-recognised as Anchors at all. The citations documents make about each other are
+A green run is also quieter than it looks, because whole classes of Anchor go
+unexamined, and every one of them reads as checked. A citation carrying no
+symbol annotation is not validated at all by default, so it may point anywhere
+and still pass. An Anchor into another prose document is invisible to the check
+entirely — only citations into code are recognised as Anchors at all. A citation
+that names no file, only a line, is skipped for the same reason even when it
+carries a symbol, which makes it the most trustworthy-looking of the lot. And an
+Anchor whose annotation says only that the line falls *inside* a named function
+keeps passing as that function grows, so drift within a long body is never
+reported at all.
+
+The pattern behind those is worth more than the list: the checker recognises a
+fixed set of citation spellings, so a spelling it does not know is a spelling it
+silently approves. Three such classes have been found and closed on separate
+occasions, each after a clean run had certified work nobody had looked at. The citations documents make about each other are
 therefore the least checked and the most quietly wrong, which is the opposite of
 how a clean report reads.
 
@@ -365,7 +375,10 @@ judging sharpness — judge at actual size. A Lab needs a real viewport to
 capture from, so a headless run can parse-check its code but cannot photograph
 it. A Lab may not *dress* its subjects the way production dresses them: it
 stands the widget up itself, so every call the shipping screen makes between
-construction and first paint has to be made here too, or the Lab is certifying
+construction and first paint has to be made here too — **and with the arguments
+production passes**, since a Lab that hands the subject a constant where the
+game derives a value is testing a premise it supplied itself — or the Lab is
+certifying
 an object the game never builds. And a Lab's set of capture modes bounds what
 can be found *missing* — a category of behaviour with no mode is invisible
 rather than absent, which is a stronger failure than a wrong value, because

@@ -57,7 +57,7 @@ curve, the hero's −70px and the `_stand` re-anchor, and had no stagger. The
 Control is the correct element and the stagger is the correct behaviour, so they
 are one function: `EnemyView.enter(delay, done)` owns the motion and the fill,
 `_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2806` (`enter`),
-`combat_screen.gd:1234` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
+`combat_screen.gd:1293` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
 which fired a frame earlier and set foe alpha to zero under the other path's
 nose, is gone.
 
