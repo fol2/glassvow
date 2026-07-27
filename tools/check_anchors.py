@@ -65,6 +65,8 @@ DECLARATIONS = (
     "static func {s}",
     "const {s}",
     "var {s}",
+    "static var {s}",
+    "@export var {s}",
     "class {s}",
     "class_name {s}",
     "signal {s}",
@@ -187,11 +189,13 @@ def find_symbol(lines: list[str], symbol: str) -> int | None:
         if shader.match(line.lstrip()):
             return i
 
-    # Fall back to any standalone mention, which still beats reporting nothing.
-    word = re.compile(rf"\b{re.escape(symbol)}\b")
-    for i, line in enumerate(lines, start=1):
-        if word.search(line):
-            return i
+    # No fall back to "any line that mentions the name". It reported something
+    # for every symbol, including ones the file never declares, and what it
+    # returned was routinely a call site or a string: `view.set_profile(...)`
+    # satisfied `(in set_profile)` in a file declaring no such symbol, and the
+    # `.tscn` inside a path literal satisfied a citation annotated `(tscn)`.
+    # An anchor whose symbol cannot be located is now reported as missing,
+    # which is the honest answer and the one this script exists to give.
     return None
 
 
