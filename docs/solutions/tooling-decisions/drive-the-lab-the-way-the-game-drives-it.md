@@ -75,7 +75,7 @@ hiding.
 **A whole category of behaviour had no capture mode.** Every pre-existing strip
 photographs a *beat* — a one-shot animation with a start, a peak and an end. The
 frame tables say so in their own comments: `RITE_FRAMES`
-(`presentation/lab/enemy_lab.gd:1397` (`RITE_FRAMES`)), `HIT_FRAMES`
+(`presentation/lab/enemy_lab.gd:1405` (`RITE_FRAMES`)), `HIT_FRAMES`
 (`:1374` (`HIT_FRAMES`), clustered early because the flash peaks at 90 ms),
 `CRACK_FRAMES` (`:1379` (`CRACK_FRAMES`)), `WARD_FRAMES`
 (`:1386` (`WARD_FRAMES`)), `ENTER_FRAMES` (`:1389` (`ENTER_FRAMES`)). An
@@ -280,7 +280,7 @@ like a creature standing perfectly still.
 
 So `--idle` runs in **real time** and spaces its frames wider than the readback
 costs instead: `IDLE_FRAMES` at 0.84s intervals over one 4.2s period — the slowest
-kind idle, `idleSlime` — at `presentation/lab/enemy_lab.gd:1428`
+kind idle, `idleSlime` — at `presentation/lab/enemy_lab.gd:1436`
 (`IDLE_FRAMES`), dispatched at `presentation/lab/enemy_lab.gd:1306-1313`
 (in `_ready`) with no `time_scale` assignment at all.
 
@@ -390,7 +390,7 @@ behaviour an instrument and then reading a number off it.
 
 Finally, note what this costs to prevent. The lab defect was one line. The missing
 capture mode was one frame table and one `if` branch — `IDLE_FRAMES`
-(`presentation/lab/enemy_lab.gd:1428` (`IDLE_FRAMES`)) and the
+(`presentation/lab/enemy_lab.gd:1436` (`IDLE_FRAMES`)) and the
 `_mode == "idle"` dispatch (`presentation/lab/enemy_lab.gd:1306-1313`, in
 `_ready`),
 reusing `_shoot_strip` unchanged. The expensive part was never the tool. It was
@@ -467,7 +467,7 @@ What is in the tree instead — real time, six cells spaced 0.84s apart across o
 full 4.2s `idleSlime` period, wide enough that a viewport readback per cell keeps
 up without any clock trickery
 (`presentation/lab/enemy_lab.gd:1306-1313`, in `_ready`, against
-`IDLE_FRAMES` at `presentation/lab/enemy_lab.gd:1428` (`IDLE_FRAMES`)):
+`IDLE_FRAMES` at `presentation/lab/enemy_lab.gd:1436` (`IDLE_FRAMES`)):
 
 ```gdscript
 await _shoot_strip(IDLE_FRAMES, "idle", func(_v: EnemyView) -> void: pass)

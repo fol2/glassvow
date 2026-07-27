@@ -2224,6 +2224,18 @@ func _hit_player(ev: Dictionary) -> void:
 		_hero.take_hit(not indirect)
 	if blocked > 0:
 		_sfx.play(&"blocked")
+		# The same pair `_hit_enemy` makes, and the half the hero was missing. `take_hit`
+		# above is the BODY recoiling; this is the stone answering for having stopped the
+		# blow. A foe that ate one flinched its shield and rang the facets facing the
+		# hero; the hero ate the identical blow and its stone did not move, so a guarded
+		# hero and an unguarded one were the same picture apart from the numeral.
+		#
+		# `RIGHT` where the foe gets `LEFT`, and it has to be the mirror rather than the
+		# default: `from` points from the creature toward whoever struck it, so it drives
+		# the shield away from that side and lights the facets on it. The foes are on the
+		# hero's right, and passing the default would drive the hero's stone INTO the blow.
+		if _hero != null:
+			_hero.ward_hit(Vector2.RIGHT)
 		_float(at + Vector2(0.0, 30.0), str(blocked), "blockedf",
 			Color(0, 0, 0, 0), 0.0, WARD_ICON, 19)
 		_vfx.burst(at + Vector2(0.0, 8.0), WARD_BLUE, 9, 210.0, TAU, 0.0, 2.0, 260.0)

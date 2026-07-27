@@ -1352,8 +1352,16 @@ func _ready() -> void:
 			# The other half of the stone's life: a blow it STOPPED. Same slowed clock, and
 			# the body is struck too, because the point of the cell is that the two read as
 			# separate events on the same frame.
+			#
+			# The heading is the subject's, not a constant. `from` points from the creature
+			# toward whoever struck it, and on the battlefield that is the far side of the
+			# field: a foe is struck from its LEFT and a hero from its RIGHT
+			# (`combat_screen.gd` › `_hit_enemy`, `_hit_player`). Hard-coding LEFT here
+			# would photograph a hero's stone flinching INTO the blow, which is the one
+			# thing this cell exists to catch.
+			var from: Vector2 = Vector2.RIGHT if HEROES.has(_strip_id) else Vector2.LEFT
 			act = func(v: EnemyView) -> void:
-				v.ward_hit(Vector2.LEFT)
+				v.ward_hit(from)
 				v.take_hit(true)
 		await _shoot_strip(wall_w, "ward", act)
 		return
