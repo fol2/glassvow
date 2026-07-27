@@ -948,10 +948,13 @@ func _build_panel() -> void:
 		var lo2: float = k[2]
 		var hi2: float = k[3]
 		_meta_slider(rows, str(k[0]), key, lo2, hi2)
-	rows.add_child(_button("save char-meta.json", func() -> void:
+	var save_meta: Button = _button("save char-meta.json", func() -> void:
 		var ok: bool = EnemyView.save_meta()
 		_readout.text = ("saved char-meta.json" if ok
-			else "could not write char-meta.json")))
+			else "could not write char-meta.json"))
+	save_meta.disabled = OS.has_feature("web_dev")
+	save_meta.tooltip_text = "Use Native Proof to write char-meta.json." if save_meta.disabled else ""
+	rows.add_child(save_meta)
 
 	_readout = _dim("")
 	_readout.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1480,6 +1483,8 @@ func _shoot_strip(frames: Array[float], label: String, action: Callable) -> void
 ## Take the usable screen before measuring: every pixel the window gains is
 ## resolution the sheet does not have to scale away.
 func _grow_window() -> void:
+	if OS.has_feature("web"):
+		return  # The browser canvas has no native window frame to subtract.
 	var usable: Rect2i = DisplayServer.screen_get_usable_rect(
 		DisplayServer.window_get_current_screen())
 	if usable.size.x <= 0 or usable.size.y <= 0:
