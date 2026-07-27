@@ -28,8 +28,9 @@ extends Control
 ##                                    # the recoil, photographed across 320ms
 ##   tools/shot.sh --enemies --crack[=duskfang] --strip=/tmp/c.png
 ##                     # the PROPAGATION: one blow, its front photographed out to arrest
-##   tools/shot.sh --enemies --ward[=duskfang] [--absorb] --strip=/tmp/w.png
-##                     # the guard stone: breaking, or ringing from a blow it stopped
+##   tools/shot.sh --enemies --ward[=duskfang] [--raise|--absorb] --strip=/tmp/w.png
+##                     # the guard stone: forming (--raise), ringing from a blow it
+##                     # stopped (--absorb), or breaking (neither)
 ##   tools/shot.sh --enemies --enter[=duskfang] --strip=/tmp/e.png
 ##   tools/shot.sh --enemies --idle[=gloomslime] --strip=/tmp/i.png
 ##                     # the arrival — `enemyIn`, one actor without the lineup's stagger
@@ -106,6 +107,10 @@ var _strip_id: String = ""
 ## `--incidental` makes the struck beat a poison tick rather than a sword blow.
 var _hit_direct: bool = true
 var _picker: OptionButton = null
+## Held so the (W) key and the switch cannot disagree about whether the stone is up:
+## the key drives the switch, and the switch's own handler is the single place that
+## raises or breaks it.
+var _ward_switch: CheckButton = null
 var _probe: FractureProbe = null
 var _probe_readout: Label = null
 var _meta_rows: Dictionary = {}
@@ -120,9 +125,12 @@ var _frac_compare: bool = false
 var _pre_cracks: int = 0
 ## Whether a strip's actor stands up already guarded. Set by `--ward`, which photographs the
 ## stone breaking and therefore needs one to break. `--absorb` switches that strip to the
-## other event a stone has: a blow it stopped.
+## other event a stone has: a blow it stopped, and `--raise` to the one that comes first.
 var _ward_up: bool = false
 var _ward_absorb: bool = false
+## `--raise` photographs the stone FORMING instead. It is the only one of the three that
+## needs the actor to stand up unguarded, so it clears `_ward_up` rather than setting it.
+var _ward_raise: bool = false
 
 
 ## The two heroes stand on the same ground line as the foes and get the same
@@ -228,6 +236,8 @@ func _init(content_ref: ContentDB) -> void:
 			_hit_direct = false
 		elif arg == "--absorb":
 			_ward_absorb = true
+		elif arg == "--raise":
+			_ward_raise = true
 		elif arg == "--enter":
 			_mode = "enter"
 		elif arg.begins_with("--enter="):
@@ -846,7 +856,8 @@ func _build_panel() -> void:
 	rows.add_child(hp)
 
 	var ward: CheckButton = CheckButton.new()
-	ward.text = "ward"
+	ward.text = "ward   (W)"
+	_ward_switch = ward
 	# Both halves. The bench is where the 560 ms form-up and the re-cut pulse can actually be
 	# judged, so this raises the STONE as well as the number — toggling it twice is the
 	# "gained ward while already warded" case, which is the only way to see the re-cut.
@@ -1212,6 +1223,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_S:
 			if _bench_actor != null:
 				_bench_actor.shatter()
+		KEY_W:
+			# The switch, not the actor: both halves of the ward and the re-cut case go
+			# through its handler, and the panel must not lie about the stone's state.
+			# This is also what makes the form-up and the break drivable from
+			# `tools/live.sh key w`, which the scroll-buried switch was not.
+			if _ward_switch != null:
+				_ward_switch.button_pressed = not _ward_switch.button_pressed
 		KEY_F:
 			EnemyView.rite_fx = not EnemyView.rite_fx
 		KEY_V:
@@ -1315,14 +1333,22 @@ func _ready() -> void:
 	if _mode == "ward":
 		# The guard giving way. Slowed for the same reason `--crack` is — the break is 340 ms
 		# against a readback that costs 70 — and photographed from a stone that is ALREADY up,
-		# because this strip is about the break and not about the form-up.
+		# because this strip is about the break and not about the form-up. `--raise` is the
+		# form-up, and it is the one case that starts from an unguarded actor.
 		Engine.time_scale = CRACK_SLOMO
+		var frames_w: Array[float] = WARD_RAISE_FRAMES if _ward_raise else WARD_FRAMES
 		var wall_w: Array[float] = []
-		for t: float in WARD_FRAMES:
+		for t: float in frames_w:
 			wall_w.append(t / CRACK_SLOMO)
-		_ward_up = true
+		_ward_up = not _ward_raise
 		var act: Callable = func(v: EnemyView) -> void: v.set_ward(0)
-		if _ward_absorb:
+		if _ward_raise:
+			# Both halves, as a Ward card plays them: the number appears on the chip at the
+			# same instant the stone starts cutting itself in.
+			act = func(v: EnemyView) -> void:
+				v.set_ward(8)
+				v.set_ward_shell(true, true)
+		elif _ward_absorb:
 			# The other half of the stone's life: a blow it STOPPED. Same slowed clock, and
 			# the body is struck too, because the point of the cell is that the two read as
 			# separate events on the same frame.
@@ -1384,6 +1410,14 @@ const CRACK_SLOMO: float = 0.06
 ## is ease-out, so the pieces are already well clear by the third cell — the frames spread
 ## further than the crack's for that reason rather than clustering harder.
 const WARD_FRAMES: Array[float] = [0.0, 0.05, 0.11, 0.18, 0.26, 0.36]
+## The stone forming, in BEAT seconds. `EnemyView.WARD_GROW` is 560ms on a SMOOTHSTEP, which
+## is the one curve on this page that is slow at BOTH ends — so these cells cluster in the
+## middle, the opposite of every other table here, and for the same reason those cluster at
+## their own fast part. Read as `grow`: the cells land near 0, .16, .39, .61, .84 and 1, so
+## the cut count (`round(WARD_CUT_N * grow)`) steps 0 → 1 → 3 → 5 → 7 → 8 and no cell
+## repeats a facet count. Cell one is the unguarded body: at t=0 the shell is still under
+## the 2% visibility floor, and a strip of a thing appearing wants the "before".
+const WARD_RAISE_FRAMES: Array[float] = [0.0, 0.14, 0.24, 0.32, 0.42, 0.60]
 ## The arrival, in BEAT seconds. `EnemyView.ENTER_TIME` is 550ms on an ease-out, so most of
 ## the travel is over by a third of it and the cells cluster there.
 const ENTER_FRAMES: Array[float] = [0.0, 0.06, 0.14, 0.25, 0.38, 0.56]

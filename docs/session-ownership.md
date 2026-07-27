@@ -132,13 +132,31 @@ three lanes own. These wait for the organiser to sequence them.
    regression by regression, is `docs/benchmark-divergence.md`. It closes with
    the checker the organiser should adopt into `tools/`.
 
-3. **CONTRADICTION — who owns the player's ward chip and HP rail?** Two lanes
+3. **CONTRADICTION — who owns the player's ward CHIP and HP rail?** Two lanes
    have written down opposite answers, in two documents, about a file neither of
-   them owns:
+   them owns.
 
-   - `docs/actor-animation-checklist.md` §5.1 (Enemy / hero lane): *"the chrome
-     does **not** mirror a foe's foot plate: `hud_bar.gd` already carries the
-     hero's HP and ward, by its own lane's design."*
+   **First, the word.** "Ward" names three things and this item is about exactly
+   one of them (`CONCEPTS.md` › Ward):
+
+   - the **ward stone**, the gem shell held in front of a creature, which lives in
+     `presentation/combat/enemy_view.gd` and is **not in dispute** — it is the
+     Enemy / hero lane's, it has never been anywhere else, and nothing below
+     touches it;
+   - the **foe's ward chip**, also `enemy_view.gd`, also not in dispute;
+   - the **hero's ward chip**, in `presentation/combat/hud_bar.gd`, which is the
+     only one this item is about.
+
+   Read the rest with the chip in mind. The Enemy / hero lane is not claiming it.
+
+   - `docs/actor-animation-checklist.md` §5.1 (Enemy / hero lane) **as it read
+     when this item was written**: *"the chrome does **not** mirror a foe's foot
+     plate: `hud_bar.gd` already carries the hero's HP and ward, by its own
+     lane's design."* **That sentence is gone.** §5.1 now reads *"`hud_bar.gd`
+     still carries run chrome (energy, lantern, piles); the hero plate owns HP
+     and ward on the body"* — which is the Assembly lane's position, not the one
+     quoted. Verified 2026-07-27: the old wording appears nowhere in `docs/`
+     except in this quotation of it.
    - `docs/assembly-integration-plan.md` D2 (Assembly lane): *"The benchmark says
      the actor owns it. Confirm `HudBar._build_plate()` goes unused rather than
      both being wired."*
@@ -172,9 +190,26 @@ three lanes own. These wait for the organiser to sequence them.
    `_build_top_bar()`'s HP **must stay**, because it is a different element of
    the benchmark and deleting it would lose the run readout.
 
-   The Enemy lane's §5.1 note is therefore true as a description of today and
-   wrong as a statement of design: it is a temporary arrangement, not a
+   The §5.1 note as quoted was therefore true as a description of today and
+   wrong as a statement of design: it was a temporary arrangement, not a
    deliberate divergence from the benchmark.
+
+   **CLOSED, 2026-07-27, by `49b505d4` (current Enemy / hero owner).** There is
+   no longer a contradiction to resolve: §5.1 was rewritten to the position the
+   benchmark reading above arrives at, so both written positions now agree and
+   only this item still carried the old one. The Enemy / hero lane does not
+   claim the hero's ward chip. `enemy_view.gd` owns the ward stone and a foe's
+   chip; whether the hero's chip moves out of `hud_bar.gd` onto a hero actor is
+   the HUD and Assembly lanes' call, and this lane implements whichever they
+   take.
+
+   Two things kept this alive longer than the disagreement itself. One is that
+   an item's quotations age independently of what they quote — nothing re-reads
+   a block quote once it is written, and `tools/check_anchors.py` checks line
+   numbers, not prose. The other is the word: "ward" was naming the protection,
+   the chip and the stone in the same sentences, and a lane cannot decline
+   something it cannot name. Both are why `CONCEPTS.md` now carries Ward chip
+   and Ward stone as separate terms.
 
 3. **The deck at the bottom of the HUD.** Raised in the HUD lane and never
    answered: should there be three decks, each with its own assets? The answer
