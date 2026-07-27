@@ -401,6 +401,11 @@ func _actor(id: String, def: Dictionary, locale: Dictionary, x: float,
 	var hue: float = art.get("hue", 210)
 	var display: String = str(locale.get("name", def.get("name", id)))
 	var view: EnemyView = EnemyView.new(0, display, hue, StringName(id))
+	# The kind's idle profile, exactly as the combat screen resolves it
+	# (`combat_screen.gd:1089`, `_foe_kind`). Without it every creature on this
+	# sheet idled — and hovered, and cast its shadow — as a humanoid, so the one
+	# surface built to judge the actors was showing an idle no fight ever runs.
+	view.set_profile(str(art.get("kind", "humanoid")))
 	# Feet are the box bottom; footY lifts (or sinks) the actor off the line,
 	# footX slides it — the benchmark's bfEnemyFootX / bfEnemyFootY.
 	view.position = Vector2(x + view.foot.x, ground - view.size.y - view.foot.y)

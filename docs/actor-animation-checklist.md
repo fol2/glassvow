@@ -76,13 +76,22 @@ Here: the **mesh layer matches**. `IDLE_PROFILES` matches the benchmark
 terms run in `BODY_SHADER` (`enemy_view.gd:496-526`,
 `enemy_view.gd:721-781`, `enemy_view.gd:2255-2299`).
 
-The separate CSS kind layer is absent. For example, the benchmark wisp also
-floats 16px over 3.1s; Godot only applies mesh float, whose maximum is
-`1.35 × 12 × .45 = 7.29px` on a 1.15 rad/s sine (about 5.46s)
-(`enemy_view.gd:496`, `enemy_view.gd:529`,
-`enemy_view.gd:2017-2027`). There is no `idleSlime` squash, serpent
-`idleSway`, general `idleBreathe`, or idle-mote equivalent. Per-kind mesh
-profiles are not the benchmark's second CSS layer.
+**`idleFloat` is built (2026-07-27); the rest of the CSS layer is still absent.**
+The lifting kinds are ported at their authored amplitude and period — wisp
+3.1s/16px, eye 3.4s/18px, siren and shade 3.6s/12px, plant 3.8s/9px — as an eased
+triangle on top of the mesh float, never below the line (`KIND_HOVER`,
+`enemy_view.gd:555`; applied at `enemy_view.gd:2117`). This was done as part of
+§2: a shadow that answers the body's height has nothing to answer while the
+floaters move `1.35 × 12 × .45 = 7.29px` on a 5.46s sine against the benchmark's
+16px on 3.1s.
+
+Still missing: the `idleSlime` squash, serpent `idleSway`, general `idleBreathe`,
+and the idle-mote equivalent. None of them raise the body, which is why they were
+out of scope for the shadow work and are still open here.
+
+**Also fixed:** the enemy lab never called `set_profile`, so every creature on the
+one sheet built to judge the actors idled as a humanoid — an idle no fight ever
+runs (`enemy_lab.gd:403`).
 
 ### 1.3 Attack lunge — **FIX** the curve
 
@@ -235,14 +244,34 @@ skew reduced 35%, from a base of `scale(1,.24)`, opacity `.62`, blur `1.5px`
 (`src/char-meta.js:8`, `src/ui/combat.js:1771-1819`, `src/styles.css:767-782`).
 
 Here: derived by projecting the silhouette along the key light
-(`enemy_view.gd:1898-1944`). Lift response remains authored, not matched:
-`s = 1 - f*0.5`, opacity `× (1 - f*1.2)`, softness `1 + f*4`
-(`enemy_view.gd:1933-1944`). At Godot's maximum `f = .6`, those resolve to
-`s = .70`, opacity `.95 × .28 = .266` and softness 3.4; the benchmark full-lift
-values are scaleX .74, scaleY .12 from its .24 base, opacity
-`.62 × .45 = .279`, and blur 4.3px. Correct as a derive, not a numeric match.
+(`enemy_view.gd:2000` (`_update_shadow`)). **Built out 2026-07-27** — the grade
+above was the shape; the lift response was neither matched nor alive.
 
-Per-creature `shadow` knobs in `char-meta.json` are unread — see §5.3.
+Two defects, both fixed. **It never ran.** `_update_shadow` was called at build
+and at reset and nowhere else, while the benchmark resynchronises against the
+body's live transform on every frame of the rig loop
+(`src/ui/combat.js:1930-1932`). **And its one variable was the wrong quantity:**
+`_lift` was the transparent margin below the painting's lowest opaque row, which
+is a uniform export border, not height — bottom matches top to a tenth of a
+percent on most of the 27 (10.0/10.0, 5.2/5.2, 13.0/13.0, 20.7/20.6), the largest
+belongs to `shellback` (a crab, flat on the floor) at 20.7%, and `voidWisp` has
+4.3%. The response was therefore inverted as well as frozen.
+
+Height now comes from the body's own transform, floored at zero exactly as
+`spriteLiftPx` is, and the benchmark's response is ported by ratio: width
+`×(1-.26t)`, length `×(1-.5t)`, opacity `×(1-.55t)`, softening `×2.87` at full
+lift. `t` is normalised against `floatKinds` (`SHADOW_MAX`), plus the creature's
+resting hover so the four whose `dy` already meets their kind's span are not
+pinned at full fade. The skew relax is deliberately not ported — there the lean
+is a hand-set fake being walked back, here it is the projection.
+
+The projection also does the thing nine authored knobs could not: the contact
+point **moves**. A rising creature slides its shadow along the light's ground
+track (`hover * l.x * run`) and leaves it behind. Measured on `watcherEye` over
+eight frames of its own hover: shadow mass swings 22.3k → 28.3k, centroid travels
+11.4px.
+
+Per-creature `shadow` knobs in `char-meta.json` are unread except `dy` — §5.3.
 
 ---
 
@@ -486,19 +515,30 @@ current `duskfang.scale` is 1.77 versus the benchmark's .95
 `src/char-meta.js:35-36`). Those are separate stage/content departures, not a
 reason to derive the authored foot offsets.
 
-### 5.3 Shadow metadata in `char-meta.json` — **DERIVE** (reference-only data)
+### 5.3 Shadow metadata in `char-meta.json` — **PARTLY READ** (`dy` is not derivable)
 
 The benchmark reads nine per-character knobs and transforms a darkened copy of
 the painted silhouette; only its missing-art fallback is a blob
 (`src/char-meta.js:8`, `src/char-meta.js:94-99`,
 `src/ui/combat.js:1795-1818`, `src/styles.css:769-778`).
 
-Godot deliberately does not read those knobs. It already renders a live
-silhouette shadow whose contact, projection and lift response are derived from
-the painting alpha, ground plane and key light (`enemy_view.gd:1868-1896`,
-`enemy_view.gd:1898-1944`). The solution record explicitly retains the
-`shadow` blocks as vestigial reference data. Ground shadows are not missing, and
-the metadata is not a work item.
+Godot derives eight of the nine from the painting alpha, the ground plane and the
+key light (`enemy_view.gd:1930` (`_read_contact`), `enemy_view.gd:2000`
+(`_update_shadow`)). **The ninth, `dy`, is now read** (2026-07-27,
+`enemy_view.gd:2387` (`_read_hover`)) — this entry previously called the whole
+block vestigial and that was wrong about one knob.
+
+Contact point, lean, length and softening are all in the image or in the light.
+Resting height is in neither: `dy` says *this painting is of something already off
+the ground*, which no scan can recover, and exactly five creatures carry it —
+`watcherEye` 24, `shade` 16, `voltEel` 13, `sporeling` 10, `voidWisp` 9, which are
+exactly the floaters. It is read as a height and fed through the same projection
+the live hover uses, so it buys an offset, smaller, fainter, softer shadow rather
+than the straight-down shove CSS could manage. `dx` stays unread — it is a lateral
+nudge the projection now supplies.
+
+The remaining eight are still reference data, and the solution record has been
+corrected accordingly.
 
 ### 5.4 Every actor renders a live 3D stage — **MEASURED** at 1×; live scale not yet measured
 

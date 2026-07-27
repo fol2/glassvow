@@ -543,6 +543,32 @@ const IDLE_PIN: float = 1.6
 const FLOAT_PX: float = 12.0
 const FLOAT_RATE: float = 1.15
 
+## The SECOND idle layer, and the one this port never had. `FLOAT_PX` above is
+## the mesh plane's own offset; on top of it the benchmark hangs a per-KIND CSS
+## hover on the sprite box — `idleFloat`, amplitude and period authored per kind
+## (`src/styles.css:1612-1621`, applied at `src/ui/combat.js:1841`). A wisp rises
+## 16px over 3.1s there against 7.29px over 5.46s here, which is why the port's
+## floaters read as standing still, and why the shadow had nothing to answer to.
+## `x` is the peak lift in stage px, `y` the period in seconds. Only the LIFTING
+## kinds are here: `idleSway`, `idleSlime` and `idleBreathe` are the rest of the
+## kind layer and none of them raise the body.
+const KIND_HOVER: Dictionary = {
+	&"wisp": Vector2(16.0, 3.1),
+	&"eye": Vector2(18.0, 3.4),
+	&"siren": Vector2(12.0, 3.6),
+	&"shade": Vector2(12.0, 3.6),
+	&"plant": Vector2(9.0, 3.8),
+}
+
+## `floatKinds` (`src/ui/combat.js:1856`) — how much lift, in stage px, counts as
+## fully airborne where the shadow is concerned. A slime that leaves the ground
+## at all has left it; a wisp is expected to.
+const SHADOW_MAX: Dictionary = {
+	&"wisp": 20.0, &"eye": 20.0, &"siren": 14.0, &"shade": 14.0,
+	&"plant": 10.0, &"slime": 6.0,
+}
+const SHADOW_MAX_DEFAULT: float = 12.0
+
 ## `charAim(id).color`, resolved once from the character table.
 var _aim_tint: Color = Color(0.894, 0.835, 0.984)
 ## In UV, so that `aim_px / art_size` is a CONSTANT number of screen pixels.
@@ -560,6 +586,11 @@ var _idle_head: float = 1.0
 var _idle_cloth: float = 0.85
 var _idle_pin: float = IDLE_PIN
 var _idle_float: float = 0.0
+## The kind's CSS hover (`KIND_HOVER`) — peak in world units, period in seconds.
+var _hover_amp: float = 0.0
+var _hover_period: float = 3.4
+## The kind's `floatKinds` ceiling (`SHADOW_MAX`), in world units.
+var _hover_span: float = SHADOW_MAX_DEFAULT * UNIT
 ## `char-meta`'s own `mesh` block, kept so the kind's profile can be swapped in
 ## underneath it later without losing the per-creature overrides on top.
 var _idle_over: Dictionary = {}
@@ -656,11 +687,27 @@ var _box_u: float = 0.0         # box HEIGHT, in world units
 var _quad_w: float = 0.0
 var _shadow: MeshInstance3D = null
 var _shadow_mat: ShaderMaterial = null
-## Where the painting actually touches the ground, read off its own alpha:
-## u across the quad, and the lift of the lowest opaque pixel above the box
-## bottom (a floating creature casts a smaller, fainter, softer shadow).
+## Where the painting actually touches the ground, read off its own alpha: u
+## across the quad, and the transparent margin the painting leaves below its
+## lowest opaque row.
+##
+## That margin is FRAMING, not height, and it used to drive the shadow's lift
+## response. Measured across all 27 paintings the bottom margin matches the top
+## to a tenth of a percent on most of them — 10.0/10.0, 5.2/5.2, 13.0/13.0,
+## 20.7/20.6 — because it is a uniform export border. The largest belongs to
+## `shellback`, a crab flat on the floor, at 20.7%; `voidWisp`, which is a wisp,
+## has 4.3%. So the old response was not merely static, it was inverted: it gave
+## the crab the most float and the wisp almost none. Height now comes from the
+## body's own transform (`_update_shadow`), and this stays what it is — a
+## framing offset for the hinge.
 var _contact_u: float = 0.5
-var _lift: float = 0.0
+var _art_pad: float = 0.0
+## `shadow.dy` read as a resting height — see `_read_hover`.
+var _hover_rest: float = 0.0
+## The death rite fades the shadow with a tween while the projection rewrites the
+## same uniform sixty times a second. Two writers, one uniform: so the fade is a
+## FACTOR the projection multiplies, never a value it overwrites.
+var _shadow_fade: float = 1.0
 ## How dark the contact is. **0.95, up from 0.55** — the old figure was
 ## calibrated in the lab, where an actor stands on flat navy and a 55% black
 ## smear is unmissable. The battlefield's floor is painted stone that is ALREADY
@@ -1566,6 +1613,7 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		foot = Vector2(fx, fy)
 		_read_idle(entry)
 		_read_aim(entry)
+		_read_hover(entry)
 		custom_minimum_size = Vector2(art_size, art_size)
 		size = custom_minimum_size
 		_rng.seed = hash(String(art_id)) + enemy_idx
@@ -1906,7 +1954,7 @@ func _read_contact(tex: Texture2D) -> void:
 			weight += a
 	if weight > 0.0:
 		_contact_u = (sum / weight + 0.5) / 64.0
-	_lift = (1.0 - (float(bottom) + 1.0) / 64.0) * _box_u
+	_art_pad = (1.0 - (float(bottom) + 1.0) / 64.0) * _box_u
 
 
 func _build_shadow(tex: Texture2D) -> void:
@@ -1924,9 +1972,9 @@ func _build_shadow(tex: Texture2D) -> void:
 	_shadow_mat.render_priority = -2   # under the body (-1) and the glass (1)
 	_shadow_mat.set_shader_parameter("body_tex", tex)
 	_shadow.set_surface_override_material(0, _shadow_mat)
-	_shadow.position = Vector3(
-		(_contact_u - 0.5) * _quad_w, -_box_u * 0.5 + _lift * 0.15, 0.0)
 	_stage.add_child(_shadow)
+	# Position belongs to `_update_shadow` now, not here: the contact point moves
+	# with the body's height and cannot be written once at build.
 	_update_shadow()
 
 
@@ -1934,6 +1982,21 @@ func _build_shadow(tex: Texture2D) -> void:
 ## run per unit height gives the lean, its magnitude gives the length, and the
 ## ground tilt does the foreshortening. Swing the key and the shadow swings —
 ## which the authored version could never do at any number of knobs.
+##
+## The lift response is the half that was missing. The benchmark resynchronises
+## its darkened copy against the body's live transform on every frame of the rig
+## loop (`spriteLiftPx` + `meshLift` into `syncCastShadow`,
+## `src/ui/combat.js:1795-1819`, `src/ui/combat.js:1930-1932`). This ran twice in
+## an actor's whole life — at build and at reset — and read its only variable off
+## the painting's transparent border, which is framing rather than height (see
+## `_art_pad`). Height now comes from the body's own transform.
+##
+## And because there is a real light here, height does the one thing nine
+## authored knobs could not buy: the contact point MOVES. A rising creature
+## slides its shadow along the light's ground track and leaves it behind, which
+## is the cue the eye actually reads as distance. CSS cannot project, so over
+## there a rising creature only got a smaller copy in the same place — and the
+## five floaters carry a hand-set `shadow.dy` shove to paper over it.
 func _update_shadow() -> void:
 	if _shadow == null or _key == null:
 		return
@@ -1941,21 +2004,44 @@ func _update_shadow() -> void:
 	# A light at or below the horizon would throw the shadow to infinity.
 	l.y = minf(l.y, -0.12)
 	var run: float = clampf(1.0 / -l.y, CAST_MIN, CAST_MAX)
-	# Lift is the gap between the lowest painted pixel and the ground line: a
-	# creature that floats casts a smaller, fainter, softer shadow, and one
-	# standing on the line casts a sharp one. Free, because the alpha knows.
-	var f: float = clampf(_lift / maxf(_box_u, 0.0001), 0.0, 0.6)
-	var s: float = 1.0 - f * 0.5
+	# Height off the ground: whatever raised the body, plus the resting hover the
+	# painting was made with. Floored at zero exactly as `spriteLiftPx` is — a
+	# body driven DOWN does not push its shadow underground.
+	var hover: float = _hover_rest
+	if _vessel != null:
+		hover += maxf(0.0, _vessel.position.y)
+	# `floatKinds` measures the ANIMATED lift over there, because `dy` is not part
+	# of `lift` at all — it is applied straight to the box. Here the resting hover
+	# goes through the projection with everything else, so the ceiling has to
+	# cover both or the four creatures whose `dy` already meets their kind's
+	# span — `watcherEye` 24 against 20, `shade` 16 against 14, `voltEel` 13
+	# against 12, `sporeling` 10 against 10 — would sit pinned at full fade with
+	# no room left to answer their own bob.
+	var f: float = clampf(hover / maxf(_hover_rest + _hover_span, 0.0001), 0.0, 1.0)
+	# `syncCastShadow`'s own response at full lift, ported: width ×(1-.26t),
+	# length ×(1-.5t), opacity ×(1-.55t), and blur 1.5px +2.8t — a ×2.87
+	# softening. Its skew relax is deliberately NOT ported: over there the lean
+	# is a hand-set fake that had to be walked back at height, here it is the
+	# projection, and a body further off the ground does not lean less.
+	var wide: float = 1.0 - f * 0.26
+	var long: float = 1.0 - f * 0.5
 	# Shear and shrink in ONE basis. Node3D.scale is DERIVED from the basis, so
 	# assigning it after a sheared basis re-orthonormalises and silently throws
 	# the shear away — the shadow then stands straight up behind the creature.
 	var shear: Basis = Basis.IDENTITY
-	shear.x = Vector3(s, 0.0, 0.0)
-	shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * s, run * s, 0.0)
+	shear.x = Vector3(wide, 0.0, 0.0)
+	shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * long, run * long, 0.0)
 	_shadow.transform.basis = \
 		Basis(Vector3.RIGHT, deg_to_rad(-GROUND_TILT_DEG)) * shear
-	_shadow_mat.set_shader_parameter("opacity", _shadow_opacity * (1.0 - f * 1.2))
-	_shadow_mat.set_shader_parameter("softness", 1.0 + f * 4.0)
+	# The hinge stays on the ground line and the CAST slides out from it: that is
+	# what separation means. `_art_pad` only sets where the hinge sits inside the
+	# framing border; it is not a height and no longer behaves like one.
+	_shadow.position = Vector3(
+		(_contact_u - 0.5) * _quad_w + hover * l.x * run,
+		-_box_u * 0.5 + _art_pad * 0.15, 0.0)
+	_shadow_mat.set_shader_parameter("opacity",
+		_shadow_opacity * _shadow_fade * (1.0 - f * 0.55))
+	_shadow_mat.set_shader_parameter("softness", 1.0 + f * 1.87)
 
 
 static func _bounce(bounce: float = 0.28, friction: float = 0.7) -> PhysicsMaterial:
@@ -2035,10 +2121,23 @@ func _process(delta: float) -> void:
 	if _idle_float > 0.0:
 		lift = maxf(0.0, _idle_float * FLOAT_PX * IDLE_INTENSITY
 			* sin(t * FLOAT_RATE + _phase * 0.7)) * UNIT
+	# `idleFloat` — the KIND layer, riding on top of the mesh float and never
+	# reaching below the line. CSS runs it `ease-in-out` between two keyframes on
+	# an infinite alternate, so the shape is an eased triangle rather than a
+	# sine; `Motion.EASE_IN_OUT` is symmetric, which is what makes easing the
+	# whole triangle identical to easing each half in its own direction.
+	if _hover_amp > 0.0:
+		var u: float = fmod(t, _hover_period) / _hover_period
+		lift += _hover_amp * Motion.ease(Motion.EASE_IN_OUT,
+			1.0 - absf(u * 2.0 - 1.0))
 	var tremble: Vector2 = _doom_tremble(delta)
 	_vessel.position = Vector3(
 		(_hit * KICK_PX + _lunge_x + _enter_x + tremble.x) * UNIT,
 		lift + (_lunge_up + tremble.y) * UNIT, 0.0)
+	# The resync the rig loop does on every frame. This one call is the whole of
+	# what was missing: a shadow that could answer the body's height, asked twice
+	# in an actor's life.
+	_update_shadow()
 
 
 ## `doomTremble` — the rattle, in the art's own px, composed into the idle the
@@ -2271,6 +2370,26 @@ func _read_idle(entry: Dictionary) -> void:
 	_resolve_profile(&"humanoid")
 
 
+## `shadow.dy` — the one knob out of the benchmark's nine that survives the
+## derive, and it survives because it is the only one that is not derivable.
+## Contact point, lean, length and softening all fall out of the painting's own
+## alpha and the key light. `dy` says the thing the alpha cannot: this painting
+## was made of a creature that is ALREADY off the ground. Exactly five carry it,
+## and they are exactly the floaters — `watcherEye` 24, `shade` 16, `voltEel` 13,
+## `sporeling` 10, `voidWisp` 9 (`src/char-meta.js:44-55`).
+##
+## Read here as a RESTING HEIGHT, not as the downward nudge it is over there.
+## CSS has no projection, so `dy` could only shove the darkened copy straight
+## down and hope; here the same number enters the same projection the live hover
+## enters, and the shadow lands offset, smaller, fainter and softer the way an
+## airborne creature's does. One authored number instead of nine, doing the job
+## the other eight were approximating.
+func _read_hover(entry: Dictionary) -> void:
+	var sh: Dictionary = entry.get("shadow", {})
+	var dy: float = sh.get("dy", 0.0)
+	_hover_rest = maxf(0.0, dy) * UNIT
+
+
 ## `meshProfileFor(kind, id)` (mesh.js:1249) — the kind's profile, with the
 ## character's own `mesh` block laid over it. The kind is passed rather than
 ## looked up, on the same rule as everything else here: a widget in
@@ -2289,6 +2408,12 @@ func _resolve_profile(kind: StringName) -> void:
 	_idle_cloth = _idle_knob(base, "cloth", 0.85)
 	_idle_pin = _idle_knob(base, "pin", IDLE_PIN)
 	_idle_float = _idle_knob(base, "float", 0.0)
+	var hover: Vector2 = KIND_HOVER.get(kind, Vector2.ZERO)
+	_hover_amp = hover.x * UNIT
+	if hover.y > 0.0:
+		_hover_period = hover.y
+	var span: float = SHADOW_MAX.get(kind, SHADOW_MAX_DEFAULT)
+	_hover_span = span * UNIT
 
 
 func _idle_knob(base: Dictionary, key: String, fallback: float) -> float:
@@ -3062,6 +3187,9 @@ func reset_glass() -> void:
 	if _cam != null:
 		_cam.h_offset = 0.0
 		_cam.v_offset = 0.0
+	# The rite's fade is a factor the projection multiplies; left at 0 the next
+	# actor built on this view would stand over nothing.
+	_shadow_fade = 1.0
 	_update_shadow()
 	if _glass_mat != null:
 		_glass_mat.set_shader_parameter("ignite", 0.0)
@@ -3650,9 +3778,12 @@ func _push_key_dir() -> void:
 	_ward_mat.set_shader_parameter("key_dir", _key.transform.basis.z.normalized())
 
 
+## The rite's fade. A FACTOR, not a value: `_update_shadow` owns the opacity
+## uniform now and runs every frame, so a tween writing it directly would be
+## erased before the next vsync.
 func _set_shadow_fade(v: float) -> void:
-	if _shadow_mat != null:
-		_shadow_mat.set_shader_parameter("opacity", _shadow_opacity * v)
+	_shadow_fade = v
+	_update_shadow()
 
 
 func set_targetable(on: bool) -> void:
