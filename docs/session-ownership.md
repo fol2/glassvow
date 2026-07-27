@@ -24,11 +24,16 @@ Two failure modes have already happened, both silent:
 | Lane | Owns | Session |
 |---|---|---|
 | **Card** | `presentation/combat/` — `card_view.gd`, `card_surface.gd`, `card_surface.gdshader`, `card_edge.gdshader`, `card_gem.gdshader`, `rules_text.gd` · `presentation/lab/card_lab.gd`, `card_studio.gd` | `ca1bf21d` |
-| **Enemy / hero** | `presentation/combat/` — `enemy_view.gd`, `glass_gem.gd`, `facet_pips.gd`, `status_row.gd` · `presentation/lab/enemy_lab.gd` · `assets/art/enemies/char-meta.json` · **`combat_screen.gd`** (see below) | `fbe74755` |
+| **Enemy / hero** | `presentation/combat/` — `enemy_view.gd`, `glass_gem.gd`, `facet_pips.gd`, `status_row.gd` · `presentation/lab/enemy_lab.gd` · `assets/art/enemies/char-meta.json` · **`combat_screen.gd`** (see below) | `49b505d4` |
 | **Reward** | `presentation/reward/` — all nine `.gd` and both `.gdshader` · `presentation/lab/reward_lab.gd` | `b3bb71f0` |
 | **Combat HUD** | `presentation/combat/hud_bar.gd` · `presentation/lab/hud_lab.gd` | `6fa343a6` |
 | **Status / intent chips** | `presentation/combat/status_chip.gd`, `intent_chip.gd` · `presentation/lab/chip_lab.gd` | `15dcffdb` |
 | **Assembly** | `application/main.gd`, `main.tscn`, `save_service.gd` · `presentation/combat/event_sequencer.gd`, `hand_view.gd` · `project.godot` | `4bb74d72` |
+
+The Enemy / hero lane changed hands on 2026-07-27: `fbe74755` is **retired** and
+`49b505d4` holds it. The retired session's transcript is still readable and is
+the only record of that lane's reasoning before the handover, but nothing in it
+is authoritative any more — this table is.
 
 **`combat_screen.gd` is contested.** It moved to the Enemy / hero lane on
 2026-07-26 when that lane's scope was extended to cover heroes, for the hero
@@ -223,9 +228,15 @@ directly:
 
 | Command | Use |
 |---|---|
+| `python3 tools/dev.py --open` | the consolidated browser front door for the native viewers, editors, real combat bench and named mocks |
 | `tools/shot.sh <game args>` | one-off capture; identical arguments to the `--shot` hook |
 | `tools/live.sh start <game args>` then `shot` / `reload` / `key` / `click` / `stop` | an iteration loop; boots once and hot-reloads code, so an edit costs no reboot |
 | `tools/check_anchors.py [--fix]` | verify `file:line` anchors in docs still point where they claim |
+
+The full inventory and the contract for adding or maintaining a tool live in
+`docs/dev-tools.md`. Browser access is loopback-only by default; an explicit
+non-loopback bind generates a per-session token and is for trusted LAN or
+Tailscale access only.
 
 The reason is measured, not stylistic: on macOS a bare `godot …` launch takes
 the frontmost window on every boot, and nothing on the engine side declines it.
