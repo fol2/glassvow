@@ -317,6 +317,29 @@ static var oversample: float = 2.0
 ## file it is judging.
 static var msaa: Viewport.MSAA = Viewport.MSAA_4X
 
+## How far into its own silhouette a painting is corroded, in UV — the port of
+## `uErode` (`mesh.js:315`), which the benchmark also mirrors for its non-mesh
+## path as the SVG `#alpha-erode` filter (`feMorphology erode 0.65` then
+## `feComposite in`, `index.html:58`, worn by `.enemy-sprite > .raster-art` at
+## `styles.css:786`). Both do one thing: eat the outermost ring of the matte.
+##
+## **Eleven of the twenty-seven paintings carry a pale halo** and nine of them
+## carry it badly. Measuring un-premultiplied fringe luma against the opaque core
+## of the same file: gloomslime +523, rootheart +434, ashAcolyte +429, waylayer
+## +408, thornling +405, then voltEel, mirelurker, gravewarden and sporeling
+## between +290 and +360. The other sixteen are neutral or dark — abyssalKnight
+## is −35 — which is why sampling one creature and generalising got this wrong
+## once already. It is a per-asset defect, not a per-project one.
+##
+## `process/fix_alpha_border` in the importer does NOT cover it. That pads FULLY
+## transparent texels with their nearest opaque colour; the halo lives in the
+## PARTIALLY transparent ring, whose RGB the art itself authored pale.
+##
+## 0.0024 is the benchmark's number and it transfers unchanged, because it is UV
+## on both sides: 1.2 texels of its 512 atlas and 2.5 of our 1024 source are the
+## same fraction of the same creature.
+static var erode_uv: float = 0.0024
+
 ## The rite's fireworks: the burst flash, the embers and the fire flare. Turning
 ## them off is a LAB affordance and never a game setting — they are additive and
 ## they cover the debris completely, so while they are on a screenshot of the
@@ -650,6 +673,47 @@ static var _fx_cache: Dictionary = {}
 static var _mask_cache: Dictionary = {}
 
 
+## Corrode the matte fringe: take the neighbourhood MINIMUM alpha, lean most of
+## the way onto it, then soften what is left. Eight directions at two radii —
+## sixteen taps, the same walk the aim rim makes with `max` instead of `min`,
+## because erode and dilate are one operator read in opposite directions. Ported
+## from `uErode` in the benchmark's `BODY_FRAG` (`mesh.js:200-250`); the mix at
+## 0.88 and the closing `smoothstep(0.02, 0.18, ...)` are its numbers.
+##
+## A contrast curve cannot stand in for this, which is what the tree tried
+## first: `smoothstep(0.12, 0.45, c.a)` re-graded every texel against itself, so
+## a pale edge texel came out MORE opaque rather than less. A fringe is a
+## SPATIAL defect and only a spatial operator reaches it.
+##
+## Spliced into both shaders that wear the painting rather than written twice,
+## because `SHARD_SHADER` states the reason as an invariant: a cap face carries
+## "the same alpha curve as the body, so the union of shards at the handoff
+## frame IS the body". Two copies of this walk is two chances for that frame to
+## pop.
+const ERODE_GLSL: String = """
+uniform float erode = 0.0;
+
+float eaten(sampler2D tex, vec2 uv) {
+	float a = texture(tex, uv).a;
+	if (erode <= 0.0 || a <= 0.001) { return a; }
+	float lo = a;
+	for (int i = 0; i < 8; i++) {
+		vec2 d = vec2(cos(float(i) * 0.7853981634), sin(float(i) * 0.7853981634)) * erode;
+		lo = min(lo, texture(tex, uv + d).a);
+		lo = min(lo, texture(tex, uv + d * 0.55).a);
+	}
+	float e = mix(a, lo, 0.88);
+	return e * smoothstep(0.02, 0.18, e);
+}
+"""
+
+
+## Splice `ERODE_GLSL` into a shader at its `//__ERODE__` marker. The marker sits
+## below `render_mode`, because a uniform cannot precede it.
+static func with_erode(src: String) -> String:
+	return src.replace("//__ERODE__", ERODE_GLSL)
+
+
 ## The body: a flat plate that takes REAL light. The painting has no normal map,
 ## so one is derived from its own luminance gradient in the fragment stage —
 ## every leaded seam and lit pane becomes relief the lamps can rake across. The
@@ -739,6 +803,7 @@ uniform float hit_white = 0.0;
 // The vessel leaving. A custom shader that writes ALPHA overrides
 // GeometryInstance3D.transparency outright, so the fade has to be a uniform.
 uniform float fade = 1.0;
+//__ERODE__
 
 // ---------------------------------------------------------------- the fracture
 //
@@ -821,7 +886,7 @@ void fragment() {
 	vec2 uv = UV;
 	vec4 c = texture(body_tex, uv);
 	ALBEDO = c.rgb;
-	ALPHA = smoothstep(0.12, 0.45, c.a) * fade;
+	ALPHA = eaten(body_tex, uv) * fade;
 
 	vec2 ts = 1.0 / vec2(textureSize(body_tex, 0));
 	float l = luma(uv);
@@ -1322,6 +1387,7 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley,
 uniform sampler2D body_tex : source_color, filter_linear_mipmap;
 uniform float heat = 1.0;      // molten fracture edges + inner glow, cools to 0
 uniform float dissolve = 0.0;  // 0 whole -> 1 burned away to nothing
+//__ERODE__
 
 const vec3 WARM = vec3(1.0, 0.60, 0.24);
 
@@ -1343,8 +1409,12 @@ void fragment() {
 	// seasoning, never paint: push the glow past a whisper and every piece is
 	// the same white-hot popcorn and the creature is gone AGAIN, just hotter.
 	ALBEDO = mix(c.rgb, WARM * 0.5, edge * (0.2 + 0.3 * heat));
+	// The cap term is the BODY's alpha, corroded exactly as the body corrodes it —
+	// that is what makes the union of shards at the handoff frame the body. The
+	// fracture term is a looser mask for the molten side band and is not a
+	// silhouette, so the fringe never reaches it.
 	float amask = smoothstep(0.05, 0.30, c.a);
-	ALPHA = mix(smoothstep(0.12, 0.45, c.a), amask, edge) * (1.0 - gone);
+	ALPHA = mix(eaten(body_tex, UV), amask, edge) * (1.0 - gone);
 	ROUGHNESS = mix(0.55, 0.9, edge);
 	METALLIC = 0.0;
 	SPECULAR = 0.3;
@@ -1634,10 +1704,11 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	qm.subdivide_depth = SEG_Y
 	_quad.mesh = qm
 	var sh: Shader = Shader.new()
-	sh.code = BODY_SHADER
+	sh.code = with_erode(BODY_SHADER)
 	_body_mat = ShaderMaterial.new()
 	_body_mat.shader = sh
 	_body_mat.set_shader_parameter("body_tex", tex)
+	_body_mat.set_shader_parameter("erode", erode_uv)
 	_body_mat.set_shader_parameter("flare_gain", flare_gain)
 	# Their plane is 2 units across, so a displacement of 0.028 is 1.4% of the
 	# half-height. `idle_gain` puts that back into world units, INTENSITY and all.
@@ -3252,7 +3323,7 @@ func shatter() -> void:
 		body_tex = _body_mat.get_shader_parameter("body_tex")
 	if _shard_shader == null:
 		_shard_shader = Shader.new()
-		_shard_shader.code = SHARD_SHADER
+		_shard_shader.code = with_erode(SHARD_SHADER)
 	# Thinner than the overlay plate: a thick prism reads as a crouton, all
 	# fracture-face and no painting.
 	var thick: float = _box_u * GLASS_THICK * 0.9
@@ -3268,6 +3339,7 @@ func shatter() -> void:
 		var smat: ShaderMaterial = ShaderMaterial.new()
 		smat.shader = _shard_shader
 		smat.set_shader_parameter("body_tex", body_tex)
+		smat.set_shader_parameter("erode", erode_uv)
 		# Explicit, not redundant: a ShaderMaterial returns nil for any uniform
 		# never set on the MATERIAL (defaults live in the shader), and a Tween
 		# with a nil start value refuses the property outright.
