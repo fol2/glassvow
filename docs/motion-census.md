@@ -66,7 +66,7 @@ rendering): a declaration existing is not evidence that it renders.
 | 592 | `.card.r-rare .card-inner::after` | `shine` 4.5s ease-in-out ∞ | nothing | ABSENT |
 | 599 | `.card-inner::before` | opacity .25s | `LAMP_FADE 0.25` on a shader hover, not the pane's opacity | DIVERGES |
 | 610 | `.card.nope, .lantern-btn.nope` | `nope` .32s ease — ±7px, ±1.5° | nothing | ABSENT |
-| 619 | `.hand-zone .card` | transform .28s cb(.25,.9,.3,1.2), **filter .2s, opacity .12s** | transform only | DIVERGES ✱ |
+| 619 | `.hand-zone .card` | transform .28s cb(.25,.9,.3,1.2), filter .2s, opacity .12s | transform only — and see below | DIVERGES ✱ |
 | 629 | `.hand-zone .card.dragging` | `transition: none` | `_kill_pose()` on drag | MATCH ✱ |
 | 632 | `.hand-zone .card .card-inner` | box-shadow .2s | shadow written directly | ABSENT |
 | 633 | `.hand-zone .card .card-lift` | transform .28s cb(.25,.9,.3,1.2) | `POSE_TIME 0.28`, `POSE_EASE [.25,.9,.3,1.2]` | MATCH ✱ |
@@ -163,21 +163,44 @@ Ranked by how often a player sees it, not by how easy it is.
    number on the screen and both bars snap. 0.35s and 0.4s on the same
    `cb(.3, 1, .4, 1)`. The ghost rail already tweens beside them, so the fill
    jumping to its new width while the ghost glides is visible on every single hit.
-2. **`.hand-zone .card` filter .2s / opacity .12s (619)** — the playability
-   grey-out snaps. Every energy change flips it across the whole hand at once.
+2. **`.intent.pop` (938) and `.schip.pop` (890)** — `chipPop` is already
+   implemented four times over for the lantern, energy orb, facet row and pile.
+   These two just never got wired to it.
 3. **`.end-turn` and `.pile-btn` .15s (1333, 1395)** — every button on the screen
    responds instantly instead of moving.
 4. **`.lantern-btn.ready` / `.end-turn.ready` `artReady` (1116, 1352)** — the two
    "you can act now" beacons do not beacon.
-5. **`.intent.pop` (938) and `.schip.pop` (890)** — `chipPop` is already
-   implemented four times over for the lantern, energy orb, facet row and pile.
-   These two just never got wired to it.
-6. **`.enemy.targetable` `targetGlow` (1238)** — a targetable foe is lit but does
+5. **`.enemy.targetable` `targetGlow` (1238)** — a targetable foe is lit but does
    not pulse, so nothing distinguishes "can be hit" from "is being aimed at".
 
-Items 1–5 are all small: three of them are calling a function the port already
+Items 1–4 are all small, and two of them are calling a function the port already
 has. That is what a census buys — it separates *twenty-four missing things* from
 *twenty-four hard things*, and they are not the same list.
+
+### A correction to this list, and what it turned up
+
+Row 619's `filter .2s` was first ranked second here, as *"the playability
+grey-out snaps"*. That was wrong, and tracing which class actually uses the
+transition is what showed it:
+
+- The grey-out is `.card.unplayable-now .card-inner { filter: saturate(0.35)
+  brightness(0.7) }` (609) — on `.card-inner`, whose own transition is
+  `box-shadow 0.2s` (632) with **no filter**. So the grey-out is instant in the
+  reference too, and the port writing `modulate` straight is correct.
+- `filter .2s` on `.hand-zone .card` covers exactly one class: `.will-burn`
+  (1125), `sepia(0.35) saturate(1.45) brightness(1.08)` — the kindle preview.
+- `opacity .12s` covers `.draw-pending` (640), which the port answers with a
+  flight instead of a fade.
+
+Which leaves a bigger finding than the one it replaced: **the port has no
+`.will-burn` tint at all.** `kindle_mode` exists in `hand_view.gd` and nothing
+tints the cards it would burn. There is no point transitioning a filter that is
+never applied, so 619's filter half is blocked behind a missing appearance, not
+a missing animation.
+
+The general lesson, and the second one this census has produced: **a transition
+is only worth what the classes that trigger it are worth.** Ranking by the
+transition alone ranked a no-op second.
 
 ## Reproducing this
 
