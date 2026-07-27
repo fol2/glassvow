@@ -82,7 +82,7 @@ Three payoffs, in increasing order of importance:
    foes', and are simply never read — dead data, not tuning.)
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
-   (`presentation/combat/enemy_view.gd:2034` (`_update_shadow`); the swing itself
+   (`presentation/combat/enemy_view.gd:2201` (`_update_shadow`); the swing itself
    enters at `enemy_view.gd:3847` (`set_light_angle`)). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.
@@ -160,7 +160,7 @@ as beats](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md).
 exactly the floaters — says the thing the alpha cannot: *this painting is of something
 already off the ground.* Contact point, lean, length and softening are all in the image
 or the light. Resting height is in neither. It is read as a height and fed through the
-same projection the live hover uses (`enemy_view.gd:2034` (`_update_shadow`)), so it
+same projection the live hover uses (`enemy_view.gd:2201` (`_update_shadow`)), so it
 buys a shadow that is offset, smaller, fainter and softer rather than the straight-down
 shove CSS could manage. One authored number doing the job eight were approximating is
 still the pattern working — it is just not zero.

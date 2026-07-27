@@ -30,7 +30,7 @@ deliberately does **not** share. This file describes what Godot actually builds.
 ## 1. What is built
 
 Two paths share one Voronoi routine, `_voronoi(sites, reach)`
-(`presentation/combat/enemy_view.gd:2879` (`_voronoi`)):
+(`presentation/combat/enemy_view.gd:3046` (`_voronoi`)):
 
 | | standing crack web | death shatter |
 |---|---|---|
