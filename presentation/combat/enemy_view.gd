@@ -2237,9 +2237,19 @@ func _update_shadow() -> void:
 	# out from there: that is what separation means. This pairs with the
 	# `center_offset` in `_build_shadow` — the two must move together or the
 	# silhouette shifts off the body by exactly the offset applied to one of them.
+	#
+	# `_hover_rest` DROPS that line, and this is the half of `dy` that was missing.
+	# The ground line is read off the silhouette's lowest opaque row, which for a
+	# creature painted already airborne is not a contact at all — it is the bottom
+	# of a hovering body. `dy` is the one number that says so, and saying so has to
+	# mean the ground is that much lower. It was only sliding the cast sideways
+	# along the light's track, which is the other half and, under a camera looking
+	# dead on, the weaker cue of the two: `watcherEye`'s shadow hung off its own
+	# tassels. The LIVE part of the hover is deliberately left out — a body driven
+	# up by the idle moves away from a ground that stays where it is.
 	_shadow.position = Vector3(
 		(_contact_u - 0.5) * _quad_w + hover * l.x * run,
-		-_box_u * 0.5 + _art_pad, 0.0)
+		-_box_u * 0.5 + _art_pad - _hover_rest, 0.0)
 	_shadow_mat.set_shader_parameter("opacity",
 		_shadow_opacity * _shadow_fade * (1.0 - f * 0.55))
 	_shadow_mat.set_shader_parameter("softness", 1.0 + f * 1.87)
@@ -2593,9 +2603,9 @@ func _read_idle(entry: Dictionary) -> void:
 ## derive, and it survives because it is the only one that is not derivable.
 ## Contact point, lean, length and softening all fall out of the painting's own
 ## alpha and the key light. `dy` says the thing the alpha cannot: this painting
-## was made of a creature that is ALREADY off the ground. Exactly five carry it,
-## and they are exactly the floaters — `watcherEye` 24, `shade` 16, `voltEel` 13,
-## `sporeling` 10, `voidWisp` 9 (`src/char-meta.js:44-55`).
+## was made of a creature that is ALREADY off the ground. Five carry it in the
+## benchmark, and they are exactly its floaters — `watcherEye` 24, `shade` 16,
+## `voltEel` 13, `sporeling` 10, `voidWisp` 9 (`src/char-meta.js:44-55`).
 ##
 ## Read here as a RESTING HEIGHT, not as the downward nudge it is over there.
 ## CSS has no projection, so `dy` could only shove the darkened copy straight
@@ -2603,6 +2613,15 @@ func _read_idle(entry: Dictionary) -> void:
 ## enters, and the shadow lands offset, smaller, fainter and softer the way an
 ## airborne creature's does. One authored number instead of nine, doing the job
 ## the other eight were approximating.
+##
+## `thornling` carries a SIXTH, at 9, and it is a deliberate deviation rather than
+## a transcription: the benchmark gives it `{ ox: 51, oy: 91 }` and no `dy`, so
+## over there it is a plant that runs the `float` idle while standing on the
+## floor. Judged on the stage and called wrong — a plant that bobs but never
+## leaves is the one creature on the roster whose animation and footing disagree.
+## 9 rather than `sporeling`'s 10 because `SHADOW_MAX` caps the kind at 10 and a
+## `dy` sitting on the cap leaves the bob no room to read. Removing the number
+## restores parity exactly; nothing else in the port depends on it.
 func _read_hover(entry: Dictionary) -> void:
 	var sh: Dictionary = entry.get("shadow", {})
 	var dy: float = sh.get("dy", 0.0)

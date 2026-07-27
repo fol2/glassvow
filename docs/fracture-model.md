@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:3661` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:3680` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
