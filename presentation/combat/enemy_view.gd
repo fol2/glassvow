@@ -2009,8 +2009,10 @@ const GROUND_TILT_DEG: float = 78.0
 ## Restated ×1.137 from 0.6/1.15 when the ground line went per column, and that
 ## is a restoration rather than a new judgement. Height used to be measured from
 ## the LOWEST contact, which overstates it for every column standing on higher
-## ground; measured across the 27 paintings, weighted by silhouette, the mean
-## overstatement was 12.0% (`shade` 21.1%, `sovereign` 0.3%). So the old clamp
+## ground; measured across the 27 paintings, weighted by silhouette, the per-column
+## line REDUCED mean height by 12.0% (`shade` 21.1%, `sovereign` 0.3%). The factor
+## is that reduction inverted — 1/(1 - 0.120) = 1.137, not 1.12 — because the
+## clamp multiplies the height rather than being measured in it. So the old clamp
 ## was judged against a cast that ran 12% long, and leaving it alone would have
 ## let a geometry fix quietly shorten every shadow in the game. The look these
 ## two numbers encode is the thing being preserved; the arithmetic under it
@@ -2062,11 +2064,19 @@ func _read_contact(tex: Texture2D) -> void:
 ## a cloak that does not reach — and the ground is interpolated underneath it
 ## from the contacts on either side.
 ##
-## 0.15 of a box is not a taste knob, it is the gap between the two populations.
-## Measured across all 27 paintings, the feet of a multi-footed creature span at
-## most 0.125 of a box (`duskfang`, `abyssalKnight`, `leviathan`), while the
-## nearest non-contact feature — `duskfang`'s belly at 0.19, its tail at 0.25 —
-## sits clear above. The band has to fall in that gap and there is only one gap.
+## 0.15 of a box is not a taste knob, it is the gap between two populations.
+## Measured across all 27 paintings, the widest spread of admitted contacts is
+## 0.141 of a box — thirteen of them reach it, `duskfang` among them — while the
+## nearest feature that is plainly NOT footing, `duskfang`'s belly at 0.188 and
+## its tail at 0.25, sits above. So the band has to land inside [0.141, 0.188],
+## and 0.15 does.
+##
+## Read that measurement honestly: it is partly circular, because the spread it
+## reports is the spread of whatever this same band admitted. It cannot see a
+## creature whose feet genuinely span more than 0.15, and no painting on the
+## current roster is known to. Widening the band is what would reveal one — so if
+## a new painting stands with its shadow starting mid-leg, raise this and re-read
+## the spread before assuming the scan is at fault.
 const CONTACT_BAND: float = 0.15
 ## One ground sample per column of the 64-wide scan `_read_contact` already runs.
 const GROUND_N: int = 64

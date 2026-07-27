@@ -79,6 +79,22 @@ gap survived. The benchmark's entire per-kind idle layer was absent from the por
 and it stayed absent because there was no instrument that could have shown its
 absence.
 
+**Update, 2026-07-27 — a second dimension the lab does not offer: exposure.** The
+same subject produced the same shape of failure again, in a different axis. The
+enemy cast shadow was misplaced on every painting with an off-centre or multi-point
+contact, and none of it was visible in a lab capture, because the shadow is
+near-black on a near-black ground: the defect only appeared once screenshots were
+brightened 2.4–3.0× after the fact. Sampling was not the problem this time — the
+frames were correct and showed nothing. What the harness lacked was a way to
+photograph the *low end* of the value range at all.
+
+So the generalisation is wider than loop-versus-beat. A capture surface has
+dimensions — when it samples, how long it samples for, and **what range of values
+it can resolve** — and a defect living outside any of them is invisible in exactly
+the way a defect that no test covers is invisible. Ask of a new instrument not only
+"does it drive the subject the way the game does" but "could this instrument show
+the failure if it were happening". Related: [A flat billboard has one depth](../ui-bugs/flat-billboard-shadow-had-one-ground-line.md).
+
 The layer is thirteen lines of the reference stylesheet, at
 `roguecardv2-benchmark src/styles.css:1612-1624` (`6e06911`): `idleFloat` on the
 floaters (wisp 3.1s/16px, eye 3.4s/18px, siren and shade 3.6s/12px, plant
@@ -103,7 +119,7 @@ cannot report that there are four idle shapes and it is showing one of them.
 
 **And the third instance, which is the one that shows why stills are not enough.**
 The actor's cast shadow is an analytic projection of the silhouette along the key
-light (`enemy_view.gd:2034` (`_update_shadow`)) — a derived replacement for the
+light (`enemy_view.gd:2217` (`_update_shadow`)) — a derived replacement for the
 benchmark's nine hand-authored CSS knobs, and structurally correct as such. It had
 plausible lift-response coefficients. It also never ran: `_update_shadow` was
 called from `_build_shadow` (`enemy_view.gd:2012`, in `_build_shadow`), from the
@@ -128,7 +144,8 @@ runs, not of what it computes. The corrected write-up is
 `docs/actor-animation-checklist.md:269` (§2) and the "Correction, 2026-07-27"
 section of
 [`derive-authored-compensations-when-porting.md`](../design-patterns/derive-authored-compensations-when-porting.md).
-The per-frame call now exists at `enemy_view.gd:2192` (in `_process`).
+The per-frame call now exists at
+`presentation/combat/enemy_view.gd:2385` (in `_process`).
 
 Three failures, one shape: the instrument was not being driven the way the product
 drives the thing it measures, and where no instrument existed at all, the missing
@@ -238,8 +255,8 @@ Stretching the beat is what makes six cells fit.
 
 That trick does not reach the idle. The kind-idle clock is
 `Time.get_ticks_msec()` — `var t: float = Time.get_ticks_msec() * 0.001 + _phase`
-at `enemy_view.gd:2125` (in `_process`), which is what the four shapes are phased
-against at `enemy_view.gd:2156` (in `_process`). `Engine.time_scale` scales
+at `presentation/combat/enemy_view.gd:2318` (in `_process`), which is what the four
+shapes are phased against in the same block. `Engine.time_scale` scales
 `delta`; it does not touch the monotonic millisecond counter. Setting
 `time_scale = 0.06` and sampling six frames would have photographed the same
 instant of the cycle six times and produced a strip that looked, convincingly,
@@ -255,8 +272,8 @@ verifies.** Before reaching for a clock knob, find which clock the subject reads
 If it reads a wall clock, the harness cannot slow it and must widen its sampling
 instead. If it reads `delta`, the harness can slow it and should. This subject
 reads *both* inside one function — `_idle_t += delta` drives the vertex-stage
-deform at `enemy_view.gd:2140` (in `_process`) while the kind layer at `:2125`
-reads the wall clock — which means one `time_scale` setting would have desynced
+deform at `presentation/combat/enemy_view.gd:2333` (in `_process`) while the kind
+layer a few lines below reads the wall clock — which means one `time_scale` setting would have desynced
 the two layers relative to each other even where it appeared to work. The same
 asymmetry sits in the harness: `_shoot_strip` waits against elapsed
 `Time.get_ticks_msec()` (`enemy_lab.gd:1440-1443`, in `_shoot_strip`), which is
@@ -347,8 +364,8 @@ it. The blast radius was larger than one layer: the same session found that the
 actor entrance had been running **two** concurrent animations — one moving the
 body inside its 3D sub-viewport with the correct stagger, one moving the whole
 Control with the correct curve and the chrome — and neither looked broken in a
-still. That is now one function: `enemy_view.gd:2604` (`enter`) owns the motion
-and the fill, `combat_screen.gd:1134` (`_play_entrance`) owns the seat delay and
+still. That is now one function: `enemy_view.gd:2806` (`enter`) owns the motion
+and the fill, `combat_screen.gd:1234` (`_play_entrance`) owns the seat delay and
 the re-anchor. It was found the same way, by giving a category of behaviour an
 instrument and then reading a number off it.
 
@@ -476,13 +493,14 @@ measures nothing:
 > the ground line gets a smaller, fainter, softer shadow, because the alpha scan
 > already measured the gap.
 
-The scan was real (`enemy_view.gd:1964` (`_read_contact`)), the projection was
-real (`enemy_view.gd:2034` (`_update_shadow`)), and the quantity was a framing
+The scan was real (`enemy_view.gd:2035` (`_read_contact`)), the projection was
+real (`enemy_view.gd:2217` (`_update_shadow`)), and the quantity was a framing
 border rather than a gap (`enemy_view.gd:1991`, in `_read_contact`; the variable
 is now named `_art_pad` at `enemy_view.gd:738` for exactly this reason). A
 constants audit cannot see that, because every constant was fine. Only a
 multi-frame capture with the body actually rising can, and until `--idle` and the
-per-frame call at `enemy_view.gd:2192` (in `_process`) existed, there was no way
+per-frame call at `presentation/combat/enemy_view.gd:2385` (in `_process`) existed,
+there was no way
 to make the body rise on a surface anyone was photographing.
 
 ## Related

@@ -93,13 +93,36 @@ above and below it. Actors of wildly different sizes share one ground line rathe
 than being centred against one another, which is what lets a size ladder read at
 a glance.
 
+One line serves the whole encounter, and it is a layout decision — it says where
+actors are placed, not what any individual painting depicts. Where a given
+creature's own art touches down is its Contact line.
+
+Where the line SITS is per Stage shape and per act, and it is authored data
+rather than a constant: 232px up from the bottom on a pad held sideways, 250 on a
+phone in portrait, 132 held sideways. It is a distance from the stage's bottom
+edge — an Edge binding — so a taller stage lowers nothing.
+
 ### Foot offset
 A per-character correction that slides an actor off its computed position so the
 painted creature's apparent feet land on the ground line even when the painting
 carries empty space below or beside the body. It corrects the *art*, not the
 layout — distinct from any lift the formation itself applies.
 
-### Tier
+### Contact line
+Where a painting says its creature meets the floor, recovered from the painting's
+own silhouette rather than declared. It is sampled across the width of the
+painting, so a creature standing on several feet at several heights has a contact
+line that steps and slopes rather than a single height.
+*Avoid:* using "ground line" for this — see Ground line, which is a layout
+concept shared by every actor in an encounter.
+
+Not every low point of a silhouette is a contact: a belly between legs and a tail
+hanging in the air are body, not footing. Only samples close to the lowest one
+count as touching down, and the line is carried across the rest by interpolation.
+A creature the art depicts as *already airborne* has no contact anywhere in its
+silhouette, and the only signal that says so is authored — which is why one
+authored shadow value survives the port's derivation of all the others.
+
 An actor's size class, selecting the base size the Art box is built from before
 the per-character scale is applied. Tiers cover ordinary foes, tougher ones,
 encounter bosses, and the player's hero.
@@ -208,7 +231,13 @@ as a numeric one — a shape can be a Compensation when the source platform had 
 other way to express it. Deriving is not the same as obeying physics: derive the
 shape, then clamp it for art direction.
 
-### Census
+That clamp is not independent of the derivation it clamps. It is expressed in the
+units of a derived quantity and was judged against whatever that quantity meant at
+the time, so correcting a systematic error in the derivation changes what the
+clamp asks for. Preserving an approved look across such a correction means
+restating the clamp by the same factor; leaving its numbers untouched changes the
+look while appearing to hold it steady.
+
 An exhaustive enumeration of one declarative surface of the Benchmark, turned
 into a fixed set of yes/no questions for the port, so that divergences are
 counted instead of noticed.
@@ -282,6 +311,17 @@ prose document is invisible to the check entirely — only citations into code a
 recognised as Anchors at all. The citations documents make about each other are
 therefore the least checked and the most quietly wrong, which is the opposite of
 how a clean report reads.
+
+There is a third class, and it is the one that made "a green run means no Anchor
+has rotted" untrue rather than merely incomplete. An Anchor that names only a bare
+filename can be resolved only while that name is unique in the tree; the moment a
+second copy exists anywhere — a scratch checkout, a vendored duplicate — the
+citation becomes ambiguous, and the check has no way to guess which was meant. It
+was passing over those in silence, so a large share of the corpus was being
+certified without ever being read. An Anchor should therefore carry its full
+path, not just a filename, and an ambiguous one should be reported rather than
+skipped. A check that cannot see a claim must say so; the danger is not the
+unchecked Anchor, it is the clean report over it.
 
 Two further consequences follow. An Anchor that drifts is repaired by moving the
 citation to where its subject went,
@@ -407,6 +447,23 @@ a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
   actor's key.** The Lamp belongs to a card and follows the cursor while that
   card is hovered. An actor's stage is lit by a fixed key and rim that do not
   track the pointer; the actor's cast shadow is a projection along that key.
+- **"Ground line" had been used for both the encounter's shared line and a
+  painting's own footing — these are distinct.** The Ground line is one layout
+  decision for every actor on the battlefield. A Contact line is read off a single
+  painting's silhouette and varies across that painting's width. An actor's feet
+  meeting the Ground line is placement; its shadow starting at its Contact line is
+  rendering, and the two are computed from different things.
+- **"Stage" means two different things, and only one of them is a screen.** A
+  Stage shape is one of five authored SCREEN sizes the whole encounter is
+  composed for. An actor's stage is that actor's own private 3D `SubViewport` —
+  its lit box, one per creature. They share no code and no units: the first is
+  measured in stage px across the window, the second in world units inside a
+  single painting.
+- **"Anchor" is taken; layout uses Edge binding instead.** An Anchor is a
+  `file:line` citation checked by `tools/check_anchors.py`. Where a widget hangs
+  is an Edge binding. Godot's `Control.anchor_left` and friends are a third
+  thing again — the engine mechanism an Edge binding is usually implemented
+  with, but not the concept.
 - **A Crack and a fracture edge are different things.** A Crack is scored on an
   intact Vessel and rides with the body before it breaks; a fracture edge is the
   lit boundary of a piece that has already broken away. Only the first is
