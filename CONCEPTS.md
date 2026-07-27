@@ -208,6 +208,44 @@ as a numeric one — a shape can be a Compensation when the source platform had 
 other way to express it. Deriving is not the same as obeying physics: derive the
 shape, then clamp it for art direction.
 
+### Census
+An exhaustive enumeration of one declarative surface of the Benchmark, turned
+into a fixed set of yes/no questions for the port, so that divergences are
+counted instead of noticed.
+*Avoid:* calling an audit a Census when it sampled rather than enumerated.
+
+A Census is only possible where the reference states the behaviour declaratively
+— a stylesheet's transitions and animations enumerate; a canvas draw loop does
+not. Its value is the denominator: once the set is finite, "how much of this
+surface is unimplemented" has an answer rather than an impression, and missing
+work separates from hard work, because several absences turn out to be a call to
+something the port already has. Two traps sit inside the enumeration and both
+cost a wrong Verdict before they were named. A declaration can be switched off
+by a later unconditional one, so its presence is not evidence that it ever runs.
+And a declaration is worth only what triggers it — a transition on a property
+nothing ever changes is a no-op that will otherwise rank high on effort it does
+not deserve.
+
+Every Verdict in a Census carries quoted port code and its location; one with no
+evidence is discarded rather than believed. What a Census cannot settle is
+whether a matching value is attached to the thing the player actually watches —
+that still wants a Live host and a look.
+
+### Verdict
+The judgement a Census records against one declaration of the Benchmark.
+
+Six values. *Match* is the one that needs no explanation — the port does the
+thing with the same numbers — and the distinctions that matter are between the
+other five, which look alike in pairs. *Absent* means the port is missing
+something the reference shows; *not
+applicable* means the reference never shows it either, or it drives a renderer
+this port replaced — reporting the second as the first is the most common way a
+Census manufactures work. *Diverges* means the port does the thing with other
+numbers; *diverges, documented* exists so a deliberate departure the port
+explains in its own comments is not re-raised as a defect on every pass.
+*Unresolved* is not a softer absence: it means the question was answered about
+the wrong element, and it is held open rather than guessed.
+
 ### Lab
 A harness that stands one widget family up in isolation — no run, no game state
 behind it — reached by its own launch flag rather than by playing to the screen
@@ -223,11 +261,23 @@ state of its own between launches.
 Labs come in two shapes, and the difference decides which one a task wants. A
 *contact sheet* renders every item at once so they can be compared against each
 other; a *bench* renders a single item with live controls so it can be tuned.
-Two traps come with the territory: a Lab may scale what it shows for
+Five traps come with the territory. A Lab may scale what it shows for
 inspection, which makes a magnified Lab screenshot the wrong evidence for
-judging sharpness — judge at actual size; and a Lab needs a real viewport to
+judging sharpness — judge at actual size. A Lab needs a real viewport to
 capture from, so a headless run can parse-check its code but cannot photograph
-it.
+it. A Lab may not *dress* its subjects the way production dresses them: it
+stands the widget up itself, so every call the shipping screen makes between
+construction and first paint has to be made here too, or the Lab is certifying
+an object the game never builds. And a Lab's set of capture modes bounds what
+can be found *missing* — a category of behaviour with no mode is invisible
+rather than absent, which is a stronger failure than a wrong value, because
+nothing ever raises it. And the narrowest of the five: a Lab inherits the
+timebase of what it verifies, so a clock knob only reaches the clocks the
+engine owns.
+
+The first two distort what a Lab shows; the last three decide whether it is
+showing production at all. "A change meant to alter nothing can be proven to
+have altered nothing" holds only of a Lab that is.
 
 ### Live host
 A single game process kept running out of sight for a whole working session, so
