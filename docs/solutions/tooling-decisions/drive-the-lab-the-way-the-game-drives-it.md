@@ -47,8 +47,8 @@ than in passing.
 It was building its actors wrong. `_actor` (`enemy_lab.gd:404` (`_actor`)) constructed every
 view with `EnemyView.new(...)` and then placed it, and that was all. The shipping
 screen does one more thing: `combat_screen.gd:1089` (in `start_encounter`) calls
-`view.set_profile(_foe_kind(e.idx))` for every foe, and `combat_screen.gd:1049`
-(in `start_encounter`) calls `_hero.set_profile("rogue")` for the player. Without
+`view.set_profile(_foe_kind(e.idx))` for every foe, and
+`combat_screen.gd:1049` (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player. Without
 that call an actor keeps the profile it is constructed with, and the construction
 default is not neutral — `_read_idle` ends by calling `_resolve_profile(&"humanoid")`
 (`enemy_view.gd:2422` (in `_read_idle`)), and `_resolve_profile` falls back to
@@ -91,8 +91,8 @@ reference's; the port's equivalents are reached through `set_profile`.) None of 
 was in the port. It is now, at the source's own numbers: `KIND_IDLE`
 (`enemy_view.gd:564` (`KIND_IDLE`)), `KIND_IDLE_PERIOD` (`:570`), `KIND_FLOAT_PX` (`:576`),
 `SLIME_AT` / `SLIME_Y` / `SLIME_SX` (`:584-586`), `SWAY_X` / `SWAY_DEG` /
-`BREATHE_SY` (`:587-589`), composed onto the vessel at `enemy_view.gd:2156` (in `_process`), with the spores as their own Control (`idle_motes.gd:1`
-(`IdleMotes`), built on demand by `_sync_motes` at `enemy_view.gd:2476` (`_sync_motes`)).
+`BREATHE_SY` (`:587-589`), composed onto the vessel at `enemy_view.gd:2156` (in `_process`), with the
+spores as their own Control (`idle_motes.gd:1` (`IdleMotes`)), built on demand by `_sync_motes` at `enemy_view.gd:2476` (`_sync_motes`)).
 
 Note where that list came from. It was found by reading the reference stylesheet —
 the method [`audit-port-by-enumerating-reference-css.md`](../workflow-issues/audit-port-by-enumerating-reference-css.md)
@@ -227,7 +227,7 @@ This is the sharpest constraint in the set and the easiest to get wrong, because
 the existing tooling made the wrong answer look like a house convention.
 
 Three of the lab's five original strips slow the engine clock — `crack`, `enter`
-and `ward`, each assigning `Engine.time_scale = CRACK_SLOMO` (`enemy_lab.gd:1284`,
+and `ward`, each assigning `Engine.time_scale = CRACK_SLOMO` (`enemy_lab.gd:1284` (in `_ready`),
 `:1297`, `:1316`), with `CRACK_SLOMO: float = 0.06` (`enemy_lab.gd:1379` (`CRACK_SLOMO`)) — and
 convert their BEAT-time frame tables to wall time by dividing. (`rite` and `hit`
 do not: their frame tables are already in real seconds.) They must, because a strip cell costs a
@@ -246,8 +246,8 @@ like a creature standing perfectly still.
 
 So `--idle` runs in **real time** and spaces its frames wider than the readback
 costs instead: `IDLE_FRAMES` at 0.84s intervals over one 4.2s period — the slowest
-kind idle, `idleSlime` — at `enemy_lab.gd:1391`, dispatched at `enemy_lab.gd:1303` (in `_ready`)
-(in `_ready`) with no `time_scale` assignment at all.
+kind idle, `idleSlime` — at `enemy_lab.gd:1391` (`IDLE_FRAMES`), dispatched at `enemy_lab.gd:1303` (in `_ready`)
+with no `time_scale` assignment at all.
 
 The general rule: **a verification tool inherits the timebase of the thing it
 verifies.** Before reaching for a clock knob, find which clock the subject reads.

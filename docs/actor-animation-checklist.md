@@ -208,10 +208,10 @@ paths go white (`src/styles.css:95-110`, `src/ui/drain.js:551-566`).
 
 Here: boss-only timing, 820ms world-stop, 110ms hit-stop, .22s transition,
 .07 saturation, .85 brightness and .09s tremble are built and wired
-(`combat_screen.gd:152-157` (`WORLDSTOP_SAT`), `combat_screen.gd:2229-2246`,
+(`combat_screen.gd:152-157` (`WORLDSTOP_SAT`), `combat_screen.gd:2229-2246` (in `_hit_player`),
 `enemy_view.gd:236-239`, `enemy_view.gd:2032-2038`). The actor pixels
 desaturate too, unlike the benchmark's separate mesh canvas; that is a documented
-structural departure (`combat_screen.gd:142-151`).
+structural departure (`combat_screen.gd:142-151` (in `WORLDSTOP_SAT`)).
 
 The visible crack blaze is absent. `set_doomed()` writes only the legacy
 `_glass_mat`, while the default `CrackField` route lives in `BODY_SHADER`;
@@ -433,7 +433,7 @@ go NaN before paint. Pixel counts on the running page: burst/motes draw; ring an
 slashArc draw 0 (`vfx_layer.gd:43-59` (in `DEAD_KINDS_RENDER`)).
 
 Here: `VfxLayer.archetype_hit` and the drain call sites are built
-(`vfx_layer.gd:591+`, `combat_screen.gd:2098` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
+(`vfx_layer.gd:591` (`archetype_hit`), `combat_screen.gd:2098` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
 `ring` / `slash` at `_push` so the typed `Vector2.ZERO` default does not
 accidentally repair them into visible hoops (`vfx_layer.gd:71-73` (`DEAD_KINDS_RENDER`),
 `vfx_layer.gd:405-410` (`_push`)). Call sites stay as the record of what the source asks
@@ -556,8 +556,8 @@ the painted silhouette; only its missing-art fallback is a blob
 `src/ui/combat.js:1795-1818`, `src/styles.css:769-778`).
 
 Godot derives eight of the nine from the painting alpha, the ground plane and the
-key light (`enemy_view.gd:1964` (`_read_contact`), `enemy_view.gd:2034`
-(`_update_shadow`)). **The ninth, `dy`, is now read** (2026-07-27,
+key light (`enemy_view.gd:1964` (`_read_contact`),
+`enemy_view.gd:2034` (`_update_shadow`)). **The ninth, `dy`, is now read** (2026-07-27,
 `enemy_view.gd:2439` (`_read_hover`)) — this entry previously called the whole
 block vestigial and that was wrong about one knob.
 

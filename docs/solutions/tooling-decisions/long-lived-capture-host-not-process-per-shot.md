@@ -198,8 +198,8 @@ attempts have a home.
 `tools/live.tscn` is six lines: a bare `Node` named `LiveHost` with
 `tools/live.gd` attached. The script instantiates the *real* game scene
 unchanged — `const GAME_SCENE_PATH: String = "res://application/main.tscn"`
-(`tools/live.gd:24` (`tscn`)) — and adds funplay's runtime bridge beside it
-(`tools/live.gd:25` (`BRIDGE_SCRIPT_PATH`), instantiated at `tools/live.gd:43-46`):
+(`tools/live.gd:24` (`GAME_SCENE_PATH`)) — and adds funplay's runtime bridge beside it
+(`tools/live.gd:25` (`BRIDGE_SCRIPT_PATH`), instantiated at `tools/live.gd:43-46` (in `_ready`)):
 
 ```gdscript
 func _ready() -> void:
@@ -284,7 +284,7 @@ if script.reload(false) != OK:
 
 Two passes are run (`RELOAD_PASSES: int = 2`, `tools/live.gd:36` (`RELOAD_PASSES`)) because a
 dependency compiled after its dependent leaves the dependent holding the older
-copy; the second pass settles it (`tools/live.gd:33-35`).
+copy; the second pass settles it (`tools/live.gd:33-35` (in `RELOAD_PASSES`)).
 
 **3. A rebuilt screen re-takes the desktop.** The new screen calls
 `grab_focus()`, which makes the window key again and drags the macOS desktop

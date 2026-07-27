@@ -201,7 +201,7 @@ its own copy at a fixed stage coordinate). **Do not wire both.**
 building (`:184–198`) comes out. `show_result` stays for Defeat and
 "Slice cleared". The blocker is the claim path: gold is already banked in the
 application layer, `addCardToDeck` exists, **relic has no command**, and potion
-can never fire (`rewards.gd:73–79` gates the phial behind a reveal a fresh
+can never fire (`rewards.gd:73-79` (in `gen_combat_rewards`) gates the phial behind a reveal a fresh
 profile does not have).
 
 ## Chips — not this lane's work, **LANDED** by this lane (`b39cf54`)
