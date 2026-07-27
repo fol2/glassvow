@@ -244,21 +244,20 @@ func clear() -> void:
 	_aiming = false
 
 
-## Cancel an in-flight drag (input lock kicking in mid-gesture).
+## Cancel an in-flight drag (input lock kicking in mid-gesture). Dropping the
+## drag first is what lets the card TRAVEL home: `.dragging` is the class that
+## suppresses the transition, so the pose is only resolved once it is off.
 func cancel_drag() -> void:
-	if _drag_uid >= 0:
-		var view: CardView = _views.get(_drag_uid)
-		if view != null:
-			view.snap_home()
+	var was: int = _drag_uid
 	_drag_uid = -1
 	_dragging = false
 	_aiming = false
+	if was >= 0:
+		_pose(was)
 
 
 func snap_back(uid: int) -> void:
-	var view: CardView = _views.get(uid)
-	if view != null:
-		view.snap_home()
+	_pose(uid)
 
 
 # ---------------------------------------------------------------- layout
@@ -479,10 +478,10 @@ func _relayout() -> void:
 		# A card being carried follows the pointer, and a card in flight is on its
 		# own clock — it reads the seat set just above on its next step, so the
 		# new seat is honoured without this function touching its transform.
-		if _flight_from.has(view.uid):
-			continue
-		if _drag_uid != view.uid or not _dragging:
-			view.snap_home()
+		# `_pose` skips both, and it re-resolves the pose rather than dropping the
+		# card back into its seat: a hand that changes under a hovered card used to
+		# put that card down, and the reference just re-fans the others around it.
+		_pose(view.uid)
 
 
 # ---------------------------------------------------------------- gestures
@@ -602,23 +601,28 @@ func _pose(uid: int) -> void:
 	# which is the pose `beginCardDrag`'s own `setTargeting` puts it in.
 	if _dragging and _drag_uid == uid and not _aiming:
 		return
-	view.snap_home()
+	# One branch resolves the whole pose, and the card TRAVELS to it — both the
+	# seat and the lift carry `transition: transform 0.28s` in the reference, so a
+	# card that changes pose is never seen in two places on consecutive frames.
+	var pos: Vector2 = view.home_position
+	var rot: float = view.home_rotation
+	var scl: float = 1.0
 	if uid == armed_uid:
 		# `x = zoneCenterX + off.x * 0.4` — measured on the seat's CENTRE, then
 		# converted back to a top-left, because that is what `position` is.
 		var centre: float = size.x * 0.5
 		var seat: float = view.home_position.x + view.size.x * 0.5
-		view.position.x = centre + (seat - centre) * ARMED_PULL - view.size.x * 0.5
-		view.position.y -= ARMED_LIFT
-		view.rotation = view.home_rotation * ARMED_ROT
-		view.scale = Vector2.ONE * ARMED_SCALE
+		pos = Vector2(centre + (seat - centre) * ARMED_PULL - view.size.x * 0.5,
+			view.home_position.y - ARMED_LIFT)
+		rot = view.home_rotation * ARMED_ROT
+		scl = ARMED_SCALE
 		view.move_to_front()
-		return
-	if uid == hovered_uid and not locked and not _dragging:
-		view.position.y -= HOVER_LIFT
-		view.rotation = 0.0
-		view.scale = Vector2.ONE * HOVER_SCALE
+	elif uid == hovered_uid and not locked and not _dragging:
+		pos = Vector2(view.home_position.x, view.home_position.y - HOVER_LIFT)
+		rot = 0.0
+		scl = HOVER_SCALE
 		view.move_to_front()
+	view.glide_to(pos, rot, scl)
 
 
 ## Which card the pointer is over, or -1. Front to back, because a fanned hand

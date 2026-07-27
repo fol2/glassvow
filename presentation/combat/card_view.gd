@@ -56,6 +56,9 @@ const ART_DIR: String = "res://assets/art/cards/"
 const CARD_W: float = 152.0
 const CARD_H: float = 216.0
 const RADIUS: int = 11
+## How long a card takes to reach a pose, and on what curve. See `glide_to`.
+const POSE_TIME: float = 0.28
+const POSE_EASE: Array[float] = [0.25, 0.9, 0.3, 1.2]
 const EDGE: float = 2.0          # card border; the inner column is 148 wide
 ## The benchmark's `box-shadow: 0 8px 22px rgba(0,0,0,.55)`. A CSS blur of 22
 ## reaches ~11px each side of the edge, which is what Godot's shadow_size means;
@@ -239,6 +242,18 @@ var home_position: Vector2 = Vector2.ZERO
 var home_rotation: float = 0.0
 
 var _held: bool = false
+## Whether this card has ever been put somewhere. The first placement is a jump —
+## a card added to the fan starts at the container's origin, and gliding it in
+## from the top-left corner is not a transition, it is a card falling out of the
+## ceiling.
+var _placed: bool = false
+var _pose_tw: Tween = null
+var _pose_from_pos: Vector2 = Vector2.ZERO
+var _pose_from_rot: float = 0.0
+var _pose_from_scale: float = 1.0
+var _pose_to_pos: Vector2 = Vector2.ZERO
+var _pose_to_rot: float = 0.0
+var _pose_to_scale: float = 1.0
 var _light_tw: Tween = null
 var _edge_mat: ShaderMaterial = null
 var _lit: Array[ShaderMaterial] = []   # every plate the lamp has to reach
@@ -1104,9 +1119,64 @@ func set_playable(can: bool) -> void:
 
 
 func snap_home() -> void:
+	_kill_pose()
 	position = home_position
 	rotation = home_rotation
 	scale = Vector2.ONE
+	_placed = true
+
+
+## Travel to a pose instead of appearing in it.
+##
+##     .hand-zone .card            { transition: transform 0.28s cubic-bezier(0.25, 0.9, 0.3, 1.2); }
+##     .hand-zone .card .card-lift { transition: transform 0.28s cubic-bezier(0.25, 0.9, 0.3, 1.2); }
+##                                                            (styles.css:618, 632)
+##
+## Two elements, one curve, one duration — so a card re-seating because the hand
+## changed and a card rising because the pointer found it are the same motion, and
+## the port had neither. Every pose was written straight onto the transform.
+##
+## The curve's second control point is at 1.2, past the end: the card overshoots
+## its pose and settles back. That is the whole feel of picking one out of a fan,
+## and it is not something an ease-out can stand in for.
+##
+## Position, rotation and scale travel together because in the reference they are
+## one property — `transform` — and a transition runs on the property, not on its
+## parts. Tweening them separately would let the lift finish before the tilt.
+func glide_to(pos: Vector2, rot: float, scl: float) -> void:
+	_kill_pose()
+	if not _placed:
+		position = pos
+		rotation = rot
+		scale = Vector2.ONE * scl
+		_placed = true
+		return
+	if position.is_equal_approx(pos) and is_equal_approx(rotation, rot) \
+			and is_equal_approx(scale.x, scl):
+		return
+	_pose_from_pos = position
+	_pose_from_rot = rotation
+	_pose_from_scale = scale.x
+	_pose_to_pos = pos
+	_pose_to_rot = rot
+	_pose_to_scale = scl
+	_pose_tw = create_tween()
+	_pose_tw.tween_method(_pose_step, 0.0, 1.0, POSE_TIME)
+
+
+func _pose_step(t: float) -> void:
+	var e: float = Motion.ease(POSE_EASE, t)
+	position = _pose_from_pos.lerp(_pose_to_pos, e)
+	rotation = lerpf(_pose_from_rot, _pose_to_rot, e)
+	scale = Vector2.ONE * lerpf(_pose_from_scale, _pose_to_scale, e)
+
+
+## A carried card is written by the pointer and must not lag it —
+## `.hand-zone .card.dragging { transition: none }` (styles.css:629).
+func _kill_pose() -> void:
+	if _pose_tw != null and _pose_tw.is_valid():
+		_pose_tw.kill()
+	_pose_tw = null
 
 
 ## Which keyword the pointer is over, or "" for none.
