@@ -81,13 +81,23 @@ class Finding:
         self.doc = doc
         self.doc_line = doc_line
         self.text = text
-        self.kind = kind          # missing | range | drift | escaped | unanchored
+        self.kind = kind          # missing | range | drift | escaped | unanchored | ambiguous
         self.detail = detail
         self.actual = actual
 
     def __str__(self) -> str:
         rel = self.doc.relative_to(REPO)
         return f"{rel}:{self.doc_line}  {self.kind.upper():10} {self.text} — {self.detail}"
+
+
+# Directories whose files are not the subject of any citation. `.claude` earns
+# its place the hard way: it holds `worktrees/`, a full second checkout of the
+# tree, so every bare `enemy_view.gd:NNNN` in the docs matched TWO paths, went
+# ambiguous in `resolve`, and was skipped in silence. Measured on 2026-07-27:
+# 69 of the 186 citations in `docs/solutions/` were invisible, 65 of them for
+# exactly this reason, and the checker reported "anchors OK" over all of them.
+# A green result on an anchor nobody checked is worse than a red one.
+SKIP_DIRS: set[str] = {".git", ".godot", ".claude", "addons", "_attic", "build"}
 
 
 def index_repo_files() -> dict[str, list[Path]]:
@@ -99,7 +109,7 @@ def index_repo_files() -> dict[str, list[Path]]:
     index: dict[str, list[Path]] = {}
     for suffix in CODE_SUFFIXES:
         for path in REPO.rglob(f"*.{suffix}"):
-            if any(part in {".git", ".godot", "addons", "_attic"} for part in path.parts):
+            if any(part in SKIP_DIRS for part in path.parts):
                 continue
             index.setdefault(path.name, []).append(path)
     return index
@@ -172,8 +182,19 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
 
                 target = resolve(cited, index)
                 if target is None:
-                    # A doc may legitimately cite an external or deleted path;
-                    # those are the claims validator's job, not this one.
+                    # Two very different reasons land here and they must not
+                    # share one silent path. A name this repo does not carry at
+                    # all is plausibly external (the benchmark's `src/…`) or
+                    # deleted — that is the claims validator's job, not this
+                    # one, so skip it. A name this repo carries MORE THAN ONCE
+                    # is a citation this checker could have verified and simply
+                    # declined to, and staying quiet about it is how a green
+                    # run came to certify anchors nobody had looked at.
+                    if len(index.get(Path(cited).name, [])) > 1:
+                        findings.append(Finding(
+                            doc, doc_line, text, "ambiguous",
+                            f"{cited} names %d files — cite the full repo-relative path"
+                            % len(index[Path(cited).name])))
                     continue
 
                 body = target.read_text(errors="replace").splitlines()
@@ -245,11 +266,19 @@ def main() -> int:
 
     drift = sum(1 for f in findings if f.kind in {"drift", "missing", "range", "escaped"})
     soft = sum(1 for f in findings if f.kind == "unanchored")
+    # A hard failure of its own, and deliberately not lumped in with drift:
+    # --fix cannot repair it. The doc has to name a full repo-relative path,
+    # because the checker has no way to guess which same-named file was meant.
+    vague = sum(1 for f in findings if f.kind == "ambiguous")
     if soft:
         print(f"\n{soft} anchor(s) carry no symbol and cannot be drift-checked.")
+    if vague:
+        print(f"\n{vague} anchor(s) cite a bare name this repo carries more than"
+              " once, so they were never checked. Cite the full repo-relative path.")
     if drift:
         print(f"\n{drift} anchor(s) no longer point where they claim."
               " Run with --fix to re-anchor the drifted ones.")
+    if drift or vague:
         return 1
     print("anchors OK" + (f" ({soft} uncheckable)" if soft else ""))
     return 1 if (args.strict and soft) else 0
