@@ -25,15 +25,15 @@ reward, shop and aspect screens and are out of scope here.
 
 | verdict | rows | |
 |---|--:|---|
-| **MATCH** | 18 | the port does this, with these numbers |
-| **DIVERGES** | 9 | the port does something, with different numbers |
+| **MATCH** | 20 | the port does this, with these numbers |
+| **DIVERGES** | 10 | the port does something, with different numbers |
 | **DIVERGES (documented)** | 4 | different on purpose, and the port says why |
-| **ABSENT** | 24 | the port does not do this at all |
-| **N/A** | 6 | the rule never fires in the reference, or drives a renderer the port does not use |
+| **ABSENT** | 22 | the port does not do this at all |
+| **N/A** | 5 | the rule never fires in the reference, or drives a renderer the port does not use |
 | **UNRESOLVED** | 1 | the audit answered a different question; needs a second look |
 
-**Twenty-four of sixty-two — 39% of the combat motion surface — has no
-implementation.** Eighteen (29%) are verified to match. That is the size of the
+**Twenty-two of sixty-two — 35% of the combat motion surface — has no
+implementation.** Twenty (32%) are verified to match. That is the size of the
 gap, measured rather than estimated.
 
 The shape of it is the same base rate this port has shown everywhere else: it is
@@ -53,8 +53,8 @@ One audit verdict was **wrong and was corrected**: `.stage-breath` (696) was
 reported ABSENT. It is N/A. `styles.css:719` — `.stage-ledge, .stage-breath {
 opacity: 0; animation: none; }` — sits at brace depth 0, so it always applies and
 the reference never shows the animation at all. This is the same trap that has
-already cost this project once (`docs/solutions/` › source-existing-is-not-
-rendering): a declaration existing is not evidence that it renders.
+already cost this project once (`docs/wrong-reference-audit.md`): a declaration
+existing is not evidence that it renders.
 
 ## The table
 
@@ -174,8 +174,8 @@ Ranked by how often a player sees it, not by how easy it is.
    not pulse, so nothing distinguishes "can be hit" from "is being aimed at".
 
 Items 1–4 are all small, and two of them are calling a function the port already
-has. That is what a census buys — it separates *twenty-four missing things* from
-*twenty-four hard things*, and they are not the same list.
+has. That is what a census buys — it separates *twenty-two missing things* from
+*twenty-two hard things*, and they are not the same list.
 
 ### A correction to this list, and what it turned up
 
@@ -226,8 +226,10 @@ This is motion only. Three surfaces remain unaudited:
 
 - **Static appearance** — colour, size, shadow, border, font. Enumerable the same
   way, through `getComputedStyle` on the live page. A first sample already
-  disagrees with the port in at least one place: `.intent` is `height: 30px` in
-  the reference and the port's chip measures 34.
+  needs doing. (An earlier draft claimed `.intent` diverged at 34px against the
+  reference's 30. It does not — the chip is 30. What measured 34 was the crown
+  ROW, which adds a 4px separation to an empty status row. The static pass is
+  still owed; that particular finding was mis-attributed and is withdrawn.)
 - **Canvas and WebGL** — `vfx.js`, `mesh.js` and the `drain.js` timings are not
   CSS and have to be read from source.
 - **Whether the port's MATCHes look right on screen.** A number can agree and
