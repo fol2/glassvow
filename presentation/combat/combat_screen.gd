@@ -170,6 +170,25 @@ const GRAIN_JUMPS: Array[Vector2] = [
 ## overhang rather than left to work it out from where it happens to sit.
 const HAND_OVERHANG: float = 12.0
 
+## `clampCombatChrome` (combat.js:516) — the two lines an actor's status may not
+## cross. Measured on the reference at pad-landscape they come out at 60 and 654,
+## and BOTH are routinely hit: a gravewarden's intent sits at y25 unclamped, fully
+## behind the 56px HUD bar, and a sporeling's HP rail hangs 9px into the hand.
+##
+## The ceiling is the HUD bar's own bottom edge plus a hair, floored at 6 for a
+## screen with no bar. It reads the constant rather than the live widget on
+## purpose: the bar flies in at the top of a fight, and a ceiling measured off a
+## widget still in flight would drag every crown down with it.
+const CHROME_CEIL_PAD: float = 4.0
+const CHROME_CEIL_MIN: float = 6.0
+## The floor is the RESTING hand-fan's top, and `handChromeCeiling` builds it from
+## the fan's law rather than from live cards — "static on purpose", because a card
+## lifting on hover or leaving for a cast would otherwise yank every HP plate on
+## the stage up and down. The slack is the benchmark's own: chrome may sit 50px
+## into the upper hand band, where resting cards leave the stage empty anyway.
+const CHROME_HAND_SLACK: float = 50.0
+const CHROME_FLOOR_PAD: float = 4.0
+
 ## The damage sources that do not shove the body (drain.js:626). A blow throws
 ## you; poison does not, and neither does your own burn.
 const INDIRECT_SOURCES: Array[String] = ["poison", "burn", "self", "thorns"]
@@ -1415,6 +1434,7 @@ func _process(delta: float) -> void:
 		var step: int = int(_atmos_t / GRAIN_STEP) % GRAIN_JUMPS.size()
 		_grain_mat.set_shader_parameter("jitter", GRAIN_JUMPS[step])
 	_update_stage_dim()
+	_clamp_chrome()
 	if _vignette_mat == null:
 		return
 	_vignette_mat.set_shader_parameter("stage_px", size)
@@ -1431,6 +1451,25 @@ func _process(delta: float) -> void:
 		[0.0, 0.5, 1.0], [LOW_HP_REACH[0], LOW_HP_REACH[1], LOW_HP_REACH[0]]))
 	_vignette_mat.set_shader_parameter("low_alpha", Motion.keyframe(e,
 		[0.0, 0.5, 1.0], [LOW_HP_ALPHA[0], LOW_HP_ALPHA[1], LOW_HP_ALPHA[0]]))
+
+
+## Keep every actor's status on stage. The benchmark schedules this on a rAF from
+## the four places that can move chrome — the entrance settling, a refit, a combat
+## sync and a hand relayout. A frame is the same coalescing point and it cannot
+## miss a fifth caller, so the port pays for the pass every frame instead: a
+## handful of floats per actor, and nothing is written while the row already fits.
+##
+## The lines are in stage px, and a combatant's `position` is battlefield-local,
+## whose top edge is the stage's — so the two spaces are already the same one.
+func _clamp_chrome() -> void:
+	var ceiling: float = maxf(CHROME_CEIL_MIN, HudBar.BAR_H + CHROME_CEIL_PAD)
+	var floor_y: float = size.y + HAND_OVERHANG - HandView.CARD_INSET \
+		- CardView.CARD_H + CHROME_HAND_SLACK - CHROME_FLOOR_PAD
+	for view: EnemyView in _enemy_views:
+		if view != null:
+			view.clamp_chrome(ceiling, floor_y)
+	if _hero != null:
+		_hero.clamp_chrome(ceiling, floor_y)
 
 
 ## `if (cb.player.block > 0) syncWardMesh(heroSprite, true, true)`

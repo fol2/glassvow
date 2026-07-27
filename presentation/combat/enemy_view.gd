@@ -72,6 +72,12 @@ const HP_LABEL_TINT: Color = Color(1.0, 0.7254902, 0.7254902)        # #ffb9b9
 const PLATE_GAP: float = 8.0
 const CROWN_GAP: float = 8.0
 const WARD_ICON_PX: float = 20.0
+## Both chrome boxes are given far more room than their rows need and then let
+## their contents settle against the near edge — the crown hangs from its bottom,
+## the plate sits on its top. The benchmark gets this for free from flex, which
+## shrink-wraps; a Godot container has to be told a size, so the size is one that
+## can never bind and `get_combined_minimum_size()` is what reports the real row.
+const CHROME_BOX_H: float = 200.0
 
 ## 1 px of art box = 0.01 world units, so a 176px creature stands 1.76m tall and
 ## the physics engine's own gravity is already in the right ballpark.
@@ -417,7 +423,15 @@ var _ward_icon: TextureRect
 var _previous_ward: int = 0
 var _block_pulse_tween: Tween = null
 var _statuses: StatusRow
+var _crown: VBoxContainer
 var _plate: VBoxContainer
+## Two independent reasons move the foot plate and they ADD: `align_plate` hangs
+## it off the ground line, `clamp_chrome` lifts it clear of the hand. The
+## benchmark spends `--chrome-dy` on the clamp alone, because there a combatant's
+## box bottom already IS its feet; this port carries both in the same offset.
+var _plate_ground_dy: float = 0.0
+var _plate_clamp_dy: float = 0.0
+var _crown_clamp_dy: float = 0.0
 var _dead: bool = false
 ## The recoil, signed and in units of KICK_PX — tweened, then composed into the
 ## idle by _process. Positive is away from the hero, which is where a foe is
@@ -3666,15 +3680,15 @@ func _build_chrome(display_name: String) -> void:
 	var is_hero: bool = tier == "hero"
 
 	# ---- crown chrome: intent, then statuses. Anchored ABOVE the art box.
-	var crown: VBoxContainer = VBoxContainer.new()
-	crown.add_theme_constant_override("separation", 4)
-	crown.alignment = BoxContainer.ALIGNMENT_END
-	crown.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	crown.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	crown.offset_bottom = -CROWN_GAP
-	crown.offset_top = -200.0
-	crown.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(crown)
+	_crown = VBoxContainer.new()
+	_crown.add_theme_constant_override("separation", 4)
+	_crown.alignment = BoxContainer.ALIGNMENT_END
+	_crown.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_crown.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_crown.offset_bottom = -CROWN_GAP
+	_crown.offset_top = -CHROME_BOX_H
+	_crown.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_crown)
 
 	# The standalone widgets, swapped in for the inline ember chip and the text
 	# line that stood here. Both start empty: an intent with no kind and no
@@ -3682,10 +3696,10 @@ func _build_chrome(display_name: String) -> void:
 	# has no row, rather than an invisible one holding a slot open.
 	if not is_hero:
 		_intent = IntentChip.new(&"", "")
-		crown.add_child(_center(_intent))
+		_crown.add_child(_center(_intent))
 
 	_statuses = StatusRow.new()
-	crown.add_child(_statuses)
+	_crown.add_child(_statuses)
 
 	# ---- foot plate: name (foes only), ward + HP vial, facets (foes only).
 	# Anchored BELOW the feet.
@@ -3694,7 +3708,7 @@ func _build_chrome(display_name: String) -> void:
 	_plate.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	_plate.grow_vertical = Control.GROW_DIRECTION_END
 	_plate.offset_top = PLATE_GAP
-	_plate.offset_bottom = PLATE_GAP + 200.0
+	_plate.offset_bottom = PLATE_GAP + CHROME_BOX_H
 	_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_plate)
 
@@ -3973,8 +3987,47 @@ static func _center(node: Control) -> CenterContainer:
 ## the line (footY), and a row where every HP vial sat at a different height
 ## would be unreadable — the benchmark aligns the same way through --chrome-dy.
 func align_plate(dy: float) -> void:
+	_plate_ground_dy = dy
+	_apply_plate_dy()
+
+
+func _apply_plate_dy() -> void:
+	var dy: float = _plate_ground_dy + _plate_clamp_dy
 	_plate.offset_top = dy + PLATE_GAP
-	_plate.offset_bottom = dy + PLATE_GAP + 200.0
+	_plate.offset_bottom = dy + PLATE_GAP + CHROME_BOX_H
+
+
+## `clampOne` (combat.js:533) — an actor's status has to be READABLE, and neither
+## end of it is safe on its own. A tall sprite lifts its crown behind the HUD bar,
+## and any sprite standing on the ground line drops its HP rail into the hand. So
+## the crown is pushed DOWN off a ceiling and the plate is pushed UP off a floor;
+## nothing moves when the row already fits, which is the common case.
+##
+## `ceiling` and `floor_y` arrive in the parent's own space, which for a combatant
+## is the battlefield — whose top edge IS the stage's, so these are stage numbers.
+##
+## The measurement takes its own clamp back out before comparing, which is what
+## the benchmark buys by writing `--chrome-dy: 0px` and re-reading. Same reading,
+## one layout pass instead of two, and it cannot oscillate.
+func clamp_chrome(ceiling: float, floor_y: float) -> void:
+	if _crown != null:
+		var crown_h: float = _crown.get_combined_minimum_size().y
+		if crown_h > 1.0:
+			var top: float = position.y + _crown.position.y + _crown.size.y \
+				- crown_h - _crown_clamp_dy
+			var want: float = maxf(0.0, roundf(ceiling - top))
+			if not is_equal_approx(want, _crown_clamp_dy):
+				_crown_clamp_dy = want
+				_crown.offset_top = -CHROME_BOX_H + want
+				_crown.offset_bottom = -CROWN_GAP + want
+	if _plate != null:
+		var plate_h: float = _plate.get_combined_minimum_size().y
+		if plate_h > 1.0:
+			var bottom: float = position.y + _plate.position.y + plate_h - _plate_clamp_dy
+			var want: float = minf(0.0, roundf(floor_y - bottom))
+			if not is_equal_approx(want, _plate_clamp_dy):
+				_plate_clamp_dy = want
+				_apply_plate_dy()
 
 
 # ---------------------------------------------------------------- state in
