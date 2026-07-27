@@ -118,9 +118,9 @@ too.
 
 **Two lab defects surfaced on the way.** The sheet never called `set_profile`, so
 every creature on the one surface built to judge the actors idled as a humanoid —
-an idle no fight ever runs (`enemy_lab.gd:414` (in `_actor`)). And there was no way to look at
+an idle no fight ever runs (`enemy_lab.gd:444` (in `_actor`)). And there was no way to look at
 the kind layer at all, which is the likelier reason nobody noticed: `--idle` is
-now a strip mode (`enemy_lab.gd:1303` (in `_ready`)). It runs in REAL time, unlike every other
+now a strip mode (`enemy_lab.gd:1344` (in `_ready`)). It runs in REAL time, unlike every other
 strip here, because the idle clock is `Time.get_ticks_msec` and `Engine.time_scale`
 cannot reach it.
 

@@ -38,7 +38,7 @@ tags: [verification-tooling, lab-harness, capture-modes, screenshot-verification
 The enemy lab is the surface this project built to judge how its actors move. It
 stands every creature in the content set on a shared ground line at true relative
 size — 27 enemies, read out of `port_fixtures/content/core-mechanics.json`
-(`presentation/lab/enemy_lab.gd:162` (`load_roster`)) — and it carried five
+(`presentation/lab/enemy_lab.gd:178` (`load_roster`)) — and it carried five
 strip modes — six since
 `--idle` — that photograph an animation across several instants and tile the
 frames side by side.
@@ -46,7 +46,7 @@ It is the one place in the port where actor motion is looked at deliberately rat
 than in passing.
 
 It was building its actors wrong. `_actor`
-(`presentation/lab/enemy_lab.gd:414` (`_actor`)) constructed every
+(`presentation/lab/enemy_lab.gd:434` (`_actor`)) constructed every
 view with `EnemyView.new(...)` and then placed it, and that was all. The shipping
 screen does one more thing: `presentation/combat/combat_screen.gd:1189`
 (in `start_encounter`) calls `view.set_profile(_foe_kind(e.idx))` for every foe,
@@ -62,7 +62,7 @@ creature on the sheet — every slime, serpent, wisp and golem — hovered, sway
 breathed and cast its shadow as a humanoid. The sheet was not showing a wrong
 number. It was showing an idle that no fight has ever run.
 
-The fix is one line, now at `presentation/lab/enemy_lab.gd:414` (in `_actor`):
+The fix is one line, now at `presentation/lab/enemy_lab.gd:434` (in `_actor`):
 
 ```gdscript
 view.set_profile(str(art.get("kind", "humanoid")))
@@ -75,7 +75,7 @@ hiding.
 **A whole category of behaviour had no capture mode.** Every pre-existing strip
 photographs a *beat* — a one-shot animation with a start, a peak and an end. The
 frame tables say so in their own comments: `RITE_FRAMES`
-(`presentation/lab/enemy_lab.gd:1405` (`RITE_FRAMES`)), `HIT_FRAMES`
+(`presentation/lab/enemy_lab.gd:1431` (`RITE_FRAMES`)), `HIT_FRAMES`
 (`:1374` (`HIT_FRAMES`), clustered early because the flash peaks at 90 ms),
 `CRACK_FRAMES` (`:1379` (`CRACK_FRAMES`)), `WARD_FRAMES`
 (`:1386` (`WARD_FRAMES`)), `ENTER_FRAMES` (`:1389` (`ENTER_FRAMES`)). An
@@ -100,6 +100,35 @@ it can resolve** — and a defect living outside any of them is invisible in exa
 the way a defect that no test covers is invisible. Ask of a new instrument not only
 "does it drive the subject the way the game does" but "could this instrument show
 the failure if it were happening". Related: [A flat billboard has one depth](../ui-bugs/flat-billboard-shadow-had-one-ground-line.md).
+
+**Update, same day — the range dimension answered, and what answering it cost.**
+The dimension was named above and then hit again immediately: the ward stone's
+ring, which lights the facets that stopped a blow, could not be read in
+`--ward --absorb` because the body's hurt flash sat on top of it. Three
+separate defects were behind one unreadable cell, and only the first is the one
+the paragraph above predicted:
+
+- **Range.** The flash was not clipping — 0.25% of the frame reached 254 — it
+  simply raised the neighbourhood a two-level effect had to be seen against.
+  Brightening cannot undo that, because the ring and the flash are equally
+  bright; only removing one of them can. `--alone` drops the body's half and
+  takes the frame from 5.2% to 0.3% of pixels above 200.
+- **Duration, again.** `--absorb` had been borrowing the BREAK's frame table:
+  340 ms of cells for a 200 ms ring, so two of six photographed a finished
+  effect. The strip that named the loop-versus-beat lesson had the same error
+  inside it, one flag over.
+- **What the picture is OF.** `--delta` re-photographs each cell as its
+  difference from the last, normalised at the 99.5th percentile — the divisor
+  matters, because one specular pixel hit 185 where the answer averaged 2.6 and
+  dividing by the maximum crushed it to black. The last cell is a free
+  reference: every strip here is built to end after its beat.
+
+The limit, stated because a general instrument invites over-trust: `--delta`
+answers *what changed*, and for this beat what changed most is the stone's
+flinch travel, not its brightness. Both decay on the same clock, so the strip
+shows them together and cannot separate them. A difference image is a sharper
+instrument than a still, and it is still an instrument with a blind spot —
+which is the whole point of the paragraph above.
 
 The layer is thirteen lines of the reference stylesheet, at
 `roguecardv2-benchmark src/styles.css:1612-1624` (`6e06911`): `idleFloat` on the
@@ -280,7 +309,7 @@ like a creature standing perfectly still.
 
 So `--idle` runs in **real time** and spaces its frames wider than the readback
 costs instead: `IDLE_FRAMES` at 0.84s intervals over one 4.2s period — the slowest
-kind idle, `idleSlime` — at `presentation/lab/enemy_lab.gd:1436`
+kind idle, `idleSlime` — at `presentation/lab/enemy_lab.gd:1469`
 (`IDLE_FRAMES`), dispatched at `presentation/lab/enemy_lab.gd:1306-1313`
 (in `_ready`) with no `time_scale` assignment at all.
 
@@ -390,7 +419,7 @@ behaviour an instrument and then reading a number off it.
 
 Finally, note what this costs to prevent. The lab defect was one line. The missing
 capture mode was one frame table and one `if` branch — `IDLE_FRAMES`
-(`presentation/lab/enemy_lab.gd:1436` (`IDLE_FRAMES`)) and the
+(`presentation/lab/enemy_lab.gd:1469` (`IDLE_FRAMES`)) and the
 `_mode == "idle"` dispatch (`presentation/lab/enemy_lab.gd:1306-1313`, in
 `_ready`),
 reusing `_shoot_strip` unchanged. The expensive part was never the tool. It was
@@ -467,7 +496,7 @@ What is in the tree instead — real time, six cells spaced 0.84s apart across o
 full 4.2s `idleSlime` period, wide enough that a viewport readback per cell keeps
 up without any clock trickery
 (`presentation/lab/enemy_lab.gd:1306-1313`, in `_ready`, against
-`IDLE_FRAMES` at `presentation/lab/enemy_lab.gd:1436` (`IDLE_FRAMES`)):
+`IDLE_FRAMES` at `presentation/lab/enemy_lab.gd:1469` (`IDLE_FRAMES`)):
 
 ```gdscript
 await _shoot_strip(IDLE_FRAMES, "idle", func(_v: EnemyView) -> void: pass)
