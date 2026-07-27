@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:3411` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:3494` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -287,7 +287,7 @@ actor or it scintillates whatever the MSAA. At a 115 px sporeling with
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:2597` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:2680` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -894,7 +894,7 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - **Two silhouette readers coexist, and the prediction here was wrong.** This bullet used
   to say step 6 would delete `_alpha_at`/`_touches_art` along with the Voronoi cells it
   culls. It did not, and could not: the CARVE culls through the same
-  `_touches_art(cell, centre)` (`enemy_view.gd:3361` (in `_death_cells`)), because a shard
+  `_touches_art(cell, centre)` (`enemy_view.gd:3444` (in `_death_cells`)), because a shard
   covering no painting is a pane of empty box that the shard shader draws as nothing while
   the physics still tumbles it. So the older reader outlived the path it was written for.
   Both are still there — `body_mask()` at 256² for the model, `_alpha_at` at full

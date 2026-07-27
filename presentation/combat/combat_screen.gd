@@ -1091,12 +1091,6 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		_enemy_views[idx] = view
 		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
 		_stand(view, slot.x, slot.y)
-		# `enemyIn` with `160 + i * 130` (combat.js:345-351). The stagger is what tells the
-		# player how many foes there are before a single name is read, so it is per SEAT and
-		# not one arrival for the lineup. Skipped when the sequencer is running instant —
-		# a trace replay has no beats to spend on an entrance.
-		if not seq.instant:
-			view.enter(EnemyView.ENTER_LEAD + float(idx) * EnemyView.ENTER_STEP)
 	_sync_all()
 	_open_fight(slots)
 
@@ -1124,33 +1118,30 @@ func _open_fight(slots: Array[Vector2]) -> void:
 ## Position is tweened and then handed back to `_stand`, because an actor is
 ## ANCHORED to the ground line: writing `position` rewrites its offsets, so the
 ## entrance would quietly cost the layout that keeps its feet on the floor at
-## any window height. Re-standing it at the end restores that exactly.
+## any window height. Re-standing it at the end restores that exactly, and that
+## re-anchor is why the slide is driven from here — `EnemyView.enter` owns the
+## motion, this owns the slot.
+##
+## Runs one frame after the views are built (`_open_fight`), because `_stand`
+## does not resolve until the first layout pass. Until 2026-07-27 a SECOND
+## entrance also fired from `_build_battlefield`, one frame earlier, sliding the
+## painting inside its stage while this slid the Control it lives in — two
+## animations on one arrival, both mine.
+##
+## The stagger is `160 + i * 130ms` on the foes only (`combat.js:280`); `heroIn`
+## carries no delay. It is what tells the player how many foes there are before a
+## single name is read, so it is per SEAT and not one arrival for the lineup.
 func _play_entrance(slots: Array[Vector2]) -> void:
 	if _hero != null:
-		_enter(_hero, -70.0, HERO_X, 0.0)
+		_hero.enter(0.0, _stand.bind(_hero, HERO_X, 0.0))
 	for idx: int in range(_enemy_views.size()):
 		var view: EnemyView = _enemy_views[idx]
 		if view == null:
 			continue
 		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
-		_enter(view, 90.0, slot.x, slot.y)
+		view.enter(EnemyView.ENTER_LEAD + float(idx) * EnemyView.ENTER_STEP,
+			_stand.bind(view, slot.x, slot.y))
 	_hud.play_entrance()
-
-
-func _enter(view: EnemyView, dx: float, x: float, lift: float) -> void:
-	var home: Vector2 = view.position
-	var rest: float = view.modulate.a
-	view.position = home + Vector2(dx, 0.0)
-	view.modulate.a = 0.0
-	var tw: Tween = view.create_tween()
-	tw.tween_method(func(t: float) -> void:
-		if not is_instance_valid(view):
-			return
-		var e: float = Motion.ease(Motion.ENTER, t)
-		view.position = home + Vector2(dx * (1.0 - e), 0.0)
-		view.modulate.a = rest * e,
-		0.0, 1.0, 0.55)
-	tw.tween_callback(_stand.bind(view, x, lift))
 
 
 func _deal_opening_hand() -> void:

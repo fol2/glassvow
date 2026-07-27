@@ -444,9 +444,8 @@ var _hit_tween: Tween = null
 ## the swing rather than cancelling it — which is what two CSS animations on one
 ## element do NOT do, and is the better read.
 var _lunge_x: float = 0.0
-## The entrance slide, in the art's own px. Composed into the vessel's position beside the
-## lunge rather than tweened onto it — see `_set_enter`.
-var _enter_x: float = 0.0
+## Where the entrance starts, in Control px — see `enter`, which slides the whole actor
+## rather than the vessel inside its stage.
 var _enter_from: float = 0.0
 var _enter_tween: Tween = null
 var _lunge_up: float = 0.0
@@ -545,20 +544,51 @@ const FLOAT_RATE: float = 1.15
 
 ## The SECOND idle layer, and the one this port never had. `FLOAT_PX` above is
 ## the mesh plane's own offset; on top of it the benchmark hangs a per-KIND CSS
-## hover on the sprite box — `idleFloat`, amplitude and period authored per kind
-## (`src/styles.css:1612-1621`, applied at `src/ui/combat.js:1841`). A wisp rises
-## 16px over 3.1s there against 7.29px over 5.46s here, which is why the port's
-## floaters read as standing still, and why the shadow had nothing to answer to.
-## `x` is the peak lift in stage px, `y` the period in seconds. Only the LIFTING
-## kinds are here: `idleSway`, `idleSlime` and `idleBreathe` are the rest of the
-## kind layer and none of them raise the body.
-const KIND_HOVER: Dictionary = {
-	&"wisp": Vector2(16.0, 3.1),
-	&"eye": Vector2(18.0, 3.4),
-	&"siren": Vector2(12.0, 3.6),
-	&"shade": Vector2(12.0, 3.6),
-	&"plant": Vector2(9.0, 3.8),
+## animation on the sprite box, one per archetype and mutually exclusive
+## (`src/styles.css:1612-1624`, applied at `src/ui/combat.js:1841`). Four shapes,
+## and every kind gets exactly one:
+##
+## - `idleFloat` — a whole-box hover, never below the line. A wisp rises 16px
+##   over 3.1s there against 7.29px over 5.46s here, which is why the port's
+##   floaters read as standing still and why the cast shadow had nothing to
+##   answer to.
+## - `idleSlime` — `translateY 0 / -4 / +2` with `scaleX 1 / 1.04 / .97` at
+##   0/33/66%. It DOES leave the ground, briefly, and it also sinks below it.
+## - `idleSway` — `translateX 5px` with `rotate 1.8deg`. Serpents only.
+## - `idleBreathe` — `scaleY 1.025`, and the closest thing the benchmark has to
+##   a default. Six walking kinds share it.
+##
+## The vertex-stage deform (`IDLE_PROFILES`) is the OTHER layer and runs with
+## whichever of these applies; over there the mesh plane tracks the CSS box each
+## frame, so both are live at once (`src/styles.css:1611`).
+const KIND_IDLE: Dictionary = {
+	&"wisp": &"float", &"eye": &"float", &"siren": &"float", &"shade": &"float",
+	&"plant": &"float", &"slime": &"slime", &"serpent": &"sway",
+	&"beast": &"breathe", &"rogue": &"breathe", &"cultist": &"breathe",
+	&"knight": &"breathe", &"zombie": &"breathe", &"crawler": &"breathe",
 }
+const KIND_IDLE_PERIOD: Dictionary = {
+	&"wisp": 3.1, &"eye": 3.4, &"siren": 3.6, &"shade": 3.6, &"plant": 3.8,
+	&"slime": 4.2, &"serpent": 3.5, &"beast": 3.6, &"rogue": 3.6,
+	&"cultist": 3.6, &"knight": 3.6, &"zombie": 3.6, &"crawler": 3.6,
+}
+## `--float-y`, in stage px — `idleFloat` only.
+const KIND_FLOAT_PX: Dictionary = {
+	&"wisp": 16.0, &"eye": 18.0, &"siren": 12.0, &"shade": 12.0, &"plant": 9.0,
+}
+## The keyframe stops, and the values at them. CSS signs throughout: `translateY`
+## is DOWN and `rotate` is clockwise, so both are negated on the way into a
+## Godot basis. Kept in the source's own numbers so a line here greps against a
+## line there.
+const HALF_AT: Array[float] = [0.0, 0.5, 1.0]
+const SLIME_AT: Array[float] = [0.0, 0.33, 0.66, 1.0]
+const SLIME_Y: Array[float] = [0.0, -4.0, 2.0, 0.0]
+const SLIME_SX: Array[float] = [1.0, 1.04, 0.97, 1.0]
+const SWAY_X: float = 5.0
+const SWAY_DEG: float = 1.8
+const BREATHE_SY: float = 1.025
+## `kind === 'wisp' || kind === 'plant'` (`src/ui/combat.js:1845`).
+const MOTE_KINDS: Array[StringName] = [&"wisp", &"plant"]
 
 ## `floatKinds` (`src/ui/combat.js:1856`) — how much lift, in stage px, counts as
 ## fully airborne where the shadow is concerned. A slime that leaves the ground
@@ -586,9 +616,13 @@ var _idle_head: float = 1.0
 var _idle_cloth: float = 0.85
 var _idle_pin: float = IDLE_PIN
 var _idle_float: float = 0.0
-## The kind's CSS hover (`KIND_HOVER`) — peak in world units, period in seconds.
+## Which of the four kind animations this creature runs, and over what period.
+var _kind_idle: StringName = &""
+var _kind_period: float = 3.6
+## `--float-y` in world units, for the `float` shape only.
 var _hover_amp: float = 0.0
-var _hover_period: float = 3.4
+## The two drifting spores, on wisps and plants only.
+var _motes: IdleMotes = null
 ## The kind's `floatKinds` ceiling (`SHADOW_MAX`), in world units.
 var _hover_span: float = SHADOW_MAX_DEFAULT * UNIT
 ## `char-meta`'s own `mesh` block, kept so the kind's profile can be swapped in
@@ -2110,10 +2144,37 @@ func _process(delta: float) -> void:
 	# function rewrites scale and position every frame, so a Tween aimed at either
 	# would be erased before it was ever seen. `_hit` and `_hit_squash` are the
 	# tweened values; composing them here is what makes the two coexist.
+	# The kind layer — one of `idleFloat` / `idleSlime` / `idleSway` /
+	# `idleBreathe`, and never more than one. Composed here for the same reason
+	# the recoil is: this function rewrites scale, rotation and position every
+	# frame, so a Tween aimed at any of the three would be erased unseen.
+	var kind_x: float = 0.0
+	var kind_y: float = 0.0
+	var kind_sx: float = 1.0
+	var kind_sy: float = 1.0
+	var kind_rot: float = 0.0
+	if _kind_idle != &"":
+		var u: float = fposmod(t, _kind_period) / _kind_period
+		match _kind_idle:
+			&"float":
+				kind_y = _hover_amp * Motion.css_pulse(u, 0.0, 1.0)
+			&"slime":
+				# CSS `translateY` is DOWN; a Godot basis counts up. The +2px stop
+				# really does sink the body under the line, and the shadow reads
+				# `max(0, y)` exactly as `spriteLiftPx` does, so the dip is its own
+				# beat and not a shadow underground.
+				kind_y = -Motion.css_keyframe(u, SLIME_AT, SLIME_Y) * UNIT
+				kind_sx = Motion.css_keyframe(u, SLIME_AT, SLIME_SX)
+			&"sway":
+				kind_x = Motion.css_pulse(u, 0.0, SWAY_X) * UNIT
+				# CSS `rotate` is clockwise on screen and +Z is anticlockwise.
+				kind_rot = -deg_to_rad(Motion.css_pulse(u, 0.0, SWAY_DEG))
+			&"breathe":
+				kind_sy = Motion.css_pulse(u, 1.0, BREATHE_SY)
 	_vessel.scale = Vector3(
-		(1.0 - SQUASH * _hit_squash) * _lunge_scale.x,
-		(1.0 + SQUASH * _hit_squash) * _lunge_scale.y, 1.0)
-	_vessel.rotation.z = 0.0
+		(1.0 - SQUASH * _hit_squash) * _lunge_scale.x * kind_sx,
+		(1.0 + SQUASH * _hit_squash) * _lunge_scale.y * kind_sy, 1.0)
+	_vessel.rotation.z = kind_rot
 	# `float` is the one idle term that is NOT a warp: a whole-body lift in stage
 	# px, never negative, so a wisp hangs above the line it was placed on rather
 	# than sinking through it.
@@ -2121,19 +2182,10 @@ func _process(delta: float) -> void:
 	if _idle_float > 0.0:
 		lift = maxf(0.0, _idle_float * FLOAT_PX * IDLE_INTENSITY
 			* sin(t * FLOAT_RATE + _phase * 0.7)) * UNIT
-	# `idleFloat` — the KIND layer, riding on top of the mesh float and never
-	# reaching below the line. CSS runs it `ease-in-out` between two keyframes on
-	# an infinite alternate, so the shape is an eased triangle rather than a
-	# sine; `Motion.EASE_IN_OUT` is symmetric, which is what makes easing the
-	# whole triangle identical to easing each half in its own direction.
-	if _hover_amp > 0.0:
-		var u: float = fmod(t, _hover_period) / _hover_period
-		lift += _hover_amp * Motion.ease(Motion.EASE_IN_OUT,
-			1.0 - absf(u * 2.0 - 1.0))
 	var tremble: Vector2 = _doom_tremble(delta)
 	_vessel.position = Vector3(
-		(_hit * KICK_PX + _lunge_x + _enter_x + tremble.x) * UNIT,
-		lift + (_lunge_up + tremble.y) * UNIT, 0.0)
+		(_hit * KICK_PX + _lunge_x + tremble.x) * UNIT + kind_x,
+		lift + kind_y + (_lunge_up + tremble.y) * UNIT, 0.0)
 	# The resync the rig loop does on every frame. This one call is the whole of
 	# what was missing: a shadow that could answer the body's height, asked twice
 	# in an actor's life.
@@ -2408,12 +2460,32 @@ func _resolve_profile(kind: StringName) -> void:
 	_idle_cloth = _idle_knob(base, "cloth", 0.85)
 	_idle_pin = _idle_knob(base, "pin", IDLE_PIN)
 	_idle_float = _idle_knob(base, "float", 0.0)
-	var hover: Vector2 = KIND_HOVER.get(kind, Vector2.ZERO)
-	_hover_amp = hover.x * UNIT
-	if hover.y > 0.0:
-		_hover_period = hover.y
+	_kind_idle = KIND_IDLE.get(kind, &"")
+	var period: float = KIND_IDLE_PERIOD.get(kind, 3.6)
+	_kind_period = period
+	var amp: float = KIND_FLOAT_PX.get(kind, 0.0)
+	_hover_amp = amp * UNIT
 	var span: float = SHADOW_MAX.get(kind, SHADOW_MAX_DEFAULT)
 	_hover_span = span * UNIT
+	_sync_motes(kind)
+
+
+## `kind === 'wisp' || kind === 'plant'` (`src/ui/combat.js:1845`) — only those
+## two shed. Built on demand rather than hidden, because the kind is set once per
+## actor and the lab is the only caller that ever re-profiles a live view.
+func _sync_motes(kind: StringName) -> void:
+	if MOTE_KINDS.has(kind) == (_motes != null):
+		return
+	if _motes != null:
+		_motes.queue_free()
+		_motes = null
+		return
+	_motes = IdleMotes.new(_hue)
+	add_child(_motes)
+	# Over the painting, under the plate: `.idle-motes` sits at `z-index: 2`
+	# inside `.enemy-sprite`, and `.cplate` is a later sibling of `.enemy-art`.
+	if _display != null:
+		move_child(_motes, _display.get_index() + 1)
 
 
 func _idle_knob(base: Dictionary, key: String, fallback: float) -> float:
@@ -2507,40 +2579,51 @@ func lunge(kind: String) -> float:
 	return seconds
 
 
-## `heroIn` / `enemyIn` (styles.css:724-730) — the actor arrives instead of appearing.
+## `heroIn` / `enemyIn` (styles.css:725-729) — the actor arrives instead of appearing.
 ##
 ## Two design facts ride on this and neither is decoration. The opposing DIRECTIONS say
 ## which side an actor fights for before any chrome is read; the staggered DELAY says how
-## many foes there are before any of them is counted. `combat.js:345-351` sets the delay
-## per seat and this takes it as an argument, because a widget does not know its own index
-## in a lineup.
+## many foes there are before any of them is counted. `combat.js:280` sets the delay per
+## seat and this takes it as an argument, because a widget does not know its own index in
+## a lineup. The hero gets none — `heroIn` carries no `animation-delay`.
 ##
 ## `modulate.a` rides along because a slide that starts fully opaque reads as a shove
 ## rather than as an arrival, and the benchmark's own keyframe fades from 0.
-func enter(delay: float = 0.0) -> void:
+##
+## **This moves the whole actor, not the body inside its stage.** The animation is on
+## `.enemy` and `.player-zone` — the boxes that carry the name plate, the HP vial and the
+## intent — so an entrance that slid only the painting would leave the chrome standing at
+## the destination waiting for it. Until 2026-07-27 there were two of these: this one had
+## the stagger and moved the vessel, while `CombatScreen._enter` moved the Control with the
+## right curve and no stagger, and both ran on the same fight. The Control is the correct
+## element and the stagger is the correct behaviour, so they are one function now.
+##
+## `done` is the caller's re-anchor. An actor is ANCHORED to the ground line, and writing
+## `position` rewrites the offsets that hold it there, so the layout has to be restored by
+## whoever owns it — `EnemyView` does not know its slot.
+func enter(delay: float = 0.0, done: Callable = Callable()) -> void:
 	if _enter_tween != null and _enter_tween.is_valid():
 		_enter_tween.kill()
 	# The hero comes from the left and a foe from the right — `_away()` is the same fact
 	# read from the other end, and reusing it is what keeps the two from disagreeing the
 	# day a third tier appears.
 	_enter_from = _away() * (HERO_IN_PX if tier == "hero" else FOE_IN_PX)
-	_set_enter(0.0)
+	var home: Vector2 = position
+	var rest: float = modulate.a
+	# CSS `animation-fill-mode: backwards` — during the delay the actor already holds the
+	# `from` frame. Without this the lineup flashes into place and then slides.
+	position = home + Vector2(_enter_from, 0.0)
+	modulate.a = 0.0
 	_enter_tween = create_tween()
 	if delay > 0.0:
 		_enter_tween.tween_interval(delay)
-	# TRANS_CUBIC / EASE_OUT against the benchmark's cubic-bezier(.2, .75, .3, 1): no
-	# overshoot in that curve, so unlike the lunge there is nothing here that a plain
-	# ease-out loses.
-	_enter_tween.tween_method(_set_enter, 0.0, 1.0, ENTER_TIME) \
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-
-
-## The slide is composed into `_lunge_x`, which `_step_idle` already folds into the
-## vessel's position every frame — a tween writing `position` directly would be erased,
-## which is the same trap the recoil docblock records.
-func _set_enter(t: float) -> void:
-	_enter_x = _enter_from * (1.0 - t)
-	modulate.a = t if t < 1.0 else 1.0
+	_enter_tween.tween_method(func(t: float) -> void:
+		var e: float = Motion.ease(Motion.ENTER, t)
+		position = home + Vector2(_enter_from * (1.0 - e), 0.0)
+		modulate.a = rest * e,
+		0.0, 1.0, ENTER_TIME)
+	if done.is_valid():
+		_enter_tween.tween_callback(done)
 
 
 func _set_lunge(t: float) -> void:

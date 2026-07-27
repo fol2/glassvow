@@ -82,8 +82,8 @@ Three payoffs, in increasing order of importance:
    foes', and are simply never read — dead data, not tuning.)
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
-   (`presentation/combat/enemy_view.gd:2000` (`_update_shadow`); the swing itself
-   enters at `enemy_view.gd:3764` (`set_light_angle`)). No amount of tuning the CSS version
+   (`presentation/combat/enemy_view.gd:2034` (`_update_shadow`); the swing itself
+   enters at `enemy_view.gd:3847` (`set_light_angle`)). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.
 
@@ -117,7 +117,7 @@ colour, a timing curve, a silhouette exaggeration. Those are design; port them.
 | --- | --- |
 | `--sh-skew`, `--sh-x` | Key light direction — horizontal run per unit height |
 | `--sh-sx`, `--sh-sy` | Ground-plane tilt (`GROUND_TILT_DEG = 78.0`, cos ≈ 0.21) × cast length |
-| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha: lowest opaque row is the contact point, its horizontal centroid is where weight sits (`enemy_view.gd:1930` (`_read_contact`)) |
+| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha: lowest opaque row is the contact point, its horizontal centroid is where weight sits (`enemy_view.gd:1964` (`_read_contact`)) |
 | `--sh-blur` | Distance from the contact point — sharp at the feet, diffuse at the far end |
 | `--sh-o` | **Kept — but promoted to a single global.** Opacity is taste, not geometry, and one taste serves every actor. The per-creature values are no longer read. |
 | `--sh-y` (`shadow.dy`) | **Kept, per creature.** See the correction below: this is the one knob that says something the painting cannot. |
@@ -154,7 +154,7 @@ Two things follow, and they are the general lesson rather than a shadow detail:
 exactly the floaters — says the thing the alpha cannot: *this painting is of something
 already off the ground.* Contact point, lean, length and softening are all in the image
 or the light. Resting height is in neither. It is read as a height and fed through the
-same projection the live hover uses (`enemy_view.gd:2000` (`_update_shadow`)), so it
+same projection the live hover uses (`enemy_view.gd:2034` (`_update_shadow`)), so it
 buys a shadow that is offset, smaller, fainter and softer rather than the straight-down
 shove CSS could manage. One authored number doing the job eight were approximating is
 still the pattern working — it is just not zero.
@@ -166,7 +166,7 @@ The honest projection at the key light's authored pitch of −38°
 geometrically correct and reads badly: in a side-on view a long cast makes the
 creature look like it is hovering over its own shadow. The derivation is therefore
 bounded back into a ground pool that still leans with the light
-(`enemy_view.gd:1921-1922` (`CAST_MIN`)):
+(`enemy_view.gd:1955-1956` (`CAST_MIN`)):
 
 ```gdscript
 const CAST_MIN: float = 0.6
@@ -191,7 +191,7 @@ first attempt set the basis and then set `scale` separately, and the shadow vani
 _shadow.transform.basis = tilt * shear
 _shadow.scale = Vector3(s, s, 1.0)
 
-# RIGHT — fold the scale into the same basis (enemy_view.gd:2030-2034 (in _update_shadow))
+# RIGHT — fold the scale into the same basis (enemy_view.gd:2064-2068 (in _update_shadow))
 var shear: Basis = Basis.IDENTITY
 shear.x = Vector3(s, 0.0, 0.0)
 shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * s, run * s, 0.0)
@@ -221,4 +221,4 @@ builds a skew, squash, or projection matrix has to keep scale inside the basis.
   per-asset tuning table valuable rather than merely tidy.
 - `assets/art/enemies/char-meta.json` — the ported per-character table. All of its
   `shadow` entries but `dy` are vestigial for rendering and are retained as reference
-  data; `dy` is read as a resting height (`enemy_view.gd:2387` (`_read_hover`)).
+  data; `dy` is read as a resting height (`enemy_view.gd:2439` (`_read_hover`)).

@@ -31,6 +31,7 @@ extends Control
 ##   tools/shot.sh --enemies --ward[=duskfang] [--absorb] --strip=/tmp/w.png
 ##                     # the guard stone: breaking, or ringing from a blow it stopped
 ##   tools/shot.sh --enemies --enter[=duskfang] --strip=/tmp/e.png
+##   tools/shot.sh --enemies --idle[=gloomslime] --strip=/tmp/i.png
 ##                     # the arrival — `enemyIn`, one actor without the lineup's stagger
 ##
 ## --shot= and --strip= both quit when they are done, so those two go through
@@ -232,6 +233,11 @@ func _init(content_ref: ContentDB) -> void:
 		elif arg.begins_with("--enter="):
 			_mode = "enter"
 			states_id = arg.trim_prefix("--enter=")
+		elif arg == "--idle":
+			_mode = "idle"
+		elif arg.begins_with("--idle="):
+			_mode = "idle"
+			states_id = arg.trim_prefix("--idle=")
 		elif arg == "--crack":
 			_mode = "crack"
 		elif arg.begins_with("--crack="):
@@ -352,7 +358,7 @@ func _init(content_ref: ContentDB) -> void:
 	_roster = roster
 	_names = names
 	_ids = ids
-	if _mode in ["rite", "hit", "crack", "ward", "enter"]:
+	if _mode in ["rite", "hit", "crack", "ward", "enter", "idle"]:
 		var pick_r: String = states_id
 		if pick_r == "" or not roster.has(pick_r):
 			pick_r = "duskfang" if roster.has("duskfang") else (str(ids[0]) if not ids.is_empty() else "")
@@ -1294,6 +1300,15 @@ func _ready() -> void:
 			wall_e.append(t / CRACK_SLOMO)
 		await _shoot_strip(wall_e, "enter", func(v: EnemyView) -> void: v.enter(0.0))
 		return
+	if _mode == "idle":
+		# The per-KIND idle, which had no way of being looked at and was therefore the
+		# last thing anyone noticed was missing — the roster sheet was not even calling
+		# `set_profile`, so every creature on it hovered, swayed and breathed as a
+		# humanoid. Real time rather than slowed: these are 3-4 second loops and the
+		# point is the SHAPE of the cycle, not a frame of it. Six cells across the
+		# longest period so a slime's two stops and a serpent's lean both land.
+		await _shoot_strip(IDLE_FRAMES, "idle", func(_v: EnemyView) -> void: pass)
+		return
 	if _mode == "ward":
 		# The guard giving way. Slowed for the same reason `--crack` is — the break is 340 ms
 		# against a readback that costs 70 — and photographed from a stone that is ALREADY up,
@@ -1369,6 +1384,11 @@ const WARD_FRAMES: Array[float] = [0.0, 0.05, 0.11, 0.18, 0.26, 0.36]
 ## The arrival, in BEAT seconds. `EnemyView.ENTER_TIME` is 550ms on an ease-out, so most of
 ## the travel is over by a third of it and the cells cluster there.
 const ENTER_FRAMES: Array[float] = [0.0, 0.06, 0.14, 0.25, 0.38, 0.56]
+## One full turn of the slowest kind idle — `idleSlime` at 4.2s — sampled evenly, in
+## real seconds. Unlike every other strip here this one is NOT slowed: an idle is a
+## loop rather than a beat, and stretching it would only photograph the same instant
+## six times.
+const IDLE_FRAMES: Array[float] = [0.0, 0.84, 1.68, 2.52, 3.36, 4.2]
 
 
 ## Stand one actor up, run `action` on it, photograph `frames`, save the strip.

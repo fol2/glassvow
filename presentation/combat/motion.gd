@@ -66,6 +66,30 @@ static func keyframe(t: float, at: Array[float], v: Array[float]) -> float:
 	return v[v.size() - 1]
 
 
+## The other keyframe contract, and the one the CSS `@keyframes` idles want. A
+## WAAPI list eases once across the iteration (`keyframe` above); a CSS
+## `animation-timing-function` eases EVERY interval, so `idleSlime`'s 0/33/66/100
+## is three eased segments and reading a linear ramp at an eased t would move the
+## stops in time. Same arguments, different contract — pick by which side the
+## animation came from.
+static func css_keyframe(u: float, at: Array[float], v: Array[float]) -> float:
+	for i: int in range(1, at.size()):
+		if u <= at[i] or i == at.size() - 1:
+			var span: float = at[i] - at[i - 1]
+			var f: float = 0.0 if span <= 0.0 else clampf((u - at[i - 1]) / span, 0.0, 1.0)
+			return lerpf(v[i - 1], v[i], Motion.ease(EASE_IN_OUT, f))
+	return v[v.size() - 1]
+
+
+## The two-stop case — `0%, 100% { a } 50% { b }` — which is most of them. Written
+## out rather than routed through `css_keyframe` because `EASE_IN_OUT` is
+## symmetric, and that makes easing the whole triangle identical to easing the
+## rise and the fall apart: one `ease` call instead of a search plus a solve,
+## sixty times a second per actor.
+static func css_pulse(u: float, a: float, b: float) -> float:
+	return lerpf(a, b, Motion.ease(EASE_IN_OUT, 1.0 - absf(u * 2.0 - 1.0)))
+
+
 ## Quadratic bezier — the shape both the aim arc and the mote flights travel on.
 static func quad(p0: Vector2, c: Vector2, p1: Vector2, t: float) -> Vector2:
 	var u: float = 1.0 - t

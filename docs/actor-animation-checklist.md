@@ -39,23 +39,32 @@ browser could not do better are marked and not ported.
 
 ## 1. Whole body
 
-### 1.1 Entrance — **FIX** the duplicate foe path
+### 1.1 Entrance — **BUILT** (was two concurrent foe paths)
 
 Benchmark: `heroIn` / `enemyIn`, 0.55s `cubic-bezier(.2,.75,.3,1)`. The hero
 enters from the left (`translateX(-70px)` → 0), foes from the right
 (`translateX(90px)` → 0), each foe delayed `160 + i×130ms`
-(`src/styles.css:725-729`, `src/ui/combat.js:280`, `src/ui/combat.js:345-351`).
+(`src/styles.css:725-729`, `src/ui/combat.js:280`). The animation is on `.enemy`
+and `.player-zone` — the boxes that carry the name plate, the HP vial and the
+intent — and `animation-fill-mode: backwards` holds the `from` frame through the
+delay. The hero has no delay.
 
-Here: built twice for foes, so it is not a match. `EnemyView.enter` gives each
-foe the correct 0.55s / +90px / `160 + i×130ms` path, but uses
-`TRANS_CUBIC/EASE_OUT` (`enemy_view.gd:2381-2396`,
-`combat_screen.gd:1076-1081`). One frame later `_play_entrance` starts another
-0.55s / +90px path on every foe, without the stagger, while correctly giving the
-hero −70px and the exact `Motion.ENTER` curve (`combat_screen.gd:1095-1119`).
-The first path has already set foe alpha to zero when the second captures its
-resting alpha. Consolidate the concurrent foe tweens into one path.
+**Resolved 2026-07-27.** Both paths were partly right, which is why neither
+looked broken: `EnemyView.enter` had the stagger and moved the vessel inside its
+3D stage, so the chrome stood at the destination waiting for the painting to
+arrive; `CombatScreen._enter` moved the Control with the exact `Motion.ENTER`
+curve, the hero's −70px and the `_stand` re-anchor, and had no stagger. The
+Control is the correct element and the stagger is the correct behaviour, so they
+are one function: `EnemyView.enter(delay, done)` owns the motion and the fill,
+`_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2621`,
+`combat_screen.gd:1122`). The `view.enter(...)` call in `_build_battlefield`,
+which fired a frame earlier and set foe alpha to zero under the other path's
+nose, is gone.
 
-### 1.2 Idle — **FIX** the missing CSS kind layer
+Measured on the `--enter` strip: the actor's bright centroid travels 79.6 canvas
+px with an ease-out profile, and the plate and rail travel with it.
+
+### 1.2 Idle — **BUILT** (was the missing CSS kind layer)
 
 Benchmark runs idle at two levels:
 
@@ -76,22 +85,44 @@ Here: the **mesh layer matches**. `IDLE_PROFILES` matches the benchmark
 terms run in `BODY_SHADER` (`enemy_view.gd:496-526`,
 `enemy_view.gd:721-781`, `enemy_view.gd:2255-2299`).
 
-**`idleFloat` is built (2026-07-27); the rest of the CSS layer is still absent.**
-The lifting kinds are ported at their authored amplitude and period — wisp
-3.1s/16px, eye 3.4s/18px, siren and shade 3.6s/12px, plant 3.8s/9px — as an eased
-triangle on top of the mesh float, never below the line (`KIND_HOVER`,
-`enemy_view.gd:555`; applied at `enemy_view.gd:2117`). This was done as part of
-§2: a shadow that answers the body's height has nothing to answer while the
-floaters move `1.35 × 12 × .45 = 7.29px` on a 5.46s sine against the benchmark's
-16px on 3.1s.
+**The kind layer is built (2026-07-27).** All four shapes, at the source's own
+amplitudes and periods, composed onto the vessel beside the recoil rather than
+tweened onto it (`KIND_IDLE`, `enemy_view.gd:555`; applied at
+`enemy_view.gd:2150`):
 
-Still missing: the `idleSlime` squash, serpent `idleSway`, general `idleBreathe`,
-and the idle-mote equivalent. None of them raise the body, which is why they were
-out of scope for the shadow work and are still open here.
+| Shape | Kinds | Values |
+| --- | --- | --- |
+| `idleFloat` | wisp, eye, siren, shade, plant | 16 / 18 / 12 / 12 / 9 px over 3.1 / 3.4 / 3.6 / 3.6 / 3.8 s |
+| `idleSlime` | slime | `translateY 0 / −4 / +2` with `scaleX 1 / 1.04 / .97` at 0/33/66%, 4.2s |
+| `idleSway` | serpent | `translateX 5px` with `rotate 1.8deg`, 3.5s |
+| `idleBreathe` | beast, rogue, cultist, knight, zombie, crawler | `scaleY 1.025`, 3.6s |
 
-**Also fixed:** the enemy lab never called `set_profile`, so every creature on the
-one sheet built to judge the actors idled as a humanoid — an idle no fight ever
-runs (`enemy_lab.gd:403`).
+Two things the port did not previously distinguish. **CSS eases every keyframe
+interval**, not once across the iteration the way a WAAPI list does, so
+`idleSlime`'s three stops are three eased segments — `Motion.css_keyframe` is
+that contract and `Motion.keyframe` is the other one (`motion.gd:75`). And
+**`idleSlime` does leave the ground**, briefly, and also sinks below it; the
+shadow reads `max(0, y)` exactly as `spriteLiftPx` does, so the dip is its own
+beat rather than a shadow underground.
+
+`idleFloat` came first as part of §2 — a shadow that answers the body's height
+has nothing to answer while the floaters move `1.35 × 12 × .45 = 7.29px` on a
+5.46s sine against the benchmark's 16px on 3.1s.
+
+**The motes are built too** — `IdleMotes` (`idle_motes.gd:1`), two drifting
+spores on wisps and plants only, in the creature's own hue, hung on the actor's
+Control between the painting and the plate the way `.idle-motes` sits at
+`z-index: 2` inside `.enemy-sprite`. Deliberately not seed-desynced:
+`animation-delay` does not inherit, so two wisps drift in lockstep over there
+too.
+
+**Two lab defects surfaced on the way.** The sheet never called `set_profile`, so
+every creature on the one surface built to judge the actors idled as a humanoid —
+an idle no fight ever runs (`enemy_lab.gd:407`). And there was no way to look at
+the kind layer at all, which is the likelier reason nobody noticed: `--idle` is
+now a strip mode (`enemy_lab.gd:1292`). It runs in REAL time, unlike every other
+strip here, because the idle clock is `Time.get_ticks_msec` and `Engine.time_scale`
+cannot reach it.
 
 ### 1.3 Attack lunge — **FIX** the curve
 
@@ -244,7 +275,7 @@ skew reduced 35%, from a base of `scale(1,.24)`, opacity `.62`, blur `1.5px`
 (`src/char-meta.js:8`, `src/ui/combat.js:1771-1819`, `src/styles.css:767-782`).
 
 Here: derived by projecting the silhouette along the key light
-(`enemy_view.gd:2000` (`_update_shadow`)). **Built out 2026-07-27** — the grade
+(`enemy_view.gd:2034` (`_update_shadow`)). **Built out 2026-07-27** — the grade
 above was the shape; the lift response was neither matched nor alive.
 
 Two defects, both fixed. **It never ran.** `_update_shadow` was called at build
@@ -523,9 +554,9 @@ the painted silhouette; only its missing-art fallback is a blob
 `src/ui/combat.js:1795-1818`, `src/styles.css:769-778`).
 
 Godot derives eight of the nine from the painting alpha, the ground plane and the
-key light (`enemy_view.gd:1930` (`_read_contact`), `enemy_view.gd:2000`
+key light (`enemy_view.gd:1964` (`_read_contact`), `enemy_view.gd:2034`
 (`_update_shadow`)). **The ninth, `dy`, is now read** (2026-07-27,
-`enemy_view.gd:2387` (`_read_hover`)) — this entry previously called the whole
+`enemy_view.gd:2439` (`_read_hover`)) — this entry previously called the whole
 block vestigial and that was wrong about one knob.
 
 Contact point, lean, length and softening are all in the image or in the light.
