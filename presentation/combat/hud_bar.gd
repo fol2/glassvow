@@ -58,6 +58,10 @@ const BAR_H: float = 56.0
 const BAR_PAD: float = 16.0
 const BAR_GAP: float = 18.0
 const HP_WRAP_W: float = 170.0
+## How the two HP rails travel. See `_hp_shown_bar` for why there are two.
+const HP_BAR_TIME: float = 0.4
+const HP_PLATE_TIME: float = 0.35
+const HP_EASE: Array[float] = [0.3, 1.0, 0.4, 1.0]
 ## The hero plate, in both widths, sharing one centre so an A/B is honest.
 ##
 ## PARITY is `.hpbar-wrap` verbatim: 150px holding [ward chip][gap 6][vial,
@@ -122,6 +126,30 @@ var _ward_num: Label
 var _plate_w: float = PLATE_WIDE_W
 var _plate_vial_w: float = PLATE_WIDE_VIAL
 var _hp_ratio: float = 1.0
+## What the two rails are SHOWING, which lags what the player HAS.
+##
+##     .hud-hpbar > div { transition: width 0.4s  cubic-bezier(0.3, 1, 0.4, 1); }
+##     .hpbar > .fill   { transition: width 0.35s cubic-bezier(0.3, 1, 0.4, 1); }
+##                                                    (styles.css:182, 834)
+##
+## Two rails, two durations, one curve. They are separate elements in the
+## reference and they are separate here, even though 50ms apart is not something
+## anyone will time — the ghost rail beside them already glides, and a fill that
+## jumps to its new width next to a ghost that slides is visible on every hit.
+##
+## Held as a ratio rather than a width because the plate's rail is re-measured by
+## `_layout_plate` whenever the ward chip changes size: a tween writing a WIDTH
+## would be overwritten by the next layout, and a tween writing the ratio the
+## layout reads survives it.
+var _hp_shown_bar: float = 1.0
+var _hp_shown_plate: float = 1.0
+var _hp_bar_tween: Tween = null
+var _hp_plate_tween: Tween = null
+## A CSS transition does not fire on the first render — the element is born at
+## its width. The first sync therefore SNAPS, or a fight resumed at half health
+## would open with both rails sweeping down from full, which is a thing the
+## reference never shows.
+var _hp_seeded: bool = false
 var _energy_num: Label
 var _candle_field: Control
 var _candles: Array[TextureRect] = []
@@ -289,7 +317,7 @@ func set_values(hp: int, max_hp: int, block: int, gold: int,
 	_last = now
 	_hp_ratio = clampf(float(hp) / float(maxi(1, max_hp)), 0.0, 1.0)
 	_hp_num.text = "%d / %d" % [hp, max_hp]
-	_hp_fill.size.x = HP_WRAP_W * _hp_ratio
+	_glide_hp()
 	# Absent, not empty, when the actor owns the plate instead — see `_init`.
 	if _plate_rail != null:
 		_plate_label.text = "%d/%d" % [hp, max_hp]
@@ -558,6 +586,41 @@ func _rail_style() -> StyleBoxFlat:
 	return track
 
 
+## Run the two rails toward the HP the player now has. Nothing here waits for a
+## layout: the top bar owns its own width, and the plate's rail is re-measured by
+## `_layout_plate`, so the plate's step asks for that instead of writing a width
+## the next layout would throw away.
+func _glide_hp() -> void:
+	if _hp_bar_tween != null and _hp_bar_tween.is_valid():
+		_hp_bar_tween.kill()
+	if _hp_plate_tween != null and _hp_plate_tween.is_valid():
+		_hp_plate_tween.kill()
+	if not _hp_seeded:
+		_hp_seeded = true
+		_set_hp_bar(1.0, _hp_ratio, _hp_ratio)
+		if _plate_rail != null:
+			_set_hp_plate(1.0, _hp_ratio, _hp_ratio)
+		return
+	_hp_bar_tween = create_tween()
+	_hp_bar_tween.tween_method(_set_hp_bar.bind(_hp_shown_bar, _hp_ratio),
+		0.0, 1.0, HP_BAR_TIME)
+	if _plate_rail == null:
+		return
+	_hp_plate_tween = create_tween()
+	_hp_plate_tween.tween_method(_set_hp_plate.bind(_hp_shown_plate, _hp_ratio),
+		0.0, 1.0, HP_PLATE_TIME)
+
+
+func _set_hp_bar(t: float, from: float, to: float) -> void:
+	_hp_shown_bar = lerpf(from, to, Motion.ease(HP_EASE, t))
+	_hp_fill.size.x = HP_WRAP_W * _hp_shown_bar
+
+
+func _set_hp_plate(t: float, from: float, to: float) -> void:
+	_hp_shown_plate = lerpf(from, to, Motion.ease(HP_EASE, t))
+	_layout_plate()
+
+
 ## Resolve `.hpbar-wrap`: the chip takes what it needs, the label its 52px, and
 ## the vial either flexes into the gap or keeps the length it was given. Run at
 ## build and again whenever the chip appears or leaves, since the vial's length
@@ -573,7 +636,7 @@ func _layout_plate() -> void:
 	_plate_rail.position = Vector2(vial_x + inset, (PLATE_H - RAIL_H) * 0.5)
 	_plate_rail.size = Vector2(maxf(2.0, vial_w - inset * 2.0), RAIL_H)
 	_plate_fill.position = Vector2(rim, rim)
-	_plate_fill.size = Vector2((_plate_rail.size.x - rim * 2.0) * _hp_ratio,
+	_plate_fill.size = Vector2((_plate_rail.size.x - rim * 2.0) * _hp_shown_plate,
 		RAIL_H - rim * 2.0)
 	if _plate_frame != null:
 		_plate_frame.position = Vector2(vial_x - 5.0, (PLATE_H - 22.0) * 0.5)
