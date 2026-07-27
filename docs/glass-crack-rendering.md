@@ -58,8 +58,8 @@ sampling. It is drawn.
 
 **2.2 The arc wears the brightest treatment in the effect.** `_prism()`
 (`enemy_view.gd:2923` (`_prism`)) extrudes *every* edge of the cell into a side
-band tagged `COLOR.r = 1`, and `GLASS_SHADER` (`enemy_view.gd:450`
-(`GLASS_SHADER`)) lights that band by Fresnel: `ALBEDO` mixes toward white,
+band tagged `COLOR.r = 1`, and `GLASS_SHADER`
+(`enemy_view.gd:1417` (`GLASS_SHADER`)) lights that band by Fresnel: `ALBEDO` mixes toward white,
 `ALPHA` gains `f * 0.6`, `EMISSION` gains `pow(f, 1.4)` for both `ignite` and
 `marked`. All three channels emphasise the same contour, so the disc boundary is
 the whitest, most opaque and most emissive line on the actor.
@@ -630,8 +630,8 @@ that seat was re-derived.
 Before any option is built or judged, one defect has to go, because every
 comparison depends on it.
 
-`EnemyView` owns a single `RandomNumberGenerator` (`enemy_view.gd:200`
-(`_rng`)), seeded once when the stage is built from
+`EnemyView` owns a single `RandomNumberGenerator` (`enemy_view.gd:460` (`_rng`)),
+seeded once when the stage is built from
 `hash(String(art_id)) + enemy_idx`. Three unrelated consumers share that one
 stream: crack placement (`crack`), the death pattern (`_death_sites`), and the
 debris ballistics in `shatter`.

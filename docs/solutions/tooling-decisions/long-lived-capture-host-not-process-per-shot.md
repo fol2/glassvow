@@ -39,9 +39,9 @@ entry point. `application/main.gd:39-47` documents it and
 # godot --path . -- --shot=/tmp/map.png [--seed=N] [--enter=0]
 ```
 
-`--shot=PATH` is read at `application/main.gd:63-64`, and each of the four exit
+`--shot=PATH` is read at `application/main.gd:63-64` (in `_ready`), and each of the four exit
 paths — studio, card lab, the four labs, and the real run — calls
-`_capture_and_quit()` (`application/main.gd:111`, `117`, `132`,
+`_capture_and_quit()` (`application/main.gd:111` (in `_ready`), `117`, `132`,
 `141`). That function is short and worth reading in full, because two of its
 lines become load-bearing later:
 
@@ -55,7 +55,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:144-150`.) It waits 30 frames for the first paint, reads
+(`application/main.gd:144-150` (`_capture_and_quit`).) It waits 30 frames for the first paint, reads
 the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
@@ -198,8 +198,8 @@ attempts have a home.
 `tools/live.tscn` is six lines: a bare `Node` named `LiveHost` with
 `tools/live.gd` attached. The script instantiates the *real* game scene
 unchanged — `const GAME_SCENE_PATH: String = "res://application/main.tscn"`
-(`tools/live.gd:24`) — and adds funplay's runtime bridge beside it
-(`tools/live.gd:25`, instantiated at `tools/live.gd:43-46`):
+(`tools/live.gd:24` (`tscn`)) — and adds funplay's runtime bridge beside it
+(`tools/live.gd:25` (`BRIDGE_SCRIPT_PATH`), instantiated at `tools/live.gd:43-46`):
 
 ```gdscript
 func _ready() -> void:
@@ -216,7 +216,7 @@ The bridge already speaks the commands the loop needs — its dispatch at
 `query_node`, `capture_view`, `send_input`, and `get_events` — over `user://`
 command and response files declared at that file's lines 3-6. The host adds one
 command of its own, `reload`, on a *separate* channel
-(`tools/live.gd:26-28`), for the reason given at `tools/live.sh:104-105`: a
+(`tools/live.gd:26-28` (`REQUEST_PATH`)), for the reason given at `tools/live.sh:104-105`: a
 reload re-parses the scripts the bridge would otherwise be answering from.
 
 ### `tools/live.sh` — the client
@@ -231,14 +231,14 @@ reload re-parses the scripts the bridge would otherwise be answering from.
 ```
 
 Everything after that boot is a file write and a poll. `send()`
-(`tools/live.sh:56-71`) mints a fresh id per call, clears the response file,
+(`tools/live.sh:56-71` (`send`)) mints a fresh id per call, clears the response file,
 writes the command, and polls for up to 200 × 0.05s. `shot` asks the bridge to
 save under `user://shots/` and copies the result out
 (`tools/live.sh:94-101`). `reload` uses the host's own channel and polls for up
 to 400 × 0.05s (`tools/live.sh:103-119`).
 
 **Do not pass `--shot` to the host.** That hook captures once and quits
-(`application/main.gd:144`), which is the exact behaviour the host exists to
+(`application/main.gd:144` (`_capture_and_quit`)), which is the exact behaviour the host exists to
 avoid. `tools/live.gd:22` and `tools/live.sh:14` both say so.
 
 ### Hot reload is the load-bearing part
@@ -255,8 +255,8 @@ originating at `modules/gdscript/gdscript.cpp:754` — a path in *Godot's own
 source*, not in this repository, and a line number taken from the error output
 rather than verified against a checkout of the engine. And `queue_free()` is deferred to the end of
 the frame, so it does not clear the instances in time. The scene must be
-`free()`d outright, first. `_teardown_game()` is called at `tools/live.gd:97`,
-before the script loop, and it does not defer (`tools/live.gd:162-167`):
+`free()`d outright, first. `_teardown_game()` is called at `tools/live.gd:97` (in `_reload`),
+before the script loop, and it does not defer (`tools/live.gd:162-167` (`_teardown_game`)):
 
 ```gdscript
 func _teardown_game() -> void:
@@ -282,7 +282,7 @@ if script.reload(false) != OK:
 	failed.append(path)
 ```
 
-Two passes are run (`RELOAD_PASSES: int = 2`, `tools/live.gd:36`) because a
+Two passes are run (`RELOAD_PASSES: int = 2`, `tools/live.gd:36` (`RELOAD_PASSES`)) because a
 dependency compiled after its dependent leaves the dependent holding the older
 copy; the second pass settles it (`tools/live.gd:33-35`).
 
@@ -300,11 +300,11 @@ to next.
 **4. The first frame after a rebuild is black.** A viewport texture read before
 the rebuilt screen has painted comes back black; several early captures were
 fully black PNGs. The host waits 30 frames before announcing ready or replying
-to a reload — `SETTLE_FRAMES: int = 30` at `tools/live.gd:32`, deliberately
+to a reload — `SETTLE_FRAMES: int = 30` at `tools/live.gd:32` (`SETTLE_FRAMES`), deliberately
 matching `main.gd`'s own hook at `application/main.gd:139`. `_settle()` is
-awaited from both `_announce_ready()` (`tools/live.gd:151`) and the reload's
-success path (`tools/live.gd:128`), so **a successful reply doubles as "safe to
-capture now"** (`tools/live.gd:127`).
+awaited from both `_announce_ready()` (`tools/live.gd:151` (in `_announce_ready`)) and the reload's
+success path (`tools/live.gd:128` (in `_reload`)), so **a successful reply doubles as "safe to
+capture now"** (`tools/live.gd:127` (in `_reload`)).
 
 ### The fifth finding, and the one the user actually felt
 
@@ -315,7 +315,7 @@ was built to eliminate.
 
 The fix is in the client, not the engine. `tools/live.sh:80` records the
 previously-frontmost application before launching, and `hand_back()`
-(`tools/live.sh:38-44`) reactivates it once the host writes its ready file
+(`tools/live.sh:38-44` (`hand_back`)) reactivates it once the host writes its ready file
 (called at `tools/live.sh:87`):
 
 ```sh
@@ -363,7 +363,7 @@ with no further transitions across a subsequent `reload` and captures.
 
 - **The host's own code and the bridge are never reloaded.**
   `_collect_scripts()` skips `res://addons` and `res://tools` outright
-  (`tools/live.gd:190`), because reloading either would pull the command channel
+  (`tools/live.gd:190` (in `_collect_scripts`)), because reloading either would pull the command channel
   out from under the reply that is being written.
 
 - **Run state is discarded by design.** A reload re-parses scripts and rebuilds
@@ -381,11 +381,11 @@ with no further transitions across a subsequent `reload` and captures.
 
 - **Thirty frames is a frame count, not a duration — and a fight's actors have
   not arrived yet.** Both settle loops count frames: `_capture_and_quit` at
-  `application/main.gd:145-146` and `SETTLE_FRAMES` at `tools/live.gd:32`,
+  `application/main.gd:145-146` (in `_capture_and_quit`) and `SETTLE_FRAMES` at `tools/live.gd:32` (`SETTLE_FRAMES`),
   `158`. Thirty frames is half a second at 60fps. A combat entrance is longer
   than that: each actor tweens for `ENTER_TIME` 0.55s after a stagger of
   `ENTER_LEAD` 0.16s plus `ENTER_STEP` 0.13s per index
-  (`presentation/combat/enemy_view.gd:283`, `288-289`), so the third foe is
+  (`presentation/combat/enemy_view.gd:283` (`ENTER_TIME`), `288-289`), so the third foe is
   still travelling at 1.27s. A one-off `tools/shot.sh --fight=...` therefore
   photographs an empty floor with healthy-looking chrome, and so does a
   `live.sh shot` taken straight after a `reload` that rebuilt the scene. The
@@ -636,7 +636,7 @@ subsequent `reload` and captures.
   attached. Untracked.
 - `application/main.gd:38-58`, `:138-144` — the `--shot` hook the host
   deliberately does not use, and the 30-frame settle the host copies.
-- `addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:3-6`, `:136-143` —
+- `addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:3-6` (`STATE_PATH`), `:136-143` —
   the `user://` file paths and the `query_node` / `capture_view` / `send_input`
   / `get_events` dispatch the host reuses unchanged.
 - `docs/hud-handoff.md:157-173` — §8, the pre-existing record that captures must

@@ -165,14 +165,14 @@ reads it, not with an assignment that happens to land on the final value. The
 HP rails are the worked shape:
 
 ```gdscript
-# hud_bar.gd:62-64 — two rails, two durations, one curve
+# hud_bar.gd:62-64 (`HP_BAR_TIME`) — two rails, two durations, one curve
 const HP_BAR_TIME: float = 0.4
 const HP_PLATE_TIME: float = 0.35
 const HP_EASE: Array[float] = [0.3, 1.0, 0.4, 1.0]
 ```
 
 ```gdscript
-# hud_bar.gd:593-611 — travel; first sync snaps, the way CSS does on first paint
+# hud_bar.gd:593-611 (`_glide_hp`) — travel; first sync snaps, the way CSS does on first paint
 func _glide_hp() -> void:
 	if not _hp_seeded:
 		_hp_seeded = true
@@ -387,7 +387,7 @@ health would open with both rails sweeping down from full. Measured after the
 fix, seeding at 50/72 then dropping to 30/72: first sync lands with no sweep;
 the second travels and settles on `170 × 30/72`. Two rails, two durations, one
 curve — `HP_BAR_TIME 0.4`, `HP_PLATE_TIME 0.35`, `HP_EASE [0.3, 1.0, 0.4, 1.0]`
-in `hud_bar.gd:62-64`, driven by `_glide_hp` at `hud_bar.gd:593-611`. That is
+in `hud_bar.gd:62-64` (`HP_BAR_TIME`), driven by `_glide_hp` at `hud_bar.gd:593-611` (`_glide_hp`). That is
 the whole loop the method is for: extract the declaration, audit it as ABSENT
 with quoted evidence, rank it by how often a player sees it, then close the row
 with the numbers the stylesheet already named.

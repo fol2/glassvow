@@ -70,7 +70,7 @@ Four rules, all load-bearing:
    have decided not to look at.
 
 2. **Add the key to every `FINISH` entry, not just the ones you are changing.**
-   `params()` (`card_surface.gd:422`) asserts the four layers own disjoint keys,
+   `params()` (`card_surface.gd:422` (`params`)) asserts the four layers own disjoint keys,
    and `apply()` reads `p[key]` with a strict index — a missing key is a hard
    crash at load, not a silent default. Both are guardrails; feed them.
 
@@ -114,7 +114,7 @@ It was established as a floor rather than assumed, in two steps:
 - **A control recipe that never enters the changed code showed the same
   1/255.** `holofoil` is `["silver-leaf", "cross-etch", "holo", "gilded"]`, and
   the `holo` finish has `sparkle: 0.0`, so the `if (sparkle > 0.0)` block at
-  `card_surface.gdshader:360` never runs for it. It moved by 1/255 anyway.
+  `card_surface.gdshader:360` (in `fragment`) never runs for it. It moved by 1/255 anyway.
 
 So the acceptance bar is: **maxdiff ≤ 1/255 on untouched recipes.** Anything
 above that is a real change and needs explaining. Anything at or below it is the
@@ -147,7 +147,7 @@ Nothing in this diff mentions `opal`, and `opal` moves.
 ### Right — a uniform, defaulted to the identity, set per recipe
 
 ```glsl
-uniform float flake_deep = 0.0;   // card_surface.gdshader:125
+uniform float flake_deep = 0.0;   // card_surface.gdshader:125 (`flake_deep`)
 
 vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
         float tip, vec3 N, vec3 T, vec3 Bv, vec3 H, float g,

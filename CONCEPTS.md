@@ -261,10 +261,11 @@ Know what the mechanical check actually proves. `tools/check_anchors.py` verifie
 that a citation's line and its `(in symbol)` annotation agree with each other; it
 cannot know what the surrounding *prose* claims is there. An Anchor that names the
 wrong function and the line that function starts on is internally consistent and
-passes clean — the 2026-07-27 refresh found one citing `hud_bar.gd:886` (in
-`_keyframe_pop`) for a snippet that lives 21 lines later in `_sync_pile`. A green
-run means no Anchor has rotted, not that every Anchor points where its sentence
-says. Only reading the cited line against the sentence establishes that.
+passes clean — the 2026-07-27 refresh found one citing
+`hud_bar.gd:886` (in `_keyframe_pop`) for a snippet that lives 21 lines
+later in `_sync_pile`. A green run means no Anchor has rotted, not that every
+Anchor points where its sentence says. Only reading the cited line against the
+sentence establishes that.
 
 Two further consequences follow. An Anchor that drifts is repaired by moving the
 citation to where its subject went,
