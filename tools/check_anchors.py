@@ -18,7 +18,9 @@ annotation prevents.
 The two forms are checked differently, because only the first has a single
 right answer. A bare `(symbol)` asserts the cited line is where the symbol is
 declared: verifiable, and repairable with --fix. An `(in symbol)` asserts only
-that the cited line falls within that symbol's body — which is the check that
+that the cited line falls within that symbol's span — its `##` doc block plus
+its body, because the ported spec lives in the commentary here and citing it is
+the point, not an accident — which is the check that
 catches the dangerous case, where drift has carried an anchor out of its
 function and into unrelated code that still reads plausibly. That one is
 reported, never auto-fixed: nothing in the document says how far the interior
@@ -117,6 +119,29 @@ def resolve(cited: str, index: dict[str, list[Path]]) -> Path | None:
     return tail[0] if len(tail) == 1 else None
 
 
+def symbol_head(lines: list[str], decl_line: int) -> int:
+    """Return the first line of the doc block attached to `decl_line`.
+
+    This repo carries the ported CSS spec in the `##` block above a symbol, not
+    beside it, so a citation's most useful target is routinely two or three
+    lines ABOVE the declaration — `enemy_view.gd:2032-2038` opens in the
+    commentary that explains `_update_shadow` and runs into its body. Treating
+    the declaration as the hard upper edge would call every one of those an
+    escape and leave roughly seventy anchors permanently unannotatable.
+    """
+    base = len(lines[decl_line - 1]) - len(lines[decl_line - 1].lstrip())
+    first = decl_line
+    for i in range(decl_line - 1, 0, -1):
+        line = lines[i - 1]
+        stripped = line.lstrip()
+        if not stripped.startswith("#"):
+            break
+        if len(line) - len(stripped) != base:
+            break
+        first = i
+    return first
+
+
 def symbol_body(lines: list[str], decl_line: int) -> int:
     """Return the last line of the block opened at `decl_line` (1-based).
 
@@ -135,12 +160,33 @@ def symbol_body(lines: list[str], decl_line: int) -> int:
 
 def find_symbol(lines: list[str], symbol: str) -> int | None:
     """Return the 1-based line where `symbol` is declared, or None."""
+    # A bare prefix test makes `_rng` match `var _rng_seed` and `_process` match
+    # `func _process_hit` — the anchor then resolves to a neighbour and passes,
+    # which is the silent half of the failure this script exists to catch.
+    def hit(stripped: str, needle: str) -> bool:
+        if not stripped.startswith(needle):
+            return False
+        rest = stripped[len(needle):]
+        return not (rest[:1].isalnum() or rest[:1] == "_")
+
     for pattern in DECLARATIONS:
         needle = pattern.format(s=symbol)
         for i, line in enumerate(lines, start=1):
             stripped = line.lstrip()
-            if stripped.startswith(needle) or stripped.startswith("@" ) and needle in stripped:
+            if hit(stripped, needle) or (stripped.startswith("@") and needle in stripped):
                 return i
+    # A shader function leads with its return type — `void fragment()`,
+    # `vec3 screen(...)` — so no prefix in DECLARATIONS can ever reach one, and
+    # the fallback below then resolves the name to whichever line mentions it
+    # first. The type list is spelled out rather than left as `\w+` so that a
+    # GDScript `return foo(...)` cannot pass for a declaration of `foo`.
+    shader = re.compile(
+        r"^(?:void|bool|int|uint|float|double|[biud]?vec[234]|mat[234](?:x[234])?"
+        r"|sampler\w*)\s+" + re.escape(symbol) + r"\s*\(")
+    for i, line in enumerate(lines, start=1):
+        if shader.match(line.lstrip()):
+            return i
+
     # Fall back to any standalone mention, which still beats reporting nothing.
     word = re.compile(rf"\b{re.escape(symbol)}\b")
     for i, line in enumerate(lines, start=1):
@@ -193,12 +239,13 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
                     findings.append(Finding(doc, doc_line, text, "missing",
                                             f"symbol `{symbol}` not found in {cited}"))
                 elif m.group("in"):
+                    first = symbol_head(body, actual)
                     last = symbol_body(body, actual)
                     end = int(m.group("end") or start)
-                    if not (actual <= start and end <= last):
+                    if not (first <= start and end <= last):
                         findings.append(Finding(
                             doc, doc_line, text, "escaped",
-                            f"`{symbol}` spans :{actual}-{last}; the anchor sits outside it"))
+                            f"`{symbol}` spans :{first}-{last}; the anchor sits outside it"))
                 elif actual != start:
                     findings.append(Finding(doc, doc_line, text, "drift",
                                             f"`{symbol}` is at :{actual}", actual))
