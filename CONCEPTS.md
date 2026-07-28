@@ -249,6 +249,20 @@ explains in its own comments is not re-raised as a defect on every pass.
 *Unresolved* is not a softer absence: it means the question was answered about
 the wrong element, and it is held open rather than guessed.
 
+### Lane
+One concurrent line of work on this project, holding its own branch or worktree
+over the single shared tree and owning a declared subset of files while it runs.
+
+Lanes are why a line number written correctly goes stale in hours rather than
+months: several are editing the same directories at once, and none of them sees
+another's work until it lands. Ownership is declared per file, not inferred — a
+Lane reads anything and writes only what it owns. Two rules follow. A Lane does
+not re-anchor a citation against another Lane's uncommitted work, because the
+number it would write is true only until that work changes shape. And a Lane
+holding edits to a shared document grows more out of date the longer it holds
+them, so what the shared tree currently says must be re-read before appending
+rather than assumed from the branch's own copy.
+
 ### Anchor
 A citation in prose that names both a file and a line, and therefore makes a
 claim that can rot silently the moment anyone edits above it.
