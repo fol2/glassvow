@@ -156,7 +156,13 @@ def index_repo_files() -> dict[str, list[Path]]:
     index: dict[str, list[Path]] = {}
     for suffix in CODE_SUFFIXES:
         for path in REPO.rglob(f"*.{suffix}"):
-            if any(part in SKIP_DIRS for part in path.parts):
+            # Judged on the path RELATIVE to the repo. `path.parts` is absolute,
+            # so a checkout whose own location contains one of these names skips
+            # its entire tree — and `.claude/worktrees/` is exactly that: every
+            # lane working in a worktree indexed zero files and got a green run
+            # over anchors nothing had looked at, which is the failure this set
+            # was added to prevent.
+            if any(part in SKIP_DIRS for part in path.relative_to(REPO).parts):
                 continue
             index.setdefault(path.name, []).append(path)
     return index
