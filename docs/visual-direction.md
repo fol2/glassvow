@@ -111,6 +111,8 @@ terminal with `claude --resume <uuid>`:
 |---|---|
 | Card line (orchestrator) | `ca1bf21d-8ae6-43ef-ae37-48fe690a9b23` — 238MB, slow to reload |
 | Status & intent chips | `15dcffdb-69d8-4737-9e00-2f86ef59f80b` |
-| Enemies | `fbe74755-0a27-4257-94d8-b8badd5e2d34` |
+| Enemy / hero — **current** | `a572b7bf-4118-4c89-893e-c618cd916df0` |
+| Enemy / hero — retired 2026-07-28 | `49b505d4-363c-4f8b-b805-ed628de8b564` |
+| Enemy / hero — retired 2026-07-27 | `fbe74755-0a27-4257-94d8-b8badd5e2d34` |
 | Reward screen | `b3bb71f0-22ee-4756-b744-c9525a27b627` |
 | Combat HUD | `6fa343a6-3da7-4669-8310-d89ae6934116` |

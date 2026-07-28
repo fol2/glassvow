@@ -24,16 +24,18 @@ Two failure modes have already happened, both silent:
 | Lane | Owns | Session |
 |---|---|---|
 | **Card** | `presentation/combat/` — `card_view.gd`, `card_surface.gd`, `card_surface.gdshader`, `card_edge.gdshader`, `card_gem.gdshader`, `rules_text.gd` · `presentation/lab/card_lab.gd`, `card_studio.gd` | `ca1bf21d` |
-| **Enemy / hero** | `presentation/combat/` — `enemy_view.gd`, `glass_gem.gd`, `facet_pips.gd`, `status_row.gd` · `presentation/lab/enemy_lab.gd` · `assets/art/enemies/char-meta.json` · **`combat_screen.gd`** (see below) | `49b505d4` |
+| **Enemy / hero** | `presentation/combat/` — `enemy_view.gd`, `glass_gem.gd`, `facet_pips.gd`, `status_row.gd` · `presentation/lab/enemy_lab.gd` · `assets/art/enemies/char-meta.json` · **`combat_screen.gd`** (see below) | `a572b7bf` |
 | **Reward** | `presentation/reward/` — all nine `.gd` and both `.gdshader` · `presentation/lab/reward_lab.gd` | `b3bb71f0` |
 | **Combat HUD** | `presentation/combat/hud_bar.gd` · `presentation/lab/hud_lab.gd` | `6fa343a6` |
 | **Status / intent chips** | `presentation/combat/status_chip.gd`, `intent_chip.gd` · `presentation/lab/chip_lab.gd` | `15dcffdb` |
 | **Assembly** | `application/main.gd`, `main.tscn`, `save_service.gd` · `presentation/combat/event_sequencer.gd`, `hand_view.gd` · `project.godot` | `4bb74d72` |
 
-The Enemy / hero lane changed hands on 2026-07-27: `fbe74755` is **retired** and
-`49b505d4` holds it. The retired session's transcript is still readable and is
-the only record of that lane's reasoning before the handover, but nothing in it
-is authoritative any more — this table is.
+The Enemy / hero lane has changed hands twice, and the chain matters only because
+each handover leaves a transcript behind that reads as if it were still in force:
+`fbe74755` was retired on 2026-07-27, `49b505d4` on 2026-07-28, and `a572b7bf`
+holds it now. Both retired transcripts are still readable and between them are
+the only record of this lane's reasoning before the handovers — but nothing in
+either is authoritative any more. This table is.
 
 **`combat_screen.gd` is contested.** It moved to the Enemy / hero lane on
 2026-07-26 when that lane's scope was extended to cover heroes, for the hero
@@ -194,7 +196,7 @@ three lanes own. These wait for the organiser to sequence them.
    wrong as a statement of design: it was a temporary arrangement, not a
    deliberate divergence from the benchmark.
 
-   **CLOSED, 2026-07-27, by `49b505d4` (current Enemy / hero owner).** There is
+   **CLOSED, 2026-07-27, by `49b505d4` (the Enemy / hero owner at the time).** There is
    no longer a contradiction to resolve: §5.1 was rewritten to the position the
    benchmark reading above arrives at, so both written positions now agree and
    only this item still carried the old one. The Enemy / hero lane does not
