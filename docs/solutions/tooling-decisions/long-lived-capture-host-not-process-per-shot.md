@@ -1,7 +1,7 @@
 ---
 title: "Capture through a long-lived host, not a process per screenshot"
 date: 2026-07-26
-last_refreshed: 2026-07-27
+last_refreshed: 2026-07-28
 category: tooling-decisions
 module: tools/live
 problem_type: tooling_decision
@@ -12,6 +12,7 @@ applies_when:
   - "Adding any tool that launches a windowed Godot process while the user is working"
   - "Hot-reloading GDScript inside a running process rather than restarting it"
   - "Proving that a focus, timing, or interruption fix actually worked"
+  - "Comparing two captures of a screen that animates, where a diff needs a noise floor first"
   - "Making a helper process long-lived, so resources a one-shot process freed on exit are now held indefinitely"
 symptoms:
   - "Every `godot --path . -- --shot=...` run raises a window, takes the keyboard for roughly 0.6s, then quits — once per visual iteration"
@@ -32,8 +33,8 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:47-61` (in `_ready`) documents it and
-`application/main.gd:72-126` (in `_ready`) parses it out of
+entry point. `application/main.gd:56-72` (in `_ready`) documents it and
+`application/main.gd:83-133` (in `_ready`) parses it out of
 `OS.get_cmdline_user_args()`:
 
 ```gdscript
@@ -307,10 +308,27 @@ to next.
 the rebuilt screen has painted comes back black; several early captures were
 fully black PNGs. The host waits 30 frames before announcing ready or replying
 to a reload — `SETTLE_FRAMES: int = 30` at `tools/live.gd:32`, deliberately
-matching `main.gd`'s own hook at `application/main.gd:220-221` (in `_capture_and_quit`). `_settle()` is
+matching `main.gd`'s own hook at `application/main.gd:243-244` (in `_capture_and_quit`). `_settle()` is
 awaited from both `_announce_ready()` (`tools/live.gd:151`) and the reload's
 success path (`tools/live.gd:128`), so **a successful reply doubles as "safe to
 capture now"** (`tools/live.gd:127`).
+
+**4b. Thirty frames means "not black". It does not mean "settled".** Half a
+second is enough for a first paint and is not enough for a fight: a combat
+screen's opening hand is still in the air, so the capture records the entrance
+at whatever position the wall clock had reached. Measured on the stage-shape
+work — two runs of the **same build**, same seed, same arguments, differed
+across **2.4%** of the frame, all of it in the hand. That is a noise floor high
+enough to swallow most layout changes, and it made the first before/after
+comparisons of that work unreadable. Adding a wall-clock wait
+(`--settle=SECONDS`, `application/main.gd:245-246` (in `_capture_and_quit`))
+drops the same comparison to **0.030%**.
+
+The rule that follows applies to any capture of an animated screen: **establish
+the noise floor before trusting a diff.** Capture the same build twice and
+measure the difference between those two; only a change larger than that number
+is evidence of anything. A diff taken without that baseline cannot distinguish a
+moved widget from a drifting ember.
 
 ### The fifth finding, and the one the user actually felt
 
@@ -387,7 +405,7 @@ with no further transitions across a subsequent `reload` and captures.
 
 - **Thirty frames is a frame count, not a duration — and a fight's actors have
   not arrived yet.** Both settle loops count frames: `_capture_and_quit` at
-  `application/main.gd:220-221` (in `_capture_and_quit`) and `SETTLE_FRAMES` at
+  `application/main.gd:243-244` (in `_capture_and_quit`) and `SETTLE_FRAMES` at
   `tools/live.gd:32`,
   `158`. Thirty frames is half a second at 60fps. A combat entrance is longer
   than that: each actor tweens for `ENTER_TIME` 0.55s after a stagger of
@@ -641,7 +659,7 @@ subsequent `reload` and captures.
   focus attempts (`:11-26`). Tracked.
 - `tools/live.tscn` — six lines; a `Node` named `LiveHost` with `live.gd`
   attached. Tracked.
-- `application/main.gd:47-61` (in `_ready`), `:219` (`_capture_and_quit`) — the `--shot`
+- `application/main.gd:56-72` (in `_ready`), `:219` (`_capture_and_quit`) — the `--shot`
   hook the host deliberately does not use, and the 30-frame settle the host
   copies. (The range here read `:138-144` until a refresh caught it: that stops
   at the function's own declaration and excludes the settle loop it claims to
