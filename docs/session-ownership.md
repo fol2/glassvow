@@ -24,11 +24,18 @@ Two failure modes have already happened, both silent:
 | Lane | Owns | Session |
 |---|---|---|
 | **Card** | `presentation/combat/` — `card_view.gd`, `card_surface.gd`, `card_surface.gdshader`, `card_edge.gdshader`, `card_gem.gdshader`, `rules_text.gd` · `presentation/lab/card_lab.gd`, `card_studio.gd` | `ca1bf21d` |
-| **Enemy / hero** | `presentation/combat/` — `enemy_view.gd`, `glass_gem.gd`, `facet_pips.gd`, `status_row.gd` · `presentation/lab/enemy_lab.gd` · `assets/art/enemies/char-meta.json` · **`combat_screen.gd`** (see below) | `fbe74755` |
+| **Enemy / hero** | `presentation/combat/` — `enemy_view.gd`, `glass_gem.gd`, `facet_pips.gd`, `status_row.gd` · `presentation/lab/enemy_lab.gd` · `assets/art/enemies/char-meta.json` · **`combat_screen.gd`** (see below) | `a572b7bf` |
 | **Reward** | `presentation/reward/` — all nine `.gd` and both `.gdshader` · `presentation/lab/reward_lab.gd` | `b3bb71f0` |
 | **Combat HUD** | `presentation/combat/hud_bar.gd` · `presentation/lab/hud_lab.gd` | `6fa343a6` |
 | **Status / intent chips** | `presentation/combat/status_chip.gd`, `intent_chip.gd` · `presentation/lab/chip_lab.gd` | `15dcffdb` |
 | **Assembly** | `application/main.gd`, `main.tscn`, `save_service.gd` · `presentation/combat/event_sequencer.gd`, `hand_view.gd` · `project.godot` | `4bb74d72` |
+
+The Enemy / hero lane has changed hands twice, and the chain matters only because
+each handover leaves a transcript behind that reads as if it were still in force:
+`fbe74755` was retired on 2026-07-27, `49b505d4` on 2026-07-28, and `a572b7bf`
+holds it now. Both retired transcripts are still readable and between them are
+the only record of this lane's reasoning before the handovers — but nothing in
+either is authoritative any more. This table is.
 
 **`combat_screen.gd` is contested.** It moved to the Enemy / hero lane on
 2026-07-26 when that lane's scope was extended to cover heroes, for the hero
@@ -127,13 +134,31 @@ three lanes own. These wait for the organiser to sequence them.
    regression by regression, is `docs/benchmark-divergence.md`. It closes with
    the checker the organiser should adopt into `tools/`.
 
-3. **CONTRADICTION — who owns the player's ward chip and HP rail?** Two lanes
+3. **CONTRADICTION — who owns the player's ward CHIP and HP rail?** Two lanes
    have written down opposite answers, in two documents, about a file neither of
-   them owns:
+   them owns.
 
-   - `docs/actor-animation-checklist.md` §5.1 (Enemy / hero lane): *"the chrome
-     does **not** mirror a foe's foot plate: `hud_bar.gd` already carries the
-     hero's HP and ward, by its own lane's design."*
+   **First, the word.** "Ward" names three things and this item is about exactly
+   one of them (`CONCEPTS.md` › Ward):
+
+   - the **ward stone**, the gem shell held in front of a creature, which lives in
+     `presentation/combat/enemy_view.gd` and is **not in dispute** — it is the
+     Enemy / hero lane's, it has never been anywhere else, and nothing below
+     touches it;
+   - the **foe's ward chip**, also `enemy_view.gd`, also not in dispute;
+   - the **hero's ward chip**, in `presentation/combat/hud_bar.gd`, which is the
+     only one this item is about.
+
+   Read the rest with the chip in mind. The Enemy / hero lane is not claiming it.
+
+   - `docs/actor-animation-checklist.md` §5.1 (Enemy / hero lane) **as it read
+     when this item was written**: *"the chrome does **not** mirror a foe's foot
+     plate: `hud_bar.gd` already carries the hero's HP and ward, by its own
+     lane's design."* **That sentence is gone.** §5.1 now reads *"`hud_bar.gd`
+     still carries run chrome (energy, lantern, piles); the hero plate owns HP
+     and ward on the body"* — which is the Assembly lane's position, not the one
+     quoted. Verified 2026-07-27: the old wording appears nowhere in `docs/`
+     except in this quotation of it.
    - `docs/assembly-integration-plan.md` D2 (Assembly lane): *"The benchmark says
      the actor owns it. Confirm `HudBar._build_plate()` goes unused rather than
      both being wired."*
@@ -167,9 +192,26 @@ three lanes own. These wait for the organiser to sequence them.
    `_build_top_bar()`'s HP **must stay**, because it is a different element of
    the benchmark and deleting it would lose the run readout.
 
-   The Enemy lane's §5.1 note is therefore true as a description of today and
-   wrong as a statement of design: it is a temporary arrangement, not a
+   The §5.1 note as quoted was therefore true as a description of today and
+   wrong as a statement of design: it was a temporary arrangement, not a
    deliberate divergence from the benchmark.
+
+   **CLOSED, 2026-07-27, by `49b505d4` (the Enemy / hero owner at the time).** There is
+   no longer a contradiction to resolve: §5.1 was rewritten to the position the
+   benchmark reading above arrives at, so both written positions now agree and
+   only this item still carried the old one. The Enemy / hero lane does not
+   claim the hero's ward chip. `enemy_view.gd` owns the ward stone and a foe's
+   chip; whether the hero's chip moves out of `hud_bar.gd` onto a hero actor is
+   the HUD and Assembly lanes' call, and this lane implements whichever they
+   take.
+
+   Two things kept this alive longer than the disagreement itself. One is that
+   an item's quotations age independently of what they quote — nothing re-reads
+   a block quote once it is written, and `tools/check_anchors.py` checks line
+   numbers, not prose. The other is the word: "ward" was naming the protection,
+   the chip and the stone in the same sentences, and a lane cannot decline
+   something it cannot name. Both are why `CONCEPTS.md` now carries Ward chip
+   and Ward stone as separate terms.
 
 3. **The deck at the bottom of the HUD.** Raised in the HUD lane and never
    answered: should there be three decks, each with its own assets? The answer
@@ -223,9 +265,15 @@ directly:
 
 | Command | Use |
 |---|---|
+| `python3 tools/dev.py --open` | the consolidated browser front door for the native viewers, editors, real combat bench and named mocks |
 | `tools/shot.sh <game args>` | one-off capture; identical arguments to the `--shot` hook |
 | `tools/live.sh start <game args>` then `shot` / `reload` / `key` / `click` / `stop` | an iteration loop; boots once and hot-reloads code, so an edit costs no reboot |
 | `tools/check_anchors.py [--fix]` | verify `file:line` anchors in docs still point where they claim |
+
+The full inventory and the contract for adding or maintaining a tool live in
+`docs/dev-tools.md`. Browser access is loopback-only by default; an explicit
+non-loopback bind generates a per-session token and is for trusted LAN or
+Tailscale access only.
 
 The reason is measured, not stylistic: on macOS a bare `godot …` launch takes
 the frontmost window on every boot, and nothing on the engine side declines it.
