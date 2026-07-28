@@ -234,7 +234,7 @@ whose extension the old resolver had been matching.
 The `(in set_profile)` case I could **not** confirm, and the honest thing is to
 say so rather than repeat it. There is no `(in set_profile)` annotation in
 `docs/` or `CONCEPTS.md` at any of the four commits; the only `set_profile`
-annotation on the branch is `` `enemy_view.gd:2645` (`set_profile`) `` at
+annotation on the branch is `` `enemy_view.gd:2669` (`set_profile`) `` at
 `docs/solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md:172`,
 and that one is correct — `func set_profile` is at
 `presentation/combat/enemy_view.gd:2449`. The likeliest reading is that the

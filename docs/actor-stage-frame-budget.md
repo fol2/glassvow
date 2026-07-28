@@ -206,5 +206,5 @@ creeps toward the full 689 MB rather than away from it.
   OK as a target-device OK.**
 - **Sharing one `World3D` across actors.** Each stage currently sets
   `own_world_3d` with its own `Sky` feeding ambient *and* reflections
-  (`enemy_view.gd:396-425` (`_ward_from`)), so N actors bake N radiance maps. Collapsing them is
+  (`enemy_view.gd:405-434` (`_ward_from`)), so N actors bake N radiance maps. Collapsing them is
   a larger refactor than either knob above and was not attempted here.

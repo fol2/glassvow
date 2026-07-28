@@ -1,6 +1,7 @@
 ---
 title: Web ports carry DOM node-per-layer thinking into Godot
 date: 2026-07-26
+last_refreshed: 2026-07-28
 category: design-patterns
 module: presentation/combat
 problem_type: design_pattern
@@ -10,6 +11,7 @@ applies_when:
   - Porting a DOM/CSS interface to Godot Control nodes
   - A widget spawns one node per repeated visual element (stack layers, fan faces, tick marks, pips)
   - A refactor has to be proven to change nothing on screen
+  - Deciding whether an extra node is browser habit or is carrying a transform for a whole subtree
 tags: [godot, web-port, presentation, draw-call, node-count, refactor-verification]
 ---
 
@@ -74,7 +76,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[presentation/combat/hud_bar.gd:947-950](../../../presentation/combat/hud_bar.gd#L947) (in `_sync_pile`):
+[presentation/combat/hud_bar.gd:964-967](../../../presentation/combat/hud_bar.gd#L964) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -173,7 +175,7 @@ benchmark's `src/pile-chrome.js:4-8` — `PILE_FAN_DEG`, `PILE_FAN_MAX_DEG`,
 
 **Two live `add_child` loops in this file are exemptions, not survivors.**
 
-- `presentation/combat/hud_bar.gd:857-885` (in `fly_backs`) builds a
+- `presentation/combat/hud_bar.gd:875-892` (in `fly_backs`) builds a
   `TextureRect` per flyer and gives each its own `Tween` — transient nodes that
   each need an independent animation, which is exactly the case the rule above
   carves out.
@@ -187,6 +189,28 @@ that followed, which told a reader grepping for `add_child` that a single hit
 was expected; the grep returns two, and the doc made the second one look like an
 unconverted instance. A count is a claim like any other, and this one was never
 checked because it read as scene-setting rather than as an assertion.
+
+**Added 2026-07-28 — a third node, and it is not an exemption because the rule
+never covered it.** `_place_widget` (`presentation/combat/hud_bar.gd:1047`) now
+wraps every chrome widget in one extra `Control` whose only job is to carry a
+scale, so a widget drawn at its identity-shape size lands in whatever box the
+layout book gives it on a phone. A reader who arrives from this document will
+find a node added on purpose and should not read it as a regression.
+
+The rule above is narrower than "prefer fewer nodes", and this is the case that
+shows where its edge is. It collapses a node **repeated to repeat a picture**,
+because `draw_set_transform()` buys everything the repetition was buying. A
+transform node is the opposite case: it exists so that a whole *subtree* is
+transformed, and `_draw()` cannot do that job at all — a Button's hit area and a
+Label's font are not draw commands this widget issues, so no amount of drawing
+transforms them. Scaling the subtree is the only thing that keeps a widget's
+pointer target and its picture agreeing.
+
+The test that separates them: **would `draw_set_transform()` in the parent's own
+`_draw()` produce the same result?** If yes, the extra nodes are the browser's
+habit and should collapse. If no — because the thing being transformed is a
+child's input, layout or text rather than this node's paint — the node is doing
+work, and one per widget is the correct count.
 
 ## Related
 

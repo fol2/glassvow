@@ -125,6 +125,15 @@ const VP_MAX: int = 2048
 const KICK_PX: float = 9.0
 const SQUASH: float = 0.03            ## scale(.97, 1.03) at the peak
 const HIT_TIME: float = 0.3           ## the whole recoil, cubic-bezier(.22,1,.36,1)
+## `choreoHit`'s offsets and the magnitude at them. The peak sits at 0.25 rather
+## than at 0, so a blow travels INTO the body before it recovers — but 0.25 is an
+## offset in EASED progress, not a quarter of the clock. `cubic-bezier(.22,1,.36,1)`
+## is steep enough at the start that eased progress passes 0.25 about 18 ms into
+## the 300 ms (measured, not read off the curve's name). The impact is therefore
+## near-instant and the remaining 94% of the duration is the recovery, which is
+## what makes it read as a hit rather than as a push.
+const HIT_AT: Array[float] = [0.0, 0.25, 1.0]
+const HIT_V: Array[float] = [0.0, 1.0, 0.0]
 const FLARE_RISE: float = 0.09        ## hurtFlash peaks at 30% of its 0.3s
 ## `meshFlash(el, 160)` (mesh.js:1030) — the layer below this one had missed.
 ##
@@ -439,6 +448,10 @@ var _dead: bool = false
 var _hit: float = 0.0
 var _hit_squash: float = 0.0
 var _hit_tween: Tween = null
+## Which way the current blow throws this body. Latched when the recoil starts
+## rather than read per frame, because `_away()` is derived from `tier` and the
+## sign must not change under a swing already in flight.
+var _hit_dir: float = 1.0
 ## The lunge, composed onto the idle in `_process` the same way the recoil is.
 ## Held as px and a plain scale multiplier so a blow landing mid-swing adds to
 ## the swing rather than cancelling it — which is what two CSS animations on one
@@ -482,6 +495,10 @@ var _frac_seed: int = 0
 # --- the 3D stage
 var _stage: SubViewport = null
 var _display: TextureRect = null
+## Where the art sat when the slump began. The stagger is authored as a relative
+## `translateY`, so the rest position has to be latched rather than assumed to be
+## zero — an actor mid-entrance is not standing at its origin.
+var _stagger_from: Vector2 = Vector2.ZERO
 var _display_mat: ShaderMaterial = null
 var _reseam_tween: Tween = null
 var _quad: MeshInstance3D = null
@@ -1904,6 +1921,13 @@ const RESEAM_SAT: float = 0.55
 ## CSS `ease-out`, spelled out. `Motion` carries `ease-in-out` and the two
 ## authored curves; this one is only ever asked for here.
 const CSS_EASE_OUT: Array[float] = [0.0, 0.0, 0.58, 1.0]
+## `choreoStagger` — the death slump, and the one animation here that does NOT
+## return: `fill: forwards` leaves the body dropped, tilted and dimmed for the
+## ignition that follows it.
+const STAGGER_TIME: float = 0.36
+const STAGGER_DROP: float = 5.0
+const STAGGER_TILT: float = -2.5
+const STAGGER_DIM: float = 0.6
 
 ## `.enemy.reseaming .enemy-art { animation: reseam 0.7s ease-out }` with
 ## `@keyframes reseam { 30% { filter: brightness(1.55) saturate(0.55); } }`
@@ -2737,15 +2761,36 @@ func _read_aim(entry: Dictionary) -> void:
 	_aim_tint = Color(tint_hex)
 
 
-## Read a keyframe track at `t`: linear between the offsets in `at`, held at the
-## ends. `at` is ascending and the two arrays are the same length.
+## Read a keyframe track at `t`: linear between the offsets in `at`. `at` is
+## ascending and the two arrays are the same length.
+##
+## Past the last offset this CONTINUES the final segment where `Motion.keyframe`
+## holds at it, and that is the only reason a second copy of this exists. An
+## overshooting curve hands back eased progress above 1 — `Motion.SPRING` is
+## `cubic-bezier(.34, 1.56, .64, 1)` and peaks at 1.098 around x = 0.57 — and
+## WAAPI keeps interpolating rather than stopping at the last stop. That
+## continuation is not a rounding artefact: it IS the spring's swing back past
+## centre, which is the whole reason `choreoAttack` was authored on that curve.
+##
+## Holding is not a near-miss either. Measured on the normal lunge track
+## (0/.3/.62/1 → 0/-8/34/0 px), eased progress crosses the last offset at about
+## x = 0.38 and never comes back under it, so holding pins translateX at 0 for
+## the final 60% of the swing — the body would snap to rest and stand still for
+## most of its own attack. Extrapolating instead carries it to -8.6 px and back.
+##
+## Every other track read here rides a curve that stays inside [0, 1], so the
+## tail arm never fires for them and their reads are unchanged.
 static func _keyframe(t: float, at: Array[float], v: Array[float]) -> float:
 	for i: int in range(1, at.size()):
 		if t <= at[i]:
 			var span: float = at[i] - at[i - 1]
 			var f: float = 0.0 if span <= 0.0 else (t - at[i - 1]) / span
 			return lerpf(v[i - 1], v[i], f)
-	return v[v.size() - 1]
+	var n: int = at.size() - 1
+	var tail: float = at[n] - at[n - 1]
+	if tail <= 0.0:
+		return v[n]
+	return lerpf(v[n - 1], v[n], (t - at[n - 1]) / tail)
 
 
 ## Throw this body at what it is striking. `kind` is the enemy's `art.kind` from
@@ -2765,12 +2810,14 @@ func lunge(kind: String) -> float:
 		seconds = HEAVY_TIME
 	elif FLOATY_KINDS.has(kind):
 		seconds = FLOATY_TIME
-	# TRANS_BACK / EASE_OUT is Godot's nearest reading of the benchmark's
-	# cubic-bezier(.34, 1.56, .64, 1) — the overshoot past 1 is the whole reason
-	# that curve was chosen, and a plain EASE_OUT loses it.
+	# `choreoAttack` (combat.js:1956-1977) eases the WHOLE iteration once on
+	# cubic-bezier(.34, 1.56, .64, 1) and then reads its keyframe list linearly.
+	# TRANS_BACK / EASE_OUT was the nearest Godot family and it is a different
+	# curve, so the tween is only a clock now and `Motion.SPRING` does the
+	# shaping in `_set_lunge`, where the keyframe reads already are.
 	_lunge_tween = create_tween()
 	_lunge_tween.tween_method(_set_lunge, 0.0, 1.0, seconds) \
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		.set_trans(Tween.TRANS_LINEAR)
 	_lunge_tween.tween_callback(_clear_lunge)
 	return seconds
 
@@ -2822,7 +2869,12 @@ func enter(delay: float = 0.0, done: Callable = Callable()) -> void:
 		_enter_tween.tween_callback(done)
 
 
-func _set_lunge(t: float) -> void:
+## `x` is linear time; `t` is the benchmark's eased progress, and every track
+## below is read at it — one ease across the iteration, then linear between the
+## offsets, which is what a WAAPI keyframe list does. `t` runs past 1 near the
+## middle because the curve overshoots; `_keyframe` is built for that.
+func _set_lunge(x: float) -> void:
+	var t: float = Motion.ease(Motion.SPRING, x)
 	var at: Array[float] = SWING_AT
 	if HEAVY_KINDS.has(_lunge_kind):
 		# A golem does not travel: it loads and releases where it stands.
@@ -2890,12 +2942,25 @@ func stagger() -> float:
 	if _dead or _display == null:
 		return 0.0
 	_display.pivot_offset = _display.size * 0.5
+	_stagger_from = _display.position
+	# `choreoStagger` (combat.js:1991-2000) is a two-stop list on
+	# cubic-bezier(.22, 1, .36, 1) with `fill: forwards` — one ease across the
+	# whole 360 ms, and the slump holds where it lands. TRANS_CUBIC was the
+	# nearest family and is not that curve; the three properties also have to
+	# move together, so one clock drives all of them.
 	var tw: Tween = create_tween()
-	tw.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	tw.tween_property(_display, "position", _display.position + Vector2(0.0, 5.0), 0.36)
-	tw.parallel().tween_property(_display, "rotation", deg_to_rad(-2.5), 0.36)
-	tw.parallel().tween_property(_display, "modulate", Color(0.6, 0.6, 0.6), 0.36)
-	return 0.36
+	tw.tween_method(_set_stagger, 0.0, 1.0, STAGGER_TIME).set_trans(Tween.TRANS_LINEAR)
+	return STAGGER_TIME
+
+
+func _set_stagger(x: float) -> void:
+	if _display == null:
+		return
+	var t: float = Motion.ease(Motion.OUT_SOFT, x)
+	_display.position = _stagger_from + Vector2(0.0, STAGGER_DROP * t)
+	_display.rotation = deg_to_rad(STAGGER_TILT * t)
+	var dim: float = lerpf(1.0, STAGGER_DIM, t)
+	_display.modulate = Color(dim, dim, dim)
 
 
 ## `x.root.classList.add('reseaming')` (drain.js:458) — a shattered pane spends
@@ -2971,16 +3036,25 @@ func _away() -> float:
 func _shove() -> void:
 	if _hit_tween != null and _hit_tween.is_valid():
 		_hit_tween.kill()
-	_hit = _away()
-	_hit_squash = 1.0
-	# TRANS_QUINT / EASE_OUT is the near-equivalent of the benchmark's
-	# cubic-bezier(.22, 1, .36, 1): almost all of the travel spent in the first
-	# third, so the blow lands hard and the settle is barely noticed.
-	_hit_tween = create_tween().set_parallel(true)
-	_hit_tween.tween_property(self, "_hit", 0.0, HIT_TIME) \
-		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-	_hit_tween.tween_property(self, "_hit_squash", 0.0, HIT_TIME) \
-		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	# `choreoHit` (combat.js:1979-1989) is a THREE-stop list — rest, peak at
+	# offset 0.25, rest — eased once across 300 ms by cubic-bezier(.22, 1, .36, 1)
+	# and read linearly between the stops. What stood here started AT the peak
+	# and decayed on TRANS_QUINT, which is a different shape as well as a
+	# different curve: the body had travel away from the blow and none into it,
+	# so a hit read as a shove rather than as an impact that recovers.
+	_hit_dir = _away()
+	_hit_tween = create_tween()
+	_hit_tween.tween_method(_set_shove, 0.0, 1.0, HIT_TIME) \
+		.set_trans(Tween.TRANS_LINEAR)
+
+
+## Both tracks share one read: the displacement carries the sign, the squash is
+## the same 0→1→0 magnitude, and they peak on the same frame because in the
+## benchmark they are two properties of a single keyframe.
+func _set_shove(x: float) -> void:
+	var f: float = _keyframe(Motion.ease(Motion.OUT_SOFT, x), HIT_AT, HIT_V)
+	_hit = _hit_dir * f
+	_hit_squash = f
 
 
 ## hurtFlash's own displacement: out, back past centre, settle. No squash — an

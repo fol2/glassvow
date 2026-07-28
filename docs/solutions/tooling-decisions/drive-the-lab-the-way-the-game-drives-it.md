@@ -48,16 +48,16 @@ than in passing.
 It was building its actors wrong. `_actor`
 (`presentation/lab/enemy_lab.gd:434` (`_actor`)) constructed every
 view with `EnemyView.new(...)` and then placed it, and that was all. The shipping
-screen does one more thing: `presentation/combat/combat_screen.gd:1231`
+screen does one more thing: `presentation/combat/combat_screen.gd:1305`
 (in `start_encounter`) calls `view.set_profile(_foe_kind(e.idx))` for every foe,
-and `presentation/combat/combat_screen.gd:1189` (in `start_encounter`) calls
+and `presentation/combat/combat_screen.gd:1263` (in `start_encounter`) calls
 `_hero.set_profile("rogue")` for the player. Without that call an actor keeps the
 profile it is constructed with, and the construction default is not neutral —
 `_read_idle` ends by calling `_resolve_profile(&"humanoid")`
-(`presentation/combat/enemy_view.gd:2607` (`_read_idle`)), and
+(`presentation/combat/enemy_view.gd:2631` (`_read_idle`)), and
 `_resolve_profile` falls back to
 `IDLE_PROFILES[&"humanoid"]` for any kind it does not know
-(`presentation/combat/enemy_view.gd:2650` (`_resolve_profile`)). So every
+(`presentation/combat/enemy_view.gd:2674` (`_resolve_profile`)). So every
 creature on the sheet — every slime, serpent, wisp and golem — hovered, swayed,
 breathed and cast its shadow as a humanoid. The sheet was not showing a wrong
 number. It was showing an idle that no fight has ever run.
@@ -157,7 +157,7 @@ was in the port. It is now, at the source's own numbers: `KIND_IDLE`
 `presentation/combat/enemy_view.gd:2340-2385` (in `_process`), with the spores
 as their own Control (`presentation/combat/idle_motes.gd:1` (`IdleMotes`)),
 built on demand by `_sync_motes` at
-`presentation/combat/enemy_view.gd:2672` (`_sync_motes`).
+`presentation/combat/enemy_view.gd:2696` (`_sync_motes`).
 
 Note where that list came from. It was found by reading the reference stylesheet —
 the method [`audit-port-by-enumerating-reference-css.md`](../workflow-issues/audit-port-by-enumerating-reference-css.md)
@@ -167,12 +167,12 @@ cannot report that there are four idle shapes and it is showing one of them.
 
 **And the third instance, which is the one that shows why stills are not enough.**
 The actor's cast shadow is an analytic projection of the silhouette along the key
-light (`presentation/combat/enemy_view.gd:2211` (`_update_shadow`)) — a derived
+light (`presentation/combat/enemy_view.gd:2235` (`_update_shadow`)) — a derived
 replacement for the
 benchmark's nine hand-authored CSS knobs, and structurally correct as such. It had
 plausible lift-response coefficients. It also never ran: `_update_shadow` was
 called from `_build_shadow`
-(`presentation/combat/enemy_view.gd:2149` (`_build_shadow`)), from the
+(`presentation/combat/enemy_view.gd:2173` (`_build_shadow`)), from the
 reset path, and from two lab-bench setters that no fight ever reaches — and from
 nothing else, while the benchmark resynchronises its darkened copy against the
 body's live transform on every frame of its rig loop. That the only other callers
@@ -240,7 +240,7 @@ site end to end and list every method it invokes on the subject between
 construction and first paint, and the value it passes to each. That pair — call
 and argument — is the harness's contract. Here it was one
 call — `set_profile`
-(`presentation/combat/enemy_view.gd:2645` (`set_profile`)) — and the sheet's
+(`presentation/combat/enemy_view.gd:2669` (`set_profile`)) — and the sheet's
 own comment now names the production line it mirrors
 (`presentation/lab/enemy_lab.gd:410-414`, in `_actor`) so the next divergence
 is a diff rather than an archaeology.
@@ -272,7 +272,7 @@ to be written down as a decision, not left as an omission.
 
 Note the shape of the failure that makes this necessary: `_resolve_profile` falls
 back to the humanoid profile for an unknown kind rather than erroring
-(`presentation/combat/enemy_view.gd:2650` (`_resolve_profile`)), and
+(`presentation/combat/enemy_view.gd:2674` (`_resolve_profile`)), and
 `KIND_IDLE.get(kind, &"")` returns a benign empty value. A tolerant default is
 right for production and is exactly what makes a missing call silent in a
 harness.
@@ -441,7 +441,7 @@ actor entrance had been running **two** concurrent animations — one moving the
 body inside its 3D sub-viewport with the correct stagger, one moving the whole
 Control with the correct curve and the chrome — and neither looked broken in a
 still. That is now one function:
-`presentation/combat/enemy_view.gd:2800` (`enter`) owns the motion and the fill,
+`presentation/combat/enemy_view.gd:2847` (`enter`) owns the motion and the fill,
 `presentation/combat/combat_screen.gd:1134` (`_play_entrance`) owns the seat
 delay and the re-anchor. It was found the same way, by giving a category of
 behaviour an instrument and then reading a number off it.
@@ -494,13 +494,13 @@ view.position = Vector2(x + view.foot.x, ground - view.size.y - view.foot.y)
 ```
 
 `EnemyView`'s construction path resolves the humanoid profile
-(`presentation/combat/enemy_view.gd:2607` (`_read_idle`)), so `gloomslime` —
+(`presentation/combat/enemy_view.gd:2631` (`_read_idle`)), so `gloomslime` —
 `art.kind == "slime"`,
 whose profile is `sway .55, bob .55, breathe 1.35, head 0, pin 1.2, float .25`
 (`presentation/combat/enemy_view.gd:520`) — rendered with `sway 1.0, bob 1.0,
 breathe 1.0, head 1.0,
 float 0` and no kind idle at all. After, one line reproduces what
-`presentation/combat/combat_screen.gd:1189` (in `start_encounter`) does, and
+`presentation/combat/combat_screen.gd:1263` (in `start_encounter`) does, and
 the comment above it
 names that line so the two can be diffed rather than rediscovered
 (`presentation/lab/enemy_lab.gd:410-414`, in `_actor`).
@@ -578,8 +578,8 @@ measures nothing:
 > already measured the gap.
 
 The scan was real
-(`presentation/combat/enemy_view.gd:2029` (`_read_contact`)), the projection
-was real (`presentation/combat/enemy_view.gd:2211` (`_update_shadow`)), and the
+(`presentation/combat/enemy_view.gd:2053` (`_read_contact`)), the projection
+was real (`presentation/combat/enemy_view.gd:2235` (`_update_shadow`)), and the
 quantity was a framing border rather than a gap
 (`presentation/combat/enemy_view.gd:2063`, in `_read_contact`; the variable is
 now named `_art_pad` at `presentation/combat/enemy_view.gd:738` for exactly
