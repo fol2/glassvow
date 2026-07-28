@@ -302,6 +302,20 @@ explains in its own comments is not re-raised as a defect on every pass.
 *Unresolved* is not a softer absence: it means the question was answered about
 the wrong element, and it is held open rather than guessed.
 
+### Lane
+One concurrent line of work on this project, holding its own branch or worktree
+over the single shared tree and owning a declared subset of files while it runs.
+
+Lanes are why a line number written correctly goes stale in hours rather than
+months: several are editing the same directories at once, and none of them sees
+another's work until it lands. Ownership is declared per file, not inferred — a
+Lane reads anything and writes only what it owns. Two rules follow. A Lane does
+not re-anchor a citation against another Lane's uncommitted work, because the
+number it would write is true only until that work changes shape. And a Lane
+holding edits to a shared document grows more out of date the longer it holds
+them, so what the shared tree currently says must be re-read before appending
+rather than assumed from the branch's own copy.
+
 ### Anchor
 A citation in prose that names both a file and a line, and therefore makes a
 claim that can rot silently the moment anyone edits above it.
@@ -347,6 +361,16 @@ certified without ever being read. An Anchor should therefore carry its full
 path, not just a filename, and an ambiguous one should be reported rather than
 skipped. A check that cannot see a claim must say so; the danger is not the
 unchecked Anchor, it is the clean report over it.
+
+An Anchor has two halves and they do not age alike. The symbol is durable: over a
+day of ordinary work on the most-edited files, none of roughly nine hundred were
+renamed or removed, while up to nearly all of their line numbers moved. The line
+is therefore not a second fact but a cache of the first, which is why the repair
+tooling regenerates it from the symbol and never the other way round. The
+preferred form names the file and the symbol and no line at all, leaving nothing
+that can go stale; a line is written only when the line itself is what the
+sentence is about, or when the thing cited has no symbol to name. The older
+line-carrying form stays valid and stays checked.
 
 Two further consequences follow. An Anchor that drifts is repaired by moving the
 citation to where its subject went,

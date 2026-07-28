@@ -18,7 +18,9 @@ annotation prevents.
 The two forms are checked differently, because only the first has a single
 right answer. A bare `(symbol)` asserts the cited line is where the symbol is
 declared: verifiable, and repairable with --fix. An `(in symbol)` asserts only
-that the cited line falls within that symbol's body — which is the check that
+that the cited line falls within that symbol's span — its `##` doc block plus
+its body, because the ported spec lives in the commentary here and citing it is
+the point, not an accident — which is the check that
 catches the dangerous case, where drift has carried an anchor out of its
 function and into unrelated code that still reads plausibly. That one is
 reported, never auto-fixed: nothing in the document says how far the interior
@@ -103,13 +105,35 @@ BARE_ANCHOR = re.compile(
     r"(?P<sym>\s*\(`?(?:in\s+)?`?(?P<symbol>[A-Za-z_][\w]*)`?\))?"
 )
 
+# The PREFERRED citation form, and the only one with nothing in it that rots.
+#
+#     `presentation/combat/enemy_view.gd` (`set_ward_shell`)
+#
+# No line number, so there is no line number to go stale — and measured over one
+# day on this repo, that is the whole of the problem. Across ~900 symbols in the
+# four most-edited files, zero were renamed or removed, while between 10% and 99%
+# of their line numbers moved. The symbol is the durable half of an anchor and
+# the line is a decaying cache of it, which is why `--fix` works at all: it
+# regenerates the line FROM the symbol. This form simply declines to store the
+# cache.
+#
+# Both halves must be backticked. That is not decoration — it is what keeps
+# prose like "`enemy_view.gd` (the actor)" from being read as a citation.
+SYMBOL_ANCHOR = re.compile(
+    r"`(?P<path>[\w./-]+\.(?:" + "|".join(CODE_SUFFIXES) + r"))`"
+    r"\s*\((?:in\s+)?`(?P<symbol>[A-Za-z_][\w]*)`\)"
+)
+
 # How a symbol is declared in the languages this repo actually uses. Ordered:
 # the first match wins, so a `func foo` beats a later mention of `foo`.
 DECLARATIONS = (
     "func {s}",
     "static func {s}",
+    "def {s}",
     "const {s}",
     "var {s}",
+    "static var {s}",
+    "@export var {s}",
     "class {s}",
     "class_name {s}",
     "signal {s}",
@@ -156,7 +180,13 @@ def index_repo_files() -> dict[str, list[Path]]:
     index: dict[str, list[Path]] = {}
     for suffix in CODE_SUFFIXES:
         for path in REPO.rglob(f"*.{suffix}"):
-            if any(part in SKIP_DIRS for part in path.parts):
+            # Judged on the path RELATIVE to the repo. `path.parts` is absolute,
+            # so a checkout whose own location contains one of these names skips
+            # its entire tree — and `.claude/worktrees/` is exactly that: every
+            # lane working in a worktree indexed zero files and got a green run
+            # over anchors nothing had looked at, which is the failure this set
+            # was added to prevent.
+            if any(part in SKIP_DIRS for part in path.relative_to(REPO).parts):
                 continue
             index.setdefault(path.name, []).append(path)
     return index
@@ -172,6 +202,29 @@ def resolve(cited: str, index: dict[str, list[Path]]) -> Path | None:
     # Ambiguous bare name: prefer one whose tail matches the citation.
     tail = [m for m in matches if str(m).endswith(cited)]
     return tail[0] if len(tail) == 1 else None
+
+
+def symbol_head(lines: list[str], decl_line: int) -> int:
+    """Return the first line of the doc block attached to `decl_line`.
+
+    This repo carries the ported CSS spec in the `##` block above a symbol, not
+    beside it, so a citation's most useful target is routinely two or three
+    lines ABOVE the declaration — `enemy_view.gd:2032-2038` opens in the
+    commentary that explains `_update_shadow` and runs into its body. Treating
+    the declaration as the hard upper edge would call every one of those an
+    escape and leave roughly seventy anchors permanently unannotatable.
+    """
+    base = len(lines[decl_line - 1]) - len(lines[decl_line - 1].lstrip())
+    first = decl_line
+    for i in range(decl_line - 1, 0, -1):
+        line = lines[i - 1]
+        stripped = line.lstrip()
+        if not stripped.startswith("#"):
+            break
+        if len(line) - len(stripped) != base:
+            break
+        first = i
+    return first
 
 
 def symbol_body(lines: list[str], decl_line: int) -> int:
@@ -192,17 +245,49 @@ def symbol_body(lines: list[str], decl_line: int) -> int:
 
 def find_symbol(lines: list[str], symbol: str) -> int | None:
     """Return the 1-based line where `symbol` is declared, or None."""
+    # A bare prefix test makes `_rng` match `var _rng_seed` and `_process` match
+    # `func _process_hit` — the anchor then resolves to a neighbour and passes,
+    # which is the silent half of the failure this script exists to catch.
+    def hit(stripped: str, needle: str) -> bool:
+        if not stripped.startswith(needle):
+            return False
+        rest = stripped[len(needle):]
+        return not (rest[:1].isalnum() or rest[:1] == "_")
+
     for pattern in DECLARATIONS:
         needle = pattern.format(s=symbol)
         for i, line in enumerate(lines, start=1):
             stripped = line.lstrip()
-            if stripped.startswith(needle) or stripped.startswith("@" ) and needle in stripped:
+            if hit(stripped, needle) or (stripped.startswith("@") and needle in stripped):
                 return i
-    # Fall back to any standalone mention, which still beats reporting nothing.
-    word = re.compile(rf"\b{re.escape(symbol)}\b")
+    # A shader function leads with its return type — `void fragment()`,
+    # `vec3 screen(...)` — so no prefix in DECLARATIONS can ever reach one, and
+    # the fallback below then resolves the name to whichever line mentions it
+    # first. The type list is spelled out rather than left as `\w+` so that a
+    # GDScript `return foo(...)` cannot pass for a declaration of `foo`.
+    # A Python module constant declares itself with `NAME = ` or `NAME: type = `
+    # at column 0 — no keyword to prefix-match, so DECLARATIONS cannot reach it.
+    # `py` has been in CODE_SUFFIXES all along, so docs were already citing this
+    # file's own constants with no way for any annotation on them to resolve.
+    pyconst = re.compile(re.escape(symbol) + r"\s*(?::\s*[^=]+)?=")
     for i, line in enumerate(lines, start=1):
-        if word.search(line):
+        if not line[:1].isspace() and pyconst.match(line):
             return i
+
+    shader = re.compile(
+        r"^(?:void|bool|int|uint|float|double|[biud]?vec[234]|mat[234](?:x[234])?"
+        r"|sampler\w*)\s+" + re.escape(symbol) + r"\s*\(")
+    for i, line in enumerate(lines, start=1):
+        if shader.match(line.lstrip()):
+            return i
+
+    # No fall back to "any line that mentions the name". It reported something
+    # for every symbol, including ones the file never declares, and what it
+    # returned was routinely a call site or a string: `view.set_profile(...)`
+    # satisfied `(in set_profile)` in a file declaring no such symbol, and the
+    # `.tscn` inside a path literal satisfied a citation annotated `(tscn)`.
+    # An anchor whose symbol cannot be located is now reported as missing,
+    # which is the honest answer and the one this script exists to give.
     return None
 
 
@@ -228,6 +313,23 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
                     doc, doc_line, b.group(0).strip(), "pathless",
                     "names no file, so it was never checked — write the full"
                     " repo-relative path" + (f" for `{named}`" if named else "")))
+            for s in SYMBOL_ANCHOR.finditer(line):
+                cited, symbol = s.group("path"), s.group("symbol")
+                target = resolve(cited, index)
+                if target is None:
+                    if len(index.get(Path(cited).name, [])) > 1:
+                        findings.append(Finding(
+                            doc, doc_line, s.group(0).strip(), "ambiguous",
+                            f"{cited} names {len(index[Path(cited).name])} files"
+                            " — cite the full repo-relative path"))
+                    continue
+                # One question, and no arithmetic: does that file declare it?
+                if find_symbol(target.read_text(errors="replace").splitlines(),
+                               symbol) is None:
+                    findings.append(Finding(
+                        doc, doc_line, s.group(0).strip(), "missing",
+                        f"symbol `{symbol}` not found in {cited}"))
+
             for m in ANCHOR.finditer(line):
                 cited, start = m.group("path"), int(m.group("start"))
                 # Either spelling of the annotation; see ANCHOR.
@@ -268,12 +370,13 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
                     findings.append(Finding(doc, doc_line, text, "missing",
                                             f"symbol `{symbol}` not found in {cited}"))
                 elif m.group("in") or m.group("in2"):
+                    first = symbol_head(body, actual)
                     last = symbol_body(body, actual)
                     end = int(m.group("end") or start)
-                    if not (actual <= start and end <= last):
+                    if not (first <= start and end <= last):
                         findings.append(Finding(
                             doc, doc_line, text, "escaped",
-                            f"`{symbol}` spans :{actual}-{last}; the anchor sits outside it"))
+                            f"`{symbol}` spans :{first}-{last}; the anchor sits outside it"))
                 elif actual != start:
                     findings.append(Finding(doc, doc_line, text, "drift",
                                             f"`{symbol}` is at :{actual}", actual))

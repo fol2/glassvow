@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:3696` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:3764` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -283,11 +283,11 @@ unrelated numbers would be tuned apart.
 
 Derived floor on `aperture`: the groove must be ≥ ~1.5 stage pixels at the smallest
 actor or it scintillates whatever the MSAA. At a 115 px sporeling with
-`oversample` = 2.0 (`enemy_view.gd:308` (`oversample`)) one body unit is ≈ 230
+`oversample` = 2.0 (`enemy_view.gd:317` (`oversample`)) one body unit is ≈ 230
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:2882` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:2928` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 
@@ -812,9 +812,9 @@ the spikes. The heatmap is the reason `drive_at` is public.
 - ~~**Whether the ward-shatter `crack()` call survives.**~~ **Closed, and it was a
   mislabel rather than a question.** There is no ward `crack()` call and there never was:
   the ward path is `set_ward_shell` / `_restore_ward_shell` and it never touches the crack
-  model. The two calls are `combat_screen.gd:1802`, which is the **`SHATTER` event** — the
+  model. The two calls are `combat_screen.gd:1847` (in `_handle_event`), which is the **`SHATTER` event** — the
   FACET gauge filling, `CONCEPTS.md` › Facet, and a wholly legitimate glass event on the
-  creature's body — and `combat_screen.gd:2098`, ordinary damage. Recorded rather than
+  creature's body — and `combat_screen.gd:2098` (`_hit_enemy`), ordinary damage. Recorded rather than
   quietly deleted because the wrong label survived several passes over this file, and a
   question about a call that does not exist is worse than no question.
 - **The ward and the crack no longer share a primitive, and that was the real overlap.**

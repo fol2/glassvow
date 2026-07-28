@@ -38,7 +38,7 @@ without naming either — the omission is harmless only until someone resolves i
 against the wrong tree, which this project has already done once, for three
 commits.
 
-At [presentation/combat/hud_bar.gd:130](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
+At [presentation/combat/hud_bar.gd:104](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
 to **48 Control nodes** — each with its own transform, style cache and layout
 slot — all drawing the *identical* texture.
@@ -115,7 +115,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([presentation/combat/hud_bar.gd:973](../../../presentation/combat/hud_bar.gd#L955) (`_fan_angle`)).
+  resolves ([presentation/combat/hud_bar.gd:915](../../../presentation/combat/hud_bar.gd#L955) (`_fan_angle`)).
 
 ## Why This Matters
 

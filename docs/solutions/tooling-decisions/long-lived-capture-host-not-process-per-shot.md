@@ -61,7 +61,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:242` (`_capture_and_quit`).) It waits 30 frames for the
+(`application/main.gd:144` (`_capture_and_quit`).) It waits 30 frames for the
 first paint, reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
@@ -238,14 +238,14 @@ one line (`tools/live.sh:84-85`):
 ```
 
 Everything after that boot is a file write and a poll. `send()`
-(`tools/live.sh:57` (`send`)) mints a fresh id per call, clears the response file,
+(`tools/live.sh:56` (`send`)) mints a fresh id per call, clears the response file,
 writes the command, and polls for up to 200 × 0.05s. `shot` asks the bridge to
 save under `user://shots/` and copies the result out
 (`tools/live.sh:95-102`). `reload` uses the host's own channel and polls for up
 to 400 × 0.05s (`tools/live.sh:104-120`).
 
 **Do not pass `--shot` to the host.** That hook captures once and quits
-(`application/main.gd:242` (`_capture_and_quit`)), which is the exact behaviour the host exists to
+(`application/main.gd:144` (`_capture_and_quit`)), which is the exact behaviour the host exists to
 avoid. `tools/live.gd:22` and `tools/live.sh:14` both say so.
 
 ### Hot reload is the load-bearing part
@@ -339,7 +339,7 @@ was built to eliminate.
 
 The fix is in the client, not the engine. `tools/live.sh:81` records the
 previously-frontmost application before launching, and `hand_back()`
-(`tools/live.sh:39` (`hand_back`)) reactivates it once the host writes its ready
+(`tools/live.sh:38` (`hand_back`)) reactivates it once the host writes its ready
 file (called at `tools/live.sh:88`):
 
 ```sh

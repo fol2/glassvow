@@ -87,7 +87,7 @@ _count.size = Vector2(w, f.get_height(NUM_SIZE))
 _count.position = Vector2(SIZE - w - NUM_RIGHT, NUM_BASELINE - f.get_ascent(NUM_SIZE))
 ```
 
-`NUM_BASELINE` ([status_chip.gd:52](../../../presentation/combat/status_chip.gd#L52))
+`NUM_BASELINE` ([status_chip.gd:52 (`NUM_BASELINE`)](../../../presentation/combat/status_chip.gd#L52))
 states the validated number — `33.0` — instead of arriving at it by accident
 through a guessed line-height.
 
