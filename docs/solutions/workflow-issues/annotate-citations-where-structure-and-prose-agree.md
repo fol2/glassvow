@@ -41,7 +41,7 @@ resolution_type: documentation_update
 concurrently and a line number written today is routinely wrong by tomorrow.
 The script says so in its own opening: a refresh on 2026-07-26 found 14 of 15
 anchors in one cluster had drifted within hours of being written, and every one
-had been correct at its own shipping commit (`tools/check_anchors.py:4-8`).
+had been correct at its own shipping commit (`tools/check_anchors.py`'s module docstring).
 Discipline does not fix that. The anchors are snapshots of a moving target, so
 they are checked mechanically instead. (auto memory [claude]: "Parallel sessions
 in glassvow — six lanes share the tree" is the same observation from the other
@@ -50,11 +50,11 @@ side; ownership lives in `docs/session-ownership.md`.)
 The checker can only verify an anchor that carries a symbol. A bare
 `enemy_view.gd:752` is a coordinate and nothing else — the script has nothing to
 compare it against, so under `--strict` it is reported `UNANCHORED` and no more
-(`tools/check_anchors.py:235-239`). Two annotated forms are checkable. A bare
+(`tools/check_anchors.py` (`check`)). Two annotated forms are checkable. A bare
 `(symbol)` asserts the cited line *is* the declaration, which has one right
 answer and is repairable with `--fix`. An `(in symbol)` asserts only that the
 cited line falls inside that symbol's span, which is the form that catches the
-dangerous case (`tools/check_anchors.py:18-28`).
+dangerous case (`tools/check_anchors.py`'s module docstring).
 
 Before this work, `--strict` reported **226** anchors carrying no symbol. I ran
 the pre-change checker from a throwaway worktree at `ca841a0~1` to confirm the
@@ -81,8 +81,8 @@ were bare.
 The clearest instance is verifiable in the tree today. `docs/actor-animation-checklist.md`
 carried `enemy_view.gd:2148+` in a sentence about the ward shell. Line 2148 is
 genuinely inside `_process`, which is declared at
-`presentation/combat/enemy_view.gd:2108`. The function the sentence is about,
-`set_ward_shell`, is declared at `presentation/combat/enemy_view.gd:2313` — 165
+`presentation/combat/enemy_view.gd` (`_process`). The function the sentence is about,
+`set_ward_shell`, is declared at `presentation/combat/enemy_view.gd` (`set_ward_shell`) — 165
 lines away. A structural annotation would have written `(in _process)`, the
 checker would have passed it, and the citation would have been certified while
 pointing at the idle loop. It now reads `enemy_view.gd:2313-2350`
@@ -108,7 +108,7 @@ where they agree.**
    concrete bite was `_process` matching `func _process_hit`; I could not
    reproduce that pair, because neither `_process_hit` nor `_rng_seed` exists in
    this tree at either commit. They are illustrative names in the script's own
-   comment (`tools/check_anchors.py:165-167`), not live symbols. The hazard the
+   comment (`tools/check_anchors.py` (`find_symbol`)), not live symbols. The hazard the
    round-trip closes is real regardless: use the resolver that will grade you.
 
 2. **Prose gate.** Collect the backticked identifiers from the anchor's whole
@@ -146,18 +146,18 @@ still find in the tree and should special-case by hand:
   At [hud_bar.gd:104 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
   ```
 
-  and `FAN_FACES` is indeed declared at `presentation/combat/hud_bar.gd:104`.
+  and `FAN_FACES` is indeed declared at `presentation/combat/hud_bar.gd` (`FAN_FACES`).
 - a code span with a trailing `+` — `` `vfx_layer.gd:591+` `` — where the
   annotation lands inside the span. The symbol's span states "and following"
   more precisely than the `+` did, so the `+` goes:
   `docs/actor-animation-checklist.md:436` now reads `vfx_layer.gd:591`
   (`archetype_hit`), matching `presentation/combat/vfx_layer.gd:591`.
 - an **en-dash range**, `73–79`. The regex takes a single ASCII hyphen between
-  the two numbers (`tools/check_anchors.py:57`), so it does not fail loudly — it
+  the two numbers (`tools/check_anchors.py` (`ANCHOR`)), so it does not fail loudly — it
   matches the start and *silently discards the end*. That one was rewritten to
   ASCII and annotated: `docs/assembly-integration-plan.md:204` cites
   `rewards.gd:73-79` (in `gen_combat_rewards`), declared at
-  `domain/rules/rewards.gd:60`. A second en-dash citation survives untouched at
+  `domain/rules/rewards.gd` (`gen_combat_rewards`). A second en-dash citation survives untouched at
   `docs/assembly-integration-plan.md:149`, and `--strict` reports it as
   `content_db.gd:45` — it *is* among the 88, but the `–62` half of it has never
   been checked by anything.
@@ -171,7 +171,7 @@ session's account it skipped 10 and wrote 39 cleanly. All ten skips were later
 fixed by hand, **and none of them was a wrong citation** — every one was
 typographic. Four already carried a correct annotation that had *wrapped onto
 the following line*, where the regex never looks: the checker reads documents
-line by line (`tools/check_anchors.py:217`), so a symbol in the next line's text
+line by line (`tools/check_anchors.py` (`check`)), so a symbol in the next line's text
 does not exist as far as the anchor is concerned.
 
 **Fix the checker before you trust its verdicts.** Four changes had to land in
@@ -180,28 +180,28 @@ named throughout — `ca841a0`, `cef9c99`, `1149731`, `4ed334a` — are local to
 `jamesto/youthful-kirch-54418b` and unpushed at the time of writing; a rebase or
 squash merge will rewrite these SHAs, and this repo has no PR to cite instead.)
 
-- **`symbol_head()`** (`tools/check_anchors.py:124-144`) — a declaration's
+- **`symbol_head()`** (`tools/check_anchors.py` (`symbol_head`)) — a declaration's
   contiguous `##` doc block now counts as part of its span, and the `(in symbol)`
-  containment test starts from it (`tools/check_anchors.py:245-252`). This repo
+  containment test starts from it (`tools/check_anchors.py` (`check`)). This repo
   carries the ported CSS spec in the commentary *above* a symbol, so citing that
   commentary is the point rather than an accident. Without this, per `ca841a0`,
   roughly seventy anchors were structurally unannotatable.
-- **Word-boundary matching in `find_symbol`** (`tools/check_anchors.py:163-172`).
+- **Word-boundary matching in `find_symbol`** (`tools/check_anchors.py` (`find_symbol`)).
   The previous test was a bare `stripped.startswith(needle)`, so a prefix could
   pass for a name.
-- **An explicit shader-declaration form** (`tools/check_anchors.py:185-190`),
+- **An explicit shader-declaration form** (`tools/check_anchors.py` (`find_symbol`)),
   because a GLSL function leads with its return type — `void fragment()` — and no
   prefix in `DECLARATIONS` can reach it. The return types are spelled out rather
   than left as `\w+`, so a GDScript `return foo(...)` cannot pass for a
   declaration of `foo`.
-- **The any-mention fallback was removed** (`tools/check_anchors.py:192-199`).
+- **The any-mention fallback was removed** (`tools/check_anchors.py` (`find_symbol`)).
   It answered for symbols the file never declares, and an anchor whose symbol
   cannot be located is now reported `missing`, which is the honest answer.
   Removing it surfaced that its one legitimate use was covering a gap in the
   declaration forms rather than a need for guessing, so `static var` and
   `@export var` were added to `DECLARATIONS`
-  (`tools/check_anchors.py:68-69`); `static var oversample` is real, at
-  `presentation/combat/enemy_view.gd:308` and `presentation/combat/card_view.gd:173`.
+  (`tools/check_anchors.py` (`DECLARATIONS`)); `static var oversample` is real, at
+  `presentation/combat/enemy_view.gd` (`oversample`) and `presentation/combat/card_view.gd` (`oversample`).
 
 ## Why This Matters
 
@@ -253,7 +253,7 @@ distinct `(file, symbol)` pairs currently annotated across the checked documents
 old resolver than the new one:
 `card_surface.gdshader` / `fragment`. The old fallback put `fragment` at line 10
 — a comment reading "…so every fragment has a" — while the declaration
-`void fragment() {` is at `presentation/combat/card_surface.gdshader:260`. That
+`void fragment() {` is at `presentation/combat/card_surface.gdshader` (`fragment`). That
 annotation is live at `docs/solutions/conventions/per-recipe-shader-knobs.md:117`,
 which cites `card_surface.gdshader:360` (in `fragment`). Under the old resolver
 the anchor would have been graded against a comment; under the new one it is
@@ -321,9 +321,9 @@ The honest limits:
   of the claim goes unchecked. Grep for the shapes; the tool's own count will not
   distinguish them.
 - **`.py` anchors cannot be annotated at all**, which is a gap rather than a
-  decision. `py` is in `CODE_SUFFIXES` (`tools/check_anchors.py:48`), so a
+  decision. `py` is in `CODE_SUFFIXES` (`tools/check_anchors.py` (`CODE_SUFFIXES`)), so a
   citation into a Python file is recognised as an anchor and counted — but
-  `DECLARATIONS` (`tools/check_anchors.py:63-79`) carries GDScript and shader
+  `DECLARATIONS` (`tools/check_anchors.py` (`DECLARATIONS`)) carries GDScript and shader
   forms only. There is no `def` form, and a module-level constant matches
   nothing either, so `find_symbol` returns `None` for every Python symbol and
   any annotation on a `.py` anchor would be reported `missing`. Thirteen
@@ -333,7 +333,7 @@ The honest limits:
 - **Do not `--fix` an `(in symbol)` finding.** The script refuses to, and says
   why: nothing in the document states how far an interior line should have moved,
   and guessing would launder a wrong number into a confident one
-  (`tools/check_anchors.py:25-28`).
+  (`tools/check_anchors.py`'s module docstring).
 
 ## Examples
 
@@ -444,7 +444,7 @@ const FAN_FACES: int = 16      # PILE_FAN_MAX_LAYERS
 
 ```markdown
 <!-- trailing `+`: drop it; the symbol's span says "and following" precisely -->
-(`vfx_layer.gd:591` (`archetype_hit`), `combat_screen.gd:2098` (`_hit_enemy`))
+(`presentation/combat/vfx_layer.gd` (`archetype_hit`), `presentation/combat/combat_screen.gd` (`_hit_enemy`))
 
 <!-- en-dash: the regex takes ASCII `-` only, so the range END is dropped
      silently — this is read as `content_db.gd:45` and the `–62` is never
@@ -468,7 +468,7 @@ against the extension inside that path literal. `tscn` is not a symbol; it is a 
 contain. The annotation had been written by this audit, and it is now
 `(GAME_SCENE_PATH)` at
 `docs/solutions/tooling-decisions/long-lived-capture-host-not-process-per-shot.md:201`.
-The fallback is gone (`tools/check_anchors.py:192-199`) and an unlocatable
+The fallback is gone (`tools/check_anchors.py` (`find_symbol`)) and an unlocatable
 symbol is now reported `missing`.
 
 The unit check recorded in `1149731` is the one to repeat if the fallback is ever
@@ -491,9 +491,9 @@ holding only a matching string and a matching call, while `GAME_SCENE_PATH`,
 Four of the ten hand-fixed skips were this shape, and this one is
 `docs/solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md:50-51`.
 The annotation was correct all along — `start_encounter` is declared at
-`presentation/combat/combat_screen.gd:1022` and line 1049 is
+`presentation/combat/combat_screen.gd` (`start_encounter`) and line 1049 is
 `_hero.set_profile("rogue")`, comfortably inside it — but because the checker
-walks documents line by line (`tools/check_anchors.py:217`), the symbol on the
+walks documents line by line (`tools/check_anchors.py` (`check`)), the symbol on the
 next line did not exist as far as the anchor was concerned. It was counted among
 the 226 uncheckable and would have been "fixed" by a bulk pass that had nothing
 to fix. Reflowing a paragraph is enough to silently un-verify a citation here,

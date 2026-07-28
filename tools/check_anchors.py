@@ -105,11 +105,31 @@ BARE_ANCHOR = re.compile(
     r"(?P<sym>\s*\(`?(?:in\s+)?`?(?P<symbol>[A-Za-z_][\w]*)`?\))?"
 )
 
+# The PREFERRED citation form, and the only one with nothing in it that rots.
+#
+#     `presentation/combat/enemy_view.gd` (`set_ward_shell`)
+#
+# No line number, so there is no line number to go stale — and measured over one
+# day on this repo, that is the whole of the problem. Across ~900 symbols in the
+# four most-edited files, zero were renamed or removed, while between 10% and 99%
+# of their line numbers moved. The symbol is the durable half of an anchor and
+# the line is a decaying cache of it, which is why `--fix` works at all: it
+# regenerates the line FROM the symbol. This form simply declines to store the
+# cache.
+#
+# Both halves must be backticked. That is not decoration — it is what keeps
+# prose like "`enemy_view.gd` (the actor)" from being read as a citation.
+SYMBOL_ANCHOR = re.compile(
+    r"`(?P<path>[\w./-]+\.(?:" + "|".join(CODE_SUFFIXES) + r"))`"
+    r"\s*\((?:in\s+)?`(?P<symbol>[A-Za-z_][\w]*)`\)"
+)
+
 # How a symbol is declared in the languages this repo actually uses. Ordered:
 # the first match wins, so a `func foo` beats a later mention of `foo`.
 DECLARATIONS = (
     "func {s}",
     "static func {s}",
+    "def {s}",
     "const {s}",
     "var {s}",
     "static var {s}",
@@ -245,6 +265,15 @@ def find_symbol(lines: list[str], symbol: str) -> int | None:
     # the fallback below then resolves the name to whichever line mentions it
     # first. The type list is spelled out rather than left as `\w+` so that a
     # GDScript `return foo(...)` cannot pass for a declaration of `foo`.
+    # A Python module constant declares itself with `NAME = ` or `NAME: type = `
+    # at column 0 — no keyword to prefix-match, so DECLARATIONS cannot reach it.
+    # `py` has been in CODE_SUFFIXES all along, so docs were already citing this
+    # file's own constants with no way for any annotation on them to resolve.
+    pyconst = re.compile(re.escape(symbol) + r"\s*(?::\s*[^=]+)?=")
+    for i, line in enumerate(lines, start=1):
+        if not line[:1].isspace() and pyconst.match(line):
+            return i
+
     shader = re.compile(
         r"^(?:void|bool|int|uint|float|double|[biud]?vec[234]|mat[234](?:x[234])?"
         r"|sampler\w*)\s+" + re.escape(symbol) + r"\s*\(")
@@ -284,6 +313,23 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
                     doc, doc_line, b.group(0).strip(), "pathless",
                     "names no file, so it was never checked — write the full"
                     " repo-relative path" + (f" for `{named}`" if named else "")))
+            for s in SYMBOL_ANCHOR.finditer(line):
+                cited, symbol = s.group("path"), s.group("symbol")
+                target = resolve(cited, index)
+                if target is None:
+                    if len(index.get(Path(cited).name, [])) > 1:
+                        findings.append(Finding(
+                            doc, doc_line, s.group(0).strip(), "ambiguous",
+                            f"{cited} names {len(index[Path(cited).name])} files"
+                            " — cite the full repo-relative path"))
+                    continue
+                # One question, and no arithmetic: does that file declare it?
+                if find_symbol(target.read_text(errors="replace").splitlines(),
+                               symbol) is None:
+                    findings.append(Finding(
+                        doc, doc_line, s.group(0).strip(), "missing",
+                        f"symbol `{symbol}` not found in {cited}"))
+
             for m in ANCHOR.finditer(line):
                 cited, start = m.group("path"), int(m.group("start"))
                 # Either spelling of the annotation; see ANCHOR.
