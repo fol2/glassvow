@@ -175,7 +175,7 @@ them near the bottom. Arrival in the set is not arrival in the conflict.
 ## Related
 
 - [`docs/session-ownership.md`](../../session-ownership.md) — the per-file
-  ownership gate, and the one-line warning at `:62-63` that this doc is the
+  ownership gate, and the one-line warning near the top of its shared-files section that this doc is the
   practical follow-through for.
 - [Annotate a citation only where structure and prose agree](annotate-citations-where-structure-and-prose-agree.md)
   — written by the same branch; the shared-tree check above is what kept its

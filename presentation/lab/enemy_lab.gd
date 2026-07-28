@@ -28,8 +28,13 @@ extends Control
 ##                                    # the recoil, photographed across 320ms
 ##   tools/shot.sh --enemies --crack[=duskfang] --strip=/tmp/c.png
 ##                     # the PROPAGATION: one blow, its front photographed out to arrest
-##   tools/shot.sh --enemies --ward[=duskfang] [--absorb] --strip=/tmp/w.png
-##                     # the guard stone: breaking, or ringing from a blow it stopped
+##   tools/shot.sh --enemies --ward[=duskfang] [--raise|--absorb [--alone]] --strip=…
+##                     # the guard stone: forming (--raise), ringing from a blow it
+##                     # stopped (--absorb), or breaking (neither). --alone drops the
+##                     # body's hurt flash, which is the only way to READ the ring
+##   … --delta          # ANY strip mode: each cell as what it ADDED, against the last
+##                     # one. For a beat that is a small addend on a bright body — see
+##                     # `_delta_cells` for why more frames cannot substitute
 ##   tools/shot.sh --enemies --enter[=duskfang] --strip=/tmp/e.png
 ##   tools/shot.sh --enemies --idle[=gloomslime] --strip=/tmp/i.png
 ##                     # the arrival — `enemyIn`, one actor without the lineup's stagger
@@ -106,6 +111,10 @@ var _strip_id: String = ""
 ## `--incidental` makes the struck beat a poison tick rather than a sword blow.
 var _hit_direct: bool = true
 var _picker: OptionButton = null
+## Held so the (W) key and the switch cannot disagree about whether the stone is up:
+## the key drives the switch, and the switch's own handler is the single place that
+## raises or breaks it.
+var _ward_switch: CheckButton = null
 var _probe: FractureProbe = null
 var _probe_readout: Label = null
 var _meta_rows: Dictionary = {}
@@ -120,9 +129,24 @@ var _frac_compare: bool = false
 var _pre_cracks: int = 0
 ## Whether a strip's actor stands up already guarded. Set by `--ward`, which photographs the
 ## stone breaking and therefore needs one to break. `--absorb` switches that strip to the
-## other event a stone has: a blow it stopped.
+## other event a stone has: a blow it stopped, and `--raise` to the one that comes first.
 var _ward_up: bool = false
 var _ward_absorb: bool = false
+## `--raise` photographs the stone FORMING instead. It is the only one of the three that
+## needs the actor to stand up unguarded, so it clears `_ward_up` rather than setting it.
+var _ward_raise: bool = false
+## `--alone` drops the BODY's half of `--absorb` and photographs only the stone's answer.
+##
+## Not a convenience. The composed cell is the true picture and stays the default, but a
+## true picture is not automatically a legible one: the hurt flash peaks at 90 ms and the
+## stone's ring decays over 200, so the two overlap almost entirely and cannot be separated
+## in TIME. The flash is not even clipping — under a quarter of one per cent of the frame
+## reaches 254 — it simply raises the whole neighbourhood the ring is a small addend on, and
+## a term that survives measurement can still be invisible to the eye reading the cell.
+## Separating them by CAUSE is the only axis left.
+var _ward_alone: bool = false
+## `--delta` applies to EVERY strip mode, not just the ward's. See `_delta_cells`.
+var _delta: bool = false
 
 
 ## The two heroes stand on the same ground line as the foes and get the same
@@ -228,6 +252,12 @@ func _init(content_ref: ContentDB) -> void:
 			_hit_direct = false
 		elif arg == "--absorb":
 			_ward_absorb = true
+		elif arg == "--raise":
+			_ward_raise = true
+		elif arg == "--alone":
+			_ward_alone = true
+		elif arg == "--delta":
+			_delta = true
 		elif arg == "--enter":
 			_mode = "enter"
 		elif arg.begins_with("--enter="):
@@ -846,7 +876,8 @@ func _build_panel() -> void:
 	rows.add_child(hp)
 
 	var ward: CheckButton = CheckButton.new()
-	ward.text = "ward"
+	ward.text = "ward   (W)"
+	_ward_switch = ward
 	# Both halves. The bench is where the 560 ms form-up and the re-cut pulse can actually be
 	# judged, so this raises the STONE as well as the number — toggling it twice is the
 	# "gained ward while already warded" case, which is the only way to see the re-cut.
@@ -948,10 +979,13 @@ func _build_panel() -> void:
 		var lo2: float = k[2]
 		var hi2: float = k[3]
 		_meta_slider(rows, str(k[0]), key, lo2, hi2)
-	rows.add_child(_button("save char-meta.json", func() -> void:
+	var save_meta: Button = _button("save char-meta.json", func() -> void:
 		var ok: bool = EnemyView.save_meta()
 		_readout.text = ("saved char-meta.json" if ok
-			else "could not write char-meta.json")))
+			else "could not write char-meta.json"))
+	save_meta.disabled = OS.has_feature("web_dev")
+	save_meta.tooltip_text = "Use Native Proof to write char-meta.json." if save_meta.disabled else ""
+	rows.add_child(save_meta)
 
 	_readout = _dim("")
 	_readout.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1209,6 +1243,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_S:
 			if _bench_actor != null:
 				_bench_actor.shatter()
+		KEY_W:
+			# The switch, not the actor: both halves of the ward and the re-cut case go
+			# through its handler, and the panel must not lie about the stone's state.
+			# This is also what makes the form-up and the break drivable from
+			# `tools/live.sh key w`, which the scroll-buried switch was not.
+			if _ward_switch != null:
+				_ward_switch.button_pressed = not _ward_switch.button_pressed
 		KEY_F:
 			EnemyView.rite_fx = not EnemyView.rite_fx
 		KEY_V:
@@ -1312,20 +1353,42 @@ func _ready() -> void:
 	if _mode == "ward":
 		# The guard giving way. Slowed for the same reason `--crack` is — the break is 340 ms
 		# against a readback that costs 70 — and photographed from a stone that is ALREADY up,
-		# because this strip is about the break and not about the form-up.
+		# because this strip is about the break and not about the form-up. `--raise` is the
+		# form-up, and it is the one case that starts from an unguarded actor.
 		Engine.time_scale = CRACK_SLOMO
+		var frames_w: Array[float] = WARD_FRAMES
+		if _ward_raise:
+			frames_w = WARD_RAISE_FRAMES
+		elif _ward_absorb:
+			frames_w = WARD_ABSORB_FRAMES
 		var wall_w: Array[float] = []
-		for t: float in WARD_FRAMES:
+		for t: float in frames_w:
 			wall_w.append(t / CRACK_SLOMO)
-		_ward_up = true
+		_ward_up = not _ward_raise
 		var act: Callable = func(v: EnemyView) -> void: v.set_ward(0)
-		if _ward_absorb:
+		if _ward_raise:
+			# Both halves, as a Ward card plays them: the number appears on the chip at the
+			# same instant the stone starts cutting itself in.
+			act = func(v: EnemyView) -> void:
+				v.set_ward(8)
+				v.set_ward_shell(true, true)
+		elif _ward_absorb:
 			# The other half of the stone's life: a blow it STOPPED. Same slowed clock, and
 			# the body is struck too, because the point of the cell is that the two read as
 			# separate events on the same frame.
+			#
+			# The heading is the subject's, not a constant. `from` points from the creature
+			# toward whoever struck it, and on the battlefield that is the far side of the
+			# field: a foe is struck from its LEFT and a hero from its RIGHT
+			# (`combat_screen.gd` › `_hit_enemy`, `_hit_player`). Hard-coding LEFT here
+			# would photograph a hero's stone flinching INTO the blow, which is the one
+			# thing this cell exists to catch.
+			var from: Vector2 = Vector2.RIGHT if HEROES.has(_strip_id) else Vector2.LEFT
+			var body: bool = not _ward_alone
 			act = func(v: EnemyView) -> void:
-				v.ward_hit(Vector2.LEFT)
-				v.take_hit(true)
+				v.ward_hit(from)
+				if body:
+					v.take_hit(true)
 		await _shoot_strip(wall_w, "ward", act)
 		return
 	if _mode == "bench":
@@ -1381,6 +1444,21 @@ const CRACK_SLOMO: float = 0.06
 ## is ease-out, so the pieces are already well clear by the third cell — the frames spread
 ## further than the crack's for that reason rather than clustering harder.
 const WARD_FRAMES: Array[float] = [0.0, 0.05, 0.11, 0.18, 0.26, 0.36]
+## The stone forming, in BEAT seconds. `EnemyView.WARD_GROW` is 560ms on a SMOOTHSTEP, which
+## is the one curve on this page that is slow at BOTH ends — so these cells cluster in the
+## middle, the opposite of every other table here, and for the same reason those cluster at
+## their own fast part. Read as `grow`: the cells land near 0, .16, .39, .61, .84 and 1, so
+## the cut count (`round(WARD_CUT_N * grow)`) steps 0 → 1 → 3 → 5 → 7 → 8 and no cell
+## repeats a facet count. Cell one is the unguarded body: at t=0 the shell is still under
+## the 2% visibility floor, and a strip of a thing appearing wants the "before".
+const WARD_RAISE_FRAMES: Array[float] = [0.0, 0.14, 0.24, 0.32, 0.42, 0.60]
+## The stone RINGING, in BEAT seconds. `--absorb` had been borrowing `WARD_FRAMES`, whose
+## clock is the 340 ms break — but the ring is `EnemyView.WARD_RING`, 200 ms, so the last
+## two cells of that table were photographing a stone that had finished answering. The decay
+## is linear and then SQUARED on its way to the shader, so what the eye follows is `(1-u)²`
+## and the cells go where that falls fastest: the visible term steps 1, .77, .53, .30, .11,
+## .00 rather than the flat sixths a linear reading would ask for.
+const WARD_ABSORB_FRAMES: Array[float] = [0.0, 0.025, 0.055, 0.09, 0.135, 0.19]
 ## The arrival, in BEAT seconds. `EnemyView.ENTER_TIME` is 550ms on an ease-out, so most of
 ## the travel is over by a third of it and the cells cluster there.
 const ENTER_FRAMES: Array[float] = [0.0, 0.06, 0.14, 0.25, 0.38, 0.56]
@@ -1465,6 +1543,9 @@ func _shoot_strip(frames: Array[float], label: String, action: Callable) -> void
 		cells.append(cell)
 	shots = cells
 
+	if _delta:
+		shots = _delta_cells(shots)
+
 	var strip: Image = Image.create_empty(
 		crop.size.x * shots.size(), crop.size.y, false, shots[0].get_format())
 	for i: int in range(shots.size()):
@@ -1477,9 +1558,69 @@ func _shoot_strip(frames: Array[float], label: String, action: Callable) -> void
 	get_tree().quit(0)
 
 
+## `--delta`: re-photograph the strip as what each cell ADDED, against the last one.
+##
+## The third dimension of a capture surface, after when it samples and for how long: what
+## VALUE RANGE it can resolve. A beat that is a small addend on a bright body passes both of
+## the other two and is still unreadable — the ward's ring is worth a couple of levels on a
+## stone the hurt flash has just raised, so a cell can be correct, unclipped, and show
+## nothing. Neither more frames nor a longer window fixes that; only changing what the
+## picture is OF does.
+##
+## The last cell is the reference because every strip here is built to END after its beat.
+## That makes the reference free — no control run, no second boot, no assumption that two
+## runs of an idle land on the same frame.
+##
+## Normalised at the 99.5th percentile rather than the maximum. A single specular pixel
+## reached 185 on a stone whose ring averaged 2.6, and dividing by that crushed the answer
+## to black; the percentile keeps the outlier out of the divisor and lets it clip instead,
+## which is the right trade when the question is "where and how much", not "how bright".
+func _delta_cells(shots: Array[Image]) -> Array[Image]:
+	var w: int = shots[0].get_width()
+	var h: int = shots[0].get_height()
+	var ref: Image = shots[shots.size() - 1]
+	var diffs: Array[PackedByteArray] = []
+	var hist: PackedInt32Array = PackedInt32Array()
+	hist.resize(256)
+	for img: Image in shots:
+		var d: PackedByteArray = PackedByteArray()
+		d.resize(w * h)
+		for y: int in range(h):
+			for x: int in range(w):
+				var a: Color = img.get_pixel(x, y)
+				var b: Color = ref.get_pixel(x, y)
+				var m: float = maxf(maxf(absf(a.r - b.r), absf(a.g - b.g)), absf(a.b - b.b))
+				var v: int = clampi(int(m * 255.0), 0, 255)
+				d[y * w + x] = v
+				hist[v] += 1
+		diffs.append(d)
+	# The divisor, read off the pooled histogram so every cell is scaled the same way and
+	# the strip stays comparable across its own length.
+	var total: int = w * h * shots.size()
+	var seen: int = 0
+	var top: int = 255
+	for v: int in range(256):
+		seen += hist[v]
+		if float(seen) / float(total) >= 0.995:
+			top = maxi(1, v)
+			break
+	print("delta: 99.5th percentile = %d/255 (divisor); saturating above it" % top)
+	var out: Array[Image] = []
+	for d: PackedByteArray in diffs:
+		var img: Image = Image.create_empty(w, h, false, Image.FORMAT_RGB8)
+		for y: int in range(h):
+			for x: int in range(w):
+				var g: float = clampf(float(d[y * w + x]) / float(top), 0.0, 1.0)
+				img.set_pixel(x, y, Color(g, g, g))
+		out.append(img)
+	return out
+
+
 ## Take the usable screen before measuring: every pixel the window gains is
 ## resolution the sheet does not have to scale away.
 func _grow_window() -> void:
+	if OS.has_feature("web"):
+		return  # The browser canvas has no native window frame to subtract.
 	var usable: Rect2i = DisplayServer.screen_get_usable_rect(
 		DisplayServer.window_get_current_screen())
 	if usable.size.x <= 0 or usable.size.y <= 0:

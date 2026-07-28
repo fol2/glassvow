@@ -79,9 +79,9 @@ Four rules, all load-bearing:
    two entries — `cosmos` and `cosmos-art`. The other twelve read `0.0, 0.0`.
    That column is reviewable at a glance, which is the point.
 
-4. **Prove the untouched recipes did not move.** Render each before and after
-   and show **RMSE = 0**, not "small". See the floor below for what 0 actually
-   means.
+4. **Prove the untouched recipes did not move beyond the shader-edit floor.**
+   Render each before and after and show **maxdiff ≤ 1/255**. Reserve
+   **RMSE = 0** for the same-build determinism control described below.
 
 ## Why This Matters
 

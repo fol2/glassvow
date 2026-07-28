@@ -82,8 +82,8 @@ Three payoffs, in increasing order of importance:
    foes', and are simply never read — dead data, not tuning.)
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
-   (`presentation/combat/enemy_view.gd:2034` (`_update_shadow`); the swing itself
-   enters at `enemy_view.gd:3847` (`set_light_angle`)). No amount of tuning the CSS version
+   (`presentation/combat/enemy_view.gd:2211` (`_update_shadow`); the swing itself
+   enters at `presentation/combat/enemy_view.gd:4043` (`set_light_angle`)). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.
 
@@ -117,7 +117,7 @@ colour, a timing curve, a silhouette exaggeration. Those are design; port them.
 | --- | --- |
 | `--sh-skew`, `--sh-x` | Key light direction — horizontal run per unit height |
 | `--sh-sx`, `--sh-sy` | Ground-plane tilt (`GROUND_TILT_DEG = 78.0`, cos ≈ 0.21) × cast length |
-| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha: lowest opaque row is the contact point, its horizontal centroid is where weight sits (`enemy_view.gd:1964` (`_read_contact`)) |
+| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha. Originally one point per creature — lowest opaque row, horizontal centroid of the band above it (`presentation/combat/enemy_view.gd:2029` (`_read_contact`)). Now the *origin* only: the contact is read per painting column, because one contact line cannot serve a creature standing on four feet at four heights. See [A flat billboard has one depth](../ui-bugs/flat-billboard-shadow-had-one-ground-line.md) |
 | `--sh-blur` | Distance from the contact point — sharp at the feet, diffuse at the far end |
 | `--sh-o` | **Kept — but promoted to a single global.** Opacity is taste, not geometry, and one taste serves every actor. The per-creature values are no longer read. |
 | `--sh-y` (`shadow.dy`) | **Kept, per creature.** See the correction below: this is the one knob that says something the painting cannot. |
@@ -155,28 +155,39 @@ shadow that never moved, and the audit that graded this entry compared constants
 That half is [Drive the lab the way the game drives it, and photograph loops as well
 as beats](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md).
 
-**And one authored knob came back.** `shadow.dy` — carried by exactly five creatures,
-`watcherEye` 24, `shade` 16, `voltEel` 13, `sporeling` 10, `voidWisp` 9, which are
-exactly the floaters — says the thing the alpha cannot: *this painting is of something
-already off the ground.* Contact point, lean, length and softening are all in the image
-or the light. Resting height is in neither. It is read as a height and fed through the
-same projection the live hover uses (`enemy_view.gd:2034` (`_update_shadow`)), so it
-buys a shadow that is offset, smaller, fainter and softer rather than the straight-down
-shove CSS could manage. One authored number doing the job eight were approximating is
-still the pattern working — it is just not zero.
+**And one authored knob came back.** `shadow.dy` — carried in the benchmark by exactly
+five creatures, `watcherEye` 24, `shade` 16, `voltEel` 13, `sporeling` 10, `voidWisp` 9,
+which are exactly the floaters — says the thing the alpha cannot: *this painting is of
+something already off the ground.* Contact point, lean, length and softening are all in
+the image or the light. Resting height is in neither. It is read as a height and fed
+through the same projection the live hover uses
+(`presentation/combat/enemy_view.gd:2211` (`_update_shadow`)), so it buys a shadow that
+is offset, smaller, fainter and softer rather than the straight-down shove CSS could
+manage. One authored number doing the job eight were approximating is still the pattern
+working — it is just not zero.
+
+**Correction, 2026-07-27 (second): `dy` was doing half its job.** Feeding it through the
+projection slides the cast sideways along the light's ground track, and that is only one
+of the two things being airborne means. The other is that the ground is *lower* than the
+silhouette's own bottom edge — which, for a creature painted already off the floor, is
+not a contact at all. Until that was fixed the shadow sat pinned directly under the
+hovering body and `watcherEye`'s hung off its own tassels. A sixth creature, `thornling`,
+now carries a `dy` the benchmark does not give it; that one is a deliberate divergence,
+recorded in the successor doc.
 
 ### The art-direction clamp (the part that is not physics)
 
 The honest projection at the key light's authored pitch of −38°
-(`enemy_view.gd:1734` (in `_build_stage`)) gives a horizontal run of roughly 1.6 body heights. That is
+(`presentation/combat/enemy_view.gd:1792` (in `_build_stage`)) gives a horizontal run of roughly 1.6 body
+heights. That is
 geometrically correct and reads badly: in a side-on view a long cast makes the
 creature look like it is hovering over its own shadow. The derivation is therefore
 bounded back into a ground pool that still leans with the light
-(`enemy_view.gd:1955-1956` (`CAST_MIN`)):
+(`presentation/combat/enemy_view.gd:2020-2021` (`CAST_MIN`)):
 
 ```gdscript
-const CAST_MIN: float = 0.6
-const CAST_MAX: float = 1.15
+const CAST_MIN: float = 0.68
+const CAST_MAX: float = 1.31
 ...
 var run: float = clampf(1.0 / -l.y, CAST_MIN, CAST_MAX)
 ```
@@ -186,9 +197,24 @@ how a side-on battlefield should read, not an estimate of geometry. That is the 
 distinction: a constant that says *what we want* earns its place; a constant that says
 *where the light would land* does not.
 
+They read 0.6 / 1.15 when this doc was written. The look they encode has not changed;
+the arithmetic underneath them has. Height used to be measured from the creature's
+*lowest* contact, which overstates it for anything standing on higher ground, and moving
+to a per-column ground line reduced measured height by a silhouette-weighted 12.0% across
+the roster. The bounds were restated ×1.137 — 1/(1 − 0.120) — so the approved result
+survived the correction. **This is the maintenance clause the rule above was missing: an
+art-direction clamp is expressed in the units of a derived quantity, so correcting a
+systematic error in that quantity silently changes what the clamp asks for.** Preserving
+the judgement means restating the numbers; preserving the numbers would have changed the
+look and left no record of why.
+
 ### Godot mechanic that made the derived shadow invisible
 
-The projection is a **shear**, so it must be built as a non-orthonormal `Basis`. The
+**Historical — the shadow no longer uses a `Basis` at all.** The Godot fact below is
+still true and still worth carrying; the code that worked around it has been retired,
+and the paragraph after the block says what replaced it.
+
+The projection was built as a **shear**, which means a non-orthonormal `Basis`. The
 first attempt set the basis and then set `scale` separately, and the shadow vanished:
 
 ```gdscript
@@ -197,7 +223,7 @@ first attempt set the basis and then set `scale` separately, and the shadow vani
 _shadow.transform.basis = tilt * shear
 _shadow.scale = Vector3(s, s, 1.0)
 
-# RIGHT — fold the scale into the same basis (enemy_view.gd:2064-2068 (in _update_shadow))
+# The workaround: fold the scale into the same basis.
 var shear: Basis = Basis.IDENTITY
 shear.x = Vector3(s, 0.0, 0.0)
 shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * s, run * s, 0.0)
@@ -206,6 +232,13 @@ _shadow.transform.basis = Basis(Vector3.RIGHT, deg_to_rad(-GROUND_TILT_DEG)) * s
 
 There is no error and no warning — the shear is simply gone. Any Godot code that
 builds a skew, squash, or projection matrix has to keep scale inside the basis.
+
+The workaround is gone because the constraint it worked around turned out to be the
+deeper problem: a `Basis` shears about exactly one origin, so a basis-projected shadow
+can only ever have one contact line. The shear now lives in the shadow's vertex stage,
+where it can run from each column's own contact — and with no basis in the picture there
+is no shear left to lose. See
+[A flat billboard has one depth](../ui-bugs/flat-billboard-shadow-had-one-ground-line.md).
 
 ## Related
 
@@ -227,4 +260,4 @@ builds a skew, squash, or projection matrix has to keep scale inside the basis.
   per-asset tuning table valuable rather than merely tidy.
 - `assets/art/enemies/char-meta.json` — the ported per-character table. All of its
   `shadow` entries but `dy` are vestigial for rendering and are retained as reference
-  data; `dy` is read as a resting height (`enemy_view.gd:2439` (`_read_hover`)).
+  data; `dy` is read as a resting height (`presentation/combat/enemy_view.gd:2635` (`_read_hover`)).

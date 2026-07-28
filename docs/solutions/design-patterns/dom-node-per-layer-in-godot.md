@@ -24,10 +24,19 @@ structure is wrong in Godot.
 
 In a browser, the only thing you can independently rotate, offset or fade is an
 element. So the benchmark's card piles are drawn as a stack of `.pile-layer`
-divs — one per visible card. The port mirrored that shape: one `TextureRect` per
+divs — one per visible card (`src/styles.css:1422`, built at
+`src/ui/combat.js:846`). The port mirrored that shape: one `TextureRect` per
 face, created lazily, shown/hidden and rotated as the count moved.
 
-At [hud_bar.gd:104 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
+**Reference citations in this document are against
+`~/Coding/roguecardv2-benchmark` at `6e06911`, the pre-Pixi checkout, and line
+numbers are that tree's.** They are not against `~/Coding/roguecardv2`, which is
+284 commits ahead and post-Pixi. This document originally quoted the reference
+without naming either — the omission is harmless only until someone resolves it
+against the wrong tree, which this project has already done once, for three
+commits.
+
+At [presentation/combat/hud_bar.gd:104](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
 to **48 Control nodes** — each with its own transform, style cache and layout
 slot — all drawing the *identical* texture.
@@ -65,7 +74,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[hud_bar.gd:907 (in `_sync_pile`)](../../../presentation/combat/hud_bar.gd):
+[presentation/combat/hud_bar.gd:947-950](../../../presentation/combat/hud_bar.gd#L947) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -104,7 +113,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([hud_bar.gd:915 (`_fan_angle`)](../../../presentation/combat/hud_bar.gd)).
+  resolves ([presentation/combat/hud_bar.gd:915](../../../presentation/combat/hud_bar.gd#L955) (`_fan_angle`)).
 
 ## Why This Matters
 
@@ -159,7 +168,25 @@ p.stack.queue_redraw()
 ```
 
 Same geometry (same 50%/92% pivot, same 5°-per-card / 30°-span rule from the
-benchmark's `pile-chrome.js`), same pixels, 48 nodes → 3.
+benchmark's `src/pile-chrome.js:4-8` — `PILE_FAN_DEG`, `PILE_FAN_MAX_DEG`,
+`PILE_FAN_MAX_LAYERS`), same pixels, 48 nodes → 3.
+
+**Two live `add_child` loops in this file are exemptions, not survivors.**
+
+- `presentation/combat/hud_bar.gd:857-885` (in `fly_backs`) builds a
+  `TextureRect` per flyer and gives each its own `Tween` — transient nodes that
+  each need an independent animation, which is exactly the case the rule above
+  carves out.
+- `presentation/combat/hud_bar.gd:385-392` (in `_sync_candles`) builds one
+  non-interactive `TextureRect` per point of max energy. Node count scales with
+  a gameplay value that stays small, which is the second carve-out.
+
+**Corrected 2026-07-27:** this paragraph said "one" for a month and there were
+always two — `_sync_candles` predates the doc. The damage was in the sentence
+that followed, which told a reader grepping for `add_child` that a single hit
+was expected; the grep returns two, and the doc made the second one look like an
+unconverted instance. A count is a claim like any other, and this one was never
+checked because it read as scene-setting rather than as an assertion.
 
 ## Related
 

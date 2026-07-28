@@ -736,6 +736,24 @@ var _shadow_mat: ShaderMaterial = null
 ## framing offset for the hinge.
 var _contact_u: float = 0.5
 var _art_pad: float = 0.0
+## The contact ROW, as a texture v — `1.0 - _art_pad / _box_u`, kept as its own
+## number because the shadow's vertex stage works in UV and converting there
+## would need the box height twice.
+var _contact_v: float = 1.0
+## The ground line, one sample per painting column, as a 64x1 R-float texture.
+##
+## A flat billboard has ONE depth, so the projection could only ever have one
+## contact line, and that line has to be the lowest opaque row — anything higher
+## would bury the nearest foot. A creature standing on more than one foot is then
+## drawn with every other foot ABOVE its own shadow, which is the whole of what
+## "floating" looks like. Measured on `duskfang`, whose four paws span 12.5% of a
+## body height: the near paw was planted and the other three hovered.
+##
+## The painting does hold the missing information — the ground is depicted, and
+## the silhouette's own bottom edge samples it wherever the creature touches
+## down. So the ground line is READ rather than assumed flat, and the projection
+## runs from each column's own contact instead of from a single line.
+var _ground_tex: ImageTexture = null
 ## `shadow.dy` read as a resting height — see `_read_hover`.
 var _hover_rest: float = 0.0
 ## The death rite fades the shadow with a tween while the projection rewrites the
@@ -1917,20 +1935,55 @@ void fragment() {
 ## come from the key's direction, the contact point from the painting's own
 ## alpha, the softening from distance off the ground. What is left to author is
 ## opacity.
+##
+## The projection runs in the VERTEX stage rather than in the node's basis, and
+## that is not a refactor for its own sake: a basis can only shear about one
+## origin, so a basis-projected shadow has exactly one contact line. Per column
+## it has to be per vertex. Doing it here also retires a trap the basis version
+## carried — `Node3D.scale` is derived from the basis, so writing it after a
+## sheared basis silently re-orthonormalised the shear away.
 const SHADOW_SHADER: String = """
 shader_type spatial;
 render_mode blend_mix, depth_draw_never, cull_disabled, unshaded, shadows_disabled;
 
 uniform sampler2D body_tex : source_color, filter_linear_mipmap;
+// The ground line, one sample per painting column, as a texture v. Linear
+// filtering is what turns 64 samples into a continuous line under the feet.
+uniform sampler2D ground_tex : filter_linear, repeat_disable;
 uniform float opacity = 0.55;
 uniform float softness = 1.0;
+uniform float box_u = 1.0;
+// Where the mesh origin sits in the painting, as a v — the lowest contact.
+uniform float contact_v = 1.0;
+// The projection, resolved on the CPU from the key light: how far the cast runs
+// per unit of height, how far it leans doing it, and how wide it stays.
+uniform float cast_run = 1.0;
+uniform float cast_lean = 0.0;
+uniform float cast_wide = 1.0;
+uniform float tilt_cos = 0.208;
+uniform float tilt_sin = 0.978;
+
+// Height above THIS column's ground, in box heights. The fragment stage wants it
+// too: a contact shadow is sharp at the contact and diffuses with distance, and
+// with four feet at four heights "distance" is per column as well.
+varying float v_far;
+
+void vertex() {
+	// UV.y 1 is the bottom of the painting, so a SMALLER v is higher up.
+	float gv = texture(ground_tex, vec2(UV.x, 0.5)).r;
+	v_far = clamp(gv - UV.y, 0.0, 1.0);
+	float h = v_far * box_u;
+	// The column's own contact, in mesh space: the mesh origin is the lowest
+	// contact, and this column's sits that much higher.
+	float gy = (contact_v - gv) * box_u;
+	VERTEX = vec3(
+		VERTEX.x * cast_wide + h * cast_lean,
+		gy + h * cast_run * tilt_cos,
+		-h * cast_run * tilt_sin);
+}
 
 void fragment() {
-	// UV.y 1 is the feet; the far end of the cast is the head. A real contact
-	// shadow is sharp where the body meets the ground and diffuses with
-	// distance, which is the whole job the authored blur radius was doing.
-	float far = 1.0 - UV.y;
-	float r = (0.003 + 0.035 * far) * softness;
+	float r = (0.003 + 0.035 * v_far) * softness;
 	float a = 0.0;
 	for (int i = -1; i <= 1; i++) {
 		for (int j = -1; j <= 1; j++) {
@@ -1939,7 +1992,7 @@ void fragment() {
 	}
 	a /= 9.0;
 	ALBEDO = vec3(0.0);
-	ALPHA = smoothstep(0.04, 0.55, a) * opacity * (1.0 - far * 0.5);
+	ALPHA = smoothstep(0.04, 0.55, a) * opacity * (1.0 - v_far * 0.5);
 }
 """
 
@@ -1952,8 +2005,20 @@ const GROUND_TILT_DEG: float = 78.0
 ## side-on view a long cast reads as the creature hovering over its own shadow.
 ## Clamped to a ground POOL that leans with the light instead of a dramatic
 ## throw — the benchmark lands in the same place with sx 1.0 / sy 0.24.
-const CAST_MIN: float = 0.6
-const CAST_MAX: float = 1.15
+##
+## Restated ×1.137 from 0.6/1.15 when the ground line went per column, and that
+## is a restoration rather than a new judgement. Height used to be measured from
+## the LOWEST contact, which overstates it for every column standing on higher
+## ground; measured across the 27 paintings, weighted by silhouette, the per-column
+## line REDUCED mean height by 12.0% (`shade` 21.1%, `sovereign` 0.3%). The factor
+## is that reduction inverted — 1/(1 - 0.120) = 1.137, not 1.12 — because the
+## clamp multiplies the height rather than being measured in it. So the old clamp
+## was judged against a cast that ran 12% long, and leaving it alone would have
+## let a geometry fix quietly shorten every shadow in the game. The look these
+## two numbers encode is the thing being preserved; the arithmetic under it
+## changed.
+const CAST_MIN: float = 0.68
+const CAST_MAX: float = 1.31
 
 
 ## Read the contact point off the painting instead of authoring --foot-ox/oy:
@@ -1988,16 +2053,120 @@ func _read_contact(tex: Texture2D) -> void:
 			weight += a
 	if weight > 0.0:
 		_contact_u = (sum / weight + 0.5) / 64.0
-	_art_pad = (1.0 - (float(bottom) + 1.0) / 64.0) * _box_u
+	_contact_v = (float(bottom) + 1.0) / 64.0
+	_art_pad = (1.0 - _contact_v) * _box_u
+	_read_ground(img, bottom)
+
+
+## How far above the lowest contact a silhouette's bottom edge may still be
+## standing on the ground. Everything within the band is read as a contact;
+## everything above it is read as body — a belly between legs, a tail in the air,
+## a cloak that does not reach — and the ground is interpolated underneath it
+## from the contacts on either side.
+##
+## 0.15 of a box is not a taste knob, it is the gap between two populations.
+## Measured across all 27 paintings, the widest spread of admitted contacts is
+## 0.141 of a box — thirteen of them reach it, `duskfang` among them — while the
+## nearest feature that is plainly NOT footing, `duskfang`'s belly at 0.188 and
+## its tail at 0.25, sits above. So the band has to land inside [0.141, 0.188],
+## and 0.15 does.
+##
+## Read that measurement honestly: it is partly circular, because the spread it
+## reports is the spread of whatever this same band admitted. It cannot see a
+## creature whose feet genuinely span more than 0.15, and no painting on the
+## current roster is known to. Widening the band is what would reveal one — so if
+## a new painting stands with its shadow starting mid-leg, raise this and re-read
+## the spread before assuming the scan is at fault.
+const CONTACT_BAND: float = 0.15
+## One ground sample per column of the 64-wide scan `_read_contact` already runs.
+const GROUND_N: int = 64
+
+
+## Derive the ground line from the painting's own silhouette.
+##
+## For each column, the lowest opaque row is a candidate contact. Those within
+## `CONTACT_BAND` of the lowest are taken as real, and the line is interpolated
+## between them across everything else — so a belly is spanned rather than stood
+## on, and a tail that hangs in the air is given the ground under the feet beside
+## it rather than a ground of its own.
+##
+## Columns with no paint at all get the same treatment and it costs nothing: the
+## shadow's alpha comes from the same silhouette, so a column the creature does
+## not occupy casts nothing wherever its ground line happens to land.
+func _read_ground(img: Image, bottom: int) -> void:
+	var xs: PackedFloat32Array = PackedFloat32Array()
+	var rows: PackedFloat32Array = PackedFloat32Array()
+	var band: float = float(bottom) - CONTACT_BAND * float(GROUND_N)
+	for x: int in range(GROUND_N):
+		var low: int = -1
+		for y: int in range(GROUND_N - 1, -1, -1):
+			if img.get_pixel(x, y).a > 0.15:
+				low = y
+				break
+		if low >= 0 and float(low) >= band:
+			xs.append(float(x))
+			rows.append(float(low))
+	if xs.is_empty():
+		return
+	# `v` for the shader, not a row: the vertex stage compares it against UV.y.
+	var line: PackedFloat32Array = PackedFloat32Array()
+	for x: int in range(GROUND_N):
+		line.append((_interp(float(x), xs, rows) + 1.0) / float(GROUND_N))
+	var strip: Image = Image.create_from_data(GROUND_N, 1, false, Image.FORMAT_RF,
+		line.to_byte_array())
+	_ground_tex = ImageTexture.create_from_image(strip)
+
+
+## One flat line at the lowest contact, for a painting whose alpha reads nothing.
+func _flat_ground() -> ImageTexture:
+	var line: PackedFloat32Array = PackedFloat32Array()
+	line.resize(GROUND_N)
+	line.fill(_contact_v)
+	return ImageTexture.create_from_image(Image.create_from_data(
+		GROUND_N, 1, false, Image.FORMAT_RF, line.to_byte_array()))
+
+
+## Piecewise-linear through the samples, held flat beyond the ends. Written out
+## because GDScript has no `Array` lerp over a second array, and the alternative
+## — a Curve resource — would put an editable artefact in the way of a number
+## that is measured, never authored.
+static func _interp(x: float, xs: PackedFloat32Array,
+		ys: PackedFloat32Array) -> float:
+	var n: int = xs.size()
+	if x <= xs[0]:
+		return ys[0]
+	if x >= xs[n - 1]:
+		return ys[n - 1]
+	var i: int = 1
+	while i < n and xs[i] < x:
+		i += 1
+	var span: float = xs[i] - xs[i - 1]
+	if span <= 0.0:
+		return ys[i]
+	return lerpf(ys[i - 1], ys[i], (x - xs[i - 1]) / span)
 
 
 func _build_shadow(tex: Texture2D) -> void:
 	_shadow = MeshInstance3D.new()
-	var qm: QuadMesh = QuadMesh.new()
+	# SUBDIVIDED, and for the same reason the body's plane is: the shape is a
+	# vertex deformation now. One quad has four corners and therefore one ground
+	# line; a column of vertices per ground sample is what lets each foot stand on
+	# its own. Vertically two rows would do — the projection is linear in height —
+	# but the ground clamp puts a kink at the contact, so it gets a few more.
+	var qm: PlaneMesh = PlaneMesh.new()
 	qm.size = Vector2(_quad_w, _box_u)
-	# Origin on the BOTTOM edge, so the quad tips away about the contact line
-	# rather than sinking half of itself through the floor.
-	qm.center_offset = Vector3(0.0, _box_u * 0.5, 0.0)
+	qm.orientation = PlaneMesh.FACE_Z
+	qm.subdivide_width = GROUND_N - 1
+	qm.subdivide_depth = 8
+	# Origin on the CONTACT POINT the painting was measured for — the lowest
+	# opaque row, at the weight centroid of the band above it. Not the quad's
+	# corner: this quad carries the same texture as the body, so the creature is
+	# already placed inside it, and a hinge anywhere else casts a shadow of a
+	# creature standing somewhere the creature is not. The bottom edge was close
+	# enough for anything drawn centred over its own feet and 15% of a body wide
+	# of the mark for `duskfang`, which stands on paws far to the left of frame.
+	qm.center_offset = Vector3(
+		-(_contact_u - 0.5) * _quad_w, _box_u * 0.5 - _art_pad, 0.0)
 	_shadow.mesh = qm
 	var sh: Shader = Shader.new()
 	sh.code = SHADOW_SHADER
@@ -2005,6 +2174,14 @@ func _build_shadow(tex: Texture2D) -> void:
 	_shadow_mat.shader = sh
 	_shadow_mat.render_priority = -2   # under the body (-1) and the glass (1)
 	_shadow_mat.set_shader_parameter("body_tex", tex)
+	_shadow_mat.set_shader_parameter("box_u", _box_u)
+	_shadow_mat.set_shader_parameter("contact_v", _contact_v)
+	_shadow_mat.set_shader_parameter("tilt_cos", cos(deg_to_rad(GROUND_TILT_DEG)))
+	_shadow_mat.set_shader_parameter("tilt_sin", sin(deg_to_rad(GROUND_TILT_DEG)))
+	# A painting with no readable contact at all falls back to one flat line at
+	# the lowest opaque row, which is exactly the behaviour before the ground line.
+	_shadow_mat.set_shader_parameter("ground_tex",
+		_ground_tex if _ground_tex != null else _flat_ground())
 	_shadow.set_surface_override_material(0, _shadow_mat)
 	_stage.add_child(_shadow)
 	# Position belongs to `_update_shadow` now, not here: the contact point moves
@@ -2059,20 +2236,30 @@ func _update_shadow() -> void:
 	# projection, and a body further off the ground does not lean less.
 	var wide: float = 1.0 - f * 0.26
 	var long: float = 1.0 - f * 0.5
-	# Shear and shrink in ONE basis. Node3D.scale is DERIVED from the basis, so
-	# assigning it after a sheared basis re-orthonormalises and silently throws
-	# the shear away — the shadow then stands straight up behind the creature.
-	var shear: Basis = Basis.IDENTITY
-	shear.x = Vector3(wide, 0.0, 0.0)
-	shear.y = Vector3(clampf(l.x * run, -1.2, 1.2) * long, run * long, 0.0)
-	_shadow.transform.basis = \
-		Basis(Vector3.RIGHT, deg_to_rad(-GROUND_TILT_DEG)) * shear
-	# The hinge stays on the ground line and the CAST slides out from it: that is
-	# what separation means. `_art_pad` only sets where the hinge sits inside the
-	# framing border; it is not a height and no longer behaves like one.
+	# The shear the basis used to carry, handed to the vertex stage — where it can
+	# be applied about each column's own contact rather than about one origin.
+	_shadow_mat.set_shader_parameter("cast_run", run * long)
+	_shadow_mat.set_shader_parameter("cast_lean",
+		clampf(l.x * run, -1.2, 1.2) * long)
+	_shadow_mat.set_shader_parameter("cast_wide", wide)
+	# Put the mesh's contact origin back onto the body's own foot line, so the
+	# projection starts where the creature meets the ground and the CAST slides
+	# out from there: that is what separation means. This pairs with the
+	# `center_offset` in `_build_shadow` — the two must move together or the
+	# silhouette shifts off the body by exactly the offset applied to one of them.
+	#
+	# `_hover_rest` DROPS that line, and this is the half of `dy` that was missing.
+	# The ground line is read off the silhouette's lowest opaque row, which for a
+	# creature painted already airborne is not a contact at all — it is the bottom
+	# of a hovering body. `dy` is the one number that says so, and saying so has to
+	# mean the ground is that much lower. It was only sliding the cast sideways
+	# along the light's track, which is the other half and, under a camera looking
+	# dead on, the weaker cue of the two: `watcherEye`'s shadow hung off its own
+	# tassels. The LIVE part of the hover is deliberately left out — a body driven
+	# up by the idle moves away from a ground that stays where it is.
 	_shadow.position = Vector3(
 		(_contact_u - 0.5) * _quad_w + hover * l.x * run,
-		-_box_u * 0.5 + _art_pad * 0.15, 0.0)
+		-_box_u * 0.5 + _art_pad - _hover_rest, 0.0)
 	_shadow_mat.set_shader_parameter("opacity",
 		_shadow_opacity * _shadow_fade * (1.0 - f * 0.55))
 	_shadow_mat.set_shader_parameter("softness", 1.0 + f * 1.87)
@@ -2426,9 +2613,9 @@ func _read_idle(entry: Dictionary) -> void:
 ## derive, and it survives because it is the only one that is not derivable.
 ## Contact point, lean, length and softening all fall out of the painting's own
 ## alpha and the key light. `dy` says the thing the alpha cannot: this painting
-## was made of a creature that is ALREADY off the ground. Exactly five carry it,
-## and they are exactly the floaters — `watcherEye` 24, `shade` 16, `voltEel` 13,
-## `sporeling` 10, `voidWisp` 9 (`src/char-meta.js:44-55`).
+## was made of a creature that is ALREADY off the ground. Five carry it in the
+## benchmark, and they are exactly its floaters — `watcherEye` 24, `shade` 16,
+## `voltEel` 13, `sporeling` 10, `voidWisp` 9 (`src/char-meta.js:44-55`).
 ##
 ## Read here as a RESTING HEIGHT, not as the downward nudge it is over there.
 ## CSS has no projection, so `dy` could only shove the darkened copy straight
@@ -2436,6 +2623,15 @@ func _read_idle(entry: Dictionary) -> void:
 ## enters, and the shadow lands offset, smaller, fainter and softer the way an
 ## airborne creature's does. One authored number instead of nine, doing the job
 ## the other eight were approximating.
+##
+## `thornling` carries a SIXTH, at 9, and it is a deliberate deviation rather than
+## a transcription: the benchmark gives it `{ ox: 51, oy: 91 }` and no `dy`, so
+## over there it is a plant that runs the `float` idle while standing on the
+## floor. Judged on the stage and called wrong — a plant that bobs but never
+## leaves is the one creature on the roster whose animation and footing disagree.
+## 9 rather than `sporeling`'s 10 because `SHADOW_MAX` caps the kind at 10 and a
+## `dy` sitting on the cap leaves the bob no room to read. Removing the number
+## restores parity exactly; nothing else in the port depends on it.
 func _read_hover(entry: Dictionary) -> void:
 	var sh: Dictionary = entry.get("shadow", {})
 	var dy: float = sh.get("dy", 0.0)

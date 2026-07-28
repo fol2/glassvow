@@ -234,7 +234,7 @@ whose extension the old resolver had been matching.
 The `(in set_profile)` case I could **not** confirm, and the honest thing is to
 say so rather than repeat it. There is no `(in set_profile)` annotation in
 `docs/` or `CONCEPTS.md` at any of the four commits; the only `set_profile`
-annotation on the branch is `` `enemy_view.gd:2449` (`set_profile`) `` at
+annotation on the branch is `` `enemy_view.gd:2645` (`set_profile`) `` at
 `docs/solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md:172`,
 and that one is correct — `func set_profile` is at
 `presentation/combat/enemy_view.gd:2449`. The likeliest reading is that the
@@ -263,7 +263,7 @@ of "verified".
 **A correction to this session's own record, arrived at by doing what this
 document asks.** The `ca841a0` commit message states that prefix matching was
 what let one live citation stay wrong: `docs/glass-crack-rendering.md` put
-`_rng` at `:200`, and it is at `:460`. The citation was indeed wrong —
+`_rng` at `presentation/combat/enemy_view.gd:200`, and it is at `presentation/combat/enemy_view.gd:460`. The citation was indeed wrong —
 `presentation/combat/enemy_view.gd:200` is `const WARD_OPACITY` and
 `var _rng` is at `presentation/combat/enemy_view.gd:460`. But the attribution
 does not hold. Running the *pre-change* `find_symbol` against the *pre-change*
@@ -296,9 +296,10 @@ The honest limits:
 
 - **Leave anchors that span more than one declaration unannotated.** This is a
   decision, not a gap. `combat_screen.gd:14-27` covers four consts — `GROUND_Y`
-  (`presentation/combat/combat_screen.gd:21`), `LEDGE_LIP` (`:23`), `STAGE`
-  (`:26`) and `STAGE_ART` (`:27`) — and has no single symbol to name. It is
-  cited twice, at `docs/actor-animation-checklist.md:547` and `:696`. Forcing an
+  (`presentation/combat/combat_screen.gd:21`), `LEDGE_LIP` (`presentation/combat/combat_screen.gd:23`), `STAGE`
+  (`presentation/combat/combat_screen.gd:26`) and `STAGE_ART`
+  (`presentation/combat/combat_screen.gd:27`) — and has no single symbol to name. It is
+  cited twice, at `docs/actor-animation-checklist.md:547` and `docs/actor-animation-checklist.md:696`. Forcing an
   annotation would mean picking one const arbitrarily and certifying a range that
   is mostly about the other three.
 - **`--strict` is not a target to drive to zero.** 88 anchors remain uncheckable
@@ -415,10 +416,10 @@ agree 0 | disagree 3 | structural-only 60 | prose-only 0 | neither 25
 `agree 0` is the expected residue and a good sign: everything the two gates
 could agree on was already written. The three disagreements are instructive
 rather than actionable. `enemy_view.gd:41-43` is a worked case — the structural
-scan from `:41` hits `const PREVIEW_WARM` at
-`presentation/combat/enemy_view.gd:40` first, because `:41` is the `##` line
+scan from line 41 hits `const PREVIEW_WARM` at
+`presentation/combat/enemy_view.gd:40` first, because line 41 is the `##` line
 belonging to the *next* const; the prose says `PREVIEW_PULSE`, declared at
-`:42`. But `PREVIEW_PULSE`'s span is only `:41-42`, and the anchor runs to `:43`
+line 42. But its span is only lines 41-42, and the anchor runs to line 43
 (`PREVIEW_DIP`). Neither annotation verifies, because the range covers two
 declarations, so this one belongs in the deliberately-bare set rather than in the annotate
 pile. It is not quite the `combat_screen.gd:14-27` shape — that range *encloses*
@@ -490,7 +491,7 @@ holding only a matching string and a matching call, while `GAME_SCENE_PATH`,
 Four of the ten hand-fixed skips were this shape, and this one is
 `docs/solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md:50-51`.
 The annotation was correct all along — `start_encounter` is declared at
-`presentation/combat/combat_screen.gd:1022` and `:1049` is
+`presentation/combat/combat_screen.gd:1022` and line 1049 is
 `_hero.set_profile("rogue")`, comfortably inside it — but because the checker
 walks documents line by line (`tools/check_anchors.py:217`), the symbol on the
 next line did not exist as far as the anchor was concerned. It was counted among
