@@ -438,8 +438,8 @@ the measurement, and a floor quoted without the capture conditions that produced
 it says nothing.
 
 ### Anchor
-A citation in prose that names both a file and a line, and therefore makes a
-claim that can rot silently the moment anyone edits above it.
+A citation in prose that names a code file and a symbol, optionally with a line
+or range; the optional location can rot silently when code moves.
 
 Anchors are checked mechanically rather than trusted, because the failure is
 invisible from the prose side: the sentence still reads correctly while the line
@@ -548,10 +548,10 @@ desktop briefly. The saving is *per photograph*: one interruption a session
 rather than one a shot, not an absence of one.
 
 A host re-reads the project's code and rebuilds the screen on demand, which is
-what lets it outlive an edit, and two consequences follow. Whatever run was in
-progress is discarded by every rebuild — that is what makes a capture
-reproducible rather than dependent on how the screen was reached. And a name
-that did not exist when the host started cannot be adopted by a rebuild, so
+what lets it outlive an edit, and two consequences follow. A rebuild discards
+scene-local run state, but a production route may immediately restore a durable
+checkpoint, so reproducibility requires a declared route or disposable profile.
+And a name that did not exist when the host started cannot be adopted, so
 introducing one is the edit that still costs a restart. A rebuild that cannot
 re-read a script reports the refusal rather than the success: the alternative is
 photographing stale code while believing it fresh.

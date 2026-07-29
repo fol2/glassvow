@@ -1,6 +1,7 @@
 ---
 title: Check what the shared tree already landed before extending a shared document
 date: 2026-07-27
+last_refreshed: 2026-07-29
 category: workflow-issues
 module: docs
 problem_type: workflow_issue
@@ -25,7 +26,7 @@ tags:
 ## Context
 
 This repo is worked by several lanes at once, and `CONCEPTS.md`, `AGENTS.md`
-and `docs/` are the files every lane wants to append to. `docs/session-ownership.md:62-63`
+and `docs/` are the files every lane wants to append to. `docs/session-ownership.md:69-70`
 already names the hazard in one line: those files are "append-only in practice.
 Two lanes appending in the same minute will conflict."
 
@@ -65,9 +66,10 @@ exactly the files every lane edits.
 
 ```bash
 git fetch --quiet
-MB=$(git merge-base HEAD main)
-git log --oneline "$MB"..main -- CONCEPTS.md        # has this entry moved?
-git show main:CONCEPTS.md | sed -n '/^### Anchor/,/^### /p'
+UPSTREAM=origin/main
+MB=$(git merge-base HEAD "$UPSTREAM")
+git log --oneline "$MB".."$UPSTREAM" -- CONCEPTS.md # has this entry moved?
+git show "$UPSTREAM":CONCEPTS.md | sed -n '/^### Anchor/,/^### /p'
 ```
 
 **When the shared tree already carries your finding, do not land your version.**
@@ -83,10 +85,11 @@ editing different regions of the same file merge cleanly. Get the real answer
 per file:
 
 ```bash
-MB=$(git merge-base HEAD main)
-for f in $(comm -12 <(git diff --name-only "$MB" main | sort) \
+UPSTREAM=origin/main
+MB=$(git merge-base HEAD "$UPSTREAM")
+for f in $(comm -12 <(git diff --name-only "$MB" "$UPSTREAM" | sort) \
                     <(git diff --name-only "$MB" HEAD | sort)); do
-  git show "$MB:$f" > /tmp/base; git show "HEAD:$f" > /tmp/ours; git show "main:$f" > /tmp/theirs
+  git show "$MB:$f" > /tmp/base; git show "HEAD:$f" > /tmp/ours; git show "$UPSTREAM:$f" > /tmp/theirs
   if git merge-file -p --quiet /tmp/ours /tmp/base /tmp/theirs >/dev/null 2>&1
   then echo "CLEAN     $f"
   else echo "CONFLICT  $f  ($(git merge-file -p /tmp/ours /tmp/base /tmp/theirs 2>/dev/null | grep -c '^<<<<<<<') hunk)"
@@ -137,9 +140,10 @@ The honest limits:
 - **A clean `merge-file` is not a clean merge.** It says the text reconciles,
   not that the result is coherent — two lanes can edit different paragraphs of
   one entry and produce a contradiction that no tool flags.
-- **`git fetch` is required for any of this to mean anything.** Every command
-  above compares against a local ref; against a stale `main` they all report
-  reassuring nonsense.
+- **`git fetch` is required for any of this to mean anything.** The commands
+  above deliberately compare against the fetched remote-tracking ref
+  `origin/main`; comparing against a stale local `main` would report reassuring
+  nonsense.
 
 ## Examples
 

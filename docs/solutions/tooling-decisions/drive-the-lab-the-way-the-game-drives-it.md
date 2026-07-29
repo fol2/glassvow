@@ -1,6 +1,7 @@
 ---
 title: "Drive the lab the way the game drives it, and photograph loops as well as beats"
 date: 2026-07-27
+last_refreshed: 2026-07-29
 category: tooling-decisions
 module: presentation/lab
 problem_type: tooling_decision
@@ -54,10 +55,10 @@ and `presentation/combat/combat_screen.gd:1263` (in `start_encounter`) calls
 `_hero.set_profile("rogue")` for the player. Without that call an actor keeps the
 profile it is constructed with, and the construction default is not neutral —
 `_read_idle` ends by calling `_resolve_profile(&"humanoid")`
-(`presentation/combat/enemy_view.gd:2631` (`_read_idle`)), and
+(`presentation/combat/enemy_view.gd:2642` (`_read_idle`)), and
 `_resolve_profile` falls back to
 `IDLE_PROFILES[&"humanoid"]` for any kind it does not know
-(`presentation/combat/enemy_view.gd:2674` (`_resolve_profile`)). So every
+(`presentation/combat/enemy_view.gd:2685` (`_resolve_profile`)). So every
 creature on the sheet — every slime, serpent, wisp and golem — hovered, swayed,
 breathed and cast its shadow as a humanoid. The sheet was not showing a wrong
 number. It was showing an idle that no fight has ever run.
@@ -74,11 +75,12 @@ hiding.
 
 **A whole category of behaviour had no capture mode.** Every pre-existing strip
 photographs a *beat* — a one-shot animation with a start, a peak and an end. The
-frame tables say so in their own comments: `RITE_FRAMES`
-(`presentation/lab/enemy_lab.gd:1431` (`RITE_FRAMES`)), `HIT_FRAMES`
-(`:1374` (`HIT_FRAMES`), clustered early because the flash peaks at 90 ms),
-`CRACK_FRAMES` (`:1379` (`CRACK_FRAMES`)), `WARD_FRAMES`
-(`:1386` (`WARD_FRAMES`)), `ENTER_FRAMES` (`:1389` (`ENTER_FRAMES`)). An
+frame tables say so in their own comments:
+`presentation/lab/enemy_lab.gd` (`RITE_FRAMES`),
+`presentation/lab/enemy_lab.gd` (`HIT_FRAMES`, clustered early because the
+flash peaks at 90 ms), `presentation/lab/enemy_lab.gd` (`CRACK_FRAMES`),
+`presentation/lab/enemy_lab.gd` (`WARD_FRAMES`) and
+`presentation/lab/enemy_lab.gd` (`ENTER_FRAMES`). An
 **idle** is not a beat. It is a loop with no start and no end, and nothing in the
 lab sampled a loop. That is not a coincidence of coverage; it is the reason the
 gap survived. The benchmark's entire per-kind idle layer was absent from the port,
@@ -149,15 +151,16 @@ floaters (wisp 3.1s/16px, eye 3.4s/18px, siren and shade 3.6s/12px, plant
 `scaleY 1.025` on beast, rogue, cultist, knight, zombie and crawler — plus
 `.idle-motes`, two drifting spores on wisps and plants only. (Those names are the
 reference's; the port's equivalents are reached through `set_profile`.) None of it
-was in the port. It is now, at the source's own numbers: `KIND_IDLE`
-(`presentation/combat/enemy_view.gd:564`), `KIND_IDLE_PERIOD` (`:570`),
-`KIND_FLOAT_PX` (`:576`),
-`SLIME_AT` / `SLIME_Y` / `SLIME_SX` (`:584-586`), `SWAY_X` / `SWAY_DEG` /
-`BREATHE_SY` (`:587-589`), composed onto the vessel at
-`presentation/combat/enemy_view.gd:2340-2385` (in `_process`), with the spores
-as their own Control (`presentation/combat/idle_motes.gd:1` (`IdleMotes`)),
-built on demand by `_sync_motes` at
-`presentation/combat/enemy_view.gd:2696` (`_sync_motes`).
+was in the port. It is now, at the source's own numbers:
+`presentation/combat/enemy_view.gd` (`KIND_IDLE`),
+`presentation/combat/enemy_view.gd` (`KIND_IDLE_PERIOD`),
+`presentation/combat/enemy_view.gd` (`KIND_FLOAT_PX`),
+`presentation/combat/enemy_view.gd` (`SLIME_AT`),
+`presentation/combat/enemy_view.gd` (`SWAY_X`) and
+`presentation/combat/enemy_view.gd` (`BREATHE_SY`), composed onto the vessel in
+`presentation/combat/enemy_view.gd` (`_process`), with the spores as their own
+Control (`presentation/combat/idle_motes.gd` (`IdleMotes`)), built on demand by
+`presentation/combat/enemy_view.gd` (`_sync_motes`).
 
 Note where that list came from. It was found by reading the reference stylesheet —
 the method [`audit-port-by-enumerating-reference-css.md`](../workflow-issues/audit-port-by-enumerating-reference-css.md)
@@ -167,12 +170,12 @@ cannot report that there are four idle shapes and it is showing one of them.
 
 **And the third instance, which is the one that shows why stills are not enough.**
 The actor's cast shadow is an analytic projection of the silhouette along the key
-light (`presentation/combat/enemy_view.gd:2235` (`_update_shadow`)) — a derived
+light (`presentation/combat/enemy_view.gd:2246` (`_update_shadow`)) — a derived
 replacement for the
 benchmark's nine hand-authored CSS knobs, and structurally correct as such. It had
 plausible lift-response coefficients. It also never ran: `_update_shadow` was
 called from `_build_shadow`
-(`presentation/combat/enemy_view.gd:2173` (`_build_shadow`)), from the
+(`presentation/combat/enemy_view.gd:2184` (`_build_shadow`)), from the
 reset path, and from two lab-bench setters that no fight ever reaches — and from
 nothing else, while the benchmark resynchronises its darkened copy against the
 body's live transform on every frame of its rig loop. That the only other callers
@@ -240,9 +243,9 @@ site end to end and list every method it invokes on the subject between
 construction and first paint, and the value it passes to each. That pair — call
 and argument — is the harness's contract. Here it was one
 call — `set_profile`
-(`presentation/combat/enemy_view.gd:2669` (`set_profile`)) — and the sheet's
+(`presentation/combat/enemy_view.gd:2680` (`set_profile`)) — and the sheet's
 own comment now names the production line it mirrors
-(`presentation/lab/enemy_lab.gd:410-414`, in `_actor`) so the next divergence
+(`presentation/lab/enemy_lab.gd` (in `_actor`)) so the next divergence
 is a diff rather than an archaeology.
 
 The check is cheap and mechanical: `grep` the subject's public methods against
@@ -267,12 +270,12 @@ plausible effect, and nobody notices at all.
 
 An intentional difference is fine — the lab
 deliberately skips the seat delay in `--enter` because one actor cannot show a
-stagger (`presentation/lab/enemy_lab.gd:1296-1304`, in `_ready`) — but it has
+stagger (`presentation/lab/enemy_lab.gd` (in `_ready`)) — but it has
 to be written down as a decision, not left as an omission.
 
 Note the shape of the failure that makes this necessary: `_resolve_profile` falls
 back to the humanoid profile for an unknown kind rather than erroring
-(`presentation/combat/enemy_view.gd:2674` (`_resolve_profile`)), and
+(`presentation/combat/enemy_view.gd:2685` (`_resolve_profile`)), and
 `KIND_IDLE.get(kind, &"")` returns a benign empty value. A tolerant default is
 right for production and is exactly what makes a missing call silent in a
 harness.
@@ -319,8 +322,8 @@ the existing tooling made the wrong answer look like a house convention.
 
 Three of the lab's five original strips slow the engine clock — `crack`, `enter`
 and `ward`, each assigning `Engine.time_scale = CRACK_SLOMO`
-(`presentation/lab/enemy_lab.gd:1287`, `:1300`, `:1319`, all in `_ready`), with
-`CRACK_SLOMO: float = 0.06` (`:1382` (`CRACK_SLOMO`)) — and
+(`presentation/lab/enemy_lab.gd` (in `_ready`)), with
+`presentation/lab/enemy_lab.gd` (`CRACK_SLOMO`) set to `0.06` — and
 convert their BEAT-time frame tables to wall time by dividing. (`rite` and `hit`
 do not: their frame tables are already in real seconds.) They must, because a strip cell costs a
 full-frame GPU readback while a crack front is over in about 170 ms; sampled at
@@ -329,7 +332,7 @@ Stretching the beat is what makes six cells fit.
 
 That trick does not reach the idle. The kind-idle clock is
 `Time.get_ticks_msec()` — `var t: float = Time.get_ticks_msec() * 0.001 + _phase`
-at `presentation/combat/enemy_view.gd:2318` (in `_process`), which is what the four
+in `presentation/combat/enemy_view.gd` (in `_process`), which is what the four
 shapes are phased against in the same block. `Engine.time_scale` scales
 `delta`; it does not touch the monotonic millisecond counter. Setting
 `time_scale = 0.06` and sampling six frames would have photographed the same
@@ -441,8 +444,8 @@ actor entrance had been running **two** concurrent animations — one moving the
 body inside its 3D sub-viewport with the correct stagger, one moving the whole
 Control with the correct curve and the chrome — and neither looked broken in a
 still. That is now one function:
-`presentation/combat/enemy_view.gd:2847` (`enter`) owns the motion and the fill,
-`presentation/combat/combat_screen.gd:1134` (`_play_entrance`) owns the seat
+`presentation/combat/enemy_view.gd:2858` (`enter`) owns the motion and the fill,
+`presentation/combat/combat_screen.gd:1353` (`_play_entrance`) owns the seat
 delay and the re-anchor. It was found the same way, by giving a category of
 behaviour an instrument and then reading a number off it.
 
@@ -494,7 +497,7 @@ view.position = Vector2(x + view.foot.x, ground - view.size.y - view.foot.y)
 ```
 
 `EnemyView`'s construction path resolves the humanoid profile
-(`presentation/combat/enemy_view.gd:2631` (`_read_idle`)), so `gloomslime` —
+(`presentation/combat/enemy_view.gd:2642` (`_read_idle`)), so `gloomslime` —
 `art.kind == "slime"`,
 whose profile is `sway .55, bob .55, breathe 1.35, head 0, pin 1.2, float .25`
 (`presentation/combat/enemy_view.gd:520`) — rendered with `sway 1.0, bob 1.0,
@@ -503,7 +506,7 @@ float 0` and no kind idle at all. After, one line reproduces what
 `presentation/combat/combat_screen.gd:1263` (in `start_encounter`) does, and
 the comment above it
 names that line so the two can be diffed rather than rediscovered
-(`presentation/lab/enemy_lab.gd:410-414`, in `_actor`).
+(`presentation/lab/enemy_lab.gd` (in `_actor`)).
 
 ### Why `--idle` could not be a slowed strip
 
@@ -511,7 +514,7 @@ The pattern every other strip follows, and the one that would have failed here:
 
 ```gdscript
 # WRONG for the idle. `Engine.time_scale` scales `delta`; the kind-idle clock is
-# `Time.get_ticks_msec()` (presentation/combat/enemy_view.gd:2318, in `_process`),
+# `Time.get_ticks_msec()` (`presentation/combat/enemy_view.gd` (in `_process`)),
 # which it cannot reach. Six cells
 # would photograph the same instant six times and read as a still creature.
 Engine.time_scale = CRACK_SLOMO  # 0.06 — presentation/lab/enemy_lab.gd:1382
@@ -524,8 +527,8 @@ await _shoot_strip(wall, "idle", ...)
 What is in the tree instead — real time, six cells spaced 0.84s apart across one
 full 4.2s `idleSlime` period, wide enough that a viewport readback per cell keeps
 up without any clock trickery
-(`presentation/lab/enemy_lab.gd:1306-1313`, in `_ready`, against
-`IDLE_FRAMES` at `presentation/lab/enemy_lab.gd:1469` (`IDLE_FRAMES`)):
+(`presentation/lab/enemy_lab.gd` (in `_ready`), against
+`presentation/lab/enemy_lab.gd` (`IDLE_FRAMES`)):
 
 ```gdscript
 await _shoot_strip(IDLE_FRAMES, "idle", func(_v: EnemyView) -> void: pass)
@@ -578,8 +581,8 @@ measures nothing:
 > already measured the gap.
 
 The scan was real
-(`presentation/combat/enemy_view.gd:2053` (`_read_contact`)), the projection
-was real (`presentation/combat/enemy_view.gd:2235` (`_update_shadow`)), and the
+(`presentation/combat/enemy_view.gd:2064` (`_read_contact`)), the projection
+was real (`presentation/combat/enemy_view.gd:2246` (`_update_shadow`)), and the
 quantity was a framing border rather than a gap
 (`presentation/combat/enemy_view.gd:2063`, in `_read_contact`; the variable is
 now named `_art_pad` at `presentation/combat/enemy_view.gd:738` for exactly
@@ -626,17 +629,17 @@ to make the body rise on a surface anyone was photographing.
 - `CONCEPTS.md` › **Lab** — where the vocabulary lives. This learning records
   the production-driving, capture-mode, timebase and exposure constraints that
   make a Lab trustworthy.
-- `docs/actor-animation-checklist.md` — §1.1 Entrance (`:42`), §1.2 Idle (`:67`,
-  with the two lab defects at `:119-125`) and §2 Cast shadow (`:269`). The ledger
+- `docs/actor-animation-checklist.md` — §1.1 Entrance, §1.2 Idle and §2 Cast
+  shadow. The ledger
   these corrections landed in.
 - `presentation/lab/enemy_lab.gd` — the harness: the profile call
-  (`:404` (`_actor`), `:414`), the strip dispatch (`:1269` (`_ready`)), the
-  frame tables (`:1371-1394`) and the shared capture loop
-  (`:1400` (`_shoot_strip`), with the wall-clock wait at `:1439-1448`).
-- `presentation/combat/enemy_view.gd` — the subject: `set_profile`
-  (`:2651` (`set_profile`)), the two clocks in one `_process`
-  (`:2301` (`_process`), wall clock at `:2318`, `delta` at `:2333`), the kind
-  idle (`:2340-2366`) and the per-frame shadow resync (`:2385`).
+  (`presentation/lab/enemy_lab.gd` (`_actor`)), the strip dispatch
+  (`presentation/lab/enemy_lab.gd` (`_ready`)), the frame tables and the shared
+  capture loop (`presentation/lab/enemy_lab.gd` (`_shoot_strip`)).
+- `presentation/combat/enemy_view.gd` — the subject:
+  `presentation/combat/enemy_view.gd` (`set_profile`), the two clocks and kind
+  idle in `presentation/combat/enemy_view.gd` (`_process`), and the per-frame
+  shadow resync in `presentation/combat/enemy_view.gd` (`_update_shadow`).
 - Commits reachable from `main` that carry this learning: `bf7b751`
   (`feat(actors): the shadow answers the height, and the floaters have one`) and
   `df3cc64` (`feat(actors): the rest of the kind idle, and one entrance instead of

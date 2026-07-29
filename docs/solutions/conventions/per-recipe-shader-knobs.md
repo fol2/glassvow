@@ -1,6 +1,7 @@
 ---
 title: Tune one card-surface recipe with a per-recipe uniform, never the shared model
 date: 2026-07-26
+last_refreshed: 2026-07-29
 category: conventions
 module: presentation/combat/card_surface
 problem_type: convention
@@ -25,8 +26,8 @@ handful of names; the catalogue behind them is much wider.
 The trap is that a request always arrives named after a *recipe* ("make nebula's
 cosmos deeper"), while the code that produces the effect lives in a *shared
 helper*. `confetti()` in `card_surface.gdshader:220` is called by every finish
-with `sparkle > 0` — five of the fourteen `FINISH` entries: `metallic`,
-`pearlescent`, `prismatic`, `cosmos`, `cosmos-art`.
+with `sparkle > 0` — six of the fifteen `FINISH` entries: `metallic`,
+`pearlescent`, `prismatic`, `cosmos`, `cosmos-art`, `aurora`.
 
 On 2026-07-25 five commits were reverted for walking into exactly that. Depth,
 murk, glow, herding, a size-tearing term, and a room-vs-lamp radiance ratio were
@@ -70,13 +71,14 @@ Four rules, all load-bearing:
    have decided not to look at.
 
 2. **Add the key to every `FINISH` entry, not just the ones you are changing.**
-   `params()` (`card_surface.gd:422` (`params`)) asserts the four layers own disjoint keys,
+   `params()` (`presentation/combat/card_surface.gd:437` (`params`)) asserts the four layers own disjoint keys,
    and `apply()` reads `p[key]` with a strict index — a missing key is a hard
    crash at load, not a silent default. Both are guardrails; feed them.
 
 3. **Set a non-zero value only on the recipes named in the request.** In
    `card_surface.gd` today, `flake_deep`/`flake_wake` are non-zero on exactly
-   two entries — `cosmos` and `cosmos-art`. The other twelve read `0.0, 0.0`.
+   three entries — `cosmos`, `cosmos-art` and `aurora`. The other twelve read
+   `0.0, 0.0`.
    That column is reviewable at a glance, which is the point.
 
 4. **Prove the untouched recipes did not move beyond the shader-edit floor.**
@@ -160,6 +162,7 @@ vec3 confetti(vec2 p, float pitch, float edge, float soft, float lobe,
 "pearlescent":{ ..., "flake_deep": 0.0, "flake_wake": 0.0, "mask": 0, },
 "cosmos":     { ..., "flake_deep": 3.0, "flake_wake": 1.0, "mask": 0, },
 "cosmos-art": { ..., "flake_deep": 3.0, "flake_wake": 1.0, "mask": 2, },
+"aurora":     { ..., "flake_deep": 4.0, "flake_wake": 1.0, "mask": 0, },
 ```
 
 ```gdscript
@@ -171,7 +174,8 @@ for key: String in ["ink", "ink_tint", ..., "sparkle", "flake_px",
 
 ### Proving the others did not move
 
-`card_view.gd:941` exposes three environment hooks for held-pose renders:
+`presentation/combat/card_view.gd:991-1009` (in `_ready`) exposes three
+environment hooks for held-pose renders:
 `GLASSVOW_TILT="nx,ny"` holds a pose, `GLASSVOW_LAMP="x,y[,gain]"` stands the
 lamp somewhere fixed, and `GLASSVOW_DUMP=<prefix>` writes
 `<prefix>_inner_<uid>.png` and `<prefix>_stage_<uid>.png`.
@@ -194,7 +198,8 @@ two runs takes the desktop for about a second. Here that is unavoidable rather
 than merely tolerated, because the recipe genuinely needs two processes (below).
 
 Do **not** reach for `tools/live.sh` here. The hooks are read once from the
-process environment (`card_view.gd:946-963`), so a single host cannot change its
+process environment (`presentation/combat/card_view.gd:991-1009` (in `_ready`)),
+so a single host cannot change its
 dump prefix between the before and after builds — this recipe genuinely needs
 two processes. See
 [Capture through a long-lived host](../tooling-decisions/long-lived-capture-host-not-process-per-shot.md)

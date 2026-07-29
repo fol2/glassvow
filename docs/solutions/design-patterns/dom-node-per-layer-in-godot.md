@@ -1,7 +1,7 @@
 ---
 title: Web ports carry DOM node-per-layer thinking into Godot
 date: 2026-07-26
-last_refreshed: 2026-07-28
+last_refreshed: 2026-07-29
 category: design-patterns
 module: presentation/combat
 problem_type: design_pattern
@@ -38,7 +38,7 @@ without naming either — the omission is harmless only until someone resolves i
 against the wrong tree, which this project has already done once, for three
 commits.
 
-At [presentation/combat/hud_bar.gd:104](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
+At [presentation/combat/hud_bar.gd:130](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
 to **48 Control nodes** — each with its own transform, style cache and layout
 slot — all drawing the *identical* texture.
@@ -76,7 +76,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[presentation/combat/hud_bar.gd:964-967](../../../presentation/combat/hud_bar.gd#L964) (in `_sync_pile`):
+[presentation/combat/hud_bar.gd:966-969](../../../presentation/combat/hud_bar.gd#L966) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -115,7 +115,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([presentation/combat/hud_bar.gd:915](../../../presentation/combat/hud_bar.gd#L955) (`_fan_angle`)).
+  resolves ([presentation/combat/hud_bar.gd:973](../../../presentation/combat/hud_bar.gd#L973) (`_fan_angle`)).
 
 ## Why This Matters
 
@@ -191,7 +191,7 @@ unconverted instance. A count is a claim like any other, and this one was never
 checked because it read as scene-setting rather than as an assertion.
 
 **Added 2026-07-28 — a third node, and it is not an exemption because the rule
-never covered it.** `_place_widget` (`presentation/combat/hud_bar.gd:1047`) now
+never covered it.** `_place_widget` (`presentation/combat/hud_bar.gd:1048`) now
 wraps every chrome widget in one extra `Control` whose only job is to carry a
 scale, so a widget drawn at its identity-shape size lands in whatever box the
 layout book gives it on a phone. A reader who arrives from this document will

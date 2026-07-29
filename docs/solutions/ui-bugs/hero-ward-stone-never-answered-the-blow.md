@@ -1,6 +1,7 @@
 ---
 title: "The hero's ward stone never answered a blow it stopped, because only one of two mirrored branches made the call"
 date: 2026-07-27
+last_refreshed: 2026-07-29
 category: ui-bugs
 module: presentation/combat/combat_screen
 problem_type: ui_bug
@@ -33,7 +34,7 @@ Two calls fire together when a warded creature eats a blow, and they are
 deliberately two:
 
 - `take_hit(direct)` — the BODY recoiling from being struck.
-- `ward_hit(from)` (`presentation/combat/enemy_view.gd:2508` (`ward_hit`)) — the
+- `ward_hit(from)` (`presentation/combat/enemy_view.gd:2519` (`ward_hit`)) — the
   STONE answering for having stopped it: it rings the facets facing the blow and
   drives the shield back along it.
 
@@ -46,7 +47,7 @@ docstring says why, in as many words:
 > first, and calling this on one is a no-op rather than a caller's problem.
 
 That last clause is real: the function returns immediately when there is no stone
-(`presentation/combat/enemy_view.gd:2496-2497`, in `ward_hit`), so the call is safe to
+(`presentation/combat/enemy_view.gd:2520-2521`, in `ward_hit`), so the call is safe to
 make unconditionally on any actor.
 
 The combat sequencer has two mirrored paths for the same beat: `_hit_enemy` is the
@@ -180,11 +181,11 @@ scaled by the decaying ring and `WARD_FLINCH`
 `presentation/combat/enemy_view.gd:249` (`WARD_FLINCH`)) and applied to
 `_ward_root.position` on top of the vessel's own motion — and it lights the
 facets ON that side, through the shader's `hit_from` uniform
-(`presentation/combat/enemy_view.gd:1233` (`hit_from`)) weighting the ring term
+(`presentation/combat/enemy_view.gd:1238` (`hit_from`)) weighting the ring term
 by `dot(axis, -hit_from)` (`presentation/combat/enemy_view.gd:1418`).
 
 `ward_hit`'s default is `Vector2.LEFT`
-(`presentation/combat/enemy_view.gd:2508` (`ward_hit`)), correct for a foe struck
+(`presentation/combat/enemy_view.gd:2519` (`ward_hit`)), correct for a foe struck
 by the hero, who stands on the foe's left. The hero is struck from the RIGHT.
 Passing the default would have driven the hero's stone INTO the blow — a wrong
 value that still renders as a plausible effect, which is the failure mode that
@@ -218,8 +219,8 @@ The work landed directly on `main` — there is no PR — in
 
 The stone's response is a single decaying scalar plus a direction, and both are
 set by the one call. `ward_hit` writes `_ward_hit = 1.0` and normalises `from`
-into `_ward_from` (`presentation/combat/enemy_view.gd:2498-2499`, in `ward_hit`).
-`_step_ward` (`presentation/combat/enemy_view.gd:2563` (`_step_ward`)) then does
+into `_ward_from` (`presentation/combat/enemy_view.gd:2522-2523`, in `ward_hit`).
+`_step_ward` (`presentation/combat/enemy_view.gd:2574` (`_step_ward`)) then does
 everything else on its own clock: it decays `_ward_hit` linearly by
 `delta / WARD_RING`, offsets `_ward_root` along `-_ward_from`, and pushes the
 squared value to the shader

@@ -1,6 +1,7 @@
 ---
 title: Annotate a citation only where structure and prose agree, never from the tree alone
 date: 2026-07-27
+last_refreshed: 2026-07-29
 category: workflow-issues
 module: docs/anchors
 problem_type: workflow_issue
@@ -59,8 +60,8 @@ dangerous case (`tools/check_anchors.py`'s module docstring).
 Before this work, `--strict` reported **226** anchors carrying no symbol. I ran
 the pre-change checker from a throwaway worktree at `ca841a0~1` to confirm the
 number rather than take it from a commit message; it prints
-`226 anchor(s) carry no symbol and cannot be drift-checked`. On the current
-branch it prints **88**. (The audit's own working set was 225 — per the
+`226 anchor(s) carry no symbol and cannot be drift-checked`. On the audit branch
+at the end of that pass it printed **88**. (The audit's own working set was 225 — per the
 `cef9c99` commit message — one fewer than the checker's finding count.)
 
 Adding the missing annotations reads like pure coverage improvement: 226
@@ -143,7 +144,7 @@ still find in the tree and should special-case by hand:
   now reads:
 
   ```markdown
-  At [hud_bar.gd:104 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
+  At [hud_bar.gd:130 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
   ```
 
   and `FAN_FACES` is indeed declared at `presentation/combat/hud_bar.gd` (`FAN_FACES`).
@@ -156,7 +157,7 @@ still find in the tree and should special-case by hand:
   the two numbers (`tools/check_anchors.py` (`ANCHOR`)), so it does not fail loudly — it
   matches the start and *silently discards the end*. That one was rewritten to
   ASCII and annotated: `docs/assembly-integration-plan.md:204` cites
-  `rewards.gd:73-79` (in `gen_combat_rewards`), declared at
+  `rewards.gd:75-79` (in `gen_combat_rewards`), declared at
   `domain/rules/rewards.gd` (`gen_combat_rewards`). A second en-dash citation survives untouched at
   `docs/assembly-integration-plan.md:149`, and `--strict` reports it as
   `content_db.gd:45` — it *is* among the 88, but the `–62` half of it has never
@@ -234,10 +235,10 @@ whose extension the old resolver had been matching.
 The `(in set_profile)` case I could **not** confirm, and the honest thing is to
 say so rather than repeat it. There is no `(in set_profile)` annotation in
 `docs/` or `CONCEPTS.md` at any of the four commits; the only `set_profile`
-annotation on the branch is `` `enemy_view.gd:2669` (`set_profile`) `` at
-`docs/solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md:172`,
+annotation on the branch is `` `enemy_view.gd:2680` (`set_profile`) `` in
+[Drive the lab the way the game drives it](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md),
 and that one is correct — `func set_profile` is at
-`presentation/combat/enemy_view.gd:2449`. The likeliest reading is that the
+`presentation/combat/enemy_view.gd:2680`. The likeliest reading is that the
 false annotation existed transiently in the working tree during the audit and
 was corrected inside `cef9c99` before it was ever committed, which would leave
 no before-and-after in git. Treat it as attested by the commit messages, not by
@@ -320,16 +321,12 @@ The honest limits:
   one respect — each looks like an ordinary counted item while a different part
   of the claim goes unchecked. Grep for the shapes; the tool's own count will not
   distinguish them.
-- **`.py` anchors cannot be annotated at all**, which is a gap rather than a
-  decision. `py` is in `CODE_SUFFIXES` (`tools/check_anchors.py` (`CODE_SUFFIXES`)), so a
-  citation into a Python file is recognised as an anchor and counted — but
-  `DECLARATIONS` (`tools/check_anchors.py` (`DECLARATIONS`)) carries GDScript and shader
-  forms only. There is no `def` form, and a module-level constant matches
-  nothing either, so `find_symbol` returns `None` for every Python symbol and
-  any annotation on a `.py` anchor would be reported `missing`. Thirteen
-  distinct `.py` anchors sit in the corpus, including every citation this
-  document makes into the checker itself. The same shape as the shader-function
-  gap fixed in `ca841a0`, and it wants the same remedy.
+- **The `.py` gap recorded by this audit is now closed.** `py` remains in
+  `CODE_SUFFIXES` (`tools/check_anchors.py` (`CODE_SUFFIXES`));
+  `DECLARATIONS` (`tools/check_anchors.py` (`DECLARATIONS`)) now includes
+  `def`, and `find_symbol` also recognises column-zero Python module constants.
+  The thirteen Python anchors counted during the audit were a real limitation
+  then, but a current Python symbol annotation can resolve.
 - **Do not `--fix` an `(in symbol)` finding.** The script refuses to, and says
   why: nothing in the document states how far an interior line should have moved,
   and guessing would launder a wrong number into a confident one
@@ -434,11 +431,11 @@ in the tree now.
 
 ```markdown
 <!-- link label: the annotation must go INSIDE the brackets -->
-At [hud_bar.gd:104 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
+At [hud_bar.gd:130 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
 ```
 
 ```gdscript
-# presentation/combat/hud_bar.gd:104
+# presentation/combat/hud_bar.gd:130
 const FAN_FACES: int = 16      # PILE_FAN_MAX_LAYERS
 ```
 
@@ -480,12 +477,12 @@ holding only a matching string and a matching call, while `GAME_SCENE_PATH`,
 
 ```markdown
 <!-- before: the anchor ends the line, the symbol starts the next one -->
-`view.set_profile(_foe_kind(e.idx))` for every foe, and `combat_screen.gd:1049`
+`view.set_profile(_foe_kind(e.idx))` for every foe, and `combat_screen.gd:1266`
 (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
 
 <!-- after: they meet, and the checker can finally grade it -->
 `view.set_profile(_foe_kind(e.idx))` for every foe, and
-`combat_screen.gd:1049` (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
+`combat_screen.gd:1266` (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
 ```
 
 Four of the ten hand-fixed skips were this shape, and this one is
@@ -511,8 +508,9 @@ That **88** is the figure for the branch as this document found it, and this
 document does not leave it there: its own citations add several dozen more the
 moment the file lands. Most of those are deliberate — an illustration
 of a *wrong* citation must stay bare, or annotating it would assert the very
-claim the passage is disputing — and the rest are the `.py` case in the limits
-below. This paragraph deliberately does not quote the resulting total: the first
+claim the passage is disputing — and the rest included the then-unfixed `.py`
+case described in the limits above. This paragraph deliberately does not quote
+the resulting total: the first
 draft did, and the figure was already stale two edits later, because adding two
 citations to the limits section moved it. Quoting a live tool count inside the
 document that changes that count is the same error in miniature — true when

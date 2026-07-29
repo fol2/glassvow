@@ -1,6 +1,7 @@
 ---
 title: "Measure the running reference, not the tables it publishes"
 date: 2026-07-28
+last_refreshed: 2026-07-29
 category: conventions
 module: port/layout
 problem_type: convention
@@ -138,7 +139,7 @@ func _probe(shape: StringName, act: int) -> void:
 
 The port draws each piece once at its identity-shape size and spends the shape as
 one scale outside it — `CardView.base_scale` (`presentation/combat/card_view.gd:254`)
-for a card, `HudBar._place_widget` (`presentation/combat/hud_bar.gd:1047`) for a
+for a card, `HudBar._place_widget` (`presentation/combat/hud_bar.gd:1048`) for a
 chrome widget — rather than teaching every widget to lay itself out at any size.
 
 The table is pinned so it cannot quietly drift back:

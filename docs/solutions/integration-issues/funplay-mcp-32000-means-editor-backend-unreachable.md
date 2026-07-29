@@ -1,7 +1,7 @@
 ---
 title: "A funplay `-32000` means its configured editor backend is unreachable"
 date: 2026-07-27
-last_refreshed: 2026-07-27
+last_refreshed: 2026-07-29
 category: integration-issues
 module: addons/funplay_mcp
 problem_type: integration_issue
@@ -180,7 +180,8 @@ or listening on another port. The server can persist `server_enabled=false`,
 and `FunplayMcpServer.start()` can select a fallback from port 8766 upwards when
 the configured port is occupied
 (`addons/funplay_mcp/core/funplay_mcp_server.gd:44-75`, in `start`, and
-`:219-230`, in `_resolve_startup_port`). Read the live listener or the editor
+`addons/funplay_mcp/core/funplay_mcp_server.gd` (in
+`_resolve_startup_port`)). Read the live listener or the editor
 dock before changing the relay URL.
 
 When no editor process is serving the project, start it:
@@ -263,8 +264,9 @@ took effect.**
 
 ## Why This Works
 
-The funplay HTTP server is an `EditorPlugin`. The declaration is at
-`addons/funplay_mcp/plugin.gd:2` (`EditorPlugin`), and the first thing
+The funplay HTTP server extends `EditorPlugin`
+([`addons/funplay_mcp/plugin.gd`](../../../addons/funplay_mcp/plugin.gd)), and
+the first thing
 `_enter_tree` does is refuse to run anywhere else —
 `addons/funplay_mcp/plugin.gd:21-23` (in `_enter_tree`):
 
@@ -314,7 +316,8 @@ what the editor currently holds — *including unsaved edits* — and they repor
 nothing at all when the editor is closed. They are not a file reader.
 
 **`get_scene_tree` returning `children: []` is correct here.**
-`application/main.tscn:5` (`Main`) is a lone `[node name="Main" type="Control"]`
+[`application/main.tscn`](../../../application/main.tscn) has a lone
+`[node name="Main" type="Control"]`
 with the script attached and no child nodes; everything the game shows is built
 at runtime by `application/main.gd`. An empty `children` array is the honest
 answer for this project's main scene, not a broken read.
@@ -406,15 +409,6 @@ never had to touch `project.godot`.
 - **Know which surface you are asking about.** Editor tools need the editor open
   (HTTP 8765); runtime tools need a bridge inside a running game (`user://`
   files).
-- **Launching the editor is now cheap, and that is a change.** (auto memory
-  [claude], `godot-macos-capture-steals-focus`) A windowed Godot launch on macOS
-  takes the frontmost slot for roughly 0.6s, which is why captures route through
-  a long-lived host rather than a process per shot. The user moved to working
-  remotely on 2026-07-27, so that focus cost is no longer a blocking constraint
-  and `godot --editor` is not something to avoid. The capture-host reasoning
-  still stands on its other merits; "it will steal the desktop" is no longer a
-  reason to leave the editor closed.
-
 ### One loose end, noted rather than resolved
 
 The addon is committed twice. `addons/funplay_mcp/` holds the full plugin, and
@@ -430,27 +424,33 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
 
 ## Related
 
-- `addons/funplay_mcp/plugin.gd:21-23` (in `_enter_tree`), `:36-37`, `:45-46`
-  (in `_exit_tree`) — the editor-only guard and the start/stop pair that define
+- `addons/funplay_mcp/plugin.gd` (`_enter_tree`) and
+  `addons/funplay_mcp/plugin.gd` (`_exit_tree`) — the editor-only guard and the
+  start/stop pair that define
   the server's lifetime. The whole root cause is these three fragments.
-- `addons/funplay_mcp/core/funplay_mcp_server.gd:8` (`SERVER_VERSION`), `:9`
-  (`DEFAULT_PORT`), `:60-72` (in `start`), `:219-230`
-  (in `_resolve_startup_port`) — the reported version, the default port, and the
-  fallback that leaves the settings file disagreeing with reality.
-- `addons/funplay_mcp/core/funplay_mcp_settings.gd:6` (`SETTINGS_PATH`), `:9`
-  (`server_port`) — where the Godot-side settings live and what they default to.
+- `addons/funplay_mcp/core/funplay_mcp_server.gd` (`SERVER_VERSION`),
+  `addons/funplay_mcp/core/funplay_mcp_server.gd` (`DEFAULT_PORT`),
+  `addons/funplay_mcp/core/funplay_mcp_server.gd` (`start`) and
+  `addons/funplay_mcp/core/funplay_mcp_server.gd`
+  (`_resolve_startup_port`) — the reported version, default port, and fallback.
+- `addons/funplay_mcp/core/funplay_mcp_settings.gd` (`SETTINGS_PATH`) and
+  `addons/funplay_mcp/core/funplay_mcp_settings.gd` (`server_port`) — where the
+  Godot-side settings live and what they default to.
 - `addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:3-6` (`STATE_PATH`)
   — the *other* funplay surface: a `user://` file channel with no port and a
   different lifetime.
-- `addons/funplay_mcp/core/funplay_core_tools.gd:41-43`
-  (`RUNTIME_BRIDGE_AUTOLOAD_NAME`), `:3397-3408` (in `install_runtime_bridge`) —
+- `addons/funplay_mcp/core/funplay_core_tools.gd`
+  (`RUNTIME_BRIDGE_AUTOLOAD_NAME`) and
+  `addons/funplay_mcp/core/funplay_core_tools.gd`
+  (`install_runtime_bridge`) —
   why installing the bridge is a `project.godot` write rather than a runtime
   action.
-- `tools/live.gd:25` (`BRIDGE_SCRIPT_PATH`), `:42-48` (in `_ready`) — the
+- `tools/live.gd` (`BRIDGE_SCRIPT_PATH`) and `tools/live.gd` (in `_ready`) — the
   capture host wiring that same bridge per-process instead of as an autoload.
 - `project.godot:32` (`enabled`) — the enabled Funplay plugin path, and the
   reason the root-level duplicate is not the live copy.
-- `application/main.tscn:5` (`Main`) — a root `Control` with a script and no
+- [`application/main.tscn`](../../../application/main.tscn) — a root `Control`
+  with a script and no
   children, which is why `children: []` is the correct answer.
 - `docs/port-status.md:99` — the pre-existing statement of this root cause,
   filed under an M5 milestone note. Now stale in the other direction: the
@@ -460,8 +460,8 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
   (`mcp screenshot …`) that does not exist in the 78-tool surface; the real
   captures are `capture_editor_view` and `capture_runtime_view`. Only visible
   once the handshake worked.
-- `docs/session-ownership.md:31` (`project.godot` is Assembly-lane), `:206`
-  (`tools/` is organiser-owned) — both matter before running
+- `docs/session-ownership.md` — the `project.godot` and `tools/` ownership rules
+  both matter before running
   `install_runtime_bridge` or committing what the editor rewrote.
 - [Capture through a long-lived host, not a process per screenshot](../tooling-decisions/long-lived-capture-host-not-process-per-shot.md)
   — the sibling surface, and the source of the principle this failure repeats: a

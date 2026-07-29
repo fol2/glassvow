@@ -1,7 +1,7 @@
 ---
 title: "Capture through a long-lived host, not a process per screenshot"
 date: 2026-07-26
-last_refreshed: 2026-07-28
+last_refreshed: 2026-07-29
 category: tooling-decisions
 module: tools/live
 problem_type: tooling_decision
@@ -33,7 +33,7 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:56-72` (in `_ready`) documents it and
+entry point. `application/main.gd:57-73` (in `_ready`) documents it and
 `application/main.gd:83-133` (in `_ready`) parses it out of
 `OS.get_cmdline_user_args()`:
 
@@ -61,7 +61,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:144` (`_capture_and_quit`).) It waits 30 frames for the
+(`application/main.gd:259` (`_capture_and_quit`).) It waits 30 frames for the
 first paint, reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
@@ -238,15 +238,24 @@ one line (`tools/live.sh:84-85`):
 ```
 
 Everything after that boot is a file write and a poll. `send()`
-(`tools/live.sh:56` (`send`)) mints a fresh id per call, clears the response file,
+(`tools/live.sh:57` (`send`)) mints a fresh id per call, clears the response file,
 writes the command, and polls for up to 200 × 0.05s. `shot` asks the bridge to
 save under `user://shots/` and copies the result out
 (`tools/live.sh:95-102`). `reload` uses the host's own channel and polls for up
 to 400 × 0.05s (`tools/live.sh:104-120`).
 
 **Do not pass `--shot` to the host.** That hook captures once and quits
-(`application/main.gd:144` (`_capture_and_quit`)), which is the exact behaviour the host exists to
-avoid. `tools/live.gd:22` and `tools/live.sh:14` both say so.
+(`application/main.gd` (`_capture_and_quit`)), which is the exact behaviour the
+host exists to avoid. `tools/live.gd` and `tools/live.sh` both say so.
+
+**Preflight the normal v2 profile before starting a run-shaped capture.**
+`Main._new_run()` now stores through `SaveService.RUN_PATH`, and a reload
+re-instantiates `Main` against the same `user://` directory. `--fight` and
+`--enter` can therefore replace an active run; `--resume` deliberately restores
+the durable checkpoint. Stop if a normal run or Vigil exists, or use a
+disposable profile context. Afterwards, clear only the known test run ID. The
+full safety pattern is recorded in
+[Verify whole-run routes with headed input and throwaway application drivers](../workflow-issues/verify-whole-run-routes-with-headed-input-and-throwaway-drivers.md).
 
 ### Hot reload is the load-bearing part
 
@@ -308,7 +317,8 @@ to next.
 the rebuilt screen has painted comes back black; several early captures were
 fully black PNGs. The host waits 30 frames before announcing ready or replying
 to a reload — `SETTLE_FRAMES: int = 30` at `tools/live.gd:32`, deliberately
-matching `main.gd`'s own hook at `application/main.gd:243-244` (in `_capture_and_quit`). `_settle()` is
+matching `main.gd`'s own hook in `application/main.gd` (in
+`_capture_and_quit`). `_settle()` is
 awaited from both `_announce_ready()` (`tools/live.gd:151`) and the reload's
 success path (`tools/live.gd:128`), so **a successful reply doubles as "safe to
 capture now"** (`tools/live.gd:127`).
@@ -321,7 +331,7 @@ work — two runs of the **same build**, same seed, same arguments, differed
 across **2.4%** of the frame, all of it in the hand. That is a noise floor high
 enough to swallow most layout changes, and it made the first before/after
 comparisons of that work unreadable. Adding a wall-clock wait
-(`--settle=SECONDS`, `application/main.gd:245-246` (in `_capture_and_quit`))
+(`--settle=SECONDS`, `application/main.gd` (in `_capture_and_quit`))
 drops the same comparison to **0.030%**.
 
 The rule that follows applies to any capture of an animated screen: **establish
@@ -339,7 +349,7 @@ was built to eliminate.
 
 The fix is in the client, not the engine. `tools/live.sh:81` records the
 previously-frontmost application before launching, and `hand_back()`
-(`tools/live.sh:38` (`hand_back`)) reactivates it once the host writes its ready
+(`tools/live.sh:39` (`hand_back`)) reactivates it once the host writes its ready
 file (called at `tools/live.sh:88`):
 
 ```sh
@@ -390,10 +400,14 @@ with no further transitions across a subsequent `reload` and captures.
   (`tools/live.gd:190`), because reloading either would pull the command channel
   out from under the reply that is being written.
 
-- **Run state is discarded by design.** A reload re-parses scripts and rebuilds
-  the scene from disk, so whatever run was in progress is gone
-  (`tools/live.gd:18-19`). That is what makes a capture reproducible rather than
-  path-dependent.
+- **Scene-local state is discarded; durable state is not.** A reload re-parses
+  scripts and rebuilds the scene from disk, so Node state from the old scene is
+  gone. The rebuilt `Main` sees the same `user://` data and the same launch
+  arguments: `--resume` reloads the saved checkpoint, while `--fight` and
+  `--enter` create and store a run. Reproducibility therefore comes from a known
+  seed and a preflighted disposable profile, not from reload alone
+  (`application/main.gd` (`_new_run`), `application/main.gd`
+  (`_continue_run`), `application/save_service.gd` (`RUN_PATH`)).
 
 - **Editing the host or the autoload set still needs a restart**
   (`tools/live.gd:20-22`).
@@ -405,7 +419,7 @@ with no further transitions across a subsequent `reload` and captures.
 
 - **Thirty frames is a frame count, not a duration — and a fight's actors have
   not arrived yet.** Both settle loops count frames: `_capture_and_quit` at
-  `application/main.gd:243-244` (in `_capture_and_quit`) and `SETTLE_FRAMES` at
+  `application/main.gd` (in `_capture_and_quit`) and `SETTLE_FRAMES` at
   `tools/live.gd:32`,
   `158`. Thirty frames is half a second at 60fps. A combat entrance is longer
   than that: each actor tweens for `ENTER_TIME` 0.55s after a stagger of
@@ -650,24 +664,26 @@ subsequent `reload` and captures.
 
 ## Related
 
-- `tools/live.gd` — the host: bridge wiring (`:43-46`), command loop
-  (`:51-65`), reload (`:86-147`), settle (`:157-160`), script collection with
-  the `addons`/`tools` skip (`:186-201`). Tracked; landed in `72b25ce`.
-- `tools/live.sh` — the client: focus hand-back (`:38-44`), request/reply
-  (`:56-71`), boot (`:74-92`), reload channel (`:103-119`). Tracked.
+- `tools/live.gd` — the host: bridge wiring and boot (`tools/live.gd`
+  (`_ready`)), command loop (`tools/live.gd` (`_process`)), reload
+  (`tools/live.gd` (`_reload`)), settle (`tools/live.gd` (`_settle`)), and
+  script collection with the `addons`/`tools` skip (`tools/live.gd`
+  (`_collect_scripts`)). Tracked; landed in `72b25ce`.
+- `tools/live.sh` — the client: focus hand-back (`tools/live.sh`
+  (`hand_back`)) and request/reply (`tools/live.sh` (`send`)). Tracked.
 - `tools/shot.sh` — the one-off wrapper, and the record of all seven failed
-  focus attempts (`:11-26`). Tracked.
+  focus attempts. Tracked.
 - `tools/live.tscn` — six lines; a `Node` named `LiveHost` with `live.gd`
   attached. Tracked.
-- `application/main.gd:56-72` (in `_ready`), `:219` (`_capture_and_quit`) — the `--shot`
-  hook the host deliberately does not use, and the 30-frame settle the host
-  copies. (The range here read `:138-144` until a refresh caught it: that stops
-  at the function's own declaration and excludes the settle loop it claims to
-  cite. It survived because an anchor carrying no `(symbol)` annotation is not
-  validated in the checker's default mode — `tools/check_anchors.py:52-57`.)
-- `addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:3-6`, `:136-143` —
-  the `user://` file paths and the `query_node` / `capture_view` / `send_input`
-  / `get_events` dispatch the host reuses unchanged.
+- `application/main.gd` (in `_ready`), `application/main.gd`
+  (`_capture_and_quit`) — the `--shot` hook the host deliberately does not use,
+  and the 30-frame settle the host
+  copies. A former numeric range stopped at the function declaration and
+  excluded the settle loop it claimed to cite. It survived because an anchor
+  carrying no symbol annotation is not validated in the checker's default mode
+  (`tools/check_anchors.py` (`check`)).
+- `addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd` (`STATE_PATH`) —
+  the `user://` file channel and command dispatch the host reuses unchanged.
 - `docs/hud-handoff.md:157-173` — §8, the pre-existing record that captures must
   be windowed because headless has no viewport texture and hangs.
 - `docs/solutions/ui-bugs/godot-label-placement-guessed-font-height.md:167-178` —
