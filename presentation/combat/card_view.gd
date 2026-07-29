@@ -268,6 +268,8 @@ var _hovered: bool = false
 ## over. It lives inside the face SubViewport and is not reachable by node path
 ## from outside.
 var _body: RulesText = null
+## Built as a card back — a painting on the slab, no face furniture, no stone.
+var _is_back: bool = false
 var _tilt: Vector2 = Vector2.ZERO         # (rot_x, rot_y) degrees
 var _tilt_v: Vector2 = Vector2.ZERO
 var _tilt_target: Vector2 = Vector2.ZERO
@@ -391,77 +393,102 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	stock.set_anchors_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(stock)
 
-	var art: Texture2D = _load_art(inst.id)
-	if art != null:
-		var art_rect: TextureRect = TextureRect.new()
-		art_rect.texture = art
-		art_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		# Source art is 3:2 landscape, the window is 148x91 — cover, don't fit.
-		art_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		layer.add_child(_band(art_rect, ART_Y, ART_H))
-		# Two overlays from the benchmark's .card-art: a wide radial wash in the
-		# type tint, and a 1px light line along the top edge from its inset
-		# shadow. The dark line *under* the window is `rule`, below.
-		layer.add_child(_band(_grad(
-			PackedColorArray([Color(tint, 0.14), Color(tint, 0.0)]),
-			PackedFloat32Array([0.0, 0.75]), true,
-			Vector2(0.5, 0.45), Vector2(1.0, 0.45), "wash:" + ctype), ART_Y, ART_H))
-		var lip: ColorRect = ColorRect.new()
-		lip.color = Color(1, 1, 1, 0.09)
-		layer.add_child(_band(lip, ART_Y, 1.0))
+	# A card BACK is the same slab wearing a painting instead of a face: stock,
+	# silhouette, edge, shadow and the whole surface stack build exactly as they
+	# do for a front, and everything that SAYS something — the art window, the
+	# name, the rubric, the rules, the cost gem — simply never exists. `back`
+	# names the painting.
+	var back_path: String = str(data.get("back", ""))
+	_is_back = back_path != ""
+	if back_path != "":
+		var back_tex: Texture2D = load(back_path)
+		if back_tex != null:
+			# The pile paintings sit in a 512 canvas with transparent margins,
+			# so the ink is cropped to its own used rect before placing.
+			var crop: AtlasTexture = AtlasTexture.new()
+			crop.atlas = back_tex
+			crop.region = Rect2(back_tex.get_image().get_used_rect())
+			var back_rect: TextureRect = TextureRect.new()
+			back_rect.texture = crop
+			back_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			# Fit, not cover: the painting is narrower than the slab (~0.59
+			# against 0.70), and the strip of stock it leaves either side is
+			# the card's material showing around the plate — wanted, not waste.
+			back_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			back_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+			layer.add_child(back_rect)
+	else:
+		var art: Texture2D = _load_art(inst.id)
+		if art != null:
+			var art_rect: TextureRect = TextureRect.new()
+			art_rect.texture = art
+			art_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			# Source art is 3:2 landscape, the window is 148x91 — cover, don't fit.
+			art_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+			layer.add_child(_band(art_rect, ART_Y, ART_H))
+			# Two overlays from the benchmark's .card-art: a wide radial wash in the
+			# type tint, and a 1px light line along the top edge from its inset
+			# shadow. The dark line *under* the window is `rule`, below.
+			layer.add_child(_band(_grad(
+				PackedColorArray([Color(tint, 0.14), Color(tint, 0.0)]),
+				PackedFloat32Array([0.0, 0.75]), true,
+				Vector2(0.5, 0.45), Vector2(1.0, 0.45), "wash:" + ctype), ART_Y, ART_H))
+			var lip: ColorRect = ColorRect.new()
+			lip.color = Color(1, 1, 1, 0.09)
+			layer.add_child(_band(lip, ART_Y, 1.0))
 
-	var rule: ColorRect = ColorRect.new()
-	rule.color = RULE
-	layer.add_child(_band(rule, RULE_Y, 1.0))
+		var rule: ColorRect = ColorRect.new()
+		rule.color = RULE
+		layer.add_child(_band(rule, RULE_Y, 1.0))
 
-	var name_label: Label = Label.new()
-	name_label.text = str(data.get("name", String(inst.id)))
-	if inst.up:
-		name_label.text += "+"
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_override("font", _font(GlassStyle.CINZEL_700, 0))
-	name_label.add_theme_font_size_override("font_size", 14)
-	name_label.add_theme_color_override("font_color", PARCHMENT)
-	layer.add_child(_band(name_label, NAME_Y, NAME_H))
+		var name_label: Label = Label.new()
+		name_label.text = str(data.get("name", String(inst.id)))
+		if inst.up:
+			name_label.text += "+"
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.add_theme_font_override("font", _font(GlassStyle.CINZEL_700, 0))
+		name_label.add_theme_font_size_override("font_size", 14)
+		name_label.add_theme_color_override("font_color", PARCHMENT)
+		layer.add_child(_band(name_label, NAME_Y, NAME_H))
 
-	# The name plate is ruled top and bottom with a 1px gold line that fades out
-	# at both ends (styles.css .card-name carries them as background gradients).
-	# The lower one is the divider between the name and the type rubric.
-	_add_name_rule(layer, NAME_Y, 0.22)
-	_add_name_rule(layer, TYPE_Y - 1.0, 0.14)
+		# The name plate is ruled top and bottom with a 1px gold line that fades out
+		# at both ends (styles.css .card-name carries them as background gradients).
+		# The lower one is the divider between the name and the type rubric.
+		_add_name_rule(layer, NAME_Y, 0.22)
+		_add_name_rule(layer, TYPE_Y - 1.0, 0.14)
 
-	var type_label: Label = Label.new()
-	type_label.text = ctype.to_upper()
-	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	type_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# 2.8px of tracking is most of this row's identity — without it the label
-	# reads as a caption instead of a rubric.
-	type_label.add_theme_font_override("font", _font(GlassStyle.ALEGREYA_400, 3))
-	type_label.add_theme_font_size_override("font_size", 10)
-	type_label.add_theme_color_override("font_color", tint)
-	layer.add_child(_band(type_label, TYPE_Y, TYPE_H))
+		var type_label: Label = Label.new()
+		type_label.text = ctype.to_upper()
+		type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		type_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		# 2.8px of tracking is most of this row's identity — without it the label
+		# reads as a caption instead of a rubric.
+		type_label.add_theme_font_override("font", _font(GlassStyle.ALEGREYA_400, 3))
+		type_label.add_theme_font_size_override("font_size", 10)
+		type_label.add_theme_color_override("font_color", tint)
+		layer.add_child(_band(type_label, TYPE_Y, TYPE_H))
 
-	# Drawn, not laid out by a Label — RichTextLabel cannot do the benchmark's
-	# dotted keyword rule and exposes no per-run rects to patch one in. See
-	# rules_text.gd. Benchmark leading is 16.9 on a 12.8 font.
-	var body: RulesText = RulesText.new(
-		str(data.get("text", "")), tint,
-		_font(GlassStyle.ALEGREYA_400, 0), _font(GlassStyle.ALEGREYA_700, 0),
-		13, 16.9)
-	body.plain_color = BODY_TEXT
-	body.value_color = PARCHMENT
-	# Benchmark text box is 148x84.9 with 4/10/10 padding — 10 rather than EDGE on
-	# the sides, since neither node type has padding. RulesText centres its own
-	# paragraph vertically, so short rules do not hang off the rubric. The rarity
-	# pill floats over the tail of this box rather than reserving space.
-	body.set_anchors_preset(Control.PRESET_FULL_RECT)
-	body.offset_left = 10.0
-	body.offset_right = -10.0
-	body.offset_top = BODY_Y
-	body.offset_bottom = -8.0
-	layer.add_child(body)
-	_body = body
+		# Drawn, not laid out by a Label — RichTextLabel cannot do the benchmark's
+		# dotted keyword rule and exposes no per-run rects to patch one in. See
+		# rules_text.gd. Benchmark leading is 16.9 on a 12.8 font.
+		var body: RulesText = RulesText.new(
+			str(data.get("text", "")), tint,
+			_font(GlassStyle.ALEGREYA_400, 0), _font(GlassStyle.ALEGREYA_700, 0),
+			13, 16.9)
+		body.plain_color = BODY_TEXT
+		body.value_color = PARCHMENT
+		# Benchmark text box is 148x84.9 with 4/10/10 padding — 10 rather than EDGE on
+		# the sides, since neither node type has padding. RulesText centres its own
+		# paragraph vertically, so short rules do not hang off the rubric. The rarity
+		# pill floats over the tail of this box rather than reserving space.
+		body.set_anchors_preset(Control.PRESET_FULL_RECT)
+		body.offset_left = 10.0
+		body.offset_right = -10.0
+		body.offset_top = BODY_Y
+		body.offset_bottom = -8.0
+		layer.add_child(body)
+		_body = body
 
 	# The edge, last in the layer: the frame holds, and the mask's silhouette is
 	# its outer cut (the shader fills past d = 0 and lets the mask do the
@@ -497,7 +524,8 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	# the stone over it have to agree about that, so the rule is read once here
 	# rather than twice from two places that could stop matching.
 	var free: bool = cost == 0 and not unplayable
-	_build_cost_gem(content, cost, free)
+	if back_path == "":
+		_build_cost_gem(content, cost, free)
 
 	_build_stage(content, mat, tint, free)
 
@@ -666,7 +694,17 @@ func _build_stage(content: Control, mat: Dictionary, tint: Color,
 	# The stone does NOT take the card's finish, and never could: a coating is a
 	# property of a sheet and there is no sheet here. It is set over the leaf,
 	# cut, and lit by the same lamp — see card_gem.gdshader.
-	_slab.set_surface_override_material(2, _gem_plate(free))
+	#
+	# A back has no cost, so no stone: the gem surface stays in the mesh (one
+	# cached prism per thickness, shared with the fronts) and is silenced with a
+	# fully transparent override instead.
+	if _is_back:
+		var no_gem: StandardMaterial3D = StandardMaterial3D.new()
+		no_gem.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		no_gem.albedo_color = Color(0, 0, 0, 0)
+		_slab.set_surface_override_material(2, no_gem)
+	else:
+		_slab.set_surface_override_material(2, _gem_plate(free))
 	_push_lamp()   # the room's lamp, before the card has ever been touched
 	_stage.add_child(_slab)
 

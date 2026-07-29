@@ -56,6 +56,20 @@ const HOVER_TIME: float = 0.18
 const HEADING_H: float = 34.0
 const RARITY_ORDER: Array = ["starter", "common", "uncommon", "rare", "special"]
 
+## The card backs, as pseudo catalogue entries: not cards the game deals, but
+## the studio and the surfaces sheet must be able to stand one up like any
+## card. `back` routes CardView into its back build; `surface` names the recipe
+## the back wears until a picker says otherwise. Kept OFF the full sheet, which
+## answers to the benchmark's 61-card gallery and must stay 61 cards long.
+const BACKS: Dictionary = {
+	"back:draw": {"name": "Back · Draw", "rarity": "back",
+		"back": "res://assets/art/piles/draw.png", "surface": "aurora"},
+	"back:discard": {"name": "Back · Discard", "rarity": "back",
+		"back": "res://assets/art/piles/discard.png", "surface": "aurora"},
+	"back:ashes": {"name": "Back · Ashes", "rarity": "back",
+		"back": "res://assets/art/piles/ashes.png", "surface": "aurora"},
+}
+
 var content: ContentDB
 
 var _catalog: Dictionary = {}        # id -> display fields, all 61 cards
@@ -86,10 +100,15 @@ static func load_catalog(fallback: ContentDB) -> Dictionary:
 				var cards: Variant = doc.get("cards")
 				if typeof(cards) == TYPE_DICTIONARY:
 					var out: Dictionary = cards
+					out.merge(BACKS)
 					return out
 	push_warning("card lab: %s unreadable — falling back to the slice registry"
 		% CATALOG_PATH)
-	return fallback.cards
+	# Duplicated before the merge: the fallback is the live content registry,
+	# and the backs must not leak into it.
+	var merged: Dictionary = fallback.cards.duplicate()
+	merged.merge(BACKS)
+	return merged
 
 
 ## Place the sheet against the live stage size. Runs after any window resize, so
@@ -202,6 +221,11 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 	var plan: Array[Array] = []          # [[card id, recipe or ""], ...]
 	if surfaces.is_empty():
 		for id: String in ids:
+			# Backs ride the catalogue for the studio and the surfaces sheet;
+			# the parity sheet stays the benchmark's 61 cards, no more.
+			if str(_catalog.get(id, {}).get("rarity", "")) == "back" \
+					and not only.has(id):
+				continue
 			plan.append([id, ""])
 	else:
 		var base: String = ids[0] if not ids.is_empty() else "strike"

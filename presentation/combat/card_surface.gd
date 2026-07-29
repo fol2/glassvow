@@ -292,6 +292,20 @@ const FINISH: Dictionary = {
 		"sparkle": 0.20, "flake_px": 2.6, "flake_big": 14.0, "flake_hue": 1.0,
 		"flake_deep": 3.0, "flake_wake": 1.0, "mask": 2,
 	},
+	"aurora": {                                # cosmos sheet under a nebula wash
+		# The Curse of Cards read (SirCalalot, 2026-07): a dense glitter dust
+		# whose colour lives only in the flakes, over a broad slow diffraction
+		# wash that shifts in patches rather than banding. Built from cosmos by
+		# tightening the fine pitch, deepening the emboss, and adding the one
+		# channel cosmos never used — a LOW-pitch grating, so the wash is a
+		# region of the face changing hue rather than a rainbow stripe crossing
+		# it. Everything still waits for the lamp; idle stays quiet.
+		"sheen": 0.030, "tight": 400.0, "aniso": 0.0,
+		"holo": 0.020, "holo_scale": 7.0, "holo_dir": 55.0,
+		"pearl": 0.0, "pearl_scale": 62.0,
+		"sparkle": 0.24, "flake_px": 2.4, "flake_big": 11.0, "flake_hue": 1.0,
+		"flake_deep": 4.0, "flake_wake": 1.0, "mask": 0,
+	},
 	"dead": {                                  # the coating that gives nothing
 		"sheen": 0.0015, "tight": 12.0, "aniso": 0.0,
 		"holo": 0.0, "holo_scale": 6.0, "holo_dir": 0.0,
@@ -357,6 +371,7 @@ const RECIPES: Dictionary = {
 	"cosmos": ["silver-leaf", "smooth", "cosmos", "gilded"],
 	"confetti": ["stock", "smooth", "cosmos-art", "gilded"],
 	"prism": ["glass", "engine-turned", "prismatic", "gilded"],
+	"aurora": ["silver-leaf", "smooth", "aurora", "gilded"],
 	"plastic": ["pvc", "glassy", "gloss", "rigid"],
 	"crystal": ["acrylic", "glassy", "gloss", "rigid"],
 	"spot": ["stock", "smooth", "spot-foil", "premium"],
