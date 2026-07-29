@@ -393,14 +393,14 @@ func _runtime_mouse_button_event(arguments: Dictionary) -> Dictionary:
 		press_event.position = position
 		press_event.global_position = position
 		press_event.pressed = true
-		Input.parse_input_event(press_event)
+		get_viewport().push_input(press_event, true)
 	if mode == "release" or mode == "tap":
 		var release_event := InputEventMouseButton.new()
 		release_event.button_index = button_index
 		release_event.position = position
 		release_event.global_position = position
 		release_event.pressed = false
-		Input.parse_input_event(release_event)
+		get_viewport().push_input(release_event, true)
 	return {
 		"success": true,
 		"type": "mouse_button",
@@ -421,7 +421,7 @@ func _runtime_mouse_drag_event(arguments: Dictionary) -> Dictionary:
 	press_event.position = from_position
 	press_event.global_position = from_position
 	press_event.pressed = true
-	Input.parse_input_event(press_event)
+	get_viewport().push_input(press_event, true)
 
 	var previous: Vector2 = from_position
 	for step_index in range(1, steps + 1):
@@ -433,7 +433,7 @@ func _runtime_mouse_drag_event(arguments: Dictionary) -> Dictionary:
 		motion_event.relative = current - previous
 		motion_event.screen_relative = current - previous
 		motion_event.button_mask = 1 << (button_index - 1)
-		Input.parse_input_event(motion_event)
+		get_viewport().push_input(motion_event, true)
 		previous = current
 
 	var release_event := InputEventMouseButton.new()
@@ -441,7 +441,7 @@ func _runtime_mouse_drag_event(arguments: Dictionary) -> Dictionary:
 	release_event.position = to_position
 	release_event.global_position = to_position
 	release_event.pressed = false
-	Input.parse_input_event(release_event)
+	get_viewport().push_input(release_event, true)
 	return {
 		"success": true,
 		"type": "mouse_drag",

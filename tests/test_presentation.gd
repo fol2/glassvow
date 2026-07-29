@@ -38,6 +38,8 @@ static func run(fails: Array[String]) -> void:
 	screen.seq.instant = true
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(screen)
+	_layout_identity(fails, screen)
+	_chrome_identity(fails)
 
 	screen.start_encounter(["sporeling", "sporeling"], "normal", "smoke")
 	_check(fails, game.cb != null and game.cb.turn == 1, "combat started turn 1")
@@ -77,7 +79,8 @@ static func run(fails: Array[String]) -> void:
 	var target_uid: int = -1
 	for c: CardInst in game.cb.hand:
 		var d: Dictionary = game.rules.card_data(c)
-		if str(d.get("target", "")) == "enemy" and game.rules.can_play(game.cb, c, 0):
+		if str(d.get("target", "")) == "enemy" \
+				and game.rules.can_play(game.run, game.cb, c, 0):
 			target_uid = c.uid
 			break
 	_check(fails, target_uid >= 0, "an enemy-target card is in the opening hand")
@@ -99,3 +102,111 @@ static func run(fails: Array[String]) -> void:
 
 	tree.root.remove_child(screen)
 	screen.free()
+
+
+## The layout identity gate.
+##
+## Every number this screen composes with now comes out of
+## `assets/layout/combat-layout.json` instead of a constant. At the identity
+## shape and act 0 the book must resolve to EXACTLY the literals that used to be
+## written here, or the swap has quietly moved the composition — and with it
+## every `file:line` this port carries, because all of them were measured at
+## 1180x820 (`CONCEPTS.md:193`).
+##
+## The plate figures are the ones `docs/battlefield-parity.md:172-174` records as
+## re-checked against `battlefield-layout.js`: `pad-landscape` act 0 is
+## 640/280/drift 30, 1000/300/drift 10, 450/0/drift 0.
+static func _layout_identity(fails: Array[String], screen: CombatScreen) -> void:
+	_check(fails, screen.shape == StageShape.IDENTITY and screen.act == 0,
+		"a default screen composes for pad-landscape act 0")
+	_check(fails, is_equal_approx(screen._ground_y(), 232.0), "the ground line is 232")
+	_check(fails, is_equal_approx(screen._hero_x(), 200.0), "the hero's centre is 200")
+
+	var formations: Array[Array] = [
+		[1, [Vector2(980.0, 0.0)]],
+		[2, [Vector2(820.0, 0.0), Vector2(1035.0, 0.0)]],
+		[3, [Vector2(698.0, 42.0), Vector2(850.0, -18.0), Vector2(996.0, 26.0)]],
+	]
+	for row: Array in formations:
+		var count: int = row[0]
+		var want: Array = row[1]
+		var got: Array[Vector2] = screen._slots(count)
+		_check(fails, got.size() == want.size(), "formation for %d foes has %d slots"
+			% [count, want.size()])
+		for i: int in mini(got.size(), want.size()):
+			var seat: Vector2 = want[i]
+			_check(fails, got[i].is_equal_approx(seat),
+				"formation for %d, slot %d is %s (wanted %s)" % [count, i, got[i], seat])
+
+	# h, y, x, zoom, opacity, posX, posY, drift — the eight the plate builder reads.
+	var plates: Array[Array] = [
+		["backdrop", [640.0, 280.0, 0.0, 1.0, 0.85, 50.0, 100.0, 30.0]],
+		["mid", [1000.0, 300.0, 100.0, 0.4, 0.95, 100.0, 100.0, 10.0]],
+		["ledge", [450.0, 0.0, 0.0, 1.0, 1.0, 100.0, 0.0, 0.0]],
+	]
+	var keys: PackedStringArray = ["h", "y", "x", "zoom", "opacity", "posX", "posY", "drift"]
+	var layers: Dictionary = screen._layout().get("layers", {})
+	for row: Array in plates:
+		var name: String = row[0]
+		var want: Array = row[1]
+		var layer: Dictionary = layers.get(name, {})
+		for i: int in keys.size():
+			var got: float = LayoutBook.num(layer.get(keys[i]), NAN)
+			var expect: float = want[i]
+			_check(fails, is_equal_approx(got, expect),
+				"%s plate %s is %s (wanted %s)" % [name, keys[i], got, expect])
+
+
+## The same gate for the chrome. `UIC` gives every widget a distance from the
+## corner it sits in, so `HudBar._place` needs no stage size — and the six boxes
+## below are the arithmetic that used to be done by subtracting 1180x820 from an
+## absolute coordinate. If any offset moves, the HUD has moved.
+static func _chrome_identity(fails: Array[String]) -> void:
+	var hud: HudBar = HudBar.new()
+	_check(fails, is_equal_approx(hud.bar_height(), 56.0), "the top bar is 56 tall")
+
+	# node, anchored-right?, offset_left, offset_top, offset_bottom
+	var seats: Array[Array] = [
+		["energy", hud._energy_orb, false, 0.0, -252.0, -162.0],
+		["lantern", hud._lantern, false, 18.0, -372.0, -268.0],
+		["endTurn", hud._end_turn, true, -120.0, -283.0, -163.0],
+	]
+	for row: Array in seats:
+		var what: String = row[0]
+		var node: Control = row[1]
+		var right: bool = row[2]
+		var want_left: float = row[3]
+		var want_top: float = row[4]
+		var want_bottom: float = row[5]
+		if node == null:
+			_check(fails, false, "%s exists" % what)
+			continue
+		_check(fails, is_equal_approx(node.anchor_left, 1.0 if right else 0.0),
+			"%s hangs off the %s edge" % [what, "right" if right else "left"])
+		_check(fails, is_equal_approx(node.anchor_bottom, 1.0), "%s hangs off the bottom" % what)
+		_check(fails, is_equal_approx(node.offset_left, want_left),
+			"%s offset_left is %s (wanted %s)" % [what, node.offset_left, want_left])
+		_check(fails, is_equal_approx(node.offset_top, want_top),
+			"%s offset_top is %s (wanted %s)" % [what, node.offset_top, want_top])
+		_check(fails, is_equal_approx(node.offset_bottom, want_bottom),
+			"%s offset_bottom is %s (wanted %s)" % [what, node.offset_bottom, want_bottom])
+
+	# The three piles go through the same funnel; what is worth pinning is the
+	# data they go through it with — `left 16 / right 132 / right 22`, all at
+	# `bottom 14` and 96x148 (`src/ui-chrome-layout.js:21-23`).
+	var piles: Array[Array] = [
+		["draw", "left", 16.0], ["ashes", "right", 132.0], ["discard", "right", 22.0],
+	]
+	for row: Array in piles:
+		var what: String = row[0]
+		var edge: String = row[1]
+		var gap: float = row[2]
+		var seat: Dictionary = hud._chrome.get(what, {})
+		_check(fails, seat.has(edge), "the %s pile pins to %s" % [what, edge])
+		_check(fails, is_equal_approx(LayoutBook.num(seat.get(edge)), gap),
+			"the %s pile is %s from that edge" % [what, gap])
+		_check(fails, is_equal_approx(LayoutBook.num(seat.get("bottom")), 14.0)
+				and is_equal_approx(LayoutBook.num(seat.get("w")), 96.0)
+				and is_equal_approx(LayoutBook.num(seat.get("h")), 148.0),
+			"the %s pile is 96x148, 14 up from the bottom" % what)
+	hud.free()

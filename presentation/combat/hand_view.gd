@@ -59,6 +59,26 @@ const MAX_CARDS: int = 10
 ## it put the fan 22px higher than the reference for a five-card hand.
 const CARD_INSET: float = 8.0
 
+## What this shape says a card is, set by the screen from `chrome.card` before
+## any card is added. Both are pad-landscape's numbers, so a HandView built with
+## no book behaves exactly as it did before shapes existed.
+##
+## `card_w` is the benchmark's `--cw`; `card_inset` is `.hand-zone .card`'s own
+## `bottom`, which the phone regimes move to 46 and 0. Neither is a constant
+## upstream and neither was carried, which is why every shape drew the pad's
+## 152px card.
+var card_w: float = CardView.CARD_W
+var card_inset: float = CARD_INSET
+## The stage the fan gap is measured against, told rather than looked up.
+##
+## This used to read `get_viewport_rect().size.x`, which is the same number in a
+## running game and is NOT the same number anywhere else — a headless probe or a
+## bench that hosts a stage inside a bigger window got the window's width and
+## fanned a phone's five cards 586px wide instead of 282. The screen already
+## knows the stage it composed against (`CombatScreen._stage_w`), so there is no
+## reason for a second, weaker answer to exist here.
+var stage_w: float = float(StageShape.REFERENCES[StageShape.IDENTITY].x)
+
 ## A seat has four poses and they do not stack — one branch per card writes the
 ## whole transform. Two of them are CSS, and these are their numbers:
 ##
@@ -171,6 +191,10 @@ func add_card(inst: CardInst, data: Dictionary, cost: int) -> CardView:
 	if _views.has(inst.uid):
 		return _views[inst.uid]
 	var view: CardView = CardView.new(inst, data, cost)
+	# Before the tree sees it, so the card is never laid out at the wrong size
+	# for a frame — a card that pops from 152 to 104 on its first relayout reads
+	# as a bug even though it settles correctly.
+	view.base_scale = card_w / CardView.CARD_W
 	_views[inst.uid] = view
 	_order.append(inst.uid)
 	add_child(view)
@@ -277,12 +301,19 @@ static func fan_gap(count: int, stage_w: float) -> float:
 
 ## `handZoneWidth` — the box hugs the fan, so the hand is as wide as it needs to
 ## be and no wider. The zone stays centred; only its edges move.
-static func zone_width(count: int, stage_w: float) -> float:
+##
+## `card_width` is a parameter for the same reason it is one upstream
+## (`combat.js:460` takes `cardW`): the gap constants above are fixed across
+## every shape, and the card's own width is the ONLY shape-dependent term. It
+## defaults to the authored silhouette so a caller with no book still gets
+## pad-landscape's answer.
+static func zone_width(count: int, stage_w: float,
+		card_width: float = CardView.CARD_W) -> float:
 	var n: int = maxi(1, count)
-	var span: float = CardView.CARD_W
+	var span: float = card_width
 	if n > 1:
-		span = float(n - 1) * fan_gap(n, stage_w) + CardView.CARD_W
-	return minf(stage_w - 24.0, maxf(CardView.CARD_W + 16.0, ceilf(span + 20.0)))
+		span = float(n - 1) * fan_gap(n, stage_w) + card_width
+	return minf(stage_w - 24.0, maxf(card_width + 16.0, ceilf(span + 20.0)))
 
 
 # ---------------------------------------------------------------- dealing
@@ -329,21 +360,31 @@ func _fly_step(t: float, uid: int) -> void:
 	if view == null:
 		return
 	var from: Rect2 = _flight_from.get(uid, Rect2())
-	var born: float = from.size.x / CardView.CARD_W if from.size.x > 0.0 else 1.0
+	# In RESTING units, so the card leaves the pile at the pile's width whatever
+	# a card is worth on this shape.
+	var born: float = from.size.x / card_w if from.size.x > 0.0 else 1.0
 	var home: Vector2 = global_position + view.home_position
 	# Both ends are measured by the card's CENTRE, so a shrunken card leaves the
 	# pile's face rather than hanging off its corner.
-	var start: Vector2 = from.get_center() - view.size * 0.5 * born
+	#
+	# The half-size is UNSCALED, and that is the whole of it: a Control scaled
+	# about its own `pivot_offset` does not move the point at that pivot, so a
+	# centre-pivoted card's centre is `position + size * 0.5` at every scale.
+	# Measured on 4.7.1 at 0.776 and 1.38 — the reported centre did not move.
+	# The `* born` this line used to carry was therefore correcting for a
+	# displacement that never happens, and pushed the start half a shrunken card
+	# down and to the right of the pile it was meant to leave.
+	var start: Vector2 = from.get_center() - view.size * 0.5
 	view.global_position = start.lerp(home, t)
 	view.rotation = view.home_rotation * t
-	view.scale = Vector2.ONE * lerpf(born, 1.0, t)
+	view.scale = view.rest_scale(lerpf(born, 1.0, t))
 
 
 func _land(uid: int) -> void:
 	_flight_from.erase(uid)
 	var view: CardView = _views.get(uid)
 	if view != null:
-		view.scale = Vector2.ONE
+		view.scale = view.rest_scale()
 		view.snap_home()
 
 
@@ -368,12 +409,13 @@ func spend_to(uid: int, to: Rect2) -> void:
 		return
 	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	view.pivot_offset = view.size * 0.5
-	var shrink: float = to.size.x / CardView.CARD_W if to.size.x > 0.0 else 1.0
+	var shrink: float = to.size.x / card_w if to.size.x > 0.0 else 1.0
 	var tw: Tween = create_tween().set_parallel(true)
+	# Centre-preserving, for the reason spelled out in `_fly_step`.
 	tw.tween_property(view, "global_position",
-		to.get_center() - view.size * 0.5 * shrink, SPEND_FLIGHT) \
+		to.get_center() - view.size * 0.5, SPEND_FLIGHT) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tw.tween_property(view, "scale", Vector2.ONE * shrink, SPEND_FLIGHT)
+	tw.tween_property(view, "scale", view.rest_scale(shrink), SPEND_FLIGHT)
 	tw.tween_property(view, "rotation", 0.0, SPEND_FLIGHT)
 	tw.tween_property(view, "modulate:a", 0.0, SPEND_FLIGHT)
 	tw.chain().tween_callback(view.queue_free)
@@ -405,9 +447,9 @@ func strike_to(uid: int, target: Vector2) -> void:
 	view.pivot_offset = view.size * 0.5
 	var tw: Tween = create_tween().set_parallel(true)
 	tw.tween_property(view, "global_position",
-		target - view.size * 0.5 * STRIKE_SCALE, STRIKE_FLIGHT) \
+		target - view.size * 0.5, STRIKE_FLIGHT) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tw.tween_property(view, "scale", Vector2.ONE * STRIKE_SCALE, STRIKE_FLIGHT)
+	tw.tween_property(view, "scale", view.rest_scale(STRIKE_SCALE), STRIKE_FLIGHT)
 	tw.tween_property(view, "rotation", 0.0, STRIKE_FLIGHT)
 	# Held opaque for the first half: a card that fades as it launches never
 	# reads as having been thrown at anything.
@@ -434,19 +476,24 @@ static func max_drop(count: int) -> float:
 	return absf(rotation_deg(0, n)) * SAG_PER_DEG + BASE_Y
 
 
+## Re-fan against a stage width that has changed under the hand. Public because
+## nothing else outside may need `_relayout`, and this one thing does.
+func refan() -> void:
+	_relayout()
+
+
 ## Fan the cards along a shallow arc: centred spread, outer cards sit lower
 ## and tilt outward. `layoutHandSeats` in the benchmark, seat for seat.
 func _relayout() -> void:
 	var n: int = _order.size()
 	if n == 0:
 		return
-	# The stage the gap is measured against is the window, not this box — the
-	# box is sized BY the gap, so reading it here would be circular.
-	var stage_w: float = get_viewport_rect().size.x if is_inside_tree() else 1180.0
+	# The gap is measured against the STAGE, not this box — the box is sized BY
+	# the gap, so reading it here would be circular.
 	# Anchored centred by the screen, so the zone resizes by moving its own
 	# edges and stays on the stage's centre line. The WIDTH is measured on the
 	# real count; the SEATS stop at ten, so an eleventh card doubles up.
-	var want: float = zone_width(n, stage_w)
+	var want: float = zone_width(n, stage_w, card_w)
 	if absf(want - size.x) > 0.5 and absf(anchor_left - 0.5) < 0.001:
 		offset_left = -want * 0.5
 		offset_right = want * 0.5
@@ -454,7 +501,13 @@ func _relayout() -> void:
 	var spacing: float = fan_gap(seats, stage_w)
 	var center_x: float = want * 0.5
 	# The zone hangs past the stage bottom on purpose, and the fan is left there.
-	var base_bottom: float = size.y - CARD_INSET
+	var base_bottom: float = size.y - card_inset
+	# A card is drawn at the authored silhouette and SCALED to the shape, about
+	# its own centre. The centre is therefore invariant and `x` needs no
+	# correction; the bottom edge is not, so the top is placed from where the
+	# scaled bottom has to land rather than from the unscaled height.
+	var shrink: float = card_w / CardView.CARD_W
+	var half_h: float = CardView.CARD_H * 0.5
 	for i: int in range(n):
 		var view: CardView = _views[_order[i]]
 		var idx: int = mini(i, seats - 1)
@@ -463,7 +516,7 @@ func _relayout() -> void:
 		var sag: float = absf(rot) * SAG_PER_DEG + BASE_Y
 		view.home_position = Vector2(
 			center_x + offset_x - view.size.x * 0.5,
-			base_bottom - CardView.CARD_H + sag
+			base_bottom + sag - half_h * (1.0 + shrink)
 		)
 		view.home_rotation = deg_to_rad(rot)
 		# A card being carried follows the pointer, and a card in flight is on its
@@ -512,7 +565,7 @@ func _on_card_moved_to(uid: int, global_pos: Vector2) -> void:
 			view.rotation = 0.0
 			# `scale = model.drag.scale ?? 1.12` — a carried card is bigger than an
 			# armed one, because it is the thing the pointer is holding.
-			view.scale = Vector2.ONE * DRAG_SCALE
+			view.scale = view.rest_scale(DRAG_SCALE)
 	if not _aiming:
 		view.global_position = global_pos - view.size * 0.5
 	card_drag_moved.emit(uid, global_pos)

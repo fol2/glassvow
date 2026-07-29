@@ -1,16 +1,14 @@
 class_name WorldMapScreen
 extends Control
-## The pilgrimage (concept brief §1/§5): the run walks west-to-east across the
-## glass world toward the Spire on the horizon. Four parallax bands — skyband
-## .10, region .35, path 1.0, veil 1.35 — are drawn in a single pass off one
-## camera-x, so depth costs arithmetic rather than a scene graph. Waystones are
-## the only real children: they take input.
+## The benchmark 15×7 pilgrimage graph, drawn over the retained Glassvow world
+## scenery. Waystones are the only real children: they take input.
 ##
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
 ## dependency) so headless tests can drive it — see the M5 screens.
 
 signal node_chosen(index: int)
+signal menu_requested
 
 const SPACING: float = 250.0     # stage px per world_x ordinal
 const LEFT: float = 210.0        # world_x 0 sits here at camera 0
@@ -21,9 +19,12 @@ const F_REGION: float = 0.35
 const F_VEIL: float = 1.35
 const TRAVEL_TIME: float = 0.4
 const ASH_COUNT: int = 64
+const MAP_SCALE: float = 0.36
+const MAP_TOP: float = 92.0
+const MAP_BOTTOM: float = 74.0
 
-## Act 1 — the Ashen Woods. Act 2/3 swap these three lines (teal caustics,
-## violet storm) once their content exists; the bands themselves don't change.
+## The retained Glassvow scenery sits behind every act; the act name comes from
+## the full catalogue.
 const REGION_NAME: String = "The Ashen Woods"
 const REGION_ACCENT: Color = Color(0.49, 0.86, 0.56)  # #7ddb8f
 const SPIRE_H: float = 0.20      # Act 1: small and pale. It grows each act.
@@ -78,7 +79,7 @@ func _build_chrome() -> void:
 	row.add_theme_constant_override("separation", 22)
 	bar.add_child(row)
 	var title: Label = Label.new()
-	title.text = "琉璃誓言"
+	title.text = "Glassvow"
 	title.add_theme_font_size_override("font_size", 22)
 	title.add_theme_color_override("font_color", Color(0.78, 0.88, 1.0, 0.92))
 	row.add_child(title)
@@ -93,6 +94,11 @@ func _build_chrome() -> void:
 	_vitals_label = Label.new()
 	_vitals_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	row.add_child(_vitals_label)
+	var menu: Button = Button.new()
+	menu.text = "Menu"
+	GlassStyle.style_button(menu, GlassStyle.GLASS)
+	menu.pressed.connect(func() -> void: menu_requested.emit())
+	row.add_child(menu)
 
 	_hint_label = Label.new()
 	_hint_label.text = "Walk east — the Spire is still far."
@@ -109,7 +115,9 @@ func _build_chrome() -> void:
 func _build_waystones() -> void:
 	for i: int in range(map.nodes.size()):
 		var n: MapNode = map.nodes[i]
-		var ws: GlassWaystone = GlassWaystone.new(i, n.type, _node_hue(n), _node_caption(n))
+		var shown_kind: String = "unlit" if n.unlit else n.type
+		var caption: String = "Unlit Way" if n.unlit else _node_caption(n)
+		var ws: GlassWaystone = GlassWaystone.new(i, shown_kind, _node_hue(n), caption)
 		ws.chosen.connect(_on_waystone_chosen)
 		add_child(ws)
 		_waystones.append(ws)
@@ -153,30 +161,33 @@ func _seed_ash() -> void:
 ## Re-seat and re-light after a run change or a return from combat.
 func refresh(run: RunState) -> void:
 	if run != null:
-		_vitals_label.text = "HP %d / %d   ·   Gold %d" % [
+		var compact: bool = get_viewport_rect().size.x < 650.0
+		_region_label.visible = not compact
+		_region_label.text = "The Rose Window" if map.region == "rose_window" \
+			else str(content.acts[clampi(run.act, 0, content.acts.size() - 1)].get("name", REGION_NAME))
+		_vitals_label.text = ("HP %d/%d · G %d" if compact else "HP %d / %d   ·   Gold %d") % [
 			maxi(0, run.player.hp), run.player.max_hp, run.player.gold]
 	var live: Array[int] = map.reachable()
+	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
 		_waystones[i].set_state(live.has(i), map.is_cleared(i))
+		if first_live == null and live.has(i):
+			first_live = _waystones[i]
 	if live.is_empty():
 		_hint_label.text = "The road ends here."
 	else:
 		_hint_label.text = "Choose the next waystone."
+		if first_live != null and first_live.is_inside_tree():
+			first_live.grab_focus()
 	_seat_marker()
 
 
 func _seat_marker() -> void:
-	if map.at < 0 or map.at >= map.nodes.size():
-		return
-	_marker_x = float(map.nodes[map.at].world_x) * SPACING
-	_cam_x = _cam_for(map.at)
+	_cam_x = 0.0
 
 
 func _cam_for(i: int) -> float:
-	if i < 0 or i >= map.nodes.size():
-		return 0.0
-	# Keep the marker in the leading third so the road ahead stays visible.
-	return maxf(0.0, float(map.nodes[i].world_x) * SPACING - size.x * 0.34)
+	return 0.0
 
 
 func _on_waystone_chosen(i: int) -> void:
@@ -189,19 +200,11 @@ func choose(i: int) -> bool:
 		return false
 	for ws: GlassWaystone in _waystones:
 		ws.set_state(false, ws.cleared)  # travel locks the road
-	var target_x: float = float(map.nodes[i].world_x) * SPACING
 	if instant:
-		_marker_x = target_x
-		_cam_x = _cam_for(i)
 		node_chosen.emit(i)
 		return true
 	_travelling = true
-	var tw: Tween = create_tween()
-	tw.set_ease(Tween.EASE_IN_OUT)
-	tw.set_trans(Tween.TRANS_CUBIC)
-	tw.tween_property(self, "_marker_x", target_x, TRAVEL_TIME)
-	tw.parallel().tween_property(self, "_cam_x", _cam_for(i), TRAVEL_TIME)
-	tw.tween_callback(_on_arrived.bind(i))
+	get_tree().create_timer(TRAVEL_TIME).timeout.connect(_on_arrived.bind(i))
 	return true
 
 
@@ -226,12 +229,21 @@ func _process(delta: float) -> void:
 
 
 func _layout_waystones() -> void:
-	var y: float = size.y * PATH_Y
 	for i: int in range(_waystones.size()):
 		var ws: GlassWaystone = _waystones[i]
-		ws.position = Vector2(
-			_world_to_screen(float(map.nodes[i].world_x) * SPACING) - ws.size.x * 0.5,
-			y - GlassWaystone.EMBLEM_H + 8.0)
+		ws.scale = Vector2(MAP_SCALE, MAP_SCALE)
+		ws.position = _node_pos(map.nodes[i]) \
+			- ws.size * MAP_SCALE * 0.5
+
+
+func _node_pos(node: MapNode) -> Vector2:
+	var usable_h: float = maxf(1.0, size.y - MAP_TOP - MAP_BOTTOM)
+	var row_gap: float = usable_h / float(WorldMap.ROWS - 1)
+	var col_gap: float = minf(104.0, maxf(50.0, (size.x - 170.0) / float(WorldMap.COLS - 1)))
+	return Vector2(
+		size.x * 0.5 + float(node.col - 3) * col_gap + node.jx * 20.0,
+		size.y - MAP_BOTTOM - float(node.row) * row_gap + node.jy * 12.0,
+	)
 
 
 func _world_to_screen(world_x: float) -> float:
@@ -251,7 +263,7 @@ func _draw() -> void:
 	_draw_skyband(w, horizon)
 	_draw_region(w, horizon)
 	_draw_ground(w, h, horizon, path_y)
-	_draw_path(w, path_y)
+	_draw_graph()
 	_draw_marker(path_y)
 	_draw_veil(w)
 
@@ -328,9 +340,12 @@ func _draw_path(w: float, path_y: float) -> void:
 ## The pilgrim: one lantern, carried east. Seated a stride west of its
 ## waystone — the screen's own _draw sits under every child, so a marker
 ## centred on the node would be buried by that node's pane.
-func _draw_marker(path_y: float) -> void:
-	var x: float = _world_to_screen(_marker_x) - 78.0
-	var y: float = path_y - 16.0
+func _draw_marker(_path_y: float) -> void:
+	if map.at < 0 or map.at >= map.nodes.size():
+		return
+	var at: Vector2 = _node_pos(map.nodes[map.at]) + Vector2(-28.0, 0.0)
+	var x: float = at.x
+	var y: float = at.y
 	var ember: Color = GlassStyle.EMBER
 	draw_circle(Vector2(x, y), 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 	draw_circle(Vector2(x, y), 15.0, Color(ember.r, ember.g, ember.b, 0.18))
@@ -346,6 +361,22 @@ func _draw_marker(path_y: float) -> void:
 		Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.55), 1.6)
 	draw_line(Vector2(x, y + 16.0), Vector2(x, y + 26.0),
 		Color(ember.r, ember.g, ember.b, 0.25), 2.0)
+
+
+func _draw_graph() -> void:
+	var by_id: Dictionary = {}
+	for node: MapNode in map.nodes:
+		by_id[node.id] = node
+	for node: MapNode in map.nodes:
+		var from: Vector2 = _node_pos(node)
+		for next_id: String in node.next:
+			var next_v: Variant = by_id.get(next_id)
+			if typeof(next_v) == TYPE_OBJECT:
+				var next_node: MapNode = next_v
+				var to: Vector2 = _node_pos(next_node)
+				var lit: bool = map.is_cleared(map.nodes.find(node))
+				var tone: Color = GlassStyle.EMBER if lit else GlassStyle.GLASS
+				draw_line(from, to, Color(tone.r, tone.g, tone.b, 0.34 if lit else 0.16), 2.0)
 
 
 ## Band 4 (1.35) — near ash, overshooting the walk to sell the depth.

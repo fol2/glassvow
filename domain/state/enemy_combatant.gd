@@ -2,11 +2,12 @@ class_name EnemyCombatant
 extends RefCounted
 ## One enemy's combat state. `def` is the resolved content definition
 ## (already-parsed data injected by the rules layer — no IO here).
-## Slice scope: no variant/adamant/ramp flags; those land with the full
-## content wave.
+## Variant, affix and ramp state is held in `flags`; authored data stays in
+## `def`.
 
 
 var key: StringName = &""
+var variant_id: StringName = &""
 var def: Dictionary = {}
 var idx: int = 0
 var name: String = ""
@@ -21,6 +22,7 @@ var elite: bool = false
 var boss: bool = false
 var facet_max: int = 0
 var chips: int = 0
+var flags: Dictionary = {}
 
 
 ## The move definition behind the current intent.

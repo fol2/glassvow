@@ -56,8 +56,8 @@ arrive; `CombatScreen._enter` moved the Control with the exact `Motion.ENTER`
 curve, the hero's −70px and the `_stand` re-anchor, and had no stagger. The
 Control is the correct element and the stagger is the correct behaviour, so they
 are one function: `EnemyView.enter(delay, done)` owns the motion and the fill,
-`_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2847` (`enter`),
-`combat_screen.gd:1134` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
+`_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2811` (`enter`),
+`combat_screen.gd:1353` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
 which fired a frame earlier and set foe alpha to zero under the other path's
 nose, is gone.
 
@@ -275,7 +275,7 @@ skew reduced 35%, from a base of `scale(1,.24)`, opacity `.62`, blur `1.5px`
 (`src/char-meta.js:8`, `src/ui/combat.js:1771-1819`, `src/styles.css:767-782`).
 
 Here: derived by projecting the silhouette along the key light
-(`enemy_view.gd:2235` (`_update_shadow`)). **Built out 2026-07-27** — the grade
+(`enemy_view.gd:2222` (`_update_shadow`)). **Built out 2026-07-27** — the grade
 above was the shape; the lift response was neither matched nor alive.
 
 Two defects, both fixed. **It never ran.** `_update_shadow` was called at build,
@@ -556,9 +556,9 @@ the painted silhouette; only its missing-art fallback is a blob
 `src/ui/combat.js:1795-1818`, `src/styles.css:769-778`).
 
 Godot derives eight of the nine from the painting alpha, the ground plane and the
-key light (`enemy_view.gd:2053` (`_read_contact`),
-`enemy_view.gd:2235` (`_update_shadow`)). **The ninth, `dy`, is now read** (2026-07-27,
-`enemy_view.gd:2659` (`_read_hover`)) — this entry previously called the whole
+key light (`enemy_view.gd:2040` (`_read_contact`), `enemy_view.gd:2222`
+(`_update_shadow`)). **The ninth, `dy`, is now read** (2026-07-27,
+`enemy_view.gd:2646` (`_read_hover`)) — this entry previously called the whole
 block vestigial and that was wrong about one knob.
 
 Contact point, lean, length and softening are all in the image or in the light.

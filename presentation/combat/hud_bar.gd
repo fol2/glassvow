@@ -8,11 +8,16 @@ extends Control
 ## the ash and discard piles beneath it, and the ward chip riding the hero's
 ## plate. This widget is that whole chrome layer.
 ##
-## Every number below is measured, not guessed — the benchmark's combat screen
-## is 1180x820, which is exactly this project's viewport, so its CSS pixels are
-## our pixels. Sizes, colours, weights and letter-spacing come from the live
-## stylesheet (read 2026-07-25); `_place()` re-hangs each cluster off the nearest
-## window edge so a taller window keeps the furniture in its corner.
+## Every number below is measured, not guessed. Sizes, colours, weights and
+## letter-spacing come from the live stylesheet (read 2026-07-25) at 1180x820,
+## which the benchmark names `pad-landscape` and whose CSS pixels are this
+## project's pixels at that shape.
+##
+## WHERE each cluster sits is no longer among them: the ten `UIC` boxes come from
+## `assets/layout/combat-layout.json` for the shape this HUD was built for, so a
+## phone gets the phone's chrome rather than the pad's shrunk. `_place()` hangs
+## each one off the corner it belongs to, and because every value in that scope
+## is a distance from an edge, a stage that flexes moves nothing.
 ##
 ## Values in, signals out. No game dependency: `set_values()` takes nine ints,
 ## `set_title()` the location line, `set_lantern()` the art charge. The lab poses
@@ -31,9 +36,18 @@ signal lantern_pressed
 signal pile_pressed(pile: StringName)
 
 const ART: String = "res://assets/art/"
-## The benchmark's `.combat-screen`, and this project's viewport. Offsets are
-## measured inside it, then hung off whichever edge each cluster belongs to.
-const SCREEN: Vector2 = Vector2(1180.0, 820.0)
+
+## Where each cluster hangs, for the shape this HUD was built for. Ten of the
+## boxes below used to be literals measured inside a 1180x820 screen; they are
+## `UIC` (`src/ui-chrome-layout.js`) and now come out of the book instead, which
+## is the same table read rather than transcribed. At `pad-landscape` it resolves
+## to exactly the numbers that were here.
+##
+## The whole scope is edge-relative — every widget is a distance from the corner
+## it sits in, never a coordinate — so the flex passes straight through it and
+## `_place` never needs to know how wide the stage is. See `LayoutBook.place`.
+var shape: StringName = StageShape.IDENTITY
+var _chrome: Dictionary = {}
 
 # --- palette: the benchmark's CSS custom properties, verbatim ---------------
 const TEXT: Color = Color(0.843, 0.863, 0.918)       # --text    #d7dcea
@@ -54,7 +68,11 @@ const HP_FILL_B: Color = Color(1.0, 0.439, 0.376)
 const PLATE_FILL_A: Color = Color(0.710, 0.165, 0.243)
 const PLATE_FILL_B: Color = Color(1.0, 0.416, 0.369)
 
-const BAR_H: float = 56.0
+## `.hud-bar`'s content height — `UIC.hud.height`, which every shape re-authors
+## (56 on a pad, 47 on a phone in portrait, 34 held sideways). `UIC.hud.scale`
+## rides alongside it and is 1 in all five shapes at 6e06911, so nothing reads it
+## yet; the editor is what will make it earn its place.
+const BAR_H_FALLBACK: float = 56.0
 const BAR_PAD: float = 16.0
 const BAR_GAP: float = 18.0
 const HP_WRAP_W: float = 170.0
@@ -85,8 +103,16 @@ const PLATE_WIDE_VIAL: float = 110.0
 ## that a warded turn changes nothing about the gauge, and a gauge that slides
 ## 66px sideways when the ward expires has changed plenty.
 const PLATE_WIDE_LEAD: float = 76.0
+## A pile's box where the book authors none. Every shape at 6e06911 does author
+## one, so this is a floor rather than a default in practice.
+const PILE_BOX: Vector2 = Vector2(96.0, 148.0)
+
 const PLATE_CX: float = 245.0       # both widths hang off this centre
-const PLATE_Y: float = 614.0
+## The hero plate is NOT a `UIC` widget — the benchmark rides it on the actor,
+## and this port hangs it off the corner instead (`docs/hud-handoff.md` §2). Its
+## two numbers stay here, restated as a distance UP from the bottom edge so they
+## survive a taller stage the same way every book widget does.
+const PLATE_BOTTOM: float = 172.0
 const PLATE_H: float = 34.0
 const PLATE_GAP: float = 6.0        # .hpbar-wrap gap
 const PLATE_LABEL_W: float = 52.0   # .hp-label min-width
@@ -270,11 +296,19 @@ static func _font(path: String, tracking: int) -> Font:
 ## a lab with no hero in it and wrong the moment a real hero stands somewhere
 ## else. Assembly asks the question as D2 in `docs/assembly-integration-plan.md`;
 ## passing false here is the answer that says the actor owns it.
+## The shape is injected the same way `CombatScreen`'s is, and defaults the same
+## way: `pad-landscape` resolves to exactly the ten boxes that used to be written
+## out in this file, so every existing caller gets an unchanged HUD.
 func _init(vial_frame: bool = true, wide_plate: bool = true,
-		plate: bool = true) -> void:
+		plate: bool = true, stage_shape: StringName = StageShape.IDENTITY) -> void:
 	_vial_frame = vial_frame
 	_plate_w = PLATE_WIDE_W if wide_plate else PLATE_PARITY_W
 	_plate_vial_w = PLATE_WIDE_VIAL if wide_plate else 0.0
+	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
+	# Chrome authors no acts at 6e06911, so the act is not a parameter here; the
+	# book still resolves through one, which is what lets a future act add chrome
+	# without this signature changing.
+	_chrome = LayoutBook.resolve(&"chrome", shape, 0)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE  # only the buttons take input
 	_build_top_bar()
@@ -283,13 +317,12 @@ func _init(vial_frame: bool = true, wide_plate: bool = true,
 	_build_energy()
 	_build_lantern()
 	# Three piles, not two, each wearing its own back — the blue vault, the warm
-	# discard, the charred ash. Boxes from the benchmark's ui-chrome-layout.js:
-	# draw {left 16, bottom 14}, ashes {right 132}, discard {right 22}, 96x148.
-	_draw_pile = _build_pile(&"draw", "DRAW", Rect2(16.0, 658.0, 96.0, 148.0), false, 1.0)
-	_ashes_pile = _build_pile(&"ashes", "ASHES", Rect2(952.0, 658.0, 96.0, 148.0),
-		true, ASH_FADE)
-	_discard_pile = _build_pile(&"discard", "DISCARD",
-		Rect2(1062.0, 658.0, 96.0, 148.0), true, 1.0)
+	# discard, the charred ash. Their boxes are `UIC.draw` / `.ashes` / `.discard`
+	# and come from the book, which is where the three rects that used to be
+	# written out here were copied from in the first place.
+	_draw_pile = _build_pile(&"draw", "DRAW", 1.0)
+	_ashes_pile = _build_pile(&"ashes", "ASHES", ASH_FADE)
+	_discard_pile = _build_pile(&"discard", "DISCARD", 1.0)
 	_build_end_turn()
 	set_title("The Ashen Woods", "Floor I · The Rootheart")
 	set_values(72, 72, 0, 99, 3, 3, 5, 0, 0)
@@ -393,9 +426,14 @@ func set_lantern(charges: int, ready: bool) -> void:
 ## `.hud-bar`: 56px, padding 8/16, gap 18, and a background that is a downward
 ## fade rather than a panel — it has no border, it dissolves into the fight.
 func _build_top_bar() -> void:
+	# One ratio for everything that merely shrinks, and two numbers for the two
+	# things that are decisions rather than shrinkage. See `LayoutBook.FIELDS`
+	# under `hud/scale` for why the bar is not simply scaled whole.
+	var k: float = _hud_num("scale", 1.0)
+	var hp_w: float = _hud_num("stat", HP_WRAP_W)
 	var bar: Control = Control.new()
 	bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	bar.offset_bottom = BAR_H
+	bar.offset_bottom = bar_height()
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bar)
 
@@ -412,38 +450,38 @@ func _build_top_bar() -> void:
 
 	var row: HBoxContainer = HBoxContainer.new()
 	row.set_anchors_preset(Control.PRESET_FULL_RECT)
-	row.offset_left = BAR_PAD
-	row.offset_right = -BAR_PAD
-	row.add_theme_constant_override("separation", int(BAR_GAP))
+	row.offset_left = BAR_PAD * k
+	row.offset_right = -BAR_PAD * k
+	row.add_theme_constant_override("separation", int(BAR_GAP * k))
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(row)
 
 	# .hud-hp-wrap — numerals over a 7px rail, 3px apart, 170 wide.
 	var hp_wrap: VBoxContainer = VBoxContainer.new()
-	hp_wrap.custom_minimum_size = Vector2(HP_WRAP_W, 0.0)
+	hp_wrap.custom_minimum_size = Vector2(hp_w, 0.0)
 	hp_wrap.add_theme_constant_override("separation", 3)
 	hp_wrap.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	hp_wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(hp_wrap)
 	var hp_stat: HBoxContainer = _stat_row()
-	hp_stat.add_child(_icon_rect("ui/heart", 14.0))
-	_hp_num = _num_label(17.0, HP_NUM, GlassStyle.CINZEL_700, 0)
+	hp_stat.add_child(_icon_rect("ui/heart", 14.0 * k))
+	_hp_num = _num_label(17.0 * k, HP_NUM, GlassStyle.CINZEL_700, 0)
 	hp_stat.add_child(_hp_num)
 	hp_wrap.add_child(hp_stat)
 	var rail: Panel = Panel.new()
-	rail.custom_minimum_size = Vector2(HP_WRAP_W, 7.0)
+	rail.custom_minimum_size = Vector2(hp_w, 7.0 * k)
 	rail.add_theme_stylebox_override("panel", _flat(Color(1.0, 1.0, 1.0, 0.12), 4))
 	rail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hp_wrap.add_child(rail)
 	# The fill keeps the CSS gradient and gives up the CSS rounding: a rounded
 	# gradient needs a shader, and at 7px tall the gradient is what reads.
 	_hp_fill = _gradient_rect(HP_FILL_A, HP_FILL_B)
-	_hp_fill.size = Vector2(HP_WRAP_W, 7.0)
+	_hp_fill.size = Vector2(hp_w, 7.0 * k)
 	rail.add_child(_hp_fill)
 
 	var gold_stat: HBoxContainer = _stat_row()
-	gold_stat.add_child(_icon_rect("ui/coin", 14.0))
-	_gold_num = _num_label(17.0, GOLD, GlassStyle.CINZEL_700, 0)
+	gold_stat.add_child(_icon_rect("ui/coin", 14.0 * k))
+	_gold_num = _num_label(17.0 * k, GOLD, GlassStyle.CINZEL_700, 0)
 	gold_stat.add_child(_gold_num)
 	row.add_child(gold_stat)
 
@@ -455,27 +493,39 @@ func _build_top_bar() -> void:
 	mid.add_theme_constant_override("separation", 0)
 	mid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(mid)
-	_title_lead = _num_label(14.0, PARCHMENT, GlassStyle.CINZEL_700, 3)
+	_title_lead = _num_label(14.0 * k, PARCHMENT, GlassStyle.CINZEL_700, 3)
 	mid.add_child(_title_lead)
-	_title_tail = _num_label(14.0, TEXT_DIM, GlassStyle.CINZEL_700, 2)
+	_title_tail = _num_label(14.0 * k, TEXT_DIM, GlassStyle.CINZEL_700, 2)
 	mid.add_child(_title_tail)
+	# `.hud-mid { display: none }` — a phone held upright has 22px of bar left
+	# after the HP block, the purse and the two seals, and a title that shrinks
+	# to fit that is not a title. It goes, and the act and floor are read off the
+	# map instead (`styles.css:2109`, whose comment says exactly that).
+	#
+	# The LABELS go, not the box. `.hud-mid` is `flex: 1` and upstream's `display:
+	# none` frees that space for the row's own `justify-content` to take up;
+	# hiding this container instead just collapses it and leaves the deck and
+	# menu seals stranded a third of the way from the right edge.
+	if _hud_num("title", 1.0) < 1.0:
+		_title_lead.visible = false
+		_title_tail.visible = false
 
 	var right: HBoxContainer = HBoxContainer.new()
-	right.add_theme_constant_override("separation", 10)
+	right.add_theme_constant_override("separation", int(10.0 * k))
 	right.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	right.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(right)
 
 	# .icon-btn.deck-btn — a 44px hit area under 56px of art, with the count
 	# sitting on the seal in white.
-	var deck: Button = _bare_button(Vector2(44.0, 44.0))
+	var deck: Button = _bare_button(Vector2(44.0, 44.0) * k)
 	deck.tooltip_text = "Deck"
 	deck.pressed.connect(func() -> void: deck_pressed.emit())
 	right.add_child(deck)
-	var seal: TextureRect = _icon_rect("ui/deck", 56.0)
-	seal.position = Vector2(-6.0, -6.0)
+	var seal: TextureRect = _icon_rect("ui/deck", 56.0 * k)
+	seal.position = Vector2(-6.0, -6.0) * k
 	deck.add_child(seal)
-	_deck_count = _num_label(22.0, Color.WHITE, GlassStyle.CINZEL_800, 0)
+	_deck_count = _num_label(22.0 * k, Color.WHITE, GlassStyle.CINZEL_800, 0)
 	_deck_count.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_deck_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_deck_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -485,7 +535,7 @@ func _build_top_bar() -> void:
 	# .icon-btn — the one piece of chrome that keeps a box: 40px, radius 10,
 	# ink fill, hairline rim.
 	var menu: Button = Button.new()
-	menu.custom_minimum_size = Vector2(40.0, 40.0)
+	menu.custom_minimum_size = Vector2(40.0, 40.0) * k
 	menu.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	menu.focus_mode = Control.FOCUS_NONE
 	for state: String in ["normal", "hover", "pressed", "focus"]:
@@ -496,12 +546,12 @@ func _build_top_bar() -> void:
 	menu.tooltip_text = "Menu"
 	menu.pressed.connect(func() -> void: menu_pressed.emit())
 	right.add_child(menu)
-	var menu_ic: TextureRect = _icon_rect("ui/menu", 19.0)
+	var menu_ic: TextureRect = _icon_rect("ui/menu", 19.0 * k)
 	menu_ic.set_anchors_preset(Control.PRESET_CENTER)
-	menu_ic.offset_left = -9.5
-	menu_ic.offset_top = -9.5
-	menu_ic.offset_right = 9.5
-	menu_ic.offset_bottom = 9.5
+	menu_ic.offset_left = -9.5 * k
+	menu_ic.offset_top = -9.5 * k
+	menu_ic.offset_right = 9.5 * k
+	menu_ic.offset_bottom = 9.5 * k
 	menu.add_child(menu_ic)
 
 
@@ -518,8 +568,8 @@ func _build_top_bar() -> void:
 ## the same measured-absolute idiom as every other cluster in this file.
 func _build_plate() -> void:
 	var plate: Control = Control.new()
-	_place(plate, Rect2(PLATE_CX - _plate_w * 0.5, PLATE_Y, _plate_w, PLATE_H),
-		false, true)
+	_place(plate, PLATE_CX - _plate_w * 0.5, PLATE_BOTTOM,
+		Vector2(_plate_w, PLATE_H))
 	add_child(plate)
 
 	# Chip and shield hide together. The shield is not a child of the chip — it
@@ -613,7 +663,7 @@ func _glide_hp() -> void:
 
 func _set_hp_bar(t: float, from: float, to: float) -> void:
 	_hp_shown_bar = lerpf(from, to, Motion.ease(HP_EASE, t))
-	_hp_fill.size.x = HP_WRAP_W * _hp_shown_bar
+	_hp_fill.size.x = _hud_num("stat", HP_WRAP_W) * _hp_shown_bar
 
 
 func _set_hp_plate(t: float, from: float, to: float) -> void:
@@ -648,7 +698,7 @@ func _layout_plate() -> void:
 ## by 10px. The candles are the gauge; the numeral is the read.
 func _build_energy() -> void:
 	_energy_orb = Control.new()
-	_place(_energy_orb, Rect2(0.0, 568.0, 120.0, 90.0), false, true)
+	var shell: Control = _place_widget(_energy_orb, "energy", Vector2(120.0, 90.0))
 	add_child(_energy_orb)
 	_chrome_in.append(_energy_orb)
 
@@ -656,19 +706,19 @@ func _build_energy() -> void:
 	_candle_field.position = Vector2(0.0, 34.0)
 	_candle_field.size = Vector2(120.0, 56.0)
 	_candle_field.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_energy_orb.add_child(_candle_field)
+	shell.add_child(_candle_field)
 
 	_energy_num = _num_label(44.0, PALE, GlassStyle.CINZEL_800, 0)
 	_energy_num.size = Vector2(120.0, 48.0)
 	_energy_num.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_outline(_energy_num, 10)
-	_energy_orb.add_child(_energy_num)
+	shell.add_child(_energy_num)
 
 
 ## `.lantern-btn` — the art charge. Its own setter, not one of the eight values.
 func _build_lantern() -> void:
 	_lantern = Control.new()
-	_place(_lantern, Rect2(18.0, 448.0, 104.0, 104.0), false, true)
+	var shell: Control = _place_widget(_lantern, "lantern", Vector2(104.0, 104.0))
 	add_child(_lantern)
 	_chrome_in.append(_lantern)
 	# The benchmark drop-shadows the lantern in its own firelight; a soft radial
@@ -681,12 +731,12 @@ func _build_lantern() -> void:
 	glow.stretch_mode = TextureRect.STRETCH_SCALE
 	glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_lantern.add_child(glow)
+	shell.add_child(glow)
 
 	var btn: Button = _bare_button(Vector2(104.0, 104.0))
 	btn.tooltip_text = "Lantern — spend a charge"
 	btn.pressed.connect(func() -> void: lantern_pressed.emit())
-	_lantern.add_child(btn)
+	shell.add_child(btn)
 	var art: TextureRect = _icon_rect("ui/lantern", 94.0)
 	art.position = Vector2(5.0, 5.0)
 	btn.add_child(art)
@@ -701,38 +751,40 @@ func _build_lantern() -> void:
 ## `.pile-btn` — a fan of card backs, the count on its shoulder, the name
 ## underneath. `.pile-stack` is inset 18px from the bottom to leave that name
 ## room, and the faces are drawn at the box's own width.
-func _build_pile(which: StringName, name_text: String, rect: Rect2,
-		from_right: bool, fade: float) -> Pile:
+func _build_pile(which: StringName, name_text: String, fade: float) -> Pile:
 	var root: Control = Control.new()
-	_place(root, rect, from_right, true)
+	# The pile is drawn against PILE_BOX whatever the shape; the shell is what
+	# turns that into the 68x108 a phone actually gets.
+	var box: Vector2 = PILE_BOX
+	var shell: Control = _place_widget(root, String(which), box)
 	root.modulate = Color(1.0, 1.0, 1.0, fade)
 	add_child(root)
 	_chrome_in.append(root)
 
-	var btn: Button = _bare_button(rect.size)
+	var btn: Button = _bare_button(box)
 	btn.pressed.connect(func() -> void: pile_pressed.emit(which))
-	root.add_child(btn)
+	shell.add_child(btn)
 
 	var p: Pile = Pile.new()
 	p.stack = Fan.new()
 	p.stack.tex = icon("piles/" + str(which))
-	p.stack.face = rect.size.x
-	p.stack.size = Vector2(rect.size.x, rect.size.y - 18.0)
+	p.stack.face = box.x
+	p.stack.size = Vector2(box.x, box.y - 18.0)
 	p.stack.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	p.stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	btn.add_child(p.stack)
 
 	p.count = _num_label(16.0, PARCHMENT, GlassStyle.CINZEL_800, 0)
-	p.count.position = Vector2(0.0, rect.size.y - 34.0)
-	p.count.size = Vector2(rect.size.x - 2.0, 16.0)
+	p.count.position = Vector2(0.0, box.y - 34.0)
+	p.count.size = Vector2(box.x - 2.0, 16.0)
 	p.count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_outline(p.count, 6)
 	btn.add_child(p.count)
 
 	var tag: Label = _num_label(10.0, TEXT_DIM, GlassStyle.CINZEL_700, 1)
 	tag.text = name_text
-	tag.position = Vector2(0.0, rect.size.y - 14.0)
-	tag.size = Vector2(rect.size.x, 13.0)
+	tag.position = Vector2(0.0, box.y - 14.0)
+	tag.size = Vector2(box.x, 13.0)
 	tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_outline(tag, 4)
 	btn.add_child(tag)
@@ -755,7 +807,13 @@ func pile_rect(which: StringName) -> Rect2:
 		p = _ashes_pile
 	if p == null or p.stack == null:
 		return Rect2(global_position + size * 0.5, Vector2.ZERO)
-	return p.stack.get_global_rect()
+	# Spelled out from the transform rather than taken from `get_global_rect()`,
+	# and the two agree: measured on 4.7.1, that accessor IS scale-aware in both
+	# origin and size, so a phone's pile reports 68px and not the 96 it is drawn
+	# at. This form is here because the shell scaling makes the question worth
+	# asking at the call site, not because the accessor is wrong.
+	var xf: Transform2D = p.stack.get_global_transform()
+	return Rect2(xf.origin, p.stack.size * xf.get_scale())
 
 
 ## `.end-turn.enemy-phase` (styles.css:1397) — while the queue drains, the END
@@ -922,13 +980,13 @@ static func _fan_angle(i: int, faces: int) -> float:
 ## `.end-turn` — 120px of seal with END struck across it.
 func _build_end_turn() -> void:
 	var root: Control = Control.new()
-	_place(root, Rect2(1060.0, 537.0, 120.0, 120.0), true, true)
+	var shell: Control = _place_widget(root, "endTurn", Vector2(120.0, 120.0))
 	add_child(root)
 	_chrome_in.append(root)
 	_end_turn = root
 	var btn: Button = _bare_button(Vector2(120.0, 120.0))
 	btn.pressed.connect(func() -> void: end_turn_pressed.emit())
-	root.add_child(btn)
+	shell.add_child(btn)
 	btn.add_child(_icon_rect("ui/end-turn", 120.0))
 	var lbl: Label = _num_label(18.0, PALE, GlassStyle.CINZEL_800, 3)
 	lbl.text = "END"
@@ -941,21 +999,81 @@ func _build_end_turn() -> void:
 
 # ---------------------------------------------------------------- parts
 
-## Hang a cluster off the window edge it belongs to, from a rect measured in the
-## benchmark's 1180x820 screen. Bottom furniture stays in the corner when the
-## window grows; the top bar is the only thing that spans.
-func _place(node: Control, rect: Rect2, from_right: bool, from_bottom: bool) -> void:
+## Hang a cluster off the edges it belongs to. `x` is a distance from the LEFT
+## edge, or from the right when `from_right`; `bottom` is always a distance UP
+## from the bottom edge. Bottom furniture stays in its corner when the stage
+## grows; the top bar is the only thing that spans.
+##
+## Every figure is a GAP now, where it used to be a coordinate inside a fixed
+## 1180x820 screen that `_place` then converted by subtracting the screen size.
+## The anchors were always doing that work; stating the gap directly means this
+## function no longer needs to know the stage's size at all, which is precisely
+## what lets the same call serve a phone.
+func _place(node: Control, x: float, bottom: float, box: Vector2,
+		from_right: bool = false) -> void:
 	var ax: float = 1.0 if from_right else 0.0
-	var ay: float = 1.0 if from_bottom else 0.0
 	node.anchor_left = ax
 	node.anchor_right = ax
-	node.anchor_top = ay
-	node.anchor_bottom = ay
-	node.offset_left = rect.position.x - (SCREEN.x if from_right else 0.0)
-	node.offset_right = node.offset_left + rect.size.x
-	node.offset_top = rect.position.y - (SCREEN.y if from_bottom else 0.0)
-	node.offset_bottom = node.offset_top + rect.size.y
+	node.anchor_top = 1.0
+	node.anchor_bottom = 1.0
+	node.offset_left = -(x + box.x) if from_right else x
+	node.offset_right = node.offset_left + box.x
+	node.offset_bottom = -bottom
+	node.offset_top = node.offset_bottom - box.y
 	node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+## Hang a cluster where the book puts it for this shape, and hand back the shell
+## its parts are drawn inside.
+##
+## `natural` is the size this port DRAWS the widget at — the pad-landscape
+## figure every internal offset, font size and icon here was authored against.
+## The book states the widget's real size per shape, and those disagree by up to
+## a third: `endTurn` is 120 on a pad and 84 held sideways, a pile 96x148 and
+## 64x102, the energy orb 120x90 and 72x57. Nothing here was reading that. Every
+## widget drew itself at the pad's size wherever it was placed, so a phone got a
+## 120px seal on a 390px stage sitting on top of the fight.
+##
+## Rather than teach nine widgets to lay themselves out at any size — nine
+## chances to disagree, which is the shape of the duplication this whole book
+## exists to remove — each is drawn ONCE at `natural` inside a shell, and the
+## shell carries the difference as a scale. The node itself is the authored box,
+## so `_keyframe_pop` still pops the real thing and `_place` still speaks in
+## gaps.
+##
+## The scale is deliberately non-uniform: the book's `w` and `h` are an
+## element's CSS width and height upstream, and honouring only one of them would
+## put the widget's own edge somewhere the book did not say. The two differ by
+## at most 3% on any authored shape, so nothing visibly stretches.
+func _place_widget(node: Control, widget: String, natural: Vector2) -> Control:
+	var seat: Dictionary = _chrome.get(widget, {})
+	if seat.is_empty():
+		push_warning("hud: the book has no %s for %s" % [widget, shape])
+	var span: Vector2 = Vector2(LayoutBook.num(seat.get("w"), natural.x),
+		LayoutBook.num(seat.get("h"), natural.y))
+	var from_right: bool = seat.has("right")
+	var x: float = LayoutBook.num(seat.get("right" if from_right else "left"))
+	_place(node, x, LayoutBook.num(seat.get("bottom")), span, from_right)
+
+	var shell: Control = Control.new()
+	shell.size = natural
+	# From the top-left, so the shell's box IS the node's box and no part of it
+	# has to be nudged back afterwards.
+	shell.pivot_offset = Vector2.ZERO
+	shell.scale = Vector2(span.x / maxf(1.0, natural.x), span.y / maxf(1.0, natural.y))
+	shell.mouse_filter = Control.MOUSE_FILTER_PASS
+	node.add_child(shell)
+	return shell
+
+
+## `.hud-bar`'s height for this shape.
+func bar_height() -> float:
+	return _hud_num("height", BAR_H_FALLBACK)
+
+
+## One of the rail's four authored numbers.
+func _hud_num(field: String, fallback: float) -> float:
+	return LayoutBook.num(_chrome.get("hud", {}).get(field), fallback)
 
 
 ## `.hud-stat`: icon and numeral, 7px apart, centred on the bar.

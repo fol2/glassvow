@@ -55,6 +55,10 @@ const BANNER_HOLD: float = 0.42
 ## `plate.y = stageHeight * yFrac` — a little above the middle, clear of the
 ## fan and clear of the actors' heads.
 const BANNER_Y_FRAC: float = 0.38
+## The room a banner leaves at each end of the stage, together. Nothing upstream
+## sets it: the benchmark's banner is a `max-width: 90vw` block and this is the
+## same idea stated in px, sized so a phone still shows a plate rather than a bar.
+const BANNER_MARGIN: float = 48.0
 
 static var _font_cache: FontFile = null
 
@@ -275,7 +279,12 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	for line: String in lines:
 		longest = maxi(longest, line.length())
 
-	var w: float = clampf(float(longest) * 18.0, 280.0, 640.0)
+	# Clamped to the STAGE as well as to its own range. The two ranges below were
+	# authored against a 1180-wide stage, where a 720px boss banner is a plate in
+	# the middle of the screen; on a 390-wide phone the same number is nearly
+	# twice the stage and the banner would have run off both edges.
+	var room: float = maxf(CardView.CARD_W, size.x - BANNER_MARGIN)
+	var w: float = minf(room, clampf(float(longest) * 18.0, 280.0, 640.0))
 	var h: float = 56.0
 	var body: Color = Color(PLATE_INK.r, PLATE_INK.g, PLATE_INK.b, 0.88)
 	var rail: Color = GOLD
@@ -288,7 +297,7 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	var dur: float = DUR_CEREMONY
 	match kind:
 		"boss":
-			w = clampf(float(longest) * 22.0, 340.0, 720.0)
+			w = minf(room, clampf(float(longest) * 22.0, 340.0, 720.0))
 			h = 96.0 if lines.size() > 1 else 78.0
 			body = Color(0.101960786, 0.03137255, 0.0627451, 0.88)
 			rail = DANGER

@@ -11,26 +11,50 @@ extends Control
 signal combat_over(result: String)
 signal result_continue
 
-## Where the ground is, in stage px up from the bottom. This project's viewport
-## is 1180x820, which `src/stage.js:23` names `pad-landscape` — one of the
-## benchmark's five AUTHORED shapes, not an approximation of one — so
-## `BF.base.groundY` transfers verbatim rather than being fitted. The
-## battlefield ends on this line and every actor stands on it: an actor drawn at
-## bottom 0 has its feet here. Foes and the hero are the same animal, which is
-## the contract `enemy_view.gd` was already built against.
-const GROUND_Y: float = 232.0
-## `BF.base.ledgeLip` — how far the lit lip rides above the ground line.
-const LEDGE_LIP: float = 14.0
-## The stage the plates were measured in. Offsets resolve against the live
-## viewport, so a taller window moves the ground rather than stretching the art.
-const STAGE: Vector2 = Vector2(1180.0, 820.0)
-const STAGE_ART: String = "res://assets/art/stage/act1-%s.png"
+## The composition this screen is drawn for, and the act it is showing.
+##
+## Both used to be constants here — a ground line of 232, a hero at x 200, a
+## 1180x820 stage — because the project rendered at exactly one shape and every
+## number could be the `pad-landscape` value written out longhand. They now come
+## from `assets/layout/combat-layout.json` through `LayoutBook`, which is the
+## same table (`src/battlefield-layout.js`) read rather than transcribed.
+##
+## The defaults are not arbitrary: `pad-landscape` at act 0 resolves to exactly
+## the numbers that were here, so a default-constructed screen is unchanged to
+## the pixel. That identity is the regression gate for this whole change —
+## `CONCEPTS.md:193` rests the parity method on this shape being 1:1 with the
+## reference build, so every `file:line` in this file stops meaning anything the
+## day a default boot stops landing on 1180x820 act 0.
+var shape: StringName = StageShape.IDENTITY
+var act: int = 0
 
-## `BF.base.hero.x` merged with `shapes['pad-landscape']` — where the hero's
-## centre stands. Its BOX is not from here: char-meta types `duskblade` as tier
-## `hero` (`tierSizes.hero` = 285) and EnemyView sizes itself off that, the same
-## way it sizes a foe.
-const HERO_X: float = 200.0
+## Ground line, hero seat, formations and plates, as authored. Read through
+## `_layout()` rather than directly: the flex is spent at read time, against the
+## stage as it is at that moment.
+var _authored: Dictionary = {}
+var _placed: Dictionary = {}
+var _placed_at: Vector2i = Vector2i.ZERO
+
+## The three plates of an act, by act INDEX and layer name.
+##
+## The file names are one-based and the act index is zero-based, which is the
+## whole of the mapping and also how it went wrong: this was
+## `"…/act1-%s.png"` with the digit baked in, so every act drew act one's
+## scenery. All three sets have been in `assets/art/stage/` since the import,
+## and the book has authored act 1 and act 2 overrides for every shape from the
+## day it landed — the layout moved when `--act=` changed and the painting never
+## did. Upstream picks the same way, from `themes.js`'s `plates` (theme 0 names
+## `act1-*`, theme 1 `act2-*`, theme 2 `act3-*`).
+const STAGE_ART: String = "res://assets/art/stage/act%d-%s.png"
+
+## How long one plate takes to complete a drift cycle. NOT in the book, and not
+## an oversight: `battlefield-layout.js` authors the amplitude (`drift`) but no
+## period at all, so these three were read off the running benchmark's own
+## elements. They are a property of the animation, not of the shape.
+const PLATE_PERIODS: Dictionary[String, float] = {
+	"backdrop": 26.0, "mid": 18.0, "ledge": 12.0,
+}
+
 ## The benchmark reads the hero's art off the run's aspect
 ## (`runCatalogues().aspects[run.aspect].id`). Our slice content carries no
 ## aspects section, and this port has called the player The Duskblade since M5.
@@ -165,10 +189,19 @@ const GRAIN_JUMPS: Array[Vector2] = [
 	Vector2(0.0, 0.0), Vector2(-14.0, 7.0), Vector2(10.0, -17.0), Vector2(-7.0, 14.0),
 	Vector2(17.0, 5.0), Vector2(-14.0, -10.0), Vector2(7.0, 17.0), Vector2(-10.0, -7.0)]
 
-## `UIC.base.hand.bottom` — the hand box hangs this far past the stage's bottom
-## edge. The fan is clamped against the STAGE line, so HandView is told the
-## overhang rather than left to work it out from where it happens to sit.
-const HAND_OVERHANG: float = 12.0
+## How tall the hand box is, when the book is silent. Its overhang past the
+## stage's bottom edge is `UIC.hand.bottom` — 12 on a pad, 6 in phone portrait,
+## 33 held sideways — and the box height is now `chrome.hand.h`.
+##
+## That entry is new, and this constant is what it had to reconcile with: the
+## benchmark states the box as `.hand-zone { height: 260px }` measured from the
+## zone's own bottom, which already includes the overhang, while this port
+## stated 248 measured from the STAGE's bottom. 248 + 12 is 260, so the two were
+## the same number written from opposite edges, and pad-landscape is unmoved.
+const HAND_H: float = 248.0
+
+## The size the Kindle chip is DRAWN at, whatever the book then scales it to.
+const KINDLE_BOX: Vector2 = Vector2(116.0, 32.0)
 
 ## `clampCombatChrome` (combat.js:516) — the two lines an actor's status may not
 ## cross. Measured on the reference at pad-landscape they come out at 60 and 654,
@@ -188,6 +221,9 @@ const CHROME_CEIL_MIN: float = 6.0
 ## into the upper hand band, where resting cards leave the stage empty anyway.
 const CHROME_HAND_SLACK: float = 50.0
 const CHROME_FLOOR_PAD: float = 4.0
+## `minLeft` / `stageW() - maxRight` (combat.js:524-525) — the side margins the
+## same clamp keeps chrome inside on the other axis.
+const CHROME_EDGE_PAD: float = 6.0
 
 ## The damage sources that do not shove the body (drain.js:626). A blow throws
 ## you; poison does not, and neither does your own burn.
@@ -297,6 +333,13 @@ class Plate:
 	## slides under the combatants standing on it.
 	var amp: float = 0.0
 	var period: float = 26.0
+	## This plate's own width at its authored zoom, before `min-width: 100%` is
+	## applied — and the offset from centred it is hung at. Kept so `fit` can
+	## re-derive the box when the stage flexes under it, which is the one thing
+	## about a plate that is NOT settled at build time.
+	var art_w: float = 0.0
+	var zoom: float = 1.0
+	var dx: float = 0.0
 	var _t: float = 0.0
 	var _dx: float = 0.0
 
@@ -319,6 +362,18 @@ class Plate:
 	func set_home(left: float, w: float) -> void:
 		offset_left = left
 		offset_right = left + w
+
+	## Re-fit to a stage that has flexed under this plate.
+	##
+	## Every other number a plate carries is a gap from an edge and survives a
+	## wider stage untouched. Its WIDTH does not: `min-width: 100%` is measured
+	## against the live stage, and the screen is built before it has a size — so a
+	## plate sized at the shape's reference falls short the moment the stage
+	## stretches. At +12% on pad-landscape that left 40px of bare sky down each
+	## side, past the edges of a ledge the actors were standing on.
+	func fit(stage_w: float) -> void:
+		var w: float = zoom * maxf(stage_w + 2.0 * amp, art_w)
+		set_home(-w * 0.5 + dx, w)
 
 	func _process(delta: float) -> void:
 		if amp <= 0.0 or period <= 0.0:
@@ -366,6 +421,8 @@ var _battlefield: Control
 ## name line and the facet gauge without being told.
 var _hero: EnemyView
 var _kindle_toggle: Button
+## The three scenery plates, kept so a flexing stage can re-fit them.
+var _plates: Array[Plate] = []
 var _encounter_text: String = ""
 var _overlay: ColorRect
 var _overlay_title: Label
@@ -455,14 +512,112 @@ var _targeting: bool = false
 
 ## Fully constructed at new() — no tree dependency, so headless tests can
 ## drive it before (or without) entering the tree.
-func _init(game_ref: GlassvowGame) -> void:
+##
+## The shape and act are injected by the composition root, which is the only
+## place that knows what window this is (`SKILL.md:23-24` — no manager
+## singletons, and `application/main.tscn` is the one composition root). They
+## default to the identity composition so every existing caller, and every
+## headless test, gets exactly the screen it got before.
+func _init(game_ref: GlassvowGame, stage_shape: StringName = StageShape.IDENTITY,
+		stage_act: int = 0) -> void:
 	game = game_ref
 	_rules = game.rules
+	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
+	act = stage_act
+	_authored = LayoutBook.resolve(&"battlefield", shape, act)
 	seq.handler = _handle_event
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	_build_ui()
 	seq.busy_changed.connect(_on_busy_changed)
+
+
+## The layout for the stage as it is right now, with the flex already spent.
+##
+## Read through here rather than off `_authored`, because `size` is the live
+## stage and the foes are bound to its right edge — a window that gained 60px of
+## flex must move them 60px, and nothing else. Cached against the size it was
+## computed for, so the common case is a comparison rather than a deep merge.
+##
+## Before the screen has a size — during `_init`, and in headless tests that
+## never lay out — the reference size stands in. That is not a fallback so much
+## as the no-shrink invariant restated: a stage never goes below its reference,
+## so clamping up to it is the only honest reading of a zero.
+func _layout() -> Dictionary:
+	var ref: Vector2i = StageShape.REFERENCES.get(shape, StageShape.REFERENCES[StageShape.IDENTITY])
+	var stage: Vector2i = Vector2i(maxi(ref.x, roundi(size.x)), maxi(ref.y, roundi(size.y)))
+	if stage != _placed_at or _placed.is_empty():
+		_placed_at = stage
+		_placed = LayoutBook.place(&"battlefield", _authored, shape, stage)
+	return _placed
+
+
+## The ground line, in stage px up from the bottom. The battlefield ends here
+## and every actor stands on it: an actor drawn at bottom 0 has its feet here.
+## Foes and the hero are the same animal, which is the contract `enemy_view.gd`
+## was already built against.
+func _ground_y() -> float:
+	return LayoutBook.num(_layout().get("groundY"), 232.0)
+
+
+## Where the hero's centre stands. His BOX is not from here: char-meta types
+## `duskblade` as tier `hero` (`tierSizes.hero` = 285) and EnemyView sizes itself
+## off that, the same way it sizes a foe.
+func _hero_x() -> float:
+	return LayoutBook.num(_layout().get("hero", {}).get("x"), 200.0)
+
+
+## The live stage width in stage px. Not the shape's reference width: inside the
+## flex cap those differ, and the difference is exactly the room the composition
+## was given to spread into.
+## How far the hand box hangs past the bottom edge — `UIC.hand.bottom`, which
+## the book authors NEGATIVE (the box sits below the stage line) and which this
+## screen wants as a positive overhang.
+func _hand_overhang() -> float:
+	var hand: Dictionary = LayoutBook.resolve(&"chrome", shape, act).get("hand", {})
+	return -LayoutBook.num(hand.get("bottom"), -12.0)
+
+
+## The hand box's height ABOVE the stage line — the book states the whole box,
+## overhang included, so the overhang comes back off here.
+func _hand_height() -> float:
+	var hand: Dictionary = LayoutBook.resolve(&"chrome", shape, act).get("hand", {})
+	return LayoutBook.num(hand.get("h"), HAND_H + 12.0) - _hand_overhang()
+
+
+## How big an actor draws its name, ward, HP rail and facets on this shape.
+func _actor_scale() -> float:
+	var actor: Dictionary = LayoutBook.resolve(&"chrome", shape, act).get("actor", {})
+	return LayoutBook.num(actor.get("scale"), 1.0)
+
+
+## What a card is worth on this shape: the benchmark's `--cw`, and the gap
+## between a resting card's bottom edge and the hand box's floor.
+func _card_metrics() -> Vector2:
+	var card: Dictionary = LayoutBook.resolve(&"chrome", shape, act).get("card", {})
+	return Vector2(LayoutBook.num(card.get("w"), CardView.CARD_W),
+		LayoutBook.num(card.get("inset"), HandView.CARD_INSET))
+
+
+## The stage grew or shrank inside the flex band. Only the hand cares: every
+## other number in the book is bound to an edge and has already followed it.
+func _on_stage_resized() -> void:
+	var w: float = _stage_w()
+	# The plates are the only part of the composition whose WIDTH is measured
+	# against the stage rather than stated as a gap from an edge, so they are the
+	# only part that has to be told the stage moved.
+	for p: Plate in _plates:
+		if is_instance_valid(p):
+			p.fit(w)
+	if _hand == null or is_equal_approx(_hand.stage_w, w):
+		return
+	_hand.stage_w = w
+	_hand.refan()
+
+
+func _stage_w() -> float:
+	var ref: Vector2i = StageShape.REFERENCES.get(shape, StageShape.REFERENCES[StageShape.IDENTITY])
+	return maxf(float(ref.x), size.x)
 
 
 # ---------------------------------------------------------------- build
@@ -488,7 +643,7 @@ func _build_ui() -> void:
 	# the ground line and nothing has to convert coordinates to say so.
 	_battlefield = Control.new()
 	_battlefield.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_battlefield.offset_bottom = -GROUND_Y
+	_battlefield.offset_bottom = -_ground_y()
 	_battlefield.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_shake_host.add_child(_battlefield)
 
@@ -499,7 +654,7 @@ func _build_ui() -> void:
 	# The whole chrome layer, in one widget, measured against the same
 	# 1180x820 the stage above is. `plate = false` because the ward chip and HP
 	# rail belong to the actor they describe — see docs/hud-handoff.md §2.
-	_hud = HudBar.new(true, true, false)
+	_hud = HudBar.new(true, true, false, shape)
 	_hud.end_turn_pressed.connect(_on_end_turn_pressed)
 	_hud.lantern_pressed.connect(_on_art_pressed)
 	_shake_host.add_child(_hud)
@@ -513,16 +668,31 @@ func _build_ui() -> void:
 	_hand.anchor_right = 0.5
 	_hand.anchor_top = 1.0
 	_hand.anchor_bottom = 1.0
-	_hand.offset_left = -HandView.zone_width(5, STAGE.x) * 0.5
-	_hand.offset_right = HandView.zone_width(5, STAGE.x) * 0.5
-	_hand.offset_top = -248.0
-	_hand.offset_bottom = HAND_OVERHANG
+	# Against the LIVE stage, which is what `hand_view.gd:445` measures the fan
+	# gap against. These two agreed only because the stage was frozen at one
+	# size; on any other shape the resting box and the fan inside it would have
+	# been sized off different widths.
+	# Before the box is measured, because the resting width is a function of the
+	# card's own width and a phone's card is a third narrower than a pad's.
+	var card: Vector2 = _card_metrics()
+	_hand.card_w = card.x
+	_hand.card_inset = card.y
+	_hand.stage_w = _stage_w()
+	_hand.offset_left = -HandView.zone_width(5, _stage_w(), card.x) * 0.5
+	_hand.offset_right = HandView.zone_width(5, _stage_w(), card.x) * 0.5
+	_hand.offset_top = -_hand_height()
+	_hand.offset_bottom = _hand_overhang()
 	_hand.card_tapped.connect(_on_card_tapped)
 	_hand.card_drag_moved.connect(_on_card_drag_moved)
 	_hand.card_drag_released.connect(_on_card_drag_released)
 	_hand.card_hover_changed.connect(_on_card_hover_changed)
 	_hand.card_drag_armed.connect(_on_card_drag_armed)
 	_hand.card_drag_refused.connect(_on_card_drag_refused)
+	# The fan is the one part of the composition whose spread is a function of
+	# the LIVE stage width rather than the shape's reference — inside the flex
+	# cap those differ by up to 12%, and that difference is exactly the room the
+	# hand was given to open into.
+	resized.connect(_on_stage_resized)
 	_shake_host.add_child(_hand)
 
 	# `#vignette` is a SIBLING of `#shake` carrying z 4, and `#shake` carries no
@@ -571,18 +741,32 @@ func _build_ui() -> void:
 	add_child(_tips)
 
 	# Kindle is this port's own control: the benchmark's chrome has no seat for
-	# it, and HudBar reserves none. Parked under the strip rather than invented
-	# into the furniture, because where it belongs is a design question nobody
-	# has answered (docs/assembly-integration-plan.md D4).
+	# it, and HudBar reserves none. Still parked under the strip, because where
+	# it belongs is a design question nobody has answered
+	# (docs/assembly-integration-plan.md D4) — but the four numbers that put it
+	# there are the book's now. They were literals, and 116 of a phone's 390px is
+	# a third of the stage spent on a debug toggle.
+	var kindle: Dictionary = LayoutBook.resolve(&"chrome", shape, act).get("kindle", {})
 	_kindle_toggle = Button.new()
 	_kindle_toggle.text = "Kindle: off"
 	_kindle_toggle.toggle_mode = true
 	_kindle_toggle.anchor_top = 0.0
 	_kindle_toggle.anchor_bottom = 0.0
-	_kindle_toggle.offset_left = 16
-	_kindle_toggle.offset_right = 132
-	_kindle_toggle.offset_top = 66
-	_kindle_toggle.offset_bottom = 98
+	# Drawn at KINDLE_BOX and scaled to the authored one, the same bargain
+	# `HudBar._place_widget` strikes: the chip's padding, corner radius and font
+	# come from one styled Button that knows nothing about shapes, and the shape
+	# is spent on the outside of it. At pad-landscape the scale is exactly 1.
+	_kindle_toggle.offset_left = LayoutBook.num(kindle.get("left"), 16.0)
+	_kindle_toggle.offset_right = _kindle_toggle.offset_left + KINDLE_BOX.x
+	_kindle_toggle.offset_top = LayoutBook.num(kindle.get("top"), 66.0)
+	_kindle_toggle.offset_bottom = _kindle_toggle.offset_top + KINDLE_BOX.y
+	_kindle_toggle.pivot_offset = Vector2.ZERO
+	# Uniform, and taken from `w` alone: a Button's height is its stylebox's
+	# content margins plus its font, and that minimum wins over any offset — the
+	# chip is 43 tall however hard 32 is asked for. So the book authors what can
+	# be authored and the chip keeps its own proportions.
+	var k: float = LayoutBook.num(kindle.get("w"), KINDLE_BOX.x) / KINDLE_BOX.x
+	_kindle_toggle.scale = Vector2.ONE * k
 	GlassStyle.style_button(_kindle_toggle, GlassStyle.EMBER)
 	_kindle_toggle.toggled.connect(_on_kindle_toggled)
 	_shake_host.add_child(_kindle_toggle)
@@ -756,16 +940,18 @@ func _build_stage() -> void:
 
 	# Draw order is the benchmark's paint order: the plates and the breath sit
 	# at z 0, the mist at 2, the ledge band at 3.
-	# h, bottom, dx, zoom, opacity, object-position — all six measured off the
-	# running benchmark's own `.sl-*` elements at this shape and act, because
-	# the resolved values are what the DOM ends up with, not what BF says.
-	# The last two numbers are `--amp` and the drift period, read live off the
-	# running benchmark rather than from the stylesheet: `battlefield-layout.js`
-	# overrides the CSS fallbacks, and 30/10/0 is what the DOM actually resolves.
-	_plate("backdrop", 640.0, 280.0, 0.0, 1.0, 0.85, Vector2(0.5, 1.0), false, 30.0, 26.0)
-	_plate("mid", 1000.0, 300.0, 100.0, 0.4, 0.95, Vector2(1.0, 1.0), false, 10.0, 18.0)
+	#
+	# Every figure each plate needs — height, lift, offset, zoom, opacity, crop
+	# focus and drift amplitude — now comes out of the book for this shape and
+	# act. They used to be nine literals per call, measured off the running
+	# benchmark's own `.sl-*` elements because the resolved values are what the
+	# DOM ends up with. That measurement still stands: it agreed with
+	# `battlefield-layout.js` to the number, which is why swapping the source
+	# changes nothing on screen and everything about what happens on a phone.
+	_plate("backdrop")
+	_plate("mid")
 	_build_mist()
-	_plate("ledge", 450.0, 0.0, 0.0, 1.0, 1.0, Vector2(1.0, 0.0), true, 0.0, 12.0)
+	_plate("ledge", true)
 
 	# NOT BUILT, and the benchmark's own stylesheet says why:
 	#
@@ -987,20 +1173,47 @@ func _build_grain() -> void:
 ## That last part was got wrong first time from reading the CSS transform order,
 ## and then measured off the running build: the mid plate lands at x 394 with a
 ## 600-wide box, which is 690 minus half of 600, not half of 1500.
-func _plate(art: String, h: float, y: float, dx: float, zoom: float,
-		alpha: float, where: Vector2, is_ledge: bool = false,
-		amp: float = 0.0, period: float = 26.0) -> void:
-	var path: String = STAGE_ART % art
+func _plate(art: String, is_ledge: bool = false) -> void:
+	var path: String = STAGE_ART % [act + 1, art]
 	if not ResourceLoader.exists(path):
 		# Named rather than silent: a missing plate is otherwise an invisible
 		# hole in the ground with nothing in the log saying which one.
 		push_warning("stage: missing plate %s" % path)
 		return
+	var L: Dictionary = _layout()
+	var layer: Dictionary = L.get("layers", {}).get(art, {})
+	var h: float = LayoutBook.num(layer.get("h"))
+	var y: float = LayoutBook.num(layer.get("y"))
+	var dx: float = LayoutBook.num(layer.get("x"))
+	var zoom: float = LayoutBook.num(layer.get("zoom"), 1.0)
+	var alpha: float = LayoutBook.num(layer.get("opacity"), 1.0)
+	# `object-position` as a fraction — the book keeps it in percent, which is
+	# what CSS authors it in and therefore what the editor should show.
+	var where: Vector2 = Vector2(LayoutBook.num(layer.get("posX"), 50.0),
+		LayoutBook.num(layer.get("posY"), 100.0)) * 0.01
+	var amp: float = LayoutBook.num(layer.get("drift"))
+	var period: float = PLATE_PERIODS.get(art, 26.0)
 	var tex: Texture2D = load(path)
 	var aspect: float = float(tex.get_width()) / maxf(1.0, float(tex.get_height()))
-	var base: Vector2 = Vector2(maxf(STAGE.x, h * aspect), h)  # `min-width: 100%`
+	# `min-width: 100%` — against the LIVE stage, not the shape's reference. A
+	# flexed stage is wider than the plate was authored for, and a plate that
+	# kept the reference width would leave the sky showing past its own edge.
+	#
+	# Plus the drift, which upstream forgets. `min-width: 100%` is the statement
+	# that a plate COVERS the stage, and `sl-drift` then slides it `±amp` — so a
+	# plate that is exactly stage-wide uncovers up to `amp` of bare sky at one
+	# edge, every sweep, on both this port and the benchmark. Invisible at act 0,
+	# where the plate's edges are as dark as the sky behind them, and not at all
+	# invisible at act 2: measured on the running port at pad-landscape, the far
+	# left four columns read mean 52.4 with the magenta glass in frame and 11.1
+	# at the other end of the same sweep, with the bright band having moved to
+	# the right edge. A plate wide enough on its own — the mid arch, an island
+	# 600px across a 1180px stage — is untouched, because this only raises a
+	# floor that `maxf` was already applying.
+	var base: Vector2 = Vector2(maxf(_stage_w() + 2.0 * amp, h * aspect), h)
 	var box: Vector2 = base * zoom
-	var bottom: float = maxf(0.0, GROUND_Y + LEDGE_LIP - h + y) if is_ledge else y
+	var lip: float = LayoutBook.num(L.get("ledgeLip"), 14.0)
+	var bottom: float = maxf(0.0, _ground_y() + lip - h + y) if is_ledge else y
 	var r: Plate = Plate.new()
 	r.tex = tex
 	r.where = where
@@ -1013,10 +1226,14 @@ func _plate(art: String, h: float, y: float, dx: float, zoom: float,
 	r.anchor_bottom = 1.0
 	r.amp = amp
 	r.period = period
+	r.art_w = h * aspect
+	r.zoom = zoom
+	r.dx = dx
 	r.set_home(-box.x * 0.5 + dx, box.x)
 	r.offset_top = -(bottom + base.y * zoom)
 	r.offset_bottom = -bottom
 	_shake_host.add_child(r)
+	_plates.append(r)
 
 
 func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> void:
@@ -1042,14 +1259,15 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 	# The hero outlives the encounter — it is the same body between fights, and
 	# rebuilding it would throw away a 3D stage for no reason.
 	if _hero == null:
-		_hero = EnemyView.new(-1, "", HERO_HUE, HERO_ART)
+		_hero = EnemyView.new(-1, "", HERO_HUE, HERO_ART, _hero_scale())
 		# `HERO_LOOKS[0].kind` — a hero is a rogue in the profile table, and
 		# char-meta's own `duskblade` block (breathe 1.6, sway 0.5, bob 0) is laid
 		# over it, which is why the player breathes harder and does not float.
 		_hero.set_profile("rogue")
 		_battlefield.add_child(_hero)
-	_stand(_hero, HERO_X, 0.0)
+	_stand(_hero, _hero_x(), 0.0)
 	var slots: Array[Vector2] = _slots(game.cb.enemies.size())
+	var scales: PackedFloat32Array = _slot_scales(game.cb.enemies.size())
 	# `bfEnemyZOrder`: lower on screen draws in front, so a foe standing further
 	# up the ledge sits behind the one nearer the lip. Expressed as the order the
 	# actors are ADDED in, because child order is the only ordering that is
@@ -1082,14 +1300,15 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		# The art id is the foe's own key: every slice foe has a painting under
 		# that name and char-meta types its box and its feet by the same one.
 		# Passing nothing here is what left the fight full of fallback gems.
-		var view: EnemyView = EnemyView.new(e.idx, e.name, float(hue_num), e.key)
+		var mul: float = scales[idx] if idx < scales.size() else 1.0
+		var view: EnemyView = EnemyView.new(e.idx, e.name, float(hue_num), e.key, mul)
 		view.set_affix(affix_name, affix_tone)
 		# `meshProfileFor(kind, id)` — a golem does not breathe like a wisp, and
 		# `art.kind` is the only thing that knows which it is.
 		view.set_profile(_foe_kind(e.idx))
 		_battlefield.add_child(view)
 		_enemy_views[idx] = view
-		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
+		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(_stage_w() * 0.5, 0.0)
 		_stand(view, slot.x, slot.y)
 	_sync_all()
 	_open_fight(slots)
@@ -1133,12 +1352,12 @@ func _open_fight(slots: Array[Vector2]) -> void:
 ## single name is read, so it is per SEAT and not one arrival for the lineup.
 func _play_entrance(slots: Array[Vector2]) -> void:
 	if _hero != null:
-		_hero.enter(0.0, _stand.bind(_hero, HERO_X, 0.0))
+		_hero.enter(0.0, _stand.bind(_hero, _hero_x(), 0.0))
 	for idx: int in range(_enemy_views.size()):
 		var view: EnemyView = _enemy_views[idx]
 		if view == null:
 			continue
-		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(STAGE.x * 0.5, 0.0)
+		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(_stage_w() * 0.5, 0.0)
 		view.enter(EnemyView.ENTER_LEAD + float(idx) * EnemyView.ENTER_STEP,
 			_stand.bind(view, slot.x, slot.y))
 	_hud.play_entrance()
@@ -1155,30 +1374,43 @@ func _deal_opening_hand() -> void:
 		_hand.deal_in(opening[i], pile, float(i) * stagger, flight)
 
 
-## `bfSlots` — the authored formations for this shape, as (x centre, lift off
-## the ground line). A count nobody authored interpolates between the outer two
-## of the widest one, which is what the benchmark does rather than crowding.
-static func _slots(count: int) -> Array[Vector2]:
+## The authored formation for this many foes, as (x centre, lift off the ground
+## line). Three formations used to be written out here as nine literals — they
+## were the `pad-landscape` column of `BF.slots`, and the interpolation below
+## them was `bfSlots` reimplemented. Both now come from the book, so a phone gets
+## its own formation instead of the iPad one scaled down.
+##
+## The x values are already flexed: a slot is bound to the RIGHT edge, so extra
+## stage width opens the gap between the hero and the foe line rather than
+## stretching either.
+func _slots(count: int) -> Array[Vector2]:
 	var out: Array[Vector2] = []
-	if count == 1:
-		out.append(Vector2(980.0, 0.0))
-		return out
-	if count == 2:
-		out.append(Vector2(820.0, 0.0))
-		out.append(Vector2(1035.0, 0.0))
-		return out
-	if count == 3:
-		out.append(Vector2(698.0, 42.0))
-		out.append(Vector2(850.0, -18.0))
-		out.append(Vector2(996.0, 26.0))
-		return out
-	var lo: Vector2 = Vector2(698.0, 42.0)
-	var hi: Vector2 = Vector2(996.0, 26.0)
-	for i: int in range(maxi(count, 0)):
-		var t: float = 0.0 if count <= 1 else float(i) / float(count - 1)
-		out.append(Vector2(roundf(lo.x + (hi.x - lo.x) * t),
-			roundf(lo.y + (hi.y - lo.y) * t)))
+	for slot: Dictionary in LayoutBook.slots(_layout(), maxi(count, 0)):
+		out.append(Vector2(LayoutBook.num(slot.get("x")), LayoutBook.num(slot.get("y"))))
 	return out
+
+
+## The per-formation size multiplier, `BF.slots[n][i].s`. It is 1 in every
+## `pad-landscape` formation and well under it everywhere else — a phone seats
+## three foes at 0.5 — which is what keeps a wide lineup on the ledge instead of
+## off the side of it.
+func _slot_scales(count: int) -> PackedFloat32Array:
+	var out: PackedFloat32Array = []
+	for slot: Dictionary in LayoutBook.slots(_layout(), maxi(count, 0)):
+		out.append(LayoutBook.num(slot.get("s"), 1.0))
+	return out
+
+
+## How much smaller than the identity composition this shape draws its actors.
+##
+## Stated as a RATIO against `pad-landscape`'s own authored height rather than
+## against char-meta's tier size, so the identity shape is 285/285 and multiplies
+## by exactly one — the hero cannot drift by a rounding of the tier table.
+func _hero_scale() -> float:
+	var here: float = LayoutBook.num(_layout().get("hero", {}).get("h"), 285.0)
+	var identity: Dictionary = LayoutBook.resolve(&"battlefield", StageShape.IDENTITY, 0)
+	var there: float = LayoutBook.num(identity.get("hero", {}).get("h"), 285.0)
+	return here / maxf(1.0, there)
 
 
 ## Stand an actor on the ground line: `x` is where its centre goes, `lift` how
@@ -1189,6 +1421,9 @@ static func _slots(count: int) -> Array[Vector2]:
 ## ground line — so layout does the arithmetic, at whatever size the window is,
 ## and nothing here has to know the viewport's height.
 func _stand(view: EnemyView, x: float, lift: float) -> void:
+	# Every actor placed is an actor whose ground chrome must fit this shape, and
+	# this is the one funnel both the hero and every foe pass through.
+	view.set_chrome_scale(_actor_scale())
 	var box: Vector2 = view.size
 	view.anchor_left = 0.0
 	view.anchor_right = 0.0
@@ -1226,7 +1461,7 @@ func request_play(uid: int, target: Variant) -> bool:
 	if seq.is_busy() or game.cb.over:
 		return false
 	var inst: CardInst = _find_card(uid)
-	if inst == null or not _rules.can_play(game.cb, inst, target):
+	if inst == null or not _rules.can_play(game.run, game.cb, inst, target):
 		return false
 	# `drain(targetIdx)` — the drain is told what was aimed at, because the
 	# `play` event does not carry it and a targeted card flies at its foe.
@@ -1239,7 +1474,7 @@ func request_kindle(uid: int) -> bool:
 	if seq.is_busy() or game.cb.over:
 		return false
 	var inst: CardInst = _find_card(uid)
-	if inst == null or not _rules.can_kindle(game.cb, inst):
+	if inst == null or not _rules.can_kindle(game.run, game.cb, inst):
 		return false
 	seq.enqueue(game.apply({"t": "kindleFromHand", "uid": uid}))
 	return true
@@ -1452,14 +1687,25 @@ func _process(delta: float) -> void:
 ## The lines are in stage px, and a combatant's `position` is battlefield-local,
 ## whose top edge is the stage's — so the two spaces are already the same one.
 func _clamp_chrome() -> void:
-	var ceiling: float = maxf(CHROME_CEIL_MIN, HudBar.BAR_H + CHROME_CEIL_PAD)
-	var floor_y: float = size.y + HAND_OVERHANG - HandView.CARD_INSET \
-		- CardView.CARD_H + CHROME_HAND_SLACK - CHROME_FLOOR_PAD
+	var ceiling: float = maxf(CHROME_CEIL_MIN, _hud.bar_height() + CHROME_CEIL_PAD)
+	# The fan's top edge, which is what a status row must stay clear of — so both
+	# terms are the card as it is drawn on THIS shape, not as it is authored.
+	# Read off the hand rather than the book, because the hand is what actually
+	# laid the cards out and the two cannot then disagree.
+	var card_h: float = _hand.card_w * (CardView.CARD_H / CardView.CARD_W)
+	var floor_y: float = size.y + _hand_overhang() - _hand.card_inset \
+		- card_h + CHROME_HAND_SLACK - CHROME_FLOOR_PAD
+	# `minLeft = 6` / `maxRight = stageW() - 6` (combat.js:524-525). The horizontal
+	# half of the clamp, which had never been ported: at 1180px three foes are far
+	# enough apart that nothing reaches an edge, and at 390px the third one loses
+	# most of its name off the right side.
+	var left: float = global_position.x + CHROME_EDGE_PAD
+	var right: float = global_position.x + size.x - CHROME_EDGE_PAD
 	for view: EnemyView in _enemy_views:
 		if view != null:
-			view.clamp_chrome(ceiling, floor_y)
+			view.clamp_chrome(ceiling, floor_y, left, right)
 	if _hero != null:
-		_hero.clamp_chrome(ceiling, floor_y)
+		_hero.clamp_chrome(ceiling, floor_y, left, right)
 
 
 ## `if (cb.player.block > 0) syncWardMesh(heroSprite, true, true)`
@@ -1707,7 +1953,7 @@ func _first_living() -> int:
 
 func _hero_centre() -> Vector2:
 	if _hero == null:
-		return Vector2(HERO_X, size.y - GROUND_Y - 120.0)
+		return Vector2(_hero_x(), size.y - _ground_y() - 120.0)
 	return _hero.body_centre()
 
 
@@ -1768,7 +2014,8 @@ func _handle_event(ev: Dictionary) -> void:
 				if not _pile_override.has(&"draw"):
 					_pile_override[&"draw"] = game.cb.draw.size() + wave
 				_sfx.play(&"draw")
-				_hand.add_card(inst, _rules.card_data(inst), _rules.eff_cost(inst))
+				_hand.add_card(inst, _rules.card_data(inst),
+					_rules.eff_cost(game.run, game.cb, inst))
 				# This card has now left the pile, so the pile is one lighter. The
 				# count walks down with the deal instead of arriving already spent.
 				_pile_override[&"draw"] = maxi(0, int(_pile_override[&"draw"]) - 1)
@@ -1976,7 +2223,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var uid: int = ev["uid"]
 			_sfx.play(&"buff")
 			var view: CardView = _hand.card_view(uid)
-			var from: Vector2 = view.get_global_rect().get_center() if view != null \
+			var from: Vector2 = view.global_centre() if view != null \
 				else Vector2(size.x * 0.5, size.y - 180.0)
 			_hand.remove_card(uid)
 			var hero_at: Vector2 = _hero_centre()
@@ -1996,7 +2243,7 @@ func _handle_event(ev: Dictionary) -> void:
 			if view != null:
 				# `emberFrom = V.centerOf(c)` — the fire this feeds the lantern
 				# leaves from the card that burned, not from the hero.
-				_ember_from = view.get_global_rect().get_center()
+				_ember_from = view.global_centre()
 				_has_ember_from = true
 				_vfx.burst(_ember_from, EMBER_ORANGE, 22, 190.0, TAU, 0.0,
 					2.4, -150.0, "spark", true, 0.85)
@@ -2073,6 +2320,17 @@ func _handle_event(ev: Dictionary) -> void:
 			_float(_hero_centre() + Vector2(0.0, -110.0),
 				str(ev.get("id", "")).to_upper(), "notice")
 			await _wait(0.09)
+		&"addCard":
+			_sync_all()
+			await _wait(0.09)
+		&"adamantHold":
+			var idx: int = ev.get("idx", -1)
+			var view: EnemyView = _enemy_view(idx)
+			if view != null:
+				view.reseam()
+			_float(_enemy_centre(idx) + Vector2(0.0, -70.0), "ADAMANT", "notice")
+			_sync_actors()
+			await _wait(0.18)
 		EventTypes.VICTORY:
 			await _wait(0.32)
 			_sfx.play(&"victory")
@@ -2426,7 +2684,7 @@ func _refresh_intent(idx: int) -> void:
 	var mv: Dictionary = e.move()
 	view.set_intent(
 		StringName(str(mv.get("intent", ""))),
-		_fmt_enemy_dmg(_rules.preview_enemy_dmg(game.cb, e)),
+		_fmt_enemy_dmg(_rules.preview_enemy_dmg(game.cb, e, game.run)),
 		str(mv.get("name", String(e.move_key))))
 
 
@@ -2471,7 +2729,7 @@ func _sync_actors(reap: bool = false) -> void:
 			var mv: Dictionary = e.move()
 			intent = StringName(str(mv.get("intent", "")))
 			move_name = str(mv.get("name", String(e.move_key)))
-			dmg_text = _fmt_enemy_dmg(_rules.preview_enemy_dmg(cb, e))
+			dmg_text = _fmt_enemy_dmg(_rules.preview_enemy_dmg(cb, e, game.run))
 		view.sync(e, dmg_text, intent, move_name, game.content.statuses, reap)
 
 
@@ -2490,7 +2748,7 @@ func _sync_all() -> void:
 	# holds is taken out.
 	var order: Array[int] = []
 	for c: CardInst in cb.hand:
-		_hand.add_card(c, _rules.card_data(c), _rules.eff_cost(c))
+		_hand.add_card(c, _rules.card_data(c), _rules.eff_cost(game.run, cb, c))
 		order.append(c.uid)
 	_hand.sync_hand(order)
 	for c: CardInst in cb.hand:
@@ -2499,9 +2757,9 @@ func _sync_all() -> void:
 			continue
 		var target_probe: Variant = first_living if view.target_kind == "enemy" else null
 		if _kindle_toggle.button_pressed:
-			view.set_playable(_rules.can_kindle(cb, c))
+			view.set_playable(_rules.can_kindle(game.run, cb, c))
 		else:
-			view.set_playable(_rules.can_play(cb, c, target_probe))
+			view.set_playable(_rules.can_play(game.run, cb, c, target_probe))
 	if cb.over and not _over_emitted:
 		_over_emitted = true
 		# `victoryFlow` / `defeatFlow` (combat.js:2683, 2720) each open with their
@@ -2591,7 +2849,7 @@ func _intent_tip(idx: int) -> Dictionary:
 		return {"title": TIP_STAGGERED_TITLE, "body": TIP_STAGGERED_BODY}
 	var mv: Dictionary = e.move()
 	var bits: PackedStringArray = PackedStringArray()
-	var preview: Variant = _rules.preview_enemy_dmg(game.cb, e)
+	var preview: Variant = _rules.preview_enemy_dmg(game.cb, e, game.run)
 	if preview != null:
 		var pv: Dictionary = preview
 		var dmg: int = pv.get("dmg", 0)
@@ -2827,9 +3085,9 @@ func _update_previews() -> void:
 		var preview: Variant = null
 		var dim: bool = false
 		if target == "allEnemies":
-			preview = _rules.preview_play(game.cb, inst, i)
+			preview = _rules.preview_play(game.cb, inst, i, game.run)
 		elif target == "enemy" and (aiming or living == 1):
-			preview = _rules.preview_play(game.cb, inst, i)
+			preview = _rules.preview_play(game.cb, inst, i, game.run)
 			dim = aiming and living > 1 and not hovered
 		if preview == null:
 			view.clear_preview()
@@ -2966,7 +3224,7 @@ func _activate_selected() -> void:
 		return
 	var d: Dictionary = _rules.card_data(inst)
 	var unplayable: bool = d.get("unplayable", false)
-	if unplayable or _rules.eff_cost(inst) > game.cb.player.energy:
+	if unplayable or _rules.eff_cost(game.run, game.cb, inst) > game.cb.player.energy:
 		_sfx.play(&"debuff")
 		return
 	if str(d.get("target", "")) == "enemy":

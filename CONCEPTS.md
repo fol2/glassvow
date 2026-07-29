@@ -101,6 +101,107 @@ Where the line sits is authored per Stage shape and per act rather than held as
 one constant. It is a distance from the stage's bottom edge — an Edge binding —
 so a taller stage lowers nothing.
 
+### Stage px
+The virtual coordinate space every authored layout number in this project is
+written in, and the only space in which the port and the reference are comparable.
+*Avoid:* virtual px, design px, logical px
+
+Real pixels are not it: the stage is scaled uniformly into whatever window is
+holding it, so a number that is right in stage px stays right on a phone and on a
+monitor. The conversion happens once, at the boundary — a pointer coming in, a
+measurement going out — and mixing the two spaces anywhere else is how a
+composition that looks aligned turns out to have its input somewhere else.
+
+Both sides of a parity check must be read into this space before they are
+compared. Comparing a port's source against the reference's source instead is
+what lets a layout store that neither source declares go unnoticed.
+
+### Layout book
+The single authored store of layout numbers: every Stage shape, every act, every
+scope, under one declared schema.
+*Avoid:* layout table, layout data, BF/UIC
+
+Singular on purpose. The reference keeps the same information in several stores
+with a separate editor and an implicit schema for each, which is why it has two
+editors for one screen and a third body of numbers with no editor at all. One
+book with the schema declared as data means the resolver's defaults, the
+validator, the flex correction and the editor's widgets all read from the same
+declaration, and a new scope costs an entry rather than a serialiser.
+
+A number's presence in the book is what makes it authorable, checkable and
+visible to an editor. A layout number kept anywhere else is not merely
+inconsistent — it is unreachable by every tool that would otherwise notice it was
+wrong or missing.
+
+### Stage shape
+An authored screen composition for an encounter, selected by device class and
+orientation. A Stage shape is a design reference rather than a frame the game
+is locked into: the real window stretches the stage along one axis to meet it,
+up to a cap, and letterboxes only past that.
+
+One landscape composition is the identity shape, and that is load-bearing
+rather than incidental. Every measured number this port carries was read at
+that size, so a composition that stops resolving to it one-to-one has quietly
+invalidated every Anchor in the repo at once.
+
+A shape says nothing about what device is holding it. Device class — phone, pad,
+desktop — is a separate question answered from the platform name and the physical
+diagonal, and it decides which shapes a window is even allowed to be given.
+
+### Edge binding
+Which edge of the stage a layout number is measured from, and therefore what
+happens to it when the stage flexes. A value bound left or top keeps its number;
+one bound right or bottom keeps its distance from that edge; one bound to the
+centre keeps its offset from the middle.
+
+Most authored numbers are already distances and survive a wider stage untouched.
+The few that are absolute coordinates — the hero's seat and each foe slot — carry
+a binding precisely so extra width opens the gap BETWEEN the two lines rather
+than being split arbitrarily or spent on one of them.
+
+Deliberately not called an anchor. That word is already taken here by a
+`file:line` citation and by the engine's layout anchors; see *Flagged
+ambiguities*.
+
+### Authoring level
+One of the three places a layout number may be written: the base that every
+Stage shape inherits, one shape's own override, or one act's override within that
+shape. A resolved number is the innermost level that supplies it, and *origin* is
+the name for which level that turned out to be.
+*Avoid:* bucket, tier
+
+Two rules make the level worth naming rather than treating as an implementation
+detail. Objects merge key by key, but **arrays replace whole** — so a level that
+touches one seat in a formation has taken ownership of every seat in it, and
+reverting one number reverts the formation. And editing a number that came from
+an outer level does not move it; it *promotes* it, creating an override that
+every later change to the outer level will silently no longer reach. Origin is
+therefore something an editor must show before an edit, not after.
+
+A number present at no level at all is not the same as a number set to zero. An
+unauthored value may legitimately mean "use the actor's own", so absence is
+carried rather than filled, except where the schema declares a default.
+
+### Natural size
+The size a piece of furniture is DRAWN at, as distinct from the box the layout
+book gives it on a particular Stage shape. Every internal offset, font size and
+icon inside a widget is authored against its natural size; the shape is spent
+outside it, as one scale.
+*Avoid:* base size, intrinsic size
+
+The alternative is teaching every widget to lay itself out at any size, which is
+as many chances to disagree as there are widgets — the same duplication the
+single layout book exists to remove. So a card, a pile, the energy orb, the END
+seal and an actor's foot plate are each built once, at the identity shape's
+figures, and a scale carries the difference.
+
+Two consequences that have already cost this port bugs. A piece scaled about its
+own centre does not move that centre, so an expression that places one by
+multiplying its half-size by the scale is correcting for a displacement that
+never happens — and lands it half a shrinkage away. And a resting scale is a
+*multiplier*, never a replacement: a lift, a drag and a flight all multiply it,
+or they snap the thing back to its natural size mid-gesture.
+
 ### Foot offset
 A per-character correction that slides an actor off its computed position so the
 painted creature's apparent feet land on the ground line even when the painting
@@ -122,6 +223,7 @@ A creature the art depicts as *already airborne* has no contact anywhere in its
 silhouette, and the only signal that says so is authored — which is why one
 authored shadow value survives the port's derivation of all the others.
 
+### Tier
 An actor's size class, selecting the base size the Art box is built from before
 the per-character scale is applied. Tiers cover ordinary foes, tougher ones,
 encounter bosses, and the player's hero.
@@ -253,6 +355,7 @@ clamp asks for. Preserving an approved look across such a correction means
 restating the clamp by the same factor; leaving its numbers untouched changes the
 look while appearing to hold it steady.
 
+### Census
 An exhaustive enumeration of one declarative surface of the Benchmark, turned
 into a fixed set of yes/no questions for the port, so that divergences are
 counted instead of noticed.
@@ -315,6 +418,24 @@ number it would write is true only until that work changes shape. And a Lane
 holding edits to a shared document grows more out of date the longer it holds
 them, so what the shared tree currently says must be re-read before appending
 rather than assumed from the branch's own copy.
+
+### Noise floor
+How far two captures of the *same* build differ, and therefore the bar a
+before/after comparison has to clear before it is evidence of anything.
+*Avoid:* margin of error, tolerance
+
+Every screen here animates — embers drift, actors breathe, a hand deals itself
+in — so two photographs of an unchanged build are never identical, and the
+difference between them is not small. Established by capturing the same build
+twice under the same seed and arguments and measuring that pair; a change smaller
+than the result distinguishes nothing, and a change concentrated in one region of
+the frame means more than a larger one spread evenly across it.
+
+The floor is a property of *how* the capture was taken, not a constant. Catching
+a screen mid-entrance rather than at rest raises it by two orders of magnitude,
+which is enough to swallow most layout changes whole — so the settling is part of
+the measurement, and a floor quoted without the capture conditions that produced
+it says nothing.
 
 ### Anchor
 A citation in prose that names both a file and a line, and therefore makes a
@@ -444,6 +565,24 @@ interruptions. The host is the default, not the universal answer.
 A session may hold a second long-lived process, and confusing the two is easy: a
 Godot editor open on the project serves its own set of agent tools. A Live host
 is neither that editor nor dependent on one — see *Flagged ambiguities*.
+
+### Interactive Web
+The browser-native development path that runs a freshly exported Lab or
+production surface as a live Godot canvas, with browser input reaching the
+surface directly.
+
+Interactive Web proves browser layout and interaction. It does not stand in for
+native-only behaviour such as desktop window fidelity or writing editor output
+back into the project.
+
+### Native Proof
+The development path that drives a Live host and presents its captured viewport
+through the browser control surface, preserving native rendering while browser
+gestures are forwarded to the game.
+
+Native Proof is the approval path when the evidence depends on the desktop
+build rather than the Web platform; its image is a projection of the native
+viewport, not a second renderer.
 
 ### Funplay editor server
 The editor-bound agent surface for inspecting and mutating the project. It

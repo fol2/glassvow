@@ -1,10 +1,10 @@
 class_name ContentDB
 extends RefCounted
-## Loads the vertical-slice content projection (port_fixtures/content/slice-content.json)
-## into id-validated registries. Lives OUTSIDE domain/ so it may touch FileAccess —
-## the pure domain rules receive already-resolved data, never file paths.
+## Loads either the frozen fixture slice or the complete 6e06911 catalogue into
+## id-validated registries. File access stays outside the pure domain.
 
 const SLICE_PATH: String = "res://port_fixtures/content/slice-content.json"
+const FULL_PATH: String = "res://content/full-content.json"
 const CORE_MECHANICS_PATH: String = "res://port_fixtures/content/core-mechanics.json"
 
 var id: String = ""
@@ -15,6 +15,22 @@ var relics: Dictionary = {}
 var arts: Dictionary = {}
 var affixes: Dictionary = {}
 var statuses: Dictionary = {}
+var events: Dictionary = {}
+var omens: Dictionary = {}
+var deeds: Dictionary = {}
+var themes: Dictionary = {}
+var quests: Dictionary = {}
+var variants: Dictionary = {}
+var boons: Dictionary = {}
+var progression: Dictionary = {}
+var shop: Dictionary = {}
+var shade_kits: Dictionary = {}
+var aspects: Array = []
+var vows: Array = []
+var quest_ids: Array[String] = []
+var theme_order: Array[String] = []
+var acts: Array = []
+var encounters: Array = []
 var card_pools: Dictionary = {}
 var relic_pools: Dictionary = {}
 var pool_gate_cards: Dictionary = {}
@@ -28,6 +44,12 @@ static func load_slice() -> ContentDB:
 	var db: ContentDB = ContentDB.new()
 	db._load(SLICE_PATH)
 	db._load_reveal_ids(CORE_MECHANICS_PATH)
+	return db
+
+
+static func load_full() -> ContentDB:
+	var db: ContentDB = ContentDB.new()
+	db._load(FULL_PATH)
 	return db
 
 
@@ -49,6 +71,16 @@ func _load(path: String) -> void:
 	arts = _section(root, "arts")
 	affixes = _section(root, "affixes")
 	statuses = _section(root, "statuses")
+	events = _section(root, "events")
+	omens = _section(root, "omens")
+	deeds = _section(root, "deeds")
+	themes = _section(root, "themes")
+	quests = _section(root, "quests")
+	variants = _section(root, "variants")
+	boons = _section(root, "boons")
+	progression = _section(root, "progression")
+	shop = _section(root, "shop")
+	shade_kits = _section(root, "shadeKits")
 	card_pools = _section(root, "cardPools")
 	relic_pools = _section(root, "relicPools")
 	var gate: Dictionary = _section(root, "poolGate")
@@ -60,6 +92,18 @@ func _load(path: String) -> void:
 	else:
 		push_error("ContentDB: rewardGold is not an array")
 	player = _section(root, "player")
+	aspects = _array(root, "aspects")
+	vows = _array(root, "vows")
+	acts = _array(root, "acts")
+	encounters = _array(root, "encounters")
+	for id_v: Variant in _array(root, "questIds"):
+		quest_ids.append(str(id_v))
+	for id_v: Variant in _array(root, "themeOrder"):
+		theme_order.append(str(id_v))
+	var reveal_rows: Array = _array(root, "reveals")
+	for reveal_v: Variant in reveal_rows:
+		if typeof(reveal_v) == TYPE_DICTIONARY:
+			reveal_ids.append(str(reveal_v.get("id", "")))
 
 
 ## The REVEALS registry ids (save-loader reveal validation) live in the
@@ -88,6 +132,14 @@ func _section(root: Dictionary, key: String) -> Dictionary:
 		push_error("ContentDB: section %s is not a dictionary" % key)
 		return {}
 	return v
+
+
+func _array(root: Dictionary, key: String) -> Array:
+	var value: Variant = root.get(key, [])
+	if typeof(value) != TYPE_ARRAY:
+		push_error("ContentDB: section %s is not an array" % key)
+		return []
+	return value
 
 
 func _lookup(registry: Dictionary, id_key: StringName, kind: String) -> Dictionary:
@@ -138,3 +190,26 @@ func validate(fails: Array[String]) -> void:
 	for eid: StringName in enemy_ids():
 		if not EnemyAi.handles(eid):
 			fails.append("ContentDB: enemy %s has no AI handler" % eid)
+	for card_v: Variant in cards.values():
+		var card_def: Dictionary = card_v
+		_validate_effects(card_def.get("effects", []), fails)
+		var upgraded_v: Variant = card_def.get("up")
+		if typeof(upgraded_v) == TYPE_DICTIONARY:
+			var upgraded: Dictionary = upgraded_v
+			_validate_effects(upgraded.get("effects", []), fails)
+	for potion_id: String in potions:
+		if not CombatRules.handles_potion(potion_id):
+			fails.append("ContentDB: potion %s has no handler" % potion_id)
+
+
+func _validate_effects(effects_v: Variant, fails: Array[String]) -> void:
+	if typeof(effects_v) != TYPE_ARRAY:
+		return
+	for effect_v: Variant in effects_v:
+		if typeof(effect_v) != TYPE_DICTIONARY:
+			continue
+		var effect: Dictionary = effect_v
+		if str(effect.get("kind")) == "special":
+			var id_key: String = str(effect.get("id"))
+			if not CombatRules.handles_special(id_key):
+				fails.append("ContentDB: card special %s has no handler" % id_key)

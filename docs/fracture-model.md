@@ -83,7 +83,7 @@ lives where the rest of the actor code does. `crack_ribbon.gd` was never written
 step 7 records why, and the interface in §5 is still what it would implement.
 
 `BodyMask` is the only file in `fracture/` permitted to name `Image`. It wraps the
-art alpha — today `presentation/combat/enemy_view.gd:3764` (`_alpha_at`) — behind
+art alpha — today `presentation/combat/enemy_view.gd:3775` (`_alpha_at`) — behind
 two methods:
 
 ```gdscript
@@ -287,7 +287,7 @@ actor or it scintillates whatever the MSAA. At a 115 px sporeling with
 stage px, so **`aperture` ≥ 0.0065 body**. The reference's ≈ 0.015 clears it 2.3×.
 
 **Blow inputs — all derived, none authored.** `at` from the hit point already
-computed for the floater (`enemy_view.gd:2928` (`body_centre`)); `dir` from the
+computed for the floater (`enemy_view.gd:2939` (`body_centre`)); `dir` from the
 existing left/right reasoning in `take_hit`; `energy` from damage; `sharp` from the
 attacking archetype.
 

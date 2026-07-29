@@ -89,8 +89,31 @@ tools/shot.sh --enemies --idle=gloomslime --strip=/tmp/idle.png
 For a native iteration loop use `tools/live.sh start …`, then `shot`, `reload`,
 `key`, `click`, `drag` and `stop`. Non-visual tools remain direct, honest
 commands: `tools/check_anchors.py`, `godot --headless -s
-res://tools/check_fracture.gd`, and the windowed
-`res://tools/bench_actor_stage.gd` probe.
+res://tools/check_fracture.gd`, the windowed
+`res://tools/bench_actor_stage.gd` probe, and:
+
+```bash
+godot --headless -s res://tools/probe_layout.gd -- --all [--act=N]
+```
+
+**`tools/probe_layout.gd` reads the composition back rather than photographing
+it.** A capture shows where something LOOKS like it is; on a 390px phone that is
+how a twelve-pixel error survives. The probe builds the real `CombatScreen` at a
+shape, lets the entrance settle, and prints every box in stage px as gaps from
+the edge each is bound to — so a row can be compared with the layout book, and
+with the benchmark's own DOM measurements, without arithmetic. It is what found
+the hand fanning 586px wide instead of 282 everywhere but a running game.
+
+Two capture flags exist for the same reason:
+
+- **`--act=N`** stages a fight at any act. The domain does not model acts, so a
+  `--fight=` bench is act 0 and the other two were reachable only through the
+  layout bench.
+- **`--settle=SECONDS`** photographs a composition at rest. Thirty frames is
+  enough for a first paint and not for a fight: the opening hand is still in the
+  air at half a second, so two runs of the same build differed across 2.4% of the
+  frame, all of it in the fan. With `--settle=4` that falls to 0.03%, which is
+  what makes a before/after diff of a layout change readable at all.
 
 ## Creation and maintenance contract
 

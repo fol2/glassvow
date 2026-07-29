@@ -29,6 +29,7 @@ var counters_played: int = 0
 var counters_attacks: int = 0
 var first_card_played: bool = false
 var hp_lost: int = 0
+var prism_procd: bool = false
 
 
 func living_enemies() -> Array[EnemyCombatant]:

@@ -53,6 +53,7 @@ Organiser-owned files for why and for the two caveats.
 - **Commercial Game Delivery** — `docs/commercial-game-delivery.md` — engine-neutral policy (save versioning, determinism, content stability, performance gates).
 - **Fixture Provenance** — `port_fixtures/` is generated only by `roguecardv2/tools/capture-port-fixtures.mjs`; never edited here.
 - **Documented Solutions** — `docs/solutions/` — solved problems and conventions, by category, with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when implementing or debugging in a documented area.
+- **Developer Tools** — `docs/dev-tools.md` — the shared browser/CLI inventory and the binding creation and maintenance contract.
 - **Shared Vocabulary** — `CONCEPTS.md` — domain terms with project-specific meaning; relevant when orienting to an area or settling on names.
 
 ---

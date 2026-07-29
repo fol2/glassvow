@@ -5,10 +5,8 @@ extends Control
 ## when not. Composes the combat screen's GlassGem for the creature nodes so
 ## the map and the fight speak one visual language.
 ##
-## Ships the three slice types — monster, elite, rest. event/shop/treasure/
-## boss/monument and the dark-lantern `unlit` marker are designed in §2 but
-## unbuilt: their content is not ported, so a drawing for them would be dead
-## code today.
+## Every benchmark node type has a compact emblem. An unlit node deliberately
+## hides its true face until the player steps onto it.
 
 signal chosen(index: int)
 
@@ -32,8 +30,10 @@ func _init(node_index: int, node_kind: String, node_hue: float, caption: String)
 	kind = node_kind
 	hue = node_hue
 	size = Vector2(WIDTH, EMBLEM_H + CAPTION_H)
-	if kind != "rest":
-		var big: bool = kind == "elite"
+	focus_entered.connect(queue_redraw)
+	focus_exited.connect(queue_redraw)
+	if kind not in ["rest", "shop", "treasure", "event", "monument", "act4", "unlit"]:
+		var big: bool = kind in ["elite", "boss"]
 		_gem = GlassGem.new()
 		_gem.size = Vector2(96, 108) if big else Vector2(74, 86)
 		_gem.position = Vector2((WIDTH - _gem.size.x) * 0.5, (EMBLEM_H - _gem.size.y) * 0.5 + 4)
@@ -56,6 +56,8 @@ func _init(node_index: int, node_kind: String, node_hue: float, caption: String)
 func set_state(is_reachable: bool, is_cleared: bool) -> void:
 	reachable = is_reachable
 	cleared = is_cleared
+	focus_mode = Control.FOCUS_ALL if reachable else Control.FOCUS_NONE
+	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if reachable else Control.CURSOR_ARROW
 	if _gem != null:
 		# A resolved node is a spent husk; an unresolved one still holds light.
 		_gem.set_state(hue, 0.25 if cleared else 1.0, cleared)
@@ -77,8 +79,11 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	var mb: InputEventMouseButton = event as InputEventMouseButton
 	var st: InputEventScreenTouch = event as InputEventScreenTouch
+	var key: InputEventKey = event as InputEventKey
 	var hit: bool = (mb != null and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT) \
-		or (st != null and st.pressed)
+		or (st != null and st.pressed) \
+		or (key != null and key.pressed and not key.echo \
+			and key.keycode in [KEY_ENTER, KEY_SPACE])
 	if hit:
 		accept_event()
 		chosen.emit(index)
@@ -92,6 +97,8 @@ func _draw() -> void:
 	var rim_a: float = 0.20
 	if reachable:
 		rim_a = 0.55 + 0.30 * glow
+		if has_focus():
+			rim_a = 1.0
 	elif cleared:
 		rim_a = 0.12
 	# Leaded pane: an upright hexagon cut, the seat every emblem shares.
@@ -114,8 +121,43 @@ func _draw() -> void:
 	match kind:
 		"elite":
 			_draw_crown(cx, cy - h - 2.0, rim_a)
+		"boss":
+			_draw_crown(cx, cy - h - 2.0, rim_a)
+			draw_circle(Vector2(cx, cy), 18.0,
+				Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.28))
 		"rest":
 			_draw_hearth(cx, cy, rim_a)
+		"shop":
+			for offset: Vector2 in [Vector2(-16, 8), Vector2(0, -10), Vector2(16, 8)]:
+				draw_circle(Vector2(cx, cy) + offset, 10.0,
+					Color(1.0, 0.78, 0.28, 0.72))
+		"treasure":
+			draw_rect(Rect2(cx - 24.0, cy - 16.0, 48.0, 34.0),
+				Color(1.0, 0.68, 0.24, 0.46), true)
+			draw_line(Vector2(cx - 24.0, cy - 4.0), Vector2(cx + 24.0, cy - 4.0),
+				Color(1.0, 0.9, 0.56, 0.8), 3.0)
+		"event":
+			draw_arc(Vector2(cx, cy - 8.0), 19.0, PI * 0.85, PI * 2.15, 20,
+				Color(0.72, 0.88, 1.0, 0.8), 5.0)
+			draw_circle(Vector2(cx, cy + 25.0), 4.0, Color(0.72, 0.88, 1.0, 0.8))
+		"monument":
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(cx, cy - 34.0), Vector2(cx + 20.0, cy),
+				Vector2(cx, cy + 34.0), Vector2(cx - 20.0, cy),
+			]), Color(0.70, 0.78, 0.92, 0.48))
+		"act4":
+			draw_circle(Vector2(cx, cy), 28.0, Color(0.75, 0.52, 1.0, 0.32))
+			for spoke: int in range(6):
+				var angle: float = TAU * float(spoke) / 6.0
+				draw_line(Vector2(cx, cy), Vector2(cx, cy) + Vector2.from_angle(angle) * 28.0,
+					Color(0.9, 0.78, 1.0, 0.8), 3.0)
+		"unlit":
+			draw_rect(Rect2(cx - 20.0, cy - 26.0, 40.0, 50.0),
+				Color(0.02, 0.03, 0.06, 0.9), true)
+			draw_arc(Vector2(cx, cy - 26.0), 13.0, PI, TAU, 16,
+				Color(0.42, 0.5, 0.65, 0.65), 2.0)
+			draw_line(Vector2(cx - 20.0, cy - 10.0), Vector2(cx + 20.0, cy - 10.0),
+				Color(0.42, 0.5, 0.65, 0.5), 2.0)
 	if cleared:
 		# A spent waystone keeps a cold lead scar across the pane.
 		draw_line(Vector2(cx - w * 0.6, cy + h * 0.55), Vector2(cx + w * 0.6, cy - h * 0.55),

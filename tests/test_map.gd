@@ -10,6 +10,44 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 
 static func run(fails: Array[String]) -> void:
+	# ---- one representative benchmark seed: full generator, one RNG stream
+	var benchmark_content: ContentDB = ContentDB.load_slice()
+	var benchmark_run: RunState = RunState.new_run(benchmark_content, 717, "run-map-golden")
+	var generated: WorldMap = WorldMap.benchmark(benchmark_run)
+	var type_counts: Dictionary = {}
+	var unlit: Array[String] = []
+	for generated_node: MapNode in generated.nodes:
+		type_counts[generated_node.type] = int(float(str(type_counts.get(generated_node.type, 0)))) + 1
+		if generated_node.unlit:
+			unlit.append("%s:%d" % [generated_node.id, generated_node.bounty])
+	_check(fails, generated.nodes.size() == 65, "benchmark seed 717 has 65 joined nodes")
+	_check(fails, type_counts == {
+		"monster": 34, "event": 9, "elite": 5, "treasure": 5,
+		"shop": 2, "rest": 9, "boss": 1,
+	}, "benchmark seed 717 node type distribution")
+	_check(fails, generated.reachable().size() == 4, "seed 717 opens four distinct row-zero nodes")
+	_check(fails, unlit == ["1,3:17", "6,3:17", "11,5:13", "9,5:14", "3,2:20", "7,0:20"],
+		"seed 717 unlit bounty trace")
+	_check(fails, benchmark_run.rng_state() == 721837281, "seed 717 consumes the benchmark RNG trace")
+	var generated_copy: WorldMap = WorldMap.from_dict(generated.to_dict())
+	_check(fails, generated_copy != null and generated_copy.nodes.size() == 65,
+		"benchmark map survives its save projection")
+	# ---- one lifecycle law: bosses move through all three authored acts
+	var full: ContentDB = ContentDB.load_full()
+	var lifecycle: RunState = RunState.new_run(full, 919, "run-three-acts", {"reveals": null})
+	lifecycle.player.hp = 1
+	lifecycle.start_next_act(full)
+	var second: WorldMap = WorldMap.benchmark(lifecycle)
+	lifecycle.player.hp = 1
+	lifecycle.start_next_act(full)
+	var third: WorldMap = WorldMap.benchmark(lifecycle)
+	_check(fails, lifecycle.act == 2 and lifecycle.omens.size() == 3,
+		"two boss transitions reach the third act with one omen per act")
+	_check(fails, second.region == "sunken_city" and third.region == "obsidian_spire",
+		"boss transitions replace the map theme")
+	_check(fails, lifecycle.player.hp == 26,
+		"each boss transition mends 35 percent without exceeding max HP")
+
 	# ---- the authored strip matches the M5 encounter ladder (brief §4)
 	var m: WorldMap = WorldMap.slice()
 	_check(fails, m.region == "ashen_woods", "slice region is the Ashen Woods")

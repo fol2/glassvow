@@ -441,6 +441,11 @@ var _plate: VBoxContainer
 var _plate_ground_dy: float = 0.0
 var _plate_clamp_dy: float = 0.0
 var _crown_clamp_dy: float = 0.0
+## The horizontal half of the same clamp. Both boxes span this actor's width with
+## anchors, so a shift is the same offset on BOTH sides — never `position`, which
+## an anchored Control recomputes away on the next layout pass.
+var _plate_clamp_dx: float = 0.0
+var _crown_clamp_dx: float = 0.0
 var _dead: bool = false
 ## The recoil, signed and in units of KICK_PX — tweened, then composed into the
 ## idle by _process. Positive is away from the hero, which is where a foe is
@@ -1649,21 +1654,26 @@ static func set_meta_value(art_id: StringName, key: String, value: Variant) -> v
 	_meta["chars"] = chars
 
 
+## Through `DataFile`: this used to open the file — which TRUNCATES — before it
+## had serialised anything to put in it, and wrote no trailing newline. Both were
+## the writer's defects, so both are fixed where the writer now lives.
 static func save_meta() -> bool:
-	var f: FileAccess = FileAccess.open(META_PATH, FileAccess.WRITE)
-	if f == null:
-		push_warning("enemy view: cannot write %s" % META_PATH)
-		return false
-	f.store_string(JSON.stringify(_meta, "  "))
-	f.close()
-	return true
+	var why: String = DataFile.write(META_PATH, DataFile.to_text(_meta))
+	if not why.is_empty():
+		push_warning("enemy view: %s" % why)
+	return why.is_empty()
 
 
 ## `art_id` stays optional: a caller that does not pass one gets exactly the
 ## avatar it got before the paintings landed, because GlassGem is the missing-art
 ## fallback here just as enemySvg() is in the benchmark (assets.js:7).
+## `size_mul` is `bfEnemySize`'s missing third term: the tier size and the
+## character's own scale come from char-meta, and the FORMATION supplies the rest
+## (`BF.slots[n][i].s`), which is how a phone fits three foes on a 390px ledge.
+## It defaults to 1, so a caller that does not pass one gets exactly the actor it
+## got before formations could resize anybody.
 func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
-		art_id: StringName = &"") -> void:
+		art_id: StringName = &"", size_mul: float = 1.0) -> void:
 	idx = enemy_idx
 	_hue = hue
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1677,6 +1687,7 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		art_size = art_box(art_id)
 		if art_size <= 0.0:
 			art_size = 185.0
+		art_size = maxf(8.0, art_size * maxf(0.01, size_mul))
 		var fx: float = entry.get("footX", 0.0)
 		var fy: float = entry.get("footY", 0.0)
 		foot = Vector2(fx, fy)
@@ -4466,6 +4477,35 @@ static func _center(node: Control) -> CenterContainer:
 	return cc
 
 
+## How big this actor's ground chrome — name, ward, HP vial, facets — is drawn,
+## as a multiple of the authored plate. One property rather than a per-part
+## table, because `_plate` is already the single box all four parts hang in.
+##
+## The benchmark spends four CSS declarations per regime on this and the numbers
+## do not share one ratio: a foe's name goes 13.5px to 10.5px (0.78) while its HP
+## rail goes 150px to 80px (0.53), because three foes on a 390px stage are 80px
+## apart and three 150px rails cannot tile that. The port takes the text's ratio
+## and leans on the formation's own vertical stagger — `slots.3[1].y` lifts the
+## middle foe 32px in the book — to keep neighbouring plates from colliding, so
+## the two that stay level are 160px apart and a 117px rail clears.
+##
+## Set by `CombatScreen` from `chrome.actor.scale`; 1.0 leaves every authored
+## figure exactly as it was, which is what the identity shape gets.
+func set_chrome_scale(k: float) -> void:
+	if _plate == null or is_equal_approx(_plate.scale.x, k):
+		return
+	# From the top CENTRE: the plate hangs off the ground line and is centred on
+	# the actor, so those are the two things a scale must not move.
+	_plate.pivot_offset = Vector2(_plate.size.x * 0.5, 0.0)
+	_plate.scale = Vector2.ONE * k
+	if not _plate.resized.is_connected(_repivot_plate):
+		_plate.resized.connect(_repivot_plate)
+
+
+func _repivot_plate() -> void:
+	_plate.pivot_offset = Vector2(_plate.size.x * 0.5, 0.0)
+
+
 ## Hang the foot plate from the GROUND rather than from this actor's own box.
 ## An actor whose art carries empty space under the creature sinks its box below
 ## the line (footY), and a row where every HP vial sat at a different height
@@ -4493,7 +4533,8 @@ func _apply_plate_dy() -> void:
 ## The measurement takes its own clamp back out before comparing, which is what
 ## the benchmark buys by writing `--chrome-dy: 0px` and re-reading. Same reading,
 ## one layout pass instead of two, and it cannot oscillate.
-func clamp_chrome(ceiling: float, floor_y: float) -> void:
+func clamp_chrome(ceiling: float, floor_y: float,
+		left: float = -INF, right: float = INF) -> void:
 	if _crown != null:
 		var crown_h: float = _crown.get_combined_minimum_size().y
 		if crown_h > 1.0:
@@ -4512,6 +4553,53 @@ func clamp_chrome(ceiling: float, floor_y: float) -> void:
 			if not is_equal_approx(want, _plate_clamp_dy):
 				_plate_clamp_dy = want
 				_apply_plate_dy()
+	_clamp_chrome_x(left, right)
+
+
+## `clampHorizontal` (combat.js:527) — the half of this that was never ported.
+##
+## The vertical clamp above has been here since the chip wave; the benchmark
+## applies the same treatment on the OTHER axis, through the same `--chrome-dx`
+## custom property, to both the crown and the foot plate. Without it a foe seated
+## near an edge has its name and HP rail cut by that edge — which is invisible at
+## 1180px, where three foes are 150px apart with room to spare, and unmissable at
+## 390px, where the third sporeling of a phone-portrait formation loses most of
+## its name off the right side.
+##
+## Measured against the plate's NATURAL width, not its clamped one, so the
+## correction is idempotent: re-running with the same bounds must not walk the
+## row further each frame, and `_clamp_chrome` runs every frame.
+func _clamp_chrome_x(left: float, right: float) -> void:
+	if left == -INF or right == INF:
+		return
+	_crown_clamp_dx = _shift_x(_crown, _crown_clamp_dx, left, right)
+	_plate_clamp_dx = _shift_x(_plate, _plate_clamp_dx, left, right)
+
+
+## Slide one chrome box back inside the stage, and report the shift it now
+## carries. Measured against the box's NATURAL edges — the clamp already in force
+## is subtracted first — so re-running with the same bounds is a no-op rather
+## than walking the row further every frame, and `_clamp_chrome` runs every frame.
+func _shift_x(node: Control, was: float, left: float, right: float) -> float:
+	if node == null:
+		return was
+	var w: float = node.size.x * node.scale.x
+	if w <= 1.0:
+		return was
+	var natural_left: float = global_position.x + node.position.x * scale.x - was
+	var want: float = 0.0
+	if natural_left < left:
+		want = left - natural_left
+	elif natural_left + w > right:
+		want = right - (natural_left + w)
+	want = roundf(want)
+	if is_equal_approx(want, was):
+		return was
+	# Both sides, because the box spans this actor with anchors: moving one edge
+	# would resize it and re-centre everything inside.
+	node.offset_left += want - was
+	node.offset_right += want - was
+	return want
 
 
 # ---------------------------------------------------------------- state in

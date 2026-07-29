@@ -28,9 +28,13 @@ const GLOW: Color = Color(0.4, 1.0, 0.61960787)                  # #66ff9e
 ## distance; flattened to two dozen each, which is what reads at this camera.
 const MAIN_COUNT: int = 26
 const ACCENT_COUNT: int = 18
-## `y += dt * rate * (0.35 + seed * 0.5)` in world units. The field spans 28
-## units over a viewport that is 820px tall, so a unit is about 29px.
-const UNIT: float = 29.0
+## `y += dt * rate * (0.35 + seed * 0.5)` in world units. The field spans this
+## many units over the stage's HEIGHT, whatever that is — the constant used to be
+## 29px, which is 820/28 and therefore silently the pad-landscape answer written
+## out as though it were a property of the field. A phone stage is 844 tall and a
+## pad in portrait 1180, and a fixed 29 would have drifted the motes at the wrong
+## rate on both.
+const SPAN_UNITS: float = 28.0
 const ACCENT_RATE: float = 0.55
 ## `x += sin(time * 0.5 + seed) * dt * 0.18` — a slow lateral wander, not wind.
 const WOBBLE_RATE: float = 0.5
@@ -205,8 +209,9 @@ func _step_kick(dt: float) -> void:
 
 func _drift(motes: Array[Mote], dt: float, rate: float) -> void:
 	for m: Mote in motes:
-		m.at.y -= dt * rate * _speed * m.rise * UNIT
-		m.at.x += sin(_t * WOBBLE_RATE + m.seed) * dt * WOBBLE_AMP * UNIT
+		var unit: float = maxf(1.0, size.y) / SPAN_UNITS
+		m.at.y -= dt * rate * _speed * m.rise * unit
+		m.at.x += sin(_t * WOBBLE_RATE + m.seed) * dt * WOBBLE_AMP * unit
 		# `if (y > cy + 14) { y = cy - 14; x = random }` — the field wraps, and a
 		# recycled point is thrown somewhere new rather than tracking a column.
 		if m.at.y < -m.radius * 2.0:

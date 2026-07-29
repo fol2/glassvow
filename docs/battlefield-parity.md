@@ -164,14 +164,56 @@ three kills at once.
 - **Actor plates are ours**: the numeral sits inside the rail rather than to its
   right, and the width is the WIDE variant. Recorded as an open A/B in
   `hud_bar.gd`.
-- **Viewport support does not exist.** `project.godot` is `canvas_items` +
-  `aspect=keep` at 1180×820, so the composition scales and letterboxes and
-  nothing reflows. Real support needs `aspect="expand"` plus the benchmark's
-  five authored shape tables (`BF` / `UIC`) and a shape-aware `HudBar`. The
-  plate figures this port uses were re-checked against `battlefield-layout.js`
-  and are exactly `pad-landscape` → act 0: 640/280/drift 30, 1000/300/drift 10,
-  450/0/drift 0. `desktop-landscape` is a different table entirely, and reading
-  `--amp` off a wide browser window reads THAT one.
+- **Viewport support exists, and its data is the benchmark's own.** This
+  paragraph used to record the opposite, and named `aspect="expand"` as what it
+  would take. That turned out not to be the mechanism: `project.godot` still
+  reads `canvas_items` + `aspect=keep`, unchanged, and the flex is expressed
+  instead as a computed `content_scale_size` (`presentation/stage/stage_shape.gd`).
+  When the flexed size matches the window's aspect, `keep` has nothing to
+  letterbox and produces no bars; past a ±12% cap the size stops moving and
+  `keep` bars the remainder. One mechanism, and the cap comes free.
+
+  Both authored tables — `BF` and `UIC` — are transliterated verbatim into
+  `assets/layout/combat-layout.json` and resolved by
+  `presentation/stage/layout_book.gd`, which ports the benchmark's three-level
+  merge once for both scopes rather than twice. `CombatScreen` and `HudBar` are
+  both shape-aware; the plate figures this port used were re-checked against
+  `battlefield-layout.js` before the swap and are exactly `pad-landscape` → act
+  0 (640/280/drift 30, 1000/300/drift 10, 450/0/drift 0), which is why the swap
+  changed nothing on screen at that shape. `tests/test_presentation.gd` pins
+  that identity, so it cannot drift back unnoticed.
+
+  The hazard the old paragraph named still stands: `desktop-landscape` is a
+  different table entirely, so reading `--amp` off a wide browser window reads
+  THAT one. `?shape=` on the benchmark and `--shape=` here are the guard.
+
+- **Card, hand, chrome and HUD sizing now follow the shape; the reward and map
+  screens still do not.** This paragraph used to say the whole regime was
+  unported, and for combat it no longer is. The numbers upstream keeps in 331
+  lines of `@container stage` rules rather than in `BF`/`UIC` — `--cw`,
+  `.hand-zone`'s height, `.hand-zone .card`'s inset, the energy orb's box, and
+  fourteen declarations of HUD-rail sizing — were measured off the running
+  benchmark at each `?shape=` and authored into the book as `card/w`,
+  `card/inset`, `hand/h`, `energy/w`, `energy/h`, `actor/scale` and the rail's
+  `hud/scale`, `hud/title` and `hud/stat`. `tests/test_layout_book.gd` pins the
+  table for all five shapes.
+
+  What made this invisible for so long is worth stating plainly: a
+  `@container stage` regime has no editor, no schema and no data file upstream,
+  so nothing was ever going to notice the port had none of it. The two authored
+  tables were complete and the screen was still wrong.
+
+  Still one shape: the reward rack and the map. `CARD_SCALE` is a `const`
+  derived from `CardView.CARD_W` in four files — `reward_screen.gd:142`,
+  `reward_embers.gd:109`, `reward_reliquary.gd:56`, `reward_window.gd:69` — so
+  a phone-portrait reward draws three 178px cards across a 390px stage and cuts
+  the outer two in half. Upstream authors `.choice-cards .card`'s `--cw` per
+  regime and it resolves to **178 / 178 / 150 / 113 / 135** across
+  pad-landscape, desktop-landscape, pad-portrait, phone-portrait and
+  phone-landscape (the last two are `29cqw` and `16cqw` against the stage
+  container, which is the reference width). Those five numbers plus a `reward`
+  entry in `LayoutBook.SCOPES` are the whole data side; the work left is the
+  four `const`s and the spoils row above the rack, which the Reward lane owns.
 - **The stage plates drift by moving their PAINT, not their box.**
   `gui/common/snap_controls_to_pixels` defaults to true, so writing an offset
   rounds a Control's rect before it draws, and a 30px sweep over 26 seconds

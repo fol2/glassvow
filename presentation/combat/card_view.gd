@@ -240,6 +240,18 @@ var playable: bool = true
 ## Layout home assigned by HandView._relayout; snap-back target.
 var home_position: Vector2 = Vector2.ZERO
 var home_rotation: float = 0.0
+## What "resting" means on this stage shape, as a multiple of the authored
+## CARD_W x CARD_H silhouette. The benchmark shrinks a card by re-declaring
+## `--cw` per `@container stage` regime and re-laying the face out in
+## percentages; this port draws the face once at 152x216 and scales the whole
+## node, which keeps the gem, the relief and the corner radius in proportion —
+## `docs/solutions/…/card-angular-budget` is the reason relief must not be
+## rescaled independently of the silhouette it sits on.
+##
+## Every scale this card is ever given is a MULTIPLE of this, never a
+## replacement for it: `rest_scale()` is the only way to say "1.0 = resting", so
+## a lift, a drag and a flight all keep their authored feel at any card size.
+var base_scale: float = 1.0
 
 var _held: bool = false
 ## Whether this card has ever been put somewhere. The first placement is a jump —
@@ -1156,11 +1168,36 @@ func set_playable(can: bool) -> void:
 	modulate = Color(1, 1, 1, 1) if can else Color(0.6, 0.6, 0.6, 0.8)
 
 
+## A scale expressed the way every caller here thinks: 1.0 is a card at rest on
+## THIS shape, 1.12 is a carried one. The shape's own size is folded in here and
+## nowhere else, so no caller has to remember it exists.
+func rest_scale(k: float = 1.0) -> Vector2:
+	return Vector2.ONE * (k * base_scale)
+
+
+## The visual silhouette on this shape, which is what the fan must be laid out
+## against — `size` stays at the authored 152x216 whatever the shape.
+func card_span() -> Vector2:
+	return Vector2(CARD_W, CARD_H) * base_scale
+
+
+## Where this card actually is on screen — the point every effect thrown FROM a
+## card leaves from.
+##
+## `get_global_rect().get_center()` returns the same point: measured on 4.7.1
+## that accessor is scale-aware, and a centre-pivoted Control's centre does not
+## move under scaling at all. This says so directly rather than leaving each call
+## site to wonder, because the cards here are scaled three ways at once — the
+## shape's resting size, a hover lift, a carry.
+func global_centre() -> Vector2:
+	return get_global_transform() * (size * 0.5)
+
+
 func snap_home() -> void:
 	_kill_pose()
 	position = home_position
 	rotation = home_rotation
-	scale = Vector2.ONE
+	scale = rest_scale()
 	_placed = true
 
 
@@ -1183,21 +1220,24 @@ func snap_home() -> void:
 ## parts. Tweening them separately would let the lift finish before the tilt.
 func glide_to(pos: Vector2, rot: float, scl: float) -> void:
 	_kill_pose()
+	# `scl` is in resting units — the shape's own size joins it here, so the pose
+	# machinery below interpolates absolute scales and needs no further care.
+	var want: float = scl * base_scale
 	if not _placed:
 		position = pos
 		rotation = rot
-		scale = Vector2.ONE * scl
+		scale = Vector2.ONE * want
 		_placed = true
 		return
 	if position.is_equal_approx(pos) and is_equal_approx(rotation, rot) \
-			and is_equal_approx(scale.x, scl):
+			and is_equal_approx(scale.x, want):
 		return
 	_pose_from_pos = position
 	_pose_from_rot = rotation
 	_pose_from_scale = scale.x
 	_pose_to_pos = pos
 	_pose_to_rot = rot
-	_pose_to_scale = scl
+	_pose_to_scale = want
 	_pose_tw = create_tween()
 	_pose_tw.tween_method(_pose_step, 0.0, 1.0, POSE_TIME)
 

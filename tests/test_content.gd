@@ -42,3 +42,24 @@ static func run(fails: Array[String]) -> void:
 
 	# Every enemy the content ships must have an AI handler.
 	db.validate(fails)
+
+	# One full-registry completeness gate; individual cards do not get their own
+	# catalogue tests.
+	var full: ContentDB = ContentDB.load_full()
+	if full.cards.size() != 61 or full.enemies.size() != 27 \
+			or full.relics.size() != 31 or full.quest_ids.size() != 6:
+		fails.append("ContentDB: full catalogue counts diverged from 6e06911")
+	if full.reveal_ids.size() != 8 or full.aspects.size() != 2 or full.vows.size() != 5:
+		fails.append("ContentDB: full progression registries are incomplete")
+	full.validate(fails)
+	var pickup_run: RunState = RunState.new_run(full, 5, "run-relic-pickup")
+	var rewards: RewardRules = RewardRules.new(full)
+	rewards.gain_relic(pickup_run, "sweetRoot")
+	rewards.gain_relic(pickup_run, "hollowCrown")
+	if pickup_run.player.max_hp != 70 or pickup_run.player.hp != 70 \
+			or pickup_run.player.energy_max != 4:
+		fails.append("ContentDB: instant relic pickup laws are not applied")
+	pickup_run.unlocks = ["card:quakeblow", "relic:smolderingCoal"]
+	if not rewards.card_pool(pickup_run, "uncommon").has("quakeblow") \
+			or not rewards.relic_pool(pickup_run, "uncommon").has("smolderingCoal"):
+		fails.append("ContentDB: deed unlocks do not extend reward pools")

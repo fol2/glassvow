@@ -7,6 +7,7 @@
 #   tools/live.sh key space                             # drive the screen
 #   tools/live.sh action ui_accept
 #   tools/live.sh click 590 700
+#   tools/live.sh drag 300 400 700 400
 #   tools/live.sh status
 #   tools/live.sh stop
 #
@@ -121,6 +122,7 @@ case "${1-}" in
   key)     send send_input "{\"type\":\"key\",\"key\":\"${2-}\"}" > /dev/null && print "key ${2-}" ;;
   action)  send send_input "{\"type\":\"action\",\"action\":\"${2-}\"}" > /dev/null && print "action ${2-}" ;;
   click)   send send_input "{\"type\":\"mouse_button\",\"button\":\"left\",\"position\":{\"x\":${2-0},\"y\":${3-0}}}" > /dev/null && print "click ${2-0},${3-0}" ;;
+  drag)    send send_input "{\"type\":\"mouse_drag\",\"button\":\"left\",\"from_position\":{\"x\":${2-0},\"y\":${3-0}},\"to_position\":{\"x\":${4-0},\"y\":${5-0}}}" > /dev/null && print "drag ${2-0},${3-0} → ${4-0},${5-0}" ;;
   query)   send query_node "{\"node_path\":\"${2-current_scene}\"}" ;;
   events)  send get_events "{}" ;;
   status)

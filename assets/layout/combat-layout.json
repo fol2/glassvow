@@ -1,0 +1,904 @@
+{
+  "_note": "Layout book. One entry per stage shape per scope; a screen resolves base -> shape -> act with a key-wise deep merge (arrays replace wholesale). All numbers are STAGE px in that shape's REFERENCE size (presentation/stage/stage_shape.gd REFERENCES) and are turned into live coordinates by LayoutFrame, which spends the flex on the edge each key is bound to. Owned by the layout editor (--layout); hand edits welcome, keep the shape and keep the numbers finite.",
+  "_source": "roguecardv2-benchmark @ 6e06911 src/battlefield-layout.js (BF) and src/ui-chrome-layout.js (UIC), verbatim. BF.shared is not carried: its sizes are already tierSizes in assets/art/enemies/char-meta.json and its heroes/enemies buckets are empty upstream.",
+  "scopes": {
+    "battlefield": {
+      "base": {
+        "groundY": 232.0,
+        "hero": {
+          "h": 285.0,
+          "w": 190.0,
+          "x": 179.0
+        },
+        "layers": {
+          "backdrop": {
+            "h": 640.0,
+            "opacity": 0.85,
+            "posX": 50.0,
+            "y": 0.0,
+            "zoom": 1.0
+          },
+          "ledge": {
+            "h": 450.0,
+            "opacity": 1.0,
+            "posX": 100.0,
+            "y": 0.0,
+            "zoom": 1.0
+          },
+          "mid": {
+            "h": 1000.0,
+            "opacity": 0.95,
+            "posX": 100.0,
+            "x": 100.0,
+            "y": 300.0,
+            "zoom": 0.4
+          }
+        },
+        "ledgeLip": 14.0,
+        "slots": {
+          "1": [
+            {
+              "s": 1.0,
+              "x": 980.0
+            }
+          ],
+          "2": [
+            {
+              "s": 1.0,
+              "x": 820.0
+            },
+            {
+              "s": 1.0,
+              "x": 1035.0
+            }
+          ],
+          "3": [
+            {
+              "s": 1.0,
+              "x": 698.0,
+              "y": 42.0
+            },
+            {
+              "s": 1.0,
+              "x": 845.0,
+              "y": -18.0
+            },
+            {
+              "s": 1.0,
+              "x": 996.0,
+              "y": 26.0
+            }
+          ]
+        }
+      },
+      "shapes": {
+        "desktop-landscape": {
+          "acts": {
+            "0": {
+              "layers": {
+                "backdrop": {
+                  "drift": 30.0,
+                  "h": 1000.0,
+                  "opacity": 0.7,
+                  "posX": 100.0,
+                  "x": -100.0,
+                  "y": 280.0,
+                  "zoom": 0.9
+                },
+                "mid": {
+                  "drift": 10.0
+                }
+              }
+            },
+            "1": {
+              "layers": {
+                "backdrop": {
+                  "drift": 30.0,
+                  "h": 1200.0,
+                  "opacity": 0.5,
+                  "posX": 100.0,
+                  "x": -150.0,
+                  "y": 250.0,
+                  "zoom": 0.8
+                },
+                "ledge": {
+                  "h": 360.0,
+                  "opacity": 0.4
+                },
+                "mid": {
+                  "drift": 10.0,
+                  "opacity": 0.9,
+                  "x": 100.0,
+                  "y": 280.0,
+                  "zoom": 0.6
+                }
+              }
+            },
+            "2": {
+              "layers": {
+                "backdrop": {
+                  "drift": 30.0,
+                  "h": 1100.0,
+                  "y": 270.0,
+                  "zoom": 1.0
+                },
+                "ledge": {
+                  "h": 330.0,
+                  "opacity": 0.8,
+                  "posX": 100.0
+                },
+                "mid": {
+                  "drift": 15.0,
+                  "x": -300.0,
+                  "y": 200.0,
+                  "zoom": 0.5
+                }
+              }
+            }
+          },
+          "groundY": 216.0,
+          "hero": {
+            "x": 212.0
+          },
+          "layers": {
+            "backdrop": {
+              "h": 1527.0,
+              "x": -42.0,
+              "y": 273.0,
+              "zoom": 0.6
+            },
+            "ledge": {
+              "h": 480.0,
+              "posY": 0.0,
+              "y": 0.0
+            },
+            "mid": {
+              "drift": 0.0,
+              "h": 1000.0,
+              "x": 189.0,
+              "y": 308.0,
+              "zoom": 0.4
+            }
+          },
+          "slots": {
+            "1": [
+              {
+                "s": 1.0,
+                "x": 1164.0,
+                "y": -16.0
+              }
+            ],
+            "2": [
+              {
+                "s": 1.0,
+                "x": 1000.0,
+                "y": 5.0
+              },
+              {
+                "s": 1.0,
+                "x": 1197.0,
+                "y": -39.0
+              }
+            ],
+            "3": [
+              {
+                "s": 1.0,
+                "x": 940.0,
+                "y": 17.0
+              },
+              {
+                "s": 1.0,
+                "x": 1095.0,
+                "y": -50.0
+              },
+              {
+                "s": 1.0,
+                "x": 1260.0,
+                "y": 22.0
+              }
+            ]
+          }
+        },
+        "pad-landscape": {
+          "acts": {
+            "0": {
+              "layers": {
+                "backdrop": {
+                  "y": 280.0
+                },
+                "mid": {
+                  "drift": 10.0,
+                  "y": 300.0
+                }
+              }
+            },
+            "1": {
+              "groundY": 220.0,
+              "layers": {
+                "backdrop": {
+                  "h": 800.0,
+                  "x": -50.0,
+                  "y": 280.0,
+                  "zoom": 0.9
+                },
+                "ledge": {
+                  "h": 350.0,
+                  "opacity": 0.7
+                },
+                "mid": {
+                  "drift": 10.0,
+                  "zoom": 0.5
+                }
+              }
+            },
+            "2": {
+              "layers": {
+                "backdrop": {
+                  "h": 800.0,
+                  "y": 300.0
+                },
+                "ledge": {
+                  "h": 320.0,
+                  "opacity": 0.9
+                },
+                "mid": {
+                  "drift": 10.0,
+                  "x": -300.0,
+                  "y": 200.0,
+                  "zoom": 0.5
+                }
+              }
+            }
+          },
+          "hero": {
+            "x": 200.0
+          },
+          "layers": {
+            "backdrop": {
+              "drift": 30.0,
+              "y": 0.0
+            }
+          },
+          "slots": {
+            "3": [
+              {
+                "s": 1.0,
+                "x": 698.0,
+                "y": 42.0
+              },
+              {
+                "s": 1.0,
+                "x": 850.0,
+                "y": -18.0
+              },
+              {
+                "s": 1.0,
+                "x": 996.0,
+                "y": 26.0
+              }
+            ]
+          }
+        },
+        "pad-portrait": {
+          "acts": {
+            "1": {
+              "layers": {
+                "backdrop": {
+                  "opacity": 0.55
+                },
+                "ledge": {
+                  "h": 400.0,
+                  "opacity": 0.6,
+                  "zoom": 1.3
+                },
+                "mid": {
+                  "y": 460.0
+                }
+              }
+            },
+            "2": {
+              "layers": {
+                "backdrop": {
+                  "h": 1600.0,
+                  "opacity": 0.7
+                },
+                "ledge": {
+                  "h": 410.0,
+                  "opacity": 0.6,
+                  "zoom": 1.2
+                },
+                "mid": {
+                  "x": -150.0,
+                  "y": 400.0
+                }
+              }
+            }
+          },
+          "groundY": 359.0,
+          "hero": {
+            "x": 102.0
+          },
+          "layers": {
+            "backdrop": {
+              "drift": 30.0,
+              "h": 920.0,
+              "opacity": 0.85,
+              "posX": 50.0,
+              "y": 450.0,
+              "zoom": 0.8
+            },
+            "ledge": {
+              "h": 400.0,
+              "opacity": 1.0,
+              "posX": 50.0,
+              "y": 0.0,
+              "zoom": 1.5
+            },
+            "mid": {
+              "drift": 10.0,
+              "h": 684.0,
+              "opacity": 0.95,
+              "posX": 50.0,
+              "x": 50.0,
+              "y": 430.0,
+              "zoom": 0.6
+            }
+          },
+          "slots": {
+            "1": [
+              {
+                "footX": 0.0,
+                "s": 1.0,
+                "x": 655.0
+              }
+            ],
+            "2": [
+              {
+                "s": 0.95,
+                "x": 505.0
+              },
+              {
+                "s": 1.0,
+                "x": 710.0
+              }
+            ],
+            "3": [
+              {
+                "s": 0.85,
+                "x": 410.0,
+                "y": 34.0
+              },
+              {
+                "s": 0.85,
+                "x": 560.0,
+                "y": -87.0
+              },
+              {
+                "s": 0.9,
+                "x": 730.0,
+                "y": 2.0
+              }
+            ]
+          }
+        },
+        "phone-landscape": {
+          "acts": {
+            "1": {
+              "groundY": 132.0,
+              "layers": {
+                "backdrop": {
+                  "h": 1000.0,
+                  "opacity": 0.6,
+                  "y": 180.0,
+                  "zoom": 0.6
+                },
+                "ledge": {
+                  "h": 220.0,
+                  "opacity": 0.7
+                },
+                "mid": {
+                  "zoom": 0.5
+                }
+              }
+            },
+            "2": {
+              "groundY": 160.0,
+              "layers": {
+                "backdrop": {
+                  "zoom": 0.8
+                },
+                "ledge": {
+                  "h": 200.0
+                },
+                "mid": {
+                  "x": -200.0,
+                  "y": 160.0
+                }
+              }
+            }
+          },
+          "groundY": 132.0,
+          "hero": {
+            "h": 150.0,
+            "w": 100.0,
+            "x": 135.0
+          },
+          "layers": {
+            "backdrop": {
+              "drift": 20.0,
+              "h": 700.0,
+              "opacity": 0.85,
+              "posX": 100.0,
+              "y": 150.0,
+              "zoom": 1.0
+            },
+            "ledge": {
+              "h": 275.0,
+              "opacity": 1.0,
+              "posX": 50.0,
+              "y": 0.0,
+              "zoom": 1.0
+            },
+            "mid": {
+              "drift": 10.0,
+              "h": 600.0,
+              "opacity": 0.95,
+              "posX": 100.0,
+              "y": 170.0,
+              "zoom": 0.4
+            }
+          },
+          "slots": {
+            "1": [
+              {
+                "footX": -150.0,
+                "footY": -40.0,
+                "s": 0.5,
+                "x": 730.0
+              }
+            ],
+            "2": [
+              {
+                "s": 0.62,
+                "x": 590.0
+              },
+              {
+                "s": 0.62,
+                "x": 730.0
+              }
+            ],
+            "3": [
+              {
+                "s": 0.55,
+                "x": 503.0,
+                "y": 19.0
+              },
+              {
+                "s": 0.55,
+                "x": 628.0,
+                "y": -2.0
+              },
+              {
+                "s": 0.55,
+                "x": 740.0,
+                "y": 19.0
+              }
+            ]
+          }
+        },
+        "phone-portrait": {
+          "acts": {
+            "1": {
+              "layers": {
+                "backdrop": {
+                  "x": 0.0
+                },
+                "ledge": {
+                  "h": 500.0,
+                  "opacity": 0.6
+                }
+              },
+              "slots": {
+                "1": [
+                  {
+                    "footX": 0.0,
+                    "footY": -30.0,
+                    "s": 0.5,
+                    "x": 300.0
+                  }
+                ]
+              }
+            },
+            "2": {
+              "layers": {
+                "backdrop": {
+                  "h": 1000.0
+                },
+                "ledge": {
+                  "h": 450.0,
+                  "opacity": 0.8
+                },
+                "mid": {
+                  "x": -50.0,
+                  "y": 260.0
+                }
+              }
+            }
+          },
+          "groundY": 250.0,
+          "hero": {
+            "h": 130.0,
+            "w": 80.0,
+            "x": 42.0
+          },
+          "layers": {
+            "backdrop": {
+              "drift": 20.0,
+              "h": 658.0,
+              "opacity": 0.6,
+              "posX": 50.0,
+              "x": 100.0,
+              "y": 315.0,
+              "zoom": 0.9
+            },
+            "ledge": {
+              "h": 600.0,
+              "opacity": 1.0,
+              "posX": 50.0,
+              "y": 0.0,
+              "zoom": 0.7
+            },
+            "mid": {
+              "drift": 5.0,
+              "h": 489.0,
+              "opacity": 0.95,
+              "posX": 50.0,
+              "y": 315.0,
+              "zoom": 0.5
+            }
+          },
+          "slots": {
+            "1": [
+              {
+                "footY": 0.0,
+                "s": 0.5,
+                "x": 300.0
+              }
+            ],
+            "2": [
+              {
+                "s": 0.65,
+                "x": 248.0
+              },
+              {
+                "s": 0.7,
+                "x": 349.0
+              }
+            ],
+            "3": [
+              {
+                "s": 0.5,
+                "x": 218.0
+              },
+              {
+                "s": 0.5,
+                "x": 298.0,
+                "y": 32.0
+              },
+              {
+                "s": 0.55,
+                "x": 357.0
+              }
+            ]
+          }
+        }
+      }
+    },
+    "chrome": {
+      "base": {
+        "actor": {
+          "scale": 1.0
+        },
+        "ashes": {
+          "bottom": 14.0,
+          "h": 148.0,
+          "right": 132.0,
+          "w": 96.0
+        },
+        "card": {
+          "inset": 8.0,
+          "w": 152.0
+        },
+        "discard": {
+          "bottom": 14.0,
+          "h": 148.0,
+          "right": 22.0,
+          "w": 96.0
+        },
+        "draw": {
+          "bottom": 14.0,
+          "h": 148.0,
+          "left": 16.0,
+          "w": 96.0
+        },
+        "endTurn": {
+          "bottom": 128.0,
+          "h": 120.0,
+          "right": 22.0,
+          "w": 120.0
+        },
+        "energy": {
+          "bottom": 148.0,
+          "h": 90.0,
+          "left": 24.0,
+          "w": 120.0
+        },
+        "hand": {
+          "bottom": -12.0,
+          "h": 260.0,
+          "left": 0.0,
+          "scale": 1.0
+        },
+        "hud": {
+          "height": 56.0,
+          "scale": 1.0,
+          "stat": 170.0,
+          "title": 1.0
+        },
+        "kindle": {
+          "left": 16.0,
+          "top": 66.0,
+          "w": 116.0
+        },
+        "lantern": {
+          "bottom": 262.0,
+          "h": 104.0,
+          "left": 42.0,
+          "w": 104.0
+        },
+        "omen": {
+          "left": 16.0,
+          "scale": 1.0,
+          "top": 62.0
+        },
+        "relics": {
+          "left": 66.0,
+          "scale": 1.0,
+          "top": 62.0
+        }
+      },
+      "shapes": {
+        "desktop-landscape": {
+          "draw": {
+            "bottom": 14.0,
+            "h": 148.0,
+            "left": 17.0,
+            "w": 96.0
+          },
+          "endTurn": {
+            "bottom": 162.0,
+            "h": 120.0,
+            "right": 7.0,
+            "w": 120.0
+          },
+          "energy": {
+            "bottom": 161.0,
+            "left": 4.0
+          },
+          "lantern": {
+            "bottom": 267.0,
+            "h": 104.0,
+            "left": 18.0,
+            "w": 104.0
+          }
+        },
+        "pad-landscape": {
+          "endTurn": {
+            "bottom": 163.0,
+            "h": 120.0,
+            "right": 0.0,
+            "w": 120.0
+          },
+          "energy": {
+            "bottom": 162.0,
+            "left": 0.0
+          },
+          "lantern": {
+            "bottom": 268.0,
+            "h": 104.0,
+            "left": 18.0,
+            "w": 104.0
+          }
+        },
+        "pad-portrait": {
+          "ashes": {
+            "bottom": 0.0,
+            "h": 148.0,
+            "right": 0.0,
+            "w": 96.0
+          },
+          "card": {
+            "w": 132.0
+          },
+          "discard": {
+            "bottom": 140.0,
+            "h": 148.0,
+            "right": 0.0,
+            "w": 96.0
+          },
+          "draw": {
+            "bottom": 140.0,
+            "h": 148.0,
+            "left": 0.0,
+            "w": 96.0
+          },
+          "endTurn": {
+            "bottom": 654.0,
+            "h": 104.0,
+            "right": 9.0,
+            "w": 104.0
+          },
+          "energy": {
+            "bottom": 665.0,
+            "h": 78.0,
+            "left": 6.0,
+            "w": 102.0
+          },
+          "hand": {
+            "h": 230.0
+          },
+          "lantern": {
+            "bottom": 772.0,
+            "h": 94.0,
+            "left": 10.0,
+            "w": 94.0
+          }
+        },
+        "phone-landscape": {
+          "actor": {
+            "scale": 0.78
+          },
+          "ashes": {
+            "bottom": 5.0,
+            "h": 102.0,
+            "right": 5.0,
+            "w": 64.0
+          },
+          "card": {
+            "inset": 0.0,
+            "w": 104.0
+          },
+          "discard": {
+            "bottom": 105.0,
+            "h": 102.0,
+            "right": 5.0,
+            "w": 64.0
+          },
+          "draw": {
+            "bottom": 5.0,
+            "h": 102.0,
+            "left": 5.0,
+            "w": 64.0
+          },
+          "endTurn": {
+            "bottom": 264.0,
+            "h": 84.0,
+            "right": 0.0,
+            "w": 84.0
+          },
+          "energy": {
+            "bottom": 133.0,
+            "h": 57.0,
+            "left": 0.0,
+            "w": 72.0
+          },
+          "hand": {
+            "bottom": -33.0,
+            "h": 128.0,
+            "left": 0.0,
+            "scale": 1.0
+          },
+          "hud": {
+            "height": 34.0,
+            "scale": 0.84,
+            "stat": 110.0,
+            "title": 1.0
+          },
+          "kindle": {
+            "left": 10.0,
+            "top": 40.0,
+            "w": 88.0
+          },
+          "lantern": {
+            "bottom": 236.0,
+            "h": 68.0,
+            "left": 2.0,
+            "w": 68.0
+          },
+          "omen": {
+            "left": 12.0,
+            "scale": 1.0,
+            "top": 40.0
+          },
+          "relics": {
+            "left": 56.0,
+            "scale": 1.0,
+            "top": 40.0
+          }
+        },
+        "phone-portrait": {
+          "actor": {
+            "scale": 0.78
+          },
+          "ashes": {
+            "bottom": 418.0,
+            "h": 108.0,
+            "right": 5.0,
+            "w": 68.0
+          },
+          "card": {
+            "inset": 46.0,
+            "w": 118.0
+          },
+          "discard": {
+            "bottom": 526.0,
+            "h": 108.0,
+            "right": 5.0,
+            "w": 68.0
+          },
+          "draw": {
+            "bottom": 634.0,
+            "h": 108.0,
+            "left": 317.0,
+            "w": 68.0
+          },
+          "endTurn": {
+            "bottom": 359.0,
+            "h": 96.0,
+            "right": 296.0,
+            "w": 96.0
+          },
+          "energy": {
+            "bottom": 575.0,
+            "h": 66.0,
+            "left": 5.0,
+            "w": 84.0
+          },
+          "hand": {
+            "bottom": -6.0,
+            "h": 214.0,
+            "left": 0.0,
+            "scale": 1.0
+          },
+          "hud": {
+            "height": 47.0,
+            "scale": 0.88,
+            "stat": 96.0,
+            "title": 0.0
+          },
+          "kindle": {
+            "left": 10.0,
+            "top": 54.0,
+            "w": 96.0
+          },
+          "lantern": {
+            "bottom": 476.0,
+            "h": 78.0,
+            "left": 5.0,
+            "w": 78.0
+          },
+          "omen": {
+            "left": 10.0,
+            "scale": 1.0,
+            "top": 52.0
+          },
+          "relics": {
+            "left": 52.0,
+            "scale": 1.0,
+            "top": 52.0
+          }
+        }
+      }
+    }
+  }
+}
