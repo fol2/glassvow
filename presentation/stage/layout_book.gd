@@ -144,6 +144,62 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	# --- chrome: how big an actor draws its own ground chrome. See
 	# `EnemyView.set_chrome_scale` for why one ratio rather than four numbers.
 	&"actor/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 2.0, "default": 1.0},
+
+	# --- map: the waystone field. The trail is a 15x7 grid seated between two
+	# edge insets, so `top` and `bottom` are already bound and only the column
+	# gap needed naming: it was `clamp(104, 50, (w - 170) / 6)` inline, three
+	# figures with no shape attached, and at 390px all three of them collide.
+	&"trail/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.05, "max": 2.0, "default": 0.36},
+	&"trail/top": {"bind": BIND_TOP, "unit": "px", "min": 0.0, "max": 600.0, "default": 92.0},
+	&"trail/bottom": {"bind": BIND_BOTTOM, "unit": "px", "min": 0.0, "max": 600.0, "default": 74.0},
+	## The width the columns may NOT use, so the outermost waystone keeps its
+	## margin. Halved on either side, like the CSS gutter it stands in for.
+	&"trail/gutter": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 800.0, "default": 170.0},
+	&"trail/colMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 50.0},
+	&"trail/colMax": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 104.0},
+	## The smallest a waystone may be to the finger, in stage px. Zero on the
+	## shapes a mouse points at, 44 on a phone — the floor Apple's HIG and
+	## Material both set. It grows the HIT rect only; see `GlassWaystone.
+	## set_touch_min` for why that costs no pixels and no extra node.
+	&"trail/touch": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 120.0, "default": 0.0},
+
+	# --- map: the top rail. Same three-part answer as `hud`, for the same
+	# reason: one ratio carries the shrinkage, and the two lines that cannot
+	# shrink usefully are switched off instead of squeezed. `region` replaces a
+	# bare `size.x < 650.0` written inline in `refresh()` — a threshold with no
+	# shape name on it, deciding a layout question outside the book.
+	&"mapbar/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 3.0, "default": 1.0},
+	&"mapbar/title": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
+	&"mapbar/region": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
+
+	# --- run: the choice panel every non-combat decision is drawn in. It asked
+	# for a 520px minimum width inside a 24px inset, which on a 390px stage is
+	# 178px wider than the stage has, hanging 89px off each side; and a 420px
+	# scroll floor, which is taller than a phone held sideways is.
+	&"panel/w": {"bind": BIND_NONE, "unit": "px", "min": 120.0, "max": 1600.0, "default": 520.0},
+	&"panel/inset": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 200.0, "default": 24.0},
+	&"panel/scroll": {"bind": BIND_NONE, "unit": "px", "min": 80.0, "max": 1600.0, "default": 420.0},
+	&"panel/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 3.0, "default": 1.0},
+
+	# --- reward: the spoils rack. `CARD_SCALE` was a `const` derived from
+	# `CardView.CARD_W` in four files, so a phone drew the pad's card and the
+	# rack ran off the stage. Authored as a WIDTH, like `card/w`, because that
+	# is the number a human can measure on the screen.
+	&"rack/w": {"bind": BIND_NONE, "unit": "px", "min": 40.0, "max": 400.0, "default": 178.0},
+	&"rack/gap": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 200.0, "default": 16.0},
+	&"rack/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 3.0, "default": 1.0},
+	## The glass panel the spoils stand in, in its two states: `panel` while the
+	## rows are up, `deep` once the offering has raised it. Both were constants
+	## (560 and 640) against a stage that is 390 wide on a phone, so the cards
+	## could be shrunk into a panel that still hung 194px off the right edge —
+	## the defect a resolved-value table cannot show and one capture does.
+	&"rack/panel": {"bind": BIND_NONE, "unit": "px", "min": 160.0, "max": 1600.0, "default": 560.0},
+	&"rack/deep": {"bind": BIND_NONE, "unit": "px", "min": 160.0, "max": 1600.0, "default": 640.0},
+	## What the panel's frame keeps clear at top and bottom. The top figure is
+	## the benchmark's `.center-panel` padding, sized to clear a HUD that is
+	## itself shorter on a phone.
+	&"rack/top": {"bind": BIND_TOP, "unit": "px", "min": 0.0, "max": 400.0, "default": 96.0},
+	&"rack/bottom": {"bind": BIND_BOTTOM, "unit": "px", "min": 0.0, "max": 400.0, "default": 20.0},
 }
 
 ## The fields each form has, in the order a human should meet them. This is the
@@ -157,6 +213,10 @@ const FORMS: Dictionary[StringName, PackedStringArray] = {
 	&"hud": ["height", "scale", "title", "stat"],
 	&"card": ["w", "inset"],
 	&"actor": ["scale"],
+	&"trail": ["scale", "top", "bottom", "gutter", "colMin", "colMax", "touch"],
+	&"mapbar": ["scale", "title", "region"],
+	&"panel": ["w", "inset", "scroll", "scale"],
+	&"rack": ["w", "gap", "scale", "panel", "deep", "top", "bottom"],
 }
 
 ## Where each form's values sit inside a resolved layout. A path is slash-
@@ -185,6 +245,22 @@ const SCOPES: Dictionary[StringName, Dictionary] = {
 		# second place for those is how the benchmark ended up with two editors.
 		"actor": &"actor",
 		"hud": &"hud", "card": &"card",
+	},
+	## The world map. The trail's own numbers sit at the root, the rail is a
+	## sub-dict — the same shape as `battlefield`, and for the same reason: the
+	## thing the screen IS goes at the root and its parts hang off it.
+	&"map": {
+		"": &"trail",
+		"bar": &"mapbar",
+	},
+	## Every non-combat decision panel: title, vigil, run menu, lamplighter.
+	&"run": {
+		"": &"panel",
+	},
+	## The spoils rack. Four reward screens share one rack size, which is what
+	## made four copies of `CARD_SCALE` possible in the first place.
+	&"reward": {
+		"": &"rack",
 	},
 }
 
@@ -545,11 +621,23 @@ static func _prune(node: Dictionary) -> void:
 static func _audit(out: PackedStringArray, scope: StringName, shape: StringName,
 		act: int, layout: Dictionary) -> void:
 	var where: String = "%s.%s act %d" % [scope, shape, act]
+	# The root form's fields sit beside the buckets the scope's OTHER rows own,
+	# so walking the root meets keys that are not its fields and must not be
+	# reported as strays. Which keys those are is already stated — they are the
+	# first segment of every other path in this scope — so it is derived here
+	# rather than listed. It used to read `field == "hero" or field == "slots"
+	# or field == "layers"`, which was the battlefield's three names written out;
+	# the first scope to add a bucket of its own (`map`'s `bar`) was reported as
+	# a fault by the validator that was supposed to be checking it.
+	var buckets: Dictionary = {}
+	for path: String in SCOPES[scope]:
+		if not path.is_empty():
+			buckets[path.split("/", false)[0]] = true
 	for path: String in SCOPES[scope]:
 		var form: StringName = SCOPES[scope][path]
 		for target: Dictionary in _walk(layout, path):
 			for field: String in target:
-				if path.is_empty() and (field == "hero" or field == "slots" or field == "layers"):
+				if path.is_empty() and buckets.has(field):
 					continue  # buckets other rows own, not stray keys
 				if not _declares(form, field):
 					out.append("%s: %s has no field %s" % [where, form, field])

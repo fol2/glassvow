@@ -899,6 +899,98 @@
           }
         }
       }
+    },
+    "map": {
+      "base": {
+        "bar": {
+          "region": 1.0,
+          "scale": 1.0,
+          "title": 1.0
+        },
+        "bottom": 74.0,
+        "colMax": 104.0,
+        "colMin": 50.0,
+        "gutter": 170.0,
+        "scale": 0.6,
+        "top": 92.0,
+        "touch": 0.0
+      },
+      "shapes": {
+        "phone-landscape": {
+          "bar": {
+            "scale": 0.84
+          },
+          "bottom": 56.0,
+          "colMax": 46.0,
+          "colMin": 40.0,
+          "scale": 0.58,
+          "top": 26.0,
+          "touch": 44.0
+        },
+        "phone-portrait": {
+          "bar": {
+            "region": 0.0,
+            "scale": 0.88
+          },
+          "gutter": 76.0,
+          "scale": 0.68,
+          "touch": 44.0
+        }
+      }
+    },
+    "reward": {
+      "base": {
+        "bottom": 20.0,
+        "deep": 640.0,
+        "gap": 16.0,
+        "panel": 560.0,
+        "scale": 1.0,
+        "top": 96.0,
+        "w": 178.0
+      },
+      "shapes": {
+        "pad-portrait": {
+          "gap": 14.0,
+          "w": 150.0
+        },
+        "phone-landscape": {
+          "bottom": 12.0,
+          "gap": 10.0,
+          "scale": 0.86,
+          "top": 40.0,
+          "w": 135.0
+        },
+        "phone-portrait": {
+          "bottom": 14.0,
+          "deep": 366.0,
+          "gap": 8.0,
+          "panel": 356.0,
+          "scale": 0.88,
+          "top": 56.0,
+          "w": 113.0
+        }
+      }
+    },
+    "run": {
+      "base": {
+        "inset": 24.0,
+        "scale": 1.0,
+        "scroll": 420.0,
+        "w": 520.0
+      },
+      "shapes": {
+        "phone-landscape": {
+          "inset": 14.0,
+          "scale": 0.86,
+          "scroll": 220.0
+        },
+        "phone-portrait": {
+          "inset": 14.0,
+          "scale": 0.88,
+          "scroll": 260.0,
+          "w": 340.0
+        }
+      }
     }
   }
 }

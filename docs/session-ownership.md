@@ -29,6 +29,7 @@ Two failure modes have already happened, both silent:
 | **Combat HUD** | `presentation/combat/hud_bar.gd` · `presentation/lab/hud_lab.gd` | `6fa343a6` |
 | **Status / intent chips** | `presentation/combat/status_chip.gd`, `intent_chip.gd` · `presentation/lab/chip_lab.gd` | `15dcffdb` |
 | **Assembly** | `application/main.gd`, `main.tscn`, `save_service.gd` · `presentation/combat/event_sequencer.gd`, `hand_view.gd` · `project.godot` | `4bb74d72` |
+| **Stage / layout** | `presentation/stage/` — `stage_shape.gd`, `layout_book.gd` · `presentation/lab/layout_lab.gd` · `assets/layout/combat-layout.json` · `tools/probe_layout.gd` · **the shape seam in every screen** (see below) | `eb691697` |
 
 The Enemy / hero lane has changed hands twice, and the chain matters only because
 each handover leaves a transcript behind that reads as if it were still in force:
@@ -52,6 +53,31 @@ the contested part (D1, the hero as an actor) to the Enemy lane and says to
 rebase onto the chip wave rather than plan around it. What is missing is an
 **order**, and the natural one is Assembly first: its stage establishes the
 ground line that every hero-placement number is then measured against.
+
+**The Stage / layout lane owns a SEAM, not a set of files.** It was created on
+2026-07-30, when the wired run made the gap visible: `CombatScreen` took a shape
+and the world map, the reward screen and every choice panel did not, so three of
+the four screens a player passes through composed at one frame. The lane's own
+files are listed above, but its work reaches into `presentation/map/`,
+`presentation/run/` and `presentation/reward/` — and those last two overlap the
+Reward lane and nobody, respectively.
+
+The boundary that keeps this from being a second claim on another lane's files:
+**this lane edits only the shape seam** — the constructor argument, the
+`LayoutBook.resolve` call, the `set_shape` method, and the replacement of a
+hardcoded figure by a book lookup with the identity value as its fallback. It
+does not touch composition, art, animation or copy. A number that changes what
+the identity shape draws is out of scope by construction, because the identity
+capture is this lane's own regression gate.
+
+Two consequences worth stating rather than discovering:
+
+- `presentation/map/` and `presentation/run/` had **no lane at all** before this.
+  They still have no owner for anything but the seam.
+- `assets/layout/combat-layout.json` is now misnamed: it holds `map`, `run` and
+  `reward` scopes alongside `battlefield` and `chrome`. The path is cited in
+  eleven places including two docs in `docs/solutions/` and one in another
+  worktree, so renaming it is an organiser event rather than a lane edit.
 
 Each lane's current open item is in `docs/visual-direction.md` under **Worker
 sessions**; the card line's is under **Card line**. The Enemy / hero lane's is

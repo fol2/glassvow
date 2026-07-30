@@ -153,6 +153,7 @@ var _shot: bool = false        # a capture is happening: run the clock out
 ## be: headless has no viewport texture, so the run hangs instead of failing.
 var _bare_shot: bool = false
 var _force_bar: bool = false
+var _shape: StringName = StageShape.IDENTITY
 
 
 func _init(content_ref: ContentDB) -> void:
@@ -180,6 +181,13 @@ func _init(content_ref: ContentDB) -> void:
 			_shot = true
 		elif arg == "--strip":
 			_force_bar = true
+		# The lab reads the shape for the same reason main hands it to the
+		# production route: the rack is authored per shape, and a bench that
+		# always builds the identity one cannot show what a phone gets.
+		elif arg.begins_with("--shape="):
+			var asked: StringName = StringName(arg.trim_prefix("--shape="))
+			if StageShape.REFERENCES.has(asked):
+				_shape = asked
 	# Dropping the chrome and running the clock out are two different things, and
 	# folding them into one flag meant a --strip shot — the one that documents the
 	# VIEWER — was the only one caught mid-entrance, which documents nothing.
@@ -250,7 +258,7 @@ func _rebuild() -> void:
 		"embers": _screen = RewardEmbers.new(reward, content, kind, _hue())
 		"reliquary": _screen = RewardReliquary.new(reward, content, kind)
 		"husk": _screen = RewardStage.new(_enemy(), _hue())
-		_: _screen = RewardScreen.new(reward, content, kind, _bench)
+		_: _screen = RewardScreen.new(reward, content, kind, _bench, _shape)
 	# The strip is the LAB'S chrome and the screen is the thing being judged, so
 	# the screen is told what the chrome is eating rather than being parked under
 	# it. The spoils sit 66px off the top of the canvas and the strip is 78 tall:

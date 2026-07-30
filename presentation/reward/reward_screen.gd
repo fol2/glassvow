@@ -139,6 +139,9 @@ const CHOICE_SUB: String = "Add one card to your deck — or skip to keep it lea
 ## assumes you can hover a card to read it. CardView is fixed at CARD_W, so the
 ## growth is a node scale; at oversample 2 that still resolves 1.7x above the
 ## display, so nothing softens.
+## The identity column of the book's `reward` scope. Kept as constants because
+## they are what `rack/w` and `rack/gap` DEFAULT to, and a fallback that agrees
+## with the default is the only kind that cannot introduce a second truth.
 const CARD_SCALE: float = CHOICE_CARD_W / CardView.CARD_W
 const RACK_H: float = CardView.CARD_H * CARD_SCALE
 
@@ -196,6 +199,12 @@ var content: ContentDB
 var encounter_kind: String = "normal"
 var bench: bool = false
 
+## The stage shape this screen composes for, and its resolved `reward` layout.
+## The rack is the only part that varies: a 178px card is 46% of a phone's
+## width, and three of them side by side are 137% of it.
+var shape: StringName = StageShape.IDENTITY
+var _rack_layout: Dictionary = {}
+
 var _rows: Array[Button] = []        # claim order; the card slot is the last
 var _row_of: Dictionary = {}         # StringName -> Button
 var _card_row: Button = null
@@ -221,11 +230,14 @@ static var _fonts: Dictionary = {}
 
 
 func _init(reward_ref: Dictionary, content_ref: ContentDB,
-		kind: String = "normal", benchmark: bool = false) -> void:
+		kind: String = "normal", benchmark: bool = false,
+		stage_shape: StringName = StageShape.IDENTITY) -> void:
 	reward = reward_ref
 	content = content_ref
 	encounter_kind = kind
 	bench = benchmark
+	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
+	_rack_layout = LayoutBook.resolve(&"reward", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	# No ground of its own: the benchmark's reward panel stands over the live
@@ -233,8 +245,8 @@ func _init(reward_ref: Dictionary, content_ref: ContentDB,
 	# behind — the lab paints a stand-in.
 	var frame: MarginContainer = MarginContainer.new()
 	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
-	frame.add_theme_constant_override("margin_top", int(PANEL_TOP))
-	frame.add_theme_constant_override("margin_bottom", int(PANEL_BOTTOM))
+	frame.add_theme_constant_override("margin_top", int(_rack_num("top", PANEL_TOP)))
+	frame.add_theme_constant_override("margin_bottom", int(_rack_num("bottom", PANEL_BOTTOM)))
 	frame.add_theme_constant_override("margin_left", 12)
 	frame.add_theme_constant_override("margin_right", 12)
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -245,7 +257,7 @@ func _init(reward_ref: Dictionary, content_ref: ContentDB,
 
 	_body = VBoxContainer.new()
 	_body.add_theme_constant_override("separation", 0)
-	_body.custom_minimum_size = Vector2(PANEL_W - PANEL_PAD * 2.0, 0.0)
+	_body.custom_minimum_size = Vector2(_rack_num("panel", PANEL_W) - PANEL_PAD * 2.0, 0.0)
 	_panel = _glass_panel(_body)
 	centre.add_child(_panel)
 
@@ -288,9 +300,9 @@ func _init(reward_ref: Dictionary, content_ref: ContentDB,
 	_body.add_child(_rack_slot)
 	_rack = HBoxContainer.new()
 	_rack.alignment = BoxContainer.ALIGNMENT_CENTER
-	_rack.add_theme_constant_override("separation", CHOICE_GAP)
+	_rack.add_theme_constant_override("separation", roundi(_rack_num("gap", float(CHOICE_GAP))))
 	_rack.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	_rack.offset_bottom = RACK_H
+	_rack.offset_bottom = _rack_h()
 	_rack_slot.add_child(_rack)
 
 	_body.add_child(_spacer(20.0))
@@ -671,7 +683,7 @@ func _deepen(ids: Array) -> void:
 		var across: float = 0.0 if n < 2 else (float(i) / float(n - 1)) * 2.0 - 1.0
 		card.hold_pose(Vector2(-across * FAN, 0.0))
 		_cards.append(card)
-		var pad: Control = _pedestal(card)
+		var pad: Control = _pedestal(card, _card_scale())
 		# Dealt, not revealed. The pedestal carries the arrival so the card's own
 		# scale (1.17, the offering's size) is left alone.
 		pad.modulate = Color(1.0, 1.0, 1.0, 0.0)
@@ -705,10 +717,10 @@ func _deepen(ids: Array) -> void:
 	tw.set_trans(Tween.TRANS_CUBIC)
 	tw.set_parallel(true)
 	tw.tween_property(_body, "custom_minimum_size:x",
-		CHOICE_PANEL_W - PANEL_PAD * 2.0, DEEPEN)
+		_rack_num("deep", CHOICE_PANEL_W) - PANEL_PAD * 2.0, DEEPEN)
 	tw.tween_property(_rows_slot, "custom_minimum_size:y", 0.0, DEEPEN)
 	tw.tween_property(_rows_slot, "modulate:a", 0.0, DEEPEN * 0.55)
-	tw.tween_property(_rack_slot, "custom_minimum_size:y", RACK_H, DEEPEN)
+	tw.tween_property(_rack_slot, "custom_minimum_size:y", _rack_h(), DEEPEN)
 	tw.tween_property(_rack_slot, "modulate:a", 1.0, DEEPEN)
 	# THE SHELF STOPS CUTTING once the offering is up. A card is not bounded by
 	# its own rect — the cost gem overhangs the silhouette by PAD_IN and the
@@ -734,7 +746,7 @@ func _open_choice_modal(ids: Array) -> void:
 	body.add_child(rack)
 	var i: int = 0
 	for id_v: Variant in ids:
-		rack.add_child(_pedestal(_card(str(id_v), i + 1)))
+		rack.add_child(_pedestal(_card(str(id_v), i + 1), _card_scale()))
 		i += 1
 	body.add_child(_spacer(20.0))
 	var actions: HBoxContainer = HBoxContainer.new()
@@ -743,7 +755,7 @@ func _open_choice_modal(ids: Array) -> void:
 	var skip: Button = _button("Skip", GO_GHOST)
 	skip.pressed.connect(func() -> void: _take_card(""))
 	actions.add_child(skip)
-	_show_overlay(body, CHOICE_PANEL_W)
+	_show_overlay(body, _rack_num("deep", CHOICE_PANEL_W))
 
 
 func _card(id: String, uid: int) -> CardView:
@@ -753,17 +765,68 @@ func _card(id: String, uid: int) -> CardView:
 	var cost_v: Variant = data.get("cost")
 	var cost: int = 0 if cost_v == null else int(float(str(cost_v)))
 	var card: CardView = CardView.new(CardInst.new(uid, StringName(id)), data, cost)
-	card.scale = Vector2(CARD_SCALE, CARD_SCALE)
+	var k: float = _card_scale()
+	card.scale = Vector2(k, k)
 	card.released_at.connect(func(_u: int, _p: Vector2) -> void: _take_card(id))
 	return card
+
+
+## How much bigger than the hand's card the offering draws, for this shape.
+##
+## Authored as a WIDTH (`rack/w`) rather than as this ratio, because the width
+## is the figure a human can measure on the screen and the ratio is not. At the
+## identity shape `rack/w` defaults to `CHOICE_CARD_W`, so this is exactly
+## `CARD_SCALE` and the pad-landscape composition is untouched.
+func _card_scale() -> float:
+	return _rack_num("w", CHOICE_CARD_W) / CardView.CARD_W
+
+
+func _rack_h() -> float:
+	return CardView.CARD_H * _card_scale()
+
+
+func _rack_num(field: String, fallback: float = 0.0) -> float:
+	return LayoutBook.num(_rack_layout.get(field), fallback)
+
+
+## Follow a re-pick. Only the rack has anything to say: the panel is 560 wide
+## against a stage that is never narrower than its reference, and the rows are
+## already bound. The offering is re-scaled in place rather than rebuilt, so a
+## card the player is mid-hover over keeps its identity.
+func set_shape(stage_shape: StringName) -> void:
+	if stage_shape == shape or not StageShape.REFERENCES.has(stage_shape):
+		return
+	shape = stage_shape
+	_rack_layout = LayoutBook.resolve(&"reward", shape)
+	if _rack == null:
+		return
+	var k: float = _card_scale()
+	var span: Vector2 = Vector2(CardView.CARD_W, CardView.CARD_H)
+	_rack.add_theme_constant_override("separation", roundi(_rack_num("gap", float(CHOICE_GAP))))
+	_rack.offset_bottom = _rack_h()
+	for node: Node in _rack.get_children():
+		var seat: Control = node as Control
+		if seat == null:
+			continue
+		seat.custom_minimum_size = span * k
+		for inner: Node in seat.get_children():
+			var card: CardView = inner as CardView
+			if card == null:
+				continue
+			card.scale = Vector2(k, k)
+			card.position = (seat.custom_minimum_size - span) * 0.5
+	# Only while the offering is actually up: the slot's height is 0 until
+	# `_deepen` raises it, and writing a height here would open it early.
+	if _rack_slot != null and _rack_slot.custom_minimum_size.y > 0.0:
+		_rack_slot.custom_minimum_size.y = _rack_h()
 
 
 ## A scaled CardView still reports its unscaled rect to a container, so three at
 ## 1.17 would overlap by 26px each. The pedestal reserves the grown box; scale
 ## runs about CardView's own centred pivot, so the card needs no offset.
-static func _pedestal(card: CardView) -> Control:
+static func _pedestal(card: CardView, k: float = CARD_SCALE) -> Control:
 	var pad: Control = Control.new()
-	pad.custom_minimum_size = Vector2(CardView.CARD_W, CardView.CARD_H) * CARD_SCALE
+	pad.custom_minimum_size = Vector2(CardView.CARD_W, CardView.CARD_H) * k
 	card.position = (pad.custom_minimum_size
 		- Vector2(CardView.CARD_W, CardView.CARD_H)) * 0.5
 	pad.add_child(card)
@@ -807,7 +870,7 @@ func _shallow() -> void:
 	tw.set_trans(Tween.TRANS_CUBIC)
 	tw.set_parallel(true)
 	tw.tween_property(_body, "custom_minimum_size:x",
-		PANEL_W - PANEL_PAD * 2.0, DEEPEN)
+		_rack_num("panel", PANEL_W) - PANEL_PAD * 2.0, DEEPEN)
 	tw.tween_property(_rack_slot, "custom_minimum_size:y", 0.0, DEEPEN)
 	tw.tween_property(_rack_slot, "modulate:a", 0.0, DEEPEN * 0.55)
 	tw.tween_property(_rows_slot, "custom_minimum_size:y", rows_h, DEEPEN)
@@ -848,7 +911,7 @@ func _on_continue() -> void:
 	var stay: Button = _button("Stay", GO_GHOST)
 	stay.pressed.connect(_close_overlay)
 	actions.add_child(stay)
-	_show_overlay(body, PANEL_W)
+	_show_overlay(body, _rack_num("panel", PANEL_W))
 
 
 # ---------------------------------------------------------------- furniture
