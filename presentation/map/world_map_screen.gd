@@ -22,6 +22,9 @@ const HINT_BOTTOM: float = -18.0
 
 const REGION_NAME: String = "The Ashen Woods"
 const REGION_ACCENT: Color = Color("#7ddb8f")
+const REGION_SKY: Color = Color("#0c1410")
+const REGION_FOG: Color = Color("#13241a")
+const REGION_GROUND: Color = Color("#05070d")
 
 var instant: bool = false        # headless: travel resolves without a tween
 var map: WorldMap
@@ -55,7 +58,7 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	_sky_tex = GlassStyle.grad_tex(
-		PackedColorArray([GlassStyle.NIGHT_TOP, GlassStyle.NIGHT_MID, GlassStyle.NIGHT_BOT]),
+		PackedColorArray([REGION_SKY, REGION_FOG, REGION_GROUND]),
 		PackedFloat32Array([0.0, 0.55, 1.0]), false, Vector2(0.5, 0.0), Vector2(0.5, 1.0))
 	_build_chrome()
 	_build_waystones()
@@ -74,6 +77,7 @@ func _build_chrome() -> void:
 	_title_label.offset_top = 38.0
 	_title_label.offset_bottom = 66.0
 	_title_label.add_theme_color_override("font_color", Color(0.78, 0.88, 1.0, 0.92))
+	_title_label.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 3))
 	_title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_title_label)
 
@@ -92,9 +96,28 @@ func _build_chrome() -> void:
 ## builder runs once and this runs again on every re-pick.
 func _scale_chrome() -> void:
 	var k: float = _bar_num("scale", 1.0)
+	# The act line, switched by the book rather than always drawn.
+	#
+	# `mapbar/title` was authored for the case where a title has no room and
+	# should go rather than shrink. It went unread for one afternoon and the case
+	# arrived from the other direction: the Spire rail now carries the act, the
+	# floor and the boss, so this label says the same thing a second time. At the
+	# identity shape that is only redundant. On a phone held upright it is clipped
+	# at the right edge, and held sideways it is drawn straight over the top row
+	# of waystones.
+	#
+	# Off in `base`, because the rail's line is strictly the longer of the two —
+	# it carries the floor number as well — so nothing is lost. Bringing it back
+	# is one value in the book, not a code change, which is the point of the
+	# field existing.
+	_title_label.visible = _bar_num("title", 1.0) >= 1.0
 	_title_label.add_theme_font_size_override("font_size", roundi(15.0 * k))
-	_title_label.offset_top = 38.0 * k
-	_title_label.offset_bottom = 68.0 * k
+	var title_top: float = 42.0 if shape == &"phone-landscape" else (
+		58.0 if shape == &"phone-portrait" else 62.0)
+	_title_label.offset_top = title_top
+	_title_label.offset_bottom = title_top + (38.0 if shape == &"phone-portrait" else 26.0)
+	_title_label.offset_left = 58.0 if shape == &"phone-portrait" else 0.0
+	_title_label.offset_right = -58.0 if shape == &"phone-portrait" else 0.0
 	_hint_label.add_theme_font_size_override("font_size", roundi(HINT_PT * k))
 	_hint_label.offset_top = HINT_TOP * k
 	_hint_label.offset_bottom = HINT_BOTTOM * k
@@ -338,7 +361,10 @@ func _draw() -> void:
 	# The night gradient is drawn, not parented: a child TextureRect would sit
 	# above this _draw pass and bury every band under it.
 	draw_texture_rect(_sky_tex, Rect2(Vector2.ZERO, size), false)
-	draw_rect(Rect2(0.0, horizon, w, h - horizon), Color(0.01, 0.015, 0.035, 0.48))
+	draw_texture_rect(SkyField.disc(),
+		Rect2(-w * 0.10, h * 0.22, w * 1.20, h * 0.60), false,
+		Color(0.52, 0.59, 0.55, 0.24))
+	draw_rect(Rect2(0.0, horizon, w, h - horizon), Color(REGION_GROUND, 0.62))
 	_draw_region(w, horizon)
 	_draw_spire()
 	_draw_graph()
@@ -375,7 +401,7 @@ func _draw_spire() -> void:
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(centre - top_w, 0.0), Vector2(centre + top_w, 0.0),
 		Vector2(centre + bottom_w, size.y), Vector2(centre - bottom_w, size.y),
-	]), Color(0.025, 0.03, 0.07, 0.92))
+	]), Color("#050805"))
 	for row: int in range(WorldMap.ROWS):
 		var y: float = size.y * 0.52 - (float(row) - _cam_row) * _row_gap()
 		if y < -20.0 or y > size.y + 20.0:
