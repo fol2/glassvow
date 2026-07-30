@@ -10,6 +10,8 @@ extends Control
 
 signal combat_over(result: String)
 signal result_continue
+signal menu_requested
+signal potion_requested(slot: int)
 
 ## The composition this screen is drawn for, and the act it is showing.
 ##
@@ -325,6 +327,8 @@ const EMBER_LAND: float = 0.44
 
 class Plate:
 	extends Control
+	var art: String = ""
+	var is_ledge: bool = false
 	var tex: Texture2D
 	var where: Vector2 = Vector2(0.5, 0.5)
 	## `sl-drift` (styles.css:687) — the diorama breathes sideways. `--amp` is
@@ -428,6 +432,11 @@ var _overlay: ColorRect
 var _overlay_title: Label
 var _overlay_body: Label
 var _overlay_button: Button
+var _inspector: Control
+var _inspector_pane: PanelContainer
+var _inspector_title: Label
+var _inspector_subtitle: Label
+var _inspector_rows: VBoxContainer
 var _vignette: ColorRect
 var _vignette_mat: ShaderMaterial
 var _sky: SkyField
@@ -532,6 +541,24 @@ func _init(game_ref: GlassvowGame, stage_shape: StringName = StageShape.IDENTITY
 	seq.busy_changed.connect(_on_busy_changed)
 
 
+## Swap the authored battlefield while keeping the encounter, actors and fracture
+## worlds alive. Main calls this when a live window crosses a shape boundary.
+func set_shape(stage_shape: StringName) -> void:
+	var next: StringName = stage_shape if StageShape.REFERENCES.has(stage_shape) \
+		else StageShape.IDENTITY
+	if next == shape:
+		return
+	shape = next
+	_authored = LayoutBook.resolve(&"battlefield", shape, act)
+	_placed = {}
+	_placed_at = Vector2i.ZERO
+	_build_hud()
+	_apply_stage_layout()
+	# `content_scale_size` and Control anchors settle on the next layout pass.
+	# Repeating the same idempotent placement then spends the new live flex.
+	call_deferred(&"_apply_stage_layout")
+
+
 ## The layout for the stage as it is right now, with the flex already spent.
 ##
 ## Read through here rather than off `_authored`, because `size` is the live
@@ -599,25 +626,54 @@ func _card_metrics() -> Vector2:
 		LayoutBook.num(card.get("inset"), HandView.CARD_INSET))
 
 
-## The stage grew or shrank inside the flex band. Only the hand cares: every
-## other number in the book is bound to an edge and has already followed it.
+## The stage grew or shrank inside the flex band. Re-read the placed book: foe
+## seats are right-bound and plate widths and the hand fan use the live stage.
 func _on_stage_resized() -> void:
-	var w: float = _stage_w()
-	# The plates are the only part of the composition whose WIDTH is measured
-	# against the stage rather than stated as a gap from an edge, so they are the
-	# only part that has to be told the stage moved.
-	for p: Plate in _plates:
-		if is_instance_valid(p):
-			p.fit(w)
-	if _hand == null or is_equal_approx(_hand.stage_w, w):
-		return
-	_hand.stage_w = w
-	_hand.refan()
+	_apply_stage_layout()
 
 
 func _stage_w() -> float:
 	var ref: Vector2i = StageShape.REFERENCES.get(shape, StageShape.REFERENCES[StageShape.IDENTITY])
 	return maxf(float(ref.x), size.x)
+
+
+func _apply_stage_layout() -> void:
+	if _shake_host == null:
+		return
+	if _battlefield != null:
+		_battlefield.offset_bottom = -_ground_y()
+	for plate: Plate in _plates:
+		if is_instance_valid(plate):
+			_layout_plate(plate)
+	_layout_kindle()
+	_layout_hand()
+	_layout_actors()
+	_fit_inspector()
+
+
+func _layout_hand() -> void:
+	if _hand == null:
+		return
+	var card: Vector2 = _card_metrics()
+	var stage_width: float = _stage_w()
+	_hand.stage_w = stage_width
+	_hand.offset_left = -HandView.zone_width(5, stage_width, card.x) * 0.5
+	_hand.offset_right = HandView.zone_width(5, stage_width, card.x) * 0.5
+	_hand.offset_top = -_hand_height()
+	_hand.offset_bottom = _hand_overhang()
+	_hand.set_card_metrics(card.x, card.y)
+
+
+func _layout_kindle() -> void:
+	if _kindle_toggle == null:
+		return
+	var kindle: Dictionary = LayoutBook.resolve(&"chrome", shape, act).get("kindle", {})
+	_kindle_toggle.offset_left = LayoutBook.num(kindle.get("left"), 16.0)
+	_kindle_toggle.offset_right = _kindle_toggle.offset_left + KINDLE_BOX.x
+	_kindle_toggle.offset_top = LayoutBook.num(kindle.get("top"), 66.0)
+	_kindle_toggle.offset_bottom = _kindle_toggle.offset_top + KINDLE_BOX.y
+	var k: float = LayoutBook.num(kindle.get("w"), KINDLE_BOX.x) / KINDLE_BOX.x
+	_kindle_toggle.scale = Vector2.ONE * k
 
 
 # ---------------------------------------------------------------- build
@@ -654,10 +710,7 @@ func _build_ui() -> void:
 	# The whole chrome layer, in one widget, measured against the same
 	# 1180x820 the stage above is. `plate = false` because the ward chip and HP
 	# rail belong to the actor they describe — see docs/hud-handoff.md §2.
-	_hud = HudBar.new(true, true, false, shape)
-	_hud.end_turn_pressed.connect(_on_end_turn_pressed)
-	_hud.lantern_pressed.connect(_on_art_pressed)
-	_shake_host.add_child(_hud)
+	_build_hud()
 
 	_hand = HandView.new()
 	# `.hand-zone` — centred on the stage, 260 tall, hanging 12px past the
@@ -746,7 +799,6 @@ func _build_ui() -> void:
 	# (docs/assembly-integration-plan.md D4) — but the four numbers that put it
 	# there are the book's now. They were literals, and 116 of a phone's 390px is
 	# a third of the stage spent on a debug toggle.
-	var kindle: Dictionary = LayoutBook.resolve(&"chrome", shape, act).get("kindle", {})
 	_kindle_toggle = Button.new()
 	_kindle_toggle.text = "Kindle: off"
 	_kindle_toggle.toggle_mode = true
@@ -756,19 +808,15 @@ func _build_ui() -> void:
 	# `HudBar._place_widget` strikes: the chip's padding, corner radius and font
 	# come from one styled Button that knows nothing about shapes, and the shape
 	# is spent on the outside of it. At pad-landscape the scale is exactly 1.
-	_kindle_toggle.offset_left = LayoutBook.num(kindle.get("left"), 16.0)
-	_kindle_toggle.offset_right = _kindle_toggle.offset_left + KINDLE_BOX.x
-	_kindle_toggle.offset_top = LayoutBook.num(kindle.get("top"), 66.0)
-	_kindle_toggle.offset_bottom = _kindle_toggle.offset_top + KINDLE_BOX.y
 	_kindle_toggle.pivot_offset = Vector2.ZERO
 	# Uniform, and taken from `w` alone: a Button's height is its stylebox's
 	# content margins plus its font, and that minimum wins over any offset — the
 	# chip is 43 tall however hard 32 is asked for. So the book authors what can
 	# be authored and the chip keeps its own proportions.
-	var k: float = LayoutBook.num(kindle.get("w"), KINDLE_BOX.x) / KINDLE_BOX.x
-	_kindle_toggle.scale = Vector2.ONE * k
+	_layout_kindle()
 	GlassStyle.style_button(_kindle_toggle, GlassStyle.EMBER)
 	_kindle_toggle.toggled.connect(_on_kindle_toggled)
+	_kindle_toggle.visible = false
 	_shake_host.add_child(_kindle_toggle)
 
 	_overlay = ColorRect.new()
@@ -799,6 +847,8 @@ func _build_ui() -> void:
 	_overlay_button.pressed.connect(func() -> void: result_continue.emit())
 	overlay_box.add_child(_overlay_button)
 
+	_build_inspector()
+
 	# `#transit` at z 73 — above the result overlay (60) and the tooltip (70),
 	# below only the grain.
 	_build_transit()
@@ -806,6 +856,161 @@ func _build_ui() -> void:
 	# Last, because `#grain` carries z 75 — above the tooltip and above the
 	# overlay — and because it reads the screen it is blended onto.
 	_build_grain()
+
+
+## Chrome has no encounter state. Rebuilding this one presentation node is the
+## smallest safe way to re-resolve all ten authored seats and the top bar.
+func _build_hud() -> void:
+	if _shake_host == null:
+		return
+	var sibling: int = -1
+	if _hud != null:
+		sibling = _hud.get_index()
+		_shake_host.remove_child(_hud)
+		_hud.queue_free()
+	_hud = HudBar.new(true, true, false, shape)
+	_hud.end_turn_pressed.connect(_on_end_turn_pressed)
+	_hud.lantern_pressed.connect(_on_art_pressed)
+	_hud.menu_pressed.connect(func() -> void: menu_requested.emit())
+	_hud.potion_pressed.connect(func(slot: int) -> void: potion_requested.emit(slot))
+	_hud.deck_pressed.connect(_show_deck)
+	_hud.pile_pressed.connect(_show_pile)
+	_shake_host.add_child(_hud)
+	if sibling >= 0:
+		_shake_host.move_child(_hud, sibling)
+	_push_hud()
+	var locked: bool = seq.is_busy() or game.cb == null or game.cb.over
+	_hud.set_locked(locked)
+
+
+func _build_inspector() -> void:
+	_inspector = Control.new()
+	_inspector.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_inspector.mouse_filter = Control.MOUSE_FILTER_STOP
+	_inspector.visible = false
+	add_child(_inspector)
+
+	var shade: ColorRect = ColorRect.new()
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.01, 0.015, 0.03, 0.88)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_inspector.add_child(shade)
+	var scrim: Button = Button.new()
+	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	scrim.flat = true
+	scrim.focus_mode = Control.FOCUS_NONE
+	scrim.pressed.connect(_close_inspector)
+	_inspector.add_child(scrim)
+
+	_inspector_pane = PanelContainer.new()
+	_inspector_pane.anchor_left = 0.5
+	_inspector_pane.anchor_right = 0.5
+	_inspector_pane.anchor_top = 0.5
+	_inspector_pane.anchor_bottom = 0.5
+	_inspector_pane.add_theme_stylebox_override(
+		"panel", GlassStyle.pane(GlassStyle.GLASS, 0.98))
+	_inspector.add_child(_inspector_pane)
+
+	var margin: MarginContainer = MarginContainer.new()
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 18)
+	_inspector_pane.add_child(margin)
+	var column: VBoxContainer = VBoxContainer.new()
+	column.add_theme_constant_override("separation", 12)
+	margin.add_child(column)
+
+	_inspector_title = _label("")
+	_inspector_title.add_theme_font_size_override("font_size", 28)
+	_inspector_title.add_theme_color_override("font_color", Color(0.82, 0.9, 1.0))
+	column.add_child(_inspector_title)
+	_inspector_subtitle = _label("")
+	_inspector_subtitle.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+	column.add_child(_inspector_subtitle)
+
+	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(scroll)
+	_inspector_rows = VBoxContainer.new()
+	_inspector_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_inspector_rows.add_theme_constant_override("separation", 8)
+	scroll.add_child(_inspector_rows)
+
+	var close: Button = Button.new()
+	close.text = "CLOSE"
+	close.custom_minimum_size = Vector2(160, 44)
+	close.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	GlassStyle.style_button(close, GlassStyle.EMBER)
+	close.pressed.connect(_close_inspector)
+	column.add_child(close)
+	_fit_inspector()
+
+
+func _fit_inspector() -> void:
+	if _inspector_pane == null:
+		return
+	var ref: Vector2i = StageShape.REFERENCES.get(
+		shape, StageShape.REFERENCES[StageShape.IDENTITY])
+	var stage: Vector2 = Vector2(maxf(size.x, float(ref.x)), maxf(size.y, float(ref.y)))
+	var box: Vector2 = Vector2(minf(520.0, stage.x - 32.0),
+		minf(540.0, stage.y - 48.0))
+	_inspector_pane.offset_left = -box.x * 0.5
+	_inspector_pane.offset_right = box.x * 0.5
+	_inspector_pane.offset_top = -box.y * 0.5
+	_inspector_pane.offset_bottom = box.y * 0.5
+
+
+func _show_deck() -> void:
+	_show_inspector("DECK", game.run.player.deck)
+
+
+func _show_pile(which: StringName) -> void:
+	match which:
+		&"draw":
+			_show_inspector("DRAW PILE", game.cb.draw)
+		&"discard":
+			_show_inspector("DISCARD PILE", game.cb.discard)
+		&"ashes":
+			_show_inspector("ASHES", game.cb.exhaust)
+
+
+func _show_inspector(title: String, cards: Array[CardInst]) -> void:
+	for child: Node in _inspector_rows.get_children():
+		_inspector_rows.remove_child(child)
+		child.queue_free()
+	_inspector_title.text = title
+	_inspector_subtitle.text = "%d card%s" % [cards.size(), "" if cards.size() == 1 else "s"]
+	var counts: Dictionary[String, int] = {}
+	var order: PackedStringArray = []
+	for card: CardInst in cards:
+		var key: String = String(card.id) + ("+" if card.up else "")
+		if not counts.has(key):
+			counts[key] = 0
+			order.append(key)
+		counts[key] += 1
+	for key: String in order:
+		var id: String = key.trim_suffix("+")
+		var definition: Dictionary = game.content.cards.get(id, {})
+		var row: HBoxContainer = HBoxContainer.new()
+		var name: Label = _label(str(definition.get("name", id)) + ("+" if key.ends_with("+") else ""))
+		name.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(name)
+		var count: Label = _label("×%d" % counts[key])
+		count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		count.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+		row.add_child(count)
+		_inspector_rows.add_child(row)
+	if cards.is_empty():
+		var empty: Label = _label("No cards")
+		empty.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+		_inspector_rows.add_child(empty)
+	_inspector.visible = true
+
+
+func _close_inspector() -> void:
+	_inspector.visible = false
 
 
 ## `radial-gradient(ellipse at 50% 45%, transparent 55%, edge 100%)` and the
@@ -935,7 +1140,7 @@ func _build_stage() -> void:
 	# stage: the act's plate art has a transparent sky and `#bg3d` is what shows
 	# through it. Black there is the single biggest reason a still frame of this
 	# fight read as flat next to the same frame on the benchmark.
-	_sky = SkyField.new()
+	_sky = SkyField.new(act)
 	_shake_host.add_child(_sky)
 
 	# Draw order is the benchmark's paint order: the plates and the breath sit
@@ -1180,60 +1385,47 @@ func _plate(art: String, is_ledge: bool = false) -> void:
 		# hole in the ground with nothing in the log saying which one.
 		push_warning("stage: missing plate %s" % path)
 		return
-	var L: Dictionary = _layout()
-	var layer: Dictionary = L.get("layers", {}).get(art, {})
-	var h: float = LayoutBook.num(layer.get("h"))
-	var y: float = LayoutBook.num(layer.get("y"))
-	var dx: float = LayoutBook.num(layer.get("x"))
-	var zoom: float = LayoutBook.num(layer.get("zoom"), 1.0)
-	var alpha: float = LayoutBook.num(layer.get("opacity"), 1.0)
-	# `object-position` as a fraction — the book keeps it in percent, which is
-	# what CSS authors it in and therefore what the editor should show.
-	var where: Vector2 = Vector2(LayoutBook.num(layer.get("posX"), 50.0),
-		LayoutBook.num(layer.get("posY"), 100.0)) * 0.01
-	var amp: float = LayoutBook.num(layer.get("drift"))
-	var period: float = PLATE_PERIODS.get(art, 26.0)
 	var tex: Texture2D = load(path)
-	var aspect: float = float(tex.get_width()) / maxf(1.0, float(tex.get_height()))
-	# `min-width: 100%` — against the LIVE stage, not the shape's reference. A
-	# flexed stage is wider than the plate was authored for, and a plate that
-	# kept the reference width would leave the sky showing past its own edge.
-	#
-	# Plus the drift, which upstream forgets. `min-width: 100%` is the statement
-	# that a plate COVERS the stage, and `sl-drift` then slides it `±amp` — so a
-	# plate that is exactly stage-wide uncovers up to `amp` of bare sky at one
-	# edge, every sweep, on both this port and the benchmark. Invisible at act 0,
-	# where the plate's edges are as dark as the sky behind them, and not at all
-	# invisible at act 2: measured on the running port at pad-landscape, the far
-	# left four columns read mean 52.4 with the magenta glass in frame and 11.1
-	# at the other end of the same sweep, with the bright band having moved to
-	# the right edge. A plate wide enough on its own — the mid arch, an island
-	# 600px across a 1180px stage — is untouched, because this only raises a
-	# floor that `maxf` was already applying.
-	var base: Vector2 = Vector2(maxf(_stage_w() + 2.0 * amp, h * aspect), h)
-	var box: Vector2 = base * zoom
-	var lip: float = LayoutBook.num(L.get("ledgeLip"), 14.0)
-	var bottom: float = maxf(0.0, _ground_y() + lip - h + y) if is_ledge else y
 	var r: Plate = Plate.new()
+	r.art = art
+	r.is_ledge = is_ledge
 	r.tex = tex
-	r.where = where
 	r.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	r.modulate = Color(1.0, 1.0, 1.0, alpha)
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	r.anchor_left = 0.5
 	r.anchor_right = 0.5
 	r.anchor_top = 1.0
 	r.anchor_bottom = 1.0
-	r.amp = amp
-	r.period = period
-	r.art_w = h * aspect
-	r.zoom = zoom
-	r.dx = dx
-	r.set_home(-box.x * 0.5 + dx, box.x)
-	r.offset_top = -(bottom + base.y * zoom)
-	r.offset_bottom = -bottom
 	_shake_host.add_child(r)
 	_plates.append(r)
+	_layout_plate(r)
+
+
+## Re-apply every shape-authored field to an existing plate. Keeping the node is
+## what preserves its paint order and its current drift phase through a rotation.
+func _layout_plate(r: Plate) -> void:
+	var stage: Dictionary = _layout()
+	var layer: Dictionary = stage.get("layers", {}).get(r.art, {})
+	var h: float = LayoutBook.num(layer.get("h"))
+	var y: float = LayoutBook.num(layer.get("y"))
+	r.dx = LayoutBook.num(layer.get("x"))
+	r.zoom = LayoutBook.num(layer.get("zoom"), 1.0)
+	r.modulate = Color(1.0, 1.0, 1.0,
+		LayoutBook.num(layer.get("opacity"), 1.0))
+	r.where = Vector2(
+		LayoutBook.num(layer.get("posX"), 50.0),
+		LayoutBook.num(layer.get("posY"), 100.0)) * 0.01
+	r.amp = LayoutBook.num(layer.get("drift"))
+	r.period = PLATE_PERIODS.get(r.art, 26.0)
+	var aspect: float = float(r.tex.get_width()) / maxf(1.0, float(r.tex.get_height()))
+	r.art_w = h * aspect
+	var lip: float = LayoutBook.num(stage.get("ledgeLip"), 14.0)
+	var bottom: float = maxf(0.0, _ground_y() + lip - h + y) if r.is_ledge else y
+	r.offset_top = -(bottom + h * r.zoom)
+	r.offset_bottom = -bottom
+	r.fit(_stage_w())
+	r.set_process(r.amp > 0.0)
+	r.queue_redraw()
 
 
 func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> void:
@@ -1259,7 +1451,7 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 	# The hero outlives the encounter — it is the same body between fights, and
 	# rebuilding it would throw away a 3D stage for no reason.
 	if _hero == null:
-		_hero = EnemyView.new(-1, "", HERO_HUE, HERO_ART, _hero_scale())
+		_hero = EnemyView.new(-1, "", HERO_HUE, HERO_ART, 1.0, _hero_frame())
 		# `HERO_LOOKS[0].kind` — a hero is a rogue in the profile table, and
 		# char-meta's own `duskblade` block (breathe 1.6, sway 0.5, bob 0) is laid
 		# over it, which is why the player breathes harder and does not float.
@@ -1350,17 +1542,33 @@ func _open_fight(slots: Array[Vector2]) -> void:
 ## The stagger is `160 + i * 130ms` on the foes only (`combat.js:280`); `heroIn`
 ## carries no delay. It is what tells the player how many foes there are before a
 ## single name is read, so it is per SEAT and not one arrival for the lineup.
-func _play_entrance(slots: Array[Vector2]) -> void:
+func _play_entrance(_slots: Array[Vector2]) -> void:
 	if _hero != null:
-		_hero.enter(0.0, _stand.bind(_hero, _hero_x(), 0.0))
+		_hero.enter(0.0, _stand_live_hero)
 	for idx: int in range(_enemy_views.size()):
 		var view: EnemyView = _enemy_views[idx]
 		if view == null:
 			continue
-		var slot: Vector2 = slots[idx] if idx < slots.size() else Vector2(_stage_w() * 0.5, 0.0)
 		view.enter(EnemyView.ENTER_LEAD + float(idx) * EnemyView.ENTER_STEP,
-			_stand.bind(view, slot.x, slot.y))
+			_stand_live_enemy.bind(idx))
 	_hud.play_entrance()
+
+
+func _stand_live_hero() -> void:
+	if _hero != null:
+		_stand(_hero, _hero_x(), 0.0)
+
+
+func _stand_live_enemy(idx: int) -> void:
+	if idx < 0 or idx >= _enemy_views.size():
+		return
+	var view: EnemyView = _enemy_views[idx]
+	if view == null:
+		return
+	var slots: Array[Vector2] = _slots(_enemy_views.size())
+	var slot: Vector2 = slots[idx] if idx < slots.size() \
+		else Vector2(_stage_w() * 0.5, 0.0)
+	_stand(view, slot.x, slot.y)
 
 
 func _deal_opening_hand() -> void:
@@ -1401,16 +1609,48 @@ func _slot_scales(count: int) -> PackedFloat32Array:
 	return out
 
 
-## How much smaller than the identity composition this shape draws its actors.
-##
-## Stated as a RATIO against `pad-landscape`'s own authored height rather than
-## against char-meta's tier size, so the identity shape is 285/285 and multiplies
-## by exactly one — the hero cannot drift by a rounding of the tier table.
-func _hero_scale() -> float:
-	var here: float = LayoutBook.num(_layout().get("hero", {}).get("h"), 285.0)
-	var identity: Dictionary = LayoutBook.resolve(&"battlefield", StageShape.IDENTITY, 0)
-	var there: float = LayoutBook.num(identity.get("hero", {}).get("h"), 285.0)
-	return here / maxf(1.0, there)
+## The hero's resolved battlefield frame. Unlike foes, its authored box is not
+## square: pad-landscape is 190 × 285, and phone shapes narrow both axes.
+func _hero_frame() -> Vector2:
+	var hero: Dictionary = _layout().get("hero", {})
+	return Vector2(LayoutBook.num(hero.get("w"), 190.0),
+		LayoutBook.num(hero.get("h"), 285.0))
+
+
+func _layout_actors() -> void:
+	if _hero != null:
+		_hero.set_body_frame(_hero_frame())
+		_stand(_hero, _hero_x(), 0.0)
+		_battlefield.move_child(_hero, 0)
+	if game.cb == null:
+		return
+	var count: int = mini(game.cb.enemies.size(), _enemy_views.size())
+	var slots: Array[Vector2] = _slots(count)
+	var scales: PackedFloat32Array = _slot_scales(count)
+	for idx: int in range(count):
+		var view: EnemyView = _enemy_views[idx]
+		if view == null:
+			continue
+		var e: EnemyCombatant = game.cb.enemies[idx]
+		var body: float = maxf(8.0, EnemyView.art_box(e.key))
+		var body_scale: float = scales[idx] if idx < scales.size() else 1.0
+		view.set_body_frame(Vector2.ONE * body * body_scale)
+		var slot: Vector2 = slots[idx] if idx < slots.size() \
+			else Vector2(_stage_w() * 0.5, 0.0)
+		_stand(view, slot.x, slot.y)
+	var order: Array[int] = []
+	for idx: int in range(count):
+		order.append(idx)
+	order.sort_custom(func(a: int, b: int) -> bool:
+		var ay: float = slots[a].y if a < slots.size() else 0.0
+		var by: float = slots[b].y if b < slots.size() else 0.0
+		return ay > by)
+	var first: int = 1 if _hero != null else 0
+	for idx: int in order:
+		var view: EnemyView = _enemy_views[idx]
+		if view != null:
+			_battlefield.move_child(view, first)
+			first += 1
 
 
 ## Stand an actor on the ground line: `x` is where its centre goes, `lift` how
@@ -1480,6 +1720,25 @@ func request_kindle(uid: int) -> bool:
 	return true
 
 
+func request_potion(slot: int, target: Variant = null) -> bool:
+	if seq.is_busy() or game.cb.over:
+		return false
+	var events: Array[Dictionary] = game.apply({
+		"t": "usePotion",
+		"slot": slot,
+		"target": target,
+	})
+	if not (game.last_ret is bool and game.last_ret):
+		return false
+	seq.enqueue(events)
+	_push_hud()
+	return true
+
+
+func refresh_chrome() -> void:
+	_push_hud()
+
+
 ## `onCardClick` (combat.js:1667). A click is not an inspection — it is the
 ## primary way the fight is played, and what it does depends entirely on how many
 ## things the card could be aimed at:
@@ -1508,10 +1767,6 @@ func _on_card_tapped(uid: int) -> void:
 		_hand.raise_seat(uid)
 		_sfx.play(&"hover")
 		_update_previews()
-		return
-	if _kindle_toggle.button_pressed:
-		if not request_kindle(uid):
-			_sfx.play(&"debuff")
 		return
 	# Clicking the card that is already armed is how you change your mind.
 	if _targeting and _selected_uid == uid:
@@ -1596,8 +1851,8 @@ func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	var view: CardView = _hand.card_view(uid)
 	if view == null:
 		return
-	if _kindle_toggle.button_pressed:
-		if _above_hand(global_pos) and request_kindle(uid):
+	if _hud.lantern_rect().has_point(global_pos):
+		if request_kindle(uid):
 			return
 	elif view.target_kind == "enemy":
 		var idx: int = _enemy_at(global_pos)
@@ -1619,7 +1874,7 @@ func _above_hand(global_pos: Vector2) -> bool:
 func _enemy_at(global_pos: Vector2) -> int:
 	for i: int in range(_enemy_views.size() - 1, -1, -1):
 		var ev: EnemyView = _enemy_views[i]
-		if ev == null or not ev.get_global_rect().has_point(global_pos):
+		if ev == null or not ev.body_rect().has_point(global_pos):
 			continue
 		if ev.idx < game.cb.enemies.size() and game.cb.enemies[ev.idx].hp > 0:
 			return ev.idx
@@ -2633,9 +2888,15 @@ func _push_hud() -> void:
 	_hud.set_values(maxi(0, cb.player.hp), cb.player.max_hp, cb.player.block,
 		game.run.player.gold, cb.player.energy, cb.player.energy_max,
 		draw_n, discard_n, cb.exhaust.size(), cb.hand.size())
+	_hud.set_potions(game.run.player.potions,
+		game.run.reveals_all or game.run.reveals.has("phials"))
 	# Embers are the number the lantern carries; the rules gate is whether it
 	# can be spent at all (docs/hud-handoff.md §3).
-	_hud.set_lantern(cb.embers, _rules.can_use_art(game.run, cb))
+	_hud.set_lantern(
+		cb.embers,
+		_rules.can_use_art(game.run, cb),
+		cb.ember_cap,
+		cb.art_used_turn == cb.turn)
 	# The strip's middle carries the place. The turn rides its dim tail — the
 	# benchmark's own bar has no seat for a number it does not show, and the
 	# tail is the honest one (assembly-integration-plan.md D3).
@@ -2756,10 +3017,9 @@ func _sync_all() -> void:
 		if view == null:
 			continue
 		var target_probe: Variant = first_living if view.target_kind == "enemy" else null
-		if _kindle_toggle.button_pressed:
-			view.set_playable(_rules.can_kindle(game.run, cb, c))
-		else:
-			view.set_playable(_rules.can_play(game.run, cb, c, target_probe))
+		view.set_playable(
+			_rules.can_play(game.run, cb, c, target_probe)
+			or _rules.can_kindle(game.run, cb, c))
 	if cb.over and not _over_emitted:
 		_over_emitted = true
 		# `victoryFlow` / `defeatFlow` (combat.js:2683, 2720) each open with their
@@ -2933,6 +3193,12 @@ func _lantern_tip() -> Dictionary:
 ## and would never see it.
 func _input(event: InputEvent) -> void:
 	var key: InputEventKey = event as InputEventKey
+	if _inspector != null and _inspector.visible:
+		if key != null and key.pressed and not key.echo:
+			if key.keycode == KEY_ESCAPE:
+				_close_inspector()
+			get_viewport().set_input_as_handled()
+		return
 	if key != null and key.pressed and not key.echo:
 		if _combat_key(key.keycode):
 			get_viewport().set_input_as_handled()

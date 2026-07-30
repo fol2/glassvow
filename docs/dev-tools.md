@@ -87,7 +87,9 @@ tools/shot.sh --enemies --idle=gloomslime --strip=/tmp/idle.png
 ```
 
 For a native iteration loop use `tools/live.sh start …`, then `shot`, `reload`,
-`key`, `click`, `drag` and `stop`. Non-visual tools remain direct, honest
+`resize W H`, `key`, `click`, `drag` and `stop`. `resize` changes the existing
+Godot window, so it is the headed gate for a live shape change without rebuilding
+the current screen. Non-visual tools remain direct, honest
 commands: `tools/check_anchors.py`, `godot --headless -s
 res://tools/check_fracture.gd`, the windowed
 `res://tools/bench_actor_stage.gd` probe, and:

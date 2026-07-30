@@ -30,14 +30,14 @@ deliberately does **not** share. This file describes what Godot actually builds.
 ## 1. What is built
 
 Two paths share one Voronoi routine, `_voronoi(sites, reach)`
-(`presentation/combat/enemy_view.gd:3160` (`_voronoi`)):
+(`presentation/combat/enemy_view.gd:3214` (`_voronoi`)):
 
 | | standing crack web | death shatter |
 |---|---|---|
-| entry | `crack()` (`enemy_view.gd:3361` (`crack`)) | `mark_dead()` (`enemy_view.gd:3582` (`mark_dead`)) |
+| entry | `crack()` (`enemy_view.gd:3415` (`crack`)) | `mark_dead()` (`enemy_view.gd:3636` (`mark_dead`)) |
 | sites | `_sites`, appended one per call, cap `MAX_SITES` | `_death_sites()` — graded rings around the burst |
-| cells | `_cells()` (`enemy_view.gd:3189` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:3705` (`_death_cells`)) — **`reach` = 0** |
-| body mask | none | `_touches_art()` (`enemy_view.gd:3758` (`_touches_art`)) |
+| cells | `_cells()` (`enemy_view.gd:3243` (`_cells`)) — **`reach` > 0** | `_death_cells()` (`enemy_view.gd:3759` (`_death_cells`)) — **`reach` = 0** |
+| body mask | none | `_touches_art()` (`enemy_view.gd:3812` (`_touches_art`)) |
 | geometry | `_prism()` → `MeshInstance3D` under `_glass_root` | `_prism()` with per-shard `origin` → `RigidBody3D` |
 | material | `GLASS_SHADER` — refraction + Fresnel | `SHARD_SHADER` — opaque cap, molten fracture face |
 
@@ -52,14 +52,14 @@ Four mechanisms, all verified in source, compounding.
 
 **2.1 The circle is a literal circle.** `_cells()` passes
 `_glass_area * minf(_quad_w, _box_u) * 0.5` as `reach`, and `_voronoi` clips
-every cell against `_disc(sites[i], reach)` (`enemy_view.gd:3147` (`_disc`)) — a
+every cell against `_disc(sites[i], reach)` (`enemy_view.gd:3201` (`_disc`)) — a
 20-gon of **constant radius**. The arc is not an artefact of shading or of
 sampling. It is drawn.
 
 **2.2 The arc wears the brightest treatment in the effect.** `_prism()`
-(`enemy_view.gd:3204` (`_prism`)) extrudes *every* edge of the cell into a side
+(`enemy_view.gd:3258` (`_prism`)) extrudes *every* edge of the cell into a side
 band tagged `COLOR.r = 1`, and `GLASS_SHADER`
-(`enemy_view.gd:1457` (`GLASS_SHADER`)) lights that band by Fresnel: `ALBEDO` mixes toward white,
+(`enemy_view.gd:1463` (`GLASS_SHADER`)) lights that band by Fresnel: `ALBEDO` mixes toward white,
 `ALPHA` gains `f * 0.6`, `EMISSION` gains `pow(f, 1.4)` for both `ignite` and
 `marked`. All three channels emphasise the same contour, so the disc boundary is
 the whitest, most opaque and most emissive line on the actor.
@@ -85,7 +85,7 @@ boundary, and every arc shares one radius.
 characteristic radius; a set of co-radial arcs can only read as circles.
 
 **2.4 The first state the player sees is the worst one.** `_rebuild_glass()`
-(`enemy_view.gd:3276` (`_rebuild_glass`)) returns early below two sites, so the
+(`enemy_view.gd:3330` (`_rebuild_glass`)) returns early below two sites, so the
 first visible crack state is two half-moons — one straight chord and one large
 arc each. Maximum circle, minimum crack.
 
@@ -144,7 +144,7 @@ apart when the Death rite runs". They do not.
 **3.5 Sites do not cluster at the blow.** `crack()` with no argument picks
 uniformly from UV 0.2–0.8, so crack position is unrelated to where the hit landed
 or how hard. Real impact fragments finely at the strike and coarsely outward —
-and `_death_sites()` (`enemy_view.gd:3617` (`_death_sites`)) *already does this*,
+and `_death_sites()` (`enemy_view.gd:3671` (`_death_sites`)) *already does this*,
 with graded rings. The death path understands the grading; the standing path does
 not.
 
@@ -630,7 +630,7 @@ that seat was re-derived.
 Before any option is built or judged, one defect has to go, because every
 comparison depends on it.
 
-`EnemyView` owns a single `RandomNumberGenerator` (`enemy_view.gd:478` (`_rng`)),
+`EnemyView` owns a single `RandomNumberGenerator` (`enemy_view.gd:481` (`_rng`)),
 seeded once when the stage is built from
 `hash(String(art_id)) + enemy_idx`. Three unrelated consumers share that one
 stream: crack placement (`crack`), the death pattern (`_death_sites`), and the

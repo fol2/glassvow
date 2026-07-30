@@ -274,14 +274,8 @@ func _apply_shape() -> void:
 ## says so with a `set_shape` method; one that cannot is left alone, because a
 ## half-applied shape looks like a bug rather than like a missing feature.
 ##
-## `CombatScreen` is deliberately in the second group. Re-seating a fight means
-## re-scaling the actors, and `EnemyView` takes its body scale as a construction
-## argument (`enemy_view.gd:1675`) with no setter — following a re-pick would
-## mean rebuilding every actor, and with it the 3D stage and any fracture in
-## flight. A fight therefore finishes at the shape it started on; `_shape` is
-## already updated, so the next screen built gets the new one. Adding
-## `set_body_scale` to `EnemyView` is what unblocks it, and that file belongs to
-## the Enemy / hero lane.
+## Combat participates without rebuilding the encounter: its setter re-frames
+## each existing EnemyView while retaining the SubViewport, fracture and tweens.
 func _reshape() -> void:
 	for screen: Control in [
 		_screen, _map_screen, _choice_screen, _reward_screen,
@@ -861,7 +855,7 @@ func _show_event() -> void:
 	screen.choice_selected.connect(func(ordinal: int) -> void:
 		_on_event_choice(str(ordinal), event_id)
 	)
-	_show_route(screen, true, &"safeNodes")
+	_show_route(screen, true, &"map")
 
 
 func _on_event_choice(choice_text: String, event_id: String) -> void:
@@ -1111,8 +1105,9 @@ func _combat_music(kind: String) -> StringName:
 		"paleOnes": return &"paleOnes"
 		"ownShade": return &"shadeDuel"
 		"usurper": return &"usurper"
-		"eighthOmen": return &"eighthOmen"
-		"unreadablePage": return &"unreadablePage"
+	if kind != "boss" and game.run.act >= 0 and game.run.act < game.run.omens.size() \
+			and game.run.omens[game.run.act] == "eighthOmen":
+		return &"eighthOmen"
 	if kind == "elite":
 		return &"elite"
 	var act: int = clampi(game.run.act + 1, 1, 3)
@@ -1212,15 +1207,17 @@ func _show_pending_reward() -> void:
 	var pending: Dictionary = game.run.pending_reward
 	var rewards: Dictionary = pending["rewards"]
 	var taken: Dictionary = pending["taken"]
+	var reward_kind: String = _map.current().combat_kind() \
+		if _map.current() != null else "normal"
 	_clear_route()
 	_reward_screen = RewardScreen.new(rewards, content,
-		_map.current().combat_kind() if _map.current() != null else "normal",
-		false, _shape)
+		reward_kind, false, _shape)
 	_reward_screen.claimed.connect(_on_reward_claimed)
 	_reward_screen.finished.connect(_on_reward_finished)
 	add_child(_reward_screen)
 	_attach_run_hud()
-	_music.play(&"victory")
+	if reward_kind == "boss":
+		_music.play(&"victory")
 	for key: String in ["gold", "card", "potion", "relic"]:
 		if taken.get(key, false):
 			_reward_screen.mark_taken(StringName(key))
@@ -1347,17 +1344,10 @@ func _on_boss_relic_chosen(id: String) -> void:
 func _show_run_end() -> void:
 	var pending: Dictionary = game.run.pending_run_end
 	var outcome: String = str(pending.get("outcome", "abandon"))
-	var stats: Dictionary = {
-		"floors": game.run.floors_climbed,
-		"slain": int(float(str(game.run.stats.get("slain", 0)))),
-		"elites_bosses": int(float(str(game.run.stats.get("elites", 0)))) \
-			+ int(float(str(game.run.stats.get("bosses", 0)))),
-		"deck_size": game.run.player.deck.size(),
-		"damage_dealt": int(float(str(game.run.stats.get("dmgDealt", 0)))),
-		"damage_taken": int(float(str(game.run.stats.get("dmgTaken", 0)))),
-		"cards_played": int(float(str(game.run.stats.get("cardsPlayed", 0)))),
-		"run_time": _run_time_text(),
-	}
+	if outcome == "win":
+		_on_terminal_commit("commit")
+		return
+	var stats: Dictionary = _run_end_stats()
 	var bequest_answered: bool = pending.get("bequestAnswered", false)
 	var choices: Array[Dictionary] = _bequest_choices() \
 		if outcome == "death" and not bequest_answered else []
@@ -1372,7 +1362,23 @@ func _show_run_end() -> void:
 	screen.commit_requested.connect(
 		func() -> void: _on_terminal_commit("commit"))
 	screen.deck_requested.connect(_show_run_deck)
-	_show_route(screen, false, &"victory" if outcome == "win" else &"defeat")
+	_show_route(screen, false, &"defeat")
+
+
+func _run_end_stats() -> Dictionary:
+	return {
+		"floors": game.run.floors_climbed,
+		"slain": int(float(str(game.run.stats.get("slain", 0)))),
+		"elites_bosses": int(float(str(game.run.stats.get("elites", 0)))) \
+			+ int(float(str(game.run.stats.get("bosses", 0)))),
+		"deck_size": game.run.player.deck.size(),
+		"damage_dealt": int(float(str(game.run.stats.get("dmgDealt", 0)))),
+		"damage_taken": int(float(str(game.run.stats.get("dmgTaken", 0)))),
+		"cards_played": int(float(str(game.run.stats.get("cardsPlayed", 0)))),
+		"run_time": _run_time_text(),
+		"act_name": str(content.acts[clampi(
+			game.run.act, 0, content.acts.size() - 1)].get("name", "")),
+	}
 
 
 func _run_time_text() -> String:
@@ -1400,9 +1406,14 @@ func _bequest_choices() -> Array[Dictionary]:
 			best_relic = relic_id
 			best_relic_rank = rank
 	if not best_relic.is_empty():
+		var relic_name: String = str(content.relics[best_relic].get(
+			"name", best_relic))
 		choices.append({"id": "relic:" + best_relic,
-			"label": "Leave %s" % str(content.relics[best_relic].get(
-				"name", best_relic))})
+			"kind": "relic",
+			"name": relic_name,
+			"note": "your rarest relic",
+			"icon": "res://assets/art/bequests/relic.png",
+			"art": "res://assets/art/relics/%s.png" % best_relic})
 	var best_card: CardInst = null
 	var best_card_rank: int = 0
 	for card: CardInst in game.run.player.deck:
@@ -1415,16 +1426,24 @@ func _bequest_choices() -> Array[Dictionary]:
 			best_card_rank = rank
 	if best_card != null:
 		var definition: Dictionary = content.cards[String(best_card.id)]
+		var card_name: String = "%s%s" % [
+			str(definition.get("name", String(best_card.id))),
+			"+" if best_card.up else "",
+		]
 		choices.append({"id": "card:%d" % best_card.uid,
-			"label": "Leave %s%s" % [
-				str(definition.get("name", String(best_card.id))),
-				"+" if best_card.up else "",
-			]})
+			"kind": "card",
+			"name": card_name,
+			"note": "your finest card",
+			"icon": "res://assets/art/bequests/card.png",
+			"art": "res://assets/art/cards/%s.jpg" % String(best_card.id)})
 	if game.run.player.gold >= 25:
 		var amount: int = mini(game.run.player.gold, 75)
 		choices.append({"id": "gold:%d" % amount,
-			"label": "Leave %d gold in the stone" % amount})
-	choices.append({"id": "none", "label": "Leave nothing", "quiet": true})
+			"kind": "gold",
+			"name": "%d gold" % amount,
+			"note": "a cache of gold",
+			"icon": "res://assets/art/bequests/gold.png",
+			"art": "res://assets/art/ui/coin.png"})
 	return choices
 
 
@@ -1501,14 +1520,17 @@ func _on_terminal_commit(_id: String) -> void:
 				"body": name,
 			})
 		if after_progress > before_progress and after_state != "complete":
-			events.append({
+			var progress_event: Dictionary = {
 				"kind": "progress",
 				"title": "Emberglass Remembers",
 				"body": "%s · %d/%d" % [
 					name, after_progress,
 					int(float(str(quest.get("target", after_progress)))),
 				],
-			})
+			}
+			if id == "unreadablePage":
+				progress_event["cue"] = "unreadablePage"
+			events.append(progress_event)
 	var receipt: Dictionary = _vigil.receipts["runEnd"]
 	for id_v: Variant in receipt.get("completed", []):
 		var id: String = str(id_v)
@@ -1520,11 +1542,14 @@ func _on_terminal_commit(_id: String) -> void:
 	for unlock_v: Variant in _vigil.unlocks:
 		var unlock: String = str(unlock_v)
 		if not before_unlocks.has(unlock):
-			events.append({
+			var unlock_event: Dictionary = {
 				"kind": "unlock",
 				"title": "The Vigil Opens a Way",
 				"body": _unlock_dawn_copy(unlock),
-			})
+			}
+			if unlock == "act4":
+				unlock_event["cue"] = "sealedDoor"
+			events.append(unlock_event)
 	if events.is_empty():
 		events.append({
 			"kind": "memory",
@@ -1555,19 +1580,24 @@ func _show_dawn() -> void:
 	var dawn: Dictionary = game.run.pending_dawn
 	var events: Array = dawn["events"]
 	var cursor: int = int(float(str(dawn.get("cursor", 0))))
-	if cursor >= events.size():
-		var run_id: String = game.run.run_id
-		if SaveService.clear_run(run_id):
-			_vigil = SaveService.load_vigil()
-			game = null
-			_show_title()
-		else:
-			_show_save_error("The completed run could not be closed.")
-		return
-	var screen: DawnScreen = DawnScreen.new(events, cursor, _shape)
-	screen.continue_requested.connect(
-		func() -> void: _on_dawn_continue("continue"))
-	_show_route(screen, false, &"victory")
+	var screen: DawnScreen = DawnScreen.new(events, cursor, _shape, _run_end_stats())
+	screen.deck_requested.connect(_show_run_deck)
+	screen.commit_requested.connect(_finish_dawn)
+	var cue: StringName = &"victory" if cursor == 0 else &""
+	if cursor < events.size():
+		var event: Dictionary = events[cursor]
+		if not str(event.get("cue", "")).is_empty():
+			cue = StringName(str(event["cue"]))
+	_show_route(screen, false, cue)
+	if cursor < events.size():
+		var expected_cursor: int = cursor
+		get_tree().create_timer(0.72).timeout.connect(func() -> void:
+			if game == null or game.run.pending_dawn == null:
+				return
+			var current: Dictionary = game.run.pending_dawn
+			if int(float(str(current.get("cursor", -1)))) == expected_cursor:
+				_on_dawn_continue("continue")
+		)
 
 
 func _on_dawn_continue(_id: String) -> void:
@@ -1577,6 +1607,16 @@ func _on_dawn_continue(_id: String) -> void:
 		_show_dawn()
 	else:
 		_show_save_error("The Dawn cursor could not be held.")
+
+
+func _finish_dawn() -> void:
+	var run_id: String = game.run.run_id
+	if SaveService.clear_run(run_id):
+		_vigil = SaveService.load_vigil()
+		game = null
+		_show_title()
+	else:
+		_show_save_error("The completed run could not be closed.")
 
 
 func _has_pending_monument() -> bool:
@@ -1720,7 +1760,7 @@ func _show_lamplighter() -> void:
 		game.run.art,
 		_shape)
 	screen.confirmed.connect(_on_lamplighter_confirmed)
-	_show_route(screen, false, &"embark")
+	_show_route(screen, false, &"map")
 
 
 func _on_lamplighter_confirmed(boon_id: String, art_id: StringName) -> void:

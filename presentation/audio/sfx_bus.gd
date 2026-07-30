@@ -10,14 +10,14 @@ extends Node
 ## window opens, so the branch it guards cannot be reached.
 ##
 ## `audio.js` runs every one-shot through a shared gain node — bus 0.55, source
-## 0.85 — and lets them overlap freely, a fresh BufferSource per call. A
+## 0.85 — and lets them overlap freely, a fresh BufferSource per call. The
+## Godot `SFX` bus carries the first gain (and the persisted setting). A
 ## `AudioStreamPlayer` plays one stream at a time, so overlap comes from a pool
-## instead, and the two gains are folded into one dB figure at play time.
+## instead.
 
 const DIR: String = "res://assets/audio/sfx/%s.mp3"
 
-## `DEFAULT_VOL` (audio.js:7) and the per-source gain `playSample` applies.
-const BUS_GAIN: float = 0.55
+## The per-source gain `playSample` applies. The bus owns `DEFAULT_VOL`.
 const SOURCE_GAIN: float = 0.85
 
 ## A draw wave staggers five flights, each of which may land on a pile bump
@@ -49,6 +49,7 @@ func _init() -> void:
 		return
 	for i: int in range(VOICES):
 		var p: AudioStreamPlayer = AudioStreamPlayer.new()
+		p.bus = &"SFX"
 		_players.append(p)
 		add_child(p)
 
@@ -66,7 +67,7 @@ func play(id: StringName, gain: float = SOURCE_GAIN) -> void:
 	var p: AudioStreamPlayer = _players[_next]
 	_next = (_next + 1) % _players.size()
 	p.stream = stream
-	p.volume_db = linear_to_db(maxf(0.0001, BUS_GAIN * gain))
+	p.volume_db = linear_to_db(maxf(0.0001, gain))
 	p.play()
 
 

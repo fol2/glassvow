@@ -144,7 +144,7 @@ still find in the tree and should special-case by hand:
   now reads:
 
   ```markdown
-  At [hud_bar.gd:130 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
+  At [hud_bar.gd:131 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
   ```
 
   and `FAN_FACES` is indeed declared at `presentation/combat/hud_bar.gd` (`FAN_FACES`).
@@ -235,7 +235,7 @@ whose extension the old resolver had been matching.
 The `(in set_profile)` case I could **not** confirm, and the honest thing is to
 say so rather than repeat it. There is no `(in set_profile)` annotation in
 `docs/` or `CONCEPTS.md` at any of the four commits; the only `set_profile`
-annotation on the branch is `` `enemy_view.gd:2680` (`set_profile`) `` in
+annotation on the branch is `` `enemy_view.gd:2726` (`set_profile`) `` in
 [Drive the lab the way the game drives it](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md),
 and that one is correct — `func set_profile` is at
 `presentation/combat/enemy_view.gd:2680`. The likeliest reading is that the
@@ -431,7 +431,7 @@ in the tree now.
 
 ```markdown
 <!-- link label: the annotation must go INSIDE the brackets -->
-At [hud_bar.gd:130 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
+At [hud_bar.gd:131 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
 ```
 
 ```gdscript
@@ -477,18 +477,18 @@ holding only a matching string and a matching call, while `GAME_SCENE_PATH`,
 
 ```markdown
 <!-- before: the anchor ends the line, the symbol starts the next one -->
-`view.set_profile(_foe_kind(e.idx))` for every foe, and `combat_screen.gd:1266`
+`view.set_profile(_foe_kind(e.idx))` for every foe, and `combat_screen.gd:1458`
 (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
 
 <!-- after: they meet, and the checker can finally grade it -->
 `view.set_profile(_foe_kind(e.idx))` for every foe, and
-`combat_screen.gd:1266` (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
+`combat_screen.gd:1458` (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
 ```
 
 Four of the ten hand-fixed skips were this shape, and this one is
 `docs/solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md:50-51`.
 The annotation was correct all along — `start_encounter` is declared at
-`presentation/combat/combat_screen.gd` (`start_encounter`) and line 1049 is
+`presentation/combat/combat_screen.gd` (`start_encounter`) and line 1458 is
 `_hero.set_profile("rogue")`, comfortably inside it — but because the checker
 walks documents line by line (`tools/check_anchors.py` (`check`)), the symbol on the
 next line did not exist as far as the anchor was concerned. It was counted among

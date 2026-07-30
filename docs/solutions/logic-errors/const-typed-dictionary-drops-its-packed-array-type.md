@@ -71,8 +71,8 @@ static func _declares(form: StringName, field: String) -> bool:
 ```
 
 Every internal reader goes through `fields()`. The two call sites that used to
-inline `FORMS[form]` are at `presentation/stage/layout_book.gd:276` (in `place`)
-and `presentation/stage/layout_book.gd:642` (in `_defaults`).
+inline `FORMS[form]` are at `presentation/stage/layout_book.gd:352` (in `place`)
+and `presentation/stage/layout_book.gd:730` (in `_defaults`).
 
 Three other escapes were measured and all work: a **constant** key
 (`FORMS[&"hero"]`), declaring the dictionary `static var` instead of `const`, and

@@ -5,7 +5,11 @@ extends RefCounted
 
 const SLICE_PATH: String = "res://port_fixtures/content/slice-content.json"
 const FULL_PATH: String = "res://content/full-content.json"
+const MOB_OVERRIDES_PATH: String = "res://content/mob-overrides.json"
 const CORE_MECHANICS_PATH: String = "res://port_fixtures/content/core-mechanics.json"
+const ENEMY_INTENTS: Array[String] = [
+	"attack", "attack_block", "attack_buff", "attack_debuff", "block", "buff", "debuff", "heal",
+]
 
 var id: String = ""
 var cards: Dictionary = {}
@@ -47,10 +51,189 @@ static func load_slice() -> ContentDB:
 	return db
 
 
-static func load_full() -> ContentDB:
+static func load_full(with_mob_overrides: bool = true) -> ContentDB:
 	var db: ContentDB = ContentDB.new()
 	db._load(FULL_PATH)
+	if with_mob_overrides:
+		db._load_mob_overrides()
 	return db
+
+
+func _load_mob_overrides() -> void:
+	var text: String = FileAccess.get_file_as_string(MOB_OVERRIDES_PATH)
+	if text.is_empty():
+		push_error("ContentDB: cannot read %s" % MOB_OVERRIDES_PATH)
+		return
+	var raw: Variant = JSON.parse_string(text)
+	var faults: PackedStringArray = apply_enemy_overrides(raw)
+	if not faults.is_empty():
+		push_error("ContentDB: refusing %s — %s" % [MOB_OVERRIDES_PATH, faults[0]])
+
+func apply_enemy_overrides(raw: Variant) -> PackedStringArray:
+	var faults: PackedStringArray = enemy_override_faults(raw)
+	if not faults.is_empty():
+		return faults
+	var overrides: Dictionary = raw
+	for id_v: Variant in overrides:
+		var id_key: String = str(id_v)
+		var definition: Dictionary = overrides[id_v]
+		enemies[id_key] = definition.duplicate(true)
+	return faults
+
+func enemy_override_faults(raw: Variant) -> PackedStringArray:
+	var faults: PackedStringArray = []
+	if typeof(raw) != TYPE_DICTIONARY:
+		faults.append("mob overrides must be a dictionary")
+		return faults
+	var overrides: Dictionary = raw
+	for id_v: Variant in overrides:
+		var id_key: String = str(id_v)
+		if not enemies.has(id_key):
+			faults.append("unknown mob id %s" % id_key)
+			continue
+		faults.append_array(enemy_faults(id_key, overrides[id_v]))
+	return faults
+
+
+func enemy_faults(id_key: String, value: Variant) -> PackedStringArray:
+	var faults: PackedStringArray = []
+	if typeof(value) != TYPE_DICTIONARY:
+		faults.append("%s must be a dictionary" % id_key)
+		return faults
+	var definition: Dictionary = value
+	var baseline: Dictionary = enemies.get(id_key, {})
+	if str(definition.get("name", "")) != str(baseline.get("name", "")):
+		faults.append("%s.name is locale-owned and read-only" % id_key)
+	var hp_v: Variant = definition.get("hp")
+	if typeof(hp_v) != TYPE_ARRAY:
+		faults.append("%s.hp must be [minimum, maximum]" % id_key)
+	else:
+		var hp: Array = hp_v
+		if hp.size() != 2 or not _whole_at_least(hp[0] if hp.size() > 0 else null, 1) \
+				or not _whole_at_least(hp[1] if hp.size() > 1 else null, 1):
+			faults.append("%s.hp must contain two positive whole numbers" % id_key)
+		elif float(str(hp[0])) > float(str(hp[1])):
+			faults.append("%s.hp minimum exceeds maximum" % id_key)
+	for flag: String in ["elite", "boss"]:
+		if definition.has(flag) and typeof(definition[flag]) != TYPE_BOOL:
+			faults.append("%s.%s must be a boolean" % [id_key, flag])
+	if definition.get("elite", false) and definition.get("boss", false):
+		faults.append("%s cannot be both elite and boss" % id_key)
+	if definition.has("facets") and not _whole_at_least(definition["facets"], 2):
+		faults.append("%s.facets must be a whole number of at least 2" % id_key)
+	_validate_enemy_art(id_key, definition.get("art"), faults)
+	_validate_start_status(id_key, definition.get("startStatus", {}), faults)
+	_validate_enemy_moves(id_key, definition.get("moves"), baseline.get("moves", {}), faults)
+	return faults
+
+
+func _validate_enemy_art(id_key: String, value: Variant, faults: PackedStringArray) -> void:
+	if typeof(value) != TYPE_DICTIONARY:
+		faults.append("%s.art must be a dictionary" % id_key)
+		return
+	var art: Dictionary = value
+	var kind: String = str(art.get("kind", ""))
+	var known_kind: bool = kind == "humanoid"
+	for enemy: Dictionary in enemies.values():
+		known_kind = known_kind or str(enemy.get("art", {}).get("kind", "")) == kind
+	if not known_kind:
+		faults.append("%s.art.kind is not recognised" % id_key)
+	if not _number_between(art.get("hue"), 0.0, 360.0):
+		faults.append("%s.art.hue must be between 0 and 360" % id_key)
+	if not _number_between(art.get("size"), 0.01, 20.0):
+		faults.append("%s.art.size must be between 0.01 and 20" % id_key)
+
+
+func _validate_start_status(id_key: String, value: Variant,
+		faults: PackedStringArray) -> void:
+	if typeof(value) != TYPE_DICTIONARY:
+		faults.append("%s.startStatus must be a dictionary" % id_key)
+		return
+	var start: Dictionary = value
+	for status_v: Variant in start:
+		var status_id: String = str(status_v)
+		if not statuses.has(status_id):
+			faults.append("%s.startStatus has unknown status %s" % [id_key, status_id])
+		elif not _whole_at_least(start[status_v], 0):
+			faults.append("%s.startStatus.%s must be a non-negative whole number"
+				% [id_key, status_id])
+
+
+func _validate_enemy_moves(id_key: String, value: Variant, baseline_v: Variant,
+		faults: PackedStringArray) -> void:
+	if typeof(value) != TYPE_DICTIONARY:
+		faults.append("%s.moves must be a dictionary" % id_key)
+		return
+	var moves: Dictionary = value
+	var baseline: Dictionary = baseline_v if typeof(baseline_v) == TYPE_DICTIONARY else {}
+	for move_v: Variant in baseline:
+		if not moves.has(move_v):
+			faults.append("%s.moves cannot remove AI move %s" % [id_key, str(move_v)])
+	for move_v: Variant in moves:
+		var move_id: String = str(move_v)
+		if not baseline.has(move_v):
+			faults.append("%s.moves cannot add unused move %s" % [id_key, move_id])
+			continue
+		var move_value: Variant = moves[move_v]
+		if typeof(move_value) != TYPE_DICTIONARY:
+			faults.append("%s.moves.%s must be a dictionary" % [id_key, move_id])
+			continue
+		var move: Dictionary = move_value
+		var base_move: Dictionary = baseline[move_v]
+		if str(move.get("name", "")) != str(base_move.get("name", "")):
+			faults.append("%s.moves.%s.name is locale-owned and read-only" % [id_key, move_id])
+		if not ENEMY_INTENTS.has(str(move.get("intent", ""))):
+			faults.append("%s.moves.%s.intent is not recognised" % [id_key, move_id])
+		for field: String in ["dmg", "block", "heal", "ramp"]:
+			if move.has(field) and not _whole_at_least(move[field], 0):
+				faults.append("%s.moves.%s.%s must be a non-negative whole number"
+					% [id_key, move_id, field])
+		if move.has("times") and not _whole_at_least(move["times"], 1):
+			faults.append("%s.moves.%s.times must be a positive whole number" % [id_key, move_id])
+		_validate_move_fx(id_key, move_id, move.get("fx", []), faults)
+		if move.has("addCards"):
+			var adds_v: Variant = move["addCards"]
+			if typeof(adds_v) != TYPE_DICTIONARY:
+				faults.append("%s.moves.%s.addCards must be a dictionary" % [id_key, move_id])
+			else:
+				var adds: Dictionary = adds_v
+				var card_id: String = str(adds.get("id", ""))
+				if not cards.has(card_id) or not _whole_at_least(adds.get("n"), 1):
+					faults.append("%s.moves.%s.addCards needs a known card and positive count"
+						% [id_key, move_id])
+
+
+func _validate_move_fx(id_key: String, move_id: String, value: Variant,
+		faults: PackedStringArray) -> void:
+	if typeof(value) != TYPE_ARRAY:
+		faults.append("%s.moves.%s.fx must be an array" % [id_key, move_id])
+		return
+	var effects: Array = value
+	for i: int in range(effects.size()):
+		var effect_v: Variant = effects[i]
+		if typeof(effect_v) != TYPE_DICTIONARY:
+			faults.append("%s.moves.%s.fx[%d] must be a dictionary" % [id_key, move_id, i])
+			continue
+		var effect: Dictionary = effect_v
+		var who: String = str(effect.get("who", ""))
+		var status_id: String = str(effect.get("id", ""))
+		if not ["self", "player", "allies"].has(who) or not statuses.has(status_id) \
+				or not _whole_at_least(effect.get("n"), 0):
+			faults.append("%s.moves.%s.fx[%d] has an invalid target, status, or amount"
+				% [id_key, move_id, i])
+
+
+static func _whole_at_least(value: Variant, minimum: int) -> bool:
+	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
+		return false
+	var number: float = float(str(value))
+	return is_equal_approx(number, roundf(number)) and number >= float(minimum)
+
+
+static func _number_between(value: Variant, minimum: float, maximum: float) -> bool:
+	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
+		return false
+	return float(str(value)) >= minimum and float(str(value)) <= maximum
 
 
 func _load(path: String) -> void:
@@ -190,6 +373,8 @@ func validate(fails: Array[String]) -> void:
 	for eid: StringName in enemy_ids():
 		if not EnemyAi.handles(eid):
 			fails.append("ContentDB: enemy %s has no AI handler" % eid)
+		for fault: String in enemy_faults(String(eid), enemy(eid)):
+			fails.append("ContentDB: %s" % fault)
 	for card_v: Variant in cards.values():
 		var card_def: Dictionary = card_v
 		_validate_effects(card_def.get("effects", []), fails)

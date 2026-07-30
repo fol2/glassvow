@@ -4,6 +4,7 @@
 #   tools/live.sh start --fight=duskfang --kind=elite   # boots once, off-screen
 #   tools/live.sh shot /tmp/a.png                       # no window, no focus grab
 #   tools/live.sh reload                                 # re-parse code, rebuild
+#   tools/live.sh resize 390 844                         # resize this live window
 #   tools/live.sh key space                             # drive the screen
 #   tools/live.sh action ui_accept
 #   tools/live.sh click 590 700
@@ -117,6 +118,25 @@ case "${1-}" in
       /bin/sleep 0.05
     done
     die "timed out waiting for reload (see $LOG)"
+    ;;
+
+  resize)
+    width="${2-}" height="${3-}"
+    [[ "$width" == <-> && "$height" == <-> ]] || die "usage: tools/live.sh resize <width> <height>"
+    host_pid >/dev/null || die "no host running — tools/live.sh start [game args]"
+    id="z$(date +%s)$RANDOM"
+    rm -f "$RELOAD_RESULT"
+    printf '{"id":"%s","command":"resize","arguments":{"width":%s,"height":%s}}\n' \
+      "$id" "$width" "$height" > "$RELOAD_REQUEST"
+    for i in {1..400}; do
+      if [[ -f "$RELOAD_RESULT" ]] && grep -q "$id" "$RELOAD_RESULT"; then
+        cat "$RELOAD_RESULT"
+        grep -q '"success": true' "$RELOAD_RESULT" || die "resize failed (see $LOG)"
+        exit 0
+      fi
+      /bin/sleep 0.05
+    done
+    die "timed out waiting for resize (see $LOG)"
     ;;
 
   key)     send send_input "{\"type\":\"key\",\"key\":\"${2-}\"}" > /dev/null && print "key ${2-}" ;;

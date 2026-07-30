@@ -21,9 +21,11 @@ const HINT_TOP: float = -44.0
 const HINT_BOTTOM: float = -18.0
 
 const REGION_NAME: String = "The Ashen Woods"
-const REGION_ACCENT: Color = Color("#7ddb8f")
-const REGION_SKY: Color = Color("#0c1410")
-const REGION_FOG: Color = Color("#13241a")
+const ACT_SKIES: Array[Color] = [Color("#0c1410"), Color("#081420"), Color("#120a1e")]
+const ACT_FOGS: Array[Color] = [Color("#13241a"), Color("#0d2233"), Color("#1e1230")]
+const ACT_PARTICLES: Array[Color] = [Color("#ffa04d"), Color("#53e8ff"), Color("#c27bff")]
+const ACT_GLOWS: Array[Color] = [Color("#66ff9e"), Color("#2fb8ff"), Color("#ff4fd8")]
+const ACT_ACCENTS: Array[Color] = [Color("#7ddb8f"), Color("#5fd6e8"), Color("#c99aff")]
 const REGION_GROUND: Color = Color("#05070d")
 
 var instant: bool = false        # headless: travel resolves without a tween
@@ -47,6 +49,12 @@ var _sky_tex: GradientTexture2D
 var _trail_layout: Dictionary = {}
 var _title_label: Label
 var _run: RunState = null
+var _act: int = 0
+var _sky_colour: Color
+var _fog_colour: Color
+var _particle_colour: Color
+var _glow_colour: Color
+var _accent_colour: Color
 
 
 func _init(world_map: WorldMap, content_ref: ContentDB,
@@ -57,9 +65,7 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_trail_layout = LayoutBook.resolve(&"map", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	_sky_tex = GlassStyle.grad_tex(
-		PackedColorArray([REGION_SKY, REGION_FOG, REGION_GROUND]),
-		PackedFloat32Array([0.0, 0.55, 1.0]), false, Vector2(0.5, 0.0), Vector2(0.5, 1.0))
+	_set_act_theme(0)
 	_build_chrome()
 	_build_waystones()
 	_seed_ash()
@@ -174,7 +180,8 @@ func _seed_ash() -> void:
 func refresh(run: RunState) -> void:
 	if run != null:
 		_run = run
-		var act: Dictionary = content.acts[clampi(run.act, 0, content.acts.size() - 1)]
+		_set_act_theme(run.act)
+		var act: Dictionary = content.acts[_act]
 		var act_name: String = "The Rose Window" if map.region == "rose_window" \
 			else str(act.get("name", REGION_NAME))
 		_title_label.text = "%s — %s AWAITS" % [
@@ -192,6 +199,20 @@ func refresh(run: RunState) -> void:
 		if first_live != null and first_live.is_inside_tree():
 			first_live.grab_focus()
 	_seat_marker()
+	queue_redraw()
+
+
+func _set_act_theme(stage_act: int) -> void:
+	_act = clampi(stage_act, 0, ACT_SKIES.size() - 1)
+	_sky_colour = ACT_SKIES[_act]
+	_fog_colour = ACT_FOGS[_act]
+	_particle_colour = ACT_PARTICLES[_act]
+	_glow_colour = ACT_GLOWS[_act]
+	_accent_colour = ACT_ACCENTS[_act]
+	_sky_tex = GlassStyle.grad_tex(
+		PackedColorArray([_sky_colour, _fog_colour, REGION_GROUND]),
+		PackedFloat32Array([0.0, 0.55, 1.0]), false,
+		Vector2(0.5, 0.0), Vector2(0.5, 1.0))
 
 
 func _seat_marker() -> void:
@@ -363,8 +384,9 @@ func _draw() -> void:
 	draw_texture_rect(_sky_tex, Rect2(Vector2.ZERO, size), false)
 	draw_texture_rect(SkyField.disc(),
 		Rect2(-w * 0.10, h * 0.22, w * 1.20, h * 0.60), false,
-		Color(0.52, 0.59, 0.55, 0.24))
-	draw_rect(Rect2(0.0, horizon, w, h - horizon), Color(REGION_GROUND, 0.62))
+		Color(_fog_colour.lightened(0.42), 0.28))
+	draw_rect(Rect2(0.0, horizon, w, h - horizon),
+		Color(REGION_GROUND, 0.62 if _act == 0 else 0.38))
 	_draw_region(w, horizon)
 	_draw_spire()
 	_draw_graph()
@@ -373,9 +395,18 @@ func _draw() -> void:
 
 
 func _draw_region(w: float, horizon: float) -> void:
+	if _act > 0:
+		for cloud: int in range(9):
+			var cloud_w: float = w * (0.18 + float(cloud % 3) * 0.035)
+			var cloud_h: float = 54.0 + float(cloud % 4) * 13.0
+			var x: float = fposmod(float(cloud) * w * 0.17, w + cloud_w) - cloud_w
+			draw_texture_rect(SkyField.disc(),
+				Rect2(x, horizon - cloud_h * 0.68, cloud_w, cloud_h), false,
+				Color(_fog_colour.lightened(0.50), 0.15))
+		return
 	var span: float = w + 400.0
 	var trunk: Color = Color(0.025, 0.065, 0.048, 0.94)
-	var rim: Color = Color(REGION_ACCENT, 0.08)
+	var rim: Color = Color(_accent_colour, 0.08)
 	for tree: int in range(20):
 		var index: float = float(tree)
 		var x: float = fposmod(index * 163.0, span) - 200.0
@@ -401,7 +432,7 @@ func _draw_spire() -> void:
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(centre - top_w, 0.0), Vector2(centre + top_w, 0.0),
 		Vector2(centre + bottom_w, size.y), Vector2(centre - bottom_w, size.y),
-	]), Color("#050805"))
+	]), _sky_colour.darkened(0.58))
 	for row: int in range(WorldMap.ROWS):
 		var y: float = size.y * 0.52 - (float(row) - _cam_row) * _row_gap()
 		if y < -20.0 or y > size.y + 20.0:
@@ -465,7 +496,7 @@ func _draw_veil(w: float) -> void:
 		if x > w:
 			continue
 		var radius: float = 2.0 + m.z * 0.08
-		var tint: Color = REGION_ACCENT if index % 3 != 0 else GlassStyle.EMBER
+		var tint: Color = _glow_colour if index % 3 != 0 else _particle_colour
 		var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
 		draw_texture_rect(glow, Rect2(
 			Vector2(x, m.y) - Vector2.ONE * radius * 2.0,

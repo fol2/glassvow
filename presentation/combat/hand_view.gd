@@ -482,6 +482,16 @@ func refan() -> void:
 	_relayout()
 
 
+## Re-size the cards already in the fan when the stage crosses a shape boundary.
+## New cards read `card_w` in `add_card`; the live ones need the same answer.
+func set_card_metrics(width: float, inset: float) -> void:
+	card_w = maxf(1.0, width)
+	card_inset = inset
+	for view: CardView in _views.values():
+		view.base_scale = card_w / CardView.CARD_W
+	_relayout()
+
+
 ## Fan the cards along a shallow arc: centred spread, outer cards sit lower
 ## and tilt outward. `layoutHandSeats` in the benchmark, seat for seat.
 func _relayout() -> void:

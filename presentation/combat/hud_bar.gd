@@ -32,6 +32,7 @@ extends Control
 signal end_turn_pressed
 signal menu_pressed
 signal deck_pressed
+signal potion_pressed(slot: int)
 signal lantern_pressed
 signal pile_pressed(pile: StringName)
 
@@ -130,6 +131,9 @@ const FAN_SPAN: float = 30.0   # PILE_FAN_MAX_DEG
 const FAN_FACES: int = 16      # PILE_FAN_MAX_LAYERS
 ## `.pile-exhaust { opacity: 0.9 }` — the ash pile sits a shade back.
 const ASH_FADE: float = 0.9
+const LANTERN_CAP_MAX: int = 12
+const LANTERN_PIP_SIDE: float = 5.0
+const LANTERN_PIP_RADIUS: float = 50.0
 
 static var _tex_cache: Dictionary = {}
 static var _font_cache: Dictionary = {}
@@ -140,6 +144,8 @@ var _gold_num: Label
 var _title_lead: Label
 var _title_tail: Label
 var _deck_count: Label
+var _potion_slots: Array[Button] = []
+var _potion_art: Array[TextureRect] = []
 var _plate_fill: TextureRect
 var _plate_label: Label
 var _plate_rail: Panel
@@ -182,6 +188,9 @@ var _candles: Array[TextureRect] = []
 var _energy_orb: Control
 var _lantern: Control
 var _lantern_count: Label
+var _lantern_art: TextureRect
+var _lantern_glow: TextureRect
+var _lantern_pips: Array[TextureRect] = []
 ## The END seal's own root — dimmed while the queue drains.
 var _end_turn: Control
 var _draw_pile: Pile
@@ -413,12 +422,43 @@ func set_title(lead: String, tail: String = "") -> void:
 	_title_tail.text = ("  ·  " + tail) if tail != "" else ""
 
 
-## The lantern's art charge, and whether it can be spent. Not one of the eight
-## values — the benchmark drives it off relic state, so it keeps its own setter.
-func set_lantern(charges: int, ready: bool) -> void:
+func set_potions(ids: Array[String], shown: bool) -> void:
+	for slot: int in range(_potion_slots.size()):
+		var id: String = ids[slot] if slot < ids.size() else ""
+		var full: bool = shown and not id.is_empty()
+		_potion_slots[slot].visible = shown
+		_potion_slots[slot].disabled = not full
+		_potion_slots[slot].tooltip_text = id.capitalize() if full else "Empty phial seat"
+		_potion_art[slot].texture = icon("potions/" + id) if full else null
+		_potion_art[slot].visible = full
+
+
+func _emit_potion(slot: int) -> void:
+	potion_pressed.emit(slot)
+
+
+## The lantern's art charge, and whether it can be spent. The benchmark arcs one
+## pip per emberCap from -140° to 140° (combat.js:754-762; styles.css:1101-1120).
+func set_lantern(charges: int, ready: bool, cap: int = 9, spent: bool = false) -> void:
 	_lantern_count.text = str(charges)
+	var shown_cap: int = clampi(cap, 1, LANTERN_CAP_MAX)
+	for i: int in range(_lantern_pips.size()):
+		var pip: TextureRect = _lantern_pips[i]
+		pip.visible = i < shown_cap
+		if not pip.visible:
+			continue
+		var angle: float = 0.0 if shown_cap == 1 else deg_to_rad(
+			lerpf(-140.0, 140.0, float(i) / float(shown_cap - 1)))
+		pip.position = Vector2(52.0, 52.0) \
+			+ Vector2(sin(angle), -cos(angle)) * LANTERN_PIP_RADIUS \
+			- Vector2.ONE * (LANTERN_PIP_SIDE * 0.5)
+		pip.modulate = Color(1.0, 0.70, 0.35) if i < charges \
+			else Color(0.47, 0.39, 0.27, 0.35)
 	# .lantern-btn.unlit { filter: saturate(.55) brightness(.82) }
 	_lantern.modulate = Color.WHITE if ready else Color(0.80, 0.82, 0.86)
+	_lantern_glow.modulate.a = 1.0 if ready else 0.45
+	# .lantern-btn.art-spent .lb-ic { opacity: .35 }
+	_lantern_art.modulate.a = 0.35 if spent else 1.0
 
 
 # ---------------------------------------------------------------- top bar
@@ -515,6 +555,33 @@ func _build_top_bar() -> void:
 	right.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	right.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(right)
+
+	# Empty seats remain visible: the benchmark keeps the three 38 × 44 phial
+	# frames in the bar so capacity is readable before the first pickup.
+	for slot: int in range(3):
+		var potion: Button = Button.new()
+		potion.custom_minimum_size = Vector2(38.0, 44.0) * k
+		potion.focus_mode = Control.FOCUS_NONE
+		for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+			var seat: StyleBoxFlat = _flat(Color(0.025, 0.032, 0.068, 0.78), 8)
+			seat.set_border_width_all(1)
+			seat.border_color = GOLD if state == "hover" \
+				else Color(1.0, 1.0, 1.0, 0.20)
+			potion.add_theme_stylebox_override(state, seat)
+		potion.pressed.connect(_emit_potion.bind(slot))
+		right.add_child(potion)
+		_potion_slots.append(potion)
+		var potion_art: TextureRect = TextureRect.new()
+		potion_art.set_anchors_preset(Control.PRESET_FULL_RECT)
+		potion_art.offset_left = 5.0 * k
+		potion_art.offset_top = 5.0 * k
+		potion_art.offset_right = -5.0 * k
+		potion_art.offset_bottom = -5.0 * k
+		potion_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		potion_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		potion_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		potion.add_child(potion_art)
+		_potion_art.append(potion_art)
 
 	# .icon-btn.deck-btn — a 44px hit area under 56px of art, with the count
 	# sitting on the seal in white.
@@ -723,29 +790,43 @@ func _build_lantern() -> void:
 	_chrome_in.append(_lantern)
 	# The benchmark drop-shadows the lantern in its own firelight; a soft radial
 	# behind it is the cheap read of the same thing.
-	var glow: TextureRect = TextureRect.new()
-	glow.texture = GlassStyle.grad_tex(
+	_lantern_glow = TextureRect.new()
+	_lantern_glow.texture = GlassStyle.grad_tex(
 		PackedColorArray([Color(1.0, 0.71, 0.35, 0.30), Color(1.0, 0.60, 0.25, 0.0)]),
 		PackedFloat32Array([0.0, 1.0]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
-	glow.set_anchors_preset(Control.PRESET_FULL_RECT)
-	glow.stretch_mode = TextureRect.STRETCH_SCALE
-	glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	shell.add_child(glow)
+	_lantern_glow.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_lantern_glow.stretch_mode = TextureRect.STRETCH_SCALE
+	_lantern_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_lantern_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	shell.add_child(_lantern_glow)
 
 	var btn: Button = _bare_button(Vector2(104.0, 104.0))
 	btn.tooltip_text = "Lantern — spend a charge"
 	btn.pressed.connect(func() -> void: lantern_pressed.emit())
 	shell.add_child(btn)
-	var art: TextureRect = _icon_rect("ui/lantern", 94.0)
-	art.position = Vector2(5.0, 5.0)
-	btn.add_child(art)
+	_lantern_art = _icon_rect("ui/lantern", 94.0)
+	_lantern_art.position = Vector2(5.0, 5.0)
+	btn.add_child(_lantern_art)
 	_lantern_count = _num_label(26.0, PALE, GlassStyle.CINZEL_800, 0)
 	_lantern_count.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_lantern_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_lantern_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_outline(_lantern_count, 8)
 	btn.add_child(_lantern_count)
+
+	var pip_texture: Texture2D = GlassStyle.grad_tex(
+		PackedColorArray([Color.WHITE, Color(1.0, 1.0, 1.0, 0.0)]),
+		PackedFloat32Array([0.0, 1.0]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
+	for i: int in range(LANTERN_CAP_MAX):
+		var pip: TextureRect = TextureRect.new()
+		pip.texture = pip_texture
+		pip.size = Vector2.ONE * LANTERN_PIP_SIDE
+		pip.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pip.stretch_mode = TextureRect.STRETCH_SCALE
+		pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		shell.add_child(pip)
+		_lantern_pips.append(pip)
+	set_lantern(0, false)
 
 
 ## `.pile-btn` — a fan of card backs, the count on its shoulder, the name

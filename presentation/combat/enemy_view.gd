@@ -368,6 +368,9 @@ var idx: int = 0
 ## this box's bottom edge (benchmark bfEnemyFootX / bfEnemyFootY).
 var foot: Vector2 = Vector2.ZERO
 var art_size: float = 0.0
+## The live hit and placement frame. The Control keeps its construction minimum
+## so its chrome is never crushed; the painting is bottom-centred in this frame.
+var body_frame: Vector2 = Vector2.ZERO
 ## Which side this actor fights for, and how big it is — one field, because
 ## char-meta already models a hero as a size class (`tierSizes.hero` = 285)
 ## alongside normal, elite and boss. Nothing has to be passed in: the art id
@@ -736,6 +739,9 @@ const BITE: float = 2.0
 ## survival, for a vessel that shatters without ever having been struck.
 static var discs: bool = false
 var _span: float = 0.0          # padded box, in px
+## The same box at the current battlefield shape. The 3D world stays intact when
+## a window rotates; only its final canvas window changes size.
+var _display_span: float = 0.0
 var _box_u: float = 0.0         # box HEIGHT, in world units
 ## Box WIDTH. The art box is square (the benchmark's hit rect) but the painting
 ## inside it is `contain`-fitted, and 6 of 27 foes plus both heroes are not
@@ -1672,8 +1678,14 @@ static func save_meta() -> bool:
 ## (`BF.slots[n][i].s`), which is how a phone fits three foes on a 390px ledge.
 ## It defaults to 1, so a caller that does not pass one gets exactly the actor it
 ## got before formations could resize anybody.
+##
+## `frame_size` is the benchmark hero's resolved battlefield frame. Foes leave it
+## at zero and stay square; a hero supplies both authored axes, while the square
+## 3D stage remains centred inside the frame rather than stretching its ground
+## shadow and body chrome to fit.
 func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
-		art_id: StringName = &"", size_mul: float = 1.0) -> void:
+		art_id: StringName = &"", size_mul: float = 1.0,
+		frame_size: Vector2 = Vector2.ZERO) -> void:
 	idx = enemy_idx
 	_hue = hue
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1688,13 +1700,16 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		if art_size <= 0.0:
 			art_size = 185.0
 		art_size = maxf(8.0, art_size * maxf(0.01, size_mul))
+		if frame_size.x > 0.0 and frame_size.y > 0.0:
+			art_size = frame_size.y
 		var fx: float = entry.get("footX", 0.0)
 		var fy: float = entry.get("footY", 0.0)
 		foot = Vector2(fx, fy)
 		_read_idle(entry)
 		_read_aim(entry)
 		_read_hover(entry)
-		custom_minimum_size = Vector2(art_size, art_size)
+		custom_minimum_size = frame_size if frame_size.x > 0.0 and frame_size.y > 0.0 \
+			else Vector2(art_size, art_size)
 		size = custom_minimum_size
 		_rng.seed = hash(String(art_id)) + enemy_idx
 		_frac_seed = _stable_seed(String(art_id), enemy_idx)
@@ -1713,6 +1728,7 @@ func _init(enemy_idx: int, display_name: String, hue: float = 210.0,
 		_gem.set_state(_hue, 1.0, false)
 		add_child(_gem)
 
+	body_frame = size
 	_build_chrome(display_name)
 
 
@@ -1754,7 +1770,7 @@ func _fit_stage() -> void:
 	if _stage == null or not is_inside_tree():
 		return
 	var scale: float = maxf(1.0, get_viewport_transform().get_scale().x)
-	var want: int = ceili(_span * scale * oversample)
+	var want: int = ceili(_display_span * scale * oversample)
 	# Quantised, because a live window drag would otherwise reallocate four
 	# render targets on every frame of the drag for sub-texel gains.
 	var px: int = clampi(ceili(want / 64.0) * 64, 64, VP_MAX)
@@ -1766,6 +1782,7 @@ func _fit_stage() -> void:
 
 func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_span = art_size * (1.0 + 2.0 * PAD_FRAC)
+	_display_span = _span
 	_box_u = art_size * UNIT
 	var aspect: float = 1.0
 	if tex.get_height() > 0:
@@ -1897,8 +1914,6 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_cam.far = dist * 3.0
 	_stage.add_child(_cam)
 
-	var pad: float = art_size * PAD_FRAC
-
 	# Added BEFORE the body, because a drop-shadow is behind what casts it. It
 	# shares the body's texture and geometry exactly, so the halo cannot drift off
 	# the creature when the vessel breathes.
@@ -1906,7 +1921,7 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_display.texture = _stage.get_texture()
 	_display.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_display.stretch_mode = TextureRect.STRETCH_SCALE
-	_display.position = Vector2(-pad, -pad)
+	_display.position = Vector2((size.x - _span) * 0.5, (size.y - _span) * 0.5)
 	_display.size = Vector2(_span, _span)
 	_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# The reseam shimmer needs a channel `modulate` cannot give it, because
@@ -1919,6 +1934,37 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_display_mat.shader = reseam_sh
 	_display.material = _display_mat
 	add_child(_display)
+
+
+## Re-fit an existing actor to a new battlefield frame without rebuilding its
+## SubViewport, fracture field, debris, tweens or combat state.
+func set_body_frame(frame: Vector2) -> void:
+	if frame.x <= 0.0 or frame.y <= 0.0:
+		return
+	var old_home: Vector2 = _body_home(body_frame, _display_span)
+	var display_shift: Vector2 = _display.position - old_home if _display != null \
+		else Vector2.ZERO
+	var holder: Vector2 = Vector2(maxf(size.x, frame.x), maxf(size.y, frame.y))
+	if not holder.is_equal_approx(size):
+		custom_minimum_size = holder
+		size = holder
+	body_frame = frame
+	_apply_crown_dy()
+	if _display == null:
+		return
+	_display_span = frame.y * (1.0 + 2.0 * PAD_FRAC)
+	var home: Vector2 = _body_home(frame, _display_span)
+	_display.position = home + display_shift
+	_display.size = Vector2.ONE * _display_span
+	_display.pivot_offset = _display.size * 0.5
+	_stagger_from = home
+	_fit_stage()
+
+
+func _body_home(frame: Vector2, span: float) -> Vector2:
+	return Vector2(
+		(size.x - span) * 0.5,
+		size.y - (frame.y + span) * 0.5)
 
 
 ## `0.7s ease-out` with its only stop at 30%: the shimmer peaks fast and takes
@@ -2936,8 +2982,16 @@ func _clear_lunge() -> void:
 ## own box; here the actor's box IS the art box (the name plate is a child hung
 ## off it), so the centre is the box centre and nothing has to know how the 3D
 ## stage inside is padded.
+func body_rect() -> Rect2:
+	return Rect2(
+		global_position + Vector2(
+			(size.x - body_frame.x) * 0.5,
+			size.y - body_frame.y),
+		body_frame)
+
+
 func body_centre() -> Vector2:
-	return global_position + size * 0.5
+	return body_rect().get_center()
 
 
 ## `choreoStagger` (combat.js:1991) — the beat before the vessel fails: the
@@ -3330,21 +3384,21 @@ func _from_uv(u: Vector2) -> Vector2:
 ## over the actor needs the same mapping to land on the creature.
 ##
 ## Derived, not measured. The stage camera frames exactly `_span * UNIT` of world at
-## the plate and `_display` covers `-pad .. art_size + pad`, so world-to-pixel is
-## `1 / UNIT` flat and the world origin lands on the box centre — which is why the
-## aspect ratio has to enter through `_quad_w` and cannot be assumed away.
+## the plate and `_display` is centred over the authored frame, so world-to-pixel
+## is `1 / UNIT` flat and the world origin lands on the box centre — which is why
+## the aspect ratio has to enter through `_quad_w` and cannot be assumed away.
 func uv_to_local(u: Vector2) -> Vector2:
 	if _quad_w <= 0.0:
 		return u * size
 	var w: Vector2 = _from_uv(u)
-	return Vector2(art_size * 0.5 + w.x / UNIT, art_size * 0.5 - w.y / UNIT)
+	return size * 0.5 + Vector2(w.x / UNIT, -w.y / UNIT)
 
 
 func local_to_uv(p: Vector2) -> Vector2:
 	if _quad_w <= 0.0:
 		return Vector2(p.x / maxf(size.x, 1.0), p.y / maxf(size.y, 1.0))
-	return _to_uv(Vector2((p.x - art_size * 0.5) * UNIT,
-		(art_size * 0.5 - p.y) * UNIT))
+	return _to_uv(Vector2((p.x - size.x * 0.5) * UNIT,
+		(size.y * 0.5 - p.y) * UNIT))
 
 
 ## The `at` a caller passes when it knows a hit landed and not where. Named because it was
@@ -4521,6 +4575,14 @@ func _apply_plate_dy() -> void:
 	_plate.offset_bottom = dy + PLATE_GAP + CHROME_BOX_H
 
 
+func _apply_crown_dy() -> void:
+	if _crown == null:
+		return
+	var body_top: float = size.y - body_frame.y
+	_crown.offset_top = body_top - CHROME_BOX_H + _crown_clamp_dy
+	_crown.offset_bottom = body_top - CROWN_GAP + _crown_clamp_dy
+
+
 ## `clampOne` (combat.js:533) — an actor's status has to be READABLE, and neither
 ## end of it is safe on its own. A tall sprite lifts its crown behind the HUD bar,
 ## and any sprite standing on the ground line drops its HP rail into the hand. So
@@ -4543,8 +4605,7 @@ func clamp_chrome(ceiling: float, floor_y: float,
 			var want: float = maxf(0.0, roundf(ceiling - top))
 			if not is_equal_approx(want, _crown_clamp_dy):
 				_crown_clamp_dy = want
-				_crown.offset_top = -CHROME_BOX_H + want
-				_crown.offset_bottom = -CROWN_GAP + want
+				_apply_crown_dy()
 	if _plate != null:
 		var plate_h: float = _plate.get_combined_minimum_size().y
 		if plate_h > 1.0:

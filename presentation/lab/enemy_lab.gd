@@ -59,7 +59,6 @@ extends Control
 ## on a real screen the battlefield owns the ground, and an actor that carried
 ## its own floor could never stand on someone else's.
 
-const CATALOG_PATH: String = "res://port_fixtures/content/core-mechanics.json"
 const LOCALE_PATH: String = "res://port_fixtures/content/locale-en.json"
 
 const MARGIN: float = 40.0
@@ -68,7 +67,7 @@ const ROW_GAP: float = 96.0
 const CAPTION_H: float = 34.0
 const CHROME_H: float = 96.0        # room the foot plate needs under the feet
 const ROW_MAX_W: float = 2900.0
-const PANEL_W: float = 300.0
+const PANEL_W: float = 380.0
 
 ## The states an enemy actually has in the benchmark. `cracks` is how many crack
 ## sites are scored into the glass; `ignite` is the death ramp 0..1.
@@ -120,6 +119,14 @@ var _probe_readout: Label = null
 var _meta_rows: Dictionary = {}
 var _light_yaw: float = -32.0
 var _light_pitch: float = -38.0
+var _benchmark: ContentDB
+var _mob_overrides: Dictionary = {}
+var _mob_editor: CodeEdit
+var _mob_status: Label
+var _mob_save_button: Button
+var _mob_text_dirty: bool = false
+var _mob_file_dirty: bool = false
+var _loading_mob_editor: bool = false
 
 # --- the fracture sheet's three flags
 var _frac_energy: float = 1.2
@@ -175,22 +182,8 @@ static func _msaa_of(text: String) -> Viewport.MSAA:
 	return Viewport.MSAA_4X
 
 
-static func load_roster(fallback: ContentDB) -> Dictionary:
-	var text: String = FileAccess.get_file_as_string(CATALOG_PATH)
-	if not text.is_empty():
-		var raw: Variant = JSON.parse_string(text)
-		if typeof(raw) == TYPE_DICTIONARY:
-			var doc: Dictionary = raw
-			var mech: Variant = doc.get("mechanics")
-			if typeof(mech) == TYPE_DICTIONARY:
-				var mechanics: Dictionary = mech
-				var all: Variant = mechanics.get("ENEMIES")
-				if typeof(all) == TYPE_DICTIONARY:
-					var out: Dictionary = all
-					return out
-	push_warning("enemy lab: %s unreadable — falling back to the slice registry"
-		% CATALOG_PATH)
-	return fallback.enemies
+static func load_roster(source: ContentDB) -> Dictionary:
+	return source.enemies.duplicate(true)
 
 
 ## Display names live in locale, never in the mechanics fixture (SKILL §3).
@@ -351,7 +344,12 @@ func _init(content_ref: ContentDB) -> void:
 	field.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(field)
 
+	_benchmark = ContentDB.load_full(false)
 	var roster: Dictionary = load_roster(content_ref)
+	for id_v: Variant in _benchmark.enemies:
+		var id_key: String = str(id_v)
+		if roster.get(id_key) != _benchmark.enemies[id_key]:
+			_mob_overrides[id_key] = roster[id_key].duplicate(true)
 	for hero_id: String in HEROES:
 		roster[hero_id] = HEROES[hero_id]
 	var names: Dictionary = load_names()
@@ -435,7 +433,7 @@ func _actor(id: String, def: Dictionary, locale: Dictionary, x: float,
 		ground: float) -> EnemyView:
 	var art: Dictionary = def.get("art", {})
 	var hue: float = art.get("hue", 210)
-	var display: String = str(locale.get("name", def.get("name", id)))
+	var display: String = str(def.get("name", locale.get("name", id)))
 	var view: EnemyView = EnemyView.new(0, display, hue, StringName(id))
 	# The kind's idle profile, exactly as the combat screen resolves it
 	# (`combat_screen.gd:1089`, `_foe_kind`). Without it every creature on this
@@ -782,9 +780,27 @@ func _build_panel() -> void:
 	for id: String in _ids:
 		_picker.add_item(id)
 	_picker.item_selected.connect(func(i: int) -> void:
-		_build_bench(_ids[i])
-		_relayout_bench())
+		_select_bench(_ids[i]))
 	rows.add_child(_picker)
+
+	rows.add_child(_dim("MOB DATA · benchmark 6e06911\nAll serialisable mechanics; names, ids and AI policy are read-only."))
+	_mob_editor = CodeEdit.new()
+	_mob_editor.custom_minimum_size = Vector2(0.0, 300.0)
+	_mob_editor.text_changed.connect(func() -> void:
+		if not _loading_mob_editor:
+			_mob_text_dirty = true
+			_mob_save_button.disabled = true
+			_mob_status.text = "JSON edited — apply or discard before changing mob")
+	rows.add_child(_mob_editor)
+	_mob_status = _dim("")
+	_mob_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rows.add_child(_mob_status)
+	rows.add_child(_button("apply JSON to preview", _apply_mob_json))
+	rows.add_child(_button("discard JSON edit", func() -> void: _show_mob_json(_bench_id)))
+	rows.add_child(_button("reset mob to 6e06911", _reset_mob))
+	_mob_save_button = _button("save mob-overrides.json", _save_mobs)
+	_mob_save_button.disabled = true
+	rows.add_child(_mob_save_button)
 
 	# The struck beat is 300ms and its flash peaks at 90ms, so it is unjudgeable
 	# from a still. Two buttons rather than one because the whole point of the port
@@ -999,7 +1015,7 @@ func _build_panel() -> void:
 ## A char-meta value. Rebuilds the actor on release rather than per-frame — the
 ## size change re-creates a SubViewport, which is not a per-pixel-of-drag cost.
 func _meta_slider(rows: VBoxContainer, label: String, key: String,
-		lo: float, hi: float) -> void:
+			lo: float, hi: float) -> void:
 	var l: Label = _dim(label)
 	rows.add_child(l)
 	var s: HSlider = HSlider.new()
@@ -1017,6 +1033,86 @@ func _meta_slider(rows: VBoxContainer, label: String, key: String,
 		_relayout_bench())
 	rows.add_child(s)
 	_meta_rows[key] = s
+
+
+func _select_bench(id: String) -> void:
+	if _mob_text_dirty:
+		_mob_status.text = "Apply or discard the current JSON before changing mob."
+		_picker.select(_ids.find(_bench_id))
+		return
+	_build_bench(id)
+	_relayout_bench()
+
+
+func _show_mob_json(id: String) -> void:
+	if _mob_editor == null:
+		return
+	var editable: bool = _benchmark != null and _benchmark.enemies.has(id)
+	_loading_mob_editor = true
+	_mob_editor.editable = editable
+	_mob_editor.text = JSON.stringify(_roster.get(id, {}), "  ") if editable \
+		else "Hero preview only — no mob content is saved."
+	_loading_mob_editor = false
+	_mob_text_dirty = false
+	_mob_status.text = ("%s overrides 6e06911" % id if _mob_overrides.has(id)
+		else "%s matches 6e06911" % id) if editable else "Heroes are presentation-only."
+	_mob_save_button.disabled = OS.has_feature("web") or not _mob_file_dirty
+
+
+func _apply_mob_json() -> void:
+	if not _benchmark.enemies.has(_bench_id):
+		return
+	var parsed: Variant = JSON.parse_string(_mob_editor.text)
+	var faults: PackedStringArray = _benchmark.enemy_faults(_bench_id, parsed)
+	if not faults.is_empty():
+		_mob_status.text = "NOT applied — %s" % faults[0]
+		return
+	var definition: Dictionary = parsed
+	_roster[_bench_id] = definition.duplicate(true)
+	content.enemies[_bench_id] = definition.duplicate(true)
+	if definition == _benchmark.enemies[_bench_id]:
+		_mob_overrides.erase(_bench_id)
+	else:
+		_mob_overrides[_bench_id] = definition.duplicate(true)
+	_mob_file_dirty = true
+	_mob_text_dirty = false
+	_build_bench(_bench_id)
+	_relayout_bench()
+	_show_mob_json(_bench_id)
+	_mob_status.text += " · preview applied; save pending"
+
+
+func _reset_mob() -> void:
+	if not _benchmark.enemies.has(_bench_id):
+		return
+	var definition: Dictionary = _benchmark.enemies[_bench_id].duplicate(true)
+	_roster[_bench_id] = definition
+	content.enemies[_bench_id] = definition.duplicate(true)
+	_mob_overrides.erase(_bench_id)
+	_mob_file_dirty = true
+	_mob_text_dirty = false
+	_build_bench(_bench_id)
+	_relayout_bench()
+	_show_mob_json(_bench_id)
+	_mob_status.text = "Reset to 6e06911; save pending."
+
+
+func _save_mobs() -> void:
+	if _mob_text_dirty:
+		_mob_status.text = "NOT saved — apply or discard the current JSON first"
+		return
+	var faults: PackedStringArray = _benchmark.enemy_override_faults(_mob_overrides)
+	if not faults.is_empty():
+		_mob_status.text = "NOT saved — %s" % faults[0]
+		return
+	var why: String = DataFile.write(
+		ContentDB.MOB_OVERRIDES_PATH, DataFile.to_text(_mob_overrides))
+	if not why.is_empty():
+		_mob_status.text = "NOT saved — %s" % why
+		return
+	_mob_file_dirty = false
+	_show_mob_json(_bench_id)
+	_mob_status.text += " · saved"
 
 
 static func _dim(text: String) -> Label:
@@ -1058,6 +1154,7 @@ func _slider(rows: VBoxContainer, label: String, param: StringName,
 ## Rebuild the actor from scratch. Cheaper than unwinding a death rite, and it
 ## guarantees the bench always starts from the same vessel.
 func _build_bench(id: String) -> void:
+	var mob_changed: bool = id != _bench_id
 	_bench_id = id
 	if _bench_actor != null:
 		_bench_actor.queue_free()
@@ -1105,6 +1202,8 @@ func _build_bench(id: String) -> void:
 		_readout.text = "%s · %s · %d px box · foot %d,%d" % [
 			id, _tier_of(def), int(_bench_actor.art_size),
 			int(_bench_actor.foot.x), int(_bench_actor.foot.y)]
+	if mob_changed:
+		_show_mob_json(id)
 
 
 ## The overlay starts hidden, so the bench still opens on a plain creature. Blows
@@ -1279,8 +1378,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			var at: int = _ids.find(_bench_id)
 			var step: int = -1 if k.keycode == KEY_BRACKETLEFT else 1
 			if at >= 0 and not _ids.is_empty():
-				_build_bench(_ids[posmod(at + step, _ids.size())])
-				_relayout_bench()
+				_select_bench(_ids[posmod(at + step, _ids.size())])
 
 
 ## The ground the actors stand on, plus a contact shadow under each. Sheet-local

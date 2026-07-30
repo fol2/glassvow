@@ -34,6 +34,22 @@ static func run(fails: Array[String]) -> void:
 
 	# ---- screen drives a real fight headless (instant drain)
 	var game: GlassvowGame = GlassvowGame.new(content, rs)
+	var composition: Main = Main.new()
+	composition.game = game
+	rs.pending_quest_id = "paleOnes"
+	_check(fails, composition._combat_music("normal") == &"paleOnes",
+		"quest combat music overrides the act")
+	rs.pending_quest_id = null
+	rs.omens[0] = "eighthOmen"
+	_check(fails, composition._combat_music("normal") == &"eighthOmen"
+		and composition._combat_music("boss") == &"act1Boss",
+		"Eighth Omen music excludes bosses")
+	rs.omens[0] = null
+	var phone_reward_padding: float = RewardScreen._deep_padding_for(366.0, 113.0, 8.0, 3)
+	_check(fails, is_equal_approx(phone_reward_padding, 3.5)
+		and RewardScreen._panel_body_width(366.0, phone_reward_padding) >= 355.0,
+		"phone reward pane contains three benchmark-sized cards")
+	composition.free()
 	var screen: CombatScreen = CombatScreen.new(game)
 	screen.seq.instant = true
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
@@ -45,6 +61,26 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, game.cb != null and game.cb.turn == 1, "combat started turn 1")
 	_check(fails, screen._enemy_views.size() == 2, "two enemy views")
 	_check(fails, screen._hand.uids().size() == 5, "hand renders 5 cards")
+	var hero_before: EnemyView = screen._hero
+	var foe_before: EnemyView = screen._enemy_views[0]
+	var stage_before: SubViewport = hero_before._stage
+	var card_before: CardView = screen._hand.card_view(game.cb.hand[0].uid)
+	screen.set_shape(&"phone-portrait")
+	_check(fails, screen._hero == hero_before and screen._enemy_views[0] == foe_before
+			and screen._hero._stage == stage_before,
+		"shape change preserves actors and their fracture stages")
+	_check(fails, screen._hero.body_frame.is_equal_approx(Vector2(80.0, 130.0))
+			and screen._hud.shape == &"phone-portrait",
+		"phone shape re-frames the hero and combat HUD")
+	_check(fails, screen._hand.card_view(game.cb.hand[0].uid) == card_before
+			and is_equal_approx(card_before.base_scale,
+				screen._card_metrics().x / CardView.CARD_W),
+		"phone shape re-sizes existing hand cards")
+	screen.set_shape(StageShape.IDENTITY)
+	_check(fails, screen._hero == hero_before
+			and screen._hero.body_frame.is_equal_approx(Vector2(190.0, 285.0))
+			and screen._slots(2)[0].is_equal_approx(Vector2(820.0, 0.0)),
+		"landscape return preserves and restores the hero")
 
 	# `onCardClick` (combat.js:1667). A tap below the slop is a CLICK, and a click
 	# is how the fight is played: a card that must choose between two living foes

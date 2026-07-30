@@ -211,6 +211,7 @@ var _card_row: Button = null
 var _cards: Array[CardView] = []
 var _body: VBoxContainer = null
 var _panel: PanelContainer = null
+var _panel_inner_style: StyleBoxFlat = null
 var _rule: Control = null
 var _title: Label = null
 var _ornament: Label = null
@@ -251,14 +252,25 @@ func _init(reward_ref: Dictionary, content_ref: ContentDB,
 	frame.add_theme_constant_override("margin_right", 12)
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(frame)
+	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	frame.add_child(scroll)
 	var centre: CenterContainer = CenterContainer.new()
+	centre.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	centre.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	centre.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	frame.add_child(centre)
+	scroll.add_child(centre)
 
 	_body = VBoxContainer.new()
 	_body.add_theme_constant_override("separation", 0)
-	_body.custom_minimum_size = Vector2(_rack_num("panel", PANEL_W) - PANEL_PAD * 2.0, 0.0)
+	_body.custom_minimum_size = Vector2(
+		_panel_body_width(_rack_num("panel", PANEL_W), PANEL_PAD - 2.0), 0.0)
 	_panel = _glass_panel(_body)
+	var inner_style_v: Variant = _panel.get_meta("inner_style")
+	if inner_style_v is StyleBoxFlat:
+		_panel_inner_style = inner_style_v
 	centre.add_child(_panel)
 
 	_title = _heading(_title_text())
@@ -712,12 +724,14 @@ func _deepen(ids: Array) -> void:
 	_continue.visible = false
 	_skip.visible = true
 
+	var deep_padding: float = _deep_panel_padding(n)
+	_set_panel_padding(deep_padding)
 	var tw: Tween = create_tween()
 	tw.set_ease(Tween.EASE_OUT)
 	tw.set_trans(Tween.TRANS_CUBIC)
 	tw.set_parallel(true)
 	tw.tween_property(_body, "custom_minimum_size:x",
-		_rack_num("deep", CHOICE_PANEL_W) - PANEL_PAD * 2.0, DEEPEN)
+		_panel_body_width(_rack_num("deep", CHOICE_PANEL_W), deep_padding), DEEPEN)
 	tw.tween_property(_rows_slot, "custom_minimum_size:y", 0.0, DEEPEN)
 	tw.tween_property(_rows_slot, "modulate:a", 0.0, DEEPEN * 0.55)
 	tw.tween_property(_rack_slot, "custom_minimum_size:y", _rack_h(), DEEPEN)
@@ -789,6 +803,33 @@ func _rack_num(field: String, fallback: float = 0.0) -> float:
 	return LayoutBook.num(_rack_layout.get(field), fallback)
 
 
+func _deep_panel_padding(card_count: int) -> float:
+	return _deep_padding_for(
+		_rack_num("deep", CHOICE_PANEL_W),
+		_rack_num("w", CHOICE_CARD_W),
+		_rack_num("gap", float(CHOICE_GAP)),
+		card_count)
+
+
+## The outer two-pixel rim also consumes width. Phone portrait has eleven
+## pixels left after its three benchmark-sized cards and gaps, so its deep pane
+## uses the remainder instead of keeping the shallow pane's 26-pixel inset.
+static func _deep_padding_for(panel_width: float, card_width: float,
+		gap: float, card_count: int) -> float:
+	var rack_width: float = float(card_count) * card_width \
+		+ float(maxi(0, card_count - 1)) * gap
+	return clampf((panel_width - rack_width) * 0.5 - 2.0, 3.0, PANEL_PAD - 2.0)
+
+
+static func _panel_body_width(panel_width: float, padding: float) -> float:
+	return panel_width - (padding + 2.0) * 2.0
+
+
+func _set_panel_padding(padding: float) -> void:
+	if _panel_inner_style != null:
+		_panel_inner_style.set_content_margin_all(padding)
+
+
 ## Follow a re-pick. Only the rack has anything to say: the panel is 560 wide
 ## against a stage that is never narrower than its reference, and the rows are
 ## already bound. The offering is re-scaled in place rather than rebuilt, so a
@@ -800,6 +841,12 @@ func set_shape(stage_shape: StringName) -> void:
 	_rack_layout = LayoutBook.resolve(&"reward", shape)
 	if _rack == null:
 		return
+	var panel_padding: float = _deep_panel_padding(_cards.size()) \
+		if _deep else PANEL_PAD - 2.0
+	_set_panel_padding(panel_padding)
+	_body.custom_minimum_size.x = _panel_body_width(
+		_rack_num("deep" if _deep else "panel", CHOICE_PANEL_W if _deep else PANEL_W),
+		panel_padding)
 	var k: float = _card_scale()
 	var span: Vector2 = Vector2(CardView.CARD_W, CardView.CARD_H)
 	_rack.add_theme_constant_override("separation", roundi(_rack_num("gap", float(CHOICE_GAP))))
@@ -860,6 +907,7 @@ func _shallow() -> void:
 	_sub.visible = false
 	_skip.visible = false
 	_continue.visible = true
+	_set_panel_padding(PANEL_PAD - 2.0)
 	for btn: Button in _rows:
 		if not btn.disabled:
 			btn.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -870,7 +918,7 @@ func _shallow() -> void:
 	tw.set_trans(Tween.TRANS_CUBIC)
 	tw.set_parallel(true)
 	tw.tween_property(_body, "custom_minimum_size:x",
-		_rack_num("panel", PANEL_W) - PANEL_PAD * 2.0, DEEPEN)
+		_panel_body_width(_rack_num("panel", PANEL_W), PANEL_PAD - 2.0), DEEPEN)
 	tw.tween_property(_rack_slot, "custom_minimum_size:y", 0.0, DEEPEN)
 	tw.tween_property(_rack_slot, "modulate:a", 0.0, DEEPEN * 0.55)
 	tw.tween_property(_rows_slot, "custom_minimum_size:y", rows_h, DEEPEN)
@@ -981,6 +1029,7 @@ static func _glass_panel(body: Control) -> PanelContainer:
 	inner.add_theme_stylebox_override("panel", inner_sb)
 	outer.add_child(inner)
 	inner.add_child(body)
+	outer.set_meta("inner_style", inner_sb)
 	return outer
 
 

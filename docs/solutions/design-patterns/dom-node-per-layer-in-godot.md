@@ -38,7 +38,7 @@ without naming either — the omission is harmless only until someone resolves i
 against the wrong tree, which this project has already done once, for three
 commits.
 
-At [presentation/combat/hud_bar.gd:130](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
+At [presentation/combat/hud_bar.gd:131](../../../presentation/combat/hud_bar.gd#L130) (`FAN_FACES`) the fan is capped at 16
 faces, and there are three piles (draw, ashes, discard). So a deep board was up
 to **48 Control nodes** — each with its own transform, style cache and layout
 slot — all drawing the *identical* texture.
@@ -76,7 +76,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[presentation/combat/hud_bar.gd:966-969](../../../presentation/combat/hud_bar.gd#L966) (in `_sync_pile`):
+[presentation/combat/hud_bar.gd:1046-1049](../../../presentation/combat/hud_bar.gd#L1046) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -115,7 +115,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([presentation/combat/hud_bar.gd:973](../../../presentation/combat/hud_bar.gd#L973) (`_fan_angle`)).
+  resolves ([presentation/combat/hud_bar.gd:1054](../../../presentation/combat/hud_bar.gd#L973) (`_fan_angle`)).
 
 ## Why This Matters
 
@@ -175,11 +175,11 @@ benchmark's `src/pile-chrome.js:4-8` — `PILE_FAN_DEG`, `PILE_FAN_MAX_DEG`,
 
 **Two live `add_child` loops in this file are exemptions, not survivors.**
 
-- `presentation/combat/hud_bar.gd:875-892` (in `fly_backs`) builds a
+- `presentation/combat/hud_bar.gd:956-984` (in `fly_backs`) builds a
   `TextureRect` per flyer and gives each its own `Tween` — transient nodes that
   each need an independent animation, which is exactly the case the rule above
   carves out.
-- `presentation/combat/hud_bar.gd:385-392` (in `_sync_candles`) builds one
+- `presentation/combat/hud_bar.gd:394-416` (in `_sync_candles`) builds one
   non-interactive `TextureRect` per point of max energy. Node count scales with
   a gameplay value that stays small, which is the second carve-out.
 

@@ -62,22 +62,40 @@ func _process(_delta: float) -> void:
 	if request_id == "" or request_id == _last_request_id:
 		return
 	_last_request_id = request_id
-	_answer(request_id, str(request.get("command", "")).strip_edges())
+	var raw_arguments: Variant = request.get("arguments", {})
+	var arguments: Dictionary = raw_arguments if raw_arguments is Dictionary else {}
+	_answer(request_id, str(request.get("command", "")).strip_edges(), arguments)
 
 
-func _answer(request_id: String, command: String) -> void:
+func _answer(request_id: String, command: String, arguments: Dictionary) -> void:
 	var started_usec: int = Time.get_ticks_usec()
 	var result: Dictionary = {"id": request_id, "command": command}
 	match command:
 		"reload":
 			result.merge(await _reload())
+		"resize":
+			result.merge(await _resize(arguments))
 		_:
 			result["success"] = false
 			result["error"] = "Unknown live host command '%s'." % command
 	result["elapsed_msec"] = float(Time.get_ticks_usec() - started_usec) / 1000.0
 	var file: FileAccess = FileAccess.open(RESULT_PATH, FileAccess.WRITE)
 	if file != null:
-		file.store_string(JSON.stringify(result, "\t") + "\n")
+			file.store_string(JSON.stringify(result, "\t") + "\n")
+
+
+func _resize(arguments: Dictionary) -> Dictionary:
+	var width_text: String = str(arguments.get("width", ""))
+	var height_text: String = str(arguments.get("height", ""))
+	if not width_text.is_valid_float() or not height_text.is_valid_float():
+		return {"success": false, "error": "Window size must use integer pixels."}
+	var width: int = roundi(width_text.to_float())
+	var height: int = roundi(height_text.to_float())
+	if width < 64 or height < 64:
+		return {"success": false, "error": "Window size must be at least 64 × 64."}
+	DisplayServer.window_set_size(Vector2i(width, height))
+	await _settle()
+	return {"success": true, "size": [width, height]}
 
 
 ## Re-parse every project script, then rebuild the game from the scene on disk.

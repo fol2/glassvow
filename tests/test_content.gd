@@ -52,6 +52,7 @@ static func run(fails: Array[String]) -> void:
 	if full.reveal_ids.size() != 8 or full.aspects.size() != 2 or full.vows.size() != 5:
 		fails.append("ContentDB: full progression registries are incomplete")
 	full.validate(fails)
+	_enemy_overrides(fails)
 	var pickup_run: RunState = RunState.new_run(full, 5, "run-relic-pickup")
 	var rewards: RewardRules = RewardRules.new(full)
 	rewards.gain_relic(pickup_run, "sweetRoot")
@@ -63,3 +64,26 @@ static func run(fails: Array[String]) -> void:
 	if not rewards.card_pool(pickup_run, "uncommon").has("quakeblow") \
 			or not rewards.relic_pool(pickup_run, "uncommon").has("smolderingCoal"):
 		fails.append("ContentDB: deed unlocks do not extend reward pools")
+
+
+static func _enemy_overrides(fails: Array[String]) -> void:
+	var baseline: ContentDB = ContentDB.load_full(false)
+	var duskfang: Dictionary = baseline.enemy(&"duskfang").duplicate(true)
+	duskfang["hp"] = [31, 35]
+	if not baseline.apply_enemy_overrides({"duskfang": duskfang}).is_empty() \
+			or baseline.enemy(&"duskfang").get("hp") != [31, 35]:
+		fails.append("ContentDB: valid mob override did not apply")
+
+	var untouched: ContentDB = ContentDB.load_full(false)
+	var broken: Dictionary = untouched.enemy(&"duskfang").duplicate(true)
+	var broken_moves: Dictionary = broken["moves"]
+	broken_moves.erase("bite")
+	var before: Dictionary = untouched.enemy(&"duskfang").duplicate(true)
+	if untouched.apply_enemy_overrides({"duskfang": broken, "notAMob": duskfang}).is_empty():
+		fails.append("ContentDB: invalid mob override file was accepted")
+	if untouched.enemy(&"duskfang") != before:
+		fails.append("ContentDB: invalid mob override file applied partially")
+	var bad_kind: Dictionary = untouched.enemy(&"duskfang").duplicate(true)
+	bad_kind["art"]["kind"] = "slmie"
+	if untouched.enemy_faults("duskfang", bad_kind).is_empty():
+		fails.append("ContentDB: unknown mob art kind was accepted")

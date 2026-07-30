@@ -27,7 +27,7 @@ tags: [godot, shader, shadows, vertex-projection, basis, billboard, alpha-scan, 
 Enemy actors render a painted PNG on a quad inside a per-actor `SubViewport` 3D
 stage lit by a real `DirectionalLight3D` key, and the cast shadow is derived from
 that light rather than authored per creature
-(`presentation/combat/enemy_view.gd:1980` (`SHADOW_SHADER`)). Looking at the
+(`presentation/combat/enemy_view.gd:2026` (`SHADOW_SHADER`)). Looking at the
 roster, the shadows did not sit under the feet. `duskfang` — a quadruped painted
 in three-quarter view — cast from off to one side of its paws; once that was
 corrected, three of its four paws still hovered above the cast; and the creatures
@@ -59,7 +59,7 @@ what was measured.
   `-_box_u * 0.5 + _art_pad * 0.15` (at `bf7b751`) — 85% of the painting's
   transparent export border *below* the creature's lowest opaque row. That border
   is framing, not height, and it is large: `shellback`'s is 20.7% of the box, the
-  roster's largest (`presentation/combat/enemy_view.gd:759` (`_contact_u`)). A
+  roster's largest (`presentation/combat/enemy_view.gd:765` (`_contact_u`)). A
   crab lying flat on the floor was floating over its own shadow by a fifth of a
   box.
 
@@ -69,7 +69,7 @@ what was measured.
   row, or the nearest foot is buried under the cast. Every other foot is then
   drawn *above* its own shadow, which is the whole of what "floating" looks like.
   `duskfang`'s admitted contacts span **14.1% of a body height** in the painting
-  (`presentation/combat/enemy_view.gd:778` (`_ground_tex`)), so planting the near
+  (`presentation/combat/enemy_view.gd:784` (`_ground_tex`)), so planting the near
   one necessarily left the other three hovering.
 
   Bottom profile for `duskfang`, from the same 64-wide scan the code runs (row
@@ -88,7 +88,7 @@ what was measured.
   survived the earlier derive pass
   ([Derive authored compensations instead of transcribing them when porting](../design-patterns/derive-authored-compensations-when-porting.md));
   it marks a painting made of a creature already airborne, and is read as a
-  resting height (`presentation/combat/enemy_view.gd:2670` (`_read_hover`)). It
+  resting height (`presentation/combat/enemy_view.gd:2716` (`_read_hover`)). It
   slid the cast sideways along the light's ground track and did not lower the
   ground. Since the ground line is read off the silhouette's lowest opaque row —
   which for a hovering creature is not a contact at all, but the bottom of a
@@ -112,7 +112,7 @@ blur-fringe area, and the fringe legitimately tightened when the blur ramp becam
 per column. Measuring the quantity that actually changed — mean height above
 ground, weighted by silhouette — gave **12.0%**, and that is the number the
 compensation was built on
-(`presentation/combat/enemy_view.gd:2055` (`CAST_MIN`)). Applying ×1.137 recovered
+(`presentation/combat/enemy_view.gd:2101` (`CAST_MIN`)). Applying ×1.137 recovered
 the length without recovering the ink count, which is the correct outcome and
 would have read as a failure under the first metric.
 
@@ -143,9 +143,9 @@ build, 2026-07-26).
 
 The two must move together, or the silhouette shifts off the body by exactly the
 offset applied to one of them. The mesh origin goes to the measured contact point
-(`presentation/combat/enemy_view.gd:2184` (`_build_shadow`)) and the node position
+(`presentation/combat/enemy_view.gd:2230` (`_build_shadow`)) and the node position
 puts that origin back on the body's own foot line
-(`presentation/combat/enemy_view.gd:2246` (`_update_shadow`)):
+(`presentation/combat/enemy_view.gd:2292` (`_update_shadow`)):
 
 ```gdscript
 qm.center_offset = Vector3(
@@ -161,15 +161,15 @@ The `_art_pad * 0.15` fudge is gone: the hinge sits on the lowest opaque row, no
 
 ### Read the ground line off the painting's own alpha, per column
 
-`_read_ground` (`presentation/combat/enemy_view.gd:2131` (`_read_ground`)) takes the lowest opaque
+`_read_ground` (`presentation/combat/enemy_view.gd:2177` (`_read_ground`)) takes the lowest opaque
 row of each of 64 columns as a candidate contact. Those within `CONTACT_BAND` of
 the lowest are taken as real; the line is linearly interpolated between them
-across everything else (`presentation/combat/enemy_view.gd:2168` (`_interp`)). A
+across everything else (`presentation/combat/enemy_view.gd:2214` (`_interp`)). A
 belly is therefore spanned rather than stood on, and a tail hanging in the air is
 given the ground under the feet beside it. The result is baked into a 64×1
 `Image.FORMAT_RF` `ImageTexture`; a painting whose alpha reads nothing falls back
 to a single flat line at the lowest contact
-(`presentation/combat/enemy_view.gd:2156` (`_flat_ground`)), which is the
+(`presentation/combat/enemy_view.gd:2202` (`_flat_ground`)), which is the
 behaviour that existed before.
 
 Columns the creature does not occupy cost nothing: the shadow's alpha comes off
@@ -180,10 +180,10 @@ lands.
 
 One quad has four corners and therefore one ground line. The shadow mesh becomes a
 subdivided `PlaneMesh` with `subdivide_width = GROUND_N - 1`
-(`presentation/combat/enemy_view.gd:2184` (`_build_shadow`)) — a column of
+(`presentation/combat/enemy_view.gd:2230` (`_build_shadow`)) — a column of
 vertices per ground sample — and the shear the `Basis` used to carry becomes
 uniforms consumed per vertex
-(`presentation/combat/enemy_view.gd:1980` (`SHADOW_SHADER`)):
+(`presentation/combat/enemy_view.gd:2026` (`SHADOW_SHADER`)):
 
 ```glsl
 void vertex() {
@@ -208,8 +208,8 @@ uniforms rather than composing a basis.
 ### `CONTACT_BAND = 0.15` is a gap, not a taste knob
 
 ```gdscript
-const CONTACT_BAND: float = 0.15   # presentation/combat/enemy_view.gd:2115 (CONTACT_BAND)
-const GROUND_N: int = 64           # presentation/combat/enemy_view.gd:2117 (GROUND_N)
+const CONTACT_BAND: float = 0.15   # presentation/combat/enemy_view.gd:2161 (CONTACT_BAND)
+const GROUND_N: int = 64           # presentation/combat/enemy_view.gd:2163 (GROUND_N)
 ```
 
 The constant falls in the one gap the measurements leave between two populations.
@@ -223,7 +223,7 @@ The measurement is partly circular and the comment says so: the spread it report
 is the spread of whatever this same band admitted, so it cannot see a creature
 whose feet genuinely span more than 0.15. No painting on the current roster is
 known to. The measurement is written into the declaring comment
-(`presentation/combat/enemy_view.gd:2115` (`CONTACT_BAND`)) so a later reader can
+(`presentation/combat/enemy_view.gd:2161` (`CONTACT_BAND`)) so a later reader can
 re-derive it rather than re-tune it.
 
 ### Restate the art-direction clamp by the bias the fix removed
@@ -236,7 +236,7 @@ paintings, the per-column line **reduced** mean height by **12.0%** (`shade`
 1/(1 − 0.120) = 1.137 — not 1.12; the clamp multiplies the height rather than
 being measured in it.
 `CAST_MIN` / `CAST_MAX` were therefore restated ×1.137, from 0.6 / 1.15 to
-**0.68 / 1.31** (`presentation/combat/enemy_view.gd:2055` (`CAST_MIN`); the prior
+**0.68 / 1.31** (`presentation/combat/enemy_view.gd:2101` (`CAST_MIN`); the prior
 values are at `bf7b751`).
 
 Those two numbers are not geometry. They were set when the physically correct
@@ -255,7 +255,7 @@ being preserved; the arithmetic under it changed.
 The **live** part of the hover is deliberately excluded: a body driven up by the
 idle animation moves away from a ground that stays where it is. Only
 `_hover_rest`, which is `max(0, shadow.dy) * UNIT`
-(`presentation/combat/enemy_view.gd:2670` (`_read_hover`)), lowers the ground
+(`presentation/combat/enemy_view.gd:2716` (`_read_hover`)), lowers the ground
 line. Six characters carry a `dy` in `assets/art/enemies/char-meta.json`, whose `chars`
 block holds 29 entries — the 27 painted foes plus two heroes with no painting.
 `_hover_rest` is 0 for the rest, so the change is confined to the floaters.

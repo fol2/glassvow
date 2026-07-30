@@ -14,9 +14,10 @@ extends RefCounted
 ##   2. No trailing newline. Every save then reads as `\ No newline at end of
 ##      file` in a diff, and every POSIX tool treats the last line as truncated.
 ##
-## So the order here is serialise, check, THEN open. The check itself belongs to
-## the caller: `LayoutBook.validate()` knows what a good book is and this does
-## not. What this owns is the guarantee that a refused save leaves the file
+## So the order here is serialise, check, write a sibling temporary, THEN atomically
+## replace the target. The check itself belongs to the caller:
+## `LayoutBook.validate()` knows what a good book is and this does not. What this
+## owns is the guarantee that a refused or interrupted save leaves the file
 ## exactly as it was.
 ##
 ## It sits at the top of `presentation/` rather than inside a topic folder
@@ -41,9 +42,15 @@ static func write(path: String, text: String) -> String:
 	var body: String = text.strip_edges()
 	if body.is_empty() or body == "null":
 		return "refusing to write an empty %s" % path
-	var f: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	var temporary: String = path + ".tmp"
+	var f: FileAccess = FileAccess.open(temporary, FileAccess.WRITE)
 	if f == null:
-		return "cannot open %s for writing (error %d)" % [path, FileAccess.get_open_error()]
+		return "cannot open %s for writing (error %d)" % [temporary, FileAccess.get_open_error()]
 	f.store_string(text)
+	f.flush()
 	f.close()
+	var replaced: Error = DirAccess.rename_absolute(temporary, path)
+	if replaced != OK:
+		DirAccess.remove_absolute(temporary)
+		return "cannot replace %s (error %d)" % [path, replaced]
 	return ""

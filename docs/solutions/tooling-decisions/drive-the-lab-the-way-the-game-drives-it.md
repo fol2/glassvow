@@ -39,7 +39,7 @@ tags: [verification-tooling, lab-harness, capture-modes, screenshot-verification
 The enemy lab is the surface this project built to judge how its actors move. It
 stands every creature in the content set on a shared ground line at true relative
 size — 27 enemies, read out of `port_fixtures/content/core-mechanics.json`
-(`presentation/lab/enemy_lab.gd:178` (`load_roster`)) — and it carried five
+(`presentation/lab/enemy_lab.gd:185` (`load_roster`)) — and it carried five
 strip modes — six since
 `--idle` — that photograph an animation across several instants and tile the
 frames side by side.
@@ -47,23 +47,23 @@ It is the one place in the port where actor motion is looked at deliberately rat
 than in passing.
 
 It was building its actors wrong. `_actor`
-(`presentation/lab/enemy_lab.gd:434` (`_actor`)) constructed every
+(`presentation/lab/enemy_lab.gd:432` (`_actor`)) constructed every
 view with `EnemyView.new(...)` and then placed it, and that was all. The shipping
-screen does one more thing: `presentation/combat/combat_screen.gd:1305`
+screen does one more thing: `presentation/combat/combat_screen.gd:1453`
 (in `start_encounter`) calls `view.set_profile(_foe_kind(e.idx))` for every foe,
-and `presentation/combat/combat_screen.gd:1263` (in `start_encounter`) calls
+and `presentation/combat/combat_screen.gd:1458` (in `start_encounter`) calls
 `_hero.set_profile("rogue")` for the player. Without that call an actor keeps the
 profile it is constructed with, and the construction default is not neutral —
 `_read_idle` ends by calling `_resolve_profile(&"humanoid")`
-(`presentation/combat/enemy_view.gd:2642` (`_read_idle`)), and
+(`presentation/combat/enemy_view.gd:2688` (`_read_idle`)), and
 `_resolve_profile` falls back to
 `IDLE_PROFILES[&"humanoid"]` for any kind it does not know
-(`presentation/combat/enemy_view.gd:2685` (`_resolve_profile`)). So every
+(`presentation/combat/enemy_view.gd:2731` (`_resolve_profile`)). So every
 creature on the sheet — every slime, serpent, wisp and golem — hovered, swayed,
 breathed and cast its shadow as a humanoid. The sheet was not showing a wrong
 number. It was showing an idle that no fight has ever run.
 
-The fix is one line, now at `presentation/lab/enemy_lab.gd:434` (in `_actor`):
+The fix is one line, now at `presentation/lab/enemy_lab.gd:432` (in `_actor`):
 
 ```gdscript
 view.set_profile(str(art.get("kind", "humanoid")))
@@ -170,19 +170,19 @@ cannot report that there are four idle shapes and it is showing one of them.
 
 **And the third instance, which is the one that shows why stills are not enough.**
 The actor's cast shadow is an analytic projection of the silhouette along the key
-light (`presentation/combat/enemy_view.gd:2246` (`_update_shadow`)) — a derived
+light (`presentation/combat/enemy_view.gd:2292` (`_update_shadow`)) — a derived
 replacement for the
 benchmark's nine hand-authored CSS knobs, and structurally correct as such. It had
 plausible lift-response coefficients. It also never ran: `_update_shadow` was
 called from `_build_shadow`
-(`presentation/combat/enemy_view.gd:2184` (`_build_shadow`)), from the
+(`presentation/combat/enemy_view.gd:2230` (`_build_shadow`)), from the
 reset path, and from two lab-bench setters that no fight ever reaches — and from
 nothing else, while the benchmark resynchronises its darkened copy against the
 body's live transform on every frame of its rig loop. That the only other callers
 were in the bench is itself the finding in miniature.
 Worse, its one variable — then named `_lift` — was the quantity now called
 `_art_pad` (`presentation/combat/enemy_view.gd:738`), computed at
-`presentation/combat/enemy_view.gd:2063` (in `_read_contact`) as the transparent
+`presentation/combat/enemy_view.gd:2138` (in `_read_contact`) as the transparent
 margin below the painting's lowest opaque row.
 That is a uniform export border, not height. Across the 27 enemy paintings the
 bottom margin matches the top to a tenth of a percent on 13 of them and to within
@@ -243,7 +243,7 @@ site end to end and list every method it invokes on the subject between
 construction and first paint, and the value it passes to each. That pair — call
 and argument — is the harness's contract. Here it was one
 call — `set_profile`
-(`presentation/combat/enemy_view.gd:2680` (`set_profile`)) — and the sheet's
+(`presentation/combat/enemy_view.gd:2726` (`set_profile`)) — and the sheet's
 own comment now names the production line it mirrors
 (`presentation/lab/enemy_lab.gd` (in `_actor`)) so the next divergence
 is a diff rather than an archaeology.
@@ -258,7 +258,7 @@ That second half was added on 2026-07-27 because the rule above, as first
 written, passed a harness that was lying. The `--ward --absorb` strip called
 `ward_hit` exactly as production does and hard-coded `Vector2.LEFT` for every
 subject — including the two heroes on the lab's own roster
-(`presentation/lab/enemy_lab.gd:156` (`HEROES`)). It cleared the method check
+(`presentation/lab/enemy_lab.gd:163` (`HEROES`)). It cleared the method check
 and could not have caught either the missing hero-side call in `_hit_player` or
 a wrong heading, because it supplied the parameter under test. See
 [The hero's ward stone never answered a blow it stopped](../ui-bugs/hero-ward-stone-never-answered-the-blow.md).
@@ -275,7 +275,7 @@ to be written down as a decision, not left as an omission.
 
 Note the shape of the failure that makes this necessary: `_resolve_profile` falls
 back to the humanoid profile for an unknown kind rather than erroring
-(`presentation/combat/enemy_view.gd:2685` (`_resolve_profile`)), and
+(`presentation/combat/enemy_view.gd:2731` (`_resolve_profile`)), and
 `KIND_IDLE.get(kind, &"")` returns a benign empty value. A tolerant default is
 right for production and is exactly what makes a missing call silent in a
 harness.
@@ -341,7 +341,7 @@ like a creature standing perfectly still.
 
 So `--idle` runs in **real time** and spaces its frames wider than the readback
 costs instead: `IDLE_FRAMES` at 0.84s intervals over one 4.2s period — the slowest
-kind idle, `idleSlime` — at `presentation/lab/enemy_lab.gd:1469`
+kind idle, `idleSlime` — at `presentation/lab/enemy_lab.gd:1567`
 (`IDLE_FRAMES`), dispatched at `presentation/lab/enemy_lab.gd:1306-1313`
 (in `_ready`) with no `time_scale` assignment at all.
 
@@ -350,7 +350,7 @@ verifies.** Before reaching for a clock knob, find which clock the subject reads
 If it reads a wall clock, the harness cannot slow it and must widen its sampling
 instead. If it reads `delta`, the harness can slow it and should. This subject
 reads *both* inside one function — `_idle_t += delta` drives the vertex-stage
-deform at `presentation/combat/enemy_view.gd:2333` (in `_process`) while the kind
+deform at `presentation/combat/enemy_view.gd:2408` (in `_process`) while the kind
 layer a few lines below reads the wall clock — which means one `time_scale` setting would have desynced
 the two layers relative to each other even where it appeared to work. The same
 asymmetry sits in the harness: `_shoot_strip` waits against elapsed
@@ -444,14 +444,14 @@ actor entrance had been running **two** concurrent animations — one moving the
 body inside its 3D sub-viewport with the correct stagger, one moving the whole
 Control with the correct curve and the chrome — and neither looked broken in a
 still. That is now one function:
-`presentation/combat/enemy_view.gd:2858` (`enter`) owns the motion and the fill,
-`presentation/combat/combat_screen.gd:1353` (`_play_entrance`) owns the seat
+`presentation/combat/enemy_view.gd:2904` (`enter`) owns the motion and the fill,
+`presentation/combat/combat_screen.gd:1545` (`_play_entrance`) owns the seat
 delay and the re-anchor. It was found the same way, by giving a category of
 behaviour an instrument and then reading a number off it.
 
 Finally, note what this costs to prevent. The lab defect was one line. The missing
 capture mode was one frame table and one `if` branch — `IDLE_FRAMES`
-(`presentation/lab/enemy_lab.gd:1469` (`IDLE_FRAMES`)) and the
+(`presentation/lab/enemy_lab.gd:1567` (`IDLE_FRAMES`)) and the
 `_mode == "idle"` dispatch (`presentation/lab/enemy_lab.gd:1306-1313`, in
 `_ready`),
 reusing `_shoot_strip` unchanged. The expensive part was never the tool. It was
@@ -497,13 +497,13 @@ view.position = Vector2(x + view.foot.x, ground - view.size.y - view.foot.y)
 ```
 
 `EnemyView`'s construction path resolves the humanoid profile
-(`presentation/combat/enemy_view.gd:2642` (`_read_idle`)), so `gloomslime` —
+(`presentation/combat/enemy_view.gd:2688` (`_read_idle`)), so `gloomslime` —
 `art.kind == "slime"`,
 whose profile is `sway .55, bob .55, breathe 1.35, head 0, pin 1.2, float .25`
 (`presentation/combat/enemy_view.gd:520`) — rendered with `sway 1.0, bob 1.0,
 breathe 1.0, head 1.0,
 float 0` and no kind idle at all. After, one line reproduces what
-`presentation/combat/combat_screen.gd:1263` (in `start_encounter`) does, and
+`presentation/combat/combat_screen.gd:1458` (in `start_encounter`) does, and
 the comment above it
 names that line so the two can be diffed rather than rediscovered
 (`presentation/lab/enemy_lab.gd` (in `_actor`)).
@@ -581,10 +581,10 @@ measures nothing:
 > already measured the gap.
 
 The scan was real
-(`presentation/combat/enemy_view.gd:2064` (`_read_contact`)), the projection
-was real (`presentation/combat/enemy_view.gd:2246` (`_update_shadow`)), and the
+(`presentation/combat/enemy_view.gd:2110` (`_read_contact`)), the projection
+was real (`presentation/combat/enemy_view.gd:2292` (`_update_shadow`)), and the
 quantity was a framing border rather than a gap
-(`presentation/combat/enemy_view.gd:2063`, in `_read_contact`; the variable is
+(`presentation/combat/enemy_view.gd:2138`, in `_read_contact`; the variable is
 now named `_art_pad` at `presentation/combat/enemy_view.gd:738` for exactly
 this reason). A
 constants audit cannot see that, because every constant was fine. Only a

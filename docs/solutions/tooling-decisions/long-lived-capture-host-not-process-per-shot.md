@@ -33,8 +33,8 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:57-73` (in `_ready`) documents it and
-`application/main.gd:83-133` (in `_ready`) parses it out of
+entry point. `application/main.gd:70-87` (in `_ready`) documents it and
+`application/main.gd:106-160` (in `_ready`) parses it out of
 `OS.get_cmdline_user_args()`:
 
 ```gdscript
@@ -61,7 +61,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:313` (`_capture_and_quit`).) It waits 30 frames for the
+(`application/main.gd:307` (`_capture_and_quit`).) It waits 30 frames for the
 first paint, reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
@@ -238,7 +238,7 @@ one line (`tools/live.sh:84-85`):
 ```
 
 Everything after that boot is a file write and a poll. `send()`
-(`tools/live.sh:57` (`send`)) mints a fresh id per call, clears the response file,
+(`tools/live.sh:58` (`send`)) mints a fresh id per call, clears the response file,
 writes the command, and polls for up to 200 × 0.05s. `shot` asks the bridge to
 save under `user://shots/` and copies the result out
 (`tools/live.sh:95-102`). `reload` uses the host's own channel and polls for up
@@ -349,7 +349,7 @@ was built to eliminate.
 
 The fix is in the client, not the engine. `tools/live.sh:81` records the
 previously-frontmost application before launching, and `hand_back()`
-(`tools/live.sh:39` (`hand_back`)) reactivates it once the host writes its ready
+(`tools/live.sh:40` (`hand_back`)) reactivates it once the host writes its ready
 file (called at `tools/live.sh:88`):
 
 ```sh

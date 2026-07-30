@@ -16,13 +16,11 @@ extends Control
 ##
 ## Declared a mock on purpose. If the 3D scene is ever ported, this comes out.
 
-## `themes.js` act 1 — `scene.sky`, `scene.fog`, `scene.particles`, `scene.glow`.
-## The slice exporter carries no theme record, so act 1's is inlined; the day it
-## does, these become arguments.
-const SKY: Color = Color(0.043137256, 0.05490196, 0.101960786)   # #0b0e1a
-const FOG: Color = Color(0.078431375, 0.101960786, 0.18039216)   # #141a2e
-const PARTICLES: Color = Color(1.0, 0.627451, 0.3019608)         # #ffa04d
-const GLOW: Color = Color(0.4, 1.0, 0.61960787)                  # #66ff9e
+## `themes.js` — `scene.sky`, `scene.fog`, `scene.particles`, `scene.glow`.
+const ACT_SKIES: Array[Color] = [Color("#0c1410"), Color("#081420"), Color("#120a1e")]
+const ACT_FOGS: Array[Color] = [Color("#13241a"), Color("#0d2233"), Color("#1e1230")]
+const ACT_PARTICLES: Array[Color] = [Color("#ffa04d"), Color("#53e8ff"), Color("#c27bff")]
+const ACT_GLOWS: Array[Color] = [Color("#66ff9e"), Color("#2fb8ff"), Color("#ff4fd8")]
 
 ## `ptsMain` / `ptsAccent`. The 3D fields are volumetric and thin out with
 ## distance; flattened to two dozen each, which is what reads at this camera.
@@ -104,6 +102,11 @@ static var _disc: GradientTexture2D = null
 
 var _main: Array[Mote] = []
 var _accent: Array[Mote] = []
+var _sky: Color
+var _fog: Color
+var _particles: Color
+var _glow: Color
+var _haze_tex: GradientTexture2D
 var _t: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _field: Control
@@ -121,7 +124,12 @@ class Field:
 			src.paint_motes(self)
 
 
-func _init() -> void:
+func _init(stage_act: int = 0) -> void:
+	var index: int = clampi(stage_act, 0, ACT_SKIES.size() - 1)
+	_sky = ACT_SKIES[index]
+	_fog = ACT_FOGS[index]
+	_particles = ACT_PARTICLES[index]
+	_glow = ACT_GLOWS[index]
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	offset_left = -OVERHANG
 	offset_top = -OVERHANG
@@ -226,23 +234,20 @@ func _drift(motes: Array[Mote], dt: float, rate: float) -> void:
 ## The fog band, as one texture. Drawn as stacked rects first, which stepped
 ## visibly — a twelve-stop staircase across 360px of near-black is exactly where
 ## banding shows worst.
-static var _haze: GradientTexture2D = null
-
-
-static func haze() -> GradientTexture2D:
-	if _haze == null:
-		_haze = GlassStyle.grad_tex(
-			PackedColorArray([Color(FOG.r, FOG.g, FOG.b, 0.0),
-				Color(FOG.r, FOG.g, FOG.b, 0.85)]),
+func haze() -> GradientTexture2D:
+	if _haze_tex == null:
+		_haze_tex = GlassStyle.grad_tex(
+			PackedColorArray([Color(_fog.r, _fog.g, _fog.b, 0.0),
+				Color(_fog.r, _fog.g, _fog.b, 0.85)]),
 			PackedFloat32Array([0.0, 1.0]), false,
 			Vector2(0.5, 0.0), Vector2(0.5, 1.0))
-	return _haze
+	return _haze_tex
 
 
 func _draw() -> void:
 	# The sky, then the fog it hazes into. Below FOG_BOTTOM the plates cover
 	# everything, so the band stops where it stops being visible.
-	draw_rect(Rect2(Vector2.ZERO, size), SKY, true)
+	draw_rect(Rect2(Vector2.ZERO, size), _sky, true)
 	var top: float = size.y * FOG_TOP
 	var span: float = size.y * (FOG_BOTTOM - FOG_TOP)
 	draw_texture_rect(haze(), Rect2(Vector2(0.0, top), Vector2(size.x, span)), false)
@@ -254,8 +259,8 @@ func paint_motes(host: CanvasItem) -> void:
 	# The bloom gain, as a ratio of its own base — the field is drawn additively,
 	# so a colour over 1.0 is light being added rather than a clipped white.
 	var flare: float = 1.0 + _kick_v * KICK_BLOOM / BLOOM_BASE
-	_stamp(host, tex, _main, PARTICLES * flare, MAIN_ALPHA)
-	_stamp(host, tex, _accent, GLOW * flare, accent_a)
+	_stamp(host, tex, _main, _particles * flare, MAIN_ALPHA)
+	_stamp(host, tex, _accent, _glow * flare, accent_a)
 
 
 func _stamp(host: CanvasItem, tex: GradientTexture2D, motes: Array[Mote],

@@ -34,7 +34,7 @@ Two calls fire together when a warded creature eats a blow, and they are
 deliberately two:
 
 - `take_hit(direct)` — the BODY recoiling from being struck.
-- `ward_hit(from)` (`presentation/combat/enemy_view.gd:2519` (`ward_hit`)) — the
+- `ward_hit(from)` (`presentation/combat/enemy_view.gd:2565` (`ward_hit`)) — the
   STONE answering for having stopped it: it rings the facets facing the blow and
   drives the shield back along it.
 
@@ -47,7 +47,7 @@ docstring says why, in as many words:
 > first, and calling this on one is a no-op rather than a caller's problem.
 
 That last clause is real: the function returns immediately when there is no stone
-(`presentation/combat/enemy_view.gd:2520-2521`, in `ward_hit`), so the call is safe to
+(`presentation/combat/enemy_view.gd:2566-2567`, in `ward_hit`), so the call is safe to
 make unconditionally on any actor.
 
 The combat sequencer has two mirrored paths for the same beat: `_hit_enemy` is the
@@ -177,15 +177,15 @@ in `_hit_player`, under a comment that states both halves of the reasoning.
 screen-space heading pointing from the creature toward whoever struck it. It
 drives the shield AWAY from that side — the flinch is computed as `-_ward_from`
 scaled by the decaying ring and `WARD_FLINCH`
-(`presentation/combat/enemy_view.gd:2591`, in `_step_ward`;
+(`presentation/combat/enemy_view.gd:2666-2667`, in `_step_ward`;
 `presentation/combat/enemy_view.gd:249` (`WARD_FLINCH`)) and applied to
 `_ward_root.position` on top of the vessel's own motion — and it lights the
 facets ON that side, through the shader's `hit_from` uniform
-(`presentation/combat/enemy_view.gd:1238` (`hit_from`)) weighting the ring term
+(`presentation/combat/enemy_view.gd:1244` (`hit_from`)) weighting the ring term
 by `dot(axis, -hit_from)` (`presentation/combat/enemy_view.gd:1418`).
 
 `ward_hit`'s default is `Vector2.LEFT`
-(`presentation/combat/enemy_view.gd:2519` (`ward_hit`)), correct for a foe struck
+(`presentation/combat/enemy_view.gd:2565` (`ward_hit`)), correct for a foe struck
 by the hero, who stands on the foe's left. The hero is struck from the RIGHT.
 Passing the default would have driven the hero's stone INTO the blow — a wrong
 value that still renders as a plausible effect, which is the failure mode that
@@ -197,20 +197,20 @@ survives review.
 var from: Vector2 = Vector2.RIGHT if HEROES.has(_strip_id) else Vector2.LEFT
 ```
 
-at `presentation/lab/enemy_lab.gd:1386` (in `_ready`), consumed by the strip's
+at `presentation/lab/enemy_lab.gd:1405` (in `_ready`), consumed by the strip's
 action callable two lines below. `HEROES`
-(`presentation/lab/enemy_lab.gd:156` (`HEROES`)) is the lab's own two-hero
+(`presentation/lab/enemy_lab.gd:163` (`HEROES`)) is the lab's own two-hero
 roster — `duskblade` and `ashwarden` — and `_strip_id`
-(`presentation/lab/enemy_lab.gd:110` (`_strip_id`)) is the subject being
+(`presentation/lab/enemy_lab.gd:109` (`_strip_id`)) is the subject being
 photographed.
 
 **Verification.** Two slowed strips from the same lab mode, compared at cell 1:
 the foe's stone is driven right, the hero's is driven left. The mirror is correct
 in both. The strip is the only surface that could settle this — it runs at
 `Engine.time_scale = CRACK_SLOMO`, 0.06
-(`presentation/lab/enemy_lab.gd:1442` (`CRACK_SLOMO`)), against a frame table
+(`presentation/lab/enemy_lab.gd:1540` (`CRACK_SLOMO`)), against a frame table
 sized to the 200 ms ring rather than the 340 ms break
-(`presentation/lab/enemy_lab.gd:1461` (`WARD_ABSORB_FRAMES`)).
+(`presentation/lab/enemy_lab.gd:1559` (`WARD_ABSORB_FRAMES`)).
 
 The work landed directly on `main` — there is no PR — in
 `fix(combat): the hero's ward stone never answered a blow it stopped`.
@@ -219,18 +219,18 @@ The work landed directly on `main` — there is no PR — in
 
 The stone's response is a single decaying scalar plus a direction, and both are
 set by the one call. `ward_hit` writes `_ward_hit = 1.0` and normalises `from`
-into `_ward_from` (`presentation/combat/enemy_view.gd:2522-2523`, in `ward_hit`).
-`_step_ward` (`presentation/combat/enemy_view.gd:2574` (`_step_ward`)) then does
+into `_ward_from` (`presentation/combat/enemy_view.gd:2568-2569`, in `ward_hit`).
+`_step_ward` (`presentation/combat/enemy_view.gd:2620` (`_step_ward`)) then does
 everything else on its own clock: it decays `_ward_hit` linearly by
 `delta / WARD_RING`, offsets `_ward_root` along `-_ward_from`, and pushes the
 squared value to the shader
-(`presentation/combat/enemy_view.gd:2597`, in `_step_ward`). Nothing else in the
+(`presentation/combat/enemy_view.gd:2672`, in `_step_ward`). Nothing else in the
 frame needs to know a blow was absorbed. That is why one missing call removes the
 entire effect with no other trace, and why one added call restores all of it.
 
 The direction argument works because it composes rather than replaces. The flinch
 is added to `_vessel.position` rather than overwriting it
-(`presentation/combat/enemy_view.gd:2592`, in `_step_ward`), so the stone travels
+(`presentation/combat/enemy_view.gd:2667`, in `_step_ward`), so the stone travels
 with the body's recoil and is *additionally* driven back along the blow. The
 body's recoil axis and the shield's are different axes for a reason: a body is
 knocked back by force, a shield is driven back by where it was struck. Mirroring
@@ -293,7 +293,7 @@ grep output as a set of pairs rather than as a presence check.
 The enemy lab's `--ward --absorb` mode exists specifically to photograph this beat
 at a slowed clock. It hard-coded `v.ward_hit(Vector2.LEFT)` for every subject,
 including the two heroes on its own roster
-(`presentation/lab/enemy_lab.gd:156` (`HEROES`)). So the one instrument built to
+(`presentation/lab/enemy_lab.gd:163` (`HEROES`)). So the one instrument built to
 judge this beat:
 
 - **could not surface the missing hero call**, because it drove `ward_hit`
