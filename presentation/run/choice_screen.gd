@@ -5,13 +5,78 @@ extends Control
 
 signal chosen(id: String)
 
+const TITLE_BACKGROUND: String = "res://assets/art/title-background/background.png"
+const TITLE_WORDMARK: String = "res://assets/art/title/title.png"
+const ROSE_MURAL: String = "res://assets/art/meta/emberglass-mural.png"
+const ROSE_FRAME: String = "res://assets/art/meta/emberglass-frame.png"
+const ROSE_MASK: String = "res://assets/art/meta/emberglass-mask-%s.png"
+const ROSE_PANE_SHADER: Shader = preload("res://presentation/run/rose_pane.gdshader")
+const GOLD: Color = Color("#f2c14e")
+const PARCHMENT: Color = Color("#e8dfc8")
+const BENCH_TEXT_DIM: Color = Color("#8b93ad")
+
+## The panel as authored at the identity shape, and the fallbacks the book's
+## `run` scope carries defaults for. Kept as named constants rather than magic
+## numbers at the call site so the 1.0 column stays readable next to the book.
+const PANEL_W: float = 520.0
+const CARD_PANEL_W: float = 1080.0
+const PANEL_INSET: float = 24.0
+const PANEL_SCROLL: float = 420.0
+const PANEL_FLOOR: float = 280.0
+const COLUMN_GAP: float = 14.0
+const TITLE_PT: float = 30.0
+const BODY_PT: float = 18.0
+const BUTTON_H: float = 48.0
+
+## The stage shape this panel composes for, and its resolved `run` layout.
+var shape: StringName = StageShape.IDENTITY
+
+var _panel_layout: Dictionary = {}
 var _first_button: Button = null
 var _panel: PanelContainer
+var _centre: CenterContainer
+var _column: VBoxContainer
+var _scroll: ScrollContainer = null
+var _card_mode: bool = false
+var _card_pick: bool = false
+var _card_views: Array[CardView] = []
+var _card_pedestals: Array[Control] = []
+var _title_variant: bool = false
+var _title_banner: TextureRect
+var _title_column: VBoxContainer
+var _wordmark_slot: Control
+var _wordmark: TextureRect
+var _tagline_slot: Control
+var _tagline: Label
+var _primary: GridContainer
+var _primary_buttons: Array[Button] = []
+var _utility: GridContainer
+var _utility_buttons: Array[Button] = []
+var _rose_medallion: Button = null
+var _sfx: SfxBus
 
 
-func _init(title_text: String, body_text: String, choices: Array[Dictionary]) -> void:
+func _init(title_text: String, body_text: String, choices: Array[Dictionary],
+		context: Dictionary = {}) -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
+	_sfx = SfxBus.new()
+	add_child(_sfx)
+	var asked: StringName = StringName(str(context.get("shape", StageShape.IDENTITY)))
+	shape = asked if StageShape.REFERENCES.has(asked) else StageShape.IDENTITY
+	_panel_layout = LayoutBook.resolve(&"run", shape)
+	_title_variant = str(context.get("variant", "")) == "title"
+	_card_mode = choices.any(func(row: Dictionary) -> bool: return row.has("card"))
+	_card_pick = choices.any(func(row: Dictionary) -> bool:
+		return row.has("card") and not row.get("disabled", false))
+	if _title_variant:
+		_build_title(body_text, choices, context)
+	else:
+		_build_standard(title_text, body_text, choices)
+
+
+func _build_standard(title_text: String, body_text: String,
+		choices: Array[Dictionary]) -> void:
 
 	var ground: ColorRect = ColorRect.new()
 	ground.color = GlassStyle.NIGHT_BOT
@@ -19,28 +84,33 @@ func _init(title_text: String, body_text: String, choices: Array[Dictionary]) ->
 	ground.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(ground)
 
-	var centre: CenterContainer = CenterContainer.new()
+	var k: float = _panel_num("scale", 1.0)
+	var inset: float = _panel_num("inset", PANEL_INSET)
+
+	_centre = CenterContainer.new()
+	var centre: CenterContainer = _centre
 	centre.set_anchors_preset(Control.PRESET_FULL_RECT)
-	centre.offset_left = 24.0
-	centre.offset_top = 24.0
-	centre.offset_right = -24.0
-	centre.offset_bottom = -24.0
+	centre.offset_left = inset
+	centre.offset_top = inset
+	centre.offset_right = -inset
+	centre.offset_bottom = -inset
 	add_child(centre)
 
 	_panel = PanelContainer.new()
-	_panel.custom_minimum_size = Vector2(520.0, 0.0)
+	_panel.custom_minimum_size = Vector2(_authored_panel_width(), 0.0)
 	_panel.add_theme_stylebox_override("panel", GlassStyle.pane(GlassStyle.GLASS, 0.94))
 	centre.add_child(_panel)
 
-	var column: VBoxContainer = VBoxContainer.new()
-	column.add_theme_constant_override("separation", 14)
+	_column = VBoxContainer.new()
+	var column: VBoxContainer = _column
+	column.add_theme_constant_override("separation", roundi(COLUMN_GAP * k))
 	_panel.add_child(column)
 
 	var title: Label = Label.new()
 	title.text = title_text
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
-	title.add_theme_font_size_override("font_size", 30)
+	title.add_theme_font_size_override("font_size", roundi(TITLE_PT * k))
 	title.add_theme_color_override("font_color", GlassStyle.TEXT)
 	column.add_child(title)
 
@@ -50,19 +120,27 @@ func _init(title_text: String, body_text: String, choices: Array[Dictionary]) ->
 		body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		body.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
-		body.add_theme_font_size_override("font_size", 18)
+		body.add_theme_font_size_override("font_size", roundi(BODY_PT * k))
 		body.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 		column.add_child(body)
 
+	if _card_mode:
+		_build_card_grid(column, choices, k)
+		return
+
 	var button_column: VBoxContainer = column
 	if choices.size() > 7:
-		var scroll: ScrollContainer = ScrollContainer.new()
-		scroll.custom_minimum_size.y = 420.0
+		# The one figure `_fit` never clamped. A 420px floor is taller than a
+		# phone held sideways IS, so the panel grew past the stage and the
+		# buttons below the fold became unreachable rather than scrollable.
+		_scroll = ScrollContainer.new()
+		var scroll: ScrollContainer = _scroll
+		scroll.custom_minimum_size.y = _panel_num("scroll", PANEL_SCROLL)
 		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 		scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		column.add_child(scroll)
 		button_column = VBoxContainer.new()
-		button_column.add_theme_constant_override("separation", 14)
+		button_column.add_theme_constant_override("separation", roundi(COLUMN_GAP * k))
 		button_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		scroll.add_child(button_column)
 	for row: Dictionary in choices:
@@ -70,22 +148,436 @@ func _init(title_text: String, body_text: String, choices: Array[Dictionary]) ->
 		button.text = str(row.get("label", row.get("id", "")))
 		button.disabled = row.get("disabled", false)
 		button.tooltip_text = str(row.get("hint", ""))
-		button.custom_minimum_size.y = 48.0
+		button.custom_minimum_size.y = roundi(BUTTON_H * k)
+		var icon_path: String = str(row.get("icon", ""))
+		if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
+			button.icon = load(icon_path) as Texture2D
+			button.expand_icon = true
+			button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+			button.custom_minimum_size.y = roundi(72.0 * k)
 		GlassStyle.style_button(button, GlassStyle.EMBER if not row.get("quiet", false) else GlassStyle.GLASS)
-		var id: String = str(row.get("id", ""))
-		button.pressed.connect(func() -> void: chosen.emit(id))
+		_wire_button(button, str(row.get("id", "")))
 		button_column.add_child(button)
-		if _first_button == null and not button.disabled:
-			_first_button = button
+
+
+func _build_card_grid(column: VBoxContainer, choices: Array[Dictionary],
+		k: float) -> void:
+	_scroll = ScrollContainer.new()
+	_scroll.custom_minimum_size.y = _panel_num("scroll", PANEL_SCROLL)
+	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.add_child(_scroll)
+	var grid: HFlowContainer = HFlowContainer.new()
+	grid.alignment = FlowContainer.ALIGNMENT_CENTER
+	grid.add_theme_constant_override("h_separation", roundi(16.0 * k))
+	grid.add_theme_constant_override("v_separation", roundi(16.0 * k))
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_scroll.add_child(grid)
+	for row: Dictionary in choices:
+		if not row.has("card"):
+			continue
+		var inst: CardInst = row["card"]
+		var definition: Dictionary = row.get("definition", {})
+		var cost_v: Variant = definition.get("cost")
+		var cost: int = 0 if cost_v == null else int(float(str(cost_v)))
+		var view: CardView = CardView.new(inst, definition, cost)
+		if not row.get("disabled", false):
+			var choice_id: String = str(row.get("id", ""))
+			view.released_at.connect(func(_uid: int, _position: Vector2) -> void:
+				_sfx.play(&"card")
+				chosen.emit(choice_id)
+			)
+		var pedestal: Control = Control.new()
+		grid.add_child(pedestal)
+		pedestal.add_child(view)
+		_card_views.append(view)
+		_card_pedestals.append(pedestal)
+	_apply_card_scale()
+
+	var actions: HBoxContainer = HBoxContainer.new()
+	actions.alignment = BoxContainer.ALIGNMENT_CENTER
+	actions.add_theme_constant_override("separation", roundi(COLUMN_GAP * k))
+	column.add_child(actions)
+	for row: Dictionary in choices:
+		if row.has("card"):
+			continue
+		var button: Button = _title_button(
+			str(row.get("label", row.get("id", ""))),
+			true if row.get("quiet", false) else false)
+		button.custom_minimum_size.x = 180.0
+		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		button.disabled = row.get("disabled", false)
+		_wire_button(button, str(row.get("id", "")))
+		actions.add_child(button)
+
+
+func _apply_card_scale() -> void:
+	var card_scale: float = _card_scale()
+	for i: int in range(_card_views.size()):
+		var span: Vector2 = Vector2(CardView.CARD_W, CardView.CARD_H) * card_scale
+		var view: CardView = _card_views[i]
+		var pedestal: Control = _card_pedestals[i]
+		pedestal.custom_minimum_size = span
+		view.position = (span - Vector2(CardView.CARD_W, CardView.CARD_H)) * 0.5
+		view.scale = Vector2.ONE * card_scale
+
+
+func _card_scale() -> float:
+	match shape:
+		&"phone-portrait":
+			return 0.74 if _card_pick else 0.69
+		&"phone-landscape":
+			return 0.89 if _card_pick else 0.84
+		&"desktop-landscape":
+			return 1.17 if _card_pick else 1.0
+		_:
+			return 0.99 if _card_pick else 0.87
+
+
+## The benchmark title is a composition, not a panel: the authored raster sits
+## over the living sky, the wordmark owns the centre, and utility actions share
+## one row at the 1180x820 reference stage.
+func _build_title(tagline_text: String, choices: Array[Dictionary],
+		context: Dictionary) -> void:
+	add_child(TitleWorld.new())
+
+	_title_banner = TextureRect.new()
+	_title_banner.texture = load(TITLE_BACKGROUND) as Texture2D
+	_title_banner.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_title_banner.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_title_banner.modulate.a = 0.35
+	_title_banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_title_banner)
+
+	var vignette: TextureRect = TextureRect.new()
+	vignette.texture = GlassStyle.grad_tex(
+		PackedColorArray([
+			Color(0.016, 0.020, 0.047, 0.0),
+			Color(0.016, 0.020, 0.047, 0.0),
+			Color(0.016, 0.020, 0.047, 0.58),
+		]),
+		PackedFloat32Array([0.0, 0.55, 1.0]), true,
+		Vector2(0.5, 0.45), Vector2(1.0, 0.45))
+	vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vignette.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	vignette.stretch_mode = TextureRect.STRETCH_SCALE
+	vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(vignette)
+
+	var centre: CenterContainer = CenterContainer.new()
+	centre.set_anchors_preset(Control.PRESET_FULL_RECT)
+	centre.offset_left = 16.0
+	centre.offset_top = 16.0
+	centre.offset_right = -16.0
+	centre.offset_bottom = -16.0
+	add_child(centre)
+
+	_title_column = VBoxContainer.new()
+	_title_column.alignment = BoxContainer.ALIGNMENT_CENTER
+	_title_column.add_theme_constant_override("separation", 8)
+	centre.add_child(_title_column)
+
+	_wordmark_slot = Control.new()
+	_title_column.add_child(_wordmark_slot)
+	_wordmark = TextureRect.new()
+	_wordmark.texture = load(TITLE_WORDMARK) as Texture2D
+	_wordmark.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_wordmark.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_wordmark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_wordmark.anchor_left = 0.5
+	_wordmark.anchor_right = 0.5
+	_wordmark.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_wordmark_slot.add_child(_wordmark)
+
+	_tagline_slot = Control.new()
+	_tagline_slot.custom_minimum_size.y = 20.0
+	_title_column.add_child(_tagline_slot)
+	_tagline = Label.new()
+	_tagline.text = tagline_text.to_upper()
+	_tagline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_tagline.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 5))
+	_tagline.add_theme_font_size_override("font_size", 14)
+	_tagline.add_theme_color_override("font_color", BENCH_TEXT_DIM)
+	_tagline.anchor_left = 0.5
+	_tagline.anchor_right = 0.5
+	_tagline.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_tagline_slot.add_child(_tagline)
+
+	_primary = GridContainer.new()
+	_primary.columns = 1
+	_primary.add_theme_constant_override("h_separation", 8)
+	_primary.add_theme_constant_override("v_separation", 8)
+	_primary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title_column.add_child(_primary)
+
+	_utility = GridContainer.new()
+	_utility.add_theme_constant_override("h_separation", 8)
+	_utility.add_theme_constant_override("v_separation", 8)
+	_utility.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title_column.add_child(_utility)
+
+	for row: Dictionary in choices:
+		var quiet: bool = row.get("quiet", false)
+		var button: Button = _title_button(str(row.get("label", row.get("id", ""))), quiet)
+		button.disabled = row.get("disabled", false)
+		button.tooltip_text = str(row.get("hint", ""))
+		button.set_meta("title_label", button.text)
+		_wire_button(button, str(row.get("id", "")))
+		if quiet:
+			_utility.add_child(button)
+			_utility_buttons.append(button)
+		else:
+			_primary.add_child(button)
+			_primary_buttons.append(button)
+	_add_title_rose(context)
+
+	var stats: Label = Label.new()
+	stats.text = str(context.get("stats", ""))
+	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stats.add_theme_font_override("font", _tracked_font(GlassStyle.ALEGREYA_400, 1))
+	stats.add_theme_font_size_override("font_size", 14)
+	stats.add_theme_color_override("font_color", BENCH_TEXT_DIM)
+	_title_column.add_child(stats)
+
+	var version: Label = Label.new()
+	version.text = str(context.get("version", ""))
+	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	version.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	version.add_theme_font_size_override("font_size", 11)
+	version.add_theme_color_override("font_color", Color(BENCH_TEXT_DIM, 0.7))
+	version.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	version.offset_left = -198.0
+	version.offset_top = -34.0
+	version.offset_right = -18.0
+	version.offset_bottom = -18.0
+	version.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(version)
+
+
+func _add_title_rose(context: Dictionary) -> void:
+	var shards_v: Variant = context.get("rose_shards", [])
+	if typeof(shards_v) != TYPE_ARRAY or shards_v.is_empty():
+		return
+	var shards: Array = shards_v
+	_rose_medallion = Button.new()
+	_rose_medallion.tooltip_text = "Open the Emberglass Rose Window"
+	_rose_medallion.clip_contents = true
+	_rose_medallion.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	for state: String in ["normal", "hover", "pressed", "focus"]:
+		var style: StyleBoxFlat = StyleBoxFlat.new()
+		style.bg_color = Color("#070912")
+		style.set_border_width_all(1)
+		style.border_color = Color(GOLD, 0.82 if state == "hover" else 0.45)
+		style.set_corner_radius_all(39)
+		style.shadow_color = Color(GOLD, 0.24 if state == "hover" else 0.16)
+		style.shadow_size = 16 if state == "hover" else 10
+		_rose_medallion.add_theme_stylebox_override(state, style)
+	add_child(_rose_medallion)
+	for id_v: Variant in shards:
+		var id: String = str(id_v)
+		var mask_path: String = ROSE_MASK % id
+		if not ResourceLoader.exists(mask_path):
+			continue
+		var pane: TextureRect = TextureRect.new()
+		pane.texture = load(mask_path) as Texture2D
+		pane.set_anchors_preset(Control.PRESET_FULL_RECT)
+		pane.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pane.stretch_mode = TextureRect.STRETCH_SCALE
+		pane.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var material: ShaderMaterial = ShaderMaterial.new()
+		material.shader = ROSE_PANE_SHADER
+		material.set_shader_parameter("mural", load(ROSE_MURAL) as Texture2D)
+		material.set_shader_parameter("show_mural", true)
+		material.set_shader_parameter("fill_colour", Color.TRANSPARENT)
+		pane.material = material
+		_rose_medallion.add_child(pane)
+	var frame: TextureRect = TextureRect.new()
+	frame.texture = load(ROSE_FRAME) as Texture2D
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame.stretch_mode = TextureRect.STRETCH_SCALE
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_rose_medallion.add_child(frame)
+	_rose_medallion.pressed.connect(func() -> void:
+		_sfx.play(&"relic")
+		chosen.emit("rose")
+	)
+
+
+func _title_button(text: String, quiet: bool) -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.custom_minimum_size.y = 40.0
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_700, 1))
+	button.add_theme_font_size_override("font_size", 13 if quiet else 17)
+	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+		var box: StyleBoxFlat = StyleBoxFlat.new()
+		box.bg_color = Color(0.055, 0.071, 0.133, 0.60 if quiet else 0.90)
+		box.set_border_width_all(1)
+		box.border_color = Color(GOLD, 0.28 if state == "normal" else 0.82)
+		box.set_corner_radius_all(8)
+		box.content_margin_left = 8.0 if quiet else 24.0
+		box.content_margin_right = 8.0 if quiet else 24.0
+		box.content_margin_top = 8.0
+		box.content_margin_bottom = 8.0
+		box.shadow_color = Color(0, 0, 0, 0.50)
+		box.shadow_size = 6
+		if state == "hover":
+			box.shadow_color = Color(GOLD, 0.22)
+			box.shadow_size = 12
+		elif state == "pressed":
+			box.bg_color = Color(0.035, 0.045, 0.090, 0.90)
+		elif state == "disabled":
+			box.border_color = Color(GOLD, 0.12)
+		button.add_theme_stylebox_override(state, box)
+	button.add_theme_color_override("font_color", PARCHMENT)
+	button.add_theme_color_override("font_hover_color", Color("#fff3d6"))
+	button.add_theme_color_override("font_pressed_color", PARCHMENT)
+	button.add_theme_color_override("font_disabled_color", Color(BENCH_TEXT_DIM, 0.45))
+	return button
+
+
+static func _tracked_font(path: String, glyph_spacing: int) -> FontVariation:
+	var tracked: FontVariation = FontVariation.new()
+	tracked.base_font = load(path) as Font
+	tracked.spacing_glyph = glyph_spacing
+	return tracked
+
+
+func _wire_button(button: Button, id: String) -> void:
+	button.pressed.connect(func() -> void:
+		_sfx.play(&"click")
+		chosen.emit(id)
+	)
+	button.mouse_entered.connect(func() -> void:
+		if not button.disabled:
+			_sfx.play(&"hover", 0.45)
+	)
+	if _first_button == null and not button.disabled:
+		_first_button = button
 
 
 func _ready() -> void:
-	resized.connect(_fit_panel)
-	_fit_panel()
+	resized.connect(_fit)
+	_fit()
 	if _first_button != null:
 		_first_button.grab_focus()
+	if _title_variant:
+		pivot_offset = size * 0.5
+		modulate.a = 0.0
+		scale = Vector2.ONE * 1.015
+		var tween: Tween = create_tween().set_parallel()
+		tween.tween_property(self, "modulate:a", 1.0, 0.45)
+		tween.tween_property(self, "scale", Vector2.ONE, 0.45) \
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
-func _fit_panel() -> void:
+## The panel's authored width, held inside what the stage can actually give it.
+##
+## This clamp already existed and already worked — it is the reason a narrow
+## stage never had the panel hanging off both sides. What it could not do is
+## know that a phone wants a NARROWER panel than the clamp alone would leave it
+## with, or that the type inside should shrink too. The book supplies the
+## authored width and the clamp keeps holding the floor and the ceiling.
+func _fit() -> void:
+	if _title_variant:
+		_fit_title()
+		return
 	if _panel != null:
-		_panel.custom_minimum_size.x = minf(520.0, maxf(280.0, size.x - 48.0))
+		var inset: float = _panel_num("inset", PANEL_INSET)
+		_panel.custom_minimum_size.x = minf(_authored_panel_width(),
+			maxf(PANEL_FLOOR, size.x - inset * 2.0))
+
+
+func _panel_num(field: String, fallback: float = 0.0) -> float:
+	return LayoutBook.num(_panel_layout.get(field), fallback)
+
+
+func _authored_panel_width() -> float:
+	return CARD_PANEL_W if _card_mode else _panel_num("w", PANEL_W)
+
+
+## Follow a re-pick. Only the numbers move — the panel keeps its buttons, its
+## focus and its fade-in, because none of those depend on the shape.
+func set_shape(stage_shape: StringName) -> void:
+	if stage_shape == shape or not StageShape.REFERENCES.has(stage_shape):
+		return
+	shape = stage_shape
+	_panel_layout = LayoutBook.resolve(&"run", shape)
+	var k: float = _panel_num("scale", 1.0)
+	var inset: float = _panel_num("inset", PANEL_INSET)
+	if _centre != null:
+		_centre.offset_left = inset
+		_centre.offset_top = inset
+		_centre.offset_right = -inset
+		_centre.offset_bottom = -inset
+	if _column != null:
+		_column.add_theme_constant_override("separation", roundi(COLUMN_GAP * k))
+	if _scroll != null:
+		_scroll.custom_minimum_size.y = _panel_num("scroll", PANEL_SCROLL)
+	if _card_mode:
+		_apply_card_scale()
+	_fit()
+
+
+func _fit_title() -> void:
+	if size.x <= 0.0 or size.y <= 0.0:
+		return
+	var phone_landscape: bool = shape == &"phone-landscape"
+	var phone_portrait: bool = shape == &"phone-portrait"
+	var compact: bool = size.x >= 1000.0 and size.y <= 860.0
+	var wordmark_w: float
+	if phone_landscape:
+		wordmark_w = minf(230.0, size.x * 0.28)
+	elif compact:
+		wordmark_w = minf(520.0, size.x * 0.60)
+	else:
+		wordmark_w = minf(780.0, size.x * 0.88)
+	var wordmark_h: float = wordmark_w * 399.0 / 1536.0
+	_wordmark_slot.custom_minimum_size.y = wordmark_h
+	_wordmark.offset_left = -wordmark_w * 0.5
+	_wordmark.offset_top = 0.0
+	_wordmark.offset_right = wordmark_w * 0.5
+	_wordmark.offset_bottom = wordmark_h
+
+	var tagline_w: float = minf(760.0, size.x - 32.0)
+	_tagline.offset_left = -tagline_w * 0.5
+	_tagline.offset_top = 0.0
+	_tagline.offset_right = tagline_w * 0.5
+	_tagline.offset_bottom = 20.0
+	_tagline_slot.visible = not phone_landscape
+	_tagline.add_theme_font_override("font",
+		_tracked_font(GlassStyle.CINZEL_500, 2 if shape.begins_with("phone") else 5))
+	_tagline.add_theme_font_size_override(
+		"font_size", 11 if shape.begins_with("phone") else 14)
+
+	_title_column.custom_minimum_size.x = minf(760.0, size.x - 32.0) \
+		if phone_landscape else (340.0 if compact or phone_portrait \
+		else minf(300.0, size.x - 32.0))
+	_title_column.add_theme_constant_override(
+		"separation", 6 if phone_landscape else (8 if compact else 14))
+	_primary.columns = 2 if phone_landscape else 1
+	_utility.columns = 3 if compact or shape.begins_with("phone") else 1
+	for button: Button in _primary_buttons:
+		button.add_theme_font_size_override("font_size", 12 if phone_landscape else 17)
+	for button: Button in _utility_buttons:
+		var label: String = str(button.get_meta("title_label", button.text))
+		button.text = label.replace("How to Play", "How to\nPlay") \
+			if compact and not shape.begins_with("phone") else label
+		button.add_theme_font_size_override("font_size", 12 if phone_landscape else 13)
+
+	var image_aspect: float = 1536.0 / 1024.0
+	var banner_h: float = minf(size.y * 0.55, size.x * 0.90 / image_aspect)
+	var banner_w: float = banner_h * image_aspect
+	_title_banner.position = Vector2(
+		(size.x - banner_w) * 0.5,
+		size.y - size.y * 0.18 - banner_h)
+	_title_banner.size = Vector2(banner_w, banner_h)
+	if _rose_medallion != null:
+		var rose_side: float = 58.0 if shape.begins_with("phone") else 78.0
+		_rose_medallion.offset_left = 18.0
+		_rose_medallion.offset_top = -18.0 - rose_side
+		_rose_medallion.offset_right = 18.0 + rose_side
+		_rose_medallion.offset_bottom = -18.0

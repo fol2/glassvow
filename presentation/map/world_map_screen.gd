@@ -1,7 +1,6 @@
 class_name WorldMapScreen
 extends Control
-## The benchmark 15×7 pilgrimage graph, drawn over the retained Glassvow world
-## scenery. Waystones are the only real children: they take input.
+## The benchmark 15×7 pilgrimage graph climbing a navigable Spire.
 ##
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
@@ -10,43 +9,49 @@ extends Control
 signal node_chosen(index: int)
 signal menu_requested
 
-const SPACING: float = 250.0     # stage px per world_x ordinal
-const LEFT: float = 210.0        # world_x 0 sits here at camera 0
-const PATH_Y: float = 0.70       # path band baseline, fraction of height
-const HORIZON: float = 0.52
-const F_SKY: float = 0.10
-const F_REGION: float = 0.35
-const F_VEIL: float = 1.35
+const HORIZON: float = 0.64
 const TRAVEL_TIME: float = 0.4
-const ASH_COUNT: int = 64
-const MAP_SCALE: float = 0.36
-const MAP_TOP: float = 92.0
-const MAP_BOTTOM: float = 74.0
+const ASH_COUNT: int = 128
+const CAMERA_LEAD: float = 1.6
+const CAMERA_MIN: float = 0.5
+const CAMERA_MAX: float = WorldMap.ROWS - 0.5
 
-## The retained Glassvow scenery sits behind every act; the act name comes from
-## the full catalogue.
+const HINT_PT: float = 13.0
+const HINT_TOP: float = -44.0
+const HINT_BOTTOM: float = -18.0
+
 const REGION_NAME: String = "The Ashen Woods"
-const REGION_ACCENT: Color = Color(0.49, 0.86, 0.56)  # #7ddb8f
-const SPIRE_H: float = 0.20      # Act 1: small and pale. It grows each act.
+const REGION_ACCENT: Color = Color("#7ddb8f")
 
 var instant: bool = false        # headless: travel resolves without a tween
 var map: WorldMap
 var content: ContentDB
 
-var _cam_x: float = 0.0
-var _marker_x: float = 0.0
+## The stage shape this screen composes for, and its resolved `map` layout.
+## Re-read through `_trail()` rather than cached in locals: `set_shape` swaps it
+## under a live screen when the window crosses an aspect boundary.
+var shape: StringName = StageShape.IDENTITY
+
+var _cam_row: float = CAMERA_LEAD
+var _cam_target: float = CAMERA_LEAD
+var _cam_velocity: float = 0.0
+var _dragging: bool = false
 var _travelling: bool = false
 var _waystones: Array[GlassWaystone] = []
 var _ash: Array[Vector3] = []    # x, y, fall speed
-var _region_label: Label
-var _vitals_label: Label
 var _hint_label: Label
 var _sky_tex: GradientTexture2D
+var _trail_layout: Dictionary = {}
+var _title_label: Label
+var _run: RunState = null
 
 
-func _init(world_map: WorldMap, content_ref: ContentDB) -> void:
+func _init(world_map: WorldMap, content_ref: ContentDB,
+		stage_shape: StringName = StageShape.IDENTITY) -> void:
 	map = world_map
 	content = content_ref
+	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
+	_trail_layout = LayoutBook.resolve(&"map", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	_sky_tex = GlassStyle.grad_tex(
@@ -62,54 +67,37 @@ func _init(world_map: WorldMap, content_ref: ContentDB) -> void:
 # ---------------------------------------------------------------- build
 
 func _build_chrome() -> void:
-	var bar: PanelContainer = PanelContainer.new()
-	bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	var sb: StyleBoxFlat = StyleBoxFlat.new()
-	sb.bg_color = Color(0.02, 0.03, 0.06, 0.55)
-	sb.border_width_bottom = 1
-	sb.border_color = Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.22)
-	sb.content_margin_left = 20
-	sb.content_margin_right = 20
-	sb.content_margin_top = 9
-	sb.content_margin_bottom = 9
-	bar.add_theme_stylebox_override("panel", sb)
-	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(bar)
-	var row: HBoxContainer = HBoxContainer.new()
-	row.add_theme_constant_override("separation", 22)
-	bar.add_child(row)
-	var title: Label = Label.new()
-	title.text = "Glassvow"
-	title.add_theme_font_size_override("font_size", 22)
-	title.add_theme_color_override("font_color", Color(0.78, 0.88, 1.0, 0.92))
-	row.add_child(title)
-	_region_label = Label.new()
-	_region_label.text = REGION_NAME
-	_region_label.add_theme_color_override("font_color",
-		Color(REGION_ACCENT.r, REGION_ACCENT.g, REGION_ACCENT.b, 0.85))
-	row.add_child(_region_label)
-	var spacer: Control = Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_child(spacer)
-	_vitals_label = Label.new()
-	_vitals_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-	row.add_child(_vitals_label)
-	var menu: Button = Button.new()
-	menu.text = "Menu"
-	GlassStyle.style_button(menu, GlassStyle.GLASS)
-	menu.pressed.connect(func() -> void: menu_requested.emit())
-	row.add_child(menu)
+	_title_label = Label.new()
+	_title_label.text = REGION_NAME.to_upper()
+	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_title_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_title_label.offset_top = 38.0
+	_title_label.offset_bottom = 66.0
+	_title_label.add_theme_color_override("font_color", Color(0.78, 0.88, 1.0, 0.92))
+	_title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_title_label)
 
 	_hint_label = Label.new()
-	_hint_label.text = "Walk east — the Spire is still far."
+	_hint_label.text = "SCROLL OR DRAG TO SURVEY THE SPIRE"
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_hint_label.add_theme_font_size_override("font_size", 13)
 	_hint_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	_hint_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	_hint_label.offset_top = -44
-	_hint_label.offset_bottom = -18
 	_hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_hint_label)
+	_scale_chrome()
+
+
+## Every rail figure at once, so a shape change is one call rather than a tour of
+## the builder. Separated from `_build_chrome` for exactly that reason: the
+## builder runs once and this runs again on every re-pick.
+func _scale_chrome() -> void:
+	var k: float = _bar_num("scale", 1.0)
+	_title_label.add_theme_font_size_override("font_size", roundi(15.0 * k))
+	_title_label.offset_top = 38.0 * k
+	_title_label.offset_bottom = 68.0 * k
+	_hint_label.add_theme_font_size_override("font_size", roundi(HINT_PT * k))
+	_hint_label.offset_top = HINT_TOP * k
+	_hint_label.offset_bottom = HINT_BOTTOM * k
 
 
 func _build_waystones() -> void:
@@ -117,7 +105,8 @@ func _build_waystones() -> void:
 		var n: MapNode = map.nodes[i]
 		var shown_kind: String = "unlit" if n.unlit else n.type
 		var caption: String = "Unlit Way" if n.unlit else _node_caption(n)
-		var ws: GlassWaystone = GlassWaystone.new(i, shown_kind, _node_hue(n), caption)
+		var ws: GlassWaystone = GlassWaystone.new(
+			i, shown_kind, _node_hue(n), caption, n.quest_marked)
 		ws.chosen.connect(_on_waystone_chosen)
 		add_child(ws)
 		_waystones.append(ws)
@@ -161,33 +150,36 @@ func _seed_ash() -> void:
 ## Re-seat and re-light after a run change or a return from combat.
 func refresh(run: RunState) -> void:
 	if run != null:
-		var compact: bool = get_viewport_rect().size.x < 650.0
-		_region_label.visible = not compact
-		_region_label.text = "The Rose Window" if map.region == "rose_window" \
-			else str(content.acts[clampi(run.act, 0, content.acts.size() - 1)].get("name", REGION_NAME))
-		_vitals_label.text = ("HP %d/%d · G %d" if compact else "HP %d / %d   ·   Gold %d") % [
-			maxi(0, run.player.hp), run.player.max_hp, run.player.gold]
+		_run = run
+		var act: Dictionary = content.acts[clampi(run.act, 0, content.acts.size() - 1)]
+		var act_name: String = "The Rose Window" if map.region == "rose_window" \
+			else str(act.get("name", REGION_NAME))
+		_title_label.text = "%s — %s AWAITS" % [
+			act_name.to_upper(), str(act.get("bossName", "THE SUMMIT")).to_upper()]
 	var live: Array[int] = map.reachable()
 	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
-		_waystones[i].set_state(live.has(i), map.is_cleared(i))
+		_waystones[i].set_state(live.has(i), map.is_cleared(i), i == map.at)
 		if first_live == null and live.has(i):
 			first_live = _waystones[i]
 	if live.is_empty():
-		_hint_label.text = "The road ends here."
+		_hint_label.text = "THE ROAD ENDS HERE"
 	else:
-		_hint_label.text = "Choose the next waystone."
+		_hint_label.text = "SCROLL OR DRAG · CHOOSE A LIT LANTERN"
 		if first_live != null and first_live.is_inside_tree():
 			first_live.grab_focus()
 	_seat_marker()
 
 
 func _seat_marker() -> void:
-	_cam_x = 0.0
+	var row: float = float(map.nodes[map.at].row) if map.at >= 0 and map.at < map.nodes.size() else 0.0
+	_cam_row = clampf(row + CAMERA_LEAD, CAMERA_MIN, CAMERA_MAX)
+	_cam_target = _cam_row
+	_cam_velocity = 0.0
 
 
 func _cam_for(i: int) -> float:
-	return 0.0
+	return clampf(float(map.nodes[i].row) + CAMERA_LEAD, CAMERA_MIN, CAMERA_MAX)
 
 
 func _on_waystone_chosen(i: int) -> void:
@@ -216,6 +208,14 @@ func _on_arrived(i: int) -> void:
 # ---------------------------------------------------------------- frame
 
 func _process(delta: float) -> void:
+	if not _dragging:
+		if absf(_cam_velocity) > 0.02:
+			_cam_row = clampf(_cam_row + _cam_velocity * delta, CAMERA_MIN, CAMERA_MAX)
+			_cam_target = _cam_row
+			_cam_velocity *= pow(0.06, delta)
+		else:
+			_cam_velocity = 0.0
+			_cam_row = lerpf(_cam_row, _cam_target, minf(1.0, delta * 9.0))
 	var span: float = maxf(size.x, 1.0) * 2.0
 	for i: int in range(_ash.size()):
 		var m: Vector3 = _ash[i]
@@ -228,26 +228,105 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
+func _gui_input(event: InputEvent) -> void:
+	var button: InputEventMouseButton = event as InputEventMouseButton
+	if button != null:
+		if button.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN] and button.pressed:
+			_cam_target = clampf(_cam_target + (
+				0.9 if button.button_index == MOUSE_BUTTON_WHEEL_UP else -0.9),
+				CAMERA_MIN, CAMERA_MAX)
+			_cam_velocity = 0.0
+			accept_event()
+		elif button.button_index == MOUSE_BUTTON_LEFT:
+			_dragging = button.pressed
+			if button.pressed:
+				_cam_velocity = 0.0
+			accept_event()
+		return
+	var motion: InputEventMouseMotion = event as InputEventMouseMotion
+	if motion != null and _dragging:
+		_pan(motion.relative.y, motion.velocity.y)
+		accept_event()
+		return
+	var touch: InputEventScreenTouch = event as InputEventScreenTouch
+	if touch != null:
+		_dragging = touch.pressed
+		if touch.pressed:
+			_cam_velocity = 0.0
+		accept_event()
+		return
+	var drag: InputEventScreenDrag = event as InputEventScreenDrag
+	if drag != null and _dragging:
+		_pan(drag.relative.y, drag.velocity.y)
+		accept_event()
+
+
+func _pan(delta_y: float, velocity_y: float) -> void:
+	var gap: float = _row_gap()
+	_cam_row = clampf(_cam_row + delta_y / gap, CAMERA_MIN, CAMERA_MAX)
+	_cam_target = _cam_row
+	_cam_velocity = clampf(velocity_y / gap, -8.0, 8.0)
+
+
+## The `map` scope's own numbers. `bar` hangs off it as a sub-dict.
+func _trail_num(field: String, fallback: float = 0.0) -> float:
+	return LayoutBook.num(_trail_layout.get(field), fallback)
+
+
+func _bar_num(field: String, fallback: float = 0.0) -> float:
+	return LayoutBook.num(_trail_layout.get("bar", {}).get(field), fallback)
+
+
+## Follow a re-pick without being rebuilt. Safe here in a way it is not on the
+## combat screen: nothing on this screen is mid-flight except the travel tween,
+## and a waystone carries no state a re-seat would lose.
+func set_shape(stage_shape: StringName) -> void:
+	if stage_shape == shape or not StageShape.REFERENCES.has(stage_shape):
+		return
+	shape = stage_shape
+	_trail_layout = LayoutBook.resolve(&"map", shape)
+	_scale_chrome()
+	if _run != null:
+		refresh(_run)
+	_layout_waystones()
+	queue_redraw()
+
+
 func _layout_waystones() -> void:
+	var k: float = _trail_num("scale", 0.36)
+	var touch: float = _trail_num("touch", 0.0)
 	for i: int in range(_waystones.size()):
 		var ws: GlassWaystone = _waystones[i]
-		ws.scale = Vector2(MAP_SCALE, MAP_SCALE)
-		ws.position = _node_pos(map.nodes[i]) \
-			- ws.size * MAP_SCALE * 0.5
+		var depth: float = absf(float(map.nodes[i].row) - _cam_row)
+		var node_scale: float = k * clampf(1.08 - depth * 0.035, 0.72, 1.08)
+		ws.scale = Vector2.ONE * node_scale
+		ws.modulate.a = clampf(1.15 - depth * 0.12, 0.12, 1.0)
+		# Before the seat, not after: the pad changes `size`, and the seat is
+		# computed from it. The drawing sits in the middle of the padded rect,
+		# so centring the rect still centres the stone.
+		ws.set_touch_min(touch, node_scale)
+		ws.position = _node_pos(map.nodes[i]) - ws.size * node_scale * 0.5
 
 
+## Where a node sits, from the book rather than from five literals.
+##
+## The column gap was `clamp(104, 50, (w - 170) / 6)` inline. Three numbers, no
+## shape named, and at 390px the clamp fires: the trail stops following the
+## screen and starts running off it. `gutter` is what the columns may not use,
+## and `colMin`/`colMax` are the band the gap is held inside.
 func _node_pos(node: MapNode) -> Vector2:
-	var usable_h: float = maxf(1.0, size.y - MAP_TOP - MAP_BOTTOM)
-	var row_gap: float = usable_h / float(WorldMap.ROWS - 1)
-	var col_gap: float = minf(104.0, maxf(50.0, (size.x - 170.0) / float(WorldMap.COLS - 1)))
+	var span: float = (size.x - _trail_num("gutter", 170.0)) / float(WorldMap.COLS - 1)
+	var col_gap: float = clampf(span, _trail_num("colMin", 50.0), _trail_num("colMax", 104.0))
+	var depth: float = absf(float(node.row) - _cam_row)
+	col_gap *= clampf(1.0 - depth * 0.025, 0.78, 1.0)
 	return Vector2(
 		size.x * 0.5 + float(node.col - 3) * col_gap + node.jx * 20.0,
-		size.y - MAP_BOTTOM - float(node.row) * row_gap + node.jy * 12.0,
+		size.y * 0.52 - (float(node.row) - _cam_row) * _row_gap() + node.jy * 12.0,
 	)
 
 
-func _world_to_screen(world_x: float) -> float:
-	return LEFT + world_x - _cam_x
+func _row_gap() -> float:
+	return clampf(size.y * 0.12, 74.0, 98.0)
 
 
 # ---------------------------------------------------------------- draw
@@ -256,111 +335,68 @@ func _draw() -> void:
 	var w: float = size.x
 	var h: float = size.y
 	var horizon: float = h * HORIZON
-	var path_y: float = h * PATH_Y
 	# The night gradient is drawn, not parented: a child TextureRect would sit
 	# above this _draw pass and bury every band under it.
 	draw_texture_rect(_sky_tex, Rect2(Vector2.ZERO, size), false)
-	_draw_skyband(w, horizon)
+	draw_rect(Rect2(0.0, horizon, w, h - horizon), Color(0.01, 0.015, 0.035, 0.48))
 	_draw_region(w, horizon)
-	_draw_ground(w, h, horizon, path_y)
+	_draw_spire()
 	_draw_graph()
-	_draw_marker(path_y)
+	_draw_marker()
 	_draw_veil(w)
 
 
-## Band 1 (.10) — the goal-anchor. The Spire barely moves, so it reads as
-## distant and fixed; it grows act by act until it fills the sky.
-func _draw_skyband(w: float, horizon: float) -> void:
-	var glass: Color = GlassStyle.GLASS
-	draw_line(Vector2(0, horizon), Vector2(w, horizon), Color(glass.r, glass.g, glass.b, 0.10), 1.0)
-	var base_x: float = w * 0.78 - _cam_x * F_SKY
-	var sh: float = size.y * SPIRE_H
-	var half: float = sh * 0.14
-	var top: float = horizon - sh
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(base_x - half * 1.5, horizon), Vector2(base_x - half * 0.42, top),
-		Vector2(base_x + half * 0.42, top), Vector2(base_x + half * 1.5, horizon),
-	]), Color(0.13, 0.15, 0.26, 0.85))
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(base_x - half * 0.42, top), Vector2(base_x, top - sh * 0.26),
-		Vector2(base_x + half * 0.42, top),
-	]), Color(0.16, 0.18, 0.30, 0.85))
-	# Lit floors: a few pale leaded bands, and a lantern at the crown.
-	for k: int in range(1, 5):
-		var fy: float = horizon - sh * (float(k) / 5.0)
-		var fw: float = half * (1.5 - 0.22 * float(k))
-		draw_line(Vector2(base_x - fw, fy), Vector2(base_x + fw, fy),
-			Color(glass.r, glass.g, glass.b, 0.16), 1.0)
-	draw_circle(Vector2(base_x, top - sh * 0.20), 3.0,
-		Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.75))
-
-
-## Band 2 (.35) — charred glass trees, the Ashen Woods silhouette.
 func _draw_region(w: float, horizon: float) -> void:
 	var span: float = w + 400.0
-	var trunk: Color = Color(0.06, 0.08, 0.12, 0.92)
-	var rim: Color = Color(REGION_ACCENT.r, REGION_ACCENT.g, REGION_ACCENT.b, 0.09)
-	for j: int in range(14):
-		var fj: float = float(j)
-		var base_x: float = fposmod(fj * 163.0 - _cam_x * F_REGION, span) - 200.0
-		var th: float = 90.0 + fmod(fj * 53.0, 70.0)
-		var base_y: float = horizon + 12.0 + fmod(fj * 29.0, 22.0)
-		var top_y: float = base_y - th
+	var trunk: Color = Color(0.025, 0.065, 0.048, 0.94)
+	var rim: Color = Color(REGION_ACCENT, 0.08)
+	for tree: int in range(20):
+		var index: float = float(tree)
+		var x: float = fposmod(index * 163.0, span) - 200.0
+		var tree_h: float = 90.0 + fmod(index * 53.0, 90.0)
+		var base_y: float = horizon + 26.0 + fmod(index * 29.0, 30.0)
+		var top_y: float = base_y - tree_h
 		draw_colored_polygon(PackedVector2Array([
-			Vector2(base_x - 7.0, base_y), Vector2(base_x - 2.5, top_y),
-			Vector2(base_x + 2.5, top_y), Vector2(base_x + 7.0, base_y),
+			Vector2(x - 8.0, base_y), Vector2(x - 2.5, top_y),
+			Vector2(x + 2.5, top_y), Vector2(x + 8.0, base_y),
 		]), trunk)
-		draw_line(Vector2(base_x, top_y + th * 0.30),
-			Vector2(base_x - 26.0, top_y + th * 0.06), trunk, 3.0)
-		draw_line(Vector2(base_x, top_y + th * 0.46),
-			Vector2(base_x + 30.0, top_y + th * 0.14), trunk, 3.0)
-		draw_line(Vector2(base_x - 2.5, top_y), Vector2(base_x - 5.0, top_y + th * 0.45), rim, 1.0)
+		draw_line(Vector2(x, top_y + tree_h * 0.30),
+			Vector2(x - 28.0, top_y + tree_h * 0.06), trunk, 4.0)
+		draw_line(Vector2(x, top_y + tree_h * 0.46),
+			Vector2(x + 32.0, top_y + tree_h * 0.14), trunk, 4.0)
+		draw_line(Vector2(x - 2.5, top_y),
+			Vector2(x - 5.0, top_y + tree_h * 0.45), rim, 1.0)
 
 
-func _draw_ground(w: float, h: float, horizon: float, path_y: float) -> void:
-	draw_rect(Rect2(0, horizon, w, h - horizon), Color(0.02, 0.025, 0.05, 0.75))
-	draw_rect(Rect2(0, path_y + 26.0, w, h - path_y - 26.0), Color(0.01, 0.015, 0.035, 0.7))
+func _draw_spire() -> void:
+	var centre: float = size.x * 0.5
+	var top_w: float = maxf(58.0, size.x * 0.08)
+	var bottom_w: float = maxf(180.0, size.x * 0.28)
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(centre - top_w, 0.0), Vector2(centre + top_w, 0.0),
+		Vector2(centre + bottom_w, size.y), Vector2(centre - bottom_w, size.y),
+	]), Color(0.025, 0.03, 0.07, 0.92))
+	for row: int in range(WorldMap.ROWS):
+		var y: float = size.y * 0.52 - (float(row) - _cam_row) * _row_gap()
+		if y < -20.0 or y > size.y + 20.0:
+			continue
+		var depth: float = absf(float(row) - _cam_row)
+		var half: float = lerpf(top_w, bottom_w, clampf(y / maxf(size.y, 1.0), 0.0, 1.0))
+		draw_line(Vector2(centre - half, y), Vector2(centre + half, y),
+			Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b,
+				clampf(0.18 - depth * 0.018, 0.035, 0.18)), 1.0)
 
 
-## Band 3 (1.0) — the play plane: the leaded road the waystones stand on.
-func _draw_path(w: float, path_y: float) -> void:
-	var glass: Color = GlassStyle.GLASS
-	draw_rect(Rect2(0, path_y, w, 22.0), Color(0.05, 0.07, 0.13, 0.85))
-	draw_line(Vector2(0, path_y), Vector2(w, path_y), Color(glass.r, glass.g, glass.b, 0.30), 1.6)
-	draw_line(Vector2(0, path_y + 22.0), Vector2(w, path_y + 22.0),
-		Color(glass.r, glass.g, glass.b, 0.14), 1.0)
-	# Lead ties, laid in world space so they carry the sense of walking.
-	var first: float = floorf(_cam_x / 46.0) * 46.0
-	for k: int in range(int(w / 46.0) + 3):
-		var x: float = _world_to_screen(first + float(k) * 46.0)
-		draw_line(Vector2(x, path_y + 3.0), Vector2(x, path_y + 19.0),
-			Color(glass.r, glass.g, glass.b, 0.09), 1.0)
-
-
-## The pilgrim: one lantern, carried east. Seated a stride west of its
-## waystone — the screen's own _draw sits under every child, so a marker
-## centred on the node would be buried by that node's pane.
-func _draw_marker(_path_y: float) -> void:
+## The current lantern's glow sits behind its waystone.
+func _draw_marker() -> void:
 	if map.at < 0 or map.at >= map.nodes.size():
 		return
-	var at: Vector2 = _node_pos(map.nodes[map.at]) + Vector2(-28.0, 0.0)
+	var at: Vector2 = _node_pos(map.nodes[map.at])
 	var x: float = at.x
 	var y: float = at.y
 	var ember: Color = GlassStyle.EMBER
 	draw_circle(Vector2(x, y), 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 	draw_circle(Vector2(x, y), 15.0, Color(ember.r, ember.g, ember.b, 0.18))
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(x, y - 13.0), Vector2(x + 8.0, y - 4.0), Vector2(x + 8.0, y + 9.0),
-		Vector2(x - 8.0, y + 9.0), Vector2(x - 8.0, y - 4.0),
-	]), Color(ember.r, ember.g, ember.b, 0.55))
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(x, y - 5.0), Vector2(x + 4.0, y + 3.0),
-		Vector2(x, y + 8.0), Vector2(x - 4.0, y + 3.0),
-	]), Color(1.0, 0.94, 0.78, 0.9))
-	draw_line(Vector2(x - 9.0, y - 13.0), Vector2(x + 9.0, y - 13.0),
-		Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.55), 1.6)
-	draw_line(Vector2(x, y + 16.0), Vector2(x, y + 26.0),
-		Color(ember.r, ember.g, ember.b, 0.25), 2.0)
 
 
 func _draw_graph() -> void:
@@ -374,17 +410,37 @@ func _draw_graph() -> void:
 			if typeof(next_v) == TYPE_OBJECT:
 				var next_node: MapNode = next_v
 				var to: Vector2 = _node_pos(next_node)
-				var lit: bool = map.is_cleared(map.nodes.find(node))
-				var tone: Color = GlassStyle.EMBER if lit else GlassStyle.GLASS
-				draw_line(from, to, Color(tone.r, tone.g, tone.b, 0.34 if lit else 0.16), 2.0)
+				var from_i: int = map.nodes.find(node)
+				var to_i: int = map.nodes.find(next_node)
+				var walked: bool = map.is_cleared(from_i) and map.is_cleared(to_i)
+				var fade: float = clampf(1.0 - maxf(
+					absf(float(node.row) - _cam_row),
+					absf(float(next_node.row) - _cam_row)) * 0.12, 0.10, 1.0)
+				var control: Vector2 = (from + to) * 0.5 + Vector2(0.0, 10.0)
+				var previous: Vector2 = from
+				for segment: int in range(1, 13):
+					var t: float = float(segment) / 12.0
+					var point: Vector2 = from * (1.0 - t) * (1.0 - t) \
+						+ control * 2.0 * (1.0 - t) * t + to * t * t
+					if walked or segment % 2 == 1:
+						var tone: Color = Color(0.85, 0.87, 0.92) if walked else GlassStyle.GLASS
+						draw_line(previous, point, Color(tone.r, tone.g, tone.b,
+							fade * (0.72 if walked else 0.24)), 3.0 if walked else 2.0)
+					previous = point
 
 
 ## Band 4 (1.35) — near ash, overshooting the walk to sell the depth.
 func _draw_veil(w: float) -> void:
 	var span: float = maxf(w, 1.0) * 2.0
-	for m: Vector3 in _ash:
-		var x: float = fposmod(m.x - _cam_x * F_VEIL, span)
+	var glow: Texture2D = SkyField.disc()
+	for index: int in range(_ash.size()):
+		var m: Vector3 = _ash[index]
+		var x: float = fposmod(m.x, span)
 		if x > w:
 			continue
-		var a: float = 0.06 + 0.10 * (m.z / 36.0)
-		draw_circle(Vector2(x, m.y), 1.0 + m.z * 0.045, Color(0.78, 0.80, 0.86, a))
+		var radius: float = 2.0 + m.z * 0.08
+		var tint: Color = REGION_ACCENT if index % 3 != 0 else GlassStyle.EMBER
+		var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
+		draw_texture_rect(glow, Rect2(
+			Vector2(x, m.y) - Vector2.ONE * radius * 2.0,
+			Vector2.ONE * radius * 4.0), false, Color(tint, alpha))

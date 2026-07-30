@@ -21,6 +21,11 @@ var _screen: CombatScreen = null
 var _map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
 var _reward_screen: RewardScreen = null
+var _route_screen: Control = null
+var _run_hud: RunHud = null
+var _modal: Control = null
+var _audio_preferences: AudioPreferences
+var _music: MusicBus
 var _vigil: VigilState
 var _embark_aspect: int = 0
 var _embark_vow: int = 0
@@ -55,6 +60,9 @@ func _ready() -> void:
 	print("glassvow boot " + str(Engine.get_version_info()["string"]))
 	content = ContentDB.load_full()
 	_vigil = SaveService.load_vigil()
+	_audio_preferences = AudioPreferences.read_from_disk()
+	_music = MusicBus.new()
+	add_child(_music)
 	var fails: Array[String] = []
 	content.validate(fails)
 	for msg: String in fails:
@@ -88,6 +96,13 @@ func _ready() -> void:
 	var surfaces: PackedStringArray = PackedStringArray()
 	var studio: bool = false
 	var resume_run: bool = false
+	# --map: start a run and STOP on the world map, instead of walking on to a
+	# fight the way `--enter=` does. The map was the one production screen with
+	# no route to it — `--fight=` skips past it and `--enter=` uses it and leaves
+	# — so its composition could be reasoned about and never looked at. A screen
+	# that cannot be captured cannot be verified, and this lane's whole method is
+	# to measure rather than to argue.
+	var show_map: bool = false
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -139,6 +154,8 @@ func _ready() -> void:
 				push_warning("--vp wants WIDTHxHEIGHT, e.g. --vp=1280x720")
 		elif arg == "--resume":
 			resume_run = true
+		elif arg == "--map":
+			show_map = true
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	# `--shape=` means two different things to a screen and to the layout bench.
@@ -191,6 +208,8 @@ func _ready() -> void:
 		return
 	if resume_run:
 		_continue_run(SaveService.load_run(content))
+	elif show_map:
+		_new_run()
 	elif not fight.is_empty():
 		_new_run()
 		_start_fight(fight, fight_kind)
@@ -231,10 +250,45 @@ func _apply_shape() -> void:
 	var size: Vector2i = StageShape.stage_size(shape, px)
 	if shape == _shape and window.content_scale_size == size:
 		return
+	var repicked: bool = shape != _shape
 	_shape = shape
 	window.content_scale_size = size
 	print("stage %s %dx%d  window %dx%d  flex %+.1f%%" % [shape, size.x, size.y,
 		px.x, px.y, StageShape.flex_of(shape, px) * 100.0])
+	if repicked:
+		_reshape()
+
+
+## Tell the live screen its shape changed, not just its size.
+##
+## The two are different events and only one of them used to arrive. Growing
+## INSIDE a shape is the flex, and every number in the book is bound to an edge,
+## so a screen follows that by itself — `CombatScreen._layout()` re-places
+## against `size` at read time and needs no telling. Crossing an aspect boundary
+## re-picks the shape, which swaps the whole authored composition: different card
+## width, different formation, different chrome seats. Nothing re-resolved it,
+## so the window changed size and the composition stayed on the old shape's
+## numbers until the next screen was built.
+##
+## Routed by capability rather than by type. A screen that can re-seat itself
+## says so with a `set_shape` method; one that cannot is left alone, because a
+## half-applied shape looks like a bug rather than like a missing feature.
+##
+## `CombatScreen` is deliberately in the second group. Re-seating a fight means
+## re-scaling the actors, and `EnemyView` takes its body scale as a construction
+## argument (`enemy_view.gd:1675`) with no setter — following a re-pick would
+## mean rebuilding every actor, and with it the 3D stage and any fracture in
+## flight. A fight therefore finishes at the shape it started on; `_shape` is
+## already updated, so the next screen built gets the new one. Adding
+## `set_body_scale` to `EnemyView` is what unblocks it, and that file belongs to
+## the Enemy / hero lane.
+func _reshape() -> void:
+	for screen: Control in [
+		_screen, _map_screen, _choice_screen, _reward_screen,
+		_route_screen, _run_hud, _modal,
+	]:
+		if screen != null and screen.has_method(&"set_shape"):
+			screen.call(&"set_shape", _shape)
 
 
 ## The physical screen diagonal in inches, or 0 when it cannot be measured —
@@ -268,31 +322,94 @@ func _capture_and_quit(path: String) -> void:
 
 
 func _clear_route() -> void:
-	for screen: Control in [_screen, _map_screen, _choice_screen, _reward_screen]:
+	for screen: Control in [
+		_screen, _map_screen, _choice_screen, _reward_screen,
+		_route_screen, _run_hud, _modal,
+	]:
 		if screen != null:
 			screen.queue_free()
 	_screen = null
 	_map_screen = null
 	_choice_screen = null
 	_reward_screen = null
+	_route_screen = null
+	_run_hud = null
+	_modal = null
 
 
-func _show_choice(title: String, body: String, choices: Array[Dictionary], handler: Callable) -> void:
+func _show_route(screen: Control, with_hud: bool = false,
+		cue: StringName = &"") -> void:
 	_clear_route()
-	_choice_screen = ChoiceScreenType.new(title, body, choices)
+	_route_screen = screen
+	add_child(screen)
+	if with_hud:
+		_attach_run_hud()
+	if not cue.is_empty():
+		_music.play(cue)
+
+
+func _attach_run_hud() -> void:
+	_run_hud = RunHud.new(game.run, content, _shape)
+	_run_hud.deck_requested.connect(_show_run_deck)
+	_run_hud.menu_requested.connect(_show_run_menu)
+	_run_hud.potion_requested.connect(_show_potion_menu)
+	add_child(_run_hud)
+
+
+func _show_overlay(screen: Control) -> void:
+	if _modal != null:
+		_modal.queue_free()
+	_modal = screen
+	add_child(screen)
+
+
+func _close_overlay() -> void:
+	if _modal == null:
+		return
+	_modal.queue_free()
+	_modal = null
+
+
+func _show_choice(title: String, body: String, choices: Array[Dictionary], handler: Callable,
+		context: Dictionary = {}) -> void:
+	_clear_route()
+	# The shape rides in the context rather than in a fifth positional argument:
+	# `ChoiceScreen` already had a context bag for the title variant, and every
+	# other caller of it stays untouched.
+	var ctx: Dictionary = context.duplicate()
+	ctx["shape"] = String(_shape)
+	_choice_screen = ChoiceScreenType.new(title, body, choices, ctx)
 	_choice_screen.connect("chosen", handler)
 	add_child(_choice_screen)
 
 
 func _show_title() -> void:
 	var saved: RunState = SaveService.load_run(content)
-	_show_choice("GLASSVOW", "Carry the lantern through three nights.", [
-		{"id": "continue", "label": "Continue", "disabled": saved == null},
-		{"id": "begin", "label": "Begin"},
-		{"id": "vigil", "label": "Vigil", "quiet": true},
-		{"id": "help", "label": "Help", "quiet": true},
+	var choices: Array[Dictionary] = []
+	if saved != null:
+		choices.append({"id": "continue", "label": "Continue Climb"})
+	choices.append_array([
+		{"id": "begin", "label": "Begin the Climb"},
+		{"id": "vigil", "label": "The Vigil", "quiet": true},
+		{"id": "help", "label": "How to Play", "quiet": true},
 		{"id": "settings", "label": "Settings", "quiet": true},
-	], _on_title_choice.bind(saved))
+	])
+	var title_stats: String = "%d climbs · %d dawns · %d slain" % [
+		int(float(str(_vigil.deeds.get("runs", 0)))),
+		int(float(str(_vigil.deeds.get("wins", 0)))),
+		int(float(str(_vigil.deeds.get("slain", 0)))),
+	]
+	if not _vigil.unlocks.is_empty():
+		title_stats += " · %d secrets unearthed" % _vigil.unlocks.size()
+	_show_choice("GLASSVOW",
+		"A Roguelite Deckbuilder · The Vigil Remembers", choices,
+		_on_title_choice.bind(saved), {
+		"variant": "title",
+		"stats": title_stats,
+		"version": "0.5.0+6e06911",
+		"rose_shards": _vigil.shards,
+	})
+	_music.play(&"title")
 
 
 func _on_title_choice(id: String, saved: RunState) -> void:
@@ -300,44 +417,30 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 		"continue": _continue_run(saved)
 		"begin": _show_embark()
 		"vigil": _show_vigil()
+		"rose": _show_vigil(true)
 		"help": _show_help()
 		"settings": _show_settings()
 
 
 func _show_embark() -> void:
-	var choices: Array[Dictionary] = [
-		{"id": "0", "label": str(content.aspects[0].get("name", "The Duskblade"))},
-	]
-	if _vigil.unlocks.has("aspect2") and content.aspects.size() > 1:
-		choices.append({"id": "1", "label": str(content.aspects[1].get("name", "The Ashwarden"))})
-	choices.append({"id": "back", "label": "Back", "quiet": true})
-	_show_choice("EMBARK", "Choose the glass that will carry the light.", choices, _on_aspect_choice)
+	var saved: bool = SaveService.load_run(content) != null
+	var screen: EmbarkScreen = EmbarkScreen.new(
+		content.aspects,
+		content.vows,
+		_vigil.unlocks.has("aspect2"),
+		_vigil.vow_unlocked,
+		saved,
+		_embark_aspect,
+		_embark_vow,
+		_shape)
+	screen.begin_requested.connect(_on_embark_begin)
+	screen.back_requested.connect(_show_title)
+	_show_route(screen, false, &"embark")
 
 
-func _on_aspect_choice(id: String) -> void:
-	if id == "back":
-		_show_title()
-		return
-	_embark_aspect = int(id)
-	_show_vow_choice()
-
-
-func _show_vow_choice() -> void:
-	var choices: Array[Dictionary] = [{"id": "0", "label": "No Vow"}]
-	for level: int in range(1, mini(_vigil.vow_unlocked, content.vows.size()) + 1):
-		choices.append({
-			"id": str(level),
-			"label": "Vow %d · %s" % [level, str(content.vows[level - 1].get("name", ""))],
-		})
-	choices.append({"id": "back", "label": "Back", "quiet": true})
-	_show_choice("THE VOW", "Each vow keeps every earlier promise.", choices, _on_vow_choice)
-
-
-func _on_vow_choice(id: String) -> void:
-	if id == "back":
-		_show_embark()
-		return
-	_embark_vow = int(id)
+func _on_embark_begin(aspect: int, vow: int) -> void:
+	_embark_aspect = aspect
+	_embark_vow = vow
 	if SaveService.load_run(content) == null:
 		_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 	else:
@@ -367,27 +470,51 @@ func _on_begin_anew(id: String) -> void:
 	_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 
 
-func _show_vigil() -> void:
-	var deeds: Dictionary = _vigil.deeds
-	var body: String = "Runs %d   ·   Wins %d   ·   Shards %d / 6\n\n%s" % [
-		_vigil.runs_played, int(float(str(deeds.get("wins", 0)))), _vigil.shards.size(),
-		"The Rose Window is dark." if _vigil.shards.is_empty()
-			else "Lit panes: %s" % ", ".join(_vigil.shards),
-	]
-	_show_choice("THE VIGIL", body, [{"id": "back", "label": "Back"}],
-		func(_id: String) -> void: _show_title())
+func _show_vigil(open_rose: bool = false) -> void:
+	var screen: VigilScreen = VigilScreen.new(_vigil, content, _shape, open_rose)
+	screen.back_requested.connect(_show_title)
+	screen.cue_requested.connect(func(cue: StringName) -> void: _music.play(cue))
+	_show_route(screen, false, &"vigil")
 
 
 func _show_help() -> void:
-	_show_choice("HOW TO CARRY THE LIGHT",
-		"Choose a reachable waystone. In combat, play cards, kindle one card each turn, "
-		+ "and spend Embers on your Lantern Art. Break every enemy pane before your own light fails.",
-		[{"id": "back", "label": "Back"}], func(_id: String) -> void: _show_title())
+	var screen: HelpScreen = HelpScreen.new(_shape)
+	screen.closed.connect(_close_overlay)
+	_show_overlay(screen)
 
 
 func _show_settings() -> void:
-	_show_choice("SETTINGS", "Audio follows the system output. Window size and input may be changed at any time.",
-		[{"id": "back", "label": "Back"}], func(_id: String) -> void: _show_title())
+	var screen: SettingsPanel = SettingsPanel.new(_audio_preferences, _run_over)
+	screen.closed.connect(_close_overlay)
+	screen.reset_requested.connect(_confirm_reset)
+	_show_overlay(screen)
+
+
+func _confirm_reset() -> void:
+	_close_overlay()
+	var screen: Control = ChoiceScreenType.new(
+		"RESET SAVE?",
+		"This erases your current climb and the entire Vigil — deeds, unlocks, "
+		+ "vows, monuments, and whispers.\n\nThis cannot be undone.",
+		[
+			{"id": "yes", "label": "Erase Everything"},
+			{"id": "no", "label": "Cancel", "quiet": true},
+		],
+		{"shape": String(_shape)})
+	screen.connect("chosen", _on_reset_choice)
+	_show_overlay(screen)
+
+
+func _on_reset_choice(id: String) -> void:
+	if id != "yes":
+		_close_overlay()
+		return
+	SaveService.clear()
+	SaveService.clear_vigil()
+	game = null
+	_map = null
+	_vigil = SaveService.load_vigil()
+	_show_title()
 
 
 func _show_save_error(message: String) -> void:
@@ -417,6 +544,7 @@ func _new_run(profile: Dictionary = {}) -> void:
 		"lamplighter": _vigil.unlocks.has("lamplighter"),
 	}
 	game = GlassvowGame.new(content, RunState.new_run(content, run_seed, run_id, merged))
+	game.run.stats["start"] = Time.get_unix_time_from_system()
 	game.quests.prepare_run(game.run)
 	if _vigil.shards.size() >= 6:
 		_map = WorldMap.act4_entrance()
@@ -473,33 +601,157 @@ func _route_run() -> void:
 
 func _show_map() -> void:
 	_clear_route()
-	_map_screen = WorldMapScreen.new(_map, content)
+	_map_screen = WorldMapScreen.new(_map, content, _shape)
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.menu_requested.connect(_show_run_menu)
 	add_child(_map_screen)
 	_map_screen.refresh(game.run)
+	_attach_run_hud()
+	_music.play(&"map")
 
 
 func _show_run_menu() -> void:
-	_show_choice("PILGRIMAGE PAUSED", "The current checkpoint is safe.", [
-		{"id": "continue", "label": "Continue"},
-		{"id": "title", "label": "Save and Return to Title", "quiet": true},
-		{"id": "abandon", "label": "Abandon Run", "quiet": true},
-	], _on_run_menu_choice)
+	var menu: RunMenuPanel = RunMenuPanel.new(_shape, _run_over)
+	menu.closed.connect(_close_overlay)
+	menu.help_requested.connect(func() -> void:
+		_close_overlay()
+		_show_help()
+	)
+	menu.settings_requested.connect(func() -> void:
+		_close_overlay()
+		_show_settings()
+	)
+	menu.abandon_requested.connect(_confirm_abandon)
+	_show_overlay(menu)
 
 
-func _on_run_menu_choice(id: String) -> void:
-	match id:
-		"continue":
-			_show_map()
-		"title":
-			_show_title()
-		"abandon":
-			game.run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
-			if SaveService.store(game.run):
-				_show_run_end()
-			else:
-				_show_save_error("The abandonment could not be held.")
+func _confirm_abandon() -> void:
+	_close_overlay()
+	var screen: Control = ChoiceScreenType.new(
+		"ABANDON RUN?",
+		"This pilgrimage will end. The Vigil will keep what was earned.",
+		[
+			{"id": "yes", "label": "Abandon Run"},
+			{"id": "no", "label": "Keep Climbing", "quiet": true},
+		],
+		{"shape": String(_shape)})
+	screen.connect("chosen", _on_abandon_choice)
+	_show_overlay(screen)
+
+
+func _on_abandon_choice(id: String) -> void:
+	if id != "yes":
+		_close_overlay()
+		return
+	game.run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
+	if SaveService.store(game.run):
+		_show_run_end()
+	else:
+		_show_save_error("The abandonment could not be held.")
+
+
+func _show_run_deck() -> void:
+	var choices: Array[Dictionary] = []
+	for card: CardInst in game.run.player.deck:
+		choices.append(_card_choice(card, "card:%d" % card.uid, true))
+	choices.append({"id": "close", "label": "Close", "quiet": true})
+	var deck: Control = ChoiceScreenType.new(
+		"DECK", "%d panes carried" % game.run.player.deck.size(),
+		choices, {"shape": String(_shape)})
+	deck.connect("chosen", func(_id: String) -> void: _close_overlay())
+	_show_overlay(deck)
+
+
+func _card_choice(card: CardInst, id: String, disabled: bool = false) -> Dictionary:
+	return {
+		"id": id,
+		"card": card,
+		"definition": game.rules.card_data(card),
+		"disabled": disabled,
+	}
+
+
+func _show_potion_menu(slot: int) -> void:
+	if slot < 0 or slot >= game.run.player.potions.size():
+		return
+	var id: String = game.run.player.potions[slot]
+	if id.is_empty():
+		return
+	var definition: Dictionary = content.potions.get(id, {})
+	var menu: Control = ChoiceScreenType.new(
+		str(definition.get("name", id)),
+		str(definition.get("text", "")),
+		[
+			{
+				"id": "use",
+				"label": "Use",
+				"disabled": definition.get("combatOnly", false),
+			},
+			{"id": "toss", "label": "Toss it", "quiet": true},
+			{"id": "close", "label": "Close", "quiet": true},
+		],
+		{"shape": String(_shape)})
+	menu.connect("chosen", _on_potion_menu_choice.bind(slot))
+	_show_overlay(menu)
+
+
+func _on_potion_menu_choice(action: String, slot: int) -> void:
+	if action == "close":
+		_close_overlay()
+		return
+	if action == "toss":
+		game.run.player.potions[slot] = ""
+	elif not game.rules.use_potion(game.run, null, slot):
+		return
+	if not SaveService.store(game.run):
+		_show_save_error("The phial choice could not be held.")
+		return
+	_close_overlay()
+	if _run_hud != null:
+		_run_hud.refresh(game.run)
+
+
+func _show_combat_potion_menu(slot: int) -> void:
+	if slot < 0 or slot >= game.run.player.potions.size():
+		return
+	var id: String = game.run.player.potions[slot]
+	if id.is_empty():
+		return
+	var definition: Dictionary = content.potions.get(id, {})
+	var choices: Array[Dictionary] = []
+	if definition.get("needsTarget", false):
+		for enemy: EnemyCombatant in game.cb.enemies:
+			if enemy.hp > 0:
+				choices.append({
+					"id": "use:%d" % enemy.idx,
+					"label": "Use on %s" % enemy.name,
+				})
+	else:
+		choices.append({"id": "use", "label": "Use"})
+	choices.append({"id": "toss", "label": "Toss it", "quiet": true})
+	choices.append({"id": "close", "label": "Close", "quiet": true})
+	var menu: Control = ChoiceScreenType.new(
+		str(definition.get("name", id)),
+		str(definition.get("text", "")),
+		choices,
+		{"shape": String(_shape)})
+	menu.connect("chosen", _on_combat_potion_choice.bind(slot))
+	_show_overlay(menu)
+
+
+func _on_combat_potion_choice(action: String, slot: int) -> void:
+	if action == "close":
+		_close_overlay()
+		return
+	if action == "toss":
+		game.run.player.potions[slot] = ""
+		_screen.refresh_chrome()
+		_close_overlay()
+		return
+	var target: Variant = int(action.trim_prefix("use:")) \
+		if action.begins_with("use:") else null
+	if _screen.request_potion(slot, target):
+		_close_overlay()
 
 
 func _on_node_chosen(i: int) -> void:
@@ -547,10 +799,19 @@ func _finish_node() -> void:
 
 
 func _show_rest() -> void:
-	_show_choice("A QUIET HEARTH", "The fire offers one service before it fades.", [
-		{"id": "heal", "label": "Mend %d%%" % int(game.rewards.rest_heal_fraction(game.run) * 100.0)},
-		{"id": "upgrade", "label": "Temper a card"},
-	], _on_rest_choice)
+	var heal_amount: int = int(roundf(float(game.run.player.max_hp)
+		* game.rewards.rest_heal_fraction(game.run)))
+	var can_upgrade: bool = game.run.player.deck.any(func(card: CardInst) -> bool:
+		return not card.up and content.cards.get(String(card.id), {}).has("up"))
+	var screen: RestScreen = RestScreen.new(
+		game.run.player.hp,
+		game.run.player.max_hp,
+		heal_amount,
+		can_upgrade,
+		_shape)
+	screen.action_requested.connect(
+		func(action: StringName) -> void: _on_rest_choice(String(action)))
+	_show_route(screen, true, &"safeNodes")
 
 
 func _on_rest_choice(id: String) -> void:
@@ -564,10 +825,7 @@ func _on_rest_choice(id: String) -> void:
 	for card: CardInst in game.run.player.deck:
 		var definition: Dictionary = content.cards.get(String(card.id), {})
 		if not card.up and definition.has("up"):
-			choices.append({
-				"id": str(card.uid),
-				"label": str(definition.get("name", String(card.id))),
-			})
+			choices.append(_card_choice(card, str(card.uid)))
 	if choices.is_empty():
 		_finish_node()
 		return
@@ -591,19 +849,19 @@ func _show_event() -> void:
 		if not SaveService.store(game.run):
 			_show_save_error("The event could not be held.")
 			return
-	var event: Dictionary = content.events[event_id]
-	var choices: Array[Dictionary] = []
+	var event: Dictionary = content.events[event_id].duplicate(true)
 	var rows: Array = event.get("choices", [])
-	for i: int in range(rows.size()):
-		var row: Dictionary = rows[i]
-		choices.append({
-			"id": str(i),
-			"label": str(row.get("label", "Leave")),
-			"hint": str(row.get("sub", "")),
-			"disabled": game.run.player.gold < int(float(str(row.get("needGold", 0)))),
-		})
-	_show_choice(str(event.get("name", "A Strange Place")), str(event.get("text", "")),
-		choices, _on_event_choice.bind(event_id))
+	for row_v: Variant in rows:
+		if typeof(row_v) == TYPE_DICTIONARY:
+			var row: Dictionary = row_v
+			row["disabled"] = game.run.player.gold < int(float(str(
+				row.get("needGold", 0))))
+	var screen: EventScreen = EventScreen.new(
+		event_id, event, "", true, false, _shape)
+	screen.choice_selected.connect(func(ordinal: int) -> void:
+		_on_event_choice(str(ordinal), event_id)
+	)
+	_show_route(screen, true, &"safeNodes")
 
 
 func _on_event_choice(choice_text: String, event_id: String) -> void:
@@ -628,12 +886,13 @@ func _show_event_pick(pending: Dictionary) -> void:
 	if kind == "card":
 		for id_v: Variant in pending.get("cards", []):
 			var id: String = str(id_v)
-			choices.append({"id": id, "label": str(content.cards[id].get("name", id))})
+			choices.append(_card_choice(CardInst.new(
+				-choices.size() - 1, StringName(id), false), id))
 	else:
 		for card: CardInst in game.run.player.deck:
 			var definition: Dictionary = content.cards.get(String(card.id), {})
 			if kind != "upgrade" or (not card.up and definition.has("up")):
-				choices.append({"id": str(card.uid), "label": str(definition.get("name", String(card.id)))})
+				choices.append(_card_choice(card, str(card.uid)))
 	if choices.is_empty():
 		_finish_node()
 		return
@@ -671,12 +930,9 @@ func _show_treasure() -> void:
 		if not SaveService.store(game.run):
 			_show_save_error("The treasure could not be held.")
 			return
-	var message: String = "The empty coffer yields 60 gold."
-	if claim.get("relic") != null:
-		var id: String = str(claim["relic"])
-		message = "You recover %s." % str(content.relics[id].get("name", id))
-	_show_choice("A LEADED COFFER", message, [{"id": "continue", "label": "Continue"}],
-		func(_id: String) -> void: _finish_node())
+	var screen: TreasureScreen = TreasureScreen.new(claim, content, _shape)
+	screen.continue_requested.connect(_finish_node)
+	_show_route(screen, true, &"safeNodes")
 
 
 func _show_act4_entrance() -> void:
@@ -704,40 +960,16 @@ func _show_shop() -> void:
 		if not SaveService.store(game.run):
 			_show_save_error("The merchant's stock could not be held.")
 			return
-	var choices: Array[Dictionary] = []
-	for category: String in ["cards", "relics", "potions"]:
-		var rows: Array = stock[category]
-		for i: int in range(rows.size()):
-			var row: Dictionary = rows[i]
-			if row.get("sold", false):
-				continue
-			var id: String = str(row["id"])
-			var registry: Dictionary = content.cards if category == "cards" \
-				else (content.relics if category == "relics" else content.potions)
-			choices.append({
-				"id": "%s:%d" % [category, i],
-				"label": "%s · %d gold" % [
-					str(registry[id].get("name", id)), int(float(str(row["price"])))],
-				"disabled": game.run.player.gold < int(float(str(row["price"]))) \
-					or (category == "potions" and not game.run.player.potions.has("")),
-			})
 	var quest_item: Dictionary = game.quests.usurper_offer(game.run)
-	if not quest_item.is_empty():
-		choices.append({
-			"id": "quest:flamelessLantern",
-			"label": "%s · %d gold" % [
-				str(quest_item["name"]), int(float(str(quest_item["price"])))],
-			"disabled": game.run.player.gold < int(float(str(quest_item["price"]))),
-		})
-	if not stock.get("removed", false):
-		choices.append({
-			"id": "remove",
-			"label": "Remove a card · %d gold" % int(float(str(stock["removeCost"]))),
-			"disabled": game.run.player.gold < int(float(str(stock["removeCost"]))),
-		})
-	choices.append({"id": "leave", "label": "Leave", "quiet": true})
-	_show_choice("THE GLASS MERCHANT", "Gold %d" % game.run.player.gold, choices,
-		_on_shop_choice)
+	var screen: ShopScreen = ShopScreen.new(
+		stock,
+		game.run.player.gold,
+		content,
+		quest_item,
+		game.run.player.potions.has(""),
+		_shape)
+	screen.action_selected.connect(_on_shop_choice)
+	_show_route(screen, true, &"safeNodes")
 
 
 func _on_shop_choice(id: String) -> void:
@@ -754,8 +986,7 @@ func _on_shop_choice(id: String) -> void:
 	if id == "remove":
 		var choices: Array[Dictionary] = []
 		for card: CardInst in game.run.player.deck:
-			choices.append({"id": str(card.uid), "label": str(
-				content.cards[String(card.id)].get("name", String(card.id)))})
+			choices.append(_card_choice(card, str(card.uid)))
 		_show_choice("REMOVE A CARD", "The merchant keeps the broken pane.", choices,
 			_on_shop_remove)
 		return
@@ -828,11 +1059,14 @@ func _resume_pending_combat() -> void:
 		_forced_act if _forced_act >= 0 else game.run.act)
 	_screen.combat_over.connect(_on_combat_over)
 	_screen.result_continue.connect(_on_result_continue)
+	_screen.menu_requested.connect(_show_run_menu)
+	_screen.potion_requested.connect(_show_combat_potion_menu)
 	add_child(_screen)
 	var route_kind: String = str(game.run.pending_combat)
 	var combat_kind: String = "normal" if route_kind == "monster" else route_kind
 	_screen.start_encounter(enemies, combat_kind,
 		"%s  ·  act %d" % [route_kind.capitalize(), game.run.act + 1])
+	_music.play(_combat_music(route_kind))
 
 
 ## The battlefield bench: a REAL fight, not a mock — the same GlassvowGame, the
@@ -863,8 +1097,27 @@ func _start_fight(ids: PackedStringArray, kind: String) -> void:
 	_screen = CombatScreen.new(game, _shape, maxi(0, _forced_act))
 	_screen.combat_over.connect(_on_combat_over)
 	_screen.result_continue.connect(_on_result_continue)
+	_screen.menu_requested.connect(_show_run_menu)
+	_screen.potion_requested.connect(_show_combat_potion_menu)
 	add_child(_screen)
 	_screen.start_encounter(known, kind, "Bench  ·  %s" % kind.capitalize())
+	_music.play(_combat_music(kind))
+
+
+func _combat_music(kind: String) -> StringName:
+	var quest: String = str(game.run.pending_quest_id) \
+		if game.run.pending_quest_id != null else ""
+	match quest:
+		"paleOnes": return &"paleOnes"
+		"ownShade": return &"shadeDuel"
+		"usurper": return &"usurper"
+		"eighthOmen": return &"eighthOmen"
+		"unreadablePage": return &"unreadablePage"
+	if kind == "elite":
+		return &"elite"
+	var act: int = clampi(game.run.act + 1, 1, 3)
+	return StringName("act%dBoss" % act if kind == "boss" \
+		else "act%dCombat" % act)
 
 
 func _on_combat_over(result: String) -> void:
@@ -880,7 +1133,7 @@ func _on_combat_over(result: String) -> void:
 		if not SaveService.store(game.run):
 			_show_save_error("The fall could not be held.")
 			return
-		_screen.show_result("Defeat", "The glass goes dark.", "Continue")
+		_route_run()
 		return
 	var node: MapNode = _map.current()
 	var quest_id: String = str(game.run.pending_quest_id) \
@@ -899,15 +1152,14 @@ func _on_combat_over(result: String) -> void:
 		if not SaveService.store(game.run):
 			_show_save_error("The shade victory could not be held.")
 			return
-		_screen.show_result("The Shade Breaks",
-			"The standing glass releases what it carried.", "Continue")
+		_route_run()
 		return
 	if node.type == "boss" and game.run.act == 2:
 		game.run.pending_run_end = {"outcome": "win"}
 		if not SaveService.store(game.run):
 			_show_save_error("The final victory could not be held.")
 			return
-		_screen.show_result("The Third Dawn", "The Sovereign's glass is broken.", "Continue")
+		_route_run()
 		return
 	var rewards: Dictionary = game.gen_combat_rewards(node.combat_kind(), game.cb.affix)
 	var reward_cards: Array = rewards["cards"]
@@ -919,7 +1171,7 @@ func _on_combat_over(result: String) -> void:
 	if not SaveService.store(game.run):
 		_show_save_error("The victory rewards could not be held.")
 		return
-	_screen.show_result("Victory", "The spoils wait beyond the broken glass.", "Continue")
+	_route_run()
 
 
 func _grant_bequest(value: Variant) -> void:
@@ -962,10 +1214,13 @@ func _show_pending_reward() -> void:
 	var taken: Dictionary = pending["taken"]
 	_clear_route()
 	_reward_screen = RewardScreen.new(rewards, content,
-		_map.current().combat_kind() if _map.current() != null else "normal")
+		_map.current().combat_kind() if _map.current() != null else "normal",
+		false, _shape)
 	_reward_screen.claimed.connect(_on_reward_claimed)
 	_reward_screen.finished.connect(_on_reward_finished)
 	add_child(_reward_screen)
+	_attach_run_hud()
+	_music.play(&"victory")
 	for key: String in ["gold", "card", "potion", "relic"]:
 		if taken.get(key, false):
 			_reward_screen.mark_taken(StringName(key))
@@ -1058,7 +1313,15 @@ func _show_boss_relic() -> void:
 	var choices: Array[Dictionary] = []
 	for id: String in offer:
 		var relic: Dictionary = content.relics.get(id, {})
-		choices.append({"id": id, "label": str(relic.get("name", id))})
+		choices.append({
+			"id": id,
+			"label": "%s\n%s" % [
+				str(relic.get("name", id)),
+				str(relic.get("text", "")),
+			],
+			"hint": str(relic.get("text", "")),
+			"icon": "res://assets/art/relics/%s.png" % id,
+		})
 	choices.append({"id": "", "label": "Take no crown", "quiet": true})
 	_show_choice("A CROWN OF BROKEN GLASS", "Choose one relic before the next night.",
 		choices, _on_boss_relic_chosen)
@@ -1084,47 +1347,85 @@ func _on_boss_relic_chosen(id: String) -> void:
 func _show_run_end() -> void:
 	var pending: Dictionary = game.run.pending_run_end
 	var outcome: String = str(pending.get("outcome", "abandon"))
-	if outcome == "death" and not pending.get("bequestAnswered", false):
-		var choices: Array[Dictionary] = []
-		var best_relic: String = ""
-		var best_relic_rank: int = 0
-		for relic_id: String in game.run.player.relics:
-			var relic: Dictionary = content.relics.get(relic_id, {})
-			var rank: int = int(float(str(
-				RARITY_RANK.get(str(relic.get("rarity", "starter")), 0))))
-			if rank > best_relic_rank:
-				best_relic = relic_id
-				best_relic_rank = rank
-		if not best_relic.is_empty():
-			choices.append({"id": "relic:" + best_relic,
-				"label": "Leave %s" % str(content.relics[best_relic].get("name", best_relic))})
-		var best_card: CardInst = null
-		var best_card_rank: int = 0
-		for card: CardInst in game.run.player.deck:
-			var definition: Dictionary = content.cards.get(String(card.id), {})
-			var rank: int = int(float(str(
-				RARITY_RANK.get(str(definition.get("rarity", "starter")), 0))))
-			if rank > best_card_rank or (rank == best_card_rank and rank > 0 \
-					and card.up and (best_card == null or not best_card.up)):
-				best_card = card
-				best_card_rank = rank
-		if best_card != null:
-			var definition: Dictionary = content.cards[String(best_card.id)]
-			choices.append({"id": "card:%d" % best_card.uid,
-				"label": "Leave %s%s" % [
-					str(definition.get("name", String(best_card.id))), "+" if best_card.up else ""]})
-		if game.run.player.gold >= 25:
-			var amount: int = mini(game.run.player.gold, 75)
-			choices.append({"id": "gold:%d" % amount,
-				"label": "Leave %d gold in the stone" % amount})
-		choices.append({"id": "none", "label": "Leave nothing", "quiet": true})
-		_show_choice("THE LAST LIGHT", "Choose what the next pilgrim may find.",
-			choices, _on_bequest_chosen)
-		return
-	var title: String = "DAWN" if outcome == "win" else (
-		"THE LANTERN FALLS" if outcome == "death" else "THE VOW IS SET ASIDE")
-	_show_choice(title, "The Vigil is waiting to record this pilgrimage.",
-		[{"id": "commit", "label": "Face the Vigil"}], _on_terminal_commit)
+	var stats: Dictionary = {
+		"floors": game.run.floors_climbed,
+		"slain": int(float(str(game.run.stats.get("slain", 0)))),
+		"elites_bosses": int(float(str(game.run.stats.get("elites", 0)))) \
+			+ int(float(str(game.run.stats.get("bosses", 0)))),
+		"deck_size": game.run.player.deck.size(),
+		"damage_dealt": int(float(str(game.run.stats.get("dmgDealt", 0)))),
+		"damage_taken": int(float(str(game.run.stats.get("dmgTaken", 0)))),
+		"cards_played": int(float(str(game.run.stats.get("cardsPlayed", 0)))),
+		"run_time": _run_time_text(),
+	}
+	var bequest_answered: bool = pending.get("bequestAnswered", false)
+	var choices: Array[Dictionary] = _bequest_choices() \
+		if outcome == "death" and not bequest_answered else []
+	var screen: RunEndScreen = RunEndScreen.new(
+		outcome,
+		stats,
+		choices,
+		bequest_answered,
+		game.run.floors_climbed,
+		_shape)
+	screen.bequest_requested.connect(_on_bequest_chosen)
+	screen.commit_requested.connect(
+		func() -> void: _on_terminal_commit("commit"))
+	screen.deck_requested.connect(_show_run_deck)
+	_show_route(screen, false, &"victory" if outcome == "win" else &"defeat")
+
+
+func _run_time_text() -> String:
+	var started: float = float(str(game.run.stats.get("start", 0)))
+	if started <= 0.0:
+		var stamp: String = game.run.run_id.get_slice("-", 2)
+		if stamp.is_valid_hex_number():
+			started = float(stamp.hex_to_int()) / 1000.0
+	if started <= 0.0:
+		return "—"
+	var minutes: int = maxi(1, roundi(
+		(Time.get_unix_time_from_system() - started) / 60.0))
+	return "%dm" % minutes
+
+
+func _bequest_choices() -> Array[Dictionary]:
+	var choices: Array[Dictionary] = []
+	var best_relic: String = ""
+	var best_relic_rank: int = 0
+	for relic_id: String in game.run.player.relics:
+		var relic: Dictionary = content.relics.get(relic_id, {})
+		var rank: int = int(float(str(
+			RARITY_RANK.get(str(relic.get("rarity", "starter")), 0))))
+		if rank > best_relic_rank:
+			best_relic = relic_id
+			best_relic_rank = rank
+	if not best_relic.is_empty():
+		choices.append({"id": "relic:" + best_relic,
+			"label": "Leave %s" % str(content.relics[best_relic].get(
+				"name", best_relic))})
+	var best_card: CardInst = null
+	var best_card_rank: int = 0
+	for card: CardInst in game.run.player.deck:
+		var definition: Dictionary = content.cards.get(String(card.id), {})
+		var rank: int = int(float(str(
+			RARITY_RANK.get(str(definition.get("rarity", "starter")), 0))))
+		if rank > best_card_rank or (rank == best_card_rank and rank > 0 \
+				and card.up and (best_card == null or not best_card.up)):
+			best_card = card
+			best_card_rank = rank
+	if best_card != null:
+		var definition: Dictionary = content.cards[String(best_card.id)]
+		choices.append({"id": "card:%d" % best_card.uid,
+			"label": "Leave %s%s" % [
+				str(definition.get("name", String(best_card.id))),
+				"+" if best_card.up else "",
+			]})
+	if game.run.player.gold >= 25:
+		var amount: int = mini(game.run.player.gold, 75)
+		choices.append({"id": "gold:%d" % amount,
+			"label": "Leave %d gold in the stone" % amount})
+	choices.append({"id": "none", "label": "Leave nothing", "quiet": true})
+	return choices
 
 
 func _on_bequest_chosen(id: String) -> void:
@@ -1160,19 +1461,75 @@ func _on_bequest_chosen(id: String) -> void:
 func _on_terminal_commit(_id: String) -> void:
 	var pending: Dictionary = game.run.pending_run_end
 	var outcome: String = str(pending["outcome"])
+	var before_unlocks: Array = _vigil.unlocks.duplicate()
+	var before_quests: Dictionary = _vigil.quests.duplicate(true)
+	var before_whispers: int = _vigil.whispers
 	if not _vigil.commit_run(game.run, outcome, content) or not SaveService.store_vigil(_vigil):
 		_show_save_error("The Vigil could not record this pilgrimage.")
 		return
-	var events: Array = [{
-		"title": "The Vigil Remembers",
-		"body": "%s · %d shards lit" % [outcome.capitalize(), _vigil.shards.size()],
-	}]
+	if outcome != "win":
+		var run_id: String = game.run.run_id
+		if SaveService.clear_run(run_id):
+			_vigil = SaveService.load_vigil()
+			game = null
+			_show_title()
+		else:
+			_show_save_error("The completed run could not be closed.")
+		return
+
+	var events: Array = []
+	if _vigil.whispers > before_whispers:
+		var whisper_index: int = mini(_vigil.whispers, VigilScreen.WHISPERS.size()) - 1
+		events.append({
+			"kind": "whisper",
+			"title": "A Whisper at Dawn",
+			"body": VigilScreen.WHISPERS[maxi(0, whisper_index)],
+		})
+	for id: String in content.quest_ids:
+		var before: Dictionary = before_quests.get(id, {})
+		var after: Dictionary = _vigil.quests.get(id, {})
+		var quest: Dictionary = content.quests.get(id, {})
+		var name: String = str(quest.get("name", id))
+		var before_state: String = str(before.get("state", "dormant"))
+		var after_state: String = str(after.get("state", "dormant"))
+		var before_progress: int = int(float(str(before.get("progress", 0))))
+		var after_progress: int = int(float(str(after.get("progress", 0))))
+		if after_state != before_state and after_state in ["armed", "revealed"]:
+			events.append({
+				"kind": "quest",
+				"title": "A Journey Revealed",
+				"body": name,
+			})
+		if after_progress > before_progress and after_state != "complete":
+			events.append({
+				"kind": "progress",
+				"title": "Emberglass Remembers",
+				"body": "%s · %d/%d" % [
+					name, after_progress,
+					int(float(str(quest.get("target", after_progress)))),
+				],
+			})
 	var receipt: Dictionary = _vigil.receipts["runEnd"]
 	for id_v: Variant in receipt.get("completed", []):
 		var id: String = str(id_v)
 		events.append({
-			"title": "Emberglass Lit",
+			"kind": "shard",
+			"title": "Emberglass Shard Lit",
 			"body": str(content.quests[id].get("name", id)),
+		})
+	for unlock_v: Variant in _vigil.unlocks:
+		var unlock: String = str(unlock_v)
+		if not before_unlocks.has(unlock):
+			events.append({
+				"kind": "unlock",
+				"title": "The Vigil Opens a Way",
+				"body": _unlock_dawn_copy(unlock),
+			})
+	if events.is_empty():
+		events.append({
+			"kind": "memory",
+			"title": "The Vigil Remembers",
+			"body": "Victory · %d shards lit" % _vigil.shards.size(),
 		})
 	game.run.pending_run_end = null
 	game.run.pending_dawn = {"events": events, "cursor": 0}
@@ -1180,6 +1537,18 @@ func _on_terminal_commit(_id: String) -> void:
 		_show_dawn()
 	else:
 		_show_save_error("Dawn could not be held.")
+
+
+func _unlock_dawn_copy(id: String) -> String:
+	match id:
+		"lamplighter": return "The Hollow Lamplighter walks the Spire."
+		"phials": return "Phials may now be found on the climb."
+		"omens": return "The nights now rise beneath Omens."
+		"poolWave2", "poolWave3", "poolFull":
+			return "New cards and relics enter the climb."
+		"emberglass": return "The Emberglass Rose Window opens."
+		"act4": return "A sealed door opens above the crown."
+		_: return id.capitalize()
 
 
 func _show_dawn() -> void:
@@ -1195,9 +1564,10 @@ func _show_dawn() -> void:
 		else:
 			_show_save_error("The completed run could not be closed.")
 		return
-	var event: Dictionary = events[cursor]
-	_show_choice(str(event.get("title", "Dawn")), str(event.get("body", "")),
-		[{"id": "continue", "label": "Continue"}], _on_dawn_continue)
+	var screen: DawnScreen = DawnScreen.new(events, cursor, _shape)
+	screen.continue_requested.connect(
+		func() -> void: _on_dawn_continue("continue"))
+	_show_route(screen, false, &"victory")
 
 
 func _on_dawn_continue(_id: String) -> void:
@@ -1262,23 +1632,20 @@ func _show_hollow() -> void:
 	var meetings: Array = content.quests["hollowLamplighter"].get("meetings", [])
 	var step: int = clampi(int(float(str(pending.get("meeting", 0)))), 0, meetings.size() - 1)
 	var meeting: Dictionary = meetings[step]
-	var body: String = str(pending.get("answer", "")) if pending.get("paid", false) \
-		else str(meeting.get("ask", ""))
-	var choices: Array[Dictionary] = []
-	if pending.get("paid", false):
-		choices.append({"id": "continue", "label": "Continue"})
-	else:
-		choices.append({"id": "pay", "label": "Pay the price"})
-		choices.append({"id": "leave", "label": "Return another night", "quiet": true})
-	_show_choice("THE HOLLOW LAMPLIGHTER", body, choices, _on_hollow_choice)
+	var screen: HollowScreen = HollowScreen.new(
+		pending, meeting, step + 1, meetings.size(), _shape)
+	screen.action_requested.connect(
+		func(action: StringName) -> void: _on_hollow_choice(String(action)))
+	_show_route(screen, true, &"hollowLamplighter")
 
 
 func _on_hollow_choice(id: String) -> void:
 	if id == "pay":
 		var result: Dictionary = game.quests.pay_hollow_price(game.run)
 		if not result.get("ok", false):
-			_show_choice("THE HOLLOW LAMPLIGHTER", str(result.get("message", "")),
-				[{"id": "back", "label": "Return"}], func(_back: String) -> void: _show_hollow())
+			if _route_screen is HollowScreen:
+				(_route_screen as HollowScreen).show_error(
+					str(result.get("message", "")))
 			return
 		if not SaveService.store(game.run):
 			_show_save_error("The Hollow price could not be held.")
@@ -1343,39 +1710,26 @@ func _show_lamplighter() -> void:
 		if not SaveService.store(game.run):
 			_show_save_error("The Lamplighter's gifts could not be held.")
 			return
-	var choices: Array[Dictionary] = []
-	for id_v: Variant in offer.get("boons", []):
-		var id: String = str(id_v)
-		var boon: Dictionary = content.boons[id]
-		choices.append({"id": id, "label": str(boon.get("name", id)),
-			"hint": str(boon.get("text", ""))})
-	_show_choice("THE LAMPLIGHTER", "Choose one gift before the first step.",
-		choices, _on_lamplighter_boon)
+	var aspect: Dictionary = content.aspects[game.run.aspect]
+	var boons: Array = offer.get("boons", [])
+	var screen: LamplighterScreen = LamplighterScreen.new(
+		aspect,
+		content.boons,
+		content.arts,
+		boons,
+		game.run.art,
+		_shape)
+	screen.confirmed.connect(_on_lamplighter_confirmed)
+	_show_route(screen, false, &"embark")
 
 
-func _on_lamplighter_boon(id: String) -> void:
+func _on_lamplighter_confirmed(boon_id: String, art_id: StringName) -> void:
 	var offer: Dictionary = game.run.quest_scratch["lamplighterOffer"]
-	if not offer.get("boons", []).has(id):
+	if not offer.get("boons", []).has(boon_id) \
+			or not content.boons.has(boon_id) \
+			or not content.arts.has(String(art_id)):
 		return
-	offer["boon"] = id
-	if not SaveService.store(game.run):
-		_show_save_error("The chosen gift could not be held.")
-		return
-	var choices: Array[Dictionary] = []
-	for art_id: String in content.arts:
-		var art: Dictionary = content.arts[art_id]
-		choices.append({"id": art_id, "label": str(art.get("name", art_id)),
-			"hint": str(art.get("text", ""))})
-	_show_choice("THE LANTERN ART", "Choose how the carried flame will answer.",
-		choices, _on_lamplighter_art)
-
-
-func _on_lamplighter_art(id: String) -> void:
-	var offer: Dictionary = game.run.quest_scratch["lamplighterOffer"]
-	var boon_id: String = str(offer.get("boon", ""))
-	if not content.arts.has(id) or not content.boons.has(boon_id):
-		return
-	game.run.art = StringName(id)
+	game.run.art = art_id
 	game.rewards.apply_boon(game.run, boon_id)
 	game.run.pending_lamplighter = false
 	game.run.quest_scratch.erase("lamplighterOffer")
