@@ -630,7 +630,7 @@ that seat was re-derived.
 Before any option is built or judged, one defect has to go, because every
 comparison depends on it.
 
-`EnemyView` owns a single `RandomNumberGenerator` (`enemy_view.gd:473` (`_rng`)),
+`EnemyView` owns a single `RandomNumberGenerator` (`enemy_view.gd:478` (`_rng`)),
 seeded once when the stage is built from
 `hash(String(art_id)) + enemy_idx`. Three unrelated consumers share that one
 stream: crack placement (`crack`), the death pattern (`_death_sites`), and the

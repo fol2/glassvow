@@ -190,9 +190,10 @@ its own copy at a fixed stage coordinate). **Do not wire both.**
 - `end_turn_pressed` → `_on_end_turn_pressed`; `lantern_pressed` →
   `_on_art_pressed`. `deck_pressed`, `menu_pressed` and `pile_pressed` have no
   destination in this port and would land as three dead controls.
-- `_float_text` is anchored on four labels this step deletes (`:493`, `:542`,
-  `:552`, `:574`); after S2 the natural anchors are the actors themselves,
-  which is also what the benchmark does.
+- `_float` now receives positions from the actor helpers
+  (`presentation/combat/combat_screen.gd` (`_enemy_centre`) and
+  `presentation/combat/combat_screen.gd` (`_hero_centre`)); the deleted labels
+  no longer act as anchors, which is also what the benchmark does.
 
 ## S5 — the reward screen
 
@@ -201,7 +202,7 @@ its own copy at a fixed stage coordinate). **Do not wire both.**
 building (`:184–198`) comes out. `show_result` stays for Defeat and
 "Slice cleared". The blocker is the claim path: gold is already banked in the
 application layer, `addCardToDeck` exists, **relic has no command**, and potion
-can never fire (`rewards.gd:73-79` (in `gen_combat_rewards`) gates the phial behind a reveal a fresh
+can never fire (`domain/rules/rewards.gd:88-92` (in `gen_combat_rewards`) gates the phial behind a reveal a fresh
 profile does not have).
 
 ## Chips — not this lane's work, **LANDED** by this lane (`b39cf54`)

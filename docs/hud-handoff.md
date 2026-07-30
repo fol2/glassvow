@@ -45,7 +45,8 @@ HudBar.new(vial_frame := true, wide_plate := true, plate := true)
 
 **Pass `plate = false`.** The benchmark is unambiguous and S4 read it right:
 `.cplate` sits inside `.player-zone` at `position: absolute; top: 100%`, and the
-enemy carries byte-identical markup (`src/ui/combat.js:232` and `:288` at
+ enemy carries byte-identical markup (`src/ui/combat.js:232` and
+ `src/ui/combat.js:288` at
 `6e069118`). It belongs to whichever actor it describes. `HudBar` hangs its own
 copy at a fixed stage coordinate, which is correct in a lab with no hero in it
 and wrong the moment a hero stands somewhere else.

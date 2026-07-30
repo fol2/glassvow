@@ -173,17 +173,20 @@ three lanes own. These wait for the organiser to sequence them.
 
    - **`#hud` › `.hud-hp-wrap`** (`src/ui/combat.js:145-148`) — a heart icon, a
      `hp / maxHp` numeral and a `.hud-hpbar` rail. This is **run** chrome: it is
-     hidden on title, embark, vigil, end and lamplighter (`:138`), and shown on
+     hidden on title, embark, vigil, end and lamplighter
+     (`src/ui/combat.js:138`), and shown on
      every other screen. It carries gold, act, floor, boss, deck, menu, relics
      and omen alongside the HP.
    - **`.player-zone` › `.cplate`** (`src/ui/combat.js:232`) — a `.hpbar-wrap`
      holding `[block-chip][hp-vial][hp-label]`. This is the **combat actor's**
-     plate, structurally identical to an enemy's (`:287`) minus the name and the
+     plate, structurally identical to an enemy's (`src/ui/combat.js:287`) minus the name and the
      facet row, and it hangs off the bottom of the hero's own box.
 
    `hud_bar.gd` has already built **both**, correctly and to spec:
-   `_build_top_bar()` (`:349`, `HP_WRAP_W` 170) is the first; `_build_plate()`
-   (`:473`, `PLATE_PARITY_W` 150, `.hpbar-wrap` verbatim) is the second.
+   `_build_top_bar()` (`presentation/combat/hud_bar.gd` (`_build_top_bar`),
+   `HP_WRAP_W` 170) is the first; `_build_plate()`
+   (`presentation/combat/hud_bar.gd` (`_build_plate`), `PLATE_PARITY_W` 150,
+   `.hpbar-wrap` verbatim) is the second.
 
    So the disagreement was never about *what* the plate is — only about *where
    it hangs*. It sits in the HUD layer today because there is no hero body to
