@@ -58,6 +58,10 @@ static var glow_out: float = GLOW_OUT_DEFAULT
 static var glow_size: int = GLOW_SIZE_DEFAULT
 static var glow_in: float = GLOW_IN_DEFAULT
 static var icon_rim: float = ICON_RIM_DEFAULT
+
+## `teleFlash`'s transient — how far through the event glow the chip is.
+var _tele: float = 0.0
+var _tele_tween: Tween = null
 static var num_outline: int = NUM_OUTLINE_DEFAULT
 
 
@@ -162,18 +166,29 @@ func set_intent(intent: StringName, amount_text: String) -> void:
 ## `teleFlash` (styles.css:921) — the chip blazes twice in the half-second
 ## before its owner swings, so the blow is announced by the promise that made
 ## it rather than arriving unheralded. 0.5s ease-in-out, TWO iterations, peaking
-## at 40% larger and near-double brightness halfway through each.
+## at 40% larger and near-double brightness halfway through each — plus an
+## event-only 10px current-colour glow OVER the resting 8px halo, which is a
+## different thing from brightening the halo it already wears.
 func telegraph() -> void:
 	if not visible or not is_inside_tree() or size == Vector2.ZERO:
 		return
 	pivot_offset = size * 0.5
-	var tw: Tween = create_tween()
-	tw.set_loops(2)
-	tw.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-	tw.tween_property(self, "scale", Vector2.ONE * 1.22, 0.25)
-	tw.parallel().tween_property(self, "modulate", Color(1.8, 1.8, 1.8), 0.25)
-	tw.tween_property(self, "scale", Vector2.ONE, 0.25)
-	tw.parallel().tween_property(self, "modulate", Color.WHITE, 0.25)
+	if _tele_tween != null and _tele_tween.is_valid():
+		_tele_tween.kill()
+	# One linear clock through both iterations; `css_pulse` eases each half the
+	# way `animation-timing-function: ease-in-out` eases every interval, and the
+	# 50% peak makes the triangle the exact read (TRANS_SINE was the nearest
+	# family and is not that curve).
+	_tele_tween = create_tween()
+	_tele_tween.tween_method(_tele_at, 0.0, 1.0, 1.0).set_trans(Tween.TRANS_LINEAR)
+
+
+func _tele_at(u: float) -> void:
+	var p: float = Motion.css_pulse(fmod(u * 2.0, 1.0), 0.0, 1.0)
+	scale = Vector2.ONE * lerpf(1.0, 1.22, p)
+	modulate = Color.WHITE.lerp(Color(1.8, 1.8, 1.8), p)
+	_tele = p
+	queue_redraw()
 
 
 func _icons_width() -> float:
@@ -215,6 +230,13 @@ func _icon_origin_x() -> float:
 func _draw() -> void:
 	var box: Rect2 = Rect2(Vector2.ZERO, size)
 	draw_style_box(_glow, box)
+	if _tele > 0.001:
+		# `teleFlash`'s own 10px current-colour glow (styles.css:893-908) —
+		# event-only, drawn OVER the resting halo rather than instead of it.
+		var flash: StyleBoxFlat = _glow.duplicate()
+		flash.shadow_size = _glow.shadow_size + int(roundf(10.0 * _tele))
+		flash.shadow_color = Color(_accent.r, _accent.g, _accent.b, 0.9 * _tele)
+		draw_style_box(flash, box)
 
 	# Body: a rounded rect carrying a vertical gradient. StyleBoxFlat is a flat
 	# fill, so the gradient is per-vertex on the polygon instead.
