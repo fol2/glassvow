@@ -209,7 +209,7 @@ over `edges`. No new transition tech — reuse the combat wipe.
   renders children above a parent's `_draw()` — so bands must become `Node2D`
   children with `z_index` before sprites can interleave with waystones. The old
   marker-offset workaround is already gone: `_draw_marker()` now uses the
-  waystone position directly (`world_map_screen.gd:502-507` (in `_draw_marker`)).
+  waystone position directly (`world_map_screen.gd` (`_draw_marker`)).
 
 ---
 

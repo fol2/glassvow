@@ -477,12 +477,12 @@ holding only a matching string and a matching call, while `GAME_SCENE_PATH`,
 
 ```markdown
 <!-- before: the anchor ends the line, the symbol starts the next one -->
-`view.set_profile(_foe_kind(e.idx))` for every foe, and `combat_screen.gd:1458`
+`view.set_profile(_foe_kind(e.idx))` for every foe, and `combat_screen.gd:1352`
 (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
 
 <!-- after: they meet, and the checker can finally grade it -->
 `view.set_profile(_foe_kind(e.idx))` for every foe, and
-`combat_screen.gd:1458` (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
+`combat_screen.gd:1352` (in `start_encounter`) calls `_hero.set_profile("rogue")` for the player.
 ```
 
 Four of the ten hand-fixed skips were this shape, and this one is
