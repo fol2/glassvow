@@ -22,6 +22,11 @@ extends Control
 ## child (window lights, motes, weather) above. The one lie in that order —
 ## additive lights over the near shards — does not show: the shard band and
 ## the tower face never overlap at this camera.
+##
+## The summit beacon is deliberately absent: at the title eye it projects far
+## above the frame (the benchmark's own title crops the tower mid-face), so
+## the sphere and its pulsing halo would be spent on pixels nobody sees. It
+## returns if a map-mode camera ever lives here.
 
 ## `TOWER` (scene3d.js:23-33) and `radiusAt` (scene3d.js:35-42), verbatim.
 const TOWER_X: float = 7.0
@@ -46,18 +51,20 @@ const ROLL_RATE: float = 0.13
 ## `FogExp2(fog, 0.055)` — factor `1 - exp(-(d·depth)²)`; the spire and beacon
 ## are `fog: false` and stay ink.
 const FOG_DENSITY: float = 0.055
-## Theme at the title: the resting `cur` colours (scene3d.js:17).
+## Theme at the title: the resting `cur` colours (scene3d.js:17). The mesh
+## tints are the runtime writes in `frame()` (scene3d.js:345-348), not the
+## constructor colours — the loop overwrites those every frame.
 const SKY: Color = Color("#0b0e1a")
 const FOG: Color = Color("#141a2e")
 const MAIN: Color = Color("#ffa04d")
 const ACCENT: Color = Color("#66ff9e")
 const SPIRE_INK: Color = Color("#04050b")
-const GROUND: Color = Color("#05070d")
-const TREE: Color = Color("#060a10")
 const SHARD: Color = Color("#04090a")
 ## Window lights (scene3d.js:160-176): 120 sprites up the face, scale .16-.42.
 const LIGHT_COUNT: int = 120
-## Nebulae (scene3d.js:127-139): 7 additive sprites, opacity .1-.2.
+## Nebulae (scene3d.js:127-139): 7 additive sprites, opacity .1-.2, tinted
+## `fog.lerp(particles, 0.5)` every frame (scene3d.js:344) — warm dust, not
+## white.
 const NEBULA_COUNT: int = 7
 ## Trees (scene3d.js:194-208): 52 cones on the ground disc at -9.6.
 const TREE_COUNT: int = 52
@@ -65,14 +72,28 @@ const TREE_COUNT: int = 52
 ## far above the title frame and is not spent here. `actBaseY(1) - 2.2`.
 const CLOUD_DECK_Y: float = 10.84
 const CLOUD_COUNT: int = 16
-## The screen-space fields the mock already carried — kept, they are the
-## flattened `ptsMain`/`ptsAccent` and they read right.
-const MAIN_COUNT: int = 115
-const ACCENT_COUNT: int = 36
-## Ash weather at the title (`setWeather('ash')` on act-0 themes): the same
-## flattening the combat sky uses.
-const WEATHER_COUNT: int = 70
-const WEATHER_ALPHA: float = 0.4
+## The point fields (scene3d.js:264-266): `makePoints(900, 0.16, …, 0.75)`
+## main embers and `makePoints(240, 0.32, …, 0.5)` accent glow, both
+## size-attenuated world sprites in a ±23 × ±13 × ±20 box around the eye. The
+## first cut of this file flattened them to ~150 screen-space dots — a tenth
+## of the population at a fraction of the size, which is most of why the port
+## read black where the benchmark reads alive. Projected now, like the rest.
+const MAIN_COUNT: int = 900
+const MAIN_SIZE: float = 0.16
+const MAIN_ALPHA: float = 0.75
+const ACCENT_COUNT: int = 240
+const ACCENT_SIZE: float = 0.32
+const ACCENT_ALPHA: float = 0.42
+## Ash weather at the title (`setWeather('ash')` on act-0 themes):
+## `makePoints(300, 0.13, …, 0.5)`, pale ash `particles.lerp(white, .55)`
+## (scene3d.js:371-373).
+const WEATHER_COUNT: int = 300
+const WEATHER_SIZE: float = 0.13
+const WEATHER_ALPHA: float = 0.5
+## Field box (`makePoints` W/H/D): x wraps at ±23, y at eye ±14, z spread ±20.
+const FIELD_X: float = 23.0
+const FIELD_Y: float = 14.0
+const FIELD_Z: float = 20.0
 
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _time: float = 0.0
@@ -96,7 +117,7 @@ var _trees: Array[Vector3] = []      # x, z, height
 var _tree_w: PackedFloat32Array = PackedFloat32Array()
 var _clouds: Array[Vector3] = []
 var _cloud_scale: PackedFloat32Array = PackedFloat32Array()
-var _main: Array[Vector4] = []
+var _main: Array[Vector4] = []      # world x, y, z + seed
 var _accent: Array[Vector4] = []
 var _weather: Array[Vector4] = []
 var _field: Control
@@ -183,42 +204,30 @@ func _seed_world() -> void:
 		_clouds.append(Vector3(TOWER_X + cos(a) * d,
 			CLOUD_DECK_Y + (_rng.randf() - 0.5) * 1.6, z))
 		_cloud_scale.append(10.0 + _rng.randf() * 14.0)
-
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_RESIZED and size.x > 0.0 and _main.is_empty():
-		_seed_screen_fields()
-
-
-func _seed_screen_fields() -> void:
-	_main.clear()
-	_accent.clear()
-	_weather.clear()
+	# The three point fields, seeded in the makePoints box around the eye.
 	for _i: int in range(MAIN_COUNT):
-		_main.append(_mote(0.55, 1.8))
+		_main.append(_field_mote())
 	for _i: int in range(ACCENT_COUNT):
-		_accent.append(_mote(0.8, 2.8))
+		_accent.append(_field_mote())
 	for _i: int in range(WEATHER_COUNT):
-		_weather.append(_mote(0.5, 1.3))
+		_weather.append(_field_mote())
 
 
-func _mote(lo: float, hi: float) -> Vector4:
+func _field_mote() -> Vector4:
 	return Vector4(
-		_rng.randf_range(0.0, size.x),
-		_rng.randf_range(0.0, size.y),
-		_rng.randf_range(lo, hi),
-		_rng.randf_range(0.0, TAU))
+		(_rng.randf() - 0.5) * FIELD_X * 2.0,
+		ALT + 3.1 + (_rng.randf() - 0.5) * FIELD_Y * 2.0,
+		(_rng.randf() - 0.5) * FIELD_Z * 2.0,
+		_rng.randf() * 100.0)
 
 
 func _process(delta: float) -> void:
-	if _main.is_empty() and size.x > 0.0:
-		_seed_screen_fields()
 	var dt: float = minf(0.05, delta)
 	_time += dt
 	_drift.step(self, dt)
 	_step_camera(dt)
-	_drift_motes(_main, dt, 1.0)
-	_drift_motes(_accent, dt, 0.55)
+	_rise_field(_main, dt, 1.0)
+	_rise_field(_accent, dt, 0.55)
 	_fall_weather(dt)
 	queue_redraw()
 	_field.queue_redraw()
@@ -262,26 +271,34 @@ func _fog_of(depth: float) -> float:
 	return 1.0 - exp(-f * f)
 
 
-func _drift_motes(motes: Array[Vector4], dt: float, rate: float) -> void:
+## The particle drift (scene3d.js:355-366): a slow rise with per-seed rate and
+## a sideways breathing sway, wrapping around the eye's altitude.
+func _rise_field(motes: Array[Vector4], dt: float, rate: float) -> void:
+	var cy: float = _cam.y
 	for i: int in motes.size():
 		var m: Vector4 = motes[i]
-		m.y -= dt * rate * (9.0 + fmod(m.w, 1.0) * 12.0)
-		m.x += sin(_time * 0.5 + m.w) * dt * 2.4
-		if m.y < -8.0:
-			m.y = size.y + 8.0
-			m.x = _rng.randf_range(0.0, size.x)
+		m.y += dt * rate * (0.35 + fmod(m.w, 1.0) * 0.5)
+		m.x += sin(_time * 0.5 + m.w) * dt * 0.18
+		if m.y > cy + FIELD_Y:
+			m.y = cy - FIELD_Y
+			m.x = (_rng.randf() - 0.5) * FIELD_X * 2.0
 		motes[i] = m
 
 
+## Ash mode (scene3d.js:377): falls at 0.45+s*0.55 with a slow sway, wrapping
+## the same box.
 func _fall_weather(dt: float) -> void:
-	var unit: float = maxf(1.0, size.y) / 28.0
+	var cy: float = _cam.y
 	for i: int in _weather.size():
 		var m: Vector4 = _weather[i]
-		m.y += dt * (0.45 + fmod(m.w, 1.0) * 0.55) * unit
-		m.x += sin(_time * 0.5 + m.w) * dt * 0.18 * unit
-		if m.y > size.y + 6.0:
-			m.y = -6.0
-			m.x = _rng.randf_range(0.0, size.x)
+		m.y -= dt * (0.45 + fmod(m.w, 1.0) * 0.55)
+		m.x += sin(_time * 0.7 + m.w) * dt * 0.5
+		if m.y < cy - FIELD_Y:
+			m.y += FIELD_Y * 2.0
+		if m.x < -FIELD_X:
+			m.x += FIELD_X * 2.0
+		if m.x > FIELD_X:
+			m.x -= FIELD_X * 2.0
 		_weather[i] = m
 
 
@@ -296,7 +313,7 @@ func _draw() -> void:
 	_draw_shards_and_chains()
 
 
-## Soft translucent whites behind the tower. The benchmark blends these
+## Soft translucent sprites behind the tower. The benchmark blends these
 ## additively over near-black, which plain alpha over the same sky matches —
 ## and painting them BEFORE the spire keeps the silhouette's occlusion.
 ## A three.js sprite's `scale` is its FULL world width; screen half-width is
@@ -308,13 +325,15 @@ func _half_w(world_scale: float, depth: float) -> float:
 
 func _draw_nebulae() -> void:
 	var tex: Texture2D = SkyField.disc()
+	# `fog.lerp(particles, 0.5)` (scene3d.js:344) — warm dust, not white.
+	var dust: Color = FOG.lerp(MAIN, 0.5)
 	for i: int in _nebulae.size():
 		var p: Vector3 = _project(_nebulae[i]
 			+ Vector3(sin(_time * 0.08 + _nebula_wob[i]) * 1.2, 0.0, 0.0))
 		if p.z <= 0.0:
 			continue
 		var w: float = _half_w(_nebula_scale[i], p.z)
-		var col: Color = Color(1.0, 1.0, 1.0, _nebula_alpha[i])
+		var col: Color = Color(dust, _nebula_alpha[i])
 		draw_texture_rect(tex, Rect2(Vector2(p.x - w, p.y - w * 0.7),
 			Vector2(w * 2.0, w * 1.4)), false, col)
 
@@ -358,13 +377,23 @@ func _draw_spire(axis_x: float, axis_z: float, prof_scale: float,
 
 
 func _draw_ground_and_trees() -> void:
-	# The ground disc reads as everything below its projected horizon; the
-	# horizon is the plane y = -9.6 far away, fogged toward the sky.
+	# The ground disc reads as everything below its projected horizon. Every
+	# visible ground pixel sits 15-60 units out, so FogExp2 has washed it 50-95%
+	# toward the fog colour — a vertical gradient from almost-fog at the horizon
+	# to half-fog at the frame's bottom edge (scene3d.js:346, :116).
 	var horizon: Vector3 = _project(Vector3(0.0, -9.6, -60.0))
 	if horizon.z > 0.0:
 		var top: float = clampf(horizon.y, 0.0, size.y)
-		draw_rect(Rect2(0.0, top, size.x, size.y - top),
-			GROUND.lerp(FOG, 0.35))
+		var ground_base: Color = Color(SKY.r * 0.3, SKY.g * 0.3, SKY.b * 0.3)
+		var far_col: Color = ground_base.lerp(FOG, 0.9)
+		var near_col: Color = ground_base.lerp(FOG, 0.5)
+		draw_polygon(PackedVector2Array([
+			Vector2(0.0, top), Vector2(size.x, top),
+			Vector2(size.x, size.y), Vector2(0.0, size.y),
+		]), PackedColorArray([far_col, far_col, near_col, near_col]))
+	# `treeMat.color = sky * 0.38` (scene3d.js:348), then fogged at full
+	# strength — the forest reads as fog-washed silhouettes, not black blobs.
+	var tree_base: Color = Color(SKY.r * 0.38, SKY.g * 0.38, SKY.b * 0.38)
 	for i: int in _trees.size():
 		var t: Vector3 = _trees[i]
 		var base: Vector3 = _project(Vector3(t.x, -9.6, t.y))
@@ -372,7 +401,7 @@ func _draw_ground_and_trees() -> void:
 		if base.z <= 0.0 or tip.z <= 0.0:
 			continue
 		var half_w: float = _tree_w[i] * 0.5 * _focal / base.z
-		var col: Color = TREE.lerp(FOG, _fog_of(base.z) * 0.8)
+		var col: Color = tree_base.lerp(FOG, _fog_of(base.z))
 		draw_colored_polygon(PackedVector2Array([
 			Vector2(tip.x, tip.y),
 			Vector2(base.x + half_w, base.y),
@@ -415,9 +444,13 @@ func _poly(points: Array[Vector2], w: float, h: float, colour: Color,
 	draw_colored_polygon(scaled, colour)
 
 
-## The additive pass: window lights on the tower face, the two point fields,
-## the sifting ash. Lights are projected; the fields stay screen-space (the
-## flattening the mock proved out).
+## The additive pass: window lights on the tower face, the three point fields
+## projected with size attenuation. The benchmark then runs the whole frame
+## through `UnrealBloomPass(0.85, 0.55, 0.16)` — a soft glow on everything
+## bright. The disc texture's radial falloff carries most of that read once
+## the sprites arrive at their true sizes; a halo pass is NOT layered on top,
+## so if the field still reads thin against localhost:5190, bloom is the next
+## knob, not density.
 func paint_field(host: CanvasItem) -> void:
 	var tex: Texture2D = SkyField.disc()
 	for i: int in _lights.size():
@@ -437,17 +470,26 @@ func paint_field(host: CanvasItem) -> void:
 			continue
 		host.draw_texture_rect(tex, Rect2(Vector2(p.x - w, p.y - w),
 			Vector2(w * 2.0, w * 2.0)), false, col)
-	_stamp(host, _main, MAIN, 0.58)
-	_stamp(host, _accent, ACCENT, 0.50 + sin(_time * 0.9) * 0.12)
-	_stamp(host, _weather, MAIN, WEATHER_ALPHA)
+	_stamp(host, _main, MAIN_SIZE, MAIN, MAIN_ALPHA)
+	_stamp(host, _accent, ACCENT_SIZE, ACCENT,
+		ACCENT_ALPHA + sin(_time * 0.9) * 0.12)
+	_stamp(host, _weather, WEATHER_SIZE, MAIN.lerp(Color.WHITE, 0.55),
+		WEATHER_ALPHA)
 
 
-func _stamp(host: CanvasItem, motes: Array[Vector4], tint: Color,
-		alpha: float) -> void:
+## Size-attenuated points: world size × focal ÷ depth, like every sprite. The
+## accent field's 0.32 world units arrive at 10-40 screen pixels up close —
+## the big soft glow blobs that carry the benchmark's night air.
+func _stamp(host: CanvasItem, motes: Array[Vector4], world_size: float,
+		tint: Color, alpha: float) -> void:
 	var colour: Color = Color(tint, alpha)
 	var texture: Texture2D = SkyField.disc()
 	for mote: Vector4 in motes:
-		var radius: float = mote.z
+		var p: Vector3 = _project(Vector3(mote.x, mote.y, mote.z))
+		if p.z <= 0.0:
+			continue
+		var w: float = _half_w(world_size, p.z)
+		if w < 0.4:
+			continue
 		host.draw_texture_rect(texture, Rect2(
-			Vector2(mote.x, mote.y) - Vector2.ONE * radius * 2.0,
-			Vector2.ONE * radius * 4.0), false, colour)
+			Vector2(p.x - w, p.y - w), Vector2(w * 2.0, w * 2.0)), false, colour)
