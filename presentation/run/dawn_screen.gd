@@ -598,7 +598,7 @@ func _build_stats(column: VBoxContainer) -> void:
 		["cards_played", "CARDS PLAYED"], ["run_time", "RUN TIME"],
 	]:
 		var cell: PanelContainer = PanelContainer.new()
-		cell.add_theme_stylebox_override("panel", GlassStyle.pane(RunStyle.GOLD, 0.52))
+		cell.add_theme_stylebox_override("panel", GlassStyle.stat_cell())
 		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_stats_grid.add_child(cell)
 		var stack: VBoxContainer = VBoxContainer.new()
