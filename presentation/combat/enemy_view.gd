@@ -44,6 +44,16 @@ const PREVIEW_DIP: float = 0.4
 const GHOST_WARM: Color = Color(1.0, 0.90196079, 0.627451, 0.55)
 const GHOST_HOLD: float = 0.25
 const GHOST_FALL: float = 0.9
+## `.hpbar > .fill` — `width 0.35s cubic-bezier(0.3, 1, 0.4, 1)` (styles.css:834).
+## The rail glides on HP_FILL; the label snaps, as the DOM's textContent does.
+const HP_GLIDE: float = 0.35
+## `blockPulse 0.4s ease-out` (styles.css:858-859) — one implicit frame at rest,
+## the declared 40% peak, home. A CSS animation eases EVERY interval, so this is
+## read through `Motion.css_keyframe` with CSS_EASE_OUT, not a pair of tweens.
+const BLOCK_PULSE_TIME: float = 0.4
+const BLOCK_PULSE_AT: Array[float] = [0.0, 0.4, 1.0]
+const BLOCK_PULSE_SCALE: Array[float] = [1.0, 1.3, 1.0]
+const BLOCK_PULSE_GLOW: Array[float] = [0.0, 22.0, 0.0]
 
 ## Chrome geometry (benchmark styles.css: .hpbar-wrap width 150, .cplate gap 6,
 ## .top-chrome bottom calc(100% + 8px)).
@@ -203,9 +213,9 @@ const NUDGE_BACK: float = -5.0 / KICK_PX
 ## Voronoi cells of another" is not a contrast at all. Every ward in the game is the same
 ## regular stone because it is the same protection.
 ##
-## `WARD_GROW`, `WARD_OPACITY`, `WARD_TINT` and `WARD_PULSE` are kept from `ward-params.js`
-## — those are values somebody chose through the benchmark's `?vfxedit=1` panel, and the cut
-## is what was wrong, not the timing or the colour.
+## `WARD_GROW`, `WARD_OPACITY`, `WARD_TINT` and the WARD_SHRINK/WARD_REGROW pair are kept
+## from `ward-params.js` — those are values somebody chose through the benchmark's
+## `?vfxedit=1` panel, and the cut is what was wrong, not the timing or the colour.
 const WARD_OPACITY: float = 0.4
 const WARD_GROW: float = 0.56         ## growMs 560 — and the break is faster; see WARD_BREAK
 const WARD_EDGE_SOFT: float = 0.01    ## all but a hard cut
@@ -213,8 +223,12 @@ const WARD_ROUGH: float = 0.0
 const WARD_ENV: float = 0.72
 const WARD_TINT: Color = Color(0.28627452, 0.5647059, 0.7490196)   # #4a90bf
 ## Re-gaining ward keeps the silhouette and re-cuts the FACETS: they collapse to
-## 12% and are cut again. `growMs * 0.55`.
-const WARD_PULSE: float = 0.56 * 0.55
+## 12% and are cut again — TWO clocks, not one. The benchmark's `tick` runs a
+## 'shrink' phase over `growMs * 0.45` and hands off to a 'grow' phase over
+## `growMs * 0.55` (mesh.js:928, :939); the collapse is the quicker half, so the
+## re-cut reads as the guard being reinforced rather than as a slow blink.
+const WARD_SHRINK: float = 0.56 * 0.45
+const WARD_REGROW: float = 0.56 * 0.55
 const WARD_PULSE_TO: float = 0.12
 
 ## How many crown facets the stone is cut with.
@@ -395,6 +409,9 @@ var _ward_grow_from: float = 0.0
 var _ward_t: float = 0.0
 var _ward_site_f: float = 0.0
 var _ward_pulsing: bool = false
+## Which half of the re-cut is running: false = the collapse to 12%, true = the
+## regrow back to full. The benchmark's `wardSitePhase` 'shrink'/'grow' pair.
+var _ward_regrow: bool = false
 var _ward_pulse_from: float = 0.0
 var _ward_pulse_t: float = 0.0
 var _ward_sites_used: int = -1
@@ -422,6 +439,11 @@ var _hp_ghost: ProgressBar
 var _hp_preview: ColorRect
 var _preview_t: float = 0.0
 var _ghost_tween: Tween = null
+var _fill_tween: Tween = null
+## The rail's last SYNCED reading. `_hp_bar.value` is the animated one — while a
+## glide is in flight it reads mid-fall, and the ghost's "hold at the old mark"
+## must anchor on where the rail was told to be, not on where it has got to.
+var _hp_synced: float = -1.0
 var _hp_label: Label
 var _facets: FacetPips
 var _ward_chip: PanelContainer
@@ -2586,6 +2608,7 @@ func set_ward_shell(on: bool, grow: bool = true) -> void:
 			return   # already off or breaking; do not restart the clock on a resync
 		_ward_on = false
 		_ward_pulsing = false
+		_ward_regrow = false
 		# The stone stays whole and `burst` does the work, so the silhouette does not shrink
 		# out from under the pieces that are leaving it.
 		_ward_grow = 1.0
@@ -2600,6 +2623,7 @@ func set_ward_shell(on: bool, grow: bool = true) -> void:
 		_ward_grow = 1.0
 		_ward_grow_from = 1.0
 		_ward_pulsing = true
+		_ward_regrow = false
 		_ward_pulse_from = _ward_site_f
 		_ward_pulse_t = 0.0
 		_ward_sites_used = -1
@@ -2607,6 +2631,7 @@ func set_ward_shell(on: bool, grow: bool = true) -> void:
 	_cut_girdle()
 	_ward_on = true
 	_ward_pulsing = false
+	_ward_regrow = false
 	_ward_breaking = false
 	_ward_burst = 0.0
 	_ward_mat.set_shader_parameter("burst", 0.0)
@@ -2625,12 +2650,25 @@ func _step_ward(delta: float) -> void:
 	if _ward_hit > 0.0:
 		_ward_hit = maxf(0.0, _ward_hit - delta / WARD_RING)
 	if _ward_pulsing:
+		# The re-cut, in the benchmark's two phases (mesh.js:927-946): facets
+		# collapse over WARD_SHRINK, then re-cut over WARD_REGROW — each half a
+		# smoothstep of its own. The old single clock snapped from 12% straight
+		# to full, which cut the "cut again" out of the re-cut.
 		_ward_pulse_t += delta
-		var u: float = clampf(_ward_pulse_t / WARD_PULSE, 0.0, 1.0)
-		_ward_site_f = lerpf(_ward_pulse_from, WARD_PULSE_TO, u * u * (3.0 - 2.0 * u))
-		if u >= 1.0:
-			_ward_site_f = 1.0
-			_ward_pulsing = false
+		if not _ward_regrow:
+			var u: float = clampf(_ward_pulse_t / WARD_SHRINK, 0.0, 1.0)
+			_ward_site_f = lerpf(_ward_pulse_from, WARD_PULSE_TO, u * u * (3.0 - 2.0 * u))
+			if u >= 1.0:
+				_ward_regrow = true
+				_ward_pulse_from = _ward_site_f
+				_ward_pulse_t = 0.0
+		else:
+			var u: float = clampf(_ward_pulse_t / WARD_REGROW, 0.0, 1.0)
+			_ward_site_f = lerpf(_ward_pulse_from, 1.0, u * u * (3.0 - 2.0 * u))
+			if u >= 1.0:
+				_ward_site_f = 1.0
+				_ward_pulsing = false
+				_ward_regrow = false
 	elif _ward_on and _ward_grow < 1.0:
 		_ward_t += delta
 		var u: float = clampf(_ward_t / WARD_GROW, 0.0, 1.0)
@@ -4693,13 +4731,31 @@ func set_hp(hp: int, max_hp: int) -> void:
 	_max_hp = maxi(max_hp, 1)
 	var now: int = maxi(0, hp)
 	_hp = now
-	var was: float = _hp_bar.value
+	var was: float = _hp_synced
+	_hp_synced = float(now)
 	_hp_bar.max_value = _max_hp
-	_hp_bar.value = now
+	# The first sync is the build — a rail must ARRIVE full, not glide up from
+	# empty. Only a change after that gets the 0.35s HP_FILL glide the
+	# stylesheet gives `.hpbar > .fill`.
+	if was < 0.0 or not is_inside_tree():
+		_hp_bar.value = now
+	elif float(now) != was:
+		_glide_fill(float(now))
 	_hp_label.text = "%d / %d" % [now, max_hp]
-	_ghost_to(was, float(now))
+	_ghost_to(maxf(was, 0.0), float(now))
 	if _gem != null and not _dead:
 		_gem.set_state(_hue, float(now) / float(_max_hp), hp <= 0)
+
+
+## `.hpbar > .fill` — `width 0.35s cubic-bezier(0.3, 1, 0.4, 1)` (styles.css:834).
+## Kill/restart so a burst of hits keeps gliding from wherever the rail IS.
+func _glide_fill(to: float) -> void:
+	if _fill_tween != null and _fill_tween.is_valid():
+		_fill_tween.kill()
+	var from: float = _hp_bar.value
+	_fill_tween = Motion.bez(self,
+		func(s: float) -> void: _hp_bar.value = lerpf(from, to, s),
+		HP_GLIDE, Motion.HP_FILL)
 
 
 ## The trail: hold at the old reading for a beat, then run down to the new one.
@@ -4717,8 +4773,13 @@ func _ghost_to(was: float, now: float) -> void:
 	_hp_ghost.value = maxf(_hp_ghost.value, was)
 	_ghost_tween = create_tween()
 	_ghost_tween.tween_interval(GHOST_HOLD)
-	_ghost_tween.tween_property(_hp_ghost, "value", now, GHOST_FALL) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# `width 0.9s ease 0.25s` (styles.css:835) — the fall runs on the
+	# stylesheet's own `ease`, not on the nearest TRANS_*.
+	var from: float = _hp_ghost.value
+	_ghost_tween.tween_method(
+		func(x: float) -> void:
+			_hp_ghost.value = lerpf(from, now, Motion.ease(Motion.CSS_EASE, x)),
+		0.0, 1.0, GHOST_FALL).set_trans(Tween.TRANS_LINEAR)
 
 
 func set_ward(block: int) -> void:
@@ -4755,14 +4816,19 @@ func _block_pulse() -> void:
 	if _block_pulse_tween != null and _block_pulse_tween.is_valid():
 		_block_pulse_tween.kill()
 	_ward_chip.pivot_offset = _ward_chip.size * 0.5
-	_ward_chip.scale = Vector2.ONE
-	_ward_chip_sb.shadow_size = 0
 	_block_pulse_tween = create_tween()
-	_block_pulse_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_block_pulse_tween.tween_property(_ward_chip, "scale", Vector2.ONE * 1.3, 0.16)
-	_block_pulse_tween.parallel().tween_property(_ward_chip_sb, "shadow_size", 22, 0.16)
-	_block_pulse_tween.tween_property(_ward_chip, "scale", Vector2.ONE, 0.24)
-	_block_pulse_tween.parallel().tween_property(_ward_chip_sb, "shadow_size", 0, 0.24)
+	_block_pulse_tween.tween_method(_block_pulse_at, 0.0, 1.0, BLOCK_PULSE_TIME) \
+		.set_trans(Tween.TRANS_LINEAR)
+
+
+## One linear clock through the keyframe list, eased per interval — which is
+## what `animation: blockPulse 0.4s ease-out` means, and what a pair of chained
+## TRANS_CUBIC tweens only approximated.
+func _block_pulse_at(u: float) -> void:
+	var s: float = Motion.css_keyframe(u, BLOCK_PULSE_AT, BLOCK_PULSE_SCALE, Motion.CSS_EASE_OUT)
+	_ward_chip.scale = Vector2.ONE * s
+	_ward_chip_sb.shadow_size = int(roundf(
+		Motion.css_keyframe(u, BLOCK_PULSE_AT, BLOCK_PULSE_GLOW, Motion.CSS_EASE_OUT)))
 
 
 ## A hero has no facet gauge to move — structural integrity is a foe's concept.

@@ -98,13 +98,15 @@ static func keyframe(t: float, at: Array[float], v: Array[float]) -> float:
 ## `animation-timing-function` eases EVERY interval, so `idleSlime`'s 0/33/66/100
 ## is three eased segments and reading a linear ramp at an eased t would move the
 ## stops in time. Same arguments, different contract — pick by which side the
-## animation came from.
-static func css_keyframe(u: float, at: Array[float], v: Array[float]) -> float:
+## animation came from. `curve` is that declared timing function — `ease-in-out`
+## for the idles, but `blockPulse` declares `ease-out` and gets CSS_EASE_OUT.
+static func css_keyframe(u: float, at: Array[float], v: Array[float],
+		curve: Array[float] = EASE_IN_OUT) -> float:
 	for i: int in range(1, at.size()):
 		if u <= at[i] or i == at.size() - 1:
 			var span: float = at[i] - at[i - 1]
 			var f: float = 0.0 if span <= 0.0 else clampf((u - at[i - 1]) / span, 0.0, 1.0)
-			return lerpf(v[i - 1], v[i], Motion.ease(EASE_IN_OUT, f))
+			return lerpf(v[i - 1], v[i], Motion.ease(curve, f))
 	return v[v.size() - 1]
 
 
