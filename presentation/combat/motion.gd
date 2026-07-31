@@ -22,6 +22,22 @@ const ENTER: Array[float] = [0.2, 0.75, 0.3, 1.0]
 ## CSS `ease-in-out`, spelled out. The stage plates drift on it
 ## (styles.css:684) and so does the HP preview pulse.
 const EASE_IN_OUT: Array[float] = [0.42, 0.0, 0.58, 1.0]
+## CSS `ease`, spelled out — the stylesheet's default transition curve; the
+## ghost rail falls on it (styles.css:835).
+const CSS_EASE: Array[float] = [0.25, 0.1, 0.25, 1.0]
+## CSS `ease-out`, spelled out — chipPop, blockPulse and the refusal shakes
+## all declare it (styles.css:891, :859, :611).
+const CSS_EASE_OUT: Array[float] = [0.0, 0.0, 0.58, 1.0]
+## The HP fill glide, shared by the actor rail and the run chrome rail
+## (styles.css:834, :182).
+const HP_FILL: Array[float] = [0.3, 1.0, 0.4, 1.0]
+## The screen-transition family — iris, bloom, crack and the act plate all
+## run on this one curve (navigation.js:45-59).
+const TRANSIT: Array[float] = [0.4, 0.0, 0.2, 1.0]
+## Every screen root's entrance (`screenIn`, styles.css:141-142).
+const SCREEN_IN: Array[float] = [0.2, 0.7, 0.25, 1.0]
+## The band-of-light wipe sweep (`wipeSweep`, styles.css:1530-1531).
+const WIPE: Array[float] = [0.55, 0.0, 0.35, 1.0]
 ## Bisection depth for the x→t solve. 18 halvings resolve a 640ms curve to
 ## well under a frame, and the loop is bounded rather than convergence-tested.
 const SOLVE_STEPS: int = 18
@@ -52,6 +68,17 @@ static func ease(curve: Array[float], x: float) -> float:
 			hi = t
 		t = (lo + hi) * 0.5
 	return _bezier(t, curve[1], curve[3])
+
+
+## Drive `setter` with eased progress 0→1 over `dur` seconds. The Tween's own
+## transition is pinned linear so the curve does all the shaping — any CSS
+## cubic-bezier lands exactly rather than on the nearest TRANS_*. Returns the
+## Tween so callers can kill or await it.
+static func bez(host: Node, setter: Callable, dur: float, curve: Array[float]) -> Tween:
+	var tw: Tween = host.create_tween()
+	tw.tween_method(func(x: float) -> void: setter.call(Motion.ease(curve, x)), 0.0, 1.0, dur) \
+		.set_trans(Tween.TRANS_LINEAR)
+	return tw
 
 
 ## Read a keyframe track at eased progress `t`. `at` are the WAAPI offsets and
