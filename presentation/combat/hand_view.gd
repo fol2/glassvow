@@ -391,7 +391,7 @@ func _land(uid: int) -> void:
 ## A card leaves the hand for a pile. It is out of the fan the moment this is
 ## called — the others close the gap immediately, as they do in the benchmark —
 ## and the node lives only long enough to fly.
-func spend_to(uid: int, to: Rect2) -> void:
+func spend_to(uid: int, to: Rect2, burn: bool = false) -> void:
 	var view: CardView = _views.get(uid)
 	if view == null:
 		return
@@ -415,9 +415,19 @@ func spend_to(uid: int, to: Rect2) -> void:
 	tw.tween_property(view, "global_position",
 		to.get_center() - view.size * 0.5, SPEND_FLIGHT) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tw.tween_property(view, "scale", view.rest_scale(shrink), SPEND_FLIGHT)
-	tw.tween_property(view, "rotation", 0.0, SPEND_FLIGHT)
-	tw.tween_property(view, "modulate:a", 0.0, SPEND_FLIGHT)
+	if burn:
+		# `.card.exhausting` (styles.css:650) — brightness 2.4, saturate .2,
+		# rotate 8deg, scale .6: a card bound for the ash blazes white-hot on
+		# the way. Modulate cannot desaturate, so the wash is the lift alone,
+		# pushed unevenly warm so it reads as fire rather than fog; the alpha
+		# rides the same tween out.
+		tw.tween_property(view, "modulate", Color(2.4, 2.15, 1.8, 0.0), SPEND_FLIGHT)
+		tw.tween_property(view, "rotation", deg_to_rad(8.0), SPEND_FLIGHT)
+		tw.tween_property(view, "scale", view.rest_scale(shrink * 0.6), SPEND_FLIGHT)
+	else:
+		tw.tween_property(view, "scale", view.rest_scale(shrink), SPEND_FLIGHT)
+		tw.tween_property(view, "rotation", 0.0, SPEND_FLIGHT)
+		tw.tween_property(view, "modulate:a", 0.0, SPEND_FLIGHT)
 	tw.chain().tween_callback(view.queue_free)
 	_relayout()
 

@@ -153,12 +153,6 @@ const LBP_BLEND: float = 0.25
 ## .15s`, −1px/−3px lift with brightness 1.08 (styles.css:1344-1349, :1403).
 const HOVER_TIME: float = 0.15
 const HOVER_BRIGHT: Color = Color(1.08, 1.08, 1.08, 1.0)
-## `nope` 0.32s ease — the refusal shake, shared with the hand's cards
-## (styles.css:610-611).
-const NOPE_TIME: float = 0.32
-const NOPE_AT: Array[float] = [0.0, 0.25, 0.65, 1.0]
-const NOPE_X: Array[float] = [0.0, -7.0, 7.0, 0.0]
-const NOPE_ROT: Array[float] = [0.0, -1.5, 1.5, 0.0]
 
 static var _tex_cache: Dictionary = {}
 static var _font_cache: Dictionary = {}
@@ -230,6 +224,7 @@ var _pip_target: Array[Color] = []
 var _pip_u: Array[float] = []
 var _pips_live: bool = false
 var _nope_tween: Tween = null
+var _dim_tween: Tween = null
 ## The END seal's own root — dimmed while the queue drains.
 var _end_turn: Control
 var _end_shell: Control
@@ -505,9 +500,22 @@ func set_lantern(charges: int, ready: bool, cap: int = 9, spent: bool = false) -
 			else Color(0.47, 0.39, 0.27, 0.35))
 	_pips_live = true
 	_lantern_ready = ready
-	# .lantern-btn.unlit { filter: saturate(.55) brightness(.82) }
-	_lantern.modulate = Color.WHITE if ready else Color(0.80, 0.82, 0.86)
-	_lantern_glow.modulate.a = 1.0 if ready else 0.45
+	# `.lantern-btn { transition: filter .25s }` over
+	# `.unlit { filter: saturate(.55) brightness(.82) }` — the dim GLIDES on
+	# and off rather than snapping, on the stylesheet's own ease.
+	var dim_to: Color = Color.WHITE if ready else Color(0.80, 0.82, 0.86)
+	var halo_to: float = 1.0 if ready else 0.45
+	if not _lantern.modulate.is_equal_approx(dim_to):
+		if _dim_tween != null and _dim_tween.is_valid():
+			_dim_tween.kill()
+		var dim_from: Color = _lantern.modulate
+		var halo_from: float = _lantern_glow.modulate.a
+		_dim_tween = Motion.bez(self,
+			func(t: float) -> void:
+				_lantern.modulate = dim_from.lerp(dim_to, t)
+				if not _kindle_target:
+					_lantern_glow.modulate.a = lerpf(halo_from, halo_to, t),
+			LBP_BLEND, Motion.CSS_EASE)
 	# .lantern-btn.art-spent .lb-ic { opacity: .35 }
 	_lantern_art.modulate.a = 0.35 if spent else 1.0
 
@@ -1034,14 +1042,14 @@ func nope() -> void:
 		_nope_at(1.0)
 	_lantern_body.pivot_offset = _lantern_body.size * 0.5
 	_nope_tween = create_tween()
-	_nope_tween.tween_method(_nope_at, 0.0, 1.0, NOPE_TIME).set_trans(Tween.TRANS_LINEAR)
+	_nope_tween.tween_method(_nope_at, 0.0, 1.0, Motion.NOPE_TIME).set_trans(Tween.TRANS_LINEAR)
 
 
 func _nope_at(u: float) -> void:
 	if _lantern_shell == null or _lantern_body == null:
 		return
-	_lantern_shell.position.x = Motion.css_keyframe(u, NOPE_AT, NOPE_X, Motion.CSS_EASE)
-	_lantern_body.rotation_degrees = Motion.css_keyframe(u, NOPE_AT, NOPE_ROT, Motion.CSS_EASE)
+	_lantern_shell.position.x = Motion.css_keyframe(u, Motion.NOPE_AT, Motion.NOPE_X, Motion.CSS_EASE)
+	_lantern_body.rotation_degrees = Motion.css_keyframe(u, Motion.NOPE_AT, Motion.NOPE_ROT, Motion.CSS_EASE)
 
 
 ## The beacons' one clock, and the pip blends. 17.6s is a common multiple of

@@ -1781,12 +1781,23 @@ func _on_card_drag_armed(uid: int) -> void:
 
 ## `beginCardDrag` (combat.js:1540) — a card that can neither be paid for nor
 ## burned refuses out loud, so a dead drag is not mistaken for a dropped input.
-func _on_card_drag_refused(_uid: int) -> void:
+func _on_card_drag_refused(uid: int) -> void:
+	# `c.classList.add('nope')` (combat.js:1131) — the card that can neither be
+	# paid for nor burned shakes its refusal beside the sound.
+	var view: CardView = _hand.card_view(uid)
+	if view != null:
+		view.nope()
 	_sfx.play(&"debuff")
 
 
 func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
 	if not _hand.is_aiming():
+		# The free-drag half of the move handler: `overL` (combat.js:1045-1046)
+		# — the card itself warns it will burn while it rides over the lantern.
+		if _hand.is_free_drag():
+			var view: CardView = _hand.card_view(uid)
+			if view != null:
+				view.set_will_burn(_hud.lantern_rect().has_point(global_pos))
 		return
 	# The arc reaches the POINTER, not the enemy under it — a shot that misses
 	# still has to look aimed somewhere.
@@ -1814,6 +1825,7 @@ func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	var view: CardView = _hand.card_view(uid)
 	if view == null:
 		return
+	view.set_will_burn(false)
 	if _hud.lantern_rect().has_point(global_pos):
 		if request_kindle(uid):
 			return
@@ -2431,7 +2443,8 @@ func _handle_event(ev: Dictionary) -> void:
 			# that burns out has to be seen going somewhere else, or the two
 			# piles are the same pile wearing different labels.
 			var pile: StringName = &"ashes" if t == EventTypes.EXHAUST else &"discard"
-			_hand.spend_to(uid, _hud.pile_rect(pile))
+			# A card bound for the ash burns on the way (`.card.exhausting`).
+			_hand.spend_to(uid, _hud.pile_rect(pile), t == EventTypes.EXHAUST)
 			# `await presentation.flyCardBacks(..., 200, ...)` (drain.js:864) — the
 			# pile is bumped by the card ARRIVING, not by it setting off. Without
 			# the wait the count ticked while the card was still in the air and the
@@ -2470,7 +2483,7 @@ func _handle_event(ev: Dictionary) -> void:
 				_has_ember_from = true
 				_vfx.burst(_ember_from, EMBER_ORANGE, 22, 190.0, TAU, 0.0,
 					2.4, -150.0, "spark", true, 0.85)
-			_hand.spend_to(uid, _hud.pile_rect(&"ashes"))
+			_hand.spend_to(uid, _hud.pile_rect(&"ashes"), true)
 			await _wait(HandView.SPEND_FLIGHT)
 			_land_in_pile(&"ashes")
 			_sync_actors()

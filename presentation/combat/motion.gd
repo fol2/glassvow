@@ -38,6 +38,15 @@ const TRANSIT: Array[float] = [0.4, 0.0, 0.2, 1.0]
 const SCREEN_IN: Array[float] = [0.2, 0.7, 0.25, 1.0]
 ## The band-of-light wipe sweep (`wipeSweep`, styles.css:1530-1531).
 const WIPE: Array[float] = [0.55, 0.0, 0.35, 1.0]
+## `@keyframes nope` (styles.css:610-611) — the refusal shake one rule serves
+## to both `.card.nope` and `.lantern-btn.nope`: 0.32s on the stylesheet's own
+## `ease`, thrown −7px/−1.5° at 25% and +7px/+1.5° at 65%. Shared here for the
+## same reason the stylesheet declares it once.
+const NOPE_TIME: float = 0.32
+const NOPE_AT: Array[float] = [0.0, 0.25, 0.65, 1.0]
+const NOPE_X: Array[float] = [0.0, -7.0, 7.0, 0.0]
+const NOPE_ROT: Array[float] = [0.0, -1.5, 1.5, 0.0]
+
 ## Bisection depth for the x→t solve. 18 halvings resolve a 640ms curve to
 ## well under a frame, and the loop is bounded rather than convergence-tested.
 const SOLVE_STEPS: int = 18

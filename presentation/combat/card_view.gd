@@ -237,6 +237,15 @@ var card_id: StringName = &""
 var target_kind: String = ""
 var unplayable: bool = false
 var playable: bool = true
+## `.card.will-burn` — the card riding over the lantern warns it will burn.
+var _will_burn: bool = false
+var _is_rare: bool = false
+var _tint_tween: Tween = null
+var _nope_tween: Tween = null
+var _nope_home: float = 0.0
+var _nope_rot_home: float = 0.0
+var _shadow_home_color: Color = SHADOW_COLOR
+var _shadow_home_size: int = SHADOW_SIZE
 ## Layout home assigned by HandView._relayout; snap-back target.
 var home_position: Vector2 = Vector2.ZERO
 var home_rotation: float = 0.0
@@ -316,6 +325,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	target_kind = str(data.get("target", ""))
 	var unplayable_flag: bool = data.get("unplayable", false)
 	unplayable = unplayable_flag
+	_is_rare = str(data.get("rarity", "")) == "rare"
 	var ctype: String = str(data.get("type", ""))
 	var tint: Color = TYPE_TINT.get(ctype, GlassStyle.GLASS)
 	custom_minimum_size = Vector2(CARD_W, CARD_H)
@@ -356,6 +366,9 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 	_shadow.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_shadow)
+	# Where the will-burn glow returns to — the stock's own weighted shadow.
+	_shadow_home_color = _shadow_sb.shadow_color
+	_shadow_home_size = _shadow_sb.shadow_size
 
 	# Everything visual from here down builds under `content`, which renders
 	# offscreen into _inner rather than into this Control — see THE SLAB.
@@ -742,6 +755,20 @@ func _build_stage(content: Control, mat: Dictionary, tint: Color,
 	display.size = Vector2(CARD_W + 2.0 * PAD_3D, CARD_H + 2.0 * PAD_3D)
 	display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(display)
+	# `.card.r-rare .card-inner::after` — the 4.5s gilt shine, on the canvas
+	# rather than in the slab so a rare at rest keeps its viewports frozen
+	# (see card_shine.gdshader for the whole argument). Under the cost gem,
+	# which the stylesheet also keeps above it (z-index 4 vs the ::after).
+	if _is_rare:
+		var shine: ColorRect = ColorRect.new()
+		var shine_mat: ShaderMaterial = ShaderMaterial.new()
+		shine_mat.shader = preload("res://presentation/combat/card_shine.gdshader")
+		shine_mat.set_shader_parameter("card_px", Vector2(CARD_W, CARD_H))
+		shine_mat.set_shader_parameter("radius_px", float(RADIUS))
+		shine.material = shine_mat
+		shine.set_anchors_preset(Control.PRESET_FULL_RECT)
+		shine.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(shine)
 
 
 ## Anything on the slab that reads the face and takes the light. The two shaders
@@ -1165,7 +1192,76 @@ func _press_release(pressed: bool, global_pos: Vector2) -> void:
 ## Grey out cards the player cannot afford / play right now.
 func set_playable(can: bool) -> void:
 	playable = can
-	modulate = Color(1, 1, 1, 1) if can else Color(0.6, 0.6, 0.6, 0.8)
+	_apply_tint(false)
+
+
+## `.hand-zone .card.will-burn` (styles.css:1125-1129) — `sepia(.35)
+## saturate(1.45) brightness(1.08)` with an amber inner glow: the card riding
+## over the lantern reads warm and lit, a thing already half in the fire.
+func set_will_burn(on: bool) -> void:
+	if _will_burn == on:
+		return
+	_will_burn = on
+	_apply_tint(true)
+
+
+## One resolver for the card's whole-body tint, because will-burn and the
+## unplayable dim share the modulate channel and two writers would stomp each
+## other. Modulate cannot desaturate, so sepia is read as the warm lift alone.
+## The glow rides the table shadow's StyleBox on the same 0.2s clock.
+func _apply_tint(glide: bool) -> void:
+	var tint: Color
+	var glow: Color = _shadow_home_color
+	var glow_px: int = _shadow_home_size
+	if _will_burn:
+		tint = Color(1.08, 0.98, 0.82, 1.0)
+		glow = Color(1.0, 0.667, 0.275, 0.8)   # rgba(255,170,70,.8)
+		glow_px = _shadow_home_size * 2
+	elif playable:
+		tint = Color(1, 1, 1, 1)
+	else:
+		tint = Color(0.6, 0.6, 0.6, 0.8)
+	if _tint_tween != null and _tint_tween.is_valid():
+		_tint_tween.kill()
+	if not glide or not is_inside_tree():
+		modulate = tint
+		_shadow_sb.shadow_color = glow
+		_shadow_sb.shadow_size = glow_px
+		return
+	var from_tint: Color = modulate
+	var from_glow: Color = _shadow_sb.shadow_color
+	var from_px: float = float(_shadow_sb.shadow_size)
+	_tint_tween = Motion.bez(self,
+		func(s: float) -> void:
+			modulate = from_tint.lerp(tint, s)
+			_shadow_sb.shadow_color = from_glow.lerp(glow, s)
+			_shadow_sb.shadow_size = int(roundf(lerpf(from_px, float(glow_px), s))),
+		0.2, Motion.CSS_EASE)
+
+
+## `.card.nope` — the refusal shake the lantern also does, 0.32s ease
+## (styles.css:610-611): a card that can neither be paid for nor burned says
+## so with its whole body.
+func nope() -> void:
+	if not is_inside_tree():
+		return
+	if _nope_tween != null and _nope_tween.is_valid():
+		_nope_tween.kill()
+		_nope_at(1.0)
+	_nope_home = position.x
+	_nope_rot_home = rotation_degrees
+	_nope_tween = create_tween()
+	_nope_tween.tween_method(_nope_at, 0.0, 1.0, Motion.NOPE_TIME) \
+		.set_trans(Tween.TRANS_LINEAR)
+
+
+## The shake is RELATIVE: a fanned card sits at its seat's own angle, and an
+## absolute write would fold it flat mid-refusal and leave it there.
+func _nope_at(u: float) -> void:
+	position.x = _nope_home \
+		+ Motion.css_keyframe(u, Motion.NOPE_AT, Motion.NOPE_X, Motion.CSS_EASE)
+	rotation_degrees = _nope_rot_home \
+		+ Motion.css_keyframe(u, Motion.NOPE_AT, Motion.NOPE_ROT, Motion.CSS_EASE)
 
 
 ## A scale expressed the way every caller here thinks: 1.0 is a card at rest on
