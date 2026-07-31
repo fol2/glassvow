@@ -426,16 +426,31 @@ before/after comparison has to clear before it is evidence of anything.
 
 Every screen here animates — embers drift, actors breathe, a hand deals itself
 in — so two photographs of an unchanged build are never identical, and the
-difference between them is not small. Established by capturing the same build
-twice under the same seed and arguments and measuring that pair; a change smaller
-than the result distinguishes nothing, and a change concentrated in one region of
-the frame means more than a larger one spread evenly across it.
+difference between them is not small. Established by capturing the same build at
+least three times under the same seed and arguments and measuring every pair; a
+change smaller than the result distinguishes nothing, and a change concentrated
+in one region of the frame means more than a larger one spread evenly across it.
+
+Three captures rather than two, because a single pair cannot tell a floor from a
+coincidence. Where the motion is phase-bound, two captures that happen to land in
+the same phase agree closely and read as a tight floor, while either of them
+against a third differs by an order of magnitude more.
 
 The floor is a property of *how* the capture was taken, not a constant. Catching
 a screen mid-entrance rather than at rest raises it by two orders of magnitude,
 which is enough to swallow most layout changes whole — so the settling is part of
 the measurement, and a floor quoted without the capture conditions that produced
-it says nothing.
+it says nothing. It is also a property of the screen and the sitting: a floor
+measured on one screen governs only that screen, and re-measuring the same screen
+later can return a different band.
+
+Some screens have no floor at all. Settling works because an entrance *finishes*;
+a continuously drifting scene never reaches rest, so its same-build spread is
+bimodal rather than a band, and no amount of waiting narrows it. When that
+happens the comparison is not a weak gate to be tightened — it is not a gate, and
+the honest move is to state that plainly and gate the change somewhere it is
+deterministic instead, above the renderer. The capture is still taken; it is
+answering a different question.
 
 ### Anchor
 A citation in prose that names a code file and a symbol, optionally with a line
