@@ -1155,6 +1155,13 @@ func _on_combat_over(result: String) -> void:
 		_screen.show_result("Victory" if result == "win" else "Defeat",
 			"The bench fight is complete.", "Map" if result == "win" else "New Run")
 		return
+	# The combat leaves fire HERE, above the route swap, so the 900ms bloom and
+	# 700ms crack finish over whatever screen arrives — victoryFlow/defeatFlow's
+	# own beat, which used to die with the CombatScreen a frame after it played.
+	if result == "win":
+		_transitions.bloom()
+	else:
+		_transitions.crack()
 	if result != "win":
 		game.run.pending_combat = null
 		game.run.pending_enemy_ids = null

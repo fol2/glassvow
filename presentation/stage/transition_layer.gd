@@ -33,6 +33,28 @@ const SCREEN_IN_SCALE: float = 1.015
 ## diagonal does the same here.
 const IRIS_TIME: float = 0.48
 const IRIS_SPAN: float = 1.5
+## `tr-bloom` — `radial-gradient(circle at 50% 45%, #ffe9ac 0%, #f2c14e55 30%,
+## transparent 70%)` over 900ms, `[0, 1 @ 0.4, 0]`. The last stop is the SAME
+## amber at zero alpha rather than `transparent`: a browser interpolates
+## gradient stops premultiplied, so `transparent` there does not drag the ramp
+## toward black, and Godot's `Gradient` — which interpolates raw RGBA — would.
+## Fired by main on a combat win (`victoryFlow`, combat.js), and living HERE so
+## the 900ms leaf survives the route swap to the reward screen.
+const BLOOM_TIME: float = 0.9
+const BLOOM_CORE: Color = Color(1.0, 0.9137255, 0.6745098, 1.0)      # #ffe9ac
+const BLOOM_MID: Color = Color(0.9490196, 0.75686276, 0.30588236, 0.33333334)
+const BLOOM_STOPS: Array[float] = [0.0, 0.3, 0.7]
+const BLOOM_AT: Array[float] = [0.0, 0.4, 1.0]
+const BLOOM_TRACK: Array[float] = [0.0, 1.0, 0.0]
+## The gradient's default extent is farthest-corner from (50%, 45%).
+const BLOOM_CENTRE: Vector2 = Vector2(0.5, 0.45)
+## `tr-crack` — `rgba(3,4,10,.9)` over 700ms, `[0, 1]`, then the host empties:
+## the benchmark's `.finally` does not linger, the screen routed underneath
+## takes over the dark.
+const CRACK_TIME: float = 0.7
+const CRACK_TONE: Color = Color(0.011764706, 0.015686275, 0.039215688, 0.9)
+const CRACK_AT: Array[float] = [0.0, 1.0]
+const CRACK_TRACK: Array[float] = [0.0, 1.0]
 
 ## The `.tr-iris` ink (`#05070e`, styles.css:1533), drawn as an annulus by
 ## shader rather than by clip: dark inside the radius, nothing outside.
@@ -88,6 +110,8 @@ var instant: bool = false
 var _wipe: TextureRect
 var _iris: ColorRect
 var _iris_mat: ShaderMaterial
+var _bloom: TextureRect
+var _crack: ColorRect
 var _grain: ColorRect
 var _grain_mat: ShaderMaterial
 var _grain_t: float = 0.0
@@ -115,6 +139,35 @@ func _init() -> void:
 	_iris.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_iris.visible = false
 	add_child(_iris)
+	# The bloom is a TextureRect because a radial ramp IS a texture in Godot
+	# and a shader would buy nothing; the crack is a flat plate.
+	var grad: Gradient = Gradient.new()
+	grad.offsets = PackedFloat32Array(BLOOM_STOPS)
+	grad.colors = PackedColorArray([BLOOM_CORE, BLOOM_MID,
+		Color(BLOOM_MID.r, BLOOM_MID.g, BLOOM_MID.b, 0.0)])
+	var bloom_tex: GradientTexture2D = GradientTexture2D.new()
+	bloom_tex.gradient = grad
+	bloom_tex.fill = GradientTexture2D.FILL_RADIAL
+	bloom_tex.fill_from = BLOOM_CENTRE
+	# Farthest-corner, expressed in the texture's own UV so it re-solves
+	# against whatever the window is rather than the stage it was measured in.
+	bloom_tex.fill_to = BLOOM_CENTRE + Vector2(0.5, 0.55)
+	bloom_tex.width = 256
+	bloom_tex.height = 256
+	_bloom = TextureRect.new()
+	_bloom.texture = bloom_tex
+	_bloom.stretch_mode = TextureRect.STRETCH_SCALE
+	_bloom.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_bloom.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bloom.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_bloom.visible = false
+	add_child(_bloom)
+	_crack = ColorRect.new()
+	_crack.color = CRACK_TONE
+	_crack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_crack.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_crack.visible = false
+	add_child(_crack)
 	var sh: Shader = Shader.new()
 	sh.code = GRAIN_SHADER
 	_grain_mat = ShaderMaterial.new()
@@ -214,10 +267,41 @@ func _shrink_iris(eased: float, full: float) -> void:
 	_iris_mat.set_shader_parameter("radius", full * (1.0 - eased))
 
 
+## The win leaf: amber light swells and fades over whatever the route swap
+## delivers underneath (`victory-out`, navigation.js:52). WAAPI semantics —
+## the ease runs once across the iteration, offsets interpolate linearly.
+func bloom() -> void:
+	_play_leaf(_bloom, BLOOM_AT, BLOOM_TRACK, BLOOM_TIME)
+
+
+## The defeat leaf: the world fades to near-black over 700ms, then the host
+## empties and the screen behind takes over (`defeat`, navigation.js:53).
+func crack() -> void:
+	_play_leaf(_crack, CRACK_AT, CRACK_TRACK, CRACK_TIME)
+
+
+func _play_leaf(leaf: Control, at: Array[float], track: Array[float],
+		seconds: float) -> void:
+	if instant:
+		return
+	_transit_seq += 1
+	_iris.visible = false
+	_bloom.visible = leaf == _bloom
+	_crack.visible = leaf == _crack
+	leaf.modulate.a = 0.0
+	var walk: Callable = func(x: float) -> void:
+		leaf.modulate.a = Motion.keyframe(Motion.ease(Motion.TRANSIT, x), at, track)
+	var tw: Tween = create_tween()
+	tw.tween_method(walk, 0.0, 1.0, seconds)
+	tw.finished.connect(_end_transit.bind(_transit_seq), CONNECT_ONE_SHOT)
+
+
 func _end_transit(seq: int) -> void:
 	if seq != _transit_seq:
 		return
 	_iris.visible = false
+	_bloom.visible = false
+	_crack.visible = false
 
 
 func set_grain(on: bool) -> void:
@@ -233,6 +317,8 @@ func clear() -> void:
 	_wipe.visible = false
 	_transit_seq += 1
 	_iris.visible = false
+	_bloom.visible = false
+	_crack.visible = false
 
 
 func _stage_size() -> Vector2:
