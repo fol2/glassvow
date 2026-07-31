@@ -58,11 +58,13 @@ const PLATE_PERIODS: Dictionary[String, float] = {
 }
 
 ## The benchmark reads the hero's art off the run's aspect
-## (`runCatalogues().aspects[run.aspect].id`). Our slice content carries no
-## aspects section, and this port has called the player The Duskblade since M5.
-## ponytail: read the aspect the day the exporter carries one.
-const HERO_ART: StringName = &"duskblade"
-const HERO_HUE: float = 225.0  # HERO_LOOKS[0].hue in art.js
+## (`runCatalogues().aspects[run.aspect].id`, and `HERO_LOOKS[aspect]` for the
+## hue — art.js:329-332). The live content book carries both, so the hero is
+## read from it: an Ashwarden run finally wears the Ashwarden's glass, and the
+## Own Shade duel reads as you against your own shade. The fallback is the
+## slice-content case — labs and tests that never embark a run.
+const HERO_FALLBACK_ART: StringName = &"duskblade"
+const HERO_FALLBACK_HUE: float = 225.0  # HERO_LOOKS[0].hue in art.js
 
 ## `.combat-screen::after` — `rgba(5,7,14,.55)` reached at 75% of a 300px band.
 const MIST: Color = Color(0.019607844, 0.02745098, 0.05490196, 0.55)
@@ -1345,10 +1347,14 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 	# The hero outlives the encounter — it is the same body between fights, and
 	# rebuilding it would throw away a 3D stage for no reason.
 	if _hero == null:
-		_hero = EnemyView.new(-1, "", HERO_HUE, HERO_ART, 1.0, _hero_frame())
-		# `HERO_LOOKS[0].kind` — a hero is a rogue in the profile table, and
-		# char-meta's own `duskblade` block (breathe 1.6, sway 0.5, bob 0) is laid
-		# over it, which is why the player breathes harder and does not float.
+		var look: Dictionary = _hero_look()
+		var look_hue: float = look["hue"]
+		var look_art: StringName = look["art"]
+		_hero = EnemyView.new(-1, "", look_hue, look_art, 1.0, _hero_frame())
+		# A hero is a rogue in the profile table regardless of aspect — neither
+		# has a kind of its own — and char-meta's own block (duskblade breathe
+		# 1.6 / sway 0.5, ashwarden breathe 1.3 / sway 0) is laid over it, which
+		# is why the one breathes harder and the other stands like smoke.
 		_hero.set_profile("rogue")
 		_battlefield.add_child(_hero)
 	_stand(_hero, _hero_x(), 0.0)
@@ -1549,6 +1555,22 @@ func _hero_frame() -> Vector2:
 	var hero: Dictionary = _layout().get("hero", {})
 	return Vector2(LayoutBook.num(hero.get("w"), 190.0),
 		LayoutBook.num(hero.get("h"), 285.0))
+
+
+## The aspect's own art id and hue, straight off the content book —
+## `runCatalogues().aspects[run.aspect]`. Falls back to the Duskblade look when
+## no run is live (labs, tests, slice content without an aspects table).
+func _hero_look() -> Dictionary:
+	if game != null and game.run != null and game.content != null \
+			and game.run.aspect >= 0 and game.run.aspect < game.content.aspects.size():
+		var aspect_v: Variant = game.content.aspects[game.run.aspect]
+		if typeof(aspect_v) == TYPE_DICTIONARY:
+			var aspect_d: Dictionary = aspect_v
+			return {
+				"art": StringName(str(aspect_d.get("id", HERO_FALLBACK_ART))),
+				"hue": LayoutBook.num(aspect_d.get("hue"), HERO_FALLBACK_HUE),
+			}
+	return {"art": HERO_FALLBACK_ART, "hue": HERO_FALLBACK_HUE}
 
 
 func _layout_actors() -> void:
