@@ -1110,13 +1110,15 @@ func _resume_pending_combat() -> void:
 func _start_fight(ids: PackedStringArray, kind: String) -> void:
 	var known: Array[String] = []
 	for id: String in ids:
-		if content.enemies.has(id):
+		# Variants are legal here too — startCombat resolves them the same way
+		# the quest route does, and the bench exists to stand up ANY encounter.
+		if content.enemies.has(id) or content.variants.has(id):
 			known.append(id)
 		else:
 			# Named, not skipped silently: a typo would otherwise open an empty
 			# battlefield and look like the screen was broken.
 			push_error("--fight: no enemy '%s' in the slice. Known: %s"
-				% [id, ", ".join(content.enemies.keys())])
+				% [id, ", ".join(content.enemies.keys() + content.variants.keys())])
 	if known.is_empty():
 		return
 	_bench_fight = true

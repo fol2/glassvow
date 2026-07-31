@@ -48,11 +48,11 @@ Nothing below is invented. It is read out of two lanes that already solved it.
 
 | Thing | Where it already exists | Note |
 |---|---|---|
-| Extruding a 2D cell into a real plate | `enemy_view.gd:3326` (`_prism`) — `(cell, thick, box, origin)` | Vertex colour is a face tag: **caps black, side band red**, and the shard shader pours molten glow only where `COLOR.r` says fracture. This is the "the cut is the brightest part" thesis, already built. |
+| Extruding a 2D cell into a real plate | `enemy_view.gd:3375` (`_prism`) — `(cell, thick, box, origin)` | Vertex colour is a face tag: **caps black, side band red**, and the shard shader pours molten glow only where `COLOR.r` says fracture. This is the "the cut is the brightest part" thesis, already built. |
 | Pieces must be built around their own centroid | same docstring | Recorded there as a bug already paid for: body-space vertices made every shard spin about the middle of the creature, so they swept arcs and landed upright. |
-| Transparent 3D stage inside a Control | `enemy_view.gd:1833-1849` (in `_build_stage`), `card_view.gd:675` (`_build_stage`) | `own_world_3d`, `transparent_bg`, `BG_CLEAR_COLOR` with `AMBIENT_SOURCE_SKY` + `REFLECTION_SOURCE_SKY` — keeps the alpha while still giving glass something to mirror. |
-| Tonemap | `enemy_view.gd:1860-1862` (in `_build_stage`) | `TONE_MAPPER_LINEAR`, never ACES: the filmic curve lifts blacks and desaturates, which on near-black art reads as fog over everything. |
-| The lamp itself | `enemy_view.gd:1867-1872` (in `_build_stage`) | Warm `DirectionalLight3D`, `rotation_degrees(-38, -32, 0)`. This is the generic lamp, and the reward stage uses the same numbers so the wreckage and the cards do not disagree about where the light is. |
+| Transparent 3D stage inside a Control | `enemy_view.gd:1881-1897` (in `_build_stage`), `card_view.gd:675` (`_build_stage`) | `own_world_3d`, `transparent_bg`, `BG_CLEAR_COLOR` with `AMBIENT_SOURCE_SKY` + `REFLECTION_SOURCE_SKY` — keeps the alpha while still giving glass something to mirror. |
+| Tonemap | `enemy_view.gd:1908-1910` (in `_build_stage`) | `TONE_MAPPER_LINEAR`, never ACES: the filmic curve lifts blacks and desaturates, which on near-black art reads as fog over everything. |
+| The lamp itself | `enemy_view.gd:1915-1920` (in `_build_stage`) | Warm `DirectionalLight3D`, `rotation_degrees(-38, -32, 0)`. This is the generic lamp, and the reward stage uses the same numbers so the wreckage and the cards do not disagree about where the light is. |
 | Freezing an idle viewport | `card_view.gd:1008-1012` (`_set_live`) | `UPDATE_ALWAYS` → `UPDATE_ONCE` when a thing stops moving. |
 
 **Ownership constraint:** `enemy_view.gd` belongs to the Enemy / hero lane. This

@@ -551,6 +551,13 @@ var _display_mat: ShaderMaterial = null
 var _reseam_tween: Tween = null
 var _quad: MeshInstance3D = null
 var _body_mat: ShaderMaterial = null
+## The variant's cast (engine.js:1094 carries `variant.tint` beside the def;
+## mesh.js:1156-1158 writes the uniforms). Held here because shard materials
+## are minted at death, long after the setter ran. Hue already in radians —
+## converted once at the same boundary THREE converts at.
+var _tint_hue: float = 0.0
+var _tint_sat: float = 1.0
+var _tint_bright: float = 1.0
 ## `.enemy .name` and its two tier overrides (styles.css:807, :814, :821).
 const NAME_PX: int = 14        # 13.5px, and a font size is an integer here
 const NAME_PX_BOSS: int = 15
@@ -895,6 +902,41 @@ static func with_erode(src: String) -> String:
 	return src.replace("//__ERODE__", ERODE_GLSL)
 
 
+## The variant cast — the benchmark's own hueRotate (mesh.js:210-226), column
+## for column, and its exact application line: rotate the chroma, scale it,
+## multiply the lit result, clamp. Identity at the defaults, so a body with no
+## variant pays two mat3 multiplies and changes by nothing. Spliced like
+## ERODE_GLSL because every shader that samples the painting must wear the same
+## cast — a shard that flew off a Pale must stay Pale in the air.
+const TINT_GLSL: String = """
+uniform float tint_hue = 0.0;
+uniform float tint_sat = 1.0;
+uniform float tint_bright = 1.0;
+
+vec3 variant_tint(vec3 c) {
+	const mat3 to_yiq = mat3(
+		vec3(0.299, 0.596, 0.212),
+		vec3(0.587, -0.275, -0.523),
+		vec3(0.114, -0.321, 0.311)
+	);
+	const mat3 to_rgb = mat3(
+		vec3(1.0, 1.0, 1.0),
+		vec3(0.956, -0.272, -1.106),
+		vec3(0.621, -0.647, 1.703)
+	);
+	vec3 yiq = to_yiq * c;
+	float h = atan(yiq.z, yiq.y) + tint_hue;
+	float chroma = length(yiq.yz) * tint_sat;
+	return clamp((to_rgb * vec3(yiq.x, chroma * cos(h), chroma * sin(h)))
+		* tint_bright, 0.0, 1.0);
+}
+"""
+
+
+static func with_tint(src: String) -> String:
+	return src.replace("//__TINT__", TINT_GLSL)
+
+
 ## The body: a flat plate that takes REAL light. The painting has no normal map,
 ## so one is derived from its own luminance gradient in the fragment stage —
 ## every leaded seam and lit pane becomes relief the lamps can rake across. The
@@ -985,6 +1027,7 @@ uniform float hit_white = 0.0;
 // GeometryInstance3D.transparency outright, so the fade has to be a uniform.
 uniform float fade = 1.0;
 //__ERODE__
+//__TINT__
 
 // ---------------------------------------------------------------- the fracture
 //
@@ -1066,6 +1109,7 @@ void fragment() {
 	// looks like.
 	vec2 uv = UV;
 	vec4 c = texture(body_tex, uv);
+	c.rgb = variant_tint(c.rgb);
 	ALBEDO = c.rgb;
 	ALPHA = eaten(body_tex, uv) * fade;
 
@@ -1510,6 +1554,7 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley,
 // breaks the capture, so every flying piece carries the part of the monster it
 // covered. A blank glass chip flying off a still-intact mob reads as debris.
 uniform sampler2D body_tex : source_color, filter_linear_mipmap;
+//__TINT__
 uniform float ior = 1.45;
 uniform float bend = 0.055;     // how far the shard displaces what it holds
 uniform float tint_a = 0.55;
@@ -1538,6 +1583,7 @@ void fragment() {
 	// exact pixels it sits over — aligned by construction, flying or not.
 	vec2 uv = UV + r.xy * bend;
 	vec4 c = texture(body_tex, uv);
+	c.rgb = variant_tint(c.rgb);
 	float f = pow(1.0 - clamp(dot(n, v), 0.0, 1.0), 3.0);
 	ALBEDO = mix(c.rgb * tint, vec3(1.0), f * 0.45);
 	// Opaque where it holds the creature, glassy at its edges, and never so
@@ -1569,11 +1615,13 @@ uniform sampler2D body_tex : source_color, filter_linear_mipmap;
 uniform float heat = 1.0;      // molten fracture edges + inner glow, cools to 0
 uniform float dissolve = 0.0;  // 0 whole -> 1 burned away to nothing
 //__ERODE__
+//__TINT__
 
 const vec3 WARM = vec3(1.0, 0.60, 0.24);
 
 void fragment() {
 	vec4 c = texture(body_tex, UV);
+	c.rgb = variant_tint(c.rgb);
 	// _prism colors the side band red and the caps black: COLOR.r is literally
 	// "this face is a fracture surface".
 	float edge = COLOR.r;
@@ -1903,7 +1951,7 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	qm.subdivide_depth = SEG_Y
 	_quad.mesh = qm
 	var sh: Shader = Shader.new()
-	sh.code = with_erode(BODY_SHADER)
+	sh.code = with_tint(with_erode(BODY_SHADER))
 	_body_mat = ShaderMaterial.new()
 	_body_mat.shader = sh
 	_body_mat.set_shader_parameter("body_tex", tex)
@@ -2398,13 +2446,14 @@ func _glass_material() -> ShaderMaterial:
 	if _glass_mat != null:
 		return _glass_mat
 	var sh: Shader = Shader.new()
-	sh.code = GLASS_SHADER
+	sh.code = with_tint(GLASS_SHADER)
 	_glass_mat = ShaderMaterial.new()
 	_glass_mat.shader = sh
 	_glass_mat.render_priority = 1   # after the body
 	if _body_mat != null:
 		_glass_mat.set_shader_parameter("body_tex",
 			_body_mat.get_shader_parameter("body_tex"))
+	_apply_tint(_glass_mat)
 	return _glass_mat
 
 
@@ -3951,7 +4000,7 @@ func shatter() -> void:
 		body_tex = _body_mat.get_shader_parameter("body_tex")
 	if _shard_shader == null:
 		_shard_shader = Shader.new()
-		_shard_shader.code = with_erode(SHARD_SHADER)
+		_shard_shader.code = with_tint(with_erode(SHARD_SHADER))
 	# Thinner than the overlay plate: a thick prism reads as a crouton, all
 	# fracture-face and no painting.
 	var thick: float = _box_u * GLASS_THICK * 0.9
@@ -3973,6 +4022,7 @@ func shatter() -> void:
 		# with a nil start value refuses the property outright.
 		smat.set_shader_parameter("heat", 1.0)
 		smat.set_shader_parameter("dissolve", 0.0)
+		_apply_tint(smat)
 		var rb: RigidBody3D = RigidBody3D.new()
 		rb.physics_material_override = _bounce(0.35, 0.4)
 		rb.gravity_scale = 2.4
@@ -4613,6 +4663,27 @@ func _name_tint() -> Color:
 
 ## `<span class="affix-name" style="color:${afx.tone}">` (combat.js:606). Passed
 ## in rather than looked up: a widget in `presentation/` does not read content.
+## The variant wears its cast on every surface that shows the painting: the
+## standing body, the glass overlay, and each shard minted at death — the
+## benchmark's DOM filter covers the whole `.enemy-sprite` (styles.css:760-764)
+## and its mesh path writes the same three uniforms per art plane. Hue arrives
+## in degrees because that is how content spells it.
+func set_variant_tint(hue_deg: float, saturation: float, brightness: float) -> void:
+	_tint_hue = deg_to_rad(hue_deg)
+	_tint_sat = saturation
+	_tint_bright = brightness
+	_apply_tint(_body_mat)
+	_apply_tint(_glass_mat)
+
+
+func _apply_tint(mat: ShaderMaterial) -> void:
+	if mat == null:
+		return
+	mat.set_shader_parameter("tint_hue", _tint_hue)
+	mat.set_shader_parameter("tint_sat", _tint_sat)
+	mat.set_shader_parameter("tint_bright", _tint_bright)
+
+
 func set_affix(display: String, tone: Color) -> void:
 	if _affix_label == null:
 		return

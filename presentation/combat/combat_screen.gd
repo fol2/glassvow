@@ -1393,7 +1393,24 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 		# that name and char-meta types its box and its feet by the same one.
 		# Passing nothing here is what left the fight full of fallback gems.
 		var mul: float = scales[idx] if idx < scales.size() else 1.0
+		# The variant's presentation pair rides beside the def (engine.js:1094):
+		# scale multiplies into the frame exactly where bfEnemyFrame multiplies
+		# its presentationScale (battlefield.js:141-144), and the tint is written
+		# once the view exists. Content is the source — the domain's resolved def
+		# deliberately carries neither, so the traces never see them.
+		var variant_tint: Dictionary = {}
+		if e.variant_id != &"":
+			var variant_def: Dictionary = game.content.variants.get(String(e.variant_id), {})
+			mul *= maxf(0.01, float(str(variant_def.get("scale", 1))))
+			var tint_v: Variant = variant_def.get("tint")
+			if typeof(tint_v) == TYPE_DICTIONARY:
+				variant_tint = tint_v
 		var view: EnemyView = EnemyView.new(e.idx, e.name, float(hue_num), e.key, mul)
+		if not variant_tint.is_empty():
+			view.set_variant_tint(
+				float(str(variant_tint.get("hue", 0))),
+				float(str(variant_tint.get("saturation", 1))),
+				float(str(variant_tint.get("brightness", 1))))
 		view.set_affix(affix_name, affix_tone)
 		# `meshProfileFor(kind, id)` — a golem does not breathe like a wisp, and
 		# `art.kind` is the only thing that knows which it is.
