@@ -57,7 +57,7 @@ curve, the hero's −70px and the `_stand` re-anchor, and had no stagger. The
 Control is the correct element and the stagger is the correct behaviour, so they
 are one function: `EnemyView.enter(delay, done)` owns the motion and the fill,
 `_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2904` (`enter`),
-`combat_screen.gd:1545` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
+`combat_screen.gd:1479` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
 which fired a frame earlier and set foe alpha to zero under the other path's
 nose, is gone.
 
@@ -208,7 +208,7 @@ paths go white (`src/styles.css:95-110`, `src/ui/drain.js:551-566`).
 
 Here: boss-only timing, 820ms world-stop, 110ms hit-stop, .22s transition,
 .07 saturation, .85 brightness and .09s tremble are built and wired
-(`combat_screen.gd:178-183` (`WORLDSTOP_SAT`), `presentation/combat/combat_screen.gd` (`_hit_player`),
+(`combat_screen.gd:153-158` (`WORLDSTOP_SAT`), `presentation/combat/combat_screen.gd` (`_hit_player`),
 `enemy_view.gd:236-239`, `enemy_view.gd:2032-2038`). The actor pixels
 desaturate too, unlike the benchmark's separate mesh canvas; that is a documented
 structural departure (`presentation/combat/combat_screen.gd` (`WORLDSTOP_SAT`)).
@@ -418,7 +418,7 @@ Benchmark: 1100ms normal / 1250ms crit, `cubic-bezier(.2,.7,.3,1)`; scale
 
 Here: `Floaters.float_text` — 1.1s / 1.25s crit, matching ease and keyframes,
 poison descends, crit blaze (`floaters.gd:43-45` (`FLOAT_EASE`), `floaters.gd:149-201` (`float_text`)). Driven
-from `combat_screen._float` (`combat_screen.gd:2226-2231` (`_float`)). The benchmark's crit
+from `combat_screen._float` (`combat_screen.gd:2160-2165` (`_float`)). The benchmark's crit
 branch has no caller, so its presence in both trees is not a visible parity gap.
 
 ### 4.2 Impact particles — **KEEP** (and honour the dead kinds)
@@ -433,7 +433,7 @@ go NaN before paint. Pixel counts on the running page: burst/motes draw; ring an
 slashArc draw 0 (`vfx_layer.gd:43-59` (in `DEAD_KINDS_RENDER`)).
 
 Here: `VfxLayer.archetype_hit` and the drain call sites are built
-(`vfx_layer.gd:591` (`archetype_hit`), `combat_screen.gd:2611` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
+(`vfx_layer.gd:591` (`archetype_hit`), `combat_screen.gd:2555` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
 `ring` / `slash` at `_push` so the typed `Vector2.ZERO` default does not
 accidentally repair them into visible hoops (`vfx_layer.gd:71-73` (`DEAD_KINDS_RENDER`),
 `vfx_layer.gd:405-410` (`_push`)). Call sites stay as the record of what the source asks
@@ -448,7 +448,7 @@ which the particle loop freezes; colour flashes at .09/.24/.28/.3s
 (`src/vfx.js:52-57`, `src/vfx.js:127-149`, `src/ui/drain.js:291-306`).
 
 Here: shake moves `_shake_host` wrapping stage, battlefield and HUD
-(`combat_screen.gd:481` (`_shake_host`), `vfx_layer.gd:433-434` (`shake`), `vfx_layer.gd:344-357` (in `_step_shake`)).
+(`combat_screen.gd:452` (`_shake_host`), `vfx_layer.gd:433-434` (`shake`), `vfx_layer.gd:344-357` (in `_step_shake`)).
 `hitstop` freezes the particle sim (`vfx_layer.gd:437-438` (`hitstop`),
 `vfx_layer.gd:245-248` (in `_process`)) and is wired for big hits, kills, shatter and world-stop
 (`presentation/combat/combat_screen.gd` (`_handle_event`), `2172`, `2176`, `2266`). Flashes go through

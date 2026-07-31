@@ -205,7 +205,7 @@ over `edges`. No new transition tech — reuse the combat wipe.
   by this brief.~~ **Withdrawn 2026-07-24.** The gate was decided: the port aligns
   to `roguecardv2@6e069118`, which is raster throughout. Painted assets are the
   target, not an open question. Known blocker: the map's four parallax bands are
-  one `_draw()` pass on a single Control (`world_map_screen.gd:429` (`_draw`)), and Godot
+  one `_draw()` pass on a single Control (`world_map_screen.gd:442` (`_draw`)), and Godot
   renders children above a parent's `_draw()` — so bands must become `Node2D`
   children with `z_index` before sprites can interleave with waystones. The old
   marker-offset workaround is already gone: `_draw_marker()` now uses the
