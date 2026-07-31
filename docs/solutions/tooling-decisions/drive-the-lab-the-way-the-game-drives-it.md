@@ -49,11 +49,11 @@ than in passing.
 It was building its actors wrong. `_actor`
 (`presentation/lab/enemy_lab.gd:432` (`_actor`)) constructed every
 view with `EnemyView.new(...)` and then placed it, and that was all. The shipping
-screen does one more thing: `presentation/combat/combat_screen.gd:1453`
-(in `start_encounter`) calls `view.set_profile(_foe_kind(e.idx))` for every foe,
-and `presentation/combat/combat_screen.gd:1458` (in `start_encounter`) calls
-`_hero.set_profile("rogue")` for the player. Without that call an actor keeps the
-profile it is constructed with, and the construction default is not neutral —
+screen does one more thing: `CombatScreen.start_encounter`
+(`presentation/combat/combat_screen.gd` (`start_encounter`)) calls
+`view.set_profile(_foe_kind(e.idx))` for every foe and
+`_hero.set_profile("rogue")` for the player. Without those calls an actor keeps
+the profile it is constructed with, and the construction default is not neutral —
 `_read_idle` ends by calling `_resolve_profile(&"humanoid")`
 (`presentation/combat/enemy_view.gd:2688` (`_read_idle`)), and
 `_resolve_profile` falls back to
@@ -503,10 +503,11 @@ whose profile is `sway .55, bob .55, breathe 1.35, head 0, pin 1.2, float .25`
 (`presentation/combat/enemy_view.gd:520`) — rendered with `sway 1.0, bob 1.0,
 breathe 1.0, head 1.0,
 float 0` and no kind idle at all. After, one line reproduces what
-`presentation/combat/combat_screen.gd:1458` (in `start_encounter`) does, and
-the comment above it
-names that line so the two can be diffed rather than rediscovered
-(`presentation/lab/enemy_lab.gd` (in `_actor`)).
+`CombatScreen.start_encounter`
+(`presentation/combat/combat_screen.gd` (`start_encounter`)) does: it passes the
+same kind selected by `CombatScreen._foe_kind`
+(`presentation/combat/combat_screen.gd` (`_foe_kind`)) through
+`EnemyView.set_profile` (`presentation/lab/enemy_lab.gd` (in `_actor`)).
 
 ### Why `--idle` could not be a slowed strip
 

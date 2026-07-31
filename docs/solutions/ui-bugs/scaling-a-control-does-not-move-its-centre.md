@@ -89,9 +89,9 @@ The same correction applies at `spend_to` and `strike_to`, which flew a card to 
 pile and at a foe with `* shrink` and `* STRIKE_SCALE` in the destination.
 
 Where a call site genuinely wants the on-screen box of a node inside a scaling
-shell, either accessor is correct; this port spells it out from the transform so
-the question is answered at the call site rather than assumed
-(`presentation/combat/hud_bar.gd:814`):
+shell, either accessor is correct; `HudBar.pile_rect`
+(`presentation/combat/hud_bar.gd` (`pile_rect`)) spells it out from the
+transform so the question is answered at the call site rather than assumed:
 
 ```gdscript
 var xf: Transform2D = p.stack.get_global_transform()

@@ -1,13 +1,14 @@
 ---
 title: "A scaled Control shrinks its hit area with its picture — and 44pt is a floor, not a preference"
 date: 2026-07-30
+last_refreshed: 2026-07-31
 category: ui-bugs
 module: presentation/map
 problem_type: ui_bug
 component: frontend_stimulus
 severity: high
 symptoms:
-  - "Waystones on a phone were 36x45 stage px; held sideways, 21x27"
+  - "At discovery, waystones on a phone were 36x45 stage px; held sideways, 21x27"
   - "Every stage shape passed its layout gate — nothing overflowed, nothing overlapped"
   - "The defect is invisible in a screenshot and invisible in a resolved-value table"
 root_cause: wrong_api
@@ -28,14 +29,21 @@ the picture shrank the target by exactly the same factor.
 
 ## Symptoms
 
-- `GlassWaystone` is 120x150. At the trail scales the book authors, the target
-  a finger has to find is:
+- At discovery, `GlassWaystone` was 120x150. At the trail scales the book then
+  authored, the target a finger had to find was:
 
   | shape | trail scale | target | verdict |
   |---|---|---|---|
   | pad-landscape | 0.36 | 43.2 x 54.0 | mouse — fine |
   | phone-portrait | 0.30 | **36.0 x 45.0** | under 44pt |
   | phone-landscape | 0.18 | **21.6 x 27.0** | half the floor |
+
+  The picture has since been re-authored at 104x104, with current trail scales
+  of 0.60 / 0.68 / 0.58 for pad landscape / phone portrait / phone landscape.
+  Those pictures are already 62.4 / 70.72 / 60.32 stage px, so the current
+  `trail/touch = 44` phone settings add no padding. The field and
+  `set_touch_min` remain the defensive authoring seam: a future smaller scale
+  grows the hit rect without requiring the picture to grow with it.
 
 - **Every layout gate passed.** Nothing overflowed, nothing overlapped, the
   identity capture was pixel-identical. A composition can be geometrically

@@ -138,8 +138,9 @@ func _probe(shape: StringName, act: int) -> void:
 ```
 
 The port draws each piece once at its identity-shape size and spends the shape as
-one scale outside it — `CardView.base_scale` (`presentation/combat/card_view.gd:254`)
-for a card, `HudBar._place_widget` (`presentation/combat/hud_bar.gd:1048`) for a
+one scale outside it — `CardView.base_scale`
+(`presentation/combat/card_view.gd` (`base_scale`)) for a card,
+`HudBar._place_widget` (`presentation/combat/hud_bar.gd` (`_place_widget`)) for a
 chrome widget — rather than teaching every widget to lay itself out at any size.
 
 The table is pinned so it cannot quietly drift back:

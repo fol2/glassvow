@@ -168,10 +168,10 @@ experiment never established. "Does an off-screen window render correctly?" is
 only answerable once something confirms the window went off-screen, and nothing
 did. Verify the precondition, not just the outcome.
 
-`-4000,-4000` remains the default in both tools (`tools/shot.sh:49`,
-`tools/live.sh:24`, both overridable via `GLASSVOW_SHOT_POSITION`) because it
-costs nothing and a platform that honoured it would be strictly better. Nothing
-downstream may assume that it works.
+`-4000,-4000` remains the default in both tools' `POSITION` assignments (both
+overridable via `GLASSVOW_SHOT_POSITION`) because it costs nothing and a
+platform that honoured it would be strictly better. Nothing downstream may
+assume that it works.
 
 **The conclusion survives this, and the reason is worth stating plainly.** The
 host's value was never that its window is invisible — it is that the window is
@@ -205,8 +205,9 @@ attempts have a home.
 `tools/live.tscn` is six lines: a bare `Node` named `LiveHost` with
 `tools/live.gd` attached. The script instantiates the *real* game scene
 unchanged — `const GAME_SCENE_PATH: String = "res://application/main.tscn"`
-(`tools/live.gd:24`) — and adds funplay's runtime bridge beside it
-(`tools/live.gd:25`, instantiated at `tools/live.gd:43-46`):
+(`tools/live.gd` (`GAME_SCENE_PATH`)) — and adds funplay's runtime bridge beside
+it (`tools/live.gd` (`BRIDGE_SCRIPT_PATH`), instantiated in `tools/live.gd`
+(`_ready`)):
 
 ```gdscript
 func _ready() -> void:
@@ -221,16 +222,16 @@ func _ready() -> void:
 The bridge already speaks the commands the loop needs — its dispatch at
 `addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:136-143` matches
 `query_node`, `capture_view`, `send_input`, and `get_events` — over `user://`
-command and response files declared at that file's lines 3-6. The host adds one
-command of its own, `reload`, on a *separate* channel
-(`tools/live.gd:26-28`), for the reason given at `tools/live.sh:104-105`: a
-reload re-parses the scripts the bridge would otherwise be answering from.
+command and response files declared at that file's lines 3-6. The host adds two
+commands of its own on a *separate* channel: `reload` re-parses the scripts the
+bridge would otherwise be answering from (`tools/live.gd` (`_reload`)), while
+`resize` changes the live window and waits for the resized viewport to settle
+(`tools/live.gd` (`_resize`)).
 
 ### `tools/live.sh` — the client
 
-`start` / `shot` / `reload` / `key` / `action` / `click` / `drag` / `query` /
-`events` / `status` / `stop`, dispatched at `tools/live.sh:74-140`. Launch is
-one line (`tools/live.sh:84-85`):
+`start` / `shot` / `reload` / `resize` / `key` / `action` / `click` / `drag` /
+`query` / `events` / `status` / `stop`. Launch is one line:
 
 ```sh
 "$GODOT" --path "$ROOT" --position "$POSITION" res://tools/live.tscn -- "$@" \
@@ -240,9 +241,8 @@ one line (`tools/live.sh:84-85`):
 Everything after that boot is a file write and a poll. `send()`
 (`tools/live.sh:58` (`send`)) mints a fresh id per call, clears the response file,
 writes the command, and polls for up to 200 × 0.05s. `shot` asks the bridge to
-save under `user://shots/` and copies the result out
-(`tools/live.sh:95-102`). `reload` uses the host's own channel and polls for up
-to 400 × 0.05s (`tools/live.sh:104-120`).
+save under `user://shots/` and copies the result out. `reload` and `resize` use
+the host's own channel and each poll for up to 400 × 0.05s.
 
 **Do not pass `--shot` to the host.** That hook captures once and quits
 (`application/main.gd` (`_capture_and_quit`)), which is the exact behaviour the
@@ -271,8 +271,9 @@ originating at `modules/gdscript/gdscript.cpp:754` — a path in *Godot's own
 source*, not in this repository, and a line number taken from the error output
 rather than verified against a checkout of the engine. And `queue_free()` is deferred to the end of
 the frame, so it does not clear the instances in time. The scene must be
-`free()`d outright, first. `_teardown_game()` is called at `tools/live.gd:97`,
-before the script loop, and it does not defer (`tools/live.gd:162-167`):
+`free()`d outright, first. `_reload` calls `_teardown_game` before the script
+loop (`tools/live.gd` (in `_reload`)), and `_teardown_game` does not defer
+(`tools/live.gd` (`_teardown_game`)):
 
 ```gdscript
 func _teardown_game() -> void:
@@ -290,7 +291,7 @@ a thoroughly convincing false positive: the reload reported `success: true` with
 `failed_scripts: []` while the running screen still showed the old code. It was
 caught only because a deliberately planted, visually checkable change — a gold
 counter set to `12345` — failed to appear on screen. The fix is the assignment
-at `tools/live.gd:116`, inside the pass loop:
+inside the pass loop in `tools/live.gd` (in `_reload`):
 
 ```gdscript
 script.source_code = FileAccess.get_file_as_string(path)
@@ -298,17 +299,16 @@ if script.reload(false) != OK:
 	failed.append(path)
 ```
 
-Two passes are run (`RELOAD_PASSES: int = 2`, `tools/live.gd:36`) because a
-dependency compiled after its dependent leaves the dependent holding the older
-copy; the second pass settles it (`tools/live.gd:33-35`).
+Two passes are run (`RELOAD_PASSES: int = 2`, `tools/live.gd`
+(`RELOAD_PASSES`)) because a dependency compiled after its dependent leaves the
+dependent holding the older copy; the second pass settles it.
 
 **3. A rebuilt screen re-takes the desktop.** The new screen calls
 `grab_focus()`, which makes the window key again and drags the macOS desktop
 with it — measured at 8 of 30 samples on `godot` during a reload. The fix is to
-toggle `WINDOW_FLAG_NO_FOCUS` on **for the rebuild only**: set at
-`tools/live.gd:92`, cleared at `tools/live.gd:129` (and on the early-return
-failure path at `tools/live.gd:120`). Leaving it on permanently is a trap that
-was itself measured, and the comment at `tools/live.gd:88-91` records the
+toggle `WINDOW_FLAG_NO_FOCUS` on **for the rebuild only**, including the
+early-return failure path (`tools/live.gd` (`_reload`)). Leaving it on
+permanently is a trap that was itself measured, and `_reload` records the
 result: with the flag always set, focus never returns to the user at all,
 because a window that can never be key is never the one the system hands focus
 to next.
@@ -316,12 +316,12 @@ to next.
 **4. The first frame after a rebuild is black.** A viewport texture read before
 the rebuilt screen has painted comes back black; several early captures were
 fully black PNGs. The host waits 30 frames before announcing ready or replying
-to a reload — `SETTLE_FRAMES: int = 30` at `tools/live.gd:32`, deliberately
-matching `main.gd`'s own hook in `application/main.gd` (in
-`_capture_and_quit`). `_settle()` is
-awaited from both `_announce_ready()` (`tools/live.gd:151`) and the reload's
-success path (`tools/live.gd:128`), so **a successful reply doubles as "safe to
-capture now"** (`tools/live.gd:127`).
+to a reload — `SETTLE_FRAMES: int = 30` (`tools/live.gd`
+(`SETTLE_FRAMES`)), deliberately matching `main.gd`'s own hook in
+`application/main.gd` (in `_capture_and_quit`). `_settle()` is awaited from
+both `_announce_ready()` (`tools/live.gd` (`_announce_ready`)) and the reload's
+success path (`tools/live.gd` (`_reload`)), so **a successful reply doubles as
+"safe to capture now"**.
 
 **4b. Thirty frames means "not black". It does not mean "settled".** Half a
 second is enough for a first paint and is not enough for a fight: a combat
@@ -356,10 +356,10 @@ never quits, so it holds the desktop indefinitely — measured holding focus fro
 boot at 2.03s all the way to 10.95s, which is far worse than the 0.6s the host
 was built to eliminate.
 
-The fix is in the client, not the engine. `tools/live.sh:81` records the
-previously-frontmost application before launching, and `hand_back()`
-(`tools/live.sh:40` (`hand_back`)) reactivates it once the host writes its ready
-file (called at `tools/live.sh:88`):
+The fix is in the client, not the engine. The `start` branch in `tools/live.sh`
+records the previously-frontmost application before launching, and
+`hand_back()` (`tools/live.sh:40` (`hand_back`)) reactivates it once the host
+writes its ready file:
 
 ```sh
 hand_back() {
@@ -388,8 +388,8 @@ with no further transitions across a subsequent `reload` and captures.
   reference were reverted as soon as the result was in — neither exists in the
   tree, so the citation is historical.) Worse, the host originally still
   reported `success: true` — a silent failure that would have let someone
-  capture stale code believing it fresh. `tools/live.gd:136-142` now reports the
-  refusal:
+  capture stale code believing it fresh. `_reload` (`tools/live.gd`
+  (`_reload`)) now reports the refusal:
 
   ```gdscript
   if not failed.is_empty():
@@ -401,13 +401,13 @@ with no further transitions across a subsequent `reload` and captures.
   	}
   ```
 
-  The comment above it (`tools/live.gd:132-135`) states the principle:
+  The comment above that branch states the principle:
   "Reporting the refusal is the difference between a reload and a lie."
 
 - **The host's own code and the bridge are never reloaded.**
   `_collect_scripts()` skips `res://addons` and `res://tools` outright
-  (`tools/live.gd:190`), because reloading either would pull the command channel
-  out from under the reply that is being written.
+  (`tools/live.gd` (`_collect_scripts`)), because reloading either would pull the
+  command channel out from under the reply that is being written.
 
 - **Scene-local state is discarded; durable state is not.** A reload re-parses
   scripts and rebuilds the scene from disk, so Node state from the old scene is
@@ -418,23 +418,25 @@ with no further transitions across a subsequent `reload` and captures.
   (`application/main.gd` (`_new_run`), `application/main.gd`
   (`_continue_run`), `application/save_service.gd` (`RUN_PATH`)).
 
-- **Editing the host or the autoload set still needs a restart**
-  (`tools/live.gd:20-22`).
+- **Editing the host or the autoload set still needs a restart**, as the
+  `tools/live.gd` module docstring records.
 
 - **Errors are reported, not raised.** A half-typed edit should leave the host
-  answering commands rather than take it down (`tools/live.gd:84-85`), which is
-  why the failure paths return dictionaries instead of pushing errors and
-  quitting.
+  answering commands rather than take it down (`tools/live.gd` (`_reload`)),
+  which is why the failure paths return dictionaries instead of pushing errors
+  and quitting.
 
 - **Thirty frames is a frame count, not a duration — and a fight's actors have
   not arrived yet.** Both settle loops count frames: `_capture_and_quit` at
-  `application/main.gd` (in `_capture_and_quit`) and `SETTLE_FRAMES` at
-  `tools/live.gd:32`,
-  `158`. Thirty frames is half a second at 60fps. A combat entrance is longer
-  than that: each actor tweens for `ENTER_TIME` 0.55s after a stagger of
+  `application/main.gd` (in `_capture_and_quit`) and `_settle` at
+  `tools/live.gd` (`_settle`), governed by `tools/live.gd`
+  (`SETTLE_FRAMES`). Thirty frames is half a second at 60fps. A combat entrance
+  is longer than that: each actor tweens for `ENTER_TIME` 0.55s after a stagger of
   `ENTER_LEAD` 0.16s plus `ENTER_STEP` 0.13s per index
-  (`presentation/combat/enemy_view.gd:283`, `288-289`), so the third foe is
-  still travelling at 1.27s. A one-off `tools/shot.sh --fight=...` therefore
+  (`presentation/combat/enemy_view.gd` (`ENTER_TIME`),
+  `presentation/combat/enemy_view.gd` (`ENTER_LEAD`), and
+  `presentation/combat/enemy_view.gd` (`ENTER_STEP`)), so the third foe is still
+  travelling at 1.27s. A one-off `tools/shot.sh --fight=...` therefore
   photographs an empty floor with healthy-looking chrome, and so does a
   `live.sh shot` taken straight after a `reload` that rebuilt the scene. The
   host itself is immune once it has been up a while — the entrance is long over
@@ -513,7 +515,8 @@ system under test is not evidence that the system under test did anything.
 The same failure mode recurred one level up, which is the strongest argument for
 the technique. The `class_name` limit was originally a silent
 `success: true` too. Both were fixed the same way: make the reply tell the
-truth, including when the truth is "I did nothing" (`tools/live.gd:136-142`).
+truth, including when the truth is "I did nothing" (`tools/live.gd`
+(`_reload`)).
 
 ### Process-per-operation is a cost that compounds invisibly
 
@@ -563,10 +566,9 @@ tools/live.sh shot /tmp/b.png
 tools/live.sh stop
 ```
 
-The usage block at `tools/live.sh:2-17` is the same list, and the bare
-invocation prints it (`tools/live.sh:136-138`) — note the printer stops at 17,
-so the `class_name` caveat on line 18 is in the file but not in the printed
-help.
+The usage block at `tools/live.sh:2-17` is the same list, and the bare invocation
+prints it with `sed -n '2,17p'` — note the printer stops at 17, so the
+`class_name` caveat on line 18 is in the file but not in the printed help.
 
 ### Edit code, then reload — no restart, no focus grab
 
@@ -606,7 +608,7 @@ for path: String in paths:
 ```
 
 Right — free outright first, re-read from disk, then recompile, twice
-(`tools/live.gd:97-118`):
+(`tools/live.gd` (in `_reload`)):
 
 ```gdscript
 _teardown_game()
@@ -631,8 +633,8 @@ await _settle()
 DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, false)
 ```
 
-(`tools/live.gd:92`, `97`, `128-129`.) Leaving the flag on permanently was
-measured: focus never returns to the user at all.
+(`tools/live.gd` (in `_reload`)). Leaving the flag on permanently was measured:
+focus never returns to the user at all.
 
 ### A measurement harness that can see the bug
 

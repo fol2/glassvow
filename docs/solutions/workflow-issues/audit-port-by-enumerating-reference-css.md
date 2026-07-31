@@ -1,7 +1,7 @@
 ---
 title: Audit a port by enumerating the reference's CSS instead of waiting for someone to notice
 date: 2026-07-27
-last_refreshed: 2026-07-29
+last_refreshed: 2026-07-31
 category: workflow-issues
 module: port/audit
 problem_type: workflow_issue
@@ -173,7 +173,7 @@ reads it, not with an assignment that happens to land on the final value. The
 HP rails are the worked shape:
 
 ```gdscript
-# presentation/combat/hud_bar.gd:80-82 — two rails, two durations, one curve
+# presentation/combat/hud_bar.gd — two rails, two durations, one curve
 const HP_BAR_TIME: float = 0.4
 const HP_PLATE_TIME: float = 0.35
 const HP_EASE: Array[float] = [0.3, 1.0, 0.4, 1.0]
@@ -404,7 +404,9 @@ health would open with both rails sweeping down from full. Measured after the
 fix, seeding at 50/72 then dropping to 30/72: first sync lands with no sweep;
 the second travels and settles on `170 × 30/72`. Two rails, two durations, one
 curve — `HP_BAR_TIME 0.4`, `HP_PLATE_TIME 0.35`, `HP_EASE [0.3, 1.0, 0.4, 1.0]`
-in `presentation/combat/hud_bar.gd:80-82`, driven by `_glide_hp` at
+in `presentation/combat/hud_bar.gd` (`HP_BAR_TIME`),
+`presentation/combat/hud_bar.gd` (`HP_PLATE_TIME`) and
+`presentation/combat/hud_bar.gd` (`HP_EASE`), driven by `_glide_hp` at
 `presentation/combat/hud_bar.gd:710` (`_glide_hp`). That is
 the whole loop the method is for: extract the declaration, audit it as ABSENT
 with quoted evidence, rank it by how often a player sees it, then close the row

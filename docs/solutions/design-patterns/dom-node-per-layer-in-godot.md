@@ -198,11 +198,12 @@ unconverted instance. A count is a claim like any other, and this one was never
 checked because it read as scene-setting rather than as an assertion.
 
 **Added 2026-07-28 — a third node, and it is not an exemption because the rule
-never covered it.** `_place_widget` (`presentation/combat/hud_bar.gd:1048`) now
-wraps every chrome widget in one extra `Control` whose only job is to carry a
-scale, so a widget drawn at its identity-shape size lands in whatever box the
-layout book gives it on a phone. A reader who arrives from this document will
-find a node added on purpose and should not read it as a regression.
+never covered it.** `_place_widget`
+(`presentation/combat/hud_bar.gd` (`_place_widget`)) now wraps every chrome
+widget in one extra `Control` whose only job is to carry a scale, so a widget
+drawn at its identity-shape size lands in whatever box the layout book gives it
+on a phone. A reader who arrives from this document will find a node added on
+purpose and should not read it as a regression.
 
 The rule above is narrower than "prefer fewer nodes", and this is the case that
 shows where its edge is. It collapses a node **repeated to repeat a picture**,

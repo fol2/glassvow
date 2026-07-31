@@ -1,7 +1,7 @@
 ---
 title: "The hero's ward stone never answered a blow it stopped, because only one of two mirrored branches made the call"
 date: 2026-07-27
-last_refreshed: 2026-07-29
+last_refreshed: 2026-07-31
 category: ui-bugs
 module: presentation/combat/combat_screen
 problem_type: ui_bug
@@ -188,7 +188,8 @@ scaled by the decaying ring and `WARD_FLINCH`
 `_ward_root.position` on top of the vessel's own motion — and it lights the
 facets ON that side, through the shader's `hit_from` uniform
 (`presentation/combat/enemy_view.gd:1244` (`hit_from`)) weighting the ring term
-by `dot(axis, -hit_from)` (`presentation/combat/enemy_view.gd:1418`).
+by `dot(axis, -hit_from)`
+(`presentation/combat/enemy_view.gd` (`WARD_SHADER`)).
 
 `ward_hit`'s default is `Vector2.LEFT`
 (`presentation/combat/enemy_view.gd:2565` (`ward_hit`)), correct for a foe struck
@@ -203,8 +204,8 @@ survives review.
 var from: Vector2 = Vector2.RIGHT if HEROES.has(_strip_id) else Vector2.LEFT
 ```
 
-at `presentation/lab/enemy_lab.gd:1405` (in `_ready`), consumed by the strip's
-action callable two lines below. `HEROES`
+in `presentation/lab/enemy_lab.gd` (in `_ready`), consumed by the strip's
+action callable. `HEROES`
 (`presentation/lab/enemy_lab.gd:163` (`HEROES`)) is the lab's own two-hero
 roster — `duskblade` and `ashwarden` — and `_strip_id`
 (`presentation/lab/enemy_lab.gd:109` (`_strip_id`)) is the subject being
