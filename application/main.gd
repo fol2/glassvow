@@ -50,6 +50,10 @@ var _forced_act: int = -1
 ## --settle=SECONDS: extra wait before a `--shot=` capture, so a composition is
 ## photographed at rest rather than mid-entrance.
 var _settle: float = 0.0
+## The ceremony layer — wipe, transit leaves, grain — living above every routed
+## screen so a leaf started before a route swap finishes over the incoming
+## screen. Screens never see it; main fires it around its own route helpers.
+var _transitions: TransitionLayer
 
 
 static func rest_heal_amount(max_hp: int) -> int:
@@ -173,6 +177,10 @@ func _ready() -> void:
 	var window: Window = get_window()
 	if window != null:
 		window.size_changed.connect(_apply_shape)
+	_transitions = TransitionLayer.new()
+	# A capture must photograph the destination, not the ceremony over it.
+	_transitions.instant = shot_path != ""
+	add_child(_transitions)
 	if studio:
 		# The material bench: one card, four layer pickers, no game state. It
 		# takes --zoom for the PANEL's scale only; the card has its own size
@@ -333,9 +341,15 @@ func _clear_route() -> void:
 
 func _show_route(screen: Control, with_hud: bool = false,
 		cue: StringName = &"") -> void:
+	# The wipe fires on every screen change with a live run, and only then —
+	# navigation.js:80. The title and a fresh boot arrive without ceremony.
+	if game != null and game.run != null:
+		_transitions.wipe()
 	_clear_route()
 	_route_screen = screen
 	add_child(screen)
+	_transitions.set_grain(true)
+	_transitions.screen_in(screen)
 	if with_hud:
 		_attach_run_hud()
 	if not cue.is_empty():
@@ -366,6 +380,8 @@ func _close_overlay() -> void:
 
 func _show_choice(title: String, body: String, choices: Array[Dictionary], handler: Callable,
 		context: Dictionary = {}) -> void:
+	if game != null and game.run != null:
+		_transitions.wipe()
 	_clear_route()
 	# The shape rides in the context rather than in a fifth positional argument:
 	# `ChoiceScreen` already had a context bag for the title variant, and every
@@ -375,6 +391,8 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 	_choice_screen = ChoiceScreenType.new(title, body, choices, ctx)
 	_choice_screen.connect("chosen", handler)
 	add_child(_choice_screen)
+	_transitions.set_grain(true)
+	_transitions.screen_in(_choice_screen)
 
 
 func _show_title() -> void:
@@ -594,12 +612,16 @@ func _route_run() -> void:
 # ---------------------------------------------------------------- map
 
 func _show_map() -> void:
+	if game != null and game.run != null:
+		_transitions.wipe()
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.menu_requested.connect(_show_run_menu)
 	add_child(_map_screen)
 	_map_screen.refresh(game.run)
+	_transitions.set_grain(true)
+	_transitions.screen_in(_map_screen)
 	_attach_run_hud()
 	_music.play(&"map")
 
@@ -1048,6 +1070,11 @@ func _resume_pending_combat() -> void:
 	var enemies: Array[String] = []
 	for id_v: Variant in game.run.pending_enemy_ids:
 		enemies.append(str(id_v))
+	_transitions.wipe()
+	# Combat carries its own grain (the world-stop drain rides that material)
+	# and its own entrance choreography — one screen reader per frame, and no
+	# fade over heroIn.
+	_transitions.set_grain(false)
 	_clear_route()
 	_screen = CombatScreen.new(game, _shape,
 		_forced_act if _forced_act >= 0 else game.run.act)
@@ -1087,6 +1114,7 @@ func _start_fight(ids: PackedStringArray, kind: String) -> void:
 	if known.is_empty():
 		return
 	_bench_fight = true
+	_transitions.set_grain(false)
 	_clear_route()
 	_screen = CombatScreen.new(game, _shape, maxi(0, _forced_act))
 	_screen.combat_over.connect(_on_combat_over)
@@ -1209,12 +1237,15 @@ func _show_pending_reward() -> void:
 	var taken: Dictionary = pending["taken"]
 	var reward_kind: String = _map.current().combat_kind() \
 		if _map.current() != null else "normal"
+	_transitions.wipe()
 	_clear_route()
 	_reward_screen = RewardScreen.new(rewards, content,
 		reward_kind, false, _shape)
 	_reward_screen.claimed.connect(_on_reward_claimed)
 	_reward_screen.finished.connect(_on_reward_finished)
 	add_child(_reward_screen)
+	_transitions.set_grain(true)
+	_transitions.screen_in(_reward_screen)
 	_attach_run_hud()
 	if reward_kind == "boss":
 		_music.play(&"victory")
