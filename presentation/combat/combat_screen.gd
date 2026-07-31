@@ -1405,6 +1405,19 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 			var tint_v: Variant = variant_def.get("tint")
 			if typeof(tint_v) == TYPE_DICTIONARY:
 				variant_tint = tint_v
+			# battlefield.js:146-152 — the frame is bounded by the stage before
+			# it is built: never wider than the stage minus its 16px breath,
+			# never taller than the room between this foe's stand and the sky.
+			# The bound only ever SHRINKS the multiplier, so a 1.2× shade on a
+			# phone stage arrives large, not cropped.
+			var box: float = EnemyView.art_box(e.key)
+			var lift: float = slots[idx].y if idx < slots.size() else 0.0
+			var head_room: float = _battlefield.size.y - lift - 8.0
+			if box > 0.0 and head_room > 8.0:
+				var raw: float = box * mul
+				var cap: float = minf(maxf(8.0, _stage_w() - 16.0), head_room)
+				if raw > cap:
+					mul *= cap / raw
 		var view: EnemyView = EnemyView.new(e.idx, e.name, float(hue_num), e.key, mul)
 		if not variant_tint.is_empty():
 			view.set_variant_tint(
