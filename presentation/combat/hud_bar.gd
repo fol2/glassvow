@@ -820,9 +820,13 @@ func _build_lantern() -> void:
 	for i: int in range(LANTERN_CAP_MAX):
 		var pip: TextureRect = TextureRect.new()
 		pip.texture = pip_texture
-		pip.size = Vector2.ONE * LANTERN_PIP_SIDE
+		# Expand mode FIRST: while a TextureRect is in KEEP_SIZE its texture is
+		# its minimum, so a `size` written before this line is clamped to the
+		# gradient's 256px and stays there — nine quarter-screen "pips" whose
+		# stacked 35% unlit tint was measured halving the hero plate under them.
 		pip.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pip.stretch_mode = TextureRect.STRETCH_SCALE
+		pip.size = Vector2.ONE * LANTERN_PIP_SIDE
 		pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		shell.add_child(pip)
 		_lantern_pips.append(pip)
