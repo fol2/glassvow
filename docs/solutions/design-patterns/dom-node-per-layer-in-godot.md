@@ -122,7 +122,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([presentation/combat/hud_bar.gd:1054](../../../presentation/combat/hud_bar.gd#L973) (`_fan_angle`)).
+  resolves ([presentation/combat/hud_bar.gd:1058](../../../presentation/combat/hud_bar.gd#L973) (`_fan_angle`)).
 
 ## Why This Matters
 
