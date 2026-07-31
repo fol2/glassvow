@@ -87,8 +87,8 @@ existing is not evidence that it renders.
 | 977 | `.enemy.igniting .cracks` | `crackBlaze` .32s ease-out | same single tween | DIVERGES |
 | 980 | `.enemy.igniting .enemy-art` | `vesselHeat` .32s ease-out | same single tween, linear emission ramp | DIVERGES |
 | 1062 | `.enemy.reseaming .enemy-art` | `reseam` .7s ease-out, 30% brightness 1.55 sat .55 | `RESEAM_MS .7`, `RESEAM_AT .3`, 1.55 / 0.55 | MATCH |
-| 1238 | `.enemy.targetable .enemy-art` | `targetGlow` 1s ease-in-out ∞ | `target_lit` set to 1.0, no pulse | ABSENT |
-| 1239 | `.enemy.targetable:hover` | `animation: none`, static brighter glow | no hover/non-hover distinction | ABSENT |
+| 1238 | `.enemy.targetable .enemy-art` | `targetGlow` 1s ease-in-out ∞ | `css_pulse` 6→18px / 0.5→0.9 lit on the rim, 1s ∞ (closed 2026-07-31) | MATCH |
+| 1239 | `.enemy.targetable:hover` | `animation: none`, static brighter glow | hover kills the pulse: solid 22px, brightness 1.25 (closed 2026-07-31) | MATCH |
 
 ### Chrome — HP, chips, facets, lantern
 
@@ -101,7 +101,7 @@ existing is not evidence that it renders.
 | 907 | `.intent.telegraph` | `teleFlash` .5s ×2 — scale 1.22, brightness 1.8, glow | scale and brightness present, drop-shadow omitted | DIVERGES |
 | 938 | `.intent.pop` | `chipPop` .4s ease-out | `IntentChip` has `telegraph()` only | ABSENT |
 | 959 | `.hpbar > .pv.show` | `pvPulse` .9s ease-in-out ∞, opacity → .4 | `PREVIEW_PULSE .9`, `PREVIEW_DIP .4`, same easing | MATCH |
-| 988 | `.facet-row .pip` | background/box-shadow/filter .2s | redraws immediately | ABSENT |
+| 988 | `.facet-row .pip` | background/box-shadow/filter .2s | per-pip .2s crossfade, intact pane fades under the overlay (closed 2026-07-31) | MATCH |
 | 1030 | `.facet-row .pip.willchip` | `pvPulse` .9s ∞ | fixed dim tint, no pulse | ABSENT |
 | 1035 | `…willchip:has(.facet-img)` | `animation: none` | no animation on will-state | MATCH |
 | 1058 | `.facet-row.pop` | `chipPop` .4s ease-out | 1.35 at 0.16s, back over 0.24s | MATCH |
@@ -189,8 +189,10 @@ Ranked by how often a player sees it, not by how easy it is.
    responds instantly instead of moving.
 4. **`.lantern-btn.ready` / `.end-turn.ready` `artReady` (1116, 1352)** — the two
    "you can act now" beacons do not beacon.
-5. **`.enemy.targetable` `targetGlow` (1238)** — a targetable foe is lit but does
-   not pulse, so nothing distinguishes "can be hit" from "is being aimed at".
+5. **`.enemy.targetable` `targetGlow` (1238)** — ~~a targetable foe is lit but
+   does not pulse~~ closed 2026-07-31: the pulse and the hover stillness are
+   both live, and every legal target lights while a single-target card is
+   armed.
 
 Items 1–4 are all small, and two of them are calling a function the port already
 has. That is what a census buys — it separates *twenty-two missing things* from

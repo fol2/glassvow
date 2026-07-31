@@ -40,7 +40,7 @@ Two calls fire together when a warded creature eats a blow, and they are
 deliberately two:
 
 - `take_hit(direct)` — the BODY recoiling from being struck.
-- `ward_hit(from)` (`presentation/combat/enemy_view.gd:2587` (`ward_hit`)) — the
+- `ward_hit(from)` (`presentation/combat/enemy_view.gd:2614` (`ward_hit`)) — the
   STONE answering for having stopped it: it rings the facets facing the blow and
   drives the shield back along it.
 
@@ -53,7 +53,7 @@ docstring says why, in as many words:
 > first, and calling this on one is a no-op rather than a caller's problem.
 
 That last clause is real: the function returns immediately when there is no stone
-(`presentation/combat/enemy_view.gd:2588-2589`, in `ward_hit`), so the call is safe to
+(`presentation/combat/enemy_view.gd:2615-2616`, in `ward_hit`), so the call is safe to
 make unconditionally on any actor.
 
 The combat sequencer has two mirrored paths for the same beat: `_hit_enemy` is the
@@ -183,16 +183,16 @@ in `_hit_player`, under a comment that states both halves of the reasoning.
 screen-space heading pointing from the creature toward whoever struck it. It
 drives the shield AWAY from that side — the flinch is computed as `-_ward_from`
 scaled by the decaying ring and `WARD_FLINCH`
-(`presentation/combat/enemy_view.gd:2666-2667`, in `_step_ward`;
+(`presentation/combat/enemy_view.gd:2731-2732`, in `_step_ward`;
 `presentation/combat/enemy_view.gd:263` (`WARD_FLINCH`)) and applied to
 `_ward_root.position` on top of the vessel's own motion — and it lights the
 facets ON that side, through the shader's `hit_from` uniform
-(`presentation/combat/enemy_view.gd:1266` (`hit_from`)) weighting the ring term
+(`presentation/combat/enemy_view.gd:1284` (`hit_from`)) weighting the ring term
 by `dot(axis, -hit_from)`
 (`presentation/combat/enemy_view.gd` (`WARD_SHADER`)).
 
 `ward_hit`'s default is `Vector2.LEFT`
-(`presentation/combat/enemy_view.gd:2587` (`ward_hit`)), correct for a foe struck
+(`presentation/combat/enemy_view.gd:2614` (`ward_hit`)), correct for a foe struck
 by the hero, who stands on the foe's left. The hero is struck from the RIGHT.
 Passing the default would have driven the hero's stone INTO the blow — a wrong
 value that still renders as a plausible effect, which is the failure mode that
@@ -226,8 +226,8 @@ The work landed directly on `main` — there is no PR — in
 
 The stone's response is a single decaying scalar plus a direction, and both are
 set by the one call. `ward_hit` writes `_ward_hit = 1.0` and normalises `from`
-into `_ward_from` (`presentation/combat/enemy_view.gd:2590-2591`, in `ward_hit`).
-`_step_ward` (`presentation/combat/enemy_view.gd:2645` (`_step_ward`)) then does
+into `_ward_from` (`presentation/combat/enemy_view.gd:2617-2618`, in `ward_hit`).
+`_step_ward` (`presentation/combat/enemy_view.gd:2672` (`_step_ward`)) then does
 everything else on its own clock: it decays `_ward_hit` linearly by
 `delta / WARD_RING`, offsets `_ward_root` along `-_ward_from`, and pushes the
 squared value to the shader
@@ -237,7 +237,7 @@ entire effect with no other trace, and why one added call restores all of it.
 
 The direction argument works because it composes rather than replaces. The flinch
 is added to `_vessel.position` rather than overwriting it
-(`presentation/combat/enemy_view.gd:2667`, in `_step_ward`), so the stone travels
+(`presentation/combat/enemy_view.gd:2732`, in `_step_ward`), so the stone travels
 with the body's recoil and is *additionally* driven back along the blow. The
 body's recoil axis and the shield's are different axes for a reason: a body is
 knocked back by force, a shield is driven back by where it was struck. Mirroring
