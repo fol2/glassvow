@@ -41,6 +41,7 @@ for f in $(git ls-files '*.gd' | grep -v '^addons/'); do
 done
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS)
 python3 tools/check_anchors.py           # doc file:line anchors still point where they claim
+python3 tools/check_web_anchors.py       # benchmark citations still point into 6e06911
 ```
 
 Screenshots go through `tools/shot.sh` (one-off) or `tools/live.sh` (iteration

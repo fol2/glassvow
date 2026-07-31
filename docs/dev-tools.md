@@ -90,8 +90,8 @@ For a native iteration loop use `tools/live.sh start …`, then `shot`, `reload`
 `resize W H`, `key`, `click`, `drag` and `stop`. `resize` changes the existing
 Godot window, so it is the headed gate for a live shape change without rebuilding
 the current screen. Non-visual tools remain direct, honest
-commands: `tools/check_anchors.py`, `godot --headless -s
-res://tools/check_fracture.gd`, the windowed
+commands: `tools/check_anchors.py`, `tools/check_web_anchors.py`, `godot
+--headless -s res://tools/check_fracture.gd`, the windowed
 `res://tools/bench_actor_stage.gd` probe, and:
 
 ```bash
@@ -146,3 +146,26 @@ Two capture flags exist for the same reason:
 Browser support is earned by a safe lifecycle, not by adding a link. Tools that
 quit, write arbitrary paths, require a real-time renderer, or expose broad editor
 mutation stay CLI-only until those constraints change.
+
+## Web-reference anchors
+
+`tools/check_anchors.py` owns in-repo `.gd` citations. Web references —
+`styles.css:834`, `src/ui/drain.js:511-512`, bare `mesh.js:928` — are checked
+separately against the pinned pre-Pixi benchmark at
+`../roguecardv2-benchmark` (commit `6e06911`):
+
+```bash
+python3 tools/check_web_anchors.py           # exit 1 if any citation failed
+python3 tools/check_web_anchors.py --list    # every citation, OK included
+```
+
+The tool scans `docs/**/*.md`, `CLAUDE.md`, `CONCEPTS.md`, and tracked
+`.gd` files under `presentation/`, `application/`, and `domain/`. It
+range-checks each `*.js` / `*.css` cite against the benchmark `src/` tree, then
+— when a nearby backtick names a token — asks whether that token still sits in
+a ±20-line window (with a longer look-back for `case` / `function` headers).
+**OUT-OF-RANGE** means the line number is past EOF; **DRIFT** means the token
+lives elsewhere in the same file; **MISSING** means a token that should be
+there is gone. Citations with no usable token are range-checked only. The
+benchmark HEAD is verified before any scan; a wrong pin aborts.
+
