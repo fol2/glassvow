@@ -1379,6 +1379,27 @@ func _on_boss_relic_chosen(id: String) -> void:
 	game.run.map = _map.to_dict()
 	if SaveService.store(game.run):
 		_show_map()
+		# The act-change plate rides over the arriving map, concurrent rather
+		# than awaited (reward.js:181 fires it on the boss-reward continue).
+		var act_name: String = "ACT %d" % (game.run.act + 1)
+		if game.run.act < content.acts.size():
+			var act_v: Variant = content.acts[game.run.act]
+			if typeof(act_v) == TYPE_DICTIONARY:
+				var act_d: Dictionary = act_v
+				act_name = str(act_d.get("name", act_name))
+		var omen_name: String = ""
+		var omen_tone: Color = Color.WHITE
+		var omen_icon: Texture2D = null
+		if game.run.act < game.run.omens.size() \
+				and game.run.omens[game.run.act] != null:
+			var omen_id: String = str(game.run.omens[game.run.act])
+			var omen: Dictionary = content.omens.get(omen_id, {})
+			omen_name = str(omen.get("name", ""))
+			omen_tone = Color(str(omen.get("tone", "#8b93ad")))
+			var icon_path: String = "res://assets/art/omens/%s.png" % omen_id
+			if ResourceLoader.exists(icon_path):
+				omen_icon = load(icon_path) as Texture2D
+		_transitions.act_plate(act_name, omen_name, omen_tone, omen_icon)
 	else:
 		_show_save_error("The next act could not be held.")
 

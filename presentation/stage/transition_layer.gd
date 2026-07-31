@@ -55,6 +55,16 @@ const CRACK_TIME: float = 0.7
 const CRACK_TONE: Color = Color(0.011764706, 0.015686275, 0.039215688, 0.9)
 const CRACK_AT: Array[float] = [0.0, 1.0]
 const CRACK_TRACK: Array[float] = [0.0, 1.0]
+## `act-change` (navigation.js:54-59, `.tr-plate` styles.css:1537-1539): an
+## opaque plate names the next act and its omen — `[0, 1 @0.15, 1 @0.8, 0]`
+## over 2200ms, fired beside the map route rather than awaited. Act line
+## `clamp(28px, 5cqw, 44px)` tracked 0.18em in Cinzel gold; omen line 15px
+## tracked 0.14em in the omen's own tone.
+const PLATE_TIME: float = 2.2
+const PLATE_AT: Array[float] = [0.0, 0.15, 0.8, 1.0]
+const PLATE_TRACK: Array[float] = [0.0, 1.0, 1.0, 0.0]
+const PLATE_GROUND: Color = Color(0.0196, 0.0275, 0.0549, 0.88)
+const PLATE_GOLD: Color = Color("#f2c14e")
 
 ## The `.tr-iris` ink (`#05070e`, styles.css:1533), drawn as an annulus by
 ## shader rather than by clip: dark inside the radius, nothing outside.
@@ -112,6 +122,11 @@ var _iris: ColorRect
 var _iris_mat: ShaderMaterial
 var _bloom: TextureRect
 var _crack: ColorRect
+var _plate: ColorRect
+var _plate_act: Label
+var _plate_omen_row: HBoxContainer
+var _plate_omen_icon: TextureRect
+var _plate_omen: Label
 var _grain: ColorRect
 var _grain_mat: ShaderMaterial
 var _grain_t: float = 0.0
@@ -168,6 +183,37 @@ func _init() -> void:
 	_crack.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_crack.visible = false
 	add_child(_crack)
+	_plate = ColorRect.new()
+	_plate.color = PLATE_GROUND
+	_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_plate.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_plate.visible = false
+	add_child(_plate)
+	var stack: VBoxContainer = VBoxContainer.new()
+	stack.set_anchors_preset(Control.PRESET_FULL_RECT)
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 10)
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_plate.add_child(stack)
+	_plate_act = Label.new()
+	_plate_act.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_plate_act.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_plate_act.add_theme_color_override("font_color", PLATE_GOLD)
+	stack.add_child(_plate_act)
+	_plate_omen_row = HBoxContainer.new()
+	_plate_omen_row.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_plate_omen_row.add_theme_constant_override("separation", 8)
+	_plate_omen_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(_plate_omen_row)
+	_plate_omen_icon = TextureRect.new()
+	_plate_omen_icon.custom_minimum_size = Vector2(16.0, 16.0)
+	_plate_omen_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_plate_omen_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_plate_omen_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_plate_omen_row.add_child(_plate_omen_icon)
+	_plate_omen = Label.new()
+	_plate_omen.add_theme_font_size_override("font_size", 15)
+	_plate_omen_row.add_child(_plate_omen)
 	var sh: Shader = Shader.new()
 	sh.code = GRAIN_SHADER
 	_grain_mat = ShaderMaterial.new()
@@ -280,6 +326,30 @@ func crack() -> void:
 	_play_leaf(_crack, CRACK_AT, CRACK_TRACK, CRACK_TIME)
 
 
+## The act-change plate: the next act's name and its omen, held over the map
+## arriving underneath. Fired beside the route, never awaited.
+func act_plate(act_name: String, omen_name: String, omen_tone: Color,
+		omen_icon: Texture2D = null) -> void:
+	if instant:
+		return
+	var stage: Vector2 = _stage_size()
+	var act_pt: int = int(clampf(stage.x * 0.05, 28.0, 44.0))
+	_plate_act.text = act_name.to_upper()
+	_plate_act.add_theme_font_size_override("font_size", act_pt)
+	_plate_act.add_theme_font_override("font",
+		_tracked(GlassStyle.CINZEL_700, int(roundf(act_pt * 0.18))))
+	_plate_omen_row.visible = not omen_name.is_empty()
+	if not omen_name.is_empty():
+		_plate_omen.text = "OMEN - " + omen_name.to_upper()
+		_plate_omen.add_theme_color_override("font_color", omen_tone)
+		_plate_omen.add_theme_font_override("font",
+			_tracked(GlassStyle.CINZEL_500, 2))
+		_plate_omen_icon.texture = omen_icon
+		_plate_omen_icon.visible = omen_icon != null
+		_plate_omen_icon.modulate = omen_tone
+	_play_leaf(_plate, PLATE_AT, PLATE_TRACK, PLATE_TIME)
+
+
 func _play_leaf(leaf: Control, at: Array[float], track: Array[float],
 		seconds: float) -> void:
 	if instant:
@@ -288,6 +358,7 @@ func _play_leaf(leaf: Control, at: Array[float], track: Array[float],
 	_iris.visible = false
 	_bloom.visible = leaf == _bloom
 	_crack.visible = leaf == _crack
+	_plate.visible = leaf == _plate
 	leaf.modulate.a = 0.0
 	var walk: Callable = func(x: float) -> void:
 		leaf.modulate.a = Motion.keyframe(Motion.ease(Motion.TRANSIT, x), at, track)
@@ -302,6 +373,16 @@ func _end_transit(seq: int) -> void:
 	_iris.visible = false
 	_bloom.visible = false
 	_crack.visible = false
+	_plate.visible = false
+
+
+## The tracked-Cinzel idiom `choice_screen.gd` and `settings_panel.gd` carry;
+## duplicated here by the shared-surface rule rather than reached across.
+static func _tracked(path: String, glyph_spacing: int) -> FontVariation:
+	var tracked: FontVariation = FontVariation.new()
+	tracked.base_font = load(path) as Font
+	tracked.spacing_glyph = glyph_spacing
+	return tracked
 
 
 func set_grain(on: bool) -> void:
@@ -319,6 +400,7 @@ func clear() -> void:
 	_iris.visible = false
 	_bloom.visible = false
 	_crack.visible = false
+	_plate.visible = false
 
 
 func _stage_size() -> Vector2:
