@@ -147,6 +147,12 @@ a correct placement from three incorrect ones.
 
 ## Related Issues
 
+- [A scaled Control shrinks its hit area with its
+  picture](a-scaled-control-shrinks-its-hit-area-with-its-picture.md) — the other
+  `Control.scale` trap, and the same blind spot from the input side: scaling the
+  picture scales the pick rect with it, so a target can pass every geometric
+  check and still be too small for a finger. Both are invisible at the identity
+  shape, where nothing is scaled at all.
 - [Measure the running reference, not the tables it publishes](../conventions/measure-the-running-reference-not-its-tables.md)
   — the same session, the same blind spot from the other side: the identity shape
   is where every override equals its default, so it is the one case that can

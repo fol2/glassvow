@@ -23,6 +23,12 @@ tags: [godot, combat, ward, enemy-view, mirrored-branches, paired-calls, blind-i
 
 # The hero's ward stone never answered a blow it stopped
 
+> **Citation convention.** The SHA `6e06911` belongs to the **reference** repo
+> (`~/Coding/roguecardv2-benchmark`), not to glassvow. A claims validator run
+> against this repository will flag it as unresolvable; that is expected and
+> correct. Bare SHAs without a repo are glassvow's own.
+
+
 ## Problem
 
 `EnemyView` is one actor class serving two roles. The foes are built from it and

@@ -692,10 +692,18 @@ a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
 - **Bare "ward" had been used for the protection and for each of its two parts —
   these are three things.** Ward is the protection. The Ward chip is the numeral;
   the Ward stone is the gem shell. An ownership sentence written about "the ward"
-  is unreadable, because a foe's chip, the hero's chip and the stone are owned
-  separately — `docs/session-ownership.md` carries a contradiction that is entirely
-  this ambiguity.
+  is unreadable, because a foe's chip, the hero's chip and the stone are each
+  owned separately — a sentence assigning "the ward" to one owner is not a
+  statement anyone can act on.
 - **Two surfaces had both been called "funplay" — these are distinct.** The
   Funplay editor server needs the editor; the Funplay runtime bridge belongs to
   a running game and does not. One being unavailable says nothing about the
   other.
+- **"Noise floor" is the capture one; a shader's recompilation jitter is a
+  different floor.** The Noise floor is how far two captures of one build differ,
+  and it is measured in pixels across a frame. Adding or removing a shader
+  uniform separately perturbs every recipe that shader draws — including recipes
+  whose code path never runs — because the driver reschedules the rest of the
+  program. That second floor is per-channel and tiny, it is a property of
+  editing the shader rather than of photographing the screen, and a comparison
+  that clears one says nothing about the other.

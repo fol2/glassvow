@@ -22,6 +22,12 @@ tags: [godot, shader, shadows, vertex-projection, basis, billboard, alpha-scan, 
 
 # A flat billboard has one depth, so a four-footed shadow planted one foot
 
+> **Citation convention.** The SHA `6e06911` belongs to the **reference** repo
+> (`~/Coding/roguecardv2-benchmark`), not to glassvow. A claims validator run
+> against this repository will flag it as unresolvable; that is expected and
+> correct. Bare SHAs without a repo are glassvow's own.
+
+
 ## Problem
 
 Enemy actors render a painted PNG on a quad inside a per-actor `SubViewport` 3D

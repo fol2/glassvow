@@ -340,6 +340,15 @@ measure the difference between those two; only a change larger than that number
 is evidence of anything. A diff taken without that baseline cannot distinguish a
 moved widget from a drifting ember.
 
+Two limits on that rule were found later and are documented in [Put the gate
+where the change is
+deterministic](../conventions/put-the-gate-where-the-change-is-deterministic.md):
+**twice is not enough** — where the motion is phase-bound, two captures can land
+in the same phase and read as a tight floor that a third capture blows apart —
+and **some screens have no floor at all**, because settling works only on motion
+that finishes. On those, the diff is not a weak gate to be tightened; the gate
+moves off the image entirely.
+
 ### The fifth finding, and the one the user actually felt
 
 A one-shot process quits, which prompts macOS to hand the desktop back. A host

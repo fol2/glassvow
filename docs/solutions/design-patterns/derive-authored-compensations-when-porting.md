@@ -16,6 +16,12 @@ tags: [godot, porting, rendering, shadows, derived-parameters, web-reference, ar
 
 # Derive authored compensations instead of transcribing them when porting
 
+> **Citation convention.** The SHA `6e06911` belongs to the **reference** repo
+> (`~/Coding/roguecardv2-benchmark`), not to glassvow. A claims validator run
+> against this repository will flag it as unresolvable; that is expected and
+> correct. Bare SHAs without a repo are glassvow's own.
+
+
 ## Context
 
 Glassvow is a parallel port of a web deckbuilder into Godot 4.7. Parity is checked

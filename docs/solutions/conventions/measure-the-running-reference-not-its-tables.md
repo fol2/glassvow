@@ -165,8 +165,24 @@ executed while the suite reported `PASS` — see
   — the same instinct applied to motion rather than layout: go to the reference's
   CSS and enumerate rather than wait for someone to notice. That doc enumerates
   the reference's **source**; this one says the source is not sufficient and the
-  running page has to be measured. Worth consolidating into one porting-method
-  doc if a third instance of this shows up.
+  running page has to be measured.
+- [Every number matched, and the declaration still did
+  not](every-number-matched-and-the-declaration-still-did-not.md) — the third
+  member of this cluster, and the closest to this doc: there too every figure
+  agreed and the screen was wrong. The causes are different and that is the whole
+  distinction. Here you read the **wrong source** — a published table instead of
+  the running page. There you read the right source and only read its **numbers**,
+  missing a property that carries no figure at all.
+
+  *This doc used to end the entry above with "worth consolidating into one
+  porting-method doc if a third instance of this shows up." The third instance
+  arrived, the question was put, and the answer was to keep all three separate:
+  they share a symptom and nothing else. This one is about which source to read,
+  the CSS-enumeration doc is about auditing at scale (reached for when planning
+  an audit, not when debugging one mismatch), and the declaration doc is about
+  reading a source completely. Merging them would produce a document whose
+  sections have only the symptom in common. Recorded here so the next reader does
+  not re-open a settled question.*
 - [Matching constants prove nothing](../design-patterns/derive-authored-compensations-when-porting.md)
   — the mirrored failure: a number transcribed correctly from the reference that
   is still wrong, because what the reference authored was a compensation rather

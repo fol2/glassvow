@@ -17,6 +17,13 @@ tags: [godot, web-port, presentation, draw-call, node-count, refactor-verificati
 
 # Web ports carry DOM node-per-layer thinking into Godot
 
+> **Citation convention.** `src/styles.css`, `src/ui/combat.js`,
+> `src/pile-chrome.js` and the SHA `6e06911` below belong to the **reference**
+> repo (`~/Coding/roguecardv2-benchmark`), not to glassvow. A claims validator
+> run against this repository will flag them as unresolvable; that is expected
+> and correct.
+
+
 ## Context
 
 This project is a parallel port of a web build. Porting presentation faithfully
