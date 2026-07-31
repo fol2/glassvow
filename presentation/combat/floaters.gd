@@ -52,9 +52,6 @@ const PLATE_INK: Color = Color(0.043137256, 0.05490196, 0.101960786)
 
 const DUR_CEREMONY: float = 0.64
 const BANNER_HOLD: float = 0.42
-## `plate.y = stageHeight * yFrac` — a little above the middle, clear of the
-## fan and clear of the actors' heads.
-const BANNER_Y_FRAC: float = 0.38
 ## The room a banner leaves at each end of the stage, together. Nothing upstream
 ## sets it: the benchmark's banner is a `max-width: 90vw` block and this is the
 ## same idea stated in px, sized so a phone still shows a plate rather than a bar.
@@ -275,7 +272,7 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	if instant or not is_inside_tree():
 		return
 	var lines: PackedStringArray = text.split("\n", false)
-	var longest: int = text.length()
+	var longest: int = 0
 	for line: String in lines:
 		longest = maxi(longest, line.length())
 
@@ -296,8 +293,14 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	var slide: Vector2 = Vector2(-24.0, 0.0)
 	var dur: float = DUR_CEREMONY
 	var wrap: bool = false
+	# `.turn-banner` sits at top: 34% and ONLY the boss plate moves down to 38%
+	# (styles.css:1457, :1471) — the speech lifts to its own band, so a boss
+	# intro and the line spoken after it read as two registers, not one box
+	# swapping its text.
+	var y_frac: float = 0.34
 	match kind:
 		"boss":
+			y_frac = 0.38
 			w = minf(room, clampf(float(longest) * 22.0, 340.0, 720.0))
 			h = 96.0 if lines.size() > 1 else 78.0
 			body = Color(0.101960786, 0.03137255, 0.0627451, 0.88)
@@ -330,14 +333,24 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 		"variant":
 			# `.variant-dialogue` (styles.css:1482-1487): prose on near-opaque
 			# night glass (#080a12 at 0.94) behind a pale leaded line
-			# (rgba(210,226,255,.48)), capped at min(660px, 86cqw). These are
-			# spoken lines, not titles — the label wraps inside the plate
-			# instead of demanding one line of stage.
+			# (rgba(210,226,255,.48)), capped at min(660px, 86cqw) — the 86%
+			# read against this layer, which covers the stage. These are spoken
+			# lines, not titles — the label wraps inside the plate instead of
+			# demanding one line of stage, and it speaks BELOW the announcing
+			# register: the benchmark's boss:dialogue size ratio is 62:42
+			# (styles.css:1457, :1470), and 30×(42/62) lands at 20 here. The
+			# base rule's 0.3em tracking is deliberately NOT carried — on a
+			# full sentence of prose it is an accident of inheritance, not
+			# typography. The 1.8s the callers pass is mapped onto the HOLD:
+			# the stylesheet's 1.8s is the whole life (in, dwell, out), the
+			# port's entrance is DUR_CEREMONY on top — prose earns the longer
+			# dwell.
 			w = minf(room, minf(size.x * 0.86,
-				clampf(float(longest) * 14.0, 320.0, 660.0)))
+				clampf(float(longest) * 11.0, 320.0, 660.0)))
 			body = Color(0.03137255, 0.039215688, 0.07058824, 0.94)
 			rail = Color(0.8235294, 0.8862745, 1.0, 0.48)
 			inset = Color(0.101960786, 0.13333334, 0.2, 0.35)
+			label_size = 20
 			wrap = true
 		_:
 			if lines.size() > 1:
@@ -346,14 +359,16 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	var face: FontFile = display_font()
 	if wrap and face != null:
 		# The plate must be tall enough BEFORE it is built — a Label wraps at
-		# layout time, after the plate has already committed to 56px. Measured
-		# with the same face at the same size, against the width the text will
-		# actually get (28px insets each side, the port's read of the
-		# benchmark's 40px padding at its own scale).
-		var text_w: float = face.get_string_size(
-			text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, label_size).x
-		var rows: int = maxi(1, int(ceilf(text_w / maxf(1.0, w - 56.0))))
-		h = 56.0 + float(rows - 1) * 34.0
+		# layout time, after the plate has already committed to 56px. So the
+		# WRAPPED block is measured with the same face at the same size and
+		# the same width the label will get (28px insets each side, the port's
+		# read of the benchmark's 40px padding), and the plate grows around
+		# it. One call carries word boundaries and embedded newlines both —
+		# a rows-times-line-height estimate under-counted each and let three
+		# rows of prose cross the rails on a 390 stage.
+		var block: Vector2 = face.get_multiline_string_size(
+			text, HORIZONTAL_ALIGNMENT_CENTER, w - 56.0, label_size)
+		h = maxf(56.0, block.y + 20.0)
 
 	var plate: BannerPlate = BannerPlate.new()
 	plate.body = body
@@ -386,7 +401,7 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	label.add_theme_constant_override("shadow_offset_y", 4)
 	plate.add_child(label)
 
-	var home: Vector2 = Vector2(size.x * 0.5 - w * 0.5, size.y * BANNER_Y_FRAC - h * 0.5)
+	var home: Vector2 = Vector2(size.x * 0.5 - w * 0.5, size.y * y_frac - h * 0.5)
 	var curve: Array[float] = Motion.SPRING if spring else Motion.OUT_SOFT
 	plate.position = home + slide
 	plate.modulate.a = 0.0

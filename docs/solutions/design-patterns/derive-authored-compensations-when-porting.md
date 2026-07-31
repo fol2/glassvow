@@ -89,8 +89,8 @@ Three payoffs, in increasing order of importance:
    foes', and are simply never read — dead data, not tuning.)
 3. **Behaviour the source could not have.** Because the shadow is a projection along
    the key light, swinging the key swings the shadow
-   (`presentation/combat/enemy_view.gd:2380` (`_update_shadow`); the swing itself
-   enters at `presentation/combat/enemy_view.gd:4300` (`set_light_angle`)). No amount of tuning the CSS version
+   (`presentation/combat/enemy_view.gd:2397` (`_update_shadow`); the swing itself
+   enters at `presentation/combat/enemy_view.gd:4317` (`set_light_angle`)). No amount of tuning the CSS version
    could produce that — the derived version is not merely cheaper to maintain, it does
    something the original could not.
 
@@ -124,7 +124,7 @@ colour, a timing curve, a silhouette exaggeration. Those are design; port them.
 | --- | --- |
 | `--sh-skew`, `--sh-x` | Key light direction — horizontal run per unit height |
 | `--sh-sx`, `--sh-sy` | Ground-plane tilt (`GROUND_TILT_DEG = 78.0`, cos ≈ 0.21) × cast length |
-| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha. Originally one point per creature — lowest opaque row, horizontal centroid of the band above it (`presentation/combat/enemy_view.gd:2198` (`_read_contact`)). Now the *origin* only: the contact is read per painting column, because one contact line cannot serve a creature standing on four feet at four heights. See [A flat billboard has one depth](../ui-bugs/flat-billboard-shadow-had-one-ground-line.md) |
+| `--foot-ox`, `--foot-oy` | Scanned off the painting's own alpha. Originally one point per creature — lowest opaque row, horizontal centroid of the band above it (`presentation/combat/enemy_view.gd:2215` (`_read_contact`)). Now the *origin* only: the contact is read per painting column, because one contact line cannot serve a creature standing on four feet at four heights. See [A flat billboard has one depth](../ui-bugs/flat-billboard-shadow-had-one-ground-line.md) |
 | `--sh-blur` | Distance from the contact point — sharp at the feet, diffuse at the far end |
 | `--sh-o` | **Kept — but promoted to a single global.** Opacity is taste, not geometry, and one taste serves every actor. The per-creature values are no longer read. |
 | `--sh-y` (`shadow.dy`) | **Kept, per creature.** See the correction below: this is the one knob that says something the painting cannot. |
@@ -168,7 +168,7 @@ which are exactly the floaters — says the thing the alpha cannot: *this painti
 something already off the ground.* Contact point, lean, length and softening are all in
 the image or the light. Resting height is in neither. It is read as a height and fed
 through the same projection the live hover uses
-(`presentation/combat/enemy_view.gd:2380` (`_update_shadow`)), so it buys a shadow that
+(`presentation/combat/enemy_view.gd:2397` (`_update_shadow`)), so it buys a shadow that
 is offset, smaller, fainter and softer rather than the straight-down shove CSS could
 manage. One authored number doing the job eight were approximating is still the pattern
 working — it is just not zero.
@@ -190,7 +190,7 @@ heights. That is
 geometrically correct and reads badly: in a side-on view a long cast makes the
 creature look like it is hovering over its own shadow. The derivation is therefore
 bounded back into a ground pool that still leans with the light
-(`presentation/combat/enemy_view.gd:2189-2190` (`CAST_MIN`)):
+(`presentation/combat/enemy_view.gd:2206-2207` (`CAST_MIN`)):
 
 ```gdscript
 const CAST_MIN: float = 0.68
@@ -267,4 +267,4 @@ is no shear left to lose. See
   per-asset tuning table valuable rather than merely tidy.
 - `assets/art/enemies/char-meta.json` — the ported per-character table. All of its
   `shadow` entries but `dy` are vestigial for rendering and are retained as reference
-  data; `dy` is read as a resting height (`presentation/combat/enemy_view.gd:2830` (`_read_hover`)).
+  data; `dy` is read as a resting height (`presentation/combat/enemy_view.gd:2847` (`_read_hover`)).

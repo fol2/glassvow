@@ -914,6 +914,12 @@ uniform float tint_sat = 1.0;
 uniform float tint_bright = 1.0;
 
 vec3 variant_tint(vec3 c) {
+	// Identity early-out: every non-variant body — including every shard
+	// prism on the shatter frame, the heaviest frame in the game — skips the
+	// matrix work entirely. Uniform-coherent, so it costs one compare.
+	if (tint_hue == 0.0 && tint_sat == 1.0 && tint_bright == 1.0) {
+		return c;
+	}
 	const mat3 to_yiq = mat3(
 		vec3(0.299, 0.596, 0.212),
 		vec3(0.587, -0.275, -0.523),
@@ -925,6 +931,12 @@ vec3 variant_tint(vec3 c) {
 		vec3(0.621, -0.647, 1.703)
 	);
 	vec3 yiq = to_yiq * c;
+	// atan(0, 0) is undefined in GLSL and a grey pixel has no chroma at all —
+	// the benchmark ships the undefined call (mesh.js:224) and gets away with
+	// it; here the grey keeps its luma and takes the brightness, defined.
+	if (length(yiq.yz) < 1e-5) {
+		return clamp(vec3(yiq.x) * tint_bright, 0.0, 1.0);
+	}
 	float h = atan(yiq.z, yiq.y) + tint_hue;
 	float chroma = length(yiq.yz) * tint_sat;
 	return clamp((to_rgb * vec3(yiq.x, chroma * cos(h), chroma * sin(h)))
@@ -1966,6 +1978,11 @@ func _build_stage(tex: Texture2D, enemy_idx: int) -> void:
 	_body_mat.set_shader_parameter("aim_tint",
 		Vector3(_aim_tint.r, _aim_tint.g, _aim_tint.b))
 	_body_mat.set_shader_parameter("aim_width", _aim_width)
+	# The invariant is local, not load-bearing across two files: today the
+	# stage is built inside _init, before set_variant_tint can have run, but a
+	# rebuilt stage must re-wear the cast the moment it is minted — the way
+	# _glass_material and each shard already do.
+	_apply_tint(_body_mat)
 	_body_mat.render_priority = -1   # drawn before the glass
 	_quad.set_surface_override_material(0, _body_mat)
 	_vessel.add_child(_quad)
