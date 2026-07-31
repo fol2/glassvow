@@ -183,19 +183,21 @@ static func _schema(fails: Array[String]) -> void:
 
 	# The engine hazard `LayoutBook._fields` exists to route around, pinned so a
 	# future simplification back to `has()` fails here rather than silently in
-	# the validator. On 4.7.1 a PackedStringArray taken out of a typed Dictionary
-	# by a runtime-built key answers has() false and find() 0 for the same string.
-	# If this ever starts passing, the workaround may go — but only then.
+	# the validator. On 4.7.1/macOS a PackedStringArray taken out of a typed
+	# Dictionary by a runtime-built key answers has() false and size() 0 for a
+	# two-item array — while find() still locates the string. The SAME official
+	# build on Linux hands the real array back: CI went red the day this pin
+	# assumed one platform's lie was the law (run 30672164735). So the pin is
+	# platform-honest now — either world is the known hazard's shape, and the
+	# workaround may only go when EVERY shipped platform reports the truth.
 	var built: StringName = StringName("st" + "age")
 	var raw_order: PackedStringArray = LayoutBook.FORMS[built]
 	_check(fails, raw_order.find("groundY") >= 0,
 		"find() locates a field through a runtime-built form key")
-	# And the SIZE, which is the half the first diagnosis missed: `has()` lying
-	# reads as a comparison bug, `size()` returning 0 for a two-item array names
-	# the real fault. If this ever reports 2, the const has stopped dropping its
-	# packed type and `fields()` can go back to a subscript.
-	_check(fails, raw_order.size() == 0,
-		"a const typed Dictionary still hands back an empty-looking packed array")
+	var truth: int = LayoutBook.fields(&"stage").size()
+	_check(fails, raw_order.size() == 0 or raw_order.size() == truth,
+		"the packed array is the pinned lie (size 0) or the real thing (size %d), got %d"
+			% [truth, raw_order.size()])
 
 	# …and the book itself must satisfy all of it. This is the check that catches
 	# a hand edit before a fight does.
