@@ -84,7 +84,50 @@ const KICK_BLOOM: float = 0.55
 ## is not, so for a frame or two after a big hit it has not. Overhanging the
 ## field is the fix; the benchmark never needs one because its camera lives in a
 ## world with no edges.
-const OVERHANG: float = 12.0
+const OVERHANG: float = 26.0
+
+## The ambient camera: `_posT.x = mouse.x * 0.9, _posT.y = 3.1 - mouse.y * 0.55`
+## (scene3d.js:417) against roughly 28 world units of visible field — ±0.9 of a
+## unit is a couple of dozen px here. Applied per mote, scaled by radius, so a
+## near (big) point leans further than a far one and the field gains depth the
+## moment the hand moves. The haze band leans a third of it.
+const PARALLAX_PX: Vector2 = Vector2(26.0, 16.0)
+## `camera.rotation.z += Math.sin(time * 0.13) * 0.012` (scene3d.js:429) — the
+## world breathes its roll even at rest.
+const BREATH_RATE: float = 0.13
+const BREATH_ROLL: float = 0.012
+
+## The weather field (scene3d.js:377-399): 300 points in the volume, three
+## behaviours by act — ash sifts down, mire sinks slow with a strong wobble,
+## astral streaks sideways. Flattened to what reads at this camera, denser
+## than the motes because weather is a veil, not points of light. Rates are
+## world units/s through the same SPAN_UNITS ruler the motes use; the source's
+## world-Y points up, so its `y -=` is a screen-space fall here.
+const WEATHER_COUNT: int = 110
+const WEATHER_ALPHA: Array[float] = [0.5, 0.42, 0.62]
+const ASH_FALL: Vector2 = Vector2(0.45, 0.55)      # base, seed spread
+const MIRE_FALL: Vector2 = Vector2(0.14, 0.2)
+const MIRE_WOBBLE: float = 0.9
+const MIRE_WOBBLE_RATE: float = 0.35
+const ASTRAL_RUN: Vector2 = Vector2(3.4, 2.8)
+const ASTRAL_FALL: Vector2 = Vector2(0.5, 0.5)
+const ASTRAL_LEN: float = 4.2                       # streak length, in radii
+const WEATHER_R_MIN: float = 1.1
+const WEATHER_R_MAX: float = 2.6
+
+## Act-3 heat lightning (scene3d.js:337-340, :448): silent flashes light the
+## whole world for a beat — sky and fog lerp toward a pale blue-white, the
+## additive field flares — then decay at `0.008^dt`. Scheduled from the clock
+## rather than rolled per frame, so two captures of one build still match:
+## one flash per SLOT seconds, intensity hashed from the slot index.
+const LIGHTNING_TONE: Color = Color("#bfd4ff")
+const LIGHTNING_SLOT: float = 8.5
+const LIGHTNING_DECAY: float = 0.008
+const LIGHTNING_SKY: float = 0.5
+const LIGHTNING_SKY_MAX: float = 0.6
+const LIGHTNING_FOG: float = 0.3
+const LIGHTNING_FOG_MAX: float = 0.4
+const LIGHTNING_FLARE: float = 0.45
 
 
 class Mote:
@@ -102,6 +145,8 @@ static var _disc: GradientTexture2D = null
 
 var _main: Array[Mote] = []
 var _accent: Array[Mote] = []
+var _weather: Array[Mote] = []
+var _weather_mode: int = 0
 var _sky: Color
 var _fog: Color
 var _particles: Color
@@ -113,6 +158,9 @@ var _field: Control
 var _kick_v: float = 0.0
 var _speed: float = 1.0
 var _cam_z: float = CAM_Z
+var _drift: PointerDrift = PointerDrift.new()
+var _lightning: float = 0.0
+var _lit_slot: int = -1
 
 
 class Field:
@@ -130,6 +178,7 @@ func _init(stage_act: int = 0) -> void:
 	_fog = ACT_FOGS[index]
 	_particles = ACT_PARTICLES[index]
 	_glow = ACT_GLOWS[index]
+	_weather_mode = index
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	offset_left = -OVERHANG
 	offset_top = -OVERHANG
@@ -168,10 +217,15 @@ func _notification(what: int) -> void:
 func _seed_field() -> void:
 	_main.clear()
 	_accent.clear()
+	_weather.clear()
 	for i: int in range(MAIN_COUNT):
 		_main.append(_mote())
 	for i: int in range(ACCENT_COUNT):
 		_accent.append(_mote())
+	for i: int in range(WEATHER_COUNT):
+		var w: Mote = _mote()
+		w.radius = WEATHER_R_MIN + _rng.randf() * (WEATHER_R_MAX - WEATHER_R_MIN)
+		_weather.append(w)
 
 
 func _mote() -> Mote:
@@ -190,10 +244,16 @@ func _process(delta: float) -> void:
 		_seed_field()
 	var dt: float = minf(0.05, delta)
 	_t += dt
+	_drift.step(self, dt)
 	_step_kick(dt)
-	_drift(_main, dt, 1.0)
-	_drift(_accent, dt, ACCENT_RATE)
+	_step_lightning(dt)
+	_drift_motes(_main, dt, 1.0)
+	_drift_motes(_accent, dt, ACCENT_RATE)
+	_step_weather(dt)
 	_field.queue_redraw()
+	# The sky rect and haze band answer the lightning and the pointer, so the
+	# base coat redraws too — two rects and a texture blit, nothing measured.
+	queue_redraw()
 
 
 ## The world takes a blow: `kickV` and `speedMul` both jump, and the ceiling is
@@ -212,10 +272,49 @@ func _step_kick(dt: float) -> void:
 	# which is why the rattle arrives on the first frame and the dolly does not.
 	_cam_z += (CAM_Z - KICK_DOLLY * _kick_v - _cam_z) * minf(1.0, dt * CAM_CHASE)
 	scale = Vector2.ONE * (CAM_Z / maxf(0.001, _cam_z))
-	rotation = _kick_v * (_rng.randf() - 0.5) * KICK_ROLL
+	# The rattle rides ON the breath: a fresh roll per frame while kicked, a
+	# slow sine always (scene3d.js:429 adds both to the same axis).
+	rotation = sin(_t * BREATH_RATE) * BREATH_ROLL \
+		+ _kick_v * (_rng.randf() - 0.5) * KICK_ROLL
 
 
-func _drift(motes: Array[Mote], dt: float, rate: float) -> void:
+## One flash per slot, intensity hashed from the slot index — deterministic
+## against the clock, so the noise floor of a settled capture stays a floor.
+func _step_lightning(dt: float) -> void:
+	if _weather_mode != 2:
+		return
+	var slot: int = int(_t / LIGHTNING_SLOT)
+	if slot != _lit_slot:
+		_lit_slot = slot
+		_lightning = 0.7 + 0.5 * absf(sin(float(slot) * 127.1))
+	_lightning *= pow(LIGHTNING_DECAY, dt)
+
+
+func _step_weather(dt: float) -> void:
+	var unit: float = maxf(1.0, size.y) / SPAN_UNITS
+	for m: Mote in _weather:
+		var s: float = fmod(m.seed, 1.0)
+		match _weather_mode:
+			0:  # ash sifts down
+				m.at.y += dt * (ASH_FALL.x + s * ASH_FALL.y) * unit * _speed
+				m.at.x += sin(_t * WOBBLE_RATE + m.seed) * dt * WOBBLE_AMP * unit
+			1:  # mire sinks slow, wobbles hard
+				m.at.y += dt * (MIRE_FALL.x + s * MIRE_FALL.y) * unit * _speed
+				m.at.x += sin(_t * MIRE_WOBBLE_RATE + m.seed) * dt * MIRE_WOBBLE * unit
+			_:  # astral streaks sideways, drifting down a little
+				m.at.x -= dt * (ASTRAL_RUN.x + s * ASTRAL_RUN.y) * unit * _speed
+				m.at.y += dt * (ASTRAL_FALL.x + s * ASTRAL_FALL.y) * unit * _speed
+		if m.at.y > size.y + m.radius * 2.0:
+			m.at.y = -m.radius
+			m.at.x = _rng.randf() * size.x
+		if m.at.x < -m.radius * ASTRAL_LEN:
+			m.at.x = size.x + m.radius
+			m.at.y = _rng.randf() * size.y
+		elif m.at.x > size.x + m.radius * ASTRAL_LEN:
+			m.at.x = -m.radius
+
+
+func _drift_motes(motes: Array[Mote], dt: float, rate: float) -> void:
 	for m: Mote in motes:
 		var unit: float = maxf(1.0, size.y) / SPAN_UNITS
 		m.at.y -= dt * rate * _speed * m.rise * unit
@@ -246,11 +345,22 @@ func haze() -> GradientTexture2D:
 
 func _draw() -> void:
 	# The sky, then the fog it hazes into. Below FOG_BOTTOM the plates cover
-	# everything, so the band stops where it stops being visible.
-	draw_rect(Rect2(Vector2.ZERO, size), _sky, true)
+	# everything, so the band stops where it stops being visible. Lightning
+	# lifts the sky coat toward its pale tone and lays a veil over the fog —
+	# the whole world lit for a beat (scene3d.js:337-340).
+	var lit: float = minf(LIGHTNING_SKY_MAX, _lightning * LIGHTNING_SKY)
+	draw_rect(Rect2(Vector2.ZERO, size), _sky.lerp(LIGHTNING_TONE, lit), true)
 	var top: float = size.y * FOG_TOP
 	var span: float = size.y * (FOG_BOTTOM - FOG_TOP)
-	draw_texture_rect(haze(), Rect2(Vector2(0.0, top), Vector2(size.x, span)), false)
+	# The haze leans a third of the field's parallax — a far band, not a near one.
+	var lean: Vector2 = -_drift.n * PARALLAX_PX / 3.0
+	draw_texture_rect(haze(), Rect2(Vector2(0.0, top) + lean,
+		Vector2(size.x, span)), false)
+	var fog_lit: float = minf(LIGHTNING_FOG_MAX, _lightning * LIGHTNING_FOG)
+	if fog_lit > 0.004:
+		var veil: Color = LIGHTNING_TONE
+		veil.a = fog_lit
+		draw_rect(Rect2(Vector2(0.0, top) + lean, Vector2(size.x, span)), veil, true)
 
 
 func paint_motes(host: CanvasItem) -> void:
@@ -258,9 +368,35 @@ func paint_motes(host: CanvasItem) -> void:
 	var accent_a: float = ACCENT_ALPHA + sin(_t * 0.9) * ACCENT_BREATH
 	# The bloom gain, as a ratio of its own base — the field is drawn additively,
 	# so a colour over 1.0 is light being added rather than a clipped white.
-	var flare: float = 1.0 + _kick_v * KICK_BLOOM / BLOOM_BASE
+	# Lightning raises it the way the benchmark raises bloom.strength.
+	var flare: float = 1.0 + (_kick_v * KICK_BLOOM + _lightning * LIGHTNING_FLARE) \
+		/ BLOOM_BASE
+	_paint_weather(host, tex, flare)
 	_stamp(host, tex, _main, _particles * flare, MAIN_ALPHA)
 	_stamp(host, tex, _accent, _glow * flare, accent_a)
+
+
+## The veil under the light points: discs for ash and mire, short streaks for
+## the astral run. Same additive pass, same parallax rule as the motes.
+func _paint_weather(host: CanvasItem, tex: GradientTexture2D, flare: float) -> void:
+	var col: Color = _particles * flare
+	col.a = WEATHER_ALPHA[clampi(_weather_mode, 0, WEATHER_ALPHA.size() - 1)]
+	var streaking: bool = _weather_mode == 2
+	for m: Mote in _weather:
+		var at: Vector2 = m.at + _lean_of(m)
+		if streaking:
+			host.draw_line(at, at + Vector2(m.radius * ASTRAL_LEN, m.radius * 0.6),
+				col, maxf(1.0, m.radius * 0.55))
+		else:
+			var r: float = m.radius
+			host.draw_texture_rect(tex,
+				Rect2(at - Vector2(r, r) * 2.0, Vector2(r, r) * 4.0), false, col)
+
+
+## A near (big) point leans further after the pointer than a far one — the
+## flat field's stand-in for the volume the benchmark's camera moves through.
+func _lean_of(m: Mote) -> Vector2:
+	return -_drift.n * PARALLAX_PX * (m.radius / R_MAX)
 
 
 func _stamp(host: CanvasItem, tex: GradientTexture2D, motes: Array[Mote],
@@ -269,5 +405,6 @@ func _stamp(host: CanvasItem, tex: GradientTexture2D, motes: Array[Mote],
 	col.a = alpha
 	for m: Mote in motes:
 		var r: float = m.radius
+		var at: Vector2 = m.at + _lean_of(m)
 		host.draw_texture_rect(tex,
-			Rect2(m.at - Vector2(r, r) * 2.0, Vector2(r, r) * 4.0), false, col)
+			Rect2(at - Vector2(r, r) * 2.0, Vector2(r, r) * 4.0), false, col)
