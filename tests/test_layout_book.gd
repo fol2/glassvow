@@ -182,22 +182,28 @@ static func _schema(fails: Array[String]) -> void:
 				"%s/%s is declared" % [form, field])
 
 	# The engine hazard `LayoutBook._fields` exists to route around, pinned so a
-	# future simplification back to `has()` fails here rather than silently in
-	# the validator. On 4.7.1/macOS a PackedStringArray taken out of a typed
-	# Dictionary by a runtime-built key answers has() false and size() 0 for a
-	# two-item array — while find() still locates the string. The SAME official
-	# build on Linux hands the real array back: CI went red the day this pin
-	# assumed one platform's lie was the law (run 30672164735). So the pin is
-	# platform-honest now — either world is the known hazard's shape, and the
-	# workaround may only go when EVERY shipped platform reports the truth.
+	# future simplification back to a subscript fails here rather than silently
+	# in the validator. The hazard wears a DIFFERENT costume per platform on the
+	# same 4.7.1.stable.official.a13da4feb: macOS answers size() 0 for the
+	# two-item array, Linux answered size() 24 (CI runs 30672164735, 30673205223)
+	# — so no pin may enumerate the lie's shapes. The one portable statement is
+	# the rule itself: the raw subscript CANNOT be trusted. The day a platform
+	# hands back exactly the truth, this fails THERE, and the workaround may go
+	# only when every shipped platform fails it.
 	var built: StringName = StringName("st" + "age")
 	var raw_order: PackedStringArray = LayoutBook.FORMS[built]
 	_check(fails, raw_order.find("groundY") >= 0,
 		"find() locates a field through a runtime-built form key")
-	var truth: int = LayoutBook.fields(&"stage").size()
-	_check(fails, raw_order.size() == 0 or raw_order.size() == truth,
-		"the packed array is the pinned lie (size 0) or the real thing (size %d), got %d"
-			% [truth, raw_order.size()])
+	var real: PackedStringArray = LayoutBook.fields(&"stage")
+	var raw_matches_truth: bool = raw_order.size() == real.size()
+	if raw_matches_truth:
+		for i: int in range(real.size()):
+			if raw_order[i] != real[i]:
+				raw_matches_truth = false
+				break
+	_check(fails, not raw_matches_truth,
+		"the raw subscript still cannot be trusted (raw size %d, real size %d)"
+			% [raw_order.size(), real.size()])
 
 	# …and the book itself must satisfy all of it. This is the check that catches
 	# a hand edit before a fight does.
