@@ -199,6 +199,44 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	&"panel/scroll": {"bind": BIND_NONE, "unit": "px", "min": 80.0, "max": 1600.0, "default": 420.0},
 	&"panel/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 3.0, "default": 1.0},
 
+	# --- run: the title screen, which is the same Control in its `_title_variant`
+	# and was the largest inline shape table left in the port. Fourteen figures
+	# across five branches, keyed off `size.x >= 1000.0 and size.y <= 860.0` — a
+	# threshold with no shape name on it that happens to select exactly the two
+	# wide-and-short references, and does so with 38px of margin once flex has
+	# been spent. That is an enumeration written as a measurement, and the two
+	# read differently the first time a sixth shape is authored.
+	#
+	# The three width formulas collapsed to one each without changing an output:
+	# `minf(wordmarkMax, size.x * wordmarkRate)` and `minf(columnW, size.x - 32)`.
+	## The wordmark is a picture of a name, so it is capped in px AND held to a
+	## share of the stage — the cap keeps it from swelling on a wide desktop, the
+	## share keeps it off both edges on a narrow phone.
+	&"titlescreen/wordmarkMax": {"bind": BIND_NONE, "unit": "px", "min": 80.0, "max": 1600.0, "default": 520.0},
+	&"titlescreen/wordmarkRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.05, "max": 1.0, "default": 0.60},
+	&"titlescreen/columnW": {"bind": BIND_NONE, "unit": "px", "min": 120.0, "max": 1600.0, "default": 340.0},
+	&"titlescreen/gap": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 80.0, "default": 8.0},
+	## How the two button blocks tile. A phone held sideways has room across and
+	## none down, so the primary block goes two-wide there and nowhere else.
+	&"titlescreen/primaryCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 1.0},
+	&"titlescreen/utilityCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 3.0},
+	&"titlescreen/primaryPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 17.0},
+	&"titlescreen/utilityPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 13.0},
+	## The tagline is the first thing to go: it is flavour, and a phone held
+	## sideways needs the row for the buttons.
+	&"titlescreen/tagline": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
+	&"titlescreen/taglinePt": {"bind": BIND_NONE, "unit": "px", "min": 6.0, "max": 32.0, "default": 14.0},
+	&"titlescreen/taglineTrack": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 20.0, "default": 5.0},
+	## Break "How to Play" over two rows. Wanted where the utility block is three
+	## across and the buttons are therefore narrow, but never on a phone, where
+	## the same three columns are narrower still and a second row costs more than
+	## the wrap saves.
+	&"titlescreen/wrapHelp": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
+	## The Emberglass medallion in the corner. The last inline shape ternary in
+	## `_fit_title`, and it is here because leaving one behind in the function
+	## whose table was just collected is how the next table starts.
+	&"titlescreen/roseSide": {"bind": BIND_NONE, "unit": "px", "min": 16.0, "max": 200.0, "default": 78.0},
+
 	# --- reward: the spoils rack. `CARD_SCALE` was a `const` derived from
 	# `CardView.CARD_W` in four files, so a phone drew the pad's card and the
 	# rack ran off the stage. Authored as a WIDTH, like `card/w`, because that
@@ -234,6 +272,9 @@ const FORMS: Dictionary[StringName, PackedStringArray] = {
 	&"trail": ["scale", "rowRate", "rowMin", "rowMax", "gutter", "colMin", "colMax", "touch"],
 	&"mapbar": ["scale", "title", "titleTop", "titleH", "titleInset"],
 	&"panel": ["w", "inset", "scroll", "scale"],
+	&"titlescreen": ["wordmarkMax", "wordmarkRate", "columnW", "gap",
+		"primaryCols", "utilityCols", "primaryPt", "utilityPt",
+		"tagline", "taglinePt", "taglineTrack", "wrapHelp", "roseSide"],
 	&"rack": ["w", "gap", "scale", "panel", "deep", "top", "bottom"],
 }
 
@@ -271,9 +312,12 @@ const SCOPES: Dictionary[StringName, Dictionary] = {
 		"": &"trail",
 		"bar": &"mapbar",
 	},
-	## Every non-combat decision panel: title, vigil, run menu, lamplighter.
+	## Every non-combat decision panel: title, vigil, run menu, lamplighter. The
+	## title screen hangs off the same scope rather than taking its own, because
+	## it is the same Control in a variant and shares the panel's re-pick path.
 	&"run": {
 		"": &"panel",
+		"title": &"titlescreen",
 	},
 	## The spoils rack. Four reward screens share one rack size, which is what
 	## made four copies of `CARD_SCALE` possible in the first place.

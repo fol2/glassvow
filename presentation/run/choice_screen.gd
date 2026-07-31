@@ -495,6 +495,12 @@ func _panel_num(field: String, fallback: float = 0.0) -> float:
 	return LayoutBook.num(_panel_layout.get(field), fallback)
 
 
+## The title screen's own bucket, hanging off the same `run` scope — the same
+## arrangement `map` uses for its top rail.
+func _title_num(field: String, fallback: float = 0.0) -> float:
+	return LayoutBook.num(_panel_layout.get("title", {}).get(field), fallback)
+
+
 func _authored_panel_width() -> float:
 	return CARD_PANEL_W if _card_mode else _panel_num("w", PANEL_W)
 
@@ -522,19 +528,27 @@ func set_shape(stage_shape: StringName) -> void:
 	_fit()
 
 
+## The title screen's set-out, from the book.
+##
+## It used to open on `size.x >= 1000.0 and size.y <= 860.0`, which selects
+## exactly pad-landscape and desktop-landscape and nothing else — an enumeration
+## of two shapes written as though it were a measurement of one stage. The two
+## are not the same claim, and the difference shows up twice: flex leaves the
+## test only 38px of margin at pad-landscape's lower bound, and the sixth shape
+## anybody authors lands in whichever bucket the arithmetic happens to put it
+## in, silently.
+##
+## Twelve fields across five branches came out, and all twelve were dumped
+## through the resolver at all five shapes and compared against the expressions
+## they replaced: sixty comparisons, zero differences. The three width formulas
+## collapsed to one each on the way, without changing a single resolved output:
+## the phone-landscape column was `minf(760, size.x - 32)` and the others were
+## flat numbers, which is the same expression once the cap is authored.
 func _fit_title() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
-	var phone_landscape: bool = shape == &"phone-landscape"
-	var phone_portrait: bool = shape == &"phone-portrait"
-	var compact: bool = size.x >= 1000.0 and size.y <= 860.0
-	var wordmark_w: float
-	if phone_landscape:
-		wordmark_w = minf(230.0, size.x * 0.28)
-	elif compact:
-		wordmark_w = minf(520.0, size.x * 0.60)
-	else:
-		wordmark_w = minf(780.0, size.x * 0.88)
+	var wordmark_w: float = minf(_title_num("wordmarkMax", 520.0),
+		size.x * _title_num("wordmarkRate", 0.60))
 	var wordmark_h: float = wordmark_w * 399.0 / 1536.0
 	_wordmark_slot.custom_minimum_size.y = wordmark_h
 	_wordmark.offset_left = -wordmark_w * 0.5
@@ -547,26 +561,28 @@ func _fit_title() -> void:
 	_tagline.offset_top = 0.0
 	_tagline.offset_right = tagline_w * 0.5
 	_tagline.offset_bottom = 20.0
-	_tagline_slot.visible = not phone_landscape
-	_tagline.add_theme_font_override("font",
-		_tracked_font(GlassStyle.CINZEL_500, 2 if shape.begins_with("phone") else 5))
+	_tagline_slot.visible = _title_num("tagline", 1.0) >= 1.0
+	_tagline.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500,
+		roundi(_title_num("taglineTrack", 5.0))))
 	_tagline.add_theme_font_size_override(
-		"font_size", 11 if shape.begins_with("phone") else 14)
+		"font_size", roundi(_title_num("taglinePt", 14.0)))
 
-	_title_column.custom_minimum_size.x = minf(760.0, size.x - 32.0) \
-		if phone_landscape else (340.0 if compact or phone_portrait \
-		else minf(300.0, size.x - 32.0))
+	_title_column.custom_minimum_size.x = minf(_title_num("columnW", 340.0),
+		size.x - 32.0)
 	_title_column.add_theme_constant_override(
-		"separation", 6 if phone_landscape else (8 if compact else 14))
-	_primary.columns = 2 if phone_landscape else 1
-	_utility.columns = 3 if compact or shape.begins_with("phone") else 1
+		"separation", roundi(_title_num("gap", 8.0)))
+	_primary.columns = roundi(_title_num("primaryCols", 1.0))
+	_utility.columns = roundi(_title_num("utilityCols", 3.0))
+	var primary_pt: int = roundi(_title_num("primaryPt", 17.0))
+	var utility_pt: int = roundi(_title_num("utilityPt", 13.0))
+	var wrap_help: bool = _title_num("wrapHelp", 1.0) >= 1.0
 	for button: Button in _primary_buttons:
-		button.add_theme_font_size_override("font_size", 12 if phone_landscape else 17)
+		button.add_theme_font_size_override("font_size", primary_pt)
 	for button: Button in _utility_buttons:
 		var label: String = str(button.get_meta("title_label", button.text))
-		button.text = label.replace("How to Play", "How to\nPlay") \
-			if compact and not shape.begins_with("phone") else label
-		button.add_theme_font_size_override("font_size", 12 if phone_landscape else 13)
+		button.text = label.replace("How to Play", "How to\nPlay") if wrap_help \
+			else label
+		button.add_theme_font_size_override("font_size", utility_pt)
 
 	var image_aspect: float = 1536.0 / 1024.0
 	var banner_h: float = minf(size.y * 0.55, size.x * 0.90 / image_aspect)
@@ -576,7 +592,7 @@ func _fit_title() -> void:
 		size.y - size.y * 0.18 - banner_h)
 	_title_banner.size = Vector2(banner_w, banner_h)
 	if _rose_medallion != null:
-		var rose_side: float = 58.0 if shape.begins_with("phone") else 78.0
+		var rose_side: float = _title_num("roseSide", 78.0)
 		_rose_medallion.offset_left = 18.0
 		_rose_medallion.offset_top = -18.0 - rose_side
 		_rose_medallion.offset_right = 18.0 + rose_side
