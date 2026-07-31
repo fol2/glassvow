@@ -13,7 +13,7 @@ extends Control
 ## Not ported: `LITE`'s particle-count halving, a coarse-pointer budget this
 ## build does not have to meet.
 
-## `ARCHETYPE_TONES` (vfx.js:419). What colour a landed blow throws.
+## `ARCHETYPE_TONES` (vfx.js:354). What colour a landed blow throws.
 const TONES: Dictionary = {
 	"slash": Color(1.0, 1.0, 1.0),
 	"pierce": Color(0.8117647, 0.9019608, 1.0),
@@ -585,7 +585,7 @@ func fly_to(from: Vector2, to: Vector2, colour: Color, n: int = 6,
 		p.delay = float(i) * FLY_STAGGER
 
 
-## `archetypeHit` (vfx.js:458) — the one entry point every landed blow goes
+## `archetypeHit` (vfx.js:393) — the one entry point every landed blow goes
 ## through, so a slash and a blunt hit never have to be spelled out at the call
 ## site. `power` is the damage normalised against 24.
 func archetype_hit(at: Vector2, archetype: String, power: float = 0.3) -> void:
@@ -626,13 +626,13 @@ func archetype_hit(at: Vector2, archetype: String, power: float = 0.3) -> void:
 			motes(at, tone, 8 if big else 5)
 
 
-## `impactFrame` (vfx.js:500) — the white blink the signature cards open with.
+## `impactFrame` (vfx.js:435) — the white blink the signature cards open with.
 func impact_frame() -> void:
 	flash(Color.WHITE, 0.28, 0.09)
 	hitstop(90.0)
 
 
-## `BESPOKE_VFX` (vfx.js:501) — the signature moments. Eighteen cards and arts
+## `BESPOKE_VFX` (vfx.js:436) — the signature moments. Eighteen cards and arts
 ## that get their OWN effect on top of their archetype's, fired once at the
 ## first impact of the play rather than on every hit of a multi-hit card.
 ##

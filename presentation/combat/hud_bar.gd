@@ -138,7 +138,8 @@ const LANTERN_PIP_RADIUS: float = 50.0
 ## The HUD's beacons. `artReady` 1.6s ease-in-out infinite — brightness 1.22
 ## with a 14px amber halo at the 50% mark — beckons from BOTH "you can act"
 ## seats: the lantern when the art can be spent (styles.css:1116-1118) and the
-## END seal once the energy is gone (styles.css:1352-1354). `kindleCall` 1.1s is
+## END seal once the energy is gone (`artReady` again, styles.css:1352-1354).
+## `kindleCall` 1.1s is
 ## the lantern as a drop target while a burnable card is in the air: brighter,
 ## a wider halo, and a 1.07 swell (styles.css:1123-1124).
 const ART_READY_TIME: float = 1.6

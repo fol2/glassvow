@@ -18,7 +18,7 @@ extends Control
 ## rgba(255,89,100,.95).
 ##
 ## The arc is only ever drawn for a card that targets an enemy. That is not a
-## style choice: `beginCardDrag` (`combat.js:1547`) sets targeting for
+## style choice: `beginCardDrag` (`combat.js:1112`) sets targeting for
 ## `target === 'enemy'` and marks every other card `free`, and the two branches
 ## look completely different. A free card follows your finger; an aimed card
 ## STAYS IN ITS SEAT and throws this arc instead. Dragging the card itself in

@@ -51,7 +51,7 @@ opened and compared against the benchmark's actual behaviour.
 | # | Thing | This port | Benchmark `6e06911` | |
 |---|---|---|---|---|
 | 1 | ward shell on mid-combat restore | `set_ward_shell(true, **false**)` — no grow | `syncWardMesh(sprite, true, **true**)` → `meshWard(…, {grow: true})` (`combat.js:1897`) | **P** |
-| 2 | mote flight stagger (`fly_to`) | all `n` motes spawn on one frame | `delay: i * 46` — one mote every 46 ms (`combat.js:1457`) | **R** |
+| 2 | mote flight stagger (`fly_to`) | all `n` motes spawn on one frame | a `delay` of `i * 46` — one mote every 46 ms (`combat.js:1457`) | **R** |
 | 3 | mote flight scale (`fly_to`) | fixed size per mote | `0.5 → 1.05 @0.45 → 0.55` — swells at apex, shrinks on landing | **R** |
 | 4 | mote flight mechanism | gravity 180, drag 0.35, velocity arc | three WAAPI keyframes over a random mid control point | **P** |
 | 5 | enemy name weight | Cinzel 700 (only 700/800 bundled) | `.enemy .name` declares **no** `font-weight` → 400 (`styles.css:793`) | **R** |
@@ -89,7 +89,7 @@ None of them needed the file it cited. Every one has a pre-Pixi original, and
 the results split three ways rather than the one way "ported from Pixi" implies.
 
 **The hand fan law was right all along (rows 21–22).** `hand-layout.js` does not
-exist at `6e06911`; the law is inline in `layoutHand` (`combat.js:466`). All
+exist at `6e06911`; the law is inline in `layoutHand` (`combat.js:983`). All
 seven constants match to the digit — `min(112, 640 / n, (stageW - 246) / (n-1))`
 for the gap, `min(5, 42 / n)` for the per-seat tilt step, `|rot| * 3.2` for the
 sag, `+ 26` for the base. So does the 26 px upward-only drag arm

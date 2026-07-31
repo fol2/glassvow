@@ -167,7 +167,7 @@ longer flash (`enemy_view.gd:3124` (`take_hit`)).
 Benchmark: `hurtFlash`, foes only, 0.3s — at 30% `brightness(2.6) saturate(.4)`
 with an 18px white glow and `X +7px`, at 60% `X -5px`. Fires on **every**
 `hitEnemy` including poison, and on a facet shatter
-(`src/styles.css:788-789`, `src/ui/drain.js:291-307`, `src/ui/drain.js:543-548`).
+(`src/styles.css:788-789`, `src/ui/drain.js:494-550`, `src/ui/drain.js:543-548`).
 
 Here: the foe beat is live. It peaks after 90ms, lasts 300ms and follows the
 benchmark's +7/−5px nudge; poison gets it without recoil
@@ -245,7 +245,8 @@ Benchmark has the rules — `.9s ease`, foe `rotate 2.4deg / Y +4px / scale .985
 hero `rotate -2deg / Y +4px` — but the selector only ever reaches the SVG aim-ring
 and crack overlay. The live painted body is an `img.raster-art` the rule never
 matches, and the crack overlay is separately reset to `transform:none`
-(`src/ui/combat.js:729-774`, `src/ui/assets.js:5-8`, `src/styles.css:969-970`,
+(the `lowhp` writers at `src/ui/combat.js:718-775`; `src/ui/assets.js:5-8`;
+the `cracks-overlay` reset at `src/styles.css:969-970`;
 `src/styles.css:1605-1608`).
 
 Dead at the visual standard. Do not build it.
@@ -541,10 +542,11 @@ Do not derive it.
 **`footY` is also not how floating works.** All four suspected floaters carry
 `footY: 0`. Hovering is expressed by the per-kind CSS idle bob — `voidWisp` 16px,
 `watcherEye` 18px, `shade` 12px, all via `idleFloat` — plus `mesh.float` when the
-mesh is on; `voltEel` sways instead and overrides `mesh.float: 1.1`.
-`shadow.dy` moves only the shadow, never the body
-(`src/char-meta.js:44-55`, `src/styles.css:1612-1621`, `src/ui/combat.js:1807`,
-`src/mesh.js:1143`). Floating and `footY` are two separate mechanisms; floating is
+mesh is on; `voltEel` sways instead (`idleSway`, `src/styles.css:1612-1621`)
+and overrides `mesh.float: 1.1`. `shadow.dy` moves only the shadow, never the
+body (`src/char-meta.js:44-55`; applied as a shadow-only fine-tune at
+`src/ui/combat.js:1805-1809`, whose comment says exactly that). Floating and
+`footY` are two separate mechanisms; floating is
 §1.2.
 
 **Floor.** The combat screen now stands actors on the imported stage plates —

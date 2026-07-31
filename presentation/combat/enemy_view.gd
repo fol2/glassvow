@@ -577,7 +577,7 @@ const IDLE_INTENSITY: float = 0.45
 ## not breathe like a wisp. Read as the BASE; `char-meta`'s own `mesh` block is
 ## laid over it per creature, which is what `meshProfileFor` does.
 ##
-## `float` is not a warp term: it is a whole-body lift in stage px (mesh.js:1271)
+## `float` is not a warp term: it is a whole-body lift in stage px (mesh.js:1171)
 ## and it is applied to the vessel rather than to the vertices.
 const IDLE_PROFILES: Dictionary[StringName, Dictionary] = {
 	&"wisp": {"sway": 0.55, "bob": 1.85, "breathe": 0.95, "head": 0.4, "cloth": 0.0, "pin": 1.05, "float": 1.35},
@@ -906,7 +906,7 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley,
 
 uniform sampler2D body_tex : source_color, filter_linear_mipmap;
 
-// `deformPlane` (mesh.js:914) — the idle, and the whole difference between a
+// `deformPlane` (mesh.js:824) — the idle, and the whole difference between a
 // creature that is alive and a picture that is being wobbled. Six terms, each
 // weighted by WHERE on the body it acts, so the feet stay planted and the head,
 // the chest and the hem move on their own clocks. Run in the vertex stage
@@ -1238,7 +1238,7 @@ void fragment() {
 ## The ward stone — a CUT GEM held in front of the creature. See `WARD_CUT_N` and the
 ## `WARD_*` block for why this is a rewrite rather than a port, and what it replaced.
 ##
-## Descended from `meshWard` (mesh.js:1300) and keeps its silhouette generator: a signed
+## Descended from `meshWard` (mesh.js:1204) and keeps its silhouette generator: a signed
 ## distance to an irregular 8-gon, so no two guards in a fight are the same stone. What it
 ## does NOT keep is that shell's normal — a Voronoi second-nearest seam over 37 scattered
 ## sites, which is the crack web's own construction and the reason a guarded creature and a
@@ -2784,7 +2784,7 @@ func _read_hover(entry: Dictionary) -> void:
 	_hover_rest = maxf(0.0, dy) * UNIT
 
 
-## `meshProfileFor(kind, id)` (mesh.js:1249) — the kind's profile, with the
+## `meshProfileFor(kind, id)` (mesh.js:1135) — the kind's profile, with the
 ## character's own `mesh` block laid over it. The kind is passed rather than
 ## looked up, on the same rule as everything else here: a widget in
 ## `presentation/` does not read content.
@@ -4316,7 +4316,7 @@ func _write_target_rim(px: float, lit: float) -> void:
 ## its `.top-chrome` holds the status row ALONE, and its `.cplate` holds the ward
 ## chip, the HP vial and the HP label alone. A foe's crown adds `.intent`, and its
 ## plate adds a name line and a `.facet-row`
-## (roguecardv2 src/ui/combat.js:215-257). Those three are therefore never built
+## (roguecardv2 src/ui/combat.js:285-297). Those three are therefore never built
 ## for a hero rather than built and hidden — an invisible widget still holds a
 ## slot open in a VBox, which is exactly the gap a hero's plate must not have.
 ##
@@ -4766,7 +4766,7 @@ func _shift_x(node: Control, was: float, left: float, right: float) -> float:
 ## screen ("" when the move deals no damage), `intent` is the move's own kind, and
 ## `infos` is the content status table for the hover text.
 ##
-## `reap` is `x.reaped` (combat.js:1060): a sync fired mid-drain must NOT bury a
+## `reap` is `x.reaped` (combat.js:740): a sync fired mid-drain must NOT bury a
 ## foe whose HP has just reached zero, because the death rite that is about to run
 ## is the whole point — the body still has to sag, crack and come apart. Only the
 ## drain-idle sync, long after the rite, re-asserts the corpse.
@@ -4782,7 +4782,7 @@ func sync(e: EnemyCombatant, dmg_text: String, intent: StringName,
 
 
 ## HP moves the vial, not the body. The benchmark keeps combat cracks OFF
-## (COMBAT_CRACKS = false, combat.js:2642) and its `.lowhp` tilt is explicitly
+## (`COMBAT_CRACKS` = false, combat.js:2004) and its `.lowhp` tilt is explicitly
 ## scoped away from the raster body — the glass language is spent on the death
 ## rite, not on attrition. The gem fallback still dims, because that is what a
 ## gem with no painting has to say.
@@ -4972,7 +4972,7 @@ func tip_zone(global_pos: Vector2) -> Array[StringName]:
 	return none
 
 
-## `updatePreviews` (combat.js:1606), the part that lands on this actor: the
+## `updatePreviews` (combat.js:1199), the part that lands on this actor: the
 ## slice of the rail an armed card would take, and the death-mark when the
 ## number is lethal.
 ##
@@ -5025,7 +5025,7 @@ func set_marked(on: bool) -> void:
 		_body_mat.set_shader_parameter("crack_marked", 1.0 if on else 0.0)
 
 
-## `.enemy.doomed` (drain.js:594) — the world-stop beat, and a boss's alone. The
+## `.enemy.doomed` (drain.js:559) — the world-stop beat, and a boss's alone. The
 ## seams blaze pure white and the body rattles; nothing else about the creature
 ## changes, because what follows is the death rite it was already going to get.
 func set_doomed(on: bool) -> void:

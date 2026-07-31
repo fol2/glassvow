@@ -73,7 +73,7 @@ const MIST_H: float = 300.0
 ## `#vignette` — `rgba(4,5,12,.55)` at the ellipse's rim.
 const VIGNETTE_EDGE: Color = Color(0.015686275, 0.019607844, 0.047058824, 0.55)
 ## `@keyframes lowhp` — `rgba(255,40,40,.12)` over 120px to `.34` over 180px, and
-## back, over 1.6s. `.lowhp` is `hp / maxHp <= 0.3` (combat.js:451).
+## back, over 1.6s. `.lowhp` is `hp / maxHp <= 0.3` (combat.js:733).
 const LOW_HP_TINT: Color = Color(1.0, 0.15686275, 0.15686275)
 const LOW_HP_AT: float = 0.3
 const LOW_HP_PERIOD: float = 1.6
@@ -127,7 +127,7 @@ const CSS_EASE: Array[float] = [0.25, 0.1, 0.25, 1.0]
 ## strike: intent illuminates". A third of the way, not all of it.
 const DIM_AIM_LEAN: float = 0.3
 
-## `#lantern.snuff` (styles.css:91, fired at drain.js:967) — you lose, and the
+## `#lantern.snuff` (styles.css:91, fired at drain.js:992) — you lose, and the
 ## lantern goes out. The SAME radial `.stage-dim` paints, but full-screen and at
 ## `--la: 1` with `--lr: 160px`: the whole view collapses to a dying point of
 ## light around the body that was carrying it. Nothing transitions `#lantern`'s
@@ -155,7 +155,7 @@ const SNUFF_RADIUS: float = 160.0
 const WORLDSTOP_SAT: float = 0.07
 const WORLDSTOP_BRIGHT: float = 0.85
 const WORLDSTOP_FADE: float = 0.22
-## `V.hitstop(110)` then `await sleep(820)` (drain.js:597).
+## `V.hitstop(110)` then `await sleep(820)` (drain.js:561).
 const WORLDSTOP_HOLD: float = 0.82
 const WORLDSTOP_STOP: float = 110.0
 
@@ -1695,7 +1695,7 @@ func refresh_chrome() -> void:
 	_push_hud()
 
 
-## `onCardClick` (combat.js:1667). A click is not an inspection — it is the
+## `onCardClick` (combat.js:1260). A click is not an inspection — it is the
 ## primary way the fight is played, and what it does depends entirely on how many
 ## things the card could be aimed at:
 ##
@@ -1757,9 +1757,9 @@ func _on_card_hover_changed(uid: int) -> void:
 	_update_previews()
 
 
-## `beginCardDrag` (combat.js:1534) — lifting a card ticks like hovering one, and
+## `beginCardDrag` (combat.js:1112) — lifting a card ticks like hovering one, and
 ## a card lifted AT something arms exactly as a clicked one does: `beginCardDrag`
-## calls the same `setTargeting` (combat.js:1547), so the same halo comes up on
+## calls the same `setTargeting` (combat.js:1297), so the same halo comes up on
 ## every living foe. A card that acts on you clears it and travels free instead.
 ##
 ## Without this the drag path lit nothing at all: `.targetable` has one setter in
@@ -1779,7 +1779,7 @@ func _on_card_drag_armed(uid: int) -> void:
 	_update_previews()
 
 
-## `beginCardDrag` (combat.js:1540) — a card that can neither be paid for nor
+## `beginCardDrag` (combat.js:1112) — a card that can neither be paid for nor
 ## burned refuses out loud, so a dead drag is not mistaken for a dropped input.
 func _on_card_drag_refused(uid: int) -> void:
 	# `c.classList.add('nope')` (combat.js:1131) — the card that can neither be
@@ -1802,7 +1802,7 @@ func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
 	# The arc reaches the POINTER, not the enemy under it — a shot that misses
 	# still has to look aimed somewhere.
 	_aim.draw_between(_hand.seat_centre(uid), global_pos)
-	# `hoverEnemyAt` (combat.js:1594): the rim is no longer set here. Which
+	# `hoverEnemyAt` (combat.js:1187): the rim is no longer set here. Which
 	# bodies light up is one decision with three rules in it, and it belongs
 	# where the card, the aim and the survivor count are all known.
 	_aim_hover = _enemy_at(global_pos)
@@ -1944,7 +1944,7 @@ func _clamp_chrome() -> void:
 
 
 ## `if (cb.player.block > 0) syncWardMesh(heroSprite, true, true)`
-## (combat.js:2580, 2585) — a screen built onto a fighter who is ALREADY warded,
+## (combat.js:1897, 1902) — a screen built onto a fighter who is ALREADY warded,
 ## which is what a mid-combat restore is. Raised without the grow: the stone was
 ## up before this screen existed, so it does not form again in front of you.
 ##
@@ -1956,7 +1956,7 @@ func _restore_ward_shell(who: EnemyView, block: int) -> void:
 		who.set_ward_shell(true, false)
 
 
-## `updateLantern` (combat.js:404) — how far the light has failed, where it is
+## `updateLantern` (combat.js:101) — how far the light has failed, where it is
 ## standing, and whether it is guttering. Run every frame rather than at the
 ## benchmark's call sites: the pool is centred on a body that breathes, sways and
 ## recoils, and a light that only moves when the HUD is rewritten slides off the
@@ -2261,7 +2261,7 @@ func _handle_event(ev: Dictionary) -> void:
 				# what makes a five-card draw read as one deal rather than five.
 				await _wait(HandView.deal_stagger(wave))
 				if seq.run_length(EventTypes.DRAW) == 1:
-					# `clearPileVisualOverride` + `bumpPile` (drain.js:263, :281) —
+					# `clearPileVisualOverride` + `bumpPile` (drain.js:235, :216) —
 					# the wave is over, so the pile goes back to telling the truth
 					# and takes its one bump for the whole deal.
 					_pile_override.erase(&"draw")
@@ -2349,7 +2349,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_sfx.play(&"stagger")
 			_float(_enemy_centre(idx) + Vector2(0.0, -76.0), SAY_STAGGERED,
 				"staggerf", WARM_GOLD)
-			# `.reseaming` for 720ms (drain.js:458) — the shimmer runs alongside
+			# `.reseaming` for 720ms (drain.js:423) — the shimmer runs alongside
 			# the 520ms beat rather than holding it up, so it is still finishing
 			# as the queue moves on.
 			var staggered: EnemyView = _enemy_view(idx)
@@ -2383,7 +2383,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var n: int = ev.get("n", total)
 			var at: Vector2 = _who_centre(who_v)
 			_sfx.play(&"block")
-			# `syncWardMesh(host, true, true)` (drain.js:663) — GAINING guard is the
+			# `syncWardMesh(host, true, true)` (drain.js:625) — GAINING guard is the
 			# one call that passes `grow`, and that is the whole distinction: a
 			# resync only states that ward is still there, while this says it was
 			# just put up. The first one grows the stone; after that it pulses the
@@ -2616,7 +2616,7 @@ func _hit_enemy(ev: Dictionary) -> void:
 		_float(at + Vector2(0.0, -20.0), str(amount), "poisonf", POISON_TAN)
 	else:
 		var big: bool = amount >= BIG_HIT
-		# `choreoDone` (drain.js:542): the hero swings once for the CARD and the
+		# `choreoDone` (drain.js:504): the hero swings once for the CARD and the
 		# blows land after it, so a three-hit attack is one swing and three
 		# recoils rather than three swings.
 		if not _hero_swung and _hero != null:
@@ -2772,7 +2772,7 @@ func _die(idx: int) -> void:
 	_ember_from = at
 	_has_ember_from = true
 	if boss:
-		# `worldstop` (drain.js:594) — the world stops: colour drains, the cracks
+		# `worldstop` (drain.js:559) — the world stops: colour drains, the cracks
 		# blaze with inner light, one silent beat, and only then is the vessel
 		# allowed to fail. The drain and the seams both come back off before the
 		# rite proper starts, because the rite has its own light.
@@ -2869,11 +2869,11 @@ func _push_hud() -> void:
 	var cb: CombatState = game.cb
 	if cb == null or _hud == null:
 		return
-	# `replacePileVisualOverride` (drain.js:192) — the engine is ALREADY post-draw
+	# `replacePileVisualOverride` (drain.js:149) — the engine is ALREADY post-draw
 	# by the time the drain runs, so a pile left to read its own state has emptied
 	# before the first card has left it. The override holds the pre-wave count and
 	# is walked down one card at a time as they fly (`setPileVisualOverride`,
-	# drain.js:252), which is the only way the deck can be seen being dealt from.
+	# drain.js:209), which is the only way the deck can be seen being dealt from.
 	var draw_n: int = _pile_override.get(&"draw", cb.draw.size())
 	var discard_n: int = _pile_override.get(&"discard", cb.discard.size())
 	_hud.set_values(maxi(0, cb.player.hp), cb.player.max_hp, cb.player.block,
@@ -2944,7 +2944,7 @@ func _refresh_intent(idx: int) -> void:
 		str(mv.get("name", String(e.move_key))))
 
 
-## `syncCombat` (combat.js:1039) — every body's numbers, and nothing else. The
+## `syncCombat` (combat.js:718) — every body's numbers, and nothing else. The
 ## hand is NOT here, which is the reason this exists apart from `_sync_all`: the
 ## benchmark restates the bodies twenty-odd times inside a single drain and the
 ## hand only where a card actually moved.
@@ -3017,7 +3017,7 @@ func _sync_all() -> void:
 			or _rules.can_kindle(game.run, cb, c))
 	if cb.over and not _over_emitted:
 		_over_emitted = true
-		# `victoryFlow` / `defeatFlow` (combat.js:2683, 2720) each open with their
+		# `victoryFlow` / `defeatFlow` (combat.js:2044, 2079) each open with their
 		# transition, before anything is torn down — the fight is what the wipe
 		# is covering, so it has to still be on screen when it starts.
 		combat_over.emit(cb.result)
@@ -3093,7 +3093,7 @@ func _keyword_tip(word: String) -> Dictionary:
 	return {"title": word, "body": str(RulesText.KEYWORD_TEXT.get(word, ""))}
 
 
-## `intentFor` (combat.js:997). The chip shows a number; the tip spells out
+## `intentFor` (combat.js:676). The chip shows a number; the tip spells out
 ## everything the move intends, in the order the benchmark lists it.
 func _intent_tip(idx: int) -> Dictionary:
 	if idx < 0 or idx >= game.cb.enemies.size():
@@ -3134,7 +3134,7 @@ func _intent_tip(idx: int) -> Dictionary:
 		"body": "Intends to %s." % what}
 
 
-## `statusChips` (combat.js:993). `N` in the catalogue body stands for the
+## `statusChips` (combat.js:660). `N` in the catalogue body stands for the
 ## magnitude the chip is actually carrying, so the sentence reads as this
 ## creature's condition rather than as a rule.
 func _status_tip(idx: int, id: StringName) -> Dictionary:
@@ -3167,7 +3167,7 @@ func _affix_tip(idx: int) -> Dictionary:
 		"body": str(affix.get("text", ""))}
 
 
-## `ce.lantern._tip` (combat.js:644). The art's own rule leads, then what the
+## `ce.lantern._tip` (combat.js:327). The art's own rule leads, then what the
 ## lantern is for.
 func _lantern_tip() -> Dictionary:
 	var art_id: String = str(game.run.art)
@@ -3182,7 +3182,7 @@ func _lantern_tip() -> Dictionary:
 
 
 ## A touchscreen has no hover, so the benchmark gives it a 380ms long press
-## instead (`pointerdown` → `setTimeout(..., 380)`, tooltip.js:104). The screen
+## instead (`pointerdown` → `setTimeout(..., 380)`, tooltip.js:63). The screen
 ## forwards the gesture because the tooltip layer is deliberately pointer-inert
 ## and would never see it.
 func _input(event: InputEvent) -> void:
@@ -3221,7 +3221,7 @@ func _input(event: InputEvent) -> void:
 		_stage_pressed(mb.position)
 
 
-## `onEnemyClick` (combat.js:1694) and `tapBackground` (combat.js:1372), which are
+## `onEnemyClick` (combat.js:1289) and the stage `pointerdown` (combat.js:356-360), which are
 ## only ever heard while a card is armed — nothing else on this screen answers a
 ## bare press on the stage.
 func _stage_pressed(at: Vector2) -> void:
@@ -3276,7 +3276,7 @@ func _aim_move(at: Vector2) -> void:
 
 # ---------------------------------------------------------------- previews
 
-## `updatePreviews` (combat.js:1606) — the consequence, spelled out.
+## `updatePreviews` (combat.js:1199) — the consequence, spelled out.
 ##
 ## While a card is hovered, armed or being dragged, every foe it could touch
 ## shows exactly what it would lose: an aim rim on the bodies the card would
@@ -3479,7 +3479,7 @@ func _select_card(uid: int) -> void:
 	_update_previews()
 
 
-## `onCardClick` (combat.js:1667) reached from the keyboard: a card that needs
+## `onCardClick` (combat.js:1260) reached from the keyboard: a card that needs
 ## a target ARMS rather than plays, unless there is only one thing to hit.
 func _activate_selected() -> void:
 	var inst: CardInst = _find_card(_selected_uid)
@@ -3498,7 +3498,7 @@ func _activate_selected() -> void:
 		if living.size() == 1:
 			_commit_selected(living[0])
 			return
-		# `setTargeting` (combat.js:1702): every living foe is marked choosable, and
+		# `setTargeting` (combat.js:1297): every living foe is marked choosable, and
 		# `S.selectedEnemyIndex` opens on the first survivor so the keyboard has
 		# somewhere to start cycling from. The arc opens onto that foe, and the
 		# pointer takes it over from the next mouse move.

@@ -72,7 +72,7 @@ const TREE_COUNT: int = 52
 ## far above the title frame and is not spent here. `actBaseY(1) - 2.2`.
 const CLOUD_DECK_Y: float = 10.84
 const CLOUD_COUNT: int = 16
-## The point fields (scene3d.js:264-266): `makePoints(900, 0.16, …, 0.75)`
+## The point fields (scene3d.js:120-121): `makePoints(900, 0.16, …, 0.75)`
 ## main embers and `makePoints(240, 0.32, …, 0.5)` accent glow, both
 ## size-attenuated world sprites in a ±23 × ±13 × ±20 box around the eye. The
 ## first cut of this file flattened them to ~150 screen-space dots — a tenth

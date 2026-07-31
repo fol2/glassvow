@@ -23,7 +23,7 @@ func is_busy() -> bool:
 
 
 ## How many events of type `t` this one heads, counting itself. A wave of draws
-## is paced by how big the wave is (`drawBatchSchedule`, pile-chrome.js:91), and
+## is paced by how big the wave is (`drawBatchSchedule`, pile-chrome.js:58), and
 ## a handler that only ever sees one event at a time cannot know that without
 ## asking. Only meaningful from inside `handler`, where the current event has
 ## already left the queue.

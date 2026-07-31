@@ -13,7 +13,7 @@ signal card_drag_released(uid: int, global_pos: Vector2)
 ## machine-gunning as the cursor crosses a seat.
 signal card_hover_changed(uid: int)
 ## The drag armed, or was refused because the card can neither be played nor
-## burned. `beginCardDrag` (combat.js:1522) answers the first with a hover tick
+## burned. `beginCardDrag` (combat.js:1112) answers the first with a hover tick
 ## and the second with a rejection.
 signal card_drag_armed(uid: int)
 signal card_drag_refused(uid: int)
@@ -108,7 +108,7 @@ const ARMED_SCALE: float = 1.24
 const ARMED_PULL: float = 0.4   # of the seat's own offset from the zone centre
 const ARMED_ROT: float = 0.5
 const DRAG_SCALE: float = 1.12
-## `drawBatchSchedule` (pile-chrome.js:91) — how a wave of draws is paced. One
+## `drawBatchSchedule` (pile-chrome.js:58) — how a wave of draws is paced. One
 ## card gets the full flight; a wave splits a 500ms budget into a stagger and
 ## what is left over, so five cards leave the pile 100ms apart and the whole
 ## deal is done in 680ms however big the hand is.
@@ -575,7 +575,7 @@ func _on_card_moved_to(uid: int, global_pos: Vector2) -> void:
 			return  # unplayable cards can be tapped, never dragged
 		_dragging = true
 		card_drag_armed.emit(uid)
-		# `beginCardDrag` (combat.js:1547): a card that targets an enemy AIMS —
+		# `beginCardDrag` (combat.js:1112): a card that targets an enemy AIMS —
 		# it keeps its seat and the screen throws an arc from it — and every
 		# other card is carried. Kindle turns the whole hand into fuel, so
 		# nothing aims, which is the benchmark's `kindleOnly` branch.
@@ -633,7 +633,7 @@ func raise_seat(uid: int) -> void:
 	_pose_all()
 
 
-## `setTargeting` (combat.js:1706) — this card is the one waiting on a target.
+## `setTargeting` (combat.js:1297) — this card is the one waiting on a target.
 func arm_seat(uid: int) -> void:
 	armed_uid = uid
 	_pose_all()
@@ -660,8 +660,8 @@ func _pose(uid: int) -> void:
 	if view == null or _flight_from.has(uid):
 		return
 	# A CARRIED card is written by the pointer on every move, so it is not posed
-	# from here at all. An AIMING one keeps its seat — `model.drag` is only set
-	# for a free drag (combat.js:274) — so it falls through to `armed` below,
+	# from here at all. An AIMING one keeps its seat — the drag only goes
+	# `free` for the kindle branch (combat.js:1121) — so it falls through to `armed` below,
 	# which is the pose `beginCardDrag`'s own `setTargeting` puts it in.
 	if _dragging and _drag_uid == uid and not _aiming:
 		return

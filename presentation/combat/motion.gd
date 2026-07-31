@@ -38,7 +38,7 @@ const TRANSIT: Array[float] = [0.4, 0.0, 0.2, 1.0]
 const SCREEN_IN: Array[float] = [0.2, 0.7, 0.25, 1.0]
 ## The band-of-light wipe sweep (`wipeSweep`, styles.css:1530-1531).
 const WIPE: Array[float] = [0.55, 0.0, 0.35, 1.0]
-## `@keyframes nope` (styles.css:610-611) — the refusal shake one rule serves
+## The `nope` refusal shake (styles.css:610-611) — the one rule serves
 ## to both `.card.nope` and `.lantern-btn.nope`: 0.32s on the stylesheet's own
 ## `ease`, thrown −7px/−1.5° at 25% and +7px/+1.5° at 65%. Shared here for the
 ## same reason the stylesheet declares it once.
