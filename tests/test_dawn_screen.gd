@@ -62,6 +62,16 @@ static func run(fails: Array[String]) -> void:
 	if grid != null:
 		_check(fails, grid.get_child_count() == 2,
 			"a cursor of 2 stands exactly 2 memories (got %d)" % grid.get_child_count())
+		# R1's shape, pinned: a seat must be a REAL container, or the fresh
+		# dawn's first card arrives force-sized and unsorted — a blank pane on
+		# the frame the screen exists for. And the card's content minimum must
+		# survive the seat, or prose can never ask for more than 82px.
+		for seat_node: Node in grid.get_children():
+			_check(fails, seat_node is Container, "a seat is a real container")
+			var seated: Control = seat_node.get_child(0) as Control
+			_check(fails, seated != null
+				and seated.get_combined_minimum_size().y >= 82.0,
+				"the card's content minimum survives the seat")
 	_check(fails, not _has_confetti(resumed), "a resumed dawn does not replay confetti")
 	for button: Button in _buttons_of(resumed):
 		_check(fails, button.disabled, "buttons stay sealed while memories are owed")

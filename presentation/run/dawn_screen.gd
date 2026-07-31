@@ -82,7 +82,13 @@ var _skipping: bool = false
 var _asked: bool = false
 var _sun_t: float = -1.0
 var _reveal_card: Control = null
+var _reveal_seat: MarginContainer = null
 var _confetti: Confetti = null
+
+## The reveal's travel, and every seat's constant extra height: top and
+## bottom margins always sum to this, so a sliding card never changes its
+## row's height.
+const TRAVEL: float = 12.0
 
 
 func _init(events: Array, cursor: int,
@@ -252,18 +258,18 @@ func _begin_beat() -> void:
 	_asked = false
 	var due: Dictionary = _events[_cursor]
 	var card: PanelContainer = _event_card(due)
-	_grid.add_child(_seat(card))
+	var seat: MarginContainer = _seat(card, 0.0 if _skipping else TRAVEL)
+	_grid.add_child(seat)
 	_reveal_card = card
+	_reveal_seat = seat
 	if _skipping:
 		# The reference's own instant path still staggers (end.js:145-146:
 		# shown, then sleep(40)) — a fast-forward the eye can follow, and one
 		# save per beat instead of the whole remainder inside one frame.
 		card.modulate.a = 1.0
-		card.position.y = 0.0
 		_finish_beat()
 		return
 	card.modulate.a = 0.0
-	card.position.y = 12.0
 
 
 func _finish_beat() -> void:
@@ -320,12 +326,13 @@ func _process(delta: float) -> void:
 			_beat_t += delta
 			var u: float = clampf(_beat_t / REVEAL_TIME, 0.0, 1.0)
 			var e: float = Motion.ease(Motion.CSS_EASE, u)
-			if is_instance_valid(_reveal_card):
+			if is_instance_valid(_reveal_card) and is_instance_valid(_reveal_seat):
 				# The whole panel slides — `.dawn-event` animates transform,
-				# not layout (styles.css:2583-2585). The card rides inside its
-				# seat, so the grid never reflows under the travel.
+				# not layout (styles.css:2583-2585). The travel lives in the
+				# seat's margins, whose sum never changes, so the row's height
+				# holds while the card moves.
 				_reveal_card.modulate.a = e
-				_reveal_card.position.y = lerpf(12.0, 0.0, e)
+				_set_travel(_reveal_seat, lerpf(TRAVEL, 0.0, e))
 			if u >= 1.0:
 				_finish_beat()
 		BEAT_WAIT:
@@ -379,7 +386,8 @@ func _press(down: bool) -> void:
 		# A tap mid-entrance means "I have read it": the card lands standing
 		# and the next memory is asked for at once.
 		_reveal_card.modulate.a = 1.0
-		_reveal_card.position.y = 0.0
+		if is_instance_valid(_reveal_seat):
+			_set_travel(_reveal_seat, 0.0)
 		_finish_beat()
 		_asked = true
 		advance_requested.emit()
@@ -489,7 +497,9 @@ class Confetti extends Control:
 			m.tone = tone
 			m.born = _t
 			m.life = LIFE * (0.6 + 0.8 * _rand())
-			m.width = 1.6 + _rand() * 0.8
+			# vfx.js: lineWidth = size * a with size 3 × (0.6 + rand × 0.8) —
+			# the width spread is part of why a burst reads as depth.
+			m.width = 3.0 * (0.6 + 0.8 * _rand())
 			_motes.append(m)
 
 	func _draw() -> void:
@@ -500,24 +510,35 @@ class Confetti extends Control:
 			var speed: float = m.vel.length()
 			var stroke: Vector2 = (m.vel / speed if speed > 0.01 else Vector2.DOWN) \
 				* (speed * 0.045 + 2.0)
-			draw_line(m.pos, m.pos + stroke, Color(m.tone, a), maxf(0.5, m.width * a))
+			# The streak trails BEHIND the mote (vfx.js:94-97 draws pos back
+			# along its angle) — the trail is the motion cue. And under ADD
+			# the festival tones must arrive scaled down, or every overlap
+			# clips to white and two of the three tones stop existing:
+			# measured 712 of 1402 mote pixels hueless at full value.
+			var lit: Color = Color(m.tone.r * 0.55, m.tone.g * 0.55, m.tone.b * 0.55, a)
+			draw_line(m.pos, m.pos - stroke, lit, maxf(0.5, m.width * a))
 
 
 # ---------------------------------------------------------------- chrome
 
-## The reveal slides the CARD inside a seat the grid owns, so the entrance
-## never reflows the row (`.dawn-event` animates transform, not layout).
-func _seat(card: PanelContainer) -> Control:
-	var seat: Control = Control.new()
-	seat.custom_minimum_size = card.custom_minimum_size
+## The reveal slides the CARD inside a seat the grid owns. The seat is a
+## REAL container — a MarginContainer whose top and bottom margins always
+## sum to TRAVEL — so container sizing and minimum-size propagation stay
+## intact and every card in a row stretches to the row's height. The first
+## cut used a bare Control here, which sorts nothing: the fresh dawn's one
+## card arrived force-sized to the whole reserve and unsorted — a blank
+## 224px pane on the frame this screen exists for.
+func _seat(card: PanelContainer, travel: float = 0.0) -> MarginContainer:
+	var seat: MarginContainer = MarginContainer.new()
 	seat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	seat.add_child(card)
-	seat.resized.connect(func() -> void:
-		if is_instance_valid(card):
-			card.size = seat.size
-	)
-	card.size = seat.custom_minimum_size
+	_set_travel(seat, travel)
 	return seat
+
+
+static func _set_travel(seat: MarginContainer, px: float) -> void:
+	seat.add_theme_constant_override("margin_top", int(roundf(px)))
+	seat.add_theme_constant_override("margin_bottom", int(roundf(TRAVEL - px)))
 
 
 ## `.dawn-event` (styles.css:2579-2591), flat: min 145×82, 1px border
@@ -607,6 +628,13 @@ func _action_button(text: String) -> Button:
 	button.custom_minimum_size = Vector2(190, 46)
 	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
 	RunStyle.style_button(button, true)
+	# `.btn:disabled { opacity: 0.45 }` (styles.css:156) fades the COMPOSED
+	# button once. Here modulate does all of it, so the disabled dressing
+	# must do none — full plate, ink label. Stacking style_button's own
+	# faded plate and 0.45 label under the modulate faded the text three
+	# times over: measured gone (max luminance 89, same as its plate).
+	button.add_theme_stylebox_override("disabled", button.get_theme_stylebox("normal"))
+	button.add_theme_color_override("font_disabled_color", RunStyle.INK)
 	return button
 
 
@@ -640,10 +668,13 @@ func _apply_shape(inset: int, panel_width: float, title_size: int,
 	_panel.custom_minimum_size.x = panel_width
 	_title.add_theme_font_size_override("font_size", title_size)
 	_grid.columns = columns
-	# `.dawn-ceremony` is content-sized under a CAP (max-height: 27cqh,
-	# styles.css:2576) — the shape number is the ceiling, never a floor. The
-	# old floor of 260px opened the ceremony on a dead hole the height of two
-	# missing rows, at the exact moment the screen wants the player's eye.
+	# FINAL-content-sized under the shape's CAP. The reference is
+	# content-sized live (max-height: 27cqh, styles.css:2576) because its
+	# whole drain lasts 3.3s; the port's feed breathes with the player, and a
+	# panel that grew mid-ceremony would shove every element on the screen
+	# once a row. So the reserve is the height the feed ENDS at — at most one
+	# unfilled row of quiet, gone by the ceremony's midpoint, instead of the
+	# old 260px floor that opened on two missing rows of hole.
 	var rows: int = maxi(1, int(ceilf(
 		float(maxi(1, _events.size())) / float(maxi(1, columns)))))
 	var need: float = float(rows) * 90.0 + float(rows - 1) * 8.0
