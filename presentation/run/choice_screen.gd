@@ -11,6 +11,19 @@ const ROSE_MURAL: String = "res://assets/art/meta/emberglass-mural.png"
 const ROSE_FRAME: String = "res://assets/art/meta/emberglass-frame.png"
 const ROSE_MASK: String = "res://assets/art/meta/emberglass-mask-%s.png"
 const ROSE_PANE_SHADER: Shader = preload("res://presentation/run/rose_pane.gdshader")
+const BANNER_SHADOW_SHADER: Shader = preload("res://presentation/run/drop_shadow.gdshader")
+
+## The title banner, verbatim from `styles.css:341-343`: a plate held at 55% of
+## the stage height and 90% of its width, seated 18% up from the bottom, the
+## whole group at `opacity: 0.35`, and a `drop-shadow(0 12px 40px rgba(0,0,0,.6))`
+## the port had never carried.
+const BANNER_ALPHA: float = 0.35
+const BANNER_H_RATE: float = 0.55
+const BANNER_W_RATE: float = 0.90
+const BANNER_LIFT: float = 0.18
+const BANNER_SHADOW_BLUR: float = 40.0
+const BANNER_SHADOW_DY: float = 12.0
+const BANNER_SHADOW_INK: Color = Color(0.0, 0.0, 0.0, 0.6)
 const GOLD: Color = Color("#f2c14e")
 const PARCHMENT: Color = Color("#e8dfc8")
 const BENCH_TEXT_DIM: Color = Color("#8b93ad")
@@ -43,6 +56,7 @@ var _card_views: Array[CardView] = []
 var _card_pedestals: Array[Control] = []
 var _title_variant: bool = false
 var _title_banner: TextureRect
+var _banner_shadow: ColorRect = null
 var _title_column: VBoxContainer
 var _wordmark_slot: Control
 var _wordmark: TextureRect
@@ -242,11 +256,25 @@ func _build_title(tagline_text: String, choices: Array[Dictionary],
 		context: Dictionary) -> void:
 	add_child(TitleWorld.new())
 
+	# The banner's drop-shadow, added FIRST so it sits under the plate it belongs
+	# to. `styles.css:343` has carried it since the reference was written and the
+	# port never had it, which is why the raster ended flush against the sky.
+	_banner_shadow = ColorRect.new()
+	var shadow_mat: ShaderMaterial = ShaderMaterial.new()
+	shadow_mat.shader = BANNER_SHADOW_SHADER
+	shadow_mat.set_shader_parameter("sigma", BANNER_SHADOW_BLUR * 0.5)
+	shadow_mat.set_shader_parameter("shade", BANNER_SHADOW_INK)
+	_banner_shadow.material = shadow_mat
+	_banner_shadow.color = Color(1.0, 1.0, 1.0, 1.0)
+	_banner_shadow.modulate.a = BANNER_ALPHA
+	_banner_shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_banner_shadow)
+
 	_title_banner = TextureRect.new()
 	_title_banner.texture = load(TITLE_BACKGROUND) as Texture2D
 	_title_banner.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_title_banner.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_title_banner.modulate.a = 0.35
+	_title_banner.modulate.a = BANNER_ALPHA
 	_title_banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_title_banner)
 
@@ -501,6 +529,30 @@ func _title_num(field: String, fallback: float = 0.0) -> float:
 	return LayoutBook.num(_panel_layout.get("title", {}).get(field), fallback)
 
 
+## Put the banner's drop-shadow under the plate it belongs to.
+##
+## The Control has to be BIGGER than the plate, because the shadow bleeds past
+## every edge — a shader can only draw inside its own rect, so a margin of three
+## standard deviations plus the offset is what keeps the tail from being clipped
+## into a second hard edge, which would defeat the whole point of adding it.
+func _seat_banner_shadow(at: Vector2, span: Vector2) -> void:
+	if _banner_shadow == null:
+		return
+	var sigma: float = BANNER_SHADOW_BLUR * 0.5
+	var pad: float = sigma * 3.0 + absf(BANNER_SHADOW_DY)
+	_banner_shadow.position = at - Vector2.ONE * pad
+	_banner_shadow.size = span + Vector2.ONE * pad * 2.0
+	var mat: ShaderMaterial = _banner_shadow.material as ShaderMaterial
+	if mat == null:
+		return
+	var plate_min: Vector2 = Vector2.ONE * pad
+	mat.set_shader_parameter("ctrl_size", _banner_shadow.size)
+	mat.set_shader_parameter("box_min", plate_min + Vector2(0.0, BANNER_SHADOW_DY))
+	mat.set_shader_parameter("box_max", plate_min + span + Vector2(0.0, BANNER_SHADOW_DY))
+	mat.set_shader_parameter("plate_min", plate_min)
+	mat.set_shader_parameter("plate_max", plate_min + span)
+
+
 func _authored_panel_width() -> float:
 	return CARD_PANEL_W if _card_mode else _panel_num("w", PANEL_W)
 
@@ -585,12 +637,14 @@ func _fit_title() -> void:
 		button.add_theme_font_size_override("font_size", utility_pt)
 
 	var image_aspect: float = 1536.0 / 1024.0
-	var banner_h: float = minf(size.y * 0.55, size.x * 0.90 / image_aspect)
+	var banner_h: float = minf(size.y * BANNER_H_RATE, size.x * BANNER_W_RATE / image_aspect)
 	var banner_w: float = banner_h * image_aspect
-	_title_banner.position = Vector2(
+	var banner_at: Vector2 = Vector2(
 		(size.x - banner_w) * 0.5,
-		size.y - size.y * 0.18 - banner_h)
+		size.y - size.y * BANNER_LIFT - banner_h)
+	_title_banner.position = banner_at
 	_title_banner.size = Vector2(banner_w, banner_h)
+	_seat_banner_shadow(banner_at, Vector2(banner_w, banner_h))
 	if _rose_medallion != null:
 		var rose_side: float = _title_num("roseSide", 78.0)
 		_rose_medallion.offset_left = 18.0
