@@ -134,7 +134,7 @@ func _build() -> void:
 
 	var t: Label = RewardKit.text(_title_text(), GlassStyle.CINZEL_700, 28,
 		RewardKit.PARCHMENT, 3)
-	_kit.put(t, Rect2(0.0, 44.0, 1180.0, 38.0))
+	_kit.put(t, Rect2(0.0, 44.0, RewardKit.CANVAS.x, 38.0))
 	_caption = RewardKit.text("", GlassStyle.ALEGREYA_400, 15, RewardKit.TEXT, 0)
 	_kit.put(_caption, Rect2(190.0, 650.0, 800.0, 22.0))
 	_refresh_caption()

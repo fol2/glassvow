@@ -903,34 +903,39 @@
     "map": {
       "base": {
         "bar": {
-          "region": 1.0,
           "scale": 1.0,
-          "title": 0.0
+          "title": 0.0,
+          "titleH": 26.0,
+          "titleInset": 0.0,
+          "titleTop": 62.0
         },
-        "bottom": 74.0,
         "colMax": 104.0,
         "colMin": 50.0,
         "gutter": 170.0,
+        "rowMax": 98.0,
+        "rowMin": 74.0,
+        "rowRate": 0.12,
         "scale": 0.6,
-        "top": 92.0,
         "touch": 0.0
       },
       "shapes": {
         "phone-landscape": {
           "bar": {
-            "scale": 0.84
+            "scale": 0.84,
+            "titleTop": 42.0
           },
-          "bottom": 56.0,
           "colMax": 46.0,
           "colMin": 40.0,
           "scale": 0.58,
-          "top": 26.0,
           "touch": 44.0
         },
         "phone-portrait": {
           "bar": {
-            "region": 0.0,
-            "scale": 0.88
+            "scale": 0.88,
+            "title": 1.0,
+            "titleH": 38.0,
+            "titleInset": 58.0,
+            "titleTop": 58.0
           },
           "gutter": 76.0,
           "scale": 0.68,

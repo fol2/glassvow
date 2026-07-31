@@ -145,13 +145,23 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	# `EnemyView.set_chrome_scale` for why one ratio rather than four numbers.
 	&"actor/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 2.0, "default": 1.0},
 
-	# --- map: the waystone field. The trail is a 15x7 grid seated between two
-	# edge insets, so `top` and `bottom` are already bound and only the column
-	# gap needed naming: it was `clamp(104, 50, (w - 170) / 6)` inline, three
-	# figures with no shape attached, and at 390px all three of them collide.
+	# --- map: the waystone field. The column gap was `clamp(104, 50, (w - 170)
+	# / 6)` inline, three figures with no shape attached, and at 390px all three
+	# of them collide.
+	#
+	# `top` and `bottom` were the trail's vertical band, and they died when the
+	# map became a navigable Spire: the rows are no longer seated between two
+	# insets, they scroll past a camera, so the vertical rhythm is a ROW GAP and
+	# not a band. The three fields below replaced them rather than being added
+	# beside them — see `WorldMapScreen._row_gap`.
 	&"trail/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.05, "max": 2.0, "default": 0.36},
-	&"trail/top": {"bind": BIND_TOP, "unit": "px", "min": 0.0, "max": 600.0, "default": 92.0},
-	&"trail/bottom": {"bind": BIND_BOTTOM, "unit": "px", "min": 0.0, "max": 600.0, "default": 74.0},
+	## Rows are `rowRate` of the stage height apart, held inside `[rowMin,
+	## rowMax]`. The rate is what makes a taller stage show the same NUMBER of
+	## rows rather than more of them; the band is what stops a phone held
+	## sideways from stacking them into each other.
+	&"trail/rowRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.02, "max": 0.5, "default": 0.12},
+	&"trail/rowMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 74.0},
+	&"trail/rowMax": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 98.0},
 	## The width the columns may NOT use, so the outermost waystone keeps its
 	## margin. Halved on either side, like the CSS gutter it stands in for.
 	&"trail/gutter": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 800.0, "default": 170.0},
@@ -163,14 +173,22 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## set_touch_min` for why that costs no pixels and no extra node.
 	&"trail/touch": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 120.0, "default": 0.0},
 
-	# --- map: the top rail. Same three-part answer as `hud`, for the same
-	# reason: one ratio carries the shrinkage, and the two lines that cannot
-	# shrink usefully are switched off instead of squeezed. `region` replaces a
-	# bare `size.x < 650.0` written inline in `refresh()` — a threshold with no
-	# shape name on it, deciding a layout question outside the book.
+	# --- map: the top rail. One ratio carries the shrinkage, and the line that
+	# cannot shrink usefully is switched off instead of squeezed.
+	#
+	# `region` is gone. It was authored against a `size.x < 650.0` threshold in
+	# the old `refresh()`, that function was rewritten, and no defect ever
+	# pointed at it again — so unlike `title`, which earned its keep the day the
+	# Spire rail started saying the same words, this one had no case behind it.
+	# A field with no reader is not automatically wrong; this one was.
 	&"mapbar/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 3.0, "default": 1.0},
 	&"mapbar/title": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
-	&"mapbar/region": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
+	## Where the act line sits when `title` is on. Bound to the top because the
+	## rail it hangs under is; `inset` is the margin it keeps off both sides,
+	## which is what stops a long act name being clipped on a narrow stage.
+	&"mapbar/titleTop": {"bind": BIND_TOP, "unit": "px", "min": 0.0, "max": 400.0, "default": 62.0},
+	&"mapbar/titleH": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 26.0},
+	&"mapbar/titleInset": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 400.0, "default": 0.0},
 
 	# --- run: the choice panel every non-combat decision is drawn in. It asked
 	# for a 520px minimum width inside a 24px inset, which on a 390px stage is
@@ -213,8 +231,8 @@ const FORMS: Dictionary[StringName, PackedStringArray] = {
 	&"hud": ["height", "scale", "title", "stat"],
 	&"card": ["w", "inset"],
 	&"actor": ["scale"],
-	&"trail": ["scale", "top", "bottom", "gutter", "colMin", "colMax", "touch"],
-	&"mapbar": ["scale", "title", "region"],
+	&"trail": ["scale", "rowRate", "rowMin", "rowMax", "gutter", "colMin", "colMax", "touch"],
+	&"mapbar": ["scale", "title", "titleTop", "titleH", "titleInset"],
 	&"panel": ["w", "inset", "scroll", "scale"],
 	&"rack": ["w", "gap", "scale", "panel", "deep", "top", "bottom"],
 }

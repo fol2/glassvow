@@ -79,6 +79,11 @@ func _build_chrome() -> void:
 	_title_label = Label.new()
 	_title_label.text = REGION_NAME.to_upper()
 	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# A backstop, not the plan. `_act_line` measures and shortens so the text
+	# fits one row; this catches the case it cannot fix — a region name that is
+	# on its own too wide, which a translation could produce — by wrapping
+	# rather than clipping the player's own location off the edge.
+	_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_title_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	_title_label.offset_top = 38.0
 	_title_label.offset_bottom = 66.0
@@ -118,12 +123,15 @@ func _scale_chrome() -> void:
 	# field existing.
 	_title_label.visible = _bar_num("title", 1.0) >= 1.0
 	_title_label.add_theme_font_size_override("font_size", roundi(15.0 * k))
-	var title_top: float = 42.0 if shape == &"phone-landscape" else (
-		58.0 if shape == &"phone-portrait" else 62.0)
+	# Three shape names spelled out in ternaries were a layout table living
+	# outside the book — the same species the `map` scope was opened to collect,
+	# and one the editor cannot see or revert. The figures are unchanged.
+	var title_top: float = _bar_num("titleTop", 62.0)
+	var inset: float = _bar_num("titleInset", 0.0)
 	_title_label.offset_top = title_top
-	_title_label.offset_bottom = title_top + (38.0 if shape == &"phone-portrait" else 26.0)
-	_title_label.offset_left = 58.0 if shape == &"phone-portrait" else 0.0
-	_title_label.offset_right = -58.0 if shape == &"phone-portrait" else 0.0
+	_title_label.offset_bottom = title_top + _bar_num("titleH", 26.0)
+	_title_label.offset_left = inset
+	_title_label.offset_right = -inset
 	_hint_label.add_theme_font_size_override("font_size", roundi(HINT_PT * k))
 	_hint_label.offset_top = HINT_TOP * k
 	_hint_label.offset_bottom = HINT_BOTTOM * k
@@ -176,6 +184,35 @@ func _seed_ash() -> void:
 
 # ---------------------------------------------------------------- state
 
+## The act line, as long as the box can hold on ONE row.
+##
+## Where the player is beats who is waiting for them, so the region name is
+## never dropped and the boss clause is what goes. Measured against the font
+## rather than authored per shape: a threshold with a shape name on it is the
+## thing this scope exists to abolish, and a measurement cannot be wrong on a
+## shape nobody thought to author.
+##
+## Wrapping to two rows was the other option and it was worse — the second row
+## lands on the top waystone row, which on a phone held upright is the row
+## nearest the player's thumb.
+func _act_line(region: String, boss: String) -> String:
+	var full: String = "%s — %s AWAITS" % [region, boss]
+	var font: Font = _title_label.get_theme_font("font")
+	var pt: int = _title_label.get_theme_font_size("font_size")
+	# The shape's reference width, never this Control's, because the first
+	# `refresh` runs before any layout pass and `size.x` is still zero there. A
+	# stage never goes below its reference, so clamping up to it is the honest
+	# reading of a zero rather than a fallback — the same rule `CombatScreen.
+	# _layout` states.
+	var ref: Vector2i = StageShape.REFERENCES.get(shape,
+		StageShape.REFERENCES[StageShape.IDENTITY])
+	var box: float = maxf(float(ref.x), size.x) - _bar_num("titleInset", 0.0) * 2.0
+	if box <= 0.0 or font == null:
+		return full
+	return full if font.get_string_size(full, HORIZONTAL_ALIGNMENT_LEFT, -1.0,
+		pt).x <= box else region
+
+
 ## Re-seat and re-light after a run change or a return from combat.
 func refresh(run: RunState) -> void:
 	if run != null:
@@ -184,8 +221,8 @@ func refresh(run: RunState) -> void:
 		var act: Dictionary = content.acts[_act]
 		var act_name: String = "The Rose Window" if map.region == "rose_window" \
 			else str(act.get("name", REGION_NAME))
-		_title_label.text = "%s — %s AWAITS" % [
-			act_name.to_upper(), str(act.get("bossName", "THE SUMMIT")).to_upper()]
+		_title_label.text = _act_line(act_name.to_upper(),
+			str(act.get("bossName", "THE SUMMIT")).to_upper())
 	var live: Array[int] = map.reachable()
 	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
@@ -369,8 +406,22 @@ func _node_pos(node: MapNode) -> Vector2:
 	)
 
 
+## How far apart two rows of the Spire stand, in stage px.
+##
+## The rate is what keeps the same NUMBER of rows on screen as the stage grows,
+## rather than more of them; the band is what stops a phone held sideways from
+## stacking rows into each other. It replaced `trail/top` and `trail/bottom`,
+## which described a vertical band the map no longer has.
+##
+## Worth knowing before tuning: across all five reference shapes the rate never
+## decides anything. Every landscape shape is 820 tall and every portrait one
+## taller, so the product lands on `rowMax` everywhere except phone-landscape,
+## where 390px lands under `rowMin`. The rate only bites between roughly 617
+## and 817 stage px — a height no reference sits at, and one flex cannot reach,
+## because flex stretches the LONG axis and so never shortens a stage.
 func _row_gap() -> float:
-	return clampf(size.y * 0.12, 74.0, 98.0)
+	return clampf(size.y * _trail_num("rowRate", 0.12),
+		_trail_num("rowMin", 74.0), _trail_num("rowMax", 98.0))
 
 
 # ---------------------------------------------------------------- draw

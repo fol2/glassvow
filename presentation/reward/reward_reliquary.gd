@@ -136,7 +136,7 @@ func _build() -> void:
 	# screen. Light sitting on it was not enough — so the seam is given the one
 	# thing that explains it: a band of shadow along the back edge of the floor,
 	# which is where a real ledge is darkest anyway.
-	_kit.veil(LEDGE_Y + 26.0, 132.0, 1180.0)
+	_kit.veil(LEDGE_Y + 26.0, 132.0, RewardKit.CANVAS.x)
 
 	var chest: TextureRect = RewardKit.art(RewardKit.ART + "props/chest-open.png", CHEST_W)
 	if chest != null:
@@ -145,9 +145,9 @@ func _build() -> void:
 	_kit.embers(Vector2(CHEST_AT.x, CHEST_AT.y + 20.0), 100.0)
 
 	var t: Label = RewardKit.text(_title_text(), GlassStyle.CINZEL_700, 27, RewardKit.PARCHMENT, 3)
-	_kit.put(t, Rect2(0.0, TITLE_Y, 1180.0, 36.0))
+	_kit.put(t, Rect2(0.0, TITLE_Y, RewardKit.CANVAS.x, 36.0))
 	var orn: Label = RewardKit.text("✦   ✦   ✦", GlassStyle.CINZEL_700, 12, RewardKit.GOLD_DIM, 5)
-	_kit.put(orn, Rect2(0.0, TITLE_Y + 40.0, 1180.0, 18.0))
+	_kit.put(orn, Rect2(0.0, TITLE_Y + 40.0, RewardKit.CANVAS.x, 18.0))
 
 	_build_spoils()
 	_build_offering()
@@ -231,7 +231,7 @@ func _build_offering() -> void:
 	_take_line = RewardKit.text("Take one from the light", GlassStyle.CINZEL_700, 13,
 		RewardKit.TEXT_DIM, 3)
 	_kit.put(_take_line, Rect2(0.0, CARD_Y + CardView.CARD_H * CARD_SCALE + 12.0,
-		1180.0, 20.0))
+		RewardKit.CANVAS.x, 20.0))
 
 
 func _build_bar() -> void:
@@ -239,7 +239,7 @@ func _build_bar() -> void:
 	_bar.alignment = BoxContainer.ALIGNMENT_CENTER
 	_bar.add_theme_constant_override("separation", 32)
 	_bar.position = Vector2(0.0, 778.0)
-	_bar.size = Vector2(1180.0, 30.0)
+	_bar.size = Vector2(RewardKit.CANVAS.x, 30.0)
 	_kit.stage.add_child(_bar)
 	if not _card_ids.is_empty():
 		_bar.add_child(_word("Leave it", _skip))

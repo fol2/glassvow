@@ -16,6 +16,24 @@ extends RefCounted
 const GLASS: Shader = preload("res://presentation/reward/leaded_glass.gdshader")
 const ART: String = "res://assets/art/"
 
+## The canvas the kit's screens are composed on.
+##
+## `RewardWindow`, `RewardEmbers`, `RewardReliquary` and `RewardRose` are design
+## studies, not shipping screens — `main.gd` builds `RewardScreen` and nothing
+## else, and `reward_lab.gd` is the only thing that reaches them. Every figure in
+## them is an absolute coordinate on the identity shape: a chest at x=590, a
+## button at (495, 692), a caption box at (190, 650). That is a legitimate way to
+## author a study and a terrible one to pretend is portable.
+##
+## So the canvas is named once, here, rather than the five places a bare `1180.0`
+## stood in for "clean across the screen". It is not a shape seam and does not
+## pretend to be one: it makes the fixed canvas legible, and it means a study
+## that IS ported later has one constant to chase instead of a literal to grep
+## for. It reads from `StageShape` so the two cannot drift apart — a `static var`
+## rather than a `const` only because GDScript will not index a Dictionary in a
+## constant expression.
+static var CANVAS: Vector2 = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+
 ## One lamp direction for every bead of came on the screen, or the lead stops
 ## agreeing with itself — the single thing separating leaded glass from a drawn
 ## border.
