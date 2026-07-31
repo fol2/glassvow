@@ -100,7 +100,7 @@ it atomically (`application/save_service.gd` (`_store_json_atomic`)). Terminal
 completion commits the Vigil, persists Dawn, advances its cursor durably, and
 clears only the matching run (`application/main.gd` (`_on_terminal_commit`),
 `application/main.gd` (`_show_dawn`), `application/main.gd`
-(`_on_dawn_continue`)).
+(`_on_dawn_advance`)).
 
 Parse-check the throwaway driver before accepting its run. The first driver in
 this programme did not count until its inferred-static warnings were replaced

@@ -225,17 +225,19 @@ func _ready() -> void:
 		# Same reason --fight= exists (see _start_fight's docblock).
 		_new_run()
 		game.run.pending_run_end = null
+		# The fixture mirrors _on_terminal_commit's event shapes EXACTLY — same
+		# kinds, same field layout (title = the earned thing, kicker speaks the
+		# register) — so what the bench photographs is what a player sees.
 		game.run.pending_dawn = {"events": [
-			{"kind": "whisper", "title": "A Whisper at Dawn",
+			{"kind": "whisper", "title": "",
 				"body": "The Spire kept none of what you gave it."},
-			{"kind": "quest", "title": "The Witchlight Road",
-				"body": "Walk the road that never warms."},
-			{"kind": "progress", "title": "Emberglass Remembers",
-				"body": "The Witchlight Road · 2/3"},
-			{"kind": "shard", "title": "Emberglass Shard Lit",
-				"body": "The Shade That Fell"},
-			{"kind": "unlock", "title": "The Vigil Opens a Way",
-				"body": "New cards and relics enter the climb."},
+			{"kind": "quest", "title": "The Pale Ones",
+				"body": "Three climbers went pale before you. Find what bleached them."},
+			{"kind": "progress", "title": "The Pale Ones", "body": "2/3"},
+			{"kind": "shard", "title": "The Shade That Fell",
+				"body": "One pane answers."},
+			{"kind": "unlock", "title": "New cards and relics enter the climb.",
+				"body": ""},
 			{"kind": "memory", "title": "The Vigil Remembers",
 				"body": "Victory · 3 shards lit"},
 		], "cursor": 0}
@@ -1588,12 +1590,18 @@ func _on_terminal_commit(_id: String) -> void:
 			_show_save_error("The completed run could not be closed.")
 		return
 
+	# The kicker already speaks the register ("A JOURNEY REVEALED"), so the
+	# title carries the thing the player EARNED — the quest's name, the
+	# whisper's words — never the register said twice. The benchmark's cards
+	# are built the same way round (end.js:94-121: kicker, then .dawn-name IS
+	# the name). The first cut wrote the register into both lines and demoted
+	# every name to 11px body text.
 	var events: Array = []
 	if _vigil.whispers > before_whispers:
 		var whisper_index: int = mini(_vigil.whispers, VigilScreen.WHISPERS.size()) - 1
 		events.append({
 			"kind": "whisper",
-			"title": "A Whisper at Dawn",
+			"title": "",
 			"body": VigilScreen.WHISPERS[maxi(0, whisper_index)],
 		})
 	for id: String in content.quest_ids:
@@ -1608,15 +1616,15 @@ func _on_terminal_commit(_id: String) -> void:
 		if after_state != before_state and after_state in ["armed", "revealed"]:
 			events.append({
 				"kind": "quest",
-				"title": "A Journey Revealed",
-				"body": name,
+				"title": name,
+				"body": str(quest.get("inscription", "")),
 			})
 		if after_progress > before_progress and after_state != "complete":
 			var progress_event: Dictionary = {
 				"kind": "progress",
-				"title": "Emberglass Remembers",
-				"body": "%s · %d/%d" % [
-					name, after_progress,
+				"title": name,
+				"body": "%d/%d" % [
+					after_progress,
 					int(float(str(quest.get("target", after_progress)))),
 				],
 			}
@@ -1628,16 +1636,17 @@ func _on_terminal_commit(_id: String) -> void:
 		var id: String = str(id_v)
 		events.append({
 			"kind": "shard",
-			"title": "Emberglass Shard Lit",
-			"body": str(content.quests[id].get("name", id)),
+			"title": str(content.quests[id].get("name", id)),
+			# `ui.dawn.shardGrantCopy` (i18n/en/ui.js:237).
+			"body": "One pane answers.",
 		})
 	for unlock_v: Variant in _vigil.unlocks:
 		var unlock: String = str(unlock_v)
 		if not before_unlocks.has(unlock):
 			var unlock_event: Dictionary = {
 				"kind": "unlock",
-				"title": "The Vigil Opens a Way",
-				"body": _unlock_dawn_copy(unlock),
+				"title": _unlock_dawn_copy(unlock),
+				"body": "",
 			}
 			if unlock == "act4":
 				unlock_event["cue"] = "sealedDoor"
@@ -1709,6 +1718,14 @@ func _on_dawn_advance(screen: DawnScreen) -> void:
 
 
 func _finish_dawn() -> void:
+	# Belt beside the screen's braces: the commit button is disabled until the
+	# feed settles, but a run must never close while memories are still owed —
+	# clear_run would erase the cursor a mid-feed kill relies on.
+	if game != null and game.run != null and game.run.pending_dawn != null:
+		var dawn: Dictionary = game.run.pending_dawn
+		var events: Array = dawn.get("events", [])
+		if int(float(str(dawn.get("cursor", 0)))) < events.size():
+			return
 	var run_id: String = game.run.run_id
 	if SaveService.clear_run(run_id):
 		_vigil = SaveService.load_vigil()
