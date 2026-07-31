@@ -31,12 +31,29 @@ const WILL_LIFT: Color = Color(1.35, 1.35, 1.45, 0.55)
 ## fill rings itself in warm gold.
 const SHATTER_RING: Color = Color(1.0, 0.84705883, 0.627451, 1.0)
 
+## `.facet-row .pip { transition: background/box-shadow/filter .2s }`
+## (styles.css:988) — a pane does not SNAP dark, it goes dark. Each pip blends
+## its taken-overlay toward its target over this long; the base pane fades out
+## underneath by the same clock.
+const PIP_BLEND: float = 0.2
+
+## `chipPop` — 0.4s CSS ease-out, one implicit rest frame, the 1.35 peak at
+## 40%, home (styles.css:891, `.facet-row.pop` at :1058).
+const POP_TIME: float = 0.4
+const POP_AT: Array[float] = [0.0, 0.4, 1.0]
+const POP_SCALE: Array[float] = [1.0, 1.35, 1.0]
+
 var _filled: int = 0
 var _total: int = 0
 ## `facetPips(en, ghost)` — how many panes the card under the cursor WOULD chip,
 ## and whether that fills the gauge. The consequence, before the blow.
 var _ghost: int = 0
 var _will_shatter: bool = false
+## Per-pip crossfade state: how much of the taken-overlay shows (0 = intact
+## pane, 1 = fully the overlay), and the overlay's current tint — WILL_LIFT and
+## CHIPPED_LIFT differ, and a will→taken change blends colour, not coverage.
+var _blend: Array[float] = []
+var _tint: Array[Color] = []
 
 
 func set_pips(filled: int, total: int) -> void:
@@ -46,6 +63,7 @@ func set_pips(filled: int, total: int) -> void:
 	var w: float = float(count) * PIP + float(maxi(count - 1, 0)) * GAP if _total <= MAX_PIPS \
 		else PIP + GAP + 46.0
 	custom_minimum_size = Vector2(w, ROW_H)
+	_retarget()
 	queue_redraw()
 
 
@@ -59,20 +77,62 @@ func set_ghost(ghost: int, will_shatter: bool) -> void:
 		return
 	_ghost = n
 	_will_shatter = will_shatter
+	_retarget()
 	queue_redraw()
+
+
+## Start (or snap) each pip's blend toward its current target. The FIRST call
+## is the build and snaps — a gauge must arrive stating a fact, not fading in.
+func _retarget() -> void:
+	var count: int = _total if _total <= MAX_PIPS else 0
+	var snap: bool = _blend.size() != count
+	_blend.resize(count)
+	_tint.resize(count)
+	for i: int in range(count):
+		if snap:
+			_blend[i] = 1.0 if _pip_taken(i) else 0.0
+			_tint[i] = _pip_tint(i)
+	if not snap and count > 0:
+		set_process(true)
+
+
+func _pip_taken(i: int) -> bool:
+	return i < _filled + _ghost
+
+
+func _pip_tint(i: int) -> Color:
+	return WILL_LIFT if (i >= _filled and i < _filled + _ghost) else CHIPPED_LIFT
+
+
+func _process(delta: float) -> void:
+	var moving: bool = false
+	var step: float = delta / PIP_BLEND
+	for i: int in range(_blend.size()):
+		var want: float = 1.0 if _pip_taken(i) else 0.0
+		var tint: Color = _pip_tint(i)
+		if absf(_blend[i] - want) > 0.001 or not _tint[i].is_equal_approx(tint):
+			_blend[i] = move_toward(_blend[i], want, step)
+			_tint[i] = _tint[i].lerp(tint, minf(1.0, step))
+			moving = true
+	if moving:
+		queue_redraw()
+	else:
+		set_process(false)
 
 
 ## `.facet-row.pop` — `chipPop`, 0.4s ease-out, 35% larger at 40% through. The
 ## gauge answers the blow that chipped it; without it a facet goes dark with no
-## more ceremony than a label changing.
+## more ceremony than a label changing. One linear clock through the keyframe
+## list, eased per interval with the declared `ease-out`.
 func pop() -> void:
 	if not is_inside_tree() or size == Vector2.ZERO:
 		return
 	pivot_offset = size * 0.5
 	var tw: Tween = create_tween()
-	tw.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	tw.tween_property(self, "scale", Vector2.ONE * 1.35, 0.16)
-	tw.tween_property(self, "scale", Vector2.ONE, 0.24)
+	tw.tween_method(
+		func(u: float) -> void:
+			scale = Vector2.ONE * Motion.css_keyframe(u, POP_AT, POP_SCALE, Motion.CSS_EASE_OUT),
+		0.0, 1.0, POP_TIME).set_trans(Tween.TRANS_LINEAR)
 
 
 func _draw() -> void:
@@ -97,14 +157,22 @@ func _draw() -> void:
 	var span_w: float = float(_total) * PIP + float(_total - 1) * GAP
 	var start_x: float = (size.x - span_w) * 0.5
 	for i: int in range(_total):
-		var chipped: bool = i < _filled
 		# `will = !filled && i < en.chips + ghost` — a pane the armed card would
 		# take draws as though it were already taken, which is what makes the
-		# gauge answer the card rather than the last blow.
-		var will: bool = not chipped and i < _filled + _ghost
+		# gauge answer the card rather than the last blow. `_blend` carries the
+		# .2s crossfade between the two readings: the intact pane fades under
+		# the taken overlay rather than being swapped for it.
 		var at: Rect2 = Rect2(
 			Vector2(start_x + float(i) * (PIP + GAP), cy - PIP * 0.5), Vector2(PIP, PIP))
-		draw_texture_rect(CHIPPED if (chipped or will) else INTACT, at, false,
-			(WILL_LIFT if will else CHIPPED_LIFT) if (chipped or will) else INTACT_LIFT)
+		var b: float = _blend[i] if i < _blend.size() else (1.0 if _pip_taken(i) else 0.0)
+		var tint: Color = _tint[i] if i < _tint.size() else _pip_tint(i)
+		if b < 0.999:
+			var base: Color = INTACT_LIFT
+			base.a *= 1.0 - b
+			draw_texture_rect(INTACT, at, false, base)
+		if b > 0.001:
+			var over: Color = tint
+			over.a *= b
+			draw_texture_rect(CHIPPED, at, false, over)
 		if _will_shatter:
 			draw_rect(at.grow(1.0), SHATTER_RING, false, 1.0)

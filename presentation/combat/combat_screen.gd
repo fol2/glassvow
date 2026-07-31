@@ -3288,8 +3288,11 @@ func _update_previews() -> void:
 			continue
 		var hovered: bool = i == aimed
 		var aim_all: bool = target == "allEnemies" and (inspect or _hand.is_free_drag())
-		var aim_one: bool = target == "enemy" and (living == 1 or (aiming and hovered))
-		view.set_targetable(aim_all or aim_one)
+		# `targetable` goes on EVERY legal foe while a single-target card is
+		# armed (combat.js:1199-1257) — the pulse is how the player learns the
+		# card has options. The hovered one alone gets `.target-hover`.
+		var aim_one: bool = target == "enemy" and (aiming or living == 1)
+		view.set_targetable(aim_all or aim_one, aiming and hovered)
 
 		var preview: Variant = null
 		var dim: bool = false

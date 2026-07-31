@@ -262,6 +262,19 @@ const WARD_BREAK: float = 0.34
 const WARD_RING: float = 0.20
 const WARD_FLINCH: float = 0.055
 
+## `targetGlow` (styles.css:1237-1240) — every legal target pulses 1s
+## ease-in-out infinite between a 6px and an 18px glow; the hovered one goes
+## still at a solid 22px with `brightness(1.25)`. The lit fractions map the
+## benchmark's 0.5→0.9 shadow alphas onto the rim's own gain.
+const TARGET_PULSE: float = 1.0
+const TARGET_PX_LO: float = 6.0
+const TARGET_PX_HI: float = 18.0
+const TARGET_PX_HOVER: float = 22.0
+const TARGET_LIT_LO: float = 0.5
+const TARGET_LIT_HI: float = 0.9
+const TARGET_LIT_HOVER: float = 1.0
+const TARGET_HOVER_BRIGHT: Color = Color(1.25, 1.25, 1.25, 1.0)
+
 const DOOM_PERIOD: float = 0.09
 const DOOM_AT: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
 const DOOM_X: Array[float] = [0.0, 1.6, -1.4, 1.0, 0.0]
@@ -498,6 +511,11 @@ var _lunge_dir: float = 1.0
 var _lunge_tween: Tween = null
 var _flare_tween: Tween = null
 var _white_tween: Tween = null
+## The targeting rim's two states — `targetGlow` pulse vs `.target-hover`
+## stillness. `_target_t` is the pulse's own clock, stepped in `_process`.
+var _target_on: bool = false
+var _target_hover: bool = false
+var _target_t: float = 0.0
 ## The throwaway stream: camera shake only. Nothing whose position anyone will
 ## ever compare between two runs may draw from it — see `_frac`.
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -2405,6 +2423,15 @@ func _process(delta: float) -> void:
 		_hp_preview.modulate.a = Motion.keyframe(e, [0.0, 0.5, 1.0],
 			[1.0, PREVIEW_DIP, 1.0])
 	_step_ward(delta)
+	# `targetGlow 1s ease-in-out infinite` — the legal-target pulse. Hover and
+	# the off state are single writes in `set_targetable`; only the pulse needs
+	# a clock. `css_pulse` is the 0/50/100 triangle eased per interval.
+	if _target_on and not _target_hover and _body_mat != null and not _dead:
+		_target_t = fmod(_target_t + delta, TARGET_PULSE)
+		var tu: float = _target_t / TARGET_PULSE
+		_write_target_rim(
+			Motion.css_pulse(tu, TARGET_PX_LO, TARGET_PX_HI),
+			Motion.css_pulse(tu, TARGET_LIT_LO, TARGET_LIT_HI))
 	if _cam != null and _shake > 0.0:
 		_shake = maxf(0.0, _shake - delta * 4.5)
 		var kick: float = _box_u * 0.02 * _shake * _shake
@@ -3102,18 +3129,21 @@ func take_hit(direct: bool = true) -> void:
 		return
 	if _vessel == null:
 		return
-	# The white beat is everyone's. `choreoHit` calls `meshFlash` unconditionally
-	# and the drain calls `choreoHit` on both sides — `choreoHit(x.root, 1)` for a
-	# foe (drain.js:512), `choreoHit(ce.hero, -1)` for the hero (drain.js:596).
-	# Only the CSS flare below is a foe's, because `hurtFlash` hangs off
-	# `.enemy.hurt` and a hero is not `.enemy`.
-	_white_beat()
+	# `meshFlash` rides only inside `choreoHit` (combat.js:1979-1989), and the
+	# drain fires `choreoHit` for DIRECT blows alone — `choreoHit(x.root, 1)` at
+	# drain.js:512, `choreoHit(ce.hero, -1)` at drain.js:596. So the white beat
+	# lands with the recoil and never on poison, a facet shatter or the hero's
+	# indirect losses. `hurtFlash` stays a foe's — it hangs off `.enemy.hurt`
+	# and carries its own +7/−5px nudge in its keyframes, so a foe's indirect
+	# loss still moves — but a hero that is not `.enemy` takes an indirect loss
+	# with no motion at all.
+	if direct:
+		_white_beat()
+		_shove()
+	elif tier != "hero":
+		_nudge()
 	if tier != "hero":
 		_flare()
-	if direct:
-		_shove()
-	else:
-		_nudge()
 
 
 ## `meshFlash(el, 160)` — a square wave, not a ramp: a `setTimeout` has no
@@ -4242,13 +4272,42 @@ func _set_shadow_fade(v: float) -> void:
 	_update_shadow()
 
 
-func set_targetable(on: bool) -> void:
+## `targetGlow` / `.target-hover` (styles.css:1237-1240) — TWO states, and the
+## difference between them is the information. Every legal target PULSES, 1s
+## ease-in-out infinite, 6px to 18px; the one under the pointer goes still —
+## `animation: none`, a solid 22px, `brightness(1.25)`. The pulse says "you
+## could"; the stillness says "you are about to". The rim keeps the character
+## table's own aim tint rather than the benchmark's flat red — the merged
+## rim/aim outline is this port's documented departure, and a colour that
+## changed per state would say two things with one channel.
+func set_targetable(on: bool, hovered: bool = false) -> void:
 	if _dead:
 		return
-	if _body_mat != null:
-		_body_mat.set_shader_parameter("target_lit", 1.0 if on else 0.0)
+	var hover_now: bool = on and hovered
+	if on == _target_on and hover_now == _target_hover:
 		return
-	modulate = Color(1.28, 1.14, 0.9, 1.0) if on else Color(1, 1, 1, 1)
+	# Written only on a CHANGE of hover, because `_set_stagger` owns this
+	# channel during the death slump and a blanket restore would erase it.
+	if _display != null and hover_now != _target_hover:
+		_display.modulate = TARGET_HOVER_BRIGHT if hover_now else Color.WHITE
+	_target_on = on
+	_target_hover = hover_now
+	_target_t = 0.0
+	if _body_mat == null:
+		modulate = Color(1.28, 1.14, 0.9, 1.0) if on else Color(1, 1, 1, 1)
+		return
+	if not on:
+		_body_mat.set_shader_parameter("target_lit", 0.0)
+	elif _target_hover:
+		_write_target_rim(TARGET_PX_HOVER, TARGET_LIT_HOVER)
+	else:
+		_write_target_rim(TARGET_PX_LO, TARGET_LIT_LO)
+
+
+## One write for both rim knobs, in the aim outline's own UV terms.
+func _write_target_rim(px: float, lit: float) -> void:
+	_body_mat.set_shader_parameter("aim_width", px / maxf(1.0, art_size))
+	_body_mat.set_shader_parameter("target_lit", lit)
 
 
 # ---------------------------------------------------------------- chrome
