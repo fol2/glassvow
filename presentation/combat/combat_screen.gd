@@ -1415,6 +1415,46 @@ func _open_fight(slots: Array[Vector2]) -> void:
 	await get_tree().process_frame
 	_play_entrance(slots)
 	_deal_opening_hand()
+	_play_opening_ceremony()
+
+
+## The start batch is hard-synced, so its bossIntro and variantDialogue events
+## never reach `_handle_event` — the ceremony is replayed here from the same
+## combat state, over the tail of the walk-in, which is where the benchmark's
+## drain lands it (drain.js:253-278). Death lines mid-fight arrive through the
+## drain as ordinary events and never pass this way.
+func _play_opening_ceremony() -> void:
+	if game.cb == null or game.cb.enemies.is_empty():
+		return
+	var boss: bool = game.cb.enemies[0].boss
+	var spoken: Array[String] = []
+	var aspect_name: String = ""
+	if game.run.aspect >= 0 and game.run.aspect < game.content.aspects.size():
+		var aspect_v: Variant = game.content.aspects[game.run.aspect]
+		if typeof(aspect_v) == TYPE_DICTIONARY:
+			var aspect_d: Dictionary = aspect_v
+			aspect_name = str(aspect_d.get("name", "")).trim_prefix("The ")
+	for e: EnemyCombatant in game.cb.enemies:
+		var lines_v: Variant = e.def.get("dialogue")
+		if typeof(lines_v) != TYPE_ARRAY:
+			continue
+		var lines: Array = lines_v
+		for line_v: Variant in lines:
+			spoken.append(str(line_v).replace("{aspect}", aspect_name))
+	if not boss and spoken.is_empty():
+		return
+	await _wait(0.9)  # let the walk-in and the deal land first
+	if not is_inside_tree():
+		return
+	if boss:
+		_vfx.flash(Color("#1a0a20"), 0.5, 0.9)
+		_sky.kick(1.6)
+		_sfx.play(&"bigDeath")
+		await _floaters.banner(game.cb.enemies[0].name, "boss", 2.1)
+	for line: String in spoken:
+		if not is_inside_tree():
+			return
+		await _floaters.banner(line, "variant", 1.8)
 
 
 ## `.combat-screen.intro` (styles.css:739) — the hero walks in from the left,
@@ -2449,6 +2489,16 @@ func _handle_event(ev: Dictionary) -> void:
 				await _wait(HandView.SPEND_FLIGHT)
 				_land_in_pile(&"discard")
 			_sync_actors()
+		EventTypes.BOSS_INTRO:
+			# drain.js:253-268 — the plate names the boss while the world dims,
+			# takes the kick, and the big bell tolls. The banner is awaited; the
+			# rest land on its first frame.
+			_vfx.flash(Color("#1a0a20"), 0.5, 0.9)
+			_sky.kick(1.6)
+			_sfx.play(&"bigDeath")
+			await _floaters.banner(str(ev.get("name", "")), "boss", 2.1)
+		EventTypes.VARIANT_DIALOGUE:
+			await _floaters.banner(str(ev.get("text", "")), "variant", 1.8)
 		EventTypes.END_TURN:
 			# `heroActing = false` — nothing swings again until a card is played.
 			_hero_swung = true

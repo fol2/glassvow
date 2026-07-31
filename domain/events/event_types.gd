@@ -32,3 +32,8 @@ const POWER_CONSUMED: StringName = &"powerConsumed"
 const RELIC_PROC: StringName = &"relicProc"
 const VICTORY: StringName = &"victory"
 const DEFEAT: StringName = &"defeat"
+## The boss announces itself at startCombat (engine.js:1133).
+const BOSS_INTRO: StringName = &"bossIntro"
+## A variant speaks — its authored lines at startCombat, its death line on
+## the killing blow (engine.js:1135-1139, :1384-1385).
+const VARIANT_DIALOGUE: StringName = &"variantDialogue"

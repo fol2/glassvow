@@ -210,6 +210,26 @@ func start_combat(
 		cb.enemies.append(e)
 		i += 1
 
+	# The boss announces itself, then every variant speaks its lines —
+	# engine.js:1133-1139, queued before the deck deals. No slice fight is a
+	# boss and no slice enemy carries dialogue, so the traces replay unmoved.
+	if kind == &"boss" and not cb.enemies.is_empty():
+		cb.queue.append({"t": EventTypes.BOSS_INTRO, "name": cb.enemies[0].name})
+	var aspect_name: String = ""
+	if run.aspect >= 0 and run.aspect < content.aspects.size():
+		var aspect_v: Variant = content.aspects[run.aspect]
+		if typeof(aspect_v) == TYPE_DICTIONARY:
+			var aspect_d: Dictionary = aspect_v
+			aspect_name = str(aspect_d.get("name", "")).trim_prefix("The ")
+	for speaker: EnemyCombatant in cb.enemies:
+		var lines_v: Variant = speaker.def.get("dialogue")
+		if typeof(lines_v) != TYPE_ARRAY:
+			continue
+		var lines: Array = lines_v
+		for line_v: Variant in lines:
+			cb.queue.append({"t": EventTypes.VARIANT_DIALOGUE, "idx": speaker.idx,
+				"text": str(line_v).replace("{aspect}", aspect_name)})
+
 	# Deck: fresh combat copies of the run deck, then one shuffle.
 	for c: CardInst in run.player.deck:
 		cb.draw.append(c.combat_copy())
@@ -526,6 +546,11 @@ func _on_enemy_death(run: RunState, cb: CombatState, e: EnemyCombatant) -> void:
 	e.statuses = {}
 	e.staggered = false
 	cb.queue.append({"t": EventTypes.DIE, "idx": e.idx})
+	# The death line rides right behind the die event (engine.js:1384-1385).
+	var death_line_v: Variant = e.def.get("deathDialogue")
+	if typeof(death_line_v) == TYPE_STRING and not str(death_line_v).is_empty():
+		cb.queue.append({"t": EventTypes.VARIANT_DIALOGUE, "idx": e.idx,
+			"text": str(death_line_v)})
 	quests.on_enemy_death(run, e.def)
 	run.stats["slain"] = _ji(run.stats.get("slain", 0)) + 1
 	if e.elite:
