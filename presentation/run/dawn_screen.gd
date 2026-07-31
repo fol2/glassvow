@@ -26,16 +26,30 @@ const REVEAL_TIME: float = 0.55
 const AUTO_ADVANCE: float = 1.6
 ## Hold anything for this long and the rest of the dawn arrives at once.
 const SKIP_HOLD: float = 0.6
-## victoryFlow's flash — V.flash('#ffe9ac', 0.25, 1) (end.js:198).
+## victoryFlow's flash — V.flash('#ffe9ac', 0.25, 1) (end.js:198), read against
+## the SIGNATURE, not the call: flash(color, alpha, dur) (vfx.js:149), so this
+## is a QUARTER-alpha veil over one full second, decayed linearly
+## (vfx.js:131: globalAlpha = life/dur * alpha). The first cut transposed the
+## arguments — a full-alpha quarter-second white-out, four times the peak for
+## a quarter of the time, and a photosensitivity hazard on top of being wrong.
 const FLASH_COLOR: Color = Color(1.0, 0.9137255, 0.6745098)
-const FLASH_TIME: float = 0.25
-## sunrise() (scene3d.js:306-313) floods warm light in from behind the Spire —
-## "the only daylight in the game". The port's dawn is a static painting, so
-## the flood is read as a ramped warm wash over it: particles #ffd9a0 up top,
-## glow #ffc478 low, over ~2.5s.
+const FLASH_ALPHA: float = 0.25
+const FLASH_TIME: float = 1.0
+## sunrise() (scene3d.js:306-313) is a STATE the scene holds, not an event —
+## the reference re-asserts it on every won render. Its two field colours
+## (sky #5a3452, fog #8a4a55) lighten the whole world; its two accents
+## (particles #ffd9a0, glow #ffc478) warm the highlights. The port's dawn is
+## a static painting, so the field half is read as the night wash THINNING
+## (0.62 → 0.40) and the accent half as a warm veil laid over everything —
+## panel included, because a sunrise that spares the thing you are reading
+## is not a sunrise. Deliberate port interpretation; the reference's
+## bloomBase and weatherOp have no counterpart on this screen and are not
+## claimed.
 const SUNRISE_TIME: float = 2.5
-const SUNRISE_HIGH: Color = Color(1.0, 0.8509804, 0.627451, 0.20)
-const SUNRISE_LOW: Color = Color(1.0, 0.76862746, 0.47058824, 0.10)
+const SUNRISE_HIGH: Color = Color(1.0, 0.8509804, 0.627451, 0.14)
+const SUNRISE_LOW: Color = Color(1.0, 0.76862746, 0.47058824, 0.07)
+const WASH_NIGHT: float = 0.62
+const WASH_DAWN: float = 0.40
 
 const BEAT_IDLE: int = 0
 const BEAT_REVEAL: int = 1
@@ -68,7 +82,7 @@ var _skipping: bool = false
 var _asked: bool = false
 var _sun_t: float = -1.0
 var _reveal_card: Control = null
-var _reveal_inset: MarginContainer = null
+var _confetti: Confetti = null
 
 
 func _init(events: Array, cursor: int,
@@ -86,12 +100,18 @@ func _init(events: Array, cursor: int,
 
 
 func _ready() -> void:
-	# The ceremony dressing belongs to the moment of ascent, not to a resumed
-	# cursor: a player killed mid-dawn comes back to a quiet feed.
+	# The one-shots — flash, confetti, the fanfare — belong to the moment of
+	# ascent: a player killed mid-dawn comes back to a quiet feed. The LIGHT is
+	# not one of them: sunrise is a state the scene holds, so a resumed dawn
+	# arrives with it already settled rather than stranded in night.
 	if _cursor == 0 and not _events.is_empty():
 		_flash_in()
 		_sun_t = 0.0
-		add_child(Confetti.new())
+		_confetti = Confetti.new()
+		add_child(_confetti)
+	else:
+		_sun.modulate.a = 1.0
+		_wash.color.a = WASH_DAWN
 	if _cursor < _events.size():
 		_begin_beat()
 	set_process(true)
@@ -110,17 +130,6 @@ func _build() -> void:
 	_wash.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_wash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_wash)
-	_sun = TextureRect.new()
-	_sun.texture = GlassStyle.grad_tex(
-		PackedColorArray([SUNRISE_HIGH, Color(SUNRISE_LOW, 0.0), SUNRISE_LOW]),
-		PackedFloat32Array([0.0, 0.55, 1.0]), false, Vector2.ZERO, Vector2.DOWN)
-	_sun.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_sun.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_sun.stretch_mode = TextureRect.STRETCH_SCALE
-	_sun.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_sun.modulate.a = 0.0
-	add_child(_sun)
-
 	_margin = MarginContainer.new()
 	_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(_margin)
@@ -156,35 +165,19 @@ func _build() -> void:
 	_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_grid)
 	if _events.is_empty():
-		_grid.add_child(_event_card({"title": "Dawn", "body": "The Vigil is quiet."}, false))
+		_grid.add_child(_seat(_event_card({"title": "Dawn", "body": "The Vigil is quiet."})))
 	else:
 		# The memories already owed by the save arrive standing — a resumed
 		# dawn does not replay what the player has been shown and been
 		# persisted through.
 		for i: int in range(_cursor):
 			var owed: Dictionary = _events[i]
-			_grid.add_child(_event_card(owed, false))
+			_grid.add_child(_seat(_event_card(owed)))
 
 	_build_stats(column)
 	_progress = _label(_progress_text(), 11, RunStyle.GOLD_DIM)
 	_progress.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
 	column.add_child(_progress)
-
-	var caption_seat: VBoxContainer = VBoxContainer.new()
-	caption_seat.alignment = BoxContainer.ALIGNMENT_CENTER
-	caption_seat.add_theme_constant_override("separation", 3)
-	column.add_child(caption_seat)
-	_caption = _label("CLICK OR SPACE TO CONTINUE  ·  HOLD TO SKIP", 9, RunStyle.TEXT_DIM)
-	_caption.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
-	caption_seat.add_child(_caption)
-	# The skip vow fills gold under the caption while anything is held.
-	_skip_fill = ColorRect.new()
-	_skip_fill.color = RunStyle.GOLD
-	_skip_fill.custom_minimum_size = Vector2(0.0, 2.0)
-	_skip_fill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	caption_seat.add_child(_skip_fill)
-	_caption.visible = _cursor < _events.size()
-	_skip_fill.visible = _caption.visible
 
 	# The benchmark renders both buttons disabled and enables them when the
 	# ceremony settles (end.js:181-184, :241-244). Rendering them at all tells
@@ -209,6 +202,45 @@ func _build() -> void:
 	var complete: bool = _cursor >= _events.size()
 	_deck_btn.disabled = not complete
 	_commit_btn.disabled = not complete
+	# `.btn:disabled { opacity: 0.45 }` (styles.css:156) fades plate and label
+	# TOGETHER — the port's disabled state re-dressed the label alone and left
+	# two full-chroma gold plates as the loudest things on a screen the player
+	# cannot use them on.
+	_deck_btn.modulate.a = 1.0 if complete else 0.45
+	_commit_btn.modulate.a = 1.0 if complete else 0.45
+
+	# The input hint speaks in the UI register — plain reading face, below the
+	# buttons — not in the vow's own tracked small caps, where a line about
+	# mouse buttons read as scripture and two stacked fine-print lines read as
+	# none.
+	var caption_seat: VBoxContainer = VBoxContainer.new()
+	caption_seat.alignment = BoxContainer.ALIGNMENT_CENTER
+	caption_seat.add_theme_constant_override("separation", 3)
+	column.add_child(caption_seat)
+	_caption = _label("click or space to continue  ·  hold to skip", 10,
+		Color(RunStyle.TEXT_DIM, 0.85))
+	caption_seat.add_child(_caption)
+	# The skip vow fills gold under the caption while anything is held.
+	_skip_fill = ColorRect.new()
+	_skip_fill.color = RunStyle.GOLD
+	_skip_fill.custom_minimum_size = Vector2(0.0, 2.0)
+	_skip_fill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	caption_seat.add_child(_skip_fill)
+	_caption.visible = _cursor < _events.size()
+	_skip_fill.visible = _caption.visible
+
+	# The sunrise veil lies over EVERYTHING built above — panel included —
+	# because warmth that spares the thing you are reading is not a sunrise.
+	_sun = TextureRect.new()
+	_sun.texture = GlassStyle.grad_tex(
+		PackedColorArray([SUNRISE_HIGH, Color(SUNRISE_LOW, 0.0), SUNRISE_LOW]),
+		PackedFloat32Array([0.0, 0.55, 1.0]), false, Vector2.ZERO, Vector2.DOWN)
+	_sun.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_sun.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_sun.stretch_mode = TextureRect.STRETCH_SCALE
+	_sun.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_sun.modulate.a = 0.0
+	add_child(_sun)
 	set_shape(shape)
 
 
@@ -219,25 +251,24 @@ func _begin_beat() -> void:
 	_beat_t = 0.0
 	_asked = false
 	var due: Dictionary = _events[_cursor]
-	var card: PanelContainer = _event_card(due, true)
-	_grid.add_child(card)
+	var card: PanelContainer = _event_card(due)
+	_grid.add_child(_seat(card))
 	_reveal_card = card
-	_reveal_inset = card.get_child(0) as MarginContainer
 	if _skipping:
+		# The reference's own instant path still staggers (end.js:145-146:
+		# shown, then sleep(40)) — a fast-forward the eye can follow, and one
+		# save per beat instead of the whole remainder inside one frame.
 		card.modulate.a = 1.0
-		_set_inset(0.0)
+		card.position.y = 0.0
 		_finish_beat()
 		return
 	card.modulate.a = 0.0
-	_set_inset(12.0)
+	card.position.y = 12.0
 
 
 func _finish_beat() -> void:
 	_beat = BEAT_WAIT
 	_beat_t = 0.0
-	if _skipping and not _asked:
-		_asked = true
-		advance_requested.emit()
 
 
 ## Main's answer to `advance_requested`: the cursor write held, the next
@@ -257,7 +288,14 @@ func _complete() -> void:
 	_skip_fill.visible = false
 	_deck_btn.disabled = false
 	_commit_btn.disabled = false
+	_deck_btn.modulate.a = 1.0
+	_commit_btn.modulate.a = 1.0
 	_progress.text = _progress_text()
+	# The festival plays to the ceremony, not past it: bursts keep coming
+	# while memories are still arriving, and stop when the feed settles —
+	# the reference's 4.2s covered its 3.3s drain the same way.
+	if is_instance_valid(_confetti):
+		_confetti.finish()
 
 
 func _process(delta: float) -> void:
@@ -266,11 +304,11 @@ func _process(delta: float) -> void:
 		var u: float = Motion.ease(Motion.EASE_IN_OUT, _sun_t / SUNRISE_TIME)
 		_sun.modulate.a = u
 		# The storm is over: the night wash thins as the light arrives.
-		_wash.color.a = lerpf(0.62, 0.40, u)
+		_wash.color.a = lerpf(WASH_NIGHT, WASH_DAWN, u)
 	if _holding and _beat != BEAT_IDLE:
 		_hold_t += delta
 		var fill: float = clampf(_hold_t / SKIP_HOLD, 0.0, 1.0)
-		_skip_fill.custom_minimum_size.x = _caption.size.x * fill
+		_skip_fill.custom_minimum_size.x = maxf(_caption.size.x, 220.0) * fill
 		if _hold_t >= SKIP_HOLD and not _skipping:
 			_skipping = true
 			_sfx.play(&"click")
@@ -283,49 +321,68 @@ func _process(delta: float) -> void:
 			var u: float = clampf(_beat_t / REVEAL_TIME, 0.0, 1.0)
 			var e: float = Motion.ease(Motion.CSS_EASE, u)
 			if is_instance_valid(_reveal_card):
+				# The whole panel slides — `.dawn-event` animates transform,
+				# not layout (styles.css:2583-2585). The card rides inside its
+				# seat, so the grid never reflows under the travel.
 				_reveal_card.modulate.a = e
-				_set_inset(lerpf(12.0, 0.0, e))
+				_reveal_card.position.y = lerpf(12.0, 0.0, e)
 			if u >= 1.0:
 				_finish_beat()
 		BEAT_WAIT:
 			_beat_t += delta
-			if _beat_t >= AUTO_ADVANCE and not _asked:
+			var wait: float = 0.04 if _skipping else AUTO_ADVANCE
+			if _beat_t >= wait and not _asked:
 				_asked = true
 				advance_requested.emit()
 
 
-func _unhandled_input(event: InputEvent) -> void:
+## Mouse arrives through _gui_input: this Control is full-rect with
+## MOUSE_FILTER_STOP, so it consumes clicks as GUI input and an
+## _unhandled_input handler would wait for a click that can never fall
+## through — which is exactly what the first cut did. The buttons stop
+## their own clicks before they reach here. Keys still arrive unhandled;
+## nothing on this screen holds focus while the feed runs.
+func _gui_input(event: InputEvent) -> void:
+	var mouse: InputEventMouseButton = event as InputEventMouseButton
+	if mouse != null and mouse.button_index == MOUSE_BUTTON_LEFT:
+		_press(mouse.pressed)
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	var key_event: InputEventKey = event as InputEventKey
+	if key_event == null or key_event.echo:
+		return
+	if key_event.keycode in [KEY_SPACE, KEY_ENTER, KEY_KP_ENTER]:
+		_press(key_event.pressed)
+
+
+func _press(down: bool) -> void:
 	if _beat == BEAT_IDLE:
 		return
-	var pressed: bool = false
-	var released: bool = false
-	if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-		pressed = (event as InputEventMouseButton).pressed
-		released = not pressed
-	elif event is InputEventKey and not (event as InputEventKey).echo:
-		var key: Key = (event as InputEventKey).keycode
-		if key == KEY_SPACE or key == KEY_ENTER or key == KEY_KP_ENTER:
-			pressed = (event as InputEventKey).pressed
-			released = not pressed
-	if pressed:
+	if down:
 		_holding = true
 		_hold_t = 0.0
-	elif released and _holding:
-		_holding = false
-		var was_tap: bool = _hold_t < SKIP_HOLD
-		_hold_t = 0.0
-		_skip_fill.custom_minimum_size.x = 0.0
-		if was_tap and _beat == BEAT_WAIT and not _asked and not _skipping:
-			_asked = true
-			_sfx.play(&"click")
-			advance_requested.emit()
-
-
-func _set_inset(px: float) -> void:
-	if _reveal_inset == null:
 		return
-	_reveal_inset.add_theme_constant_override("margin_top", int(roundf(9.0 + px)))
-	_reveal_inset.add_theme_constant_override("margin_bottom", int(roundf(maxf(0.0, 9.0 - px))))
+	if not _holding:
+		return
+	_holding = false
+	var was_tap: bool = _hold_t < SKIP_HOLD
+	_hold_t = 0.0
+	_skip_fill.custom_minimum_size.x = 0.0
+	if not was_tap or _skipping or _asked:
+		return
+	_sfx.play(&"click")
+	if _beat == BEAT_WAIT:
+		_asked = true
+		advance_requested.emit()
+	elif _beat == BEAT_REVEAL and is_instance_valid(_reveal_card):
+		# A tap mid-entrance means "I have read it": the card lands standing
+		# and the next memory is asked for at once.
+		_reveal_card.modulate.a = 1.0
+		_reveal_card.position.y = 0.0
+		_finish_beat()
+		_asked = true
+		advance_requested.emit()
 
 
 # ---------------------------------------------------------------- dressing
@@ -335,21 +392,30 @@ func _flash_in() -> void:
 	_flash.color = FLASH_COLOR
 	_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_flash.modulate.a = FLASH_ALPHA
 	add_child(_flash)
-	Motion.bez(self, func(u: float) -> void:
-		if is_instance_valid(_flash):
-			_flash.modulate.a = 1.0 - u,
-		FLASH_TIME, Motion.CSS_EASE_OUT
-	).finished.connect(func() -> void:
+	# Linear, because that is the decay: globalAlpha = life/dur * alpha
+	# (vfx.js:131). A Tween's default transition is exactly that.
+	var tw: Tween = create_tween()
+	tw.tween_property(_flash, "modulate:a", 0.0, FLASH_TIME)
+	tw.finished.connect(func() -> void:
 		if is_instance_valid(_flash):
 			_flash.queue_free()
 	)
 
 
-## victoryFlow's confetti (end.js:199-200): a burst every 400ms for 4.2s from
-## a fifth of the way down the sky — 16 motes a burst in the three festival
-## tones, thrown at 300 and pulled down at 260 over a 1.2s life. Drawn, not
-## noded: sixty-odd quads a frame is one canvas item.
+## victoryFlow's confetti (end.js:199-200): a burst every 400ms, 16 motes in
+## one festival tone per burst, thrown at speed 300 and pulled down at 260.
+## Each mote is V.burst's SPARK (vfx.js:88-98): a stroke laid along its own
+## velocity, length |v|·0.045+2, width fading with alpha, composited
+## ADDITIVELY — light, not litter. Life is 1.2s randomised ×(0.6..1.4), drag
+## 1.6, opaque until the last quarter-second. The reference clears its
+## interval at 4.2s against a 3.3s drain; the port's drain breathes with the
+## player, so the festival runs until the feed settles (finish()) and never
+## shorter than the reference's own 4.2s. First burst at t=0.4 — setInterval
+## fires late, and nothing bursts under the flash. Seeded, not random, so a
+## capture is reproducible shot to shot; the pattern varies burst to burst,
+## which is all the eye ever compares.
 class Confetti extends Control:
 	const TONES: Array[Color] = [
 		Color(1.0, 0.8509804, 0.47843137),   # #ffd97a
@@ -357,39 +423,51 @@ class Confetti extends Control:
 		Color(0.5607843, 0.9098039, 0.627451),  # #8fe8a0
 	]
 	const BURST_EVERY: float = 0.4
-	const BURSTS_FOR: float = 4.2
+	const MIN_FESTIVAL: float = 4.2
 	const LIFE: float = 1.2
+	const DRAG: float = 1.6
 
 	class Mote extends RefCounted:
 		var pos: Vector2
 		var vel: Vector2
 		var tone: Color
 		var born: float
-		var r: float
+		var life: float
+		var width: float
 
 	var _t: float = 0.0
-	var _next_burst: float = 0.0
+	var _next_burst: float = BURST_EVERY
 	var _seed: int = 0x0DA3
 	var _motes: Array[Mote] = []
+	var _finished: bool = false
 
 	func _init() -> void:
 		set_anchors_preset(Control.PRESET_FULL_RECT)
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var mat: CanvasItemMaterial = CanvasItemMaterial.new()
+		mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+		material = mat
+
+	## The feed has settled; let the last motes gutter out.
+	func finish() -> void:
+		_finished = true
 
 	func _process(delta: float) -> void:
 		_t += delta
-		if _t >= _next_burst and _t <= BURSTS_FOR:
+		var bursting: bool = _t <= MIN_FESTIVAL or not _finished
+		if bursting and _t >= _next_burst:
 			_next_burst += BURST_EVERY
 			_burst()
 		var alive: Array[Mote] = []
 		for m: Mote in _motes:
-			if _t - m.born > LIFE:
+			if _t - m.born > m.life:
 				continue
+			m.vel *= maxf(0.0, 1.0 - DRAG * delta)
 			m.vel.y += 260.0 * delta
 			m.pos += m.vel * delta
 			alive.append(m)
 		_motes = alive
-		if _t > BURSTS_FOR and _motes.is_empty():
+		if _finished and _t > MIN_FESTIVAL and _motes.is_empty():
 			queue_free()
 			return
 		queue_redraw()
@@ -403,55 +481,85 @@ class Confetti extends Control:
 		var tone: Color = TONES[int(_rand() * 3.0) % 3]
 		for i: int in range(16):
 			var ang: float = _rand() * TAU
-			var speed: float = 300.0 * (0.35 + 0.65 * _rand())
+			# vfx.js:154 — speed * (0.35 + rand * 0.75).
+			var speed: float = 300.0 * (0.35 + 0.75 * _rand())
 			var m: Mote = Mote.new()
 			m.pos = at
 			m.vel = Vector2(cos(ang), sin(ang)) * speed
 			m.tone = tone
 			m.born = _t
-			m.r = 1.6 + _rand() * 2.2
+			m.life = LIFE * (0.6 + 0.8 * _rand())
+			m.width = 1.6 + _rand() * 0.8
 			_motes.append(m)
 
 	func _draw() -> void:
 		for m: Mote in _motes:
-			var age: float = (_t - m.born) / LIFE
-			var tone: Color = m.tone
-			tone.a = 1.0 - age * age
-			draw_rect(Rect2(m.pos.x, m.pos.y, m.r, m.r * 1.6), tone)
+			var left: float = m.life - (_t - m.born)
+			# Opaque until the final quarter-second (vfx.js: min(1, life/0.25)).
+			var a: float = clampf(left / 0.25, 0.0, 1.0)
+			var speed: float = m.vel.length()
+			var stroke: Vector2 = (m.vel / speed if speed > 0.01 else Vector2.DOWN) \
+				* (speed * 0.045 + 2.0)
+			draw_line(m.pos, m.pos + stroke, Color(m.tone, a), maxf(0.5, m.width * a))
 
 
 # ---------------------------------------------------------------- chrome
 
-func _event_card(event: Dictionary, current: bool) -> PanelContainer:
+## The reveal slides the CARD inside a seat the grid owns, so the entrance
+## never reflows the row (`.dawn-event` animates transform, not layout).
+func _seat(card: PanelContainer) -> Control:
+	var seat: Control = Control.new()
+	seat.custom_minimum_size = card.custom_minimum_size
+	seat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	seat.add_child(card)
+	seat.resized.connect(func() -> void:
+		if is_instance_valid(card):
+			card.size = seat.size
+	)
+	card.size = seat.custom_minimum_size
+	return seat
+
+
+## `.dawn-event` (styles.css:2579-2591), flat: min 145×82, 1px border
+## rgba(242,193,78,.22) on rgba(8,9,16,.82), radius 9, padding 9/11 — and NO
+## shadow and NO "current" state. The reference lights every memory the
+## same; the arriving one announces itself by its entrance, not by a border
+## three times brighter than its neighbours' (which is also what kept a
+## resumed feed from matching a watched one).
+func _event_card(event: Dictionary) -> PanelContainer:
 	var card: PanelContainer = PanelContainer.new()
-	card.custom_minimum_size = Vector2(180, 92)
-	var style: StyleBoxFlat = GlassStyle.pane(RunStyle.GOLD, 0.78 if current else 0.62)
-	style.border_color = Color(RunStyle.GOLD, 0.68 if current else 0.22)
+	card.custom_minimum_size = Vector2(145, 82)
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color(0.03137255, 0.03529412, 0.0627451, 0.82)
+	style.set_border_width_all(1)
+	style.border_color = Color(RunStyle.GOLD, 0.22)
+	style.set_corner_radius_all(9)
+	style.content_margin_left = 11
+	style.content_margin_right = 11
+	style.content_margin_top = 9
+	style.content_margin_bottom = 9
 	card.add_theme_stylebox_override("panel", style)
-	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	# The inset is the reveal's travel: margin_top eases 12→0 the way
-	# `.dawn-event` translates in (styles.css:2583-2585).
-	var inset: MarginContainer = MarginContainer.new()
-	inset.add_theme_constant_override("margin_top", 9)
-	inset.add_theme_constant_override("margin_bottom", 9)
-	inset.add_theme_constant_override("margin_left", 11)
-	inset.add_theme_constant_override("margin_right", 11)
-	card.add_child(inset)
 	var stack: VBoxContainer = VBoxContainer.new()
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 4)
-	inset.add_child(stack)
+	card.add_child(stack)
 	var kind: String = str(event.get("kind", "memory"))
 	var kicker: Label = _label(_event_kicker(kind), 9, RunStyle.GOLD_DIM)
 	kicker.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 1))
 	stack.add_child(kicker)
-	var title: Label = _label(str(event.get("title", "Dawn")), 13, RunStyle.PARCHMENT)
-	title.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
-	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stack.add_child(title)
-	var body: Label = _label(str(event.get("body", "")), 11, RunStyle.TEXT)
-	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stack.add_child(body)
+	# Kicker speaks the register; title carries the earned thing; a whisper
+	# has no title and an unlock may have no body — empty lines take no room.
+	var title_text: String = str(event.get("title", ""))
+	if not title_text.is_empty():
+		var title: Label = _label(title_text, 13, RunStyle.PARCHMENT)
+		title.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		stack.add_child(title)
+	var body_text: String = str(event.get("body", ""))
+	if not body_text.is_empty():
+		var body: Label = _label(body_text, 11, RunStyle.TEXT)
+		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		stack.add_child(body)
 	return card
 
 
@@ -532,7 +640,14 @@ func _apply_shape(inset: int, panel_width: float, title_size: int,
 	_panel.custom_minimum_size.x = panel_width
 	_title.add_theme_font_size_override("font_size", title_size)
 	_grid.columns = columns
-	_grid.get_parent().custom_minimum_size.y = grid_height
+	# `.dawn-ceremony` is content-sized under a CAP (max-height: 27cqh,
+	# styles.css:2576) — the shape number is the ceiling, never a floor. The
+	# old floor of 260px opened the ceremony on a dead hole the height of two
+	# missing rows, at the exact moment the screen wants the player's eye.
+	var rows: int = maxi(1, int(ceilf(
+		float(maxi(1, _events.size())) / float(maxi(1, columns)))))
+	var need: float = float(rows) * 90.0 + float(rows - 1) * 8.0
+	_grid.get_parent().custom_minimum_size.y = minf(grid_height, need)
 
 
 static func _label(text: String, font_size: int, colour: Color) -> Label:
