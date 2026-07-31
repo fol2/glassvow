@@ -25,16 +25,18 @@ reward, shop and aspect screens and are out of scope here.
 
 | verdict | rows | |
 |---|--:|---|
-| **MATCH** | 23 | the port does this, with these numbers |
-| **DIVERGES** | 10 | the port does something, with different numbers |
-| **DIVERGES (documented)** | 1 | different on purpose, and the port says why |
-| **ABSENT** | 22 | the port does not do this at all |
-| **N/A** | 5 | the rule never fires in the reference, or drives a renderer the port does not use |
+| **MATCH** | 39 | the port does this, with these numbers |
+| **DIVERGES** | 9 | the port does something, with different numbers |
+| **DIVERGES (documented)** | 3 | different on purpose, and the port says why |
+| **ABSENT** | 0 | the port does not do this at all |
+| **N/A** | 10 | the rule never fires in the reference, or drives a renderer the port does not use |
 | **UNRESOLVED** | 1 | the audit answered a different question; needs a second look |
 
-**Twenty-two of sixty-two — 35% of the combat motion surface — has no
-implementation.** Twenty (32%) are verified to match. That is the size of the
-gap, measured rather than estimated.
+**ABSENT reached zero on 2026-07-31** — every liveable rule is either matched,
+deliberately diverged with its reasons written down, or recorded dead with grep
+evidence (see the P2.6 record at the end). The remaining nine DIVERGES are each
+a judged trade, not a gap; the counts above are recomputed from the table, not
+carried forward.
 
 The shape of it is the same base rate this port has shown everywhere else: it is
 precise where it was handed a number and thin where it had to notice that a
@@ -63,25 +65,25 @@ existing is not evidence that it renders.
 | css | selector | reference | port | |
 |---|---|---|---|:-:|
 | 505 | `.card-inner` | box-shadow .2s, transform .12s ease-out | audit matched this against the hand-seat glide, which is a different element | UNRESOLVED |
-| 592 | `.card.r-rare .card-inner::after` | `shine` 4.5s ease-in-out ∞ | nothing | ABSENT |
+| 592 | `.card.r-rare .card-inner::after` | `shine` 4.5s ease-in-out ∞ | canvas shader over the slab, TIME-driven, 62/92 marks (closed 2026-07-31) | MATCH |
 | 599 | `.card-inner::before` | opacity .25s | `LAMP_FADE 0.25` on a shader hover, not the pane's opacity | DIVERGES |
-| 610 | `.card.nope, .lantern-btn.nope` | `nope` .32s ease — ±7px, ±1.5° | nothing | ABSENT |
+| 610 | `.card.nope, .lantern-btn.nope` | `nope` .32s ease — ±7px, ±1.5° | `Motion.NOPE_*` shared by card and lantern, CSS ease per interval (closed 2026-07-31) | MATCH |
 | 619 | `.hand-zone .card` | transform .28s cb(.25,.9,.3,1.2), filter .2s, opacity .12s | transform only — and see below | DIVERGES ✱ |
 | 629 | `.hand-zone .card.dragging` | `transition: none` | `_kill_pose()` on drag | MATCH ✱ |
-| 632 | `.hand-zone .card .card-inner` | box-shadow .2s | shadow written directly | ABSENT |
+| 632 | `.hand-zone .card .card-inner` | box-shadow .2s | the will-burn glow glides the shadow .2s; other shadow states still write directly | DIVERGES |
 | 633 | `.hand-zone .card .card-lift` | transform .28s cb(.25,.9,.3,1.2) | `POSE_TIME 0.28`, `POSE_EASE [.25,.9,.3,1.2]` | MATCH ✱ |
 | 642 | `.card.draw-in .card-lift` | `drawReveal` .24s cb(.2,.8,.3,1.05) | variable 0.16–0.28s cubic ease-out | DIVERGES |
 | 649 | `.card.played-up` | transform + opacity .3s ease-in, −240px, ×0.72 | the port flies the card to the discard pile instead | DIVERGES |
-| 650 | `.card.exhausting` | .5s, −140px, ×0.6, 8°, brightness 2.4 blur 2px | nothing | ABSENT |
+| 650 | `.card.exhausting` | .5s, −140px, ×0.6, 8°, brightness 2.4 blur 2px | the ash flight wears the blaze — ×0.6, 8°, hot lift; it flies to the pile instead of −140px, the port's own pile language (closed 2026-07-31) | DIVERGES (documented) |
 
 ### Enemy states
 
 | css | selector | reference | port | |
 |---|---|---|---|:-:|
 | 102 | `.enemy.doomed .enemy-art` | `doomTremble` .09s linear ∞ | `DOOM_PERIOD 0.09`, same 5 offsets, same X/Y | MATCH |
-| 738 | `.enemy` | filter .2s, transform .25s | no blanket transition; each state hand-tweened | ABSENT |
+| 738 | `.enemy` | filter .2s, transform .25s | structural: every state change here is an explicit tween with its own clock (see the P2.6 record) | N/A |
 | 788 | `.enemy.hurt .enemy-art` | `hurtFlash` .3s — 30% brightness 2.6 +7px, 60% −5px | `HIT_TIME 0.3`, `FLARE_RISE 0.09`, ±7/−5px | MATCH |
-| 790 | `.enemy.dying` | `dissolve` .85s ease-in forwards | the body does not dissolve; the fracture is a separate layer | ABSENT |
+| 790 | `.enemy.dying` | `dissolve` .85s ease-in forwards | superseded by the real 3D death rite (§1.8 of the actor checklist) — the deliberate departure | DIVERGES (documented) |
 | 971 | `.cracks .crack` | `crackIn` .2s ease-out | propagation is speed-based (`CRACK_SPEED 2.6`), duration varies | DIVERGES |
 | 974 | `.enemy.igniting .vessel-fire` | `vesselFire` .32s cb(.3,.7,.3,1) | one `set_ignite` cubic tween drives everything | DIVERGES |
 | 977 | `.enemy.igniting .cracks` | `crackBlaze` .32s ease-out | same single tween | DIVERGES |
@@ -94,22 +96,22 @@ existing is not evidence that it renders.
 
 | css | selector | reference | port | |
 |---|---|---|---|:-:|
-| 182 | `.hud-hpbar > div` | width **.4s** cb(.3,1,.4,1) | `_hp_fill.size.x = …` assigned | ABSENT |
-| 834 | `.hpbar > .fill` | width **.35s** cb(.3,1,.4,1) | `_hp_bar.value = now` | ABSENT |
-| 835 | `.hpbar > .ghost` | width .9s **ease** delay .25s | right timings, sine ease-in-out instead of CSS `ease` | DIVERGES |
-| 890 | `.schip.pop` | `chipPop` .35s ease-out | status chips never pop | ABSENT |
-| 907 | `.intent.telegraph` | `teleFlash` .5s ×2 — scale 1.22, brightness 1.8, glow | scale and brightness present, drop-shadow omitted | DIVERGES |
-| 938 | `.intent.pop` | `chipPop` .4s ease-out | `IntentChip` has `telegraph()` only | ABSENT |
+| 182 | `.hud-hpbar > div` | width **.4s** cb(.3,1,.4,1) | `HP_BAR_TIME 0.4` / `HP_EASE [.3,1,.4,1]` via `_glide_hp` | MATCH |
+| 834 | `.hpbar > .fill` | width **.35s** cb(.3,1,.4,1) | `HP_GLIDE 0.35` on `Motion.HP_FILL` (closed 2026-07-31) | MATCH |
+| 835 | `.hpbar > .ghost` | width .9s **ease** delay .25s | same timings on `Motion.CSS_EASE` (closed 2026-07-31) | MATCH |
+| 890 | `.schip.pop` | `chipPop` .35s ease-out | dead rule — no writer (P2.6 record) | N/A |
+| 907 | `.intent.telegraph` | `teleFlash` .5s ×2 — scale 1.22, brightness 1.8, glow | one linear clock, css_pulse per iteration, event-only 10px glow over the resting halo (closed 2026-07-31) | MATCH |
+| 938 | `.intent.pop` | `chipPop` .4s ease-out | dead rule — no writer (P2.6 record) | N/A |
 | 959 | `.hpbar > .pv.show` | `pvPulse` .9s ease-in-out ∞, opacity → .4 | `PREVIEW_PULSE .9`, `PREVIEW_DIP .4`, same easing | MATCH |
 | 988 | `.facet-row .pip` | background/box-shadow/filter .2s | per-pip .2s crossfade, intact pane fades under the overlay (closed 2026-07-31) | MATCH |
-| 1030 | `.facet-row .pip.willchip` | `pvPulse` .9s ∞ | fixed dim tint, no pulse | ABSENT |
+| 1030 | `.facet-row .pip.willchip` | `pvPulse` .9s ∞ | dead for raster pips — `animation: none` at :1035 (P2.6 record) | N/A |
 | 1035 | `…willchip:has(.facet-img)` | `animation: none` | no animation on will-state | MATCH |
 | 1058 | `.facet-row.pop` | `chipPop` .4s ease-out | 1.35 at 0.16s, back over 0.24s | MATCH |
-| 1068 | `.lantern-btn` | filter .25s, transform .25s | instant modulate | ABSENT |
-| 1106 | `.lantern-btn .lbp` | background/box-shadow .25s | the port has no ember-pip ring at all | ABSENT |
+| 1068 | `.lantern-btn` | filter .25s, transform .25s | the unlit dim glides .25s on CSS ease (closed 2026-07-31) | MATCH |
+| 1106 | `.lantern-btn .lbp` | background/box-shadow .25s | per-pip .25s crossfade on the ring (closed 2026-07-31) | MATCH |
 | 1115 | `.lantern-btn.pop` | `chipPop` .4s ease-out | `_keyframe_pop(_lantern, 1.35, 0, 0.4)` | MATCH |
-| 1116 | `.lantern-btn.ready` | `artReady` 1.6s ease-in-out ∞ | static modulate only | ABSENT |
-| 1123 | `.lantern-btn.kindle-target` | `kindleCall` 1.1s ease-in-out ∞ | kindle is a separate toggle; no lantern pulse | ABSENT |
+| 1116 | `.lantern-btn.ready` | `artReady` 1.6s ease-in-out ∞ | css_pulse 1.6s — brightness 1.22, halo swell; shared clock with the END seal (closed 2026-07-31) | MATCH |
+| 1123 | `.lantern-btn.kindle-target` | `kindleCall` 1.1s ease-in-out ∞ | css_pulse 1.1s — brightness 1.2, 1.07 swell, wide halo, lit while a burnable card is in the air (closed 2026-07-31) | MATCH |
 
 ### Idle and creature motion
 
@@ -167,28 +169,25 @@ row in this census at all — the enumeration missed them. They were built in
 | 726 | `.combat-screen.intro .enemy` | `enemyIn` .55s, +90px | `_enter(view, 90.0, …)` | MATCH |
 | 727 | `.combat-screen.intro` chrome | `chromeIn` .5s **delay .4s**, +44px | `tween_interval(0.4)`, 0.5s, 44px | MATCH |
 | 1282 | `.energy-orb.pop` | `chipPop` .35s ease-out | `_keyframe_pop(_energy_orb, 1.35, 0, 0.35)` | MATCH |
-| 1333 | `.end-turn` | transform .15s, filter .15s | instant modulate on hover | ABSENT |
-| 1352 | `.end-turn.ready` | `artReady` 1.6s ease-in-out ∞ | nothing | ABSENT |
+| 1333 | `.end-turn` | transform .15s, filter .15s | hover glides −1px / brightness 1.08 over .15s on CSS ease (closed 2026-07-31) | MATCH |
+| 1352 | `.end-turn.ready` | `artReady` 1.6s ease-in-out ∞ | the seal's halo breathes on the lantern's own clock; gated off while locked (closed 2026-07-31) | MATCH |
 | 1393 | `.end-turn.enemy-phase` | opacity .45, no pointer events | `modulate.a = 0.45`, `MOUSE_FILTER_IGNORE` | MATCH |
-| 1395 | `.pile-btn` | transform .15s, filter .15s | no transition | ABSENT |
+| 1395 | `.pile-btn` | transform .15s, filter .15s | hover glides −3px / brightness 1.08 over .15s (closed 2026-07-31) | MATCH |
 | 1449 | `.pile-btn.pile-bump` | `pileBump` .28s ease-out, −4px ×1.05 | `_keyframe_pop(p.stack, 1.05, -4.0, 0.28)` | MATCH |
-| 1802 | `.ember` | `emberRise` 4s linear ∞ | embers are VFX particles, not a rising UI element | ABSENT |
+| 1802 | `.ember` | `emberRise` 4s linear ∞ | a run-end screen dressing, not combat — P3.4's build target (P2.6 record) | N/A |
 
 ## What to fix first
 
 Ranked by how often a player sees it, not by how easy it is.
 
-1. **`.hpbar > .fill` (834) and `.hud-hpbar > div` (182)** — HP is the most-watched
-   number on the screen and both bars snap. 0.35s and 0.4s on the same
-   `cb(.3, 1, .4, 1)`. The ghost rail already tweens beside them, so the fill
-   jumping to its new width while the ghost glides is visible on every single hit.
-2. **`.intent.pop` (938) and `.schip.pop` (890)** — `chipPop` is already
-   implemented four times over for the lantern, energy orb, facet row and pile.
-   These two just never got wired to it.
-3. **`.end-turn` and `.pile-btn` .15s (1333, 1395)** — every button on the screen
-   responds instantly instead of moving.
-4. **`.lantern-btn.ready` / `.end-turn.ready` `artReady` (1116, 1352)** — the two
-   "you can act now" beacons do not beacon.
+1. **`.hpbar > .fill` (834) and `.hud-hpbar > div` (182)** — ~~both bars snap~~
+   closed 2026-07-31: both glide on their own durations over `Motion.HP_FILL`.
+2. **`.intent.pop` (938) and `.schip.pop` (890)** — re-judged: both are DEAD
+   rules with no writer (see the P2.6 record); nothing to wire.
+3. **`.end-turn` and `.pile-btn` .15s (1333, 1395)** — ~~respond instantly~~
+   closed 2026-07-31: both glide on hover.
+4. **`.lantern-btn.ready` / `.end-turn.ready` `artReady` (1116, 1352)** — ~~do
+   not beacon~~ closed 2026-07-31: both breathe on one shared clock.
 5. **`.enemy.targetable` `targetGlow` (1238)** — ~~a targetable foe is lit but
    does not pulse~~ closed 2026-07-31: the pulse and the hover stillness are
    both live, and every legal target lights while a single-target card is
@@ -255,3 +254,32 @@ This is motion only. Three surfaces remain unaudited:
   CSS and have to be read from source.
 - **Whether the port's MATCHes look right on screen.** A number can agree and
   still be attached to the wrong thing.
+
+## Dead rules and non-items — the P2.6 record (2026-07-31)
+
+Three rules the stylesheet declares that nothing in the shipping build ever
+fires, each verified by grepping for a class writer at `6e06911`. They are
+DECLINED, not ported:
+
+- **`.intent.pop`** (`src/styles.css:938`) — `chipPop` on the telegraph chip.
+  No `classList` write ever adds `pop` to an intent element; the only `pop`
+  writers are the facet row (`src/ui/drain.js:287`), the lantern
+  (`src/ui/drain.js:374`) and the energy orb (`src/ui/drain.js:662`).
+- **`.schip.pop`** (`src/styles.css:890-891`) — already recorded at §3.4:
+  nothing adds the class.
+- **`.facet-row .pip.willchip` `pvPulse`** (`src/styles.css:1030`) — overridden
+  by `animation: none` for pips carrying a raster face (`src/styles.css:1035`), and every pip
+  in the game carries one.
+
+Three candidates from the same sweep that are NOT dead, recorded so the list
+does not grow back by rumour:
+
+- **`.enemy { transition: filter .2s, transform .25s }`**
+  (`src/styles.css:738`) — live, but structural here: the port drives those
+  channels through explicit tweens with their own clocks, so a blanket
+  smoothing layer has nothing left to smooth.
+- **`dissolve`** (`src/styles.css:790-791`) — live via `.dying`
+  (`src/ui/drain.js:582`); superseded in this port by the real 3D death rite
+  (§1.8 KEEP), which is the deliberate departure, not an omission.
+- **`.ember` / `.embers`** (`src/styles.css:1801-1812`) — live on the run-end
+  screen; it is P3.4's build target rather than a combat census item.

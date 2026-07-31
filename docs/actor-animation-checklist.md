@@ -57,7 +57,7 @@ curve, the hero's −70px and the `_stand` re-anchor, and had no stagger. The
 Control is the correct element and the stagger is the correct behaviour, so they
 are one function: `EnemyView.enter(delay, done)` owns the motion and the fill,
 `_play_entrance` owns the seat delay and the re-anchor (`enemy_view.gd:2969` (`enter`),
-`combat_screen.gd:1479` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
+`combat_screen.gd:1485` (`_play_entrance`)). The `view.enter(...)` call in `_build_battlefield`,
 which fired a frame earlier and set foe alpha to zero under the other path's
 nose, is gone.
 
@@ -100,7 +100,7 @@ tweened onto it (`enemy_view.gd:629` (`KIND_IDLE`); applied at
 Two things the port did not previously distinguish. **CSS eases every keyframe
 interval**, not once across the iteration the way a WAAPI list does, so
 `idleSlime`'s three stops are three eased segments — `Motion.css_keyframe` is
-that contract and `Motion.keyframe` is the other one (`motion.gd:103` (`css_keyframe`)). And
+that contract and `Motion.keyframe` is the other one (`motion.gd:112` (`css_keyframe`)). And
 **`idleSlime` does leave the ground**, briefly, and also sinks below it; the
 shadow reads `max(0, y)` exactly as `spriteLiftPx` does, so the dip is its own
 beat rather than a shadow underground.
@@ -206,7 +206,7 @@ paths go white (`src/styles.css:95-110`, `src/ui/drain.js:551-566`).
 
 Here: boss-only timing, 820ms world-stop, 110ms hit-stop, .22s transition,
 .07 saturation, .85 brightness and .09s tremble are built and wired
-(`combat_screen.gd:153-158` (`WORLDSTOP_SAT`), `presentation/combat/combat_screen.gd` (`_hit_player`),
+(`combat_screen.gd:155-160` (`WORLDSTOP_SAT`), `presentation/combat/combat_screen.gd` (`_hit_player`),
 `enemy_view.gd:236-239`, `enemy_view.gd:2032-2038`). The actor pixels
 desaturate too, unlike the benchmark's separate mesh canvas; that is a documented
 structural departure (`presentation/combat/combat_screen.gd` (`WORLDSTOP_SAT`)).
@@ -391,7 +391,7 @@ lead **before** the body lunge (`src/ui/drain.js:898-925`, `src/styles.css:893-9
 
 Here: `IntentChip` is the actor's telegraph (`presentation/combat/enemy_view.gd` (`_build_chrome`)).
 `telegraph()` is two 0.5s loops peaking at scale 1.22 / modulate 1.8
-(`intent_chip.gd:166-176` (`telegraph`)). Drain order: telegraph → float name → wait 0.3s →
+(`intent_chip.gd:172-182` (`telegraph`)). Drain order: telegraph → float name → wait 0.3s →
 lunge (`combat_screen.gd:2281-2287`). The numeric beats match, but Godot uses
 `TRANS_SINE/EASE_IN_OUT` rather than CSS `ease-in-out`, and it brightens the
 chip's existing 8px halo instead of adding the benchmark's event-only 10px glow
@@ -429,7 +429,7 @@ Benchmark: 1100ms normal / 1250ms crit, `cubic-bezier(.2,.7,.3,1)`; scale
 
 Here: `Floaters.float_text` — 1.1s / 1.25s crit, matching ease and keyframes,
 poison descends, crit blaze (`floaters.gd:43-45` (`FLOAT_EASE`), `floaters.gd:149-201` (`float_text`)). Driven
-from `combat_screen._float` (`combat_screen.gd:2160-2165` (`_float`)). The benchmark's crit
+from `combat_screen._float` (`combat_screen.gd:2206-2211` (`_float`)). The benchmark's crit
 branch has no caller, so its presence in both trees is not a visible parity gap.
 
 ### 4.2 Impact particles — **KEEP** (and honour the dead kinds)
@@ -444,7 +444,7 @@ go NaN before paint. Pixel counts on the running page: burst/motes draw; ring an
 slashArc draw 0 (`vfx_layer.gd:43-59` (in `DEAD_KINDS_RENDER`)).
 
 Here: `VfxLayer.archetype_hit` and the drain call sites are built
-(`vfx_layer.gd:591` (`archetype_hit`), `combat_screen.gd:2555` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
+(`vfx_layer.gd:591` (`archetype_hit`), `combat_screen.gd:2602` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
 `ring` / `slash` at `_push` so the typed `Vector2.ZERO` default does not
 accidentally repair them into visible hoops (`vfx_layer.gd:71-73` (`DEAD_KINDS_RENDER`),
 `vfx_layer.gd:405-410` (`_push`)). Call sites stay as the record of what the source asks
@@ -459,7 +459,7 @@ which the particle loop freezes; colour flashes at .09/.24/.28/.3s
 (`src/vfx.js:52-57`, `src/vfx.js:127-149`, `src/ui/drain.js:291-306`).
 
 Here: shake moves `_shake_host` wrapping stage, battlefield and HUD
-(`combat_screen.gd:452` (`_shake_host`), `vfx_layer.gd:433-434` (`shake`), `vfx_layer.gd:344-357` (in `_step_shake`)).
+(`combat_screen.gd:454` (`_shake_host`), `vfx_layer.gd:433-434` (`shake`), `vfx_layer.gd:344-357` (in `_step_shake`)).
 `hitstop` freezes the particle sim (`vfx_layer.gd:437-438` (`hitstop`),
 `vfx_layer.gd:245-248` (in `_process`)) and is wired for big hits, kills, shatter and world-stop
 (`presentation/combat/combat_screen.gd` (`_handle_event`), `2172`, `2176`, `2266`). Flashes go through
@@ -503,8 +503,10 @@ The remaining structural differences are visible: the benchmark selects
 `duskblade` or `ashwarden` from `S.run.aspect` and lays the hero out at 190×285px
 in pad landscape (`src/ui/assets.js:43-48`,
 `src/battlefield-layout.js:30-32`, `src/battlefield-layout.js:139-142`).
-Godot hard-codes `duskblade` and gives every painted actor a square 285×285px box
-(`combat_screen.gd:64-65` (`HERO_ART`), `enemy_view.gd:1544-1556`).
+Godot read the aspect from the content book from 2026-07-31
+(`combat_screen.gd:1563` (`_hero_look`)); the hard-code survives only as the
+no-run fallback for labs and tests. The square 285×285px box remains
+(`enemy_view.gd:1544-1556`).
 
 ### 5.2 `footX` / `footY` — **KEEP** the offsets; stage data differ
 
