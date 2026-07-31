@@ -6,7 +6,6 @@ signal bequest_requested(id: String)
 signal commit_requested
 signal deck_requested
 
-const ASCENDED: String = "res://assets/art/meta/ascended.png"
 const FALLEN: String = "res://assets/art/meta/fallen.png"
 
 var shape: StringName = StageShape.IDENTITY
@@ -42,9 +41,10 @@ func _init(outcome: String, stats: Dictionary, bequest_choices: Array,
 
 
 func _build() -> void:
-	if _outcome == "win":
-		_add_meta_backdrop(ASCENDED)
-	elif _outcome == "death":
+	# "win" never reaches this screen: main short-circuits it to the Dawn
+	# ceremony before construction (_show_run_end), exactly as the benchmark's
+	# won end-screen is its own render branch (end.js:186).
+	if _outcome == "death":
 		_add_meta_backdrop(FALLEN)
 	else:
 		RunStyle.add_backdrop(self)
@@ -246,21 +246,18 @@ func _apply_shape(inset: int, panel_width: float, title_size: int,
 
 func _title_text() -> String:
 	match _outcome:
-		"win": return "ASCENDED"
 		"death": return "FALLEN"
 		_: return "THE VOW IS SET ASIDE"
 
 
 func _subtitle_text() -> String:
 	match _outcome:
-		"win": return "The Spire opens into morning."
 		"death": return "Your lantern went dark on floor %d." % _fall_floor
 		_: return "The pilgrimage ends here. The Vigil will keep the record."
 
 
 func _title_colour() -> Color:
-	return RunStyle.GOLD if _outcome == "win" else (
-		Color("#6a7288") if _outcome == "death" else RunStyle.PARCHMENT)
+	return Color("#6a7288") if _outcome == "death" else RunStyle.PARCHMENT
 
 
 func _add_meta_backdrop(path: String) -> void:

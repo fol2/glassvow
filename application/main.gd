@@ -107,6 +107,7 @@ func _ready() -> void:
 	# that cannot be captured cannot be verified, and this lane's whole method is
 	# to measure rather than to argue.
 	var show_map: bool = false
+	var show_dawn_bench: bool = false
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -160,6 +161,8 @@ func _ready() -> void:
 			resume_run = true
 		elif arg == "--map":
 			show_map = true
+		elif arg == "--dawn":
+			show_dawn_bench = true
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	# `--shape=` means two different things to a screen and to the layout bench.
@@ -216,6 +219,28 @@ func _ready() -> void:
 		return
 	if resume_run:
 		_continue_run(SaveService.load_run(content))
+	elif show_dawn_bench:
+		# The Dawn ceremony bench: a fresh run handed a representative feed, so
+		# the victory beat can be photographed without climbing three acts.
+		# Same reason --fight= exists (see _start_fight's docblock).
+		_new_run()
+		game.run.pending_run_end = null
+		game.run.pending_dawn = {"events": [
+			{"kind": "whisper", "title": "A Whisper at Dawn",
+				"body": "The Spire kept none of what you gave it."},
+			{"kind": "quest", "title": "The Witchlight Road",
+				"body": "Walk the road that never warms."},
+			{"kind": "progress", "title": "Emberglass Remembers",
+				"body": "The Witchlight Road · 2/3"},
+			{"kind": "shard", "title": "Emberglass Shard Lit",
+				"body": "The Shade That Fell"},
+			{"kind": "unlock", "title": "The Vigil Opens a Way",
+				"body": "New cards and relics enter the climb."},
+			{"kind": "memory", "title": "The Vigil Remembers",
+				"body": "Victory · 3 shards lit"},
+		], "cursor": 0}
+		if SaveService.store(game.run):
+			_show_dawn()
 	elif show_map:
 		_new_run()
 	elif not fight.is_empty():
@@ -1643,6 +1668,11 @@ func _unlock_dawn_copy(id: String) -> String:
 		_: return id.capitalize()
 
 
+## Built ONCE; the feed animates in place (DawnScreen, P3.3). The durable
+## contract is unchanged — every cursor advance is a persisted save before the
+## next memory shows — but the screen now ASKS for each advance instead of the
+## route being rebuilt around a 0.72s timer. drainEndQueue's shape exactly
+## (end.js:134-151): show, persist, only then the next.
 func _show_dawn() -> void:
 	var dawn: Dictionary = game.run.pending_dawn
 	var events: Array = dawn["events"]
@@ -1650,30 +1680,32 @@ func _show_dawn() -> void:
 	var screen: DawnScreen = DawnScreen.new(events, cursor, _shape, _run_end_stats())
 	screen.deck_requested.connect(_show_run_deck)
 	screen.commit_requested.connect(_finish_dawn)
+	screen.advance_requested.connect(_on_dawn_advance.bind(screen))
 	var cue: StringName = &"victory" if cursor == 0 else &""
 	if cursor < events.size():
 		var event: Dictionary = events[cursor]
 		if not str(event.get("cue", "")).is_empty():
 			cue = StringName(str(event["cue"]))
 	_show_route(screen, false, cue)
-	if cursor < events.size():
-		var expected_cursor: int = cursor
-		get_tree().create_timer(0.72).timeout.connect(func() -> void:
-			if game == null or game.run.pending_dawn == null:
-				return
-			var current: Dictionary = game.run.pending_dawn
-			if int(float(str(current.get("cursor", -1)))) == expected_cursor:
-				_on_dawn_continue("continue")
-		)
 
 
-func _on_dawn_continue(_id: String) -> void:
+func _on_dawn_advance(screen: DawnScreen) -> void:
+	if game == null or game.run == null or game.run.pending_dawn == null:
+		return
 	var dawn: Dictionary = game.run.pending_dawn
-	dawn["cursor"] = int(float(str(dawn.get("cursor", 0)))) + 1
-	if SaveService.store(game.run):
-		_show_dawn()
-	else:
+	var next: int = int(float(str(dawn.get("cursor", 0)))) + 1
+	dawn["cursor"] = next
+	if not SaveService.store(game.run):
 		_show_save_error("The Dawn cursor could not be held.")
+		return
+	var events: Array = dawn["events"]
+	if next < events.size():
+		var event: Dictionary = events[next]
+		var cue: String = str(event.get("cue", ""))
+		if not cue.is_empty():
+			_music.play(StringName(cue))
+	if is_instance_valid(screen):
+		screen.advance_confirmed()
 
 
 func _finish_dawn() -> void:
