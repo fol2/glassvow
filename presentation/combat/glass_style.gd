@@ -43,6 +43,22 @@ static func pane(accent: Color, alpha: float = 0.80) -> StyleBoxFlat:
 	return sb
 
 
+## `.stat-cell` (styles.css:1813-1814): a flat white-tinted cell with NO
+## shadow. The end screens' grids sat on gold panes whose 10px glows stacked
+## in the 6px gutters — a lattice of bright seams the benchmark never draws.
+static func stat_cell() -> StyleBoxFlat:
+	var sb: StyleBoxFlat = StyleBoxFlat.new()
+	sb.bg_color = Color(1.0, 1.0, 1.0, 0.045)
+	sb.set_border_width_all(1)
+	sb.border_color = Color(1.0, 1.0, 1.0, 0.1)
+	sb.set_corner_radius_all(12)
+	sb.content_margin_left = 16
+	sb.content_margin_right = 16
+	sb.content_margin_top = 12
+	sb.content_margin_bottom = 12
+	return sb
+
+
 ## Small rounded pill (intent / ward / status).
 static func chip(fill: Color) -> StyleBoxFlat:
 	var sb: StyleBoxFlat = StyleBoxFlat.new()

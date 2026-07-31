@@ -73,6 +73,9 @@ func _build() -> void:
 	_column.add_theme_constant_override("separation", 9)
 	_panel.add_child(_column)
 
+	if _outcome == "death":
+		# `.mon-flame` stands ON the monument, above the carved word.
+		_column.add_child(MonumentFlame.new())
 	_title = _label(_title_text(), 42, _title_colour())
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 4))
 	_column.add_child(_title)
@@ -107,7 +110,7 @@ func _build_stats() -> void:
 
 func _add_stat(key: String, caption: String) -> void:
 	var cell: PanelContainer = PanelContainer.new()
-	cell.add_theme_stylebox_override("panel", GlassStyle.pane(RunStyle.GOLD, 0.60))
+	cell.add_theme_stylebox_override("panel", GlassStyle.stat_cell())
 	cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_stats_grid.add_child(cell)
 	var stack: VBoxContainer = VBoxContainer.new()
@@ -192,17 +195,20 @@ func _build_commit() -> void:
 		deck_requested.emit()
 	)
 	actions.add_child(deck)
-	var commit: Button = _action_button("RETURN TO THE VIGIL")
+	# The way onward is the CTA; the deck viewer is a side glance. Two
+	# identically-dressed buttons made the player weigh a choice this screen
+	# is not asking them to make.
+	var commit: Button = _action_button("RETURN TO THE VIGIL", true)
 	commit.pressed.connect(_request_commit)
 	actions.add_child(commit)
 
 
-func _action_button(text: String) -> Button:
+func _action_button(text: String, primary: bool = false) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(190, 46)
 	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
-	RunStyle.style_button(button)
+	RunStyle.style_button(button, primary)
 	return button
 
 
@@ -283,17 +289,112 @@ func _add_vignette() -> void:
 
 
 func _add_embers() -> void:
-	var layer: Control = Control.new()
-	layer.set_anchors_preset(Control.PRESET_FULL_RECT)
-	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(layer)
-	for i: int in range(14):
-		var ember: ColorRect = ColorRect.new()
-		ember.color = Color(1.0, 0.42 + float(i % 3) * 0.10, 0.16, 0.82)
-		ember.position = Vector2(70 + (i * 83) % 1040, 110 + (i * 137) % 620)
-		ember.size = Vector2(2 + i % 2, 5 + i % 4)
-		ember.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		layer.add_child(ember)
+	add_child(EmberField.new())
+
+
+## The fallen screen's living ash (end.js:212-213, styles.css:1801-1811):
+## fourteen embers rising from below the monument on their own clocks,
+## forever. What stood here before was fourteen STATIC rectangles — the
+## field is the point, a grave that still breathes heat. Drawn, not noded:
+## fourteen soft dots a frame is one canvas item.
+class EmberField extends Control:
+	class Ember extends RefCounted:
+		var x_frac: float   # left: 8% + rand * 84%
+		var ex: float       # --ex: horizontal drift over the whole rise, ±45px
+		var delay: float    # animation-delay: 0-4s
+		var dur: float      # animation-duration: 3-6s
+
+	## `emberRise` climbs -46cqh from `bottom: 18%` on a LINEAR clock.
+	const RISE_FRAC: float = 0.46
+	const FLOOR_FRAC: float = 0.82
+	const BODY: Color = Color(1.0, 0.6901961, 0.4)          # #ffb066
+	const HALO: Color = Color(1.0, 0.5882353, 0.27450982)   # rgba(255,150,70,…)
+
+	var _t: float = 0.0
+	var _seed: int = 0x0EA5
+	var _embers: Array[Ember] = []
+
+	func _init() -> void:
+		set_anchors_preset(Control.PRESET_FULL_RECT)
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		for i: int in range(14):
+			var e: Ember = Ember.new()
+			e.x_frac = 0.08 + _rand() * 0.84
+			e.ex = (_rand() - 0.5) * 90.0
+			e.delay = _rand() * 4.0
+			e.dur = 3.0 + _rand() * 3.0
+			_embers.append(e)
+
+	func _rand() -> float:
+		_seed = (_seed * 1103515245 + 12345) & 0x7FFFFFFF
+		return float(_seed) / float(0x7FFFFFFF)
+
+	func _process(delta: float) -> void:
+		_t += delta
+		queue_redraw()
+
+	func _draw() -> void:
+		for e: Ember in _embers:
+			var alive: float = _t - e.delay
+			if alive < 0.0:
+				continue
+			var u: float = fmod(alive, e.dur) / e.dur
+			# 0% α0 → 12% α0.95 → 100% α0, all on the linear clock.
+			var a: float = (u / 0.12) * 0.95 if u < 0.12 \
+				else 0.95 * (1.0 - (u - 0.12) / 0.88)
+			var s: float = lerpf(1.0, 0.4, u)
+			var at: Vector2 = Vector2(
+				e.x_frac * size.x + e.ex * u,
+				size.y * FLOOR_FRAC - size.y * RISE_FRAC * u)
+			# The 8px box-shadow at 0.9 (styles.css:1805), read as soft rings
+			# under the 4px body — the glow IS the ember at a glance; the dot
+			# alone read as noise against the night ground.
+			draw_circle(at, 7.0 * s, Color(HALO, a * 0.22))
+			draw_circle(at, 4.4 * s, Color(HALO, a * 0.48))
+			draw_circle(at, 2.0 * s, Color(BODY, a))
+
+
+## The monument's flame (styles.css:1794-1800): a thumb of fire above the
+## carved name, guttering on `monFlame`'s 2.6s ease-in-out — 0.9 tall, 0.5
+## crouched at 38%, straightening through 62% with a 3° lean. The grave is
+## not cold, which is the whole argument of the screen.
+class MonumentFlame extends Control:
+	const TIME: float = 2.6
+	const AT: Array[float] = [0.0, 0.38, 0.62, 1.0]
+	const ALPHA: Array[float] = [0.9, 0.5, 0.8, 0.9]
+	const SCALE_Y: Array[float] = [1.0, 0.7, 0.9, 1.0]
+	const ROT: Array[float] = [0.0, 0.0, -3.0, 0.0]
+	const CORE: Color = Color(1.0, 0.9529412, 0.8117647)    # #fff3cf
+	const MID: Color = Color(1.0, 0.6039216, 0.3019608)     # #ff9a4d
+	const ROOT: Color = Color(0.47843137, 0.22745098, 0.0627451)  # #7a3a10
+
+	var _t: float = 0.0
+
+	func _init() -> void:
+		custom_minimum_size = Vector2(12, 18)
+		size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _process(delta: float) -> void:
+		_t = fmod(_t + delta, TIME)
+		queue_redraw()
+
+	func _draw() -> void:
+		var u: float = _t / TIME
+		var a: float = Motion.css_keyframe(u, AT, ALPHA)
+		var sy: float = Motion.css_keyframe(u, AT, SCALE_Y)
+		var rot: float = deg_to_rad(Motion.css_keyframe(u, AT, ROT))
+		var base: Vector2 = Vector2(size.x * 0.5, size.y)
+		draw_set_transform(base, rot, Vector2(1.0, sy))
+		# The radial gradient, read as three stacked drops: hot core high,
+		# amber body, dark root — plus the 22px shed onto the stone.
+		draw_circle(Vector2(0, -5), 9.0, Color(HALO_SHED, a * 0.16))
+		draw_circle(Vector2(0, -4), 6.0, Color(ROOT, a * 0.85))
+		draw_circle(Vector2(0, -7), 4.6, Color(MID, a * 0.95))
+		draw_circle(Vector2(0, -10), 2.4, Color(CORE, a))
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+	const HALO_SHED: Color = Color(1.0, 0.5882353, 0.27450982)
 
 
 static func _label(text: String, font_size: int, colour: Color) -> Label:
