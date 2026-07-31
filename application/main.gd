@@ -793,7 +793,13 @@ func _on_node_chosen(i: int) -> void:
 		_show_hollow()
 		return
 	match n.type:
-		"monster", "elite", "boss": _prepare_encounter(n)
+		"monster", "elite", "boss":
+			# The iris covers at the chosen waystone and reveals over the
+			# arriving fight (map.js:296). The wipe still fires beneath it,
+			# unseen — the benchmark runs both.
+			if _map_screen != null:
+				_transitions.iris(_map_screen.chosen_point())
+			_prepare_encounter(n)
 		"rest": _show_rest()
 		"event": _show_event()
 		"shop": _show_shop()

@@ -42,6 +42,9 @@ var _cam_target: float = CAMERA_LEAD
 var _cam_velocity: float = 0.0
 var _dragging: bool = false
 var _travelling: bool = false
+## Where the last chosen waystone sat on screen, for the combat iris to
+## collapse into. INF until a choice has been made.
+var _chosen_at: Vector2 = Vector2.INF
 var _waystones: Array[GlassWaystone] = []
 var _ash: Array[Vector3] = []    # x, y, fall speed
 var _hint_label: Label
@@ -271,6 +274,8 @@ func _on_waystone_chosen(i: int) -> void:
 func choose(i: int) -> bool:
 	if _travelling or not map.enter(i):
 		return false
+	if i >= 0 and i < _waystones.size():
+		_chosen_at = _waystones[i].get_global_rect().get_center()
 	for ws: GlassWaystone in _waystones:
 		ws.set_state(false, ws.cleared)  # travel locks the road
 	if instant:
@@ -284,6 +289,14 @@ func choose(i: int) -> bool:
 func _on_arrived(i: int) -> void:
 	_travelling = false
 	node_chosen.emit(i)
+
+
+## The screen point the combat iris collapses into — the chosen waystone's
+## centre, or the stage centre before any choice was made.
+func chosen_point() -> Vector2:
+	if _chosen_at == Vector2.INF:
+		return size * 0.5
+	return _chosen_at
 
 
 # ---------------------------------------------------------------- frame

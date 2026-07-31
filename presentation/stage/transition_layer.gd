@@ -27,6 +27,28 @@ const WIPE_WIDTH: float = 2.8
 ## `screenIn` (styles.css:141-142): 0.45s, fade with a 1.015 settle.
 const SCREEN_IN_TIME: float = 0.45
 const SCREEN_IN_SCALE: float = 1.015
+## `combat-in` (navigation.js:44-49): the dark disc collapses into the click
+## point over 480ms — cover is immediate, the reveal is the animation. CSS
+## `circle(150%)` resolves past any corner from any centre; 1.5× the stage
+## diagonal does the same here.
+const IRIS_TIME: float = 0.48
+const IRIS_SPAN: float = 1.5
+
+## The `.tr-iris` ink (`#05070e`, styles.css:1533), drawn as an annulus by
+## shader rather than by clip: dark inside the radius, nothing outside.
+const IRIS_SHADER: String = """
+shader_type canvas_item;
+
+uniform vec2 centre = vec2(0.0, 0.0);
+uniform float radius = 0.0;
+uniform vec2 rect_size = vec2(1.0, 1.0);
+uniform vec4 ink : source_color = vec4(0.0196, 0.0275, 0.0549, 1.0);
+
+void fragment() {
+	float d = distance(UV * rect_size, centre);
+	COLOR = vec4(ink.rgb, ink.a * (1.0 - smoothstep(radius - 0.75, radius + 0.75, d)));
+}
+"""
 ## `#grain` (styles.css:74-81): whole-pixel jitter jumps, eight per 0.9s —
 ## the same table `CombatScreen` carries, duplicated by the shared-surface
 ## rule rather than reached across the lane boundary.
@@ -64,10 +86,15 @@ void fragment() {
 var instant: bool = false
 
 var _wipe: TextureRect
+var _iris: ColorRect
+var _iris_mat: ShaderMaterial
 var _grain: ColorRect
 var _grain_mat: ShaderMaterial
 var _grain_t: float = 0.0
 var _wipe_tween: Tween = null
+## The transit-slot guard, `navigation.js`'s `transitionSeq`: a later leaf
+## takes the slot and an earlier one's finish must not hide it.
+var _transit_seq: int = 0
 
 
 func _init() -> void:
@@ -78,6 +105,16 @@ func _init() -> void:
 	_wipe.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_wipe.visible = false
 	add_child(_wipe)
+	var iris_sh: Shader = Shader.new()
+	iris_sh.code = IRIS_SHADER
+	_iris_mat = ShaderMaterial.new()
+	_iris_mat.shader = iris_sh
+	_iris = ColorRect.new()
+	_iris.material = _iris_mat
+	_iris.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_iris.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_iris.visible = false
+	add_child(_iris)
 	var sh: Shader = Shader.new()
 	sh.code = GRAIN_SHADER
 	_grain_mat = ShaderMaterial.new()
@@ -154,6 +191,35 @@ func screen_in(root: Control) -> void:
 	Motion.bez(root, entrance, SCREEN_IN_TIME, Motion.SCREEN_IN)
 
 
+## The combat entry: dark covers the screen the moment this is called, then
+## collapses into `at` (stage px) while the fight builds underneath — the
+## route swap's frame hitch happens under the cover, which is the point.
+func iris(at: Vector2) -> void:
+	if instant:
+		return
+	var stage: Vector2 = _stage_size()
+	if stage.x <= 0.0:
+		return
+	_transit_seq += 1
+	_iris_mat.set_shader_parameter("rect_size", stage)
+	_iris_mat.set_shader_parameter("centre", at)
+	var full: float = stage.length() * IRIS_SPAN
+	_iris_mat.set_shader_parameter("radius", full)
+	_iris.visible = true
+	var tw: Tween = Motion.bez(self, _shrink_iris.bind(full), IRIS_TIME, Motion.TRANSIT)
+	tw.finished.connect(_end_transit.bind(_transit_seq), CONNECT_ONE_SHOT)
+
+
+func _shrink_iris(eased: float, full: float) -> void:
+	_iris_mat.set_shader_parameter("radius", full * (1.0 - eased))
+
+
+func _end_transit(seq: int) -> void:
+	if seq != _transit_seq:
+		return
+	_iris.visible = false
+
+
 func set_grain(on: bool) -> void:
 	_grain.visible = on
 
@@ -165,6 +231,8 @@ func clear() -> void:
 		_wipe_tween.kill()
 		_wipe_tween = null
 	_wipe.visible = false
+	_transit_seq += 1
+	_iris.visible = false
 
 
 func _stage_size() -> Vector2:
