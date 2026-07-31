@@ -1771,6 +1771,11 @@ func _on_card_drag_armed(uid: int) -> void:
 	_selected_uid = uid if _targeting else -1
 	_aim_hover = -1
 	_hand.arm_seat(_selected_uid)
+	# `if (E.canKindle(...)) lantern.classList.add('kindle-target')`
+	# (combat.js:1140) — the lantern calls for a burnable card in the air.
+	var inst: CardInst = _find_card(uid)
+	_hud.set_kindle_target(
+		inst != null and _rules.can_kindle(game.run, game.cb, inst))
 	_update_previews()
 
 
@@ -1796,6 +1801,8 @@ func _on_card_drag_moved(uid: int, global_pos: Vector2) -> void:
 func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	_aim.clear_aim()
 	_aim_hover = -1
+	# The card has left the air, whatever happens next (combat.js:1062).
+	_hud.set_kindle_target(false)
 	# The drag armed it (see `_on_card_drag_armed`), so the drag disarms it. Not
 	# `_cancel_targeting`: that snaps every seat home, and the card being released
 	# is mid-flight to a foe or mid-snap-back on its own clock.
@@ -1810,6 +1817,8 @@ func _on_card_drag_released(uid: int, global_pos: Vector2) -> void:
 	if _hud.lantern_rect().has_point(global_pos):
 		if request_kindle(uid):
 			return
+		# Dropped ON the lantern and refused — the lantern says no out loud.
+		_hud.nope()
 	elif view.target_kind == "enemy":
 		var idx: int = _enemy_at(global_pos)
 		if idx >= 0 and request_play(uid, idx):
@@ -1850,6 +1859,9 @@ func _on_art_pressed() -> void:
 	if _rules.can_use_art(game.run, game.cb):
 		seq.enqueue(game.apply({"t": "useArt"}))
 	else:
+		# `ce.lantern.classList.add('nope')` (combat.js:336) — the widget that
+		# refused says so itself, alongside the sound.
+		_hud.nope()
 		_sfx.play(&"debuff")
 
 
@@ -2863,6 +2875,9 @@ func _push_hud() -> void:
 		_rules.can_use_art(game.run, cb),
 		cb.ember_cap,
 		cb.art_used_turn == cb.turn)
+	# `ce.endTurn.classList.toggle('ready', P.energy === 0 && !cb.over && !S.busy)`
+	# (combat.js:779) — busy is the HUD's own `_locked`, checked at the pulse.
+	_hud.set_end_ready(cb.player.energy == 0 and not cb.over)
 	# The strip's middle carries the place. The turn rides its dim tail — the
 	# benchmark's own bar has no seat for a number it does not show, and the
 	# tail is the honest one (assembly-integration-plan.md D3).
@@ -2882,6 +2897,7 @@ func _on_busy_changed(busy: bool) -> void:
 	if locked:
 		_aim.clear_aim()
 		_hand.cancel_drag()
+		_hud.set_kindle_target(false)
 		_aim_hover = -1
 		_clear_previews()
 	if not busy:

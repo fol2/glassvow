@@ -135,6 +135,31 @@ const LANTERN_CAP_MAX: int = 12
 const LANTERN_PIP_SIDE: float = 5.0
 const LANTERN_PIP_RADIUS: float = 50.0
 
+## The HUD's beacons. `artReady` 1.6s ease-in-out infinite — brightness 1.22
+## with a 14px amber halo at the 50% mark — beckons from BOTH "you can act"
+## seats: the lantern when the art can be spent (styles.css:1116-1118) and the
+## END seal once the energy is gone (styles.css:1352-1354). `kindleCall` 1.1s is
+## the lantern as a drop target while a burnable card is in the air: brighter,
+## a wider halo, and a 1.07 swell (styles.css:1123-1124).
+const ART_READY_TIME: float = 1.6
+const ART_READY_BRIGHT: float = 1.22
+const KINDLE_TIME: float = 1.1
+const KINDLE_BRIGHT: float = 1.2
+const KINDLE_SCALE: float = 1.07
+## `.lbp { transition: background .25s, box-shadow .25s }` (styles.css:1112) —
+## an ember pip fades between its two readings rather than snapping.
+const LBP_BLEND: float = 0.25
+## `.end-turn`/`.pile-btn` hover glides — `transition: transform .15s, filter
+## .15s`, −1px/−3px lift with brightness 1.08 (styles.css:1344-1349, :1403).
+const HOVER_TIME: float = 0.15
+const HOVER_BRIGHT: Color = Color(1.08, 1.08, 1.08, 1.0)
+## `nope` 0.32s ease — the refusal shake, shared with the hand's cards
+## (styles.css:610-611).
+const NOPE_TIME: float = 0.32
+const NOPE_AT: Array[float] = [0.0, 0.25, 0.65, 1.0]
+const NOPE_X: Array[float] = [0.0, -7.0, 7.0, 0.0]
+const NOPE_ROT: Array[float] = [0.0, -1.5, 1.5, 0.0]
+
 static var _tex_cache: Dictionary = {}
 static var _font_cache: Dictionary = {}
 
@@ -191,8 +216,30 @@ var _lantern_count: Label
 var _lantern_art: TextureRect
 var _lantern_glow: TextureRect
 var _lantern_pips: Array[TextureRect] = []
+## The lantern's inner frame (`shell`) and its button body — the shell takes
+## the `nope` shove and the beacon brightness, the body takes the tilt and the
+## kindle swell, because the shell's scale is the shape adapter and its pivot
+## must stay at the origin.
+var _lantern_shell: Control
+var _lantern_body: Button
+var _lantern_ready: bool = false
+var _kindle_target: bool = false
+## Per-pip .25s crossfade state — from, target, and progress.
+var _pip_from: Array[Color] = []
+var _pip_target: Array[Color] = []
+var _pip_u: Array[float] = []
+var _pips_live: bool = false
+var _nope_tween: Tween = null
 ## The END seal's own root — dimmed while the queue drains.
 var _end_turn: Control
+var _end_shell: Control
+var _end_glow: TextureRect
+var _end_ready: bool = false
+var _locked: bool = false
+## One clock for both artReady beacons, so the lantern and the seal breathe in
+## phase the way two CSS animations started the same frame do.
+var _beacon_t: float = 0.0
+var _hover_tw: Dictionary = {}
 var _draw_pile: Pile
 var _ashes_pile: Pile
 var _discard_pile: Pile
@@ -452,13 +499,31 @@ func set_lantern(charges: int, ready: bool, cap: int = 9, spent: bool = false) -
 		pip.position = Vector2(52.0, 52.0) \
 			+ Vector2(sin(angle), -cos(angle)) * LANTERN_PIP_RADIUS \
 			- Vector2.ONE * (LANTERN_PIP_SIDE * 0.5)
-		pip.modulate = Color(1.0, 0.70, 0.35) if i < charges \
-			else Color(0.47, 0.39, 0.27, 0.35)
+		# `.lbp` blends between its readings over .25s; the build itself snaps,
+		# because a DOM element is born wearing its classes.
+		_pip_to(i, Color(1.0, 0.70, 0.35) if i < charges \
+			else Color(0.47, 0.39, 0.27, 0.35))
+	_pips_live = true
+	_lantern_ready = ready
 	# .lantern-btn.unlit { filter: saturate(.55) brightness(.82) }
 	_lantern.modulate = Color.WHITE if ready else Color(0.80, 0.82, 0.86)
 	_lantern_glow.modulate.a = 1.0 if ready else 0.45
 	# .lantern-btn.art-spent .lb-ic { opacity: .35 }
 	_lantern_art.modulate.a = 0.35 if spent else 1.0
+
+
+## Aim (or snap) one ember pip's tint. Progress is stepped in `_process`.
+func _pip_to(i: int, want: Color) -> void:
+	if _pip_target[i].is_equal_approx(want):
+		return
+	_pip_target[i] = want
+	if not _pips_live:
+		_lantern_pips[i].modulate = want
+		_pip_from[i] = want
+		_pip_u[i] = 1.0
+		return
+	_pip_from[i] = _lantern_pips[i].modulate
+	_pip_u[i] = 0.0
 
 
 # ---------------------------------------------------------------- top bar
@@ -786,6 +851,7 @@ func _build_energy() -> void:
 func _build_lantern() -> void:
 	_lantern = Control.new()
 	var shell: Control = _place_widget(_lantern, "lantern", Vector2(104.0, 104.0))
+	_lantern_shell = shell
 	add_child(_lantern)
 	_chrome_in.append(_lantern)
 	# The benchmark drop-shadows the lantern in its own firelight; a soft radial
@@ -804,6 +870,7 @@ func _build_lantern() -> void:
 	btn.tooltip_text = "Lantern — spend a charge"
 	btn.pressed.connect(func() -> void: lantern_pressed.emit())
 	shell.add_child(btn)
+	_lantern_body = btn
 	_lantern_art = _icon_rect("ui/lantern", 94.0)
 	_lantern_art.position = Vector2(5.0, 5.0)
 	btn.add_child(_lantern_art)
@@ -830,6 +897,9 @@ func _build_lantern() -> void:
 		pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		shell.add_child(pip)
 		_lantern_pips.append(pip)
+		_pip_from.append(Color.WHITE)
+		_pip_target.append(Color.WHITE)
+		_pip_u.append(1.0)
 	set_lantern(0, false)
 
 
@@ -849,6 +919,9 @@ func _build_pile(which: StringName, name_text: String, fade: float) -> Pile:
 	var btn: Button = _bare_button(box)
 	btn.pressed.connect(func() -> void: pile_pressed.emit(which))
 	shell.add_child(btn)
+	# `.pile-btn:hover { transform: translateY(-3px); filter: brightness(1.08) }`
+	# on the same .15s glide (styles.css:1403).
+	_hover_glide(btn, shell, 3.0)
 
 	var p: Pile = Pile.new()
 	p.stack = Fan.new()
@@ -905,11 +978,138 @@ func pile_rect(which: StringName) -> Rect2:
 ## seal dims to 0.45 and stops taking the pointer. The screen already refuses a
 ## press while the pump is busy; this is the half that says so.
 func set_locked(locked: bool) -> void:
+	_locked = locked
 	if _end_turn == null:
 		return
 	_end_turn.modulate.a = 0.45 if locked else 1.0
 	_end_turn.mouse_filter = Control.MOUSE_FILTER_IGNORE if locked \
 		else Control.MOUSE_FILTER_PASS
+	# `.end-turn.enemy-phase { animation: none }` — a seal that cannot be
+	# pressed does not beckon (styles.css:1394).
+	if locked and _end_glow != null:
+		_end_glow.modulate.a = 0.0
+
+
+## `.end-turn.ready` — the energy is spent and the fight is live, so the seal
+## beckons on the same `artReady` breath as the lantern (combat.js:779).
+func set_end_ready(on: bool) -> void:
+	if _end_ready == on:
+		return
+	_end_ready = on
+	if not on and _end_glow != null:
+		_end_glow.modulate.a = 0.0
+
+
+## `.lantern-btn.kindle-target` — a burnable card is in the air and the lantern
+## calls for it: brighter, wider halo, a 1.07 swell (combat.js:1127, :1140).
+func set_kindle_target(on: bool) -> void:
+	if _kindle_target == on:
+		return
+	_kindle_target = on
+	if not on:
+		_lantern_neutral()
+
+
+## The lantern at rest — every beacon channel returned to what `set_lantern`
+## last said. Called when a pulse ends, never per frame.
+func _lantern_neutral() -> void:
+	if _lantern_shell == null:
+		return
+	_lantern_shell.modulate = Color.WHITE
+	if _lantern_body != null:
+		_lantern_body.scale = Vector2.ONE
+	_lantern_glow.scale = Vector2.ONE
+	_lantern_glow.modulate.a = 1.0 if _lantern_ready else 0.45
+
+
+## `@keyframes nope` — the refusal shake, 0.32s ease: −7px/−1.5° at 25%,
+## +7px/+1.5° at 65%, home (styles.css:610-611). The shell takes the shove and
+## the body the tilt, because the shell's pivot is the shape adapter's origin
+## and must not move.
+func nope() -> void:
+	if _lantern_shell == null or not is_inside_tree():
+		return
+	if _nope_tween != null and _nope_tween.is_valid():
+		_nope_tween.kill()
+		_nope_at(1.0)
+	_lantern_body.pivot_offset = _lantern_body.size * 0.5
+	_nope_tween = create_tween()
+	_nope_tween.tween_method(_nope_at, 0.0, 1.0, NOPE_TIME).set_trans(Tween.TRANS_LINEAR)
+
+
+func _nope_at(u: float) -> void:
+	if _lantern_shell == null or _lantern_body == null:
+		return
+	_lantern_shell.position.x = Motion.css_keyframe(u, NOPE_AT, NOPE_X, Motion.CSS_EASE)
+	_lantern_body.rotation_degrees = Motion.css_keyframe(u, NOPE_AT, NOPE_ROT, Motion.CSS_EASE)
+
+
+## The beacons' one clock, and the pip blends. 17.6s is a common multiple of
+## both pulse periods, so the wrap is invisible to either. One clock for both
+## `artReady` seats keeps the lantern and the seal breathing in phase, the way
+## two CSS animations started on the same frame do.
+func _process(delta: float) -> void:
+	_beacon_t = fmod(_beacon_t + delta, 17.6)
+	var pstep: float = delta / LBP_BLEND
+	for i: int in range(_lantern_pips.size()):
+		if _pip_u[i] < 1.0:
+			_pip_u[i] = minf(1.0, _pip_u[i] + pstep)
+			_lantern_pips[i].modulate = _pip_from[i].lerp(_pip_target[i], _pip_u[i])
+	if _lantern_shell != null:
+		if _kindle_target:
+			var p: float = Motion.css_pulse(
+				fmod(_beacon_t, KINDLE_TIME) / KINDLE_TIME, 0.0, 1.0)
+			_lantern_shell.modulate = Color.WHITE.lerp(
+				Color(KINDLE_BRIGHT, KINDLE_BRIGHT, KINDLE_BRIGHT), p)
+			_lantern_body.pivot_offset = _lantern_body.size * 0.5
+			_lantern_body.scale = Vector2.ONE * lerpf(1.0, KINDLE_SCALE, p)
+			_lantern_glow.pivot_offset = _lantern_glow.size * 0.5
+			_lantern_glow.scale = Vector2.ONE * lerpf(1.0, 1.4, p)
+			_lantern_glow.modulate.a = lerpf(0.6, 1.0, p)
+		elif _lantern_ready:
+			var p: float = Motion.css_pulse(
+				fmod(_beacon_t, ART_READY_TIME) / ART_READY_TIME, 0.0, 1.0)
+			_lantern_shell.modulate = Color.WHITE.lerp(
+				Color(ART_READY_BRIGHT, ART_READY_BRIGHT, ART_READY_BRIGHT), p)
+			_lantern_glow.pivot_offset = _lantern_glow.size * 0.5
+			_lantern_glow.scale = Vector2.ONE * lerpf(1.0, 1.28, p)
+		elif not _lantern_shell.modulate.is_equal_approx(Color.WHITE) \
+				or _lantern_body.scale != Vector2.ONE:
+			_lantern_neutral()
+	# The seal's beckon lives on its halo alone: hover owns the shell's own
+	# modulate, and two writers on one channel is how a glide gets stomped.
+	if _end_glow != null:
+		if _end_ready and not _locked:
+			var p: float = Motion.css_pulse(
+				fmod(_beacon_t, ART_READY_TIME) / ART_READY_TIME, 0.0, 1.0)
+			_end_glow.pivot_offset = _end_glow.size * 0.5
+			_end_glow.scale = Vector2.ONE * lerpf(1.0, 1.28, p)
+			_end_glow.modulate.a = p
+		elif (not _end_ready or _locked) and _end_glow.modulate.a > 0.0:
+			_end_glow.modulate.a = 0.0
+
+
+## Hover glide — `transition: transform .15s, filter .15s` on the stylesheet's
+## own `ease`: the host lifts `lift` px and brightens 1.08 while the pointer
+## rests on it.
+func _hover_glide(btn: Button, host: Control, lift: float) -> void:
+	btn.mouse_entered.connect(func() -> void: _glide(host, -lift, HOVER_BRIGHT))
+	btn.mouse_exited.connect(func() -> void: _glide(host, 0.0, Color.WHITE))
+
+
+func _glide(host: Control, to_y: float, tint: Color) -> void:
+	var prev: Variant = _hover_tw.get(host)
+	if prev is Tween:
+		var prev_tw: Tween = prev
+		if prev_tw.is_valid():
+			prev_tw.kill()
+	var from_y: float = host.position.y
+	var from_c: Color = host.modulate
+	_hover_tw[host] = Motion.bez(host,
+		func(s: float) -> void:
+			host.position.y = lerpf(from_y, to_y, s)
+			host.modulate = from_c.lerp(tint, s),
+		HOVER_TIME, Motion.CSS_EASE)
 
 
 ## `chromeIn` (styles.css:741) — the furniture rises 44px into place a beat
@@ -1069,9 +1269,25 @@ func _build_end_turn() -> void:
 	add_child(root)
 	_chrome_in.append(root)
 	_end_turn = root
+	_end_shell = shell
+	# The `.ready` beckon's halo — the drop-shadow the stylesheet paints when
+	# the energy is spent, as a radial behind the seal. Dark at rest.
+	_end_glow = TextureRect.new()
+	_end_glow.texture = GlassStyle.grad_tex(
+		PackedColorArray([Color(1.0, 0.745, 0.353, 0.55), Color(1.0, 0.706, 0.314, 0.0)]),
+		PackedFloat32Array([0.0, 1.0]), true, Vector2(0.5, 0.5), Vector2(1.0, 0.5))
+	_end_glow.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_end_glow.stretch_mode = TextureRect.STRETCH_SCALE
+	_end_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_end_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_end_glow.modulate.a = 0.0
+	shell.add_child(_end_glow)
 	var btn: Button = _bare_button(Vector2(120.0, 120.0))
 	btn.pressed.connect(func() -> void: end_turn_pressed.emit())
 	shell.add_child(btn)
+	# `.end-turn { transition: transform .15s, filter .15s }` with hover
+	# translateY(-1px) brightness(1.08) (styles.css:1344-1349).
+	_hover_glide(btn, shell, 1.0)
 	btn.add_child(_icon_rect("ui/end-turn", 120.0))
 	var lbl: Label = _num_label(18.0, PALE, GlassStyle.CINZEL_800, 3)
 	lbl.text = "END"
