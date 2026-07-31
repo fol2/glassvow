@@ -1,7 +1,14 @@
 # Port status & handoff
 
-Living status for the Glassvow Godot port. Spec = the frozen web engine
-(`roguecardv2` @ tag `web-reference-v1`, HEAD `2068b76c`) — mirror `engine.js`.
+Living status for the Glassvow Godot port. Two authorities, not one:
+
+- **Domain/engine spec** = the web engine the fixtures were captured from
+  (`roguecardv2` @ `2068b76c`, pinned by `port_fixtures/manifest.json`) —
+  mirror `engine.js` behaviour, proven by trace replay.
+- **Visual standard** = the pre-Pixi benchmark **`6e06911`** at
+  `~/Coding/roguecardv2-benchmark` (localhost:5190). Web `main` /
+  `web-reference-v1` is post-Pixi and a visual regression — never read
+  parity specs from it (see CLAUDE.md › THE REFERENCE).
 
 ## Done (all green, pushed)
 
@@ -44,7 +51,10 @@ preview mirror in lockstep.
   gated). The trace replayer computes all 16 reward rows live (gold, cards,
   potion, relic, rngState). Law was pinned first with a Node scratch harness
   against the frozen engine — do that for any future rng-order question.
-- **M4b saves**: `user://glassvow_save_v1.json` lineage; validation is pure
+- **M4b saves**: `user://glassvow_save_v1.json` lineage *(historical — the
+  shipping lineage is now the v2 pair, `user://glassvow_run_v2.json` +
+  `user://glassvow_vigil_v2.json`; v1 is deliberately not read or migrated,
+  see `application/save_service.gd`)*; validation is pure
   domain (`RunState.from_save_dict`): envelope v==1 → id shield (unknown
   card/relic/potion/art/omen/reveal rejects the whole save) → additive heals
   (art/unlocks/omens/boon/bossRelicAct/shards) → reveals check → per-act omen

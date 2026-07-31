@@ -100,7 +100,7 @@ tweened onto it (`enemy_view.gd:589` (`KIND_IDLE`); applied at
 Two things the port did not previously distinguish. **CSS eases every keyframe
 interval**, not once across the iteration the way a WAAPI list does, so
 `idleSlime`'s three stops are three eased segments — `Motion.css_keyframe` is
-that contract and `Motion.keyframe` is the other one (`motion.gd:75` (`css_keyframe`)). And
+that contract and `Motion.keyframe` is the other one (`motion.gd:102` (`css_keyframe`)). And
 **`idleSlime` does leave the ground**, briefly, and also sinks below it; the
 shadow reads `max(0, y)` exactly as `spriteLiftPx` does, so the dip is its own
 beat rather than a shadow underground.

@@ -4,7 +4,11 @@ Authoritative list, read out of the benchmark worktree at
 `../roguecardv2-prepixi` — `src/packs/core/cards.js` for the definitions and
 `src/i18n/en/content.js` for the display names.
 
-**`x` = present in the Godot slice** (`port_fixtures/content/slice-content.json`).
+**`x` = present in the immutable test slice** (`port_fixtures/content/slice-content.json`).
+The slice is what the parity suites replay; it is NOT the shipping catalogue.
+**The runtime game carries all 61 cards** in `content/full-content.json`
+(landed with the three-act programme, `aabb0c0`) — a card without an `x` here
+is absent from the fixtures, not from the game.
 
 Names and ids diverge hard here, which is the point of SKILL.md §3: ids are
 frozen save keys, names are locale data. `strike` is "Edge", `cleave` is
@@ -12,8 +16,10 @@ frozen save keys, names are locale data. `strike` is "Edge", `cleave` is
 expecting the id to match will look like invented content when it is not — every
 card in the slice was verified against this list, and all 18 match on rarity too.
 
-Rarity coverage: starter 6/7, common 3/11, uncommon 6/22, **rare 0/17**,
-special 3/4. The whole rare tier is unported.
+Slice rarity coverage: starter 6/7, common 3/11, uncommon 6/22, **rare 0/17**,
+special 3/4. The rare tier never entered the fixtures — the traces were
+recorded on starter-and-common fights — so rare-card behaviour is covered by
+`validate()` and play, not by trace replay.
 
 | | Name | id | Rarity | Type | Cost |
 |---|---|---|---|---|---|

@@ -27,7 +27,7 @@ description: Binding contract for working in the glassvow Godot repo — engine 
 
 **Internal StringName IDs frozen:** Card, relic, enemy, status, and ability IDs are engine-internal constants (e.g. `poison`, `vulnerable`, `str`, `strike`, `leech`). Once M4 lands, these IDs never change — saves depend on them. Changes to an ID require a migration step or a new save-version envelope.
 
-**Display names are locale data:** Render "Block" instead of "defend"? Change `locale/en.json` `{"status": {"defend": "Block"}}`, never the internal key `defend`. This separation protects cross-version save loading.
+**Display names are locale data:** Render "Block" instead of "defend"? Change the display string, never the internal key `defend`. This separation protects cross-version save loading. Today display names live in the content catalogue's `name`/text fields (`content/full-content.json`); the dedicated locale layer (`locale/en.json`, `locale/zh-Hant.json`) is the planned home once the localisation workstream lands — the invariant is the same either way.
 
 ## 4. Editing Methods
 
@@ -96,7 +96,7 @@ Dictionaries compare natively against the JSON parity fixtures and survive seria
 
 ## 8. Save Compatibility
 
-**Lineage:** `user://glassvow_save_v1.json` is the new save envelope (Godot, not web). Once M4 ships, the schema is frozen. Any breaking change requires a version bump and a migration handler in `SaveService`.
+**Lineage:** the live envelope is the v2 pair — `user://glassvow_run_v2.json` (run) and `user://glassvow_vigil_v2.json` (meta). The v1 lineage is deliberately not read or migrated (`application/save_service.gd`). The v2 schema is frozen; any breaking change requires a version bump and a migration handler in `SaveService`.
 
 **Web saves never migrate:** Users porting from web restart at the beginning; progress doesn't carry over (the map is redesigned anyway).
 
