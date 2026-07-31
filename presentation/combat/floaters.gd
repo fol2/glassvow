@@ -295,6 +295,7 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	var spring: bool = false
 	var slide: Vector2 = Vector2(-24.0, 0.0)
 	var dur: float = DUR_CEREMONY
+	var wrap: bool = false
 	match kind:
 		"boss":
 			w = minf(room, clampf(float(longest) * 22.0, 340.0, 720.0))
@@ -327,10 +328,32 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 		"guard-shattered":
 			rail = Color(0.62352943, 0.83137256, 1.0)
 		"variant":
+			# `.variant-dialogue` (styles.css:1482-1487): prose on near-opaque
+			# night glass (#080a12 at 0.94) behind a pale leaded line
+			# (rgba(210,226,255,.48)), capped at min(660px, 86cqw). These are
+			# spoken lines, not titles — the label wraps inside the plate
+			# instead of demanding one line of stage.
+			w = minf(room, minf(size.x * 0.86,
+				clampf(float(longest) * 14.0, 320.0, 660.0)))
+			body = Color(0.03137255, 0.039215688, 0.07058824, 0.94)
+			rail = Color(0.8235294, 0.8862745, 1.0, 0.48)
 			inset = Color(0.101960786, 0.13333334, 0.2, 0.35)
+			wrap = true
 		_:
 			if lines.size() > 1:
 				h = 72.0
+
+	var face: FontFile = display_font()
+	if wrap and face != null:
+		# The plate must be tall enough BEFORE it is built — a Label wraps at
+		# layout time, after the plate has already committed to 56px. Measured
+		# with the same face at the same size, against the width the text will
+		# actually get (28px insets each side, the port's read of the
+		# benchmark's 40px padding at its own scale).
+		var text_w: float = face.get_string_size(
+			text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, label_size).x
+		var rows: int = maxi(1, int(ceilf(text_w / maxf(1.0, w - 56.0))))
+		h = 56.0 + float(rows - 1) * 34.0
 
 	var plate: BannerPlate = BannerPlate.new()
 	plate.body = body
@@ -349,7 +372,10 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_preset(Control.PRESET_FULL_RECT)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var face: FontFile = display_font()
+	if wrap:
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.offset_left = 28.0
+		label.offset_right = -28.0
 	if face != null:
 		label.add_theme_font_override("font", face)
 	label.add_theme_font_size_override("font_size", label_size)
