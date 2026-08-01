@@ -360,7 +360,8 @@ static func _action(text: String, primary: bool) -> Button:
 static func _step_button(text: String) -> Button:
 	var button: Button = Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(34, 34)
+	var side: float = RunStyle.hit_floor(34.0)
+	button.custom_minimum_size = Vector2(side, side)
 	button.add_theme_font_size_override("font_size", 20)
 	RunStyle.style_button(button, false, RunStyle.GOLD, true)
 	return button

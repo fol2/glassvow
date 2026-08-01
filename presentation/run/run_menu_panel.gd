@@ -96,7 +96,8 @@ func _button(label: String, colour: Color = RunStyle.TEXT,
 	var button: Button = Button.new()
 	button.text = label
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.custom_minimum_size.y = 44.0 if shape.begins_with("phone") else 34.0
+	button.custom_minimum_size.y = RunStyle.hit_floor(
+		44.0 if shape.begins_with("phone") else 34.0)
 	button.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
 	button.add_theme_font_size_override("font_size", 14)
 	button.add_theme_color_override("font_color", colour)
@@ -125,7 +126,7 @@ func _apply_shape() -> void:
 	_panel.offset_bottom = top
 	for child: Node in _panel.get_child(0).get_children():
 		var button: Button = child as Button
-		button.custom_minimum_size.y = 44.0 if phone else 34.0
+		button.custom_minimum_size.y = RunStyle.hit_floor(44.0 if phone else 34.0)
 
 
 static func _panel_style() -> StyleBoxFlat:

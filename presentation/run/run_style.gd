@@ -51,6 +51,16 @@ static func panel(radius: int = 12, inset: float = 16.0,
 	return style
 
 
+## matchMedia('(pointer: coarse)') — a 44px floor for touch targets, applied
+## only when a touchscreen is all there is (combat_screen.gd:1772 precedent).
+## Grows the hit rect, never the art.
+static func hit_floor(px: float) -> float:
+	if DisplayServer.is_touchscreen_available() \
+			and not DisplayServer.has_feature(DisplayServer.FEATURE_MOUSE):
+		return maxf(px, 44.0)
+	return px
+
+
 static func style_button(button: Button, primary: bool = false,
 		accent: Color = GOLD, compact: bool = false) -> void:
 	var vertical: float = 4.0 if compact else 8.0
