@@ -26,6 +26,8 @@ var _title: Label
 var _stats_grid: GridContainer
 var _bequest_grid: GridContainer
 var _grave_plate: ColorRect
+var _rise_tween: Tween = null
+var _rise_snapped: bool = false
 
 
 func _init(outcome: String, stats: Dictionary, bequest_choices: Array,
@@ -69,15 +71,31 @@ func _ready() -> void:
 		return
 	var base_y: float = _panel.position.y
 	_panel.position.y = base_y + 46.0
+	resized.connect(_on_rise_resized)
 	await get_tree().create_timer(0.4).timeout
-	if not is_instance_valid(_panel):
+	if not is_instance_valid(_panel) or _rise_snapped:
 		return
-	Motion.bez(self, func(t: float) -> void:
+	_rise_tween = Motion.bez(self, func(t: float) -> void:
 		if not is_instance_valid(_panel):
 			return
 		_panel.modulate.a = t
 		_panel.position.y = base_y + 46.0 * (1.0 - t)
 	, 1.6, MONUMENT_RISE)
+
+
+func _on_rise_resized() -> void:
+	# A resize re-seats the CenterContainer; writing against the captured base_y
+	# would strand the monument. Snap to the container's fresh seat instead —
+	# during the 0.4s hold too, where base_y is already stale before the tween
+	# even starts.
+	if _rise_snapped:
+		return
+	_rise_snapped = true
+	if _rise_tween != null and is_instance_valid(_rise_tween) and _rise_tween.is_running():
+		_rise_tween.kill()
+	_rise_tween = null
+	if is_instance_valid(_panel):
+		_panel.modulate.a = 1.0
 
 
 func _build() -> void:
@@ -88,6 +106,11 @@ func _build() -> void:
 		_add_meta_backdrop(FALLEN)
 		# Between backdrop and vignette — the black plate that graveReveal
 		# dissolves. Reduce-motion never builds it (final state immediately).
+		# Opaque by design — a deliberate deviation. The reference's graveReveal
+		# swings only ≈(1.7, 2.1, 3.9) at the ellipse centre because its black sits
+		# behind a 75-96% radial and .meta-bg at 0.4 — this port's opaque plate
+		# swings ≈(9.5, 10.9, 12.3) by design, because the literal reading is the
+		# invisible nothing issue #18 complained about.
 		if not Preferences.active.reduce_motion:
 			_grave_plate = ColorRect.new()
 			_grave_plate.color = Color.BLACK
@@ -189,7 +212,7 @@ func _build_bequest() -> void:
 	_bequest_grid.columns = mini(4, _bequest_choices.size())
 	_bequest_grid.add_theme_constant_override("h_separation", 10)
 	_bequest_grid.add_theme_constant_override("v_separation", 8)
-	_bequest_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_bequest_grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_column.add_child(_bequest_grid)
 	for row_v: Variant in _bequest_choices:
 		var row: Dictionary = row_v

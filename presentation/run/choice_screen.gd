@@ -46,6 +46,7 @@ var shape: StringName = StageShape.IDENTITY
 
 var _panel_layout: Dictionary = {}
 var _first_button: Button = null
+var _cancel_button: Button = null
 var _panel: PanelContainer
 var _centre: CenterContainer
 var _column: VBoxContainer
@@ -380,6 +381,14 @@ func _build_title(tagline_text: String, choices: Array[Dictionary],
 		else:
 			_primary.add_child(button)
 			_primary_buttons.append(button)
+	# An odd count cannot balance a two-column grid — the orphan hangs in
+	# the left cell, off the stack axis. It spans the column instead
+	# (DL, issue #49: "three balanced rows").
+	if _utility_buttons.size() % 2 == 1 and _utility_buttons.size() > 1:
+		var orphan: Button = _utility_buttons[_utility_buttons.size() - 1]
+		_utility.remove_child(orphan)
+		_title_column.add_child(orphan)
+		_title_column.move_child(orphan, _utility.get_index() + 1)
 	_add_title_rose(context)
 
 	var stats: Label = Label.new()
@@ -514,6 +523,8 @@ func _wire_button(button: Button, id: String) -> void:
 	)
 	if _first_button == null and not button.disabled:
 		_first_button = button
+	if _cancel_button == null and id == _cancel_id and not _cancel_id.is_empty():
+		_cancel_button = button
 
 
 ## Optional safe cancel: context key `"cancel"` maps Escape onto that choice id.
@@ -530,8 +541,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _ready() -> void:
 	resized.connect(_fit)
 	_fit()
-	if _first_button != null:
-		_first_button.grab_focus()
+	var focus: Button = _cancel_button if _cancel_button != null else _first_button
+	if focus != null:
+		focus.grab_focus()
 	if _title_variant:
 		pivot_offset = size * 0.5
 		# REDUCE MOTION: the title arrives standing (`.logo { animation:
@@ -670,7 +682,7 @@ func _fit_title() -> void:
 	_title_column.add_theme_constant_override(
 		"separation", roundi(_title_num("gap", 8.0)))
 	_primary.columns = roundi(_title_num("primaryCols", 1.0))
-	_utility.columns = roundi(_title_num("utilityCols", 3.0))
+	_utility.columns = roundi(_title_num("utilityCols", 2.0))
 	var primary_pt: int = roundi(_title_num("primaryPt", 17.0))
 	var utility_pt: int = roundi(_title_num("utilityPt", 13.0))
 	var wrap_help: bool = _title_num("wrapHelp", 1.0) >= 1.0
