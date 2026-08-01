@@ -390,10 +390,24 @@ class Piece extends RefCounted:
 	var axis: Vector3
 	var rate: float          # rad/s, braked toward DRIFT_SPIN
 	var drift: Vector3       # the hang's own slow heading
+	var spoil: int = -1      # 0..2: one of the three chosen pieces
+	var area: float = 0.0
+
+## The three spoils are CHOSEN, not promoted: the three largest cells. As
+## the brake bites they turn to face the camera — their art and their word
+## must read flat — and their cut takes the ITEM'S colour, not the enemy's.
+## Lab stand-ins until the screen hands real spoils over.
+const SPOIL_TINTS: Array[Color] = [
+	Color(0.949, 0.757, 0.306),   # gold — the purse
+	Color(0.56, 0.82, 1.0),       # glass-blue — the card
+	Color(1.0, 0.60, 0.30),       # ember — the relic
+]
+const SPOIL_WORDS: Array[String] = ["GOLD", "CARD", "RELIC"]
 
 var _phase: int = REST
 var _t: float = 0.0
 var _pieces: Array[Piece] = []
+var _words: Array[Label] = []
 ## Stage 3's own material — the cut cools INTO the item's colour.
 const SHARD_SHADER_RES: Shader = preload("res://presentation/reward/reward_shard.gdshader")
 
@@ -445,9 +459,7 @@ func _process(delta: float) -> void:
 			# bite that leaves only the drift.
 			var braking: bool = _t > BURST
 			# COOL overlaps the brake (the plan's own timeline): molten at the
-			# moment of failure, glass again by the hold. Stage 3 replaces
-			# this straight ramp with the item-colour cooling; without it the
-			# hold reads as plywood — every fracture face still pouring WARM.
+			# moment of failure, glass again by the hold.
 			var cool: float = clampf((_t - BURST) / 0.40, 0.0, 1.0)
 			for piece: Piece in _pieces:
 				var mat: ShaderMaterial = \
@@ -459,7 +471,17 @@ func _process(delta: float) -> void:
 					piece.vel = piece.vel * bite + piece.drift * (1.0 - bite)
 					piece.rate = maxf(piece.rate * bite, DRIFT_SPIN)
 				piece.node.position += piece.vel * delta
-				piece.node.rotate(piece.axis, piece.rate * delta)
+				if piece.spoil >= 0 and braking:
+					# A spoil turns to FACE the camera as it brakes — its art
+					# and its word must read flat — and stays faced through
+					# the hold: the announcements are the one thing in the
+					# room excused from the drift.
+					var q_now: Quaternion = piece.node.quaternion
+					piece.node.quaternion = q_now.slerp(
+						Quaternion.IDENTITY, 1.0 - pow(0.002, delta / BRAKE))
+				else:
+					piece.node.rotate(piece.axis, piece.rate * delta)
+			_seat_words()
 
 
 ## The body comes apart: the husk hides in the same frame its pieces appear,
@@ -518,8 +540,68 @@ func _burst() -> void:
 		piece.drift = Vector3(
 			rng.next() - 0.5, rng.next() - 0.5, (rng.next() - 0.5) * 0.4
 		).normalized() * DRIFT_MOVE * (0.4 + 0.6 * rng.next())
+		var area: float = 0.0
+		for k: int in range(cell.size()):
+			var p2: Vector2 = cell[k]
+			var q2: Vector2 = cell[(k + 1) % cell.size()]
+			area += p2.x * q2.y - q2.x * p2.y
+		piece.area = absf(area) * 0.5
 		_pieces.append(piece)
 	_husk.visible = false
+	_choose_spoils()
+
+
+## The three spoils are the three LARGEST cells — chosen, not promoted.
+## Their cut takes the item's colour and their word follows them down the
+## brake into the hold.
+func _choose_spoils() -> void:
+	var by_area: Array[Piece] = _pieces.duplicate()
+	by_area.sort_custom(func(a: Piece, b: Piece) -> bool: return a.area > b.area)
+	for i: int in range(mini(3, by_area.size())):
+		var piece: Piece = by_area[i]
+		piece.spoil = i
+		var mat: ShaderMaterial = \
+			piece.node.get_surface_override_material(0) as ShaderMaterial
+		if mat != null:
+			var tint: Color = SPOIL_TINTS[i]
+			mat.set_shader_parameter("cool_tint", Vector3(tint.r, tint.g, tint.b))
+	for word: Label in _words:
+		if is_instance_valid(word):
+			word.queue_free()
+	_words.clear()
+	for i: int in range(mini(3, by_area.size())):
+		var word: Label = Label.new()
+		word.text = SPOIL_WORDS[i]
+		word.add_theme_font_size_override("font_size", 13)
+		word.add_theme_color_override("font_color", SPOIL_TINTS[i])
+		word.add_theme_font_override("font",
+			load(GlassStyle.CINZEL_700) as Font)
+		word.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+		word.add_theme_constant_override("shadow_offset_y", 2)
+		word.modulate.a = 0.0
+		word.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(word)
+		_words.append(word)
+
+
+## The words stand under their pieces, in screen pixels, faded in with the
+## cool — announcements belong to the HOLD, not to the explosion.
+func _seat_words() -> void:
+	if _words.is_empty():
+		return
+	var fade: float = clampf((_t - BURST) / 0.40, 0.0, 1.0)
+	var view_scale: Vector2 = size / Vector2(_vp.size)
+	for piece: Piece in _pieces:
+		if piece.spoil < 0 or piece.spoil >= _words.size():
+			continue
+		var word: Label = _words[piece.spoil]
+		if not is_instance_valid(word):
+			continue
+		var at_screen: Vector2 = _cam.unproject_position(
+			piece.node.global_position) * view_scale
+		word.position = at_screen + Vector2(
+			-word.size.x * 0.5, _box_u * 0.22 / UNIT * view_scale.y + 10.0)
+		word.modulate.a = fade
 
 
 func rest() -> void:
