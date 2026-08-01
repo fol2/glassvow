@@ -1,8 +1,8 @@
 extends SceneTree
-## Throwaway probe for the P4.10 RunHud diff refresh. Proves the three claims
-## the diff makes: a refresh with unchanged data keeps the same controls (and
-## keyboard focus survives it), a potion change rebuilds the right cluster,
-## and a relic change rebuilds the collection.
+## Throwaway probe for the P4.10 RunHud diff refresh. Proves the four claims
+## the diff makes: a refresh with unchanged data keeps the same controls,
+## keyboard focus survives that tick, a potion change rebuilds the right
+## cluster, and a relic change rebuilds the collection. Exits 1 on any FAIL.
 ##   godot --path . --position -4000,-4000 -s res://tools/probe_p410_diff.gd
 
 
@@ -49,4 +49,6 @@ func _initialize() -> void:
 	var coll_rebuilt: bool = hud._collection.get_child_count() > 0 \
 		and hud._collection.get_child(0).get_instance_id() != coll_id
 	print("relic change rebuilds: ", "PASS" if coll_rebuilt else "FAIL")
-	quit(0)
+	var all_pass: bool = same_deck and same_seat and focus_held \
+		and rebuilt and coll_rebuilt
+	quit(0 if all_pass else 1)
