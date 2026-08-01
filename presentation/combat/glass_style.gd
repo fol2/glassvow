@@ -90,7 +90,14 @@ static func gem(fill: Color) -> StyleBoxFlat:
 ## shares. `draw_center = false` so it lays OVER whichever state box is
 ## showing without repainting it; the ring is the leading, the glow is the
 ## lantern behind it. Expanded 2px so it reads as an addition around the
-## control, not a swap of its border.
+## control, not a swap of its border. The glow outbids the hover box's own
+## (0.35 @ 8px) so the persistent keyboard state is never out-glowed by
+## the transient pointer state.
+##
+## ADOPTION PREREQUISITE: a surface that pushes its own "focus" stylebox
+## shadows this ring entirely — an opaque focus box repainting the hover
+## wash away is exactly the SettingsPanel focus≡hover defect. To adopt,
+## DELETE "focus" from your state loop and let this overlay carry it.
 static func focus_ring(accent: Color = GOLD) -> StyleBoxFlat:
 	var ring: StyleBoxFlat = StyleBoxFlat.new()
 	ring.draw_center = false
@@ -98,7 +105,7 @@ static func focus_ring(accent: Color = GOLD) -> StyleBoxFlat:
 	ring.border_color = Color(accent, 0.85)
 	ring.set_corner_radius_all(14)
 	ring.set_expand_margin_all(2.0)
-	ring.shadow_color = Color(accent, 0.3)
+	ring.shadow_color = Color(accent, 0.45)
 	ring.shadow_size = 8
 	return ring
 
@@ -171,7 +178,9 @@ static func theme() -> Theme:
 	t.set_font_size("font_size", "Label", 15)
 	t.set_color("font_color", "Button", TEXT)
 	t.set_font_size("font_size", "Button", 15)
-	# Every button under a glass theme carries the lantern ring on keyboard
-	# focus, so a surface only overrides when its accent differs.
+	# A gold-ring default for buttons nobody styled. Reach is honest, not
+	# total: RunStyle's button/card loops and both panels still push their
+	# own opaque "focus" boxes that shadow this — deleting those is the
+	# P4.5/P4.6 adoption work (see focus_ring's ADOPTION PREREQUISITE).
 	t.set_stylebox("focus", "Button", focus_ring())
 	return t
