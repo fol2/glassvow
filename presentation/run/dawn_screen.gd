@@ -193,13 +193,13 @@ func _build() -> void:
 	actions.add_theme_constant_override("h_separation", 12)
 	actions.add_theme_constant_override("v_separation", 8)
 	column.add_child(actions)
-	_deck_btn = _action_button("VIEW FINAL DECK")
+	_deck_btn = _action_button("VIEW FINAL DECK", false)
 	_deck_btn.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		deck_requested.emit()
 	)
 	actions.add_child(_deck_btn)
-	_commit_btn = _action_button("RETURN TO THE VIGIL")
+	_commit_btn = _action_button("RETURN TO THE VIGIL", true)
 	_commit_btn.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		commit_requested.emit()
@@ -622,19 +622,24 @@ func _event_kicker(kind: String) -> String:
 		_: return "AT DAWN"
 
 
-func _action_button(text: String) -> Button:
+## `primary` marks the way ONWARD — the port's own hierarchy (the benchmark
+## dresses both as plain .btn), applied the same way on both end screens:
+## the terminal commit wears gold, the deck viewer steps back. Two gold
+## plates side by side weighed a choice the screen never asks.
+func _action_button(text: String, primary: bool = false) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(190, 46)
 	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
-	RunStyle.style_button(button, true)
+	RunStyle.style_button(button, primary)
 	# `.btn:disabled { opacity: 0.45 }` (styles.css:156) fades the COMPOSED
 	# button once. Here modulate does all of it, so the disabled dressing
-	# must do none — full plate, ink label. Stacking style_button's own
+	# must do none — full plate, its own label ink. Stacking style_button's
 	# faded plate and 0.45 label under the modulate faded the text three
 	# times over: measured gone (max luminance 89, same as its plate).
 	button.add_theme_stylebox_override("disabled", button.get_theme_stylebox("normal"))
-	button.add_theme_color_override("font_disabled_color", RunStyle.INK)
+	button.add_theme_color_override("font_disabled_color",
+		RunStyle.INK if primary else RunStyle.PARCHMENT)
 	return button
 
 

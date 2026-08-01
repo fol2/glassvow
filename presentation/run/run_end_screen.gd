@@ -49,8 +49,6 @@ func _build() -> void:
 	else:
 		RunStyle.add_backdrop(self)
 	_add_vignette()
-	if _outcome == "death":
-		_add_embers()
 
 	_margin = MarginContainer.new()
 	_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -88,6 +86,14 @@ func _build() -> void:
 		_build_bequest()
 	else:
 		_build_commit()
+	if _outcome == "death":
+		# LAST child, like the reference: `.embers` is the final child of
+		# `.end-screen` in the same stacking context as the monument
+		# (end.js:222, styles.css:1774) — the ash rises across the FACE of
+		# the stone. Built under the panel, 78% of the field's span was
+		# hidden behind 90%-opaque glass; the field ignores the mouse, so
+		# nothing under it loses a click.
+		_add_embers()
 	set_shape(shape)
 
 
@@ -288,8 +294,17 @@ func _add_vignette() -> void:
 	add_child(shade)
 
 
+## rgba(255,150,70) — the one warm the fire sheds, whether it is an ember's
+## halo or the flame's throw. Declared once; two names for one colour was
+## its own review finding.
+const FIRE_WARM: Color = Color(1.0, 0.5882353, 0.27450982)
+
+
 func _add_embers() -> void:
-	add_child(EmberField.new())
+	# Seeded per DEATH, not per build: off the global streams (a field must
+	# not perturb a run's rolls) but keyed to the fall, so two graves are not
+	# the same photograph.
+	add_child(EmberField.new(0x0EA5 ^ (_fall_floor * 2654435761)))
 
 
 ## The fallen screen's living ash (end.js:212-213, styles.css:1801-1811):
@@ -308,13 +323,14 @@ class EmberField extends Control:
 	const RISE_FRAC: float = 0.46
 	const FLOOR_FRAC: float = 0.82
 	const BODY: Color = Color(1.0, 0.6901961, 0.4)          # #ffb066
-	const HALO: Color = Color(1.0, 0.5882353, 0.27450982)   # rgba(255,150,70,…)
+	const HALO: Color = RunEndScreen.FIRE_WARM
 
 	var _t: float = 0.0
 	var _seed: int = 0x0EA5
 	var _embers: Array[Ember] = []
 
-	func _init() -> void:
+	func _init(seed_in: int = 0x0EA5) -> void:
+		_seed = seed_in & 0x7FFFFFFF
 		set_anchors_preset(Control.PRESET_FULL_RECT)
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 		for i: int in range(14):
@@ -346,7 +362,7 @@ class EmberField extends Control:
 			var at: Vector2 = Vector2(
 				e.x_frac * size.x + e.ex * u,
 				size.y * FLOOR_FRAC - size.y * RISE_FRAC * u)
-			# The 8px box-shadow at 0.9 (styles.css:1805), read as soft rings
+			# The 8px box-shadow at 0.9 (styles.css:1804), read as soft rings
 			# under the 4px body — the glow IS the ember at a glance; the dot
 			# alone read as noise against the night ground.
 			draw_circle(at, 7.0 * s, Color(HALO, a * 0.22))
@@ -384,17 +400,28 @@ class MonumentFlame extends Control:
 		var a: float = Motion.css_keyframe(u, AT, ALPHA)
 		var sy: float = Motion.css_keyframe(u, AT, SCALE_Y)
 		var rot: float = deg_to_rad(Motion.css_keyframe(u, AT, ROT))
+		# Pivot at the BASE — a deliberate deviation. The stylesheet leaves
+		# transform-origin at its 50% 50% default, so the reference squeezes
+		# toward the flame's middle; a flame guttering from a fixed root is
+		# the truer physical read, and this port takes it, on the record.
 		var base: Vector2 = Vector2(size.x * 0.5, size.y)
 		draw_set_transform(base, rot, Vector2(1.0, sy))
-		# The radial gradient, read as three stacked drops: hot core high,
-		# amber body, dark root — plus the 22px shed onto the stone.
-		draw_circle(Vector2(0, -5), 9.0, Color(HALO_SHED, a * 0.16))
-		draw_circle(Vector2(0, -4), 6.0, Color(ROOT, a * 0.85))
-		draw_circle(Vector2(0, -7), 4.6, Color(MID, a * 0.95))
-		draw_circle(Vector2(0, -10), 2.4, Color(CORE, a))
+		# The radial gradient as three stacked drops — dark root at the base,
+		# amber body, hot core — all held above the baseline so the flame
+		# never dips into whatever the layout puts beneath it.
+		draw_circle(Vector2(0, -6), 5.5, Color(ROOT, a * 0.85))
+		draw_circle(Vector2(0, -8.5), 4.4, Color(MID, a * 0.95))
+		draw_circle(Vector2(0, -11), 2.4, Color(CORE, a))
+		# The 22px shed, AFTER the body so nothing covers its heart, with a
+		# real falloff: box-shadow's blur is a gaussian, and a hard 9px disc
+		# at 0.16 read as a bead of solder — 18px of warm field standing in
+		# for a ~56px throw. Four widening rings approximate the curve and
+		# actually reach the stone.
+		for ring: int in range(4):
+			var r: float = 10.0 + 6.5 * float(ring)
+			var fade: float = 0.11 * pow(0.62, float(ring))
+			draw_circle(Vector2(0, -8), r, Color(RunEndScreen.FIRE_WARM, a * fade))
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-
-	const HALO_SHED: Color = Color(1.0, 0.5882353, 0.27450982)
 
 
 static func _label(text: String, font_size: int, colour: Color) -> Label:
