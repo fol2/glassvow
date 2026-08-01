@@ -25,17 +25,28 @@ const WEATHER_BY_ACT: Array[StringName] = [&"ash", &"sunken", &"storm"]
 ## small nor pale nor act-varying"). Act 2 restates the wedge that shipped in
 ## P5.2; acts 0–1 get the distance they never had.
 ##   W_RATE  base width as a fraction of the stage
-##   H_RATE  apex reach across the horizon→frame-top span (1.0 = past the edge)
+##   H_RATE  apex reach across the horizon→frame-top span (>1.0 = past the edge)
 ##   DARKEN  how deep the near silhouette cuts below the sky
 ##   HAZE    how far the FAR silhouette lifts toward the fog
 ## The tone inverts along the journey, which is the whole point: against a
 ## near-black sky a distant object cannot read by getting darker — atmospheric
 ## scatter lifts it toward the fog, and only the near tower is a true cut-out.
 ## Darkening alone gave act 0 a 3–5 level delta, i.e. an invisible goal-anchor.
+##
+## HAZE[0] is set against the COMPOSITED sky, not the theme constant: the fog
+## disc already lifts the wedge's own rows before the spire draws, so a haze
+## tuned against `sky` cancels against itself and lands +4 on screen where the
+## arithmetic promised +23 (PR #77 DL R1). H_RATE[2] runs past 1.0 on purpose —
+## a crown cropped by eight pixels reads as a mistake, one cropped by a hundred
+## reads as a wall of tower leaving the frame.
 const SPIRE_W_RATE: Array[float] = [0.05, 0.14, 0.50]
-const SPIRE_H_RATE: Array[float] = [0.30, 0.65, 1.00]
+const SPIRE_H_RATE: Array[float] = [0.30, 0.65, 1.35]
 const SPIRE_DARKEN: Array[float] = [0.00, 0.30, 0.58]
-const SPIRE_HAZE: Array[float] = [0.30, 0.14, 0.00]
+const SPIRE_HAZE: Array[float] = [0.42, 0.14, 0.00]
+## tan of the silhouette's half-angle from vertical, held constant across every
+## act and every stage. A tower is two near-vertical converging edges; past ~15°
+## it is a mountain. See `MapBand.SkyBand._draw_spire`.
+const SPIRE_SLANT: float = 0.2309   # tan(13°)
 
 ## Act-2 heat lightning: irregular enough to read as weather, fixed so two
 ## captures of one build still match. No RNG — marks only.

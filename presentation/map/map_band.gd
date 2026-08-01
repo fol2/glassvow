@@ -85,29 +85,41 @@ class SkyBand extends MapBand:
 			Rect2(-w * 0.10 + drift.x, h * 0.22 + drift.y, w * 1.20, h * 0.60),
 			false, Color(host._fog_colour.lightened(0.42), 0.28))
 		var horizon: float = h * host._trail_num("horizonY", 0.36)
+		# The strip is the band's ATMOSPHERE; the Spire is an OBJECT on it. They
+		# are drawn together, never one instead of the other: §1 makes the Spire a
+		# single constant goal-anchor doubling as an act meter, and a tiling
+		# backdrop cannot hold a singular landmark — a 3072-wide strip lays two
+		# tiles on a 1180 stage and the anchor becomes wallpaper (PR #77 DL R1).
+		# The screen-anchor rule below survives for the same reason.
 		if _strip != null:
-			# A repeating strip may scroll at the band factor: unlike the single
-			# procedural wedge, it never runs out of itself, so the screen-anchor
-			# rule that keeps a lone 0.10 object on stage does not apply here.
 			MapStrip.draw_tiled(self, _strip,
 				Rect2(0.0, 0.0, w, horizon + FAR_BLEED),
 				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
-		else:
-			_draw_spire(w, horizon)
+		_draw_spire(w, horizon)
 		_draw_flash_overlay(Rect2(Vector2.ZERO, size))
 
-	## Procedural stand-in for act{N}-skyband.png: a distant needle in the Ashen
-	## Woods, a near tower under the storm. Still SCREEN-anchored — at 0.10 the
-	## whole journey drifts a lone object only a tenth of the act, so a world
-	## anchor parks it off-stage for every step of the walk (PR #71 DL R2).
+	## The §1 goal-anchor. SCREEN-anchored — at 0.10 the whole journey drifts a
+	## lone object only a tenth of the act, so a world anchor parks it off-stage
+	## for every step of the walk (PR #71 DL R2).
+	##
+	## The silhouette is read from two near-vertical converging edges, so the
+	## SLANT is the invariant, not the top width: deriving `top_w` from `base_w`
+	## made the flare grow with the act AND with the stage's aspect — one intent
+	## gave 14.1° on phone-portrait and 40.9° on desktop-landscape, and act 2 read
+	## as a mountain (PR #77 DL R1). Holding the slant instead means the three acts
+	## are the same building seen from three distances, which is what an act meter
+	## has to be.
 	func _draw_spire(w: float, horizon: float) -> void:
 		var act: int = host._act
 		if host._region != null:
 			act = host._region.act
 		act = clampi(act, 0, MapRegions.SPIRE_W_RATE.size() - 1)
 		var base_w: float = w * MapRegions.SPIRE_W_RATE[act] * 0.5
-		var top_w: float = maxf(base_w * 0.28, 3.0)
 		var apex_y: float = horizon * (1.0 - MapRegions.SPIRE_H_RATE[act]) - FAR_BLEED
+		# Floored at a fraction of the base so a tall narrow stage can never
+		# invert the taper into an hourglass.
+		var top_w: float = maxf(base_w - (horizon - apex_y) * MapRegions.SPIRE_SLANT,
+			base_w * 0.18)
 		var centre: float = w * 0.82 - cam_x * factor + drift.x
 		# Near acts cut BELOW the sky, far acts lift toward the fog — see the
 		# ramp docstring in map_regions.gd for why darkening alone leaves act 0
@@ -163,14 +175,18 @@ class RegionBand extends MapBand:
 		draw_rect(Rect2(0.0, horizon, w, h - horizon + FAR_BLEED),
 			Color(WorldMapScreen.REGION_GROUND, 0.62 if host._act == 0 else 0.38))
 		var ground: Rect2 = Rect2(0.0, horizon, w, h - horizon)
-		if host._region != null and host._region.weather == &"sunken":
-			_draw_shafts(w, horizon, path_y)
+		# The strip covers the WHOLE ground, not just the skyline — so it goes in
+		# BEFORE the shafts, not after. The clouds it was modelled on are 54–93px
+		# discs at the horizon; this is a 533px quad that would swallow act 1's
+		# signature weather entirely (PR #77 DL R1). Caustics are volumetric light
+		# between the viewer and the drowned towers: they belong in front.
 		if _strip != null:
-			# Seated where the silhouettes are, so the shafts stay behind the
-			# skyline exactly as the clouds already put them.
 			MapStrip.draw_tiled(self, _strip,
 				Rect2(0.0, horizon, w, h - horizon + FAR_BLEED),
 				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
+		if host._region != null and host._region.weather == &"sunken":
+			_draw_shafts(w, horizon, path_y)
+		if _strip != null:
 			_draw_flash_overlay(ground)
 			return
 		if host._act > 0:
@@ -244,6 +260,13 @@ class RegionBand extends MapBand:
 
 
 class PathBand extends MapBand:
+	## Half-height of the road bed's fade, in stage px. Deliberately NOT
+	## `FAR_BLEED`: that number covers a band's drift overshoot, this one is a
+	## composition width, and they collide at 8.0 by coincidence only. Absolute px
+	## means the bed is 2.0% of a 820-tall stage and 4.1% of a 390-tall one —
+	## whether that should be a rate is the tuning sweep's call (#69).
+	const BED_HALF: float = 8.0
+
 	func _init() -> void:
 		super(1.0)
 
@@ -261,12 +284,12 @@ class PathBand extends MapBand:
 		var bed: Color = Color(glass.r, glass.g, glass.b, 0.09)
 		var clear: Color = Color(glass.r, glass.g, glass.b, 0.0)
 		draw_polygon(PackedVector2Array([
-			Vector2(0.0, path_y - 8.0), Vector2(w, path_y - 8.0),
+			Vector2(0.0, path_y - BED_HALF), Vector2(w, path_y - BED_HALF),
 			Vector2(w, path_y), Vector2(0.0, path_y),
 		]), PackedColorArray([clear, clear, bed, bed]))
 		draw_polygon(PackedVector2Array([
 			Vector2(0.0, path_y), Vector2(w, path_y),
-			Vector2(w, path_y + 8.0), Vector2(0.0, path_y + 8.0),
+			Vector2(w, path_y + BED_HALF), Vector2(0.0, path_y + BED_HALF),
 		]), PackedColorArray([bed, bed, clear, clear]))
 		# Terminus rose-window BEFORE the graph so edges/stones layer over it.
 		_draw_rose_window()

@@ -8,11 +8,26 @@ const DIR: String = "res://assets/art/map"
 ## Draw-call ceiling per band per frame — see `draw_tiled`.
 const MAX_TILES: int = 16
 
+## ART CONTRACT for P5.8. Strips are ATMOSPHERE, never architecture:
+##
+## * `act{N}-skyband.png` — cloud, haze, star field. **No Spire.** The §1 goal
+##   anchor is a single screen-anchored object drawn on top of this strip by
+##   `MapBand.SkyBand._draw_spire`; a tiling backdrop lays two copies on a wide
+##   stage and a lone constant anchor cannot survive being repeated.
+## * `act{N}-region.png` — the far skyline silhouette. Loop-safe left/right
+##   edges, and **transparent below its skyline**: the strip is stretched over
+##   the whole ground rect, and act 1's caustic shafts now draw in front of it.
+##
+## Both are height-fitted, and the two bands have different rect heights — sky is
+## `horizonY` of the stage (≈303 px at 1180×820), region is the remainder
+## (≈533 px). Author to those proportions, not to a shared canvas size, or a tree
+## and a cloud will disagree about scale (PR #77 DL R1 m6).
+
 ## One disk probe and one warning per (act, kind) for the process lifetime. A
 ## band repaints every frame the camera moves; a per-draw `ResourceLoader.exists`
 ## would hit the filesystem as fast as the map scrolls, and a per-draw
 ## `push_warning` would bury the log it is meant to be read from.
-static var _cache: Dictionary = {}
+static var _cache: Dictionary[String, Texture2D] = {}
 
 
 ## Acts are 1-based in asset filenames (`act1-…`) and 0-based in code, matching
@@ -24,10 +39,7 @@ static func path_for(act: int, kind: StringName) -> String:
 static func fetch(act: int, kind: StringName) -> Texture2D:
 	var key: String = path_for(act, kind)
 	if _cache.has(key):
-		# Typed assign from Dictionary — `hit as Texture2D` on a Variant local
-		# is UNSAFE_CAST under warnings-as-errors (same idiom as hud_bar._tex_cache).
-		var hit: Texture2D = _cache[key]
-		return hit
+		return _cache[key]
 	var tex: Texture2D = null
 	if ResourceLoader.exists(key):
 		tex = load(key) as Texture2D
