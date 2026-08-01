@@ -14,7 +14,11 @@ config/name="Glassvow"
 config/version="0.6.0"
 config/features=PackedStringArray("4.7")
 run/main_scene="res://application/main.tscn"
-config/icon="res://icon.svg"
+config/icon="res://assets/icon/glassvow-icon.png"
+config/macos_native_icon="res://assets/icon/glassvow.icns"
+boot_splash/bg_color=Color(0.015, 0.02, 0.045, 1)
+boot_splash/image="res://assets/art/title/title.png"
+boot_splash/fullsize=false
 config/auto_accept_quit=false
 
 [audio]
