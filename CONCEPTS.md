@@ -660,6 +660,25 @@ beneath it is what lights it.
 
 ---
 
+## The vigil
+
+### Vigil
+The cross-run ledger — deeds counted, quests with their memories, Shards
+collected, and receipts of committed runs — that survives every run and
+carries all meta-progression. It loads all-or-nothing: a saved ledger that
+fails validation is silently replaced by a fresh blank one rather than
+partially accepted, so any behaviour built on planted or migrated vigil state
+must be proven by reading the state back through the same load path the game
+uses.
+
+### Shard
+The token a completed emberglass quest leaves in the Vigil — one per quest,
+never duplicated, never from an unknown quest. Collecting all six is what
+unseals the Act IV threshold; with any fewer the journey routes onto an
+ordinary act map.
+
+---
+
 ## Flagged ambiguities
 
 - **"Holo" had been used for both depth and rainbow colour — these are
