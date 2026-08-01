@@ -364,7 +364,6 @@ class PathBand extends MapBand:
 	func _draw_graph() -> void:
 		var by_id: Dictionary = {}
 		var step: float = host._step()
-		var lane_gap_px: float = host._lane_gap()
 		for node: MapNode in host.map.nodes:
 			by_id[node.id] = node
 		for node: MapNode in host.map.nodes:
@@ -381,16 +380,10 @@ class PathBand extends MapBand:
 					absf(host._world_x(float(node.row)) - host._cam_x),
 					absf(host._world_x(float(next_node.row)) - host._cam_x)) \
 					/ maxf(step, 1.0) * 0.12, 0.10, 1.0)
-				# Rising bows up, falling bows down so crossing paths pull apart
-				# rather than stacking — scaled by how far the edge actually
-				# climbs, so a same-lane run really is straight. `signf` was 0
-				# only on an exact tie and `node.jx * 6.0` jitter guarantees no
-				# tie, so every same-lane edge used to take the full bow off a
-				# sub-pixel difference (#69, found in PR #77 PM R3).
-				var climb: float = clampf((to.y - from.y) / maxf(lane_gap_px, 1.0),
-					-1.0, 1.0)
-				var control: Vector2 = (from + to) * 0.5 \
-					+ Vector2(0.0, climb * 10.0)
+				# The host owns the bow so the marker gliding along this edge
+				# cannot drift from the dashes drawn on it — see
+				# `WorldMapScreen.edge_control` for why it is not written twice.
+				var control: Vector2 = host.edge_control(from, to)
 				var previous: Vector2 = from
 				# ~10–12px dash cells from chord length; first cell drawn so the
 				# dash begins at the source rim instead of detaching from it.

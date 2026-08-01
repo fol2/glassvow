@@ -384,6 +384,24 @@ func _on_arrived(i: int) -> void:
 	node_chosen.emit(i)
 
 
+## The one control point for a trail edge, shared by the drawn dashes
+## (`MapBand.PathBand._draw_graph`) and by the marker gliding along them.
+##
+## Rising bows up, falling bows down so crossing paths pull apart rather than
+## stacking, SCALED by how far the edge actually climbs — a same-lane run is then
+## straight by construction. It used to be `signf(to.y - from.y) * 10.0`, which
+## is 0 only on an exact tie, and `node.jx * 6.0` jitter guarantees no tie, so
+## every "straight" edge took the full bow off a sub-pixel difference (#69).
+##
+## It lives here, in one place, because the same expression written twice is how
+## it went wrong: the marker's copy kept the old `signf` through the first draft
+## of that fix while its comment claimed it was "the same control the PathBand
+## edges use" (PR #78 PM R1). One function cannot disagree with itself.
+func edge_control(from: Vector2, to: Vector2) -> Vector2:
+	var climb: float = clampf((to.y - from.y) / maxf(_lane_gap(), 1.0), -1.0, 1.0)
+	return (from + to) * 0.5 + Vector2(0.0, climb * 10.0)
+
+
 ## The glow's live screen point — bezier mid-glide, seated otherwise, stage
 ## centre before any node. Recomputed each call so cam/drift stay coherent.
 func marker_screen_position() -> Vector2:
@@ -394,9 +412,7 @@ func marker_screen_position() -> Vector2:
 			or _travel_from_i >= map.nodes.size():
 		return to
 	var from: Vector2 = _node_pos(map.nodes[_travel_from_i])
-	# Same control the PathBand edges use — rising bows up, falling bows down.
-	var control: Vector2 = (from + to) * 0.5 \
-		+ Vector2(0.0, signf(to.y - from.y) * 10.0)
+	var control: Vector2 = edge_control(from, to)
 	var t: float = _travel_t
 	var u: float = 1.0 - t
 	return from * u * u + control * 2.0 * u * t + to * t * t
