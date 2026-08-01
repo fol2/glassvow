@@ -18,6 +18,13 @@ const HINT_BOTTOM: float = -18.0
 
 ## Path/waystone PointerDrift amplitude (px); sky/region ÷3, veil ×1.35 (#64).
 const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
+## Wander amplitudes, in px, against `jy`/`jx` domain data that spans about ±0.25.
+## The step axis takes the review's "~3×" unchanged — ±4.6 px was 1.8% of a
+## 259.6 px step and read as a lattice. The lane axis does NOT: at only 46–50 px
+## of pitch it has no room, so it trades amplitude for the per-row application in
+## `_row_lane_jitter` and keeps a modest span (#69).
+const STEP_JITTER: float = 72.0
+const LANE_JITTER: float = 20.0
 
 const REGION_NAME: String = "The Ashen Woods"
 const REGION_GROUND: Color = Color("#05070d")
@@ -55,6 +62,9 @@ var _accent_colour: Color
 ## Per-act region knobs (palette + weather + lightning). Bands read this;
 ## built in `_set_act_theme` so a theme pick never leaves stale weather.
 var _region: MapRegions = null
+## Row → lane offset in px. Built lazily and never invalidated: it derives only
+## from the map's own `jx`, which is frozen for the life of the screen.
+var _row_jx: Dictionary[int, float] = {}
 ## Act-2 heat lightning — fixed mark table, no RNG (captures must repeat).
 var _lightning_t: float = 0.0
 var _flash: float = 0.0
@@ -326,8 +336,19 @@ func _cam_min() -> float:
 
 
 func _cam_max() -> float:
-	# Boss at the lead-third leaves `(1 − lead)·W` of sky to its right.
-	return _world_x(float(WorldMap.ROWS - 1))
+	# The terminus does NOT get the entry seat. At `_world_x(ROWS − 1)` the boss
+	# lands at exactly `lead·W` — the same spot node 0 occupies on the opening
+	# frame — leaving 67% of the stage as empty road ahead of it, which reads as
+	# a journey that has not finished (#69, carried from P5.1 DL R2). Stopping
+	# the camera short seats it at `terminusSeat` of the stage instead, keeping
+	# §3's act sky beyond without the frame looking unspent.
+	#
+	# Mind the sign: a LARGER `_cam_max` moves the terminus LEFT, so arriving
+	# further right means stopping EARLIER. Clamped against `_cam_min` so a
+	# stage narrower than the shortfall cannot invert the range.
+	var last: float = _world_x(float(WorldMap.ROWS - 1))
+	var seat: float = size.x * _trail_num("terminusSeat", 0.72)
+	return maxf(last - (seat - _lead_px()), _cam_min())
 
 
 func _on_waystone_chosen(i: int) -> void:
@@ -486,6 +507,16 @@ func _push_bands(force: bool = false) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
+	# The walk owns the camera while it lasts. A drag or a wheel tick mid-glide
+	# used to overwrite `_cam_target`, so the lead-third follow stopped and the
+	# lantern finished its bezier somewhere off-frame while the glow kept riding
+	# the trail (#69, carried from P5.3 PM R1). Events are still ACCEPTED — the
+	# gesture is swallowed, not passed through to a waystone underneath — because
+	# 0.4 s of ignored input is a pause, whereas a stray tap landing on a stone
+	# during the glide is a wrong move the player did not make.
+	if _travelling:
+		accept_event()
+		return
 	var button: InputEventMouseButton = event as InputEventMouseButton
 	if button != null:
 		if button.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN] and button.pressed:
@@ -559,9 +590,16 @@ func _layout_waystones() -> void:
 	for i: int in range(_waystones.size()):
 		var ws: GlassWaystone = _waystones[i]
 		var depth: float = absf(_world_x(float(map.nodes[i].row)) - _cam_x) / maxf(step, 1.0)
-		var node_scale: float = k * clampf(1.08 - depth * 0.035, 0.72, 1.08)
+		# Both falloffs are anchored at the NEAREST stone, not past it. They used
+		# to peak at 1.08 and 1.15, so `scale` reached its nominal `k` only at
+		# depth 2.29 and alpha stayed pinned at 1.0 until depth 1.25 — everything
+		# closer was drawn oversized, and a third of the visible range carried no
+		# alpha cue at all (#69, carried from P5.1 DL R2). Anchoring at 1.0 makes
+		# `k` mean what the book says and gives every visible step a distinct
+		# depth reading.
+		var node_scale: float = k * clampf(1.0 - depth * 0.035, 0.72, 1.0)
 		ws.scale = Vector2.ONE * node_scale
-		ws.modulate.a = clampf(1.15 - depth * 0.12, 0.12, 1.0)
+		ws.modulate.a = clampf(1.0 - depth * 0.10, 0.12, 1.0)
 		# Before the seat, not after: the pad changes `size`, and the seat is
 		# computed from it. The drawing sits in the middle of the padded rect,
 		# so centring the rect still centres the stone.
@@ -589,10 +627,42 @@ func _node_pos(node: MapNode) -> Vector2:
 	var d: Vector2 = Vector2(
 		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
 	return Vector2(
-		world_x - _cam_x + _lead_px() + node.jy * 24.0 + d.x,
+		world_x - _cam_x + _lead_px() + node.jy * STEP_JITTER + d.x,
 		size.y * _trail_num("pathY", 0.64) + float(node.col - 3) * lane_gap \
-			+ node.jx * 6.0 + d.y,
+			+ _row_lane_jitter(node.row) + d.y,
 	)
+
+
+## Lane wander, applied per ROW rather than per node.
+##
+## Per-node jitter breaks the touch floor it sits under: `laneMin` guarantees the
+## PITCH, but a thumb hits a GAP, and two neighbours can jitter toward each other.
+## Measured over the 33 pairs that actually sit in adjacent lanes on seed 717,
+## with the lane gap at the phone-landscape value where it rests on its floor:
+## at the old ±6 px, three pairs were already under the 44 px touch rect (worst
+## 43.06); the carried "~3× the jitter" ask would have made it nine (worst 37.18).
+##
+## Shifting the whole column by one amount preserves every gap inside it exactly
+## while still setting rows at different heights, which is the lattice-breaking
+## the note actually wanted. The offset is domain-derived and deterministic —
+## presentation reads `jx` differently, it does not invent any (#69).
+##
+## It takes the LOWEST-col node's `jx` as the row's representative, and the
+## choice matters: the row's MEAN was the first thing I tried, and averaging four
+## to six values that span ±0.25 regresses to nothing. Measured on seed 717, the
+## mean gave a total span of −3.14…+1.20 px with most rows inside ±0.8 — LESS
+## lane variation than the ±1.5 px per-node jitter it replaced, i.e. the exact
+## opposite of the intent. A single member keeps the full amplitude.
+func _row_lane_jitter(row: int) -> float:
+	if _row_jx.has(row):
+		return _row_jx[row]
+	var pick: MapNode = null
+	for n: MapNode in map.nodes:
+		if n.row == row and (pick == null or n.col < pick.col):
+			pick = n
+	var offset: float = 0.0 if pick == null else pick.jx * LANE_JITTER
+	_row_jx[row] = offset
+	return offset
 
 
 ## How far apart two steps of the pilgrimage stand, in stage px.
