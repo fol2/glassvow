@@ -8,6 +8,7 @@ var _screen: ThresholdScreen
 var _touched: int = 0
 var _vigil: int = 0
 var _failed: bool = false
+var _passed: int = 0
 
 
 func _initialize() -> void:
@@ -75,6 +76,17 @@ func _drive() -> void:
 		return
 	_save("/tmp/p416-probe-after.png")
 
+	# Two frames in, the fade is still running: this press must complete the
+	# reveal, not leave — a stray double-tap cannot skip the payoff.
+	cta.pressed.emit()
+	await process_frame
+	if not _check(_vigil == 0, "press inside the fade does not leave (got %d)" % _vigil):
+		return
+	if not _check(answer_box.modulate.a == 1.0,
+			"press inside the fade completes the reveal (alpha %.2f)"
+			% answer_box.modulate.a):
+		return
+
 	cta.pressed.emit()
 	await process_frame
 	if not _check(_vigil == 1, "vigil_requested fired once (got %d)" % _vigil):
@@ -82,7 +94,7 @@ func _drive() -> void:
 	if not _check(_touched == 1, "threshold_touched did not replay (got %d)" % _touched):
 		return
 
-	print("PASS: threshold probe")
+	print("PASS: threshold probe (%d checks)" % _passed)
 	quit(0)
 
 
@@ -102,6 +114,7 @@ func _find_label(wanted: String) -> Label:
 
 func _check(ok: bool, what: String) -> bool:
 	if ok:
+		_passed += 1
 		print("  ok: " + what)
 		return true
 	_failed = true
