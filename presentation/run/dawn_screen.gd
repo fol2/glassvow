@@ -575,15 +575,17 @@ func _event_card(event: Dictionary) -> PanelContainer:
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 4)
 	card.add_child(stack)
-	# Glyph above the kicker — shardGrant / act4Reveal (end.js:117-122).
+	# Glyph speaks the register — shardGrant / act4Reveal (end.js:117-122)
+	# render icon + name/copy with no kicker.
 	if event.has("icon"):
 		var glyph_id: String = str(event["icon"])
 		if glyph_id == "shard" or glyph_id == "door":
 			stack.add_child(DawnGlyph.new(glyph_id))
-	var kind: String = str(event.get("kind", "memory"))
-	var kicker: Label = _label(_event_kicker(kind), 9, RunStyle.GOLD_DIM)
-	kicker.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 1))
-	stack.add_child(kicker)
+	else:
+		var kind: String = str(event.get("kind", "memory"))
+		var kicker: Label = _label(_event_kicker(kind), 9, RunStyle.GOLD_DIM)
+		kicker.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 1))
+		stack.add_child(kicker)
 	# Kicker speaks the register; title carries the earned thing; a whisper
 	# has no title and an unlock may have no body — empty lines take no room.
 	var title_text: String = str(event.get("title", ""))

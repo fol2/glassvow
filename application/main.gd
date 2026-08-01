@@ -552,8 +552,7 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 	if overlay and live:
 		# Keep the routed surface; veil + freeze instead of a wipe/clear.
 		if _choice_screen != null:
-			_choice_screen.queue_free()
-			_choice_screen = null
+			_close_choice_overlay()
 		_freeze_under_modal()
 		_choice_screen = ChoiceScreenType.new(title, body, choices, ctx, _sfx_bus)
 		_choice_screen.z_index = MODAL_Z

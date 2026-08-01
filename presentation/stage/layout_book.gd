@@ -219,7 +219,7 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## How the two button blocks tile. A phone held sideways has room across and
 	## none down, so the primary block goes two-wide there and nowhere else.
 	&"titlescreen/primaryCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 1.0},
-	&"titlescreen/utilityCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 3.0},
+	&"titlescreen/utilityCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 2.0},
 	&"titlescreen/primaryPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 17.0},
 	&"titlescreen/utilityPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 13.0},
 	## The tagline is the first thing to go: it is flavour, and a phone held

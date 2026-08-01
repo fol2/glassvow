@@ -276,7 +276,7 @@ func _hide_wipe() -> void:
 ## centre. The pivot needs a laid-out size, so the scale half waits one frame
 ## and is skipped when the root has none to offer.
 func screen_in(root: Control) -> void:
-	if instant or root == null:
+	if instant or Preferences.active.reduce_motion or root == null:
 		return
 	root.modulate.a = 0.0
 	var tree: SceneTree = get_tree()
