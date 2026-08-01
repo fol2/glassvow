@@ -229,7 +229,14 @@ class PathBand extends MapBand:
 			draw_circle(at, 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 			draw_circle(at, 15.0, Color(ember.r, ember.g, ember.b, 0.18))
 
-	## §3 keystone backdrop — quiet night-glass silhouette; painted art is P5.6+.
+	## §3 keystone backdrop — quiet night-glass silhouette; painted art is
+	## P5.6+/P5.8. The window is an ARCH the stone stands at the foot of: its
+	## base meets the path, low-alpha panes fill the upper fan (leading needs
+	## glass to separate — rings alone read as a reticle), every weight sits
+	## BELOW the path ribbon's, and the leading springs from the stone's rim.
+	## P5.8 NOTE: anchored to the boss node's _node_pos at parallax 1.0 as a
+	## stand-in; painted terminus architecture belongs to the region plane
+	## (§5 band 2) and must not inherit this placement contract.
 	func _draw_rose_window() -> void:
 		var boss: MapNode = null
 		for node: MapNode in host.map.nodes:
@@ -242,21 +249,37 @@ class PathBand extends MapBand:
 		var step: float = host._step()
 		var depth: float = absf(host._world_x(float(boss.row)) - host._cam_x) \
 			/ maxf(step, 1.0)
-		# Same depth compress the waystones use — the window tracks the stone.
+		# The waystones' own scale knob and depth compress, then a stage cap —
+		# a fixed 110px broke phone-landscape at 61% of the stage's height.
 		var compress: float = clampf(1.08 - depth * 0.035, 0.72, 1.08)
-		var R: float = 110.0 * compress
+		var k: float = host._trail_num("scale", 0.36)
+		var R: float = minf(110.0 * (k / 0.6) * compress, size.y * 0.22)
+		var path_y: float = size.y * host._trail_num("pathY", 0.64) + drift.y
+		var centre: Vector2 = Vector2(pos.x, path_y - R)
 		var glass: Color = GlassStyle.GLASS
-		var side: float = R * 2.6
+		var side: float = R * 2.4
 		draw_texture_rect(SkyField.disc(),
-			Rect2(pos - Vector2.ONE * side * 0.5, Vector2.ONE * side), false,
-			Color(host._accent_colour, 0.10))
-		draw_arc(pos, R, 0.0, TAU, 64, Color(glass.r, glass.g, glass.b, 0.18), 3.0)
-		draw_arc(pos, R * 0.62, 0.0, TAU, 48, Color(glass.r, glass.g, glass.b, 0.14), 2.0)
-		for spoke: int in range(8):
-			var a: float = float(spoke) * TAU / 8.0
-			var dir: Vector2 = Vector2(cos(a), sin(a))
-			draw_line(pos + dir * R * 0.18, pos + dir * R,
-				Color(glass.r, glass.g, glass.b, 0.16), 2.0)
+			Rect2(centre - Vector2.ONE * side * 0.5, Vector2.ONE * side), false,
+			Color(host._accent_colour, 0.08))
+		# Six panes across the upper fan, alternating like leaded glass.
+		for pane: int in range(6):
+			var a0: float = deg_to_rad(-160.0 + float(pane) * (140.0 / 6.0))
+			var a1: float = deg_to_rad(-160.0 + float(pane + 1) * (140.0 / 6.0))
+			var points: PackedVector2Array = PackedVector2Array([centre])
+			for seg: int in range(5):
+				var a: float = lerpf(a0, a1, float(seg) / 4.0)
+				points.append(centre + Vector2(cos(a), sin(a)) * R)
+			draw_colored_polygon(points,
+				Color(host._accent_colour, 0.055 if pane % 2 == 0 else 0.035))
+		draw_arc(centre, R, 0.0, TAU, 64, Color(glass.r, glass.g, glass.b, 0.09), 2.0)
+		draw_arc(centre, R * 0.62, 0.0, TAU, 48, Color(glass.r, glass.g, glass.b, 0.06), 1.5)
+		# Leading springs from the stone's rim into the fan — five rays, none
+		# horizontal, so no spoke drowns in the path line.
+		for ray: int in range(5):
+			var ra: float = deg_to_rad(-150.0 + float(ray) * 30.0)
+			var to: Vector2 = centre + Vector2(cos(ra), sin(ra)) * R * 0.98
+			var dir: Vector2 = (to - pos).normalized()
+			draw_line(pos + dir * 46.0, to, Color(glass.r, glass.g, glass.b, 0.10), 1.5)
 
 	func _draw_graph() -> void:
 		var by_id: Dictionary = {}
