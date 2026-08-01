@@ -110,8 +110,11 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	var ledger: VBoxContainer = _section("THE LEDGER", DANGER, true, ledger_seat)
 	var erase: Button = _button("ERASE ALL PROGRESS", DANGER, 14)
 	# The most destructive control in the game must not be CLOSE's twin: the
-	# glyph wears the danger, not just one pixel of border.
+	# glyph wears the danger, not just one pixel of border — and it must not
+	# shed it at exactly the moment a keyboard player has it selected.
 	erase.add_theme_color_override("font_color", Color(DANGER, 0.92))
+	erase.add_theme_color_override("font_focus_color", Color(DANGER, 0.92))
+	erase.add_theme_color_override("font_pressed_color", Color(DANGER, 0.92))
 	erase.disabled = reset_disabled
 	erase.pressed.connect(func() -> void:
 		_sfx.play(&"click")
@@ -306,6 +309,12 @@ static func _toggle_state(toggle: Button, on: bool) -> void:
 		GOLD if on else GlassStyle.TEXT_DIM)
 	toggle.add_theme_color_override("font_hover_color",
 		GOLD if on else GlassStyle.TEXT)
+	# Focus and press carry the same lit/unlit ink: a focused ON toggle must
+	# never be pixel-identical to a focused OFF one (DL, PR #47 round 1).
+	toggle.add_theme_color_override("font_focus_color",
+		GOLD if on else GlassStyle.TEXT)
+	toggle.add_theme_color_override("font_pressed_color",
+		GOLD if on else GlassStyle.TEXT)
 	var lit: StyleBoxFlat = StyleBoxFlat.new()
 	lit.bg_color = Color(GOLD, 0.10) if on else Color(0.055, 0.071, 0.133, 0.60)
 	lit.set_border_width_all(1)
@@ -405,7 +414,13 @@ static func _style_button(button: Button, accent: Color, vertical: float,
 	# (DL round 1: ERASE hovered gold, and a dimmed OFF hovered DARKER than
 	# at rest).
 	button.add_theme_color_override("font_hover_color", accent)
+	# Focus and press keep the control's resting ink — unset, pressed falls
+	# to Godot's pure white, and a blanket TEXT here is exactly how a state
+	# control sheds its lit/unlit read the moment it is selected. Controls
+	# that recolour font_color afterwards (ERASE, the toggles) must recolour
+	# these two beside it.
 	button.add_theme_color_override("font_focus_color", GlassStyle.TEXT)
+	button.add_theme_color_override("font_pressed_color", GlassStyle.TEXT)
 	button.add_theme_color_override("font_disabled_color", Color(GlassStyle.TEXT_DIM, 0.45))
 
 
