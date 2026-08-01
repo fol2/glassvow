@@ -1234,15 +1234,22 @@ func _on_combat_over(result: String) -> void:
 	# reward Dictionary carried neither. Additive field — an old save without
 	# it falls back to lantern-ember and the generic husk, which is the plan's
 	# own fallback path.
-	var slain: Dictionary = {}
+	# The BIGGEST body in the fight is the one the reward wears — enemies[0]
+	# is merely the leftmost. Named slain_enemy because run.stats["slain"] is
+	# already an integer kill count; one name carrying two types in one save
+	# file is a bug that waits.
+	var slain_enemy: Dictionary = {}
 	if game.cb != null and not game.cb.enemies.is_empty():
-		var first: EnemyCombatant = game.cb.enemies[0]
-		var slain_art: Dictionary = first.def.get("art", {})
-		slain = {"id": String(first.key), "hue": slain_art.get("hue", 22)}
+		var largest: EnemyCombatant = game.cb.enemies[0]
+		for foe: EnemyCombatant in game.cb.enemies:
+			if foe.max_hp > largest.max_hp:
+				largest = foe
+		var slain_art: Dictionary = largest.def.get("art", {})
+		slain_enemy = {"id": String(largest.key), "hue": slain_art.get("hue", 22)}
 	game.run.pending_reward = {
 		"rewards": rewards,
 		"taken": {"gold": false, "card": false, "potion": false, "relic": false},
-		"slain": slain,
+		"slain_enemy": slain_enemy,
 	}
 	if not SaveService.store(game.run):
 		_show_save_error("The victory rewards could not be held.")

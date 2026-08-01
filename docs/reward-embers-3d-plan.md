@@ -157,7 +157,17 @@ molten term is allowed.
 of video memory**, with frame time comfortable (~0.9 ms of 16). Two knobs — MSAA
 and `oversample` — roughly halve it.
 
-The reward stage is one stage, so its own cost should land well under an actor's,
+The reward stage is one stage. **Measured 2026-08-01** (`tools/bench_reward_stage.gd`,
+same instruments as the actor probe): **127.4 MB** of video memory at the hold —
+BESIDE the actor's 113 MB, not under it, because an actor's viewport is a fixed
+box and this one is the window × OVERSAMPLE 1.5. Two properties worth knowing
+before turning knobs: `stretch/mode="canvas_items"` pins the logical canvas at
+1180×820, so the stage renders at 1770×1230 on every display and the figure does
+NOT grow with the monitor (`VP_MAX` 2048 never engages) — on a 2560-wide display
+OVERSAMPLE is therefore a *sharpness* lever, not only a cost one. The engine's
+per-viewport GPU clock reads zero through this path on this driver; the frame-time
+story stays with the actor probe's method. The original hope stands corrected:
+its own cost was expected to land well under an actor's,
 but **it must be measured with the same tool** (`tools/bench_actor_stage.gd`)
 before this is called done. Two things make it not automatically safe:
 

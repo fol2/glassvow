@@ -397,9 +397,28 @@ class Piece extends RefCounted:
 	var vel: Vector3
 	var axis: Vector3
 	var rate: float          # rad/s, braked toward DRIFT_SPIN
-	var drift: Vector3       # the hang's own slow heading
+	var drift: Vector3       # the brake's convergence target
 	var spoil: int = -1      # 0..2: one of the three chosen pieces
-	var area: float = 0.0
+	var area: float = 0.0    # polygon area — mass, for the throw
+	var paint: float = 0.0   # PAINTED area — what the player actually sees
+	var paint_off: Vector2 = Vector2.ZERO  # alpha-weighted centre − centroid
+	var settled: bool = false
+	var home: Vector3 = Vector3.ZERO
+	var base_q: Quaternion = Quaternion.IDENTITY
+	var osc_phase: Vector3 = Vector3.ZERO
+	var osc_rate: Vector3 = Vector3.ZERO
+
+const COOL: float = 0.40
+## The hang is a BOUNDED oscillation, not a heading. Decision 3 said "not a
+## drift that keeps going somewhere", and a constant 2px/s heading violates
+## that in the integral — 120px gone after a minute of the player reading
+## cards. A slow lissajous about the hold pose keeps the same peak rates
+## (amp × rate ≤ 2px/s, tilt × rate ≤ 2°/s) inside a fixed envelope, so a
+## highlight still walks across a facet over seconds and nothing ever
+## leaves.
+const OSC_AMP: float = 5.0 * UNIT
+const OSC_TILT: float = 0.10
+const OSC_RATE: float = 0.35
 
 ## The three spoils are CHOSEN, not promoted: the three largest cells. As
 ## the brake bites they turn to face the camera — their art and their word
@@ -424,6 +443,12 @@ const SHARD_SHADER_RES: Shader = preload("res://presentation/reward/reward_shard
 ## watching it more than once, and the same seed breaks the same way.
 func shatter() -> void:
 	_clear_pieces()
+	# The previous run's words go with its pieces — 0.28s of GOLD floating
+	# over a visibly whole body was every replay's first frame.
+	for word: Label in _words:
+		if is_instance_valid(word):
+			word.queue_free()
+	_words.clear()
 	if _husk != null:
 		_husk.visible = true
 	if _body != null:
@@ -464,29 +489,51 @@ func _process(delta: float) -> void:
 		PH_FLY:
 			# One integration for burst, brake and hang. The damp is the
 			# BRAKE: full speed until BURST ends, then a hard exponential
-			# bite that leaves only the drift.
+			# bite; once the bite has done its work each piece banks its hold
+			# pose and the hang becomes a bounded sway about it.
 			var braking: bool = _t > BURST
-			# COOL overlaps the brake (the plan's own timeline): molten at the
-			# moment of failure, glass again by the hold.
-			var cool: float = clampf((_t - BURST) / 0.40, 0.0, 1.0)
+			var held: bool = _t > BURST + BRAKE
+			var cool: float = clampf((_t - BURST) / COOL, 0.0, 1.0)
 			for piece: Piece in _pieces:
 				var mat: ShaderMaterial = \
 					piece.node.get_surface_override_material(0) as ShaderMaterial
 				if mat != null:
 					mat.set_shader_parameter("cool", cool)
+				if held and not piece.settled:
+					piece.settled = true
+					piece.home = piece.node.position
+					piece.base_q = piece.node.quaternion
+				if piece.settled:
+					if piece.spoil >= 0:
+						continue  # faced and parked: the announcements hold still
+					piece.node.position = piece.home + Vector3(
+						sin(_t * piece.osc_rate.x + piece.osc_phase.x),
+						sin(_t * piece.osc_rate.y + piece.osc_phase.y),
+						sin(_t * piece.osc_rate.z + piece.osc_phase.z) * 0.4) * OSC_AMP
+					piece.node.quaternion = piece.base_q * Quaternion(
+						piece.axis,
+						OSC_TILT * sin(_t * piece.osc_rate.x * 0.7 + piece.osc_phase.y))
+					continue
 				if braking:
 					var bite: float = pow(0.004, delta / BRAKE)
 					piece.vel = piece.vel * bite + piece.drift * (1.0 - bite)
 					piece.rate = maxf(piece.rate * bite, DRIFT_SPIN)
 				piece.node.position += piece.vel * delta
 				if piece.spoil >= 0 and braking:
-					# A spoil turns to FACE the camera as it brakes — its art
-					# and its word must read flat — and stays faced through
-					# the hold: the announcements are the one thing in the
-					# room excused from the drift.
+					# A spoil turns to the room's REST-FACING as it brakes —
+					# the camera's home axis; look_from() parallax may tilt
+					# the whole room and the spoils ride with it, which keeps
+					# them IN the room rather than pasted over it. And it
+					# BRAKES INTO ITS SEAT: the three most-painted cells are
+					# body-core cells, thrown from the same blow — left to
+					# the damp alone they bunch over the fire, three words in
+					# one spot. The seats hang mid-air (nothing lands), the
+					# 2D concept's own arrangement carried into the room.
 					var q_now: Quaternion = piece.node.quaternion
 					piece.node.quaternion = q_now.slerp(
 						Quaternion.IDENTITY, 1.0 - pow(0.002, delta / BRAKE))
+					piece.node.position = piece.node.position.lerp(
+						_spoil_seat(piece.spoil), 1.0 - pow(0.02, delta / BRAKE))
 				else:
 					piece.node.rotate(piece.axis, piece.rate * delta)
 			_seat_words()
@@ -503,10 +550,16 @@ func _burst() -> void:
 		aspect = quad.size.x / quad.size.y
 	var box: Vector2 = Vector2(_box_u * aspect, _box_u)
 	var rng: Rng = Rng.new(hash(enemy_id) & 0x7FFFFFFF)
-	var blow: Vector2 = Vector2(0.0, -_box_u * 0.08)
+	# The blow lands OFF-centre — a perfectly central blow makes a perfectly
+	# radial field, and B1's wreath comes back wearing 3D.
+	var blow: Vector2 = Vector2(
+		(rng.next() - 0.5) * box.x * 0.22, -_box_u * 0.10)
 	var cells: Array[PackedVector2Array] = RewardFracture.voronoi(
 		RewardFracture.burst_sites(blow, box, rng), box)
 	var tex: Texture2D = _art()
+	var img: Image = tex.get_image() if tex != null else null
+	if img != null and img.is_compressed():
+		img.decompress()
 	var home: Vector3 = _husk.position
 	for cell: PackedVector2Array in cells:
 		var centre: Vector2 = Vector2.ZERO
@@ -536,48 +589,121 @@ func _burst() -> void:
 		var piece: Piece = Piece.new()
 		piece.node = node
 		var out: Vector2 = (centre - blow)
-		var dir: Vector3 = Vector3(out.x, -out.y, 0.0).normalized() \
-			if out.length() > 0.001 else Vector3(0, 1, 0)
+		var radial: Vector2 = out.normalized() if out.length() > 0.001 \
+			else Vector2(0.0, 1.0)
+		# Not strictly radial: a tangent shove of up to ±0.9 lets fragments
+		# CROSS the middle, so the hold has no hole where the creature was —
+		# a strictly radial field is B1's wreath, structural this time.
+		var tangent: Vector2 = Vector2(-radial.y, radial.x) \
+			* (rng.next() - 0.5) * 1.8
+		var swung: Vector2 = (radial + tangent).normalized()
+		var dir: Vector3 = Vector3(swung.x, -swung.y, 0.0)
 		# A shove toward the camera as well as outward — the spread must
 		# read in depth, or it is a drawing again.
 		dir = (dir + Vector3(0, 0, 0.55 + rng.next() * 0.5)).normalized()
-		piece.vel = dir * THROW * (0.55 + 0.65 * rng.next())
-		piece.axis = Vector3(
-			rng.next() - 0.5, rng.next() - 0.5, rng.next() - 0.5).normalized()
-		piece.rate = SPIN * (0.4 + 0.9 * rng.next())
-		piece.drift = Vector3(
-			rng.next() - 0.5, rng.next() - 0.5, (rng.next() - 0.5) * 0.4
-		).normalized() * DRIFT_MOVE * (0.4 + 0.6 * rng.next())
 		var area: float = 0.0
 		for k: int in range(cell.size()):
 			var p2: Vector2 = cell[k]
 			var q2: Vector2 = cell[(k + 1) % cell.size()]
 			area += p2.x * q2.y - q2.x * p2.y
 		piece.area = absf(area) * 0.5
+		# Mass matters: the heaviest fragments leave slower than the chips.
+		var heft: float = clampf(
+			1.18 - piece.area / (box.x * box.y) * 4.0, 0.6, 1.18)
+		piece.vel = dir * THROW * (0.55 + 0.65 * rng.next()) * heft
+		piece.axis = Vector3(
+			rng.next() - 0.5, rng.next() - 0.5, rng.next() - 0.5).normalized()
+		piece.rate = SPIN * (0.4 + 0.9 * rng.next())
+		piece.drift = Vector3(
+			rng.next() - 0.5, rng.next() - 0.5, (rng.next() - 0.5) * 0.4
+		).normalized() * DRIFT_MOVE * (0.4 + 0.6 * rng.next())
+		piece.osc_phase = Vector3(rng.next(), rng.next(), rng.next()) * TAU
+		piece.osc_rate = Vector3(
+			OSC_RATE * (0.7 + 0.6 * rng.next()),
+			OSC_RATE * (0.7 + 0.6 * rng.next()),
+			OSC_RATE * (0.7 + 0.6 * rng.next()))
+		# What the player SEES of a cell is its painted subset — a huge cell
+		# over an empty corner of the art box is debris, whatever its
+		# polygon area says. Sampled against the art's alpha; the weighted
+		# centre also seats the word on the paint, not on the geometry.
+		_measure_paint(piece, cell, centre, box, img)
 		_pieces.append(piece)
 	_husk.visible = false
 	_choose_spoils()
 
 
-## The three spoils are the three LARGEST cells — chosen, not promoted.
-## Their cut takes the item's colour and their word follows them down the
-## brake into the hold.
+## Where a spoil hangs: an arc over the wreckage, spread wide enough that
+## three words never touch, lifted toward the camera so the prize reads in
+## front of the debris. Mid-air by construction — decision 3's "nothing
+## lands" holds because there is nothing to land on.
+func _spoil_seat(i: int) -> Vector3:
+	var seat_px: Vector2 = HUSK_AT + Vector2(
+		(float(i) - 1.0) * _box_px * 0.85, -_box_px * 0.34)
+	return at(seat_px, _box_u * 0.45)
+
+
+## Alpha coverage of a cell, and where that coverage sits. A 12×12 grid over
+## the cell's bounds — fine enough to rank sixteen cells, cheap enough to
+## run at the burst frame.
+func _measure_paint(piece: Piece, cell: PackedVector2Array, centre: Vector2,
+		box: Vector2, img: Image) -> void:
+	if img == null:
+		piece.paint = piece.area
+		return
+	var lo: Vector2 = cell[0]
+	var hi: Vector2 = cell[0]
+	for p: Vector2 in cell:
+		lo = lo.min(p)
+		hi = hi.max(p)
+	var span: Vector2 = hi - lo
+	var hits: int = 0
+	var weighted: Vector2 = Vector2.ZERO
+	var w: int = img.get_width()
+	var h: int = img.get_height()
+	for iy: int in range(12):
+		for ix: int in range(12):
+			var at: Vector2 = lo + Vector2(
+				span.x * (float(ix) + 0.5) / 12.0,
+				span.y * (float(iy) + 0.5) / 12.0)
+			if not Geometry2D.is_point_in_polygon(at, cell):
+				continue
+			var u: float = at.x / box.x + 0.5
+			var v: float = 0.5 - at.y / box.y
+			if u < 0.0 or u >= 1.0 or v < 0.0 or v >= 1.0:
+				continue
+			var px: Color = img.get_pixel(int(u * float(w)), int(v * float(h)))
+			if px.a > 0.3:
+				hits += 1
+				weighted += at
+	var sample_area: float = span.x * span.y / 144.0
+	piece.paint = float(hits) * sample_area
+	if hits > 0:
+		piece.paint_off = weighted / float(hits) - centre
+
+
+## The three spoils are the three pieces carrying the most PAINT — chosen,
+## not promoted, and chosen by what the player sees rather than by polygon
+## area: the first cut promoted a sliver whose word was wider than the
+## fragment it named. Their cut takes the item's colour, and louder than
+## the debris keeps the enemy's — the tint gain is what separates a prize
+## from a shard once the cream specular lands on both.
 func _choose_spoils() -> void:
-	var by_area: Array[Piece] = _pieces.duplicate()
-	by_area.sort_custom(func(a: Piece, b: Piece) -> bool: return a.area > b.area)
-	for i: int in range(mini(3, by_area.size())):
-		var piece: Piece = by_area[i]
+	var by_paint: Array[Piece] = _pieces.duplicate()
+	by_paint.sort_custom(func(a: Piece, b: Piece) -> bool: return a.paint > b.paint)
+	for i: int in range(mini(3, by_paint.size())):
+		var piece: Piece = by_paint[i]
 		piece.spoil = i
 		var mat: ShaderMaterial = \
 			piece.node.get_surface_override_material(0) as ShaderMaterial
 		if mat != null:
 			var tint: Color = SPOIL_TINTS[i]
 			mat.set_shader_parameter("cool_tint", Vector3(tint.r, tint.g, tint.b))
+			mat.set_shader_parameter("tint_gain", 2.4)
 	for word: Label in _words:
 		if is_instance_valid(word):
 			word.queue_free()
 	_words.clear()
-	for i: int in range(mini(3, by_area.size())):
+	for i: int in range(mini(3, by_paint.size())):
 		var word: Label = Label.new()
 		word.text = SPOIL_WORDS[i]
 		word.add_theme_font_size_override("font_size", 13)
@@ -597,7 +723,7 @@ func _choose_spoils() -> void:
 func _seat_words() -> void:
 	if _words.is_empty():
 		return
-	var fade: float = clampf((_t - BURST) / 0.40, 0.0, 1.0)
+	var fade: float = clampf((_t - BURST) / COOL, 0.0, 1.0)
 	var view_scale: Vector2 = size / Vector2(_vp.size)
 	for piece: Piece in _pieces:
 		if piece.spoil < 0 or piece.spoil >= _words.size():
@@ -605,10 +731,16 @@ func _seat_words() -> void:
 		var word: Label = _words[piece.spoil]
 		if not is_instance_valid(word):
 			continue
+		# Anchored on the PAINT's centre, not the polygon's — the word names
+		# the visible fragment. view_scale converts viewport px to control
+		# px; the drop below the piece is already in canvas px and takes no
+		# second scaling (that double-scale was a 0.667x error waiting for
+		# the OVERSAMPLE knob to expose it).
 		var at_screen: Vector2 = _cam.unproject_position(
-			piece.node.global_position) * view_scale
+			piece.node.global_position
+			+ Vector3(piece.paint_off.x, -piece.paint_off.y, 0.0)) * view_scale
 		word.position = at_screen + Vector2(
-			-word.size.x * 0.5, _box_u * 0.22 / UNIT * view_scale.y + 10.0)
+			-word.size.x * 0.5, _box_px * 0.10 + 12.0)
 		word.modulate.a = fade
 
 
