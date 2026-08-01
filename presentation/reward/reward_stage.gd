@@ -353,6 +353,178 @@ func look_from(pointer: Vector2) -> void:
 	_room.rotation_degrees = Vector3(_turn.y * TURN.y, _turn.x * TURN.x, 0.0)
 
 
+# ---------------------------------------------------------------- the break
+#
+# Stage 2 of the plan: the body comes apart AT REAL SPEED, brakes HARD, and
+# hangs. The deceleration is what reads as time slowing — things merely
+# stopping reads as a bug — and nothing ever lands, so nothing can land badly.
+# No physics (decision 1): velocities are integrated by hand, which is also
+# what makes the same seed the same shot tomorrow.
+
+## The beats (docs/reward-embers-3d-plan.md § timeline). SIT and BLAZE run
+## before the burst; COOL belongs to stage 3's material and overlaps the brake.
+const SIT: float = 0.18
+const BLAZE: float = 0.10
+const BURST: float = 0.30
+const BRAKE: float = 0.35
+## The hold's residual drift: a highlight should walk across a facet over
+## SECONDS — about 2°/s of turn and under 2px/s of travel.
+const DRIFT_SPIN: float = deg_to_rad(2.0)
+const DRIFT_MOVE: float = 2.0 * UNIT
+## How hard the body leaves itself. World units per second at the burst's
+## edge; the brake eats almost all of it.
+const THROW: float = 2.6
+const SPIN: float = 4.2
+## A reward piece is slightly thinner than a combat shard — it is meant to be
+## looked THROUGH at rest, not thrown past the camera.
+const PIECE_THICK: float = 0.032
+
+const REST: int = 0
+const PH_SIT: int = 1
+const PH_BLAZE: int = 2
+const PH_FLY: int = 3     # burst + brake + hang, one continuous integration
+
+class Piece extends RefCounted:
+	var node: MeshInstance3D
+	var vel: Vector3
+	var axis: Vector3
+	var rate: float          # rad/s, braked toward DRIFT_SPIN
+	var drift: Vector3       # the hang's own slow heading
+
+var _phase: int = REST
+var _t: float = 0.0
+var _pieces: Array[Piece] = []
+var _shard_mat_src: Shader = null
+
+
+## Begin the rite from the whole body. Replayable: the lab judges a break by
+## watching it more than once, and the same seed breaks the same way.
+func shatter() -> void:
+	_clear_pieces()
+	if _husk != null:
+		_husk.visible = true
+	if _body != null:
+		_body.set_shader_parameter("emission_gain", HUSK_EMISSION)
+	set_heat(1.0)
+	_phase = PH_SIT
+	_t = 0.0
+	set_process(true)
+
+
+func _clear_pieces() -> void:
+	for piece: Piece in _pieces:
+		if is_instance_valid(piece.node):
+			piece.node.queue_free()
+	_pieces.clear()
+
+
+func _process(delta: float) -> void:
+	if _phase == REST:
+		return
+	_t += delta
+	match _phase:
+		PH_SIT:
+			if _t >= SIT:
+				_phase = PH_BLAZE
+				_t = 0.0
+		PH_BLAZE:
+			# The cracks take light from inside while it is still one piece:
+			# the dead lantern glows once more, from 0.06 up toward a living
+			# body's neighbourhood.
+			if _body != null:
+				_body.set_shader_parameter("emission_gain",
+					lerpf(HUSK_EMISSION, 0.85, clampf(_t / BLAZE, 0.0, 1.0)))
+			if _t >= BLAZE:
+				_burst()
+				_phase = PH_FLY
+				_t = 0.0
+		PH_FLY:
+			# One integration for burst, brake and hang. The damp is the
+			# BRAKE: full speed until BURST ends, then a hard exponential
+			# bite that leaves only the drift.
+			var braking: bool = _t > BURST
+			# COOL overlaps the brake (the plan's own timeline): molten at the
+			# moment of failure, glass again by the hold. Stage 3 replaces
+			# this straight ramp with the item-colour cooling; without it the
+			# hold reads as plywood — every fracture face still pouring WARM.
+			var cool: float = clampf((_t - BURST) / 0.40, 0.0, 1.0)
+			for piece: Piece in _pieces:
+				var mat: ShaderMaterial = \
+					piece.node.get_surface_override_material(0) as ShaderMaterial
+				if mat != null:
+					mat.set_shader_parameter("heat", lerpf(1.0, 0.10, cool))
+				if braking:
+					var bite: float = pow(0.004, delta / BRAKE)
+					piece.vel = piece.vel * bite + piece.drift * (1.0 - bite)
+					piece.rate = maxf(piece.rate * bite, DRIFT_SPIN)
+				piece.node.position += piece.vel * delta
+				piece.node.rotate(piece.axis, piece.rate * delta)
+
+
+## The body comes apart: the husk hides in the same frame its pieces appear,
+## each cell extruded about its own centroid and thrown out from the blow.
+func _burst() -> void:
+	if _husk == null:
+		return
+	var aspect: float = 1.0
+	var quad: QuadMesh = _husk.mesh as QuadMesh
+	if quad != null and quad.size.y > 0.0:
+		aspect = quad.size.x / quad.size.y
+	var box: Vector2 = Vector2(_box_u * aspect, _box_u)
+	var rng: Rng = Rng.new(hash(enemy_id) & 0x7FFFFFFF)
+	var blow: Vector2 = Vector2(0.0, -_box_u * 0.08)
+	var cells: Array[PackedVector2Array] = RewardFracture.voronoi(
+		RewardFracture.burst_sites(blow, box, rng), box)
+	if _shard_mat_src == null:
+		_shard_mat_src = Shader.new()
+		# Borrowed SPLICED, like the husk's own shader: the caps carry the
+		# painting, the red-tagged fracture band carries the molten term.
+		# Stage 3 replaces the cooling with the item's own colour.
+		_shard_mat_src.code = EnemyView.with_tint(
+			EnemyView.with_erode(EnemyView.SHARD_SHADER))
+	var tex: Texture2D = _art()
+	var home: Vector3 = _husk.position
+	for cell: PackedVector2Array in cells:
+		var centre: Vector2 = Vector2.ZERO
+		for p: Vector2 in cell:
+			centre += p
+		centre /= float(cell.size())
+		var mesh: ArrayMesh = RewardFracture.prism(
+			cell, _box_u * PIECE_THICK, box, centre)
+		if mesh == null:
+			continue
+		var mat: ShaderMaterial = ShaderMaterial.new()
+		mat.shader = _shard_mat_src
+		mat.set_shader_parameter("body_tex", tex)
+		mat.set_shader_parameter("heat", 1.0)
+		mat.set_shader_parameter("dissolve", 0.0)
+		var node: MeshInstance3D = MeshInstance3D.new()
+		node.mesh = mesh
+		node.set_surface_override_material(0, mat)
+		# Cells are husk-space (y down in canvas sense); the husk quad maps
+		# art the same way, so a piece stands exactly over the pixels it
+		# carries — flip y into world, as at() does.
+		node.position = home + Vector3(centre.x, -centre.y, 0.0)
+		_room.add_child(node)
+		var piece: Piece = Piece.new()
+		piece.node = node
+		var out: Vector2 = (centre - blow)
+		var dir: Vector3 = Vector3(out.x, -out.y, 0.0).normalized() \
+			if out.length() > 0.001 else Vector3(0, 1, 0)
+		# A shove toward the camera as well as outward — the spread must
+		# read in depth, or it is a drawing again.
+		dir = (dir + Vector3(0, 0, 0.55 + rng.next() * 0.5)).normalized()
+		piece.vel = dir * THROW * (0.55 + 0.65 * rng.next())
+		piece.axis = Vector3(
+			rng.next() - 0.5, rng.next() - 0.5, rng.next() - 0.5).normalized()
+		piece.rate = SPIN * (0.4 + 0.9 * rng.next())
+		piece.drift = Vector3(
+			rng.next() - 0.5, rng.next() - 0.5, (rng.next() - 0.5) * 0.4
+		).normalized() * DRIFT_MOVE * (0.4 + 0.6 * rng.next())
+		_pieces.append(piece)
+	_husk.visible = false
+
+
 func rest() -> void:
 	_turn = Vector2.ZERO
 	if _room != null:
