@@ -345,8 +345,9 @@ func _on_scrim_input(event: InputEvent) -> void:
 		closed.emit()
 
 
-## Scrim `gui_input` never receives keys; Escape closes via the unhandled path.
-func _unhandled_key_input(event: InputEvent) -> void:
+## Scrim `gui_input` never receives keys; Escape / ui_cancel closes via the
+## unhandled path — `_unhandled_input` so gamepad ui_cancel reaches it too.
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"ui_cancel"):
 		closed.emit()
 		get_viewport().set_input_as_handled()

@@ -7,10 +7,22 @@ signal closed
 
 const PANEL_MAX_WIDTH: float = 640.0
 const PANEL_MAX_HEIGHT: float = 0.88
-const DESKTOP_INSET: float = 28.0
-const PHONE_INSET: float = 18.0
+## Matches `GlassStyle.pane` `set_content_margin_all(12)` — the real inset the
+## column must subtract when sizing against the pane (not a dead DESKTOP/PHONE
+## knob that never bound to the stylebox).
+const PANE_INSET: float = 12.0
 const MUSIC_MANIFEST: String = "res://assets/audio/music/manifest.json"
 const SFX_MANIFEST: String = "res://assets/audio/sfx/manifest.json"
+
+const FONT_LICENCES: Array[Dictionary] = [
+	{"family": "Cinzel", "path": "res://assets/fonts/OFL-Cinzel.txt"},
+	{"family": "Alegreya", "path": "res://assets/fonts/OFL-Alegreya.txt"},
+	# OFL.txt's copyright reads "Adobe ... Reserved Font Name 'Source'" and
+	# that IS Noto Sans TC's genuine declaration: Adobe manufactures Noto CJK
+	# for Google (derived from Source Han Sans) — verified against the TTF's
+	# own name table (nameID 8 = Adobe).
+	{"family": "Noto Sans TC", "path": "res://assets/fonts/OFL.txt"},
+]
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -21,6 +33,9 @@ var _sfx: SfxBus
 var _licence_wrap: MarginContainer
 var _licence_toggle: Button
 var _licence_built: bool = false
+var _font_licence_wrap: MarginContainer
+var _font_licence_toggle: Button
+var _font_licence_built: bool = false
 
 
 func _init(stage_shape: StringName = StageShape.IDENTITY,
@@ -91,17 +106,20 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	_add_body("Parallel-ported from roguecardv2 (web reference 0.5.0+6e06911).")
 
 	_add_heading("MUSIC — STAINED GLASS")
-	_add_body("stained-glass-v1", GlassStyle.TEXT_DIM)
-	_add_music_rows(_read_manifest(MUSIC_MANIFEST))
+	_add_pack_id("stained-glass-v1")
+	var music_manifest: Variant = _read_manifest(MUSIC_MANIFEST)
+	_add_music_attribution(music_manifest)
+	_add_music_rows(music_manifest)
 
 	_add_heading("SOUND — ASHGLASS VIGIL")
-	_add_body("ashglass-v1", GlassStyle.TEXT_DIM)
+	_add_pack_id("ashglass-v1")
 	_add_sfx_rows(_read_manifest(SFX_MANIFEST))
 
 	_add_heading("TYPE")
 	_add_body("Cinzel — Natanael Gama (OFL)")
 	_add_body("Alegreya — Juan Pablo del Peral, Huerta Tipográfica (OFL)")
 	_add_body("Noto Sans TC — Google (OFL)")
+	_add_font_licence_fold()
 
 	_add_heading("ENGINE")
 	_add_body("Made with Godot Engine")
@@ -113,6 +131,15 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	footer_seat.add_theme_constant_override("margin_top", 14)
 	footer_seat.add_child(footer)
 	_column.add_child(footer_seat)
+
+	# Fixed-foot seam: gold hairline marks the scroll/foot boundary so the
+	# last track title is not sliced against the Close row (#54 NIT).
+	var hairline: ColorRect = ColorRect.new()
+	hairline.custom_minimum_size = Vector2(0, 1)
+	hairline.color = Color(GlassStyle.GOLD, 0.25)
+	hairline.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hairline.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	shell.add_child(hairline)
 
 	# The panel's primary action is LEAVING it — a visible, focused dismiss
 	# at the foot of the pane, outside the scroll so it never hides below
@@ -147,11 +174,10 @@ func _fit() -> void:
 	var reference: Vector2i = StageShape.REFERENCES[shape]
 	var stage_size: Vector2 = size if size.x > 0.0 and size.y > 0.0 else Vector2(reference)
 	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
-	var inset: float = PHONE_INSET if phone else DESKTOP_INSET
 	var panel_width: float = minf(PANEL_MAX_WIDTH, stage_size.x)
 	var panel_height: float = stage_size.y if phone else stage_size.y * PANEL_MAX_HEIGHT
 	_panel.custom_minimum_size = Vector2(panel_width, panel_height)
-	_column.custom_minimum_size.x = maxf(240.0, panel_width - inset * 2.0)
+	_column.custom_minimum_size.x = maxf(240.0, panel_width - PANE_INSET * 2.0)
 
 
 func _read_manifest(path: String) -> Variant:
@@ -161,6 +187,20 @@ func _read_manifest(path: String) -> Variant:
 	if file == null:
 		return null
 	return JSON.parse_string(file.get_as_text())
+
+
+func _add_music_attribution(manifest: Variant) -> void:
+	var count: int = 0
+	if typeof(manifest) == TYPE_DICTIONARY:
+		var pack: Dictionary = manifest
+		var items_raw: Variant = pack.get("items", null)
+		if typeof(items_raw) == TYPE_DICTIONARY:
+			var items: Dictionary = items_raw
+			count = items.size()
+	if count > 0:
+		_add_body("%d tracks · composed with Suno" % count)
+	else:
+		_add_body("composed with Suno")
 
 
 func _add_music_rows(manifest: Variant) -> void:
@@ -215,7 +255,7 @@ func _add_licence_fold() -> void:
 	seat.add_child(fold)
 
 	_licence_toggle = Button.new()
-	_licence_toggle.text = "Third-party licences"
+	_licence_toggle.text = "Engine licences"
 	_licence_toggle.custom_minimum_size = Vector2(0, 36)
 	_licence_toggle.add_theme_font_override("font",
 		load(GlassStyle.ALEGREYA_400) as Font)
@@ -229,29 +269,181 @@ func _add_licence_fold() -> void:
 	fold.add_child(_licence_wrap)
 
 
+func _add_font_licence_fold() -> void:
+	var seat: MarginContainer = MarginContainer.new()
+	seat.add_theme_constant_override("margin_top", 8)
+	_column.add_child(seat)
+	var fold: VBoxContainer = VBoxContainer.new()
+	fold.add_theme_constant_override("separation", 8)
+	seat.add_child(fold)
+
+	_font_licence_toggle = Button.new()
+	_font_licence_toggle.text = "Font licences (OFL)"
+	_font_licence_toggle.custom_minimum_size = Vector2(0, 36)
+	_font_licence_toggle.add_theme_font_override("font",
+		load(GlassStyle.ALEGREYA_400) as Font)
+	_font_licence_toggle.add_theme_font_size_override("font_size", 15)
+	GlassStyle.style_button(_font_licence_toggle, GlassStyle.GLASS)
+	_font_licence_toggle.pressed.connect(_on_font_licence_toggle)
+	fold.add_child(_font_licence_toggle)
+
+	_font_licence_wrap = MarginContainer.new()
+	_font_licence_wrap.visible = false
+	fold.add_child(_font_licence_wrap)
+
+
 func _on_licence_toggle() -> void:
 	_sfx.play(&"click")
 	if not _licence_built:
 		_build_licence()
 		_licence_built = true
 	_licence_wrap.visible = not _licence_wrap.visible
+	if _licence_wrap.visible:
+		_scroll.ensure_control_visible.call_deferred(_licence_wrap)
+
+
+func _on_font_licence_toggle() -> void:
+	_sfx.play(&"click")
+	if not _font_licence_built:
+		_build_font_licences()
+		_font_licence_built = true
+	_font_licence_wrap.visible = not _font_licence_wrap.visible
+	if _font_licence_wrap.visible:
+		_scroll.ensure_control_visible.call_deferred(_font_licence_wrap)
 
 
 func _build_licence() -> void:
 	# One scrollbar only: the outer panel carries the licence text — a well
 	# with its own scroll inside a scrolling panel is a wheel-capture trap.
 	_licence_wrap.add_theme_constant_override("margin_bottom", 8)
+	var fold: VBoxContainer = VBoxContainer.new()
+	fold.add_theme_constant_override("separation", 8)
+	fold.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_licence_wrap.add_child(fold)
+
+	var engine_text: RichTextLabel = _licence_body(Engine.get_license_text())
+	fold.add_child(engine_text)
+
+	fold.add_child(_fold_heading("COMPONENTS"))
+
+	var copyright_info: Array = Engine.get_copyright_info()
+	for entry_raw: Variant in copyright_info:
+		if typeof(entry_raw) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_raw
+		var lines: PackedStringArray = PackedStringArray()
+		lines.append(str(entry.get("name", "")))
+		var parts_raw: Variant = entry.get("parts", [])
+		if typeof(parts_raw) == TYPE_ARRAY:
+			var parts: Array = parts_raw
+			for part_raw: Variant in parts:
+				if typeof(part_raw) != TYPE_DICTIONARY:
+					continue
+				var part: Dictionary = part_raw
+				var cr_raw: Variant = part.get("copyright", [])
+				var cr_bits: PackedStringArray = PackedStringArray()
+				if typeof(cr_raw) == TYPE_ARRAY:
+					var cr_list: Array = cr_raw
+					for cr_item: Variant in cr_list:
+						cr_bits.append(str(cr_item))
+				elif typeof(cr_raw) == TYPE_STRING:
+					var cr_str: String = str(cr_raw).strip_edges()
+					if not cr_str.is_empty():
+						cr_bits.append(cr_str)
+				if not cr_bits.is_empty():
+					lines.append("© " + "; ".join(cr_bits))
+				var lic_id: String = str(part.get("license", "")).strip_edges()
+				if not lic_id.is_empty():
+					lines.append(lic_id)
+		var component: Label = Label.new()
+		component.text = "\n".join(lines)
+		component.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		component.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+		component.add_theme_font_size_override("font_size", 11)
+		component.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+		fold.add_child(component)
+
+	fold.add_child(_fold_heading("LICENCE TEXTS"))
+
+	var licence_info: Dictionary = Engine.get_license_info()
+	for name_raw: Variant in licence_info.keys():
+		var lic_name: String = str(name_raw)
+		var name_label: Label = Label.new()
+		name_label.text = lic_name
+		name_label.add_theme_font_override("font",
+			RunStyle.tracked(GlassStyle.CINZEL_700, 1))
+		name_label.add_theme_font_size_override("font_size", 13)
+		name_label.add_theme_color_override("font_color", GlassStyle.GOLD)
+		fold.add_child(name_label)
+		var text_raw: Variant = licence_info[name_raw]
+		fold.add_child(_licence_body(str(text_raw), 11))
+
+
+func _build_font_licences() -> void:
+	_font_licence_wrap.add_theme_constant_override("margin_bottom", 8)
+	var fold: VBoxContainer = VBoxContainer.new()
+	fold.add_theme_constant_override("separation", 8)
+	fold.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_font_licence_wrap.add_child(fold)
+
+	for entry: Dictionary in FONT_LICENCES:
+		var family: String = str(entry["family"])
+		var path: String = str(entry["path"])
+		var name_label: Label = Label.new()
+		name_label.text = family
+		name_label.add_theme_font_override("font",
+			RunStyle.tracked(GlassStyle.CINZEL_700, 1))
+		name_label.add_theme_font_size_override("font_size", 13)
+		name_label.add_theme_color_override("font_color", GlassStyle.GOLD)
+		fold.add_child(name_label)
+		if not FileAccess.file_exists(path):
+			var missing: Label = Label.new()
+			missing.text = "licence file not found: %s" % family
+			missing.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			missing.add_theme_font_override("font",
+				load(GlassStyle.ALEGREYA_400) as Font)
+			missing.add_theme_font_size_override("font_size", 11)
+			missing.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+			fold.add_child(missing)
+			continue
+		var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+		if file == null:
+			var missing_open: Label = Label.new()
+			missing_open.text = "licence file not found: %s" % family
+			missing_open.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			missing_open.add_theme_font_override("font",
+				load(GlassStyle.ALEGREYA_400) as Font)
+			missing_open.add_theme_font_size_override("font_size", 11)
+			missing_open.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+			fold.add_child(missing_open)
+			continue
+		fold.add_child(_licence_body(file.get_as_text(), 11))
+
+
+func _fold_heading(text: String) -> MarginContainer:
+	var seat: MarginContainer = MarginContainer.new()
+	seat.add_theme_constant_override("margin_top", 12)
+	var heading: Label = Label.new()
+	heading.text = text
+	heading.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 1))
+	heading.add_theme_font_size_override("font_size", 13)
+	heading.add_theme_color_override("font_color", GlassStyle.GOLD)
+	seat.add_child(heading)
+	return seat
+
+
+func _licence_body(text: String, font_size: int = 12) -> RichTextLabel:
 	var body: RichTextLabel = RichTextLabel.new()
 	body.fit_content = true
 	body.scroll_active = false
 	body.selection_enabled = true
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	body.text = Engine.get_license_text()
+	body.text = text
 	body.add_theme_font_override("normal_font", load(GlassStyle.ALEGREYA_400) as Font)
-	body.add_theme_font_size_override("normal_font_size", 12)
+	body.add_theme_font_size_override("normal_font_size", font_size)
 	body.add_theme_color_override("default_color", GlassStyle.TEXT_DIM)
-	_licence_wrap.add_child(body)
+	return body
 
 
 func _add_heading(text: String) -> void:
@@ -265,6 +457,15 @@ func _add_heading(text: String) -> void:
 	heading.add_theme_color_override("font_color", GlassStyle.GOLD)
 	heading.add_theme_constant_override("line_spacing", 0)
 	seat.add_child(heading)
+
+
+## Pack-id dim line: wrap so the extra breath sits below the id (toward the
+## list), not between heading and id.
+func _add_pack_id(text: String) -> void:
+	var seat: MarginContainer = MarginContainer.new()
+	seat.add_theme_constant_override("margin_bottom", 8)
+	seat.add_child(_body_label(text, GlassStyle.TEXT_DIM))
+	_column.add_child(seat)
 
 
 func _add_body(text: String, colour: Color = GlassStyle.TEXT) -> void:
@@ -286,8 +487,9 @@ func _on_scrim_input(event: InputEvent) -> void:
 		closed.emit()
 
 
-## Scrim `gui_input` never receives keys; Escape closes via the unhandled path.
-func _unhandled_key_input(event: InputEvent) -> void:
+## Scrim `gui_input` never receives keys; Escape / ui_cancel closes via the
+## unhandled path — `_unhandled_input` so gamepad ui_cancel reaches it too.
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"ui_cancel"):
 		closed.emit()
 		get_viewport().set_input_as_handled()
