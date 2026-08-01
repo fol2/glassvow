@@ -278,6 +278,12 @@ func set_shape(stage_shape: StringName) -> void:
 		_fit()
 
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"ui_cancel"):
+		back_requested.emit()
+		get_viewport().set_input_as_handled()
+
+
 func _fit() -> void:
 	if _centre == null:
 		return
