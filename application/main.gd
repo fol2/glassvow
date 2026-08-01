@@ -30,6 +30,9 @@ var _frozen_under_modal: Control = null
 ## Veils may stack (a modal over an overlay choice): the surface thaws only
 ## when the last one lifts.
 var _freeze_count: int = 0
+## Title buttons barred from keyboard focus while a modal is up (see
+## `_freeze_under_modal`); restored on thaw.
+var _defocused_under_modal: Array[BaseButton] = []
 ## Whether the current `_modal` froze the world — the run-menu drawer does not.
 var _modal_froze: bool = false
 ## Above RunHud's z 100 (run_hud.gd:37): the veil must outdraw the chrome it
@@ -422,6 +425,19 @@ func _freeze_under_modal() -> void:
 		_frozen_under_modal = under
 	if _run_hud != null:
 		_run_hud.process_mode = Node.PROCESS_MODE_DISABLED
+	# The breathing title must still lose the KEYBOARD: its buttons stay
+	# focusable under the veil, and focus traversal ignores the scrim — a
+	# Tab from the button that opened the modal lands on Quit, and Enter
+	# presses it. Bar focus while any modal is up; restore on thaw.
+	if _choice_screen != null:
+		_choice_screen.set_process_unhandled_key_input(false)
+		for node: Node in _choice_screen.find_children("", "BaseButton", true, false):
+			var button: BaseButton = node
+			if button.focus_mode != Control.FOCUS_NONE:
+				_defocused_under_modal.append(button)
+				if button.has_focus():
+					button.release_focus()
+				button.focus_mode = Control.FOCUS_NONE
 
 
 func _thaw_under_modal() -> void:
@@ -436,6 +452,12 @@ func _thaw_surfaces() -> void:
 	if _frozen_under_modal != null and is_instance_valid(_frozen_under_modal):
 		_frozen_under_modal.process_mode = Node.PROCESS_MODE_INHERIT
 	_frozen_under_modal = null
+	for button: BaseButton in _defocused_under_modal:
+		if is_instance_valid(button):
+			button.focus_mode = Control.FOCUS_ALL
+	_defocused_under_modal.clear()
+	if _choice_screen != null and is_instance_valid(_choice_screen):
+		_choice_screen.set_process_unhandled_key_input(true)
 	if _run_hud != null and is_instance_valid(_run_hud):
 		_run_hud.process_mode = Node.PROCESS_MODE_INHERIT
 
@@ -544,6 +566,7 @@ func _show_title() -> void:
 		{"id": "vigil", "label": "The Vigil", "quiet": true},
 		{"id": "help", "label": "How to Play", "quiet": true},
 		{"id": "settings", "label": "Settings", "quiet": true},
+		{"id": "credits", "label": "Credits", "quiet": true},
 	])
 	# Desktop only — web has no process to leave.
 	if not OS.has_feature("web"):
@@ -577,6 +600,7 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 		"rose": _show_vigil(true)
 		"help": _show_help()
 		"settings": _show_settings()
+		"credits": _show_credits()
 		"quit": _quit_game()
 
 
@@ -638,6 +662,12 @@ func _show_vigil(open_rose: bool = false) -> void:
 
 func _show_help() -> void:
 	var screen: HelpScreen = HelpScreen.new(_shape, _sfx_bus)
+	screen.closed.connect(_close_overlay)
+	_show_overlay(screen)
+
+
+func _show_credits() -> void:
+	var screen: CreditsScreen = CreditsScreen.new(_shape, _sfx_bus)
 	screen.closed.connect(_close_overlay)
 	_show_overlay(screen)
 
