@@ -424,9 +424,8 @@ func _layout_waystones() -> void:
 ## Where a node sits: row → walk axis (X), col → lane (Y).
 ##
 ## The camera holds the tracked world-x at the lead-third of the frame, so
-## `screen_x = world_x − cam_x + lead·W`. Jitter axes are swapped from the
-## vertical Spire — the big scatter belongs on the cross-axis (lane), the
-## small one on the step.
+## `screen_x = world_x − cam_x + lead·W`. The wander budget follows the room
+## each axis has — step has 150–290px, lane only 46–50.
 func _node_pos(node: MapNode) -> Vector2:
 	var step: float = _step()
 	var world_x: float = _world_x(float(node.row))
@@ -434,8 +433,8 @@ func _node_pos(node: MapNode) -> Vector2:
 	var lane_gap: float = _lane_gap()
 	lane_gap *= clampf(1.0 - depth * 0.025, 0.78, 1.0)
 	return Vector2(
-		world_x - _cam_x + _lead_px() + node.jy * 12.0,
-		size.y * _trail_num("pathY", 0.52) + float(node.col - 3) * lane_gap + node.jx * 20.0,
+		world_x - _cam_x + _lead_px() + node.jy * 24.0,
+		size.y * _trail_num("pathY", 0.64) + float(node.col - 3) * lane_gap + node.jx * 6.0,
 	)
 
 
@@ -453,7 +452,7 @@ func _step() -> float:
 ## call site so scale/alpha falloff can share the same depth reading.
 func _lane_gap() -> float:
 	return clampf(size.y * _trail_num("laneRate", 0.06),
-		_trail_num("laneMin", 34.0), _trail_num("laneMax", 50.0))
+		_trail_num("laneMin", 46.0), _trail_num("laneMax", 50.0))
 
 
 func _world_x(row: float) -> float:
@@ -469,7 +468,7 @@ func _lead_px() -> float:
 func _draw() -> void:
 	var w: float = size.x
 	var h: float = size.y
-	var horizon: float = h * _trail_num("horizonY", 0.64)
+	var horizon: float = h * _trail_num("horizonY", 0.36)
 	# The night gradient is drawn, not parented: a child TextureRect would sit
 	# above this _draw pass and bury every band under it.
 	draw_texture_rect(_sky_tex, Rect2(Vector2.ZERO, size), false)
@@ -478,6 +477,14 @@ func _draw() -> void:
 		Color(_fog_colour.lightened(0.42), 0.28))
 	draw_rect(Rect2(0.0, horizon, w, h - horizon),
 		Color(REGION_GROUND, 0.62 if _act == 0 else 0.38))
+	# §5 band-3 stand-in: a leaded path ribbon along pathY until P5.2 owns the
+	# real path plane. Seeds left-to-right reading without claiming the road.
+	var path_y: float = h * _trail_num("pathY", 0.64)
+	var glass: Color = GlassStyle.GLASS
+	draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
+		Color(glass.r, glass.g, glass.b, 0.10), 3.0)
+	draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
+		Color(glass.r, glass.g, glass.b, 0.16), 1.0)
 	_draw_region(w, horizon)
 	_draw_spire()
 	_draw_graph()
@@ -517,28 +524,20 @@ func _draw_region(w: float, horizon: float) -> void:
 
 
 func _draw_spire() -> void:
-	# Horizon stand-in until P5.2 owns the skyband: the Spire sits just past
-	# the terminus so the cam ceiling leaves act sky beside the boss.
+	# Distant goal-anchor at the skyband factor until P5.2 owns it (§5 band 1,
+	# 0.10). A band that slow needs a SCREEN anchor, not a world one: at 0.10
+	# the whole journey drifts it only a tenth of the act, so anchoring at
+	# `world_x(ROWS)` would park it off-stage for every step of the walk. It
+	# starts high in the frame's right and eases toward the lead as you close.
 	var w: float = size.x
-	var path_y: float = size.y * _trail_num("pathY", 0.52)
-	var centre: float = _world_x(float(WorldMap.ROWS)) - _cam_x + _lead_px()
+	var horizon: float = size.y * _trail_num("horizonY", 0.36)
+	var centre: float = w * 0.82 - _cam_x * 0.10
 	var top_w: float = maxf(58.0, w * 0.08)
 	var bottom_w: float = maxf(180.0, w * 0.28)
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(centre - top_w, 0.0), Vector2(centre + top_w, 0.0),
-		Vector2(centre + bottom_w, size.y), Vector2(centre - bottom_w, size.y),
+		Vector2(centre + bottom_w, horizon), Vector2(centre - bottom_w, horizon),
 	]), _sky_colour.darkened(0.58))
-	var step: float = _step()
-	for row: int in range(WorldMap.ROWS):
-		var x: float = _world_x(float(row)) - _cam_x + _lead_px()
-		if x < -20.0 or x > w + 20.0:
-			continue
-		var depth: float = absf(_world_x(float(row)) - _cam_x) / maxf(step, 1.0)
-		var half: float = lerpf(top_w * 0.35, bottom_w * 0.35,
-			clampf(absf(x - centre) / maxf(w, 1.0), 0.0, 1.0))
-		draw_line(Vector2(x, path_y - half), Vector2(x, path_y + half),
-			Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b,
-				clampf(0.18 - depth * 0.018, 0.035, 0.18)), 1.0)
 
 
 ## The current lantern's glow sits behind its waystone.
@@ -572,13 +571,19 @@ func _draw_graph() -> void:
 					absf(_world_x(float(node.row)) - _cam_x),
 					absf(_world_x(float(next_node.row)) - _cam_x)) / maxf(step, 1.0) * 0.12,
 					0.10, 1.0)
-				var control: Vector2 = (from + to) * 0.5 + Vector2(0.0, 10.0)
+				# Same-lane edges run straight; rising bows up, falling bows down
+				# so crossing paths pull apart rather than stacking.
+				var control: Vector2 = (from + to) * 0.5 \
+					+ Vector2(0.0, signf(to.y - from.y) * 10.0)
 				var previous: Vector2 = from
-				for segment: int in range(1, 13):
-					var t: float = float(segment) / 12.0
+				# ~10–12px dash cells from chord length; first cell drawn so the
+				# dash begins at the source rim instead of detaching from it.
+				var segs: int = maxi(12, int(from.distance_to(to) / 11.0))
+				for segment: int in range(segs):
+					var t: float = float(segment + 1) / float(segs)
 					var point: Vector2 = from * (1.0 - t) * (1.0 - t) \
 						+ control * 2.0 * (1.0 - t) * t + to * t * t
-					if walked or segment % 2 == 1:
+					if walked or segment % 2 == 0:
 						var tone: Color = Color(0.85, 0.87, 0.92) if walked else GlassStyle.GLASS
 						draw_line(previous, point, Color(tone.r, tone.g, tone.b,
 							fade * (0.72 if walked else 0.24)), 3.0 if walked else 2.0)

@@ -23,7 +23,7 @@ tags: [godot, gdscript, godot-4-7, const, typed-dictionary, packed-array, silent
 
 ## Problem
 
-`presentation/stage/layout_book.gd:268` (`FORMS`) declares the schema's field order as
+`presentation/stage/layout_book.gd:270` (`FORMS`) declares the schema's field order as
 `const FORMS: Dictionary[StringName, PackedStringArray]`. Reading it with
 `FORMS[form]`, where `form` is a variable, returns a value that reports itself
 **empty** to `size()`, `has()`, `count()`, `[i]` and `for`-in, while `find()` and
@@ -48,7 +48,7 @@ one of them turned a test assertion into a no-op that still counted as passing.
   `StringName("he" + "ro") == &"hero"` is `true`, and the lookup plainly finds
   the entry, since `find()` searches the real contents.
 - **Blaming `has()`.** The session's first diagnosis — and the code comment it
-  left behind in the docstring of `presentation/stage/layout_book.gd:858`
+  left behind in the docstring of `presentation/stage/layout_book.gd:860`
   (`fields`) — was "`has()` lies
   on 4.7.1". That is the visible half of a bigger fault. It stopped the
   investigation one step short, and the step it skipped is the one that matters:
@@ -71,8 +71,8 @@ static func _declares(form: StringName, field: String) -> bool:
 ```
 
 Every internal reader goes through `fields()`. The two call sites that used to
-inline `FORMS[form]` are at `presentation/stage/layout_book.gd:414` (in `place`)
-and `presentation/stage/layout_book.gd:792` (in `_defaults`).
+inline `FORMS[form]` are at `presentation/stage/layout_book.gd:422` (in `place`)
+and `presentation/stage/layout_book.gd:800` (in `_defaults`).
 
 Three other escapes were measured and all work: a **constant** key
 (`FORMS[&"hero"]`), declaring the dictionary `static var` instead of `const`, and
@@ -119,7 +119,7 @@ The scope, measured on `4.7.1.stable.official`:
 
 - **Do not declare a `const` Dictionary with a packed-array value type.** Use
   `static var`, or hold plain `Array` values. A sweep of this tree found exactly
-  one such declaration, `presentation/stage/layout_book.gd:268` (`FORMS`); every other
+  one such declaration, `presentation/stage/layout_book.gd:270` (`FORMS`); every other
   `const Dictionary[...]` here has `Dictionary`, `Array`, `Color`, `Vector2i` or
   `float` values and is unaffected.
 - **A test that iterates the suspect expression proves nothing.** This is the
@@ -159,7 +159,7 @@ The scope, measured on `4.7.1.stable.official`:
 
 ## Related Issues
 
-- The docstring of `presentation/stage/layout_book.gd:858` (`fields`) — the
+- The docstring of `presentation/stage/layout_book.gd:860` (`fields`) — the
   in-code comment written from the first, incomplete diagnosis. Superseded by
   this document.
 - [Matching constants prove nothing](../design-patterns/derive-authored-compensations-when-porting.md)
