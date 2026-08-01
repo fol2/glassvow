@@ -135,9 +135,10 @@ class PathBand extends MapBand:
 		draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
 			Color(glass.r, glass.g, glass.b, 0.16), 1.0)
 		_draw_graph()
-		# The current lantern's glow sits behind its waystone.
+		# The current lantern's glow sits behind its waystone (or mid-glide
+		# along the same bezier the edges draw — host owns travel state).
 		if host.map.at >= 0 and host.map.at < host.map.nodes.size():
-			var at: Vector2 = host._node_pos(host.map.nodes[host.map.at])
+			var at: Vector2 = host.marker_screen_position()
 			var ember: Color = GlassStyle.EMBER
 			draw_circle(at, 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 			draw_circle(at, 15.0, Color(ember.r, ember.g, ember.b, 0.18))
