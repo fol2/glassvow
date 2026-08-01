@@ -204,12 +204,13 @@ over `edges`. No new transition tech — reuse the combat wipe.
   ever takes painted horizons/props is a separate asset-strategy gate, unchanged
   by this brief.~~ **Withdrawn 2026-07-24.** The gate was decided: the port aligns
   to `roguecardv2@6e069118`, which is raster throughout. Painted assets are the
-  target, not an open question. Known blocker: the map's four parallax bands are
-  one `_draw()` pass on a single Control (`world_map_screen.gd:468` (`_draw`)), and Godot
-  renders children above a parent's `_draw()` — so bands must become `Node2D`
-  children with `z_index` before sprites can interleave with waystones. The old
-  marker-offset workaround is already gone: `_draw_marker()` now uses the
-  waystone position directly (`world_map_screen.gd` (`_draw_marker`)).
+  target, not an open question. ~~Known blocker: the map's four parallax bands
+  are one `_draw()` pass on a single Control, and Godot renders children above
+  a parent's `_draw()` — so bands must become children in paint order before
+  sprites can interleave with waystones.~~ **Resolved 2026-08-01 (P5.2, issue
+  #64):** the bands are now `MapBand` children in paint order
+  (`presentation/map/map_band.gd:1` (`MapBand`)) — sky, region, path, then the
+  waystones, then the veil — so raster strips can seat per band (P5.6).
 
 ---
 
