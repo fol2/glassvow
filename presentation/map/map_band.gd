@@ -331,7 +331,13 @@ class PathBand extends MapBand:
 			/ maxf(step, 1.0)
 		# The waystones' own scale knob and depth compress, then a stage cap —
 		# a fixed 110px broke phone-landscape at 61% of the stage's height.
-		var compress: float = clampf(1.08 - depth * 0.035, 0.72, 1.08)
+		#
+		# It must be the SAME curve `_layout_waystones` gives the stones, anchor
+		# included. When that anchor moved from 1.08 to 1.0 this copy was left
+		# behind for one commit, which made the arch 8% larger than the keystone
+		# standing at its foot — at the terminus, the one frame this whole change
+		# exists to compose (PR #79 PM R1).
+		var compress: float = clampf(1.0 - depth * 0.035, 0.72, 1.0)
 		var k: float = host._trail_num("scale", 0.36)
 		var R: float = minf(110.0 * (k / 0.6) * compress, size.y * 0.22)
 		var path_y: float = size.y * host._trail_num("pathY", 0.64) + drift.y
