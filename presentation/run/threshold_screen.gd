@@ -14,6 +14,7 @@ var _margin: MarginContainer
 var _window_slot: Control
 var _window: Control
 var _answer: VBoxContainer
+var _answer_fade: Tween
 var _sub: Label
 var _cta: Button
 var _touched: bool = false
@@ -215,9 +216,16 @@ func _on_cta() -> void:
 		if Preferences.active.reduce_motion:
 			_answer.modulate.a = 1.0
 		else:
-			create_tween().tween_property(_answer, "modulate:a", 1.0, 0.45)
+			_answer_fade = create_tween()
+			_answer_fade.tween_property(_answer, "modulate:a", 1.0, 0.45)
 		_cta.text = "Return to the Vigil"
 		_cta.grab_focus.call_deferred()
+		return
+	# A press inside the fade completes the reveal rather than leaving — a
+	# stray double-tap must not skip the payoff the screen exists to deliver.
+	if _answer_fade != null and _answer_fade.is_running():
+		_answer_fade.kill()
+		_answer.modulate.a = 1.0
 		return
 	vigil_requested.emit()
 
