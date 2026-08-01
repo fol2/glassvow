@@ -7,6 +7,13 @@ extends Control
 
 const CAM_EPS: float = 0.05
 const DRIFT_EPS: float = 0.1
+## Far bands are full-rect Controls painted with a divided drift; the sky bleeds
+## above the frame and the region below it so a pointer lean never opens raw
+## stage. Must stay ≥ the far-band drift amplitude
+## (WorldMapScreen.PATH_DRIFT_AMP.y / 3.0 = 4.0) — asserted in tests/test_map.gd,
+## because map_band and world_map_screen are a cyclic class_name pair and a
+## const expression across them is not safe to write.
+const FAR_BLEED: float = 8.0
 
 var factor: float = 1.0
 var cam_x: float = 0.0
@@ -57,8 +64,14 @@ func _draw_flash_overlay(rect: Rect2) -> void:
 
 
 class SkyBand extends MapBand:
+	var _strip: Texture2D = null
+
 	func _init() -> void:
 		super(0.10)
+
+	func apply_region(region: MapRegions) -> void:
+		_strip = MapStrip.fetch(region.act, &"skyband")
+		queue_redraw()
 
 	func _draw() -> void:
 		if host == null:
@@ -71,31 +84,50 @@ class SkyBand extends MapBand:
 		draw_texture_rect(SkyField.disc(),
 			Rect2(-w * 0.10 + drift.x, h * 0.22 + drift.y, w * 1.20, h * 0.60),
 			false, Color(host._fog_colour.lightened(0.42), 0.28))
-		# Distant goal-anchor at the skyband factor (§5 band 1, 0.10). A band
-		# that slow needs a SCREEN anchor, not a world one: at 0.10 the whole
-		# journey drifts it only a tenth of the act, so anchoring at
-		# `world_x(ROWS)` would park it off-stage for every step of the walk.
-		# It starts high in the frame's right and eases toward the lead as you
-		# close. The band's factor supplies the cam term; drift is far amplitude.
 		var horizon: float = h * host._trail_num("horizonY", 0.36)
-		var centre: float = w * 0.82 - cam_x * factor + drift.x
-		var top_w: float = maxf(58.0, w * 0.08)
-		var bottom_w: float = maxf(180.0, w * 0.28)
-		# Top bleeds past the frame by more than the far drift amplitude —
-		# a downward lean must not open raw sky above the wedge.
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(centre - top_w, drift.y - 8.0),
-			Vector2(centre + top_w, drift.y - 8.0),
-			Vector2(centre + bottom_w, horizon + drift.y),
-			Vector2(centre - bottom_w, horizon + drift.y),
-		]), host._sky_colour.darkened(0.58))
+		if _strip != null:
+			# A repeating strip may scroll at the band factor: unlike the single
+			# procedural wedge, it never runs out of itself, so the screen-anchor
+			# rule that keeps a lone 0.10 object on stage does not apply here.
+			MapStrip.draw_tiled(self, _strip,
+				Rect2(0.0, 0.0, w, horizon + FAR_BLEED),
+				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
+		else:
+			_draw_spire(w, horizon)
 		_draw_flash_overlay(Rect2(Vector2.ZERO, size))
+
+	## Procedural stand-in for act{N}-skyband.png: a distant needle in the Ashen
+	## Woods, a near tower under the storm. Still SCREEN-anchored — at 0.10 the
+	## whole journey drifts a lone object only a tenth of the act, so a world
+	## anchor parks it off-stage for every step of the walk (PR #71 DL R2).
+	func _draw_spire(w: float, horizon: float) -> void:
+		var act: int = host._act
+		if host._region != null:
+			act = host._region.act
+		act = clampi(act, 0, MapRegions.SPIRE_W_RATE.size() - 1)
+		var base_w: float = w * MapRegions.SPIRE_W_RATE[act] * 0.5
+		var top_w: float = maxf(base_w * 0.28, 3.0)
+		var apex_y: float = horizon * (1.0 - MapRegions.SPIRE_H_RATE[act]) - FAR_BLEED
+		var centre: float = w * 0.82 - cam_x * factor + drift.x
+		# Near acts cut BELOW the sky, far acts lift toward the fog — see the
+		# ramp docstring in map_regions.gd for why darkening alone leaves act 0
+		# with no readable silhouette at all.
+		var tone: Color = host._sky_colour.darkened(MapRegions.SPIRE_DARKEN[act])
+		tone = tone.lerp(host._fog_colour.lightened(0.35),
+			MapRegions.SPIRE_HAZE[act])
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(centre - top_w, apex_y + drift.y),
+			Vector2(centre + top_w, apex_y + drift.y),
+			Vector2(centre + base_w, horizon + drift.y),
+			Vector2(centre - base_w, horizon + drift.y),
+		]), tone)
 
 
 class RegionBand extends MapBand:
 	## Shaft sway clock — advanced only when motion is allowed, so reduce-motion
 	## stills the caustics the same way it stills the veil.
 	var _age: float = 0.0
+	var _strip: Texture2D = null
 
 	func _init() -> void:
 		super(0.35)
@@ -106,6 +138,7 @@ class RegionBand extends MapBand:
 	func apply_region(region: MapRegions) -> void:
 		gated = region.weather != &"sunken"
 		set_process(region.weather == &"sunken")
+		_strip = MapStrip.fetch(region.act, &"region")
 		queue_redraw()
 
 	func _process(delta: float) -> void:
@@ -127,11 +160,19 @@ class RegionBand extends MapBand:
 		var path_y: float = h * host._trail_num("pathY", 0.64) + drift.y
 		# Bleeds past the frame bottom by more than the far drift amplitude —
 		# an upward lean must not leave a strip of raw sky under the ground.
-		draw_rect(Rect2(0.0, horizon, w, h - horizon + 8.0),
+		draw_rect(Rect2(0.0, horizon, w, h - horizon + FAR_BLEED),
 			Color(WorldMapScreen.REGION_GROUND, 0.62 if host._act == 0 else 0.38))
 		var ground: Rect2 = Rect2(0.0, horizon, w, h - horizon)
 		if host._region != null and host._region.weather == &"sunken":
 			_draw_shafts(w, horizon, path_y)
+		if _strip != null:
+			# Seated where the silhouettes are, so the shafts stay behind the
+			# skyline exactly as the clouds already put them.
+			MapStrip.draw_tiled(self, _strip,
+				Rect2(0.0, horizon, w, h - horizon + FAR_BLEED),
+				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
+			_draw_flash_overlay(ground)
+			return
 		if host._act > 0:
 			for cloud: int in range(9):
 				var cloud_w: float = w * (0.18 + float(cloud % 3) * 0.035)
@@ -210,14 +251,23 @@ class PathBand extends MapBand:
 		if host == null:
 			return
 		var w: float = size.x
-		# §5 band-3 stand-in: leaded path ribbon along pathY until a real path
-		# plane owns taper. Seeds left-to-right reading without claiming the road.
+		# §5 band-3 stand-in. The ribbon is the road BED, not a lead: a crisp
+		# hairline at pathY doubles with the centre lane's own edge run, and two
+		# things drawn the same way read as one thing drawn twice (carried from
+		# P5.2, #64). Same fix shape as the storm streaks — change the primitive,
+		# not just the alpha, so the graph's dashes own the only hard line here.
 		var path_y: float = size.y * host._trail_num("pathY", 0.64) + drift.y
 		var glass: Color = GlassStyle.GLASS
-		draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
-			Color(glass.r, glass.g, glass.b, 0.10), 3.0)
-		draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
-			Color(glass.r, glass.g, glass.b, 0.16), 1.0)
+		var bed: Color = Color(glass.r, glass.g, glass.b, 0.09)
+		var clear: Color = Color(glass.r, glass.g, glass.b, 0.0)
+		draw_polygon(PackedVector2Array([
+			Vector2(0.0, path_y - 8.0), Vector2(w, path_y - 8.0),
+			Vector2(w, path_y), Vector2(0.0, path_y),
+		]), PackedColorArray([clear, clear, bed, bed]))
+		draw_polygon(PackedVector2Array([
+			Vector2(0.0, path_y), Vector2(w, path_y),
+			Vector2(w, path_y + 8.0), Vector2(0.0, path_y + 8.0),
+		]), PackedColorArray([bed, bed, clear, clear]))
 		# Terminus rose-window BEFORE the graph so edges/stones layer over it.
 		_draw_rose_window()
 		_draw_graph()
