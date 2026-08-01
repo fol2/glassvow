@@ -24,6 +24,18 @@ var _panel: PanelContainer
 var _cards: HFlowContainer
 var _misc: HFlowContainer
 var _card_views: Array[CardView] = []
+## Purchasable slots registered at build; update() refreshes state in place.
+var _slots: Array[Dictionary] = []
+
+
+func update(stock: Dictionary, gold: int, quest_offer: Dictionary,
+		potion_slot_available: bool) -> void:
+	_stock = stock
+	_gold = gold
+	_quest_offer = quest_offer
+	_potion_slot_available = potion_slot_available
+	for entry: Dictionary in _slots:
+		_apply_slot_state(entry)
 
 
 func _init(stock: Dictionary, gold: int, content: ContentDB,
@@ -150,18 +162,20 @@ func _add_card(row: Dictionary, index: int) -> void:
 	var view: CardView = CardView.new(CardInst.new(-index - 1, StringName(id)),
 		definition, cost)
 	view.scale = Vector2.ONE * CARD_SCALE
-	var sold: bool = row.get("sold", false)
-	var disabled: bool = sold or _gold < _price(row)
-	view.modulate.a = 0.28 if sold else (0.58 if disabled else 1.0)
-	if not disabled:
-		view.released_at.connect(func(_uid: int, _position: Vector2) -> void:
-			_emit_action("cards:%d" % index)
-		)
+	var price_label: Label = _price_label(_price(row), false)
+	var entry: Dictionary = _register_slot("card", "cards", index, view,
+		price_label, RunStyle.GOLD)
+	# Always connect; gate on the slot's live disabled flag from _apply_slot_state.
+	view.released_at.connect(func(_uid: int, _position: Vector2) -> void:
+		if entry.get("disabled", false):
+			return
+		_emit_action("cards:%d" % index)
+	)
 	var column: VBoxContainer = VBoxContainer.new()
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.add_theme_constant_override("separation", 7)
 	column.add_child(_card_pedestal(view))
-	column.add_child(_price_label(_price(row), disabled))
+	column.add_child(price_label)
 	_cards.add_child(column)
 	_card_views.append(view)
 
@@ -171,45 +185,107 @@ func _add_misc(category: String, row: Dictionary, index: int) -> void:
 	var registry: Dictionary = _content.relics if category == "relics" \
 		else _content.potions
 	var definition: Dictionary = registry.get(id, {})
-	var sold: bool = row.get("sold", false)
-	var disabled: bool = sold or _gold < _price(row) \
-		or (category == "potions" and not _potion_slot_available)
 	var art: String = (RELIC_ART if category == "relics" else POTION_ART) % id
 	var button: Button = _item_button(str(definition.get("name", id)),
-		str(definition.get("text", "")), art, disabled, false)
-	button.modulate.a = 0.28 if sold else 1.0
+		str(definition.get("text", "")), art, false, false)
 	button.pressed.connect(_emit_action.bind("%s:%d" % [category, index]))
-	_add_misc_column(button, _price(row), disabled)
+	var price_label: Label = _price_label(_price(row), false)
+	_register_slot("misc", category, index, button, price_label, RunStyle.GOLD)
+	_add_misc_column(button, price_label)
 
 
 func _add_offer() -> void:
 	var price: int = _price(_quest_offer)
-	var disabled: bool = _gold < price or _quest_offer.get("sold", false)
 	var button: Button = _item_button(
 		str(_quest_offer.get("name", "A Lantern with No Flame")),
 		str(_quest_offer.get("text", _content.quests.get("usurper", {}).get(
-			"itemText", "Cold glass. No wick."))), "", disabled, true)
+			"itemText", "Cold glass. No wick."))), "", false, true)
 	button.pressed.connect(_emit_action.bind("quest:flamelessLantern"))
-	_add_misc_column(button, price, disabled, Color("#c7eadf"))
+	var price_colour: Color = Color("#c7eadf")
+	var price_label: Label = _price_label(price, false, price_colour)
+	_register_slot("offer", "", 0, button, price_label, price_colour)
+	_add_misc_column(button, price_label)
 
 
 func _add_removal() -> void:
 	var price: int = int(float(str(_stock.get("removeCost", 0))))
-	var disabled: bool = _stock.get("removed", false) or _gold < price
 	var button: Button = _item_button("CARD REMOVAL",
-		"Remove a card from your deck forever.", "", disabled, false, "✂")
-	button.modulate.a = 0.28 if _stock.get("removed", false) else 1.0
+		"Remove a card from your deck forever.", "", false, false, "✂")
 	button.pressed.connect(_emit_action.bind("remove"))
-	_add_misc_column(button, price, disabled)
+	var price_label: Label = _price_label(price, false)
+	_register_slot("removal", "", 0, button, price_label, RunStyle.GOLD)
+	_add_misc_column(button, price_label)
 
 
-func _add_misc_column(button: Button, price: int, disabled: bool,
-		colour: Color = RunStyle.GOLD) -> void:
+func _register_slot(kind: String, category: String, index: int, control: Control,
+		price_label: Label, price_colour: Color) -> Dictionary:
+	var entry: Dictionary = {
+		"kind": kind,
+		"category": category,
+		"index": index,
+		"control": control,
+		"price_label": price_label,
+		"price_colour": price_colour,
+		"disabled": false,
+	}
+	_slots.append(entry)
+	_apply_slot_state(entry)
+	return entry
+
+
+func _apply_slot_state(entry: Dictionary) -> void:
+	var kind: String = str(entry["kind"])
+	var index: int = entry["index"]
+	var disabled: bool = false
+	match kind:
+		"card":
+			var rows: Array = _stock.get("cards", [])
+			var row: Dictionary = rows[index]
+			var sold: bool = row.get("sold", false)
+			disabled = sold or _gold < _price(row)
+			var view: CardView = entry["control"]
+			view.modulate.a = 0.28 if sold else (0.58 if disabled else 1.0)
+		"misc":
+			var category: String = str(entry["category"])
+			var rows: Array = _stock.get(category, [])
+			var row: Dictionary = rows[index]
+			var sold: bool = row.get("sold", false)
+			disabled = sold or _gold < _price(row) \
+				or (category == "potions" and not _potion_slot_available)
+			var button: Button = entry["control"]
+			button.disabled = disabled
+			button.modulate.a = 0.28 if sold else 1.0
+		"offer":
+			# Read live _quest_offer — usurper_offer returns a fresh dict each
+			# call, and an EMPTY one once bought: the lantern leaves the stall
+			# entirely, exactly as the old full rebuild dropped it.
+			var offer_btn: Button = entry["control"]
+			var column: Control = offer_btn.get_parent() as Control
+			var gone: bool = _quest_offer.is_empty()
+			if column != null:
+				column.visible = not gone
+			disabled = gone or _gold < _price(_quest_offer) \
+				or _quest_offer.get("sold", false)
+			offer_btn.disabled = disabled
+		"removal":
+			var removed: bool = _stock.get("removed", false)
+			disabled = removed or _gold < int(float(str(_stock.get("removeCost", 0))))
+			var removal_btn: Button = entry["control"]
+			removal_btn.disabled = disabled
+			removal_btn.modulate.a = 0.28 if removed else 1.0
+	entry["disabled"] = disabled
+	var price_label: Label = entry["price_label"]
+	var price_colour: Color = entry["price_colour"]
+	price_label.add_theme_color_override("font_color",
+		RunStyle.DANGER if disabled else price_colour)
+
+
+func _add_misc_column(button: Button, price_label: Label) -> void:
 	var column: VBoxContainer = VBoxContainer.new()
 	column.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.add_theme_constant_override("separation", 7)
 	column.add_child(button)
-	column.add_child(_price_label(price, disabled, colour))
+	column.add_child(price_label)
 	_misc.add_child(column)
 
 

@@ -1176,13 +1176,26 @@ func _show_shop() -> void:
 	_show_route(screen, true, &"safeNodes")
 
 
+func _refresh_shop() -> void:
+	var shop: ShopScreen = _route_screen as ShopScreen
+	if shop == null:
+		_show_shop()
+		return
+	var stock: Dictionary = game.run.quest_scratch["shopStock"]
+	shop.update(stock, game.run.player.gold,
+		game.quests.usurper_offer(game.run),
+		game.run.player.potions.has(""))
+	if _run_hud != null:
+		_run_hud.refresh(game.run)
+
+
 func _on_shop_choice(id: String) -> void:
 	if id == "leave":
 		_finish_node()
 		return
 	if id == "quest:flamelessLantern":
 		if game.quests.buy_usurper(game.run) and SaveService.store(game.run):
-			_show_shop()
+			_refresh_shop()
 		else:
 			_show_save_error("The empty lantern purchase could not be held.")
 		return
@@ -1200,7 +1213,7 @@ func _on_shop_choice(id: String) -> void:
 	var row: Dictionary = rows[int(parts[1])]
 	var price: int = int(float(str(row["price"])))
 	if row.get("sold", false) or game.run.player.gold < price:
-		_show_shop()
+		_refresh_shop()
 		return
 	game.run.player.gold -= price
 	var item_id: String = str(row["id"])
@@ -1213,7 +1226,7 @@ func _on_shop_choice(id: String) -> void:
 			game.run.player.potions[game.run.player.potions.find("")] = item_id
 	row["sold"] = true
 	if SaveService.store(game.run):
-		_show_shop()
+		_refresh_shop()
 	else:
 		_show_save_error("The purchase could not be held.")
 
@@ -1228,7 +1241,7 @@ func _on_shop_remove(uid_text: String) -> void:
 	game.run.player.gold -= cost
 	stock["removed"] = true
 	if SaveService.store(game.run):
-		_show_shop()
+		_refresh_shop()
 	else:
 		_show_save_error("The removed card could not be held.")
 
