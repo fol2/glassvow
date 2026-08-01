@@ -25,6 +25,11 @@ var _gold_num: Label
 var _title: Label
 var _right: HBoxContainer
 var _collection: HFlowContainer
+var _deck_count: Label
+## Potion-id signature; rebuild `_right` only when this changes.
+var _right_sig: String = ""
+## Act + omen + relic-id signature; rebuild `_collection` only when this changes.
+var _collection_sig: String = ""
 
 
 func _init(run: RunState, content_ref: ContentDB,
@@ -50,8 +55,29 @@ func refresh(run: RunState) -> void:
 	_hp_bar.value = clampi(player.hp, 0, maxi(1, player.max_hp))
 	_gold_num.text = str(player.gold)
 	_title.text = _location_text(run)
-	_rebuild_right(player)
-	_rebuild_collection(run, player)
+
+	var right_sig: String = _right_signature(player)
+	if right_sig != _right_sig:
+		_rebuild_right(player)
+		_right_sig = right_sig
+	elif _deck_count != null:
+		_deck_count.text = str(player.deck.size())
+
+	var collection_sig: String = _collection_signature(run)
+	if collection_sig != _collection_sig:
+		_rebuild_collection(run, player)
+		_collection_sig = collection_sig
+
+
+func _right_signature(player: RunState.Player) -> String:
+	return ",".join(player.potions)
+
+
+func _collection_signature(run: RunState) -> String:
+	var omen_id: String = ""
+	if run.act >= 0 and run.act < run.omens.size() and run.omens[run.act] != null:
+		omen_id = str(run.omens[run.act])
+	return str(run.act) + "|" + omen_id + "|" + ",".join(run.player.relics)
 
 
 func set_shape(stage_shape: StringName) -> void:
@@ -60,8 +86,12 @@ func set_shape(stage_shape: StringName) -> void:
 	shape = stage_shape
 	_apply_shape()
 	if _run != null:
+		# Shape changes button sizes; force both regions, and store the fresh
+		# signatures so the next refresh neither skips stale nor rebuilds twice.
 		_rebuild_right(_run.player)
 		_rebuild_collection(_run, _run.player)
+		_right_sig = _right_signature(_run.player)
+		_collection_sig = _collection_signature(_run)
 
 
 func _build() -> void:
@@ -146,13 +176,13 @@ func _rebuild_right(player: RunState.Player) -> void:
 	var deck: Button = _art_button("ui/deck", icon_side, button_side, "View deck")
 	for state: String in ["normal", "hover", "pressed"]:
 		deck.add_theme_stylebox_override(state, _flat(Color.TRANSPARENT, 0))
-	var count: Label = _label(str(player.deck.size()),
+	_deck_count = _label(str(player.deck.size()),
 		_shape_value(18, 16, 22), Color.WHITE)
-	count.set_anchors_preset(Control.PRESET_FULL_RECT)
-	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	deck.add_child(count)
+	_deck_count.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_deck_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_deck_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_deck_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	deck.add_child(_deck_count)
 	deck.pressed.connect(_request.bind(&"deck", -1))
 	_right.add_child(deck)
 	var menu: Button = _art_button("ui/menu",
