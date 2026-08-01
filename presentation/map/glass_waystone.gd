@@ -38,6 +38,8 @@ var _kindle: float = 0.0
 var _kindling: bool = false
 ## Theme font cached once; draw_string refuses a null Font under warnings-as-errors.
 var _chip_font: Font = null
+var _chip_coin: Texture2D = null
+var _chip_box: StyleBoxFlat = null
 
 ## Empty rect grown around the drawing so the HIT AREA can be bigger than the
 ## picture. Zero at the shapes a mouse points at; on a phone it is what keeps a
@@ -173,13 +175,6 @@ func _draw() -> void:
 	var cx: float = _pad.x + WIDTH * 0.5
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	var glow: float = (0.5 + 0.5 * sin(_pulse * 2.2)) if reachable else 0.0
-	# Rim alpha feeds the elite crown — focus no longer brightens the pulse;
-	# the dashed glass arc below is the keyboard affordance instead.
-	var rim_a: float = 0.20
-	if reachable:
-		rim_a = 0.55 + 0.30 * glow
-	elif cleared:
-		rim_a = 0.12
 	var radius: float = 38.0 if kind == "boss" else (32.0 if kind in ["elite", "treasure"] else 28.0)
 	if reachable or current:
 		draw_circle(Vector2(cx, cy), radius + 12.0,
@@ -188,19 +183,20 @@ func _draw() -> void:
 	if reachable:
 		draw_arc(Vector2(cx, cy), radius + 5.0, 0.0, TAU, 32,
 			Color(1.0, 0.96, 0.88, 0.78 + glow * 0.2), 3.0)
-	# Shown-kind only — an unlit elite stays crownless until kindled (§2 mask).
-	if kind == "elite":
-		_draw_crown(cx, cy - radius - 4.0, rim_a)
-	# Keyboard focus: a DISTINCT rotating dashed arc, not a brighter rim pulse.
-	# Reduce-motion freezes spin (pulse is held) but keeps the arc visible.
+	# Keyboard focus speaks the game's own focus language: GOLD corner
+	# brackets (GlassStyle.focus_ring's hue), boxed rather than ringed, so it
+	# cannot be confused with the warm reachable ring, the glass edge dashes,
+	# or the ember pulse. Static by design — no reduce-motion special case.
 	if has_focus():
-		var spin: float = _pulse * 0.6
-		var focus_col: Color = Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g,
-			GlassStyle.GLASS.b, 0.9)
-		for dash: int in range(8):
-			var a0: float = spin + float(dash) * TAU / 8.0
-			draw_arc(Vector2(cx, cy), radius + 9.0, a0, a0 + deg_to_rad(22.0), 8,
-				focus_col, 2.0)
+		var half: float = radius + 8.0
+		var arm: float = 9.0
+		var gold: Color = Color(GlassStyle.GOLD.r, GlassStyle.GOLD.g, GlassStyle.GOLD.b, 0.95)
+		for corner: int in range(4):
+			var sx: float = -1.0 if corner % 2 == 0 else 1.0
+			var sy: float = -1.0 if corner < 2 else 1.0
+			var tip: Vector2 = Vector2(cx + sx * half, cy + sy * half)
+			draw_line(tip, tip + Vector2(-sx * arm, 0.0), gold, 2.0)
+			draw_line(tip, tip + Vector2(0.0, -sy * arm), gold, 2.0)
 	if quest_marked:
 		var lens: Vector2 = Vector2(cx + radius * 0.78, cy - radius * 0.78)
 		draw_circle(lens, 12.0, Color(0.72, 0.96, 1.0, 0.13))
@@ -237,39 +233,44 @@ func _seat_art() -> void:
 	_glyph_art.size = Vector2.ONE * glyph_side
 
 
-## Three spikes above the pane — the affix crown that marks an elite.
-func _draw_crown(cx: float, top_y: float, alpha: float) -> void:
-	var col: Color = Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b,
-		clampf(alpha + 0.15, 0.0, 1.0))
-	for k: int in range(-1, 2):
-		var bx: float = cx + float(k) * 15.0
-		var tip: float = top_y - (16.0 if k == 0 else 11.0)
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(bx - 6.0, top_y), Vector2(bx, tip), Vector2(bx + 6.0, top_y),
-		]), col)
-
-
-## "Unlit · +N" under the pane — bounty is paid TO the player; the `+` is the pin.
-## Lives inside the padded hit rect; WIDTH/EMBLEM_H stay untouched.
+## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
+## "unlit" statement (§2), so the word would only restate the emblem; the coin
+## glyph gives the number its unit the same way the HUD does. Seated INSIDE
+## the control rect under the pane — a chip that leaves its own rect lands on
+## the lane-below neighbour at every shipped shape (PR #76 DL R1).
 func _draw_bounty_chip(cx: float) -> void:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
+	if _chip_coin == null:
+		_chip_coin = load("res://assets/art/ui/coin.png") as Texture2D
 	if _chip_font == null:
 		return
-	var text: String = "Unlit · +%d" % bounty
-	var fs: int = 12
+	var text: String = "+%d" % bounty
+	var fs: int = 13
 	var tw: float = _chip_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs).x
-	var chip_w: float = tw + 14.0
-	var chip_h: float = 18.0
-	var cy: float = _pad.y + EMBLEM_H + 10.0
+	var icon: float = 13.0
+	var chip_w: float = icon + 4.0 + tw + 16.0
+	var chip_h: float = 19.0
+	var cy: float = _pad.y + 93.0  # inside the rect; pane circle ends at 80
 	var a: float = 0.45 if cleared else 1.0
 	var rect: Rect2 = Rect2(cx - chip_w * 0.5, cy - chip_h * 0.5, chip_w, chip_h)
-	draw_rect(rect, Color(0.04, 0.05, 0.10, 0.85 * a), true)
-	draw_rect(rect, Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.35 * a),
-		false, 1.0)
-	draw_string(_chip_font, Vector2(cx - tw * 0.5, cy + float(fs) * 0.35), text,
+	# Rounded pill via stylebox — the map draws no other hard-cornered
+	# rectangle, and the border borrows the EMBER family, not the edges' glass.
+	if _chip_box == null:
+		_chip_box = StyleBoxFlat.new()
+		_chip_box.bg_color = Color(0.03, 0.04, 0.08, 0.92)
+		_chip_box.border_color = Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g,
+			GlassStyle.EMBER.b, 0.30)
+		_chip_box.set_border_width_all(1)
+		_chip_box.set_corner_radius_all(9)
+	draw_style_box(_chip_box, rect)
+	var left: float = cx - (icon + 4.0 + tw) * 0.5
+	if _chip_coin != null:
+		draw_texture_rect(_chip_coin, Rect2(left, cy - icon * 0.5, icon, icon),
+			false, Color(1.0, 1.0, 1.0, a))
+	draw_string(_chip_font, Vector2(left + icon + 4.0, cy + float(fs) * 0.35), text,
 		HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs,
-		Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.92 * a))
+		Color(1.0, 0.84, 0.58, a))
 
 
 ## Flash → art swap at 0.12s → SPRING bloom. Reduce-motion: instant swap, no ceremony.
@@ -296,14 +297,25 @@ func _on_kindle_swap(true_kind: String) -> void:
 	_apply_kindle_art(true_kind)
 	_frame_art.pivot_offset = _frame_art.size * 0.5
 	_glyph_art.pivot_offset = _glyph_art.size * 0.5
-	_frame_art.scale = Vector2.ONE * 0.82
-	_glyph_art.scale = Vector2.ONE * 0.82
+	# Crossfade-in, not a size pop: the flash draws BEHIND the art children
+	# so it cannot mask an instant 1.0→0.82 reset — the new face fades in as
+	# it grows instead (PR #76 DL R1 MINOR-6).
+	_frame_art.scale = Vector2.ONE * 0.78
+	_glyph_art.scale = Vector2.ONE * 0.78
+	_frame_art.modulate.a = 0.0
+	_glyph_art.modulate.a = 0.0
+	Motion.bez(self, _set_kindle_fade, 0.15, Motion.CSS_EASE_OUT)
 	Motion.bez(self, _set_kindle_bloom, 0.33, Motion.SPRING) \
 		.finished.connect(_on_kindle_done)
 
 
+func _set_kindle_fade(t: float) -> void:
+	_frame_art.modulate.a = t
+	_glyph_art.modulate.a = t
+
+
 func _set_kindle_bloom(t: float) -> void:
-	var s: float = lerpf(0.82, 1.0, t)
+	var s: float = lerpf(0.78, 1.0, t)
 	_frame_art.scale = Vector2(s, s)
 	_glyph_art.scale = Vector2(s, s)
 
