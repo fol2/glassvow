@@ -34,7 +34,8 @@ const ALEGREYA_700: String = "res://assets/fonts/Alegreya-700.woff2"
 
 ## Canonical modal veil — flat (no blur; backbuffer budget). Shared by Help,
 ## Settings, reward overlays, and ChoiceScreen overlay mode. RunMenu keeps a
-## transparent hit-catcher; it is not a veil.
+## transparent hit-catcher; it is not a veil. The grain above is deliberately
+## not frozen with the world beneath: a held screen must not read as a still.
 static func scrim() -> Color:
 	return Color(5.0 / 255.0, 7.0 / 255.0, 16.0 / 255.0, 0.72)
 
