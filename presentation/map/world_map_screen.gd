@@ -80,7 +80,7 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_veil_band = MapBand.VeilBand.new()
 	_veil_band.host = self
 	add_child(_veil_band)
-	# Theme after bands exist so apply_region reaches region + veil.
+	# Theme after bands exist so apply_region reaches sky + region + veil.
 	_set_act_theme(0)
 	_build_chrome()
 	_seat_marker()
@@ -281,6 +281,7 @@ func _set_act_theme(stage_act: int) -> void:
 	_lightning_t = 0.0
 	_flash = 0.0
 	if _sky_band != null:
+		_sky_band.apply_region(_region)
 		_sky_band.set_flash(0.0)
 	if _region_band != null:
 		_region_band.apply_region(_region)

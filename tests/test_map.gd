@@ -91,6 +91,15 @@ static func run(fails: Array[String]) -> void:
 	screen.node_chosen.connect(func(i: int) -> void: seen.append(i))
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(screen)
+	# The far bands' bleed must cover the drift they are painted with, and the
+	# strip filenames must stay 1-based against 0-based act indices.
+	_check(fails, MapBand.FAR_BLEED >= WorldMapScreen.PATH_DRIFT_AMP.y / 3.0,
+		"far-band bleed covers the far drift amplitude")
+	_check(fails, MapStrip.path_for(0, &"skyband")
+		== "res://assets/art/map/act1-skyband.png", "strip paths are 1-based")
+	_check(fails, MapRegions.SPIRE_W_RATE.size() == 3
+		and MapRegions.SPIRE_H_RATE.size() == 3
+		and MapRegions.SPIRE_DARKEN.size() == 3, "spire ramps cover three acts")
 	_check(fails, screen._waystones.size() == 5, "one waystone per node")
 	_check(fails, not screen.choose(2), "screen refuses an unreachable waystone")
 	_check(fails, seen.is_empty(), "a refused choice hands off nothing")
