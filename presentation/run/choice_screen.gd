@@ -494,6 +494,12 @@ func _ready() -> void:
 		_first_button.grab_focus()
 	if _title_variant:
 		pivot_offset = size * 0.5
+		# REDUCE MOTION: the title arrives standing (`.logo { animation:
+		# none; }`, styles.css:2039) instead of breathing in.
+		if Preferences.active.reduce_motion:
+			modulate.a = 1.0
+			scale = Vector2.ONE
+			return
 		modulate.a = 0.0
 		scale = Vector2.ONE * 1.015
 		var tween: Tween = create_tween().set_parallel()

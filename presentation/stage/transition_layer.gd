@@ -228,7 +228,14 @@ func _init() -> void:
 
 
 func _process(delta: float) -> void:
-	if not _grain.visible:
+	# `#grain { display: none; }` under prefers-reduced-motion
+	# (styles.css:2037): the film disappears entirely — a noise plate held
+	# still would read as dirt on the glass. Faded rather than hidden so
+	# main's `set_grain` routing (`visible`) stays the single owner of which
+	# grain exists on a route.
+	var still: bool = Preferences.active.reduce_motion
+	_grain.self_modulate.a = 0.0 if still else 1.0
+	if not _grain.visible or still:
 		return
 	_grain_t += delta
 	var step: int = int(_grain_t / GRAIN_STEP) % GRAIN_JUMPS.size()

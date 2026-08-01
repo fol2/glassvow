@@ -445,7 +445,7 @@ go NaN before paint. Pixel counts on the running page: burst/motes draw; ring an
 slashArc draw 0 (`vfx_layer.gd:43-59` (in `DEAD_KINDS_RENDER`)).
 
 Here: `VfxLayer.archetype_hit` and the drain call sites are built
-(`vfx_layer.gd:591` (`archetype_hit`), `combat_screen.gd:2632` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
+(`vfx_layer.gd:596` (`archetype_hit`), `combat_screen.gd:2632` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
 `ring` / `slash` at `_push` so the typed `Vector2.ZERO` default does not
 accidentally repair them into visible hoops (`vfx_layer.gd:71-73` (`DEAD_KINDS_RENDER`),
 `vfx_layer.gd:405-410` (`_push`)). Call sites stay as the record of what the source asks
@@ -461,7 +461,7 @@ which the particle loop freezes; colour flashes at .09/.24/.28/.3s
 
 Here: shake moves `_shake_host` wrapping stage, battlefield and HUD
 (`combat_screen.gd:454` (`_shake_host`), `vfx_layer.gd:433-434` (`shake`), `vfx_layer.gd:344-357` (in `_step_shake`)).
-`hitstop` freezes the particle sim (`vfx_layer.gd:437-438` (`hitstop`),
+`hitstop` freezes the particle sim (`vfx_layer.gd:442-443` (`hitstop`),
 `vfx_layer.gd:245-248` (in `_process`)) and is wired for big hits, kills, shatter and world-stop
 (`presentation/combat/combat_screen.gd` (`_handle_event`), `2172`, `2176`, `2266`). Flashes go through
 `VfxLayer.flash`. Per-actor SubViewport camera shake is no longer the battlefield

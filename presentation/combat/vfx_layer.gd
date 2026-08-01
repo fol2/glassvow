@@ -431,6 +431,11 @@ func _spawn(kind: String, at: Vector2, vel: Vector2, sz: float, colour: Color,
 # ---------------------------------------------------------------- primitives
 
 func shake(power: float = 8.0) -> void:
+	# The player's hand on the camera: SCREEN SHAKE off stills the room, and
+	# REDUCE MOTION implies it — the hit's flash, floaters and numbers all
+	# still land, so nothing informational rides on this early-out.
+	if not Preferences.active.screen_shake or Preferences.active.reduce_motion:
+		return
 	_shake_v = maxf(_shake_v, power)
 
 
