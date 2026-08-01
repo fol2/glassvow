@@ -5,7 +5,6 @@ extends Control
 
 signal choice_selected(ordinal: int)
 signal continue_requested
-signal back_requested
 
 const PANEL_W: float = 660.0
 const EVENT_ART: String = "res://assets/art/events/%s.png"
@@ -170,12 +169,6 @@ func _ready() -> void:
 		if not button.disabled:
 			button.grab_focus()
 			break
-
-
-func _unhandled_key_input(event: InputEvent) -> void:
-	if event.is_action_pressed(&"ui_cancel"):
-		back_requested.emit()
-		get_viewport().set_input_as_handled()
 
 
 func set_shape(stage_shape: StringName) -> void:

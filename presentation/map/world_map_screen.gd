@@ -7,7 +7,6 @@ extends Control
 ## dependency) so headless tests can drive it — see the M5 screens.
 
 signal node_chosen(index: int)
-signal menu_requested
 
 const HORIZON: float = 0.64
 const TRAVEL_TIME: float = 0.4

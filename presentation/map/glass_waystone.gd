@@ -2,8 +2,7 @@ class_name GlassWaystone
 extends Control
 ## A waystone on the path band (concept brief §2): a faceted emblem seated on
 ## a leaded glass pane, its rim kindled (ember) when reachable and dim glass
-## when not. Composes the combat screen's GlassGem for the creature nodes so
-## the map and the fight speak one visual language.
+## when not.
 ##
 ## Every benchmark node type has a compact emblem. An unlit node deliberately
 ## hides its true face until the player steps onto it.
@@ -23,7 +22,6 @@ var cleared: bool = false
 var current: bool = false
 var quest_marked: bool = false
 
-var _gem: GlassGem = null
 var _frame_art: TextureRect
 var _glyph_art: TextureRect
 var _caption: Label
@@ -74,9 +72,6 @@ func set_state(is_reachable: bool, is_cleared: bool, is_current: bool = false) -
 	current = is_current
 	focus_mode = Control.FOCUS_ALL if reachable else Control.FOCUS_NONE
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if reachable else Control.CURSOR_ARROW
-	if _gem != null:
-		# A resolved node is a spent husk; an unresolved one still holds light.
-		_gem.set_state(hue, 0.25 if cleared else 1.0, cleared)
 	var art_tint: Color = Color(0.68, 0.70, 0.76, 0.76) if cleared else Color.WHITE
 	_frame_art.modulate = art_tint
 	_glyph_art.modulate = art_tint
@@ -157,8 +152,6 @@ func set_touch_min(min_px: float, draw_scale: float) -> void:
 	var pad: Vector2 = ((want - base) * 0.5).max(Vector2.ZERO)
 	if pad.is_equal_approx(_pad):
 		return
-	if _gem != null:
-		_gem.position += pad - _pad
 	_caption.offset_top = _pad.y + EMBLEM_H - 2 + (pad.y - _pad.y)
 	_caption.offset_bottom = _caption.offset_top + CAPTION_H + 2
 	_pad = pad
@@ -230,23 +223,3 @@ func _draw_crown(cx: float, top_y: float, alpha: float) -> void:
 		]), col)
 
 
-## The only amber node: a held breath of lantern-fire on a dark road.
-func _draw_hearth(cx: float, cy: float, alpha: float) -> void:
-	var ember: Color = GlassStyle.EMBER
-	var a: float = clampf(alpha + 0.25, 0.0, 1.0) * (0.4 if cleared else 1.0)
-	draw_circle(Vector2(cx, cy + 6.0), 26.0, Color(ember.r, ember.g, ember.b, 0.10 * a))
-	var flame: PackedVector2Array = PackedVector2Array([
-		Vector2(cx, cy - 26.0), Vector2(cx + 13.0, cy + 2.0),
-		Vector2(cx + 7.0, cy + 16.0), Vector2(cx - 7.0, cy + 16.0),
-		Vector2(cx - 13.0, cy + 2.0),
-	])
-	draw_colored_polygon(flame, Color(ember.r, ember.g, ember.b, 0.62 * a))
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(cx, cy - 12.0), Vector2(cx + 6.0, cy + 4.0),
-		Vector2(cx, cy + 13.0), Vector2(cx - 6.0, cy + 4.0),
-	]), Color(1.0, 0.92, 0.72, 0.75 * a))
-	# Lantern cage: two uprights and a crossbar hooding the fire.
-	var cage: Color = Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.5 * a)
-	draw_line(Vector2(cx - 18.0, cy - 22.0), Vector2(cx - 18.0, cy + 20.0), cage, 1.6)
-	draw_line(Vector2(cx + 18.0, cy - 22.0), Vector2(cx + 18.0, cy + 20.0), cage, 1.6)
-	draw_line(Vector2(cx - 22.0, cy - 22.0), Vector2(cx + 22.0, cy - 22.0), cage, 1.6)

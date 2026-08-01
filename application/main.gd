@@ -811,7 +811,6 @@ func _show_map() -> void:
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
 	_map_screen.node_chosen.connect(_on_node_chosen)
-	_map_screen.menu_requested.connect(_show_run_menu)
 	add_child(_map_screen)
 	_map_screen.refresh(game.run)
 	_transitions.set_grain(true)
