@@ -441,6 +441,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_toggle_build()
 	elif k.keycode == KEY_O:
 		_offering()
+	elif k.keycode == KEY_SPACE and _screen is RewardStage:
+		# Stage 2's judge key: break the body, watch the brake, replay at
+		# will — the same seed breaks the same way.
+		(_screen as RewardStage).shatter()
+		_note("husk · the break, replayed")
 	elif k.keycode == KEY_0:
 		_rebuild()
 	else:
