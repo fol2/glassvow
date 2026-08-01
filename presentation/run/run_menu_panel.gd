@@ -100,7 +100,12 @@ func _button(label: String, colour: Color = RunStyle.TEXT) -> Button:
 	button.add_theme_color_override("font_hover_color", RunStyle.GOLD)
 	button.add_theme_color_override("font_pressed_color", colour)
 	button.add_theme_color_override("font_focus_color", RunStyle.GOLD)
-	for state: String in ["normal", "hover", "pressed", "focus"]:
+	# The lantern ring overlays the state boxes; an opaque "focus" box here
+	# would shadow it (GlassStyle.focus_ring's ADOPTION PREREQUISITE). The
+	# menu's rows ring in the row's own colour, so Abandon rings danger.
+	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(
+		colour if colour != RunStyle.TEXT else RunStyle.GOLD))
+	for state: String in ["normal", "hover", "pressed"]:
 		button.add_theme_stylebox_override(state, _button_style(state))
 	button.mouse_entered.connect(func() -> void: _sfx.play(&"hover", 0.45))
 	return button

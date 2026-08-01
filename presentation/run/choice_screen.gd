@@ -148,6 +148,7 @@ func _build_standard(title_text: String, body_text: String,
 		# phone held sideways IS, so the panel grew past the stage and the
 		# buttons below the fold became unreachable rather than scrollable.
 		_scroll = ScrollContainer.new()
+		_scroll.follow_focus = true
 		var scroll: ScrollContainer = _scroll
 		scroll.custom_minimum_size.y = _panel_num("scroll", PANEL_SCROLL)
 		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -178,6 +179,7 @@ func _build_standard(title_text: String, body_text: String,
 func _build_card_grid(column: VBoxContainer, choices: Array[Dictionary],
 		k: float) -> void:
 	_scroll = ScrollContainer.new()
+	_scroll.follow_focus = true
 	_scroll.custom_minimum_size.y = _panel_num("scroll", PANEL_SCROLL)
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
