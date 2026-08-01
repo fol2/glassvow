@@ -47,11 +47,13 @@ func set_flash(v: float) -> void:
 		queue_redraw()
 
 
-func _draw_flash_overlay() -> void:
+## Each band washes only the area it painted — both far bands are full-rect
+## Controls, so an unclipped overlay double-applies (composite 0.19, not the
+## intended 0.10) and would sit over P5.6's strips (PR #75 DL R1).
+func _draw_flash_overlay(rect: Rect2) -> void:
 	if _flash <= 0.0:
 		return
-	draw_rect(Rect2(Vector2.ZERO, size),
-		Color(MapRegions.LIGHTNING_TONE, _flash * 0.10))
+	draw_rect(rect, Color(MapRegions.LIGHTNING_TONE, _flash * 0.10))
 
 
 class SkyBand extends MapBand:
@@ -87,7 +89,7 @@ class SkyBand extends MapBand:
 			Vector2(centre + bottom_w, horizon + drift.y),
 			Vector2(centre - bottom_w, horizon + drift.y),
 		]), host._sky_colour.darkened(0.58))
-		_draw_flash_overlay()
+		_draw_flash_overlay(Rect2(Vector2.ZERO, size))
 
 
 class RegionBand extends MapBand:
@@ -98,16 +100,20 @@ class RegionBand extends MapBand:
 	func _init() -> void:
 		super(0.35)
 
-	## Act 1 ungates so the shafts keep swaying while the camera rests; acts
-	## 0 and 2 stay gated (static silhouettes need no per-frame paint).
+	## The sunken region ungates so the shafts keep swaying while the camera
+	## rests; the other weathers stay gated (static silhouettes need no
+	## per-frame paint). The band asks the config, not the act index.
 	func apply_region(region: MapRegions) -> void:
-		gated = region.act != 1
-		set_process(region.act == 1)
+		gated = region.weather != &"sunken"
+		set_process(region.weather == &"sunken")
 		queue_redraw()
 
 	func _process(delta: float) -> void:
 		if host == null:
 			return
+		# Stilled sway re-gates the band: repainting an identical frame is
+		# the cost the gate exists to avoid (PR #75 DL R1 NIT).
+		gated = Preferences.active.reduce_motion
 		if Preferences.active.reduce_motion:
 			return
 		_age += delta
@@ -123,7 +129,8 @@ class RegionBand extends MapBand:
 		# an upward lean must not leave a strip of raw sky under the ground.
 		draw_rect(Rect2(0.0, horizon, w, h - horizon + 8.0),
 			Color(WorldMapScreen.REGION_GROUND, 0.62 if host._act == 0 else 0.38))
-		if host._act == 1:
+		var ground: Rect2 = Rect2(0.0, horizon, w, h - horizon)
+		if host._region != null and host._region.weather == &"sunken":
 			_draw_shafts(w, horizon, path_y)
 		if host._act > 0:
 			for cloud: int in range(9):
@@ -134,12 +141,13 @@ class RegionBand extends MapBand:
 				draw_texture_rect(SkyField.disc(),
 					Rect2(x, horizon - cloud_h * 0.68, cloud_w, cloud_h), false,
 					Color(host._fog_colour.lightened(0.50), 0.15))
-			_draw_flash_overlay()
+			_draw_flash_overlay(ground)
 			return
-		# Trees derive from the horizon→path span, not absolute px — at
-		# phone-landscape (h=390, horizonY 0.36→140, pathY 0.5→195) span=55;
-		# bases live in the top 18–40% → 149.9–162.0, all above the ribbon at
-		# 195 (33px clearance). Heights scale with the span (30.25–60.5).
+		# Trees derive from the horizon→path span — the RATIOS are the P5.2
+		# absolutes read against that shape's own span (bases 321–351 and
+		# heights 90–180 over a 230px span at pad-landscape → 0.113–0.244 and
+		# 0.391–0.783), so the identity shape keeps its approved look while
+		# phone-landscape (span 55: bases 146.2–153.4, ribbon 195) stays clear.
 		var span_y: float = path_y - horizon
 		var span: float = w + 400.0
 		var trunk: Color = Color(0.025, 0.065, 0.048, 0.94)
@@ -148,9 +156,9 @@ class RegionBand extends MapBand:
 			var index: float = float(tree)
 			var x: float = fposmod(index * 163.0 - cam_x * factor, span) \
 				- 200.0 + drift.x
-			var tree_h: float = span_y * (0.55 + fmod(index * 53.0, 90.0) / 90.0 * 0.55)
-			var base_y: float = horizon + span_y * (0.18 \
-				+ fmod(index * 29.0, 30.0) / 30.0 * 0.22)
+			var tree_h: float = span_y * (0.391 + fmod(index * 53.0, 90.0) / 90.0 * 0.392)
+			var base_y: float = horizon + span_y * (0.113 \
+				+ fmod(index * 29.0, 30.0) / 30.0 * 0.131)
 			var top_y: float = base_y - tree_h
 			draw_colored_polygon(PackedVector2Array([
 				Vector2(x - 8.0, base_y), Vector2(x - 2.5, top_y),
@@ -162,24 +170,36 @@ class RegionBand extends MapBand:
 				Vector2(x + 32.0, top_y + tree_h * 0.14), trunk, 4.0)
 			draw_line(Vector2(x - 2.5, top_y),
 				Vector2(x - 5.0, top_y + tree_h * 0.45), rim, 1.0)
-		_draw_flash_overlay()
+		_draw_flash_overlay(ground)
 
 	func _draw_shafts(w: float, horizon: float, path_y: float) -> void:
 		# Six near-vertical caustics between horizon and path — the Sunken
-		# City's drowned light. Sway is deterministic off _age + index.
+		# City's drowned light. Sway is deterministic off _age + index. Each
+		# shaft is two per-vertex-ramped quads (a wide veil over a narrower
+		# core) fading to nothing at the road: light that SINKS must not end
+		# in a flat cut a few px under the ribbon (PR #75 DL R1).
 		for i: int in range(6):
 			var fi: float = float(i)
 			var sway: float = sin(_age * 0.4 + fi * 1.7)
 			var x: float = fposmod(fi * w * 0.19 - cam_x * factor, w * 1.2) \
 				- w * 0.1 + sway * 14.0 + drift.x
 			var alpha: float = 0.05 + 0.03 * (0.5 + 0.5 * sway)
-			var tint: Color = Color(host._glow_colour, alpha)
-			draw_colored_polygon(PackedVector2Array([
-				Vector2(x - 14.0, horizon),
-				Vector2(x + 14.0, horizon),
-				Vector2(x + 34.0, path_y),
-				Vector2(x - 34.0, path_y),
-			]), tint)
+			var glow: Color = host._glow_colour
+			var clear: Color = Color(glow, 0.0)
+			draw_polygon(PackedVector2Array([
+				Vector2(x - 14.0, horizon), Vector2(x + 14.0, horizon),
+				Vector2(x + 34.0, path_y), Vector2(x - 34.0, path_y),
+			]), PackedColorArray([
+				Color(glow, alpha * 0.7), Color(glow, alpha * 0.7),
+				clear, clear,
+			]))
+			draw_polygon(PackedVector2Array([
+				Vector2(x - 7.0, horizon), Vector2(x + 7.0, horizon),
+				Vector2(x + 17.0, path_y), Vector2(x - 17.0, path_y),
+			]), PackedColorArray([
+				Color(glow, alpha * 0.6), Color(glow, alpha * 0.6),
+				clear, clear,
+			]))
 
 
 class PathBand extends MapBand:
@@ -319,9 +339,11 @@ class VeilBand extends MapBand:
 		# (same principle as the pointer-chased title camera).
 		var cam_shift: float = cam_x * factor
 		var kind: StringName = _weather
+		var visible_count: int = _ash.size()
 		if host._region != null:
 			kind = host._region.weather
-		for index: int in range(_ash.size()):
+			visible_count = mini(host._region.particle_count, _ash.size())
+		for index: int in range(visible_count):
 			var m: Vector3 = _ash[index]
 			var x: float = fposmod(m.x - cam_shift + drift.x, span)
 			if x > w:
@@ -332,10 +354,15 @@ class VeilBand extends MapBand:
 				else host._particle_colour
 			var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
 			if kind == &"storm":
-				# Speed reads as a streak — short line, not a disc.
-				var p: Vector2 = Vector2(x, y)
-				draw_line(p, p + Vector2(m.z * 0.35, -m.z * 0.05),
-					Color(tint, alpha), radius)
+				# Speed reads as a streak — the SAME soft disc stretched along
+				# the velocity, ≥3× longer than tall and 40% dimmer, so an
+				# ember can never be confused with the graph's crisp lead
+				# dashes on the play plane (PR #75 DL R1 MAJOR).
+				var length: float = maxf(radius * 3.0, m.z * 0.5)
+				draw_texture_rect(glow, Rect2(
+					Vector2(x - length * 0.5, y - radius * 0.5),
+					Vector2(length, radius)), false,
+					Color(tint, alpha * 0.6))
 			else:
 				draw_texture_rect(glow, Rect2(
 					Vector2(x, y) - Vector2.ONE * radius * 2.0,

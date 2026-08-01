@@ -35,10 +35,11 @@ var particles: Color = FALLBACK_PARTICLES[0]
 var glow: Color = FALLBACK_GLOWS[0]
 var accent: Color = FALLBACK_ACCENTS[0]
 var weather: StringName = &"ash"
+## How many of the veil's scattered motes this region DRAWS. The scatter
+## itself stays the full deterministic 128 so switching acts never reshuffles
+## it — storm halves the visible field because 64 hard streaks already carry
+## more luminance than 128 soft discs (PR #75 DL R1).
 var particle_count: int = 128
-## Inclusive speed band written into each mote's z at scatter (ash budget).
-var speed_min: float = 14.0
-var speed_max: float = 36.0
 
 
 static func for_act(act_i: int, content: ContentDB) -> MapRegions:
@@ -46,6 +47,8 @@ static func for_act(act_i: int, content: ContentDB) -> MapRegions:
 	var index: int = clampi(act_i, 0, FALLBACK_SKIES.size() - 1)
 	cfg.act = index
 	cfg.weather = WEATHER_BY_ACT[index]
+	if cfg.weather == &"storm":
+		cfg.particle_count = 64
 	cfg.sky = FALLBACK_SKIES[index]
 	cfg.fog = FALLBACK_FOGS[index]
 	cfg.particles = FALLBACK_PARTICLES[index]
