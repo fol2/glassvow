@@ -24,7 +24,6 @@ var _reward_screen: RewardScreen = null
 var _route_screen: Control = null
 var _run_hud: RunHud = null
 var _modal: Control = null
-var _audio_preferences: AudioPreferences
 var _music: MusicBus
 var _vigil: VigilState
 var _embark_aspect: int = 0
@@ -64,7 +63,7 @@ func _ready() -> void:
 	print("glassvow boot " + str(Engine.get_version_info()["string"]))
 	content = ContentDB.load_full()
 	_vigil = SaveService.load_vigil()
-	_audio_preferences = AudioPreferences.read_from_disk()
+	Preferences.active = Preferences.read_from_disk()
 	_music = MusicBus.new()
 	add_child(_music)
 	var fails: Array[String] = []
@@ -176,6 +175,12 @@ func _ready() -> void:
 	# constructed against the size it will actually be laid out in. Re-picked on
 	# every window change after that: an iPadOS 26 window has no fixed aspect
 	# (UIRequiresFullScreen is deprecated) and a desktop window never did.
+	# A plain boot is the player's window; any tooling invocation (--shot=,
+	# labs, --fight=, --vp=) owns its own window and must not be hijacked by a
+	# saved fullscreen choice. Applied before the shape pick so the stage is
+	# chosen against the window the player will actually see.
+	if OS.get_cmdline_user_args().is_empty():
+		Preferences.active.apply_display()
 	_apply_shape()
 	var window: Window = get_window()
 	if window != null:
@@ -523,7 +528,7 @@ func _show_help() -> void:
 
 
 func _show_settings() -> void:
-	var screen: SettingsPanel = SettingsPanel.new(_audio_preferences, _run_over)
+	var screen: SettingsPanel = SettingsPanel.new(Preferences.active, _run_over)
 	screen.closed.connect(_close_overlay)
 	screen.reset_requested.connect(_confirm_reset)
 	_show_overlay(screen)

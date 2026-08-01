@@ -9,11 +9,11 @@ const GOLD: Color = Color("#f2c14e")
 const DANGER: Color = Color("#ff8d8d")
 const WIDTH: float = 320.0
 
-var _preferences: AudioPreferences
+var _preferences: Preferences
 var _sfx: SfxBus
 
 
-func _init(preferences: AudioPreferences, reset_disabled: bool = false) -> void:
+func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 	_preferences = preferences
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
@@ -53,8 +53,8 @@ func _init(preferences: AudioPreferences, reset_disabled: bool = false) -> void:
 	var audio: VBoxContainer = VBoxContainer.new()
 	audio.add_theme_constant_override("separation", 7)
 	column.add_child(audio)
-	audio.add_child(_audio_row("MUSIC", AudioPreferences.MUSIC))
-	audio.add_child(_audio_row("SFX", AudioPreferences.SFX))
+	audio.add_child(_audio_row("MUSIC", Preferences.MUSIC))
+	audio.add_child(_audio_row("SFX", Preferences.SFX))
 
 	var debug_section: VBoxContainer = VBoxContainer.new()
 	debug_section.add_theme_constant_override("separation", 8)
