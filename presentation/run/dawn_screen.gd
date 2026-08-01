@@ -677,7 +677,8 @@ func _apply_shape(inset: int, panel_width: float, title_size: int,
 	# old 260px floor that opened on two missing rows of hole.
 	var rows: int = maxi(1, int(ceilf(
 		float(maxi(1, _events.size())) / float(maxi(1, columns)))))
-	var need: float = float(rows) * 90.0 + float(rows - 1) * 8.0
+	# A seat is 82 + TRAVEL tall — the reviewer's parting nit, banked.
+	var need: float = float(rows) * 94.0 + float(rows - 1) * 8.0
 	_grid.get_parent().custom_minimum_size.y = minf(grid_height, need)
 
 
