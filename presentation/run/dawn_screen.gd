@@ -330,19 +330,19 @@ func _process(delta: float) -> void:
 		BEAT_REVEAL:
 			_beat_t += delta
 			var u: float = clampf(_beat_t / REVEAL_TIME, 0.0, 1.0)
-			# `.dawn-event { animation: none }`: each event stands at once;
-			# the feed's cadence — advance, hold-to-skip — is pacing, not
-			# motion, and is untouched.
-			if Preferences.active.reduce_motion:
-				u = 1.0
-			var e: float = Motion.ease(Motion.CSS_EASE, u)
+			# `.dawn-event { animation: none }` (styles.css:2052): the card
+			# stands at once, but the CLOCK is untouched — `u` still walks
+			# REVEAL_TIME so every memory keeps its full dwell. Reduced
+			# motion must never buy the player LESS reading time.
+			var shown: float = 1.0 if Preferences.active.reduce_motion \
+				else Motion.ease(Motion.CSS_EASE, u)
 			if is_instance_valid(_reveal_card) and is_instance_valid(_reveal_seat):
 				# The whole panel slides — `.dawn-event` animates transform,
 				# not layout (styles.css:2583-2585). The travel lives in the
 				# seat's margins, whose sum never changes, so the row's height
 				# holds while the card moves.
-				_reveal_card.modulate.a = e
-				_set_travel(_reveal_seat, lerpf(TRAVEL, 0.0, e))
+				_reveal_card.modulate.a = shown
+				_set_travel(_reveal_seat, lerpf(TRAVEL, 0.0, shown))
 			if u >= 1.0:
 				_finish_beat()
 		BEAT_WAIT:

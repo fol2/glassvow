@@ -558,14 +558,21 @@ func _draw_graph() -> void:
 func _draw_veil(w: float) -> void:
 	var span: float = maxf(w, 1.0) * 2.0
 	var glow: Texture2D = SkyField.disc()
+	# The veil answers the camera like every other band — at its own 1.35
+	# overshoot — instead of sitting welded to the glass. With the fall
+	# stilled under reduce-motion this is what keeps the ash part of the
+	# WORLD: scroll is user-initiated motion, the same principle that keeps
+	# the pointer-chased title camera alive.
+	var cam_y: float = (_cam_row - CAMERA_LEAD) * _row_gap() * 1.35
 	for index: int in range(_ash.size()):
 		var m: Vector3 = _ash[index]
 		var x: float = fposmod(m.x, span)
 		if x > w:
 			continue
+		var y: float = fposmod(m.y + cam_y, maxf(size.y, 1.0))
 		var radius: float = 2.0 + m.z * 0.08
 		var tint: Color = _glow_colour if index % 3 != 0 else _particle_colour
 		var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
 		draw_texture_rect(glow, Rect2(
-			Vector2(x, m.y) - Vector2.ONE * radius * 2.0,
+			Vector2(x, y) - Vector2.ONE * radius * 2.0,
 			Vector2.ONE * radius * 4.0), false, Color(tint, alpha))
