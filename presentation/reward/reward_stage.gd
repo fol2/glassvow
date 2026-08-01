@@ -242,7 +242,13 @@ func _build_husk() -> void:
 	_husk = MeshInstance3D.new()
 	_husk.mesh = quad
 	var sh: Shader = Shader.new()
-	sh.code = EnemyView.BODY_SHADER
+	# The SPLICED shader, not the raw const: BODY_SHADER's fragment calls
+	# eaten() and variant_tint(), which live in the ERODE and TINT snippets its
+	# markers stand for. The raw string does not compile, and a shader that
+	# does not compile is a white unshaded plate — the husk rendered as a
+	# glowing square, which is what "source existing is not rendering" looks
+	# like in 3D.
+	sh.code = EnemyView.with_tint(EnemyView.with_erode(EnemyView.BODY_SHADER))
 	_body = ShaderMaterial.new()
 	_body.shader = sh
 	_body.set_shader_parameter("body_tex", tex)
