@@ -218,6 +218,8 @@ class PathBand extends MapBand:
 			Color(glass.r, glass.g, glass.b, 0.10), 3.0)
 		draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
 			Color(glass.r, glass.g, glass.b, 0.16), 1.0)
+		# Terminus rose-window BEFORE the graph so edges/stones layer over it.
+		_draw_rose_window()
 		_draw_graph()
 		# The current lantern's glow sits behind its waystone (or mid-glide
 		# along the same bezier the edges draw — host owns travel state).
@@ -226,6 +228,35 @@ class PathBand extends MapBand:
 			var ember: Color = GlassStyle.EMBER
 			draw_circle(at, 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 			draw_circle(at, 15.0, Color(ember.r, ember.g, ember.b, 0.18))
+
+	## §3 keystone backdrop — quiet night-glass silhouette; painted art is P5.6+.
+	func _draw_rose_window() -> void:
+		var boss: MapNode = null
+		for node: MapNode in host.map.nodes:
+			if node.type == "boss":
+				boss = node
+				break
+		if boss == null:
+			return
+		var pos: Vector2 = host._node_pos(boss)
+		var step: float = host._step()
+		var depth: float = absf(host._world_x(float(boss.row)) - host._cam_x) \
+			/ maxf(step, 1.0)
+		# Same depth compress the waystones use — the window tracks the stone.
+		var compress: float = clampf(1.08 - depth * 0.035, 0.72, 1.08)
+		var R: float = 110.0 * compress
+		var glass: Color = GlassStyle.GLASS
+		var side: float = R * 2.6
+		draw_texture_rect(SkyField.disc(),
+			Rect2(pos - Vector2.ONE * side * 0.5, Vector2.ONE * side), false,
+			Color(host._accent_colour, 0.10))
+		draw_arc(pos, R, 0.0, TAU, 64, Color(glass.r, glass.g, glass.b, 0.18), 3.0)
+		draw_arc(pos, R * 0.62, 0.0, TAU, 48, Color(glass.r, glass.g, glass.b, 0.14), 2.0)
+		for spoke: int in range(8):
+			var a: float = float(spoke) * TAU / 8.0
+			var dir: Vector2 = Vector2(cos(a), sin(a))
+			draw_line(pos + dir * R * 0.18, pos + dir * R,
+				Color(glass.r, glass.g, glass.b, 0.16), 2.0)
 
 	func _draw_graph() -> void:
 		var by_id: Dictionary = {}

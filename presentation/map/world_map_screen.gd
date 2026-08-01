@@ -176,7 +176,8 @@ func _build_waystones() -> void:
 		var shown_kind: String = "unlit" if n.unlit else n.type
 		var caption: String = "Unlit Way" if n.unlit else _node_caption(n)
 		var ws: GlassWaystone = GlassWaystone.new(
-			i, shown_kind, _node_hue(n), caption, n.quest_marked)
+			i, shown_kind, _node_hue(n), caption, n.quest_marked,
+			n.bounty if n.unlit else 0)
 		ws.chosen.connect(_on_waystone_chosen)
 		add_child(ws)
 		_waystones.append(ws)
@@ -334,8 +335,12 @@ func _on_waystone_chosen(i: int) -> void:
 
 ## Glide the lantern to node `i`, then hand off. False = not selectable now.
 ## Capture departure BEFORE enter() — that call mutates map.at immediately.
+## Unlit is NOT cleared here: main pays the bounty and flips `n.unlit` only
+## after node_chosen, so the ceremony covers the same-screen window between
+## click and route swap.
 func choose(i: int) -> bool:
 	var from_i: int = map.at
+	var was_unlit: bool = map.nodes[i].unlit
 	if _travelling or not map.enter(i):
 		return false
 	for ws: GlassWaystone in _waystones:
@@ -348,12 +353,17 @@ func choose(i: int) -> bool:
 	_travelling = true
 	_cam_target = _cam_for(i)
 	# Reduce-motion skips the walk but still arrives through one path so the
-	# travelling flag clears the same way a tween finish would.
+	# travelling flag clears the same way a tween finish would. No kindle
+	# ceremony — art corrects on the next _show_map rebuild, as today.
 	if Preferences.active.reduce_motion:
 		_cam_x = _cam_target
 		_on_arrived(i)
 		return true
-	Motion.bez(self, _set_travel_t, TRAVEL_TIME, Motion.CSS_EASE) \
+	if was_unlit:
+		_waystones[i].kindle_reveal(map.nodes[i].type)
+	# Hold the glide so the 0.45s bloom lands before the route swap.
+	var dur: float = maxf(TRAVEL_TIME, 0.5) if was_unlit else TRAVEL_TIME
+	Motion.bez(self, _set_travel_t, dur, Motion.CSS_EASE) \
 		.finished.connect(_on_arrived.bind(i))
 	return true
 

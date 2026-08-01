@@ -21,6 +21,9 @@ var reachable: bool = false
 var cleared: bool = false
 var current: bool = false
 var quest_marked: bool = false
+## Paid TO the player on kindling — chip text pins the `+`. Zero until the
+## screen passes an unlit node's bounty through the ctor.
+var bounty: int = 0
 
 var _frame_art: TextureRect
 var _glyph_art: TextureRect
@@ -30,6 +33,11 @@ var _pulse: float = 0.0
 const PULSE_HELD: float = PI / 4.4
 var _pressed: bool = false
 var _press_at: Vector2 = Vector2.ZERO
+## Kindle ceremony — flash envelope (1→0 over 0.45s) and re-entry guard.
+var _kindle: float = 0.0
+var _kindling: bool = false
+## Theme font cached once; draw_string refuses a null Font under warnings-as-errors.
+var _chip_font: Font = null
 
 ## Empty rect grown around the drawing so the HIT AREA can be bigger than the
 ## picture. Zero at the shapes a mouse points at; on a phone it is what keeps a
@@ -38,11 +46,12 @@ var _pad: Vector2 = Vector2.ZERO
 
 
 func _init(node_index: int, node_kind: String, node_hue: float, caption: String,
-		is_quest_marked: bool = false) -> void:
+		is_quest_marked: bool = false, node_bounty: int = 0) -> void:
 	index = node_index
 	kind = node_kind
 	hue = node_hue
 	quest_marked = is_quest_marked
+	bounty = node_bounty
 	size = Vector2(WIDTH, EMBLEM_H + CAPTION_H)
 	focus_entered.connect(queue_redraw)
 	focus_exited.connect(queue_redraw)
@@ -164,12 +173,11 @@ func _draw() -> void:
 	var cx: float = _pad.x + WIDTH * 0.5
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	var glow: float = (0.5 + 0.5 * sin(_pulse * 2.2)) if reachable else 0.0
-	var rim: Color = GlassStyle.EMBER if reachable else GlassStyle.GLASS
+	# Rim alpha feeds the elite crown — focus no longer brightens the pulse;
+	# the dashed glass arc below is the keyboard affordance instead.
 	var rim_a: float = 0.20
 	if reachable:
 		rim_a = 0.55 + 0.30 * glow
-		if has_focus():
-			rim_a = 1.0
 	elif cleared:
 		rim_a = 0.12
 	var radius: float = 38.0 if kind == "boss" else (32.0 if kind in ["elite", "treasure"] else 28.0)
@@ -180,11 +188,29 @@ func _draw() -> void:
 	if reachable:
 		draw_arc(Vector2(cx, cy), radius + 5.0, 0.0, TAU, 32,
 			Color(1.0, 0.96, 0.88, 0.78 + glow * 0.2), 3.0)
+	# Shown-kind only — an unlit elite stays crownless until kindled (§2 mask).
+	if kind == "elite":
+		_draw_crown(cx, cy - radius - 4.0, rim_a)
+	# Keyboard focus: a DISTINCT rotating dashed arc, not a brighter rim pulse.
+	# Reduce-motion freezes spin (pulse is held) but keeps the arc visible.
+	if has_focus():
+		var spin: float = _pulse * 0.6
+		var focus_col: Color = Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g,
+			GlassStyle.GLASS.b, 0.9)
+		for dash: int in range(8):
+			var a0: float = spin + float(dash) * TAU / 8.0
+			draw_arc(Vector2(cx, cy), radius + 9.0, a0, a0 + deg_to_rad(22.0), 8,
+				focus_col, 2.0)
 	if quest_marked:
 		var lens: Vector2 = Vector2(cx + radius * 0.78, cy - radius * 0.78)
 		draw_circle(lens, 12.0, Color(0.72, 0.96, 1.0, 0.13))
 		draw_circle(lens, 7.5, Color(0.54, 0.92, 1.0, 0.28))
 		draw_arc(lens, 7.5, 0.0, TAU, 18, Color(0.88, 0.98, 1.0, 0.9), 1.5)
+	if _kindle > 0.0:
+		draw_circle(Vector2(cx, cy), radius + 8.0,
+			Color(1.0, 0.92, 0.78, _kindle * 0.55))
+	if kind == "unlit" and bounty > 0:
+		_draw_bounty_chip(cx)
 
 
 func _art(name: String) -> TextureRect:
@@ -222,4 +248,73 @@ func _draw_crown(cx: float, top_y: float, alpha: float) -> void:
 			Vector2(bx - 6.0, top_y), Vector2(bx, tip), Vector2(bx + 6.0, top_y),
 		]), col)
 
+
+## "Unlit · +N" under the pane — bounty is paid TO the player; the `+` is the pin.
+## Lives inside the padded hit rect; WIDTH/EMBLEM_H stay untouched.
+func _draw_bounty_chip(cx: float) -> void:
+	if _chip_font == null:
+		_chip_font = get_theme_font(&"font")
+	if _chip_font == null:
+		return
+	var text: String = "Unlit · +%d" % bounty
+	var fs: int = 12
+	var tw: float = _chip_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs).x
+	var chip_w: float = tw + 14.0
+	var chip_h: float = 18.0
+	var cy: float = _pad.y + EMBLEM_H + 10.0
+	var a: float = 0.45 if cleared else 1.0
+	var rect: Rect2 = Rect2(cx - chip_w * 0.5, cy - chip_h * 0.5, chip_w, chip_h)
+	draw_rect(rect, Color(0.04, 0.05, 0.10, 0.85 * a), true)
+	draw_rect(rect, Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b, 0.35 * a),
+		false, 1.0)
+	draw_string(_chip_font, Vector2(cx - tw * 0.5, cy + float(fs) * 0.35), text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs,
+		Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.92 * a))
+
+
+## Flash → art swap at 0.12s → SPRING bloom. Reduce-motion: instant swap, no ceremony.
+func kindle_reveal(true_kind: String) -> void:
+	if _kindling or kind != "unlit":
+		return
+	_kindling = true
+	if Preferences.active.reduce_motion:
+		_apply_kindle_art(true_kind)
+		_kindling = false
+		return
+	_kindle = 1.0
+	queue_redraw()
+	Motion.bez(self, _set_kindle_flash, 0.45, Motion.CSS_EASE_OUT)
+	get_tree().create_timer(0.12).timeout.connect(_on_kindle_swap.bind(true_kind))
+
+
+func _set_kindle_flash(t: float) -> void:
+	_kindle = 1.0 - t
+	queue_redraw()
+
+
+func _on_kindle_swap(true_kind: String) -> void:
+	_apply_kindle_art(true_kind)
+	_frame_art.pivot_offset = _frame_art.size * 0.5
+	_glyph_art.pivot_offset = _glyph_art.size * 0.5
+	_frame_art.scale = Vector2.ONE * 0.82
+	_glyph_art.scale = Vector2.ONE * 0.82
+	Motion.bez(self, _set_kindle_bloom, 0.33, Motion.SPRING) \
+		.finished.connect(_on_kindle_done)
+
+
+func _set_kindle_bloom(t: float) -> void:
+	var s: float = lerpf(0.82, 1.0, t)
+	_frame_art.scale = Vector2(s, s)
+	_glyph_art.scale = Vector2(s, s)
+
+
+func _on_kindle_done() -> void:
+	_kindling = false
+
+
+func _apply_kindle_art(true_kind: String) -> void:
+	kind = true_kind
+	_glyph_art.texture = load("res://assets/art/ui/node-%s.png" % _art_kind()) as Texture2D
+	_seat_art()
+	queue_redraw()
 
