@@ -27,9 +27,13 @@ func set_view(p_cam_x: float, p_drift: Vector2, force: bool = false) -> void:
 	var moved: bool = force \
 		or absf(p_cam_x - cam_x) > CAM_EPS \
 		or p_drift.distance_to(drift) > DRIFT_EPS
-	cam_x = p_cam_x
-	drift = p_drift
+	# Store only what gets PAINTED. The waystones relayout ungated every
+	# frame, so a gate that re-baselines on every push lets sub-epsilon
+	# deltas accumulate into a permanent stone/road detach on a slow sweep —
+	# the comparison must always be against the last painted view.
 	if not gated or moved:
+		cam_x = p_cam_x
+		drift = p_drift
 		queue_redraw()
 
 
@@ -58,8 +62,11 @@ class SkyBand extends MapBand:
 		var centre: float = w * 0.82 - cam_x * factor + drift.x
 		var top_w: float = maxf(58.0, w * 0.08)
 		var bottom_w: float = maxf(180.0, w * 0.28)
+		# Top bleeds past the frame by more than the far drift amplitude —
+		# a downward lean must not open raw sky above the wedge.
 		draw_colored_polygon(PackedVector2Array([
-			Vector2(centre - top_w, drift.y), Vector2(centre + top_w, drift.y),
+			Vector2(centre - top_w, drift.y - 8.0),
+			Vector2(centre + top_w, drift.y - 8.0),
 			Vector2(centre + bottom_w, horizon + drift.y),
 			Vector2(centre - bottom_w, horizon + drift.y),
 		]), host._sky_colour.darkened(0.58))
@@ -75,7 +82,9 @@ class RegionBand extends MapBand:
 		var w: float = size.x
 		var h: float = size.y
 		var horizon: float = h * host._trail_num("horizonY", 0.36) + drift.y
-		draw_rect(Rect2(0.0, horizon, w, h - horizon),
+		# Bleeds past the frame bottom by more than the far drift amplitude —
+		# an upward lean must not leave a strip of raw sky under the ground.
+		draw_rect(Rect2(0.0, horizon, w, h - horizon + 8.0),
 			Color(WorldMapScreen.REGION_GROUND, 0.62 if host._act == 0 else 0.38))
 		if host._act > 0:
 			for cloud: int in range(9):
