@@ -4,7 +4,7 @@ date: 2026-08-01
 category: workflow-issues
 module: application
 problem_type: workflow_issue
-component: testing_framework
+component: development_workflow
 severity: high
 applies_when:
   - "A test, screenshot drive, or QA session needs pre-seeded user:// save state (vigil or run)"
@@ -63,7 +63,8 @@ domain's own API, persist through `SaveService`, and roundtrip-verify before
 driving any UI on top of it.
 
 ```gdscript
-# tools/plant_act4_vigil.gd — run with: godot --headless -s res://tools/plant_act4_vigil.gd
+# Throwaway plant-and-verify script — the pattern, not a committed tool.
+# Save as e.g. tools/plant_act4_vigil.gd and run headless; delete after use.
 extends SceneTree
 
 func _init() -> void:
@@ -148,6 +149,9 @@ first drive, and the threshold screen rendered as intended.
   *made and trusted*; that one covers how routes built on it get *driven and
   proven*. Its throwaway drivers build state the same way — through `_new_run()`
   and `game.apply()`, never JSON.
-- `tests/test_quests.gd` and `tests/test_save.gd` — the in-suite precedents:
-  `blank()` + mutations + roundtrip through the production serialisers.
+- `tests/test_save.gd` — the in-suite precedent for the full roundtrip:
+  `blank()` → `commit_run` → `store_vigil` → `load_vigil`.
+- `tests/test_quests.gd` — the in-suite precedent for domain-API planting
+  (`blank()` + mutations to light six shards); it stays in memory and does
+  not exercise the serialisers.
 - Issue #36 (P4.16), PR #55 — the drive this lesson was learnt on.
