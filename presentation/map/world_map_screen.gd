@@ -563,8 +563,13 @@ func _node_pos(node: MapNode) -> Vector2:
 	var step: float = _step()
 	var world_x: float = _world_x(float(node.row))
 	var depth: float = absf(world_x - _cam_x) / maxf(step, 1.0)
-	var lane_gap: float = _lane_gap()
-	lane_gap *= clampf(1.0 - depth * 0.025, 0.78, 1.0)
+	# `laneMin` is a TOUCH floor, so the depth compression is not allowed to
+	# multiply it away: 46 × 0.78 = 35.9 px, under the 44 px rect `set_touch_min`
+	# exists to guarantee. Depth still compresses the lanes while there is room
+	# and simply stops when it reaches the floor (#69, carried from P5.1 DL R2).
+	var compress: float = clampf(1.0 - depth * 0.025, 0.78, 1.0)
+	var lane_gap: float = maxf(_lane_gap() * compress,
+		_trail_num("laneMin", 46.0))
 	var d: Vector2 = Vector2(
 		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
 	return Vector2(

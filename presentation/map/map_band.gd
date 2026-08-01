@@ -364,6 +364,7 @@ class PathBand extends MapBand:
 	func _draw_graph() -> void:
 		var by_id: Dictionary = {}
 		var step: float = host._step()
+		var lane_gap_px: float = host._lane_gap()
 		for node: MapNode in host.map.nodes:
 			by_id[node.id] = node
 		for node: MapNode in host.map.nodes:
@@ -380,10 +381,16 @@ class PathBand extends MapBand:
 					absf(host._world_x(float(node.row)) - host._cam_x),
 					absf(host._world_x(float(next_node.row)) - host._cam_x)) \
 					/ maxf(step, 1.0) * 0.12, 0.10, 1.0)
-				# Same-lane edges run straight; rising bows up, falling bows down
-				# so crossing paths pull apart rather than stacking.
+				# Rising bows up, falling bows down so crossing paths pull apart
+				# rather than stacking — scaled by how far the edge actually
+				# climbs, so a same-lane run really is straight. `signf` was 0
+				# only on an exact tie and `node.jx * 6.0` jitter guarantees no
+				# tie, so every same-lane edge used to take the full bow off a
+				# sub-pixel difference (#69, found in PR #77 PM R3).
+				var climb: float = clampf((to.y - from.y) / maxf(lane_gap_px, 1.0),
+					-1.0, 1.0)
 				var control: Vector2 = (from + to) * 0.5 \
-					+ Vector2(0.0, signf(to.y - from.y) * 10.0)
+					+ Vector2(0.0, climb * 10.0)
 				var previous: Vector2 = from
 				# ~10–12px dash cells from chord length; first cell drawn so the
 				# dash begins at the source rim instead of detaching from it.
@@ -435,7 +442,17 @@ class VeilBand extends MapBand:
 		var kind: StringName = _weather
 		if host._region != null:
 			kind = host._region.weather
-		for i: int in range(_ash.size()):
+		# Step only what `_draw` renders — storm drew 64 of 128 and stepped all
+		# 128 (#69, carried from P5.4 DL R2). The undrawn tail holds its
+		# position, which cannot show: `main._show_map` builds a fresh
+		# WorldMapScreen on every route to the map, so the scatter is reborn
+		# before an act advance could ever resume a frozen mote. The one path
+		# that raises the count on a LIVE band is `--map --act=N`, and that
+		# applies in the same frame as the build.
+		var moving: int = _ash.size()
+		if host._region != null:
+			moving = mini(host._region.particle_count, _ash.size())
+		for i: int in range(moving):
 			var m: Vector3 = _ash[i]
 			var fi: float = float(i)
 			match kind:
