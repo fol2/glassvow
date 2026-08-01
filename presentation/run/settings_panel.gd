@@ -19,13 +19,16 @@ var _scroll: ScrollContainer
 var _sections: VBoxContainer
 
 
-func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
+func _init(preferences: Preferences, reset_disabled: bool = false,
+		sfx: SfxBus = null) -> void:
 	_preferences = preferences
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		# Injected bus already lives under main; only own a fallback.
+		add_child(_sfx)
 
 	var scrim: ColorRect = ColorRect.new()
 	# The route stays visible but must not COMPETE: without this veil the

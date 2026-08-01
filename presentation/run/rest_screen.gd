@@ -22,7 +22,7 @@ var _sfx: SfxBus
 
 
 func _init(current_hp: int, max_hp: int, heal_amount: int, can_upgrade: bool,
-		stage_shape: StringName = StageShape.IDENTITY) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
 	_current_hp = clampi(current_hp, 0, maxi(0, max_hp))
 	_max_hp = maxi(0, max_hp)
 	_heal_amount = maxi(0, heal_amount)
@@ -31,8 +31,9 @@ func _init(current_hp: int, max_hp: int, heal_amount: int, can_upgrade: bool,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	RunStyle.add_backdrop(self)
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

@@ -93,15 +93,16 @@ const TRAVEL: float = 12.0
 
 func _init(events: Array, cursor: int,
 		stage_shape: StringName = StageShape.IDENTITY,
-		stats: Dictionary = {}) -> void:
+		stats: Dictionary = {}, sfx: SfxBus = null) -> void:
 	_events = events.duplicate(true)
 	_cursor = clampi(cursor, 0, _events.size())
 	_stats = stats.duplicate(true)
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

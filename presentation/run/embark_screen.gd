@@ -39,7 +39,8 @@ var _back: Button
 
 func _init(aspects: Array, vows: Array, aspect_unlocked: bool,
 		vow_unlocked: int, saved_run: bool, initial_aspect: int = 0,
-		initial_vow: int = 0, stage_shape: StringName = StageShape.IDENTITY) -> void:
+		initial_vow: int = 0, stage_shape: StringName = StageShape.IDENTITY,
+		sfx: SfxBus = null) -> void:
 	_aspects = aspects
 	_vows = vows
 	_aspect_unlocked = aspect_unlocked
@@ -52,8 +53,9 @@ func _init(aspects: Array, vows: Array, aspect_unlocked: bool,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	RunStyle.add_backdrop(self)
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

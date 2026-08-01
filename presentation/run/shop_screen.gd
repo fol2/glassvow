@@ -28,7 +28,7 @@ var _card_views: Array[CardView] = []
 
 func _init(stock: Dictionary, gold: int, content: ContentDB,
 		quest_offer: Dictionary = {}, potion_slot_available: bool = true,
-		stage_shape: StringName = StageShape.IDENTITY) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
 	_stock = stock
 	_gold = gold
 	_content = content
@@ -38,8 +38,9 @@ func _init(stock: Dictionary, gold: int, content: ContentDB,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	RunStyle.add_backdrop(self)
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

@@ -15,14 +15,16 @@ var _sfx: SfxBus
 var _panel: PanelContainer
 
 
-func _init(stage_shape: StringName, terminal_locked: bool = false) -> void:
+func _init(stage_shape: StringName, terminal_locked: bool = false,
+		sfx: SfxBus = null) -> void:
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	z_index = 200
 
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 
 	var scrim: ColorRect = ColorRect.new()
 	scrim.color = Color.TRANSPARENT
