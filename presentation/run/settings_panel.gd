@@ -355,7 +355,11 @@ static func _small_button() -> Button:
 
 static func _style_button(button: Button, accent: Color, vertical: float,
 		radius: int) -> void:
-	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+	# "focus" left the loop at P4.5: the opaque focus box made keyboard
+	# focus ≡ hover here (DL, PR #40) — the shared lantern ring overlays
+	# whichever state box is showing instead.
+	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(accent))
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var style: StyleBoxFlat = StyleBoxFlat.new()
 		style.bg_color = Color(0.055, 0.071, 0.133, 0.60)
 		style.set_border_width_all(1)
@@ -378,6 +382,7 @@ static func _style_button(button: Button, accent: Color, vertical: float,
 	# (DL round 1: ERASE hovered gold, and a dimmed OFF hovered DARKER than
 	# at rest).
 	button.add_theme_color_override("font_hover_color", accent)
+	button.add_theme_color_override("font_focus_color", GlassStyle.TEXT)
 	button.add_theme_color_override("font_disabled_color", Color(GlassStyle.TEXT_DIM, 0.45))
 
 

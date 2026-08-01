@@ -72,6 +72,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY) -> void:
 	centre.add_child(_panel)
 
 	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.follow_focus = true
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL

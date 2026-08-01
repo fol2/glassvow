@@ -55,7 +55,13 @@ static func style_button(button: Button, primary: bool = false,
 		accent: Color = GOLD, compact: bool = false) -> void:
 	var vertical: float = 4.0 if compact else 8.0
 	var radius: int = 6 if compact else 8
-	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+	# "focus" is deliberately NOT in this loop: an opaque focus box shadows
+	# the shared lantern ring (GlassStyle.focus_ring's ADOPTION PREREQUISITE)
+	# and leaves keyboard focus indistinguishable from rest — which is what
+	# this loop did before P4.5.
+	button.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(GOLD if primary else accent))
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var style: StyleBoxFlat = StyleBoxFlat.new()
 		if primary:
 			style.bg_color = Color("#f2c14e") if state != "pressed" else Color("#c89a30")
@@ -79,11 +85,16 @@ static func style_button(button: Button, primary: bool = false,
 	button.add_theme_color_override("font_color", INK if primary else PARCHMENT)
 	button.add_theme_color_override("font_hover_color", INK if primary else GOLD)
 	button.add_theme_color_override("font_pressed_color", INK if primary else PARCHMENT)
+	# Unset, focus falls back to Godot's neutral grey — a primary CTA would
+	# shed its ink exactly while a keyboard player has it selected.
+	button.add_theme_color_override("font_focus_color", INK if primary else PARCHMENT)
 	button.add_theme_color_override("font_disabled_color", Color(TEXT_DIM, 0.45))
 
 
 static func style_card(button: Button, selected: bool) -> void:
-	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+	# Same adoption as style_button: the ring overlays, never repaints.
+	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(GOLD))
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var style: StyleBoxFlat = StyleBoxFlat.new()
 		style.bg_color = Color(0.118, 0.102, 0.055, 0.50) if selected \
 			else Color(0.055, 0.071, 0.133, 0.72)

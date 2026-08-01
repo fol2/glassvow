@@ -118,6 +118,7 @@ func _build() -> void:
 		tabs.add_child(_rose_tab)
 
 	_deed_list = ScrollContainer.new()
+	_deed_list.follow_focus = true
 	_deed_list.custom_minimum_size = Vector2(500, 459)
 	_deed_list.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_deed_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
