@@ -6,6 +6,7 @@ signal help_requested
 signal settings_requested
 signal title_requested
 signal abandon_requested
+signal quit_requested
 signal closed
 
 const WIDTH: float = 200.0
@@ -52,10 +53,20 @@ func _init(stage_shape: StringName, terminal_locked: bool = false,
 	settings.pressed.connect(_request.bind(&"settings"))
 	actions.add_child(settings)
 
+	var title: Button = _button("Return to Title")
+	title.pressed.connect(_request.bind(&"title"))
+	actions.add_child(title)
+
 	if not terminal_locked:
 		var abandon: Button = _button("Abandon Run", RunStyle.DANGER, RunStyle.DANGER)
 		abandon.pressed.connect(_request.bind(&"abandon"))
 		actions.add_child(abandon)
+
+	# Desktop only — web has no process to leave, and the tab chrome owns close.
+	if not OS.has_feature("web"):
+		var quit: Button = _button("Quit Game")
+		quit.pressed.connect(_request.bind(&"quit"))
+		actions.add_child(quit)
 
 	_apply_shape()
 
@@ -87,8 +98,12 @@ func _request(action: StringName) -> void:
 			help_requested.emit()
 		&"settings":
 			settings_requested.emit()
+		&"title":
+			title_requested.emit()
 		&"abandon":
 			abandon_requested.emit()
+		&"quit":
+			quit_requested.emit()
 
 
 func _button(label: String, colour: Color = RunStyle.TEXT,
