@@ -909,13 +909,16 @@
           "titleInset": 0.0,
           "titleTop": 62.0
         },
-        "colMax": 104.0,
-        "colMin": 50.0,
-        "gutter": 170.0,
-        "rowMax": 98.0,
-        "rowMin": 74.0,
-        "rowRate": 0.12,
+        "horizonY": 0.64,
+        "laneMax": 50.0,
+        "laneMin": 34.0,
+        "laneRate": 0.06,
+        "lead": 0.333,
+        "pathY": 0.52,
         "scale": 0.6,
+        "stepMax": 290.0,
+        "stepMin": 150.0,
+        "stepRate": 0.22,
         "touch": 0.0
       },
       "shapes": {
@@ -924,8 +927,6 @@
             "scale": 0.84,
             "titleTop": 42.0
           },
-          "colMax": 46.0,
-          "colMin": 40.0,
           "scale": 0.58,
           "touch": 44.0
         },
@@ -937,7 +938,6 @@
             "titleInset": 58.0,
             "titleTop": 58.0
           },
-          "gutter": 76.0,
           "scale": 0.68,
           "touch": 44.0
         }

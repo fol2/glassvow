@@ -1,6 +1,6 @@
 class_name WorldMapScreen
 extends Control
-## The benchmark 15×7 pilgrimage graph climbing a navigable Spire.
+## The benchmark 15×7 pilgrimage graph walking a navigable road toward the Spire.
 ##
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
@@ -8,12 +8,8 @@ extends Control
 
 signal node_chosen(index: int)
 
-const HORIZON: float = 0.64
 const TRAVEL_TIME: float = 0.4
 const ASH_COUNT: int = 128
-const CAMERA_LEAD: float = 1.6
-const CAMERA_MIN: float = 0.5
-const CAMERA_MAX: float = WorldMap.ROWS - 0.5
 
 const HINT_PT: float = 13.0
 const HINT_TOP: float = -44.0
@@ -36,8 +32,8 @@ var content: ContentDB
 ## under a live screen when the window crosses an aspect boundary.
 var shape: StringName = StageShape.IDENTITY
 
-var _cam_row: float = CAMERA_LEAD
-var _cam_target: float = CAMERA_LEAD
+var _cam_x: float = 0.0
+var _cam_target: float = 0.0
 var _cam_velocity: float = 0.0
 var _dragging: bool = false
 var _travelling: bool = false
@@ -95,7 +91,7 @@ func _build_chrome() -> void:
 	add_child(_title_label)
 
 	_hint_label = Label.new()
-	_hint_label.text = "SCROLL OR DRAG TO SURVEY THE SPIRE"
+	_hint_label.text = "SCROLL OR DRAG TO SURVEY THE PILGRIMAGE"
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	_hint_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -255,14 +251,30 @@ func _set_act_theme(stage_act: int) -> void:
 
 
 func _seat_marker() -> void:
-	var row: float = float(map.nodes[map.at].row) if map.at >= 0 and map.at < map.nodes.size() else 0.0
-	_cam_row = clampf(row + CAMERA_LEAD, CAMERA_MIN, CAMERA_MAX)
-	_cam_target = _cam_row
+	var i: int = map.at if map.at >= 0 and map.at < map.nodes.size() else 0
+	_cam_x = _cam_for(i) if not map.nodes.is_empty() else _cam_min()
+	_cam_target = _cam_x
 	_cam_velocity = 0.0
 
 
+## World-x of the lead-third seating for node `i`, clamped so node 0 cannot
+## underscroll and the terminus keeps act sky to its right.
 func _cam_for(i: int) -> float:
-	return clampf(float(map.nodes[i].row) + CAMERA_LEAD, CAMERA_MIN, CAMERA_MAX)
+	if i < 0 or i >= map.nodes.size():
+		return _cam_min()
+	return clampf(_world_x(float(map.nodes[i].row)), _cam_min(), _cam_max())
+
+
+func _cam_min() -> float:
+	# Node 0's screen x == lead·W at the floor: with
+	# `screen = world − cam + lead·W`, that floor is zero — not `−lead·W`,
+	# which would let the map underscroll past the entry seat.
+	return 0.0
+
+
+func _cam_max() -> float:
+	# Boss at the lead-third leaves `(1 − lead)·W` of sky to its right.
+	return _world_x(float(WorldMap.ROWS - 1))
 
 
 func _on_waystone_chosen(i: int) -> void:
@@ -303,12 +315,12 @@ func chosen_point() -> Vector2:
 func _process(delta: float) -> void:
 	if not _dragging:
 		if absf(_cam_velocity) > 0.02:
-			_cam_row = clampf(_cam_row + _cam_velocity * delta, CAMERA_MIN, CAMERA_MAX)
-			_cam_target = _cam_row
+			_cam_x = clampf(_cam_x + _cam_velocity * delta, _cam_min(), _cam_max())
+			_cam_target = _cam_x
 			_cam_velocity *= pow(0.06, delta)
 		else:
 			_cam_velocity = 0.0
-			_cam_row = lerpf(_cam_row, _cam_target, minf(1.0, delta * 9.0))
+			_cam_x = lerpf(_cam_x, _cam_target, minf(1.0, delta * 9.0))
 	# REDUCE MOTION: the ash hangs where it is — the region keeps its weather
 	# as dressing, it just stops falling (the benchmark stills `.ember` and
 	# every map keyframe the same way, styles.css:2042-2049).
@@ -329,9 +341,10 @@ func _gui_input(event: InputEvent) -> void:
 	var button: InputEventMouseButton = event as InputEventMouseButton
 	if button != null:
 		if button.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN] and button.pressed:
+			var step: float = _step()
 			_cam_target = clampf(_cam_target + (
-				0.9 if button.button_index == MOUSE_BUTTON_WHEEL_UP else -0.9),
-				CAMERA_MIN, CAMERA_MAX)
+				0.9 * step if button.button_index == MOUSE_BUTTON_WHEEL_UP else -0.9 * step),
+				_cam_min(), _cam_max())
 			_cam_velocity = 0.0
 			accept_event()
 		elif button.button_index == MOUSE_BUTTON_LEFT:
@@ -342,7 +355,7 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	var motion: InputEventMouseMotion = event as InputEventMouseMotion
 	if motion != null and _dragging:
-		_pan(motion.relative.y, motion.velocity.y)
+		_pan(motion.relative.x, motion.velocity.x)
 		accept_event()
 		return
 	var touch: InputEventScreenTouch = event as InputEventScreenTouch
@@ -354,15 +367,17 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	var drag: InputEventScreenDrag = event as InputEventScreenDrag
 	if drag != null and _dragging:
-		_pan(drag.relative.y, drag.velocity.y)
+		_pan(drag.relative.x, drag.velocity.x)
 		accept_event()
 
 
-func _pan(delta_y: float, velocity_y: float) -> void:
-	var gap: float = _row_gap()
-	_cam_row = clampf(_cam_row + delta_y / gap, CAMERA_MIN, CAMERA_MAX)
-	_cam_target = _cam_row
-	_cam_velocity = clampf(velocity_y / gap, -8.0, 8.0)
+## Content follows the finger: drag left advances the view right, same
+## convention the vertical map used when drag-down showed higher rows.
+func _pan(delta_x: float, velocity_x: float) -> void:
+	var step: float = _step()
+	_cam_x = clampf(_cam_x - delta_x, _cam_min(), _cam_max())
+	_cam_target = _cam_x
+	_cam_velocity = clampf(-velocity_x, -8.0 * step, 8.0 * step)
 
 
 ## The `map` scope's own numbers. `bar` hangs off it as a sub-dict.
@@ -392,9 +407,10 @@ func set_shape(stage_shape: StringName) -> void:
 func _layout_waystones() -> void:
 	var k: float = _trail_num("scale", 0.36)
 	var touch: float = _trail_num("touch", 0.0)
+	var step: float = _step()
 	for i: int in range(_waystones.size()):
 		var ws: GlassWaystone = _waystones[i]
-		var depth: float = absf(float(map.nodes[i].row) - _cam_row)
+		var depth: float = absf(_world_x(float(map.nodes[i].row)) - _cam_x) / maxf(step, 1.0)
 		var node_scale: float = k * clampf(1.08 - depth * 0.035, 0.72, 1.08)
 		ws.scale = Vector2.ONE * node_scale
 		ws.modulate.a = clampf(1.15 - depth * 0.12, 0.12, 1.0)
@@ -405,39 +421,47 @@ func _layout_waystones() -> void:
 		ws.position = _node_pos(map.nodes[i]) - ws.size * node_scale * 0.5
 
 
-## Where a node sits, from the book rather than from five literals.
+## Where a node sits: row → walk axis (X), col → lane (Y).
 ##
-## The column gap was `clamp(104, 50, (w - 170) / 6)` inline. Three numbers, no
-## shape named, and at 390px the clamp fires: the trail stops following the
-## screen and starts running off it. `gutter` is what the columns may not use,
-## and `colMin`/`colMax` are the band the gap is held inside.
+## The camera holds the tracked world-x at the lead-third of the frame, so
+## `screen_x = world_x − cam_x + lead·W`. Jitter axes are swapped from the
+## vertical Spire — the big scatter belongs on the cross-axis (lane), the
+## small one on the step.
 func _node_pos(node: MapNode) -> Vector2:
-	var span: float = (size.x - _trail_num("gutter", 170.0)) / float(WorldMap.COLS - 1)
-	var col_gap: float = clampf(span, _trail_num("colMin", 50.0), _trail_num("colMax", 104.0))
-	var depth: float = absf(float(node.row) - _cam_row)
-	col_gap *= clampf(1.0 - depth * 0.025, 0.78, 1.0)
+	var step: float = _step()
+	var world_x: float = _world_x(float(node.row))
+	var depth: float = absf(world_x - _cam_x) / maxf(step, 1.0)
+	var lane_gap: float = _lane_gap()
+	lane_gap *= clampf(1.0 - depth * 0.025, 0.78, 1.0)
 	return Vector2(
-		size.x * 0.5 + float(node.col - 3) * col_gap + node.jx * 20.0,
-		size.y * 0.52 - (float(node.row) - _cam_row) * _row_gap() + node.jy * 12.0,
+		world_x - _cam_x + _lead_px() + node.jy * 12.0,
+		size.y * _trail_num("pathY", 0.52) + float(node.col - 3) * lane_gap + node.jx * 20.0,
 	)
 
 
-## How far apart two rows of the Spire stand, in stage px.
+## How far apart two steps of the pilgrimage stand, in stage px.
 ##
-## The rate is what keeps the same NUMBER of rows on screen as the stage grows,
-## rather than more of them; the band is what stops a phone held sideways from
-## stacking rows into each other. It replaced `trail/top` and `trail/bottom`,
-## which described a vertical band the map no longer has.
-##
-## Worth knowing before tuning: across all five reference shapes the rate never
-## decides anything. Every landscape shape is 820 tall and every portrait one
-## taller, so the product lands on `rowMax` everywhere except phone-landscape,
-## where 390px lands under `rowMin`. The rate only bites between roughly 617
-## and 817 stage px — a height no reference sits at, and one flex cannot reach,
-## because flex stretches the LONG axis and so never shortens a stage.
-func _row_gap() -> float:
-	return clampf(size.y * _trail_num("rowRate", 0.12),
-		_trail_num("rowMin", 74.0), _trail_num("rowMax", 98.0))
+## The rate keeps the same NUMBER of nodes on screen as the stage grows; the
+## band stops a phone held sideways from packing them into each other. It
+## replaced the vertical Spire's `rowRate`/`rowMin`/`rowMax`.
+func _step() -> float:
+	return clampf(size.x * _trail_num("stepRate", 0.22),
+		_trail_num("stepMin", 150.0), _trail_num("stepMax", 290.0))
+
+
+## Lane spacing across the path. Col 3 is centre; depth-compress lives at the
+## call site so scale/alpha falloff can share the same depth reading.
+func _lane_gap() -> float:
+	return clampf(size.y * _trail_num("laneRate", 0.06),
+		_trail_num("laneMin", 34.0), _trail_num("laneMax", 50.0))
+
+
+func _world_x(row: float) -> float:
+	return row * _step()
+
+
+func _lead_px() -> float:
+	return _trail_num("lead", 0.333) * size.x
 
 
 # ---------------------------------------------------------------- draw
@@ -445,7 +469,7 @@ func _row_gap() -> float:
 func _draw() -> void:
 	var w: float = size.x
 	var h: float = size.y
-	var horizon: float = h * HORIZON
+	var horizon: float = h * _trail_num("horizonY", 0.64)
 	# The night gradient is drawn, not parented: a child TextureRect would sit
 	# above this _draw pass and bury every band under it.
 	draw_texture_rect(_sky_tex, Rect2(Vector2.ZERO, size), false)
@@ -493,20 +517,26 @@ func _draw_region(w: float, horizon: float) -> void:
 
 
 func _draw_spire() -> void:
-	var centre: float = size.x * 0.5
-	var top_w: float = maxf(58.0, size.x * 0.08)
-	var bottom_w: float = maxf(180.0, size.x * 0.28)
+	# Horizon stand-in until P5.2 owns the skyband: the Spire sits just past
+	# the terminus so the cam ceiling leaves act sky beside the boss.
+	var w: float = size.x
+	var path_y: float = size.y * _trail_num("pathY", 0.52)
+	var centre: float = _world_x(float(WorldMap.ROWS)) - _cam_x + _lead_px()
+	var top_w: float = maxf(58.0, w * 0.08)
+	var bottom_w: float = maxf(180.0, w * 0.28)
 	draw_colored_polygon(PackedVector2Array([
 		Vector2(centre - top_w, 0.0), Vector2(centre + top_w, 0.0),
 		Vector2(centre + bottom_w, size.y), Vector2(centre - bottom_w, size.y),
 	]), _sky_colour.darkened(0.58))
+	var step: float = _step()
 	for row: int in range(WorldMap.ROWS):
-		var y: float = size.y * 0.52 - (float(row) - _cam_row) * _row_gap()
-		if y < -20.0 or y > size.y + 20.0:
+		var x: float = _world_x(float(row)) - _cam_x + _lead_px()
+		if x < -20.0 or x > w + 20.0:
 			continue
-		var depth: float = absf(float(row) - _cam_row)
-		var half: float = lerpf(top_w, bottom_w, clampf(y / maxf(size.y, 1.0), 0.0, 1.0))
-		draw_line(Vector2(centre - half, y), Vector2(centre + half, y),
+		var depth: float = absf(_world_x(float(row)) - _cam_x) / maxf(step, 1.0)
+		var half: float = lerpf(top_w * 0.35, bottom_w * 0.35,
+			clampf(absf(x - centre) / maxf(w, 1.0), 0.0, 1.0))
+		draw_line(Vector2(x, path_y - half), Vector2(x, path_y + half),
 			Color(GlassStyle.GLASS.r, GlassStyle.GLASS.g, GlassStyle.GLASS.b,
 				clampf(0.18 - depth * 0.018, 0.035, 0.18)), 1.0)
 
@@ -525,6 +555,7 @@ func _draw_marker() -> void:
 
 func _draw_graph() -> void:
 	var by_id: Dictionary = {}
+	var step: float = _step()
 	for node: MapNode in map.nodes:
 		by_id[node.id] = node
 	for node: MapNode in map.nodes:
@@ -538,8 +569,9 @@ func _draw_graph() -> void:
 				var to_i: int = map.nodes.find(next_node)
 				var walked: bool = map.is_cleared(from_i) and map.is_cleared(to_i)
 				var fade: float = clampf(1.0 - maxf(
-					absf(float(node.row) - _cam_row),
-					absf(float(next_node.row) - _cam_row)) * 0.12, 0.10, 1.0)
+					absf(_world_x(float(node.row)) - _cam_x),
+					absf(_world_x(float(next_node.row)) - _cam_x)) / maxf(step, 1.0) * 0.12,
+					0.10, 1.0)
 				var control: Vector2 = (from + to) * 0.5 + Vector2(0.0, 10.0)
 				var previous: Vector2 = from
 				for segment: int in range(1, 13):
@@ -562,13 +594,13 @@ func _draw_veil(w: float) -> void:
 	# stilled under reduce-motion this is what keeps the ash part of the
 	# WORLD: scroll is user-initiated motion, the same principle that keeps
 	# the pointer-chased title camera alive.
-	var cam_y: float = (_cam_row - CAMERA_LEAD) * _row_gap() * 1.35
+	var cam_shift: float = _cam_x * 1.35
 	for index: int in range(_ash.size()):
 		var m: Vector3 = _ash[index]
-		var x: float = fposmod(m.x, span)
+		var x: float = fposmod(m.x - cam_shift, span)
 		if x > w:
 			continue
-		var y: float = fposmod(m.y + cam_y, maxf(size.y, 1.0))
+		var y: float = fposmod(m.y, maxf(size.y, 1.0))
 		var radius: float = 2.0 + m.z * 0.08
 		var tint: Color = _glow_colour if index % 3 != 0 else _particle_colour
 		var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
