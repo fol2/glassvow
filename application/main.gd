@@ -349,6 +349,21 @@ func _screen_diagonal() -> float:
 	return Vector2(DisplayServer.screen_get_size()).length() / float(dpi)
 
 
+## Saves are durable at every boundary, so this needs no flush — it exists so
+## every quit door (title, run menu, window close) goes through one frame, today
+## and when the path grows.
+func _quit_game() -> void:
+	get_tree().quit()
+
+
+## Window close is a clean quit: with `config/auto_accept_quit=false` the engine
+## hands us NOTIFICATION_WM_CLOSE_REQUEST instead of exiting itself. No save
+## flush — durable at every boundary; the interception is the single path.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_quit_game()
+
+
 ## Wait, then photograph, then quit.
 ##
 ## Thirty frames is enough for layout and a first paint, and NOT enough for a
@@ -530,6 +545,9 @@ func _show_title() -> void:
 		{"id": "help", "label": "How to Play", "quiet": true},
 		{"id": "settings", "label": "Settings", "quiet": true},
 	])
+	# Desktop only — web has no process to leave.
+	if not OS.has_feature("web"):
+		choices.append({"id": "quit", "label": "Quit", "quiet": true})
 	var title_stats: String = "%d climbs · %d dawns · %d slain" % [
 		int(float(str(_vigil.deeds.get("runs", 0)))),
 		int(float(str(_vigil.deeds.get("wins", 0)))),
@@ -559,6 +577,7 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 		"rose": _show_vigil(true)
 		"help": _show_help()
 		"settings": _show_settings()
+		"quit": _quit_game()
 
 
 func _show_embark() -> void:
@@ -769,6 +788,23 @@ func _show_run_menu() -> void:
 	menu.settings_requested.connect(func() -> void:
 		_close_overlay()
 		_show_settings()
+	)
+	menu.title_requested.connect(func() -> void:
+		_close_overlay()
+		# Save on disk is the truth — drop the in-memory run, same as reset.
+		game = null
+		_map = null
+		_show_title()
+	)
+	menu.quit_requested.connect(func() -> void:
+		_close_overlay()
+		_show_choice("LEAVE THE SPIRE?", "The lantern keeps your place.",
+			[{"id": "yes", "label": "Leave"},
+				{"id": "no", "label": "Stay", "quiet": true}],
+			func(id: String) -> void:
+				if id == "yes":
+					_quit_game(),
+			{"cancel": "no", "overlay": true})
 	)
 	menu.abandon_requested.connect(_confirm_abandon)
 	# The drawer neither veils nor freezes: seeing the world stay alive is the
