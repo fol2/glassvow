@@ -100,6 +100,17 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, MapRegions.SPIRE_W_RATE.size() == 3
 		and MapRegions.SPIRE_H_RATE.size() == 3
 		and MapRegions.SPIRE_DARKEN.size() == 3, "spire ramps cover three acts")
+	# A same-lane edge must actually run straight. `signf(to.y - from.y)` gave it
+	# the full 10px bow off a sub-pixel jitter difference for three phases while
+	# the comment above it said otherwise (#69); 1.53px is the worst same-lane
+	# endpoint gap on seed 717, and a full lane step must still bow the full 10.
+	var flat_from: Vector2 = Vector2(0.0, 100.0)
+	var flat_mid: float = screen.edge_control(flat_from,
+		Vector2(200.0, 101.53)).y - 100.765
+	var step_mid: float = screen.edge_control(flat_from,
+		Vector2(200.0, 100.0 + screen._lane_gap())).y - (100.0 + screen._lane_gap() * 0.5)
+	_check(fails, absf(flat_mid) < 1.0, "a same-lane edge bows under 1px")
+	_check(fails, absf(step_mid - 10.0) < 0.01, "a full lane step still bows 10px")
 	_check(fails, screen._waystones.size() == 5, "one waystone per node")
 	_check(fails, not screen.choose(2), "screen refuses an unreachable waystone")
 	_check(fails, seen.is_empty(), "a refused choice hands off nothing")
