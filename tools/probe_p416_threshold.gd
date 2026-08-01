@@ -49,8 +49,10 @@ func _drive() -> void:
 	var answer: Label = _find_label("The glass holds fast. The way is not yet cut.")
 	if not _check(answer != null, "honest copy exists in tree"):
 		return
-	if not _check(not answer.is_visible_in_tree(), "honest copy hidden before touch"):
+	var answer_box: CanvasItem = answer.get_parent() as CanvasItem
+	if not _check(answer_box.modulate.a == 0.0, "honest copy at zero alpha before touch"):
 		return
+	var cta_rect: Rect2 = cta.get_global_rect()
 	_save("/tmp/p416-probe-before.png")
 
 	cta.pressed.emit()
@@ -58,7 +60,13 @@ func _drive() -> void:
 	await process_frame
 	if not _check(_touched == 1, "threshold_touched fired once (got %d)" % _touched):
 		return
-	if not _check(answer.is_visible_in_tree(), "honest copy revealed after touch"):
+	if not _check(answer_box.modulate.a > 0.0, "honest copy fading in after touch"):
+		return
+	# The reveal must cost no relayout: a moving CTA turns the second press
+	# into a dead click at the first press's coordinates (PR #55 MAJOR 1).
+	if not _check(cta.get_global_rect().is_equal_approx(cta_rect),
+			"CTA rect unmoved by the reveal (%s -> %s)"
+			% [cta_rect, cta.get_global_rect()]):
 		return
 	if not _check(cta.text == "Return to the Vigil",
 			"CTA becomes Return to the Vigil (got %s)" % cta.text):

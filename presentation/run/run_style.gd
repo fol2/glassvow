@@ -38,6 +38,14 @@ static func tracked(path: String, glyph_spacing: int) -> FontVariation:
 	return font
 
 
+## No italic faces ship; a -0.16 shear on the roman face is the house slant.
+static func slanted(path: String, glyph_spacing: int = 0) -> FontVariation:
+	var font: FontVariation = tracked(path, glyph_spacing)
+	font.variation_transform = Transform2D(Vector2(1.0, 0.0), Vector2(-0.16, 1.0),
+		Vector2.ZERO)
+	return font
+
+
 static func panel(radius: int = 12, inset: float = 16.0,
 		alpha: float = 0.86) -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
