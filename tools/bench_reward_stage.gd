@@ -61,7 +61,10 @@ func _process(_delta: float) -> bool:
 			# zero a reader would take for "free".
 			print("hold frame, stage viewport: UNAVAILABLE on this driver path")
 		else:
-			print("hold frame, stage viewport: median %.3f ms  p95 %.3f ms"
+			# GPU+CPU SUMMED — one viewport-render figure, not the actor
+			# probe's separated columns; comparisons go via that tool.
+			print("hold frame, stage viewport render (gpu+cpu summed): "
+				+ "median %.3f ms  p95 %.3f ms"
 				% [median / 1000.0, p95 / 1000.0])
 		quit(0)
 	return false
