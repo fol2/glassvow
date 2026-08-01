@@ -7,6 +7,9 @@ signal commit_requested
 signal deck_requested
 
 const FALLEN: String = "res://assets/art/meta/fallen.png"
+## `monumentRise` cubic-bezier(0.2, 0.7, 0.3, 1) — no Motion constant matches
+## exactly (SCREEN_IN is 0.2/0.7/0.25/1; ENTER is 0.2/0.75/0.3/1).
+const MONUMENT_RISE: Array[float] = [0.2, 0.7, 0.3, 1.0]
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -22,6 +25,7 @@ var _column: VBoxContainer
 var _title: Label
 var _stats_grid: GridContainer
 var _bequest_grid: GridContainer
+var _grave_plate: ColorRect
 
 
 func _init(outcome: String, stats: Dictionary, bequest_choices: Array,
@@ -41,12 +45,55 @@ func _init(outcome: String, stats: Dictionary, bequest_choices: Array,
 	_build()
 
 
+func _ready() -> void:
+	# Death owns the grave entrance (styles.css:1781-1791); abandon keeps the
+	# generic screen_in from main. Reduce-motion skips both — final state now.
+	if _outcome != "death" or Preferences.active.reduce_motion:
+		return
+	# graveReveal: ground starts BLACK and eases to the warm grave over 2.2s.
+	if _grave_plate != null:
+		var plate: ColorRect = _grave_plate
+		Motion.bez(self, func(t: float) -> void:
+			if is_instance_valid(plate):
+				plate.modulate.a = 1.0 - t
+		, 2.2, Motion.CSS_EASE).finished.connect(func() -> void:
+			if is_instance_valid(plate):
+				plate.queue_free()
+			if _grave_plate == plate:
+				_grave_plate = null
+		)
+	# monumentRise `both`: from-state (α0, +46px) holds through the 0.4s delay.
+	_panel.modulate.a = 0.0
+	await get_tree().process_frame
+	if not is_instance_valid(_panel):
+		return
+	var base_y: float = _panel.position.y
+	_panel.position.y = base_y + 46.0
+	await get_tree().create_timer(0.4).timeout
+	if not is_instance_valid(_panel):
+		return
+	Motion.bez(self, func(t: float) -> void:
+		if not is_instance_valid(_panel):
+			return
+		_panel.modulate.a = t
+		_panel.position.y = base_y + 46.0 * (1.0 - t)
+	, 1.6, MONUMENT_RISE)
+
+
 func _build() -> void:
 	# "win" never reaches this screen: main short-circuits it to the Dawn
 	# ceremony before construction (_show_run_end), exactly as the benchmark's
 	# won end-screen is its own render branch (end.js:186).
 	if _outcome == "death":
 		_add_meta_backdrop(FALLEN)
+		# Between backdrop and vignette — the black plate that graveReveal
+		# dissolves. Reduce-motion never builds it (final state immediately).
+		if not Preferences.active.reduce_motion:
+			_grave_plate = ColorRect.new()
+			_grave_plate.color = Color.BLACK
+			_grave_plate.set_anchors_preset(Control.PRESET_FULL_RECT)
+			_grave_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			add_child(_grave_plate)
 	else:
 		RunStyle.add_backdrop(self)
 	_add_vignette()
@@ -83,10 +130,11 @@ func _build() -> void:
 	_column.add_child(subtitle)
 	_column.add_child(_underline())
 	_build_stats()
+	# Benchmark renders stats + bequest + buttons TOGETHER (end.js:216-221).
+	# Declining the bequest must still leave the exit.
 	if _outcome == "death" and not _bequest_answered and not _bequest_choices.is_empty():
 		_build_bequest()
-	else:
-		_build_commit()
+	_build_commit()
 	if _outcome == "death":
 		# LAST child, like the reference: `.embers` is the final child of
 		# `.end-screen` in the same stacking context as the monument

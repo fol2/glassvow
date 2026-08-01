@@ -259,11 +259,14 @@ func _ready() -> void:
 				"body": "The Spire kept none of what you gave it."},
 			{"kind": "quest", "title": "The Pale Ones",
 				"body": "Three climbers went pale before you. Find what bleached them."},
-			{"kind": "progress", "title": "The Pale Ones", "body": "2/3"},
+			{"kind": "progress", "title": "The Pale Ones", "body": "",
+				"count": "2/3"},
 			{"kind": "shard", "title": "The Shade That Fell",
-				"body": "One pane answers."},
+				"body": "One pane answers.", "icon": "shard"},
 			{"kind": "unlock", "title": "New cards and relics enter the climb.",
 				"body": ""},
+			{"kind": "unlock", "title": "A sealed door opens above the crown.",
+				"body": "", "icon": "door"},
 			{"kind": "memory", "title": "The Vigil Remembers",
 				"body": "Victory · 3 shards lit"},
 		], "cursor": 0}
@@ -482,7 +485,7 @@ func _close_choice_overlay() -> void:
 
 
 func _show_route(screen: Control, with_hud: bool = false,
-		cue: StringName = &"") -> void:
+		cue: StringName = &"", entrance: bool = true) -> void:
 	# The wipe fires on every screen change with a live run, and only then —
 	# navigation.js:80. The title and a fresh boot arrive without ceremony.
 	if game != null and game.run != null:
@@ -491,7 +494,10 @@ func _show_route(screen: Control, with_hud: bool = false,
 	_route_screen = screen
 	add_child(screen)
 	_transitions.set_grain(true)
-	_transitions.screen_in(screen)
+	# Death owns its own graveReveal + monumentRise; skip the generic screen_in
+	# so the two entrances do not stack (issue #18).
+	if entrance:
+		_transitions.screen_in(screen)
 	if with_hud:
 		_attach_run_hud()
 	if not cue.is_empty():
@@ -1677,7 +1683,8 @@ func _show_run_end() -> void:
 	screen.commit_requested.connect(
 		func() -> void: _on_terminal_commit("commit"))
 	screen.deck_requested.connect(_show_run_deck)
-	_show_route(screen, false, &"defeat")
+	# Death plays graveReveal + monumentRise itself; abandon keeps screen_in.
+	_show_route(screen, false, &"defeat", outcome != "death")
 
 
 func _run_end_stats() -> Dictionary:
@@ -1844,7 +1851,10 @@ func _on_terminal_commit(_id: String) -> void:
 			var progress_event: Dictionary = {
 				"kind": "progress",
 				"title": name,
-				"body": "%d/%d" % [
+				"body": "",
+				# `.dawn-count` (styles.css:2589) — progress lives beside the
+				# body, not in it (end.js:105).
+				"count": "%d/%d" % [
 					after_progress,
 					int(float(str(quest.get("target", after_progress)))),
 				],
@@ -1860,6 +1870,7 @@ func _on_terminal_commit(_id: String) -> void:
 			"title": str(content.quests[id].get("name", id)),
 			# `ui.dawn.shardGrantCopy` (i18n/en/ui.js:237).
 			"body": "One pane answers.",
+			"icon": "shard",
 		})
 	for unlock_v: Variant in _vigil.unlocks:
 		var unlock: String = str(unlock_v)
@@ -1871,6 +1882,7 @@ func _on_terminal_commit(_id: String) -> void:
 			}
 			if unlock == "act4":
 				unlock_event["cue"] = "sealedDoor"
+				unlock_event["icon"] = "door"
 			events.append(unlock_event)
 	if events.is_empty():
 		events.append({

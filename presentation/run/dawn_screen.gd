@@ -575,6 +575,11 @@ func _event_card(event: Dictionary) -> PanelContainer:
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	stack.add_theme_constant_override("separation", 4)
 	card.add_child(stack)
+	# Glyph above the kicker — shardGrant / act4Reveal (end.js:117-122).
+	if event.has("icon"):
+		var glyph_id: String = str(event["icon"])
+		if glyph_id == "shard" or glyph_id == "door":
+			stack.add_child(DawnGlyph.new(glyph_id))
 	var kind: String = str(event.get("kind", "memory"))
 	var kicker: Label = _label(_event_kicker(kind), 9, RunStyle.GOLD_DIM)
 	kicker.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 1))
@@ -592,7 +597,98 @@ func _event_card(event: Dictionary) -> PanelContainer:
 		var body: Label = _label(body_text, 11, RunStyle.TEXT)
 		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		stack.add_child(body)
+	# `.dawn-count` (styles.css:2589-2590) — questProgress progress/target.
+	if event.has("count"):
+		var count_text: String = str(event["count"])
+		if not count_text.is_empty():
+			var count_seat: MarginContainer = MarginContainer.new()
+			count_seat.add_theme_constant_override("margin_top", 5)
+			count_seat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			var count_label: Label = _label(count_text, 17, RunStyle.GOLD)
+			count_label.add_theme_font_override("font",
+				load(GlassStyle.CINZEL_700) as Font)
+			count_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			count_seat.add_child(count_label)
+			stack.add_child(count_seat)
 	return card
+
+
+## Emberglass shard + sealed-door glyphs (art.js:502, :506), drawn in a
+## 24-unit viewbox scaled to 42×42 / 48×48. Gold fill at low alpha, stroked
+## outline — the reference's SVG paths, not textures.
+class DawnGlyph extends Control:
+	var _kind: String = ""
+
+	func _init(kind: String) -> void:
+		_kind = kind
+		var side: float = 42.0 if kind == "shard" else 48.0
+		custom_minimum_size = Vector2(side, side)
+		size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		var s: float = size.x / 24.0
+		match _kind:
+			"shard":
+				_draw_shard(s)
+			"door":
+				_draw_door(s)
+
+	func _draw_shard(s: float) -> void:
+		# Pentagon: M(12,2.6) L(19.2,8.2) L(16.6,20.4) L(8.1,18.8) L(4.8,8.8) Z
+		var pts: PackedVector2Array = PackedVector2Array([
+			Vector2(12.0, 2.6) * s,
+			Vector2(19.2, 8.2) * s,
+			Vector2(16.6, 20.4) * s,
+			Vector2(8.1, 18.8) * s,
+			Vector2(4.8, 8.8) * s,
+		])
+		draw_colored_polygon(pts, Color(RunStyle.GOLD, 0.2))
+		var ring: PackedVector2Array = pts.duplicate()
+		ring.append(pts[0])
+		draw_polyline(ring, RunStyle.GOLD, 1.9, true)
+		# Facets: (4.8,8.8)→(11.6,11.5)→(19.2,8.2);
+		# (12,2.6)→(11.6,11.5)→(8.1,18.8); (11.6,11.5)→(16.6,20.4).
+		var hub: Vector2 = Vector2(11.6, 11.5) * s
+		draw_polyline(PackedVector2Array([
+			Vector2(4.8, 8.8) * s, hub, Vector2(19.2, 8.2) * s,
+		]), RunStyle.GOLD, 1.35, true)
+		draw_polyline(PackedVector2Array([
+			Vector2(12.0, 2.6) * s, hub, Vector2(8.1, 18.8) * s,
+		]), RunStyle.GOLD, 1.35, true)
+		draw_line(hub, Vector2(16.6, 20.4) * s, RunStyle.GOLD, 1.35, true)
+
+	func _draw_door(s: float) -> void:
+		# Outer arch: M(6.1,21) V(9.4) arc r=5.9 to (17.9,9.4) V(21) Z.
+		var outer: PackedVector2Array = PackedVector2Array()
+		outer.append(Vector2(6.1, 21.0) * s)
+		var oc: Vector2 = Vector2(12.0, 9.4)
+		var orad: float = 5.9
+		for i: int in range(16):
+			var a: float = PI + (float(i) / 15.0) * PI
+			outer.append(Vector2(oc.x + cos(a) * orad, oc.y + sin(a) * orad) * s)
+		outer.append(Vector2(17.9, 21.0) * s)
+		draw_colored_polygon(outer, Color(RunStyle.GOLD, 0.16))
+		var outer_ring: PackedVector2Array = outer.duplicate()
+		outer_ring.append(outer[0])
+		draw_polyline(outer_ring, RunStyle.GOLD, 1.9, true)
+		# Inner arch: (9,21)→(9,9.7) arc r=3 to (15,9.7)→(15,21).
+		var inner: PackedVector2Array = PackedVector2Array()
+		inner.append(Vector2(9.0, 21.0) * s)
+		var ic: Vector2 = Vector2(12.0, 9.7)
+		var irad: float = 3.0
+		for i: int in range(16):
+			var a: float = PI + (float(i) / 15.0) * PI
+			inner.append(Vector2(ic.x + cos(a) * irad, ic.y + sin(a) * irad) * s)
+		inner.append(Vector2(15.0, 21.0) * s)
+		draw_polyline(inner, RunStyle.GOLD, 1.55, true)
+		# Centre bar, ground line, handle stub.
+		draw_line(Vector2(12.0, 6.8) * s, Vector2(12.0, 21.0) * s,
+			RunStyle.GOLD, 1.55, true)
+		draw_line(Vector2(4.4, 21.0) * s, Vector2(19.6, 21.0) * s,
+			RunStyle.GOLD, 1.9, true)
+		draw_line(Vector2(10.7, 13.4) * s, Vector2(12.0, 13.4) * s,
+			RunStyle.GOLD, 1.9, true)
 
 
 func _build_stats(column: VBoxContainer) -> void:
