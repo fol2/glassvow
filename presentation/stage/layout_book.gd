@@ -151,10 +151,11 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	# and a LANE GAP along Y, both rate-clamped so a wider stage shows the same
 	# NUMBER of steps rather than more of them. See `WorldMapScreen._step`.
 	#
-	# `pathY` is where the centre lane sits; `horizonY` is the ground line
-	# `_draw` reads; `lead` is the fraction of the stage the camera holds the
-	# current node at (the lead-third rule). Portrait shapes may override the
-	# rates later — P5.7 — the defaults alone keep every reference readable.
+	# `horizonY` sits high so the sky is the Spire's (P5.2); `pathY` fans the
+	# road across the LAND below it. `lead` is the fraction of the stage the
+	# camera holds the current node at (the lead-third rule). Portrait shapes
+	# may override the rates later — P5.7 — the defaults alone keep every
+	# reference readable.
 	&"trail/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.05, "max": 2.0, "default": 0.36},
 	## Steps are `stepRate` of the stage width apart, held inside `[stepMin,
 	## stepMax]`. The rate keeps the same NUMBER of nodes on screen as the
@@ -165,10 +166,11 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## Lanes are `laneRate` of the stage height apart, held inside `[laneMin,
 	## laneMax]`. Col 3 is the centre lane; depth still compresses the gap.
 	&"trail/laneRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.01, "max": 0.3, "default": 0.06},
-	&"trail/laneMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 34.0},
+	## Floor so an emblem and its finger target survive the shortest stage.
+	&"trail/laneMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 46.0},
 	&"trail/laneMax": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 50.0},
-	&"trail/pathY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.52},
-	&"trail/horizonY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.64},
+	&"trail/pathY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.64},
+	&"trail/horizonY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.36},
 	## Where in the frame the camera seats the current node. A third from the
 	## left leaves the road ahead readable without parking the lantern mid-stage.
 	&"trail/lead": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 0.6, "default": 0.333},
