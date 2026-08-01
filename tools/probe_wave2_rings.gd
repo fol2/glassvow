@@ -24,8 +24,10 @@ func _initialize() -> void:
 	_rose.size = Vector2(520.0, 560.0)
 	host.add_child(_rose)
 
+	# The real lamplighter geometry (lamplighter_screen.gd:176): a 138×56
+	# stadium — radius 28 is half the height, not a circle.
 	_art = Button.new()
-	_art.custom_minimum_size = Vector2(56.0, 56.0)
+	_art.custom_minimum_size = Vector2(138.0, 56.0)
 	_art.position = Vector2(640.0, 120.0)
 	LamplighterScreen._art_style(_art, false)
 	host.add_child(_art)
