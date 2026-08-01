@@ -102,13 +102,20 @@ class SkyBand extends MapBand:
 	## lone object only a tenth of the act, so a world anchor parks it off-stage
 	## for every step of the walk (PR #71 DL R2).
 	##
-	## The silhouette is read from two near-vertical converging edges, so the
-	## SLANT is the invariant, not the top width: deriving `top_w` from `base_w`
-	## made the flare grow with the act AND with the stage's aspect — one intent
-	## gave 14.1° on phone-portrait and 40.9° on desktop-landscape, and act 2 read
-	## as a mountain (PR #77 DL R1). Holding the slant instead means the three acts
-	## are the same building seen from three distances, which is what an act meter
-	## has to be.
+	## The silhouette is read from near-vertical converging edges, so the SLANT is
+	## the invariant, not the top width: deriving `top_w` from `base_w` made the
+	## flare grow with the act AND with the stage's aspect — one intent gave 14.1°
+	## on phone-portrait and 40.9° on desktop-landscape, and act 2 read as a
+	## mountain (PR #77 DL R1). Holding the slant instead means the three acts are
+	## the same building seen from three distances, which is what an act meter has
+	## to be. `MapRegions.SPIRE_SLANT` documents where the taper floor makes that
+	## ≤13° rather than =13°.
+	##
+	## "Converging edges" is the reading, not a promise that both are on stage: at
+	## act 2 on a wide shape the right edge clears the frame at every visible row
+	## (1194.4 against a 1180 stage), so what ships is one leaning edge and a wall
+	## of glass. That IS standing at its foot. Portrait shapes keep both edges, so
+	## act 2 is shape-dependent before anyone paints it — noted on #70 for P5.8.
 	func _draw_spire(w: float, horizon: float) -> void:
 		var act: int = host._act
 		if host._region != null:

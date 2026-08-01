@@ -43,9 +43,24 @@ const SPIRE_W_RATE: Array[float] = [0.05, 0.14, 0.50]
 const SPIRE_H_RATE: Array[float] = [0.30, 0.65, 1.35]
 const SPIRE_DARKEN: Array[float] = [0.00, 0.30, 0.58]
 const SPIRE_HAZE: Array[float] = [0.42, 0.14, 0.00]
-## tan of the silhouette's half-angle from vertical, held constant across every
-## act and every stage. A tower is two near-vertical converging edges; past ~15°
-## it is a mountain. See `MapBand.SkyBand._draw_spire`.
+## tan of the silhouette's half-angle from vertical. A tower is near-vertical
+## converging edges; past ~15° it is a mountain. See `MapBand.SkyBand._draw_spire`.
+##
+## Held EXACTLY at 13° wherever the taper floor does not bind — which is not
+## everywhere, and the earlier draft of this line claiming "every act and every
+## stage" was wrong (PR #77 DL R2). The floor binds where the stage is narrow
+## against its own height, i.e. on both portrait shapes, in 5 of the 15
+## shape × act combinations:
+##
+##     phone-portrait  390x844   acts 0, 1, 2   floored
+##     pad-portrait    820x1180  acts 0, 1      floored
+##     the three landscape shapes                clear at every act
+##
+## Every floored case comes out MORE vertical, never less (phone-portrait act 2
+## measures 12.0°), so the design intent survives — but the invariant is "≤13°",
+## not "=13°". Note also that pad-landscape act 0 clears the floor by only ~8% of
+## its base width: a small `SPIRE_W_RATE[0]` tweak would tip the identity shape
+## into the floored branch without anything announcing it.
 const SPIRE_SLANT: float = 0.2309   # tan(13°)
 
 ## Act-2 heat lightning: irregular enough to read as weather, fixed so two
