@@ -61,7 +61,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:376` (`_capture_and_quit`).) It waits 30 frames for the
+(`application/main.gd:379` (`_capture_and_quit`).) It waits 30 frames for the
 first paint, reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
