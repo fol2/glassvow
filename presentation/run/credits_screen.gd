@@ -9,7 +9,6 @@ const PANEL_MAX_WIDTH: float = 640.0
 const PANEL_MAX_HEIGHT: float = 0.88
 const DESKTOP_INSET: float = 28.0
 const PHONE_INSET: float = 18.0
-const LICENCE_MAX_HEIGHT: float = 260.0
 const MUSIC_MANIFEST: String = "res://assets/audio/music/manifest.json"
 const SFX_MANIFEST: String = "res://assets/audio/sfx/manifest.json"
 
@@ -51,15 +50,19 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	_panel.add_theme_stylebox_override("panel", GlassStyle.pane(GlassStyle.GLASS, 0.94))
 	centre.add_child(_panel)
 
+	var shell: VBoxContainer = VBoxContainer.new()
+	shell.add_theme_constant_override("separation", 10)
+	_panel.add_child(shell)
+
 	_scroll = ScrollContainer.new()
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_scroll.follow_focus = true
 	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_panel.add_child(_scroll)
+	shell.add_child(_scroll)
 
 	_column = VBoxContainer.new()
-	_column.add_theme_constant_override("separation", 6)
+	_column.add_theme_constant_override("separation", 4)
 	_scroll.add_child(_column)
 
 	var title: Label = Label.new()
@@ -87,10 +90,12 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	_add_heading("THE GLASS")
 	_add_body("Parallel-ported from roguecardv2 (web reference 0.5.0+6e06911).")
 
-	_add_heading("MUSIC — STAINED GLASS (stained-glass-v1)")
+	_add_heading("MUSIC — STAINED GLASS")
+	_add_body("stained-glass-v1", GlassStyle.TEXT_DIM)
 	_add_music_rows(_read_manifest(MUSIC_MANIFEST))
 
-	_add_heading("SOUND — ASHGLASS VIGIL (ashglass-v1)")
+	_add_heading("SOUND — ASHGLASS VIGIL")
+	_add_body("ashglass-v1", GlassStyle.TEXT_DIM)
 	_add_sfx_rows(_read_manifest(SFX_MANIFEST))
 
 	_add_heading("TYPE")
@@ -109,17 +114,26 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	footer_seat.add_child(footer)
 	_column.add_child(footer_seat)
 
+	# The panel's primary action is LEAVING it — a visible, focused dismiss
+	# at the foot of the pane, outside the scroll so it never hides below
+	# the fold (Help's "Fight On" contract). First-frame focus lands here.
+	var close_centre: CenterContainer = CenterContainer.new()
+	shell.add_child(close_centre)
+	var close: Button = Button.new()
+	close.text = "Close"
+	close.custom_minimum_size = Vector2(150, 44)
+	close.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
+	close.add_theme_font_size_override("font_size", 17)
+	RunStyle.style_button(close)
+	close.pressed.connect(func() -> void:
+		_sfx.play(&"click")
+		closed.emit()
+	)
+	close_centre.add_child(close)
+	close.grab_focus.call_deferred()
+
 	resized.connect(_fit)
 	_fit.call_deferred()
-
-
-func _ready() -> void:
-	# The modal owns the keyboard from the first frame: the fold toggle is
-	# the panel's one focusable. Grab it without scrolling to it — the
-	# panel must open at the top, not at the toggle's seat near the bottom.
-	_scroll.follow_focus = false
-	_licence_toggle.grab_focus()
-	_scroll.set_deferred("follow_focus", true)
 
 
 func set_shape(stage_shape: StringName) -> void:
@@ -151,12 +165,12 @@ func _read_manifest(path: String) -> Variant:
 
 func _add_music_rows(manifest: Variant) -> void:
 	if typeof(manifest) != TYPE_DICTIONARY:
-		_add_body("22 tracks", GlassStyle.TEXT_DIM)
+		_add_body("the stained-glass tracklist", GlassStyle.TEXT_DIM)
 		return
 	var pack: Dictionary = manifest
 	var items_raw: Variant = pack.get("items", null)
 	if typeof(items_raw) != TYPE_DICTIONARY:
-		_add_body("22 tracks", GlassStyle.TEXT_DIM)
+		_add_body("the stained-glass tracklist", GlassStyle.TEXT_DIM)
 		return
 	var items: Dictionary = items_raw
 	var titles: Array[String] = []
@@ -166,16 +180,15 @@ func _add_music_rows(manifest: Variant) -> void:
 		var cue: Dictionary = cue_raw
 		if cue.has("title"):
 			titles.append(str(cue["title"]))
-	titles.sort()
 	if titles.is_empty():
-		_add_body("22 tracks", GlassStyle.TEXT_DIM)
+		_add_body("the stained-glass tracklist", GlassStyle.TEXT_DIM)
 		return
 	for track_title: String in titles:
 		_add_body(track_title)
 
 
 func _add_sfx_rows(manifest: Variant) -> void:
-	var count: int = 36
+	var count: int = 0
 	var theme_line: String = "Ashglass Vigil"
 	if typeof(manifest) == TYPE_DICTIONARY:
 		var pack: Dictionary = manifest
@@ -186,7 +199,10 @@ func _add_sfx_rows(manifest: Variant) -> void:
 		var packed: String = str(pack.get("theme", "")).strip_edges()
 		if not packed.is_empty():
 			theme_line = packed
-	_add_body("%d sounds · synthesised with ElevenLabs" % count)
+	if count > 0:
+		_add_body("%d sounds · synthesised with ElevenLabs" % count)
+	else:
+		_add_body("synthesised with ElevenLabs")
 	_add_body(theme_line, GlassStyle.TEXT_DIM)
 
 
@@ -222,12 +238,9 @@ func _on_licence_toggle() -> void:
 
 
 func _build_licence() -> void:
-	var scroll: ScrollContainer = ScrollContainer.new()
-	scroll.custom_minimum_size.y = LICENCE_MAX_HEIGHT
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_licence_wrap.add_child(scroll)
-
+	# One scrollbar only: the outer panel carries the licence text — a well
+	# with its own scroll inside a scrolling panel is a wheel-capture trap.
+	_licence_wrap.add_theme_constant_override("margin_bottom", 8)
 	var body: RichTextLabel = RichTextLabel.new()
 	body.fit_content = true
 	body.scroll_active = false
@@ -238,12 +251,12 @@ func _build_licence() -> void:
 	body.add_theme_font_override("normal_font", load(GlassStyle.ALEGREYA_400) as Font)
 	body.add_theme_font_size_override("normal_font_size", 12)
 	body.add_theme_color_override("default_color", GlassStyle.TEXT_DIM)
-	scroll.add_child(body)
+	_licence_wrap.add_child(body)
 
 
 func _add_heading(text: String) -> void:
 	var seat: MarginContainer = MarginContainer.new()
-	seat.add_theme_constant_override("margin_top", 12)
+	seat.add_theme_constant_override("margin_top", 20)
 	_column.add_child(seat)
 	var heading: Label = Label.new()
 	heading.text = text

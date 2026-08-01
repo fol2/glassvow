@@ -31,8 +31,12 @@ var _frozen_under_modal: Control = null
 ## when the last one lifts.
 var _freeze_count: int = 0
 ## Title buttons barred from keyboard focus while a modal is up (see
-## `_freeze_under_modal`); restored on thaw.
-var _defocused_under_modal: Array[BaseButton] = []
+## `_freeze_under_modal`): one {button, mode} entry each, so thaw restores
+## what a button HAD, not what we assume it had.
+var _defocused_under_modal: Array[Dictionary] = []
+## The button holding focus when the veil rose — thaw hands it back, so the
+## title does not come back keyboard-dead.
+var _refocus_after_thaw: BaseButton = null
 ## Whether the current `_modal` froze the world — the run-menu drawer does not.
 var _modal_froze: bool = false
 ## Above RunHud's z 100 (run_hud.gd:37): the veil must outdraw the chrome it
@@ -434,9 +438,12 @@ func _freeze_under_modal() -> void:
 		for node: Node in _choice_screen.find_children("", "BaseButton", true, false):
 			var button: BaseButton = node
 			if button.focus_mode != Control.FOCUS_NONE:
-				_defocused_under_modal.append(button)
 				if button.has_focus():
+					_refocus_after_thaw = button
 					button.release_focus()
+				_defocused_under_modal.append({
+					"button": button, "mode": button.focus_mode,
+				})
 				button.focus_mode = Control.FOCUS_NONE
 
 
@@ -452,10 +459,15 @@ func _thaw_surfaces() -> void:
 	if _frozen_under_modal != null and is_instance_valid(_frozen_under_modal):
 		_frozen_under_modal.process_mode = Node.PROCESS_MODE_INHERIT
 	_frozen_under_modal = null
-	for button: BaseButton in _defocused_under_modal:
+	for entry: Dictionary in _defocused_under_modal:
+		var button: BaseButton = entry["button"]
+		var mode: int = entry["mode"]
 		if is_instance_valid(button):
-			button.focus_mode = Control.FOCUS_ALL
+			button.focus_mode = mode as Control.FocusMode
 	_defocused_under_modal.clear()
+	if _refocus_after_thaw != null and is_instance_valid(_refocus_after_thaw):
+		_refocus_after_thaw.grab_focus()
+	_refocus_after_thaw = null
 	if _choice_screen != null and is_instance_valid(_choice_screen):
 		_choice_screen.set_process_unhandled_key_input(true)
 	if _run_hud != null and is_instance_valid(_run_hud):
