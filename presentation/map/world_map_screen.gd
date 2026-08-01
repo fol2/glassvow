@@ -41,9 +41,10 @@ var _cam_target: float = 0.0
 var _cam_velocity: float = 0.0
 var _dragging: bool = false
 var _travelling: bool = false
-## Where the last chosen waystone sat on screen, for the combat iris to
-## collapse into. INF until a choice has been made.
-var _chosen_at: Vector2 = Vector2.INF
+## Node index the lantern leaves during a glide; −1 when seated or when the
+## run starts with no prior seat (path then collapses to the target).
+var _travel_from_i: int = -1
+var _travel_t: float = 0.0
 var _waystones: Array[GlassWaystone] = []
 var _hint_label: Label
 var _sky_tex: GradientTexture2D
@@ -304,32 +305,62 @@ func _on_waystone_chosen(i: int) -> void:
 
 
 ## Glide the lantern to node `i`, then hand off. False = not selectable now.
+## Capture departure BEFORE enter() — that call mutates map.at immediately.
 func choose(i: int) -> bool:
+	var from_i: int = map.at
 	if _travelling or not map.enter(i):
 		return false
-	if i >= 0 and i < _waystones.size():
-		_chosen_at = _waystones[i].get_global_rect().get_center()
 	for ws: GlassWaystone in _waystones:
 		ws.set_state(false, ws.cleared)  # travel locks the road
 	if instant:
 		node_chosen.emit(i)
 		return true
+	_travel_from_i = from_i
+	_travel_t = 0.0
 	_travelling = true
-	get_tree().create_timer(TRAVEL_TIME).timeout.connect(_on_arrived.bind(i))
+	_cam_target = _cam_for(i)
+	# Reduce-motion skips the walk but still arrives through one path so the
+	# travelling flag clears the same way a tween finish would.
+	if Preferences.active.reduce_motion:
+		_cam_x = _cam_target
+		_on_arrived(i)
+		return true
+	Motion.bez(self, _set_travel_t, TRAVEL_TIME, Motion.CSS_EASE) \
+		.finished.connect(_on_arrived.bind(i))
 	return true
+
+
+func _set_travel_t(v: float) -> void:
+	_travel_t = v
+	# Camera lerp already forces band redraws; force the path so the glow
+	# tracks even if cam and drift happen to sit still for a frame.
+	var path_d: Vector2 = Vector2(
+		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
+	_path_band.set_view(_cam_x, path_d, true)
 
 
 func _on_arrived(i: int) -> void:
 	_travelling = false
+	_travel_from_i = -1
 	node_chosen.emit(i)
 
 
-## The screen point the combat iris collapses into — the chosen waystone's
-## centre, or the stage centre before any choice was made.
-func chosen_point() -> Vector2:
-	if _chosen_at == Vector2.INF:
+## The glow's live screen point — bezier mid-glide, seated otherwise, stage
+## centre before any node. Recomputed each call so cam/drift stay coherent.
+func marker_screen_position() -> Vector2:
+	if map.at < 0 or map.at >= map.nodes.size():
 		return size * 0.5
-	return _chosen_at
+	var to: Vector2 = _node_pos(map.nodes[map.at])
+	if not _travelling or _travel_from_i < 0 \
+			or _travel_from_i >= map.nodes.size():
+		return to
+	var from: Vector2 = _node_pos(map.nodes[_travel_from_i])
+	# Same control the PathBand edges use — rising bows up, falling bows down.
+	var control: Vector2 = (from + to) * 0.5 \
+		+ Vector2(0.0, signf(to.y - from.y) * 10.0)
+	var t: float = _travel_t
+	var u: float = 1.0 - t
+	return from * u * u + control * 2.0 * u * t + to * t * t
 
 
 # ---------------------------------------------------------------- frame

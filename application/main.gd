@@ -1023,7 +1023,7 @@ func _on_node_chosen(i: int) -> void:
 			# arriving fight (map.js:296). The wipe still fires beneath it,
 			# unseen — the benchmark runs both.
 			if _map_screen != null:
-				_transitions.iris(_map_screen.chosen_point())
+				_transitions.iris(_map_screen.marker_screen_position())
 			_prepare_encounter(n)
 		"rest": _show_rest()
 		"event": _show_event()
