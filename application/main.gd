@@ -27,6 +27,14 @@ var _modal: Control = null
 ## Routed surface held under a modal/choice overlay (`PROCESS_MODE_DISABLED`).
 ## Combat (`_screen`) is never frozen — its awaits must not desync.
 var _frozen_under_modal: Control = null
+## Veils may stack (a modal over an overlay choice): the surface thaws only
+## when the last one lifts.
+var _freeze_count: int = 0
+## Whether the current `_modal` froze the world — the run-menu drawer does not.
+var _modal_froze: bool = false
+## Above RunHud's z 100 (run_hud.gd:37): the veil must outdraw the chrome it
+## subdues, or a frozen HUD is the brightest thing on a veiled screen.
+const MODAL_Z: int = 200
 var _music: MusicBus
 var _sfx_bus: SfxBus
 var _vigil: VigilState
@@ -362,7 +370,10 @@ func _capture_and_quit(path: String) -> void:
 
 
 func _clear_route() -> void:
-	_thaw_under_modal()
+	# Everything below is about to be freed: drop the whole freeze stack, not
+	# one level of it, so no count survives into the next surface.
+	_freeze_count = 0
+	_thaw_surfaces()
 	for screen: Control in [
 		_screen, _map_screen, _choice_screen, _reward_screen,
 		_route_screen, _run_hud, _modal,
@@ -379,21 +390,34 @@ func _clear_route() -> void:
 
 
 func _freeze_under_modal() -> void:
-	# First live non-combat surface; combat stays running so awaits do not desync.
-	if _frozen_under_modal == null:
-		var under: Control = _route_screen
-		if under == null:
-			under = _map_screen
-		if under == null:
-			under = _reward_screen
-		if under != null:
-			under.process_mode = Node.PROCESS_MODE_DISABLED
-			_frozen_under_modal = under
+	_freeze_count += 1
+	if _freeze_count > 1:
+		return
+	# First live non-combat surface; combat stays running so awaits do not
+	# desync. The title is a deliberate exception too: it lives in
+	# `_choice_screen`, never a candidate here, so its world keeps breathing
+	# behind Settings — routed worlds are held, the living sky is not hung.
+	var under: Control = _route_screen
+	if under == null:
+		under = _map_screen
+	if under == null:
+		under = _reward_screen
+	if under != null:
+		under.process_mode = Node.PROCESS_MODE_DISABLED
+		_frozen_under_modal = under
 	if _run_hud != null:
 		_run_hud.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func _thaw_under_modal() -> void:
+	if _freeze_count == 0:
+		return
+	_freeze_count -= 1
+	if _freeze_count == 0:
+		_thaw_surfaces()
+
+
+func _thaw_surfaces() -> void:
 	if _frozen_under_modal != null and is_instance_valid(_frozen_under_modal):
 		_frozen_under_modal.process_mode = Node.PROCESS_MODE_INHERIT
 	_frozen_under_modal = null
@@ -433,12 +457,17 @@ func _attach_run_hud() -> void:
 	add_child(_run_hud)
 
 
-func _show_overlay(screen: Control) -> void:
+func _show_overlay(screen: Control, freeze: bool = true) -> void:
 	if _modal != null:
+		if _modal_froze:
+			_thaw_under_modal()
 		_modal.queue_free()
 	_modal = screen
+	screen.z_index = MODAL_Z
 	add_child(screen)
-	_freeze_under_modal()
+	if freeze:
+		_freeze_under_modal()
+	_modal_froze = freeze
 	# RunHud's Escape rung must not fire under an overlay — the modal owns cancel.
 	if _run_hud != null:
 		_run_hud.set_process_unhandled_key_input(false)
@@ -449,7 +478,9 @@ func _close_overlay() -> void:
 		return
 	_modal.queue_free()
 	_modal = null
-	_thaw_under_modal()
+	if _modal_froze:
+		_thaw_under_modal()
+	_modal_froze = false
 	if _run_hud != null:
 		_run_hud.set_process_unhandled_key_input(true)
 
@@ -470,6 +501,7 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 			_choice_screen = null
 		_freeze_under_modal()
 		_choice_screen = ChoiceScreenType.new(title, body, choices, ctx, _sfx_bus)
+		_choice_screen.z_index = MODAL_Z
 		_choice_screen.connect("chosen", func(id: String) -> void:
 			_close_choice_overlay()
 			handler.call(id)
@@ -601,15 +633,18 @@ func _show_settings() -> void:
 
 func _confirm_reset() -> void:
 	_close_overlay()
+	# Typed local, not an inline literal: `.new()` does not convert an untyped
+	# Array to the `Array[Dictionary]` parameter and construction fails.
+	var choices: Array[Dictionary] = [
+		{"id": "yes", "label": "Erase Everything"},
+		{"id": "no", "label": "Cancel", "quiet": true},
+	]
 	var screen: Control = ChoiceScreenType.new(
 		"ERASE ALL PROGRESS?",
 		"This erases your current climb and the entire Vigil — deeds, unlocks, "
 		+ "vows, monuments, and whispers.\n\nThis cannot be undone.",
-		[
-			{"id": "yes", "label": "Erase Everything"},
-			{"id": "no", "label": "Cancel", "quiet": true},
-		],
-		{"shape": String(_shape), "cancel": "no"},
+		choices,
+		{"shape": String(_shape), "cancel": "no", "overlay": true},
 		_sfx_bus)
 	screen.connect("chosen", _on_reset_choice)
 	_show_overlay(screen)
@@ -736,19 +771,23 @@ func _show_run_menu() -> void:
 		_show_settings()
 	)
 	menu.abandon_requested.connect(_confirm_abandon)
-	_show_overlay(menu)
+	# The drawer neither veils nor freezes: seeing the world stay alive is the
+	# point of a glance at the menu. Veil and stillness travel together.
+	_show_overlay(menu, false)
 
 
 func _confirm_abandon() -> void:
 	_close_overlay()
+	# Typed local, not an inline literal — see `_confirm_reset`.
+	var choices: Array[Dictionary] = [
+		{"id": "yes", "label": "Abandon Run"},
+		{"id": "no", "label": "Keep Climbing", "quiet": true},
+	]
 	var screen: Control = ChoiceScreenType.new(
 		"ABANDON RUN?",
 		"This pilgrimage will end. The Vigil will keep what was earned.",
-		[
-			{"id": "yes", "label": "Abandon Run"},
-			{"id": "no", "label": "Keep Climbing", "quiet": true},
-		],
-		{"shape": String(_shape), "cancel": "no"},
+		choices,
+		{"shape": String(_shape), "cancel": "no", "overlay": true},
 		_sfx_bus)
 	screen.connect("chosen", _on_abandon_choice)
 	_show_overlay(screen)
@@ -772,7 +811,8 @@ func _show_run_deck() -> void:
 	choices.append({"id": "close", "label": "Close", "quiet": true})
 	var deck: Control = ChoiceScreenType.new(
 		"DECK", "%d panes carried" % game.run.player.deck.size(),
-		choices, {"shape": String(_shape), "cancel": "close"}, _sfx_bus)
+		choices, {"shape": String(_shape), "cancel": "close", "overlay": true},
+		_sfx_bus)
 	deck.connect("chosen", func(_id: String) -> void: _close_overlay())
 	_show_overlay(deck)
 
@@ -793,19 +833,21 @@ func _show_potion_menu(slot: int) -> void:
 	if id.is_empty():
 		return
 	var definition: Dictionary = content.potions.get(id, {})
+	# Typed local, not an inline literal — see `_confirm_reset`.
+	var choices: Array[Dictionary] = [
+		{
+			"id": "use",
+			"label": "Use",
+			"disabled": definition.get("combatOnly", false),
+		},
+		{"id": "toss", "label": "Toss it", "quiet": true},
+		{"id": "close", "label": "Close", "quiet": true},
+	]
 	var menu: Control = ChoiceScreenType.new(
 		str(definition.get("name", id)),
 		str(definition.get("text", "")),
-		[
-			{
-				"id": "use",
-				"label": "Use",
-				"disabled": definition.get("combatOnly", false),
-			},
-			{"id": "toss", "label": "Toss it", "quiet": true},
-			{"id": "close", "label": "Close", "quiet": true},
-		],
-		{"shape": String(_shape), "cancel": "close"},
+		choices,
+		{"shape": String(_shape), "cancel": "close", "overlay": true},
 		_sfx_bus)
 	menu.connect("chosen", _on_potion_menu_choice.bind(slot))
 	_show_overlay(menu)
