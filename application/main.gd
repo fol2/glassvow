@@ -1181,17 +1181,10 @@ func _show_treasure() -> void:
 
 
 func _show_act4_entrance() -> void:
-	_show_choice("THE ROSE WINDOW OPENS",
-		"Six Emberglass panes answer the lantern. A fourth road is visible beyond the crown.",
-		[{"id": "enter", "label": "Touch the Act IV threshold"},
-			{"id": "title", "label": "Return to Title", "quiet": true}],
-		func(id: String) -> void:
-			if id == "enter":
-				_show_choice("ACT IV", "The threshold answers. Act IV gameplay is beyond this programme.",
-					[{"id": "title", "label": "Return to Title"}],
-					func(_back: String) -> void: _show_title())
-			else:
-				_show_title())
+	var screen: ThresholdScreen = ThresholdScreen.new(_shape, _sfx_bus)
+	screen.threshold_touched.connect(_transitions.bloom)
+	screen.vigil_requested.connect(func() -> void: _show_vigil())
+	_show_route(screen, false, &"sealedDoor")
 
 
 func _show_shop() -> void:
