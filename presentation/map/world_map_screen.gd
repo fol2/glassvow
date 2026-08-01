@@ -5,15 +5,19 @@ extends Control
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
 ## dependency) so headless tests can drive it — see the M5 screens.
+## Paint order is child order: sky → region → path → waystones → veil → chrome
+## (DL MAJOR from PR #71: Spire behind trees by construction).
 
 signal node_chosen(index: int)
 
 const TRAVEL_TIME: float = 0.4
-const ASH_COUNT: int = 128
 
 const HINT_PT: float = 13.0
 const HINT_TOP: float = -44.0
 const HINT_BOTTOM: float = -18.0
+
+## Path/waystone PointerDrift amplitude (px); sky/region ÷3, veil ×1.35 (#64).
+const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
 
 const REGION_NAME: String = "The Ashen Woods"
 const ACT_SKIES: Array[Color] = [Color("#0c1410"), Color("#081420"), Color("#120a1e")]
@@ -41,7 +45,6 @@ var _travelling: bool = false
 ## collapse into. INF until a choice has been made.
 var _chosen_at: Vector2 = Vector2.INF
 var _waystones: Array[GlassWaystone] = []
-var _ash: Array[Vector3] = []    # x, y, fall speed
 var _hint_label: Label
 var _sky_tex: GradientTexture2D
 var _trail_layout: Dictionary = {}
@@ -54,6 +57,12 @@ var _particle_colour: Color
 var _glow_colour: Color
 var _accent_colour: Color
 
+var _drift: PointerDrift = PointerDrift.new()
+var _sky_band: MapBand.SkyBand = null
+var _region_band: MapBand.RegionBand = null
+var _path_band: MapBand.PathBand = null
+var _veil_band: MapBand.VeilBand = null
+
 
 func _init(world_map: WorldMap, content_ref: ContentDB,
 		stage_shape: StringName = StageShape.IDENTITY) -> void:
@@ -64,14 +73,37 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	_set_act_theme(0)
-	_build_chrome()
+	# Bands → waystones → veil → chrome: child order is paint order.
+	_build_bands()
 	_build_waystones()
-	_seed_ash()
+	_veil_band = MapBand.VeilBand.new()
+	_veil_band.host = self
+	add_child(_veil_band)
+	_build_chrome()
 	_seat_marker()
+	_push_bands(true)
 	set_process(true)
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		_layout_waystones()
+		_push_bands(true)
+
+
 # ---------------------------------------------------------------- build
+
+func _build_bands() -> void:
+	_sky_band = MapBand.SkyBand.new()
+	_sky_band.host = self
+	add_child(_sky_band)
+	_region_band = MapBand.RegionBand.new()
+	_region_band.host = self
+	add_child(_region_band)
+	_path_band = MapBand.PathBand.new()
+	_path_band.host = self
+	add_child(_path_band)
+
 
 func _build_chrome() -> void:
 	_title_label = Label.new()
@@ -170,16 +202,6 @@ func _node_caption(n: MapNode) -> String:
 	return label
 
 
-func _seed_ash() -> void:
-	# Deterministic scatter — the --shot loop diffs frames, so no randomness.
-	for i: int in range(ASH_COUNT):
-		var fi: float = float(i)
-		_ash.append(Vector3(
-			fmod(fi * 137.0, 2400.0),
-			fmod(fi * 211.0, 900.0),
-			14.0 + fmod(fi * 7.0, 22.0)))
-
-
 # ---------------------------------------------------------------- state
 
 ## The act line, as long as the box can hold on ONE row.
@@ -234,7 +256,7 @@ func refresh(run: RunState) -> void:
 		if first_live != null and first_live.is_inside_tree():
 			first_live.grab_focus()
 	_seat_marker()
-	queue_redraw()
+	_push_bands(true)
 
 
 func _set_act_theme(stage_act: int) -> void:
@@ -321,20 +343,21 @@ func _process(delta: float) -> void:
 		else:
 			_cam_velocity = 0.0
 			_cam_x = lerpf(_cam_x, _cam_target, minf(1.0, delta * 9.0))
-	# REDUCE MOTION: the ash hangs where it is — the region keeps its weather
-	# as dressing, it just stops falling (the benchmark stills `.ember` and
-	# every map keyframe the same way, styles.css:2042-2049).
-	if not Preferences.active.reduce_motion:
-		var span: float = maxf(size.x, 1.0) * 2.0
-		for i: int in range(_ash.size()):
-			var m: Vector3 = _ash[i]
-			m.y += m.z * delta
-			m.x -= m.z * delta * 0.35  # ash drifts against the walk
-			if m.y > size.y:
-				m.y -= size.y + 40.0
-			_ash[i] = Vector3(fposmod(m.x, span), m.y, m.z)
+	# Scroll and pointer chase are user-initiated — PointerDrift settles home
+	# off-stage; no second reduce-motion gate (P5.1 / P1).
+	_drift.step(self, delta)
 	_layout_waystones()
-	queue_redraw()
+	_push_bands()
+
+
+func _push_bands(force: bool = false) -> void:
+	var path_d: Vector2 = Vector2(
+		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
+	var far_d: Vector2 = path_d / 3.0
+	_sky_band.set_view(_cam_x, far_d, force)
+	_region_band.set_view(_cam_x, far_d, force)
+	_path_band.set_view(_cam_x, path_d, force)
+	_veil_band.set_view(_cam_x, path_d * 1.35, force)
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -401,7 +424,7 @@ func set_shape(stage_shape: StringName) -> void:
 	if _run != null:
 		refresh(_run)
 	_layout_waystones()
-	queue_redraw()
+	_push_bands(true)
 
 
 func _layout_waystones() -> void:
@@ -425,16 +448,20 @@ func _layout_waystones() -> void:
 ##
 ## The camera holds the tracked world-x at the lead-third of the frame, so
 ## `screen_x = world_x − cam_x + lead·W`. The wander budget follows the room
-## each axis has — step has 150–290px, lane only 46–50.
+## each axis has — step has 150–290px, lane only 46–50. PointerDrift at the
+## path amplitude keeps the stones on the path plane's lean.
 func _node_pos(node: MapNode) -> Vector2:
 	var step: float = _step()
 	var world_x: float = _world_x(float(node.row))
 	var depth: float = absf(world_x - _cam_x) / maxf(step, 1.0)
 	var lane_gap: float = _lane_gap()
 	lane_gap *= clampf(1.0 - depth * 0.025, 0.78, 1.0)
+	var d: Vector2 = Vector2(
+		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
 	return Vector2(
-		world_x - _cam_x + _lead_px() + node.jy * 24.0,
-		size.y * _trail_num("pathY", 0.64) + float(node.col - 3) * lane_gap + node.jx * 6.0,
+		world_x - _cam_x + _lead_px() + node.jy * 24.0 + d.x,
+		size.y * _trail_num("pathY", 0.64) + float(node.col - 3) * lane_gap \
+			+ node.jx * 6.0 + d.y,
 	)
 
 
@@ -461,154 +488,3 @@ func _world_x(row: float) -> float:
 
 func _lead_px() -> float:
 	return _trail_num("lead", 0.333) * size.x
-
-
-# ---------------------------------------------------------------- draw
-
-func _draw() -> void:
-	var w: float = size.x
-	var h: float = size.y
-	var horizon: float = h * _trail_num("horizonY", 0.36)
-	# The night gradient is drawn, not parented: a child TextureRect would sit
-	# above this _draw pass and bury every band under it.
-	draw_texture_rect(_sky_tex, Rect2(Vector2.ZERO, size), false)
-	draw_texture_rect(SkyField.disc(),
-		Rect2(-w * 0.10, h * 0.22, w * 1.20, h * 0.60), false,
-		Color(_fog_colour.lightened(0.42), 0.28))
-	draw_rect(Rect2(0.0, horizon, w, h - horizon),
-		Color(REGION_GROUND, 0.62 if _act == 0 else 0.38))
-	# §5 band-3 stand-in: a leaded path ribbon along pathY until P5.2 owns the
-	# real path plane. Seeds left-to-right reading without claiming the road.
-	var path_y: float = h * _trail_num("pathY", 0.64)
-	var glass: Color = GlassStyle.GLASS
-	draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
-		Color(glass.r, glass.g, glass.b, 0.10), 3.0)
-	draw_line(Vector2(0.0, path_y), Vector2(w, path_y),
-		Color(glass.r, glass.g, glass.b, 0.16), 1.0)
-	_draw_region(w, horizon)
-	_draw_spire()
-	_draw_graph()
-	_draw_marker()
-	_draw_veil(w)
-
-
-func _draw_region(w: float, horizon: float) -> void:
-	if _act > 0:
-		for cloud: int in range(9):
-			var cloud_w: float = w * (0.18 + float(cloud % 3) * 0.035)
-			var cloud_h: float = 54.0 + float(cloud % 4) * 13.0
-			var x: float = fposmod(float(cloud) * w * 0.17, w + cloud_w) - cloud_w
-			draw_texture_rect(SkyField.disc(),
-				Rect2(x, horizon - cloud_h * 0.68, cloud_w, cloud_h), false,
-				Color(_fog_colour.lightened(0.50), 0.15))
-		return
-	var span: float = w + 400.0
-	var trunk: Color = Color(0.025, 0.065, 0.048, 0.94)
-	var rim: Color = Color(_accent_colour, 0.08)
-	for tree: int in range(20):
-		var index: float = float(tree)
-		var x: float = fposmod(index * 163.0, span) - 200.0
-		var tree_h: float = 90.0 + fmod(index * 53.0, 90.0)
-		var base_y: float = horizon + 26.0 + fmod(index * 29.0, 30.0)
-		var top_y: float = base_y - tree_h
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(x - 8.0, base_y), Vector2(x - 2.5, top_y),
-			Vector2(x + 2.5, top_y), Vector2(x + 8.0, base_y),
-		]), trunk)
-		draw_line(Vector2(x, top_y + tree_h * 0.30),
-			Vector2(x - 28.0, top_y + tree_h * 0.06), trunk, 4.0)
-		draw_line(Vector2(x, top_y + tree_h * 0.46),
-			Vector2(x + 32.0, top_y + tree_h * 0.14), trunk, 4.0)
-		draw_line(Vector2(x - 2.5, top_y),
-			Vector2(x - 5.0, top_y + tree_h * 0.45), rim, 1.0)
-
-
-func _draw_spire() -> void:
-	# Distant goal-anchor at the skyband factor until P5.2 owns it (§5 band 1,
-	# 0.10). A band that slow needs a SCREEN anchor, not a world one: at 0.10
-	# the whole journey drifts it only a tenth of the act, so anchoring at
-	# `world_x(ROWS)` would park it off-stage for every step of the walk. It
-	# starts high in the frame's right and eases toward the lead as you close.
-	var w: float = size.x
-	var horizon: float = size.y * _trail_num("horizonY", 0.36)
-	var centre: float = w * 0.82 - _cam_x * 0.10
-	var top_w: float = maxf(58.0, w * 0.08)
-	var bottom_w: float = maxf(180.0, w * 0.28)
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(centre - top_w, 0.0), Vector2(centre + top_w, 0.0),
-		Vector2(centre + bottom_w, horizon), Vector2(centre - bottom_w, horizon),
-	]), _sky_colour.darkened(0.58))
-
-
-## The current lantern's glow sits behind its waystone.
-func _draw_marker() -> void:
-	if map.at < 0 or map.at >= map.nodes.size():
-		return
-	var at: Vector2 = _node_pos(map.nodes[map.at])
-	var x: float = at.x
-	var y: float = at.y
-	var ember: Color = GlassStyle.EMBER
-	draw_circle(Vector2(x, y), 30.0, Color(ember.r, ember.g, ember.b, 0.10))
-	draw_circle(Vector2(x, y), 15.0, Color(ember.r, ember.g, ember.b, 0.18))
-
-
-func _draw_graph() -> void:
-	var by_id: Dictionary = {}
-	var step: float = _step()
-	for node: MapNode in map.nodes:
-		by_id[node.id] = node
-	for node: MapNode in map.nodes:
-		var from: Vector2 = _node_pos(node)
-		for next_id: String in node.next:
-			var next_v: Variant = by_id.get(next_id)
-			if typeof(next_v) == TYPE_OBJECT:
-				var next_node: MapNode = next_v
-				var to: Vector2 = _node_pos(next_node)
-				var from_i: int = map.nodes.find(node)
-				var to_i: int = map.nodes.find(next_node)
-				var walked: bool = map.is_cleared(from_i) and map.is_cleared(to_i)
-				var fade: float = clampf(1.0 - maxf(
-					absf(_world_x(float(node.row)) - _cam_x),
-					absf(_world_x(float(next_node.row)) - _cam_x)) / maxf(step, 1.0) * 0.12,
-					0.10, 1.0)
-				# Same-lane edges run straight; rising bows up, falling bows down
-				# so crossing paths pull apart rather than stacking.
-				var control: Vector2 = (from + to) * 0.5 \
-					+ Vector2(0.0, signf(to.y - from.y) * 10.0)
-				var previous: Vector2 = from
-				# ~10–12px dash cells from chord length; first cell drawn so the
-				# dash begins at the source rim instead of detaching from it.
-				var segs: int = maxi(12, int(from.distance_to(to) / 11.0))
-				for segment: int in range(segs):
-					var t: float = float(segment + 1) / float(segs)
-					var point: Vector2 = from * (1.0 - t) * (1.0 - t) \
-						+ control * 2.0 * (1.0 - t) * t + to * t * t
-					if walked or segment % 2 == 0:
-						var tone: Color = Color(0.85, 0.87, 0.92) if walked else GlassStyle.GLASS
-						draw_line(previous, point, Color(tone.r, tone.g, tone.b,
-							fade * (0.72 if walked else 0.24)), 3.0 if walked else 2.0)
-					previous = point
-
-
-## Band 4 (1.35) — near ash, overshooting the walk to sell the depth.
-func _draw_veil(w: float) -> void:
-	var span: float = maxf(w, 1.0) * 2.0
-	var glow: Texture2D = SkyField.disc()
-	# The veil answers the camera like every other band — at its own 1.35
-	# overshoot — instead of sitting welded to the glass. With the fall
-	# stilled under reduce-motion this is what keeps the ash part of the
-	# WORLD: scroll is user-initiated motion, the same principle that keeps
-	# the pointer-chased title camera alive.
-	var cam_shift: float = _cam_x * 1.35
-	for index: int in range(_ash.size()):
-		var m: Vector3 = _ash[index]
-		var x: float = fposmod(m.x - cam_shift, span)
-		if x > w:
-			continue
-		var y: float = fposmod(m.y, maxf(size.y, 1.0))
-		var radius: float = 2.0 + m.z * 0.08
-		var tint: Color = _glow_colour if index % 3 != 0 else _particle_colour
-		var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
-		draw_texture_rect(glow, Rect2(
-			Vector2(x, y) - Vector2.ONE * radius * 2.0,
-			Vector2.ONE * radius * 4.0), false, Color(tint, alpha))
