@@ -96,7 +96,12 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	_column.add_child(rule_centre)
 	var rule: HSeparator = HSeparator.new()
 	rule.custom_minimum_size.x = 84
-	rule.add_theme_color_override("separator", RunStyle.GOLD)
+	# HSeparator's separator is a STYLEBOX, not a colour — a Color override
+	# is a silent no-op. 0.55 reads as the help title's centred flourish.
+	var rule_line: StyleBoxLine = StyleBoxLine.new()
+	rule_line.color = Color(RunStyle.GOLD, 0.55)
+	rule_line.thickness = 1
+	rule.add_theme_stylebox_override("separator", rule_line)
 	rule_centre.add_child(rule)
 
 	for section: Dictionary in SECTIONS:

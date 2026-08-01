@@ -215,7 +215,10 @@ func _section(heading: String, accent: Color, with_rule: bool = true,
 
 func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 	var row: VBoxContainer = VBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
+	# 1 above the slider, 6 below it (the seat's margin): each track must sit
+	# decisively closer to the name it answers to than to the next row's —
+	# the constants alone had this inverted (DL, PR #40 round 2, minor 3).
+	row.add_theme_constant_override("separation", 1)
 
 	var header: HBoxContainer = HBoxContainer.new()
 	header.add_theme_constant_override("separation", 10)
@@ -236,11 +239,14 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 	slider.max_value = 100.0
 	slider.step = 1.0
 	slider.value = roundf(_preferences.volume(bus) * 100.0)
-	slider.custom_minimum_size.y = 22.0
+	slider.custom_minimum_size.y = RunStyle.hit_floor(13.0)
 	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	slider.tooltip_text = "%s volume" % label_text.capitalize()
 	_style_slider(slider)
-	row.add_child(slider)
+	var slider_seat: MarginContainer = MarginContainer.new()
+	slider_seat.add_theme_constant_override("margin_bottom", 6)
+	slider_seat.add_child(slider)
+	row.add_child(slider_seat)
 
 	var sync: Callable = func() -> void:
 		var muted: bool = _preferences.is_muted(bus)
@@ -293,9 +299,13 @@ func _toggle_row(label_text: String, getter: Callable, setter: Callable) -> HBox
 ## State lives in the ACCENT — lit glass against unlit — never in opacity,
 ## which is the channel `disabled` already owns in this same panel (DL round
 ## 1: OFF at 0.62 modulate measured 65% of the way to the disabled border).
+## Hover is written here too: _style_button's gold-0.8 hover would otherwise
+## paint an OFF toggle as if it were ON (DL, PR #40 round 2).
 static func _toggle_state(toggle: Button, on: bool) -> void:
 	toggle.add_theme_color_override("font_color",
 		GOLD if on else GlassStyle.TEXT_DIM)
+	toggle.add_theme_color_override("font_hover_color",
+		GOLD if on else GlassStyle.TEXT)
 	var lit: StyleBoxFlat = StyleBoxFlat.new()
 	lit.bg_color = Color(GOLD, 0.10) if on else Color(0.055, 0.071, 0.133, 0.60)
 	lit.set_border_width_all(1)
@@ -306,6 +316,16 @@ static func _toggle_state(toggle: Button, on: bool) -> void:
 	lit.content_margin_top = 4
 	lit.content_margin_bottom = 4
 	toggle.add_theme_stylebox_override("normal", lit)
+	var hover: StyleBoxFlat = StyleBoxFlat.new()
+	hover.bg_color = Color(GOLD, 0.16 if on else 0.06)
+	hover.set_border_width_all(1)
+	hover.border_color = Color(GOLD, 0.70 if on else 0.40)
+	hover.set_corner_radius_all(6)
+	hover.content_margin_left = 10
+	hover.content_margin_right = 10
+	hover.content_margin_top = 4
+	hover.content_margin_bottom = 4
+	toggle.add_theme_stylebox_override("hover", hover)
 
 
 func _on_scrim_input(event: InputEvent) -> void:
@@ -349,7 +369,7 @@ static func _button(text: String, accent: Color, font_size: int = 13) -> Button:
 
 static func _small_button() -> Button:
 	var button: Button = Button.new()
-	button.custom_minimum_size = Vector2(76.0, 26.0)
+	button.custom_minimum_size = Vector2(76.0, RunStyle.hit_floor(26.0))
 	button.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
 	button.add_theme_font_size_override("font_size", 12)
 	_style_button(button, GOLD, 4.0, 6)

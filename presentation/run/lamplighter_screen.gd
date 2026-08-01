@@ -264,10 +264,14 @@ static func _label(text: String, size: int, colour: Color, centred: bool) -> Lab
 
 static func _art_style(button: Button, selected: bool) -> void:
 	RunStyle.style_button(button, false, RunStyle.GOLD, true)
-	for state: String in ["normal", "hover", "pressed", "focus"]:
+	for state: String in ["normal", "hover", "pressed"]:
 		var style: StyleBoxFlat = button.get_theme_stylebox(state).duplicate()
 		style.set_corner_radius_all(28)
 		style.set_border_width_all(2 if selected else 1)
 		style.border_color = RunStyle.GOLD if selected or state == "hover" \
 			else RunStyle.PANEL_LINE
 		button.add_theme_stylebox_override(state, style)
+	# Circular art: the shared ring must match the 28px body radius, not
+	# the compact 6 style_button left behind.
+	button.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(RunStyle.GOLD, 28))

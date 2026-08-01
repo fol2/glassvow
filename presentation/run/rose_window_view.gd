@@ -160,6 +160,11 @@ func _add_pane(index: int) -> void:
 	button.position = POSITIONS[index] * 410.0 - Vector2(57, 29)
 	button.size = Vector2(114, 58)
 	button.tooltip_text = _pane_accessible_name(index, id, record)
+	# Lantern ring overlays; an opaque "focus" box would shadow it
+	# (GlassStyle.focus_ring's ADOPTION PREREQUISITE). Radius 9 matches
+	# the per-state boxes below.
+	button.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(RunStyle.GOLD, 9))
 	button.pressed.connect(_select.bind(index))
 	_window.add_child(button)
 	_pane_buttons.append(button)
@@ -173,7 +178,7 @@ func _select(index: int) -> void:
 func _refresh_selection() -> void:
 	for index: int in range(_pane_buttons.size()):
 		var button: Button = _pane_buttons[index]
-		for state_name: String in ["normal", "hover", "pressed", "focus"]:
+		for state_name: String in ["normal", "hover", "pressed"]:
 			var style: StyleBoxFlat = StyleBoxFlat.new()
 			style.bg_color = Color.TRANSPARENT
 			style.set_border_width_all(1)

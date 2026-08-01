@@ -279,7 +279,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _tab(text: String, callback: Callable) -> Button:
 	var button: Button = Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(118, 34)
+	button.custom_minimum_size = Vector2(118, RunStyle.hit_floor(34.0))
 	button.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		callback.call()

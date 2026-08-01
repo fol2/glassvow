@@ -636,7 +636,7 @@ func _build_top_bar() -> void:
 		var potion: Button = Button.new()
 		potion.custom_minimum_size = Vector2(38.0, 44.0) * k
 		potion.focus_mode = Control.FOCUS_NONE
-		for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+		for state: String in ["normal", "hover", "pressed", "disabled"]:
 			var seat: StyleBoxFlat = _flat(Color(0.025, 0.032, 0.068, 0.78), 8)
 			seat.set_border_width_all(1)
 			seat.border_color = GOLD if state == "hover" \
@@ -679,7 +679,7 @@ func _build_top_bar() -> void:
 	menu.custom_minimum_size = Vector2(40.0, 40.0) * k
 	menu.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	menu.focus_mode = Control.FOCUS_NONE
-	for state: String in ["normal", "hover", "pressed", "focus"]:
+	for state: String in ["normal", "hover", "pressed"]:
 		var sb: StyleBoxFlat = _flat(Color(0.063, 0.078, 0.149, 0.72), 10)
 		sb.set_border_width_all(1)
 		sb.border_color = GOLD if state == "hover" else Color(1.0, 1.0, 1.0, 0.14)
@@ -1403,7 +1403,7 @@ func _bare_button(px: Vector2) -> Button:
 	b.size = px
 	b.focus_mode = Control.FOCUS_NONE
 	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	for state: String in ["normal", "hover", "pressed", "focus", "disabled"]:
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		b.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	b.mouse_entered.connect(func() -> void: b.modulate = Color(1.10, 1.10, 1.10))
 	b.mouse_exited.connect(func() -> void: b.modulate = Color.WHITE)

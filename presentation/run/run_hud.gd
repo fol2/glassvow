@@ -142,9 +142,9 @@ func _rebuild_right(player: RunState.Player) -> void:
 	for slot: int in range(player.potions.size()):
 		_right.add_child(_potion_seat(slot, player.potions[slot]))
 	var icon_side: int = _shape_value(46, 42, 56)
-	var button_side: int = _shape_value(40, 38, 44)
+	var button_side: int = int(RunStyle.hit_floor(_shape_value(40, 38, 44)))
 	var deck: Button = _art_button("ui/deck", icon_side, button_side, "View deck")
-	for state: String in ["normal", "hover", "pressed", "focus"]:
+	for state: String in ["normal", "hover", "pressed"]:
 		deck.add_theme_stylebox_override(state, _flat(Color.TRANSPARENT, 0))
 	var count: Label = _label(str(player.deck.size()),
 		_shape_value(18, 16, 22), Color.WHITE)
@@ -162,7 +162,8 @@ func _rebuild_right(player: RunState.Player) -> void:
 
 
 func _potion_seat(slot: int, id: String) -> Control:
-	var side: Vector2 = Vector2(_shape_value(32, 30, 38), _shape_value(38, 36, 44))
+	var side: Vector2 = Vector2(
+		_shape_value(32, 30, 38), RunStyle.hit_floor(_shape_value(38, 36, 44)))
 	var definition: Dictionary = content.potions.get(id, {})
 	if id.is_empty():
 		var empty: Panel = Panel.new()
@@ -273,6 +274,10 @@ func _art_button(asset: String, art_side: int, button_side: int,
 	var button: Button = Button.new()
 	button.custom_minimum_size = Vector2(button_side, button_side)
 	button.tooltip_text = tip
+	# RunHud does not inherit GlassStyle.theme(); every art button carries
+	# its own lantern ring. Radius 9 matches _seat_style.
+	button.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(RunStyle.GOLD, 9))
 	button.add_theme_stylebox_override("normal", _seat_style(true))
 	button.add_theme_stylebox_override("hover", _seat_style(true, RunStyle.GOLD))
 	button.add_theme_stylebox_override("pressed", _seat_style(true, RunStyle.PARCHMENT))
