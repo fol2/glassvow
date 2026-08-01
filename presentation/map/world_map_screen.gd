@@ -18,11 +18,15 @@ const HINT_BOTTOM: float = -18.0
 
 ## Path/waystone PointerDrift amplitude (px); sky/region ÷3, veil ×1.35 (#64).
 const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
-## Wander amplitudes, in px, against `jy`/`jx` domain data that spans about ±0.25.
-## The step axis takes the review's "~3×" unchanged — ±4.6 px was 1.8% of a
-## 259.6 px step and read as a lattice. The lane axis does NOT: at only 46–50 px
-## of pitch it has no room, so it trades amplitude for the per-row application in
-## `_row_lane_jitter` and keeps a modest span (#69).
+## Wander amplitudes in px. The two domain fields do NOT share a range —
+## `domain/state/world_map.gd:134` scales `jx` by 0.5 (±0.25) and `:135` scales
+## `jy` by 0.4 (**±0.20**). An earlier draft of this docstring said "about ±0.25"
+## for both and the PR body then overstated the step wander by 30% (#69, PR #79
+## DL R1 m3). At 72 the step axis realises ±13.8 px on seed 717 against a
+## 241.9 px step — 5.7%, up from 1.8%, which is the "~3×" the review asked for.
+##
+## The lane axis cannot take the same treatment: at 46–50 px of pitch it has no
+## room, so it trades amplitude for the per-row application in `_row_lane_jitter`.
 const STEP_JITTER: float = 72.0
 const LANE_JITTER: float = 20.0
 
@@ -373,6 +377,10 @@ func choose(i: int) -> bool:
 	_travel_from_i = from_i
 	_travel_t = 0.0
 	_travelling = true
+	# The only instruction on screen names three things the walk has just taken
+	# away — scroll, drag and choose are all refused for its duration. Half alpha
+	# says "not now" without the label vanishing and re-appearing (PR #79 DL R1).
+	_hint_label.modulate.a = 0.4
 	_cam_target = _cam_for(i)
 	# Reduce-motion skips the walk but still arrives through one path so the
 	# travelling flag clears the same way a tween finish would. No kindle
@@ -402,6 +410,7 @@ func _set_travel_t(v: float) -> void:
 func _on_arrived(i: int) -> void:
 	_travelling = false
 	_travel_from_i = -1
+	_hint_label.modulate.a = 1.0
 	node_chosen.emit(i)
 
 
@@ -507,13 +516,18 @@ func _push_bands(force: bool = false) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	# The walk owns the camera while it lasts. A drag or a wheel tick mid-glide
-	# used to overwrite `_cam_target`, so the lead-third follow stopped and the
-	# lantern finished its bezier somewhere off-frame while the glow kept riding
-	# the trail (#69, carried from P5.3 PM R1). Events are still ACCEPTED — the
-	# gesture is swallowed, not passed through to a waystone underneath — because
-	# 0.4 s of ignored input is a pause, whereas a stray tap landing on a stone
-	# during the glide is a wrong move the player did not make.
+	# The walk owns the camera while it lasts: PAN AND WHEEL are swallowed. A drag
+	# or a wheel tick mid-glide used to overwrite `_cam_target`, so the lead-third
+	# follow stopped and the lantern finished its bezier somewhere off-frame while
+	# the glow kept riding the trail (#69, carried from P5.3 PM R1).
+	#
+	# This does NOT guard against a stray tap reaching a waystone, whatever an
+	# earlier draft of this comment claimed. Godot delivers `_gui_input` to the
+	# deepest control first and `GlassWaystone` keeps the default
+	# `MOUSE_FILTER_STOP`, so a press over a stone is consumed there and never
+	# arrives here. What stops the wrong move is `choose()`'s own `if _travelling`
+	# — which predates this guard — plus `set_state(false, …)` unlighting every
+	# stone for the duration (PR #79 DL R1 m4).
 	if _travelling:
 		accept_event()
 		return
