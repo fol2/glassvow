@@ -28,7 +28,10 @@ func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 	add_child(_sfx)
 
 	var scrim: ColorRect = ColorRect.new()
-	scrim.color = Color.TRANSPARENT
+	# The route stays visible but must not COMPETE: without this veil the
+	# title wordmark read straight through the panel copy (DL round 1,
+	# measured ~70% local lift). P4.8 unifies scrims project-wide.
+	scrim.color = Color(0.02, 0.03, 0.06, 0.5)
 	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	scrim.gui_input.connect(_on_scrim_input)
 	add_child(scrim)
@@ -64,12 +67,17 @@ func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_scroll)
 
+	# The optical ladder, not the container constant: the 26px controls carry
+	# ~8px of internal padding each, so the source ratio must be far steeper
+	# than the on-screen ratio it buys (DL round 1 measured 14/7/6 collapsing
+	# to one uniform 22-24px band, leaving each slider equidistant between
+	# its own label and the next).
 	_sections = VBoxContainer.new()
-	_sections.add_theme_constant_override("separation", 14)
+	_sections.add_theme_constant_override("separation", 26)
 	_sections.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll.add_child(_sections)
 
-	var audio: VBoxContainer = _section("AUDIO", GOLD)
+	var audio: VBoxContainer = _section("AUDIO", GOLD, false)
 	audio.add_child(_audio_row("MASTER", Preferences.MASTER))
 	audio.add_child(_audio_row("MUSIC", Preferences.MUSIC))
 	audio.add_child(_audio_row("SFX", Preferences.SFX))
@@ -91,8 +99,16 @@ func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 		func() -> bool: return _preferences.reduce_motion,
 		func(on: bool) -> void: _preferences.set_reduce_motion(on)))
 
-	var ledger: VBoxContainer = _section("THE LEDGER", DANGER)
+	# The destructive section sits deliberately OUTSIDE the shared rhythm —
+	# reaching it should take a beat.
+	var ledger_seat: MarginContainer = MarginContainer.new()
+	ledger_seat.add_theme_constant_override("margin_top", 14)
+	_sections.add_child(ledger_seat)
+	var ledger: VBoxContainer = _section("THE LEDGER", DANGER, true, ledger_seat)
 	var erase: Button = _button("ERASE ALL PROGRESS", DANGER, 14)
+	# The most destructive control in the game must not be CLOSE's twin: the
+	# glyph wears the danger, not just one pixel of border.
+	erase.add_theme_color_override("font_color", Color(DANGER, 0.92))
 	erase.disabled = reset_disabled
 	erase.pressed.connect(func() -> void:
 		_sfx.play(&"click")
@@ -161,16 +177,29 @@ static func _display_supported() -> bool:
 	return not OS.has_feature("web") and DisplayServer.get_name() != "headless"
 
 
-func _section(heading: String, accent: Color) -> VBoxContainer:
+func _section(heading: String, accent: Color, with_rule: bool = true,
+		seat: Container = null) -> VBoxContainer:
 	var body: VBoxContainer = VBoxContainer.new()
-	body.add_theme_constant_override("separation", 7)
+	body.add_theme_constant_override("separation", 4)
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_sections.add_child(body)
+	if seat != null:
+		seat.add_child(body)
+	else:
+		_sections.add_child(body)
 
-	var divider: HSeparator = HSeparator.new()
-	divider.add_theme_color_override("separator", Color(accent, 0.22))
-	divider.add_theme_constant_override("separation", 1)
-	body.add_child(divider)
+	# The first section skips its rule: 11px under SETTINGS it groups upward
+	# and reads as the title's underline rather than AUDIO's divider.
+	if with_rule:
+		var divider: HSeparator = HSeparator.new()
+		# `separator` is a STYLEBOX theme item, not a Color — a Color
+		# override compiles, does nothing, and the stock #808080 line paints
+		# instead (DL round 1: all four rules measured dead grey).
+		var rule: StyleBoxLine = StyleBoxLine.new()
+		rule.color = Color(accent, 0.22)
+		rule.thickness = 1
+		divider.add_theme_stylebox_override("separator", rule)
+		divider.add_theme_constant_override("separation", 1)
+		body.add_child(divider)
 
 	var label: Label = Label.new()
 	label.text = heading
@@ -246,7 +275,7 @@ func _toggle_row(label_text: String, getter: Callable, setter: Callable) -> HBox
 	var sync: Callable = func() -> void:
 		var on: bool = getter.call()
 		toggle.text = "ON" if on else "OFF"
-		toggle.modulate = Color.WHITE if on else Color(1.0, 1.0, 1.0, 0.62)
+		_toggle_state(toggle, on)
 	sync.call()
 	toggle.pressed.connect(func() -> void:
 		var was_on: bool = getter.call()
@@ -256,6 +285,24 @@ func _toggle_row(label_text: String, getter: Callable, setter: Callable) -> HBox
 	)
 	row.add_child(toggle)
 	return row
+
+
+## State lives in the ACCENT — lit glass against unlit — never in opacity,
+## which is the channel `disabled` already owns in this same panel (DL round
+## 1: OFF at 0.62 modulate measured 65% of the way to the disabled border).
+static func _toggle_state(toggle: Button, on: bool) -> void:
+	toggle.add_theme_color_override("font_color",
+		GOLD if on else GlassStyle.TEXT_DIM)
+	var lit: StyleBoxFlat = StyleBoxFlat.new()
+	lit.bg_color = Color(GOLD, 0.10) if on else Color(0.055, 0.071, 0.133, 0.60)
+	lit.set_border_width_all(1)
+	lit.border_color = Color(GOLD, 0.55 if on else 0.28)
+	lit.set_corner_radius_all(6)
+	lit.content_margin_left = 10
+	lit.content_margin_right = 10
+	lit.content_margin_top = 4
+	lit.content_margin_bottom = 4
+	toggle.add_theme_stylebox_override("normal", lit)
 
 
 func _on_scrim_input(event: InputEvent) -> void:
@@ -319,7 +366,11 @@ static func _style_button(button: Button, accent: Color, vertical: float,
 			style.border_color = Color(accent, 0.12)
 		button.add_theme_stylebox_override(state, style)
 	button.add_theme_color_override("font_color", GlassStyle.TEXT)
-	button.add_theme_color_override("font_hover_color", GOLD)
+	# Hover speaks the button's OWN accent: gold on gold controls, danger on
+	# the destructive one — never the affirmative accent over a danger wash
+	# (DL round 1: ERASE hovered gold, and a dimmed OFF hovered DARKER than
+	# at rest).
+	button.add_theme_color_override("font_hover_color", accent)
 	button.add_theme_color_override("font_disabled_color", Color(GlassStyle.TEXT_DIM, 0.45))
 
 

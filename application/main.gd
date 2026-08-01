@@ -450,7 +450,10 @@ func _show_title() -> void:
 		_on_title_choice.bind(saved), {
 		"variant": "title",
 		"stats": title_stats,
-		"version": "0.5.0+6e06911",
+		# One build string, one source: the same setting the settings-panel
+		# footer reads. The benchmark's 0.5.0+6e06911 stamp lives on in the
+		# parity docs, not on the player's title screen.
+		"version": str(ProjectSettings.get_setting("application/config/version", "")),
 		"rose_shards": _vigil.shards,
 	})
 	_music.play(&"title")
