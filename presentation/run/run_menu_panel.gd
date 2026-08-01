@@ -51,7 +51,7 @@ func _init(stage_shape: StringName, terminal_locked: bool = false) -> void:
 	actions.add_child(settings)
 
 	if not terminal_locked:
-		var abandon: Button = _button("Abandon Run", RunStyle.DANGER)
+		var abandon: Button = _button("Abandon Run", RunStyle.DANGER, RunStyle.DANGER)
 		abandon.pressed.connect(_request.bind(&"abandon"))
 		actions.add_child(abandon)
 
@@ -89,7 +89,8 @@ func _request(action: StringName) -> void:
 			abandon_requested.emit()
 
 
-func _button(label: String, colour: Color = RunStyle.TEXT) -> Button:
+func _button(label: String, colour: Color = RunStyle.TEXT,
+		ring_accent: Color = RunStyle.GOLD) -> Button:
 	var button: Button = Button.new()
 	button.text = label
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -102,9 +103,10 @@ func _button(label: String, colour: Color = RunStyle.TEXT) -> Button:
 	button.add_theme_color_override("font_focus_color", RunStyle.GOLD)
 	# The lantern ring overlays the state boxes; an opaque "focus" box here
 	# would shadow it (GlassStyle.focus_ring's ADOPTION PREREQUISITE). The
-	# menu's rows ring in the row's own colour, so Abandon rings danger.
-	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(
-		colour if colour != RunStyle.TEXT else RunStyle.GOLD))
+	# ring accent is EXPLICIT — inferring it from colour-equality would
+	# silently re-map every row if TEXT ever changed (DL, PR #43).
+	button.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(ring_accent, 7))
 	for state: String in ["normal", "hover", "pressed"]:
 		button.add_theme_stylebox_override(state, _button_style(state))
 	button.mouse_entered.connect(func() -> void: _sfx.play(&"hover", 0.45))
@@ -139,7 +141,7 @@ static func _panel_style() -> StyleBoxFlat:
 
 static func _button_style(state: String) -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(RunStyle.GOLD, 0.14) if state in ["hover", "focus"] \
+	style.bg_color = Color(RunStyle.GOLD, 0.14) if state == "hover" \
 		else (Color(RunStyle.GOLD, 0.08) if state == "pressed" else Color.TRANSPARENT)
 	style.set_corner_radius_all(7)
 	style.content_margin_left = 18

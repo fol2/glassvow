@@ -160,10 +160,21 @@ func _build_standard(title_text: String, body_text: String,
 		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 		scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		column.add_child(scroll)
+		# The lantern ring lives ENTIRELY in the 2px band outside a control,
+		# and the scroll clips at its own edge — full-width buttons would
+		# lose both vertical strokes outright, not just their glow. A 4px
+		# inset keeps the ring inside the clip.
+		var ring_room: MarginContainer = MarginContainer.new()
+		ring_room.add_theme_constant_override("margin_left", 4)
+		ring_room.add_theme_constant_override("margin_right", 4)
+		ring_room.add_theme_constant_override("margin_top", 4)
+		ring_room.add_theme_constant_override("margin_bottom", 4)
+		ring_room.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		scroll.add_child(ring_room)
 		button_column = VBoxContainer.new()
 		button_column.add_theme_constant_override("separation", roundi(COLUMN_GAP * k))
 		button_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		scroll.add_child(button_column)
+		ring_room.add_child(button_column)
 	for row: Dictionary in choices:
 		var button: Button = Button.new()
 		button.text = str(row.get("label", row.get("id", "")))
@@ -185,7 +196,6 @@ func _build_standard(title_text: String, body_text: String,
 func _build_card_grid(column: VBoxContainer, choices: Array[Dictionary],
 		k: float) -> void:
 	_scroll = ScrollContainer.new()
-	_scroll.follow_focus = true
 	_scroll.custom_minimum_size.y = _panel_num("scroll", PANEL_SCROLL)
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -400,7 +410,9 @@ func _add_title_rose(context: Dictionary) -> void:
 	_rose_medallion.tooltip_text = "Open the Emberglass Rose Window"
 	_rose_medallion.clip_contents = true
 	_rose_medallion.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	for state: String in ["normal", "hover", "pressed", "focus"]:
+	_rose_medallion.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(GOLD, 39))
+	for state: String in ["normal", "hover", "pressed"]:
 		var style: StyleBoxFlat = StyleBoxFlat.new()
 		style.bg_color = Color("#070912")
 		style.set_border_width_all(1)
@@ -448,7 +460,12 @@ func _title_button(text: String, quiet: bool) -> Button:
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_700, 1))
 	button.add_theme_font_size_override("font_size", 13 if quiet else 17)
-	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+	# The most-seen buttons in the game adopt the shared ring: the old
+	# opaque focus box was 1px on the button's own border line with a black
+	# shadow — focus ≡ hover-minus-glow (DL, PR #43).
+	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(GOLD, 8))
+	button.add_theme_color_override("font_focus_color", PARCHMENT)
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var box: StyleBoxFlat = StyleBoxFlat.new()
 		box.bg_color = Color(0.055, 0.071, 0.133, 0.60 if quiet else 0.90)
 		box.set_border_width_all(1)

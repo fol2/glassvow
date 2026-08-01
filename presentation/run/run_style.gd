@@ -58,9 +58,12 @@ static func style_button(button: Button, primary: bool = false,
 	# "focus" is deliberately NOT in this loop: an opaque focus box shadows
 	# the shared lantern ring (GlassStyle.focus_ring's ADOPTION PREREQUISITE)
 	# and leaves keyboard focus indistinguishable from rest — which is what
-	# this loop did before P4.5.
+	# this loop did before P4.5. A primary CTA is an OPAQUE gold body, so a
+	# gold ring flush against it reads as the button thickening — the ring
+	# borrows the glass blue instead, the one accent that cannot dissolve
+	# into the body it rings.
 	button.add_theme_stylebox_override("focus",
-		GlassStyle.focus_ring(GOLD if primary else accent))
+		GlassStyle.focus_ring(GlassStyle.GLASS if primary else accent, radius))
 	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var style: StyleBoxFlat = StyleBoxFlat.new()
 		if primary:
@@ -93,7 +96,7 @@ static func style_button(button: Button, primary: bool = false,
 
 static func style_card(button: Button, selected: bool) -> void:
 	# Same adoption as style_button: the ring overlays, never repaints.
-	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(GOLD))
+	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(GOLD, 14))
 	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var style: StyleBoxFlat = StyleBoxFlat.new()
 		style.bg_color = Color(0.118, 0.102, 0.055, 0.50) if selected \
