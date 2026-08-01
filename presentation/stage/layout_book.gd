@@ -145,28 +145,33 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	# `EnemyView.set_chrome_scale` for why one ratio rather than four numbers.
 	&"actor/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 2.0, "default": 1.0},
 
-	# --- map: the waystone field. The column gap was `clamp(104, 50, (w - 170)
-	# / 6)` inline, three figures with no shape attached, and at 390px all three
-	# of them collide.
+	# --- map: the waystone field. Rows are steps along the pilgrimage (the
+	# walk axis); columns are lanes across it. The vertical Spire's row-gap and
+	# column-gutter died with that frame — what replaced them is a STEP along X
+	# and a LANE GAP along Y, both rate-clamped so a wider stage shows the same
+	# NUMBER of steps rather than more of them. See `WorldMapScreen._step`.
 	#
-	# `top` and `bottom` were the trail's vertical band, and they died when the
-	# map became a navigable Spire: the rows are no longer seated between two
-	# insets, they scroll past a camera, so the vertical rhythm is a ROW GAP and
-	# not a band. The three fields below replaced them rather than being added
-	# beside them — see `WorldMapScreen._row_gap`.
+	# `pathY` is where the centre lane sits; `horizonY` is the ground line
+	# `_draw` reads; `lead` is the fraction of the stage the camera holds the
+	# current node at (the lead-third rule). Portrait shapes may override the
+	# rates later — P5.7 — the defaults alone keep every reference readable.
 	&"trail/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.05, "max": 2.0, "default": 0.36},
-	## Rows are `rowRate` of the stage height apart, held inside `[rowMin,
-	## rowMax]`. The rate is what makes a taller stage show the same NUMBER of
-	## rows rather than more of them; the band is what stops a phone held
-	## sideways from stacking them into each other.
-	&"trail/rowRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.02, "max": 0.5, "default": 0.12},
-	&"trail/rowMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 74.0},
-	&"trail/rowMax": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 98.0},
-	## The width the columns may NOT use, so the outermost waystone keeps its
-	## margin. Halved on either side, like the CSS gutter it stands in for.
-	&"trail/gutter": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 800.0, "default": 170.0},
-	&"trail/colMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 50.0},
-	&"trail/colMax": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 400.0, "default": 104.0},
+	## Steps are `stepRate` of the stage width apart, held inside `[stepMin,
+	## stepMax]`. The rate keeps the same NUMBER of nodes on screen as the
+	## stage grows; the band stops a phone held sideways from packing them.
+	&"trail/stepRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.05, "max": 0.6, "default": 0.22},
+	&"trail/stepMin": {"bind": BIND_NONE, "unit": "px", "min": 40.0, "max": 600.0, "default": 150.0},
+	&"trail/stepMax": {"bind": BIND_NONE, "unit": "px", "min": 40.0, "max": 600.0, "default": 290.0},
+	## Lanes are `laneRate` of the stage height apart, held inside `[laneMin,
+	## laneMax]`. Col 3 is the centre lane; depth still compresses the gap.
+	&"trail/laneRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.01, "max": 0.3, "default": 0.06},
+	&"trail/laneMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 34.0},
+	&"trail/laneMax": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 50.0},
+	&"trail/pathY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.52},
+	&"trail/horizonY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.64},
+	## Where in the frame the camera seats the current node. A third from the
+	## left leaves the road ahead readable without parking the lantern mid-stage.
+	&"trail/lead": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 0.6, "default": 0.333},
 	## The smallest a waystone may be to the finger, in stage px. Zero on the
 	## shapes a mouse points at, 44 on a phone — the floor Apple's HIG and
 	## Material both set. It grows the HIT rect only; see `GlassWaystone.
@@ -269,7 +274,8 @@ const FORMS: Dictionary[StringName, PackedStringArray] = {
 	&"hud": ["height", "scale", "title", "stat"],
 	&"card": ["w", "inset"],
 	&"actor": ["scale"],
-	&"trail": ["scale", "rowRate", "rowMin", "rowMax", "gutter", "colMin", "colMax", "touch"],
+	&"trail": ["scale", "stepRate", "stepMin", "stepMax", "laneRate", "laneMin", "laneMax",
+		"pathY", "horizonY", "lead", "touch"],
 	&"mapbar": ["scale", "title", "titleTop", "titleH", "titleInset"],
 	&"panel": ["w", "inset", "scroll", "scale"],
 	&"titlescreen": ["wordmarkMax", "wordmarkRate", "columnW", "gap",
