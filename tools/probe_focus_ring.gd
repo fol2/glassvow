@@ -49,11 +49,15 @@ func _shoot() -> void:
 	await process_frame
 	await process_frame
 	_save("/tmp/p44-probe-glass.png")
-	# Focus beside hover: the ember button keeps focus while the pointer
-	# rests on its identical neighbour.
+	# Focus beside hover, with no cursor at all: the probe window sits
+	# off-screen, so real NOTIFICATION_MOUSE_ENTER can never arrive —
+	# instead the resting twin WEARS the hover boxes as its resting state.
+	# Same pixels a genuine hover paints, deterministically.
+	_ember_rest.add_theme_stylebox_override("normal",
+		_ember_rest.get_theme_stylebox("hover"))
+	_ember_rest.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
+	_ember_rest.text = "HOVERED"
 	_ember_focus.grab_focus()
-	Input.warp_mouse(_ember_rest.get_screen_position() + _ember_rest.size * 0.5)
-	await process_frame
 	await process_frame
 	await process_frame
 	_save("/tmp/p44-probe-hover.png")
