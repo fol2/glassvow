@@ -529,6 +529,7 @@ func _show_help() -> void:
 
 func _show_settings() -> void:
 	var screen: SettingsPanel = SettingsPanel.new(Preferences.active, _run_over)
+	screen.set_shape(_shape)
 	screen.closed.connect(_close_overlay)
 	screen.reset_requested.connect(_confirm_reset)
 	_show_overlay(screen)
@@ -537,7 +538,7 @@ func _show_settings() -> void:
 func _confirm_reset() -> void:
 	_close_overlay()
 	var screen: Control = ChoiceScreenType.new(
-		"RESET SAVE?",
+		"ERASE ALL PROGRESS?",
 		"This erases your current climb and the entire Vigil — deeds, unlocks, "
 		+ "vows, monuments, and whispers.\n\nThis cannot be undone.",
 		[
