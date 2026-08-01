@@ -394,7 +394,8 @@ class Piece extends RefCounted:
 var _phase: int = REST
 var _t: float = 0.0
 var _pieces: Array[Piece] = []
-var _shard_mat_src: Shader = null
+## Stage 3's own material — the cut cools INTO the item's colour.
+const SHARD_SHADER_RES: Shader = preload("res://presentation/reward/reward_shard.gdshader")
 
 
 ## Begin the rite from the whole body. Replayable: the lab judges a break by
@@ -452,7 +453,7 @@ func _process(delta: float) -> void:
 				var mat: ShaderMaterial = \
 					piece.node.get_surface_override_material(0) as ShaderMaterial
 				if mat != null:
-					mat.set_shader_parameter("heat", lerpf(1.0, 0.10, cool))
+					mat.set_shader_parameter("cool", cool)
 				if braking:
 					var bite: float = pow(0.004, delta / BRAKE)
 					piece.vel = piece.vel * bite + piece.drift * (1.0 - bite)
@@ -475,13 +476,6 @@ func _burst() -> void:
 	var blow: Vector2 = Vector2(0.0, -_box_u * 0.08)
 	var cells: Array[PackedVector2Array] = RewardFracture.voronoi(
 		RewardFracture.burst_sites(blow, box, rng), box)
-	if _shard_mat_src == null:
-		_shard_mat_src = Shader.new()
-		# Borrowed SPLICED, like the husk's own shader: the caps carry the
-		# painting, the red-tagged fracture band carries the molten term.
-		# Stage 3 replaces the cooling with the item's own colour.
-		_shard_mat_src.code = EnemyView.with_tint(
-			EnemyView.with_erode(EnemyView.SHARD_SHADER))
 	var tex: Texture2D = _art()
 	var home: Vector3 = _husk.position
 	for cell: PackedVector2Array in cells:
@@ -494,10 +488,13 @@ func _burst() -> void:
 		if mesh == null:
 			continue
 		var mat: ShaderMaterial = ShaderMaterial.new()
-		mat.shader = _shard_mat_src
+		mat.shader = SHARD_SHADER_RES
 		mat.set_shader_parameter("body_tex", tex)
-		mat.set_shader_parameter("heat", 1.0)
-		mat.set_shader_parameter("dissolve", 0.0)
+		mat.set_shader_parameter("cool", 0.0)
+		# The enemy's own hue until stage 4 seats the spoils — then the three
+		# chosen pieces take their ITEM'S colour and the debris keeps this.
+		var glass: Color = tone(0.72, 0.95)
+		mat.set_shader_parameter("cool_tint", Vector3(glass.r, glass.g, glass.b))
 		var node: MeshInstance3D = MeshInstance3D.new()
 		node.mesh = mesh
 		node.set_surface_override_material(0, mat)
