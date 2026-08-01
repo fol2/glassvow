@@ -1229,9 +1229,20 @@ func _on_combat_over(result: String) -> void:
 	var rewards: Dictionary = game.gen_combat_rewards(node.combat_kind(), game.cb.affix)
 	var reward_cards: Array = rewards["cards"]
 	game.quests.adjust_reward_cards(game.run, node.combat_kind(), reward_cards)
+	# D1 (docs/reward-embers-3d-plan.md § cross-lane): the embers concept is
+	# painted in the dead enemy's hue over the dead enemy's OWN body, and a
+	# reward Dictionary carried neither. Additive field — an old save without
+	# it falls back to lantern-ember and the generic husk, which is the plan's
+	# own fallback path.
+	var slain: Dictionary = {}
+	if game.cb != null and not game.cb.enemies.is_empty():
+		var first: EnemyCombatant = game.cb.enemies[0]
+		var slain_art: Dictionary = first.def.get("art", {})
+		slain = {"id": String(first.key), "hue": slain_art.get("hue", 22)}
 	game.run.pending_reward = {
 		"rewards": rewards,
 		"taken": {"gold": false, "card": false, "potion": false, "relic": false},
+		"slain": slain,
 	}
 	if not SaveService.store(game.run):
 		_show_save_error("The victory rewards could not be held.")
