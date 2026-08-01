@@ -11,6 +11,7 @@ const NIGHT_MID: Color = Color(0.035, 0.045, 0.095)
 const NIGHT_BOT: Color = Color(0.015, 0.02, 0.045)
 const GLASS: Color = Color(0.56, 0.82, 1.0)      # #8fd0ff facet blue
 const EMBER: Color = Color(1.0, 0.60, 0.30)      # #ff9a4d lantern fire
+const GOLD: Color = Color("#f2c14e")             # lantern gold (RunStyle.GOLD)
 const INK: Color = Color(0.10, 0.12, 0.19)       # panel body
 const TEXT: Color = Color(0.86, 0.90, 1.0)
 const TEXT_DIM: Color = Color(0.58, 0.64, 0.80)
@@ -85,7 +86,25 @@ static func gem(fill: Color) -> StyleBoxFlat:
 	return sb
 
 
+## The lantern ring — the one keyboard-focus treatment every glass surface
+## shares. `draw_center = false` so it lays OVER whichever state box is
+## showing without repainting it; the ring is the leading, the glow is the
+## lantern behind it. Expanded 2px so it reads as an addition around the
+## control, not a swap of its border.
+static func focus_ring(accent: Color = GOLD) -> StyleBoxFlat:
+	var ring: StyleBoxFlat = StyleBoxFlat.new()
+	ring.draw_center = false
+	ring.set_border_width_all(2)
+	ring.border_color = Color(accent, 0.85)
+	ring.set_corner_radius_all(14)
+	ring.set_expand_margin_all(2.0)
+	ring.shadow_color = Color(accent, 0.3)
+	ring.shadow_size = 8
+	return ring
+
+
 static func style_button(btn: Button, fill: Color) -> void:
+	btn.add_theme_stylebox_override("focus", focus_ring(fill))
 	var states: PackedStringArray = PackedStringArray(["normal", "hover", "pressed", "disabled"])
 	for state: String in states:
 		var sb: StyleBoxFlat = StyleBoxFlat.new()
@@ -109,6 +128,11 @@ static func style_button(btn: Button, fill: Color) -> void:
 	btn.add_theme_color_override("font_color", TEXT)
 	btn.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
 	btn.add_theme_color_override("font_disabled_color", TEXT_DIM)
+	# Unset, these fall back to Godot's neutral defaults (0.95 grey and pure
+	# white) — a focused or pressed button would shed the glass ink exactly
+	# while it is selected.
+	btn.add_theme_color_override("font_focus_color", TEXT)
+	btn.add_theme_color_override("font_pressed_color", TEXT)
 
 
 static func style_bar(bar: ProgressBar, fill: Color) -> void:
@@ -147,4 +171,7 @@ static func theme() -> Theme:
 	t.set_font_size("font_size", "Label", 15)
 	t.set_color("font_color", "Button", TEXT)
 	t.set_font_size("font_size", "Button", 15)
+	# Every button under a glass theme carries the lantern ring on keyboard
+	# focus, so a surface only overrides when its accent differs.
+	t.set_stylebox("focus", "Button", focus_ring())
 	return t
