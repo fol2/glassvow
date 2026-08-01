@@ -1,6 +1,9 @@
 class_name SettingsPanel
 extends Control
-## Benchmark-sized audio/settings overlay; the route behind it stays visible.
+## The player-facing settings overlay: AUDIO / DISPLAY / MOTION / THE LEDGER,
+## with the route behind it staying visible. Reads and writes the main-owned
+## Preferences handle; the DISPLAY section hides itself where the platform
+## owns the window (web) or there is no window at all (headless).
 
 signal closed
 signal reset_requested
@@ -11,6 +14,9 @@ const WIDTH: float = 320.0
 
 var _preferences: Preferences
 var _sfx: SfxBus
+var _panel: PanelContainer
+var _scroll: ScrollContainer
+var _sections: VBoxContainer
 
 
 func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
@@ -32,15 +38,15 @@ func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 	centre.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(centre)
 
-	var panel: PanelContainer = PanelContainer.new()
-	panel.custom_minimum_size.x = WIDTH
-	panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	panel.add_theme_stylebox_override("panel", _panel_style())
-	centre.add_child(panel)
+	_panel = PanelContainer.new()
+	_panel.custom_minimum_size.x = WIDTH
+	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	_panel.add_theme_stylebox_override("panel", _panel_style())
+	centre.add_child(_panel)
 
 	var column: VBoxContainer = VBoxContainer.new()
 	column.add_theme_constant_override("separation", 12)
-	panel.add_child(column)
+	_panel.add_child(column)
 
 	var title: Label = Label.new()
 	title.text = "SETTINGS"
@@ -50,35 +56,49 @@ func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 	title.add_theme_color_override("font_color", GOLD)
 	column.add_child(title)
 
-	var audio: VBoxContainer = VBoxContainer.new()
-	audio.add_theme_constant_override("separation", 7)
-	column.add_child(audio)
+	# Four sections can outgrow a phone stage, so they live in a scroll while
+	# the title, close button and footer stay put.
+	_scroll = ScrollContainer.new()
+	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_scroll.follow_focus = true
+	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(_scroll)
+
+	_sections = VBoxContainer.new()
+	_sections.add_theme_constant_override("separation", 14)
+	_sections.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_scroll.add_child(_sections)
+
+	var audio: VBoxContainer = _section("AUDIO", GOLD)
+	audio.add_child(_audio_row("MASTER", Preferences.MASTER))
 	audio.add_child(_audio_row("MUSIC", Preferences.MUSIC))
 	audio.add_child(_audio_row("SFX", Preferences.SFX))
 
-	var debug_section: VBoxContainer = VBoxContainer.new()
-	debug_section.add_theme_constant_override("separation", 8)
-	column.add_child(debug_section)
+	if _display_supported():
+		var display: VBoxContainer = _section("DISPLAY", GOLD)
+		display.add_child(_toggle_row("FULLSCREEN",
+			func() -> bool: return _preferences.fullscreen,
+			func(on: bool) -> void: _preferences.set_fullscreen(on)))
+		display.add_child(_toggle_row("VSYNC",
+			func() -> bool: return _preferences.vsync,
+			func(on: bool) -> void: _preferences.set_vsync(on)))
 
-	var divider: HSeparator = HSeparator.new()
-	divider.add_theme_color_override("separator", Color(DANGER, 0.22))
-	divider.add_theme_constant_override("separation", 1)
-	debug_section.add_child(divider)
+	var motion: VBoxContainer = _section("MOTION", GOLD)
+	motion.add_child(_toggle_row("SCREEN SHAKE",
+		func() -> bool: return _preferences.screen_shake,
+		func(on: bool) -> void: _preferences.set_screen_shake(on)))
+	motion.add_child(_toggle_row("REDUCE MOTION",
+		func() -> bool: return _preferences.reduce_motion,
+		func(on: bool) -> void: _preferences.set_reduce_motion(on)))
 
-	var debug: Label = Label.new()
-	debug.text = "DEBUG"
-	debug.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 2))
-	debug.add_theme_font_size_override("font_size", 12)
-	debug.add_theme_color_override("font_color", Color(DANGER, 0.9))
-	debug_section.add_child(debug)
-
-	var reset: Button = _button("RESET SAVE", DANGER, 14)
-	reset.disabled = reset_disabled
-	reset.pressed.connect(func() -> void:
+	var ledger: VBoxContainer = _section("THE LEDGER", DANGER)
+	var erase: Button = _button("ERASE ALL PROGRESS", DANGER, 14)
+	erase.disabled = reset_disabled
+	erase.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		reset_requested.emit()
 	)
-	debug_section.add_child(reset)
+	ledger.add_child(erase)
 
 	var warning: Label = Label.new()
 	warning.text = "Wipes the current climb and all Vigil progress. Cannot be undone."
@@ -87,7 +107,7 @@ func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 	warning.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
 	warning.add_theme_font_size_override("font_size", 12)
 	warning.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
-	debug_section.add_child(warning)
+	ledger.add_child(warning)
 
 	var close: Button = _button("CLOSE", GlassStyle.GLASS)
 	close.pressed.connect(func() -> void:
@@ -95,7 +115,70 @@ func _init(preferences: Preferences, reset_disabled: bool = false) -> void:
 		closed.emit()
 	)
 	column.add_child(close)
+
+	var footer: Label = Label.new()
+	var version: String = str(ProjectSettings.get_setting("application/config/version", ""))
+	footer.text = "GLASSVOW %s" % version if version != "" else "GLASSVOW"
+	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	footer.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 2))
+	footer.add_theme_font_size_override("font_size", 10)
+	footer.add_theme_color_override("font_color", Color(GlassStyle.TEXT_DIM, 0.7))
+	column.add_child(footer)
+
 	close.grab_focus.call_deferred()
+	# The warning label wraps, so the sections' minimum height is only honest
+	# once they have been laid out at the panel's real width — refit whenever
+	# that settles rather than trusting the first frame's measure.
+	_sections.resized.connect(_fit)
+	_fit.call_deferred()
+
+
+func set_shape(stage_shape: StringName) -> void:
+	if not StageShape.REFERENCES.has(stage_shape):
+		return
+	_fit()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		_fit()
+
+
+## The panel never outgrows the stage: the section scroll takes what remains
+## after the fixed rows, and the width narrows on stages the 320px column
+## would crowd.
+func _fit() -> void:
+	if _panel == null or size.x <= 0.0 or size.y <= 0.0:
+		return
+	_panel.custom_minimum_size.x = minf(WIDTH, maxf(272.0, size.x - 24.0))
+	var room: float = maxf(180.0, size.y - 190.0)
+	var want: float = minf(_sections.get_combined_minimum_size().y, room)
+	if absf(_scroll.custom_minimum_size.y - want) > 0.5:
+		_scroll.custom_minimum_size.y = want
+
+
+static func _display_supported() -> bool:
+	return not OS.has_feature("web") and DisplayServer.get_name() != "headless"
+
+
+func _section(heading: String, accent: Color) -> VBoxContainer:
+	var body: VBoxContainer = VBoxContainer.new()
+	body.add_theme_constant_override("separation", 7)
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_sections.add_child(body)
+
+	var divider: HSeparator = HSeparator.new()
+	divider.add_theme_color_override("separator", Color(accent, 0.22))
+	divider.add_theme_constant_override("separation", 1)
+	body.add_child(divider)
+
+	var label: Label = Label.new()
+	label.text = heading
+	label.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 2))
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", Color(accent, 0.9))
+	body.add_child(label)
+	return body
 
 
 func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
@@ -143,6 +226,35 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 		sync.call()
 		_sfx.play(&"click")
 	)
+	return row
+
+
+## A labelled ON/OFF switch reading through a getter so the button always
+## restates the stored truth rather than a mirrored local.
+func _toggle_row(label_text: String, getter: Callable, setter: Callable) -> HBoxContainer:
+	var row: HBoxContainer = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+
+	var label: Label = Label.new()
+	label.text = label_text
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 1))
+	label.add_theme_font_size_override("font_size", 13)
+	row.add_child(label)
+
+	var toggle: Button = _small_button()
+	var sync: Callable = func() -> void:
+		var on: bool = getter.call()
+		toggle.text = "ON" if on else "OFF"
+		toggle.modulate = Color.WHITE if on else Color(1.0, 1.0, 1.0, 0.62)
+	sync.call()
+	toggle.pressed.connect(func() -> void:
+		var was_on: bool = getter.call()
+		setter.call(not was_on)
+		sync.call()
+		_sfx.play(&"click")
+	)
+	row.add_child(toggle)
 	return row
 
 
