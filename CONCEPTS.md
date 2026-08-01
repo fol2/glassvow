@@ -650,6 +650,14 @@ It is the only real decision a reward contains, and so outranks the Spoils for
 space and attention however the screen is drawn. A fight may make no Offering;
 a reward that is Spoils alone is an ordinary outcome, not a degenerate one.
 
+### Husk
+The defeated enemy's body as the reward presents it: the creature's own
+painting standing dead in the room, not a reproduction of its silhouette and
+not a prop in front of it. The Embers' whole claim rests on the husk being the
+real body — the wreckage is what you broke, still in the colour of the thing
+you broke it out of. A husk no longer emits as a living vessel does; the fire
+beneath it is what lights it.
+
 ---
 
 ## Flagged ambiguities

@@ -1,5 +1,6 @@
 ---
 title: Procedural glass reads off its edges, not its fill
+last_refreshed: 2026-08-01
 date: 2026-07-26
 category: design-patterns
 module: presentation/reward
@@ -22,6 +23,13 @@ polygons in `_draw`, no art, no viewport — deliberately mirroring `GlassGem`, 
 fallback enemy avatar, which is also pure `_draw`. (Enemies normally render as
 painted Actors; the gem survives as the fallback when a painting is missing, and
 as the world map's emblem.)
+
+Status note (2026-08-01): the reward's OWN drawing layer is being superseded by
+a real-3D stage (`docs/reward-embers-3d-plan.md`, staged behind the reward lab
+pending the owner's integration call) — that plan's premise is precisely that a
+flat drawing cannot be a material. This lesson remains the standing contract
+for glass that IS drawn in 2D — `GlassGem`, the map emblem, and any future
+`_draw`-based pane.
 
 The first pass drew each shard the obvious way: a filled polygon plus an outline.
 It was rejected on sight; the note in the session was that the pieces read as
