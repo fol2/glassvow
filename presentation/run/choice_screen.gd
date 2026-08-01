@@ -68,6 +68,9 @@ var _utility: GridContainer
 var _utility_buttons: Array[Button] = []
 var _rose_medallion: Button = null
 var _sfx: SfxBus
+## When set, Escape emits `chosen` with this id (safe cancel). Absent → Escape ignored.
+var _cancel_id: String = ""
+var _has_cancel: bool = false
 
 
 func _init(title_text: String, body_text: String, choices: Array[Dictionary],
@@ -80,6 +83,9 @@ func _init(title_text: String, body_text: String, choices: Array[Dictionary],
 	shape = asked if StageShape.REFERENCES.has(asked) else StageShape.IDENTITY
 	_panel_layout = LayoutBook.resolve(&"run", shape)
 	_title_variant = str(context.get("variant", "")) == "title"
+	if context.has("cancel"):
+		_has_cancel = true
+		_cancel_id = str(context["cancel"])
 	_card_mode = choices.any(func(row: Dictionary) -> bool: return row.has("card"))
 	_card_pick = choices.any(func(row: Dictionary) -> bool:
 		return row.has("card") and not row.get("disabled", false))
@@ -485,6 +491,17 @@ func _wire_button(button: Button, id: String) -> void:
 	)
 	if _first_button == null and not button.disabled:
 		_first_button = button
+
+
+## Optional safe cancel: context key `"cancel"` maps Escape onto that choice id.
+## Absent key → Escape does nothing (must-choose dialogs).
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not _has_cancel:
+		return
+	if not event.is_action_pressed(&"ui_cancel"):
+		return
+	chosen.emit(_cancel_id)
+	get_viewport().set_input_as_handled()
 
 
 func _ready() -> void:

@@ -292,6 +292,17 @@ func _art_button(asset: String, art_side: int, button_side: int,
 	return button
 
 
+## Escape opens the run menu on every route that hosts this chrome. Keys arrive
+## unhandled (full-rect STOP children eat the mouse, not the keyboard); when
+## main has a `_modal` overlay up it disables this callback so the overlay owns
+## the cancel rung.
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not event.is_action_pressed(&"ui_cancel"):
+		return
+	menu_requested.emit()
+	get_viewport().set_input_as_handled()
+
+
 func _request(kind: StringName, slot: int) -> void:
 	_sfx.play(&"click")
 	match kind:

@@ -269,6 +269,12 @@ func set_shape(stage_shape: StringName) -> void:
 		_rose.set_shape(shape)
 
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"ui_cancel"):
+		back_requested.emit()
+		get_viewport().set_input_as_handled()
+
+
 func _tab(text: String, callback: Callable) -> Button:
 	var button: Button = Button.new()
 	button.text = text

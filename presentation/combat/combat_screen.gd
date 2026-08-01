@@ -3251,6 +3251,18 @@ func _input(event: InputEvent) -> void:
 		_stage_pressed(mb.position)
 
 
+## Third Escape rung: with nothing to cancel (aim / selection / inspector), open
+## the run menu. Lives on the unhandled path so a `_modal` ChoiceScreen overlay
+## (potion, etc.) claims cancel first — `_input` would steal it.
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not event.is_action_pressed(&"ui_cancel"):
+		return
+	if game.cb == null or game.cb.over or (_overlay != null and _overlay.visible):
+		return
+	menu_requested.emit()
+	get_viewport().set_input_as_handled()
+
+
 ## `onEnemyClick` (combat.js:1289) and the stage `pointerdown` (combat.js:356-360), which are
 ## only ever heard while a card is armed — nothing else on this screen answers a
 ## bare press on the stage.

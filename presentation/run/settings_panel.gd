@@ -312,6 +312,13 @@ func _on_scrim_input(event: InputEvent) -> void:
 		closed.emit()
 
 
+## Scrim `gui_input` never receives keys; Escape closes via the unhandled path.
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"ui_cancel"):
+		closed.emit()
+		get_viewport().set_input_as_handled()
+
+
 static func _panel_style() -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 	style.bg_color = Color(0.055, 0.071, 0.133, 0.86)

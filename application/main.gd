@@ -401,6 +401,9 @@ func _show_overlay(screen: Control) -> void:
 		_modal.queue_free()
 	_modal = screen
 	add_child(screen)
+	# RunHud's Escape rung must not fire under an overlay — the modal owns cancel.
+	if _run_hud != null:
+		_run_hud.set_process_unhandled_key_input(false)
 
 
 func _close_overlay() -> void:
@@ -408,6 +411,8 @@ func _close_overlay() -> void:
 		return
 	_modal.queue_free()
 	_modal = null
+	if _run_hud != null:
+		_run_hud.set_process_unhandled_key_input(true)
 
 
 func _show_choice(title: String, body: String, choices: Array[Dictionary], handler: Callable,
@@ -495,7 +500,7 @@ func _on_embark_begin(aspect: int, vow: int) -> void:
 			"The current pilgrimage will be recorded as abandoned before a new one begins.",
 			[{"id": "begin", "label": "Begin Anew"},
 				{"id": "back", "label": "Keep Climbing", "quiet": true}],
-			_on_begin_anew)
+			_on_begin_anew, {"cancel": "back"})
 
 
 func _on_begin_anew(id: String) -> void:
@@ -548,7 +553,7 @@ func _confirm_reset() -> void:
 			{"id": "yes", "label": "Erase Everything"},
 			{"id": "no", "label": "Cancel", "quiet": true},
 		],
-		{"shape": String(_shape)})
+		{"shape": String(_shape), "cancel": "no"})
 	screen.connect("chosen", _on_reset_choice)
 	_show_overlay(screen)
 
@@ -686,7 +691,7 @@ func _confirm_abandon() -> void:
 			{"id": "yes", "label": "Abandon Run"},
 			{"id": "no", "label": "Keep Climbing", "quiet": true},
 		],
-		{"shape": String(_shape)})
+		{"shape": String(_shape), "cancel": "no"})
 	screen.connect("chosen", _on_abandon_choice)
 	_show_overlay(screen)
 
@@ -709,7 +714,7 @@ func _show_run_deck() -> void:
 	choices.append({"id": "close", "label": "Close", "quiet": true})
 	var deck: Control = ChoiceScreenType.new(
 		"DECK", "%d panes carried" % game.run.player.deck.size(),
-		choices, {"shape": String(_shape)})
+		choices, {"shape": String(_shape), "cancel": "close"})
 	deck.connect("chosen", func(_id: String) -> void: _close_overlay())
 	_show_overlay(deck)
 
@@ -742,7 +747,7 @@ func _show_potion_menu(slot: int) -> void:
 			{"id": "toss", "label": "Toss it", "quiet": true},
 			{"id": "close", "label": "Close", "quiet": true},
 		],
-		{"shape": String(_shape)})
+		{"shape": String(_shape), "cancel": "close"})
 	menu.connect("chosen", _on_potion_menu_choice.bind(slot))
 	_show_overlay(menu)
 
@@ -786,7 +791,7 @@ func _show_combat_potion_menu(slot: int) -> void:
 		str(definition.get("name", id)),
 		str(definition.get("text", "")),
 		choices,
-		{"shape": String(_shape)})
+		{"shape": String(_shape), "cancel": "close"})
 	menu.connect("chosen", _on_combat_potion_choice.bind(slot))
 	_show_overlay(menu)
 
