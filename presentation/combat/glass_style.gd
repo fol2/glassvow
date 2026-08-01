@@ -98,12 +98,15 @@ static func gem(fill: Color) -> StyleBoxFlat:
 ## shadows this ring entirely — an opaque focus box repainting the hover
 ## wash away is exactly the SettingsPanel focus≡hover defect. To adopt,
 ## DELETE "focus" from your state loop and let this overlay carry it.
-static func focus_ring(accent: Color = GOLD) -> StyleBoxFlat:
+static func focus_ring(accent: Color = GOLD, body_radius: int = 12) -> StyleBoxFlat:
 	var ring: StyleBoxFlat = StyleBoxFlat.new()
 	ring.draw_center = false
 	ring.set_border_width_all(2)
 	ring.border_color = Color(accent, 0.85)
-	ring.set_corner_radius_all(14)
+	# Concentric with the CONTROL it rings: the ring rides a rect expanded
+	# 2px, so its radius is the adopter's own body radius plus that — a
+	# fixed 14 sat ON the corner of every radius-6-8 adopter (DL, PR #43).
+	ring.set_corner_radius_all(body_radius + 2)
 	ring.set_expand_margin_all(2.0)
 	ring.shadow_color = Color(accent, 0.45)
 	ring.shadow_size = 8
