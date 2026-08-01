@@ -59,11 +59,11 @@ var _shape: StringName = StageShape.IDENTITY
 ## bare wide window silently resolves to `desktop-landscape` and reads a
 ## different layout table entirely (docs/battlefield-parity.md).
 var _forced_shape: StringName = &""
-## --act=N: which act's scenery the fight is dressed in. The domain does not model
-## acts yet, so a fight built from `--fight=` is act 0 and there was no way to see
-## the other two outside the layout bench — while the book authors all three for
-## every shape and `sky_field.gd` inlines act 1's theme. Clamped to the three the
-## benchmark authors (`src/dev/bf-editor.js:169`).
+## --act=N: which act's scenery the fight or map is dressed in. The domain does
+## not model acts yet, so a fight from `--fight=` / a `--map` run is act 0 and
+## there was no way to see the other two outside the layout bench — while the
+## book authors all three for every shape. Clamped to the three the benchmark
+## authors (`src/dev/bf-editor.js:169`). Map generation is never act-forced.
 var _forced_act: int = -1
 ## --settle=SECONDS: extra wait before a `--shot=` capture, so a composition is
 ## photographed at rest rather than mid-entrance.
@@ -106,7 +106,7 @@ func _ready() -> void:
 	# godot --path . -- --fight=id[,id] [--kind=normal|elite|boss]   (battlefield)
 	# godot --path . -- --vp=1280x720            (watch the shape re-pick live)
 	# godot --path . -- --shape=phone-portrait   (force one; ?shape= ported)
-	# godot --path . -- --act=2                  (dress the fight in act 2's scenery)
+	# godot --path . -- --act=2                  (dress fight/map in act 2's scenery)
 	# tools/shot.sh --resume --shot=...          (exercise the durable router)
 	# tools/shot.sh --fight=… --settle=3 --shot=…  (photograph it at rest)
 	var shot_path: String = ""
@@ -818,6 +818,9 @@ func _show_map() -> void:
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	add_child(_map_screen)
 	_map_screen.refresh(game.run)
+	# --map --act=N: dress scenery only (domain map stays the run's act).
+	if _forced_act >= 0:
+		_map_screen.set_act_scenery(_forced_act)
 	_transitions.set_grain(true)
 	_transitions.screen_in(_map_screen)
 	_attach_run_hud()

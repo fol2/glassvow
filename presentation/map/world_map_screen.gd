@@ -20,11 +20,6 @@ const HINT_BOTTOM: float = -18.0
 const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
 
 const REGION_NAME: String = "The Ashen Woods"
-const ACT_SKIES: Array[Color] = [Color("#0c1410"), Color("#081420"), Color("#120a1e")]
-const ACT_FOGS: Array[Color] = [Color("#13241a"), Color("#0d2233"), Color("#1e1230")]
-const ACT_PARTICLES: Array[Color] = [Color("#ffa04d"), Color("#53e8ff"), Color("#c27bff")]
-const ACT_GLOWS: Array[Color] = [Color("#66ff9e"), Color("#2fb8ff"), Color("#ff4fd8")]
-const ACT_ACCENTS: Array[Color] = [Color("#7ddb8f"), Color("#5fd6e8"), Color("#c99aff")]
 const REGION_GROUND: Color = Color("#05070d")
 
 var instant: bool = false        # headless: travel resolves without a tween
@@ -57,6 +52,12 @@ var _fog_colour: Color
 var _particle_colour: Color
 var _glow_colour: Color
 var _accent_colour: Color
+## Per-act region knobs (palette + weather + lightning). Bands read this;
+## built in `_set_act_theme` so a theme pick never leaves stale weather.
+var _region: MapRegions = null
+## Act-2 heat lightning — fixed mark table, no RNG (captures must repeat).
+var _lightning_t: float = 0.0
+var _flash: float = 0.0
 
 var _drift: PointerDrift = PointerDrift.new()
 var _sky_band: MapBand.SkyBand = null
@@ -73,13 +74,14 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_trail_layout = LayoutBook.resolve(&"map", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	_set_act_theme(0)
 	# Bands → waystones → veil → chrome: child order is paint order.
 	_build_bands()
 	_build_waystones()
 	_veil_band = MapBand.VeilBand.new()
 	_veil_band.host = self
 	add_child(_veil_band)
+	# Theme after bands exist so apply_region reaches region + veil.
+	_set_act_theme(0)
 	_build_chrome()
 	_seat_marker()
 	_push_bands(true)
@@ -261,16 +263,42 @@ func refresh(run: RunState) -> void:
 
 
 func _set_act_theme(stage_act: int) -> void:
-	_act = clampi(stage_act, 0, ACT_SKIES.size() - 1)
-	_sky_colour = ACT_SKIES[_act]
-	_fog_colour = ACT_FOGS[_act]
-	_particle_colour = ACT_PARTICLES[_act]
-	_glow_colour = ACT_GLOWS[_act]
-	_accent_colour = ACT_ACCENTS[_act]
+	_region = MapRegions.for_act(stage_act, content)
+	_act = _region.act
+	# Palette fields keep their names — bands already read them. Content
+	# theme is truth; MapRegions.FALLBACK_* only fills a missing key.
+	_sky_colour = _region.sky
+	_fog_colour = _region.fog
+	_particle_colour = _region.particles
+	_glow_colour = _region.glow
+	_accent_colour = _region.accent
 	_sky_tex = GlassStyle.grad_tex(
 		PackedColorArray([_sky_colour, _fog_colour, REGION_GROUND]),
 		PackedFloat32Array([0.0, 0.55, 1.0]), false,
 		Vector2(0.5, 0.0), Vector2(0.5, 1.0))
+	# Lightning clock resets with the region so --act=2 always starts cold.
+	_lightning_t = 0.0
+	_flash = 0.0
+	if _sky_band != null:
+		_sky_band.set_flash(0.0)
+	if _region_band != null:
+		_region_band.apply_region(_region)
+		_region_band.set_flash(0.0)
+	if _veil_band != null:
+		_veil_band.apply_region(_region)
+
+
+## Dress the bands in another act's region without mutating the run. Used by
+## `--map --act=N` so captures can see act 1/2 weather without climbing there —
+## domain map generation stays the run's act (scenery only).
+func set_act_scenery(stage_act: int) -> void:
+	_set_act_theme(stage_act)
+	if content != null and _act < content.acts.size() and _title_label != null:
+		var act: Dictionary = content.acts[_act]
+		_title_label.text = _act_line(
+			str(act.get("name", REGION_NAME)).to_upper(),
+			str(act.get("bossName", "THE SUMMIT")).to_upper())
+	_push_bands(true)
 
 
 func _seat_marker() -> void:
@@ -377,8 +405,47 @@ func _process(delta: float) -> void:
 	# Scroll and pointer chase are user-initiated — PointerDrift settles home
 	# off-stage; no second reduce-motion gate (P5.1 / P1).
 	_drift.step(self, delta)
+	_step_lightning(delta)
 	_layout_waystones()
 	_push_bands()
+
+
+## Deterministic heat lightning for act 2. Fixed marks in a 26s loop — irregular
+## enough to read as weather, fixed so two runs film the same sky. Under
+## reduce-motion no flash ever fires (same single gate as weather/sway).
+func _step_lightning(delta: float) -> void:
+	if _region == null or _region.weather != &"storm":
+		if _flash > 0.0:
+			_flash = 0.0
+			if _sky_band != null:
+				_sky_band.set_flash(0.0)
+			if _region_band != null:
+				_region_band.set_flash(0.0)
+		return
+	if Preferences.active.reduce_motion:
+		if _flash > 0.0:
+			_flash = 0.0
+			if _sky_band != null:
+				_sky_band.set_flash(0.0)
+			if _region_band != null:
+				_region_band.set_flash(0.0)
+		return
+	var prev_t: float = _lightning_t
+	_lightning_t += delta
+	for mark: float in MapRegions.LIGHTNING_MARKS:
+		if prev_t < mark and _lightning_t >= mark:
+			_flash = 1.0
+	if _lightning_t >= MapRegions.LIGHTNING_PERIOD:
+		_lightning_t = fmod(_lightning_t, MapRegions.LIGHTNING_PERIOD)
+	# Combat sky's own decay (presentation/combat/sky_field.gd LIGHTNING_DECAY).
+	if _flash > 0.0:
+		_flash *= pow(MapRegions.LIGHTNING_DECAY, delta)
+		if _flash < 0.001:
+			_flash = 0.0
+	if _sky_band != null:
+		_sky_band.set_flash(_flash)
+	if _region_band != null:
+		_region_band.set_flash(_flash)
 
 
 func _push_bands(force: bool = false) -> void:
