@@ -89,9 +89,12 @@ func set_state(is_reachable: bool, is_cleared: bool, is_current: bool = false) -
 func _process(delta: float) -> void:
 	if not reachable:
 		return
-	# `.mnode.avail` under prefers-reduced-motion (styles.css:2048): the
-	# kindled rim is information and stays lit — held at the pulse's peak —
-	# only the beckoning throb stops.
+	# Under prefers-reduced-motion the kindled rim is information and stays
+	# lit — held at the pulse's PEAK, only the beckoning throb stops. The
+	# precedent is styles.css:2049, where `.mnode .pale-lens` is forced to
+	# opacity 1 — peak, explicitly, for legibility — a deliberate step past
+	# :2048's base-state rendering, because a reduced-motion player has lost
+	# the throb that also said "you can go here".
 	if Preferences.active.reduce_motion:
 		if _pulse != PULSE_HELD:
 			_pulse = PULSE_HELD

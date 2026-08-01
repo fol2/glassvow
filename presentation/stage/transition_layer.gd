@@ -246,7 +246,11 @@ func _process(delta: float) -> void:
 ## swap and the band crosses whatever arrives underneath, exactly as the
 ## fixed-position `#wipe` does.
 func wipe() -> void:
-	if instant:
+	# `#wipe, #transit { display: none; }` (styles.css:2038): the band is the
+	# largest translating element in the build, and the first thing a
+	# vestibular-sensitive player needs gone. Same clean early-out as
+	# `instant` — the route swap simply happens.
+	if instant or Preferences.active.reduce_motion:
 		return
 	var stage: Vector2 = _stage_size()
 	if stage.x <= 0.0:
@@ -301,7 +305,10 @@ func screen_in(root: Control) -> void:
 ## collapses into `at` (stage px) while the fight builds underneath — the
 ## route swap's frame hitch happens under the cover, which is the point.
 func iris(at: Vector2) -> void:
-	if instant:
+	# `#transit` leaf (styles.css:2038). The early-out never touches
+	# `_iris.visible`, so no cover is stranded — the fight arrives the way a
+	# capture run's does.
+	if instant or Preferences.active.reduce_motion:
 		return
 	var stage: Vector2 = _stage_size()
 	if stage.x <= 0.0:
@@ -359,7 +366,9 @@ func act_plate(act_name: String, omen_name: String, omen_tone: Color,
 
 func _play_leaf(leaf: Control, at: Array[float], track: Array[float],
 		seconds: float) -> void:
-	if instant:
+	# Bloom, crack and the act plate are all `#transit` children over there,
+	# and :2038 hides the whole container under prefers-reduced-motion.
+	if instant or Preferences.active.reduce_motion:
 		return
 	_transit_seq += 1
 	_iris.visible = false

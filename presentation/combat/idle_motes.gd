@@ -61,12 +61,11 @@ func _init(hue: float) -> void:
 
 func _process(delta: float) -> void:
 	# `.idle-motes::before/::after { animation: none; }` (styles.css:2043):
-	# with the keyframes gone the 0% stop applies, and 0% is rest — so the
-	# stilled picture is the clock held at zero, not frozen mid-drift.
+	# both points hold at the keyframes' rest. The hold happens in _mote's
+	# input, not by zeroing the clock — `_phase` bakes ::after's -1.2s delay
+	# in, so a zeroed clock would still leave that mote frozen mid-drift.
 	if Preferences.active.reduce_motion:
-		if _t != 0.0:
-			_t = 0.0
-			queue_redraw()
+		queue_redraw()
 		return
 	_t += delta
 	queue_redraw()
@@ -74,6 +73,15 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
+		return
+	if Preferences.active.reduce_motion:
+		var half_rest: float = DOT_PX * 0.5
+		var top_rest: float = -size.y * OVERHANG_FRAC
+		var tall_rest: float = size.y * (1.0 + OVERHANG_FRAC)
+		_mote(Vector2(size.x * BEFORE_AT.x + half_rest,
+			top_rest + tall_rest * BEFORE_AT.y + half_rest), 0.0)
+		_mote(Vector2(size.x * (1.0 - AFTER_AT.x) - half_rest,
+			top_rest + tall_rest * AFTER_AT.y + half_rest), 0.0)
 		return
 	# The grown box, in this Control's coordinates. Nothing clips it: the overhang
 	# is the whole reason the container has negative inset.
