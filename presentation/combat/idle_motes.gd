@@ -69,6 +69,10 @@ func _process(delta: float) -> void:
 	if Preferences.active.reduce_motion:
 		if not _stilled:
 			_stilled = true
+			# CSS semantics: removing an animation and re-adding it restarts
+			# it from 0% — so the clock resets on entry, and a later toggle
+			# OFF resumes from rest rather than a stale mid-phase.
+			_t = 0.0
 			queue_redraw()
 		return
 	_stilled = false
