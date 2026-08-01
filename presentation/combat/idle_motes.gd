@@ -48,6 +48,8 @@ static var _disc: GradientTexture2D = null
 ## `--mote: hsla(hue, 85%, 62%, .6)`, the creature's own hue.
 var _tone: Color = Color(0.55, 1.0, 0.47, 0.6)
 var _t: float = 0.0
+## One redraw on entering the stilled state, not one per frame.
+var _stilled: bool = false
 
 
 func _init(hue: float) -> void:
@@ -65,8 +67,11 @@ func _process(delta: float) -> void:
 	# input, not by zeroing the clock — `_phase` bakes ::after's -1.2s delay
 	# in, so a zeroed clock would still leave that mote frozen mid-drift.
 	if Preferences.active.reduce_motion:
-		queue_redraw()
+		if not _stilled:
+			_stilled = true
+			queue_redraw()
 		return
+	_stilled = false
 	_t += delta
 	queue_redraw()
 
