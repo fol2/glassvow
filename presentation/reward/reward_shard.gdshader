@@ -9,11 +9,15 @@
 // when it broke (nothing has eaten its alpha), and the husk's variant cast
 // is a stage-4 concern once D1 carries the id. The cut POLISHES as it
 // cools — roughness falls toward glass and the schlick-ggx highlight
-// tightens, which is this room's route to the card lane's lesson that a
-// tight high-exponent highlight is what sells small glass. The plan's
-// "unshaded, own lighting maths" was written for a screen with no lights;
-// this room HAS the game's real lamp, rim and fire, so the material takes
-// them rather than faking its own. Deviation on the record.
+// tightens (α≈0.014 at 0.12, well inside the card lane's angular budget).
+//
+// On the plan's "unshaded, own lighting maths": the rule's REASON is cost —
+// real refraction is a screen-space pass this mobile renderer cannot afford
+// — not a ban on the built-in lit path, and the enemy lane's own
+// SHARD_SHADER ships the identical render_mode line. This material follows
+// that precedent: it takes the room's real lamp, rim and fire and buys no
+// refraction. What the lit path costs is the room itself, priced in
+// tools/bench_reward_stage.gd and recorded in the plan's cost section.
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley,
 	specular_schlick_ggx;
@@ -23,6 +27,10 @@ uniform sampler2D body_tex : source_color, filter_linear_mipmap;
 // item's colour resting in the fracture).
 uniform float cool = 0.0;
 uniform vec3 cool_tint : source_color = vec3(1.0, 0.6, 0.24);
+// How loudly the cooled cut speaks its colour. Debris holds the whisper
+// (1.0); a SPOIL carries the prize and gets ~2.4 — chroma, not brightness,
+// is what survives a cream specular landing on every piece alike.
+uniform float tint_gain = 1.0;
 
 const vec3 WHITE_HOT = vec3(1.0, 0.93, 0.82);
 
@@ -37,8 +45,10 @@ void fragment() {
 	float hot = 1.0 - cool;
 	vec3 molten = mix(WHITE_HOT, cool_tint, cool);
 	// A cap is THE PAINTING; the cut takes the molten face, dimming toward
-	// half the tint as it cools so the colour reads as inside the glass.
-	ALBEDO = mix(c.rgb, molten * 0.5, edge * (0.2 + 0.3 * hot));
+	// half the tint as it cools so the colour reads as inside the glass —
+	// and a spoil's cut leans harder into its item's colour as it settles.
+	ALBEDO = mix(c.rgb, molten * 0.5,
+		edge * (0.2 + 0.3 * hot + 0.18 * cool * (tint_gain - 1.0)));
 	float amask = smoothstep(0.05, 0.30, c.a);
 	ALPHA = mix(smoothstep(0.02, 0.18, c.a), amask, edge);
 	// The cut polishes as it cools: molten glass is matte, cold glass is the
@@ -51,6 +61,6 @@ void fragment() {
 	// whisper of the item's colour: past a whisper every piece is the same
 	// white-hot popcorn and the creature is gone again, just hotter.
 	float l = dot(c.rgb, vec3(0.299, 0.587, 0.114)) * c.a;
-	EMISSION = molten * (edge * (hot * 0.9 + 0.12) + f * hot * 0.3)
+	EMISSION = molten * (edge * (hot * 0.9 + 0.12 * tint_gain) + f * hot * 0.3)
 		+ c.rgb * (pow(l, 3.2) * 0.85 * (1.0 - edge) + hot * 0.25);
 }

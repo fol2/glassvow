@@ -208,3 +208,15 @@ creeps toward the full 689 MB rather than away from it.
   `own_world_3d` with its own `Sky` feeding ambient *and* reflections
   (`enemy_view.gd:438-467` (`_ward_from`)), so N actors bake N radiance maps. Collapsing them is
   a larger refactor than either knob above and was not attempted here.
+
+## The reward room (added 2026-08-01, stage 5 of the embers plan)
+
+One stage for the whole reward screen — `tools/bench_reward_stage.gd`, the same
+instruments as above: **127.4 MB** of video memory at the hold (16-odd prisms,
+three lights, sky radiance, full-window viewport × OVERSAMPLE 1.5). Beside one
+actor's 113 MB, not under it: an actor's viewport is a fixed art box, the reward's
+is the logical canvas (1770×1230 after oversample — pinned by
+`stretch/mode="canvas_items"`, so the figure does not grow with the display and
+`VP_MAX` never engages). If the reward screen ever stands over a live combat, the
+combat's four actor stages must be freed or dropped to `UPDATE_DISABLED` first —
+the plan's own cross-lane item 3.
