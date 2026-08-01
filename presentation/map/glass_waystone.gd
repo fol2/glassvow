@@ -28,6 +28,8 @@ var _frame_art: TextureRect
 var _glyph_art: TextureRect
 var _caption: Label
 var _pulse: float = 0.0
+## The phase where `0.5 + 0.5·sin(_pulse·2.2)` reads 1.0 — the rim fully lit.
+const PULSE_HELD: float = PI / 4.4
 var _pressed: bool = false
 var _press_at: Vector2 = Vector2.ZERO
 
@@ -86,6 +88,14 @@ func set_state(is_reachable: bool, is_cleared: bool, is_current: bool = false) -
 
 func _process(delta: float) -> void:
 	if not reachable:
+		return
+	# `.mnode.avail` under prefers-reduced-motion (styles.css:2048): the
+	# kindled rim is information and stays lit — held at the pulse's peak —
+	# only the beckoning throb stops.
+	if Preferences.active.reduce_motion:
+		if _pulse != PULSE_HELD:
+			_pulse = PULSE_HELD
+			queue_redraw()
 		return
 	_pulse = fmod(_pulse + delta, TAU)
 	queue_redraw()

@@ -223,12 +223,19 @@ func _field_mote() -> Vector4:
 
 func _process(delta: float) -> void:
 	var dt: float = minf(0.05, delta)
-	_time += dt
+	# REDUCE MOTION stills the ambience — rising motes, falling weather, the
+	# breathing folded into `_time` — while the pointer-chased eye keeps
+	# answering the hand: the benchmark's five blocks kill keyframes, never
+	# cursor response (styles.css:2036-2053).
+	var still: bool = Preferences.active.reduce_motion
+	if not still:
+		_time += dt
 	_drift.step(self, dt)
 	_step_camera(dt)
-	_rise_field(_main, dt, 1.0)
-	_rise_field(_accent, dt, 0.55)
-	_fall_weather(dt)
+	if not still:
+		_rise_field(_main, dt, 1.0)
+		_rise_field(_accent, dt, 0.55)
+		_fall_weather(dt)
 	queue_redraw()
 	_field.queue_redraw()
 

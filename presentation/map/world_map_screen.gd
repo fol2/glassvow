@@ -310,14 +310,18 @@ func _process(delta: float) -> void:
 		else:
 			_cam_velocity = 0.0
 			_cam_row = lerpf(_cam_row, _cam_target, minf(1.0, delta * 9.0))
-	var span: float = maxf(size.x, 1.0) * 2.0
-	for i: int in range(_ash.size()):
-		var m: Vector3 = _ash[i]
-		m.y += m.z * delta
-		m.x -= m.z * delta * 0.35  # ash drifts against the walk
-		if m.y > size.y:
-			m.y -= size.y + 40.0
-		_ash[i] = Vector3(fposmod(m.x, span), m.y, m.z)
+	# REDUCE MOTION: the ash hangs where it is — the region keeps its weather
+	# as dressing, it just stops falling (the benchmark stills `.ember` and
+	# every map keyframe the same way, styles.css:2042-2049).
+	if not Preferences.active.reduce_motion:
+		var span: float = maxf(size.x, 1.0) * 2.0
+		for i: int in range(_ash.size()):
+			var m: Vector3 = _ash[i]
+			m.y += m.z * delta
+			m.x -= m.z * delta * 0.35  # ash drifts against the walk
+			if m.y > size.y:
+				m.y -= size.y + 40.0
+			_ash[i] = Vector3(fposmod(m.x, span), m.y, m.z)
 	_layout_waystones()
 	queue_redraw()
 

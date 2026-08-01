@@ -60,6 +60,14 @@ func _init(hue: float) -> void:
 
 
 func _process(delta: float) -> void:
+	# `.idle-motes::before/::after { animation: none; }` (styles.css:2043):
+	# with the keyframes gone the 0% stop applies, and 0% is rest — so the
+	# stilled picture is the clock held at zero, not frozen mid-drift.
+	if Preferences.active.reduce_motion:
+		if _t != 0.0:
+			_t = 0.0
+			queue_redraw()
+		return
 	_t += delta
 	queue_redraw()
 

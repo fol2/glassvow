@@ -111,10 +111,15 @@ func _ready() -> void:
 	# not one of them: sunrise is a state the scene holds, so a resumed dawn
 	# arrives with it already settled rather than stranded in night.
 	if _cursor == 0 and not _events.is_empty():
-		_flash_in()
 		_sun_t = 0.0
-		_confetti = Confetti.new()
-		add_child(_confetti)
+		# REDUCE MOTION: flash and confetti are celebration MOTION and stay
+		# out (`.dawn-event { animation: none; transition: none; }`,
+		# styles.css:2052); the sunrise is a state the scene holds and keeps
+		# arriving either way.
+		if not Preferences.active.reduce_motion:
+			_flash_in()
+			_confetti = Confetti.new()
+			add_child(_confetti)
 	else:
 		_sun.modulate.a = 1.0
 		_wash.color.a = WASH_DAWN
@@ -325,6 +330,11 @@ func _process(delta: float) -> void:
 		BEAT_REVEAL:
 			_beat_t += delta
 			var u: float = clampf(_beat_t / REVEAL_TIME, 0.0, 1.0)
+			# `.dawn-event { animation: none }`: each event stands at once;
+			# the feed's cadence — advance, hold-to-skip — is pacing, not
+			# motion, and is untouched.
+			if Preferences.active.reduce_motion:
+				u = 1.0
 			var e: float = Motion.ease(Motion.CSS_EASE, u)
 			if is_instance_valid(_reveal_card) and is_instance_valid(_reveal_seat):
 				# The whole panel slides — `.dawn-event` animates transform,
