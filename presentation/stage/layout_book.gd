@@ -174,6 +174,11 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## Where in the frame the camera seats the current node. A third from the
 	## left leaves the road ahead readable without parking the lantern mid-stage.
 	&"trail/lead": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 0.6, "default": 0.333},
+	## Where the LAST node seats once the camera has run out of map. `lead` would
+	## give the terminus the same spot node 0 gets on the opening frame, leaving
+	## two thirds of the stage as empty road ahead of the boss. Further right than
+	## `lead`, but short of the edge so the act sky beyond it survives.
+	&"trail/terminusSeat": {"bind": BIND_NONE, "unit": "ratio", "min": 0.3, "max": 0.95, "default": 0.72},
 	## The smallest a waystone may be to the finger, in stage px. Zero on the
 	## shapes a mouse points at, 44 on a phone — the floor Apple's HIG and
 	## Material both set. It grows the HIT rect only; see `GlassWaystone.
@@ -277,7 +282,7 @@ const FORMS: Dictionary[StringName, PackedStringArray] = {
 	&"card": ["w", "inset"],
 	&"actor": ["scale"],
 	&"trail": ["scale", "stepRate", "stepMin", "stepMax", "laneRate", "laneMin", "laneMax",
-		"pathY", "horizonY", "lead", "touch"],
+		"pathY", "horizonY", "lead", "terminusSeat", "touch"],
 	&"mapbar": ["scale", "title", "titleTop", "titleH", "titleInset"],
 	&"panel": ["w", "inset", "scroll", "scale"],
 	&"titlescreen": ["wordmarkMax", "wordmarkRate", "columnW", "gap",

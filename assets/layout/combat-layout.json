@@ -918,7 +918,8 @@
         "scale": 0.6,
         "stepMax": 290.0,
         "stepMin": 150.0,
-        "stepRate": 0.22,
+        "stepRate": 0.205,
+        "terminusSeat": 0.72,
         "touch": 0.0
       },
       "shapes": {
@@ -941,6 +942,7 @@
           },
           "lead": 0.22,
           "scale": 0.68,
+          "stepMin": 128.0,
           "touch": 44.0
         }
       }
