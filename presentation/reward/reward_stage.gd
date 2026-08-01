@@ -335,6 +335,14 @@ func at(px: Vector2, depth: float = 0.0) -> Vector3:
 	return Vector3(px.x * UNIT, -px.y * UNIT, depth)
 
 
+## Stage 5's instrument seam: the bench reads the engine's own render clocks
+## off this viewport, the same way the actor probe reads an actor's.
+func get_viewport_rid_for_bench() -> RID:
+	var rid: RID = _vp.get_viewport_rid()
+	RenderingServer.viewport_set_measure_render_time(rid, true)
+	return rid
+
+
 func tone(sat: float, val: float) -> Color:
 	return Color.from_hsv(fmod(hue, 360.0) / 360.0, sat, val)
 
