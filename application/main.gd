@@ -1669,8 +1669,12 @@ func _show_run_end() -> void:
 		return
 	var stats: Dictionary = _run_end_stats()
 	var bequest_answered: bool = pending.get("bequestAnswered", false)
-	var choices: Array[Dictionary] = _bequest_choices() \
-		if outcome == "death" and not bequest_answered else []
+	# No ternary: an untyped `[]` does not convert to Array[Dictionary]
+	# through one — it throws at runtime and --check-only cannot see it
+	# (issue #58; the ternary variant of the typed-array .new() trap).
+	var choices: Array[Dictionary] = []
+	if outcome == "death" and not bequest_answered:
+		choices = _bequest_choices()
 	var screen: RunEndScreen = RunEndScreen.new(
 		outcome,
 		stats,
