@@ -27,7 +27,7 @@ var _begin: Button
 
 func _init(aspect: Dictionary, boons: Dictionary, arts: Dictionary,
 		boon_ids: Array, selected_art: StringName,
-		stage_shape: StringName = StageShape.IDENTITY) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
 	_aspect = aspect
 	_boons = boons
 	_arts = arts
@@ -41,8 +41,9 @@ func _init(aspect: Dictionary, boons: Dictionary, arts: Dictionary,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	_add_scene()
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

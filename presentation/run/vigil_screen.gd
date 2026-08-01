@@ -56,7 +56,7 @@ var _done: Array[bool] = []
 
 func _init(vigil: VigilState, content: ContentDB,
 		stage_shape: StringName = StageShape.IDENTITY,
-		open_rose: bool = false) -> void:
+		open_rose: bool = false, sfx: SfxBus = null) -> void:
 	_vigil = vigil
 	_content = content
 	_has_rose = vigil.unlocks.has("emberglass")
@@ -65,8 +65,9 @@ func _init(vigil: VigilState, content: ContentDB,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	RunStyle.add_backdrop(self)
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

@@ -24,15 +24,16 @@ var _sfx: SfxBus
 
 
 func _init(claim: Dictionary, content: ContentDB,
-		stage_shape: StringName = StageShape.IDENTITY) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
 	_claim = claim
 	_content = content
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	RunStyle.add_backdrop(self)
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

@@ -47,14 +47,16 @@ var _column: VBoxContainer
 var _sfx: SfxBus
 
 
-func _init(stage_shape: StringName = StageShape.IDENTITY) -> void:
+func _init(stage_shape: StringName = StageShape.IDENTITY,
+		sfx: SfxBus = null) -> void:
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	theme = GlassStyle.theme()
 
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 
 	var scrim: ColorRect = ColorRect.new()
 	scrim.color = Color(5.0 / 255.0, 7.0 / 255.0, 16.0 / 255.0, 0.72)

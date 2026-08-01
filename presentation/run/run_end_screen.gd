@@ -26,7 +26,7 @@ var _bequest_grid: GridContainer
 
 func _init(outcome: String, stats: Dictionary, bequest_choices: Array,
 		bequest_answered: bool, fall_floor: int,
-		stage_shape: StringName = StageShape.IDENTITY) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
 	_outcome = outcome
 	_stats = stats.duplicate(true)
 	_bequest_choices = bequest_choices.duplicate(true)
@@ -35,8 +35,9 @@ func _init(outcome: String, stats: Dictionary, bequest_choices: Array,
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

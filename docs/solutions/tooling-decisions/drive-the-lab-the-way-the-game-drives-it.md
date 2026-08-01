@@ -445,7 +445,7 @@ body inside its 3D sub-viewport with the correct stagger, one moving the whole
 Control with the correct curve and the chrome — and neither looked broken in a
 still. That is now one function:
 `presentation/combat/enemy_view.gd:3035` (`enter`) owns the motion and the fill,
-`presentation/combat/combat_screen.gd:1515` (`_play_entrance`) owns the seat
+`presentation/combat/combat_screen.gd:1518` (`_play_entrance`) owns the seat
 delay and the re-anchor. It was found the same way, by giving a category of
 behaviour an instrument and then reading a number off it.
 

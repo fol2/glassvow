@@ -30,7 +30,7 @@ var _buttons: Array[Button] = []
 func _init(event_id: String, event_definition: Dictionary,
 		result_log: String = "", choices_enabled: bool = true,
 		completed: bool = false,
-		stage_shape: StringName = StageShape.IDENTITY) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
 	_event_id = event_id
 	_event = event_definition
 	_result_log = result_log
@@ -40,8 +40,9 @@ func _init(event_id: String, event_definition: Dictionary,
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	RunStyle.add_backdrop(self)
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

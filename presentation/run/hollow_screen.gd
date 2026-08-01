@@ -29,7 +29,8 @@ var _leave: Button
 
 
 func _init(pending: Dictionary, meeting: Dictionary, meeting_number: int,
-		target: int, stage_shape: StringName = StageShape.IDENTITY) -> void:
+		target: int, stage_shape: StringName = StageShape.IDENTITY,
+		sfx: SfxBus = null) -> void:
 	_pending = pending
 	_meeting = meeting
 	_meeting_number = clampi(meeting_number, 1, maxi(1, target))
@@ -37,8 +38,9 @@ func _init(pending: Dictionary, meeting: Dictionary, meeting_number: int,
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	_build()
 
 

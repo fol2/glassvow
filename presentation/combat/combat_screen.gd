@@ -501,7 +501,7 @@ var _targeting: bool = false
 ## default to the identity composition so every existing caller, and every
 ## headless test, gets exactly the screen it got before.
 func _init(game_ref: GlassvowGame, stage_shape: StringName = StageShape.IDENTITY,
-		stage_act: int = 0) -> void:
+		stage_act: int = 0, sfx: SfxBus = null) -> void:
 	game = game_ref
 	_rules = game.rules
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
@@ -510,6 +510,7 @@ func _init(game_ref: GlassvowGame, stage_shape: StringName = StageShape.IDENTITY
 	seq.handler = _handle_event
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
+	_sfx = sfx
 	_build_ui()
 	seq.busy_changed.connect(_on_busy_changed)
 
@@ -759,8 +760,10 @@ func _build_ui() -> void:
 	_cast.visible = false
 	add_child(_cast)
 
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	# Injected bus already lives under main; only own a fallback.
+	if _sfx == null:
+		_sfx = SfxBus.new()
+		add_child(_sfx)
 
 	_tips = TooltipLayer.new()
 	_tips.source = _tip_at

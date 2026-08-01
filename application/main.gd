@@ -25,6 +25,7 @@ var _route_screen: Control = null
 var _run_hud: RunHud = null
 var _modal: Control = null
 var _music: MusicBus
+var _sfx_bus: SfxBus
 var _vigil: VigilState
 var _embark_aspect: int = 0
 var _embark_vow: int = 0
@@ -66,6 +67,8 @@ func _ready() -> void:
 	Preferences.active = Preferences.read_from_disk()
 	_music = MusicBus.new()
 	add_child(_music)
+	_sfx_bus = SfxBus.new()
+	add_child(_sfx_bus)
 	var fails: Array[String] = []
 	content.validate(fails)
 	for msg: String in fails:
@@ -389,7 +392,7 @@ func _show_route(screen: Control, with_hud: bool = false,
 
 
 func _attach_run_hud() -> void:
-	_run_hud = RunHud.new(game.run, content, _shape)
+	_run_hud = RunHud.new(game.run, content, _shape, _sfx_bus)
 	_run_hud.deck_requested.connect(_show_run_deck)
 	_run_hud.menu_requested.connect(_show_run_menu)
 	_run_hud.potion_requested.connect(_show_potion_menu)
@@ -425,7 +428,7 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 	# other caller of it stays untouched.
 	var ctx: Dictionary = context.duplicate()
 	ctx["shape"] = String(_shape)
-	_choice_screen = ChoiceScreenType.new(title, body, choices, ctx)
+	_choice_screen = ChoiceScreenType.new(title, body, choices, ctx, _sfx_bus)
 	_choice_screen.connect("chosen", handler)
 	add_child(_choice_screen)
 	_transitions.set_grain(true)
@@ -484,7 +487,8 @@ func _show_embark() -> void:
 		saved,
 		_embark_aspect,
 		_embark_vow,
-		_shape)
+		_shape,
+		_sfx_bus)
 	screen.begin_requested.connect(_on_embark_begin)
 	screen.back_requested.connect(_show_title)
 	_show_route(screen, false, &"embark")
@@ -523,20 +527,20 @@ func _on_begin_anew(id: String) -> void:
 
 
 func _show_vigil(open_rose: bool = false) -> void:
-	var screen: VigilScreen = VigilScreen.new(_vigil, content, _shape, open_rose)
+	var screen: VigilScreen = VigilScreen.new(_vigil, content, _shape, open_rose, _sfx_bus)
 	screen.back_requested.connect(_show_title)
 	screen.cue_requested.connect(func(cue: StringName) -> void: _music.play(cue))
 	_show_route(screen, false, &"vigil")
 
 
 func _show_help() -> void:
-	var screen: HelpScreen = HelpScreen.new(_shape)
+	var screen: HelpScreen = HelpScreen.new(_shape, _sfx_bus)
 	screen.closed.connect(_close_overlay)
 	_show_overlay(screen)
 
 
 func _show_settings() -> void:
-	var screen: SettingsPanel = SettingsPanel.new(Preferences.active, _run_over)
+	var screen: SettingsPanel = SettingsPanel.new(Preferences.active, _run_over, _sfx_bus)
 	screen.set_shape(_shape)
 	screen.closed.connect(_close_overlay)
 	screen.reset_requested.connect(_confirm_reset)
@@ -553,7 +557,8 @@ func _confirm_reset() -> void:
 			{"id": "yes", "label": "Erase Everything"},
 			{"id": "no", "label": "Cancel", "quiet": true},
 		],
-		{"shape": String(_shape), "cancel": "no"})
+		{"shape": String(_shape), "cancel": "no"},
+		_sfx_bus)
 	screen.connect("chosen", _on_reset_choice)
 	_show_overlay(screen)
 
@@ -668,7 +673,7 @@ func _show_map() -> void:
 
 
 func _show_run_menu() -> void:
-	var menu: RunMenuPanel = RunMenuPanel.new(_shape, _run_over)
+	var menu: RunMenuPanel = RunMenuPanel.new(_shape, _run_over, _sfx_bus)
 	menu.closed.connect(_close_overlay)
 	menu.help_requested.connect(func() -> void:
 		_close_overlay()
@@ -691,7 +696,8 @@ func _confirm_abandon() -> void:
 			{"id": "yes", "label": "Abandon Run"},
 			{"id": "no", "label": "Keep Climbing", "quiet": true},
 		],
-		{"shape": String(_shape), "cancel": "no"})
+		{"shape": String(_shape), "cancel": "no"},
+		_sfx_bus)
 	screen.connect("chosen", _on_abandon_choice)
 	_show_overlay(screen)
 
@@ -714,7 +720,7 @@ func _show_run_deck() -> void:
 	choices.append({"id": "close", "label": "Close", "quiet": true})
 	var deck: Control = ChoiceScreenType.new(
 		"DECK", "%d panes carried" % game.run.player.deck.size(),
-		choices, {"shape": String(_shape), "cancel": "close"})
+		choices, {"shape": String(_shape), "cancel": "close"}, _sfx_bus)
 	deck.connect("chosen", func(_id: String) -> void: _close_overlay())
 	_show_overlay(deck)
 
@@ -747,7 +753,8 @@ func _show_potion_menu(slot: int) -> void:
 			{"id": "toss", "label": "Toss it", "quiet": true},
 			{"id": "close", "label": "Close", "quiet": true},
 		],
-		{"shape": String(_shape), "cancel": "close"})
+		{"shape": String(_shape), "cancel": "close"},
+		_sfx_bus)
 	menu.connect("chosen", _on_potion_menu_choice.bind(slot))
 	_show_overlay(menu)
 
@@ -791,7 +798,8 @@ func _show_combat_potion_menu(slot: int) -> void:
 		str(definition.get("name", id)),
 		str(definition.get("text", "")),
 		choices,
-		{"shape": String(_shape), "cancel": "close"})
+		{"shape": String(_shape), "cancel": "close"},
+		_sfx_bus)
 	menu.connect("chosen", _on_combat_potion_choice.bind(slot))
 	_show_overlay(menu)
 
@@ -871,7 +879,8 @@ func _show_rest() -> void:
 		game.run.player.max_hp,
 		heal_amount,
 		can_upgrade,
-		_shape)
+		_shape,
+		_sfx_bus)
 	screen.action_requested.connect(
 		func(action: StringName) -> void: _on_rest_choice(String(action)))
 	_show_route(screen, true, &"safeNodes")
@@ -920,7 +929,7 @@ func _show_event() -> void:
 			row["disabled"] = game.run.player.gold < int(float(str(
 				row.get("needGold", 0))))
 	var screen: EventScreen = EventScreen.new(
-		event_id, event, "", true, false, _shape)
+		event_id, event, "", true, false, _shape, _sfx_bus)
 	screen.choice_selected.connect(func(ordinal: int) -> void:
 		_on_event_choice(str(ordinal), event_id)
 	)
@@ -993,7 +1002,7 @@ func _show_treasure() -> void:
 		if not SaveService.store(game.run):
 			_show_save_error("The treasure could not be held.")
 			return
-	var screen: TreasureScreen = TreasureScreen.new(claim, content, _shape)
+	var screen: TreasureScreen = TreasureScreen.new(claim, content, _shape, _sfx_bus)
 	screen.continue_requested.connect(_finish_node)
 	_show_route(screen, true, &"safeNodes")
 
@@ -1030,7 +1039,8 @@ func _show_shop() -> void:
 		content,
 		quest_item,
 		game.run.player.potions.has(""),
-		_shape)
+		_shape,
+		_sfx_bus)
 	screen.action_selected.connect(_on_shop_choice)
 	_show_route(screen, true, &"safeNodes")
 
@@ -1124,7 +1134,7 @@ func _resume_pending_combat() -> void:
 	_transitions.set_grain(false)
 	_clear_route()
 	_screen = CombatScreen.new(game, _shape,
-		_forced_act if _forced_act >= 0 else game.run.act)
+		_forced_act if _forced_act >= 0 else game.run.act, _sfx_bus)
 	_screen.combat_over.connect(_on_combat_over)
 	_screen.result_continue.connect(_on_result_continue)
 	_screen.menu_requested.connect(_show_run_menu)
@@ -1165,7 +1175,7 @@ func _start_fight(ids: PackedStringArray, kind: String) -> void:
 	_bench_fight = true
 	_transitions.set_grain(false)
 	_clear_route()
-	_screen = CombatScreen.new(game, _shape, maxi(0, _forced_act))
+	_screen = CombatScreen.new(game, _shape, maxi(0, _forced_act), _sfx_bus)
 	_screen.combat_over.connect(_on_combat_over)
 	_screen.result_continue.connect(_on_result_continue)
 	_screen.menu_requested.connect(_show_run_menu)
@@ -1483,7 +1493,8 @@ func _show_run_end() -> void:
 		choices,
 		bequest_answered,
 		game.run.floors_climbed,
-		_shape)
+		_shape,
+		_sfx_bus)
 	screen.bequest_requested.connect(_on_bequest_chosen)
 	screen.commit_requested.connect(
 		func() -> void: _on_terminal_commit("commit"))
@@ -1718,7 +1729,7 @@ func _show_dawn() -> void:
 	var dawn: Dictionary = game.run.pending_dawn
 	var events: Array = dawn["events"]
 	var cursor: int = int(float(str(dawn.get("cursor", 0))))
-	var screen: DawnScreen = DawnScreen.new(events, cursor, _shape, _run_end_stats())
+	var screen: DawnScreen = DawnScreen.new(events, cursor, _shape, _run_end_stats(), _sfx_bus)
 	screen.deck_requested.connect(_show_run_deck)
 	screen.commit_requested.connect(_finish_dawn)
 	screen.advance_requested.connect(_on_dawn_advance.bind(screen))
@@ -1821,7 +1832,7 @@ func _show_hollow() -> void:
 	var step: int = clampi(int(float(str(pending.get("meeting", 0)))), 0, meetings.size() - 1)
 	var meeting: Dictionary = meetings[step]
 	var screen: HollowScreen = HollowScreen.new(
-		pending, meeting, step + 1, meetings.size(), _shape)
+		pending, meeting, step + 1, meetings.size(), _shape, _sfx_bus)
 	screen.action_requested.connect(
 		func(action: StringName) -> void: _on_hollow_choice(String(action)))
 	_show_route(screen, true, &"hollowLamplighter")
@@ -1906,7 +1917,8 @@ func _show_lamplighter() -> void:
 		content.arts,
 		boons,
 		game.run.art,
-		_shape)
+		_shape,
+		_sfx_bus)
 	screen.confirmed.connect(_on_lamplighter_confirmed)
 	_show_route(screen, false, &"map")
 

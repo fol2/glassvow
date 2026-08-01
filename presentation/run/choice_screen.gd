@@ -74,11 +74,12 @@ var _has_cancel: bool = false
 
 
 func _init(title_text: String, body_text: String, choices: Array[Dictionary],
-		context: Dictionary = {}) -> void:
+		context: Dictionary = {}, sfx: SfxBus = null) -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	_sfx = SfxBus.new()
-	add_child(_sfx)
+	_sfx = sfx if sfx != null else SfxBus.new()
+	if sfx == null:
+		add_child(_sfx)
 	var asked: StringName = StringName(str(context.get("shape", StageShape.IDENTITY)))
 	shape = asked if StageShape.REFERENCES.has(asked) else StageShape.IDENTITY
 	_panel_layout = LayoutBook.resolve(&"run", shape)
