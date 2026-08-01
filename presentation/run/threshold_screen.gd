@@ -48,6 +48,7 @@ func _build() -> void:
 	_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_margin.add_theme_constant_override("margin_left", 12)
 	_margin.add_theme_constant_override("margin_right", 12)
+	_margin.add_theme_constant_override("margin_top", 20)
 	_margin.add_theme_constant_override("margin_bottom", 20)
 	add_child(_margin)
 
@@ -76,30 +77,39 @@ func _build() -> void:
 	title.add_theme_color_override("font_color", RunStyle.PARCHMENT)
 	column.add_child(title)
 
+	# The reference flourish is a 2px tapered gradient, not a flat hairline
+	# (.ov-title::after, styles.css:1649).
 	var rule_centre: CenterContainer = CenterContainer.new()
 	rule_centre.custom_minimum_size.y = 10
 	column.add_child(rule_centre)
-	var rule: HSeparator = HSeparator.new()
-	rule.custom_minimum_size.x = 84
-	var rule_line: StyleBoxLine = StyleBoxLine.new()
-	rule_line.color = Color(GlassStyle.GOLD, 0.55)
-	rule_line.thickness = 1
-	rule.add_theme_stylebox_override("separator", rule_line)
+	var rule: TextureRect = TextureRect.new()
+	rule.texture = GlassStyle.grad_tex(
+		PackedColorArray([
+			Color(GlassStyle.GOLD, 0.0), GlassStyle.GOLD, Color(GlassStyle.GOLD, 0.0)]),
+		PackedFloat32Array([0.0, 0.5, 1.0]), false,
+		Vector2(0.0, 0.5), Vector2(1.0, 0.5))
+	rule.custom_minimum_size = Vector2(84, 2)
+	rule.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rule.stretch_mode = TextureRect.STRETCH_SCALE
 	rule_centre.add_child(rule)
 
 	column.add_child(_build_rose())
 
+	# `.ov-sub` is dim in the reference (var(--text-dim), styles.css) — the
+	# payoff lives in the inscription, not here.
 	_sub = Label.new()
 	_sub.text = "Six panes burn behind you. The lock answers, but does not open."
 	_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_sub.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
-	_sub.add_theme_font_size_override("font_size", 16)
-	_sub.add_theme_color_override("font_color", GlassStyle.TEXT)
+	_sub.add_theme_font_size_override("font_size", 15)
+	_sub.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	column.add_child(_sub)
 
+	# Laid out from the first frame at zero alpha, so the reveal costs no
+	# relayout — the CTA must never move out from under the pointer.
 	_answer = VBoxContainer.new()
-	_answer.visible = false
+	_answer.modulate.a = 0.0
 	_answer.alignment = BoxContainer.ALIGNMENT_CENTER
 	_answer.add_theme_constant_override("separation", 6)
 	column.add_child(_answer)
@@ -110,19 +120,25 @@ func _build() -> void:
 	hold.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hold.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
 	hold.add_theme_font_size_override("font_size", 16)
-	hold.add_theme_color_override("font_color", RunStyle.GOLD)
+	hold.add_theme_color_override("font_color", GlassStyle.TEXT)
 	_answer.add_child(hold)
 
+	# The benchmark's emotional close: italic Cinzel, tracked, brighter than
+	# parchment (.door-inscription, styles.css:2554).
 	var climb: Label = Label.new()
 	climb.text = "the climb continues"
 	climb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	climb.add_theme_font_override("font", _italic_font())
-	climb.add_theme_font_size_override("font_size", 13)
-	climb.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+	climb.add_theme_font_override("font", RunStyle.slanted(GlassStyle.CINZEL_500, 1))
+	climb.add_theme_font_size_override("font_size", 18)
+	climb.add_theme_color_override("font_color", Color("#fff3d6"))
 	_answer.add_child(climb)
 
+	# The primary action breathes apart from the copy above it.
+	var cta_seat: MarginContainer = MarginContainer.new()
+	cta_seat.add_theme_constant_override("margin_top", 20)
+	column.add_child(cta_seat)
 	var cta_row: CenterContainer = CenterContainer.new()
-	column.add_child(cta_row)
+	cta_seat.add_child(cta_row)
 	_cta = Button.new()
 	_cta.text = "Stand at the Threshold"
 	_cta.custom_minimum_size = Vector2(280, 44)
@@ -143,7 +159,10 @@ func _build_rose() -> Control:
 
 	_window_slot = Control.new()
 	_window_slot.custom_minimum_size = Vector2.ONE * DESIGN
-	_window_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# PASS, not IGNORE: the tooltip is the rose's accessible name
+	# (sealedDoor.aria in the reference).
+	_window_slot.mouse_filter = Control.MOUSE_FILTER_PASS
+	_window_slot.tooltip_text = "The sealed door"
 	window_centre.add_child(_window_slot)
 
 	_window = Control.new()
@@ -193,25 +212,32 @@ func _on_cta() -> void:
 	if not _touched:
 		_touched = true
 		threshold_touched.emit()
-		_answer.visible = true
+		if Preferences.active.reduce_motion:
+			_answer.modulate.a = 1.0
+		else:
+			create_tween().tween_property(_answer, "modulate:a", 1.0, 0.45)
 		_cta.text = "Return to the Vigil"
 		_cta.grab_focus.call_deferred()
 		return
 	vigil_requested.emit()
 
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"ui_cancel"):
+		vigil_requested.emit()
+		get_viewport().set_input_as_handled()
+
+
 func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
-	var top: int = 48 if shape == &"phone-landscape" else (
-		70 if shape == &"phone-portrait" else 96)
-	_margin.add_theme_constant_override("margin_top", top)
 	var diameter: float = 300.0 if shape == &"phone-portrait" \
 		else (250.0 if shape == &"phone-landscape" else DESIGN)
-	# Wider than the window column, or the sub line strands "open." alone;
-	# phone-portrait cannot afford the width and takes a balanced two-line wrap.
-	_sub.custom_minimum_size.x = 340.0 if shape == &"phone-portrait" else 520.0
+	# This strut sets the whole column's width: wide enough that the sub line
+	# does not strand "open." alone (needs ~415px at 15pt), narrow enough for
+	# phone-portrait to take a balanced two-line wrap instead.
+	_sub.custom_minimum_size.x = 340.0 if shape == &"phone-portrait" else 440.0
 	var scale_factor: float = diameter / DESIGN
 	_window_slot.custom_minimum_size = Vector2.ONE * diameter
 	_window.size = Vector2.ONE * DESIGN
@@ -219,10 +245,3 @@ func set_shape(stage_shape: StringName) -> void:
 	_window.pivot_offset = Vector2.ZERO
 
 
-static func _italic_font() -> FontVariation:
-	# No Alegreya italic asset ships; slant the roman face (event_screen.gd:214).
-	var font: FontVariation = FontVariation.new()
-	font.base_font = load(GlassStyle.ALEGREYA_400) as Font
-	font.variation_transform = Transform2D(Vector2(1.0, 0.0), Vector2(-0.16, 1.0),
-		Vector2.ZERO)
-	return font

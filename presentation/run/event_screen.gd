@@ -212,8 +212,4 @@ static func _label(text: String, font_size: int, colour: Color,
 
 
 static func _italic_font() -> FontVariation:
-	var font: FontVariation = FontVariation.new()
-	font.base_font = load(GlassStyle.ALEGREYA_400) as Font
-	font.variation_transform = Transform2D(Vector2(1.0, 0.0), Vector2(-0.16, 1.0),
-		Vector2.ZERO)
-	return font
+	return RunStyle.slanted(GlassStyle.ALEGREYA_400)
