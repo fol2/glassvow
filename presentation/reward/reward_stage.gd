@@ -549,7 +549,7 @@ func _burst() -> void:
 	if quad != null and quad.size.y > 0.0:
 		aspect = quad.size.x / quad.size.y
 	var box: Vector2 = Vector2(_box_u * aspect, _box_u)
-	var rng: Rng = Rng.new(hash(enemy_id) & 0x7FFFFFFF)
+	var rng: Rng = Rng.new(RewardFracture.stable_seed(enemy_id))
 	# The blow lands OFF-centre — a perfectly central blow makes a perfectly
 	# radial field, and B1's wreath comes back wearing 3D.
 	var blow: Vector2 = Vector2(
@@ -632,14 +632,18 @@ func _burst() -> void:
 	_choose_spoils()
 
 
-## Where a spoil hangs: an arc over the wreckage, spread wide enough that
-## three words never touch, lifted toward the camera so the prize reads in
-## front of the debris. Mid-air by construction — decision 3's "nothing
-## lands" holds because there is nothing to land on.
+## Where a spoil hangs: an ARC over the wreckage — the middle seat higher
+## and nearer, the flanks lower and deeper — spread wide enough that three
+## words never touch. A straight, evenly spaced, constant-depth row is a
+## shelf of tokens: retired complaint A2, back wearing 3D. Mid-air by
+## construction — decision 3's "nothing lands" holds because there is
+## nothing to land on.
 func _spoil_seat(i: int) -> Vector3:
+	var lift: float = 0.42 if i == 1 else 0.30
+	var depth: float = 0.55 if i == 1 else 0.32
 	var seat_px: Vector2 = HUSK_AT + Vector2(
-		(float(i) - 1.0) * _box_px * 0.85, -_box_px * 0.34)
-	return at(seat_px, _box_u * 0.45)
+		(float(i) - 1.0) * _box_px * 0.85, -_box_px * lift)
+	return at(seat_px, _box_u * depth)
 
 
 ## Alpha coverage of a cell, and where that coverage sits. A 12×12 grid over
@@ -739,8 +743,12 @@ func _seat_words() -> void:
 		var at_screen: Vector2 = _cam.unproject_position(
 			piece.node.global_position
 			+ Vector3(piece.paint_off.x, -piece.paint_off.y, 0.0)) * view_scale
+		# The drop clears the PIECE, not the husk box: selection guarantees
+		# the labelled fragments are the largest painted ones, so a
+		# husk-keyed drop parked GOLD's word inside its own piece.
+		var piece_px: float = sqrt(maxf(piece.paint, 0.0001)) / UNIT
 		word.position = at_screen + Vector2(
-			-word.size.x * 0.5, _box_px * 0.10 + 12.0)
+			-word.size.x * 0.5, piece_px * 0.55 + 10.0)
 		word.modulate.a = fade
 
 

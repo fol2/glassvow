@@ -12,6 +12,17 @@ extends RefCounted
 ## and land upright like headstones).
 
 
+## FNV-1a over the id — the seed the enemy lane already ruled for shipped
+## fracture (enemy_view.gd `_stable_seed`): GDScript's hash() is not stable
+## across engine versions, and "the same body breaks the same way" is a
+## promise about NEXT year's build too.
+static func stable_seed(id: String) -> int:
+	var h: int = 0x811C9DC5
+	for c: int in id.to_utf8_buffer():
+		h = ((h ^ c) * 0x01000193) & 0xFFFFFFFF
+	return h & 0x7FFFFFFF
+
+
 static func clip(poly: PackedVector2Array, a: Vector2, b: Vector2,
 		big: float) -> PackedVector2Array:
 	var mid: Vector2 = (a + b) * 0.5

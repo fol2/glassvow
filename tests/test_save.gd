@@ -137,6 +137,20 @@ static func _run_transaction_checkpoints(content: ContentDB, fails: Array[String
 			"accept": true,
 		},
 		{
+			# D1's payload (reward-embers-3d-plan § cross-lane): the reward
+			# remembers what died. Additive — the case above, without it,
+			# stays the old-save proof.
+			"tag": "reward carrying the slain enemy",
+			"patch": {"pendingReward": {
+				"kind": "monster",
+				"rewards": {"gold": 9, "cards": ["strike"], "potion": null, "relic": null},
+				"taken": {"gold": false, "potion": false, "relic": false, "card": false},
+				"perfect": false,
+				"slain_enemy": {"id": "gloomslime", "hue": 130},
+			}},
+			"accept": true,
+		},
+		{
 			"tag": "terminal dawn cursor",
 			"patch": {"pendingDawn": {"events": [{"t": "questComplete"}], "cursor": 1, "newUnlocks": []}},
 			"accept": true,
