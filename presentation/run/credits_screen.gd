@@ -197,10 +197,15 @@ func _add_music_attribution(manifest: Variant) -> void:
 		if typeof(items_raw) == TYPE_DICTIONARY:
 			var items: Dictionary = items_raw
 			count = items.size()
+	var line: String = "composed with Suno"
 	if count > 0:
-		_add_body("%d tracks · composed with Suno" % count)
-	else:
-		_add_body("composed with Suno")
+		line = "%d tracks · composed with Suno" % count
+	# Breath below the attribution: its gap to the first track must exceed
+	# the track pitch, or the line reads as track zero.
+	var seat: MarginContainer = MarginContainer.new()
+	seat.add_theme_constant_override("margin_bottom", 8)
+	seat.add_child(_body_label(line, GlassStyle.TEXT))
+	_column.add_child(seat)
 
 
 func _add_music_rows(manifest: Variant) -> void:
@@ -332,7 +337,6 @@ func _build_licence() -> void:
 			continue
 		var entry: Dictionary = entry_raw
 		var lines: PackedStringArray = PackedStringArray()
-		lines.append(str(entry.get("name", "")))
 		var parts_raw: Variant = entry.get("parts", [])
 		if typeof(parts_raw) == TYPE_ARRAY:
 			var parts: Array = parts_raw
@@ -355,26 +359,35 @@ func _build_licence() -> void:
 				var lic_id: String = str(part.get("license", "")).strip_edges()
 				if not lic_id.is_empty():
 					lines.append(lic_id)
-		var component: Label = Label.new()
-		component.text = "\n".join(lines)
-		component.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		component.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
-		component.add_theme_font_size_override("font_size", 11)
-		component.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+		# Two-tier entry: the name a step brighter than its © lines, and the
+		# intra-entry gap tighter than the roll's separation, so ~100
+		# near-identical entries stay scannable.
+		var component: VBoxContainer = VBoxContainer.new()
+		component.add_theme_constant_override("separation", 2)
+		var name_line: Label = Label.new()
+		name_line.text = str(entry.get("name", ""))
+		name_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		name_line.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+		name_line.add_theme_font_size_override("font_size", 12)
+		name_line.add_theme_color_override("font_color", GlassStyle.TEXT)
+		component.add_child(name_line)
+		if not lines.is_empty():
+			var part_lines: Label = Label.new()
+			part_lines.text = "\n".join(lines)
+			part_lines.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			part_lines.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+			part_lines.add_theme_font_size_override("font_size", 11)
+			part_lines.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+			component.add_child(part_lines)
 		fold.add_child(component)
 
 	fold.add_child(_fold_heading("LICENCE TEXTS"))
 
 	var licence_info: Dictionary = Engine.get_license_info()
 	for name_raw: Variant in licence_info.keys():
-		var lic_name: String = str(name_raw)
-		var name_label: Label = Label.new()
-		name_label.text = lic_name
-		name_label.add_theme_font_override("font",
-			RunStyle.tracked(GlassStyle.CINZEL_700, 1))
-		name_label.add_theme_font_size_override("font_size", 13)
-		name_label.add_theme_color_override("font_color", GlassStyle.GOLD)
-		fold.add_child(name_label)
+		# Seated heading: the gap above each licence name must beat a blank
+		# line inside its body, or the strongest break reads weakest.
+		fold.add_child(_fold_heading(str(name_raw)))
 		var text_raw: Variant = licence_info[name_raw]
 		fold.add_child(_licence_body(str(text_raw), 11))
 
@@ -389,13 +402,7 @@ func _build_font_licences() -> void:
 	for entry: Dictionary in FONT_LICENCES:
 		var family: String = str(entry["family"])
 		var path: String = str(entry["path"])
-		var name_label: Label = Label.new()
-		name_label.text = family
-		name_label.add_theme_font_override("font",
-			RunStyle.tracked(GlassStyle.CINZEL_700, 1))
-		name_label.add_theme_font_size_override("font_size", 13)
-		name_label.add_theme_color_override("font_color", GlassStyle.GOLD)
-		fold.add_child(name_label)
+		fold.add_child(_fold_heading(family))
 		if not FileAccess.file_exists(path):
 			var missing: Label = Label.new()
 			missing.text = "licence file not found: %s" % family

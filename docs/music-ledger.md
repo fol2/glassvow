@@ -1,8 +1,8 @@
 # Music ledger — stained-glass-v1
 
 Port-scoped inventory of the music pack Glassvow ships. The full generation
-ledger (prompts, motif law, render pipeline) lives in the reference repo at
-`docs/music-ledger.md`.
+ledger (prompts, motif law, render pipeline) lives at
+`../roguecardv2-benchmark/docs/music-ledger.md` (roguecardv2@6e06911).
 
 ## What
 
@@ -12,10 +12,12 @@ music — dark panes, cold stone, a lantern kept lit.
 
 ## Provenance
 
-Composed with **Suno** (Suno Pro workspace, July 2026). Track selection,
-loop renders and loudness normalisation happened upstream in the reference
-repo; this port carries the v1 renders verbatim. Do not re-encode or
-re-title the shipping files without a pack bump.
+Composed with **Suno** (Suno Pro workspace, July 2026); track selection
+happened upstream in the reference repo. This port carries the **v1**
+renders verbatim, as first rendered — variable bit rate, untrimmed run
+lengths (`title.mp3` runs 159 s). The reference's later v2 master pass
+(flat-rate re-encode, tighter loop cuts) is not what ships here. Do not
+re-encode or re-title the shipping files without a pack bump.
 
 ## Contract
 
@@ -27,5 +29,6 @@ re-title the shipping files without a pack bump.
 
 ## Pointer
 
-For prompts, motif law and the render pipeline, see the reference repo's
-`docs/music-ledger.md`. This file is the port-facing contract only.
+For prompts, motif law and the render pipeline, see
+`../roguecardv2-benchmark/docs/music-ledger.md` (roguecardv2@6e06911).
+This file is the port-facing contract only.
