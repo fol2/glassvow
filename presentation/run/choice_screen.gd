@@ -71,6 +71,8 @@ var _sfx: SfxBus
 ## When set, Escape emits `chosen` with this id (safe cancel). Absent → Escape ignored.
 var _cancel_id: String = ""
 var _has_cancel: bool = false
+## Overlay mode: scrim over a live routed surface instead of an opaque night ground.
+var _overlay: bool = false
 
 
 func _init(title_text: String, body_text: String, choices: Array[Dictionary],
@@ -84,6 +86,7 @@ func _init(title_text: String, body_text: String, choices: Array[Dictionary],
 	shape = asked if StageShape.REFERENCES.has(asked) else StageShape.IDENTITY
 	_panel_layout = LayoutBook.resolve(&"run", shape)
 	_title_variant = str(context.get("variant", "")) == "title"
+	_overlay = context.get("overlay", false) == true
 	if context.has("cancel"):
 		_has_cancel = true
 		_cancel_id = str(context["cancel"])
@@ -100,7 +103,7 @@ func _build_standard(title_text: String, body_text: String,
 		choices: Array[Dictionary]) -> void:
 
 	var ground: ColorRect = ColorRect.new()
-	ground.color = GlassStyle.NIGHT_BOT
+	ground.color = GlassStyle.scrim() if _overlay else GlassStyle.NIGHT_BOT
 	ground.set_anchors_preset(Control.PRESET_FULL_RECT)
 	ground.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(ground)

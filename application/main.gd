@@ -24,6 +24,9 @@ var _reward_screen: RewardScreen = null
 var _route_screen: Control = null
 var _run_hud: RunHud = null
 var _modal: Control = null
+## Routed surface held under a modal/choice overlay (`PROCESS_MODE_DISABLED`).
+## Combat (`_screen`) is never frozen — its awaits must not desync.
+var _frozen_under_modal: Control = null
 var _music: MusicBus
 var _sfx_bus: SfxBus
 var _vigil: VigilState
@@ -359,6 +362,7 @@ func _capture_and_quit(path: String) -> void:
 
 
 func _clear_route() -> void:
+	_thaw_under_modal()
 	for screen: Control in [
 		_screen, _map_screen, _choice_screen, _reward_screen,
 		_route_screen, _run_hud, _modal,
@@ -372,6 +376,36 @@ func _clear_route() -> void:
 	_route_screen = null
 	_run_hud = null
 	_modal = null
+
+
+func _freeze_under_modal() -> void:
+	# First live non-combat surface; combat stays running so awaits do not desync.
+	if _frozen_under_modal == null:
+		var under: Control = _route_screen
+		if under == null:
+			under = _map_screen
+		if under == null:
+			under = _reward_screen
+		if under != null:
+			under.process_mode = Node.PROCESS_MODE_DISABLED
+			_frozen_under_modal = under
+	if _run_hud != null:
+		_run_hud.process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func _thaw_under_modal() -> void:
+	if _frozen_under_modal != null and is_instance_valid(_frozen_under_modal):
+		_frozen_under_modal.process_mode = Node.PROCESS_MODE_INHERIT
+	_frozen_under_modal = null
+	if _run_hud != null and is_instance_valid(_run_hud):
+		_run_hud.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func _close_choice_overlay() -> void:
+	if _choice_screen != null:
+		_choice_screen.queue_free()
+		_choice_screen = null
+	_thaw_under_modal()
 
 
 func _show_route(screen: Control, with_hud: bool = false,
@@ -404,6 +438,7 @@ func _show_overlay(screen: Control) -> void:
 		_modal.queue_free()
 	_modal = screen
 	add_child(screen)
+	_freeze_under_modal()
 	# RunHud's Escape rung must not fire under an overlay — the modal owns cancel.
 	if _run_hud != null:
 		_run_hud.set_process_unhandled_key_input(false)
@@ -414,20 +449,37 @@ func _close_overlay() -> void:
 		return
 	_modal.queue_free()
 	_modal = null
+	_thaw_under_modal()
 	if _run_hud != null:
 		_run_hud.set_process_unhandled_key_input(true)
 
 
 func _show_choice(title: String, body: String, choices: Array[Dictionary], handler: Callable,
 		context: Dictionary = {}) -> void:
-	if game != null and game.run != null:
-		_transitions.wipe()
-	_clear_route()
 	# The shape rides in the context rather than in a fifth positional argument:
 	# `ChoiceScreen` already had a context bag for the title variant, and every
 	# other caller of it stays untouched.
 	var ctx: Dictionary = context.duplicate()
 	ctx["shape"] = String(_shape)
+	var overlay: bool = ctx.get("overlay", false) == true
+	var live: bool = _route_screen != null or _map_screen != null or _reward_screen != null
+	if overlay and live:
+		# Keep the routed surface; veil + freeze instead of a wipe/clear.
+		if _choice_screen != null:
+			_choice_screen.queue_free()
+			_choice_screen = null
+		_freeze_under_modal()
+		_choice_screen = ChoiceScreenType.new(title, body, choices, ctx, _sfx_bus)
+		_choice_screen.connect("chosen", func(id: String) -> void:
+			_close_choice_overlay()
+			handler.call(id)
+		)
+		add_child(_choice_screen)
+		_transitions.screen_in(_choice_screen)
+		return
+	if game != null and game.run != null:
+		_transitions.wipe()
+	_clear_route()
 	_choice_screen = ChoiceScreenType.new(title, body, choices, ctx, _sfx_bus)
 	_choice_screen.connect("chosen", handler)
 	add_child(_choice_screen)
@@ -901,7 +953,8 @@ func _on_rest_choice(id: String) -> void:
 	if choices.is_empty():
 		_finish_node()
 		return
-	_show_choice("TEMPER A CARD", "Choose one pane to strengthen.", choices, _on_rest_upgrade)
+	_show_choice("TEMPER A CARD", "Choose one pane to strengthen.", choices, _on_rest_upgrade,
+		{"overlay": true})
 
 
 func _on_rest_upgrade(uid_text: String) -> void:
@@ -969,7 +1022,7 @@ func _show_event_pick(pending: Dictionary) -> void:
 		_finish_node()
 		return
 	_show_choice("CHOOSE A CARD", "The choice is part of the price.", choices,
-		_on_event_pick.bind(kind))
+		_on_event_pick.bind(kind), {"overlay": true})
 
 
 func _on_event_pick(id: String, kind: String) -> void:
@@ -1061,7 +1114,7 @@ func _on_shop_choice(id: String) -> void:
 		for card: CardInst in game.run.player.deck:
 			choices.append(_card_choice(card, str(card.uid)))
 		_show_choice("REMOVE A CARD", "The merchant keeps the broken pane.", choices,
-			_on_shop_remove)
+			_on_shop_remove, {"overlay": true})
 		return
 	var parts: PackedStringArray = id.split(":")
 	var category: String = parts[0]
@@ -1379,7 +1432,7 @@ func _show_potion_replace(id: String) -> void:
 		})
 	choices.append({"id": "discard", "label": "Discard the new phial", "quiet": true})
 	_show_choice("PHIAL RACK FULL", "Choose what leaves the rack.", choices,
-		_on_potion_replace.bind(id))
+		_on_potion_replace.bind(id), {"overlay": true})
 
 
 func _on_potion_replace(choice: String, id: String) -> void:
@@ -1795,7 +1848,7 @@ func _show_monument() -> void:
 	_show_choice("MONUMENT OF THE LAST FALL", body, [
 		{"id": "claim", "label": "Touch the standing glass"},
 		{"id": "leave", "label": "Leave it", "quiet": true},
-	], _on_monument_choice)
+	], _on_monument_choice, {"overlay": true})
 
 
 func _on_monument_choice(id: String) -> void:

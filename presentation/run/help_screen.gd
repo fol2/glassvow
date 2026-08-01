@@ -59,7 +59,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 		add_child(_sfx)
 
 	var scrim: ColorRect = ColorRect.new()
-	scrim.color = Color(5.0 / 255.0, 7.0 / 255.0, 16.0 / 255.0, 0.72)
+	scrim.color = GlassStyle.scrim()
 	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	scrim.gui_input.connect(_on_scrim_input)
 	add_child(scrim)

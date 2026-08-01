@@ -17,6 +17,7 @@ const TEXT: Color = Color(0.86, 0.90, 1.0)
 const TEXT_DIM: Color = Color(0.58, 0.64, 0.80)
 const HP_RED: Color = Color(0.85, 0.33, 0.32)
 
+
 ## The benchmark's two faces (roguecardv2@6e069118): Cinzel for display —
 ## names, cost numerals — and Alegreya for the reading text. Both OFL, bundled
 ## alongside NotoSansTC, which stays the UI face because these two carry no CJK.
@@ -29,6 +30,13 @@ const CINZEL_700: String = "res://assets/fonts/Cinzel-700.woff2"
 const CINZEL_800: String = "res://assets/fonts/Cinzel-800.woff2"
 const ALEGREYA_400: String = "res://assets/fonts/Alegreya-400.woff2"
 const ALEGREYA_700: String = "res://assets/fonts/Alegreya-700.woff2"
+
+
+## Canonical modal veil — flat (no blur; backbuffer budget). Shared by Help,
+## Settings, reward overlays, and ChoiceScreen overlay mode. RunMenu keeps a
+## transparent hit-catcher; it is not a veil.
+static func scrim() -> Color:
+	return Color(5.0 / 255.0, 7.0 / 255.0, 16.0 / 255.0, 0.72)
 
 
 ## Floating glass placard: translucent ink body, faint accent rim, soft glow.

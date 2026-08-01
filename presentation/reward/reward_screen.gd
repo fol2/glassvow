@@ -113,7 +113,6 @@ const DANGER: Color = Color(1.000, 0.349, 0.392)      # #FF5964
 ## as the midpoint. StyleBoxFlat has no gradient and a mask node for this would
 ## cost three nodes to move four RGB points.
 const GLASS_FILL: Color = Color(0.071, 0.086, 0.145, 0.93)
-const SCRIM: Color = Color(0.020, 0.027, 0.063, 0.72)  # #overlay
 
 # ── measured geometry ─────────────────────────────────────────────────────
 const PANEL_W: float = 560.0
@@ -968,7 +967,7 @@ func _on_continue() -> void:
 func _show_overlay(body: Control, width: float) -> void:
 	_close_overlay()
 	_overlay = ColorRect.new()
-	_overlay.color = SCRIM
+	_overlay.color = GlassStyle.scrim()  # #overlay
 	_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(_overlay)
 	var centre: CenterContainer = CenterContainer.new()

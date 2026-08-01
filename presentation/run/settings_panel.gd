@@ -33,8 +33,9 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	var scrim: ColorRect = ColorRect.new()
 	# The route stays visible but must not COMPETE: without this veil the
 	# title wordmark read straight through the panel copy (DL round 1,
-	# measured ~70% local lift). P4.8 unifies scrims project-wide.
-	scrim.color = Color(0.02, 0.03, 0.06, 0.5)
+	# measured ~70% local lift). P4.8 unifies scrims project-wide —
+	# Settings darkens from 0.5 → 0.72 alpha to match the canonical veil.
+	scrim.color = GlassStyle.scrim()
 	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	scrim.gui_input.connect(_on_scrim_input)
 	add_child(scrim)
