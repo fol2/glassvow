@@ -29,14 +29,18 @@ reward, shop and aspect screens and are out of scope here.
 | **DIVERGES** | 9 | the port does something, with different numbers |
 | **DIVERGES (documented)** | 3 | different on purpose, and the port says why |
 | **ABSENT** | 0 | the port does not do this at all |
-| **N/A** | 10 | the rule never fires in the reference, or drives a renderer the port does not use |
-| **UNRESOLVED** | 1 | the audit answered a different question; needs a second look |
+| **N/A** | 11 | the rule never fires in the reference, or drives a renderer the port does not use |
+| **UNRESOLVED** | 0 | the audit answered a different question; needs a second look |
 
 **ABSENT reached zero on 2026-07-31** — every liveable rule is either matched,
 deliberately diverged with its reasons written down, or recorded dead with grep
 evidence (see the P2.6 record at the end). The remaining nine DIVERGES are each
 a judged trade, not a gap; the counts above are recomputed from the table, not
 carried forward.
+
+**UNRESOLVED reached zero on 2026-08-02** — row 505 was the last one, and it
+closed N/A rather than as a defect: the half that looked like a gap turns out to
+be a rule the reference never fires. Every row now carries an answer.
 
 The shape of it is the same base rate this port has shown everywhere else: it is
 precise where it was handed a number and thin where it had to notice that a
@@ -64,7 +68,7 @@ existing is not evidence that it renders.
 
 | css | selector | reference | port | |
 |---|---|---|---|:-:|
-| 505 | `.card-inner` | box-shadow .2s, transform .12s ease-out | audit matched this against the hand-seat glide, which is a different element | UNRESOLVED |
+| 505 | `.card-inner` | box-shadow .2s, transform .12s ease-out | transform half never fires — `.tilting` has no writer; box-shadow half is row 632 (closed 2026-08-02) | N/A ✱ |
 | 592 | `.card.r-rare .card-inner::after` | `shine` 4.5s ease-in-out ∞ | canvas shader over the slab, TIME-driven, 62/92 marks (closed 2026-07-31) | MATCH |
 | 599 | `.card-inner::before` | opacity .25s | `LAMP_FADE 0.25` on a shader hover, not the pane's opacity | DIVERGES |
 | 610 | `.card.nope, .lantern-btn.nope` | `nope` .32s ease — ±7px, ±1.5° | `Motion.NOPE_*` shared by card and lantern, CSS ease per interval (closed 2026-07-31) | MATCH |
@@ -237,8 +241,12 @@ Two rules learned assembling it:
   `animation: none` silently kills an earlier one, and an audit that reads only
   the first declaration will report a defect where the reference shows nothing.
 - **A `transition` on element X is not answered by a tween on element Y.** Row
-  505 is UNRESOLVED precisely because `.card-inner` and the hand seat are two
-  different elements that both animate `transform`.
+  505 was reopened precisely because `.card-inner` and the hand seat are two
+  different elements that both animate `transform`. Asking the question about
+  the right element then answered it in one grep — the rule is dead (see the
+  P2.6 record). The lesson survives its row: the first audit's verdict was
+  reached by looking at the wrong element, and it would have been wrong even if
+  the number had happened to agree.
 
 ## Not covered here
 
@@ -255,9 +263,9 @@ This is motion only. Three surfaces remain unaudited:
 - **Whether the port's MATCHes look right on screen.** A number can agree and
   still be attached to the wrong thing.
 
-## Dead rules and non-items — the P2.6 record (2026-07-31)
+## Dead rules and non-items — the P2.6 record (2026-07-31, extended 2026-08-02)
 
-Three rules the stylesheet declares that nothing in the shipping build ever
+Four rules the stylesheet declares that nothing in the shipping build ever
 fires, each verified by grepping for a class writer at `6e06911`. They are
 DECLINED, not ported:
 
@@ -270,6 +278,29 @@ DECLINED, not ported:
 - **`.facet-row .pip.willchip` `pvPulse`** (`src/styles.css:1030`) — overridden
   by `animation: none` for pips carrying a raster face (`src/styles.css:1035`), and every pip
   in the game carries one.
+- **`.card.tilting .card-inner`** (`src/styles.css:520`) — the 3D cursor tilt,
+  and with it the `transform .12s ease-out` half of row 505. `grep -rn tilting
+  src/` returns exactly two hits at `6e06911`, both in the stylesheet: the
+  comment at `src/styles.css:515` and the selector at `src/styles.css:520`. No
+  code adds the class, and the card's class string is built from card type and
+  rarity only (`src/ui/tooltip.js:103`), so no dynamic path can produce it
+  either. `src/styles.css:520` is the only rule anywhere that sets `transform`
+  on `.card-inner`, so `transform: none` (`src/styles.css:516`) holds for the
+  whole life of every card and the transition (`src/styles.css:517`) has nothing
+  to interpolate. `src/ui/tooltip.js:126-127` does write `--rx`/`--ry` on
+  mousemove, which is what makes this rule read live at a glance — but the only
+  consumer of those variables is the selector that never matches. The
+  reference's own comment at `src/styles.css:513-515` says why the tilt was
+  gated behind a class in the first place (idle `rotateX(0)` builds a
+  perspective layer that Chromium soft-samples at non-integer stage scales); the
+  gate went in and the class never followed.
+
+  **This one is not a decline.** The port tilts — `MAX_TILT 7.0` degrees on a
+  spring (`presentation/combat/card_view.gd:177`) — so the port shows a motion
+  the reference does not. That is the deliberate 3D departure argued at
+  `presentation/combat/card_view.gd:145-161`, not a parity defect in either
+  direction. Row 505 is graded N/A because the rule it cites is dead, and the
+  port's tilt is answerable to §1 of the visual direction, not to this row.
 
 Three candidates from the same sweep that are NOT dead, recorded so the list
 does not grow back by rumour:
