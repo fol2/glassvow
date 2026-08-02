@@ -266,6 +266,16 @@ static func run(fails: Array[String]) -> void:
 	# other on-screen chips must survive (PR #80 DL R4 MINOR).
 	_check(fails, _on_screen_chips(sib) - pills.size() == 1,
 		"exactly one chip is declined at the collision, not the frame's worth")
+	# Pin WHICH pair, not just a count. `_collisions(raw) >= 1` is satisfied by
+	# any collision, so the fixture could drift onto a different pair on a
+	# different generator and still read green (PR #80 PM R4). n6 `+16` is the
+	# left one and keeps its place; n7 `+22` is the one that would have flipped
+	# onto it.
+	var sib_seats: Dictionary[int, bool] = sib._chip_band.seats(sib.size.x)
+	_check(fails, sib._waystones[6].bounty == 16 and sib._waystones[7].bounty == 22,
+		"seed 17634 still generates the +16 / +22 pair this fixture is about")
+	_check(fails, sib_seats.has(6) and not sib_seats.has(7),
+		"the pill already on the road keeps it, and the one that would bury it declines")
 	# The over-decline itself, at the camera where three same-column stones share
 	# the frame: judged on x alone the band dropped two of them, and a dark
 	# lantern's bounty appears nowhere else in the game (DL R4 MAJOR).
