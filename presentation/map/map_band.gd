@@ -103,7 +103,12 @@ class SkyBand extends MapBand:
 		# frame, for the ~0.5s it lasts. Each band washes what it painted, which
 		# is the same rule `_draw_flash_overlay`'s own docstring states and this
 		# call site did not follow (#69 C2).
-		_draw_flash_overlay(Rect2(0.0, 0.0, w, horizon + FAR_BLEED))
+		# Ends exactly where the region's ground begins — `horizon + drift.y`, the
+		# same expression with the same `far_d` both bands are pushed. An earlier
+		# revision used `horizon + FAR_BLEED`, which is drift-blind, so the two
+		# rects overlapped 4-12px and left a full-width band at 1.63x the wash
+		# during a flash: the step became a hairline instead of going (PR #80 DL R1).
+		_draw_flash_overlay(Rect2(0.0, 0.0, w, horizon + drift.y))
 
 	## The §1 goal-anchor. SCREEN-anchored — at 0.10 the whole journey drifts a
 	## lone object only a tenth of the act, so a world anchor parks it off-stage
@@ -546,3 +551,44 @@ class VeilBand extends MapBand:
 					Vector2(x, y) - Vector2.ONE * radius * 2.0,
 					Vector2.ONE * radius * 4.0), false,
 					Color(tint, alpha))
+
+
+## The bounty chips, as ONE layer sitting between the waystones and the veil.
+##
+## Every stone drew its own chip once, first inside `_draw` (where the stone's
+## art and every later sibling painted over it) and then in a per-stone child at
+## `z_index` 1 — which fixed the slicing by outranking the veil and the chrome
+## as well, i.e. by breaking the "child order IS paint order" contract this file
+## opens with (PR #80 DL R1).
+##
+## One sibling in the right seat needs no `z_index` at all, drops six nodes to
+## one on seed 717, and takes two hacks with it: the chip no longer inherits a
+## stone's depth alpha, so nothing has to divide that back out, and the layer
+## knows the FRAME, so a chip that would run off the right edge can flip to the
+## stone's left — the rule every tooltip uses, and the fix for a number that
+## rendered as `+1` instead of `+17` at 11% of camera positions.
+class ChipBand extends MapBand:
+	func _init() -> void:
+		super(1.0)
+		gated = false
+
+	## Which side of the stone the pill goes on. Pure, so `tests/test_map.gd` can
+	## assert the rule rather than a capture chasing the 26px of node step where
+	## it bites. Right by default; left only when the right runs off the frame AND
+	## the left does not — a chip with nowhere to go stays put rather than
+	## trading one clipped edge for the other.
+	static func flips(centre_x: float, reach: float, frame_w: float) -> bool:
+		return centre_x + reach > frame_w and centre_x - reach >= 0.0
+
+	func _draw() -> void:
+		if host == null:
+			return
+		for ws: GlassWaystone in host._waystones:
+			if not ws.has_chip():
+				continue
+			var reach: float = ws.chip_reach() * ws.scale.x
+			var centre_x: float = ws.position.x + ws.size.x * ws.scale.x * 0.5
+			var flip: bool = flips(centre_x, reach, size.x)
+			draw_set_transform(ws.position, 0.0, ws.scale)
+			ws.paint_bounty_chip(self, flip)
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)

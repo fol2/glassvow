@@ -140,6 +140,16 @@ static func run(fails: Array[String]) -> void:
 	# `refresh` → `_seat_marker`, and a hard `_cam_x` write there tore the walk
 	# out from under the lantern when the window crossed an aspect boundary
 	# during a travel (#69 B2). Seated: both move. Travelling: only the target.
+	# The bounty chip flips to the stone's left rather than run off the frame.
+	# 11% of camera positions per column put the pill past the right edge and
+	# rendered "+17" as "+1" (#69 D1, PR #80 DL R1) — a window narrow enough that
+	# a capture finds it by luck, so the rule is asserted instead.
+	_check(fails, not MapBand.ChipBand.flips(600.0, 60.0, 1180.0),
+		"a chip with room on the right stays right")
+	_check(fails, MapBand.ChipBand.flips(1145.0, 60.0, 1180.0),
+		"a chip that would leave the frame flips left")
+	_check(fails, not MapBand.ChipBand.flips(30.0, 60.0, 100.0),
+		"a chip with room on neither side does not trade edges")
 	var glider: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
 	glider.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	glider.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])

@@ -16,8 +16,6 @@ const CAPTION_H: float = 0.0
 ## bounty chip seats itself off the stone's visible edge and must not be able to
 ## disagree with what `_draw` actually draws.
 const UNLIT_RADIUS: float = 28.0
-## The lowest net alpha the bounty chip may fade to, whatever the stone does.
-const CHIP_ALPHA_FLOOR: float = 0.88
 const DRAG_SLOP: float = 12.0
 
 var index: int = 0
@@ -46,7 +44,6 @@ var _kindling: bool = false
 var _chip_font: Font = null
 var _chip_coin: Texture2D = null
 var _chip_box: StyleBoxFlat = null
-var _chip_layer: ChipLayer = null
 
 ## Empty rect grown around the drawing so the HIT AREA can be bigger than the
 ## picture. Zero at the shapes a mouse points at; on a phone it is what keeps a
@@ -79,11 +76,6 @@ func _init(node_index: int, node_kind: String, node_hue: float, caption: String,
 	_caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_caption.visible = false
 	add_child(_caption)
-	# Last child, and only where there is a chip to draw — 6 of 65 stones on
-	# seed 717 rather than a node per stone.
-	if kind == "unlit" and bounty > 0:
-		_chip_layer = ChipLayer.new(self)
-		add_child(_chip_layer)
 	tooltip_text = caption
 	set_state(false, false)
 	set_process(true)
@@ -102,9 +94,6 @@ func set_state(is_reachable: bool, is_cleared: bool, is_current: bool = false) -
 	_caption.add_theme_color_override("font_color", Color(text_col.r, text_col.g, text_col.b,
 		0.45 if cleared else 1.0))
 	queue_redraw()
-	# A child does not redraw with its parent, and the chip dims with `cleared`.
-	if _chip_layer != null:
-		_chip_layer.queue_redraw()
 
 
 func _process(delta: float) -> void:
@@ -184,22 +173,18 @@ func set_touch_min(min_px: float, draw_scale: float) -> void:
 	size = base + pad * 2.0
 	_seat_art()
 	queue_redraw()
-	if _chip_layer != null:
-		_chip_layer.queue_redraw()
 
 
-## The stone's depth fade. Applied here rather than written straight onto
-## `modulate` because the chip must not go with it: a child's alpha multiplies
-## its parent's, so at the far end of the visible range the stone's 0.12 was
-## taking a number the player is meant to READ down with it. The chip divides
-## that back out to a floor — never brighter than opaque, never dimmer than
-## `CHIP_ALPHA_FLOOR` — so distance still reads on the glass while the bounty
-## stays legible (#69 D2, the information-not-decoration rule P4.3 set for
-## floaters).
+## The stone's depth fade. Named rather than written straight onto `modulate` so
+## the reason survives: the bounty chip must NOT fade with the glass it labels
+## (#69 D2, the information-not-decoration rule P4.3 set for floaters). It no
+## longer can — `MapBand.ChipBand` draws it as a sibling rather than a child, so
+## there is no inherited alpha to divide back out. An earlier revision did
+## exactly that division and its arithmetic was quoted against a 0.12 the frame
+## can never show: on screen a stone bottoms out at 0.665-0.762, not 0.12
+## (PR #80 DL R1).
 func set_depth_alpha(a: float) -> void:
 	modulate.a = a
-	if _chip_layer != null:
-		_chip_layer.modulate.a = clampf(CHIP_ALPHA_FLOOR / maxf(a, 0.01), 1.0, 8.0)
 
 
 func _draw() -> void:
@@ -240,7 +225,8 @@ func _draw() -> void:
 	# The chip is NOT drawn here. A parent's `_draw` runs before its children, so
 	# a chip painted in this pass sits under this stone's own art and under every
 	# later sibling's — it was being sliced by the neighbour it overlaps (#69 D3).
-	# `ChipLayer` is a child at `z_index` 1, which clears both.
+	# `MapBand.ChipBand` paints it instead, one layer for all stones, seated
+	# between the waystones and the veil where paint order alone settles it.
 
 
 func _art(name: String) -> TextureRect:
@@ -267,31 +253,33 @@ func _seat_art() -> void:
 	_glyph_art.size = Vector2.ONE * glyph_side
 
 
-## One Control per unlit stone, drawn after every sibling so the chip is a label
-## rather than something the next stone eats half of. Full-rect, so it shares the
-## stone's local coordinates exactly and cannot drift from it.
-class ChipLayer extends Control:
-	var stone: GlassWaystone = null
-
-	func _init(owner_stone: GlassWaystone) -> void:
-		stone = owner_stone
-		set_anchors_preset(Control.PRESET_FULL_RECT)
-		mouse_filter = Control.MOUSE_FILTER_IGNORE
-		z_index = 1
-
-	func _draw() -> void:
-		if stone != null:
-			stone.paint_bounty_chip(self)
-
-
 ## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
 ## "unlit" statement (§2), so the word would only restate the emblem; the coin
-## glyph gives the number its unit the same way the HUD does. Seated INSIDE
-## the control rect under the pane — a chip that leaves its own rect lands on
-## the lane-below neighbour at every shipped shape (PR #76 DL R1).
+## glyph gives the number its unit the same way the HUD does.
 ##
-## `ci` is the `ChipLayer` child, not this stone: see the note in `_draw`.
-func paint_bounty_chip(ci: CanvasItem) -> void:
+## Painted onto `ci` — `MapBand.ChipBand`, which has already set the transform to
+## this stone's position and scale, so everything below stays in local units.
+## `flip` mirrors the pill to the stone's LEFT; the band decides, because only it
+## knows the frame. See the seat comment in the body for why neither side is
+## under the stone.
+## Whether this stone has a bounty left to promise. False the moment it kindles.
+func has_chip() -> bool:
+	return kind == "unlit" and bounty > 0
+
+
+## How far the pill reaches from the stone's centre, in LOCAL px. The band asks
+## before it decides which side to draw on.
+func chip_reach() -> float:
+	if _chip_font == null:
+		_chip_font = get_theme_font(&"font")
+	if _chip_font == null:
+		return 0.0
+	var tw: float = _chip_font.get_string_size("+%d" % bounty,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13).x
+	return UNLIT_RADIUS + (13.0 + 4.0 + tw + 16.0) + 4.0
+
+
+func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
 	if _chip_coin == null:
@@ -316,7 +304,8 @@ func paint_bounty_chip(ci: CanvasItem) -> void:
 	# lanes by construction. It crosses the dashed edge running to the next
 	# node, which is a pale 1px line under an opaque pill: a label over a road,
 	# not a label over another lantern (#69 D1).
-	var cx: float = _pad.x + WIDTH * 0.5 + UNLIT_RADIUS + chip_w * 0.5 + 4.0
+	var side: float = -1.0 if flip else 1.0
+	var cx: float = _pad.x + WIDTH * 0.5 + side * (UNLIT_RADIUS + chip_w * 0.5 + 4.0)
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	var a: float = 0.45 if cleared else 1.0
 	var rect: Rect2 = Rect2(cx - chip_w * 0.5, cy - chip_h * 0.5, chip_w, chip_h)
@@ -395,9 +384,6 @@ func _apply_kindle_art(true_kind: String) -> void:
 	_glyph_art.texture = load("res://assets/art/ui/node-%s.png" % _art_kind()) as Texture2D
 	_seat_art()
 	queue_redraw()
-	# The bounty is paid the moment the stone kindles, so the chip has nothing
-	# left to promise. It goes with the dark lantern it labelled.
-	if _chip_layer != null:
-		_chip_layer.queue_free()
-		_chip_layer = null
+	# The bounty is paid the moment the stone kindles, so `has_chip` goes false
+	# with the dark lantern it labelled and `ChipBand` stops drawing it.
 
