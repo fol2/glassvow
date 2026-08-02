@@ -30,6 +30,17 @@ const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
 ##
 ## The lane axis cannot take the same treatment: at 46–50 px of pitch it has no
 ## room, so it trades amplitude for the per-row application in `_row_lane_jitter`.
+##
+## BOTH STAY ABSOLUTE PX, which #69 grouped with `BED_HALF` as "decide once for
+## all three" and only `BED_HALF` had an answer until now (PR #80 DL R1). The
+## other two answer differently, and for the same reason as each other: they are
+## measured against quantities that are ALREADY rate-derived. `STEP_JITTER` is
+## wander within a step that is `W · stepRate` clamped, and `LANE_JITTER` within
+## a pitch that is `H · laneRate` clamped — expressing either as a second rate
+## would compound two ratios and make the wander grow fastest exactly where the
+## floors have already said there is no room. `laneMin` is the third: a TOUCH
+## floor in px by necessity, because 44 px is a finger, not a fraction of a
+## stage. `BED_HALF` was the odd one out precisely because it measures nothing.
 const STEP_JITTER: float = 72.0
 const LANE_JITTER: float = 20.0
 
@@ -80,6 +91,7 @@ var _drift: PointerDrift = PointerDrift.new()
 var _sky_band: MapBand.SkyBand = null
 var _region_band: MapBand.RegionBand = null
 var _path_band: MapBand.PathBand = null
+var _chip_band: MapBand.ChipBand = null
 var _veil_band: MapBand.VeilBand = null
 
 
@@ -94,6 +106,11 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	# Bands → waystones → veil → chrome: child order is paint order.
 	_build_bands()
 	_build_waystones()
+	# Between the stones and the weather: the chips label the play plane, so they
+	# sit on it, and the veil still drifts in front of them.
+	_chip_band = MapBand.ChipBand.new()
+	_chip_band.host = self
+	add_child(_chip_band)
 	_veil_band = MapBand.VeilBand.new()
 	_veil_band.host = self
 	add_child(_veil_band)
@@ -331,10 +348,14 @@ func _seat_marker() -> void:
 	var i: int = map.at if map.at >= 0 and map.at < map.nodes.size() else 0
 	var seat: float = _cam_for(i) if not map.nodes.is_empty() else _cam_min()
 	_cam_target = seat
+	# Kill the fling either way. `_process` drives `_cam_x` from `_cam_velocity`
+	# while it lives and overwrites `_cam_target` doing it, so an early return
+	# that left a fling running would discard the very re-aim it exists to make
+	# (PR #80 DL R1).
+	_cam_velocity = 0.0
 	if _travelling:
 		return
 	_cam_x = seat
-	_cam_velocity = 0.0
 
 
 ## World-x of the lead-third seating for node `i`, clamped so node 0 cannot
@@ -525,6 +546,9 @@ func _push_bands(force: bool = false) -> void:
 	_sky_band.set_view(_cam_x, far_d, force)
 	_region_band.set_view(_cam_x, far_d, force)
 	_path_band.set_view(_cam_x, path_d, force)
+	# Ungated: it reads the waystones' own positions, which relayout every frame.
+	if _chip_band != null:
+		_chip_band.set_view(_cam_x, path_d, force)
 	_veil_band.set_view(_cam_x, path_d * 1.35, force)
 
 
