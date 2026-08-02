@@ -293,12 +293,15 @@ class PathBand extends MapBand:
 	## `FAR_BLEED`: that number covers a band's drift overshoot, this one is a
 	## composition width, and they collide at 8.0 by coincidence only.
 	##
-	## STAYS ABSOLUTE, and the sweep that asked the question is why. 8.0 px is
-	## 2.0% of a 820-tall stage and 4.1% of a 390-tall one, which reads as an
-	## argument for a rate — but this bed is a §5 band-3 STAND-IN, and a rate
-	## would be tuning the placeholder's proportions instead of building the
-	## plane. The taper and edges that make it a road, and this number's fate
-	## with them, belong to #70 (#69 C5, PM R2 on PR #79).
+	## STAYS ABSOLUTE, and the sweep that asked the question is why. The bed this
+	## half-spans is 16 px — 2.0% of a 820-tall stage and 4.1% of a 390-tall one;
+	## the constant itself is 0.98% and 2.05% (PM R1 on PR #80: the percentages
+	## first recorded here were the bed's, written against the half). Either way
+	## it doubles across the shapes, which reads as an argument for a rate — but
+	## this bed is a §5 band-3 STAND-IN, and a rate would tune the placeholder's
+	## proportions instead of building the plane. The taper and edges that make
+	## it a road, and this number's fate with them, belong to #70 (#69 C5, PM R2
+	## on PR #79).
 	const BED_HALF: float = 8.0
 
 	func _init() -> void:
