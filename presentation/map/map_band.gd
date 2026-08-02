@@ -96,7 +96,14 @@ class SkyBand extends MapBand:
 				Rect2(0.0, 0.0, w, horizon + FAR_BLEED),
 				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
 		_draw_spire(w, horizon)
-		_draw_flash_overlay(Rect2(Vector2.ZERO, size))
+		# Washes the SKY, not the stage. The full-rect version put a step across
+		# the horizon: below it the region's ground scrim is only 0.38, so the
+		# sky's flash survived at 0.62 of its strength and added to the region's
+		# own wash — one flash counted twice on the lower two thirds of the
+		# frame, for the ~0.5s it lasts. Each band washes what it painted, which
+		# is the same rule `_draw_flash_overlay`'s own docstring states and this
+		# call site did not follow (#69 C2).
+		_draw_flash_overlay(Rect2(0.0, 0.0, w, horizon + FAR_BLEED))
 
 	## The §1 goal-anchor. SCREEN-anchored — at 0.10 the whole journey drifts a
 	## lone object only a tenth of the act, so a world anchor parks it off-stage
@@ -236,6 +243,16 @@ class RegionBand extends MapBand:
 				Vector2(x - 5.0, top_y + tree_h * 0.45), rim, 1.0)
 		_draw_flash_overlay(ground)
 
+	## Act 1's caustics, in the REGION band only — a deliberate departure from
+	## §3's "sink through the bands", recorded here because this is where the
+	## next reader will come looking for the missing echo (#69 C1).
+	##
+	## The veil is the 1.35 overshoot plane: a shaft drawn there crosses IN FRONT
+	## of the waystones and the graph, which is the wrong-plane failure #66/#67
+	## already cost two rounds. Depth here is bought by the shafts standing
+	## BEHIND the stones while the rising motes drift in front of them — two
+	## planes doing different jobs. A near echo would put the same vocabulary on
+	## both sides of the play plane and flatten the very cue it copies.
 	func _draw_shafts(w: float, horizon: float, path_y: float) -> void:
 		# Six near-vertical caustics between horizon and path — the Sunken
 		# City's drowned light. Sway is deterministic off _age + index. Each
@@ -269,9 +286,14 @@ class RegionBand extends MapBand:
 class PathBand extends MapBand:
 	## Half-height of the road bed's fade, in stage px. Deliberately NOT
 	## `FAR_BLEED`: that number covers a band's drift overshoot, this one is a
-	## composition width, and they collide at 8.0 by coincidence only. Absolute px
-	## means the bed is 2.0% of a 820-tall stage and 4.1% of a 390-tall one —
-	## whether that should be a rate is the tuning sweep's call (#69).
+	## composition width, and they collide at 8.0 by coincidence only.
+	##
+	## STAYS ABSOLUTE, and the sweep that asked the question is why. 8.0 px is
+	## 2.0% of a 820-tall stage and 4.1% of a 390-tall one, which reads as an
+	## argument for a rate — but this bed is a §5 band-3 STAND-IN, and a rate
+	## would be tuning the placeholder's proportions instead of building the
+	## plane. The taper and edges that make it a road, and this number's fate
+	## with them, belong to #70 (#69 C5, PM R2 on PR #79).
 	const BED_HALF: float = 8.0
 
 	func _init() -> void:
@@ -502,14 +524,23 @@ class VeilBand extends MapBand:
 			var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
 			if kind == &"storm":
 				# Speed reads as a streak — the SAME soft disc stretched along
-				# the velocity, ≥3× longer than tall and 40% dimmer, so an
-				# ember can never be confused with the graph's crisp lead
-				# dashes on the play plane (PR #75 DL R1 MAJOR).
-				var length: float = maxf(radius * 3.0, m.z * 0.5)
+				# the velocity, never a `draw_line`, and always ≥3× longer than
+				# tall, so an ember cannot be confused with the graph's crisp
+				# lead dashes on the play plane (PR #75 DL R1 MAJOR).
+				#
+				# That fix was right in kind and 5–10× too strong in degree: the
+				# primitive change is what stopped the impersonation, and the
+				# dimming and thinning on top of it left the act-3 storm as the
+				# QUIETEST weather in the game. The aspect floor is what keeps
+				# the streak safe, not its faintness, so the ink comes back —
+				# thicker, longer, brighter — with the 3:1 floor measured
+				# against the new thickness (#69 C3).
+				var thick: float = radius * 2.2
+				var length: float = maxf(thick * 3.0, m.z * 0.9)
 				draw_texture_rect(glow, Rect2(
-					Vector2(x - length * 0.5, y - radius * 0.5),
-					Vector2(length, radius)), false,
-					Color(tint, alpha * 0.6))
+					Vector2(x - length * 0.5, y - thick * 0.5),
+					Vector2(length, thick)), false,
+					Color(tint, alpha))
 			else:
 				draw_texture_rect(glow, Rect2(
 					Vector2(x, y) - Vector2.ONE * radius * 2.0,

@@ -320,10 +320,20 @@ func set_act_scenery(stage_act: int) -> void:
 	_push_bands(true)
 
 
+## Put the camera where the marker's node sits. Called on every `refresh`, which
+## `set_shape` also routes through — and a shape re-pick can land mid-glide, when
+## a snap would tear the walk out from under the lantern. Re-aim instead: the
+## destination is re-derived at the NEW geometry (`_cam_for` reads `_step` and
+## `_cam_max`, both shape-dependent) while `_cam_x` keeps easing, so the glide
+## finishes at the right place on the new stage (#69 B2, the other door into the
+## state PR #79 closed against input).
 func _seat_marker() -> void:
 	var i: int = map.at if map.at >= 0 and map.at < map.nodes.size() else 0
-	_cam_x = _cam_for(i) if not map.nodes.is_empty() else _cam_min()
-	_cam_target = _cam_x
+	var seat: float = _cam_for(i) if not map.nodes.is_empty() else _cam_min()
+	_cam_target = seat
+	if _travelling:
+		return
+	_cam_x = seat
 	_cam_velocity = 0.0
 
 
