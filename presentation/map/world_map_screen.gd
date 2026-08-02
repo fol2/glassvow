@@ -626,7 +626,7 @@ func _layout_waystones() -> void:
 		# depth reading.
 		var node_scale: float = k * depth_scale(depth)
 		ws.scale = Vector2.ONE * node_scale
-		ws.modulate.a = clampf(1.0 - depth * 0.10, 0.12, 1.0)
+		ws.set_depth_alpha(clampf(1.0 - depth * 0.10, 0.12, 1.0))
 		# Before the seat, not after: the pad changes `size`, and the seat is
 		# computed from it. The drawing sits in the middle of the padded rect,
 		# so centring the rect still centres the stone.
@@ -644,13 +644,7 @@ func _node_pos(node: MapNode) -> Vector2:
 	var step: float = _step()
 	var world_x: float = _world_x(float(node.row))
 	var depth: float = absf(world_x - _cam_x) / maxf(step, 1.0)
-	# `laneMin` is a TOUCH floor, so the depth compression is not allowed to
-	# multiply it away: 46 × 0.78 = 35.9 px, under the 44 px rect `set_touch_min`
-	# exists to guarantee. Depth still compresses the lanes while there is room
-	# and simply stops when it reaches the floor (#69, carried from P5.1 DL R2).
-	var compress: float = clampf(1.0 - depth * 0.025, 0.78, 1.0)
-	var lane_gap: float = maxf(_lane_gap() * compress,
-		_trail_num("laneMin", 46.0))
+	var lane_gap: float = lane_pitch(depth)
 	var d: Vector2 = Vector2(
 		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
 	return Vector2(
@@ -715,6 +709,19 @@ func _world_x(row: float) -> float:
 
 func _lead_px() -> float:
 	return _trail_num("lead", 0.333) * size.x
+
+
+## Distance between two lanes at `depth` steps from the camera, in stage px.
+##
+## `laneMin` is a TOUCH floor, so depth compression is not allowed to multiply it
+## away: 46 × 0.78 = 35.9 px, under the 44 px rect `set_touch_min` exists to
+## guarantee. Depth compresses while there is room and stops at the floor (#69,
+## carried from P5.1 DL R2). Named rather than inlined because #69 D1 asked
+## whether the bounty chip could be seated against it — it cannot, and the
+## answer is recorded at `GlassWaystone.paint_bounty_chip`.
+func lane_pitch(depth: float) -> float:
+	return maxf(_lane_gap() * clampf(1.0 - depth * 0.025, 0.78, 1.0),
+		_trail_num("laneMin", 46.0))
 
 
 ## How far a stone shrinks at `depth` steps from the camera. Anchored at 1.0, so
