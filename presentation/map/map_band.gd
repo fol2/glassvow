@@ -327,11 +327,24 @@ class PathBand extends MapBand:
 	## the `bed_taper` floor IS reached on desktop-landscape, adding a second
 	## kink over the final 5.8 px of a 1458 px stage (sub-pixel, non-degenerate);
 	## and the rendered apex measures ~10% blunter than the formula (6.85 px
-	## against 7.6, PR #84 DL R1 m2, isolated against a 12-frame median with the
-	## taper disabled as control). The chord error above is three orders of
-	## magnitude too small to explain that, so the cause is elsewhere and is
-	## unresolved. The effect is benign — a blunt apex is what stops the taper
-	## reading as an arrowhead — and it is recorded here rather than chased.
+	## against 7.6, PR #84 DL R1 m2, isolated by re-rendering with the taper
+	## disabled and fitting a 12-frame median per column — a different control
+	## from `bed_taper`'s alpha-zero differencing, and used for a different job).
+	##
+	## That deficit is 0.76 px, i.e. **162× the chord error at pad-landscape
+	## where it was measured** (0.0047 px) and 10× even the worst-shape figure
+	## above — two orders of magnitude, not the three an earlier draft of this
+	## sentence claimed, which PR #84 DL R2 falsified against numbers eight lines
+	## up. The conclusion is unchanged and the correction matters anyway: this
+	## sentence is the whole argument for not chasing the defect, so it cannot be
+	## the one carrying an unreproducible figure.
+	##
+	## What IS known, and is worth a reader's time before they spend a capture
+	## round: at the far edge the formula and the measurement agree to within a
+	## couple of percent, against −10% at the apex. **The effect is apex-local —
+	## not a global scale factor and not a constant threshold loss.** The cause
+	## is still unresolved. It is benign, and arguably load-bearing: a blunt apex
+	## is what stops the taper reading as an arrowhead.
 	const BED_STEPS: int = 24
 
 	func _init() -> void:
