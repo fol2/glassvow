@@ -177,6 +177,39 @@ static func run(fails: Array[String]) -> void:
 			"the terminus arch fits inside %s (%.1f + %.1f lean + %.1f vs %.0f)"
 				% [shape_name, seat_x, lean, arch, probe.size.x])
 		probe.free()
+	# The road plane's taper, over the shape matrix (#69 A7/C5, #70). Three laws:
+	# it never inverts, it never grows wide enough to swallow the lane the stones
+	# stand in, and it is actually widest at the camera's seat — a taper that
+	# stopped tapering would still satisfy the first two and would be a rectangle
+	# with a gradient, which is what this task replaced.
+	for shape_name: StringName in StageShape.REFERENCES:
+		var road: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
+		road.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		road.size = Vector2(StageShape.REFERENCES[shape_name])
+		road.set_shape(shape_name)
+		var w_px: float = road.size.x
+		var widest: float = road.bed_half(road._lead_px())
+		var thinnest: float = widest
+		var lane_room: float = road.lane_pitch(0.0) * 0.5
+		var inverted: bool = false
+		for step_i: int in range(0, 41):
+			var probe_x: float = w_px * float(step_i) / 40.0
+			var half: float = road.bed_half(probe_x)
+			if half <= 0.0:
+				inverted = true
+			thinnest = minf(thinnest, half)
+			if half > widest:
+				widest = half
+		_check(fails, not inverted, "the road bed never inverts on %s" % shape_name)
+		_check(fails, is_equal_approx(widest, road.bed_half(road._lead_px())),
+			"the bed is widest at the camera's seat on %s" % shape_name)
+		_check(fails, thinnest < widest * 0.9,
+			"…and has narrowed at least a tenth by the frame edge on %s (%.2f vs %.2f)"
+				% [shape_name, thinnest, widest])
+		_check(fails, widest * MapBand.PathBand.VERGE <= lane_room,
+			"the road and its verge stay out of the next lane on %s (%.1f vs %.1f)"
+				% [shape_name, widest * MapBand.PathBand.VERGE, lane_room])
+		road.free()
 	# A refresh mid-glide must RE-AIM, not seat. `set_shape` routes through
 	# `refresh` → `_seat_marker`, and a hard `_cam_x` write there tore the walk
 	# out from under the lantern when the window crossed an aspect boundary
