@@ -326,13 +326,15 @@ class PathBand extends MapBand:
 	## Two further facts measured on this polyline, neither of them its fault:
 	## the `bed_taper` floor IS reached on desktop-landscape, adding a second
 	## kink over the final 5.8 px of a 1458 px stage (sub-pixel, non-degenerate);
-	## and the rendered apex measures ~10% blunter than the formula (6.85 px
-	## against 7.6, PR #84 DL R1 m2, isolated by re-rendering with the taper
-	## disabled and fitting a 12-frame median per column — a different control
-	## from `bed_taper`'s alpha-zero differencing, and used for a different job).
+	## and the rendered apex measures 6.85 px against the formula's 7.61 — a
+	## deficit of 0.76 px, quoted to the precision that makes it fall out of the
+	## subtraction as well as out of the ~10% (PR #84 DL R3). Isolated by
+	## re-rendering with the taper disabled and fitting a 12-frame median per
+	## column — a different control from `bed_taper`'s alpha-zero differencing,
+	## and used for a different job, though both fit the SAME 6.85 px.
 	##
 	## That deficit is 0.76 px, i.e. **162× the chord error at pad-landscape
-	## where it was measured** (0.0047 px) and 10× even the worst-shape figure
+	## where it was measured** (0.0047 px) and 10× even the worst-shape BED figure
 	## above — two orders of magnitude, not the three an earlier draft of this
 	## sentence claimed, which PR #84 DL R2 falsified against numbers eight lines
 	## up. The conclusion is unchanged and the correction matters anyway: this

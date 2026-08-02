@@ -780,7 +780,8 @@ func depth_at(screen_x: float) -> float:
 ##
 ## Rate-derived, which is the question #69 C5 recorded and handed here: the 8 px
 ## constant it replaces was 0.98% of a 820-tall stage and 2.05% of a 390-tall
-## one, so the same road read twice as wide on the narrowest shape. The default
+## one, so the same road read twice as wide on the SHORTEST shape (390 px tall;
+## this said "narrowest" until PR #84 DL R3 — 390 is its height). The default
 ## rate reproduces 8.04 px at 820, where the constant was tuned, and the clamps
 ## stop a very short or very tall stage from collapsing or flooding it.
 ##
