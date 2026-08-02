@@ -189,7 +189,6 @@ static func run(fails: Array[String]) -> void:
 		road.set_shape(shape_name)
 		var w_px: float = road.size.x
 		var widest: float = road.bed_half(road._lead_px())
-		var thinnest: float = widest
 		var lane_room: float = road.lane_pitch(0.0) * 0.5
 		var inverted: bool = false
 		for step_i: int in range(0, 41):
@@ -197,19 +196,47 @@ static func run(fails: Array[String]) -> void:
 			var half: float = road.bed_half(probe_x)
 			if half <= 0.0:
 				inverted = true
-			thinnest = minf(thinnest, half)
 			if half > widest:
 				widest = half
 		_check(fails, not inverted, "the road bed never inverts on %s" % shape_name)
 		_check(fails, is_equal_approx(widest, road.bed_half(road._lead_px())),
 			"the bed is widest at the camera's seat on %s" % shape_name)
-		_check(fails, thinnest < widest * 0.9,
-			"…and has narrowed at least a tenth by the frame edge on %s (%.2f vs %.2f)"
-				% [shape_name, thinnest, widest])
+		# BOTH edges, read directly — not the minimum anywhere on the frame.
+		# The first version tracked `thinnest` over the probe sweep, and PR #84
+		# PM R1 broke it with a taper that dipped to 0.8 between depth 0.5 and
+		# 1.5 and then widened back to 1.0 at the far edge: a road that narrows
+		# in the middle and flares at the rim passed a gate whose message says
+		# "by the frame edge". `<=` because the message says "at least a tenth"
+		# and `<` rejected exactly a tenth.
+		var left_edge: float = road.bed_half(0.0)
+		var right_edge: float = road.bed_half(w_px)
+		_check(fails, left_edge <= widest * 0.9 and right_edge <= widest * 0.9,
+			"…and has narrowed at least a tenth AT BOTH frame edges on %s (%.2f | %.2f vs %.2f)"
+				% [shape_name, left_edge, right_edge, widest])
 		_check(fails, widest * MapBand.PathBand.VERGE <= lane_room,
 			"the road and its verge stay out of the next lane on %s (%.1f vs %.1f)"
 				% [shape_name, widest * MapBand.PathBand.VERGE, lane_room])
 		road.free()
+	# The bed keys must be AUTHORED, not merely resolvable. `LayoutBook.resolve`
+	# inserts every declared default through `_defaults()` before `_audit()` runs,
+	# so deleting these three from the JSON leaves the book validating cleanly
+	# and the road silently running on schema defaults — the schema/JSON
+	# atomicity this task claimed was never enforced for the added-key case
+	# (PR #84 PM R1). Read the raw file, not the resolved book.
+	var book_raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://assets/layout/combat-layout.json"))
+	var authored: Dictionary = {}
+	if typeof(book_raw) == TYPE_DICTIONARY:
+		var book: Dictionary = book_raw
+		if book.has("scopes"):
+			var scopes: Dictionary = book["scopes"]
+			if scopes.has("map"):
+				var map_scope: Dictionary = scopes["map"]
+				if map_scope.has("base"):
+					authored = map_scope["base"]
+	for key: String in ["bedRate", "bedMin", "bedMax"]:
+		_check(fails, authored.has(key),
+			"combat-layout.json authors scopes.map.base.%s" % key)
 	# A refresh mid-glide must RE-AIM, not seat. `set_shape` routes through
 	# `refresh` → `_seat_marker`, and a hard `_cam_x` write there tore the walk
 	# out from under the lantern when the window crossed an aspect boundary

@@ -637,10 +637,9 @@ func set_shape(stage_shape: StringName) -> void:
 func _layout_waystones() -> void:
 	var k: float = _trail_num("scale", 0.36)
 	var touch: float = _trail_num("touch", 0.0)
-	var step: float = _step()
 	for i: int in range(_waystones.size()):
 		var ws: GlassWaystone = _waystones[i]
-		var depth: float = absf(_world_x(float(map.nodes[i].row)) - _cam_x) / maxf(step, 1.0)
+		var depth: float = depth_of(_world_x(float(map.nodes[i].row)))
 		# Both falloffs are anchored at the NEAREST stone, not past it. They used
 		# to peak at 1.08 and 1.15, so `scale` reached its nominal `k` only at
 		# depth 2.29 and alpha stayed pinned at 1.0 until depth 1.25 — everything
@@ -665,9 +664,8 @@ func _layout_waystones() -> void:
 ## each axis has — step has 150–290px, lane only 46–50. PointerDrift at the
 ## path amplitude keeps the stones on the path plane's lean.
 func _node_pos(node: MapNode) -> Vector2:
-	var step: float = _step()
 	var world_x: float = _world_x(float(node.row))
-	var depth: float = absf(world_x - _cam_x) / maxf(step, 1.0)
+	var depth: float = depth_of(world_x)
 	var lane_gap: float = lane_pitch(depth)
 	var d: Vector2 = Vector2(
 		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
@@ -748,16 +746,34 @@ func lane_pitch(depth: float) -> float:
 		_trail_num("laneMin", 46.0))
 
 
-## The depth reading at a point on the STAGE, in steps from the camera's seat.
+## The map's ONE depth projection: how far a world point sits from the camera,
+## in steps. Every depth curve on this map reads from here — stone size and
+## alpha (`_layout_waystones`), lane compression (`lane_pitch`), the terminus
+## arch (`MapBand.PathBand._draw_rose_window`) and the road's taper (`bed_half`).
 ##
-## `_node_pos` computes `|world_x − cam_x| / step` per node, and its screen x is
-## `world_x − cam_x + lead·W`, so the same reading anywhere on the frame is
-## `|screen_x − lead·W| / step`: nearest at the lead seat and growing toward BOTH
-## edges. Named because the road plane has to read depth continuously across the
-## frame while the stones sample it at their own columns, and two derivations of
-## one projection is how this map has failed before (#70).
+## It is a function rather than the one-line expression it replaces because the
+## expression had been written out three times, and this map has twice paid for
+## a second copy of one geometry going stale — the arch's radius (PR #79 PM R1)
+## and `BED_HALF` (#69 C5). PR #84 PM R1 caught the third.
+func depth_of(world_x: float) -> float:
+	return absf(world_x - _cam_x) / maxf(_step(), 1.0)
+
+
+## The same projection read at a point on the STAGE, for the GROUND PLANE.
+##
+## A node's screen x is `world_x − cam_x + lead·W + jy·STEP_JITTER + drift.x`, so
+## dropping the last two terms and inverting gives `world_x = screen_x − lead·W
+## + cam_x` — which is what this passes to `depth_of`. It is one function, not an
+## identity to be maintained.
+##
+## **The two dropped terms are why this must not be fed a stone's screen x.** The
+## ground does not jitter and does not lean, so for the road they are correctly
+## absent; but a stone carries up to `STEP_JITTER + PATH_DRIFT_AMP.x` of them,
+## and reading a stone's depth from its drawn position would disagree with the
+## depth it was drawn AT. Stones pass their world x to `depth_of` directly
+## (PR #84 PM R1).
 func depth_at(screen_x: float) -> float:
-	return absf(screen_x - _lead_px()) / maxf(_step(), 1.0)
+	return depth_of(screen_x - _lead_px() + _cam_x)
 
 
 ## Half-height of the road bed at a point on the stage, in stage px.
@@ -767,6 +783,34 @@ func depth_at(screen_x: float) -> float:
 ## one, so the same road read twice as wide on the narrowest shape. The default
 ## rate reproduces 8.04 px at 820, where the constant was tuned, and the clamps
 ## stop a very short or very tall stage from collapsing or flooding it.
+##
+## **Improved, not settled** — the word this docstring used, and PR #84 DL R1 m3
+## was right that leaving it there is how the same arithmetic gets re-litigated
+## in six weeks. What the change actually bought, measured over the shape matrix:
+##
+##   phone-portrait      8.27   0.980% of stage H   16.5% of lane pitch
+##   pad-portrait       10.00   0.847%  (bedMax)    20.0%
+##   pad-landscape       8.04   0.980%              16.3%
+##   desktop-landscape   8.04   0.980%              16.3%
+##   phone-landscape     6.00   1.538%  (bedMin)    13.0%
+##
+## Against stage height the spread falls from 3.03× to 1.82× and three shapes
+## land exactly on 0.980%. But **the clamps bind at two of the five**, and the
+## 390-tall stage that motivated deleting the constant is still 1.57× wider in
+## proportion than the reference — `bedMin` floors it at 6.0 where the rate wants
+## 3.82, so the excess is reduced by 40%, not removed.
+##
+## And the honest counter-argument, which belongs next to the change rather than
+## in a review thread: measured against LANE PITCH — the only other vertical
+## rhythm on this plane — the rate is *less* consistent than the constant was.
+## `_lane_gap` clamps to 46–50, so lanes vary 8.7% across a 3.03× range of stage
+## heights; bed-to-lane was 16.0–17.4% (1.09×) under `BED_HALF` and is now
+## 13.0–20.0% (1.53×). The book has already decided that vertical spacing here is
+## effectively absolute px, and the road is now measured against a different
+## ruler from the lanes it runs between. Stage-relative is defensible and
+## phone-portrait — the shape the whole question came from — is now exactly
+## right; but if this is ever revisited, `laneMin`/`laneMax` are the precedent
+## pointing the other way.
 func bed_half(screen_x: float) -> float:
 	return clampf(size.y * _trail_num("bedRate", 0.0098),
 		_trail_num("bedMin", 6.0), _trail_num("bedMax", 10.0)) \
@@ -782,12 +826,30 @@ func bed_half(screen_x: float) -> float:
 ## stones' coefficient narrows it by 11% edge to edge — a rectangle with a
 ## gradient, not a road.
 ##
-## 0.18 was picked by measuring both on the running map at pad-landscape, seed
-## 717, column by column with the dashes and stones rejected: 0.12 narrows the
-## bed 6.8 → 5.4 stage px across the frame (**20%**, inside the region
-## gradient's own noise), 0.18 narrows it 7.1 → 3.9 (**44%**). Peak lift over
-## the ground is 16–17 luma either way, which keeps it under the dashes' 25–29
-## — the road must not compete with the play plane (#66/#67).
+## 0.18 was picked by measuring on the running map at pad-landscape, seed 717,
+## and then re-measured independently by PR #84 DL R1, which isolated the road
+## by differencing a 12-frame median against the same frames rendered with the
+## bed's alpha at zero (off-road residual 0.18 luma). Their figures, seat →
+## right edge: 0.12 gives 7.40 → 5.10 px (**31%**), 0.18 gives 6.85 → 3.45
+## (**50%**), 0.24 gives 6.95 → 3.40 (**51%**).
+##
+## **The argument for 0.18 is not that 50% beats 31% — it is that 0.24 buys
+## nothing.** At 0.24 the `0.40` floor below engages at depth 2.5, i.e. x ≈ 998
+## on an 1180 stage, so the far sixth of the frame stops tapering entirely
+## (3.45 px at x = 1050, 3.40 at x = 1150 — flat) and the road ends in a blunt
+## stub exactly where recession should read strongest. At 0.18 the floor lands
+## at x ≈ 1199, just past the reference frame. **0.18 is the largest coefficient
+## whose taper stays live to the right edge at the reference shape**, which also
+## means raising it requires revisiting the floor, not just this constant.
+## (On desktop-landscape, 1458 wide, the floor does clip the final 5.8 px even
+## at 0.18 — sub-pixel and non-degenerate, PR #84 PM R1.)
+##
+## Crown lift over the ground measures 15.2 luma (p5 14.4, p95 16.3) and is
+## identical at phone-portrait and phone-landscape, against dashes at 36–63,
+## stones at 159 and the marker at 208 — the road must not compete with the play
+## plane (#66/#67). Worth knowing before anyone tunes this again: at those alphas
+## 0.12, 0.18 and 0.24 are close to indistinguishable in the far third. The
+## width gradient reads as atmosphere, not as measurement.
 ##
 ## The other four are named in `depth_scale`'s docstring; this one belongs with
 ## them.

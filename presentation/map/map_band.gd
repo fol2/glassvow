@@ -294,7 +294,10 @@ class PathBand extends MapBand:
 	##
 	## The lip is what makes this a road rather than a band of haze, and it is a
 	## GRADIENT BREAK, not a stroke: the bed falls 0.09 → 0.03 across its half,
-	## then the verge falls 0.03 → 0 across nearly twice that again. The slope
+	## then the verge falls 0.03 → 0 across a further 0.9 of that half — `VERGE`
+	## is the verge's REACH from the crown, so the verge is slightly NARROWER
+	## than the bed, not "nearly twice" it as this sentence read until PR #84
+	## DL R1 m1 measured the profile and found it zero at t = 1.9. The slope
 	## changes at the lip and nothing hard is drawn, because the dashes own the
 	## only hard line on this plane (#64) and a second one reads as one thing
 	## drawn twice (#66/#67).
@@ -303,9 +306,32 @@ class PathBand extends MapBand:
 	const VERGE: float = 1.9
 	## Steps across the frame. The taper is piecewise LINEAR — depth is linear in
 	## x and the taper is linear in depth — so this polyline is exact everywhere
-	## except within one step of the kink at the camera's seat, where it cuts the
-	## corner by `base · 0.18 · (W/24)/step`. Solved over the five shapes that is
-	## 0.19–0.37 px, worst at pad-portrait. 24 buys sub-pixel for four draw calls.
+	## except within one cell of the kink at the camera's seat.
+	##
+	## With slope `s = base · 0.18 / step`, cell width `h = W / BED_STEPS` and the
+	## kink sitting `f` of a cell from the nearest vertex, the deficit there is
+	## `2·s·h·f·(1−f)`, bounded by `s·h/2` — HALF the one-cell figure this
+	## docstring used to quote, and quoted for the wrong shape besides (PR #84
+	## PM R1). Solved per shape, the bed boundary is off by **0.0035–0.0762 px**
+	## and the verge's outer boundary, at 1.9× the slope, by up to **0.1448 px**.
+	##
+	## Worst is **phone-portrait**, and the reason is the thing to carry away: it
+	## is the one shape that overrides `lead` (0.22, and `stepMin` 128). Elsewhere
+	## `lead·BED_STEPS = 0.333·24 = 7.992`, so the kink lands within 0.008 of a
+	## cell of vertex 8 and the error is ~0.005 px; at 0.22 it lands 0.28 of a
+	## cell away and the error is 16× larger. **BED_STEPS and `lead` are coupled**
+	## — a value that is not a multiple of three stops the kink landing on a
+	## vertex at the four shapes where it currently does.
+	##
+	## Two further facts measured on this polyline, neither of them its fault:
+	## the `bed_taper` floor IS reached on desktop-landscape, adding a second
+	## kink over the final 5.8 px of a 1458 px stage (sub-pixel, non-degenerate);
+	## and the rendered apex measures ~10% blunter than the formula (6.85 px
+	## against 7.6, PR #84 DL R1 m2, isolated against a 12-frame median with the
+	## taper disabled as control). The chord error above is three orders of
+	## magnitude too small to explain that, so the cause is elsewhere and is
+	## unresolved. The effect is benign — a blunt apex is what stops the taper
+	## reading as an arrowhead — and it is recorded here rather than chased.
 	const BED_STEPS: int = 24
 
 	func _init() -> void:
@@ -382,9 +408,7 @@ class PathBand extends MapBand:
 		if boss == null:
 			return
 		var pos: Vector2 = host._node_pos(boss)
-		var step: float = host._step()
-		var depth: float = absf(host._world_x(float(boss.row)) - host._cam_x) \
-			/ maxf(step, 1.0)
+		var depth: float = host.depth_of(host._world_x(float(boss.row)))
 		# The radius lives on the HOST, not here. It was a copy of the stones'
 		# curve once, and when that curve's anchor moved from 1.08 to 1.0 the
 		# copy was left behind for one commit — an arch 8% larger than the
