@@ -253,15 +253,6 @@ func _seat_art() -> void:
 	_glyph_art.size = Vector2.ONE * glyph_side
 
 
-## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
-## "unlit" statement (§2), so the word would only restate the emblem; the coin
-## glyph gives the number its unit the same way the HUD does.
-##
-## Painted onto `ci` — `MapBand.ChipBand`, which has already set the transform to
-## this stone's position and scale, so everything below stays in local units.
-## `flip` mirrors the pill to the stone's LEFT; the band decides, because only it
-## knows the frame. See the seat comment in the body for why neither side is
-## under the stone.
 ## Whether this stone has a bounty left to promise. False the moment it kindles.
 func has_chip() -> bool:
 	return kind == "unlit" and bounty > 0
@@ -279,6 +270,24 @@ func chip_reach() -> float:
 	return UNLIT_RADIUS + (13.0 + 4.0 + tw + 16.0) + 4.0
 
 
+## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
+## "unlit" statement (§2), so the word would only restate the emblem; the coin
+## glyph gives the number its unit the same way the HUD does.
+##
+## Painted onto `ci` — `MapBand.ChipBand`, which has already set the transform to
+## this stone's position and scale, so everything below stays in local units.
+## `flip` mirrors the pill to the stone's LEFT; the band decides, because only it
+## knows the frame. See the seat comment in the body for why neither side is
+## under the stone.
+##
+## What this does NOT settle: #69 filed D2 for a number a player can GLANCE at,
+## and that is a size problem this commit does not touch. 13 px of text under the
+## 0.56–0.66 map scale the shapes ship renders about 8 stage px tall, where the
+## coverage a glyph reaches rather
+## than the authored colour decides the contrast. Moving the chip out of the
+## stone's alpha was necessary and is not sufficient — no alpha change reaches a
+## coverage problem. Declined here deliberately, with the criterion and three
+## candidate fixes carried to #81, which stays open past #69 (PR #80 DL R1/PM R1).
 func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
@@ -292,18 +301,31 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	var icon: float = 13.0
 	var chip_w: float = icon + 4.0 + tw + 16.0
 	var chip_h: float = 19.0
-	# BESIDE the stone, not below it, and the lane pitch is why. Under the pane
-	# the chip needed 50 local px of clearance while the shipped lane pitch is
-	# 46–50 stage px — smaller than two emblem radii — so at every shape the
-	# chip's bottom landed on the face of the stone one lane down whenever that
-	# lane was occupied. No vertical seat fixes that: there is no gap to sit in.
+	# BESIDE the stone, not below it, and the REACHABLE neighbour's ring is why.
+	# Measured in one unit — stage px, seed 717's worst lane-adjacent chip pair
+	# (n40 unlit above n18 monster), every shipped shape. The old seat under the
+	# pane put the pill's bottom 26.2–30.7 px below this stone's centre; the lane
+	# below sits 46.0–46.2 px away and reaches back up 20–23 px of pane, +5 local
+	# px more while it is lit and drawing its focus ring. Positive is overlap:
 	#
-	# The walk axis has the room the lane axis does not — 128 px of step at the
-	# narrowest shape against a chip that reaches 60 local px from the centre —
-	# so the chip sits at the stone's own height, to its right, clear of both
-	# lanes by construction. It crosses the dashed edge running to the next
-	# node, which is a pale 1px line under an opaque pill: a label over a road,
-	# not a label over another lantern (#69 D1).
+	#   shape                pane    ring    glow
+	#   phone-portrait       +5.2    +8.2    +12.5
+	#   pad-portrait         −0.9    +1.8     +5.6
+	#   pad/desktop-land.    −0.6    +2.1     +5.8
+	#   phone-landscape      −2.1    +0.5     +4.1
+	#
+	# So against bare panes it collides at ONE shape, and against a reachable
+	# neighbour — which is what #69 D1 filed — at all five, by a margin no
+	# vertical nudge buys back. The lane pitch itself is not the culprit it first
+	# looked like: two ordinary radii are 39.4–46.2 stage px against a 46–50 px
+	# pitch, so the stones never touch. It is the pill's reach plus the ring's.
+	#
+	# The walk axis has room the lane axis does not: the pill reaches 86 local px
+	# from centre — 48.1–56.4 stage px — against a step of 128 stage px at the
+	# narrowest shape and 290 at the widest, so it spends at most 44% of one
+	# step. It crosses the dashed edge running to the next node, which is a pale
+	# 1px line under an opaque pill: a label over a road, not a label over
+	# another lantern (#69 D1; units corrected, PM R1 on PR #80).
 	var side: float = -1.0 if flip else 1.0
 	var cx: float = _pad.x + WIDTH * 0.5 + side * (UNLIT_RADIUS + chip_w * 0.5 + 4.0)
 	var cy: float = _pad.y + EMBLEM_H * 0.5

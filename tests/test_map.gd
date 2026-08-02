@@ -150,20 +150,42 @@ static func run(fails: Array[String]) -> void:
 		"a chip that would leave the frame flips left")
 	_check(fails, not MapBand.ChipBand.flips(30.0, 60.0, 100.0),
 		"a chip with room on neither side does not trade edges")
-	var glider: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
+	# Drive the real door — resize, then `set_shape` → `refresh` → `_seat_marker`
+	# — with the marker walked off node 0 and `_cam_target` seeded wrong. Both
+	# matter: `_cam_for(0)` clamps to `_cam_min()` on every shape and
+	# construction already seats the target there, so a re-aim assertion taken at
+	# node 0 passes whether or not anything re-aims (PM R1 on PR #80).
+	# Full content, not the slice: `refresh(run)` re-reads `content.acts[act]` for
+	# the title line, which the slice does not carry.
+	var glide_run: RunState = RunState.new_run(full, 717, "run-glide")
+	var glider: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), full)
 	glider.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	glider.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	tree.root.add_child(glider)
+	glider.refresh(glide_run)
+	glider.map.enter(0)
+	glider.map.clear_current()
+	glider.map.enter(1)
+	glider.map.clear_current()
+	glider.map.enter(2)
+	glider.size = Vector2(StageShape.REFERENCES[&"phone-portrait"])
 	glider._cam_x = 999.0
+	glider._cam_target = -777.0
 	glider._travelling = true
-	glider.refresh(null)
+	glider.set_shape(&"phone-portrait")
+	var aim: float = glider._cam_for(glider.map.at)
+	_check(fails, aim > 1.0,
+		"the mid-glide gate stands where the camera's clamps do not decide the seat")
 	_check(fails, is_equal_approx(glider._cam_x, 999.0),
-		"a refresh mid-glide leaves the camera where the walk put it")
-	_check(fails, is_equal_approx(glider._cam_target, glider._cam_for(glider.map.at)),
-		"…and re-aims the target at the new geometry")
+		"a shape re-pick mid-glide leaves the camera where the walk put it")
+	_check(fails, is_equal_approx(glider._cam_target, aim),
+		"…and re-aims the target at the new shape's geometry")
 	glider._travelling = false
-	glider.refresh(null)
+	glider.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	glider.set_shape(StageShape.IDENTITY)
 	_check(fails, is_equal_approx(glider._cam_x, glider._cam_for(glider.map.at)),
-		"a refresh while seated still seats the camera")
+		"a shape re-pick while seated still seats the camera")
+	tree.root.remove_child(glider)
 	glider.free()
 	_check(fails, screen._waystones.size() == 5, "one waystone per node")
 	_check(fails, not screen.choose(2), "screen refuses an unreachable waystone")
