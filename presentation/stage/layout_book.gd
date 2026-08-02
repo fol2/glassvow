@@ -178,6 +178,14 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## give the terminus the same spot node 0 gets on the opening frame, leaving
 	## two thirds of the stage as empty road ahead of the boss. Further right than
 	## `lead`, but short of the edge so the act sky beyond it survives.
+	##
+	## SHAPE-DEPENDENT, and the reason is not derivable from the number:
+	## phone-portrait overrides it to 0.60 because it carries `scale` 0.68 — a 13%
+	## larger terminus arch — on the narrowest stage, so 0.72 ran the arch 8.7 px
+	## off a 390 px frame (PR #79 DL R1/R2, measured both ways). A seat and an arch
+	## size that were never tied together: `tests/test_map.gd` now asserts
+	## `seat·W + arch_radius ≤ W` over the whole shape matrix, so this pairing
+	## fails a gate rather than a human opening one shape's terminus frame.
 	&"trail/terminusSeat": {"bind": BIND_NONE, "unit": "ratio", "min": 0.3, "max": 0.95, "default": 0.72},
 	## The smallest a waystone may be to the finger, in stage px. Zero on the
 	## shapes a mouse points at, 44 on a phone — the floor Apple's HIG and

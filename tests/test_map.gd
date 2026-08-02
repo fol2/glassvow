@@ -111,6 +111,24 @@ static func run(fails: Array[String]) -> void:
 		Vector2(200.0, 100.0 + screen._lane_gap())).y - (100.0 + screen._lane_gap() * 0.5)
 	_check(fails, absf(flat_mid) < 1.0, "a same-lane edge bows under 1px")
 	_check(fails, absf(step_mid - 10.0) < 0.01, "a full lane step still bows 10px")
+	# The terminus arch must fit the frame it is seated in, on every shape. The
+	# seat and the arch's size are separate book values that nothing tied
+	# together: `terminusSeat` reaches 0.95 and `trail/scale` 2.0, and 0.72
+	# against phone-portrait's `scale` 0.68 already ran the arch 8.7px off a
+	# 390px frame once (#69, PR #79 DL R1). Off-tree so `size` is the shape's
+	# reference and no layout pass reclaims it.
+	for shape_name: StringName in StageShape.REFERENCES:
+		var reference: Vector2i = StageShape.REFERENCES[shape_name]
+		var probe: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
+		probe.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		probe.size = Vector2(reference)
+		probe.set_shape(shape_name)
+		var seat_x: float = probe.size.x * probe._trail_num("terminusSeat", 0.72)
+		var arch: float = probe.arch_radius(probe.terminus_depth(), probe.size.y)
+		_check(fails, seat_x + arch <= probe.size.x,
+			"the terminus arch fits inside %s (%.1f + %.1f vs %.0f)"
+				% [shape_name, seat_x, arch, probe.size.x])
+		probe.free()
 	_check(fails, screen._waystones.size() == 5, "one waystone per node")
 	_check(fails, not screen.choose(2), "screen refuses an unreachable waystone")
 	_check(fails, seen.is_empty(), "a refused choice hands off nothing")

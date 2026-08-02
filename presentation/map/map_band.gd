@@ -329,17 +329,14 @@ class PathBand extends MapBand:
 		var step: float = host._step()
 		var depth: float = absf(host._world_x(float(boss.row)) - host._cam_x) \
 			/ maxf(step, 1.0)
-		# The waystones' own scale knob and depth compress, then a stage cap —
-		# a fixed 110px broke phone-landscape at 61% of the stage's height.
-		#
-		# It must be the SAME curve `_layout_waystones` gives the stones, anchor
-		# included. When that anchor moved from 1.08 to 1.0 this copy was left
-		# behind for one commit, which made the arch 8% larger than the keystone
-		# standing at its foot — at the terminus, the one frame this whole change
-		# exists to compose (PR #79 PM R1).
-		var compress: float = clampf(1.0 - depth * 0.035, 0.72, 1.0)
-		var k: float = host._trail_num("scale", 0.36)
-		var R: float = minf(110.0 * (k / 0.6) * compress, size.y * 0.22)
+		# The radius lives on the HOST, not here. It was a copy of the stones'
+		# curve once, and when that curve's anchor moved from 1.08 to 1.0 the
+		# copy was left behind for one commit — an arch 8% larger than the
+		# keystone standing at its foot, at the terminus, the one frame this
+		# whole change exists to compose (PR #79 PM R1). One function now, so a
+		# later edit cannot move the stones without moving the arch, and so
+		# `tests/test_map.gd` can assert the fit against what actually draws.
+		var R: float = host.arch_radius(depth, size.y)
 		var path_y: float = size.y * host._trail_num("pathY", 0.64) + drift.y
 		var centre: Vector2 = Vector2(pos.x, path_y - R)
 		var glass: Color = GlassStyle.GLASS
