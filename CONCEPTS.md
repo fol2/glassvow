@@ -660,6 +660,66 @@ beneath it is what lights it.
 
 ---
 
+## The pilgrimage
+
+### Pilgrimage
+The journey across one act, walked west to east past lit and unlit stones toward
+the Spire. It is a graph the run advances through one node at a time, and a
+composed scene the player surveys by dragging — the same structure serving both,
+which is why its geometry is presentation's to project and the run's to decide.
+
+*Avoid:* the trail, the tower, the climb — the last is the vertical arrangement
+this replaced and now means nothing here.
+
+### Waystone
+One node of the Pilgrimage: a place the journey can stop, carrying what waits
+there and whether it has been reached. Unlit until the lantern arrives, lit
+after. What a Waystone *is* comes from the run; how large, how faint and how far
+apart it draws comes from Depth.
+
+### Step
+The unit of the walk axis. One Step is the distance between consecutive rows of
+the graph, and every other distance on the map is quoted in Steps rather than in
+pixels — a stone's depth, the camera's reach, the road's taper. Deriving a Step
+from the stage's width rather than fixing it is what lets one composition hold
+across every Stage shape.
+
+### Lane
+*(map sense — distinct from the concurrent-work Lane under **The port**; see
+Flagged ambiguities)* One track of the fan a Pilgrimage spreads across, holding
+the stones of a single column. Lanes converge with distance and are floored so
+two stones never crowd below a thumb's width.
+
+### Depth
+How far a point sits from the camera's seat, measured in Steps. **The map's one
+projection** — stone size, stone alpha, Lane compression, the terminus arch and
+the road's taper are each a curve read from it, and each is a separate curve on
+purpose. Anything that computes distance-from-camera without going through Depth
+is a second derivation of the same geometry, which is the failure this map has
+paid for more than once.
+
+### Band
+One plane of the Pilgrimage, drawn at its own parallax factor: sky and region
+behind, the play plane carrying stones and road, weather in front. Paint order
+is the plane order, so a thing's Band decides both how fast it travels and what
+it may cover. Moving something between Bands is a change of meaning, not of
+depth — scenery on the play plane travels at the player's speed, and light drawn
+in front of the stones stops being distance and becomes glare.
+
+### Road
+The drawn ground the Pilgrimage walks: a bed tapering with Depth, ending at a
+lip that is a break in the gradient rather than a stroke. It reads as ground
+without competing with the play plane, which is why it carries no hard line of
+its own — the graph's dashes own the only one.
+
+### Terminus
+The frame the journey ends on: the act's boss seated short of the far edge with
+sky beyond, and the arch composed around it. It is the one view the whole
+horizontal arrangement exists to compose, so what fits *there* is a constraint on
+every Stage shape rather than a property of the widest one.
+
+---
+
 ## The vigil
 
 ### Vigil
@@ -683,6 +743,17 @@ journey routes onto an ordinary act map.
 
 ## Flagged ambiguities
 
+- **"Lane" carries two unrelated meanings — check which cluster you are in.**
+  Under **The port**, a Lane is one concurrent line of work over the shared tree,
+  owning a declared subset of files. Under **The pilgrimage**, a Lane is one
+  track of the fan the map's stones sit in. Nothing connects them; a sentence
+  about "the lane" is unreadable without its cluster. The collision is live —
+  both are in daily use — so prefer "work lane" and "map lane" wherever the two
+  could be read in the same breath.
+- **"Depth" on the map is a distance in Steps, not a paint order.** Depth is how
+  far a point is from the camera's seat. Which plane a thing is drawn on is its
+  Band. They move together in the far distance and come apart on the play plane,
+  where everything shares one Band and Depth still varies across the frame.
 - **"Holo" had been used for both depth and rainbow colour — these are
   distinct.** Holo is the depth cue (points at different depths sliding past
   each other under tilt). Spectral colour is a separate, independent channel a
