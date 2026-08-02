@@ -117,6 +117,13 @@ static func run(fails: Array[String]) -> void:
 	# against phone-portrait's `scale` 0.68 already ran the arch 8.7px off a
 	# 390px frame once (#69, PR #79 DL R1). Off-tree so `size` is the shape's
 	# reference and no layout pass reclaims it.
+	#
+	# Assert the WORST realisation, not the nominal seat. The boss is drawn at
+	# its own `jy` wander plus the pointer lean, both on the step axis and both
+	# about the size of the margin being defended — and the seed belongs to a
+	# run, so a gate on one realisation guards one run (PR #79 DL R3).
+	var lean: float = WorldMapScreen.STEP_JITTER * WorldMap.JITTER_SPREAD.y * 0.5 \
+		+ WorldMapScreen.PATH_DRIFT_AMP.x
 	for shape_name: StringName in StageShape.REFERENCES:
 		var reference: Vector2i = StageShape.REFERENCES[shape_name]
 		var probe: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
@@ -125,9 +132,9 @@ static func run(fails: Array[String]) -> void:
 		probe.set_shape(shape_name)
 		var seat_x: float = probe.size.x * probe._trail_num("terminusSeat", 0.72)
 		var arch: float = probe.arch_radius(probe.terminus_depth(), probe.size.y)
-		_check(fails, seat_x + arch <= probe.size.x,
-			"the terminus arch fits inside %s (%.1f + %.1f vs %.0f)"
-				% [shape_name, seat_x, arch, probe.size.x])
+		_check(fails, seat_x + lean + arch <= probe.size.x,
+			"the terminus arch fits inside %s (%.1f + %.1f lean + %.1f vs %.0f)"
+				% [shape_name, seat_x, lean, arch, probe.size.x])
 		probe.free()
 	_check(fails, screen._waystones.size() == 5, "one waystone per node")
 	_check(fails, not screen.choose(2), "screen refuses an unreachable waystone")
