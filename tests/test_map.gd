@@ -136,6 +136,25 @@ static func run(fails: Array[String]) -> void:
 			"the terminus arch fits inside %s (%.1f + %.1f lean + %.1f vs %.0f)"
 				% [shape_name, seat_x, lean, arch, probe.size.x])
 		probe.free()
+	# A refresh mid-glide must RE-AIM, not seat. `set_shape` routes through
+	# `refresh` → `_seat_marker`, and a hard `_cam_x` write there tore the walk
+	# out from under the lantern when the window crossed an aspect boundary
+	# during a travel (#69 B2). Seated: both move. Travelling: only the target.
+	var glider: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
+	glider.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	glider.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	glider._cam_x = 999.0
+	glider._travelling = true
+	glider.refresh(null)
+	_check(fails, is_equal_approx(glider._cam_x, 999.0),
+		"a refresh mid-glide leaves the camera where the walk put it")
+	_check(fails, is_equal_approx(glider._cam_target, glider._cam_for(glider.map.at)),
+		"…and re-aims the target at the new geometry")
+	glider._travelling = false
+	glider.refresh(null)
+	_check(fails, is_equal_approx(glider._cam_x, glider._cam_for(glider.map.at)),
+		"a refresh while seated still seats the camera")
+	glider.free()
 	_check(fails, screen._waystones.size() == 5, "one waystone per node")
 	_check(fails, not screen.choose(2), "screen refuses an unreachable waystone")
 	_check(fails, seen.is_empty(), "a refused choice hands off nothing")
