@@ -150,6 +150,51 @@ static func run(fails: Array[String]) -> void:
 		"a chip that would leave the frame flips left")
 	_check(fails, not MapBand.ChipBand.flips(30.0, 60.0, 100.0),
 		"a chip with room on neither side does not trade edges")
+	# …and the reachable failure the flip rule never covered: the STONE leaving
+	# the frame while its pill does not. The seat is horizontal, so the pill
+	# reaches ~49 stage px from a centre whose own ink reaches ~20 — a 29px band
+	# at each edge, 12% of a node step, where a `+17` is drawn with no lantern
+	# under it. Both edges photographed (#69 D1, PR #80 DL R2 MAJOR). The three
+	# `flips` cases above assert a rule; these assert that it is asked at all.
+	_check(fails, MapBand.ChipBand.on_screen(600.0, 20.0, 1180.0),
+		"a stone in the middle of the frame draws its chip")
+	_check(fails, not MapBand.ChipBand.on_screen(1205.0, 20.0, 1180.0),
+		"a stone past the right edge draws no chip, flipped or not")
+	_check(fails, not MapBand.ChipBand.on_screen(-30.0, 20.0, 1180.0),
+		"a stone past the left edge draws no orphan pill on the road")
+	_check(fails, MapBand.ChipBand.on_screen(1179.0, 20.0, 1180.0),
+		"a stone still touching the right edge keeps its chip")
+	# Pointer drift sweeps a stone's flip input 28 stage px with no pan at all,
+	# so the threshold needs a band wider than that or the pill pops sides while
+	# the player only moves the cursor (PR #80 DL R2).
+	_check(fails, MapBand.ChipBand.FLIP_SLACK > 2.0 * WorldMapScreen.PATH_DRIFT_AMP.x,
+		"the flip's hysteresis outruns the pointer drift that would cross it")
+	_check(fails, MapBand.ChipBand.flips(1120.0, 60.0, 1180.0, true)
+			and not MapBand.ChipBand.flips(1120.0, 60.0, 1180.0, false),
+		"a flipped chip keeps its side inside the slack a fresh one would not take")
+	# …and that the band ASKS. `flips` was pure and asserted for two rounds while
+	# `_draw` painted every chip unconditionally, so a green suite and a `+17`
+	# alone on the road were consistent with each other. Hold the DECISION, on
+	# the real seed-717 geometry, not just the rule.
+	var chip_screen: WorldMapScreen = WorldMapScreen.new(generated, benchmark_content)
+	chip_screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	chip_screen.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	tree.root.add_child(chip_screen)
+	chip_screen._layout_waystones()
+	var chip_band: MapBand.ChipBand = chip_screen._chip_band
+	var seated: Dictionary[int, bool] = chip_band.seats(chip_screen.size.x)
+	_check(fails, not seated.is_empty(),
+		"seed 717 seats at least one bounty chip on the opening frame")
+	var orphan: int = seated.keys()[0]
+	var stone: GlassWaystone = chip_screen._waystones[orphan]
+	stone.position.x = chip_screen.size.x + 60.0
+	_check(fails, not chip_band.seats(chip_screen.size.x).has(orphan),
+		"a stone walked off the right edge takes its chip with it")
+	stone.position.x = -300.0
+	_check(fails, not chip_band.seats(chip_screen.size.x).has(orphan),
+		"…and off the left edge, where the pill would sit alone on the road")
+	tree.root.remove_child(chip_screen)
+	chip_screen.free()
 	# Drive the real door — resize, then `set_shape` → `refresh` → `_seat_marker`
 	# — with the marker walked off node 0 and `_cam_target` seeded wrong. Both
 	# matter: `_cam_for(0)` clamps to `_cam_min()` on every shape and
