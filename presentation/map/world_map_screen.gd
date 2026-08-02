@@ -784,9 +784,12 @@ func depth_at(screen_x: float) -> float:
 ## rate reproduces 8.04 px at 820, where the constant was tuned, and the clamps
 ## stop a very short or very tall stage from collapsing or flooding it.
 ##
-## **Improved, not settled** — the word this docstring used, and PR #84 DL R1 m3
-## was right that leaving it there is how the same arithmetic gets re-litigated
-## in six weeks. What the change actually bought, measured over the shape matrix:
+## **Improved, not settled** — the word was `LayoutBook`'s, on the `trail/bedRate`
+## field declaration, and PR #84 DL R1 m3 was right that leaving it there is how
+## the same arithmetic gets re-litigated in six weeks. (DL R2 then caught that
+## this paragraph was written as though the word had been here: it never was.
+## It is retired at its own site and that field now points back to this one.)
+## What the change actually bought, measured over the shape matrix:
 ##
 ##   phone-portrait      8.27   0.980% of stage H   16.5% of lane pitch
 ##   pad-portrait       10.00   0.847%  (bedMax)    20.0%
@@ -798,7 +801,10 @@ func depth_at(screen_x: float) -> float:
 ## land exactly on 0.980%. But **the clamps bind at two of the five**, and the
 ## 390-tall stage that motivated deleting the constant is still 1.57× wider in
 ## proportion than the reference — `bedMin` floors it at 6.0 where the rate wants
-## 3.82, so the excess is reduced by 40%, not removed.
+## 3.82, so the excess over what the rate asks for falls from 4.18 px to 2.18,
+## **48% of it removed, not all**. (That figure read 40% until PR #84 DL R2:
+## 40% is the SPREAD's improvement, 3.03× → 1.82×, two sentences above — a
+## number borrowed from the wrong row of the same paragraph.)
 ##
 ## And the honest counter-argument, which belongs next to the change rather than
 ## in a review thread: measured against LANE PITCH — the only other vertical

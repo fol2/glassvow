@@ -173,8 +173,16 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## seat, held inside `[bedMin, bedMax]` and tapered with depth from there.
 	## A rate rather than the 8 px constant it replaces: 8 px was 0.98% of a
 	## 820-tall stage and 2.05% of a 390-tall one, so the same road read twice
-	## as wide on the narrowest shape (#69 C5, settled in #70). The default
-	## reproduces 8.04 px at 820, where the constant was tuned.
+	## as wide on the narrowest shape (#69 C5). The default reproduces 8.04 px
+	## at 820, where the constant was tuned.
+	##
+	## **Improved, not settled**, and the residual is on
+	## `WorldMapScreen.bed_half` — read it before retuning these three. The
+	## clamps bind at two of the five shapes, phone-landscape is still 1.57×
+	## wider in proportion than the reference, and measured against LANE PITCH
+	## the rate is less consistent than the constant it replaced. This line said
+	## "settled in #70" until PR #84 DL R2, which is the word a tuner would have
+	## read first and stopped at.
 	&"trail/bedRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.002, "max": 0.06, "default": 0.0098},
 	&"trail/bedMin": {"bind": BIND_NONE, "unit": "px", "min": 2.0, "max": 40.0, "default": 6.0},
 	&"trail/bedMax": {"bind": BIND_NONE, "unit": "px", "min": 2.0, "max": 60.0, "default": 10.0},
