@@ -748,14 +748,63 @@ func lane_pitch(depth: float) -> float:
 		_trail_num("laneMin", 46.0))
 
 
+## The depth reading at a point on the STAGE, in steps from the camera's seat.
+##
+## `_node_pos` computes `|world_x − cam_x| / step` per node, and its screen x is
+## `world_x − cam_x + lead·W`, so the same reading anywhere on the frame is
+## `|screen_x − lead·W| / step`: nearest at the lead seat and growing toward BOTH
+## edges. Named because the road plane has to read depth continuously across the
+## frame while the stones sample it at their own columns, and two derivations of
+## one projection is how this map has failed before (#70).
+func depth_at(screen_x: float) -> float:
+	return absf(screen_x - _lead_px()) / maxf(_step(), 1.0)
+
+
+## Half-height of the road bed at a point on the stage, in stage px.
+##
+## Rate-derived, which is the question #69 C5 recorded and handed here: the 8 px
+## constant it replaces was 0.98% of a 820-tall stage and 2.05% of a 390-tall
+## one, so the same road read twice as wide on the narrowest shape. The default
+## rate reproduces 8.04 px at 820, where the constant was tuned, and the clamps
+## stop a very short or very tall stage from collapsing or flooding it.
+func bed_half(screen_x: float) -> float:
+	return clampf(size.y * _trail_num("bedRate", 0.0098),
+		_trail_num("bedMin", 6.0), _trail_num("bedMax", 10.0)) \
+		* bed_taper(depth_at(screen_x))
+
+
+## The road's taper — the FIFTH depth curve on this map, and it is not the
+## stones' 0.035 for a measurable reason rather than a stylistic one.
+##
+## The stones sample depth at their own columns, spread over many steps, so
+## 0.035 accumulates across the whole walk. The bed is drawn continuously across
+## ONE frame, where the visible depth range is only about 0 to 3.3 steps, and the
+## stones' coefficient narrows it by 11% edge to edge — a rectangle with a
+## gradient, not a road.
+##
+## 0.18 was picked by measuring both on the running map at pad-landscape, seed
+## 717, column by column with the dashes and stones rejected: 0.12 narrows the
+## bed 6.8 → 5.4 stage px across the frame (**20%**, inside the region
+## gradient's own noise), 0.18 narrows it 7.1 → 3.9 (**44%**). Peak lift over
+## the ground is 16–17 luma either way, which keeps it under the dashes' 25–29
+## — the road must not compete with the play plane (#66/#67).
+##
+## The other four are named in `depth_scale`'s docstring; this one belongs with
+## them.
+static func bed_taper(depth: float) -> float:
+	return clampf(1.0 - depth * 0.18, 0.40, 1.0)
+
+
 ## How far a stone shrinks at `depth` steps from the camera. Anchored at 1.0, so
 ## the nearest stone draws at exactly the book's `scale`.
 ##
-## The map runs FOUR distinct depth curves, and a review round was spent on the
+## The map runs FIVE distinct depth curves, and a review round was spent on the
 ## belief that it ran three — so they are named here once: this one (0.035) for
 ## stone and arch size, `0.10` for stone alpha in `_layout_waystones`, `0.025`
-## for lane compression in `_node_pos`, and `0.12` for edge fade in
-## `MapBand.PathBand._draw_graph`. All four anchor at 1.0 (PR #79 PM R2).
+## for lane compression in `_node_pos`, `0.12` for edge fade in
+## `MapBand.PathBand._draw_graph`, and `bed_taper`'s `0.18` for the road plane —
+## the steepest of the five, and the reason it is not this one is measured in its
+## docstring. All five anchor at 1.0 (PR #79 PM R2, extended by #70).
 ##
 ## This is the only one with two call sites, which is why it is a function: the
 ## arch used to carry a copy, and the copy went stale for a commit.

@@ -289,45 +289,71 @@ class RegionBand extends MapBand:
 
 
 class PathBand extends MapBand:
-	## Half-height of the road bed's fade, in stage px. Deliberately NOT
-	## `FAR_BLEED`: that number covers a band's drift overshoot, this one is a
-	## composition width, and they collide at 8.0 by coincidence only.
+	## Alpha at the crown of the road bed, at the lip where the bed ends, and the
+	## verge's reach as a multiple of the bed's own half-height.
 	##
-	## STAYS ABSOLUTE, and the sweep that asked the question is why. The bed this
-	## half-spans is 16 px — 2.0% of a 820-tall stage and 4.1% of a 390-tall one;
-	## the constant itself is 0.98% and 2.05% (PM R1 on PR #80: the percentages
-	## first recorded here were the bed's, written against the half). Either way
-	## it doubles across the shapes, which reads as an argument for a rate — but
-	## this bed is a §5 band-3 STAND-IN, and a rate would tune the placeholder's
-	## proportions instead of building the plane. The taper and edges that make
-	## it a road, and this number's fate with them, belong to #70 (#69 C5, PM R2
-	## on PR #79).
-	const BED_HALF: float = 8.0
+	## The lip is what makes this a road rather than a band of haze, and it is a
+	## GRADIENT BREAK, not a stroke: the bed falls 0.09 → 0.03 across its half,
+	## then the verge falls 0.03 → 0 across nearly twice that again. The slope
+	## changes at the lip and nothing hard is drawn, because the dashes own the
+	## only hard line on this plane (#64) and a second one reads as one thing
+	## drawn twice (#66/#67).
+	const BED_A: float = 0.09
+	const LIP_A: float = 0.03
+	const VERGE: float = 1.9
+	## Steps across the frame. The taper is piecewise LINEAR — depth is linear in
+	## x and the taper is linear in depth — so this polyline is exact everywhere
+	## except within one step of the kink at the camera's seat, where it cuts the
+	## corner by `base · 0.18 · (W/24)/step`. Solved over the five shapes that is
+	## 0.19–0.37 px, worst at pad-portrait. 24 buys sub-pixel for four draw calls.
+	const BED_STEPS: int = 24
 
 	func _init() -> void:
 		super(1.0)
+
+	## The bed and its verge, tapered per column. Four strips: bed and verge,
+	## above and below `path_y`.
+	##
+	## The half-height comes from `host.bed_half(x)` — the screen owns it because
+	## the taper reads the same depth the stones do, and this map has twice paid
+	## for a second derivation of one projection (#70, carried from #69 C5/A7).
+	func _draw_bed(w: float, path_y: float) -> void:
+		var glass: Color = GlassStyle.GLASS
+		_draw_ramp(w, path_y, -1.0, 0.0, 1.0, BED_A, LIP_A, glass)
+		_draw_ramp(w, path_y, 1.0, 0.0, 1.0, BED_A, LIP_A, glass)
+		_draw_ramp(w, path_y, -1.0, 1.0, VERGE, LIP_A, 0.0, glass)
+		_draw_ramp(w, path_y, 1.0, 1.0, VERGE, LIP_A, 0.0, glass)
+
+	## One tapered strip: from `from_mul` of the bed's half-height to `to_mul`,
+	## fading `a_from` to `a_to`, on the `sign` side of the road.
+	func _draw_ramp(w: float, path_y: float, sign: float, from_mul: float,
+			to_mul: float, a_from: float, a_to: float, tone: Color) -> void:
+		var points: PackedVector2Array = PackedVector2Array()
+		var colours: PackedColorArray = PackedColorArray()
+		var near: Color = Color(tone.r, tone.g, tone.b, a_from)
+		var far: Color = Color(tone.r, tone.g, tone.b, a_to)
+		for i: int in range(BED_STEPS + 1):
+			var x: float = w * float(i) / float(BED_STEPS)
+			points.append(Vector2(x, path_y + sign * host.bed_half(x) * from_mul))
+			colours.append(near)
+		for i: int in range(BED_STEPS, -1, -1):
+			var x: float = w * float(i) / float(BED_STEPS)
+			points.append(Vector2(x, path_y + sign * host.bed_half(x) * to_mul))
+			colours.append(far)
+		draw_polygon(points, colours)
 
 	func _draw() -> void:
 		if host == null:
 			return
 		var w: float = size.x
-		# §5 band-3 stand-in. The ribbon is the road BED, not a lead: a crisp
-		# hairline at pathY doubles with the centre lane's own edge run, and two
-		# things drawn the same way read as one thing drawn twice (carried from
-		# P5.2, #64). Same fix shape as the storm streaks — change the primitive,
-		# not just the alpha, so the graph's dashes own the only hard line here.
+		# §5 band 3 — the ground line, the leaded path. No longer a stand-in: the
+		# bed tapers with the same depth the stones read and ends at a lip, which
+		# is what #69 A7 filed as missing and #70 owns. Still no hairline at
+		# `pathY` — a crisp lead there doubles with the centre lane's own edge run
+		# and two things drawn the same way read as one thing drawn twice (P5.2,
+		# #64). The graph's dashes own the only hard line on this plane.
 		var path_y: float = size.y * host._trail_num("pathY", 0.64) + drift.y
-		var glass: Color = GlassStyle.GLASS
-		var bed: Color = Color(glass.r, glass.g, glass.b, 0.09)
-		var clear: Color = Color(glass.r, glass.g, glass.b, 0.0)
-		draw_polygon(PackedVector2Array([
-			Vector2(0.0, path_y - BED_HALF), Vector2(w, path_y - BED_HALF),
-			Vector2(w, path_y), Vector2(0.0, path_y),
-		]), PackedColorArray([clear, clear, bed, bed]))
-		draw_polygon(PackedVector2Array([
-			Vector2(0.0, path_y), Vector2(w, path_y),
-			Vector2(w, path_y + BED_HALF), Vector2(0.0, path_y + BED_HALF),
-		]), PackedColorArray([bed, bed, clear, clear]))
+		_draw_bed(w, path_y)
 		# Terminus rose-window BEFORE the graph so edges/stones layer over it.
 		_draw_rose_window()
 		_draw_graph()

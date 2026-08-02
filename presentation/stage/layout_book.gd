@@ -169,6 +169,15 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## Floor so an emblem and its finger target survive the shortest stage.
 	&"trail/laneMin": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 46.0},
 	&"trail/laneMax": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 200.0, "default": 50.0},
+	## The road bed is `bedRate` of the stage height half-tall at the camera's
+	## seat, held inside `[bedMin, bedMax]` and tapered with depth from there.
+	## A rate rather than the 8 px constant it replaces: 8 px was 0.98% of a
+	## 820-tall stage and 2.05% of a 390-tall one, so the same road read twice
+	## as wide on the narrowest shape (#69 C5, settled in #70). The default
+	## reproduces 8.04 px at 820, where the constant was tuned.
+	&"trail/bedRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.002, "max": 0.06, "default": 0.0098},
+	&"trail/bedMin": {"bind": BIND_NONE, "unit": "px", "min": 2.0, "max": 40.0, "default": 6.0},
+	&"trail/bedMax": {"bind": BIND_NONE, "unit": "px", "min": 2.0, "max": 60.0, "default": 10.0},
 	&"trail/pathY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.64},
 	&"trail/horizonY": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 0.9, "default": 0.36},
 	## Where in the frame the camera seats the current node. A third from the
@@ -290,7 +299,7 @@ const FORMS: Dictionary[StringName, PackedStringArray] = {
 	&"card": ["w", "inset"],
 	&"actor": ["scale"],
 	&"trail": ["scale", "stepRate", "stepMin", "stepMax", "laneRate", "laneMin", "laneMax",
-		"pathY", "horizonY", "lead", "terminusSeat", "touch"],
+		"bedRate", "bedMin", "bedMax", "pathY", "horizonY", "lead", "terminusSeat", "touch"],
 	&"mapbar": ["scale", "title", "titleTop", "titleH", "titleInset"],
 	&"panel": ["w", "inset", "scroll", "scale"],
 	&"titlescreen": ["wordmarkMax", "wordmarkRate", "columnW", "gap",
