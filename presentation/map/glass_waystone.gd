@@ -351,9 +351,11 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	if _chip_font == null:
 		return
 	var text: String = "+%d" % bounty
-	var tw: float = _chip_font.get_string_size(text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1.0, CHIP_FONT_SIZE).x
 	var rect: Rect2 = chip_rect(flip)
+	# Derived, not measured again: `chip_rect` already asked the font, and the
+	# last second measurement of the same thing in this function was the one
+	# review round #80 spent most of its length on (DL R5 NIT).
+	var tw: float = rect.size.x - CHIP_ICON - 4.0 - 16.0
 	# BESIDE the stone, not below it — and what settles it is a per-run FAILURE
 	# RATE, not a geometric impossibility. Measured in stage px with the
 	# neighbour's radius asked of `pane_radius()` rather than restated, over 20
