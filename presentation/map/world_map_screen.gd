@@ -22,8 +22,11 @@ const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
 ## `domain/state/world_map.gd:134` scales `jx` by 0.5 (±0.25) and `:135` scales
 ## `jy` by 0.4 (**±0.20**). An earlier draft of this docstring said "about ±0.25"
 ## for both and the PR body then overstated the step wander by 30% (#69, PR #79
-## DL R1 m3). At 72 the step axis realises ±13.8 px on seed 717 against a
-## 241.9 px step — 5.7%, up from 1.8%, which is the "~3×" the review asked for.
+## DL R1 m3). At 72 the step axis realises ±13.8 px on seed 717, which reads as
+## 5.7% of pad-landscape's 241.9 px step but **10.8% of phone-portrait's 128 px
+## floor** — a ratio is a property of the shape, not of the constant, and quoting
+## the roomiest one alone is how the same figure understated itself twice
+## (PR #79 DL R2 n5). Both are the "~3×" the review asked for; 1.8% was before.
 ##
 ## The lane axis cannot take the same treatment: at 46–50 px of pitch it has no
 ## room, so it trades amplitude for the per-row application in `_row_lane_jitter`.
@@ -611,7 +614,7 @@ func _layout_waystones() -> void:
 		# alpha cue at all (#69, carried from P5.1 DL R2). Anchoring at 1.0 makes
 		# `k` mean what the book says and gives every visible step a distinct
 		# depth reading.
-		var node_scale: float = k * clampf(1.0 - depth * 0.035, 0.72, 1.0)
+		var node_scale: float = k * depth_scale(depth)
 		ws.scale = Vector2.ONE * node_scale
 		ws.modulate.a = clampf(1.0 - depth * 0.10, 0.12, 1.0)
 		# Before the seat, not after: the pad changes `size`, and the seat is
@@ -702,3 +705,36 @@ func _world_x(row: float) -> float:
 
 func _lead_px() -> float:
 	return _trail_num("lead", 0.333) * size.x
+
+
+## How far a stone shrinks at `depth` steps from the camera. Anchored at 1.0, so
+## the nearest stone draws at exactly the book's `scale`.
+##
+## The map runs FOUR distinct depth curves, and a review round was spent on the
+## belief that it ran three — so they are named here once: this one (0.035) for
+## stone and arch size, `0.10` for stone alpha in `_layout_waystones`, `0.025`
+## for lane compression in `_node_pos`, and `0.12` for edge fade in
+## `MapBand.PathBand._draw_graph`. All four anchor at 1.0 (PR #79 PM R2).
+##
+## This is the only one with two call sites, which is why it is a function: the
+## arch used to carry a copy, and the copy went stale for a commit.
+static func depth_scale(depth: float) -> float:
+	return clampf(1.0 - depth * 0.035, 0.72, 1.0)
+
+
+## Radius of the terminus arch at a given boss depth, in stage px.
+##
+## `stage_h` is the drawing band's height rather than this screen's, because the
+## band is what clips it; the two are equal by `PRESET_FULL_RECT` and the
+## parameter keeps that an argument instead of an assumption. The cap exists
+## because a fixed 110 px broke phone-landscape at 61% of the stage's height.
+func arch_radius(depth: float, stage_h: float) -> float:
+	var k: float = _trail_num("scale", 0.36)
+	return minf(110.0 * (k / 0.6) * depth_scale(depth), stage_h * 0.22)
+
+
+## The boss's depth once the camera has run out of map — the terminus frame the
+## arch is composed for. Derived from `_cam_max()` itself, not modelled from the
+## seat, so it cannot disagree with where the camera actually stops.
+func terminus_depth() -> float:
+	return absf(_world_x(float(WorldMap.ROWS - 1)) - _cam_max()) / maxf(_step(), 1.0)
