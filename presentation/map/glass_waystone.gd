@@ -12,9 +12,10 @@ signal chosen(index: int)
 const WIDTH: float = 104.0
 const EMBLEM_H: float = 104.0
 const CAPTION_H: float = 0.0
-## Pane radius of an ordinary stone — an unlit one included. Named because the
-## bounty chip seats itself off the stone's visible edge and must not be able to
-## disagree with what `_draw` actually draws.
+## Pane radius of an ordinary stone — an unlit one included. Read it through
+## `pane_radius()`, never directly: the promise this docstring used to make on
+## its own was that nothing could disagree with what `_draw` draws, and a
+## measurement disagreed anyway (PR #80 PM R2). The function is the promise.
 const UNLIT_RADIUS: float = 28.0
 const DRAG_SLOP: float = 12.0
 
@@ -191,8 +192,7 @@ func _draw() -> void:
 	var cx: float = _pad.x + WIDTH * 0.5
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	var glow: float = (0.5 + 0.5 * sin(_pulse * 2.2)) if reachable else 0.0
-	var radius: float = 38.0 if kind == "boss" \
-		else (32.0 if kind in ["elite", "treasure"] else UNLIT_RADIUS)
+	var radius: float = pane_radius()
 	if reachable or current:
 		draw_circle(Vector2(cx, cy), radius + 12.0,
 			Color(GlassStyle.EMBER.r, GlassStyle.EMBER.g, GlassStyle.EMBER.b, 0.08 + glow * 0.05))
@@ -253,6 +253,21 @@ func _seat_art() -> void:
 	_glyph_art.size = Vector2.ONE * glyph_side
 
 
+## Radius of this stone's pane, in LOCAL px — the visible edge everything else
+## measures against: the reachable ring at `+5`, the pulse halo at `+12`, the
+## focus bracket at `+8`, and the bounty chip's seat.
+##
+## A function because it was three-way branching arithmetic inside `_draw`, and
+## `UNLIT_RADIUS`'s own docstring already promised nothing could disagree with
+## what `_draw` draws. Something did: a review probe re-implemented the branch
+## from memory as `38 / 28 unlit / 34 otherwise`, and published an overlap table
+## against a radius no ordinary stone has ever drawn (PR #80 PM R2). One
+## definition means the next measurement asks the drawing code instead.
+func pane_radius() -> float:
+	return 38.0 if kind == "boss" \
+		else (32.0 if kind in ["elite", "treasure"] else UNLIT_RADIUS)
+
+
 ## Whether this stone has a bounty left to promise. False the moment it kindles.
 func has_chip() -> bool:
 	return kind == "unlit" and bounty > 0
@@ -267,7 +282,7 @@ func chip_reach() -> float:
 		return 0.0
 	var tw: float = _chip_font.get_string_size("+%d" % bounty,
 		HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13).x
-	return UNLIT_RADIUS + (13.0 + 4.0 + tw + 16.0) + 4.0
+	return pane_radius() + (13.0 + 4.0 + tw + 16.0) + 4.0
 
 
 ## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
@@ -301,33 +316,40 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	var icon: float = 13.0
 	var chip_w: float = icon + 4.0 + tw + 16.0
 	var chip_h: float = 19.0
-	# BESIDE the stone, not below it, and the REACHABLE neighbour's ring is why.
-	# Measured in one unit — stage px, seed 717's worst lane-adjacent chip pair
-	# (n40 unlit above n18 monster), every shipped shape. The old seat under the
-	# pane put the pill's bottom 26.2–30.7 px below this stone's centre; the lane
-	# below sits 46.0–46.2 px away and reaches back up 20–23 px of pane, +5 local
-	# px more while it is lit and drawing its focus ring. Positive is overlap:
+	# BESIDE the stone, not below it — and what settles it is a per-run FAILURE
+	# RATE, not a geometric impossibility. Measured in stage px with the
+	# neighbour's radius asked of `pane_radius()` rather than restated, over 20
+	# seeds, taking each run's worst chip-and-lower-neighbour pair:
 	#
-	#   shape                pane    ring    glow
-	#   phone-portrait       +5.2    +8.2    +12.5
-	#   pad-portrait         −0.9    +1.8     +5.6
-	#   pad/desktop-land.    −0.6    +2.1     +5.8
-	#   phone-landscape      −2.1    +0.5     +4.1
+	#   shape                worst pane   worst ring   runs hit: pane / ring
+	#   phone-portrait          +2.76        +6.04          11/20   17/20
+	#   pad-portrait            −3.30        −0.40           0/20    0/20
+	#   pad-landscape           −2.52        +0.38           0/20    4/20
+	#   desktop-landscape       −2.52        +0.38           0/20    4/20
+	#   phone-landscape         −2.06        +0.73           0/20    4/20
 	#
-	# So against bare panes it collides at ONE shape, and against a reachable
-	# neighbour — which is what #69 D1 filed — at all five, by a margin no
-	# vertical nudge buys back. The lane pitch itself is not the culprit it first
-	# looked like: two ordinary radii are 39.4–46.2 stage px against a 46–50 px
-	# pitch, so the stones never touch. It is the pill's reach plus the ring's.
+	# Positive is overlap. "Ring" is a REACHABLE neighbour's focus arc at
+	# `radius + 5`; its pulse halo at `radius + 12` overlaps at every shape in
+	# every run. So the old seat under the pane lands on a neighbour's ink in
+	# more than half of phone-portrait runs and crosses a lit ring in one run in
+	# five at three further shapes — while clearing comfortably in the rest.
+	# The variance is lane jitter: `jx · LANE_JITTER` wanders each stone ±5 stage
+	# px across the lane, which is larger than the 0.4–3.3 px the passing runs
+	# clear by. A seat that survives by jitter is not a seat.
 	#
-	# The walk axis has room the lane axis does not: the pill reaches 86 local px
-	# from centre — 48.1–56.4 stage px — against a step of 128 stage px at the
-	# narrowest shape and 290 at the widest, so it spends at most 44% of one
-	# step. It crosses the dashed edge running to the next node, which is a pale
-	# 1px line under an opaque pill: a label over a road, not a label over
-	# another lantern (#69 D1; units corrected, PM R1 on PR #80).
+	# The walk axis is clear by construction instead: the pill reaches 86 local
+	# px from centre — 44.6–56.4 stage px across the depths a chip renders at —
+	# against a step of 128 stage px at the narrowest shape and 290 at the
+	# widest. It crosses the dashed edge running to the next node, which is a
+	# pale 1px line under an opaque pill: a label over a road, not a label over
+	# another lantern (#69 D1).
+	#
+	# This table is the THIRD reason written for one unchanged decision. The
+	# first mixed local and stage px (PM R1); the second measured against a
+	# 34 px radius no ordinary stone draws (PM R2). Both were arithmetic that
+	# was never asked of the drawing code — which is now `pane_radius()`.
 	var side: float = -1.0 if flip else 1.0
-	var cx: float = _pad.x + WIDTH * 0.5 + side * (UNLIT_RADIUS + chip_w * 0.5 + 4.0)
+	var cx: float = _pad.x + WIDTH * 0.5 + side * (pane_radius() + chip_w * 0.5 + 4.0)
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	var a: float = 0.45 if cleared else 1.0
 	var rect: Rect2 = Rect2(cx - chip_w * 0.5, cy - chip_h * 0.5, chip_w, chip_h)
