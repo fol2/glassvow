@@ -275,6 +275,10 @@ func has_chip() -> bool:
 
 ## How far the pill reaches from the stone's centre, in LOCAL px. The band asks
 ## before it decides which side to draw on.
+##
+## The budget for widening it is 12 stage px, and that is the whole budget: two
+## same-lane bounty stones one step apart at phone-portrait have 128 px of step
+## against 48 + 48 of reach if the right one flips (PR #80 DL R2).
 func chip_reach() -> float:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
@@ -298,11 +302,11 @@ func chip_reach() -> float:
 ## What this does NOT settle: #69 filed D2 for a number a player can GLANCE at,
 ## and that is a size problem this commit does not touch. 13 px of text under the
 ## 0.56–0.66 map scale the shapes ship renders about 8 stage px tall, where the
-## coverage a glyph reaches rather
-## than the authored colour decides the contrast. Moving the chip out of the
-## stone's alpha was necessary and is not sufficient — no alpha change reaches a
-## coverage problem. Declined here deliberately, with the criterion and three
-## candidate fixes carried to #81, which stays open past #69 (PR #80 DL R1/PM R1).
+## coverage a glyph reaches — not the authored colour — decides its contrast.
+## Moving the chip out of the stone's alpha was necessary and is not sufficient:
+## no alpha change reaches a coverage problem. Declined here deliberately, with
+## the criterion and three candidate fixes carried to #81, which stays open past
+## #69 (PR #80 DL R1/PM R1).
 func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
@@ -351,6 +355,11 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	var side: float = -1.0 if flip else 1.0
 	var cx: float = _pad.x + WIDTH * 0.5 + side * (pane_radius() + chip_w * 0.5 + 4.0)
 	var cy: float = _pad.y + EMBLEM_H * 0.5
+	# `cleared` is not reachable from any path this file can see — `has_chip`
+	# requires kind "unlit", and main flips `n.unlit` when the bounty is paid,
+	# before the node clears. Kept rather than flattened because the ordering
+	# that makes it unreachable lives in `main.gd`, not here, and a dimmed chip
+	# is a better failure than a bright one (PR #80 DL R2 NIT).
 	var a: float = 0.45 if cleared else 1.0
 	var rect: Rect2 = Rect2(cx - chip_w * 0.5, cy - chip_h * 0.5, chip_w, chip_h)
 	# Rounded pill via stylebox — the map draws no other hard-cornered

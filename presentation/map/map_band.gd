@@ -571,27 +571,85 @@ class VeilBand extends MapBand:
 ## stone's left — the rule every tooltip uses, and the fix for a number that
 ## rendered as `+1` instead of `+17` at 11% of camera positions.
 class ChipBand extends MapBand:
+	## Hysteresis on the flip, in stage px. `_node_pos` adds
+	## `_drift.n.x * PATH_DRIFT_AMP.x` to every stone's screen x, so a stone's
+	## flip input sweeps 28 px as the pointer crosses the stage WITH NO PAN AT
+	## ALL. Against a bare threshold that pops the pill 98 px across while the
+	## player only moves the cursor (PR #80 DL R2). 32 > that 28 px sweep, with
+	## margin; the cost of the band is a pill that keeps its side while it has up
+	## to 32 px of room back, which reads as nothing.
+	const FLIP_SLACK: float = 32.0
+
+	## Last side chosen per stone index — the flip's only state, and the reason
+	## `flips` can stay pure and asserted.
+	var _flipped: Dictionary[int, bool] = {}
+
 	func _init() -> void:
 		super(1.0)
 		gated = false
 
+	## Whether the STONE is in frame. Culling on this is what stops the chip
+	## outliving its lantern: the pill reaches ~49 stage px from the centre while
+	## the stone's own ink reaches ~20, so without it there is a 29 px band at
+	## each edge — 12% of a node step, both photographed — where the label is on
+	## screen and the lantern is not, and a `+17` sits alone on the road. At the
+	## right edge the flip made it worse, converting "nothing drawn" into a
+	## truncated `+` with no referent (PR #80 DL R2 MAJOR).
+	##
+	## Measured against the stone's INK, not its rect: the touch rect is padded
+	## out to `set_touch_min`'s finger floor and would cull a frame or two late.
+	static func on_screen(centre_x: float, ink: float, frame_w: float) -> bool:
+		return centre_x + ink > 0.0 and centre_x - ink < frame_w
+
 	## Which side of the stone the pill goes on. Pure, so `tests/test_map.gd` can
 	## assert the rule rather than a capture chasing the 26px of node step where
 	## it bites. Right by default; left only when the right runs off the frame AND
-	## the left does not — a chip with nowhere to go stays put rather than
-	## trading one clipped edge for the other.
-	static func flips(centre_x: float, reach: float, frame_w: float) -> bool:
-		return centre_x + reach > frame_w and centre_x - reach >= 0.0
+	## the left does not.
+	##
+	## The "nowhere to go" branch needs `frame_w < 2 · reach` — under ~100 px
+	## against the narrowest shipped stage's 390 — so it cannot fire in the game
+	## and is kept only to keep the function total. The reachable failure was
+	## never this one: it was the stone leaving the frame, and `on_screen` owns
+	## it (PR #80 DL R2).
+	static func flips(centre_x: float, reach: float, frame_w: float,
+			was_flipped: bool = false) -> bool:
+		if centre_x - reach < 0.0:
+			return false
+		return centre_x + reach > frame_w - (FLIP_SLACK if was_flipped else 0.0)
+
+	## Which chips this band paints at `frame_w`, and the side each takes, keyed
+	## by stone index. `_draw` asks this and then only draws.
+	##
+	## Separated because the MAJOR it exists to stop was never a wrong RULE — it
+	## was a rule that nothing asked. `flips` was pure and asserted while
+	## `_draw` drew every chip unconditionally, so a green suite and an orphaned
+	## `+17` on empty road were consistent with each other (PR #80 DL R2). The
+	## decision is now the thing the suite can hold.
+	func seats(frame_w: float) -> Dictionary[int, bool]:
+		var out: Dictionary[int, bool] = {}
+		if host == null:
+			return out
+		for ws: GlassWaystone in host._waystones:
+			if not ws.has_chip():
+				continue
+			var scale_x: float = ws.scale.x
+			var centre_x: float = ws.position.x + ws.size.x * scale_x * 0.5
+			if not on_screen(centre_x, ws.pane_radius() * scale_x, frame_w):
+				_flipped.erase(ws.index)
+				continue
+			var was: bool = _flipped.get(ws.index, false)
+			var flip: bool = flips(centre_x, ws.chip_reach() * scale_x, frame_w, was)
+			_flipped[ws.index] = flip
+			out[ws.index] = flip
+		return out
 
 	func _draw() -> void:
 		if host == null:
 			return
+		var painted: Dictionary[int, bool] = seats(size.x)
 		for ws: GlassWaystone in host._waystones:
-			if not ws.has_chip():
+			if not painted.has(ws.index):
 				continue
-			var reach: float = ws.chip_reach() * ws.scale.x
-			var centre_x: float = ws.position.x + ws.size.x * ws.scale.x * 0.5
-			var flip: bool = flips(centre_x, reach, size.x)
 			draw_set_transform(ws.position, 0.0, ws.scale)
-			ws.paint_bounty_chip(self, flip)
+			ws.paint_bounty_chip(self, painted[ws.index])
 			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
