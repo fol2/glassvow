@@ -23,8 +23,12 @@ static func _collisions(rects: Array[Rect2]) -> int:
 
 ## Every pill the band would paint at `frame_w`, in stage px.
 static func _seated_pills(screen: WorldMapScreen) -> Array[Rect2]:
+	return _pills_from(screen, screen._chip_band.seats(screen.size.x))
+
+
+static func _pills_from(screen: WorldMapScreen,
+		chosen: Dictionary[int, bool]) -> Array[Rect2]:
 	var out: Array[Rect2] = []
-	var chosen: Dictionary[int, bool] = screen._chip_band.seats(screen.size.x)
 	for i: int in chosen:
 		var ws: GlassWaystone = screen._waystones[i]
 		out.append(MapBand.ChipBand.pill_rect(ws.chip_rect(chosen[i]),
@@ -257,7 +261,8 @@ static func run(fails: Array[String]) -> void:
 		raw.append(MapBand.ChipBand.pill_rect(
 			ws.chip_rect(MapBand.ChipBand.flips(c, ws.chip_reach() * s, sib.size.x)),
 			ws.position, ws.scale))
-	var pills: Array[Rect2] = _seated_pills(sib)
+	var sib_chosen: Dictionary[int, bool] = sib._chip_band.seats(sib.size.x)
+	var pills: Array[Rect2] = _pills_from(sib, sib_chosen)
 	_check(fails, _collisions(raw) >= 1,
 		"seed 17634 at cam 627.53 still reproduces the sibling collision to guard against")
 	_check(fails, _collisions(pills) == 0, "no bounty pill is painted over another")
@@ -271,11 +276,34 @@ static func run(fails: Array[String]) -> void:
 	# different generator and still read green (PR #80 PM R4). n6 `+16` is the
 	# left one and keeps its place; n7 `+22` is the one that would have flipped
 	# onto it.
-	var sib_seats: Dictionary[int, bool] = sib._chip_band.seats(sib.size.x)
+	# One call, reused: `seats()` writes `_flipped`, so asking twice and treating
+	# the answers as one decision assumes an idempotence it does not promise
+	# (DL R5 NIT).
+	var sib_seats: Dictionary[int, bool] = sib_chosen
 	_check(fails, sib._waystones[6].bounty == 16 and sib._waystones[7].bounty == 22,
 		"seed 17634 still generates the +16 / +22 pair this fixture is about")
 	_check(fails, sib_seats.has(6) and not sib_seats.has(7),
 		"the pill already on the road keeps it, and the one that would bury it declines")
+	# `chip_rect` became the single definition of the pill and nothing watched it:
+	# `CHIP_GAP` 4→7 moved every pill on the map 3px and `CHIP_H` 19→30 grew it by
+	# 58%, and the suite stayed green through both (PR #80 DL R5). The two
+	# authored numbers are pinned here so moving the seat has to be deliberate,
+	# and the mirror is pinned because it is a law rather than a value.
+	var pin: GlassWaystone = sib._waystones[6]
+	var pin_centre: Vector2 = pin._pad \
+		+ Vector2(GlassWaystone.WIDTH, GlassWaystone.EMBLEM_H) * 0.5
+	var pin_right: Rect2 = pin.chip_rect(false)
+	var pin_left: Rect2 = pin.chip_rect(true)
+	_check(fails, is_equal_approx(pin_right.size.y, 19.0),
+		"the bounty pill stands 19 local px tall")
+	_check(fails, is_equal_approx(
+			pin_right.position.x - (pin_centre.x + pin.pane_radius()), 4.0),
+		"…and starts 4 local px past the pane it labels")
+	_check(fails, is_equal_approx(pin_right.get_center().y, pin_centre.y),
+		"…centred on the emblem, not on the padded touch rect")
+	_check(fails, is_equal_approx(pin_right.get_center().x - pin_centre.x,
+			pin_centre.x - pin_left.get_center().x),
+		"…and a flip mirrors it about the stone rather than re-seating it")
 	# The over-decline itself, at the camera where three same-column stones share
 	# the frame: judged on x alone the band dropped two of them, and a dark
 	# lantern's bounty appears nowhere else in the game (DL R4 MAJOR).
