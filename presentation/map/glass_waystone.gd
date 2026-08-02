@@ -17,6 +17,10 @@ const CAPTION_H: float = 0.0
 ## its own was that nothing could disagree with what `_draw` draws, and a
 ## measurement disagreed anyway (PR #80 PM R2). The function is the promise.
 const UNLIT_RADIUS: float = 28.0
+## Air between the stone's pane and the bounty pill's near edge, in LOCAL px.
+## One name because `chip_reach`, `chip_inner` and the seat below all need it and
+## a fourth restatement is how the last three review rounds started.
+const CHIP_GAP: float = 4.0
 const DRAG_SLOP: float = 12.0
 
 var index: int = 0
@@ -273,12 +277,16 @@ func has_chip() -> bool:
 	return kind == "unlit" and bounty > 0
 
 
-## How far the pill reaches from the stone's centre, in LOCAL px. The band asks
-## before it decides which side to draw on.
+## How far the pill reaches from the stone's centre, in LOCAL px — the far end of
+## the span `chip_inner()` starts. The band asks for both before it decides.
 ##
-## The budget for widening it is 12 stage px, and that is the whole budget: two
-## same-lane bounty stones one step apart at phone-portrait have 128 px of step
-## against 48 + 48 of reach if the right one flips (PR #80 DL R2).
+## There is no room to widen this. Two same-lane bounty stones at phone-portrait
+## measure 100 stage px apart against `2 × 58.6` of reach, so a flipped pill
+## already reaches 17 px INTO its neighbour's; `ChipBand.seats` is what stops
+## that being drawn. An earlier note here recorded a +12 px budget, from a
+## reading that used the layout book's step FLOOR as the spacing and a reach
+## measured at a farther depth than the pair renders at (PR #80 DL R2 NIT,
+## withdrawn by DL R3 who photographed the pair on seed 17634).
 func chip_reach() -> float:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
@@ -286,7 +294,15 @@ func chip_reach() -> float:
 		return 0.0
 	var tw: float = _chip_font.get_string_size("+%d" % bounty,
 		HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13).x
-	return pane_radius() + (13.0 + 4.0 + tw + 16.0) + 4.0
+	return pane_radius() + (13.0 + 4.0 + tw + 16.0) + CHIP_GAP
+
+
+## Where the pill STARTS, measured from the stone's centre in LOCAL px. Named
+## alongside `chip_reach()` because the band needs both ends to know whether one
+## pill lands on another, and a span rebuilt from the seat arithmetic is a third
+## place for the same numbers to disagree.
+func chip_inner() -> float:
+	return pane_radius() + CHIP_GAP
 
 
 ## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
@@ -353,7 +369,7 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	# 34 px radius no ordinary stone draws (PM R2). Both were arithmetic that
 	# was never asked of the drawing code — which is now `pane_radius()`.
 	var side: float = -1.0 if flip else 1.0
-	var cx: float = _pad.x + WIDTH * 0.5 + side * (pane_radius() + chip_w * 0.5 + 4.0)
+	var cx: float = _pad.x + WIDTH * 0.5 + side * (chip_inner() + chip_w * 0.5)
 	var cy: float = _pad.y + EMBLEM_H * 0.5
 	# `cleared` is not reachable from any path this file can see — `has_chip`
 	# requires kind "unlit", and main flips `n.unlit` when the bounty is paid,

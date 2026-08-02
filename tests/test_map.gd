@@ -9,6 +9,16 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 		fails.append("test_map: %s" % what)
 
 
+## How many pairs of bounty pills would land on each other, given their spans.
+static func _collisions(spans: Array[Vector2]) -> int:
+	var hits: int = 0
+	for a: int in range(spans.size()):
+		for b: int in range(a + 1, spans.size()):
+			if MapBand.ChipBand.spans_overlap(spans[a], spans[b]):
+				hits += 1
+	return hits
+
+
 static func run(fails: Array[String]) -> void:
 	# ---- one representative benchmark seed: full generator, one RNG stream
 	var benchmark_content: ContentDB = ContentDB.load_slice()
@@ -195,6 +205,42 @@ static func run(fails: Array[String]) -> void:
 		"…and off the left edge, where the pill would sit alone on the road")
 	tree.root.remove_child(chip_screen)
 	chip_screen.free()
+	# The seed-17634 pair, made a fixture: two same-lane bounty stones at
+	# phone-portrait measure 100 stage px apart against 2 × 58.6 of reach, so the
+	# right one's frame-flip painted its pill 17 px into the left one's and left
+	# `+16` reading as its first digit. Found independently by capture and by
+	# probe (PR #80 DL R3 and the PM's third pass) — a case a capture finds by
+	# luck and a gate finds every run.
+	var sib_run: RunState = RunState.new_run(benchmark_content, 17634, "run-siblings")
+	var sib: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(sib_run), benchmark_content)
+	sib.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	sib.size = Vector2(StageShape.REFERENCES[&"phone-portrait"])
+	tree.root.add_child(sib)
+	sib.set_shape(&"phone-portrait")
+	sib._cam_x = 627.53
+	sib._layout_waystones()
+	var raw: Array[Vector2] = []
+	for ws: GlassWaystone in sib._waystones:
+		if not ws.has_chip():
+			continue
+		var s: float = ws.scale.x
+		var c: float = ws.position.x + ws.size.x * s * 0.5
+		if not MapBand.ChipBand.on_screen(c, ws.pane_radius() * s, sib.size.x):
+			continue
+		raw.append(MapBand.ChipBand.pill_span(c, ws.chip_inner() * s, ws.chip_reach() * s,
+			MapBand.ChipBand.flips(c, ws.chip_reach() * s, sib.size.x)))
+	var pills: Array[Vector2] = []
+	var chosen: Dictionary[int, bool] = sib._chip_band.seats(sib.size.x)
+	for i: int in chosen:
+		var ws: GlassWaystone = sib._waystones[i]
+		var s: float = ws.scale.x
+		pills.append(MapBand.ChipBand.pill_span(ws.position.x + ws.size.x * s * 0.5,
+			ws.chip_inner() * s, ws.chip_reach() * s, chosen[i]))
+	_check(fails, _collisions(raw) >= 1,
+		"seed 17634 at cam 627.53 still reproduces the sibling collision to guard against")
+	_check(fails, _collisions(pills) == 0, "no bounty pill is painted over another")
+	tree.root.remove_child(sib)
+	sib.free()
 	# Drive the real door — resize, then `set_shape` → `refresh` → `_seat_marker`
 	# — with the marker walked off node 0 and `_cam_target` seeded wrong. Both
 	# matter: `_cam_for(0)` clamps to `_cam_min()` on every shape and

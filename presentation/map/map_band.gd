@@ -617,6 +617,17 @@ class ChipBand extends MapBand:
 			return false
 		return centre_x + reach > frame_w - (FLIP_SLACK if was_flipped else 0.0)
 
+	## The pill's stage-x span for a stone seated on one side or the other, given
+	## the two ends `GlassWaystone` measures. Pure, so the sibling rule below can
+	## be asserted rather than photographed.
+	static func pill_span(centre_x: float, inner: float, reach: float,
+			flip: bool) -> Vector2:
+		return Vector2(centre_x - reach, centre_x - inner) if flip \
+			else Vector2(centre_x + inner, centre_x + reach)
+
+	static func spans_overlap(a: Vector2, b: Vector2) -> bool:
+		return a.x < b.y and b.x < a.y
+
 	## Which chips this band paints at `frame_w`, and the side each takes, keyed
 	## by stone index. `_draw` asks this and then only draws.
 	##
@@ -629,16 +640,47 @@ class ChipBand extends MapBand:
 		var out: Dictionary[int, bool] = {}
 		if host == null:
 			return out
+		# Left to right, so the pill already on the road is the one that keeps
+		# its place. Waystone order is row-major and NOT reliably screen order
+		# once jitter moves a stone across a step boundary.
+		var chipped: Array[GlassWaystone] = []
 		for ws: GlassWaystone in host._waystones:
-			if not ws.has_chip():
-				continue
+			if ws.has_chip():
+				chipped.append(ws)
+		chipped.sort_custom(func(a: GlassWaystone, b: GlassWaystone) -> bool:
+			return a.position.x < b.position.x)
+		var taken: Array[Vector2] = []
+		for ws: GlassWaystone in chipped:
 			var scale_x: float = ws.scale.x
 			var centre_x: float = ws.position.x + ws.size.x * scale_x * 0.5
 			if not on_screen(centre_x, ws.pane_radius() * scale_x, frame_w):
 				_flipped.erase(ws.index)
 				continue
 			var was: bool = _flipped.get(ws.index, false)
-			var flip: bool = flips(centre_x, ws.chip_reach() * scale_x, frame_w, was)
+			var reach: float = ws.chip_reach() * scale_x
+			var flip: bool = flips(centre_x, reach, frame_w, was)
+			var span: Vector2 = pill_span(centre_x, ws.chip_inner() * scale_x, reach, flip)
+			# A flip may not bury the neighbour it flips towards. At
+			# phone-portrait two same-lane bounty stones measure 100 stage px
+			# apart against 2 × 58.6 of reach, so a flipped pill lands 17 px
+			# inside the one already seated and its `+16` reads as `+16`'s first
+			# digit (#69 D1, PR #80 DL R3, photographed on seed 17634).
+			#
+			# Declined rather than re-seated: the other side is the one `flips`
+			# just rejected for running off the frame, so seating there renders a
+			# TRUNCATED number — which is the R1 MAJOR this PR already fixed
+			# once. A number that reads as a different number is worse than no
+			# number, and the stone is at the frame edge, so a few px of pan
+			# brings it back.
+			var buried: bool = false
+			for other: Vector2 in taken:
+				if spans_overlap(span, other):
+					buried = true
+					break
+			if buried:
+				_flipped.erase(ws.index)
+				continue
+			taken.append(span)
 			_flipped[ws.index] = flip
 			out[ws.index] = flip
 		return out
