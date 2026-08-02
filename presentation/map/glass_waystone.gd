@@ -18,9 +18,13 @@ const CAPTION_H: float = 0.0
 ## measurement disagreed anyway (PR #80 PM R2). The function is the promise.
 const UNLIT_RADIUS: float = 28.0
 ## Air between the stone's pane and the bounty pill's near edge, in LOCAL px.
-## One name because `chip_reach`, `chip_inner` and the seat below all need it and
-## a fourth restatement is how the last three review rounds started.
+## Named because restating it is how three of this phase's review rounds started;
+## `chip_rect()` is the only place it is used.
 const CHIP_GAP: float = 4.0
+## The pill itself, in LOCAL px: height, coin side, and the numeral's size.
+const CHIP_H: float = 19.0
+const CHIP_ICON: float = 13.0
+const CHIP_FONT_SIZE: int = 13
 const DRAG_SLOP: float = 12.0
 
 var index: int = 0
@@ -277,32 +281,48 @@ func has_chip() -> bool:
 	return kind == "unlit" and bounty > 0
 
 
-## How far the pill reaches from the stone's centre, in LOCAL px — the far end of
-## the span `chip_inner()` starts. The band asks for both before it decides.
+## The pill's rect in LOCAL px, on the side `flip` chooses. ONE definition:
+## `paint_bounty_chip` draws it, `chip_reach()` measures its far edge, and
+## `ChipBand` scales it into stage space to see whether one pill lands on
+## another.
 ##
-## There is no room to widen this. Two same-lane bounty stones at phone-portrait
-## measure 100 stage px apart against `2 × 58.6` of reach, so a flipped pill
-## already reaches 17 px INTO its neighbour's; `ChipBand.seats` is what stops
-## that being drawn. An earlier note here recorded a +12 px budget, from a
-## reading that used the layout book's step FLOOR as the spacing and a reach
-## measured at a farther depth than the pair renders at (PR #80 DL R2 NIT,
-## withdrawn by DL R3 who photographed the pair on seed 17634).
-func chip_reach() -> float:
+## A rect and not a span, because a span was x-only for a round and that is a
+## defect, not a simplification: same-COLUMN stones share `world_x` and differ
+## only by lane, so their pills always overlap in x while sitting ≥46 stage px
+## apart against a pill 9.7–12.6 px tall. Judged on x alone, 36 of 150 bounty
+## stones lost their price for more than half the time they were on screen
+## (PR #80 DL R4).
+func chip_rect(flip: bool = false) -> Rect2:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
 	if _chip_font == null:
-		return 0.0
+		return Rect2()
 	var tw: float = _chip_font.get_string_size("+%d" % bounty,
-		HORIZONTAL_ALIGNMENT_LEFT, -1.0, 13).x
-	return pane_radius() + (13.0 + 4.0 + tw + 16.0) + CHIP_GAP
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, CHIP_FONT_SIZE).x
+	var w: float = CHIP_ICON + 4.0 + tw + 16.0
+	var side: float = -1.0 if flip else 1.0
+	var centre: Vector2 = _pad + Vector2(WIDTH, EMBLEM_H) * 0.5
+	return Rect2(centre.x + side * (pane_radius() + CHIP_GAP + w * 0.5) - w * 0.5,
+		centre.y - CHIP_H * 0.5, w, CHIP_H)
 
 
-## Where the pill STARTS, measured from the stone's centre in LOCAL px. Named
-## alongside `chip_reach()` because the band needs both ends to know whether one
-## pill lands on another, and a span rebuilt from the seat arithmetic is a third
-## place for the same numbers to disagree.
-func chip_inner() -> float:
-	return pane_radius() + CHIP_GAP
+## How far the pill reaches from the stone's centre, in LOCAL px. `ChipBand.flips`
+## asks this before it knows which side the pill takes, so it is the unflipped
+## rect's far edge rather than a second piece of arithmetic.
+##
+## There is no room to widen it. On seed 17634 at phone-portrait the two
+## same-lane bounty stones measure 99.40 stage px apart while their reaches sum
+## to 110.42, so a flipped pill lands 11.02 px inside its neighbour's. Two
+## earlier notes here were wrong in opposite directions — +12 px of budget from
+## the layout book's step FLOOR and a farther depth (DL R2, withdrawn by its own
+## author at R3), then −17 px from a nearer one (DL R4). Both were arithmetic
+## that was never asked of the drawing code. This one was measured at the
+## fixture's own camera.
+func chip_reach() -> float:
+	var rect: Rect2 = chip_rect()
+	if rect.size.x <= 0.0:
+		return 0.0
+	return rect.end.x - (_pad.x + WIDTH * 0.5)
 
 
 ## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
@@ -331,11 +351,9 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	if _chip_font == null:
 		return
 	var text: String = "+%d" % bounty
-	var fs: int = 13
-	var tw: float = _chip_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs).x
-	var icon: float = 13.0
-	var chip_w: float = icon + 4.0 + tw + 16.0
-	var chip_h: float = 19.0
+	var tw: float = _chip_font.get_string_size(text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, CHIP_FONT_SIZE).x
+	var rect: Rect2 = chip_rect(flip)
 	# BESIDE the stone, not below it — and what settles it is a per-run FAILURE
 	# RATE, not a geometric impossibility. Measured in stage px with the
 	# neighbour's radius asked of `pane_radius()` rather than restated, over 20
@@ -368,16 +386,14 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	# first mixed local and stage px (PM R1); the second measured against a
 	# 34 px radius no ordinary stone draws (PM R2). Both were arithmetic that
 	# was never asked of the drawing code — which is now `pane_radius()`.
-	var side: float = -1.0 if flip else 1.0
-	var cx: float = _pad.x + WIDTH * 0.5 + side * (chip_inner() + chip_w * 0.5)
-	var cy: float = _pad.y + EMBLEM_H * 0.5
+	var cx: float = rect.get_center().x
+	var cy: float = rect.get_center().y
 	# `cleared` is not reachable from any path this file can see — `has_chip`
 	# requires kind "unlit", and main flips `n.unlit` when the bounty is paid,
 	# before the node clears. Kept rather than flattened because the ordering
 	# that makes it unreachable lives in `main.gd`, not here, and a dimmed chip
 	# is a better failure than a bright one (PR #80 DL R2 NIT).
 	var a: float = 0.45 if cleared else 1.0
-	var rect: Rect2 = Rect2(cx - chip_w * 0.5, cy - chip_h * 0.5, chip_w, chip_h)
 	# Rounded pill via stylebox — the map draws no other hard-cornered
 	# rectangle, and the border borrows the EMBER family, not the edges' glass.
 	if _chip_box == null:
@@ -388,12 +404,14 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 		_chip_box.set_border_width_all(1)
 		_chip_box.set_corner_radius_all(9)
 	ci.draw_style_box(_chip_box, rect)
-	var left: float = cx - (icon + 4.0 + tw) * 0.5
+	var left: float = cx - (CHIP_ICON + 4.0 + tw) * 0.5
 	if _chip_coin != null:
-		ci.draw_texture_rect(_chip_coin, Rect2(left, cy - icon * 0.5, icon, icon),
+		ci.draw_texture_rect(_chip_coin,
+			Rect2(left, cy - CHIP_ICON * 0.5, CHIP_ICON, CHIP_ICON),
 			false, Color(1.0, 1.0, 1.0, a))
-	ci.draw_string(_chip_font, Vector2(left + icon + 4.0, cy + float(fs) * 0.35), text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1.0, fs,
+	ci.draw_string(_chip_font,
+		Vector2(left + CHIP_ICON + 4.0, cy + float(CHIP_FONT_SIZE) * 0.35), text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, CHIP_FONT_SIZE,
 		Color(1.0, 0.84, 0.58, a))
 
 

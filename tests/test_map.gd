@@ -9,14 +9,41 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 		fails.append("test_map: %s" % what)
 
 
-## How many pairs of bounty pills would land on each other, given their spans.
-static func _collisions(spans: Array[Vector2]) -> int:
+## How many pairs of bounty pills would land on each other. Rects, not spans:
+## same-column stones share `world_x` and overlap in x at every camera while
+## sitting a lane apart (PR #80 DL R4).
+static func _collisions(rects: Array[Rect2]) -> int:
 	var hits: int = 0
-	for a: int in range(spans.size()):
-		for b: int in range(a + 1, spans.size()):
-			if MapBand.ChipBand.spans_overlap(spans[a], spans[b]):
+	for a: int in range(rects.size()):
+		for b: int in range(a + 1, rects.size()):
+			if rects[a].intersects(rects[b]):
 				hits += 1
 	return hits
+
+
+## Every pill the band would paint at `frame_w`, in stage px.
+static func _seated_pills(screen: WorldMapScreen) -> Array[Rect2]:
+	var out: Array[Rect2] = []
+	var chosen: Dictionary[int, bool] = screen._chip_band.seats(screen.size.x)
+	for i: int in chosen:
+		var ws: GlassWaystone = screen._waystones[i]
+		out.append(MapBand.ChipBand.pill_rect(ws.chip_rect(chosen[i]),
+			ws.position, ws.scale))
+	return out
+
+
+## Every chip stone whose STONE is on screen — what the band should paint unless
+## a pill genuinely lands on another.
+static func _on_screen_chips(screen: WorldMapScreen) -> int:
+	var n: int = 0
+	for ws: GlassWaystone in screen._waystones:
+		if not ws.has_chip():
+			continue
+		var s: float = ws.scale.x
+		if MapBand.ChipBand.on_screen(ws.position.x + ws.size.x * s * 0.5,
+				ws.pane_radius() * s, screen.size.x):
+			n += 1
+	return n
 
 
 static func run(fails: Array[String]) -> void:
@@ -219,7 +246,7 @@ static func run(fails: Array[String]) -> void:
 	sib.set_shape(&"phone-portrait")
 	sib._cam_x = 627.53
 	sib._layout_waystones()
-	var raw: Array[Vector2] = []
+	var raw: Array[Rect2] = []
 	for ws: GlassWaystone in sib._waystones:
 		if not ws.has_chip():
 			continue
@@ -227,18 +254,29 @@ static func run(fails: Array[String]) -> void:
 		var c: float = ws.position.x + ws.size.x * s * 0.5
 		if not MapBand.ChipBand.on_screen(c, ws.pane_radius() * s, sib.size.x):
 			continue
-		raw.append(MapBand.ChipBand.pill_span(c, ws.chip_inner() * s, ws.chip_reach() * s,
-			MapBand.ChipBand.flips(c, ws.chip_reach() * s, sib.size.x)))
-	var pills: Array[Vector2] = []
-	var chosen: Dictionary[int, bool] = sib._chip_band.seats(sib.size.x)
-	for i: int in chosen:
-		var ws: GlassWaystone = sib._waystones[i]
-		var s: float = ws.scale.x
-		pills.append(MapBand.ChipBand.pill_span(ws.position.x + ws.size.x * s * 0.5,
-			ws.chip_inner() * s, ws.chip_reach() * s, chosen[i]))
+		raw.append(MapBand.ChipBand.pill_rect(
+			ws.chip_rect(MapBand.ChipBand.flips(c, ws.chip_reach() * s, sib.size.x)),
+			ws.position, ws.scale))
+	var pills: Array[Rect2] = _seated_pills(sib)
 	_check(fails, _collisions(raw) >= 1,
 		"seed 17634 at cam 627.53 still reproduces the sibling collision to guard against")
 	_check(fails, _collisions(pills) == 0, "no bounty pill is painted over another")
+	# `_collisions == 0` is satisfied by painting NOTHING, so the decline needs a
+	# ceiling as well as a floor: exactly one chip may be dropped here, and the
+	# other on-screen chips must survive (PR #80 DL R4 MINOR).
+	_check(fails, _on_screen_chips(sib) - pills.size() == 1,
+		"exactly one chip is declined at the collision, not the frame's worth")
+	# The over-decline itself, at the camera where three same-column stones share
+	# the frame: judged on x alone the band dropped two of them, and a dark
+	# lantern's bounty appears nowhere else in the game (DL R4 MAJOR).
+	sib._cam_x = 1250.0
+	sib._layout_waystones()
+	var wide: Array[Rect2] = _seated_pills(sib)
+	_check(fails, _on_screen_chips(sib) >= 3,
+		"seed 17634 at cam 1250 still puts three chip stones in one frame")
+	_check(fails, wide.size() == _on_screen_chips(sib),
+		"stones a lane apart keep their prices — a shared column is not a collision")
+	_check(fails, _collisions(wide) == 0, "…and still none is painted over another")
 	tree.root.remove_child(sib)
 	sib.free()
 	# Drive the real door — resize, then `set_shape` → `refresh` → `_seat_marker`
