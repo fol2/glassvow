@@ -9,6 +9,12 @@ extends RefCounted
 const ROWS: int = 15
 const COLS: int = 7
 const PATHS: int = 6
+## Half-width of each node's authored wander, as a fraction of the lane/step it
+## sits in: `jx` spans ±0.25 and `jy` ±0.20. Named because presentation reads
+## them as bounds — `tests/test_map.gd` asserts the terminus arch fits at the
+## worst realisation, and a spread edited here without that gate seeing it would
+## be a screen defect no test could catch (PR #79 DL R3).
+const JITTER_SPREAD: Vector2 = Vector2(0.5, 0.4)
 
 var region: String = "ashen_woods"
 var nodes: Array[MapNode] = []
@@ -131,8 +137,8 @@ static func _node_at(
 	n.row = row
 	n.col = col
 	n.world_x = col
-	n.jx = (rng.next() - 0.5) * 0.5
-	n.jy = (rng.next() - 0.5) * 0.4
+	n.jx = (rng.next() - 0.5) * JITTER_SPREAD.x
+	n.jy = (rng.next() - 0.5) * JITTER_SPREAD.y
 	grid[key] = n
 	m.nodes.append(n)
 	return n
