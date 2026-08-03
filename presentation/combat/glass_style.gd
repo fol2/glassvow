@@ -21,6 +21,8 @@ const HP_RED: Color = Color(0.85, 0.33, 0.32)
 ## The benchmark's two faces (roguecardv2@6e069118): Cinzel for display —
 ## names, cost numerals — and Alegreya for the reading text. Both OFL, bundled
 ## alongside NotoSansTC, which stays the UI face because these two carry no CJK.
+## When a display face is requested, `face()` attaches NotoSansTC as a fallback
+## so 繁中 glyphs never tofu through Cinzel/Alegreya overrides.
 ## The lightest weight the benchmark loads, and the one a rule that names no
 ## `font-weight` lands on: CSS matching for a desired 400 checks 500 before it
 ## checks anything heavier, and 400 is not in the set. `.enemy .name` is such a
@@ -30,6 +32,32 @@ const CINZEL_700: String = "res://assets/fonts/Cinzel-700.woff2"
 const CINZEL_800: String = "res://assets/fonts/Cinzel-800.woff2"
 const ALEGREYA_400: String = "res://assets/fonts/Alegreya-400.woff2"
 const ALEGREYA_700: String = "res://assets/fonts/Alegreya-700.woff2"
+const NOTO_SANS_TC: String = "res://assets/fonts/NotoSansTC.ttf"
+
+static var _faces: Dictionary = {}
+
+
+## Load a display face with NotoSansTC as CJK fallback. Cached per path so the
+## fallback chain is built once.
+static func face(path: String) -> Font:
+	if _faces.has(path):
+		return _faces[path]
+	var primary: Font = load(path) as Font
+	var noto: Font = load(NOTO_SANS_TC) as Font
+	if primary == null:
+		_faces[path] = noto
+		return noto
+	if noto == null or path == NOTO_SANS_TC:
+		_faces[path] = primary
+		return primary
+	var chained: Font = primary.duplicate() as Font
+	if chained == null:
+		_faces[path] = primary
+		return primary
+	var chain: Array[Font] = [noto]
+	chained.fallbacks = chain
+	_faces[path] = chained
+	return chained
 
 
 ## Canonical modal veil — flat (no blur; backbuffer budget). Shared by Help,

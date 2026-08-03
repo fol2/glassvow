@@ -7,6 +7,7 @@ extends Control
 
 signal closed
 signal reset_requested
+signal language_changed(code: StringName)
 
 const GOLD: Color = Color("#f2c14e")
 const DANGER: Color = Color("#ff8d8d")
@@ -99,6 +100,12 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 		display.add_child(_toggle_row(Locale.active.t("ui.settings.vsync").to_upper(),
 			func() -> bool: return _preferences.vsync,
 			func(on: bool) -> void: _preferences.set_vsync(on)))
+		display.add_child(_language_row())
+	else:
+		# Web / headless have no window toggles; language still must be reachable.
+		var language_section: VBoxContainer = _section(
+			Locale.active.t("ui.language.label").to_upper(), GOLD)
+		language_section.add_child(_language_row())
 
 	var motion: VBoxContainer = _section(
 		Locale.active.t("ui.settings.motion").to_upper(), GOLD)
@@ -280,6 +287,41 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 		sync.call()
 		_sfx.play(&"click")
 	)
+	return row
+
+
+## Language cycles English ↔ 繁體中文. Labels are themselves localised. Live
+## re-render is owned by main (rebuild the routed screen); mid-combat defers
+## until the next route — see ui.language.deferNote.
+func _language_row() -> HBoxContainer:
+	var row: HBoxContainer = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+
+	var label: Label = Label.new()
+	label.text = Locale.active.t("ui.language.label").to_upper()
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 1))
+	label.add_theme_font_size_override("font_size", 13)
+	row.add_child(label)
+
+	var toggle: Button = _small_button()
+	toggle.custom_minimum_size.x = maxf(toggle.custom_minimum_size.x, 120.0)
+	var sync: Callable = func() -> void:
+		var code: StringName = _preferences.effective_language()
+		toggle.text = Locale.active.t(
+			"ui.language.zhHant" if code == Locale.CODE_ZH_HANT else "ui.language.en")
+	sync.call()
+	toggle.pressed.connect(func() -> void:
+		var next: String = "en" if _preferences.effective_language() == Locale.CODE_ZH_HANT \
+			else "zh-Hant"
+		_preferences.set_language(next)
+		Locale.active.set_language(StringName(next))
+		sync.call()
+		label.text = Locale.active.t("ui.language.label").to_upper()
+		_sfx.play(&"click")
+		language_changed.emit(StringName(next))
+	)
+	row.add_child(toggle)
 	return row
 
 
