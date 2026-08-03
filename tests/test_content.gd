@@ -52,6 +52,8 @@ static func run(fails: Array[String]) -> void:
 	if full.reveal_ids.size() != 8 or full.aspects.size() != 2 or full.vows.size() != 5:
 		fails.append("ContentDB: full progression registries are incomplete")
 	full.validate(fails)
+	_emberheart_heal(full, 3, "full content", fails)
+	_emberheart_heal(db, 6, "fixture fallback", fails)
 	_enemy_overrides(fails)
 	var pickup_run: RunState = RunState.new_run(full, 5, "run-relic-pickup")
 	var rewards: RewardRules = RewardRules.new(full)
@@ -64,6 +66,20 @@ static func run(fails: Array[String]) -> void:
 	if not rewards.card_pool(pickup_run, "uncommon").has("quakeblow") \
 			or not rewards.relic_pool(pickup_run, "uncommon").has("smolderingCoal"):
 		fails.append("ContentDB: deed unlocks do not extend reward pools")
+
+
+static func _emberheart_heal(
+	content: ContentDB, expected: int, label: String, fails: Array[String]
+) -> void:
+	var run_state: RunState = RunState.new_run(content, 11, "emberheart-%s" % label)
+	run_state.player.hp = 20
+	var game: GlassvowGame = GlassvowGame.new(content, run_state)
+	game.apply({"t": "startCombat", "enemies": ["sporeling"], "kind": "normal"})
+	game.rules.hit_enemy(run_state, game.cb, game.cb.enemies[0], 999, false)
+	if run_state.player.hp != 20 + expected:
+		fails.append("Emberheart: %s expected heal %d got %d" % [
+			label, expected, run_state.player.hp - 20,
+		])
 
 
 static func _enemy_overrides(fails: Array[String]) -> void:

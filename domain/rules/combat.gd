@@ -460,7 +460,7 @@ func _win_combat(run: RunState, cb: CombatState) -> void:
 	quests.on_combat_win(run, cb)
 	run.player.hp = clampi(cb.player.hp, 1, run.player.max_hp)
 	if run.has_relic("emberHeart"):
-		heal_player(run, null, 6)
+		heal_player(run, null, _ji(content.relic(&"emberHeart").get("heal", 6)))
 		_proc(cb, "emberHeart")
 	if run.has_relic("crownOfTheHearth") and cb.embers > 0:
 		heal_player(run, null, cb.embers * 3)
