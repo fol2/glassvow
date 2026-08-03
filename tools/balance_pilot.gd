@@ -1,6 +1,8 @@
 class_name BalancePilot
 extends RefCounted
 ## Block lethal, else kill-lowest; Dusk favours Eclipse/Shatter, Ash stacks Smolder highest and blocks with Smother.
+## Routes favour treasure, then low-HP rest; rewards take the highest card/relic score and one affordable shop item.
+## Potions heal at 20 missing HP, block lethal intent, and spend offensive stock in elite/boss fights.
 const VERSION: String = "p6-b0-v1"
 const RELIC_SCORE: Dictionary = {"hollowCrown": 90, "crownOfCinders": 80,
 	"crownOfTheHearth": 75, "shatterersCrown": 70, "crownOfTithes": 65}
@@ -97,8 +99,30 @@ static func _target(game: GlassvowGame, card: CardInst, d: Dictionary) -> Varian
 			lowest = e
 	return lowest.idx
 static func _incoming(game: GlassvowGame) -> int:
+	var hp: Array[int] = []
+	var smolder: Array[int] = []
+	for e: EnemyCombatant in game.cb.enemies:
+		hp.append(e.hp)
+		smolder.append(int(float(str(e.statuses.get("poison", 0)))))
+	var rng: Rng = Rng.new(game.run.rng_state()) # Forecast jumps without moving the run RNG.
 	var total: int = 0
-	for e: EnemyCombatant in game.cb.living_enemies():
+	for i: int in range(game.cb.enemies.size()):
+		if hp[i] <= 0:
+			continue
+		if smolder[i] > 0:
+			hp[i] -= smolder[i]
+			smolder[i] = maxi(0, smolder[i] - 1)
+			if hp[i] <= 0:
+				var living: Array[int] = []
+				for j: int in range(hp.size()):
+					if j != i and hp[j] > 0:
+						living.append(j)
+				if smolder[i] > 0 and not living.is_empty():
+					smolder[living[rng.pick_index(living.size())]] += smolder[i]
+				continue
+		var e: EnemyCombatant = game.cb.enemies[i]
+		if e.staggered:
+			continue
 		var preview_v: Variant = game.rules.preview_enemy_dmg(game.cb, e, game.run)
 		if typeof(preview_v) == TYPE_DICTIONARY:
 			var preview: Dictionary = preview_v

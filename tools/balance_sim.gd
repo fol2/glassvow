@@ -2,6 +2,8 @@ class_name BalanceSim
 extends SceneTree
 ## Domain-only whole runs: all reveals, no quests or cross-run side state.
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
+const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
+const PROFILE: String = "mature-three-act-no-side-state-v1"
 func _initialize() -> void:
 	var opts: Dictionary = _options(OS.get_cmdline_user_args())
 	if opts.has("error"):
@@ -24,7 +26,18 @@ func _initialize() -> void:
 	for aspect: String in aspects:
 		for offset: int in range(int(float(str(opts["runs"])))):
 			rows.append(simulate(content, aspect, int(float(str(opts["seed0"]))) + offset, int(float(str(opts["vow"])))))
-	print(JSON.stringify(rows))
+	var report: Dictionary = Metrics.report(rows, _manifest(opts, overlay))
+	var text: String = JSON.stringify(report)
+	if str(opts["out"]).is_empty():
+		print(text)
+	else:
+		var file: FileAccess = FileAccess.open(str(opts["out"]), FileAccess.WRITE)
+		if file == null:
+			push_error("balance_sim: cannot write --out")
+			quit(2)
+			return
+		file.store_string(text + "\n")
+		print(JSON.stringify({"calibration": report["calibration"], "summary": report["summary"]}))
 	quit(0)
 static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0) -> Dictionary:
 	var aspect_index: int = 1 if aspect == "ashwarden" else 0
@@ -186,8 +199,10 @@ static func _result(run: RunState, aspect: String, seed: int, outcome: String,
 		"gold": run.player.gold, "deck": run.player.deck.size(), "rng": run.rng_state(),
 		"fights": fights,
 	}
+static func outcome_digest(row: Dictionary) -> String:
+	return JSON.stringify(row).sha256_text()
 static func _options(args: PackedStringArray) -> Dictionary:
-	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": ""}
+	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "", "out": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}
@@ -204,3 +219,17 @@ static func _options(args: PackedStringArray) -> Dictionary:
 	if int(float(str(out["runs"]))) < 1 or int(float(str(out["vow"]))) < 0 or int(float(str(out["vow"]))) > 5:
 		return {"error": "--runs must be positive and --vow must be 0..5"}
 	return out
+static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
+	var git_out: Array = []
+	OS.execute("git", ["rev-parse", "HEAD"], git_out)
+	return {
+		"commit": str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown",
+		"godot": Engine.get_version_info().get("string", "unknown"),
+		"contentSha256": FileAccess.get_sha256(ContentDB.FULL_PATH),
+		"overlay": null if overlay.is_empty() else {"path": overlay,
+			"sha256": FileAccess.get_sha256(overlay)},
+		"pilot": Pilot.VERSION, "profile": PROFILE, "aspect": opts["aspect"],
+		"vow": opts["vow"], "seeds": {"first": opts["seed0"],
+			"last": int(float(str(opts["seed0"]))) + int(float(str(opts["runs"]))) - 1,
+			"count": opts["runs"]},
+	}
