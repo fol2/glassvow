@@ -81,7 +81,7 @@ func _build() -> void:
 	_hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_column.add_child(_hero)
-	_title = _label("THE LAMPLIGHTER", 34, RunStyle.GOLD, true)
+	_title = _label(Locale.active.t("ui.lamp.title"), 34, RunStyle.GOLD, true)
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	_column.add_child(_title)
 	var aspect_name: String = str(_aspect.get("name", "climber"))

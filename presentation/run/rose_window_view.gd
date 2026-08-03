@@ -200,7 +200,7 @@ func _refresh_selection() -> void:
 
 func _build_log() -> void:
 	var title: Label = Label.new()
-	title.text = "WHISPERS HEARD AT DAWN"
+	title.text = Locale.active.t("ui.rose.whisperLogTitleUpper")
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
 	title.add_theme_font_size_override("font_size", 12)
 	title.add_theme_color_override("font_color", RunStyle.GOLD_DIM)
@@ -225,7 +225,7 @@ func _build_log() -> void:
 		row.add_child(line)
 	if _whispers > _whisper_lines.size():
 		var final: Label = Label.new()
-		final.text = "∞  The final whisper returns at every dawn."
+		final.text = Locale.active.t("ui.rose.finalWhisperMark")
 		final.add_theme_color_override("font_color", RunStyle.TEXT_DIM)
 		_log.add_child(final)
 

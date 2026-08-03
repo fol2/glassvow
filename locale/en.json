@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "ui": {
-  "brand": {
-    "secrets": " · {n} secrets unearthed",
-    "stats": "{runs} climbs · {wins} dawns · {slain} slain",
-    "tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
-    "title": "GLASSVOW"
-  },
+    "brand": {
+      "secrets": " · {n} secrets unearthed",
+      "stats": "{runs} climbs · {wins} dawns · {slain} slain",
+      "tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
+      "title": "GLASSVOW"
+    },
     "combat": {
       "affixTitle": "{name} — an elite's title",
       "ashes": "ASHES",
@@ -25,11 +25,11 @@
       "end": "End",
       "enemyTurn": "ENEMY TURN",
       "energyAria": "Energy",
-      "facetsBody": "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass <b>shatters</b> — it loses its next action, is Cracked, and spills Embers into your lantern.",
+      "facetsBody": "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass [b]shatters[/b] â it loses its next action, is Cracked, and spills Embers into your lantern.",
       "facetsTitle": "Facets",
       "glassHolds": "THE GLASS HOLDS",
       "guardShattered": "GUARD SHATTERED",
-      "lanternBody": "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> — burn the card away for an ember, once a turn. Curses refuse the fire.",
+      "lanternBody": "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> â burn the card away for an ember, once a turn. Curses refuse the fire.",
       "lanternBodyLead": "<b>{cost} Embers, once a turn:</b> {text}<br><br>",
       "lanternSub": "A · use Art",
       "lanternTitle": "The Lantern",
@@ -42,13 +42,19 @@
       "staggeredTipBody": "The glass has shattered — this creature loses its next action while it reseams.",
       "staggeredTipTitle": "Staggered",
       "stoneRemembers": "THE STONE REMEMBERS",
-      "yourTurn": "YOUR TURN"
+      "yourTurn": "YOUR TURN",
+      "perfect": "PERFECT",
+      "lanternArtTitle": "Lantern Art — {name}",
+      "lanternLead": "<b>{embers} Embers, once a turn:</b> {text}<br><br>",
+      "staggeredTitle": "Staggered",
+      "staggeredBody": "The glass has shattered â this creature loses its next action while it reseams."
     },
     "common": {
       "cancel": "Cancel",
       "continue": "Continue",
       "retry": "Retry",
-      "skip": "Skip"
+      "skip": "Skip",
+      "leave": "Leave"
     },
     "dawn": {
       "act4RevealCopy": "Six panes burn. Something waits above the crown.",
@@ -66,17 +72,29 @@
       "shardGrantCopy": "One pane answers.",
       "whisperKicker": "A whisper reaches the dawn",
       "witchlightCopy": "Pale paths will now be marked.",
-      "witchlightLens": "Witchlight Lens"
+      "witchlightLens": "Witchlight Lens",
+      "title": "ASCENDED",
+      "subtitle": "At Dawn, the Vigil remembers.",
+      "quietTitle": "Dawn",
+      "quietBody": "The Vigil is quiet.",
+      "kickerWhisper": "A WHISPER AT DAWN",
+      "kickerQuest": "A JOURNEY REVEALED",
+      "kickerProgress": "THE JOURNEY CONTINUES",
+      "kickerShard": "EMBERGLASS SHARD",
+      "kickerUnlock": "THE VIGIL OPENS",
+      "kickerDefault": "AT DAWN",
+      "complete": "DAWN COMPLETE",
+      "progress": "DAWN {n} OF {total} · THE CURRENT MEMORY IS LIT"
     },
-  "embark": {
-    "aspectLabel": "Who carries the lantern",
-    "noVows": "The Spire as it is. No vows sworn.",
-    "subChoose": "Choose how you meet the Spire.",
-    "subWait": "The lantern is lit. The Spire waits.",
-    "title": "THE CLIMB BEGINS",
-    "vowLevel": "VOW {level}  / {max}",
-    "warnSaved": "Beginning anew abandons your saved climb."
-  },
+    "embark": {
+      "aspectLabel": "Who carries the lantern",
+      "noVows": "The Spire as it is. No vows sworn.",
+      "subChoose": "Choose how you meet the Spire.",
+      "subWait": "The lantern is lit. The Spire waits.",
+      "title": "THE CLIMB BEGINS",
+      "vowLevel": "VOW {level}  / {max}",
+      "warnSaved": "Beginning anew abandons your saved climb."
+    },
     "end": {
       "ascended": "ASCENDED",
       "ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the Spire — the first in an age.",
@@ -108,7 +126,11 @@
         "header": "✦ {kind}",
         "relic": "Relic Unlocked"
       },
-      "viewDeck": "View Final Deck"
+      "viewDeck": "View Final Deck",
+      "abandoned": "THE VOW IS SET ASIDE",
+      "abandonedSub": "The pilgrimage ends here. The Vigil will keep the record.",
+      "fallenLantern": "Your lantern went dark on floor {floor}.",
+      "elitesBossesPlus": "Elites + Bosses"
     },
     "event": {
       "chooseCardSub": "One page still glows.",
@@ -118,7 +140,9 @@
       "removeSub": "Let it go.",
       "removeTitle": "Remove a Card",
       "upgradeSub": "The forge hungers.",
-      "upgradeTitle": "Upgrade a Card"
+      "upgradeTitle": "Upgrade a Card",
+      "strangePlace": "A Strange Place",
+      "continue": "CONTINUE"
     },
     "help": {
       "climbBody": "Choose a path of lanterns up the Spire. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
@@ -157,7 +181,10 @@
       "omenTitle": "Omen — {name}",
       "potionTip": "Click to use or toss",
       "tossPotion": "Toss it",
-      "usePotion": "Use {name}"
+      "usePotion": "Use {name}",
+      "viewDeck": "View deck",
+      "menu": "Menu",
+      "emptyPhial": "Empty phial seat"
     },
     "keywords": {
       "chip": "Strike at the glass itself: adds toward a Shatter, no blood required.",
@@ -216,7 +243,10 @@
       "unlitBody": "What waits here is unknown — but first light pays a bounty of gold.",
       "unlitTitle": "An unlit lantern",
       "witchlightBody": "Pale glass waits here.",
-      "witchlightTitle": "Witchlight trembles"
+      "witchlightTitle": "Witchlight trembles",
+      "holdFast": "The glass holds fast. The way is not yet cut.",
+      "standThreshold": "Stand at the Threshold",
+      "returnVigil": "Return to the Vigil"
     },
     "menu": {
       "abandon": "Abandon",
@@ -229,24 +259,24 @@
       "beginAnewTitle": "Begin Anew?",
       "beginClimb": "Begin the Climb",
       "chooseBoon": "Choose a boon",
-    "close": "Close",
-    "continueClimb": "Continue Climb",
-    "credits": "Credits",
-    "fightOn": "Fight On",
-    "howToPlay": "How to Play",
-    "keepClimbing": "Keep Climbing",
-    "lightTheWay": "Light the Way",
-    "mute": "Mute",
-    "muteSound": "Mute Sound",
-    "quit": "Quit",
-    "quitGame": "Quit Game",
-    "return": "Return",
-    "returnTitle": "Return to Title",
-    "settings": "Settings",
-    "theVigil": "The Vigil",
-    "unmute": "Unmute",
-    "unmuteSound": "Unmute Sound"
-  },
+      "close": "Close",
+      "continueClimb": "Continue Climb",
+      "credits": "Credits",
+      "fightOn": "Fight On",
+      "howToPlay": "How to Play",
+      "keepClimbing": "Keep Climbing",
+      "lightTheWay": "Light the Way",
+      "mute": "Mute",
+      "muteSound": "Mute Sound",
+      "quit": "Quit",
+      "quitGame": "Quit Game",
+      "return": "Return",
+      "returnTitle": "Return to Title",
+      "settings": "Settings",
+      "theVigil": "The Vigil",
+      "unmute": "Unmute",
+      "unmuteSound": "Unmute Sound"
+    },
     "persistence": {
       "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
       "reloadClimb": "Reload Saved Climb",
@@ -274,7 +304,9 @@
       "upgradeSub": "Forge one card into its + form.",
       "upgradeTitle": "Upgrade a Card",
       "upgradedSub": "It gleams with new power.",
-      "upgradedTitle": "Upgraded!"
+      "upgradedTitle": "Upgraded!",
+      "restHealBtn": "Rest — heal {hp} HP",
+      "hpFrac": "{cur} / {max} HP"
     },
     "reward": {
       "addCardRow": "Add a card to your deck",
@@ -293,7 +325,18 @@
       "perfectSeal": "✦ PERFECT — the glass untouched ✦",
       "potionSlotsFull": "Potion slots full!",
       "takeNone": "Take none",
-      "victory": "VICTORY"
+      "victory": "VICTORY",
+      "continue": "Continue",
+      "skip": "Skip",
+      "leaveIt": "Leave it",
+      "walkOn": "Walk on",
+      "takeOneLight": "Take one light with you",
+      "takeOneFromLight": "Take one from the light",
+      "onePiece": "One piece comes with you",
+      "addCard": "Add a card to your deck",
+      "offeredTakeOne": "{n} offered · take one",
+      "goldAmount": "{n} Gold",
+      "chooseCardBody": "Add one card to your deck — or skip to keep it lean."
     },
     "rose": {
       "dormantPane": "Dormant Emberglass pane {n}",
@@ -304,34 +347,38 @@
       "shardRecovered": "{name}, Shard recovered",
       "shardRecoveredShort": "Shard recovered",
       "unknownPane": "Unknown Emberglass pane {n}",
-      "whisperLogTitle": "Whispers heard at dawn"
+      "whisperLogTitle": "Whispers heard at dawn",
+      "whisperLogTitleUpper": "WHISPERS HEARD AT DAWN",
+      "finalWhisperMark": "∞  The final whisper returns at every dawn."
     },
-  "settings": {
-    "audio": "Audio",
-    "debugLabel": "Debug",
-    "display": "Display",
-    "eraseAll": "Erase All Progress",
-    "eraseEverything": "Erase Everything",
-    "fullscreen": "Fullscreen",
-    "ledger": "The Ledger",
-    "master": "Master",
-    "motion": "Motion",
-    "music": "Music",
-    "mute": "Mute",
-    "off": "Off",
-    "on": "On",
-    "reduceMotion": "Reduce Motion",
-    "resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
-    "resetConfirmTitle": "Reset Save?",
-    "resetSave": "Reset Save",
-    "resetWarn": "Wipes the current climb and all Vigil progress. Cannot be undone.",
-    "screenShake": "Screen Shake",
-    "sfx": "SFX",
-    "title": "Settings",
-    "unmute": "Unmute",
-    "volumeTip": "{name} volume",
-    "vsync": "Vsync"
-  },
+    "settings": {
+      "audio": "Audio",
+      "debugLabel": "Debug",
+      "display": "Display",
+      "eraseAll": "Erase All Progress",
+      "eraseEverything": "Erase Everything",
+      "fullscreen": "Fullscreen",
+      "ledger": "The Ledger",
+      "master": "Master",
+      "motion": "Motion",
+      "music": "Music",
+      "mute": "Mute",
+      "off": "Off",
+      "on": "On",
+      "reduceMotion": "Reduce Motion",
+      "resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
+      "resetConfirmTitle": "Reset Save?",
+      "resetSave": "Reset Save",
+      "resetWarn": "Wipes the current climb and all Vigil progress. Cannot be undone.",
+      "screenShake": "Screen Shake",
+      "sfx": "SFX",
+      "title": "Settings",
+      "unmute": "Unmute",
+      "volumeTip": "{name} volume",
+      "vsync": "Vsync",
+      "resetConfirmPlain": "This erases your current climb and the entire Vigil — deeds, unlocks, vows, monuments, and whispers.\n\nThis cannot be undone.",
+      "eraseAllTitle": "ERASE ALL PROGRESS?"
+    },
     "shop": {
       "cardRemoval": {
         "desc": "Remove a card from your deck forever.",
@@ -342,7 +389,8 @@
       "greeting": "\"Gold for glory, stranger. Everything's fair-priced — for the doomed.\"",
       "leave": "Leave the Shop",
       "potionSlotsFull": "Potion slots full!",
-      "title": "THE MERCHANT"
+      "title": "THE MERCHANT",
+      "leaveUpper": "LEAVE THE SHOP"
     },
     "smoke": {
       "hello": "Hello, {name}"
@@ -353,11 +401,19 @@
       "openBtn": "Open the Chest",
       "relicClaim": "You claim <b style=\"color:{tone}\">{name}</b> — <i>{text}</i>",
       "sub": "A heavy chest, banded in gold. Open it?",
-      "title": "TREASURE"
+      "title": "TREASURE",
+      "continue": "Continue",
+      "relicClaimPlain": "You claim [color=#{tone}]{name}[/color] — [i]{text}[/i]"
     },
     "vigil": {
       "deeds": "Deeds",
-      "roseWindow": "Rose Window"
+      "roseWindow": "Rose Window",
+      "title": "THE VIGIL",
+      "return": "RETURN",
+      "ashwarden": "The Ashwarden",
+      "stats": "{runs} climbs · {wins} dawns · deepest Vow: {vow}",
+      "deedsTab": "DEEDS",
+      "roseTab": "ROSE WINDOW"
     },
     "pilgrimage": {
       "survey": "SCROLL OR DRAG TO SURVEY THE PILGRIMAGE",
@@ -369,6 +425,36 @@
       "hearth": "Hearth",
       "awaits": "%s — %s AWAITS",
       "notNow": "not now"
+    },
+    "credits": {
+      "title": "Credits",
+      "headingBrand": "GLASSVOW",
+      "bodyBrand": "A roguelite deckbuilder · by fol2",
+      "headingGlass": "THE GLASS",
+      "bodyGlass": "Parallel-ported from roguecardv2 (web reference 0.5.0+6e06911).",
+      "headingMusic": "MUSIC — STAINED GLASS",
+      "headingSound": "SOUND — ASHGLASS VIGIL",
+      "headingType": "TYPE",
+      "bodyCinzel": "Cinzel — Natanael Gama (OFL)",
+      "bodyAlegreya": "Alegreya — Juan Pablo del Peral, Huerta Tipográfica (OFL)",
+      "bodyNoto": "Noto Sans TC — Google (OFL)",
+      "headingEngine": "ENGINE",
+      "bodyEngine": "Made with Godot Engine",
+      "close": "Close",
+      "engineLicences": "Engine licences",
+      "fontLicences": "Font licences (OFL)",
+      "components": "COMPONENTS",
+      "licenceTexts": "LICENCE TEXTS",
+      "themeLine": "Ashglass Vigil"
+    },
+    "omen": {
+      "prefix": "OMEN - "
+    },
+    "language": {
+      "label": "Language",
+      "en": "English",
+      "zhHant": "繁體中文",
+      "deferNote": "Takes effect on the next screen."
     }
   },
   "content": {
