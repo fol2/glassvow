@@ -84,18 +84,19 @@ func _build() -> void:
 	_column.add_theme_constant_override("separation", 14)
 	_centre.add_child(_column)
 
-	_title = _label("THE CLIMB BEGINS", 26, RunStyle.GOLD, true)
+	_title = _label(Locale.active.t("ui.embark.title"), 26, RunStyle.GOLD, true)
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 4))
 	_column.add_child(_title)
 
 	_sub = _label(
-		"Choose how you meet the Spire." if _aspect_unlocked or _vow_unlocked > 0
-			else "The lantern is lit. The Spire waits.",
+		Locale.active.t("ui.embark.subChoose") if _aspect_unlocked or _vow_unlocked > 0
+			else Locale.active.t("ui.embark.subWait"),
 		14, Color(RunStyle.TEXT, 0.75), true)
 	_column.add_child(_sub)
 
 	if _aspect_unlocked and _aspects.size() > 1:
-		var aspect_label: Label = _label("WHO CARRIES THE LANTERN", 12,
+		var aspect_label: Label = _label(
+			Locale.active.t("ui.embark.aspectLabel").to_upper(), 12,
 			Color(RunStyle.TEXT, 0.60), true)
 		aspect_label.add_theme_font_override(
 			"font", RunStyle.tracked(GlassStyle.CINZEL_500, 2))
@@ -113,7 +114,7 @@ func _build() -> void:
 
 	if _saved_run:
 		var warning: Label = _label(
-			"Beginning anew abandons your saved climb.", 12, RunStyle.DANGER, true)
+			Locale.active.t("ui.embark.warnSaved"), 12, RunStyle.DANGER, true)
 		_column.add_child(warning)
 
 	_actions = GridContainer.new()
@@ -124,13 +125,15 @@ func _build() -> void:
 	_actions.add_theme_constant_override("v_separation", 8)
 	_column.add_child(_actions)
 
-	_begin = _action("BEGIN ANEW" if _saved_run else "BEGIN THE CLIMB", true)
+	_begin = _action(
+		Locale.active.t("ui.menu.beginAnew" if _saved_run else "ui.menu.beginClimb").to_upper(),
+		true)
 	_begin.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		begin_requested.emit(_selected_aspect, _selected_vow)
 	)
 	_actions.add_child(_begin)
-	_back = _action("BACK", false)
+	_back = _action(Locale.active.t("ui.menu.back").to_upper(), false)
 	_back.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		back_requested.emit()
@@ -254,9 +257,11 @@ func _refresh_vow() -> void:
 		else str(_selected_vow)
 	var maximum: String = ROMAN[_vow_unlocked] if _vow_unlocked < ROMAN.size() \
 		else str(_vow_unlocked)
-	_vow_level.text = "VOW %s  / %s" % [roman, maximum]
+	_vow_level.text = Locale.active.t("ui.embark.vowLevel", {
+		"level": roman, "max": maximum,
+	})
 	if _selected_vow == 0:
-		_vow_desc.text = "The Spire as it is. No vows sworn."
+		_vow_desc.text = Locale.active.t("ui.embark.noVows")
 		return
 	var lines: PackedStringArray = []
 	for index: int in range(_selected_vow):

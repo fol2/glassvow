@@ -1,10 +1,12 @@
 {
   "formatVersion": 1,
   "ui": {
-    "brand": {
-      "tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
-      "title": "GLASSVOW"
-    },
+  "brand": {
+    "secrets": " · {n} secrets unearthed",
+    "stats": "{runs} climbs · {wins} dawns · {slain} slain",
+    "tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
+    "title": "GLASSVOW"
+  },
     "combat": {
       "affixTitle": "{name} — an elite's title",
       "ashes": "ASHES",
@@ -66,14 +68,15 @@
       "witchlightCopy": "Pale paths will now be marked.",
       "witchlightLens": "Witchlight Lens"
     },
-    "embark": {
-      "aspectLabel": "Who carries the lantern",
-      "noVows": "The Spire as it is. No vows sworn.",
-      "subChoose": "Choose how you meet the Spire.",
-      "subWait": "The lantern is lit. The Spire waits.",
-      "title": "THE CLIMB BEGINS",
-      "warnSaved": "Beginning anew abandons your saved climb."
-    },
+  "embark": {
+    "aspectLabel": "Who carries the lantern",
+    "noVows": "The Spire as it is. No vows sworn.",
+    "subChoose": "Choose how you meet the Spire.",
+    "subWait": "The lantern is lit. The Spire waits.",
+    "title": "THE CLIMB BEGINS",
+    "vowLevel": "VOW {level}  / {max}",
+    "warnSaved": "Beginning anew abandons your saved climb."
+  },
     "end": {
       "ascended": "ASCENDED",
       "ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the Spire — the first in an age.",
@@ -226,20 +229,24 @@
       "beginAnewTitle": "Begin Anew?",
       "beginClimb": "Begin the Climb",
       "chooseBoon": "Choose a boon",
-      "close": "Close",
-      "continueClimb": "Continue Climb",
-      "fightOn": "Fight On",
-      "howToPlay": "How to Play",
-      "keepClimbing": "Keep Climbing",
-      "lightTheWay": "Light the Way",
-      "mute": "Mute",
-      "muteSound": "Mute Sound",
-      "return": "Return",
-      "settings": "Settings",
-      "theVigil": "The Vigil",
-      "unmute": "Unmute",
-      "unmuteSound": "Unmute Sound"
-    },
+    "close": "Close",
+    "continueClimb": "Continue Climb",
+    "credits": "Credits",
+    "fightOn": "Fight On",
+    "howToPlay": "How to Play",
+    "keepClimbing": "Keep Climbing",
+    "lightTheWay": "Light the Way",
+    "mute": "Mute",
+    "muteSound": "Mute Sound",
+    "quit": "Quit",
+    "quitGame": "Quit Game",
+    "return": "Return",
+    "returnTitle": "Return to Title",
+    "settings": "Settings",
+    "theVigil": "The Vigil",
+    "unmute": "Unmute",
+    "unmuteSound": "Unmute Sound"
+  },
     "persistence": {
       "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
       "reloadClimb": "Reload Saved Climb",
@@ -299,17 +306,32 @@
       "unknownPane": "Unknown Emberglass pane {n}",
       "whisperLogTitle": "Whispers heard at dawn"
     },
-    "settings": {
-      "debugLabel": "Debug",
-      "eraseEverything": "Erase Everything",
-      "music": "Music",
-      "resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
-      "resetConfirmTitle": "Reset Save?",
-      "resetSave": "Reset Save",
-      "resetWarn": "Wipes the current climb and all Vigil progress. Cannot be undone.",
-      "sfx": "SFX",
-      "title": "Settings"
-    },
+  "settings": {
+    "audio": "Audio",
+    "debugLabel": "Debug",
+    "display": "Display",
+    "eraseAll": "Erase All Progress",
+    "eraseEverything": "Erase Everything",
+    "fullscreen": "Fullscreen",
+    "ledger": "The Ledger",
+    "master": "Master",
+    "motion": "Motion",
+    "music": "Music",
+    "mute": "Mute",
+    "off": "Off",
+    "on": "On",
+    "reduceMotion": "Reduce Motion",
+    "resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
+    "resetConfirmTitle": "Reset Save?",
+    "resetSave": "Reset Save",
+    "resetWarn": "Wipes the current climb and all Vigil progress. Cannot be undone.",
+    "screenShake": "Screen Shake",
+    "sfx": "SFX",
+    "title": "Settings",
+    "unmute": "Unmute",
+    "volumeTip": "{name} volume",
+    "vsync": "Vsync"
+  },
     "shop": {
       "cardRemoval": {
         "desc": "Remove a card from your deck forever.",

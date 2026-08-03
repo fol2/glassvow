@@ -580,26 +580,26 @@ func _show_title() -> void:
 	var saved: RunState = SaveService.load_run(content)
 	var choices: Array[Dictionary] = []
 	if saved != null:
-		choices.append({"id": "continue", "label": "Continue Climb"})
+		choices.append({"id": "continue", "label": Locale.active.t("ui.menu.continueClimb")})
 	choices.append_array([
-		{"id": "begin", "label": "Begin the Climb"},
-		{"id": "vigil", "label": "The Vigil", "quiet": true},
-		{"id": "help", "label": "How to Play", "quiet": true},
-		{"id": "settings", "label": "Settings", "quiet": true},
-		{"id": "credits", "label": "Credits", "quiet": true},
+		{"id": "begin", "label": Locale.active.t("ui.menu.beginClimb")},
+		{"id": "vigil", "label": Locale.active.t("ui.menu.theVigil"), "quiet": true},
+		{"id": "help", "label": Locale.active.t("ui.menu.howToPlay"), "quiet": true},
+		{"id": "settings", "label": Locale.active.t("ui.menu.settings"), "quiet": true},
+		{"id": "credits", "label": Locale.active.t("ui.menu.credits"), "quiet": true},
 	])
 	# Desktop only — web has no process to leave.
 	if not OS.has_feature("web"):
-		choices.append({"id": "quit", "label": "Quit", "quiet": true})
-	var title_stats: String = "%d climbs · %d dawns · %d slain" % [
-		int(float(str(_vigil.deeds.get("runs", 0)))),
-		int(float(str(_vigil.deeds.get("wins", 0)))),
-		int(float(str(_vigil.deeds.get("slain", 0)))),
-	]
+		choices.append({"id": "quit", "label": Locale.active.t("ui.menu.quit"), "quiet": true})
+	var title_stats: String = Locale.active.t("ui.brand.stats", {
+		"runs": int(float(str(_vigil.deeds.get("runs", 0)))),
+		"wins": int(float(str(_vigil.deeds.get("wins", 0)))),
+		"slain": int(float(str(_vigil.deeds.get("slain", 0)))),
+	})
 	if not _vigil.unlocks.is_empty():
-		title_stats += " · %d secrets unearthed" % _vigil.unlocks.size()
-	_show_choice("GLASSVOW",
-		"A Roguelite Deckbuilder · The Vigil Remembers", choices,
+		title_stats += Locale.active.t("ui.brand.secrets", {"n": _vigil.unlocks.size()})
+	_show_choice(Locale.active.t("ui.brand.title"),
+		Locale.active.t("ui.brand.tagline"), choices,
 		_on_title_choice.bind(saved), {
 		"variant": "title",
 		"stats": title_stats,
