@@ -42,22 +42,22 @@ const KEYWORD_STATUS: Dictionary = {
 	"Cracked": "vulnerable", "Dimmed": "weak", "Brittle": "frail",
 	"Smolder": "poison", "Fervor": "str", "Poise": "dex",
 }
-const FACET_DESC: String = "Every creature is glass with a Facet gauge. Fill it and the glass Shatters — the creature loses its next action, is Cracked, and spills Embers into your lantern."
-const KEYWORD_TEXT: Dictionary = {
-	"Kindle": "Burned away for the rest of this combat — and the lantern gains 1 Ember.",
-	"Ward": "Held light that prevents damage. Expires at the start of your turn.",
-	"Energy": "Spent to play cards. Refreshes each turn.",
-	"Ember": "Fuel for your Lantern Art. Spilled by shatters, deaths and kindling; held in the lantern.",
-	"Embers": "Fuel for your Lantern Art. Spilled by shatters, deaths and kindling; held in the lantern.",
-	"Chip": "Strike at the glass itself: adds toward a Shatter, no blood required.",
-	"Facet": FACET_DESC, "Facets": FACET_DESC,
-	"Shatter": FACET_DESC, "Shatters": FACET_DESC,
-	"Staggered": "Shattered glass loses its next action while it reseams.",
-	"Unplayable": "This card cannot be played.",
-	"Shard": "Unplayable junk glass. It can still be kindled.",
-	"Hex": "Curse: lose 1 HP at end of turn while in hand. Cannot be kindled.",
-	"Cinder": "Take 2 damage at end of turn while in hand.",
-}
+static func keyword_text(word: String) -> String:
+	## Glossary bodies from Locale (`ui.keywords.*`). Match tokens stay in
+	## KEYWORDS so English card text still highlights; zh-Hant tokens join
+	## that list when the active language is 繁中 (see Locale.keyword_words).
+	var key: String = word.to_lower()
+	match word:
+		"Facets", "Facet", "Shatter", "Shatters":
+			return Locale.active.t("ui.keywords.facetDesc")
+		"Embers":
+			return Locale.active.t("ui.keywords.ember")
+		_:
+			var path: String = "ui.keywords.%s" % key
+			var found: String = Locale.active.t(path)
+			return found if found != path else word
+
+
 
 ## CSS `dotted` at 1px is a 1px dot every 2px.
 const DOT_W: float = 1.0

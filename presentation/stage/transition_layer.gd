@@ -354,7 +354,7 @@ func act_plate(act_name: String, omen_name: String, omen_tone: Color,
 		_tracked(GlassStyle.CINZEL_700, int(roundf(act_pt * 0.18))))
 	_plate_omen_row.visible = not omen_name.is_empty()
 	if not omen_name.is_empty():
-		_plate_omen.text = "OMEN - " + omen_name.to_upper()
+		_plate_omen.text = Locale.active.t("ui.omen.prefix") + omen_name.to_upper()
 		_plate_omen.add_theme_color_override("font_color", omen_tone)
 		_plate_omen.add_theme_font_override("font",
 			_tracked(GlassStyle.CINZEL_500, 2))
