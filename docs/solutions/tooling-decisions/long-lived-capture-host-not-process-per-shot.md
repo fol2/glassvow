@@ -239,7 +239,7 @@ bridge would otherwise be answering from (`tools/live.gd` (`_reload`)), while
 ```
 
 Everything after that boot is a file write and a poll. `send()`
-(`tools/live.sh:58` (`send`)) mints a fresh id per call, clears the response file,
+(`tools/live.sh:59` (`send`)) mints a fresh id per call, clears the response file,
 writes the command, and polls for up to 200 × 0.05s. `shot` asks the bridge to
 save under `user://shots/` and copies the result out. `reload` and `resize` use
 the host's own channel and each poll for up to 400 × 0.05s.
@@ -358,7 +358,7 @@ was built to eliminate.
 
 The fix is in the client, not the engine. The `start` branch in `tools/live.sh`
 records the previously-frontmost application before launching, and
-`hand_back()` (`tools/live.sh:40` (`hand_back`)) reactivates it once the host
+`hand_back()` (`tools/live.sh:41` (`hand_back`)) reactivates it once the host
 writes its ready file:
 
 ```sh

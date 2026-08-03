@@ -11,6 +11,7 @@
 #   tools/live.sh drag 300 400 700 400
 #   tools/live.sh status
 #   tools/live.sh stop
+#   GLASSVOW_LIVE_ROOT=/tmp/copy GLASSVOW_LIVE_USERDATA=/tmp/profile tools/live.sh start
 #
 # `start` takes the same game arguments as tools/shot.sh — minus --shot, which
 # captures once and quits. Everything after it is served over funplay's runtime
@@ -20,10 +21,10 @@
 # renaming a class_name still needs stop+start: that registry is built at boot.
 set -u
 
-ROOT="${0:A:h:h}"
+ROOT="${GLASSVOW_LIVE_ROOT:-${0:A:h:h}}"
 GODOT="${GODOT:-godot}"
 POSITION="${GLASSVOW_SHOT_POSITION:--4000,-4000}"
-USERDATA="$HOME/Library/Application Support/Godot/app_userdata/Glassvow"
+USERDATA="${GLASSVOW_LIVE_USERDATA:-$HOME/Library/Application Support/Godot/app_userdata/Glassvow}"
 CMD="$USERDATA/funplay_mcp_runtime_command.json"
 RESP="$USERDATA/funplay_mcp_runtime_response.json"
 STATE="$USERDATA/funplay_mcp_runtime_bridge.json"

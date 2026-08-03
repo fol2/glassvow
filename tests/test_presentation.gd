@@ -18,6 +18,16 @@ static func run(fails: Array[String]) -> void:
 		for ch: String in ["琉", "璃", "誓", "言"]:
 			_check(fails, ui_font.has_char(ch.unicode_at(0)), "font has glyph %s" % ch)
 
+	# The title can paint as soon as it enters the tree, before its first process
+	# tick. Its projection must therefore be initialised during that lifecycle.
+	var title_world: TitleWorld = TitleWorld.new()
+	title_world.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	title_world.size = Vector2(1180.0, 820.0)
+	title_world._ready()
+	_check(fails, title_world._focal > 700.0,
+		"title projection is ready before its first paint")
+	title_world.free()
+
 	var content: ContentDB = ContentDB.load_slice()
 
 	# ---- new_run builds a fresh core-only profile from content.player
