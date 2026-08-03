@@ -3,7 +3,7 @@
 Status: **PASS** on the untouched replacement holdout at game commit
 `e32962086124a407233eb5281fd89cdd5b4cd469`.
 
-This is the one-page reading copy for James before the human playtest. It lists
+This is the one-page reading copy for the completed P6 balance phase. It lists
 every gameplay number changed by P6, in the order a player meets it. Stored HP
 pairs are shown exactly as they appear in content.
 
@@ -67,3 +67,12 @@ combined vow-0 report SHA-256
 `3260add43c0aa9292596b5f1aedfeb1805001314fec8ca13cfee04b840da57e6`;
 combined vow-5 report SHA-256
 `98d0e1c733dd2a288aec463af153018d1ba93c50ff547ffe262fb107bca3c8ef`.
+
+## Final autonomous replay
+
+B8 reran the same 3,200-row holdout through the headless simulator on final
+balance `main` at `ed6b986c5c24e39c8569ff43b7013e6a17d34169`. Every row and
+published metric reproduced exactly; replacing only the report's
+`manifest.commit` with the B7 game-under-test commit reproduced both hashes
+above. An independent raw-report verifier passed. This was P6's balance-only
+exit gate; native UI and visual evidence were explicitly non-counting.
