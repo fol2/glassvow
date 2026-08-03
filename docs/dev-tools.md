@@ -98,6 +98,15 @@ commands: `tools/check_anchors.py`, `tools/check_web_anchors.py`, `godot
 godot --headless -s res://tools/probe_layout.gd -- --all [--act=N]
 ```
 
+Whole-run balance calibration is a CLI-only, domain simulation. The default
+replays both aspects over the same 200 contiguous seeds; `--out` retains the
+manifest, every run row, derived metrics and calibration verdict as JSON:
+
+```bash
+godot --headless -s res://tools/balance_sim.gd -- --aspect=all --runs=200 \
+  --seed0=1000 --vow=0 --out=/tmp/balance.json [--mobs=path.json]
+```
+
 **`tools/probe_layout.gd` reads the composition back rather than photographing
 it.** A capture shows where something LOOKS like it is; on a 390px phone that is
 how a twelve-pixel error survives. The probe builds the real `CombatScreen` at a
@@ -168,4 +177,3 @@ a ±20-line window (with a longer look-back for `case` / `function` headers).
 lives elsewhere in the same file; **MISSING** means a token that should be
 there is gone. Citations with no usable token are range-checked only. The
 benchmark HEAD is verified before any scan; a wrong pin aborts.
-
