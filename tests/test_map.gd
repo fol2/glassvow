@@ -36,6 +36,26 @@ static func _pills_from(screen: WorldMapScreen,
 	return out
 
 
+## Every field of one node the save projection must carry, keyed so a mismatch
+## names what was lost rather than just "not equal". Save schema v2 is frozen
+## (SKILL §4) — this comparison is what stands between a projection regression
+## and a run that reloads wrong. `reachable` and `edges` are derived from the
+## `next` id list, so they also catch a join the projection silently drops.
+static func _projected(m: WorldMap, i: int) -> Dictionary:
+	var n: MapNode = m.nodes[i]
+	var out_edges: Array = m.edges.get(i, [])
+	return {
+		"id": n.id, "type": n.type, "row": n.row, "col": n.col,
+		# from_dict crosses the same string-to-float boundary as a JSON save;
+		# compare authored jitter at save precision rather than IEEE residue.
+		"jx": snappedf(n.jx, 0.000001), "jy": snappedf(n.jy, 0.000001),
+		"next": n.next, "edges": out_edges, "enemies": n.enemies,
+		"unlit": n.unlit, "bounty": n.bounty, "affix": n.affix,
+		"quest": [n.quest_variant_id, n.quest_marked],
+		"cleared": m.cleared.has(i), "reachable": m.reachable().has(i),
+	}
+
+
 ## Every chip stone whose STONE is on screen — what the band should paint unless
 ## a pill genuinely lands on another.
 static func _on_screen_chips(screen: WorldMapScreen) -> int:
@@ -70,9 +90,62 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, unlit == ["1,3:17", "6,3:17", "11,5:13", "9,5:14", "3,2:20", "7,0:20"],
 		"seed 717 unlit bounty trace")
 	_check(fails, benchmark_run.rng_state() == 721837281, "seed 717 consumes the benchmark RNG trace")
+	# The projection is a contract, not a smoke test: field-by-field against the
+	# generator's own map, because a count alone passes on a map that came back
+	# with every join, bounty and affix stripped.
 	var generated_copy: WorldMap = WorldMap.from_dict(generated.to_dict())
-	_check(fails, generated_copy != null and generated_copy.nodes.size() == 65,
-		"benchmark map survives its save projection")
+	var drift: Array[String] = []
+	if generated_copy == null or generated_copy.nodes.size() != generated.nodes.size():
+		drift.append("the node list itself")
+	else:
+		if generated_copy.region != generated.region or generated_copy.at != generated.at:
+			drift.append("region/marker")
+		for i: int in range(generated.nodes.size()):
+			if _projected(generated_copy, i) != _projected(generated, i):
+				drift.append(generated.nodes[i].id)
+	_check(fails, drift.is_empty(),
+		"benchmark map survives its save projection (lost: %s)" % ", ".join(drift))
+	# Prove the comparison is sensitive to every non-trivial persisted field it
+	# protects. Each case corrupts only one value in a fresh save projection;
+	# joins are represented by `next`, from which `edges` and reachability derive.
+	var contract_source: WorldMap = WorldMap.from_dict(generated.to_dict())
+	var contract_index: int = 0
+	while contract_source.nodes[contract_index].next.is_empty():
+		contract_index += 1
+	var contract_node: MapNode = contract_source.nodes[contract_index]
+	contract_node.unlit = true
+	contract_node.bounty = 17
+	contract_node.affix = "volatile"
+	contract_node.quest_variant_id = "shard_trial"
+	contract_node.quest_marked = true
+	var baseline: Dictionary = _projected(contract_source, contract_index)
+	var corruptions: Array[Dictionary] = [
+		{"field": "bounty", "value": 18, "label": "bounty"},
+		{"field": "affix", "value": "armoured", "label": "affix"},
+		{"field": "questVariantId", "value": "ember_trial", "label": "quest"},
+		{"field": "next", "value": [], "label": "join"},
+		{"field": "jx", "value": contract_node.jx + 0.125, "label": "jx"},
+		{"field": "jy", "value": contract_node.jy + 0.125, "label": "jy"},
+	]
+	for corruption: Dictionary in corruptions:
+		var corrupted_raw: Dictionary = contract_source.to_dict()
+		var raw_nodes: Array = corrupted_raw["nodes"]
+		var raw_node: Dictionary = raw_nodes[contract_index]
+		raw_node[corruption["field"]] = corruption["value"]
+		var corrupted: WorldMap = WorldMap.from_dict(corrupted_raw)
+		_check(fails, corrupted != null
+			and _projected(corrupted, contract_index) != baseline,
+			"save projection comparison catches changed %s" % corruption["label"])
+	# `at` and the cleared set only mean something once the lantern has moved,
+	# and `generated` is read pristine further down — so walk a copy.
+	var walked: WorldMap = WorldMap.from_dict(generated.to_dict())
+	walked.enter(walked.reachable()[0])
+	walked.clear_current()
+	var walked_copy: WorldMap = WorldMap.from_dict(walked.to_dict())
+	_check(fails, walked_copy != null and walked_copy.at == walked.at
+		and walked_copy.cleared == walked.cleared
+		and walked_copy.reachable() == walked.reachable(),
+		"a walked map's marker, cleared set and open waystones survive the projection")
 	# ---- one lifecycle law: bosses move through all three authored acts
 	var full: ContentDB = ContentDB.load_full()
 	var lifecycle: RunState = RunState.new_run(full, 919, "run-three-acts", {"reveals": null})
@@ -430,6 +503,16 @@ static func run(fails: Array[String]) -> void:
 	tree.root.remove_child(screen)
 	screen.free()
 
-	# ---- rest heals 30% of max HP, clamped (web engine.js restHealFrac)
-	_check(fails, Main.rest_heal_amount(72) == 22, "rest heals 22 of a 72 HP pool")
-	_check(fails, Main.rest_heal_amount(0) == 0, "no pool, no heal")
+	# ---- rest heals 30% of max HP, clamped (web engine.js restHealFrac) — asked
+	# of the two functions the rest screen itself calls: RewardRules for the
+	# fraction, Main for the rounding.
+	# Full content, as a live run loads it: the slice fixture authors no vows or
+	# omens, so it cannot see the clamp at all.
+	var rest_rules: RewardRules = RewardRules.new(full)
+	var core_frac: float = rest_rules.rest_heal_fraction(RunState.new_run(full, 717, "run-rest"))
+	_check(fails, Main.rest_heal_amount(72, core_frac) == 22, "rest heals 22 of a 72 HP pool")
+	_check(fails, Main.rest_heal_amount(0, core_frac) == 0, "no pool, no heal")
+	# The clamp half of `min(0.3, omen, vow)`: vow 5 carries restHealFrac 0.2.
+	var vowed: RunState = RunState.new_run(full, 717, "run-rest-vow", {"vow": 5})
+	_check(fails, Main.rest_heal_amount(72, rest_rules.rest_heal_fraction(vowed)) == 14,
+		"a vow that dims the hearth clamps the rest heal under 30%")
