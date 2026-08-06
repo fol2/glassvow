@@ -104,6 +104,10 @@ func _build() -> void:
 	var log_scroll: ScrollContainer = ScrollContainer.new()
 	log_scroll.custom_minimum_size = Vector2(620, 92)
 	log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	# Without this the view never travels with keyboard focus: Godot moves focus
+	# to a control whether or not it is on screen, so a focused entry below the
+	# fold is reachable and invisible (issue #72, found on the boon screen).
+	log_scroll.follow_focus = true
 	log_scroll.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	add_child(log_scroll)
 	_log = VBoxContainer.new()

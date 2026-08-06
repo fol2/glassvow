@@ -102,6 +102,10 @@ func _build() -> void:
 	_deed_list = ScrollContainer.new()
 	_deed_list.custom_minimum_size = Vector2(500, 459)
 	_deed_list.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	# Without this the view never travels with keyboard focus: Godot moves focus
+	# to a control whether or not it is on screen, so a focused deed below the
+	# fold is reachable and invisible (issue #72, found on the boon screen).
+	_deed_list.follow_focus = true
 	_deed_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_child(_deed_list)
 	var rows: VBoxContainer = VBoxContainer.new()
