@@ -1,1944 +1,1944 @@
 {
-  "formatVersion": 1,
-  "ui": {
-    "brand": {
-      "secrets": " · {n} 個秘密已現",
-      "stats": "{runs} 次攀行 · {wins} 次破曉 · {slain} 敵隕落",
-      "tagline": "Roguelite 卡牌构筑 · 守夜銘記",
-      "title": "琉璃誓言"
-    },
-    "combat": {
-      "affixTitle": "{name} — 菁英封號",
-      "ashes": "灰燼",
-      "ashesPileAria": "Ashes pile",
-      "ashesSub": "Burned away — each fed the lantern an ember",
-      "ashesTitle": "The Ashes",
-      "buff": "增益",
-      "debuff": "減益",
-      "discard": "棄牌",
-      "discardPileAria": "Discard pile",
-      "discardPileTitle": "Discard Pile",
-      "draw": "抽牌",
-      "drawPileAria": "Draw pile",
-      "drawPileSub": "Order hidden — shown alphabetically",
-      "drawPileTitle": "Draw Pile",
-      "end": "結束",
-      "enemyTurn": "敵方回合",
-      "energyAria": "Energy",
-      "facetsBody": "每個生物皆是琉璃。造成未被格擋的流血會琢下一格璃面；填滿量表則琉璃[b]碎裂[/b]——它失去下一動、陷入裂痕，並將餘燼灑入你的提燈。",
-      "facetsTitle": "璃面",
-      "glassHolds": "琉璃仍持",
-      "guardShattered": "護光粉碎",
-      "lanternBody": "提燈盛放碎裂與擊殺所灑的<b>餘燼</b>。將任意卡牌拖上即可<b>燃燼</b>——焚去該牌換取一點餘燼，每回合一次。詛咒拒火。",
-      "lanternBodyLead": "<b>{cost} Embers, once a turn:</b> {text}<br><br>",
-      "lanternSub": "A · 施展提燈術",
-      "lanternTitle": "提燈",
-      "lanternTitleArt": "Lantern Art — {name}",
-      "monumentGift": "THE STONE RETURNS ITS GIFT",
-      "perfectBanner": "PERFECT",
-      "reshuffle": "重洗",
-      "shatter": "碎裂",
-      "staggered": "踉蹌",
-      "staggeredTipBody": "The glass has shattered — this creature loses its next action while it reseams.",
-      "staggeredTipTitle": "Staggered",
-      "stoneRemembers": "THE STONE REMEMBERS",
-      "yourTurn": "你的回合",
-      "perfect": "完美",
-      "lanternArtTitle": "提燈術 — {name}",
-      "lanternLead": "<b>{embers} 餘燼，每回合一次：</b> {text}<br><br>",
-      "staggeredTitle": "踉蹌",
-      "staggeredBody": "琉璃已碎——此生物在重新接合前失去下一動。"
-    },
-    "common": {
-      "cancel": "取消",
-      "continue": "繼續",
-      "retry": "重試",
-      "skip": "跳過",
-      "leave": "離開"
-    },
-    "dawn": {
-      "act4RevealCopy": "Six panes burn. Something waits above the crown.",
-      "eighthResolvedKicker": "The broken glyphs resolve",
-      "pageKicker": "Page {n}",
-      "questCompleteKicker": "{mode} complete",
-      "questProgressKicker": "The trail continues",
-      "questRevealKicker": "{mode} revealed",
-      "questUnlockKicker": "Insight awakened",
-      "reloadSaved": "Reload Saved Dawn",
-      "saveFailedClear": "Every panel has been seen, but the saved dawn could not be released. Retry before leaving this screen.",
-      "saveFailedCursor": "This panel was shown, but its place in the dawn could not be secured. Retry before the ceremony continues.",
-      "saveFailedTitle": "The Dawn Could Not Hold",
-      "shadeResolvedKicker": "The shade speaks plainly",
-      "shardGrantCopy": "One pane answers.",
-      "whisperKicker": "A whisper reaches the dawn",
-      "witchlightCopy": "Pale paths will now be marked.",
-      "witchlightLens": "Witchlight Lens",
-      "title": "登臨",
-      "subtitle": "破曉時，守夜銘記。",
-      "quietTitle": "破曉",
-      "quietBody": "守夜靜默。",
-      "kickerWhisper": "破曉低語",
-      "kickerQuest": "旅途顯現",
-      "kickerProgress": "旅途續行",
-      "kickerShard": "餘燼琉璃碎片",
-      "kickerUnlock": "守夜敞開",
-      "kickerDefault": "破曉",
-      "complete": "破曉完成",
-      "progress": "破曉 {n} / {total} · 當前記憶已燃"
-    },
-    "embark": {
-      "aspectLabel": "誰執提燈",
-      "noVows": "尖塔如常。未立任何誓言。",
-      "subChoose": "選擇你面對尖塔的方式。",
-      "subWait": "提燈已燃。尖塔在等待。",
-      "title": "攀行開始",
-      "vowLevel": "誓言 {level}  / {max}",
-      "warnSaved": "重新開始將拋棄已保存的攀行。"
-    },
-    "end": {
-      "ascended": "登臨",
-      "ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the Spire — the first in an age.",
-      "bequestDone": "✦ The stone keeps your {name}.<br>It will wait for you in {act}.",
-      "bequestNote": {
-        "card": "your finest card",
-        "gold": "{n} gold",
-        "goldCache": "a cache of gold",
-        "relic": "your rarest relic"
-      },
-      "bequestTitle": "將一事刻入石中——下一行可在 {act} 取回。",
-      "bequestUnpaid": "The unpaid gift remains in the standing stone",
-      "cardsPlayed": "出牌數",
-      "deckSize": "牌庫",
-      "dmgDealt": "造成傷害",
-      "dmgTaken": "受到傷害",
-      "elitesBosses": "菁英與首領",
-      "fallen": "隕落",
-      "fallenSub": "Here ended a climb, on floor <b>{floor}</b>.<br>The Spire keeps what it takes — but the Vigil remembers.",
-      "finalDeckTitle": "Final Deck",
-      "floors": "層數",
-      "returnVigil": "返回守夜",
-      "runTime": "用時",
-      "slain": "擊殺",
-      "unlock": {
-        "ashwarden": "The Ashwarden",
-        "aspect": "Aspect Unlocked",
-        "card": "Card Unlocked",
-        "header": "✦ {kind}",
-        "relic": "Relic Unlocked"
-      },
-      "viewDeck": "檢視最終牌庫",
-      "abandoned": "誓言擱置",
-      "abandonedSub": "朝聖止於此。守夜將記下這筆。",
-      "fallenLantern": "你的提燈在第 {floor} 層熄滅。",
-      "elitesBossesPlus": "菁英 + 首領"
-    },
-    "event": {
-      "chooseCardSub": "One page still glows.",
-      "chooseCardTitle": "Choose a Card",
-      "duplicateSub": "The mirror remembers.",
-      "duplicateTitle": "Duplicate a Card",
-      "removeSub": "Let it go.",
-      "removeTitle": "Remove a Card",
-      "upgradeSub": "The forge hungers.",
-      "upgradeTitle": "Upgrade a Card",
-      "strangePlace": "異樣之地",
-      "continue": "繼續"
-    },
-    "help": {
-      "climbBody": "沿提燈之路攀向尖塔。擊敗怪物、收集卡牌、遺物與藥瓶，並打倒每一幕的首領，共 <b>{count} 幕</b>。未燃之燈隱匿其所藏——但點燃者須付賞金。",
-      "climbTitle": "攀行",
-      "combatBody": "每回合你抽 <b>5 張牌</b>並獲得 <b>3 點能量</b>（⬤）。點擊或拖曳出牌——若場上尚有多名敵人，攻擊須選定目標。敵人頭頂會預示其<b>意圖</b>。",
-      "combatTitle": "戰鬥",
-      "firesBody": "休息處可回復 <b>30%</b> 生命或升級一張牌。商店販售卡牌、遺物、藥瓶——亦可自牌庫中<b>移除</b>一張。保持牌庫精簡；每份戰利皆可放棄。",
-      "firesTitle": "爐火與商人",
-      "glassBody": "每個生物皆是琉璃，生命條下有一列<b>璃面</b>。造成未被格擋的傷害會琢下一格璃面（重擊琢得更多）。填滿量表則琉璃<b>碎裂</b>：它失去下一動、陷入裂痕，並將<b>餘燼</b>灑入你的提燈。把握碎裂時機，可擋下你無法承受的一擊。",
-      "glassTitle": "琉璃",
-      "lanternBody": "餘燼驅動你的<b>提燈術</b>——專屬力量，每回合可用一次（按 <b>A</b>）。將任意卡牌拖到提燈上即可<b>燃燼</b>：牌被焚去，提燈得 1 餘燼。每回合一次；詛咒拒火。",
-      "lanternTitle": "提燈",
-      "title": "玩法說明",
-      "vigilBody": "一無所費。每次攀行之初，<b>掌燈人</b>贈予恩賜並讓你選擇提燈術。倒下時，將一事刻入石中——一座<b>紀念碑</b>，下一行可在同一幕取回。每次碎裂、燃燼與擊殺皆累積畢生<b>功績</b>，解鎖新牌、遺物，與第二面向——<b>灰衛</b>。抵達破曉一次後，<b>誓言</b>開啟：一條可選的嚴酷難度之梯。",
-      "vigilTitle": "守夜——死亡留下的",
-      "wardBody": "<b>護光</b>是可吸收傷害的持光，但每回合開始消散。<b>裂痕</b> ×1.5 受傷 · <b>黯淡</b> −25% 輸出 · <b>脆裂</b> −25% 護光 · <b>陰燃</b>每回合灼燒，宿主死亡或碎裂時躍至另一敵人。",
-      "wardTitle": "護光與狀態"
-    },
-    "hollow": {
-      "kicker": "THE UNLIT WAY · PRICE {current} OF {total}",
-      "payPrice": "付上代價",
-      "pricePaid": "Price Paid",
-      "returnLater": "稍後再來",
-      "routeFailed": "The way onward could not be prepared.",
-      "routeSaveFailed": "The way onward is not secured. Retry when storage is available.",
-      "saveFailed": "The price is not yet secured. Retry the save.",
-      "title": "空燈掌燈人"
-    },
-    "hud": {
-      "actFloor": "第 {act} 幕 · 第 {floor} 層",
-      "deckAria": "Deck",
-      "deckCount": "{n} cards",
-      "deckTitle": "Your Deck",
-      "menuAria": "Menu",
-      "omenSub": "hangs over Act {act}",
-      "omenTitle": "Omen — {name}",
-      "potionTip": "Click to use or toss",
-      "tossPotion": "Toss it",
-      "usePotion": "Use {name}",
-      "viewDeck": "檢視牌庫",
-      "menu": "選單",
-      "emptyPhial": "空藥瓶位"
-    },
-    "keywords": {
-      "chip": "直擊琉璃本身：推進碎裂，無需見血。",
-      "cinder": "留在手中時每回合結束受到 2 點傷害。",
-      "ember": "提燈術的燃料。碎裂、死亡與燃燼所灑；盛於提燈。",
-      "energy": "用於出牌。每回合回滿。",
-      "facetDesc": "每個生物皆是帶有璃面量表的琉璃。填滿則碎裂——失去下一動、陷入裂痕，並將餘燼灑入你的提燈。",
-      "hex": "詛咒：留在手中時每回合結束失去 1 生命。無法燃燼。",
-      "kindle": "焚去直至本場戰鬥結束——提燈獲得 1 餘燼。",
-      "shard": "無法打出的廢璃。仍可燃燼。",
-      "staggered": "碎裂的琉璃在重新接合前失去下一動。",
-      "unplayable": "此牌無法打出。",
-      "ward": "持光，可阻擋傷害。於你的回合開始消散。"
-    },
-    "lamp": {
-      "artHint": "(press A in combat)",
-      "artLabel": "你的提燈術",
-      "boonLabel": "路上的恩賜",
-      "sub": "{aspect} 立於尖塔腳下。取一份臨別贈禮——並選擇提燈將攜的火。",
-      "title": "掌燈人"
-    },
-    "map": {
-      "click": "Click",
-      "drag": "drag",
-      "hint": {
-        "boss": "本幕止於此。整備你的牌庫。",
-        "elite": "有封號之敵——風險更高，遺物級獎賞。",
-        "event": "命運未書。任何事都可能發生。",
-        "hollow": "空燈掌燈人以代價相候。",
-        "monster": "一場戰鬥。迅捷者得餘燼與金幣。",
-        "rest": "回復，或將一張牌鍛成 + 型。",
-        "shop": "金幣換卡牌、遺物、藥瓶。",
-        "treasure": "無需戰鬥的箱子。"
-      },
-      "node": {
-        "elite": "菁英 — 當心",
-        "event": "未知事件",
-        "hollow": "空燈",
-        "monster": "怪物",
-        "rest": "休息處",
-        "shop": "商人",
-        "treasure": "寶藏"
-      },
-      "scroll": "scroll",
-      "sealedDoor": {
-        "aria": "封印之門",
-        "inscription": "攀行仍在繼續",
-        "label": "封印之門",
-        "return": "返回頂點",
-        "sub": "六扇窗在你身後燃燒。鎖回應了，卻未開啟。",
-        "title": "封印之門"
-      },
-      "survey": "{action} 以巡視尖塔",
-      "tap": "Tap",
-      "travelHere": "{action} 以前往此處。",
-      "unlitBody": "此處所藏未知——但初燃須付金幣賞金。",
-      "unlitTitle": "未燃之燈",
-      "witchlightBody": "Pale glass waits here.",
-      "witchlightTitle": "Witchlight trembles",
-      "holdFast": "琉璃堅守。路尚未開。",
-      "standThreshold": "立於門檻",
-      "returnVigil": "返回守夜"
-    },
-    "menu": {
-      "abandon": "放棄",
-      "abandonConfirmBody": "你的攀行將沒入虛空。",
-      "abandonConfirmTitle": "放棄此行？",
-      "abandonRun": "放棄此行",
-      "back": "返回",
-      "beginAnew": "重新開始",
-      "beginAnewBody": "已保存的攀行將沒入虛空。",
-      "beginAnewTitle": "重新開始？",
-      "beginClimb": "開始攀行",
-      "chooseBoon": "選擇恩賜",
-      "close": "關閉",
-      "continueClimb": "繼續攀行",
-      "credits": "製作人員",
-      "fightOn": "繼續前行",
-      "howToPlay": "玩法說明",
-      "keepClimbing": "繼續攀行",
-      "lightTheWay": "點亮前路",
-      "mute": "靜音",
-      "muteSound": "靜音",
-      "quit": "離開",
-      "quitGame": "結束遊戲",
-      "return": "返回",
-      "returnTitle": "返回標題",
-      "settings": "設定",
-      "theVigil": "守夜",
-      "unmute": "取消靜音",
-      "unmuteSound": "取消靜音"
-    },
-    "persistence": {
-      "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
-      "reloadClimb": "Reload Saved Climb",
-      "reloadDestination": "Reload Saved Destination",
-      "reloadDuel": "Reload Saved Duel",
-      "reloadFinalisation": "Reload Saved Finalisation",
-      "retryFinalisation": "Retry Finalisation",
-      "retrySave": "Retry Save",
-      "runSaveBody": "The climb could not be secured. Free storage and retry, or reload the last durable climb state.",
-      "runSaveRetryFail": "The save is still unavailable. Free storage, then retry or reload the last durable climb state.",
-      "saveFailedTitle": "Save Failed",
-      "stoneBody": "The stone could not hold this duel. Free storage and try again.",
-      "stoneTitle": "The Stone Could Not Hold",
-      "vigilBody": "This run end is safely journalled, but its ledgers or final dawn could not be secured. Free storage and retry, or reload this saved finalisation.",
-      "vigilTitle": "The Vigil Could Not Hold"
-    },
-    "rest": {
-      "healedFloat": "+{hp} HP",
-      "restBtn": "休息",
-      "restHeal": "— 回復 {hp} 生命",
-      "smithBtn": "鍛造",
-      "smithSub": "— upgrade a card",
-      "sub": "爐火噼啪。片刻之間，尖塔安靜。",
-      "title": "休息處",
-      "upgradeSub": "Forge one card into its + form.",
-      "upgradeTitle": "Upgrade a Card",
-      "upgradedSub": "It gleams with new power.",
-      "upgradedTitle": "Upgraded!",
-      "restHealBtn": "休息 — 回復 {hp} 生命",
-      "hpFrac": "{cur} / {max} 生命"
-    },
-    "reward": {
-      "addCardRow": "Add a card to your deck",
-      "bossRelicSub": "Choose one — its power is permanent.",
-      "bossRelicTitle": "A BOSS RELIC CALLS",
-      "bossVanquished": "BOSS VANQUISHED",
-      "cardAdded": "{name} added",
-      "chooseCardSub": "Add one card to your deck — or skip to keep it lean.",
-      "chooseCardTitle": "Choose a Card",
-      "eliteSlain": "菁英殞落",
-      "goldRow": "<b class=\"gold-num\">{n}</b> gold",
-      "leaveConfirmBody": "You still have unclaimed spoils on the glass. Move on without them?",
-      "leaveConfirmNo": "Stay",
-      "leaveConfirmTitle": "Leave Rewards Behind?",
-      "leaveConfirmYes": "Leave Them",
-      "perfectSeal": "✦ PERFECT — the glass untouched ✦",
-      "potionSlotsFull": "Potion slots full!",
-      "takeNone": "都不拿",
-      "victory": "勝利",
-      "continue": "繼續",
-      "skip": "跳過",
-      "leaveIt": "留下",
-      "walkOn": "繼續前行",
-      "takeOneLight": "Take one light with you",
-      "takeOneFromLight": "Take one from the light",
-      "onePiece": "One piece comes with you",
-      "addCard": "將一張牌加入牌庫",
-      "offeredTakeOne": "{n} offered · take one",
-      "goldAmount": "{n} Gold",
-      "chooseCardBody": "將一張牌加入牌庫——或跳過以保持精簡。"
-    },
-    "rose": {
-      "dormantPane": "Dormant Emberglass pane {n}",
-      "finalWhisper": "The final whisper returns at every dawn.",
-      "openLabel": "打開玫瑰窗",
-      "paneDark": "This pane is dark.",
-      "selectedPane": "Selected Emberglass pane",
-      "shardRecovered": "{name}, Shard recovered",
-      "shardRecoveredShort": "Shard recovered",
-      "unknownPane": "Unknown Emberglass pane {n}",
-      "whisperLogTitle": "破曉所聞低語",
-      "whisperLogTitleUpper": "破曉所聞低語",
-      "finalWhisperMark": "∞  最終低語於每次破曉歸來。"
-    },
-    "settings": {
-      "audio": "音訊",
-      "debugLabel": "Debug",
-      "display": "顯示",
-      "eraseAll": "抹除全部進度",
-      "eraseEverything": "抹除一切",
-      "fullscreen": "全螢幕",
-      "ledger": "總帳",
-      "master": "主音量",
-      "motion": "動態",
-      "music": "音樂",
-      "mute": "靜音",
-      "off": "關",
-      "on": "開",
-      "reduceMotion": "減少動態",
-      "resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
-      "resetConfirmTitle": "重置存檔？",
-      "resetSave": "重置存檔",
-      "resetWarn": "將抹去當前攀行與全部守夜進度。此舉無法復原。",
-      "screenShake": "畫面震動",
-      "sfx": "音效",
-      "title": "設定",
-      "unmute": "取消靜音",
-      "volumeTip": "{name} 音量",
-      "vsync": "垂直同步",
-      "resetConfirmPlain": "這將抹去你當前的攀行與整個守夜——功績、解鎖、誓言、紀念碑與低語。\n\n此舉無法復原。",
-      "eraseAllTitle": "抹除全部進度？"
-    },
-    "shop": {
-      "cardRemoval": {
-        "desc": "Remove a card from your deck forever.",
-        "pickSub": "Cut the dead weight.",
-        "pickTitle": "Remove a Card",
-        "title": "Card Removal"
-      },
-      "greeting": "「黃金換榮耀，異鄉人。對注定之人——價錢公道。」",
-      "leave": "離開商店",
-      "potionSlotsFull": "Potion slots full!",
-      "title": "商人",
-      "leaveUpper": "離開商店"
-    },
-    "smoke": {
-      "hello": "Hello, {name}"
-    },
-    "treasure": {
-      "coinsOnly": "Only coins remain — <b class=\"gold-num\">+{gold} gold</b>.",
-      "empty": "The chest lies empty.",
-      "openBtn": "打開箱子",
-      "relicClaim": "You claim <b style=\"color:{tone}\">{name}</b> — <i>{text}</i>",
-      "sub": "沉重的金箍箱。要打開嗎？",
-      "title": "寶藏",
-      "continue": "繼續",
-      "relicClaimPlain": "You claim [color=#{tone}]{name}[/color] — [i]{text}[/i]"
-    },
-    "vigil": {
-      "deeds": "功績",
-      "roseWindow": "玫瑰窗",
-      "title": "守夜",
-      "return": "返回",
-      "ashwarden": "灰衛",
-      "stats": "{runs} 次攀行 · {wins} 次破曉 · 最深誓言：{vow}",
-      "deedsTab": "功績",
-      "roseTab": "玫瑰窗"
-    },
-    "pilgrimage": {
-      "survey": "滾動或拖曳以巡視朝聖之路",
-      "surveyChoose": "滾動或拖曳 · 選擇一盞已燃提燈",
-      "summit": "頂點",
-      "roadEnds": "此路已盡",
-      "unlitWay": "未燃之路",
-      "roseWindow": "玫瑰窗",
-      "hearth": "爐火",
-      "awaits": "{0} — {1} 在等待",
-      "notNow": "尚早"
-    },
-    "credits": {
-      "title": "製作人員",
-      "headingBrand": "琉璃誓言",
-      "bodyBrand": "Roguelite 卡牌构筑 · 作者 fol2",
-      "headingGlass": "琉璃",
-      "bodyGlass": "自 roguecardv2 平行移植（網頁參考 0.5.0+6e06911）。",
-      "headingMusic": "音樂 — 彩繪玻璃",
-      "headingSound": "音效 — 灰璃守夜",
-      "headingType": "字型",
-      "bodyCinzel": "Cinzel — Natanael Gama（OFL）",
-      "bodyAlegreya": "Alegreya — Juan Pablo del Peral, Huerta Tipográfica（OFL）",
-      "bodyNoto": "Noto Sans TC — Google（OFL）",
-      "headingEngine": "引擎",
-      "bodyEngine": "以 Godot 引擎製作",
-      "close": "關閉",
-      "engineLicences": "引擎授權",
-      "fontLicences": "字型授權（OFL）",
-      "components": "組件",
-      "licenceTexts": "授權全文",
-      "themeLine": "灰璃守夜"
-    },
-    "omen": {
-      "prefix": "兆示 - "
-    },
-    "language": {
-      "label": "語言",
-      "en": "English",
-      "zhHant": "繁體中文",
-      "deferNote": "將於下一畫面生效。"
-    }
-  },
-  "content": {
-    "acts": {
-      "0": {
-        "bossName": "根心",
-        "name": "灰燼樹林"
-      },
-      "1": {
-        "bossName": "利維坦之喉",
-        "name": "沉沒之城"
-      },
-      "2": {
-        "bossName": "永恆主宰",
-        "name": "黑曜尖塔"
-      }
-    },
-    "affixes": {
-      "adamant": {
-        "name": "Adamant",
-        "text": "The first time its glass would shatter, it holds."
-      },
-      "cinderVeined": {
-        "name": "Cinder-Veined",
-        "text": "Its blows leave 1 Smolder on you."
-      },
-      "emberFat": {
-        "name": "Ember-Fat",
-        "text": "Slaying it pays double gold."
-      },
-      "fervent": {
-        "name": "Fervent",
-        "text": "Begins the fight with 2 Fervor."
-      },
-      "veiled": {
-        "name": "Veiled",
-        "text": "Begins the fight behind 15 Ward."
-      },
-      "vitrified": {
-        "name": "Vitrified",
-        "text": "Thicker glass: +2 facets and +15% HP."
-      }
-    },
-    "arts": {
-      "ashfall": {
-        "name": "Ashfall",
-        "text": "The Ashwarden's breath. Apply 3 Smolder to ALL enemies and gain 5 Ward."
-      },
-      "beacon": {
-        "name": "Beacon",
-        "text": "Raise the light. Your attacks chip 1 extra facet this turn."
-      },
-      "emberveil": {
-        "name": "Emberveil",
-        "text": "A curtain of held fire. Gain 12 Ward."
-      },
-      "flare": {
-        "name": "Flare",
-        "text": "The lantern vents. Deal 7 damage to ALL enemies and apply 2 Smolder."
-      },
-      "mendglass": {
-        "name": "Mendglass",
-        "text": "Warm light knits the cracks. Heal 8 HP."
-      },
-      "stoke": {
-        "name": "Stoke",
-        "text": "Feed the flame to the hand that carries it. Gain 1 Energy and draw 2 cards."
-      }
-    },
-    "aspects": {
-      "ashwarden": {
-        "blurb": "Smoke given a shape. Lets the Smolder do the killing and kindles its own hand to feed the lantern. Slower, but it endures — and everything it touches burns.",
-        "name": "The Ashwarden"
-      },
-      "duskblade": {
-        "blurb": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a versatile climber for any night.",
-        "name": "The Duskblade"
-      }
-    },
-    "boons": {
-      "emberFlask": {
-        "name": "Ember Flask",
-        "text": "Pack a Fire Phial and a Draught of Vigor."
-      },
-      "fullPurse": {
-        "name": "A Full Purse",
-        "text": "Set out with 120 extra gold."
-      },
-      "keenEye": {
-        "name": "A Keeper's Eye",
-        "text": "Begin with a random relic."
-      },
-      "pilgrimsCache": {
-        "name": "Pilgrim's Cache",
-        "text": "Gain 60 gold and a Ward Phial."
-      },
-      "temperedGlass": {
-        "name": "Tempered Glass",
-        "text": "Raise your Max HP by 14."
-      },
-      "twinPhials": {
-        "name": "Twin Phials",
-        "text": "Pack a Swift Phial and an Energy Phial."
-      },
-      "venomPouch": {
-        "name": "A Pouch of Ash",
-        "text": "Gain 40 gold and a Venom Phial."
-      },
-      "warmHearth": {
-        "name": "A Warm Hearth",
-        "text": "Mend to full and gain 6 Max HP."
-      }
-    },
-    "cards": {
-      "aegis": {
-        "name": "大教堂璃",
-        "text": "獲得 #30# 點護光。 燃燼.",
-        "textUp": "獲得 #40# 點護光。 燃燼."
-      },
-      "agility": {
-        "name": "琉璃師沉穩",
-        "text": "獲得 2 Poise.",
-        "textUp": "獲得 3 Poise."
-      },
-      "annihilate": {
-        "name": "安魂",
-        "text": "造成 @9@ 點傷害 and apply 3 Smolder to 所有敵人.",
-        "textUp": "造成 @12@ 點傷害 and apply 4 Smolder to 所有敵人."
-      },
-      "ascension": {
-        "name": "Rising Litany",
-        "text": "At the start of each turn, gain 2 Fervor.",
-        "textUp": "At the start of each turn, gain 3 Fervor."
-      },
-      "ashBite": {
-        "name": "灰咬",
-        "text": "造成 @5@ 點傷害。 施加 2 層陰燃。",
-        "textUp": "造成 @7@ 點傷害。 施加 3 層陰燃。"
-      },
-      "ashenChoir": {
-        "name": "灰合唱",
-        "text": "施加 4 層陰燃。 When smoldering glass dies, its fire leaps on.",
-        "textUp": "施加 6 層陰燃。 When smoldering glass dies, its fire leaps on."
-      },
-      "bastion": {
-        "name": "退火",
-        "text": "Ward no longer expires at the start of your turn."
-      },
-      "bloodRite": {
-        "name": "血換油",
-        "text": "Lose 3 HP. 獲得 2 能量.",
-        "textUp": "Lose 3 HP. 獲得 3 能量."
-      },
-      "brace": {
-        "name": "持光",
-        "text": "獲得 #8# 點護光。",
-        "textUp": "獲得 #11# 點護光。"
-      },
-      "bulwark": {
-        "name": "璃牆",
-        "text": "獲得 #13# 點護光。",
-        "textUp": "獲得 #18# 點護光。"
-      },
-      "burn": {
-        "name": "Cinder",
-        "text": "Unplayable. At the end of your turn, take 2 點傷害 if this is in your hand."
-      },
-      "catalyst": {
-        "name": "風箱",
-        "text": "Double an enemy's 層陰燃。 燃燼.",
-        "textUp": "Triple an enemy's 層陰燃。 燃燼."
-      },
-      "chisel": {
-        "name": "鑿刻",
-        "text": "造成 @4@ 點傷害。 琢擊 1 extra 璃面.",
-        "textUp": "造成 @7@ 點傷害。 琢擊 1 extra 璃面."
-      },
-      "cleave": {
-        "name": "琉璃扇斬",
-        "text": "造成 @6@ 點傷害 to 所有敵人.",
-        "textUp": "造成 @9@ 點傷害 to 所有敵人."
-      },
-      "cripple": {
-        "name": "開溝",
-        "text": "Snuff an enemy's fire: it loses 2 Fervor. 燃燼.",
-        "textUp": "Snuff an enemy's fire: it loses 3 Fervor. 燃燼."
-      },
-      "defend": {
-        "name": "護光",
-        "text": "獲得 #5# 點護光。",
-        "textUp": "獲得 #8# 點護光。"
-      },
-      "deflect": {
-        "name": "折射",
-        "text": "獲得 #6# 點護光。 抽 1 張牌。",
-        "textUp": "獲得 #9# 點護光。 抽 1 張牌。"
-      },
-      "devour": {
-        "name": "吞焰",
-        "text": "造成 @10@ 點傷害。 If this kills, swallow its fire: gain 3 餘燼s and heal 4. 燃燼.",
-        "textUp": "造成 @13@ 點傷害。 If this kills, swallow its fire: gain 4 餘燼s and heal 6. 燃燼."
-      },
-      "eclipseSlash": {
-        "name": "蝕月斬",
-        "text": "造成 @7@ 點傷害。 施加 1 Cracked.",
-        "textUp": "造成 @9@ 點傷害。 施加 2 Cracked."
-      },
-      "emberdance": {
-        "name": "餘燼舞",
-        "text": "Spill your lantern: gain 3 點護光 for each 餘燼 spent. 燃燼.",
-        "textUp": "Spill your lantern: gain 4 點護光 for each 餘燼 spent. 燃燼."
-      },
-      "empower": {
-        "name": "內焰",
-        "text": "獲得 2 Fervor.",
-        "textUp": "獲得 3 Fervor."
-      },
-      "executioner": {
-        "name": "斷層",
-        "text": "造成 @8@ 點傷害。 Cracked enemies take 6 more.",
-        "textUp": "造成 @11@ 點傷害。 Cracked enemies take 8 more."
-      },
-      "firstSpark": {
-        "name": "初火",
-        "text": "抽 1 張牌。 燃燼.",
-        "textUp": "抽 2 張牌。 燃燼."
-      },
-      "flawlessForm": {
-        "name": "無瑕形",
-        "text": "獲得 #8# 點護光。 If your glass is untouched this combat, gain #8# more.",
-        "textUp": "獲得 #11# 點護光。 If your glass is untouched this combat, gain #11# more."
-      },
-      "flurry": {
-        "name": "裂片風暴",
-        "text": "造成 @2@ 點傷害 3 times.",
-        "textUp": "造成 @3@ 點傷害 3 times."
-      },
-      "fortify": {
-        "name": "鏡光",
-        "text": "Double your 點護光。",
-        "textUp": "Double your 點護光。"
-      },
-      "frenzy": {
-        "name": "過輝",
-        "text": "Your glass runs too hot: gain 2 Cracked. At the start of each turn, gain 1 能量.",
-        "textUp": "Your glass runs too hot: gain 1 Cracked. At the start of each turn, gain 1 能量."
-      },
-      "guardedStrike": {
-        "name": "守衛之刃",
-        "text": "造成 @5@ 點傷害。 獲得 #4# 點護光。",
-        "textUp": "造成 @7@ 點傷害。 獲得 #6# 點護光。"
-      },
-      "heavyBlow": {
-        "name": "採石重錘",
-        "text": "造成 @12@ 點傷害。 琢擊 1 extra 璃面.",
-        "textUp": "造成 @16@ 點傷害。 琢擊 2 extra 璃面s."
-      },
-      "hex": {
-        "name": "Hex",
-        "text": "Unplayable. At the end of your turn, lose 1 HP if this is in your hand. Refuses the fire."
-      },
-      "ironSkin": {
-        "name": "玻化",
-        "text": "At the end of your turn, gain 3 點護光。",
-        "textUp": "At the end of your turn, gain 4 點護光。"
-      },
-      "leechBlade": {
-        "name": "渴璃",
-        "text": "造成 @9@ 點傷害。 Heal for half the unblocked 點傷害。",
-        "textUp": "造成 @13@ 點傷害。 Heal for half the unblocked 點傷害。"
-      },
-      "limitBreak": {
-        "name": "退火儀",
-        "text": "琢擊 2 璃面s of every enemy. 燃燼.",
-        "textUp": "琢擊 3 璃面s of every enemy. 燃燼."
-      },
-      "lunge": {
-        "name": "黯切",
-        "text": "造成 @6@ 點傷害。 施加 1 Dimmed.",
-        "textUp": "造成 @9@ 點傷害。 施加 2 Dimmed."
-      },
-      "momentum": {
-        "name": "磨鋒",
-        "text": "造成 @6@ 點傷害。 Each play, this card gains +4 點傷害 this combat.",
-        "textUp": "造成 @8@ 點傷害。 Each play, this card gains +6 點傷害 this combat."
-      },
-      "nightSight": {
-        "name": "夜視",
-        "text": "At the start of each turn, draw 1 extra 張牌。"
-      },
-      "novaflare": {
-        "name": "新星焰",
-        "text": "造成 @3@ 點傷害 for every 餘燼 in your lantern.",
-        "textUp": "造成 @4@ 點傷害 for every 餘燼 in your lantern."
-      },
-      "oblivionStrike": {
-        "name": "鐘擊",
-        "text": "造成 @30@ 點傷害。 琢擊 2 extra 璃面s.",
-        "textUp": "造成 @40@ 點傷害。 琢擊 3 extra 璃面s."
-      },
-      "offering": {
-        "name": "火堆稅",
-        "text": "Burn every other card in your hand — each feeds the lantern. 抽 3 張牌。 燃燼.",
-        "textUp": "Burn every other card in your hand — each feeds the lantern. 抽 4 張牌。 燃燼."
-      },
-      "phantomBlades": {
-        "name": "幻影刃",
-        "text": "造成 @3@ 點傷害 for each card in your hand.",
-        "textUp": "造成 @4@ 點傷害 for each card in your hand."
-      },
-      "preparation": {
-        "name": "火絨",
-        "text": "抽 2 張牌。 燃燼.",
-        "textUp": "抽 2 張牌。"
-      },
-      "pyreheart": {
-        "name": "火堆心",
-        "text": "At the start of each turn, gain 1 餘燼."
-      },
-      "quakeblow": {
-        "name": "震擊",
-        "text": "造成 @8@ 點傷害。 琢擊 2 extra 璃面s.",
-        "textUp": "造成 @11@ 點傷害。 琢擊 3 extra 璃面s."
-      },
-      "quickSlash": {
-        "name": "閃爍",
-        "text": "造成 @4@ 點傷害。 抽 1 張牌。",
-        "textUp": "造成 @6@ 點傷害。 抽 1 張牌。"
-      },
-      "regrowth": {
-        "name": "爐輝",
-        "text": "At the end of your turn, heal 2 HP.",
-        "textUp": "At the end of your turn, heal 3 HP."
-      },
-      "resonantLance": {
-        "name": "共鳴槍",
-        "text": "造成 @7@ 點傷害。 Deals double to Staggered or Cracked glass.",
-        "textUp": "造成 @10@ 點傷害。 Deals double to Staggered or Cracked glass."
-      },
-      "shardstorm": {
-        "name": "Shardstorm",
-        "text": "造成 @5@ 點傷害 to 所有敵人 twice.",
-        "textUp": "造成 @7@ 點傷害 to 所有敵人 twice."
-      },
-      "sidestep": {
-        "name": "璃步",
-        "text": "獲得 #3# 點護光。 抽 1 張牌。",
-        "textUp": "獲得 #5# 點護光。 抽 1 張牌。"
-      },
-      "smother": {
-        "name": "窒息",
-        "text": "獲得 #5# 點護光。 施加 2 層陰燃。",
-        "textUp": "獲得 #8# 點護光。 施加 3 層陰燃。"
-      },
-      "strike": {
-        "name": "刃鋒",
-        "text": "造成 @6@ 點傷害。",
-        "textUp": "造成 @9@ 點傷害。"
-      },
-      "surge": {
-        "name": "擦燃",
-        "text": "獲得 1 能量. 抽 1 張牌。 燃燼.",
-        "textUp": "獲得 2 能量. 抽 1 張牌。 燃燼."
-      },
-      "tempest": {
-        "name": "雹璃",
-        "text": "造成 @4@ 點傷害 to 所有敵人 twice.",
-        "textUp": "造成 @6@ 點傷害 to 所有敵人 twice."
-      },
-      "tithe": {
-        "name": "窗稅",
-        "text": "獲得 2 餘燼s. 抽 1 張牌。",
-        "textUp": "獲得 3 餘燼s. 抽 1 張牌。"
-      },
-      "toxicMist": {
-        "name": "灰雲",
-        "text": "施加 3 Smolder to 所有敵人.",
-        "textUp": "施加 5 Smolder to 所有敵人."
-      },
-      "twinFangs": {
-        "name": "雙碎片",
-        "text": "造成 @4@ 點傷害 twice.",
-        "textUp": "造成 @6@ 點傷害 twice."
-      },
-      "unreadablePage": {
-        "name": "The Unreadable Page",
-        "text": "It cannot be played or removed. Carry it to dawn and it may read itself."
-      },
-      "uppercut": {
-        "name": "鳴擊",
-        "text": "造成 @10@ 點傷害。 琢擊 1 extra 璃面. 施加 1 Dimmed.",
-        "textUp": "造成 @13@ 點傷害。 琢擊 2 extra 璃面s. 施加 2 Dimmed."
-      },
-      "venomStrike": {
-        "name": "餘燼噬",
-        "text": "造成 @4@ 點傷害。 施加 3 層陰燃。",
-        "textUp": "造成 @6@ 點傷害。 施加 4 層陰燃。"
-      },
-      "virulence": {
-        "name": "餘燼牙",
-        "text": "Whenever you play an Attack, apply 1 Smolder to the enemy."
-      },
-      "warCry": {
-        "name": "碎裂聖詠",
-        "text": "施加 1 Dimmed and 1 Cracked to 所有敵人.",
-        "textUp": "施加 2 Dimmed and 2 Cracked to 所有敵人."
-      },
-      "wound": {
-        "name": "Shard",
-        "text": "Unplayable. Broken glass rattling in your deck."
-      }
-    },
-    "deeds": {
-      "ashSermon": {
-        "desc": "Let Smolder claim 10 lives",
-        "name": "Sermon of Ash"
-      },
-      "darkWalker": {
-        "desc": "Enter 6 unlit lanterns",
-        "name": "Walker of Unlit Ways"
-      },
-      "firstDawn": {
-        "desc": "Reach the sunrise once",
-        "name": "The First Dawn"
-      },
-      "hundredShards": {
-        "desc": "Slay 100 creatures",
-        "name": "A Hundred Shards"
-      },
-      "lanternFed": {
-        "desc": "Kindle 20 cards by hand",
-        "name": "The Lantern Fed"
-      },
-      "paneBreaker": {
-        "desc": "Shatter 15 facets",
-        "name": "Breaker of Panes"
-      },
-      "spendthrift": {
-        "desc": "Spend 30 embers on Lantern Arts",
-        "name": "Fire Given Freely"
-      },
-      "untouched": {
-        "desc": "Win 3 fights without a scratch",
-        "name": "The Glass Untouched"
-      }
-    },
-    "enemies": {
-      "abyssalKnight": {
-        "moves": {
-          "blade": {
-            "name": "Voidblade"
-          },
-          "condemn": {
-            "name": "Condemn"
-          },
-          "execute": {
-            "name": "Execute"
-          },
-          "oath": {
-            "name": "Dark Oath"
-          }
-        },
-        "name": "Abyssal Knight"
-      },
-      "alphaFang": {
-        "moves": {
-          "howl": {
-            "name": "Alpha Howl"
-          },
-          "savage": {
-            "name": "Savage"
-          },
-          "throat": {
-            "name": "Throat Rip"
-          }
-        },
-        "name": "Alpha Duskfang"
-      },
-      "ashAcolyte": {
-        "moves": {
-          "ritual": {
-            "name": "Dark Ritual"
-          },
-          "scorch": {
-            "name": "Scorch"
-          }
-        },
-        "name": "Ash Acolyte"
-      },
-      "chaosHound": {
-        "moves": {
-          "bite": {
-            "name": "Chaos Bite"
-          },
-          "howl": {
-            "name": "Warp Howl"
-          }
-        },
-        "name": "Chaos Hound"
-      },
-      "deepmaw": {
-        "moves": {
-          "bite": {
-            "name": "Bite"
-          },
-          "lure": {
-            "name": "Luminous Lure"
-          },
-          "swallow": {
-            "name": "Swallow"
-          }
-        },
-        "name": "Deepmaw"
-      },
-      "drownedOne": {
-        "moves": {
-          "claw": {
-            "name": "Claw"
-          },
-          "frenzy": {
-            "name": "Frenzy"
-          },
-          "gurgle": {
-            "name": "Gurgle"
-          }
-        },
-        "name": "Drowned One"
-      },
-      "duskfang": {
-        "moves": {
-          "bite": {
-            "name": "Bite"
-          },
-          "howl": {
-            "name": "Howl"
-          },
-          "rend": {
-            "name": "Rend"
-          }
-        },
-        "name": "Duskfang"
-      },
-      "gloomslime": {
-        "moves": {
-          "harden": {
-            "name": "Congeal"
-          },
-          "ooze": {
-            "name": "Corrosive Ooze"
-          },
-          "slam": {
-            "name": "Slam"
-          }
-        },
-        "name": "Gloomslime"
-      },
-      "gravewarden": {
-        "moves": {
-          "bulwark": {
-            "name": "Bulwark"
-          },
-          "crush": {
-            "name": "Crush"
-          },
-          "entomb": {
-            "name": "Entomb"
-          }
-        },
-        "name": "Gravewarden"
-      },
-      "heraldOfEnd": {
-        "moves": {
-          "doom": {
-            "name": "Doomsong"
-          },
-          "flame": {
-            "name": "Black Flame"
-          },
-          "reave": {
-            "name": "Reave"
-          },
-          "rise": {
-            "name": "Apotheosis"
-          }
-        },
-        "name": "Herald of the End"
-      },
-      "leviathan": {
-        "moves": {
-          "brine": {
-            "name": "Black Brine"
-          },
-          "cataclysm": {
-            "name": "Cataclysm"
-          },
-          "consume": {
-            "name": "Consume the Deep"
-          },
-          "crush": {
-            "name": "Crushing Jaws"
-          },
-          "tide": {
-            "name": "Rising Tide"
-          }
-        },
-        "name": "Leviathan's Maw"
-      },
-      "mirelurker": {
-        "moves": {
-          "barb": {
-            "name": "Barb"
-          },
-          "burrow": {
-            "name": "Burrow"
-          },
-          "sting": {
-            "name": "Venom Sting"
-          }
-        },
-        "name": "Mirelurker"
-      },
-      "obsidianGolem": {
-        "moves": {
-          "harden": {
-            "name": "Harden"
-          },
-          "pound": {
-            "name": "Pound"
-          },
-          "quake": {
-            "name": "Quake"
-          }
-        },
-        "name": "Obsidian Golem"
-      },
-      "rootheart": {
-        "moves": {
-          "awaken": {
-            "name": "Awaken"
-          },
-          "entangle": {
-            "name": "Entangle"
-          },
-          "lash": {
-            "name": "Root Lash"
-          },
-          "slam": {
-            "name": "Colossal Slam"
-          },
-          "spores": {
-            "name": "Choking Spores"
-          }
-        },
-        "name": "The Rootheart"
-      },
-      "shade": {
-        "moves": {
-          "gloom": {
-            "name": "Gloom"
-          },
-          "slash": {
-            "name": "Dual Slash"
-          },
-          "vanish": {
-            "name": "Vanish"
-          }
-        },
-        "name": "Shade"
-      },
-      "shellback": {
-        "moves": {
-          "jet": {
-            "name": "Water Jet"
-          },
-          "shell": {
-            "name": "Shell Up"
-          },
-          "snap": {
-            "name": "Snap"
-          }
-        },
-        "name": "Shellback"
-      },
-      "siren": {
-        "moves": {
-          "mend": {
-            "name": "Mend"
-          },
-          "rend": {
-            "name": "Talon Rend"
-          },
-          "shriek": {
-            "name": "Shriek"
-          },
-          "song": {
-            "name": "Dirge"
-          }
-        },
-        "name": "Siren"
-      },
-      "sovereign": {
-        "moves": {
-          "annihilation": {
-            "name": "Annihilation"
-          },
-          "ascend": {
-            "name": "Ascend"
-          },
-          "gravitas": {
-            "name": "Gravitas"
-          },
-          "ruin": {
-            "name": "Word of Ruin"
-          },
-          "scepter": {
-            "name": "Scepter Strike"
-          },
-          "starfall": {
-            "name": "Starfall"
-          }
-        },
-        "name": "The Eternal Sovereign"
-      },
-      "sporeling": {
-        "moves": {
-          "grow": {
-            "name": "Bloom"
-          },
-          "spit": {
-            "name": "Spore Spit"
-          }
-        },
-        "name": "Sporeling"
-      },
-      "starCultist": {
-        "moves": {
-          "ritual": {
-            "name": "Star Ritual"
-          },
-          "scorch": {
-            "name": "Starfire"
-          }
-        },
-        "name": "Star Cultist"
-      },
-      "thornling": {
-        "moves": {
-          "bristle": {
-            "name": "Bristle"
-          },
-          "burst": {
-            "name": "Spike Burst"
-          },
-          "prick": {
-            "name": "Prick"
-          }
-        },
-        "name": "Thornling"
-      },
-      "tidecaller": {
-        "moves": {
-          "bolt": {
-            "name": "Water Bolt"
-          },
-          "surge": {
-            "name": "Tidal Blessing"
-          },
-          "undertow": {
-            "name": "Undertow"
-          }
-        },
-        "name": "Tidecaller"
-      },
-      "voidColossus": {
-        "moves": {
-          "fortify": {
-            "name": "Fortify"
-          },
-          "shatter": {
-            "name": "Shatter"
-          },
-          "slam": {
-            "name": "Void Slam"
-          }
-        },
-        "name": "Voidforged Colossus"
-      },
-      "voidWisp": {
-        "moves": {
-          "siphon": {
-            "name": "Siphon"
-          },
-          "zap": {
-            "name": "Void Zap"
-          }
-        },
-        "name": "Void Wisp"
-      },
-      "voltEel": {
-        "moves": {
-          "coil": {
-            "name": "Coil"
-          },
-          "discharge": {
-            "name": "Discharge"
-          },
-          "shock": {
-            "name": "Shock"
-          }
-        },
-        "name": "Voltaic Eel"
-      },
-      "watcherEye": {
-        "moves": {
-          "beam": {
-            "name": "Ruin Beam"
-          },
-          "blink": {
-            "name": "Blink"
-          },
-          "gaze": {
-            "name": "Piercing Gaze"
-          }
-        },
-        "name": "Watcher Eye"
-      },
-      "waylayer": {
-        "moves": {
-          "smoke": {
-            "name": "Smokescreen"
-          },
-          "stab": {
-            "name": "Stab"
-          },
-          "trick": {
-            "name": "Dirty Trick"
-          }
-        },
-        "name": "Waylayer"
-      }
-    },
-    "events": {
-      "cursedIdol": {
-        "choices": {
-          "0": {
-            "label": "Take it",
-            "sub": "Gain a relic. Gain a Hex."
-          },
-          "1": {
-            "label": "Leave it",
-            "sub": ""
-          }
-        },
-        "name": "The Cursed Idol",
-        "text": "A jade idol sits on a plinth of skulls, radiating a soft warmth. It has clearly been left here for a reason."
-      },
-      "emberFountain": {
-        "choices": {
-          "0": {
-            "label": "Bathe",
-            "sub": "Heal 35% of your Max HP."
-          },
-          "1": {
-            "label": "Bottle it",
-            "sub": "Gain a Phial of Dawn."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "Fountain of Embers",
-        "text": "Liquid light pools in a cracked basin, throwing sparks that do not burn. It smells of summer and old victories."
-      },
-      "fleshTrader": {
-        "choices": {
-          "0": {
-            "label": "Trade",
-            "sub": "Lose 8 Max HP. Gain a relic."
-          },
-          "1": {
-            "label": "Refuse",
-            "sub": ""
-          }
-        },
-        "name": "The Flesh Trader",
-        "text": "\"Vitality is a currency,\" purrs a thing wearing a merchant's coat. \"And you look flush with it.\" Long fingers open to reveal a relic."
-      },
-      "forge": {
-        "choices": {
-          "0": {
-            "label": "Temper",
-            "sub": "Upgrade a card."
-          },
-          "1": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "The Forgotten Forge",
-        "text": "An anvil of black star-metal, still warm. Hammers hang in racks, waiting for hands that died an age ago."
-      },
-      "forgottenShrine": {
-        "choices": {
-          "0": {
-            "label": "Pray",
-            "sub": "Remove a card from your deck."
-          },
-          "1": {
-            "label": "Desecrate",
-            "sub": "Gain 90 gold. Gain a Hex."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "Forgotten Shrine",
-        "text": "A moss-eaten shrine hums with old power. Offerings of bone and silver litter its base. Something watches from inside the stone."
-      },
-      "gambler": {
-        "choices": {
-          "0": {
-            "label": "Bet 40 gold",
-            "sub": "45% chance to win 110 gold."
-          },
-          "1": {
-            "label": "Walk away",
-            "sub": ""
-          }
-        },
-        "name": "The Bone Gambler",
-        "rolls": {
-          "lose": {
-            "text": "The bones rattle against you. The wager is lost."
-          },
-          "win": {
-            "text": "The bones land in your favour. You claim 110 gold."
-          }
-        },
-        "text": "A grinning figure rattles a cup of knuckle-bones. \"One throw, stranger. Fortune loves the reckless.\""
-      },
-      "library": {
-        "choices": {
-          "0": {
-            "label": "Study",
-            "sub": "Choose 1 of 5 cards to add to your deck."
-          },
-          "1": {
-            "label": "Rest among the stacks",
-            "sub": "Heal 20% of your Max HP."
-          }
-        },
-        "name": "The Drowned Library",
-        "text": "Shelves of waterlogged grimoires stretch into the dark. Most are pulp — but a few pages still glow faintly."
-      },
-      "mirror": {
-        "choices": {
-          "0": {
-            "label": "Reflect",
-            "sub": "Duplicate a card in your deck."
-          },
-          "1": {
-            "label": "Shatter it",
-            "sub": "Lose 6 HP. Remove a card from your deck."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "The Silvered Mirror",
-        "text": "A tall mirror stands in the rubble, unbroken. Your reflection moves half a breath behind you — and it is smiling."
-      },
-      "ruinedCamp": {
-        "choices": {
-          "0": {
-            "label": "Rest",
-            "sub": "Heal 15% of your Max HP."
-          },
-          "1": {
-            "label": "Scavenge",
-            "sub": "Gain 45 gold and a random potion."
-          }
-        },
-        "name": "Ruined Camp",
-        "text": "A campfire, still smoldering. Bedrolls, torn. Whoever slept here left in a hurry — and left their packs behind."
-      },
-      "voidChest": {
-        "choices": {
-          "0": {
-            "label": "Open it",
-            "sub": "It might hold a relic... or teeth."
-          },
-          "1": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "Humming Chest",
-        "text": "A black iron chest sits alone in the gloom, humming a note you feel in your teeth. Its lock is already broken."
-      },
-      "woundedKnight": {
-        "choices": {
-          "0": {
-            "label": "Aid him",
-            "sub": "Lose 8 HP. He rewards you with a relic."
-          },
-          "1": {
-            "label": "Loot him",
-            "sub": "Gain 65 gold. Gain a Hex."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "The Wounded Knight",
-        "text": "A knight slumps against a shattered pillar, breath rattling behind a crushed visor. One gauntlet clutches a relic; the other beckons you closer."
-      }
-    },
-    "omens": {
-      "ashfall": {
-        "name": "Ashfall",
-        "text": "Ash chokes every fire: enemies begin combat with 2 Smolder, but their blows leave 1 Smolder on you."
-      },
-      "eighthOmen": {
-        "name": "The Eighth Omen",
-        "text": "Every lesser battle bears a title. The broken words follow every floor."
-      },
-      "emberWind": {
-        "name": "Ember Wind",
-        "text": "Sparks ride the wind into your lantern: begin each combat with 2 Embers, but draw 4 cards instead of 5."
-      },
-      "heavyAir": {
-        "name": "Heavy Air",
-        "text": "The air holds light like water: all Ward gained is increased by a quarter — yours and theirs."
-      },
-      "hungryDark": {
-        "name": "The Hungry Dark",
-        "text": "The dark eats coin but sharpens choice: shop prices are a quarter higher, and card rewards offer 1 more choice."
-      },
-      "longNight": {
-        "name": "The Long Night",
-        "text": "The climb stretches on: enemies carry 12% more life, but every victory pays 40% more gold."
-      },
-      "thinGlass": {
-        "name": "Thin Glass",
-        "text": "Tonight all glass runs thin: every facet gauge is 1 smaller, but enemy blows strike 2 harder."
-      },
-      "waningMoon": {
-        "name": "Waning Moon",
-        "text": "The moon spends her last light on you: your first card each turn costs 1 less, but rest sites heal only 20%."
-      }
-    },
-    "potions": {
-      "block": {
-        "name": "Phial of Held Light",
-        "text": "Gain 12 Ward."
-      },
-      "energy": {
-        "name": "Emberphial",
-        "text": "Gain 3 Embers."
-      },
-      "fire": {
-        "name": "Stormglass Phial",
-        "text": "Deal 20 damage to an enemy."
-      },
-      "healing": {
-        "name": "Phial of Dawn",
-        "text": "Heal 20 HP."
-      },
-      "strength": {
-        "name": "Phial of Fervor",
-        "text": "Gain 2 Fervor."
-      },
-      "swift": {
-        "name": "Inkdraught",
-        "text": "Draw 3 cards."
-      },
-      "venom": {
-        "name": "Smolderphial",
-        "text": "Apply 7 Smolder to an enemy."
-      }
-    },
-    "quests": {
-      "eighthOmen": {
-        "floorEchoes": [
-          "// THE PANE WATCHES //",
-          "// EIGHT IS NOT A NUMBER //",
-          "// CARRY THE WRONG LIGHT UPWARD //",
-          "// THE CROWN IS A MASK //"
-        ],
-        "inscription": "Reach dawn beneath the Eighth Omen.",
-        "mode": "Gate",
-        "name": "The Eighth Omen",
-        "resolved": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR."
-      },
-      "hollowLamplighter": {
-        "inscription": "Pay the Hollow Lamplighter five prices along the Unlit Way.",
-        "meetings": [
-          {
-            "accepted": "The next three embers belong to the hollow lantern.",
-            "ask": "Your lantern is noisy. Give me the next three embers it catches.",
-            "cannot": "Promise the embers now. The lantern will pay before you do.",
-            "paid": "Six panes were carried away from a window no wall could hold."
-          },
-          {
-            "ask": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
-            "cannot": "Your purse is warm, but not warm enough.",
-            "paid": "The Pale Ones watch the paths that point above the crown."
-          },
-          {
-            "ask": "The Spire counts the vessel. Give me twelve measures of yours.",
-            "cannot": "I will not hollow you below thirty. Return with a larger vessel.",
-            "paid": "Your standing dead have seen the stair above the Sovereign."
-          },
-          {
-            "ask": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
-            "cannot": "You have spent the gift already. Bring me one that is still yours.",
-            "paid": "The empty lantern is the token that purchases an audience with the mask."
-          },
-          {
-            "ask": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
-            "cannot": "One heartbeat is enough. Refusal is the only poverty left.",
-            "paid": "Light the panes. The door will know you."
-          }
-        ],
-        "mode": "Trail",
-        "name": "The Hollow Lamplighter"
-      },
-      "ownShade": {
-        "final": "We were never climbing out. We were carrying light to the lock.",
-        "fragments": [
-          "I remember the stone. You walked away before I stopped calling.",
-          "Each climber leaves a shape behind. The Spire has learned to wear ours.",
-          "Above the Sovereign there is no dawn — only a door pretending to be the sky."
-        ],
-        "inscription": "Defeat the self that remembers falling. Three shades must fall.",
-        "mode": "Trail",
-        "name": "Your Own Shade"
-      },
-      "paleOnes": {
-        "huntInscription": "Defeat three pale foes and follow the cold motes they leave behind.",
-        "huntName": "Hunt the Pale Ones",
-        "inscription": "Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour.",
-        "mode": "Trail",
-        "name": "The Pale Ones",
-        "progress": [
-          "No mote answers the Lens.",
-          "The first pale mote chills the lantern."
-        ]
-      },
-      "unreadablePage": {
-        "inscription": "Win five dawns carrying the Unreadable Page.",
-        "mode": "Trail",
-        "name": "The Unreadable Page",
-        "pages": [
-          "FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
-          "SECOND PAGE — Pale figures carried the shards down so the thing above could not follow.",
-          "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended.",
-          "FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.",
-          "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown."
-        ]
-      },
-      "usurper": {
-        "bought": "Now the summit knows what you carry.",
-        "death": "The mask is broken. Look above.",
-        "inscription": "Carry the lantern with no flame to the summit and unmask the Usurper.",
-        "itemName": "A Lantern with No Flame",
-        "itemText": "Cold glass. No wick. The merchant will not say who left it.",
-        "mode": "Gate",
-        "name": "The Usurper",
-        "poor": "Cold goods, warm price. Come back carrying a dawn's worth of gold."
-      }
-    },
-    "relics": {
-      "ashenCore": {
-        "name": "Ashen Core",
-        "text": "Enemies begin each combat with 3 Smolder."
-      },
-      "basaltIdol": {
-        "name": "Basalt Idol",
-        "text": "Begin each combat with 10 Ward."
-      },
-      "bellOfEndings": {
-        "name": "Bell of Endings",
-        "text": "Whenever glass Shatters, every other enemy takes 4 damage."
-      },
-      "crownOfCinders": {
-        "name": "Crown of Cinders",
-        "text": "Your lantern holds 12 Embers and begins each combat holding 2."
-      },
-      "crownOfTheHearth": {
-        "name": "Crown of the Hearth",
-        "text": "At the end of combat, heal 3 HP for every Ember still in your lantern."
-      },
-      "crownOfTithes": {
-        "name": "Crown of Tithes",
-        "text": "You may kindle twice each turn, and each kindling grants 3 Ward."
-      },
-      "duskmirror": {
-        "name": "Duskmirror",
-        "text": "The first card you play each turn costs 0."
-      },
-      "emberHeart": {
-        "name": "Emberheart",
-        "text": "At the end of combat, heal 6 HP."
-      },
-      "emberLantern": {
-        "name": "Ember Lantern",
-        "text": "Gain 1 extra Energy on your first turn."
-      },
-      "executionersSeal": {
-        "name": "Executioner's Seal",
-        "text": "Every 10th Attack you play deals double damage."
-      },
-      "frozenCore": {
-        "name": "Frozen Core",
-        "text": "Unspent Energy carries over between turns."
-      },
-      "gravebloom": {
-        "name": "Gravebloom",
-        "text": "After combat, if at or below 50% HP, heal 10."
-      },
-      "hollowCrown": {
-        "name": "Hollow Crown",
-        "text": "Gain 1 Energy each turn. The glass dims: on pickup, lose 10 Max HP."
-      },
-      "ironTalisman": {
-        "name": "Iron Talisman",
-        "text": "Every 3rd Attack you play grants 1 Fervor."
-      },
-      "merchantsMark": {
-        "name": "Merchant's Mark",
-        "text": "Shop prices are 25% lower."
-      },
-      "prismCharm": {
-        "name": "Prism Charm",
-        "text": "Your first Shatter each combat spills 2 extra Embers."
-      },
-      "reapersBell": {
-        "name": "Reaper's Bell",
-        "text": "When an enemy dies, gain 1 Energy and draw 1 card."
-      },
-      "riverPearl": {
-        "name": "River Pearl",
-        "text": "Begin each combat with 1 Poise."
-      },
-      "seersOrb": {
-        "name": "Seer's Orb",
-        "text": "Card rewards offer 1 additional choice."
-      },
-      "shatterersCrown": {
-        "name": "Shatterer's Crown",
-        "text": "Enemy glass runs thin: all facet gauges are 1 smaller. Enemies begin with 1 Fervor."
-      },
-      "silkFan": {
-        "name": "Silk Fan",
-        "text": "Every 3rd card you play each combat grants 3 Ward."
-      },
-      "smolderingCoal": {
-        "name": "Smoldering Coal",
-        "text": "Enemies begin each combat with 2 Smolder."
-      },
-      "sunBlossom": {
-        "name": "Sun Blossom",
-        "text": "All healing is increased by 50%."
-      },
-      "sweetRoot": {
-        "name": "Sweet Root",
-        "text": "On pickup: gain 8 Max HP."
-      },
-      "thiefOfWicks": {
-        "name": "Thief of Wicks",
-        "text": "Unlit lanterns pay double bounty."
-      },
-      "thornBand": {
-        "name": "Thorn Band",
-        "text": "Begin each combat with 2 Splinters."
-      },
-      "travelersPack": {
-        "name": "Traveler's Pack",
-        "text": "Draw 2 extra cards on your first turn."
-      },
-      "verdantBranch": {
-        "name": "Verdant Branch",
-        "text": "Whenever a card is Kindled or burned away, draw 1 card."
-      },
-      "vialOfLife": {
-        "name": "Vial of Life",
-        "text": "Heal 2 HP at the start of each combat."
-      },
-      "warFetish": {
-        "name": "War Fetish",
-        "text": "Begin each combat with 1 Fervor."
-      },
-      "wardingCharm": {
-        "name": "Warding Charm",
-        "text": "Enemy attacks that would deal 5 or less damage deal 1."
-      }
-    },
-    "shadeKits": {
-      "ashwarden": {
-        "moves": {
-          "ashbite": {
-            "name": "Remembered Ashbite"
-          },
-          "ashfall": {
-            "name": "First Ash, Last Breath"
-          },
-          "smother": {
-            "name": "Remembered Smother"
-          }
-        }
-      },
-      "duskblade": {
-        "moves": {
-          "chisel": {
-            "name": "Remembered Chisel"
-          },
-          "eclipse": {
-            "name": "Remembered Eclipse"
-          },
-          "spark": {
-            "name": "First Spark, Last Light"
-          }
-        }
-      }
-    },
-    "status": {
-      "barricade": {
-        "desc": "Ward no longer expires.",
-        "name": "Annealed"
-      },
-      "beacon": {
-        "desc": "Attacks chip N extra Facet(s). Fades at end of turn.",
-        "name": "Beacon"
-      },
-      "dex": {
-        "desc": "Ward cards grant +N Ward.",
-        "name": "沉穩"
-      },
-      "emberflow": {
-        "desc": "Gain N Ember(s) at the start of each turn.",
-        "name": "Pyreheart"
-      },
-      "energized": {
-        "desc": "Gain N extra Energy at the start of each turn.",
-        "name": "Alight"
-      },
-      "frail": {
-        "desc": "Ward gained reduced 25%. Wears off each turn.",
-        "name": "脆裂"
-      },
-      "metallicize": {
-        "desc": "Gains N Ward at the end of each turn.",
-        "name": "Vitrified"
-      },
-      "nightsight": {
-        "desc": "Draw N extra card(s) at the start of each turn.",
-        "name": "Night Sight"
-      },
-      "poison": {
-        "desc": "Burns from within: loses N HP at the start of its turn, then Smolder falls by 1. When smoldering glass shatters or dies, the Smolder leaps to another enemy.",
-        "name": "陰燃"
-      },
-      "rampage": {
-        "desc": "Attack grows stronger with each use.",
-        "name": "Crescendo"
-      },
-      "regen": {
-        "desc": "Heals N HP at the end of each turn.",
-        "name": "Warmth"
-      },
-      "ritual": {
-        "desc": "Gains N Fervor at the start of each turn.",
-        "name": "Litany"
-      },
-      "str": {
-        "desc": "The inner fire stoked: attacks deal +N damage.",
-        "name": "熾心"
-      },
-      "thorns": {
-        "desc": "Attackers take N damage back.",
-        "name": "Splinters"
-      },
-      "venomous": {
-        "desc": "Attacks apply N Smolder.",
-        "name": "Emberfang"
-      },
-      "vulnerable": {
-        "desc": "The glass is scored: takes 50% more attack damage. Wears off each turn.",
-        "name": "裂痕"
-      },
-      "weak": {
-        "desc": "The fire gutters: deals 25% less attack damage. Wears off each turn.",
-        "name": "黯淡"
-      }
-    },
-    "variants": {
-      "ownShade1": {
-        "deathDialogue": "I remember the stone. You walked away before I stopped calling.",
-        "dialogue": [],
-        "name": "The Shade That Fell"
-      },
-      "ownShade2": {
-        "deathDialogue": "Each climber leaves a shape behind. The Spire has learned to wear ours.",
-        "dialogue": [],
-        "name": "The Shade That Returned"
-      },
-      "ownShade3": {
-        "deathDialogue": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
-        "dialogue": [],
-        "name": "The Shade That Remembers"
-      },
-      "paleDrownedOne": {
-        "dialogue": [],
-        "name": "Pale Drowned One"
-      },
-      "paleDuskfang": {
-        "dialogue": [],
-        "name": "Pale Duskfang"
-      },
-      "paleVoidWisp": {
-        "dialogue": [],
-        "name": "Pale Void Wisp"
-      },
-      "usurpedSovereign": {
-        "dialogue": [
-          "{aspect}. At last, the lantern brings me a name.",
-          "The Sovereign was a mask. You have paid to meet the face beneath it.",
-          "Break me, and the empty lantern will remember fire."
-        ],
-        "name": "The Usurper"
-      }
-    },
-    "vows": {
-      "0": {
-        "desc": "Every creature is harder to break — enemy HP +12%.",
-        "name": "Vow of Iron"
-      },
-      "1": {
-        "desc": "Their blows land heavier — enemy attacks deal +1.",
-        "name": "Vow of Malice"
-      },
-      "2": {
-        "desc": "Bosses armor their cores — boss Facets +1.",
-        "name": "Vow of the Deep"
-      },
-      "3": {
-        "desc": "You climb already cursed — begin every run with a Hex.",
-        "name": "Vow of the Mark"
-      },
-      "4": {
-        "desc": "The dark drinks your rest — campfires heal 20%, not 30%.",
-        "name": "Vow of the Waning"
-      }
-    },
-    "whispers": [
-      "有一種顏色，尖塔拒絕為它命名。",
-      "一隻蒼白的手觸過璃的暗面。",
-      "六處空位在等候，那裡不曾立過窗。",
-      "死者攀行兩次：一次以肉身，一次以記憶。",
-      "無焰的提燈仍是一把鑰匙。",
-      "數一數接不住破曉的窗格。",
-      "一頁字，唯有在頂點倖存之後才能讀。",
-      "第八徵兆不寫在七者之中。",
-      "憔悴的守門人記得你未走的路。",
-      "蒼白微粒如霜，聚在隱縫周圍。",
-      "你的紀念碑並不總是躺下。",
-      "商人櫃下藏著一件冰冷之物。",
-      "破碎符文是完整句子的影子。",
-      "五頁成章；五次代價成供認。",
-      "三次死亡會教你的影子說明白話。",
-      "守夜有一扇窗，雖無牆承載它。",
-      "每片碎片點亮一格餘燼琉璃。",
-      "蒼白者並非在獵你。他們在向上指。",
-      "主宰是戴在最終階下的面具。",
-      "當六扇窗燃起，望向頂點之外。",
-      "王冠之上有一扇封印之門。",
-      "它的銘文等候得比守夜更久。",
-      "帶六片碎片到玫瑰窗。",
-      "攀行仍在繼續。"
-    ]
-  }
+	"formatVersion": 1,
+	"ui": {
+		"brand": {
+			"secrets": " · {n} 個秘密已現",
+			"stats": "{runs} 次攀行 · {wins} 次破曉 · {slain} 敵隕落",
+			"tagline": "Roguelite 卡牌构筑 · 守夜銘記",
+			"title": "琉璃誓言"
+		},
+		"combat": {
+			"affixTitle": "{name} — 菁英封號",
+			"ashes": "灰燼",
+			"ashesPileAria": "Ashes pile",
+			"ashesSub": "Burned away — each fed the lantern an ember",
+			"ashesTitle": "The Ashes",
+			"buff": "增益",
+			"debuff": "減益",
+			"discard": "棄牌",
+			"discardPileAria": "Discard pile",
+			"discardPileTitle": "Discard Pile",
+			"draw": "抽牌",
+			"drawPileAria": "Draw pile",
+			"drawPileSub": "Order hidden — shown alphabetically",
+			"drawPileTitle": "Draw Pile",
+			"end": "結束",
+			"enemyTurn": "敵方回合",
+			"energyAria": "Energy",
+			"facetsBody": "每個生物皆是琉璃。造成未被格擋的流血會琢下一格璃面；填滿量表則琉璃[b]碎裂[/b]——它失去下一動、陷入裂痕，並將餘燼灑入你的提燈。",
+			"facetsTitle": "璃面",
+			"glassHolds": "琉璃仍持",
+			"guardShattered": "護光粉碎",
+			"lanternBody": "提燈盛放碎裂與擊殺所灑的<b>餘燼</b>。將任意卡牌拖上即可<b>燃燼</b>——焚去該牌換取一點餘燼，每回合一次。詛咒拒火。",
+			"lanternBodyLead": "<b>{cost} Embers, once a turn:</b> {text}<br><br>",
+			"lanternSub": "A · 施展提燈術",
+			"lanternTitle": "提燈",
+			"lanternTitleArt": "Lantern Art — {name}",
+			"monumentGift": "THE STONE RETURNS ITS GIFT",
+			"perfectBanner": "PERFECT",
+			"reshuffle": "重洗",
+			"shatter": "碎裂",
+			"staggered": "踉蹌",
+			"staggeredTipBody": "The glass has shattered — this creature loses its next action while it reseams.",
+			"staggeredTipTitle": "Staggered",
+			"stoneRemembers": "THE STONE REMEMBERS",
+			"yourTurn": "你的回合",
+			"perfect": "完美",
+			"lanternArtTitle": "提燈術 — {name}",
+			"lanternLead": "<b>{embers} 餘燼，每回合一次：</b> {text}<br><br>",
+			"staggeredTitle": "踉蹌",
+			"staggeredBody": "琉璃已碎——此生物在重新接合前失去下一動。"
+		},
+		"common": {
+			"cancel": "取消",
+			"continue": "繼續",
+			"retry": "重試",
+			"skip": "跳過",
+			"leave": "離開"
+		},
+		"dawn": {
+			"act4RevealCopy": "Six panes burn. Something waits above the crown.",
+			"eighthResolvedKicker": "The broken glyphs resolve",
+			"pageKicker": "Page {n}",
+			"questCompleteKicker": "{mode} complete",
+			"questProgressKicker": "The trail continues",
+			"questRevealKicker": "{mode} revealed",
+			"questUnlockKicker": "Insight awakened",
+			"reloadSaved": "Reload Saved Dawn",
+			"saveFailedClear": "Every panel has been seen, but the saved dawn could not be released. Retry before leaving this screen.",
+			"saveFailedCursor": "This panel was shown, but its place in the dawn could not be secured. Retry before the ceremony continues.",
+			"saveFailedTitle": "The Dawn Could Not Hold",
+			"shadeResolvedKicker": "The shade speaks plainly",
+			"shardGrantCopy": "One pane answers.",
+			"whisperKicker": "A whisper reaches the dawn",
+			"witchlightCopy": "Pale paths will now be marked.",
+			"witchlightLens": "Witchlight Lens",
+			"title": "登臨",
+			"subtitle": "破曉時，守夜銘記。",
+			"quietTitle": "破曉",
+			"quietBody": "守夜靜默。",
+			"kickerWhisper": "破曉低語",
+			"kickerQuest": "旅途顯現",
+			"kickerProgress": "旅途續行",
+			"kickerShard": "餘燼琉璃碎片",
+			"kickerUnlock": "守夜敞開",
+			"kickerDefault": "破曉",
+			"complete": "破曉完成",
+			"progress": "破曉 {n} / {total} · 當前記憶已燃"
+		},
+		"embark": {
+			"aspectLabel": "誰執提燈",
+			"noVows": "尖塔如常。未立任何誓言。",
+			"subChoose": "選擇你面對尖塔的方式。",
+			"subWait": "提燈已燃。尖塔在等待。",
+			"title": "攀行開始",
+			"vowLevel": "誓言 {level}  / {max}",
+			"warnSaved": "重新開始將拋棄已保存的攀行。"
+		},
+		"end": {
+			"ascended": "登臨",
+			"ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the Spire — the first in an age.",
+			"bequestDone": "✦ The stone keeps your {name}.<br>It will wait for you in {act}.",
+			"bequestNote": {
+				"card": "your finest card",
+				"gold": "{n} gold",
+				"goldCache": "a cache of gold",
+				"relic": "your rarest relic"
+			},
+			"bequestTitle": "將一事刻入石中——下一行可在 {act} 取回。",
+			"bequestUnpaid": "The unpaid gift remains in the standing stone",
+			"cardsPlayed": "出牌數",
+			"deckSize": "牌庫",
+			"dmgDealt": "造成傷害",
+			"dmgTaken": "受到傷害",
+			"elitesBosses": "菁英與首領",
+			"fallen": "隕落",
+			"fallenSub": "Here ended a climb, on floor <b>{floor}</b>.<br>The Spire keeps what it takes — but the Vigil remembers.",
+			"finalDeckTitle": "Final Deck",
+			"floors": "層數",
+			"returnVigil": "返回守夜",
+			"runTime": "用時",
+			"slain": "擊殺",
+			"unlock": {
+				"ashwarden": "The Ashwarden",
+				"aspect": "Aspect Unlocked",
+				"card": "Card Unlocked",
+				"header": "✦ {kind}",
+				"relic": "Relic Unlocked"
+			},
+			"viewDeck": "檢視最終牌庫",
+			"abandoned": "誓言擱置",
+			"abandonedSub": "朝聖止於此。守夜將記下這筆。",
+			"fallenLantern": "你的提燈在第 {floor} 層熄滅。",
+			"elitesBossesPlus": "菁英 + 首領"
+		},
+		"event": {
+			"chooseCardSub": "One page still glows.",
+			"chooseCardTitle": "Choose a Card",
+			"duplicateSub": "The mirror remembers.",
+			"duplicateTitle": "Duplicate a Card",
+			"removeSub": "Let it go.",
+			"removeTitle": "Remove a Card",
+			"upgradeSub": "The forge hungers.",
+			"upgradeTitle": "Upgrade a Card",
+			"strangePlace": "異樣之地",
+			"continue": "繼續"
+		},
+		"help": {
+			"climbBody": "沿提燈之路攀向尖塔。擊敗怪物、收集卡牌、遺物與藥瓶，並打倒每一幕的首領，共 <b>{count} 幕</b>。未燃之燈隱匿其所藏——但點燃者須付賞金。",
+			"climbTitle": "攀行",
+			"combatBody": "每回合你抽 <b>5 張牌</b>並獲得 <b>3 點能量</b>（⬤）。點擊或拖曳出牌——若場上尚有多名敵人，攻擊須選定目標。敵人頭頂會預示其<b>意圖</b>。",
+			"combatTitle": "戰鬥",
+			"firesBody": "休息處可回復 <b>30%</b> 生命或升級一張牌。商店販售卡牌、遺物、藥瓶——亦可自牌庫中<b>移除</b>一張。保持牌庫精簡；每份戰利皆可放棄。",
+			"firesTitle": "爐火與商人",
+			"glassBody": "每個生物皆是琉璃，生命條下有一列<b>璃面</b>。造成未被格擋的傷害會琢下一格璃面（重擊琢得更多）。填滿量表則琉璃<b>碎裂</b>：它失去下一動、陷入裂痕，並將<b>餘燼</b>灑入你的提燈。把握碎裂時機，可擋下你無法承受的一擊。",
+			"glassTitle": "琉璃",
+			"lanternBody": "餘燼驅動你的<b>提燈術</b>——專屬力量，每回合可用一次（按 <b>A</b>）。將任意卡牌拖到提燈上即可<b>燃燼</b>：牌被焚去，提燈得 1 餘燼。每回合一次；詛咒拒火。",
+			"lanternTitle": "提燈",
+			"title": "玩法說明",
+			"vigilBody": "一無所費。每次攀行之初，<b>掌燈人</b>贈予恩賜並讓你選擇提燈術。倒下時，將一事刻入石中——一座<b>紀念碑</b>，下一行可在同一幕取回。每次碎裂、燃燼與擊殺皆累積畢生<b>功績</b>，解鎖新牌、遺物，與第二面向——<b>灰衛</b>。抵達破曉一次後，<b>誓言</b>開啟：一條可選的嚴酷難度之梯。",
+			"vigilTitle": "守夜——死亡留下的",
+			"wardBody": "<b>護光</b>是可吸收傷害的持光，但每回合開始消散。<b>裂痕</b> ×1.5 受傷 · <b>黯淡</b> −25% 輸出 · <b>脆裂</b> −25% 護光 · <b>陰燃</b>每回合灼燒，宿主死亡或碎裂時躍至另一敵人。",
+			"wardTitle": "護光與狀態"
+		},
+		"hollow": {
+			"kicker": "THE UNLIT WAY · PRICE {current} OF {total}",
+			"payPrice": "付上代價",
+			"pricePaid": "Price Paid",
+			"returnLater": "稍後再來",
+			"routeFailed": "The way onward could not be prepared.",
+			"routeSaveFailed": "The way onward is not secured. Retry when storage is available.",
+			"saveFailed": "The price is not yet secured. Retry the save.",
+			"title": "空燈掌燈人"
+		},
+		"hud": {
+			"actFloor": "第 {act} 幕 · 第 {floor} 層",
+			"deckAria": "Deck",
+			"deckCount": "{n} cards",
+			"deckTitle": "Your Deck",
+			"menuAria": "Menu",
+			"omenSub": "hangs over Act {act}",
+			"omenTitle": "Omen — {name}",
+			"potionTip": "Click to use or toss",
+			"tossPotion": "Toss it",
+			"usePotion": "Use {name}",
+			"viewDeck": "檢視牌庫",
+			"menu": "選單",
+			"emptyPhial": "空藥瓶位"
+		},
+		"keywords": {
+			"chip": "直擊琉璃本身：推進碎裂，無需見血。",
+			"cinder": "留在手中時每回合結束受到 2 點傷害。",
+			"ember": "提燈術的燃料。碎裂、死亡與燃燼所灑；盛於提燈。",
+			"energy": "用於出牌。每回合回滿。",
+			"facetDesc": "每個生物皆是帶有璃面量表的琉璃。填滿則碎裂——失去下一動、陷入裂痕，並將餘燼灑入你的提燈。",
+			"hex": "詛咒：留在手中時每回合結束失去 1 生命。無法燃燼。",
+			"kindle": "焚去直至本場戰鬥結束——提燈獲得 1 餘燼。",
+			"shard": "無法打出的廢璃。仍可燃燼。",
+			"staggered": "碎裂的琉璃在重新接合前失去下一動。",
+			"unplayable": "此牌無法打出。",
+			"ward": "持光，可阻擋傷害。於你的回合開始消散。"
+		},
+		"lamp": {
+			"artHint": "(press A in combat)",
+			"artLabel": "你的提燈術",
+			"boonLabel": "路上的恩賜",
+			"sub": "{aspect} 立於尖塔腳下。取一份臨別贈禮——並選擇提燈將攜的火。",
+			"title": "掌燈人"
+		},
+		"map": {
+			"click": "Click",
+			"drag": "drag",
+			"hint": {
+				"boss": "本幕止於此。整備你的牌庫。",
+				"elite": "有封號之敵——風險更高，遺物級獎賞。",
+				"event": "命運未書。任何事都可能發生。",
+				"hollow": "空燈掌燈人以代價相候。",
+				"monster": "一場戰鬥。迅捷者得餘燼與金幣。",
+				"rest": "回復，或將一張牌鍛成 + 型。",
+				"shop": "金幣換卡牌、遺物、藥瓶。",
+				"treasure": "無需戰鬥的箱子。"
+			},
+			"node": {
+				"elite": "菁英 — 當心",
+				"event": "未知事件",
+				"hollow": "空燈",
+				"monster": "怪物",
+				"rest": "休息處",
+				"shop": "商人",
+				"treasure": "寶藏"
+			},
+			"scroll": "scroll",
+			"sealedDoor": {
+				"aria": "封印之門",
+				"inscription": "攀行仍在繼續",
+				"label": "封印之門",
+				"return": "返回頂點",
+				"sub": "六扇窗在你身後燃燒。鎖回應了，卻未開啟。",
+				"title": "封印之門"
+			},
+			"survey": "{action} 以巡視尖塔",
+			"tap": "Tap",
+			"travelHere": "{action} 以前往此處。",
+			"unlitBody": "此處所藏未知——但初燃須付金幣賞金。",
+			"unlitTitle": "未燃之燈",
+			"witchlightBody": "Pale glass waits here.",
+			"witchlightTitle": "Witchlight trembles",
+			"holdFast": "琉璃堅守。路尚未開。",
+			"standThreshold": "立於門檻",
+			"returnVigil": "返回守夜"
+		},
+		"menu": {
+			"abandon": "放棄",
+			"abandonConfirmBody": "你的攀行將沒入虛空。",
+			"abandonConfirmTitle": "放棄此行？",
+			"abandonRun": "放棄此行",
+			"back": "返回",
+			"beginAnew": "重新開始",
+			"beginAnewBody": "已保存的攀行將沒入虛空。",
+			"beginAnewTitle": "重新開始？",
+			"beginClimb": "開始攀行",
+			"chooseBoon": "選擇恩賜",
+			"close": "關閉",
+			"continueClimb": "繼續攀行",
+			"credits": "製作人員",
+			"fightOn": "繼續前行",
+			"howToPlay": "玩法說明",
+			"keepClimbing": "繼續攀行",
+			"lightTheWay": "點亮前路",
+			"mute": "靜音",
+			"muteSound": "靜音",
+			"quit": "離開",
+			"quitGame": "結束遊戲",
+			"return": "返回",
+			"returnTitle": "返回標題",
+			"settings": "設定",
+			"theVigil": "守夜",
+			"unmute": "取消靜音",
+			"unmuteSound": "取消靜音"
+		},
+		"persistence": {
+			"hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
+			"reloadClimb": "Reload Saved Climb",
+			"reloadDestination": "Reload Saved Destination",
+			"reloadDuel": "Reload Saved Duel",
+			"reloadFinalisation": "Reload Saved Finalisation",
+			"retryFinalisation": "Retry Finalisation",
+			"retrySave": "Retry Save",
+			"runSaveBody": "The climb could not be secured. Free storage and retry, or reload the last durable climb state.",
+			"runSaveRetryFail": "The save is still unavailable. Free storage, then retry or reload the last durable climb state.",
+			"saveFailedTitle": "Save Failed",
+			"stoneBody": "The stone could not hold this duel. Free storage and try again.",
+			"stoneTitle": "The Stone Could Not Hold",
+			"vigilBody": "This run end is safely journalled, but its ledgers or final dawn could not be secured. Free storage and retry, or reload this saved finalisation.",
+			"vigilTitle": "The Vigil Could Not Hold"
+		},
+		"rest": {
+			"healedFloat": "+{hp} HP",
+			"restBtn": "休息",
+			"restHeal": "— 回復 {hp} 生命",
+			"smithBtn": "鍛造",
+			"smithSub": "— upgrade a card",
+			"sub": "爐火噼啪。片刻之間，尖塔安靜。",
+			"title": "休息處",
+			"upgradeSub": "Forge one card into its + form.",
+			"upgradeTitle": "Upgrade a Card",
+			"upgradedSub": "It gleams with new power.",
+			"upgradedTitle": "Upgraded!",
+			"restHealBtn": "休息 — 回復 {hp} 生命",
+			"hpFrac": "{cur} / {max} 生命"
+		},
+		"reward": {
+			"addCardRow": "Add a card to your deck",
+			"bossRelicSub": "Choose one — its power is permanent.",
+			"bossRelicTitle": "A BOSS RELIC CALLS",
+			"bossVanquished": "BOSS VANQUISHED",
+			"cardAdded": "{name} added",
+			"chooseCardSub": "Add one card to your deck — or skip to keep it lean.",
+			"chooseCardTitle": "Choose a Card",
+			"eliteSlain": "菁英殞落",
+			"goldRow": "<b class=\"gold-num\">{n}</b> gold",
+			"leaveConfirmBody": "You still have unclaimed spoils on the glass. Move on without them?",
+			"leaveConfirmNo": "Stay",
+			"leaveConfirmTitle": "Leave Rewards Behind?",
+			"leaveConfirmYes": "Leave Them",
+			"perfectSeal": "✦ PERFECT — the glass untouched ✦",
+			"potionSlotsFull": "Potion slots full!",
+			"takeNone": "都不拿",
+			"victory": "勝利",
+			"continue": "繼續",
+			"skip": "跳過",
+			"leaveIt": "留下",
+			"walkOn": "繼續前行",
+			"takeOneLight": "Take one light with you",
+			"takeOneFromLight": "Take one from the light",
+			"onePiece": "One piece comes with you",
+			"addCard": "將一張牌加入牌庫",
+			"offeredTakeOne": "{n} offered · take one",
+			"goldAmount": "{n} Gold",
+			"chooseCardBody": "將一張牌加入牌庫——或跳過以保持精簡。"
+		},
+		"rose": {
+			"dormantPane": "Dormant Emberglass pane {n}",
+			"finalWhisper": "The final whisper returns at every dawn.",
+			"openLabel": "打開玫瑰窗",
+			"paneDark": "This pane is dark.",
+			"selectedPane": "Selected Emberglass pane",
+			"shardRecovered": "{name}, Shard recovered",
+			"shardRecoveredShort": "Shard recovered",
+			"unknownPane": "Unknown Emberglass pane {n}",
+			"whisperLogTitle": "破曉所聞低語",
+			"whisperLogTitleUpper": "破曉所聞低語",
+			"finalWhisperMark": "∞  最終低語於每次破曉歸來。"
+		},
+		"settings": {
+			"audio": "音訊",
+			"debugLabel": "Debug",
+			"display": "顯示",
+			"eraseAll": "抹除全部進度",
+			"eraseEverything": "抹除一切",
+			"fullscreen": "全螢幕",
+			"ledger": "總帳",
+			"master": "主音量",
+			"motion": "動態",
+			"music": "音樂",
+			"mute": "靜音",
+			"off": "關",
+			"on": "開",
+			"reduceMotion": "減少動態",
+			"resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
+			"resetConfirmTitle": "重置存檔？",
+			"resetSave": "重置存檔",
+			"resetWarn": "將抹去當前攀行與全部守夜進度。此舉無法復原。",
+			"screenShake": "畫面震動",
+			"sfx": "音效",
+			"title": "設定",
+			"unmute": "取消靜音",
+			"volumeTip": "{name} 音量",
+			"vsync": "垂直同步",
+			"resetConfirmPlain": "這將抹去你當前的攀行與整個守夜——功績、解鎖、誓言、紀念碑與低語。\n\n此舉無法復原。",
+			"eraseAllTitle": "抹除全部進度？"
+		},
+		"shop": {
+			"cardRemoval": {
+				"desc": "Remove a card from your deck forever.",
+				"pickSub": "Cut the dead weight.",
+				"pickTitle": "Remove a Card",
+				"title": "Card Removal"
+			},
+			"greeting": "「黃金換榮耀，異鄉人。對注定之人——價錢公道。」",
+			"leave": "離開商店",
+			"potionSlotsFull": "Potion slots full!",
+			"title": "商人",
+			"leaveUpper": "離開商店"
+		},
+		"smoke": {
+			"hello": "Hello, {name}"
+		},
+		"treasure": {
+			"coinsOnly": "Only coins remain — <b class=\"gold-num\">+{gold} gold</b>.",
+			"empty": "The chest lies empty.",
+			"openBtn": "打開箱子",
+			"relicClaim": "You claim <b style=\"color:{tone}\">{name}</b> — <i>{text}</i>",
+			"sub": "沉重的金箍箱。要打開嗎？",
+			"title": "寶藏",
+			"continue": "繼續",
+			"relicClaimPlain": "You claim [color=#{tone}]{name}[/color] — [i]{text}[/i]"
+		},
+		"vigil": {
+			"deeds": "功績",
+			"roseWindow": "玫瑰窗",
+			"title": "守夜",
+			"return": "返回",
+			"ashwarden": "灰衛",
+			"stats": "{runs} 次攀行 · {wins} 次破曉 · 最深誓言：{vow}",
+			"deedsTab": "功績",
+			"roseTab": "玫瑰窗"
+		},
+		"pilgrimage": {
+			"survey": "滾動或拖曳以巡視朝聖之路",
+			"surveyChoose": "滾動或拖曳 · 選擇一盞已燃提燈",
+			"summit": "頂點",
+			"roadEnds": "此路已盡",
+			"unlitWay": "未燃之路",
+			"roseWindow": "玫瑰窗",
+			"hearth": "爐火",
+			"awaits": "{0} — {1} 在等待",
+			"notNow": "尚早"
+		},
+		"credits": {
+			"title": "製作人員",
+			"headingBrand": "琉璃誓言",
+			"bodyBrand": "Roguelite 卡牌构筑 · 作者 fol2",
+			"headingGlass": "琉璃",
+			"bodyGlass": "自 roguecardv2 平行移植（網頁參考 0.5.0+6e06911）。",
+			"headingMusic": "音樂 — 彩繪玻璃",
+			"headingSound": "音效 — 灰璃守夜",
+			"headingType": "字型",
+			"bodyCinzel": "Cinzel — Natanael Gama（OFL）",
+			"bodyAlegreya": "Alegreya — Juan Pablo del Peral, Huerta Tipográfica（OFL）",
+			"bodyNoto": "Noto Sans TC — Google（OFL）",
+			"headingEngine": "引擎",
+			"bodyEngine": "以 Godot 引擎製作",
+			"close": "關閉",
+			"engineLicences": "引擎授權",
+			"fontLicences": "字型授權（OFL）",
+			"components": "組件",
+			"licenceTexts": "授權全文",
+			"themeLine": "灰璃守夜"
+		},
+		"omen": {
+			"prefix": "兆示 - "
+		},
+		"language": {
+			"label": "語言",
+			"en": "English",
+			"zhHant": "繁體中文",
+			"deferNote": "將於下一畫面生效。"
+		}
+	},
+	"content": {
+		"acts": {
+			"0": {
+				"bossName": "根心",
+				"name": "灰燼樹林"
+			},
+			"1": {
+				"bossName": "利維坦之喉",
+				"name": "沉沒之城"
+			},
+			"2": {
+				"bossName": "永恆主宰",
+				"name": "黑曜尖塔"
+			}
+		},
+		"affixes": {
+			"adamant": {
+				"name": "Adamant",
+				"text": "The first time its glass would shatter, it holds."
+			},
+			"cinderVeined": {
+				"name": "Cinder-Veined",
+				"text": "Its blows leave 1 Smolder on you."
+			},
+			"emberFat": {
+				"name": "Ember-Fat",
+				"text": "Slaying it pays double gold."
+			},
+			"fervent": {
+				"name": "Fervent",
+				"text": "Begins the fight with 2 Fervor."
+			},
+			"veiled": {
+				"name": "Veiled",
+				"text": "Begins the fight behind 15 Ward."
+			},
+			"vitrified": {
+				"name": "Vitrified",
+				"text": "Thicker glass: +2 facets and +15% HP."
+			}
+		},
+		"arts": {
+			"ashfall": {
+				"name": "Ashfall",
+				"text": "The Ashwarden's breath. Apply 3 Smolder to ALL enemies and gain 5 Ward."
+			},
+			"beacon": {
+				"name": "Beacon",
+				"text": "Raise the light. Your attacks chip 1 extra facet this turn."
+			},
+			"emberveil": {
+				"name": "Emberveil",
+				"text": "A curtain of held fire. Gain 12 Ward."
+			},
+			"flare": {
+				"name": "Flare",
+				"text": "The lantern vents. Deal 7 damage to ALL enemies and apply 2 Smolder."
+			},
+			"mendglass": {
+				"name": "Mendglass",
+				"text": "Warm light knits the cracks. Heal 8 HP."
+			},
+			"stoke": {
+				"name": "Stoke",
+				"text": "Feed the flame to the hand that carries it. Gain 1 Energy and draw 2 cards."
+			}
+		},
+		"aspects": {
+			"ashwarden": {
+				"blurb": "Smoke given a shape. Lets the Smolder do the killing and kindles its own hand to feed the lantern. Slower, but it endures — and everything it touches burns.",
+				"name": "The Ashwarden"
+			},
+			"duskblade": {
+				"blurb": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a versatile climber for any night.",
+				"name": "The Duskblade"
+			}
+		},
+		"boons": {
+			"emberFlask": {
+				"name": "Ember Flask",
+				"text": "Pack a Fire Phial and a Draught of Vigor."
+			},
+			"fullPurse": {
+				"name": "A Full Purse",
+				"text": "Set out with 120 extra gold."
+			},
+			"keenEye": {
+				"name": "A Keeper's Eye",
+				"text": "Begin with a random relic."
+			},
+			"pilgrimsCache": {
+				"name": "Pilgrim's Cache",
+				"text": "Gain 60 gold and a Ward Phial."
+			},
+			"temperedGlass": {
+				"name": "Tempered Glass",
+				"text": "Raise your Max HP by 14."
+			},
+			"twinPhials": {
+				"name": "Twin Phials",
+				"text": "Pack a Swift Phial and an Energy Phial."
+			},
+			"venomPouch": {
+				"name": "A Pouch of Ash",
+				"text": "Gain 40 gold and a Venom Phial."
+			},
+			"warmHearth": {
+				"name": "A Warm Hearth",
+				"text": "Mend to full and gain 6 Max HP."
+			}
+		},
+		"cards": {
+			"aegis": {
+				"name": "大教堂璃",
+				"text": "獲得 #30# 點護光。 燃燼.",
+				"textUp": "獲得 #40# 點護光。 燃燼."
+			},
+			"agility": {
+				"name": "琉璃師沉穩",
+				"text": "獲得 2 Poise.",
+				"textUp": "獲得 3 Poise."
+			},
+			"annihilate": {
+				"name": "安魂",
+				"text": "造成 @9@ 點傷害 and apply 3 Smolder to 所有敵人.",
+				"textUp": "造成 @12@ 點傷害 and apply 4 Smolder to 所有敵人."
+			},
+			"ascension": {
+				"name": "Rising Litany",
+				"text": "At the start of each turn, gain 2 Fervor.",
+				"textUp": "At the start of each turn, gain 3 Fervor."
+			},
+			"ashBite": {
+				"name": "灰咬",
+				"text": "造成 @5@ 點傷害。 施加 2 層陰燃。",
+				"textUp": "造成 @7@ 點傷害。 施加 3 層陰燃。"
+			},
+			"ashenChoir": {
+				"name": "灰合唱",
+				"text": "施加 4 層陰燃。 When smoldering glass dies, its fire leaps on.",
+				"textUp": "施加 6 層陰燃。 When smoldering glass dies, its fire leaps on."
+			},
+			"bastion": {
+				"name": "退火",
+				"text": "Ward no longer expires at the start of your turn."
+			},
+			"bloodRite": {
+				"name": "血換油",
+				"text": "Lose 3 HP. 獲得 2 能量.",
+				"textUp": "Lose 3 HP. 獲得 3 能量."
+			},
+			"brace": {
+				"name": "持光",
+				"text": "獲得 #8# 點護光。",
+				"textUp": "獲得 #11# 點護光。"
+			},
+			"bulwark": {
+				"name": "璃牆",
+				"text": "獲得 #13# 點護光。",
+				"textUp": "獲得 #18# 點護光。"
+			},
+			"burn": {
+				"name": "Cinder",
+				"text": "Unplayable. At the end of your turn, take 2 點傷害 if this is in your hand."
+			},
+			"catalyst": {
+				"name": "風箱",
+				"text": "Double an enemy's 層陰燃。 燃燼.",
+				"textUp": "Triple an enemy's 層陰燃。 燃燼."
+			},
+			"chisel": {
+				"name": "鑿刻",
+				"text": "造成 @4@ 點傷害。 琢擊 1 extra 璃面.",
+				"textUp": "造成 @7@ 點傷害。 琢擊 1 extra 璃面."
+			},
+			"cleave": {
+				"name": "琉璃扇斬",
+				"text": "造成 @6@ 點傷害 to 所有敵人.",
+				"textUp": "造成 @9@ 點傷害 to 所有敵人."
+			},
+			"cripple": {
+				"name": "開溝",
+				"text": "Snuff an enemy's fire: it loses 2 Fervor. 燃燼.",
+				"textUp": "Snuff an enemy's fire: it loses 3 Fervor. 燃燼."
+			},
+			"defend": {
+				"name": "護光",
+				"text": "獲得 #5# 點護光。",
+				"textUp": "獲得 #8# 點護光。"
+			},
+			"deflect": {
+				"name": "折射",
+				"text": "獲得 #6# 點護光。 抽 1 張牌。",
+				"textUp": "獲得 #9# 點護光。 抽 1 張牌。"
+			},
+			"devour": {
+				"name": "吞焰",
+				"text": "造成 @10@ 點傷害。 If this kills, swallow its fire: gain 3 餘燼s and heal 4. 燃燼.",
+				"textUp": "造成 @13@ 點傷害。 If this kills, swallow its fire: gain 4 餘燼s and heal 6. 燃燼."
+			},
+			"eclipseSlash": {
+				"name": "蝕月斬",
+				"text": "造成 @7@ 點傷害。 施加 1 Cracked.",
+				"textUp": "造成 @9@ 點傷害。 施加 2 Cracked."
+			},
+			"emberdance": {
+				"name": "餘燼舞",
+				"text": "Spill your lantern: gain 3 點護光 for each 餘燼 spent. 燃燼.",
+				"textUp": "Spill your lantern: gain 4 點護光 for each 餘燼 spent. 燃燼."
+			},
+			"empower": {
+				"name": "內焰",
+				"text": "獲得 2 Fervor.",
+				"textUp": "獲得 3 Fervor."
+			},
+			"executioner": {
+				"name": "斷層",
+				"text": "造成 @8@ 點傷害。 Cracked enemies take 6 more.",
+				"textUp": "造成 @11@ 點傷害。 Cracked enemies take 8 more."
+			},
+			"firstSpark": {
+				"name": "初火",
+				"text": "抽 1 張牌。 燃燼.",
+				"textUp": "抽 2 張牌。 燃燼."
+			},
+			"flawlessForm": {
+				"name": "無瑕形",
+				"text": "獲得 #8# 點護光。 If your glass is untouched this combat, gain #8# more.",
+				"textUp": "獲得 #11# 點護光。 If your glass is untouched this combat, gain #11# more."
+			},
+			"flurry": {
+				"name": "裂片風暴",
+				"text": "造成 @2@ 點傷害 3 times.",
+				"textUp": "造成 @3@ 點傷害 3 times."
+			},
+			"fortify": {
+				"name": "鏡光",
+				"text": "Double your 點護光。",
+				"textUp": "Double your 點護光。"
+			},
+			"frenzy": {
+				"name": "過輝",
+				"text": "Your glass runs too hot: gain 2 Cracked. At the start of each turn, gain 1 能量.",
+				"textUp": "Your glass runs too hot: gain 1 Cracked. At the start of each turn, gain 1 能量."
+			},
+			"guardedStrike": {
+				"name": "守衛之刃",
+				"text": "造成 @5@ 點傷害。 獲得 #4# 點護光。",
+				"textUp": "造成 @7@ 點傷害。 獲得 #6# 點護光。"
+			},
+			"heavyBlow": {
+				"name": "採石重錘",
+				"text": "造成 @12@ 點傷害。 琢擊 1 extra 璃面.",
+				"textUp": "造成 @16@ 點傷害。 琢擊 2 extra 璃面s."
+			},
+			"hex": {
+				"name": "Hex",
+				"text": "Unplayable. At the end of your turn, lose 1 HP if this is in your hand. Refuses the fire."
+			},
+			"ironSkin": {
+				"name": "玻化",
+				"text": "At the end of your turn, gain 3 點護光。",
+				"textUp": "At the end of your turn, gain 4 點護光。"
+			},
+			"leechBlade": {
+				"name": "渴璃",
+				"text": "造成 @9@ 點傷害。 Heal for half the unblocked 點傷害。",
+				"textUp": "造成 @13@ 點傷害。 Heal for half the unblocked 點傷害。"
+			},
+			"limitBreak": {
+				"name": "退火儀",
+				"text": "琢擊 2 璃面s of every enemy. 燃燼.",
+				"textUp": "琢擊 3 璃面s of every enemy. 燃燼."
+			},
+			"lunge": {
+				"name": "黯切",
+				"text": "造成 @6@ 點傷害。 施加 1 Dimmed.",
+				"textUp": "造成 @9@ 點傷害。 施加 2 Dimmed."
+			},
+			"momentum": {
+				"name": "磨鋒",
+				"text": "造成 @6@ 點傷害。 Each play, this card gains +4 點傷害 this combat.",
+				"textUp": "造成 @8@ 點傷害。 Each play, this card gains +6 點傷害 this combat."
+			},
+			"nightSight": {
+				"name": "夜視",
+				"text": "At the start of each turn, draw 1 extra 張牌。"
+			},
+			"novaflare": {
+				"name": "新星焰",
+				"text": "造成 @3@ 點傷害 for every 餘燼 in your lantern.",
+				"textUp": "造成 @4@ 點傷害 for every 餘燼 in your lantern."
+			},
+			"oblivionStrike": {
+				"name": "鐘擊",
+				"text": "造成 @30@ 點傷害。 琢擊 2 extra 璃面s.",
+				"textUp": "造成 @40@ 點傷害。 琢擊 3 extra 璃面s."
+			},
+			"offering": {
+				"name": "火堆稅",
+				"text": "Burn every other card in your hand — each feeds the lantern. 抽 3 張牌。 燃燼.",
+				"textUp": "Burn every other card in your hand — each feeds the lantern. 抽 4 張牌。 燃燼."
+			},
+			"phantomBlades": {
+				"name": "幻影刃",
+				"text": "造成 @3@ 點傷害 for each card in your hand.",
+				"textUp": "造成 @4@ 點傷害 for each card in your hand."
+			},
+			"preparation": {
+				"name": "火絨",
+				"text": "抽 2 張牌。 燃燼.",
+				"textUp": "抽 2 張牌。"
+			},
+			"pyreheart": {
+				"name": "火堆心",
+				"text": "At the start of each turn, gain 1 餘燼."
+			},
+			"quakeblow": {
+				"name": "震擊",
+				"text": "造成 @8@ 點傷害。 琢擊 2 extra 璃面s.",
+				"textUp": "造成 @11@ 點傷害。 琢擊 3 extra 璃面s."
+			},
+			"quickSlash": {
+				"name": "閃爍",
+				"text": "造成 @4@ 點傷害。 抽 1 張牌。",
+				"textUp": "造成 @6@ 點傷害。 抽 1 張牌。"
+			},
+			"regrowth": {
+				"name": "爐輝",
+				"text": "At the end of your turn, heal 2 HP.",
+				"textUp": "At the end of your turn, heal 3 HP."
+			},
+			"resonantLance": {
+				"name": "共鳴槍",
+				"text": "造成 @7@ 點傷害。 Deals double to Staggered or Cracked glass.",
+				"textUp": "造成 @10@ 點傷害。 Deals double to Staggered or Cracked glass."
+			},
+			"shardstorm": {
+				"name": "Shardstorm",
+				"text": "造成 @5@ 點傷害 to 所有敵人 twice.",
+				"textUp": "造成 @7@ 點傷害 to 所有敵人 twice."
+			},
+			"sidestep": {
+				"name": "璃步",
+				"text": "獲得 #3# 點護光。 抽 1 張牌。",
+				"textUp": "獲得 #5# 點護光。 抽 1 張牌。"
+			},
+			"smother": {
+				"name": "窒息",
+				"text": "獲得 #5# 點護光。 施加 2 層陰燃。",
+				"textUp": "獲得 #8# 點護光。 施加 3 層陰燃。"
+			},
+			"strike": {
+				"name": "刃鋒",
+				"text": "造成 @6@ 點傷害。",
+				"textUp": "造成 @9@ 點傷害。"
+			},
+			"surge": {
+				"name": "擦燃",
+				"text": "獲得 1 能量. 抽 1 張牌。 燃燼.",
+				"textUp": "獲得 2 能量. 抽 1 張牌。 燃燼."
+			},
+			"tempest": {
+				"name": "雹璃",
+				"text": "造成 @4@ 點傷害 to 所有敵人 twice.",
+				"textUp": "造成 @6@ 點傷害 to 所有敵人 twice."
+			},
+			"tithe": {
+				"name": "窗稅",
+				"text": "獲得 2 餘燼s. 抽 1 張牌。",
+				"textUp": "獲得 3 餘燼s. 抽 1 張牌。"
+			},
+			"toxicMist": {
+				"name": "灰雲",
+				"text": "施加 3 Smolder to 所有敵人.",
+				"textUp": "施加 5 Smolder to 所有敵人."
+			},
+			"twinFangs": {
+				"name": "雙碎片",
+				"text": "造成 @4@ 點傷害 twice.",
+				"textUp": "造成 @6@ 點傷害 twice."
+			},
+			"unreadablePage": {
+				"name": "The Unreadable Page",
+				"text": "It cannot be played or removed. Carry it to dawn and it may read itself."
+			},
+			"uppercut": {
+				"name": "鳴擊",
+				"text": "造成 @10@ 點傷害。 琢擊 1 extra 璃面. 施加 1 Dimmed.",
+				"textUp": "造成 @13@ 點傷害。 琢擊 2 extra 璃面s. 施加 2 Dimmed."
+			},
+			"venomStrike": {
+				"name": "餘燼噬",
+				"text": "造成 @4@ 點傷害。 施加 3 層陰燃。",
+				"textUp": "造成 @6@ 點傷害。 施加 4 層陰燃。"
+			},
+			"virulence": {
+				"name": "餘燼牙",
+				"text": "Whenever you play an Attack, apply 1 Smolder to the enemy."
+			},
+			"warCry": {
+				"name": "碎裂聖詠",
+				"text": "施加 1 Dimmed and 1 Cracked to 所有敵人.",
+				"textUp": "施加 2 Dimmed and 2 Cracked to 所有敵人."
+			},
+			"wound": {
+				"name": "Shard",
+				"text": "Unplayable. Broken glass rattling in your deck."
+			}
+		},
+		"deeds": {
+			"ashSermon": {
+				"desc": "Let Smolder claim 10 lives",
+				"name": "Sermon of Ash"
+			},
+			"darkWalker": {
+				"desc": "Enter 6 unlit lanterns",
+				"name": "Walker of Unlit Ways"
+			},
+			"firstDawn": {
+				"desc": "Reach the sunrise once",
+				"name": "The First Dawn"
+			},
+			"hundredShards": {
+				"desc": "Slay 100 creatures",
+				"name": "A Hundred Shards"
+			},
+			"lanternFed": {
+				"desc": "Kindle 20 cards by hand",
+				"name": "The Lantern Fed"
+			},
+			"paneBreaker": {
+				"desc": "Shatter 15 facets",
+				"name": "Breaker of Panes"
+			},
+			"spendthrift": {
+				"desc": "Spend 30 embers on Lantern Arts",
+				"name": "Fire Given Freely"
+			},
+			"untouched": {
+				"desc": "Win 3 fights without a scratch",
+				"name": "The Glass Untouched"
+			}
+		},
+		"enemies": {
+			"abyssalKnight": {
+				"moves": {
+					"blade": {
+						"name": "Voidblade"
+					},
+					"condemn": {
+						"name": "Condemn"
+					},
+					"execute": {
+						"name": "Execute"
+					},
+					"oath": {
+						"name": "Dark Oath"
+					}
+				},
+				"name": "Abyssal Knight"
+			},
+			"alphaFang": {
+				"moves": {
+					"howl": {
+						"name": "Alpha Howl"
+					},
+					"savage": {
+						"name": "Savage"
+					},
+					"throat": {
+						"name": "Throat Rip"
+					}
+				},
+				"name": "Alpha Duskfang"
+			},
+			"ashAcolyte": {
+				"moves": {
+					"ritual": {
+						"name": "Dark Ritual"
+					},
+					"scorch": {
+						"name": "Scorch"
+					}
+				},
+				"name": "Ash Acolyte"
+			},
+			"chaosHound": {
+				"moves": {
+					"bite": {
+						"name": "Chaos Bite"
+					},
+					"howl": {
+						"name": "Warp Howl"
+					}
+				},
+				"name": "Chaos Hound"
+			},
+			"deepmaw": {
+				"moves": {
+					"bite": {
+						"name": "Bite"
+					},
+					"lure": {
+						"name": "Luminous Lure"
+					},
+					"swallow": {
+						"name": "Swallow"
+					}
+				},
+				"name": "Deepmaw"
+			},
+			"drownedOne": {
+				"moves": {
+					"claw": {
+						"name": "Claw"
+					},
+					"frenzy": {
+						"name": "Frenzy"
+					},
+					"gurgle": {
+						"name": "Gurgle"
+					}
+				},
+				"name": "Drowned One"
+			},
+			"duskfang": {
+				"moves": {
+					"bite": {
+						"name": "Bite"
+					},
+					"howl": {
+						"name": "Howl"
+					},
+					"rend": {
+						"name": "Rend"
+					}
+				},
+				"name": "Duskfang"
+			},
+			"gloomslime": {
+				"moves": {
+					"harden": {
+						"name": "Congeal"
+					},
+					"ooze": {
+						"name": "Corrosive Ooze"
+					},
+					"slam": {
+						"name": "Slam"
+					}
+				},
+				"name": "Gloomslime"
+			},
+			"gravewarden": {
+				"moves": {
+					"bulwark": {
+						"name": "Bulwark"
+					},
+					"crush": {
+						"name": "Crush"
+					},
+					"entomb": {
+						"name": "Entomb"
+					}
+				},
+				"name": "Gravewarden"
+			},
+			"heraldOfEnd": {
+				"moves": {
+					"doom": {
+						"name": "Doomsong"
+					},
+					"flame": {
+						"name": "Black Flame"
+					},
+					"reave": {
+						"name": "Reave"
+					},
+					"rise": {
+						"name": "Apotheosis"
+					}
+				},
+				"name": "Herald of the End"
+			},
+			"leviathan": {
+				"moves": {
+					"brine": {
+						"name": "Black Brine"
+					},
+					"cataclysm": {
+						"name": "Cataclysm"
+					},
+					"consume": {
+						"name": "Consume the Deep"
+					},
+					"crush": {
+						"name": "Crushing Jaws"
+					},
+					"tide": {
+						"name": "Rising Tide"
+					}
+				},
+				"name": "Leviathan's Maw"
+			},
+			"mirelurker": {
+				"moves": {
+					"barb": {
+						"name": "Barb"
+					},
+					"burrow": {
+						"name": "Burrow"
+					},
+					"sting": {
+						"name": "Venom Sting"
+					}
+				},
+				"name": "Mirelurker"
+			},
+			"obsidianGolem": {
+				"moves": {
+					"harden": {
+						"name": "Harden"
+					},
+					"pound": {
+						"name": "Pound"
+					},
+					"quake": {
+						"name": "Quake"
+					}
+				},
+				"name": "Obsidian Golem"
+			},
+			"rootheart": {
+				"moves": {
+					"awaken": {
+						"name": "Awaken"
+					},
+					"entangle": {
+						"name": "Entangle"
+					},
+					"lash": {
+						"name": "Root Lash"
+					},
+					"slam": {
+						"name": "Colossal Slam"
+					},
+					"spores": {
+						"name": "Choking Spores"
+					}
+				},
+				"name": "The Rootheart"
+			},
+			"shade": {
+				"moves": {
+					"gloom": {
+						"name": "Gloom"
+					},
+					"slash": {
+						"name": "Dual Slash"
+					},
+					"vanish": {
+						"name": "Vanish"
+					}
+				},
+				"name": "Shade"
+			},
+			"shellback": {
+				"moves": {
+					"jet": {
+						"name": "Water Jet"
+					},
+					"shell": {
+						"name": "Shell Up"
+					},
+					"snap": {
+						"name": "Snap"
+					}
+				},
+				"name": "Shellback"
+			},
+			"siren": {
+				"moves": {
+					"mend": {
+						"name": "Mend"
+					},
+					"rend": {
+						"name": "Talon Rend"
+					},
+					"shriek": {
+						"name": "Shriek"
+					},
+					"song": {
+						"name": "Dirge"
+					}
+				},
+				"name": "Siren"
+			},
+			"sovereign": {
+				"moves": {
+					"annihilation": {
+						"name": "Annihilation"
+					},
+					"ascend": {
+						"name": "Ascend"
+					},
+					"gravitas": {
+						"name": "Gravitas"
+					},
+					"ruin": {
+						"name": "Word of Ruin"
+					},
+					"scepter": {
+						"name": "Scepter Strike"
+					},
+					"starfall": {
+						"name": "Starfall"
+					}
+				},
+				"name": "The Eternal Sovereign"
+			},
+			"sporeling": {
+				"moves": {
+					"grow": {
+						"name": "Bloom"
+					},
+					"spit": {
+						"name": "Spore Spit"
+					}
+				},
+				"name": "Sporeling"
+			},
+			"starCultist": {
+				"moves": {
+					"ritual": {
+						"name": "Star Ritual"
+					},
+					"scorch": {
+						"name": "Starfire"
+					}
+				},
+				"name": "Star Cultist"
+			},
+			"thornling": {
+				"moves": {
+					"bristle": {
+						"name": "Bristle"
+					},
+					"burst": {
+						"name": "Spike Burst"
+					},
+					"prick": {
+						"name": "Prick"
+					}
+				},
+				"name": "Thornling"
+			},
+			"tidecaller": {
+				"moves": {
+					"bolt": {
+						"name": "Water Bolt"
+					},
+					"surge": {
+						"name": "Tidal Blessing"
+					},
+					"undertow": {
+						"name": "Undertow"
+					}
+				},
+				"name": "Tidecaller"
+			},
+			"voidColossus": {
+				"moves": {
+					"fortify": {
+						"name": "Fortify"
+					},
+					"shatter": {
+						"name": "Shatter"
+					},
+					"slam": {
+						"name": "Void Slam"
+					}
+				},
+				"name": "Voidforged Colossus"
+			},
+			"voidWisp": {
+				"moves": {
+					"siphon": {
+						"name": "Siphon"
+					},
+					"zap": {
+						"name": "Void Zap"
+					}
+				},
+				"name": "Void Wisp"
+			},
+			"voltEel": {
+				"moves": {
+					"coil": {
+						"name": "Coil"
+					},
+					"discharge": {
+						"name": "Discharge"
+					},
+					"shock": {
+						"name": "Shock"
+					}
+				},
+				"name": "Voltaic Eel"
+			},
+			"watcherEye": {
+				"moves": {
+					"beam": {
+						"name": "Ruin Beam"
+					},
+					"blink": {
+						"name": "Blink"
+					},
+					"gaze": {
+						"name": "Piercing Gaze"
+					}
+				},
+				"name": "Watcher Eye"
+			},
+			"waylayer": {
+				"moves": {
+					"smoke": {
+						"name": "Smokescreen"
+					},
+					"stab": {
+						"name": "Stab"
+					},
+					"trick": {
+						"name": "Dirty Trick"
+					}
+				},
+				"name": "Waylayer"
+			}
+		},
+		"events": {
+			"cursedIdol": {
+				"choices": {
+					"0": {
+						"label": "Take it",
+						"sub": "Gain a relic. Gain a Hex."
+					},
+					"1": {
+						"label": "Leave it",
+						"sub": ""
+					}
+				},
+				"name": "The Cursed Idol",
+				"text": "A jade idol sits on a plinth of skulls, radiating a soft warmth. It has clearly been left here for a reason."
+			},
+			"emberFountain": {
+				"choices": {
+					"0": {
+						"label": "Bathe",
+						"sub": "Heal 35% of your Max HP."
+					},
+					"1": {
+						"label": "Bottle it",
+						"sub": "Gain a Phial of Dawn."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "Fountain of Embers",
+				"text": "Liquid light pools in a cracked basin, throwing sparks that do not burn. It smells of summer and old victories."
+			},
+			"fleshTrader": {
+				"choices": {
+					"0": {
+						"label": "Trade",
+						"sub": "Lose 8 Max HP. Gain a relic."
+					},
+					"1": {
+						"label": "Refuse",
+						"sub": ""
+					}
+				},
+				"name": "The Flesh Trader",
+				"text": "\"Vitality is a currency,\" purrs a thing wearing a merchant's coat. \"And you look flush with it.\" Long fingers open to reveal a relic."
+			},
+			"forge": {
+				"choices": {
+					"0": {
+						"label": "Temper",
+						"sub": "Upgrade a card."
+					},
+					"1": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "The Forgotten Forge",
+				"text": "An anvil of black star-metal, still warm. Hammers hang in racks, waiting for hands that died an age ago."
+			},
+			"forgottenShrine": {
+				"choices": {
+					"0": {
+						"label": "Pray",
+						"sub": "Remove a card from your deck."
+					},
+					"1": {
+						"label": "Desecrate",
+						"sub": "Gain 90 gold. Gain a Hex."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "Forgotten Shrine",
+				"text": "A moss-eaten shrine hums with old power. Offerings of bone and silver litter its base. Something watches from inside the stone."
+			},
+			"gambler": {
+				"choices": {
+					"0": {
+						"label": "Bet 40 gold",
+						"sub": "45% chance to win 110 gold."
+					},
+					"1": {
+						"label": "Walk away",
+						"sub": ""
+					}
+				},
+				"name": "The Bone Gambler",
+				"rolls": {
+					"lose": {
+						"text": "The bones rattle against you. The wager is lost."
+					},
+					"win": {
+						"text": "The bones land in your favour. You claim 110 gold."
+					}
+				},
+				"text": "A grinning figure rattles a cup of knuckle-bones. \"One throw, stranger. Fortune loves the reckless.\""
+			},
+			"library": {
+				"choices": {
+					"0": {
+						"label": "Study",
+						"sub": "Choose 1 of 5 cards to add to your deck."
+					},
+					"1": {
+						"label": "Rest among the stacks",
+						"sub": "Heal 20% of your Max HP."
+					}
+				},
+				"name": "The Drowned Library",
+				"text": "Shelves of waterlogged grimoires stretch into the dark. Most are pulp — but a few pages still glow faintly."
+			},
+			"mirror": {
+				"choices": {
+					"0": {
+						"label": "Reflect",
+						"sub": "Duplicate a card in your deck."
+					},
+					"1": {
+						"label": "Shatter it",
+						"sub": "Lose 6 HP. Remove a card from your deck."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "The Silvered Mirror",
+				"text": "A tall mirror stands in the rubble, unbroken. Your reflection moves half a breath behind you — and it is smiling."
+			},
+			"ruinedCamp": {
+				"choices": {
+					"0": {
+						"label": "Rest",
+						"sub": "Heal 15% of your Max HP."
+					},
+					"1": {
+						"label": "Scavenge",
+						"sub": "Gain 45 gold and a random potion."
+					}
+				},
+				"name": "Ruined Camp",
+				"text": "A campfire, still smoldering. Bedrolls, torn. Whoever slept here left in a hurry — and left their packs behind."
+			},
+			"voidChest": {
+				"choices": {
+					"0": {
+						"label": "Open it",
+						"sub": "It might hold a relic... or teeth."
+					},
+					"1": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "Humming Chest",
+				"text": "A black iron chest sits alone in the gloom, humming a note you feel in your teeth. Its lock is already broken."
+			},
+			"woundedKnight": {
+				"choices": {
+					"0": {
+						"label": "Aid him",
+						"sub": "Lose 8 HP. He rewards you with a relic."
+					},
+					"1": {
+						"label": "Loot him",
+						"sub": "Gain 65 gold. Gain a Hex."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "The Wounded Knight",
+				"text": "A knight slumps against a shattered pillar, breath rattling behind a crushed visor. One gauntlet clutches a relic; the other beckons you closer."
+			}
+		},
+		"omens": {
+			"ashfall": {
+				"name": "Ashfall",
+				"text": "Ash chokes every fire: enemies begin combat with 2 Smolder, but their blows leave 1 Smolder on you."
+			},
+			"eighthOmen": {
+				"name": "The Eighth Omen",
+				"text": "Every lesser battle bears a title. The broken words follow every floor."
+			},
+			"emberWind": {
+				"name": "Ember Wind",
+				"text": "Sparks ride the wind into your lantern: begin each combat with 2 Embers, but draw 4 cards instead of 5."
+			},
+			"heavyAir": {
+				"name": "Heavy Air",
+				"text": "The air holds light like water: all Ward gained is increased by a quarter — yours and theirs."
+			},
+			"hungryDark": {
+				"name": "The Hungry Dark",
+				"text": "The dark eats coin but sharpens choice: shop prices are a quarter higher, and card rewards offer 1 more choice."
+			},
+			"longNight": {
+				"name": "The Long Night",
+				"text": "The climb stretches on: enemies carry 12% more life, but every victory pays 40% more gold."
+			},
+			"thinGlass": {
+				"name": "Thin Glass",
+				"text": "Tonight all glass runs thin: every facet gauge is 1 smaller, but enemy blows strike 2 harder."
+			},
+			"waningMoon": {
+				"name": "Waning Moon",
+				"text": "The moon spends her last light on you: your first card each turn costs 1 less, but rest sites heal only 20%."
+			}
+		},
+		"potions": {
+			"block": {
+				"name": "Phial of Held Light",
+				"text": "Gain 12 Ward."
+			},
+			"energy": {
+				"name": "Emberphial",
+				"text": "Gain 3 Embers."
+			},
+			"fire": {
+				"name": "Stormglass Phial",
+				"text": "Deal 20 damage to an enemy."
+			},
+			"healing": {
+				"name": "Phial of Dawn",
+				"text": "Heal 20 HP."
+			},
+			"strength": {
+				"name": "Phial of Fervor",
+				"text": "Gain 2 Fervor."
+			},
+			"swift": {
+				"name": "Inkdraught",
+				"text": "Draw 3 cards."
+			},
+			"venom": {
+				"name": "Smolderphial",
+				"text": "Apply 7 Smolder to an enemy."
+			}
+		},
+		"quests": {
+			"eighthOmen": {
+				"floorEchoes": [
+					"// THE PANE WATCHES //",
+					"// EIGHT IS NOT A NUMBER //",
+					"// CARRY THE WRONG LIGHT UPWARD //",
+					"// THE CROWN IS A MASK //"
+				],
+				"inscription": "Reach dawn beneath the Eighth Omen.",
+				"mode": "Gate",
+				"name": "The Eighth Omen",
+				"resolved": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR."
+			},
+			"hollowLamplighter": {
+				"inscription": "Pay the Hollow Lamplighter five prices along the Unlit Way.",
+				"meetings": [
+					{
+						"accepted": "The next three embers belong to the hollow lantern.",
+						"ask": "Your lantern is noisy. Give me the next three embers it catches.",
+						"cannot": "Promise the embers now. The lantern will pay before you do.",
+						"paid": "Six panes were carried away from a window no wall could hold."
+					},
+					{
+						"ask": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
+						"cannot": "Your purse is warm, but not warm enough.",
+						"paid": "The Pale Ones watch the paths that point above the crown."
+					},
+					{
+						"ask": "The Spire counts the vessel. Give me twelve measures of yours.",
+						"cannot": "I will not hollow you below thirty. Return with a larger vessel.",
+						"paid": "Your standing dead have seen the stair above the Sovereign."
+					},
+					{
+						"ask": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+						"cannot": "You have spent the gift already. Bring me one that is still yours.",
+						"paid": "The empty lantern is the token that purchases an audience with the mask."
+					},
+					{
+						"ask": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
+						"cannot": "One heartbeat is enough. Refusal is the only poverty left.",
+						"paid": "Light the panes. The door will know you."
+					}
+				],
+				"mode": "Trail",
+				"name": "The Hollow Lamplighter"
+			},
+			"ownShade": {
+				"final": "We were never climbing out. We were carrying light to the lock.",
+				"fragments": [
+					"I remember the stone. You walked away before I stopped calling.",
+					"Each climber leaves a shape behind. The Spire has learned to wear ours.",
+					"Above the Sovereign there is no dawn — only a door pretending to be the sky."
+				],
+				"inscription": "Defeat the self that remembers falling. Three shades must fall.",
+				"mode": "Trail",
+				"name": "Your Own Shade"
+			},
+			"paleOnes": {
+				"huntInscription": "Defeat three pale foes and follow the cold motes they leave behind.",
+				"huntName": "Hunt the Pale Ones",
+				"inscription": "Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour.",
+				"mode": "Trail",
+				"name": "The Pale Ones",
+				"progress": [
+					"No mote answers the Lens.",
+					"The first pale mote chills the lantern."
+				]
+			},
+			"unreadablePage": {
+				"inscription": "Win five dawns carrying the Unreadable Page.",
+				"mode": "Trail",
+				"name": "The Unreadable Page",
+				"pages": [
+					"FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
+					"SECOND PAGE — Pale figures carried the shards down so the thing above could not follow.",
+					"THIRD PAGE — A climber died standing and saw a stair where the summit should have ended.",
+					"FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.",
+					"FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown."
+				]
+			},
+			"usurper": {
+				"bought": "Now the summit knows what you carry.",
+				"death": "The mask is broken. Look above.",
+				"inscription": "Carry the lantern with no flame to the summit and unmask the Usurper.",
+				"itemName": "A Lantern with No Flame",
+				"itemText": "Cold glass. No wick. The merchant will not say who left it.",
+				"mode": "Gate",
+				"name": "The Usurper",
+				"poor": "Cold goods, warm price. Come back carrying a dawn's worth of gold."
+			}
+		},
+		"relics": {
+			"ashenCore": {
+				"name": "Ashen Core",
+				"text": "Enemies begin each combat with 3 Smolder."
+			},
+			"basaltIdol": {
+				"name": "Basalt Idol",
+				"text": "Begin each combat with 10 Ward."
+			},
+			"bellOfEndings": {
+				"name": "Bell of Endings",
+				"text": "Whenever glass Shatters, every other enemy takes 4 damage."
+			},
+			"crownOfCinders": {
+				"name": "Crown of Cinders",
+				"text": "Your lantern holds 12 Embers and begins each combat holding 2."
+			},
+			"crownOfTheHearth": {
+				"name": "Crown of the Hearth",
+				"text": "At the end of combat, heal 3 HP for every Ember still in your lantern."
+			},
+			"crownOfTithes": {
+				"name": "Crown of Tithes",
+				"text": "You may kindle twice each turn, and each kindling grants 3 Ward."
+			},
+			"duskmirror": {
+				"name": "Duskmirror",
+				"text": "The first card you play each turn costs 0."
+			},
+			"emberHeart": {
+				"name": "Emberheart",
+				"text": "At the end of combat, heal 3 HP."
+			},
+			"emberLantern": {
+				"name": "Ember Lantern",
+				"text": "Gain 1 extra Energy on your first turn."
+			},
+			"executionersSeal": {
+				"name": "Executioner's Seal",
+				"text": "Every 10th Attack you play deals double damage."
+			},
+			"frozenCore": {
+				"name": "Frozen Core",
+				"text": "Unspent Energy carries over between turns."
+			},
+			"gravebloom": {
+				"name": "Gravebloom",
+				"text": "After combat, if at or below 50% HP, heal 10."
+			},
+			"hollowCrown": {
+				"name": "Hollow Crown",
+				"text": "Gain 1 Energy each turn. The glass dims: on pickup, lose 10 Max HP."
+			},
+			"ironTalisman": {
+				"name": "Iron Talisman",
+				"text": "Every 3rd Attack you play grants 1 Fervor."
+			},
+			"merchantsMark": {
+				"name": "Merchant's Mark",
+				"text": "Shop prices are 25% lower."
+			},
+			"prismCharm": {
+				"name": "Prism Charm",
+				"text": "Your first Shatter each combat spills 2 extra Embers."
+			},
+			"reapersBell": {
+				"name": "Reaper's Bell",
+				"text": "When an enemy dies, gain 1 Energy and draw 1 card."
+			},
+			"riverPearl": {
+				"name": "River Pearl",
+				"text": "Begin each combat with 1 Poise."
+			},
+			"seersOrb": {
+				"name": "Seer's Orb",
+				"text": "Card rewards offer 1 additional choice."
+			},
+			"shatterersCrown": {
+				"name": "Shatterer's Crown",
+				"text": "Enemy glass runs thin: all facet gauges are 1 smaller. Enemies begin with 1 Fervor."
+			},
+			"silkFan": {
+				"name": "Silk Fan",
+				"text": "Every 3rd card you play each combat grants 3 Ward."
+			},
+			"smolderingCoal": {
+				"name": "Smoldering Coal",
+				"text": "Enemies begin each combat with 2 Smolder."
+			},
+			"sunBlossom": {
+				"name": "Sun Blossom",
+				"text": "All healing is increased by 50%."
+			},
+			"sweetRoot": {
+				"name": "Sweet Root",
+				"text": "On pickup: gain 8 Max HP."
+			},
+			"thiefOfWicks": {
+				"name": "Thief of Wicks",
+				"text": "Unlit lanterns pay double bounty."
+			},
+			"thornBand": {
+				"name": "Thorn Band",
+				"text": "Begin each combat with 2 Splinters."
+			},
+			"travelersPack": {
+				"name": "Traveler's Pack",
+				"text": "Draw 2 extra cards on your first turn."
+			},
+			"verdantBranch": {
+				"name": "Verdant Branch",
+				"text": "Whenever a card is Kindled or burned away, draw 1 card."
+			},
+			"vialOfLife": {
+				"name": "Vial of Life",
+				"text": "Heal 2 HP at the start of each combat."
+			},
+			"warFetish": {
+				"name": "War Fetish",
+				"text": "Begin each combat with 1 Fervor."
+			},
+			"wardingCharm": {
+				"name": "Warding Charm",
+				"text": "Enemy attacks that would deal 5 or less damage deal 1."
+			}
+		},
+		"shadeKits": {
+			"ashwarden": {
+				"moves": {
+					"ashbite": {
+						"name": "Remembered Ashbite"
+					},
+					"ashfall": {
+						"name": "First Ash, Last Breath"
+					},
+					"smother": {
+						"name": "Remembered Smother"
+					}
+				}
+			},
+			"duskblade": {
+				"moves": {
+					"chisel": {
+						"name": "Remembered Chisel"
+					},
+					"eclipse": {
+						"name": "Remembered Eclipse"
+					},
+					"spark": {
+						"name": "First Spark, Last Light"
+					}
+				}
+			}
+		},
+		"status": {
+			"barricade": {
+				"desc": "Ward no longer expires.",
+				"name": "Annealed"
+			},
+			"beacon": {
+				"desc": "Attacks chip N extra Facet(s). Fades at end of turn.",
+				"name": "Beacon"
+			},
+			"dex": {
+				"desc": "Ward cards grant +N Ward.",
+				"name": "沉穩"
+			},
+			"emberflow": {
+				"desc": "Gain N Ember(s) at the start of each turn.",
+				"name": "Pyreheart"
+			},
+			"energized": {
+				"desc": "Gain N extra Energy at the start of each turn.",
+				"name": "Alight"
+			},
+			"frail": {
+				"desc": "Ward gained reduced 25%. Wears off each turn.",
+				"name": "脆裂"
+			},
+			"metallicize": {
+				"desc": "Gains N Ward at the end of each turn.",
+				"name": "Vitrified"
+			},
+			"nightsight": {
+				"desc": "Draw N extra card(s) at the start of each turn.",
+				"name": "Night Sight"
+			},
+			"poison": {
+				"desc": "Burns from within: loses N HP at the start of its turn, then Smolder falls by 1. When smoldering glass shatters or dies, the Smolder leaps to another enemy.",
+				"name": "陰燃"
+			},
+			"rampage": {
+				"desc": "Attack grows stronger with each use.",
+				"name": "Crescendo"
+			},
+			"regen": {
+				"desc": "Heals N HP at the end of each turn.",
+				"name": "Warmth"
+			},
+			"ritual": {
+				"desc": "Gains N Fervor at the start of each turn.",
+				"name": "Litany"
+			},
+			"str": {
+				"desc": "The inner fire stoked: attacks deal +N damage.",
+				"name": "熾心"
+			},
+			"thorns": {
+				"desc": "Attackers take N damage back.",
+				"name": "Splinters"
+			},
+			"venomous": {
+				"desc": "Attacks apply N Smolder.",
+				"name": "Emberfang"
+			},
+			"vulnerable": {
+				"desc": "The glass is scored: takes 50% more attack damage. Wears off each turn.",
+				"name": "裂痕"
+			},
+			"weak": {
+				"desc": "The fire gutters: deals 25% less attack damage. Wears off each turn.",
+				"name": "黯淡"
+			}
+		},
+		"variants": {
+			"ownShade1": {
+				"deathDialogue": "I remember the stone. You walked away before I stopped calling.",
+				"dialogue": [],
+				"name": "The Shade That Fell"
+			},
+			"ownShade2": {
+				"deathDialogue": "Each climber leaves a shape behind. The Spire has learned to wear ours.",
+				"dialogue": [],
+				"name": "The Shade That Returned"
+			},
+			"ownShade3": {
+				"deathDialogue": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
+				"dialogue": [],
+				"name": "The Shade That Remembers"
+			},
+			"paleDrownedOne": {
+				"dialogue": [],
+				"name": "Pale Drowned One"
+			},
+			"paleDuskfang": {
+				"dialogue": [],
+				"name": "Pale Duskfang"
+			},
+			"paleVoidWisp": {
+				"dialogue": [],
+				"name": "Pale Void Wisp"
+			},
+			"usurpedSovereign": {
+				"dialogue": [
+					"{aspect}. At last, the lantern brings me a name.",
+					"The Sovereign was a mask. You have paid to meet the face beneath it.",
+					"Break me, and the empty lantern will remember fire."
+				],
+				"name": "The Usurper"
+			}
+		},
+		"vows": {
+			"0": {
+				"desc": "Every creature is harder to break — enemy HP +12%.",
+				"name": "Vow of Iron"
+			},
+			"1": {
+				"desc": "Their blows land heavier — enemy attacks deal +1.",
+				"name": "Vow of Malice"
+			},
+			"2": {
+				"desc": "Bosses armor their cores — boss Facets +1.",
+				"name": "Vow of the Deep"
+			},
+			"3": {
+				"desc": "You climb already cursed — begin every run with a Hex.",
+				"name": "Vow of the Mark"
+			},
+			"4": {
+				"desc": "The dark drinks your rest — campfires heal 20%, not 30%.",
+				"name": "Vow of the Waning"
+			}
+		},
+		"whispers": [
+			"有一種顏色，尖塔拒絕為它命名。",
+			"一隻蒼白的手觸過璃的暗面。",
+			"六處空位在等候，那裡不曾立過窗。",
+			"死者攀行兩次：一次以肉身，一次以記憶。",
+			"無焰的提燈仍是一把鑰匙。",
+			"數一數接不住破曉的窗格。",
+			"一頁字，唯有在頂點倖存之後才能讀。",
+			"第八徵兆不寫在七者之中。",
+			"憔悴的守門人記得你未走的路。",
+			"蒼白微粒如霜，聚在隱縫周圍。",
+			"你的紀念碑並不總是躺下。",
+			"商人櫃下藏著一件冰冷之物。",
+			"破碎符文是完整句子的影子。",
+			"五頁成章；五次代價成供認。",
+			"三次死亡會教你的影子說明白話。",
+			"守夜有一扇窗，雖無牆承載它。",
+			"每片碎片點亮一格餘燼琉璃。",
+			"蒼白者並非在獵你。他們在向上指。",
+			"主宰是戴在最終階下的面具。",
+			"當六扇窗燃起，望向頂點之外。",
+			"王冠之上有一扇封印之門。",
+			"它的銘文等候得比守夜更久。",
+			"帶六片碎片到玫瑰窗。",
+			"攀行仍在繼續。"
+		]
+	}
 }
