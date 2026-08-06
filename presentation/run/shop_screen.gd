@@ -103,7 +103,7 @@ func _build() -> void:
 	column.add_child(_misc)
 
 	_add_stock()
-	var leave: Button = _action_button("LEAVE THE SHOP", true)
+	var leave: Button = _action_button(Locale.active.t("ui.shop.leaveUpper"), true)
 	leave.custom_minimum_size.x = 160
 	leave.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	leave.pressed.connect(_emit_action.bind("leave"))
@@ -127,7 +127,7 @@ func _header() -> HBoxContainer:
 	copy.add_theme_constant_override("separation", 4)
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(copy)
-	var title: Label = _label("THE MERCHANT", 22 if phone_portrait else 26,
+	var title: Label = _label(Locale.active.t("ui.shop.title"), 22 if phone_portrait else 26,
 		RunStyle.PARCHMENT, false)
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	copy.add_child(title)

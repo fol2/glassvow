@@ -71,7 +71,7 @@ func _build() -> void:
 	centre.add_child(column)
 
 	var title: Label = Label.new()
-	title.text = "THE SEALED DOOR"
+	title.text = Locale.active.t("ui.map.sealedDoor.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	title.add_theme_font_size_override("font_size", 28)
@@ -99,7 +99,7 @@ func _build() -> void:
 	# `.ov-sub` is dim in the reference (var(--text-dim), styles.css) — the
 	# payoff lives in the inscription, not here.
 	_sub = Label.new()
-	_sub.text = "Six panes burn behind you. The lock answers, but does not open."
+	_sub.text = Locale.active.t("ui.map.sealedDoor.sub")
 	_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_sub.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
@@ -116,7 +116,7 @@ func _build() -> void:
 	column.add_child(_answer)
 
 	var hold: Label = Label.new()
-	hold.text = "The glass holds fast. The way is not yet cut."
+	hold.text = Locale.active.t("ui.map.holdFast")
 	hold.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hold.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hold.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
@@ -127,7 +127,7 @@ func _build() -> void:
 	# The benchmark's emotional close: italic Cinzel, tracked, brighter than
 	# parchment (.door-inscription, styles.css:2554).
 	var climb: Label = Label.new()
-	climb.text = "the climb continues"
+	climb.text = Locale.active.t("ui.map.sealedDoor.inscription")
 	climb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	climb.add_theme_font_override("font", RunStyle.slanted(GlassStyle.CINZEL_500, 1))
 	climb.add_theme_font_size_override("font_size", 18)
@@ -141,7 +141,7 @@ func _build() -> void:
 	var cta_row: CenterContainer = CenterContainer.new()
 	cta_seat.add_child(cta_row)
 	_cta = Button.new()
-	_cta.text = "Stand at the Threshold"
+	_cta.text = Locale.active.t("ui.map.standThreshold")
 	_cta.custom_minimum_size = Vector2(280, 44)
 	_cta.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
 	_cta.add_theme_font_size_override("font_size", 17)
@@ -163,7 +163,7 @@ func _build_rose() -> Control:
 	# PASS, not IGNORE: the tooltip is the rose's accessible name
 	# (sealedDoor.aria in the reference).
 	_window_slot.mouse_filter = Control.MOUSE_FILTER_PASS
-	_window_slot.tooltip_text = "The sealed door"
+	_window_slot.tooltip_text = Locale.active.t("ui.map.sealedDoor.aria")
 	window_centre.add_child(_window_slot)
 
 	_window = Control.new()
@@ -218,7 +218,7 @@ func _on_cta() -> void:
 		else:
 			_answer_fade = create_tween()
 			_answer_fade.tween_property(_answer, "modulate:a", 1.0, 0.45)
-		_cta.text = "Return to the Vigil"
+		_cta.text = Locale.active.t("ui.map.returnVigil")
 		_cta.grab_focus.call_deferred()
 		return
 	# A press inside the fade completes the reveal rather than leaving — a

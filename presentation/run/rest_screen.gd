@@ -66,7 +66,7 @@ func _build() -> void:
 	column.add_theme_constant_override("separation", 8)
 	_panel.add_child(column)
 
-	var title: Label = _label("REST SITE", 26, RunStyle.PARCHMENT)
+	var title: Label = _label(Locale.active.t("ui.rest.title"), 26, RunStyle.PARCHMENT)
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	column.add_child(title)
 	column.add_child(_underline())
@@ -80,7 +80,7 @@ func _build() -> void:
 	column.add_child(_art)
 
 	var sub: Label = _label(
-		"The fire crackles. For a moment, the Spire is quiet.", 15, RunStyle.TEXT_DIM)
+		Locale.active.t("ui.rest.sub"), 15, RunStyle.TEXT_DIM)
 	sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(sub)
 

@@ -84,8 +84,9 @@ func _ready() -> void:
 	_vigil = SaveService.load_vigil()
 	Preferences.active = Preferences.read_from_disk()
 	# Locale follows Preferences: main publishes the live handle; labs keep the
-	# default English stand-in (docs/p7-locale-design.md §3).
-	Locale.active = Locale.new()
+	# default English stand-in (docs/p7-locale-design.md §3). Language comes
+	# from the saved setting, else OS (`zh*` → zh-Hant).
+	Locale.active = Locale.new(Preferences.active.effective_language())
 	_music = MusicBus.new()
 	add_child(_music)
 	_sfx_bus = SfxBus.new()
@@ -580,26 +581,26 @@ func _show_title() -> void:
 	var saved: RunState = SaveService.load_run(content)
 	var choices: Array[Dictionary] = []
 	if saved != null:
-		choices.append({"id": "continue", "label": "Continue Climb"})
+		choices.append({"id": "continue", "label": Locale.active.t("ui.menu.continueClimb")})
 	choices.append_array([
-		{"id": "begin", "label": "Begin the Climb"},
-		{"id": "vigil", "label": "The Vigil", "quiet": true},
-		{"id": "help", "label": "How to Play", "quiet": true},
-		{"id": "settings", "label": "Settings", "quiet": true},
-		{"id": "credits", "label": "Credits", "quiet": true},
+		{"id": "begin", "label": Locale.active.t("ui.menu.beginClimb")},
+		{"id": "vigil", "label": Locale.active.t("ui.menu.theVigil"), "quiet": true},
+		{"id": "help", "label": Locale.active.t("ui.menu.howToPlay"), "quiet": true},
+		{"id": "settings", "label": Locale.active.t("ui.menu.settings"), "quiet": true},
+		{"id": "credits", "label": Locale.active.t("ui.menu.credits"), "quiet": true},
 	])
 	# Desktop only — web has no process to leave.
 	if not OS.has_feature("web"):
-		choices.append({"id": "quit", "label": "Quit", "quiet": true})
-	var title_stats: String = "%d climbs · %d dawns · %d slain" % [
-		int(float(str(_vigil.deeds.get("runs", 0)))),
-		int(float(str(_vigil.deeds.get("wins", 0)))),
-		int(float(str(_vigil.deeds.get("slain", 0)))),
-	]
+		choices.append({"id": "quit", "label": Locale.active.t("ui.menu.quit"), "quiet": true})
+	var title_stats: String = Locale.active.t("ui.brand.stats", {
+		"runs": int(float(str(_vigil.deeds.get("runs", 0)))),
+		"wins": int(float(str(_vigil.deeds.get("wins", 0)))),
+		"slain": int(float(str(_vigil.deeds.get("slain", 0)))),
+	})
 	if not _vigil.unlocks.is_empty():
-		title_stats += " · %d secrets unearthed" % _vigil.unlocks.size()
-	_show_choice("GLASSVOW",
-		"A Roguelite Deckbuilder · The Vigil Remembers", choices,
+		title_stats += Locale.active.t("ui.brand.secrets", {"n": _vigil.unlocks.size()})
+	_show_choice(Locale.active.t("ui.brand.title"),
+		Locale.active.t("ui.brand.tagline"), choices,
 		_on_title_choice.bind(saved), {
 		"variant": "title",
 		"stats": title_stats,
@@ -697,7 +698,24 @@ func _show_settings() -> void:
 	screen.set_shape(_shape)
 	screen.closed.connect(_close_overlay)
 	screen.reset_requested.connect(_confirm_reset)
+	screen.language_changed.connect(_on_language_changed)
 	_show_overlay(screen)
+
+
+## Live re-render: close settings and rebuild the title (or the current run
+## route). Mid-combat keeps the fight; the next screen after combat picks up
+## the new catalogue.
+func _on_language_changed(_code: StringName) -> void:
+	_close_overlay()
+	if _screen != null:
+		# Combat stays; chrome on the next route will re-read Locale.
+		return
+	if game != null and not _run_over:
+		# Rebuild map / run chrome by re-showing the map if present.
+		if _map_screen != null:
+			_map_screen.refresh(game.run)
+		return
+	_show_title()
 
 
 func _confirm_reset() -> void:
@@ -705,13 +723,12 @@ func _confirm_reset() -> void:
 	# Typed local, not an inline literal: `.new()` does not convert an untyped
 	# Array to the `Array[Dictionary]` parameter and construction fails.
 	var choices: Array[Dictionary] = [
-		{"id": "yes", "label": "Erase Everything"},
-		{"id": "no", "label": "Cancel", "quiet": true},
+		{"id": "yes", "label": Locale.active.t("ui.settings.eraseEverything")},
+		{"id": "no", "label": Locale.active.t("ui.common.cancel"), "quiet": true},
 	]
 	var screen: Control = ChoiceScreenType.new(
-		"ERASE ALL PROGRESS?",
-		"This erases your current climb and the entire Vigil — deeds, unlocks, "
-		+ "vows, monuments, and whispers.\n\nThis cannot be undone.",
+		Locale.active.t("ui.settings.eraseAllTitle"),
+		Locale.active.t("ui.settings.resetConfirmPlain"),
 		choices,
 		{"shape": String(_shape), "cancel": "no", "overlay": true},
 		_sfx_bus)
@@ -1835,11 +1852,11 @@ func _on_terminal_commit(_id: String) -> void:
 	# every name to 11px body text.
 	var events: Array = []
 	if _vigil.whispers > before_whispers:
-		var whisper_index: int = mini(_vigil.whispers, VigilScreen.WHISPERS.size()) - 1
+		var whisper_index: int = mini(_vigil.whispers, 24) - 1
 		events.append({
 			"kind": "whisper",
 			"title": "",
-			"body": VigilScreen.WHISPERS[maxi(0, whisper_index)],
+			"body": Locale.active.whisper(maxi(0, whisper_index)),
 		})
 	for id: String in content.quest_ids:
 		var before: Dictionary = before_quests.get(id, {})

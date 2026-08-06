@@ -160,7 +160,7 @@ func _build_chrome() -> void:
 	add_child(_title_label)
 
 	_hint_label = Label.new()
-	_hint_label.text = "SCROLL OR DRAG TO SURVEY THE PILGRIMAGE"
+	_hint_label.text = Locale.active.t("ui.pilgrimage.survey")
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint_label.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	_hint_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -208,7 +208,8 @@ func _build_waystones() -> void:
 	for i: int in range(map.nodes.size()):
 		var n: MapNode = map.nodes[i]
 		var shown_kind: String = "unlit" if n.unlit else n.type
-		var caption: String = "Unlit Way" if n.unlit else _node_caption(n)
+		var caption: String = Locale.active.t("ui.pilgrimage.unlitWay") \
+			if n.unlit else _node_caption(n)
 		var ws: GlassWaystone = GlassWaystone.new(
 			i, shown_kind, _node_hue(n), caption, n.quest_marked,
 			n.bounty if n.unlit else 0)
@@ -230,9 +231,11 @@ func _node_hue(n: MapNode) -> float:
 
 func _node_caption(n: MapNode) -> String:
 	if n.type == "rest":
-		return "Hearth"
+		return Locale.active.t("ui.pilgrimage.hearth")
 	if n.enemies.is_empty():
-		return n.type.capitalize()
+		var node_key: String = "ui.map.node.%s" % n.type
+		var localized: String = Locale.active.t(node_key)
+		return localized if localized != node_key else n.type.capitalize()
 	var def: Dictionary = content.enemies.get(n.enemies[0], {})
 	var label: String = str(def.get("name", n.enemies[0]))
 	if n.enemies.size() > 1:
@@ -277,10 +280,11 @@ func refresh(run: RunState) -> void:
 		_run = run
 		_set_act_theme(run.act)
 		var act: Dictionary = content.acts[_act]
-		var act_name: String = "The Rose Window" if map.region == "rose_window" \
+		var act_name: String = Locale.active.t("ui.pilgrimage.roseWindow") \
+			if map.region == "rose_window" \
 			else str(act.get("name", REGION_NAME))
 		_title_label.text = _act_line(act_name.to_upper(),
-			str(act.get("bossName", "THE SUMMIT")).to_upper())
+			str(act.get("bossName", Locale.active.t("ui.pilgrimage.summit"))).to_upper())
 	var live: Array[int] = map.reachable()
 	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
@@ -288,9 +292,9 @@ func refresh(run: RunState) -> void:
 		if first_live == null and live.has(i):
 			first_live = _waystones[i]
 	if live.is_empty():
-		_hint_label.text = "THE ROAD ENDS HERE"
+		_hint_label.text = Locale.active.t("ui.pilgrimage.roadEnds")
 	else:
-		_hint_label.text = "SCROLL OR DRAG · CHOOSE A LIT LANTERN"
+		_hint_label.text = Locale.active.t("ui.pilgrimage.surveyChoose")
 		if first_live != null and first_live.is_inside_tree():
 			first_live.grab_focus()
 	_seat_marker()
@@ -333,7 +337,7 @@ func set_act_scenery(stage_act: int) -> void:
 		var act: Dictionary = content.acts[_act]
 		_title_label.text = _act_line(
 			str(act.get("name", REGION_NAME)).to_upper(),
-			str(act.get("bossName", "THE SUMMIT")).to_upper())
+			str(act.get("bossName", Locale.active.t("ui.pilgrimage.summit"))).to_upper())
 	_push_bands(true)
 
 

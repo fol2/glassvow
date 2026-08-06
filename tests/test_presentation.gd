@@ -17,6 +17,28 @@ static func run(fails: Array[String]) -> void:
 	if ui_font != null:
 		for ch: String in ["琉", "璃", "誓", "言"]:
 			_check(fails, ui_font.has_char(ch.unicode_at(0)), "font has glyph %s" % ch)
+	# Display faces must fall back to NotoSansTC so 繁中 never tofu.
+	var cinzel: Font = GlassStyle.face(GlassStyle.CINZEL_500)
+	var alegreya: Font = GlassStyle.face(GlassStyle.ALEGREYA_400)
+	_check(fails, cinzel != null and alegreya != null, "display faces load through face()")
+	if cinzel != null:
+		for ch: String in ["琉", "璃"]:
+			_check(fails, cinzel.has_char(ch.unicode_at(0)),
+				"Cinzel+Noto fallback has glyph %s" % ch)
+	if alegreya != null:
+		for ch: String in ["誓", "言"]:
+			_check(fails, alegreya.has_char(ch.unicode_at(0)),
+				"Alegreya+Noto fallback has glyph %s" % ch)
+	# zh-Hant catalogue resolves brand + a whisper.
+	var zh: Locale = Locale.new(Locale.CODE_ZH_HANT)
+	_check(fails, zh.set_language(Locale.CODE_ZH_HANT) or zh.code == Locale.CODE_ZH_HANT,
+		"zh-Hant catalogue loads")
+	_check(fails, zh.t("ui.brand.title") == "琉璃誓言", "zh-Hant brand title")
+	_check(fails, zh.whisper(0).begins_with("有一種顏色"), "zh-Hant whisper 0")
+	_check(fails, zh.content("cards", "strike", "name") == "刃鋒", "zh-Hant card name")
+	# Markers survive translation.
+	_check(fails, zh.content("cards", "strike", "text").contains("@6@"),
+		"zh-Hant card text keeps @n@ markers")
 
 	var content: ContentDB = ContentDB.load_slice()
 

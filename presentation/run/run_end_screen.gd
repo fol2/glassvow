@@ -176,14 +176,14 @@ func _build_stats() -> void:
 	_stats_grid.add_theme_constant_override("v_separation", 6)
 	_stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_column.add_child(_stats_grid)
-	_add_stat("floors", "FLOORS")
-	_add_stat("slain", "SLAIN")
-	_add_stat("elites_bosses", "ELITES + BOSSES")
-	_add_stat("deck_size", "DECK SIZE")
-	_add_stat("damage_dealt", "DAMAGE DEALT")
-	_add_stat("damage_taken", "DAMAGE TAKEN")
-	_add_stat("cards_played", "CARDS PLAYED")
-	_add_stat("run_time", "RUN TIME")
+	_add_stat("floors", Locale.active.t("ui.end.floors").to_upper())
+	_add_stat("slain", Locale.active.t("ui.end.slain").to_upper())
+	_add_stat("elites_bosses", Locale.active.t("ui.end.elitesBossesPlus").to_upper())
+	_add_stat("deck_size", Locale.active.t("ui.end.deckSize").to_upper())
+	_add_stat("damage_dealt", Locale.active.t("ui.end.dmgDealt").to_upper())
+	_add_stat("damage_taken", Locale.active.t("ui.end.dmgTaken").to_upper())
+	_add_stat("cards_played", Locale.active.t("ui.end.cardsPlayed").to_upper())
+	_add_stat("run_time", Locale.active.t("ui.end.runTime").to_upper())
 
 
 func _add_stat(key: String, caption: String) -> void:
@@ -204,8 +204,9 @@ func _add_stat(key: String, caption: String) -> void:
 
 func _build_bequest() -> void:
 	var copy: Label = _label(
-		"Carve one thing into the stone — the next climb may recover it in %s."
-		% str(_stats.get("act_name", "this act")), 13, RunStyle.TEXT_DIM)
+		Locale.active.t("ui.end.bequestTitle", {
+			"act": str(_stats.get("act_name", "this act")),
+		}), 13, RunStyle.TEXT_DIM)
 	copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_column.add_child(copy)
 	_bequest_grid = GridContainer.new()
@@ -267,7 +268,7 @@ func _build_commit() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	actions.add_theme_constant_override("separation", 12)
 	_column.add_child(actions)
-	var deck: Button = _action_button("VIEW FINAL DECK")
+	var deck: Button = _action_button(Locale.active.t("ui.end.viewDeck").to_upper())
 	deck.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		deck_requested.emit()
@@ -276,7 +277,7 @@ func _build_commit() -> void:
 	# The way onward is the CTA; the deck viewer is a side glance. Two
 	# identically-dressed buttons made the player weigh a choice this screen
 	# is not asking them to make.
-	var commit: Button = _action_button("RETURN TO THE VIGIL", true)
+	var commit: Button = _action_button(Locale.active.t("ui.end.returnVigil").to_upper(), true)
 	commit.pressed.connect(_request_commit)
 	actions.add_child(commit)
 
@@ -330,14 +331,14 @@ func _apply_shape(inset: int, panel_width: float, title_size: int,
 
 func _title_text() -> String:
 	match _outcome:
-		"death": return "FALLEN"
-		_: return "THE VOW IS SET ASIDE"
+		"death": return Locale.active.t("ui.end.fallen")
+		_: return Locale.active.t("ui.end.abandoned")
 
 
 func _subtitle_text() -> String:
 	match _outcome:
-		"death": return "Your lantern went dark on floor %d." % _fall_floor
-		_: return "The pilgrimage ends here. The Vigil will keep the record."
+		"death": return Locale.active.t("ui.end.fallenLantern", {"floor": _fall_floor})
+		_: return Locale.active.t("ui.end.abandonedSub")
 
 
 func _title_colour() -> Color:

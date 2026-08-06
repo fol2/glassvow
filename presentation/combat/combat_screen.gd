@@ -211,28 +211,8 @@ const INDIRECT_SOURCES: Array[String] = ["poison", "burn", "self", "thorns"]
 ## `tr('ui.combat.*')` — the copy the drain announces with, from `i18n/en/ui.js`.
 ## Held here rather than typed at each call site so the wording is one edit when
 ## this port grows a locale table of its own.
-const SAY_YOUR_TURN: String = "YOUR TURN"
-const SAY_ENEMY_TURN: String = "ENEMY TURN"
-const SAY_SHATTER: String = "SHATTER"
-const SAY_STAGGERED: String = "STAGGERED"
-const SAY_GLASS_HOLDS: String = "THE GLASS HOLDS"
-const SAY_GUARD_SHATTERED: String = "GUARD SHATTERED"
-const SAY_RESHUFFLE: String = "Reshuffle"
-const SAY_PERFECT: String = "PERFECT"
 ## Tooltip copy (`ui.combat.*`, i18n/en/ui.js:143). Keyword copy is not here —
 ## it belongs with the vocabulary that produces it, in `RulesText`.
-const TIP_FACETS_TITLE: String = "Facets"
-const TIP_FACETS_BODY: String = "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass [b]shatters[/b] — it loses its next action, is Cracked, and spills Embers into your lantern."
-const TIP_STAGGERED_TITLE: String = "Staggered"
-const TIP_STAGGERED_BODY: String = "The glass has shattered — this creature loses its next action while it reseams."
-const TIP_LANTERN_TITLE: String = "The Lantern"
-const TIP_LANTERN_ART_TITLE: String = "Lantern Art — %s"
-const TIP_LANTERN_LEAD: String = "<b>%d Embers, once a turn:</b> %s<br><br>"
-const TIP_LANTERN_BODY: String = "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> — burn the card away for an ember, once a turn. Curses refuse the fire."
-const TIP_LANTERN_SUB: String = "A · use Art"
-const TIP_AFFIX_TITLE: String = "%s — an elite's title"
-const TIP_BUFF: String = "Buff"
-const TIP_DEBUFF: String = "Debuff"
 
 ## The palette the drain names inline. Every one of these is a literal in
 ## `drain.js`; they are the effect layer's own colours, not the theme's.
@@ -2260,7 +2240,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_sync_actors()
 			if n > 1:
 				_sfx.play(&"turn")
-				_floaters.banner(SAY_YOUR_TURN, "turn")
+				_floaters.banner(Locale.active.t("ui.combat.yourTurn"), "turn")
 				await _wait(0.5)
 			else:
 				await _wait(0.12)
@@ -2367,7 +2347,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.hitstop(90.0)
 			_vfx.ring(at, GLASS_BLUE, 10.0, 700.0, 5.0)
 			_vfx.burst(at, GLASS_BLUE, 26, 430.0, TAU, 0.0, 2.4, 300.0)
-			_float(at + Vector2(0.0, -58.0), SAY_SHATTER, "shatterf", GLASS_BLUE)
+			_float(at + Vector2(0.0, -58.0), Locale.active.t("ui.combat.shatter"), "shatterf", GLASS_BLUE)
 			_vfx.shake(10.0)
 			_sky.kick(0.9)
 			var view: EnemyView = _enemy_view(idx)
@@ -2380,7 +2360,7 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.STAGGERED:
 			var idx: int = ev["idx"]
 			_sfx.play(&"stagger")
-			_float(_enemy_centre(idx) + Vector2(0.0, -76.0), SAY_STAGGERED,
+			_float(_enemy_centre(idx) + Vector2(0.0, -76.0), Locale.active.t("ui.combat.staggered"),
 				"staggerf", WARM_GOLD)
 			# `.reseaming` for 720ms (drain.js:423) — the shimmer runs alongside
 			# the 520ms beat rather than holding it up, so it is still finishing
@@ -2582,7 +2562,7 @@ func _handle_event(ev: Dictionary) -> void:
 		EventTypes.END_TURN:
 			# `heroActing = false` — nothing swings again until a card is played.
 			_hero_swung = true
-			_floaters.banner(SAY_ENEMY_TURN, "turn")
+			_floaters.banner(Locale.active.t("ui.combat.enemyTurn"), "turn")
 			await _wait(0.48)
 		EventTypes.ENEMY_ACT:
 			await _enemy_act(ev)
@@ -2616,7 +2596,7 @@ func _handle_event(ev: Dictionary) -> void:
 			_vfx.flash(Color(1.0, 0.9137255, 0.6745098), 0.16, 0.6)
 			var perfect: bool = ev.get("perfect", false)
 			if perfect:
-				await _floaters.banner(SAY_PERFECT, "perfect", 1.4)
+				await _floaters.banner(Locale.active.t("ui.combat.perfect"), "perfect", 1.4)
 				await _wait(0.5)
 		EventTypes.DEFEAT:
 			await _wait(0.4)
@@ -2677,7 +2657,7 @@ func _hit_enemy(ev: Dictionary) -> void:
 				2.0, 260.0)  # ward chips off
 			if idx < game.cb.enemies.size() and game.cb.enemies[idx].block == 0 \
 					and amount == 0:
-				_floaters.banner(SAY_GUARD_SHATTERED, "guard-shattered")
+				_floaters.banner(Locale.active.t("ui.combat.guardShattered"), "guard-shattered")
 				_vfx.shard_spray(at, WARD_BLUE, 14)
 		if amount > 0:
 			var killing: bool = ev.get("killingBlow", false)
@@ -2777,7 +2757,7 @@ func _hit_player(ev: Dictionary) -> void:
 			Color(0, 0, 0, 0), 0.0, WARD_ICON, 19)
 		_vfx.burst(at + Vector2(0.0, 8.0), WARD_BLUE, 9, 210.0, TAU, 0.0, 2.0, 260.0)
 		if game.cb.player.block == 0 and amount == 0:
-			_floaters.banner(SAY_GUARD_SHATTERED, "guard-shattered")
+			_floaters.banner(Locale.active.t("ui.combat.guardShattered"), "guard-shattered")
 			_vfx.shard_spray(at, WARD_BLUE, 14)
 	if amount > 0:
 		var dx: float = float(_hit_seq % 3 - 1) * 34.0
@@ -2889,7 +2869,7 @@ func _reshuffle_ceremony(n: int) -> void:
 	_land_in_pile(&"draw")
 	_push_hud()
 	_float(_hud.pile_rect(&"draw").get_center() + Vector2(0.0, -46.0),
-		SAY_RESHUFFLE, "notice")
+		Locale.active.t("ui.combat.reshuffle"), "notice")
 
 
 # ---------------------------------------------------------------- sync
@@ -3012,8 +2992,8 @@ func _sync_actors(reap: bool = false) -> void:
 			# The benchmark's `iconSvg('stagger')` has no counterpart in
 			# assets/art/ui, so the plate carries the word alone.
 			intent = &"staggered"
-			dmg_text = SAY_STAGGERED
-			move_name = SAY_STAGGERED
+			dmg_text = Locale.active.t("ui.combat.staggered")
+			move_name = Locale.active.t("ui.combat.staggered")
 		elif e.hp > 0:
 			var mv: Dictionary = e.move()
 			intent = StringName(str(mv.get("intent", "")))
@@ -3101,7 +3081,7 @@ func _tip_at(global_pos: Vector2) -> Dictionary:
 			&"intent":
 				tip = _intent_tip(view.idx)
 			&"facets":
-				tip = {"title": TIP_FACETS_TITLE, "body": TIP_FACETS_BODY}
+				tip = {"title": Locale.active.t("ui.combat.facetsTitle"), "body": Locale.active.t("ui.combat.facetsBody")}
 			&"name":
 				tip = _affix_tip(view.idx)
 		# A zone that resolves to nothing is not a stop. A common foe's name
@@ -3123,7 +3103,7 @@ func _keyword_tip(word: String) -> Dictionary:
 	if status_id != "":
 		var info: Dictionary = game.content.statuses.get(status_id, {})
 		return {"title": word, "body": str(info.get("desc", ""))}
-	return {"title": word, "body": str(RulesText.KEYWORD_TEXT.get(word, ""))}
+	return {"title": word, "body": RulesText.keyword_text(word)}
 
 
 ## `intentFor` (combat.js:676). The chip shows a number; the tip spells out
@@ -3133,7 +3113,7 @@ func _intent_tip(idx: int) -> Dictionary:
 		return {}
 	var e: EnemyCombatant = game.cb.enemies[idx]
 	if e.staggered:
-		return {"title": TIP_STAGGERED_TITLE, "body": TIP_STAGGERED_BODY}
+		return {"title": Locale.active.t("ui.combat.staggeredTitle"), "body": Locale.active.t("ui.combat.staggeredBody")}
 	var mv: Dictionary = e.move()
 	var bits: PackedStringArray = PackedStringArray()
 	var preview: Variant = _rules.preview_enemy_dmg(game.cb, e, game.run)
@@ -3180,7 +3160,7 @@ func _status_tip(idx: int, id: StringName) -> Dictionary:
 		kind = "debuff"
 	var body: String = str(info.get("desc", "")).replace("N", str(absi(n)))
 	return {"title": str(info.get("name", String(id))), "body": body,
-		"sub": TIP_DEBUFF if kind == "debuff" else TIP_BUFF}
+		"sub": Locale.active.t("ui.combat.debuff") if kind == "debuff" else Locale.active.t("ui.combat.buff")}
 
 
 ## `if (afx) $('.name', box)._tip = ...` (combat.js:622). The title belongs to
@@ -3196,7 +3176,8 @@ func _affix_tip(idx: int) -> Dictionary:
 	var affix: Dictionary = game.content.affixes.get(affix_id, {})
 	if affix.is_empty():
 		return {}
-	return {"title": TIP_AFFIX_TITLE % str(affix.get("name", affix_id)),
+	return {"title": Locale.active.t("ui.combat.affixTitle", {
+			"name": str(affix.get("name", affix_id))}),
 		"body": str(affix.get("text", ""))}
 
 
@@ -3206,13 +3187,16 @@ func _lantern_tip() -> Dictionary:
 	var art_id: String = str(game.run.art)
 	var art: Dictionary = game.content.arts.get(art_id, {})
 	if art.is_empty():
-		return {"title": TIP_LANTERN_TITLE, "body": TIP_LANTERN_BODY,
-			"sub": TIP_LANTERN_SUB}
+		return {"title": Locale.active.t("ui.combat.lanternTitle"), "body": Locale.active.t("ui.combat.lanternBody"),
+			"sub": Locale.active.t("ui.combat.lanternSub")}
 	var art_cost: int = art.get("cost", 0)
-	var lead: String = TIP_LANTERN_LEAD % [art_cost, str(art.get("text", ""))]
-	return {"title": TIP_LANTERN_ART_TITLE % str(art.get("name", art_id)),
-		"body": lead + TIP_LANTERN_BODY, "sub": TIP_LANTERN_SUB}
-
+	var lead: String = Locale.active.t("ui.combat.lanternLead", {
+		"embers": art_cost, "text": str(art.get("text", "")),
+	})
+	return {"title": Locale.active.t("ui.combat.lanternArtTitle", {
+			"name": str(art.get("name", art_id))}),
+		"body": lead + Locale.active.t("ui.combat.lanternBody"),
+		"sub": Locale.active.t("ui.combat.lanternSub")}
 
 ## A touchscreen has no hover, so the benchmark gives it a 380ms long press
 ## instead (`pointerdown` → `setTimeout(..., 380)`, tooltip.js:63). The screen

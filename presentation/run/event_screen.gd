@@ -75,7 +75,7 @@ func _build() -> void:
 	column.add_theme_constant_override("separation", 10)
 	_panel.add_child(column)
 
-	_title = _label(str(_event.get("name", "A Strange Place")).to_upper(),
+	_title = _label(str(_event.get("name", Locale.active.t("ui.event.strangePlace"))).to_upper(),
 		26, RunStyle.PARCHMENT, true)
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	column.add_child(_title)
@@ -120,7 +120,7 @@ func _add_choices() -> void:
 		var row: Dictionary = value
 		var button: Button = Button.new()
 		var sub: String = str(row.get("sub", ""))
-		button.text = str(row.get("label", "Leave")) \
+		button.text = str(row.get("label", Locale.active.t("ui.common.leave"))) \
 			+ ("\n%s" % sub if not sub.is_empty() else "")
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.custom_minimum_size.y = 52 if sub.is_empty() else 66

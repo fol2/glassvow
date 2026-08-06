@@ -118,7 +118,7 @@ func _build() -> void:
 		11, Color("#83939d"))
 	_kicker.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 2))
 	column.add_child(_kicker)
-	_title = _label("THE HOLLOW LAMPLIGHTER", 38, Color("#c3cdd2"))
+	_title = _label(Locale.active.t("ui.hollow.title"), 38, Color("#c3cdd2"))
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 2))
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(_title)

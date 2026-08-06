@@ -24,6 +24,10 @@ static func _english_seed(fails: Array[String]) -> void:
 		fails.append("locale: ui.keywords.kindle missing from en seed")
 	if locale.t("ui.pilgrimage.survey") != "SCROLL OR DRAG TO SURVEY THE PILGRIMAGE":
 		fails.append("locale: Glassvow pilgrimage keys missing from en seed")
+	if locale.t("ui.embark.vowLevel", {"level": "I", "max": "III"}) != "VOW I  / III":
+		fails.append("locale: ui.embark.vowLevel missing or mistyped")
+	if locale.t("ui.settings.ledger") != "The Ledger":
+		fails.append("locale: ui.settings.ledger missing from en seed")
 	if locale.content("cards", "strike", "name") != "Edge":
 		fails.append("locale: content.cards.strike.name missing from en seed")
 	if not locale.content("cards", "strike", "text").contains("@6@"):

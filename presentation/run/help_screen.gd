@@ -9,36 +9,25 @@ const PANEL_MAX_HEIGHT: float = 0.88
 const DESKTOP_INSET: float = 28.0
 const PHONE_INSET: float = 18.0
 
-const SECTIONS: Array[Dictionary] = [
-	{
-		"title": "The Climb",
-		"body": "Choose a path of lanterns up the Spire. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
-	},
-	{
-		"title": "Combat",
-		"body": "Each turn you draw <b>5 cards</b> and gain <b>3 Energy</b> (⬤). Play a card by clicking or dragging — attacks need a target when several enemies remain. Enemies telegraph their <b>intent</b> above their heads.",
-	},
-	{
-		"title": "The Glass",
-		"body": "Every creature is glass with a row of <b>Facets</b> under its lifebar. Attacks that draw unblocked blood chip a facet (heavy cards chip more). Fill the gauge and the glass <b>SHATTERS</b>: it loses its next action, is Cracked, and spills <b>Embers</b> into your lantern. Time a shatter to deny the blow you can't survive.",
-	},
-	{
-		"title": "The Lantern",
-		"body": "Embers fuel your <b>Lantern Art</b> — one signature power, always available, once a turn (press <b>A</b>). Drag any card onto the lantern to <b>kindle</b> it: the card burns away and feeds the lantern 1 ember. Once a turn; curses refuse the fire.",
-	},
-	{
-		"title": "Ward & Statuses",
-		"body": "<b>Ward</b> is held light that absorbs damage but expires each turn. <b>Cracked</b> ×1.5 damage taken · <b>Dimmed</b> −25% damage dealt · <b>Brittle</b> −25% Ward · <b>Smolder</b> burns each turn, and leaps to another enemy when its host dies or shatters.",
-	},
-	{
-		"title": "The Fires & The Merchant",
-		"body": "Rest sites heal <b>30%</b> or upgrade a card. Shops sell cards, relics, phials — and can <b>remove</b> a card from your deck. Keep your deck lean; every reward is optional.",
-	},
-	{
-		"title": "The Vigil — What Death Leaves Behind",
-		"body": "Nothing is wasted. At the foot of each climb the <b>Lamplighter</b> offers a boon and lets you choose your Lantern Art. When you fall, carve one thing into the stone — a <b>monument</b> your next climb can recover in that same act. Every shatter, kindle and slaying feeds lifetime <b>Deeds</b> that unlock new cards, relics, and a second aspect, the <b>Ashwarden</b>. Reach the dawn once and the <b>Vows</b> open: an optional difficulty ladder for those who'd climb a crueler Spire.",
-	},
-]
+static func _sections(act_count: int) -> Array[Dictionary]:
+	var params: Dictionary = {"count": act_count}
+	return [
+		{"title": Locale.active.t("ui.help.climbTitle"),
+			"body": Locale.active.t("ui.help.climbBody", params)},
+		{"title": Locale.active.t("ui.help.combatTitle"),
+			"body": Locale.active.t("ui.help.combatBody")},
+		{"title": Locale.active.t("ui.help.glassTitle"),
+			"body": Locale.active.t("ui.help.glassBody")},
+		{"title": Locale.active.t("ui.help.lanternTitle"),
+			"body": Locale.active.t("ui.help.lanternBody")},
+		{"title": Locale.active.t("ui.help.wardTitle"),
+			"body": Locale.active.t("ui.help.wardBody")},
+		{"title": Locale.active.t("ui.help.firesTitle"),
+			"body": Locale.active.t("ui.help.firesBody")},
+		{"title": Locale.active.t("ui.help.vigilTitle"),
+			"body": Locale.active.t("ui.help.vigilBody")},
+	]
+
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -84,7 +73,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	scroll.add_child(_column)
 
 	var title: Label = Label.new()
-	title.text = "How to Play"
+	title.text = Locale.active.t("ui.help.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	title.add_theme_font_size_override("font_size", 26)
@@ -104,7 +93,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	rule.add_theme_stylebox_override("separator", rule_line)
 	rule_centre.add_child(rule)
 
-	for section: Dictionary in SECTIONS:
+	for section: Dictionary in _sections(3):
 		_add_section(str(section["title"]), str(section["body"]))
 
 	var action_margin: MarginContainer = MarginContainer.new()
@@ -113,7 +102,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	var action_centre: CenterContainer = CenterContainer.new()
 	action_margin.add_child(action_centre)
 	var fight_on: Button = Button.new()
-	fight_on.text = "Fight On"
+	fight_on.text = Locale.active.t("ui.menu.fightOn")
 	fight_on.custom_minimum_size = Vector2(150, 44)
 	fight_on.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
 	fight_on.add_theme_font_size_override("font_size", 17)

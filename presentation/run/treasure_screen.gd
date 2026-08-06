@@ -88,7 +88,7 @@ func _build() -> void:
 	_sub.bbcode_enabled = true
 	_sub.fit_content = true
 	_sub.scroll_active = false
-	_sub.text = "A heavy chest, banded in gold. Open it?"
+	_sub.text = Locale.active.t("ui.treasure.sub")
 	_sub.custom_minimum_size.y = 24
 	_sub.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_sub.add_theme_font_override("normal_font", load(GlassStyle.ALEGREYA_400) as Font)
@@ -100,7 +100,7 @@ func _build() -> void:
 	_actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	_actions.add_theme_constant_override("separation", 14)
 	column.add_child(_actions)
-	_actions.add_child(_button("Open the Chest", _open))
+	_actions.add_child(_button(Locale.active.t("ui.treasure.openBtn"), _open))
 
 	resized.connect(_fit)
 	set_shape(shape)

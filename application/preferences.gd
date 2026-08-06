@@ -34,6 +34,9 @@ var fullscreen: bool = false
 var vsync: bool = true
 var screen_shake: bool = true
 var reduce_motion: bool = false
+## Empty = derive from OS (`zh*` → zh-Hant, else en). Explicit `en` / `zh-Hant`
+## overrides. Persisted under [locale] language.
+var language: String = ""
 
 ## Only the instance read from disk writes back to disk; the default `active`
 ## stand-in stays in memory whatever a lab does to it.
@@ -122,6 +125,21 @@ func set_reduce_motion(on: bool) -> void:
 	_store()
 
 
+func set_language(code: String) -> void:
+	language = code
+	_store()
+
+
+## Resolves the catalogue code Preferences wants Locale to load.
+func effective_language() -> StringName:
+	if language == "en" or language == "zh-Hant":
+		return StringName(language)
+	var os_lang: String = OS.get_locale_language()
+	if os_lang.begins_with("zh"):
+		return Locale.CODE_ZH_HANT
+	return Locale.CODE_EN
+
+
 func apply_audio() -> void:
 	_apply_bus(MASTER)
 	_apply_bus(MUSIC)
@@ -156,6 +174,7 @@ func _read(config: ConfigFile) -> void:
 	screen_shake = _bool_value(config.get_value("motion", "screen_shake", true), true)
 	reduce_motion = _bool_value(
 		config.get_value("motion", "reduce_motion", false), false)
+	language = str(config.get_value("locale", "language", ""))
 
 
 func _import_legacy(legacy_audio_path: String) -> void:
@@ -205,6 +224,7 @@ func _store() -> void:
 	config.set_value("display", "vsync", vsync)
 	config.set_value("motion", "screen_shake", screen_shake)
 	config.set_value("motion", "reduce_motion", reduce_motion)
+	config.set_value("locale", "language", language)
 	var error: Error = config.save(_path)
 	if error != OK:
 		push_warning("preferences: could not save (%s)" % error_string(error))

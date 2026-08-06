@@ -10,32 +10,12 @@ const DEED_IDS: PackedStringArray = [
 	"darkWalker", "spendthrift", "hundredShards", "firstDawn",
 ]
 const ROMAN: PackedStringArray = ["—", "I", "II", "III", "IV", "V"]
-const WHISPERS: Array[String] = [
-	"There is a colour the Spire refuses to name.",
-	"A pale hand has touched the dark side of the glass.",
-	"Six spaces wait where no window stands.",
-	"The dead climb twice: once in flesh, once in memory.",
-	"A lantern without flame is still a key.",
-	"Count the panes that do not catch the dawn.",
-	"A page can be read only after it survives the summit.",
-	"The eighth sign is not written among the seven.",
-	"The gaunt keeper remembers the road you did not take.",
-	"Pale motes gather like frost around a hidden seam.",
-	"Your monument does not always lie down.",
-	"The merchant keeps one cold thing beneath the counter.",
-	"Broken glyphs are the shadow of a complete sentence.",
-	"Five pages make a chapter; five prices make a confession.",
-	"Three deaths will teach your shade to speak plainly.",
-	"The Vigil has a window, though no wall holds it.",
-	"Each shard lights one pane of Emberglass.",
-	"The Pale Ones are not hunting you. They are pointing upward.",
-	"The Sovereign is a mask worn below the final stair.",
-	"When six panes burn, look beyond the summit.",
-	"There is a sealed door above the crown.",
-	"Its inscription has waited longer than the Vigil.",
-	"Bring six shards to the Rose Window.",
-	"The climb continues.",
-]
+static func _whisper_lines() -> Array:
+	var lines: Array = []
+	for index: int in range(24):
+		lines.append(Locale.active.whisper(index))
+	return lines
+
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -88,7 +68,7 @@ func _build() -> void:
 	column.add_theme_constant_override("separation", 8)
 	_panel.add_child(column)
 
-	var title: Label = _label("THE VIGIL", 26, RunStyle.GOLD, true)
+	var title: Label = _label(Locale.active.t("ui.vigil.title"), 26, RunStyle.GOLD, true)
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 4))
 	column.add_child(title)
 	var underline: TextureRect = TextureRect.new()
@@ -103,19 +83,20 @@ func _build() -> void:
 	column.add_child(underline)
 	var vow: int = clampi(int(float(str(_vigil.deeds.get("bestVow", 0)))),
 		0, ROMAN.size() - 1)
-	column.add_child(_label("%d climbs · %d dawns · deepest Vow: %s" % [
-		int(float(str(_vigil.deeds.get("runs", 0)))),
-		int(float(str(_vigil.deeds.get("wins", 0)))),
-		ROMAN[vow]], 13, RunStyle.TEXT_DIM, true))
+	column.add_child(_label(Locale.active.t("ui.vigil.stats", {
+		"runs": int(float(str(_vigil.deeds.get("runs", 0)))),
+		"wins": int(float(str(_vigil.deeds.get("wins", 0)))),
+		"vow": ROMAN[vow],
+	}), 13, RunStyle.TEXT_DIM, true))
 
 	var tabs: HBoxContainer = HBoxContainer.new()
 	tabs.alignment = BoxContainer.ALIGNMENT_CENTER
 	tabs.add_theme_constant_override("separation", 4)
 	column.add_child(tabs)
-	_deeds_tab = _tab("DEEDS", _show_deeds)
+	_deeds_tab = _tab(Locale.active.t("ui.vigil.deedsTab"), _show_deeds)
 	tabs.add_child(_deeds_tab)
 	if _has_rose:
-		_rose_tab = _tab("ROSE WINDOW", _show_rose)
+		_rose_tab = _tab(Locale.active.t("ui.vigil.roseTab"), _show_rose)
 		tabs.add_child(_rose_tab)
 
 	_deed_list = ScrollContainer.new()
@@ -132,12 +113,12 @@ func _build() -> void:
 
 	if _has_rose:
 		_rose = RoseWindowView.new(
-			_vigil.quests, _content.quests, _vigil.whispers, WHISPERS, shape)
+			_vigil.quests, _content.quests, _vigil.whispers, _whisper_lines(), shape)
 		_rose.visible = false
 		column.add_child(_rose)
 
 	var back: Button = Button.new()
-	back.text = "RETURN"
+	back.text = Locale.active.t("ui.vigil.return")
 	back.custom_minimum_size = Vector2(150, 44)
 	back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	RunStyle.style_button(back)
@@ -215,7 +196,7 @@ func _reward_names(unlocks_v: Variant) -> String:
 	for unlock_v: Variant in unlocks:
 		var unlock: String = str(unlock_v)
 		if unlock == "aspect2":
-			names.append("The Ashwarden")
+			names.append(Locale.active.t("ui.vigil.ashwarden"))
 			continue
 		var bits: PackedStringArray = unlock.split(":", false, 1)
 		if bits.size() != 2:

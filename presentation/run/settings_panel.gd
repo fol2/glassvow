@@ -7,6 +7,7 @@ extends Control
 
 signal closed
 signal reset_requested
+signal language_changed(code: StringName)
 
 const GOLD: Color = Color("#f2c14e")
 const DANGER: Color = Color("#ff8d8d")
@@ -56,7 +57,7 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	_panel.add_child(column)
 
 	var title: Label = Label.new()
-	title.text = "SETTINGS"
+	title.text = Locale.active.t("ui.settings.title").to_upper()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
 	title.add_theme_font_size_override("font_size", 16)
@@ -81,25 +82,37 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	_sections.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll.add_child(_sections)
 
-	var audio: VBoxContainer = _section("AUDIO", GOLD, false)
-	audio.add_child(_audio_row("MASTER", Preferences.MASTER))
-	audio.add_child(_audio_row("MUSIC", Preferences.MUSIC))
-	audio.add_child(_audio_row("SFX", Preferences.SFX))
+	var audio: VBoxContainer = _section(
+		Locale.active.t("ui.settings.audio").to_upper(), GOLD, false)
+	audio.add_child(_audio_row(
+		Locale.active.t("ui.settings.master").to_upper(), Preferences.MASTER))
+	audio.add_child(_audio_row(
+		Locale.active.t("ui.settings.music").to_upper(), Preferences.MUSIC))
+	audio.add_child(_audio_row(
+		Locale.active.t("ui.settings.sfx").to_upper(), Preferences.SFX))
 
 	if _display_supported():
-		var display: VBoxContainer = _section("DISPLAY", GOLD)
-		display.add_child(_toggle_row("FULLSCREEN",
+		var display: VBoxContainer = _section(
+			Locale.active.t("ui.settings.display").to_upper(), GOLD)
+		display.add_child(_toggle_row(Locale.active.t("ui.settings.fullscreen").to_upper(),
 			func() -> bool: return _preferences.fullscreen,
 			func(on: bool) -> void: _preferences.set_fullscreen(on)))
-		display.add_child(_toggle_row("VSYNC",
+		display.add_child(_toggle_row(Locale.active.t("ui.settings.vsync").to_upper(),
 			func() -> bool: return _preferences.vsync,
 			func(on: bool) -> void: _preferences.set_vsync(on)))
+		display.add_child(_language_row())
+	else:
+		# Web / headless have no window toggles; language still must be reachable.
+		var language_section: VBoxContainer = _section(
+			Locale.active.t("ui.language.label").to_upper(), GOLD)
+		language_section.add_child(_language_row())
 
-	var motion: VBoxContainer = _section("MOTION", GOLD)
-	motion.add_child(_toggle_row("SCREEN SHAKE",
+	var motion: VBoxContainer = _section(
+		Locale.active.t("ui.settings.motion").to_upper(), GOLD)
+	motion.add_child(_toggle_row(Locale.active.t("ui.settings.screenShake").to_upper(),
 		func() -> bool: return _preferences.screen_shake,
 		func(on: bool) -> void: _preferences.set_screen_shake(on)))
-	motion.add_child(_toggle_row("REDUCE MOTION",
+	motion.add_child(_toggle_row(Locale.active.t("ui.settings.reduceMotion").to_upper(),
 		func() -> bool: return _preferences.reduce_motion,
 		func(on: bool) -> void: _preferences.set_reduce_motion(on)))
 
@@ -108,8 +121,10 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	var ledger_seat: MarginContainer = MarginContainer.new()
 	ledger_seat.add_theme_constant_override("margin_top", 14)
 	_sections.add_child(ledger_seat)
-	var ledger: VBoxContainer = _section("THE LEDGER", DANGER, true, ledger_seat)
-	var erase: Button = _button("ERASE ALL PROGRESS", DANGER, 14)
+	var ledger: VBoxContainer = _section(
+		Locale.active.t("ui.settings.ledger").to_upper(), DANGER, true, ledger_seat)
+	var erase: Button = _button(
+		Locale.active.t("ui.settings.eraseAll").to_upper(), DANGER, 14)
 	# The most destructive control in the game must not be CLOSE's twin: the
 	# glyph wears the danger, not just one pixel of border — and it must not
 	# shed it at exactly the moment a keyboard player has it selected.
@@ -124,7 +139,7 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	ledger.add_child(erase)
 
 	var warning: Label = Label.new()
-	warning.text = "Wipes the current climb and all Vigil progress. Cannot be undone."
+	warning.text = Locale.active.t("ui.settings.resetWarn")
 	warning.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	warning.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
@@ -132,7 +147,7 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	warning.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	ledger.add_child(warning)
 
-	var close: Button = _button("CLOSE", GlassStyle.GLASS)
+	var close: Button = _button(Locale.active.t("ui.menu.close").to_upper(), GlassStyle.GLASS)
 	close.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		closed.emit()
@@ -141,7 +156,8 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 
 	var footer: Label = Label.new()
 	var version: String = str(ProjectSettings.get_setting("application/config/version", ""))
-	footer.text = "GLASSVOW %s" % version if version != "" else "GLASSVOW"
+	var brand: String = Locale.active.t("ui.brand.title")
+	footer.text = "%s %s" % [brand, version] if version != "" else brand
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	footer.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 2))
 	footer.add_theme_font_size_override("font_size", 10)
@@ -245,7 +261,9 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 	slider.value = roundf(_preferences.volume(bus) * 100.0)
 	slider.custom_minimum_size.y = RunStyle.hit_floor(13.0)
 	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	slider.tooltip_text = "%s volume" % label_text.capitalize()
+	slider.tooltip_text = Locale.active.t("ui.settings.volumeTip", {
+		"name": label_text.capitalize(),
+	})
 	_style_slider(slider)
 	var slider_seat: MarginContainer = MarginContainer.new()
 	slider_seat.add_theme_constant_override("margin_bottom", 6)
@@ -254,7 +272,8 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 
 	var sync: Callable = func() -> void:
 		var muted: bool = _preferences.is_muted(bus)
-		mute.text = "UNMUTE" if muted else "MUTE"
+		mute.text = Locale.active.t(
+			"ui.settings.unmute" if muted else "ui.settings.mute").to_upper()
 		slider.editable = not muted
 	sync.call()
 	slider.value_changed.connect(func(value: float) -> void:
@@ -268,6 +287,41 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 		sync.call()
 		_sfx.play(&"click")
 	)
+	return row
+
+
+## Language cycles English ↔ 繁體中文. Labels are themselves localised. Live
+## re-render is owned by main (rebuild the routed screen); mid-combat defers
+## until the next route — see ui.language.deferNote.
+func _language_row() -> HBoxContainer:
+	var row: HBoxContainer = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+
+	var label: Label = Label.new()
+	label.text = Locale.active.t("ui.language.label").to_upper()
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 1))
+	label.add_theme_font_size_override("font_size", 13)
+	row.add_child(label)
+
+	var toggle: Button = _small_button()
+	toggle.custom_minimum_size.x = maxf(toggle.custom_minimum_size.x, 120.0)
+	var sync: Callable = func() -> void:
+		var code: StringName = _preferences.effective_language()
+		toggle.text = Locale.active.t(
+			"ui.language.zhHant" if code == Locale.CODE_ZH_HANT else "ui.language.en")
+	sync.call()
+	toggle.pressed.connect(func() -> void:
+		var next: String = "en" if _preferences.effective_language() == Locale.CODE_ZH_HANT \
+			else "zh-Hant"
+		_preferences.set_language(next)
+		Locale.active.set_language(StringName(next))
+		sync.call()
+		label.text = Locale.active.t("ui.language.label").to_upper()
+		_sfx.play(&"click")
+		language_changed.emit(StringName(next))
+	)
+	row.add_child(toggle)
 	return row
 
 
@@ -287,7 +341,8 @@ func _toggle_row(label_text: String, getter: Callable, setter: Callable) -> HBox
 	var toggle: Button = _small_button()
 	var sync: Callable = func() -> void:
 		var on: bool = getter.call()
-		toggle.text = "ON" if on else "OFF"
+		toggle.text = Locale.active.t(
+			"ui.settings.on" if on else "ui.settings.off").to_upper()
 		_toggle_state(toggle, on)
 	sync.call()
 	toggle.pressed.connect(func() -> void:

@@ -44,26 +44,27 @@ func _init(stage_shape: StringName, terminal_locked: bool = false,
 	actions.add_theme_constant_override("separation", 2)
 	_panel.add_child(actions)
 
-	var help: Button = _button("How to Play")
+	var help: Button = _button(Locale.active.t("ui.menu.howToPlay"))
 	help.pressed.connect(_request.bind(&"help"))
 	actions.add_child(help)
 
-	var settings: Button = _button("Settings")
+	var settings: Button = _button(Locale.active.t("ui.menu.settings"))
 	settings.pressed.connect(_request.bind(&"settings"))
 	actions.add_child(settings)
 
-	var title: Button = _button("Return to Title")
+	var title: Button = _button(Locale.active.t("ui.menu.returnTitle"))
 	title.pressed.connect(_request.bind(&"title"))
 	actions.add_child(title)
 
 	if not terminal_locked:
-		var abandon: Button = _button("Abandon Run", RunStyle.DANGER, RunStyle.DANGER)
+		var abandon: Button = _button(
+			Locale.active.t("ui.menu.abandonRun"), RunStyle.DANGER, RunStyle.DANGER)
 		abandon.pressed.connect(_request.bind(&"abandon"))
 		actions.add_child(abandon)
 
 	# Desktop only — web has no process to leave, and the tab chrome owns close.
 	if not OS.has_feature("web"):
-		var quit: Button = _button("Quit Game")
+		var quit: Button = _button(Locale.active.t("ui.menu.quitGame"))
 		quit.pressed.connect(_request.bind(&"quit"))
 		actions.add_child(quit)
 

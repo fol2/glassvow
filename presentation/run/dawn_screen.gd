@@ -157,10 +157,10 @@ func _build() -> void:
 	column.add_theme_constant_override("separation", 9)
 	_panel.add_child(column)
 
-	_title = _label("ASCENDED", 42, RunStyle.GOLD)
+	_title = _label(Locale.active.t("ui.dawn.title"), 42, RunStyle.GOLD)
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 4))
 	column.add_child(_title)
-	var subtitle: Label = _label("At Dawn, the Vigil remembers.", 15, RunStyle.PARCHMENT)
+	var subtitle: Label = _label(Locale.active.t("ui.dawn.subtitle"), 15, RunStyle.PARCHMENT)
 	column.add_child(subtitle)
 	column.add_child(_underline())
 
@@ -177,7 +177,7 @@ func _build() -> void:
 	_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_grid)
 	if _events.is_empty():
-		_grid.add_child(_seat(_event_card({"title": "Dawn", "body": "The Vigil is quiet."})))
+		_grid.add_child(_seat(_event_card({"title": Locale.active.t("ui.dawn.quietTitle"), "body": Locale.active.t("ui.dawn.quietBody")})))
 	else:
 		# The memories already owed by the save arrive standing — a resumed
 		# dawn does not replay what the player has been shown and been
@@ -199,13 +199,13 @@ func _build() -> void:
 	actions.add_theme_constant_override("h_separation", 12)
 	actions.add_theme_constant_override("v_separation", 8)
 	column.add_child(actions)
-	_deck_btn = _action_button("VIEW FINAL DECK", false)
+	_deck_btn = _action_button(Locale.active.t("ui.end.viewDeck").to_upper(), false)
 	_deck_btn.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		deck_requested.emit()
 	)
 	actions.add_child(_deck_btn)
-	_commit_btn = _action_button("RETURN TO THE VIGIL", true)
+	_commit_btn = _action_button(Locale.active.t("ui.end.returnVigil").to_upper(), true)
 	_commit_btn.pressed.connect(func() -> void:
 		_sfx.play(&"click")
 		commit_requested.emit()
@@ -701,10 +701,14 @@ func _build_stats(column: VBoxContainer) -> void:
 	_stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_child(_stats_grid)
 	for row: Array in [
-		["floors", "FLOORS"], ["slain", "SLAIN"],
-		["elites_bosses", "ELITES + BOSSES"], ["deck_size", "DECK SIZE"],
-		["damage_dealt", "DAMAGE DEALT"], ["damage_taken", "DAMAGE TAKEN"],
-		["cards_played", "CARDS PLAYED"], ["run_time", "RUN TIME"],
+		["floors", Locale.active.t("ui.end.floors").to_upper()],
+		["slain", Locale.active.t("ui.end.slain").to_upper()],
+		["elites_bosses", Locale.active.t("ui.end.elitesBossesPlus").to_upper()],
+		["deck_size", Locale.active.t("ui.end.deckSize").to_upper()],
+		["damage_dealt", Locale.active.t("ui.end.dmgDealt").to_upper()],
+		["damage_taken", Locale.active.t("ui.end.dmgTaken").to_upper()],
+		["cards_played", Locale.active.t("ui.end.cardsPlayed").to_upper()],
+		["run_time", Locale.active.t("ui.end.runTime").to_upper()],
 	]:
 		var cell: PanelContainer = PanelContainer.new()
 		cell.add_theme_stylebox_override("panel", GlassStyle.stat_cell())
@@ -723,12 +727,12 @@ func _build_stats(column: VBoxContainer) -> void:
 
 func _event_kicker(kind: String) -> String:
 	match kind:
-		"whisper": return "A WHISPER AT DAWN"
-		"quest": return "A JOURNEY REVEALED"
-		"progress": return "THE JOURNEY CONTINUES"
-		"shard": return "EMBERGLASS SHARD"
-		"unlock": return "THE VIGIL OPENS"
-		_: return "AT DAWN"
+		"whisper": return Locale.active.t("ui.dawn.kickerWhisper")
+		"quest": return Locale.active.t("ui.dawn.kickerQuest")
+		"progress": return Locale.active.t("ui.dawn.kickerProgress")
+		"shard": return Locale.active.t("ui.dawn.kickerShard")
+		"unlock": return Locale.active.t("ui.dawn.kickerUnlock")
+		_: return Locale.active.t("ui.dawn.kickerDefault")
 
 
 ## `primary` marks the way ONWARD — the port's own hierarchy (the benchmark
@@ -754,8 +758,10 @@ func _action_button(text: String, primary: bool = false) -> Button:
 
 func _progress_text() -> String:
 	if _events.is_empty() or _cursor >= _events.size():
-		return "DAWN COMPLETE"
-	return "DAWN %d OF %d · THE CURRENT MEMORY IS LIT" % [_cursor + 1, _events.size()]
+		return Locale.active.t("ui.dawn.complete")
+	return Locale.active.t("ui.dawn.progress", {
+		"n": _cursor + 1, "total": _events.size(),
+	})
 
 
 func set_shape(stage_shape: StringName) -> void:
