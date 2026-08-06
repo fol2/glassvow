@@ -147,6 +147,10 @@ func _init() -> void:
 	add_child(_field)
 
 
+func _ready() -> void:
+	_step_camera(0.0)
+
+
 ## `radiusAt(y)` verbatim: tiered ledges and fine crag over a powered cone.
 static func radius_at(y: float) -> float:
 	var t: float = clampf((y - TOWER_BOTTOM) / (TOWER_TOP - TOWER_BOTTOM), 0.0, 1.0)

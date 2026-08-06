@@ -18,6 +18,23 @@ static func run(fails: Array[String]) -> void:
 		for ch: String in ["琉", "璃", "誓", "言"]:
 			_check(fails, ui_font.has_char(ch.unicode_at(0)), "font has glyph %s" % ch)
 
+	# The title paints on frame 0, before its first process tick: measured with
+	# the layout already resolved (size 1180x820) and `_focal` still at its 1.0
+	# sentinel, so that frame drew at a garbage projection. `_ready` is what
+	# initialises it. Guarded by `has_method` because `_ready` is a virtual —
+	# calling it directly once the override is gone raises "nonexistent
+	# function", which aborts the rest of this file instead of failing it.
+	var title_world: TitleWorld = TitleWorld.new()
+	title_world.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	title_world.size = Vector2(1180.0, 820.0)
+	var title_ready: bool = title_world.has_method("_ready")
+	if title_ready:
+		title_world._ready()
+		title_ready = is_equal_approx(title_world._focal,
+			(title_world.size.y * 0.5) / tan(deg_to_rad(TitleWorld.FOV_DEG * 0.5)))
+	_check(fails, title_ready, "title projection is ready before its first paint")
+	title_world.free()
+
 	var content: ContentDB = ContentDB.load_slice()
 
 	# ---- new_run builds a fresh core-only profile from content.player
