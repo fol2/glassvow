@@ -60,6 +60,12 @@ func _build() -> void:
 	margin.add_theme_constant_override("margin_bottom", 20)
 	add_child(margin)
 	var scroll: ScrollContainer = ScrollContainer.new()
+	# At phone-landscape the column measures 517px against a 350px viewport, so
+	# CHOOSE A BOON sits 141px below the fold. Focus traversal reaches it either
+	# way — Godot moves focus regardless of scroll position — but without
+	# `follow_focus` the view never travels with it, so the button the whole
+	# screen exists to press is focused and invisible (#72).
+	scroll.follow_focus = true
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL

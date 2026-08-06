@@ -48,6 +48,7 @@ var _panel_layout: Dictionary = {}
 var _first_button: Button = null
 var _cancel_button: Button = null
 var _panel: PanelContainer
+var _frame: MarginContainer = null
 var _centre: CenterContainer
 var _column: VBoxContainer
 var _scroll: ScrollContainer = null
@@ -112,14 +113,35 @@ func _build_standard(title_text: String, body_text: String,
 	var k: float = _panel_num("scale", 1.0)
 	var inset: float = _panel_num("inset", PANEL_INSET)
 
+	# The inner scroll below opens on `choices.size() > 7`, which is a
+	# choice-count guard for what is a viewport-height problem: measured at
+	# 844x390, six plain choices make a 424px panel and seven make a 479px one,
+	# both taller than the 390px stage, and neither trips the guard — the panel
+	# is pinned to the top inset and its last buttons hang off the bottom with
+	# nothing to scroll. Seating the panel in the same
+	# ScrollContainer -> Margin -> Centre stack the other run screens use fixes
+	# every count at once. The margin sits INSIDE the scroll so the scroll's
+	# viewport is the whole stage: a panel that fits is still centred at exactly
+	# the position it had before, and one that does not gains travel instead of
+	# a clipped edge.
+	var page: ScrollContainer = ScrollContainer.new()
+	page.follow_focus = true
+	page.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	page.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(page)
+
+	_frame = MarginContainer.new()
+	var frame: MarginContainer = _frame
+	frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_seat_frame(inset)
+	page.add_child(frame)
+
 	_centre = CenterContainer.new()
 	var centre: CenterContainer = _centre
-	centre.set_anchors_preset(Control.PRESET_FULL_RECT)
-	centre.offset_left = inset
-	centre.offset_top = inset
-	centre.offset_right = -inset
-	centre.offset_bottom = -inset
-	add_child(centre)
+	centre.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	centre.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	frame.add_child(centre)
 
 	_panel = PanelContainer.new()
 	_panel.custom_minimum_size = Vector2(_authored_panel_width(), 0.0)
@@ -611,6 +633,17 @@ func _seat_banner_shadow(at: Vector2, span: Vector2) -> void:
 	mat.set_shader_parameter("plate_max", plate_min + span)
 
 
+## The panel's breathing room, held by the margin inside the page scroll rather
+## than by the centre's offsets — a container's offsets are overwritten by its
+## parent, so they stopped being the place to keep this the moment the centre
+## gained one.
+func _seat_frame(inset: float) -> void:
+	if _frame == null:
+		return
+	for side: String in ["left", "top", "right", "bottom"]:
+		_frame.add_theme_constant_override("margin_%s" % side, roundi(inset))
+
+
 func _authored_panel_width() -> float:
 	return CARD_PANEL_W if _card_mode else _panel_num("w", PANEL_W)
 
@@ -624,11 +657,7 @@ func set_shape(stage_shape: StringName) -> void:
 	_panel_layout = LayoutBook.resolve(&"run", shape)
 	var k: float = _panel_num("scale", 1.0)
 	var inset: float = _panel_num("inset", PANEL_INSET)
-	if _centre != null:
-		_centre.offset_left = inset
-		_centre.offset_top = inset
-		_centre.offset_right = -inset
-		_centre.offset_bottom = -inset
+	_seat_frame(inset)
 	if _column != null:
 		_column.add_theme_constant_override("separation", roundi(COLUMN_GAP * k))
 	if _scroll != null:
