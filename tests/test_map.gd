@@ -217,6 +217,72 @@ static func run(fails: Array[String]) -> void:
 			"the road and its verge stay out of the next lane on %s (%.1f vs %.1f)"
 				% [shape_name, widest * MapBand.PathBand.VERGE, lane_room])
 		road.free()
+	# The region strip's negative top bleed, over the shape matrix (#86). The
+	# rect used to start exactly AT the horizon while the fallback the same band
+	# draws stood tree crowns well above it, so a painted skyline was either
+	# decapitated or squeezed into a tenth of its canvas.
+	#
+	# Worst-case horizon: a far band is pushed by up to `FAR_BLEED` of drift and
+	# an UPWARD lean raises the horizon, which is the direction that walks the
+	# bleed toward stage pixel 0.
+	var lifts: Dictionary[StringName, float] = {}
+	for shape_name: StringName in StageShape.REFERENCES:
+		var strip: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
+		strip.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		strip.size = Vector2(StageShape.REFERENCES[shape_name])
+		strip.set_shape(shape_name)
+		var sh: float = strip.size.y
+		var horizon: float = sh * strip._trail_num("horizonY", 0.36) \
+			- MapBand.FAR_BLEED
+		var path_y: float = sh * strip._trail_num("pathY", 0.64) - MapBand.FAR_BLEED
+		var span_y: float = path_y - horizon
+		var rect: Rect2 = MapBand.RegionBand.strip_rect(strip.size.x, sh,
+			horizon, path_y)
+		var lift: float = horizon - rect.position.y
+		lifts[shape_name] = lift
+		_check(fails, rect.position.y >= 0.0,
+			"the region bleed stays on stage on %s (top %.1f)"
+				% [shape_name, rect.position.y])
+		# …and no further into the sky's territory than the ratio asks. The sky
+		# band paints 0 → `horizon + FAR_BLEED` and the region is added AFTER it,
+		# so every px of this lift is px the region takes off the sky.
+		_check(fails, absf(lift - span_y * MapBand.RegionBand.CROWN_BLEED) < 0.001,
+			"…and lifts exactly CROWN_BLEED of the span on %s (%.2f vs %.2f)"
+				% [shape_name, lift, span_y * MapBand.RegionBand.CROWN_BLEED])
+		# The one that proves the fix rather than restating the rect: every crown
+		# the PROCEDURAL fallback stands must fit inside the rect a painted strip
+		# gets, or art authored against what ships is cut off. Recomputed from the
+		# band's own ratios, so moving a stride moves both sides.
+		var highest: float = horizon
+		for trunk: int in range(20):
+			var index: float = float(trunk)
+			var tree_h: float = span_y * (MapBand.RegionBand.TREE_H_MIN \
+				+ fmod(index * 53.0, 90.0) / 90.0 * MapBand.RegionBand.TREE_H_SPAN)
+			var base_y: float = horizon + span_y * (MapBand.RegionBand.TREE_BASE_MIN \
+				+ fmod(index * 29.0, 30.0) / 30.0 * MapBand.RegionBand.TREE_BASE_SPAN)
+			highest = minf(highest, base_y - tree_h)
+		_check(fails, rect.position.y <= highest,
+			"…and clears every fallback crown on %s (top %.1f vs crown %.1f)"
+				% [shape_name, rect.position.y, highest])
+		# The issue's own acceptance figure, as a literal rather than through
+		# `CROWN_BLEED`: a skyline standing 67% of the span above the horizon —
+		# the tallest thing the fallback's ratios can produce — is not clipped.
+		# Held separately so lowering `CROWN_BLEED` fails a gate instead of
+		# quietly redefining the one that checks it.
+		_check(fails, rect.position.y <= horizon - span_y * 0.67 + 0.001,
+			"…and a crown 67%% of the span up is not clipped on %s (top %.1f vs %.1f)"
+				% [shape_name, rect.position.y, horizon - span_y * 0.67])
+		_check(fails, rect.end.y >= sh,
+			"…while still covering the frame bottom on %s" % shape_name)
+		strip.free()
+	# A RATIO, not a constant: phone-landscape is the one shape that overrides
+	# `pathY`, so its span is 54.6px against pad-portrait's 330.4 and a px-tuned
+	# bleed would be 4x wrong on one of them (the BED_HALF lesson, #69 C5).
+	var short_span: float = lifts.get(&"phone-landscape", 0.0)
+	var long_span: float = lifts.get(&"pad-portrait", 0.0)
+	_check(fails, short_span > 0.0 and long_span > short_span * 2.0,
+		"the bleed scales with span_y rather than being constant (%.1f vs %.1f)"
+			% [short_span, long_span])
 	# The bed keys must be AUTHORED, not merely resolvable. `LayoutBook.resolve`
 	# inserts every declared default through `_defaults()` before `_audit()` runs,
 	# so deleting these three from the JSON leaves the book validating cleanly

@@ -155,6 +155,36 @@ class SkyBand extends MapBand:
 
 
 class RegionBand extends MapBand:
+	## The procedural treeline's own ratios against `span_y = path_y - horizon`.
+	## Named because `CROWN_BLEED` below is DERIVED from them and the strip rect
+	## is derived from that: the literals had one reader (the fallback loop) and
+	## now have two, and two copies of a ratio is how the strip stops matching
+	## the art it was authored against.
+	const TREE_H_MIN: float = 0.391
+	const TREE_H_SPAN: float = 0.392
+	const TREE_BASE_MIN: float = 0.113
+	const TREE_BASE_SPAN: float = 0.131
+	## How far above the horizon a painted strip may reach, as a fraction of the
+	## band's own `span_y`. A RATIO, never a constant: `span_y` is 229.6 px at
+	## pad-landscape and 54.6 px at phone-landscape, so a px figure tuned on one
+	## shape is 4x wrong on the other — the BED_HALF lesson from #69 C5.
+	##
+	## The value is the fallback's own supremum, not a taste call. A tree's apex
+	## sits `span_y * (base_ratio - height_ratio)` from the horizon, `base_ratio`
+	## runs TREE_BASE_MIN…+SPAN and `height_ratio` runs TREE_H_MIN…+SPAN, so the
+	## tallest tree on the lowest base lifts `TREE_H_MIN + TREE_H_SPAN -
+	## TREE_BASE_MIN` = 0.670 of the span. The 20 indices the loop actually walks
+	## reach 0.539 (tree 15, the `fmod` strides never pair a max with a min), so
+	## authored art matching what ships clears the rect with room; taking the
+	## supremum instead means changing the tree count or either stride cannot
+	## silently start decapitating the strip.
+	##
+	## Safe against the frame top on every shape: it needs
+	## `horizonY / (pathY - horizonY)`, which is 1.286 everywhere and 2.571 at
+	## phone-landscape (the one shape overriding `pathY`). Asserted per shape in
+	## tests/test_map.gd.
+	const CROWN_BLEED: float = TREE_H_MIN + TREE_H_SPAN - TREE_BASE_MIN
+
 	## Shaft sway clock — advanced only when motion is allowed, so reduce-motion
 	## stills the caustics the same way it stills the veil.
 	var _age: float = 0.0
@@ -182,6 +212,21 @@ class RegionBand extends MapBand:
 			return
 		_age += delta
 
+	## Where a PAINTED strip goes. Not the ground scrim's rect and not the
+	## fallback's: the scrim is ground tint and must stop at the horizon, but a
+	## skyline is an object standing ON the ground and its crowns rise above it.
+	##
+	## The rect used to start exactly AT `horizon`, so a strip could not place one
+	## pixel above it while the fallback drawn by the same band stood trees up to
+	## `CROWN_BLEED` of the span higher. Art authored to the fallback was
+	## decapitated and art authored to the rect was a distant range using a tenth
+	## of its canvas (#86). Pure and static so tests/test_map.gd can gate the
+	## clearance across the shape matrix instead of chasing it in a capture.
+	static func strip_rect(w: float, h: float, horizon: float,
+			path_y: float) -> Rect2:
+		var lift: float = (path_y - horizon) * CROWN_BLEED
+		return Rect2(0.0, horizon - lift, w, h - horizon + lift + FAR_BLEED)
+
 	func _draw() -> void:
 		if host == null:
 			return
@@ -201,7 +246,7 @@ class RegionBand extends MapBand:
 		# between the viewer and the drowned towers: they belong in front.
 		if _strip != null:
 			MapStrip.draw_tiled(self, _strip,
-				Rect2(0.0, horizon, w, h - horizon + FAR_BLEED),
+				strip_rect(w, h, horizon, path_y),
 				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
 		if host._region != null and host._region.weather == &"sunken":
 			_draw_shafts(w, horizon, path_y)
@@ -232,9 +277,10 @@ class RegionBand extends MapBand:
 			var index: float = float(tree)
 			var x: float = fposmod(index * 163.0 - cam_x * factor, span) \
 				- 200.0 + drift.x
-			var tree_h: float = span_y * (0.391 + fmod(index * 53.0, 90.0) / 90.0 * 0.392)
-			var base_y: float = horizon + span_y * (0.113 \
-				+ fmod(index * 29.0, 30.0) / 30.0 * 0.131)
+			var tree_h: float = span_y * (TREE_H_MIN \
+				+ fmod(index * 53.0, 90.0) / 90.0 * TREE_H_SPAN)
+			var base_y: float = horizon + span_y * (TREE_BASE_MIN \
+				+ fmod(index * 29.0, 30.0) / 30.0 * TREE_BASE_SPAN)
 			var top_y: float = base_y - tree_h
 			draw_colored_polygon(PackedVector2Array([
 				Vector2(x - 8.0, base_y), Vector2(x - 2.5, top_y),
