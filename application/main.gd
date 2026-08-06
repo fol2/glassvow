@@ -83,6 +83,9 @@ func _ready() -> void:
 	content = ContentDB.load_full()
 	_vigil = SaveService.load_vigil()
 	Preferences.active = Preferences.read_from_disk()
+	# Locale follows Preferences: main publishes the live handle; labs keep the
+	# default English stand-in (docs/p7-locale-design.md §3).
+	Locale.active = Locale.new()
 	_music = MusicBus.new()
 	add_child(_music)
 	_sfx_bus = SfxBus.new()
