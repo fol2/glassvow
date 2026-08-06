@@ -92,13 +92,15 @@ def verify_benchmark(root: Path) -> str | None:
     if not root.is_dir():
         return f"benchmark tree not found at {root}"
     try:
+        # %H, not %h: git's auto-abbrev length grows with the object count, so
+        # an abbreviated HEAD stops matching a fixed-width PINNED_COMMIT.
         head = subprocess.check_output(
-            ["git", "-C", str(root), "log", "-1", "--format=%h"],
+            ["git", "-C", str(root), "log", "-1", "--format=%H"],
             text=True,
         ).strip()
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         return f"cannot read benchmark HEAD at {root}: {e}"
-    if head != PINNED_COMMIT:
+    if not head.startswith(PINNED_COMMIT):
         return (f"benchmark at {root} is {head}, expected {PINNED_COMMIT}."
                 " Aborting — citations are pinned to the pre-Pixi reference.")
     return None
