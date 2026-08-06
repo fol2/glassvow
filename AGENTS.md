@@ -36,13 +36,29 @@ either commit. Measure on the running page; do not infer from the source.
 ```bash
 godot --version                          # must print 4.7.1.stable
 godot --headless --import                # asset import; must complete without errors
-for f in $(git ls-files '*.gd' | grep -v '^addons/'); do
-  godot --headless --check-only -s "$f" || exit 1   # parse + warnings-as-errors gate
-done
+tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS)
 python3 tools/check_anchors.py           # doc file:line anchors still point where they claim
 python3 tools/check_web_anchors.py       # benchmark citations still point into 6e06911
 ```
+
+**Why the parse gate is a script and not a one-line loop.** `godot --headless
+--check-only -s FILE` writes its diagnostics to **stderr and exits 0 whatever it
+found**. Measured on 4.7.1 across four seeded error classes — a duplicate `var`
+in one scope, an unterminated string, `var x: int = "text"`, and an untyped
+`var x = 1` — the status was 0 on all four, so the `|| exit 1` loop that stood
+here until 2026-08-06 could not fail and never once caught a defect. What the
+tree was actually being protected by was `tests/run_all.gd`, and only as a side
+effect: a parse error makes `load()` return null and the run fail.
+`tools/check_scripts.sh` greps the stderr instead, which is the only signal
+`--check-only` gives, and both this gate and CI call that one script so the two
+cannot drift.
+
+Warnings-as-errors is not the broken half. `project.godot` sets
+`untyped_declaration`, `inferred_declaration`, `unsafe_cast` and
+`unsafe_call_argument` to level 2, and an untyped `var x = 1` really does print
+`Parse Error: Variable "x" has no static type. (Warning treated as error.)` —
+detected, and now enforced by the stderr grep rather than by the exit code.
 
 Screenshots go through `tools/shot.sh` (one-off) or `tools/live.sh` (iteration
 loop) rather than a bare `godot` launch — see `docs/session-ownership.md` ›
