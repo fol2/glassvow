@@ -87,6 +87,10 @@ func _ready() -> void:
 	# default English stand-in (docs/p7-locale-design.md §3). Language comes
 	# from the saved setting, else OS (`zh*` → zh-Hant).
 	Locale.active = Locale.new(Preferences.active.effective_language())
+	# Content display fields are overlaid onto the live rows, not looked up at
+	# every draw (docs/p7-locale-design.md §3) — presentation keeps reading
+	# `name` / `text` / move names straight off ContentDB.
+	Locale.active.hydrate_content(content)
 	_music = MusicBus.new()
 	add_child(_music)
 	_sfx_bus = SfxBus.new()
@@ -706,6 +710,8 @@ func _show_settings() -> void:
 ## route). Mid-combat keeps the fight; the next screen after combat picks up
 ## the new catalogue.
 func _on_language_changed(_code: StringName) -> void:
+	# Re-overlay first: every route rebuilt below reads names off ContentDB.
+	Locale.active.hydrate_content(content)
 	_close_overlay()
 	if _screen != null:
 		# Combat stays; chrome on the next route will re-read Locale.

@@ -1,1944 +1,1944 @@
 {
-  "formatVersion": 1,
-  "ui": {
-    "brand": {
-      "secrets": " · {n} secrets unearthed",
-      "stats": "{runs} climbs · {wins} dawns · {slain} slain",
-      "tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
-      "title": "GLASSVOW"
-    },
-    "combat": {
-      "affixTitle": "{name} — an elite's title",
-      "ashes": "ASHES",
-      "ashesPileAria": "Ashes pile",
-      "ashesSub": "Burned away — each fed the lantern an ember",
-      "ashesTitle": "The Ashes",
-      "buff": "Buff",
-      "debuff": "Debuff",
-      "discard": "DISCARD",
-      "discardPileAria": "Discard pile",
-      "discardPileTitle": "Discard Pile",
-      "draw": "DRAW",
-      "drawPileAria": "Draw pile",
-      "drawPileSub": "Order hidden — shown alphabetically",
-      "drawPileTitle": "Draw Pile",
-      "end": "End",
-      "enemyTurn": "ENEMY TURN",
-      "energyAria": "Energy",
-      "facetsBody": "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass [b]shatters[/b] â it loses its next action, is Cracked, and spills Embers into your lantern.",
-      "facetsTitle": "Facets",
-      "glassHolds": "THE GLASS HOLDS",
-      "guardShattered": "GUARD SHATTERED",
-      "lanternBody": "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> â burn the card away for an ember, once a turn. Curses refuse the fire.",
-      "lanternBodyLead": "<b>{cost} Embers, once a turn:</b> {text}<br><br>",
-      "lanternSub": "A · use Art",
-      "lanternTitle": "The Lantern",
-      "lanternTitleArt": "Lantern Art — {name}",
-      "monumentGift": "THE STONE RETURNS ITS GIFT",
-      "perfectBanner": "PERFECT",
-      "reshuffle": "Reshuffle",
-      "shatter": "SHATTER",
-      "staggered": "STAGGERED",
-      "staggeredTipBody": "The glass has shattered — this creature loses its next action while it reseams.",
-      "staggeredTipTitle": "Staggered",
-      "stoneRemembers": "THE STONE REMEMBERS",
-      "yourTurn": "YOUR TURN",
-      "perfect": "PERFECT",
-      "lanternArtTitle": "Lantern Art — {name}",
-      "lanternLead": "<b>{embers} Embers, once a turn:</b> {text}<br><br>",
-      "staggeredTitle": "Staggered",
-      "staggeredBody": "The glass has shattered â this creature loses its next action while it reseams."
-    },
-    "common": {
-      "cancel": "Cancel",
-      "continue": "Continue",
-      "retry": "Retry",
-      "skip": "Skip",
-      "leave": "Leave"
-    },
-    "dawn": {
-      "act4RevealCopy": "Six panes burn. Something waits above the crown.",
-      "eighthResolvedKicker": "The broken glyphs resolve",
-      "pageKicker": "Page {n}",
-      "questCompleteKicker": "{mode} complete",
-      "questProgressKicker": "The trail continues",
-      "questRevealKicker": "{mode} revealed",
-      "questUnlockKicker": "Insight awakened",
-      "reloadSaved": "Reload Saved Dawn",
-      "saveFailedClear": "Every panel has been seen, but the saved dawn could not be released. Retry before leaving this screen.",
-      "saveFailedCursor": "This panel was shown, but its place in the dawn could not be secured. Retry before the ceremony continues.",
-      "saveFailedTitle": "The Dawn Could Not Hold",
-      "shadeResolvedKicker": "The shade speaks plainly",
-      "shardGrantCopy": "One pane answers.",
-      "whisperKicker": "A whisper reaches the dawn",
-      "witchlightCopy": "Pale paths will now be marked.",
-      "witchlightLens": "Witchlight Lens",
-      "title": "ASCENDED",
-      "subtitle": "At Dawn, the Vigil remembers.",
-      "quietTitle": "Dawn",
-      "quietBody": "The Vigil is quiet.",
-      "kickerWhisper": "A WHISPER AT DAWN",
-      "kickerQuest": "A JOURNEY REVEALED",
-      "kickerProgress": "THE JOURNEY CONTINUES",
-      "kickerShard": "EMBERGLASS SHARD",
-      "kickerUnlock": "THE VIGIL OPENS",
-      "kickerDefault": "AT DAWN",
-      "complete": "DAWN COMPLETE",
-      "progress": "DAWN {n} OF {total} · THE CURRENT MEMORY IS LIT"
-    },
-    "embark": {
-      "aspectLabel": "Who carries the lantern",
-      "noVows": "The Spire as it is. No vows sworn.",
-      "subChoose": "Choose how you meet the Spire.",
-      "subWait": "The lantern is lit. The Spire waits.",
-      "title": "THE CLIMB BEGINS",
-      "vowLevel": "VOW {level}  / {max}",
-      "warnSaved": "Beginning anew abandons your saved climb."
-    },
-    "end": {
-      "ascended": "ASCENDED",
-      "ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the Spire — the first in an age.",
-      "bequestDone": "✦ The stone keeps your {name}.<br>It will wait for you in {act}.",
-      "bequestNote": {
-        "card": "your finest card",
-        "gold": "{n} gold",
-        "goldCache": "a cache of gold",
-        "relic": "your rarest relic"
-      },
-      "bequestTitle": "Carve one thing into the stone — the next climb may recover it in {act}.",
-      "bequestUnpaid": "The unpaid gift remains in the standing stone",
-      "cardsPlayed": "Cards Played",
-      "deckSize": "Deck Size",
-      "dmgDealt": "Damage Dealt",
-      "dmgTaken": "Damage Taken",
-      "elitesBosses": "Elites & Bosses",
-      "fallen": "FALLEN",
-      "fallenSub": "Here ended a climb, on floor <b>{floor}</b>.<br>The Spire keeps what it takes — but the Vigil remembers.",
-      "finalDeckTitle": "Final Deck",
-      "floors": "Floors",
-      "returnVigil": "Return to the Vigil",
-      "runTime": "Run Time",
-      "slain": "Slain",
-      "unlock": {
-        "ashwarden": "The Ashwarden",
-        "aspect": "Aspect Unlocked",
-        "card": "Card Unlocked",
-        "header": "✦ {kind}",
-        "relic": "Relic Unlocked"
-      },
-      "viewDeck": "View Final Deck",
-      "abandoned": "THE VOW IS SET ASIDE",
-      "abandonedSub": "The pilgrimage ends here. The Vigil will keep the record.",
-      "fallenLantern": "Your lantern went dark on floor {floor}.",
-      "elitesBossesPlus": "Elites + Bosses"
-    },
-    "event": {
-      "chooseCardSub": "One page still glows.",
-      "chooseCardTitle": "Choose a Card",
-      "duplicateSub": "The mirror remembers.",
-      "duplicateTitle": "Duplicate a Card",
-      "removeSub": "Let it go.",
-      "removeTitle": "Remove a Card",
-      "upgradeSub": "The forge hungers.",
-      "upgradeTitle": "Upgrade a Card",
-      "strangePlace": "A Strange Place",
-      "continue": "CONTINUE"
-    },
-    "help": {
-      "climbBody": "Choose a path of lanterns up the Spire. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
-      "climbTitle": "The Climb",
-      "combatBody": "Each turn you draw <b>5 cards</b> and gain <b>3 Energy</b> (⬤). Play a card by clicking or dragging — attacks need a target when several enemies remain. Enemies telegraph their <b>intent</b> above their heads.",
-      "combatTitle": "Combat",
-      "firesBody": "Rest sites heal <b>30%</b> or upgrade a card. Shops sell cards, relics, phials — and can <b>remove</b> a card from your deck. Keep your deck lean; every reward is optional.",
-      "firesTitle": "The Fires & The Merchant",
-      "glassBody": "Every creature is glass with a row of <b>Facets</b> under its lifebar. Attacks that draw unblocked blood chip a facet (heavy cards chip more). Fill the gauge and the glass <b>SHATTERS</b>: it loses its next action, is Cracked, and spills <b>Embers</b> into your lantern. Time a shatter to deny the blow you can't survive.",
-      "glassTitle": "The Glass",
-      "lanternBody": "Embers fuel your <b>Lantern Art</b> — one signature power, always available, once a turn (press <b>A</b>). Drag any card onto the lantern to <b>kindle</b> it: the card burns away and feeds the lantern 1 ember. Once a turn; curses refuse the fire.",
-      "lanternTitle": "The Lantern",
-      "title": "How to Play",
-      "vigilBody": "Nothing is wasted. At the foot of each climb the <b>Lamplighter</b> offers a boon and lets you choose your Lantern Art. When you fall, carve one thing into the stone — a <b>monument</b> your next climb can recover in that same act. Every shatter, kindle and slaying feeds lifetime <b>Deeds</b> that unlock new cards, relics, and a second aspect, the <b>Ashwarden</b>. Reach the dawn once and the <b>Vows</b> open: an optional difficulty ladder for those who'd climb a crueler Spire.",
-      "vigilTitle": "The Vigil — What Death Leaves Behind",
-      "wardBody": "<b>Ward</b> is held light that absorbs damage but expires each turn. <b>Cracked</b> ×1.5 damage taken · <b>Dimmed</b> −25% damage dealt · <b>Brittle</b> −25% Ward · <b>Smolder</b> burns each turn, and leaps to another enemy when its host dies or shatters.",
-      "wardTitle": "Ward & Statuses"
-    },
-    "hollow": {
-      "kicker": "THE UNLIT WAY · PRICE {current} OF {total}",
-      "payPrice": "Pay the Price",
-      "pricePaid": "Price Paid",
-      "returnLater": "Return Later",
-      "routeFailed": "The way onward could not be prepared.",
-      "routeSaveFailed": "The way onward is not secured. Retry when storage is available.",
-      "saveFailed": "The price is not yet secured. Retry the save.",
-      "title": "THE HOLLOW LAMPLIGHTER"
-    },
-    "hud": {
-      "actFloor": "Act {act} · Floor {floor}",
-      "deckAria": "Deck",
-      "deckCount": "{n} cards",
-      "deckTitle": "Your Deck",
-      "menuAria": "Menu",
-      "omenSub": "hangs over Act {act}",
-      "omenTitle": "Omen — {name}",
-      "potionTip": "Click to use or toss",
-      "tossPotion": "Toss it",
-      "usePotion": "Use {name}",
-      "viewDeck": "View deck",
-      "menu": "Menu",
-      "emptyPhial": "Empty phial seat"
-    },
-    "keywords": {
-      "chip": "Strike at the glass itself: adds toward a Shatter, no blood required.",
-      "cinder": "Take 2 damage at end of turn while in hand.",
-      "ember": "Fuel for your Lantern Art. Spilled by shatters, deaths and kindling; held in the lantern.",
-      "energy": "Spent to play cards. Refreshes each turn.",
-      "facetDesc": "Every creature is glass with a Facet gauge. Fill it and the glass Shatters — the creature loses its next action, is Cracked, and spills Embers into your lantern.",
-      "hex": "Curse: lose 1 HP at end of turn while in hand. Cannot be kindled.",
-      "kindle": "Burned away for the rest of this combat — and the lantern gains 1 Ember.",
-      "shard": "Unplayable junk glass. It can still be kindled.",
-      "staggered": "Shattered glass loses its next action while it reseams.",
-      "unplayable": "This card cannot be played.",
-      "ward": "Held light that prevents damage. Expires at the start of your turn."
-    },
-    "lamp": {
-      "artHint": "(press A in combat)",
-      "artLabel": "Your Lantern Art",
-      "boonLabel": "A Boon for the Road",
-      "sub": "{aspect} stands at the foot of the Spire. Take one parting gift — and choose the fire your lantern will carry.",
-      "title": "THE LAMPLIGHTER"
-    },
-    "map": {
-      "click": "Click",
-      "drag": "drag",
-      "hint": {
-        "boss": "The act ends here. Ready your deck.",
-        "elite": "A titled foe - greater risk, a relic-grade purse.",
-        "event": "Fate unwritten. Could be anything.",
-        "hollow": "The Hollow Lamplighter waits with a price.",
-        "monster": "A fight. Embers and gold for the swift.",
-        "rest": "Heal, or forge a card into its + form.",
-        "shop": "Gold for cards, relics, phials.",
-        "treasure": "A chest with no fight attached."
-      },
-      "node": {
-        "elite": "Elite — beware",
-        "event": "Unknown event",
-        "hollow": "Hollow lantern",
-        "monster": "Monster",
-        "rest": "Rest site",
-        "shop": "Merchant",
-        "treasure": "Treasure"
-      },
-      "scroll": "scroll",
-      "sealedDoor": {
-        "aria": "The sealed door",
-        "inscription": "the climb continues",
-        "label": "THE SEALED DOOR",
-        "return": "Return to the summit",
-        "sub": "Six panes burn behind you. The lock answers, but does not open.",
-        "title": "THE SEALED DOOR"
-      },
-      "survey": "{action} to survey the Spire",
-      "tap": "Tap",
-      "travelHere": "{action} to travel here.",
-      "unlitBody": "What waits here is unknown — but first light pays a bounty of gold.",
-      "unlitTitle": "An unlit lantern",
-      "witchlightBody": "Pale glass waits here.",
-      "witchlightTitle": "Witchlight trembles",
-      "holdFast": "The glass holds fast. The way is not yet cut.",
-      "standThreshold": "Stand at the Threshold",
-      "returnVigil": "Return to the Vigil"
-    },
-    "menu": {
-      "abandon": "Abandon",
-      "abandonConfirmBody": "Your climb will be lost to the void.",
-      "abandonConfirmTitle": "Abandon Run?",
-      "abandonRun": "Abandon Run",
-      "back": "Back",
-      "beginAnew": "Begin Anew",
-      "beginAnewBody": "Your saved climb will be lost to the void.",
-      "beginAnewTitle": "Begin Anew?",
-      "beginClimb": "Begin the Climb",
-      "chooseBoon": "Choose a boon",
-      "close": "Close",
-      "continueClimb": "Continue Climb",
-      "credits": "Credits",
-      "fightOn": "Fight On",
-      "howToPlay": "How to Play",
-      "keepClimbing": "Keep Climbing",
-      "lightTheWay": "Light the Way",
-      "mute": "Mute",
-      "muteSound": "Mute Sound",
-      "quit": "Quit",
-      "quitGame": "Quit Game",
-      "return": "Return",
-      "returnTitle": "Return to Title",
-      "settings": "Settings",
-      "theVigil": "The Vigil",
-      "unmute": "Unmute",
-      "unmuteSound": "Unmute Sound"
-    },
-    "persistence": {
-      "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
-      "reloadClimb": "Reload Saved Climb",
-      "reloadDestination": "Reload Saved Destination",
-      "reloadDuel": "Reload Saved Duel",
-      "reloadFinalisation": "Reload Saved Finalisation",
-      "retryFinalisation": "Retry Finalisation",
-      "retrySave": "Retry Save",
-      "runSaveBody": "The climb could not be secured. Free storage and retry, or reload the last durable climb state.",
-      "runSaveRetryFail": "The save is still unavailable. Free storage, then retry or reload the last durable climb state.",
-      "saveFailedTitle": "Save Failed",
-      "stoneBody": "The stone could not hold this duel. Free storage and try again.",
-      "stoneTitle": "The Stone Could Not Hold",
-      "vigilBody": "This run end is safely journalled, but its ledgers or final dawn could not be secured. Free storage and retry, or reload this saved finalisation.",
-      "vigilTitle": "The Vigil Could Not Hold"
-    },
-    "rest": {
-      "healedFloat": "+{hp} HP",
-      "restBtn": "Rest",
-      "restHeal": "— heal {hp} HP",
-      "smithBtn": "Smith",
-      "smithSub": "— upgrade a card",
-      "sub": "The fire crackles. For a moment, the Spire is quiet.",
-      "title": "REST SITE",
-      "upgradeSub": "Forge one card into its + form.",
-      "upgradeTitle": "Upgrade a Card",
-      "upgradedSub": "It gleams with new power.",
-      "upgradedTitle": "Upgraded!",
-      "restHealBtn": "Rest — heal {hp} HP",
-      "hpFrac": "{cur} / {max} HP"
-    },
-    "reward": {
-      "addCardRow": "Add a card to your deck",
-      "bossRelicSub": "Choose one — its power is permanent.",
-      "bossRelicTitle": "A BOSS RELIC CALLS",
-      "bossVanquished": "BOSS VANQUISHED",
-      "cardAdded": "{name} added",
-      "chooseCardSub": "Add one card to your deck — or skip to keep it lean.",
-      "chooseCardTitle": "Choose a Card",
-      "eliteSlain": "ELITE SLAIN",
-      "goldRow": "<b class=\"gold-num\">{n}</b> gold",
-      "leaveConfirmBody": "You still have unclaimed spoils on the glass. Move on without them?",
-      "leaveConfirmNo": "Stay",
-      "leaveConfirmTitle": "Leave Rewards Behind?",
-      "leaveConfirmYes": "Leave Them",
-      "perfectSeal": "✦ PERFECT — the glass untouched ✦",
-      "potionSlotsFull": "Potion slots full!",
-      "takeNone": "Take none",
-      "victory": "VICTORY",
-      "continue": "Continue",
-      "skip": "Skip",
-      "leaveIt": "Leave it",
-      "walkOn": "Walk on",
-      "takeOneLight": "Take one light with you",
-      "takeOneFromLight": "Take one from the light",
-      "onePiece": "One piece comes with you",
-      "addCard": "Add a card to your deck",
-      "offeredTakeOne": "{n} offered · take one",
-      "goldAmount": "{n} Gold",
-      "chooseCardBody": "Add one card to your deck — or skip to keep it lean."
-    },
-    "rose": {
-      "dormantPane": "Dormant Emberglass pane {n}",
-      "finalWhisper": "The final whisper returns at every dawn.",
-      "openLabel": "Open the Rose Window",
-      "paneDark": "This pane is dark.",
-      "selectedPane": "Selected Emberglass pane",
-      "shardRecovered": "{name}, Shard recovered",
-      "shardRecoveredShort": "Shard recovered",
-      "unknownPane": "Unknown Emberglass pane {n}",
-      "whisperLogTitle": "Whispers heard at dawn",
-      "whisperLogTitleUpper": "WHISPERS HEARD AT DAWN",
-      "finalWhisperMark": "∞  The final whisper returns at every dawn."
-    },
-    "settings": {
-      "audio": "Audio",
-      "debugLabel": "Debug",
-      "display": "Display",
-      "eraseAll": "Erase All Progress",
-      "eraseEverything": "Erase Everything",
-      "fullscreen": "Fullscreen",
-      "ledger": "The Ledger",
-      "master": "Master",
-      "motion": "Motion",
-      "music": "Music",
-      "mute": "Mute",
-      "off": "Off",
-      "on": "On",
-      "reduceMotion": "Reduce Motion",
-      "resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
-      "resetConfirmTitle": "Reset Save?",
-      "resetSave": "Reset Save",
-      "resetWarn": "Wipes the current climb and all Vigil progress. Cannot be undone.",
-      "screenShake": "Screen Shake",
-      "sfx": "SFX",
-      "title": "Settings",
-      "unmute": "Unmute",
-      "volumeTip": "{name} volume",
-      "vsync": "Vsync",
-      "resetConfirmPlain": "This erases your current climb and the entire Vigil — deeds, unlocks, vows, monuments, and whispers.\n\nThis cannot be undone.",
-      "eraseAllTitle": "ERASE ALL PROGRESS?"
-    },
-    "shop": {
-      "cardRemoval": {
-        "desc": "Remove a card from your deck forever.",
-        "pickSub": "Cut the dead weight.",
-        "pickTitle": "Remove a Card",
-        "title": "Card Removal"
-      },
-      "greeting": "\"Gold for glory, stranger. Everything's fair-priced — for the doomed.\"",
-      "leave": "Leave the Shop",
-      "potionSlotsFull": "Potion slots full!",
-      "title": "THE MERCHANT",
-      "leaveUpper": "LEAVE THE SHOP"
-    },
-    "smoke": {
-      "hello": "Hello, {name}"
-    },
-    "treasure": {
-      "coinsOnly": "Only coins remain — <b class=\"gold-num\">+{gold} gold</b>.",
-      "empty": "The chest lies empty.",
-      "openBtn": "Open the Chest",
-      "relicClaim": "You claim <b style=\"color:{tone}\">{name}</b> — <i>{text}</i>",
-      "sub": "A heavy chest, banded in gold. Open it?",
-      "title": "TREASURE",
-      "continue": "Continue",
-      "relicClaimPlain": "You claim [color=#{tone}]{name}[/color] — [i]{text}[/i]"
-    },
-    "vigil": {
-      "deeds": "Deeds",
-      "roseWindow": "Rose Window",
-      "title": "THE VIGIL",
-      "return": "RETURN",
-      "ashwarden": "The Ashwarden",
-      "stats": "{runs} climbs · {wins} dawns · deepest Vow: {vow}",
-      "deedsTab": "DEEDS",
-      "roseTab": "ROSE WINDOW"
-    },
-    "pilgrimage": {
-      "survey": "SCROLL OR DRAG TO SURVEY THE PILGRIMAGE",
-      "surveyChoose": "SCROLL OR DRAG · CHOOSE A LIT LANTERN",
-      "summit": "THE SUMMIT",
-      "roadEnds": "THE ROAD ENDS HERE",
-      "unlitWay": "Unlit Way",
-      "roseWindow": "The Rose Window",
-      "hearth": "Hearth",
-      "awaits": "%s — %s AWAITS",
-      "notNow": "not now"
-    },
-    "credits": {
-      "title": "Credits",
-      "headingBrand": "GLASSVOW",
-      "bodyBrand": "A roguelite deckbuilder · by fol2",
-      "headingGlass": "THE GLASS",
-      "bodyGlass": "Parallel-ported from roguecardv2 (web reference 0.5.0+6e06911).",
-      "headingMusic": "MUSIC — STAINED GLASS",
-      "headingSound": "SOUND — ASHGLASS VIGIL",
-      "headingType": "TYPE",
-      "bodyCinzel": "Cinzel — Natanael Gama (OFL)",
-      "bodyAlegreya": "Alegreya — Juan Pablo del Peral, Huerta Tipográfica (OFL)",
-      "bodyNoto": "Noto Sans TC — Google (OFL)",
-      "headingEngine": "ENGINE",
-      "bodyEngine": "Made with Godot Engine",
-      "close": "Close",
-      "engineLicences": "Engine licences",
-      "fontLicences": "Font licences (OFL)",
-      "components": "COMPONENTS",
-      "licenceTexts": "LICENCE TEXTS",
-      "themeLine": "Ashglass Vigil"
-    },
-    "omen": {
-      "prefix": "OMEN - "
-    },
-    "language": {
-      "label": "Language",
-      "en": "English",
-      "zhHant": "繁體中文",
-      "deferNote": "Takes effect on the next screen."
-    }
-  },
-  "content": {
-    "acts": {
-      "0": {
-        "bossName": "The Rootheart",
-        "name": "The Ashen Woods"
-      },
-      "1": {
-        "bossName": "Leviathan's Maw",
-        "name": "The Sunken City"
-      },
-      "2": {
-        "bossName": "The Eternal Sovereign",
-        "name": "The Obsidian Spire"
-      }
-    },
-    "affixes": {
-      "adamant": {
-        "name": "Adamant",
-        "text": "The first time its glass would shatter, it holds."
-      },
-      "cinderVeined": {
-        "name": "Cinder-Veined",
-        "text": "Its blows leave 1 Smolder on you."
-      },
-      "emberFat": {
-        "name": "Ember-Fat",
-        "text": "Slaying it pays double gold."
-      },
-      "fervent": {
-        "name": "Fervent",
-        "text": "Begins the fight with 2 Fervor."
-      },
-      "veiled": {
-        "name": "Veiled",
-        "text": "Begins the fight behind 15 Ward."
-      },
-      "vitrified": {
-        "name": "Vitrified",
-        "text": "Thicker glass: +2 facets and +15% HP."
-      }
-    },
-    "arts": {
-      "ashfall": {
-        "name": "Ashfall",
-        "text": "The Ashwarden's breath. Apply 3 Smolder to ALL enemies and gain 5 Ward."
-      },
-      "beacon": {
-        "name": "Beacon",
-        "text": "Raise the light. Your attacks chip 1 extra facet this turn."
-      },
-      "emberveil": {
-        "name": "Emberveil",
-        "text": "A curtain of held fire. Gain 12 Ward."
-      },
-      "flare": {
-        "name": "Flare",
-        "text": "The lantern vents. Deal 7 damage to ALL enemies and apply 2 Smolder."
-      },
-      "mendglass": {
-        "name": "Mendglass",
-        "text": "Warm light knits the cracks. Heal 8 HP."
-      },
-      "stoke": {
-        "name": "Stoke",
-        "text": "Feed the flame to the hand that carries it. Gain 1 Energy and draw 2 cards."
-      }
-    },
-    "aspects": {
-      "ashwarden": {
-        "blurb": "Smoke given a shape. Lets the Smolder do the killing and kindles its own hand to feed the lantern. Slower, but it endures — and everything it touches burns.",
-        "name": "The Ashwarden"
-      },
-      "duskblade": {
-        "blurb": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a versatile climber for any night.",
-        "name": "The Duskblade"
-      }
-    },
-    "boons": {
-      "emberFlask": {
-        "name": "Ember Flask",
-        "text": "Pack a Fire Phial and a Draught of Vigor."
-      },
-      "fullPurse": {
-        "name": "A Full Purse",
-        "text": "Set out with 120 extra gold."
-      },
-      "keenEye": {
-        "name": "A Keeper's Eye",
-        "text": "Begin with a random relic."
-      },
-      "pilgrimsCache": {
-        "name": "Pilgrim's Cache",
-        "text": "Gain 60 gold and a Ward Phial."
-      },
-      "temperedGlass": {
-        "name": "Tempered Glass",
-        "text": "Raise your Max HP by 14."
-      },
-      "twinPhials": {
-        "name": "Twin Phials",
-        "text": "Pack a Swift Phial and an Energy Phial."
-      },
-      "venomPouch": {
-        "name": "A Pouch of Ash",
-        "text": "Gain 40 gold and a Venom Phial."
-      },
-      "warmHearth": {
-        "name": "A Warm Hearth",
-        "text": "Mend to full and gain 6 Max HP."
-      }
-    },
-    "cards": {
-      "aegis": {
-        "name": "Cathedral Glass",
-        "text": "Gain #30# Ward. Kindle.",
-        "textUp": "Gain #40# Ward. Kindle."
-      },
-      "agility": {
-        "name": "Glazier's Poise",
-        "text": "Gain 2 Poise.",
-        "textUp": "Gain 3 Poise."
-      },
-      "annihilate": {
-        "name": "Requiem",
-        "text": "Deal @9@ damage and apply 3 Smolder to ALL enemies.",
-        "textUp": "Deal @12@ damage and apply 4 Smolder to ALL enemies."
-      },
-      "ascension": {
-        "name": "Rising Litany",
-        "text": "At the start of each turn, gain 2 Fervor.",
-        "textUp": "At the start of each turn, gain 3 Fervor."
-      },
-      "ashBite": {
-        "name": "Ashbite",
-        "text": "Deal @5@ damage. Apply 2 Smolder.",
-        "textUp": "Deal @7@ damage. Apply 3 Smolder."
-      },
-      "ashenChoir": {
-        "name": "Ashen Choir",
-        "text": "Apply 4 Smolder. When smoldering glass dies, its fire leaps on.",
-        "textUp": "Apply 6 Smolder. When smoldering glass dies, its fire leaps on."
-      },
-      "bastion": {
-        "name": "Anneal",
-        "text": "Ward no longer expires at the start of your turn."
-      },
-      "bloodRite": {
-        "name": "Blood for Oil",
-        "text": "Lose 3 HP. Gain 2 Energy.",
-        "textUp": "Lose 3 HP. Gain 3 Energy."
-      },
-      "brace": {
-        "name": "Held Light",
-        "text": "Gain #8# Ward.",
-        "textUp": "Gain #11# Ward."
-      },
-      "bulwark": {
-        "name": "Glasswall",
-        "text": "Gain #13# Ward.",
-        "textUp": "Gain #18# Ward."
-      },
-      "burn": {
-        "name": "Cinder",
-        "text": "Unplayable. At the end of your turn, take 2 damage if this is in your hand."
-      },
-      "catalyst": {
-        "name": "Bellows",
-        "text": "Double an enemy's Smolder. Kindle.",
-        "textUp": "Triple an enemy's Smolder. Kindle."
-      },
-      "chisel": {
-        "name": "Chisel",
-        "text": "Deal @4@ damage. Chip 1 extra Facet.",
-        "textUp": "Deal @7@ damage. Chip 1 extra Facet."
-      },
-      "cleave": {
-        "name": "Fan of Glass",
-        "text": "Deal @6@ damage to ALL enemies.",
-        "textUp": "Deal @9@ damage to ALL enemies."
-      },
-      "cripple": {
-        "name": "Gutter",
-        "text": "Snuff an enemy's fire: it loses 2 Fervor. Kindle.",
-        "textUp": "Snuff an enemy's fire: it loses 3 Fervor. Kindle."
-      },
-      "defend": {
-        "name": "Ward",
-        "text": "Gain #5# Ward.",
-        "textUp": "Gain #8# Ward."
-      },
-      "deflect": {
-        "name": "Refract",
-        "text": "Gain #6# Ward. Draw 1 card.",
-        "textUp": "Gain #9# Ward. Draw 1 card."
-      },
-      "devour": {
-        "name": "Eat the Flame",
-        "text": "Deal @10@ damage. If this kills, swallow its fire: gain 3 Embers and heal 4. Kindle.",
-        "textUp": "Deal @13@ damage. If this kills, swallow its fire: gain 4 Embers and heal 6. Kindle."
-      },
-      "eclipseSlash": {
-        "name": "Eclipse Slash",
-        "text": "Deal @7@ damage. Apply 1 Cracked.",
-        "textUp": "Deal @9@ damage. Apply 2 Cracked."
-      },
-      "emberdance": {
-        "name": "Emberdance",
-        "text": "Spill your lantern: gain 3 Ward for each Ember spent. Kindle.",
-        "textUp": "Spill your lantern: gain 4 Ward for each Ember spent. Kindle."
-      },
-      "empower": {
-        "name": "Inner Blaze",
-        "text": "Gain 2 Fervor.",
-        "textUp": "Gain 3 Fervor."
-      },
-      "executioner": {
-        "name": "Faultline",
-        "text": "Deal @8@ damage. Cracked enemies take 6 more.",
-        "textUp": "Deal @11@ damage. Cracked enemies take 8 more."
-      },
-      "firstSpark": {
-        "name": "First Spark",
-        "text": "Draw 1 card. Kindle.",
-        "textUp": "Draw 2 cards. Kindle."
-      },
-      "flawlessForm": {
-        "name": "Flawless Form",
-        "text": "Gain #8# Ward. If your glass is untouched this combat, gain #8# more.",
-        "textUp": "Gain #11# Ward. If your glass is untouched this combat, gain #11# more."
-      },
-      "flurry": {
-        "name": "Splinterstorm",
-        "text": "Deal @2@ damage 3 times.",
-        "textUp": "Deal @3@ damage 3 times."
-      },
-      "fortify": {
-        "name": "Mirrorlight",
-        "text": "Double your Ward.",
-        "textUp": "Double your Ward."
-      },
-      "frenzy": {
-        "name": "Overglow",
-        "text": "Your glass runs too hot: gain 2 Cracked. At the start of each turn, gain 1 Energy.",
-        "textUp": "Your glass runs too hot: gain 1 Cracked. At the start of each turn, gain 1 Energy."
-      },
-      "guardedStrike": {
-        "name": "Warden's Edge",
-        "text": "Deal @5@ damage. Gain #4# Ward.",
-        "textUp": "Deal @7@ damage. Gain #6# Ward."
-      },
-      "heavyBlow": {
-        "name": "Quarry Maul",
-        "text": "Deal @12@ damage. Chip 1 extra Facet.",
-        "textUp": "Deal @16@ damage. Chip 2 extra Facets."
-      },
-      "hex": {
-        "name": "Hex",
-        "text": "Unplayable. At the end of your turn, lose 1 HP if this is in your hand. Refuses the fire."
-      },
-      "ironSkin": {
-        "name": "Vitrify",
-        "text": "At the end of your turn, gain 3 Ward.",
-        "textUp": "At the end of your turn, gain 4 Ward."
-      },
-      "leechBlade": {
-        "name": "Thirsting Shard",
-        "text": "Deal @9@ damage. Heal for half the unblocked damage.",
-        "textUp": "Deal @13@ damage. Heal for half the unblocked damage."
-      },
-      "limitBreak": {
-        "name": "Annealing Rite",
-        "text": "Chip 2 Facets of every enemy. Kindle.",
-        "textUp": "Chip 3 Facets of every enemy. Kindle."
-      },
-      "lunge": {
-        "name": "Dimming Cut",
-        "text": "Deal @6@ damage. Apply 1 Dimmed.",
-        "textUp": "Deal @9@ damage. Apply 2 Dimmed."
-      },
-      "momentum": {
-        "name": "Honing Edge",
-        "text": "Deal @6@ damage. Each play, this card gains +4 damage this combat.",
-        "textUp": "Deal @8@ damage. Each play, this card gains +6 damage this combat."
-      },
-      "nightSight": {
-        "name": "Night Sight",
-        "text": "At the start of each turn, draw 1 extra card."
-      },
-      "novaflare": {
-        "name": "Novaflare",
-        "text": "Deal @3@ damage for every Ember in your lantern.",
-        "textUp": "Deal @4@ damage for every Ember in your lantern."
-      },
-      "oblivionStrike": {
-        "name": "Bellstrike",
-        "text": "Deal @30@ damage. Chip 2 extra Facets.",
-        "textUp": "Deal @40@ damage. Chip 3 extra Facets."
-      },
-      "offering": {
-        "name": "Pyre Tithe",
-        "text": "Burn every other card in your hand — each feeds the lantern. Draw 3 cards. Kindle.",
-        "textUp": "Burn every other card in your hand — each feeds the lantern. Draw 4 cards. Kindle."
-      },
-      "phantomBlades": {
-        "name": "Phantom Blades",
-        "text": "Deal @3@ damage for each card in your hand.",
-        "textUp": "Deal @4@ damage for each card in your hand."
-      },
-      "preparation": {
-        "name": "Tinder",
-        "text": "Draw 2 cards. Kindle.",
-        "textUp": "Draw 2 cards."
-      },
-      "pyreheart": {
-        "name": "Pyreheart",
-        "text": "At the start of each turn, gain 1 Ember."
-      },
-      "quakeblow": {
-        "name": "Quakeblow",
-        "text": "Deal @8@ damage. Chip 2 extra Facets.",
-        "textUp": "Deal @11@ damage. Chip 3 extra Facets."
-      },
-      "quickSlash": {
-        "name": "Flicker",
-        "text": "Deal @4@ damage. Draw 1 card.",
-        "textUp": "Deal @6@ damage. Draw 1 card."
-      },
-      "regrowth": {
-        "name": "Hearthglow",
-        "text": "At the end of your turn, heal 2 HP.",
-        "textUp": "At the end of your turn, heal 3 HP."
-      },
-      "resonantLance": {
-        "name": "Resonant Lance",
-        "text": "Deal @7@ damage. Deals double to Staggered or Cracked glass.",
-        "textUp": "Deal @10@ damage. Deals double to Staggered or Cracked glass."
-      },
-      "shardstorm": {
-        "name": "Shardstorm",
-        "text": "Deal @5@ damage to ALL enemies twice.",
-        "textUp": "Deal @7@ damage to ALL enemies twice."
-      },
-      "sidestep": {
-        "name": "Glasstep",
-        "text": "Gain #3# Ward. Draw 1 card.",
-        "textUp": "Gain #5# Ward. Draw 1 card."
-      },
-      "smother": {
-        "name": "Smother",
-        "text": "Gain #5# Ward. Apply 2 Smolder.",
-        "textUp": "Gain #8# Ward. Apply 3 Smolder."
-      },
-      "strike": {
-        "name": "Edge",
-        "text": "Deal @6@ damage.",
-        "textUp": "Deal @9@ damage."
-      },
-      "surge": {
-        "name": "Struck Match",
-        "text": "Gain 1 Energy. Draw 1 card. Kindle.",
-        "textUp": "Gain 2 Energy. Draw 1 card. Kindle."
-      },
-      "tempest": {
-        "name": "Hailglass",
-        "text": "Deal @4@ damage to ALL enemies twice.",
-        "textUp": "Deal @6@ damage to ALL enemies twice."
-      },
-      "tithe": {
-        "name": "Tithe of Panes",
-        "text": "Gain 2 Embers. Draw 1 card.",
-        "textUp": "Gain 3 Embers. Draw 1 card."
-      },
-      "toxicMist": {
-        "name": "Ashcloud",
-        "text": "Apply 3 Smolder to ALL enemies.",
-        "textUp": "Apply 5 Smolder to ALL enemies."
-      },
-      "twinFangs": {
-        "name": "Twin Shards",
-        "text": "Deal @4@ damage twice.",
-        "textUp": "Deal @6@ damage twice."
-      },
-      "unreadablePage": {
-        "name": "The Unreadable Page",
-        "text": "It cannot be played or removed. Carry it to dawn and it may read itself."
-      },
-      "uppercut": {
-        "name": "Ringing Blow",
-        "text": "Deal @10@ damage. Chip 1 extra Facet. Apply 1 Dimmed.",
-        "textUp": "Deal @13@ damage. Chip 2 extra Facets. Apply 2 Dimmed."
-      },
-      "venomStrike": {
-        "name": "Emberbite",
-        "text": "Deal @4@ damage. Apply 3 Smolder.",
-        "textUp": "Deal @6@ damage. Apply 4 Smolder."
-      },
-      "virulence": {
-        "name": "Emberfang",
-        "text": "Whenever you play an Attack, apply 1 Smolder to the enemy."
-      },
-      "warCry": {
-        "name": "Shatterhymn",
-        "text": "Apply 1 Dimmed and 1 Cracked to ALL enemies.",
-        "textUp": "Apply 2 Dimmed and 2 Cracked to ALL enemies."
-      },
-      "wound": {
-        "name": "Shard",
-        "text": "Unplayable. Broken glass rattling in your deck."
-      }
-    },
-    "deeds": {
-      "ashSermon": {
-        "desc": "Let Smolder claim 10 lives",
-        "name": "Sermon of Ash"
-      },
-      "darkWalker": {
-        "desc": "Enter 6 unlit lanterns",
-        "name": "Walker of Unlit Ways"
-      },
-      "firstDawn": {
-        "desc": "Reach the sunrise once",
-        "name": "The First Dawn"
-      },
-      "hundredShards": {
-        "desc": "Slay 100 creatures",
-        "name": "A Hundred Shards"
-      },
-      "lanternFed": {
-        "desc": "Kindle 20 cards by hand",
-        "name": "The Lantern Fed"
-      },
-      "paneBreaker": {
-        "desc": "Shatter 15 facets",
-        "name": "Breaker of Panes"
-      },
-      "spendthrift": {
-        "desc": "Spend 30 embers on Lantern Arts",
-        "name": "Fire Given Freely"
-      },
-      "untouched": {
-        "desc": "Win 3 fights without a scratch",
-        "name": "The Glass Untouched"
-      }
-    },
-    "enemies": {
-      "abyssalKnight": {
-        "moves": {
-          "blade": {
-            "name": "Voidblade"
-          },
-          "condemn": {
-            "name": "Condemn"
-          },
-          "execute": {
-            "name": "Execute"
-          },
-          "oath": {
-            "name": "Dark Oath"
-          }
-        },
-        "name": "Abyssal Knight"
-      },
-      "alphaFang": {
-        "moves": {
-          "howl": {
-            "name": "Alpha Howl"
-          },
-          "savage": {
-            "name": "Savage"
-          },
-          "throat": {
-            "name": "Throat Rip"
-          }
-        },
-        "name": "Alpha Duskfang"
-      },
-      "ashAcolyte": {
-        "moves": {
-          "ritual": {
-            "name": "Dark Ritual"
-          },
-          "scorch": {
-            "name": "Scorch"
-          }
-        },
-        "name": "Ash Acolyte"
-      },
-      "chaosHound": {
-        "moves": {
-          "bite": {
-            "name": "Chaos Bite"
-          },
-          "howl": {
-            "name": "Warp Howl"
-          }
-        },
-        "name": "Chaos Hound"
-      },
-      "deepmaw": {
-        "moves": {
-          "bite": {
-            "name": "Bite"
-          },
-          "lure": {
-            "name": "Luminous Lure"
-          },
-          "swallow": {
-            "name": "Swallow"
-          }
-        },
-        "name": "Deepmaw"
-      },
-      "drownedOne": {
-        "moves": {
-          "claw": {
-            "name": "Claw"
-          },
-          "frenzy": {
-            "name": "Frenzy"
-          },
-          "gurgle": {
-            "name": "Gurgle"
-          }
-        },
-        "name": "Drowned One"
-      },
-      "duskfang": {
-        "moves": {
-          "bite": {
-            "name": "Bite"
-          },
-          "howl": {
-            "name": "Howl"
-          },
-          "rend": {
-            "name": "Rend"
-          }
-        },
-        "name": "Duskfang"
-      },
-      "gloomslime": {
-        "moves": {
-          "harden": {
-            "name": "Congeal"
-          },
-          "ooze": {
-            "name": "Corrosive Ooze"
-          },
-          "slam": {
-            "name": "Slam"
-          }
-        },
-        "name": "Gloomslime"
-      },
-      "gravewarden": {
-        "moves": {
-          "bulwark": {
-            "name": "Bulwark"
-          },
-          "crush": {
-            "name": "Crush"
-          },
-          "entomb": {
-            "name": "Entomb"
-          }
-        },
-        "name": "Gravewarden"
-      },
-      "heraldOfEnd": {
-        "moves": {
-          "doom": {
-            "name": "Doomsong"
-          },
-          "flame": {
-            "name": "Black Flame"
-          },
-          "reave": {
-            "name": "Reave"
-          },
-          "rise": {
-            "name": "Apotheosis"
-          }
-        },
-        "name": "Herald of the End"
-      },
-      "leviathan": {
-        "moves": {
-          "brine": {
-            "name": "Black Brine"
-          },
-          "cataclysm": {
-            "name": "Cataclysm"
-          },
-          "consume": {
-            "name": "Consume the Deep"
-          },
-          "crush": {
-            "name": "Crushing Jaws"
-          },
-          "tide": {
-            "name": "Rising Tide"
-          }
-        },
-        "name": "Leviathan's Maw"
-      },
-      "mirelurker": {
-        "moves": {
-          "barb": {
-            "name": "Barb"
-          },
-          "burrow": {
-            "name": "Burrow"
-          },
-          "sting": {
-            "name": "Venom Sting"
-          }
-        },
-        "name": "Mirelurker"
-      },
-      "obsidianGolem": {
-        "moves": {
-          "harden": {
-            "name": "Harden"
-          },
-          "pound": {
-            "name": "Pound"
-          },
-          "quake": {
-            "name": "Quake"
-          }
-        },
-        "name": "Obsidian Golem"
-      },
-      "rootheart": {
-        "moves": {
-          "awaken": {
-            "name": "Awaken"
-          },
-          "entangle": {
-            "name": "Entangle"
-          },
-          "lash": {
-            "name": "Root Lash"
-          },
-          "slam": {
-            "name": "Colossal Slam"
-          },
-          "spores": {
-            "name": "Choking Spores"
-          }
-        },
-        "name": "The Rootheart"
-      },
-      "shade": {
-        "moves": {
-          "gloom": {
-            "name": "Gloom"
-          },
-          "slash": {
-            "name": "Dual Slash"
-          },
-          "vanish": {
-            "name": "Vanish"
-          }
-        },
-        "name": "Shade"
-      },
-      "shellback": {
-        "moves": {
-          "jet": {
-            "name": "Water Jet"
-          },
-          "shell": {
-            "name": "Shell Up"
-          },
-          "snap": {
-            "name": "Snap"
-          }
-        },
-        "name": "Shellback"
-      },
-      "siren": {
-        "moves": {
-          "mend": {
-            "name": "Mend"
-          },
-          "rend": {
-            "name": "Talon Rend"
-          },
-          "shriek": {
-            "name": "Shriek"
-          },
-          "song": {
-            "name": "Dirge"
-          }
-        },
-        "name": "Siren"
-      },
-      "sovereign": {
-        "moves": {
-          "annihilation": {
-            "name": "Annihilation"
-          },
-          "ascend": {
-            "name": "Ascend"
-          },
-          "gravitas": {
-            "name": "Gravitas"
-          },
-          "ruin": {
-            "name": "Word of Ruin"
-          },
-          "scepter": {
-            "name": "Scepter Strike"
-          },
-          "starfall": {
-            "name": "Starfall"
-          }
-        },
-        "name": "The Eternal Sovereign"
-      },
-      "sporeling": {
-        "moves": {
-          "grow": {
-            "name": "Bloom"
-          },
-          "spit": {
-            "name": "Spore Spit"
-          }
-        },
-        "name": "Sporeling"
-      },
-      "starCultist": {
-        "moves": {
-          "ritual": {
-            "name": "Star Ritual"
-          },
-          "scorch": {
-            "name": "Starfire"
-          }
-        },
-        "name": "Star Cultist"
-      },
-      "thornling": {
-        "moves": {
-          "bristle": {
-            "name": "Bristle"
-          },
-          "burst": {
-            "name": "Spike Burst"
-          },
-          "prick": {
-            "name": "Prick"
-          }
-        },
-        "name": "Thornling"
-      },
-      "tidecaller": {
-        "moves": {
-          "bolt": {
-            "name": "Water Bolt"
-          },
-          "surge": {
-            "name": "Tidal Blessing"
-          },
-          "undertow": {
-            "name": "Undertow"
-          }
-        },
-        "name": "Tidecaller"
-      },
-      "voidColossus": {
-        "moves": {
-          "fortify": {
-            "name": "Fortify"
-          },
-          "shatter": {
-            "name": "Shatter"
-          },
-          "slam": {
-            "name": "Void Slam"
-          }
-        },
-        "name": "Voidforged Colossus"
-      },
-      "voidWisp": {
-        "moves": {
-          "siphon": {
-            "name": "Siphon"
-          },
-          "zap": {
-            "name": "Void Zap"
-          }
-        },
-        "name": "Void Wisp"
-      },
-      "voltEel": {
-        "moves": {
-          "coil": {
-            "name": "Coil"
-          },
-          "discharge": {
-            "name": "Discharge"
-          },
-          "shock": {
-            "name": "Shock"
-          }
-        },
-        "name": "Voltaic Eel"
-      },
-      "watcherEye": {
-        "moves": {
-          "beam": {
-            "name": "Ruin Beam"
-          },
-          "blink": {
-            "name": "Blink"
-          },
-          "gaze": {
-            "name": "Piercing Gaze"
-          }
-        },
-        "name": "Watcher Eye"
-      },
-      "waylayer": {
-        "moves": {
-          "smoke": {
-            "name": "Smokescreen"
-          },
-          "stab": {
-            "name": "Stab"
-          },
-          "trick": {
-            "name": "Dirty Trick"
-          }
-        },
-        "name": "Waylayer"
-      }
-    },
-    "events": {
-      "cursedIdol": {
-        "choices": {
-          "0": {
-            "label": "Take it",
-            "sub": "Gain a relic. Gain a Hex."
-          },
-          "1": {
-            "label": "Leave it",
-            "sub": ""
-          }
-        },
-        "name": "The Cursed Idol",
-        "text": "A jade idol sits on a plinth of skulls, radiating a soft warmth. It has clearly been left here for a reason."
-      },
-      "emberFountain": {
-        "choices": {
-          "0": {
-            "label": "Bathe",
-            "sub": "Heal 35% of your Max HP."
-          },
-          "1": {
-            "label": "Bottle it",
-            "sub": "Gain a Phial of Dawn."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "Fountain of Embers",
-        "text": "Liquid light pools in a cracked basin, throwing sparks that do not burn. It smells of summer and old victories."
-      },
-      "fleshTrader": {
-        "choices": {
-          "0": {
-            "label": "Trade",
-            "sub": "Lose 8 Max HP. Gain a relic."
-          },
-          "1": {
-            "label": "Refuse",
-            "sub": ""
-          }
-        },
-        "name": "The Flesh Trader",
-        "text": "\"Vitality is a currency,\" purrs a thing wearing a merchant's coat. \"And you look flush with it.\" Long fingers open to reveal a relic."
-      },
-      "forge": {
-        "choices": {
-          "0": {
-            "label": "Temper",
-            "sub": "Upgrade a card."
-          },
-          "1": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "The Forgotten Forge",
-        "text": "An anvil of black star-metal, still warm. Hammers hang in racks, waiting for hands that died an age ago."
-      },
-      "forgottenShrine": {
-        "choices": {
-          "0": {
-            "label": "Pray",
-            "sub": "Remove a card from your deck."
-          },
-          "1": {
-            "label": "Desecrate",
-            "sub": "Gain 90 gold. Gain a Hex."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "Forgotten Shrine",
-        "text": "A moss-eaten shrine hums with old power. Offerings of bone and silver litter its base. Something watches from inside the stone."
-      },
-      "gambler": {
-        "choices": {
-          "0": {
-            "label": "Bet 40 gold",
-            "sub": "45% chance to win 110 gold."
-          },
-          "1": {
-            "label": "Walk away",
-            "sub": ""
-          }
-        },
-        "name": "The Bone Gambler",
-        "rolls": {
-          "lose": {
-            "text": "The bones rattle against you. The wager is lost."
-          },
-          "win": {
-            "text": "The bones land in your favour. You claim 110 gold."
-          }
-        },
-        "text": "A grinning figure rattles a cup of knuckle-bones. \"One throw, stranger. Fortune loves the reckless.\""
-      },
-      "library": {
-        "choices": {
-          "0": {
-            "label": "Study",
-            "sub": "Choose 1 of 5 cards to add to your deck."
-          },
-          "1": {
-            "label": "Rest among the stacks",
-            "sub": "Heal 20% of your Max HP."
-          }
-        },
-        "name": "The Drowned Library",
-        "text": "Shelves of waterlogged grimoires stretch into the dark. Most are pulp — but a few pages still glow faintly."
-      },
-      "mirror": {
-        "choices": {
-          "0": {
-            "label": "Reflect",
-            "sub": "Duplicate a card in your deck."
-          },
-          "1": {
-            "label": "Shatter it",
-            "sub": "Lose 6 HP. Remove a card from your deck."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "The Silvered Mirror",
-        "text": "A tall mirror stands in the rubble, unbroken. Your reflection moves half a breath behind you — and it is smiling."
-      },
-      "ruinedCamp": {
-        "choices": {
-          "0": {
-            "label": "Rest",
-            "sub": "Heal 15% of your Max HP."
-          },
-          "1": {
-            "label": "Scavenge",
-            "sub": "Gain 45 gold and a random potion."
-          }
-        },
-        "name": "Ruined Camp",
-        "text": "A campfire, still smoldering. Bedrolls, torn. Whoever slept here left in a hurry — and left their packs behind."
-      },
-      "voidChest": {
-        "choices": {
-          "0": {
-            "label": "Open it",
-            "sub": "It might hold a relic... or teeth."
-          },
-          "1": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "Humming Chest",
-        "text": "A black iron chest sits alone in the gloom, humming a note you feel in your teeth. Its lock is already broken."
-      },
-      "woundedKnight": {
-        "choices": {
-          "0": {
-            "label": "Aid him",
-            "sub": "Lose 8 HP. He rewards you with a relic."
-          },
-          "1": {
-            "label": "Loot him",
-            "sub": "Gain 65 gold. Gain a Hex."
-          },
-          "2": {
-            "label": "Leave",
-            "sub": ""
-          }
-        },
-        "name": "The Wounded Knight",
-        "text": "A knight slumps against a shattered pillar, breath rattling behind a crushed visor. One gauntlet clutches a relic; the other beckons you closer."
-      }
-    },
-    "omens": {
-      "ashfall": {
-        "name": "Ashfall",
-        "text": "Ash chokes every fire: enemies begin combat with 2 Smolder, but their blows leave 1 Smolder on you."
-      },
-      "eighthOmen": {
-        "name": "The Eighth Omen",
-        "text": "Every lesser battle bears a title. The broken words follow every floor."
-      },
-      "emberWind": {
-        "name": "Ember Wind",
-        "text": "Sparks ride the wind into your lantern: begin each combat with 2 Embers, but draw 4 cards instead of 5."
-      },
-      "heavyAir": {
-        "name": "Heavy Air",
-        "text": "The air holds light like water: all Ward gained is increased by a quarter — yours and theirs."
-      },
-      "hungryDark": {
-        "name": "The Hungry Dark",
-        "text": "The dark eats coin but sharpens choice: shop prices are a quarter higher, and card rewards offer 1 more choice."
-      },
-      "longNight": {
-        "name": "The Long Night",
-        "text": "The climb stretches on: enemies carry 12% more life, but every victory pays 40% more gold."
-      },
-      "thinGlass": {
-        "name": "Thin Glass",
-        "text": "Tonight all glass runs thin: every facet gauge is 1 smaller, but enemy blows strike 2 harder."
-      },
-      "waningMoon": {
-        "name": "Waning Moon",
-        "text": "The moon spends her last light on you: your first card each turn costs 1 less, but rest sites heal only 20%."
-      }
-    },
-    "potions": {
-      "block": {
-        "name": "Phial of Held Light",
-        "text": "Gain 12 Ward."
-      },
-      "energy": {
-        "name": "Emberphial",
-        "text": "Gain 3 Embers."
-      },
-      "fire": {
-        "name": "Stormglass Phial",
-        "text": "Deal 20 damage to an enemy."
-      },
-      "healing": {
-        "name": "Phial of Dawn",
-        "text": "Heal 20 HP."
-      },
-      "strength": {
-        "name": "Phial of Fervor",
-        "text": "Gain 2 Fervor."
-      },
-      "swift": {
-        "name": "Inkdraught",
-        "text": "Draw 3 cards."
-      },
-      "venom": {
-        "name": "Smolderphial",
-        "text": "Apply 7 Smolder to an enemy."
-      }
-    },
-    "quests": {
-      "eighthOmen": {
-        "floorEchoes": [
-          "// THE PANE WATCHES //",
-          "// EIGHT IS NOT A NUMBER //",
-          "// CARRY THE WRONG LIGHT UPWARD //",
-          "// THE CROWN IS A MASK //"
-        ],
-        "inscription": "Reach dawn beneath the Eighth Omen.",
-        "mode": "Gate",
-        "name": "The Eighth Omen",
-        "resolved": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR."
-      },
-      "hollowLamplighter": {
-        "inscription": "Pay the Hollow Lamplighter five prices along the Unlit Way.",
-        "meetings": [
-          {
-            "accepted": "The next three embers belong to the hollow lantern.",
-            "ask": "Your lantern is noisy. Give me the next three embers it catches.",
-            "cannot": "Promise the embers now. The lantern will pay before you do.",
-            "paid": "Six panes were carried away from a window no wall could hold."
-          },
-          {
-            "ask": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
-            "cannot": "Your purse is warm, but not warm enough.",
-            "paid": "The Pale Ones watch the paths that point above the crown."
-          },
-          {
-            "ask": "The Spire counts the vessel. Give me twelve measures of yours.",
-            "cannot": "I will not hollow you below thirty. Return with a larger vessel.",
-            "paid": "Your standing dead have seen the stair above the Sovereign."
-          },
-          {
-            "ask": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
-            "cannot": "You have spent the gift already. Bring me one that is still yours.",
-            "paid": "The empty lantern is the token that purchases an audience with the mask."
-          },
-          {
-            "ask": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
-            "cannot": "One heartbeat is enough. Refusal is the only poverty left.",
-            "paid": "Light the panes. The door will know you."
-          }
-        ],
-        "mode": "Trail",
-        "name": "The Hollow Lamplighter"
-      },
-      "ownShade": {
-        "final": "We were never climbing out. We were carrying light to the lock.",
-        "fragments": [
-          "I remember the stone. You walked away before I stopped calling.",
-          "Each climber leaves a shape behind. The Spire has learned to wear ours.",
-          "Above the Sovereign there is no dawn — only a door pretending to be the sky."
-        ],
-        "inscription": "Defeat the self that remembers falling. Three shades must fall.",
-        "mode": "Trail",
-        "name": "Your Own Shade"
-      },
-      "paleOnes": {
-        "huntInscription": "Defeat three pale foes and follow the cold motes they leave behind.",
-        "huntName": "Hunt the Pale Ones",
-        "inscription": "Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour.",
-        "mode": "Trail",
-        "name": "The Pale Ones",
-        "progress": [
-          "No mote answers the Lens.",
-          "The first pale mote chills the lantern."
-        ]
-      },
-      "unreadablePage": {
-        "inscription": "Win five dawns carrying the Unreadable Page.",
-        "mode": "Trail",
-        "name": "The Unreadable Page",
-        "pages": [
-          "FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
-          "SECOND PAGE — Pale figures carried the shards down so the thing above could not follow.",
-          "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended.",
-          "FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.",
-          "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown."
-        ]
-      },
-      "usurper": {
-        "bought": "Now the summit knows what you carry.",
-        "death": "The mask is broken. Look above.",
-        "inscription": "Carry the lantern with no flame to the summit and unmask the Usurper.",
-        "itemName": "A Lantern with No Flame",
-        "itemText": "Cold glass. No wick. The merchant will not say who left it.",
-        "mode": "Gate",
-        "name": "The Usurper",
-        "poor": "Cold goods, warm price. Come back carrying a dawn's worth of gold."
-      }
-    },
-    "relics": {
-      "ashenCore": {
-        "name": "Ashen Core",
-        "text": "Enemies begin each combat with 3 Smolder."
-      },
-      "basaltIdol": {
-        "name": "Basalt Idol",
-        "text": "Begin each combat with 10 Ward."
-      },
-      "bellOfEndings": {
-        "name": "Bell of Endings",
-        "text": "Whenever glass Shatters, every other enemy takes 4 damage."
-      },
-      "crownOfCinders": {
-        "name": "Crown of Cinders",
-        "text": "Your lantern holds 12 Embers and begins each combat holding 2."
-      },
-      "crownOfTheHearth": {
-        "name": "Crown of the Hearth",
-        "text": "At the end of combat, heal 3 HP for every Ember still in your lantern."
-      },
-      "crownOfTithes": {
-        "name": "Crown of Tithes",
-        "text": "You may kindle twice each turn, and each kindling grants 3 Ward."
-      },
-      "duskmirror": {
-        "name": "Duskmirror",
-        "text": "The first card you play each turn costs 0."
-      },
-      "emberHeart": {
-        "name": "Emberheart",
-        "text": "At the end of combat, heal 6 HP."
-      },
-      "emberLantern": {
-        "name": "Ember Lantern",
-        "text": "Gain 1 extra Energy on your first turn."
-      },
-      "executionersSeal": {
-        "name": "Executioner's Seal",
-        "text": "Every 10th Attack you play deals double damage."
-      },
-      "frozenCore": {
-        "name": "Frozen Core",
-        "text": "Unspent Energy carries over between turns."
-      },
-      "gravebloom": {
-        "name": "Gravebloom",
-        "text": "After combat, if at or below 50% HP, heal 10."
-      },
-      "hollowCrown": {
-        "name": "Hollow Crown",
-        "text": "Gain 1 Energy each turn. The glass dims: on pickup, lose 10 Max HP."
-      },
-      "ironTalisman": {
-        "name": "Iron Talisman",
-        "text": "Every 3rd Attack you play grants 1 Fervor."
-      },
-      "merchantsMark": {
-        "name": "Merchant's Mark",
-        "text": "Shop prices are 25% lower."
-      },
-      "prismCharm": {
-        "name": "Prism Charm",
-        "text": "Your first Shatter each combat spills 2 extra Embers."
-      },
-      "reapersBell": {
-        "name": "Reaper's Bell",
-        "text": "When an enemy dies, gain 1 Energy and draw 1 card."
-      },
-      "riverPearl": {
-        "name": "River Pearl",
-        "text": "Begin each combat with 1 Poise."
-      },
-      "seersOrb": {
-        "name": "Seer's Orb",
-        "text": "Card rewards offer 1 additional choice."
-      },
-      "shatterersCrown": {
-        "name": "Shatterer's Crown",
-        "text": "Enemy glass runs thin: all facet gauges are 1 smaller. Enemies begin with 1 Fervor."
-      },
-      "silkFan": {
-        "name": "Silk Fan",
-        "text": "Every 3rd card you play each combat grants 3 Ward."
-      },
-      "smolderingCoal": {
-        "name": "Smoldering Coal",
-        "text": "Enemies begin each combat with 2 Smolder."
-      },
-      "sunBlossom": {
-        "name": "Sun Blossom",
-        "text": "All healing is increased by 50%."
-      },
-      "sweetRoot": {
-        "name": "Sweet Root",
-        "text": "On pickup: gain 8 Max HP."
-      },
-      "thiefOfWicks": {
-        "name": "Thief of Wicks",
-        "text": "Unlit lanterns pay double bounty."
-      },
-      "thornBand": {
-        "name": "Thorn Band",
-        "text": "Begin each combat with 2 Splinters."
-      },
-      "travelersPack": {
-        "name": "Traveler's Pack",
-        "text": "Draw 2 extra cards on your first turn."
-      },
-      "verdantBranch": {
-        "name": "Verdant Branch",
-        "text": "Whenever a card is Kindled or burned away, draw 1 card."
-      },
-      "vialOfLife": {
-        "name": "Vial of Life",
-        "text": "Heal 2 HP at the start of each combat."
-      },
-      "warFetish": {
-        "name": "War Fetish",
-        "text": "Begin each combat with 1 Fervor."
-      },
-      "wardingCharm": {
-        "name": "Warding Charm",
-        "text": "Enemy attacks that would deal 5 or less damage deal 1."
-      }
-    },
-    "shadeKits": {
-      "ashwarden": {
-        "moves": {
-          "ashbite": {
-            "name": "Remembered Ashbite"
-          },
-          "ashfall": {
-            "name": "First Ash, Last Breath"
-          },
-          "smother": {
-            "name": "Remembered Smother"
-          }
-        }
-      },
-      "duskblade": {
-        "moves": {
-          "chisel": {
-            "name": "Remembered Chisel"
-          },
-          "eclipse": {
-            "name": "Remembered Eclipse"
-          },
-          "spark": {
-            "name": "First Spark, Last Light"
-          }
-        }
-      }
-    },
-    "status": {
-      "barricade": {
-        "desc": "Ward no longer expires.",
-        "name": "Annealed"
-      },
-      "beacon": {
-        "desc": "Attacks chip N extra Facet(s). Fades at end of turn.",
-        "name": "Beacon"
-      },
-      "dex": {
-        "desc": "Ward cards grant +N Ward.",
-        "name": "Poise"
-      },
-      "emberflow": {
-        "desc": "Gain N Ember(s) at the start of each turn.",
-        "name": "Pyreheart"
-      },
-      "energized": {
-        "desc": "Gain N extra Energy at the start of each turn.",
-        "name": "Alight"
-      },
-      "frail": {
-        "desc": "Ward gained reduced 25%. Wears off each turn.",
-        "name": "Brittle"
-      },
-      "metallicize": {
-        "desc": "Gains N Ward at the end of each turn.",
-        "name": "Vitrified"
-      },
-      "nightsight": {
-        "desc": "Draw N extra card(s) at the start of each turn.",
-        "name": "Night Sight"
-      },
-      "poison": {
-        "desc": "Burns from within: loses N HP at the start of its turn, then Smolder falls by 1. When smoldering glass shatters or dies, the Smolder leaps to another enemy.",
-        "name": "Smolder"
-      },
-      "rampage": {
-        "desc": "Attack grows stronger with each use.",
-        "name": "Crescendo"
-      },
-      "regen": {
-        "desc": "Heals N HP at the end of each turn.",
-        "name": "Warmth"
-      },
-      "ritual": {
-        "desc": "Gains N Fervor at the start of each turn.",
-        "name": "Litany"
-      },
-      "str": {
-        "desc": "The inner fire stoked: attacks deal +N damage.",
-        "name": "Fervor"
-      },
-      "thorns": {
-        "desc": "Attackers take N damage back.",
-        "name": "Splinters"
-      },
-      "venomous": {
-        "desc": "Attacks apply N Smolder.",
-        "name": "Emberfang"
-      },
-      "vulnerable": {
-        "desc": "The glass is scored: takes 50% more attack damage. Wears off each turn.",
-        "name": "Cracked"
-      },
-      "weak": {
-        "desc": "The fire gutters: deals 25% less attack damage. Wears off each turn.",
-        "name": "Dimmed"
-      }
-    },
-    "variants": {
-      "ownShade1": {
-        "deathDialogue": "I remember the stone. You walked away before I stopped calling.",
-        "dialogue": [],
-        "name": "The Shade That Fell"
-      },
-      "ownShade2": {
-        "deathDialogue": "Each climber leaves a shape behind. The Spire has learned to wear ours.",
-        "dialogue": [],
-        "name": "The Shade That Returned"
-      },
-      "ownShade3": {
-        "deathDialogue": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
-        "dialogue": [],
-        "name": "The Shade That Remembers"
-      },
-      "paleDrownedOne": {
-        "dialogue": [],
-        "name": "Pale Drowned One"
-      },
-      "paleDuskfang": {
-        "dialogue": [],
-        "name": "Pale Duskfang"
-      },
-      "paleVoidWisp": {
-        "dialogue": [],
-        "name": "Pale Void Wisp"
-      },
-      "usurpedSovereign": {
-        "dialogue": [
-          "{aspect}. At last, the lantern brings me a name.",
-          "The Sovereign was a mask. You have paid to meet the face beneath it.",
-          "Break me, and the empty lantern will remember fire."
-        ],
-        "name": "The Usurper"
-      }
-    },
-    "vows": {
-      "0": {
-        "desc": "Every creature is harder to break — enemy HP +12%.",
-        "name": "Vow of Iron"
-      },
-      "1": {
-        "desc": "Their blows land heavier — enemy attacks deal +1.",
-        "name": "Vow of Malice"
-      },
-      "2": {
-        "desc": "Bosses armor their cores — boss Facets +1.",
-        "name": "Vow of the Deep"
-      },
-      "3": {
-        "desc": "You climb already cursed — begin every run with a Hex.",
-        "name": "Vow of the Mark"
-      },
-      "4": {
-        "desc": "The dark drinks your rest — campfires heal 20%, not 30%.",
-        "name": "Vow of the Waning"
-      }
-    },
-    "whispers": [
-      "There is a colour the Spire refuses to name.",
-      "A pale hand has touched the dark side of the glass.",
-      "Six spaces wait where no window stands.",
-      "The dead climb twice: once in flesh, once in memory.",
-      "A lantern without flame is still a key.",
-      "Count the panes that do not catch the dawn.",
-      "A page can be read only after it survives the summit.",
-      "The eighth sign is not written among the seven.",
-      "The gaunt keeper remembers the road you did not take.",
-      "Pale motes gather like frost around a hidden seam.",
-      "Your monument does not always lie down.",
-      "The merchant keeps one cold thing beneath the counter.",
-      "Broken glyphs are the shadow of a complete sentence.",
-      "Five pages make a chapter; five prices make a confession.",
-      "Three deaths will teach your shade to speak plainly.",
-      "The Vigil has a window, though no wall holds it.",
-      "Each shard lights one pane of Emberglass.",
-      "The Pale Ones are not hunting you. They are pointing upward.",
-      "The Sovereign is a mask worn below the final stair.",
-      "When six panes burn, look beyond the summit.",
-      "There is a sealed door above the crown.",
-      "Its inscription has waited longer than the Vigil.",
-      "Bring six shards to the Rose Window.",
-      "The climb continues."
-    ]
-  }
+	"formatVersion": 1,
+	"ui": {
+		"brand": {
+			"secrets": " · {n} secrets unearthed",
+			"stats": "{runs} climbs · {wins} dawns · {slain} slain",
+			"tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
+			"title": "GLASSVOW"
+		},
+		"combat": {
+			"affixTitle": "{name} — an elite's title",
+			"ashes": "ASHES",
+			"ashesPileAria": "Ashes pile",
+			"ashesSub": "Burned away — each fed the lantern an ember",
+			"ashesTitle": "The Ashes",
+			"buff": "Buff",
+			"debuff": "Debuff",
+			"discard": "DISCARD",
+			"discardPileAria": "Discard pile",
+			"discardPileTitle": "Discard Pile",
+			"draw": "DRAW",
+			"drawPileAria": "Draw pile",
+			"drawPileSub": "Order hidden — shown alphabetically",
+			"drawPileTitle": "Draw Pile",
+			"end": "End",
+			"enemyTurn": "ENEMY TURN",
+			"energyAria": "Energy",
+			"facetsBody": "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass [b]shatters[/b] â it loses its next action, is Cracked, and spills Embers into your lantern.",
+			"facetsTitle": "Facets",
+			"glassHolds": "THE GLASS HOLDS",
+			"guardShattered": "GUARD SHATTERED",
+			"lanternBody": "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> â burn the card away for an ember, once a turn. Curses refuse the fire.",
+			"lanternBodyLead": "<b>{cost} Embers, once a turn:</b> {text}<br><br>",
+			"lanternSub": "A · use Art",
+			"lanternTitle": "The Lantern",
+			"lanternTitleArt": "Lantern Art — {name}",
+			"monumentGift": "THE STONE RETURNS ITS GIFT",
+			"perfectBanner": "PERFECT",
+			"reshuffle": "Reshuffle",
+			"shatter": "SHATTER",
+			"staggered": "STAGGERED",
+			"staggeredTipBody": "The glass has shattered — this creature loses its next action while it reseams.",
+			"staggeredTipTitle": "Staggered",
+			"stoneRemembers": "THE STONE REMEMBERS",
+			"yourTurn": "YOUR TURN",
+			"perfect": "PERFECT",
+			"lanternArtTitle": "Lantern Art — {name}",
+			"lanternLead": "<b>{embers} Embers, once a turn:</b> {text}<br><br>",
+			"staggeredTitle": "Staggered",
+			"staggeredBody": "The glass has shattered â this creature loses its next action while it reseams."
+		},
+		"common": {
+			"cancel": "Cancel",
+			"continue": "Continue",
+			"retry": "Retry",
+			"skip": "Skip",
+			"leave": "Leave"
+		},
+		"dawn": {
+			"act4RevealCopy": "Six panes burn. Something waits above the crown.",
+			"eighthResolvedKicker": "The broken glyphs resolve",
+			"pageKicker": "Page {n}",
+			"questCompleteKicker": "{mode} complete",
+			"questProgressKicker": "The trail continues",
+			"questRevealKicker": "{mode} revealed",
+			"questUnlockKicker": "Insight awakened",
+			"reloadSaved": "Reload Saved Dawn",
+			"saveFailedClear": "Every panel has been seen, but the saved dawn could not be released. Retry before leaving this screen.",
+			"saveFailedCursor": "This panel was shown, but its place in the dawn could not be secured. Retry before the ceremony continues.",
+			"saveFailedTitle": "The Dawn Could Not Hold",
+			"shadeResolvedKicker": "The shade speaks plainly",
+			"shardGrantCopy": "One pane answers.",
+			"whisperKicker": "A whisper reaches the dawn",
+			"witchlightCopy": "Pale paths will now be marked.",
+			"witchlightLens": "Witchlight Lens",
+			"title": "ASCENDED",
+			"subtitle": "At Dawn, the Vigil remembers.",
+			"quietTitle": "Dawn",
+			"quietBody": "The Vigil is quiet.",
+			"kickerWhisper": "A WHISPER AT DAWN",
+			"kickerQuest": "A JOURNEY REVEALED",
+			"kickerProgress": "THE JOURNEY CONTINUES",
+			"kickerShard": "EMBERGLASS SHARD",
+			"kickerUnlock": "THE VIGIL OPENS",
+			"kickerDefault": "AT DAWN",
+			"complete": "DAWN COMPLETE",
+			"progress": "DAWN {n} OF {total} · THE CURRENT MEMORY IS LIT"
+		},
+		"embark": {
+			"aspectLabel": "Who carries the lantern",
+			"noVows": "The Spire as it is. No vows sworn.",
+			"subChoose": "Choose how you meet the Spire.",
+			"subWait": "The lantern is lit. The Spire waits.",
+			"title": "THE CLIMB BEGINS",
+			"vowLevel": "VOW {level}  / {max}",
+			"warnSaved": "Beginning anew abandons your saved climb."
+		},
+		"end": {
+			"ascended": "ASCENDED",
+			"ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the Spire — the first in an age.",
+			"bequestDone": "✦ The stone keeps your {name}.<br>It will wait for you in {act}.",
+			"bequestNote": {
+				"card": "your finest card",
+				"gold": "{n} gold",
+				"goldCache": "a cache of gold",
+				"relic": "your rarest relic"
+			},
+			"bequestTitle": "Carve one thing into the stone — the next climb may recover it in {act}.",
+			"bequestUnpaid": "The unpaid gift remains in the standing stone",
+			"cardsPlayed": "Cards Played",
+			"deckSize": "Deck Size",
+			"dmgDealt": "Damage Dealt",
+			"dmgTaken": "Damage Taken",
+			"elitesBosses": "Elites & Bosses",
+			"fallen": "FALLEN",
+			"fallenSub": "Here ended a climb, on floor <b>{floor}</b>.<br>The Spire keeps what it takes — but the Vigil remembers.",
+			"finalDeckTitle": "Final Deck",
+			"floors": "Floors",
+			"returnVigil": "Return to the Vigil",
+			"runTime": "Run Time",
+			"slain": "Slain",
+			"unlock": {
+				"ashwarden": "The Ashwarden",
+				"aspect": "Aspect Unlocked",
+				"card": "Card Unlocked",
+				"header": "✦ {kind}",
+				"relic": "Relic Unlocked"
+			},
+			"viewDeck": "View Final Deck",
+			"abandoned": "THE VOW IS SET ASIDE",
+			"abandonedSub": "The pilgrimage ends here. The Vigil will keep the record.",
+			"fallenLantern": "Your lantern went dark on floor {floor}.",
+			"elitesBossesPlus": "Elites + Bosses"
+		},
+		"event": {
+			"chooseCardSub": "One page still glows.",
+			"chooseCardTitle": "Choose a Card",
+			"duplicateSub": "The mirror remembers.",
+			"duplicateTitle": "Duplicate a Card",
+			"removeSub": "Let it go.",
+			"removeTitle": "Remove a Card",
+			"upgradeSub": "The forge hungers.",
+			"upgradeTitle": "Upgrade a Card",
+			"strangePlace": "A Strange Place",
+			"continue": "CONTINUE"
+		},
+		"help": {
+			"climbBody": "Choose a path of lanterns up the Spire. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
+			"climbTitle": "The Climb",
+			"combatBody": "Each turn you draw <b>5 cards</b> and gain <b>3 Energy</b> (⬤). Play a card by clicking or dragging — attacks need a target when several enemies remain. Enemies telegraph their <b>intent</b> above their heads.",
+			"combatTitle": "Combat",
+			"firesBody": "Rest sites heal <b>30%</b> or upgrade a card. Shops sell cards, relics, phials — and can <b>remove</b> a card from your deck. Keep your deck lean; every reward is optional.",
+			"firesTitle": "The Fires & The Merchant",
+			"glassBody": "Every creature is glass with a row of <b>Facets</b> under its lifebar. Attacks that draw unblocked blood chip a facet (heavy cards chip more). Fill the gauge and the glass <b>SHATTERS</b>: it loses its next action, is Cracked, and spills <b>Embers</b> into your lantern. Time a shatter to deny the blow you can't survive.",
+			"glassTitle": "The Glass",
+			"lanternBody": "Embers fuel your <b>Lantern Art</b> — one signature power, always available, once a turn (press <b>A</b>). Drag any card onto the lantern to <b>kindle</b> it: the card burns away and feeds the lantern 1 ember. Once a turn; curses refuse the fire.",
+			"lanternTitle": "The Lantern",
+			"title": "How to Play",
+			"vigilBody": "Nothing is wasted. At the foot of each climb the <b>Lamplighter</b> offers a boon and lets you choose your Lantern Art. When you fall, carve one thing into the stone — a <b>monument</b> your next climb can recover in that same act. Every shatter, kindle and slaying feeds lifetime <b>Deeds</b> that unlock new cards, relics, and a second aspect, the <b>Ashwarden</b>. Reach the dawn once and the <b>Vows</b> open: an optional difficulty ladder for those who'd climb a crueler Spire.",
+			"vigilTitle": "The Vigil — What Death Leaves Behind",
+			"wardBody": "<b>Ward</b> is held light that absorbs damage but expires each turn. <b>Cracked</b> ×1.5 damage taken · <b>Dimmed</b> −25% damage dealt · <b>Brittle</b> −25% Ward · <b>Smolder</b> burns each turn, and leaps to another enemy when its host dies or shatters.",
+			"wardTitle": "Ward & Statuses"
+		},
+		"hollow": {
+			"kicker": "THE UNLIT WAY · PRICE {current} OF {total}",
+			"payPrice": "Pay the Price",
+			"pricePaid": "Price Paid",
+			"returnLater": "Return Later",
+			"routeFailed": "The way onward could not be prepared.",
+			"routeSaveFailed": "The way onward is not secured. Retry when storage is available.",
+			"saveFailed": "The price is not yet secured. Retry the save.",
+			"title": "THE HOLLOW LAMPLIGHTER"
+		},
+		"hud": {
+			"actFloor": "Act {act} · Floor {floor}",
+			"deckAria": "Deck",
+			"deckCount": "{n} cards",
+			"deckTitle": "Your Deck",
+			"menuAria": "Menu",
+			"omenSub": "hangs over Act {act}",
+			"omenTitle": "Omen — {name}",
+			"potionTip": "Click to use or toss",
+			"tossPotion": "Toss it",
+			"usePotion": "Use {name}",
+			"viewDeck": "View deck",
+			"menu": "Menu",
+			"emptyPhial": "Empty phial seat"
+		},
+		"keywords": {
+			"chip": "Strike at the glass itself: adds toward a Shatter, no blood required.",
+			"cinder": "Take 2 damage at end of turn while in hand.",
+			"ember": "Fuel for your Lantern Art. Spilled by shatters, deaths and kindling; held in the lantern.",
+			"energy": "Spent to play cards. Refreshes each turn.",
+			"facetDesc": "Every creature is glass with a Facet gauge. Fill it and the glass Shatters — the creature loses its next action, is Cracked, and spills Embers into your lantern.",
+			"hex": "Curse: lose 1 HP at end of turn while in hand. Cannot be kindled.",
+			"kindle": "Burned away for the rest of this combat — and the lantern gains 1 Ember.",
+			"shard": "Unplayable junk glass. It can still be kindled.",
+			"staggered": "Shattered glass loses its next action while it reseams.",
+			"unplayable": "This card cannot be played.",
+			"ward": "Held light that prevents damage. Expires at the start of your turn."
+		},
+		"lamp": {
+			"artHint": "(press A in combat)",
+			"artLabel": "Your Lantern Art",
+			"boonLabel": "A Boon for the Road",
+			"sub": "{aspect} stands at the foot of the Spire. Take one parting gift — and choose the fire your lantern will carry.",
+			"title": "THE LAMPLIGHTER"
+		},
+		"map": {
+			"click": "Click",
+			"drag": "drag",
+			"hint": {
+				"boss": "The act ends here. Ready your deck.",
+				"elite": "A titled foe - greater risk, a relic-grade purse.",
+				"event": "Fate unwritten. Could be anything.",
+				"hollow": "The Hollow Lamplighter waits with a price.",
+				"monster": "A fight. Embers and gold for the swift.",
+				"rest": "Heal, or forge a card into its + form.",
+				"shop": "Gold for cards, relics, phials.",
+				"treasure": "A chest with no fight attached."
+			},
+			"node": {
+				"elite": "Elite — beware",
+				"event": "Unknown event",
+				"hollow": "Hollow lantern",
+				"monster": "Monster",
+				"rest": "Rest site",
+				"shop": "Merchant",
+				"treasure": "Treasure"
+			},
+			"scroll": "scroll",
+			"sealedDoor": {
+				"aria": "The sealed door",
+				"inscription": "the climb continues",
+				"label": "THE SEALED DOOR",
+				"return": "Return to the summit",
+				"sub": "Six panes burn behind you. The lock answers, but does not open.",
+				"title": "THE SEALED DOOR"
+			},
+			"survey": "{action} to survey the Spire",
+			"tap": "Tap",
+			"travelHere": "{action} to travel here.",
+			"unlitBody": "What waits here is unknown — but first light pays a bounty of gold.",
+			"unlitTitle": "An unlit lantern",
+			"witchlightBody": "Pale glass waits here.",
+			"witchlightTitle": "Witchlight trembles",
+			"holdFast": "The glass holds fast. The way is not yet cut.",
+			"standThreshold": "Stand at the Threshold",
+			"returnVigil": "Return to the Vigil"
+		},
+		"menu": {
+			"abandon": "Abandon",
+			"abandonConfirmBody": "Your climb will be lost to the void.",
+			"abandonConfirmTitle": "Abandon Run?",
+			"abandonRun": "Abandon Run",
+			"back": "Back",
+			"beginAnew": "Begin Anew",
+			"beginAnewBody": "Your saved climb will be lost to the void.",
+			"beginAnewTitle": "Begin Anew?",
+			"beginClimb": "Begin the Climb",
+			"chooseBoon": "Choose a boon",
+			"close": "Close",
+			"continueClimb": "Continue Climb",
+			"credits": "Credits",
+			"fightOn": "Fight On",
+			"howToPlay": "How to Play",
+			"keepClimbing": "Keep Climbing",
+			"lightTheWay": "Light the Way",
+			"mute": "Mute",
+			"muteSound": "Mute Sound",
+			"quit": "Quit",
+			"quitGame": "Quit Game",
+			"return": "Return",
+			"returnTitle": "Return to Title",
+			"settings": "Settings",
+			"theVigil": "The Vigil",
+			"unmute": "Unmute",
+			"unmuteSound": "Unmute Sound"
+		},
+		"persistence": {
+			"hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
+			"reloadClimb": "Reload Saved Climb",
+			"reloadDestination": "Reload Saved Destination",
+			"reloadDuel": "Reload Saved Duel",
+			"reloadFinalisation": "Reload Saved Finalisation",
+			"retryFinalisation": "Retry Finalisation",
+			"retrySave": "Retry Save",
+			"runSaveBody": "The climb could not be secured. Free storage and retry, or reload the last durable climb state.",
+			"runSaveRetryFail": "The save is still unavailable. Free storage, then retry or reload the last durable climb state.",
+			"saveFailedTitle": "Save Failed",
+			"stoneBody": "The stone could not hold this duel. Free storage and try again.",
+			"stoneTitle": "The Stone Could Not Hold",
+			"vigilBody": "This run end is safely journalled, but its ledgers or final dawn could not be secured. Free storage and retry, or reload this saved finalisation.",
+			"vigilTitle": "The Vigil Could Not Hold"
+		},
+		"rest": {
+			"healedFloat": "+{hp} HP",
+			"restBtn": "Rest",
+			"restHeal": "— heal {hp} HP",
+			"smithBtn": "Smith",
+			"smithSub": "— upgrade a card",
+			"sub": "The fire crackles. For a moment, the Spire is quiet.",
+			"title": "REST SITE",
+			"upgradeSub": "Forge one card into its + form.",
+			"upgradeTitle": "Upgrade a Card",
+			"upgradedSub": "It gleams with new power.",
+			"upgradedTitle": "Upgraded!",
+			"restHealBtn": "Rest — heal {hp} HP",
+			"hpFrac": "{cur} / {max} HP"
+		},
+		"reward": {
+			"addCardRow": "Add a card to your deck",
+			"bossRelicSub": "Choose one — its power is permanent.",
+			"bossRelicTitle": "A BOSS RELIC CALLS",
+			"bossVanquished": "BOSS VANQUISHED",
+			"cardAdded": "{name} added",
+			"chooseCardSub": "Add one card to your deck — or skip to keep it lean.",
+			"chooseCardTitle": "Choose a Card",
+			"eliteSlain": "ELITE SLAIN",
+			"goldRow": "<b class=\"gold-num\">{n}</b> gold",
+			"leaveConfirmBody": "You still have unclaimed spoils on the glass. Move on without them?",
+			"leaveConfirmNo": "Stay",
+			"leaveConfirmTitle": "Leave Rewards Behind?",
+			"leaveConfirmYes": "Leave Them",
+			"perfectSeal": "✦ PERFECT — the glass untouched ✦",
+			"potionSlotsFull": "Potion slots full!",
+			"takeNone": "Take none",
+			"victory": "VICTORY",
+			"continue": "Continue",
+			"skip": "Skip",
+			"leaveIt": "Leave it",
+			"walkOn": "Walk on",
+			"takeOneLight": "Take one light with you",
+			"takeOneFromLight": "Take one from the light",
+			"onePiece": "One piece comes with you",
+			"addCard": "Add a card to your deck",
+			"offeredTakeOne": "{n} offered · take one",
+			"goldAmount": "{n} Gold",
+			"chooseCardBody": "Add one card to your deck — or skip to keep it lean."
+		},
+		"rose": {
+			"dormantPane": "Dormant Emberglass pane {n}",
+			"finalWhisper": "The final whisper returns at every dawn.",
+			"openLabel": "Open the Rose Window",
+			"paneDark": "This pane is dark.",
+			"selectedPane": "Selected Emberglass pane",
+			"shardRecovered": "{name}, Shard recovered",
+			"shardRecoveredShort": "Shard recovered",
+			"unknownPane": "Unknown Emberglass pane {n}",
+			"whisperLogTitle": "Whispers heard at dawn",
+			"whisperLogTitleUpper": "WHISPERS HEARD AT DAWN",
+			"finalWhisperMark": "∞  The final whisper returns at every dawn."
+		},
+		"settings": {
+			"audio": "Audio",
+			"debugLabel": "Debug",
+			"display": "Display",
+			"eraseAll": "Erase All Progress",
+			"eraseEverything": "Erase Everything",
+			"fullscreen": "Fullscreen",
+			"ledger": "The Ledger",
+			"master": "Master",
+			"motion": "Motion",
+			"music": "Music",
+			"mute": "Mute",
+			"off": "Off",
+			"on": "On",
+			"reduceMotion": "Reduce Motion",
+			"resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
+			"resetConfirmTitle": "Reset Save?",
+			"resetSave": "Reset Save",
+			"resetWarn": "Wipes the current climb and all Vigil progress. Cannot be undone.",
+			"screenShake": "Screen Shake",
+			"sfx": "SFX",
+			"title": "Settings",
+			"unmute": "Unmute",
+			"volumeTip": "{name} volume",
+			"vsync": "Vsync",
+			"resetConfirmPlain": "This erases your current climb and the entire Vigil — deeds, unlocks, vows, monuments, and whispers.\n\nThis cannot be undone.",
+			"eraseAllTitle": "ERASE ALL PROGRESS?"
+		},
+		"shop": {
+			"cardRemoval": {
+				"desc": "Remove a card from your deck forever.",
+				"pickSub": "Cut the dead weight.",
+				"pickTitle": "Remove a Card",
+				"title": "Card Removal"
+			},
+			"greeting": "\"Gold for glory, stranger. Everything's fair-priced — for the doomed.\"",
+			"leave": "Leave the Shop",
+			"potionSlotsFull": "Potion slots full!",
+			"title": "THE MERCHANT",
+			"leaveUpper": "LEAVE THE SHOP"
+		},
+		"smoke": {
+			"hello": "Hello, {name}"
+		},
+		"treasure": {
+			"coinsOnly": "Only coins remain — <b class=\"gold-num\">+{gold} gold</b>.",
+			"empty": "The chest lies empty.",
+			"openBtn": "Open the Chest",
+			"relicClaim": "You claim <b style=\"color:{tone}\">{name}</b> — <i>{text}</i>",
+			"sub": "A heavy chest, banded in gold. Open it?",
+			"title": "TREASURE",
+			"continue": "Continue",
+			"relicClaimPlain": "You claim [color=#{tone}]{name}[/color] — [i]{text}[/i]"
+		},
+		"vigil": {
+			"deeds": "Deeds",
+			"roseWindow": "Rose Window",
+			"title": "THE VIGIL",
+			"return": "RETURN",
+			"ashwarden": "The Ashwarden",
+			"stats": "{runs} climbs · {wins} dawns · deepest Vow: {vow}",
+			"deedsTab": "DEEDS",
+			"roseTab": "ROSE WINDOW"
+		},
+		"pilgrimage": {
+			"survey": "SCROLL OR DRAG TO SURVEY THE PILGRIMAGE",
+			"surveyChoose": "SCROLL OR DRAG · CHOOSE A LIT LANTERN",
+			"summit": "THE SUMMIT",
+			"roadEnds": "THE ROAD ENDS HERE",
+			"unlitWay": "Unlit Way",
+			"roseWindow": "The Rose Window",
+			"hearth": "Hearth",
+			"awaits": "%s — %s AWAITS",
+			"notNow": "not now"
+		},
+		"credits": {
+			"title": "Credits",
+			"headingBrand": "GLASSVOW",
+			"bodyBrand": "A roguelite deckbuilder · by fol2",
+			"headingGlass": "THE GLASS",
+			"bodyGlass": "Parallel-ported from roguecardv2 (web reference 0.5.0+6e06911).",
+			"headingMusic": "MUSIC — STAINED GLASS",
+			"headingSound": "SOUND — ASHGLASS VIGIL",
+			"headingType": "TYPE",
+			"bodyCinzel": "Cinzel — Natanael Gama (OFL)",
+			"bodyAlegreya": "Alegreya — Juan Pablo del Peral, Huerta Tipográfica (OFL)",
+			"bodyNoto": "Noto Sans TC — Google (OFL)",
+			"headingEngine": "ENGINE",
+			"bodyEngine": "Made with Godot Engine",
+			"close": "Close",
+			"engineLicences": "Engine licences",
+			"fontLicences": "Font licences (OFL)",
+			"components": "COMPONENTS",
+			"licenceTexts": "LICENCE TEXTS",
+			"themeLine": "Ashglass Vigil"
+		},
+		"omen": {
+			"prefix": "OMEN - "
+		},
+		"language": {
+			"label": "Language",
+			"en": "English",
+			"zhHant": "繁體中文",
+			"deferNote": "Takes effect on the next screen."
+		}
+	},
+	"content": {
+		"acts": {
+			"0": {
+				"bossName": "The Rootheart",
+				"name": "The Ashen Woods"
+			},
+			"1": {
+				"bossName": "Leviathan's Maw",
+				"name": "The Sunken City"
+			},
+			"2": {
+				"bossName": "The Eternal Sovereign",
+				"name": "The Obsidian Spire"
+			}
+		},
+		"affixes": {
+			"adamant": {
+				"name": "Adamant",
+				"text": "The first time its glass would shatter, it holds."
+			},
+			"cinderVeined": {
+				"name": "Cinder-Veined",
+				"text": "Its blows leave 1 Smolder on you."
+			},
+			"emberFat": {
+				"name": "Ember-Fat",
+				"text": "Slaying it pays double gold."
+			},
+			"fervent": {
+				"name": "Fervent",
+				"text": "Begins the fight with 2 Fervor."
+			},
+			"veiled": {
+				"name": "Veiled",
+				"text": "Begins the fight behind 15 Ward."
+			},
+			"vitrified": {
+				"name": "Vitrified",
+				"text": "Thicker glass: +2 facets and +15% HP."
+			}
+		},
+		"arts": {
+			"ashfall": {
+				"name": "Ashfall",
+				"text": "The Ashwarden's breath. Apply 3 Smolder to ALL enemies and gain 5 Ward."
+			},
+			"beacon": {
+				"name": "Beacon",
+				"text": "Raise the light. Your attacks chip 1 extra facet this turn."
+			},
+			"emberveil": {
+				"name": "Emberveil",
+				"text": "A curtain of held fire. Gain 12 Ward."
+			},
+			"flare": {
+				"name": "Flare",
+				"text": "The lantern vents. Deal 7 damage to ALL enemies and apply 2 Smolder."
+			},
+			"mendglass": {
+				"name": "Mendglass",
+				"text": "Warm light knits the cracks. Heal 8 HP."
+			},
+			"stoke": {
+				"name": "Stoke",
+				"text": "Feed the flame to the hand that carries it. Gain 1 Energy and draw 2 cards."
+			}
+		},
+		"aspects": {
+			"ashwarden": {
+				"blurb": "Smoke given a shape. Lets the Smolder do the killing and kindles its own hand to feed the lantern. Slower, but it endures — and everything it touches burns.",
+				"name": "The Ashwarden"
+			},
+			"duskblade": {
+				"blurb": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a versatile climber for any night.",
+				"name": "The Duskblade"
+			}
+		},
+		"boons": {
+			"emberFlask": {
+				"name": "Ember Flask",
+				"text": "Pack a Fire Phial and a Draught of Vigor."
+			},
+			"fullPurse": {
+				"name": "A Full Purse",
+				"text": "Set out with 120 extra gold."
+			},
+			"keenEye": {
+				"name": "A Keeper's Eye",
+				"text": "Begin with a random relic."
+			},
+			"pilgrimsCache": {
+				"name": "Pilgrim's Cache",
+				"text": "Gain 60 gold and a Ward Phial."
+			},
+			"temperedGlass": {
+				"name": "Tempered Glass",
+				"text": "Raise your Max HP by 14."
+			},
+			"twinPhials": {
+				"name": "Twin Phials",
+				"text": "Pack a Swift Phial and an Energy Phial."
+			},
+			"venomPouch": {
+				"name": "A Pouch of Ash",
+				"text": "Gain 40 gold and a Venom Phial."
+			},
+			"warmHearth": {
+				"name": "A Warm Hearth",
+				"text": "Mend to full and gain 6 Max HP."
+			}
+		},
+		"cards": {
+			"aegis": {
+				"name": "Cathedral Glass",
+				"text": "Gain #30# Ward. Kindle.",
+				"textUp": "Gain #40# Ward. Kindle."
+			},
+			"agility": {
+				"name": "Glazier's Poise",
+				"text": "Gain 2 Poise.",
+				"textUp": "Gain 3 Poise."
+			},
+			"annihilate": {
+				"name": "Requiem",
+				"text": "Deal @9@ damage and apply 3 Smolder to ALL enemies.",
+				"textUp": "Deal @12@ damage and apply 4 Smolder to ALL enemies."
+			},
+			"ascension": {
+				"name": "Rising Litany",
+				"text": "At the start of each turn, gain 2 Fervor.",
+				"textUp": "At the start of each turn, gain 3 Fervor."
+			},
+			"ashBite": {
+				"name": "Ashbite",
+				"text": "Deal @5@ damage. Apply 2 Smolder.",
+				"textUp": "Deal @7@ damage. Apply 3 Smolder."
+			},
+			"ashenChoir": {
+				"name": "Ashen Choir",
+				"text": "Apply 4 Smolder. When smoldering glass dies, its fire leaps on.",
+				"textUp": "Apply 6 Smolder. When smoldering glass dies, its fire leaps on."
+			},
+			"bastion": {
+				"name": "Anneal",
+				"text": "Ward no longer expires at the start of your turn."
+			},
+			"bloodRite": {
+				"name": "Blood for Oil",
+				"text": "Lose 3 HP. Gain 2 Energy.",
+				"textUp": "Lose 3 HP. Gain 3 Energy."
+			},
+			"brace": {
+				"name": "Held Light",
+				"text": "Gain #8# Ward.",
+				"textUp": "Gain #11# Ward."
+			},
+			"bulwark": {
+				"name": "Glasswall",
+				"text": "Gain #13# Ward.",
+				"textUp": "Gain #18# Ward."
+			},
+			"burn": {
+				"name": "Cinder",
+				"text": "Unplayable. At the end of your turn, take 2 damage if this is in your hand."
+			},
+			"catalyst": {
+				"name": "Bellows",
+				"text": "Double an enemy's Smolder. Kindle.",
+				"textUp": "Triple an enemy's Smolder. Kindle."
+			},
+			"chisel": {
+				"name": "Chisel",
+				"text": "Deal @4@ damage. Chip 1 extra Facet.",
+				"textUp": "Deal @7@ damage. Chip 1 extra Facet."
+			},
+			"cleave": {
+				"name": "Fan of Glass",
+				"text": "Deal @6@ damage to ALL enemies.",
+				"textUp": "Deal @9@ damage to ALL enemies."
+			},
+			"cripple": {
+				"name": "Gutter",
+				"text": "Snuff an enemy's fire: it loses 2 Fervor. Kindle.",
+				"textUp": "Snuff an enemy's fire: it loses 3 Fervor. Kindle."
+			},
+			"defend": {
+				"name": "Ward",
+				"text": "Gain #5# Ward.",
+				"textUp": "Gain #8# Ward."
+			},
+			"deflect": {
+				"name": "Refract",
+				"text": "Gain #6# Ward. Draw 1 card.",
+				"textUp": "Gain #9# Ward. Draw 1 card."
+			},
+			"devour": {
+				"name": "Eat the Flame",
+				"text": "Deal @10@ damage. If this kills, swallow its fire: gain 3 Embers and heal 4. Kindle.",
+				"textUp": "Deal @13@ damage. If this kills, swallow its fire: gain 4 Embers and heal 6. Kindle."
+			},
+			"eclipseSlash": {
+				"name": "Eclipse Slash",
+				"text": "Deal @7@ damage. Apply 1 Cracked.",
+				"textUp": "Deal @9@ damage. Apply 2 Cracked."
+			},
+			"emberdance": {
+				"name": "Emberdance",
+				"text": "Spill your lantern: gain 3 Ward for each Ember spent. Kindle.",
+				"textUp": "Spill your lantern: gain 4 Ward for each Ember spent. Kindle."
+			},
+			"empower": {
+				"name": "Inner Blaze",
+				"text": "Gain 2 Fervor.",
+				"textUp": "Gain 3 Fervor."
+			},
+			"executioner": {
+				"name": "Faultline",
+				"text": "Deal @8@ damage. Cracked enemies take 6 more.",
+				"textUp": "Deal @11@ damage. Cracked enemies take 8 more."
+			},
+			"firstSpark": {
+				"name": "First Spark",
+				"text": "Draw 1 card. Kindle.",
+				"textUp": "Draw 2 cards. Kindle."
+			},
+			"flawlessForm": {
+				"name": "Flawless Form",
+				"text": "Gain #8# Ward. If your glass is untouched this combat, gain #8# more.",
+				"textUp": "Gain #11# Ward. If your glass is untouched this combat, gain #11# more."
+			},
+			"flurry": {
+				"name": "Splinterstorm",
+				"text": "Deal @2@ damage 3 times.",
+				"textUp": "Deal @3@ damage 3 times."
+			},
+			"fortify": {
+				"name": "Mirrorlight",
+				"text": "Double your Ward.",
+				"textUp": "Double your Ward."
+			},
+			"frenzy": {
+				"name": "Overglow",
+				"text": "Your glass runs too hot: gain 2 Cracked. At the start of each turn, gain 1 Energy.",
+				"textUp": "Your glass runs too hot: gain 1 Cracked. At the start of each turn, gain 1 Energy."
+			},
+			"guardedStrike": {
+				"name": "Warden's Edge",
+				"text": "Deal @5@ damage. Gain #4# Ward.",
+				"textUp": "Deal @7@ damage. Gain #6# Ward."
+			},
+			"heavyBlow": {
+				"name": "Quarry Maul",
+				"text": "Deal @12@ damage. Chip 1 extra Facet.",
+				"textUp": "Deal @16@ damage. Chip 2 extra Facets."
+			},
+			"hex": {
+				"name": "Hex",
+				"text": "Unplayable. At the end of your turn, lose 1 HP if this is in your hand. Refuses the fire."
+			},
+			"ironSkin": {
+				"name": "Vitrify",
+				"text": "At the end of your turn, gain 3 Ward.",
+				"textUp": "At the end of your turn, gain 4 Ward."
+			},
+			"leechBlade": {
+				"name": "Thirsting Shard",
+				"text": "Deal @9@ damage. Heal for half the unblocked damage.",
+				"textUp": "Deal @13@ damage. Heal for half the unblocked damage."
+			},
+			"limitBreak": {
+				"name": "Annealing Rite",
+				"text": "Chip 2 Facets of every enemy. Kindle.",
+				"textUp": "Chip 3 Facets of every enemy. Kindle."
+			},
+			"lunge": {
+				"name": "Dimming Cut",
+				"text": "Deal @6@ damage. Apply 1 Dimmed.",
+				"textUp": "Deal @9@ damage. Apply 2 Dimmed."
+			},
+			"momentum": {
+				"name": "Honing Edge",
+				"text": "Deal @6@ damage. Each play, this card gains +4 damage this combat.",
+				"textUp": "Deal @8@ damage. Each play, this card gains +6 damage this combat."
+			},
+			"nightSight": {
+				"name": "Night Sight",
+				"text": "At the start of each turn, draw 1 extra card."
+			},
+			"novaflare": {
+				"name": "Novaflare",
+				"text": "Deal @3@ damage for every Ember in your lantern.",
+				"textUp": "Deal @4@ damage for every Ember in your lantern."
+			},
+			"oblivionStrike": {
+				"name": "Bellstrike",
+				"text": "Deal @30@ damage. Chip 2 extra Facets.",
+				"textUp": "Deal @40@ damage. Chip 3 extra Facets."
+			},
+			"offering": {
+				"name": "Pyre Tithe",
+				"text": "Burn every other card in your hand — each feeds the lantern. Draw 3 cards. Kindle.",
+				"textUp": "Burn every other card in your hand — each feeds the lantern. Draw 4 cards. Kindle."
+			},
+			"phantomBlades": {
+				"name": "Phantom Blades",
+				"text": "Deal @3@ damage for each card in your hand.",
+				"textUp": "Deal @4@ damage for each card in your hand."
+			},
+			"preparation": {
+				"name": "Tinder",
+				"text": "Draw 2 cards. Kindle.",
+				"textUp": "Draw 2 cards."
+			},
+			"pyreheart": {
+				"name": "Pyreheart",
+				"text": "At the start of each turn, gain 1 Ember."
+			},
+			"quakeblow": {
+				"name": "Quakeblow",
+				"text": "Deal @8@ damage. Chip 2 extra Facets.",
+				"textUp": "Deal @11@ damage. Chip 3 extra Facets."
+			},
+			"quickSlash": {
+				"name": "Flicker",
+				"text": "Deal @4@ damage. Draw 1 card.",
+				"textUp": "Deal @6@ damage. Draw 1 card."
+			},
+			"regrowth": {
+				"name": "Hearthglow",
+				"text": "At the end of your turn, heal 2 HP.",
+				"textUp": "At the end of your turn, heal 3 HP."
+			},
+			"resonantLance": {
+				"name": "Resonant Lance",
+				"text": "Deal @7@ damage. Deals double to Staggered or Cracked glass.",
+				"textUp": "Deal @10@ damage. Deals double to Staggered or Cracked glass."
+			},
+			"shardstorm": {
+				"name": "Shardstorm",
+				"text": "Deal @5@ damage to ALL enemies twice.",
+				"textUp": "Deal @7@ damage to ALL enemies twice."
+			},
+			"sidestep": {
+				"name": "Glasstep",
+				"text": "Gain #3# Ward. Draw 1 card.",
+				"textUp": "Gain #5# Ward. Draw 1 card."
+			},
+			"smother": {
+				"name": "Smother",
+				"text": "Gain #5# Ward. Apply 2 Smolder.",
+				"textUp": "Gain #8# Ward. Apply 3 Smolder."
+			},
+			"strike": {
+				"name": "Edge",
+				"text": "Deal @6@ damage.",
+				"textUp": "Deal @9@ damage."
+			},
+			"surge": {
+				"name": "Struck Match",
+				"text": "Gain 1 Energy. Draw 1 card. Kindle.",
+				"textUp": "Gain 2 Energy. Draw 1 card. Kindle."
+			},
+			"tempest": {
+				"name": "Hailglass",
+				"text": "Deal @4@ damage to ALL enemies twice.",
+				"textUp": "Deal @6@ damage to ALL enemies twice."
+			},
+			"tithe": {
+				"name": "Tithe of Panes",
+				"text": "Gain 2 Embers. Draw 1 card.",
+				"textUp": "Gain 3 Embers. Draw 1 card."
+			},
+			"toxicMist": {
+				"name": "Ashcloud",
+				"text": "Apply 3 Smolder to ALL enemies.",
+				"textUp": "Apply 5 Smolder to ALL enemies."
+			},
+			"twinFangs": {
+				"name": "Twin Shards",
+				"text": "Deal @4@ damage twice.",
+				"textUp": "Deal @6@ damage twice."
+			},
+			"unreadablePage": {
+				"name": "The Unreadable Page",
+				"text": "It cannot be played or removed. Carry it to dawn and it may read itself."
+			},
+			"uppercut": {
+				"name": "Ringing Blow",
+				"text": "Deal @10@ damage. Chip 1 extra Facet. Apply 1 Dimmed.",
+				"textUp": "Deal @13@ damage. Chip 2 extra Facets. Apply 2 Dimmed."
+			},
+			"venomStrike": {
+				"name": "Emberbite",
+				"text": "Deal @4@ damage. Apply 3 Smolder.",
+				"textUp": "Deal @6@ damage. Apply 4 Smolder."
+			},
+			"virulence": {
+				"name": "Emberfang",
+				"text": "Whenever you play an Attack, apply 1 Smolder to the enemy."
+			},
+			"warCry": {
+				"name": "Shatterhymn",
+				"text": "Apply 1 Dimmed and 1 Cracked to ALL enemies.",
+				"textUp": "Apply 2 Dimmed and 2 Cracked to ALL enemies."
+			},
+			"wound": {
+				"name": "Shard",
+				"text": "Unplayable. Broken glass rattling in your deck."
+			}
+		},
+		"deeds": {
+			"ashSermon": {
+				"desc": "Let Smolder claim 10 lives",
+				"name": "Sermon of Ash"
+			},
+			"darkWalker": {
+				"desc": "Enter 6 unlit lanterns",
+				"name": "Walker of Unlit Ways"
+			},
+			"firstDawn": {
+				"desc": "Reach the sunrise once",
+				"name": "The First Dawn"
+			},
+			"hundredShards": {
+				"desc": "Slay 100 creatures",
+				"name": "A Hundred Shards"
+			},
+			"lanternFed": {
+				"desc": "Kindle 20 cards by hand",
+				"name": "The Lantern Fed"
+			},
+			"paneBreaker": {
+				"desc": "Shatter 15 facets",
+				"name": "Breaker of Panes"
+			},
+			"spendthrift": {
+				"desc": "Spend 30 embers on Lantern Arts",
+				"name": "Fire Given Freely"
+			},
+			"untouched": {
+				"desc": "Win 3 fights without a scratch",
+				"name": "The Glass Untouched"
+			}
+		},
+		"enemies": {
+			"abyssalKnight": {
+				"moves": {
+					"blade": {
+						"name": "Voidblade"
+					},
+					"condemn": {
+						"name": "Condemn"
+					},
+					"execute": {
+						"name": "Execute"
+					},
+					"oath": {
+						"name": "Dark Oath"
+					}
+				},
+				"name": "Abyssal Knight"
+			},
+			"alphaFang": {
+				"moves": {
+					"howl": {
+						"name": "Alpha Howl"
+					},
+					"savage": {
+						"name": "Savage"
+					},
+					"throat": {
+						"name": "Throat Rip"
+					}
+				},
+				"name": "Alpha Duskfang"
+			},
+			"ashAcolyte": {
+				"moves": {
+					"ritual": {
+						"name": "Dark Ritual"
+					},
+					"scorch": {
+						"name": "Scorch"
+					}
+				},
+				"name": "Ash Acolyte"
+			},
+			"chaosHound": {
+				"moves": {
+					"bite": {
+						"name": "Chaos Bite"
+					},
+					"howl": {
+						"name": "Warp Howl"
+					}
+				},
+				"name": "Chaos Hound"
+			},
+			"deepmaw": {
+				"moves": {
+					"bite": {
+						"name": "Bite"
+					},
+					"lure": {
+						"name": "Luminous Lure"
+					},
+					"swallow": {
+						"name": "Swallow"
+					}
+				},
+				"name": "Deepmaw"
+			},
+			"drownedOne": {
+				"moves": {
+					"claw": {
+						"name": "Claw"
+					},
+					"frenzy": {
+						"name": "Frenzy"
+					},
+					"gurgle": {
+						"name": "Gurgle"
+					}
+				},
+				"name": "Drowned One"
+			},
+			"duskfang": {
+				"moves": {
+					"bite": {
+						"name": "Bite"
+					},
+					"howl": {
+						"name": "Howl"
+					},
+					"rend": {
+						"name": "Rend"
+					}
+				},
+				"name": "Duskfang"
+			},
+			"gloomslime": {
+				"moves": {
+					"harden": {
+						"name": "Congeal"
+					},
+					"ooze": {
+						"name": "Corrosive Ooze"
+					},
+					"slam": {
+						"name": "Slam"
+					}
+				},
+				"name": "Gloomslime"
+			},
+			"gravewarden": {
+				"moves": {
+					"bulwark": {
+						"name": "Bulwark"
+					},
+					"crush": {
+						"name": "Crush"
+					},
+					"entomb": {
+						"name": "Entomb"
+					}
+				},
+				"name": "Gravewarden"
+			},
+			"heraldOfEnd": {
+				"moves": {
+					"doom": {
+						"name": "Doomsong"
+					},
+					"flame": {
+						"name": "Black Flame"
+					},
+					"reave": {
+						"name": "Reave"
+					},
+					"rise": {
+						"name": "Apotheosis"
+					}
+				},
+				"name": "Herald of the End"
+			},
+			"leviathan": {
+				"moves": {
+					"brine": {
+						"name": "Black Brine"
+					},
+					"cataclysm": {
+						"name": "Cataclysm"
+					},
+					"consume": {
+						"name": "Consume the Deep"
+					},
+					"crush": {
+						"name": "Crushing Jaws"
+					},
+					"tide": {
+						"name": "Rising Tide"
+					}
+				},
+				"name": "Leviathan's Maw"
+			},
+			"mirelurker": {
+				"moves": {
+					"barb": {
+						"name": "Barb"
+					},
+					"burrow": {
+						"name": "Burrow"
+					},
+					"sting": {
+						"name": "Venom Sting"
+					}
+				},
+				"name": "Mirelurker"
+			},
+			"obsidianGolem": {
+				"moves": {
+					"harden": {
+						"name": "Harden"
+					},
+					"pound": {
+						"name": "Pound"
+					},
+					"quake": {
+						"name": "Quake"
+					}
+				},
+				"name": "Obsidian Golem"
+			},
+			"rootheart": {
+				"moves": {
+					"awaken": {
+						"name": "Awaken"
+					},
+					"entangle": {
+						"name": "Entangle"
+					},
+					"lash": {
+						"name": "Root Lash"
+					},
+					"slam": {
+						"name": "Colossal Slam"
+					},
+					"spores": {
+						"name": "Choking Spores"
+					}
+				},
+				"name": "The Rootheart"
+			},
+			"shade": {
+				"moves": {
+					"gloom": {
+						"name": "Gloom"
+					},
+					"slash": {
+						"name": "Dual Slash"
+					},
+					"vanish": {
+						"name": "Vanish"
+					}
+				},
+				"name": "Shade"
+			},
+			"shellback": {
+				"moves": {
+					"jet": {
+						"name": "Water Jet"
+					},
+					"shell": {
+						"name": "Shell Up"
+					},
+					"snap": {
+						"name": "Snap"
+					}
+				},
+				"name": "Shellback"
+			},
+			"siren": {
+				"moves": {
+					"mend": {
+						"name": "Mend"
+					},
+					"rend": {
+						"name": "Talon Rend"
+					},
+					"shriek": {
+						"name": "Shriek"
+					},
+					"song": {
+						"name": "Dirge"
+					}
+				},
+				"name": "Siren"
+			},
+			"sovereign": {
+				"moves": {
+					"annihilation": {
+						"name": "Annihilation"
+					},
+					"ascend": {
+						"name": "Ascend"
+					},
+					"gravitas": {
+						"name": "Gravitas"
+					},
+					"ruin": {
+						"name": "Word of Ruin"
+					},
+					"scepter": {
+						"name": "Scepter Strike"
+					},
+					"starfall": {
+						"name": "Starfall"
+					}
+				},
+				"name": "The Eternal Sovereign"
+			},
+			"sporeling": {
+				"moves": {
+					"grow": {
+						"name": "Bloom"
+					},
+					"spit": {
+						"name": "Spore Spit"
+					}
+				},
+				"name": "Sporeling"
+			},
+			"starCultist": {
+				"moves": {
+					"ritual": {
+						"name": "Star Ritual"
+					},
+					"scorch": {
+						"name": "Starfire"
+					}
+				},
+				"name": "Star Cultist"
+			},
+			"thornling": {
+				"moves": {
+					"bristle": {
+						"name": "Bristle"
+					},
+					"burst": {
+						"name": "Spike Burst"
+					},
+					"prick": {
+						"name": "Prick"
+					}
+				},
+				"name": "Thornling"
+			},
+			"tidecaller": {
+				"moves": {
+					"bolt": {
+						"name": "Water Bolt"
+					},
+					"surge": {
+						"name": "Tidal Blessing"
+					},
+					"undertow": {
+						"name": "Undertow"
+					}
+				},
+				"name": "Tidecaller"
+			},
+			"voidColossus": {
+				"moves": {
+					"fortify": {
+						"name": "Fortify"
+					},
+					"shatter": {
+						"name": "Shatter"
+					},
+					"slam": {
+						"name": "Void Slam"
+					}
+				},
+				"name": "Voidforged Colossus"
+			},
+			"voidWisp": {
+				"moves": {
+					"siphon": {
+						"name": "Siphon"
+					},
+					"zap": {
+						"name": "Void Zap"
+					}
+				},
+				"name": "Void Wisp"
+			},
+			"voltEel": {
+				"moves": {
+					"coil": {
+						"name": "Coil"
+					},
+					"discharge": {
+						"name": "Discharge"
+					},
+					"shock": {
+						"name": "Shock"
+					}
+				},
+				"name": "Voltaic Eel"
+			},
+			"watcherEye": {
+				"moves": {
+					"beam": {
+						"name": "Ruin Beam"
+					},
+					"blink": {
+						"name": "Blink"
+					},
+					"gaze": {
+						"name": "Piercing Gaze"
+					}
+				},
+				"name": "Watcher Eye"
+			},
+			"waylayer": {
+				"moves": {
+					"smoke": {
+						"name": "Smokescreen"
+					},
+					"stab": {
+						"name": "Stab"
+					},
+					"trick": {
+						"name": "Dirty Trick"
+					}
+				},
+				"name": "Waylayer"
+			}
+		},
+		"events": {
+			"cursedIdol": {
+				"choices": {
+					"0": {
+						"label": "Take it",
+						"sub": "Gain a relic. Gain a Hex."
+					},
+					"1": {
+						"label": "Leave it",
+						"sub": ""
+					}
+				},
+				"name": "The Cursed Idol",
+				"text": "A jade idol sits on a plinth of skulls, radiating a soft warmth. It has clearly been left here for a reason."
+			},
+			"emberFountain": {
+				"choices": {
+					"0": {
+						"label": "Bathe",
+						"sub": "Heal 35% of your Max HP."
+					},
+					"1": {
+						"label": "Bottle it",
+						"sub": "Gain a Phial of Dawn."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "Fountain of Embers",
+				"text": "Liquid light pools in a cracked basin, throwing sparks that do not burn. It smells of summer and old victories."
+			},
+			"fleshTrader": {
+				"choices": {
+					"0": {
+						"label": "Trade",
+						"sub": "Lose 8 Max HP. Gain a relic."
+					},
+					"1": {
+						"label": "Refuse",
+						"sub": ""
+					}
+				},
+				"name": "The Flesh Trader",
+				"text": "\"Vitality is a currency,\" purrs a thing wearing a merchant's coat. \"And you look flush with it.\" Long fingers open to reveal a relic."
+			},
+			"forge": {
+				"choices": {
+					"0": {
+						"label": "Temper",
+						"sub": "Upgrade a card."
+					},
+					"1": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "The Forgotten Forge",
+				"text": "An anvil of black star-metal, still warm. Hammers hang in racks, waiting for hands that died an age ago."
+			},
+			"forgottenShrine": {
+				"choices": {
+					"0": {
+						"label": "Pray",
+						"sub": "Remove a card from your deck."
+					},
+					"1": {
+						"label": "Desecrate",
+						"sub": "Gain 90 gold. Gain a Hex."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "Forgotten Shrine",
+				"text": "A moss-eaten shrine hums with old power. Offerings of bone and silver litter its base. Something watches from inside the stone."
+			},
+			"gambler": {
+				"choices": {
+					"0": {
+						"label": "Bet 40 gold",
+						"sub": "45% chance to win 110 gold."
+					},
+					"1": {
+						"label": "Walk away",
+						"sub": ""
+					}
+				},
+				"name": "The Bone Gambler",
+				"rolls": {
+					"lose": {
+						"text": "The bones rattle against you. The wager is lost."
+					},
+					"win": {
+						"text": "The bones land in your favour. You claim 110 gold."
+					}
+				},
+				"text": "A grinning figure rattles a cup of knuckle-bones. \"One throw, stranger. Fortune loves the reckless.\""
+			},
+			"library": {
+				"choices": {
+					"0": {
+						"label": "Study",
+						"sub": "Choose 1 of 5 cards to add to your deck."
+					},
+					"1": {
+						"label": "Rest among the stacks",
+						"sub": "Heal 20% of your Max HP."
+					}
+				},
+				"name": "The Drowned Library",
+				"text": "Shelves of waterlogged grimoires stretch into the dark. Most are pulp — but a few pages still glow faintly."
+			},
+			"mirror": {
+				"choices": {
+					"0": {
+						"label": "Reflect",
+						"sub": "Duplicate a card in your deck."
+					},
+					"1": {
+						"label": "Shatter it",
+						"sub": "Lose 6 HP. Remove a card from your deck."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "The Silvered Mirror",
+				"text": "A tall mirror stands in the rubble, unbroken. Your reflection moves half a breath behind you — and it is smiling."
+			},
+			"ruinedCamp": {
+				"choices": {
+					"0": {
+						"label": "Rest",
+						"sub": "Heal 15% of your Max HP."
+					},
+					"1": {
+						"label": "Scavenge",
+						"sub": "Gain 45 gold and a random potion."
+					}
+				},
+				"name": "Ruined Camp",
+				"text": "A campfire, still smoldering. Bedrolls, torn. Whoever slept here left in a hurry — and left their packs behind."
+			},
+			"voidChest": {
+				"choices": {
+					"0": {
+						"label": "Open it",
+						"sub": "It might hold a relic... or teeth."
+					},
+					"1": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "Humming Chest",
+				"text": "A black iron chest sits alone in the gloom, humming a note you feel in your teeth. Its lock is already broken."
+			},
+			"woundedKnight": {
+				"choices": {
+					"0": {
+						"label": "Aid him",
+						"sub": "Lose 8 HP. He rewards you with a relic."
+					},
+					"1": {
+						"label": "Loot him",
+						"sub": "Gain 65 gold. Gain a Hex."
+					},
+					"2": {
+						"label": "Leave",
+						"sub": ""
+					}
+				},
+				"name": "The Wounded Knight",
+				"text": "A knight slumps against a shattered pillar, breath rattling behind a crushed visor. One gauntlet clutches a relic; the other beckons you closer."
+			}
+		},
+		"omens": {
+			"ashfall": {
+				"name": "Ashfall",
+				"text": "Ash chokes every fire: enemies begin combat with 2 Smolder, but their blows leave 1 Smolder on you."
+			},
+			"eighthOmen": {
+				"name": "The Eighth Omen",
+				"text": "Every lesser battle bears a title. The broken words follow every floor."
+			},
+			"emberWind": {
+				"name": "Ember Wind",
+				"text": "Sparks ride the wind into your lantern: begin each combat with 2 Embers, but draw 4 cards instead of 5."
+			},
+			"heavyAir": {
+				"name": "Heavy Air",
+				"text": "The air holds light like water: all Ward gained is increased by a quarter — yours and theirs."
+			},
+			"hungryDark": {
+				"name": "The Hungry Dark",
+				"text": "The dark eats coin but sharpens choice: shop prices are a quarter higher, and card rewards offer 1 more choice."
+			},
+			"longNight": {
+				"name": "The Long Night",
+				"text": "The climb stretches on: enemies carry 12% more life, but every victory pays 40% more gold."
+			},
+			"thinGlass": {
+				"name": "Thin Glass",
+				"text": "Tonight all glass runs thin: every facet gauge is 1 smaller, but enemy blows strike 2 harder."
+			},
+			"waningMoon": {
+				"name": "Waning Moon",
+				"text": "The moon spends her last light on you: your first card each turn costs 1 less, but rest sites heal only 20%."
+			}
+		},
+		"potions": {
+			"block": {
+				"name": "Phial of Held Light",
+				"text": "Gain 12 Ward."
+			},
+			"energy": {
+				"name": "Emberphial",
+				"text": "Gain 3 Embers."
+			},
+			"fire": {
+				"name": "Stormglass Phial",
+				"text": "Deal 20 damage to an enemy."
+			},
+			"healing": {
+				"name": "Phial of Dawn",
+				"text": "Heal 20 HP."
+			},
+			"strength": {
+				"name": "Phial of Fervor",
+				"text": "Gain 2 Fervor."
+			},
+			"swift": {
+				"name": "Inkdraught",
+				"text": "Draw 3 cards."
+			},
+			"venom": {
+				"name": "Smolderphial",
+				"text": "Apply 7 Smolder to an enemy."
+			}
+		},
+		"quests": {
+			"eighthOmen": {
+				"floorEchoes": [
+					"// THE PANE WATCHES //",
+					"// EIGHT IS NOT A NUMBER //",
+					"// CARRY THE WRONG LIGHT UPWARD //",
+					"// THE CROWN IS A MASK //"
+				],
+				"inscription": "Reach dawn beneath the Eighth Omen.",
+				"mode": "Gate",
+				"name": "The Eighth Omen",
+				"resolved": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR."
+			},
+			"hollowLamplighter": {
+				"inscription": "Pay the Hollow Lamplighter five prices along the Unlit Way.",
+				"meetings": [
+					{
+						"accepted": "The next three embers belong to the hollow lantern.",
+						"ask": "Your lantern is noisy. Give me the next three embers it catches.",
+						"cannot": "Promise the embers now. The lantern will pay before you do.",
+						"paid": "Six panes were carried away from a window no wall could hold."
+					},
+					{
+						"ask": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
+						"cannot": "Your purse is warm, but not warm enough.",
+						"paid": "The Pale Ones watch the paths that point above the crown."
+					},
+					{
+						"ask": "The Spire counts the vessel. Give me twelve measures of yours.",
+						"cannot": "I will not hollow you below thirty. Return with a larger vessel.",
+						"paid": "Your standing dead have seen the stair above the Sovereign."
+					},
+					{
+						"ask": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+						"cannot": "You have spent the gift already. Bring me one that is still yours.",
+						"paid": "The empty lantern is the token that purchases an audience with the mask."
+					},
+					{
+						"ask": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
+						"cannot": "One heartbeat is enough. Refusal is the only poverty left.",
+						"paid": "Light the panes. The door will know you."
+					}
+				],
+				"mode": "Trail",
+				"name": "The Hollow Lamplighter"
+			},
+			"ownShade": {
+				"final": "We were never climbing out. We were carrying light to the lock.",
+				"fragments": [
+					"I remember the stone. You walked away before I stopped calling.",
+					"Each climber leaves a shape behind. The Spire has learned to wear ours.",
+					"Above the Sovereign there is no dawn — only a door pretending to be the sky."
+				],
+				"inscription": "Defeat the self that remembers falling. Three shades must fall.",
+				"mode": "Trail",
+				"name": "Your Own Shade"
+			},
+			"paleOnes": {
+				"huntInscription": "Defeat three pale foes and follow the cold motes they leave behind.",
+				"huntName": "Hunt the Pale Ones",
+				"inscription": "Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour.",
+				"mode": "Trail",
+				"name": "The Pale Ones",
+				"progress": [
+					"No mote answers the Lens.",
+					"The first pale mote chills the lantern."
+				]
+			},
+			"unreadablePage": {
+				"inscription": "Win five dawns carrying the Unreadable Page.",
+				"mode": "Trail",
+				"name": "The Unreadable Page",
+				"pages": [
+					"FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
+					"SECOND PAGE — Pale figures carried the shards down so the thing above could not follow.",
+					"THIRD PAGE — A climber died standing and saw a stair where the summit should have ended.",
+					"FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.",
+					"FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown."
+				]
+			},
+			"usurper": {
+				"bought": "Now the summit knows what you carry.",
+				"death": "The mask is broken. Look above.",
+				"inscription": "Carry the lantern with no flame to the summit and unmask the Usurper.",
+				"itemName": "A Lantern with No Flame",
+				"itemText": "Cold glass. No wick. The merchant will not say who left it.",
+				"mode": "Gate",
+				"name": "The Usurper",
+				"poor": "Cold goods, warm price. Come back carrying a dawn's worth of gold."
+			}
+		},
+		"relics": {
+			"ashenCore": {
+				"name": "Ashen Core",
+				"text": "Enemies begin each combat with 3 Smolder."
+			},
+			"basaltIdol": {
+				"name": "Basalt Idol",
+				"text": "Begin each combat with 10 Ward."
+			},
+			"bellOfEndings": {
+				"name": "Bell of Endings",
+				"text": "Whenever glass Shatters, every other enemy takes 4 damage."
+			},
+			"crownOfCinders": {
+				"name": "Crown of Cinders",
+				"text": "Your lantern holds 12 Embers and begins each combat holding 2."
+			},
+			"crownOfTheHearth": {
+				"name": "Crown of the Hearth",
+				"text": "At the end of combat, heal 3 HP for every Ember still in your lantern."
+			},
+			"crownOfTithes": {
+				"name": "Crown of Tithes",
+				"text": "You may kindle twice each turn, and each kindling grants 3 Ward."
+			},
+			"duskmirror": {
+				"name": "Duskmirror",
+				"text": "The first card you play each turn costs 0."
+			},
+			"emberHeart": {
+				"name": "Emberheart",
+				"text": "At the end of combat, heal 3 HP."
+			},
+			"emberLantern": {
+				"name": "Ember Lantern",
+				"text": "Gain 1 extra Energy on your first turn."
+			},
+			"executionersSeal": {
+				"name": "Executioner's Seal",
+				"text": "Every 10th Attack you play deals double damage."
+			},
+			"frozenCore": {
+				"name": "Frozen Core",
+				"text": "Unspent Energy carries over between turns."
+			},
+			"gravebloom": {
+				"name": "Gravebloom",
+				"text": "After combat, if at or below 50% HP, heal 10."
+			},
+			"hollowCrown": {
+				"name": "Hollow Crown",
+				"text": "Gain 1 Energy each turn. The glass dims: on pickup, lose 10 Max HP."
+			},
+			"ironTalisman": {
+				"name": "Iron Talisman",
+				"text": "Every 3rd Attack you play grants 1 Fervor."
+			},
+			"merchantsMark": {
+				"name": "Merchant's Mark",
+				"text": "Shop prices are 25% lower."
+			},
+			"prismCharm": {
+				"name": "Prism Charm",
+				"text": "Your first Shatter each combat spills 2 extra Embers."
+			},
+			"reapersBell": {
+				"name": "Reaper's Bell",
+				"text": "When an enemy dies, gain 1 Energy and draw 1 card."
+			},
+			"riverPearl": {
+				"name": "River Pearl",
+				"text": "Begin each combat with 1 Poise."
+			},
+			"seersOrb": {
+				"name": "Seer's Orb",
+				"text": "Card rewards offer 1 additional choice."
+			},
+			"shatterersCrown": {
+				"name": "Shatterer's Crown",
+				"text": "Enemy glass runs thin: all facet gauges are 1 smaller. Enemies begin with 1 Fervor."
+			},
+			"silkFan": {
+				"name": "Silk Fan",
+				"text": "Every 3rd card you play each combat grants 3 Ward."
+			},
+			"smolderingCoal": {
+				"name": "Smoldering Coal",
+				"text": "Enemies begin each combat with 2 Smolder."
+			},
+			"sunBlossom": {
+				"name": "Sun Blossom",
+				"text": "All healing is increased by 50%."
+			},
+			"sweetRoot": {
+				"name": "Sweet Root",
+				"text": "On pickup: gain 8 Max HP."
+			},
+			"thiefOfWicks": {
+				"name": "Thief of Wicks",
+				"text": "Unlit lanterns pay double bounty."
+			},
+			"thornBand": {
+				"name": "Thorn Band",
+				"text": "Begin each combat with 2 Splinters."
+			},
+			"travelersPack": {
+				"name": "Traveler's Pack",
+				"text": "Draw 2 extra cards on your first turn."
+			},
+			"verdantBranch": {
+				"name": "Verdant Branch",
+				"text": "Whenever a card is Kindled or burned away, draw 1 card."
+			},
+			"vialOfLife": {
+				"name": "Vial of Life",
+				"text": "Heal 2 HP at the start of each combat."
+			},
+			"warFetish": {
+				"name": "War Fetish",
+				"text": "Begin each combat with 1 Fervor."
+			},
+			"wardingCharm": {
+				"name": "Warding Charm",
+				"text": "Enemy attacks that would deal 5 or less damage deal 1."
+			}
+		},
+		"shadeKits": {
+			"ashwarden": {
+				"moves": {
+					"ashbite": {
+						"name": "Remembered Ashbite"
+					},
+					"ashfall": {
+						"name": "First Ash, Last Breath"
+					},
+					"smother": {
+						"name": "Remembered Smother"
+					}
+				}
+			},
+			"duskblade": {
+				"moves": {
+					"chisel": {
+						"name": "Remembered Chisel"
+					},
+					"eclipse": {
+						"name": "Remembered Eclipse"
+					},
+					"spark": {
+						"name": "First Spark, Last Light"
+					}
+				}
+			}
+		},
+		"status": {
+			"barricade": {
+				"desc": "Ward no longer expires.",
+				"name": "Annealed"
+			},
+			"beacon": {
+				"desc": "Attacks chip N extra Facet(s). Fades at end of turn.",
+				"name": "Beacon"
+			},
+			"dex": {
+				"desc": "Ward cards grant +N Ward.",
+				"name": "Poise"
+			},
+			"emberflow": {
+				"desc": "Gain N Ember(s) at the start of each turn.",
+				"name": "Pyreheart"
+			},
+			"energized": {
+				"desc": "Gain N extra Energy at the start of each turn.",
+				"name": "Alight"
+			},
+			"frail": {
+				"desc": "Ward gained reduced 25%. Wears off each turn.",
+				"name": "Brittle"
+			},
+			"metallicize": {
+				"desc": "Gains N Ward at the end of each turn.",
+				"name": "Vitrified"
+			},
+			"nightsight": {
+				"desc": "Draw N extra card(s) at the start of each turn.",
+				"name": "Night Sight"
+			},
+			"poison": {
+				"desc": "Burns from within: loses N HP at the start of its turn, then Smolder falls by 1. When smoldering glass shatters or dies, the Smolder leaps to another enemy.",
+				"name": "Smolder"
+			},
+			"rampage": {
+				"desc": "Attack grows stronger with each use.",
+				"name": "Crescendo"
+			},
+			"regen": {
+				"desc": "Heals N HP at the end of each turn.",
+				"name": "Warmth"
+			},
+			"ritual": {
+				"desc": "Gains N Fervor at the start of each turn.",
+				"name": "Litany"
+			},
+			"str": {
+				"desc": "The inner fire stoked: attacks deal +N damage.",
+				"name": "Fervor"
+			},
+			"thorns": {
+				"desc": "Attackers take N damage back.",
+				"name": "Splinters"
+			},
+			"venomous": {
+				"desc": "Attacks apply N Smolder.",
+				"name": "Emberfang"
+			},
+			"vulnerable": {
+				"desc": "The glass is scored: takes 50% more attack damage. Wears off each turn.",
+				"name": "Cracked"
+			},
+			"weak": {
+				"desc": "The fire gutters: deals 25% less attack damage. Wears off each turn.",
+				"name": "Dimmed"
+			}
+		},
+		"variants": {
+			"ownShade1": {
+				"deathDialogue": "I remember the stone. You walked away before I stopped calling.",
+				"dialogue": [],
+				"name": "The Shade That Fell"
+			},
+			"ownShade2": {
+				"deathDialogue": "Each climber leaves a shape behind. The Spire has learned to wear ours.",
+				"dialogue": [],
+				"name": "The Shade That Returned"
+			},
+			"ownShade3": {
+				"deathDialogue": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
+				"dialogue": [],
+				"name": "The Shade That Remembers"
+			},
+			"paleDrownedOne": {
+				"dialogue": [],
+				"name": "Pale Drowned One"
+			},
+			"paleDuskfang": {
+				"dialogue": [],
+				"name": "Pale Duskfang"
+			},
+			"paleVoidWisp": {
+				"dialogue": [],
+				"name": "Pale Void Wisp"
+			},
+			"usurpedSovereign": {
+				"dialogue": [
+					"{aspect}. At last, the lantern brings me a name.",
+					"The Sovereign was a mask. You have paid to meet the face beneath it.",
+					"Break me, and the empty lantern will remember fire."
+				],
+				"name": "The Usurper"
+			}
+		},
+		"vows": {
+			"0": {
+				"desc": "Every creature is harder to break — enemy HP +12%.",
+				"name": "Vow of Iron"
+			},
+			"1": {
+				"desc": "Their blows land heavier — enemy attacks deal +1.",
+				"name": "Vow of Malice"
+			},
+			"2": {
+				"desc": "Bosses armor their cores — boss Facets +1.",
+				"name": "Vow of the Deep"
+			},
+			"3": {
+				"desc": "You climb already cursed — begin every run with a Hex.",
+				"name": "Vow of the Mark"
+			},
+			"4": {
+				"desc": "The dark drinks your rest — campfires heal 20%, not 30%.",
+				"name": "Vow of the Waning"
+			}
+		},
+		"whispers": [
+			"There is a colour the Spire refuses to name.",
+			"A pale hand has touched the dark side of the glass.",
+			"Six spaces wait where no window stands.",
+			"The dead climb twice: once in flesh, once in memory.",
+			"A lantern without flame is still a key.",
+			"Count the panes that do not catch the dawn.",
+			"A page can be read only after it survives the summit.",
+			"The eighth sign is not written among the seven.",
+			"The gaunt keeper remembers the road you did not take.",
+			"Pale motes gather like frost around a hidden seam.",
+			"Your monument does not always lie down.",
+			"The merchant keeps one cold thing beneath the counter.",
+			"Broken glyphs are the shadow of a complete sentence.",
+			"Five pages make a chapter; five prices make a confession.",
+			"Three deaths will teach your shade to speak plainly.",
+			"The Vigil has a window, though no wall holds it.",
+			"Each shard lights one pane of Emberglass.",
+			"The Pale Ones are not hunting you. They are pointing upward.",
+			"The Sovereign is a mask worn below the final stair.",
+			"When six panes burn, look beyond the summit.",
+			"There is a sealed door above the crown.",
+			"Its inscription has waited longer than the Vigil.",
+			"Bring six shards to the Rose Window.",
+			"The climb continues."
+		]
+	}
 }
