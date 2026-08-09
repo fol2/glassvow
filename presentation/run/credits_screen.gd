@@ -103,7 +103,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	_add_body("A roguelite deckbuilder · by fol2")
 
 	_add_heading("THE GLASS")
-	_add_body("Parallel-ported from roguecardv2 (web reference 0.5.0+6e06911).")
+	_add_body("Parallel-ported from roguecardv2.")
 
 	_add_heading("MUSIC — STAINED GLASS")
 	_add_pack_id("stained-glass-v1")
