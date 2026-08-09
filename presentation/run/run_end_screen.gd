@@ -125,6 +125,9 @@ func _build() -> void:
 	_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(_margin)
 	var scroll: ScrollContainer = ScrollContainer.new()
+	# Same reachability defect as #72's boon screen: without this the view never
+	# travels with focus, so a button below the fold is focused and invisible.
+	scroll.follow_focus = true
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
