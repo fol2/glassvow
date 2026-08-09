@@ -218,10 +218,6 @@ static func _display_face_route_contract(fails: Array[String]) -> void:
 	var sources: Array[String] = []
 	_collect_gd_sources("res://presentation", sources)
 	for path: String in sources:
-		# ChoiceScreen is a sibling-owned migration lane. It is deliberately the
-		# sole expected residual until that lane lands.
-		if path == "res://presentation/run/choice_screen.gd":
-			continue
 		var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 		_check(fails, file != null, "display-face route audit reads %s" % path)
 		if file == null:
@@ -261,6 +257,7 @@ static func _display_face_consumers(fails: Array[String]) -> void:
 		["RewardKit", RewardKit.font(GlassStyle.ALEGREYA_400, 0)],
 		["RewardScreen", RewardScreen._font(GlassStyle.CINZEL_700, 1)],
 		["RewardSpoils", RewardSpoils.font(GlassStyle.ALEGREYA_400, 0)],
+		["ChoiceScreen", ChoiceScreen._tracked_font(GlassStyle.CINZEL_700, 1)],
 		["SettingsPanel", SettingsPanel._tracked_font(GlassStyle.CINZEL_500, 1)],
 		["TransitionLayer", TransitionLayer._tracked(GlassStyle.CINZEL_700, 1)],
 	]
