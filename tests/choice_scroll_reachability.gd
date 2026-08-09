@@ -7,6 +7,7 @@ const STAGE_SIZE: Vector2i = Vector2i(844, 390)
 
 var _fails: Array[String] = []
 var _mutate_follow_focus: bool = false
+var _mutate_boon_height: bool = false
 var _viewport: SubViewport
 var _confirmed: bool = false
 var _chosen_id: String = ""
@@ -15,6 +16,7 @@ var _capture_dir: String = ""
 
 func _initialize() -> void:
 	_mutate_follow_focus = "--mutate-follow-focus" in OS.get_cmdline_user_args()
+	_mutate_boon_height = "--mutate-boon-height" in OS.get_cmdline_user_args()
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--capture-dir="):
 			_capture_dir = arg.trim_prefix("--capture-dir=")
@@ -29,6 +31,7 @@ func _run() -> void:
 	await _check_embark()
 	await _check_lamplighter_keyboard()
 	await _check_lamplighter_mouse_drag()
+	await _check_lamplighter_portrait()
 	for count: int in [6, 7, 8]:
 		await _check_plain_choices(count)
 	if _fails.is_empty():
@@ -66,6 +69,11 @@ func _check_lamplighter_keyboard() -> void:
 	var scroll: ScrollContainer = _vertical_scrolls(screen)[0]
 	if _mutate_follow_focus:
 		scroll.follow_focus = false
+	if _mutate_boon_height:
+		for button: Button in screen._boon_buttons.values():
+			button.custom_minimum_size.y = 100
+		await _settle()
+	_check_boon_copy_clear(screen, "phone-landscape")
 	var first_boon: Button = screen._boon_buttons[screen._boon_ids[0]]
 	screen._select_boon(screen._boon_ids[0])
 	first_boon.grab_focus()
@@ -81,6 +89,16 @@ func _check_lamplighter_keyboard() -> void:
 	await _action(&"ui_accept")
 	_check(_confirmed, "keyboard-focused CHOOSE A BOON activates")
 	_drop(screen)
+
+func _check_lamplighter_portrait() -> void:
+	_viewport.size = Vector2i(390, 844)
+	var screen: LamplighterScreen = _lamplighter(&"phone-portrait")
+	_viewport.add_child(screen)
+	await _settle()
+	_check_boon_copy_clear(screen, "phone-portrait")
+	await _capture("lamplighter-portrait")
+	_drop(screen)
+	_viewport.size = STAGE_SIZE
 
 func _check_lamplighter_mouse_drag() -> void:
 	var screen: LamplighterScreen = _lamplighter()
@@ -132,7 +150,7 @@ func _check_plain_choices(count: int) -> void:
 		"final control for %d plain choices activates" % count)
 	_drop(screen)
 
-func _lamplighter() -> LamplighterScreen:
+func _lamplighter(stage_shape: StringName = &"phone-landscape") -> LamplighterScreen:
 	var content: ContentDB = ContentDB.load_full(false)
 	var boon_ids: Array[String] = []
 	for id_v: Variant in content.boons.keys().slice(0, 3):
@@ -140,9 +158,21 @@ func _lamplighter() -> LamplighterScreen:
 	var aspect: Dictionary = content.aspects[0]
 	var screen: LamplighterScreen = LamplighterScreen.new(
 		aspect, content.boons, content.arts, boon_ids,
-		StringName(str(content.arts.keys()[0])), &"phone-landscape")
+		StringName(str(content.arts.keys()[0])), stage_shape)
 	_hide_backdrop(screen)
 	return screen
+
+func _check_boon_copy_clear(screen: LamplighterScreen, stage_shape: String) -> void:
+	var heading_rect: Rect2 = screen._art_heading.get_global_rect()
+	for id: String in screen._boon_ids:
+		var description_rect: Rect2 = screen._boon_descriptions[id].get_global_rect()
+		var card_rect: Rect2 = screen._boon_buttons[id].get_global_rect()
+		print("EVIDENCE %s boon=%s card=%s description=%s heading=%s" % [
+			stage_shape, id, card_rect, description_rect, heading_rect])
+		_check(card_rect.encloses(description_rect),
+			"%s boon description %s stays inside its card" % [stage_shape, id])
+		_check(not description_rect.intersects(heading_rect),
+			"%s boon description %s does not overlap the art heading" % [stage_shape, id])
 
 func _hide_backdrop(screen: Control) -> void:
 	for backdrop: Node in screen.find_children("", "TitleWorld", true, false):
@@ -257,20 +287,21 @@ func _capture(stem: String) -> void:
 		return
 	await process_frame
 	var image: Image = _viewport.get_texture().get_image()
-	var path: String = _capture_dir.path_join("%s-844x390.png" % stem)
+	var path: String = _capture_dir.path_join("%s-%dx%d.png" % [
+		stem, _viewport.size.x, _viewport.size.y])
 	if image == null:
 		_check(false, "capture %s has a rendered viewport image" % stem)
 		return
-	if image.get_size() != STAGE_SIZE:
-		_check(false, "capture %s is exactly 844x390" % stem)
+	if image.get_size() != _viewport.size:
+		_check(false, "capture %s matches the viewport size" % stem)
 		return
 	var save_error: Error = image.save_png(path)
 	if save_error != OK:
 		_check(false, "capture %s is written" % stem)
 		return
 	var proof: Image = Image.load_from_file(path)
-	_check(proof != null and proof.get_size() == STAGE_SIZE,
-		"capture %s reloads as an 844x390 PNG" % stem)
+	_check(proof != null and proof.get_size() == _viewport.size,
+		"capture %s reloads at the viewport size" % stem)
 	print("CAPTURE %s" % path)
 
 
