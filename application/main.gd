@@ -1045,12 +1045,12 @@ func _show_combat_potion_menu(slot: int) -> void:
 			if enemy.hp > 0:
 				choices.append({
 					"id": "use:%d" % enemy.idx,
-					"label": "Use on %s" % enemy.name,
+					"label": Locale.active.t("ui.hud.usePotionOn", {"name": enemy.name}),
 				})
 	else:
-		choices.append({"id": "use", "label": "Use"})
-	choices.append({"id": "toss", "label": "Toss it", "quiet": true})
-	choices.append({"id": "close", "label": "Close", "quiet": true})
+		choices.append({"id": "use", "label": Locale.active.t("ui.common.use")})
+	choices.append({"id": "toss", "label": Locale.active.t("ui.hud.tossPotion"), "quiet": true})
+	choices.append({"id": "close", "label": Locale.active.t("ui.menu.close"), "quiet": true})
 	var menu: Control = ChoiceScreenType.new(
 		str(definition.get("name", id)),
 		str(definition.get("text", "")),
@@ -1158,7 +1158,8 @@ func _on_rest_choice(id: String) -> void:
 	if choices.is_empty():
 		_finish_node()
 		return
-	_show_choice("TEMPER A CARD", "Choose one pane to strengthen.", choices, _on_rest_upgrade,
+	_show_choice(Locale.active.t("ui.rest.temperCardTitle"),
+		Locale.active.t("ui.rest.temperCardBody"), choices, _on_rest_upgrade,
 		{"overlay": true})
 
 
@@ -1226,7 +1227,8 @@ func _show_event_pick(pending: Dictionary) -> void:
 	if choices.is_empty():
 		_finish_node()
 		return
-	_show_choice("CHOOSE A CARD", "The choice is part of the price.", choices,
+	_show_choice(Locale.active.t("ui.event.chooseCardTitle").to_upper(),
+		Locale.active.t("ui.event.chooseCardBody"), choices,
 		_on_event_pick.bind(kind), {"overlay": true})
 
 
@@ -1324,7 +1326,8 @@ func _on_shop_choice(id: String) -> void:
 		var choices: Array[Dictionary] = []
 		for card: CardInst in game.run.player.deck:
 			choices.append(_card_choice(card, str(card.uid)))
-		_show_choice("REMOVE A CARD", "The merchant keeps the broken pane.", choices,
+		_show_choice(Locale.active.t("ui.shop.cardRemoval.pickTitle").to_upper(),
+		Locale.active.t("ui.shop.cardRemoval.confirmBody"), choices,
 			_on_shop_remove, {"overlay": true})
 		return
 	var parts: PackedStringArray = id.split(":")
@@ -1407,7 +1410,7 @@ func _resume_pending_combat() -> void:
 	var route_kind: String = str(game.run.pending_combat)
 	var combat_kind: String = "normal" if route_kind == "monster" else route_kind
 	_screen.start_encounter(enemies, combat_kind,
-		"%s  ·  act %d" % [route_kind.capitalize(), game.run.act + 1])
+		_combat_encounter_header(route_kind, game.run.act + 1))
 	_music.play(_combat_music(route_kind))
 
 
@@ -1639,10 +1642,13 @@ func _show_potion_replace(id: String) -> void:
 		var held_def: Dictionary = content.potions.get(held, {})
 		choices.append({
 			"id": str(slot),
-			"label": "Replace %s" % str(held_def.get("name", held)),
+			"label": Locale.active.t("ui.reward.replacePotion", {
+				"name": str(held_def.get("name", held))}),
 		})
-	choices.append({"id": "discard", "label": "Discard the new phial", "quiet": true})
-	_show_choice("PHIAL RACK FULL", "Choose what leaves the rack.", choices,
+	choices.append({"id": "discard",
+		"label": Locale.active.t("ui.reward.discardNewPhial"), "quiet": true})
+	_show_choice(Locale.active.t("ui.reward.phialRackFullTitle"),
+		Locale.active.t("ui.reward.phialRackFullBody"), choices,
 		_on_potion_replace.bind(id), {"overlay": true})
 
 
@@ -1698,9 +1704,10 @@ func _show_boss_relic() -> void:
 			"hint": str(relic.get("text", "")),
 			"icon": "res://assets/art/relics/%s.png" % id,
 		})
-	choices.append({"id": "", "label": "Take no crown", "quiet": true})
-	_show_choice("A CROWN OF BROKEN GLASS", "Choose one relic before the next night.",
-		choices, _on_boss_relic_chosen)
+	choices.append({"id": "", "label": Locale.active.t("ui.reward.bossTakeNone"),
+		"quiet": true})
+	_show_choice(Locale.active.t("ui.reward.bossCrownTitle"),
+		Locale.active.t("ui.reward.bossCrownBody"), choices, _on_boss_relic_chosen)
 
 
 func _on_boss_relic_chosen(id: String) -> void:
@@ -2212,3 +2219,10 @@ func _on_lamplighter_confirmed(boon_id: String, art_id: StringName) -> void:
 		_show_map()
 	else:
 		_show_save_error("The Lamplighter's gift could not be held.")
+
+
+## Route kinds are stable mechanics IDs. Only their display parameter crosses
+## the frozen catalogue before composition into the encounter header.
+static func _combat_encounter_header(route_kind: String, act_number: int) -> String:
+	var kind: String = Locale.active.t("ui.combat.encounterKind.%s" % route_kind)
+	return Locale.active.t("ui.combat.encounterHeader", {"kind": kind, "act": act_number})
