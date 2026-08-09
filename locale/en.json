@@ -25,11 +25,11 @@
       "end": "End",
       "enemyTurn": "ENEMY TURN",
       "energyAria": "Energy",
-      "facetsBody": "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass [b]shatters[/b] â it loses its next action, is Cracked, and spills Embers into your lantern.",
+      "facetsBody": "Every creature is glass. Attacks that draw unblocked blood chip a facet; fill the gauge and the glass [b]shatters[/b] — it loses its next action, is Cracked, and spills Embers into your lantern.",
       "facetsTitle": "Facets",
       "glassHolds": "THE GLASS HOLDS",
       "guardShattered": "GUARD SHATTERED",
-      "lanternBody": "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> â burn the card away for an ember, once a turn. Curses refuse the fire.",
+      "lanternBody": "The lantern holds the <b>Embers</b> spilled by shattered and slain glass. Drag any card onto it to <b>kindle</b> — burn the card away for an ember, once a turn. Curses refuse the fire.",
       "lanternBodyLead": "<b>{cost} Embers, once a turn:</b> {text}<br><br>",
       "lanternSub": "A · use Art",
       "lanternTitle": "The Lantern",
@@ -47,14 +47,34 @@
       "lanternArtTitle": "Lantern Art — {name}",
       "lanternLead": "<b>{embers} Embers, once a turn:</b> {text}<br><br>",
       "staggeredTitle": "Staggered",
-      "staggeredBody": "The glass has shattered â this creature loses its next action while it reseams."
+      "staggeredBody": "The glass has shattered — this creature loses its next action while it reseams.",
+      "lanternAria": "Lantern — spend a charge",
+      "deckInspectorTitle": "DECK",
+      "inspectorCardCountOne": "1 card",
+      "inspectorCardCountMany": "{count} cards",
+      "inspectorEmpty": "No cards",
+      "adamant": "ADAMANT",
+      "turn": "Turn {turn}",
+      "encounterHeader": "{kind}  ·  act {act}",
+      "intent": {
+        "attackFor": "attack for [b]{amount}[/b]",
+        "gainWard": "gain Ward",
+        "healSelf": "heal itself",
+        "afflictYou": "afflict you",
+        "empower": "empower",
+        "act": "act",
+        "summary": "Intends to {intent}."
+      }
     },
     "common": {
       "cancel": "Cancel",
       "continue": "Continue",
       "retry": "Retry",
       "skip": "Skip",
-      "leave": "Leave"
+      "leave": "Leave",
+      "use": "Use",
+      "stay": "Stay",
+      "title": "Title"
     },
     "dawn": {
       "act4RevealCopy": "Six panes burn. Something waits above the crown.",
@@ -84,7 +104,18 @@
       "kickerUnlock": "THE VIGIL OPENS",
       "kickerDefault": "AT DAWN",
       "complete": "DAWN COMPLETE",
-      "progress": "DAWN {n} OF {total} · THE CURRENT MEMORY IS LIT"
+      "progress": "DAWN {n} OF {total} · THE CURRENT MEMORY IS LIT",
+      "inputHint": "click or space to continue  ·  hold to skip",
+      "memoryTitle": "The Vigil Remembers",
+      "memoryBody": "Victory · {count} shards lit",
+      "unlock": {
+        "lamplighter": "The Hollow Lamplighter walks the Spire.",
+        "phials": "Phials may now be found on the climb.",
+        "omens": "The nights now rise beneath Omens.",
+        "pool": "New cards and relics enter the climb.",
+        "emberglass": "The Emberglass Rose Window opens.",
+        "act4": "A sealed door opens above the crown."
+      }
     },
     "embark": {
       "aspectLabel": "Who carries the lantern",
@@ -130,7 +161,14 @@
       "abandoned": "THE VOW IS SET ASIDE",
       "abandonedSub": "The pilgrimage ends here. The Vigil will keep the record.",
       "fallenLantern": "Your lantern went dark on floor {floor}.",
-      "elitesBossesPlus": "Elites + Bosses"
+      "elitesBossesPlus": "Elites + Bosses",
+      "monument": {
+        "body": "A previous pilgrim stands inside the stone.",
+        "bodyWithBequest": "A previous pilgrim stands inside the stone.\nSomething remains in their hands.",
+        "title": "MONUMENT OF THE LAST FALL",
+        "claim": "Touch the standing glass",
+        "leave": "Leave it"
+      }
     },
     "event": {
       "chooseCardSub": "One page still glows.",
@@ -142,7 +180,8 @@
       "upgradeSub": "The forge hungers.",
       "upgradeTitle": "Upgrade a Card",
       "strangePlace": "A Strange Place",
-      "continue": "CONTINUE"
+      "continue": "CONTINUE",
+      "chooseCardBody": "The choice is part of the price."
     },
     "help": {
       "climbBody": "Choose a path of lanterns up the Spire. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
@@ -169,7 +208,16 @@
       "routeFailed": "The way onward could not be prepared.",
       "routeSaveFailed": "The way onward is not secured. Retry when storage is available.",
       "saveFailed": "The price is not yet secured. Retry the save.",
-      "title": "THE HOLLOW LAMPLIGHTER"
+      "title": "THE HOLLOW LAMPLIGHTER",
+      "message": {
+        "inactive": "The empty lantern does not answer.",
+        "emberDebt": "The next three Embers belong to the hollow lantern.",
+        "needGold": "Bring 160 gold.",
+        "vesselTooFragile": "Your vessel cannot survive the price.",
+        "needBoon": "Bring an unspent boon.",
+        "paneLit": "Another hollow pane catches fire.",
+        "noPriceWaiting": "No hollow price is waiting."
+      }
     },
     "hud": {
       "actFloor": "Act {act} · Floor {floor}",
@@ -184,7 +232,12 @@
       "usePotion": "Use {name}",
       "viewDeck": "View deck",
       "menu": "Menu",
-      "emptyPhial": "Empty phial seat"
+      "emptyPhial": "Empty phial seat",
+      "hpFraction": "{hp} / {maxHp}",
+      "location": "{act} · FLOOR {floor} · {boss}",
+      "deckOverlayTitle": "DECK",
+      "deckOverlayCount": "{count} panes carried",
+      "usePotionOn": "Use on {name}"
     },
     "keywords": {
       "chip": "Strike at the glass itself: adds toward a Shatter, no blood required.",
@@ -226,7 +279,9 @@
         "monster": "Monster",
         "rest": "Rest site",
         "shop": "Merchant",
-        "treasure": "Treasure"
+        "treasure": "Treasure",
+        "act4": "Act 4",
+        "monument": "Monument"
       },
       "scroll": "scroll",
       "sealedDoor": {
@@ -250,12 +305,12 @@
     },
     "menu": {
       "abandon": "Abandon",
-      "abandonConfirmBody": "Your climb will be lost to the void.",
+      "abandonConfirmBody": "This pilgrimage will end. The Vigil will keep what was earned.",
       "abandonConfirmTitle": "Abandon Run?",
       "abandonRun": "Abandon Run",
       "back": "Back",
       "beginAnew": "Begin Anew",
-      "beginAnewBody": "Your saved climb will be lost to the void.",
+      "beginAnewBody": "The current pilgrimage will be recorded as abandoned before a new one begins.",
       "beginAnewTitle": "Begin Anew?",
       "beginClimb": "Begin the Climb",
       "chooseBoon": "Choose a boon",
@@ -275,7 +330,9 @@
       "settings": "Settings",
       "theVigil": "The Vigil",
       "unmute": "Unmute",
-      "unmuteSound": "Unmute Sound"
+      "unmuteSound": "Unmute Sound",
+      "leaveSpireTitle": "LEAVE THE SPIRE?",
+      "leaveSpireBody": "The lantern keeps your place."
     },
     "persistence": {
       "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
@@ -291,7 +348,46 @@
       "stoneBody": "The stone could not hold this duel. Free storage and try again.",
       "stoneTitle": "The Stone Could Not Hold",
       "vigilBody": "This run end is safely journalled, but its ledgers or final dawn could not be secured. Free storage and retry, or reload this saved finalisation.",
-      "vigilTitle": "The Vigil Could Not Hold"
+      "vigilTitle": "The Vigil Could Not Hold",
+      "lightWouldNotHoldTitle": "THE LIGHT WOULD NOT HOLD",
+      "noProgressDiscarded": "No progress was discarded.",
+      "detail": {
+        "currentPilgrimageClose": "The current pilgrimage could not be closed.",
+        "currentPilgrimageClear": "The current pilgrimage could not be cleared.",
+        "pilgrimageStart": "The pilgrimage could not be started.",
+        "savedPilgrimageMapUnreadable": "The saved pilgrimage map is unreadable.",
+        "abandonmentHold": "The abandonment could not be held.",
+        "phialChoiceHold": "The phial choice could not be held.",
+        "chosenWaystoneHold": "The chosen waystone could not be held.",
+        "clearedWaystoneHold": "The cleared waystone could not be held.",
+        "eventHold": "The event could not be held.",
+        "eventChoiceHold": "The event choice could not be held.",
+        "treasureHold": "The treasure could not be held.",
+        "merchantStockHold": "The merchant's stock could not be held.",
+        "emptyLanternPurchaseHold": "The empty lantern purchase could not be held.",
+        "purchaseHold": "The purchase could not be held.",
+        "removedCardHold": "The removed card could not be held.",
+        "encounterFreeze": "The encounter could not be frozen.",
+        "standingBequestClear": "The standing bequest could not be cleared.",
+        "fallHold": "The fall could not be held.",
+        "shadeVictoryHold": "The shade victory could not be held.",
+        "finalVictoryHold": "The final victory could not be held.",
+        "victoryRewardsHold": "The victory rewards could not be held.",
+        "claimedRewardHold": "The claimed reward could not be held.",
+        "crownRelicsHold": "The crown relics could not be held.",
+        "nextActHold": "The next act could not be held.",
+        "bequestHold": "The bequest could not be held.",
+        "vigilRecord": "The Vigil could not record this pilgrimage.",
+        "completedRunClose": "The completed run could not be closed.",
+        "dawnHold": "Dawn could not be held.",
+        "dawnCursorHold": "The Dawn cursor could not be held.",
+        "shadeDuelHold": "The shade duel could not be held.",
+        "hollowPriceHold": "The Hollow price could not be held.",
+        "heldHollowDestinationUnreadable": "The held Hollow destination is unreadable.",
+        "hollowDestinationHold": "The Hollow destination could not be held.",
+        "lamplighterGiftsHold": "The Lamplighter's gifts could not be held.",
+        "lamplighterGiftHold": "The Lamplighter's gift could not be held."
+      }
     },
     "rest": {
       "healedFloat": "+{hp} HP",
@@ -306,7 +402,9 @@
       "upgradedSub": "It gleams with new power.",
       "upgradedTitle": "Upgraded!",
       "restHealBtn": "Rest — heal {hp} HP",
-      "hpFrac": "{cur} / {max} HP"
+      "hpFrac": "{cur} / {max} HP",
+      "temperCardTitle": "TEMPER A CARD",
+      "temperCardBody": "Choose one pane to strengthen."
     },
     "reward": {
       "addCardRow": "Add a card to your deck",
@@ -317,7 +415,7 @@
       "chooseCardSub": "Add one card to your deck — or skip to keep it lean.",
       "chooseCardTitle": "Choose a Card",
       "eliteSlain": "ELITE SLAIN",
-      "goldRow": "<b class=\"gold-num\">{n}</b> gold",
+      "goldRow": "[b][color=#{tone}]{n}[/color][/b] gold",
       "leaveConfirmBody": "You still have unclaimed spoils on the glass. Move on without them?",
       "leaveConfirmNo": "Stay",
       "leaveConfirmTitle": "Leave Rewards Behind?",
@@ -336,12 +434,19 @@
       "addCard": "Add a card to your deck",
       "offeredTakeOne": "{n} offered · take one",
       "goldAmount": "{n} Gold",
-      "chooseCardBody": "Add one card to your deck — or skip to keep it lean."
+      "chooseCardBody": "Add one card to your deck — or skip to keep it lean.",
+      "replacePotion": "Replace {name}",
+      "discardNewPhial": "Discard the new phial",
+      "phialRackFullTitle": "PHIAL RACK FULL",
+      "phialRackFullBody": "Choose what leaves the rack.",
+      "bossTakeNone": "Take no crown",
+      "bossCrownTitle": "A CROWN OF BROKEN GLASS",
+      "bossCrownBody": "Choose one relic before the next night."
     },
     "rose": {
       "dormantPane": "Dormant Emberglass pane {n}",
       "finalWhisper": "The final whisper returns at every dawn.",
-      "openLabel": "Open the Rose Window",
+      "openLabel": "Open the Emberglass Rose Window",
       "paneDark": "This pane is dark.",
       "selectedPane": "Selected Emberglass pane",
       "shardRecovered": "{name}, Shard recovered",
@@ -349,7 +454,8 @@
       "unknownPane": "Unknown Emberglass pane {n}",
       "whisperLogTitle": "Whispers heard at dawn",
       "whisperLogTitleUpper": "WHISPERS HEARD AT DAWN",
-      "finalWhisperMark": "∞  The final whisper returns at every dawn."
+      "finalWhisperMark": "∞  The final whisper returns at every dawn.",
+      "shardRecoveredStack": "{name}\nShard recovered"
     },
     "settings": {
       "audio": "Audio",
@@ -384,7 +490,8 @@
         "desc": "Remove a card from your deck forever.",
         "pickSub": "Cut the dead weight.",
         "pickTitle": "Remove a Card",
-        "title": "Card Removal"
+        "title": "Card Removal",
+        "confirmBody": "The merchant keeps the broken pane."
       },
       "greeting": "\"Gold for glory, stranger. Everything's fair-priced — for the doomed.\"",
       "leave": "Leave the Shop",
@@ -396,7 +503,7 @@
       "hello": "Hello, {name}"
     },
     "treasure": {
-      "coinsOnly": "Only coins remain — <b class=\"gold-num\">+{gold} gold</b>.",
+      "coinsOnly": "Only coins remain — [color=#{tone}]+{gold} gold[/color].",
       "empty": "The chest lies empty.",
       "openBtn": "Open the Chest",
       "relicClaim": "You claim <b style=\"color:{tone}\">{name}</b> — <i>{text}</i>",
@@ -423,7 +530,7 @@
       "unlitWay": "Unlit Way",
       "roseWindow": "The Rose Window",
       "hearth": "Hearth",
-      "awaits": "%s — %s AWAITS",
+      "awaits": "{region} — {boss} AWAITS",
       "notNow": "not now"
     },
     "credits": {
@@ -445,7 +552,13 @@
       "fontLicences": "Font licences (OFL)",
       "components": "COMPONENTS",
       "licenceTexts": "LICENCE TEXTS",
-      "themeLine": "Ashglass Vigil"
+      "themeLine": "Ashglass Vigil",
+      "footer": "© 2026 fol2 · thank you for keeping the vigil",
+      "musicAttribution": "composed with Suno",
+      "musicAttributionCount": "{count} tracks · composed with Suno",
+      "musicTracklistFallback": "the stained-glass tracklist",
+      "sfxAttribution": "synthesised with ElevenLabs",
+      "sfxAttributionCount": "{count} sounds · synthesised with ElevenLabs"
     },
     "omen": {
       "prefix": "OMEN - "
