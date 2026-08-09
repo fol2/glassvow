@@ -372,9 +372,9 @@ func _init(vial_frame: bool = true, wide_plate: bool = true,
 	# discard, the charred ash. Their boxes are `UIC.draw` / `.ashes` / `.discard`
 	# and come from the book, which is where the three rects that used to be
 	# written out here were copied from in the first place.
-	_draw_pile = _build_pile(&"draw", "DRAW", 1.0)
-	_ashes_pile = _build_pile(&"ashes", "ASHES", ASH_FADE)
-	_discard_pile = _build_pile(&"discard", "DISCARD", 1.0)
+	_draw_pile = _build_pile(&"draw", Locale.active.t("ui.combat.draw"), 1.0)
+	_ashes_pile = _build_pile(&"ashes", Locale.active.t("ui.combat.ashes"), ASH_FADE)
+	_discard_pile = _build_pile(&"discard", Locale.active.t("ui.combat.discard"), 1.0)
 	_build_end_turn()
 	set_title("The Ashen Woods", "Floor I · The Rootheart")
 	set_values(72, 72, 0, 99, 3, 3, 5, 0, 0)
@@ -401,7 +401,7 @@ func set_values(hp: int, max_hp: int, block: int, gold: int,
 		return
 	_last = now
 	_hp_ratio = clampf(float(hp) / float(maxi(1, max_hp)), 0.0, 1.0)
-	_hp_num.text = "%d / %d" % [hp, max_hp]
+	_hp_num.text = Locale.active.t("ui.hud.hpFraction", {"hp": hp, "maxHp": max_hp})
 	_glide_hp()
 	# Absent, not empty, when the actor owns the plate instead — see `_init`.
 	if _plate_rail != null:
@@ -465,13 +465,13 @@ func set_title(lead: String, tail: String = "") -> void:
 	_title_tail.text = ("  ·  " + tail) if tail != "" else ""
 
 
-func set_potions(ids: Array[String], shown: bool) -> void:
+func set_potions(ids: Array[String], display_names: Array[String], shown: bool) -> void:
 	for slot: int in range(_potion_slots.size()):
 		var id: String = ids[slot] if slot < ids.size() else ""
 		var full: bool = shown and not id.is_empty()
 		_potion_slots[slot].visible = shown
 		_potion_slots[slot].disabled = not full
-		_potion_slots[slot].tooltip_text = id.capitalize() if full else "Empty phial seat"
+		_potion_slots[slot].tooltip_text = display_names[slot] if full else Locale.active.t("ui.hud.emptyPhial")
 		_potion_art[slot].texture = icon("potions/" + id) if full else null
 		_potion_art[slot].visible = full
 
@@ -660,7 +660,7 @@ func _build_top_bar() -> void:
 	# .icon-btn.deck-btn — a 44px hit area under 56px of art, with the count
 	# sitting on the seal in white.
 	var deck: Button = _bare_button(Vector2(44.0, 44.0) * k)
-	deck.tooltip_text = "Deck"
+	deck.tooltip_text = Locale.active.t("ui.hud.deckAria")
 	deck.pressed.connect(func() -> void: deck_pressed.emit())
 	right.add_child(deck)
 	var seal: TextureRect = _icon_rect("ui/deck", 56.0 * k)
@@ -684,7 +684,7 @@ func _build_top_bar() -> void:
 		sb.set_border_width_all(1)
 		sb.border_color = GOLD if state == "hover" else Color(1.0, 1.0, 1.0, 0.14)
 		menu.add_theme_stylebox_override(state, sb)
-	menu.tooltip_text = "Menu"
+	menu.tooltip_text = Locale.active.t("ui.hud.menuAria")
 	menu.pressed.connect(func() -> void: menu_pressed.emit())
 	right.add_child(menu)
 	var menu_ic: TextureRect = _icon_rect("ui/menu", 19.0 * k)
@@ -876,7 +876,7 @@ func _build_lantern() -> void:
 	shell.add_child(_lantern_glow)
 
 	var btn: Button = _bare_button(Vector2(104.0, 104.0))
-	btn.tooltip_text = "Lantern — spend a charge"
+	btn.tooltip_text = Locale.active.t("ui.combat.lanternAria")
 	btn.pressed.connect(func() -> void: lantern_pressed.emit())
 	shell.add_child(btn)
 	_lantern_body = btn
@@ -925,7 +925,7 @@ func _build_pile(which: StringName, name_text: String, fade: float) -> Pile:
 	add_child(root)
 	_chrome_in.append(root)
 
-	var btn: Button = _bare_button(box)
+	var btn: Button = _bare_button(box); btn.tooltip_text = Locale.active.t("ui.combat.drawPileAria" if which == &"draw" else ("ui.combat.discardPileAria" if which == &"discard" else "ui.combat.ashesPileAria"))
 	btn.pressed.connect(func() -> void: pile_pressed.emit(which))
 	shell.add_child(btn)
 	# `.pile-btn:hover { transform: translateY(-3px); filter: brightness(1.08) }`
@@ -1299,7 +1299,7 @@ func _build_end_turn() -> void:
 	_hover_glide(btn, shell, 1.0)
 	btn.add_child(_icon_rect("ui/end-turn", 120.0))
 	var lbl: Label = _num_label(18.0, PALE, GlassStyle.CINZEL_800, 3)
-	lbl.text = "END"
+	lbl.text = Locale.active.t("ui.combat.end").to_upper()
 	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

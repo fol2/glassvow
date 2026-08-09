@@ -893,7 +893,7 @@ func _build_inspector() -> void:
 	scroll.add_child(_inspector_rows)
 
 	var close: Button = Button.new()
-	close.text = "CLOSE"
+	close.text = Locale.active.t("ui.menu.close").to_upper()
 	close.custom_minimum_size = Vector2(160, 44)
 	close.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	GlassStyle.style_button(close, GlassStyle.EMBER)
@@ -917,25 +917,25 @@ func _fit_inspector() -> void:
 
 
 func _show_deck() -> void:
-	_show_inspector("DECK", game.run.player.deck)
+	_show_inspector(Locale.active.t("ui.combat.deckInspectorTitle"), game.run.player.deck)
 
 
 func _show_pile(which: StringName) -> void:
 	match which:
 		&"draw":
-			_show_inspector("DRAW PILE", game.cb.draw)
+			_show_inspector(Locale.active.t("ui.combat.drawPileTitle"), game.cb.draw)
 		&"discard":
-			_show_inspector("DISCARD PILE", game.cb.discard)
+			_show_inspector(Locale.active.t("ui.combat.discardPileTitle"), game.cb.discard)
 		&"ashes":
-			_show_inspector("ASHES", game.cb.exhaust)
+			_show_inspector(Locale.active.t("ui.combat.ashes"), game.cb.exhaust)
 
 
 func _show_inspector(title: String, cards: Array[CardInst]) -> void:
 	for child: Node in _inspector_rows.get_children():
 		_inspector_rows.remove_child(child)
 		child.queue_free()
-	_inspector_title.text = title
-	_inspector_subtitle.text = "%d card%s" % [cards.size(), "" if cards.size() == 1 else "s"]
+	_inspector_title.text = title.to_upper()
+	_inspector_subtitle.text = Locale.active.t("ui.combat.inspectorCardCountOne" if cards.size() == 1 else "ui.combat.inspectorCardCountMany", {"count": cards.size()})
 	var counts: Dictionary[String, int] = {}
 	var order: PackedStringArray = []
 	for card: CardInst in cards:
@@ -958,7 +958,7 @@ func _show_inspector(title: String, cards: Array[CardInst]) -> void:
 		row.add_child(count)
 		_inspector_rows.add_child(row)
 	if cards.is_empty():
-		var empty: Label = _label("No cards")
+		var empty: Label = _label(Locale.active.t("ui.combat.inspectorEmpty"))
 		empty.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 		_inspector_rows.add_child(empty)
 	_inspector.visible = true
@@ -2577,7 +2577,7 @@ func _handle_event(ev: Dictionary) -> void:
 			# The chrome has no relic row yet (docs/hud-handoff.md D5), so the
 			# proc says its own name instead of lighting a chip that is not there.
 			_float(_hero_centre() + Vector2(0.0, -110.0),
-				str(ev.get("id", "")).to_upper(), "notice")
+				_relic_proc_text(str(ev.get("id", ""))), "notice")
 			await _wait(0.09)
 		&"addCard":
 			_sync_all()
@@ -2587,7 +2587,7 @@ func _handle_event(ev: Dictionary) -> void:
 			var view: EnemyView = _enemy_view(idx)
 			if view != null:
 				view.reseam()
-			_float(_enemy_centre(idx) + Vector2(0.0, -70.0), "ADAMANT", "notice")
+			_float(_enemy_centre(idx) + Vector2(0.0, -70.0), Locale.active.t("ui.combat.adamant"), "notice")
 			_sync_actors()
 			await _wait(0.18)
 		EventTypes.VICTORY:
@@ -2892,7 +2892,10 @@ func _push_hud() -> void:
 	_hud.set_values(maxi(0, cb.player.hp), cb.player.max_hp, cb.player.block,
 		game.run.player.gold, cb.player.energy, cb.player.energy_max,
 		draw_n, discard_n, cb.exhaust.size(), cb.hand.size())
-	_hud.set_potions(game.run.player.potions,
+	var potion_names: Array[String] = []
+	for id: String in game.run.player.potions:
+		potion_names.append(str(game.content.potions.get(id, {}).get("name", id)))
+	_hud.set_potions(game.run.player.potions, potion_names,
 		game.run.reveals_all or game.run.reveals.has("phials"))
 	# Embers are the number the lantern carries; the rules gate is whether it
 	# can be spent at all (docs/hud-handoff.md §3).
@@ -2907,7 +2910,7 @@ func _push_hud() -> void:
 	# The strip's middle carries the place. The turn rides its dim tail — the
 	# benchmark's own bar has no seat for a number it does not show, and the
 	# tail is the honest one (assembly-integration-plan.md D3).
-	_hud.set_title(_encounter_text, "Turn %d" % cb.turn)
+	_hud.set_title(_encounter_text, Locale.active.t("ui.combat.turn", {"turn": cb.turn}))
 
 
 ## `!S.busy` guards the hover branch of `updatePreviews`: nothing is previewed
@@ -3122,13 +3125,13 @@ func _intent_tip(idx: int) -> Dictionary:
 		var dmg: int = pv.get("dmg", 0)
 		var times: int = pv.get("times", 1)
 		var figure: String = "%d×%d" % [dmg, times] if times > 1 else str(dmg)
-		bits.append("attack for [b]%s[/b]" % figure)
+		bits.append(Locale.active.t("ui.combat.intent.attackFor", {"amount": figure}))
 	var block_n: int = mv.get("block", 0)
 	if block_n > 0:
-		bits.append("gain Ward")
+		bits.append(Locale.active.t("ui.combat.intent.gainWard"))
 	var heal_n: int = mv.get("heal", 0)
 	if heal_n > 0:
-		bits.append("heal itself")
+		bits.append(Locale.active.t("ui.combat.intent.healSelf"))
 	var fx: Array = mv.get("fx", [])
 	var on_player: bool = false
 	var on_self: bool = false
@@ -3139,12 +3142,12 @@ func _intent_tip(idx: int) -> Dictionary:
 		else:
 			on_self = true
 	if on_player:
-		bits.append("afflict you")
+		bits.append(Locale.active.t("ui.combat.intent.afflictYou"))
 	if on_self:
-		bits.append("empower")
-	var what: String = ", ".join(bits) if bits.size() > 0 else "act"
+		bits.append(Locale.active.t("ui.combat.intent.empower"))
+	var what: String = ", ".join(bits) if bits.size() > 0 else Locale.active.t("ui.combat.intent.act")
 	return {"title": str(mv.get("name", String(e.move_key))),
-		"body": "Intends to %s." % what}
+		"body": Locale.active.t("ui.combat.intent.summary", {"intent": what})}
 
 
 ## `statusChips` (combat.js:660). `N` in the catalogue body stands for the
@@ -3559,3 +3562,9 @@ func _cancel_targeting() -> void:
 	_hand.hovered_uid = -1
 	_hand.drop_seat()
 	_update_previews()
+
+
+## Display-only relic proc copy. IDs remain the event/art identity; hydrated
+## ContentDB owns the player-facing name, with the unknown ID as diagnostics.
+func _relic_proc_text(id: String) -> String:
+	return str(game.content.relics.get(id, {}).get("name", id)).to_upper()
