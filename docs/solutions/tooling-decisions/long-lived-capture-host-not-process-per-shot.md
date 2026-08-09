@@ -33,8 +33,8 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:105-123` (in `_ready`) documents it and
-`application/main.gd:106-160` (in `_ready`) parses it out of
+entry point. `application/main.gd:144-162` (in `_ready`) documents it and
+`application/main.gd:163-241` (in `_ready`) parses it out of
 `OS.get_cmdline_user_args()`:
 
 ```gdscript
@@ -45,11 +45,11 @@ entry point. `application/main.gd:105-123` (in `_ready`) documents it and
 # tools/shot.sh --shot=/tmp/map.png [--seed=N] [--enter=0]
 ```
 
-`--shot=PATH` is read at `application/main.gd:125-126` (in `_ready`), and each
-route exit — studio, card lab, the lab branch, and the real run — calls
-`_capture_and_quit()` (`application/main.gd:141`, `147`, `166`, `175`, all in
-`_ready`). That function is short and worth reading in full, because two of its
-lines become load-bearing later:
+`--shot=PATH` is read at `application/main.gd:184-185` (in `_ready`), and each
+route exit — font probe, studio, card lab, the other labs, and the real run —
+calls `_capture_and_quit()` (`application/main.gd:270`, `278`, `284`, `303`,
+`348`, all in `_ready`). That function is short and worth reading in full,
+because two of its lines become load-bearing later:
 
 ```gdscript
 func _capture_and_quit(path: String) -> void:
@@ -61,7 +61,7 @@ func _capture_and_quit(path: String) -> void:
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:441` (`_capture_and_quit`).) It waits 30 frames for the
+(`application/main.gd:463` (`_capture_and_quit`).) It waits 30 frames for the
 first paint, reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
