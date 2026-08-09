@@ -116,10 +116,12 @@ from a lane — it may be red for reasons that belong to another lane, and the
 result is not information about your change. Gate per file instead:
 
 ```bash
-godot --headless --check-only -s presentation/combat/card_view.gd
+tools/check_scripts.sh presentation/combat/card_view.gd
 ```
 
-The organiser runs the whole-tree parse gate and the suite, and owns the verdict.
+Positional paths deliberately check only the named scripts; they do not change
+the full gate's tracked-file scope. The organiser runs the whole-tree parse gate
+and the suite, and owns the verdict.
 
 ## Cross-lane queue
 

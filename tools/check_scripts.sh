@@ -26,14 +26,46 @@ set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
 
 GODOT="${GODOT:-godot}"
-list=$(mktemp)
-err=$(mktemp)
-trap 'rm -f "$list" "$err"' EXIT
+tmpdir=$(mktemp -d) || {
+	printf 'TEMP     Unable to create a working directory.\n' >&2
+	exit 1
+}
+list="$tmpdir/scripts"
+err="$tmpdir/stderr"
+
+cleanup() {
+	rc=$?
+	trap - EXIT
+	if ! rm -rf -- "$tmpdir"; then
+		printf 'TEMP     Unable to remove working directory %s.\n' "$tmpdir" >&2
+		exit 1
+	fi
+	exit "$rc"
+}
+trap cleanup EXIT
 
 if [ "$#" -gt 0 ]; then
-	printf '%s\n' "$@" >"$list"
+	if ! printf '%s\n' "$@" >"$list"; then
+		printf 'INPUT    Unable to record explicit script paths.\n' >&2
+		exit 1
+	fi
 else
 	git ls-files '*.gd' | grep -v '^addons/' >"$list"
+	discovery_status=("${PIPESTATUS[@]}")
+	git_rc=${discovery_status[0]}
+	filter_rc=${discovery_status[1]}
+	if [ "$git_rc" -ne 0 ]; then
+		printf 'DISCOVERY git ls-files exited with status %d.\n' "$git_rc" >&2
+		exit 1
+	fi
+	if [ "$filter_rc" -gt 1 ]; then
+		printf 'DISCOVERY script-path filter exited with status %d.\n' "$filter_rc" >&2
+		exit 1
+	fi
+	if [ ! -s "$list" ]; then
+		printf 'DISCOVERY No tracked non-addon .gd scripts found.\n' >&2
+		exit 1
+	fi
 fi
 
 checked=0
