@@ -140,7 +140,7 @@ func _add_choices() -> void:
 
 func _add_continue() -> void:
 	var button: Button = Button.new()
-	button.text = "CONTINUE"
+	button.text = Locale.active.t("ui.event.continue")
 	button.custom_minimum_size = Vector2(180, 46)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
