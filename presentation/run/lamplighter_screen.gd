@@ -19,6 +19,8 @@ var _title: Label
 var _sub: Label
 var _boon_grid: GridContainer
 var _boon_buttons: Dictionary[String, Button] = {}
+var _boon_descriptions: Dictionary[String, Label] = {}
+var _art_heading: Label
 var _art_grid: GridContainer
 var _art_buttons: Dictionary[StringName, Button] = {}
 var _description: RichTextLabel
@@ -108,7 +110,8 @@ func _build() -> void:
 	for id: String in _boon_ids:
 		_add_boon(id)
 
-	_column.add_child(_section_label("YOUR LANTERN ART  (PRESS A IN COMBAT)"))
+	_art_heading = _section_label("YOUR LANTERN ART  (PRESS A IN COMBAT)")
+	_column.add_child(_art_heading)
 	_art_grid = GridContainer.new()
 	_art_grid.columns = _arts.size()
 	_art_grid.add_theme_constant_override("h_separation", 9)
@@ -174,6 +177,7 @@ func _add_boon(id: String) -> void:
 	var text: Label = _label(str(boon.get("text", "")), 12, RunStyle.TEXT_DIM, false)
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	copy.add_child(text)
+	_boon_descriptions[id] = text
 
 
 func _add_art(id: StringName) -> void:
@@ -247,7 +251,7 @@ func set_shape(stage_shape: StringName) -> void:
 	for button: Button in _boon_buttons.values():
 		button.custom_minimum_size = Vector2(
 			300 if shape == &"phone-portrait" else (190 if phone else 210),
-			100 if phone else 142)
+			142)
 	_description.custom_minimum_size.x = 330 if phone else 500
 
 
