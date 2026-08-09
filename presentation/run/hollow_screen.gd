@@ -124,7 +124,7 @@ func _build() -> void:
 	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(_title)
 	_ask = _label("“%s”" % str(_meeting.get("ask", "")), 19, Color("#d8dfe2"))
-	_ask.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	_ask.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	_ask.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_ask.custom_minimum_size.y = 96
 	column.add_child(_ask)
@@ -219,7 +219,7 @@ func set_shape(stage_shape: StringName) -> void:
 static func _label(text: String, font_size: int, colour: Color) -> Label:
 	var label: Label = Label.new()
 	label.text = text
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	return label

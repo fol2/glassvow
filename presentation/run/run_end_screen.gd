@@ -198,7 +198,7 @@ func _add_stat(key: String, caption: String) -> void:
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
 	cell.add_child(stack)
 	var value: Label = _label(str(_stats.get(key, "—")), 22, RunStyle.PARCHMENT)
-	value.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	value.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	stack.add_child(value)
 	var name_label: Label = _label(caption, 9, RunStyle.TEXT_DIM)
 	name_label.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
@@ -257,7 +257,7 @@ func _bequest_button(row: Dictionary) -> Button:
 		icons.add_child(art)
 	var name_label: Label = _label(str(row.get("name", row.get("label", ""))),
 		14, RunStyle.PARCHMENT)
-	name_label.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	name_label.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stack.add_child(name_label)
 	var note: Label = _label(str(row.get("note", "")), 11, RunStyle.TEXT_DIM)
@@ -289,7 +289,7 @@ func _action_button(text: String, primary: bool = false) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(190, 46)
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	RunStyle.style_button(button, primary)
 	return button
 
@@ -504,7 +504,7 @@ static func _label(text: String, font_size: int, colour: Color) -> Label:
 	var label: Label = Label.new()
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	return label

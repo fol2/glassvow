@@ -102,7 +102,7 @@ func _build() -> void:
 	_sub.text = Locale.active.t("ui.map.sealedDoor.sub")
 	_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_sub.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	_sub.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	_sub.add_theme_font_size_override("font_size", 15)
 	_sub.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	column.add_child(_sub)
@@ -119,7 +119,7 @@ func _build() -> void:
 	hold.text = Locale.active.t("ui.map.holdFast")
 	hold.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hold.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hold.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	hold.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	hold.add_theme_font_size_override("font_size", 16)
 	hold.add_theme_color_override("font_color", GlassStyle.TEXT)
 	_answer.add_child(hold)

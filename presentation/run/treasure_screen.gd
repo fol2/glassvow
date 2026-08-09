@@ -94,7 +94,7 @@ func _build() -> void:
 	_sub.text = Locale.active.t("ui.treasure.sub")
 	_sub.custom_minimum_size.y = 24
 	_sub.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_sub.add_theme_font_override("normal_font", load(GlassStyle.ALEGREYA_400) as Font)
+	_sub.add_theme_font_override("normal_font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	_sub.add_theme_font_size_override("normal_font_size", 15)
 	_sub.add_theme_color_override("default_color", RunStyle.TEXT_DIM)
 	column.add_child(_sub)
@@ -156,7 +156,7 @@ func _button(text: String, pressed: Callable) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size.y = 48
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	button.add_theme_font_size_override("font_size", 17)
 	RunStyle.style_button(button, true)
 	button.pressed.connect(pressed)

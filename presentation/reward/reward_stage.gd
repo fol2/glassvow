@@ -713,7 +713,7 @@ func _choose_spoils() -> void:
 		word.add_theme_font_size_override("font_size", 13)
 		word.add_theme_color_override("font_color", SPOIL_TINTS[i])
 		word.add_theme_font_override("font",
-			load(GlassStyle.CINZEL_700) as Font)
+			GlassStyle.face(GlassStyle.CINZEL_700))
 		word.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
 		word.add_theme_constant_override("shadow_offset_y", 2)
 		word.modulate.a = 0.0

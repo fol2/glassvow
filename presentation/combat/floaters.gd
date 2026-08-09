@@ -57,7 +57,7 @@ const BANNER_HOLD: float = 0.42
 ## same idea stated in px, sized so a phone still shows a plate rather than a bar.
 const BANNER_MARGIN: float = 48.0
 
-static var _font_cache: FontFile = null
+static var _font_cache: Font = null
 
 ## Headless playback: every ceremony here is a no-op that returns at once, so a
 ## test driving the sequencer never waits on a tween that will not tick.
@@ -101,10 +101,10 @@ func _init() -> void:
 
 
 ## Cinzel 800 — the display face the benchmark sets every numeral in.
-static func display_font() -> FontFile:
+static func display_font() -> Font:
 	var path: String = GlassStyle.CINZEL_800
 	if _font_cache == null and ResourceLoader.exists(path):
-		_font_cache = load(path)
+		_font_cache = GlassStyle.face(path)
 	return _font_cache
 
 
@@ -215,7 +215,7 @@ func float_text(at: Vector2, text: String, cls: String = "dmg",
 	var label: Label = Label.new()
 	label.text = text
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var face: FontFile = display_font()
+	var face: Font = display_font()
 	if face != null:
 		label.add_theme_font_override("font", face)
 	label.add_theme_font_size_override("font_size", font_size)
@@ -356,7 +356,7 @@ func banner(text: String, kind: String = "turn", hold: float = -1.0) -> void:
 			if lines.size() > 1:
 				h = 72.0
 
-	var face: FontFile = display_font()
+	var face: Font = display_font()
 	if wrap and face != null:
 		# The plate must be tall enough BEFORE it is built — a Label wraps at
 		# layout time, after the plate has already committed to 56px. So the

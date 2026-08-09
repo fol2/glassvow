@@ -13,6 +13,16 @@ const HOLLOW_MESSAGES: Dictionary = {
 	"ui.hollow.message.noPriceWaiting": "No hollow price is waiting.",
 }
 
+const ZH_HOLLOW_MESSAGES: Dictionary = {
+	"ui.hollow.message.inactive": "空燈沒有回應。",
+	"ui.hollow.message.emberDebt": "接下來三點餘燼歸於空燈。",
+	"ui.hollow.message.needGold": "帶來 160 金幣。",
+	"ui.hollow.message.vesselTooFragile": "你的容器承受不起這代價。",
+	"ui.hollow.message.needBoon": "帶來一份尚未花掉的恩賜。",
+	"ui.hollow.message.paneLit": "又一片空燈窗片燃起。",
+	"ui.hollow.message.noPriceWaiting": "目前沒有空燈代價等候支付。",
+}
+
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
 	if not ok:
@@ -149,7 +159,9 @@ static func _hollow_locale_fallback(fails: Array[String]) -> void:
 	for code: StringName in [Locale.CODE_EN, Locale.CODE_ZH_HANT]:
 		var locale: Locale = Locale.new(code)
 		for token: String in HOLLOW_MESSAGES:
-			_check(fails, locale.t(token) == str(HOLLOW_MESSAGES[token]),
+			var expected: String = str(ZH_HOLLOW_MESSAGES[token]) \
+				if code == Locale.CODE_ZH_HANT else str(HOLLOW_MESSAGES[token])
+			_check(fails, locale.t(token) == expected,
 				"%s did not resolve %s through exact English fallback" % [code, token])
 
 
@@ -168,7 +180,7 @@ static func _hollow_save_boundary(fails: Array[String]) -> void:
 	var meeting: Dictionary = {"ask": "A fixture question."}
 	var pending: Dictionary = run_state.pending_hollow
 	var screen: HollowScreen = HollowScreen.new(pending, meeting, 5, 5)
-	_check(fails, screen._answer.text == str(HOLLOW_MESSAGES["ui.hollow.message.paneLit"]),
+	_check(fails, screen._answer.text == str(ZH_HOLLOW_MESSAGES["ui.hollow.message.paneLit"]),
 		"new token did not resolve at the Hollow presentation boundary")
 	_check(fails, run_state.to_save_dict() == before,
 		"rendering translated the token or otherwise changed the v2 save dictionary")

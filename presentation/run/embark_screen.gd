@@ -192,7 +192,7 @@ func _add_aspect(index: int) -> void:
 	_aspect_copies.append(copy)
 
 	var aspect_name: Label = _label(str(row.get("name", "")), 16, RunStyle.GOLD, true)
-	aspect_name.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	aspect_name.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	aspect_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	aspect_name.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	copy.add_child(aspect_name)
@@ -348,7 +348,7 @@ static func _label(text: String, font_size: int, colour: Color,
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if centred \
 		else HORIZONTAL_ALIGNMENT_LEFT
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	return label

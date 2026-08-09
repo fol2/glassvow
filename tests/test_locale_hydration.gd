@@ -212,7 +212,7 @@ static func _real_zh_catalogue(fails: Array[String]) -> void:
 		fails.append("hydration: zh-Hant left the card name English")
 	if not _at(db.cards, ["strike", "text"]).contains("@6@"):
 		fails.append("hydration: zh-Hant card text lost its @n@ markers")
-	if _at(db.relics, ["emberHeart", "text"]) != "At the end of combat, heal 3 HP.":
+	if _at(db.relics, ["emberHeart", "text"]) != "戰鬥結束時回復 3 點生命。":
 		fails.append("hydration: zh-Hant Emberheart must say heal 3 HP exactly")
 	if _id_fingerprint(db) != baked_ids:
 		fails.append("hydration: zh-Hant changed content IDs")
@@ -251,7 +251,7 @@ static func _shade_name_pattern(fails: Array[String]) -> void:
 		"id": "testShade", "base": "hero", "statMods": {}, "dialogue": [],
 	}
 	var rules: CombatRules = CombatRules.new(db)
-	var expected: PackedStringArray = ["暮刃之影", "灰燼守衛之影"]
+	var expected: PackedStringArray = ["暮刃之影", "灰衛之影"]
 	for aspect_index: int in range(expected.size()):
 		var one_run: RunState = RunState.new_run(
 			db, 127128 + aspect_index, "shade-name-%d" % aspect_index)
@@ -264,7 +264,7 @@ static func _shade_name_pattern(fails: Array[String]) -> void:
 	var authored_run: RunState = RunState.new_run(db, 127130, "shade-name-authored")
 	var authored_combat: CombatState = rules.start_combat(
 		authored_run, ["ownShade1"], &"boss")
-	if authored_combat.enemies[0].name != "The Shade That Fell":
+	if authored_combat.enemies[0].name != "墜落之影":
 		fails.append("shade name: ownShade1 authored name lost precedence")
 	var dialogue_run: RunState = RunState.new_run(db, 127130, "shade-dialogue")
 	var dialogue_combat: CombatState = rules.start_combat(
@@ -274,7 +274,7 @@ static func _shade_name_pattern(fails: Array[String]) -> void:
 		if event.get("t") == EventTypes.VARIANT_DIALOGUE:
 			first_line = str(event.get("text", ""))
 			break
-	if not first_line.begins_with("暮刃."):
+	if not first_line.begins_with("暮刃。"):
 		fails.append("shade name: variant dialogue did not receive the bare zh-Hant aspect")
 	var domain_source: String = FileAccess.get_file_as_string("res://domain/rules/combat.gd")
 	var screen_source: String = FileAccess.get_file_as_string(

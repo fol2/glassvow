@@ -32,6 +32,7 @@ func _run() -> void:
 	await _check_lamplighter_keyboard()
 	await _check_lamplighter_mouse_drag()
 	await _check_lamplighter_portrait()
+	await _check_vigil_rose_portrait()
 	for count: int in [6, 7, 8]:
 		await _check_plain_choices(count)
 	if _fails.is_empty():
@@ -97,6 +98,41 @@ func _check_lamplighter_portrait() -> void:
 	await _settle()
 	_check_boon_copy_clear(screen, "phone-portrait")
 	await _capture("lamplighter-portrait")
+	_drop(screen)
+	_viewport.size = STAGE_SIZE
+
+
+func _check_vigil_rose_portrait() -> void:
+	_viewport.size = StageShape.REFERENCES[&"phone-portrait"]
+	var content: ContentDB = ContentDB.load_full(false)
+	var vigil: VigilState = VigilState.blank()
+	vigil.unlocks.append("emberglass")
+	vigil.whispers = 24
+	vigil.quests["paleOnes"] = {
+		"state": "revealed", "progress": 1, "memory": {},
+	}
+	var screen: VigilScreen = VigilScreen.new(
+		vigil, content, &"phone-portrait", true)
+	_hide_backdrop(screen)
+	_viewport.add_child(screen)
+	await _settle()
+	var stage: Rect2 = Rect2(Vector2.ZERO, Vector2(_viewport.size))
+	_check(stage.encloses(screen._panel.get_global_rect()),
+		"phone-portrait Vigil panel stays inside the stage with Rose open")
+	_check(stage.encloses(screen._rose.get_global_rect()),
+		"phone-portrait Rose stays inside the stage")
+	_check(stage.encloses(screen._rose._detail.get_global_rect()),
+		"phone-portrait Rose detail copy stays inside the stage")
+	_check(screen._rose._detail.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART,
+		"phone-portrait Rose detail copy retains smart wrapping")
+	screen._show_deeds()
+	await _settle()
+	_check(stage.encloses(screen._panel.get_global_rect()),
+		"phone-portrait Vigil panel stays inside the stage after opening Deeds")
+	screen._show_rose()
+	await _settle()
+	_check(stage.encloses(screen._panel.get_global_rect()),
+		"phone-portrait Vigil panel stays inside the stage after reopening Rose")
 	_drop(screen)
 	_viewport.size = STAGE_SIZE
 

@@ -298,7 +298,7 @@ func _item_button(title: String, description: String, art_path: String,
 	button.custom_minimum_size = Vector2(164 if quest else 120, 146 if quest else 122)
 	button.disabled = disabled
 	button.tooltip_text = description
-	button.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	button.add_theme_font_size_override("font_size", 12)
 	RunStyle.style_button(button, false, Color("#8ce0cc") if quest else RunStyle.GOLD)
 	if not art_path.is_empty() and ResourceLoader.exists(art_path):
@@ -312,7 +312,7 @@ func _action_button(text: String, primary: bool) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size.y = 44
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	RunStyle.style_button(button, primary)
 	return button
 
@@ -374,7 +374,7 @@ static func _label(text: String, font_size: int, colour: Color,
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if centred \
 		else HORIZONTAL_ALIGNMENT_LEFT
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	return label

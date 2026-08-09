@@ -122,7 +122,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 func _add_section(title_text: String, body_html: String) -> void:
 	var heading: Label = Label.new()
 	heading.text = title_text
-	heading.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	heading.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	heading.add_theme_font_size_override("font_size", 17)
 	heading.add_theme_color_override("font_color", RunStyle.GOLD)
 	heading.add_theme_constant_override("line_spacing", 0)
@@ -134,8 +134,8 @@ func _add_section(title_text: String, body_html: String) -> void:
 	body.scroll_active = false
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.text = body_html.replace("{count}", "3").replace("<b>", "[b]").replace("</b>", "[/b]")
-	body.add_theme_font_override("normal_font", load(GlassStyle.ALEGREYA_400) as Font)
-	body.add_theme_font_override("bold_font", load(GlassStyle.ALEGREYA_700) as Font)
+	body.add_theme_font_override("normal_font", GlassStyle.face(GlassStyle.ALEGREYA_400))
+	body.add_theme_font_override("bold_font", GlassStyle.face(GlassStyle.ALEGREYA_700))
 	body.add_theme_font_size_override("normal_font_size", 16)
 	body.add_theme_font_size_override("bold_font_size", 16)
 	body.add_theme_color_override("default_color", RunStyle.TEXT)

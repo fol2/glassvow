@@ -72,14 +72,13 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 		fails.append("Main hydration integration: opening CardView missed baked name/text")
 
 	Locale.active.set_language(Locale.CODE_ZH_HANT)
-	# Relic names are not translated in the retained catalogue yet. Give this
-	# real locale tree one distinctive display value so the bequest copy cannot
-	# pass merely because its English and zh-Hant strings happen to match.
+	# Keep a distinctive value in the requested tree so the bequest copy cannot
+	# pass merely because it retained the English bake.
 	var requested: Dictionary = Locale.active.get("_requested")
 	var requested_content: Dictionary = requested["content"]
 	var requested_relics: Dictionary = requested_content["relics"]
 	var requested_duskmirror: Dictionary = requested_relics["duskmirror"]
-	requested_duskmirror["name"] = "暮鏡"
+	requested_duskmirror["name"] = "暮色鏡"
 	main._on_language_changed(Locale.CODE_ZH_HANT)
 	if str(baked.cards["strike"]["name"]) != "Edge":
 		fails.append("Main hydration integration: combat language toggle changed live ContentDB early")
@@ -118,9 +117,9 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 	if run_end == null or str(run_end._stats.get("act_name", "")) != "灰燼樹林":
 		fails.append("Main hydration integration: abandon run-end copied the old English act name")
 	var bequests: Array[Dictionary] = main._bequest_choices()
-	if not _choice_has_name(bequests, "card", "大教堂璃"):
+	if not _choice_has_name(bequests, "card", "聖堂琉璃"):
 		fails.append("Main hydration integration: run-end card copy stayed English")
-	if not _choice_has_name(bequests, "relic", "暮鏡"):
+	if not _choice_has_name(bequests, "relic", "暮色鏡"):
 		fails.append("Main hydration integration: run-end relic copy stayed English")
 	var translated: CardView = screen._hand.add_card(
 		CardInst.new(999, &"strike"), baked.card(&"strike"), 1)
