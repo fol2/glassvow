@@ -13,6 +13,9 @@ var content: ContentDB
 var game: GlassvowGame
 var _map: WorldMap
 var _screen: CombatScreen = null
+## Settings may change Locale while a fight still owns copied CardViews. Keep
+## ContentDB on that fight's language until the next route is built atomically.
+var _content_hydration_pending: bool = false
 var _map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
 var _reward_screen: RewardScreen = null
@@ -84,6 +87,17 @@ static func rest_heal_amount(max_hp: int, fraction: float) -> int:
 	return int(roundf(float(max_hp) * fraction))
 
 
+func _apply_content_hydration() -> int:
+	_content_hydration_pending = false
+	return Locale.active.hydrate_content(content)
+
+
+func _apply_pending_content_hydration() -> int:
+	if not _content_hydration_pending:
+		return 0
+	return _apply_content_hydration()
+
+
 func _ready() -> void:
 	print("glassvow boot " + str(Engine.get_version_info()["string"]))
 	content = ContentDB.load_full()
@@ -93,6 +107,10 @@ func _ready() -> void:
 	# default English stand-in (docs/p7-locale-design.md §3). Language comes
 	# from the saved setting, else OS (`zh*` → zh-Hant).
 	Locale.active = Locale.new(Preferences.active.effective_language())
+	# Content display fields are overlaid onto the live rows, not looked up at
+	# every draw (docs/p7-locale-design.md §3) — presentation keeps reading
+	# `name` / `text` / move names straight off ContentDB.
+	_apply_content_hydration()
 	_music = MusicBus.new()
 	add_child(_music)
 	_sfx_bus = SfxBus.new()
@@ -611,6 +629,7 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 
 
 func _show_title() -> void:
+	_apply_pending_content_hydration()
 	var saved: RunState = SaveService.load_run(content)
 	var choices: Array[Dictionary] = []
 	if saved != null:
@@ -739,10 +758,13 @@ func _show_settings() -> void:
 ## route). Mid-combat keeps the fight; the next screen after combat picks up
 ## the new catalogue.
 func _on_language_changed(_code: StringName) -> void:
+	_content_hydration_pending = true
 	_close_overlay()
 	if _screen != null:
-		# Combat stays; chrome on the next route will re-read Locale.
+		# Combat stays wholly in its existing content language. Its copied
+		# CardViews and any later draw both keep reading the same live catalogue.
 		return
+	_apply_pending_content_hydration()
 	if game != null and not _run_over:
 		# Rebuild map / run chrome by re-showing the map if present.
 		if _map_screen != null:
@@ -837,6 +859,7 @@ func _continue_run(saved: RunState) -> void:
 
 
 func _route_run() -> void:
+	_apply_pending_content_hydration()
 	if game == null:
 		_show_title()
 	elif game.run.pending_dawn != null:
@@ -864,6 +887,7 @@ func _route_run() -> void:
 # ---------------------------------------------------------------- map
 
 func _show_map() -> void:
+	_apply_pending_content_hydration()
 	if game != null and game.run != null:
 		_transitions.wipe()
 	_clear_route()
