@@ -40,6 +40,22 @@ const PERSISTENCE_DETAILS: Dictionary = {
 	"ui.persistence.detail.lamplighterGiftHold": "The Lamplighter's gift could not be held.",
 }
 
+## Deliberately identical player-facing values. Technical font and licence
+## names are embedded in otherwise localised credit lines, so they do not need
+## an exemption here.
+const ZH_HANT_ENGLISH_ALLOWLIST: Array[String] = [
+	"ui.language.en",
+]
+
+const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
+	"ui.brand.title": "琉璃誓言",
+	"ui.vigil.title": "守夜",
+	"ui.pilgrimage.survey": "滾動或拖曳以巡視朝聖之路",
+	"ui.combat.lanternTitle": "提燈",
+	"content.cards.defend.name": "護光",
+	"content.status.poison.name": "陰燃",
+}
+
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
 	if not ok:
@@ -57,6 +73,7 @@ static func run(fails: Array[String]) -> void:
 	_remaining_run_screen_call_sites(fails)
 	_dialog_shells(fails)
 	_persistence_calls_and_shell(fails)
+	_zh_hant_catalogue_contract(fails)
 
 
 static func _english_seed(fails: Array[String]) -> void:
@@ -353,3 +370,105 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 			["Retry", "Title"], "", "Retry", "save error")
 		_check(fails, not shell._has_cancel, "save-error shell gained a cancel action")
 	Locale.active = previous
+
+
+## P7.6's authored catalogue is a strict peer of English: the same keys, no
+## accidental blanks, and no English seed copy left behind except the named
+## language label. Markers are compared as multisets, not mere containment, so
+## duplicate parameters and paired rich-text tags cannot disappear unnoticed.
+static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
+	var en: Dictionary = _read_catalogue("res://locale/en.json", fails)
+	var zh: Dictionary = _read_catalogue("res://locale/zh-Hant.json", fails)
+	if en.is_empty() or zh.is_empty():
+		return
+	var en_leaves: Dictionary = {}
+	var zh_leaves: Dictionary = {}
+	_flatten_strings(en, "", en_leaves)
+	_flatten_strings(zh, "", zh_leaves)
+	var missing: Array[String] = []
+	var extra: Array[String] = []
+	var blank: Array[String] = []
+	var untranslated: Array[String] = []
+	var marker_drift: Array[String] = []
+	for key_v: Variant in en_leaves:
+		var key: String = str(key_v)
+		if not zh_leaves.has(key):
+			missing.append(key)
+			continue
+		var en_value: String = str(en_leaves[key])
+		var zh_value: String = str(zh_leaves[key])
+		if not en_value.is_empty() and zh_value.strip_edges().is_empty():
+			blank.append(key)
+		if en_value == zh_value and not en_value.is_empty() \
+				and not ZH_HANT_ENGLISH_ALLOWLIST.has(key):
+			untranslated.append(key)
+		if _marker_multiset(en_value) != _marker_multiset(zh_value):
+			marker_drift.append(key)
+	for key_v: Variant in zh_leaves:
+		var key: String = str(key_v)
+		if not en_leaves.has(key):
+			extra.append(key)
+	missing.sort()
+	extra.sort()
+	blank.sort()
+	untranslated.sort()
+	marker_drift.sort()
+	_check(fails, missing.is_empty(), "zh-Hant missing %d keys: %s" % [
+		missing.size(), _first_paths(missing)])
+	_check(fails, extra.is_empty(), "zh-Hant has %d extra keys: %s" % [
+		extra.size(), _first_paths(extra)])
+	_check(fails, blank.is_empty(), "zh-Hant has %d unexpected blanks: %s" % [
+		blank.size(), _first_paths(blank)])
+	_check(fails, untranslated.is_empty(), "zh-Hant leaves %d English values: %s" % [
+		untranslated.size(), _first_paths(untranslated)])
+	_check(fails, marker_drift.is_empty(), "zh-Hant marker drift in %d values: %s" % [
+		marker_drift.size(), _first_paths(marker_drift)])
+	for key_v: Variant in ZH_HANT_ENGLISH_ALLOWLIST:
+		var key: String = str(key_v)
+		_check(fails, en_leaves.has(key) and zh_leaves.has(key)
+			and str(en_leaves[key]) == str(zh_leaves[key]),
+			"zh-Hant English allowlist entry is stale: %s" % key)
+	for key_v: Variant in ZH_HANT_GLOSSARY_SAMPLES:
+		var key: String = str(key_v)
+		_check(fails, str(zh_leaves.get(key, "")) == str(ZH_HANT_GLOSSARY_SAMPLES[key]),
+			"zh-Hant glossary drift at %s" % key)
+
+
+static func _read_catalogue(path: String, fails: Array[String]) -> Dictionary:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		fails.append("locale: could not parse catalogue %s" % path)
+		return {}
+	return parsed
+
+
+static func _flatten_strings(value: Variant, path: String, out: Dictionary) -> void:
+	if typeof(value) == TYPE_STRING:
+		out[path] = value
+	elif typeof(value) == TYPE_DICTIONARY:
+		var table: Dictionary = value
+		for key_v: Variant in table:
+			var key: String = str(key_v)
+			_flatten_strings(table[key_v], key if path.is_empty() else "%s.%s" % [path, key], out)
+	elif typeof(value) == TYPE_ARRAY:
+		var rows: Array = value
+		for index: int in range(rows.size()):
+			_flatten_strings(rows[index], str(index) if path.is_empty()
+				else "%s.%d" % [path, index], out)
+
+
+static func _marker_multiset(value: String) -> Array[String]:
+	var pattern: RegEx = RegEx.new()
+	pattern.compile("(@[^@]+@|#[^#]+#|\\{[^{}]+\\}|<[^>]+>|\\[[^]\\n]+\\])")
+	var markers: Array[String] = []
+	for found: RegExMatch in pattern.search_all(value):
+		markers.append(found.get_string())
+	markers.sort()
+	return markers
+
+
+static func _first_paths(paths: Array[String]) -> String:
+	var shown: Array[String] = []
+	for index: int in range(mini(paths.size(), 8)):
+		shown.append(paths[index])
+	return ", ".join(shown)
