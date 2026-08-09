@@ -1954,7 +1954,7 @@ func _on_terminal_commit(_id: String) -> void:
 			"kind": "shard",
 			"title": str(content.quests[id].get("name", id)),
 			# `ui.dawn.shardGrantCopy` (i18n/en/ui.js:237).
-			"body": "One pane answers.",
+			"body": Locale.active.t("ui.dawn.shardGrantCopy"),
 			"icon": "shard",
 		})
 	for unlock_v: Variant in _vigil.unlocks:
@@ -1972,8 +1972,8 @@ func _on_terminal_commit(_id: String) -> void:
 	if events.is_empty():
 		events.append({
 			"kind": "memory",
-			"title": "The Vigil Remembers",
-			"body": "Victory · %d shards lit" % _vigil.shards.size(),
+			"title": Locale.active.t("ui.dawn.memoryTitle"),
+			"body": Locale.active.t("ui.dawn.memoryBody", {"count": _vigil.shards.size()}),
 		})
 	game.run.pending_run_end = null
 	game.run.pending_dawn = {"events": events, "cursor": 0}
@@ -1985,13 +1985,13 @@ func _on_terminal_commit(_id: String) -> void:
 
 func _unlock_dawn_copy(id: String) -> String:
 	match id:
-		"lamplighter": return "The Hollow Lamplighter walks the Spire."
-		"phials": return "Phials may now be found on the climb."
-		"omens": return "The nights now rise beneath Omens."
+		"lamplighter": return Locale.active.t("ui.dawn.unlock.lamplighter")
+		"phials": return Locale.active.t("ui.dawn.unlock.phials")
+		"omens": return Locale.active.t("ui.dawn.unlock.omens")
 		"poolWave2", "poolWave3", "poolFull":
-			return "New cards and relics enter the climb."
-		"emberglass": return "The Emberglass Rose Window opens."
-		"act4": return "A sealed door opens above the crown."
+			return Locale.active.t("ui.dawn.unlock.pool")
+		"emberglass": return Locale.active.t("ui.dawn.unlock.emberglass")
+		"act4": return Locale.active.t("ui.dawn.unlock.act4")
 		_: return id.capitalize()
 
 
