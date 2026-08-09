@@ -1,7 +1,8 @@
 # Traditional Chinese canonical glossary
 
-**Version:** 1.0  
-**Locale:** `zh-Hant`  
+**Version:** 1.0
+
+**Locale:** `zh-Hant`
 **Scope:** player-facing Glassvow copy
 
 This glossary fixes the vocabulary used by `locale/zh-Hant.json`. It preserves
