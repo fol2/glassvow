@@ -81,7 +81,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	_scroll.add_child(_column)
 
 	var title: Label = Label.new()
-	title.text = "Credits"
+	title.text = Locale.active.t("ui.credits.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	title.add_theme_font_size_override("font_size", 26)
@@ -99,34 +99,34 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	rule.add_theme_stylebox_override("separator", rule_line)
 	rule_centre.add_child(rule)
 
-	_add_heading("GLASSVOW")
-	_add_body("A roguelite deckbuilder · by fol2")
+	_add_heading(Locale.active.t("ui.credits.headingBrand"))
+	_add_body(Locale.active.t("ui.credits.bodyBrand"))
 
-	_add_heading("THE GLASS")
-	_add_body("Parallel-ported from roguecardv2.")
+	_add_heading(Locale.active.t("ui.credits.headingGlass"))
+	_add_body(Locale.active.t("ui.credits.bodyGlass"))
 
-	_add_heading("MUSIC — STAINED GLASS")
+	_add_heading(Locale.active.t("ui.credits.headingMusic"))
 	_add_pack_id("stained-glass-v1")
 	var music_manifest: Variant = _read_manifest(MUSIC_MANIFEST)
 	_add_music_attribution(music_manifest)
 	_add_music_rows(music_manifest)
 
-	_add_heading("SOUND — ASHGLASS VIGIL")
+	_add_heading(Locale.active.t("ui.credits.headingSound"))
 	_add_pack_id("ashglass-v1")
 	_add_sfx_rows(_read_manifest(SFX_MANIFEST))
 
-	_add_heading("TYPE")
-	_add_body("Cinzel — Natanael Gama (OFL)")
-	_add_body("Alegreya — Juan Pablo del Peral, Huerta Tipográfica (OFL)")
-	_add_body("Noto Sans TC — Google (OFL)")
+	_add_heading(Locale.active.t("ui.credits.headingType"))
+	_add_body(Locale.active.t("ui.credits.bodyCinzel"))
+	_add_body(Locale.active.t("ui.credits.bodyAlegreya"))
+	_add_body(Locale.active.t("ui.credits.bodyNoto"))
 	_add_font_licence_fold()
 
-	_add_heading("ENGINE")
-	_add_body("Made with Godot Engine")
+	_add_heading(Locale.active.t("ui.credits.headingEngine"))
+	_add_body(Locale.active.t("ui.credits.bodyEngine"))
 	_add_licence_fold()
 
 	var footer: Label = _body_label(
-		"© 2026 fol2 · thank you for keeping the vigil", GlassStyle.TEXT_DIM)
+		Locale.active.t("ui.credits.footer"), GlassStyle.TEXT_DIM)
 	var footer_seat: MarginContainer = MarginContainer.new()
 	footer_seat.add_theme_constant_override("margin_top", 14)
 	footer_seat.add_child(footer)
@@ -147,7 +147,7 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	var close_centre: CenterContainer = CenterContainer.new()
 	shell.add_child(close_centre)
 	var close: Button = Button.new()
-	close.text = "Close"
+	close.text = Locale.active.t("ui.credits.close")
 	close.custom_minimum_size = Vector2(150, 44)
 	close.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
 	close.add_theme_font_size_override("font_size", 17)
@@ -197,9 +197,9 @@ func _add_music_attribution(manifest: Variant) -> void:
 		if typeof(items_raw) == TYPE_DICTIONARY:
 			var items: Dictionary = items_raw
 			count = items.size()
-	var line: String = "composed with Suno"
+	var line: String = Locale.active.t("ui.credits.musicAttribution")
 	if count > 0:
-		line = "%d tracks · composed with Suno" % count
+		line = Locale.active.t("ui.credits.musicAttributionCount", {"count": count})
 	# Breath below the attribution: its gap to the first track must exceed
 	# the track pitch, or the line reads as track zero.
 	var seat: MarginContainer = MarginContainer.new()
@@ -210,12 +210,12 @@ func _add_music_attribution(manifest: Variant) -> void:
 
 func _add_music_rows(manifest: Variant) -> void:
 	if typeof(manifest) != TYPE_DICTIONARY:
-		_add_body("the stained-glass tracklist", GlassStyle.TEXT_DIM)
+		_add_body(Locale.active.t("ui.credits.musicTracklistFallback"), GlassStyle.TEXT_DIM)
 		return
 	var pack: Dictionary = manifest
 	var items_raw: Variant = pack.get("items", null)
 	if typeof(items_raw) != TYPE_DICTIONARY:
-		_add_body("the stained-glass tracklist", GlassStyle.TEXT_DIM)
+		_add_body(Locale.active.t("ui.credits.musicTracklistFallback"), GlassStyle.TEXT_DIM)
 		return
 	var items: Dictionary = items_raw
 	var titles: Array[String] = []
@@ -226,7 +226,7 @@ func _add_music_rows(manifest: Variant) -> void:
 		if cue.has("title"):
 			titles.append(str(cue["title"]))
 	if titles.is_empty():
-		_add_body("the stained-glass tracklist", GlassStyle.TEXT_DIM)
+		_add_body(Locale.active.t("ui.credits.musicTracklistFallback"), GlassStyle.TEXT_DIM)
 		return
 	for track_title: String in titles:
 		_add_body(track_title)
@@ -234,7 +234,7 @@ func _add_music_rows(manifest: Variant) -> void:
 
 func _add_sfx_rows(manifest: Variant) -> void:
 	var count: int = 0
-	var theme_line: String = "Ashglass Vigil"
+	var theme_line: String = Locale.active.t("ui.credits.themeLine")
 	if typeof(manifest) == TYPE_DICTIONARY:
 		var pack: Dictionary = manifest
 		var items_raw: Variant = pack.get("items", null)
@@ -245,9 +245,9 @@ func _add_sfx_rows(manifest: Variant) -> void:
 		if not packed.is_empty():
 			theme_line = packed
 	if count > 0:
-		_add_body("%d sounds · synthesised with ElevenLabs" % count)
+		_add_body(Locale.active.t("ui.credits.sfxAttributionCount", {"count": count}))
 	else:
-		_add_body("synthesised with ElevenLabs")
+		_add_body(Locale.active.t("ui.credits.sfxAttribution"))
 	_add_body(theme_line, GlassStyle.TEXT_DIM)
 
 
@@ -260,7 +260,7 @@ func _add_licence_fold() -> void:
 	seat.add_child(fold)
 
 	_licence_toggle = Button.new()
-	_licence_toggle.text = "Engine licences"
+	_licence_toggle.text = Locale.active.t("ui.credits.engineLicences")
 	_licence_toggle.custom_minimum_size = Vector2(0, 36)
 	_licence_toggle.add_theme_font_override("font",
 		load(GlassStyle.ALEGREYA_400) as Font)
@@ -283,7 +283,7 @@ func _add_font_licence_fold() -> void:
 	seat.add_child(fold)
 
 	_font_licence_toggle = Button.new()
-	_font_licence_toggle.text = "Font licences (OFL)"
+	_font_licence_toggle.text = Locale.active.t("ui.credits.fontLicences")
 	_font_licence_toggle.custom_minimum_size = Vector2(0, 36)
 	_font_licence_toggle.add_theme_font_override("font",
 		load(GlassStyle.ALEGREYA_400) as Font)
@@ -329,7 +329,7 @@ func _build_licence() -> void:
 	var engine_text: RichTextLabel = _licence_body(Engine.get_license_text())
 	fold.add_child(engine_text)
 
-	fold.add_child(_fold_heading("COMPONENTS"))
+	fold.add_child(_fold_heading(Locale.active.t("ui.credits.components")))
 
 	var copyright_info: Array = Engine.get_copyright_info()
 	for entry_raw: Variant in copyright_info:
@@ -381,7 +381,7 @@ func _build_licence() -> void:
 			component.add_child(part_lines)
 		fold.add_child(component)
 
-	fold.add_child(_fold_heading("LICENCE TEXTS"))
+	fold.add_child(_fold_heading(Locale.active.t("ui.credits.licenceTexts")))
 
 	var licence_info: Dictionary = Engine.get_license_info()
 	for name_raw: Variant in licence_info.keys():
