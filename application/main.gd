@@ -2064,12 +2064,12 @@ func _show_monument() -> void:
 		return
 	var monument: Dictionary = game.run.monument
 	var bequest_v: Variant = monument.get("bequest")
-	var body: String = "A previous pilgrim stands inside the stone."
+	var body: String = Locale.active.t("ui.end.monument.body")
 	if typeof(bequest_v) == TYPE_DICTIONARY:
-		body += "\nSomething remains in their hands."
-	_show_choice("MONUMENT OF THE LAST FALL", body, [
-		{"id": "claim", "label": "Touch the standing glass"},
-		{"id": "leave", "label": "Leave it", "quiet": true},
+		body = Locale.active.t("ui.end.monument.bodyWithBequest")
+	_show_choice(Locale.active.t("ui.end.monument.title"), body, [
+		{"id": "claim", "label": Locale.active.t("ui.end.monument.claim")},
+		{"id": "leave", "label": Locale.active.t("ui.end.monument.leave"), "quiet": true},
 	], _on_monument_choice, {"overlay": true})
 
 
