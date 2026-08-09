@@ -195,7 +195,7 @@ func buy_usurper(run: RunState) -> bool:
 func pay_lamplighter(run: RunState) -> Dictionary:
 	var quest: Dictionary = record(run, "hollowLamplighter")
 	if not active(run, "hollowLamplighter"):
-		return {"ok": false, "message": "The empty lantern does not answer."}
+		return {"ok": false, "message": "ui.hollow.message.inactive"}
 	var step: int = _ji(quest.get("progress", 0))
 	match step:
 		0:
@@ -207,28 +207,28 @@ func pay_lamplighter(run: RunState) -> Dictionary:
 			memory["emberDebt"] = 3
 			quest["memory"] = memory
 			quest["state"] = "revealed"
-			return {"ok": true, "message": "The next three Embers belong to the hollow lantern."}
+			return {"ok": true, "message": "ui.hollow.message.emberDebt"}
 		1:
 			if run.player.gold < 160:
-				return {"ok": false, "message": "Bring 160 gold."}
+				return {"ok": false, "message": "ui.hollow.message.needGold"}
 			run.player.gold -= 160
 		2:
 			if run.player.max_hp - 12 < 30:
-				return {"ok": false, "message": "Your vessel cannot survive the price."}
+				return {"ok": false, "message": "ui.hollow.message.vesselTooFragile"}
 			run.player.max_hp -= 12
 			run.player.hp = mini(run.player.hp, run.player.max_hp)
 		3:
 			if not RewardRules.new(content).reverse_boon(run):
-				return {"ok": false, "message": "Bring an unspent boon."}
+				return {"ok": false, "message": "ui.hollow.message.needBoon"}
 		4:
 			run.player.hp = 1
 	advance(run, "hollowLamplighter")
-	return {"ok": true, "message": "Another hollow pane catches fire."}
+	return {"ok": true, "message": "ui.hollow.message.paneLit"}
 
 
 func pay_hollow_price(run: RunState) -> Dictionary:
 	if typeof(run.pending_hollow) != TYPE_DICTIONARY:
-		return {"ok": false, "message": "No hollow price is waiting."}
+		return {"ok": false, "message": "ui.hollow.message.noPriceWaiting"}
 	var pending: Dictionary = run.pending_hollow
 	if pending.get("paid", false):
 		return {"ok": true, "message": str(pending.get("answer", ""))}
