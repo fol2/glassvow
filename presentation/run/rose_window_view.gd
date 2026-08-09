@@ -275,7 +275,9 @@ func _pane_copy(id: String, record: Dictionary) -> String:
 	if state == "armed":
 		return "???"
 	if state == "complete":
-		return "%s\nShard recovered" % str(_quest(id).get("name", id))
+		return Locale.active.t("ui.rose.shardRecoveredStack", {
+			"name": str(_quest(id).get("name", id)),
+		})
 	return "%s\n%s/%s" % [
 		_quest(id).get("name", id), record.get("progress", 0),
 		_quest(id).get("target", 0)]
@@ -290,16 +292,18 @@ func _detail_copy(id: String, record: Dictionary) -> String:
 			_quest(id).get("name", id), _quest(id).get("inscription", ""),
 			record.get("progress", 0), _quest(id).get("target", 0)]
 	if state == "complete":
-		return "%s\nShard recovered" % str(_quest(id).get("name", id))
-	return "This pane is dark."
+		return Locale.active.t("ui.rose.shardRecoveredStack", {
+			"name": str(_quest(id).get("name", id)),
+		})
+	return Locale.active.t("ui.rose.paneDark")
 
 
 func _pane_accessible_name(index: int, id: String, record: Dictionary) -> String:
 	var state: String = _state(record)
 	if state == "dormant":
-		return "Dormant Emberglass pane %d" % (index + 1)
+		return Locale.active.t("ui.rose.dormantPane", {"n": index + 1})
 	if state == "armed":
-		return "Unknown Emberglass pane %d" % (index + 1)
+		return Locale.active.t("ui.rose.unknownPane", {"n": index + 1})
 	return _detail_copy(id, record).replace("\n", ", ")
 
 

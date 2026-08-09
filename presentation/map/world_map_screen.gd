@@ -257,7 +257,9 @@ func _node_caption(n: MapNode) -> String:
 ## lands on the top waystone row, which on a phone held upright is the row
 ## nearest the player's thumb.
 func _act_line(region: String, boss: String) -> String:
-	var full: String = "%s — %s AWAITS" % [region, boss]
+	var full: String = Locale.active.t("ui.pilgrimage.awaits", {
+		"region": region, "boss": boss,
+	})
 	var font: Font = _title_label.get_theme_font("font")
 	var pt: int = _title_label.get_theme_font_size("font_size")
 	# The shape's reference width, never this Control's, because the first

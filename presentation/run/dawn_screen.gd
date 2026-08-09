@@ -229,7 +229,7 @@ func _build() -> void:
 	caption_seat.alignment = BoxContainer.ALIGNMENT_CENTER
 	caption_seat.add_theme_constant_override("separation", 3)
 	column.add_child(caption_seat)
-	_caption = _label("click or space to continue  ·  hold to skip", 10,
+	_caption = _label(Locale.active.t("ui.dawn.inputHint"), 10,
 		Color(RunStyle.TEXT_DIM, 0.85))
 	caption_seat.add_child(_caption)
 	# The skip vow fills gold under the caption while anything is held.

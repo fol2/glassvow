@@ -50,7 +50,9 @@ func _init(run: RunState, content_ref: ContentDB,
 func refresh(run: RunState) -> void:
 	_run = run
 	var player: RunState.Player = run.player
-	_hp_num.text = "%d / %d" % [player.hp, player.max_hp]
+	_hp_num.text = Locale.active.t("ui.hud.hpFraction", {
+		"hp": player.hp, "maxHp": player.max_hp,
+	})
 	_hp_bar.max_value = maxi(1, player.max_hp)
 	_hp_bar.value = clampi(player.hp, 0, maxi(1, player.max_hp))
 	_gold_num.text = str(player.gold)
@@ -173,7 +175,8 @@ func _rebuild_right(player: RunState.Player) -> void:
 		_right.add_child(_potion_seat(slot, player.potions[slot]))
 	var icon_side: int = _shape_value(46, 42, 56)
 	var button_side: int = int(RunStyle.hit_floor(_shape_value(40, 38, 44)))
-	var deck: Button = _art_button("ui/deck", icon_side, button_side, "View deck")
+	var deck: Button = _art_button("ui/deck", icon_side, button_side,
+		Locale.active.t("ui.hud.viewDeck"))
 	for state: String in ["normal", "hover", "pressed"]:
 		deck.add_theme_stylebox_override(state, _flat(Color.TRANSPARENT, 0))
 	_deck_count = _label(str(player.deck.size()),
@@ -186,7 +189,8 @@ func _rebuild_right(player: RunState.Player) -> void:
 	deck.pressed.connect(_request.bind(&"deck", -1))
 	_right.add_child(deck)
 	var menu: Button = _art_button("ui/menu",
-		_shape_value(17, 16, 19), _shape_value(36, 34, 40), "Menu")
+		_shape_value(17, 16, 19), _shape_value(36, 34, 40),
+		Locale.active.t("ui.hud.menu"))
 	menu.pressed.connect(_request.bind(&"menu", -1))
 	_right.add_child(menu)
 
@@ -199,7 +203,7 @@ func _potion_seat(slot: int, id: String) -> Control:
 		var empty: Panel = Panel.new()
 		empty.custom_minimum_size = side
 		empty.add_theme_stylebox_override("panel", _seat_style(false))
-		empty.tooltip_text = "Empty phial seat"
+		empty.tooltip_text = Locale.active.t("ui.hud.emptyPhial")
 		empty.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		return empty
 	var button: Button = _art_button("potions/" + id,
@@ -269,11 +273,11 @@ func _location_text(run: RunState) -> String:
 	if content.acts.is_empty():
 		return "UNKNOWN ACT · FLOOR %d" % run.floors_climbed
 	var act: Dictionary = content.acts[clampi(run.act, 0, content.acts.size() - 1)]
-	return ("%s · FLOOR %d · %s" % [
-		str(act.get("name", "Unknown Act")),
-		run.floors_climbed,
-		str(act.get("bossName", "Unknown Boss")),
-	]).to_upper()
+	return Locale.active.t("ui.hud.location", {
+		"act": str(act.get("name", "Unknown Act")),
+		"floor": run.floors_climbed,
+		"boss": str(act.get("bossName", "Unknown Boss")),
+	}).to_upper()
 
 
 func _shape_value(phone_portrait: int, phone_landscape: int, roomy: int) -> int:

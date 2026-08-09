@@ -10,6 +10,7 @@ static func run(fails: Array[String]) -> void:
 	_content_and_whisper(fails)
 	_unknown_language_rejected(fails)
 	_default_active(fails)
+	_remaining_run_screen_call_sites(fails)
 
 
 static func _english_seed(fails: Array[String]) -> void:
@@ -84,3 +85,94 @@ static func _default_active(fails: Array[String]) -> void:
 		fails.append("locale: static active is null")
 	if Locale.active.t("ui.common.continue") != "Continue":
 		fails.append("locale: static active does not serve English without main")
+
+
+## Wave 4 I1 owns these exact presentation seams. Source assertions are
+## deliberate here: an English runtime cannot distinguish a raw literal from
+## the English catalogue value, while a changed locale must traverse every
+## call site below.
+static func _remaining_run_screen_call_sites(fails: Array[String]) -> void:
+	var seams: Dictionary = {
+		"res://presentation/run/credits_screen.gd": {
+			"_init": ["ui.credits.title", "ui.credits.headingBrand",
+				"ui.credits.bodyBrand", "ui.credits.headingGlass",
+				"ui.credits.bodyGlass", "ui.credits.headingMusic",
+				"ui.credits.headingSound", "ui.credits.headingType",
+				"ui.credits.bodyCinzel", "ui.credits.bodyAlegreya",
+				"ui.credits.bodyNoto", "ui.credits.headingEngine",
+				"ui.credits.bodyEngine", "ui.credits.footer", "ui.credits.close"],
+			"_add_music_attribution": ["ui.credits.musicAttribution",
+				"ui.credits.musicAttributionCount"],
+			"_add_music_rows": ["ui.credits.musicTracklistFallback"],
+			"_add_sfx_rows": ["ui.credits.sfxAttribution",
+				"ui.credits.sfxAttributionCount", "ui.credits.themeLine"],
+			"_add_licence_fold": ["ui.credits.engineLicences"],
+			"_add_font_licence_fold": ["ui.credits.fontLicences"],
+			"_build_licence": ["ui.credits.components", "ui.credits.licenceTexts"],
+		},
+		"res://presentation/run/rose_window_view.gd": {
+			"_pane_copy": ["ui.rose.shardRecoveredStack"],
+			"_detail_copy": ["ui.rose.shardRecoveredStack", "ui.rose.paneDark"],
+			"_pane_accessible_name": ["ui.rose.dormantPane", "ui.rose.unknownPane"],
+		},
+		"res://presentation/run/choice_screen.gd": {
+			"_add_title_rose": ["ui.rose.openLabel"],
+		},
+		"res://presentation/run/dawn_screen.gd": {
+			"_build": ["ui.dawn.inputHint"],
+		},
+		"res://presentation/run/lamplighter_screen.gd": {
+			"_build": ["ui.lamp.title", "ui.lamp.sub", "ui.lamp.boonLabel",
+				"ui.lamp.artLabel", "ui.lamp.artHint", "ui.menu.chooseBoon"],
+			"_refresh": ["ui.menu.lightTheWay", "ui.menu.chooseBoon"],
+		},
+		"res://presentation/run/run_hud.gd": {
+			"refresh": ["ui.hud.hpFraction"],
+			"_rebuild_right": ["ui.hud.viewDeck", "ui.hud.menu"],
+			"_potion_seat": ["ui.hud.emptyPhial"],
+			"_location_text": ["ui.hud.location"],
+		},
+		"res://presentation/map/world_map_screen.gd": {
+			"_act_line": ["ui.pilgrimage.awaits"],
+		},
+		"res://application/main.gd": {
+			"_show_run_deck": ["ui.hud.deckOverlayTitle", "ui.hud.deckOverlayCount",
+				"ui.menu.close"],
+			"_show_potion_menu": ["ui.common.use", "ui.hud.tossPotion", "ui.menu.close"],
+			"_bequest_choices": ["ui.end.bequestNote.relic", "ui.end.bequestNote.card",
+				"ui.end.bequestNote.gold", "ui.end.bequestNote.goldCache"],
+			"_on_terminal_commit": ["ui.dawn.shardGrantCopy", "ui.dawn.memoryTitle",
+				"ui.dawn.memoryBody"],
+			"_unlock_dawn_copy": ["ui.dawn.unlock.lamplighter", "ui.dawn.unlock.phials",
+				"ui.dawn.unlock.omens", "ui.dawn.unlock.pool",
+				"ui.dawn.unlock.emberglass", "ui.dawn.unlock.act4"],
+			"_show_monument": ["ui.end.monument.body", "ui.end.monument.bodyWithBequest",
+				"ui.end.monument.title", "ui.end.monument.claim", "ui.end.monument.leave"],
+		},
+	}
+	for path_v: Variant in seams:
+		var path: String = str(path_v)
+		var source: String = FileAccess.get_file_as_string(path)
+		var functions: Dictionary = seams[path_v]
+		for function_v: Variant in functions:
+			var function_name: String = str(function_v)
+			var body: String = _function_body(source, function_name)
+			for key_v: Variant in functions[function_v]:
+				var key: String = str(key_v)
+				if not body.contains('Locale.active.t("%s"' % key):
+					fails.append("locale I1 call site: %s:%s misses %s" % [
+						path, function_name, key])
+	var map_source: String = FileAccess.get_file_as_string(
+		"res://presentation/map/world_map_screen.gd")
+	var node_caption: String = _function_body(map_source, "_node_caption")
+	if not node_caption.contains('var node_key: String = "ui.map.node.%s"') \
+			or not node_caption.contains("Locale.active.t(node_key)"):
+		fails.append("locale I1 call site: map node captions bypass their dynamic locale key")
+
+
+static func _function_body(source: String, name: String) -> String:
+	var start: int = source.find("func %s(" % name)
+	if start < 0:
+		return ""
+	var finish: int = source.find("\nfunc ", start + 1)
+	return source.substr(start) if finish < 0 else source.substr(start, finish - start)

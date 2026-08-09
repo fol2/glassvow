@@ -970,9 +970,10 @@ func _show_run_deck() -> void:
 	var choices: Array[Dictionary] = []
 	for card: CardInst in game.run.player.deck:
 		choices.append(_card_choice(card, "card:%d" % card.uid, true))
-	choices.append({"id": "close", "label": "Close", "quiet": true})
+	choices.append({"id": "close", "label": Locale.active.t("ui.menu.close"), "quiet": true})
 	var deck: Control = ChoiceScreenType.new(
-		"DECK", "%d panes carried" % game.run.player.deck.size(),
+		Locale.active.t("ui.hud.deckOverlayTitle"),
+		Locale.active.t("ui.hud.deckOverlayCount", {"count": game.run.player.deck.size()}),
 		choices, {"shape": String(_shape), "cancel": "close", "overlay": true},
 		_sfx_bus)
 	deck.connect("chosen", func(_id: String) -> void: _close_overlay())
@@ -999,11 +1000,11 @@ func _show_potion_menu(slot: int) -> void:
 	var choices: Array[Dictionary] = [
 		{
 			"id": "use",
-			"label": "Use",
+			"label": Locale.active.t("ui.common.use"),
 			"disabled": definition.get("combatOnly", false),
 		},
-		{"id": "toss", "label": "Toss it", "quiet": true},
-		{"id": "close", "label": "Close", "quiet": true},
+		{"id": "toss", "label": Locale.active.t("ui.hud.tossPotion"), "quiet": true},
+		{"id": "close", "label": Locale.active.t("ui.menu.close"), "quiet": true},
 	]
 	var menu: Control = ChoiceScreenType.new(
 		str(definition.get("name", id)),
@@ -1817,7 +1818,7 @@ func _bequest_choices() -> Array[Dictionary]:
 		choices.append({"id": "relic:" + best_relic,
 			"kind": "relic",
 			"name": relic_name,
-			"note": "your rarest relic",
+			"note": Locale.active.t("ui.end.bequestNote.relic"),
 			"icon": "res://assets/art/bequests/relic.png",
 			"art": "res://assets/art/relics/%s.png" % best_relic})
 	var best_card: CardInst = null
@@ -1839,15 +1840,15 @@ func _bequest_choices() -> Array[Dictionary]:
 		choices.append({"id": "card:%d" % best_card.uid,
 			"kind": "card",
 			"name": card_name,
-			"note": "your finest card",
+			"note": Locale.active.t("ui.end.bequestNote.card"),
 			"icon": "res://assets/art/bequests/card.png",
 			"art": "res://assets/art/cards/%s.jpg" % String(best_card.id)})
 	if game.run.player.gold >= 25:
 		var amount: int = mini(game.run.player.gold, 75)
 		choices.append({"id": "gold:%d" % amount,
 			"kind": "gold",
-			"name": "%d gold" % amount,
-			"note": "a cache of gold",
+			"name": Locale.active.t("ui.end.bequestNote.gold", {"n": amount}),
+			"note": Locale.active.t("ui.end.bequestNote.goldCache"),
 			"icon": "res://assets/art/bequests/gold.png",
 			"art": "res://assets/art/ui/coin.png"})
 	return choices
@@ -1953,7 +1954,7 @@ func _on_terminal_commit(_id: String) -> void:
 			"kind": "shard",
 			"title": str(content.quests[id].get("name", id)),
 			# `ui.dawn.shardGrantCopy` (i18n/en/ui.js:237).
-			"body": "One pane answers.",
+			"body": Locale.active.t("ui.dawn.shardGrantCopy"),
 			"icon": "shard",
 		})
 	for unlock_v: Variant in _vigil.unlocks:
@@ -1971,8 +1972,8 @@ func _on_terminal_commit(_id: String) -> void:
 	if events.is_empty():
 		events.append({
 			"kind": "memory",
-			"title": "The Vigil Remembers",
-			"body": "Victory · %d shards lit" % _vigil.shards.size(),
+			"title": Locale.active.t("ui.dawn.memoryTitle"),
+			"body": Locale.active.t("ui.dawn.memoryBody", {"count": _vigil.shards.size()}),
 		})
 	game.run.pending_run_end = null
 	game.run.pending_dawn = {"events": events, "cursor": 0}
@@ -1984,13 +1985,13 @@ func _on_terminal_commit(_id: String) -> void:
 
 func _unlock_dawn_copy(id: String) -> String:
 	match id:
-		"lamplighter": return "The Hollow Lamplighter walks the Spire."
-		"phials": return "Phials may now be found on the climb."
-		"omens": return "The nights now rise beneath Omens."
+		"lamplighter": return Locale.active.t("ui.dawn.unlock.lamplighter")
+		"phials": return Locale.active.t("ui.dawn.unlock.phials")
+		"omens": return Locale.active.t("ui.dawn.unlock.omens")
 		"poolWave2", "poolWave3", "poolFull":
-			return "New cards and relics enter the climb."
-		"emberglass": return "The Emberglass Rose Window opens."
-		"act4": return "A sealed door opens above the crown."
+			return Locale.active.t("ui.dawn.unlock.pool")
+		"emberglass": return Locale.active.t("ui.dawn.unlock.emberglass")
+		"act4": return Locale.active.t("ui.dawn.unlock.act4")
 		_: return id.capitalize()
 
 
@@ -2063,12 +2064,12 @@ func _show_monument() -> void:
 		return
 	var monument: Dictionary = game.run.monument
 	var bequest_v: Variant = monument.get("bequest")
-	var body: String = "A previous pilgrim stands inside the stone."
+	var body: String = Locale.active.t("ui.end.monument.body")
 	if typeof(bequest_v) == TYPE_DICTIONARY:
-		body += "\nSomething remains in their hands."
-	_show_choice("MONUMENT OF THE LAST FALL", body, [
-		{"id": "claim", "label": "Touch the standing glass"},
-		{"id": "leave", "label": "Leave it", "quiet": true},
+		body = Locale.active.t("ui.end.monument.bodyWithBequest")
+	_show_choice(Locale.active.t("ui.end.monument.title"), body, [
+		{"id": "claim", "label": Locale.active.t("ui.end.monument.claim")},
+		{"id": "leave", "label": Locale.active.t("ui.end.monument.leave"), "quiet": true},
 	], _on_monument_choice, {"overlay": true})
 
 
