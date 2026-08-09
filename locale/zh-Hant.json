@@ -47,14 +47,39 @@
       "lanternArtTitle": "提燈術 — {name}",
       "lanternLead": "<b>{embers} 餘燼，每回合一次：</b> {text}<br><br>",
       "staggeredTitle": "踉蹌",
-      "staggeredBody": "琉璃已碎——此生物在重新接合前失去下一動。"
+      "staggeredBody": "琉璃已碎——此生物在重新接合前失去下一動。",
+      "lanternAria": "提燈——耗用一點餘燼",
+      "deckInspectorTitle": "牌庫",
+      "inspectorCardCountOne": "1 張牌",
+      "inspectorCardCountMany": "{count} 張牌",
+      "inspectorEmpty": "沒有牌",
+      "adamant": "不摧",
+      "turn": "回合 {turn}",
+      "encounterHeader": "{kind} · 第 {act} 幕",
+      "encounterKind": {
+        "boss": "首領",
+        "elite": "菁英",
+        "monster": "怪物"
+      },
+      "intent": {
+        "attackFor": "攻擊造成 [b]{amount}[/b] 點傷害",
+        "gainWard": "獲得護光",
+        "healSelf": "治療自身",
+        "afflictYou": "向你施加狀態",
+        "empower": "強化自身",
+        "act": "行動",
+        "summary": "意圖：{intent}。"
+      }
     },
     "common": {
       "cancel": "取消",
       "continue": "繼續",
       "retry": "重試",
       "skip": "跳過",
-      "leave": "離開"
+      "leave": "離開",
+      "use": "使用",
+      "stay": "留下",
+      "title": "主畫面"
     },
     "dawn": {
       "act4RevealCopy": "Six panes burn. Something waits above the crown.",
@@ -84,7 +109,18 @@
       "kickerUnlock": "守夜敞開",
       "kickerDefault": "破曉",
       "complete": "破曉完成",
-      "progress": "破曉 {n} / {total} · 當前記憶已燃"
+      "progress": "破曉 {n} / {total} · 當前記憶已燃",
+      "inputHint": "點擊或按空白鍵繼續 · 長按跳過",
+      "memoryTitle": "守夜銘記",
+      "memoryBody": "勝利 · {count} 片碎片已點亮",
+      "unlock": {
+        "lamplighter": "空燈掌燈人踏上尖塔。",
+        "phials": "朝聖之路上如今可找到藥瓶。",
+        "omens": "今後長夜將在凶兆下升起。",
+        "pool": "新卡牌與遺物加入朝聖之路。",
+        "emberglass": "餘燼琉璃玫瑰窗開啟。",
+        "act4": "王冠之上的封印之門已開。"
+      }
     },
     "embark": {
       "aspectLabel": "誰執提燈",
@@ -130,7 +166,14 @@
       "abandoned": "誓言擱置",
       "abandonedSub": "朝聖止於此。守夜將記下這筆。",
       "fallenLantern": "你的提燈在第 {floor} 層熄滅。",
-      "elitesBossesPlus": "菁英 + 首領"
+      "elitesBossesPlus": "菁英 + 首領",
+      "monument": {
+        "body": "前一位朝聖者站在石中。",
+        "bodyWithBequest": "前一位朝聖者站在石中。\n其手中仍留有一物。",
+        "title": "上次墜落的紀念碑",
+        "claim": "觸碰矗立的琉璃",
+        "leave": "置之不理"
+      }
     },
     "event": {
       "chooseCardSub": "One page still glows.",
@@ -142,7 +185,8 @@
       "upgradeSub": "The forge hungers.",
       "upgradeTitle": "Upgrade a Card",
       "strangePlace": "異樣之地",
-      "continue": "繼續"
+      "continue": "繼續",
+      "chooseCardBody": "選擇本身也是代價。"
     },
     "help": {
       "climbBody": "沿提燈之路攀向尖塔。擊敗怪物、收集卡牌、遺物與藥瓶，並打倒每一幕的首領，共 <b>{count} 幕</b>。未燃之燈隱匿其所藏——但點燃者須付賞金。",
@@ -169,7 +213,16 @@
       "routeFailed": "The way onward could not be prepared.",
       "routeSaveFailed": "The way onward is not secured. Retry when storage is available.",
       "saveFailed": "The price is not yet secured. Retry the save.",
-      "title": "空燈掌燈人"
+      "title": "空燈掌燈人",
+      "message": {
+        "inactive": "空燈沒有回應。",
+        "emberDebt": "接下來三點餘燼歸於空燈。",
+        "needGold": "帶來 160 金幣。",
+        "vesselTooFragile": "你的容器承受不起這代價。",
+        "needBoon": "帶來一份尚未花掉的恩賜。",
+        "paneLit": "又一片空燈璃面燃起。",
+        "noPriceWaiting": "目前沒有空燈代價等候支付。"
+      }
     },
     "hud": {
       "actFloor": "第 {act} 幕 · 第 {floor} 層",
@@ -184,7 +237,12 @@
       "usePotion": "Use {name}",
       "viewDeck": "檢視牌庫",
       "menu": "選單",
-      "emptyPhial": "空藥瓶位"
+      "emptyPhial": "空藥瓶位",
+      "hpFraction": "{hp} / {maxHp}",
+      "location": "{act} · 第 {floor} 層 · {boss}",
+      "deckOverlayTitle": "牌庫",
+      "deckOverlayCount": "攜帶 {count} 片牌",
+      "usePotionOn": "對 {name} 使用"
     },
     "keywords": {
       "chip": "直擊琉璃本身：推進碎裂，無需見血。",
@@ -226,7 +284,9 @@
         "monster": "怪物",
         "rest": "休息處",
         "shop": "商人",
-        "treasure": "寶藏"
+        "treasure": "寶藏",
+        "act4": "第四幕",
+        "monument": "紀念碑"
       },
       "scroll": "scroll",
       "sealedDoor": {
@@ -275,7 +335,9 @@
       "settings": "設定",
       "theVigil": "守夜",
       "unmute": "取消靜音",
-      "unmuteSound": "取消靜音"
+      "unmuteSound": "取消靜音",
+      "leaveSpireTitle": "離開尖塔？",
+      "leaveSpireBody": "提燈會守住你的行程。"
     },
     "persistence": {
       "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
@@ -291,7 +353,46 @@
       "stoneBody": "The stone could not hold this duel. Free storage and try again.",
       "stoneTitle": "The Stone Could Not Hold",
       "vigilBody": "This run end is safely journalled, but its ledgers or final dawn could not be secured. Free storage and retry, or reload this saved finalisation.",
-      "vigilTitle": "The Vigil Could Not Hold"
+      "vigilTitle": "The Vigil Could Not Hold",
+      "lightWouldNotHoldTitle": "光未能守住",
+      "noProgressDiscarded": "沒有進度被捨棄。",
+      "detail": {
+        "currentPilgrimageClose": "目前的朝聖之路未能結束。",
+        "currentPilgrimageClear": "目前的朝聖之路未能清除。",
+        "pilgrimageStart": "朝聖之路未能開始。",
+        "savedPilgrimageMapUnreadable": "已保存的朝聖地圖無法讀取。",
+        "abandonmentHold": "放棄決定未能保存。",
+        "phialChoiceHold": "藥瓶選擇未能保存。",
+        "chosenWaystoneHold": "所選引路石未能保存。",
+        "clearedWaystoneHold": "已走過的引路石未能保存。",
+        "eventHold": "事件未能保存。",
+        "eventChoiceHold": "事件選擇未能保存。",
+        "treasureHold": "寶藏未能保存。",
+        "merchantStockHold": "商人貨物未能保存。",
+        "emptyLanternPurchaseHold": "空燈交易未能保存。",
+        "purchaseHold": "購買結果未能保存。",
+        "removedCardHold": "移除卡牌未能保存。",
+        "encounterFreeze": "戰鬥狀態未能封存。",
+        "standingBequestClear": "矗立石中的遺贈未能清除。",
+        "fallHold": "墜落結果未能保存。",
+        "shadeVictoryHold": "影之決鬥勝果未能保存。",
+        "finalVictoryHold": "最終勝果未能保存。",
+        "victoryRewardsHold": "勝利獎賞未能保存。",
+        "claimedRewardHold": "已領獎賞未能保存。",
+        "crownRelicsHold": "王冠遺物未能保存。",
+        "nextActHold": "下一幕未能保存。",
+        "bequestHold": "遺贈未能保存。",
+        "vigilRecord": "守夜未能記下這段朝聖之路。",
+        "completedRunClose": "已完成的朝聖之路未能結束。",
+        "dawnHold": "破曉未能保存。",
+        "dawnCursorHold": "破曉進度未能保存。",
+        "shadeDuelHold": "影之決鬥未能保存。",
+        "hollowPriceHold": "空燈代價未能保存。",
+        "heldHollowDestinationUnreadable": "已保存的空燈目的地無法讀取。",
+        "hollowDestinationHold": "空燈目的地未能保存。",
+        "lamplighterGiftsHold": "掌燈人的贈禮未能保存。",
+        "lamplighterGiftHold": "掌燈人的贈禮選擇未能保存。"
+      }
     },
     "rest": {
       "healedFloat": "+{hp} HP",
@@ -306,7 +407,9 @@
       "upgradedSub": "It gleams with new power.",
       "upgradedTitle": "Upgraded!",
       "restHealBtn": "休息 — 回復 {hp} 生命",
-      "hpFrac": "{cur} / {max} 生命"
+      "hpFrac": "{cur} / {max} 生命",
+      "temperCardTitle": "淬鍊一張牌",
+      "temperCardBody": "選擇一片牌加以強化。"
     },
     "reward": {
       "addCardRow": "Add a card to your deck",
@@ -336,7 +439,14 @@
       "addCard": "將一張牌加入牌庫",
       "offeredTakeOne": "{n} offered · take one",
       "goldAmount": "{n} Gold",
-      "chooseCardBody": "將一張牌加入牌庫——或跳過以保持精簡。"
+      "chooseCardBody": "將一張牌加入牌庫——或跳過以保持精簡。",
+      "replacePotion": "替換 {name}",
+      "discardNewPhial": "捨棄新藥瓶",
+      "phialRackFullTitle": "藥瓶架已滿",
+      "phialRackFullBody": "選擇要離架的一瓶。",
+      "bossTakeNone": "不取王冠",
+      "bossCrownTitle": "破璃之冠",
+      "bossCrownBody": "下一夜來臨前，選擇一件遺物。"
     },
     "rose": {
       "dormantPane": "Dormant Emberglass pane {n}",
@@ -349,7 +459,8 @@
       "unknownPane": "Unknown Emberglass pane {n}",
       "whisperLogTitle": "破曉所聞低語",
       "whisperLogTitleUpper": "破曉所聞低語",
-      "finalWhisperMark": "∞  最終低語於每次破曉歸來。"
+      "finalWhisperMark": "∞  最終低語於每次破曉歸來。",
+      "shardRecoveredStack": "{name}\n碎片已尋回"
     },
     "settings": {
       "audio": "音訊",
@@ -384,7 +495,8 @@
         "desc": "Remove a card from your deck forever.",
         "pickSub": "Cut the dead weight.",
         "pickTitle": "Remove a Card",
-        "title": "Card Removal"
+        "title": "Card Removal",
+        "confirmBody": "商人收下破碎的璃片。"
       },
       "greeting": "「黃金換榮耀，異鄉人。對注定之人——價錢公道。」",
       "leave": "離開商店",
@@ -445,7 +557,13 @@
       "fontLicences": "字型授權（OFL）",
       "components": "組件",
       "licenceTexts": "授權全文",
-      "themeLine": "灰璃守夜"
+      "themeLine": "灰璃守夜",
+      "footer": "© 2026 fol2 · 感謝你守住這場守夜",
+      "musicAttribution": "以 Suno 作曲",
+      "musicAttributionCount": "{count} 首樂曲 · 以 Suno 作曲",
+      "musicTracklistFallback": "彩繪琉璃曲目",
+      "sfxAttribution": "以 ElevenLabs 合成",
+      "sfxAttributionCount": "{count} 段音效 · 以 ElevenLabs 合成"
     },
     "omen": {
       "prefix": "兆示 - "
@@ -455,6 +573,23 @@
       "en": "English",
       "zhHant": "繁體中文",
       "deferNote": "將於下一畫面生效。"
+    },
+    "card": {
+      "type": {
+        "attack": "攻擊",
+        "curse": "詛咒",
+        "power": "能力",
+        "skill": "技巧",
+        "status": "狀態"
+      }
+    },
+    "rarity": {
+      "boss": "首領",
+      "common": "普通",
+      "rare": "稀有",
+      "special": "特殊",
+      "starter": "初始牌",
+      "uncommon": "罕見"
     }
   },
   "content": {
