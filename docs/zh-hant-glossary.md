@@ -19,13 +19,16 @@ remain unchanged.
 | Spire | 尖塔 | The destination and its regions. |
 | Lantern | 提燈 | The vessel that carries Embers. |
 | Lantern Art | 提燈術 | The once-per-turn power. |
+| Energy | 能量 | The resource spent to play cards. |
 | Kindle | 燃燼 | Burn a card away to feed the Lantern. |
 | Ember / Embers | 餘燼 | No plural suffix in Chinese. |
+| Cinder | 燼屑 | The unplayable status card. |
 | Emberglass | 餘燼琉璃 | The six panes and their Shards. |
 | Facet | 璃面 | One unit of structural integrity. |
 | Pane | 窗片 | One narrative Rose Window or Emberglass pane; never a combat Facet. Card metaphors may simply say 牌. |
 | Chip | 琢擊 | Damage a Facet directly. |
 | Shatter | 碎裂 | Break a full Facet gauge. |
+| Staggered | 踉蹌 | The state caused by Shatter. |
 | Ward | 護光 | Temporary protection; “Held Light” may remain 持光 as a proper item name. |
 | Smolder | 陰燃 | The transferable burning status. |
 | Fervor | 熾心 | Stacked inner fire that increases attack damage. |
@@ -35,6 +38,7 @@ remain unchanged.
 | Deed | 功績 | A lifetime accomplishment recorded by the Vigil. |
 | Boon | 恩賜 | The Lamplighter's starting gift. |
 | Omen | 凶兆 | An act-wide modifier. |
+| Hex | 咒印 | The curse card that costs health when drawn. |
 | Affix | 封號 | An elite enemy's title. |
 | Aspect | 面向 | A playable form. |
 | Shade | 影 / `{aspect}之影` | Use 影 in prose and the composed form for generated names. |
@@ -42,6 +46,7 @@ remain unchanged.
 | Relic | 遺物 | Persistent run equipment. |
 | Rose Window | 玫瑰窗 | The Vigil's six-pane memorial and map. |
 | Shard | 碎片 | A completed Emberglass quest token. |
+| Unplayable | 無法打出 | A card that cannot be played from hand. |
 | Lamplighter | 掌燈人 | The keeper who offers gifts. |
 | Hollow Lamplighter | 空燈掌燈人 | The quest character on the Unlit Way. |
 
