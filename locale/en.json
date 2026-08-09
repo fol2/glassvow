@@ -662,11 +662,13 @@
     "aspects": {
       "ashwarden": {
         "blurb": "Smoke given a shape. Lets the Smolder do the killing and kindles its own hand to feed the lantern. Slower, but it endures — and everything it touches burns.",
-        "name": "The Ashwarden"
+        "name": "The Ashwarden",
+        "nameBare": "Ashwarden"
       },
       "duskblade": {
         "blurb": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a versatile climber for any night.",
-        "name": "The Duskblade"
+        "name": "The Duskblade",
+        "nameBare": "Duskblade"
       }
     },
     "boons": {
@@ -1904,7 +1906,8 @@
           "smother": {
             "name": "Remembered Smother"
           }
-        }
+        },
+        "namePattern": "{aspect} Shade"
       },
       "duskblade": {
         "moves": {
@@ -1917,7 +1920,8 @@
           "spark": {
             "name": "First Spark, Last Light"
           }
-        }
+        },
+        "namePattern": "{aspect} Shade"
       }
     },
     "status": {

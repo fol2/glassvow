@@ -1452,7 +1452,7 @@ func _play_opening_ceremony() -> void:
 		var aspect_v: Variant = game.content.aspects[game.run.aspect]
 		if typeof(aspect_v) == TYPE_DICTIONARY:
 			var aspect_d: Dictionary = aspect_v
-			aspect_name = str(aspect_d.get("name", "")).trim_prefix("The ")
+			aspect_name = str(aspect_d.get("nameBare", aspect_d.get("name", "")))
 	for e: EnemyCombatant in game.cb.enemies:
 		var lines_v: Variant = e.def.get("dialogue")
 		if typeof(lines_v) != TYPE_ARRAY:

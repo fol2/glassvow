@@ -17,7 +17,8 @@ const CODE_EN: StringName = &"en"
 const CODE_ZH_HANT: StringName = &"zh-Hant"
 ## Only authored display copy may cross the locale → ContentDB boundary.
 const DISPLAY_LEAVES: Dictionary = {
-	"name": true, "text": true, "desc": true, "label": true, "sub": true,
+	"name": true, "nameBare": true, "namePattern": true,
+	"text": true, "desc": true, "label": true, "sub": true,
 	"bossName": true, "blurb": true, "inscription": true, "mode": true,
 	"deathDialogue": true, "resolved": true, "accepted": true, "final": true,
 	"huntInscription": true, "huntName": true, "bought": true, "death": true,

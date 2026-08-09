@@ -577,7 +577,7 @@ them, so the beams' job is the direction and not the brightness.
 ## 6. Tests and the purity gate
 
 `tests/test_arch.gd` already scans for banned tokens per path
-(`tests/test_arch.gd:56` (`_scan_file`)). Extend it with a second rule rather than
+(`tests/test_arch.gd:57` (`_scan_file`)). Extend it with a second rule rather than
 a second scanner:
 
 ```

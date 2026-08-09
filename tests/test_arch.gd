@@ -11,6 +11,7 @@ const _BANNED_WORDS: PackedStringArray = [
 	"Input",
 	"DisplayServer",
 	"OS",
+	"Locale",
 	"get_tree",
 ]
 
