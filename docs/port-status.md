@@ -87,8 +87,11 @@ M5/M6 — author it with the map concept brief).
   transform). Targeted cards drop on an enemy pane's rect; kindle/untargeted
   release above the hand line; failed drops snap back. Rules-gated
   `request_play`/`request_kindle` on the screen.
-- **M5c font**: NotoSansTC (variable, OFL bundled) as `gui/theme/custom_font`;
+- **M5c font**: NotoSansTC (variable, OFL bundled) as the runtime
+  `GlassStyle.theme()` default font;
   琉璃誓言 in the combat top bar; test asserts the four title glyphs shape.
+  Controls with an explicit Cinzel/Alegreya override are outside that default
+  chain; routing every display-face call site through the CJK fallback is #103.
   Music/SFX buses already existed from M0; audio assets = gate-time decision.
 - **Screenshot loop without the editor MCP**: `godot --path . --
   --shot=/tmp/x.png [--seed=N]` captures the combat screen after first paint.
@@ -117,7 +120,8 @@ M5/M6 — author it with the map concept brief).
 - Typed GDScript is **warnings-as-errors**: `str(v)` not `String(v)` for JSON
   Variants, `float(str(v))` for JSON floats, pull JSON arrays/dicts into typed
   locals before `append_array`; `floorf` not `floor`; explicit `return` per path.
-- Gate: `godot --headless --import` then `godot --headless -s res://tests/run_all.gd`.
+- Gate: `tools/check_imports.sh`, then `tools/check_scripts.sh`, then
+  `godot --headless -s res://tests/run_all.gd`.
   godot 4.7.1 is on PATH — the local `run_all` loop makes inline work fast for
   this parity-critical layer. Trunk flow: commit + push `main`; commit `.uid`,
   never touch `.godot/`.

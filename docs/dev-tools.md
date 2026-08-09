@@ -90,12 +90,21 @@ For a native iteration loop use `tools/live.sh start …`, then `shot`, `reload`
 `resize W H`, `key`, `click`, `drag` and `stop`. `resize` changes the existing
 Godot window, so it is the headed gate for a live shape change without rebuilding
 the current screen. Non-visual tools remain direct, honest
-commands: `tools/check_anchors.py`, `tools/check_web_anchors.py`, `godot
+commands: `tools/check_imports.sh`, `tools/check_anchors.py`,
+`tools/check_web_anchors.py`, `godot
 --headless -s res://tools/check_fracture.gd`, the windowed
 `res://tools/bench_actor_stage.gd` probe, and:
 
 ```bash
 godot --headless -s res://tools/probe_layout.gd -- --all [--act=N]
+```
+
+The #128 runtime-font proof also stays on the headed capture route. It renders
+an unoverridden `Label` through `GlassStyle.theme().default_font`, verifies the
+four title glyphs, captures, and exits:
+
+```bash
+tools/shot.sh --font-probe --shot=/tmp/glassvow-runtime-font.png
 ```
 
 Whole-run balance calibration is a CLI-only, domain simulation. The default

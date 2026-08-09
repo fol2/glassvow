@@ -214,6 +214,10 @@ static func grad_tex(colors: PackedColorArray, offsets: PackedFloat32Array,
 ## without per-node overrides.
 static func theme() -> Theme:
 	var t: Theme = Theme.new()
+	# Keep the default UI face in the runtime resource chain. A project-level
+	# custom font is resolved before cache-cold import has produced its fontdata,
+	# while this factory runs only after resources are ready.
+	t.default_font = face(NOTO_SANS_TC)
 	t.set_color("font_color", "Label", TEXT)
 	t.set_font_size("font_size", "Label", 15)
 	t.set_color("font_color", "Button", TEXT)

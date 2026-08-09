@@ -17,7 +17,10 @@ jobs:
           use-dotnet: false
       
       - name: Import assets
-        run: godot --headless --import
+        run: tools/check_imports.sh
+
+      - name: Test asset import gate failures
+        run: tools/test_check_imports.sh
       
       # `--check-only` exits 0 on every parse error and reports only on stderr,
       # so the loop that stood here could never fail. The script grades stderr

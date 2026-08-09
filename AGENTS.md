@@ -35,7 +35,7 @@ either commit. Measure on the running page; do not infer from the source.
 
 ```bash
 godot --version                          # must print 4.7.1.stable
-godot --headless --import                # asset import; must complete without errors
+tools/check_imports.sh                   # asset import; fails on stderr ERRORs or process status
 tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS)
 python3 tools/check_anchors.py           # doc file:line anchors still point where they claim

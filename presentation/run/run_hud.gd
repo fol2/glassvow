@@ -304,8 +304,8 @@ func _art_button(asset: String, art_side: int, button_side: int,
 	var button: Button = Button.new()
 	button.custom_minimum_size = Vector2(button_side, button_side)
 	button.tooltip_text = tip
-	# RunHud does not inherit GlassStyle.theme(); every art button carries
-	# its own lantern ring. Radius 9 matches _seat_style.
+	# RunHud inherits Main's default font, while every art button carries its own
+	# lantern ring. Radius 9 matches _seat_style.
 	button.add_theme_stylebox_override("focus",
 		GlassStyle.focus_ring(RunStyle.GOLD, 9))
 	button.add_theme_stylebox_override("normal", _seat_style(true))
