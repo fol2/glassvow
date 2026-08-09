@@ -44,7 +44,12 @@ const PERSISTENCE_DETAILS: Dictionary = {
 ## names are embedded in otherwise localised credit lines, so they do not need
 ## an exemption here.
 const ZH_HANT_ENGLISH_ALLOWLIST: Array[String] = [
+	# Language selectors display each language in its own script.
 	"ui.language.en",
+	"ui.language.zhHant",
+	# This value contains only a decorative glyph and an interpolation marker;
+	# there is no English lexical copy to translate.
+	"ui.end.unlock.header",
 ]
 
 ## Every visible Latin-script remainder is deliberate: genre/credit proper
@@ -422,7 +427,6 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 		if not en_value.is_empty() and zh_value.strip_edges().is_empty():
 			blank.append(key)
 		if en_value == zh_value and not en_value.is_empty() \
-				and _visible_ascii(en_value) \
 				and not ZH_HANT_ENGLISH_ALLOWLIST.has(key):
 			untranslated.append(key)
 		if _marker_multiset(en_value) != _marker_multiset(zh_value):
