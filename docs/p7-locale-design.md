@@ -276,6 +276,21 @@ Card rules text therefore stays one authored string per language; `RulesText`
 keeps styling it. P7.4 wires vocabulary keys into `RulesText`; P7.6 supplies
 zh-Hant tokens so highlighting still matches.
 
+### Live language transaction (P7.7)
+
+`Main` is the sole owner of a language change. `SettingsPanel` reports the
+requested catalogue; it does not mutate `Preferences`, `Locale` or `ContentDB`.
+Outside combat, Main persists the request, swaps `Locale`, hydrates content and
+rebuilds the exact current route before reopening Settings. Rebuilding rather
+than refreshing replaces constructor-cached map captions and run chrome too.
+
+During combat, Main persists the request but leaves both `Locale` and
+`ContentDB` on the fight's existing language. Settings says that the request
+takes effect on the next screen; the next route constructor activates and
+hydrates it once. A later request supersedes an earlier pending one. Neither
+path reloads the game or changes run state, map state, RNG, IDs or the v2 save
+shape, and returning to English restores the baked content catalogue exactly.
+
 ---
 
 ## 4. Wave boundaries (P7.3–P7.5)

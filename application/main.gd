@@ -13,9 +13,13 @@ var content: ContentDB
 var game: GlassvowGame
 var _map: WorldMap
 var _screen: CombatScreen = null
-## Settings may change Locale while a fight still owns copied CardViews. Keep
-## ContentDB on that fight's language until the next route is built atomically.
+## A fight owns one complete language. Settings may persist a request during
+## combat, but Locale and ContentDB change together only at the next route seam.
 var _content_hydration_pending: bool = false
+var _pending_language: StringName = &""
+## Exact current route constructor. `_route_run()` cannot infer unresolved
+## rest/event/shop routes from durable state without dropping back to the map.
+var _route_rebuilder: Callable = Callable()
 var _map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
 var _reward_screen: RewardScreen = null
@@ -95,7 +99,25 @@ func _apply_content_hydration() -> int:
 func _apply_pending_content_hydration() -> int:
 	if not _content_hydration_pending:
 		return 0
+	if not _pending_language.is_empty():
+		if not Locale.active.set_language(_pending_language):
+			return 0
+		_pending_language = &""
 	return _apply_content_hydration()
+
+
+func _remember_route(rebuilder: Callable) -> void:
+	_route_rebuilder = rebuilder
+
+
+func _rebuild_active_route() -> void:
+	var rebuild: Callable = _route_rebuilder
+	if rebuild.is_valid():
+		rebuild.call()
+	elif game != null:
+		_route_run()
+	else:
+		_show_title()
 
 
 func _ready() -> void:
@@ -629,6 +651,7 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 
 
 func _show_title() -> void:
+	_remember_route(_show_title)
 	_apply_pending_content_hydration()
 	var saved: RunState = SaveService.load_run(content)
 	var choices: Array[Dictionary] = []
@@ -678,6 +701,7 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 
 
 func _show_embark() -> void:
+	_remember_route(_show_embark)
 	var saved: bool = SaveService.load_run(content) != null
 	var screen: EmbarkScreen = EmbarkScreen.new(
 		content.aspects,
@@ -727,6 +751,7 @@ func _on_begin_anew(id: String) -> void:
 
 
 func _show_vigil(open_rose: bool = false) -> void:
+	_remember_route(_show_vigil.bind(open_rose))
 	var screen: VigilScreen = VigilScreen.new(_vigil, content, _shape, open_rose, _sfx_bus)
 	screen.back_requested.connect(_show_title)
 	screen.cue_requested.connect(func(cue: StringName) -> void: _music.play(cue))
@@ -745,32 +770,37 @@ func _show_credits() -> void:
 	_show_overlay(screen)
 
 
-func _show_settings() -> void:
-	var screen: SettingsPanel = SettingsPanel.new(Preferences.active, _run_over, _sfx_bus)
+func _show_settings(focus_language: bool = false) -> void:
+	var deferred: bool = _screen != null and _content_hydration_pending
+	var screen: SettingsPanel = SettingsPanel.new(
+		Preferences.active, _run_over, _sfx_bus, deferred)
 	screen.set_shape(_shape)
 	screen.closed.connect(_close_overlay)
 	screen.reset_requested.connect(_confirm_reset)
 	screen.language_changed.connect(_on_language_changed)
 	_show_overlay(screen)
+	if focus_language:
+		screen.focus_language()
 
 
-## Live re-render: close settings and rebuild the title (or the current run
-## route). Mid-combat keeps the fight; the next screen after combat picks up
-## the new catalogue.
-func _on_language_changed(_code: StringName) -> void:
-	_content_hydration_pending = true
+## Main owns the language transaction. Non-combat activates, hydrates and
+## rebuilds one route atomically; combat persists the request but keeps its
+## entire Locale/ContentDB pair until the next route constructor.
+func _on_language_changed(code: StringName) -> void:
+	if code != Locale.CODE_EN and code != Locale.CODE_ZH_HANT:
+		return
+	Preferences.active.set_language(String(code))
+	_pending_language = code
+	_content_hydration_pending = code != Locale.active.code
+	if not _content_hydration_pending:
+		_pending_language = &""
 	_close_overlay()
 	if _screen != null:
-		# Combat stays wholly in its existing content language. Its copied
-		# CardViews and any later draw both keep reading the same live catalogue.
+		_show_settings(true)
 		return
 	_apply_pending_content_hydration()
-	if game != null and not _run_over:
-		# Rebuild map / run chrome by re-showing the map if present.
-		if _map_screen != null:
-			_map_screen.refresh(game.run)
-		return
-	_show_title()
+	_rebuild_active_route()
+	_show_settings(true)
 
 
 func _confirm_reset() -> void:
@@ -889,6 +919,7 @@ func _route_run() -> void:
 # ---------------------------------------------------------------- map
 
 func _show_map() -> void:
+	_remember_route(_show_map)
 	_apply_pending_content_hydration()
 	if game != null and game.run != null:
 		_transitions.wipe()
@@ -1130,6 +1161,7 @@ func _finish_node() -> void:
 
 
 func _show_rest() -> void:
+	_remember_route(_show_rest)
 	var heal_amount: int = rest_heal_amount(game.run.player.max_hp,
 		game.rewards.rest_heal_fraction(game.run))
 	var can_upgrade: bool = game.run.player.deck.any(func(card: CardInst) -> bool:
@@ -1176,6 +1208,7 @@ func _on_rest_upgrade(uid_text: String) -> void:
 
 
 func _show_event() -> void:
+	_remember_route(_show_event)
 	var event_id: String = str(game.run.quest_scratch.get("eventNode", ""))
 	if event_id.is_empty():
 		event_id = game.rewards.roll_event(game.run)
@@ -1255,6 +1288,7 @@ func _on_event_pick(id: String, kind: String) -> void:
 
 
 func _show_treasure() -> void:
+	_remember_route(_show_treasure)
 	var claim_v: Variant = game.run.quest_scratch.get("treasureClaim")
 	var claim: Dictionary
 	if typeof(claim_v) == TYPE_DICTIONARY:
@@ -1271,6 +1305,7 @@ func _show_treasure() -> void:
 
 
 func _show_act4_entrance() -> void:
+	_remember_route(_show_act4_entrance)
 	var screen: ThresholdScreen = ThresholdScreen.new(_shape, _sfx_bus)
 	screen.threshold_touched.connect(_transitions.bloom)
 	screen.vigil_requested.connect(func() -> void: _show_vigil())
@@ -1278,6 +1313,7 @@ func _show_act4_entrance() -> void:
 
 
 func _show_shop() -> void:
+	_remember_route(_show_shop)
 	var stock_v: Variant = game.run.quest_scratch.get("shopStock")
 	var stock: Dictionary
 	if typeof(stock_v) == TYPE_DICTIONARY:
@@ -1586,6 +1622,7 @@ func _on_result_continue() -> void:
 # ---------------------------------------------------------------- rewards and acts
 
 func _show_pending_reward() -> void:
+	_remember_route(_show_pending_reward)
 	var pending: Dictionary = game.run.pending_reward
 	var rewards: Dictionary = pending["rewards"]
 	var taken: Dictionary = pending["taken"]
@@ -1684,6 +1721,7 @@ func _has_pending_boss_relic() -> bool:
 
 
 func _show_boss_relic() -> void:
+	_remember_route(_show_boss_relic)
 	var offer_v: Variant = game.run.quest_scratch.get("bossRelicOffer")
 	var offer: Array[String] = []
 	if typeof(offer_v) == TYPE_ARRAY:
@@ -1752,6 +1790,7 @@ func _on_boss_relic_chosen(id: String) -> void:
 # ---------------------------------------------------------------- terminal and durable side routes
 
 func _show_run_end() -> void:
+	_remember_route(_show_run_end)
 	_apply_pending_content_hydration()
 	var pending: Dictionary = game.run.pending_run_end
 	var outcome: String = str(pending.get("outcome", "abandon"))
@@ -2011,6 +2050,7 @@ func _unlock_dawn_copy(id: String) -> String:
 ## route being rebuilt around a 0.72s timer. drainEndQueue's shape exactly
 ## (end.js:134-151): show, persist, only then the next.
 func _show_dawn() -> void:
+	_remember_route(_show_dawn)
 	var dawn: Dictionary = game.run.pending_dawn
 	var events: Array = dawn["events"]
 	var cursor: int = int(float(str(dawn.get("cursor", 0))))
@@ -2069,6 +2109,7 @@ func _has_pending_monument() -> bool:
 
 
 func _show_monument() -> void:
+	_remember_route(_show_monument)
 	if typeof(game.run.monument) != TYPE_DICTIONARY:
 		_finish_node()
 		return
@@ -2112,6 +2153,7 @@ func _on_monument_choice(id: String) -> void:
 
 
 func _show_hollow() -> void:
+	_remember_route(_show_hollow)
 	var pending: Dictionary = game.run.pending_hollow
 	var meetings: Array = content.quests["hollowLamplighter"].get("meetings", [])
 	var step: int = clampi(int(float(str(pending.get("meeting", 0)))), 0, meetings.size() - 1)
@@ -2172,6 +2214,7 @@ func _show_hollow_route() -> void:
 
 
 func _show_lamplighter() -> void:
+	_remember_route(_show_lamplighter)
 	var offer_v: Variant = game.run.quest_scratch.get("lamplighterOffer")
 	var offer: Dictionary
 	if typeof(offer_v) == TYPE_DICTIONARY:

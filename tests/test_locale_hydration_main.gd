@@ -7,6 +7,7 @@ const MAIN_PATH: String = "res://application/main.gd"
 
 static func run(fails: Array[String]) -> void:
 	_main_source_seams(fails)
+	_combat_latest_request_wins(fails)
 	_combat_defer_and_card_consumer(fails)
 
 
@@ -22,7 +23,7 @@ static func _main_source_seams(fails: Array[String]) -> void:
 	var run_end: String = _function_body(source, "_show_run_end")
 	if not ready.contains("_apply_content_hydration()"):
 		fails.append("Main hydration seam: boot does not apply the active content catalogue")
-	var pending_at: int = language.find("_content_hydration_pending = true")
+	var pending_at: int = language.find("_pending_language = code")
 	var combat_guard_at: int = language.find("if _screen != null")
 	if pending_at < 0 or combat_guard_at < 0 or pending_at > combat_guard_at:
 		fails.append("Main hydration seam: language change is not deferred before the combat guard")
@@ -38,7 +39,101 @@ static func _main_source_seams(fails: Array[String]) -> void:
 		fails.append("Main hydration seam: run end reads content before applying pending content")
 
 
+## A player can change their mind while the same fight is still alive. The
+## second Settings request cancels the first pending catalogue; the route seam
+## must therefore remain wholly English rather than applying stale zh-Hant.
+static func _combat_latest_request_wins(fails: Array[String]) -> void:
+	var previous_locale: Locale = Locale.active
+	var previous_preferences: Preferences = Preferences.active
+	Preferences.active = Preferences.new()
+	Preferences.active.language = "en"
+	Locale.active = Locale.new(Locale.CODE_EN)
+	var content: ContentDB = ContentDB.load_full()
+	var baked: String = _catalogue_fingerprint(content)
+	var ids: String = _id_fingerprint(content)
+	var run: RunState = RunState.new_run(content, 104125, "latest-language-request")
+	run.player.deck.append(CardInst.new(run.next_uid(), &"aegis"))
+	run.player.relics.append("duskmirror")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	var main: Main = Main.new()
+	main.content = content
+	main.game = game
+	main._transitions = TransitionLayer.new()
+	main._transitions.instant = true
+	main.add_child(main._transitions)
+	main._music = MusicBus.new()
+	main.add_child(main._music)
+	main._sfx_bus = SfxBus.new()
+	main.add_child(main._sfx_bus)
+	var screen: CombatScreen = CombatScreen.new(game)
+	screen.seq.instant = true
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	tree.root.add_child(screen)
+	screen.start_encounter(["sporeling"], "normal", "latest language request")
+	main._screen = screen
+	run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
+	var save_before: String = JSON.stringify(run.to_save_dict())
+	var rng_before: int = run.rng_state()
+	var english_act: String = str(content.acts[run.act].get("name", ""))
+
+	main._show_settings()
+	var first: Button = _button_with_text(main._modal, "English")
+	if first == null:
+		fails.append("Main hydration latest request: English control was not reachable")
+		_cleanup(main, screen, tree)
+		Locale.active = previous_locale
+		Preferences.active = previous_preferences
+		return
+	first.pressed.emit()
+	if Preferences.active.language != "zh-Hant" \
+			or Locale.active.code != Locale.CODE_EN \
+			or main.get("_content_hydration_pending") != true \
+			or not _node_has_text(main._modal, "Takes effect on the next screen."):
+		fails.append("Main hydration latest request: first combat request was not deferred")
+	var second: Button = _button_with_text(main._modal, "繁體中文")
+	if second == null:
+		fails.append("Main hydration latest request: pending zh-Hant control was not reachable")
+	else:
+		second.pressed.emit()
+
+	if Preferences.active.language != "en" \
+			or Locale.active.code != Locale.CODE_EN \
+			or main.get("_content_hydration_pending") != false:
+		fails.append("Main hydration latest request: second request did not cancel the first")
+	if not main._modal is SettingsPanel \
+			or _button_with_text(main._modal, "English") == null \
+			or _node_has_text(main._modal, "Takes effect on the next screen."):
+		fails.append("Main hydration latest request: cancelled request still shows defer copy")
+	if _catalogue_fingerprint(content) != baked \
+			or JSON.stringify(run.to_save_dict()) != save_before \
+			or run.rng_state() != rng_before \
+			or _id_fingerprint(content) != ids:
+		fails.append("Main hydration latest request: combat cancellation changed state or content")
+
+	main._close_overlay()
+	main._show_run_end()
+	var run_end: RunEndScreen = main._route_screen as RunEndScreen
+	var bequests: Array[Dictionary] = main._bequest_choices()
+	if Locale.active.code != Locale.CODE_EN \
+			or _catalogue_fingerprint(content) != baked \
+			or run_end == null \
+			or str(run_end._stats.get("act_name", "")) != english_act \
+			or not _choice_has_name(bequests, "card", "Cathedral Glass") \
+			or not _choice_has_name(bequests, "relic", "Duskmirror"):
+		fails.append("Main hydration latest request: next route applied the stale first request")
+	if JSON.stringify(run.to_save_dict()) != save_before \
+			or run.rng_state() != rng_before \
+			or _id_fingerprint(content) != ids:
+		fails.append("Main hydration latest request: next route changed save, RNG, or IDs")
+	_cleanup(main, screen, tree)
+	Locale.active = previous_locale
+	Preferences.active = previous_preferences
+
+
 static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
+	var previous_preferences: Preferences = Preferences.active
+	Preferences.active = Preferences.new()
+	Preferences.active.language = "en"
 	var baked: ContentDB = ContentDB.load_full()
 	var baked_fingerprint: String = _catalogue_fingerprint(baked)
 	var baked_ids: String = _id_fingerprint(baked)
@@ -71,15 +166,21 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 	if not _card_shows(existing, str(existing_en["name"]), str(existing_en["text"])):
 		fails.append("Main hydration integration: opening CardView missed baked name/text")
 
-	Locale.active.set_language(Locale.CODE_ZH_HANT)
-	# Keep a distinctive value in the requested tree so the bequest copy cannot
-	# pass merely because it retained the English bake.
-	var requested: Dictionary = Locale.active.get("_requested")
-	var requested_content: Dictionary = requested["content"]
-	var requested_relics: Dictionary = requested_content["relics"]
-	var requested_duskmirror: Dictionary = requested_relics["duskmirror"]
-	requested_duskmirror["name"] = "暮色鏡"
-	main._on_language_changed(Locale.CODE_ZH_HANT)
+	main._show_settings()
+	var settings: SettingsPanel = main._modal as SettingsPanel
+	var language_toggle: Button = _button_with_text(settings, "English")
+	if language_toggle == null:
+		fails.append("Main hydration integration: combat language control was not reachable")
+	else:
+		language_toggle.pressed.emit()
+	if Locale.active.code != Locale.CODE_EN:
+		fails.append("Main hydration integration: combat switched dynamic chrome early")
+	if Preferences.active.language != "zh-Hant":
+		fails.append("Main hydration integration: combat request was not persisted")
+	if not main._modal is SettingsPanel \
+			or not _node_has_text(main._modal, "Takes effect on the next screen.") \
+			or _button_with_text(main._modal, "繁體中文") == null:
+		fails.append("Main hydration integration: deferred Settings copy was not honest")
 	if str(baked.cards["strike"]["name"]) != "Edge":
 		fails.append("Main hydration integration: combat language toggle changed live ContentDB early")
 	if not _card_shows(existing, str(existing_en["name"]), str(existing_en["text"])):
@@ -133,11 +234,31 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 		fails.append("Main hydration integration: route zh-Hant -> en did not restore catalogue/IDs")
 	_cleanup(main, screen, tree)
 	Locale.active = Locale.new()
+	Preferences.active = previous_preferences
 
 
 static func _choice_has_name(choices: Array[Dictionary], kind: String, name: String) -> bool:
 	for choice: Dictionary in choices:
 		if str(choice.get("kind", "")) == kind and str(choice.get("name", "")) == name:
+			return true
+	return false
+
+
+static func _button_with_text(root: Node, text: String) -> Button:
+	if root == null:
+		return null
+	for node: Node in root.find_children("", "Button", true, false):
+		var button: Button = node
+		if button.text == text:
+			return button
+	return null
+
+
+static func _node_has_text(root: Node, text: String) -> bool:
+	if root == null:
+		return false
+	for node: Node in root.find_children("", "Label", true, false):
+		if (node as Label).text == text:
 			return true
 	return false
 
