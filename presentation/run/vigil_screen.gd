@@ -216,7 +216,7 @@ func _show_deeds() -> void:
 	_deed_list.visible = true
 	if _rose != null:
 		_rose.visible = false
-	_panel.custom_minimum_size.x = 560
+	_sync_panel_width()
 	_style_tabs(false)
 	cue_requested.emit(&"vigil")
 
@@ -226,7 +226,7 @@ func _show_rose() -> void:
 		return
 	_deed_list.visible = false
 	_rose.visible = true
-	_panel.custom_minimum_size.x = 720
+	_sync_panel_width()
 	_style_tabs(true)
 	cue_requested.emit(&"roseWindow")
 
@@ -242,8 +242,7 @@ func set_shape(stage_shape: StringName) -> void:
 		return
 	shape = stage_shape
 	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
-	_panel.custom_minimum_size.x = 350 if phone else (
-		720 if _rose != null and _rose.visible else 560)
+	_sync_panel_width()
 	_deed_list.custom_minimum_size = Vector2(302 if phone else 500,
 		440 if shape == &"phone-portrait" else (215 if phone else 459))
 	for index: int in range(_rows.size()):
@@ -253,6 +252,12 @@ func set_shape(stage_shape: StringName) -> void:
 		art.custom_minimum_size = Vector2.ONE * (40 if phone else 48)
 	if _rose != null:
 		_rose.set_shape(shape)
+
+
+func _sync_panel_width() -> void:
+	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
+	_panel.custom_minimum_size.x = 350 if phone else (
+		720 if _rose != null and _rose.visible else 560)
 
 
 func _unhandled_key_input(event: InputEvent) -> void:

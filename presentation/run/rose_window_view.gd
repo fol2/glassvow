@@ -26,7 +26,9 @@ var _window_slot: Control
 var _window: Control
 var _pane_copies: Array[Control] = []
 var _pane_buttons: Array[Button] = []
+var _detail_panel: PanelContainer
 var _detail: Label
+var _log_scroll: ScrollContainer
 var _log: VBoxContainer
 
 
@@ -88,10 +90,10 @@ func _build() -> void:
 	for button: Button in _pane_buttons:
 		_window.move_child(button, _window.get_child_count() - 1)
 
-	var detail_panel: PanelContainer = PanelContainer.new()
-	detail_panel.custom_minimum_size = Vector2(620, 50)
-	detail_panel.add_theme_stylebox_override("panel", _detail_style())
-	add_child(detail_panel)
+	_detail_panel = PanelContainer.new()
+	_detail_panel.custom_minimum_size = Vector2(620, 50)
+	_detail_panel.add_theme_stylebox_override("panel", _detail_style())
+	add_child(_detail_panel)
 	_detail = Label.new()
 	_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_detail.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -99,21 +101,21 @@ func _build() -> void:
 	_detail.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	_detail.add_theme_font_size_override("font_size", 12)
 	_detail.add_theme_color_override("font_color", Color("#c8c6d4"))
-	detail_panel.add_child(_detail)
+	_detail_panel.add_child(_detail)
 
-	var log_scroll: ScrollContainer = ScrollContainer.new()
-	log_scroll.custom_minimum_size = Vector2(620, 92)
-	log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_log_scroll = ScrollContainer.new()
+	_log_scroll.custom_minimum_size = Vector2(620, 92)
+	_log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	# Without this the view never travels with keyboard focus: Godot moves focus
 	# to a control whether or not it is on screen, so a focused entry below the
 	# fold is reachable and invisible (issue #72, found on the boon screen).
-	log_scroll.follow_focus = true
-	log_scroll.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	add_child(log_scroll)
+	_log_scroll.follow_focus = true
+	_log_scroll.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	add_child(_log_scroll)
 	_log = VBoxContainer.new()
 	_log.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_log.add_theme_constant_override("separation", 4)
-	log_scroll.add_child(_log)
+	_log_scroll.add_child(_log)
 	_build_log()
 	_refresh_selection()
 	set_shape(shape)
@@ -240,6 +242,10 @@ func set_shape(stage_shape: StringName) -> void:
 	shape = stage_shape
 	var diameter: float = 300.0 if shape == &"phone-portrait" \
 		else (250.0 if shape == &"phone-landscape" else 410.0)
+	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
+	var copy_width: float = diameter if phone else 620.0
+	_detail_panel.custom_minimum_size.x = copy_width
+	_log_scroll.custom_minimum_size.x = copy_width
 	var scale_factor: float = diameter / 410.0
 	_window_slot.custom_minimum_size = Vector2.ONE * diameter
 	_window.size = Vector2.ONE * 410.0
