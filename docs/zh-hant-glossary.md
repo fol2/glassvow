@@ -40,11 +40,14 @@ remain unchanged.
 
 ## Retained technical and proper names
 
-`Alegreya`, `Cinzel`, `Noto Sans TC`, `Google`, `OFL`, `Suno`, `ElevenLabs`, and
-the `A` key label remain in Latin script. Their surrounding player-facing
-sentences are still translated. `ui.language.en` deliberately remains
-`English`; this is the only catalogue value allowed to be byte-identical to
-English solely for its displayed language name.
+`Alegreya`, `Cinzel`, `Noto Sans TC`, `Google`, `OFL`, `Suno`, `ElevenLabs`,
+`Godot`, `roguecardv2`, `fol2`, the `Roguelite` genre label, and the `A` key
+label remain in Latin script. The status descriptions also retain their literal
+`N` magnitude token. Their surrounding player-facing sentences are still
+translated. `ui.language.en` deliberately remains `English`; this is the only
+catalogue value allowed to be byte-identical to English solely for its displayed
+language name. `tests/test_locale.gd` holds the exhaustive path allowlist so a
+new Latin-script remainder must be reviewed explicitly.
 
 ## Mechanical invariants
 
