@@ -81,6 +81,13 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"content.aspects.duskblade.name": "暮刃",
 	"content.omens.eighthOmen.name": "第八凶兆",
 	"content.variants.ownShade1.name": "墜落之影",
+	"content.status.ritual.desc": "每回合開始時獲得 N 層熾心。",
+	"ui.menu.abandonConfirmBody": "這段朝聖之路將告終；守夜會留下你所得的一切。",
+	"ui.menu.beginAnewBody": "新的朝聖之路開始前，目前這段旅程會記作放棄。",
+	"ui.map.unlitBody": "此處所藏仍是未知——但首次點亮會獲得金幣賞金。",
+	"ui.omen.prefix": "凶兆",
+	"ui.event.chooseCardSub": "仍有一頁泛着微光。",
+	"ui.rose.selectedPane": "已選的餘燼琉璃窗片",
 }
 
 
@@ -101,6 +108,7 @@ static func run(fails: Array[String]) -> void:
 	_dialog_shells(fails)
 	_persistence_calls_and_shell(fails)
 	_zh_hant_catalogue_contract(fails)
+	_title_wordmark_locale(fails)
 
 
 static func _english_seed(fails: Array[String]) -> void:
@@ -517,3 +525,25 @@ static func _first_paths(paths: Array[String]) -> String:
 	for index: int in range(mini(paths.size(), 8)):
 		shown.append(paths[index])
 	return ", ".join(shown)
+
+
+static func _title_wordmark_locale(fails: Array[String]) -> void:
+	var context: Dictionary = {"variant": "title"}
+	var en: ChoiceScreen = ChoiceScreen.new("GLASSVOW", "", [], context)
+	_check(fails, en._wordmark != null and en._wordmark.visible,
+		"English title no longer uses the exact authored raster")
+	_check(fails, en.get("_wordmark_label") == null,
+		"English title gained a duplicate text wordmark")
+	en.free()
+	var zh: ChoiceScreen = ChoiceScreen.new("琉璃誓言", "", [], context)
+	var label_v: Variant = zh.get("_wordmark_label")
+	var label: Label = label_v if label_v is Label else null
+	_check(fails, zh._wordmark != null and not zh._wordmark.visible,
+		"zh-Hant title still paints the English raster")
+	_check(fails, label != null and label.text == "琉璃誓言",
+		"zh-Hant title does not paint its catalogue wordmark")
+	if label != null:
+		var font: Font = label.get_theme_font("font")
+		_check(fails, font != null and font.has_char("誓".unicode_at(0)),
+			"zh-Hant title wordmark cannot shape representative glyph 誓")
+	zh.free()
