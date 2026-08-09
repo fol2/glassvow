@@ -3,6 +3,11 @@ extends RefCounted
 ## interpolate, and the default `active` stand-in needs no main.
 
 
+static func _check(fails: Array[String], ok: bool, what: String) -> void:
+	if not ok:
+		fails.append("locale: %s" % what)
+
+
 static func run(fails: Array[String]) -> void:
 	_english_seed(fails)
 	_derived_display_seed(fails)
@@ -12,6 +17,7 @@ static func run(fails: Array[String]) -> void:
 	_unknown_language_rejected(fails)
 	_default_active(fails)
 	_remaining_run_screen_call_sites(fails)
+	_dialog_shells(fails)
 
 
 static func _english_seed(fails: Array[String]) -> void:
@@ -203,3 +209,62 @@ static func _function_body(source: String, name: String) -> String:
 		return ""
 	var finish: int = source.find("\nfunc ", start + 1)
 	return source.substr(start) if finish < 0 else source.substr(start, finish - start)
+
+
+static func _dialog_shells(fails: Array[String]) -> void:
+	var source: String = FileAccess.get_file_as_string("res://application/main.gd")
+	var expected_keys: Array[String] = [
+		"ui.menu.beginAnew", "ui.menu.beginAnewBody", "ui.menu.keepClimbing",
+		"ui.menu.leaveSpireTitle", "ui.menu.leaveSpireBody",
+		"ui.common.leave", "ui.common.stay", "ui.menu.abandonConfirmTitle",
+		"ui.menu.abandonConfirmBody", "ui.menu.abandonRun",
+	]
+	for key: String in expected_keys:
+		_check(fails, source.contains('Locale.active.t("%s")' % key),
+			"Main dialog seam does not consume %s" % key)
+
+	var previous: Locale = Locale.active
+	Locale.active = Locale.new(Locale.CODE_EN)
+	var main: Main = Main.new()
+	main._sfx_bus = SfxBus.new()
+	main.add_child(main._sfx_bus)
+	main._transitions = TransitionLayer.new()
+	main.add_child(main._transitions)
+	main._confirm_abandon()
+	var abandon: ChoiceScreen = main._modal as ChoiceScreen
+	_check(fails, abandon != null, "abandon confirmation did not open as an overlay")
+	if abandon != null:
+		_check_dialog(fails, abandon, "ABANDON RUN?",
+			"This pilgrimage will end. The Vigil will keep what was earned.",
+			["Abandon Run", "Keep Climbing"], "no", "Abandon Run", "abandon")
+	main._close_overlay()
+	main._show_run_menu()
+	var menu: RunMenuPanel = main._modal as RunMenuPanel
+	_check(fails, menu != null, "run menu did not open")
+	if menu != null:
+		menu.quit_requested.emit()
+	var leave: ChoiceScreen = main._choice_screen as ChoiceScreen
+	_check(fails, leave != null, "Leave Spire confirmation did not open")
+	if leave != null:
+		_check_dialog(fails, leave, "LEAVE THE SPIRE?", "The lantern keeps your place.",
+			["Leave", "Stay"], "no", "Leave", "leave")
+	Locale.active = previous
+
+
+static func _check_dialog(fails: Array[String], screen: ChoiceScreen,
+		title: String, body: String, actions: Array[String], cancel: String,
+		first: String, label: String) -> void:
+	var labels: Array[String] = []
+	for node: Node in screen.find_children("", "Label", true, false):
+		var text: String = str((node as Label).text)
+		if not text.is_empty():
+			labels.append(text)
+	var buttons: Array[String] = []
+	for node: Node in screen.find_children("", "Button", true, false):
+		buttons.append(str((node as Button).text))
+	_check(fails, labels.has(title), "%s title changed" % label)
+	_check(fails, labels.has(body), "%s body changed" % label)
+	_check(fails, buttons == actions, "%s action order changed: %s" % [label, buttons])
+	_check(fails, screen._cancel_id == cancel, "%s cancel action changed" % label)
+	_check(fails, screen._first_button != null and screen._first_button.text == first,
+		"%s initial focus target changed" % label)

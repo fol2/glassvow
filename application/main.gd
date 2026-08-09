@@ -700,10 +700,10 @@ func _on_embark_begin(aspect: int, vow: int) -> void:
 	if SaveService.load_run(content) == null:
 		_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 	else:
-		_show_choice("BEGIN ANEW",
-			"The current pilgrimage will be recorded as abandoned before a new one begins.",
-			[{"id": "begin", "label": "Begin Anew"},
-				{"id": "back", "label": "Keep Climbing", "quiet": true}],
+		_show_choice(Locale.active.t("ui.menu.beginAnew").to_upper(),
+			Locale.active.t("ui.menu.beginAnewBody"),
+			[{"id": "begin", "label": Locale.active.t("ui.menu.beginAnew")},
+				{"id": "back", "label": Locale.active.t("ui.menu.keepClimbing"), "quiet": true}],
 			_on_begin_anew, {"cancel": "back"})
 
 
@@ -924,9 +924,10 @@ func _show_run_menu() -> void:
 	)
 	menu.quit_requested.connect(func() -> void:
 		_close_overlay()
-		_show_choice("LEAVE THE SPIRE?", "The lantern keeps your place.",
-			[{"id": "yes", "label": "Leave"},
-				{"id": "no", "label": "Stay", "quiet": true}],
+		_show_choice(Locale.active.t("ui.menu.leaveSpireTitle"),
+			Locale.active.t("ui.menu.leaveSpireBody"),
+			[{"id": "yes", "label": Locale.active.t("ui.common.leave")},
+				{"id": "no", "label": Locale.active.t("ui.common.stay"), "quiet": true}],
 			func(id: String) -> void:
 				if id == "yes":
 					_quit_game(),
@@ -942,12 +943,12 @@ func _confirm_abandon() -> void:
 	_close_overlay()
 	# Typed local, not an inline literal — see `_confirm_reset`.
 	var choices: Array[Dictionary] = [
-		{"id": "yes", "label": "Abandon Run"},
-		{"id": "no", "label": "Keep Climbing", "quiet": true},
+		{"id": "yes", "label": Locale.active.t("ui.menu.abandonRun")},
+		{"id": "no", "label": Locale.active.t("ui.menu.keepClimbing"), "quiet": true},
 	]
 	var screen: Control = ChoiceScreenType.new(
-		"ABANDON RUN?",
-		"This pilgrimage will end. The Vigil will keep what was earned.",
+		Locale.active.t("ui.menu.abandonConfirmTitle").to_upper(),
+		Locale.active.t("ui.menu.abandonConfirmBody"),
 		choices,
 		{"shape": String(_shape), "cancel": "no", "overlay": true},
 		_sfx_bus)
