@@ -718,10 +718,10 @@ func _on_begin_anew(id: String) -> void:
 	game = GlassvowGame.new(content, saved)
 	game.run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
 	if not _vigil.commit_run(game.run, "abandon", content) or not SaveService.store_vigil(_vigil):
-		_show_save_error("The current pilgrimage could not be closed.")
+		_show_save_error("ui.persistence.detail.currentPilgrimageClose")
 		return
 	if not SaveService.clear_run(game.run.run_id):
-		_show_save_error("The current pilgrimage could not be cleared.")
+		_show_save_error("ui.persistence.detail.currentPilgrimageClear")
 		return
 	_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 
@@ -803,9 +803,11 @@ func _on_reset_choice(id: String) -> void:
 	_show_title()
 
 
-func _show_save_error(message: String) -> void:
-	_show_choice("THE LIGHT WOULD NOT HOLD", message + "\nNo progress was discarded.",
-		[{"id": "retry", "label": "Retry"}, {"id": "title", "label": "Title", "quiet": true}],
+func _show_save_error(detail_key: String) -> void:
+	_show_choice(Locale.active.t("ui.persistence.lightWouldNotHoldTitle"),
+		Locale.active.t(detail_key) + "\n" + Locale.active.t("ui.persistence.noProgressDiscarded"),
+		[{"id": "retry", "label": Locale.active.t("ui.common.retry")},
+			{"id": "title", "label": Locale.active.t("ui.common.title"), "quiet": true}],
 		_on_save_error_choice)
 
 
@@ -842,7 +844,7 @@ func _new_run(profile: Dictionary = {}) -> void:
 	if SaveService.store(game.run):
 		_route_run()
 	else:
-		_show_save_error("The pilgrimage could not be started.")
+		_show_save_error("ui.persistence.detail.pilgrimageStart")
 
 
 func _continue_run(saved: RunState) -> void:
@@ -851,7 +853,7 @@ func _continue_run(saved: RunState) -> void:
 		return
 	var restored: WorldMap = WorldMap.from_dict(saved.map)
 	if restored == null:
-		_show_save_error("The saved pilgrimage map is unreadable.")
+		_show_save_error("ui.persistence.detail.savedPilgrimageMapUnreadable")
 		return
 	game = GlassvowGame.new(content, saved)
 	_map = restored
@@ -964,7 +966,7 @@ func _on_abandon_choice(id: String) -> void:
 	if SaveService.store(game.run):
 		_show_run_end()
 	else:
-		_show_save_error("The abandonment could not be held.")
+		_show_save_error("ui.persistence.detail.abandonmentHold")
 
 
 func _show_run_deck() -> void:
@@ -1026,7 +1028,7 @@ func _on_potion_menu_choice(action: String, slot: int) -> void:
 	elif not game.rules.use_potion(game.run, null, slot):
 		return
 	if not SaveService.store(game.run):
-		_show_save_error("The phial choice could not be held.")
+		_show_save_error("ui.persistence.detail.phialChoiceHold")
 		return
 	_close_overlay()
 	if _run_hud != null:
@@ -1094,7 +1096,7 @@ func _on_node_chosen(i: int) -> void:
 	var hollow: bool = game.quests.stage_hollow_meeting(game.run, n, was_unlit)
 	game.run.map = _map.to_dict()
 	if not SaveService.store(game.run):
-		_show_save_error("The chosen waystone could not be held.")
+		_show_save_error("ui.persistence.detail.chosenWaystoneHold")
 		return
 	if hollow:
 		_show_hollow()
@@ -1124,7 +1126,7 @@ func _finish_node() -> void:
 	if SaveService.store(game.run):
 		_route_run()
 	else:
-		_show_save_error("The cleared waystone could not be held.")
+		_show_save_error("ui.persistence.detail.clearedWaystoneHold")
 
 
 func _show_rest() -> void:
@@ -1179,7 +1181,7 @@ func _show_event() -> void:
 		event_id = game.rewards.roll_event(game.run)
 		game.run.quest_scratch["eventNode"] = event_id
 		if not SaveService.store(game.run):
-			_show_save_error("The event could not be held.")
+			_show_save_error("ui.persistence.detail.eventHold")
 			return
 	var event: Dictionary = content.events[event_id].duplicate(true)
 	var rows: Array = event.get("choices", [])
@@ -1209,7 +1211,7 @@ func _on_event_choice(choice_text: String, event_id: String) -> void:
 	if SaveService.store(game.run):
 		_show_event_pick(pending)
 	else:
-		_show_save_error("The event choice could not be held.")
+		_show_save_error("ui.persistence.detail.eventChoiceHold")
 
 
 func _show_event_pick(pending: Dictionary) -> void:
@@ -1261,7 +1263,7 @@ func _show_treasure() -> void:
 		claim = game.rewards.claim_treasure(game.run)
 		game.run.quest_scratch["treasureClaim"] = claim
 		if not SaveService.store(game.run):
-			_show_save_error("The treasure could not be held.")
+			_show_save_error("ui.persistence.detail.treasureHold")
 			return
 	var screen: TreasureScreen = TreasureScreen.new(claim, content, _shape, _sfx_bus)
 	screen.continue_requested.connect(_finish_node)
@@ -1284,7 +1286,7 @@ func _show_shop() -> void:
 		stock = game.rewards.gen_shop(game.run)
 		game.run.quest_scratch["shopStock"] = stock
 		if not SaveService.store(game.run):
-			_show_save_error("The merchant's stock could not be held.")
+			_show_save_error("ui.persistence.detail.merchantStockHold")
 			return
 	var quest_item: Dictionary = game.quests.usurper_offer(game.run)
 	var screen: ShopScreen = ShopScreen.new(
@@ -1320,7 +1322,7 @@ func _on_shop_choice(id: String) -> void:
 		if game.quests.buy_usurper(game.run) and SaveService.store(game.run):
 			_refresh_shop()
 		else:
-			_show_save_error("The empty lantern purchase could not be held.")
+			_show_save_error("ui.persistence.detail.emptyLanternPurchaseHold")
 		return
 	var stock: Dictionary = game.run.quest_scratch["shopStock"]
 	if id == "remove":
@@ -1352,7 +1354,7 @@ func _on_shop_choice(id: String) -> void:
 	if SaveService.store(game.run):
 		_refresh_shop()
 	else:
-		_show_save_error("The purchase could not be held.")
+		_show_save_error("ui.persistence.detail.purchaseHold")
 
 
 func _on_shop_remove(uid_text: String) -> void:
@@ -1367,7 +1369,7 @@ func _on_shop_remove(uid_text: String) -> void:
 	if SaveService.store(game.run):
 		_refresh_shop()
 	else:
-		_show_save_error("The removed card could not be held.")
+		_show_save_error("ui.persistence.detail.removedCardHold")
 
 
 # ---------------------------------------------------------------- combat
@@ -1381,7 +1383,7 @@ func _prepare_encounter(n: MapNode) -> void:
 	game.run.pending_combat = n.type
 	game.run.pending_enemy_ids = enemies
 	if not SaveService.store(game.run):
-		_show_save_error("The encounter could not be frozen.")
+		_show_save_error("ui.persistence.detail.encounterFreeze")
 		return
 	_resume_pending_combat()
 
@@ -1390,7 +1392,7 @@ func _resume_pending_combat() -> void:
 	if game.run.pending_quest_id == "ownShade" and _vigil.last_fall != null:
 		_vigil.last_fall = null
 		if not SaveService.store_vigil(_vigil):
-			_show_save_error("The standing bequest could not be cleared.")
+			_show_save_error("ui.persistence.detail.standingBequestClear")
 			return
 	var enemies: Array[String] = []
 	for id_v: Variant in game.run.pending_enemy_ids:
@@ -1488,7 +1490,7 @@ func _on_combat_over(result: String) -> void:
 		game.run.pending_enemy_ids = null
 		game.run.pending_run_end = {"outcome": "death"}
 		if not SaveService.store(game.run):
-			_show_save_error("The fall could not be held.")
+			_show_save_error("ui.persistence.detail.fallHold")
 			return
 		_route_run()
 		return
@@ -1507,14 +1509,14 @@ func _on_combat_over(result: String) -> void:
 		_map.clear_current()
 		game.run.map = _map.to_dict()
 		if not SaveService.store(game.run):
-			_show_save_error("The shade victory could not be held.")
+			_show_save_error("ui.persistence.detail.shadeVictoryHold")
 			return
 		_route_run()
 		return
 	if node.type == "boss" and game.run.act == 2:
 		game.run.pending_run_end = {"outcome": "win"}
 		if not SaveService.store(game.run):
-			_show_save_error("The final victory could not be held.")
+			_show_save_error("ui.persistence.detail.finalVictoryHold")
 			return
 		_route_run()
 		return
@@ -1544,7 +1546,7 @@ func _on_combat_over(result: String) -> void:
 		"slain_enemy": slain_enemy,
 	}
 	if not SaveService.store(game.run):
-		_show_save_error("The victory rewards could not be held.")
+		_show_save_error("ui.persistence.detail.victoryRewardsHold")
 		return
 	_route_run()
 
@@ -1633,7 +1635,7 @@ func _on_reward_claimed(what: StringName, id: String) -> void:
 				game.rewards.gain_relic(game.run, id)
 	taken[key] = true
 	if not SaveService.store(game.run):
-		_show_save_error("The claimed reward could not be held.")
+		_show_save_error("ui.persistence.detail.claimedRewardHold")
 
 
 func _show_potion_replace(id: String) -> void:
@@ -1662,7 +1664,7 @@ func _on_potion_replace(choice: String, id: String) -> void:
 	if SaveService.store(game.run):
 		_show_pending_reward()
 	else:
-		_show_save_error("The phial choice could not be held.")
+		_show_save_error("ui.persistence.detail.phialChoiceHold")
 
 
 func _on_reward_finished() -> void:
@@ -1672,7 +1674,7 @@ func _on_reward_finished() -> void:
 	if SaveService.store(game.run):
 		_route_run()
 	else:
-		_show_save_error("The cleared waystone could not be held.")
+		_show_save_error("ui.persistence.detail.clearedWaystoneHold")
 
 
 func _has_pending_boss_relic() -> bool:
@@ -1691,7 +1693,7 @@ func _show_boss_relic() -> void:
 		offer = game.rewards.roll_boss_relics(game.run)
 		game.run.quest_scratch["bossRelicOffer"] = offer.duplicate()
 		if not SaveService.store(game.run):
-			_show_save_error("The crown relics could not be held.")
+			_show_save_error("ui.persistence.detail.crownRelicsHold")
 			return
 	var choices: Array[Dictionary] = []
 	for id: String in offer:
@@ -1744,7 +1746,7 @@ func _on_boss_relic_chosen(id: String) -> void:
 				omen_icon = load(icon_path) as Texture2D
 		_transitions.act_plate(act_name, omen_name, omen_tone, omen_icon)
 	else:
-		_show_save_error("The next act could not be held.")
+		_show_save_error("ui.persistence.detail.nextActHold")
 
 
 # ---------------------------------------------------------------- terminal and durable side routes
@@ -1889,7 +1891,7 @@ func _on_bequest_chosen(id: String) -> void:
 	if SaveService.store(game.run):
 		_show_run_end()
 	else:
-		_show_save_error("The bequest could not be held.")
+		_show_save_error("ui.persistence.detail.bequestHold")
 
 
 func _on_terminal_commit(_id: String) -> void:
@@ -1899,7 +1901,7 @@ func _on_terminal_commit(_id: String) -> void:
 	var before_quests: Dictionary = _vigil.quests.duplicate(true)
 	var before_whispers: int = _vigil.whispers
 	if not _vigil.commit_run(game.run, outcome, content) or not SaveService.store_vigil(_vigil):
-		_show_save_error("The Vigil could not record this pilgrimage.")
+		_show_save_error("ui.persistence.detail.vigilRecord")
 		return
 	if outcome != "win":
 		var run_id: String = game.run.run_id
@@ -1908,7 +1910,7 @@ func _on_terminal_commit(_id: String) -> void:
 			game = null
 			_show_title()
 		else:
-			_show_save_error("The completed run could not be closed.")
+			_show_save_error("ui.persistence.detail.completedRunClose")
 		return
 
 	# The kicker already speaks the register ("A JOURNEY REVEALED"), so the
@@ -1988,7 +1990,7 @@ func _on_terminal_commit(_id: String) -> void:
 	if SaveService.store(game.run):
 		_show_dawn()
 	else:
-		_show_save_error("Dawn could not be held.")
+		_show_save_error("ui.persistence.detail.dawnHold")
 
 
 func _unlock_dawn_copy(id: String) -> String:
@@ -2031,7 +2033,7 @@ func _on_dawn_advance(screen: DawnScreen) -> void:
 	var next: int = int(float(str(dawn.get("cursor", 0)))) + 1
 	dawn["cursor"] = next
 	if not SaveService.store(game.run):
-		_show_save_error("The Dawn cursor could not be held.")
+		_show_save_error("ui.persistence.detail.dawnCursorHold")
 		return
 	var events: Array = dawn["events"]
 	if next < events.size():
@@ -2058,7 +2060,7 @@ func _finish_dawn() -> void:
 		game = null
 		_show_title()
 	else:
-		_show_save_error("The completed run could not be closed.")
+		_show_save_error("ui.persistence.detail.completedRunClose")
 
 
 func _has_pending_monument() -> bool:
@@ -2100,13 +2102,13 @@ func _on_monument_choice(id: String) -> void:
 	game.run.pending_enemy_ids = ["ownShade%d" % tier]
 	game.run.pending_quest_id = "ownShade"
 	if not SaveService.store(game.run):
-		_show_save_error("The shade duel could not be held.")
+		_show_save_error("ui.persistence.detail.shadeDuelHold")
 		return
 	_vigil.last_fall = null
 	if SaveService.store_vigil(_vigil):
 		_resume_pending_combat()
 	else:
-		_show_save_error("The standing bequest could not be cleared.")
+		_show_save_error("ui.persistence.detail.standingBequestClear")
 
 
 func _show_hollow() -> void:
@@ -2130,7 +2132,7 @@ func _on_hollow_choice(id: String) -> void:
 					str(result.get("message", "")))
 			return
 		if not SaveService.store(game.run):
-			_show_save_error("The Hollow price could not be held.")
+			_show_save_error("ui.persistence.detail.hollowPriceHold")
 			return
 		_show_hollow()
 		return
@@ -2142,7 +2144,7 @@ func _stage_hollow_exit() -> void:
 	var node: MapNode = _map.current()
 	if node == null or node.id != str(pending.get("nodeId")) \
 			or node.type != str(pending.get("type")):
-		_show_save_error("The held Hollow destination is unreadable.")
+		_show_save_error("ui.persistence.detail.heldHollowDestinationUnreadable")
 		return
 	game.run.pending_hollow = null
 	if node.is_combat():
@@ -2157,7 +2159,7 @@ func _stage_hollow_exit() -> void:
 	if SaveService.store(game.run):
 		_show_hollow_route()
 	else:
-		_show_save_error("The Hollow destination could not be held.")
+		_show_save_error("ui.persistence.detail.hollowDestinationHold")
 
 
 func _show_hollow_route() -> void:
@@ -2166,7 +2168,7 @@ func _show_hollow_route() -> void:
 		"rest": _show_rest()
 		"shop": _show_shop()
 		"event": _show_event()
-		_: _show_save_error("The held Hollow destination is unreadable.")
+		_: _show_save_error("ui.persistence.detail.heldHollowDestinationUnreadable")
 
 
 func _show_lamplighter() -> void:
@@ -2190,7 +2192,7 @@ func _show_lamplighter() -> void:
 		offer = {"boons": ids}
 		game.run.quest_scratch["lamplighterOffer"] = offer
 		if not SaveService.store(game.run):
-			_show_save_error("The Lamplighter's gifts could not be held.")
+			_show_save_error("ui.persistence.detail.lamplighterGiftsHold")
 			return
 	var aspect: Dictionary = content.aspects[game.run.aspect]
 	var boons: Array = offer.get("boons", [])
@@ -2219,7 +2221,7 @@ func _on_lamplighter_confirmed(boon_id: String, art_id: StringName) -> void:
 	if SaveService.store(game.run):
 		_show_map()
 	else:
-		_show_save_error("The Lamplighter's gift could not be held.")
+		_show_save_error("ui.persistence.detail.lamplighterGiftHold")
 
 
 ## Route kinds are stable mechanics IDs. Only their display parameter crosses
