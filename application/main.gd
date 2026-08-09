@@ -970,9 +970,10 @@ func _show_run_deck() -> void:
 	var choices: Array[Dictionary] = []
 	for card: CardInst in game.run.player.deck:
 		choices.append(_card_choice(card, "card:%d" % card.uid, true))
-	choices.append({"id": "close", "label": "Close", "quiet": true})
+	choices.append({"id": "close", "label": Locale.active.t("ui.menu.close"), "quiet": true})
 	var deck: Control = ChoiceScreenType.new(
-		"DECK", "%d panes carried" % game.run.player.deck.size(),
+		Locale.active.t("ui.hud.deckOverlayTitle"),
+		Locale.active.t("ui.hud.deckOverlayCount", {"count": game.run.player.deck.size()}),
 		choices, {"shape": String(_shape), "cancel": "close", "overlay": true},
 		_sfx_bus)
 	deck.connect("chosen", func(_id: String) -> void: _close_overlay())
@@ -999,11 +1000,11 @@ func _show_potion_menu(slot: int) -> void:
 	var choices: Array[Dictionary] = [
 		{
 			"id": "use",
-			"label": "Use",
+			"label": Locale.active.t("ui.common.use"),
 			"disabled": definition.get("combatOnly", false),
 		},
-		{"id": "toss", "label": "Toss it", "quiet": true},
-		{"id": "close", "label": "Close", "quiet": true},
+		{"id": "toss", "label": Locale.active.t("ui.hud.tossPotion"), "quiet": true},
+		{"id": "close", "label": Locale.active.t("ui.menu.close"), "quiet": true},
 	]
 	var menu: Control = ChoiceScreenType.new(
 		str(definition.get("name", id)),
