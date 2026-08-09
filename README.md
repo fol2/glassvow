@@ -7,11 +7,12 @@ A Godot 4.7.1 reimplementation of **Glassvow**, the web-based roguelite deckbuil
 ```bash
 godot --version                          # must print 4.7.1.stable
 godot --headless --import                # import .tscn/.gd assets; verify no errors
-for f in $(git ls-files '*.gd' | grep -v '^addons/'); do
-  godot --headless --check-only -s "$f" || exit 1   # parse + warnings-as-errors gate
-done
+tools/check_scripts.sh                   # tracked parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0
 ```
+
+The full script sweep uses `git ls-files`; stage new `.gd` files before running
+it. Use positional paths only when intentionally checking a narrower set.
 
 ## Status
 

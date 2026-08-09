@@ -54,13 +54,24 @@ Run these three from the repo root, in order. All must pass before pushing:
 ```bash
 godot --version                          # confirm 4.7.1.stable
 godot --headless --import                # import all .tscn/.gd; no errors
-for f in $(git ls-files '*.gd' | grep -v '^addons/'); do
-  godot --headless --check-only -s "$f" || exit 1   # parse + warnings-as-errors gate
-done
+tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 with PASS
 ```
 
-CI runs this same gate on every push to verify nothing is broken.
+CI runs this same gate on every push to verify nothing is broken — literally the
+same script, called from `.github/workflows/ci.yml`, so local and CI cannot
+drift.
+
+**Never grade `--check-only` by its exit code.** It writes diagnostics to stderr
+and exits 0 whatever it found; measured on 4.7.1, a duplicate `var`, an
+unterminated string, a type mismatch and an untyped `var` all exited 0. The
+`|| exit 1` loop that stood here until 2026-08-06 therefore never failed once.
+`tools/check_scripts.sh` greps stderr for `SCRIPT ERROR` / `Failed to load
+script`, while separately failing on a non-zero process status so invocation
+failures and crashes cannot pass. Warnings-as-errors is genuinely reaching the
+check — `project.godot` sets four warning classes to level 2 and an untyped
+`var x = 1` prints `(Warning treated as error.)` — it is enforced by that grep,
+not by the exit code.
 
 ## 6. Visual Inspection
 

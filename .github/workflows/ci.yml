@@ -19,11 +19,14 @@ jobs:
       - name: Import assets
         run: godot --headless --import
       
+      # `--check-only` exits 0 on every parse error and reports only on stderr,
+      # so the loop that stood here could never fail. The script grades stderr
+      # and process status; AGENTS.md calls the same gate so local and CI agree.
       - name: Check GDScript syntax
-        run: |
-          git ls-files '*.gd' | grep -v '^addons/' | while read file; do
-            godot --headless --check-only -s "$file" || exit 1
-          done
+        run: tools/check_scripts.sh
+
+      - name: Test GDScript gate failures
+        run: tools/test_check_scripts.sh
       
       - name: Run tests
         run: godot --headless -s res://tests/run_all.gd
