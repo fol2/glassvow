@@ -53,7 +53,7 @@ Run these three from the repo root, in order. All must pass before pushing:
 
 ```bash
 godot --version                          # confirm 4.7.1.stable
-godot --headless --import                # import all .tscn/.gd; no errors
+tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
 tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 with PASS
 ```
@@ -134,4 +134,3 @@ Dictionaries compare natively against the JSON parity fixtures and survive seria
 - **M8:** Decision gate (parity suite green; ship the full port, or return to web).
 
 **Authority:** User (fol2) signs off on concept briefs (especially M6 map concept), high-level PRs, and the M8 decision. Otherwise, reviewers drive their lane.
-

@@ -17,6 +17,13 @@ static func run(fails: Array[String]) -> void:
 	if ui_font != null:
 		for ch: String in ["琉", "璃", "誓", "言"]:
 			_check(fails, ui_font.has_char(ch.unicode_at(0)), "font has glyph %s" % ch)
+	var ui_theme: Theme = GlassStyle.theme()
+	_check(fails, ui_theme.default_font == GlassStyle.face(GlassStyle.NOTO_SANS_TC),
+		"runtime theme supplies NotoSansTC as the default UI font")
+	if ui_theme.default_font != null:
+		for ch: String in ["琉", "璃", "誓", "言"]:
+			_check(fails, ui_theme.default_font.has_char(ch.unicode_at(0)),
+				"runtime theme default has glyph %s" % ch)
 	# Display faces must fall back to NotoSansTC so 繁中 never tofu.
 	var cinzel: Font = GlassStyle.face(GlassStyle.CINZEL_500)
 	var alegreya: Font = GlassStyle.face(GlassStyle.ALEGREYA_400)
@@ -57,6 +64,14 @@ static func run(fails: Array[String]) -> void:
 	# ---- screen drives a real fight headless (instant drain)
 	var game: GlassvowGame = GlassvowGame.new(content, rs)
 	var composition: Main = Main.new()
+	_check(fails, composition.theme != null
+		and composition.theme.default_font == GlassStyle.face(GlassStyle.NOTO_SANS_TC),
+		"shipping Main owns the runtime default UI font")
+	var inherited_label: Label = Label.new()
+	composition.add_child(inherited_label)
+	var inherited_font: Font = inherited_label.get_theme_default_font()
+	_check(fails, inherited_font != null and inherited_font.has_char("琉".unicode_at(0)),
+		"Main descendant resolves the runtime NotoSansTC default")
 	composition.game = game
 	rs.pending_quest_id = "paleOnes"
 	_check(fails, composition._combat_music("normal") == &"paleOnes",

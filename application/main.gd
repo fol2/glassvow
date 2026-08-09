@@ -74,6 +74,13 @@ var _settle: float = 0.0
 var _transitions: TransitionLayer
 
 
+func _init() -> void:
+	# Install the default UI face on the shipping composition root after imported
+	# resources exist. Routed screens may refine this theme; unthemed descendants
+	# such as RunHud still inherit the same NotoSansTC default.
+	theme = GlassStyle.theme()
+
+
 static func rest_heal_amount(max_hp: int) -> int:
 	return int(roundf(float(max_hp) * REST_HEAL_FRAC))
 
@@ -113,6 +120,7 @@ func _ready() -> void:
 	# godot --path . -- --act=2                  (dress fight/map in act 2's scenery)
 	# tools/shot.sh --resume --shot=...          (exercise the durable router)
 	# tools/shot.sh --fight=… --settle=3 --shot=…  (photograph it at rest)
+	# tools/shot.sh --font-probe --shot=/tmp/font.png  (runtime default font)
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var lab_flag: String = ""
@@ -132,6 +140,7 @@ func _ready() -> void:
 	# to measure rather than to argue.
 	var show_map: bool = false
 	var show_dawn_bench: bool = false
+	var show_font_probe: bool = false
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -187,6 +196,8 @@ func _ready() -> void:
 			show_map = true
 		elif arg == "--dawn":
 			show_dawn_bench = true
+		elif arg == "--font-probe":
+			show_font_probe = true
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	# `--shape=` means two different things to a screen and to the layout bench.
@@ -214,6 +225,11 @@ func _ready() -> void:
 	# A capture must photograph the destination, not the ceremony over it.
 	_transitions.instant = shot_path != ""
 	add_child(_transitions)
+	if show_font_probe:
+		_show_runtime_font_probe()
+		if shot_path != "":
+			_capture_and_quit(shot_path)
+		return
 	if studio:
 		# The material bench: one card, four layer pickers, no game state. It
 		# takes --zoom for the PANEL's scale only; the card has its own size
@@ -376,6 +392,24 @@ func _quit_game() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_quit_game()
+
+
+## A headed proof of the shipping root's default font. The Label carries no font
+## override: its resolved face can only come from Main.theme.
+func _show_runtime_font_probe() -> void:
+	var ground: ColorRect = ColorRect.new()
+	ground.color = GlassStyle.NIGHT_BOT
+	ground.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ground.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(ground)
+	var label: Label = Label.new()
+	label.text = "琉璃誓言"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 72)
+	label.add_theme_color_override("font_color", GlassStyle.TEXT)
+	label.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(label)
 
 
 ## Wait, then photograph, then quit.

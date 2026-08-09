@@ -169,8 +169,8 @@ same from the command line, and `--shot=PATH` captures. Captures must be run
 **windowed** — headless has no viewport texture and the run hangs rather than
 failing.
 
-The gate, from the repo root: `godot --headless --import`, then
-`godot --headless --check-only -s <file>` per changed `.gd`, then
+The gate, from the repo root: `tools/check_imports.sh`, then
+`tools/check_scripts.sh`, then
 `godot --headless -s res://tests/run_all.gd`. All green as of this handoff.
 
 ## 9. Ownership

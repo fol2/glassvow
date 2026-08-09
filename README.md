@@ -6,7 +6,7 @@ A Godot 4.7.1 reimplementation of **Glassvow**, the web-based roguelite deckbuil
 
 ```bash
 godot --version                          # must print 4.7.1.stable
-godot --headless --import                # import .tscn/.gd assets; verify no errors
+tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
 tools/check_scripts.sh                   # tracked parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0
 ```
