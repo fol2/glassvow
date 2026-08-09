@@ -1545,92 +1545,92 @@
     "quests": {
       "eighthOmen": {
         "floorEchoes": [
-          "// THE PANE WATCHES //",
-          "// EIGHT IS NOT A NUMBER //",
-          "// CARRY THE WRONG LIGHT UPWARD //",
-          "// THE CROWN IS A MASK //"
+          "// 璃窗凝視 //",
+          "// 八並非數字 //",
+          "// 攜錯誤之光向上 //",
+          "// 王冠只是一副面具 //"
         ],
-        "inscription": "Reach dawn beneath the Eighth Omen.",
-        "mode": "Gate",
-        "name": "The Eighth Omen",
-        "resolved": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR."
+        "inscription": "在第八凶兆籠罩下抵達破曉。",
+        "mode": "門檻",
+        "name": "第八凶兆",
+        "resolved": "第八凶兆從來不是凶兆。它是一扇門投下的影。"
       },
       "hollowLamplighter": {
-        "inscription": "Pay the Hollow Lamplighter five prices along the Unlit Way.",
+        "inscription": "沿未燃之路，向空燈掌燈人付出五重代價。",
         "meetings": [
           {
-            "accepted": "The next three embers belong to the hollow lantern.",
-            "ask": "Your lantern is noisy. Give me the next three embers it catches.",
-            "cannot": "Promise the embers now. The lantern will pay before you do.",
-            "paid": "Six panes were carried away from a window no wall could hold."
+            "accepted": "接下來三點餘燼，歸於空燈。",
+            "ask": "你的提燈太吵。把它接住的三點餘燼交給我。",
+            "cannot": "現在便許下餘燼。提燈會先於你付清。",
+            "paid": "六片璃面曾從一扇無牆可承的窗中被帶走。"
           },
           {
-            "ask": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
-            "cannot": "Your purse is warm, but not warm enough.",
-            "paid": "The Pale Ones watch the paths that point above the crown."
+            "ask": "金幣記得每一隻手。讓一百六十枚忘記你的手。",
+            "cannot": "你的錢囊尚暖，卻還不夠暖。",
+            "paid": "蒼白眾凝望着指向王冠之上的路。"
           },
           {
-            "ask": "The Spire counts the vessel. Give me twelve measures of yours.",
-            "cannot": "I will not hollow you below thirty. Return with a larger vessel.",
-            "paid": "Your standing dead have seen the stair above the Sovereign."
+            "ask": "尖塔清點容器。把你的十二分交給我。",
+            "cannot": "我不會把你挖空至三十以下。換一副更大的容器再來。",
+            "paid": "你站立而死的前身，已見過永恆君王之上的階梯。"
           },
           {
-            "ask": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
-            "cannot": "You have spent the gift already. Bring me one that is still yours.",
-            "paid": "The empty lantern is the token that purchases an audience with the mask."
+            "ask": "第一位守望者曾贈你恩賜。我要那份贈禮，不要你的感激。",
+            "cannot": "你已花掉那份贈禮。帶一份仍屬於你的來。",
+            "paid": "空燈就是購得面具覲見的信物。"
           },
           {
-            "ask": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
-            "cannot": "One heartbeat is enough. Refusal is the only poverty left.",
-            "paid": "Light the panes. The door will know you."
+            "ask": "最後代價：只留一記心跳在這提燈裏。其餘全歸黑暗。",
+            "cannot": "一記心跳已足夠。如今只剩拒絕才算貧乏。",
+            "paid": "點亮璃面。門會認得你。"
           }
         ],
-        "mode": "Trail",
-        "name": "The Hollow Lamplighter"
+        "mode": "旅跡",
+        "name": "空燈掌燈人"
       },
       "ownShade": {
-        "final": "We were never climbing out. We were carrying light to the lock.",
+        "final": "我們從未向外攀爬。我們一直把光送往鎖孔。",
         "fragments": [
-          "I remember the stone. You walked away before I stopped calling.",
-          "Each climber leaves a shape behind. The Spire has learned to wear ours.",
-          "Above the Sovereign there is no dawn — only a door pretending to be the sky."
+          "我記得那塊石。你轉身離去時，我仍未停止呼喚。",
+          "每位朝聖者都留下一道形影。尖塔已學會披上我們的模樣。",
+          "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。"
         ],
-        "inscription": "Defeat the self that remembers falling. Three shades must fall.",
-        "mode": "Trail",
-        "name": "Your Own Shade"
+        "inscription": "擊敗那個銘記墜落的自己。三道影必須倒下。",
+        "mode": "旅跡",
+        "name": "自身之影"
       },
       "paleOnes": {
-        "huntInscription": "Defeat three pale foes and follow the cold motes they leave behind.",
-        "huntName": "Hunt the Pale Ones",
-        "inscription": "Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour.",
-        "mode": "Trail",
-        "name": "The Pale Ones",
+        "huntInscription": "擊敗三名蒼白之敵，追隨它們留下的寒冷光塵。",
+        "huntName": "狩獵蒼白眾",
+        "inscription": "狩獵蒼白眾。從忘卻色彩的琉璃中收集九粒光塵。",
+        "mode": "旅跡",
+        "name": "蒼白眾",
         "progress": [
-          "No mote answers the Lens.",
-          "The first pale mote chills the lantern."
+          "沒有光塵回應透鏡。",
+          "第一粒蒼白光塵令提燈生寒。"
         ]
       },
       "unreadablePage": {
-        "inscription": "Win five dawns carrying the Unreadable Page.",
-        "mode": "Trail",
-        "name": "The Unreadable Page",
+        "inscription": "攜無法辨讀之頁贏得五次破曉。",
+        "mode": "旅跡",
+        "name": "無法辨讀之頁",
         "pages": [
-          "FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
-          "SECOND PAGE — Pale figures carried the shards down so the thing above could not follow.",
-          "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended.",
-          "FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.",
-          "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown."
+          "第一頁——六片璃面從同一團火中切下，於第一次守夜前散落各處。",
+          "第二頁——蒼白身影把碎片帶往下方，使上方之物無從追隨。",
+          "第三頁——一名朝聖者站着死去，卻在頂點本應終結之處看見階梯。",
+          "第四頁——永恆君王取來一盞空燈，在鎖上披起王者形貌。",
+          "第五頁——玫瑰窗是一幅地圖，不是紀念碑。將它點亮，再望向王冠之上。"
         ]
       },
       "usurper": {
-        "bought": "Now the summit knows what you carry.",
-        "death": "The mask is broken. Look above.",
-        "inscription": "Carry the lantern with no flame to the summit and unmask the Usurper.",
-        "itemName": "A Lantern with No Flame",
-        "itemText": "Cold glass. No wick. The merchant will not say who left it.",
-        "mode": "Gate",
-        "name": "The Usurper",
-        "poor": "Cold goods, warm price. Come back carrying a dawn's worth of gold."
+        "bought": "如今，頂點知曉你攜着何物。",
+        "death": "面具已碎。往上看。",
+        "inscription": "攜無焰提燈前往頂點，揭穿篡位者的面具。",
+        "itemName": "無焰提燈",
+        "itemText": "冰冷琉璃。沒有燈芯。商人不肯說是誰留下它。",
+        "mode": "門檻",
+        "name": "篡位者",
+        "poor": "貨冷，價暖。帶着足以買下一次破曉的金幣再來。"
       }
     },
     "relics": {
