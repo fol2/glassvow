@@ -70,7 +70,7 @@ func _build() -> void:
 	_panel.add_child(column)
 
 	var title: Label = Label.new()
-	title.text = "TREASURE"
+	title.text = Locale.active.t("ui.treasure.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	title.add_theme_font_size_override("font_size", 26)
@@ -126,7 +126,7 @@ func _open() -> void:
 	for child: Node in _actions.get_children():
 		_actions.remove_child(child)
 		child.queue_free()
-	_actions.add_child(_button("Continue", _continue))
+	_actions.add_child(_button(Locale.active.t("ui.treasure.continue"), _continue))
 
 
 func _reward_copy() -> String:
@@ -135,13 +135,16 @@ func _reward_copy() -> String:
 		var id: String = str(relic_v)
 		var relic: Dictionary = _content.relics.get(id, {})
 		var tone: Color = Color.from_string(str(relic.get("tone", "")), RunStyle.GOLD)
-		return "You claim [color=#%s]%s[/color] — [i]%s[/i]" % [
-			tone.to_html(false), str(relic.get("name", id)), str(relic.get("text", ""))]
+		return Locale.active.t("ui.treasure.relicClaimPlain", {
+			"tone": tone.to_html(false),
+			"name": str(relic.get("name", id)),
+			"text": str(relic.get("text", "")),
+		})
 	var gold: int = maxi(0, int(float(str(_claim.get("gold", 0)))))
 	if gold > 0:
-		return "Only coins remain — [color=#%s]+%d gold[/color]." % [
-			RunStyle.GOLD.to_html(false), gold]
-	return "The chest lies empty."
+		return Locale.active.t("ui.treasure.coinsOnly", {
+			"tone": RunStyle.GOLD.to_html(false), "gold": gold})
+	return Locale.active.t("ui.treasure.empty")
 
 
 func _continue() -> void:
