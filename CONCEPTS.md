@@ -609,6 +609,27 @@ be driven without an editor.
 
 ---
 
+## Localisation
+
+### Language transaction
+The player-facing activation that makes a selected language current by
+synchronising its dynamic UI catalogue, authored-content overlay, and exact
+routed-screen reconstruction as one presentation unit.
+
+A selection records the Pending language immediately. A fight defers the
+Language transaction until its next route boundary; each new selection replaces
+the pending target, and selecting the Active language again cancels it.
+
+### Active language
+The one language whose dynamic UI catalogue and live authored-content
+projection are allowed to render the current route together.
+
+### Pending language
+The latest selected target waiting for a safe route boundary while the Active
+language deliberately continues to own the current fight.
+
+---
+
 ## The player's resources
 
 ### Pile
