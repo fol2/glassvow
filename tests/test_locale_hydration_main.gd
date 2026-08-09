@@ -19,6 +19,7 @@ static func _main_source_seams(fails: Array[String]) -> void:
 	var route: String = _function_body(source, "_route_run")
 	var title: String = _function_body(source, "_show_title")
 	var map: String = _function_body(source, "_show_map")
+	var run_end: String = _function_body(source, "_show_run_end")
 	if not ready.contains("_apply_content_hydration()"):
 		fails.append("Main hydration seam: boot does not apply the active content catalogue")
 	var pending_at: int = language.find("_content_hydration_pending = true")
@@ -33,6 +34,8 @@ static func _main_source_seams(fails: Array[String]) -> void:
 		fails.append("Main hydration seam: title constructs before applying pending content")
 	if not _before(map, "_apply_pending_content_hydration()", "WorldMapScreen.new"):
 		fails.append("Main hydration seam: direct map route constructs before applying pending content")
+	if not _before(run_end, "_apply_pending_content_hydration()", "var pending: Dictionary"):
+		fails.append("Main hydration seam: run end reads content before applying pending content")
 
 
 static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
@@ -42,10 +45,19 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 	var english_cards: Dictionary = baked.cards.duplicate(true)
 	Locale.active = Locale.new(Locale.CODE_EN)
 	var run: RunState = RunState.new_run(baked, 125125, "hydration-main")
+	run.player.deck.append(CardInst.new(run.next_uid(), &"aegis"))
+	run.player.relics.append("duskmirror")
 	var game: GlassvowGame = GlassvowGame.new(baked, run)
 	var main: Main = Main.new()
 	main.content = baked
 	main.game = game
+	main._transitions = TransitionLayer.new()
+	main._transitions.instant = true
+	main.add_child(main._transitions)
+	main._music = MusicBus.new()
+	main.add_child(main._music)
+	main._sfx_bus = SfxBus.new()
+	main.add_child(main._sfx_bus)
 	var screen: CombatScreen = CombatScreen.new(game)
 	screen.seq.instant = true
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
@@ -60,6 +72,14 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 		fails.append("Main hydration integration: opening CardView missed baked name/text")
 
 	Locale.active.set_language(Locale.CODE_ZH_HANT)
+	# Relic names are not translated in the retained catalogue yet. Give this
+	# real locale tree one distinctive display value so the bequest copy cannot
+	# pass merely because its English and zh-Hant strings happen to match.
+	var requested: Dictionary = Locale.active.get("_requested")
+	var requested_content: Dictionary = requested["content"]
+	var requested_relics: Dictionary = requested_content["relics"]
+	var requested_duskmirror: Dictionary = requested_relics["duskmirror"]
+	requested_duskmirror["name"] = "暮鏡"
 	main._on_language_changed(Locale.CODE_ZH_HANT)
 	if str(baked.cards["strike"]["name"]) != "Edge":
 		fails.append("Main hydration integration: combat language toggle changed live ContentDB early")
@@ -83,19 +103,25 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 				or str(drawn_data["name"]) != str(drawn_en["name"]):
 			fails.append("Main hydration integration: a new combat draw mixed in zh-Hant early")
 
+	# Abandon is the direct combat exit that does not pass through `_route_run`.
+	# Drive its run-end constructor without writing the production save path.
+	run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
 	var save_before_route: String = JSON.stringify(run.to_save_dict())
-	main._screen = null
-	if not main.has_method("_apply_pending_content_hydration"):
-		fails.append("Main hydration integration: route has no pending-content apply seam")
-		_cleanup(main, screen, tree)
-		Locale.active = Locale.new()
-		return
-	var route_writes_v: Variant = main.call("_apply_pending_content_hydration")
-	var route_writes: int = route_writes_v if typeof(route_writes_v) == TYPE_INT else -1
-	if route_writes != 642 or main.get("_content_hydration_pending") != false:
-		fails.append("Main hydration integration: route boundary did not apply zh-Hant once")
+	main._show_run_end()
+	var undo_v: Variant = Locale.active.get("_overlaid")
+	var undo: Array = undo_v if typeof(undo_v) == TYPE_ARRAY else []
+	if undo.size() != 642 or main.get("_content_hydration_pending") != false:
+		fails.append("Main hydration integration: combat abandon did not apply zh-Hant once")
 	if JSON.stringify(run.to_save_dict()) != save_before_route:
 		fails.append("Main hydration integration: display overlay changed the v2 run/save dictionary")
+	var run_end: RunEndScreen = main._route_screen as RunEndScreen
+	if run_end == null or str(run_end._stats.get("act_name", "")) != "灰燼樹林":
+		fails.append("Main hydration integration: abandon run-end copied the old English act name")
+	var bequests: Array[Dictionary] = main._bequest_choices()
+	if not _choice_has_name(bequests, "card", "大教堂璃"):
+		fails.append("Main hydration integration: run-end card copy stayed English")
+	if not _choice_has_name(bequests, "relic", "暮鏡"):
+		fails.append("Main hydration integration: run-end relic copy stayed English")
 	var translated: CardView = screen._hand.add_card(
 		CardInst.new(999, &"strike"), baked.card(&"strike"), 1)
 	if not _card_shows(translated, "刃鋒", "造成 @6@ 點傷害。"):
@@ -108,6 +134,13 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 		fails.append("Main hydration integration: route zh-Hant -> en did not restore catalogue/IDs")
 	_cleanup(main, screen, tree)
 	Locale.active = Locale.new()
+
+
+static func _choice_has_name(choices: Array[Dictionary], kind: String, name: String) -> bool:
+	for choice: Dictionary in choices:
+		if str(choice.get("kind", "")) == kind and str(choice.get("name", "")) == name:
+			return true
+	return false
 
 
 static func _card_shows(view: CardView, expected_name: String, expected_text: String) -> bool:

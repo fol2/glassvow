@@ -1741,6 +1741,7 @@ func _on_boss_relic_chosen(id: String) -> void:
 # ---------------------------------------------------------------- terminal and durable side routes
 
 func _show_run_end() -> void:
+	_apply_pending_content_hydration()
 	var pending: Dictionary = game.run.pending_run_end
 	var outcome: String = str(pending.get("outcome", "abandon"))
 	if outcome == "win":
