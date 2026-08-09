@@ -93,13 +93,12 @@ func _build() -> void:
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	_column.add_child(_title)
 	var aspect_name: String = str(_aspect.get("name", "climber"))
-	_sub = _label(("%s stands at the foot of the Spire. Take one parting "
-		+ "gift — and choose the fire your lantern will carry.") % aspect_name,
+	_sub = _label(Locale.active.t("ui.lamp.sub", {"aspect": aspect_name}),
 		14, RunStyle.TEXT_DIM, true)
 	_sub.custom_minimum_size.x = 540
 	_sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_column.add_child(_sub)
-	_column.add_child(_section_label("A BOON FOR THE ROAD"))
+	_column.add_child(_section_label(Locale.active.t("ui.lamp.boonLabel").to_upper()))
 
 	_boon_grid = GridContainer.new()
 	_boon_grid.columns = mini(3, _boon_ids.size())
@@ -110,7 +109,10 @@ func _build() -> void:
 	for id: String in _boon_ids:
 		_add_boon(id)
 
-	_art_heading = _section_label("YOUR LANTERN ART  (PRESS A IN COMBAT)")
+	_art_heading = _section_label("%s  %s" % [
+		Locale.active.t("ui.lamp.artLabel").to_upper(),
+		Locale.active.t("ui.lamp.artHint").to_upper(),
+	])
 	_column.add_child(_art_heading)
 	_art_grid = GridContainer.new()
 	_art_grid.columns = _arts.size()
@@ -133,7 +135,7 @@ func _build() -> void:
 	_column.add_child(_description)
 
 	_begin = Button.new()
-	_begin.text = "CHOOSE A BOON"
+	_begin.text = Locale.active.t("ui.menu.chooseBoon").to_upper()
 	_begin.custom_minimum_size = Vector2(280, 46)
 	_begin.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_begin.disabled = true
@@ -232,7 +234,9 @@ func _refresh() -> void:
 		tone.to_html(false), art.get("glyph", ""), art.get("name", ""),
 		art.get("text", "")]
 	_begin.disabled = _selected_boon.is_empty()
-	_begin.text = "LIGHT THE WAY" if not _selected_boon.is_empty() else "CHOOSE A BOON"
+	_begin.text = Locale.active.t("ui.menu.lightTheWay").to_upper() \
+		if not _selected_boon.is_empty() \
+		else Locale.active.t("ui.menu.chooseBoon").to_upper()
 
 
 func set_shape(stage_shape: StringName) -> void:
