@@ -13,7 +13,7 @@ movement.
 
 | Surface | Source seam (`file:function`) | Keys | Notes |
 |---|---|---|---|
-| Credits shell | `presentation/run/credits_screen.gd:_init`, `_add_licence_fold`, `_add_font_licence_fold` | E `ui.credits.title`, `heading*`, `body*`, `close`, `engineLicences`, `fontLicences`, `components`, `licenceTexts`; N `ui.credits.footer` | Preserve section and focus order. Manifest pack IDs and titles are not catalogue copy. |
+| Credits shell | `presentation/run/credits_screen.gd:_init`, `_add_licence_fold`, `_add_font_licence_fold`, `_build_licence` | E `ui.credits.title`, `heading*`, `body*`, `close`, `engineLicences`, `fontLicences`, `components`, `licenceTexts`; N `ui.credits.footer` | Preserve section and focus order. Manifest pack IDs and titles are not catalogue copy. |
 | Credits manifests | `presentation/run/credits_screen.gd:_add_music_attribution`, `_add_music_rows`, `_add_sfx_rows` | N `ui.credits.musicAttribution`, `musicAttributionCount`, `musicTracklistFallback`, `sfxAttribution`, `sfxAttributionCount`; E `themeLine` | `{count}` replaces only the number; manifest item order stays authoritative. |
 | Emberglass Rose | `presentation/run/rose_window_view.gd:_pane_copy`, `_detail_copy`; `presentation/run/choice_screen.gd:_add_title_rose` | N `ui.rose.shardRecoveredStack`; U `ui.rose.openLabel`; E remaining `ui.rose.*` | Preserve the newline in the recovered stack and pane ordering. |
 | Dawn chrome | `presentation/run/dawn_screen.gd:_build` | N `ui.dawn.inputHint`; E `ui.dawn.*`, `ui.end.*` actions/stats | Preserve the double spaces around the middle dot and the reveal/skip timing. |
