@@ -129,7 +129,7 @@ func _build() -> void:
 	_description.scroll_active = false
 	_description.custom_minimum_size = Vector2(500, 38)
 	_description.add_theme_font_override("normal_font",
-		load(GlassStyle.ALEGREYA_400) as Font)
+		GlassStyle.face(GlassStyle.ALEGREYA_400))
 	_description.add_theme_font_size_override("normal_font_size", 13)
 	_description.add_theme_color_override("default_color", RunStyle.TEXT_DIM)
 	_column.add_child(_description)
@@ -174,7 +174,7 @@ func _add_boon(id: String) -> void:
 	art.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	copy.add_child(art)
 	var name: Label = _label(str(boon.get("name", id)), 16, RunStyle.GOLD, false)
-	name.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	name.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	copy.add_child(name)
 	var text: Label = _label(str(boon.get("text", "")), 12, RunStyle.TEXT_DIM, false)
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -206,7 +206,7 @@ func _add_art(id: StringName) -> void:
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(icon)
 	var name: Label = _label(str(art.get("name", id)), 13, RunStyle.TEXT, false)
-	name.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	name.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	row.add_child(name)
 
 
@@ -268,7 +268,7 @@ static func _section_label(text: String) -> Label:
 static func _label(text: String, size: int, colour: Color, centred: bool) -> Label:
 	var label: Label = Label.new()
 	label.text = text
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", colour)
 	label.horizontal_alignment = (

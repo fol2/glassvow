@@ -59,7 +59,7 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	var title: Label = Label.new()
 	title.text = Locale.active.t("ui.settings.title").to_upper()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	title.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	title.add_theme_font_size_override("font_size", 16)
 	title.add_theme_color_override("font_color", GOLD)
 	column.add_child(title)
@@ -142,7 +142,7 @@ func _init(preferences: Preferences, reset_disabled: bool = false,
 	warning.text = Locale.active.t("ui.settings.resetWarn")
 	warning.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	warning.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	warning.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	warning.add_theme_font_size_override("font_size", 12)
 	warning.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	ledger.add_child(warning)
@@ -427,7 +427,7 @@ static func _button(text: String, accent: Color, font_size: int = 13) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size.y = 36.0
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	button.add_theme_font_size_override("font_size", font_size)
 	_style_button(button, accent, 8.0, 8)
 	return button
@@ -436,7 +436,7 @@ static func _button(text: String, accent: Color, font_size: int = 13) -> Button:
 static func _small_button() -> Button:
 	var button: Button = Button.new()
 	button.custom_minimum_size = Vector2(76.0, RunStyle.hit_floor(26.0))
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	button.add_theme_font_size_override("font_size", 12)
 	_style_button(button, GOLD, 4.0, 6)
 	return button
@@ -511,6 +511,6 @@ static func _disc(colour: Color, alpha: float) -> GradientTexture2D:
 
 static func _tracked_font(path: String, glyph_spacing: int) -> FontVariation:
 	var tracked: FontVariation = FontVariation.new()
-	tracked.base_font = load(path) as Font
+	tracked.base_font = GlassStyle.face(path)
 	tracked.spacing_glyph = glyph_spacing
 	return tracked

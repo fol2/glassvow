@@ -591,7 +591,7 @@ func _event_card(event: Dictionary) -> PanelContainer:
 	var title_text: String = str(event.get("title", ""))
 	if not title_text.is_empty():
 		var title: Label = _label(title_text, 13, RunStyle.PARCHMENT)
-		title.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+		title.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		stack.add_child(title)
 	var body_text: String = str(event.get("body", ""))
@@ -608,7 +608,7 @@ func _event_card(event: Dictionary) -> PanelContainer:
 			count_seat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			var count_label: Label = _label(count_text, 17, RunStyle.GOLD)
 			count_label.add_theme_font_override("font",
-				load(GlassStyle.CINZEL_700) as Font)
+				GlassStyle.face(GlassStyle.CINZEL_700))
 			count_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			count_seat.add_child(count_label)
 			stack.add_child(count_seat)
@@ -718,7 +718,7 @@ func _build_stats(column: VBoxContainer) -> void:
 		stack.alignment = BoxContainer.ALIGNMENT_CENTER
 		cell.add_child(stack)
 		var value: Label = _label(str(_stats.get(row[0], "—")), 17, RunStyle.PARCHMENT)
-		value.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+		value.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 		stack.add_child(value)
 		var caption: Label = _label(str(row[1]), 8, RunStyle.TEXT_DIM)
 		caption.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
@@ -743,7 +743,7 @@ func _action_button(text: String, primary: bool = false) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(190, 46)
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	RunStyle.style_button(button, primary)
 	# `.btn:disabled { opacity: 0.45 }` (styles.css:156) fades the COMPOSED
 	# button once. Here modulate does all of it, so the disabled dressing
@@ -806,7 +806,7 @@ static func _label(text: String, font_size: int, colour: Color) -> Label:
 	var label: Label = Label.new()
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	return label

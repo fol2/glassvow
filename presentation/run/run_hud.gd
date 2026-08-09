@@ -357,7 +357,7 @@ func _request(kind: StringName, slot: int) -> void:
 func _label(text: String, font_size: int, colour: Color) -> Label:
 	var label: Label = Label.new()
 	label.text = text
-	label.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE

@@ -116,7 +116,7 @@ func _button(text: String, primary: bool) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.custom_minimum_size.y = 48
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	button.add_theme_font_size_override("font_size", 17)
 	RunStyle.style_button(button, primary)
 	button.mouse_entered.connect(func() -> void:
@@ -130,7 +130,7 @@ func _label(text: String, font_size: int, colour: Color) -> Label:
 	var label: Label = Label.new()
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	return label

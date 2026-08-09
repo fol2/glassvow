@@ -113,7 +113,7 @@ func _button(label: String, colour: Color = RunStyle.TEXT,
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size.y = RunStyle.hit_floor(
 		44.0 if shape.begins_with("phone") else 34.0)
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	button.add_theme_font_size_override("font_size", 14)
 	button.add_theme_color_override("font_color", colour)
 	button.add_theme_color_override("font_hover_color", RunStyle.GOLD)

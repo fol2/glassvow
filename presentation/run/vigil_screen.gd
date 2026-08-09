@@ -173,7 +173,7 @@ func _add_deed(parent: VBoxContainer, id: String) -> void:
 	var name: Label = _label(
 		("%s " % "✦" if done else "") + str(deed.get("name", id)),
 		14, RunStyle.GOLD if done else RunStyle.PARCHMENT, false)
-	name.add_theme_font_override("font", load(GlassStyle.CINZEL_500) as Font)
+	name.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_500))
 	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(name)
 	head.add_child(_label("%d/%d" % [mini(current, target), target],
@@ -282,7 +282,7 @@ static func _label(text: String, font_size: int, colour: Color,
 		centred: bool) -> Label:
 	var label: Label = Label.new()
 	label.text = text
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	label.horizontal_alignment = (

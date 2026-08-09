@@ -263,7 +263,7 @@ func _add_licence_fold() -> void:
 	_licence_toggle.text = Locale.active.t("ui.credits.engineLicences")
 	_licence_toggle.custom_minimum_size = Vector2(0, 36)
 	_licence_toggle.add_theme_font_override("font",
-		load(GlassStyle.ALEGREYA_400) as Font)
+		GlassStyle.face(GlassStyle.ALEGREYA_400))
 	_licence_toggle.add_theme_font_size_override("font_size", 15)
 	GlassStyle.style_button(_licence_toggle, GlassStyle.GLASS)
 	_licence_toggle.pressed.connect(_on_licence_toggle)
@@ -286,7 +286,7 @@ func _add_font_licence_fold() -> void:
 	_font_licence_toggle.text = Locale.active.t("ui.credits.fontLicences")
 	_font_licence_toggle.custom_minimum_size = Vector2(0, 36)
 	_font_licence_toggle.add_theme_font_override("font",
-		load(GlassStyle.ALEGREYA_400) as Font)
+		GlassStyle.face(GlassStyle.ALEGREYA_400))
 	_font_licence_toggle.add_theme_font_size_override("font_size", 15)
 	GlassStyle.style_button(_font_licence_toggle, GlassStyle.GLASS)
 	_font_licence_toggle.pressed.connect(_on_font_licence_toggle)
@@ -367,7 +367,7 @@ func _build_licence() -> void:
 		var name_line: Label = Label.new()
 		name_line.text = str(entry.get("name", ""))
 		name_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		name_line.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+		name_line.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 		name_line.add_theme_font_size_override("font_size", 12)
 		name_line.add_theme_color_override("font_color", GlassStyle.TEXT)
 		component.add_child(name_line)
@@ -375,7 +375,7 @@ func _build_licence() -> void:
 			var part_lines: Label = Label.new()
 			part_lines.text = "\n".join(lines)
 			part_lines.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			part_lines.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+			part_lines.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 			part_lines.add_theme_font_size_override("font_size", 11)
 			part_lines.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 			component.add_child(part_lines)
@@ -408,7 +408,7 @@ func _build_font_licences() -> void:
 			missing.text = "licence file not found: %s" % family
 			missing.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			missing.add_theme_font_override("font",
-				load(GlassStyle.ALEGREYA_400) as Font)
+				GlassStyle.face(GlassStyle.ALEGREYA_400))
 			missing.add_theme_font_size_override("font_size", 11)
 			missing.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 			fold.add_child(missing)
@@ -419,7 +419,7 @@ func _build_font_licences() -> void:
 			missing_open.text = "licence file not found: %s" % family
 			missing_open.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			missing_open.add_theme_font_override("font",
-				load(GlassStyle.ALEGREYA_400) as Font)
+				GlassStyle.face(GlassStyle.ALEGREYA_400))
 			missing_open.add_theme_font_size_override("font_size", 11)
 			missing_open.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 			fold.add_child(missing_open)
@@ -447,7 +447,7 @@ func _licence_body(text: String, font_size: int = 12) -> RichTextLabel:
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.text = text
-	body.add_theme_font_override("normal_font", load(GlassStyle.ALEGREYA_400) as Font)
+	body.add_theme_font_override("normal_font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	body.add_theme_font_size_override("normal_font_size", font_size)
 	body.add_theme_color_override("default_color", GlassStyle.TEXT_DIM)
 	return body
@@ -483,7 +483,7 @@ func _body_label(text: String, colour: Color) -> Label:
 	var body: Label = Label.new()
 	body.text = text
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	body.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	body.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	body.add_theme_font_size_override("font_size", 16)
 	body.add_theme_color_override("font_color", colour)
 	return body

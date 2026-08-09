@@ -128,8 +128,8 @@ func _add_choices() -> void:
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.custom_minimum_size.y = 52 if sub.is_empty() else 66
 		button.disabled = not _choices_enabled or row.get("disabled", false)
-		button.add_theme_font_override("font", load(
-			GlassStyle.CINZEL_700 if sub.is_empty() else GlassStyle.ALEGREYA_400) as Font)
+		button.add_theme_font_override("font", GlassStyle.face(
+			GlassStyle.CINZEL_700 if sub.is_empty() else GlassStyle.ALEGREYA_400))
 		button.add_theme_font_size_override("font_size", 15)
 		RunStyle.style_button(button, ordinal == 0)
 		button.pressed.connect(_choose.bind(ordinal))
@@ -143,7 +143,7 @@ func _add_continue() -> void:
 	button.text = Locale.active.t("ui.event.continue")
 	button.custom_minimum_size = Vector2(180, 46)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	button.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	RunStyle.style_button(button, true)
 	button.pressed.connect(func() -> void:
 		_sfx.play(&"click")
@@ -201,7 +201,7 @@ static func _label(text: String, font_size: int, colour: Color,
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if centred \
 		else HORIZONTAL_ALIGNMENT_LEFT
-	label.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", colour)
 	return label

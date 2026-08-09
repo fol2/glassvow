@@ -96,7 +96,7 @@ func _build() -> void:
 	_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_detail.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_detail.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	_detail.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	_detail.add_theme_font_size_override("font_size", 12)
 	_detail.add_theme_color_override("font_color", Color("#c8c6d4"))
 	detail_panel.add_child(_detail)
@@ -155,7 +155,7 @@ func _add_pane(index: int) -> void:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+		label.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 		label.add_theme_font_size_override("font_size", 9)
 		label.add_theme_color_override("font_color", RunStyle.GOLD)
 		copy.add_child(label)
@@ -195,8 +195,8 @@ func _refresh_selection() -> void:
 	var state: String = _state(record)
 	_detail.text = _detail_copy(id, record)
 	_detail.add_theme_font_override("font",
-		load(GlassStyle.CINZEL_700 if state != "dormant"
-			else GlassStyle.ALEGREYA_400) as Font)
+		GlassStyle.face(GlassStyle.CINZEL_700 if state != "dormant"
+			else GlassStyle.ALEGREYA_400))
 	_detail.add_theme_font_size_override("font_size", 16 if state == "armed" else 12)
 	_detail.add_theme_color_override(
 		"font_color", RunStyle.GOLD if state == "armed" else Color("#c8c6d4"))
@@ -223,7 +223,7 @@ func _build_log() -> void:
 		line.text = str(_whisper_lines[index])
 		line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		line.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+		line.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 		line.add_theme_font_size_override("font_size", 12)
 		line.add_theme_color_override("font_color", RunStyle.TEXT_DIM)
 		row.add_child(line)

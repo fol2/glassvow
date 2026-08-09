@@ -396,7 +396,7 @@ func _end_transit(seq: int) -> void:
 ## duplicated here by the shared-surface rule rather than reached across.
 static func _tracked(path: String, glyph_spacing: int) -> FontVariation:
 	var tracked: FontVariation = FontVariation.new()
-	tracked.base_font = load(path) as Font
+	tracked.base_font = GlassStyle.face(path)
 	tracked.spacing_glyph = glyph_spacing
 	return tracked
 
