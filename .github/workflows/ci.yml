@@ -33,3 +33,6 @@ jobs:
       
       - name: Run tests
         run: godot --headless -s res://tests/run_all.gd
+
+      - name: Test phone-landscape scroll reachability
+        run: godot --headless -s res://tests/choice_scroll_reachability.gd
