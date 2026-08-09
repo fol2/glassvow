@@ -24,18 +24,25 @@ static func run(fails: Array[String]) -> void:
 		for ch: String in ["琉", "璃", "誓", "言"]:
 			_check(fails, ui_theme.default_font.has_char(ch.unicode_at(0)),
 				"runtime theme default has glyph %s" % ch)
-	# Display faces must fall back to NotoSansTC so 繁中 never tofu.
-	var cinzel: Font = GlassStyle.face(GlassStyle.CINZEL_500)
-	var alegreya: Font = GlassStyle.face(GlassStyle.ALEGREYA_400)
-	_check(fails, cinzel != null and alegreya != null, "display faces load through face()")
-	if cinzel != null:
-		for ch: String in ["琉", "璃"]:
-			_check(fails, cinzel.has_char(ch.unicode_at(0)),
-				"Cinzel+Noto fallback has glyph %s" % ch)
-	if alegreya != null:
-		for ch: String in ["誓", "言"]:
-			_check(fails, alegreya.has_char(ch.unicode_at(0)),
-				"Alegreya+Noto fallback has glyph %s" % ch)
+	# Every shipped display weight must fall back to NotoSansTC so a less-common
+	# surface cannot silently tofu while the title sample passes.
+	var display_faces: Array[Array] = [
+		["Cinzel 500", GlassStyle.CINZEL_500],
+		["Cinzel 700", GlassStyle.CINZEL_700],
+		["Cinzel 800", GlassStyle.CINZEL_800],
+		["Alegreya 400", GlassStyle.ALEGREYA_400],
+		["Alegreya 700", GlassStyle.ALEGREYA_700],
+	]
+	for row: Array in display_faces:
+		var face_name: String = row[0]
+		var face: Font = GlassStyle.face(str(row[1]))
+		_check(fails, face != null, "%s loads through face()" % face_name)
+		if face != null:
+			for ch: String in ["琉", "璃", "誓", "言"]:
+				_check(fails, face.has_char(ch.unicode_at(0)),
+					"%s+Noto fallback has glyph %s" % [face_name, ch])
+	_display_face_route_contract(fails)
+	_display_face_consumers(fails)
 	# zh-Hant catalogue resolves brand + a whisper.
 	var zh: Locale = Locale.new(Locale.CODE_ZH_HANT)
 	_check(fails, zh.set_language(Locale.CODE_ZH_HANT) or zh.code == Locale.CODE_ZH_HANT,
@@ -56,6 +63,7 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, not player_credit_text.contains("6e06911")
 		and not player_credit_text.contains("0.5.0+"),
 		"player credits omit benchmark build identity")
+	_credits_font_licences(fails, credits)
 	credits.free()
 
 	# The title paints on frame 0, before its first process tick: measured with
@@ -204,6 +212,85 @@ static func run(fails: Array[String]) -> void:
 
 	tree.root.remove_child(screen)
 	screen.free()
+
+
+static func _display_face_route_contract(fails: Array[String]) -> void:
+	var sources: Array[String] = []
+	_collect_gd_sources("res://presentation", sources)
+	for path: String in sources:
+		# ChoiceScreen is a sibling-owned migration lane. It is deliberately the
+		# sole expected residual until that lane lands.
+		if path == "res://presentation/run/choice_screen.gd":
+			continue
+		var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+		_check(fails, file != null, "display-face route audit reads %s" % path)
+		if file == null:
+			continue
+		var compact: String = file.get_as_text().replace(" ", "").replace("\t", "") \
+			.replace("\r", "").replace("\n", "")
+		var raw_loads: int = compact.count("load(GlassStyle.CINZEL_") \
+			+ compact.count("load(GlassStyle.ALEGREYA_") \
+			+ compact.count("base_font=load(")
+		if path == "res://presentation/combat/floaters.gd":
+			raw_loads += compact.count("_font_cache=load(path)")
+		_check(fails, raw_loads == 0,
+			"display faces route through GlassStyle.face in %s (%d raw)" % [path, raw_loads])
+
+
+static func _collect_gd_sources(path: String, out: Array[String]) -> void:
+	var dir: DirAccess = DirAccess.open(path)
+	if dir == null:
+		return
+	dir.list_dir_begin()
+	var name: String = dir.get_next()
+	while name != "":
+		var child: String = path.path_join(name)
+		if dir.current_is_dir():
+			_collect_gd_sources(child, out)
+		elif name.ends_with(".gd"):
+			out.append(child)
+		name = dir.get_next()
+	dir.list_dir_end()
+
+
+static func _display_face_consumers(fails: Array[String]) -> void:
+	var consumers: Array[Array] = [
+		["CardView", CardView._font(GlassStyle.CINZEL_700, 1)],
+		["HudBar", HudBar._font(GlassStyle.CINZEL_500, 1)],
+		["Floaters", Floaters.display_font()],
+		["RewardKit", RewardKit.font(GlassStyle.ALEGREYA_400, 0)],
+		["RewardScreen", RewardScreen._font(GlassStyle.CINZEL_700, 1)],
+		["RewardSpoils", RewardSpoils.font(GlassStyle.ALEGREYA_400, 0)],
+		["SettingsPanel", SettingsPanel._tracked_font(GlassStyle.CINZEL_500, 1)],
+		["TransitionLayer", TransitionLayer._tracked(GlassStyle.CINZEL_700, 1)],
+	]
+	for row: Array in consumers:
+		var face: Font = row[1] if row[1] is Font else null
+		_check(fails, face != null and face.has_char("琉".unicode_at(0)),
+			"%s display face carries the Noto fallback" % row[0])
+
+
+static func _credits_font_licences(fails: Array[String], credits: CreditsScreen) -> void:
+	var families: PackedStringArray = PackedStringArray()
+	for entry: Dictionary in CreditsScreen.FONT_LICENCES:
+		var family: String = str(entry.get("family", ""))
+		var path: String = str(entry.get("path", ""))
+		families.append(family)
+		var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+		_check(fails, file != null, "%s OFL licence is readable" % family)
+		if file != null:
+			_check(fails, file.get_as_text().contains("SIL OPEN FONT LICENSE"),
+				"%s manifest entry points to an OFL licence" % family)
+	_check(fails, families == PackedStringArray(["Cinzel", "Alegreya", "Noto Sans TC"]),
+		"credits font manifest carries every bundled family")
+	credits._build_font_licences()
+	var fold_text: String = ""
+	for node: Node in credits._font_licence_wrap.find_children("*", "Label", true, false):
+		if node is Label:
+			fold_text += "\n" + node.text
+	_check(fails, fold_text.contains("Cinzel") and fold_text.contains("Alegreya")
+		and fold_text.contains("Noto Sans TC"),
+		"credits font licence fold carries every manifest family")
 
 
 static func _derived_display_labels(fails: Array[String], content: ContentDB) -> void:
