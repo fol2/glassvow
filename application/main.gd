@@ -1818,7 +1818,7 @@ func _bequest_choices() -> Array[Dictionary]:
 		choices.append({"id": "relic:" + best_relic,
 			"kind": "relic",
 			"name": relic_name,
-			"note": "your rarest relic",
+			"note": Locale.active.t("ui.end.bequestNote.relic"),
 			"icon": "res://assets/art/bequests/relic.png",
 			"art": "res://assets/art/relics/%s.png" % best_relic})
 	var best_card: CardInst = null
@@ -1840,15 +1840,15 @@ func _bequest_choices() -> Array[Dictionary]:
 		choices.append({"id": "card:%d" % best_card.uid,
 			"kind": "card",
 			"name": card_name,
-			"note": "your finest card",
+			"note": Locale.active.t("ui.end.bequestNote.card"),
 			"icon": "res://assets/art/bequests/card.png",
 			"art": "res://assets/art/cards/%s.jpg" % String(best_card.id)})
 	if game.run.player.gold >= 25:
 		var amount: int = mini(game.run.player.gold, 75)
 		choices.append({"id": "gold:%d" % amount,
 			"kind": "gold",
-			"name": "%d gold" % amount,
-			"note": "a cache of gold",
+			"name": Locale.active.t("ui.end.bequestNote.gold", {"n": amount}),
+			"note": Locale.active.t("ui.end.bequestNote.goldCache"),
 			"icon": "res://assets/art/bequests/gold.png",
 			"art": "res://assets/art/ui/coin.png"})
 	return choices
