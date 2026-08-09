@@ -63,6 +63,10 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	centre.add_child(_panel)
 
 	var scroll: ScrollContainer = ScrollContainer.new()
+	# Same reachability defect as #72's boon screen: FIGHT ON is the last child
+	# of this scrolled column, and it grabs focus on open — without this the
+	# view stays at the top and the focused button is off-screen.
+	scroll.follow_focus = true
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
