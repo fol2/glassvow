@@ -282,7 +282,7 @@ func _init(reward_ref: Dictionary, content_ref: ContentDB,
 	# they are different faces at different sizes.
 	_ornament = _ornament_label()
 	_body.add_child(_ornament)
-	_sub = _sub_label(CHOICE_SUB)
+	_sub = _sub_label(Locale.active.t("ui.reward.chooseCardBody"))
 	_sub.visible = false
 	_body.add_child(_sub)
 	_body.add_child(_spacer(14.0))
@@ -322,10 +322,10 @@ func _init(reward_ref: Dictionary, content_ref: ContentDB,
 	actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	actions.add_theme_constant_override("separation", 12)
 	_body.add_child(actions)
-	_continue = _button("Continue", GO_PRIMARY)
+	_continue = _button(Locale.active.t("ui.reward.continue"), GO_PRIMARY)
 	_continue.pressed.connect(_on_continue)
 	actions.add_child(_continue)
-	_skip = _button("Skip", GO_GHOST)
+	_skip = _button(Locale.active.t("ui.reward.skip"), GO_GHOST)
 	_skip.visible = false
 	_skip.pressed.connect(func() -> void: _take_card(""))
 	actions.add_child(_skip)
@@ -391,7 +391,7 @@ static func _slot() -> Control:
 ## Reward order is the benchmark's: gold, phial, relic, then the card slot last.
 func _build_rows(list: VBoxContainer) -> void:
 	list.add_child(_row(&"gold", "", UI_ART + "coin.png",
-		"[b][color=#%s]%d[/color][/b] gold" % [GOLD.to_html(false), _gold()],
+		Locale.active.t("ui.reward.goldRow", {"tone": GOLD.to_html(false), "n": _gold()}),
 		"", GOLD))
 	var potion_v: Variant = reward.get("potion")
 	if potion_v != null:
@@ -414,8 +414,8 @@ func _build_rows(list: VBoxContainer) -> void:
 	var ids: Array = reward.get("cards", [])
 	if not ids.is_empty():
 		list.add_child(_row(&"card", "", UI_ART + "deck.png",
-			"Add a card to your deck",
-			"" if bench else "%d offered · take one" % ids.size(), GlassStyle.GLASS))
+			Locale.active.t("ui.reward.addCard"),
+			"" if bench else Locale.active.t("ui.reward.offeredTakeOne", {"n": ids.size()}), GlassStyle.GLASS))
 		_card_row = _rows.back()
 
 
@@ -718,7 +718,7 @@ func _deepen(ids: Array) -> void:
 	# The heading names what the panel is FOR, so it changes with the depth. In
 	# the benchmark this was free — the second window had its own title — and it
 	# is the one thing the deepening would otherwise lose.
-	_title.text = "CHOOSE A CARD"
+	_title.text = Locale.active.t("ui.reward.chooseCardTitle").to_upper()
 	_ornament.visible = false
 	_sub.visible = true
 	_continue.visible = false
@@ -939,11 +939,10 @@ func _on_continue() -> void:
 	# Spoils left on the glass are gone for good, so leaving asks first. This is
 	# the one place the screen refuses to be quiet about a mistake.
 	var body: VBoxContainer = VBoxContainer.new()
-	body.add_child(_heading("Leave Rewards Behind?"))
+	body.add_child(_heading(Locale.active.t("ui.reward.leaveConfirmTitle")))
 	body.add_child(_hairline())
 	body.add_child(_spacer(6.0))
-	var sub: Label = _sub_label(
-		"You still have unclaimed spoils on the glass. Move on without them?")
+	var sub: Label = _sub_label(Locale.active.t("ui.reward.leaveConfirmBody"))
 	sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.add_child(sub)
 	body.add_child(_spacer(20.0))
@@ -951,12 +950,12 @@ func _on_continue() -> void:
 	actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	actions.add_theme_constant_override("separation", 12)
 	body.add_child(actions)
-	var leave: Button = _button("Leave Them", GO_DANGER)
+	var leave: Button = _button(Locale.active.t("ui.reward.leaveConfirmYes"), GO_DANGER)
 	leave.pressed.connect(func() -> void:
 		_close_overlay()
 		finished.emit())
 	actions.add_child(leave)
-	var stay: Button = _button("Stay", GO_GHOST)
+	var stay: Button = _button(Locale.active.t("ui.reward.leaveConfirmNo"), GO_GHOST)
 	stay.pressed.connect(_close_overlay)
 	actions.add_child(stay)
 	_show_overlay(body, _rack_num("panel", PANEL_W))
@@ -1035,9 +1034,9 @@ static func _glass_panel(body: Control) -> PanelContainer:
 
 func _title_text() -> String:
 	match encounter_kind:
-		"elite": return "ELITE SLAIN"
-		"boss": return "BOSS VANQUISHED"
-		_: return "VICTORY"
+		"elite": return Locale.active.t("ui.reward.eliteSlain")
+		"boss": return Locale.active.t("ui.reward.bossVanquished")
+		_: return Locale.active.t("ui.reward.victory")
 
 
 static func _heading(text: String) -> Label:

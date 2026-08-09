@@ -92,12 +92,13 @@ func _build() -> void:
 	actions.add_theme_constant_override("separation", 14)
 	column.add_child(actions)
 
-	var rest: Button = _button("Rest — heal %d HP" % _heal_amount, true)
-	rest.tooltip_text = "%d / %d HP" % [_current_hp, _max_hp]
+	var rest: Button = _button(Locale.active.t("ui.rest.restHealBtn", {"hp": _heal_amount}), true)
+	rest.tooltip_text = Locale.active.t("ui.rest.hpFrac", {"cur": _current_hp, "max": _max_hp})
 	rest.pressed.connect(_request.bind(&"heal"))
 	actions.add_child(rest)
 
-	var smith: Button = _button("Smith — upgrade a card", false)
+	var smith: Button = _button("%s %s" % [Locale.active.t("ui.rest.smithBtn"),
+		Locale.active.t("ui.rest.smithSub")], false)
 	smith.disabled = not _can_upgrade
 	smith.pressed.connect(_request.bind(&"upgrade"))
 	actions.add_child(smith)
