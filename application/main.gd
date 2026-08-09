@@ -4,11 +4,6 @@ extends Control
 ## title, durable run checkpoints, the benchmark map, combat and terminal
 ## screens. Domain mutation remains behind GlassvowGame and its rules.
 
-## Rest heals 30% of max HP — the frozen web law (engine.js restHealFrac:
-## min(0.3, omen, vow), and a fresh core-only profile carries neither
-## modifier). `rest_heal_amount` remains as the slice-fixture compatibility
-## helper; live runs ask RewardRules for the complete law.
-const REST_HEAL_FRAC: float = 0.3
 const RARITY_RANK: Dictionary = {
 	"starter": 0, "special": 0, "common": 1, "uncommon": 2, "rare": 3, "boss": 4,
 }
@@ -81,8 +76,12 @@ func _init() -> void:
 	theme = GlassStyle.theme()
 
 
-static func rest_heal_amount(max_hp: int) -> int:
-	return int(roundf(float(max_hp) * REST_HEAL_FRAC))
+## The pool turned into an amount. The fraction is the frozen web law and
+## RewardRules owns it (engine.js restHealFrac: `min(0.3, omen, vow)`) — this
+## is only the rounding, kept in one place so the rest screen's promise and
+## the heal it applies can never round apart.
+static func rest_heal_amount(max_hp: int, fraction: float) -> int:
+	return int(roundf(float(max_hp) * fraction))
 
 
 func _ready() -> void:
@@ -1103,8 +1102,8 @@ func _finish_node() -> void:
 
 
 func _show_rest() -> void:
-	var heal_amount: int = int(roundf(float(game.run.player.max_hp)
-		* game.rewards.rest_heal_fraction(game.run)))
+	var heal_amount: int = rest_heal_amount(game.run.player.max_hp,
+		game.rewards.rest_heal_fraction(game.run))
 	var can_upgrade: bool = game.run.player.deck.any(func(card: CardInst) -> bool:
 		return not card.up and content.cards.get(String(card.id), {}).has("up"))
 	var screen: RestScreen = RestScreen.new(
@@ -1121,8 +1120,8 @@ func _show_rest() -> void:
 
 func _on_rest_choice(id: String) -> void:
 	if id == "heal":
-		var amount: int = int(roundf(float(game.run.player.max_hp)
-			* game.rewards.rest_heal_fraction(game.run)))
+		var amount: int = rest_heal_amount(game.run.player.max_hp,
+			game.rewards.rest_heal_fraction(game.run))
 		game.run.player.hp = mini(game.run.player.max_hp, game.run.player.hp + amount)
 		_finish_node()
 		return
