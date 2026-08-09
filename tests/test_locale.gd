@@ -73,21 +73,42 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"ui.brand.title": "琉璃誓言",
 	"ui.vigil.title": "守夜",
 	"ui.pilgrimage.survey": "滾動或拖曳以巡視朝聖之路",
+	"ui.embark.noVows": "尖塔如常。未立任何誓言。",
 	"ui.combat.lanternTitle": "提燈",
+	"ui.lamp.artLabel": "你的提燈術",
+	"content.cards.firstSpark.text": "抽 1 張牌。燃燼。",
+	"ui.combat.ashesSub": "焚去的牌——每張都曾餵提燈一點餘燼",
+	"ui.rose.selectedPane": "已選的餘燼琉璃窗片",
+	"ui.combat.facetsTitle": "璃面",
+	"ui.keywords.chip": "琢擊可直傷琉璃本身：推進碎裂，無需見血。",
+	"ui.combat.shatter": "碎裂",
 	"ui.combat.affixTitle": "{name} — 菁英封號",
 	"ui.persistence.detail.chosenWaystoneHold": "所選引路石未能保存。",
 	"content.cards.defend.name": "護光",
 	"content.status.poison.name": "陰燃",
+	"content.status.dex.name": "沉穩",
+	"content.status.vulnerable.name": "裂痕",
+	"content.status.weak.name": "黯淡",
+	"content.status.frail.name": "脆裂",
+	"ui.embark.vowLevel": "誓言 {level}  / {max}",
+	"ui.vigil.deeds": "功績",
+	"ui.lamp.boonLabel": "路上的恩賜",
 	"content.aspects.duskblade.name": "暮刃",
 	"content.omens.eighthOmen.name": "第八凶兆",
+	"ui.end.unlock.aspect": "面向已解鎖",
 	"content.variants.ownShade1.name": "墜落之影",
+	"ui.reward.phialRackFullTitle": "藥瓶架已滿",
+	"ui.end.unlock.relic": "遺物已解鎖",
+	"ui.pilgrimage.roseWindow": "玫瑰窗",
+	"ui.rose.shardRecoveredShort": "碎片已尋回",
+	"ui.dawn.unlock.lamplighter": "空燈掌燈人踏上尖塔。",
+	"content.quests.hollowLamplighter.name": "空燈掌燈人",
 	"content.status.ritual.desc": "每回合開始時獲得 N 層熾心。",
 	"ui.menu.abandonConfirmBody": "這段朝聖之路將告終；守夜會留下你所得的一切。",
 	"ui.menu.beginAnewBody": "新的朝聖之路開始前，目前這段旅程會記作放棄。",
 	"ui.map.unlitBody": "此處所藏仍是未知——但首次點亮會獲得金幣賞金。",
-	"ui.omen.prefix": "凶兆",
+	"ui.omen.prefix": "凶兆——",
 	"ui.event.chooseCardSub": "仍有一頁泛着微光。",
-	"ui.rose.selectedPane": "已選的餘燼琉璃窗片",
 }
 
 
@@ -535,15 +556,21 @@ static func _title_wordmark_locale(fails: Array[String]) -> void:
 	_check(fails, en.get("_wordmark_label") == null,
 		"English title gained a duplicate text wordmark")
 	en.free()
-	var zh: ChoiceScreen = ChoiceScreen.new("琉璃誓言", "", [], context)
-	var label_v: Variant = zh.get("_wordmark_label")
-	var label: Label = label_v if label_v is Label else null
-	_check(fails, zh._wordmark != null and not zh._wordmark.visible,
-		"zh-Hant title still paints the English raster")
-	_check(fails, label != null and label.text == "琉璃誓言",
-		"zh-Hant title does not paint its catalogue wordmark")
-	if label != null:
-		var font: Font = label.get_theme_font("font")
-		_check(fails, font != null and font.has_char("誓".unicode_at(0)),
-			"zh-Hant title wordmark cannot shape representative glyph 誓")
-	zh.free()
+	for shape: StringName in [&"pad-landscape", &"phone-portrait"]:
+		var zh_context: Dictionary = {"variant": "title", "shape": shape}
+		var zh: ChoiceScreen = ChoiceScreen.new("琉璃誓言", "", [], zh_context)
+		zh.size = Vector2(StageShape.REFERENCES[shape])
+		zh._fit_title()
+		var label_v: Variant = zh.get("_wordmark_label")
+		var label: Label = label_v if label_v is Label else null
+		_check(fails, zh._wordmark != null and not zh._wordmark.visible,
+			"zh-Hant title still paints the English raster at %s" % shape)
+		_check(fails, label != null and label.text == "琉璃誓言",
+			"zh-Hant title does not paint its catalogue wordmark at %s" % shape)
+		if label != null:
+			var font: Font = label.get_theme_font("font")
+			_check(fails, font != null and font.has_char("誓".unicode_at(0)),
+				"zh-Hant title wordmark cannot shape representative glyph 誓 at %s" % shape)
+			_check(fails, label.size.x <= zh.size.x and label.size.y <= zh.size.y,
+				"zh-Hant title wordmark escapes the %s stage" % shape)
+		zh.free()

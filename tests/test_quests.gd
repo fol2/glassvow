@@ -19,7 +19,7 @@ const ZH_HOLLOW_MESSAGES: Dictionary = {
 	"ui.hollow.message.needGold": "帶來 160 金幣。",
 	"ui.hollow.message.vesselTooFragile": "你的容器承受不起這代價。",
 	"ui.hollow.message.needBoon": "帶來一份尚未花掉的恩賜。",
-	"ui.hollow.message.paneLit": "又一片空燈璃面燃起。",
+	"ui.hollow.message.paneLit": "又一片空燈窗片燃起。",
 	"ui.hollow.message.noPriceWaiting": "目前沒有空燈代價等候支付。",
 }
 
