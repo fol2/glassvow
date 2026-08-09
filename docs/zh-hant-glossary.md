@@ -26,7 +26,12 @@ remain unchanged.
 | Shatter | 碎裂 | Break a full Facet gauge. |
 | Ward | 護光 | Temporary protection; “Held Light” may remain 持光 as a proper item name. |
 | Smolder | 陰燃 | The transferable burning status. |
+| Fervor | 熾心 | Stacked inner fire that increases attack damage. |
+| Poise | 沉穩 | The glassworking status that strengthens Ward cards. |
+| Cracked / Dimmed / Brittle | 裂痕 / 黯淡 / 脆裂 | Glass and light states; keep the three mechanically distinct. |
 | Vow | 誓言 | The optional difficulty ladder. |
+| Deed | 功績 | A lifetime accomplishment recorded by the Vigil. |
+| Boon | 恩賜 | The Lamplighter's starting gift. |
 | Omen | 凶兆 | An act-wide modifier. |
 | Affix | 封號 | An elite enemy's title. |
 | Aspect | 面向 | A playable form. |
