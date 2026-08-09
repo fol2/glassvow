@@ -22,6 +22,7 @@ remain unchanged.
 | Ember / Embers | 餘燼 | No plural suffix in Chinese. |
 | Emberglass | 餘燼琉璃 | The six panes and their Shards. |
 | Facet | 璃面 | One unit of structural integrity. |
+| Pane | 窗片 | One narrative Rose Window or Emberglass pane; never a combat Facet. Card metaphors may simply say 牌. |
 | Chip | 琢擊 | Damage a Facet directly. |
 | Shatter | 碎裂 | Break a full Facet gauge. |
 | Ward | 護光 | Temporary protection; “Held Light” may remain 持光 as a proper item name. |
