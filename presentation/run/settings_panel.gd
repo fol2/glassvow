@@ -18,11 +18,15 @@ var _sfx: SfxBus
 var _panel: PanelContainer
 var _scroll: ScrollContainer
 var _sections: VBoxContainer
+var _language_toggle: Button
+var _language_label: Label
+var _language_deferred: bool
 
 
 func _init(preferences: Preferences, reset_disabled: bool = false,
-		sfx: SfxBus = null) -> void:
+		sfx: SfxBus = null, language_deferred: bool = false) -> void:
 	_preferences = preferences
+	_language_deferred = language_deferred
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -293,36 +297,55 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 ## Language cycles English ↔ 繁體中文. Labels are themselves localised. Live
 ## re-render is owned by main (rebuild the routed screen); mid-combat defers
 ## until the next route — see ui.language.deferNote.
-func _language_row() -> HBoxContainer:
+func _language_row() -> VBoxContainer:
+	var body: VBoxContainer = VBoxContainer.new()
+	body.add_theme_constant_override("separation", 4)
 	var row: HBoxContainer = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
+	body.add_child(row)
 
-	var label: Label = Label.new()
-	label.text = Locale.active.t("ui.language.label").to_upper()
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 1))
-	label.add_theme_font_size_override("font_size", 13)
-	row.add_child(label)
+	_language_label = Label.new()
+	_language_label.name = "LanguageLabel"
+	_language_label.text = Locale.active.t("ui.language.label").to_upper()
+	_language_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_language_label.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_500, 1))
+	_language_label.add_theme_font_size_override("font_size", 13)
+	row.add_child(_language_label)
 
-	var toggle: Button = _small_button()
-	toggle.custom_minimum_size.x = maxf(toggle.custom_minimum_size.x, 120.0)
-	var sync: Callable = func() -> void:
-		var code: StringName = _preferences.effective_language()
-		toggle.text = Locale.active.t(
-			"ui.language.zhHant" if code == Locale.CODE_ZH_HANT else "ui.language.en")
-	sync.call()
-	toggle.pressed.connect(func() -> void:
-		var next: String = "en" if _preferences.effective_language() == Locale.CODE_ZH_HANT \
-			else "zh-Hant"
-		_preferences.set_language(next)
-		Locale.active.set_language(StringName(next))
-		sync.call()
-		label.text = Locale.active.t("ui.language.label").to_upper()
+	_language_toggle = _small_button()
+	_language_toggle.name = "LanguageToggle"
+	_language_toggle.custom_minimum_size.x = maxf(
+		_language_toggle.custom_minimum_size.x, 120.0)
+	var code: StringName = _preferences.effective_language()
+	_language_toggle.text = Locale.active.t(
+		"ui.language.zhHant" if code == Locale.CODE_ZH_HANT else "ui.language.en")
+	_language_toggle.pressed.connect(func() -> void:
+		var next: StringName = Locale.CODE_EN \
+			if _preferences.effective_language() == Locale.CODE_ZH_HANT \
+			else Locale.CODE_ZH_HANT
 		_sfx.play(&"click")
-		language_changed.emit(StringName(next))
+		language_changed.emit(next)
 	)
-	row.add_child(toggle)
-	return row
+	row.add_child(_language_toggle)
+
+	if _language_deferred:
+		var note: Label = Label.new()
+		note.name = "LanguageDeferNote"
+		note.text = Locale.active.t("ui.language.deferNote")
+		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		note.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
+		note.add_theme_font_size_override("font_size", 12)
+		note.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
+		body.add_child(note)
+	return body
+
+
+## Moves keyboard focus and the settings scroll to the language control.
+func focus_language() -> void:
+	if _language_toggle == null:
+		return
+	_language_toggle.grab_focus.call_deferred()
+	_scroll.ensure_control_visible.call_deferred(_language_toggle)
 
 
 ## A labelled ON/OFF switch reading through a getter so the button always

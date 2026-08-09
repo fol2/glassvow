@@ -132,10 +132,15 @@ func set_language(code: String) -> void:
 
 ## Resolves the catalogue code Preferences wants Locale to load.
 func effective_language() -> StringName:
-	if language == "en" or language == "zh-Hant":
-		return StringName(language)
-	var os_lang: String = OS.get_locale_language()
-	if os_lang.begins_with("zh"):
+	return resolve_language(language, OS.get_locale_language())
+
+
+## Pure resolver: an explicit player choice wins; otherwise the OS language
+## selects Traditional Chinese for any zh locale and English for everything else.
+static func resolve_language(saved: String, os_language: String) -> StringName:
+	if saved == "en" or saved == "zh-Hant":
+		return StringName(saved)
+	if os_language.begins_with("zh"):
 		return Locale.CODE_ZH_HANT
 	return Locale.CODE_EN
 
