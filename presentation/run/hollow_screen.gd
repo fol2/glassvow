@@ -114,7 +114,8 @@ func _build() -> void:
 	column.add_theme_constant_override("separation", 8)
 	_copy.add_child(column)
 	_kicker = _label(
-		"THE UNLIT WAY · PRICE %d OF %d" % [_meeting_number, _target],
+		Locale.active.t("ui.hollow.kicker", {
+			"current": _meeting_number, "total": _target}),
 		11, Color("#83939d"))
 	_kicker.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 2))
 	column.add_child(_kicker)
@@ -141,11 +142,11 @@ func _build() -> void:
 	_actions.add_theme_constant_override("h_separation", 12)
 	_actions.add_theme_constant_override("v_separation", 8)
 	column.add_child(_actions)
-	_pay = _action("PAY THE PRICE", &"pay", true)
+	_pay = _action(Locale.active.t("ui.hollow.payPrice").to_upper(), &"pay", true)
 	_actions.add_child(_pay)
-	_continue = _action("CONTINUE", &"continue", false)
+	_continue = _action(Locale.active.t("ui.common.continue").to_upper(), &"continue", false)
 	_actions.add_child(_continue)
-	_leave = _action("RETURN LATER", &"leave", false)
+	_leave = _action(Locale.active.t("ui.hollow.returnLater").to_upper(), &"leave", false)
 	_actions.add_child(_leave)
 	set_paid(str(_pending.get("paid", false)) == "true",
 		str(_pending.get("answer", "")))
@@ -170,7 +171,8 @@ func set_paid(paid: bool, answer: String = "") -> void:
 	_answer.text = answer
 	_answer.add_theme_color_override(
 		"font_color", Color("#d9c98c") if paid else Color("#9eabb2"))
-	_pay.text = "PRICE PAID" if paid else "PAY THE PRICE"
+	_pay.text = (Locale.active.t("ui.hollow.pricePaid") if paid \
+		else Locale.active.t("ui.hollow.payPrice")).to_upper()
 	_pay.disabled = paid
 	_continue.disabled = not paid
 	_leave.disabled = paid
