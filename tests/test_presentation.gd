@@ -43,9 +43,20 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, zh.t("ui.brand.title") == "琉璃誓言", "zh-Hant brand title")
 	_check(fails, zh.whisper(0).begins_with("有一種顏色"), "zh-Hant whisper 0")
 	_check(fails, zh.content("cards", "strike", "name") == "刃鋒", "zh-Hant card name")
+	_check(fails, zh.t("ui.credits.bodyGlass") == "平行移植自 roguecardv2。",
+		"zh-Hant player credits omit benchmark build identity")
 	# Markers survive translation.
 	_check(fails, zh.content("cards", "strike", "text").contains("@6@"),
 		"zh-Hant card text keeps @n@ markers")
+	var credits: CreditsScreen = CreditsScreen.new()
+	var player_credit_text: String = ""
+	for node: Node in credits.find_children("*", "Label", true, false):
+		if node is Label:
+			player_credit_text += "\n" + node.text
+	_check(fails, not player_credit_text.contains("6e06911")
+		and not player_credit_text.contains("0.5.0+"),
+		"player credits omit benchmark build identity")
+	credits.free()
 
 	# The title paints on frame 0, before its first process tick: measured with
 	# the layout already resolved (size 1180x820) and `_focal` still at its 1.0
