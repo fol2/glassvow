@@ -1302,180 +1302,180 @@
       "cursedIdol": {
         "choices": {
           "0": {
-            "label": "Take it",
-            "sub": "Gain a relic. Gain a Hex."
+            "label": "取走",
+            "sub": "獲得一件遺物。獲得一張咒印牌。"
           },
           "1": {
-            "label": "Leave it",
+            "label": "置之不理",
             "sub": ""
           }
         },
-        "name": "The Cursed Idol",
-        "text": "A jade idol sits on a plinth of skulls, radiating a soft warmth. It has clearly been left here for a reason."
+        "name": "受詛神像",
+        "text": "一尊玉像坐在顱骨砌成的座台上，散發微暖。它被留在此處，顯然另有緣由。"
       },
       "emberFountain": {
         "choices": {
           "0": {
-            "label": "Bathe",
-            "sub": "Heal 35% of your Max HP."
+            "label": "沐浴",
+            "sub": "回復生命上限的 35%。"
           },
           "1": {
-            "label": "Bottle it",
-            "sub": "Gain a Phial of Dawn."
+            "label": "盛入瓶中",
+            "sub": "獲得一瓶破曉藥瓶。"
           },
           "2": {
-            "label": "Leave",
+            "label": "離開",
             "sub": ""
           }
         },
-        "name": "Fountain of Embers",
-        "text": "Liquid light pools in a cracked basin, throwing sparks that do not burn. It smells of summer and old victories."
+        "name": "餘燼泉",
+        "text": "液態光芒聚在裂盆之中，迸出的火星不會灼人。那氣味像盛夏，也像久遠的勝利。"
       },
       "fleshTrader": {
         "choices": {
           "0": {
-            "label": "Trade",
-            "sub": "Lose 8 Max HP. Gain a relic."
+            "label": "交易",
+            "sub": "失去 8 點生命上限。獲得一件遺物。"
           },
           "1": {
-            "label": "Refuse",
+            "label": "拒絕",
             "sub": ""
           }
         },
-        "name": "The Flesh Trader",
-        "text": "\"Vitality is a currency,\" purrs a thing wearing a merchant's coat. \"And you look flush with it.\" Long fingers open to reveal a relic."
+        "name": "血肉商人",
+        "text": "「生命也是貨幣。」披着商人外衣的東西輕聲低鳴。「而你看來身家豐厚。」修長手指攤開，露出一件遺物。"
       },
       "forge": {
         "choices": {
           "0": {
-            "label": "Temper",
-            "sub": "Upgrade a card."
+            "label": "淬鍊",
+            "sub": "升級一張牌。"
           },
           "1": {
-            "label": "Leave",
+            "label": "離開",
             "sub": ""
           }
         },
-        "name": "The Forgotten Forge",
-        "text": "An anvil of black star-metal, still warm. Hammers hang in racks, waiting for hands that died an age ago."
+        "name": "被遺忘的鍛爐",
+        "text": "黑色星鐵鑄成的鐵砧仍有餘溫。錘子懸在架上，等待早於一個時代前便已死去的手。"
       },
       "forgottenShrine": {
         "choices": {
           "0": {
-            "label": "Pray",
-            "sub": "Remove a card from your deck."
+            "label": "祈禱",
+            "sub": "從牌庫移除一張牌。"
           },
           "1": {
-            "label": "Desecrate",
-            "sub": "Gain 90 gold. Gain a Hex."
+            "label": "褻瀆",
+            "sub": "獲得 90 金幣。獲得一張咒印牌。"
           },
           "2": {
-            "label": "Leave",
+            "label": "離開",
             "sub": ""
           }
         },
-        "name": "Forgotten Shrine",
-        "text": "A moss-eaten shrine hums with old power. Offerings of bone and silver litter its base. Something watches from inside the stone."
+        "name": "荒忘神龕",
+        "text": "苔蘚侵蝕的神龕嗡鳴着古老力量。骨與銀製祭品散落座下。石中有甚麼正凝視着你。"
       },
       "gambler": {
         "choices": {
           "0": {
-            "label": "Bet 40 gold",
-            "sub": "45% chance to win 110 gold."
+            "label": "下注 40 金幣",
+            "sub": "有 45% 機會贏得 110 金幣。"
           },
           "1": {
-            "label": "Walk away",
+            "label": "轉身離去",
             "sub": ""
           }
         },
-        "name": "The Bone Gambler",
+        "name": "骨骰賭徒",
         "rolls": {
           "lose": {
-            "text": "The bones rattle against you. The wager is lost."
+            "text": "骨骰滾出與你相悖的命數。賭注已失。"
           },
           "win": {
-            "text": "The bones land in your favour. You claim 110 gold."
+            "text": "骨骰落定，命數眷顧你。你取走 110 金幣。"
           }
         },
-        "text": "A grinning figure rattles a cup of knuckle-bones. \"One throw, stranger. Fortune loves the reckless.\""
+        "text": "咧嘴而笑的身影搖着一杯指骨骰。「只擲一次，陌生人。命運偏愛不顧一切的人。」"
       },
       "library": {
         "choices": {
           "0": {
-            "label": "Study",
-            "sub": "Choose 1 of 5 cards to add to your deck."
+            "label": "研讀",
+            "sub": "從 5 張牌中選 1 張加入牌庫。"
           },
           "1": {
-            "label": "Rest among the stacks",
-            "sub": "Heal 20% of your Max HP."
+            "label": "在書架間歇息",
+            "sub": "回復生命上限的 20%。"
           }
         },
-        "name": "The Drowned Library",
-        "text": "Shelves of waterlogged grimoires stretch into the dark. Most are pulp — but a few pages still glow faintly."
+        "name": "沉沒書庫",
+        "text": "浸透水的魔典沿書架伸入黑暗。大多已化成紙漿——仍有幾頁泛着微光。"
       },
       "mirror": {
         "choices": {
           "0": {
-            "label": "Reflect",
-            "sub": "Duplicate a card in your deck."
+            "label": "映照",
+            "sub": "複製牌庫中的一張牌。"
           },
           "1": {
-            "label": "Shatter it",
-            "sub": "Lose 6 HP. Remove a card from your deck."
+            "label": "將它打碎",
+            "sub": "失去 6 點生命。從牌庫移除一張牌。"
           },
           "2": {
-            "label": "Leave",
+            "label": "離開",
             "sub": ""
           }
         },
-        "name": "The Silvered Mirror",
-        "text": "A tall mirror stands in the rubble, unbroken. Your reflection moves half a breath behind you — and it is smiling."
+        "name": "鍍銀之鏡",
+        "text": "一面高鏡立在瓦礫中，完好無缺。鏡中的你比真身慢了半口氣——而且正在微笑。"
       },
       "ruinedCamp": {
         "choices": {
           "0": {
-            "label": "Rest",
-            "sub": "Heal 15% of your Max HP."
+            "label": "歇息",
+            "sub": "回復生命上限的 15%。"
           },
           "1": {
-            "label": "Scavenge",
-            "sub": "Gain 45 gold and a random potion."
+            "label": "搜掠",
+            "sub": "獲得 45 金幣與一瓶隨機藥瓶。"
           }
         },
-        "name": "Ruined Camp",
-        "text": "A campfire, still smoldering. Bedrolls, torn. Whoever slept here left in a hurry — and left their packs behind."
+        "name": "荒廢營地",
+        "text": "營火仍在陰燃，睡鋪已被撕破。曾在此入睡的人匆匆離去——連行囊也棄下。"
       },
       "voidChest": {
         "choices": {
           "0": {
-            "label": "Open it",
-            "sub": "It might hold a relic... or teeth."
+            "label": "打開",
+            "sub": "裏面或許藏着遺物……也或許是利齒。"
           },
           "1": {
-            "label": "Leave",
+            "label": "離開",
             "sub": ""
           }
         },
-        "name": "Humming Chest",
-        "text": "A black iron chest sits alone in the gloom, humming a note you feel in your teeth. Its lock is already broken."
+        "name": "低鳴寶箱",
+        "text": "黑鐵箱獨坐幽暗，低鳴透入齒間。它的鎖早已破開。"
       },
       "woundedKnight": {
         "choices": {
           "0": {
-            "label": "Aid him",
-            "sub": "Lose 8 HP. He rewards you with a relic."
+            "label": "救助他",
+            "sub": "失去 8 點生命。他以一件遺物作謝。"
           },
           "1": {
-            "label": "Loot him",
-            "sub": "Gain 65 gold. Gain a Hex."
+            "label": "劫掠他",
+            "sub": "獲得 65 金幣。獲得一張咒印牌。"
           },
           "2": {
-            "label": "Leave",
+            "label": "離開",
             "sub": ""
           }
         },
-        "name": "The Wounded Knight",
-        "text": "A knight slumps against a shattered pillar, breath rattling behind a crushed visor. One gauntlet clutches a relic; the other beckons you closer."
+        "name": "負傷騎士",
+        "text": "騎士癱靠在碎裂石柱上，呼吸在凹陷面甲後嘶啞作響。一隻鐵手緊握遺物，另一隻招你靠近。"
       }
     },
     "omens": {
