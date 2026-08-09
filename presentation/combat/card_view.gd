@@ -484,7 +484,7 @@ func _init(inst: CardInst, data: Dictionary, cost: int) -> void:
 		_add_name_rule(layer, TYPE_Y - 1.0, 0.14)
 
 		var type_label: Label = Label.new()
-		type_label.text = ctype.to_upper()
+		type_label.text = _display_type(ctype).to_upper()
 		type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		type_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		# 2.8px of tracking is most of this row's identity — without it the label
@@ -1373,3 +1373,11 @@ func keyword_at(global_pos: Vector2) -> String:
 	if not Rect2(Vector2.ZERO, size).has_point(local):
 		return ""
 	return _body.keyword_at(local - _body.position)
+
+
+static func _display_type(ctype: String) -> String:
+	if not TYPE_TINT.has(ctype):
+		return ctype
+	var key: String = "ui.card.type." + ctype
+	var translated: String = Locale.active.t(key)
+	return translated if translated != key and not translated.is_empty() else ctype

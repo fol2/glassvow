@@ -375,10 +375,16 @@ func _add_fallback(parent: Control, glyph: String, colour: Color) -> void:
 func _tip(definition: Dictionary, missing: String) -> String:
 	if definition.is_empty():
 		return missing
+	var rarity: String = str(definition.get("rarity", ""))
+	if not rarity.is_empty():
+		var rarity_key: String = "ui.rarity." + rarity
+		var translated_rarity: String = Locale.active.t(rarity_key)
+		if translated_rarity != rarity_key and not translated_rarity.is_empty():
+			rarity = translated_rarity
 	var lines: PackedStringArray = [
 		str(definition.get("name", missing)),
 		str(definition.get("text", "")),
-		str(definition.get("rarity", "")),
+		rarity,
 	]
 	var shown: PackedStringArray = []
 	for line: String in lines:

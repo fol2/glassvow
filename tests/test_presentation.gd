@@ -76,6 +76,7 @@ static func run(fails: Array[String]) -> void:
 	title_world.free()
 
 	var content: ContentDB = ContentDB.load_slice()
+	_derived_display_labels(fails, content)
 
 	# ---- new_run builds a fresh core-only profile from content.player
 	var rs: RunState = RunState.new_run(content, 12345)
@@ -203,6 +204,74 @@ static func run(fails: Array[String]) -> void:
 
 	tree.root.remove_child(screen)
 	screen.free()
+
+
+static func _derived_display_labels(fails: Array[String], content: ContentDB) -> void:
+	var previous_locale: Locale = Locale.active
+	var locale: Locale = Locale.new(Locale.CODE_EN)
+	Locale.active = locale
+	var strike: Dictionary = content.card(&"strike")
+	var normal_card: CardView = CardView.new(CardInst.new(9001, &"strike"), strike, 1)
+	_check(fails, _has_label(normal_card, "ATTACK"),
+		"card type rubric keeps exact English uppercase")
+	_free_card(normal_card)
+
+	var relic: Dictionary = content.relic(&"emberHeart")
+	var run: RunState = RunState.new_run(content, 9001)
+	var normal_hud: RunHud = RunHud.new(run, content)
+	var normal_tip: String = "%s\n%s\nstarter" % [relic["name"], relic["text"]]
+	_check(fails, normal_hud._tip(relic, "missing") == normal_tip,
+		"relic tooltip keeps hydrated English name, text and rarity")
+	normal_hud.free()
+
+	var requested: Dictionary = locale.get("_requested")
+	var ui: Dictionary = requested["ui"]
+	var card: Dictionary = ui["card"]
+	var card_types: Dictionary = card["type"]
+	card_types["attack"] = "blade-kind"
+	var rarities: Dictionary = ui["rarity"]
+	rarities["starter"] = "heirloom-tier"
+
+	var translated_card: CardView = CardView.new(CardInst.new(9002, &"strike"), strike, 1)
+	_check(fails, _has_label(translated_card, "BLADE-KIND"),
+		"card type rubric resolves the active catalogue before uppercasing")
+	_free_card(translated_card)
+	var unknown_card_data: Dictionary = strike.duplicate(true)
+	unknown_card_data["type"] = "diagnostic-type"
+	var unknown_card: CardView = CardView.new(
+		CardInst.new(9003, &"strike"), unknown_card_data, 1)
+	_check(fails, _has_label(unknown_card, "DIAGNOSTIC-TYPE"),
+		"unknown card type rubric stays literal instead of showing a key")
+	_free_card(unknown_card)
+
+	var translated_hud: RunHud = RunHud.new(run, content)
+	var translated_tip: String = "%s\n%s\nheirloom-tier" % [relic["name"], relic["text"]]
+	_check(fails, translated_hud._tip(relic, "missing") == translated_tip,
+		"relic tooltip resolves a known rarity through the active catalogue")
+	var relic_seat: Control = translated_hud._collection.get_child(0) as Control
+	_check(fails, relic_seat != null and relic_seat.tooltip_text == translated_tip,
+		"real relic seat carries the translated rarity tooltip")
+	_check(fails, translated_hud._tip({"name": "Oddity", "text": "Kept",
+		"rarity": "diagnostic-tier"}, "missing") == "Oddity\nKept\ndiagnostic-tier",
+		"unknown relic rarity stays literal")
+	_check(fails, translated_hud._tip({"name": "Plain", "text": "Kept",
+		"rarity": ""}, "missing") == "Plain\nKept",
+		"empty relic rarity stays omitted")
+	translated_hud.free()
+	Locale.active = previous_locale
+
+
+static func _has_label(root: Node, text: String) -> bool:
+	for node: Node in root.find_children("*", "Label", true, false):
+		if node is Label and node.text == text:
+			return true
+	return false
+
+
+static func _free_card(card: CardView) -> void:
+	for surface: int in 3:
+		card._slab.set_surface_override_material(surface, null)
+	card.free()
 
 
 ## The layout identity gate.
