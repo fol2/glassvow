@@ -132,7 +132,7 @@ func _header() -> HBoxContainer:
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	copy.add_child(title)
 	var greeting: Label = _label(
-		"\"Gold for glory, stranger. Everything's fair-priced — for the doomed.\"", 14,
+		Locale.active.t("ui.shop.greeting"), 14,
 		RunStyle.TEXT_DIM, false)
 	greeting.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	copy.add_child(greeting)
@@ -209,8 +209,9 @@ func _add_offer() -> void:
 
 func _add_removal() -> void:
 	var price: int = int(float(str(_stock.get("removeCost", 0))))
-	var button: Button = _item_button("CARD REMOVAL",
-		"Remove a card from your deck forever.", "", false, false, "✂")
+	var button: Button = _item_button(
+		Locale.active.t("ui.shop.cardRemoval.title").to_upper(),
+		Locale.active.t("ui.shop.cardRemoval.desc"), "", false, false, "✂")
 	button.pressed.connect(_emit_action.bind("remove"))
 	var price_label: Label = _price_label(price, false)
 	_register_slot("removal", "", 0, button, price_label, RunStyle.GOLD)
