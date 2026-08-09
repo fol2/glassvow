@@ -109,6 +109,32 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"ui.map.unlitBody": "此處所藏仍是未知——但首次點亮會獲得金幣賞金。",
 	"ui.omen.prefix": "凶兆——",
 	"ui.event.chooseCardSub": "仍有一頁泛着微光。",
+	"ui.help.vigilBody": "一切皆不白費。每段朝聖之路開始時，<b>掌燈人</b>贈予恩賜並讓你選擇提燈術。倒下時，將一事刻入石中——一座<b>紀念碑</b>，下一段旅程可在同一幕取回。每次碎裂、燃燼與擊殺皆累積畢生<b>功績</b>，解鎖新牌、遺物，與第二面向——<b>灰衛</b>。抵達破曉一次後，<b>誓言</b>開啟：一條可選的嚴酷難度之梯，留給願意踏上更殘酷朝聖之路的人。",
+	"ui.combat.facetsBody": "每個生物皆是琉璃。攻擊造成未被格擋的傷害時，會琢擊一格璃面；填滿量表，琉璃便會[b]碎裂[/b]——它會失去下一次行動、陷入裂痕，並將餘燼灑入你的提燈。",
+	"content.quests.hollowLamplighter.meetings.0.ask": "你的提燈太吵。把它接下來收集的三點餘燼交給我。",
+	"ui.pilgrimage.notNow": "暫時不要",
+	"content.acts.0.bossName": "根脈之心",
+	"content.acts.1.bossName": "利維坦之喉",
+	"content.acts.2.bossName": "永恆君王",
+	"content.enemies.rootheart.name": "根脈之心",
+	"content.enemies.leviathan.name": "利維坦之喉",
+	"content.enemies.sovereign.name": "永恆君王",
+	"content.enemies.shade.name": "影",
+	"ui.rose.openLabel": "打開餘燼琉璃玫瑰窗",
+	"content.cards.flurry.name": "碎屑風暴",
+	"content.cards.shardstorm.name": "碎片風暴",
+	"content.cards.leechBlade.name": "渴血碎片",
+	"content.cards.twinFangs.name": "雙生碎片",
+	"content.whispers.8": "枯瘦的掌燈人記得你未走的路。",
+	"ui.combat.lanternArtTitle": "提燈術——{name}",
+	"ui.combat.staggeredBody": "琉璃已碎——此生物在重新接合前失去下一次行動。",
+	"ui.combat.encounterHeader": "{kind}  ·  第 {act} 幕",
+	"ui.dawn.inputHint": "點擊或按空白鍵繼續  ·  長按跳過",
+	"ui.combat.energyAria": "能量",
+	"content.cards.burn.name": "燼屑",
+	"content.cards.hex.name": "咒印",
+	"ui.combat.staggered": "踉蹌",
+	"ui.keywords.unplayable": "此牌無法打出。",
 }
 
 
@@ -488,6 +514,17 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 		var key: String = str(key_v)
 		_check(fails, str(zh_leaves.get(key, "")) == str(ZH_HANT_GLOSSARY_SAMPLES[key]),
 			"zh-Hant glossary drift at %s" % key)
+	var card_names: Dictionary = {}
+	var cards: Dictionary = zh.get("content", {}).get("cards", {})
+	for card_id_v: Variant in cards:
+		var card_id: String = str(card_id_v)
+		var card: Dictionary = cards[card_id]
+		var card_name: String = str(card.get("name", ""))
+		if card_names.has(card_name):
+			fails.append("locale: zh-Hant card name collision: %s (%s, %s)" % [
+				card_name, card_names[card_name], card_id])
+		else:
+			card_names[card_name] = card_id
 	var latin_paths: Array[String] = []
 	for key_v: Variant in zh_leaves:
 		var key: String = str(key_v)
