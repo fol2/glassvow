@@ -7,6 +7,15 @@
       "tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
       "title": "GLASSVOW"
     },
+    "card": {
+      "type": {
+        "attack": "attack",
+        "curse": "curse",
+        "power": "power",
+        "skill": "skill",
+        "status": "status"
+      }
+    },
     "combat": {
       "affixTitle": "{name} — an elite's title",
       "ashes": "ASHES",
@@ -56,6 +65,11 @@
       "adamant": "ADAMANT",
       "turn": "Turn {turn}",
       "encounterHeader": "{kind}  ·  act {act}",
+      "encounterKind": {
+        "boss": "Boss",
+        "elite": "Elite",
+        "monster": "Monster"
+      },
       "intent": {
         "attackFor": "attack for [b]{amount}[/b]",
         "gainWard": "gain Ward",
@@ -532,6 +546,14 @@
       "hearth": "Hearth",
       "awaits": "{region} — {boss} AWAITS",
       "notNow": "not now"
+    },
+    "rarity": {
+      "boss": "boss",
+      "common": "common",
+      "rare": "rare",
+      "special": "special",
+      "starter": "starter",
+      "uncommon": "uncommon"
     },
     "credits": {
       "title": "Credits",

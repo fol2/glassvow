@@ -5,6 +5,7 @@ extends RefCounted
 
 static func run(fails: Array[String]) -> void:
 	_english_seed(fails)
+	_derived_display_seed(fails)
 	_fallback_chain(fails)
 	_params(fails)
 	_content_and_whisper(fails)
@@ -35,6 +36,32 @@ static func _english_seed(fails: Array[String]) -> void:
 		fails.append("locale: content.cards.strike.name missing from en seed")
 	if not locale.content("cards", "strike", "text").contains("@6@"):
 		fails.append("locale: card text lost @n@ markers")
+
+
+## Mechanics IDs that are rendered as labels need catalogue-owned display copy.
+## The English values deliberately match the current transforms byte for byte;
+## I2 and the residual presentation follow-up consume these leaves separately.
+static func _derived_display_seed(fails: Array[String]) -> void:
+	var locale: Locale = Locale.new()
+	var expected: Dictionary = {
+		"ui.combat.encounterKind.monster": "Monster",
+		"ui.combat.encounterKind.elite": "Elite",
+		"ui.combat.encounterKind.boss": "Boss",
+		"ui.card.type.attack": "attack",
+		"ui.card.type.skill": "skill",
+		"ui.card.type.power": "power",
+		"ui.card.type.status": "status",
+		"ui.card.type.curse": "curse",
+		"ui.rarity.starter": "starter",
+		"ui.rarity.common": "common",
+		"ui.rarity.uncommon": "uncommon",
+		"ui.rarity.rare": "rare",
+		"ui.rarity.special": "special",
+		"ui.rarity.boss": "boss",
+	}
+	for key: String in expected:
+		if locale.t(key) != expected[key]:
+			fails.append("locale derived display: %s is missing or mistyped" % key)
 
 
 static func _fallback_chain(fails: Array[String]) -> void:
