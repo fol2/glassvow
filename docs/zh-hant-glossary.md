@@ -44,10 +44,12 @@ remain unchanged.
 `Godot`, `roguecardv2`, `fol2`, the `Roguelite` genre label, and the `A` key
 label remain in Latin script. The status descriptions also retain their literal
 `N` magnitude token. Their surrounding player-facing sentences are still
-translated. `ui.language.en` deliberately remains `English`; this is the only
-catalogue value allowed to be byte-identical to English solely for its displayed
-language name. `tests/test_locale.gd` holds the exhaustive path allowlist so a
-new Latin-script remainder must be reviewed explicitly.
+translated. The language selector deliberately keeps `ui.language.en` as
+`English` and `ui.language.zhHant` as `繁體中文`, so each language names itself.
+`ui.end.unlock.header` is also byte-identical because it contains only a
+decorative glyph and `{kind}`, with no lexical copy. `tests/test_locale.gd`
+holds both exhaustive allowlists so a new identical value or Latin-script
+remainder must be reviewed explicitly.
 
 ## Mechanical invariants
 
