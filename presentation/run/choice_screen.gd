@@ -418,7 +418,7 @@ func _add_title_rose(context: Dictionary) -> void:
 		return
 	var shards: Array = shards_v
 	_rose_medallion = Button.new()
-	_rose_medallion.tooltip_text = "Open the Emberglass Rose Window"
+	_rose_medallion.tooltip_text = Locale.active.t("ui.rose.openLabel")
 	_rose_medallion.clip_contents = true
 	_rose_medallion.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	_rose_medallion.add_theme_stylebox_override("focus",
