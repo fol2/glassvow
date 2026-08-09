@@ -90,8 +90,10 @@ func _resolved_enemy(run: RunState, requested_id: String) -> Dictionary:
 		var aspect: Dictionary = content.aspects[aspect_index]
 		shade_kit = str(aspect.get("id", "duskblade"))
 		var kit: Dictionary = content.shade_kits.get(shade_kit, {})
+		var aspect_bare: String = str(aspect.get("nameBare", aspect.get("name", shade_kit)))
+		var name_pattern: String = str(kit.get("namePattern", "{aspect}"))
 		base = {
-			"name": "%s Shade" % str(aspect.get("name", "The Duskblade")).trim_prefix("The "),
+			"name": name_pattern.replace("{aspect}", aspect_bare),
 			"hp": [110, 110], "facets": 6, "boss": true,
 			"art": content.enemies["shade"].get("art", {}),
 			"moves": kit.get("moves", {}),
@@ -220,7 +222,7 @@ func start_combat(
 		var aspect_v: Variant = content.aspects[run.aspect]
 		if typeof(aspect_v) == TYPE_DICTIONARY:
 			var aspect_d: Dictionary = aspect_v
-			aspect_name = str(aspect_d.get("name", "")).trim_prefix("The ")
+			aspect_name = str(aspect_d.get("nameBare", aspect_d.get("name", "")))
 	for speaker: EnemyCombatant in cb.enemies:
 		var lines_v: Variant = speaker.def.get("dialogue")
 		if typeof(lines_v) != TYPE_ARRAY:

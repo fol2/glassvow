@@ -47,8 +47,8 @@ static func _real_catalogue_census(fails: Array[String]) -> void:
 		_unwind(undo)
 	if domain_count != 17:
 		fails.append("hydration census: expected 17 live domains, got %d" % domain_count)
-	if leaf_total != 642:
-		fails.append("hydration census: real catalogue has %d, expected 642 live leaves" % leaf_total)
+	if leaf_total != 646:
+		fails.append("hydration census: real catalogue has %d, expected 646 live leaves" % leaf_total)
 	if write_total != leaf_total:
 		fails.append("hydration census: wrote %d of %d live leaves" % [write_total, leaf_total])
 

@@ -28,11 +28,12 @@ const FAKE_TREE: Dictionary = {
 			"paid": "代價已付。", "cannot": "你的燈火尚且不足。",
 		}]},
 	},
-	"aspects": {"duskblade": {"name": "暮刃"}},
+	"aspects": {"duskblade": {"name": "暮刃", "nameBare": "暮刃"}},
 	"vows": {"0": {"name": "鐵之誓"}},
 	"acts": {"0": {"name": "灰燼林", "bossName": "根心"}},
 	"variants": {"paleDuskfang": {"name": "蒼白暮牙"}},
-	"shadeKits": {"duskblade": {"moves": {"eclipse": {"name": "追憶之蝕"}}}},
+	"shadeKits": {"duskblade": {
+		"moves": {"eclipse": {"name": "追憶之蝕"}}, "namePattern": "{aspect}之影"}},
 	"potions": {"healing": {"name": "曙光之瓶"}}, "boons": {"fullPurse": {"name": "滿囊"}},
 	"omens": {"eighthOmen": {"name": "第八徵兆"}}, "affixes": {"vitrified": {"name": "琉璃化"}},
 	"arts": {"flare": {"name": "耀焰"}}, "deeds": {"paneBreaker": {"name": "碎窗者"}},
@@ -45,6 +46,7 @@ static func run(fails: Array[String]) -> void:
 	_overlay_reaches_the_live_rows(fails)
 	_missing_keys_leave_the_bake(fails)
 	_real_zh_catalogue(fails)
+	_shade_name_pattern(fails)
 
 
 ## The English seed must agree with the bake on every display string it carries.
@@ -136,10 +138,12 @@ static func _overlay_reaches_the_live_rows(fails: Array[String]) -> void:
 		[db.quests, ["hollowLamplighter", "meetings", "0", "paid"], "代價已付。"],
 		[db.quests, ["hollowLamplighter", "meetings", "0", "cannot"], "你的燈火尚且不足。"],
 		[db.aspects, ["duskblade", "name"], "暮刃"],
+		[db.aspects, ["duskblade", "nameBare"], "暮刃"],
 		[db.vows, ["0", "name"], "鐵之誓"],
 		[db.acts, ["0", "bossName"], "根心"],
 		[db.variants, ["paleDuskfang", "name"], "蒼白暮牙"],
 		[db.shade_kits, ["duskblade", "moves", "eclipse", "name"], "追憶之蝕"],
+		[db.shade_kits, ["duskblade", "namePattern"], "{aspect}之影"],
 	]
 	for check: Array in checks:
 		var path: Array = check[1]
@@ -202,8 +206,8 @@ static func _real_zh_catalogue(fails: Array[String]) -> void:
 		fails.append("hydration: zh-Hant catalogue did not load")
 		return
 	var written: int = locale.hydrate_content(db)
-	if written != 642:
-		fails.append("hydration: zh-Hant reached %d of 642 live content strings" % written)
+	if written != 646:
+		fails.append("hydration: zh-Hant reached %d of 646 live content strings" % written)
 	if _at(db.cards, ["strike", "name"]) == "Edge":
 		fails.append("hydration: zh-Hant left the card name English")
 	if not _at(db.cards, ["strike", "text"]).contains("@6@"):
@@ -221,6 +225,67 @@ static func _real_zh_catalogue(fails: Array[String]) -> void:
 		fails.append("hydration: en -> zh-Hant -> en did not restore the exact baked catalogue")
 	if _id_fingerprint(db) != baked_ids:
 		fails.append("hydration: en -> zh-Hant -> en did not restore the exact content IDs")
+
+
+## Generated names are catalogue grammar, not an English noun or article rule.
+## A nameless local variant exposes the hero-shade base through the same public
+## combat path without changing the authored names of the three quest tiers.
+static func _shade_name_pattern(fails: Array[String]) -> void:
+	var en_db: ContentDB = ContentDB.load_full()
+	en_db.variants["testShade"] = {
+		"id": "testShade", "base": "hero", "statMods": {}, "dialogue": [],
+	}
+	var en_run: RunState = RunState.new_run(en_db, 127126, "shade-name-en")
+	var en_combat: CombatState = CombatRules.new(en_db).start_combat(
+		en_run, ["testShade"], &"boss")
+	if en_combat.enemies[0].name != "Duskblade Shade":
+		fails.append("shade name: English generated name changed from Duskblade Shade")
+	var db: ContentDB = ContentDB.load_full()
+	var locale: Locale = Locale.new(Locale.CODE_ZH_HANT)
+	var run: RunState = RunState.new_run(db, 127127, "shade-name-pattern")
+	var save_before: String = JSON.stringify(run.to_save_dict())
+	locale.hydrate_content(db)
+	if JSON.stringify(run.to_save_dict()) != save_before:
+		fails.append("shade name: locale hydration changed the v2 run dictionary")
+	db.variants["testShade"] = {
+		"id": "testShade", "base": "hero", "statMods": {}, "dialogue": [],
+	}
+	var rules: CombatRules = CombatRules.new(db)
+	var expected: PackedStringArray = ["暮刃之影", "灰燼守衛之影"]
+	for aspect_index: int in range(expected.size()):
+		var one_run: RunState = RunState.new_run(
+			db, 127128 + aspect_index, "shade-name-%d" % aspect_index)
+		one_run.aspect = aspect_index
+		var combat: CombatState = rules.start_combat(one_run, ["testShade"], &"boss")
+		var got: String = combat.enemies[0].name
+		if got != expected[aspect_index]:
+			fails.append("shade name: aspect %d expected %s got %s"
+				% [aspect_index, expected[aspect_index], got])
+	var authored_run: RunState = RunState.new_run(db, 127130, "shade-name-authored")
+	var authored_combat: CombatState = rules.start_combat(
+		authored_run, ["ownShade1"], &"boss")
+	if authored_combat.enemies[0].name != "The Shade That Fell":
+		fails.append("shade name: ownShade1 authored name lost precedence")
+	var dialogue_run: RunState = RunState.new_run(db, 127130, "shade-dialogue")
+	var dialogue_combat: CombatState = rules.start_combat(
+		dialogue_run, ["usurpedSovereign"], &"boss")
+	var first_line: String = ""
+	for event: Dictionary in dialogue_combat.queue:
+		if event.get("t") == EventTypes.VARIANT_DIALOGUE:
+			first_line = str(event.get("text", ""))
+			break
+	if not first_line.begins_with("暮刃."):
+		fails.append("shade name: variant dialogue did not receive the bare zh-Hant aspect")
+	var domain_source: String = FileAccess.get_file_as_string("res://domain/rules/combat.gd")
+	var screen_source: String = FileAccess.get_file_as_string(
+		"res://presentation/combat/combat_screen.gd")
+	if domain_source.contains("trim_prefix(\"The \")") \
+			or screen_source.contains("trim_prefix(\"The \")"):
+		fails.append("shade name: an English article heuristic remains in a player-facing path")
+	if domain_source.contains("%s Shade"):
+		fails.append("shade name: domain still assembles the English Shade noun")
+	if not screen_source.contains("nameBare"):
+		fails.append("shade name: opening ceremony does not read the bare aspect field")
 
 
 ## Navigate the bake the way the overlay does — dictionary key, array index, or
