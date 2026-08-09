@@ -559,6 +559,7 @@ static func _title_wordmark_locale(fails: Array[String]) -> void:
 	for shape: StringName in [&"pad-landscape", &"phone-portrait"]:
 		var zh_context: Dictionary = {"variant": "title", "shape": shape}
 		var zh: ChoiceScreen = ChoiceScreen.new("琉璃誓言", "", [], zh_context)
+		zh.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		zh.size = Vector2(StageShape.REFERENCES[shape])
 		zh._fit_title()
 		var label_v: Variant = zh.get("_wordmark_label")
