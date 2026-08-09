@@ -67,10 +67,11 @@ and exits 0 whatever it found; measured on 4.7.1, a duplicate `var`, an
 unterminated string, a type mismatch and an untyped `var` all exited 0. The
 `|| exit 1` loop that stood here until 2026-08-06 therefore never failed once.
 `tools/check_scripts.sh` greps stderr for `SCRIPT ERROR` / `Failed to load
-script`, which is the only signal there is. Warnings-as-errors is genuinely
-reaching the check — `project.godot` sets four warning classes to level 2 and an
-untyped `var x = 1` prints `(Warning treated as error.)` — it is enforced by
-that grep, not by the exit code.
+script`, while separately failing on a non-zero process status so invocation
+failures and crashes cannot pass. Warnings-as-errors is genuinely reaching the
+check — `project.godot` sets four warning classes to level 2 and an untyped
+`var x = 1` prints `(Warning treated as error.)` — it is enforced by that grep,
+not by the exit code.
 
 ## 6. Visual Inspection
 

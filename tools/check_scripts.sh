@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 # Fail when a `.gd` file does not parse.
 #
-# `godot --headless --check-only -s FILE` writes its diagnostics to stderr and
-# **exits 0 regardless of what it found**. Measured on 4.7.1 across every class
-# this gate cares about — duplicate declaration, unterminated string, type
-# mismatch, and warnings-as-errors — the exit status was 0 every time while
-# stderr carried a `SCRIPT ERROR: Parse Error:` and a `Failed to load script`.
+# `godot --headless --check-only -s FILE` writes script diagnostics to stderr
+# while exiting 0. Measured on 4.7.1 across every script-error class this gate
+# cares about — duplicate declaration, unterminated string, type mismatch, and
+# warnings-as-errors — the exit status was 0 every time while stderr carried a
+# `SCRIPT ERROR: Parse Error:` and a `Failed to load script`.
 # So the `for f in …; do godot --check-only -s "$f" || exit 1; done` loop this
 # script replaces (`AGENTS.md` § Verification, `.github/workflows/ci.yml`) could
-# never fail, and never once caught a defect. The exit code carries no signal;
-# the stderr text is the only signal there is, so that is what is graded here.
+# never fail, and never once caught a defect. The script must therefore grade
+# both signals independently: stderr for script errors, and the process status
+# for invocation failures or crashes.
 #
 # Warnings-as-errors DOES reach `--check-only`: `project.godot` sets
 # `untyped_declaration`, `inferred_declaration`, `unsafe_cast` and
@@ -42,9 +43,14 @@ while IFS= read -r f; do
 	[ -n "$f" ] || continue
 	checked=$((checked + 1))
 	"$GODOT" --headless --check-only -s "$f" >/dev/null 2>"$err"
-	# Deliberately NOT `if [ $? -ne 0 ]` — see the header. It is always 0.
+	rc=$?
+	file_failed=0
+	if [ "$rc" -ne 0 ]; then
+		printf '%s  %-7s Godot exited with status %d.\n' "$f" "PROCESS" "$rc"
+		file_failed=1
+	fi
 	if grep -qE 'SCRIPT ERROR|Failed to load script' "$err"; then
-		failed=$((failed + 1))
+		file_failed=1
 		# One line per diagnostic: `path:line  KIND  message`, categorised so a
 		# warning-as-error is not mistaken for a syntax error when triaging.
 		awk -v f="$f" '
@@ -59,10 +65,13 @@ while IFS= read -r f; do
 			END { if (n == 0) for (i = 1; i <= e; i++) printf "%s  %-7s %s\n", f, "LOAD", raw[i] }
 		' "$err"
 	fi
+	if [ "$file_failed" -ne 0 ]; then
+		failed=$((failed + 1))
+	fi
 done <"$list"
 
 if [ "$failed" -gt 0 ]; then
-	printf '\n%d of %d script(s) failed to parse. --check-only exits 0 on all of these;\nthey were found by grepping its stderr, which is the only signal it gives.\n' \
+	printf '\n%d of %d script check(s) failed.\n' \
 		"$failed" "$checked"
 	exit 1
 fi

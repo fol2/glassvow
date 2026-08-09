@@ -20,8 +20,8 @@ jobs:
         run: godot --headless --import
       
       # `--check-only` exits 0 on every parse error and reports only on stderr,
-      # so the loop that stood here could never fail. The script greps stderr;
-      # the local gate in AGENTS.md calls the same one so the two cannot drift.
+      # so the loop that stood here could never fail. The script grades stderr
+      # and process status; AGENTS.md calls the same gate so local and CI agree.
       - name: Check GDScript syntax
         run: tools/check_scripts.sh
       

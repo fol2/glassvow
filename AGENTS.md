@@ -54,6 +54,10 @@ effect: a parse error makes `load()` return null and the run fail.
 `--check-only` gives, and both this gate and CI call that one script so the two
 cannot drift.
 
+The default sweep deliberately uses `git ls-files`, so it protects tracked
+scripts only. Stage every new `.gd` file with an explicit path before running
+the full gate; an untracked script is outside both the local sweep and CI.
+
 Warnings-as-errors is not the broken half. `project.godot` sets
 `untyped_declaration`, `inferred_declaration`, `unsafe_cast` and
 `unsafe_call_argument` to level 2, and an untyped `var x = 1` really does print
