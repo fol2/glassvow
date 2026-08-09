@@ -62,6 +62,7 @@ var _banner_shadow: ColorRect = null
 var _title_column: VBoxContainer
 var _wordmark_slot: Control
 var _wordmark: TextureRect
+var _wordmark_label: Label = null
 var _tagline_slot: Control
 var _tagline: Label
 var _primary: GridContainer
@@ -96,7 +97,7 @@ func _init(title_text: String, body_text: String, choices: Array[Dictionary],
 	_card_pick = choices.any(func(row: Dictionary) -> bool:
 		return row.has("card") and not row.get("disabled", false))
 	if _title_variant:
-		_build_title(body_text, choices, context)
+		_build_title(title_text, body_text, choices, context)
 	else:
 		_build_standard(title_text, body_text, choices)
 
@@ -155,7 +156,7 @@ func _build_standard(title_text: String, body_text: String,
 	var title: Label = Label.new()
 	title.text = title_text
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_override("font", load(GlassStyle.CINZEL_700) as Font)
+	title.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	title.add_theme_font_size_override("font_size", roundi(TITLE_PT * k))
 	title.add_theme_color_override("font_color", GlassStyle.TEXT)
 	column.add_child(title)
@@ -165,7 +166,7 @@ func _build_standard(title_text: String, body_text: String,
 		body.text = body_text
 		body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		body.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+		body.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 		body.add_theme_font_size_override("font_size", roundi(BODY_PT * k))
 		body.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 		column.add_child(body)
@@ -273,7 +274,7 @@ func _card_scale() -> float:
 ## The benchmark title is a composition, not a panel: the authored raster sits
 ## over the living sky, the wordmark owns the centre, and utility actions share
 ## one row at the 1180x820 reference stage.
-func _build_title(tagline_text: String, choices: Array[Dictionary],
+func _build_title(title_text: String, tagline_text: String, choices: Array[Dictionary],
 		context: Dictionary) -> void:
 	add_child(TitleWorld.new())
 
@@ -338,6 +339,25 @@ func _build_title(tagline_text: String, choices: Array[Dictionary],
 	_wordmark.anchor_right = 0.5
 	_wordmark.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_wordmark_slot.add_child(_wordmark)
+	# The authored raster is the exact English wordmark. Other locales use the
+	# same seat and composition, but paint their catalogue title through the
+	# display-face fallback chain rather than baking a second language into art.
+	if title_text != "GLASSVOW":
+		_wordmark.visible = false
+		_wordmark_label = Label.new()
+		_wordmark_label.text = title_text
+		_wordmark_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_wordmark_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_wordmark_label.add_theme_font_override(
+			"font", _tracked_font(GlassStyle.CINZEL_700, 8))
+		_wordmark_label.add_theme_color_override("font_color", PARCHMENT)
+		_wordmark_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.72))
+		_wordmark_label.add_theme_constant_override("shadow_offset_x", 0)
+		_wordmark_label.add_theme_constant_override("shadow_offset_y", 5)
+		_wordmark_label.anchor_left = 0.5
+		_wordmark_label.anchor_right = 0.5
+		_wordmark_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+		_wordmark_slot.add_child(_wordmark_label)
 
 	_tagline_slot = Control.new()
 	_tagline_slot.custom_minimum_size.y = 20.0
@@ -400,7 +420,7 @@ func _build_title(tagline_text: String, choices: Array[Dictionary],
 	var version: Label = Label.new()
 	version.text = str(context.get("version", ""))
 	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	version.add_theme_font_override("font", load(GlassStyle.ALEGREYA_400) as Font)
+	version.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	version.add_theme_font_size_override("font_size", 11)
 	version.add_theme_color_override("font_color", Color(BENCH_TEXT_DIM, 0.7))
 	version.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
@@ -505,7 +525,7 @@ func _title_button(text: String, quiet: bool) -> Button:
 
 static func _tracked_font(path: String, glyph_spacing: int) -> FontVariation:
 	var tracked: FontVariation = FontVariation.new()
-	tracked.base_font = load(path) as Font
+	tracked.base_font = GlassStyle.face(path)
 	tracked.spacing_glyph = glyph_spacing
 	return tracked
 
@@ -670,6 +690,13 @@ func _fit_title() -> void:
 	_wordmark.offset_top = 0.0
 	_wordmark.offset_right = wordmark_w * 0.5
 	_wordmark.offset_bottom = wordmark_h
+	if _wordmark_label != null:
+		_wordmark_label.offset_left = -wordmark_w * 0.5
+		_wordmark_label.offset_top = 0.0
+		_wordmark_label.offset_right = wordmark_w * 0.5
+		_wordmark_label.offset_bottom = wordmark_h
+		_wordmark_label.add_theme_font_size_override(
+			"font_size", roundi(clampf(wordmark_h * 0.52, 30.0, 68.0)))
 
 	var tagline_w: float = minf(760.0, size.x - 32.0)
 	_tagline.offset_left = -tagline_w * 0.5
