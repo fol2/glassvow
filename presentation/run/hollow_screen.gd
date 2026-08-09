@@ -168,7 +168,7 @@ func _action(text: String, action: StringName, primary: bool) -> Button:
 func set_paid(paid: bool, answer: String = "") -> void:
 	_pending["paid"] = paid
 	_pending["answer"] = answer
-	_answer.text = answer
+	_answer.text = _message_text(answer)
 	_answer.add_theme_color_override(
 		"font_color", Color("#d9c98c") if paid else Color("#9eabb2"))
 	_pay.text = (Locale.active.t("ui.hollow.pricePaid") if paid \
@@ -180,11 +180,17 @@ func set_paid(paid: bool, answer: String = "") -> void:
 
 
 func show_error(message: String) -> void:
-	_error.text = message
+	_error.text = _message_text(message)
 	_answer.text = ""
 	_pay.disabled = false
 	_continue.disabled = true
 	_leave.disabled = false
+
+
+static func _message_text(message: String) -> String:
+	if message.begins_with("ui.hollow.message."):
+		return Locale.active.t(message)
+	return message
 
 
 func set_shape(stage_shape: StringName) -> void:

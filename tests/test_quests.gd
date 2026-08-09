@@ -3,6 +3,16 @@ extends RefCounted
 ## domain law, the Vigil lights six unique panes, and the Act IV threshold is
 ## a reachable map node.
 
+const HOLLOW_MESSAGES: Dictionary = {
+	"ui.hollow.message.inactive": "The empty lantern does not answer.",
+	"ui.hollow.message.emberDebt": "The next three Embers belong to the hollow lantern.",
+	"ui.hollow.message.needGold": "Bring 160 gold.",
+	"ui.hollow.message.vesselTooFragile": "Your vessel cannot survive the price.",
+	"ui.hollow.message.needBoon": "Bring an unspent boon.",
+	"ui.hollow.message.paneLit": "Another hollow pane catches fire.",
+	"ui.hollow.message.noPriceWaiting": "No hollow price is waiting.",
+}
+
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
 	if not ok:
@@ -19,6 +29,9 @@ static func _paid(result: Dictionary) -> bool:
 
 static func run(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
+	_hollow_domain_tokens(fails)
+	_hollow_locale_fallback(fails)
+	_hollow_save_boundary(fails)
 	var vigil: VigilState = VigilState.blank()
 	for id: String in VigilState.QUEST_IDS:
 		vigil.quests[id]["state"] = "armed"
@@ -86,3 +99,92 @@ static func run(fails: Array[String]) -> void:
 	var threshold: WorldMap = WorldMap.act4_entrance()
 	_check(fails, threshold.reachable() == [0] and threshold.nodes[0].type == "act4",
 		"Act IV threshold is clickable")
+
+
+static func _hollow_run(content: ContentDB, progress: int) -> RunState:
+	var run_state: RunState = RunState.new_run(content, 102, "run-i3-hollow")
+	run_state.quests["hollowLamplighter"] = {
+		"state": "armed", "progress": progress, "memory": {},
+	}
+	return run_state
+
+
+static func _hollow_domain_tokens(fails: Array[String]) -> void:
+	var source: String = FileAccess.get_file_as_string("res://domain/rules/quests.gd")
+	_check(fails, not source.contains("Locale"), "domain/rules/quests.gd contains Locale")
+	for token: String in HOLLOW_MESSAGES:
+		_check(fails, source.contains('"message": "%s"' % token),
+			"domain does not return %s" % token)
+		_check(fails, not source.contains('"message": "%s"' % HOLLOW_MESSAGES[token]),
+			"domain still returns English for %s" % token)
+
+	var content: ContentDB = ContentDB.load_full()
+	var rules: QuestRules = QuestRules.new(content)
+	var inactive: RunState = RunState.new_run(content, 102, "run-i3-inactive")
+	_check(fails, str(rules.pay_lamplighter(inactive).get("message")) \
+		== "ui.hollow.message.inactive", "inactive result is not the stable token")
+	var ember: RunState = _hollow_run(content, 0)
+	_check(fails, str(rules.pay_lamplighter(ember).get("message")) \
+		== "ui.hollow.message.emberDebt", "Ember result is not the stable token")
+	var gold: RunState = _hollow_run(content, 1)
+	gold.player.gold = 159
+	_check(fails, str(rules.pay_lamplighter(gold).get("message")) \
+		== "ui.hollow.message.needGold", "gold result is not the stable token")
+	var fragile: RunState = _hollow_run(content, 2)
+	fragile.player.max_hp = 41
+	_check(fails, str(rules.pay_lamplighter(fragile).get("message")) \
+		== "ui.hollow.message.vesselTooFragile", "Max HP result is not the stable token")
+	var boon: RunState = _hollow_run(content, 3)
+	_check(fails, str(rules.pay_lamplighter(boon).get("message")) \
+		== "ui.hollow.message.needBoon", "boon result is not the stable token")
+	var pane: RunState = _hollow_run(content, 4)
+	_check(fails, str(rules.pay_lamplighter(pane).get("message")) \
+		== "ui.hollow.message.paneLit", "lit-pane result is not the stable token")
+	var waiting: RunState = _hollow_run(content, 0)
+	_check(fails, str(rules.pay_hollow_price(waiting).get("message")) \
+		== "ui.hollow.message.noPriceWaiting", "missing-price result is not the stable token")
+
+
+static func _hollow_locale_fallback(fails: Array[String]) -> void:
+	for code: StringName in [Locale.CODE_EN, Locale.CODE_ZH_HANT]:
+		var locale: Locale = Locale.new(code)
+		for token: String in HOLLOW_MESSAGES:
+			_check(fails, locale.t(token) == str(HOLLOW_MESSAGES[token]),
+				"%s did not resolve %s through exact English fallback" % [code, token])
+
+
+static func _hollow_save_boundary(fails: Array[String]) -> void:
+	var previous: Locale = Locale.active
+	Locale.active = Locale.new(Locale.CODE_ZH_HANT)
+	var content: ContentDB = ContentDB.load_full()
+	var run_state: RunState = _hollow_run(content, 4)
+	run_state.pending_hollow = {
+		"nodeId": "0", "type": "event", "meeting": 4,
+		"paid": false, "deferred": false, "answer": "",
+	}
+	var result: Dictionary = QuestRules.new(content).pay_hollow_price(run_state)
+	_check(fails, str(result.get("ok", false)) == "true", "paid Hollow fixture was rejected")
+	var before: Dictionary = run_state.to_save_dict().duplicate(true)
+	var meeting: Dictionary = {"ask": "A fixture question."}
+	var pending: Dictionary = run_state.pending_hollow
+	var screen: HollowScreen = HollowScreen.new(pending, meeting, 5, 5)
+	_check(fails, screen._answer.text == str(HOLLOW_MESSAGES["ui.hollow.message.paneLit"]),
+		"new token did not resolve at the Hollow presentation boundary")
+	_check(fails, run_state.to_save_dict() == before,
+		"rendering translated the token or otherwise changed the v2 save dictionary")
+
+	var legacy: RunState = _hollow_run(content, 4)
+	legacy.pending_hollow = {
+		"nodeId": "0", "type": "event", "meeting": 4,
+		"paid": true, "deferred": false,
+		"answer": HOLLOW_MESSAGES["ui.hollow.message.paneLit"],
+	}
+	var legacy_before: Dictionary = legacy.to_save_dict().duplicate(true)
+	var legacy_pending: Dictionary = legacy.pending_hollow
+	var legacy_screen: HollowScreen = HollowScreen.new(
+		legacy_pending, meeting, 5, 5)
+	_check(fails, legacy_screen._answer.text == str(HOLLOW_MESSAGES["ui.hollow.message.paneLit"]),
+		"persisted v2 English answer is no longer readable")
+	_check(fails, legacy.to_save_dict() == legacy_before,
+		"rendering changed the legacy v2 save dictionary")
+	Locale.active = previous

@@ -2,6 +2,49 @@ extends RefCounted
 ## Locale catalogue: English seed resolves, fallback never blanks, params
 ## interpolate, and the default `active` stand-in needs no main.
 
+const PERSISTENCE_DETAILS: Dictionary = {
+	"ui.persistence.detail.currentPilgrimageClose": "The current pilgrimage could not be closed.",
+	"ui.persistence.detail.currentPilgrimageClear": "The current pilgrimage could not be cleared.",
+	"ui.persistence.detail.pilgrimageStart": "The pilgrimage could not be started.",
+	"ui.persistence.detail.savedPilgrimageMapUnreadable": "The saved pilgrimage map is unreadable.",
+	"ui.persistence.detail.abandonmentHold": "The abandonment could not be held.",
+	"ui.persistence.detail.phialChoiceHold": "The phial choice could not be held.",
+	"ui.persistence.detail.chosenWaystoneHold": "The chosen waystone could not be held.",
+	"ui.persistence.detail.clearedWaystoneHold": "The cleared waystone could not be held.",
+	"ui.persistence.detail.eventHold": "The event could not be held.",
+	"ui.persistence.detail.eventChoiceHold": "The event choice could not be held.",
+	"ui.persistence.detail.treasureHold": "The treasure could not be held.",
+	"ui.persistence.detail.merchantStockHold": "The merchant's stock could not be held.",
+	"ui.persistence.detail.emptyLanternPurchaseHold": "The empty lantern purchase could not be held.",
+	"ui.persistence.detail.purchaseHold": "The purchase could not be held.",
+	"ui.persistence.detail.removedCardHold": "The removed card could not be held.",
+	"ui.persistence.detail.encounterFreeze": "The encounter could not be frozen.",
+	"ui.persistence.detail.standingBequestClear": "The standing bequest could not be cleared.",
+	"ui.persistence.detail.fallHold": "The fall could not be held.",
+	"ui.persistence.detail.shadeVictoryHold": "The shade victory could not be held.",
+	"ui.persistence.detail.finalVictoryHold": "The final victory could not be held.",
+	"ui.persistence.detail.victoryRewardsHold": "The victory rewards could not be held.",
+	"ui.persistence.detail.claimedRewardHold": "The claimed reward could not be held.",
+	"ui.persistence.detail.crownRelicsHold": "The crown relics could not be held.",
+	"ui.persistence.detail.nextActHold": "The next act could not be held.",
+	"ui.persistence.detail.bequestHold": "The bequest could not be held.",
+	"ui.persistence.detail.vigilRecord": "The Vigil could not record this pilgrimage.",
+	"ui.persistence.detail.completedRunClose": "The completed run could not be closed.",
+	"ui.persistence.detail.dawnHold": "Dawn could not be held.",
+	"ui.persistence.detail.dawnCursorHold": "The Dawn cursor could not be held.",
+	"ui.persistence.detail.shadeDuelHold": "The shade duel could not be held.",
+	"ui.persistence.detail.hollowPriceHold": "The Hollow price could not be held.",
+	"ui.persistence.detail.heldHollowDestinationUnreadable": "The held Hollow destination is unreadable.",
+	"ui.persistence.detail.hollowDestinationHold": "The Hollow destination could not be held.",
+	"ui.persistence.detail.lamplighterGiftsHold": "The Lamplighter's gifts could not be held.",
+	"ui.persistence.detail.lamplighterGiftHold": "The Lamplighter's gift could not be held.",
+}
+
+
+static func _check(fails: Array[String], ok: bool, what: String) -> void:
+	if not ok:
+		fails.append("locale: %s" % what)
+
 
 static func run(fails: Array[String]) -> void:
 	_english_seed(fails)
@@ -12,6 +55,8 @@ static func run(fails: Array[String]) -> void:
 	_unknown_language_rejected(fails)
 	_default_active(fails)
 	_remaining_run_screen_call_sites(fails)
+	_dialog_shells(fails)
+	_persistence_calls_and_shell(fails)
 
 
 static func _english_seed(fails: Array[String]) -> void:
@@ -203,3 +248,108 @@ static func _function_body(source: String, name: String) -> String:
 		return ""
 	var finish: int = source.find("\nfunc ", start + 1)
 	return source.substr(start) if finish < 0 else source.substr(start, finish - start)
+
+
+static func _dialog_shells(fails: Array[String]) -> void:
+	var source: String = FileAccess.get_file_as_string("res://application/main.gd")
+	var expected_keys: Array[String] = [
+		"ui.menu.beginAnew", "ui.menu.beginAnewBody", "ui.menu.keepClimbing",
+		"ui.menu.leaveSpireTitle", "ui.menu.leaveSpireBody",
+		"ui.common.leave", "ui.common.stay", "ui.menu.abandonConfirmTitle",
+		"ui.menu.abandonConfirmBody", "ui.menu.abandonRun",
+	]
+	for key: String in expected_keys:
+		_check(fails, source.contains('Locale.active.t("%s")' % key),
+			"Main dialog seam does not consume %s" % key)
+
+	var previous: Locale = Locale.active
+	Locale.active = Locale.new(Locale.CODE_EN)
+	var main: Main = Main.new()
+	main._sfx_bus = SfxBus.new()
+	main.add_child(main._sfx_bus)
+	main._transitions = TransitionLayer.new()
+	main.add_child(main._transitions)
+	main._confirm_abandon()
+	var abandon: ChoiceScreen = main._modal as ChoiceScreen
+	_check(fails, abandon != null, "abandon confirmation did not open as an overlay")
+	if abandon != null:
+		_check_dialog(fails, abandon, "ABANDON RUN?",
+			"This pilgrimage will end. The Vigil will keep what was earned.",
+			["Abandon Run", "Keep Climbing"], "no", "Abandon Run", "abandon")
+	main._close_overlay()
+	main._show_run_menu()
+	var menu: RunMenuPanel = main._modal as RunMenuPanel
+	_check(fails, menu != null, "run menu did not open")
+	if menu != null:
+		menu.quit_requested.emit()
+	var leave: ChoiceScreen = main._choice_screen as ChoiceScreen
+	_check(fails, leave != null, "Leave Spire confirmation did not open")
+	if leave != null:
+		_check_dialog(fails, leave, "LEAVE THE SPIRE?", "The lantern keeps your place.",
+			["Leave", "Stay"], "no", "Leave", "leave")
+	Locale.active = previous
+
+
+static func _check_dialog(fails: Array[String], screen: ChoiceScreen,
+		title: String, body: String, actions: Array[String], cancel: String,
+		first: String, label: String) -> void:
+	var labels: Array[String] = []
+	for node: Node in screen.find_children("", "Label", true, false):
+		var text: String = str((node as Label).text)
+		if not text.is_empty():
+			labels.append(text)
+	var buttons: Array[String] = []
+	for node: Node in screen.find_children("", "Button", true, false):
+		buttons.append(str((node as Button).text))
+	_check(fails, labels.has(title), "%s title changed" % label)
+	_check(fails, labels.has(body), "%s body changed" % label)
+	_check(fails, buttons == actions, "%s action order changed: %s" % [label, buttons])
+	_check(fails, screen._cancel_id == cancel, "%s cancel action changed" % label)
+	_check(fails, screen._first_button != null and screen._first_button.text == first,
+		"%s initial focus target changed" % label)
+
+
+static func _persistence_calls_and_shell(fails: Array[String]) -> void:
+	var source: String = FileAccess.get_file_as_string("res://application/main.gd")
+	var call_keys: Array[String] = []
+	var marker: String = '_show_save_error("'
+	var at: int = source.find(marker)
+	while at >= 0:
+		var start: int = at + marker.length()
+		var finish: int = source.find('")', start)
+		if finish < 0:
+			break
+		call_keys.append(source.substr(start, finish - start))
+		at = source.find(marker, finish + 2)
+	_check(fails, call_keys.size() == 40,
+		"expected 40 save-error call sites, found %d" % call_keys.size())
+	var distinct: Array[String] = []
+	var locale: Locale = Locale.new(Locale.CODE_EN)
+	for key: String in call_keys:
+		_check(fails, PERSISTENCE_DETAILS.has(key), "save-error call uses non-frozen key %s" % key)
+		if PERSISTENCE_DETAILS.has(key):
+			_check(fails, locale.t(key) == str(PERSISTENCE_DETAILS[key]),
+				"save-error key %s does not preserve its English detail" % key)
+		if not distinct.has(key):
+			distinct.append(key)
+	_check(fails, distinct.size() == 35,
+		"expected 35 distinct save-error details, found %d" % distinct.size())
+	for key: String in PERSISTENCE_DETAILS:
+		_check(fails, distinct.has(key), "save-error details do not cover %s" % key)
+
+	var previous: Locale = Locale.active
+	Locale.active = Locale.new(Locale.CODE_EN)
+	var main: Main = Main.new()
+	main._sfx_bus = SfxBus.new()
+	main.add_child(main._sfx_bus)
+	main._transitions = TransitionLayer.new()
+	main.add_child(main._transitions)
+	main._show_save_error("ui.persistence.detail.eventHold")
+	var shell: ChoiceScreen = main._choice_screen as ChoiceScreen
+	_check(fails, shell != null, "save-error shell did not open")
+	if shell != null:
+		_check_dialog(fails, shell, "THE LIGHT WOULD NOT HOLD",
+			"The event could not be held.\nNo progress was discarded.",
+			["Retry", "Title"], "", "Retry", "save error")
+		_check(fails, not shell._has_cancel, "save-error shell gained a cancel action")
+	Locale.active = previous
