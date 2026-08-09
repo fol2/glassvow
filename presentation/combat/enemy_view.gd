@@ -4572,7 +4572,7 @@ func _build_chrome(display_name: String) -> void:
 	_hp_label.custom_minimum_size = Vector2(HP_LABEL_W, 0.0)
 	_hp_label.add_theme_font_size_override("font_size", HP_LABEL_PX)
 	_hp_label.add_theme_color_override("font_color", HP_LABEL_TINT)
-	var alegreya_bold: FontFile = load(GlassStyle.ALEGREYA_700)
+	var alegreya_bold: Font = GlassStyle.face(GlassStyle.ALEGREYA_700)
 	if alegreya_bold != null:
 		_hp_label.add_theme_font_override("font", alegreya_bold)
 	_hp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -4647,7 +4647,7 @@ static func _label(initial: String) -> Label:
 ## `Cinzel-500.woff2` is byte-identical to the benchmark's own
 ## `cinzel-latin-500-normal`, as are the 700 and 800 already here.
 func _name_style(l: Label, tint: Color) -> Label:
-	var cinzel: FontFile = load(GlassStyle.CINZEL_500)
+	var cinzel: Font = GlassStyle.face(GlassStyle.CINZEL_500)
 	if cinzel != null:
 		# `letter-spacing: 0.1em` at 13.5px is 1.35px, and a glyph advance is an
 		# integer here.

@@ -80,12 +80,12 @@ static func icon_for(status_id: StringName) -> Texture2D:
 ## Alegreya is the benchmark's reading face and it carries the chip numerals too
 ## (`.schip .n` computes to Alegreya 800). Only 400 and 700 are bundled here, so
 ## 700 is the nearest weight — Cinzel would be the wrong face entirely.
-static var _numerals: FontFile = null
+static var _numerals: Font = null
 
 
-static func numeral_font() -> FontFile:
+static func numeral_font() -> Font:
 	if _numerals == null:
-		_numerals = load(GlassStyle.ALEGREYA_700) as FontFile
+		_numerals = GlassStyle.face(GlassStyle.ALEGREYA_700)
 	return _numerals
 
 
@@ -132,7 +132,7 @@ func set_count(value: int) -> void:
 	if not _count.visible:
 		return
 	_count.text = str(value)
-	var f: FontFile = numeral_font()
+	var f: Font = numeral_font()
 	var w: float = f.get_string_size(
 		_count.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, NUM_SIZE).x
 	# The font's REAL line height — 18 at 12px, where the old box was NUM_SIZE + 4

@@ -123,7 +123,7 @@ static func font(path: String, tracking: int) -> Font:
 		var hit: Font = _fonts[key]
 		return hit
 	var fv: FontVariation = FontVariation.new()
-	fv.base_font = load(path) as FontFile
+	fv.base_font = GlassStyle.face(path)
 	if tracking != 0:
 		fv.spacing_glyph = tracking
 	_fonts[key] = fv

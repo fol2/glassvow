@@ -112,7 +112,7 @@ func _build() -> void:
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_title.add_theme_color_override(&"font_color", GOLD)
 	_title.add_theme_font_size_override(&"font_size", TITLE_SIZE)
-	var cinzel: FontFile = load(GlassStyle.CINZEL_700)
+	var cinzel: Font = GlassStyle.face(GlassStyle.CINZEL_700)
 	if cinzel != null:
 		_title.add_theme_font_override(&"font", cinzel)
 	_box.add_child(_title)
@@ -130,10 +130,10 @@ func _build() -> void:
 	_body.add_theme_font_size_override(&"normal_font_size", BODY_SIZE)
 	_body.add_theme_font_size_override(&"bold_font_size", BODY_SIZE)
 	_body.add_theme_constant_override(&"line_separation", int(LINE_SPACING))
-	var alegreya: FontFile = load(GlassStyle.ALEGREYA_400)
+	var alegreya: Font = GlassStyle.face(GlassStyle.ALEGREYA_400)
 	if alegreya != null:
 		_body.add_theme_font_override(&"normal_font", alegreya)
-	var alegreya_bold: FontFile = load(GlassStyle.ALEGREYA_700)
+	var alegreya_bold: Font = GlassStyle.face(GlassStyle.ALEGREYA_700)
 	if alegreya_bold != null:
 		_body.add_theme_font_override(&"bold_font", alegreya_bold)
 	_box.add_child(_body)
