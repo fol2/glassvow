@@ -176,7 +176,7 @@
       }
     },
     "event": {
-      "chooseCardSub": "仍有一頁發着微光。",
+      "chooseCardSub": "仍有一頁泛着微光。",
       "chooseCardTitle": "選擇一張牌",
       "duplicateSub": "鏡子仍記得。",
       "duplicateTitle": "複製一張牌",
@@ -300,7 +300,7 @@
       "survey": "{action} 以巡視尖塔",
       "tap": "輕觸",
       "travelHere": "{action} 以前往此處。",
-      "unlitBody": "此處所藏未知——但初燃須付金幣賞金。",
+      "unlitBody": "此處所藏仍是未知——但首次點亮會獲得金幣賞金。",
       "unlitTitle": "未燃之燈",
       "witchlightBody": "蒼白琉璃在此等候。",
       "witchlightTitle": "巫光顫動",
@@ -310,12 +310,12 @@
     },
     "menu": {
       "abandon": "放棄",
-      "abandonConfirmBody": "你的朝聖之路將沒入虛空。",
+      "abandonConfirmBody": "這段朝聖之路將告終；守夜會留下你所得的一切。",
       "abandonConfirmTitle": "放棄此行？",
       "abandonRun": "放棄此行",
       "back": "返回",
       "beginAnew": "重新開始",
-      "beginAnewBody": "已保存的朝聖之路將沒入虛空。",
+      "beginAnewBody": "新的朝聖之路開始前，目前這段旅程會記作放棄。",
       "beginAnewTitle": "重新開始？",
       "beginClimb": "開始朝聖",
       "chooseBoon": "選擇恩賜",
@@ -453,7 +453,7 @@
       "finalWhisper": "最後的低語在每次破曉歸來。",
       "openLabel": "打開玫瑰窗",
       "paneDark": "這片璃面仍然黯淡。",
-      "selectedPane": "已選餘燼琉璃璃面",
+      "selectedPane": "已選的餘燼琉璃窗片",
       "shardRecovered": "{name}，碎片已尋回",
       "shardRecoveredShort": "碎片已尋回",
       "unknownPane": "未知的餘燼琉璃第 {n} 片",
@@ -566,7 +566,7 @@
       "sfxAttributionCount": "{count} 段音效 · 以 ElevenLabs 合成"
     },
     "omen": {
-      "prefix": "兆示 - "
+      "prefix": "凶兆"
     },
     "language": {
       "label": "語言",
@@ -622,7 +622,7 @@
       },
       "fervent": {
         "name": "熾烈",
-        "text": "戰鬥開始時獲得 2 層熱誠。"
+        "text": "戰鬥開始時獲得 2 層熾心。"
       },
       "veiled": {
         "name": "蒙紗",
@@ -723,8 +723,8 @@
       },
       "ascension": {
         "name": "昇華聖詠",
-        "text": "每回合開始時獲得 2 層熱誠。",
-        "textUp": "每回合開始時獲得 3 層熱誠。"
+        "text": "每回合開始時獲得 2 層熾心。",
+        "textUp": "每回合開始時獲得 3 層熾心。"
       },
       "ashBite": {
         "name": "灰噬",
@@ -776,8 +776,8 @@
       },
       "cripple": {
         "name": "熄火槽",
-        "text": "撲滅一名敵人的內火：令其失去 2 層熱誠。燃燼。",
-        "textUp": "撲滅一名敵人的內火：令其失去 3 層熱誠。燃燼。"
+        "text": "撲滅一名敵人的內火：令其失去 2 層熾心。燃燼。",
+        "textUp": "撲滅一名敵人的內火：令其失去 3 層熾心。燃燼。"
       },
       "defend": {
         "name": "護光",
@@ -806,8 +806,8 @@
       },
       "empower": {
         "name": "內焰",
-        "text": "獲得 2 層熱誠。",
-        "textUp": "獲得 3 層熱誠。"
+        "text": "獲得 2 層熾心。",
+        "textUp": "獲得 3 層熾心。"
       },
       "executioner": {
         "name": "斷層",
@@ -1665,8 +1665,8 @@
         "text": "回復 20 點生命。"
       },
       "strength": {
-        "name": "熱誠藥瓶",
-        "text": "獲得 2 層熱誠。"
+        "name": "熾心藥瓶",
+        "text": "獲得 2 層熾心。"
       },
       "swift": {
         "name": "墨飲",
@@ -1823,7 +1823,7 @@
       },
       "ironTalisman": {
         "name": "鐵符",
-        "text": "你每打出第 3 張攻擊牌，便獲得 1 層熱誠。"
+        "text": "你每打出第 3 張攻擊牌，便獲得 1 層熾心。"
       },
       "merchantsMark": {
         "name": "商人印記",
@@ -1847,7 +1847,7 @@
       },
       "shatterersCrown": {
         "name": "碎璃者之冠",
-        "text": "敵人琉璃變薄：所有璃面量表少 1 格。敵人開戰時獲得 1 層熱誠。"
+        "text": "敵人琉璃變薄：所有璃面量表少 1 格。敵人開戰時獲得 1 層熾心。"
       },
       "silkFan": {
         "name": "絲扇",
@@ -1887,7 +1887,7 @@
       },
       "warFetish": {
         "name": "戰爭神物",
-        "text": "每場戰鬥開始時獲得 1 層熱誠。"
+        "text": "每場戰鬥開始時獲得 1 層熾心。"
       },
       "wardingCharm": {
         "name": "護光符",
@@ -1970,7 +1970,7 @@
         "name": "暖意"
       },
       "ritual": {
-        "desc": "每回合開始時獲得 N 層熱誠。",
+        "desc": "每回合開始時獲得 N 層熾心。",
         "name": "聖詠"
       },
       "str": {
