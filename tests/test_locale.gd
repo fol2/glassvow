@@ -47,13 +47,35 @@ const ZH_HANT_ENGLISH_ALLOWLIST: Array[String] = [
 	"ui.language.en",
 ]
 
+## Every visible Latin-script remainder is deliberate: genre/credit proper
+## names, the A key, or the status catalogue's literal N magnitude token.
+const ZH_HANT_LATIN_PATH_ALLOWLIST: Array[String] = [
+	"ui.brand.tagline", "ui.combat.lanternSub", "ui.help.lanternBody",
+	"ui.lamp.artHint", "ui.credits.bodyBrand", "ui.credits.bodyGlass",
+	"ui.credits.bodyCinzel", "ui.credits.bodyAlegreya", "ui.credits.bodyNoto",
+	"ui.credits.bodyEngine", "ui.credits.fontLicences", "ui.credits.footer",
+	"ui.credits.musicAttribution", "ui.credits.musicAttributionCount",
+	"ui.credits.sfxAttribution", "ui.credits.sfxAttributionCount", "ui.language.en",
+	"content.status.beacon.desc", "content.status.dex.desc",
+	"content.status.emberflow.desc", "content.status.energized.desc",
+	"content.status.metallicize.desc", "content.status.nightsight.desc",
+	"content.status.poison.desc", "content.status.regen.desc",
+	"content.status.ritual.desc", "content.status.str.desc",
+	"content.status.thorns.desc", "content.status.venomous.desc",
+]
+
 const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"ui.brand.title": "琉璃誓言",
 	"ui.vigil.title": "守夜",
 	"ui.pilgrimage.survey": "滾動或拖曳以巡視朝聖之路",
 	"ui.combat.lanternTitle": "提燈",
+	"ui.combat.affixTitle": "{name} — 菁英封號",
+	"ui.persistence.detail.chosenWaystoneHold": "所選引路石未能保存。",
 	"content.cards.defend.name": "護光",
 	"content.status.poison.name": "陰燃",
+	"content.aspects.duskblade.name": "暮刃",
+	"content.omens.eighthOmen.name": "第八凶兆",
+	"content.variants.ownShade1.name": "墜落之影",
 }
 
 
@@ -400,6 +422,7 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 		if not en_value.is_empty() and zh_value.strip_edges().is_empty():
 			blank.append(key)
 		if en_value == zh_value and not en_value.is_empty() \
+				and _visible_ascii(en_value) \
 				and not ZH_HANT_ENGLISH_ALLOWLIST.has(key):
 			untranslated.append(key)
 		if _marker_multiset(en_value) != _marker_multiset(zh_value):
@@ -432,6 +455,16 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 		var key: String = str(key_v)
 		_check(fails, str(zh_leaves.get(key, "")) == str(ZH_HANT_GLOSSARY_SAMPLES[key]),
 			"zh-Hant glossary drift at %s" % key)
+	var latin_paths: Array[String] = []
+	for key_v: Variant in zh_leaves:
+		var key: String = str(key_v)
+		if _visible_ascii(str(zh_leaves[key])):
+			latin_paths.append(key)
+	latin_paths.sort()
+	var expected_latin: Array[String] = ZH_HANT_LATIN_PATH_ALLOWLIST.duplicate()
+	expected_latin.sort()
+	_check(fails, latin_paths == expected_latin,
+		"zh-Hant visible Latin allowlist drift: %s" % _first_paths(latin_paths))
 
 
 static func _read_catalogue(path: String, fails: Array[String]) -> Dictionary:
@@ -465,6 +498,14 @@ static func _marker_multiset(value: String) -> Array[String]:
 		markers.append(found.get_string())
 	markers.sort()
 	return markers
+
+
+static func _visible_ascii(value: String) -> bool:
+	var structural: RegEx = RegEx.new()
+	structural.compile("(@[^@]+@|#[^#]+#|\\{[^{}]+\\}|<[^>]+>|\\[[^]\\n]+\\])")
+	var words: RegEx = RegEx.new()
+	words.compile("[A-Za-z]")
+	return words.search(structural.sub(value, "", true)) != null
 
 
 static func _first_paths(paths: Array[String]) -> String:
