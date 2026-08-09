@@ -13,6 +13,7 @@ static func run(fails: Array[String]) -> void:
 	_fresh_boot_defaults(fails)
 	_legacy_import_once(fails)
 	_round_trip(fails)
+	_language_resolution(fails)
 	_default_instance_never_writes(fails)
 	_cleanup()
 
@@ -59,11 +60,33 @@ static func _round_trip(fails: Array[String]) -> void:
 	prefs.set_muted(Preferences.SFX, true)
 	prefs.set_screen_shake(false)
 	prefs.set_reduce_motion(true)
+	prefs.set_language("zh-Hant")
 	var back: Preferences = Preferences.read_from_disk(TEST_PATH, TEST_LEGACY)
 	if back.master_volume != 0.5 or not back.sfx_muted:
 		fails.append("preferences: audio changes did not survive a reload")
 	if back.screen_shake or not back.reduce_motion:
 		fails.append("preferences: motion changes did not survive a reload")
+	if back.language != "zh-Hant":
+		fails.append("preferences: language did not survive a reload")
+
+
+static func _language_resolution(fails: Array[String]) -> void:
+	var script: Script = load("res://application/preferences.gd") as Script
+	if script == null or not script.has_method("resolve_language"):
+		fails.append("preferences: pure language resolver is missing")
+		return
+	if script.call("resolve_language", "", "zh-HK") != Locale.CODE_ZH_HANT:
+		fails.append("preferences: zh-HK OS locale did not resolve to zh-Hant")
+	if script.call("resolve_language", "", "zh-TW") != Locale.CODE_ZH_HANT:
+		fails.append("preferences: zh-TW OS locale did not resolve to zh-Hant")
+	if script.call("resolve_language", "", "en-GB") != Locale.CODE_EN:
+		fails.append("preferences: English OS locale did not resolve to en")
+	if script.call("resolve_language", "", "fr-FR") != Locale.CODE_EN:
+		fails.append("preferences: non-Chinese OS locale did not fall back to en")
+	if script.call("resolve_language", "en", "zh-HK") != Locale.CODE_EN:
+		fails.append("preferences: saved en did not override the Chinese OS locale")
+	if script.call("resolve_language", "zh-Hant", "en-GB") != Locale.CODE_ZH_HANT:
+		fails.append("preferences: saved zh-Hant did not override the English OS locale")
 
 
 static func _default_instance_never_writes(fails: Array[String]) -> void:
