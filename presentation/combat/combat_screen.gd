@@ -3102,7 +3102,7 @@ func _tip_at(global_pos: Vector2) -> Dictionary:
 ## `keywordLegend`'s glossary (tooltip.js:14). Six of the twenty-one read their
 ## body out of the status catalogue so retuning a status retunes its keyword.
 func _keyword_tip(word: String) -> Dictionary:
-	var status_id: String = str(RulesText.KEYWORD_STATUS.get(word, ""))
+	var status_id: String = RulesText.keyword_status(word)
 	if status_id != "":
 		var info: Dictionary = game.content.statuses.get(status_id, {})
 		return {"title": word, "body": str(info.get("desc", ""))}

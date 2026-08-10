@@ -101,6 +101,11 @@ static func _runtime_rules_text_keywords(fails: Array[String]) -> void:
 	for surface: String in ["護光", "陰燃", "燃燼"]:
 		_check(fails, _token_kind(chinese, surface) == RulesText.KIND_KEYWORD,
 			"zh-Hant %s is styled as a keyword" % surface)
+	_check(fails, RulesText.keyword_key("護光") == "ward"
+		and RulesText.keyword_key("燃燼") == "kindle",
+		"zh-Hant keyword surfaces resolve to semantic glossary keys")
+	_check(fails, RulesText.keyword_status("陰燃") == "poison",
+		"zh-Hant Smolder surface resolves to the poison status")
 	_check(fails, _token_kind(RulesText.tokenize("Ward"), "Ward") == RulesText.KIND_PLAIN,
 		"cached English keyword terms do not survive a zh-Hant switch")
 

@@ -15,6 +15,12 @@ extends RefCounted
 const EN_PATH: String = "res://locale/en.json"
 const CODE_EN: StringName = &"en"
 const CODE_ZH_HANT: StringName = &"zh-Hant"
+const KEYWORD_TERM_COUNTS: Dictionary = {
+	"vulnerable": 1, "weak": 1, "frail": 1, "poison": 1, "str": 1,
+	"dex": 1, "kindle": 1, "ward": 1, "energy": 1, "ember": 2,
+	"chip": 1, "facetDesc": 4, "staggered": 1, "unplayable": 1,
+	"shard": 1, "hex": 1, "cinder": 1,
+}
 ## Only authored display copy may cross the locale → ContentDB boundary.
 const DISPLAY_LEAVES: Dictionary = {
 	"name": true, "nameBare": true, "namePattern": true,
@@ -86,6 +92,43 @@ func content(domain: String, id: String, field: String = "name") -> String:
 ## Whisper line by stable index (whispers are a plain array — no IDs).
 func whisper(index: int) -> String:
 	return t("content.whispers.%d" % index)
+
+
+## Keyword surfaces keyed by their stable glossary/status semantic. A malformed
+## requested-language table falls back as one unit to English, so styling and
+## tooltip meaning can never be assembled from different catalogues.
+func keyword_terms() -> Dictionary:
+	var parts: PackedStringArray = PackedStringArray(["ui", "keywords", "terms"])
+	var requested_terms: Variant = _dig(_requested, parts)
+	if _valid_keyword_terms(requested_terms):
+		var requested_copy: Dictionary = requested_terms
+		return requested_copy.duplicate(true)
+	var english_terms: Variant = _dig(_fallback_en, parts)
+	if _valid_keyword_terms(english_terms):
+		var english_copy: Dictionary = english_terms
+		return english_copy.duplicate(true)
+	return {}
+
+
+static func _valid_keyword_terms(value: Variant) -> bool:
+	if typeof(value) != TYPE_DICTIONARY:
+		return false
+	var terms: Dictionary = value
+	if terms.size() != KEYWORD_TERM_COUNTS.size():
+		return false
+	for key_v: Variant in KEYWORD_TERM_COUNTS:
+		var key: String = str(key_v)
+		var surfaces_v: Variant = terms.get(key)
+		if typeof(surfaces_v) != TYPE_ARRAY:
+			return false
+		var surfaces: Array = surfaces_v
+		var expected_count: int = KEYWORD_TERM_COUNTS[key]
+		if surfaces.size() != expected_count:
+			return false
+		for surface_v: Variant in surfaces:
+			if typeof(surface_v) != TYPE_STRING or str(surface_v).is_empty():
+				return false
+	return true
 
 
 ## Overlay the active language's `content.*` display strings onto the live
