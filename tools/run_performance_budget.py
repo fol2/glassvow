@@ -185,6 +185,7 @@ def validate_footprint(data: Any, pid: int) -> float:
         die("footprint: wrong unit or missing sample series")
     peaks: list[float] = []
     starts: list[float] = []
+    seen_end = False
     for i, sample in enumerate(data["samples"]):
         if not isinstance(sample, dict) or sample.get("errors") != []:
             die(f"footprint.samples[{i}]: errors or malformed sample")
@@ -194,6 +195,11 @@ def validate_footprint(data: Any, pid: int) -> float:
         starts.append(number(start.get("mach_continuous_time_ns"),
                              f"footprint[{i}].start", positive=True))
         processes = sample.get("processes")
+        if processes == []:
+            seen_end = True
+            continue
+        if seen_end:
+            die(f"footprint.samples[{i}]: process reappeared after exit")
         if not isinstance(processes, list) or len(processes) != 1 \
                 or not isinstance(processes[0], dict) \
                 or processes[0].get("pid") != pid:
@@ -212,7 +218,7 @@ def validate_footprint(data: Any, pid: int) -> float:
         if peak < current or (peaks and peak < peaks[-1]):
             die(f"footprint[{i}]: physical peak is below current or regressed")
         peaks.append(peak)
-    if max(starts) - min(starts) < 16_000_000_000:
+    if not seen_end or max(starts) - min(starts) < 16_000_000_000:
         die("footprint: samples do not cover the full warm-up and sample window")
     return max(peaks) / 1048576
 def validate_logs(stdout: str, stderr: str, expected: dict[str, Any],

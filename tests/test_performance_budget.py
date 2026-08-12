@@ -78,6 +78,9 @@ class PerformanceEvidenceTests(unittest.TestCase):
                               "phys_footprint_peak": 710 * 1048576}}]}
                 for index in range(8)],
         }
+        self.footprint["samples"].append({
+            "errors": [], "start_time": {"mach_continuous_time_ns": 24_000_000_001},
+            "processes": []})
         self.status = {"process_returncode": 0, "footprint_returncode": 0,
                        "launcher_pid": self.pid}
         self._write_bundle()
@@ -167,6 +170,8 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.assert_rejected(lambda: [sample["start_time"].update(
             mach_continuous_time_ns=index * 1_000_000_000 + 1)
             for index, sample in enumerate(self.footprint["samples"])])
+        self._reset()
+        self.assert_rejected(lambda: self.footprint["samples"].pop())
         self._reset()
         (self.root / "raw" / f"{self.name}.stdout").unlink()
         with self.assertRaises(PERF.EvidenceError):
