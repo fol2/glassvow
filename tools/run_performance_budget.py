@@ -259,7 +259,7 @@ def validate_footprint(data: Any, pid: int) -> float:
     if not seen_end or not live_starts \
             or max(live_starts) - min(live_starts) < 16_000_000_000 \
             or any(gap <= 0 or gap > 2_000_000_000 for gap in live_gaps):
-        die("footprint: samples do not cover the full warm-up and sample window")
+        die("footprint: live samples do not cover the benchmark or prove process exit")
     return max(peaks) / 1048576
 def validate_logs(stdout: str, stderr: str, expected: dict[str, Any],
                   summary: dict[str, Any]) -> int:
@@ -465,9 +465,10 @@ def run_measure(args: argparse.Namespace) -> int:
                     process = subprocess.Popen(app_command, stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE, text=True, env=env)
                     footprint_path = raw / f"{name}.footprint.json"
-                    footprint = subprocess.run(["/usr/bin/footprint", "-j",
+                    footprint_command = ["/usr/bin/footprint", "-j",
                         str(footprint_path), "--sample", "0.25",
-                        "--sample-duration", "20", "-p", str(process.pid)],
+                        "--sample-duration", "20", "-p", str(process.pid)]
+                    first_footprint = subprocess.run(footprint_command,
                         text=True, capture_output=True, check=False)
                     try:
                         stdout, stderr = process.communicate(timeout=45)
@@ -475,12 +476,17 @@ def run_measure(args: argparse.Namespace) -> int:
                         process.kill()
                         process.communicate()
                         raise EvidenceError(f"{name}: app timed out") from exc
+                    footprint = subprocess.run(footprint_command, text=True,
+                        capture_output=True, check=False) if first_footprint.returncode == 0 \
+                        else first_footprint
+                    footprint_stdout = first_footprint.stdout + footprint.stdout
+                    footprint_stderr = first_footprint.stderr + footprint.stderr
                 (raw / f"{name}.stdout").write_text(stdout, encoding="utf-8")
                 (raw / f"{name}.stderr").write_text(stderr, encoding="utf-8")
                 (raw / f"{name}.footprint.stdout").write_text(
-                    footprint.stdout, encoding="utf-8")
+                    footprint_stdout, encoding="utf-8")
                 (raw / f"{name}.footprint.stderr").write_text(
-                    footprint.stderr, encoding="utf-8")
+                    footprint_stderr, encoding="utf-8")
                 (raw / f"{name}.status.json").write_text(json.dumps({
                     "process_returncode": process.returncode,
                     "footprint_returncode": footprint.returncode,
