@@ -18,44 +18,31 @@ const KIND_PLAIN: int = 0
 const KIND_VALUE: int = 1
 const KIND_KEYWORD: int = 2
 
-## Matched as whole words, not via the @…@ / #…# markers — those carry only the
-## numbers. Copied from the benchmark's src/ui/tooltip.js.
-##
-## The order is load-bearing: these become one alternation, and a regex takes
-## the first alternative that fits at a given position. Plural before singular,
-## or "Embers" matches as "Ember" and leaves a stray "s" unstyled.
-const KEYWORDS: Array = [
-	"Cracked", "Dimmed", "Brittle", "Smolder", "Fervor", "Poise", "Kindle",
-	"Ward", "Energy", "Embers", "Ember", "Chip", "Facets", "Facet", "Shatters",
-	"Shatter", "Staggered", "Unplayable", "Shard", "Hex", "Cinder",
-]
-
-## The glossary behind the dotted rule (`KEYWORDS`, tooltip.js:14). Six of the
-## twenty-one are STATUSES and read their description out of the run's own
-## catalogue rather than out of a constant, so a status whose text is retuned
-## does not have to be retuned twice. That table maps them; the rest are fixed
-## UI copy (`ui.keywords`, i18n/en/ui.js:332) and live here.
-##
-## The aliases are the benchmark's: `Facets`, `Shatter` and `Shatters` all
-## explain the facet gauge, and `Embers` explains an ember.
+## Six terms read their description from the hydrated status catalogue. The
+## map is semantic rather than surface text, so a live language switch cannot
+## disconnect a translated dotted rule from its status.
 const KEYWORD_STATUS: Dictionary = {
-	"Cracked": "vulnerable", "Dimmed": "weak", "Brittle": "frail",
-	"Smolder": "poison", "Fervor": "str", "Poise": "dex",
+	"vulnerable": "vulnerable", "weak": "weak", "frail": "frail",
+	"poison": "poison", "str": "str", "dex": "dex",
 }
-static func keyword_text(word: String) -> String:
-	## Glossary bodies from Locale (`ui.keywords.*`). Match tokens stay in
-	## KEYWORDS so English card text still highlights; zh-Hant tokens join
-	## that list when the active language is 繁中 (see Locale.keyword_words).
-	var key: String = word.to_lower()
-	match word:
-		"Facets", "Facet", "Shatter", "Shatters":
-			return Locale.active.t("ui.keywords.facetDesc")
-		"Embers":
-			return Locale.active.t("ui.keywords.ember")
-		_:
-			var path: String = "ui.keywords.%s" % key
-			var found: String = Locale.active.t(path)
-			return found if found != path else word
+
+
+static func keyword_key(surface: String) -> String:
+	_refresh_keyword_cache()
+	return str(_keyword_keys.get(surface, ""))
+
+
+static func keyword_status(surface: String) -> String:
+	return str(KEYWORD_STATUS.get(keyword_key(surface), ""))
+
+
+static func keyword_text(surface: String) -> String:
+	var key: String = keyword_key(surface)
+	if key.is_empty():
+		return surface
+	var path: String = "ui.keywords.%s" % key
+	var found: String = Locale.active.t(path)
+	return found if found != path else surface
 
 
 
@@ -64,9 +51,12 @@ const DOT_W: float = 1.0
 const DOT_STEP: float = 2.0
 const UNDERLINE_DROP: float = 2.0
 
-## Compiled once per run, not once per keyword per run. Lazy rather than a
-## static initialiser so it cannot race class load order.
-static var _kw_re: RegEx = null
+## Derived from the active catalogue. The signature is the term content rather
+## than the locale code: catalogue mutation and a live switch both invalidate
+## it, while identical content avoids pointless rebuilding.
+static var _keyword_signature: String = ""
+static var _keyword_surfaces: Array[String] = []
+static var _keyword_keys: Dictionary = {}
 
 var plain_color: Color = Color(0.776, 0.800, 0.875)
 var value_color: Color = Color(0.910, 0.875, 0.784)
@@ -92,13 +82,25 @@ func _init(text: String, tint: Color, plain: Font, bold: Font, size: int,
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-static func _keyword_re() -> RegEx:
-	if _kw_re == null:
-		var alts: PackedStringArray = PackedStringArray()
-		for w: String in KEYWORDS:
-			alts.append(w)
-		_kw_re = RegEx.create_from_string("\\b(?:%s)\\b" % "|".join(alts))
-	return _kw_re
+static func _refresh_keyword_cache() -> void:
+	var terms: Dictionary = Locale.active.keyword_terms()
+	var signature: String = JSON.stringify(terms)
+	if signature == _keyword_signature:
+		return
+	_keyword_signature = signature
+	_keyword_surfaces.clear()
+	_keyword_keys.clear()
+	for key_v: Variant in terms:
+		var key: String = str(key_v)
+		var surfaces: Array = terms[key_v]
+		for surface_v: Variant in surfaces:
+			var surface: String = str(surface_v)
+			if _keyword_keys.has(surface):
+				continue
+			_keyword_keys[surface] = key
+			_keyword_surfaces.append(surface)
+	_keyword_surfaces.sort_custom(func(a: String, b: String) -> bool:
+		return a.length() > b.length() if a.length() != b.length() else a < b)
 
 
 ## Split rules text into styled runs. Numbers first — a marker never contains a
@@ -136,16 +138,53 @@ static func tokenize(text: String) -> Array:
 
 static func _split_keywords(text: String) -> Array:
 	var out: Array = []
+	_refresh_keyword_cache()
+	var plain_at: int = 0
 	var at: int = 0
-	for m: RegExMatch in _keyword_re().search_all(text):
-		if m.get_start() > at:
-			out.append({
-				"text": text.substr(at, m.get_start() - at), "kind": KIND_PLAIN})
-		out.append({"text": m.get_string(), "kind": KIND_KEYWORD})
-		at = m.get_end()
-	if at < text.length():
-		out.append({"text": text.substr(at), "kind": KIND_PLAIN})
+	while at < text.length():
+		var matched: String = ""
+		for surface: String in _keyword_surfaces:
+			if text.substr(at, surface.length()) == surface \
+					and _surface_boundary(text, at, surface):
+				matched = surface
+				break
+		if matched.is_empty():
+			at += 1
+			continue
+		if at > plain_at:
+			out.append({"text": text.substr(plain_at, at - plain_at),
+				"kind": KIND_PLAIN})
+		out.append({"text": matched, "kind": KIND_KEYWORD})
+		at += matched.length()
+		plain_at = at
+	if plain_at < text.length():
+		out.append({"text": text.substr(plain_at), "kind": KIND_PLAIN})
 	return out
+
+
+static func _surface_boundary(text: String, at: int, surface: String) -> bool:
+	if not _is_ascii_word(surface):
+		return true
+	var before_ok: bool = at == 0 or not _is_ascii_word_char(text[at - 1])
+	var after: int = at + surface.length()
+	return before_ok and (after == text.length() or not _is_ascii_word_char(text[after]))
+
+
+static func _is_ascii_word(text: String) -> bool:
+	for i: int in range(text.length()):
+		if not _is_ascii_word_char(text[i]):
+			return false
+	return not text.is_empty()
+
+
+static func _is_ascii_word_char(ch: String) -> bool:
+	if ch.length() != 1:
+		return false
+	var codepoint: int = ch.unicode_at(0)
+	return codepoint >= 48 and codepoint <= 57 \
+		or codepoint >= 65 and codepoint <= 90 \
+		or codepoint >= 97 and codepoint <= 122 \
+		or codepoint == 95
 
 
 func _font_for(kind: int) -> Font:

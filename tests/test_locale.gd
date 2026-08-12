@@ -139,6 +139,32 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"ui.keywords.unplayable": "此牌無法打出。",
 }
 
+## Runtime keyword surfaces are catalogue data, but their semantic keys are
+## stable. Keep every alias exact in both languages: a drift here can leave an
+## authored card word unstyled or send its tooltip to the wrong glossary body.
+const KEYWORD_TERM_SURFACES: Dictionary = {
+	"vulnerable": {"en": ["Cracked"], "zh-Hant": ["裂痕"]},
+	"weak": {"en": ["Dimmed"], "zh-Hant": ["黯淡"]},
+	"frail": {"en": ["Brittle"], "zh-Hant": ["脆裂"]},
+	"poison": {"en": ["Smolder"], "zh-Hant": ["陰燃"]},
+	"str": {"en": ["Fervor"], "zh-Hant": ["熾心"]},
+	"dex": {"en": ["Poise"], "zh-Hant": ["沉穩"]},
+	"kindle": {"en": ["Kindle"], "zh-Hant": ["燃燼"]},
+	"ward": {"en": ["Ward"], "zh-Hant": ["護光"]},
+	"energy": {"en": ["Energy"], "zh-Hant": ["能量"]},
+	"ember": {"en": ["Embers", "Ember"], "zh-Hant": ["餘燼", "餘燼"]},
+	"chip": {"en": ["Chip"], "zh-Hant": ["琢擊"]},
+	"facetDesc": {
+		"en": ["Facets", "Facet", "Shatters", "Shatter"],
+		"zh-Hant": ["璃面", "璃面", "碎裂", "碎裂"],
+	},
+	"staggered": {"en": ["Staggered"], "zh-Hant": ["踉蹌"]},
+	"unplayable": {"en": ["Unplayable"], "zh-Hant": ["無法打出"]},
+	"shard": {"en": ["Shard"], "zh-Hant": ["碎片"]},
+	"hex": {"en": ["Hex"], "zh-Hant": ["咒印"]},
+	"cinder": {"en": ["Cinder"], "zh-Hant": ["燼屑"]},
+}
+
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
 	if not ok:
@@ -516,6 +542,7 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 		var key: String = str(key_v)
 		_check(fails, str(zh_leaves.get(key, "")) == str(ZH_HANT_GLOSSARY_SAMPLES[key]),
 			"zh-Hant glossary drift at %s" % key)
+	_keyword_term_contract(fails, en, zh)
 	var card_names: Dictionary = {}
 	var cards: Dictionary = zh.get("content", {}).get("cards", {})
 	for card_id_v: Variant in cards:
@@ -537,6 +564,25 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 	expected_latin.sort()
 	_check(fails, latin_paths == expected_latin,
 		"zh-Hant visible Latin allowlist drift: %s" % _first_paths(latin_paths))
+
+
+static func _keyword_term_contract(fails: Array[String], en: Dictionary,
+		zh: Dictionary) -> void:
+	var en_terms: Dictionary = en.get("ui", {}).get("keywords", {}).get("terms", {})
+	var zh_terms: Dictionary = zh.get("ui", {}).get("keywords", {}).get("terms", {})
+	_check(fails, en_terms.size() == KEYWORD_TERM_SURFACES.size(),
+		"English keyword-term semantic set drifted")
+	_check(fails, zh_terms.size() == KEYWORD_TERM_SURFACES.size(),
+		"zh-Hant keyword-term semantic set drifted")
+	for key_v: Variant in KEYWORD_TERM_SURFACES:
+		var key: String = str(key_v)
+		var expected: Dictionary = KEYWORD_TERM_SURFACES[key_v]
+		var en_matches: bool = en_terms.get(key, []) == expected["en"]
+		var zh_matches: bool = zh_terms.get(key, []) == expected["zh-Hant"]
+		_check(fails, en_matches,
+			"English keyword-term drift at %s" % key)
+		_check(fails, zh_matches,
+			"zh-Hant keyword-term drift at %s" % key)
 
 
 static func _read_catalogue(path: String, fails: Array[String]) -> Dictionary:

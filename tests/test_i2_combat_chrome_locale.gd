@@ -24,6 +24,7 @@ static func _ordered(source: String, needles: Array[String]) -> bool:
 	return true
 
 static func run(fails: Array[String]) -> void:
+	_runtime_rules_text_keywords(fails)
 	_runtime_hydrated_combat_chrome(fails)
 	_runtime_encounter_headers(fails)
 	var hud: String = _source("res://presentation/combat/hud_bar.gd")
@@ -79,6 +80,61 @@ static func run(fails: Array[String]) -> void:
 		and relic_branch.find("_relic_proc_text") < relic_wait
 		and relic_branch.find("_hero_centre() + Vector2(0.0, -110.0)") < relic_wait,
 		"hydrated relic proc keeps its exact floater position before the 0.09 wait")
+
+
+static func _runtime_rules_text_keywords(fails: Array[String]) -> void:
+	var previous: Locale = Locale.active
+	var locale: Locale = Locale.new(Locale.CODE_EN)
+	Locale.active = locale
+	var english: Array = RulesText.tokenize("Gain #5# Ward. Warden.")
+	_check(fails, _token_kind(english, "5") == RulesText.KIND_VALUE,
+		"English rules marker remains a value run")
+	_check(fails, _token_kind(english, "Ward") == RulesText.KIND_KEYWORD,
+		"English Ward is styled as a keyword")
+	_check(fails, _token_kind(RulesText.tokenize("Warden"), "Warden") == RulesText.KIND_PLAIN,
+		"English keyword matching keeps the Warden whole-word boundary")
+
+	locale.set_language(Locale.CODE_ZH_HANT)
+	var chinese: Array = RulesText.tokenize("獲得 #5# 點護光。施加 1 層陰燃。燃燼。")
+	_check(fails, _token_kind(chinese, "5") == RulesText.KIND_VALUE,
+		"zh-Hant rules marker remains a value run")
+	for surface: String in ["護光", "陰燃", "燃燼"]:
+		_check(fails, _token_kind(chinese, surface) == RulesText.KIND_KEYWORD,
+			"zh-Hant %s is styled as a keyword" % surface)
+	_check(fails, RulesText.keyword_key("護光") == "ward"
+		and RulesText.keyword_key("燃燼") == "kindle",
+		"zh-Hant keyword surfaces resolve to semantic glossary keys")
+	_check(fails, RulesText.keyword_status("陰燃") == "poison",
+		"zh-Hant Smolder surface resolves to the poison status")
+	_check(fails, _token_kind(RulesText.tokenize("Ward"), "Ward") == RulesText.KIND_PLAIN,
+		"cached English keyword terms do not survive a zh-Hant switch")
+
+	var content: ContentDB = ContentDB.load_full()
+	locale.hydrate_content(content)
+	var run: RunState = RunState.new_run(content, 101102, "i2-keywords")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	var screen: CombatScreen = CombatScreen.new(game)
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	tree.root.add_child(screen)
+	var smolder_tip: Dictionary = screen._keyword_tip("陰燃")
+	_check(fails, smolder_tip == {"title": "陰燃", "body":
+		"火從內裏灼燒：其回合開始時失去 N 點生命，然後陰燃減少 1 層。陰燃中的琉璃碎裂或死亡時，火會躍至另一名敵人。"},
+		"zh-Hant Smolder tooltip keeps its surface and hydrated status body")
+	_check(fails, screen._keyword_tip("護光") == {"title": "護光", "body":
+		"可阻擋傷害的護光。於你的回合開始時消散。"},
+		"zh-Hant Ward tooltip resolves through ui.keywords.ward")
+	tree.root.remove_child(screen)
+	screen.free()
+	locale.restore_content()
+	Locale.active = previous
+
+
+static func _token_kind(tokens: Array, text: String) -> int:
+	for token: Dictionary in tokens:
+		if str(token["text"]) == text:
+			var kind: int = token["kind"]
+			return kind
+	return -1
 
 
 static func _runtime_hydrated_combat_chrome(fails: Array[String]) -> void:

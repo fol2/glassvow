@@ -67,4 +67,7 @@ remainder must be reviewed explicitly.
 
 - Preserve the exact multiset of `@n@`, `#n#`, `{param}`, BBCode and HTML tags.
 - Never add English plural suffixes to Chinese terms (`餘燼s`, `璃面s`).
+- Keep every runtime keyword-term leaf paired across English and Traditional
+  Chinese; aliases resolve to stable semantic keys rather than English
+  fallback.
 - Keep stable keys, content IDs, save fields and fixture data unchanged.

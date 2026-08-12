@@ -22,18 +22,24 @@ rules from templates. It takes an already-authored paragraph — typically
 `content/full-content.json` → `cards.<id>.text` / `.up.text` — and:
 
 1. Splits `@…@` / `#…#` markers into value runs (`RulesText.tokenize`).
-2. Highlights whole-word matches from `RulesText.KEYWORDS` as keyword runs.
-3. Serves glossary copy for those keywords via `RulesText.KEYWORD_TEXT` (and
-   `RulesText.KEYWORD_STATUS` → the status catalogue for six of them).
+2. Matches the active locale's twenty-one keyword-term surfaces and highlights
+   them as keyword runs (`Locale.keyword_terms`, `RulesText.tokenize`).
+3. Resolves each visible surface to a stable semantic key, then serves either
+   the shared glossary body or, for six statuses, the hydrated status
+   description (`RulesText.keyword_key`, `RulesText.keyword_text`,
+   `RulesText.keyword_status`).
 
 The twenty-one keywords (`Cracked`, `Dimmed`, `Brittle`, `Smolder`, `Fervor`,
 `Poise`, `Kindle`, `Ward`, `Energy`, `Embers`, `Ember`, `Chip`, `Facets`,
 `Facet`, `Shatters`, `Shatter`, `Staggered`, `Unplayable`, `Shard`, `Hex`,
-`Cinder`) and the fixed glossary behind the dotted rule
-(`RulesText.KEYWORD_TEXT`, `RulesText.FACET_DESC`) are **generator vocabulary**
-— UI chrome, already catalogued on the web as `ui.keywords`
+`Cinder`) are **generator vocabulary**. Their active-language surface arrays
+live under `ui.keywords.terms`; their fixed glossary bodies live beside them
+under `ui.keywords.*`. This is UI chrome, already catalogued on the web as
+`ui.keywords`
 (`port_fixtures/content/locale-en.json` → `ui.keywords`, 11 entries; plurals
-share descriptions).
+share descriptions). English aliases keep separate term leaves. Traditional
+Chinese aliases may share one rendered surface, but every surface still maps
+back to one semantic key before tooltip lookup.
 
 Combat ceremony banners and tip bodies on `CombatScreen`
 (`CombatScreen.SAY_YOUR_TURN`, `CombatScreen.TIP_FACETS_BODY`, …) are the same
@@ -67,7 +73,7 @@ locale content catalogue onto those tables. UI chrome lives in a sibling
 | Layer | What it is | zh-Hant translates | Key home |
 |---|---|---|---|
 | **Authored copy** | Per-ID `name` / `text` / `desc` / event prose / quest inscriptions / whispers | The full string, markers preserved | `content.<domain>.<id>…` |
-| **Generator vocabulary** | `RulesText.KEYWORDS` tokens + `KEYWORD_TEXT` / status-backed glossary + combat tip/banner constants | The tokens **and** their glossary lines, kept consistent with authored copy | `ui.keywords.*`, `ui.combat.*` |
+| **Generator vocabulary** | Locale-owned term surfaces + semantic/status-backed glossary + combat tip/banner constants | The tokens **and** their glossary lines, kept consistent with authored copy | `ui.keywords.terms.*`, `ui.keywords.*`, `ui.combat.*` |
 | **UI chrome** | Buttons, titles, help, settings, map prompts | The chrome string | `ui.<screen>.*` |
 
 **Do not** decompose card text into vocabulary templates. "Deal @6@ damage."
@@ -76,8 +82,10 @@ assembly. A generator that rebuilt sentences would fight the register, drift
 from the web catalogue, and make `@n@` / `#n#` ordering a second language.
 
 **Do** keep keyword tokens and the words inside authored zh-Hant text in lockstep
-(the glossary in P7.6). `RulesText` matches whole words; if the card says 護甲
-and the keyword list still says `Ward`, the dotted rule never lights.
+(the glossary in P7.6). Matching follows the active locale: ASCII surfaces keep
+whole-word boundaries, while Traditional Chinese surfaces match their authored
+characters directly. If a card says 護甲 while the active term remains 護光, the
+dotted rule never lights and its glossary tip is unreachable.
 
 Interpolation stays two systems, never mixed:
 
@@ -273,8 +281,9 @@ Two cooperating mechanisms (both land before zh-Hant is playable):
    active language. IDs never move.
 
 Card rules text therefore stays one authored string per language; `RulesText`
-keeps styling it. P7.4 wires vocabulary keys into `RulesText`; P7.6 supplies
-zh-Hant tokens so highlighting still matches.
+styles it with the active locale's term map and retains the semantic key needed
+by the tooltip. P7.4 wires the glossary consumers; P7.6 supplies the zh-Hant
+terms so matching, dotted styling and tooltip meaning stay together.
 
 ### Live language transaction (P7.7)
 
@@ -313,8 +322,9 @@ byte-identical English.
 
 HUD (`hud_bar`, lantern, end-turn, piles / pile browsers), ceremony banners and
 floaters (`CombatScreen.SAY_*`), tooltips (`TIP_*`), intent/status chip chrome,
-`RulesText` vocabulary → `ui.keywords`, and combat-adjacent copy on shop / rest /
-event / treasure / hollow / reward / choice confirmations.
+`RulesText` keyword-term matching, styling and semantic tooltip resolution →
+`ui.keywords`, and combat-adjacent copy on shop / rest / event / treasure /
+hollow / reward / choice confirmations.
 
 Floater and banner strings ride the combat event queue — change source only,
 never order or timing.
