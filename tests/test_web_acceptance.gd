@@ -22,7 +22,7 @@ static func _source_contract(fails: Array[String]) -> void:
 	if publish.find('OS.has_feature("web_dev")') < 0 \
 			or publish.find('OS.has_feature("web_dev")') > publish.find("JavaScriptBridge"):
 		fails.append("web acceptance guard: JavaScriptBridge is reachable before the web_dev guard")
-	if not seam.contains("SaveService.load_run(content, save_path)"):
+	if not seam.contains("SaveService.load_run(content, durable_path)"):
 		fails.append("web acceptance durable read: projection does not independently load the save")
 	if main.contains("JavaScriptBridge"):
 		fails.append("web acceptance boundary: Main accesses JavaScriptBridge directly")
@@ -38,6 +38,11 @@ static func _projection_contract(fails: Array[String]) -> void:
 	if seam == null or not seam.has_method("projection_for"):
 		fails.append("web acceptance projection: helper or projection_for is missing")
 		return
+	var main: Main = Main.new()
+	if seam.call("canonical_route", Callable(main, "_show_vigil").bind(true)) != "vigil" \
+			or seam.call("canonical_route", Callable(main, "_resume_pending_combat")) != "combat":
+		fails.append("web acceptance route: bound and pending constructors are not canonical")
+	main.free()
 	var content: ContentDB = ContentDB.load_full()
 	var live: RunState = RunState.new_run(content, 14601, "live-run-146")
 	var durable: RunState = RunState.new_run(content, 14602, "durable-run-146")
@@ -55,13 +60,14 @@ static func _projection_contract(fails: Array[String]) -> void:
 	]
 	if keys != expected_keys:
 		fails.append("web acceptance schema: projection keys are not exact: %s" % [keys])
-	if projection.get("schemaVersion") != RunState.SAVE_VERSION \
+	if projection.get("schemaVersion") != 1 \
 			or projection.get("ready") != true or projection.get("route") != "map":
 		fails.append("web acceptance schema: version, readiness or canonical route is wrong")
 	if projection.get("liveRunId") != "live-run-146" \
 			or projection.get("durableRunId") != "durable-run-146":
 		fails.append("web acceptance durable read: live and independently loaded run IDs collapsed")
-	var expected_digest: String = JSON.stringify(durable.to_save_dict()).sha256_text()
+	var expected_loaded: RunState = SaveService.load_run(content, SAVE_PATH)
+	var expected_digest: String = JSON.stringify(expected_loaded.to_save_dict()).sha256_text()
 	if projection.get("durableSaveSha256") != expected_digest:
 		fails.append("web acceptance durable read: digest is not the loaded canonical v2 save projection")
 	SaveService.clear_run("", SAVE_PATH)
