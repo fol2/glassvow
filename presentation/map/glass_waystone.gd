@@ -22,9 +22,9 @@ const UNLIT_RADIUS: float = 28.0
 ## `chip_rect()` is the only place it is used.
 const CHIP_GAP: float = 4.0
 ## The pill itself, in LOCAL px: height, coin side, and the numeral's size.
-const CHIP_H: float = 19.0
+const CHIP_H: float = 21.0
 const CHIP_ICON: float = 13.0
-const CHIP_FONT_SIZE: int = 13
+const CHIP_FONT_SIZE: int = 27
 const DRAG_SLOP: float = 12.0
 
 var index: int = 0
@@ -34,8 +34,8 @@ var reachable: bool = false
 var cleared: bool = false
 var current: bool = false
 var quest_marked: bool = false
-## Paid TO the player on kindling — chip text pins the `+`. Zero until the
-## screen passes an unlit node's bounty through the ctor.
+## Paid TO the player on kindling. The coin supplies the unit, so the chip text
+## is the numeral alone. Zero until the screen passes a bounty through the ctor.
 var bounty: int = 0
 
 var _frame_art: TextureRect
@@ -281,6 +281,12 @@ func has_chip() -> bool:
 	return kind == "unlit" and bounty > 0
 
 
+## One label source for both geometry and paint. The coin already says gold is
+## paid to the player; repeating that with a `+` costs the numeral scarce width.
+func chip_text() -> String:
+	return "%d" % bounty
+
+
 ## The pill's rect in LOCAL px, on the side `flip` chooses. ONE definition:
 ## `paint_bounty_chip` draws it, `chip_reach()` measures its far edge, and
 ## `ChipBand` scales it into stage space to see whether one pill lands on
@@ -289,15 +295,15 @@ func has_chip() -> bool:
 ## A rect and not a span, because a span was x-only for a round and that is a
 ## defect, not a simplification: same-COLUMN stones share `world_x` and differ
 ## only by lane, so their pills always overlap in x while sitting ≥46 stage px
-## apart against a pill 9.7–12.6 px tall. Judged on x alone, 36 of 150 bounty
-## stones lost their price for more than half the time they were on screen
+## apart against the pill's scaled stage-space height. Judged on x alone, 36 of
+## 150 bounty stones lost their price for more than half their time on screen
 ## (PR #80 DL R4).
 func chip_rect(flip: bool = false) -> Rect2:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
 	if _chip_font == null:
 		return Rect2()
-	var tw: float = _chip_font.get_string_size("+%d" % bounty,
+	var tw: float = _chip_font.get_string_size(chip_text(),
 		HORIZONTAL_ALIGNMENT_LEFT, -1.0, CHIP_FONT_SIZE).x
 	var w: float = CHIP_ICON + 4.0 + tw + 16.0
 	var side: float = -1.0 if flip else 1.0
@@ -311,9 +317,9 @@ func chip_rect(flip: bool = false) -> Rect2:
 ## rect's far edge rather than a second piece of arithmetic.
 ##
 ## There is no room to widen it. On seed 17634 at phone-portrait the two
-## same-lane bounty stones measure 99.40 stage px apart while their reaches sum
-## to 110.42, so a flipped pill lands 11.02 px inside its neighbour's. Two
-## earlier notes here were wrong in opposite directions — +12 px of budget from
+## same-lane bounty stones' candidate pill rects already overlap at the captured
+## collision camera, so widening makes that known constraint worse.
+## Two earlier notes here were wrong in opposite directions — +12 px of budget from
 ## the layout book's step FLOOR and a farther depth (DL R2, withdrawn by its own
 ## author at R3), then −17 px from a nearer one (DL R4). Both were arithmetic
 ## that was never asked of the drawing code. This one was measured at the
@@ -325,7 +331,7 @@ func chip_reach() -> float:
 	return rect.end.x - (_pad.x + WIDTH * 0.5)
 
 
-## The bounty chip: a coin and "+N", nothing else. The dark lantern IS the
+## The bounty chip: a coin and numeral, nothing else. The dark lantern IS the
 ## "unlit" statement (§2), so the word would only restate the emblem; the coin
 ## glyph gives the number its unit the same way the HUD does.
 ##
@@ -335,14 +341,12 @@ func chip_reach() -> float:
 ## knows the frame. See the seat comment in the body for why neither side is
 ## under the stone.
 ##
-## What this does NOT settle: #69 filed D2 for a number a player can GLANCE at,
-## and that is a size problem this commit does not touch. 13 px of text under the
-## 0.56–0.66 map scale the shapes ship renders about 8 stage px tall, where the
-## coverage a glyph reaches — not the authored colour — decides its contrast.
-## Moving the chip out of the stone's alpha was necessary and is not sufficient:
-## no alpha change reaches a coverage problem. Declined here deliberately, with
-## the criterion and three candidate fixes carried to #81, which stays open past
-## #69 (PR #80 DL R1/PM R1).
+## #81 measured the old 13 px `+N` below its 10-stage-px / 4.5:1 floor. Removing
+## the redundant `+` bought enough width for the smallest passing integer size:
+## 27 px inside a 21 px pill. The paired text-on/text-off 20-seed phone sweep
+## bottoms out at 10 stage px; 26 px bottoms out at 9, while a 20 px pill clips
+## real glyph pixels. The mask limits contrast to actual numeral pixels and
+## proves every glyph remains inside the 21 px pill.
 func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	if _chip_font == null:
 		_chip_font = get_theme_font(&"font")
@@ -350,7 +354,7 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 		_chip_coin = load("res://assets/art/ui/coin.png") as Texture2D
 	if _chip_font == null:
 		return
-	var text: String = "+%d" % bounty
+	var text: String = chip_text()
 	var rect: Rect2 = chip_rect(flip)
 	# Derived, not measured again: `chip_rect` already asked the font, and the
 	# last second measurement of the same thing in this function was the one
@@ -377,10 +381,10 @@ func paint_bounty_chip(ci: CanvasItem, flip: bool = false) -> void:
 	# px across the lane, which is larger than the 0.4–3.3 px the passing runs
 	# clear by. A seat that survives by jitter is not a seat.
 	#
-	# The walk axis is clear by construction instead: the pill reaches 86 local
-	# px from centre — 44.6–56.4 stage px across the depths a chip renders at —
-	# against a step of 128 stage px at the narrowest shape and 290 at the
-	# widest. It crosses the dashed edge running to the next node, which is a
+	# The walk axis is clear by construction instead: the pill's far edge stays
+	# within one map step at every shipped depth, even with the larger numeral.
+	# The step is 128 stage px at the narrowest shape and 290 at the widest. The
+	# pill crosses the dashed edge running to the next node, which is a
 	# pale 1px line under an opaque pill: a label over a road, not a label over
 	# another lantern (#69 D1).
 	#
@@ -475,4 +479,3 @@ func _apply_kindle_art(true_kind: String) -> void:
 	queue_redraw()
 	# The bounty is paid the moment the stone kindles, so `has_chip` goes false
 	# with the dark lantern it labelled and `ChipBand` stops drawing it.
-
