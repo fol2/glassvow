@@ -61,9 +61,71 @@ func _publish(route: String, live_run: RunState, content: ContentDB,
 		durable_path: String) -> void:
 	if not OS.has_feature("web_dev"):
 		return
-	var serialized: String = JSON.stringify(
-		projection_for(route, live_run, content, durable_path))
+	var generation: int = _publish_generation
+	var pending: Dictionary = projection_for(route, live_run, content, durable_path)
+	pending["ready"] = false
+	var ready: Dictionary = pending.duplicate(true)
+	ready["ready"] = true
+	_publish_plain(pending)
+	_begin_indexed_db_ack(generation, JSON.stringify(ready))
+
+
+func _publish_plain(projection: Dictionary) -> void:
+	var serialized: String = JSON.stringify(projection)
 	var window: JavaScriptObject = JavaScriptBridge.get_interface("window")
 	var js_json: JavaScriptObject = JavaScriptBridge.get_interface("JSON")
 	if window != null and js_json != null:
 		window[GLOBAL_NAME] = js_json.parse(serialized)
+
+
+func _begin_indexed_db_ack(generation: int, ready_json: String) -> void:
+	var capture_source: String = """
+(() => {
+	if (typeof GodotOS !== "object") return;
+	GodotOS.__glassvow_acceptance_generation = %d;
+	GodotOS.__glassvow_acceptance_previous_promise = GodotOS._fs_sync_promise;
+})();
+""" % generation
+	JavaScriptBridge.eval(capture_source, false)
+	# Godot 4.7.1-stable (a13da4feb): force_fs_sync only requests OS_Web's
+	# coordinated main-loop sync. Its distinct GodotOS promise is the ack.
+	JavaScriptBridge.force_fs_sync()
+	var source: String = """
+(async () => {
+	const generation = %d;
+	const os = typeof GodotOS === "object" ? GodotOS : null;
+	const currentGeneration = () => os == null ? null : os.__glassvow_acceptance_generation;
+	const previousPromise = os == null ? null : os.__glassvow_acceptance_previous_promise;
+	const readyJson = %s;
+	try {
+		if (typeof GodotFS !== "object" || typeof GodotFS.is_persistent !== "function" ||
+				GodotFS.is_persistent() !== 1 || typeof GodotFS._syncing !== "boolean" ||
+				os == null) {
+			throw new Error("Godot IndexedDB sync API is unavailable");
+		}
+		let syncPromise = null;
+		for (let attempt = 0; attempt < 120; attempt += 1) {
+			if (currentGeneration() !== generation) return;
+			const candidate = os._fs_sync_promise;
+			if (candidate !== previousPromise && candidate != null &&
+					typeof candidate.then === "function") {
+				syncPromise = candidate;
+				break;
+			}
+			await new Promise((resolve) => requestAnimationFrame(resolve));
+		}
+		if (syncPromise == null) throw new Error("coordinated sync did not start");
+		const syncError = await syncPromise;
+		if (syncError) throw new Error("acceptance sync failed: " + syncError);
+		if (GodotFS._syncing !== false) throw new Error("acceptance sync is still active");
+		if (currentGeneration() !== generation) return;
+		delete os.__glassvow_acceptance_previous_promise;
+		window[%s] = JSON.parse(readyJson);
+	} catch (error) {
+		if (currentGeneration() !== generation) return;
+		const message = error instanceof Error ? error.message : String(error);
+		console.error("Glassvow IndexedDB acceptance sync failed: " + message);
+	}
+})();
+""" % [generation, JSON.stringify(ready_json), JSON.stringify(GLOBAL_NAME)]
+	JavaScriptBridge.eval(source, false)

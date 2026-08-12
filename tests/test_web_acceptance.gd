@@ -26,6 +26,7 @@ class AcceptanceSpy extends WebAcceptance:
 
 static func run(fails: Array[String]) -> void:
 	_source_contract(fails)
+	_indexed_db_ack_contract(fails)
 	_path_binding_contract(fails)
 	_last_route_wins_contract(fails)
 	_projection_contract(fails)
@@ -38,19 +39,19 @@ static func _source_contract(fails: Array[String]) -> void:
 	if not seam.contains('OS.has_feature("web_dev")'):
 		fails.append("web acceptance guard: projection is not restricted to web_dev")
 	var publish: String = _function_body(seam, "_publish")
-	if publish.find('OS.has_feature("web_dev")') < 0 \
-			or publish.find('OS.has_feature("web_dev")') > publish.find("JavaScriptBridge"):
+	var guard_at: int = publish.find('OS.has_feature("web_dev")')
+	var bridge_at: int = publish.find("_publish_plain(pending)")
+	if guard_at < 0 or bridge_at < 0 or guard_at > bridge_at:
 		fails.append("web acceptance guard: JavaScriptBridge is reachable before the web_dev guard")
-	if not publish.contains("var serialized: String = JSON.stringify(") \
-			or not publish.contains(
-				"projection_for(route, live_run, content, durable_path)"):
+	var publish_plain: String = _function_body(seam, "_publish_plain")
+	if not publish_plain.contains("var serialized: String = JSON.stringify(projection)"):
 		fails.append("web acceptance bridge: projection is not serialized before JavaScript marshalling")
-	if not publish.contains('JavaScriptBridge.get_interface("JSON")'):
+	if not publish_plain.contains('JavaScriptBridge.get_interface("JSON")'):
 		fails.append("web acceptance bridge: JavaScript JSON interface is missing")
-	if not publish.contains("window[GLOBAL_NAME] = js_json.parse(serialized)"):
+	if not publish_plain.contains("window[GLOBAL_NAME] = js_json.parse(serialized)"):
 		fails.append("web acceptance bridge: global is not assigned a parsed plain JavaScript object")
-	if publish.contains("window.set(") \
-			or publish.contains("window[GLOBAL_NAME] = projection_for("):
+	if publish_plain.contains("window.set(") \
+			or publish_plain.contains("window[GLOBAL_NAME] = projection_for("):
 		fails.append("web acceptance bridge: Dictionary is marshalled directly to the JavaScript global")
 	if not seam.contains("SaveService.load_run(content, durable_path)"):
 		fails.append("web acceptance durable read: projection does not independently load the save")
@@ -68,6 +69,49 @@ static func _source_contract(fails: Array[String]) -> void:
 	if not seam.contains("if generation != _publish_generation:"):
 		fails.append("web acceptance ordering mutation: stale deferred routes are not rejected")
 
+
+static func _indexed_db_ack_contract(fails: Array[String]) -> void:
+	var seam: String = FileAccess.get_file_as_string(SEAM_PATH)
+	var publish: String = _function_body(seam, "_publish")
+	var begin_ack: String = _function_body(seam, "_begin_indexed_db_ack")
+	var pending_at: int = publish.find("_publish_plain(pending)")
+	var ack_at: int = publish.find("_begin_indexed_db_ack(generation, JSON.stringify(ready))")
+	if pending_at < 0 or ack_at < 0 or pending_at > ack_at:
+		fails.append("web acceptance IndexedDB ack: current ready=false is not published before sync")
+	var capture_at: int = begin_ack.find("JavaScriptBridge.eval(capture_source, false)")
+	var request_at: int = begin_ack.find("JavaScriptBridge.force_fs_sync()")
+	var await_at: int = begin_ack.find("await syncPromise")
+	if capture_at < 0 or request_at < 0 or await_at < 0 \
+			or capture_at > request_at or request_at > await_at:
+		fails.append("web acceptance IndexedDB ack: coordinated promise is not captured, requested and awaited")
+	if seam.contains("FS.syncfs") or seam.contains("GodotFS.sync()"):
+		fails.append("web acceptance IndexedDB ack: an uncoordinated sync primitive is used")
+	if not begin_ack.contains('typeof GodotFS !== "object"') \
+			or not begin_ack.contains('GodotFS.is_persistent() !== 1') \
+			or not begin_ack.contains('typeof GodotFS._syncing !== "boolean"') \
+			or not begin_ack.contains('typeof GodotOS !== "object"'):
+		fails.append("web acceptance IndexedDB ack: runtime sync features are not checked")
+	if not begin_ack.contains("if (syncError)"):
+		fails.append("web acceptance IndexedDB ack: resolved sync errors are discarded")
+	var resolved_at: int = begin_ack.find("const syncError = await syncPromise")
+	var idle_at: int = begin_ack.find("if (GodotFS._syncing !== false)")
+	if resolved_at < 0 or idle_at < 0 or resolved_at > idle_at:
+		fails.append("web acceptance IndexedDB ack: resolved sync is not confirmed idle")
+	if not begin_ack.contains("attempt < 120") \
+			or not begin_ack.contains('throw new Error("coordinated sync did not start")'):
+		fails.append("web acceptance IndexedDB ack: promise identity poll is not bounded fail-closed")
+	if begin_ack.count("currentGeneration() !== generation") < 2:
+		fails.append("web acceptance IndexedDB ack: latest generation is not checked around sync")
+	if not begin_ack.contains("console.error"):
+		fails.append("web acceptance IndexedDB ack: sync errors are not reported fail-closed")
+	if not begin_ack.contains("window[%s] = JSON.parse(readyJson)"):
+		fails.append("web acceptance IndexedDB ack: success does not publish ready=true")
+	if seam.contains("create_callback") or seam.contains("ACK_CALLBACK_NAME"):
+		fails.append("web acceptance IndexedDB ack: browser-callable ack command is exposed")
+	if not seam.contains("JavaScriptBridge.eval(source, false)"):
+		fails.append("web acceptance IndexedDB ack: async closure is not evaluated non-globally")
+	if not seam.contains("Godot 4.7.1-stable (a13da4feb)"):
+		fails.append("web acceptance IndexedDB ack: engine source contract is not pinned")
 
 static func _path_binding_contract(fails: Array[String]) -> void:
 	var main: Main = Main.new()
