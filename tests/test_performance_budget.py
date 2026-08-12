@@ -175,6 +175,18 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.assert_report_rejected(lambda: self.report["samples"]
                                     .update(renderer_allocated_bytes=[0.0] * 600))
 
+    def test_exported_vector_inventory_replays_and_malformed_vectors_fail(self) -> None:
+        self.report["method"]["viewport_sizes"] = [
+            "(844, 390)", "(100, 100)", "(100, 100)",
+            "(100, 100)", "(100, 100)"]
+        self.report["method"]["actor_stage_sizes"] = ["(100, 100)"] * 2
+        PERF.validate_report(self.report, PERF.expected(
+            self.plan, "phone-landscape", "en"))
+        self.report["method"]["viewport_sizes"][1] = "Vector2i(100, 100)"
+        with self.assertRaises(PERF.EvidenceError):
+            PERF.validate_report(self.report, PERF.expected(
+                self.plan, "phone-landscape", "en"))
+
     def test_request_and_method_integer_types_are_strict(self) -> None:
         for section, key, value in (("request", "act", False),
                                     ("request", "seed", 717.0),
@@ -192,6 +204,23 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self._reset()
         self.assert_report_rejected(lambda: self.report["provenance"]
                                     .update(renderer="Another GPU"))
+
+    def test_logs_accept_only_known_runtime_warnings(self) -> None:
+        expected = PERF.expected(self.plan, "phone-landscape", "en")
+        summary = self.report["summary"]
+        ready = {"pid": self.pid, "shape": "phone-landscape",
+                 "window": [844, 390], "actors": 2, "language": "en"}
+        stdout = "BENCH_READY " + json.dumps(ready) + "\nBENCH_RESULT " \
+            + json.dumps(summary) + "\n"
+        warnings = "\n".join((
+            "WARNING: MapStrip: absent — act 1 skyband uses the procedural draw",
+            "WARNING: 2 ObjectDB instances were leaked at exit",
+        ))
+        self.assertEqual(self.pid, PERF.validate_logs(stdout, warnings,
+                                                      expected, summary))
+        with self.assertRaises(PERF.EvidenceError):
+            PERF.validate_logs(stdout, warnings + "\nWARNING: surprise",
+                               expected, summary)
 
     def test_logs_status_and_footprint_fail_closed(self) -> None:
         self.assert_replay_rejected(lambda: self.status.update(process_returncode=1))

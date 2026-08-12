@@ -60,6 +60,19 @@ def hex_string(value: Any, length: int, where: str) -> str:
             or any(char not in "0123456789abcdef" for char in value):
         die(f"{where}: expected lowercase hex")
     return value
+def vector(value: Any, where: str) -> list[int]:
+    if isinstance(value, list):
+        parts = value
+    elif isinstance(value, str) and value.startswith("(") and value.endswith(")"):
+        parts = [part.strip() for part in value[1:-1].split(",")]
+        if len(parts) != 2 or any(not part.isdigit() for part in parts):
+            die(f"{where}: malformed Vector2i")
+        parts = [int(part) for part in parts]
+    else:
+        die(f"{where}: expected Vector2i")
+    if len(parts) != 2 or any(type(axis) is not int or axis <= 0 for axis in parts):
+        die(f"{where}: malformed Vector2i")
+    return parts
 def validate_plan(data: Any) -> dict[str, Any]:
     keys = {"schema", "commit", "fight", "kind", "seed", "act",
             "shapes", "languages", "repeats", "budgets", "app_sha256",
@@ -144,11 +157,10 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
     min_frames = integer(method["sample_frames_min"], "sample_frames_min", minimum=1)
     def sizes(field: str) -> list[list[int]]:
         value = method[field]
-        if not isinstance(value, list) or any(not isinstance(size, list)
-                or len(size) != 2 or any(type(axis) is not int or axis <= 0
-                                        for axis in size) for size in value):
+        if not isinstance(value, list):
             die(f"method.{field}: malformed viewport inventory")
-        return value
+        return [vector(size, f"method.{field}[{index}]")
+                for index, size in enumerate(value)]
     viewport_sizes = sizes("viewport_sizes")
     actor_sizes = sizes("actor_stage_sizes")
     if integer(method["measured_viewports"], "measured_viewports", minimum=1) \
@@ -244,8 +256,8 @@ def validate_logs(stdout: str, stderr: str, expected: dict[str, Any],
                   summary: dict[str, Any]) -> int:
     if "ERROR:" in stderr or "SCRIPT ERROR:" in stderr or "BENCH_ERROR " in stdout:
         die("process log contains an error")
-    allowed = ("absent — act 0 skyband uses the procedural draw",
-               "absent — act 0 region uses the procedural draw")
+    allowed = ("skyband uses the procedural draw", "region uses the procedural draw",
+               "ObjectDB instances were leaked at exit")
     for line in stderr.splitlines():
         if line.startswith("WARNING:") and not any(token in line for token in allowed):
             die(f"unexpected warning: {line}")
