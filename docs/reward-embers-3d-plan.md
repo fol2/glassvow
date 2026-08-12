@@ -153,10 +153,9 @@ molten term is allowed.
 
 ## Cost and the current gate
 
-`docs/actor-stage-frame-budget.md` now leads with the real #105 exported-combat
-matrix. Its proposed P8.1 Mac limits are 1228.8 MiB renderer allocation,
-1536 MiB macOS process physical footprint and 16.00 ms observed whole-frame p95;
-James's PM approval on PR #143 remains pending.
+The current #105 exported-combat matrix and proposed P8.1 Mac gate are
+canonical in `docs/actor-stage-frame-budget.md` and
+`docs/commercial-game-delivery.md` §5.
 
 The reward stage is one stage. **Measured 2026-08-01** (`tools/bench_reward_stage.gd`,
 same instruments as the actor probe): **127.4 MiB of renderer allocation** at

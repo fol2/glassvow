@@ -24,10 +24,10 @@ processes: 50 rows.
 | macOS process physical-footprint peak | ≤1536 MiB | **1056.204544 MiB** | clears proposal |
 | observed whole-frame p95 | ≤16.00 ms in every row | **9.578 ms** | clears proposal |
 
-These thresholds await James's PM approval on PR #143. They are not yet signed
-or approved; a verifier `pass` means only that the evidence clears the proposed
-numbers. The proposal is written so James's approval of the final PR head makes
-it the gate without a post-sign documentation edit.
+These thresholds are submitted for James's owner decision on PR #143. They
+become the P8.1 gate only if and when he approves that exact final PR head; a
+verifier `pass` shows only that the evidence clears the proposed numbers. PR
+#143 is the decision of record.
 
 Metric boundaries are binding:
 

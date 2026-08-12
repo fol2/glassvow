@@ -509,11 +509,12 @@ Real extruded V-groove geometry buys real thickness and a genuinely lit lip. But
   changed is that the sentence pointing at a live example has to point at a fixed one.
 - A ribbon groove is a **silhouette edge**, so it inherits the MSAA dependency.
   `docs/actor-stage-frame-budget.md` records MSAA 4× as load-bearing precisely
-  because a shard's lit lip breaks into a dim broken line at 2×, and prices MSAA at
-  21 % of the actor-stage figure with the lever **gated** pending visual approval.
+  because a shard's lit lip breaks into a dim broken line at 2×. The 2026-07-26
+  lab therefore retained MSAA 4×; the old component probe priced 2× as a 21%
+  renderer-allocation saving, not as an approved change.
 
 A normal-mapped field groove is shaded per fragment and antialiases itself. So
-**if the memory gate later forces MSAA to 2×, `CrackField` survives unchanged and
+**if a later approved budget revision forces MSAA to 2×, `CrackField` survives unchanged and
 `CrackRibbon` does not.** Building both behind one interface is a hedge against a
 decision nobody has made, not gold-plating.
 
@@ -718,9 +719,10 @@ happens in the frame the vessel hands off. The `_weld` fold is the expensive hal
 is quadratic in ribbons before the AABB reject; welding by spatial bucket instead would
 be the fix if a death ever visibly hitches.
 
-Against the measured 113 MB per actor — dominated by the `SubViewport` colour and
-depth attachments — the memory is noise. The crack model is **orthogonal** to the MSAA
-and `oversample` levers, and cannot help or hurt that budget.
+Against the historical 2026-07-26 component probe — dominated by the
+`SubViewport` colour and depth attachments — the crack model's memory is noise.
+It is **orthogonal** to the MSAA and `oversample` levers and cannot materially
+change renderer allocation.
 
 ## 8. Build order
 

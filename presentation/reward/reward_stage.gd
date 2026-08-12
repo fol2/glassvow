@@ -11,12 +11,11 @@ extends Control
 ## reached this conclusion first and the enemy lane second; this is the third
 ## time and the argument has not changed.
 ##
-## ONE STAGE, NOT ONE PER PIECE. `docs/actor-stage-frame-budget.md` measured an
-## actor's private stage at roughly 113 MB of video memory, which a four-actor
-## fight pays four times. The wreckage here is a dozen-odd pieces and they all
-## stand in the same room, so the screen pays once. The knobs that price it are
-## OVERSAMPLE and MSAA, both here, both deliberately conservative until the
-## measurement in stage 5 of `docs/reward-embers-3d-plan.md` says otherwise.
+## ONE STAGE, NOT ONE PER PIECE. A 2026-07-26 component probe showed that each
+## actor's private stage carries its own renderer allocation. The wreckage here
+## is a dozen-odd pieces and they all stand in the same room, so the screen pays
+## for one stage. OVERSAMPLE and MSAA price it; current release evidence and the
+## historical component readings live in `docs/actor-stage-frame-budget.md`.
 ##
 ## THE SCREEN'S OWN COORDINATES STILL WORK. The layout language of this concept
 ## is pixels from the centre of the canvas — where the bed is, where a seat sits,

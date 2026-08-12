@@ -254,20 +254,13 @@ three lanes own. These wait for the organiser to sequence them.
    structural and belongs to the battlefield, not to an actor.
 4. **Any `glass_style.gd` change.** See above.
 
-## Performance gate: exported combat measured; signature pending
+## Performance gate
 
-Issue #105 now measures the real exported combat, not just the actor component
-probe. On the named M4 Mac, all 50 shape/locale/process rows clear the proposed
-P8.1 limits: maxima were 543.640625 MiB renderer allocation, 1056.204544 MiB
-macOS process physical footprint and 9.578 ms observed whole-frame p95. James's
-PM approval on PR #143 is still pending, so those thresholds are not signed.
-The immutable evidence and the historical component rationale are linked from
-**`docs/actor-stage-frame-budget.md`**.
-
-Renderer allocation is not physical VRAM, physical footprint is not RSS, and
-the two are not added on Apple unified memory. GPU time was unavailable on
-Metal. #105 did not measure cold save-load ≤2 seconds; #108 remeasures that
-release-candidate gate.
+The current #105 exported-combat evidence, historical component rationale and
+proposed P8.1 Mac gate are canonical in
+**`docs/actor-stage-frame-budget.md`** and
+**`docs/commercial-game-delivery.md` §5**. #105 did not measure cold save-load
+≤2 seconds; #108 remeasures that release-candidate gate.
 
 ## Organiser-owned files
 

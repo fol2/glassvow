@@ -9,7 +9,7 @@ extends Control
 ## front of the raster, laid out in the sprite box's own coordinates
 ## (`src/ui/combat.js:1845-1849`). Two soft points cost a draw call each; the
 ## same picture inside the stage would cost a render target that is already the
-## project's largest line of VRAM.
+## project's largest line of renderer allocation.
 ##
 ## Deliberately NOT seed-desynced. The sprite carries
 ## `animation-delay: -(seed % 2.8)s` but `animation-delay` does not inherit, so

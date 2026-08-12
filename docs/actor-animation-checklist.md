@@ -596,12 +596,10 @@ now multiplies that size by the live canvas scale, rounds to 64px and caps at
 2048² on window-size changes (`enemy_view.gd:1577-1641`). Measured by the organiser in
 `docs/actor-stage-frame-budget.md`:
 
-- **Current whole product:** #105 ran the real exported combat at five shapes,
-  two locales and five fresh processes on the named M4 Mac. Across all 50 rows,
-  maxima were **543.640625 MiB renderer allocation**, **1056.204544 MiB macOS
-  physical footprint** and **9.578 ms observed whole-frame p95**. They clear the
-  proposed P8.1 limits of 1228.8 MiB, 1536 MiB and 16.00 ms respectively.
-  James's PM approval on PR #143 remains pending; these are not signed limits.
+- **Current whole product:** #105's exported-combat matrix, proposed P8.1 Mac
+  gate and owner-decision rule are canonical in
+  `docs/actor-stage-frame-budget.md` and
+  `docs/commercial-game-delivery.md` §5.
 - **Component history:** the former 2.3 Mpx / 248.4 MiB four-actor result was a
   1× M1 Max component probe, not the current exported matrix. It is retained in
   the historical appendix of `actor-stage-frame-budget.md` for tuning rationale.
@@ -765,9 +763,10 @@ the chip lane — §3.4 and §3.5 consume them.
 
 ## Open decisions
 
-1. **P8.1 approval (§5.4)** — the 50-row exported matrix clears the proposed
-   Mac limits; James's PM signature on PR #143 remains pending. #108 separately
-   remeasures the cold save-load ≤2-second target, which #105 did not measure.
+1. **P8.1 approval (§5.4)** — see `docs/actor-stage-frame-budget.md` and
+   `docs/commercial-game-delivery.md` §5 for the proposal and PR #143 owner
+   decision. #108 separately remeasures the cold save-load ≤2-second target,
+   which #105 did not measure.
 2. **Hurt-flash strength (§1.5)** — the shader translation is source-audited;
    whether it visually matches the composited CSS flash still requires an
    in-motion lab judgement.
