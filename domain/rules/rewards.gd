@@ -186,6 +186,48 @@ func roll_event(run: RunState) -> String:
 	return picked
 
 
+## Pure semantic checks for route checkpoints already produced and applied.
+func valid_event_checkpoint(run: RunState, event_id: String, value: Variant) -> bool:
+	if not content.events.has(event_id) or typeof(value) != TYPE_DICTIONARY:
+		return false
+	var pending: Dictionary = value
+	if typeof(pending.get("kind")) != TYPE_STRING:
+		return false
+	var kind: String = pending["kind"]
+	var authored_count: int = -1
+	var event: Dictionary = content.events[event_id]
+	for choice_v: Variant in event.get("choices", []):
+		var choice: Dictionary = choice_v
+		for op_v: Variant in choice.get("ops", []):
+			var op: Dictionary = op_v
+			if kind == "card" and op.has("pickCard"):
+				authored_count = maxi(authored_count, _ji(op["pickCard"]))
+			elif kind == "remove" and op.get("pickRemove", false) == true:
+				authored_count = 0
+			elif kind == "upgrade" and op.get("pickUpgrade", false) == true:
+				authored_count = 0
+			elif kind == "duplicate" and op.get("pickDuplicate", false) == true:
+				authored_count = 0
+	if authored_count < 0:
+		return false
+	if kind != "card":
+		return pending.size() == 1
+	if pending.size() != 2 or typeof(pending.get("cards")) != TYPE_ARRAY:
+		return false
+	var cards: Array = pending["cards"]
+	if cards.is_empty() or cards.size() > authored_count:
+		return false
+	var eligible: Array = []
+	for tier: String in ["common", "uncommon", "rare"]:
+		eligible.append_array(card_pool(run, tier))
+	var seen: Dictionary = {}
+	for id_v: Variant in cards:
+		if typeof(id_v) != TYPE_STRING or seen.has(id_v) or not eligible.has(id_v):
+			return false
+		seen[id_v] = true
+	return true
+
+
 func claim_treasure(run: RunState) -> Dictionary:
 	var id_v: Variant = _random_relic(run)
 	if id_v == null:
@@ -194,6 +236,27 @@ func claim_treasure(run: RunState) -> Dictionary:
 	var id: String = str(id_v)
 	gain_relic(run, id)
 	return {"relic": id, "gold": 0}
+
+
+func valid_treasure_checkpoint(run: RunState, value: Variant) -> bool:
+	if typeof(value) != TYPE_DICTIONARY:
+		return false
+	var claim: Dictionary = value
+	if claim.size() != 2 or not claim.has("relic") or not _whole_nonnegative(claim.get("gold")):
+		return false
+	var eligible: Array = []
+	for tier: String in ["common", "uncommon", "rare"]:
+		eligible.append_array(relic_pool(run, tier))
+	var relic_v: Variant = claim["relic"]
+	if relic_v != null:
+		return typeof(relic_v) == TYPE_STRING and _ji(claim["gold"]) == 0 \
+			and eligible.has(relic_v) and run.player.relics.has(relic_v)
+	if _ji(claim["gold"]) != 60 or run.player.gold < 60:
+		return false
+	for id_v: Variant in eligible:
+		if not run.player.relics.has(str(id_v)):
+			return false
+	return true
 
 
 func gain_relic(run: RunState, id: String) -> bool:
@@ -333,6 +396,100 @@ func gen_shop(run: RunState) -> Dictionary:
 		"removeCost": int(roundf(float(_ji(content.shop.get("removeCost", 75))) * discount)),
 		"removed": false,
 	}
+
+
+func valid_shop_checkpoint(run: RunState, value: Variant) -> bool:
+	if typeof(value) != TYPE_DICTIONARY:
+		return false
+	var stock: Dictionary = value
+	if not _exact_keys(stock, ["cards", "relics", "potions", "removeCost", "removed"]) \
+			or typeof(stock["cards"]) != TYPE_ARRAY or typeof(stock["relics"]) != TYPE_ARRAY \
+			or typeof(stock["potions"]) != TYPE_ARRAY or not _whole_nonnegative(stock["removeCost"]) \
+			or typeof(stock["removed"]) != TYPE_BOOL:
+		return false
+	var bought_mark: bool = false
+	for row_v: Variant in stock["relics"]:
+		if typeof(row_v) == TYPE_DICTIONARY:
+			var row: Dictionary = row_v
+			bought_mark = bought_mark or (row.get("id") == "merchantsMark" and row.get("sold") == true)
+	var creation_mark: bool = run.has_relic("merchantsMark") and not bought_mark
+	var discount: float = (0.75 if creation_mark else 1.0) \
+		* float(str(_omen_mods(run).get("shopMult", 1)))
+	var card_tiers: Array[String] = ["common", "common", "uncommon", "uncommon", "rare"]
+	var cards: Array = stock["cards"]
+	if cards.size() != card_tiers.size():
+		return false
+	for i: int in range(cards.size()):
+		if not _valid_shop_row(cards[i], card_pool(run, card_tiers[i]),
+				content.shop["cardPrice"][card_tiers[i]], discount):
+			return false
+
+	var seen_tiers: Dictionary = {}
+	var previous_tier: int = -1
+	for row_v: Variant in stock["relics"]:
+		var tier: String = ""
+		if typeof(row_v) == TYPE_DICTIONARY:
+			var row: Dictionary = row_v
+			for candidate: String in ["common", "uncommon"]:
+				if relic_pool(run, candidate).has(row.get("id")):
+					tier = candidate
+					break
+		var tier_index: int = ["common", "uncommon"].find(tier)
+		if tier_index <= previous_tier or seen_tiers.has(tier) or not _valid_shop_row(row_v,
+				relic_pool(run, tier), content.shop["relicPrice"][tier], discount):
+			return false
+		previous_tier = tier_index
+		var relic_row: Dictionary = row_v
+		if relic_row["sold"] != run.player.relics.has(relic_row["id"]):
+			return false
+		seen_tiers[tier] = true
+	for tier: String in ["common", "uncommon"]:
+		if not seen_tiers.has(tier):
+			for id_v: Variant in relic_pool(run, tier):
+				if not run.player.relics.has(str(id_v)):
+					return false
+
+	var potions: Array = stock["potions"]
+	var expected_potions: int = 2 if run.reveals_all or run.reveals.has("phials") else 0
+	if potions.size() != expected_potions:
+		return false
+	for row_v: Variant in potions:
+		if not _valid_shop_row(row_v, content.potions.keys(), content.shop["potionPrice"], discount):
+			return false
+	return _ji(stock["removeCost"]) == int(roundf(float(_ji(content.shop["removeCost"])) * discount))
+
+
+static func _exact_keys(row: Dictionary, wanted: Array) -> bool:
+	if row.size() != wanted.size():
+		return false
+	for key: Variant in wanted:
+		if not row.has(key):
+			return false
+	return true
+
+
+static func _whole_nonnegative(value: Variant) -> bool:
+	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
+		return false
+	var encoded: String = str(value)
+	if encoded in ["inf", "-inf", "nan"]:
+		return false
+	var number: float = float(encoded)
+	return is_finite(number) and number >= 0.0 and number == floorf(number)
+
+
+func _valid_shop_row(row_v: Variant, pool: Array, price_pair: Variant, discount: float) -> bool:
+	if typeof(row_v) != TYPE_DICTIONARY:
+		return false
+	var row: Dictionary = row_v
+	if not _exact_keys(row, ["id", "price", "sold"]) or typeof(row["id"]) != TYPE_STRING \
+			or not _whole_nonnegative(row["price"]) or typeof(row["sold"]) != TYPE_BOOL \
+			or not pool.has(row["id"]):
+		return false
+	for authored: int in range(_ji(price_pair[0]), _ji(price_pair[1]) + 1):
+		if _ji(row["price"]) == int(roundf(float(authored) * discount)):
+			return true
+	return false
 
 
 func apply_event_ops(run: RunState, ops: Array) -> Dictionary:
