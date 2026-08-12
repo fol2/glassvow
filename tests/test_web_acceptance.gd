@@ -22,6 +22,15 @@ static func _source_contract(fails: Array[String]) -> void:
 	if publish.find('OS.has_feature("web_dev")') < 0 \
 			or publish.find('OS.has_feature("web_dev")') > publish.find("JavaScriptBridge"):
 		fails.append("web acceptance guard: JavaScriptBridge is reachable before the web_dev guard")
+	if not publish.contains("var serialized: String = JSON.stringify(projection_for("):
+		fails.append("web acceptance bridge: projection is not serialized before JavaScript marshalling")
+	if not publish.contains('JavaScriptBridge.get_interface("JSON")'):
+		fails.append("web acceptance bridge: JavaScript JSON interface is missing")
+	if not publish.contains("window[GLOBAL_NAME] = js_json.parse(serialized)"):
+		fails.append("web acceptance bridge: global is not assigned a parsed plain JavaScript object")
+	if publish.contains("window.set(") \
+			or publish.contains("window[GLOBAL_NAME] = projection_for("):
+		fails.append("web acceptance bridge: Dictionary is marshalled directly to the JavaScript global")
 	if not seam.contains("SaveService.load_run(content, durable_path)"):
 		fails.append("web acceptance durable read: projection does not independently load the save")
 	if main.contains("JavaScriptBridge"):

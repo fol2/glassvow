@@ -45,6 +45,8 @@ static func projection_for(route: String, live_run: RunState, content: ContentDB
 func _publish(route: String, live_run: RunState, content: ContentDB) -> void:
 	if not OS.has_feature("web_dev"):
 		return
+	var serialized: String = JSON.stringify(projection_for(route, live_run, content, save_path))
 	var window: JavaScriptObject = JavaScriptBridge.get_interface("window")
-	if window != null:
-		window.set(GLOBAL_NAME, projection_for(route, live_run, content, save_path))
+	var js_json: JavaScriptObject = JavaScriptBridge.get_interface("JSON")
+	if window != null and js_json != null:
+		window[GLOBAL_NAME] = js_json.parse(serialized)
