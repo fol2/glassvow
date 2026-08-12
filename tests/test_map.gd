@@ -325,10 +325,9 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, not MapBand.ChipBand.flips(30.0, 60.0, 100.0),
 		"a chip with room on neither side does not trade edges")
 	# …and the reachable failure the flip rule never covered: the STONE leaving
-	# the frame while its pill does not. The seat is horizontal, so the pill
-	# reaches ~49 stage px from a centre whose own ink reaches ~20 — a 29px band
-	# at each edge, 12% of a node step, where a `+17` is drawn with no lantern
-	# under it. Both edges photographed (#69 D1, PR #80 DL R2 MAJOR). The three
+	# the frame while its pill does not. In the old 13 px `+N` geometry, its
+	# horizontal seat left an edge band where `+17` drew without a lantern.
+	# Both edges photographed (#69 D1, PR #80 DL R2 MAJOR). The three
 	# `flips` cases above assert a rule; these assert that it is asked at all.
 	_check(fails, MapBand.ChipBand.on_screen(600.0, 20.0, 1180.0),
 		"a stone in the middle of the frame draws its chip")
@@ -370,10 +369,11 @@ static func run(fails: Array[String]) -> void:
 	tree.root.remove_child(chip_screen)
 	chip_screen.free()
 	# The seed-17634 pair, made a fixture: two same-lane bounty stones at
-	# phone-portrait measure 100 stage px apart against 2 × 58.6 of reach, so the
-	# right one's frame-flip painted its pill 17 px into the left one's and left
-	# `+16` reading as its first digit. Found independently by capture and by
-	# probe (PR #80 DL R3 and the PM's third pass) — a case a capture finds by
+	# phone-portrait produce overlapping candidate pill rects before seating, so
+	# the right one's frame-flip painted its pill into the left one's and left
+	# `+16` reading as its first digit.
+	# Found independently by capture and probe (PR #80 DL R3 and the PM's third
+	# pass) — a case a capture finds by
 	# luck and a gate finds every run.
 	var sib_run: RunState = RunState.new_run(benchmark_content, 17634, "run-siblings")
 	var sib: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(sib_run), benchmark_content)
@@ -406,15 +406,15 @@ static func run(fails: Array[String]) -> void:
 		"exactly one chip is declined at the collision, not the frame's worth")
 	# Pin WHICH pair, not just a count. `_collisions(raw) >= 1` is satisfied by
 	# any collision, so the fixture could drift onto a different pair on a
-	# different generator and still read green (PR #80 PM R4). n6 `+16` is the
-	# left one and keeps its place; n7 `+22` is the one that would have flipped
+	# different generator and still read green (PR #80 PM R4). n6 bounty 16 is the
+	# left one and keeps its place; n7 bounty 22 is the one that would have flipped
 	# onto it.
 	# One call, reused: `seats()` writes `_flipped`, so asking twice and treating
 	# the answers as one decision assumes an idempotence it does not promise
 	# (DL R5 NIT).
 	var sib_seats: Dictionary[int, bool] = sib_chosen
 	_check(fails, sib._waystones[6].bounty == 16 and sib._waystones[7].bounty == 22,
-		"seed 17634 still generates the +16 / +22 pair this fixture is about")
+		"seed 17634 still generates the bounty 16 / 22 pair this fixture is about")
 	_check(fails, sib_seats.has(6) and not sib_seats.has(7),
 		"the pill already on the road keeps it, and the one that would bury it declines")
 	# `chip_rect` became the single definition of the pill and nothing watched it:
@@ -427,8 +427,18 @@ static func run(fails: Array[String]) -> void:
 		+ Vector2(GlassWaystone.WIDTH, GlassWaystone.EMBLEM_H) * 0.5
 	var pin_right: Rect2 = pin.chip_rect(false)
 	var pin_left: Rect2 = pin.chip_rect(true)
-	_check(fails, is_equal_approx(pin_right.size.y, 19.0),
-		"the bounty pill stands 19 local px tall")
+	_check(fails, GlassWaystone.CHIP_FONT_SIZE == 27,
+		"the bounty numeral uses the measured 27 px authored size")
+	_check(fails, is_equal_approx(pin_right.size.y, 21.0),
+		"the bounty pill stands 21 local px tall around the larger numeral")
+	_check(fails, pin.has_method(&"chip_text"),
+		"the bounty chip has one label source for measuring and painting")
+	if pin.has_method(&"chip_text"):
+		_check(fails, str(pin.call(&"chip_text")) == "16",
+			"the coin is the bounty unit and its label is the numeral alone")
+	else:
+		_check(fails, false,
+			"the coin is the bounty unit and its label is the numeral alone")
 	_check(fails, is_equal_approx(
 			pin_right.position.x - (pin_centre.x + pin.pane_radius()), 4.0),
 		"…and starts 4 local px past the pane it labels")
