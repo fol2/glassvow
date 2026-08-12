@@ -135,6 +135,16 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.assert_rejected(lambda: self.report["samples"]
                              .update(renderer_allocated_bytes=[0.0] * 600))
 
+    def test_request_and_method_integer_types_are_strict(self) -> None:
+        for section, key, value in (("request", "act", False),
+                                    ("request", "seed", 717.0),
+                                    ("method", "measured_viewports", 5.9),
+                                    ("method", "viewport_pixels", 329160.5)):
+            with self.subTest(section=section, key=key):
+                self._reset()
+                self.assert_rejected(lambda section=section, key=key, value=value:
+                                     self.report[section].update({key: value}))
+
     def test_logs_status_and_footprint_fail_closed(self) -> None:
         self.assert_rejected(lambda: self.status.update(process_returncode=1))
         self._reset()

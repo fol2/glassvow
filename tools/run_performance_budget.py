@@ -111,6 +111,14 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
     request = exact_keys(report["request"],
         {"fight", "kind", "seed", "act", "shape", "window", "language", "mode"},
         "request")
+    if type(request["seed"]) is not int or type(request["act"]) is not int \
+            or not all(isinstance(request[key], str) for key in
+                       ("kind", "shape", "language", "mode")) \
+            or not isinstance(request["fight"], list) \
+            or not isinstance(request["window"], list) \
+            or len(request["window"]) != 2 \
+            or any(type(value) is not int for value in request["window"]):
+        die("request: wrong field type")
     wanted = {key: expected[key] for key in request}
     if request != wanted:
         die(f"request: expected {wanted}, got {request}")
@@ -122,11 +130,11 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
                      method["sample_seconds"], method["sample_frames_min"])
     if actual_method != wanted_method:
         die(f"method: expected {wanted_method}, got {actual_method}")
-    min_frames = int(number(method["sample_frames_min"], "sample_frames_min", positive=True))
-    if int(number(method["measured_viewports"], "measured_viewports", positive=True)) \
+    min_frames = integer(method["sample_frames_min"], "sample_frames_min", minimum=1)
+    if integer(method["measured_viewports"], "measured_viewports", minimum=1) \
             < len(expected["fight"]) + 2:
         die("method: too few measured viewports for root plus every actor")
-    if int(number(method["viewport_pixels"], "viewport_pixels", positive=True)) \
+    if integer(method["viewport_pixels"], "viewport_pixels", minimum=1) \
             < expected["window"][0] * expected["window"][1]:
         die("method: viewport pixels omit the root viewport")
     samples = exact_keys(report["samples"], SAMPLE_KEYS, "samples")
