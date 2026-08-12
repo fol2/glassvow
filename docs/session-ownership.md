@@ -254,27 +254,20 @@ three lanes own. These wait for the organiser to sequence them.
    structural and belongs to the battlefield, not to an actor.
 4. **Any `glass_style.gd` change.** See above.
 
-## Standing risk: the per-actor 3D stage — **measured**
+## Performance gate: exported combat measured; signature pending
 
-`docs/actor-animation-checklist.md` §5.4 flagged this as unmeasured. It has now
-been measured: **`docs/actor-stage-frame-budget.md`**, tool at
-`tools/bench_actor_stage.gd`.
+Issue #105 now measures the real exported combat, not just the actor component
+probe. On the named M4 Mac, all 50 shape/locale/process rows clear the proposed
+P8.1 limits: maxima were 543.640625 MiB renderer allocation, 1056.204544 MiB
+macOS process physical footprint and 9.578 ms observed whole-frame p95. James's
+PM approval on PR #143 is still pending, so those thresholds are not signed.
+The immutable evidence and the historical component rationale are linked from
+**`docs/actor-stage-frame-budget.md`**.
 
-Short version: **frame time passes with room** — a real fight costs about 0.9 ms
-of the 16 ms budget, so the checklist's PORT items are not blocked. **Memory does
-not** — roughly 113 MB of video memory per actor, 310 MB for a four-actor fight,
-before any texture, UI or audio. And the memory budget in
-`commercial-game-delivery.md` §5 is literally written "≤X MB" — **never filled
-in**, so no pass can be declared against it. Setting that number is a gate
-decision.
-
-Knobs are priced in that note — MSAA, `oversample`, and the fact that all 245
-textures import lossless with no VRAM compression at all. **None of them is to be
-turned yet.** Ruled 2026-07-26: optimisation waits for a real battlefield that
-has been visually approved, because every one of these is a visual trade and the
-screen to judge it against does not exist yet. The measured figures are also a
-floor — the stage restructure adds to them — so when the battlefield lands the
-probe gets re-run rather than the old prices re-used.
+Renderer allocation is not physical VRAM, physical footprint is not RSS, and
+the two are not added on Apple unified memory. GPU time was unavailable on
+Metal. #105 did not measure cold save-load ≤2 seconds; #108 remeasures that
+release-candidate gate.
 
 ## Organiser-owned files
 

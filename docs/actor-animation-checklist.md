@@ -430,7 +430,7 @@ Benchmark: 1100ms normal / 1250ms crit, `cubic-bezier(.2,.7,.3,1)`; scale
 
 Here: `Floaters.float_text` — 1.1s / 1.25s crit, matching ease and keyframes,
 poison descends, crit blaze (`floaters.gd:43-45` (`FLOAT_EASE`), `floaters.gd:146-198` (`float_text`)). Driven
-from `combat_screen._float` (`combat_screen.gd:2219-2224` (`_float`)). The benchmark's crit
+from `combat_screen._float` (`combat_screen.gd:2230-2235` (`_float`)). The benchmark's crit
 branch has no caller, so its presence in both trees is not a visible parity gap.
 
 ### 4.2 Impact particles — **KEEP** (and honour the dead kinds)
@@ -445,7 +445,7 @@ go NaN before paint. Pixel counts on the running page: burst/motes draw; ring an
 slashArc draw 0 (`vfx_layer.gd:43-59` (in `DEAD_KINDS_RENDER`)).
 
 Here: `VfxLayer.archetype_hit` and the drain call sites are built
-(`vfx_layer.gd:596` (`archetype_hit`), `combat_screen.gd:2615` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
+(`vfx_layer.gd:617` (`archetype_hit`), `combat_screen.gd:2626` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
 `ring` / `slash` at `_push` so the typed `Vector2.ZERO` default does not
 accidentally repair them into visible hoops (`vfx_layer.gd:71-73` (`DEAD_KINDS_RENDER`),
 `vfx_layer.gd:405-410` (`_push`)). Call sites stay as the record of what the source asks
@@ -460,8 +460,8 @@ which the particle loop freezes; colour flashes at .09/.24/.28/.3s
 (`src/vfx.js:52-57`, `src/vfx.js:127-149`, `src/ui/drain.js:291-306`).
 
 Here: shake moves `_shake_host` wrapping stage, battlefield and HUD
-(`combat_screen.gd:434` (`_shake_host`), `vfx_layer.gd:433-434` (`shake`), `vfx_layer.gd:344-357` (in `_step_shake`)).
-`hitstop` freezes the particle sim (`vfx_layer.gd:442-443` (`hitstop`),
+(`combat_screen.gd:434` (`_shake_host`), `vfx_layer.gd:454-455` (`shake`), `vfx_layer.gd:344-357` (in `_step_shake`)).
+`hitstop` freezes the particle sim (`vfx_layer.gd:463-464` (`hitstop`),
 `vfx_layer.gd:245-248` (in `_process`)) and is wired for big hits, kills, shatter and world-stop
 (`presentation/combat/combat_screen.gd` (`_handle_event`), `2172`, `2176`, `2266`). Flashes go through
 `VfxLayer.flash`. Per-actor SubViewport camera shake is no longer the battlefield
@@ -588,25 +588,26 @@ nudge the projection now supplies.
 The remaining eight are still reference data, and the solution record has been
 corrected accordingly.
 
-### 5.4 Every actor renders a live 3D stage — **MEASURED** at 1×; live scale not yet measured
+### 5.4 Every actor renders a live 3D stage — **MEASURED** in the exported matrix
 
 `_stage.render_target_update_mode = SubViewport.UPDATE_ALWAYS`, one stage per
 actor. `oversample = 2.0` and MSAA 4× remain the chosen baseline, but the stage
 now multiplies that size by the live canvas scale, rounds to 64px and caps at
 2048² on window-size changes (`enemy_view.gd:1577-1641`). Measured by the organiser in
-`docs/actor-stage-frame-budget.md` (tool: `tools/bench_actor_stage.gd`):
+`docs/actor-stage-frame-budget.md`:
 
-- **1× canvas baseline:** four actors at `oversample = 2.0`, MSAA 4× occupy
-  2.3 Mpx / **248.4 MB** in the desktop measurement
-  (`actor-stage-frame-budget.md:134-140`). The former 3.6 Mpx / 310 MB and
-  inferred 0.9ms / roughly 38 actors belong to the old 2.5× profile, not the
-  chosen baseline (`actor-stage-frame-budget.md:34-44`,
-  `actor-stage-frame-budget.md:82-94`). Neither wall time nor memory has been
-  remeasured for the new live-scale path, so 248.4 MB is no longer a general
-  current-window figure.
-- **Memory still has no budget to pass against.**
-  `commercial-game-delivery.md` §5 still reads "≤X MB"; setting it remains a
-  gate decision.
+- **Current whole product:** #105 ran the real exported combat at five shapes,
+  two locales and five fresh processes on the named M4 Mac. Across all 50 rows,
+  maxima were **543.640625 MiB renderer allocation**, **1056.204544 MiB macOS
+  physical footprint** and **9.578 ms observed whole-frame p95**. They clear the
+  proposed P8.1 limits of 1228.8 MiB, 1536 MiB and 16.00 ms respectively.
+  James's PM approval on PR #143 remains pending; these are not signed limits.
+- **Component history:** the former 2.3 Mpx / 248.4 MiB four-actor result was a
+  1× M1 Max component probe, not the current exported matrix. It is retained in
+  the historical appendix of `actor-stage-frame-budget.md` for tuning rationale.
+  Renderer allocation is not physical VRAM and is not added to process physical
+  footprint on Apple unified memory; the latter is not RSS. GPU time was
+  unavailable on Metal.
 
 Two knobs were priced there and left to this lane to judge. Judged 2026-07-26 in
 the lab at 1:1, and the naive reading of that price table is **wrong**:
@@ -764,9 +765,9 @@ the chip lane — §3.4 and §3.5 consume them.
 
 ## Open decisions
 
-1. **Memory budget (§5.4)** — the 1× 2.0× / MSAA 4× baseline is measured; the
-   live-scale path is not, and the commercial gate still has no limit to pass or
-   fail.
+1. **P8.1 approval (§5.4)** — the 50-row exported matrix clears the proposed
+   Mac limits; James's PM signature on PR #143 remains pending. #108 separately
+   remeasures the cold save-load ≤2-second target, which #105 did not measure.
 2. **Hurt-flash strength (§1.5)** — the shader translation is source-audited;
    whether it visually matches the composited CSS flash still requires an
    in-motion lab judgement.

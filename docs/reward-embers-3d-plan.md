@@ -85,8 +85,8 @@ cross-lane.
 ## Structure
 
 **One stage for the whole screen**, not one per piece. This matters for cost: the
-measured 113 MB figure is *per actor stage*, and a fight pays it four times. The
-reward screen pays it once.
+historical component ladder allocated one stage per actor, so a fight paid four
+stage allocations. The reward screen pays for one stage.
 
 Layers, back to front:
 
@@ -151,35 +151,35 @@ already demonstrated that a hand-built specular term at a very high exponent is
 what sells small glass. The fracture-face tag from `_prism` selects where the
 molten term is allowed.
 
-## Cost, and the one number nobody has
+## Cost and the current gate
 
-`docs/actor-stage-frame-budget.md` measured a per-actor stage at roughly **113 MB
-of video memory**, with frame time comfortable (~0.9 ms of 16). Two knobs — MSAA
-and `oversample` — roughly halve it.
+`docs/actor-stage-frame-budget.md` now leads with the real #105 exported-combat
+matrix. Its proposed P8.1 Mac limits are 1228.8 MiB renderer allocation,
+1536 MiB macOS process physical footprint and 16.00 ms observed whole-frame p95;
+James's PM approval on PR #143 remains pending.
 
 The reward stage is one stage. **Measured 2026-08-01** (`tools/bench_reward_stage.gd`,
-same instruments as the actor probe): **127.4 MB** of video memory at the hold —
-BESIDE the actor's 113 MB, not under it, because an actor's viewport is a fixed
+same instruments as the actor probe): **127.4 MiB of renderer allocation** at
+the hold — beside the historical per-actor component reading, not under it,
+because an actor's viewport is a fixed
 box and this one is the window × OVERSAMPLE 1.5. Two properties worth knowing
 before turning knobs: `stretch/mode="canvas_items"` pins the logical canvas at
 1180×820, so the stage renders at 1770×1230 on every display and the figure does
 NOT grow with the monitor (`VP_MAX` 2048 never engages) — on a 2560-wide display
 OVERSAMPLE is therefore a *sharpness* lever, not only a cost one. The engine's
 per-viewport GPU clock reads zero through this path on this driver; the frame-time
-story stays with the actor probe's method. The original hope stands corrected:
-its own cost was expected to land well under an actor's,
-but **it must be measured with the same tool** (`tools/bench_actor_stage.gd`)
-before this is called done. Two things make it not automatically safe:
+story stays with the actor probe's method. This historical component reading is
+not part of the current exported-combat matrix. Two lifetime questions remain:
 
 1. If the combat screen is still alive behind the reward screen, four actor
    stages and this one are resident at once. Whoever wires this in should free
    the combat stage or drop its viewports to `UPDATE_DISABLED` while the reward
    screen is up.
-2. `commercial-game-delivery.md` §5 states the memory budget as literally
-   `≤X MB`. It has never been filled in, so **no pass can be declared against
-   it** — by this lane or any other. Setting that number is a gate decision, and
-   this work should not be the thing that quietly consumes the headroom nobody
-   has priced.
+2. The isolated reward-stage reading is historical component guidance, not a
+   separate pass against the proposed whole-product gate. Renderer allocation
+   is not physical VRAM and must not be added to process physical footprint on
+   Apple unified memory; physical footprint is not RSS. GPU time was unavailable
+   on Metal. #105 also did not measure cold save-load ≤2 seconds; #108 does.
 
 ## Cross-lane items
 
