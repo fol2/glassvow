@@ -222,18 +222,39 @@ def validate_footprint(data: Any, pid: int) -> float:
     starts: list[float] = []
     live_starts: list[float] = []
     seen_end = False
+    seen_teardown_race = False
+    teardown_errors = {
+        "mach_vm_region_recurse - (os/kern) invalid argument",
+        "mach_vm_page_range_query - (os/kern) invalid argument",
+    }
     for i, sample in enumerate(data["samples"]):
-        if not isinstance(sample, dict) or sample.get("errors") != []:
+        if not isinstance(sample, dict):
             die(f"footprint.samples[{i}]: errors or malformed sample")
+        errors = sample.get("errors")
+        processes = sample.get("processes")
+        teardown_race = False
+        if errors != []:
+            next_sample = data["samples"][i + 1] \
+                if i + 1 < len(data["samples"]) else None
+            if seen_teardown_race or not isinstance(errors, list) \
+                    or len(errors) != 1 or errors[0] not in teardown_errors \
+                    or not isinstance(processes, list) or len(processes) != 1 \
+                    or not isinstance(next_sample, dict) \
+                    or next_sample.get("errors") != [] \
+                    or next_sample.get("processes") != []:
+                die(f"footprint.samples[{i}]: errors or malformed sample")
+            seen_teardown_race = True
+            teardown_race = True
         start = sample.get("start_time")
         if not isinstance(start, dict):
             die(f"footprint.samples[{i}]: missing start timestamp")
         starts.append(number(start.get("mach_continuous_time_ns"),
                              f"footprint[{i}].start", positive=True))
-        processes = sample.get("processes")
         if processes == []:
             seen_end = True
             continue
+        if seen_teardown_race and not teardown_race:
+            die(f"footprint.samples[{i}]: process reappeared after teardown race")
         if seen_end:
             die(f"footprint.samples[{i}]: process reappeared after exit")
         if not isinstance(processes, list) or len(processes) != 1 \
@@ -244,7 +265,11 @@ def validate_footprint(data: Any, pid: int) -> float:
         live_starts.append(starts[-1])
         if process.get("translated") is not False:
             die(f"footprint.samples[{i}]: process is translated")
-        number(process.get("footprint"), f"footprint[{i}].footprint")
+        if teardown_race:
+            if process.get("footprint") is not None:
+                die(f"footprint[{i}].footprint: teardown race is inconsistent")
+        else:
+            number(process.get("footprint"), f"footprint[{i}].footprint")
         auxiliary = process.get("auxiliary")
         if not isinstance(auxiliary, dict):
             die(f"footprint.samples[{i}].auxiliary: missing")

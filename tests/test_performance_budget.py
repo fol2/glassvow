@@ -168,6 +168,60 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.assertEqual(11, len(evidence["samples"]))
         self.assertEqual([], evidence["samples"][-1]["processes"])
 
+    def test_footprint_accepts_only_the_observed_terminal_teardown_race(self) -> None:
+        def evidence(error: str) -> dict[str, Any]:
+            race = copy.deepcopy(self.footprint)
+            teardown = copy.deepcopy(race["samples"][-2])
+            teardown["start_time"]["mach_continuous_time_ns"] = 17_000_000_001
+            teardown["processes"][0]["footprint"] = None
+            teardown["errors"] = [error]
+            race["samples"].insert(-1, teardown)
+            return race
+
+        for error in (
+                "mach_vm_region_recurse - (os/kern) invalid argument",
+                "mach_vm_page_range_query - (os/kern) invalid argument"):
+            with self.subTest(error=error):
+                self.assertEqual(710.0, PERF.validate_footprint(
+                    evidence(error), self.pid))
+
+        unknown = evidence("unexpected sampling failure")
+        with self.assertRaises(PERF.EvidenceError):
+            PERF.validate_footprint(unknown, self.pid)
+
+        duplicate = evidence(
+            "mach_vm_region_recurse - (os/kern) invalid argument")
+        duplicate["samples"][-2]["errors"].append(
+            "mach_vm_page_range_query - (os/kern) invalid argument")
+        with self.assertRaises(PERF.EvidenceError):
+            PERF.validate_footprint(duplicate, self.pid)
+
+        nonterminal = evidence(
+            "mach_vm_region_recurse - (os/kern) invalid argument")
+        nonterminal["samples"].insert(-1, copy.deepcopy(
+            nonterminal["samples"][-3]))
+        with self.assertRaises(PERF.EvidenceError):
+            PERF.validate_footprint(nonterminal, self.pid)
+
+        for label, mutate in (
+                ("timestamp", lambda sample: sample["start_time"].update(
+                    mach_continuous_time_ns=0)),
+                ("pid", lambda sample: sample["processes"][0].update(pid=7)),
+                ("translated", lambda sample: sample["processes"][0].update(
+                    translated=True)),
+                ("auxiliary", lambda sample: sample["processes"][0].pop(
+                    "auxiliary")),
+                ("current", lambda sample: sample["processes"][0]["auxiliary"]
+                    .update(phys_footprint=0)),
+                ("peak", lambda sample: sample["processes"][0]["auxiliary"]
+                    .update(phys_footprint_peak=1))):
+            with self.subTest(field=label):
+                malformed = evidence(
+                    "mach_vm_region_recurse - (os/kern) invalid argument")
+                mutate(malformed["samples"][-2])
+                with self.assertRaises(PERF.EvidenceError):
+                    PERF.validate_footprint(malformed, self.pid)
+
     def test_plan_matrix_and_types_fail_closed(self) -> None:
         self.plan.update(shapes=["phone-landscape"] * 2)
         with self.assertRaises(PERF.EvidenceError):
