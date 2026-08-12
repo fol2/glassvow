@@ -246,6 +246,9 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	var boon_receipt_v: Variant = save.get("boonReceipt")
 	if boon_receipt_v != null and not _valid_boon_receipt(boon_receipt_v, boon_v, content):
 		return null
+	var quest_scratch_v: Variant = save.get("questScratch", {})
+	if typeof(quest_scratch_v) != TYPE_DICTIONARY:
+		return null
 	# ---- additive heals + build
 	var rs: RunState = RunState.new()
 	rs.seed = _sji(save.get("seed", 0))
@@ -268,7 +271,7 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	rs.shards = save.get("shards", [])
 	rs.monument = save.get("monument")
 	rs.quests = save.get("quests", {})
-	rs.quest_scratch = save.get("questScratch", {})
+	rs.quest_scratch = quest_scratch_v
 	rs.quest_completions = save.get("questCompletions", [])
 	var saved_stats: Dictionary = save.get("stats", {})
 	rs.stats.merge(saved_stats, true)
