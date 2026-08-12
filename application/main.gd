@@ -111,7 +111,7 @@ func _apply_pending_content_hydration() -> int:
 func _remember_route(rebuilder: Callable) -> void:
 	_route_rebuilder = rebuilder
 	if _web_acceptance != null:
-		_web_acceptance.observe_route(rebuilder, game, content)
+		_web_acceptance.observe_route(rebuilder, game, content, _run_save_path)
 
 
 func _rebuild_active_route() -> void:

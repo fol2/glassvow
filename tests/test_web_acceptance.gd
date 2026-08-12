@@ -7,8 +7,17 @@ const SEAM_PATH: String = "res://application/web_acceptance.gd"
 const SAVE_PATH: String = "user://test_web_acceptance_run.json"
 
 
+class AcceptanceSpy extends WebAcceptance:
+	var observed_path: String = ""
+
+	func observe_route(_rebuilder: Callable, _game: GlassvowGame, _content: ContentDB,
+			durable_path: String) -> void:
+		observed_path = durable_path
+
+
 static func run(fails: Array[String]) -> void:
 	_source_contract(fails)
+	_path_binding_contract(fails)
 	_projection_contract(fails)
 	SaveService.clear_run("", SAVE_PATH)
 
@@ -22,7 +31,9 @@ static func _source_contract(fails: Array[String]) -> void:
 	if publish.find('OS.has_feature("web_dev")') < 0 \
 			or publish.find('OS.has_feature("web_dev")') > publish.find("JavaScriptBridge"):
 		fails.append("web acceptance guard: JavaScriptBridge is reachable before the web_dev guard")
-	if not publish.contains("var serialized: String = JSON.stringify(projection_for("):
+	if not publish.contains("var serialized: String = JSON.stringify(") \
+			or not publish.contains(
+				"projection_for(route, live_run, content, durable_path)"):
 		fails.append("web acceptance bridge: projection is not serialized before JavaScript marshalling")
 	if not publish.contains('JavaScriptBridge.get_interface("JSON")'):
 		fails.append("web acceptance bridge: JavaScript JSON interface is missing")
@@ -40,10 +51,24 @@ static func _source_contract(fails: Array[String]) -> void:
 			or ready.find('OS.has_feature("web_dev")') > ready.find("WebAcceptance.new()"):
 		fails.append("web acceptance allocation: helper exists outside web_dev")
 	if not _function_body(main, "_remember_route").contains(
-			"_web_acceptance.observe_route(rebuilder, game, content)"):
-		fails.append("web acceptance route: Main does not publish from its live route constructor")
+			"_web_acceptance.observe_route(rebuilder, game, content, _run_save_path)"):
+		fails.append("web acceptance path: Main does not publish from its live injected save path")
 	if not seam.contains('call_deferred("_publish"'):
 		fails.append("web acceptance readiness: projection publishes before route construction returns")
+
+
+static func _path_binding_contract(fails: Array[String]) -> void:
+	var main: Main = Main.new()
+	var spy: AcceptanceSpy = AcceptanceSpy.new()
+	main._run_save_path = "user://superseded_web_acceptance_run.json"
+	main._web_acceptance = spy
+	main._run_save_path = SAVE_PATH
+	main._remember_route(Callable(main, "_show_title"))
+	if spy.observed_path != SAVE_PATH:
+		fails.append("web acceptance path: route observation captured a stale save path")
+	main._web_acceptance = null
+	spy.free()
+	main.free()
 
 
 static func _projection_contract(fails: Array[String]) -> void:

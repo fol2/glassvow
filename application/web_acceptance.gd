@@ -6,14 +6,12 @@ extends Node
 const SCHEMA_VERSION: int = 1
 const GLOBAL_NAME: String = "glassvowAcceptance"
 
-var save_path: String = SaveService.RUN_PATH
-
-
-func observe_route(rebuilder: Callable, game: GlassvowGame, content: ContentDB) -> void:
+func observe_route(rebuilder: Callable, game: GlassvowGame, content: ContentDB,
+		durable_path: String) -> void:
 	if not OS.has_feature("web_dev"):
 		return
 	var live_run: RunState = game.run if game != null else null
-	call_deferred("_publish", canonical_route(rebuilder), live_run, content)
+	call_deferred("_publish", canonical_route(rebuilder), live_run, content, durable_path)
 
 
 static func canonical_route(rebuilder: Callable) -> String:
@@ -42,10 +40,12 @@ static func projection_for(route: String, live_run: RunState, content: ContentDB
 	}
 
 
-func _publish(route: String, live_run: RunState, content: ContentDB) -> void:
+func _publish(route: String, live_run: RunState, content: ContentDB,
+		durable_path: String) -> void:
 	if not OS.has_feature("web_dev"):
 		return
-	var serialized: String = JSON.stringify(projection_for(route, live_run, content, save_path))
+	var serialized: String = JSON.stringify(
+		projection_for(route, live_run, content, durable_path))
 	var window: JavaScriptObject = JavaScriptBridge.get_interface("window")
 	var js_json: JavaScriptObject = JavaScriptBridge.get_interface("JSON")
 	if window != null and js_json != null:
