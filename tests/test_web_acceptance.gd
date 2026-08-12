@@ -9,15 +9,25 @@ const SAVE_PATH: String = "user://test_web_acceptance_run.json"
 
 class AcceptanceSpy extends WebAcceptance:
 	var observed_path: String = ""
+	var publications: Array[Dictionary] = []
 
 	func observe_route(_rebuilder: Callable, _game: GlassvowGame, _content: ContentDB,
 			durable_path: String) -> void:
 		observed_path = durable_path
 
+	func _publish(route: String, live_run: RunState, _content: ContentDB,
+			durable_path: String) -> void:
+		publications.append({
+			"route": route,
+			"liveRunId": live_run.run_id if live_run != null else null,
+			"durablePath": durable_path,
+		})
+
 
 static func run(fails: Array[String]) -> void:
 	_source_contract(fails)
 	_path_binding_contract(fails)
+	_last_route_wins_contract(fails)
 	_projection_contract(fails)
 	SaveService.clear_run("", SAVE_PATH)
 
@@ -53,8 +63,10 @@ static func _source_contract(fails: Array[String]) -> void:
 	if not _function_body(main, "_remember_route").contains(
 			"_web_acceptance.observe_route(rebuilder, game, content, _run_save_path)"):
 		fails.append("web acceptance path: Main does not publish from its live injected save path")
-	if not seam.contains('call_deferred("_publish"'):
+	if not seam.contains('call_deferred("_publish_if_current"'):
 		fails.append("web acceptance readiness: projection publishes before route construction returns")
+	if not seam.contains("if generation != _publish_generation:"):
+		fails.append("web acceptance ordering mutation: stale deferred routes are not rejected")
 
 
 static func _path_binding_contract(fails: Array[String]) -> void:
@@ -71,15 +83,58 @@ static func _path_binding_contract(fails: Array[String]) -> void:
 	main.free()
 
 
+static func _last_route_wins_contract(fails: Array[String]) -> void:
+	var spy: AcceptanceSpy = AcceptanceSpy.new()
+	var content: ContentDB = ContentDB.load_full()
+	var first: RunState = RunState.new_run(content, 14611, "first-run-146")
+	var latest: RunState = RunState.new_run(content, 14612, "latest-run-146")
+	spy._queue_publish("map", first, content, "user://first.json")
+	spy._queue_publish("combat", latest, content, "user://latest.json")
+	spy._publish_if_current(1, "map", first, content, "user://first.json")
+	spy._publish_if_current(2, "combat", latest, content, "user://latest.json")
+	var expected: Array[Dictionary] = [{
+		"route": "combat",
+		"liveRunId": "latest-run-146",
+		"durablePath": "user://latest.json",
+	}]
+	if spy.publications != expected:
+		fails.append("web acceptance ordering: stale route, run or path reached publication")
+	spy.free()
+
+
 static func _projection_contract(fails: Array[String]) -> void:
 	var seam: Script = load(SEAM_PATH) as Script
 	if seam == null or not seam.has_method("projection_for"):
 		fails.append("web acceptance projection: helper or projection_for is missing")
 		return
 	var main: Main = Main.new()
-	if seam.call("canonical_route", Callable(main, "_show_vigil").bind(true)) != "vigil" \
-			or seam.call("canonical_route", Callable(main, "_resume_pending_combat")) != "combat":
-		fails.append("web acceptance route: bound and pending constructors are not canonical")
+	var routes: Dictionary = {
+		"_show_title": "title", "_show_embark": "embark", "_show_vigil": "vigil",
+		"_show_map": "map", "_show_rest": "rest", "_show_event": "event",
+		"_show_treasure": "treasure", "_show_act4_entrance": "act4_entrance",
+		"_show_shop": "shop", "_resume_pending_combat": "combat",
+		"_show_pending_reward": "pending_reward", "_show_boss_relic": "boss_relic",
+		"_show_run_end": "run_end", "_show_dawn": "dawn",
+		"_show_monument": "monument", "_show_hollow": "hollow",
+		"_show_lamplighter": "lamplighter",
+	}
+	var route_pattern: RegEx = RegEx.new()
+	route_pattern.compile("_remember_route\\((_[a-z0-9_]+)")
+	var callsites: Array[String] = []
+	for result: RegExMatch in route_pattern.search_all(
+			FileAccess.get_file_as_string(MAIN_PATH)):
+		callsites.append(result.get_string(1))
+	callsites.sort()
+	var expected_callsites: Array = routes.keys()
+	expected_callsites.sort()
+	if callsites != expected_callsites:
+		fails.append("web acceptance route: remembered constructors are not exhaustively audited")
+	for method: String in routes:
+		var callable: Callable = Callable(main, method)
+		if method == "_show_vigil":
+			callable = callable.bind(true)
+		if seam.call("canonical_route", callable) != routes[method]:
+			fails.append("web acceptance route: %s is not canonical" % method)
 	main.free()
 	var content: ContentDB = ContentDB.load_full()
 	var live: RunState = RunState.new_run(content, 14601, "live-run-146")

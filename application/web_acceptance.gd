@@ -6,12 +6,29 @@ extends Node
 const SCHEMA_VERSION: int = 1
 const GLOBAL_NAME: String = "glassvowAcceptance"
 
+var _publish_generation: int = 0
+
+
 func observe_route(rebuilder: Callable, game: GlassvowGame, content: ContentDB,
 		durable_path: String) -> void:
 	if not OS.has_feature("web_dev"):
 		return
 	var live_run: RunState = game.run if game != null else null
-	call_deferred("_publish", canonical_route(rebuilder), live_run, content, durable_path)
+	_queue_publish(canonical_route(rebuilder), live_run, content, durable_path)
+
+
+func _queue_publish(route: String, live_run: RunState, content: ContentDB,
+		durable_path: String) -> void:
+	_publish_generation += 1
+	call_deferred("_publish_if_current", _publish_generation,
+		route, live_run, content, durable_path)
+
+
+func _publish_if_current(generation: int, route: String, live_run: RunState,
+		content: ContentDB, durable_path: String) -> void:
+	if generation != _publish_generation:
+		return
+	_publish(route, live_run, content, durable_path)
 
 
 static func canonical_route(rebuilder: Callable) -> String:
