@@ -56,6 +56,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
                         "window": [844, 390], "language": "en"},
             "method": {"warmup_seconds": 6.0, "warmup_frames_min": 300,
                        "sample_seconds": 10.0, "sample_frames_min": 600,
+                       "vfx_particles_start": 96, "vfx_particles_end": 96,
                        "measured_viewports": 5,
                        "viewport_sizes": [[844, 390]] + [[100, 100]] * 4,
                        "actor_stage_sizes": [[100, 100], [100, 100]],
@@ -174,6 +175,9 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self._reset()
         self.assert_report_rejected(lambda: self.report["samples"]
                                     .update(renderer_allocated_bytes=[0.0] * 600))
+        self._reset()
+        self.assert_report_rejected(lambda: self.report["method"]
+                                    .update(vfx_particles_end=95))
 
     def test_exported_vector_inventory_replays_and_malformed_vectors_fail(self) -> None:
         self.report["method"]["viewport_sizes"] = [
@@ -247,6 +251,9 @@ class PerformanceEvidenceTests(unittest.TestCase):
             for index, sample in enumerate(self.footprint["samples"])])
         self._reset()
         self.assert_footprint_rejected(lambda: self.footprint["samples"].pop())
+        self._reset()
+        self.assert_footprint_rejected(lambda: [sample.update(processes=[])
+            for sample in self.footprint["samples"][1:]])
         self._reset()
         (self.root / "raw" / f"{self.name}.stdout").unlink()
         with self.assertRaises(PERF.EvidenceError):

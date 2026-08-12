@@ -147,13 +147,17 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
         die(f"request: expected {wanted}, got {request}")
     method = exact_keys(report["method"], {
         "warmup_seconds", "warmup_frames_min", "sample_seconds",
-        "sample_frames_min", "measured_viewports", "viewport_pixels",
+        "sample_frames_min", "vfx_particles_start", "vfx_particles_end",
+        "measured_viewports", "viewport_pixels",
         "viewport_sizes", "actor_stage_sizes"}, "method")
     wanted_method = (6.0, 300, 10.0, 600)
     actual_method = (method["warmup_seconds"], method["warmup_frames_min"],
                      method["sample_seconds"], method["sample_frames_min"])
     if actual_method != wanted_method:
         die(f"method: expected {wanted_method}, got {actual_method}")
+    if integer(method["vfx_particles_start"], "vfx_particles_start") != 96 \
+            or integer(method["vfx_particles_end"], "vfx_particles_end") != 96:
+        die("method: peak VFX load did not survive the sample")
     min_frames = integer(method["sample_frames_min"], "sample_frames_min", minimum=1)
     def sizes(field: str) -> list[list[int]]:
         value = method[field]
@@ -216,6 +220,7 @@ def validate_footprint(data: Any, pid: int) -> float:
         die("footprint: wrong unit or missing sample series")
     peaks: list[float] = []
     starts: list[float] = []
+    live_starts: list[float] = []
     seen_end = False
     for i, sample in enumerate(data["samples"]):
         if not isinstance(sample, dict) or sample.get("errors") != []:
@@ -236,6 +241,7 @@ def validate_footprint(data: Any, pid: int) -> float:
                 or processes[0].get("pid") != pid:
             die(f"footprint.samples[{i}]: wrong process")
         process = processes[0]
+        live_starts.append(starts[-1])
         if process.get("translated") is not False:
             die(f"footprint.samples[{i}]: process is translated")
         number(process.get("footprint"), f"footprint[{i}].footprint")
@@ -249,7 +255,8 @@ def validate_footprint(data: Any, pid: int) -> float:
         if peak < current or (peaks and peak < peaks[-1]):
             die(f"footprint[{i}]: physical peak is below current or regressed")
         peaks.append(peak)
-    if not seen_end or max(starts) - min(starts) < 16_000_000_000:
+    if not seen_end or not live_starts \
+            or max(live_starts) - min(live_starts) < 16_000_000_000:
         die("footprint: samples do not cover the full warm-up and sample window")
     return max(peaks) / 1048576
 def validate_logs(stdout: str, stderr: str, expected: dict[str, Any],

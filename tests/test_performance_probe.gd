@@ -17,6 +17,9 @@ static func run(fails: Array[String]) -> void:
 		"combat bench p95 uses the fail-closed upper sample")
 	_check(fails, empty == 0.0,
 		"combat bench empty percentile is explicit")
+	var particles: int = Bench.PEAK_VFX_PARTICLES
+	_check(fails, particles == 96,
+		"combat bench locks the peak VFX particle count")
 	if not Bench.has_method("request"):
 		fails.append("combat bench has no fail-closed release request contract")
 		return

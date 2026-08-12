@@ -7,6 +7,8 @@ const WARMUP_SECONDS: float = 6.0
 const WARMUP_FRAMES: int = 300
 const SAMPLE_SECONDS: float = 10.0
 const SAMPLE_FRAMES: int = 600
+const PEAK_VFX_PARTICLES: int = 96
+const PEAK_VFX_LIFE: float = WARMUP_SECONDS + SAMPLE_SECONDS + 4.0
 const ARG_KEYS: Array[String] = [
 	"fight", "kind", "seed", "act", "shape", "vp", "perf-language",
 	"perf-commit", "perf-out",
@@ -21,6 +23,8 @@ var _vps: Array[RID] = []
 var _viewport_pixels: int = 0
 var _viewport_sizes: Array[Vector2i] = []
 var _actor_stage_sizes: Array[Vector2i] = []
+var _combat: CombatScreen = null
+var _vfx_particles_start: int = 0
 var _wall_ms: Array[float] = []
 var _cpu_ms: Array[float] = []
 var _setup_ms: Array[float] = []
@@ -79,6 +83,7 @@ func _bind_scene() -> bool:
 		_fail("expected one CombatScreen, got %d" % screens.size())
 		return false
 	var combat: CombatScreen = screens[0] as CombatScreen
+	_combat = combat
 	if combat.game == null or combat.game.cb == null:
 		_fail("combat state did not start")
 		return false
@@ -120,7 +125,12 @@ func _bind_scene() -> bool:
 		_actor_stage_sizes.append(stage.size)
 	for rid: RID in _vps:
 		RenderingServer.viewport_set_measure_render_time(rid, true)
-	combat.performance_peak_vfx()
+	_vfx_particles_start = combat.performance_peak_vfx(
+		PEAK_VFX_PARTICLES, PEAK_VFX_LIFE)
+	if _vfx_particles_start != PEAK_VFX_PARTICLES:
+		_fail("expected %d peak VFX particles, got %d" % [
+			PEAK_VFX_PARTICLES, _vfx_particles_start])
+		return false
 	print("BENCH_READY " + JSON.stringify({
 		"pid": OS.get_process_id(), "shape": _request["shape"],
 		"window": [expected_size.x, expected_size.y], "actors": actors.size(),
@@ -131,6 +141,11 @@ func _bind_scene() -> bool:
 
 
 func _write_report() -> void:
+	var vfx_particles_end: int = _combat.performance_vfx_particles()
+	if vfx_particles_end != PEAK_VFX_PARTICLES:
+		_fail("expected %d peak VFX particles at sample end, got %d" % [
+			PEAK_VFX_PARTICLES, vfx_particles_end])
+		return
 	var cpu_total: Array[float] = []
 	for i: int in _cpu_ms.size():
 		cpu_total.append(_cpu_ms[i] + _setup_ms[i])
@@ -161,6 +176,8 @@ func _write_report() -> void:
 			"warmup_frames_min": WARMUP_FRAMES,
 			"sample_seconds": SAMPLE_SECONDS,
 			"sample_frames_min": SAMPLE_FRAMES,
+			"vfx_particles_start": _vfx_particles_start,
+			"vfx_particles_end": vfx_particles_end,
 			"measured_viewports": _vps.size(), "viewport_pixels": _viewport_pixels,
 			"viewport_sizes": _viewport_sizes,
 			"actor_stage_sizes": _actor_stage_sizes,
