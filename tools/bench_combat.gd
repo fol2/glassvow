@@ -113,6 +113,7 @@ func _bind_scene() -> bool:
 		_viewport_pixels += viewport.size.x * viewport.size.y
 	for rid: RID in _vps:
 		RenderingServer.viewport_set_measure_render_time(rid, true)
+	combat.performance_peak_vfx()
 	print("BENCH_READY " + JSON.stringify({
 		"pid": OS.get_process_id(), "shape": _request["shape"],
 		"window": [expected_size.x, expected_size.y], "actors": actors.size(),
