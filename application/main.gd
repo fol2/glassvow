@@ -180,6 +180,7 @@ func _ready() -> void:
 	var show_map: bool = false
 	var show_dawn_bench: bool = false
 	var show_font_probe: bool = false
+	var performance_probe: bool = false
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -237,8 +238,15 @@ func _ready() -> void:
 			show_dawn_bench = true
 		elif arg == "--font-probe":
 			show_font_probe = true
+		elif arg.begins_with("--perf-out="):
+			performance_probe = true
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
+	if performance_probe and (fight.is_empty() or not shot_path.is_empty()
+			or cards_lab or studio or not lab_flag.is_empty()):
+		push_error("--perf-out requires one --fight route and no capture or lab")
+		get_tree().quit(2)
+		return
 	# `--shape=` means two different things to a screen and to the layout bench.
 	# To a screen it is "run the window at this stage". To the bench it is "author
 	# THIS shape", and the bench already hosts its own stage at that shape's
@@ -344,8 +352,25 @@ func _ready() -> void:
 		_map_screen.choose(enter_node)
 	else:
 		_show_title()
-	if shot_path != "":
+	if performance_probe:
+		_attach_performance_probe()
+	elif shot_path != "":
 		_capture_and_quit(shot_path)
+
+
+func _attach_performance_probe() -> void:
+	var script: GDScript = load("res://tools/bench_combat.gd") as GDScript
+	if script == null:
+		push_error("performance probe did not load")
+		get_tree().quit(2)
+		return
+	var instance: Variant = script.new(self)
+	if not instance is Node:
+		push_error("performance probe did not instantiate")
+		get_tree().quit(2)
+		return
+	var probe: Node = instance
+	add_child(probe)
 
 
 # ---------------------------------------------------------------- stage shape
