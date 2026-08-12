@@ -18,16 +18,20 @@ intents, with exactly 96 non-weather VFX particles sustained through each
 sample. The matrix is five authored shapes × `en`/`zh-Hant` × five fresh
 processes: 50 rows.
 
-| Metric | Proposed P8.1 gate | Maximum observed | Matrix result |
-|---|---:|---:|---|
-| renderer allocation peak | ≤1228.8 MiB | **543.640625 MiB** | clears proposal |
-| macOS process physical-footprint peak | ≤1536 MiB | **1056.204544 MiB** | clears proposal |
-| observed whole-frame p95 | ≤16.00 ms in every row | **9.578 ms** | clears proposal |
+| Metric | Signed P8.1 gate | Matrix maximum | Conservative matrix + exact-head envelope | Gate result and exact headroom |
+|---|---:|---:|---:|---|
+| renderer allocation peak | ≤1228.8 MiB | **543.640625 MiB** | **547.46875 MiB** | clears gate — 681.33125 MiB (55.45%) |
+| macOS process physical-footprint peak | ≤1536 MiB | **1056.204544 MiB** | **1056.204544 MiB** | clears gate — 479.795456 MiB (31.24%) |
+| observed whole-frame p95 | ≤16.00 ms in every row | **9.578 ms** | **9.578 ms** | clears gate — 6.422 ms (40.14%) |
 
-These thresholds are submitted for James's owner decision on PR #143. They
-become the P8.1 gate only if and when he approves that exact final PR head; a
-verifier `pass` shows only that the evidence clears the proposed numbers. PR
-#143 is the decision of record.
+PR #143 is the signed P8.1 decision of record. [James To's signature
+receipt](https://github.com/fol2/glassvow/pull/143#issuecomment-5269434207)
+binds product head `984479dd6c24c366a2b86478301b41021d3b9c24`, evidence
+`712c1b563168d655acdbb3ed7960e9be0792c944`, merge
+`806076b26ecbd1c0e40e2ec28fb9fd688cabfad4` and the gates above. The verifier
+`pass` proves that the evidence clears the numbers; the signature is the PM
+approval. The envelope takes the conservative maximum across the binding matrix
+and exact-head bridge; only renderer allocation is higher on the bridge.
 
 Metric boundaries are binding:
 
@@ -41,7 +45,7 @@ Metric boundaries are binding:
   work.
 - #105 did not measure the standing cold save-load ≤2-second target. #108
   remeasures it at the release-candidate gate.
-- The result clears only the named Mac proposal. It is not phone or Steam Deck
+- The result clears only the named Mac gate. It is not phone or Steam Deck
   evidence.
 
 ## Current actor-stage component diagnostic
@@ -140,3 +144,22 @@ threshold and was not the #105 exported-combat workload.
 Sharing one `World3D` across actors was not attempted. Each stage owns a `Sky`
 feeding ambient light and reflections, so collapsing those worlds is a refactor,
 not a tuning knob. GPU time also remains unavailable on the measured Metal path.
+
+## P8.2 disposition — no 1.0 optimisation
+
+PR #144 is the P8.2 decision of record: PM/owner and authorised Design Lead
+approvals at its exact head make the disposition below binding.
+Subject to those approvals, the 1.0 disposition is **no optimisation**. It uses
+the signed P8.1 gate and conservative exact-head envelope recorded in the table
+above.
+
+Radiance-map sharing and texture compression were not attempted for 1.0. There
+is no signed-budget gap; candidate benefit and visual equivalence were not
+measured. Neither candidate is therefore selected for 1.0. This records neither
+savings nor visual equivalence, and is not a permanent rejection of either
+opportunity. Issue #108 remeasures the exact release candidate.
+
+Reopen this decision if the release candidate misses a signed gate, the shipping
+target or device tier changes, or PM and Design accept a newly measured
+opportunity. Approval authority rests with PM/owner James To and an authorised
+Design Lead on the exact PR #144 head; this document does not self-approve it.
