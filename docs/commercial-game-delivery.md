@@ -61,7 +61,7 @@ project-specific target, metric and evidence set, as Glassvow §5 does below.
 metric and the device; renderer allocation, process physical footprint and RSS
 are not interchangeable.
 
-**Glassvow P8.1 Mac-gate proposal — PR #143 is the decision of record:**
+**Glassvow signed P8.1 Mac gate — PR #143 is the decision of record:**
 
 - Target: Mac mini `Mac16,10`, Apple M4, 16 GiB unified memory, macOS 26.6.1
   (25G76), official Godot 4.7.1 native `arm64`, Forward Mobile.
@@ -69,9 +69,13 @@ are not interchangeable.
 - macOS process physical-footprint peak ≤1536 MiB.
 - Observed whole-frame p95 ≤16.00 ms in every independent run.
 
-These thresholds become the P8.1 gate only if and when James approves the
-exact final head of PR #143. A verifier `pass` shows that evidence clears the
-proposal; it is not PM approval. PR #143 is the decision of record.
+The [James To signature
+receipt](https://github.com/fol2/glassvow/pull/143#issuecomment-5269434207)
+binds product head `984479dd6c24c366a2b86478301b41021d3b9c24`, evidence
+`712c1b563168d655acdbb3ed7960e9be0792c944`, merge
+`806076b26ecbd1c0e40e2ec28fb9fd688cabfad4` and these thresholds as the P8.1
+gate. The verifier `pass` proves that the evidence clears the gate; the signature
+is the distinct PM approval.
 Issue #105 measured a 50-row exported-combat matrix (five authored shapes ×
 `en`/`zh-Hant` × five fresh processes) under the act-1 Leviathan boss,
 seed 717, with 96 sustained VFX particles. Its maxima were 543.640625 MiB
