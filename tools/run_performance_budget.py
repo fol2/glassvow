@@ -12,6 +12,12 @@ import sys
 import tempfile
 from pathlib import Path
 from typing import Any
+TARGET_ENVIRONMENT = {
+    "model": "Mac16,10", "chip": "Apple M4", "memory_gib": 16,
+    "macos": "26.6.1", "build": "25G76",
+    "godot": "4.7.1.stable.official.a13da4feb", "architecture": "arm64",
+    "renderer": "Apple M4 (Apple9)", "method": "mobile",
+}
 SHAPES = {
     "desktop-landscape": [1458, 820], "pad-landscape": [1180, 820],
     "pad-portrait": [820, 1180], "phone-portrait": [390, 844],
@@ -58,13 +64,18 @@ def hex_string(value: Any, length: int, where: str) -> str:
 def validate_plan(data: Any) -> dict[str, Any]:
     keys = {"schema", "commit", "fight", "kind", "seed", "act", "mode",
             "shapes", "languages", "repeats", "budgets", "app_sha256",
-            "pck_sha256"}
+            "pck_sha256", "environment"}
     plan = exact_keys(data, keys, "plan")
     if integer(plan["schema"], "plan.schema") != 1:
         die("plan.schema: expected 1")
     hex_string(plan["commit"], 40, "plan.commit")
     hex_string(plan["app_sha256"], 64, "plan.app_sha256")
     hex_string(plan["pck_sha256"], 64, "plan.pck_sha256")
+    environment = exact_keys(plan["environment"], {"model", "chip", "memory_gib",
+        "macos", "build", "godot", "architecture", "renderer", "method"},
+        "plan.environment")
+    if environment != TARGET_ENVIRONMENT:
+        die("plan.environment: measured target differs")
     if not isinstance(plan["fight"], list) or not plan["fight"] \
             or any(not isinstance(enemy, str) or not enemy for enemy in plan["fight"]):
         die("plan.fight: expected non-empty enemy IDs")
@@ -257,6 +268,19 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+def command(*args: str) -> str:
+    result = subprocess.run(args, text=True, capture_output=True, check=False)
+    if result.returncode != 0 or result.stderr:
+        die(f"environment command failed: {' '.join(args)}")
+    return result.stdout.strip()
+def measured_environment() -> dict[str, Any]:
+    return {**TARGET_ENVIRONMENT,
+        "model": command("sysctl", "-n", "hw.model"),
+        "chip": command("sysctl", "-n", "machdep.cpu.brand_string"),
+        "memory_gib": int(command("sysctl", "-n", "hw.memsize")) // 1073741824,
+        "macos": command("sw_vers", "-productVersion"),
+        "build": command("sw_vers", "-buildVersion"),
+        "architecture": command("uname", "-m")}
 def expected(plan: dict[str, Any], shape: str, language: str) -> dict[str, Any]:
     return {
         "commit": plan["commit"], "fight": plan["fight"], "kind": plan["kind"],
@@ -383,6 +407,7 @@ def run_measure(args: argparse.Namespace) -> int:
             "frame_p95_ms": args.frame_p95_ms},
         "app_sha256": sha256(executable),
         "pck_sha256": sha256(app / "Contents/Resources/Glassvow.pck"),
+        "environment": measured_environment(),
     }
     validate_plan(plan)
     root.mkdir(parents=True)

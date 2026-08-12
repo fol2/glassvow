@@ -36,6 +36,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
             "shapes": ["phone-landscape"], "languages": ["en"],
             "repeats": 1, "budgets": None, "app_sha256": "b" * 64,
             "pck_sha256": "c" * 64,
+            "environment": dict(PERF.TARGET_ENVIRONMENT),
         }
         values = [17.0] * 600
         zeros = [0.0] * 600
