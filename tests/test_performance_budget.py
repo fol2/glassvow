@@ -153,6 +153,21 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.assertEqual(710.0, PERF.validate_footprint(self.footprint, self.pid))
         self.assertEqual(50, len(PERF.replay(self.root)["rows"]))
 
+    def test_capture_merges_live_and_exit_footprint_samples(self) -> None:
+        live = self.root / "live.json"
+        exited = self.root / "exit.json"
+        merged = self.root / "merged.json"
+        dump(live, self.footprint)
+        exit_sample = {"unit": "byte", "bytes per unit": 1,
+                       "samples": [{"errors": [], "start_time": {
+                           "mach_continuous_time_ns": 20_000_000_001},
+                           "processes": []}]}
+        dump(exited, exit_sample)
+        PERF.merge_footprints(live, exited, merged)
+        evidence = json.loads(merged.read_text())
+        self.assertEqual(11, len(evidence["samples"]))
+        self.assertEqual([], evidence["samples"][-1]["processes"])
+
     def test_plan_matrix_and_types_fail_closed(self) -> None:
         self.plan.update(shapes=["phone-landscape"] * 2)
         with self.assertRaises(PERF.EvidenceError):

@@ -329,6 +329,17 @@ def environment_receipts(app: Path, executable: Path, out: Path) -> None:
         "executable_sha256": sha256(executable),
         "pck_sha256": sha256(app / "Contents/Resources/Glassvow.pck"),
     }, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+def merge_footprints(live_path: Path, exit_path: Path, out: Path) -> None:
+    live = read_json(live_path)
+    exited = read_json(exit_path)
+    if not isinstance(live, dict) or not isinstance(exited, dict) \
+            or any(live.get(key) != exited.get(key)
+                   for key in ("unit", "bytes per unit")) \
+            or not isinstance(live.get("samples"), list) \
+            or not isinstance(exited.get("samples"), list):
+        die("footprint: live and exit captures cannot be merged")
+    merged = {**live, "samples": live["samples"] + exited["samples"]}
+    out.write_text(json.dumps(merged, sort_keys=True) + "\n", encoding="utf-8")
 def aggregate(plan: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any]:
     fields = ["observed_frame_p95_ms", "render_cpu_plus_setup_p95_ms",
               "renderer_allocated_peak_mib", "process_physical_footprint_peak_mib"]
@@ -465,8 +476,10 @@ def run_measure(args: argparse.Namespace) -> int:
                     process = subprocess.Popen(app_command, stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE, text=True, env=env)
                     footprint_path = raw / f"{name}.footprint.json"
+                    live_footprint_path = Path(temp) / "footprint-live.json"
+                    exit_footprint_path = Path(temp) / "footprint-exit.json"
                     footprint_command = ["/usr/bin/footprint", "-j",
-                        str(footprint_path), "--sample", "0.25",
+                        str(live_footprint_path), "--sample", "0.25",
                         "--sample-duration", "20", "-p", str(process.pid)]
                     first_footprint = subprocess.run(footprint_command,
                         text=True, capture_output=True, check=False)
@@ -476,11 +489,18 @@ def run_measure(args: argparse.Namespace) -> int:
                         process.kill()
                         process.communicate()
                         raise EvidenceError(f"{name}: app timed out") from exc
-                    footprint = subprocess.run(footprint_command, text=True,
+                    exit_command = ["/usr/bin/footprint", "-j",
+                        str(exit_footprint_path), "--sample", "0.25",
+                        "--sample-duration", "1", "-p", str(process.pid)]
+                    footprint = subprocess.run(exit_command, text=True,
                         capture_output=True, check=False) if first_footprint.returncode == 0 \
                         else first_footprint
                     footprint_stdout = first_footprint.stdout + footprint.stdout
                     footprint_stderr = first_footprint.stderr + footprint.stderr
+                    footprint_returncode = first_footprint.returncode or footprint.returncode
+                    if footprint_returncode == 0:
+                        merge_footprints(live_footprint_path, exit_footprint_path,
+                                         footprint_path)
                 (raw / f"{name}.stdout").write_text(stdout, encoding="utf-8")
                 (raw / f"{name}.stderr").write_text(stderr, encoding="utf-8")
                 (raw / f"{name}.footprint.stdout").write_text(
@@ -489,10 +509,10 @@ def run_measure(args: argparse.Namespace) -> int:
                     footprint_stderr, encoding="utf-8")
                 (raw / f"{name}.status.json").write_text(json.dumps({
                     "process_returncode": process.returncode,
-                    "footprint_returncode": footprint.returncode,
+                    "footprint_returncode": footprint_returncode,
                     "launcher_pid": process.pid}, sort_keys=True) + "\n", encoding="utf-8")
-                if process.returncode != 0 or footprint.returncode != 0:
-                    die(f"{name}: process={process.returncode} footprint={footprint.returncode}")
+                if process.returncode != 0 or footprint_returncode != 0:
+                    die(f"{name}: process={process.returncode} footprint={footprint_returncode}")
                 print(f"measured {name}")
     environment_receipts(app, executable, root)
     summary = replay(root)
