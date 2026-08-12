@@ -255,8 +255,10 @@ def validate_footprint(data: Any, pid: int) -> float:
         if peak < current or (peaks and peak < peaks[-1]):
             die(f"footprint[{i}]: physical peak is below current or regressed")
         peaks.append(peak)
+    live_gaps = [later - earlier for earlier, later in zip(live_starts, live_starts[1:])]
     if not seen_end or not live_starts \
-            or max(live_starts) - min(live_starts) < 16_000_000_000:
+            or max(live_starts) - min(live_starts) < 16_000_000_000 \
+            or any(gap <= 0 or gap > 2_000_000_000 for gap in live_gaps):
         die("footprint: samples do not cover the full warm-up and sample window")
     return max(peaks) / 1048576
 def validate_logs(stdout: str, stderr: str, expected: dict[str, Any],

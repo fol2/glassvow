@@ -97,6 +97,13 @@ func _bind_scene() -> bool:
 	if actual_fight != expected_fight:
 		_fail("fight mismatch: expected %s got %s" % [expected_fight, actual_fight])
 		return false
+	var requested_seed: int = int(float(str(_request["seed"])))
+	var requested_act: int = int(float(str(_request["act"])))
+	if combat.game.cb.kind != StringName(str(_request["kind"])) \
+			or combat.game.run.seed != requested_seed \
+			or combat.act != requested_act:
+		_fail("kind, seed or act differs from the request")
+		return false
 	var expected_size: Vector2i = Vector2i(
 		int(float(str(_request["vp_x"]))), int(float(str(_request["vp_y"]))))
 	if combat.shape != StringName(str(_request["shape"])) \

@@ -1712,7 +1712,7 @@ func refresh_chrome() -> void:
 ## changing combat truth. The probe calls this once after the scene settles.
 func performance_peak_vfx(count: int, life: float) -> int:
 	var centre: Vector2 = _enemy_centre(_first_living())
-	return _vfx.performance_burst(centre, GlassStyle.GOLD, count, life)
+	return _vfx.performance_burst(centre, count, life)
 
 
 func performance_vfx_particles() -> int:

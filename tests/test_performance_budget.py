@@ -75,15 +75,15 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.footprint = {
             "unit": "byte", "bytes per unit": 1,
             "samples": [{"errors": [],
-                "start_time": {"mach_continuous_time_ns": index * 3_000_000_000 + 1},
+                "start_time": {"mach_continuous_time_ns": index * 2_000_000_000 + 1},
                 "processes": [{
                 "pid": self.pid, "translated": False, "footprint": 700 * 1048576,
                 "auxiliary": {"phys_footprint": 700 * 1048576,
                               "phys_footprint_peak": 710 * 1048576}}]}
-                for index in range(8)],
+                for index in range(9)],
         }
         self.footprint["samples"].append({
-            "errors": [], "start_time": {"mach_continuous_time_ns": 24_000_000_001},
+            "errors": [], "start_time": {"mach_continuous_time_ns": 18_000_000_001},
             "processes": []})
         self.status = {"process_returncode": 0, "footprint_returncode": 0,
                        "launcher_pid": self.pid}
@@ -254,6 +254,11 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self._reset()
         self.assert_footprint_rejected(lambda: [sample.update(processes=[])
             for sample in self.footprint["samples"][1:]])
+        self._reset()
+        self.footprint["samples"][3]["start_time"]["mach_continuous_time_ns"] += \
+            3_000_000_000
+        with self.assertRaises(PERF.EvidenceError):
+            PERF.validate_footprint(self.footprint, self.pid)
         self._reset()
         (self.root / "raw" / f"{self.name}.stdout").unlink()
         with self.assertRaises(PERF.EvidenceError):

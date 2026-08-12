@@ -423,11 +423,11 @@ func performance_particles() -> int:
 	return count
 
 
-func performance_burst(at: Vector2, colour: Color, count: int, life: float) -> int:
+func performance_burst(at: Vector2, count: int, life: float) -> int:
 	for i: int in count:
 		var a: float = TAU * float(i) / float(count)
 		var p: Part = _spawn("spark", at, Vector2(cos(a), sin(a)) * 360.0,
-			4.0, colour, life, 0.25)
+			4.0, GlassStyle.GOLD, life, 0.25)
 		p.grav = 220.0
 		p.drag = 1.6
 		p.additive = true
