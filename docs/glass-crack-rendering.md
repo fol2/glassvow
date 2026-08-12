@@ -313,11 +313,11 @@ lines, or the first line count will be read as a failure.
    change"*.
 2. **The shatter must consume the crack network** (§3.4). Every seat named it.
 3. **Memory is a non-argument.** The standing mesh is a few hundred triangles —
-   tens of kilobytes. The 113 MB/actor figure is dominated by the `SubViewport`
-   colour and depth attachments, so the crack model is *orthogonal* to the MSAA and
-   `oversample` levers. Reached independently by the audit seat after the red team
-   asserted a 32 MB saving, which is not physically possible at that triangle
-   count.
+   tens of kilobytes. The historical 2026-07-26 component probe was dominated by
+   the `SubViewport` colour and depth attachments, so the crack model is
+   *orthogonal* to the MSAA and `oversample` levers. Reached independently by the
+   audit seat after the red team asserted a 32 MB saving, which is not physically
+   possible at that triangle count.
 
 ### 6.3 Independently converged: how to carve cells from curves
 
@@ -525,8 +525,9 @@ trough for `ignite` and `marked`.
 - Coverage is a thin band around real cracks, so `GLASS_AREA` disappears entirely
   rather than being retuned.
 - Incremental: cost is in the *new* segments, bounded to their bounding boxes,
-  and only on a hit. 64 KB per damaged actor; 256 KB at four actors, against a
-  310 MB stage measurement (`docs/actor-stage-frame-budget.md`).
+  and only on a hit. 64 KB per damaged actor; 256 KB at four actors, negligible
+  beside the renderer allocation recorded by the historical 2026-07-26
+  component probe (`docs/actor-stage-frame-budget.md`).
 - No per-actor geometry rebuild, no extra draw call, no site list, no
   `MAX_SITES`.
 - **Weakness:** no real thickness, so no self-shadowing or parallax in the
@@ -586,9 +587,10 @@ ordering. The arguments that decided it: the field is one concept (distance to t
 network) with four consumers, it adds no node and no draw call, propagation
 animation is free and incremental rather than merely possible, and — the
 architectural point — a ribbon groove is a *silhouette* edge and therefore inherits
-the **gated** MSAA 4× dependency, where a normal-mapped groove antialiases itself.
-If the memory gate later forces MSAA to 2×, the field renderer survives and the
-ribbon does not.
+the retained MSAA 4× dependency, where a normal-mapped groove antialiases itself.
+The 2026-07-26 lab retained 4× because 2× broke the lit edge. If a later approved
+budget revision forces MSAA to 2×, the field renderer survives and the ribbon
+does not.
 
 **Accumulation is affordable, and the fix is one structure.** The architecture seat
 corrected its own round-1 figure upward by ~27×: a 30-blow fight leaves ≈ 9 600

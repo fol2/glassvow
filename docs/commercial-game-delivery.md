@@ -1,6 +1,8 @@
 # Commercial Game Delivery — Policy & Boundaries
 
-This document outlines engine-neutral delivery policies for roguelite deckbuilders on multiple platforms. Sections apply to any implementation; they are reusable across Godot, Defold, or other platforms.
+This document outlines reusable delivery policies for roguelite deckbuilders on
+multiple platforms. The policy is engine-neutral; milestone gates may name a
+project-specific target, metric and evidence set, as Glassvow §5 does below.
 
 ## 1. Save Versioning & Migration Policy
 
@@ -53,11 +55,38 @@ This document outlines engine-neutral delivery policies for roguelite deckbuilde
 
 ## 5. Performance Budgets
 
-**Targets (set at milestone gates):**
-- **Frame rate:** 60 FPS on target device (e.g., "phone from 2021 or newer"; "Steam Deck").
-- **Load time:** save-load ≤2 seconds (e.g., "resume from kill").
-- **Combat frame:** hand + enemy view + VFX updates ≤16 ms.
-- **Memory:** run state + UI ≤X MB (device-specific; clarify at gate).
+**Targets are set at milestone gates.** The standing cross-platform targets are
+60 FPS on the named device and cold save-load ≤2 seconds (for example,
+"resume from kill"). Memory limits are device-specific and must name both the
+metric and the device; renderer allocation, process physical footprint and RSS
+are not interchangeable.
+
+**Glassvow P8.1 Mac-gate proposal — PR #143 is the decision of record:**
+
+- Target: Mac mini `Mac16,10`, Apple M4, 16 GiB unified memory, macOS 26.6.1
+  (25G76), official Godot 4.7.1 native `arm64`, Forward Mobile.
+- Godot renderer allocation peak ≤1228.8 MiB.
+- macOS process physical-footprint peak ≤1536 MiB.
+- Observed whole-frame p95 ≤16.00 ms in every independent run.
+
+These thresholds become the P8.1 gate only if and when James approves the
+exact final head of PR #143. A verifier `pass` shows that evidence clears the
+proposal; it is not PM approval. PR #143 is the decision of record.
+Issue #105 measured a 50-row exported-combat matrix (five authored shapes ×
+`en`/`zh-Hant` × five fresh processes) under the act-1 Leviathan boss,
+seed 717, with 96 sustained VFX particles. Its maxima were 543.640625 MiB
+renderer allocation, 1056.204544 MiB process physical footprint and 9.578 ms
+observed whole-frame p95. The immutable [manifest](https://github.com/fol2/glassvow/blob/1ce1ce8915b33ae1914714a6b2c40af89fb6ac22/manifest.md)
+and [summary](https://github.com/fol2/glassvow/blob/1ce1ce8915b33ae1914714a6b2c40af89fb6ac22/binding/summary.json)
+bind measurement source `cf1b3d51af2992e1db8a419a49ff6254d6147581` and
+verifier `5fb7d95a0bfa75953d184e172c3cd4a7d91d7786`.
+
+On Apple unified memory, renderer allocation is not physical VRAM and must not
+be added to process footprint. Physical footprint is macOS
+`auxiliary.phys_footprint_peak`, not RSS. GPU time was unavailable on Metal;
+zero reported by Godot does not mean free GPU work. Issue #105 did not measure
+the standing cold save-load ≤2-second target; #108 remeasures it as a
+release-candidate gate.
 
 **Measurement:** Profile before optimizing. Common traps:
 - Allocating per frame (pools, reuse).
@@ -88,4 +117,3 @@ This document outlines engine-neutral delivery policies for roguelite deckbuilde
 ```
 
 This acknowledges the trade-off and documents the upgrade path for future scale.
-

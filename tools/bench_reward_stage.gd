@@ -12,8 +12,9 @@ const SAMPLE_FRAMES: int = 180
 
 var _stage: RewardStage = null
 var _frame: int = 0
-var _vram_before: float = 0.0
+var _renderer_mib_before: float = 0.0
 var _samples: Array[float] = []
+var _gpu_available: bool = false
 var _burst_done: bool = false
 
 
@@ -21,7 +22,7 @@ func _initialize() -> void:
 	var host: Control = Control.new()
 	host.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.add_child(host)
-	_vram_before = Performance.get_monitor(
+	_renderer_mib_before = Performance.get_monitor(
 		Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
 	_stage = RewardStage.new("duskfang", 22.0)
 	host.add_child(_stage)
@@ -44,27 +45,24 @@ func _process(_delta: float) -> bool:
 		_burst_done = true
 	if _burst_done and _frame > WARMUP_FRAMES + 90 \
 			and _samples.size() < SAMPLE_FRAMES:
-		var us: float = RenderingServer.viewport_get_measured_render_time_gpu(_vp_rid) \
-			+ RenderingServer.viewport_get_measured_render_time_cpu(_vp_rid)
-		_samples.append(us)
+		var gpu_us: float = RenderingServer.viewport_get_measured_render_time_gpu(_vp_rid)
+		var cpu_us: float = RenderingServer.viewport_get_measured_render_time_cpu(_vp_rid)
+		_gpu_available = _gpu_available or gpu_us > 0.0
+		_samples.append(cpu_us + gpu_us)
 	if _samples.size() >= SAMPLE_FRAMES:
-		var vram_now: float = Performance.get_monitor(
+		var renderer_mib_now: float = Performance.get_monitor(
 			Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
 		_samples.sort()
 		var median: float = _samples[_samples.size() / 2]
 		var p95: float = _samples[int(float(_samples.size()) * 0.95)]
-		print("reward stage VRAM: %.1f MB (before %.1f, after %.1f)"
-			% [vram_now - _vram_before, _vram_before, vram_now])
-		if p95 <= 0.0:
-			# source-existing-is-not-rendering, applied to instruments: a
-			# clock that reads zero has not measured — it must never print a
-			# zero a reader would take for "free".
-			print("hold frame, stage viewport: UNAVAILABLE on this driver path")
-		else:
-			# GPU+CPU SUMMED — one viewport-render figure, not the actor
-			# probe's separated columns; comparisons go via that tool.
-			print("hold frame, stage viewport render (gpu+cpu summed): "
-				+ "median %.3f ms  p95 %.3f ms"
-				% [median / 1000.0, p95 / 1000.0])
+		print("reward stage renderer allocation: %.1f MiB (before %.1f, after %.1f)"
+			% [renderer_mib_now - _renderer_mib_before,
+				_renderer_mib_before, renderer_mib_now])
+		print("hold frame, stage viewport CPU+GPU: median %.3f ms  p95 %.3f ms"
+			% [median / 1000.0, p95 / 1000.0])
+		if not _gpu_available:
+			# A zero Metal timestamp is unmeasured, not free GPU work; in this
+			# case the combined figure above contains CPU time only.
+			print("hold frame, stage viewport GPU: UNAVAILABLE on this driver path")
 		quit(0)
 	return false

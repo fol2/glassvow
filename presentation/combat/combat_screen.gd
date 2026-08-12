@@ -1708,6 +1708,17 @@ func refresh_chrome() -> void:
 	_push_hud()
 
 
+## Release-budget load only: exercise the real always-rendered VFX layer without
+## changing combat truth. The probe calls this once after the scene settles.
+func performance_peak_vfx(count: int, life: float) -> int:
+	var centre: Vector2 = _enemy_centre(_first_living())
+	return _vfx.performance_burst(centre, count, life)
+
+
+func performance_vfx_particles() -> int:
+	return _vfx.performance_particles()
+
+
 ## `onCardClick` (combat.js:1260). A click is not an inspection — it is the
 ## primary way the fight is played, and what it does depends entirely on how many
 ## things the card could be aimed at:

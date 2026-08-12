@@ -1,14 +1,15 @@
 extends SceneTree
 ## Frame-budget probe for the per-actor 3D stage.
 ##
-## `docs/commercial-game-delivery.md` §5 sets the combat frame at **≤16 ms**
-## (hand + enemy view + VFX). Every actor builds its own `SubViewport` with
+## `docs/commercial-game-delivery.md` §5 records the proposed combat frame
+## threshold. This component diagnostic does not grant release clearance. Every
+## actor builds its own `SubViewport` with
 ## `own_world_3d`, MSAA 4x, a `ProceduralSkyMaterial` feeding both ambient and
 ## reflections, three lights, and `render_target_update_mode = UPDATE_ALWAYS`
 ## — so N actors are N separate 3D worlds re-rendered every frame
 ## (`enemy_view.gd:384-450`). `docs/actor-animation-checklist.md` §5.4 flags this
-## as unmeasured, and the checklist's own PORT items all add *more* per-frame
-## work on top of it. This measures the floor before that work is authorised.
+## as a scaling concern. This probe isolates that component; the exported
+## whole-product matrix remains the release evidence.
 ##
 ## Not a test: `tests/run_all.gd` only discovers `res://tests/test_*.gd`, so this
 ## never joins the suite. It needs a real renderer — do NOT run it `--headless`,
@@ -25,7 +26,6 @@ extends SceneTree
 const DEFAULT_COUNTS: Array[int] = [1, 3, 6, 12, 29]
 const WARMUP_FRAMES: int = 90
 const SAMPLE_FRAMES: int = 180
-const BUDGET_MS: float = 16.0
 
 ## A fixed slice of the roster, taken in this order so a 3-actor run is always
 ## the same three. Random picks would make two runs incomparable.
@@ -94,8 +94,8 @@ func _initialize() -> void:
 	_host.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.add_child(_host)
 
-	print("actor-stage frame probe — budget %.0f ms  (%s)" % [
-		BUDGET_MS, RenderingServer.get_video_adapter_name()])
+	print("actor-stage component probe — %s"
+		% RenderingServer.get_video_adapter_name())
 	if OS.get_cmdline_user_args().has("--textures"):
 		_price_textures()
 	print("oversample=%.2f  VP_MAX=%d  MSAA=%s  update=ALWAYS\n" % [
@@ -105,8 +105,9 @@ func _initialize() -> void:
 
 
 ## `--textures` prices the OTHER half of the memory question. Every texture in
-## this project imports at `compress/mode=0` (lossless) — 245 of them, none VRAM
-## compressed — so each is resident as uncompressed RGBA8 at w×h×4. Whether that
+## this project imports at `compress/mode=0` (lossless) — 245 of them, none GPU
+## block-compressed — so each is resident as uncompressed RGBA8 at w×h×4.
+## Whether that
 ## matters more than the stages is not a thing to reason about; it is a thing to
 ## load and read off the meter. Held in a static so the loads are not collected
 ## between the read and the print.
@@ -144,11 +145,12 @@ func _price_textures() -> void:
 		# Textures upload lazily; force the frame that does it before reading.
 		RenderingServer.force_draw()
 		var now: float = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
-		print("  %-8s %3d textures  +%7.1f MB" % [label, n, now - mark])
+		print("  %-8s %3d textures  +%7.1f renderer MiB" % [label, n, now - mark])
 	RenderingServer.force_draw()
 	var after: float = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
 	print("  ---------------------------------------")
-	print("  every source texture resident: %.1f MB (was %.1f)\n" % [after, before])
+	print("  every source texture resident: %.1f renderer MiB (was %.1f)\n"
+		% [after, before])
 	_held.clear()
 
 
@@ -250,13 +252,14 @@ func _record(n: int) -> void:
 		"gpu": _gpu[_gpu.size() / 2],
 		"px": _px,
 		"draw": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
-		"vram": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0,
+		"renderer_mib": Performance.get_monitor(
+			Performance.RENDER_VIDEO_MEM_USED) / 1048576.0,
 	})
 
 
 func _report() -> void:
-	print("\n actors | wall ms | p95 ms | render CPU | GPU ms | stage Mpx | draw | vram MB | verdict")
-	print(" -------|---------|--------|------------|--------|-----------|------|---------|--------")
+	print("\n actors | wall ms | p95 ms | render CPU | GPU ms | stage Mpx | draw | renderer MiB")
+	print(" -------|---------|--------|------------|--------|-----------|------|-------------")
 	var gpu_dead: bool = true
 	for r: Dictionary in _rows:
 		# Typed locals first: a Dictionary read is a Variant, and this project
@@ -266,18 +269,15 @@ func _report() -> void:
 		var px: int = r["px"]
 		if gpu > 0.0:
 			gpu_dead = false
-		print(" %6d | %7.2f | %6.2f | %10.2f | %6.2f | %9.1f | %4.0f | %7.1f | %s" % [
+		print(" %6d | %7.2f | %6.2f | %10.2f | %6.2f | %9.1f | %4.0f | %12.1f" % [
 			r["n"], med, r["p95"], r["cpu"], gpu, float(px) / 1048576.0,
-			r["draw"], r["vram"], "OK" if med <= BUDGET_MS else "OVER"])
+			r["draw"], r["renderer_mib"]])
 	if gpu_dead:
 		print("\nGPU ms read 0 on every row: this backend does not implement GPU")
 		print("timestamp queries (Metal is one). The GPU column is UNMEASURED, not")
 		print("free. Wall-clock is the only figure here that sees the GPU, and it")
 		print("is floored by the refresh interval — a row at exactly 1/120 or 1/180")
 		print("means 'below the floor', not 'this is the cost'.")
-	print("\nvram and draw calls are backend-independent and are the trustworthy")
-	print("columns on any machine.")
-	print("\nMeasured on this machine's adapter only. The budget names a target")
-	print("device (a 2021 phone, a Steam Deck) — a desktop pass is a floor, not")
-	print("a clearance. Read a desktop OVER as disqualifying; never read a")
-	print("desktop OK as a target-device OK.")
+	print("\nRenderer allocation and draw calls are adapter- and backend-specific")
+	print("diagnostics from this run; neither proves another device or driver.")
+	print("This component probe is not whole-product release clearance.")

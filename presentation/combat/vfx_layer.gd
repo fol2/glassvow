@@ -413,6 +413,27 @@ func _push(p: Part) -> void:
 	_parts.append(p)
 
 
+## Probe receipt only: the release-budget harness must prove that its requested
+## peak load reached this real always-rendered layer and survived the sample.
+func performance_particles() -> int:
+	var count: int = 0
+	for p: Part in _parts:
+		if not p.weather:
+			count += 1
+	return count
+
+
+func performance_burst(at: Vector2, count: int, life: float) -> int:
+	for i: int in count:
+		var a: float = TAU * float(i) / float(count)
+		var p: Part = _spawn("spark", at, Vector2(cos(a), sin(a)) * 360.0,
+			4.0, GlassStyle.GOLD, life, 0.25)
+		p.grav = 220.0
+		p.drag = 1.6
+		p.additive = true
+	return performance_particles()
+
+
 func _spawn(kind: String, at: Vector2, vel: Vector2, sz: float, colour: Color,
 		life: float, fade: float) -> Part:
 	var p: Part = Part.new()
@@ -766,4 +787,3 @@ func _after(seconds: float, what: Callable) -> void:
 		what.call()
 		return
 	get_tree().create_timer(seconds).timeout.connect(what, CONNECT_ONE_SHOT)
-

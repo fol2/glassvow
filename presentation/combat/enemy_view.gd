@@ -336,9 +336,9 @@ static var flare_gain: float = 1.0
 ## 176px render being upscaled by the window's own content scale (and again by
 ## the bench's zoom), which is exactly the softness the first 3D pass had.
 ##
-## **2.0, down from 2.5** — the one memory concession this view makes, worth −20%
-## of a 310 MB four-actor stage (docs/actor-stage-frame-budget.md). Stage pixels
-## go as the square of this, so it is the cheapest place to buy memory back.
+## **2.0, down from 2.5** — retained from the 2026-07-26 component probe,
+## where it reduced four-actor renderer allocation by about 20%. Stage pixels go
+## as the square of this, so it remains the cheapest local lever.
 ## Judged at 1:1 against MSAA in the lab: dropping it coarsens the lit lip along a
 ## shard's edge but the lip stays lit, and 1.5 was too soft on the paintings.
 static var oversample: float = 2.0
@@ -1857,15 +1857,15 @@ func _ready() -> void:
 ## bilinear blow-up of a render that never held the detail. Multiplying by the
 ## scale is what makes the constant mean again what it was judged to mean.
 ##
-## `VP_MAX` is where the promise runs out, and it is an arithmetic wall rather
-## than a round number. Stage memory runs about 49 MB per megapixel
-## (docs/actor-stage-frame-budget.md: 0.6 Mpx → 162 MB, 3.6 Mpx → 310 MB), the
-## proposed budget for a four-actor fight is 200 MB and the fight already spends
-## 248. Keeping the promise at scale 3.068 wants 9.4x the stage pixels — about
-## 1.2 GB. So above roughly a 2x window the cap binds on purpose and the actor
-## renders below the mark. **That shortfall is an architecture bill — one MSAA
-## 4x stage per actor — not a knob**, and `VP_MAX` is the single line to turn
-## down if the memory matters more than the edge.
+## `VP_MAX` is where the promise runs out. The 2026-07-26 component probe found
+## renderer allocation grew roughly with stage pixels; satisfying the scale
+## target at 3.068 would require about 9.4× the uncapped stage pixels. Above
+## roughly a 2× window this cap therefore binds on purpose and the actor renders
+## below the mark. **That shortfall is an architecture bill — one MSAA 4× stage
+## per actor — not a release-budget claim**. The cap is an image-quality and
+## allocation trade-off, not an independent pass/fail limit. Current release
+## evidence lives in `docs/actor-stage-frame-budget.md`; `VP_MAX` remains the
+## single line to turn down if renderer allocation matters more than the edge.
 func _fit_stage() -> void:
 	if _stage == null or not is_inside_tree():
 		return
