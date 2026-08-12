@@ -88,8 +88,8 @@ def validate_plan(data: Any) -> dict[str, Any]:
         and plan["kind"] == "normal" and plan["act"] == 0 \
         and set(plan["shapes"]) == set(SHAPES) \
         and set(plan["languages"]) == {"en", "zh-Hant"} and repeats >= 5
-    if plan["budgets"] is not None and not complete:
-        die("plan: scored release gate requires five shapes, both languages and five repeats")
+    if not complete:
+        die("plan: release evidence requires five shapes, both languages and five repeats")
     if plan["budgets"] is not None:
         budgets = exact_keys(plan["budgets"],
             {"renderer_mib", "footprint_mib", "frame_p95_ms"}, "plan.budgets")
@@ -205,9 +205,13 @@ def validate_footprint(data: Any, pid: int) -> float:
         auxiliary = process.get("auxiliary")
         if not isinstance(auxiliary, dict):
             die(f"footprint.samples[{i}].auxiliary: missing")
-        number(auxiliary.get("phys_footprint"), f"footprint[{i}].phys_footprint")
-        peaks.append(number(auxiliary.get("phys_footprint_peak"),
-                            f"footprint[{i}].phys_footprint_peak", positive=True))
+        current = number(auxiliary.get("phys_footprint"),
+                         f"footprint[{i}].phys_footprint", positive=True)
+        peak = number(auxiliary.get("phys_footprint_peak"),
+                      f"footprint[{i}].phys_footprint_peak", positive=True)
+        if peak < current or (peaks and peak < peaks[-1]):
+            die(f"footprint[{i}]: physical peak is below current or regressed")
+        peaks.append(peak)
     if max(starts) - min(starts) < 16_000_000_000:
         die("footprint: samples do not cover the full warm-up and sample window")
     return max(peaks) / 1048576
@@ -274,6 +278,15 @@ def aggregate(plan: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any
         values = [float(row[field]) for row in rows]
         spread[field] = {"min": min(values), "median": statistics.median(values),
                          "max": max(values), "range": max(values) - min(values)}
+    conditions = {}
+    for shape in plan["shapes"]:
+        for language in plan["languages"]:
+            group = [row for row in rows if row["stem"].startswith(
+                     f"{shape}--{language}--")]
+            conditions[f"{shape}--{language}"] = {
+                field: {"min": min(values := [float(row[field]) for row in group]),
+                        "median": statistics.median(values), "max": max(values),
+                        "range": max(values) - min(values)} for field in fields}
     budgets = plan["budgets"]
     misses: list[str] = []
     if budgets is not None:
@@ -285,6 +298,7 @@ def aggregate(plan: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any
                 if row[field] > budget:
                     misses.append(f"{row['stem']} {field} {row[field]:.6f} > {budget:.6f}")
     return {"schema": 1, "plan": plan, "rows": rows, "spread": spread,
+            "conditions": conditions,
             "status": "unscored" if budgets is None else ("miss" if misses else "pass"),
             "misses": misses}
 def read_json(path: Path) -> Any:

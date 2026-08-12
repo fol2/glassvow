@@ -114,10 +114,11 @@ class PerformanceEvidenceTests(unittest.TestCase):
         with self.assertRaises(PERF.EvidenceError):
             PERF.replay(self.root)
 
-    def test_valid_smoke_replays(self) -> None:
-        result = PERF.replay(self.root)
-        self.assertEqual("unscored", result["status"])
-        self.assertEqual(1, len(result["rows"]))
+    def test_valid_report_and_footprint_replay(self) -> None:
+        metrics = PERF.validate_report(self.report, PERF.expected(
+            self.plan, "phone-landscape", "en"))
+        self.assertEqual(400.0, metrics["renderer_allocated_peak_mib"])
+        self.assertEqual(710.0, PERF.validate_footprint(self.footprint, self.pid))
 
     def test_plan_matrix_and_types_fail_closed(self) -> None:
         self.assert_rejected(lambda: self.plan.update(shapes=["phone-landscape"] * 2))
@@ -160,6 +161,9 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.assert_rejected(lambda: self.footprint["samples"][0]["processes"][0]
                              ["auxiliary"].update(phys_footprint_peak=0))
         self._reset()
+        self.assert_rejected(lambda: self.footprint["samples"][0]["processes"][0]
+                             ["auxiliary"].update(phys_footprint_peak=1))
+        self._reset()
         self.assert_rejected(lambda: [sample["start_time"].update(
             mach_continuous_time_ns=index * 1_000_000_000 + 1)
             for index, sample in enumerate(self.footprint["samples"])])
@@ -184,7 +188,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
         with self.assertRaises(PERF.EvidenceError):
             PERF.replay(self.root)
 
-    def test_partial_matrix_cannot_be_scored(self) -> None:
+    def test_partial_matrix_cannot_be_release_evidence(self) -> None:
         self.plan["budgets"] = {"renderer_mib": 400.0,
                                 "footprint_mib": 710.0,
                                 "frame_p95_ms": 17.0}
