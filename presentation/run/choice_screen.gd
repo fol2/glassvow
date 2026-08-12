@@ -156,6 +156,7 @@ func _build_standard(title_text: String, body_text: String,
 	var title: Label = Label.new()
 	title.text = title_text
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
 	title.add_theme_font_size_override("font_size", roundi(TITLE_PT * k))
 	title.add_theme_color_override("font_color", GlassStyle.TEXT)
@@ -182,6 +183,7 @@ func _build_standard(title_text: String, body_text: String,
 	for row: Dictionary in choices:
 		var button: Button = Button.new()
 		button.text = str(row.get("label", row.get("id", "")))
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		button.disabled = row.get("disabled", false)
 		button.tooltip_text = str(row.get("hint", ""))
 		button.custom_minimum_size.y = roundi(BUTTON_H * k)
@@ -189,6 +191,7 @@ func _build_standard(title_text: String, body_text: String,
 		if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
 			button.icon = load(icon_path) as Texture2D
 			button.expand_icon = true
+			button.add_theme_constant_override("icon_max_width", roundi(48.0 * k))
 			button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			button.custom_minimum_size.y = roundi(72.0 * k)
