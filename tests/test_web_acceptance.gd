@@ -26,6 +26,10 @@ static func _source_contract(fails: Array[String]) -> void:
 		fails.append("web acceptance durable read: projection does not independently load the save")
 	if main.contains("JavaScriptBridge"):
 		fails.append("web acceptance boundary: Main accesses JavaScriptBridge directly")
+	var ready: String = _function_body(main, "_ready")
+	if ready.find('OS.has_feature("web_dev")') < 0 \
+			or ready.find('OS.has_feature("web_dev")') > ready.find("WebAcceptance.new()"):
+		fails.append("web acceptance allocation: helper exists outside web_dev")
 	if not _function_body(main, "_remember_route").contains(
 			"_web_acceptance.observe_route(rebuilder, game, content)"):
 		fails.append("web acceptance route: Main does not publish from its live route constructor")

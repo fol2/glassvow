@@ -75,7 +75,7 @@ var _settle: float = 0.0
 ## screen so a leaf started before a route swap finishes over the incoming
 ## screen. Screens never see it; main fires it around its own route helpers.
 var _transitions: TransitionLayer
-var _web_acceptance: WebAcceptance
+var _web_acceptance: WebAcceptance = null
 
 
 func _init() -> void:
@@ -127,8 +127,9 @@ func _rebuild_active_route() -> void:
 func _ready() -> void:
 	print("glassvow boot " + str(Engine.get_version_info()["string"]))
 	content = ContentDB.load_full()
-	_web_acceptance = WebAcceptance.new()
-	add_child(_web_acceptance)
+	if OS.has_feature("web_dev"):
+		_web_acceptance = WebAcceptance.new()
+		add_child(_web_acceptance)
 	_vigil = SaveService.load_vigil()
 	Preferences.active = Preferences.read_from_disk()
 	# Locale follows Preferences: main publishes the live handle; labs keep the
