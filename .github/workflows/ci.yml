@@ -42,3 +42,6 @@ jobs:
 
       - name: Test boss-relic phone containment
         run: godot --headless -s res://tests/boss_relic_choice_containment.gd
+
+      - name: Test Dawn phone containment
+        run: godot --headless -s res://tests/dawn_phone_containment.gd

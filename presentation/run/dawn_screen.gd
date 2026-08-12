@@ -189,6 +189,8 @@ func _build() -> void:
 	_build_stats(column)
 	_progress = _label(_progress_text(), 11, RunStyle.GOLD_DIM)
 	_progress.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
+	_progress.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_child(_progress)
 
 	# The benchmark renders both buttons disabled and enables them when the
@@ -231,6 +233,8 @@ func _build() -> void:
 	column.add_child(caption_seat)
 	_caption = _label(Locale.active.t("ui.dawn.inputHint"), 10,
 		Color(RunStyle.TEXT_DIM, 0.85))
+	_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	caption_seat.add_child(_caption)
 	# The skip vow fills gold under the caption while anything is held.
 	_skip_fill = ColorRect.new()
@@ -722,6 +726,7 @@ func _build_stats(column: VBoxContainer) -> void:
 		stack.add_child(value)
 		var caption: Label = _label(str(row[1]), 8, RunStyle.TEXT_DIM)
 		caption.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
+		caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		stack.add_child(caption)
 
 
@@ -768,26 +773,35 @@ func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
+	_deck_btn.custom_minimum_size.x = 190.0
+	_commit_btn.custom_minimum_size.x = 190.0
+	_deck_btn.remove_theme_font_size_override("font_size")
+	_commit_btn.remove_theme_font_size_override("font_size")
 	match shape:
 		&"phone-portrait":
-			_apply_shape(14, 350, 42, 2, 380)
+			_apply_shape(14, 350, 42, 2, 2, 150)
+			_deck_btn.custom_minimum_size.x = 145.0
+			_commit_btn.custom_minimum_size.x = 145.0
+			_deck_btn.add_theme_font_size_override("font_size", 10)
+			_commit_btn.add_theme_font_size_override("font_size", 10)
 		&"pad-portrait":
-			_apply_shape(42, 720, 64, 2, 460)
+			_apply_shape(42, 720, 64, 2, 4, 460)
 		&"pad-landscape":
-			_apply_shape(48, 800, 72, 3, 260)
+			_apply_shape(48, 800, 72, 3, 4, 260)
 		&"desktop-landscape":
-			_apply_shape(52, 900, 80, 4, 260)
+			_apply_shape(52, 900, 80, 4, 4, 260)
 		&"phone-landscape":
-			_apply_shape(10, 760, 46, 2, 150)
+			_apply_shape(10, 760, 46, 2, 4, 150)
 
 
 func _apply_shape(inset: int, panel_width: float, title_size: int,
-		columns: int, grid_height: float) -> void:
+		event_columns: int, stat_columns: int, grid_height: float) -> void:
 	for side: String in ["left", "right", "top", "bottom"]:
 		_margin.add_theme_constant_override("margin_" + side, inset)
 	_panel.custom_minimum_size.x = panel_width
 	_title.add_theme_font_size_override("font_size", title_size)
-	_grid.columns = columns
+	_grid.columns = event_columns
+	_stats_grid.columns = stat_columns
 	# FINAL-content-sized under the shape's CAP. The reference is
 	# content-sized live (max-height: 27cqh, styles.css:2576) because its
 	# whole drain lasts 3.3s; the port's feed breathes with the player, and a
@@ -796,7 +810,7 @@ func _apply_shape(inset: int, panel_width: float, title_size: int,
 	# unfilled row of quiet, gone by the ceremony's midpoint, instead of the
 	# old 260px floor that opened on two missing rows of hole.
 	var rows: int = maxi(1, int(ceilf(
-		float(maxi(1, _events.size())) / float(maxi(1, columns)))))
+		float(maxi(1, _events.size())) / float(maxi(1, event_columns)))))
 	# A seat is 82 + TRAVEL tall — the reviewer's parting nit, banked.
 	var need: float = float(rows) * 94.0 + float(rows - 1) * 8.0
 	_grid.get_parent().custom_minimum_size.y = minf(grid_height, need)
