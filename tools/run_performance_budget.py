@@ -25,8 +25,7 @@ SHAPES = {
 }
 REPORT_KEYS = {"schema", "provenance", "request", "method", "samples", "summary"}
 SAMPLE_KEYS = {"observed_frame_ms", "render_cpu_ms", "frame_setup_cpu_ms",
-               "render_cpu_plus_setup_ms", "render_gpu_ms",
-               "renderer_allocated_bytes"}
+               "render_gpu_ms", "renderer_allocated_bytes"}
 SUMMARY_KEYS = {"sample_count", "observed_frame_median_ms",
                 "observed_frame_p95_ms", "render_cpu_plus_setup_p95_ms",
                 "render_gpu_available", "render_gpu_p95_ms",
@@ -62,7 +61,7 @@ def hex_string(value: Any, length: int, where: str) -> str:
         die(f"{where}: expected lowercase hex")
     return value
 def validate_plan(data: Any) -> dict[str, Any]:
-    keys = {"schema", "commit", "fight", "kind", "seed", "act", "mode",
+    keys = {"schema", "commit", "fight", "kind", "seed", "act",
             "shapes", "languages", "repeats", "budgets", "app_sha256",
             "pck_sha256", "environment"}
     plan = exact_keys(data, keys, "plan")
@@ -84,8 +83,6 @@ def validate_plan(data: Any) -> dict[str, Any]:
     integer(plan["seed"], "plan.seed")
     if integer(plan["act"], "plan.act") not in range(3):
         die("plan.act: invalid")
-    if plan["mode"] != "full":
-        die("plan.mode: invalid")
     for field, allowed in (("shapes", set(SHAPES)),
                            ("languages", {"en", "zh-Hant"})):
         values = plan[field]
@@ -120,11 +117,11 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
             or provenance["rendering_method"] != "mobile":
         die("provenance: wrong Godot or OS")
     request = exact_keys(report["request"],
-        {"fight", "kind", "seed", "act", "shape", "window", "language", "mode"},
+        {"fight", "kind", "seed", "act", "shape", "window", "language"},
         "request")
     if type(request["seed"]) is not int or type(request["act"]) is not int \
             or not all(isinstance(request[key], str) for key in
-                       ("kind", "shape", "language", "mode")) \
+                       ("kind", "shape", "language")) \
             or not isinstance(request["fight"], list) \
             or not isinstance(request["window"], list) \
             or len(request["window"]) != 2 \
@@ -177,18 +174,15 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
     if sum(parsed["observed_frame_ms"]) + 1e-6 \
             < number(method["sample_seconds"], "sample_seconds", positive=True) * 1000:
         die("samples: observed interval is shorter than the declared window")
-    for index, (cpu, setup, total) in enumerate(zip(
-            parsed["render_cpu_ms"], parsed["frame_setup_cpu_ms"],
-            parsed["render_cpu_plus_setup_ms"])):
-        if not math.isclose(cpu + setup, total, rel_tol=1e-9, abs_tol=1e-6):
-            die(f"samples.render_cpu_plus_setup_ms[{index}]: derived value differs")
+    cpu_total = [cpu + setup for cpu, setup in zip(
+        parsed["render_cpu_ms"], parsed["frame_setup_cpu_ms"])]
     summary = exact_keys(report["summary"], SUMMARY_KEYS, "summary")
     if type(summary["sample_count"]) is not int or summary["sample_count"] != count:
         die("summary.sample_count: wrong integer count")
     close(summary["observed_frame_median_ms"], percentile(parsed["observed_frame_ms"], .50), "frame median")
     close(summary["observed_frame_p95_ms"], percentile(parsed["observed_frame_ms"], .95), "frame p95")
     close(summary["render_cpu_plus_setup_p95_ms"],
-        percentile(parsed["render_cpu_plus_setup_ms"], .95), "CPU p95")
+        percentile(cpu_total, .95), "CPU p95")
     close(summary["render_gpu_p95_ms"], percentile(parsed["render_gpu_ms"], .95), "GPU p95")
     if type(summary["render_gpu_available"]) is not bool \
             or summary["render_gpu_available"] != (max(parsed["render_gpu_ms"]) > 0):
@@ -297,7 +291,7 @@ def expected(plan: dict[str, Any], shape: str, language: str) -> dict[str, Any]:
     return {
         "commit": plan["commit"], "fight": plan["fight"], "kind": plan["kind"],
         "seed": plan["seed"], "act": plan["act"], "shape": shape,
-        "window": SHAPES[shape], "language": language, "mode": plan["mode"],
+        "window": SHAPES[shape], "language": language,
     }
 def profile(home: Path, language: str) -> None:
     directory = home / "Library/Application Support/Godot/app_userdata/Glassvow"
@@ -412,7 +406,7 @@ def run_measure(args: argparse.Namespace) -> int:
         die("provide all three budgets or none")
     plan = {
         "schema": 1, "commit": args.commit.lower(), "fight": ["leviathan"],
-        "kind": "boss", "seed": 717, "act": 1, "mode": "full",
+        "kind": "boss", "seed": 717, "act": 1,
         "shapes": list(SHAPES), "languages": ["en", "zh-Hant"], "repeats": 5,
         "budgets": None if args.renderer_mib is None else {
             "renderer_mib": args.renderer_mib, "footprint_mib": args.footprint_mib,
@@ -443,7 +437,7 @@ def run_measure(args: argparse.Namespace) -> int:
                         "--fight=leviathan", "--kind=boss",
                         "--seed=717", "--act=1", f"--shape={shape}", f"--vp={width}x{height}",
                         f"--perf-language={language}", f"--perf-commit={plan['commit']}",
-                        f"--perf-out={report}", "--perf-mode=full"]
+                        f"--perf-out={report}"]
                     env = dict(os.environ, HOME=str(home))
                     process = subprocess.Popen(command, stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE, text=True, env=env)

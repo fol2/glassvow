@@ -9,10 +9,9 @@ const SAMPLE_SECONDS: float = 10.0
 const SAMPLE_FRAMES: int = 600
 const ARG_KEYS: Array[String] = [
 	"fight", "kind", "seed", "act", "shape", "vp", "perf-language",
-	"perf-commit", "perf-out", "perf-mode",
+	"perf-commit", "perf-out",
 ]
 
-var _main: Main
 var _request: Dictionary = {}
 var _frame: int = 0
 var _started_us: int = 0
@@ -27,10 +26,6 @@ var _cpu_ms: Array[float] = []
 var _setup_ms: Array[float] = []
 var _gpu_ms: Array[float] = []
 var _renderer_bytes: Array[float] = []
-
-
-func _init(main_ref: Main) -> void:
-	_main = main_ref
 
 
 func _ready() -> void:
@@ -154,7 +149,7 @@ func _write_report() -> void:
 			"seed": _request["seed"], "act": _request["act"],
 			"shape": _request["shape"],
 			"window": [_request["vp_x"], _request["vp_y"]],
-			"language": _request["language"], "mode": _request["mode"],
+			"language": _request["language"],
 		},
 		"method": {
 			"warmup_seconds": WARMUP_SECONDS,
@@ -167,7 +162,7 @@ func _write_report() -> void:
 		},
 		"samples": {
 			"observed_frame_ms": _wall_ms, "render_cpu_ms": _cpu_ms,
-			"frame_setup_cpu_ms": _setup_ms, "render_cpu_plus_setup_ms": cpu_total,
+			"frame_setup_cpu_ms": _setup_ms,
 			"render_gpu_ms": _gpu_ms, "renderer_allocated_bytes": _renderer_bytes,
 		},
 		"summary": {
@@ -227,8 +222,6 @@ static func request(args: PackedStringArray) -> Dictionary:
 	var act: int = str(raw["act"]).to_int()
 	if not str(raw["act"]).is_valid_int() or act not in range(3):
 		return {"error": "invalid act"}
-	if str(raw["perf-mode"]) != "full":
-		return {"error": "invalid mode"}
 	var commit: String = str(raw["perf-commit"]).to_lower()
 	if commit.length() != 40 or not commit.is_valid_hex_number(false):
 		return {"error": "invalid commit"}
@@ -241,7 +234,7 @@ static func request(args: PackedStringArray) -> Dictionary:
 		"fight": fight, "kind": str(raw["kind"]), "seed": seed,
 		"act": act, "shape": String(shape), "vp_x": vp.x, "vp_y": vp.y,
 		"language": str(raw["perf-language"]), "commit": commit,
-		"out": str(raw["perf-out"]), "mode": str(raw["perf-mode"]),
+		"out": str(raw["perf-out"]),
 	}
 
 

@@ -25,7 +25,7 @@ static func run(fails: Array[String]) -> void:
 		"--seed=717", "--act=0", "--shape=phone-landscape",
 		"--vp=844x390", "--perf-language=zh-Hant",
 		"--perf-commit=0123456789abcdef0123456789abcdef01234567",
-		"--perf-out=/tmp/report.json", "--perf-mode=full",
+		"--perf-out=/tmp/report.json",
 	])
 	var valid: Dictionary = Bench.request(args)
 	_check(fails, not valid.has("error"),

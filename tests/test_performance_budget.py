@@ -32,7 +32,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.plan = {
             "schema": 1, "commit": "a" * 40,
             "fight": ["leviathan"],
-            "kind": "boss", "seed": 717, "act": 1, "mode": "full",
+            "kind": "boss", "seed": 717, "act": 1,
             "shapes": ["phone-landscape"], "languages": ["en"],
             "repeats": 1, "budgets": None, "app_sha256": "b" * 64,
             "pck_sha256": "c" * 64,
@@ -42,7 +42,6 @@ class PerformanceEvidenceTests(unittest.TestCase):
         zeros = [0.0] * 600
         cpu = [0.5] * 600
         setup = [0.1] * 600
-        total = [0.6] * 600
         renderer = [400.0 * 1048576] * 600
         self.report = {
             "schema": 1,
@@ -52,8 +51,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
                            "rendering_method": "mobile"},
             "request": {"fight": self.plan["fight"], "kind": "boss",
                         "seed": 717, "act": 1, "shape": "phone-landscape",
-                        "window": [844, 390], "language": "en",
-                        "mode": "full"},
+                        "window": [844, 390], "language": "en"},
             "method": {"warmup_seconds": 6.0, "warmup_frames_min": 300,
                        "sample_seconds": 10.0, "sample_frames_min": 600,
                        "measured_viewports": 5,
@@ -62,7 +60,6 @@ class PerformanceEvidenceTests(unittest.TestCase):
                        "viewport_pixels": 844 * 390 + 40000},
             "samples": {"observed_frame_ms": values, "render_cpu_ms": cpu,
                         "frame_setup_cpu_ms": setup,
-                        "render_cpu_plus_setup_ms": total,
                         "render_gpu_ms": zeros,
                         "renderer_allocated_bytes": renderer},
             "summary": {"sample_count": 600,
@@ -137,8 +134,8 @@ class PerformanceEvidenceTests(unittest.TestCase):
     def test_method_and_derived_cpu_fail_closed(self) -> None:
         self.assert_rejected(lambda: self.report["method"].update(sample_seconds=2.0))
         self._reset()
-        self.assert_rejected(lambda: self.report["samples"]
-                             ["render_cpu_plus_setup_ms"].__setitem__(0, 9.0))
+        self.assert_rejected(lambda: self.report["summary"]
+                             .update(render_cpu_plus_setup_p95_ms=9.0))
         self._reset()
         self.assert_rejected(lambda: self.report["samples"]
                              .update(renderer_allocated_bytes=[0.0] * 600))

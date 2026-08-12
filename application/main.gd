@@ -364,7 +364,7 @@ func _attach_performance_probe() -> void:
 		push_error("performance probe did not load")
 		get_tree().quit(2)
 		return
-	var instance: Variant = script.new(self)
+	var instance: Variant = script.new()
 	if not instance is Node:
 		push_error("performance probe did not instantiate")
 		get_tree().quit(2)
