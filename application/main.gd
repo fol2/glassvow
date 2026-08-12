@@ -17,8 +17,8 @@ var _screen: CombatScreen = null
 ## combat, but Locale and ContentDB change together only at the next route seam.
 var _content_hydration_pending: bool = false
 var _pending_language: StringName = &""
-## Exact current route constructor. `_route_run()` cannot infer unresolved
-## rest/event/shop routes from durable state without dropping back to the map.
+var _route_checkpoint_quarantined: bool = false
+## Exact live route constructor; durable resume reconstructs the initial route.
 var _route_rebuilder: Callable = Callable()
 var _map_screen: WorldMapScreen = null
 var _choice_screen: Control = null
@@ -879,6 +879,7 @@ func _on_save_error_choice(id: String) -> void:
 
 
 func _new_run(profile: Dictionary = {}) -> void:
+	_route_checkpoint_quarantined = false
 	var run_seed: int = _forced_seed if _forced_seed >= 0 else randi() & 0x7FFFFFFF
 	var run_id: String = "run-%08x-%x" % [run_seed, int(Time.get_unix_time_from_system() * 1000.0)]
 	var merged: Dictionary = {
@@ -908,6 +909,7 @@ func _new_run(profile: Dictionary = {}) -> void:
 
 
 func _continue_run(saved: RunState) -> void:
+	_route_checkpoint_quarantined = false
 	if saved == null:
 		_show_title()
 		return
@@ -935,17 +937,98 @@ func _route_run() -> void:
 	elif game.run.pending_combat != null:
 		_resume_pending_combat()
 	elif game.run.pending_hollow_route != null:
-		_show_hollow_route()
+		if not _dispatch_current_route():
+			_show_map()
 	elif _has_pending_monument():
 		_show_monument()
 	elif _has_pending_boss_relic():
 		_show_boss_relic()
 	elif game.run.pending_lamplighter:
 		_show_lamplighter()
+	elif _dispatch_current_route():
+		pass
 	else:
 		_show_map()
 
 
+func _dispatch_current_route() -> bool:
+	if _map == null or game == null or game.run == null:
+		return false
+	var node: MapNode = _map.current()
+	var scratch: Dictionary = game.run.quest_scratch
+	var route_keys: Array[String] = [
+		"eventNode", "eventPending", "shopStock", "treasureClaim"]
+	var has_route_scratch: bool = route_keys.any(
+		func(key: String) -> bool: return scratch.has(key))
+	var receipt_v: Variant = game.run.pending_hollow_route
+	if node == null or _map.is_cleared(_map.at) \
+			or node.type not in ["rest", "event", "shop", "treasure"]:
+		return _quarantine_route() if has_route_scratch or receipt_v != null else false
+	if game.run.node_id != node.id:
+		return _quarantine_route()
+	var allowed: Dictionary = {"rest": [], "event": ["eventNode", "eventPending"],
+		"shop": ["shopStock"], "treasure": ["treasureClaim"]}
+	for key: String in route_keys:
+		if scratch.has(key) and not allowed[node.type].has(key):
+			return _quarantine_route()
+	if receipt_v != null and not _valid_hollow_route(receipt_v, node):
+		return _quarantine_route()
+	match node.type:
+		"rest":
+			_show_rest()
+			return true
+		"event":
+			var event_v: Variant = scratch.get("eventNode")
+			var event_id: String = event_v if typeof(event_v) == TYPE_STRING else ""
+			if scratch.has("eventNode") \
+					and (event_id.is_empty() or not content.events.has(event_id)):
+				return _quarantine_route()
+			var pending_v: Variant = scratch.get("eventPending")
+			if scratch.has("eventPending") \
+					and (not scratch.has("eventNode") \
+					or not game.rewards.valid_event_checkpoint(
+						game.run, event_id, pending_v)):
+				return _quarantine_route()
+			_show_event()
+			if typeof(pending_v) == TYPE_DICTIONARY:
+				var pending: Dictionary = pending_v
+				_show_event_pick(pending)
+			return true
+		"shop":
+			var stock_v: Variant = scratch.get("shopStock")
+			if scratch.has("shopStock") and not game.rewards.valid_shop_checkpoint(
+					game.run, stock_v):
+				return _quarantine_route()
+			_show_shop()
+			return true
+		"treasure":
+			var claim_v: Variant = scratch.get("treasureClaim")
+			if scratch.has("treasureClaim") and not game.rewards.valid_treasure_checkpoint(
+					game.run, claim_v):
+				return _quarantine_route()
+			_show_treasure()
+			return true
+	return false
+
+
+func _valid_hollow_route(value: Variant, node: MapNode) -> bool:
+	if typeof(value) != TYPE_DICTIONARY:
+		return false
+	var route: Dictionary = value
+	if route.size() != 3 or not route.has_all(["nodeId", "type", "eventId"]) \
+			or typeof(route["nodeId"]) != TYPE_STRING \
+			or typeof(route["type"]) != TYPE_STRING \
+			or route["nodeId"] != node.id or route["type"] != node.type:
+		return false
+	if node.type == "event":
+		return typeof(route["eventId"]) == TYPE_STRING \
+			and route["eventId"] == game.run.quest_scratch.get("eventNode")
+	return route["eventId"] == null
+
+
+func _quarantine_route() -> bool:
+	_route_checkpoint_quarantined = true
+	return false
 # ---------------------------------------------------------------- map
 
 func _show_map() -> void:
@@ -1147,6 +1230,8 @@ func _on_combat_potion_choice(action: String, slot: int) -> void:
 
 
 func _on_node_chosen(i: int) -> void:
+	if _route_checkpoint_quarantined:
+		return
 	var n: MapNode = _map.nodes[i]
 	var was_unlit: bool = n.unlit
 	game.run.node_id = n.id
@@ -1162,7 +1247,7 @@ func _on_node_chosen(i: int) -> void:
 		n.bounty = 0
 	var hollow: bool = game.quests.stage_hollow_meeting(game.run, n, was_unlit)
 	game.run.map = _map.to_dict()
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.chosenWaystoneHold")
 		return
 	if hollow:
@@ -1190,7 +1275,7 @@ func _finish_node() -> void:
 	game.run.map = _map.to_dict()
 	for key: String in ["eventNode", "eventPending", "shopStock", "treasureClaim"]:
 		game.run.quest_scratch.erase(key)
-	if SaveService.store(game.run):
+	if _store_run():
 		_route_run()
 	else:
 		_show_save_error("ui.persistence.detail.clearedWaystoneHold")
@@ -1249,7 +1334,7 @@ func _show_event() -> void:
 	if event_id.is_empty():
 		event_id = game.rewards.roll_event(game.run)
 		game.run.quest_scratch["eventNode"] = event_id
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.eventHold")
 			return
 	var event: Dictionary = content.events[event_id].duplicate(true)
@@ -1277,7 +1362,7 @@ func _on_event_choice(choice_text: String, event_id: String) -> void:
 		_finish_node()
 		return
 	game.run.quest_scratch["eventPending"] = pending
-	if SaveService.store(game.run):
+	if _store_run():
 		_show_event_pick(pending)
 	else:
 		_show_save_error("ui.persistence.detail.eventChoiceHold")
@@ -1332,7 +1417,7 @@ func _show_treasure() -> void:
 	else:
 		claim = game.rewards.claim_treasure(game.run)
 		game.run.quest_scratch["treasureClaim"] = claim
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.treasureHold")
 			return
 	var screen: TreasureScreen = TreasureScreen.new(claim, content, _shape, _sfx_bus)
@@ -1357,7 +1442,7 @@ func _show_shop() -> void:
 	else:
 		stock = game.rewards.gen_shop(game.run)
 		game.run.quest_scratch["shopStock"] = stock
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.merchantStockHold")
 			return
 	var quest_item: Dictionary = game.quests.usurper_offer(game.run)
@@ -2234,19 +2319,11 @@ func _stage_hollow_exit() -> void:
 	}
 	if event_id != null:
 		game.run.quest_scratch["eventNode"] = event_id
-	if SaveService.store(game.run):
-		_show_hollow_route()
+	if _store_run():
+		if not _dispatch_current_route():
+			_show_save_error("ui.persistence.detail.heldHollowDestinationUnreadable")
 	else:
 		_show_save_error("ui.persistence.detail.hollowDestinationHold")
-
-
-func _show_hollow_route() -> void:
-	var route: Dictionary = game.run.pending_hollow_route
-	match str(route.get("type")):
-		"rest": _show_rest()
-		"shop": _show_shop()
-		"event": _show_event()
-		_: _show_save_error("ui.persistence.detail.heldHollowDestinationUnreadable")
 
 
 func _show_lamplighter() -> void:
