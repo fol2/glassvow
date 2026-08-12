@@ -75,7 +75,6 @@ var _settle: float = 0.0
 ## screen so a leaf started before a route swap finishes over the incoming
 ## screen. Screens never see it; main fires it around its own route helpers.
 var _transitions: TransitionLayer
-var _web_acceptance: WebAcceptance = null
 
 
 func _init() -> void:
@@ -110,8 +109,6 @@ func _apply_pending_content_hydration() -> int:
 
 func _remember_route(rebuilder: Callable) -> void:
 	_route_rebuilder = rebuilder
-	if _web_acceptance != null:
-		_web_acceptance.observe_route(rebuilder, game, content, _run_save_path)
 
 
 func _rebuild_active_route() -> void:
@@ -127,9 +124,6 @@ func _rebuild_active_route() -> void:
 func _ready() -> void:
 	print("glassvow boot " + str(Engine.get_version_info()["string"]))
 	content = ContentDB.load_full()
-	if OS.has_feature("web_dev"):
-		_web_acceptance = WebAcceptance.new()
-		add_child(_web_acceptance)
 	_vigil = SaveService.load_vigil()
 	Preferences.active = Preferences.read_from_disk()
 	# Locale follows Preferences: main publishes the live handle; labs keep the
@@ -1552,7 +1546,6 @@ func _prepare_encounter(n: MapNode) -> void:
 
 
 func _resume_pending_combat() -> void:
-	_remember_route(_resume_pending_combat)
 	if game.run.pending_quest_id == "ownShade" and _vigil.last_fall != null:
 		_vigil.last_fall = null
 		if not SaveService.store_vigil(_vigil):
