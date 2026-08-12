@@ -20,6 +20,8 @@ var _sampling_us: int = 0
 var _last_frame_us: int = 0
 var _vps: Array[RID] = []
 var _viewport_pixels: int = 0
+var _viewport_sizes: Array[Vector2i] = []
+var _actor_stage_sizes: Array[Vector2i] = []
 var _wall_ms: Array[float] = []
 var _cpu_ms: Array[float] = []
 var _setup_ms: Array[float] = []
@@ -107,10 +109,20 @@ func _bind_scene() -> bool:
 		return false
 	_vps = [get_tree().root.get_viewport_rid()]
 	_viewport_pixels = get_tree().root.size.x * get_tree().root.size.y
+	_viewport_sizes = [get_tree().root.size]
 	for node: Node in get_tree().root.find_children("", "SubViewport", true, false):
 		var viewport: SubViewport = node as SubViewport
 		_vps.append(viewport.get_viewport_rid())
 		_viewport_pixels += viewport.size.x * viewport.size.y
+		_viewport_sizes.append(viewport.size)
+	_actor_stage_sizes.clear()
+	for actor: Node in actors:
+		var stages: Array[Node] = actor.find_children("", "SubViewport", true, false)
+		if stages.size() != 1:
+			_fail("expected one stage per actor, got %d" % stages.size())
+			return false
+		var stage: SubViewport = stages[0] as SubViewport
+		_actor_stage_sizes.append(stage.size)
 	for rid: RID in _vps:
 		RenderingServer.viewport_set_measure_render_time(rid, true)
 	combat.performance_peak_vfx()
@@ -150,6 +162,8 @@ func _write_report() -> void:
 			"sample_seconds": SAMPLE_SECONDS,
 			"sample_frames_min": SAMPLE_FRAMES,
 			"measured_viewports": _vps.size(), "viewport_pixels": _viewport_pixels,
+			"viewport_sizes": _viewport_sizes,
+			"actor_stage_sizes": _actor_stage_sizes,
 		},
 		"samples": {
 			"observed_frame_ms": _wall_ms, "render_cpu_ms": _cpu_ms,

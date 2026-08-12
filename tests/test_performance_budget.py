@@ -31,8 +31,8 @@ class PerformanceEvidenceTests(unittest.TestCase):
         self.pid = 4242
         self.plan = {
             "schema": 1, "commit": "a" * 40,
-            "fight": ["sporeling", "sporeling", "sporeling"],
-            "kind": "normal", "seed": 717, "act": 0, "mode": "full",
+            "fight": ["leviathan"],
+            "kind": "boss", "seed": 717, "act": 1, "mode": "full",
             "shapes": ["phone-landscape"], "languages": ["en"],
             "repeats": 1, "budgets": None, "app_sha256": "b" * 64,
             "pck_sha256": "c" * 64,
@@ -50,13 +50,16 @@ class PerformanceEvidenceTests(unittest.TestCase):
                            "os": "macOS", "architecture": "arm64",
                            "renderer": "Apple M4 (Apple9)", "release": True,
                            "rendering_method": "mobile"},
-            "request": {"fight": self.plan["fight"], "kind": "normal",
-                        "seed": 717, "act": 0, "shape": "phone-landscape",
+            "request": {"fight": self.plan["fight"], "kind": "boss",
+                        "seed": 717, "act": 1, "shape": "phone-landscape",
                         "window": [844, 390], "language": "en",
                         "mode": "full"},
             "method": {"warmup_seconds": 6.0, "warmup_frames_min": 300,
                        "sample_seconds": 10.0, "sample_frames_min": 600,
-                       "measured_viewports": 5, "viewport_pixels": 844 * 390},
+                       "measured_viewports": 5,
+                       "viewport_sizes": [[844, 390]] + [[100, 100]] * 4,
+                       "actor_stage_sizes": [[100, 100], [100, 100]],
+                       "viewport_pixels": 844 * 390 + 40000},
             "samples": {"observed_frame_ms": values, "render_cpu_ms": cpu,
                         "frame_setup_cpu_ms": setup,
                         "render_cpu_plus_setup_ms": total,
@@ -104,7 +107,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
         dump(raw / f"{self.name}.footprint.json", self.footprint)
         dump(raw / f"{self.name}.status.json", self.status)
         ready = {"pid": self.pid, "shape": "phone-landscape",
-                 "window": [844, 390], "actors": 4, "measured_viewports": 5,
+                 "window": [844, 390], "actors": 2, "measured_viewports": 5,
                  "language": "en", "renderer": "Apple M4 (Apple9)"}
         (raw / f"{self.name}.stdout").write_text(
             "BENCH_READY " + json.dumps(ready) + "\nBENCH_RESULT "
@@ -144,7 +147,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
         for section, key, value in (("request", "act", False),
                                     ("request", "seed", 717.0),
                                     ("method", "measured_viewports", 5.9),
-                                    ("method", "viewport_pixels", 329160.5)):
+                                    ("method", "viewport_pixels", 369160.5)):
             with self.subTest(section=section, key=key):
                 self._reset()
                 self.assert_rejected(lambda section=section, key=key, value=value:

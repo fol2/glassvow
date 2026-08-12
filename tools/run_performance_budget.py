@@ -95,8 +95,8 @@ def validate_plan(data: Any) -> dict[str, Any]:
                 or any(value not in allowed for value in values):
             die(f"plan.{field}: invalid or duplicate matrix values")
     repeats = integer(plan["repeats"], "plan.repeats", minimum=1)
-    complete = plan["fight"] == ["sporeling"] * 3 \
-        and plan["kind"] == "normal" and plan["act"] == 0 \
+    complete = plan["fight"] == ["leviathan"] \
+        and plan["kind"] == "boss" and plan["act"] == 1 \
         and set(plan["shapes"]) == set(SHAPES) \
         and set(plan["languages"]) == {"en", "zh-Hant"} and repeats >= 5
     if not complete:
@@ -135,19 +135,31 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
         die(f"request: expected {wanted}, got {request}")
     method = exact_keys(report["method"], {
         "warmup_seconds", "warmup_frames_min", "sample_seconds",
-        "sample_frames_min", "measured_viewports", "viewport_pixels"}, "method")
+        "sample_frames_min", "measured_viewports", "viewport_pixels",
+        "viewport_sizes", "actor_stage_sizes"}, "method")
     wanted_method = (6.0, 300, 10.0, 600)
     actual_method = (method["warmup_seconds"], method["warmup_frames_min"],
                      method["sample_seconds"], method["sample_frames_min"])
     if actual_method != wanted_method:
         die(f"method: expected {wanted_method}, got {actual_method}")
     min_frames = integer(method["sample_frames_min"], "sample_frames_min", minimum=1)
+    def sizes(field: str) -> list[list[int]]:
+        value = method[field]
+        if not isinstance(value, list) or any(not isinstance(size, list)
+                or len(size) != 2 or any(type(axis) is not int or axis <= 0
+                                        for axis in size) for size in value):
+            die(f"method.{field}: malformed viewport inventory")
+        return value
+    viewport_sizes = sizes("viewport_sizes")
+    actor_sizes = sizes("actor_stage_sizes")
     if integer(method["measured_viewports"], "measured_viewports", minimum=1) \
-            < len(expected["fight"]) + 2:
-        die("method: too few measured viewports for root plus every actor")
-    if integer(method["viewport_pixels"], "viewport_pixels", minimum=1) \
-            < expected["window"][0] * expected["window"][1]:
-        die("method: viewport pixels omit the root viewport")
+            != len(viewport_sizes) or viewport_sizes[0] != expected["window"] \
+            or len(actor_sizes) != len(expected["fight"]) + 1 \
+            or any(size not in viewport_sizes for size in actor_sizes):
+        die("method: viewport or actor-stage inventory differs")
+    pixels = sum(size[0] * size[1] for size in viewport_sizes)
+    if integer(method["viewport_pixels"], "viewport_pixels", minimum=1) != pixels:
+        die("method: viewport pixel sum differs")
     samples = exact_keys(report["samples"], SAMPLE_KEYS, "samples")
     parsed: dict[str, list[float]] = {}
     lengths: set[int] = set()
@@ -399,8 +411,8 @@ def run_measure(args: argparse.Namespace) -> int:
     if any(v is not None for v in budget_values) and not all(v is not None for v in budget_values):
         die("provide all three budgets or none")
     plan = {
-        "schema": 1, "commit": args.commit.lower(), "fight": ["sporeling"] * 3,
-        "kind": "normal", "seed": 717, "act": 0, "mode": "full",
+        "schema": 1, "commit": args.commit.lower(), "fight": ["leviathan"],
+        "kind": "boss", "seed": 717, "act": 1, "mode": "full",
         "shapes": list(SHAPES), "languages": ["en", "zh-Hant"], "repeats": 5,
         "budgets": None if args.renderer_mib is None else {
             "renderer_mib": args.renderer_mib, "footprint_mib": args.footprint_mib,
@@ -428,8 +440,8 @@ def run_measure(args: argparse.Namespace) -> int:
                     width, height = SHAPES[shape]
                     command = ["/usr/bin/arch", "-arm64", str(executable),
                         "--disable-vsync", "--position", "-4000,-4000", "--",
-                        "--fight=sporeling,sporeling,sporeling", "--kind=normal",
-                        "--seed=717", "--act=0", f"--shape={shape}", f"--vp={width}x{height}",
+                        "--fight=leviathan", "--kind=boss",
+                        "--seed=717", "--act=1", f"--shape={shape}", f"--vp={width}x{height}",
                         f"--perf-language={language}", f"--perf-commit={plan['commit']}",
                         f"--perf-out={report}", "--perf-mode=full"]
                     env = dict(os.environ, HOME=str(home))
