@@ -654,12 +654,12 @@ class ChipBand extends MapBand:
 		gated = false
 
 	## Whether the STONE is in frame. Culling on this is what stops the chip
-	## outliving its lantern: the pill reaches ~49 stage px from the centre while
-	## the stone's own ink reaches ~20, so without it there is a 29 px band at
-	## each edge — 12% of a node step, both photographed — where the label is on
-	## screen and the lantern is not, and a `+17` sits alone on the road. At the
-	## right edge the flip made it worse, converting "nothing drawn" into a
-	## truncated `+` with no referent (PR #80 DL R2 MAJOR).
+	## outliving its lantern. In the old 13 px `+N` geometry, the pill reached
+	## ~49 stage px from a centre whose stone ink reached ~20, leaving a 29 px
+	## edge band where `+17` sat alone on the road. At the right edge the flip
+	## made it worse, converting "nothing drawn" into a truncated `+` with no
+	## referent (PR #80 DL R2 MAJOR). The cull remains defined by stone ink, so
+	## changing label geometry cannot reintroduce that orphan.
 	##
 	## Measured against the stone's INK, not its rect: the touch rect is padded
 	## out to `set_touch_min`'s finger floor and would cull a frame or two late.
@@ -671,8 +671,8 @@ class ChipBand extends MapBand:
 	## it bites. Right by default; left only when the right runs off the frame AND
 	## the left does not.
 	##
-	## The "nowhere to go" branch needs `frame_w < 2 · reach` — under ~100 px
-	## against the narrowest shipped stage's 390 — so it cannot fire in the game
+	## The "nowhere to go" branch needs `frame_w < 2 · reach`, still well below
+	## the narrowest shipped stage's 390 px, so it cannot fire in the game
 	## and is kept only to keep the function total. The reachable failure was
 	## never this one: it was the stone leaving the frame, and `on_screen` owns
 	## it (PR #80 DL R2).
@@ -722,10 +722,9 @@ class ChipBand extends MapBand:
 			var flip: bool = flips(centre_x, reach, frame_w, was)
 			var rect: Rect2 = pill_rect(ws.chip_rect(flip), ws.position, ws.scale)
 			# A flip may not bury the neighbour it flips towards. On seed 17634
-			# at phone-portrait two same-lane bounty stones sit 99.40 stage px
-			# apart while their reaches sum to 110.42, so a flipped pill lands
-			# 11.02 px inside the one already seated and its `+16` renders as
-			# `+1` (#69 D1, PR #80 DL R3, photographed).
+			# at phone-portrait, two same-lane stones' candidate pill rects overlap.
+			# A flipped pill therefore lands inside the one already seated and
+			# the old `+16` rendered as `+1` (#69 D1, PR #80 DL R3, photographed).
 			#
 			# Both axes. The first version of this compared x only and declined
 			# every same-COLUMN pair — identical `world_x`, one lane apart, so
