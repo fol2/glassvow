@@ -112,10 +112,12 @@ def validate_report(data: Any, expected: dict[str, Any]) -> dict[str, float]:
         "architecture", "renderer", "release", "rendering_method"}, "provenance")
     if provenance["claimed_commit"] != expected["commit"] or provenance["architecture"] != "arm64":
         die("provenance: wrong commit or non-native architecture")
-    if not str(provenance["godot"]).startswith("4.7.1") or provenance["os"] != "macOS" \
+    if provenance["godot"] != TARGET_ENVIRONMENT["godot"] \
+            or provenance["renderer"] != TARGET_ENVIRONMENT["renderer"] \
+            or provenance["os"] != "macOS" \
             or provenance["release"] is not True \
             or provenance["rendering_method"] != "mobile":
-        die("provenance: wrong Godot or OS")
+        die("provenance: runtime differs from the signed target")
     request = exact_keys(report["request"],
         {"fight", "kind", "seed", "act", "shape", "window", "language"},
         "request")
@@ -419,7 +421,6 @@ def run_measure(args: argparse.Namespace) -> int:
     root.mkdir(parents=True)
     (root / "raw").mkdir()
     (root / "plan.json").write_text(json.dumps(plan, sort_keys=True, indent=2) + "\n")
-    environment_receipts(app, executable, root)
     raw = root / "raw"
     for shape in plan["shapes"]:
         if shape not in SHAPES:
@@ -432,14 +433,15 @@ def run_measure(args: argparse.Namespace) -> int:
                     profile(home, language)
                     report = raw / f"{name}.report.json"
                     width, height = SHAPES[shape]
-                    command = ["/usr/bin/arch", "-arm64", str(executable),
+                    app_command = ["/usr/bin/arch", "-arm64", str(executable),
                         "--disable-vsync", "--position", "-4000,-4000", "--",
-                        "--fight=leviathan", "--kind=boss",
-                        "--seed=717", "--act=1", f"--shape={shape}", f"--vp={width}x{height}",
+                        f"--fight={','.join(plan['fight'])}", f"--kind={plan['kind']}",
+                        f"--seed={plan['seed']}", f"--act={plan['act']}",
+                        f"--shape={shape}", f"--vp={width}x{height}",
                         f"--perf-language={language}", f"--perf-commit={plan['commit']}",
                         f"--perf-out={report}"]
                     env = dict(os.environ, HOME=str(home))
-                    process = subprocess.Popen(command, stdout=subprocess.PIPE,
+                    process = subprocess.Popen(app_command, stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE, text=True, env=env)
                     footprint_path = raw / f"{name}.footprint.json"
                     footprint = subprocess.run(["/usr/bin/footprint", "-j",
@@ -465,6 +467,7 @@ def run_measure(args: argparse.Namespace) -> int:
                 if process.returncode != 0 or footprint.returncode != 0:
                     die(f"{name}: process={process.returncode} footprint={footprint.returncode}")
                 print(f"measured {name}")
+    environment_receipts(app, executable, root)
     summary = replay(root)
     (root / "summary.json").write_text(json.dumps(summary, sort_keys=True, indent=2) + "\n")
     print(json.dumps({"status": summary["status"], "spread": summary["spread"]}, sort_keys=True))

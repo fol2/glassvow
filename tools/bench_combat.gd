@@ -134,11 +134,16 @@ func _write_report() -> void:
 	var cpu_total: Array[float] = []
 	for i: int in _cpu_ms.size():
 		cpu_total.append(_cpu_ms[i] + _setup_ms[i])
+	var version: Dictionary = Engine.get_version_info()
+	var exact_version: String = "%d.%d.%d.%s.%s.%s" % [
+		version["major"], version["minor"], version["patch"], version["status"],
+		version["build"], str(version["hash"]).left(9),
+	]
 	var report: Dictionary = {
 		"schema": 1,
 		"provenance": {
 			"claimed_commit": _request["commit"],
-			"godot": str(Engine.get_version_info()["string"]),
+			"godot": exact_version,
 			"os": OS.get_name(), "architecture": Engine.get_architecture_name(),
 			"renderer": RenderingServer.get_video_adapter_name(),
 			"release": not OS.is_debug_build(),
