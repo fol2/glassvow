@@ -51,6 +51,7 @@ var _embark_aspect: int = 0
 var _embark_vow: int = 0
 var _run_over: bool = false
 var _bench_fight: bool = false
+var _run_save_path: String = SaveService.RUN_PATH
 var _forced_seed: int = -1  # --seed=N: reproducible shots for layout diffing
 ## The virtual stage this window is composed against. A 1180x820 window resolves
 ## to `pad-landscape` at zero flex, so the default boot is identical to the port
@@ -448,6 +449,10 @@ func _screen_diagonal() -> float:
 ## and when the path grows.
 func _quit_game() -> void:
 	get_tree().quit()
+
+
+func _store_run() -> bool:
+	return SaveService.store(game.run, _run_save_path)
 
 
 ## Window close is a clean quit: with `config/auto_accept_quit=false` the engine
@@ -1018,8 +1023,14 @@ func _on_abandon_choice(id: String) -> void:
 	if id != "yes":
 		_close_overlay()
 		return
+	game.run.pending_combat = null
+	game.run.pending_enemy_ids = null
+	game.run.pending_quest_id = null
+	game.run.pending_reward = null
+	game.run.pending_hollow = null
+	game.run.pending_hollow_route = null
 	game.run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
-	if SaveService.store(game.run):
+	if _store_run():
 		_show_run_end()
 	else:
 		_show_save_error("ui.persistence.detail.abandonmentHold")
