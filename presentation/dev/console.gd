@@ -23,6 +23,12 @@ var _status: Label
 var _editors: Dictionary = {}
 var _painting: bool = false
 
+var _receipt_visible: bool = false
+var _receipt_section: VBoxContainer = null
+var _receipt_header: Button = null
+var _overlay_visible: bool = false
+var _diagnostic_overlay: Node = null
+
 
 static func entry_label() -> String:
 	return _t("entry")
@@ -119,6 +125,8 @@ func _build() -> void:
 	body.add_child(_btn(_t("reset"), _reset))
 	body.add_child(_btn(_t("restart"), _restart))
 	body.add_child(_btn(_t("clear"), _clear))
+	body.add_child(_build_receipt_section())
+	body.add_child(_btn(_t("diagnostics"), _toggle_diagnostic_overlay))
 	column.add_child(_btn(_t("close"), _close))
 
 
@@ -242,6 +250,101 @@ func _sync_from_widgets() -> void:
 	_field.text = JSON.stringify(_ref.encode())
 	_status.text = ""
 
+
+
+func _build_receipt_section() -> VBoxContainer:
+	var section: VBoxContainer = VBoxContainer.new()
+	section.add_theme_constant_override("separation", 4)
+	var header: Button = Button.new()
+	header.text = _t("receipt").to_upper() + (" ▼" if _receipt_visible else " ►")
+	header.custom_minimum_size.y = RunStyle.hit_floor(44.0)
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	RunStyle.style_button(header)
+	header.pressed.connect(func() -> void:
+		_sfx.play(&"click")
+		_receipt_visible = not _receipt_visible
+		_refresh_receipt_display()
+	)
+	section.add_child(header)
+	_receipt_header = header
+	if _receipt_visible:
+		_populate_receipt_content(section)
+	_receipt_section = section
+	return section
+
+func _populate_receipt_content(section: VBoxContainer) -> void:
+	var content: VBoxContainer = VBoxContainer.new()
+	content.add_theme_constant_override("separation", 6)
+	content.name = "receipt_content"
+	var run: RunState = _get_run_state()
+	var snapshot: Dictionary = {
+		"scenario": _ref.encode(),
+		"seed": _ref.seed,
+		"rng_cursor": run.rng_state() if run != null else null,
+		"locale": str(Locale.active.code) if Locale.active else "en",
+		"shape": str(shape),
+		"act": run.act if run != null else 0,
+		"node": run.node_id if run != null else null,
+		"hp": run.hp if run != null else 0,
+		"gold": run.gold if run != null else 0,
+	}
+	if run != null:
+		snapshot["fingerprint"] = ScenarioKernel.fingerprint(run)
+	content.add_child(_label("NOT RELEASE EVIDENCE", 11, RunStyle.DANGER, false))
+	var json_text: TextEdit = TextEdit.new()
+	json_text.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	json_text.custom_minimum_size.y = RunStyle.hit_floor(88.0)
+	json_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	json_text.text = JSON.stringify(snapshot)
+	json_text.editable = false
+	content.add_child(json_text)
+	var copy_btn: Button = _btn(_t("copy_receipt"), func() -> void:
+		DisplayServer.clipboard_set(json_text.text)
+	)
+	content.add_child(copy_btn)
+	section.add_child(content)
+
+func _refresh_receipt_display() -> void:
+	if _receipt_header == null or _receipt_section == null:
+		return
+	_receipt_header.text = _t("receipt").to_upper() + (" ▼" if _receipt_visible else " ►")
+	var old_content: Node = _receipt_section.find_child("receipt_content")
+	if old_content != null:
+		old_content.queue_free()
+	if _receipt_visible:
+		_populate_receipt_content(_receipt_section)
+
+func _get_run_state() -> Variant:
+	if _host == null:
+		return null
+	var g: Variant = _host.get("game")
+	if g is GlassvowGame:
+		var game: GlassvowGame = g
+		if game.run != null:
+			return game.run
+	return null
+
+func _toggle_diagnostic_overlay() -> void:
+	_overlay_visible = not _overlay_visible
+	if _overlay_visible:
+		_show_diagnostic_overlay()
+	else:
+		_hide_diagnostic_overlay()
+
+func _show_diagnostic_overlay() -> void:
+	if _diagnostic_overlay != null:
+		return
+	var script: GDScript = load("res://presentation/dev/diagnostic_overlay.gd") as GDScript
+	if script == null:
+		return
+	_diagnostic_overlay = script.new()
+	if _diagnostic_overlay is Node:
+		get_tree().root.add_child(_diagnostic_overlay)
+
+func _hide_diagnostic_overlay() -> void:
+	if _diagnostic_overlay != null and _diagnostic_overlay is Node:
+		_diagnostic_overlay.queue_free()
+		_diagnostic_overlay = null
 
 func _label(text: String, size_px: int, colour: Color, centred: bool) -> Label:
 	var label: Label = Label.new()
