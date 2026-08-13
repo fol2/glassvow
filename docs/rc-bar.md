@@ -160,17 +160,19 @@ Evidence: immutable packet.
       ([#108](https://github.com/fol2/glassvow/issues/108)).
 - [ ] Any waiver exists only as the rubric's recorded-waiver mechanism prescribes.
 
-## P6 — External beta round
+## P6 — Internal beta round
 
-- [ ] One external beta round completed and survived, against the pass criteria defined by
-      [#166](https://github.com/fol2/glassvow/issues/166). This bar does not pre-empt that
-      design; the receipt links whatever evidence #166 prescribes.
+- [ ] One internal beta round completed and survived, against the pass criteria defined by
+      [#166](https://github.com/fol2/glassvow/issues/166): TestFlight internal track, 7 days,
+      one RC-shape build, four testers (James + Wing zh-Hant; Nelson + Eugenia en). The
+      receipt links whatever evidence #166 prescribes. (External beta consciously skipped —
+      design preserved in `docs/external-beta-playbook.md`.)
 
-**Waivability.** Running the round is **not waivable** — no RC without one completed external
+**Waivability.** Running the round is **not waivable** — no RC without one completed internal
 round. Whether the round *passed* is judged solely by #166's criteria; a round that fails them
 returns to the map as a decision (fix and repeat, or a recorded release-policy call by James on
 [#108](https://github.com/fol2/glassvow/issues/108)) — it is never silently waived, and
-external testers hold no veto beyond what #166's criteria encode.
+beta testers hold no veto beyond what #166's criteria encode.
 
 ## P7 — Compliance checklist (iOS)
 
