@@ -39,7 +39,7 @@ tools/check_imports.sh                   # asset import; fails on stderr ERRORs 
 tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS)
 python3 tools/check_anchors.py           # doc file:line anchors still point where they claim
-python3 tools/check_web_anchors.py       # benchmark citations still point into 6e06911
+python3 tools/check_web_anchors.py       # benchmark citations still point into 6e06911 — LOCAL ONLY, see below
 ```
 
 **Why the parse gate is a script and not a one-line loop.** `godot --headless
@@ -63,6 +63,20 @@ Warnings-as-errors is not the broken half. `project.godot` sets
 `unsafe_call_argument` to level 2, and an untyped `var x = 1` really does print
 `Parse Error: Variable "x" has no static type. (Warning treated as error.)` —
 detected, and now enforced by the stderr grep rather than by the exit code.
+
+**Which of these CI enforces.** All but the last. `check_anchors.py` joined
+`ci.yml` on 2026-08-13, after main was found sitting on a drifted anchor — a
+`docs/solutions/` citation still naming the line `_capture_and_quit` had since
+moved off. The gate existed, ran locally, and exited 1 correctly; nothing called
+it before a merge, so it caught nothing for as long as everyone remembered to
+forget it. `check_web_anchors.py`
+stays **local-only** and is the one gate you must run by hand: it needs the
+`roguecardv2-benchmark` checkout and returns **2 — "benchmark tree not found"**
+wherever that is absent, which is every CI runner and every git worktree. Adding
+it to CI would paint the tree red for a reason that has nothing to do with the
+anchors, and special-casing that exit away would turn a real gate into a no-op —
+the same disease as the `--check-only` loop above. Run it before any commit that
+touches a benchmark citation.
 
 Screenshots go through `tools/shot.sh` (one-off) or `tools/live.sh` (iteration
 loop) rather than a bare `godot` launch — see `docs/session-ownership.md` ›

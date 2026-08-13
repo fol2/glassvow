@@ -40,6 +40,15 @@ jobs:
       - name: Check developer-tool registry and coordinate conversion
         run: python3 -B tools/dev.py --check
 
+      # The web-reference twin, tools/check_web_anchors.py, is deliberately NOT
+      # here: it needs the roguecardv2-benchmark checkout and returns 2 —
+      # "benchmark tree not found" — wherever that is absent, which includes
+      # every CI runner. Adding it would make CI permanently red for a reason
+      # unrelated to the anchors, and silencing that exit would turn a real
+      # gate into a no-op. It stays local-only; CLAUDE.md records the split.
+      - name: Check doc file:line anchors
+        run: python3 -B tools/check_anchors.py
+
       - name: Test performance evidence replay
         run: python3 -B tests/test_performance_budget.py
       
