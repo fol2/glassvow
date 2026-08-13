@@ -52,6 +52,8 @@ var _embark_vow: int = 0
 var _run_over: bool = false
 var _bench_fight: bool = false
 var _run_save_path: String = SaveService.RUN_PATH
+## Set when the optional Development boot handled this launch.
+var _dev_claimed: bool = false
 var _forced_seed: int = -1  # --seed=N: reproducible shots for layout diffing
 ## The virtual stage this window is composed against. A 1180x820 window resolves
 ## to `pad-landscape` at zero flex, so the default boot is identical to the port
@@ -311,6 +313,16 @@ func _ready() -> void:
 		if shot_path != "":
 			_capture_and_quit(shot_path)
 		return
+	if DevTools.available():
+		var boot: GDScript = load(DevTools.BOOT) as GDScript
+		if boot != null:
+			boot.call("apply", self, OS.get_cmdline_user_args())
+		if _dev_claimed:
+			if performance_probe:
+				_attach_performance_probe()
+			elif shot_path != "":
+				_capture_and_quit(shot_path)
+			return
 	if resume_run:
 		_continue_run(SaveService.load_run(content))
 	elif show_dawn_bench:
@@ -906,6 +918,22 @@ func _new_run(profile: Dictionary = {}) -> void:
 		_route_run()
 	else:
 		_show_save_error("ui.persistence.detail.pilgrimageStart")
+
+
+## Route a Development Scenario onto the kernel's default profile. Fail-closed.
+func apply_dev_scenario(ref: ScenarioReference) -> bool:
+	_dev_claimed = true
+	if ref == null or not ref.error.is_empty():
+		push_error(ref.error if ref != null else "Scenario reference is unreadable")
+		return false
+	var kernel: ScenarioKernel = ScenarioKernel.new(content)
+	var run: RunState = kernel.construct(ref)
+	if run == null:
+		push_error(kernel.last_error)
+		return false
+	_run_save_path = kernel.run_path
+	_continue_run(run)
+	return true
 
 
 func _continue_run(saved: RunState) -> void:
