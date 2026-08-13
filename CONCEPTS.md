@@ -5,6 +5,65 @@ status concepts with project-specific meaning. Seeded with core domain
 vocabulary, then accretes as ce-compound and ce-compound-refresh process
 learnings; direct edits are fine. Glossary only, not a spec or catch-all.
 
+## Developer tooling
+
+### Developer Console
+A development-only scenario orchestrator that places a valid, deterministic
+run at a named player-facing state through the game's real routing seams. It is
+a navigation and inspection convenience, not release evidence and not a place
+to author content.
+
+### Dev Review build
+An internal Web, native or signed-mobile build carrying the explicit
+`dev_tools` capability and a visible Developer Console entry. It exists for
+review and diagnosis; a store or release-candidate build never carries that
+capability or entry point.
+
+### Scenario
+A named, versioned recipe for reaching one deterministic player-facing state.
+It has a stable identity and declares its seed, locale and valid run/route
+inputs, so two reviewers asking for the same Scenario mean the same setup. A
+Scenario is constructed through production seams rather than by editing live
+screen nodes or raw state.
+
+### Scenario reference
+The portable identity of one reproducible Scenario invocation: its stable ID
+and revision, product build, seed, locale, Stage shape and bounded overrides.
+It describes how to reconstruct the state rather than carrying a save blob. A
+reference whose revision is no longer supported fails explicitly instead of
+silently acquiring newer semantics.
+
+### Custom Scenario
+A Scenario assembled from the Console's bounded gameplay controls rather than
+from a catalogue entry. It still produces a valid run through production seams;
+it is not an editor for raw save dictionaries, RNG cursors or live screen
+nodes.
+
+### Synthesised history
+The coherent completed path constructed before a Scenario enters a requested
+map node. It preserves route and checkpoint invariants but makes no claim that a
+player performed those earlier actions.
+
+### Development profile
+The persistence boundary used by the Developer Console. Its checkpoints are
+disjoint from a player's ordinary run and Vigil, so starting, altering or
+restarting a Scenario cannot contaminate player progress.
+
+### Authoring Lab
+An isolated tool for inspecting and editing one authored presentation or
+content subject. A Lab may construct production UI, but it does not stand in for
+the routed game or for release evidence.
+
+### Evidence Harness
+A tool that records or verifies a named gate under its declared conditions.
+Evidence from a Harness keeps its own proof boundary; reaching the same surface
+through the Developer Console does not inherit that evidence.
+
+### Diagnostic overlay
+A development-only live performance readout used to spot and reproduce likely
+problems. Its numbers guide investigation but are never release evidence; an
+Evidence Harness performs the release measurement.
+
 ## Card surface
 
 ### Recipe
