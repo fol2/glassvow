@@ -66,6 +66,7 @@ func _write_state(status: String) -> void:
 		"remaining": MAX_TREE_NODES,
 		"truncated": false,
 	}
+	var geometry: Dictionary = _runtime_geometry()
 	var state: Dictionary = {
 		"status": status,
 		"timestamp": Time.get_datetime_string_from_system(true, true),
@@ -76,6 +77,9 @@ func _write_state(status: String) -> void:
 		"node_count": _count_nodes(current_scene),
 		"root_child_count": tree.root.get_child_count() if tree != null and tree.root != null else 0,
 		"viewport_size": _vector2_to_dict(viewport.get_visible_rect().size) if viewport != null else null,
+		"window_size": geometry.get("window_size", null),
+		"stage_size": geometry.get("stage_size", null),
+		"stage_rect": geometry.get("stage_rect", null),
 		"scene_tree": _serialize_node_tree(current_scene, 0, tree_budget),
 		"scene_tree_truncated": bool(tree_budget.get("truncated", false)),
 		"scene_tree_max_depth": MAX_TREE_DEPTH,
@@ -90,6 +94,41 @@ func _write_state(status: String) -> void:
 	if file != null:
 		file.store_string(JSON.stringify(state, "\t") + "\n")
 		file = null
+
+
+## Logical window, virtual Stage, and the Stage's letterboxed footprint in
+## window pixels. Native Proof maps captured backing-store clicks through
+## this rectangle. KEEP is centred, matching `content_scale_aspect`.
+func _runtime_geometry() -> Dictionary:
+	var window: Window = get_window()
+	if window == null:
+		return {}
+	var window_size: Vector2i = window.size
+	if window_size.x <= 0 or window_size.y <= 0:
+		return {}
+	var stage_size: Vector2i = window.content_scale_size
+	if stage_size.x <= 0 or stage_size.y <= 0:
+		stage_size = window_size
+	# KEEP letterbox, centred: the stretch transform's origin is not a reliable
+	# inset (it can sit at zero while the capture is the drawn Stage only).
+	var scale: float = minf(
+		float(window_size.x) / float(stage_size.x),
+		float(window_size.y) / float(stage_size.y))
+	scale *= window.content_scale_factor
+	if scale <= 0.0:
+		return {}
+	var drawn: Vector2 = Vector2(stage_size) * scale
+	var origin: Vector2 = (Vector2(window_size) - drawn) * 0.5
+	return {
+		"window_size": {"x": window_size.x, "y": window_size.y},
+		"stage_size": {"x": stage_size.x, "y": stage_size.y},
+		"stage_rect": {
+			"x": origin.x,
+			"y": origin.y,
+			"w": drawn.x,
+			"h": drawn.y,
+		},
+	}
 
 
 func _clear_session_command_files() -> void:
@@ -270,6 +309,7 @@ func _command_capture_view(arguments: Dictionary) -> Dictionary:
 		"save_path": save_path,
 		"size": _vector2_to_dict(Vector2(image.get_size())),
 	}
+	result.merge(_runtime_geometry())
 	if bool(arguments.get("return_data_uri", false)):
 		result["data_uri"] = "data:image/png;base64,%s" % Marshalls.raw_to_base64(image.save_png_to_buffer())
 	return result

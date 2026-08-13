@@ -89,7 +89,17 @@ tools/shot.sh --enemies --idle=gloomslime --strip=/tmp/idle.png
 For a native iteration loop use `tools/live.sh start …`, then `shot`, `reload`,
 `resize W H`, `key`, `click`, `drag` and `stop`. `resize` changes the existing
 Godot window, so it is the headed gate for a live shape change without rebuilding
-the current screen. Non-visual tools remain direct, honest
+the current screen.
+
+Native Proof click and drag map captured backing-store pixels through the Stage
+rectangle the live host reports on the runtime-bridge heartbeat (`window_size`,
+`stage_size`, `stage_rect`). The capture is the drawn Stage (or, if it matches
+the window, the full window including KEEP bars). That conversion handles a
+resized window, a letterboxed Stage, and non-1× Retina captures. It fails
+rather than guessing when the geometry is missing, stale, or the point falls
+outside the Stage.
+`python3 tools/dev.py --check` covers the mapping. Interactive Web does not use
+this path: the browser delivers events to the Godot canvas directly. Non-visual tools remain direct, honest
 commands: `tools/check_imports.sh`, `tools/check_anchors.py`,
 `tools/check_web_anchors.py`, `godot
 --headless -s res://tools/check_fracture.gd`, the windowed

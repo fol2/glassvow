@@ -12,6 +12,7 @@ import re
 import secrets
 import shlex
 import shutil
+import struct
 import subprocess
 import tempfile
 import threading
@@ -100,6 +101,122 @@ api("/api/status").then(x=>{if(x.surface){$("mode").value=x.mode||"native";$("su
 
 class ToolError(RuntimeError): pass
 
+IDENTITY_GEOMETRY = {
+    "window_size": {"x": 1180, "y": 820},
+    "stage_size": {"x": 1180, "y": 820},
+    "stage_rect": {"x": 0, "y": 0, "w": 1180, "h": 820},
+}
+
+
+def png_size(body: bytes) -> tuple[int, int]:
+    if len(body) < 24 or body[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ToolError("Capture is not a PNG.")
+    return struct.unpack(">II", body[16:24])
+
+
+def parse_geometry(state: dict[str, object]) -> dict[str, object]:
+    """Pull window / Stage fields out of a runtime-bridge heartbeat."""
+    window = state.get("window_size")
+    stage = state.get("stage_size")
+    rect = state.get("stage_rect")
+    if not all(isinstance(item, dict) for item in (window, stage, rect)):
+        raise ToolError("Stage geometry is unavailable.")
+    try:
+        parsed = {
+            "window_size": (float(window["x"]), float(window["y"])),
+            "stage_size": (float(stage["x"]), float(stage["y"])),
+            "stage_rect": (
+                float(rect["x"]), float(rect["y"]), float(rect["w"]), float(rect["h"])),
+        }
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ToolError("Stage geometry is unavailable.") from exc
+    ww, wh = parsed["window_size"]
+    sw, sh = parsed["stage_size"]
+    _rx, _ry, rw, rh = parsed["stage_rect"]
+    if not (0 < ww <= 32_768 and 0 < wh <= 32_768 and 0 < sw <= 32_768
+            and 0 < sh <= 32_768 and rw > 0 and rh > 0):
+        raise ToolError("Stage geometry is unavailable.")
+    return parsed
+
+
+def geometry_unchanged(left: dict[str, object], right: dict[str, object]) -> bool:
+    for key in ("window_size", "stage_size"):
+        ax, ay = left[key]
+        bx, by = right[key]
+        if abs(ax - bx) > 0.5 or abs(ay - by) > 0.5:
+            return False
+    for index, value in enumerate(left["stage_rect"]):
+        if abs(value - right["stage_rect"][index]) > 0.5:
+            return False
+    return True
+
+
+def _aspect_matches(width: float, height: float, other: tuple[float, float]) -> bool:
+    other_w, other_h = other
+    if width <= 0 or height <= 0 or other_w <= 0 or other_h <= 0:
+        return False
+    return abs(width / height - other_w / other_h) <= 0.01 * (other_w / other_h)
+
+
+def live_geometry() -> dict[str, object]:
+    output = live("status")
+    lines = output.splitlines()
+    if not lines or not lines[0].startswith("running"):
+        raise ToolError("Stage geometry is unavailable.")
+    blob = "\n".join(lines[1:]).strip()
+    if not blob:
+        raise ToolError("Stage geometry is unavailable.")
+    try:
+        state = json.loads(blob)
+    except json.JSONDecodeError as exc:
+        raise ToolError("Stage geometry is unavailable.") from exc
+    if not isinstance(state, dict):
+        raise ToolError("Stage geometry is unavailable.")
+    return parse_geometry(state)
+
+
+def as_geometry(geometry: dict[str, object]) -> dict[str, object]:
+    window = geometry.get("window_size")
+    if isinstance(window, dict):
+        return parse_geometry(geometry)
+    return geometry
+
+
+def convert_point(
+        value: dict[str, object], geometry: dict[str, object]) -> tuple[int, int]:
+    """Capture backing-store px -> Stage event space via the reported rect."""
+    width, height = int(value.get("width", 0)), int(value.get("height", 0))
+    if not 0 < width <= 32_768 or not 0 < height <= 32_768:
+        raise ToolError("Capture dimensions are invalid.")
+    parsed = as_geometry(geometry)
+    try:
+        win_w, win_h = parsed["window_size"]
+        stage_w, stage_h = parsed["stage_size"]
+        rect_x, rect_y, rect_w, rect_h = parsed["stage_rect"]
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ToolError("Stage geometry is unavailable.") from exc
+    capture_x, capture_y = int(value.get("x", 0)), int(value.get("y", 0))
+    # Native Proof captures the drawn Stage (no window bars). A full-window
+    # capture including KEEP bars is accepted too; anything else is stale.
+    if _aspect_matches(width, height, (stage_w, stage_h)):
+        if not (0 <= capture_x <= width and 0 <= capture_y <= height):
+            raise ToolError("Click is outside the Stage.")
+        return (
+            round(capture_x * stage_w / width),
+            round(capture_y * stage_h / height),
+        )
+    if _aspect_matches(width, height, (win_w, win_h)):
+        window_x = capture_x * win_w / width
+        window_y = capture_y * win_h / height
+        if (window_x < rect_x or window_y < rect_y
+                or window_x > rect_x + rect_w or window_y > rect_y + rect_h):
+            raise ToolError("Click is outside the Stage.")
+        return (
+            round((window_x - rect_x) * stage_w / rect_w),
+            round((window_y - rect_y) * stage_h / rect_h),
+        )
+    raise ToolError("Stage geometry is stale.")
+
 def live(*arguments: str, timeout: int = 55) -> str:
     try:
         result = subprocess.run(
@@ -169,6 +286,7 @@ class Server(ThreadingHTTPServer):
         self.lock = threading.Lock()
         self.owns_host = False
         self.current: dict[str, str] = {}
+        self.geometry: dict[str, object] = {}
 
 class Handler(BaseHTTPRequestHandler):
     server: Server
@@ -280,6 +398,12 @@ class Handler(BaseHTTPRequestHandler):
             with self.server.lock:
                 live("shot", str(path))
                 body = path.read_bytes()
+                try:
+                    geometry = live_geometry()
+                    geometry["capture"] = png_size(body)
+                    self.server.geometry = geometry
+                except ToolError:
+                    self.server.geometry = {}
             self.send_response(200)
             self.send_header("Content-Type", "image/png")
             self.send_header("Content-Length", str(len(body)))
@@ -305,18 +429,22 @@ class Handler(BaseHTTPRequestHandler):
                 with self.server.lock:
                     if live("status").startswith("running"):
                         live("stop")
-                        self.server.owns_host = False; self.server.current = {}
+                        self.server.owns_host = False
+                        self.server.current = {}
+                        self.server.geometry = {}
                     if mode == "web":
                         output = build_web()
                         url = web_url(arguments, self.server.token)
                         self.server.current = {
                             "mode": mode, "surface": surface_id, "args": extra, "url": url}
+                        self.server.geometry = {}
                     else:
                         output = live("start", *arguments)
                         url = ""
                         self.server.owns_host = True
                         self.server.current = {
                             "mode": mode, "surface": surface_id, "args": extra}
+                        self.server.geometry = {}
                 self.send_json(200, {"output": output, **({"url": url} if url else {})})
             elif self.path == "/api/command":
                 self.send_json(200, {"output": self.run_command(request)})
@@ -330,11 +458,16 @@ class Handler(BaseHTTPRequestHandler):
         with self.server.lock:
             if name == "stop" and self.server.current.get("mode") == "web":
                 self.server.current = {}
+                self.server.geometry = {}
                 return "Web canvas stopped."
             if name in {"reload", "stop"}:
                 output = live(name)
                 if name == "stop":
-                    self.server.owns_host = False; self.server.current = {}
+                    self.server.owns_host = False
+                    self.server.current = {}
+                    self.server.geometry = {}
+                elif name == "reload":
+                    self.server.geometry = {}
                 return output
             if name == "key":
                 key = str(request.get("key", ""))
@@ -354,39 +487,72 @@ class Handler(BaseHTTPRequestHandler):
                 return live("drag", str(x1), str(y1), str(x2), str(y2))
         raise ToolError("Unsupported browser command.")
 
-    @staticmethod
-    def point(value: dict[str, object]) -> tuple[int, int]:
-        """Browser click -> the injected event's coordinate space.
+    def point(self, value: dict[str, object]) -> tuple[int, int]:
+        """Browser click -> injected Stage coordinates.
 
-        The rescale is a backing-store conversion, not a layout one: a live-host
-        capture of the 1180x820 window comes back at 3620x2516 on this Mac (the
-        3.068x Retina backing store), while the runtime bridge feeds positions
-        to Input.parse_input_event, which reads WINDOW pixels. Hence capture px
-        -> logical window px.
-
-        The 1180x820 written here is therefore the WINDOW's logical size, which
-        stage shapes do not change -- a shape changes content_scale_size, not
-        the window. Two known gaps, both pre-existing and neither reachable from
-        this side: --vp resizes the window and this constant does not follow it,
-        and past the flex cap the stage is letterboxed, so the capture is inset
-        within the window and a click needs that offset added as well. Every
-        interactive surface today runs at the identity shape in a default
-        window, where both corrections are zero. The layout editor is the first
-        surface that will be clicked at another shape, and is where the game
-        should start reporting its stage rect back instead of it being assumed.
+        Capture pixels are the viewport backing store (Retina is ~3x on this
+        Mac). The live host reports the logical window and the letterboxed
+        Stage rectangle on the runtime-bridge heartbeat; this maps capture px
+        through that rectangle into the space push_input(..., true) reads.
+        Missing, stale, or out-of-stage geometry fails instead of guessing.
         """
-        width, height = int(value.get("width", 1180)), int(value.get("height", 820))
-        if not 0 < width <= 32_768 or not 0 < height <= 32_768:
-            raise ToolError("Capture dimensions are invalid.")
-        return (
-            max(0, min(1180, round(int(value.get("x", 0)) * 1180 / width))),
-            max(0, min(820, round(int(value.get("y", 0)) * 820 / height))),
-        )
+        return convert_point(value, self.command_geometry(value))
+
+    def command_geometry(self, value: dict[str, object]) -> dict[str, object]:
+        last = self.server.geometry
+        if not last or "capture" not in last:
+            raise ToolError("Stage geometry is unavailable.")
+        width, height = int(value.get("width", 0)), int(value.get("height", 0))
+        capture = last["capture"]
+        if (width, height) != capture:
+            raise ToolError("Stage geometry is stale.")
+        current = live_geometry()
+        if not geometry_unchanged(last, current):
+            raise ToolError("Stage geometry is stale.")
+        return current
 
 def check() -> None:
     assert len(BY_ID) == len(SURFACES)
     assert not hasattr(BaseHTTPRequestHandler, "run_command")
-    assert Handler.point({"x": 3130, "y": 310, "width": 3620, "height": 2516}) == (1020, 101)
+    retina = {"x": 3130, "y": 310, "width": 3620, "height": 2516}
+    assert convert_point(retina, IDENTITY_GEOMETRY) == (1020, 101)
+    assert convert_point(
+        {"x": 1180, "y": 410, "width": 2360, "height": 1640}, IDENTITY_GEOMETRY
+    ) == (590, 205)
+    resized = {
+        "window_size": {"x": 2360, "y": 1640},
+        "stage_size": {"x": 1180, "y": 820},
+        "stage_rect": {"x": 0, "y": 0, "w": 2360, "h": 1640},
+    }
+    assert convert_point(
+        {"x": 1180, "y": 820, "width": 2360, "height": 1640}, resized) == (590, 410)
+    letterboxed = {
+        "window_size": {"x": 800, "y": 800},
+        "stage_size": {"x": 918, "y": 1180},
+        "stage_rect": {"x": 89.0, "y": 0.0, "w": 622.0, "h": 800.0},
+    }
+    assert convert_point(
+        {"x": 311, "y": 400, "width": 622, "height": 800}, letterboxed) == (459, 590)
+    assert convert_point(
+        {"x": 400, "y": 400, "width": 800, "height": 800}, letterboxed) == (459, 590)
+    try:
+        convert_point({"x": 2, "y": 400, "width": 800, "height": 800}, letterboxed)
+    except ToolError as exc:
+        assert "outside the Stage" in str(exc)
+    else:
+        raise AssertionError("letterbox bar was accepted")
+    try:
+        convert_point(retina, letterboxed)
+    except ToolError as exc:
+        assert "stale" in str(exc)
+    else:
+        raise AssertionError("mismatched capture was guessed")
+    try:
+        convert_point(retina, {})
+    except ToolError as exc:
+        assert "unavailable" in str(exc)
+    else:
+        raise AssertionError("missing geometry was guessed")
     assert web_url(["--enemies", "--bench=duskfang"], "secret") == (
         "/web/index.html?token=secret&arg=--enemies&arg=--bench%3Dduskfang")
     assert all(marker in PAGE for marker in (
