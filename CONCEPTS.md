@@ -64,6 +64,29 @@ A development-only live performance readout used to spot and reproduce likely
 problems. Its numbers guide investigation but are never release evidence; an
 Evidence Harness performs the release measurement.
 
+## The release
+
+### RC bar
+The single checkable document a release-candidate build must clear, composing
+the rubric sign-offs, the performance floor, the on-device QA and save-integrity
+protocols, the beta round, and the compliance checklist into one falsifiable
+gate. The bar is the measure; the release gate is the act of holding one named
+build against it. A bar instantiates per platform wave — the same pillars,
+that wave's floor devices.
+
+### Twin build
+A development-signed build of the exact release-candidate commit and the exact
+release export configuration, differing from the RC artifact only in signing
+identity. It exists because distribution signing denies evidence access (the
+app container, byte-level save fingerprints); it is not a Dev Review build —
+it carries no `dev_tools` — and evidence captured on it must state that it was.
+
+### RC signature receipt
+The signed comment that pronounces a build the release candidate, binding the
+exact product head, the artifact hash, and every pillar's evidence address. A
+verifier passing proves the evidence clears the gate; the signature is the
+distinct human approval — the two are never merged.
+
 ## Card surface
 
 ### Recipe
