@@ -706,9 +706,14 @@ func _show_title() -> void:
 		{"id": "settings", "label": Locale.active.t("ui.menu.settings"), "quiet": true},
 		{"id": "credits", "label": Locale.active.t("ui.menu.credits"), "quiet": true},
 	])
+	if DevTools.available():
+		var dev_label: String = _dev_console_label()
+		if not dev_label.is_empty():
+			choices.append({"id": "dev", "label": dev_label, "quiet": true})
 	# Desktop only — web has no process to leave.
 	if not OS.has_feature("web"):
 		choices.append({"id": "quit", "label": Locale.active.t("ui.menu.quit"), "quiet": true})
+
 	var title_stats: String = Locale.active.t("ui.brand.stats", {
 		"runs": int(float(str(_vigil.deeds.get("runs", 0)))),
 		"wins": int(float(str(_vigil.deeds.get("wins", 0)))),
@@ -739,6 +744,7 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 		"help": _show_help()
 		"settings": _show_settings()
 		"credits": _show_credits()
+		"dev": _show_dev_console()
 		"quit": _quit_game()
 
 
@@ -810,6 +816,20 @@ func _show_credits() -> void:
 	var screen: CreditsScreen = CreditsScreen.new(_shape, _sfx_bus)
 	screen.closed.connect(_close_overlay)
 	_show_overlay(screen)
+
+
+func _dev_console_label() -> String:
+	var script: GDScript = load(DevTools.CONSOLE) as GDScript
+	return str(script.call("entry_label")) if script != null else ""
+
+
+func _show_dev_console() -> void:
+	var script: GDScript = load(DevTools.CONSOLE) as GDScript
+	if not DevTools.available() or script == null:
+		return
+	var screen: Control = script.new(self, _shape, _sfx_bus)
+	screen.connect("closed", _close_overlay)
+	_show_overlay(screen, true)
 
 
 func _show_settings(focus_language: bool = false) -> void:
@@ -1088,6 +1108,10 @@ func _show_run_menu() -> void:
 	menu.settings_requested.connect(func() -> void:
 		_close_overlay()
 		_show_settings()
+	)
+	menu.dev_requested.connect(func() -> void:
+		_close_overlay()
+		_show_dev_console()
 	)
 	menu.title_requested.connect(func() -> void:
 		_close_overlay()

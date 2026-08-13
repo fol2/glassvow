@@ -4,6 +4,7 @@ extends Control
 
 signal help_requested
 signal settings_requested
+signal dev_requested
 signal title_requested
 signal abandon_requested
 signal quit_requested
@@ -52,6 +53,13 @@ func _init(stage_shape: StringName, terminal_locked: bool = false,
 	settings.pressed.connect(_request.bind(&"settings"))
 	actions.add_child(settings)
 
+	if DevTools.available():
+		var script: GDScript = load(DevTools.CONSOLE) as GDScript
+		if script != null:
+			var dev: Button = _button(str(script.call("entry_label")))
+			dev.pressed.connect(_request.bind(&"dev"))
+			actions.add_child(dev)
+
 	var title: Button = _button(Locale.active.t("ui.menu.returnTitle"))
 	title.pressed.connect(_request.bind(&"title"))
 	actions.add_child(title)
@@ -98,6 +106,8 @@ func _request(action: StringName) -> void:
 			help_requested.emit()
 		&"settings":
 			settings_requested.emit()
+		&"dev":
+			dev_requested.emit()
 		&"title":
 			title_requested.emit()
 		&"abandon":
