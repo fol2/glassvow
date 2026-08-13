@@ -57,6 +57,7 @@ static func _check_valuation(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("balance pilot: Dusk eclipseSlash score %s should beat strike %s" % [dusk_eclipse, dusk_strike])
 	if Pilot.VERSION != "p7-d2-v1":
 		fails.append("balance pilot: VERSION expected p7-d2-v1 got %s" % Pilot.VERSION)
+	_check_grammar(content, fails)
 	var dusk_run: RunState = RunState.new_run(content, 7, "best-card")
 	var strongest: CardInst = Pilot.best_card(dusk_run, content, dusk_run.player.deck)
 	if strongest == null or String(strongest.id) == "strike":
@@ -79,8 +80,39 @@ static func _check_valuation(content: ContentDB, fails: Array[String]) -> void:
 	var worst: CardInst = Pilot.worst_card(dusk_run, content, dusk_run.player.deck)
 	var worst_def: Dictionary = content.cards.get(String(worst.id), {})
 	var wscore: float = Pilot.card_score(worst_def, dusk_run.aspect, String(worst.id))
-	if remove_score != 8.5 - wscore:
+	if remove_score != Pilot.remove_value(wscore) or remove_score != 8.5 - wscore:
 		fails.append("balance sim: pickRemove must be 8.5 - worst, got %s vs %s" %
 			[remove_score, 8.5 - wscore])
 	print("event-score library[0]=%s [1]=%s  forgottenShrine[0]=%s [1]=%s" %
 		[lib0, lib1, remove_score, gold_score])
+
+
+static func _check_grammar(content: ContentDB, fails: Array[String]) -> void:
+	Pilot.apply_policy({})
+	if not Pilot.wants_shop_remove(3, 6.5) or Pilot.wants_shop_remove(3, 6.6) \
+			or Pilot.wants_shop_remove(2, 0.0):
+		fails.append("balance pilot: default shop remove must be copies>=3 and wscore<=6.5")
+	if Pilot.remove_value(2.5) != 6.0:
+		fails.append("balance pilot: default pickRemove must be 8.5 - wscore")
+	var run_state: RunState = RunState.new_run(content, 7, "t1a")
+	var game: GlassvowGame = GlassvowGame.new(content, run_state)
+	var before: int = game.run.player.deck.size()
+	Sim._claim_rewards(game, {"gold": 0, "cards": ["strike"]})
+	if game.run.player.deck.size() != before + 1:
+		fails.append("balance sim: default decline must take strike")
+	Pilot.apply_policy({"cardDecline": 100.0})
+	run_state = RunState.new_run(content, 7, "t1a-high")
+	game = GlassvowGame.new(content, run_state)
+	before = game.run.player.deck.size()
+	Sim._claim_rewards(game, {"gold": 0, "cards": ["strike"]})
+	if game.run.player.deck.size() != before:
+		fails.append("balance sim: high cardDecline must skip strike")
+	Pilot.apply_policy({"removalAppetite": 20.0})
+	if not Pilot.wants_shop_remove(3, 18.0) or Pilot.wants_shop_remove(3, 18.1):
+		fails.append("balance pilot: shop ceiling must track removalAppetite - 2")
+	if Pilot.remove_value(2.5) != 17.5:
+		fails.append("balance pilot: pickRemove must track removalAppetite")
+	Pilot.apply_policy({"removalMinCopies": 1})
+	if not Pilot.wants_shop_remove(1, 6.5) or Pilot.wants_shop_remove(1, 6.6):
+		fails.append("balance pilot: removalMinCopies must open singleton shop remove")
+	Pilot.apply_policy({})

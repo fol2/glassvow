@@ -30,7 +30,7 @@ func _initialize() -> void:
 	for aspect: String in aspects:
 		for offset: int in range(int(float(str(opts["runs"])))):
 			rows.append(simulate(content, aspect, int(float(str(opts["seed0"]))) + offset,
-				int(float(str(opts["vow"]))), ban))
+				int(float(str(opts["vow"]))), ban, _policy(opts)))
 	var report: Dictionary = Metrics.report(rows, _manifest(opts, overlay))
 	var text: String = JSON.stringify(report)
 	if str(opts["out"]).is_empty():
@@ -45,8 +45,9 @@ func _initialize() -> void:
 		print(JSON.stringify({"calibration": report["calibration"], "summary": report["summary"]}))
 	quit(0)
 static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0,
-		ban: PackedStringArray = PackedStringArray()) -> Dictionary:
+		ban: PackedStringArray = PackedStringArray(), policy: Dictionary = {}) -> Dictionary:
 	Pilot.set_ban(ban)
+	Pilot.apply_policy(policy)
 	var aspect_index: int = 1 if aspect == "ashwarden" else 0
 	var profile: Dictionary = {
 		"aspect": aspect_index, "vow": vow, "reveals": content.reveal_ids.duplicate(),
@@ -127,7 +128,9 @@ static func _claim_rewards(game: GlassvowGame, rewards: Dictionary) -> void:
 	game.run.stats["goldEarned"] = int(float(str(game.run.stats.get("goldEarned", 0)))) + gold
 	var card: String = Pilot.choose_card(rewards.get("cards", []), game.content, game.run.aspect)
 	if not card.is_empty() and not Pilot.is_banned(card):
-		game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(card), false))
+		var score: float = Pilot.card_score(game.content.cards.get(card, {}), game.run.aspect, card)
+		if Pilot.accepts_card_reward(score):
+			game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(card), false))
 	var potion_v: Variant = rewards.get("potion")
 	if potion_v != null and not Pilot.is_banned(str(potion_v)):
 		var slot: int = game.run.player.potions.find("")
@@ -234,7 +237,7 @@ static func _event_op_score(game: GlassvowGame, op_v: Variant) -> float:
 			return 0.0
 		var wscore: float = Pilot.card_score(game.content.cards.get(String(worst.id), {}),
 			game.run.aspect, String(worst.id))
-		return 8.5 - wscore
+		return Pilot.remove_value(wscore)
 	if op.has("pickCard"):
 		return _expected_card_max(game, int(float(str(op["pickCard"]))))
 	if op.get("pickUpgrade", false):
@@ -379,7 +382,9 @@ static func outcome_digest(row: Dictionary) -> String:
 	return JSON.stringify(row).sha256_text()
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "",
-		"out": "", "ban": ""}
+		"out": "", "ban": "", "cardDecline": Pilot.CARD_DECLINE_DEFAULT,
+		"removalAppetite": Pilot.REMOVAL_APPETITE_DEFAULT,
+		"removalMinCopies": Pilot.REMOVAL_MIN_COPIES_DEFAULT}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}
@@ -387,15 +392,22 @@ static func _options(args: PackedStringArray) -> Dictionary:
 		if not out.has(key):
 			return {"error": "unknown option --%s" % key}
 		out[key] = arg.substr(arg.find("=") + 1)
-	for key: String in ["runs", "seed0", "vow"]:
+	for key: String in ["runs", "seed0", "vow", "removalMinCopies"]:
 		if not str(out[key]).is_valid_int():
 			return {"error": "--%s must be an integer" % key}
 		out[key] = int(float(str(out[key])))
+	for key: String in ["cardDecline", "removalAppetite"]:
+		if not str(out[key]).is_valid_float():
+			return {"error": "--%s must be a number" % key}
+		out[key] = float(str(out[key]))
 	if str(out["aspect"]) not in ["all", "duskblade", "ashwarden"]:
 		return {"error": "--aspect must be all, duskblade or ashwarden"}
 	if int(float(str(out["runs"]))) < 1 or int(float(str(out["vow"]))) < 0 or int(float(str(out["vow"]))) > 5:
 		return {"error": "--runs must be positive and --vow must be 0..5"}
 	return out
+static func _policy(opts: Dictionary) -> Dictionary:
+	return {"cardDecline": opts["cardDecline"], "removalAppetite": opts["removalAppetite"],
+		"removalMinCopies": opts["removalMinCopies"]}
 static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
 	var git_out: Array = []
 	OS.execute("git", ["rev-parse", "HEAD"], git_out)
@@ -406,7 +418,8 @@ static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
 		"overlay": null if overlay.is_empty() else {"path": overlay,
 			"sha256": FileAccess.get_sha256(overlay)},
 		"pilot": Pilot.VERSION, "profile": PROFILE, "aspect": opts["aspect"],
-		"vow": opts["vow"], "ban": opts["ban"], "seeds": {"first": opts["seed0"],
+		"vow": opts["vow"], "ban": opts["ban"], "policy": _policy(opts),
+		"seeds": {"first": opts["seed0"],
 			"last": int(float(str(opts["seed0"]))) + int(float(str(opts["runs"]))) - 1,
 			"count": opts["runs"]},
 	}
