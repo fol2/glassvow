@@ -1,0 +1,2 @@
+# Keep diagnosis CSV/JSON out of the Godot resource index. CSV would otherwise
+# import as translations. Headless tools still read these files via FileAccess.

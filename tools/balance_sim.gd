@@ -23,9 +23,14 @@ func _initialize() -> void:
 	var aspects: Array[String] = [str(opts["aspect"])]
 	if aspects[0] == "all":
 		aspects = ["duskblade", "ashwarden"]
+	var ban: PackedStringArray = PackedStringArray()
+	for id: String in str(opts["ban"]).split(",", false):
+		if not id.is_empty():
+			ban.append(id)
 	for aspect: String in aspects:
 		for offset: int in range(int(float(str(opts["runs"])))):
-			rows.append(simulate(content, aspect, int(float(str(opts["seed0"]))) + offset, int(float(str(opts["vow"])))))
+			rows.append(simulate(content, aspect, int(float(str(opts["seed0"]))) + offset,
+				int(float(str(opts["vow"]))), ban))
 	var report: Dictionary = Metrics.report(rows, _manifest(opts, overlay))
 	var text: String = JSON.stringify(report)
 	if str(opts["out"]).is_empty():
@@ -39,42 +44,49 @@ func _initialize() -> void:
 		file.store_string(text + "\n")
 		print(JSON.stringify({"calibration": report["calibration"], "summary": report["summary"]}))
 	quit(0)
-static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0) -> Dictionary:
+static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0,
+		ban: PackedStringArray = PackedStringArray()) -> Dictionary:
+	Pilot.set_ban(ban)
 	var aspect_index: int = 1 if aspect == "ashwarden" else 0
 	var profile: Dictionary = {
 		"aspect": aspect_index, "vow": vow, "reveals": content.reveal_ids.duplicate(),
 		"unlocks": ["aspect2"], "quests": {}, "shards": [], "lamplighter": false,
 	}
 	var run: RunState = RunState.new_run(content, seed, "sim-%s-%d" % [aspect, seed], profile)
+	_apply_ban(run)
 	var game: GlassvowGame = GlassvowGame.new(content, run)
 	var fights: Array[Dictionary] = []
+	var economy: Array[Dictionary] = []
 	for _act: int in range(3):
 		var map: WorldMap = WorldMap.benchmark(run)
 		while not map.is_finished():
 			var i: int = Pilot.choose_node(map, run)
 			if not map.enter(i):
-				return _result(run, aspect, seed, "error", fights, "unreachable node")
+				return _result(run, aspect, seed, "error", fights, "unreachable node", economy)
 			var node: MapNode = map.current()
 			_enter_node(run, node)
 			if node.is_combat():
 				var fight: Dictionary = _fight(game, node)
 				fights.append(fight)
 				if fight["result"] != "win":
-					return _result(run, aspect, seed, "stall" if fight["result"] == "stall" else "loss", fights)
+					return _result(run, aspect, seed, "stall" if fight["result"] == "stall" else "loss",
+						fights, "", economy)
 				if node.type == "boss" and run.act == 2:
-					return _result(run, aspect, seed, "win", fights)
+					economy.append(_economy_row(run))
+					return _result(run, aspect, seed, "win", fights, "", economy)
 				_claim_rewards(game, game.gen_combat_rewards(node.combat_kind(), game.cb.affix))
 			else:
 				_resolve_safe_node(game, node)
 			map.clear_current()
 			if node.type == "boss":
-				var relic: String = Pilot.choose_relic(game.rewards.roll_boss_relics(run), content)
+				economy.append(_economy_row(run))
+				var relic: String = Pilot.choose_relic(game.rewards.roll_boss_relics(run), content, run.aspect)
 				if not relic.is_empty():
 					game.rewards.gain_relic(run, relic)
 				run.boss_relic_act = run.act
 				run.start_next_act(content)
 				break
-	return _result(run, aspect, seed, "error", fights, "run route exhausted")
+	return _result(run, aspect, seed, "error", fights, "run route exhausted", economy)
 static func _fight(game: GlassvowGame, node: MapNode) -> Dictionary:
 	var enemies: Array[String] = node.enemies.duplicate()
 	if enemies.is_empty():
@@ -114,15 +126,15 @@ static func _claim_rewards(game: GlassvowGame, rewards: Dictionary) -> void:
 	game.run.player.gold += gold
 	game.run.stats["goldEarned"] = int(float(str(game.run.stats.get("goldEarned", 0)))) + gold
 	var card: String = Pilot.choose_card(rewards.get("cards", []), game.content, game.run.aspect)
-	if not card.is_empty():
+	if not card.is_empty() and not Pilot.is_banned(card):
 		game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(card), false))
 	var potion_v: Variant = rewards.get("potion")
-	if potion_v != null:
+	if potion_v != null and not Pilot.is_banned(str(potion_v)):
 		var slot: int = game.run.player.potions.find("")
 		if slot >= 0:
 			game.run.player.potions[slot] = str(potion_v)
 	var relic_v: Variant = rewards.get("relic")
-	if relic_v != null:
+	if relic_v != null and not Pilot.is_banned(str(relic_v)):
 		game.rewards.gain_relic(game.run, str(relic_v))
 static func _resolve_safe_node(game: GlassvowGame, node: MapNode) -> void:
 	match node.type:
@@ -135,7 +147,7 @@ static func _resolve_safe_node(game: GlassvowGame, node: MapNode) -> void:
 				_upgrade_best(game)
 		"event": _resolve_event(game)
 		"shop": _resolve_shop(game)
-		"treasure": game.rewards.claim_treasure(game.run)
+		"treasure": _claim_treasure(game)
 static func _upgrade_best(game: GlassvowGame) -> void:
 	var best: CardInst = null
 	var best_score: float = -INF
@@ -146,7 +158,8 @@ static func _upgrade_best(game: GlassvowGame) -> void:
 		var upgraded: Dictionary = d.duplicate()
 		var up: Dictionary = d["up"]
 		upgraded.merge(up, true)
-		var score: float = Pilot.card_score(upgraded, game.run.aspect) - Pilot.card_score(d, game.run.aspect)
+		var score: float = Pilot.card_score(upgraded, game.run.aspect, String(card.id)) \
+			- Pilot.card_score(d, game.run.aspect, String(card.id))
 		if score > best_score:
 			best = card
 			best_score = score
@@ -176,33 +189,73 @@ static func _resolve_event(game: GlassvowGame) -> void:
 			game.run.player.deck.append(CardInst.new(game.run.next_uid(), source.id, source.up))
 static func _resolve_shop(game: GlassvowGame) -> void:
 	var stock: Dictionary = game.rewards.gen_shop(game.run)
-	for category: String in ["relics", "cards", "potions"]:
-		for row_v: Variant in stock.get(category, []):
-			var row: Dictionary = row_v
-			var price: int = int(float(str(row["price"])))
-			if game.run.player.gold < price or (category == "potions" and not game.run.player.potions.has("")):
-				continue
-			game.run.player.gold -= price
-			var id: String = str(row["id"])
-			if category == "relics":
-				game.rewards.gain_relic(game.run, id)
-			elif category == "cards":
-				game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(id), false))
-			else:
-				game.run.player.potions[game.run.player.potions.find("")] = id
-			return # One deliberate purchase keeps the policy stable and legible.
+	var buys: Array[Dictionary] = Pilot.choose_shop(stock, game.run, game.content)
+	for buy: Dictionary in buys:
+		var price: int = int(float(str(buy["price"])))
+		if game.run.player.gold < price:
+			continue
+		game.run.player.gold -= price
+		var category: String = str(buy["category"])
+		var id: String = str(buy["id"])
+		if category == "relics":
+			game.rewards.gain_relic(game.run, id)
+		elif category == "cards":
+			game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(id), false))
+		elif category == "potions":
+			var slot: int = game.run.player.potions.find("")
+			if slot >= 0:
+				game.run.player.potions[slot] = id
+		elif category == "remove":
+			var worst: CardInst = Pilot.worst_card(game.run, game.content, game.run.player.deck)
+			if worst != null:
+				game.run.player.deck.erase(worst)
+static func _claim_treasure(game: GlassvowGame) -> void:
+	var before: Array[String] = game.run.player.relics.duplicate()
+	game.rewards.claim_treasure(game.run)
+	for id: String in game.run.player.relics:
+		if not before.has(id) and Pilot.is_banned(id):
+			game.run.player.relics.erase(id)
+			if id == "sweetRoot":
+				game.run.player.max_hp = maxi(1, game.run.player.max_hp - 8)
+				game.run.player.hp = mini(game.run.player.hp, game.run.player.max_hp)
+			break
+static func _apply_ban(run: RunState) -> void:
+	if Pilot.banned.is_empty():
+		return
+	var kept_deck: Array[CardInst] = []
+	for card: CardInst in run.player.deck:
+		if not Pilot.is_banned(String(card.id)):
+			kept_deck.append(card)
+	run.player.deck.clear()
+	for card: CardInst in kept_deck:
+		run.player.deck.append(card)
+	var kept_relics: Array[String] = []
+	for id: String in run.player.relics:
+		if not Pilot.is_banned(id):
+			kept_relics.append(id)
+	run.player.relics.clear()
+	for id: String in kept_relics:
+		run.player.relics.append(id)
+static func _economy_row(run: RunState) -> Dictionary:
+	return {"act": run.act + 1, "gold": run.player.gold, "hp": run.player.hp,
+		"maxHp": run.player.max_hp, "deck": run.player.deck.size()}
 static func _result(run: RunState, aspect: String, seed: int, outcome: String,
-		fights: Array[Dictionary], error: String = "") -> Dictionary:
+		fights: Array[Dictionary], error: String, economy: Array[Dictionary]) -> Dictionary:
+	var deck_ids: Array[String] = []
+	for card: CardInst in run.player.deck:
+		deck_ids.append(String(card.id))
 	return {
 		"seed": seed, "aspect": aspect, "vow": run.vow, "outcome": outcome,
 		"error": error, "hp": run.player.hp, "maxHp": run.player.max_hp,
 		"gold": run.player.gold, "deck": run.player.deck.size(), "rng": run.rng_state(),
-		"fights": fights,
+		"fights": fights, "relics": run.player.relics.duplicate(), "deckIds": deck_ids,
+		"goldEarned": int(float(str(run.stats.get("goldEarned", 0)))), "economy": economy,
 	}
 static func outcome_digest(row: Dictionary) -> String:
 	return JSON.stringify(row).sha256_text()
 static func _options(args: PackedStringArray) -> Dictionary:
-	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "", "out": ""}
+	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "",
+		"out": "", "ban": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}
@@ -229,7 +282,7 @@ static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
 		"overlay": null if overlay.is_empty() else {"path": overlay,
 			"sha256": FileAccess.get_sha256(overlay)},
 		"pilot": Pilot.VERSION, "profile": PROFILE, "aspect": opts["aspect"],
-		"vow": opts["vow"], "seeds": {"first": opts["seed0"],
+		"vow": opts["vow"], "ban": opts["ban"], "seeds": {"first": opts["seed0"],
 			"last": int(float(str(opts["seed0"]))) + int(float(str(opts["runs"]))) - 1,
 			"count": opts["runs"]},
 	}
