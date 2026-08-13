@@ -101,6 +101,9 @@ release-candidate gate.
 
 ## 6. Release Gates & Stop Conditions
 
+**Glassvow's release-candidate gate:** `docs/rc-bar.md` instantiates this section for the iOS
+release candidate — the nine-pillar bar that issue #108 checks a build against.
+
 **Milestone gates:** Before advancing, verify:
 - All acceptance tests green (parity fixtures, if applicable).
 - No regressions in previous milestones.
