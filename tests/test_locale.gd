@@ -69,6 +69,11 @@ const ZH_HANT_LATIN_PATH_ALLOWLIST: Array[String] = [
 	"content.status.thorns.desc", "content.status.venomous.desc",
 ]
 
+
+## This allowlist exists for future 顯著 or 著作 senses of 著; 裡 has no legitimate use.
+const ZH_HANT_BANNED_FORM_ALLOWLIST: Array[String] = []
+
+
 const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"ui.brand.title": "琉璃誓言",
 	"ui.vigil.title": "守夜",
@@ -486,6 +491,10 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 ## accidental blanks, and no English seed copy left behind except the named
 ## language label. Markers are compared as multisets, not mere containment, so
 ## duplicate parameters and paired rich-text tags cannot disappear unnoticed.
+##
+## The closing scan holds the house orthography (#177): it bans only the
+## non-house forms, because 著 stays legal in the 顯著 / 著作 senses, so the
+## ban can never run in the opposite direction.
 static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 	var en: Dictionary = _read_catalogue("res://locale/en.json", fails)
 	var zh: Dictionary = _read_catalogue("res://locale/zh-Hant.json", fails)
@@ -564,6 +573,17 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 	expected_latin.sort()
 	_check(fails, latin_paths == expected_latin,
 		"zh-Hant visible Latin allowlist drift: %s" % _first_paths(latin_paths))
+	var banned_form_paths: Array[String] = []
+	for key_v: Variant in zh_leaves:
+		var key: String = str(key_v)
+		var value: String = str(zh_leaves[key])
+		if value.contains("著") or value.contains("裡"):
+			banned_form_paths.append(key)
+	banned_form_paths.sort()
+	var expected_banned_forms: Array[String] = ZH_HANT_BANNED_FORM_ALLOWLIST.duplicate()
+	expected_banned_forms.sort()
+	_check(fails, banned_form_paths == expected_banned_forms,
+		"zh-Hant banned-form allowlist drift (replace 著 with 着 and 裡 with 裏): %s" % _first_paths(banned_form_paths))
 
 
 static func _keyword_term_contract(fails: Array[String], en: Dictionary,

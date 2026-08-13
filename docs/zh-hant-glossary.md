@@ -1,6 +1,6 @@
 # Traditional Chinese canonical glossary
 
-**Version:** 1.0
+**Version:** 1.1
 
 **Locale:** `zh-Hant`
 **Scope:** player-facing Glassvow copy
@@ -44,11 +44,28 @@ remain unchanged.
 | Shade | 影 / `{aspect}之影` | Use 影 in prose and the composed form for generated names. |
 | Phial | 藥瓶 | The consumable item class. |
 | Relic | 遺物 | Persistent run equipment. |
+| Mythic (card rarity) | 秘藏 | The tier above Rare. Chase content: Vow 3 only, never in shop, events or normal offer weights. |
+| Treasure (map node) | 寶箱 | The no-fight chest node and its screen; renamed from 寶藏 so 藏 reads as the rarity term. |
 | Rose Window | 玫瑰窗 | The Vigil's six-pane memorial and map. |
 | Shard | 碎片 | A completed Emberglass quest token. |
 | Unplayable | 無法打出 | A card that cannot be played from hand. |
 | Lamplighter | 掌燈人 | The keeper who offers gifts. |
 | Hollow Lamplighter | 空燈掌燈人 | The quest character on the Unlit Way. |
+
+## Register standard
+
+- House standard is Hong Kong 書面語.
+- Avoid the 口語 vs 書面 gap rather than treating it as regional variation; do not use Cantonese colloquial forms (嘅／唔／係咁／攞／乜嘢).
+- Proper nouns and fixed expressions are exempt.
+- Draft story copy in zh-Hant first, then translate it to English for review by native English readers.
+- This standard follows issue #177.
+
+## Orthographic variants
+
+- Use 着, not 著, for aspect and verb-complement uses; 著 remains legitimate in 顯著、著作 and 著名.
+- Use 裏, not 裡, for 心裏 and 裏面.
+- `tests/test_locale.gd` mechanically enforces these forms; document exceptions on `ZH_HANT_BANNED_FORM_ALLOWLIST` with a comment.
+- A character scan cannot see 用語, measure words or rhythm; a green gate settles only the cheapest slice.
 
 ## Retained technical and proper names
 
