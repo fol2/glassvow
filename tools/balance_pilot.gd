@@ -5,6 +5,14 @@ extends RefCounted
 ## Potions heal at 20 missing HP, block lethal intent, and spend offensive stock in elite/boss fights.
 const VERSION: String = "p7-d2-v1"
 const SHOP_MIN_RATIO: float = 0.06
+## T1a: take every offered card. Finite so CLI/JSON round-trip; no catalogue score is this low.
+const CARD_DECLINE_DEFAULT: float = -1.0e9
+## T1b: shop-remove numerator and event pickRemove share this intercept (default 8.5).
+const REMOVAL_APPETITE_DEFAULT: float = 8.5
+## T1b: min copies of the worst card before a shop will remove it (default 3).
+const REMOVAL_MIN_COPIES_DEFAULT: int = 3
+## Shop eligibility ceiling is appetite minus this; 8.5 - 2.0 = 6.5. Not a sampled knob.
+const REMOVAL_SHOP_MARGIN: float = 2.0
 const RELIC_SCORE: Dictionary = {
 	"hollowCrown": 90, "frozenCore": 70, "crownOfCinders": 68, "verdantBranch": 62,
 	"crownOfTheHearth": 60, "shatterersCrown": 58, "crownOfTithes": 55, "warFetish": 48,
@@ -15,6 +23,22 @@ const RELIC_SCORE: Dictionary = {
 	"sweetRoot": 18, "prismCharm": 16, "bellOfEndings": 16, "thiefOfWicks": 14,
 }
 static var banned: Dictionary = {}
+static var card_decline_threshold: float = CARD_DECLINE_DEFAULT
+static var removal_appetite: float = REMOVAL_APPETITE_DEFAULT
+static var removal_min_copies: int = REMOVAL_MIN_COPIES_DEFAULT
+static func apply_policy(policy: Dictionary) -> void:
+	card_decline_threshold = float(str(policy.get("cardDecline", CARD_DECLINE_DEFAULT)))
+	removal_appetite = float(str(policy.get("removalAppetite", REMOVAL_APPETITE_DEFAULT)))
+	removal_min_copies = int(float(str(policy.get("removalMinCopies", REMOVAL_MIN_COPIES_DEFAULT))))
+static func policy_snapshot() -> Dictionary:
+	return {"cardDecline": card_decline_threshold, "removalAppetite": removal_appetite,
+		"removalMinCopies": removal_min_copies}
+static func accepts_card_reward(score: float) -> bool:
+	return score >= card_decline_threshold
+static func remove_value(wscore: float) -> float:
+	return removal_appetite - wscore
+static func wants_shop_remove(copies: int, wscore: float) -> bool:
+	return copies >= removal_min_copies and wscore <= removal_appetite - REMOVAL_SHOP_MARGIN
 static func set_ban(ids: PackedStringArray) -> void:
 	banned.clear()
 	for id: String in ids:
@@ -400,8 +424,8 @@ static func choose_shop(stock: Dictionary, run: RunState, content: ContentDB) ->
 						copies += 1
 				var worst_def: Dictionary = content.cards.get(String(worst.id), {})
 				var wscore: float = card_score(worst_def, run.aspect, String(worst.id))
-				if copies >= 3 and wscore <= 6.5:
-					var remove_ratio: float = (8.5 - wscore) / float(maxi(remove_cost, 1))
+				if wants_shop_remove(copies, wscore):
+					var remove_ratio: float = remove_value(wscore) / float(maxi(remove_cost, 1))
 					if remove_ratio > best_ratio:
 						best = {"category": "remove", "id": String(worst.id),
 							"price": remove_cost, "uid": worst.uid}
