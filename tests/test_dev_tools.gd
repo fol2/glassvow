@@ -11,6 +11,7 @@ static func run(fails: Array[String]) -> void:
 		return
 	_parse(boot, fails)
 	_isolation(fails)
+	_vigil_write(fails)
 	_entries(fails)
 	_console(fails)
 
@@ -66,6 +67,39 @@ static func _isolation(fails: Array[String]) -> void:
 	kernel.clear_profile()
 
 
+static func _vigil_write(fails: Array[String]) -> void:
+	var before_vigil: String = _snap(SaveService.VIGIL_PATH)
+	var previous_locale: Locale = Locale.active
+	var previous_preferences: Preferences = Preferences.active
+	Preferences.active = Preferences.new()
+	Preferences.active.language = "en"
+	Locale.active = Locale.new(Locale.CODE_EN)
+	var host: Main = _bare_main()
+	var ref: ScenarioReference = ScenarioReference.new()
+	ref.load_from({
+		"id": "custom", "revision": 1, "build": "t", "seed": 18403,
+		"locale": "en", "shape": "pad-landscape", "overrides": {},
+	})
+	if not host.apply_dev_scenario(ref):
+		fails.append("dev tools: apply_dev_scenario failed: %s" % host.last_dev_error)
+	elif host._vigil_save_path != ScenarioKernel.VIGIL_PATH:
+		fails.append("dev tools: apply_dev_scenario did not bind the kernel Vigil path")
+	else:
+		host._vigil.whispers = 99
+		if not host._store_vigil():
+			fails.append("dev tools: redirected Vigil write failed")
+		elif _snap(SaveService.VIGIL_PATH) != before_vigil:
+			fails.append("dev tools: Console-routed Vigil write touched the player Vigil")
+		else:
+			var stored: VigilState = SaveService.load_vigil(host._vigil_save_path)
+			if stored.whispers != 99:
+				fails.append("dev tools: redirected Vigil write missed the Development profile")
+	ScenarioKernel.new(host.content).clear_profile()
+	host.free()
+	Locale.active = previous_locale
+	Preferences.active = previous_preferences
+
+
 static func _arg(payload: Dictionary) -> PackedStringArray:
 	return PackedStringArray(["--scenario=%s" % JSON.stringify(payload)])
 
@@ -112,6 +146,10 @@ static func _console(fails: Array[String]) -> void:
 			fails.append("dev tools: %s banner missing" % code)
 		if not _has_text(console, "custom@1"):
 			fails.append("dev tools: %s catalogue row missing" % code)
+		if not _has_text(console, str(bundle.get("custom", "")).to_upper()):
+			fails.append("dev tools: %s custom header missing" % code)
+		if not _has_text(console, str(bundle.get("seed", ""))):
+			fails.append("dev tools: %s seed field missing" % code)
 		console.emit_signal("closed")
 		console.free()
 		Locale.active = previous

@@ -52,8 +52,10 @@ var _embark_vow: int = 0
 var _run_over: bool = false
 var _bench_fight: bool = false
 var _run_save_path: String = SaveService.RUN_PATH
+var _vigil_save_path: String = SaveService.VIGIL_PATH
 ## Set when the optional Development boot handled this launch.
 var _dev_claimed: bool = false
+var last_dev_error: String = ""
 var _forced_seed: int = -1  # --seed=N: reproducible shots for layout diffing
 ## The virtual stage this window is composed against. A 1180x820 window resolves
 ## to `pad-landscape` at zero flex, so the default boot is identical to the port
@@ -126,7 +128,7 @@ func _rebuild_active_route() -> void:
 func _ready() -> void:
 	print("glassvow boot " + str(Engine.get_version_info()["string"]))
 	content = ContentDB.load_full()
-	_vigil = SaveService.load_vigil()
+	_vigil = _load_vigil()
 	Preferences.active = Preferences.read_from_disk()
 	# Locale follows Preferences: main publishes the live handle; labs keep the
 	# default English stand-in (docs/p7-locale-design.md §3). Language comes
@@ -467,6 +469,14 @@ func _store_run() -> bool:
 	return SaveService.store(game.run, _run_save_path)
 
 
+func _store_vigil() -> bool:
+	return SaveService.store_vigil(_vigil, _vigil_save_path)
+
+
+func _load_vigil() -> VigilState:
+	return SaveService.load_vigil(_vigil_save_path)
+
+
 ## Window close is a clean quit: with `config/auto_accept_quit=false` the engine
 ## hands us NOTIFICATION_WM_CLOSE_REQUEST instead of exiting itself. No save
 ## flush — durable at every boundary; the interception is the single path.
@@ -789,7 +799,7 @@ func _on_begin_anew(id: String) -> void:
 		return
 	game = GlassvowGame.new(content, saved)
 	game.run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
-	if not _vigil.commit_run(game.run, "abandon", content) or not SaveService.store_vigil(_vigil):
+	if not _vigil.commit_run(game.run, "abandon", content) or not _store_vigil():
 		_show_save_error("ui.persistence.detail.currentPilgrimageClose")
 		return
 	if not SaveService.clear_run(game.run.run_id):
@@ -888,10 +898,10 @@ func _on_reset_choice(id: String) -> void:
 		_close_overlay()
 		return
 	SaveService.clear()
-	SaveService.clear_vigil()
+	SaveService.clear_vigil(_vigil_save_path)
 	game = null
 	_map = null
-	_vigil = SaveService.load_vigil()
+	_vigil = _load_vigil()
 	_show_title()
 
 
@@ -943,15 +953,20 @@ func _new_run(profile: Dictionary = {}) -> void:
 ## Route a Development Scenario onto the kernel's default profile. Fail-closed.
 func apply_dev_scenario(ref: ScenarioReference) -> bool:
 	_dev_claimed = true
+	last_dev_error = ""
 	if ref == null or not ref.error.is_empty():
-		push_error(ref.error if ref != null else "Scenario reference is unreadable")
+		last_dev_error = ref.error if ref != null else "Scenario reference is unreadable"
+		push_error(last_dev_error)
 		return false
 	var kernel: ScenarioKernel = ScenarioKernel.new(content)
 	var run: RunState = kernel.construct(ref)
 	if run == null:
+		last_dev_error = kernel.last_error
 		push_error(kernel.last_error)
 		return false
 	_run_save_path = kernel.run_path
+	_vigil_save_path = kernel.vigil_path
+	_vigil = _load_vigil()
 	_continue_run(run)
 	return true
 
@@ -1600,7 +1615,7 @@ func _prepare_encounter(n: MapNode) -> void:
 func _resume_pending_combat() -> void:
 	if game.run.pending_quest_id == "ownShade" and _vigil.last_fall != null:
 		_vigil.last_fall = null
-		if not SaveService.store_vigil(_vigil):
+		if not _store_vigil():
 			_show_save_error("ui.persistence.detail.standingBequestClear")
 			return
 	var enemies: Array[String] = []
@@ -2112,13 +2127,13 @@ func _on_terminal_commit(_id: String) -> void:
 	var before_unlocks: Array = _vigil.unlocks.duplicate()
 	var before_quests: Dictionary = _vigil.quests.duplicate(true)
 	var before_whispers: int = _vigil.whispers
-	if not _vigil.commit_run(game.run, outcome, content) or not SaveService.store_vigil(_vigil):
+	if not _vigil.commit_run(game.run, outcome, content) or not _store_vigil():
 		_show_save_error("ui.persistence.detail.vigilRecord")
 		return
 	if outcome != "win":
 		var run_id: String = game.run.run_id
 		if SaveService.clear_run(run_id):
-			_vigil = SaveService.load_vigil()
+			_vigil = _load_vigil()
 			game = null
 			_show_title()
 		else:
@@ -2269,7 +2284,7 @@ func _finish_dawn() -> void:
 			return
 	var run_id: String = game.run.run_id
 	if SaveService.clear_run(run_id):
-		_vigil = SaveService.load_vigil()
+		_vigil = _load_vigil()
 		game = null
 		_show_title()
 	else:
@@ -2319,7 +2334,7 @@ func _on_monument_choice(id: String) -> void:
 		_show_save_error("ui.persistence.detail.shadeDuelHold")
 		return
 	_vigil.last_fall = null
-	if SaveService.store_vigil(_vigil):
+	if _store_vigil():
 		_resume_pending_combat()
 	else:
 		_show_save_error("ui.persistence.detail.standingBequestClear")

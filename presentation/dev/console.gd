@@ -5,6 +5,11 @@ signal closed
 
 const LOCALE_DIR: String = "res://presentation/dev/locale/"
 const WIDTH: float = 420.0
+const INT_OV: PackedStringArray = ["aspect", "vow", "act", "hp", "max_hp", "gold"]
+const LIST_OV: PackedStringArray = [
+	"enemies", "potions", "add_cards", "remove_cards", "upgrade_cards",
+	"add_relics", "remove_relics",
+]
 
 var shape: StringName
 var _host: Object
@@ -15,6 +20,8 @@ var _panel: PanelContainer
 var _scroll: ScrollContainer
 var _field: TextEdit
 var _status: Label
+var _editors: Dictionary = {}
+var _painting: bool = false
 
 
 static func entry_label() -> String:
@@ -88,6 +95,12 @@ func _build() -> void:
 		var id: String = str(id_v)
 		var rev: int = int(float(str(ScenarioReference.CATALOGUE[id_v])))
 		body.add_child(_btn("%s@%d" % [id, rev], _pick.bind(id, rev)))
+	body.add_child(_label(_t("custom").to_upper(), 13, RunStyle.GOLD, false))
+	body.add_child(_row("seed", _edit(str(_ref.seed))))
+	body.add_child(_row("locale", _choice(ScenarioReference.LOCALES, _ref.locale)))
+	body.add_child(_row("shape", _choice(_shape_names(), _ref.shape)))
+	for key: String in ScenarioReference.OVERRIDE_KEYS:
+		body.add_child(_row(key, _edit("")))
 	body.add_child(_label(_t("reference").to_upper(), 13, RunStyle.GOLD, false))
 	_field = TextEdit.new()
 	_field.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
@@ -107,6 +120,127 @@ func _build() -> void:
 	body.add_child(_btn(_t("restart"), _restart))
 	body.add_child(_btn(_t("clear"), _clear))
 	column.add_child(_btn(_t("close"), _close))
+
+
+func _row(key: String, widget: Control) -> VBoxContainer:
+	var col: VBoxContainer = VBoxContainer.new()
+	col.add_theme_constant_override("separation", 4)
+	col.add_child(_label(_t(key), 13, RunStyle.GOLD, false))
+	widget.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	widget.custom_minimum_size.y = RunStyle.hit_floor(44.0)
+	_editors[key] = widget
+	col.add_child(widget)
+	return col
+
+
+func _edit(text: String) -> LineEdit:
+	var box: LineEdit = LineEdit.new()
+	box.text = text
+	box.text_changed.connect(func(_value: String) -> void: _sync_from_widgets())
+	return box
+
+
+func _choice(ids: PackedStringArray, current: String) -> OptionButton:
+	var button: OptionButton = OptionButton.new()
+	button.clip_text = true
+	for id: String in ids:
+		button.add_item(id)
+		if id == current:
+			button.select(button.item_count - 1)
+	button.item_selected.connect(func(_i: int) -> void: _sync_from_widgets())
+	return button
+
+
+func _shape_names() -> PackedStringArray:
+	var ids: PackedStringArray = PackedStringArray()
+	for name: StringName in StageShape.REFERENCES:
+		ids.append(String(name))
+	return ids
+
+
+func _ov_text(key: String) -> String:
+	if not _ref.overrides.has(key):
+		return ""
+	var value: Variant = _ref.overrides[key]
+	if typeof(value) != TYPE_ARRAY:
+		return str(value)
+	var parts: PackedStringArray = PackedStringArray()
+	for item: Variant in value:
+		parts.append("-" if item == null else str(item))
+	return ",".join(parts)
+
+
+func _text_of(key: String) -> String:
+	var raw: Variant = _editors.get(key)
+	if raw is LineEdit:
+		var box: LineEdit = raw
+		return box.text
+	if raw is OptionButton:
+		var button: OptionButton = raw
+		return button.get_item_text(button.selected) if button.selected >= 0 else ""
+	return ""
+
+
+func _set_text(key: String, text: String) -> void:
+	var raw: Variant = _editors.get(key)
+	if raw is LineEdit:
+		var box: LineEdit = raw
+		box.text = text
+		return
+	if raw is OptionButton:
+		var button: OptionButton = raw
+		for i: int in range(button.item_count):
+			if button.get_item_text(i) == text:
+				button.select(i)
+				return
+
+
+func _paint() -> void:
+	_painting = true
+	_set_text("seed", str(_ref.seed))
+	_set_text("locale", _ref.locale)
+	_set_text("shape", _ref.shape)
+	for key: String in ScenarioReference.OVERRIDE_KEYS:
+		_set_text(key, _ov_text(key))
+	_painting = false
+
+
+func _parse_ov(key: String, raw: String) -> Variant:
+	if LIST_OV.has(key):
+		var items: Array = []
+		for part: String in raw.split(","):
+			var token: String = part.strip_edges()
+			if token.is_empty():
+				continue
+			items.append(null if token == "-" or token == "null" else token)
+		return items
+	if (INT_OV.has(key) or key == "node") and raw.is_valid_int():
+		return int(raw)
+	return raw
+
+
+func _sync_from_widgets() -> void:
+	if _painting:
+		return
+	var blob: Dictionary = _ref.encode()
+	var seed_text: String = _text_of("seed").strip_edges()
+	blob["seed"] = int(seed_text) if seed_text.is_valid_int() else seed_text
+	blob["locale"] = _text_of("locale")
+	blob["shape"] = _text_of("shape")
+	var ov: Dictionary = {}
+	for key: String in ScenarioReference.OVERRIDE_KEYS:
+		var raw: String = _text_of(key).strip_edges()
+		if raw.is_empty():
+			continue
+		ov[key] = _parse_ov(key, raw)
+	blob["overrides"] = ov
+	var next: ScenarioReference = ScenarioReference.new()
+	if not next.load_from(blob):
+		_status.text = next.error
+		return
+	_ref = next
+	_field.text = JSON.stringify(_ref.encode())
+	_status.text = ""
 
 
 func _label(text: String, size_px: int, colour: Color, centred: bool) -> Label:
@@ -168,6 +302,7 @@ func _pick(id: String, rev: int) -> void:
 	_ref.load_from({"id": id, "revision": rev})
 	_field.text = JSON.stringify(_ref.encode())
 	_status.text = ""
+	_paint()
 
 
 func _copy_ref() -> void:
@@ -191,6 +326,7 @@ func _absorb_field() -> bool:
 		return false
 	_ref = next
 	_status.text = ""
+	_paint()
 	return true
 
 
@@ -199,7 +335,9 @@ func _apply(ref: ScenarioReference) -> void:
 		return
 	var ok: Variant = _host.call("apply_dev_scenario", ref)
 	if ok != true:
-		_status.text = _t("failed")
+		var err_v: Variant = _host.get("last_dev_error")
+		var err: String = str(err_v) if typeof(err_v) == TYPE_STRING else ""
+		_status.text = err if not err.is_empty() else _t("failed")
 
 
 func _start() -> void:

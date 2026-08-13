@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 STORE = ("macOS", "iOS", "Android (Play AAB)")
+REVIEW_MARK = "Dev Review"
 WEB_DEV = "Web Dev"
 DEV_PREFIX = "presentation/dev/"
 PROD_ROOTS = ("application/", "presentation/", "domain/", "content/")
@@ -75,6 +76,8 @@ def main() -> int:
     if not dev_gd:
         errors.append("presentation/dev/ has no tracked .gd (vacuous exclude)")
     for name in STORE:
+        if REVIEW_MARK in name:
+            continue
         preset = by_name.get(name)
         if preset is None:
             errors.append("%s preset is missing" % name)
@@ -85,6 +88,15 @@ def main() -> int:
         for path in dev_files:
             if not any(glob_match(g, path) for g in globs):
                 errors.append("%s exclude_filter does not match %s" % (name, path))
+    for preset in presets:
+        name = preset["name"]
+        if REVIEW_MARK not in name:
+            continue
+        globs = csv(preset["exclude_filter"])
+        if any(glob_match(g, "presentation/dev/console.gd") for g in globs):
+            errors.append("%s must include the Console tree" % name)
+        if "dev_tools" not in csv(preset["custom_features"]):
+            errors.append("%s must list custom feature dev_tools" % name)
     web = by_name.get(WEB_DEV)
     if web is None:
         errors.append("Web Dev preset is missing")
