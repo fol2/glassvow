@@ -3,12 +3,13 @@ extends RefCounted
 
 const Sim: GDScript = preload("res://tools/balance_sim.gd")
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
-const EXPECTED: String = "43ff8d0e6fd3a820ef9d65e9ea681d86e6354d1918fa079e68a0bf98db442197"
+const EXPECTED: String = "b38410ee207c477b1f0048dec350d1488a100937750150b2a4fd04d69eae6710"
 
 
 static func run(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full(false)
 	_check_incoming(content, fails)
+	_check_valuation(content, fails)
 	var first: Dictionary = Sim.simulate(content, "duskblade", 1000, 0)
 	var second: Dictionary = Sim.simulate(content, "duskblade", 1000, 0)
 	var digest: String = Sim.outcome_digest(first)
@@ -40,3 +41,19 @@ static func _check_incoming(content: ContentDB, fails: Array[String]) -> void:
 		var actual: int = hp_before - game.cb.player.hp
 		if forecast != actual:
 			fails.append("balance pilot: %s forecast %d damage, enemy phase dealt %d" % [condition, forecast, actual])
+
+
+static func _check_valuation(content: ContentDB, fails: Array[String]) -> void:
+	var catalyst: Dictionary = content.cards["catalyst"]
+	var strike: Dictionary = content.cards["strike"]
+	var eclipse: Dictionary = content.cards["eclipseSlash"]
+	var ash_cat: float = Pilot.card_score(catalyst, 1, "catalyst")
+	var ash_strike: float = Pilot.card_score(strike, 1, "strike")
+	if ash_cat <= ash_strike:
+		fails.append("balance pilot: Ash catalyst score %s should beat strike %s" % [ash_cat, ash_strike])
+	var dusk_eclipse: float = Pilot.card_score(eclipse, 0, "eclipseSlash")
+	var dusk_strike: float = Pilot.card_score(strike, 0, "strike")
+	if dusk_eclipse <= dusk_strike:
+		fails.append("balance pilot: Dusk eclipseSlash score %s should beat strike %s" % [dusk_eclipse, dusk_strike])
+	if Pilot.VERSION != "p7-d0-v1":
+		fails.append("balance pilot: VERSION expected p7-d0-v1 got %s" % Pilot.VERSION)
