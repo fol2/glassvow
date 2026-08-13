@@ -146,6 +146,8 @@ static func _console(fails: Array[String]) -> void:
 			fails.append("dev tools: %s banner missing" % code)
 		if not _has_text(console, "custom@1"):
 			fails.append("dev tools: %s catalogue row missing" % code)
+		if not _has_text(console, "act-1-map-start@1"):
+			fails.append("dev tools: %s named catalogue row missing" % code)
 		if not _has_text(console, str(bundle.get("custom", "")).to_upper()):
 			fails.append("dev tools: %s custom header missing" % code)
 		if not _has_text(console, str(bundle.get("seed", ""))):
