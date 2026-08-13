@@ -92,8 +92,7 @@ class SkyBand extends MapBand:
 		# tiles on a 1180 stage and the anchor becomes wallpaper (PR #77 DL R1).
 		# The screen-anchor rule below survives for the same reason.
 		if _strip != null:
-			MapStrip.draw_tiled(self, _strip,
-				Rect2(0.0, 0.0, w, horizon + FAR_BLEED),
+			MapStrip.draw_tiled(self, _strip, strip_rect(w, horizon),
 				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
 		_draw_spire(w, horizon)
 		# Washes the SKY, not the stage. The full-rect version put a step across
@@ -109,6 +108,14 @@ class SkyBand extends MapBand:
 		# rects overlapped 4-12px and left a full-width band at 1.63x the wash
 		# during a flash: the step became a hairline instead of going (PR #80 DL R1).
 		_draw_flash_overlay(Rect2(0.0, 0.0, w, horizon + drift.y))
+
+	## Atmosphere tile. Horizon is the undrifted book value — the strip is
+	## screen-anchored so a pointer lean cannot open a gap at the top of the
+	## frame. Height is horizon + FAR_BLEED; the extra is a seam into the
+	## region, not exclusive sky. `_draw` asks this, and so does the #86 gate
+	## in tests/test_map.gd, so the two cannot drift.
+	static func strip_rect(w: float, horizon: float) -> Rect2:
+		return Rect2(0.0, 0.0, w, horizon + FAR_BLEED)
 
 	## The §1 goal-anchor. SCREEN-anchored — at 0.10 the whole journey drifts a
 	## lone object only a tenth of the act, so a world anchor parks it off-stage
@@ -155,6 +162,19 @@ class SkyBand extends MapBand:
 
 
 class RegionBand extends MapBand:
+	## Fallback trees rise past the horizon by at most this fraction of the
+	## horizon→path span: max tree_h 0.783 − min base 0.113 = 0.670, written
+	## 0.67 as the issue states it. A pixel constant would be the BED_HALF
+	## lesson again (#69 C5): 154 px is 0.67 of pad-landscape's span and
+	## nearly 3× phone-landscape's. The region strip opens this room so
+	## authored crowns are not decapitated at the horizon (#86). The strip
+	## may overlay the lower sky — that is the same composition the fallback
+	## already paints — but `strip_rect` will not climb past
+	## `SkyBand.strip_rect`'s top edge; above that is empty stage, not sky.
+	## Clamping against the sky strip's *bottom* (horizon + FAR_BLEED) would
+	## seat the rect *below* the horizon and undo the bleed.
+	const CROWN_OVERSHOOT: float = 0.67
+
 	## Shaft sway clock — advanced only when motion is allowed, so reduce-motion
 	## stills the caustics the same way it stills the veil.
 	var _age: float = 0.0
@@ -172,6 +192,24 @@ class RegionBand extends MapBand:
 		_strip = MapStrip.fetch(region.act, &"region")
 		queue_redraw()
 
+	## Painted region-strip rect. `horizon` / `path_y` are the drifted book
+	## values `_draw` uses; `sky_horizon` is SkyBand's undrifted horizon so
+	## the clamp asks `SkyBand.strip_rect` rather than restating it. `_draw`
+	## asks this, and so does the #86 gate, so a rect the suite has never
+	## seen cannot ship.
+	static func strip_rect(w: float, h: float, horizon: float, path_y: float,
+			sky_horizon: float) -> Rect2:
+		var span_y: float = path_y - horizon
+		var bleed: float = maxf(span_y, 0.0) * CROWN_OVERSHOOT
+		var sky: Rect2 = SkyBand.strip_rect(w, sky_horizon)
+		# Never climb out of the sky strip. Its top edge is the frame top
+		# (y = 0). Its bottom sits at horizon + FAR_BLEED and is already a
+		# seam into this band; clamping against that bottom would put the
+		# strip below the horizon and decapitate the crowns this function
+		# exists to keep.
+		var top: float = maxf(horizon - bleed, sky.position.y)
+		return Rect2(0.0, top, w, h - top + FAR_BLEED)
+
 	func _process(delta: float) -> void:
 		if host == null:
 			return
@@ -187,7 +225,8 @@ class RegionBand extends MapBand:
 			return
 		var w: float = size.x
 		var h: float = size.y
-		var horizon: float = h * host._trail_num("horizonY", 0.36) + drift.y
+		var sky_horizon: float = h * host._trail_num("horizonY", 0.36)
+		var horizon: float = sky_horizon + drift.y
 		var path_y: float = h * host._trail_num("pathY", 0.64) + drift.y
 		# Bleeds past the frame bottom by more than the far drift amplitude —
 		# an upward lean must not leave a strip of raw sky under the ground.
@@ -199,9 +238,13 @@ class RegionBand extends MapBand:
 		# discs at the horizon; this is a 533px quad that would swallow act 1's
 		# signature weather entirely (PR #77 DL R1). Caustics are volumetric light
 		# between the viewer and the drowned towers: they belong in front.
+		# The rect itself starts ABOVE the horizon by the fallback's crown
+		# overshoot (#86). Ground scrim stays put: lifting it would wash the
+		# sky the crowns stand in front of, and the sky flash already covers
+		# that band (a second wash there is the #69 C2 / PR #80 double-count).
 		if _strip != null:
 			MapStrip.draw_tiled(self, _strip,
-				Rect2(0.0, horizon, w, h - horizon + FAR_BLEED),
+				strip_rect(w, h, horizon, path_y, sky_horizon),
 				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
 		if host._region != null and host._region.weather == &"sunken":
 			_draw_shafts(w, horizon, path_y)
