@@ -168,11 +168,15 @@ static func _upgrade_best(game: GlassvowGame) -> void:
 static func _resolve_event(game: GlassvowGame) -> void:
 	var event: Dictionary = game.content.events[game.rewards.roll_event(game.run)]
 	var choice: Dictionary = {}
+	var best_score: float = -INF
 	for row_v: Variant in event.get("choices", []):
 		var row: Dictionary = row_v
-		if game.run.player.gold >= int(float(str(row.get("needGold", 0)))):
+		if game.run.player.gold < int(float(str(row.get("needGold", 0)))):
+			continue
+		var score: float = _event_choice_score(game, row)
+		if score > best_score:
+			best_score = score
 			choice = row
-			break
 	var ops: Array = choice.get("ops", [])
 	var pending: Dictionary = game.rewards.apply_event_ops(game.run, ops)
 	match str(pending.get("kind", "")):
@@ -185,8 +189,128 @@ static func _resolve_event(game: GlassvowGame) -> void:
 			var worst: CardInst = Pilot.worst_card(game.run, game.content, game.run.player.deck)
 			if worst != null: game.run.player.deck.erase(worst)
 		"duplicate":
-			var source: CardInst = game.run.player.deck[0]
-			game.run.player.deck.append(CardInst.new(game.run.next_uid(), source.id, source.up))
+			var source: CardInst = Pilot.best_card(game.run, game.content, game.run.player.deck)
+			if source != null:
+				game.run.player.deck.append(CardInst.new(game.run.next_uid(), source.id, source.up))
+static func _event_choice_score(game: GlassvowGame, choice: Dictionary) -> float:
+	var total: float = 0.0
+	for op_v: Variant in choice.get("ops", []):
+		total += _event_op_score(game, op_v)
+	return total
+static func _event_op_score(game: GlassvowGame, op_v: Variant) -> float:
+	var op: Dictionary = op_v
+	if op.has("roll"):
+		var expected: float = 0.0
+		for branch_v: Variant in op["roll"]:
+			var branch: Dictionary = branch_v
+			expected += float(str(branch.get("p", 0))) * _event_choice_score(game, branch)
+		return expected
+	if op.has("gold"):
+		return float(int(float(str(op["gold"])))) * Pilot.SHOP_MIN_RATIO
+	if op.has("hp"):
+		var hp: int = int(float(str(op["hp"])))
+		var kind: String = "heal" if hp >= 0 else "loseHp"
+		return Pilot.card_score({"effects": [{"kind": kind, "n": absi(hp)}]}, game.run.aspect)
+	if op.has("heal"):
+		var healed: int = int(roundf(float(game.run.player.max_hp) * float(str(op["heal"]))))
+		return Pilot.card_score({"effects": [{"kind": "heal", "n": healed}]}, game.run.aspect)
+	if op.has("maxHp"):
+		# loseHp weights only; this under-values permanence of a max-HP change.
+		var lost: int = absi(int(float(str(op["maxHp"]))))
+		return Pilot.card_score({"effects": [{"kind": "loseHp", "n": lost}]}, game.run.aspect)
+	if op.has("addCard"):
+		var card_id: String = str(op["addCard"])
+		return Pilot.card_score(game.content.cards.get(card_id, {}), game.run.aspect, card_id)
+	if op.has("addRelic"):
+		var relic_id: String = str(op["addRelic"])
+		if relic_id == "random":
+			return _expected_relic_score(game)
+		return Pilot.relic_score(relic_id, game.content, game.run.aspect)
+	if op.has("potion"):
+		return _potion_shop_value(game)
+	if op.get("pickRemove", false):
+		var worst: CardInst = Pilot.worst_card(game.run, game.content, game.run.player.deck)
+		if worst == null:
+			return 0.0
+		var wscore: float = Pilot.card_score(game.content.cards.get(String(worst.id), {}),
+			game.run.aspect, String(worst.id))
+		return 8.5 - wscore
+	if op.has("pickCard"):
+		return _expected_card_max(game, int(float(str(op["pickCard"]))))
+	if op.get("pickUpgrade", false):
+		return _best_upgrade_delta(game)
+	if op.get("pickDuplicate", false):
+		var best: CardInst = Pilot.best_card(game.run, game.content, game.run.player.deck)
+		if best == null:
+			return 0.0
+		return Pilot.card_score(game.content.cards.get(String(best.id), {}), game.run.aspect, String(best.id))
+	return 0.0
+static func _potion_shop_value(game: GlassvowGame) -> float:
+	var pair: Array = game.content.shop["potionPrice"]
+	return (float(str(pair[0])) + float(str(pair[1]))) * 0.5 * Pilot.SHOP_MIN_RATIO
+static func _expected_card_max(game: GlassvowGame, n: int) -> float:
+	# roll_event_cards weights: common×2, uncommon×2, rare×1. No RNG — read the pools.
+	if n <= 0:
+		return 0.0
+	var scores: Array[float] = []
+	var copies: Dictionary = {"common": 2, "uncommon": 2, "rare": 1}
+	for tier: String in ["common", "uncommon", "rare"]:
+		var weight: int = int(float(str(copies[tier])))
+		for id_v: Variant in game.rewards.card_pool(game.run, tier):
+			var id: String = str(id_v)
+			if Pilot.is_banned(id):
+				continue
+			var score: float = Pilot.card_score(game.content.cards.get(id, {}), game.run.aspect, id)
+			for _copy: int in range(weight):
+				scores.append(score)
+	var m: int = scores.size()
+	if m == 0:
+		return 0.0
+	scores.sort()
+	var expected: float = 0.0
+	var prev_cdf: float = 0.0
+	var i: int = 0
+	while i < m:
+		var s: float = scores[i]
+		var j: int = i + 1
+		while j < m and scores[j] == s:
+			j += 1
+		var cdf: float = float(j) / float(m)
+		expected += s * (cdf ** n - prev_cdf ** n)
+		prev_cdf = cdf
+		i = j
+	return expected
+static func _expected_relic_score(game: GlassvowGame) -> float:
+	var weights: Dictionary = {"common": 0.5, "uncommon": 0.35, "rare": 0.15}
+	var total: float = 0.0
+	for tier: String in ["common", "uncommon", "rare"]:
+		var mean: float = 0.0
+		var n: int = 0
+		for id_v: Variant in game.rewards.relic_pool(game.run, tier):
+			var id: String = str(id_v)
+			if game.run.player.relics.has(id) or Pilot.is_banned(id):
+				continue
+			mean += Pilot.relic_score(id, game.content, game.run.aspect)
+			n += 1
+		if n > 0:
+			total += float(str(weights[tier])) * mean / float(n)
+	return total
+static func _best_upgrade_delta(game: GlassvowGame) -> float:
+	var best_score: float = 0.0
+	var found: bool = false
+	for card: CardInst in game.run.player.deck:
+		var d: Dictionary = game.content.cards.get(String(card.id), {})
+		if card.up or not d.has("up"):
+			continue
+		var upgraded: Dictionary = d.duplicate()
+		var up: Dictionary = d["up"]
+		upgraded.merge(up, true)
+		var score: float = Pilot.card_score(upgraded, game.run.aspect, String(card.id)) \
+			- Pilot.card_score(d, game.run.aspect, String(card.id))
+		if not found or score > best_score:
+			found = true
+			best_score = score
+	return best_score if found else 0.0
 static func _resolve_shop(game: GlassvowGame) -> void:
 	var stock: Dictionary = game.rewards.gen_shop(game.run)
 	var buys: Array[Dictionary] = Pilot.choose_shop(stock, game.run, game.content)

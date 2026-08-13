@@ -55,5 +55,32 @@ static func _check_valuation(content: ContentDB, fails: Array[String]) -> void:
 	var dusk_strike: float = Pilot.card_score(strike, 0, "strike")
 	if dusk_eclipse <= dusk_strike:
 		fails.append("balance pilot: Dusk eclipseSlash score %s should beat strike %s" % [dusk_eclipse, dusk_strike])
-	if Pilot.VERSION != "p7-d0-v1":
-		fails.append("balance pilot: VERSION expected p7-d0-v1 got %s" % Pilot.VERSION)
+	if Pilot.VERSION != "p7-d2-v1":
+		fails.append("balance pilot: VERSION expected p7-d2-v1 got %s" % Pilot.VERSION)
+	var dusk_run: RunState = RunState.new_run(content, 7, "best-card")
+	var strongest: CardInst = Pilot.best_card(dusk_run, content, dusk_run.player.deck)
+	if strongest == null or String(strongest.id) == "strike":
+		fails.append("balance pilot: best_card must not copy startDeck[0] strike")
+	var game: GlassvowGame = GlassvowGame.new(content, dusk_run)
+	var library: Dictionary = content.events["library"]
+	var lib_choices: Array = library["choices"]
+	var lib0_row: Dictionary = lib_choices[0]
+	var lib1_row: Dictionary = lib_choices[1]
+	var lib0: float = Sim._event_choice_score(game, lib0_row)
+	var lib1: float = Sim._event_choice_score(game, lib1_row)
+	if lib0 <= lib1:
+		fails.append("balance sim: library must choose [0] {pickCard: 5}, scores %s vs %s" % [lib0, lib1])
+	var shrine: Dictionary = content.events["forgottenShrine"]
+	var shrine_choices: Array = shrine["choices"]
+	var shrine0: Dictionary = shrine_choices[0]
+	var shrine1: Dictionary = shrine_choices[1]
+	var remove_score: float = Sim._event_choice_score(game, shrine0)
+	var gold_score: float = Sim._event_choice_score(game, shrine1)
+	var worst: CardInst = Pilot.worst_card(dusk_run, content, dusk_run.player.deck)
+	var worst_def: Dictionary = content.cards.get(String(worst.id), {})
+	var wscore: float = Pilot.card_score(worst_def, dusk_run.aspect, String(worst.id))
+	if remove_score != 8.5 - wscore:
+		fails.append("balance sim: pickRemove must be 8.5 - worst, got %s vs %s" %
+			[remove_score, 8.5 - wscore])
+	print("event-score library[0]=%s [1]=%s  forgottenShrine[0]=%s [1]=%s" %
+		[lib0, lib1, remove_score, gold_score])
