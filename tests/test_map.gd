@@ -250,6 +250,40 @@ static func run(fails: Array[String]) -> void:
 			"the terminus arch fits inside %s (%.1f + %.1f lean + %.1f vs %.0f)"
 				% [shape_name, seat_x, lean, arch, probe.size.x])
 		probe.free()
+	# The region strip must open the same crown room the fallback trees take,
+	# on every shape. A texture fitted to a rect that starts at the horizon
+	# cannot place a pixel above it, and the fallback's tallest tree rises
+	# span_y · CROWN_OVERSHOOT past that line (#86). The bleed is a ratio of
+	# span_y, not a pixel constant (the BED_HALF lesson, #69 C5). Off-tree so
+	# `size` is the shape's reference, same as the arch-fit gate above.
+	#
+	# It may overlay the lower sky — that is the composition the trees already
+	# paint — but it must not climb *out* of SkyBand.strip_rect. The boundary
+	# is the sky strip's top edge (always the frame top today); its bottom is
+	# already a FAR_BLEED seam into this band, and a clamp against that
+	# bottom would seat the region *below* the horizon.
+	for shape_name: StringName in StageShape.REFERENCES:
+		var crown: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
+		crown.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		crown.size = Vector2(StageShape.REFERENCES[shape_name])
+		crown.set_shape(shape_name)
+		var frame_w: float = crown.size.x
+		var frame_h: float = crown.size.y
+		var horizon: float = frame_h * crown._trail_num("horizonY", 0.36)
+		var path_y: float = frame_h * crown._trail_num("pathY", 0.64)
+		var span_y: float = path_y - horizon
+		var sky_rect: Rect2 = MapBand.SkyBand.strip_rect(frame_w, horizon)
+		var region_rect: Rect2 = MapBand.RegionBand.strip_rect(
+			frame_w, frame_h, horizon, path_y, horizon)
+		var bleed: float = horizon - region_rect.position.y
+		_check(fails, is_equal_approx(bleed, span_y * MapBand.RegionBand.CROWN_OVERSHOOT),
+			"region strip crown bleed is %.2f of span_y on %s (%.1f vs %.1f)"
+				% [MapBand.RegionBand.CROWN_OVERSHOOT, shape_name, bleed,
+					span_y * MapBand.RegionBand.CROWN_OVERSHOOT])
+		_check(fails, region_rect.position.y >= sky_rect.position.y,
+			"region strip does not climb out of the sky strip on %s (top %.1f vs sky %.1f)"
+				% [shape_name, region_rect.position.y, sky_rect.position.y])
+		crown.free()
 	# The road plane's taper, over the shape matrix (#69 A7/C5, #70). Three laws:
 	# it never inverts, it never grows wide enough to swallow the lane the stones
 	# stand in, and it is actually widest at the camera's seat — a taper that
