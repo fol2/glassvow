@@ -3,7 +3,29 @@ extends RefCounted
 ## Portable Scenario identity: `scenario-id@revision`, build SHA, seed, locale,
 ## Stage shape and bounded Custom Scenario overrides. Never a save blob.
 
-const CATALOGUE: Dictionary = {"custom": 1}
+## Named recipes live in presentation/dev/catalogue.gd; this map is id → revision.
+const CATALOGUE: Dictionary = {
+	"custom": 1,
+	"title-continue": 1,
+	"act-1-map-start": 1,
+	"act-1-map-branch": 1,
+	"act-1-map-terminus": 1,
+	"act-2-map-start": 1,
+	"act-2-map-branch": 1,
+	"act-2-map-terminus": 1,
+	"act-3-map-start": 1,
+	"act-3-map-branch": 1,
+	"act-3-map-terminus": 1,
+	"combat-normal": 1,
+	"combat-elite": 1,
+	"combat-boss": 1,
+	"combat-low-hp": 1,
+	"shop-stocked": 1,
+	"shop-insufficient-funds": 1,
+	"rest": 1,
+	"event": 1,
+	"treasure": 1,
+}
 const LOCALES: PackedStringArray = ["en", "zh-Hant"]
 const OVERRIDE_KEYS: PackedStringArray = [
 	"aspect", "vow", "act", "node", "kind", "enemies",
