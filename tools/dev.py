@@ -511,6 +511,61 @@ class Handler(BaseHTTPRequestHandler):
             raise ToolError("Stage geometry is stale.")
         return current
 
+SCENARIO_TOP = ("id", "revision", "build", "seed", "locale", "shape")
+SCENARIO_OVERRIDES = (
+    "aspect", "vow", "act", "node", "kind", "enemies",
+    "hp", "max_hp", "gold", "potions",
+    "add_cards", "remove_cards", "upgrade_cards",
+    "add_relics", "remove_relics",
+)
+
+
+def parse_scenario_value(raw: str) -> object:
+    token = raw.strip()
+    if token in {"", "null", "-"}:
+        return None
+    if token.lstrip("-").isdigit():
+        return int(token)
+    if "," in token:
+        return [parse_scenario_value(part) for part in token.split(",")]
+    return token
+
+
+def compose_scenario(raw: str, fields: list[str]) -> str:
+    blob: dict[str, object] = {"id": "custom", "revision": 1}
+    if raw:
+        parsed = json.loads(raw)
+        if not isinstance(parsed, dict):
+            raise ToolError("Scenario reference must be a JSON object.")
+        blob.update(parsed)
+    overrides_v = blob.get("overrides", {})
+    if overrides_v is None:
+        overrides_v = {}
+    if not isinstance(overrides_v, dict):
+        raise ToolError("overrides must be an object.")
+    overrides: dict[str, object] = dict(overrides_v)
+    for field in fields:
+        if "=" not in field:
+            raise ToolError(f"Scenario field must be key=value: {field}")
+        key, value = field.split("=", 1)
+        parsed = parse_scenario_value(value)
+        if key in SCENARIO_TOP:
+            blob[key] = parsed
+        elif key in SCENARIO_OVERRIDES:
+            overrides[key] = parsed
+        else:
+            raise ToolError(f"Custom Scenario does not expose {key}")
+    if overrides:
+        blob["overrides"] = overrides
+    elif "overrides" in blob and not blob["overrides"]:
+        blob.pop("overrides")
+    return json.dumps(blob, separators=(",", ":"))
+
+
+def launch_scenario(payload: str) -> str:
+    return live("start", f"--scenario={payload}")
+
+
 def check() -> None:
     assert len(BY_ID) == len(SURFACES)
     assert not hasattr(BaseHTTPRequestHandler, "run_command")
@@ -568,6 +623,16 @@ def check() -> None:
         pass
     else:
         raise AssertionError("an exiting strip reached the live host")
+    assert compose_scenario("", ["seed=7", "gold=10"]) == (
+        '{"id":"custom","revision":1,"seed":7,"overrides":{"gold":10}}')
+    assert compose_scenario('{"id":"custom","revision":1,"seed":1}', ["locale=zh-Hant"]) == (
+        '{"id":"custom","revision":1,"seed":1,"locale":"zh-Hant"}')
+    try:
+        compose_scenario("", ["rng_state=4"])
+    except ToolError as exc:
+        assert "does not expose rng_state" in str(exc)
+    else:
+        raise AssertionError("unknown Scenario field was accepted")
     print(f"dev tools: PASS ({len(SURFACES)} browser surfaces)")
 
 def main() -> None:
@@ -578,9 +643,16 @@ def main() -> None:
     parser.add_argument("--open", action="store_true", help="open the local browser")
     parser.add_argument("--check", action="store_true", help="validate the registry and exit")
     parser.add_argument("--build-web", action="store_true", help="export Interactive Web and exit")
+    parser.add_argument("--scenario", nargs="?", const="", default=None,
+                        help="launch Native Proof with --scenario=<json>; omit JSON to compose")
+    parser.add_argument("--scn", action="append", default=[],
+                        help="Scenario field key=value (seed=7, gold=10, add_cards=strike,defend)")
     options = parser.parse_args()
     if options.check:
         check()
+        return
+    if options.scenario is not None:
+        print(launch_scenario(compose_scenario(options.scenario, options.scn)))
         return
     if options.build_web:
         print(build_web())

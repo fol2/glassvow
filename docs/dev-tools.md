@@ -76,6 +76,7 @@ failing halfway through one.
 | Scripted HUD mock | `--hud` | `HUD mock` |
 | Fixed-spoils reward mock | `--reward` | `Reward mock` |
 | Stage-shape layout authoring | `--layout --shape=… --scope=… --act=…` | `Layout book` |
+| Scenario launch | `--scenario=<json>` via `python3 tools/dev.py --scenario` | CLI only |
 | Editor scene inspection and mutation | Funplay editor plugin | Editor MCP only |
 
 Additional flags stay owned and parsed by their lab. The browser allow-list
@@ -84,6 +85,15 @@ host. Temporal enemy strips therefore remain one-off captures:
 
 ```bash
 tools/shot.sh --enemies --idle=gloomslime --strip=/tmp/idle.png
+```
+
+A Development Scenario launches Native Proof through the same `--scenario=<json>`
+flag the excluded boot handler already owns. Pass the reference verbatim, or
+compose the bounded Custom controls with `--scn key=value`:
+
+```bash
+python3 tools/dev.py --scenario='{"id":"custom","revision":1,"seed":7}'
+python3 tools/dev.py --scenario --scn seed=7 --scn gold=10 --scn add_cards=strike,defend
 ```
 
 For a native iteration loop use `tools/live.sh start …`, then `shot`, `reload`,

@@ -39,6 +39,10 @@ exclude_filter="port_fixtures/*,presentation/dev/*"
 name="Android (Play AAB)"
 custom_features=""
 exclude_filter="port_fixtures/*,presentation/dev/*"
+[preset.4]
+name="iOS Dev Review"
+custom_features="dev_tools"
+exclude_filter="port_fixtures/*"
 EOF
 }
 
