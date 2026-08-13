@@ -3,7 +3,7 @@ extends RefCounted
 ## Block lethal, else kill-lowest; Dusk favours Eclipse/Shatter, Ash stacks Smolder highest and blocks with Smother.
 ## Routes favour treasure, then low-HP rest; rewards take the highest card/relic score; shops buy by value/gold.
 ## Potions heal at 20 missing HP, block lethal intent, and spend offensive stock in elite/boss fights.
-const VERSION: String = "p7-d0-v1"
+const VERSION: String = "p7-d2-v1"
 const SHOP_MIN_RATIO: float = 0.06
 const RELIC_SCORE: Dictionary = {
 	"hollowCrown": 90, "frozenCore": 70, "crownOfCinders": 68, "verdantBranch": 62,
@@ -337,6 +337,16 @@ static func worst_card(run: RunState, content: ContentDB, cards: Array, kindle: 
 			worst = card
 			score = candidate
 	return worst
+static func best_card(run: RunState, content: ContentDB, cards: Array) -> CardInst:
+	var best: CardInst = null
+	var score: float = -INF
+	for card: CardInst in cards:
+		var definition: Dictionary = content.cards.get(String(card.id), {})
+		var candidate: float = card_score(definition, run.aspect, String(card.id))
+		if candidate > score:
+			best = card
+			score = candidate
+	return best
 static func relic_score(id: String, content: ContentDB, aspect: int) -> float:
 	var rarity: String = str(content.relics.get(id, {}).get("rarity", "common"))
 	var score: float = float(str(RELIC_SCORE.get(id,
