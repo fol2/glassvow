@@ -39,3 +39,10 @@ Thumbs.db
 *.token
 .env
 .env.*
+export_credentials.cfg
+*.keystore
+*.jks
+
+# Android gradle build template — machine-local, reinstalled from the pinned
+# 4.7.1 android_source.zip (see docs/release-signing.md)
+android/
