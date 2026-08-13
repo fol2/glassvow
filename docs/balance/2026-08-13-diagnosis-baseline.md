@@ -20,7 +20,7 @@ Pilot `p7-d0-v1` on profile `mature-three-act-no-side-state-v1`. Content SHA-256
 
 - **Aspect gap (paired, same seeds):** Vow 0 Ash − Dusk = **+9.00 pp**, 95% [+0.08, +17.92]; Vow 5 = **+4.00 pp**, 95% [−5.30, +13.30].
 - **Boss-turn window (means):** all twelve vow × aspect × act means sit in **6–10 turns**. Shortest mean 6.082 (Vow 0 Ash act 2); longest 9.590 (Vow 0 Dusk act 3).
-- **Top-3 interventional ablation shifts** (Vow 0, seeds 4000–4079, 80 runs/aspect, matched control): **hollowCrown −10.62 pp** combined (−11.25 Dusk, −10.00 Ash); **duskmirror −6.25 pp**; **catalyst −3.12 pp** combined (**−8.75 pp Ash**).
+- **Top-3 interventional ablation shifts** (Vow 0, seeds 4000–4199, 200 runs/aspect, matched control): **hollowCrown −9.50 pp** combined (−12.50 Dusk, −6.50 Ash); **duskmirror −4.75 pp**; **emberLantern −4.50 pp** combined. `catalyst` is −6.50 pp Ash and −2.25 pp combined.
 - **Saturation:** **did not occur.** Vow 0 max is 76%, not ~100%. The four cells separate (Vow 0 vs Vow 5 CIs disjoint). Lookahead escalation is **not** triggered.
 
 ## Seeds and counts
@@ -32,18 +32,19 @@ Diagnosis seeds are **4000–4199 inclusive** (200 contiguous integers). Both as
 | P6 B0 diagnosis | 1000–1199 | historical |
 | P6 B7 holdout | 2200–2999 | historical |
 | **This diagnosis** | **4000–4199** | **this baseline** |
-| Ablation subset of this diagnosis | 4000–4079 | nested in 4000–4199 |
+| Ablation matched sample | 4000–4199 | same seeds as this diagnosis |
 | Future holdout (suggested) | **5000+** | disjoint from all of the above |
 
 Exact run counts:
 
 - Diagnosis: **800** whole runs (4 cells × 200).
-- Ablation: **1,280** additional whole runs (8 bans × 2 aspects × 80).
+- Ablation: **3,200** additional banned whole runs (8 bans × 2 aspects × 200), each paired with the diagnosis control on the same seeds. A fresh 400-run control rerun reproduced the retained control exactly apart from its manifest commit.
 - Stalls = 0 and simulator errors = 0 in every cell and every ablation file.
 
 Raw files: `docs/balance/data/2026-08-13-vow0.json`, `…-vow5.json`,
-`…-ablation-<id>.json`, plus CSV slices `…-cells.csv`, `…-boss-turns.csv`,
-`…-economy.csv`, `…-ablation.csv`, `…-runs.csv`.
+`…-ablation-n200-<id>.json`, plus CSV slices `…-cells.csv`, `…-boss-turns.csv`,
+`…-economy.csv`, `…-ablation-n200.csv`, `…-runs.csv`. The original n = 80
+`…-ablation-<id>.json` and `…-ablation.csv` files remain as prior evidence.
 
 ## What the pilot change was
 
@@ -94,22 +95,22 @@ Gold earned on wins is ~935–974; on losses ~499–630. Winning decks finish ar
 
 ## Ablation
 
-Observational "has item → higher win rate" is survivorship (a boss relic is only held if a boss died) and is **not** the gate. The table below is interventional: same seeds 4000–4079, item banned from start deck, relics, rewards and shop, compared to the unbanned control on those seeds (Dusk 53/80 = 66.25%, Ash 62/80 = 77.50%).
+Observational "has item → higher win rate" is survivorship (a boss relic is only held if a boss died) and is **not** the gate. The table below is interventional: same seeds 4000–4199, item banned from start deck, relics, rewards and shop, compared to the unbanned control on those seeds (Dusk 134/200 = 67.00%, Ash 152/200 = 76.00%). Each cell reports point delta; paired McNemar 95% interval; achieved half-width.
 
-| Item | Dusk Δ | Ash Δ | Combined Δ |
+| Item | Dusk Δ; paired 95%; ±half-width | Ash Δ; paired 95%; ±half-width | Combined Δ; paired 95%; ±half-width |
 |---|---:|---:|---:|
-| hollowCrown | −11.25 pp | −10.00 pp | **−10.62 pp** |
-| duskmirror | −5.00 pp | −7.50 pp | **−6.25 pp** |
-| catalyst | +2.50 pp | **−8.75 pp** | **−3.12 pp** |
-| emberLantern | 0.00 pp | −3.75 pp | −1.88 pp |
-| venomStrike | +1.25 pp | −2.50 pp | −0.62 pp |
-| virulence | +2.50 pp | −1.25 pp | +0.62 pp |
-| warCry | 0.00 pp | 0.00 pp | 0.00 pp |
-| eclipseSlash | **+8.75 pp** | 0.00 pp | +4.37 pp |
+| hollowCrown | **−12.50 pp; [−19.30, −5.70]; ±6.80** | −6.50 pp; [−12.41, −0.59]; ±5.91 | **−9.50 pp; [−14.01, −4.99]; ±4.51** |
+| duskmirror | −5.00 pp; [−8.33, −1.67]; ±3.33 | −4.50 pp; [−7.70, −1.30]; ±3.20 | **−4.75 pp; [−7.06, −2.44]; ±2.31** |
+| catalyst | +2.00 pp; [−0.76, +4.76]; ±2.76 | **−6.50 pp; [−11.12, −1.88]; ±4.62** | −2.25 pp; [−4.97, +0.47]; ±2.72 |
+| emberLantern | −5.00 pp; [−9.96, −0.04]; ±4.96 | −4.00 pp; [−7.36, −0.64]; ±3.36 | **−4.50 pp; [−7.49, −1.51]; ±2.99** |
+| venomStrike | +1.50 pp; [−0.69, +3.69]; ±2.19 | +1.00 pp; [−5.81, +7.81]; ±6.81 | +1.25 pp; [−2.32, +4.82]; ±3.57 |
+| virulence | +0.50 pp; [−4.21, +5.21]; ±4.71 | +1.50 pp; [−3.79, +6.79]; ±5.29 | +1.00 pp; [−2.54, +4.54]; ±3.54 |
+| warCry | +0.50 pp; [−5.94, +6.94]; ±6.44 | +2.00 pp; [−1.67, +5.67]; ±3.67 | +1.25 pp; [−2.45, +4.95]; ±3.70 |
+| eclipseSlash | **+6.00 pp; [−3.07, +15.07]; ±9.07** | 0.00 pp; [0.00, 0.00]; ±0.00 | +3.00 pp; [−1.54, +7.54]; ±4.54 |
 
-`eclipseSlash` stripped from the Dusk start deck *raised* win rate. That is thinning a 10-card starter, not a proof that Eclipse is weak in play — do not read it as a nerf recommendation. `hollowCrown` is the concentration peak and is a boss relic (+energy, −max HP). `catalyst` is the Ash combo peak among pool cards.
+`eclipseSlash` stripped from the Dusk start deck *raised* win rate by 6.00 pp. That is thinning a 10-card starter, not a proof that Eclipse is weak in play — do not read it as a nerf recommendation. `hollowCrown` is the concentration peak and is a boss relic (+energy, −max HP). `catalyst` at −6.50 pp Ash is the Ash combo peak among pool cards.
 
-n = 80 per aspect; Wilson half-width is ~10 pp, so sub-5 pp rows are noise. The signed band should be set against the *largest* real shift, not the noise floor.
+n = 200 per aspect and 400 combined. The intervals use the document's existing paired-difference arithmetic: the sample variance of matched Bernoulli differences with n − 1 in the denominator and z = 1.9599639845. The combined figure pairs 400 comparisons, not 200.
 
 ## Saturation check
 
@@ -147,7 +148,7 @@ P6 already owned this window as the time for boss mechanics to show. All twelve 
 
 **Draft:** on a matched ≥80-run Vow 0 sample, no single **non-boss** card or relic whose removal shifts a per-aspect win rate by more than **12 pp**; no **boss relic** more than **15 pp**.
 
-The point of the gate is "one toy deletes the run." `hollowCrown` at −11 pp is a boss energy relic and should be allowed to matter; 15 pp lets it through and would catch a 20+ pp trivialize. `catalyst` at −8.8 pp Ash is the largest pool-card shift and sits under 12 pp. `duskmirror` at −7.5 pp Ash likewise. n = 80 is noisy below ~5 pp; the band is about the peak, not the dust. Observational lifts are evidence of survivorship, never of this gate.
+The point of the gate is "one toy deletes the run." `hollowCrown` at −12.50 pp Dusk and −6.50 pp Ash is a boss energy relic; both point estimates sit under 15 pp. `catalyst` at −6.50 pp Ash is the largest negative pool-card shift and sits under 12 pp. `duskmirror` reaches −5.00 pp Dusk. The matched sample is now n = 200 per aspect; the band remains about the point-estimate peak, not the smaller rows. Observational lifts are evidence of survivorship, never of this gate.
 
 ---
 
@@ -159,13 +160,24 @@ Added 2026-08-13 by the reviewing session after an adversarial methodology revie
 
 2. **Ablation results are biased toward the pilot's coded synergies.** `card_score` grants a flat +8 to two hand-authored card-id lists (Dusk's Eclipse line, Ash's Smolder line) on top of hand-authored `RELIC_SCORE`, `_status_value` and `_special_value` tables. A pilot told to like card X builds around X and therefore suffers more when X is ablated. Band 4 measures **sensitivity of this pilot**, not tightness of the game. Cards outside those lists are not shown to be balanced — only that this instrument does not lean on them.
 
-3. **Band 4 has no margin against its own noise floor at n = 80.** `hollowCrown` at −10.62 pp has a paired McNemar 95% interval of **[−17.01, −4.24]** — the point estimate passes the 15 pp boss-relic line, but the interval reaches past it. At this discordance rate, a ±5 pp half-width needs roughly **131 seeds per aspect** (262 paired comparisons); ±7.5 pp needs about 58. Either raise the ablation sample before the band is enforced against a future build, or sign the band explicitly as a point-estimate gate that cannot separate a 12 pp shift from a 20 pp one. *(The review asserted a wider interval, [−20.74, −1.76], and prescribed n ≥ 250 per aspect; neither reproduces — the interval arithmetic appears to have used n = 80 where the combined figure pairs 160 comparisons.)*
+3. **Band 4's n = 80 sample limit has been removed; interval margin is now measured at n = 200.** `hollowCrown` is −9.50 pp combined with paired McNemar 95% **[−14.01, −4.99]** and ±4.51 pp half-width. Its combined interval now clears the −15 pp boss-relic line. Per aspect it is −12.50 pp Dusk, **[−19.30, −5.70]**, ±6.80 pp, and −6.50 pp Ash, **[−12.41, −0.59]**, ±5.91 pp. Thus both per-aspect point estimates pass the drafted 15 pp line, while the Dusk interval still reaches past it. The drafted band remains a point-estimate gate; the table above records every interval and half-width rather than treating the combined interval as per-aspect evidence. *(The earlier review's [−20.74, −1.76] still does not reproduce; at n = 200 the combined figure pairs 400 comparisons.)*
 
-4. **Band 2's second clause is close to vacuous as drafted.** "The paired 95% interval must not lie entirely outside [−15, +15] pp" is satisfied by an interval of [+14.9, +40]. The review read this clause as "the interval must lie *inside* the band" and therefore called the baseline a self-violation, since Vow 0's interval reaches +17.92; on the clause as written the baseline passes, so that blocker is rejected. But the clause as written gates almost nothing and should be tightened or dropped at sign-off. Separately, Vow 0's lower bound of +0.08 pp means the observed 9 pp gap only barely clears zero — thin evidence that the gap is real, and a resample could invert its direction.
+4. **Band 2's second clause is close to vacuous as drafted; measured candidate outcomes are now explicit.** "The paired 95% interval must not lie entirely outside [−15, +15] pp" is satisfied by an interval of [+14.9, +40]. Recomputing from the retained 800-run raw JSON with the same paired-difference arithmetic gives Vow 0 **+9.00 pp, [+0.08, +17.92]** and Vow 5 **+4.00 pp, [−5.30, +13.30]**. The table does not select a replacement:
 
-5. **No multiple-comparisons correction.** Roughly 34 intervals (4 cells, 2 aspect gaps, 12 boss-turn cells, 16 ablation shifts) are drawn from the same 800-run sample at 95% each, and the bands were then chosen post-hoc to fit them. Future validation should treat the four bands as one joint hypothesis, not four independent gates; the marginal Vow 0 aspect gap is the interval most exposed to a correction.
+| Candidate second-clause treatment | Vow 0 today | Vow 5 today | Measured rule |
+|---|---:|---:|---|
+| (a) Drop it; gate only \|point gap\| ≤ 15 pp | **PASS** | **PASS** | 9.00 and 4.00 pp are within 15 pp. |
+| (b) Paired 95% interval entirely inside [−15, +15] pp | **FAIL** | **PASS** | Vow 0 reaches +17.92 pp; Vow 5 stays inside. |
+| (c) Upper bound of the \|gap\| interval ≤ 15 pp | **FAIL** | **PASS** | Absolute upper bounds are 17.92 and 13.30 pp. |
+| (c) Upper bound of the \|gap\| interval ≤ 20 pp | **PASS** | **PASS** | Both absolute upper bounds are within 20 pp. |
+| (c) Upper bound of the \|gap\| interval ≤ 25 pp | **PASS** | **PASS** | Both absolute upper bounds are within 25 pp. |
+| (d) Paired 95% interval must contain zero | **FAIL** | **PASS** | Vow 0's lower bound is +0.08 pp; Vow 5 contains zero. |
 
-None of the five change a measured number in this document. All five change what the numbers may be claimed to prove.
+Candidate (d) is non-vacuous when retained alongside the 15 pp point clause: it rejects a statistically resolved direction, while the point clause continues to cap magnitude. It does not itself bound magnitude. **Choosing (b) at sign-off fails the current baseline on the day it is signed**, because Vow 0 reaches +17.92 pp. The clause as drafted passes both cells but gates almost nothing; James must choose among the measured options rather than having this artifact choose for him.
+
+5. **No multiple-comparisons correction.** The diagnosis reports 18 intervals (4 cells, 2 aspect gaps and 12 boss-turn cells) from the same 800-run sample. Ablation adds 16 per-aspect intervals and eight derived combined intervals from 3,200 banned runs paired against the retained Vow 0 control. The bands were chosen post-hoc to fit the baseline. Future validation should treat the four bands as one joint hypothesis, not four independent gates; the marginal Vow 0 aspect gap is the interval most exposed to a correction.
+
+Limits 3 and 4 now record the additional measurements requested before sign-off; none of the five changes a drafted band definition. All five change what the numbers may be claimed to prove.
 
 ## Lookahead
 
