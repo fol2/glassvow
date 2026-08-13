@@ -43,12 +43,20 @@ The bar binds one exact RC commit. If the RC commit changes:
 | Any code, asset, or export-preset change | P1 re-runs; P2, P3, P4 re-run; P5 re-verifies only the surfaces the change touches; P7 re-checks build-config items only (SDK, Info.plist keys, signing) |
 | Player-facing-major change (James's judgment) | Additionally, P6 beta round repeats |
 
+"Player-facing-major" means a change that would read differently between the beta round's build
+and this RC: gameplay balance, card/relic behaviour, encounter design, visible UI, or story
+flow. An invisible fix (crash, soft-lock, data corruption) is not player-facing-major unless it
+alters a gameplay rule. All evidence is captured on the final RC commit; evidence from an
+earlier commit survives only through this table.
+
 ## P0 — Build identity
 
 - [ ] The RC commit is named. The distribution-signed `glassvow.ipa` is produced from it per
       `docs/release-signing.md`, from the pinned Godot 4.7.1 templates.
-- [ ] The version stamp is honest: marketing version and build number identify this RC, and no
-      player-facing surface carries a foreign or benchmark hash.
+- [ ] The version stamp is honest: marketing version and build number identify this RC, build
+      numbers increment monotonically across RC attempts, the submitted build number is
+      recorded in the receipt, and no player-facing surface carries a foreign or benchmark
+      hash.
 - [ ] `dev_tools` is absent: no Developer Console entry point is reachable anywhere in the
       build ([#159](https://github.com/fol2/glassvow/issues/159): a store or release-candidate
       build never carries that capability).
@@ -65,7 +73,8 @@ All from the repo root, on the exact RC commit, plus CI green on the same head:
 - [ ] `tools/check_scripts.sh`
 - [ ] `godot --headless -s res://tests/run_all.gd` exits 0 (PASS)
 - [ ] `python3 tools/check_anchors.py` and `python3 tools/check_web_anchors.py`
-- [ ] CI green on the exact RC head
+- [ ] CI green on the exact RC head. A pass obtained by re-running a flaky job does not count
+      until the flake itself is filed as a `bug` (it lands in P8's ledger like any other).
 
 ## P2 — Performance floor
 
@@ -85,7 +94,8 @@ particles):
       where the OS exposes it; start/end levels and platform-native power trace recorded;
       charging runs invalid.
 - [ ] Memory stability: no OS memory-pressure termination, no monotonic retained growth across
-      two consecutive route repetitions; platform-native peak and post-route figures reported.
+      the session's two consecutive route runs (the cold run, then the heat-soaked run);
+      platform-native peak and post-route figures reported.
 - [ ] **Cold save-load ≤2 s** on each floor device: from tapping Continue to the restored run
       being interactive. Cold launch → title-interactive is
       measured and recorded in the same packet, **report-only** for this RC — gating launch
@@ -101,12 +111,16 @@ The [#107](https://github.com/fol2/glassvow/issues/107) protocol (`docs/p8-full-
 re-instantiated on floor hardware, by touch, on the twin build:
 
 - [ ] **Four full journeys = 2 heroes × 2 locales**, split two per floor device (each device
-      plays one hero in en and the other in zh-Hant, covering both aspect classes). A journey
+      runs two journeys — one hero in en, the other hero in zh-Hant — covering both aspect
+      classes across the pair). A journey
       runs title → full run to the shipped terminus (the Act IV terminus once
       [#175](https://github.com/fol2/glassvow/issues/175)'s arc lands) → Dawn → back to the
       Vigil/title. Touch only; no keyboard, no mouse, no editor.
 - [ ] **One spot-check journey on the actual distribution-signed TestFlight build** (either
-      device, either locale), demonstrating twin-equivalence in play.
+      device, either locale). Pass criteria: the journey completes without crash, soft-lock, or
+      OS termination, and every defect found files into P8's ledger. A defect that reproduces
+      on the distribution build but not on the twin voids the twin's equivalence claim for
+      every packet that used it — that is a P0 problem, not a P3 note.
 - [ ] Every defect found is filed as a `bug` issue before the pillar closes — P8's ledger is
       the fail-closed net; QA finding things is the protocol working, not the pillar failing.
 
@@ -123,6 +137,9 @@ The [#107](https://github.com/fol2/glassvow/issues/107) process-kill matrix re-r
       equality on the restored state, and a real-input continuation by touch.
 - [ ] A save/load comparison inside one process is not substituted for process-kill evidence
       (the [#107](https://github.com/fol2/glassvow/issues/107) rule, unchanged).
+- [ ] If a prior TestFlight round shipped builds to outsiders, the RC loads and continues a
+      save created by the latest prior round without loss (one checkpoint suffices; absence of
+      any prior round makes this row vacuously true and says so in the packet).
 
 Evidence: immutable packet.
 
@@ -132,8 +149,10 @@ Evidence: immutable packet.
 
 - [ ] **Tier 1 — sign-off.** Every rubric surface (Global inherited each time, the eight
       surfaces, Onboarding, and the cross-surface Story arc) is signed by James on the primary
-      phone, on a release export, both locales, recorded as sign-off comments on the executing
-      tickets per the rubric's protocol.
+      phone — **James's daily-driver iPhone, named by model in the RC signature receipt** (Tier
+      1 checks real-world look-and-feel; floor coverage is Tier 2's job, not this tier's) — on
+      a release export, both locales, recorded as sign-off comments on the executing tickets
+      per the rubric's protocol.
 - [ ] **Tier 2 — floor re-verify.** Every surface's full criteria list runs once on floor
       hardware: **iPhone SE 2 in zh-Hant** (smallest screen × riskiest script), **iPad 8 in
       en** (4:3 aspect axis). Both locales are inside the gate across the pair. Recorded as a
@@ -146,6 +165,12 @@ Evidence: immutable packet.
 - [ ] One external beta round completed and survived, against the pass criteria defined by
       [#166](https://github.com/fol2/glassvow/issues/166). This bar does not pre-empt that
       design; the receipt links whatever evidence #166 prescribes.
+
+**Waivability.** Running the round is **not waivable** — no RC without one completed external
+round. Whether the round *passed* is judged solely by #166's criteria; a round that fails them
+returns to the map as a decision (fix and repeat, or a recorded release-policy call by James on
+[#108](https://github.com/fol2/glassvow/issues/108)) — it is never silently waived, and
+external testers hold no veto beyond what #166's criteria encode.
 
 ## P7 — Compliance checklist (iOS)
 
@@ -179,8 +204,10 @@ From the store-compliance dossier
       description, support URL, 1024×1024 icon in the asset catalog, screenshots for
       **6.9" iPhone and 13" iPad** (1–10 each, real gameplay screens per 2.3.3, all metadata
       appropriate for 4+ per 2.3.8, unique name with no keyword stuffing, trademarks, or
-      pricing in metadata per 2.3.7), in **both locales**. Content is produced by its own
-      tickets; this pillar checks presence and compliance, not taste.
+      pricing in metadata per 2.3.7), in **both locales with matching scope** (no field
+      translated in one locale and missing in the other). Screenshots carry no debug overlay,
+      placeholder text, or content absent from the shipped build. Content is produced by its
+      own tickets; this pillar checks presence and compliance, not taste.
 
 Evidence: a checklist comment linking each item's proof (screenshots of App Store Connect
 state, the policy URL, the Info.plist diff).
@@ -192,6 +219,9 @@ state, the policy URL, the Info.plist diff).
       James with a reason, in the ledger comment. Missing, duplicate, or unknown rows fail the
       ledger ([#107](https://github.com/fol2/glassvow/issues/107) house style). The ledger is
       refreshed immediately before the RC is declared.
+- [ ] If the Sentry SDK is in the RC build and the beta round produced sessions, the ledger
+      records the crash-free-sessions rate; a rate below **99.0%** fails closed unless every
+      contributing crash signature is itself in the ledger, fixed or waived.
 
 ## The RC signature receipt
 
