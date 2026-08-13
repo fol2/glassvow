@@ -76,11 +76,16 @@ xcodebuild -exportArchive -archivePath build/ios/glassvow.xcarchive \
   -allowProvisioningUpdates
 ```
 
-If `-exportArchive` fails with **"No Accounts"** the CLI can't reach Xcode's
-Apple ID session: open the `.xcarchive` (Organizer) → Distribute App →
-App Store Connect → **Export** (Upload once a store listing exists). For
-fully headless releases, create an App Store Connect API key and pass
-`-authenticationKeyPath` / `-authenticationKeyID` / `-authenticationKeyIssuerID`.
+Headless, `-exportArchive` alone fails with **"No Accounts"** (the CLI can't
+reach Xcode's Apple ID session). The working path — verified 2026-08-13, it
+produced a distribution-signed `glassvow.ipa` (Team V45S7U2LZB, full Apple
+chain) — authenticates with the existing App Store Connect **team API key**:
+append `-authenticationKeyPath` / `-authenticationKeyID` /
+`-authenticationKeyIssuerID` to the `-exportArchive` command above. The `.p8`
+lives under `~/.appstoreconnect/private_keys/`; its key + issuer IDs are in
+`~/.appstoreconnect/octomiser-api-key.json` (a team-wide key, first created
+for Octomiser's TestFlight uploads — IDs deliberately not reproduced here:
+public repo). The same key later serves upload/TestFlight automation.
 
 ## Store accounts
 
