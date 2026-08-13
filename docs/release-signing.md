@@ -58,16 +58,29 @@ jarsigner -verify build/android/glassvow.aab
 Bump `version/code` in the Android preset before every Play upload. Play's
 upload screen re-verifies the target API level (must read 36).
 
-**iOS store build** (Godot signs nothing; Xcode does):
+**iOS store build** (Godot signs nothing; Xcode does). Release order note:
+Android is deferred — it ships after the iOS release, before desktop/Steam
+(map #156 decision, 2026-08-13) — so iOS is the release path that matters now.
 
 ```bash
 godot --headless --export-release "iOS" build/ios/glassvow.ipa   # emits build/ios/glassvow.xcodeproj
+# archive with development signing (verified headless on this machine):
+xcodebuild -project build/ios/glassvow.xcodeproj -scheme glassvow \
+  -destination "generic/platform=iOS" archive \
+  -archivePath build/ios/glassvow.xcarchive \
+  -allowProvisioningUpdates CODE_SIGN_IDENTITY="Apple Development"
+# re-sign with Apple Distribution + export the .ipa:
+xcodebuild -exportArchive -archivePath build/ios/glassvow.xcarchive \
+  -exportPath build/ios/export \
+  -exportOptionsPlist scripts/ios_export_options.plist \
+  -allowProvisioningUpdates
 ```
 
-Open the project in Xcode 26 → Signing & Capabilities → automatic signing +
-team → destination "Any iOS Device (arm64)" → Product → Archive → Organizer →
-Distribute App → App Store Connect → **Export** (Upload once a store listing
-exists).
+If `-exportArchive` fails with **"No Accounts"** the CLI can't reach Xcode's
+Apple ID session: open the `.xcarchive` (Organizer) → Distribute App →
+App Store Connect → **Export** (Upload once a store listing exists). For
+fully headless releases, create an App Store Connect API key and pass
+`-authenticationKeyPath` / `-authenticationKeyID` / `-authenticationKeyIssuerID`.
 
 ## Store accounts
 

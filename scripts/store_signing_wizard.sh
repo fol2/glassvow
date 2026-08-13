@@ -252,6 +252,13 @@ pause "Signed in? Press Enter."
 
 # ── Stage 4: Google Play Console ──────────────────────────────────────────
 stage "Google Play Console (US\$25 one-time)"
+SKIP_PLAY=0
+say "Android is deferred: it ships after the iOS release, before desktop/Steam"
+say "(map #156 decision, 2026-08-13). Stages 4-6 are the Google side."
+if ! confirm "Set up the Google Play side now anyway?"; then
+  SKIP_PLAY=1
+fi
+if [[ "$SKIP_PLAY" == 0 ]]; then
 open_url "https://play.google.com/console/signup"
 step "Register a developer account and pay the US\$25 fee."
 say "Personal vs organization matters:"
@@ -263,9 +270,13 @@ step "verify an Android device via the Play Console app."
 step "Set up the payments profile (required to sell a paid app)."
 note "EEA: identity verification under DSA/DMA is part of the same flow."
 pause "Account verified? Press Enter."
+fi
 
 # ── Stage 5: upload keystore ──────────────────────────────────────────────
 stage "Android upload keystore"
+if [[ "$SKIP_PLAY" == 1 ]]; then
+  note "skipped — Android deferred; re-run this wizard when that phase starts"
+else
 mkdir -p "$KEYSTORE_DIR"
 if [[ -f "$KEYSTORE" ]]; then
   say "keystore already exists: $KEYSTORE — keeping it."
@@ -290,9 +301,13 @@ warn "Back up the keystore file AND its password in your password manager now."
 note "Play App Signing holds the real app key; this is only the upload key —"
 note "losable but painful (reset via a Play Console help form)."
 pause
+fi
 
 # ── Stage 6: signed Android release build (AAB) ───────────────────────────
 stage "Signed Android release build"
+if [[ "$SKIP_PLAY" == 1 ]]; then
+  note "skipped — Android deferred; re-run this wizard when that phase starts"
+else
 if [[ -z "$UPLOAD_PW" ]]; then
   ask_secret UPLOAD_PW "Keystore password for $KEYSTORE:"
 fi
@@ -308,21 +323,38 @@ note "For future uploads: bump version/code in the Android preset every time."
 note "Optional: set the same keystore in Godot's editor (Export → Android →"
 note "Keystore); Godot stores it in export_credentials.cfg, which is gitignored."
 pause
+fi
 
 # ── Stage 7: iOS Xcode project + signed archive ───────────────────────────
-stage "iOS — export project, archive in Xcode"
+stage "iOS — export, archive, distribution-sign"
 say "Exporting the Xcode project (Godot signs nothing; Xcode does)..."
 godot --headless --export-release "iOS" build/ios/glassvow.ipa
 say "✓ Xcode project at build/ios/"
-step "It opens in Xcode 26 now (App Store uploads require the iOS 26 SDK):"
-open_url "$(pwd)/build/ios/glassvow.xcodeproj"
-step "Target 'glassvow' → Signing & Capabilities → tick 'Automatically manage"
-step "signing' and pick your team ($APPLE_TEAM_ID)."
-step "Select the 'Any iOS Device (arm64)' destination → Product → Archive."
-step "In Organizer: Distribute App → App Store Connect → Export (not Upload)."
-say "That leaves a signed .ipa on disk — the release-candidate proof this"
-say "pipeline works end to end. Uploading waits for the store-presence work."
-pause "Archived + exported? Press Enter."
+say "Archiving (development signing; distribution happens at export)..."
+xcodebuild -project build/ios/glassvow.xcodeproj -scheme glassvow \
+  -destination "generic/platform=iOS" archive \
+  -archivePath build/ios/glassvow.xcarchive \
+  -allowProvisioningUpdates CODE_SIGN_IDENTITY="Apple Development" \
+  | tail -2
+say "Re-signing with Apple Distribution and exporting the .ipa..."
+if xcodebuild -exportArchive -archivePath build/ios/glassvow.xcarchive \
+     -exportPath build/ios/export \
+     -exportOptionsPlist scripts/ios_export_options.plist \
+     -allowProvisioningUpdates; then
+  say "✓ signed .ipa at build/ios/export/"
+else
+  warn "exportArchive failed (usually 'No Accounts' — the CLI can't reach"
+  warn "Xcode's Apple ID session). Finish this one step in the Xcode UI:"
+  open_url "$(pwd)/build/ios/glassvow.xcarchive"
+  step "Organizer opens with the archive → Distribute App → App Store"
+  step "Connect → Export (not Upload) — that writes the signed .ipa."
+  note "For fully headless releases later: create an App Store Connect API"
+  note "key and pass -authenticationKeyPath/-authenticationKeyID/"
+  note "-authenticationKeyIssuerID to xcodebuild."
+fi
+say "A signed .ipa on disk is the release-candidate proof this pipeline"
+say "works end to end. Uploading waits for the store-presence work."
+pause "Signed .ipa in hand? Press Enter."
 
 finish
 warn "Still ahead (other tickets): store listings/assets, privacy declarations,"
