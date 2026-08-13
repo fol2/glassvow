@@ -90,7 +90,7 @@ Gold earned on wins is ~935–974; on losses ~499–630. Winning decks finish ar
 | Vow 5 Ashwarden | 2.50 |
 | Vow 5 Duskblade | 2.78 |
 
-**Six Shards / Act IV is not modeled.** The sim profile is `mature-three-act-no-side-state-v1` (`quests: {}`, `shards: []`). The 1/p figures are three-act clears, not vigil progression. That diagnostic stays open for a later profile.
+**Six Shards / Act IV is not modeled.** The sim profile is `mature-three-act-no-side-state-v1` (`quests: {}`, `shards: []`). The 1/p figures above are **three-act clears, not vigil progression**, so they do not answer #160's "runs-to-endgame per vow" — that diagnostic is deferred to a later profile, not substituted here.
 
 ## Ablation
 
@@ -123,6 +123,8 @@ Caveat for HITL: a competent human will still beat this heuristic. If James's de
 
 Instrument: headless `p7-d0-v1` on `mature-three-act-no-side-state-v1`, diagnosis seeds held out from any later proof. Gated vows are 0 (primary) and 5 (sanity). Vows 1–4 ungated.
 
+> **Read "Limits of this instrument" below before signing.** An adversarial methodology review by a non-authoring model raised five findings that survived independent verification; two of them change what bands 2 and 4 can honestly claim, and one bounds what all four bands can claim together.
+
 ### 1. Win-rate band per gated vow × aspect
 
 **Draft:** Vow 0 each aspect **60–80%**; Vow 5 each aspect **25–50%**.
@@ -148,6 +150,22 @@ P6 already owned this window as the time for boss mechanics to show. All twelve 
 The point of the gate is "one toy deletes the run." `hollowCrown` at −11 pp is a boss energy relic and should be allowed to matter; 15 pp lets it through and would catch a 20+ pp trivialize. `catalyst` at −8.8 pp Ash is the largest pool-card shift and sits under 12 pp. `duskmirror` at −7.5 pp Ash likewise. n = 80 is noisy below ~5 pp; the band is about the peak, not the dust. Observational lifts are evidence of survivorship, never of this gate.
 
 ---
+
+## Limits of this instrument — read before signing
+
+Added 2026-08-13 by the reviewing session after an adversarial methodology review by a non-authoring model. Each finding below was independently re-verified before being recorded; the review's two headline "blockers" did **not** survive that check and are recorded here with the reason, because a rejected finding is still evidence about how these bands read.
+
+1. **The four bands cannot evidence the unwaivable trio.** This is the finding that most constrains the artifact. A hand-written heuristic pilot can only explore strategies it was programmed to try, so a passing win-rate band is *no evidence at all* that no degenerate strategy trivializes a gated vow. Likewise, zero stalls in 200 seeds per cell is consistent with an unwinnable-seed rate near 0.5%. #160's trio (no trivializing strategy, no strict aspect dominance, no unwinnable seed) is **not discharged by these bands**; it needs HITL (#205) and, for the trivialize leg, something these bands do not contain. Sign the bands as a pilot-adequacy checkpoint, not as a balance guarantee.
+
+2. **Ablation results are biased toward the pilot's coded synergies.** `card_score` grants a flat +8 to two hand-authored card-id lists (Dusk's Eclipse line, Ash's Smolder line) on top of hand-authored `RELIC_SCORE`, `_status_value` and `_special_value` tables. A pilot told to like card X builds around X and therefore suffers more when X is ablated. Band 4 measures **sensitivity of this pilot**, not tightness of the game. Cards outside those lists are not shown to be balanced — only that this instrument does not lean on them.
+
+3. **Band 4 has no margin against its own noise floor at n = 80.** `hollowCrown` at −10.62 pp has a paired McNemar 95% interval of **[−17.01, −4.24]** — the point estimate passes the 15 pp boss-relic line, but the interval reaches past it. At this discordance rate, a ±5 pp half-width needs roughly **131 seeds per aspect** (262 paired comparisons); ±7.5 pp needs about 58. Either raise the ablation sample before the band is enforced against a future build, or sign the band explicitly as a point-estimate gate that cannot separate a 12 pp shift from a 20 pp one. *(The review asserted a wider interval, [−20.74, −1.76], and prescribed n ≥ 250 per aspect; neither reproduces — the interval arithmetic appears to have used n = 80 where the combined figure pairs 160 comparisons.)*
+
+4. **Band 2's second clause is close to vacuous as drafted.** "The paired 95% interval must not lie entirely outside [−15, +15] pp" is satisfied by an interval of [+14.9, +40]. The review read this clause as "the interval must lie *inside* the band" and therefore called the baseline a self-violation, since Vow 0's interval reaches +17.92; on the clause as written the baseline passes, so that blocker is rejected. But the clause as written gates almost nothing and should be tightened or dropped at sign-off. Separately, Vow 0's lower bound of +0.08 pp means the observed 9 pp gap only barely clears zero — thin evidence that the gap is real, and a resample could invert its direction.
+
+5. **No multiple-comparisons correction.** Roughly 34 intervals (4 cells, 2 aspect gaps, 12 boss-turn cells, 16 ablation shifts) are drawn from the same 800-run sample at 95% each, and the bands were then chosen post-hoc to fit them. Future validation should treat the four bands as one joint hypothesis, not four independent gates; the marginal Vow 0 aspect gap is the interval most exposed to a correction.
+
+None of the five change a measured number in this document. All five change what the numbers may be claimed to prove.
 
 ## Lookahead
 
