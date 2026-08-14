@@ -37,6 +37,7 @@ static func run(fails: Array[String]) -> void:
 		for ch: String in ["琉", "璃", "誓", "言"]:
 			_check(fails, ui_theme.default_font.has_char(ch.unicode_at(0)),
 				"runtime theme default has glyph %s" % ch)
+	_canonical_theme(fails, ui_theme)
 	# Every shipped display weight must fall back to Noto Serif TC so a less-common
 	# surface cannot silently tofu while the title sample passes.
 	var display_faces: Array[Array] = [
@@ -494,3 +495,65 @@ static func _chrome_identity(fails: Array[String]) -> void:
 				and is_equal_approx(LayoutBook.num(seat.get("h")), 148.0),
 			"the %s pile is 96x148, 14 up from the bottom" % what)
 	hud.free()
+
+
+## Canonical Theme covers every Control the game instantiates, and none of
+## those items are still the engine default. A themed Control resolving each
+## item by type is the gate — Main already installs this Theme at the root.
+static func _canonical_theme(fails: Array[String], ui_theme: Theme) -> void:
+	var stock: Theme = ThemeDB.get_default_theme()
+	var items: Array[Array] = [
+		["Button", "focus"], ["Button", "normal"],
+		["OptionButton", "normal"], ["OptionButton", "focus"],
+		["VScrollBar", "grabber"], ["HScrollBar", "grabber"],
+		["HSlider", "slider"], ["VSlider", "slider"],
+		["PopupMenu", "panel"], ["PopupPanel", "panel"],
+		["AcceptDialog", "panel"], ["CheckBox", "focus"],
+		["CheckButton", "focus"], ["ProgressBar", "fill"],
+		["LineEdit", "normal"], ["TextEdit", "normal"],
+		["ItemList", "panel"], ["Panel", "panel"],
+		["PanelContainer", "panel"], ["HSeparator", "separator"],
+		["VSeparator", "separator"], ["TooltipPanel", "panel"],
+		["ScrollContainer", "panel"],
+	]
+	for row: Array in items:
+		var type_name: String = str(row[0])
+		var item: String = str(row[1])
+		_check(fails, ui_theme.has_stylebox(item, type_name),
+			"canonical theme has %s/%s" % [type_name, item])
+		if not ui_theme.has_stylebox(item, type_name):
+			continue
+		var ours: StyleBox = ui_theme.get_stylebox(item, type_name)
+		var theirs: StyleBox = stock.get_stylebox(item, type_name)
+		_check(fails, ours != theirs,
+			"%s/%s is not the engine default" % [type_name, item])
+	var ring: StyleBox = ui_theme.get_stylebox("focus", "Button")
+	_check(fails, ring is StyleBoxFlat and not (ring as StyleBoxFlat).draw_center
+		and (ring as StyleBoxFlat).border_color.is_equal_approx(Color(GlassStyle.GOLD, 0.85)),
+		"Button focus is the lantern ring (draw_center false, gold)")
+	# Query through a themed Control with an explicit type. Implicit class
+	# lookup needs the node inside a ready tree; this runner calls us from
+	# SceneTree._initialize, where is_inside_tree is still false.
+	var host: Control = Control.new()
+	host.theme = ui_theme
+	var grabber: StyleBox = host.get_theme_stylebox("grabber", "VScrollBar")
+	_check(fails, grabber is StyleBoxFlat
+		and (grabber as StyleBoxFlat).bg_color.is_equal_approx(Color(GlassStyle.GOLD, 0.55)),
+		"themed host resolves the gold VScrollBar grabber")
+	_check(fails, host.get_theme_icon("grabber", "HSlider") != stock.get_icon("grabber", "HSlider"),
+		"themed host resolves the lantern HSlider grabber")
+	_check(fails, host.get_theme_icon("checked", "CheckBox") != stock.get_icon("checked", "CheckBox"),
+		"themed host resolves the glass CheckBox mark")
+	var drop_box: StyleBox = host.get_theme_stylebox("normal", "OptionButton")
+	_check(fails, drop_box is StyleBoxFlat
+		and (drop_box as StyleBoxFlat).border_color.is_equal_approx(Color(GlassStyle.GOLD, 0.28)),
+		"themed host resolves OptionButton glass dressing")
+	var popup_panel: StyleBox = host.get_theme_stylebox("panel", "PopupMenu")
+	_check(fails, popup_panel is StyleBoxFlat
+		and (popup_panel as StyleBoxFlat).border_color.is_equal_approx(RunStyle.PANEL_LINE),
+		"themed host resolves the glass PopupMenu panel")
+	var raw_focus: StyleBox = host.get_theme_stylebox("focus", "Button")
+	_check(fails, raw_focus is StyleBoxFlat and not (raw_focus as StyleBoxFlat).draw_center
+		and (raw_focus as StyleBoxFlat).border_color.is_equal_approx(Color(GlassStyle.GOLD, 0.85)),
+		"themed host resolves the lantern Button ring")
+	host.free()
