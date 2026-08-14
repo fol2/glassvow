@@ -1,7 +1,9 @@
 # 06 — 詞彙表(Bilingual Canonical Terms)
 
 > Domain-modeling discipline applied to the fiction. 一詞一義;文案只准用
-> 表內詞。**佔位名一律【brackets】**,鎖名前不得裸寫。
+> 表內詞。**佔位專名一律【brackets】**,鎖名前不得裸寫;普通名詞類
+> canon 詞(行者/留者/碑/隊伍)可裸寫——placeholder 僅指最終命名未鎖
+> [#258 R2 N7]。
 > 狀態:locked(可用)/ placeholder(可用但將改)/ banned(禁用)。
 
 | zh-Hant | en | 意義 | 狀態 |
@@ -22,9 +24,12 @@
 | 【原初朝聖者】 | (tbd) | 「你」這條人格線的起點 | placeholder |
 | 碑 | monument | 站着死去的行者 | placeholder(en shipped) |
 | 隊伍 | the Queue | 歷代行者總稱,第二主角(複數) | placeholder |
+| 臍帶 | the cord | 爐火與行者之間的連結;run 視角所經(00 §3.7) | placeholder |
+| 鏡面空間 | mirror-space | 門後之地的地理:盡頭即爐邊另一面(00 §2.4) | placeholder(敘述用,非對白詞) |
+| 行過 | passed | 勝仗對 Sovereign 的動詞:打退「不肯」,不殺那個人(00 §2.1) | placeholder |
 | 尖塔 / Spire | — | 舊垂直語彙 | **banned** [SETTLED] |
 | 爬 / climb / ascend(敘事用) | — | 垂直朝聖語彙 | **banned**,逐句清洗見 ledger |
-| 上面嗰樣嘢 / the thing above | — | 舊指涉;建議改「門後嗰樣嘢」 | banned(pending [OPEN] 00 §8.1) |
+| 上面嗰樣嘢 / the thing above | — | 舊指涉;§8.1 已解——門後沒有嗰樣嘢,只有城;該詞只作 legend-drift 出現 | **banned** [#258 R1 Q4A] |
 
 ## 正字與語域(繼承 #177,對文案 binding)
 

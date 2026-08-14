@@ -27,8 +27,8 @@ before it ships.
 |---|---|---|---|
 | Keeper hearth lines (run start) | 留低嗰個 | pool 60 | +60 (shard-count-aware variants) |
 | Waystone interstitials | walker monologues | pool 60 | +60 |
-| Lamplighter meetings ×5 | dialogue scenes | 8–12 lines each | reactive variants |
-| Whispers | 24 walkers' last words | rewrite/assign all 24 | — |
+| Lamplighter meetings ×5 | dialogue scenes | 8–12 lines each, incl. the explicit「上次」line (#258 R2 Q13) | reactive variants |
+| Whispers | 24 walkers' last words | rewrite/assign all 24 — full per-walker table with mini-bios, method per 00 §8.5 (#258 R3 Q16) | — |
 | Loss pool (A2/A3) | dying walkers' last words + epitaphs | pool 50 | +50 |
 | Dawn-ceremony prose | Vigil memory archive | 1 passage per quest milestone (~25) | act-transition passages |
 | Quest line rewrites | six quests | full pass (climb-language purge) | — |
@@ -38,6 +38,29 @@ before it ships.
 | Per-enemy walker-memory fragments | 34 enemies × 2–3 | — | ~100 lines |
 | Relic/card/status/potion lore | item flavor | — | ~115 entries (needs the un-surveyed icon groups: cards 60, relics 31, statuses 17, potions 7) |
 | Event scripts (library, shrine, knight, traders…) | scene dialogues | top 5 events | remainder |
+
+## Per-channel spoiler ceiling [SETTLED — #258 R1 Q5 + R2 N3]
+
+Every surface records the maximum reveal-ladder level (00 §5) it may carry.
+Canon-lint checks each line's ledger level against its channel's ceiling.
+*When* a level unlocks in play: shard-count **code gating** — engine child
+task #270 [SETTLED — #258 R2 Q12].
+
+| Surface | Ceiling | Note |
+|---|---|---|
+| Opening scene | L0 | visual-only foreshadow; zero textual confirmation |
+| Keeper hearth lines | L1 | dual-reading, never confirming |
+| Waystone interstitials | L1 | |
+| Lamplighter meetings | L1 | the「上次」ambiguity lives here |
+| Whispers | L1 | last words may unsettle, never explain |
+| Loss pool (A2/A3) | L1 | shard-0 reachable — see R2 gating decision |
+| Per-enemy fragments | L1 | |
+| Relic/card/status/potion lore | L1 | |
+| Event scripts | L1 | Silvered Mirror motif ruled L1 |
+| Dawn-ceremony prose | L2 | quest-milestone keyed |
+| Quest line rewrites | L2 | closers only; quest bodies stay L1 |
+| Sixth-shard scene | L3 | the only L3 surface |
+| Act IV five nodes + finale | L4 | |
 
 ## Drafting pipeline (how a batch ships)
 

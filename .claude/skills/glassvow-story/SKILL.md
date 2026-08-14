@@ -66,3 +66,24 @@ first batch). No freehand additions outside a batch.
   governs only the words.
 - Wayfinder map #156 tracks story decisions as tickets; one ticket per
   session, decisions recorded on the map.
+
+## 9. Fair-play decalogue (#258 R1 Q5)
+
+Twist-craft rules; the canon-lint and twist-safety passes enforce them line
+by line.
+
+1. A reveal may only reinterpret shipped lines — never import a fact the
+   player couldn't have met before it.
+2. Every dual-reading line must fully work on its surface reading alone;
+   a line that only functions post-twist is a leak.
+3. The Keeper may mislead, never lie: every Keeper line is literally true
+   under `00-truth.md`.
+4. No character may voice knowledge above their information-matrix row
+   (00 §4); the matrix, not the cast sheet, is the authority.
+5. A line's reveal-ladder level (00 §5) may not exceed its channel's
+   spoiler ceiling (04-delivery).
+6. Contradictions are resolved from existing canon or taken to James —
+   never patched with new metaphysics invented inline.
+7. Legend-drift (in-fiction wrong beliefs: the Lamplighter's testimony,
+   the Second Page's motive clause) is ledgered as drift — the ledger
+   records both the false surface and the true mechanism.
