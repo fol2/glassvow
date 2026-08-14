@@ -87,6 +87,62 @@ lives under `~/.appstoreconnect/private_keys/`; its key + issuer IDs are in
 for Octomiser's TestFlight uploads — IDs deliberately not reproduced here:
 public repo). The same key later serves upload/TestFlight automation.
 
+## iOS build on a tethered device — the measurement path, not the store path
+
+Performance tickets need a `dev_tools` build running on real hardware (#233
+measures the map scene on iPad 8). That is a **different route** from the store
+recipe above and the two must not be confused: `scripts/ios_export_options.plist`
+declares `method = app-store-connect`, which produces an artifact that cannot be
+installed on a tethered device. It is not needed here at all — Godot's own
+`--export-debug` writes a `glassvow/export_options.plist` next to the project
+with `method = development` and the team already filled in.
+
+Verified end to end on this machine, 2026-08-14, against an iPhone 16 Pro Max:
+
+```bash
+mkdir -p build/ios-dev                       # Godot will not create it
+godot --headless --export-debug "iOS Dev Review" build/ios-dev/glassvow.ipa
+xcodebuild -project build/ios-dev/glassvow.xcodeproj -scheme glassvow \
+  -configuration Debug -destination 'id=<devicectl identifier>' \
+  -allowProvisioningUpdates -derivedDataPath build/ios-dev/dd build
+xcrun devicectl device install app --device <devicectl identifier> \
+  build/ios-dev/dd/Build/Products/Debug-iphoneos/glassvow.app
+```
+
+`xcrun devicectl list devices` gives the identifier. Signing needs no new
+profile: automatic signing picked `Apple Development: James TO` under the
+wildcard `iOS Team Provisioning Profile: *`, and **BUILD SUCCEEDED** without a
+portal visit.
+
+Three things that will stop you:
+
+- **The preset is iPad-only.** `iOS Dev Review` sets
+  `application/targeted_device_family=2`, so the build refuses to install on an
+  iPhone. Append `TARGETED_DEVICE_FAMILY="1,2"` to the `xcodebuild` line to
+  rehearse on a phone — an override at build time, so `export_presets.cfg` stays
+  untouched and the iPad remains the only *shipped* target.
+- **The device must be tethered and unlocked.** A Wi-Fi-paired device reports
+  `available (paired)` from `devicectl list devices` while
+  `tunnelState: disconnected` and `tunnelIPAddress: nil`; installing then fails
+  with `com.apple.dt.CoreDeviceError error 4`. Check `tunnelState` before
+  blaming the build.
+- **`IPHONEOS_DEPLOYMENT_TARGET` is 15.0, which is below the renderer's floor.**
+  `project.godot` selects the Mobile renderer, whose documented minimum is
+  iPadOS 16 + Metal 3 (see the mobile performance-floor research note). The app
+  therefore *installs* on an OS where the renderer is not supported, and it will
+  produce numbers that look valid. Read the OS version off the device before
+  trusting any measurement taken on it.
+
+The bench harness is not launched from the app's main scene: it is a `SceneTree`
+script, passed as `-s res://tools/bench_map_scene.gd`. Release iOS templates do
+carry the `--script` parser, so the argument route exists; whether it survives an
+Xcode scheme or needs the Info.plist `godot_cmdline` array is recorded on #233.
+
+Use `--export-debug` only to rehearse the plumbing. Timings for a ticket must
+come from `--export-release`: the debug engine slice is a different binary, and
+`tools/bench_map_scene.gd` stamps a DEBUG BUILD warning across its own output to
+stop a rehearsal run being pasted in as evidence.
+
 ## Store accounts
 
 Apple Developer Program (US$99/yr) and Play Console (US$25 one-time) are

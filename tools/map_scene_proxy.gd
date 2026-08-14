@@ -29,6 +29,9 @@ const PROP_SHADER: String = "res://presentation/map/map_prop.gdshader"
 const GRADE_MIN: Vector2 = Vector2(-24.0, -12.0)
 const GRADE_SIZE: Vector2 = Vector2(48.0, 24.0)
 const GRADE_RESOLUTION: Vector2i = Vector2i(256, 128)
+const GROUND_SIZE: Vector2 = Vector2(48.0, 34.0)
+const CAM_SIZE: float = 20.0
+const CAM_POS: Vector3 = Vector3(-7.0, 18.0, 16.0)
 const TILE_SIZE: int = 128
 const TILE_CELLS: int = 12
 const GROUND_VALUE_LINEAR: float = 0.420
@@ -98,7 +101,7 @@ func _add_key() -> DirectionalLight3D:
 
 func _add_ground(material: ShaderMaterial) -> void:
 	var plane: PlaneMesh = PlaneMesh.new()
-	plane.size = GRADE_SIZE
+	plane.size = GROUND_SIZE
 	var ground: MeshInstance3D = MeshInstance3D.new()
 	ground.name = "TerrainProxy"
 	ground.mesh = plane
@@ -121,8 +124,8 @@ func _add_camera(tilt_degrees: float) -> void:
 	_camera = Camera3D.new()
 	_camera.name = "MapCamera"
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	_camera.size = 20.0
-	_camera.position = Vector3(-7.0, 18.0, 16.0)
+	_camera.size = CAM_SIZE
+	_camera.position = CAM_POS
 	_camera.rotation_degrees = Vector3(tilt_degrees, 0.0, 0.0)
 	_camera.far = 80.0
 	_camera.current = true
