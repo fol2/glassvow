@@ -82,7 +82,7 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 			else:
 				_resolve_safe_node(game, node)
 			map.clear_current()
-			if node.type == "boss":
+			if node.type == "boss" and not run.is_final_act():
 				economy.append(_economy_row(run))
 				var relic: String = Pilot.choose_relic(game.rewards.roll_boss_relics(run), content,
 					run.aspect, run.rng)

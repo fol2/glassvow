@@ -43,7 +43,7 @@ func construct(ref: ScenarioReference) -> RunState:
 	if vow < 0 or vow > content.vows.size():
 		return _fail("unknown vow %d" % vow)
 	var act: int = _ji(ref.overrides.get("act", 0))
-	if act < 0 or act > 2:
+	if act < 0 or act > 3:
 		return _fail("act %d is out of range" % act)
 	var run_id: String = "scn-%s-%d" % [ref.identity().replace("@", "-"), ref.seed]
 	var run: RunState = RunState.new_run(content, ref.seed, run_id, {

@@ -146,21 +146,56 @@ static func run(fails: Array[String]) -> void:
 		and walked_copy.cleared == walked.cleared
 		and walked_copy.reachable() == walked.reachable(),
 		"a walked map's marker, cleared set and open waystones survive the projection")
-	# ---- one lifecycle law: bosses move through all three authored acts
+	# ---- one lifecycle law: six Shards open the fourth act over three map themes
 	var full: ContentDB = ContentDB.load_full()
-	var lifecycle: RunState = RunState.new_run(full, 919, "run-three-acts", {"reveals": null})
+	var ordinary: RunState = RunState.new_run(full, 918, "run-three-acts")
+	ordinary.act = ordinary.final_act()
+	_check(fails, ordinary.final_act() == 2 and ordinary.is_final_act(),
+		"a zero-Shard run ends at act 2")
+	var lifecycle: RunState = RunState.new_run(full, 919, "run-four-acts", {
+		"reveals": null, "shards": VigilState.QUEST_IDS.duplicate(),
+	})
+	_check(fails, lifecycle.final_act() == 3 and not lifecycle.is_final_act(),
+		"a six-Shard run ends at act 3 without starting there")
 	lifecycle.player.hp = 1
 	lifecycle.start_next_act(full)
 	var second: WorldMap = WorldMap.benchmark(lifecycle)
 	lifecycle.player.hp = 1
 	lifecycle.start_next_act(full)
 	var third: WorldMap = WorldMap.benchmark(lifecycle)
-	_check(fails, lifecycle.act == 2 and lifecycle.omens.size() == 3,
-		"two boss transitions reach the third act with one omen per act")
-	_check(fails, second.region == "sunken_city" and third.region == "obsidian_spire",
-		"boss transitions replace the map theme")
+	lifecycle.player.hp = 1
+	lifecycle.start_next_act(full)
+	var fourth: WorldMap = WorldMap.benchmark(lifecycle)
+	_check(fails, lifecycle.act == 3 and lifecycle.omens.size() == 4
+		and lifecycle.is_final_act(),
+		"three boss transitions reach the fourth and final act with one omen per act")
+	_check(fails, second.region == "sunken_city" and third.region == "obsidian_spire"
+		and fourth.region == "obsidian_spire",
+		"the contentless fourth act reuses the last authored map theme")
 	_check(fails, lifecycle.player.hp == 26,
 		"each boss transition mends 35 percent without exceeding max HP")
+	var boss_map: WorldMap = WorldMap.slice()
+	boss_map.at = 0
+	boss_map.nodes[0].type = "boss"
+	boss_map.cleared[0] = true
+	var crown_run: RunState = RunState.new_run(full, 920, "run-third-act-crown", {
+		"shards": VigilState.QUEST_IDS.duplicate(),
+	})
+	crown_run.start_next_act(full)
+	crown_run.start_next_act(full)
+	var crown_host: Main = Main.new()
+	crown_host.game = GlassvowGame.new(full, crown_run)
+	crown_host._map = boss_map
+	_check(fails, crown_host._has_pending_boss_relic(),
+		"the Act III boss grants a crown in a six-Shard run")
+	crown_run.start_next_act(full)
+	_check(fails, not crown_host._has_pending_boss_relic(),
+		"the final act's boss grants no crown")
+	crown_host.free()
+	var main_source: String = FileAccess.get_file_as_string("res://application/main.gd")
+	_check(fails, main_source.contains(
+		'if node.type == "boss" and game.run.is_final_act():'),
+		"the win branch fires on the final-act boss rather than literal act 2")
 
 	# ---- the authored strip matches the M5 encounter ladder (brief §4)
 	var m: WorldMap = WorldMap.slice()
@@ -211,9 +246,10 @@ static func run(fails: Array[String]) -> void:
 		"far-band bleed covers the far drift amplitude")
 	_check(fails, MapStrip.path_for(0, &"skyband")
 		== "res://assets/art/map/act1-skyband.png", "strip paths are 1-based")
-	_check(fails, MapRegions.SPIRE_W_RATE.size() == 3
-		and MapRegions.SPIRE_H_RATE.size() == 3
-		and MapRegions.SPIRE_DARKEN.size() == 3, "spire ramps cover three acts")
+	_check(fails, MapRegions.SPIRE_W_RATE.size() == MapRegions.WEATHER_BY_ACT.size()
+		and MapRegions.SPIRE_H_RATE.size() == MapRegions.WEATHER_BY_ACT.size()
+		and MapRegions.SPIRE_DARKEN.size() == MapRegions.WEATHER_BY_ACT.size(),
+		"spire ramps cover every authored map theme")
 	# A same-lane edge must actually run straight. `signf(to.y - from.y)` gave it
 	# the full 10px bow off a sub-pixel jitter difference for three phases while
 	# the comment above it said otherwise (#69); 1.53px is the worst same-lane

@@ -46,8 +46,9 @@ static func run(fails: Array[String]) -> void:
 	# One full-registry completeness gate; individual cards do not get their own
 	# catalogue tests.
 	var full: ContentDB = ContentDB.load_full()
-	if full.cards.size() != 61 or full.enemies.size() != 27 \
-			or full.relics.size() != 31 or full.quest_ids.size() != 6:
+	var full_counts: Array[int] = [full.cards.size(), full.enemies.size(),
+		full.relics.size(), full.quest_ids.size()]
+	if full_counts != [61, 27, 31, 6]:
 		fails.append("ContentDB: full catalogue counts diverged from 6e06911")
 	if full.reveal_ids.size() != 8 or full.aspects.size() != 2 or full.vows.size() != 5:
 		fails.append("ContentDB: full progression registries are incomplete")
@@ -57,6 +58,13 @@ static func run(fails: Array[String]) -> void:
 	_enemy_overrides(fails)
 	var pickup_run: RunState = RunState.new_run(full, 5, "run-relic-pickup")
 	var rewards: RewardRules = RewardRules.new(full)
+	var act_four: RunState = RunState.new_run(full, 4, "act-four-reward")
+	act_four.act = 3
+	var act_four_reward: Dictionary = rewards.gen_combat_rewards(act_four, "normal")
+	var last_gold: Array = full.reward_gold[full.reward_gold.size() - 1]["normal"]
+	var paid_gold: int = int(float(str(act_four_reward["gold"])))
+	if paid_gold < int(float(str(last_gold[0]))) or paid_gold > int(float(str(last_gold[1]))):
+		fails.append("ContentDB: act 4 reward gold did not clamp to the final authored row")
 	rewards.gain_relic(pickup_run, "sweetRoot")
 	rewards.gain_relic(pickup_run, "hollowCrown")
 	if pickup_run.player.max_hp != 70 or pickup_run.player.hp != 70 \

@@ -132,6 +132,11 @@ static func _rejection(kernel: ScenarioKernel, fails: Array[String]) -> void:
 		fails.append("scenario reject: unknown card was accepted")
 	if kernel.construct(_custom(18309, {"rng_state": 4})) != null:
 		fails.append("scenario reject: raw RNG override was accepted")
+	var act_four: RunState = kernel.construct(_custom(18310, {"act": 3}))
+	if act_four == null or act_four.act != 3:
+		fails.append("scenario boundary: act 3 was not accepted")
+	if kernel.construct(_custom(18311, {"act": 4})) != null:
+		fails.append("scenario reject: act 4 index was accepted")
 
 
 static func _custom(seed: int, overrides: Dictionary) -> ScenarioReference:

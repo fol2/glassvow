@@ -33,11 +33,11 @@ extends RefCounted
 
 const BOOK_PATH: String = "res://assets/layout/combat-layout.json"
 
-## How many acts a run has, and therefore how many act buckets a shape may hold.
-## Three upstream, clamped to three in the benchmark's own editor
-## (`src/dev/bf-editor.js:169`). Here rather than in a caller because it is a fact
-## about the schema, and both the bench and `--act=` need it.
-const ACTS: int = 3
+## How many act buckets a shape may hold. The benchmark authors three
+## (`src/dev/bf-editor.js:169`); the fourth is an optional content seam.
+## Until it has an authored bucket, the existing data-driven resolver falls back
+## through the shape and base layers.
+const ACTS: int = 4
 
 ## Which stage edge a number is measured from. Drives the flex correction and,
 ## later, which drag handle the editor draws.

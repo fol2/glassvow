@@ -107,8 +107,8 @@ static func _final_act_run(content: ContentDB, shards: Array) -> RunState:
 	var run: RunState = RunState.new_run(content, 717, "run-sealed-final", {
 		"shards": shards,
 	})
-	run.start_next_act(content)
-	run.start_next_act(content)
+	while not run.is_final_act():
+		run.start_next_act(content)
 	return run
 
 
