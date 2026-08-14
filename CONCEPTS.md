@@ -68,6 +68,13 @@ so a gate is not trusted until it has been watched failing on a seeded defect in
 the environment it guards. When a gate cannot run somewhere, that is stated
 rather than allowed to pass.
 
+A gate's **coverage set** — what it actually examined — is a separate fact from
+its verdict, and a green verdict asserts nothing about anything outside that set.
+A gate that derives its set from what is tracked, or that can only check the
+subjects carrying some marker, is silent about everything else by construction.
+So a passing gate is quoted with its count, and a claim of the form "the gate
+passes over every X" is only as true as the set actually contained every X.
+
 ### Evidence Harness
 A tool that records or verifies a named gate under its declared conditions.
 Evidence from a Harness keeps its own proof boundary; reaching the same surface

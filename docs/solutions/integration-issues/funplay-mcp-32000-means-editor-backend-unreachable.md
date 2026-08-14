@@ -121,13 +121,13 @@ running.
 
 This is the finding that justifies the document.
 
-`docs/port-status.md:99` has carried the diagnosis since the M5 milestone note:
+`docs/port-status.md` (the Funplay MCP note) has carried the diagnosis since the M5 milestone note:
 
 > Funplay MCP handshake still pending (editor must be opened once) — the --shot
 > loop covers agent iteration meanwhile.
 
 And the binding contract states it as a numbered precondition —
-`.claude/skills/glassvow-godot/SKILL.md:69`, § 6 *Visual Inspection*, step 1:
+`.claude/skills/glassvow-godot/SKILL.md` § 6 *Visual Inspection*, step 1:
 "Godot editor open, MCP connected (port 8765)."
 
 So the cause was written down twice, in a status ledger and in a contract every
@@ -201,7 +201,7 @@ tools: 78
 ```
 
 By this project's own record that was the **first** successful funplay handshake:
-`docs/port-status.md:99` had described it as pending since before 2026-07-24, so
+`docs/port-status.md` (the Funplay MCP note) had described it as pending since before 2026-07-24, so
 this is a never-worked path being made to work, not a regression being repaired.
 
 There is no PR. This was a local environment fix on one machine; nothing in the
@@ -224,10 +224,20 @@ wrong.** Checked against the running engine rather than assumed:
 | `buses/default_bus_layout` | `has=true`, value `res://default_bus_layout.tres` | same |
 | `gdscript/warnings/exclude_addons` | **`has=false`** | not a registered setting in 4.7.1 — it was a dead key |
 
-The parse gate from AGENTS.md passes over every non-addon `.gd` file after the
-rewrite, which is the outcome that matters; that gate never depended on
-`exclude_addons` anyway, because the loop already excludes those files itself
-with `grep -v '^addons/'`.
+The `has=false` row is the load-bearing evidence: a key the engine does not
+register cannot have been doing anything, whatever any gate reports.
+
+*(Refreshed 2026-08-14.* This paragraph originally added "and the parse gate
+passes over every non-addon `.gd` file after the rewrite" as corroboration. That
+sentence is withdrawn on both halves. First, on 2026-07-27 a passing parse gate
+proved nothing — the `|| exit 1` loop of the day exited 0 on every file
+regardless of what it found, see issue #82. Second, "passes over every non-addon
+`.gd` file" overclaims even under the replacement gate: `tools/check_scripts.sh`
+builds its default sweep from `git ls-files`, so an **untracked** `.gd` is
+silently never checked, and the addon exclusion is a discovery filter on that
+default sweep only — an explicit `tools/check_scripts.sh addons/foo.gd` bypasses
+it and does check the addon. The `ProjectSettings` table above never needed the
+gate's corroboration.*)
 
 The real cost is therefore ownership, not correctness: `project.godot` belongs to
 the Assembly lane (`docs/session-ownership.md:31`) and six lanes share this tree,
@@ -352,7 +362,7 @@ no ports.
 The two are disjoint at runtime, and the cleanest proof is a negative: **no code
 under `tools/` ever contacts the port.** Grepping `8765` across `tools/` returns
 exactly one hit, and it is a comment in the anchor checker explaining that a
-port is not a `file:line` anchor (`tools/check_anchors.py:44`). The capture
+port is not a `file:line` anchor (`tools/check_anchors.py`, the anchor-suffix comment). The capture
 harness talks only to `user://funplay_mcp_runtime_*.json`
 (`tools/live.sh:26-28`), which is why `tools/live.sh` kept working normally
 throughout the outage. "funplay is down" is ambiguous between two independent
@@ -452,10 +462,10 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
 - [`application/main.tscn`](../../../application/main.tscn) — a root `Control`
   with a script and no
   children, which is why `children: []` is the correct answer.
-- `docs/port-status.md:99` — the pre-existing statement of this root cause,
+- `docs/port-status.md` (the Funplay MCP note) — the pre-existing statement of this root cause,
   filed under an M5 milestone note. Now stale in the other direction: the
   handshake is no longer pending.
-- `.claude/skills/glassvow-godot/SKILL.md:69` — § 6 step 1, the same
+- `.claude/skills/glassvow-godot/SKILL.md` § 6 *Visual Inspection* — § 6 step 1, the same
   precondition as a contract clause. Step 3 of that section names a command
   (`mcp screenshot …`) that does not exist in the 78-tool surface; the real
   captures are `capture_editor_view` and `capture_runtime_view`. Only visible
@@ -470,6 +480,12 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
   that loop depends on the editor or on port 8765.
 - `docs/dev-tools.md` — the shared tool inventory. It distinguishes the
   editor-bound MCP server from the runtime bridge used by Native Proof.
-- Auto-memory `godot-macos-capture-steals-focus` — the focus-cost reasoning that
-  used to argue against opening the editor, relaxed on 2026-07-27 by the move to
-  remote work. Corroborating context, not independent evidence.
+- The focus-cost reasoning that used to argue against opening the editor,
+  relaxed on 2026-07-27 by the move to remote work. Corroborating context, not
+  independent evidence. *(Refreshed 2026-08-14: this cited an auto-memory note
+  named `godot-macos-capture-steals-focus`, which no longer exists — the store
+  holds no note by that name. The same reasoning survives in
+  [Capture through a long-lived host, not a process per screenshot](../tooling-decisions/long-lived-capture-host-not-process-per-shot.md),
+  which is in-repo and checkable; cite that instead. Memory notes are not a
+  citable substrate for a learning: nothing in the tree can verify one, and
+  nothing notices when one is deleted.)*
