@@ -34,9 +34,9 @@ unconditionally. It now scores that pick and keeps it only when
 `accepts_card_reward` says so:
 
 - Gate: `tools/balance_sim.gd:132-133` (`in _claim_rewards`)
-- Predicate: `tools/balance_pilot.gd:36` (`accepts_card_reward`) —
+- Predicate: `tools/balance_pilot.gd:47` (`accepts_card_reward`) —
   `score >= card_decline_threshold`
-- Default: `CARD_DECLINE_DEFAULT = -1e9` at `tools/balance_pilot.gd:9`
+- Default: `CARD_DECLINE_DEFAULT = -1e9` at `tools/balance_pilot.gd:10`
   (`CARD_DECLINE_DEFAULT`). Finite so CLI/JSON round-trip; no catalogue score is
   this low, so the default still takes every offered card.
 
@@ -50,12 +50,12 @@ T1b is removal. The old shop gate was the conjunction
 `8.5 - wscore`. Those are now one policy with three numbers; `remove_value`
 stays the unified intercept.
 
-- Shop eligibility: `tools/balance_pilot.gd:40-41` (`wants_shop_remove`) —
+- Shop eligibility: `tools/balance_pilot.gd:51-52` (`wants_shop_remove`) —
   `copies >= removal_min_copies and wscore <= removal_appetite - REMOVAL_SHOP_MARGIN`
-- Shop numerator and event score: `tools/balance_pilot.gd:38-39` (`remove_value`)
+- Shop numerator and event score: `tools/balance_pilot.gd:49-50` (`remove_value`)
   — `removal_appetite - wscore`. Event path:
-  `tools/balance_sim.gd:240` (`in _event_op_score`). Shop call:
-  `tools/balance_pilot.gd:427-428` (`in choose_shop`).
+  `tools/balance_sim.gd:241` (`in _event_op_score`). Shop call:
+  `tools/balance_pilot.gd:449-450` (`in choose_shop`).
 - Defaults: `removalAppetite = 8.5`, `removalMinCopies = 3`,
   `REMOVAL_SHOP_MARGIN = 2.0` (not sampled). So the default shop gate is still
   `copies >= 3 and wscore <= 6.5`, and default `pickRemove` is still `8.5 - wscore`.
@@ -68,11 +68,12 @@ what lets a policy cut a singleton — the way a player builds a thin deck.
 ## Knob table
 
 One dict. `apply_policy` / `policy_snapshot` at
-`tools/balance_pilot.gd:29` (`apply_policy`) and
-`tools/balance_pilot.gd:33` (`policy_snapshot`). CLI keys in
-`tools/balance_sim.gd:408-410` (`_policy`). `simulate(..., policy)` applies the
-dict at the start of every run. `manifest.policy` records it; it is **not**
-written onto the run row, so the seed-1000 digest does not move.
+`tools/balance_pilot.gd:23` (`apply_policy`) and
+`tools/balance_pilot.gd:29` (`policy_snapshot`). CLI keys in
+`tools/balance_sim.gd:410-413` (`_policy`). `simulate(..., policy)` applies the
+dict at the start of every run. Slice B records the resolved vector on every
+run row (`policy`) as the replay key; the seed-1000 digest moves with that
+field. See `docs/balance/2026-08-14-policy-vector.md`.
 
 | name | default | drives | Slice B |
 |---|---|---|---|
@@ -80,21 +81,21 @@ written onto the run row, so the seed-1000 digest does not move.
 | `removalAppetite` | `8.5` | T1b intercept: `pickRemove = appetite − wscore`; shop ceiling `wscore <= appetite − 2.0`; shop ratio `(appetite − wscore) / removeCost` | one number, both sides |
 | `removalMinCopies` | `3` | T1b shop eligibility: `copies >= this` | sample 1 / 2 / 3 so a thin policy can cut singletons |
 
-`REMOVAL_SHOP_MARGIN = 2.0` is structural, not a sampled knob. Slice B plugs a
-sampled vector in by calling `Pilot.apply_policy({...})` (or the same keys as
-CLI flags after `--`) and leaving the rest of the dict for later weights —
-`card_score` constants, `_status_value`, `_special_value`, `RELIC_SCORE`,
-`_combat_score` bonuses, the route table, rest and potion thresholds,
-`SHOP_MIN_RATIO`. Replay-key on the run row waits until that vector exists;
-adding it will bump the digest, which is expected.
+`REMOVAL_SHOP_MARGIN = 2.0` is structural, not a sampled knob. Slice B's
+`BalancePolicy.default()` is the rest of that dict — `card_score` constants,
+`_status_value`, `_special_value`, relic scores, `_combat_score` bonuses, the
+route table, rest and potion thresholds, `SHOP_MIN_RATIO`. `apply_policy({...})`
+deep-merges onto it. CLI still exposes only the three T1 keys.
 
 ## Neutrality proof
 
 Defaults must reproduce the merged p7-d2-v1 instrument. Re-confirmed **after**
 `removalMinCopies` landed (default 3):
 
-1. **Seed-1000 digest unchanged.**
-   `b38410ee207c477b1f0048dec350d1488a100937750150b2a4fd04d69eae6710`
+1. **Seed-1000 digest.** Slice A pin was
+   `b38410ee207c477b1f0048dec350d1488a100937750150b2a4fd04d69eae6710`.
+   Slice B records `policy` on the run row; the pin is now
+   `648562f245b41b131c36945c3c0627b465ec99b0f2e44c4a3aae28008f132aee`
    (`tests/test_balance_sim.gd` (`EXPECTED`)). Library / forgottenShrine scores
    unchanged: `library[0]=28.345 [1]=9.8`, `forgottenShrine[0]=6.0 [1]=5.4`.
 2. **Vow 0, seeds 4000–4199 inclusive, 200 runs/aspect, defaults.**
