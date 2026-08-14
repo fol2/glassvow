@@ -28,7 +28,7 @@ before it ships.
 | Keeper hearth lines (run start) | 留低嗰個 | pool 60 | +60 (shard-count-aware variants) |
 | Waystone interstitials | walker monologues | pool 60 | +60 |
 | Lamplighter meetings ×5 | dialogue scenes | 8–12 lines each, incl. the explicit「上次」line (#258 R2 Q13) | reactive variants |
-| Whispers | 24 walkers' last words | rewrite/assign all 24 | — |
+| Whispers | 24 walkers' last words | rewrite/assign all 24 — full per-walker table with mini-bios, method per 00 §8.5 (#258 R3 Q16) | — |
 | Loss pool (A2/A3) | dying walkers' last words + epitaphs | pool 50 | +50 |
 | Dawn-ceremony prose | Vigil memory archive | 1 passage per quest milestone (~25) | act-transition passages |
 | Quest line rewrites | six quests | full pass (climb-language purge) | — |

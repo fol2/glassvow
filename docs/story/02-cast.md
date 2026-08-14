@@ -55,7 +55,7 @@
 - **資產**:`shade.png`、`mirror.png`(鏡中淺笑黑影=留者,即你);
   招式名「憶中○○」系列。
 
-## 次要人物 [全部 PROPOSED — 一句版,待深寫]
+## 次要人物 [一句版 SETTLED — #258 R3 Q17;深寫留 Phase 1 batch]
 
 | 人物 | 新讀法定位 | 資產 |
 |---|---|---|
@@ -73,4 +73,5 @@
 歷代行者不是背景板,是**第二主角(複數)**。文案曝光面:24 whisper
 (遺言)、waystone 獨白、碑文、敗仗遺言 pool。(Act IV 九敵**不屬
 Queue**——鏡面反照的 counterfactual selves,00 §2.6 [SETTLED — #258
-R2 Q9];隊伍永不阻你。)逐代分配表 → 待 `04-delivery` 開稿時建立。
+R2 Q9];隊伍永不阻你。)逐代分配表:whisper-rewrite batch 起全表,
+方法與約束見 00 §8.5 [SETTLED — #258 R3 Q16]。

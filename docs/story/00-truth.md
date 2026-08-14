@@ -194,12 +194,15 @@
 2. **兩位英雄(ashwarden/duskblade)的 in-fiction 身份** [SETTLED —
    #258 R2 Q15]:hero 選擇=這一代行者選的「行法」;行者永遠 faceless,
    文案永不第三人稱點明身份(L4 亦不點名)。
-3. **三 act 的成因深寫**(誰住過、為何淪為此貌)——03-acts.md 有
-   [PROPOSED] 初稿,深度版未寫。
-4. **Merchant / Flesh Trader / Gambler 在新讀法下的定位**——02-cast.md
-   有 [PROPOSED] 一句版。
-5. **24 句 whisper 逐句歸位**:哪一句是哪一代行者的遺言(次序=隊伍次序
-   已 [SETTLED],逐句分配未做)。
+3. **三 act 的成因深寫**(誰住過、為何淪為此貌)——drafting,非 canon
+   決定:歸 04-delivery batch 管(#258 R3 判定);03-acts.md 現稿為據。
+4. **次要人物在新讀法下的定位** [SETTLED — #258 R3 Q17]:02-cast.md
+   一句版轉正;深寫留 Phase 1 batch。
+5. **24 句 whisper 逐句歸位** [方法 SETTLED — #258 R3 Q16]:writer 於
+   whisper-rewrite batch 起全表——24 代行者每人一行 mini-bio,遺言逐句
+   掛靠;約束:符合隊伍次序、不超 §4 矩陣上限、全部 ≤L1;錨點:
+   whisper 9(gaunt keeper=Lamplighter)、whisper 14(掌燈人五價)。
+   成表過 James normal review。
 
 ## 9. 命名記錄
 
