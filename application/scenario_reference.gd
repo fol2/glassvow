@@ -39,7 +39,7 @@ var scenario_id: String = "custom"
 var revision: int = 1
 var build: String = ""
 var seed: int = 0
-var locale: String = "en"
+var locale: String = ""
 var shape: String = "pad-landscape"
 var overrides: Dictionary = {}
 
@@ -85,8 +85,8 @@ func load_from(raw: Dictionary) -> bool:
 	if rv_check != rev:
 		error = "unsupported revision %s@%d" % [id, rev]
 		return false
-	var loc: String = str(raw.get("locale", "en"))
-	if not LOCALES.has(loc):
+	var loc: String = str(raw.get("locale", ""))
+	if not loc.is_empty() and not LOCALES.has(loc):
 		error = "unsupported locale %s" % loc
 		return false
 	var shape_name: String = str(raw.get("shape", String(StageShape.IDENTITY)))
