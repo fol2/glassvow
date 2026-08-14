@@ -4,7 +4,7 @@ extends Control
 
 signal action_requested(action: StringName)
 
-const HOLLOW: String = "res://assets/art/meta/hollow-lamplighter.svg"
+const HOLLOW: String = "res://assets/art/meta/hollow-lamplighter.png"
 
 var shape: StringName = StageShape.IDENTITY
 
