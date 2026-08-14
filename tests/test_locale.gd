@@ -667,16 +667,29 @@ static func _title_wordmark_locale(fails: Array[String]) -> void:
 		zh.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		zh.size = Vector2(StageShape.REFERENCES[shape])
 		zh._fit_title()
-		var label_v: Variant = zh.get("_wordmark_label")
-		var label: Label = label_v if label_v is Label else null
-		_check(fails, zh._wordmark != null and not zh._wordmark.visible,
-			"zh-Hant title still paints the English raster at %s" % shape)
-		_check(fails, label != null and label.text == "琉璃誓言",
-			"zh-Hant title does not paint its catalogue wordmark at %s" % shape)
-		if label != null:
-			var font: Font = label.get_theme_font("font")
-			_check(fails, font != null and font.has_char("誓".unicode_at(0)),
-				"zh-Hant title wordmark cannot shape representative glyph 誓 at %s" % shape)
-			_check(fails, label.size.x <= zh.size.x and label.size.y <= zh.size.y,
-				"zh-Hant title wordmark escapes the %s stage" % shape)
+		# zh-Hant has its own authored raster, cut in the same stained glass
+		# as the English wordmark (docs/art-ledger.md) — no text fallback.
+		_check(fails, zh._wordmark != null and zh._wordmark.visible
+			and zh._wordmark.texture == load(ChoiceScreen.TITLE_WORDMARK_ZH),
+			"zh-Hant title does not paint its authored raster at %s" % shape)
+		_check(fails, zh.get("_wordmark_label") == null,
+			"zh-Hant title gained a duplicate text wordmark at %s" % shape)
 		zh.free()
+	# Any locale WITHOUT an authored raster still paints its catalogue title
+	# through the display-face fallback chain.
+	var other: ChoiceScreen = ChoiceScreen.new("GLASVOGT", "", [],
+		{"variant": "title", "shape": &"pad-landscape"})
+	other.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	other.size = Vector2(StageShape.REFERENCES[&"pad-landscape"])
+	other._fit_title()
+	var label_v: Variant = other.get("_wordmark_label")
+	var label: Label = label_v if label_v is Label else null
+	_check(fails, other._wordmark != null and not other._wordmark.visible,
+		"rasterless locale title still paints the English raster")
+	_check(fails, label != null and label.text == "GLASVOGT",
+		"rasterless locale title does not paint its catalogue wordmark")
+	if label != null:
+		var font: Font = label.get_theme_font("font")
+		_check(fails, font != null and font.has_char("誓".unicode_at(0)),
+			"rasterless locale wordmark cannot shape representative glyph 誓")
+	other.free()

@@ -118,6 +118,24 @@ The Godot boot splash, wired at `project.godot:20`. Last corrected by 4007c11
 ("the splash stops clipping its own name"). **Prompt not recorded** —
 reconstruct and add it here the next time it is touched.
 
+### `title/title-zh.png` — 1536×512 RGBA
+
+The zh-Hant title wordmark — 琉璃誓言 cut in the same stained glass as the
+English raster, shown in its seat by `choice_screen.gd` whenever the catalogue
+title is exactly that string; every other non-English locale keeps the
+display-face text fallback. Generated 2026-08-14 through
+`~/.claude/scripts/subagents/run-imagegen.sh` with `title/title.png` attached
+as the style reference. Prompt (abridged to its binding clauses): "the four
+traditional Chinese characters 琉璃誓言 written horizontally, as ornate
+stained-glass letterforms — faceted panes in amber, gold and honey with deep
+blue and violet panes near the lower stroke edges, dark lead-line (came)
+outlines forming a strong kai calligraphic stroke skeleton with sharp tapered
+ends, backlit inner glow, thin gold rim light on the outer contour, transparent
+RGBA background, no backdrop, no ornaments, no watermark; the characters must
+read exactly 琉璃誓言 with correct stroke structure." First candidate accepted:
+all four characters structurally correct, transparency real (514,654 fully
+transparent pixels, corner alpha 0).
+
 ## Rejection note — what "technically shippable" means
 
 Judging generated character art by eye is not enough; two of the five

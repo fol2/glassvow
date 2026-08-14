@@ -7,6 +7,7 @@ signal chosen(id: String)
 
 const TITLE_BACKGROUND: String = "res://assets/art/title-background/background.png"
 const TITLE_WORDMARK: String = "res://assets/art/title/title.png"
+const TITLE_WORDMARK_ZH: String = "res://assets/art/title/title-zh.png"
 const ROSE_MURAL: String = "res://assets/art/meta/emberglass-mural.png"
 const ROSE_FRAME: String = "res://assets/art/meta/emberglass-frame.png"
 const ROSE_MASK: String = "res://assets/art/meta/emberglass-mask-%s.png"
@@ -361,10 +362,13 @@ func _build_title(title_text: String, tagline_text: String, choices: Array[Dicti
 	_wordmark.anchor_right = 0.5
 	_wordmark.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_wordmark_slot.add_child(_wordmark)
-	# The authored raster is the exact English wordmark. Other locales use the
-	# same seat and composition, but paint their catalogue title through the
-	# display-face fallback chain rather than baking a second language into art.
-	if title_text != "GLASSVOW":
+	# Two authored rasters exist: the English wordmark and the zh-Hant
+	# wordmark, cut in the same stained glass (docs/art-ledger.md). Any other
+	# locale paints its catalogue title through the display-face fallback
+	# chain rather than baking more languages into art.
+	if title_text == "琉璃誓言":
+		_wordmark.texture = load(TITLE_WORDMARK_ZH) as Texture2D
+	elif title_text != "GLASSVOW":
 		_wordmark.visible = false
 		_wordmark_label = Label.new()
 		_wordmark_label.text = title_text
