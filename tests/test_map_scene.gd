@@ -24,7 +24,7 @@ static func _rig(fails: Array[String]) -> void:
 	_check(fails, is_equal_approx(cam.rotation_degrees.x, MapCameraRig.TILT_DEGREES),
 			"default pitch is the #255 −55° stop")
 	_check(fails, rig.zoom_stop == MapCameraRig.DEFAULT_STOP
-			and is_equal_approx(cam.size, MapCameraRig.ZOOM_STOPS[MapCameraRig.DEFAULT_STOP]),
+			and is_equal_approx(cam.size, 20.0),
 			"default zoom stop matches proxy CAM_SIZE 20")
 	_check(fails, MapCameraRig.ZOOM_STOPS.size() == 4,
 			"four discrete zoom stops, same count as shader TEX_STOPS")

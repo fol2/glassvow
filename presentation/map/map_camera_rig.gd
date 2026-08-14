@@ -12,7 +12,7 @@ const TILT_DEGREES: float = -55.0
 const CAM_HEIGHT: float = 18.0
 const DEFAULT_XZ: Vector2 = Vector2(-7.0, 16.0)
 const ZOOM_STOPS: Array[float] = [12.0, 16.0, 20.0, 28.0]
-const DEFAULT_STOP: int = 1
+const DEFAULT_STOP: int = 2
 ## Camera XZ. Default pose is inside; slice 3 replaces this with the lattice
 ## footprint. Rect is (min_x, min_z, size_x, size_z).
 const DEFAULT_PAN_BOUNDS: Rect2 = Rect2(-24.0, 2.0, 48.0, 28.0)
