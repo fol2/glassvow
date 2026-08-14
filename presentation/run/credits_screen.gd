@@ -17,11 +17,9 @@ const SFX_MANIFEST: String = "res://assets/audio/sfx/manifest.json"
 const FONT_LICENCES: Array[Dictionary] = [
 	{"family": "Cinzel", "path": "res://assets/fonts/OFL-Cinzel.txt"},
 	{"family": "Alegreya", "path": "res://assets/fonts/OFL-Alegreya.txt"},
-	# OFL.txt's copyright reads "Adobe ... Reserved Font Name 'Source'" and
-	# that IS Noto Sans TC's genuine declaration: Adobe manufactures Noto CJK
-	# for Google (derived from Source Han Sans) — verified against the TTF's
-	# own name table (nameID 8 = Adobe).
-	{"family": "Noto Sans TC", "path": "res://assets/fonts/OFL.txt"},
+	# Noto Serif CJK TC is an Adobe/Google Noto CJK family and remains OFL.
+	{"family": "Noto Serif CJK TC", "path": "res://assets/fonts/OFL.txt"},
+	{"family": "Noto Sans Symbols2", "path": "res://assets/fonts/OFL-NotoSansSymbols2.txt"},
 ]
 
 var shape: StringName = StageShape.IDENTITY

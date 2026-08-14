@@ -19,10 +19,10 @@ const HP_RED: Color = Color(0.85, 0.33, 0.32)
 
 
 ## The benchmark's two faces (roguecardv2@6e069118): Cinzel for display —
-## names, cost numerals — and Alegreya for the reading text. Both OFL, bundled
-## alongside NotoSansTC, which stays the UI face because these two carry no CJK.
-## When a display face is requested, `face()` attaches NotoSansTC as a fallback
-## so 繁中 glyphs never tofu through Cinzel/Alegreya overrides.
+## names, cost numerals — and Alegreya for the reading text. Both stay the Latin
+## primaries. Noto Serif TC is the complete zh-Hant chain: Regular for reading,
+## SemiBold for names/headings, Black for the act plate, then a three-glyph Noto
+## Sans Symbols2 subset for the two locale markers and the ticket spelling.
 ## The lightest weight the benchmark loads, and the one a rule that names no
 ## `font-weight` lands on: CSS matching for a desired 400 checks 500 before it
 ## checks anything heavier, and 400 is not in the set. `.enemy .name` is such a
@@ -32,31 +32,89 @@ const CINZEL_700: String = "res://assets/fonts/Cinzel-700.woff2"
 const CINZEL_800: String = "res://assets/fonts/Cinzel-800.woff2"
 const ALEGREYA_400: String = "res://assets/fonts/Alegreya-400.woff2"
 const ALEGREYA_700: String = "res://assets/fonts/Alegreya-700.woff2"
-const NOTO_SANS_TC: String = "res://assets/fonts/NotoSansTC.ttf"
+const NOTO_SERIF_TC_REGULAR: String = "res://assets/fonts/NotoSerifTC-Regular.woff2"
+const NOTO_SERIF_TC_SEMIBOLD: String = "res://assets/fonts/NotoSerifTC-SemiBold.woff2"
+const NOTO_SERIF_TC_BLACK: String = "res://assets/fonts/NotoSerifTC-Black.woff2"
+const NOTO_SANS_SYMBOLS_2: String = "res://assets/fonts/NotoSansSymbols2-Glassvow.woff2"
 
 static var _faces: Dictionary = {}
 
 
-## Load a display face with NotoSansTC as CJK fallback. Cached per path so the
-## fallback chain is built once.
-static func face(path: String) -> Font:
-	if _faces.has(path):
-		return _faces[path]
+static func _is_serif_tc(path: String) -> bool:
+	return path == NOTO_SERIF_TC_REGULAR or path == NOTO_SERIF_TC_SEMIBOLD \
+		or path == NOTO_SERIF_TC_BLACK
+
+
+static func _symbol_face() -> Font:
+	var cache_key: String = "symbols"
+	if _faces.has(cache_key):
+		return _faces[cache_key]
+	var symbols: Font = load(NOTO_SANS_SYMBOLS_2) as Font
+	_faces[cache_key] = symbols
+	return symbols
+
+
+## Build the CJK/symbol leaf once. Every primary face points at this leaf, so
+## its marker glyphs cannot fall through to an OS-specific system font.
+static func _serif_tc_face(path: String) -> Font:
+	var cache_key: String = "serif:" + path
+	if _faces.has(cache_key):
+		return _faces[cache_key]
+	var serif: Font = load(path) as Font
+	var symbols: Font = _symbol_face()
+	if serif == null or symbols == null:
+		_faces[cache_key] = serif if serif != null else symbols
+		return _faces[cache_key]
+	var chained: Font = serif.duplicate() as Font
+	if chained == null:
+		_faces[cache_key] = serif
+		return serif
+	var chain: Array[Font] = [symbols]
+	chained.fallbacks = chain
+	_faces[cache_key] = chained
+	return chained
+
+
+## Reading routes to Regular. Display paths (Cinzel plus bold Alegreya) route
+## to SemiBold; transition_layer.gd explicitly requests Black for its act plate.
+static func _cjk_fallback_for(path: String) -> String:
+	if path == ALEGREYA_400 or path == NOTO_SERIF_TC_REGULAR:
+		return NOTO_SERIF_TC_REGULAR
+	if path == NOTO_SERIF_TC_BLACK:
+		return NOTO_SERIF_TC_BLACK
+	return NOTO_SERIF_TC_SEMIBOLD
+
+
+## Load a Latin face with its deterministic serif/symbol fallback leaf. Cached
+## by both primary and CJK paths because the same Latin weight has three CJK
+## roles: reading, headings, and the act-plate display.
+static func face(path: String, cjk_path: String = "") -> Font:
+	var resolved_cjk_path: String = cjk_path if not cjk_path.is_empty() else _cjk_fallback_for(path)
+	var cache_key: String = path + "|" + resolved_cjk_path
+	if _faces.has(cache_key):
+		return _faces[cache_key]
+	if _is_serif_tc(path):
+		var serif: Font = _serif_tc_face(path)
+		_faces[cache_key] = serif
+		return serif
 	var primary: Font = load(path) as Font
-	var noto: Font = load(NOTO_SANS_TC) as Font
+	var serif_fallback: Font = _serif_tc_face(resolved_cjk_path)
+	var symbols: Font = _symbol_face()
 	if primary == null:
-		_faces[path] = noto
-		return noto
-	if noto == null or path == NOTO_SANS_TC:
-		_faces[path] = primary
+		_faces[cache_key] = serif_fallback
+		return serif_fallback
+	if serif_fallback == null:
+		_faces[cache_key] = primary
 		return primary
 	var chained: Font = primary.duplicate() as Font
 	if chained == null:
-		_faces[path] = primary
+		_faces[cache_key] = primary
 		return primary
-	var chain: Array[Font] = [noto]
+	var chain: Array[Font] = [serif_fallback]
+	if symbols != null:
+		chain.append(symbols)
 	chained.fallbacks = chain
-	_faces[path] = chained
+	_faces[cache_key] = chained
 	return chained
 
 
@@ -217,7 +275,7 @@ static func theme() -> Theme:
 	# Keep the default UI face in the runtime resource chain. A project-level
 	# custom font is resolved before cache-cold import has produced its fontdata,
 	# while this factory runs only after resources are ready.
-	t.default_font = face(NOTO_SANS_TC)
+	t.default_font = face(NOTO_SERIF_TC_REGULAR)
 	t.set_color("font_color", "Label", TEXT)
 	t.set_font_size("font_size", "Label", 15)
 	t.set_color("font_color", "Button", TEXT)

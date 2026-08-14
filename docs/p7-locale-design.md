@@ -345,13 +345,13 @@ Extract verbatim — no "while we're here" copy edits.
 
 | Task | Delivers |
 |---|---|
-| P7.6 | `locale/zh-Hant.json` (authored, glossary-bound) + Cinzel/Alegreya → NotoSansTC fallbacks + glyph gate |
+| P7.6 | `locale/zh-Hant.json` (authored, glossary-bound) + Cinzel/Alegreya → Noto Serif TC fallbacks + cmap glyph gate |
 | P7.7 | Settings › DISPLAY › Language; `Preferences` persistence; live re-render policy |
 
-NotoSansTC is already bundled (`project.godot` `theme/custom_font`,
-`assets/fonts/NotoSansTC.ttf`, Credits OFL line, `tests/test_presentation.gd`
-import check). P7.6's font work is **fallback chaining on the display faces**,
-not a first import.
+Noto Serif TC is bundled as reproducible subsets: Regular for reading text,
+SemiBold for names and headings, and Black for the act plate. Each falls back to
+a three-glyph Noto Sans Symbols2 subset for the locale markers. `tools/check_locale_font_coverage.py`
+checks every `locale/*.json` character against those bundled cmaps in CI.
 
 ---
 

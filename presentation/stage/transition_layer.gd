@@ -351,7 +351,8 @@ func act_plate(act_name: String, omen_name: String, omen_tone: Color,
 	_plate_act.text = act_name.to_upper()
 	_plate_act.add_theme_font_size_override("font_size", act_pt)
 	_plate_act.add_theme_font_override("font",
-		_tracked(GlassStyle.CINZEL_700, int(roundf(act_pt * 0.18))))
+		_tracked(GlassStyle.CINZEL_700, int(roundf(act_pt * 0.18)),
+			GlassStyle.NOTO_SERIF_TC_BLACK))
 	_plate_omen_row.visible = not omen_name.is_empty()
 	if not omen_name.is_empty():
 		_plate_omen.text = Locale.active.t("ui.omen.prefix") + omen_name.to_upper()
@@ -394,9 +395,10 @@ func _end_transit(seq: int) -> void:
 
 ## The tracked-Cinzel idiom `choice_screen.gd` and `settings_panel.gd` carry;
 ## duplicated here by the shared-surface rule rather than reached across.
-static func _tracked(path: String, glyph_spacing: int) -> FontVariation:
+static func _tracked(path: String, glyph_spacing: int,
+		cjk_path: String = "") -> FontVariation:
 	var tracked: FontVariation = FontVariation.new()
-	tracked.base_font = GlassStyle.face(path)
+	tracked.base_font = GlassStyle.face(path, cjk_path)
 	tracked.spacing_glyph = glyph_spacing
 	return tracked
 

@@ -10,21 +10,34 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 
 static func run(fails: Array[String]) -> void:
-	# The bundled UI font must shape the title glyphs (琉璃誓言) — guards a
+	# The bundled serif subsets must shape the title glyphs (琉璃誓言) — guards a
 	# broken font import that headless runs would otherwise never notice.
-	var ui_font: FontFile = load("res://assets/fonts/NotoSansTC.ttf") as FontFile
-	_check(fails, ui_font != null, "NotoSansTC.ttf imports as a FontFile")
-	if ui_font != null:
-		for ch: String in ["琉", "璃", "誓", "言"]:
-			_check(fails, ui_font.has_char(ch.unicode_at(0)), "font has glyph %s" % ch)
+	var serif_paths: PackedStringArray = PackedStringArray([
+		GlassStyle.NOTO_SERIF_TC_REGULAR,
+		GlassStyle.NOTO_SERIF_TC_SEMIBOLD,
+		GlassStyle.NOTO_SERIF_TC_BLACK,
+	])
+	for path: String in serif_paths:
+		var ui_font: FontFile = load(path) as FontFile
+		_check(fails, ui_font != null, "%s imports as a FontFile" % path)
+		if ui_font != null:
+			for ch: String in ["琉", "璃", "誓", "言"]:
+				_check(fails, ui_font.has_char(ch.unicode_at(0)),
+					"%s has glyph %s" % [path, ch])
+	var symbols: FontFile = load(GlassStyle.NOTO_SANS_SYMBOLS_2) as FontFile
+	_check(fails, symbols != null, "Noto Sans Symbols2 subset imports as a FontFile")
+	if symbols != null:
+		for ch: String in ["✦", "⬤", "⬭"]:
+			_check(fails, symbols.has_char(ch.unicode_at(0)),
+				"symbol subset has glyph %s" % ch)
 	var ui_theme: Theme = GlassStyle.theme()
-	_check(fails, ui_theme.default_font == GlassStyle.face(GlassStyle.NOTO_SANS_TC),
-		"runtime theme supplies NotoSansTC as the default UI font")
+	_check(fails, ui_theme.default_font == GlassStyle.face(GlassStyle.NOTO_SERIF_TC_REGULAR),
+		"runtime theme supplies Noto Serif TC Regular as the default UI font")
 	if ui_theme.default_font != null:
 		for ch: String in ["琉", "璃", "誓", "言"]:
 			_check(fails, ui_theme.default_font.has_char(ch.unicode_at(0)),
 				"runtime theme default has glyph %s" % ch)
-	# Every shipped display weight must fall back to NotoSansTC so a less-common
+	# Every shipped display weight must fall back to Noto Serif TC so a less-common
 	# surface cannot silently tofu while the title sample passes.
 	var display_faces: Array[Array] = [
 		["Cinzel 500", GlassStyle.CINZEL_500],
@@ -40,7 +53,15 @@ static func run(fails: Array[String]) -> void:
 		if face != null:
 			for ch: String in ["琉", "璃", "誓", "言"]:
 				_check(fails, face.has_char(ch.unicode_at(0)),
-					"%s+Noto fallback has glyph %s" % [face_name, ch])
+					"%s+Noto Serif fallback has glyph %s" % [face_name, ch])
+	var act_plate_face: Font = GlassStyle.face(
+		GlassStyle.CINZEL_700, GlassStyle.NOTO_SERIF_TC_BLACK)
+	_check(fails, act_plate_face != null and act_plate_face.has_char("誓".unicode_at(0)),
+		"act plate display routes CJK through Noto Serif TC Black")
+	var marker_face: Font = GlassStyle.face(GlassStyle.CINZEL_700)
+	_check(fails, marker_face != null and marker_face.has_char("✦".unicode_at(0))
+		and marker_face.has_char("⬤".unicode_at(0)),
+		"display fallback chain resolves themed marker glyphs")
 	_display_face_route_contract(fails)
 	_display_face_consumers(fails)
 	# zh-Hant catalogue resolves brand + a whisper.
@@ -102,13 +123,13 @@ static func run(fails: Array[String]) -> void:
 	var game: GlassvowGame = GlassvowGame.new(content, rs)
 	var composition: Main = Main.new()
 	_check(fails, composition.theme != null
-		and composition.theme.default_font == GlassStyle.face(GlassStyle.NOTO_SANS_TC),
+		and composition.theme.default_font == GlassStyle.face(GlassStyle.NOTO_SERIF_TC_REGULAR),
 		"shipping Main owns the runtime default UI font")
 	var inherited_label: Label = Label.new()
 	composition.add_child(inherited_label)
 	var inherited_font: Font = inherited_label.get_theme_default_font()
 	_check(fails, inherited_font != null and inherited_font.has_char("琉".unicode_at(0)),
-		"Main descendant resolves the runtime NotoSansTC default")
+		"Main descendant resolves the runtime Noto Serif TC default")
 	composition.game = game
 	rs.pending_quest_id = "paleOnes"
 	_check(fails, composition._combat_music("normal") == &"paleOnes",
@@ -278,7 +299,9 @@ static func _credits_font_licences(fails: Array[String], credits: CreditsScreen)
 		if file != null:
 			_check(fails, file.get_as_text().contains("SIL OPEN FONT LICENSE"),
 				"%s manifest entry points to an OFL licence" % family)
-	_check(fails, families == PackedStringArray(["Cinzel", "Alegreya", "Noto Sans TC"]),
+	_check(fails, families == PackedStringArray([
+		"Cinzel", "Alegreya", "Noto Serif CJK TC", "Noto Sans Symbols2"
+	]),
 		"credits font manifest carries every bundled family")
 	credits._build_font_licences()
 	var fold_text: String = ""
@@ -286,7 +309,8 @@ static func _credits_font_licences(fails: Array[String], credits: CreditsScreen)
 		if node is Label:
 			fold_text += "\n" + node.text
 	_check(fails, fold_text.contains("Cinzel") and fold_text.contains("Alegreya")
-		and fold_text.contains("Noto Sans TC"),
+		and fold_text.contains("Noto Serif CJK TC")
+		and fold_text.contains("Noto Sans Symbols2"),
 		"credits font licence fold carries every manifest family")
 
 
