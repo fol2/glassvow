@@ -40,6 +40,14 @@ const COLUMN_GAP: float = 14.0
 const TITLE_PT: float = 30.0
 const BODY_PT: float = 18.0
 const BUTTON_H: float = 48.0
+## Ceremonial title furniture, transcribed from title-b.html (1180×820).
+const TITLE_PRIMARY_H: float = 76.0
+const TITLE_SECONDARY_H: float = 64.0
+const TITLE_UTILITY_H: float = 64.0
+const TITLE_CHAMFER_PRIMARY: float = 18.0
+const TITLE_CHAMFER_SECONDARY: float = 15.0
+const TITLE_SEAM_W: float = 520.0
+const TITLE_LANTERN_SIZE: Vector2 = Vector2(620.0, 240.0)
 
 ## The stage shape this panel composes for, and its resolved `run` layout.
 var shape: StringName = StageShape.IDENTITY
@@ -65,10 +73,13 @@ var _wordmark: TextureRect
 var _wordmark_label: Label = null
 var _tagline_slot: Control
 var _tagline: Label
-var _primary: GridContainer
+var _lantern: TextureRect = null
+var _primary: VBoxContainer
 var _primary_buttons: Array[Button] = []
-var _utility: GridContainer
+var _seam: Control = null
+var _utility: HBoxContainer
 var _utility_buttons: Array[Button] = []
+var _dev_button: Button = null
 var _rose_medallion: Button = null
 var _sfx: SfxBus
 ## When set, Escape emits `chosen` with this id (safe cancel). Absent → Escape ignored.
@@ -318,6 +329,14 @@ func _build_title(title_text: String, tagline_text: String, choices: Array[Dicti
 	vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(vignette)
 
+	_lantern = TextureRect.new()
+	_lantern.texture = RunStyle.lantern_bloom()
+	_lantern.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_lantern.stretch_mode = TextureRect.STRETCH_SCALE
+	_lantern.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_lantern.size = TITLE_LANTERN_SIZE
+	add_child(_lantern)
+
 	var centre: CenterContainer = CenterContainer.new()
 	centre.set_anchors_preset(Control.PRESET_FULL_RECT)
 	centre.offset_left = 16.0
@@ -376,40 +395,62 @@ func _build_title(title_text: String, tagline_text: String, choices: Array[Dicti
 	_tagline.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_tagline_slot.add_child(_tagline)
 
-	_primary = GridContainer.new()
-	_primary.columns = 1
-	_primary.add_theme_constant_override("h_separation", 8)
-	_primary.add_theme_constant_override("v_separation", 8)
-	_primary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var actions: Array[Dictionary] = []
+	var utilities: Array[Dictionary] = []
+	var dev_row: Dictionary = {}
+	for row: Dictionary in choices:
+		if str(row.get("id", "")) == "dev":
+			dev_row = row
+		elif row.get("quiet", false):
+			utilities.append(row)
+		else:
+			actions.append(row)
+
+	_primary = VBoxContainer.new()
+	_primary.alignment = BoxContainer.ALIGNMENT_CENTER
+	_primary.add_theme_constant_override("separation", 12)
+	_primary.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_title_column.add_child(_primary)
 
-	_utility = GridContainer.new()
-	_utility.add_theme_constant_override("h_separation", 8)
-	_utility.add_theme_constant_override("v_separation", 8)
-	_utility.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_title_column.add_child(_utility)
-
-	for row: Dictionary in choices:
-		var quiet: bool = row.get("quiet", false)
-		var button: Button = _title_button(str(row.get("label", row.get("id", ""))), quiet)
-		button.disabled = row.get("disabled", false)
-		button.tooltip_text = str(row.get("hint", ""))
+	for i: int in range(actions.size()):
+		var ceremonial: bool = i == 0
+		var button: TitleFacetButton = _ceremonial_button(
+			str(actions[i].get("label", actions[i].get("id", ""))), ceremonial)
+		button.disabled = actions[i].get("disabled", false)
+		button.tooltip_text = str(actions[i].get("hint", ""))
 		button.set_meta("title_label", button.text)
-		_wire_button(button, str(row.get("id", "")))
-		if quiet:
-			_utility.add_child(button)
-			_utility_buttons.append(button)
-		else:
-			_primary.add_child(button)
-			_primary_buttons.append(button)
-	# An odd count cannot balance a two-column grid — the orphan hangs in
-	# the left cell, off the stack axis. It spans the column instead
-	# (DL, issue #49: "three balanced rows").
-	if _utility_buttons.size() % 2 == 1 and _utility_buttons.size() > 1:
-		var orphan: Button = _utility_buttons[_utility_buttons.size() - 1]
-		_utility.remove_child(orphan)
-		_title_column.add_child(orphan)
-		_title_column.move_child(orphan, _utility.get_index() + 1)
+		_wire_button(button, str(actions[i].get("id", "")))
+		_primary.add_child(button)
+		_primary_buttons.append(button)
+	if not _primary_buttons.is_empty():
+		# The bloom is placed from the plate's rect, which the container only
+		# assigns on its layout pass AFTER this build — following the rect
+		# keeps the bloom under the plate instead of at the screen origin
+		# (where the first capture found it).
+		_primary_buttons[0].item_rect_changed.connect(_place_lantern)
+
+	_seam = TitleSeam.new()
+	_seam.custom_minimum_size = Vector2(TITLE_SEAM_W, 12.0)
+	_seam.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_seam.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_title_column.add_child(_seam)
+
+	_utility = HBoxContainer.new()
+	_utility.alignment = BoxContainer.ALIGNMENT_CENTER
+	_utility.add_theme_constant_override("separation", 0)
+	_utility.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_title_column.add_child(_utility)
+	for i: int in range(utilities.size()):
+		if i > 0:
+			_utility.add_child(_utility_pip())
+		var button: Button = _utility_word(
+			str(utilities[i].get("label", utilities[i].get("id", ""))))
+		button.disabled = utilities[i].get("disabled", false)
+		button.tooltip_text = str(utilities[i].get("hint", ""))
+		button.set_meta("title_label", button.text)
+		_wire_button(button, str(utilities[i].get("id", "")))
+		_utility.add_child(button)
+		_utility_buttons.append(button)
 	_add_title_rose(context)
 
 	var stats: Label = Label.new()
@@ -433,6 +474,18 @@ func _build_title(title_text: String, tagline_text: String, choices: Array[Dicti
 	version.offset_bottom = -18.0
 	version.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(version)
+
+	if not dev_row.is_empty():
+		_dev_button = _utility_word(str(dev_row.get("label", "dev")))
+		_dev_button.disabled = dev_row.get("disabled", false)
+		_dev_button.set_meta("title_label", _dev_button.text)
+		_wire_button(_dev_button, str(dev_row.get("id", "dev")))
+		_dev_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		_dev_button.offset_left = -280.0
+		_dev_button.offset_top = -98.0
+		_dev_button.offset_right = -18.0
+		_dev_button.offset_bottom = -34.0
+		add_child(_dev_button)
 
 
 func _add_title_rose(context: Dictionary) -> void:
@@ -485,6 +538,117 @@ func _add_title_rose(context: Dictionary) -> void:
 		_sfx.play(&"relic")
 		chosen.emit("rose")
 	)
+
+
+func _ceremonial_button(text: String, ceremonial: bool) -> TitleFacetButton:
+	var button: TitleFacetButton = TitleFacetButton.new()
+	button.text = text
+	button.ceremonial = ceremonial
+	button.chamfer = TITLE_CHAMFER_PRIMARY if ceremonial else TITLE_CHAMFER_SECONDARY
+	button.custom_minimum_size = Vector2(400.0,
+		TITLE_PRIMARY_H if ceremonial else TITLE_SECONDARY_H)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var pt: int = 27 if ceremonial else 21
+	var track: int = 4 if ceremonial else 3
+	button.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, track))
+	button.add_theme_font_size_override("font_size", pt)
+	var fill: Color = RunStyle.GOLD if ceremonial else RunStyle.TEXT
+	button.add_theme_color_override("font_color", fill)
+	button.add_theme_color_override("font_hover_color",
+		fill.lerp(Color.WHITE, 0.35) if ceremonial else RunStyle.GOLD)
+	button.add_theme_color_override("font_pressed_color",
+		fill.lerp(RunStyle.GOLD_DIM, 0.45) if ceremonial else RunStyle.TEXT)
+	button.add_theme_color_override("font_focus_color", fill)
+	if ceremonial:
+		button.add_theme_color_override("font_shadow_color", Color(GlassStyle.EMBER, 0.32))
+		button.add_theme_constant_override("shadow_offset_x", 0)
+		button.add_theme_constant_override("shadow_offset_y", 0)
+	# State plates come from TitleFacetStyleBox in _ready; only focus is extra.
+	# The mock's hover & focus dressing is warm — a GLASS ring here reads as a
+	# cold blue halo against the gold plate (first capture), so both tiers ring
+	# in gold.
+	var chamfer: int = roundi(TITLE_CHAMFER_PRIMARY if ceremonial else TITLE_CHAMFER_SECONDARY)
+	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(RunStyle.GOLD, chamfer))
+	return button
+
+
+func _place_lantern() -> void:
+	if _lantern == null:
+		return
+	_lantern.visible = not _primary_buttons.is_empty()
+	if not _lantern.visible:
+		return
+	var host: Button = _primary_buttons[0]
+	var plate: Vector2 = host.size
+	if plate.x < 1.0:
+		plate = host.custom_minimum_size
+	var origin: Vector2 = host.get_global_rect().position - get_global_rect().position
+	_lantern.position = origin + Vector2(
+		plate.x * 0.5 - TITLE_LANTERN_SIZE.x * 0.5,
+		plate.y * 0.34 - TITLE_LANTERN_SIZE.y * 0.34)
+	_lantern.size = TITLE_LANTERN_SIZE
+
+
+func _utility_word(text: String) -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.clip_text = false
+	button.autowrap_mode = TextServer.AUTOWRAP_OFF
+	button.custom_minimum_size = Vector2(68.0, TITLE_UTILITY_H)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	button.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 2))
+	button.add_theme_font_size_override("font_size", 15)
+	button.add_theme_color_override("font_color", RunStyle.TEXT_DIM)
+	button.add_theme_color_override("font_hover_color", RunStyle.GOLD)
+	button.add_theme_color_override("font_pressed_color", RunStyle.TEXT_DIM)
+	button.add_theme_color_override("font_focus_color", RunStyle.TEXT_DIM)
+	button.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.80))
+	button.add_theme_constant_override("shadow_offset_x", 0)
+	button.add_theme_constant_override("shadow_offset_y", 1)
+	RunStyle.hide_button_boxes(button)
+	var pad: StyleBoxEmpty = StyleBoxEmpty.new()
+	pad.content_margin_left = 16.0
+	pad.content_margin_right = 16.0
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		button.add_theme_stylebox_override(state, pad)
+	return button
+
+
+func _utility_pip() -> Control:
+	var pip: TitlePip = TitlePip.new()
+	pip.custom_minimum_size = Vector2(3.0, TITLE_UTILITY_H)
+	pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	return pip
+
+
+func _apply_utility_pt(pt: int) -> void:
+	var track: int = maxi(roundi(float(pt) * 0.14), 0)
+	for button: Button in _utility_buttons:
+		button.text = str(button.get_meta("title_label", button.text))
+		button.clip_text = false
+		button.autowrap_mode = TextServer.AUTOWRAP_OFF
+		button.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, track))
+		button.add_theme_font_size_override("font_size", pt)
+		button.custom_minimum_size.y = TITLE_UTILITY_H
+	if _dev_button != null:
+		_dev_button.clip_text = false
+		_dev_button.autowrap_mode = TextServer.AUTOWRAP_OFF
+		_dev_button.add_theme_font_size_override("font_size", mini(pt, 13))
+
+
+func _utility_row_width() -> float:
+	var total: float = 0.0
+	for button: Button in _utility_buttons:
+		var font: Font = button.get_theme_font("font")
+		var pt: int = button.get_theme_font_size("font_size")
+		var text_w: float = 0.0
+		if font != null:
+			text_w = font.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pt).x
+		total += maxf(68.0, text_w + 32.0)
+	if _utility_buttons.size() > 1:
+		total += 3.0 * float(_utility_buttons.size() - 1)
+	return total
 
 
 func _title_button(text: String, quiet: bool) -> Button:
@@ -710,22 +874,37 @@ func _fit_title() -> void:
 	_tagline.add_theme_font_size_override(
 		"font_size", roundi(_title_num("taglinePt", 14.0)))
 
-	_title_column.custom_minimum_size.x = minf(_title_num("columnW", 340.0),
-		size.x - 32.0)
+	_title_column.custom_minimum_size.x = size.x - 32.0
 	_title_column.add_theme_constant_override(
-		"separation", roundi(_title_num("gap", 8.0)))
-	_primary.columns = roundi(_title_num("primaryCols", 1.0))
-	_utility.columns = roundi(_title_num("utilityCols", 2.0))
-	var primary_pt: int = roundi(_title_num("primaryPt", 17.0))
-	var utility_pt: int = roundi(_title_num("utilityPt", 13.0))
-	var wrap_help: bool = _title_num("wrapHelp", 1.0) >= 1.0
-	for button: Button in _primary_buttons:
-		button.add_theme_font_size_override("font_size", primary_pt)
-	for button: Button in _utility_buttons:
-		var label: String = str(button.get_meta("title_label", button.text))
-		button.text = label.replace("How to Play", "How to\nPlay") if wrap_help \
-			else label
-		button.add_theme_font_size_override("font_size", utility_pt)
+		"separation", roundi(_title_num("gap", 12.0)))
+	if _primary != null:
+		_primary.add_theme_constant_override(
+			"separation", roundi(_title_num("gap", 12.0)))
+	var plate_w: float = minf(_title_num("columnW", 400.0), size.x - 32.0)
+	var primary_pt: int = roundi(_title_num("primaryPt", 27.0))
+	var secondary_pt: int = maxi(roundi(float(primary_pt) * 21.0 / 27.0), 11)
+	var utility_pt: int = roundi(_title_num("utilityPt", 15.0))
+	for i: int in range(_primary_buttons.size()):
+		var button: Button = _primary_buttons[i]
+		var ceremonial: bool = i == 0
+		button.custom_minimum_size.x = plate_w
+		button.custom_minimum_size.y = TITLE_PRIMARY_H if ceremonial else TITLE_SECONDARY_H
+		button.add_theme_font_size_override(
+			"font_size", primary_pt if ceremonial else secondary_pt)
+	if _seam != null:
+		_seam.custom_minimum_size.x = minf(TITLE_SEAM_W, size.x - 32.0)
+	var util_pt: int = utility_pt
+	var budget: float = size.x - 32.0
+	while util_pt >= 8:
+		_apply_utility_pt(util_pt)
+		if _utility_row_width() <= budget:
+			break
+		util_pt -= 1
+	# Container sorting is deferred, so the plate's global rect is stale here
+	# (measured at (16,16) mid-_fit_title) and its item_rect_changed never
+	# re-fires for ancestor moves. The deferred call lands after the queued
+	# sorts and reads the settled rect.
+	_place_lantern.call_deferred()
 
 	var image_aspect: float = 1536.0 / 1024.0
 	var banner_h: float = minf(size.y * BANNER_H_RATE, size.x * BANNER_W_RATE / image_aspect)
@@ -742,3 +921,127 @@ func _fit_title() -> void:
 		_rose_medallion.offset_top = -18.0 - rose_side
 		_rose_medallion.offset_right = 18.0 + rose_side
 		_rose_medallion.offset_bottom = -18.0
+
+
+## Waystone-facet plate: chamfered came + glass, transcribed from title-b.html.
+class TitleFacetButton extends Button:
+	## The plate is painted by per-state TitleFacetStyleBox instances, NOT a
+	## _draw() override: a GDScript _draw runs after the Button's own pass, so
+	## polygons drawn there land ON TOP of the label and erase the text
+	## (measured on the first capture of this branch). A StyleBox draws under.
+	var ceremonial: bool = false
+	var chamfer: float = 15.0
+
+	func _ready() -> void:
+		clip_text = false
+		autowrap_mode = TextServer.AUTOWRAP_OFF
+		for state: String in ["normal", "hover", "pressed", "disabled"]:
+			var box: TitleFacetStyleBox = TitleFacetStyleBox.new()
+			box.ceremonial = ceremonial
+			box.chamfer = chamfer
+			box.state = state
+			add_theme_stylebox_override(state, box)
+
+
+class TitleFacetStyleBox extends StyleBox:
+	var ceremonial: bool = false
+	var chamfer: float = 15.0
+	var state: String = "normal"
+
+	func _draw(ci: RID, rect: Rect2) -> void:
+		var pressed: bool = state == "pressed"
+		var hover: bool = state == "hover"
+		var cut: float = chamfer
+		var plate: Rect2 = Rect2(
+			rect.position + Vector2(0.0, 1.0 if pressed else 0.0),
+			rect.size - Vector2(0.0, 1.0 if pressed else 0.0))
+		var came: PackedColorArray
+		var glass: PackedColorArray
+		if ceremonial:
+			if pressed:
+				came = _facet_cols(Color(RunStyle.GOLD_DIM, 0.75), Color(RunStyle.GOLD, 0.45))
+				glass = _facet_cols(Color(RunStyle.INK, 0.86), Color(RunStyle.GOLD, 0.10))
+			elif hover:
+				came = _facet_cols(RunStyle.GOLD, Color(RunStyle.GOLD, 0.72))
+				glass = _facet_cols(Color(RunStyle.GOLD, 0.30), Color(GlassStyle.EMBER, 0.12))
+			else:
+				came = _facet_cols(Color(RunStyle.GOLD, 0.95), Color(RunStyle.GOLD_DIM, 0.62))
+				glass = _facet_cols(Color(RunStyle.GOLD, 0.20), Color(GlassStyle.EMBER, 0.07))
+			_poly(ci, _octagon(plate.grow(2.0), cut + 2.0),
+				PackedColorArray([Color(GlassStyle.EMBER, 0.12 if hover else 0.08)]))
+		else:
+			came = _facet_cols(Color(RunStyle.GOLD, 0.32), Color(RunStyle.GOLD, 0.15))
+			glass = _facet_cols(RunStyle.PANEL, RunStyle.PANEL)
+			_poly(ci, _octagon(plate.grow(1.0), cut + 1.0),
+				PackedColorArray([Color(0.0, 0.0, 0.0, 0.40)]))
+		_poly(ci, _octagon(plate, cut), came)
+		var inner: Rect2 = plate.grow(-1.0)
+		var glass_pts: PackedVector2Array = _octagon(inner, maxf(cut - 1.0, 1.0))
+		if ceremonial:
+			_poly(ci, glass_pts, PackedColorArray([RunStyle.INK]))
+		_poly(ci, glass_pts, glass)
+
+	static func _poly(ci: RID, points: PackedVector2Array, colors: PackedColorArray) -> void:
+		RenderingServer.canvas_item_add_polygon(ci, points, colors)
+
+	static func _facet_cols(top: Color, bot: Color) -> PackedColorArray:
+		var mid: Color = top.lerp(bot, 0.55)
+		return PackedColorArray([top, top, mid, bot, bot, bot, mid, top])
+
+	static func _octagon(rect: Rect2, cut: float) -> PackedVector2Array:
+		var c: float = minf(cut, minf(rect.size.x, rect.size.y) * 0.45)
+		var x0: float = rect.position.x
+		var y0: float = rect.position.y
+		var x1: float = rect.end.x
+		var y1: float = rect.end.y
+		return PackedVector2Array([
+			Vector2(x0 + c, y0), Vector2(x1 - c, y0), Vector2(x1, y0 + c),
+			Vector2(x1, y1 - c), Vector2(x1 - c, y1), Vector2(x0 + c, y1),
+			Vector2(x0, y1 - c), Vector2(x0, y0 + c),
+		])
+
+
+class TitleSeam extends Control:
+	func _draw() -> void:
+		var y: float = size.y * 0.5
+		var cx: float = size.x * 0.5
+		var gap: float = 14.0
+		var half: float = 3.5
+		var gold: Color = Color(RunStyle.GOLD, 0.36)
+		var left_to: float = cx - gap
+		var right_from: float = cx + gap
+		var h: float = 0.5
+		draw_polygon(
+			PackedVector2Array([
+				Vector2(0.0, y - h), Vector2(left_to, y - h),
+				Vector2(left_to, y + h), Vector2(0.0, y + h),
+			]),
+			PackedColorArray([
+				Color(RunStyle.GOLD, 0.0), gold, gold, Color(RunStyle.GOLD, 0.0),
+			]))
+		draw_polygon(
+			PackedVector2Array([
+				Vector2(right_from, y - h), Vector2(size.x, y - h),
+				Vector2(size.x, y + h), Vector2(right_from, y + h),
+			]),
+			PackedColorArray([
+				gold, Color(RunStyle.GOLD, 0.0), Color(RunStyle.GOLD, 0.0), gold,
+			]))
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(cx, y - half - 2.0), Vector2(cx + half + 2.0, y),
+			Vector2(cx, y + half + 2.0), Vector2(cx - half - 2.0, y),
+		]), Color(GlassStyle.EMBER, 0.28))
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(cx, y - half), Vector2(cx + half, y),
+			Vector2(cx, y + half), Vector2(cx - half, y),
+		]), Color(RunStyle.GOLD, 0.82))
+
+
+class TitlePip extends Control:
+	func _draw() -> void:
+		var c: Vector2 = size * 0.5
+		var r: float = 1.5
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(c.x, c.y - r), Vector2(c.x + r, c.y),
+			Vector2(c.x, c.y + r), Vector2(c.x - r, c.y),
+		]), Color(RunStyle.GOLD_DIM, 0.85))

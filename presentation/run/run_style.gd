@@ -123,6 +123,28 @@ static func style_button(button: Button, primary: bool = false,
 	button.add_theme_color_override("font_disabled_color", Color(TEXT_DIM, 0.45))
 
 
+## Unboxed word: no drawn plate. Focus stays the Theme lantern ring — do not
+## push a "focus" box, or the ring is shadowed (GlassStyle.focus_ring).
+static func hide_button_boxes(button: Button) -> void:
+	var empty: StyleBoxEmpty = StyleBoxEmpty.new()
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		button.add_theme_stylebox_override(state, empty)
+
+
+## Warm bloom that rises under the title's ceremonial primary. Ellipse is the
+## TextureRect size; the radial is EMBER fading to nothing, centre high.
+static func lantern_bloom() -> Texture2D:
+	return GlassStyle.grad_tex(
+		PackedColorArray([
+			Color(GlassStyle.EMBER, 0.30),
+			Color(GlassStyle.EMBER, 0.13),
+			Color(GlassStyle.EMBER, 0.03),
+			Color(GlassStyle.EMBER, 0.0),
+		]),
+		PackedFloat32Array([0.0, 0.42, 0.66, 0.78]),
+		true, Vector2(0.5, 0.34), Vector2(0.96, 0.34))
+
+
 static func style_card(button: Button, selected: bool) -> void:
 	# Same adoption as style_button: the ring overlays, never repaints.
 	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(GOLD, 14))

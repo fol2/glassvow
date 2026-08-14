@@ -716,6 +716,7 @@ func _show_title() -> void:
 		{"id": "settings", "label": Locale.active.t("ui.menu.settings"), "quiet": true},
 		{"id": "credits", "label": Locale.active.t("ui.menu.credits"), "quiet": true},
 	])
+	# Dev-only — ChoiceScreen seats this outside the ceremonial three-tier.
 	if DevTools.available():
 		var dev_label: String = _dev_console_label()
 		if not dev_label.is_empty():
