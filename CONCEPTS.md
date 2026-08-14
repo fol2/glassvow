@@ -54,6 +54,19 @@ An isolated tool for inspecting and editing one authored presentation or
 content subject. A Lab may construct production UI, but it does not stand in for
 the routed game or for release evidence.
 
+### Gate
+A check whose purpose is to fail when a defect is present, so that its passing
+is evidence rather than habit.
+
+A gate is only as good as the signal it reads. One wired to a signal that cannot
+express the failure passes for reasons unrelated to correctness, and is
+indistinguishable from a working gate until something else catches the defect.
+Two forms recur: the signal is silent about the failure, and the trigger
+condition is narrower than the set of ways the thing can fail. Both read green,
+so a gate is not trusted until it has been watched failing on a seeded defect in
+the environment it guards. When a gate cannot run somewhere, that is stated
+rather than allowed to pass.
+
 ### Evidence Harness
 A tool that records or verifies a named gate under its declared conditions.
 Evidence from a Harness keeps its own proof boundary; reaching the same surface
