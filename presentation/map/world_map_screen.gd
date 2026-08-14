@@ -9,6 +9,7 @@ extends Control
 ## (DL MAJOR from PR #71: Spire behind trees by construction).
 
 signal node_chosen(index: int)
+signal sealed_door_requested
 
 const TRAVEL_TIME: float = 0.4
 
@@ -67,6 +68,7 @@ var _travel_from_i: int = -1
 var _travel_t: float = 0.0
 var _waystones: Array[GlassWaystone] = []
 var _hint_label: Label
+var _sealed_door: Button
 var _sky_tex: GradientTexture2D
 var _trail_layout: Dictionary = {}
 var _title_label: Label
@@ -166,7 +168,65 @@ func _build_chrome() -> void:
 	_hint_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 	_hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_hint_label)
+	_build_sealed_door()
 	_scale_chrome()
+
+
+## Overlay button, not a map node — styles.css:2536. Hidden until refresh
+## sees the final act with six Shards.
+func _build_sealed_door() -> void:
+	_sealed_door = Button.new()
+	_sealed_door.visible = false
+	_sealed_door.z_index = 5
+	_sealed_door.custom_minimum_size = Vector2(116, 74)
+	_sealed_door.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_sealed_door.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_sealed_door.offset_left = -58.0
+	_sealed_door.offset_right = 58.0
+	_sealed_door.offset_top = 67.0
+	_sealed_door.offset_bottom = 141.0
+	_sealed_door.tooltip_text = Locale.active.t("ui.map.sealedDoor.aria")
+	_style_sealed_door(_sealed_door)
+	var col: VBoxContainer = VBoxContainer.new()
+	col.set_anchors_preset(Control.PRESET_FULL_RECT)
+	col.alignment = BoxContainer.ALIGNMENT_CENTER
+	col.add_theme_constant_override("separation", 2)
+	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_sealed_door.add_child(col)
+	var glyph: DawnScreen.DawnGlyph = DawnScreen.DawnGlyph.new("door")
+	glyph.custom_minimum_size = Vector2(42, 42)
+	glyph.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(glyph)
+	var caption: Label = Label.new()
+	caption.text = Locale.active.t("ui.map.sealedDoor.label")
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caption.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 1))
+	caption.add_theme_font_size_override("font_size", 8)
+	caption.add_theme_color_override("font_color", Color("#fff3d6"))
+	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(caption)
+	_sealed_door.pressed.connect(func() -> void: sealed_door_requested.emit())
+	add_child(_sealed_door)
+
+
+func _style_sealed_door(button: Button) -> void:
+	# Arch plate: 48% 48% 12px 12px, parchment rim, night fill (styles.css:2537).
+	for state: String in ["normal", "hover", "pressed", "disabled"]:
+		var style: StyleBoxFlat = StyleBoxFlat.new()
+		style.bg_color = Color(0.02, 0.024, 0.047, 0.9)
+		style.set_border_width_all(1)
+		style.border_color = Color(1.0, 0.914, 0.675, 0.82 if state == "hover" else 0.55)
+		style.corner_radius_top_left = 48
+		style.corner_radius_top_right = 48
+		style.corner_radius_bottom_left = 12
+		style.corner_radius_bottom_right = 12
+		style.set_content_margin_all(7)
+		style.shadow_color = Color(1.0, 0.914, 0.675, 0.2)
+		style.shadow_size = 24
+		button.add_theme_stylebox_override(state, style)
+	button.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(Color("#ffe9ac"), 12))
 
 
 ## Every rail figure at once, so a shape change is one call rather than a tour of
@@ -202,6 +262,13 @@ func _scale_chrome() -> void:
 	_hint_label.add_theme_font_size_override("font_size", roundi(HINT_PT * k))
 	_hint_label.offset_top = HINT_TOP * k
 	_hint_label.offset_bottom = HINT_BOTTOM * k
+	# Web seats the door at 104px from the map-screen top (styles.css:2542).
+	# The act line lives on this Control, so when it is on, sit just under it.
+	var door_top: float = 67.0
+	if _title_label.visible:
+		door_top = _title_label.offset_bottom + 8.0
+	_sealed_door.offset_top = door_top
+	_sealed_door.offset_bottom = door_top + 74.0
 
 
 func _build_waystones() -> void:
@@ -301,6 +368,13 @@ func refresh(run: RunState) -> void:
 			first_live.grab_focus()
 	_seat_marker()
 	_push_bands(true)
+	_sync_sealed_door(run)
+
+
+func _sync_sealed_door(run: RunState) -> void:
+	# Existing final-act shape is act 2 (three authored acts). #218 replaces
+	# this with isFinalTheme; do not add a named predicate here.
+	_sealed_door.visible = run != null and run.act == 2 and run.shards.size() >= 6
 
 
 func _set_act_theme(stage_act: int) -> void:

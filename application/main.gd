@@ -937,14 +937,14 @@ func _new_run(profile: Dictionary = {}) -> void:
 	game = GlassvowGame.new(content, RunState.new_run(content, run_seed, run_id, merged))
 	game.run.stats["start"] = Time.get_unix_time_from_system()
 	game.quests.prepare_run(game.run)
-	if _vigil.shards.size() >= 6:
-		_map = WorldMap.act4_entrance()
-	else:
-		_map = WorldMap.benchmark(game.run)
-		game.quests.decorate_map(game.run, _map)
+	# Six shards used to replace the whole pilgrimage with a one-node Act IV
+	# ceremony (the loop in #217). The sealed door is an overlay on the ordinary
+	# final-act map — map.js:106 — not a different graph.
+	_map = WorldMap.benchmark(game.run)
+	game.quests.decorate_map(game.run, _map)
 	game.run.map = _map.to_dict()
 	_run_over = false
-	if SaveService.store(game.run):
+	if _store_run():
 		_route_run()
 	else:
 		_show_save_error("ui.persistence.detail.pilgrimageStart")
@@ -1102,6 +1102,7 @@ func _show_map() -> void:
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
 	_map_screen.node_chosen.connect(_on_node_chosen)
+	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 	add_child(_map_screen)
 	_map_screen.refresh(game.run)
 	# --map --act=N: dress scenery only (domain map stays the run's act).
@@ -1490,6 +1491,23 @@ func _show_treasure() -> void:
 	var screen: TreasureScreen = TreasureScreen.new(claim, content, _shape, _sfx_bus)
 	screen.continue_requested.connect(_finish_node)
 	_show_route(screen, true, &"safeNodes")
+
+
+func _on_sealed_door_requested() -> void:
+	# Overlay, not a route: the pilgrimage stays under the ceremony, and closing
+	# returns to the map (map.js:127-132). `_show_act4_entrance` remains for
+	# saves that still carry the one-node act4 graph.
+	var screen: ThresholdScreen = ThresholdScreen.new(_shape, _sfx_bus)
+	screen.threshold_touched.connect(_transitions.bloom)
+	screen.vigil_requested.connect(_close_sealed_door)
+	_sfx_bus.play(&"click")
+	_show_overlay(screen)
+	_music.play(&"sealedDoor")
+
+
+func _close_sealed_door() -> void:
+	_close_overlay()
+	_music.play(&"map")
 
 
 func _show_act4_entrance() -> void:
