@@ -133,10 +133,19 @@ Three things that will stop you:
   produce numbers that look valid. Read the OS version off the device before
   trusting any measurement taken on it.
 
-The bench harness is not launched from the app's main scene: it is a `SceneTree`
-script, passed as `-s res://tools/bench_map_scene.gd`. Release iOS templates do
-carry the `--script` parser, so the argument route exists; whether it survives an
-Xcode scheme or needs the Info.plist `godot_cmdline` array is recorded on #233.
+Benches launch through `main.gd` user-arg routes (`--map-bench`, `--perf-out=`),
+never `-s`: measured 2026-08-14 on iPad 8, the iOS release template silently
+ignores `-s` both as a `devicectl` launch argument and via the Info.plist
+`godot_cmdline` array — the app boots `main.tscn` either way — while generic
+options from the same array (`--log-file`, `--verbose`) are honoured. The
+working recipe: set `godot_cmdline` to
+`["--log-file","user://bench.log","--","--map-bench"]` in the generated
+project's Info.plist (plutil, then rebuild — the exporter regenerates the plist
+on every export), and pull the log with
+`xcrun devicectl device copy from … --domain-type appDataContainer
+--domain-identifier io.fol2.glassvow --source Documents/bench.log`, since
+`print()` output never reaches `devicectl --console` (also measured; `user://`
+maps to `Documents/`).
 
 Use `--export-debug` only to rehearse the plumbing. Timings for a ticket must
 come from `--export-release`: the debug engine slice is a different binary, and

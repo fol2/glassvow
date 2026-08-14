@@ -186,6 +186,7 @@ func _ready() -> void:
 	var show_dawn_bench: bool = false
 	var show_font_probe: bool = false
 	var performance_probe: bool = false
+	var map_bench: bool = false
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -245,6 +246,8 @@ func _ready() -> void:
 			show_font_probe = true
 		elif arg.begins_with("--perf-out="):
 			performance_probe = true
+		elif arg == "--map-bench":
+			map_bench = true
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	if performance_probe and (fight.is_empty() or not shot_path.is_empty()
@@ -281,6 +284,25 @@ func _ready() -> void:
 		_show_runtime_font_probe()
 		if shot_path != "":
 			_capture_and_quit(shot_path)
+		return
+	if map_bench:
+		# #233's pan-repaint sweep, hosted here because this is the only launch
+		# route a deployed iOS app has: `-s` is silently ignored by the iOS
+		# template (measured 2026-08-14, iPad 8), while user args pass through
+		# the Info.plist `godot_cmdline` array. Same isolation as the labs — a
+		# bench over content, no run, no title behind the timed frames.
+		var bench_script: GDScript = load("res://tools/bench_map_scene.gd") as GDScript
+		if bench_script == null:
+			push_error("map bench did not load")
+			get_tree().quit(2)
+			return
+		var bench_instance: Variant = bench_script.new()
+		if not bench_instance is Node:
+			push_error("map bench did not instantiate")
+			get_tree().quit(2)
+			return
+		var bench: Node = bench_instance
+		add_child(bench)
 		return
 	if studio:
 		# The material bench: one card, four layer pickers, no game state. It

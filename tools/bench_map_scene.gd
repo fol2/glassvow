@@ -1,5 +1,14 @@
-extends SceneTree
+extends Node
 ## Headed pan-repaint bench for #233: one honest map scene, twelve configs.
+##
+## A Node, not a SceneTree script, because the device it exists for cannot run
+## one: measured 2026-08-14 on iPad 8 (iPadOS 26.1, release template), `-s` is
+## silently ignored both as a devicectl launch argument and via the Info.plist
+## `godot_cmdline` array — the app boots main.tscn either way, while
+## `--log-file` from the same array is honoured. The literals `--script` and
+## "Can't load script:" exist in the template binary; the path does not run.
+## So main.gd hosts this bench behind `--map-bench`, the same route
+## bench_combat.gd ships through.
 ##
 ## Clock protocol from tools/bench_reward_stage.gd (WARMUP_FRAMES /
 ## SAMPLE_FRAMES; measure-render-time enabled ONCE before anything is sampled).
@@ -12,7 +21,9 @@ extends SceneTree
 ## scaling_3d_scale multiply). Binding frame is a pan, not a hold.
 ##
 ## Not a test; needs a real renderer — never --headless:
-##   godot --path . --position -4000,-4000 -s res://tools/bench_map_scene.gd
+##   godot --path . --position -4000,-4000 -- --map-bench
+## On device: Info.plist `godot_cmdline` = ["--log-file","user://bench.log",
+## "--","--map-bench"], then pull the log from the app container.
 ##
 ## Mac numbers are NON-EVIDENCE. #233 counts only a headed pan-repaint on
 ## iPad 8 (A12).
@@ -64,24 +75,41 @@ var _pooled: Dictionary[int, Array] = {}
 var _pooled_cpu: Dictionary[int, Array] = {}
 var _renderer_mib: Dictionary[int, Array] = {}
 var _screen_hz: float = 0.0  # Read once; separates a refresh floor from timer granularity
+var _report_file: FileAccess = null
 var _config_order: Array[int] = []  # Shuffled config order
 var _run_idx: int = 0  # Index into _config_order
 
 
-func _initialize() -> void:
+## Every report line goes through here: stdout for a tethered reader, plus an
+## explicitly-flushed file for the device. Engine log buffering ate the final
+## table row on the first iPad 8 run — SceneTree.quit() does not exit on iOS,
+## so the logger never closes and its tail never flushes. This file does not
+## depend on the process ending well.
+func _p(line: String) -> void:
+	print(line)
+	if _report_file != null:
+		_report_file.store_line(line)
+		_report_file.flush()
+
+
+func _ready() -> void:
 	if DisplayServer.get_name() == "headless":
 		printerr("bench_map_scene: needs a real renderer; do not pass --headless")
-		quit(2)
+		get_tree().quit(2)
 		return
+	_report_file = FileAccess.open("user://bench_report.txt", FileAccess.WRITE)
 	if not _assert_geometry():
 		return
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
-	root.size = IPAD8_STAGE
+	get_tree().root.size = IPAD8_STAGE
 
 	_host = Control.new()
 	_host.set_anchors_preset(Control.PRESET_FULL_RECT)
-	root.add_child(_host)
+	# Child of the bench itself, not the tree root: root is mid-setup while
+	# main.gd's _ready attaches this node, and a Control under a plain Node
+	# anchors against the viewport anyway.
+	add_child(_host)
 
 	_vp = SubViewport.new()
 	_vp.own_world_3d = true
@@ -101,7 +129,7 @@ func _initialize() -> void:
 	_host.add_child(_display)
 
 	_banner()
-	print("map-scene pan probe — warmup %d, sample %d, %d repeats/config  %s / %s"
+	_p("map-scene pan probe — warmup %d, sample %d, %d repeats/config  %s / %s"
 		% [WARMUP_FRAMES, SAMPLE_FRAMES, REPEATS,
 			RenderingServer.get_current_rendering_method(),
 			RenderingServer.get_video_adapter_name()])
@@ -172,10 +200,10 @@ func _assert_geometry() -> bool:
 			% [rest_x_min, rest_x_max, pan_x_min, pan_x_max,
 				MapSceneProxy.GRADE_MIN.x, grade_x_max]):
 		return false
-	print("geometry  canvas %dx%d  iPad 8 window %dx%d → stage %dx%d"
+	_p("geometry  canvas %dx%d  iPad 8 window %dx%d → stage %dx%d"
 		% [AUTHORED_CANVAS.x, AUTHORED_CANVAS.y,
 			IPAD8_WINDOW.x, IPAD8_WINDOW.y, IPAD8_STAGE.x, IPAD8_STAGE.y])
-	print("          composite %.2f Mpx  3D @1.0 %dx%d = %.2f Mpx  @1.5 %dx%d = %.2f Mpx"
+	_p("          composite %.2f Mpx  3D @1.0 %dx%d = %.2f Mpx  @1.5 %dx%d = %.2f Mpx"
 		% [COMPOSITE_MPX, pass_1.x, pass_1.y, PASS_1_0_MPX,
 			pass_15.x, pass_15.y, PASS_1_5_MPX])
 	return true
@@ -195,30 +223,31 @@ func _require(ok: bool, message: String) -> bool:
 	if ok:
 		return true
 	printerr("bench_map_scene GEOMETRY FAIL: " + message)
-	quit(2)
+	get_tree().quit(2)
 	return false
 
 
 func _banner() -> void:
-	print("")
-	print("################################################################")
-	print("#  NON-EVIDENCE unless this is a headed iPad 8 (A12) run.      #")
-	print("#  Mac / M1 / M4 / any other GPU does NOT answer #233.         #")
-	print("#  Do not quote these milliseconds as a 60 fps verdict.        #")
-	print("################################################################")
+	_p("")
+	_p("################################################################")
+	_p("#  NON-EVIDENCE unless this is a headed iPad 8 (A12) run.      #")
+	_p("#  Mac / M1 / M4 / any other GPU does NOT answer #233.         #")
+	_p("#  Do not quote these milliseconds as a 60 fps verdict.        #")
+	_p("################################################################")
 	var version: Dictionary = Engine.get_version_info()
 	var version_string: String = str(version["string"])
-	print("host %s  %s  godot %s" % [
+	_p("host %s  %s  godot %s" % [
 		OS.get_name(), Engine.get_architecture_name(), version_string])
 	var screen_size: Vector2i = DisplayServer.screen_get_size()
 	var screen_hz: float = DisplayServer.screen_get_refresh_rate()
 	_screen_hz = screen_hz
-	var window: Window = root.get_window()
-	var window_size: Vector2i = window.size if window != null else root.size
-	print("device %s  screen %dx%d @ %.2f Hz" % [
+	var tree_root: Window = get_tree().root
+	var window: Window = tree_root.get_window()
+	var window_size: Vector2i = window.size if window != null else tree_root.size
+	_p("device %s  screen %dx%d @ %.2f Hz" % [
 		OS.get_model_name(), screen_size.x, screen_size.y, screen_hz])
-	print("window root %dx%d  get_window %dx%d" % [
-		root.size.x, root.size.y, window_size.x, window_size.y])
+	_p("window root %dx%d  get_window %dx%d" % [
+		tree_root.size.x, tree_root.size.y, window_size.x, window_size.y])
 	var tilt_radians: float = deg_to_rad(absf(TILT_DEGREES))
 	var ground_z_span: float = MapSceneProxy.CAM_SIZE / sin(tilt_radians)
 	var ground_z_centre: float = MapSceneProxy.CAM_POS.z \
@@ -226,24 +255,24 @@ func _banner() -> void:
 	var half_width: float = MapSceneProxy.CAM_SIZE \
 		* float(IPAD8_STAGE.x) / float(IPAD8_STAGE.y) / 2.0
 	var total_pan: float = float(WARMUP_FRAMES + SAMPLE_FRAMES) * PAN_DELTA_X
-	print("coverage z %.2f..%.2f (span %.2f)  x %.2f..%.2f → %.2f..%.2f (pan %.2f)" % [
+	_p("coverage z %.2f..%.2f (span %.2f)  x %.2f..%.2f → %.2f..%.2f (pan %.2f)" % [
 		ground_z_centre - ground_z_span / 2.0, ground_z_centre + ground_z_span / 2.0,
 		ground_z_span, MapSceneProxy.CAM_POS.x - half_width,
 		MapSceneProxy.CAM_POS.x + half_width,
 		MapSceneProxy.CAM_POS.x - half_width + total_pan,
 		MapSceneProxy.CAM_POS.x + half_width + total_pan, total_pan])
 	if window_size != IPAD8_STAGE:
-		print("WARNING: actual window is %dx%d; expected iPad 8 stage %dx%d" % [
+		_p("WARNING: actual window is %dx%d; expected iPad 8 stage %dx%d" % [
 			window_size.x, window_size.y, IPAD8_STAGE.x, IPAD8_STAGE.y])
 	# bench_combat.gd:44-46 aborts here instead. This one warns, because the
 	# debug slice is the honest way to rehearse the iOS launch path — but the
 	# engine binary is not the shipped one, so the stamp has to survive into
 	# anything pasted from this run.
 	if OS.is_debug_build():
-		print("WARNING: DEBUG BUILD — engine differs from the shipped release")
-		print("         slice. Plumbing evidence only; #233 timings must come")
-		print("         from an --export-release build.")
-	print("")
+		_p("WARNING: DEBUG BUILD — engine differs from the shipped release")
+		_p("         slice. Plumbing evidence only; #233 timings must come")
+		_p("         from an --export-release build.")
+	_p("")
 
 func _config_oversample() -> float:
 	return OVERSAMPLES[_config >> 2]
@@ -269,7 +298,7 @@ func _build() -> void:
 	if _config in _results:
 		var config_results: Array = _results[_config]
 		completed_repeats = config_results.size()
-	print("INSTRUMENTS t=%dms config=%d osamp=%.2f octave=%s triplanar=%s repeat=%d/%d"
+	_p("INSTRUMENTS t=%dms config=%d osamp=%.2f octave=%s triplanar=%s repeat=%d/%d"
 		% [Time.get_ticks_msec(), _config, _config_oversample(),
 			_config_octave(), _config_triplanar(), completed_repeats + 1, REPEATS])
 	for child: Node in _vp.get_children():
@@ -279,7 +308,7 @@ func _build() -> void:
 	var oversample: float = _config_oversample()
 	_vp.size = _vp_size(oversample)
 	if _config not in _results:
-		print("viewport config=%d actual=%dx%d %.2f Mpx" % [
+		_p("viewport config=%d actual=%dx%d %.2f Mpx" % [
 			_config, _vp.size.x, _vp.size.y, _mpx(_vp.size.x * _vp.size.y)])
 	_proxy = MapSceneProxy.new(_config_octave(), _config_triplanar(), TILT_DEGREES)
 	_vp.add_child(_proxy.get_root())
@@ -288,12 +317,14 @@ func _build() -> void:
 	_cpu.clear()
 
 
-func _process(_delta: float) -> bool:
+func _process(_delta: float) -> void:
+	if _host == null:
+		return  # _ready bailed (headless or geometry fail); tree is quitting
 	if _proxy != null:
 		_proxy.pan(PAN_DELTA_X)
 	_frame += 1
 	if _frame <= WARMUP_FRAMES:
-		return false
+		return
 	# PRIMARY: unsynchronised whole-frame interval. Viewport GPU timestamps
 	# read 0 on Metal, so CPU+GPU cannot answer #233. Floored by the
 	# presentation interval — when most frames quantise to a known refresh
@@ -305,16 +336,16 @@ func _process(_delta: float) -> bool:
 	_gpu_available = _gpu_available or \
 		RenderingServer.viewport_get_measured_render_time_gpu(_vp_rid) > 0.0
 	if _samples.size() < SAMPLE_FRAMES:
-		return false
+		return
 	_record()
 	_run_idx += 1
 	if _run_idx >= _config_order.size():
 		_report()
-		quit(0)
-		return false
+		get_tree().quit(0)
+		set_process(false)
+		return
 	_advance_config()
 	_build()
-	return false
 
 
 func _advance_config() -> void:
@@ -400,9 +431,9 @@ func _overlaps(min1: float, max1: float, min2: float, max2: float) -> bool:
 	return not (max1 < min2 or max2 < min1)
 
 func _report() -> void:
-	print("")
-	print(" osamp | octave | triplanar | wall ms (spread) | p95 ms | p99 ms |  max ms | miss% |  CPU ms | render MiB | vs #158")
-	print(" ------|--------|-----------|------------------|--------|--------|---------|-------|---------|------------|--------")
+	_p("")
+	_p(" osamp | octave | triplanar | wall ms (spread) | p95 ms | p99 ms |  max ms | miss% |  CPU ms | render MiB | vs #158")
+	_p(" ------|--------|-----------|------------------|--------|--------|---------|-------|---------|------------|--------")
 	var floor_n: int = 0
 	var miss_n: int = 0
 	var clear_n: int = 0
@@ -514,7 +545,7 @@ func _report() -> void:
 			var pin: String = "floor" if quantised_hz <= _screen_hz * 1.05 else "quant"
 			verdict_label = "%s@%.0fHz" % [pin, quantised_hz] if verdict == "floor" \
 				else "%s %s@%.0fHz" % [verdict, pin, quantised_hz]
-		print(" %5.2f | %6s | %9s | %6.3f ± %.3f–%.3f | %6.3f | %6.3f | %7.3f | %5.2f | %7.3f | %10.2f | %s%s%s" % [
+		_p(" %5.2f | %6s | %9s | %6.3f ± %.3f–%.3f | %6.3f | %6.3f | %7.3f | %5.2f | %7.3f | %10.2f | %s%s%s" % [
 			oversample,
 			_octave_label(octave, triplanar),
 			"tri" if triplanar else "xz",
@@ -523,37 +554,37 @@ func _report() -> void:
 			comparison_label,
 			control_label])
 	
-	print("")
-	print("wall ms = median unsynchronised whole-frame interval (median over %d repeats × %d frames/repeat)."
+	_p("")
+	_p("wall ms = median unsynchronised whole-frame interval (median over %d repeats × %d frames/repeat)."
 		% [REPEATS, SAMPLE_FRAMES])
-	print("spread  = range of medians across repeats; tri* / oct* / osamp* identify")
-	print("          comparisons that overlap within the harness's run-to-run noise.")
-	print("CPU ms  = viewport CPU timer (secondary). GPU timer is not a column:")
+	_p("spread  = range of medians across repeats; tri* / oct* / osamp* identify")
+	_p("          comparisons that overlap within the harness's run-to-run noise.")
+	_p("CPU ms  = viewport CPU timer (secondary). GPU timer is not a column:")
 	if _gpu_available:
-		print("          GPU timestamps were non-zero on this driver.")
+		_p("          GPU timestamps were non-zero on this driver.")
 	else:
-		print("          GPU timer reads 0 on this driver (Metal is one). Zero is")
-		print("          UNMEASURED GPU work, not free GPU work.")
-	print("render MiB = RENDER_VIDEO_MEM_USED renderer allocation, NOT a jetsam figure.")
-	print("pinning: when >%.0f%% of a config's frames sit within %.2f ms of its own"
+		_p("          GPU timer reads 0 on this driver (Metal is one). Zero is")
+		_p("          UNMEASURED GPU work, not free GPU work.")
+	_p("render MiB = RENDER_VIDEO_MEM_USED renderer allocation, NOT a jetsam figure.")
+	_p("pinning: when >%.0f%% of a config's frames sit within %.2f ms of its own"
 		% [QUANTISED_FRACTION * 100.0, FLOOR_EPS_MS])
-	print("         median, the row is pinned to one interval and the median is NOT")
-	print("         the scene's cost. floor@NHz = at or below this display's %.0f Hz,"
+	_p("         median, the row is pinned to one interval and the median is NOT")
+	_p("         the scene's cost. floor@NHz = at or below this display's %.0f Hz,"
 		% _screen_hz)
-	print("         so presentation is pacing it. quant@NHz = pinned ABOVE the")
-	print("         refresh rate, which is timer granularity, not vsync.")
-	print("")
-	print("#158 frame pacing (docs/rc-bar.md): P95 ≤ %.2f ms, P99 ≤ %.2f ms,"
+	_p("         so presentation is pacing it. quant@NHz = pinned ABOVE the")
+	_p("         refresh rate, which is timer granularity, not vsync.")
+	_p("")
+	_p("#158 frame pacing (docs/rc-bar.md): P95 ≤ %.2f ms, P99 ≤ %.2f ms,"
 		% [GATE_P95_MS, GATE_P99_MS])
-	print("          no frame > %.2f ms, missed deadlines ≤ %.1f%%."
+	_p("          no frame > %.2f ms, missed deadlines ≤ %.1f%%."
 		% [GATE_MAX_MS, GATE_MISS_PCT])
-	print("          this run: %d clear  %d refresh-floor  %d MISS  (Mac ≠ #233 evidence)"
+	_p("          this run: %d clear  %d refresh-floor  %d MISS  (Mac ≠ #233 evidence)"
 		% [clear_n, floor_n, miss_n])
-	print("octave = n/a when triplanar=xz: props use map_ground.gdshader,")
-	print("         which has no octave path; the flag does not change the shader.")
-	print("[control] = xz pair (identical configs); spread is harness precision measurement.")
-	print("")
-	print("MEMORY INSTRUMENTS")
-	print("  RENDER_VIDEO_MEM_USED — renderer allocation, NOT the jetsam budget.")
-	print("  resident  process RSS / phys_footprint — THIS is the jetsam figure.")
+	_p("octave = n/a when triplanar=xz: props use map_ground.gdshader,")
+	_p("         which has no octave path; the flag does not change the shader.")
+	_p("[control] = xz pair (identical configs); spread is harness precision measurement.")
+	_p("")
+	_p("MEMORY INSTRUMENTS")
+	_p("  RENDER_VIDEO_MEM_USED — renderer allocation, NOT the jetsam budget.")
+	_p("  resident  process RSS / phys_footprint — THIS is the jetsam figure.")
 	_banner()
