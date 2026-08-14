@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Night Stall — Glassvow shop direction C1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Alegreya:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#f2c14e; --gold-dim:#9c7c34; --ink:#0b0e1a; --parchment:#e8dfc8;
+  --text:#d7dcea; --text-dim:#8b93ad; --danger:#ff8d8d; --glass:#8fd0ff; --ember:#ff9a4d;
+}
+*{margin:0;padding:0;box-sizing:border-box;hyphens:none;overflow-wrap:normal;word-break:normal;}
+html,body{background:#05070e;}
+body{font-family:'Alegreya',Georgia,serif;-webkit-font-smoothing:antialiased;}
+img{display:block;}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* ─────────── canvas ─────────── */
+.canvas{position:relative;width:1180px;height:820px;overflow:hidden;background:var(--ink);
+  font-kerning:normal;}
+.scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;}
+
+/* atmosphere */
+.vig-top{position:absolute;inset:0 0 auto 0;height:170px;
+  background:linear-gradient(180deg,rgba(4,6,13,.80),rgba(4,6,13,.34) 46%,rgba(4,6,13,0));pointer-events:none;}
+.vig-bot{position:absolute;inset:auto 0 0 0;height:270px;
+  background:linear-gradient(0deg,rgba(4,6,13,.72),rgba(4,6,13,.26) 52%,rgba(4,6,13,0));pointer-events:none;}
+.vig-sides{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 92% at 50% 52%,rgba(4,6,13,0) 46%,rgba(4,6,13,.40) 100%);}
+.ember{position:absolute;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,196,120,.95),rgba(255,150,60,.34) 42%,rgba(255,140,50,0) 72%);}
+
+/* ─────────── HUD: no bar, just marks on the painting ─────────── */
+.hud{position:absolute;font-family:'Cinzel',serif;pointer-events:none;}
+.hp{left:18px;top:11px;}
+.hp .row{display:flex;align-items:baseline;gap:9px;}
+.hp .pip{width:12px;height:12px;transform:translateY(1px);
+  background:#ff6d6d;clip-path:path('M6 11.5 C2 8 0 6 0 3.7 C0 1.5 1.6 0 3.4 0 C4.6 0 5.6 .7 6 1.6 C6.4 .7 7.4 0 8.6 0 C10.4 0 12 1.5 12 3.7 C12 6 10 8 6 11.5Z');}
+.hp .n{font-size:15px;font-weight:600;letter-spacing:.06em;color:rgba(240,225,205,.90);
+  text-shadow:0 1px 4px rgba(0,0,0,.9);}
+.hp .bar{margin-top:6px;width:174px;height:4px;border-radius:2px;background:rgba(255,109,109,.16);
+  box-shadow:0 1px 5px rgba(0,0,0,.7);}
+.hp .bar i{display:block;height:100%;width:100%;border-radius:2px;
+  background:linear-gradient(90deg,rgba(214,74,74,.78),rgba(226,116,102,.78));}
+
+/* the purse — one quiet chip */
+.purse{left:212px;top:8px;display:flex;align-items:center;gap:8px;
+  padding:5px 15px 6px 12px;border-radius:20px;
+  background:linear-gradient(180deg,rgba(12,14,26,.62),rgba(8,10,20,.52));
+  box-shadow:inset 0 0 0 1px rgba(242,193,78,.22),0 3px 14px rgba(0,0,0,.55);}
+.purse .d{font-size:11px;color:var(--gold);opacity:.95;}
+.purse .v{font-family:'Cinzel',serif;font-size:19px;font-weight:700;letter-spacing:.04em;color:var(--gold);
+  text-shadow:0 1px 6px rgba(0,0,0,.85),0 0 16px rgba(242,193,78,.28);}
+
+.place{left:0;right:0;top:19px;text-align:center;font-size:12.5px;font-weight:600;letter-spacing:.24em;
+  color:rgba(215,220,234,.50);text-shadow:0 1px 6px rgba(0,0,0,.95);}
+
+.slots{right:150px;top:12px;display:flex;gap:9px;}
+.slots i{display:block;width:30px;height:30px;border-radius:5px;
+  box-shadow:inset 0 0 0 1px rgba(215,220,234,.13);background:rgba(9,11,21,.30);}
+.omen{right:92px;top:8px;width:36px;height:39px;display:grid;place-items:center;
+  clip-path:polygon(50% 0,100% 26%,100% 74%,50% 100%,0 74%,0 26%);
+  background:rgba(9,11,21,.34);box-shadow:inset 0 0 0 1px rgba(143,208,255,.12);}
+.omen b{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:rgba(190,215,245,.72);}
+.menu{right:22px;top:13px;width:44px;height:28px;display:grid;gap:5px;align-content:center;justify-items:center;}
+.menu i{display:block;width:19px;height:1.5px;background:rgba(215,220,234,.55);}
+
+/* ─────────── the merchant's line ─────────── */
+.said{position:absolute;left:296px;top:196px;width:478px;
+  font-size:16.5px;font-style:italic;line-height:1.35;color:rgba(232,223,200,.90);
+  text-shadow:0 1px 3px rgba(0,0,0,.95),0 0 22px rgba(0,0,0,.8);}
+.said::before{content:'';position:absolute;inset:-24px -46px -22px -34px;z-index:-1;
+  background:radial-gradient(58% 62% at 46% 50%,rgba(4,6,14,.72),rgba(4,6,14,.32) 58%,rgba(4,6,14,0) 100%);
+  filter:blur(6px);}
+
+/* ─────────── ware tags: text tied to goods, never boxed ─────────── */
+.tag{position:absolute;z-index:6;}
+.tag::before{content:'';position:absolute;inset:-15px -20px -13px -18px;z-index:-1;
+  background:radial-gradient(60% 60% at 48% 50%,rgba(4,6,14,.82),rgba(4,6,14,.42) 56%,rgba(4,6,14,0) 100%);
+  filter:blur(5px);}
+.tag .nm{font-family:'Cinzel',serif;font-size:11.5px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:#e6cd92;white-space:nowrap;
+  text-shadow:0 1px 3px rgba(0,0,0,.95);}
+.tag .fx{margin-top:4px;font-size:13px;line-height:1.26;color:rgba(215,220,234,.76);
+  text-shadow:0 1px 3px rgba(0,0,0,.95);}
+.tag .pz{margin-top:6px;display:flex;align-items:center;gap:5px;}
+.pz .d{font-size:10px;line-height:1;}
+.pz .v{font-family:'Cinzel',serif;font-size:14.5px;font-weight:700;letter-spacing:.03em;line-height:1;}
+.can .d,.can .v{color:var(--gold);text-shadow:0 1px 4px rgba(0,0,0,.95),0 0 14px rgba(242,193,78,.30);}
+.cant .d,.cant .v{color:var(--danger);text-shadow:0 1px 4px rgba(0,0,0,.95),0 0 14px rgba(255,141,141,.26);}
+
+/* the thread that ties a tag to its ware */
+.thread{position:absolute;width:1px;z-index:5;
+  background:linear-gradient(180deg,rgba(242,193,78,.10),rgba(242,193,78,.72));
+  box-shadow:0 0 4px rgba(0,0,0,.9);}
+.thread.up{background:linear-gradient(0deg,rgba(242,193,78,.10),rgba(242,193,78,.72));}
+.knot{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(242,193,78,.85);z-index:5;
+  box-shadow:0 0 5px rgba(0,0,0,.9);}
+
+/* ─────────── goods ─────────── */
+.ware{position:absolute;z-index:4;}
+.ware img{filter:drop-shadow(0 6px 12px rgba(0,0,0,.65));}
+.glowwarm{position:absolute;border-radius:50%;z-index:3;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,164,80,.30),rgba(255,140,50,0) 70%);}
+.rest{position:absolute;z-index:3;border-radius:50%;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,.55),rgba(0,0,0,0) 72%);}
+
+/* hook hardware */
+.hang{position:absolute;width:1px;z-index:4;
+  background:linear-gradient(180deg,rgba(214,186,132,.55),rgba(214,186,132,.18));}
+.ring{position:absolute;width:7px;height:7px;border-radius:50%;z-index:4;
+  box-shadow:inset 0 0 0 1px rgba(226,201,148,.62);}
+
+/* the empty hook — where a ware used to be */
+.gone{position:absolute;z-index:6;text-align:center;}
+.gone .nm{font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:rgba(163,171,196,.92);text-decoration:line-through;
+  text-decoration-color:rgba(255,141,141,.92);text-decoration-thickness:1.6px;white-space:nowrap;
+  text-shadow:0 1px 3px rgba(0,0,0,.98);}
+.gone .st{margin-top:5px;font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:.36em;
+  color:rgba(163,171,196,.98);text-shadow:0 1px 3px rgba(0,0,0,.98);}
+.gone::before{content:'';position:absolute;inset:-14px -18px;z-index:-1;
+  background:radial-gradient(58% 60% at 50% 50%,rgba(4,6,14,.80),rgba(4,6,14,0) 100%);filter:blur(5px);}
+
+/* ─────────── the quest under cold glass ─────────── */
+.jarglow{position:absolute;left:986px;top:400px;width:212px;height:230px;z-index:2;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(143,208,255,.22),rgba(143,208,255,.06) 52%,rgba(143,208,255,0) 78%);}
+.jar{position:absolute;left:1036px;top:452px;width:106px;height:128px;z-index:6;
+  border-radius:53px 53px 7px 7px;
+  border:1px solid rgba(143,208,255,.46);
+  background:linear-gradient(180deg,rgba(143,208,255,.13),rgba(120,180,235,.05) 42%,rgba(143,208,255,.11));
+  box-shadow:inset 11px 0 26px -14px rgba(143,208,255,.80),inset -13px 0 28px -14px rgba(143,208,255,.66),
+             inset 0 14px 26px -16px rgba(200,235,255,.75),0 0 40px rgba(143,208,255,.20);}
+.jar::after{content:'';position:absolute;left:15px;top:12px;width:15px;height:74px;border-radius:9px;
+  background:linear-gradient(180deg,rgba(214,240,255,.34),rgba(214,240,255,0));transform:rotate(6deg);}
+.jarknob{position:absolute;left:1080px;top:441px;width:18px;height:13px;z-index:6;
+  border-radius:9px 9px 4px 4px;background:linear-gradient(180deg,rgba(180,222,255,.42),rgba(120,175,225,.18));
+  box-shadow:inset 0 0 0 1px rgba(143,208,255,.50);}
+.jarfoot{position:absolute;left:1024px;top:574px;width:130px;height:13px;z-index:5;border-radius:50%;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(143,208,255,.30),rgba(143,208,255,0) 74%);}
+.omenware{position:absolute;left:1058px;top:508px;width:62px;z-index:6;}
+.omenware img{width:100%;height:auto;filter:saturate(.34) hue-rotate(180deg) brightness(1.18) contrast(1.08)
+  drop-shadow(0 4px 10px rgba(0,0,0,.7)) drop-shadow(0 0 16px rgba(143,208,255,.55));}
+.tag.cold .nm{color:#bfe2ff;letter-spacing:.10em;font-size:13px;}
+.eyebrow{font-family:'Cinzel',serif;font-size:9.5px;font-weight:600;letter-spacing:.34em;
+  color:rgba(143,208,255,.80);text-shadow:0 1px 3px rgba(0,0,0,.95);margin-bottom:5px;}
+
+/* ─────────── the rack across the counter ─────────── */
+.card{position:absolute;top:590px;height:188px;width:auto;z-index:7;transform-origin:50% 100%;
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.72)) drop-shadow(0 0 22px rgba(0,0,0,.45));}
+.pricerow{position:absolute;top:784px;height:22px;display:flex;align-items:center;justify-content:center;
+  gap:5px;z-index:7;}
+.pricerow .d{font-size:10px;line-height:1;}
+.pricerow .v{font-family:'Cinzel',serif;font-size:15px;font-weight:700;letter-spacing:.03em;line-height:1;}
+.pricerow.struck .d,.pricerow.struck .v{color:rgba(139,147,173,.78);text-decoration:line-through;
+  text-decoration-color:rgba(255,141,141,.55);text-shadow:0 1px 4px rgba(0,0,0,.9);}
+
+/* the empty slot in the rack — an absence, not a box */
+.pocket{position:absolute;top:590px;height:188px;z-index:6;}
+.pocket::before{content:'';position:absolute;inset:-6px -10px;
+  background:radial-gradient(46% 60% at 50% 44%,rgba(2,3,9,.72),rgba(2,3,9,.32) 62%,rgba(2,3,9,0) 100%);
+  filter:blur(9px);}
+.pocket::after{content:'';position:absolute;left:2px;right:2px;bottom:-4px;height:15px;border-radius:50%;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,.62),rgba(0,0,0,0) 74%);filter:blur(2px);}
+.pocket .gone{position:absolute;left:0;right:0;top:70px;}
+.pocket .gone::before{opacity:.55;}
+
+/* the merchant's service, standing in the rack */
+.service{position:absolute;top:590px;height:188px;z-index:7;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;padding-bottom:2px;text-align:center;}
+.service svg{filter:drop-shadow(0 5px 10px rgba(0,0,0,.7)) drop-shadow(0 0 14px rgba(255,164,80,.24));}
+.service .nm{margin-top:13px;font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:#e6cd92;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.95);}
+.service .rule{margin-top:5px;width:28px;height:1px;background:rgba(242,193,78,.55);}
+.service .fx{margin-top:7px;font-size:12.5px;line-height:1.26;color:rgba(215,220,234,.74);
+  text-shadow:0 1px 3px rgba(0,0,0,.95);}
+.service .pz{margin-top:8px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.service::before{content:'';position:absolute;inset:44px -14px 0 -14px;z-index:-1;
+  background:radial-gradient(52% 52% at 50% 62%,rgba(4,6,14,.76),rgba(4,6,14,0) 100%);filter:blur(6px);}
+
+/* ─────────── leaving: the stair is the button ─────────── */
+.way{position:absolute;left:64px;top:404px;width:300px;height:250px;z-index:6;
+  background:radial-gradient(46% 48% at 42% 62%,rgba(255,170,86,.16),rgba(255,150,60,0) 74%);}
+.leave{position:absolute;left:78px;top:486px;width:236px;height:64px;z-index:7;
+  display:flex;align-items:center;gap:12px;}
+.leave .arw{font-size:19px;color:rgba(242,193,78,.72);line-height:1;
+  text-shadow:0 1px 4px rgba(0,0,0,.95);}
+.leave .lb{font-family:'Cinzel',serif;font-size:13.5px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:#d8bb71;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.98);}
+.leave::before{content:'';position:absolute;inset:-8px -22px;z-index:-1;
+  background:radial-gradient(54% 60% at 44% 50%,rgba(4,6,14,.70),rgba(4,6,14,0) 100%);filter:blur(6px);}
+.leave .ul{position:absolute;left:31px;bottom:14px;width:190px;height:1px;
+  background:linear-gradient(90deg,rgba(242,193,78,.50),rgba(242,193,78,0));}
+
+/* ─────────── below the canvas: zh-Hant + state note ─────────── */
+.below{width:1180px;background:#05070e;padding:20px 0 34px;}
+.strip{display:flex;gap:0;border-top:1px solid rgba(242,193,78,.16);padding-top:16px;}
+.strip .lead{width:104px;flex:none;font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.26em;
+  color:rgba(139,147,173,.75);padding-left:18px;line-height:1.7;}
+.zh{font-family:'Noto Serif TC','Songti TC',serif;flex:1;display:flex;flex-wrap:wrap;gap:16px 24px;
+  padding-right:18px;align-content:flex-start;}
+.zh .it{width:212px;}
+.zh .it.wide{width:100%;}
+.zh .n{font-size:13px;font-weight:600;letter-spacing:.04em;color:#e6cd92;}
+.zh .t{margin-top:3px;font-size:12px;line-height:1.5;color:rgba(215,220,234,.70);}
+.zh .p{margin-top:3px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--gold);}
+.zh .p.no{color:var(--danger);}
+.zh .p.sold{color:rgba(139,147,173,.8);text-decoration:line-through;}
+.zh .say{font-size:13px;line-height:1.6;color:rgba(232,223,200,.86);margin-bottom:2px;}
+.note{display:flex;gap:22px;align-items:flex-start;margin-top:22px;padding:14px 18px 0;
+  border-top:1px solid rgba(242,193,78,.10);}
+.note .lead{width:86px;flex:none;font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.26em;
+  color:rgba(139,147,173,.75);line-height:1.7;}
+.spent{width:132px;text-align:center;opacity:.44;}
+.spent .nm{font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(139,147,173,.95);text-decoration:line-through;text-decoration-color:rgba(255,141,141,.5);}
+.spent .fx{margin-top:6px;font-size:12px;line-height:1.25;color:rgba(139,147,173,.75);}
+.spent .st{margin-top:7px;font-family:'Cinzel',serif;font-size:9.5px;font-weight:700;letter-spacing:.34em;
+  color:rgba(139,147,173,.95);}
+.note p{font-size:12.5px;line-height:1.6;color:rgba(139,147,173,.9);max-width:640px;}
+.note p b{color:rgba(232,223,200,.9);font-weight:500;}
+</style>
+</head>
+<body>
+
+<div class="canvas" id="stage">
+  <h1 class="sr-only">THE MERCHANT</h1>
+  <img class="scene" src="assets/shop-c1/stall-scene.png" alt="A merchant's night stall under a torn canopy">
+
+  <div class="vig-sides"></div>
+  <div class="vig-top"></div>
+  <div class="vig-bot"></div>
+
+  <!-- embers -->
+  <div class="ember" style="left:236px;top:452px;width:5px;height:5px;opacity:.55"></div>
+  <div class="ember" style="left:322px;top:318px;width:3px;height:3px;opacity:.40"></div>
+  <div class="ember" style="left:640px;top:262px;width:4px;height:4px;opacity:.34"></div>
+  <div class="ember" style="left:889px;top:214px;width:3px;height:3px;opacity:.30"></div>
+  <div class="ember" style="left:1004px;top:472px;width:5px;height:5px;opacity:.50"></div>
+  <div class="ember" style="left:1096px;top:238px;width:3px;height:3px;opacity:.34"></div>
+  <div class="ember" style="left:174px;top:596px;width:4px;height:4px;opacity:.32"></div>
+  <div class="ember" style="left:1128px;top:668px;width:3px;height:3px;opacity:.26"></div>
+  <div class="ember" style="left:520px;top:170px;width:3px;height:3px;opacity:.24"></div>
+  <div class="ember" style="left:770px;top:520px;width:4px;height:4px;opacity:.30"></div>
+
+  <!-- ── HUD, floating, no bar ── -->
+  <div class="hud hp">
+    <div class="row"><span class="pip"></span><span class="n">72 / 72</span></div>
+    <div class="bar"><i></i></div>
+  </div>
+  <div class="hud purse"><span class="d">◈</span><span class="v">136</span></div>
+  <div class="hud place">THE ASHEN WOODS · FLOOR 10 · THE ROOTHEART</div>
+  <div class="hud slots"><i></i><i></i><i></i></div>
+  <div class="hud omen"><b>10</b></div>
+  <div class="hud menu"><i></i><i></i><i></i></div>
+
+  <!-- ── the merchant speaks ── -->
+  <div class="said">“Gold for glory, stranger. Everything's fair-priced — for the doomed.”</div>
+
+  <!-- ══ HOOK 1 · Phial of Dawn ══ -->
+  <div class="hang" style="left:760px;top:340px;height:17px;"></div>
+  <div class="ring" style="left:757px;top:352px;"></div>
+  <div class="glowwarm" style="left:722px;top:340px;width:76px;height:84px;"></div>
+  <div class="ware" style="left:741px;top:357px;width:39px;">
+    <img src="assets/shop-c1/wares/healing.png" alt="Phial of Dawn" style="width:100%;height:auto;">
+  </div>
+  <div class="thread" style="left:760px;top:410px;height:18px;"></div>
+  <div class="knot" style="left:759px;top:426px;"></div>
+  <div class="tag" style="left:684px;top:430px;width:142px;">
+    <div class="nm">Phial of Dawn</div>
+    <div class="fx">Heal 20 HP.</div>
+    <div class="pz can"><span class="d">◈</span><span class="v">55</span></div>
+  </div>
+
+  <!-- ══ HOOK 2 · bare. the ware is gone ══ -->
+  <div class="hang" style="left:843px;top:340px;height:16px;"></div>
+  <div class="gone" style="left:773px;top:294px;width:140px;">
+    <div class="nm">Stormglass Phial</div>
+    <div class="st">SOLD</div>
+  </div>
+  <div class="thread up" style="left:843px;top:328px;height:12px;"></div>
+
+  <!-- ══ HOOK 3 · Emberphial ══ -->
+  <div class="hang" style="left:920px;top:336px;height:15px;"></div>
+  <div class="ring" style="left:917px;top:347px;"></div>
+  <div class="glowwarm" style="left:880px;top:334px;width:80px;height:86px;"></div>
+  <div class="ware" style="left:900px;top:352px;width:42px;">
+    <img src="assets/shop-c1/wares/energy.png" alt="Emberphial" style="width:100%;height:auto;">
+  </div>
+  <div class="thread" style="left:920px;top:404px;height:44px;"></div>
+  <div class="knot" style="left:919px;top:446px;"></div>
+  <div class="tag" style="left:846px;top:452px;width:142px;">
+    <div class="nm">Emberphial</div>
+    <div class="fx">Gain 3 Embers.</div>
+    <div class="pz can"><span class="d">◈</span><span class="v">65</span></div>
+  </div>
+
+  <!-- ══ COUNTER · Sweet Root ══ -->
+  <div class="tag" style="left:352px;top:450px;width:162px;">
+    <div class="nm">Sweet Root</div>
+    <div class="fx">On pickup: gain 8 Max HP.</div>
+    <div class="pz cant"><span class="d">◈</span><span class="v">150</span></div>
+  </div>
+  <div class="thread up" style="left:434px;top:502px;height:10px;"></div>
+  <div class="knot" style="left:433px;top:502px;"></div>
+  <div class="glowwarm" style="left:392px;top:520px;width:86px;height:72px;"></div>
+  <div class="rest" style="left:398px;top:574px;width:78px;height:18px;"></div>
+  <div class="ware" style="left:407px;top:512px;width:54px;">
+    <img src="assets/shop-c1/wares/sweetRoot.png" alt="Sweet Root" style="width:100%;height:auto;">
+  </div>
+
+  <!-- ══ COUNTER · Gravebloom ══ -->
+  <div class="tag" style="left:530px;top:414px;width:140px;">
+    <div class="nm">Gravebloom</div>
+    <div class="fx">After combat, if at or below 50% HP, heal 10.</div>
+    <div class="pz cant"><span class="d">◈</span><span class="v">240</span></div>
+  </div>
+  <div class="thread up" style="left:598px;top:486px;height:12px;"></div>
+  <div class="knot" style="left:597px;top:486px;"></div>
+  <div class="glowwarm" style="left:558px;top:516px;width:80px;height:74px;"></div>
+  <div class="rest" style="left:566px;top:572px;width:66px;height:16px;"></div>
+  <div class="ware" style="left:576px;top:498px;width:44px;">
+    <img src="assets/shop-c1/wares/gravebloom.png" alt="Gravebloom" style="width:100%;height:auto;">
+  </div>
+
+  <!-- ══ THE COLD GLASS · quest offer, set apart on its own ledge ══ -->
+  <div class="jarglow"></div>
+  <div class="jarfoot"></div>
+  <div class="omenware"><img src="assets/shop-c1/wares/ashenCore.png" alt="An omen under glass"></div>
+  <div class="jar"></div>
+  <div class="jarknob"></div>
+  <div class="tag cold" style="left:982px;top:600px;width:154px;">
+    <div class="eyebrow">GATE</div>
+    <div class="nm">The Eighth Omen</div>
+    <div class="fx">Reach dawn beneath the Eighth Omen.</div>
+    <div class="pz cant"><span class="d">◈</span><span class="v">300</span></div>
+  </div>
+
+  <!-- ══ THE RACK ══ -->
+  <img class="card" src="assets/shop-c1/cards/heavyBlow.png" alt="Quarry Maul"
+       style="left:192px;transform:rotate(-1.5deg);">
+  <div class="pricerow can" style="left:192px;width:130px;"><span class="d">◈</span><span class="v">47</span></div>
+
+  <div class="pocket" style="left:333px;width:90px;">
+    <div class="gone">
+      <div class="nm">Fan of Glass</div>
+      <div class="st">SOLD</div>
+    </div>
+  </div>
+  <div class="pricerow struck" style="left:333px;width:90px;"><span class="d">◈</span><span class="v">47</span></div>
+
+  <img class="card" src="assets/shop-c1/cards/surge.png" alt="Struck Match"
+       style="left:435px;transform:rotate(1.1deg);">
+  <div class="pricerow can" style="left:435px;width:128px;"><span class="d">◈</span><span class="v">75</span></div>
+
+  <img class="card" src="assets/shop-c1/cards/empower.png" alt="Inner Blaze"
+       style="left:575px;transform:rotate(-0.8deg);">
+  <div class="pricerow can" style="left:575px;width:129px;"><span class="d">◈</span><span class="v">72</span></div>
+
+  <img class="card" src="assets/shop-c1/cards/aegis.png" alt="Cathedral Glass"
+       style="left:716px;transform:rotate(1.7deg);">
+  <div class="pricerow cant" style="left:716px;width:129px;"><span class="d">◈</span><span class="v">137</span></div>
+
+  <!-- the merchant's own service stands in the rack beside the cards -->
+  <div class="service" style="left:857px;width:110px;">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+      <!-- blades cross at the pivot: each tip is opposite its ring -->
+      <path d="M15.4 4 L19.6 5.6 L30.2 28.6 L26.6 30.4 Z" fill="#d7c095" stroke="#6f5730" stroke-width=".9"/>
+      <path d="M40.6 4 L36.4 5.6 L25.8 28.6 L29.4 30.4 Z" fill="#efdcb1" stroke="#6f5730" stroke-width=".9"/>
+      <path d="M27.6 30.2 C31.6 34.4 34.6 37.6 36.4 40.6" stroke="#c8ab72" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M28.4 30.2 C24.4 34.4 21.4 37.6 19.6 40.6" stroke="#c8ab72" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="16.6" cy="45.6" r="6.2" stroke="#d9b877" stroke-width="2.5" fill="none"/>
+      <circle cx="39.4" cy="45.6" r="6.2" stroke="#d9b877" stroke-width="2.5" fill="none"/>
+      <circle cx="28" cy="29.4" r="2.3" fill="#f2c14e"/>
+    </svg>
+    <div class="nm">Card Removal</div>
+    <div class="rule"></div>
+    <div class="fx">Remove a card from your deck forever.</div>
+    <div class="pz can"><span class="d">◈</span><span class="v">75</span></div>
+  </div>
+
+  <!-- ══ THE WAY OUT is the stair ══ -->
+  <div class="way"></div>
+  <div class="leave">
+    <span class="arw">←</span><span class="lb">Leave the Shop</span>
+    <span class="ul"></span>
+  </div>
+</div>
+
+<!-- ─────────────── outside the canvas ─────────────── -->
+<div class="below">
+  <div class="strip">
+    <div class="lead">ZH-HANT<br>同一畫面</div>
+    <div class="zh">
+      <div class="it wide say">「黃金換榮耀，異鄉人。就算你命定殞落——價錢仍然公道。」　　<span style="color:rgba(139,147,173,.8);font-size:11.5px">灰燼樹林 · 第 10 層 · 根脈之心　·　離開商店</span></div>
+      <div class="it"><div class="n">破曉藥瓶</div><div class="t">回復 20 點生命。</div><div class="p">◈ 55</div></div>
+      <div class="it"><div class="n">餘燼藥瓶</div><div class="t">獲得 3 點餘燼。</div><div class="p">◈ 65</div></div>
+      <div class="it"><div class="n">風暴琉璃藥瓶</div><div class="t">售罄</div><div class="p sold">◈ 70</div></div>
+      <div class="it"><div class="n">琉璃扇</div><div class="t">售罄</div><div class="p sold">◈ 47</div></div>
+      <div class="it"><div class="n">甘根</div><div class="t">拾取時：生命上限提高 8。</div><div class="p no">◈ 150</div></div>
+      <div class="it"><div class="n">墓綻花</div><div class="t">戰鬥後若生命不多於 50%，回復 10 點生命。</div><div class="p no">◈ 240</div></div>
+      <div class="it"><div class="n">移除卡牌</div><div class="t">從牌庫永久移除一張牌。</div><div class="p">◈ 75</div></div>
+      <div class="it"><div class="n">門檻 · 第八凶兆</div><div class="t">在第八凶兆籠罩下抵達破曉。</div><div class="p no">◈ 300</div></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <div class="lead">STATE<br>AFTER USE</div>
+    <div class="spent">
+      <div class="nm">Card Removal</div>
+      <div class="fx">Remove a card from your deck forever.</div>
+      <div class="st">SPENT</div>
+    </div>
+    <p><b>One grammar for "no longer available":</b> the ware's place is empty and its name is struck.
+    The rack pocket where Fan of Glass stood, the bare canopy hook, and the shears after one use all read the
+    same way. <b>Unaffordable is a different signal entirely</b> — the ware is still physically there, only its
+    price turns red. A hole versus a red number: nothing to read to tell them apart.</p>
+  </div>
+</div>
+
+</body>
+</html>

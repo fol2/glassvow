@@ -95,6 +95,28 @@ this session's scope.
 natively in Godot. Unresolved question raised and never answered: the deck at
 the bottom — should there be three decks, each with its own assets?
 
+## UI/UX overhaul direction — decided 2026-08-14 (wayfinder #163)
+
+Full record with images: `docs/design/2026-08-14-ui-direction/README.md`.
+The one-line versions, so this ledger stays the single place rejections live:
+
+- **zh-Hant is serif now** — Noto Serif TC, subset per locale corpus
+  (~0.73 MB woff2 per weight vs the 11.9 MB NotoSansTC full file). Chiron
+  Sung HK and LXGW WenKai TC rejected on the same specimen. Latin unchanged.
+- **Control theme: systematize, don't redesign** — one canonical Theme
+  resource from the existing RunStyle/GlassStyle tokens; remaining engine
+  widgets (scrollbar, dropdown, popup) get glass dressings; per-panel opaque
+  focus boxes die in favour of the shared lantern ring.
+- **Title menu: variant B "Ceremonial"** — waystone-facet primary with a
+  lantern bloom, unboxed utility row (kills the How-to-Play wrap). Variant A
+  "quiet hierarchy" rejected.
+- **Shop: "The Night Stall"** — the screen is the painting; goods hang in
+  the scene, tags on threads, SOLD is a physical gap, quest under a cold
+  bell jar, exit is the staircase. Two panel-based redesigns rejected as
+  "too busy … think wider, think wilder"; sibling concepts C2 (reliquary
+  window, state-as-light) and C3 (merchant close-up) not chosen but their
+  grammars are on record for execution to steal.
+
 ## Known cross-session breakage
 
 `enemy_lab.gd` once broke `godot --path . -- --studio` for everyone with typed-GDScript
