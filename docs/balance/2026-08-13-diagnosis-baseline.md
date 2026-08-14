@@ -2,7 +2,7 @@
 
 Issue: [fol2/glassvow#203](https://github.com/fol2/glassvow/issues/203).
 Method: [fol2/glassvow#160](https://github.com/fol2/glassvow/issues/160).
-Status: **DRAFT — PENDING JAMES SIGN-OFF** on the four bands. Step 2 (device validation) is HITL and is not this artifact.
+Status: **DRAFT — PENDING JAMES SIGN-OFF** on the **p8-d0-v1** bands (addendum 2026-08-14). Do not sign the p7-d2-v1 bands. Step 2 (device validation) is HITL and is not this artifact.
 
 **The bands also await a re-measure, not only a signature.** #203 is wired blocked-by [Strategy landscape layer 1](https://github.com/fol2/glassvow/issues/215): Tier 1 opens the pilot's grammar so a policy can *decline* a card reward, and the measured winning deck of ~43 cards is not a build any competent human plays. A new grammar is a new instrument, so these four cells will move again and every number below is provisional against that. Signing before then would fence the game to a superseded ruler. *(Re-measured 2026-08-14 — see the addendum at the end: the numbers did not move, and that is not the same as the ruler surviving.)*
 
@@ -313,3 +313,267 @@ Option 1 needs its own adequacy check before any band is drafted against it:
 it must beat arm 2 at Vow 0 on paired seeds, and the four cells must still
 separate. That validation, the re-drafted bands, and James's signature are
 what remain of #203.
+
+---
+
+## Addendum — 2026-08-14 p8-d0-v1 (top-decile default)
+
+James delegated the #203 anchor to option 1 (planner session 2026-08-14).
+Pilot `p8-d0-v1` is that instrument. The p7-d2-v1 bands above are **not** the
+signature target.
+
+Godot `4.7.1-stable (official)`. Content SHA-256
+`633408231840d4ba47e0680d1969982cdf1ded1a61213a51bfd2bdab00f35155` (unchanged).
+Profile `mature-three-act-no-side-state-v1`. Seeds **4000–4199** (diagnosis
+block; holdout 5000+ untouched). Manifest `commit` at sim time is worktree HEAD
+`104d818b9ae121b82e127183bd59f967735c5587`; the p8 default was uncommitted in
+this worktree, same pattern as the p7-d2 control.
+
+Every headline number below recomputes from
+`docs/balance/data/2026-08-14-p8d0-*.json` with this document's arithmetic
+(Wilson / paired difference, z = 1.9599639845, n − 1 in the paired variance).
+CSV slices: `…-p8d0-cells.csv`, `…-p8d0-boss-turns.csv`, `…-p8d0-economy.csv`,
+`…-p8d0-runs.csv`, `…-p8d0-ablation-n200.csv`.
+
+### Vector derivation + provenance
+
+`BalancePolicy.default()` is the **componentwise median of the four #215
+top-deciles** (Dusk/Ash × Vow 0/5, 200 policies each = 800 observations). A
+policy in more than one top-decile is counted once per grid. Integer knobs
+(`removalMinCopies`, `restHpPct`, `potionHealMissing`, `routeLowHpPct`,
+`shopGoldLow`, `shopGoldHigh`) are rounded to nearest int after the median.
+Construction and per-grid checks:
+`docs/balance/data/2026-08-14-p8-default-derivation.json`.
+
+The four-grid auditor in `docs/balance/2026-08-14-strategy-landscape.md` (and
+`/private/tmp/glassvow-215-slice-c/sweep/analysis.json`) is the source, not a
+paraphrase. Recomputed top-200 medians match that audit bit-for-bit on the
+published fingerprint paths:
+
+| Grid (cutoff) | `card.drawEnergy` top median | `status.regen` | `cardDecline` |
+|---|---:|---:|---:|
+| Dusk V0 (75.0%) | 10.05878415317795 | 10.4527410380887 | 13.974294066429149 |
+| Dusk V5 (40.0%) | 10.4412650565421 | 12.357756913535251 | 13.9244389627129 |
+| Ash V0 (82.5%) | 8.889488865874636 | 10.5010444153098 | 15.82626729737965 |
+| Ash V5 (50.0%) | 10.2766173984526 | 12.4427187507917 | 13.68352461606265 |
+
+Pooled-800 p8 defaults vs frozen p7 origin:
+
+| Knob | p7-d2-v1 | p8-d0-v1 |
+|---|---:|---:|
+| `card.drawEnergy` | 4.5 | **10.03605729808525** |
+| `status.regen` | 6.0 | **11.76985144414705** |
+| `cardDecline` | −1e9 (never decline) | **14.0958831273019** |
+| `restHpPct` | 70 | **67** |
+| `removalAppetite` | 8.5 | **16.4400114826858** |
+| `removalMinCopies` | 3 | **2** |
+| `shopMinRatio` | 0.06 | **0.06475653649074956** |
+| `relics.hollowCrown` | 90 | **129.500764113312** |
+
+The rest of the vector is the same construction (full median, not a
+fingerprint-only patch). `Pilot.VERSION = p8-d0-v1`. CLI T1 knobs
+(`CARD_DECLINE_DEFAULT`, `REMOVAL_APPETITE_DEFAULT`,
+`REMOVAL_MIN_COPIES_DEFAULT`) match those medians so
+`godot --headless -s res://tools/balance_sim.gd -- --vow=0 --runs=200 --seed0=4000`
+applies p8, not a T1 override back to p7.
+
+`BalancePolicy.sample_origin()` freezes the p7-d2-v1 constants.
+`sample_range` and CEM encode against that origin so #215 / #216 replay stays
+bit-identical. Live `resolve({})` / empty `apply_policy` uses p8 `default()`.
+
+Seed-1000 digest `eaeacd084dd9793a1a924ea2b5850c99453e38227c55bb09bb38dc0da45fdcb0`.
+Event scores on a Dusk start (seed 7): library `[0]=27.202 [1]=11.870`;
+forgottenShrine `[0]=13.201 [1]=5.828` — still chooses `[0]` on both.
+
+### Adequacy check — PASS
+
+Paired seeds 4000–4199, Vow 0, both aspects, vs #215 arm 2 (random build,
+competent play: Dusk 161/200 = 80.5%, Ash 175/200 = 87.5%).
+
+| Cell | p8 | arm 2 | Paired Δ; 95% |
+|---|---:|---:|---|
+| Vow 0 Duskblade | **178 / 200 = 89.0%** | 161 / 200 = 80.5% | **+8.50 pp; [+1.31, +15.69]** |
+| Vow 0 Ashwarden | **185 / 200 = 92.5%** | 175 / 200 = 87.5% | **+5.00 pp; [−0.51, +10.51]** |
+
+Both **point estimates beat arm 2**. Dusk's paired interval excludes zero. Ash's
+interval includes zero — the +5.00 pp lift is not resolved at n = 200. The
+binding was point-estimate "beat"; both cells pass. Stalls = 0, errors = 0.
+
+Four diagnosis cells, Wilson 95%, Vow 0 vs Vow 5 disjoint per aspect:
+
+| Cell | Wins / runs | Win rate | Wilson 95% |
+|---|---:|---:|---|
+| Vow 0 Ashwarden | 185 / 200 | **92.5%** | [87.996%, 95.403%] |
+| Vow 0 Duskblade | 178 / 200 | **89.0%** | [83.907%, 92.623%] |
+| Vow 5 Ashwarden | 162 / 200 | **81.0%** | [74.999%, 85.833%] |
+| Vow 5 Duskblade | 128 / 200 | **64.0%** | [57.142%, 70.331%] |
+
+- Dusk V0 [83.907, 92.623] vs V5 [57.142, 70.331]: **disjoint**.
+- Ash V0 [87.996, 95.403] vs V5 [74.999, 85.833]: **disjoint**.
+
+Adequacy does **not** fail. Diagnosis + ablation proceeded.
+
+### Four cells (p8)
+
+Aspect gap (paired, same seeds): Vow 0 Ash − Dusk = **+3.50 pp**, 95%
+[−2.46, +9.46]; Vow 5 = **+17.00 pp**, 95% [+8.89, +25.11].
+
+**Runs to a 3-act win** (geometric 1/p; still not vigil progression):
+
+| Cell | E[runs] |
+|---|---:|
+| Vow 0 Ashwarden | 1.08 |
+| Vow 0 Duskblade | 1.12 |
+| Vow 5 Ashwarden | 1.23 |
+| Vow 5 Duskblade | 1.56 |
+
+Winning decks finish around 42–44 cards (Dusk V0 win 42.48; Ash V5 win 44.06).
+cardDecline 14.1 does **not** collapse the diagnosis decks to thin — the
+top-decile fingerprint was fat.
+
+Saturation: Vow 0 max is 92.5%, Wilson upper 95.403%, not ~100%. Lookahead
+escalation is **not** triggered. A competent human can still beat this
+heuristic; HITL (#203 step 2) remains.
+
+### Boss turns (p8)
+
+Means (`kind=boss`):
+
+| Vow | Aspect | Act 1 | Act 2 | Act 3 |
+|---|---|---:|---:|---:|
+| 0 | Ashwarden | 5.914 | 5.949 | 7.947 |
+| 0 | Duskblade | 6.725 | 6.568 | 9.598 |
+| 5 | Ashwarden | 6.588 | 6.451 | 8.485 |
+| 5 | Duskblade | 7.505 | 7.250 | 10.157 |
+
+Shortest mean **5.914** (Vow 0 Ash act 1). Longest **10.157** (Vow 5 Dusk act 3).
+Share-in-window 6–10 is 60.0–92.5%; lowest is Vow 5 Dusk act 3 (**60.0%**,
+84 / 140). Three means sit outside the p7 [6, 10] gate: Vow 0 Ash act 1 and 2
+below 6, Vow 5 Dusk act 3 above 10. A stronger pilot shortens early Ash bosses.
+
+### Ablation (p8)
+
+Interventional `--ban=`, Vow 0, seeds 4000–4199, n = 200 per aspect, matched to
+the p8 unbanned control (Dusk 178/200 = 89.00%, Ash 185/200 = 92.50%). Same
+eight IDs as the p7 table.
+
+**Amendment 3 sample choice:** keep **n = 200** per aspect. The ±5 pp half-width
+target needs ~131; 200 already meets it on the largest shift (hollowCrown Dusk
+±4.59 pp). Did not drop to 131 (would widen). Did not raise further (not
+needed). Existing p7 sample size, not a new budget.
+
+| Item | Dusk Δ; paired 95%; ±half-width | Ash Δ; paired 95%; ±half-width | Combined Δ; paired 95%; ±half-width |
+|---|---:|---:|---|
+| hollowCrown | **−7.50 pp; [−12.09, −2.91]; ±4.59** | +3.00 pp; [−0.08, +6.08]; ±3.08 | −2.25 pp; [−5.06, +0.56]; ±2.81 |
+| emberLantern | −2.00 pp; [−4.39, +0.39]; ±2.39 | +0.50 pp; [−1.70, +2.70]; ±2.20 | −0.75 pp; [−2.38, +0.88]; ±1.63 |
+| duskmirror | 0.00 pp; [−1.39, +1.39]; ±1.39 | −1.00 pp; [−2.38, +0.38]; ±1.38 | −0.50 pp; [−1.48, +0.48]; ±0.98 |
+| eclipseSlash | −0.50 pp; [−6.79, +5.79]; ±6.29 | 0.00 pp; [0.00, 0.00]; ±0.00 | −0.25 pp; [−3.39, +2.89]; ±3.14 |
+| catalyst | 0.00 pp; [0.00, 0.00]; ±0.00 | −0.50 pp; [−2.70, +1.70]; ±2.20 | −0.25 pp; [−1.35, +0.85]; ±1.10 |
+| virulence | −0.50 pp; [−2.70, +1.70]; ±2.20 | +2.50 pp; [−0.08, +5.08]; ±2.58 | +1.00 pp; [−0.70, +2.70]; ±1.70 |
+| warCry | +2.00 pp; [−2.16, +6.16]; ±4.16 | 0.00 pp; [0.00, 0.00]; ±0.00 | +1.00 pp; [−1.08, +3.08]; ±2.08 |
+| venomStrike | +1.50 pp; [−0.69, +3.69]; ±2.19 | +0.50 pp; [−3.55, +4.55]; ±4.05 | +1.00 pp; [−1.30, +3.30]; ±2.30 |
+
+No row fails a 12 pp non-boss or 15 pp boss-relic **point** line. hollowCrown
+Dusk −7.50 pp is the largest negative shift (p7 was −17.00 pp on this relic).
+catalyst Ash is −0.50 pp (p7 was −11.00 pp). Ceiling effects at 89–92% Vow 0
+compress ablation deltas; band 4 still measures **sensitivity of this pilot**.
+
+### Wall-clock
+
+| Sweep | UTC start | UTC end | wall |
+|---|---|---|---:|
+| Vow 0 diagnosis (400 runs) | 2026-08-14T21:58:19Z | 21:58:50Z | **31 s** |
+| Vow 5 diagnosis (400 runs) | 2026-08-14T21:58:20Z | 21:58:50Z | **30 s** |
+| ablation hollowCrown | 22:01:30Z | 22:02:09Z | **39 s** |
+| ablation duskmirror | 22:01:33Z | 22:02:15Z | **42 s** |
+| ablation catalyst | 22:01:36Z | 22:02:20Z | **44 s** |
+| ablation emberLantern | 22:01:39Z | 22:02:23Z | **44 s** |
+| ablation venomStrike | 22:01:41Z | 22:02:26Z | **45 s** |
+| ablation virulence | 22:01:44Z | 22:02:27Z | **43 s** |
+| ablation warCry | 22:01:47Z | 22:02:29Z | **42 s** |
+| ablation eclipseSlash | 22:01:47Z | 22:02:29Z | **42 s** |
+
+Diagnosis pair ran in parallel; the eight ablations ran as eight Godot
+processes. Per-run cost ~75–110 ms once Godot is up.
+
+### Four bands — DRAFT against p8-d0-v1, PENDING JAMES SIGN-OFF
+
+Re-fitted to this instrument. The p7 60–80 / 25–50 / 15 pp / [6, 10] lines do
+not contain these points. The four adversarial-review amendments follow
+**verbatim** as caveats; they are not weakened by the re-fit.
+
+#### 1. Win-rate band per gated vow × aspect
+
+**Draft:** Vow 0 each aspect **80–97%**; Vow 5 each aspect **55–85%**.
+
+p7's 60–80 / 25–50 sat around 64.5–74.5 and 32–42. p8 sits at 89.0 / 92.5 and
+64.0 / 81.0. The floor stays above arm 2's Vow 0 Dusk 80.5% so the instrument
+cannot regress to "loses to random build." The 97% ceiling leaves room under
+100%. Point estimates sit inside. Vow 0 Ash's Wilson upper (95.403%) is under
+the ceiling. Vow 5 Dusk at 64.0% sits 9 pp above the 55% floor. Vow 5 Ash at
+81.0% sits 4 pp under 85%.
+
+#### 2. |Ashwarden − Duskblade| gap
+
+**Draft:** paired |Ash − Dusk| **≤ 20 pp** at both gated vows; the paired 95%
+interval must not lie entirely outside [−20, +20] pp.
+
+p7's 15 pp line **fails** Vow 5's **+17.00 pp** point. Twenty points is the
+same kind of round cap with ~3 pp margin on the measured 17.00 that fifteen
+had on p7's 10.00. Vow 0 is +3.50 pp with zero inside the interval. Measured
+second-clause candidates (amendment 2 still applies):
+
+| Candidate second-clause treatment | Vow 0 today | Vow 5 today |
+|---|---|---|
+| (a) Drop it; gate only \|point gap\| ≤ 20 pp | **PASS** (3.50) | **PASS** (17.00) |
+| (a′) \|point gap\| ≤ 15 pp | **PASS** | **FAIL** (17.00) |
+| (b) Paired 95% interval entirely inside [−20, +20] pp | **PASS** | **FAIL** (reaches +25.11) |
+| (c) Upper bound of the \|gap\| interval ≤ 20 pp | **PASS** (9.46) | **FAIL** (25.11) |
+| (c) Upper bound of the \|gap\| interval ≤ 26 pp | **PASS** | **PASS** |
+| (d) Paired 95% interval must contain zero | **PASS** | **FAIL** (lower +8.89) |
+
+Choosing (a′) or (d) at sign-off fails Vow 5 on the day they are signed.
+
+#### 3. Boss 6–10 turn window
+
+**Draft:** **mean** boss length in **[5.5, 10.5]** for every act × aspect ×
+gated vow (twelve cells). Share-in-window is reported, not gated.
+
+p7's [6, 10] fails three p8 means: Vow 0 Ash act 1 **5.914**, act 2 **5.949**,
+Vow 5 Dusk act 3 **10.157**. All twelve sit in [5.5, 10.5]. Share ≥ 60% in 6–10
+would currently pass all twelve (lowest 60.0%). If James wants the original
+[6, 10] mean gate kept as design intent, it fails those three cells today.
+
+#### 4. Ablation concentration
+
+**Draft:** on a matched ≥80-run Vow 0 sample, no single **non-boss** card or
+relic whose removal shifts a per-aspect win rate by more than **12 pp**; no
+**boss relic** more than **15 pp**. Point-estimate gate (amendment 3).
+
+n = 200 per aspect. hollowCrown −7.50 pp Dusk is the peak and sits under 15 pp.
+Largest non-boss negative is emberLantern −2.00 pp Dusk, under 12 pp. The p7
+hollowCrown −17.00 / catalyst −11.00 failures do not reproduce under p8.
+
+### Amendments — attached verbatim, not weakened
+
+These are the four amendments the adversarial review earned, copied from
+https://github.com/fol2/glassvow/issues/203 (comment "Before you sign"). They
+constrain what a signature on the p8 bands can claim. Full adjudication remains
+on https://github.com/fol2/glassvow/pull/208#issuecomment-5281077468.
+
+1. **State that the four bands do not discharge the unwaivable trio.** A heuristic pilot only explores strategies it was programmed to try, so no win-rate band evidences "no strategy trivializes a gated vow". That leg needs #205 plus something these bands do not contain. This is the finding that most constrains what the baseline can claim.
+2. **Tighten or drop band 2's second clause.** "The paired 95% interval must not lie entirely outside [−15, +15] pp" is satisfied by an interval of [+14.9, +40].
+3. **Sign band 4 explicitly as a point-estimate gate, or raise the ablation sample.** At n = 80, `hollowCrown`'s −10.62 pp has a paired interval of [−17.01, −4.24] — the point estimate passes the 15 pp line but the interval reaches past it. A ±5 pp half-width needs roughly 131 seeds per aspect.
+4. **Note that the bands were fitted post-hoc** to ~34 uncorrected intervals from one sample; future validation should treat them as one joint hypothesis.
+
+On (2): the p8 draft uses [−20, +20] for the second clause, which is the same
+shape of vacuous gate at a wider cap. The candidate table above is the
+measured choice, not a silent tighten.
+On (3): band 4 is signed as a **point-estimate** gate; the sample is n = 200
+(already above 131), and every interval/half-width is in the table.
+On (4): these four bands were fitted post-hoc to the p8 sample. Treat them as
+one joint hypothesis on a future holdout (seeds 5000+).
+
+RNG: `_incoming` still clones `run.rng_state()`; `domain/rng/rng.gd` was not
+touched. Ablation bans still live in `choose_card` / `choose_relic` /
+`choose_shop` (next-best, not forfeit).

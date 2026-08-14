@@ -40,7 +40,7 @@ func _initialize() -> void:
 	var paths: PackedStringArray = _mag_paths()
 	var mag_mu: Array[float] = []
 	var mag_sd: Array[float] = []
-	var base: Dictionary = Policy.default()
+	var base: Dictionary = Policy.sample_origin()
 	for path: String in paths:
 		var ratio: float = _at(seed_pol, path) / _at(base, path)
 		mag_mu.append(log(clampf(ratio, 0.25, 4.0)))
@@ -161,7 +161,7 @@ static func _gauss(rng: Rng) -> float:
 
 static func _policy(base: Dictionary, paths: PackedStringArray, mag: Array[float],
 		thr: Array[float]) -> Dictionary:
-	var pol: Dictionary = Policy.default()
+	var pol: Dictionary = Policy.sample_origin()
 	for i: int in range(paths.size()):
 		_put(pol, paths[i], _at(base, paths[i]) * exp(mag[i]))
 	for t: int in range(THR.size()):
@@ -213,7 +213,7 @@ static func _std(xs: Array[float], mean: float) -> float:
 	return maxf(sqrt(s / float(xs.size() - 1)), 0.02)
 
 static func _mag_paths() -> PackedStringArray:
-	var d: Dictionary = Policy.default()
+	var d: Dictionary = Policy.sample_origin()
 	var out: PackedStringArray = PackedStringArray()
 	for group: String in ["card", "status", "special", "combat", "route", "relics", "relicRarity"]:
 		_walk(d[group], group, out)

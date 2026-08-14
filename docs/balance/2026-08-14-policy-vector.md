@@ -1,8 +1,10 @@
 # Policy vector — Slice B — 2026-08-14
 
 Issue: [fol2/glassvow#215](https://github.com/fol2/glassvow/issues/215).
-`BalancePolicy.default()` at `tools/balance_policy.gd:5` (`default`) is exactly
-today's `p7-d2-v1` constants. `Pilot.apply_policy` deep-merges an override onto
+`BalancePolicy.default()` at `tools/balance_policy.gd:5` (`default`) is the
+live `p8-d0-v1` vector (four-grid top-decile median). `sample_origin()` is
+frozen `p7-d2-v1` so `sample_range` / CEM replay stay bit-identical.
+`Pilot.apply_policy` deep-merges an override onto
 that dict. Unspecified keys reset to default (same contract as Slice A).
 
 ## What is sampled

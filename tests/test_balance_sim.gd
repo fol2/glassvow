@@ -4,7 +4,7 @@ extends RefCounted
 const Sim: GDScript = preload("res://tools/balance_sim.gd")
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
 const Policy: GDScript = preload("res://tools/balance_policy.gd")
-const EXPECTED: String = "648562f245b41b131c36945c3c0627b465ec99b0f2e44c4a3aae28008f132aee"
+const EXPECTED: String = "eaeacd084dd9793a1a924ea2b5850c99453e38227c55bb09bb38dc0da45fdcb0"
 
 
 static func run(fails: Array[String]) -> void:
@@ -75,8 +75,8 @@ static func _check_valuation(content: ContentDB, fails: Array[String]) -> void:
 	var dusk_strike: float = Pilot.card_score(strike, 0, "strike")
 	if dusk_eclipse <= dusk_strike:
 		fails.append("balance pilot: Dusk eclipseSlash score %s should beat strike %s" % [dusk_eclipse, dusk_strike])
-	if Pilot.VERSION != "p7-d2-v1":
-		fails.append("balance pilot: VERSION expected p7-d2-v1 got %s" % Pilot.VERSION)
+	if Pilot.VERSION != "p8-d0-v1":
+		fails.append("balance pilot: VERSION expected p8-d0-v1 got %s" % Pilot.VERSION)
 	_check_grammar(content, fails)
 	_check_default_vector(content, fails)
 	var dusk_run: RunState = RunState.new_run(content, 7, "best-card")
@@ -101,26 +101,33 @@ static func _check_valuation(content: ContentDB, fails: Array[String]) -> void:
 	var worst: CardInst = Pilot.worst_card(dusk_run, content, dusk_run.player.deck)
 	var worst_def: Dictionary = content.cards.get(String(worst.id), {})
 	var wscore: float = Pilot.card_score(worst_def, dusk_run.aspect, String(worst.id))
-	if remove_score != Pilot.remove_value(wscore) or remove_score != 8.5 - wscore:
-		fails.append("balance sim: pickRemove must be 8.5 - worst, got %s vs %s" %
-			[remove_score, 8.5 - wscore])
+	var appetite: float = float(str(Policy.default()["removalAppetite"]))
+	if remove_score != Pilot.remove_value(wscore) or remove_score != appetite - wscore:
+		fails.append("balance sim: pickRemove must be appetite - worst, got %s vs %s" %
+			[remove_score, appetite - wscore])
 	print("event-score library[0]=%s [1]=%s  forgottenShrine[0]=%s [1]=%s" %
 		[lib0, lib1, remove_score, gold_score])
 
 
 static func _check_grammar(content: ContentDB, fails: Array[String]) -> void:
 	Pilot.apply_policy({})
-	if not Pilot.wants_shop_remove(3, 6.5) or Pilot.wants_shop_remove(3, 6.6) \
-			or Pilot.wants_shop_remove(2, 0.0):
-		fails.append("balance pilot: default shop remove must be copies>=3 and wscore<=6.5")
-	if Pilot.remove_value(2.5) != 6.0:
-		fails.append("balance pilot: default pickRemove must be 8.5 - wscore")
+	var appetite: float = float(str(Policy.default()["removalAppetite"]))
+	var copies: int = int(float(str(Policy.default()["removalMinCopies"])))
+	var ceiling: float = appetite - Pilot.REMOVAL_SHOP_MARGIN
+	if not Pilot.wants_shop_remove(copies, ceiling) or Pilot.wants_shop_remove(copies, ceiling + 0.1) \
+			or Pilot.wants_shop_remove(copies - 1, 0.0):
+		fails.append("balance pilot: default shop remove must track appetite and min copies")
+	if Pilot.remove_value(2.5) != appetite - 2.5:
+		fails.append("balance pilot: default pickRemove must be appetite - wscore")
 	var run_state: RunState = RunState.new_run(content, 7, "t1a")
 	var game: GlassvowGame = GlassvowGame.new(content, run_state)
 	var before: int = game.run.player.deck.size()
+	var strike_score: float = Pilot.card_score(content.cards["strike"], game.run.aspect, "strike")
+	var takes_strike: bool = Pilot.accepts_card_reward(strike_score)
 	Sim._claim_rewards(game, {"gold": 0, "cards": ["strike"]})
-	if game.run.player.deck.size() != before + 1:
-		fails.append("balance sim: default decline must take strike")
+	var grew: bool = game.run.player.deck.size() == before + 1
+	if grew != takes_strike:
+		fails.append("balance sim: default decline must match accepts_card_reward on strike")
 	Pilot.apply_policy({"cardDecline": 100.0})
 	run_state = RunState.new_run(content, 7, "t1a-high")
 	game = GlassvowGame.new(content, run_state)
@@ -134,7 +141,8 @@ static func _check_grammar(content: ContentDB, fails: Array[String]) -> void:
 	if Pilot.remove_value(2.5) != 17.5:
 		fails.append("balance pilot: pickRemove must track removalAppetite")
 	Pilot.apply_policy({"removalMinCopies": 1})
-	if not Pilot.wants_shop_remove(1, 6.5) or Pilot.wants_shop_remove(1, 6.6):
+	var open_ceiling: float = float(str(Policy.default()["removalAppetite"])) - Pilot.REMOVAL_SHOP_MARGIN
+	if not Pilot.wants_shop_remove(1, open_ceiling) or Pilot.wants_shop_remove(1, open_ceiling + 0.1):
 		fails.append("balance pilot: removalMinCopies must open singleton shop remove")
 	Pilot.apply_policy({})
 

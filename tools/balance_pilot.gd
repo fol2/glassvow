@@ -4,15 +4,15 @@ extends RefCounted
 ## Routes favour treasure, then low-HP rest; rewards take the highest card/relic score; shops buy by value/gold.
 ## Potions heal at 20 missing HP, block lethal intent, and spend offensive stock in elite/boss fights.
 const Policy: GDScript = preload("res://tools/balance_policy.gd")
-const VERSION: String = "p7-d2-v1"
-const SHOP_MIN_RATIO: float = 0.06
-## T1a: take every offered card. Finite so CLI/JSON round-trip; no catalogue score is this low.
-const CARD_DECLINE_DEFAULT: float = -1.0e9
-## T1b: shop-remove numerator and event pickRemove share this intercept (default 8.5).
-const REMOVAL_APPETITE_DEFAULT: float = 8.5
-## T1b: min copies of the worst card before a shop will remove it (default 3).
-const REMOVAL_MIN_COPIES_DEFAULT: int = 3
-## Shop eligibility ceiling is appetite minus this; 8.5 - 2.0 = 6.5. Not a sampled knob.
+const VERSION: String = "p8-d0-v1"
+const SHOP_MIN_RATIO: float = 0.06475653649074956
+## T1a: keep a reward iff card_score >= this. #215 four-grid top-decile median.
+const CARD_DECLINE_DEFAULT: float = 14.0958831273019
+## T1b: shop-remove numerator and event pickRemove share this intercept.
+const REMOVAL_APPETITE_DEFAULT: float = 16.4400114826858
+## T1b: min copies of the worst card before a shop will remove it.
+const REMOVAL_MIN_COPIES_DEFAULT: int = 2
+## Shop eligibility ceiling is appetite minus this. Not a sampled knob.
 const REMOVAL_SHOP_MARGIN: float = 2.0
 static var banned: Dictionary = {}
 static var vector: Dictionary = {}
