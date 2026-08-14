@@ -1,8 +1,9 @@
 class_name MapScene
 extends Control
-## Standalone 3D map surface for one act (#234 slice 2).
+## Standalone 3D map surface for one act (#234 slice 3).
 ##
-## Instantiable without a WorldMap. The live 2D `WorldMapScreen` is not
+## Instantiable without a WorldMap. `project_pins` takes a node list when the
+## caller has one; construction does not. The live 2D `WorldMapScreen` is not
 ## replaced here — swap-over is a later slice. Ground and placeholder
 ## MultiMesh modules (wedge / slab / dab) carry the #255 cel/triplanar pair.
 ## Freeze is a switch, not a scene-graph assumption (#207 decision 10). Rest
@@ -71,6 +72,21 @@ func get_stage() -> SubViewport:
 
 func get_key() -> DirectionalLight3D:
 	return _key
+
+
+## Screen seats for 2D pins, in this Control's pixel space. Empty list is
+## legal — MapScene does not own a WorldMap.
+func project_pins(nodes: Array[MapNode]) -> PackedVector2Array:
+	return _projection().seats(nodes)
+
+
+func hit_test(screen: Vector2) -> Vector3:
+	return _projection().hit_world(screen)
+
+
+func _projection() -> MapPinProjection:
+	var view: Vector2i = _stage.size
+	return MapPinProjection.new(_rig.get_camera(), size, Vector2(view))
 
 
 func is_live() -> bool:
