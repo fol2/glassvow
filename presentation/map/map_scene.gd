@@ -1,11 +1,10 @@
 class_name MapScene
 extends Control
-## Standalone 3D map surface for one act (#234 slice 1).
+## Standalone 3D map surface for one act (#234 slice 2).
 ##
 ## Instantiable without a WorldMap. The live 2D `WorldMapScreen` is not
-## replaced here — swap-over is a later slice. Geometry is placeholder
-## primitives; the #255 cel/triplanar pair is wired in slice 2.
-##
+## replaced here — swap-over is a later slice. Ground and placeholder
+## MultiMesh modules (wedge / slab / dab) carry the #255 cel/triplanar pair.
 ## Freeze is a switch, not a scene-graph assumption (#207 decision 10). Rest
 ## is `UPDATE_ONCE` (one paint, then sleep). Call `set_live(true)` while the
 ## camera moves; `set_live(false)` re-arms a single frame at the new pose —
@@ -15,13 +14,13 @@ const OVERSAMPLE: float = 1.0
 const VP_MAX: int = 2048
 const GROUND_SIZE: Vector2 = Vector2(48.0, 34.0)
 const SUN_TO: Vector3 = Vector3(-0.35, 0.78, 0.52)
-const PLACEHOLDER_GROUND: Color = Color(0.22, 0.28, 0.24)
 const SKY: Color = Color(0.018, 0.022, 0.045)
 
 var _stage: SubViewport
 var _display: TextureRect
 var _rig: MapCameraRig
 var _key: DirectionalLight3D
+var _materials: MapMaterials
 var _dragging: bool = false
 
 
@@ -43,7 +42,10 @@ func _init() -> void:
 	world.add_child(_rig)
 	_add_key(world)
 	_add_environment(world)
+	_materials = MapMaterials.new(_key.basis.z, _rig.zoom_stop)
+	_rig.zoom_stop_changed.connect(_materials.set_tex_stop)
 	_add_ground(world)
+	_add_props(world)
 	_display = TextureRect.new()
 	_display.name = "MapDisplay"
 	_display.texture = _stage.get_texture()
@@ -150,11 +152,105 @@ func _add_environment(world: Node3D) -> void:
 func _add_ground(world: Node3D) -> void:
 	var plane: PlaneMesh = PlaneMesh.new()
 	plane.size = GROUND_SIZE
-	var material: StandardMaterial3D = StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = PLACEHOLDER_GROUND
 	var ground: MeshInstance3D = MeshInstance3D.new()
 	ground.name = "TerrainPlaceholder"
 	ground.mesh = plane
-	ground.material_override = material
+	ground.material_override = _materials.ground
+	ground.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	world.add_child(ground)
+
+
+func _add_props(world: Node3D) -> void:
+	var wedge: PrismMesh = PrismMesh.new()
+	wedge.size = Vector3(2.3, 3.4, 1.25)
+	_add_multimesh(world, "FlatWedges", wedge, _wedge_positions(), 0)
+	var slab: BoxMesh = BoxMesh.new()
+	slab.size = Vector3(2.5, 0.62, 1.7)
+	_add_multimesh(world, "StackedSlabs", slab, _slab_positions(), 9)
+	_add_multimesh(world, "DabMasses", _dab_mesh(), _dab_positions(), 17)
+
+
+## INSTANCE_CUSTOM.xyz phase copied from MapSceneProxy._add_multimesh
+## (#207 repair 4). Do not parent or subclass the proxy.
+func _add_multimesh(world: Node3D, node_name: String, mesh: Mesh,
+		positions: PackedVector3Array, first_index: int) -> void:
+	var multimesh: MultiMesh = MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.use_custom_data = true
+	multimesh.mesh = mesh
+	multimesh.instance_count = positions.size()
+	for i: int in range(positions.size()):
+		var index: int = first_index + i
+		var angle: float = float(index) * 1.117
+		var scale: Vector3 = Vector3(
+				0.82 + 0.09 * float(index % 4),
+				0.86 + 0.08 * float((index + 2) % 3),
+				0.84 + 0.07 * float((index + 1) % 4))
+		if node_name == "StackedSlabs" and i % 2 == 1:
+			scale *= 0.76
+		var basis: Basis = Basis(Vector3.UP, angle).scaled(scale)
+		multimesh.set_instance_transform(i, Transform3D(basis, positions[i]))
+		multimesh.set_instance_custom_data(i, Color(
+				fposmod(float(index) * 0.173, 1.0),
+				fposmod(float(index) * 0.317, 1.0),
+				fposmod(float(index) * 0.619, 1.0), 1.0))
+	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
+	instances.name = node_name
+	instances.multimesh = multimesh
+	instances.material_override = _materials.prop
+	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	world.add_child(instances)
+
+
+func _wedge_positions() -> PackedVector3Array:
+	return PackedVector3Array([
+		Vector3(-21.0, 1.7, -6.5), Vector3(-17.0, 1.7, 5.7),
+		Vector3(-12.0, 1.7, -7.7), Vector3(-6.5, 1.7, 6.4),
+		Vector3(-1.0, 1.7, -5.8), Vector3(5.0, 1.7, 7.2),
+		Vector3(10.5, 1.7, -6.7), Vector3(16.0, 1.7, 5.9),
+		Vector3(21.0, 1.7, -7.5),
+	])
+
+
+func _slab_positions() -> PackedVector3Array:
+	return PackedVector3Array([
+		Vector3(-18.5, 0.31, 3.9), Vector3(-18.5, 0.86, 3.9),
+		Vector3(-8.0, 0.31, -4.5), Vector3(-8.0, 0.86, -4.5),
+		Vector3(4.0, 0.31, 4.2), Vector3(4.0, 0.86, 4.2),
+		Vector3(15.5, 0.31, -4.0), Vector3(15.5, 0.86, -4.0),
+	])
+
+
+func _dab_positions() -> PackedVector3Array:
+	return PackedVector3Array([
+		Vector3(-22.0, 0.0, 7.8), Vector3(-14.0, 0.0, -5.2),
+		Vector3(-10.5, 0.0, 7.6), Vector3(-3.5, 0.0, 5.0),
+		Vector3(2.0, 0.0, -7.7), Vector3(8.5, 0.0, 5.2),
+		Vector3(13.0, 0.0, -7.8), Vector3(20.5, 0.0, 6.9),
+	])
+
+
+func _dab_mesh() -> ArrayMesh:
+	var top: Vector3 = Vector3(0.05, 1.45, -0.08)
+	var bottom: Vector3 = Vector3(-0.08, 0.0, 0.05)
+	var east: Vector3 = Vector3(0.95, 0.56, 0.02)
+	var north: Vector3 = Vector3(0.02, 0.62, -0.78)
+	var west: Vector3 = Vector3(-0.82, 0.48, -0.04)
+	var south: Vector3 = Vector3(-0.03, 0.58, 0.86)
+	var triangles: PackedVector3Array = PackedVector3Array([
+		top, east, north, top, south, east,
+		top, west, south, top, north, west,
+		bottom, north, east, bottom, east, south,
+		bottom, south, west, bottom, west, north,
+	])
+	var surface: SurfaceTool = SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i: int in range(0, triangles.size(), 3):
+		var a: Vector3 = triangles[i]
+		var b: Vector3 = triangles[i + 1]
+		var c: Vector3 = triangles[i + 2]
+		var normal: Vector3 = (b - a).cross(c - a).normalized()
+		for vertex: Vector3 in [a, b, c]:
+			surface.set_normal(normal)
+			surface.add_vertex(vertex)
+	return surface.commit()
