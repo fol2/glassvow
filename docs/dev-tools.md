@@ -94,6 +94,7 @@ compose the bounded Custom controls with `--scn key=value`:
 ```bash
 python3 tools/dev.py --scenario='{"id":"custom","revision":1,"seed":7}'
 python3 tools/dev.py --scenario --scn seed=7 --scn gold=10 --scn add_cards=strike,defend
+python3 tools/dev.py --scenario --scn id=vigil --scn shards=6
 ```
 
 For a native iteration loop use `tools/live.sh start …`, then `shot`, `reload`,

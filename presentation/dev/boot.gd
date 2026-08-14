@@ -51,14 +51,5 @@ static func _catalogue_entry(id: String) -> Dictionary:
 	var script: GDScript = load("res://presentation/dev/catalogue.gd") as GDScript
 	if script == null:
 		return {}
-	var rows_v: Variant = script.get("ENTRIES")
-	if typeof(rows_v) != TYPE_ARRAY:
-		return {}
-	var rows: Array = rows_v
-	for row_v: Variant in rows:
-		if typeof(row_v) != TYPE_DICTIONARY:
-			continue
-		var row: Dictionary = row_v
-		if str(row.get("id", "")) == id:
-			return row
-	return {}
+	var found: Variant = script.call("recipe_for", id)
+	return found if typeof(found) == TYPE_DICTIONARY else {}

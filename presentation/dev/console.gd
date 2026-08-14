@@ -8,7 +8,7 @@ const WIDTH: float = 420.0
 const INT_OV: PackedStringArray = ["aspect", "vow", "act", "hp", "max_hp", "gold"]
 const LIST_OV: PackedStringArray = [
 	"enemies", "potions", "add_cards", "remove_cards", "upgrade_cards",
-	"add_relics", "remove_relics",
+	"add_relics", "remove_relics", "shards",
 ]
 
 var shape: StringName
@@ -214,6 +214,8 @@ func _paint() -> void:
 
 
 func _parse_ov(key: String, raw: String) -> Variant:
+	if key == "shards" and raw.is_valid_int():
+		return int(raw)
 	if LIST_OV.has(key):
 		var items: Array = []
 		for part: String in raw.split(","):
@@ -401,8 +403,19 @@ func _close() -> void:
 	closed.emit()
 
 func _pick(id: String, rev: int) -> void:
+	var blob: Dictionary = {"id": id, "revision": rev}
+	var script: GDScript = load("res://presentation/dev/catalogue.gd") as GDScript
+	if script != null:
+		var found: Variant = script.call("recipe_for", id)
+		if typeof(found) == TYPE_DICTIONARY:
+			var entry: Dictionary = found
+			if not entry.is_empty():
+				blob["seed"] = int(float(str(entry.get("seed", 0))))
+				var ov_v: Variant = entry.get("overrides", {})
+				var ov: Dictionary = ov_v if typeof(ov_v) == TYPE_DICTIONARY else {}
+				blob["overrides"] = ov.duplicate(true)
 	_ref = ScenarioReference.new()
-	_ref.load_from({"id": id, "revision": rev})
+	_ref.load_from(blob)
 	_field.text = JSON.stringify(_ref.encode())
 	_status.text = ""
 	_paint()
