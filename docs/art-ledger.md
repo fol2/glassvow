@@ -112,6 +112,31 @@ channel** — that is deliberate and `enemy_view.gd:4197` documents why.
 Introduced by 26b49af. **Prompt not recorded** — reconstruct and add it here
 the next time these are touched.
 
+### `scenes/night-stall.png` — 1600×1100 RGB — **INTERIM, concept-grade**
+
+The Night Stall, the shop's whole screen: concept C1 makes the painting the
+layout, so this is not decoration but the surface every ware is positioned
+against (`presentation/run/stall_layout.gd`). Copied verbatim from the signed
+design record at `docs/design/2026-08-14-ui-direction/stall-scene.png`, which
+is where #163 generated it as a **concept** render; #242 slice 1 gave it a
+`res://assets/` home so the production pass has a stable path to overwrite.
+
+**This is a placeholder and is listed here so it cannot become the next
+`meta/hollow-lamplighter`.** #242 slice 3 replaces the bytes at this same path
+with a production render, and the replacement is bound by three numbers the
+layout depends on, not by taste alone:
+
+- **1600×1100** (aspect 1.4545), or `StallLayout.IMAGE` moves with it.
+- **The counter's front lip at v = 0.7073** — the horizon the whole crop
+  pivots on.
+- **Nothing load-bearing outside `StallLayout.SAFE_BAND`** — u ∈ [0.042,
+  0.958], v ∈ [0.245, 0.899]. The three canopy hooks, both counter stands, the
+  right-hand ledge and the stair treads must all be painted inside it, because
+  a 20:9 frame crops the rest away.
+
+**Prompt not recorded** — #163 generated this without logging one. Slice 3 must
+write its prompt here.
+
 ### `title/splash.png` — 2360×1640 RGBA
 
 The Godot boot splash, wired at `project.godot:20`. Last corrected by 4007c11
