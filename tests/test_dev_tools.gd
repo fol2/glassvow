@@ -271,6 +271,8 @@ static func _vigil_scenario(fails: Array[String]) -> void:
 	elif host._vigil == null or host._vigil.shards.size() != 6 \
 			or not host._vigil.unlocks.has("emberglass"):
 		fails.append("dev tools: vigil Scenario did not plant the rose")
+	elif host.game == null or host.game.run.shards.size() != 6:
+		fails.append("dev tools: vigil Scenario left a stale run installed")
 	ScenarioKernel.new(host.content).clear_profile()
 	host.free()
 	if _snap(SaveService.RUN_PATH) != before_run \

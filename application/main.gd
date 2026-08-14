@@ -977,6 +977,12 @@ func apply_dev_scenario(ref: ScenarioReference) -> bool:
 	_vigil_save_path = kernel.vigil_path
 	_vigil = _load_vigil()
 	if ref.scenario_id == "vigil":
+		# Install the constructed run so no earlier run survives the profile
+		# switch; the Vigil is the destination, not a detour from a live run.
+		game = GlassvowGame.new(content, run)
+		var restored: WorldMap = WorldMap.from_dict(run.map)
+		if restored != null:
+			_map = restored
 		_show_vigil(true)
 		return true
 	_continue_run(run)

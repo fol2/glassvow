@@ -70,7 +70,7 @@ const ENTRIES: Array[Dictionary] = [
 		"description": "A closed treasure chest on the Act I relic row.",
 		"seed": SEED, "overrides": {"act": 0, "node": "8,0"}},
 	{"id": "vigil", "revision": 1,
-		"description": "The Vigil rose with all six Emberglass panes lit.",
+		"description": "The Vigil rose with all six panes lit (synthetic fixture; no quest memories).",
 		"seed": SEED, "overrides": {"shards": 6}},
 ]
 

@@ -160,16 +160,20 @@ static func _shards(kernel: ScenarioKernel, fails: Array[String]) -> void:
 	var final_act: RunState = kernel.construct(_custom(18314, {"act": 3, "shards": 6}))
 	if final_act == null or final_act.act != 3 or not final_act.is_final_act():
 		fails.append("scenario shards: act 3 with six panes was not the final act")
-	if kernel.construct(_custom(18315, {"shards": 7})) != null:
+	if kernel.construct(_custom(18315, {"shards": 7})) != null \
+			or kernel.last_error != "shards 7 is out of range":
 		fails.append("scenario reject: shard count 7 was accepted")
 	if kernel.construct(_custom(18318, {"act": 3})) != null \
 			or kernel.last_error != "act 3 requires six shards":
 		fails.append("scenario reject: act 3 without six shards was accepted")
-	if kernel.construct(_custom(18319, {"act": 3, "shards": 5})) != null:
+	if kernel.construct(_custom(18319, {"act": 3, "shards": 5})) != null \
+			or kernel.last_error != "act 3 requires six shards":
 		fails.append("scenario reject: act 3 with five shards was accepted")
-	if kernel.construct(_custom(18316, {"shards": ["not-a-quest"]})) != null:
+	if kernel.construct(_custom(18316, {"shards": ["not-a-quest"]})) != null \
+			or kernel.last_error != "unknown shard not-a-quest":
 		fails.append("scenario reject: unknown shard was accepted")
-	if kernel.construct(_custom(18317, {"shards": ["paleOnes", "paleOnes"]})) != null:
+	if kernel.construct(_custom(18317, {"shards": ["paleOnes", "paleOnes"]})) != null \
+			or kernel.last_error != "duplicate shard paleOnes":
 		fails.append("scenario reject: duplicate shard was accepted")
 	var again: RunState = kernel.construct(_custom(18312, {"shards": 6}))
 	if again == null or ScenarioKernel.fingerprint(again) != ScenarioKernel.fingerprint(counted):
