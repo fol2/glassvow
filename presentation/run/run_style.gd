@@ -33,7 +33,7 @@ static func add_backdrop(parent: Control) -> void:
 
 static func tracked(path: String, glyph_spacing: int) -> FontVariation:
 	var font: FontVariation = FontVariation.new()
-	# face() already chains NotoSansTC; spacing rides on the variation.
+	# face() already chains the serif and symbol subsets; spacing rides on the variation.
 	font.base_font = GlassStyle.face(path)
 	font.spacing_glyph = glyph_spacing
 	return font

@@ -31,6 +31,11 @@ jobs:
       - name: Test GDScript gate failures
         run: tools/test_check_scripts.sh
 
+      - name: Check zh-Hant bundled font coverage
+        run: |
+          python3 -m pip install 'fonttools[woff]>=4.63,<4.64'
+          python3 -B tools/check_locale_font_coverage.py
+
       - name: Check store Dev-tree exclusion
         run: python3 tools/check_store_dev_exclusion.py
 

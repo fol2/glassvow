@@ -84,7 +84,7 @@ var _transitions: TransitionLayer
 func _init() -> void:
 	# Install the default UI face on the shipping composition root after imported
 	# resources exist. Routed screens may refine this theme; unthemed descendants
-	# such as RunHud still inherit the same NotoSansTC default.
+	# such as RunHud still inherit the same Noto Serif TC default.
 	theme = GlassStyle.theme()
 
 
