@@ -125,7 +125,7 @@ actually lived, now carries the verdict and routes onward:
 ## the rate is less consistent than the constant it replaced.
 ```
 
-`presentation/map/world_map_screen.gd:788` — the file the finding was discussed
+`presentation/map/world_map_screen.gd` (`bed_half`) — the file the finding was discussed
 in — now names where the word lived instead of claiming it as its own, and the
 cross-reference runs both ways so neither end can rot silently.
 

@@ -73,7 +73,9 @@ rules, 45 `transition` declarations, 108 `animation` declarations and 70
 `@keyframes` bodies. Filtered to the combat surface that left 78 declarations,
 of which 67 are live (the other 11 are `prefers-reduced-motion` overrides).
 Sixty-two of those live ones fall on the combat screen proper. Of those
-sixty-two, twenty-two — **35%** — had no implementation in the port at all;
+sixty-two, twenty-two — **35%** — had no implementation in the port at all at
+the first run (ABSENT has since reached zero; the census table remains the
+authority);
 twenty-three matched, ten diverged, one diverged on purpose and the port said
 why, five were N/A because the rule never fires in the reference or drives a
 renderer the port does not use, and one was unresolved because the audit had
@@ -257,7 +259,9 @@ The honest limits matter as much as the method:
   sample.
 - **But an enumeration can silently under-enumerate, and this one did.**
   `moteDrift` and its `.idle-motes` carrier have no row in the census at all —
-  the extraction missed them (`docs/motion-census.md:155-156`). That is a worse
+  the extraction missed them (`docs/motion-census.md:161-163` — since built in
+  `df3cc64`, the census row still owed; the under-enumeration lesson stands
+  either way). That is a worse
   failure than a wrong verdict, because a wrong verdict is visible in the table
   and a missing row is not: the census reads complete either way. Enumeration
   buys you completeness *over what the extractor matched*, which is not the same
@@ -357,11 +361,15 @@ What `filter 0.2s` on `.hand-zone .card` actually covers is one class:
 `filter: sepia(0.35) saturate(1.45) brightness(1.08)` — the kindle preview.
 `opacity 0.12s` covers `.draw-pending` at `src/styles.css:640`, which the port
 answers with a flight rather than a fade. The bigger finding replaces the one
-it displaced: the port has no `.will-burn` tint at all. `kindle_mode` exists on
-`hand_view.gd` and nothing tints the cards it would burn. There is no point
-transitioning a filter that is never applied, so 619's filter half is blocked
-behind a missing appearance, not a missing animation. Ranking by the transition
-alone ranked a no-op second; ranking by the trigger found the real gap.
+it displaced: the port at the time had no `.will-burn` tint at all.
+`kindle_mode` existed on `hand_view.gd` and nothing tinted the cards it would
+burn. There is no point transitioning a filter that is never applied, so 619's
+filter half was blocked behind a missing appearance, not a missing animation.
+Ranking by the transition alone ranked a no-op second; ranking by the trigger
+found the real gap. That gap has since been closed —
+`presentation/combat/card_view.gd` (`set_will_burn`) carries the
+`styles.css:1125` sepia tint — which is the census loop completing on the very
+row this caveat found.
 
 ### Worked example: census entry to fix — the HP rails
 

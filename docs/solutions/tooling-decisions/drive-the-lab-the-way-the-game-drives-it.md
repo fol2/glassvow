@@ -181,8 +181,8 @@ nothing else, while the benchmark resynchronises its darkened copy against the
 body's live transform on every frame of its rig loop. That the only other callers
 were in the bench is itself the finding in miniature.
 Worse, its one variable — then named `_lift` — was the quantity now called
-`_art_pad` (`presentation/combat/enemy_view.gd:738`), computed at
-`presentation/combat/enemy_view.gd:2226` (in `_read_contact`) as the transparent
+`_art_pad` (`presentation/combat/enemy_view.gd:813`), computed at
+`presentation/combat/enemy_view.gd:2243` (in `_read_contact`) as the transparent
 margin below the painting's lowest opaque row.
 That is a uniform export border, not height. Across the 27 enemy paintings the
 bottom margin matches the top to a tenth of a percent on 13 of them and to within
@@ -195,11 +195,11 @@ A prior audit had graded that entry by comparing its *constants* against the
 reference and had written "correct as a derive, not a numeric match". Both defects
 were invisible to that comparison, because both are properties of when the code
 runs, not of what it computes. The corrected write-up is
-`docs/actor-animation-checklist.md:269` (§2) and the "Correction, 2026-07-27"
+`docs/actor-animation-checklist.md:274` (§2) and the "Correction, 2026-07-27"
 section of
 [`derive-authored-compensations-when-porting.md`](../design-patterns/derive-authored-compensations-when-porting.md).
 The per-frame call now exists at
-`presentation/combat/enemy_view.gd:2479` (in `_process`).
+`presentation/combat/enemy_view.gd:2575` (in `_process`).
 
 Three failures, one shape: the instrument was not being driven the way the product
 drives the thing it measures, and where no instrument existed at all, the missing
@@ -342,7 +342,7 @@ like a creature standing perfectly still.
 So `--idle` runs in **real time** and spaces its frames wider than the readback
 costs instead: `IDLE_FRAMES` at 0.84s intervals over one 4.2s period — the slowest
 kind idle, `idleSlime` — at `presentation/lab/enemy_lab.gd:1567`
-(`IDLE_FRAMES`), dispatched at `presentation/lab/enemy_lab.gd:1306-1313`
+(`IDLE_FRAMES`), dispatched at `presentation/lab/enemy_lab.gd:1444-1449`
 (in `_ready`) with no `time_scale` assignment at all.
 
 The general rule: **a verification tool inherits the timebase of the thing it
@@ -350,11 +350,11 @@ verifies.** Before reaching for a clock knob, find which clock the subject reads
 If it reads a wall clock, the harness cannot slow it and must widen its sampling
 instead. If it reads `delta`, the harness can slow it and should. This subject
 reads *both* inside one function — `_idle_t += delta` drives the vertex-stage
-deform at `presentation/combat/enemy_view.gd:2506` (in `_process`) while the kind
+deform at `presentation/combat/enemy_view.gd:2523` (in `_process`) while the kind
 layer a few lines below reads the wall clock — which means one `time_scale` setting would have desynced
 the two layers relative to each other even where it appeared to work. The same
 asymmetry sits in the harness: `_shoot_strip` waits against elapsed
-`Time.get_ticks_msec()` (`presentation/lab/enemy_lab.gd:1439-1448`, in
+`Time.get_ticks_msec()` (`presentation/lab/enemy_lab.gd:1616-1618`, in
 `_shoot_strip`), which is
 precisely why the slowed modes have to pre-divide their frame tables.
 
@@ -428,7 +428,7 @@ checked against the reference and the approach was endorsed as a derive. Every
 future reader of that entry would have concluded the shadow was done. Nothing in
 the entry was dishonest; it answered the question it had asked, which was about
 numbers, while both defects were about scheduling. The correction is now the
-longest passage in §2 (`docs/actor-animation-checklist.md:281-289`) and a whole new
+longest passage in §2 (`docs/actor-animation-checklist.md`, §2) and a whole new
 section in the pattern doc it had been cited by
 ([`derive-authored-compensations-when-porting.md`](../design-patterns/derive-authored-compensations-when-porting.md)).
 Two documents had to be amended because one instrument had been trusted past what
@@ -452,7 +452,7 @@ behaviour an instrument and then reading a number off it.
 Finally, note what this costs to prevent. The lab defect was one line. The missing
 capture mode was one frame table and one `if` branch — `IDLE_FRAMES`
 (`presentation/lab/enemy_lab.gd:1567` (`IDLE_FRAMES`)) and the
-`_mode == "idle"` dispatch (`presentation/lab/enemy_lab.gd:1306-1313`, in
+`_mode == "idle"` dispatch (`presentation/lab/enemy_lab.gd:1444-1449`, in
 `_ready`),
 reusing `_shoot_strip` unchanged. The expensive part was never the tool. It was
 the parity work performed against a surface nobody had checked was telling the
@@ -500,7 +500,7 @@ view.position = Vector2(x + view.foot.x, ground - view.size.y - view.foot.y)
 (`presentation/combat/enemy_view.gd:2821` (in `_read_idle`)), so `gloomslime` —
 `art.kind == "slime"`,
 whose profile is `sway .55, bob .55, breathe 1.35, head 0, pin 1.2, float .25`
-(`presentation/combat/enemy_view.gd:520`) — rendered with `sway 1.0, bob 1.0,
+(`presentation/combat/enemy_view.gd:592`) — rendered with `sway 1.0, bob 1.0,
 breathe 1.0, head 1.0,
 float 0` and no kind idle at all. After, one line reproduces what
 `CombatScreen.start_encounter`
@@ -518,7 +518,7 @@ The pattern every other strip follows, and the one that would have failed here:
 # `Time.get_ticks_msec()` (`presentation/combat/enemy_view.gd` (in `_process`)),
 # which it cannot reach. Six cells
 # would photograph the same instant six times and read as a still creature.
-Engine.time_scale = CRACK_SLOMO  # 0.06 — presentation/lab/enemy_lab.gd:1382
+Engine.time_scale = CRACK_SLOMO  # 0.06 — presentation/lab/enemy_lab.gd:1540
 var wall: Array[float] = []
 for t: float in IDLE_FRAMES:
     wall.append(t / CRACK_SLOMO)
@@ -549,9 +549,9 @@ re-running the captures.
 
 | Command | Kind | Predicted signature | Measured |
 | --- | --- | --- | --- |
-| `--idle=gloomslime` | slime → `idleSlime` | bounding-box **width** swings, tracking `scaleX` | 6.8% against the authored 7.2% (`SLIME_SX` 1.04 → 0.97, `presentation/combat/enemy_view.gd:586`) |
+| `--idle=gloomslime` | slime → `idleSlime` | bounding-box **width** swings, tracking `scaleX` | 6.8% against the authored 7.2% (`SLIME_SX` 1.04 → 0.97, `presentation/combat/enemy_view.gd:658`) |
 | `--idle=voltEel` | serpent → `idleSway` | bright **centroid** swings, bounding-box width does **not** | confirmed — translate plus rotate, not a scale |
-| `--idle=waylayer` | rogue → `idleBreathe` | **height** moves, width does not | confirmed — what `scaleY` alone looks like (`BREATHE_SY` 1.025, `presentation/combat/enemy_view.gd:589`) |
+| `--idle=waylayer` | rogue → `idleBreathe` | **height** moves, width does not | confirmed — what `scaleY` alone looks like (`BREATHE_SY` 1.025, `presentation/combat/enemy_view.gd:661`) |
 
 The 6.8-against-7.2 shortfall is the expected shape of agreement rather than a
 miss: six evenly spaced samples across a period will land near, not on, the
@@ -566,7 +566,7 @@ profile **and the name plate and HP rail travel with it**
 verification, because the defect was that the chrome used to stand at the
 destination waiting for the painting. And for the shadow, on `watcherEye` over
 eight frames of its own hover, shadow mass swings 22.3k → 28.3k while its centroid
-travels 11.4px (`docs/actor-animation-checklist.md:301-303`). A frozen
+travels 11.4px (`docs/actor-animation-checklist.md:309-310`). A frozen
 `_update_shadow` scores zero on both. A shadow whose only input was the export
 border would have scored the wrong sign on the first: most response on
 `shellback`, a crab flat on the floor at 20.7% margin, and almost none on
@@ -585,12 +585,12 @@ The scan was real
 (`presentation/combat/enemy_view.gd:2215` (`_read_contact`)), the projection
 was real (`presentation/combat/enemy_view.gd:2397` (`_update_shadow`)), and the
 quantity was a framing border rather than a gap
-(`presentation/combat/enemy_view.gd:2226`, in `_read_contact`; the variable is
-now named `_art_pad` at `presentation/combat/enemy_view.gd:738` for exactly
+(`presentation/combat/enemy_view.gd:2243`, in `_read_contact`; the variable is
+now named `_art_pad` at `presentation/combat/enemy_view.gd:813` for exactly
 this reason). A
 constants audit cannot see that, because every constant was fine. Only a
 multi-frame capture with the body actually rising can, and until `--idle` and the
-per-frame call at `presentation/combat/enemy_view.gd:2479` (in `_process`) existed,
+per-frame call at `presentation/combat/enemy_view.gd:2575` (in `_process`) existed,
 there was no way
 to make the body rise on a surface anyone was photographing.
 

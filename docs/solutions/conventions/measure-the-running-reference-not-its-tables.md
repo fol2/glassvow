@@ -90,11 +90,16 @@ stops the search. Two verified tables and a matching pixel diff on the identity
 shape read as "done" — and the identity shape is precisely the one where the
 third store's values equal the defaults, so it could never have shown the gap.
 
-The same shape of mistake is still live in this tree and is named rather than
-fixed: the reward rack draws three 178px cards across a 390px stage, because
-`CARD_SCALE` is a `const` divided out of `CardView.CARD_W` in four files. Its
+The same shape of mistake was still live in this tree when this was written:
+the reward rack drew three 178px cards across a 390px stage, because
+`CARD_SCALE` was a `const` divided out of `CardView.CARD_W` in four files. Its
 numbers live in the same container-query blocks
-(`styles.css:1657, 2060, 2174, 2261`), and they were never in a data file either.
+(`styles.css:1657, 2060, 2174, 2261`), and they were never in a data file
+either. It has since been closed the same way this doc prescribes: the rack's
+per-shape numbers were authored into the layout book's `reward` scope
+(`presentation/stage/layout_book.gd:282-284` (`rack/w`)), and the four
+`CARD_SCALE` consts survive only as identity-column defaults
+(`presentation/reward/reward_screen.gd:144` (`CARD_SCALE`)).
 
 One more consequence worth stating: a store with no schema also has no
 *validation*, so upstream can carry a plain bug in it indefinitely. The
@@ -146,7 +151,7 @@ chrome widget — rather than teaching every widget to lay itself out at any siz
 The table is pinned so it cannot quietly drift back:
 
 ```gdscript
-# tests/test_layout_book.gd:365
+# tests/test_layout_book.gd:377 (`_sizes`)
 static func _sizes(fails: Array[String]) -> void:
     var want: Dictionary[StringName, Array] = {
         &"pad-landscape": [152.0, 8.0, 260.0, 120.0, 90.0, 56.0, 1.0],

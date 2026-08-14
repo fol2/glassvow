@@ -33,8 +33,8 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:144-162` (in `_ready`) documents it and
-`application/main.gd:163-241` (in `_ready`) parses it out of
+entry point. `application/main.gd:149-168` (in `_ready`) documents it and
+`application/main.gd:169-241` (in `_ready`) parses it out of
 `OS.get_cmdline_user_args()`:
 
 ```gdscript
@@ -45,16 +45,18 @@ entry point. `application/main.gd:144-162` (in `_ready`) documents it and
 # tools/shot.sh --shot=/tmp/map.png [--seed=N] [--enter=0]
 ```
 
-`--shot=PATH` is read at `application/main.gd:184-185` (in `_ready`), and each
+`--shot=PATH` is read at `application/main.gd:191-192` (in `_ready`), and each
 route exit — font probe, studio, card lab, the other labs, and the real run —
-calls `_capture_and_quit()` (`application/main.gd:270`, `278`, `284`, `303`,
-`348`, all in `_ready`). That function is short and worth reading in full,
+calls `_capture_and_quit()` (`application/main.gd:286`, `313`, `319`, `338`,
+`348`, `395`, all in `_ready`). That function is short and worth reading in full,
 because two of its lines become load-bearing later:
 
 ```gdscript
 func _capture_and_quit(path: String) -> void:
 	for _i: int in range(30):  # let layout + first paint settle
 		await get_tree().process_frame
+	if _settle > 0.0:
+		await get_tree().create_timer(_settle).timeout
 	var img: Image = get_viewport().get_texture().get_image()
 	img.save_png(path)
 	print("shot saved: " + path)
@@ -220,7 +222,7 @@ func _ready() -> void:
 ```
 
 The bridge already speaks the commands the loop needs — its dispatch at
-`addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:136-143` matches
+`addons/funplay_mcp/runtime/funplay_mcp_runtime_bridge.gd:176-182` matches
 `query_node`, `capture_view`, `send_input`, and `get_events` — over `user://`
 command and response files declared at that file's lines 3-6. The host adds two
 commands of its own on a *separate* channel: `reload` re-parses the scripts the
@@ -568,7 +570,8 @@ tools/live.sh stop
 
 The usage block at `tools/live.sh:2-17` is the same list, and the bare invocation
 prints it with `sed -n '2,17p'` — note the printer stops at 17, so the
-`class_name` caveat on line 18 is in the file but not in the printed help.
+`class_name` caveat just below the printed range (lines 18-20) is in the file
+but not in the printed help.
 
 ### Edit code, then reload — no restart, no focus grab
 
@@ -701,7 +704,7 @@ subsequent `reload` and captures.
   the empirical backing for workaround #1, measured independently and earlier:
   a headless capture exits 124 after a 60s timeout and never writes the PNG.
   Cited rather than re-argued. The same rule appears again at
-  `docs/solutions/conventions/per-recipe-shader-knobs.md:210` and in the `Lab`
+  `docs/solutions/conventions/per-recipe-shader-knobs.md:215` and in the `Lab`
   entry of `CONCEPTS.md` — it is settled project knowledge, not a new finding.
 - `CONCEPTS.md`, `Live host` entry — the glossary definition this doc
   introduces, with the reload/restart rules stated for a reader who has not read

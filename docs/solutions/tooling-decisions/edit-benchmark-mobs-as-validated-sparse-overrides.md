@@ -30,7 +30,12 @@ The content loader therefore keeps three states distinct: the frozen catalogue,
 the sparse override dictionary, and the effective catalogue consumed by the game.
 `ContentDB.load_full()` loads the baseline first and applies
 `content/mob-overrides.json` only when requested
-(`content/content_db.gd:54-70`). The Enemy Lab separately loads
+(`content/content_db.gd:56-62`). Since #219 (commit `627503a`), `load_full`
+also interposes `_load_original_content()` — a hand-authored
+`content/original-content.json` overlay merged over the frozen `6e06911`
+baseline before mob overrides — so the "frozen catalogue" the Lab diffs
+against is baseline **plus** that overlay; `mob-overrides` remains the only
+opt-out layer. The Enemy Lab separately loads
 `ContentDB.load_full(false)` as its comparison baseline and derives the sparse set
 from entries that differ (`presentation/lab/enemy_lab.gd:347-352`). The checked-in
 override file can remain `{}` when there is no local tuning.
@@ -39,8 +44,9 @@ The editable boundary is also narrower than “anything in an enemy object”. T
 Lab exposes serialisable mechanics while declaring names, IDs and AI policy
 read-only (`presentation/lab/enemy_lab.gd:786-803`). Move IDs remain fixed because
 executable AI selects them; enemy and move names remain localisation-owned. The
-validator enforces both boundaries (`content/content_db.gd:98-126`,
-`content/content_db.gd:162-193`).
+validator enforces both boundaries (`content/content_db.gd`
+(`enemy_override_faults`) and its per-entry half, `content/content_db.gd`
+(`enemy_faults`)).
 
 ## What Didn't Work
 
@@ -71,7 +77,7 @@ Complete-entry validation should cover the actual trust boundary: HP shape and
 range; tier flags; facets; recognised art kinds and bounds; known starting
 statuses; the exact baseline move-ID set; move intents and numeric values; effects;
 referenced cards; and unchanged locale-owned names
-(`content/content_db.gd:98-203`). Do not put executable AI or localisation into
+(`content/content_db.gd:201-215` (`enemy_override_faults`)). Do not put executable AI or localisation into
 the JSON editor merely to make the object appear more complete.
 
 ### Validate the whole candidate before mutating anything
@@ -87,15 +93,18 @@ for id in raw:
 ```
 
 This is the ordering in `ContentDB.apply_enemy_overrides()`
-(`content/content_db.gd:72-81`). The regression check supplies a dictionary with
+(`content/content_db.gd:190-199` (`apply_enemy_overrides`)). The regression check supplies a dictionary with
 both a broken known mob and an unknown ID, then confirms the known mob was not
-partially changed (`tests/test_content.gd:69-89`). Validation interleaved with
+partially changed (`tests/test_content.gd:93-109` (`_enemy_overrides`)). Validation interleaved with
 assignment would fail that guarantee.
 
 ### Preview through effective content, not a private editor model
 
 Apply and Reset update both the Lab roster and the injected `ContentDB` used by
-runtime consumers (`presentation/lab/enemy_lab.gd:1062-1097`). The frozen baseline
+runtime consumers (`presentation/lab/enemy_lab.gd:1062-1097`); Apply first
+validates the single entry through `_benchmark.enemy_faults()`
+(`presentation/lab/enemy_lab.gd:1066`), while the whole-dictionary
+`enemy_override_faults` still guards Save. The frozen baseline
 is retained only for comparison and reset. This keeps the picture under review
 and the content the game will consume on the same path.
 

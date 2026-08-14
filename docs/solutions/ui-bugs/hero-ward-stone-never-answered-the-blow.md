@@ -183,7 +183,7 @@ in `_hit_player`, under a comment that states both halves of the reasoning.
 screen-space heading pointing from the creature toward whoever struck it. It
 drives the shield AWAY from that side — the flinch is computed as `-_ward_from`
 scaled by the decaying ring and `WARD_FLINCH`
-(`presentation/combat/enemy_view.gd:2748-2749`, in `_step_ward`;
+(`presentation/combat/enemy_view.gd:2797-2798`, in `_step_ward`;
 `presentation/combat/enemy_view.gd:263` (`WARD_FLINCH`)) and applied to
 `_ward_root.position` on top of the vessel's own motion — and it lights the
 facets ON that side, through the shader's `hit_from` uniform
@@ -237,7 +237,7 @@ entire effect with no other trace, and why one added call restores all of it.
 
 The direction argument works because it composes rather than replaces. The flinch
 is added to `_vessel.position` rather than overwriting it
-(`presentation/combat/enemy_view.gd:2749`, in `_step_ward`), so the stone travels
+(`presentation/combat/enemy_view.gd:2798`, in `_step_ward`), so the stone travels
 with the body's recoil and is *additionally* driven back along the blow. The
 body's recoil axis and the shield's are different axes for a reason: a body is
 knocked back by force, a shield is driven back by where it was struck. Mirroring
