@@ -494,10 +494,8 @@ func _title_button(text: String, quiet: bool) -> Button:
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.add_theme_font_override("font", _tracked_font(GlassStyle.CINZEL_700, 1))
 	button.add_theme_font_size_override("font_size", 13 if quiet else 17)
-	# The most-seen buttons in the game adopt the shared ring: the old
-	# opaque focus box was 1px on the button's own border line with a black
-	# shadow — focus ≡ hover-minus-glow (DL, PR #43).
-	button.add_theme_stylebox_override("focus", GlassStyle.focus_ring(GOLD, 8))
+	# Radius 8 GOLD ring is the canonical Theme default — no per-button
+	# focus box. Custom-radius seats still push their own ring.
 	button.add_theme_color_override("font_focus_color", PARCHMENT)
 	for state: String in ["normal", "hover", "pressed", "disabled"]:
 		var box: StyleBoxFlat = StyleBoxFlat.new()

@@ -71,9 +71,36 @@ static func hit_floor_for(px: float, touch: bool) -> float:
 	return maxf(px, 44.0) if touch else px
 
 
+## One secondary/primary state box. The canonical Theme and style_button share
+## this so a raw Button and a styled one cannot drift apart.
+static func button_stylebox(state: String, primary: bool = false,
+		accent: Color = GOLD, compact: bool = false) -> StyleBoxFlat:
+	var vertical: float = 4.0 if compact else 8.0
+	var radius: int = 6 if compact else 8
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	if primary:
+		style.bg_color = Color("#f2c14e") if state != "pressed" else Color("#c89a30")
+		style.border_color = Color.TRANSPARENT
+	else:
+		style.bg_color = Color(0.055, 0.071, 0.133, 0.60)
+		style.border_color = Color(accent, 0.28 if state == "normal" else 0.82)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(radius)
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	style.content_margin_top = vertical
+	style.content_margin_bottom = vertical
+	if state == "hover":
+		style.shadow_color = Color(accent, 0.24)
+		style.shadow_size = 10
+	elif state == "disabled":
+		style.bg_color = Color(style.bg_color, style.bg_color.a * 0.45)
+		style.border_color = Color(style.border_color, style.border_color.a * 0.45)
+	return style
+
+
 static func style_button(button: Button, primary: bool = false,
 		accent: Color = GOLD, compact: bool = false) -> void:
-	var vertical: float = 4.0 if compact else 8.0
 	var radius: int = 6 if compact else 8
 	# "focus" is deliberately NOT in this loop: an opaque focus box shadows
 	# the shared lantern ring (GlassStyle.focus_ring's ADOPTION PREREQUISITE)
@@ -85,26 +112,8 @@ static func style_button(button: Button, primary: bool = false,
 	button.add_theme_stylebox_override("focus",
 		GlassStyle.focus_ring(GlassStyle.GLASS if primary else accent, radius))
 	for state: String in ["normal", "hover", "pressed", "disabled"]:
-		var style: StyleBoxFlat = StyleBoxFlat.new()
-		if primary:
-			style.bg_color = Color("#f2c14e") if state != "pressed" else Color("#c89a30")
-			style.border_color = Color.TRANSPARENT
-		else:
-			style.bg_color = Color(0.055, 0.071, 0.133, 0.60)
-			style.border_color = Color(accent, 0.28 if state == "normal" else 0.82)
-		style.set_border_width_all(1)
-		style.set_corner_radius_all(radius)
-		style.content_margin_left = 10
-		style.content_margin_right = 10
-		style.content_margin_top = vertical
-		style.content_margin_bottom = vertical
-		if state == "hover":
-			style.shadow_color = Color(accent, 0.24)
-			style.shadow_size = 10
-		elif state == "disabled":
-			style.bg_color = Color(style.bg_color, style.bg_color.a * 0.45)
-			style.border_color = Color(style.border_color, style.border_color.a * 0.45)
-		button.add_theme_stylebox_override(state, style)
+		button.add_theme_stylebox_override(state,
+			button_stylebox(state, primary, accent, compact))
 	button.add_theme_color_override("font_color", INK if primary else PARCHMENT)
 	button.add_theme_color_override("font_hover_color", INK if primary else GOLD)
 	button.add_theme_color_override("font_pressed_color", INK if primary else PARCHMENT)

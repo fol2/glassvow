@@ -268,7 +268,6 @@ func _audio_row(label_text: String, bus: StringName) -> VBoxContainer:
 	slider.tooltip_text = Locale.active.t("ui.settings.volumeTip", {
 		"name": label_text.capitalize(),
 	})
-	_style_slider(slider)
 	var slider_seat: MarginContainer = MarginContainer.new()
 	slider_seat.add_theme_constant_override("margin_bottom", 6)
 	slider_seat.add_child(slider)
@@ -502,34 +501,6 @@ static func _style_button(button: Button, accent: Color, vertical: float,
 	button.add_theme_color_override("font_focus_color", GlassStyle.TEXT)
 	button.add_theme_color_override("font_pressed_color", GlassStyle.TEXT)
 	button.add_theme_color_override("font_disabled_color", Color(GlassStyle.TEXT_DIM, 0.45))
-
-
-static func _style_slider(slider: HSlider) -> void:
-	var track: StyleBoxFlat = StyleBoxFlat.new()
-	track.bg_color = Color(0.02, 0.03, 0.06, 0.9)
-	track.set_corner_radius_all(3)
-	track.content_margin_top = 3
-	track.content_margin_bottom = 3
-	var fill: StyleBoxFlat = track.duplicate()
-	fill.bg_color = GOLD
-	slider.add_theme_stylebox_override("slider", track)
-	slider.add_theme_stylebox_override("grabber_area", fill)
-	slider.add_theme_stylebox_override("grabber_area_highlight", fill)
-	var grabber: Texture2D = _disc(GOLD, 1.0)
-	slider.add_theme_icon_override("grabber", grabber)
-	slider.add_theme_icon_override("grabber_highlight", grabber)
-	slider.add_theme_icon_override("grabber_disabled", _disc(GlassStyle.TEXT_DIM, 0.45))
-
-
-static func _disc(colour: Color, alpha: float) -> GradientTexture2D:
-	var texture: GradientTexture2D = GlassStyle.grad_tex(
-		PackedColorArray([Color(colour, alpha), Color(colour, alpha * 0.45),
-			Color(colour, 0.0)]),
-		PackedFloat32Array([0.0, 0.52, 1.0]), true,
-		Vector2(0.5, 0.5), Vector2(1.0, 0.5))
-	texture.width = 16
-	texture.height = 16
-	return texture
 
 
 static func _tracked_font(path: String, glyph_spacing: int) -> FontVariation:
