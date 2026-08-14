@@ -372,9 +372,10 @@ func refresh(run: RunState) -> void:
 
 
 func _sync_sealed_door(run: RunState) -> void:
-	# Existing final-act shape is act 2 (three authored acts). #218 replaces
-	# this with isFinalTheme; do not add a named predicate here.
-	_sealed_door.visible = run != null and run.act == 2 and run.shards.size() >= 6
+	# The door fronts the final act: it stands on the last ordinary map
+	# (act == final_act() - 1), not inside the act it opens.
+	_sealed_door.visible = run != null and run.shards.size() >= 6 \
+		and run.act + 1 == run.final_act()
 
 
 func _set_act_theme(stage_act: int) -> void:

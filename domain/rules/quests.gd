@@ -5,6 +5,7 @@ extends RefCounted
 
 const ACTIVE: Array[String] = ["armed", "revealed"]
 const PALE_VARIANTS: Array[String] = ["paleDuskfang", "paleDrownedOne", "paleVoidWisp"]
+const EMBERGLASS_ACT: int = 2
 
 var content: ContentDB
 
@@ -117,7 +118,7 @@ func decorate_map(run: RunState, map: WorldMap) -> void:
 
 
 func encounter_override(run: RunState, type: String, node: MapNode) -> Array[String]:
-	if type == "boss" and run.act == 2 \
+	if type == "boss" and run.act == EMBERGLASS_ACT \
 			and run.quest_scratch.get("usurper", {}).get("bought", false):
 		return ["usurpedSovereign"]
 	if node.quest_variant_id != null:
@@ -147,7 +148,7 @@ func on_enemy_death(run: RunState, definition: Dictionary) -> void:
 
 
 func on_combat_win(run: RunState, cb: CombatState) -> void:
-	if cb.kind != &"boss" or run.act != 2:
+	if cb.kind != &"boss" or run.act != EMBERGLASS_ACT:
 		return
 	var eighth_v: Variant = run.quest_scratch.get("eighthOmen")
 	if typeof(eighth_v) == TYPE_DICTIONARY and eighth_v.get("active", false):
@@ -161,7 +162,8 @@ func on_combat_win(run: RunState, cb: CombatState) -> void:
 
 
 func adjust_reward_cards(run: RunState, kind: String, cards: Array) -> void:
-	if kind == "boss" and run.act == 2 or not active(run, "unreadablePage") or cards.is_empty():
+	if kind == "boss" and (run.act == EMBERGLASS_ACT or run.is_final_act()) \
+			or not active(run, "unreadablePage") or cards.is_empty():
 		return
 	var scratch: Dictionary = run.quest_scratch.get("unreadablePage", {})
 	scratch["rewardOrdinal"] = _ji(scratch.get("rewardOrdinal", 0)) + 1

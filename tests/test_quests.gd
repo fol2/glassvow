@@ -71,7 +71,7 @@ static func run(fails: Array[String]) -> void:
 	var usurper: Dictionary = content.variants["usurpedSovereign"]
 	rules.on_enemy_death(run_state, usurper)
 
-	run_state.act = 2
+	run_state.act = QuestRules.EMBERGLASS_ACT
 	run_state.quest_scratch["eighthOmen"] = {"active": true}
 	var boss: CombatState = CombatState.new()
 	boss.kind = &"boss"
@@ -80,6 +80,19 @@ static func run(fails: Array[String]) -> void:
 	run_state.player.deck.append(CardInst.new(run_state.next_uid(), &"unreadablePage"))
 	for _i: int in range(5):
 		rules.on_combat_win(run_state, boss)
+	var final_run: RunState = RunState.new_run(content, 819, "run-final-page-guard", {
+		"shards": VigilState.QUEST_IDS.duplicate(),
+		"quests": vigil.quests,
+	})
+	final_run.act = final_run.final_act()
+	for guarded_act: int in [QuestRules.EMBERGLASS_ACT, final_run.final_act()]:
+		final_run.act = guarded_act
+		final_run.quest_scratch.erase("unreadablePage")
+		var guarded_cards: Array = ["strike", "defend", "cleave"]
+		rules.adjust_reward_cards(final_run, "boss", guarded_cards)
+		_check(fails, guarded_cards == ["strike", "defend", "cleave"]
+			and not final_run.quest_scratch.has("unreadablePage"),
+			"boss rewards suppress unreadablePage in guarded act %d" % guarded_act)
 
 	var payment: Dictionary = rules.pay_lamplighter(run_state)
 	_check(fails, _paid(payment), "Lamplighter accepts Ember debt")
@@ -106,9 +119,11 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, vigil.commit_run(run_state, "win", content), "completed run commits")
 	_check(fails, vigil.shards.size() == 6, "six unique Emberglass panes are lit")
 	_check(fails, vigil.unlocks.has("act4"), "six panes reveal Act IV")
-	var threshold: WorldMap = WorldMap.act4_entrance()
-	_check(fails, threshold.reachable() == [0] and threshold.nodes[0].type == "act4",
-		"Act IV threshold is clickable")
+	var next_run: RunState = RunState.new_run(content, 820, "run-act-four", {
+		"shards": vigil.shards,
+	})
+	_check(fails, next_run.final_act() == 3,
+		"the six carried panes open the next run's fourth-act seam")
 
 
 static func _hollow_run(content: ContentDB, progress: int) -> RunState:

@@ -71,6 +71,14 @@ func has_relic(relic_id: String) -> bool:
 	return player.relics.has(relic_id)
 
 
+func final_act() -> int:
+	return 3 if shards.size() >= 6 else 2
+
+
+func is_final_act() -> bool:
+	return act == final_act()
+
+
 ## Post-increment uid allocator (web run.uid++).
 func next_uid() -> int:
 	var u: int = uid

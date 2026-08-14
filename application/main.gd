@@ -69,8 +69,8 @@ var _forced_shape: StringName = &""
 ## --act=N: which act's scenery the fight or map is dressed in. The domain does
 ## not model acts yet, so a fight from `--fight=` / a `--map` run is act 0 and
 ## there was no way to see the other two outside the layout bench — while the
-## book authors all three for every shape. Clamped to the three the benchmark
-## authors (`src/dev/bf-editor.js:169`). Map generation is never act-forced.
+## book authors the benchmark's three and exposes the optional fourth seam.
+## Map generation is never act-forced.
 var _forced_act: int = -1
 ## --settle=SECONDS: extra wait before a `--shot=` capture, so a composition is
 ## photographed at rest rather than mid-entrance.
@@ -1718,7 +1718,7 @@ func _combat_music(kind: String) -> StringName:
 		return &"eighthOmen"
 	if kind == "elite":
 		return &"elite"
-	var act: int = clampi(game.run.act + 1, 1, 3)
+	var act: int = clampi(game.run.act + 1, 1, LayoutBook.ACTS)
 	return StringName("act%dBoss" % act if kind == "boss" \
 		else "act%dCombat" % act)
 
@@ -1764,7 +1764,7 @@ func _on_combat_over(result: String) -> void:
 			return
 		_route_run()
 		return
-	if node.type == "boss" and game.run.act == 2:
+	if node.type == "boss" and game.run.is_final_act():
 		game.run.pending_run_end = {"outcome": "win"}
 		if not SaveService.store(game.run):
 			_show_save_error("ui.persistence.detail.finalVictoryHold")
@@ -1932,7 +1932,7 @@ func _on_reward_finished() -> void:
 func _has_pending_boss_relic() -> bool:
 	var node: MapNode = _map.current()
 	return node != null and node.type == "boss" and _map.is_cleared(_map.at) \
-		and game.run.act < 2 and game.run.boss_relic_act != game.run.act
+		and not game.run.is_final_act() and game.run.boss_relic_act != game.run.act
 
 
 func _show_boss_relic() -> void:

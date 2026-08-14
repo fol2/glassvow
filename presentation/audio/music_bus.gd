@@ -18,6 +18,8 @@ const FILES: Dictionary[StringName, String] = {
 	&"act2Boss": "act2-boss",
 	&"act3Combat": "act3-combat",
 	&"act3Boss": "act3-boss",
+	&"act4Combat": "act3-combat",
+	&"act4Boss": "act3-boss",
 	&"elite": "elite",
 	&"paleOnes": "pale-ones",
 	&"shadeDuel": "shade-duel",

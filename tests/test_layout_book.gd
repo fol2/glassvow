@@ -236,6 +236,10 @@ static func _merge(fails: Array[String]) -> void:
 	_near(fails, pad.get("groundY", -1.0), 232.0, "pad-landscape act 0 groundY (base)")
 	var pad1: Dictionary = LayoutBook.resolve(bf, &"pad-landscape", 1)
 	_near(fails, pad1.get("groundY", -1.0), 220.0, "pad-landscape act 1 groundY (act)")
+	_check(fails, LayoutBook.ACTS == 4
+		and LayoutBook.resolve(bf, &"pad-landscape", 3)
+			== LayoutBook.resolve(bf, &"pad-landscape", LayoutBook.ACTS),
+		"the optional act-3 bucket falls back to the authored shape")
 
 	# an unknown shape degrades to base rather than throwing — upstream's rule,
 	# and the reason a typo in `--shape=` costs a wrong composition, not a crash.

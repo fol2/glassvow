@@ -74,7 +74,8 @@ static func _pool_open(run: RunState, gate: Dictionary, id: String) -> bool:
 ## {"gold": int, "cards": Array[String], "potion": null|String, "relic": null|String}
 func gen_combat_rewards(run: RunState, kind: String, affix: StringName = &"") -> Dictionary:
 	var tier_key: String = "boss" if kind == "boss" else ("elite" if kind == "elite" else "normal")
-	var act_row: Dictionary = content.reward_gold[run.act]
+	var act_row: Dictionary = content.reward_gold[
+		clampi(run.act, 0, content.reward_gold.size() - 1)]
 	var pair: Array = act_row[tier_key]
 	var gold: int = run.rng.irange(_ji(pair[0]), _ji(pair[1]))
 	var gold_mult: float = float(str(_omen_mods(run).get("goldMult", 1)))
