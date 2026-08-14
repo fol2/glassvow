@@ -27,8 +27,9 @@ variable **through a ternary expression** is a runtime error, not a parse
 error. The parse gate (`godot --headless --check-only`, warnings-as-errors)
 passes silently; the throw fires only when the line executes. In
 `application/main.gd` this made the abandon-run route — the "THE VOW IS SET
-ASIDE" run-end screen (`presentation/run/run_end_screen.gd:334`) — dead from
-the commit that introduced the ternary until issue #58 was fixed in PR #59.
+ASIDE" run-end screen (`presentation/run/run_end_screen.gd` `_title_text`) —
+dead from the commit that introduced the ternary until issue #58 was fixed in
+PR #59.
 
 ## Symptoms
 
@@ -37,6 +38,15 @@ the commit that introduced the ternary until issue #58 was fixed in PR #59.
   acknowledged it.
 - `godot --headless --check-only` on every `.gd` file: clean. Suite: green —
   no test drives the abandon route.
+  *(Refreshed 2026-08-14: "clean" here meant the gate exited 0, and in
+  2026-08-01 that proved nothing — the `|| exit 1` loop of the day could not
+  fail at all, see `docs/solutions/integration-issues/fail-over-on-any-failure-and-verify-the-artifact.md`
+  and issue #82. The blindness claim was therefore re-measured against the
+  replacement gate: seeding this exact ternary in a scratch `.gd` and running
+  `tools/check_scripts.sh` on it prints `scripts OK (1 checked)` and exits 0,
+  with nothing on stderr. `tools/check_scripts.sh` grades stderr as well as
+  the exit status, so this is a real pass, not an empty one — the trap is
+  genuinely invisible to the current gate too.)*
 - The break shipped and stayed shipped until a design reviewer physically
   drove the screen during the PR #57 review; the broken code was outside that
   PR's diff. Filed as issue #58, fixed in PR #59.
@@ -45,7 +55,9 @@ the commit that introduced the ternary until issue #58 was fixed in PR #59.
 
 - **Relying on the parse gate.** `--check-only` with warnings-as-errors sees
   nothing wrong with the ternary; the mismatch is detected only at assignment
-  time, at runtime.
+  time, at runtime. This survives the gate rewrite: `tools/check_scripts.sh`
+  reads stderr rather than trusting the exit status, and still reports the
+  seeded ternary clean.
 - **Relying on the test suite.** No test exercises the abandon route, so a
   runtime-only throw on that path is invisible to CI. Green gates proved
   parseability, not reachability.
@@ -59,7 +71,7 @@ var choices: Array[Dictionary] = _bequest_choices() \
 	if outcome == "death" and not bequest_answered else []
 ```
 
-After (current, `application/main.gd:1671-1676`):
+After (current, `application/main.gd` `_show_run_end`):
 
 ```gdscript
 # No ternary: an untyped `[]` does not convert to Array[Dictionary]
@@ -71,7 +83,7 @@ if outcome == "death" and not bequest_answered:
 ```
 
 `_bequest_choices()` returns `Array[Dictionary]`
-(`application/main.gd:1722`), so assigning from the call is fine; only the
+(`application/main.gd` `_bequest_choices`), so assigning from the call is fine; only the
 `else []` branch was fatal.
 
 ## Why This Works

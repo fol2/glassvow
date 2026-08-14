@@ -1,0 +1,871 @@
+{
+ "no": 8,
+ "title": {
+  "en": "The One Who Walked Never Came Back",
+  "zh": "行出去那個，從來沒有回來"
+ },
+ "family": {
+  "en": "The Prestige, the Angier line — every performance is a real drowning, and the survivor inherits the applause.",
+  "zh": "《死亡魔法》的 Angier 線——每一場表演都是一次真正的溺斃，而倖存下來的那個繼承了掌聲。"
+ },
+ "hook": {
+  "en": "You have set out nineteen times and come home nineteen times, and the Vigil has a ledger to prove it. The road out is lined with standing stones, and every one of them holds someone who did not lie down.",
+  "zh": "你出發過十九次，也回來過十九次，守夜有一本帳冊可以作證。出去的那條路兩旁立滿石碑，每一塊裏面都站着一個沒有躺下的人。"
+ },
+ "poster": "threshold",
+ "images": [
+  {
+   "id": "threshold",
+   "source": "generate",
+   "subject": "A small stone room with a low fire burning in a hearth. A hooded figure stands with its back to the viewer at a tall window whose frame stands free on the floor, with no wall around it. In the glass a second hooded figure is reflected, standing slightly out of step with the first. Behind them, a third hooded figure sits at the hearth with open hands held to the fire.",
+   "alt": {
+    "en": "A hooded figure at a free-standing window in a small hearth-lit room, with a reflection that does not quite match and a seated figure at the fire behind.",
+    "zh": "一名兜帽身影站在爐火小室內一扇獨立的窗前，玻璃中的倒影與他並不完全一致，身後爐邊另坐着一個兜帽身影。"
+   }
+  },
+  {
+   "id": "monument",
+   "source": "asset",
+   "path": "assets/art/meta/monument-node.png",
+   "alt": {
+    "en": "A map marker showing an upright pillar of dark glass with a figure held inside it.",
+    "zh": "地圖標記：一根直立的暗色琉璃柱，柱中封着一個人形。"
+   }
+  },
+  {
+   "id": "mural",
+   "source": "asset",
+   "path": "assets/art/meta/emberglass-mural.png",
+   "alt": {
+    "en": "A six-panel stained-glass wheel, one coloured panel per thread, with a glowing arched doorway where the spokes meet.",
+    "zh": "六格彩繪玻璃輪盤，每格一條線索，輪輻交會處是一道發光的拱門。"
+   }
+  },
+  {
+   "id": "lamplighter",
+   "source": "asset",
+   "path": "assets/art/meta/hollow-lamplighter.png",
+   "alt": {
+    "en": "A gaunt bald robed figure carrying an unlit caged lantern on a long pole.",
+    "zh": "枯瘦光頭的長袍身影，長桿上掛着一盞未燃的籠燈。"
+   }
+  },
+  {
+   "id": "mirror",
+   "source": "asset",
+   "path": "assets/art/events/mirror.png",
+   "alt": {
+    "en": "A tall unbroken mirror standing in rubble, holding a dark reflection that is faintly smiling.",
+    "zh": "瓦礫間一面完好的高鏡，鏡中暗影正微微含笑。"
+   }
+  },
+  {
+   "id": "sovereign",
+   "source": "asset",
+   "path": "assets/art/enemies/sovereign.png",
+   "alt": {
+    "en": "A crowned figure with a sceptre, standing before a broken halo with a shard-shaped gap in it.",
+    "zh": "戴冠持杖的身影，身後光環破裂，缺了一塊碎片形狀的空位。"
+   }
+  },
+  {
+   "id": "rosequeue",
+   "source": "generate",
+   "subject": "A vast circular stained-glass window at full light, its six coloured panels burning. The glass has turned reflective, and standing inside it is a rank of identical hooded figures receding into depth, each carrying a single point of light at the chest. At the hub of the wheel is an arched doorway. The nearest figures inside the glass have their palms flat against that door.",
+   "alt": {
+    "en": "A lit rose window that has become a mirror, holding a receding rank of identical hooded figures with their hands on a door at its centre.",
+    "zh": "點亮的玫瑰窗化為鏡面，鏡中一列相同的兜帽身影向深處排開，最近的幾個把手掌按在正中的門上。"
+   }
+  },
+  {
+   "id": "walkersroad",
+   "source": "generate",
+   "subject": "A wide road under a low sky, walled on both sides by upright human figures fused into columns of dark glass. Every figure is still standing and carries a faint ember at the chest. The road runs toward a distant arch. Ash drifts across the stones and nothing is moving.",
+   "alt": {
+    "en": "A road walled on both sides by standing figures set into dark glass, running toward a distant arch.",
+    "zh": "一條大路，兩旁盡是嵌在暗色琉璃中的站立人形，路直通遠處一道拱門。"
+   }
+  },
+  {
+   "id": "onewhostayed",
+   "source": "generate",
+   "subject": "A hooded figure sits on a low stone seat in front of a tall shut door, holding a lit lantern in both hands. The posture is settled, as though it has been sitting there a very long time. A thin line of light shows along the floor beneath the door. The figure's face is entirely in shadow under the hood.",
+   "alt": {
+    "en": "A hooded figure seated before a shut door with a lit lantern in both hands, face lost in shadow.",
+    "zh": "兜帽身影坐在一道緊閉的門前，雙手捧着點亮的提燈，臉隱沒在帽影裏。"
+   }
+  },
+  {
+   "id": "ascended",
+   "source": "asset",
+   "path": "assets/art/meta/ascended.png",
+   "alt": {
+    "en": "A cathedral city standing above a sea of cloud in golden dawn light.",
+    "zh": "金色破曉中，一座大教堂之城矗立在雲海之上。"
+   }
+  },
+  {
+   "id": "fallen",
+   "source": "asset",
+   "path": "assets/art/meta/fallen.png",
+   "alt": {
+    "en": "A dark hall with an obsidian monolith and a single lit lantern at its foot.",
+    "zh": "幽暗大廳中一座黑曜石碑，碑腳只點着一盞孤燈。"
+   }
+  }
+ ],
+ "story": [
+  {
+   "t": "act",
+   "en": "BEFORE THE FIRST — The Vigil",
+   "zh": "第一次之前 — 守夜"
+  },
+  {
+   "t": "art",
+   "img": "threshold",
+   "en": "The hearth, the window, and the door you are about to use.",
+   "zh": "爐火、窗，和你即將推開的那道門。"
+  },
+  {
+   "t": "prose",
+   "en": "The Vigil is one room holding three things. A hearth that never wants for fuel. A keeper, gaunt under a hood, who gives you one small kindness before you go. And a window.",
+   "zh": "守夜只是一個房間，裏面只有三樣東西。一座從不缺柴的爐。一位守燈人，兜帽下形容枯瘦，臨行前給你一份小小的恩賜。還有一扇窗。"
+  },
+  {
+   "t": "prose",
+   "en": "Tonight it is A Warm Hearth — mend to full, gain 6 Max HP. Then the keeper says the only unasked thing anyone says all game: look at the window before you go.",
+   "zh": "今夜是「溫暖爐火」——生命回復至全滿，並提高 6 點生命上限。然後守燈人說了全場唯一一句沒有人問過的話：走之前，看一看那扇窗。"
+  },
+  {
+   "t": "prose",
+   "en": "You look. The glass gives the room back — the fire, the keeper, your own hood. Your reflection settles half a breath after you do. Old glass, dark room. You look away. The button under your hand says:",
+   "zh": "你看了。玻璃把房間交還給你——火、守燈人、你自己的兜帽。鏡中的你比你慢了半口氣才停定。玻璃老舊，房間昏暗。你別過臉去。手底下的按鈕寫着："
+  },
+  {
+   "t": "screen",
+   "en": "Stand at the Threshold",
+   "zh": "立於門檻"
+  },
+  {
+   "t": "prose",
+   "en": "You press it. Before the camera follows you out it does something small: it stays. One second on the hearth of the empty room — and the room is not empty. A hooded figure sits there, hands open to the fire, watching the door swing shut. Then the Ashen Woods.",
+   "zh": "你按下去。鏡頭跟出去之前做了一件細小的事：它留了下來。空房的爐火上停一秒——而那房間並不空。一個兜帽身影仍坐在那裏，雙手向着火攤開，看着門緩緩合上。然後就是灰燼樹林。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 1 — The Ashen Woods",
+   "zh": "第一次朝聖 — 灰燼樹林"
+  },
+  {
+   "t": "prose",
+   "en": "Six floors. A Waylayer opens you up while you are still learning what Ward is for, and the screen goes a colour you will come to know well.",
+   "zh": "六層。你還在摸索護光有甚麼用的時候，一名伏擊者已經把你剖開；畫面轉入一種你日後會很熟悉的顏色。"
+  },
+  {
+   "t": "screen",
+   "en": "FALLEN — Your lantern went dark on floor 6.\nHere ended a climb, on floor 6. 【The Last Place】 keeps what it takes — but the Vigil remembers.",
+   "zh": "隕落——你的提燈在第 6 層熄滅。\n一段朝聖之路在第 6 層終結。【終境】留下它所奪走的——守夜卻會銘記。"
+  },
+  {
+   "t": "prose",
+   "en": "Dawn is a ceremony, not a screen. Panels turn one at a time; a whisper arrives; the ledger takes a line. Then the fire again, at the height you left it.",
+   "zh": "破曉是一場儀式，不是一個畫面。畫格逐一翻過；一句低語抵達；帳冊多添一行。然後又是那爐火，高度與你離開時一樣。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 16",
+   "sp_zh": "低語 16",
+   "en": "The Vigil has a window, though no wall holds it.",
+   "zh": "守夜有一扇窗，雖無牆承載它。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 2–4 — The stone on the map",
+   "zh": "第二至四次 — 地圖上那塊石"
+  },
+  {
+   "t": "prose",
+   "en": "Run 2 ends on floor 4 and teaches you nothing. Run 3 is the first that feels like play, and it dies on floor 9 with a full purse you never spent.",
+   "zh": "第二次死在第 4 層，甚麼也沒教會你。第三次才第一次像在玩，最後死在第 9 層，錢囊滿滿卻一枚未花。"
+  },
+  {
+   "t": "prose",
+   "en": "Run 4 puts a new marker on the map, sitting exactly where run 3 ended. It is not the flat slab a memorial usually is. You step onto it and a small panel opens.",
+   "zh": "第四次的地圖上多了一個新標記，位置正好是第三次終結的地方。它不是紀念物常見的那種平放石板。你踏上去，開了一個小面板。"
+  },
+  {
+   "t": "screen",
+   "en": "MONUMENT OF THE LAST FALL\nA previous pilgrim stands inside the stone.\nSomething remains in their hands.\n\n> Touch the standing glass    > Leave it",
+   "zh": "上次墜落的紀念碑\n前一位朝聖者站在石中。\n其手中仍留有一物。\n\n> 觸碰矗立的琉璃    > 置之不理"
+  },
+  {
+   "t": "art",
+   "img": "monument",
+   "en": "The map marks where the last one ended. Whatever is in there is upright.",
+   "zh": "地圖標出了上一次終結的地方。裏面那位，是站着的。"
+  },
+  {
+   "t": "prose",
+   "en": "You touch the standing glass and it hands back the card you carved before leaving. Good system. You note the phrasing — stands inside the stone, remains in their hands — file it under nice writing, and move on.",
+   "zh": "你觸碰那塊矗立的琉璃，它把你出發前刻進去的牌交還給你。好機制。你留意到那句措辭——「站在石中」、「手中仍留有一物」——歸入「文案寫得不錯」，然後走開。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 11",
+   "sp_zh": "低語 11",
+   "en": "Your monument does not always lie down.",
+   "zh": "你的紀念碑並不總是躺下。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 7 — The first dawn",
+   "zh": "第七次 — 第一個破曉"
+  },
+  {
+   "t": "prose",
+   "en": "Seven nights to reach 【the Last Place】 (placeholder name), and one more hour to break the Eternal Sovereign. The crown comes apart. Behind it the broken ring still hangs with its piece missing, and the game does not comment.",
+   "zh": "七夜才走到【終境】（暫名），再多一個鐘頭才擊碎永恆君王。王冠碎裂。它身後那個破環仍懸在原處，缺着那一塊，而遊戲不置一詞。"
+  },
+  {
+   "t": "screen",
+   "en": "ASCENDED\nThe Eternal Sovereign is dust. Dawn breaks over 【the Last Place】 — the first in an age.",
+   "zh": "登臨\n永恆君王已化塵。破曉越過【終境】——這是漫長年代中的第一次。"
+  },
+  {
+   "t": "prose",
+   "en": "Back at the Vigil the wall behind the hearth is different. A wheel of coloured glass has appeared, six panels wide, every panel dark. Where the spokes meet there is an arch, and the arch is already lit.",
+   "zh": "回到守夜，爐後那面牆變了。牆上出現一輪彩繪玻璃，六格寬，每一格都是暗的。輪輻交會處是一道拱門，而那道拱門，早已點亮。"
+  },
+  {
+   "t": "art",
+   "img": "mural",
+   "en": "Six panels, one thread each — and something already burning where they meet.",
+   "zh": "六格畫面，一格一條線索——而它們交會之處，早已在燃燒。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 23",
+   "sp_zh": "低語 23",
+   "en": "Bring six shards to the Rose Window.",
+   "zh": "帶六片碎片到玫瑰窗。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 8 — The Hollow Lamplighter, first price",
+   "zh": "第八次 — 空燈掌燈人，第一重代價"
+  },
+  {
+   "t": "prose",
+   "en": "He is on the path between two fights: gaunt, bald, robed, carrying an unlit lantern on a pole. It has never been lit. He does not ask for gold.",
+   "zh": "他站在兩場戰鬥之間的路上：枯瘦、光頭、披着長袍，長桿上挑着一盞燈。它從來沒有燃過。他不要金幣。"
+  },
+  {
+   "t": "art",
+   "img": "lamplighter",
+   "en": "He carries a lantern on a pole, and has never once lit it.",
+   "zh": "他挑着一盞燈，卻一次也沒有點過它。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your lantern is noisy. Give me the next three embers it catches.",
+   "zh": "你的提燈太吵。把它接下來收集的三點餘燼交給我。"
+  },
+  {
+   "t": "prose",
+   "en": "Three embers later he takes them off you without appearing, the way a debt collects itself, and pays you in a sentence.",
+   "zh": "三點餘燼之後，他沒有再現身就把它們取走了，像債務自行結算，然後用一句話付你工錢。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Six panes were carried away from a window no wall could hold.",
+   "zh": "六片窗片曾從一扇無牆可承的窗中被帶走。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 11 — The shade that fell",
+   "zh": "第十一次 — 墜落之影"
+  },
+  {
+   "t": "prose",
+   "en": "In a dead-end corridor something waits that fights the way you fight. Same silhouette. Same lantern. Its moves carry your moves' names with a word bolted on the front: Remembered Ashbite. Remembered Smother. Then a card you have never owned — First Ash, Last Breath.",
+   "zh": "一條死路的盡頭有東西在等你，而它的打法和你一樣。同一個剪影。同一盞燈。它的招式就是你的招式，前面多釘了兩個字：憶中灰噬。憶中窒焰。然後是一張你從未擁有過的牌——初灰，終息。"
+  },
+  {
+   "t": "prose",
+   "en": "You kill it in four turns. The Vigil calls it The Shade That Fell. It says one thing on the way down.",
+   "zh": "你四回合把它殺死。守夜稱它為「墜落之影」。它倒下時說了一句。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Fell",
+   "sp_zh": "墜落之影",
+   "en": "I remember the stone. You walked away before I stopped calling.",
+   "zh": "我記得那塊石。你轉身離去時，我仍未停止呼喚。"
+  },
+  {
+   "t": "prose",
+   "en": "The stone. You have touched a lot of stones. You assume it means the one it died at, and that the bitterness is a genre reflex — every deckbuilder gives you a mirror boss with a grievance.",
+   "zh": "那塊石。你摸過的石多得很。你假定它指的是它自己死的那塊，也假定那份怨恨不過是類型片的反射動作——每款卡牌構築遊戲都給你一個記恨的鏡像首領。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 13 — A price you cannot pay",
+   "zh": "第十三次 — 付不起的代價"
+  },
+  {
+   "t": "prose",
+   "en": "The Lamplighter is on the path again, and this time you are broke.",
+   "zh": "掌燈人又出現在路上，而這一次你身無分文。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
+   "zh": "金幣記得每一隻手。讓一百六十枚忘記你的手。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your purse is warm, but not warm enough.",
+   "zh": "你的錢囊尚暖，卻還不夠暖。"
+  },
+  {
+   "t": "prose",
+   "en": "Two runs and four real days later he is in the Sunken City with his hand out, and he does not repeat the offer. He picks it up mid-sentence, as though you had stepped out a moment. You pay.",
+   "zh": "隔了兩次朝聖、現實裏四天之後，他站在沉沒之城裏伸出手，卻沒有重說那個要求。他從句子中間接下去，彷彿你只是走開了一會。你付了。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The Pale Ones watch the paths that point above the crown.",
+   "zh": "蒼白眾凝望着指向王冠之上的路。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 14 — A bad night",
+   "zh": "第十四次 — 糟糕的一夜"
+  },
+  {
+   "t": "prose",
+   "en": "You take Vow of the Mark out of boredom — you climb already cursed — and the Sunken City drowns you on floor 3 with a hand of dead cards. Nothing learned, nothing unlocked. The ledger records a wasted evening.",
+   "zh": "你因為悶選了「烙印之誓」——起行時已受詛咒——結果沉沒之城在第 3 層把你淹死，手上滿是無用的牌。沒學到甚麼，沒解鎖甚麼。帳冊記下一個浪費掉的晚上。"
+  },
+  {
+   "t": "screen",
+   "en": "The pilgrimage ends here. The Vigil will keep the record.\n\nThe fourteenth walker fell in the Sunken City, on the third floor. The last thing they remembered was water moving under the stone.",
+   "zh": "朝聖止於此。守夜將記下這筆。\n\n第十四位行者倒在沉沒之城第三層。他記得的最後一樣東西，是石下流動的水聲。"
+  },
+  {
+   "t": "prose",
+   "en": "Next run there is a new marker on that floor, the upright kind. You stop out of habit. Its hands are empty — you carved nothing that night — but the panel still gives you a line, and the line is in the first person.",
+   "zh": "下一次朝聖，那一層多了一個新標記，直立的那種。你出於習慣停下。它手中空無一物——那一夜你沒有刻下任何東西——但面板仍然給了你一句話，而那句話用的是第一人稱。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 17 — The shade that returned",
+   "zh": "第十七次 — 歸來之影"
+  },
+  {
+   "t": "prose",
+   "en": "Before the second shade there is a mirror, tall and unbroken in a collapsed hall, and the game is explicit about what is wrong with it: your reflection moves half a breath behind you — and it is smiling.",
+   "zh": "遇上第二道影之前，先遇上一面鏡：很高，在坍塌的大廳裏完好無缺；遊戲把它的不對勁說得很白：鏡中的你比真身慢了半口氣——而且正在微笑。"
+  },
+  {
+   "t": "art",
+   "img": "mirror",
+   "en": "Unbroken, in a hall where nothing else survived. Half a breath behind.",
+   "zh": "在一座甚麼都沒剩下的大廳裏，它完好無缺。慢了半口氣。"
+  },
+  {
+   "t": "prose",
+   "en": "You choose Reflect and duplicate your best card, because that is what mirrors are for. Then you kill the second shade, and it dies saying:",
+   "zh": "你選「映照」，複製了自己最好的一張牌，因為鏡子就是用來做這件事的。然後你殺掉第二道影，而它死時說："
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Returned",
+   "sp_zh": "歸來之影",
+   "en": "Each climber leaves a shape behind. 【The Last Place】 has learned to wear ours.",
+   "zh": "每位朝聖者都留下一道形影。【終境】已學會披上我們的模樣。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 19 — The lantern with no flame",
+   "zh": "第十九次 — 無焰提燈"
+  },
+  {
+   "t": "prose",
+   "en": "The merchant keeps one cold thing under the counter and will not say who left it. It costs a dawn's worth of gold and is not a weapon — a cold glass shell with no wick.",
+   "zh": "商人櫃下藏着一件冰冷之物，不肯說是誰留下它。它值一次破曉的金幣，而它不是武器——一個沒有燈芯的冰冷玻璃殼。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Merchant",
+   "sp_zh": "商人",
+   "en": "Cold goods, warm price. Come back carrying a dawn's worth of gold.",
+   "zh": "貨冷，價暖。帶着足以買下一次破曉的金幣再來。"
+  },
+  {
+   "t": "prose",
+   "en": "You carry the empty lantern to the top, and the crowned thing there speaks to it rather than to you.",
+   "zh": "你把空燈帶到頂點，而頂點上那個戴冠之物，是對着它、不是對着你說話。"
+  },
+  {
+   "t": "art",
+   "img": "sovereign",
+   "en": "The crown, the sceptre, and the ring behind them with a piece the wrong shape missing.",
+   "zh": "王冠、權杖，還有它們身後那個環——缺了一塊形狀不對的碎片。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Usurper",
+   "sp_zh": "篡位者",
+   "en": "The Sovereign was a mask. You have paid to meet the face beneath it.",
+   "zh": "永恆君王只是一副面具。你已付出代價，得見其下真容。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Usurper",
+   "sp_zh": "篡位者",
+   "en": "Break me, and the empty lantern will remember fire.",
+   "zh": "打碎我，空燈自會記起火光。"
+  },
+  {
+   "t": "prose",
+   "en": "You break it, and the game gives you four words and a direction.",
+   "zh": "你打碎了它，而遊戲給你四個字，和一個方向。"
+  },
+  {
+   "t": "screen",
+   "en": "The mask is broken. Look above.",
+   "zh": "面具已碎。往上看。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 20–26 — Pages, motes, omens, prices",
+   "zh": "第二十至二十六次 — 頁、光塵、凶兆、代價"
+  },
+  {
+   "t": "prose",
+   "en": "The rest is bookkeeping, three weeks of evenings. Nine cold motes out of pale foes that are the same foes with the colour drained out. Five dawns carrying a page that opens one line at a time, and only after it survives the summit.",
+   "zh": "餘下的都是帳目功夫，三個星期的晚上。九粒寒冷光塵，來自那些蒼白之敵——其實就是被抽走顏色的同一批敵人。五次破曉，每次帶着一頁紙；它一次讀通一行，而且必須先捱過頂點。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Unreadable Page",
+   "sp_zh": "無法辨讀之頁",
+   "en": "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended.",
+   "zh": "第三頁——一名朝聖者站着死去，卻在頂點本應終結之處看見階梯。"
+  },
+  {
+   "t": "prose",
+   "en": "An omen outside the set of seven turns up twice and writes on the arena floor while you fight: THE PANE WATCHES. EIGHT IS NOT A NUMBER. CARRY THE WRONG LIGHT UPWARD. THE CROWN IS A MASK. Reach dawn beneath it and the Vigil resolves it.",
+   "zh": "一個不屬於那七者的凶兆出現了兩次，並在你交戰時把字寫在地面上：窗片凝視。八並非數字。攜錯誤之光向上。王冠只是一副面具。在它籠罩下抵達破曉，守夜便把它了結。"
+  },
+  {
+   "t": "screen",
+   "en": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR.",
+   "zh": "第八凶兆從來不是凶兆。它是一扇門投下的影。"
+  },
+  {
+   "t": "prose",
+   "en": "And the Lamplighter takes his last three prices. Twelve measures of your vessel. The keeper's first gift — the gift, not the gratitude. Then the one that leaves you at a single heartbeat.",
+   "zh": "而掌燈人取走最後三重代價。你容器的十二格容量。守燈人最初那份贈禮——要贈禮，不要感激。然後是那一重：讓你只剩一記心跳。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your standing dead have seen the stair above the Sovereign.",
+   "zh": "你站立而死的前身，已見過永恆君王之上的階梯。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Light the panes. The door will know you.",
+   "zh": "點亮窗片。門會認得你。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 27 — The third shade",
+   "zh": "第二十七次 — 第三道影"
+  },
+  {
+   "t": "prose",
+   "en": "Three deaths teach your shade to speak plainly. The third is The Shade That Remembers, and it does not fight you so much as delay you. It says two things.",
+   "zh": "三次死亡會教你的影直言。第三道是「銘記之影」，與其說它在跟你打，不如說它在拖住你。它說了兩句。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Remembers",
+   "sp_zh": "銘記之影",
+   "en": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
+   "zh": "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Remembers",
+   "sp_zh": "銘記之影",
+   "en": "We were never climbing out. We were carrying light to the lock.",
+   "zh": "我們從來不是為了逃出去而朝聖；我們一直把光送往鎖孔。"
+  },
+  {
+   "t": "prose",
+   "en": "We. It has said we three times now and you have never once asked who else is in it.",
+   "zh": "我們。它已經說了三次「我們」，而你一次也沒有問過，這個「我們」裏還有誰。"
+  },
+  {
+   "t": "act",
+   "en": "THE SIXTH — The Rose Window",
+   "zh": "第六片 — 玫瑰窗"
+  },
+  {
+   "t": "prose",
+   "en": "The sixth shard goes into the wheel on a Tuesday, some thirty hours after the keeper told you to look at a window. Five panels are burning. The last one catches. The room turns the colour of the inside of a fire.",
+   "zh": "第六片碎片嵌進輪盤，是在一個星期二；距離守燈人叫你看那扇窗，已過了約三十個鐘頭。五格燃着。最後一格點燃。整個房間變成火焰內部的顏色。"
+  },
+  {
+   "t": "screen",
+   "en": "Six panes burn behind you. The lock answers, but does not open.",
+   "zh": "六片窗片在你身後燃燒。鎖回應了，卻未開啟。"
+  },
+  {
+   "t": "prose",
+   "en": "Behind you. You have never been told the window is behind you. You turn.",
+   "zh": "在你身後。從來沒有人告訴過你，那扇窗在你身後。你轉過身。"
+  },
+  {
+   "t": "prose",
+   "en": "At full light the glass stops being a picture and becomes what glass is. It is a mirror. Standing in it is a rank of hooded figures, identical, receding into a depth the room does not have, each carrying one point of light at the chest. The nearest is you, and it is the only one facing this way.",
+   "zh": "全然點亮之際，玻璃不再是一幅圖，而回復成玻璃本身。它是一面鏡。鏡中站着一列兜帽身影，一模一樣，向着這個房間並不具備的縱深退去，每一個胸口都捧着一點光。最近那個是你，也是唯一一個面向這邊的。"
+  },
+  {
+   "t": "art",
+   "img": "rosequeue",
+   "en": "At full light the window stops being a picture.",
+   "zh": "全然點亮之際，那扇窗不再是一幅圖。"
+  },
+  {
+   "t": "prose",
+   "en": "The keeper reads the fourth whisper, the one you were given on your second night and have seen at every dawn since.",
+   "zh": "守燈人念出第四句低語——你第二夜就拿到、此後每個破曉都見過的那一句。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Keeper",
+   "sp_zh": "守燈人",
+   "en": "The dead climb twice: once in flesh, once in memory.",
+   "zh": "死者朝聖兩次：一次以肉身，一次以記憶。"
+  },
+  {
+   "t": "prose",
+   "en": "Then the door at the hub opens, and you do not open it. The figures in the glass put their palms against it and push, all at once, and the ones at the far end have to lean.",
+   "zh": "然後中心那道門開了，而開門的不是你。鏡中的身影一起把手掌按上去推，隊尾那幾個還得傾身用力。"
+  },
+  {
+   "t": "prose",
+   "en": "Every time you pressed Stand at the Threshold, two of you existed. One walked out. One sat back down at the fire. The walker carried the lantern up through the Woods, the City and 【the Last Place】, and died on the road — every time, without exception. The one who sat down inherited everything the walker learned, down to the last hand it played, and woke at the hearth certain it had come home.",
+   "zh": "每一次你按下「立於門檻」，都同時存在兩個你。一個走了出去。一個坐回火邊。行者把提燈帶過樹林、帶過城、帶上【終境】，然後死在路上——每一次，無一例外。坐下那個繼承了行者學到的一切，細至它打出的最後一手牌，然後在爐邊醒來，確信自己是回來了。"
+  },
+  {
+   "t": "prose",
+   "en": "You are the one who sat down. You always were. The hooded figure the camera held for one second on your first night was not a ghost; it was the protagonist, already seated, waiting for the memories to arrive.",
+   "zh": "你就是坐下那個。你一直都是。你第一夜鏡頭停留一秒的那個兜帽身影，不是鬼魂；那是主角，早已坐好，等着記憶送到。"
+  },
+  {
+   "t": "prose",
+   "en": "And the standing stones on every map are not memorials. They never were. They are the walkers, still upright, still holding what they were given, still queuing.",
+   "zh": "而每張地圖上矗立的石碑都不是紀念物。從來都不是。那是歷代行者，仍然站着，仍然握着別人交給他們的東西，仍然排在隊裏。"
+  },
+  {
+   "t": "act",
+   "en": "ACT IV — 【The Walkers' Country】 (placeholder name)",
+   "zh": "第四幕 — 【行者之邦】（暫名）"
+  },
+  {
+   "t": "art",
+   "img": "walkersroad",
+   "en": "The road past the door is walled on both sides.",
+   "zh": "門後那條路，兩旁都有牆。"
+  },
+  {
+   "t": "prose",
+   "en": "Beyond the door there is no summit and no sky. There is a road, and its walls are made of people standing up. Five nodes long. The light comes up out of the stones, so every shadow here runs upward.",
+   "zh": "門後沒有頂點，也沒有天空。只有一條路，而它的兩堵牆由站着的人砌成。全長五個節點。光自石中向上透出，於是這裏每一道影都向上生長。"
+  },
+  {
+   "t": "prose",
+   "en": "The nine things that come at you are all you. Not shades — walkers, whole ones, carrying builds you never took: the poison engine you abandoned on run 6, the deck you would have had if you had bought the relic.",
+   "zh": "迎面而來的九個東西全部都是你。不是影——是行者，完整的行者，帶着你從未選過的組合：你在第六次朝聖放棄的毒素引擎；你若買了那件遺物，本來會有的那副牌。"
+  },
+  {
+   "t": "prose",
+   "en": "At the end of the road a shut door shows a thin line of light beneath it, and someone sits before it with a lit lantern in both hands. It is the first of you: the one that, on the first night, chose not to walk.",
+   "zh": "路的盡頭，一道緊閉的門下透着一線細光，門前坐着一個人，雙手捧着點亮的提燈。那是最初的你：在最初那一夜選擇了不走的那一個。"
+  },
+  {
+   "t": "art",
+   "img": "onewhostayed",
+   "en": "Someone has been sitting here since the first night.",
+   "zh": "從第一夜開始，就有人坐在這裏。"
+  },
+  {
+   "t": "line",
+   "sp_en": "【The One Who Stayed】",
+   "sp_zh": "【留下的那個】",
+   "en": "I have kept the fire for twenty-seven of you. Not one of you kept it for me.",
+   "zh": "我為你們二十七個人守着火。你們沒有一個為我守過。"
+  },
+  {
+   "t": "prose",
+   "en": "You cannot kill it, and the fight does not end when its health runs out. It ends when you take the lantern. The exchange is the win condition: you walk through, and it sits down where you sat, and inherits.",
+   "zh": "你殺不死它，而它血量歸零時這場仗也不會結束。它結束於你接過那盞燈。交換就是勝利條件：你走過去，它坐到你原本坐的位置，然後繼承。"
+  },
+  {
+   "t": "prose",
+   "en": "The last stretch is the first walking you have ever done, and there is no hand of cards for it. Behind you — down the road, out through the window, across every map you have played — the standing stones come loose and fall into step.",
+   "zh": "最後那一段，是你此生第一次真正走路，而且沒有手牌可打。在你身後——沿路退回去、穿過那扇窗、橫越你玩過的每一張地圖——那些石碑一一鬆脫，走進隊列。"
+  },
+  {
+   "t": "art",
+   "img": "ascended",
+   "en": "Golden light, and a gate, and a queue that reaches it.",
+   "zh": "金色的光，一道城門，以及一條抵達了它的隊。"
+  },
+  {
+   "t": "prose",
+   "en": "The city above the cloud is real, the dawn is real, the gate is open. A line of identical hooded silhouettes files in ahead of you, twenty-seven of them, none looking back. You are last, and the only one who arrives without having walked the whole way. Every one of them made it. The count is twenty-eight.",
+   "zh": "雲上那座城是真的，破曉是真的，城門是開的。一列一模一樣的兜帽剪影在你前面魚貫而入，二十七個，沒有一個回頭。你排在最後，也是唯一一個沒有走完全程就抵達的人。他們每一個都到了。總數是二十八。"
+  },
+  {
+   "t": "act",
+   "en": "IF IT ENDS THE OTHER WAY",
+   "zh": "如果結局是另一邊"
+  },
+  {
+   "t": "art",
+   "img": "fallen",
+   "en": "One lantern, lit, at the foot of the stone.",
+   "zh": "碑腳一盞燈，燃着。"
+  },
+  {
+   "t": "prose",
+   "en": "Lose the last road and there is no city. There is a dark hall, a monolith, one lantern burning at its foot — and a Vigil line exactly like the twenty-seven before it that now reads differently.",
+   "zh": "在最後那條路上輸掉，就沒有城。只有一座幽暗大廳、一塊獨石、碑腳一盞燃着的燈——以及守夜寫下的一行，與之前二十七行一字不差，讀起來卻已不同。"
+  },
+  {
+   "t": "screen",
+   "en": "This one did not come back either.",
+   "zh": "這一個，也沒有回來。"
+  },
+  {
+   "t": "prose",
+   "en": "And then the fire, at the height you left it, someone at it with their hands open, and a button that says Stand at the Threshold.",
+   "zh": "然後又是那爐火，高度與你離開時一樣，有人坐在旁邊、雙手攤開，還有一個按鈕，寫着「立於門檻」。"
+  }
+ ],
+ "craft": [
+  {
+   "h": {
+    "en": "The last shot was written first",
+    "zh": "最後一個鏡頭是最先寫的"
+   },
+   "body": [
+    {
+     "en": "The image that existed before anything else was the queue at the gate: a column of identical hooded figures walking into the golden city, and the player arriving at the back of it. Everything upstream was reverse-engineered from the requirement that this shot land as relief rather than as a demotion. If the queue is a gotcha, the story is cruel. If the queue is a delivery — twenty-seven people got where they were going, and you carried them — it is the opposite.",
+     "zh": "最先存在的畫面，是城門前那條隊：一列一模一樣的兜帽身影走進金色的城，而玩家排在隊尾抵達。上游的一切都是從一條要求逆推出來的——這個鏡頭必須落成「鬆一口氣」，而不是「被降格」。如果那條隊是一記突襲，這個故事就是殘忍的。如果那條隊是一次送達——二十七個人都到了目的地，而是你把他們背到那裏——意思就完全相反。"
+    },
+    {
+     "en": "That requirement forced exactly one thing into the opening, and it had to be an image rather than a sentence: the camera holding on the hearth for one second after the player leaves, with someone still sitting in it. It cannot be dialogue, because dialogue gets read. It cannot be a whisper, because whispers get collected. It has to be something the player's eye passes over and their attention does not, so that thirty hours later the memory is available for re-parsing but was never processed as information.",
+     "zh": "這條要求只逼出開場的一件事，而且必須是影像而非句子：玩家離開之後，鏡頭在爐火上多停一秒，而爐邊仍坐着一個人。它不能是對白，因為對白會被閱讀。它不能是低語，因為低語會被收集。它必須是眼睛掃過而注意力沒有停下的東西——好讓三十小時之後，這段記憶還在，可以重新解讀，卻從未被當成情報處理過。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "起承轉合 measured in save-file state, not in chapters",
+    "zh": "起承轉合以存檔狀態量度，不是以章節"
+   },
+   "body": [
+    {
+     "en": "起 is one second of camera and one line of keeper dialogue, and it is over before run 1 begins. 承 is not a section at all — it is roughly twenty-five runs and three real weeks, and its content is a set of shipped quest threads that already exist: the shade duels at three deaths, the Lamplighter's five prices, the five pages, the nine motes. The story does not add beats here. It re-labels beats the game already ships.",
+     "zh": "「起」只有一秒鏡頭和守燈人一句話，在第一次朝聖開始之前就結束了。「承」根本不是一個段落——它是大約二十五次朝聖、現實裏三個星期，內容是一批已經上線的任務線索：三次死亡的影之決鬥、掌燈人的五重代價、五頁紙、九粒光塵。這個故事沒有在這裏加東西，它只是把遊戲本來就有的節拍重新貼上標籤。"
+    },
+    {
+     "en": "轉 is bolted to a state condition that already exists in the build: the Act IV reveal fires at six shards. That is the correct gate and also the honest problem — it is twenty to thirty hours in. So the fragments have to be individually satisfying with no knowledge of the turn. Each shade line has to work as a mirror-boss taunt. Each Lamplighter payment has to work as lore. The turn is a second reading layered on top of a first reading that already paid for itself, which is the only structure that survives being played in twenty-minute pieces on a commute.",
+     "zh": "「轉」綁在版本裏已經存在的狀態條件上：第四幕在六片碎片時揭示。那是正確的門檻，同時也是誠實的問題——那是二十至三十小時之後的事。所以每一片碎料都必須在完全不知道轉折的前提下自足。每一句影的台詞，都要能當作鏡像首領的挑釁來讀。每一次向掌燈人付款，都要能當作世界觀來讀。轉折是疊在第一層閱讀之上的第二層閱讀，而第一層本身已經回本——只有這種結構，才捱得住通勤路上二十分鐘一節地玩。"
+    },
+    {
+     "en": "合 is Act IV, and it is deliberately short: five nodes. After thirty hours of 承 the audience does not need a fourth act with a difficulty curve. It needs the walk.",
+     "zh": "「合」就是第四幕，而且刻意做得短：五個節點。經過三十小時的「承」之後，觀眾不需要一個帶難度曲線的第四幕。他們需要的是那一段路。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "What the player was looking at the whole time",
+    "zh": "玩家一直在看着的東西"
+   },
+   "body": [
+    {
+     "en": "The single strongest asset in this story is not art, it is a UI string that already ships: A previous pilgrim stands inside the stone. Something remains in their hands. Read as a monument-node tooltip it is atmosphere on a bequest-recovery mechanic. Read after the turn it is a literal inventory of a corpse. The word doing all the work is stands, and it has been sitting in the build unremarked because a reader parses monument first and posture second.",
+     "zh": "這個故事裏最強的資產不是美術，是一句已經上線的介面文字：「前一位朝聖者站在石中。其手中仍留有一物。」當作紀念碑節點的提示來讀，它不過是遺贈回收機制上的氣氛。轉折之後再讀，它是一具屍體的物品清單。承擔全部重量的字是「站」，而它一直安靜地待在版本裏——因為讀者會先解析「紀念碑」，才輪到姿勢。"
+    },
+    {
+     "en": "The shade kit does the same job at the level of card names. Remembered Ashbite. Remembered Smother. Remembered Eclipse. The prefix reads as a mirror-boss convention — of course the copy of you knows your moves. After the turn it is a precise statement of what a shade is made of: not a body with your techniques, a memory with no body left to put them in. And First Ash, Last Breath is the card only a dying walker ever gets to play.",
+     "zh": "影的套牌在卡名層面做同一件事。憶中灰噬。憶中窒焰。憶中蝕月。這個前綴看上去只是鏡像首領的慣例——你的複製品當然懂你的招。轉折之後，它是一句精確的成分說明：那不是一具會你招式的身體，那是一段沒有身體可放的記憶。而「初灰，終息」，是只有將死的行者才打得出的那張牌。"
+    },
+    {
+     "en": "The Silvered Mirror is the one piece of misdirection that is pure sleight of hand. Your reflection moves half a breath behind you — and it is smiling. On first read that is a horror beat and the smiling thing is the threat. After the turn the reflection is the one sitting at the fire, watching a walker leave, and the smile is not menace; it is the expression of the only one in the room who is going to be alive tomorrow. Nothing about the asset changes. The event's mechanics do not change. Only the direction of the sympathy does.",
+     "zh": "「鍍銀之鏡」是唯一一處純粹手法上的誤導。鏡中的你比真身慢了半口氣——而且正在微笑。第一次讀，這是恐怖節拍，會笑的那個是威脅。轉折之後，鏡中那個是坐在火邊、看着行者離開的那一個，而那個笑不是惡意；那是房間裏唯一一個明天還活着的人的表情。美術一點沒改。事件機制一點沒改。改變的只有同情的方向。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Act IV is an exchange, not a boss",
+    "zh": "第四幕是一場交換，不是一場首領戰"
+   },
+   "body": [
+    {
+     "en": "The nine encounters on the road are generated from the player's own meta-progression — builds they abandoned, relics they passed on, the vow they only took once. This costs almost nothing in content because it reuses the hero silhouette vocabulary and existing card pools, and it means the fourth act is different for every save file without a single bespoke enemy design.",
+     "zh": "路上那九場遭遇，是由玩家自己的中繼進度生成的——他們放棄過的組合、錯過的遺物、只選過一次的誓言。這在內容成本上幾乎是零，因為它重用了英雄剪影語彙和現有的卡池；而這意味着第四幕在每一份存檔裏都不一樣，卻不需要一個專門設計的新敵人。"
+    },
+    {
+     "en": "【The One Who Stayed】 cannot be defeated by damage, and that is the entire point of building the act. Every other boss in the game is a health bar. This one ends when you take the lantern out of its hands and sit it down where you were sitting. Mechanically it is a swap; dramatically it is the first and only time the player character personally does the thing that twenty-seven other people did on their behalf. That is the beat that has to carry the dignity, and it is why the final stretch has no combat in it at all.",
+     "zh": "【留下的那個】不能靠傷害擊敗，而這正是整個第四幕存在的理由。遊戲裏其他每一個首領都是一條血條。這一個結束於你把提燈從它手中接過來，並且讓它坐到你原本坐的位置。機制上是一次換位；戲劇上，這是玩家角色第一次、也是唯一一次親身去做那件二十七個人替他做過的事。尊嚴要靠這一拍撐起來，所以最後那一段完全沒有戰鬥。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "A defeat has to leave a person behind",
+    "zh": "一場敗仗必須留下一個人"
+   },
+   "body": [
+    {
+     "en": "The rule this story is built to satisfy is that losing must produce residue that refers to the specific defeat, not a generic penalty. The build already has the delivery mechanism: the monument node that appears at the coordinates of your last fall. This story adds one line of prose to the Vigil ledger — the fourteenth walker fell in the Sunken City, on the third floor, and the last thing they remembered was water moving under the stone — and attaches those last words to the stone itself, readable by whoever walks past it next.",
+     "zh": "這個故事要滿足的規則是：輸掉必須產生指涉那一次具體敗仗的殘留，而不是一個通用懲罰。版本裏已經有投遞管道：紀念碑節點會出現在你上次墜落的座標上。這個故事只在守夜帳冊上加一行散文——第十四位行者倒在沉沒之城第三層，他記得的最後一樣東西是石下流動的水聲——並把這句遺言掛在那塊石上，讓下一個路過的人讀得到。"
+    },
+    {
+     "en": "The compounding effect is the design: a player who dies a lot ends up walking a road that is visibly more crowded than a good player's road, and after the turn that crowd is unambiguously their own dead. A losing streak stops being a stat and becomes a population. It is also the cheapest possible content — one string per death, authored by the run itself.",
+     "zh": "複利效果才是設計本身：死得多的玩家，最後會走在一條明顯比高手更擠的路上；而轉折之後，那些人毫無疑義地全部是他自己的死者。連敗不再是一個數字，而是一群人口。這同時是成本最低的內容——一次死亡一句字串，由那次朝聖自己寫。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "The honest risks",
+    "zh": "誠實的風險"
+   },
+   "body": [
+    {
+     "en": "One: devaluation. The sentence the turn puts in the player's head is you were not the one who walked, and if the tone is off by a few degrees that reads as thirty hours of achievement being retroactively assigned to someone else. The counterweight is the arrival count — every walker made it, none of them were wasted, and the player walks the last stretch themselves — but that counterweight is a tone calibration, not a mechanic, and tone calibrations fail quietly in localisation and in playtest.",
+     "zh": "其一：貶值。轉折塞進玩家腦裏的那句話是「行的那個不是你」；語氣只要偏個幾度，讀出來就會變成三十小時的成就被追溯地判給了別人。抗衡的是抵達人數——每一位行者都到了，沒有一個白費，而且最後那一段由玩家親身走完——但這個抗衡是語氣校準，不是機制；而語氣校準會在本地化和實測裏悄悄失效。"
+    },
+    {
+     "en": "Two: adjacency. This shares an image with any story that puts another you in a mirror. The separation has to be enforced at the level of tense — this one is a split happening in the present, every single run, with real bodies left on the road, not a revelation that the player has been dead or remembering all along. If a reader can summarise both stories with the same sentence, one of them should be cut.",
+     "zh": "其二：撞題。任何把「鏡中另一個你」放進去的故事，都與這個共用同一個意象。切割必須在時態層面執行——這一個是每一次朝聖、正在當下發生的分裂，路上留着真正的屍體；而不是「玩家其實早已死去、全程都在回憶」那種揭示。如果一個讀者可以用同一句話總結兩個故事，其中一個應該砍掉。"
+    },
+    {
+     "en": "Three: the Lamplighter's ambiguity is load-bearing and also indistinguishable from a bug. He picks up a refused offer mid-sentence two runs later, as though you had stepped out briefly. That is deliberate — he is talking to the one who stayed, who has been in the room the whole time — but a player who notices it before the turn is more likely to file it as broken dialogue state than as a clue, and the fix and the feature look identical in a bug report.",
+     "zh": "其三：掌燈人的歧義是承重的，同時又和一個 bug 沒有分別。他會在兩次朝聖之後，從你拒絕過的那句話中間接下去，彷彿你只是暫時走開了一會。這是刻意的——他一直在跟那個留下來的人說話，而那個人從頭到尾都在房間裏——但在轉折之前留意到這件事的玩家，多半會把它歸類為對話狀態壞掉，而不是線索；在 bug 報告裏，要修的和要保的長得一模一樣。"
+    }
+   ]
+  }
+ ],
+ "rereadings": [
+  {
+   "line": "Your monument does not always lie down.",
+   "before": {
+    "en": "A hint about a mechanic: the monument node sometimes stands upright on the map so you can walk to it and recover what you carved.",
+    "zh": "一句機制提示：紀念碑節點有時會在地圖上直立起來，讓你走過去取回自己刻下的東西。"
+   },
+   "after": {
+    "en": "It is not a monument. It is a body, and bodies that were still queuing when they died do not lie down. The final scene is that sentence coming true all at once, up and down every road you ever walked.",
+    "zh": "那不是紀念碑，是屍體；而死的時候仍在排隊的屍體，是不會躺下的。最後一幕就是這句話同時在你走過的每一條路上兌現。"
+   }
+  },
+  {
+   "line": "The dead climb twice: once in flesh, once in memory.",
+   "before": {
+    "en": "A poetic line about persistence — the dead are remembered, so in some sense they climb again.",
+    "zh": "一句關於延續的詩句——死者被記住，於是在某種意義上再朝聖一次。"
+   },
+   "after": {
+    "en": "It is not poetry, it is the specification. The walker climbs in flesh and dies of it. You climb the same road afterwards using only what they remembered. The whisper has been describing the split in plain language since your second night.",
+    "zh": "那不是詩，那是規格書。行者以肉身朝聖，並且因此而死。事後你只憑他記得的東西，再走同一條路。從你的第二夜起，這句低語就一直在用大白話描述那場分裂。"
+   }
+  },
+  {
+   "line": "I remember the stone. You walked away before I stopped calling.",
+   "before": {
+    "en": "A mirror boss with a grievance. You killed a copy of yourself at a monument once, and it is bitter.",
+    "zh": "一個懷恨的鏡像首領。你曾經在某塊碑前殺過自己的複製品，它記仇。"
+   },
+   "after": {
+    "en": "The accusation reverses. The shade is the walker, dying inside the stone, calling after the figure that turned back toward the fire. The you it is addressing is the one who stayed — which is the player. It is not the past attacking you; it is a dying man recognising the person who left.",
+    "zh": "控訴的方向反轉。影就是那位行者，正在石中死去，向着轉身回到火邊的那個背影呼喚。它口中的「你」，是留下來的那一個——也就是玩家。這不是過去在攻擊你，這是一個垂死的人認出了離開的那個人。"
+   }
+  },
+  {
+   "line": "Each climber leaves a shape behind. 【The Last Place】 has learned to wear ours.",
+   "before": {
+    "en": "The mountain is haunted and reuses the silhouettes of the people who died on it.",
+    "zh": "這座山鬧鬼，並且會借用死在它身上那些人的剪影。"
+   },
+   "after": {
+    "en": "The shape left behind is not on the road at all. It is sitting at the hearth with its hands open to the fire. What every climber leaves behind is the protagonist.",
+    "zh": "留下的那道形影根本不在路上。它坐在爐邊，雙手向着火攤開。每一位朝聖者留下的那樣東西，一直就是這個遊戲的主角。"
+   }
+  },
+  {
+   "line": "A previous pilgrim stands inside the stone.",
+   "before": {
+    "en": "Flavour text on the bequest node. Someone died here, the game preserved it, take your card back.",
+    "zh": "遺贈節點上的風味文字。有人死在這裏，遊戲替你保存了，把牌拿回去就好。"
+   },
+   "after": {
+    "en": "A location, a posture and a tense, all literal. He is previous, he is a pilgrim, he is standing, and he is inside there right now. The next line — something remains in their hands — is you taking it off him.",
+    "zh": "位置、姿勢、時態，全部照字面成立。他是前一位，他是朝聖者，他正站着，他此刻就在裏面。下一句「其手中仍留有一物」，就是你從他手上拿走它。"
+   }
+  },
+  {
+   "line": "The Vigil has a window, though no wall holds it.",
+   "before": {
+    "en": "The Vigil is a strange half-real place; of course its window has no wall.",
+    "zh": "守夜本來就是個半真實的怪地方；它的窗沒有牆，也很合理。"
+   },
+   "after": {
+    "en": "The window has no wall because it is not looking outside. It is the seventh pane — the one the Rose Window is missing — and what stands behind it is the rank of everyone who ever walked out of that room.",
+    "zh": "那扇窗沒有牆，是因為它並不朝外。它就是第七片窗片——玫瑰窗缺的那一片——而站在它背後的，是所有曾經走出那個房間的人排成的隊。"
+   }
+  }
+ ],
+ "meta": {
+  "twist": {
+   "en": "Stand at the Threshold does not start a run; it performs a division. Each time, one of you walks out and one of you sits back down at the fire. The walker carries the lantern up and dies on the road, every time, without exception. The one who stayed inherits the walker's complete memory and wakes at the hearth certain it came home. The player has always been the one who stayed — the hooded figure the camera held on for one second before the first run ever started. The standing stones on every map are the walkers, still upright, still in the queue. The door at the hub of the Rose Window only opens for someone who has walked, so it is opened by them, not by you; and the ending is the queue arriving, all twenty-seven of them, with the player last.",
+   "zh": "「立於門檻」不是開始一次朝聖，而是執行一次分裂。每一次，一個你走出去，一個你坐回火邊。走出去那個把提燈帶上路，然後死在路上——每一次，無一例外。留下的那個繼承行者的全部記憶，在爐邊醒來，確信自己是回來了。玩家一直都是留下的那個——就是第一次朝聖尚未開始時，鏡頭停留一秒的那個兜帽身影。每張地圖上矗立的石碑，都是歷代行者，仍然站着，仍然排在隊裏。玫瑰窗中心那道門只為走過路的人而開，所以推開它的是他們，不是你；而結局，是那條隊抵達——二十七個人全部到了，玩家排在最後。"
+  },
+  "act4": {
+   "en": "【The Walkers' Country】 (placeholder). Five nodes, a road whose walls are made of standing dead and whose light comes up out of the stones, so every shadow runs upward — an inverted Vigil hearth. Nine encounters, all of them walkers wearing builds the player abandoned, generated from that save file's own meta-progression rather than from bespoke enemy art. The boss is 【The One Who Stayed】, the first version of the player that refused to walk on night one, now doorkeeper for whatever is above the crown. It cannot be killed. The fight resolves as an exchange: you take the lantern, it sits down in your place and inherits, and the final stretch of road has no combat in it — the first walking the player character has ever personally done. Win goes to the golden city with the whole queue filing in ahead of you. Loss goes to the dark hall, the monolith, and one lit lantern at its foot.",
+   "zh": "【行者之邦】（暫名）。五個節點；路的兩堵牆由站立的死者砌成，光自石中向上透出，於是每一道影都向上生長——一個倒轉的守夜爐火。九場遭遇，全部是穿着玩家放棄過的組合的行者，由該存檔自身的中繼進度生成，而非另外繪製敵人美術。首領是【留下的那個】，即第一夜拒絕行走的那個版本的玩家，如今是「王冠之上那樣東西」的門房。它殺不死。這場仗以交換收束：你接過提燈，它坐到你的位置繼承一切；而最後那一段路完全沒有戰鬥——這是玩家角色此生第一次親身走路。勝，通向金色之城，整條隊在你前面魚貫而入。敗，通向幽暗大廳、獨石，以及碑腳一盞燃着的燈。"
+  },
+  "defeat": {
+   "en": "Every loss writes one authored line into the Vigil ledger naming the walker by number, the place, and the last thing they remembered — the fourteenth walker fell in the Sunken City, on the third floor; the last thing they remembered was water moving under the stone. On the next run a new upright monument stands at exactly that node, and stopping at it lets the player read those last words back. The shipped bequest-recovery mechanic already delivers this; the story adds the sentence and the first person. The compounding consequence is that a player who dies often walks a visibly more crowded road, and after the turn that crowd is unambiguously their own dead — a losing streak becomes a population rather than a statistic.",
+   "zh": "每一次落敗，都會在守夜帳冊寫下一句經作者撰寫的文字，記明行者的編號、地點，以及他記得的最後一樣東西——第十四位行者倒在沉沒之城第三層，他記得的最後一樣東西是石下流動的水聲。下一次朝聖，那個節點上會立起一座新的直立紀念碑；停在那裏，玩家就能讀回這句遺言。已上線的遺贈回收機制本身就是投遞管道；故事只補上那一句話和第一人稱。複利後果是：死得多的玩家會走在一條明顯更擠的路上，而轉折之後，那群人毫無疑義全是他自己的死者——連敗於是從一個統計數字變成一群人口。"
+  },
+  "risks": {
+   "en": "Devaluation is the big one: you were not the one who walked can retroactively read as thirty hours of achievement being reassigned, and the counterweight — everyone arrived, nobody was wasted, and you walk the last stretch yourself — is a tone calibration rather than a mechanic, which means it can fail quietly in playtest and again in localisation. Adjacency is the second: any story with another you in a mirror shares this image, so the separation must be enforced by tense — a division happening in the present on every single run, with real bodies left standing on the road, not a revelation that the player has been dead or remembering all along. Third, the Hollow Lamplighter's memory ambiguity is load-bearing and visually identical to a dialogue-state bug: he resumes a refused offer mid-sentence two runs later because he is addressing the one who never left the room, and a player who notices before the turn will file it as broken rather than as a clue.",
+   "zh": "最大的是貶值：「行的那個不是你」有可能被追溯地讀成三十小時的成就被判給了別人；而抗衡它的東西——所有人都到了、沒有一個白費、最後一段由你親身走完——是語氣校準而非機制，所以它可能在實測裏悄悄失效，再在本地化裏失效一次。其次是撞題：任何有「鏡中另一個你」的故事都共用這個意象，所以切割必須以時態執行——每一次朝聖、正在當下發生的分裂，路上留着真正站立的屍體；而不是「玩家其實早已死去、全程都在回憶」。第三，空燈掌燈人的記憶歧義是承重的，外觀上又與對話狀態的 bug 完全一樣：他隔兩次朝聖仍從你拒絕過的那句中間接下去，是因為他一直在對那個從未離開房間的人說話；在轉折之前留意到的玩家，會把它歸類為壞掉，而不是線索。"
+  }
+ }
+}
