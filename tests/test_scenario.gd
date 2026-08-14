@@ -17,6 +17,7 @@ static func run(fails: Array[String]) -> void:
 	_round_trips(kernel, content, fails)
 	_isolation(kernel, content, fails)
 	_rejection(kernel, fails)
+	_shards(kernel, fails)
 	kernel.clear_profile()
 
 
@@ -132,11 +133,47 @@ static func _rejection(kernel: ScenarioKernel, fails: Array[String]) -> void:
 		fails.append("scenario reject: unknown card was accepted")
 	if kernel.construct(_custom(18309, {"rng_state": 4})) != null:
 		fails.append("scenario reject: raw RNG override was accepted")
-	var act_four: RunState = kernel.construct(_custom(18310, {"act": 3}))
+	var act_four: RunState = kernel.construct(_custom(18310, {"act": 3, "shards": 6}))
 	if act_four == null or act_four.act != 3:
-		fails.append("scenario boundary: act 3 was not accepted")
+		fails.append("scenario boundary: act 3 with six shards was not accepted")
 	if kernel.construct(_custom(18311, {"act": 4})) != null:
 		fails.append("scenario reject: act 4 index was accepted")
+
+
+static func _shards(kernel: ScenarioKernel, fails: Array[String]) -> void:
+	var counted: RunState = kernel.construct(_custom(18312, {"shards": 6}))
+	if counted == null:
+		fails.append("scenario shards: count 6 failed: %s" % kernel.last_error)
+		return
+	if counted.shards != VigilState.QUEST_IDS:
+		fails.append("scenario shards: run did not carry the six quest ids")
+	var vigil: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	if vigil.shards != VigilState.QUEST_IDS:
+		fails.append("scenario shards: Vigil did not light the six panes")
+	elif not vigil.unlocks.has("emberglass") or not vigil.unlocks.has("act4"):
+		fails.append("scenario shards: Vigil unlocks missed emberglass or act4")
+	var named: RunState = kernel.construct(_custom(18313, {
+		"shards": ["hollowLamplighter", "paleOnes"],
+	}))
+	if named == null or named.shards != ["paleOnes", "hollowLamplighter"]:
+		fails.append("scenario shards: id list was not canonicalised")
+	var final_act: RunState = kernel.construct(_custom(18314, {"act": 3, "shards": 6}))
+	if final_act == null or final_act.act != 3 or not final_act.is_final_act():
+		fails.append("scenario shards: act 3 with six panes was not the final act")
+	if kernel.construct(_custom(18315, {"shards": 7})) != null:
+		fails.append("scenario reject: shard count 7 was accepted")
+	if kernel.construct(_custom(18318, {"act": 3})) != null \
+			or kernel.last_error != "act 3 requires six shards":
+		fails.append("scenario reject: act 3 without six shards was accepted")
+	if kernel.construct(_custom(18319, {"act": 3, "shards": 5})) != null:
+		fails.append("scenario reject: act 3 with five shards was accepted")
+	if kernel.construct(_custom(18316, {"shards": ["not-a-quest"]})) != null:
+		fails.append("scenario reject: unknown shard was accepted")
+	if kernel.construct(_custom(18317, {"shards": ["paleOnes", "paleOnes"]})) != null:
+		fails.append("scenario reject: duplicate shard was accepted")
+	var again: RunState = kernel.construct(_custom(18312, {"shards": 6}))
+	if again == null or ScenarioKernel.fingerprint(again) != ScenarioKernel.fingerprint(counted):
+		fails.append("scenario shards: identical six-pane reference diverged")
 
 
 static func _custom(seed: int, overrides: Dictionary) -> ScenarioReference:

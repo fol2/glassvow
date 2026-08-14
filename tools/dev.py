@@ -517,6 +517,7 @@ SCENARIO_OVERRIDES = (
     "hp", "max_hp", "gold", "potions",
     "add_cards", "remove_cards", "upgrade_cards",
     "add_relics", "remove_relics",
+    "shards",
 )
 
 

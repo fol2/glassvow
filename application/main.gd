@@ -976,6 +976,9 @@ func apply_dev_scenario(ref: ScenarioReference) -> bool:
 	_run_save_path = kernel.run_path
 	_vigil_save_path = kernel.vigil_path
 	_vigil = _load_vigil()
+	if ref.scenario_id == "vigil":
+		_show_vigil(true)
+		return true
 	_continue_run(run)
 	return true
 

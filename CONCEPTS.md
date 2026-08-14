@@ -10,8 +10,9 @@ learnings; direct edits are fine. Glossary only, not a spec or catch-all.
 ### Developer Console
 A development-only scenario orchestrator that places a valid, deterministic
 run at a named player-facing state through the game's real routing seams. It is
-a navigation and inspection convenience, not release evidence and not a place
-to author content.
+a navigation and inspection convenience, not a place to author content. It is
+not release evidence except for the endgame surfaces named in the RC bar's P5
+clause.
 
 ### Dev Review build
 An internal Web, native or signed-mobile build carrying the explicit
@@ -57,7 +58,11 @@ the routed game or for release evidence.
 ### Evidence Harness
 A tool that records or verifies a named gate under its declared conditions.
 Evidence from a Harness keeps its own proof boundary; reaching the same surface
-through the Developer Console does not inherit that evidence.
+through the Developer Console does not inherit that evidence — except the
+endgame surfaces named in `docs/rc-bar.md` P5, which may be signed on a Dev
+Review build reached through the Scenario kernel. That exception is an
+amendment of the sign-off protocol, not a waiver of any criterion, and it does
+not make Console-reached states evidence for any other surface.
 
 ### Diagnostic overlay
 A development-only live performance readout used to spot and reproduce likely

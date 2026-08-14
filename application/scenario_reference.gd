@@ -25,6 +25,7 @@ const CATALOGUE: Dictionary = {
 	"rest": 1,
 	"event": 1,
 	"treasure": 1,
+	"vigil": 1,
 }
 const LOCALES: PackedStringArray = ["en", "zh-Hant"]
 const OVERRIDE_KEYS: PackedStringArray = [
@@ -32,6 +33,7 @@ const OVERRIDE_KEYS: PackedStringArray = [
 	"hp", "max_hp", "gold", "potions",
 	"add_cards", "remove_cards", "upgrade_cards",
 	"add_relics", "remove_relics",
+	"shards",
 ]
 
 var error: String = ""

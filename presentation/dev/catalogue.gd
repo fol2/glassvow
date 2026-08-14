@@ -69,6 +69,9 @@ const ENTRIES: Array[Dictionary] = [
 	{"id": "treasure", "revision": 1,
 		"description": "A closed treasure chest on the Act I relic row.",
 		"seed": SEED, "overrides": {"act": 0, "node": "8,0"}},
+	{"id": "vigil", "revision": 1,
+		"description": "The Vigil rose with all six Emberglass panes lit.",
+		"seed": SEED, "overrides": {"shards": 6}},
 ]
 
 const UNSUPPORTED: Array[Dictionary] = [
@@ -104,10 +107,15 @@ const UNSUPPORTED: Array[Dictionary] = [
 		"reason": "pending_run_end and the boss-relic beat are not OVERRIDE_KEYS."},
 	{"id": "dawn",
 		"reason": "pending_dawn is not an OVERRIDE_KEY."},
-	{"id": "vigil",
-		"reason": "The Vigil is meta-progress, not a run Scenario."},
 	{"id": "story",
 		"reason": "Story Scenarios graduate with the story feature."},
 	{"id": "onboarding",
 		"reason": "Onboarding Scenarios graduate with the guided-first-run feature."},
 ]
+
+
+static func recipe_for(id: String) -> Dictionary:
+	for row: Dictionary in ENTRIES:
+		if str(row.get("id", "")) == id:
+			return row
+	return {}

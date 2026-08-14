@@ -152,12 +152,18 @@ Evidence: immutable packet.
       phone — **James's daily-driver iPhone, named by model in the RC signature receipt** (Tier
       1 checks real-world look-and-feel; floor coverage is Tier 2's job, not this tier's) — on
       a release export, both locales, recorded as sign-off comments on the executing tickets
-      per the rubric's protocol.
+      per the rubric's protocol. The endgame surfaces named below may instead be signed on a
+      Dev Review build; that is an amendment of this protocol, not a waiver of any criterion.
 - [ ] **Tier 2 — floor re-verify.** Every surface's full criteria list runs once on floor
       hardware: **iPhone SE 2 in zh-Hant** (smallest screen × riskiest script), **iPad 8 in
       en** (4:3 aspect axis). Both locales are inside the gate across the pair. Recorded as a
       consolidated re-verify table on the release-gate ticket
       ([#108](https://github.com/fol2/glassvow/issues/108)).
+- [ ] **Endgame amendment.** These surfaces may be signed on a Dev Review build reached
+      through the Scenario kernel, both locales: the Vigil (Story-arc shard and quest-memory
+      criteria), the sixth-Shard unsealing / sealed-door ceremony, the Act IV map, and the
+      Act IV boss. Every other surface still requires a release export. This amends the
+      sign-off protocol; it does not waive any criterion.
 - [ ] Any waiver exists only as the rubric's recorded-waiver mechanism prescribes.
 
 ## P6 — Internal beta round

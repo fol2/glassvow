@@ -45,20 +45,32 @@ func construct(ref: ScenarioReference) -> RunState:
 	var act: int = _ji(ref.overrides.get("act", 0))
 	if act < 0 or act > 3:
 		return _fail("act %d is out of range" % act)
+	var ov: Dictionary = ref.overrides
+	var shard_ids: Array = []
+	if ov.has("shards"):
+		shard_ids = _shard_ids(ov["shards"])
+		if not last_error.is_empty():
+			return null
+	# Act 3 exists only past the sixth Shard (#218): with fewer, final_act()
+	# stays 2 and the checkpoint could never finish a run (PR #246 note).
+	if act == 3 and shard_ids.size() < VigilState.QUEST_IDS.size():
+		return _fail("act 3 requires six shards")
 	var run_id: String = "scn-%s-%d" % [ref.identity().replace("@", "-"), ref.seed]
-	var run: RunState = RunState.new_run(content, ref.seed, run_id, {
-		"aspect": aspect, "vow": vow,
-	})
+	var profile: Dictionary = {"aspect": aspect, "vow": vow}
+	if ov.has("shards"):
+		profile["shards"] = shard_ids.duplicate()
+		profile["quests"] = _quest_profile(shard_ids)
+	var run: RunState = RunState.new_run(content, ref.seed, run_id, profile)
 	var game: GlassvowGame = GlassvowGame.new(content, run)
 	game.quests.prepare_run(run)
-	if not _synthesise(game, act, ref.overrides.get("node")):
+	if not _synthesise(game, act, ov.get("node")):
 		return null
-	if not _apply_custom(game, ref.overrides):
+	if not _apply_custom(game, ov):
 		return null
 	var checked: RunState = _validate_checkpoint(run)
 	if checked == null:
 		return null
-	if not _store_ref(ref) or not _ensure_vigil():
+	if not _store_ref(ref) or not _persist_vigil(run, ov.has("shards")):
 		return _fail("Development profile could not persist")
 	return checked
 
@@ -305,10 +317,66 @@ func _validate_checkpoint(run: RunState) -> RunState:
 	return loaded
 
 
-func _ensure_vigil() -> bool:
-	if FileAccess.file_exists(vigil_path):
-		return true
-	return SaveService.store_vigil(VigilState.blank(), vigil_path)
+func _persist_vigil(run: RunState, apply_shards: bool) -> bool:
+	var vigil: VigilState = VigilState.blank()
+	if apply_shards and not run.shards.is_empty():
+		if not vigil.commit_run(run, "win", content):
+			last_error = "Vigil could not record the Scenario"
+			return false
+	return SaveService.store_vigil(vigil, vigil_path)
+
+
+func _shard_ids(value: Variant) -> Array:
+	var out: Array = []
+	if typeof(value) == TYPE_ARRAY:
+		var seen: Dictionary = {}
+		var wanted: Dictionary = {}
+		var rows: Array = value
+		for id_v: Variant in rows:
+			var id: String = str(id_v)
+			if not VigilState.QUEST_IDS.has(id):
+				last_error = "unknown shard %s" % id
+				return out
+			if seen.has(id):
+				last_error = "duplicate shard %s" % id
+				return out
+			seen[id] = true
+			wanted[id] = true
+		for id: String in VigilState.QUEST_IDS:
+			if wanted.has(id):
+				out.append(id)
+		return out
+	var raw: String = str(value).strip_edges()
+	if not raw.is_valid_int():
+		last_error = "shards must be 0..%d or quest ids" % VigilState.QUEST_IDS.size()
+		return out
+	var n: int = int(raw)
+	if n < 0 or n > VigilState.QUEST_IDS.size():
+		last_error = "shards %d is out of range" % n
+		return out
+	for i: int in range(n):
+		out.append(VigilState.QUEST_IDS[i])
+	return out
+
+
+func _quest_profile(shard_ids: Array) -> Dictionary:
+	var lit: Dictionary = {}
+	for id_v: Variant in shard_ids:
+		lit[str(id_v)] = true
+	var quests: Dictionary = {}
+	for id: String in VigilState.QUEST_IDS:
+		var def_v: Variant = content.quests.get(id, {})
+		var target: int = 0
+		if typeof(def_v) == TYPE_DICTIONARY:
+			var def: Dictionary = def_v
+			target = _ji(def.get("target", 0))
+		var done: bool = lit.has(id)
+		quests[id] = {
+			"state": "complete" if done else "dormant",
+			"progress": target if done else 0,
+			"memory": {},
+		}
+	return quests
 
 
 func _store_ref(ref: ScenarioReference) -> bool:

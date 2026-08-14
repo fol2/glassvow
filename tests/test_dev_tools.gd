@@ -15,6 +15,7 @@ static func run(fails: Array[String]) -> void:
 	_locale_apply(fails)
 	_entries(fails)
 	_console(fails)
+	_vigil_scenario(fails)
 
 
 static func _parse(boot: GDScript, fails: Array[String]) -> void:
@@ -252,6 +253,29 @@ static func _console(fails: Array[String]) -> void:
 	if _snap(SaveService.RUN_PATH) != before_run \
 			or _snap(SaveService.VIGIL_PATH) != before_vigil:
 		fails.append("dev tools: console mutated a production path")
+
+
+static func _vigil_scenario(fails: Array[String]) -> void:
+	var before_run: String = _snap(SaveService.RUN_PATH)
+	var before_vigil: String = _snap(SaveService.VIGIL_PATH)
+	var host: Main = _bare_main()
+	var ref: ScenarioReference = ScenarioReference.new()
+	ref.load_from({
+		"id": "vigil", "revision": 1, "build": "t", "seed": 18501,
+		"locale": "en", "shape": "pad-landscape", "overrides": {"shards": 6},
+	})
+	if not host.apply_dev_scenario(ref):
+		fails.append("dev tools: vigil Scenario failed: %s" % host.last_dev_error)
+	elif not host._route_screen is VigilScreen:
+		fails.append("dev tools: vigil Scenario did not open VigilScreen")
+	elif host._vigil == null or host._vigil.shards.size() != 6 \
+			or not host._vigil.unlocks.has("emberglass"):
+		fails.append("dev tools: vigil Scenario did not plant the rose")
+	ScenarioKernel.new(host.content).clear_profile()
+	host.free()
+	if _snap(SaveService.RUN_PATH) != before_run \
+			or _snap(SaveService.VIGIL_PATH) != before_vigil:
+		fails.append("dev tools: vigil Scenario mutated a production path")
 
 
 static func _labelled(root: Node) -> bool:
