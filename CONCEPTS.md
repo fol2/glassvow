@@ -792,7 +792,7 @@ beneath it is what lights it.
 
 ### Pilgrimage
 The journey across one act, walked west to east past lit and unlit stones toward
-the Spire. It is a graph the run advances through one node at a time, and a
+the act's Terminus. It is a graph the run advances through one node at a time, and a
 composed scene the player surveys by dragging — the same structure serving both,
 which is why its geometry is presentation's to project and the run's to decide.
 
@@ -866,6 +866,34 @@ never duplicated, never from an unknown quest.
 
 Collecting all six is what unseals the Act IV threshold; with any fewer the
 journey routes onto an ordinary act map.
+
+---
+
+## The story
+
+### Story Bible
+The layered canon every line of game copy derives from: a spoiler-complete
+truth root, and the world, cast, act, delivery, foreshadow and glossary layers
+derived from it. No copy is drafted freehand — a fact the bible lacks is added
+to the bible before any line leans on it.
+
+### Review state
+The tag every Story Bible claim carries. **[SETTLED]** — decided by the human
+owner; changing it reopens that decision, never a silent edit. **[PROPOSED]** —
+drafted and awaiting review; freely rewritable until confirmed. **[OPEN]** — an
+unanswered canon question; no copy or downstream plan may lean on it.
+
+### Foreshadow Ledger
+The account of every line's two readings — what it appears to say before the
+story's reveal, and what it truly says after. A line whose post-reveal
+rereading fails is rewritten until it passes; a line that discloses above its
+Reveal Ladder rung is rewritten or rescheduled.
+
+### Reveal Ladder
+The ordered stages of what the player may learn of the story's hidden truth,
+from picture-only hints through accumulating ambiguity to the one scripted
+moment that states it plainly. Every line is assigned a rung, and a line never
+discloses above its rung no matter how early chance surfaces it.
 
 ---
 
