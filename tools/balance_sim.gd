@@ -2,6 +2,7 @@ class_name BalanceSim
 extends SceneTree
 ## Domain-only whole runs: all reveals, no quests or cross-run side state.
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
+const Policy: GDScript = preload("res://tools/balance_policy.gd")
 const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
 const PROFILE: String = "mature-three-act-no-side-state-v1"
 func _initialize() -> void:
@@ -142,7 +143,7 @@ static func _claim_rewards(game: GlassvowGame, rewards: Dictionary) -> void:
 static func _resolve_safe_node(game: GlassvowGame, node: MapNode) -> void:
 	match node.type:
 		"rest":
-			if game.run.player.hp * 100 <= game.run.player.max_hp * 70:
+			if game.run.player.hp * 100 <= game.run.player.max_hp * Pilot._wi("restHpPct"):
 				var amount: int = int(roundf(float(game.run.player.max_hp) \
 					* game.rewards.rest_heal_fraction(game.run)))
 				game.run.player.hp = mini(game.run.player.max_hp, game.run.player.hp + amount)
@@ -209,7 +210,7 @@ static func _event_op_score(game: GlassvowGame, op_v: Variant) -> float:
 			expected += float(str(branch.get("p", 0))) * _event_choice_score(game, branch)
 		return expected
 	if op.has("gold"):
-		return float(int(float(str(op["gold"])))) * Pilot.SHOP_MIN_RATIO
+		return float(int(float(str(op["gold"])))) * Pilot.shop_min_ratio
 	if op.has("hp"):
 		var hp: int = int(float(str(op["hp"])))
 		var kind: String = "heal" if hp >= 0 else "loseHp"
@@ -250,7 +251,7 @@ static func _event_op_score(game: GlassvowGame, op_v: Variant) -> float:
 	return 0.0
 static func _potion_shop_value(game: GlassvowGame) -> float:
 	var pair: Array = game.content.shop["potionPrice"]
-	return (float(str(pair[0])) + float(str(pair[1]))) * 0.5 * Pilot.SHOP_MIN_RATIO
+	return (float(str(pair[0])) + float(str(pair[1]))) * 0.5 * Pilot.shop_min_ratio
 static func _expected_card_max(game: GlassvowGame, n: int) -> float:
 	# roll_event_cards weights: common×2, uncommon×2, rare×1. No RNG — read the pools.
 	if n <= 0:
@@ -377,6 +378,7 @@ static func _result(run: RunState, aspect: String, seed: int, outcome: String,
 		"gold": run.player.gold, "deck": run.player.deck.size(), "rng": run.rng_state(),
 		"fights": fights, "relics": run.player.relics.duplicate(), "deckIds": deck_ids,
 		"goldEarned": int(float(str(run.stats.get("goldEarned", 0)))), "economy": economy,
+		"policy": Pilot.policy_snapshot(),
 	}
 static func outcome_digest(row: Dictionary) -> String:
 	return JSON.stringify(row).sha256_text()
@@ -406,8 +408,9 @@ static func _options(args: PackedStringArray) -> Dictionary:
 		return {"error": "--runs must be positive and --vow must be 0..5"}
 	return out
 static func _policy(opts: Dictionary) -> Dictionary:
-	return {"cardDecline": opts["cardDecline"], "removalAppetite": opts["removalAppetite"],
-		"removalMinCopies": opts["removalMinCopies"]}
+	return Policy.resolve({"cardDecline": opts["cardDecline"],
+		"removalAppetite": opts["removalAppetite"],
+		"removalMinCopies": opts["removalMinCopies"]})
 static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
 	var git_out: Array = []
 	OS.execute("git", ["rev-parse", "HEAD"], git_out)

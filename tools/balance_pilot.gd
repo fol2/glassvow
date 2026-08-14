@@ -3,6 +3,7 @@ extends RefCounted
 ## Block lethal, else kill-lowest; Dusk favours Eclipse/Shatter, Ash stacks Smolder highest and blocks with Smother.
 ## Routes favour treasure, then low-HP rest; rewards take the highest card/relic score; shops buy by value/gold.
 ## Potions heal at 20 missing HP, block lethal intent, and spend offensive stock in elite/boss fights.
+const Policy: GDScript = preload("res://tools/balance_policy.gd")
 const VERSION: String = "p7-d2-v1"
 const SHOP_MIN_RATIO: float = 0.06
 ## T1a: take every offered card. Finite so CLI/JSON round-trip; no catalogue score is this low.
@@ -13,26 +14,36 @@ const REMOVAL_APPETITE_DEFAULT: float = 8.5
 const REMOVAL_MIN_COPIES_DEFAULT: int = 3
 ## Shop eligibility ceiling is appetite minus this; 8.5 - 2.0 = 6.5. Not a sampled knob.
 const REMOVAL_SHOP_MARGIN: float = 2.0
-const RELIC_SCORE: Dictionary = {
-	"hollowCrown": 90, "frozenCore": 70, "crownOfCinders": 68, "verdantBranch": 62,
-	"crownOfTheHearth": 60, "shatterersCrown": 58, "crownOfTithes": 55, "warFetish": 48,
-	"emberLantern": 46, "sunBlossom": 44, "duskmirror": 42, "merchantsMark": 40,
-	"travelersPack": 38, "silkFan": 36, "seersOrb": 34, "ironTalisman": 32,
-	"executionersSeal": 30, "wardingCharm": 28, "basaltIdol": 26, "riverPearl": 24,
-	"gravebloom": 24, "reapersBell": 22, "vialOfLife": 20, "thornBand": 18,
-	"sweetRoot": 18, "prismCharm": 16, "bellOfEndings": 16, "thiefOfWicks": 14,
-}
 static var banned: Dictionary = {}
+static var vector: Dictionary = {}
 static var card_decline_threshold: float = CARD_DECLINE_DEFAULT
 static var removal_appetite: float = REMOVAL_APPETITE_DEFAULT
 static var removal_min_copies: int = REMOVAL_MIN_COPIES_DEFAULT
+static var shop_min_ratio: float = SHOP_MIN_RATIO
 static func apply_policy(policy: Dictionary) -> void:
-	card_decline_threshold = float(str(policy.get("cardDecline", CARD_DECLINE_DEFAULT)))
-	removal_appetite = float(str(policy.get("removalAppetite", REMOVAL_APPETITE_DEFAULT)))
-	removal_min_copies = int(float(str(policy.get("removalMinCopies", REMOVAL_MIN_COPIES_DEFAULT))))
+	vector = Policy.resolve(policy)
+	card_decline_threshold = float(str(vector["cardDecline"]))
+	removal_appetite = float(str(vector["removalAppetite"]))
+	removal_min_copies = int(float(str(vector["removalMinCopies"])))
+	shop_min_ratio = float(str(vector["shopMinRatio"]))
 static func policy_snapshot() -> Dictionary:
-	return {"cardDecline": card_decline_threshold, "removalAppetite": removal_appetite,
-		"removalMinCopies": removal_min_copies}
+	if vector.is_empty():
+		apply_policy({})
+	return vector.duplicate(true)
+static func _group(name: String) -> Dictionary:
+	if vector.is_empty():
+		apply_policy({})
+	var raw: Variant = vector[name]
+	return raw if typeof(raw) == TYPE_DICTIONARY else {}
+static func _w(group: String, key: String) -> float:
+	var d: Dictionary = _group(group)
+	return float(str(d[key]))
+static func _wf(key: String) -> float:
+	if vector.is_empty():
+		apply_policy({})
+	return float(str(vector[key]))
+static func _wi(key: String) -> int:
+	return int(_wf(key))
 static func accepts_card_reward(score: float) -> bool:
 	return score >= card_decline_threshold
 static func remove_value(wscore: float) -> float:
@@ -48,15 +59,20 @@ static func is_banned(id: String) -> bool:
 static func choose_node(map: WorldMap, run: RunState) -> int:
 	var best: int = map.reachable()[0]
 	var best_score: int = -1
-	var low: bool = run.player.hp * 100 <= run.player.max_hp * 60
+	var low: bool = run.player.hp * 100 <= run.player.max_hp * _wi("routeLowHpPct")
+	var gold_high: int = _wi("shopGoldHigh")
+	var gold_low: int = _wi("shopGoldLow")
 	for i: int in map.reachable():
 		var n: MapNode = map.nodes[i]
-		var score: int = {
-			"boss": 1000, "treasure": 900, "rest": 800 if low else 150,
-			"shop": 700 if run.player.gold >= 140 else (520 if run.player.gold >= 45 else 100),
-			"event": 400,
-			"elite": 450 if not low else 50, "monster": 300,
-		}.get(n.type, 0)
+		var score: int = int(float(str({
+			"boss": _w("route", "boss"), "treasure": _w("route", "treasure"),
+			"rest": _w("route", "restLow") if low else _w("route", "restOk"),
+			"shop": _w("route", "shopRich") if run.player.gold >= gold_high \
+				else (_w("route", "shopMid") if run.player.gold >= gold_low else _w("route", "shopPoor")),
+			"event": _w("route", "event"),
+			"elite": _w("route", "eliteOk") if not low else _w("route", "eliteLow"),
+			"monster": _w("route", "monster"),
+		}.get(n.type, 0))))
 		if score > best_score:
 			best = i
 			best_score = score
@@ -119,13 +135,14 @@ static func _combat_score(game: GlassvowGame, card: CardInst, d: Dictionary, tar
 	var score: float = card_score(d, game.run.aspect, cid)
 	var loss: int = int(float(str(preview.get("loss", 0))))
 	var block: int = int(float(str(preview.get("block", 0))))
-	score += float(loss) * 1.15
+	score += float(loss) * _w("combat", "loss")
 	if unblocked > 0 and block > 0:
-		score += float(mini(block, unblocked)) * (1.6 if unblocked * 2 >= game.cb.player.hp else 0.85)
+		score += float(mini(block, unblocked)) * (_w("combat", "blockUrgent") \
+			if unblocked * 2 >= game.cb.player.hp else _w("combat", "blockNormal"))
 	if preview.get("willShatter", false):
-		score += 80.0 if dusk else 22.0
+		score += _w("combat", "shatterDusk") if dusk else _w("combat", "shatterAsh")
 	if preview.get("lethal", false):
-		score += 280.0
+		score += _w("combat", "lethal")
 	var foe: EnemyCombatant = null
 	if typeof(target) == TYPE_INT:
 		var idx: int = int(float(str(target)))
@@ -133,25 +150,26 @@ static func _combat_score(game: GlassvowGame, card: CardInst, d: Dictionary, tar
 	var existing: int = 0 if foe == null else int(float(str(foe.statuses.get("poison", 0))))
 	var applied: int = _status_n(d, "poison")
 	if applied > 0:
-		score += float(applied * (2 * existing + applied + 1)) * (0.85 if not dusk else 0.22)
+		score += float(applied * (2 * existing + applied + 1)) \
+			* (_w("combat", "poisonAsh") if not dusk else _w("combat", "poisonDusk"))
 	if _special_id(d) == "catalyst" and existing > 0:
-		score += float(existing) * (3.2 if not dusk else 0.8)
+		score += float(existing) * (_w("combat", "catalystAsh") if not dusk else _w("combat", "catalystDusk"))
 	var vuln: int = 0 if foe == null else int(float(str(foe.statuses.get("vulnerable", 0))))
 	if dusk and cid == "eclipseSlash" and vuln <= 0:
-		score += 48.0
+		score += _w("combat", "eclipse")
 		for other: CardInst in game.cb.hand:
 			if other != card and str(game.rules.card_data(other).get("type", "")) == "attack":
-				score += 36.0
+				score += _w("combat", "eclipseFollow")
 				break
 	if dusk and vuln > 0 and str(d.get("type", "")) == "attack" and cid != "eclipseSlash":
-		score += 18.0
+		score += _w("combat", "vulnAttack")
 	if dusk and foe != null:
 		var chips: int = int(float(str(preview.get("chips", 0))))
 		var need: int = foe.facet_max - foe.chips
 		if chips > 0 and need > 0 and chips < need:
-			score += 12.0 * float(chips) / float(need)
+			score += _w("combat", "chip") * float(chips) / float(need)
 	if str(d.get("type", "")) == "power":
-		score += 14.0
+		score += _w("combat", "power")
 	return score
 static func _target(game: GlassvowGame, card: CardInst, d: Dictionary) -> Variant:
 	if str(d.get("target", "")) != "enemy":
@@ -216,7 +234,7 @@ static func _use_potions(game: GlassvowGame) -> void:
 	var spend: bool = game.cb.kind != &"normal"
 	for slot: int in range(game.run.player.potions.size()):
 		var id: String = game.run.player.potions[slot]
-		var use: bool = id == "healing" and game.cb.player.max_hp - game.cb.player.hp >= 20
+		var use: bool = id == "healing" and game.cb.player.max_hp - game.cb.player.hp >= _wi("potionHealMissing")
 		use = use or id == "block" and _incoming(game) - game.cb.player.block >= game.cb.player.hp
 		use = use or spend and id in ["strength", "swift", "fire", "venom", "energy"]
 		if not use:
@@ -234,68 +252,71 @@ static func _use_potions(game: GlassvowGame) -> void:
 			return
 static func card_score(d: Dictionary, aspect: int, card_id: String = "") -> float:
 	var dusk: bool = aspect == 0
-	var score: float = float(str({"starter": 0, "common": 3, "uncommon": 6, "rare": 10}.get(
-		str(d.get("rarity", "starter")), 0))) - float(str(d.get("cost", 0)))
+	var card_w: Dictionary = _group("card")
+	var rarity_v: Variant = card_w["rarity"]
+	var rarity: Dictionary = rarity_v if typeof(rarity_v) == TYPE_DICTIONARY else {}
+	var score: float = float(str(rarity.get(str(d.get("rarity", "starter")), 0))) \
+		- float(str(d.get("cost", 0)))
 	for fx_v: Variant in d.get("effects", []):
 		var fx: Dictionary = fx_v
 		match str(fx.get("kind", "")):
 			"dmg": score += float(str(fx.get("n", 0))) * float(str(fx.get("times", 1)))
-			"block", "heal": score += float(str(fx.get("n", 0))) * 0.7
-			"draw", "energy": score += float(str(fx.get("n", 0))) * 4.5
-			"chip": score += float(str(fx.get("n", 0))) * (6.0 if dusk else 2.5)
-			"ember": score += float(str(fx.get("n", 0))) * 2.0
-			"loseHp": score -= float(str(fx.get("n", 0))) * 0.4
+			"block", "heal": score += float(str(fx.get("n", 0))) * _w("card", "blockHeal")
+			"draw", "energy": score += float(str(fx.get("n", 0))) * _w("card", "drawEnergy")
+			"chip": score += float(str(fx.get("n", 0))) * (_w("card", "chipDusk") if dusk else _w("card", "chipAsh"))
+			"ember": score += float(str(fx.get("n", 0))) * _w("card", "ember")
+			"loseHp": score -= float(str(fx.get("n", 0))) * _w("card", "loseHp")
 			"status": score += _status_value(str(fx.get("id", "")), int(float(str(fx.get("n", 0)))), dusk)
 			"special": score += _special_value(str(fx.get("id", "")), dusk)
 	if str(d.get("type", "")) == "power":
-		score += 10.0
-	score += float(str(d.get("chip", 0))) * (6.0 if dusk else 2.5)
+		score += _w("card", "power")
+	score += float(str(d.get("chip", 0))) * (_w("card", "chipDusk") if dusk else _w("card", "chipAsh"))
 	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner"]:
-		score += 8.0
+		score += _w("card", "aspectBonus")
 	if not dusk and card_id in ["ashBite", "smother", "venomStrike", "toxicMist", "ashenChoir",
 			"catalyst", "virulence", "annihilate"]:
-		score += 8.0
+		score += _w("card", "aspectBonus")
 	return score
 static func _status_value(id: String, n: int, dusk: bool) -> float:
 	match id:
 		"poison":
-			return float(n * (n + 1)) * (0.85 if not dusk else 0.22)
+			return float(n * (n + 1)) * (_w("status", "poisonAsh") if not dusk else _w("status", "poisonDusk"))
 		"vulnerable":
-			return float(n) * (12.0 if dusk else 4.0)
+			return float(n) * (_w("status", "vulnerableDusk") if dusk else _w("status", "vulnerableAsh"))
 		"weak":
-			return float(n) * 5.0
+			return float(n) * _w("status", "weak")
 		"str":
-			return float(n) * 8.0
+			return float(n) * _w("status", "str")
 		"dex", "metallicize":
-			return float(n) * 5.5
+			return float(n) * _w("status", "dex")
 		"regen":
-			return float(n) * 6.0
+			return float(n) * _w("status", "regen")
 		"venomous":
-			return 20.0 if not dusk else 6.0
+			return _w("status", "venomousAsh") if not dusk else _w("status", "venomousDusk")
 		"ritual":
-			return float(n) * 10.0
+			return float(n) * _w("status", "ritual")
 		"barricade", "energized":
-			return 12.0
+			return _w("status", "barricade")
 		"beacon":
-			return 10.0 if dusk else 4.0
+			return _w("status", "beaconDusk") if dusk else _w("status", "beaconAsh")
 		"nightsight", "emberflow":
-			return 8.0
+			return _w("status", "nightsight")
 	return 0.0
 static func _special_value(id: String, dusk: bool) -> float:
 	match id:
 		"catalyst":
-			return 30.0 if not dusk else 6.0
+			return _w("special", "catalystAsh") if not dusk else _w("special", "catalystDusk")
 		"shatterEcho":
-			return 16.0 if dusk else 8.0
+			return _w("special", "shatterEchoDusk") if dusk else _w("special", "shatterEchoAsh")
 		"execute", "momentum":
-			return 13.0
+			return _w("special", "execute")
 		"leech", "devour", "phantom":
-			return 12.0
+			return _w("special", "leech")
 		"doubleBlock", "flawless", "emberNova":
-			return 9.0
+			return _w("special", "doubleBlock")
 		"pyreTithe", "emberdance":
-			return 6.0
-	return 8.0
+			return _w("special", "pyreTithe")
+	return _w("special", "fallback")
 static func _status_n(d: Dictionary, id: String) -> int:
 	var total: int = 0
 	for fx_v: Variant in d.get("effects", []):
@@ -373,12 +394,13 @@ static func best_card(run: RunState, content: ContentDB, cards: Array) -> CardIn
 	return best
 static func relic_score(id: String, content: ContentDB, aspect: int) -> float:
 	var rarity: String = str(content.relics.get(id, {}).get("rarity", "common"))
-	var score: float = float(str(RELIC_SCORE.get(id,
-		{"common": 12, "uncommon": 22, "rare": 34, "boss": 50}.get(rarity, 10))))
+	var table: Dictionary = _group("relics")
+	var rarity_table: Dictionary = _group("relicRarity")
+	var score: float = float(str(table.get(id, rarity_table.get(rarity, _wf("relicFallback")))))
 	if aspect == 0 and id in ["shatterersCrown", "prismCharm", "executionersSeal"]:
-		score += 12.0
+		score += _wf("relicDuskBonus")
 	if aspect == 1 and id in ["smolderingCoal", "ashenCore", "thornBand"]:
-		score += 16.0
+		score += _wf("relicAshBonus")
 	return score
 static func choose_shop(stock: Dictionary, run: RunState, content: ContentDB) -> Array[Dictionary]:
 	var gold: int = run.player.gold
@@ -391,7 +413,7 @@ static func choose_shop(stock: Dictionary, run: RunState, content: ContentDB) ->
 	var removed: bool = false
 	for _guard: int in range(8):
 		var best: Dictionary = {}
-		var best_ratio: float = SHOP_MIN_RATIO
+		var best_ratio: float = shop_min_ratio
 		for category: String in ["relics", "cards", "potions"]:
 			for row_v: Variant in stock.get(category, []):
 				var row: Dictionary = row_v
@@ -402,14 +424,14 @@ static func choose_shop(stock: Dictionary, run: RunState, content: ContentDB) ->
 					continue
 				if category == "potions" and potion_free <= 0:
 					continue
-				var value: float = 16.0
+				var value: float = _wf("potionShopDefault")
 				if category == "relics":
 					value = relic_score(id, content, run.aspect)
 				elif category == "cards":
 					var definition: Dictionary = content.cards.get(id, {})
 					value = card_score(definition, run.aspect, id)
 				elif id == "healing":
-					value = 22.0
+					value = _wf("potionHealing")
 				var ratio: float = value / float(maxi(price, 1))
 				if ratio > best_ratio:
 					best_ratio = ratio

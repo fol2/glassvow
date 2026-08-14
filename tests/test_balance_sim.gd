@@ -3,7 +3,8 @@ extends RefCounted
 
 const Sim: GDScript = preload("res://tools/balance_sim.gd")
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
-const EXPECTED: String = "b38410ee207c477b1f0048dec350d1488a100937750150b2a4fd04d69eae6710"
+const Policy: GDScript = preload("res://tools/balance_policy.gd")
+const EXPECTED: String = "648562f245b41b131c36945c3c0627b465ec99b0f2e44c4a3aae28008f132aee"
 
 
 static func run(fails: Array[String]) -> void:
@@ -58,6 +59,7 @@ static func _check_valuation(content: ContentDB, fails: Array[String]) -> void:
 	if Pilot.VERSION != "p7-d2-v1":
 		fails.append("balance pilot: VERSION expected p7-d2-v1 got %s" % Pilot.VERSION)
 	_check_grammar(content, fails)
+	_check_default_vector(content, fails)
 	var dusk_run: RunState = RunState.new_run(content, 7, "best-card")
 	var strongest: CardInst = Pilot.best_card(dusk_run, content, dusk_run.player.deck)
 	if strongest == null or String(strongest.id) == "strike":
@@ -115,4 +117,36 @@ static func _check_grammar(content: ContentDB, fails: Array[String]) -> void:
 	Pilot.apply_policy({"removalMinCopies": 1})
 	if not Pilot.wants_shop_remove(1, 6.5) or Pilot.wants_shop_remove(1, 6.6):
 		fails.append("balance pilot: removalMinCopies must open singleton shop remove")
+	Pilot.apply_policy({})
+
+
+static func _check_default_vector(content: ContentDB, fails: Array[String]) -> void:
+	Pilot.apply_policy({})
+	if Pilot.policy_snapshot() != Policy.default():
+		fails.append("balance policy: empty override must resolve to default()")
+	Pilot.apply_policy(Policy.default())
+	var dusk_run: RunState = RunState.new_run(content, 7, "vector-events")
+	var game: GlassvowGame = GlassvowGame.new(content, dusk_run)
+	var lib: Array = content.events["library"]["choices"]
+	var lib0_row: Dictionary = lib[0]
+	var lib1_row: Dictionary = lib[1]
+	var lib0: float = Sim._event_choice_score(game, lib0_row)
+	var lib1: float = Sim._event_choice_score(game, lib1_row)
+	if lib0 <= lib1:
+		fails.append("balance policy: default vector library must choose [0], %s vs %s" % [lib0, lib1])
+	var shrine: Array = content.events["forgottenShrine"]["choices"]
+	var shrine0: Dictionary = shrine[0]
+	var shrine1: Dictionary = shrine[1]
+	var remove_score: float = Sim._event_choice_score(game, shrine0)
+	var gold_score: float = Sim._event_choice_score(game, shrine1)
+	if remove_score <= gold_score:
+		fails.append("balance policy: default vector forgottenShrine must choose [0], %s vs %s" %
+			[remove_score, gold_score])
+	var empty: Dictionary = Sim.simulate(content, "duskblade", 1000, 0)
+	var full: Dictionary = Sim.simulate(content, "duskblade", 1000, 0, PackedStringArray(),
+		Policy.default())
+	empty.erase("policy")
+	full.erase("policy")
+	if Sim.outcome_digest(empty) != Sim.outcome_digest(full):
+		fails.append("balance policy: default() run must match empty-override run")
 	Pilot.apply_policy({})

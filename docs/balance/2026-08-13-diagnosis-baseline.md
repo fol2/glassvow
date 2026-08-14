@@ -118,7 +118,7 @@ table.
 | `addCard id` | `card_score(id)` | existing |
 | `addRelic id` | `relic_score(id)`; `random` uses pool × 0.5 / 0.35 / 0.15 | existing `_random_relic` weights |
 | `potion` | `mean(shop.potionPrice) * SHOP_MIN_RATIO` = 3.3 | (48 + 62) / 2 × 0.06 |
-| `pickRemove` | `8.5 - card_score(worst)` | shop-remove numerator at `tools/balance_pilot.gd:404` (in `choose_shop`); worst card via `Pilot.worst_card` |
+| `pickRemove` | `8.5 - card_score(worst)` | shop-remove numerator at `tools/balance_pilot.gd:450` (in `choose_shop`); worst card via `Pilot.worst_card` |
 | `pickCard n` | E[max of n] from `card_pool` weighted common×2, uncommon×2, rare×1 | no RNG; read the pools |
 | `pickUpgrade` | best `card_score(up) − card_score(base)` in deck | existing rest-site upgrade delta |
 | `pickDuplicate` | `card_score(best_card)` | same `best_card` as the duplicate fix |
