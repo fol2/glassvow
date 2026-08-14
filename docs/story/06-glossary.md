@@ -26,10 +26,11 @@
 | 隊伍 | the Queue | 歷代行者總稱,第二主角(複數) | placeholder |
 | 臍帶 | the cord | 爐火與行者之間的連結;run 視角所經(00 §3.7) | placeholder |
 | 鏡面空間 | mirror-space | 門後之地的地理:盡頭即爐邊另一面(00 §2.4) | placeholder(敘述用,非對白詞) |
+| 【城】 | (tbd) | Act IV 盡頭=守夜之爐的真貌;入城=歸家(00 §8.1,#259 Q3) | placeholder |
 | 行過 | passed | 勝仗對 Sovereign 的動詞:打退「不肯」,不殺那個人(00 §2.1) | placeholder |
 | 尖塔 / Spire | — | 舊垂直語彙 | **banned** [SETTLED] |
 | 爬 / climb / ascend(敘事用) | — | 垂直朝聖語彙 | **banned**,逐句清洗見 ledger |
-| 上面嗰樣嘢 / the thing above | — | 舊指涉;§8.1 已解——門後沒有嗰樣嘢,只有城;該詞只作 legend-drift 出現 | **banned** [#258 R1 Q4A] |
+| 上面嗰樣嘢 / the thing above | — | 舊指涉;§8.1 已解——門後沒有嗰樣嘢,只有【城】;該詞只作 legend-drift 出現 | **banned** [#258 R1 Q4A] |
 
 ## 正字與語域(繼承 #177,對文案 binding)
 
