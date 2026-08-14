@@ -87,6 +87,71 @@ lives under `~/.appstoreconnect/private_keys/`; its key + issuer IDs are in
 for Octomiser's TestFlight uploads — IDs deliberately not reproduced here:
 public repo). The same key later serves upload/TestFlight automation.
 
+## iOS build on a tethered device — the measurement path, not the store path
+
+Performance tickets need a `dev_tools` build running on real hardware (#233
+measures the map scene on iPad 8). That is a **different route** from the store
+recipe above and the two must not be confused: `scripts/ios_export_options.plist`
+declares `method = app-store-connect`, which produces an artifact that cannot be
+installed on a tethered device. It is not needed here at all — Godot's own
+`--export-debug` writes a `glassvow/export_options.plist` next to the project
+with `method = development` and the team already filled in.
+
+Verified end to end on this machine, 2026-08-14, against an iPhone 16 Pro Max:
+
+```bash
+mkdir -p build/ios-dev                       # Godot will not create it
+godot --headless --export-debug "iOS Dev Review" build/ios-dev/glassvow.ipa
+xcodebuild -project build/ios-dev/glassvow.xcodeproj -scheme glassvow \
+  -configuration Debug -destination 'id=<devicectl identifier>' \
+  -allowProvisioningUpdates -derivedDataPath build/ios-dev/dd build
+xcrun devicectl device install app --device <devicectl identifier> \
+  build/ios-dev/dd/Build/Products/Debug-iphoneos/glassvow.app
+```
+
+`xcrun devicectl list devices` gives the identifier. Signing needs no new
+profile: automatic signing picked `Apple Development: James TO` under the
+wildcard `iOS Team Provisioning Profile: *`, and **BUILD SUCCEEDED** without a
+portal visit.
+
+Three things that will stop you:
+
+- **The preset is iPad-only.** `iOS Dev Review` sets
+  `application/targeted_device_family=2`, so the build refuses to install on an
+  iPhone. Append `TARGETED_DEVICE_FAMILY="1,2"` to the `xcodebuild` line to
+  rehearse on a phone — an override at build time, so `export_presets.cfg` stays
+  untouched and the iPad remains the only *shipped* target.
+- **The device must be tethered and unlocked.** A Wi-Fi-paired device reports
+  `available (paired)` from `devicectl list devices` while
+  `tunnelState: disconnected` and `tunnelIPAddress: nil`; installing then fails
+  with `com.apple.dt.CoreDeviceError error 4`. Check `tunnelState` before
+  blaming the build.
+- **`IPHONEOS_DEPLOYMENT_TARGET` is 15.0, which is below the renderer's floor.**
+  `project.godot` selects the Mobile renderer, whose documented minimum is
+  iPadOS 16 + Metal 3 (see the mobile performance-floor research note). The app
+  therefore *installs* on an OS where the renderer is not supported, and it will
+  produce numbers that look valid. Read the OS version off the device before
+  trusting any measurement taken on it.
+
+Benches launch through `main.gd` user-arg routes (`--map-bench`, `--perf-out=`),
+never `-s`: measured 2026-08-14 on iPad 8, the iOS release template silently
+ignores `-s` both as a `devicectl` launch argument and via the Info.plist
+`godot_cmdline` array — the app boots `main.tscn` either way — while generic
+options from the same array (`--log-file`, `--verbose`) are honoured. The
+working recipe: set `godot_cmdline` to
+`["--log-file","user://bench.log","--","--map-bench"]` in the generated
+project's Info.plist (plutil, then rebuild — the exporter regenerates the plist
+on every export), and pull the log with
+`xcrun devicectl device copy from … --domain-type appDataContainer
+--domain-identifier io.fol2.glassvow --source Documents/bench.log`, since
+`print()` output never reaches `devicectl --console` (also measured; `user://`
+maps to `Documents/`).
+
+Use `--export-debug` only to rehearse the plumbing. Timings for a ticket must
+come from `--export-release`: the debug engine slice is a different binary, and
+`tools/bench_map_scene.gd` stamps a DEBUG BUILD warning across its own output to
+stop a rehearsal run being pasted in as evidence.
+
 ## Store accounts
 
 Apple Developer Program (US$99/yr) and Play Console (US$25 one-time) are
