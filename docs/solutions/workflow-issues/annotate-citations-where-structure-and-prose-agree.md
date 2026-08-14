@@ -79,15 +79,16 @@ plausible unrelated code — and both a human reader and the next audit would th
 trust them. The docs would end up **more** misleading once annotated than they
 were bare.
 
-The clearest instance is verifiable in the tree today. `docs/actor-animation-checklist.md`
+The clearest instance was measured live at the audit commit. `docs/actor-animation-checklist.md`
 carried `enemy_view.gd:2148+` in a sentence about the ward shell. Line 2148 is
 genuinely inside `_process`, which is declared at
 `presentation/combat/enemy_view.gd` (`_process`). The function the sentence is about,
 `set_ward_shell`, is declared at `presentation/combat/enemy_view.gd` (`set_ward_shell`) — 165
 lines away. A structural annotation would have written `(in _process)`, the
 checker would have passed it, and the citation would have been certified while
-pointing at the idle loop. It now reads `enemy_view.gd:2313-2350`
-(`set_ward_shell`) at `docs/actor-animation-checklist.md:338`.
+pointing at the idle loop. The repaired citation is the `set_ward_shell` line
+in `docs/actor-animation-checklist.md` — its numeric range has kept sliding
+with the file since; the symbol half is what keeps it valid.
 
 This is the same evidence-over-assumption family the project already paid for
 once on the rendering side (auto memory [claude]: "Matching constants prove
@@ -118,12 +119,12 @@ where they agree.**
 
 Write the annotation only where both gates agree. **Where they name different
 symbols, write the prose one.** `enemy_view.gd:496-526` really did open on
-`NAME_BOSS` (`presentation/combat/enemy_view.gd:496`), but the sentence was
-about `IDLE_PROFILES`, declared twenty-one lines further down at
-`presentation/combat/enemy_view.gd:517`. The annotation a reader trusts is the
+`NAME_BOSS` (`presentation/combat/enemy_view.gd` (`NAME_BOSS`)), but the sentence was
+about `IDLE_PROFILES`, declared twenty-one lines further down
+(`presentation/combat/enemy_view.gd` (`IDLE_PROFILES`)). The annotation a reader trusts is the
 one the sentence meant, so the citation was re-anchored rather than annotated:
-`docs/actor-animation-checklist.md:85` now reads `enemy_view.gd:517-537`
-(`IDLE_PROFILES`).
+the checklist's citation carries the `IDLE_PROFILES` annotation (at the audit
+commit it read `enemy_view.gd:517-537`; the range slides, the symbol holds).
 
 **Scope the prose window to the paragraph, not the line.** A one-line window
 reads legitimate citations as drift, because prose habitually names the symbol at
@@ -138,26 +139,31 @@ account it corrupted 4 of 55 edits. Three of the four failures are shapes you ca
 still find in the tree and should special-case by hand:
 
 - an anchor inside a markdown **link label**, where naive insertion lands
-  outside the brackets and breaks the link. The fix is to move the annotation
-  *inside* the label, so the anchor and its symbol finally meet and the link
-  still resolves. `docs/solutions/design-patterns/dom-node-per-layer-in-godot.md:30`
-  now reads:
+  outside the brackets and breaks the link. The fix at the audit commit was to
+  move the annotation *inside* the label, so the anchor and its symbol finally
+  meet and the link still resolves. `docs/solutions/design-patterns/dom-node-per-layer-in-godot.md:30`
+  then read:
 
   ```markdown
   At [hud_bar.gd:131 (`FAN_FACES`)](../../../presentation/combat/hud_bar.gd) the fan is capped at 16
   ```
 
   and `FAN_FACES` is indeed declared at `presentation/combat/hud_bar.gd` (`FAN_FACES`).
+  (That site has since been rewritten to the annotation-after-link form, which
+  the checker's `ANCHOR` regex now also recognises — the hazard is retired for
+  that site, but the insertion trap remains for any applier that predates the
+  regex extension.)
 - a code span with a trailing `+` — `` `vfx_layer.gd:591+` `` — where the
   annotation lands inside the span. The symbol's span states "and following"
   more precisely than the `+` did, so the `+` goes:
-  `docs/actor-animation-checklist.md:436` now reads `vfx_layer.gd:591`
-  (`archetype_hit`), matching `presentation/combat/vfx_layer.gd:591`.
+  `docs/actor-animation-checklist.md:436` then read `vfx_layer.gd:591`
+  (`archetype_hit`) — the symbol half still matches
+  (`presentation/combat/vfx_layer.gd` (`archetype_hit`)) as the line slides.
 - an **en-dash range**, `73–79`. The regex takes a single ASCII hyphen between
   the two numbers (`tools/check_anchors.py` (`ANCHOR`)), so it does not fail loudly — it
   matches the start and *silently discards the end*. That one was rewritten to
-  ASCII and annotated: `docs/assembly-integration-plan.md:204` cites
-  `rewards.gd:75-79` (in `gen_combat_rewards`), declared at
+  ASCII and annotated: `docs/assembly-integration-plan.md` carries the
+  `gen_combat_rewards` citation, declared at
   `domain/rules/rewards.gd` (`gen_combat_rewards`). A second en-dash citation survives untouched at
   `docs/assembly-integration-plan.md:149`, and `--strict` reports it as
   `content_db.gd:45` — it *is* among the 88, but the `–62` half of it has never
@@ -237,8 +243,8 @@ say so rather than repeat it. There is no `(in set_profile)` annotation in
 `docs/` or `CONCEPTS.md` at any of the four commits; the only `set_profile`
 annotation on the branch is `` `enemy_view.gd:2857` (`set_profile`) `` in
 [Drive the lab the way the game drives it](../tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md),
-and that one is correct — `func set_profile` is at
-`presentation/combat/enemy_view.gd:2680`. The likeliest reading is that the
+and that one is correct — `func set_profile` is declared at
+`presentation/combat/enemy_view.gd` (`set_profile`). The likeliest reading is that the
 false annotation existed transiently in the working tree during the audit and
 was corrected inside `cef9c99` before it was ever committed, which would leave
 no before-and-after in git. Treat it as attested by the commit messages, not by
@@ -296,13 +302,14 @@ stale within hours.
 The honest limits:
 
 - **Leave anchors that span more than one declaration unannotated.** This is a
-  decision, not a gap. `combat_screen.gd:14-27` covers four consts — `GROUND_Y`
-  (`presentation/combat/combat_screen.gd:21`), `LEDGE_LIP` (`presentation/combat/combat_screen.gd:23`), `STAGE`
-  (`presentation/combat/combat_screen.gd:26`) and `STAGE_ART`
-  (`presentation/combat/combat_screen.gd:27`) — and has no single symbol to name. It is
-  cited twice, at `docs/actor-animation-checklist.md:547` and `docs/actor-animation-checklist.md:696`. Forcing an
+  decision, not a gap. At the audit commit, `combat_screen.gd:14-27` covered
+  four consts — `GROUND_Y`, `LEDGE_LIP`, `STAGE` and `STAGE_ART` — with no
+  single symbol to name, and was cited twice in
+  `docs/actor-animation-checklist.md`. Forcing an
   annotation would mean picking one const arbitrarily and certifying a range that
-  is mostly about the other three.
+  is mostly about the other three. (The instance has since retired itself —
+  those values moved into `assets/layout/combat-layout.json` via the
+  `LayoutBook` and the range now holds a docstring — but the shape recurs.)
 - **`--strict` is not a target to drive to zero.** 88 anchors remain uncheckable
   on this branch. Re-running the two gates over them (see Examples) shows why:
   60 have a structural answer but no backticked symbol in their paragraph to
@@ -495,6 +502,10 @@ next line did not exist as far as the anchor was concerned. It was counted among
 the 226 uncheckable and would have been "fixed" by a bulk pass that had nothing
 to fix. Reflowing a paragraph is enough to silently un-verify a citation here,
 which is worth knowing before anyone runs a prose formatter over `docs/`.
+(The drive-the-lab citation shown above has since been converted to the
+line-less symbol form — `presentation/combat/combat_screen.gd`
+(`start_encounter`) — which retires the wrapped-annotation hazard for that site
+permanently.)
 
 ### Outcome
 

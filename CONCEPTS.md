@@ -864,8 +864,10 @@ the state back through the same load path the game uses.
 The token a completed emberglass quest leaves in the Vigil — one per quest,
 never duplicated, never from an unknown quest.
 
-Collecting all six is what unseals the Act IV threshold; with any fewer the
-journey routes onto an ordinary act map.
+Collecting all six extends the journey to a third act and surfaces the sealed
+Act IV door on that act's final map; with fewer, the run ends after the second
+act. The map is ordinary either way — the door is an overlay on it, not a
+different graph.
 
 ---
 
@@ -963,3 +965,9 @@ discloses above its rung no matter how early chance surfaces it.
   program. That second floor is per-channel and tiny, it is a property of
   editing the shader rather than of photographing the screen, and a comparison
   that clears one says nothing about the other.
+- **"Lamplighter" had been used for two distinct figures — the run-start boon
+  giver and the Hollow Lamplighter quest character.** They are not the same:
+  the boon giver at the hearth is the Keeper of the Story Bible's canon, while
+  the Hollow Lamplighter is the five-meeting recurring character on the road.
+  Story work may rename one of them; until then the bare word needs its
+  qualifier.

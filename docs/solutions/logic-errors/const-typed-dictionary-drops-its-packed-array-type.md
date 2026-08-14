@@ -144,9 +144,17 @@ The scope, measured on `4.7.1.stable.official`:
   for field: String in order:
   ```
 
-  Fixed 2026-07-28. The `size() == 0` half of the hazard is pinned separately in
-  the same function, so a future engine release that stops dropping the packed
-  type fails the pin rather than passing silently.
+  Fixed 2026-07-28. The raw-subscript half of the hazard is pinned separately
+  in the same test file, shape-agnostically: CI measured the lie wearing a
+  different costume per platform on the same 4.7.1.stable (macOS answered
+  `size()` 0 for the two-item array, Linux answered 24), so the pin at
+  `tests/test_layout_book.gd:193-206` builds a runtime `StringName`, fetches
+  `LayoutBook.FORMS[built]` raw, and asserts the raw subscript does **not**
+  match `fields()` truth — with a comment forbidding any pin that enumerates
+  the lie's shapes. (The per-platform garbage also strengthens this doc's
+  mechanism claim: a container-layout misread predicts garbage, not a stable
+  zero.) A future engine release that stops dropping the packed type fails the
+  pin rather than passing silently.
 - **A new test that passes proves nothing either.** The same trap catches the
   guard you just wrote. Break one authored value on purpose and watch the suite
   report `FAIL` with your assertion's own message before believing it runs.

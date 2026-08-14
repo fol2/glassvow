@@ -82,20 +82,19 @@ func set_touch_min(min_px: float, draw_scale: float) -> void:
     var pad: Vector2 = ((want - base) * 0.5).max(Vector2.ZERO)
     if pad.is_equal_approx(_pad):
         return
-    if _gem != null:
-        _gem.position += pad - _pad
     _caption.offset_top = _pad.y + EMBLEM_H - 2 + (pad.y - _pad.y)
     _caption.offset_bottom = _caption.offset_top + CAPTION_H + 2
     _pad = pad
     size = base + pad * 2.0
+    _seat_art()
     queue_redraw()
 ```
 
 `_draw` then measures from `_pad + WIDTH * 0.5` instead of `WIDTH * 0.5`, which
-puts the picture back in the middle of the bigger rect. The two children that
-*do* read the rect — the gem's position, the caption's centring box — are shifted
-by the same pad. `WorldMapScreen` seats each stone by its centre, so nothing
-moves.
+puts the picture back in the middle of the bigger rect. The children that
+*do* read the rect — the caption's centring box, and the frame/glyph art
+re-centred by `_seat_art()` — are reseated against the same pad.
+`WorldMapScreen` seats each stone by its centre, so nothing moves.
 
 The minimum is authored, not hardcoded: `trail/touch` in the layout book,
 defaulting to **0** so the shapes a mouse points at are untouched, and 44 on the

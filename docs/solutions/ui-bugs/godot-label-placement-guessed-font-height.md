@@ -82,7 +82,7 @@ _count.size = Vector2(w, h)
 _count.position = Vector2(SIZE - w - NUM_RIGHT, SIZE - h - NUM_BOTTOM)
 
 # After — box from the font, position from the baseline
-var f: FontFile = numeral_font()
+var f: Font = numeral_font()  # the face now arrives via GlassStyle.face(), not a direct FontFile load
 _count.size = Vector2(w, f.get_height(NUM_SIZE))
 _count.position = Vector2(SIZE - w - NUM_RIGHT, NUM_BASELINE - f.get_ascent(NUM_SIZE))
 ```

@@ -4,7 +4,7 @@ date: 2026-07-31
 category: conventions
 module: presentation/stage
 problem_type: convention
-component: layout_book
+component: development_workflow
 severity: medium
 symptoms:
   - "Four fields in the layout book had no reader after a screen was rewritten"
@@ -73,6 +73,11 @@ authors a value into because it is there.
    vertical band between two insets; the Spire scrolls rows past a camera, so
    the vertical rhythm is a row gap. Three fields (`rowRate`, `rowMin`,
    `rowMax`) went in, two came out, and `_row_gap()` stopped being a literal.
+   (Historical example: the vertical Spire has since been replaced by the
+   horizontal Pilgrimage, and that rewrite re-applied this very rule in the
+   same motion — `rowRate`/`rowMin`/`rowMax` became `trail/stepRate`/`stepMin`/
+   `stepMax`, `_row_gap()` became `_step()`; see
+   `presentation/map/world_map_screen.gd` (`_step`).)
 3. **The concept is gone and no defect ever pointed at the field** → delete.
 
 The clause that does the work is the second half of rule 3. A field that was

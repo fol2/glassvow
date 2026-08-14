@@ -74,8 +74,8 @@ what was measured.
   shadow has exactly one contact line — and that line has to be the lowest opaque
   row, or the nearest foot is buried under the cast. Every other foot is then
   drawn *above* its own shadow, which is the whole of what "floating" looks like.
-  `duskfang`'s admitted contacts span **14.1% of a body height** in the painting
-  (`presentation/combat/enemy_view.gd:831` (`_ground_tex`)), so planting the near
+  `duskfang`'s admitted contacts span **0.141 of a box** in the painting
+  (`presentation/combat/enemy_view.gd:2266` (`CONTACT_BAND`)), so planting the near
   one necessarily left the other three hovering.
 
   Bottom profile for `duskfang`, from the same 64-wide scan the code runs (row

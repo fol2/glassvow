@@ -22,7 +22,7 @@ tags: ["canary", "engine-bug", "platform-dependent", "ci", "packed-string-array"
 `tests/test_layout_book.gd` carries a canary for a Godot 4.7.1 hazard: a
 `PackedStringArray` taken out of a `const` typed Dictionary through a
 runtime-built `StringName` key lies about itself (`has()` false, `size()` 0 on
-the machine that discovered it), which is why `LayoutBook._fields` routes
+the machine that discovered it), which is why `LayoutBook.fields()` routes
 around the subscript. The canary asserted the lie's exact shape —
 `size() == 0`. Hosted CI (Linux) had been red since 2026-07-29 while every
 local (macOS) run passed, because the same official build wears the bug

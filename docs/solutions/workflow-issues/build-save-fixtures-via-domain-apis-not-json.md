@@ -50,10 +50,15 @@ return loaded if loaded != null else VigilState.blank()   # save_service.gd:58
 
 So a malformed fixture does not error; it loads as `VigilState.blank()`
 (`vigil_state.gd:35-39` — zero deeds, all six quests dormant, **empty
-shards**). Downstream, the run-start gate at `application/main.gd:760-763`
-reads `_vigil.shards.size() >= 6` to pick `WorldMap.act4_entrance()` over the
-normal benchmark map. Empty shards means the drive lands on a normal act map,
-and the failure presents as a routing bug in the map code — three layers away
+shards**). Downstream — as re-anchored after the #217 redesign — the vigil's
+shards are copied into the run profile by `_new_run`
+(`application/main.gd:957` (in `_new_run`)), `RunState.final_act()`
+(`domain/state/run_state.gd` (`final_act`)) extends the journey to a third act
+only with six shards, and the Act IV threshold is a sealed-door overlay on the
+ordinary final-act map (`presentation/map/world_map_screen.gd:377` (in
+`_sync_sealed_door`)). Empty shards means the drive silently shortens the run
+to two acts and never shows the sealed door — the failure presents as a
+routing bug in the map code, three layers away
 from the actual cause, a rejected fixture.
 
 ## Guidance
@@ -64,6 +69,11 @@ driving any UI on top of it.
 
 ```gdscript
 # Throwaway plant-and-verify script — the pattern, not a committed tool.
+# (A committed tool now embodies the same principle for dev scenarios:
+# application/scenario_kernel.gd builds checkpoints from clean domain state
+# and validates them on the real save encode/decode path. The throwaway
+# script remains the pattern for ad-hoc vigil fixtures the kernel does not
+# cover.)
 # Save as e.g. tools/plant_act4_vigil.gd and run headless; delete after use.
 extends SceneTree
 
@@ -139,8 +149,11 @@ act map. Time was spent reading `WorldMap.act4_entrance()` and the routing in
 **After.** The plant-and-verify script above: `VigilState.blank()`, mark the
 six quests complete and append their shards, `SaveService.store_vigil()`, then
 `SaveService.load_vigil()` and assert `shards.size() == 6` before launching the
-UI. The gate at `main.gd:760-761` selected `WorldMap.act4_entrance()` on the
-first drive, and the threshold screen rendered as intended.
+UI. The then-current gate (as of PR #55, pre-#217) selected
+`WorldMap.act4_entrance()` on the first drive, and the threshold screen
+rendered as intended. (Today the equivalent proof is the sealed door
+appearing on the final-act map; `act4_entrance` survives only as the legacy
+route for old saves.)
 
 ## Related
 

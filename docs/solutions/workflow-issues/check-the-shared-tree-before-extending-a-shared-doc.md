@@ -26,7 +26,8 @@ tags:
 ## Context
 
 This repo is worked by several lanes at once, and `CONCEPTS.md`, `AGENTS.md`
-and `docs/` are the files every lane wants to append to. `docs/session-ownership.md:69-70`
+and `docs/` are the files every lane wants to append to. `docs/session-ownership.md`
+(the shared-files bullet under Organiser-owned files)
 already names the hazard in one line: those files are "append-only in practice.
 Two lanes appending in the same minute will conflict."
 
@@ -42,7 +43,7 @@ On 2026-07-27 a documentation branch sat at `ebe2ad2` from roughly 09:00. At
 as an anchor at all. The citations documents make about each other are the least
 checked in the corpus." At 13:14 this session's own session-history search
 surfaced the same gap, independently, and it was verified from scratch against
-`tools/check_anchors.py:48`. Seven minutes apart, two lanes, one finding, two
+`tools/check_anchors.py` (`CODE_SUFFIXES`). Seven minutes apart, two lanes, one finding, two
 lots of work.
 
 The second half was the near-miss. The branch was about to extend the
