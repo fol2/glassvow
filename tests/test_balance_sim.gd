@@ -11,6 +11,7 @@ static func run(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full(false)
 	_check_incoming(content, fails)
 	_check_valuation(content, fails)
+	_check_sampler(content, fails)
 	var first: Dictionary = Sim.simulate(content, "duskblade", 1000, 0)
 	var second: Dictionary = Sim.simulate(content, "duskblade", 1000, 0)
 	var digest: String = Sim.outcome_digest(first)
@@ -18,6 +19,24 @@ static func run(fails: Array[String]) -> void:
 		fails.append("balance sim: seed 1000 is not deterministic")
 	if digest != EXPECTED:
 		fails.append("balance sim: seed 1000 outcome digest expected %s got %s" % [EXPECTED, digest])
+	var random_first: Dictionary = Sim.simulate(content, "duskblade", 1000, 0,
+		PackedStringArray(), {}, true, true)
+	var random_second: Dictionary = Sim.simulate(content, "duskblade", 1000, 0,
+		PackedStringArray(), {}, true, true)
+	if Sim.outcome_digest(random_first) != Sim.outcome_digest(random_second):
+		fails.append("balance sim: seeded random-build/random-play arm is not deterministic")
+
+
+static func _check_sampler(content: ContentDB, fails: Array[String]) -> void:
+	var all: Array[Dictionary] = Policy.sample_range(215, 0, 3)
+	var tail: Array[Dictionary] = Policy.sample_range(215, 2, 1)
+	if all[2] != tail[0]:
+		fails.append("balance policy: sampled policy must be shard-independent")
+	var sampled: Dictionary = all[0]
+	var decline: float = float(str(sampled["cardDecline"]))
+	if decline < 0.0 or decline > 40.0 \
+			or int(float(str(sampled["removalMinCopies"]))) not in [1, 2, 3]:
+		fails.append("balance policy: sampled thresholds outside documented ranges")
 
 
 static func _check_incoming(content: ContentDB, fails: Array[String]) -> void:

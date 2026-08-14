@@ -20,6 +20,11 @@ static var card_decline_threshold: float = CARD_DECLINE_DEFAULT
 static var removal_appetite: float = REMOVAL_APPETITE_DEFAULT
 static var removal_min_copies: int = REMOVAL_MIN_COPIES_DEFAULT
 static var shop_min_ratio: float = SHOP_MIN_RATIO
+static var random_build: bool = false
+static var random_play: bool = false
+static func set_modes(build: bool, play: bool) -> void:
+	random_build = build
+	random_play = play
 static func apply_policy(policy: Dictionary) -> void:
 	vector = Policy.resolve(policy)
 	card_decline_threshold = float(str(vector["cardDecline"]))
@@ -57,6 +62,9 @@ static func set_ban(ids: PackedStringArray) -> void:
 static func is_banned(id: String) -> bool:
 	return banned.has(id)
 static func choose_node(map: WorldMap, run: RunState) -> int:
+	if random_build:
+		var reachable: Array[int] = map.reachable()
+		return reachable[run.rng.pick_index(reachable.size())]
 	var best: int = map.reachable()[0]
 	var best_score: int = -1
 	var low: bool = run.player.hp * 100 <= run.player.max_hp * _wi("routeLowHpPct")
@@ -100,6 +108,19 @@ static func _play_cards(game: GlassvowGame) -> void:
 		if game.last_ret != true or game.cb.over:
 			return
 static func _pick_play(game: GlassvowGame) -> Dictionary:
+	if random_play:
+		var legal: Array[Dictionary] = []
+		for card: CardInst in game.cb.hand:
+			var d: Dictionary = game.rules.card_data(card)
+			var targets: Array[Variant] = [null]
+			if str(d.get("target", "")) == "enemy":
+				targets.clear()
+				for enemy: EnemyCombatant in game.cb.living_enemies():
+					targets.append(enemy.idx)
+			for target: Variant in targets:
+				if game.rules.can_play(game.run, game.cb, card, target):
+					legal.append({"uid": card.uid, "target": target})
+		return {} if legal.is_empty() else legal[game.run.rng.pick_index(legal.size())]
 	var incoming: int = _incoming(game)
 	var unblocked: int = incoming - game.cb.player.block
 	var lethal: bool = unblocked >= game.cb.player.hp
@@ -345,7 +366,13 @@ static func _has_effect(d: Dictionary, kind: String, id: String) -> bool:
 		if str(fx.get("kind", "")) == kind and str(fx.get("id", "")) == id:
 			return true
 	return false
-static func choose_card(ids: Array, content: ContentDB, aspect: int) -> String:
+static func choose_card(ids: Array, content: ContentDB, aspect: int, rng: Rng = null) -> String:
+	if random_build and rng != null:
+		var legal: Array[String] = []
+		for id_v: Variant in ids:
+			if not is_banned(str(id_v)):
+				legal.append(str(id_v))
+		return "" if legal.is_empty() else legal[rng.pick_index(legal.size())]
 	var best: String = ""
 	var score: float = -INF
 	for id_v: Variant in ids:
@@ -358,7 +385,13 @@ static func choose_card(ids: Array, content: ContentDB, aspect: int) -> String:
 			best = id
 			score = candidate
 	return best
-static func choose_relic(ids: Array, content: ContentDB, aspect: int = 0) -> String:
+static func choose_relic(ids: Array, content: ContentDB, aspect: int = 0, rng: Rng = null) -> String:
+	if random_build and rng != null:
+		var legal: Array[String] = []
+		for id_v: Variant in ids:
+			if not is_banned(str(id_v)):
+				legal.append(str(id_v))
+		return "" if legal.is_empty() else legal[rng.pick_index(legal.size())]
 	var best: String = ""
 	var score: int = -1
 	for id_v: Variant in ids:
@@ -403,6 +436,8 @@ static func relic_score(id: String, content: ContentDB, aspect: int) -> float:
 		score += _wf("relicAshBonus")
 	return score
 static func choose_shop(stock: Dictionary, run: RunState, content: ContentDB) -> Array[Dictionary]:
+	if random_build:
+		return _random_shop(stock, run)
 	var gold: int = run.player.gold
 	var potion_free: int = 0
 	for slot: String in run.player.potions:
@@ -462,4 +497,42 @@ static func choose_shop(stock: Dictionary, run: RunState, content: ContentDB) ->
 			taken[str(best["key"])] = true
 			if str(best["category"]) == "potions":
 				potion_free -= 1
+	return bought
+
+
+static func _random_shop(stock: Dictionary, run: RunState) -> Array[Dictionary]:
+	var gold: int = run.player.gold
+	var potion_free: int = run.player.potions.count("")
+	var taken: Dictionary = {}
+	var removed: bool = false
+	var bought: Array[Dictionary] = []
+	var remove_cost: int = int(float(str(stock.get("removeCost", 75))))
+	for _guard: int in range(8):
+		var options: Array[Dictionary] = []
+		for category: String in ["relics", "cards", "potions"]:
+			for row_v: Variant in stock.get(category, []):
+				var row: Dictionary = row_v
+				var key: String = "%s:%s" % [category, row["id"]]
+				if not taken.has(key) and not is_banned(str(row["id"])) \
+						and int(float(str(row["price"]))) <= gold \
+						and (category != "potions" or potion_free > 0):
+					options.append({"category": category, "id": str(row["id"]),
+						"price": row["price"], "key": key})
+		if not removed and remove_cost <= gold and not run.player.deck.is_empty():
+			options.append({"category": "remove", "price": remove_cost})
+		# One equally weighted stop option prevents random build from always emptying the purse.
+		var pick: int = run.rng.pick_index(options.size() + 1)
+		if pick == options.size():
+			break
+		var chosen: Dictionary = options[pick]
+		if str(chosen["category"]) == "remove":
+			var card: CardInst = run.player.deck[run.rng.pick_index(run.player.deck.size())]
+			chosen.merge({"id": String(card.id), "uid": card.uid})
+			removed = true
+		else:
+			taken[str(chosen["key"])] = true
+			if str(chosen["category"]) == "potions":
+				potion_free -= 1
+		bought.append(chosen)
+		gold -= int(float(str(chosen["price"])))
 	return bought
