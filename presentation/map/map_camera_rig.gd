@@ -5,8 +5,9 @@ extends Node3D
 ## Pitch, height and default pose are the #255 proxy's measured numbers
 ## (`tools/map_scene_proxy.gd`), which already sit inside #207's 50–60° band.
 ## Zoom is a stop index, not a float scale: the same contract as shader
-## `tex_stop` (`map_ground.gdshader`). Slice 2 binds the two indices together;
-## this file only owns the camera size. Pan is world XZ; Y and tilt never move.
+## `tex_stop` (`map_ground.gdshader`). `zoom_stop_changed` carries that int so
+## MapScene can push it into both materials. This file only owns camera size.
+## Pan is world XZ; Y and tilt never move.
 
 const TILT_DEGREES: float = -55.0
 const CAM_HEIGHT: float = 18.0
@@ -17,6 +18,8 @@ const DEFAULT_STOP: int = 2
 ## footprint. Rect is (min_x, min_z, size_x, size_z).
 const DEFAULT_PAN_BOUNDS: Rect2 = Rect2(-24.0, 2.0, 48.0, 28.0)
 const CAM_FAR: float = 80.0
+
+signal zoom_stop_changed(index: int)
 
 var zoom_stop: int = DEFAULT_STOP
 var pan_bounds: Rect2 = DEFAULT_PAN_BOUNDS
@@ -48,6 +51,7 @@ func camera_xz() -> Vector2:
 func set_zoom_stop(index: int) -> void:
 	zoom_stop = clampi(index, 0, ZOOM_STOPS.size() - 1)
 	_camera.size = ZOOM_STOPS[zoom_stop]
+	zoom_stop_changed.emit(zoom_stop)
 
 
 func nudge_zoom(steps: int) -> void:
