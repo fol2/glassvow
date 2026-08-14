@@ -127,3 +127,120 @@ The following is copied verbatim from #213 §8.
 2. **Combo-shaped lines are unsearched** until C fires — cross-turn holds, target selection, Art timing.
 3. Anything outside the pilot's grammar even after Tier 1 — deliberate losing/farming, multi-turn intent reading beyond the one-turn forecast (`_incoming`).
 4. **Nothing about where human players sit.** James settled Q4: **no numeric human anchor.** Humans report "easy / fun / hard" and nothing more precise unless a purpose-built scientific test is made — which is a separate ticket, not this one. So the CEM ladder's rungs measure *distance from the optimum inside the grammar*, never *player skill*, and no rung may be labelled "human". The gen-0 → ceiling gap is reported as skill headroom precisely because it needs no human anchor to be meaningful.
+
+## Layer 2 — CEM islands — 2026-08-14
+Issue: [fol2/glassvow#216](https://github.com/fol2/glassvow/issues/216). 24 islands (2 aspects × vows {0, 5} × 6), population 60, elite 15, up to 20 generations, 40 common-random-number training seeds per generation (`4200 + g×40 … +39`; never ≥5000). Published ceilings are holdout seeds **5000–5199** (200 runs). Godot `4.7.1-stable (official)`, content SHA-256 `633408231840d4ba47e0680d1969982cdf1ded1a61213a51bfd2bdab00f35155` (same as layer 1). CEM Gaussians are Box–Muller over `Rng(216 + island ordinal)`; no engine `randf`/`randi`.
+Wall clock **15,067 s (4 h 11 min 7 s)** on ten Godot processes, all 24 islands exit 0. Per-run cost under this contention was ~150 ms (layer 1 on the same host was ~125 ms/run, against the ticket's 25–35 ms). Manifests name worktree base `30669b4`; replay also needs this #216 driver commit.
+### Seeding (orchestrator, from layer-1 raw)
+The ticket asked for one island per viable cell. Layer 1 found 0–2 viable cells per grid, so the orchestrator seeded **the top-6 cells by win rate with ≥20 policies**. Representative `policyIndex` = highest in-cell per-policy win rate, ties to lower index. Seed vector = `BalancePolicy.sample_range(215, policyIndex, 1)[0]`. Table copied from `/private/tmp/glassvow-216-layer2/island-seeds.json`.
+
+| Grid | Island | Cell | Layer-1 cell rate | policyIndex | in-cell rep rate (n) |
+|---|---:|---|---:|---:|---|
+| Dusk V0 | 0 | shatter:fat | 83.85% | 18 | 1.000 (18) |
+| Dusk V0 | 1 | attrition:fat | 70.11% | 61 | 1.000 (10) |
+| Dusk V0 | 2 | smolder:fat | 68.86% | 135 | 0.938 (16) |
+| Dusk V0 | 3 | shatter:mid | 68.49% | 26 | 1.000 (10) |
+| Dusk V0 | 4 | shatter:thin | 47.85% | 703 | 0.968 (31) |
+| Dusk V0 | 5 | attrition:mid | 28.94% | 797 | 1.000 (14) |
+| Dusk V5 | 6 | shatter:fat | 73.05% | 80 | 1.000 (19) |
+| Dusk V5 | 7 | attrition:fat | 48.00% | 18 | 1.000 (5) |
+| Dusk V5 | 8 | smolder:fat | 46.87% | 1800 | 0.600 (10) |
+| Dusk V5 | 9 | shatter:mid | 39.89% | 846 | 1.000 (14) |
+| Dusk V5 | 10 | shatter:thin | 9.77% | 1633 | 0.684 (19) |
+| Dusk V5 | 11 | attrition:mid | 6.45% | 1611 | 0.000 (10) |
+| Ash V0 | 12 | shatter:fat | 86.32% | 2 | 1.000 (13) |
+| Ash V0 | 13 | smolder:fat | 78.91% | 64 | 1.000 (14) |
+| Ash V0 | 14 | attrition:fat | 74.55% | 789 | 1.000 (12) |
+| Ash V0 | 15 | shatter:mid | 67.46% | 9 | 1.000 (17) |
+| Ash V0 | 16 | shatter:thin | 47.52% | 506 | 1.000 (24) |
+| Ash V0 | 17 | smolder:mid | 45.51% | 78 | 1.000 (11) |
+| Ash V5 | 18 | shatter:fat | 75.16% | 0 | 1.000 (12) |
+| Ash V5 | 19 | smolder:fat | 65.75% | 926 | 1.000 (11) |
+| Ash V5 | 20 | attrition:fat | 54.92% | 254 | 1.000 (5) |
+| Ash V5 | 21 | shatter:mid | 35.39% | 285 | 1.000 (10) |
+| Ash V5 | 22 | smolder:mid | 17.22% | 846 | 1.000 (12) |
+| Ash V5 | 23 | shatter:thin | 10.95% | 1964 | 0.846 (13) |
+
+Islands are unconstrained after seeding. End cell = majority cell over the 200 holdout rows, using layer 1's frozen deck cuts (thin ≤25, mid ≤35) and per-aspect shatters/smolder medians. Tie-break is `Counter.most_common` (higher count; ties keep the first-seen key — none tied here).
+### Drift map, holdout ceilings, fitness curves
+Holdout is wins/200 on seeds 5000–5199. `bestEver` is **training** fitness on that generation's 40 seeds and is shown only as the convergence curve; it is not a ceiling. Floor = layer-1 midpoint(arm 2, top cell).
+
+#### Duskblade — Vow 0 — floor 82.18%
+
+| Isl | start → end (holdout majority) | holdout | gens / stop | wall | bestEver by gen |
+|---:|---|---:|---|---:|---|
+| 0 | shatter:fat → shatter:fat (159/200) | **196/200 (98.0%)** | 15 stall | 5708 s | .85 .85 .85 .93 .98 .98 .98 .98 .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 1 | attrition:fat → attrition:mid (72) | 170/200 (85.0%) | 6 stall | 2266 s | .98 .98 .98 .98 .98 .98 |
+| 2 | smolder:fat → shatter:fat (93) | 188/200 (94.0%) | 16 stall | 7416 s | .75 .80 .83 .90 .90 .90 .93 .95 .95 .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 3 | shatter:mid → shatter:thin (162) | 193/200 (96.5%) | 7 stall | 2351 s | .95 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 4 | shatter:thin → shatter:thin (140) | 181/200 (90.5%) | 6 stall | 1992 s | 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 5 | attrition:mid → shatter:fat (123) | 183/200 (91.5%) | 10 stall | 4533 s | .90 .90 .98 .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+
+Stayed in start cell with holdout ≥ floor: islands 0 and 4 (2). Close to best ceiling (98.0%) within 15 pp: both. **C3 FAIL.** End-cell ceilings: shatter:fat 98.0%, shatter:thin 96.5%, attrition:mid 85.0%. Best−second = 1.5 pp. **C4 PASS.**
+
+#### Duskblade — Vow 5 — floor 55.27%
+
+| Isl | start → end | holdout | gens / stop | wall | bestEver by gen |
+|---:|---|---:|---|---:|---|
+| 6 | shatter:fat → shatter:fat (167) | 168/200 (84.0%) | 20 maxGen | 8463 s | .78 .80 .83 .90 .93 .93 .93 .95 .95 .95 .95 .95 .98 .98 .98 .98 .98 1.0 1.0 1.0 |
+| 7 | attrition:fat → shatter:fat (128) | 124/200 (62.0%) | 16 stall | 5008 s | .48 .48 .58 .60 .60 .60 .60 .60 .70 .70 .73 .73 .73 .73 .73 .73 |
+| 8 | smolder:fat → shatter:fat (153) | 166/200 (83.0%) | 18 stall | 7614 s | .58 .58 .80 .83 .83 .83 .83 .88 .93 .93 .93 .95 .98 .98 .98 .98 .98 .98 |
+| 9 | shatter:mid → shatter:mid (86) | 132/200 (66.0%) | 7 stall | 2403 s | .90 .93 .93 .93 .93 .93 .93 |
+| 10 | shatter:thin → shatter:thin (106) | 126/200 (63.0%) | 17 stall | 5570 s | .60 .65 .65 .65 .73 .73 .73 .75 .75 .75 .75 .83 .83 .83 .83 .83 .83 |
+| 11 | attrition:mid → shatter:fat (176) | **182/200 (91.0%)** | 20 maxGen | 10362 s | .48 .63 .63 .68 .73 .73 .73 .78 .85 .88 .88 .95 .95 .95 .95 .95 .98 .98 .98 .98 |
+
+Stayed ≥ floor: 6, 9, 10 (3). Close to best (91.0%) within 15 pp: island 6 only. **C3 FAIL.** End-cell ceilings: shatter:fat 91.0%, shatter:mid 66.0%, shatter:thin 63.0%. Best−second = 25.0 pp. **C4 FAIL.** Island 11 holdout **91.0% > 90%**. **Vow-5 ceiling FAIL** (fail-closed).
+
+#### Ashwarden — Vow 0 — floor 86.91%
+
+| Isl | start → end | holdout | gens / stop | wall | bestEver by gen |
+|---:|---|---:|---|---:|---|
+| 12 | shatter:fat → shatter:mid (78) | 185/200 (92.5%) | 10 stall | 3609 s | .83 .95 .95 .95 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 13 | smolder:fat → shatter:fat (157) | 191/200 (95.5%) | 12 stall | 4670 s | .85 .93 .95 .95 .98 .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 14 | attrition:fat → shatter:fat (131) | 188/200 (94.0%) | 9 stall | 3436 s | .90 .95 .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 15 | shatter:mid → shatter:mid (118) | 191/200 (95.5%) | 6 stall | 2299 s | 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 16 | shatter:thin → shatter:thin (114) | **196/200 (98.0%)** | 7 stall | 2873 s | .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 17 | smolder:mid → shatter:thin (47; next 44, 39) | 184/200 (92.0%) | 9 stall | 4300 s | .93 .98 .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+
+Stayed ≥ floor: 15 and 16 (2). Close to best (98.0%) within 15 pp: both. **C3 FAIL.** End-cell ceilings: shatter:thin 98.0%, shatter:fat 95.5%, shatter:mid 95.5%. Best−second = 2.5 pp. **C4 PASS.** Vow 0 is report-only.
+
+#### Ashwarden — Vow 5 — floor 60.08%
+
+| Isl | start → end | holdout | gens / stop | wall | bestEver by gen |
+|---:|---|---:|---|---:|---|
+| 18 | shatter:fat → shatter:fat (130) | 120/200 (60.0%) | 20 maxGen | 7256 s | .50 .53 .55 .55 .68 .68 .68 .68 .68 .70 .70 .80 .80 .80 .80 .83 .83 .88 .88 .88 |
+| 19 | smolder:fat → shatter:fat (144) | **188/200 (94.0%)** | 14 stall | 7271 s | .78 .93 .93 .98 .98 .98 .98 .98 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 20 | attrition:fat → shatter:fat (148) | 177/200 (88.5%) | 17 stall | 7470 s | .43 .63 .70 .75 .83 .85 .85 .90 .95 .95 .95 1.0 1.0 1.0 1.0 1.0 1.0 |
+| 21 | shatter:mid → shatter:mid (87) | 152/200 (76.0%) | 13 stall | 6243 s | .68 .68 .73 .88 .88 .90 .90 .98 .98 .98 .98 .98 .98 |
+| 22 | smolder:mid → shatter:mid (121) | 167/200 (83.5%) | 13 stall | 6312 s | .78 .83 .85 .93 .93 .95 .95 .98 .98 .98 .98 .98 .98 |
+| 23 | shatter:thin → shatter:thin (100) | 149/200 (74.5%) | 18 stall | 7098 s | .85 .88 .90 .90 .90 .93 .93 .95 .95 .95 .95 .95 .98 .98 .98 .98 .98 .98 |
+
+Stayed ≥ floor: 18 (60.0% kisses the floor) and 23 (2). Close to best (94.0%) within 15 pp: neither (18 is 34 pp behind; 23 is 19.5 pp behind). **C3 FAIL.** End-cell ceilings: shatter:fat 94.0%, shatter:mid 83.5%, shatter:thin 74.5%. Best−second = 10.5 pp. **C4 PASS.** Island 19 holdout **94.0% > 90%**. **Vow-5 ceiling FAIL** (fail-closed).
+### Verdicts
+| Grid | C3 | C4 | Vow-5 >90% | Skill headroom (holdout ceiling − gen-0 median) |
+|---|---|---|---|---|
+| Dusk V0 | **FAIL** (2 stayed) | **PASS** (1.5 pp) | n/a (report-only; 98.0%) | 5.50 pp (92.5% → 98.0%) |
+| Dusk V5 | **FAIL** (3 stayed, 1 close) | **FAIL** (25.0 pp) | **FAIL** (91.0%) | 32.25 pp (58.75% → 91.0%) |
+| Ash V0 | **FAIL** (2 stayed) | **PASS** (2.5 pp) | n/a (report-only; 98.0%) | 6.75 pp (91.25% → 98.0%) |
+| Ash V5 | **FAIL** (2 stayed, 0 close) | **PASS** (10.5 pp) | **FAIL** (94.0%) | 21.50 pp (72.5% → 94.0%) |
+
+Island drift is the primary signal: 13 of 24 islands left their start cell; 11 of those 13 landed in a shatter cell (9 shatter:fat, 2 shatter:mid/thin). That is the "optimisation has one destination" signature on this grammar, measured without a human anchor.
+Median generations until stop: 13 (range 6–20). Stop reasons: 21 stall, 3 maxGen (islands 6, 11, 18).
+### Replay key
+- Content SHA and Godot as in the island manifest line.
+- Seed policy: `BalancePolicy.sample_range(215, policyIndex, 1)[0]` with `policyIndex` from the seeding table.
+- CEM draws: `Rng.new(216 + island)` , island ordinal 0–23 as in the table (Dusk V0, Dusk V5, Ash V0, Ash V5 × local 0–5).
+- Converged vector: the `policy` field of the `{"t":"final"}` row in `/private/tmp/glassvow-216-layer2/island-NN.ndjson`.
+- Holdout replay: `BalanceSim.simulate(content, aspect, seed, vow, PackedStringArray(), policy)` for seed in 5000–5199.
+- Readout: `python3 tools/balance_cem_report.py /private/tmp/glassvow-216-layer2 /private/tmp/glassvow-215-slice-c/sweep/analysis.json OUT.json`.
+Driver: `tools/balance_cem.gd`. Analysis JSON: `/private/tmp/glassvow-216-layer2/analysis.json`.
+### Tier 2 stays open
+Cross-turn card holding, target selection and Art timing are not searched by this layer; they belong to a combat-lookahead escalation that is **triggered, not committed** (#213 §7 names the three triggers). This layer does not claim those lines were searched.
+### Decisions beyond the brief
+- Elite count is `min(15, popSize)` so the smoke (`popSize=6`) still refits.
+- `σ` floor 0.02 applies at elite refit, not to the initial σ.
+- Integer thresholds are Gaussian-sampled then `round` + clamp onto the layer-1 ranges.
+- C4 is computed on **end-cell** ceilings (max holdout of islands that landed there). A grid whose islands occupy only one end cell fails C4 (vacuous "exceeds every other").
+- C3's "best ceiling" is the grid's best holdout, including islands that drifted.
+- Gen-0 median uses `statistics.median` (mean of the two central values when n=6).
+- Manifest `commit` is `30669b4` because the driver was uncommitted during the sweep.

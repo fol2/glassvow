@@ -15,14 +15,14 @@ forecloses that, Steam/PC/Mac, or expansion-pack IAP.
 
 ## How the bar works
 
-- **Nine pillars, P0–P8. The bar is passed when every pillar passes** and the RC signature
+- **Ten pillars, P0–P9. The bar is passed when every pillar passes** and the RC signature
   receipt (below) is signed. There is no partial pass.
 - **Evidence tiers.** P2/P3/P4 produce **immutable evidence packets** (house style: evidence
   commit with manifest and offline verifier, bound to exact hashes). P5/P7/P8 record as
   **ticket comments** (the rubric's own sign-off protocol; a linked compliance checklist; the
   defect ledger). P0/P1 evidence is recorded directly in the RC signature receipt.
 - **Waivers.** Rubric criteria may be waived only through the rubric's recorded-waiver
-  mechanism, on the executing ticket. P1, P2, P4, and P7 are **not waivable**: a miss is not
+  mechanism, on the executing ticket. P1, P2, P4, P7, and P9 are **not waivable**: a miss is not
   argued past the gate — it returns to the map as a new wayfinder decision, per
   [#158](https://github.com/fol2/glassvow/issues/158)'s rule. P8 waivers (per-defect, by James,
   with reason) are part of that pillar's mechanism, not an escape from it.
@@ -40,7 +40,7 @@ The bar binds one exact RC commit. If the RC commit changes:
 | Diff since evidenced commit | Consequence |
 |---|---|
 | Docs-only | All evidence carries |
-| Any code, asset, or export-preset change | P1 re-runs; P2, P3, P4 re-run; P5 re-verifies only the surfaces the change touches; P7 re-checks build-config items only (SDK, Info.plist keys, signing) |
+| Any code, asset, or export-preset change | P1 re-runs; P2, P3, P4 re-run; P5 re-verifies only the surfaces the change touches; P7 re-checks build-config items only (SDK, Info.plist keys, signing); **P9 re-runs on the new content SHA** |
 | Player-facing-major change (James's judgment) | Additionally, P6 beta round repeats |
 
 "Player-facing-major" means a change that would read differently between the beta round's build
@@ -231,6 +231,33 @@ state, the policy URL, the Info.plist diff).
       records the crash-free-sessions rate; a rate below **99.0%** fails closed unless every
       contributing crash signature is itself in the ledger, fixed or waived.
 
+## P9 — Strategy landscape (two layers)
+
+The detector in [#213](https://github.com/fol2/glassvow/issues/213), measured by
+[#215](https://github.com/fol2/glassvow/issues/215) (layer 1, sampled plurality) and
+[#216](https://github.com/fol2/glassvow/issues/216) (layer 2, CEM ceilings). **Not
+optional.** #211 and #212 both change content after a landscape measured on an earlier
+SHA; a pass on pre-mythic content says nothing about the shipped game. Re-run both
+layers on the **RC content SHA** (`FileAccess.get_sha256` of `res://content/full-content.json`).
+
+- [ ] Layer 1: `tools/balance_sweep.gd` sweep + controls, readout by
+      `tools/balance_landscape.py`. C1a, C1b, C2 recorded for both aspects × vows {0, 5}
+      against the signed arm definitions in the landscape doc.
+- [ ] Layer 2: `tools/balance_cem.gd` 24 islands (population 60, 40 common-random-number
+      training seeds/generation, holdout 5000–5199), readout by
+      `tools/balance_cem_report.py`. C3, C4, and the Vow-5 90% fail-closed ceiling gate
+      recorded on **holdout** numbers only. Training-seed fitness never enters the RC
+      receipt as a ceiling.
+- [ ] The landscape doc (`docs/balance/2026-08-14-strategy-landscape.md`) carries both
+      layers, fitness curves, drift map, replay keys, and the Tier-2 boundary (cross-turn
+      holds, target selection, Art timing remain unsearched).
+- [ ] All of C1–C4 plus the Vow-5 ceiling gate **must pass**. A miss returns to the map
+      as a wayfinder decision; it is not argued past this pillar.
+
+Evidence: the landscape doc on the RC commit plus the raw NDJSON / analysis JSON bound
+to that content SHA. Layer 1 took 66 min on this host; layer 2 took **4 h 11 min** on
+ten cores at ~150 ms/run under contention (the ticket's 40–80 min assumed 25–35 ms/run).
+
 ## The RC signature receipt
 
 The bar's final act, and the only place "RC" is pronounced: a signed comment by James on the
@@ -239,7 +266,8 @@ release-gate ticket ([#108](https://github.com/fol2/glassvow/issues/108)) bindin
 - the exact product head (the RC commit),
 - the `.ipa` artifact hash,
 - each pillar's evidence address (packet commits for P2/P3/P4; comment permalinks for
-  P5/P7/P8; for P6, whatever evidence #166 prescribes),
+  P5/P7/P8; for P6, whatever evidence #166 prescribes; for P9, the landscape doc and the
+  content-SHA-bound analysis JSON),
 - P0/P1 evidence inline (gate log, CI run link),
 - and the sentence "this build is the release candidate."
 
