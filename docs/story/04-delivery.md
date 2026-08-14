@@ -39,6 +39,29 @@ before it ships.
 | Relic/card/status/potion lore | item flavor | — | ~115 entries (needs the un-surveyed icon groups: cards 60, relics 31, statuses 17, potions 7) |
 | Event scripts (library, shrine, knight, traders…) | scene dialogues | top 5 events | remainder |
 
+## Per-channel spoiler ceiling [機制 SETTLED — #258 R1 Q5;逐行值 PROPOSED]
+
+Every surface records the maximum reveal-ladder level (00 §5) it may carry.
+Canon-lint checks each line's ledger level against its channel's ceiling.
+(*When* a level unlocks in play — shard-count code gating vs discipline-only —
+is a separate decision: #258 R2.)
+
+| Surface | Ceiling | Note |
+|---|---|---|
+| Opening scene | L0 | visual-only foreshadow; zero textual confirmation |
+| Keeper hearth lines | L1 | dual-reading, never confirming |
+| Waystone interstitials | L1 | |
+| Lamplighter meetings | L1 | the「上次」ambiguity lives here |
+| Whispers | L1 | last words may unsettle, never explain |
+| Loss pool (A2/A3) | L1 | shard-0 reachable — see R2 gating decision |
+| Per-enemy fragments | L1 | |
+| Relic/card/status/potion lore | L1 | |
+| Event scripts | L1 | Silvered Mirror motif ruled L1 |
+| Dawn-ceremony prose | L2 | quest-milestone keyed |
+| Quest line rewrites | L2 | closers only; quest bodies stay L1 |
+| Sixth-shard scene | L3 | the only L3 surface |
+| Act IV five nodes + finale | L4 | |
+
 ## Drafting pipeline (how a batch ships)
 
 1. **Brief**: batch scope + the bible files it may lean on + max ladder level.
