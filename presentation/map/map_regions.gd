@@ -5,21 +5,21 @@ extends RefCounted
 ## Tuning act 1's shafts must not move act 0's ash (docs/solutions/conventions/
 ## per-recipe-shader-knobs.md: one recipe's knobs stay off the shared model).
 
-## 2D band sky/fog/weather. Length 3 until slice 6 authors Act IV's row;
-## `for_act` clamps these separately from the 4-row ramp. Hexes match the
-## shipping pack so the live `WorldMapScreen` bands do not jump this slice.
+## 2D band sky/fog/weather. Rows 0–2 keep the shipping-pack hexes so live
+## `WorldMapScreen` bands do not jump; row 3 is Act IV's dawn-arc (residual
+## umber shade, rose-gold key — same wheel as `BAND_SHADE`/`BAND_KEY`[3]).
 const FALLBACK_SKIES: Array[Color] = [
-	Color("#0c1410"), Color("#081420"), Color("#120a1e")]
+	Color("#0c1410"), Color("#081420"), Color("#120a1e"), Color("#16120c")]
 const FALLBACK_FOGS: Array[Color] = [
-	Color("#13241a"), Color("#0d2233"), Color("#1e1230")]
+	Color("#13241a"), Color("#0d2233"), Color("#1e1230"), Color("#241e14")]
 const FALLBACK_PARTICLES: Array[Color] = [
-	Color("#ffa04d"), Color("#53e8ff"), Color("#c27bff")]
+	Color("#ffa04d"), Color("#53e8ff"), Color("#c27bff"), Color("#ffc08a")]
 const FALLBACK_GLOWS: Array[Color] = [
-	Color("#66ff9e"), Color("#2fb8ff"), Color("#ff4fd8")]
+	Color("#66ff9e"), Color("#2fb8ff"), Color("#ff4fd8"), Color("#f0a878")]
 const FALLBACK_ACCENTS: Array[Color] = [
-	Color("#7ddb8f"), Color("#5fd6e8"), Color("#c99aff")]
+	Color("#7ddb8f"), Color("#5fd6e8"), Color("#c99aff"), Color("#e8b890")]
 
-const WEATHER_BY_ACT: Array[StringName] = [&"ash", &"sunken", &"storm"]
+const WEATHER_BY_ACT: Array[StringName] = [&"ash", &"sunken", &"storm", &"dawn"]
 
 ## Light arc (#207 decision 11): dusk → night → storm → dawn. Written onto
 ## ramp `band_shade` / `band_key` only — never albedo, never `surface_tex`.
@@ -117,14 +117,13 @@ var particle_count: int = 128
 static func for_act(act_i: int, _content: ContentDB = null) -> MapRegions:
 	var cfg: MapRegions = MapRegions.new()
 	var index: int = clampi(act_i, 0, BAND_SHADE.size() - 1)
-	var tone: int = clampi(index, 0, FALLBACK_SKIES.size() - 1)
 	cfg.act = index
-	cfg.weather = WEATHER_BY_ACT[tone]
-	cfg.sky = FALLBACK_SKIES[tone]
-	cfg.fog = FALLBACK_FOGS[tone]
-	cfg.particles = FALLBACK_PARTICLES[tone]
-	cfg.glow = FALLBACK_GLOWS[tone]
-	cfg.accent = FALLBACK_ACCENTS[tone]
+	cfg.weather = WEATHER_BY_ACT[index]
+	cfg.sky = FALLBACK_SKIES[index]
+	cfg.fog = FALLBACK_FOGS[index]
+	cfg.particles = FALLBACK_PARTICLES[index]
+	cfg.glow = FALLBACK_GLOWS[index]
+	cfg.accent = FALLBACK_ACCENTS[index]
 	cfg.band_shade = BAND_SHADE[index]
 	cfg.band_key = BAND_KEY[index]
 	cfg.grade_hue_far = GRADE_HUE_FAR[index]
