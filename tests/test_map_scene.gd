@@ -134,6 +134,12 @@ static func _materials(fails: Array[String]) -> void:
 				"surface_value")), MapMaterials.GROUND_VALUE),
 				"ground surface_value is linearised 0.420")
 		_sun_matches(fails, ground_mat, sun, "ground")
+		_check(fails, ground_mat.get_shader_parameter("surface_tex") is Texture2D
+				and ground_mat.get_shader_parameter("grade") is Texture2D,
+				"ground surface_tex and grade are bound, not silently null")
+		_check(fails, int(_as_float(ground_mat.get_shader_parameter("tex_stop")))
+					== rig.zoom_stop,
+				"ground tex_stop starts at the rig's zoom stop, not the shader default")
 	var prop_names: PackedStringArray = ["FlatWedges", "StackedSlabs", "DabMasses"]
 	for node_name: String in prop_names:
 		var prop_mat: ShaderMaterial = _override(scene, node_name)
