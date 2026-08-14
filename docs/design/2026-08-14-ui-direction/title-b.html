@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glassvow Title — B · Ceremonial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Alegreya:wght@400;700&family=Noto+Serif+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#f2c14e; --gold-dim:#9c7c34; --ink:#0b0e1a; --parchment:#e8dfc8;
+  --text:#d7dcea; --text-dim:#8b93ad; --danger:#ff8d8d; --glass:#8fd0ff; --ember:#ff9a4d;
+  --panel:rgba(14,18,34,0.86); --edge:rgba(242,193,78,0.28);
+  --cinzel:"Cinzel",Georgia,serif;
+  --body:"Alegreya",Georgia,serif;
+  --tc:"Noto Serif TC","Songti TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#05070e;color:var(--text);font-family:var(--body)}
+
+/* ══════════════  GAME CANVAS — exactly 1180 × 820  ══════════════ */
+.canvas{
+  position:relative;width:1180px;height:820px;overflow:hidden;
+  background:#05070e url("shots/title.png") 0 0/1180px 820px no-repeat;
+}
+
+/* Identical plate to variant A, so the A/B comparison is only about the menu furniture.
+   Blur (not just a scrim) is what destroys the old buttons; at 0.9 opacity they still ghost
+   through on a scene this dark. Top edge lands in the clean band under the logo (y 314–334). */
+.plate{
+  position:absolute;inset:0;pointer-events:none;
+  backdrop-filter:blur(28px) brightness(.55) saturate(.9);
+  -webkit-backdrop-filter:blur(28px) brightness(.55) saturate(.9);
+  background:linear-gradient(180deg,
+    rgba(4,6,14,.26) 314px, rgba(4,6,14,.56) 344px,
+    rgba(4,6,14,.64) 384px, rgba(4,6,14,.64) 648px,
+    rgba(4,6,14,.48) 706px, rgba(4,6,14,.28) 786px, rgba(4,6,14,.22) 820px);
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 20px, #000 210px, #000 970px, transparent 1160px),
+    linear-gradient(180deg, transparent 312px, #000 334px, #000 664px, rgba(0,0,0,.5) 726px, transparent 806px);
+  mask-image:
+    linear-gradient(90deg, transparent 20px, #000 210px, #000 970px, transparent 1160px),
+    linear-gradient(180deg, transparent 312px, #000 334px, #000 664px, rgba(0,0,0,.5) 726px, transparent 806px);
+  -webkit-mask-composite:source-in; mask-composite:intersect;
+}
+
+.tagline{
+  position:absolute;left:0;right:0;top:330px;height:20px;text-align:center;
+  font-family:var(--cinzel);font-weight:500;font-size:13px;letter-spacing:.34em;
+  color:rgba(215,220,234,.52);text-indent:.34em;white-space:nowrap;
+}
+
+.menu{position:absolute;left:0;right:0;top:374px;display:flex;flex-direction:column;align-items:center}
+
+/* ─── MOTIF 1 · lantern. A warm bloom rises from under the primary, as if lit from the sill. ─── */
+.lantern{
+  position:absolute;left:50%;top:404px;width:620px;height:240px;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse 46% 44% at 50% 34%,
+    rgba(255,154,77,.30) 0%, rgba(255,154,77,.13) 42%, rgba(255,154,77,.03) 66%, transparent 78%);
+  filter:blur(8px);
+}
+
+/* ─── MOTIF 2 · waystone facet. Chamfered plates, cut like a glass pane, with a lead-line edge. ───
+   Outer element paints the came (the 1px lead); inner element paints the glass.  */
+.facet{position:relative;padding:1px;display:flex}
+.facet, .facet > .glass{
+  clip-path:polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)),
+                    calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));
+}
+.facet > .glass{flex:1;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+
+/* TIER 1 · the one action */
+.primary{--c:18px;width:400px;height:76px;
+  background:linear-gradient(180deg, rgba(242,193,78,.95), rgba(242,193,78,.52) 55%, rgba(156,124,52,.62));
+  filter:drop-shadow(0 12px 26px rgba(255,154,77,.26)) drop-shadow(0 5px 16px rgba(0,0,0,.55));}
+.primary > .glass{
+  --c:17px;
+  /* opaque base under the tint, or the gold came behind bleeds through the glass */
+  background:linear-gradient(180deg, rgba(242,193,78,.20), rgba(255,154,77,.07) 55%, rgba(11,14,26,.55)), #0c1020;
+  box-shadow:inset 0 1px 0 rgba(242,193,78,.30), inset 0 -22px 30px -22px rgba(255,154,77,.58);
+  font-family:var(--cinzel);font-weight:700;font-size:27px;letter-spacing:.16em;text-indent:.16em;
+  color:var(--gold);text-shadow:0 0 18px rgba(255,154,77,.32), 0 1px 0 rgba(0,0,0,.65);}
+
+/* TIER 2 · same footprint, same cut, plainly quieter */
+.secondary{--c:15px;margin-top:12px;width:400px;height:64px;
+  background:linear-gradient(180deg, rgba(242,193,78,.32), rgba(242,193,78,.15));
+  filter:drop-shadow(0 5px 14px rgba(0,0,0,.5));}
+.secondary > .glass{
+  /* the double-stop gradient keeps the rgba panel token but makes the layer opaque —
+     a bare colour in a non-final background layer is invalid and drops the declaration */
+  --c:14px;background:linear-gradient(rgba(14,18,34,.86), rgba(14,18,34,.86)), #090c16;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+  font-family:var(--cinzel);font-weight:700;font-size:21px;letter-spacing:.16em;text-indent:.16em;
+  color:var(--text);}
+
+/* ─── MOTIF 3 · the seam. One gold hairline and one glass lozenge close the ceremony. ─── */
+.seam{margin-top:22px;width:520px;height:12px;display:flex;align-items:center;justify-content:center;gap:14px}
+.seam s{flex:1;height:1px;border:0;background:linear-gradient(90deg,transparent,rgba(242,193,78,.36))}
+.seam s+s{background:linear-gradient(90deg,rgba(242,193,78,.36),transparent)}
+.seam i{width:7px;height:7px;transform:rotate(45deg);background:rgba(242,193,78,.82);
+        box-shadow:0 0 10px rgba(255,154,77,.55)}
+
+/* TIER 3 · no containers. Quiet words, 64px tap boxes, facet punctuation between them. */
+.utils{margin-top:6px;display:flex;align-items:center;gap:0}
+.util{
+  height:64px;min-width:68px;padding:0 16px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--cinzel);font-weight:500;font-size:15px;letter-spacing:.14em;
+  color:var(--text-dim);white-space:nowrap;text-indent:.14em;
+  text-shadow:0 1px 2px rgba(0,0,0,.8);
+}
+.pip{width:3px;height:3px;transform:rotate(45deg);background:rgba(156,124,52,.85);flex:0 0 3px}
+
+.stats{
+  position:absolute;left:0;right:0;top:646px;text-align:center;
+  font-family:var(--body);font-size:15px;letter-spacing:.06em;
+  color:rgba(139,147,173,.70);
+}
+
+/* ══════════════  BELOW THE CANVAS — reference only, not part of the 1180×820 shot  ══════════════ */
+.below{width:1180px;padding:0 26px 44px}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(242,193,78,.30),transparent)}
+.cap{font-family:var(--cinzel);font-weight:500;font-size:11px;letter-spacing:.22em;
+     color:var(--gold-dim);text-transform:uppercase;padding:16px 0 12px}
+
+.strip{display:flex;align-items:center;gap:12px}
+.strip > *{flex:0 0 auto;white-space:nowrap}
+.zh-title{font-family:var(--tc);font-weight:900;font-size:24px;letter-spacing:.18em;
+          color:var(--parchment);padding-right:8px;text-indent:.18em}
+.zh-primary{--c:14px;height:58px;width:auto}
+.zh-primary > .glass{--c:13px;padding:0 24px;
+  font-family:var(--tc);font-weight:700;font-size:25px;letter-spacing:.14em;text-indent:.14em;color:var(--gold)}
+.zh-secondary{--c:13px;height:58px;width:auto}
+.zh-secondary > .glass{--c:12px;padding:0 22px;
+  font-family:var(--tc);font-weight:600;font-size:21px;letter-spacing:.12em;text-indent:.12em;color:var(--text)}
+.zh-util{height:58px;padding:0 10px;display:flex;align-items:center;
+  font-family:var(--tc);font-weight:600;font-size:17px;letter-spacing:.10em;text-indent:.10em;color:var(--text-dim)}
+.zh-meta{font-family:var(--tc);font-weight:400;font-size:14px;letter-spacing:.05em;
+         color:rgba(139,147,173,.70);padding:12px 0 4px}
+
+/* state swatches */
+.sw{display:flex;gap:12px;align-items:flex-start}
+.sw figure{width:178px;flex:0 0 178px}
+.sw figcaption{font-family:var(--cinzel);font-size:10px;letter-spacing:.16em;color:var(--gold-dim);
+               text-transform:uppercase;padding-top:9px;line-height:1.5}
+.mini{--c:14px;height:58px;width:178px}
+.mini > .glass{--c:13px;font-family:var(--cinzel);font-weight:700;font-size:15px;letter-spacing:.14em;text-indent:.14em}
+.mini.hover{background:linear-gradient(180deg,#f2c14e,rgba(242,193,78,.72) 55%,rgba(156,124,52,.8));
+  filter:drop-shadow(0 12px 28px rgba(255,154,77,.45))}
+.mini.hover > .glass{color:#ffd469;
+  background:linear-gradient(180deg, rgba(242,193,78,.30), rgba(255,154,77,.12) 55%, rgba(11,14,26,.55)), #0c1020;
+  box-shadow:inset 0 1px 0 rgba(242,193,78,.45), inset 0 -22px 28px -20px rgba(255,154,77,.80)}
+.mini.pressed{background:linear-gradient(180deg, rgba(156,124,52,.75), rgba(242,193,78,.45));
+  filter:none;transform:translateY(1px)}
+.mini.pressed > .glass{color:#d3a544;
+  background:linear-gradient(180deg, rgba(6,8,16,.86), rgba(242,193,78,.10)), #06080f;
+  box-shadow:inset 0 4px 12px rgba(0,0,0,.85), inset 0 -1px 0 rgba(242,193,78,.16)}
+.mini.util, .mini.util > .glass{clip-path:none}
+.mini.util{background:none;filter:none;height:64px;padding:0}
+.mini.util > .glass{color:var(--text-dim);background:transparent;
+  border:1px dashed rgba(139,147,173,.26);border-radius:8px;font-size:14px;font-weight:500}
+.note{font-family:var(--body);font-size:15px;line-height:1.55;color:#98a0b8;padding:14px 0 0;max-width:960px}
+.note b{color:var(--parchment);font-weight:700}
+.note i{color:#b9c0d4}
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <div class="plate"></div>
+
+  <div class="tagline">A Roguelite Deckbuilder · The Vigil Remembers</div>
+  <div class="lantern"></div>
+
+  <div class="menu">
+    <div class="facet primary"><div class="glass">Continue Climb</div></div>
+    <div class="facet secondary"><div class="glass">Begin the Climb</div></div>
+
+    <div class="seam"><s></s><i></i><s></s></div>
+
+    <div class="utils">
+      <div class="util">The Vigil</div><div class="pip"></div>
+      <div class="util">How to Play</div><div class="pip"></div>
+      <div class="util">Settings</div><div class="pip"></div>
+      <div class="util">Credits</div><div class="pip"></div>
+      <div class="util">Quit</div>
+    </div>
+  </div>
+
+  <div class="stats">0 climbs · 0 dawns · 0 slain</div>
+</div>
+
+<div class="below">
+  <div class="rule"></div>
+  <div class="cap">↑ 1180 × 820 game canvas ends at this line ·&nbsp;&nbsp; B · ceremonial — zh-Hant pairing, Noto Serif TC in the same dressings</div>
+  <div class="strip">
+    <div class="zh-title">琉璃誓言</div>
+    <div class="facet primary zh-primary"><div class="glass">繼續朝聖</div></div>
+    <div class="facet secondary zh-secondary" style="margin-top:0"><div class="glass">開始朝聖</div></div>
+    <div class="zh-util">守夜</div>
+    <div class="zh-util">玩法說明</div>
+    <div class="zh-util">設定</div>
+    <div class="zh-util">製作人員</div>
+    <div class="zh-util">離開</div>
+  </div>
+  <div class="zh-meta">Roguelite 卡牌構築 · 守夜銘記　　　0 次朝聖 · 0 次破曉 · 0 敵隕落</div>
+
+  <div class="rule"></div>
+  <div class="cap">states — not on canvas</div>
+  <div class="sw">
+    <figure><div class="facet primary mini"><div class="glass">Continue Climb</div></div><figcaption>primary · default</figcaption></figure>
+    <figure><div class="facet primary mini hover"><div class="glass">Continue Climb</div></div><figcaption>primary · hover &amp; focus</figcaption></figure>
+    <figure><div class="facet primary mini pressed"><div class="glass">Continue Climb</div></div><figcaption>primary · pressed</figcaption></figure>
+    <figure><div class="facet secondary mini" style="margin-top:0"><div class="glass" style="font-size:14px">Begin the Climb</div></div><figcaption>secondary · default</figcaption></figure>
+    <figure><div class="facet primary mini"><div class="glass" style="font-size:14px">Begin the Climb</div></div><figcaption>no saved run · gold moves down</figcaption></figure>
+    <figure><div class="facet mini util"><div class="glass">Settings</div></div><figcaption>utility · 64px tap box (dashes undrawn in game)</figcaption></figure>
+  </div>
+  <div class="note">
+    <b>B — ceremonial.</b> Same three tiers and the same tap targets as A; only the furniture changes. The plates are cut
+    as waystone facets with a lead-line edge, a lantern bloom rises from beneath the primary so the light comes from the
+    world rather than from a CSS glow, and a single gold hairline with one glass lozenge closes the actions off from the
+    utilities. Three motifs, no fourth — the wordmark is still the brightest thing on the screen.
+  </div>
+</div>
+
+</body>
+</html>
