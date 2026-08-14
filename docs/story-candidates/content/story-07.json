@@ -1,0 +1,778 @@
+{
+ "no": 7,
+ "title": {
+  "en": "The Seventh Piece of the Flame",
+  "zh": "一團火的第七份"
+ },
+ "family": {
+  "en": "Moon — a workplace where the routine is the horror, performed in plain sight, on schedule, and nobody who works there finds it strange.",
+  "zh": "《Moon》一系——恐怖就寫在日常程序裏面，公開演出，準時發生，而在那裏工作的人，沒有一個覺得出奇。"
+ },
+ "hook": {
+  "en": "Every dawn a keeper with no face presses two fingers to your breastbone, and something there catches. Then he tells you to carry it east.",
+  "zh": "每一個破曉，一位沒有臉的掌燈人把兩根手指按在你的胸骨上，那裏便燃起一點東西。然後他叫你把它帶往東方。"
+ },
+ "poster": "hero",
+ "images": [
+  {
+   "id": "hero",
+   "source": "generate",
+   "subject": "A tall arched window of leaded glass stands upright in an empty stone room that has no walls around it, six panel spaces in its frame left empty and an arched opening at its centre that is shut and dark. Beneath it a robed figure with no face reaches out and presses two fingers to the chest of a second hooded figure seen from behind. A single small amber light has just kindled under the second figure's ribs and lights the inside of the hood from within.",
+   "alt": {
+    "en": "A faceless robed keeper touches the chest of a hooded pilgrim beneath a freestanding window with six empty panel spaces.",
+    "zh": "一位無臉的袍衣掌燈人在一扇獨立豎立、留有六處空位的窗下，觸碰一名兜帽朝聖者的胸口。"
+   }
+  },
+  {
+   "id": "glassform",
+   "source": "generate",
+   "subject": "A tall sheet of dark leaded glass reflects a hooded robe standing upright with no body inside it. Inside the empty robe a single flame burns at chest height, and the cloth hangs around the flame the way a lantern casing hangs around a wick. In front of the glass a faceless robed figure extends one open hand toward the reflection's chest. The floor around them is bare stone.",
+   "alt": {
+    "en": "In dark glass, an empty robe stands upright with a single flame burning where a chest would be.",
+    "zh": "暗色玻璃之中，一件空袍筆直站立，胸口位置只有一團火在燃燒。"
+   }
+  },
+  {
+   "id": "hearthward",
+   "source": "generate",
+   "subject": "A road runs along the inner surface of an enormous stained glass window, so the ground underfoot is coloured light seen from behind. Five waypoints mark the road, and the colour drains out of the glass as the road goes on until the far end is plain black. At the end stands a cold open hearth of black stone, large as a gateway, with no fire in it and a thin ring of grey ash on its floor.",
+   "alt": {
+    "en": "A road along the inside of a stained glass window, colour draining to black, ending at a cold stone hearth the size of a gateway.",
+    "zh": "一條沿着彩玻璃內側伸展的路，顏色一路褪成純黑，盡頭是一座大如門洞的黑石冷爐。"
+   }
+  },
+  {
+   "id": "ashcustodian",
+   "source": "generate",
+   "subject": "A tall figure stands in front of a cold black hearth with its arms spread wide across the opening, blocking it. The figure is built from packed grey ash held in the shape of a robed warden, and its surface cracks and reseals as it moves. Where a face would be there is a shallow bowl of ash holding a hundred small guttering flames, each one no bigger than a coal. The floor is dark stone and there is no other light in the frame.",
+   "alt": {
+    "en": "A warden made of packed ash blocks a cold hearth, its face a shallow bowl holding a hundred guttering flames.",
+    "zh": "一尊由壓實灰燼構成的守衛橫身擋住冷爐，臉的位置是一隻淺盤，盛着一百點將熄的小火。"
+   }
+  },
+  {
+   "id": "fallen",
+   "source": "asset",
+   "path": "assets/art/meta/fallen.png",
+   "alt": {
+    "en": "A dark hall with an obsidian monolith and a single lit lantern at its foot.",
+    "zh": "一座幽暗大廳，黑曜石碑腳下亮着一盞孤燈。"
+   }
+  },
+  {
+   "id": "hollow",
+   "source": "asset",
+   "path": "assets/art/meta/hollow-lamplighter.png",
+   "alt": {
+    "en": "A gaunt bald robed figure holding an unlit lantern on a pole.",
+    "zh": "一名枯瘦光頭的袍衣人，執着一根挑竿，竿上的提燈沒有火。"
+   }
+  },
+  {
+   "id": "paleones",
+   "source": "asset",
+   "path": "assets/art/meta/emberglass-mask-paleOnes.png",
+   "alt": {
+    "en": "Three pale robed figures carrying a long blue glass shard down a black stair.",
+    "zh": "三名蒼白袍影，抬着一片修長的藍色琉璃碎片走下黑階。"
+   }
+  },
+  {
+   "id": "mirror",
+   "source": "asset",
+   "path": "assets/art/events/mirror.png",
+   "alt": {
+    "en": "A tall unbroken mirror in rubble, the reflection in it smiling.",
+    "zh": "瓦礫之中一面完好的高鏡，鏡中的影正在微笑。"
+   }
+  },
+  {
+   "id": "sovereign",
+   "source": "asset",
+   "path": "assets/art/enemies/sovereign.png",
+   "alt": {
+    "en": "A crowned figure with a sceptre, a broken halo behind the crown with a shard-shaped gap in it.",
+    "zh": "一名戴冠執杖的身影，冠後的光環已碎，缺口正是一片碎片的形狀。"
+   }
+  },
+  {
+   "id": "mural",
+   "source": "asset",
+   "path": "assets/art/meta/emberglass-mural.png",
+   "alt": {
+    "en": "A six-panel stained glass wheel with a glowing arched doorway at its hub.",
+    "zh": "一面六格彩玻璃輪窗，輪轂中央是一道發光的拱形門。"
+   }
+  },
+  {
+   "id": "ascended",
+   "source": "asset",
+   "path": "assets/art/meta/ascended.png",
+   "alt": {
+    "en": "A cathedral city standing above the clouds in a golden dawn.",
+    "zh": "一座聳立雲上的教堂之城，沐於金色的破曉。"
+   }
+  }
+ ],
+ "story": [
+  {
+   "t": "act",
+   "en": "RUN 1 — The Ashen Woods",
+   "zh": "第一次朝聖 — 灰燼樹林"
+  },
+  {
+   "t": "art",
+   "img": "hero",
+   "en": "The Vigil, before the first road. The window has six spaces in it and no glass.",
+   "zh": "守夜，第一條路之前。那扇窗有六處空位，卻沒有琉璃。"
+  },
+  {
+   "t": "prose",
+   "en": "The Vigil is one room and one window. The window has no wall to hold it; it simply stands, six spaces cut into its frame where glass ought to be, and at the hub an arch, shut, with nothing behind it but its own shadow. The keeper waits underneath. He has no face — not a mask, not a hood pulled low, simply nothing — and he does not speak until you are close enough to touch. Then he puts two fingers against your breastbone, the way you test whether a coal is still alive, and something there catches.",
+   "zh": "守夜只有一個房間、一扇窗。那扇窗沒有牆承載它；它就那樣立着，框上鑿出六處本應嵌玻璃的空位，而輪轂中央有一道拱門，緊閉，門後除了自己的影，甚麼也沒有。掌燈人在窗下等。他沒有臉——不是戴着面具，不是兜帽壓得太低，而是本該有臉的地方甚麼都沒有——他一直不出聲，直到你走到伸手可及。然後他把兩根手指按在你的胸骨上，像試一塊炭是否還活着那樣，那裏便燃起了一點東西。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The keeper",
+   "sp_zh": "掌燈人",
+   "en": "Carry it east.",
+   "zh": "把它帶往東方。"
+  },
+  {
+   "t": "screen",
+   "en": "THE LAMPLIGHTER — Take a parting gift, and choose the fire your lantern will carry.\nA Warm Hearth — Mend to full and gain 6 Max HP.",
+   "zh": "掌燈人 — 取一份臨別贈禮，並選擇提燈將攜的火。\n溫暖爐火 — 生命回復至全滿，並提高 6 點生命上限。"
+  },
+  {
+   "t": "prose",
+   "en": "Then the road. Two facts arrive before the third fight. Everything alive is glass, and glass can be chipped until it shatters. And the lantern you carry is not a light held up to see by — it is a weapon and a stomach. Drag a card onto it and the card burns; the lantern is one ember richer. Nobody says where the fire inside it came from. You do not ask; a Duskfang is already halfway across the ledge.",
+   "zh": "然後是路。還未打到第三場，兩件事就已經自己找上門。凡是活着的都是琉璃，而琉璃可以一直被琢擊，直到碎裂。至於你手上那盞提燈，它不是舉起來照路的光——它是武器，也是胃。把任何一張牌拖上去，牌就燒掉，提燈多一點餘燼。沒有人提過它裏面那團火從何而來，你亦沒有問，因為一頭暮牙已經衝到石台一半。"
+  },
+  {
+   "t": "prose",
+   "en": "Run 1 ends nine floors east, against a Waylayer with two friends you did not count. The light on the board dims first. The board follows.",
+   "zh": "第一次朝聖在東行第九層完結，敗給一名截道者，還有兩個你沒數到的同伴。棋盤上的光先暗下去，之後才輪到棋盤。"
+  },
+  {
+   "t": "art",
+   "img": "fallen",
+   "en": "One lantern kept burning for every pilgrimage that ended.",
+   "zh": "一座大廳，為每一段完結了的朝聖之路留住一盞燈。"
+  },
+  {
+   "t": "screen",
+   "en": "FALLEN — Your lantern went out on floor 9.\nSet one thing in stone — the next pilgrimage can claim it in The Ashen Woods.",
+   "zh": "隕落 — 你的提燈在第 9 層熄滅。\n將一事刻入石中——下一段朝聖之路可在灰燼樹林取回。"
+  },
+  {
+   "t": "act",
+   "en": "FIRST DAWN — The Vigil remembers",
+   "zh": "第一個破曉 — 守夜銘記"
+  },
+  {
+   "t": "prose",
+   "en": "Dawn at the Vigil is a ceremony, and short. The room is the same. The window is the same. One thing has been added: on the flagstones at the foot of the window, a single pale mote, cold as frost, where it fell. The keeper looks at it before he looks at you, and says one sentence about the pilgrimage you just lost. Not a tally — a sentence.",
+   "zh": "守夜的破曉是一場儀式，而且很短。房間一樣。窗一樣。只多了一件東西：窗腳的石板上，一粒蒼白的光塵，冷得像霜，落在哪裏就停在哪裏。掌燈人先看它，然後才看你，並且為你剛剛輸掉的那段朝聖之路，講一句話。不是統計。是一句話。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The keeper",
+   "sp_zh": "掌燈人",
+   "en": "The last one stopped among the ash birches, nine floors east, with four embers it never spent.",
+   "zh": "上一份停在灰樺之間，東行第九層，還剩四點餘燼沒有用過。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 3",
+   "sp_zh": "低語 3",
+   "en": "Six spaces wait where no window stands.",
+   "zh": "六處空位在等候，那裏不曾立過窗。"
+  },
+  {
+   "t": "prose",
+   "en": "Then he puts two fingers against your breastbone, exactly as before, and something catches. You are already reading the whisper. It will happen more than thirty times, this order, this gesture, and it will be over before you finish looking away.",
+   "zh": "然後他把兩根手指按在你的胸骨上，和上次一模一樣，那裏又燃起了一點東西。你的眼睛其實已經在讀那句低語。這件事會發生超過三十次，同樣次序，同樣動作，每次都在你把視線移開之前就完結。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 2 — The Unlit Way",
+   "zh": "第二次朝聖 — 未燃之路"
+  },
+  {
+   "t": "art",
+   "img": "hollow",
+   "en": "A gaunt keeper on the Unlit Way, carrying a lantern he does not light.",
+   "zh": "未燃之路上一名枯瘦的守燈者，執着一盞他從不點着的提燈。"
+  },
+  {
+   "t": "prose",
+   "en": "The second run opens a branch on the map: a node marked with a hollow lantern. The thing waiting there is bald, robed, thin as a wick, holding a lantern on a pole with nothing burning inside it. He does not want gold first. He wants what your lantern is about to make.",
+   "zh": "第二次朝聖在地圖上打開一條岔路：一個標着空燈的節點。等在那裏的東西光頭、披袍、瘦得像一條燈芯，手裏一根挑竿，竿上的提燈甚麼都沒有燒着。他第一次要的不是金幣。他要的是你的提燈即將造出來的東西。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your lantern is noisy. Give me the next three embers it catches.",
+   "zh": "你的提燈太吵。把它接下來收集的三點餘燼交給我。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The next three embers belong to the hollow lantern.",
+   "zh": "接下來三點餘燼，歸於空燈。"
+  },
+  {
+   "t": "prose",
+   "en": "You accept, because three is a small number when you have none. It is not a small number in the Sunken City, where a shattered Deepmaw spills two into a lantern that hands them straight on, and the Art you were saving for stays grey all fight. Run 2 ends on floor 14, one ember short of Emberveil. The price is paid, though, and paying is what he answers.",
+   "zh": "你答應了，因為當你一點餘燼都未有的時候，三點是個小數目。到了沉沒之城，它就不是小數目：一頭深喉碎裂，灑下兩點餘燼進提燈，提燈原封不動交了出去，你等着開的那道提燈術整場都灰着。第二次朝聖止於第 14 層，差一點餘燼開不出燼幕。不過代價付清了，而他回應的，正是付清這件事。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Six panes were carried away from a window no wall could hold.",
+   "zh": "六片窗片曾從一扇無牆可承的窗中被帶走。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 3–5 — Nine cold motes",
+   "zh": "第三至第五次朝聖 — 九粒寒塵"
+  },
+  {
+   "t": "art",
+   "img": "paleones",
+   "en": "Pale figures carrying a long shard down a black stair.",
+   "zh": "蒼白身影抬着一片修長的碎片走下黑階。"
+  },
+  {
+   "t": "prose",
+   "en": "By the third run the Rose Window has a Trail on it: Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour. Pale foes are ordinary foes with the colour drained out and a little more strength put in, and when they shatter they leave a mote — cold, small, slow to fall. Three of them wake the Witchlight Lens.",
+   "zh": "到第三次朝聖，玫瑰窗上出現一條旅跡：狩獵蒼白眾。從忘卻色彩的琉璃中收集九粒光塵。蒼白之敵就是普通的敵人抽走了顏色、加回一點力氣，碎裂時會留下一粒光塵——冷、小、落得很慢。收滿三粒，巫光透鏡便會醒來。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 18",
+   "sp_zh": "低語 18",
+   "en": "The Pale Ones are not hunting you. They are pointing upward.",
+   "zh": "蒼白眾並非在獵你。他們在向上指。"
+  },
+  {
+   "t": "prose",
+   "en": "You carry the motes home and the Vigil takes them. On the flagstones below the window, the motes left by your own dead runs have been collecting since the first dawn. Same size, same cold, same slow fall. Nobody remarks on this. Run 5 drowns in the flooded quarter with three hundred and forty gold and no shop left.",
+   "zh": "你把光塵帶回來，守夜收下。而窗下那片石板上，由第一個破曉開始，你自己那些死去的朝聖之路留下的光塵，一直在累積。一樣大小，一樣冰冷，一樣落得慢。守夜裏沒有人提起過這件事。第五次朝聖淹死在水浸的街區，身上三百四十金幣，前面已經沒有商人可以花。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The keeper",
+   "sp_zh": "掌燈人",
+   "en": "The last one went out under water with three hundred and forty gold it never spent, and a Ward Phial it never opened.",
+   "zh": "上一份在水下熄滅，身上三百四十金幣沒有花過，一瓶護光藥瓶沒有開過。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 6 — The first dawn",
+   "zh": "第六次朝聖 — 第一次破曉"
+  },
+  {
+   "t": "art",
+   "img": "sovereign",
+   "en": "The Eternal Sovereign, at the end of the third act. The ring behind the crown is missing a piece.",
+   "zh": "永恆君王，第三幕的盡頭。王冠背後那個圓環，缺了一塊。"
+  },
+  {
+   "t": "prose",
+   "en": "The sixth run is the one that goes right. At 【the Last Place】(placeholder name) the Eternal Sovereign takes eleven turns and most of a deck built on Smolder, and when the crown comes apart the ring behind it stays broken. It was already broken. The gap in it is shaped like a shard, and it has been there in every fight you lost to him.",
+   "zh": "第六次朝聖是走得順的那一次。在【終境】（暫名），永恆君王打了十一個回合，用掉大半副以陰燃堆出來的牌庫；王冠散開之後，冠後那個圓環仍然是破的。它本來就是破的。環上那個缺口的形狀正是一片碎片，而你之前每一次敗給他，缺口都在。"
+  },
+  {
+   "t": "screen",
+   "en": "ASCENDED\nThe Emberglass Rose Window opens.",
+   "zh": "登臨\n餘燼琉璃玫瑰窗開啟。"
+  },
+  {
+   "t": "art",
+   "img": "mural",
+   "en": "The Emberglass Rose Window: six panes, and a door at the hub.",
+   "zh": "餘燼琉璃玫瑰窗：六片窗片，輪轂中央一道門。"
+  },
+  {
+   "t": "prose",
+   "en": "The window stops being scenery. Six panes, one for each thread, all dark; at the hub, the arch, with a light behind it that is not on yet. The whispers have been saying so since before you could see the window at all.",
+   "zh": "那扇窗不再只是布景。六片窗片，一片對一條旅跡，全部黯着；輪轂中央就是那道拱門，門後有一點還未亮起的光。早在你還看不見那扇窗的時候，低語就已經在講這件事。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 17",
+   "sp_zh": "低語 17",
+   "en": "Each shard lights one pane of Emberglass.",
+   "zh": "每片碎片點亮餘燼琉璃的一扇窗片。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 21",
+   "sp_zh": "低語 21",
+   "en": "There is a sealed door above the crown.",
+   "zh": "王冠之上有一扇封印之門。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 7–19 — The long middle",
+   "zh": "第七至第十九次朝聖 — 漫長的中段"
+  },
+  {
+   "t": "prose",
+   "en": "The middle is measured in weeks. Four threads run at once and none finishes inside a single pilgrimage. The merchant keeps one cold thing beneath the counter, at a price a first-act purse has never seen.",
+   "zh": "中段是用星期計的。四條旅跡同時在跑，沒有一條可以在同一段朝聖之路裏走完。商人櫃下藏着一件冰冷之物，價錢是第一幕的錢囊從來未見過的。"
+  },
+  {
+   "t": "screen",
+   "en": "A Lantern with No Flame — Cold glass. No wick. The merchant will not say who left it.",
+   "zh": "無焰提燈 — 冰冷琉璃。沒有燈芯。商人不肯說是誰留下它。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The merchant",
+   "sp_zh": "商人",
+   "en": "Cold goods, warm price. Come back carrying a dawn's worth of gold.",
+   "zh": "貨冷，價暖。帶着足以買下一次破曉的金幣再來。"
+  },
+  {
+   "t": "prose",
+   "en": "Six hundred and fifty gold is two and a half runs of buying nothing. You do it anyway, and carry a dead lantern east, and the crowned thing at the end of the road opens like a door when you hold it up.",
+   "zh": "六百五十金幣，等於兩次半甚麼都不買的朝聖。你照樣做了，帶着一盞死掉的提燈向東；當你把它舉起來，路盡頭那個戴冠之物就像一道門那樣打開了。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 5",
+   "sp_zh": "低語 5",
+   "en": "A lantern without flame is still a key.",
+   "zh": "無焰的提燈仍是一把鑰匙。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Usurper",
+   "sp_zh": "篡位者",
+   "en": "The mask is broken. Look above.",
+   "zh": "面具已碎。往上看。"
+  },
+  {
+   "t": "art",
+   "img": "mirror",
+   "en": "The Silvered Mirror. Your reflection moves half a breath behind you.",
+   "zh": "鍍銀之鏡。鏡中的你比真身慢了半口氣。"
+  },
+  {
+   "t": "prose",
+   "en": "Your own shade appears only where you have died, so the Trail is written by your worst nights. Three duels. The thing wearing your shape gets more talkative each time it loses.",
+   "zh": "自身之影只會在你死過的地方出現，所以這條旅跡是由你最差的那幾晚寫出來的。三場決鬥。那件披着你形貌的東西，每輸一次，就講得多一句。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Your Own Shade",
+   "sp_zh": "自身之影",
+   "en": "I remember the stone. You walked away before I stopped calling.",
+   "zh": "我記得那塊石。你轉身離去時，我仍未停止呼喚。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Your Own Shade",
+   "sp_zh": "自身之影",
+   "en": "Each climber leaves a shape behind. 【The Last Place】 has learned to wear ours.",
+   "zh": "每位朝聖者都留下一道形影。【終境】已學會披上我們的模樣。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Your Own Shade",
+   "sp_zh": "自身之影",
+   "en": "We were never climbing out. We were carrying light to the lock.",
+   "zh": "我們從來不是為了逃出去而朝聖；我們一直把光送往鎖孔。"
+  },
+  {
+   "t": "prose",
+   "en": "The Hollow Lamplighter turns up about one run in five, never twice in one. The second price is a hundred and sixty gold. The third is twelve measures of your vessel, and he has a floor under it — thirty, and not one point further.",
+   "zh": "空燈掌燈人大約每五次朝聖出現一次，同一次絕不出現兩次。第二重代價是一百六十金幣。第三重是你容器的十二格容量，而他有底線——三十，一點都不再多。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "I will not hollow you below thirty. Return with a larger vessel.",
+   "zh": "我不會把你挖空至三十以下。換一副更大的容器再來。"
+  },
+  {
+   "t": "prose",
+   "en": "The fourth price costs you a run before you ever reach him. He asks for the boon.",
+   "zh": "第四重代價，在你走到他面前之前就已經吃掉你一整次朝聖。他要的是恩賜。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+   "zh": "最初的掌燈人曾贈你恩賜。我要那份贈禮，不要你的感激。"
+  },
+  {
+   "t": "prose",
+   "en": "You took A Warm Hearth that morning, mended to full, and walked out six Max HP heavier before the first fight. There is nothing left in your hands.",
+   "zh": "那朝你揀了溫暖爐火，回滿了血，還未打第一場就多帶了六點生命上限出門。你手上已經一無所有。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "You have spent the gift already. Bring me one that is still yours.",
+   "zh": "你已花掉那份贈禮。帶一份仍屬於你的來。"
+  },
+  {
+   "t": "prose",
+   "en": "So next dawn you choose a boon you can hold rather than use. Ember Flask: two phials you do not drink, through two acts, through a Leviathan fight you could have shortened by nine turns. He takes them without one word about the wait.",
+   "zh": "於是下一個破曉，你揀一份可以拿住的恩賜，而不是一份可以用的。餘燼瓶：兩瓶你都不開，捱過兩幕，捱過一場本可以少打九個回合的利維坦。他收下的時候，一句都沒有提你讓他等了多久。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The empty lantern is the token that purchases an audience with the mask.",
+   "zh": "空燈就是換取面見那副面具的信物。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
+   "zh": "最後代價：只留一記心跳在這提燈裏。其餘全歸黑暗。"
+  },
+  {
+   "t": "prose",
+   "en": "One heartbeat means one hit point for the rest of the run. The first time he asks, you are on floor 22 with a good deck, and you refuse. He has a line ready for that too.",
+   "zh": "一記心跳的意思，是這次朝聖餘下的路都只剩一點生命。他第一次開口時你在第 22 層，牌庫正順，於是你拒絕。他連這一下也早已備好了一句。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "One heartbeat is enough. Refusal is the only poverty left.",
+   "zh": "一記心跳已足夠。如今只剩拒絕才算貧乏。"
+  },
+  {
+   "t": "prose",
+   "en": "Four runs later you meet him on the last ledge before the crown, with nothing ahead but a boss you have beaten eleven times, and you pay. You win at one hit point. What he gives back is not a pane. It is an instruction.",
+   "zh": "四次朝聖之後，你在王冠之前最後一塊石台遇到他，前面只剩一個你已經打贏過十一次的首領，於是你付了。你用一點生命贏了那場。他還你的不是一片窗片，而是一句指示。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Light the panes. The door will know you.",
+   "zh": "點亮窗片。門會認得你。"
+  },
+  {
+   "t": "prose",
+   "en": "Two threads are pure endurance. The Unreadable Page wants five dawns while you carry it, and pays out one line each time. The Eighth Omen wants one dawn under a sign that is not among the seven, and until then the floors talk in broken glyphs.",
+   "zh": "有兩條旅跡純粹是捱。無法辨讀之頁要你攜着它贏五次破曉，每次還你一行字。第八凶兆要你在一個不屬於七者之列的徵象下抵達破曉，而在此之前，樓層一直用破碎的字形跟你講話。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Unreadable Page",
+   "sp_zh": "無法辨讀之頁",
+   "en": "FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
+   "zh": "第一頁——六片窗片從同一團火中切下，於第一次守夜前散落各處。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Unreadable Page",
+   "sp_zh": "無法辨讀之頁",
+   "en": "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown.",
+   "zh": "第五頁——玫瑰窗是一幅地圖，不是紀念碑。將它點亮，再望向王冠之上。"
+  },
+  {
+   "t": "screen",
+   "en": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR.",
+   "zh": "第八凶兆從來不是凶兆。它是一扇門投下的影。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 21 — The sixth shard",
+   "zh": "第二十一次朝聖 — 第六片碎片"
+  },
+  {
+   "t": "prose",
+   "en": "The sixth shard comes home on a Tuesday, from the pale thread, after nine motes and four months. You set it in the window and the last pane lights. All six burn. The wheel is complete for the first time since before the first Vigil, and the arch at the hub does not open.",
+   "zh": "第六片碎片在一個星期二回到守夜，來自蒼白那條旅跡，收足九粒光塵，用了四個月。你把它嵌進窗，最後一片窗片亮起。六片全燃。這個輪自第一次守夜之前起第一次完整——而輪轂中央那道拱門，沒有開。"
+  },
+  {
+   "t": "screen",
+   "en": "THE SEALED DOOR\nSix panes burn behind you. The lock answered, but did not open.",
+   "zh": "封印之門\n六片窗片在你身後燃燒。鎖回應了，卻未開啟。"
+  },
+  {
+   "t": "prose",
+   "en": "The keeper crosses the floor. He does not reach for the window, or for the shard, which is already set. He reaches for you. On the way his hand passes in front of the leaded pane at your shoulder, dark enough to hold a reflection, and what stands in the reflection is a hooded robe with nobody inside it, upright, one flame burning where a chest would be, the cloth hanging around it the way a casing hangs around a wick.",
+   "zh": "掌燈人穿過地面走來。他沒有伸手去碰那扇窗，也沒有去拿那片碎片——碎片已經嵌好了。他伸手來的是你。途中他的手掠過你肩旁那片鉛條玻璃，那片玻璃暗得足以留住一個倒影，而倒影裏站着的，是一件裏面沒有人的兜帽長袍，筆直立着，胸口的位置有一團火在燒，布料掛在火的外面，像燈罩掛在燈芯的外面。"
+  },
+  {
+   "t": "art",
+   "img": "glassform",
+   "en": "What the Vigil's glass has been reflecting since the first dawn.",
+   "zh": "由第一個破曉開始，守夜的玻璃一直映着的東西。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The keeper",
+   "sp_zh": "掌燈人",
+   "en": "Six were scattered. One was kept burning.",
+   "zh": "六份散落。一份被留下來，一直燒着。"
+  },
+  {
+   "t": "prose",
+   "en": "Six panes were cut from one fire. Six were scattered before the first Vigil, and you have spent four months bringing all six home. Seven pieces were cut. The seventh was never scattered. It was kept, and set into a robe, and sent east, and put out, and lit again, thirty-one times, by a hand with no face, in a room with no wall, at dawn, in front of you.",
+   "zh": "六片窗片從同一團火中切下。六份在第一次守夜前散落，而你花了四個月把六份全部帶回來。切出來的是七份。第七份從來沒有散落。它被留下，被裝進一件袍，被送往東方，被熄滅，被重新點着，三十一次，由一隻沒有臉的手，在一個沒有牆的房間，在破曉，都在你眼前。"
+  },
+  {
+   "t": "act",
+   "en": "ACT IV — 【The Hearthward Road】(placeholder name)",
+   "zh": "第四幕 — 【爐心之路】（暫名）"
+  },
+  {
+   "t": "art",
+   "img": "hearthward",
+   "en": "Behind the glass. The colour runs out before the road does.",
+   "zh": "玻璃的內側。顏色比路更早走完。"
+  },
+  {
+   "t": "prose",
+   "en": "The arch opens inward, and the fourth act is the inside of the window. You walk on colour seen from behind: the teal of the Lamplighter's pane, the violet of the pages, the gold of the omen, all of it lit from a side you are no longer on. Five waypoints, and the colour thins as you go, the way a fire thins, until the last stretch is plain black.",
+   "zh": "拱門向內打開，第四幕就是那扇窗的內側。你踏着由背面看的顏色前行：掌燈人那片的青綠、書頁那片的紫、凶兆那片的金，全部由一個你已經不再身處的方向照過來。五個節點；顏色一路變薄，像火變薄那樣，直到最後一段只剩純黑。"
+  },
+  {
+   "t": "prose",
+   "en": "Nine things live on that road, and none is a monster in the way the first three acts meant it. They are remnants — flames carried east that never made it back, still lit out of nothing but refusal. One fights with a lantern flail. One has a shard-shaped gap in the ring behind its head. They do not speak. They point.",
+   "zh": "那條路上住着九樣東西，沒有一樣是頭三幕所講的那種怪物。牠們是殘餘——被送往東方、從來沒能回去的火，靠着單純的不肯，一直燒到現在。一個用提燈連枷作戰。一個腦後的圓環上有一個碎片形狀的缺口。牠們不說話。牠們指。"
+  },
+  {
+   "t": "art",
+   "img": "ashcustodian",
+   "en": "【The Ash Custodian】(placeholder name), standing where the road ends.",
+   "zh": "【守灰者】（暫名），站在路的盡頭。"
+  },
+  {
+   "t": "prose",
+   "en": "At the end there is a hearth of black stone, wide as a gate, cold, empty except for a ring of grey ash on its floor. The thing standing in front of it is made of that ash, and where its face should be there is a shallow bowl holding a hundred small flames, none bigger than a coal. It has been catching them a very long time.",
+   "zh": "盡頭有一座黑石的爐，闊如一道門，冷的，空的，只有爐底一圈灰。站在爐前那樣東西就是由那些灰造成的，而本該是臉的地方，是一隻淺盤，盛着一百點小火，沒有一點大得過一塊炭。它接住這些火，已經接了很久很久。"
+  },
+  {
+   "t": "line",
+   "sp_en": "【The Ash Custodian】",
+   "sp_zh": "【守灰者】",
+   "en": "Stay lit. Stay yours. The hearth can wait another hundred of you.",
+   "zh": "繼續燒着。繼續做你自己。這座爐等得起再一百份你。"
+  },
+  {
+   "t": "prose",
+   "en": "It is not lying, and that is the whole fight. Refuse the hearth and you keep the thing you have called yourself since the first dawn, and the road stays open for the next one. Beat it, and the last screen is not a victory pose. It is you taking off the hood in front of a full window: no face, never a face, only the amber core under the ribs, coming loose.",
+   "zh": "它沒有講大話，而整場仗的重點就在這裏。拒絕那座爐，你就保住由第一個破曉起你一直叫做「自己」的那樣東西，而這條路會繼續開着，等下一份，再下一份。打贏它，最後一幕不是甚麼勝利姿勢。是你在一扇全亮的窗前面除下兜帽：沒有臉，從來沒有臉，只有肋骨下那顆琥珀色的核，正在鬆脫。"
+  },
+  {
+   "t": "art",
+   "img": "ascended",
+   "en": "Dawn over the city, seen from inside a window that is finally whole.",
+   "zh": "破曉照着那座城；望出去的位置，是一扇終於完整的窗的內側。"
+  },
+  {
+   "t": "screen",
+   "en": "THE HEARTH IS LIT\nSeven pieces. One fire. The window is whole for the first time.",
+   "zh": "爐火已燃\n七份。一團火。窗第一次完整。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 24",
+   "sp_zh": "低語 24",
+   "en": "The climb continues.",
+   "zh": "朝聖仍在繼續。"
+  },
+  {
+   "t": "prose",
+   "en": "And it does. The next dawn there is a keeper with no face, a window with seven lights in it now, two fingers against a breastbone, and the same three words. Nothing about the ceremony has changed. Everything about watching it has. If instead the Custodian wins — and it wins often — the hall goes dark, one lantern stays lit at the foot of the monument, a cold mote settles on the flagstones, and at dawn the keeper says where the last one stopped.",
+   "zh": "而它確實繼續。下一個破曉，仍然有一位沒有臉的掌燈人，有一扇如今亮着七點光的窗，有兩根按在胸骨上的手指，還有同樣那句話。儀式一點都沒有變。變的是看着它的那個人。若然反過來是守灰者贏——而它經常贏——大廳暗下去，石碑腳下留着一盞燈，石板上落下一粒寒塵，破曉時掌燈人會講出上一份停在哪裏。"
+  }
+ ],
+ "craft": [
+  {
+   "h": {
+    "en": "The last image came first",
+    "zh": "最後一格畫面，是最先定下的"
+   },
+   "body": [
+    {
+     "en": "This story was written from one frame backwards: a hooded figure takes the hood off in front of a fully lit Emberglass wheel, has no face, and the amber core under its ribs floats free and becomes the seventh light at the hub. Everything else is reverse-engineered from the question that frame asks — if the ending is a body giving up its fire, then the opening has to be a body being given one, in public, as routine.",
+     "zh": "呢個故事係由一格畫面倒推返轉頭寫嘅：一個兜帽身影喺全亮嘅餘燼琉璃輪前面除下兜帽，冇臉，肋骨下嗰粒琥珀色核心離體升起，成為輪轂中央第七點光。其餘所有嘢，都係由呢格畫面問嘅問題反推出嚟——如果結局係一副身體交出佢嘅火，開場就一定要係一副身體被人放入火，公開咁做，而且係例行公事。"
+    },
+    {
+     "en": "That forced the first sixty seconds of the game. The keeper had to be faceless (a hand that lights lamps needs no face), the gesture had to be a touch to the chest and not a handing-over of an object, and the boon screen had to sit immediately after it so the player reads the whole thing as onboarding. The cost of the story is performed in the tutorial and then repeated at every single dawn for the next four months.",
+     "zh": "呢一點直接決定咗遊戲頭六十秒。掌燈人必須冇臉（一隻專責點燈嘅手唔需要臉）；動作必須係按向胸口，而唔係遞一件物件過嚟；恩賜畫面必須緊接住出現，令玩家整段當成新手教學嚟讀。故事嘅代價喺教學裏面已經演咗一次，之後四個月，每一個破曉都重演一次。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "起承轉合, measured in runs",
+    "zh": "起承轉合，用 run 嚟量"
+   },
+   "body": [
+    {
+     "en": "起 is runs 1 to 5 and is deliberately not a chapter: it is the same forty seconds of Vigil ceremony seen five or six times with a different sentence in the middle. 承 is the long middle, runs 6 to 20, where four Trails run in parallel and the game hands out the evidence in an order it cannot control, because the player controls it. 轉 is a single scene that can only fire when a counter reaches six. 合 is Act IV, which is the only part of this story that is a chapter in the ordinary sense.",
+     "zh": "「起」係第一到第五次朝聖，而且刻意唔係一章：佢係同一段四十秒嘅守夜儀式，睇五六次，中間換咗一句對白。「承」係漫長中段，第六到第二十次，四條旅跡並行，遊戲派線索嘅次序自己控制唔到，因為次序喺玩家手上。「轉」係一場單一場景，要等一個計數器去到六先可以觸發。「合」係第四幕，係成個故事裏面唯一一段可以用普通意義上嘅「章」嚟講嘅嘢。"
+    },
+    {
+     "en": "The gap between 承 and 轉 is the design risk and also the design. A player who has met the Hollow Lamplighter four times has heard four confessions in an order determined by a twenty per cent appearance roll, and the fourth one lands on them at a different hour of a different week than it lands on anybody else. What holds is not sequence but repetition: the ceremony is identical every dawn, so the reveal can point at the ceremony rather than at any particular line the player may or may not have seen.",
+     "zh": "「承」同「轉」之間嗰段真空，係設計風險，同時亦係設計本身。一個見過空燈掌燈人四次嘅玩家，聽到嘅四句懺言次序係由一個兩成出現率擲出嚟嘅；第四句砸落佢身上嗰一刻，同其他人唔會喺同一個星期、同一個鐘數。撐住成件事嘅唔係次序，係重複：儀式每個破曉都一模一樣，所以反轉可以指住「儀式」本身，而唔使指住任何一句玩家未必見過嘅對白。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "It was all on screen",
+    "zh": "所有嘢一直都喺畫面上"
+   },
+   "body": [
+    {
+     "en": "Both aspects are already faceless, because they are player inserts. The Ashwarden's weapon is already a lit lantern on a chain. The Duskblade already wears a lantern emblem on the chest. The lantern already eats cards and is already the thing that goes out when you die — the shipped defeat line is Your lantern went out on floor 9, not You died. The Pale Ones are already ordinary enemies with the colour burned out of them. None of this was added for the twist; it was chosen as the twist because it was already there.",
+     "zh": "兩個面向本身已經冇臉，因為佢哋係玩家嘅代入位。灰衛嘅武器本身已經係一盞用鏈吊住嘅燃着提燈。暮刃胸口本身已經有提燈紋章。提燈本身已經食牌，亦本身已經係你死嗰陣熄滅嘅嗰樣嘢——已 shipped 嘅敗仗文案係「你的提燈在第 9 層熄滅」，唔係「你死了」。蒼白眾本身已經係燒走咗顏色嘅普通敵人。呢啲全部都唔係為咗反轉而加落去；係因為佢哋一早已經喺度，所以先揀佢做反轉。"
+    },
+    {
+     "en": "The mural did the rest. Six panes plus a door at the hub is a seven-slot object that had already shipped as a six-slot object, and nobody had asked what the seventh slot was for. The Sovereign's broken halo has a shard-shaped gap in it in every fight of act three. The player looks at that gap sixty times before it means anything.",
+     "zh": "餘下嘅由那幅輪窗完成。六片窗片加輪轂一道門，其實係一件七格嘅物件，而佢一早已經當六格出咗貨，冇人問過第七格係做乜。永恆君王嗰個破環，喺第三幕每一場戰鬥入面都帶住一個碎片形狀嘅缺口。玩家會喺佢有意義之前，望住嗰個缺口六十次。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Act IV: the road runs the other way",
+    "zh": "第四幕：路係反方向行嘅"
+   },
+   "body": [
+    {
+     "en": "Acts one to three go east, away from the Vigil, toward a crown. Act IV goes back — into the window, along the inside of the glass, toward the empty hearth the six panes were cut out of. Mechanically it is five nodes and nine enemies and a boss, like anything else. Narratively it is the only act where the player is walking toward the place the game has been taking things away from them for four months, which is why the colour drains: the palette is literally the three acts' stained glass, seen from behind, running out.",
+     "zh": "第一至第三幕向東行，離開守夜，行去一個王冠。第四幕係行返轉頭——行入嗰扇窗，沿住玻璃內側，行去六片窗片當初被切走嘅那座空爐。機制上佢就係五個節點、九個敵人、一個首領，同其他幕冇分別。敘事上佢係唯一一幕玩家係行向「四個月以嚟一直喺度攞走佢嘢嗰個地方」，所以顏色要褪：色板字面上就係頭三幕嘅彩玻璃，由背面睇，一路用完。"
+    },
+    {
+     "en": "【The Ash Custodian】is not a villain and the fight should not be scored like one. Its position is that you should stay lit and stay yourself, which is exactly what a roguelite player has been trained by twenty runs to want. Beating it is choosing to end your own continuity, and the game has to earn that or it is just railroading. The hedge is that the loop does not stop afterwards: post-ending runs still open with a keeper lighting a new piece, except now the ceremony is shown from the pilgrim's side, and the whisper The climb continues stops being a stinger and starts being a job description.",
+     "zh": "【守灰者】唔係反派，呢場仗亦唔應該當反派仗嚟打分。佢嘅立場係：你應該繼續燒着，繼續做你自己——而呢樣正正係一個 roguelite 玩家俾二十次朝聖訓練到最想要嘅嘢。打贏佢，等於選擇終結自己嘅連續性，遊戲要贏返呢個選擇嘅份量，否則就只係劇本挾持。對沖係：通關之後個迴圈唔停。之後每次 run 開場，仍然係掌燈人點着新一份，只不過今次個儀式由朝聖者嗰邊影出嚟，而「朝聖仍在繼續」呢句低語就唔再係彩蛋，而係一句職務描述。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "What a loss leaves behind",
+    "zh": "輸一場之後剩低乜"
+   },
+   "body": [
+    {
+     "en": "Every defeat drops one pale mote on the flagstones at the foot of the Rose Window, and the keeper opens the next dawn with a full sentence recording where the last flame went out and what it was still carrying — the unspent gold, the four embers, the Ward Phial never opened. It is not a stats panel. It is an obituary with an inventory in it, and it is different every time because it is generated from the run that just ended.",
+     "zh": "每一次敗仗，玫瑰窗腳嘅石板上會多一粒蒼白光塵；下一個破曉，掌燈人會用一句完整嘅散文，記低上一份火喺邊度熄、熄嗰陣仲攞住乜——冇花嘅金幣、四點餘燼、一瓶冇開過嘅護光藥瓶。呢個唔係一塊數據面板。呢個係一份帶住遺物清單嘅訃聞，而且每次都唔同，因為佢係由啱啱完結嗰次朝聖生成出嚟。"
+    },
+    {
+     "en": "The motes are the load-bearing part. The Pale Ones Trail asks the player to collect nine identical cold motes from enemies, over months, and drop them into the same window those defeat motes are piling up under. The player has been physically handling the evidence. Nothing ever draws attention to it; the two piles simply sit in the same room. On defeat in Act IV the sequence is the same one the player has seen thirty times — dark hall, one lantern still lit at the foot of the monument — which after the reveal reads as what it always was: the next piece, waiting to be lit.",
+     "zh": "承重嗰part係啲光塵。蒼白眾嗰條旅跡要玩家喺幾個月裏面，由敵人身上收集九粒一模一樣嘅寒冷光塵，再放入同一扇窗——而敗仗嘅光塵，一直就堆喺嗰扇窗腳下。玩家其實一路都親手掂緊證據。全程冇任何嘢提示佢；兩堆嘢淨係擺喺同一間房。第四幕輸咗嗰下，播嘅係玩家已經睇過三十次嗰段——暗廳、石碑腳下一盞仍然燃着嘅燈——揭盅之後，佢終於讀返做佢一直以嚟嘅意思：下一份，等緊被點着。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "The risks I am not pretending away",
+    "zh": "唔扮睇唔到嘅風險"
+   },
+   "body": [
+    {
+     "en": "First: you are not who you think you are is a shape players know, and this only earns its place if the specific mechanism lands — not amnesia, not a clone, but fuel, with the continuity between runs being the actual lie. If a player summarises it as I was the monster all along, the writing has failed, and the fix is in the keeper's dawn sentences, which must always be about consumption and never about identity.",
+     "zh": "第一：「你唔係你以為嗰個」係玩家好熟嘅形狀，呢個故事要企得住，靠嘅係具體機制要落地——唔係失憶，唔係複製人，而係燃料，而且 run 與 run 之間嗰種連續性本身就係個謊。如果玩家總結成「原來我一路都係怪物」，即係文本輸咗；補救位喺掌燈人破曉嗰幾句，佢哋永遠只可以講消耗，唔可以講身份。"
+    },
+    {
+     "en": "Second: the faceless hero is very visible evidence, and a chunk of players will call it by run four. That is survivable — Moon shows its hand early too, and an early guess does not damage the re-readings — but it does flatten the 轉. The mitigation is that the guessable part is only half of it. Guessing you are made of fire is easy; guessing that the Vigil is the mechanism spending you, and that the keeper's boon and the Hollow Lamplighter's fourth price are the same transaction at two scales, is not.",
+     "zh": "第二：主角冇臉呢條證據好當眼，會有一批玩家第四次朝聖已經估中。呢樣捱得住——《Moon》本身都係早段就攤牌，估中亦唔會傷到回讀——但佢會削平「轉」。緩解係：可以估中嘅只係一半。估到「你係由火造嘅」好易；估到「守夜就係消耗緊你嗰套機制」，以及「掌燈人嘅恩賜同空燈掌燈人第四重代價，其實係同一宗交易嘅兩個尺度」，就唔易。"
+    },
+    {
+     "en": "Third: the ending asks the player to volunteer to stop existing, and any ending that asks for a specific feeling can be refused. Both branches therefore have to be finished art, not a win screen and a fail state — the golden dawn and the dark hall with its one lantern carry equal weight — and the post-ending loop has to be genuinely playable, so that the player who wants to keep burning can simply keep burning and let the next piece decide for itself.",
+     "zh": "第三：結局要求玩家自願停止存在，而任何要求特定情緒嘅結局，玩家都有權拒絕。所以兩條分支都必須係完成度對等嘅美術，而唔係一個勝利畫面加一個失敗狀態——金色破曉，同暗廳裏面嗰盞孤燈，份量要對等——而通關之後嘅迴圈要真係玩得落，令想繼續燒落去嘅玩家可以繼續燒，將決定留返俾下一份火自己做。"
+    }
+   ]
+  }
+ ],
+ "rereadings": [
+  {
+   "line": "A lantern without flame is still a key.",
+   "before": {
+    "en": "A hint about the shop item — buy the cold lantern, use it on the Sovereign, unmask him.",
+    "zh": "當成商店提示——買嗰盞冷提燈，喺永恆君王身上用，揭穿佢。"
+   },
+   "after": {
+    "en": "A description of your shell. The robe without its fire is half of the key. The other half — fire without a robe — is the part that actually opens the door, and it is the part that has been inside you the entire time.",
+    "zh": "係喺講你個殼。冇火嘅袍，係鑰匙嘅一半。另一半——有火冇袍——先係真正開到門嗰樣嘢，而嗰半，由頭到尾都喺你入面。"
+   }
+  },
+  {
+   "line": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+   "before": {
+    "en": "A greedy riddle: he wants your starting bonus, and he is being precious about the wording.",
+    "zh": "一條貪心嘅謎語：佢想要你開局嗰份加成，仲要講到咁矯情。"
+   },
+   "after": {
+    "en": "The wording is exact. The gift the first keeper gave you was the fire in your chest on the morning you were made. The Hollow Lamplighter is rehearsing the final handover at a small scale, five times, and refusing the gratitude because he has always known what you are and what you are for.",
+    "zh": "佢用字好準。最初嘅掌燈人「贈」你嗰份禮物，就係你被造出嚟嗰朝，胸口嗰團火。空燈掌燈人係喺細規模咁綵排最終嗰次交還，做足五次；佢唔要感激，係因為佢一早知你係乜、知你係用嚟做乜。"
+   }
+  },
+  {
+   "line": "We were never climbing out. We were carrying light to the lock.",
+   "before": {
+    "en": "A grim metaphor from your own shade: the pilgrimage was never an escape, it was a delivery.",
+    "zh": "自身之影一句陰沉嘅比喻：朝聖從來唔係逃亡，係送貨。"
+   },
+   "after": {
+    "en": "Not a metaphor. We is every version of you that was ever lit. Light is the seventh piece under your ribs. The lock is the hearth the six panes were cut from. The shade was giving you the plot in one sentence and you filed it as atmosphere.",
+    "zh": "唔係比喻。「我們」係歷代每一份被點着嘅你。「光」係你肋骨下嗰第七份。「鎖」係六片窗片被切走嗰座爐。個影其實一句就講晒成個劇情，你當咗係氣氛。"
+   }
+  },
+  {
+   "line": "The Pale Ones are not hunting you. They are pointing upward.",
+   "before": {
+    "en": "Quest flavour explaining why pale enemies behave oddly and drop motes.",
+    "zh": "任務嘅氣氛文案，解釋點解蒼白之敵行為古怪、會掉光塵。"
+   },
+   "after": {
+    "en": "They are burned-out earlier versions of you — pale is the colour of spent fuel. They are not hunting you because you are the next one in the line, not their quarry. They point because none of them ever reached the hearth, and they are all still indicating the same address.",
+    "zh": "佢哋係燒盡咗嘅歷代你——蒼白就係燃盡嘅顏色。佢哋唔追你，因為你係佢哋嘅下一棒，唔係佢哋嘅獵物。佢哋指，係因為佢哋冇一個送到爐，到今日仲喺度指住同一個地址。"
+   }
+  },
+  {
+   "line": "FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
+   "before": {
+    "en": "The founding myth, stated plainly and early. Six shards, one origin, go and fetch them.",
+    "zh": "開宗明義嘅創世神話：六片碎片，一個源頭，去拎返佢哋。"
+   },
+   "after": {
+    "en": "Read the sentence again for what it does not say. It says six panes were cut from one fire. It does not say the fire was used up. Six were scattered; the remainder was kept, and the remainder is the thing reading the page.",
+    "zh": "再讀多次，睇佢冇講嘅嘢。佢講「六片窗片從同一團火中切下」。佢冇講嗰團火用晒。散落嘅係六份；餘下嗰份俾人留起咗，而餘下嗰份，就係而家讀緊呢一頁嗰樣嘢。"
+   }
+  }
+ ],
+ "meta": {
+  "twist": {
+   "en": "The six Emberglass shards were cut from one fire, and the pilgrim is the seventh and last piece of it. Every run, the Vigil's faceless keeper kindles one remnant of that fire inside an empty hooded robe and sends it east; death is that piece burning out, and returning to the Vigil at dawn is the next piece being lit. The continuity the player has assumed across dozens of sessions never existed. The pilgrimage was never an escape; it was fuel being delivered, one body at a time, to the hearth the panes were cut from.",
+   "zh": "六片餘燼琉璃碎片係由同一團火切出嚟，而朝聖者就係嗰團火嘅第七份，亦係最後一份。每一次朝聖，守夜嗰位無臉掌燈人都會將嗰團火嘅一份殘焰點落一件空嘅兜帽長袍裏面，然後送佢向東；所謂死亡，係嗰份火燒完，而所謂破曉返守夜，係點着下一份。玩家幾十次遊戲以嚟一直假設嘅連續性，由頭到尾都唔存在。朝聖從來唔係逃亡，係送燃料——一次一副身體，送去六片窗片當初被切走嘅嗰座爐。"
+  },
+  "act4": {
+   "en": "【The Hearthward Road】(placeholder): the arch at the hub of the Rose Window opens inward and act four is the inside of the glass. Five nodes run along the back of the window with the stained-glass palette of acts one to three draining behind you until the last stretch is plain black. Nine enemies are remnant flames that were carried east and refused to return, each echoing a burned-away form of memory. The boss is 【The Ash Custodian】(placeholder), a warden built of packed ash guarding a cold empty hearth, whose position is that you should stay lit and stay yourself so the pilgrimage can keep repeating forever. Win, and you return to the hearth voluntarily and the mural's hub takes a seventh light. Lose, and the fallen hall keeps one lantern burning.",
+   "zh": "【爐心之路】（暫名）：玫瑰窗輪轂嗰道拱門向內打開，第四幕就係玻璃嘅內側。五個節點沿住窗嘅背面伸展，頭三幕嘅彩玻璃色板一路喺你背後褪走，最後一段只剩純黑。九個敵人係被送往東方、拒絕歸位嘅殘焰，各自對應一種被燒去嘅記憶形態。首領係【守灰者】（暫名），一尊由壓實灰燼造成、守住一座冰冷空爐嘅守衛，佢嘅立場係：你應該繼續燒着、繼續做你自己，令朝聖可以永遠重複落去。贏，你自願歸位，輪窗中央補上第七點光。輸，隕落之廳留住一盞燈。"
+  },
+  "defeat": {
+   "en": "Every defeat leaves two things. One pale mote settles on the flagstones at the foot of the Rose Window — visually identical to the nine cold motes the Pale Ones Trail asks the player to collect from enemies, and stacking in the same room. And at the next dawn, before the keeper relights, he speaks one generated sentence recording where the last flame went out and what it was still carrying: unspent gold, unspent embers, an unopened phial. The defeat art is the dark hall with a single lantern lit at the foot of the monument, which after the reveal is not a memorial but the next piece waiting to be lit.",
+   "zh": "每一次敗仗留低兩樣嘢。玫瑰窗腳嘅石板上落多一粒蒼白光塵——外觀同蒼白眾旅跡要玩家喺敵人身上收集嘅九粒寒塵完全一樣，而且堆喺同一間房。然後下一個破曉，喺掌燈人重新點燈之前，佢會講一句由該次朝聖生成嘅散文，記低上一份火喺邊度熄、熄嗰陣仲攞住乜：冇花嘅金幣、冇用嘅餘燼、冇開過嘅藥瓶。敗仗美術係暗廳同石碑腳下一盞燃着嘅孤燈——揭盅之後，佢唔係紀念，而係下一份，等緊被點着。"
+  },
+  "risks": {
+   "en": "Three. The you are not who you think you are shape is close to a baseline twist and only separates itself if the specific mechanism — consumable fuel, with cross-run continuity as the actual lie — reads clearly rather than as amnesia or cloning. The faceless hero is conspicuous evidence and a share of players will guess by run four; that is survivable (Moon shows its hand early too, and early guesses do not damage the re-readings) but it flattens the 轉, so the harder half — the Vigil as the mechanism spending you — has to carry the scene. And the ending asks the player to volunteer to stop existing, which risks feeling railroaded; the hedge is equal-weight art on both branches and a post-ending loop that genuinely keeps running, so a player who wants to keep burning can.",
+   "zh": "三個。「你唔係你以為嗰個」呢個形狀太接近基準反轉，要拉得開，就得靠具體機制讀得清楚——耗材燃料，加上跨 run 連續性本身係謊——而唔係讀成失憶或者複製人。主角冇臉係好當眼嘅證據，會有一批玩家第四次朝聖就估中；呢樣捱得住（《Moon》本身都早段攤牌，估中亦唔傷回讀），但會削平個「轉」，所以難估嗰一半——守夜就係消耗緊你嗰套機制——要撐起成場戲。最後，結局要求玩家自願停止存在，好易變成被劇本挾持；對沖係兩條分支要有份量對等嘅美術，加上通關之後個迴圈真係繼續行得到，令想繼續燒落去嘅玩家可以繼續燒。"
+  }
+ }
+}

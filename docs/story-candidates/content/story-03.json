@@ -1,0 +1,911 @@
+{
+ "no": 3,
+ "title": {
+  "en": "The Forgotten Vow",
+  "zh": "忘誓者"
+ },
+ "family": {
+  "en": "Identity — Shutter Island / Fight Club / Memento",
+  "zh": "身份系 —《不赦島》/《搏擊會》/《凶心人》"
+ },
+ "hook": {
+  "en": "Twenty-four whispers. Five torn pages. An eighth omen in a world that only ever promised seven. Somebody laid a trail through this ruin in exactly the order you would need it, and put the last sentence where you could not reach it until the end.",
+  "zh": "二十四句低語。五頁撕開的紙。在只應許七個凶兆的世上，多出來的第八個。有人沿着這片廢墟，按你將會需要的次序，逐段留下線索，並把最後一句，放在你到最後一刻才伸得到的位置。"
+ },
+ "poster": "hero",
+ "images": [
+  {
+   "id": "hero",
+   "source": "generate",
+   "subject": "A wide roofless stone hall open to a grey sky, frost spreading across the flagstones in long feathers. A robed pale figure kneels with both hands cupped, holding out a single small point of cold light. Behind it a huge wheel of black leadwork fills the far wall, with six empty gaps where panes should sit. A hooded figure stands in the foreground seen from behind, holding a small lit lantern.",
+   "alt": {
+    "en": "A kneeling pale figure holds out a mote of cold light in a frost-covered hall, beneath a leadwork wheel with six empty gaps.",
+    "zh": "結霜的石廳中，一個蒼白身影跪着，雙手捧出一粒寒冷光塵；其後的鉛框巨輪留着六處空位。"
+   }
+  },
+  {
+   "id": "lamplighter",
+   "source": "asset",
+   "path": "assets/art/meta/hollow-lamplighter.png",
+   "alt": {
+    "en": "A gaunt bald robed figure carrying an unlit lantern on a long pole.",
+    "zh": "枯瘦光頭的袍影，挑着一盞從未點亮的提燈。"
+   }
+  },
+  {
+   "id": "mural",
+   "source": "asset",
+   "path": "assets/art/meta/emberglass-mural.png",
+   "alt": {
+    "en": "A six-panel stained-glass wheel with a glowing arched doorway at its hub.",
+    "zh": "六格彩繪玻璃輪盤，輪轂處是一道發亮的拱門。"
+   }
+  },
+  {
+   "id": "shade",
+   "source": "asset",
+   "path": "assets/art/enemies/shade.png",
+   "alt": {
+    "en": "A black tendrilled figure with the outline of a climber, standing in a fighting posture.",
+    "zh": "一道黑色纏繞的身影，輪廓與朝聖者無異，擺出戰鬥姿態。"
+   }
+  },
+  {
+   "id": "sovereign",
+   "source": "asset",
+   "path": "assets/art/enemies/sovereign.png",
+   "alt": {
+    "en": "A crowned figure with a sceptre beneath a broken halo, one shard-shaped piece missing from the ring.",
+    "zh": "戴冠持杖的身影，頭上光環破缺，環上少了一塊碎片形狀的缺口。"
+   }
+  },
+  {
+   "id": "door",
+   "source": "generate",
+   "subject": "A tall arched door of dark stone set into a cliff face at the top of a long stair, sealed with heavy bands of lead. Six small circular sockets are cut into the stone around the arch, each holding a piece of glowing coloured glass. The stair below falls away into cloud. No figures are present.",
+   "alt": {
+    "en": "A sealed arched door at the head of a stair, ringed by six sockets of lit glass.",
+    "zh": "長階盡頭一道封印拱門，門拱四周嵌着六個亮起的玻璃凹槽。"
+   }
+  },
+  {
+   "id": "peak",
+   "source": "generate",
+   "subject": "A narrow stair of stained glass climbing above a broken mountain peak. The glass here is whole and unbroken, saturated red and gold and blue, lit from within, while the ruined leadwork of the world below is grey and empty. Clouds pass beneath the lowest step. Far off at the top of the stair stands a plain arched doorway.",
+   "alt": {
+    "en": "A stair of whole, saturated stained glass rising above a grey ruined peak.",
+    "zh": "一道完好而飽和的彩繪玻璃階梯，自灰敗的殘峰上方升起。"
+   }
+  },
+  {
+   "id": "excised",
+   "source": "generate",
+   "subject": "A life-size human figure made entirely of coloured stained glass steps out of an upright window frame onto a stone landing, one arm raised mid-gesture. The frame behind it is now a person-shaped hole with lead came dangling at the torn edges. Fragments of glass hang in the air around it. The light comes from inside the figure itself.",
+   "alt": {
+    "en": "A figure of coloured glass stepping out of a window frame, leaving a person-shaped hole behind it.",
+    "zh": "一個由彩玻構成的人形自窗框中踏出，身後留下一個人形的空洞。"
+   }
+  },
+  {
+   "id": "mirror",
+   "source": "asset",
+   "path": "assets/art/events/mirror.png",
+   "alt": {
+    "en": "A tall unbroken mirror in rubble; the reflection inside it is a dark shape with lit eyes, slightly smiling.",
+    "zh": "瓦礫中一面完好的高鏡；鏡內的倒影是發光雙眼的黑影，帶着淺笑。"
+   }
+  },
+  {
+   "id": "ascended",
+   "source": "asset",
+   "path": "assets/art/meta/ascended.png",
+   "alt": {
+    "en": "A cathedral city standing above a sea of cloud in golden dawn light.",
+    "zh": "金色破曉之中，一座教堂之城矗立於雲海之上。"
+   }
+  },
+  {
+   "id": "fallen",
+   "source": "asset",
+   "path": "assets/art/meta/fallen.png",
+   "alt": {
+    "en": "A dark hall containing a black monolith, with a single lit lantern set at its foot.",
+    "zh": "幽暗大廳中的黑曜石碑，碑腳放着唯一一盞點亮的提燈。"
+   }
+  }
+ ],
+ "story": [
+  {
+   "t": "act",
+   "en": "RUN 1 — The Ashen Woods",
+   "zh": "第一次朝聖 — 灰燼樹林"
+  },
+  {
+   "t": "art",
+   "img": "hero",
+   "en": "Frost, and someone kneeling with their hands held out.",
+   "zh": "地上結霜，有人跪着，雙手向你伸出。"
+  },
+  {
+   "t": "prose",
+   "en": "You come to on the flagstones of the Vigil with cold glass in your mouth and no name in your head. A lantern sits by your hand, still warm, as though carried very recently by somebody who is not here.",
+   "zh": "你在守夜的石板上醒來，口裏是冷玻璃的味道，腦裏沒有名字。手邊一盞提燈仍是暖的，像剛被人提過——而那人此刻不在。"
+  },
+  {
+   "t": "prose",
+   "en": "A pale figure kneels six paces away, holding out one mote of cold light in both palms, the way a child hands back a coin it was told not to keep. You take it. It stands, walks east, and does not look back.",
+   "zh": "六步之外跪着一個蒼白身影，雙掌托出一粒寒冷光塵，像小孩交還一枚人家吩咐過不可留下的錢幣。你接過。它站起，向東而行，沒有回頭。"
+  },
+  {
+   "t": "prose",
+   "en": "Behind it the far wall carries a wheel of black leadwork, six spaces set into it where six panes should be. All six are empty. Low beside the frame, at hand height, a line is cut into the stone.",
+   "zh": "它身後的遠牆嵌着一輪黑鉛框，框上六處空位，本應安放六片窗片。六處皆空。框旁低處，約一隻手垂下的高度，石上刻着一行字。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Cut into the stone",
+   "sp_zh": "刻在石上的字",
+   "en": "There is a colour 【the Last Place】 refuses to name.",
+   "zh": "有一種顏色，【終境】拒絕為它命名。"
+  },
+  {
+   "t": "prose",
+   "en": "The strokes lean left and finish too early and you have never seen them before. You understand the sentence anyway, the way you understand a language in a dream. The lantern is yours. You go east.",
+   "zh": "筆畫左傾，收得太早，你從未見過這種字跡。你卻讀得懂——像在夢裏讀懂一種不曾學過的語言。這盞燈是你的。你向東行。"
+  },
+  {
+   "t": "prose",
+   "en": "The Ashen Woods take nine floors to kill you. Everything out here is glass; glass keeps its facets until the last one is chipped away, and then it shatters and spills embers into your lantern.",
+   "zh": "灰燼樹林用九層殺死你。外頭一切都是琉璃；琉璃守着璃面，直到最後一格被琢下，然後碎裂，把餘燼灑進你的提燈。"
+  },
+  {
+   "t": "screen",
+   "en": "FALLEN — Here ended a climb, on floor 9. 【The Last Place】 keeps what it takes — but the Vigil remembers.",
+   "zh": "隕落——一段朝聖之路在第 9 層終結。【終境】留下它所奪走的——守夜卻會銘記。"
+  },
+  {
+   "t": "prose",
+   "en": "You wake on the flagstones again, holding a lantern relit by hands you did not see. The Vigil holds a ceremony for whatever you brought back, and it will hold one after every climb you make.",
+   "zh": "你又在石板上醒來，手裏的提燈已被你沒見過的手重新點亮。守夜為你帶回來的東西辦一場儀式——此後每一程之後，它都會辦。"
+  },
+  {
+   "t": "screen",
+   "en": "THE VIGIL OPENS · The Hollow Lamplighter walks 【the Last Place】.",
+   "zh": "守夜敞開 · 空燈掌燈人踏上【終境】。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 1",
+   "sp_zh": "低語 1",
+   "en": "There is a colour 【the Last Place】 refuses to name.",
+   "zh": "有一種顏色，【終境】拒絕為它命名。"
+  },
+  {
+   "t": "prose",
+   "en": "You have met that sentence before — an hour ago, at knee height, on a wall. You decide the Vigil talks to itself, and go back out.",
+   "zh": "這句話你見過：一小時前，在牆上，膝蓋的高度。你判定守夜大概會自言自語，然後再度出發。"
+  },
+  {
+   "t": "prose",
+   "en": "In the morning the glass wall carries a new mark, low where the frost gathers: four broken glyphs, not quite a word, and between them a silhouette you know at once — a root system closing like a fist.",
+   "zh": "翌晨琉璃牆上多了一道新痕，低，就在結霜之處：四個破碎字形，還不成一個字；字間壓着一個你一眼認得的剪影——一叢根系，像拳頭合起。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The keeper",
+   "sp_zh": "掌燈的人",
+   "en": "There is another line since last night. I did not cut it.",
+   "zh": "昨夜又多了一行。不是我刻的。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 2 — The Unlit Way",
+   "zh": "第二次朝聖 — 未燃之路"
+  },
+  {
+   "t": "art",
+   "img": "lamplighter",
+   "en": "A lantern on a pole. It has never been lit.",
+   "zh": "一盞挑在杆上的燈。從未亮過。"
+  },
+  {
+   "t": "prose",
+   "en": "The second climb puts a node on the map the first did not have: a hollow lantern. The gaunt, bald man standing on it speaks as though you are already halfway through a conversation.",
+   "zh": "第二次朝聖，地圖上多了一個節點：一盞空燈。站在那裏的枯瘦光頭人開口的方式，像你們的對話早已進行到一半。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your lantern is noisy. Give me the next three embers it catches.",
+   "zh": "你的提燈太吵。把它接下來收集的三點餘燼交給我。"
+  },
+  {
+   "t": "prose",
+   "en": "Three shatters later the embers arrive and leave again at once, drawn back down the stairs towards a man who is no longer there. It costs you a fight you would have won. Then he pays you in the only currency he carries.",
+   "zh": "三次碎裂之後，餘燼到手，又立刻離開，被階下那個早已不在的人抽走。這代價讓你輸掉一場本該贏的仗。然後他用身上唯一的貨幣還你。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Six panes were carried away from a window no wall could hold.",
+   "zh": "六片窗片曾從一扇無牆可承的窗中被帶走。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 2",
+   "sp_zh": "低語 2",
+   "en": "A pale hand has touched the dark side of the glass.",
+   "zh": "一隻蒼白的手觸過琉璃的暗面。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 3 — Nine Motes",
+   "zh": "第三次朝聖 — 九粒光塵"
+  },
+  {
+   "t": "prose",
+   "en": "By the third climb you have killed three foes that came out of the dark a shade too white. The motes they leave are the same cold the kneeling figure handed you, and they do not have to be collected: they go into the lantern by themselves, the way a thing goes home.",
+   "zh": "到第三次朝聖，你已擊殺三個從黑暗中走出、卻白得不對勁的敵人。牠們留下的光塵，與那個跪着的身影交到你手上的寒冷是同一種，而且不用你去撿：它們自己飛進提燈，像東西回家。"
+  },
+  {
+   "t": "screen",
+   "en": "Trail revealed — Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour.",
+   "zh": "旅跡顯現——狩獵蒼白眾。從忘卻色彩的琉璃中收集九粒光塵。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 3",
+   "sp_zh": "低語 3",
+   "en": "Six spaces wait where no window stands.",
+   "zh": "六處空位在等候，那裏不曾立過窗。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 4 — The First Dawn",
+   "zh": "第四次朝聖 — 首次破曉"
+  },
+  {
+   "t": "prose",
+   "en": "The fourth climb goes all the way. The last place on the road — 【the Last Place】, provisionally; nobody will give it a settled name — is a black stair with a broken gold ring hanging in the sky behind it.",
+   "zh": "第四次朝聖走得完。路上最後的所在——暫稱【終境】，沒有人肯給它一個定下來的名字——是一道黑階，背後的天上懸着一隻殘缺的金環。"
+  },
+  {
+   "t": "art",
+   "img": "sovereign",
+   "en": "A crown, a sceptre, and a halo missing one piece.",
+   "zh": "一頂王冠、一根權杖，和一隻缺了一塊的光環。"
+  },
+  {
+   "t": "prose",
+   "en": "The Eternal Sovereign nearly finishes you, and when it comes apart it comes apart into glass. Above you the broken ring keeps turning, with a gap in it the exact shape of a shard.",
+   "zh": "永恆君王幾乎把你了結；它散開時，散成琉璃。頭上殘環仍在轉，缺口的形狀，恰好是一片碎片。"
+  },
+  {
+   "t": "screen",
+   "en": "ASCENDED — The Eternal Sovereign is dust. Dawn breaks over 【the Last Place】 — the first in an age. · The Emberglass Rose Window opens.",
+   "zh": "登臨——永恆君王已化塵。破曉越過【終境】——這是漫長年代中的第一次。 · 餘燼琉璃玫瑰窗開啟。"
+  },
+  {
+   "t": "art",
+   "img": "mural",
+   "en": "Six panels around a doorway. None of them are lit yet.",
+   "zh": "六格圍着一道門。此刻一格未亮。"
+  },
+  {
+   "t": "prose",
+   "en": "The wheel on the wall turns out to have a hub: six dormant panels ringing an arched doorway that is already, faintly, giving off light. Beneath it a log keeps every whisper, in the order it gave them.",
+   "zh": "牆上那輪東西原來有個輪轂：六格沉睡的窗片，圍着一道已在微微透光的拱門。輪盤之下有一份紀錄，按給你的次序收着每一句低語。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 4",
+   "sp_zh": "低語 4",
+   "en": "The dead climb twice: once in flesh, once in memory.",
+   "zh": "死者朝聖兩次：一次以肉身，一次以記憶。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 5–8 — The Page and the Omen",
+   "zh": "第五至八次朝聖 — 頁與凶兆"
+  },
+  {
+   "t": "prose",
+   "en": "A reward offers you a card you cannot use: no cost, no effect, no way out of your deck. You carry it for thirty floors anyway, because the whispers have started arriving with a tone of voice.",
+   "zh": "一份獎賞給了你一張用不到的卡：沒有費用、沒有效果，也離不開牌庫。你照樣帶着它走三十層——因為那些低語，開始有語氣了。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 7",
+   "sp_zh": "低語 7",
+   "en": "A page can be read only after it survives the summit.",
+   "zh": "這一頁唯有捱過頂點，方能讀懂。"
+  },
+  {
+   "t": "screen",
+   "en": "Page 1 — FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
+   "zh": "第 1 頁——第一頁——六片窗片從同一團火中切下，於第一次守夜前散落各處。"
+  },
+  {
+   "t": "prose",
+   "en": "The eighth climb rises under a sign that is not on the list. There are seven omens. This night has an eighth, and under it every fight on every floor arrives with a title in broken script.",
+   "zh": "第八次朝聖，升起在一個不在名單上的記號之下。凶兆有七個。這一夜有第八個；在它之下，每層每一場戰鬥都壓着一個破碎字體的題名。"
+  },
+  {
+   "t": "screen",
+   "en": "// THE PANE WATCHES //   // EIGHT IS NOT A NUMBER //   // CARRY THE WRONG LIGHT UPWARD //   // THE CROWN IS A MASK //",
+   "zh": "// 窗片凝視 //　// 八並非數字 //　// 攜錯誤之光向上 //　// 王冠只是一副面具 //"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 8",
+   "sp_zh": "低語 8",
+   "en": "The eighth sign is not written among the seven.",
+   "zh": "第八凶兆不寫在七者之中。"
+  },
+  {
+   "t": "prose",
+   "en": "You die on floor forty-one. Next morning there is another row of glyphs on the wall, and this time the shape between them is a doorway.",
+   "zh": "你死在第四十一層。翌晨牆上又多一列字形，而這次字間的形狀，是一道門。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 9–14 — The Stone and the Price",
+   "zh": "第九至十四次朝聖 — 石與代價"
+  },
+  {
+   "t": "prose",
+   "en": "Somewhere in here it stops being a series of attempts and becomes a job of work. On the eleventh climb you walk into a standing stone with somebody inside it.",
+   "zh": "在這一段裏，這件事不再是一連串嘗試，而成了一份工。第十一程，你撞上一塊矗立的石——石裏面有人。"
+  },
+  {
+   "t": "screen",
+   "en": "MONUMENT OF THE LAST FALL — A previous pilgrim stands inside the stone.",
+   "zh": "上次墜落的紀念碑——前一位朝聖者站在石中。"
+  },
+  {
+   "t": "prose",
+   "en": "It is you: the thing you carved into the stone at the end of the last run. The pilgrim is standing, not lying, and their hands are open at hip height as if putting something down.",
+   "zh": "那是你：你上一程結束時刻進石中的東西。那位朝聖者是站着的，不是躺着的，雙手在腰際張開，像正把甚麼放下。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 11",
+   "sp_zh": "低語 11",
+   "en": "Your monument does not always lie down.",
+   "zh": "你的紀念碑並不總是躺下。"
+  },
+  {
+   "t": "prose",
+   "en": "The Hollow Lamplighter finds you twice in this stretch. He never asks twice for the same thing, and he always asks for exactly what you have most of.",
+   "zh": "這一段裏，空燈掌燈人找到你兩次。他從不重複索取同一樣東西，而他每次要的，恰好是你當下最多的那樣。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
+   "zh": "金幣記得每一隻手。讓一百六十枚忘記你的手。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The Pale Ones watch the paths that point above the crown.",
+   "zh": "蒼白眾凝望着指向王冠之上的路。"
+  },
+  {
+   "t": "prose",
+   "en": "He asks for twelve measures of the vessel while you stand at thirty-four maximum health, and for the only time in the exchange he declines his own price. You spend a later run building a body big enough to be cut.",
+   "zh": "他開口要十二格容量時，你的生命上限是三十四；整段交易裏唯一一次，他拒絕了自己開出的價。你之後用一整程，把身體養到足以被割。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "I will not hollow you below thirty. Return with a larger vessel.",
+   "zh": "我不會把你挖空至三十以下。換一副更大的容器再來。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your standing dead have seen the stair above the Sovereign.",
+   "zh": "你站立而死的前身，已見過永恆君王之上的階梯。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 13",
+   "sp_zh": "低語 13",
+   "en": "Broken glyphs are the shadow of a complete sentence.",
+   "zh": "破碎字形是完整句子的影子。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 14",
+   "sp_zh": "低語 14",
+   "en": "Five pages make a chapter; five prices make a confession.",
+   "zh": "五頁成章；五重代價成懺言。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 15 — Three Deaths",
+   "zh": "第十五次朝聖 — 三次死亡"
+  },
+  {
+   "t": "art",
+   "img": "shade",
+   "en": "It has your outline, and it waits where you last died.",
+   "zh": "它有你的輪廓，守在你上次死去之處。"
+  },
+  {
+   "t": "prose",
+   "en": "The trail that opens after your first death takes longest to close. It will only meet you on the floor where you last fell, and it is harder each time. The third is stronger than you have ever been.",
+   "zh": "第一次死亡之後開啟的旅跡，最遲才走得完：它只在你上次墜落的那一層等你，一次比一次難。第三道，比你曾經到過的最強還要強。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Fell",
+   "sp_zh": "墜落之影",
+   "en": "I remember the stone. You walked away before I stopped calling.",
+   "zh": "我記得那塊石。你轉身離去時，我仍未停止呼喚。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Returned",
+   "sp_zh": "歸來之影",
+   "en": "Each climber leaves a shape behind. 【The Last Place】 has learned to wear ours.",
+   "zh": "每位朝聖者都留下一道形影。【終境】已學會披上我們的模樣。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Remembers",
+   "sp_zh": "銘記之影",
+   "en": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
+   "zh": "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。"
+  },
+  {
+   "t": "prose",
+   "en": "The third does not vanish when it dies. It stays upright a moment longer, the way something stays when it has one more thing to say and has held it a long time.",
+   "zh": "第三道死時沒有立刻消散。它多站了一瞬——像有一件事還未說完，而它已經忍了很久。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Remembers",
+   "sp_zh": "銘記之影",
+   "en": "We were never climbing out. We were carrying light to the lock.",
+   "zh": "我們從來不是為了逃出去而朝聖；我們一直把光送往鎖孔。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 15",
+   "sp_zh": "低語 15",
+   "en": "Three deaths will teach your shade to speak plainly.",
+   "zh": "三次死亡會教你的影直言。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 19 — The Mask",
+   "zh": "第十九次朝聖 — 面具"
+  },
+  {
+   "t": "prose",
+   "en": "The merchant has kept one cold thing under the counter since the first shop you ever walked into, at six hundred and fifty gold. A lantern of cold glass with no wick. He will not say who left it.",
+   "zh": "由你踏進的第一間店開始，商人櫃下一直藏着一件冰冷之物，索價六百五十金。一盞冷琉璃提燈，沒有燈芯。他不肯說是誰留下的。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Merchant",
+   "sp_zh": "商人",
+   "en": "Cold goods, warm price. Come back carrying a dawn's worth of gold.",
+   "zh": "貨冷，價暖。帶着足以買下一次破曉的金幣再來。"
+  },
+  {
+   "t": "prose",
+   "en": "You carry the empty lantern up thirty-nine floors and hold it out at the top of the black stair. The king reacts the way a lock reacts to a key of the wrong shape and the right metal.",
+   "zh": "你把那盞空燈揹上三十九層，在黑階盡頭舉到身前。那位王的反應，像一把鎖遇上形狀不對、金屬卻對的鑰匙。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Usurper",
+   "sp_zh": "篡位者",
+   "en": "The mask is broken. Look above.",
+   "zh": "面具已碎。往上看。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 19",
+   "sp_zh": "低語 19",
+   "en": "The Sovereign is a mask worn below the final stair.",
+   "zh": "永恆君王只是在最終階梯之下披上的面具。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 23 — The Last Price",
+   "zh": "第二十三次朝聖 — 最後代價"
+  },
+  {
+   "t": "prose",
+   "en": "Five dawns with an unplayable card in your hand finish the chapter, and the last page is not history. It is an instruction, written to somebody standing exactly where you are standing.",
+   "zh": "帶着一張打不出的牌捱過五次破曉，這一章便完了；而最後一頁不是史料。那是一道指示，寫給一個恰好站在你此刻位置上的人。"
+  },
+  {
+   "t": "screen",
+   "en": "Page 5 — FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown.",
+   "zh": "第 5 頁——第五頁——玫瑰窗是一幅地圖，不是紀念碑。將它點亮，再望向王冠之上。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 22",
+   "sp_zh": "低語 22",
+   "en": "Its inscription has waited longer than the Vigil.",
+   "zh": "它的銘文等候得比守夜更久。"
+  },
+  {
+   "t": "prose",
+   "en": "The fourth price is the strangest, because it is not a resource. Before every climb the keeper at the Vigil gives you a boon. He wants that.",
+   "zh": "第四重代價最古怪，因為它不是資源。每次出發前，守夜的掌燈人都會贈你一份恩賜。他要的，就是那個。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+   "zh": "最初的掌燈人曾贈你恩賜。我要那份贈禮，不要你的感激。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The empty lantern is the token that purchases an audience with the mask.",
+   "zh": "空燈就是換取面見那副面具的信物。"
+  },
+  {
+   "t": "prose",
+   "en": "The fifth ask arrives on floor forty-six of a run you are winning comfortably, and it is not a trade.",
+   "zh": "第五次索價，出現在一場你贏得從容的朝聖第四十六層——而那不是交易。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
+   "zh": "最後代價：只留一記心跳在這提燈裏。其餘全歸黑暗。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "One heartbeat is enough. Refusal is the only poverty left.",
+   "zh": "一記心跳已足夠。如今只剩拒絕才算貧乏。"
+  },
+  {
+   "t": "prose",
+   "en": "You climb the last twelve floors at one health. You reach the top anyway, because by now you know what every enemy intends before it moves.",
+   "zh": "你以一點生命走完最後十二層。你還是上到頂——因為到了這一步，每個敵人動手前想做甚麼，你都已經知道。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Light the panes. The door will know you.",
+   "zh": "點亮窗片。門會認得你。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 23",
+   "sp_zh": "低語 23",
+   "en": "Bring six shards to the Rose Window.",
+   "zh": "帶六片碎片到玫瑰窗。"
+  },
+  {
+   "t": "act",
+   "en": "THE SIXTH PANE",
+   "zh": "第六片窗片"
+  },
+  {
+   "t": "prose",
+   "en": "The wheel takes the sixth shard before you decide to give it up. The panels light in the order you earned them. Then the leadwork between them goes transparent and the whole wheel plays, once, in glass.",
+   "zh": "你還未決定交不交，輪盤已先一步取走第六片碎片。六格按你取得的次序亮起。然後格間的鉛條變得透明，整輪玻璃開始播放，只播一次。"
+  },
+  {
+   "t": "prose",
+   "en": "A hooded figure stands inside the Rose Window with its back to you, on the side that faces up. It looks at something above it for a long time. Then it sets both hands against the glass from within, breaks it outward, and hands the six panes down to pale figures kneeling on black stairs.",
+   "zh": "一個兜帽身影站在玫瑰窗之內，背向你，在朝上的那一側。它抬頭看着上方某樣東西，看了很久。然後它雙手由內按住玻璃，向外擊碎，把六片窗片遞下，交到跪在黑階上的蒼白身影手中。"
+  },
+  {
+   "t": "prose",
+   "en": "On an unlit road it gives a gaunt man five things: embers, gold, a measure of its own body, a gift somebody made it, everything in its chest but one beat. Then it lifts its own lantern level with its own hood and turns the light inward. The figure it leaves stands in a frost-covered hall with nothing behind its eyes, and walks west, past a fresh scratch at hand height.",
+   "zh": "在一條未燃之路上，它給了一個枯瘦的人五樣東西：餘燼、金幣、自己身體的一截容量、別人送它的一份贈禮，以及胸腔裏除一記心跳以外的全部。然後它把提燈舉到自己兜帽的高度，將光轉向內。留下的那身影站在結霜的石廳裏，眼底空無一物，向西而行，經過一道剛刻好的、齊手高的痕。"
+  },
+  {
+   "t": "prose",
+   "en": "The six shards were never a key. They are a lock; you took it apart yourself, paid a stranger to hold the pieces of your own character, then put out your own light so you could not change your mind. The whispers are the half of you that could not go through with it, writing to the half that did.",
+   "zh": "六片碎片從來不是鑰匙。它們是一把鎖；拆散它的是你，你付錢請一個陌生人替你保管你自己人格的零件，然後熄掉自己的光，好讓自己無法反悔。那些低語，是你身上狠不下心的一半，寫給狠得下心的一半。"
+  },
+  {
+   "t": "art",
+   "img": "door",
+   "en": "Six sockets, and the thing they were cut out of.",
+   "zh": "六個凹槽，以及它們當初被切出來的地方。"
+  },
+  {
+   "t": "prose",
+   "en": "The arch at the hub opens. Not because the key fitted — because the lock is whole again and recognises the hands that took it apart. The Hollow Lamplighter is standing behind you. He has been in the Vigil the whole time.",
+   "zh": "輪轂處的拱門打開了。不是因為鑰匙對上，而是因為那把鎖終於完整，並認得出當初拆散它的那雙手。空燈掌燈人站在你身後。他一直都在守夜裏。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "You asked us to. You asked us not to tell you.",
+   "zh": "是你叫我們這樣做的。你還叫我們，不要告訴你。"
+  },
+  {
+   "t": "screen",
+   "en": "A sealed door opens above the crown. · Six panes burn. Something waits above the crown.",
+   "zh": "王冠之上的封印之門已開。 · 六片琉璃窗片燃起。王冠之上有甚麼在等待。"
+  },
+  {
+   "t": "act",
+   "en": "ACT IV — 【the Unforgotten Peak】 (placeholder name)",
+   "zh": "第四幕 —【未忘之峰】（暫名）"
+  },
+  {
+   "t": "art",
+   "img": "peak",
+   "en": "Above the door the glass is whole.",
+   "zh": "門之上的玻璃是完整的。"
+  },
+  {
+   "t": "prose",
+   "en": "Everything below was broken leadwork and grey empty frames. Through the door is a stair made of glass that was never broken — the stair the third page describes, seen once by a climber who died standing.",
+   "zh": "下面的一切都是斷裂的鉛框與灰白的空窗。門後是一道由不曾破碎的玻璃砌成的階梯——正是第三頁所寫、曾被一名站着死去的朝聖者看見一次的那道。"
+  },
+  {
+   "t": "art",
+   "img": "excised",
+   "en": "Nine of them. Each leaves a hole shaped like itself.",
+   "zh": "共九個。每一個都留下一個與自己同形的洞。"
+  },
+  {
+   "t": "prose",
+   "en": "Nine enemies, none of them creatures. Each is a frozen moment of stained glass that steps out of its own frame and, coming apart, writes a line on the landing in the handwriting you could not read on your first morning.",
+   "zh": "九個敵人，沒有一個是生物。每一個都是一幕定格的彩繪玻璃，踏出自己的窗框，碎裂時在平台上寫下一行字，用的是你第一個早上讀不出的那種筆跡。"
+  },
+  {
+   "t": "art",
+   "img": "mirror",
+   "en": "It has been smiling since the first act.",
+   "zh": "它由第一幕起便一直在笑。"
+  },
+  {
+   "t": "prose",
+   "en": "At the head of the stair is a mirror you have met in rubble in every act, offering to duplicate a card or be smashed for six health. The shape inside it steps out. Its move list is your move list.",
+   "zh": "階梯盡頭立着一面你在每一幕的瓦礫中都見過的鏡：複製一張卡，或以六點生命把它砸碎。鏡中的形體走出來。它的招式表就是你的招式表。"
+  },
+  {
+   "t": "line",
+   "sp_en": "【the One Who Did Not Forget】 (placeholder name)",
+   "sp_zh": "【不曾遺忘的你】（暫名）",
+   "en": "I have been carrying it the whole time. You only had to carry the lantern.",
+   "zh": "由頭到尾都是我在揹。你只需要揹那盞燈。"
+  },
+  {
+   "t": "prose",
+   "en": "When it falls it does not die, because it is not a separate thing. It stands the way the third shade stood, and the Vigil gives you a door and no recommendation whatsoever.",
+   "zh": "它倒下時沒有死，因為它本來就不是另一樣東西。它像第三道影那樣站着；守夜只給你一道門，不給任何建議。"
+  },
+  {
+   "t": "art",
+   "img": "ascended",
+   "en": "One of the two ways this ends.",
+   "zh": "兩種收場的其中一種。"
+  },
+  {
+   "t": "prose",
+   "en": "You can take it back. Everything it carries arrives at once — the vow, the reason, the thing above the door. Then you open the door anyway, knowing what is behind it, which is what the person who made the vow never did.",
+   "zh": "你可以把它接回來。它揹着的一切一次過湧進來——那個誓、那個理由，以及門上面那樣東西。然後你照樣推門，並且知道另一邊是甚麼——而這正是當年立誓那個人從未做到的事。"
+  },
+  {
+   "t": "art",
+   "img": "fallen",
+   "en": "The other. Somebody lit the lantern at the stone's foot.",
+   "zh": "另一種。碑腳那盞燈，是有人點亮的。"
+  },
+  {
+   "t": "prose",
+   "en": "Or you kill it a second time. You go down with six shards on your back, put one into each pair of pale hands, settle five accounts on an unlit road, and raise your own lantern to your own hood. The monument in the dark hall is an empty grave you cut for yourself, and the lantern at its foot is a note for whoever wakes tomorrow with no name in their head.",
+   "zh": "又或者，你再殺它一次。你揹着六片碎片落山，逐雙蒼白的手交託，在未燃之路上結清五筆賬，然後把提燈舉到自己的兜帽前。幽暗大廳那座碑是你替自己刻的空墳；碑腳那盞燈，是留給明早醒來、腦裏沒有名字那個人的字條。"
+  },
+  {
+   "t": "prose",
+   "en": "The last whisper returns at every dawn, as it always has. It reads differently on the way down.",
+   "zh": "最後一句低語每次破曉都會回來，一如既往。落山的路上，它讀起來是另一個意思。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 24",
+   "sp_zh": "低語 24",
+   "en": "The climb continues.",
+   "zh": "朝聖仍在繼續。"
+  }
+ ],
+ "craft": [
+  {
+   "h": {
+    "en": "The last frame was built first",
+    "zh": "最後一格，最先砌"
+   },
+   "body": [
+    {
+     "en": "The design started from one image: the six-panel Emberglass wheel finishing its reveal and then, instead of stopping, playing a stained-glass animation of a hooded figure breaking the Rose Window from the inside. That shot fixes everything else. The player must recognise their own silhouette, so the heroes must be faceless — and both already are. The shards must be handed downward to kneeling pale figures, so the Pale Ones must read as carriers, not hunters — and a shipped whisper already says they are not hunting you. A stranger must be holding pieces of your character, so a five-price contract must already exist on the road — and it does.",
+     "zh": "設計由一格畫面開始：餘燼琉璃六格輪盤揭示完成之後，唔停低，反而以彩繪玻璃演一段動畫——一個兜帽身影由內擊碎玫瑰窗。呢一格定死咗其餘一切。玩家要認得出個剪影係自己，所以主角必須無面——而兩個主角本來就係。碎片要往下交到跪住嘅蒼白身影手上，所以蒼白眾必須讀得出係搬運者而唔係獵人——而已 shipped 嘅低語本身就講咗佢哋唔係喺度獵你。要有陌生人揸住你人格嘅零件，所以路上必須早已有一份五重代價嘅合約——而佢一直都在。"
+    },
+    {
+     "en": "The force ran back to the first ten seconds: a returned object, an unreadable inscription in your own hand, and a wall with six holes in it. Three plants, none of which may be commented on, all of which must survive being ignored for thirty climbs.",
+     "zh": "呢股倒推嘅力一路推返到開場頭十秒：一件被歸還嘅物件、一句用你自己筆跡寫成而你讀唔出嘅刻文、一幅有六個窿嘅牆。三個伏筆，一個都唔准解釋，而且要捱得住被無視三十程。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "起承轉合 measured in runs, not chapters",
+    "zh": "起承轉合，用「程」量"
+   },
+   "body": [
+    {
+     "en": "起 is one screen. 承 is not a section at all — it is twenty climbs of ordinary roguelite work during which six quests, twenty-four whispers and five pages arrive on schedules the player experiences as generosity. 轉 is a single ceremony triggered by the sixth shard, costing nothing except everything already done. 合 is Act IV, short on purpose.",
+     "zh": "「起」係一個畫面。「承」根本唔係一個段落——係二十程尋常 roguelite 勞作，期間六條 quest、二十四句低語、五頁紙按各自節奏送到，而玩家會當佢係慷慨。「轉」係由第六片碎片觸發嘅一場儀式，除咗已經做完嘅一切，唔使再付。「合」係 Act IV，刻意短。"
+    },
+    {
+     "en": "承 is the load-bearing member. In a film it is the flabby middle; here it is the entire evidence base, delivered by systems that already gate on real play — nine motes, three shades, six hundred and fifty gold, five dawns carrying dead weight, five prices from a man with a one-in-five appearance rate. The player does not experience it as exposition because they experience it as difficulty.",
+     "zh": "食重嘅係「承」。喺電影度呢段係鬆散中段；喺呢度佢係全部證據嘅來源，而且由本來已經 gate 住真實遊玩嘅系統送出——九粒光塵、三道影、六百五十金、揹住死重量捱五次破曉、向一個出現率五分一嘅人付五重代價。玩家唔覺得係聽設定，因為佢感受到嘅係難度。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "What the player was looking at the whole time",
+    "zh": "玩家一直望住嘅嘢"
+   },
+   "body": [
+    {
+     "en": "Three shipped assets carry the reveal and none need repainting. The mural has a doorway at its hub, so the Rose Window has always been drawn as a portal, not a trophy case. The Sovereign's halo has a gap the shape of a shard, so the fourth page's claim — a king's shape worn over a lock — is visible in the enemy art from the first fight. And mirror.png is the Shade with a slight smile: a boss portrait that has been on the board since act one, priced at six health to smash.",
+     "zh": "三件已 shipped 嘅美術扛起揭盅，一件都唔使重畫。壁畫嘅輪轂係一道門，即係玫瑰窗一直畫成通道，唔係獎座櫃。永恆君王嘅光環有個碎片形狀嘅缺口，即係第四頁講「喺鎖上披起王者形貌」呢件事，第一次打佢就已經寫喺敵人美術上。而 mirror.png 就係帶淺笑嘅影：一張由第一幕就擺喺枱面、明碼六點生命砸得爛嘅 boss 立繪。"
+    },
+    {
+     "en": "The cheapest trick is the handwriting: the opening inscription is whisper 1, scratched into the wall an hour before the Vigil hands you the same sentence as a reward. Forwards it is atmosphere. Backwards it is a signature.",
+     "zh": "最平嘅一招係筆跡：開場嗰句刻文就係低語 1，喺守夜將同一句當獎賞交俾你之前一個鐘，已經刻咗喺牆上。順住讀係氣氛，倒返轉讀係簽名。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "The whisper list is a route book",
+    "zh": "低語清單係路書"
+   },
+   "body": [
+    {
+     "en": "The twenty-four shipped whispers already run in a fixed order, one per dawn, and that order is operational rather than thematic: what to notice, what to collect, how the systems behave, what they mean, then a four-line instruction set — look beyond the summit, there is a door, its inscription is older than the Vigil, bring six shards. Nothing was reordered for this story. A fixed instructional sequence, delivered one line per session, is what a person leaves behind when they expect the recipient to be forgetful and slow.",
+     "zh": "已 shipped 嘅二十四句低語本身就有固定次序，一夜一句，而個次序係操作式而非主題式：留意咩、收集咩、系統點運作、系統咩意思，然後四句指示——望向頂點之外、有一扇門、門上銘文比守夜更老、帶六片碎片返嚟。為咗呢個故事一句都唔使調位。一份固定嘅指示序列、一節派一句——呢種嘢，只有當你預咗收件人善忘又慢熱先會咁留低。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Act IV is a contrast, not a content patch",
+    "zh": "Act IV 係對比，唔係內容補丁"
+   },
+   "body": [
+    {
+     "en": "The world is broken leadwork; Act IV's one visual idea is that the glass up here is whole, because it is the part of the memory that was never smashed. Nine enemies, each a frozen pane that steps out of its frame and leaves a person-shaped hole, gives the roster one silhouette rule and gives every kill a line of first-person prose without a cutscene. The boss reuses mirror.png and mirrors the player's own move list, so the last fight is an argument with your own build. Five nodes keeps it under half an hour: an epilogue that outstays its welcome converts a reveal into a grind.",
+     "zh": "成個世界都係斷裂鉛框；Act IV 只有一個視覺概念：上面嘅玻璃係完整嘅，因為佢係記憶入面未被打碎嗰截。九個敵人各自係一格定格窗片，踏出窗框，身後留低一個人形嘅洞——一條規則就俾晒成個 roster 一致嘅剪影，亦令每次擊殺自然帶出一段第一人稱散文，唔使開 cutscene。Boss 沿用 mirror.png，招式表同玩家鏡像，所以最後一戰其實係同自己套牌組吵一場。五個節點令佢維持喺半個鐘以內：賴死唔走嘅尾聲，會將反轉變成苦工。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "A loss has to write something down",
+    "zh": "輸咗要寫低啲嘢"
+   },
+   "body": [
+    {
+     "en": "Rubric A3. Every death adds a group of broken glyphs to the Vigil's glass wall, with a silhouette pressed between them naming the boss and the act that killed you, so the residue refers to that specific defeat rather than to defeat in general. The keeper says so out loud the next morning. Before the reveal this is a ghost story; after it, the marks are the player's own blackout carving, which makes the residue system part of the evidence. The wall grows with your failures, so the confession is longest for the players who struggled most — and a player who never dies has the least to read.",
+     "zh": "評分項 A3。每次死亡，守夜嘅琉璃牆就多一組破碎字形，字間壓住嘅剪影指明係邊個 boss、邊一幕殺咗你——所以殘留指向嗰次具體嘅失敗，而唔係泛指失敗。掌燈人翌晨會明文講出嚟。揭盅前係鬼故；揭盅後，嗰啲痕跡係玩家自己斷片時刻嘅，於是殘留系統本身就變成證物。幅牆隨你嘅敗績生長，所以掙扎得最辛苦嗰班玩家，讀到嘅告解最長——而從來唔死嘅玩家，可讀嘅嘢最少。"
+    },
+    {
+     "en": "One naming note: 【the Last Place】, 【the Unforgotten Peak】 and 【the One Who Did Not Forget】 are placeholders. Shipped strings quoted verbatim here still carry the retired name, because that is what is in the product today.",
+     "zh": "一個命名註記：【終境】、【未忘之峰】、【不曾遺忘的你】全部係暫名。本頁逐字引用嘅已 shipped 字串仍然帶住嗰個已退役嘅名，因為嗰啲就係產品今日實際有嘅字串。"
+    }
+   ]
+  }
+ ],
+ "rereadings": [
+  {
+   "line": "Broken glyphs are the shadow of a complete sentence.",
+   "before": {
+    "en": "Atmosphere: the ruined script scattered through the world is debris of some older text nobody can restore.",
+    "zh": "氣氛：散落世界各處嘅殘破字形，係某段更古老、無人能復原嘅文本嘅碎屑。"
+   },
+   "after": {
+    "en": "The complete sentence is the confession you wrote before breaking the vow. The whispers and every glyph on the wall are that sentence, taken apart. The shadow's body is your own hand.",
+    "zh": "嗰句完整句子，就係你毀約前寫低嘅告解。低語同牆上每個字形，都係嗰句被拆散後嘅樣。影嘅本體，係你隻手。"
+   }
+  },
+  {
+   "line": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR.",
+   "before": {
+    "en": "The cosmology beat: seven omens are natural, the eighth is something structural leaning over the world.",
+    "zh": "世界觀大揭示：七個凶兆係自然現象，第八個係某種結構性嘅嘢壓落嚟嘅影。"
+   },
+   "after": {
+    "en": "Even the correction is a marker you left. Seven signs would not convince a forgetful you, so you added an eighth and forced a future self to survive a night in the door's shadow before believing anything.",
+    "zh": "連呢句更正都係你留低嘅路標。七個記號說服唔到善忘嘅你，所以你加多一個第八，逼未來嘅自己喺門影下捱足一夜先准佢信。"
+   }
+  },
+  {
+   "line": "We were never climbing out. We were carrying light to the lock.",
+   "before": {
+    "en": "A tragic mission statement: the climb was never escape, it was a duty carried by generations.",
+    "zh": "悲壯宣言：朝聖從來唔係逃生，而係歷代承傳嘅職責。"
+   },
+   "after": {
+    "en": "A literal confession. Every we in it is one person. The lock is the one you dismantled, and light has been going back to it, run after run, exactly as you arranged.",
+    "zh": "一句字面自首。入面每個「我們」都係同一個人。把鎖係你親手拆散嘅，而光一程一程搬返去，完全按你嘅安排。"
+   }
+  },
+  {
+   "line": "Your monument does not always lie down.",
+   "before": {
+    "en": "A ghost-story line about standing stones, and a hint that the monument node returns your bequest.",
+    "zh": "一句關於矗立石嘅鬼故，兼一個提示：紀念碑節點會還返遺贈。"
+   },
+   "after": {
+    "en": "It stands because you are not dead. The monolith is an empty grave you cut for yourself, and the lit lantern at its foot is the hint you leave the next you after each erasure.",
+    "zh": "佢企住，因為你根本未死。塊碑係你替自己刻嘅空墳，碑腳嗰盞燈，係你每次抹除之後留俾下一個自己嘅提示。"
+   }
+  },
+  {
+   "line": "The Pale Ones are not hunting you. They are pointing upward.",
+   "before": {
+    "en": "A tactical correction: the marked pale enemies are a navigation aid, not an ambush.",
+    "zh": "戰術更正：被標記嘅蒼白敵人係導航提示，唔係伏擊。"
+   },
+   "after": {
+    "en": "Neither. They are the couriers you sent down the mountain with the pieces, returning them one cold mote at a time to the only person entitled to collect them.",
+    "zh": "兩樣都唔係。佢哋係你當年派落山、揹住零件嘅信使，而家逐粒寒冷光塵還返俾唯一有資格收嘅人。"
+   }
+  },
+  {
+   "line": "The gaunt keeper remembers the road you did not take.",
+   "before": {
+    "en": "Ominous flavour: the man on the unlit way has seen more of this world than you have.",
+    "zh": "陰森味道：未燃之路上嗰個人，見過嘅世界比你多。"
+   },
+   "after": {
+    "en": "He remembers it because you paid him to hold it. The five prices are your own deposit repaid in instalments, one clue per payment, on the schedule you set.",
+    "zh": "佢記得，係因為你出錢請佢代你保管。五重代價就係你當年落嘅按金分期發還——一次付款一條線索，按你自己定嘅期數。"
+   }
+  }
+ ],
+ "meta": {
+  "twist": {
+   "en": "You have made this climb before. You reached the top, opened the door, saw what was above it, and swore it would never follow anybody down. So you broke the Rose Window from the inside, gave the six shards to the Pale Ones to scatter, paid the Hollow Lamplighter five prices to hold the parts of your character you could not be trusted with, and turned your own lantern on yourself. The six shards are not a key: they are the lock you took apart. The half of you that could not go through with it left the whispers, the pages and the eighth omen as a dead drop, so a future forgetful you could find the way back and be offered the choice again.",
+   "zh": "這條路你走過。你上到頂、開過那道門、見過門上的東西，然後立誓：不可讓它跟着任何人落山。於是你由內擊碎玫瑰窗，把六片碎片交給蒼白眾散落，向空燈掌燈人付五重代價，請他保管你自己信不過的人格零件，最後把提燈轉向自己。六片碎片不是鑰匙：它們是你親手拆散的那把鎖。而你身上狠不下心的一半，沿路留下低語、頁與第八凶兆，做成一個 dead drop，好讓將來善忘的你找得回路，並且可以再選一次。"
+  },
+  "act4": {
+   "en": "【the Unforgotten Peak】: five nodes behind the door at the hub of the Rose Window. One visual rule — whole, saturated, internally lit stained glass against a world made entirely of broken leadwork, because this is the part of the memory that was never smashed. Nine enemies, 【the Excised Moments】, each a frozen pane that steps out of its frame and leaves a person-shaped hole, each dropping a line of first-person prose in the handwriting from the opening scene. Boss: 【the One Who Did Not Forget】, built on the existing mirror.png vocabulary and mirroring the player's own move list. Two endings: absorb it, remember everything, and open the door knowing exactly what is behind it (ascended.png); or kill it again, carry the six shards down, scatter them and wipe this iteration (fallen.png) — which turns the last whisper from consolation into a loop you chose by hand, and explains diegetically why there is another run.",
+   "zh": "【未忘之峰】：玫瑰窗輪轂那道門之後的五個節點。唯一的視覺規則是完整、飽和、由內發光的彩繪玻璃，對照一個全由斷裂鉛框構成的世界——因為這是記憶中不曾被打碎的一截。九個敵人【被剪走的時刻】，各為一格定格窗片，踏出窗框，留下人形的洞，每個掉下一行第一人稱散文，筆跡與開場的刻痕相同。Boss【不曾遺忘的你】沿用現有 mirror.png 語彙，招式表與玩家鏡像。兩種結局：接回它、記起一切、明知門後是甚麼仍推門（ascended.png）；或再殺它一次，揹六片碎片落山重新散落，抹去這一輪的自己（fallen.png）——後者令最後一句低語由安慰變成你親手選的迴圈，並在敘事之內解釋了為何還有下一程。"
+  },
+  "defeat": {
+   "en": "Rubric A3: every defeat adds broken glyphs to the Vigil's glass wall, with a silhouette between them identifying the boss and act that killed you, so the residue refers to that specific loss. The keeper names it the next morning — there is another line since last night, I did not cut it. Before the reveal this is environmental horror; after it, the player understands the marks are their own blackout carving, which makes the residue system itself part of the evidence. The wall grows with your failures, so the confession is longest for the players who struggled most.",
+   "zh": "評分項 A3：每次戰敗，守夜的琉璃牆便多一組破碎字形，字間的剪影指明殺死你的 boss 與幕次，所以殘留指向那一次具體的失敗。翌晨掌燈人會說出來：昨夜又多了一行，不是我刻的。揭盅前是環境恐怖；揭盅後，玩家明白那些痕跡是自己斷片時刻下的，於是殘留系統本身也成為證物。牆隨敗績生長，掙扎得最辛苦的玩家，讀到的告解最長。"
+  },
+  "risks": {
+   "en": "Three. First, this shares its raw material — memory — with another candidate; the distinction is directional and must be stated aloud: that one is a dead person walking back through a memory, this is a living person who erased herself on purpose and left her own clue network. Two of these on the same slate will taste identical to a casual reader. Second, the Memento payoff depends on players re-reading the whisper log after the reveal; a player who skips the dawn ceremony meets the twist having seen a third of its setup, and the reveal scene then carries the whole load alone. Third, cost: the whole-glass region art, nine excised-moment enemies and the six-panel memory animation are all new, and the animation is the most expensive shot in the game.",
+   "zh": "三項。第一，本作與另一個候選共用同一種原料——記憶——分別必須明言，而且方向剛好相反：對方是死者行回一段記憶，這邊是在生的人自願自抹並自設線索網。兩個一齊上檯，讀得不細的人會覺得一模一樣。第二，Memento 式的爽位依賴玩家在揭盅後回讀低語紀錄；跳過破曉儀式的玩家，遇上反轉時只見過三分一鋪墊，揭盅那一場便要獨力承受全部重量。第三，成本：完整玻璃的區域美術、九個【被剪走的時刻】敵人，以及六格記憶動畫，全部是新資產，而那段動畫是全遊戲最貴的一個鏡頭。"
+  }
+ }
+}

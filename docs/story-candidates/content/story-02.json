@@ -1,0 +1,704 @@
+{
+ "no": 2,
+ "title": {
+  "en": "The Abdication Rite",
+  "zh": "退位儀式"
+ },
+ "family": {
+  "en": "The Staged World",
+  "zh": "做戲的世界"
+ },
+ "hook": {
+  "en": "Six shards, three acts, and a door above the crown. You have walked this road before — and the Vigil has walked it with you rather more often than that.",
+  "zh": "六片碎片、三幕路，王冠之上一道門。這條路你走過——而守夜陪你走過的次數，比那多得多。"
+ },
+ "poster": "hero",
+ "images": [
+  {
+   "id": "hero",
+   "source": "generate",
+   "subject": "A low stone room lit by a single lantern. A standing figure in a faceted glass mask fastens the hood of a cloaked traveller whose face is turned away and cannot be seen, then holds out a flail whose head is a small caged lantern. Behind them a tall window of dark unlit stained glass is set into empty air, with six blank spaces in its wheel and no wall to hold it up.",
+   "alt": {
+    "en": "In a lantern-lit stone room, a masked attendant fastens a hooded traveller's cloak and offers a lantern-headed flail.",
+    "zh": "石室之中，一盞提燈照明；戴面具的侍者為披篷旅人扣好兜帽，遞上燈首流星錘。"
+   }
+  },
+  {
+   "id": "merchant",
+   "source": "asset",
+   "path": "assets/art/props/merchant.png",
+   "alt": {
+    "en": "A merchant in a robe, his face a faceted plate of glass with no eyes and no mouth.",
+    "zh": "身披長袍的商人，臉是一塊多面琉璃，沒有眼，也沒有口。"
+   }
+  },
+  {
+   "id": "lamplighter",
+   "source": "asset",
+   "path": "assets/art/meta/hollow-lamplighter.png",
+   "alt": {
+    "en": "A gaunt bald figure in a long robe, holding an unlit lantern on a pole.",
+    "zh": "枯瘦光頭的長袍身影，執一根長桿，桿上提燈未燃。"
+   }
+  },
+  {
+   "id": "gambler",
+   "source": "asset",
+   "path": "assets/art/events/gambler.png",
+   "alt": {
+    "en": "A grinning skeleton shaking a cup of knuckle-bones.",
+    "zh": "咧嘴而笑的骷髏，搖着一杯指骨骰。"
+   }
+  },
+  {
+   "id": "fallen",
+   "source": "asset",
+   "path": "assets/art/meta/fallen.png",
+   "alt": {
+    "en": "A dark hall with a standing obsidian monolith, one lit lantern at its foot.",
+    "zh": "幽暗大廳，一座矗立的黑曜石碑，碑腳留着一盞點着的燈。"
+   }
+  },
+  {
+   "id": "sovereign",
+   "source": "asset",
+   "path": "assets/art/enemies/sovereign.png",
+   "alt": {
+    "en": "A crowned figure with a sceptre, a broken halo behind it with a shard-shaped gap at the top right.",
+    "zh": "戴冠執杖的身影，身後光環破損，右上角缺了一塊碎片形狀的空隙。"
+   }
+  },
+  {
+   "id": "mural",
+   "source": "asset",
+   "path": "assets/art/meta/emberglass-mural.png",
+   "alt": {
+    "en": "A six-panel stained-glass wheel with a glowing arched doorway at its hub.",
+    "zh": "六格彩璃圓輪，輪轂正中是一道發光的拱門。"
+   }
+  },
+  {
+   "id": "unmasking",
+   "source": "generate",
+   "subject": "A wide stone chamber beneath a lit six-panel stained-glass wheel. A merchant, a robed trader, a skeleton, a hooded stranger and a gaunt lamplighter are lowering masks from their faces and kneeling in a half circle. Every uncovered face is pale, bare and identical in colour, all of them turned away from the glowing wheel and towards the viewer.",
+   "alt": {
+    "en": "Beneath a lit six-panel wheel of glass, five figures lower their masks and kneel, facing outward.",
+    "zh": "點亮的六格琉璃輪之下，五個身影摘下面具跪落，面向外側。"
+   }
+  },
+  {
+   "id": "mirror",
+   "source": "asset",
+   "path": "assets/art/events/mirror.png",
+   "alt": {
+    "en": "A tall unbroken mirror; the reflection in it is a dark tendrilled figure with glowing eyes, faintly smiling.",
+    "zh": "一面完好的高鏡；鏡中是纏繞觸影的黑色身影，雙眼發光，微微在笑。"
+   }
+  },
+  {
+   "id": "act4",
+   "source": "generate",
+   "subject": "A wide corridor of unfinished glass, molten and half set, running away from a tall open door. The walls are colourless and translucent and still slumping, with the shapes of windows beginning to form in them and never finishing. Suspended in the air along the corridor are an empty crown, a walking sceptre and a robe with nobody inside it.",
+   "alt": {
+    "en": "A corridor of unfinished molten glass behind an open door, with an empty crown, a sceptre and an empty robe suspended in it.",
+    "zh": "敞開的門後是一條未成形的熔融琉璃長廊，空中懸着一頂無人之冠、一根遊走的權杖，與一襲空袍。"
+   }
+  },
+  {
+   "id": "lastshade",
+   "source": "generate",
+   "subject": "A tall dark figure standing at the end of a hall of unfinished glass, wearing a complete royal robe and an intact crown, with two glowing eyes and no face. It holds a lit lantern low in one hand. Its shadow on the floor behind it wears no crown at all.",
+   "alt": {
+    "en": "A crowned dark figure with glowing eyes holds a lit lantern; the shadow it casts wears no crown.",
+    "zh": "戴冠的黑影雙眼發光，低手提着一盞燃着的燈；地上投出的影子卻沒有冠。"
+   }
+  },
+  {
+   "id": "ascended",
+   "source": "asset",
+   "path": "assets/art/meta/ascended.png",
+   "alt": {
+    "en": "A cathedral city standing above the clouds in a golden dawn.",
+    "zh": "金色破曉之中，一座立於雲上的教堂之城。"
+   }
+  }
+ ],
+ "story": [
+  {
+   "t": "act",
+   "en": "RUN 1 — The Ashen Woods",
+   "zh": "第一次朝聖 — 灰燼樹林"
+  },
+  {
+   "t": "prose",
+   "en": "The Vigil is a low stone room with a tall window in it and no wall that could be holding it up. Six of its spaces are empty. You do not think about this on the first morning.\n\nThe merchant is waiting by the rack with your cloak over his arm. He does not speak in this room — only in the shop, in that bright commercial voice. He settles the hood, tests the buckle at your throat, and puts the lantern into your hands.\n\nThen he steps back and bows.\n\nIt is a low bow. Perhaps half an inch lower than the room requires, and it lasts about half a second longer than a bow lasts. You have no idea how long a bow lasts. You are new.",
+   "zh": "守夜是一間低矮石室，室內立着一扇高窗，四周卻沒有哪一堵牆撐得起它。窗上六處空位仍然是空的。第一個早晨你不會去想這件事。\n\n商人在架旁等着，你的披篷搭在他臂上。他在這間房從不開口——他只在商店裏說話，用那把明亮的生意腔。他替你理好兜帽，試過喉前的扣，把提燈交到你手裏。\n\n然後他退後一步，鞠躬。\n\n那是一個很低的躬。大概比這間房所需要的低了半寸，也比一個躬應有的長度多了半秒。你根本不知道一個躬應有多長。你是新來的。"
+  },
+  {
+   "t": "art",
+   "img": "hero",
+   "en": "The Vigil, before a first climb.",
+   "zh": "守夜，初次啟程之前。"
+  },
+  {
+   "t": "screen",
+   "en": "THE LAMPLIGHTER\nA Boon for the Road\n\nA Full Purse — Set out with 120 extra gold.",
+   "zh": "掌燈人\n路上的恩賜\n\n滿囊金幣——出發時額外獲得 120 金幣。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Lamplighter",
+   "sp_zh": "掌燈人",
+   "en": "There is a false crown in the east, and a door that it holds shut. Bring six shards back to this window and the window will show you the way to both.",
+   "zh": "東方有一頂假冠，還有一道被它封住的門。把六片碎片帶回這扇窗前，窗會把通往兩者的路指給你看。"
+  },
+  {
+   "t": "prose",
+   "en": "The Ashen Woods are grey and burnt and full of small things that bite. You learn that the lantern eats cards out of your hand and gives fire back. You reach the Rootheart with eleven cards and no phials, and around the seventh turn the arithmetic stops being survivable.",
+   "zh": "灰燼樹林一片灰、一片焦，滿佈會咬人的小東西。你學會提燈會吃掉你手上的牌，再把火還給你。你帶着十一張牌、藥瓶用盡，走到根脈之心跟前；大約第七回合，數字就不再是能活下去的數字。"
+  },
+  {
+   "t": "screen",
+   "en": "Your lantern went dark on floor 9.\n\nMONUMENT OF THE LAST FALL\nCarve one thing into the stone — the next climb may recover it in The Ashen Woods.",
+   "zh": "你的提燈在第 9 層熄滅。\n\n上次墜落的紀念碑\n將一事刻入石中——下一段朝聖之路可在灰燼樹林取回。"
+  },
+  {
+   "t": "prose",
+   "en": "You come back at dawn carrying nothing. The merchant is at the rack, where he was. Nobody asks how it went. Behind you a pane of the dark window catches and goes out, and a sentence arrives the way sentences arrive in dreams — already finished, already yours.",
+   "zh": "破曉時你兩手空空回來。商人在架旁，位置分毫未變。沒有人問你走得怎樣。你身後，黯窗上一片窗片閃了一下又熄；然後一句話像夢裏的話那樣抵達——已經說完，而且已經屬於你。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 3",
+   "sp_zh": "低語 3",
+   "en": "Six spaces wait where no window stands.",
+   "zh": "六處空位在等候，那裏不曾立過窗。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 2 — The Sunken City",
+   "zh": "第二次朝聖 — 沉沒之城"
+  },
+  {
+   "t": "prose",
+   "en": "On the second climb a path goes dark on the map: an unlit lantern, a node the Vigil declines to name. At the end of it stands a gaunt bald figure holding a lantern on a pole with nothing inside it. Not the Lamplighter who gave you the purse this morning — thinner, older, waiting precisely where you were going to walk anyway.",
+   "zh": "第二次朝聖，地圖上有一條路暗了下來：一盞未燃之燈，一個守夜不肯命名的節點。路盡頭立着一個枯瘦光頭的身影，手執長桿，桿首提燈裏空無一物。不是今早給你錢囊的掌燈人——更瘦、更老，而且等候的位置恰好就是你本來就要走過的地方。"
+  },
+  {
+   "t": "art",
+   "img": "lamplighter",
+   "en": "On the Unlit Way.",
+   "zh": "未燃之路上。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your lantern is noisy. Give me the next three embers it catches.",
+   "zh": "你的提燈太吵。把它接下來收集的三點餘燼交給我。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Six panes were carried away from a window no wall could hold.",
+   "zh": "六片窗片曾從一扇無牆可承的窗中被帶走。"
+  },
+  {
+   "t": "prose",
+   "en": "You say yes, because the path only goes one way. Three embers later the lantern is quiet and your deck is bad, and Leviathan's Maw takes you without hurrying. You did not lose the fight; you lost the run four floors earlier, at a shop, over sixty gold.",
+   "zh": "你答應了，因為這條路只通向一個方向。三點餘燼之後，提燈安靜了，牌組很差，利維坦之喉吞掉你，一點也不趕。你不是輸了這場仗；你是四層之前在商店裏，為了六十金幣，輸掉了整段朝聖。"
+  },
+  {
+   "t": "art",
+   "img": "gambler",
+   "en": "He keeps a tally either way.",
+   "zh": "無論你有無開口，他都替你記數。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Bone Gambler",
+   "sp_zh": "骨骰賭徒",
+   "en": "Second fall. Sunken City. Odds unchanged.",
+   "zh": "第二次墜落。沉沒之城。賠率照舊。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 3 TO 6 — What the deaths are for",
+   "zh": "第三至第六次朝聖 — 死亡的用途"
+  },
+  {
+   "t": "prose",
+   "en": "The Vigil opens by increments, one dawn at a time. Omens cover the nights. In the fourth run you kill a third foe of the wrong colour — bleached, cold, a Pale Drowned One with the sea washed out of it — and a lens assembles from the motes they drop.\n\nAfter that they are marked before you reach them. What you think about eventually is that a marked foe mid-fight will sometimes stop. Not flinch. Stop. And raise one arm.",
+   "zh": "守夜一次一個破曉地敞開。凶兆籠罩長夜。第四次朝聖途中，你殺掉第三隻顏色不對的敵人——褪白、冰冷，一隻被海水洗淨了的蒼白溺亡者——牠們掉下的光塵自行聚成一枚透鏡。\n\n此後牠們在你走近之前就已標好。你最終會想的是另一件事：一隻被標記的敵人，戰鬥途中偶爾會停下來。不是退縮，是停。然後抬起一隻手。"
+  },
+  {
+   "t": "screen",
+   "en": "Witchlight Lens — Pale paths will now be marked.",
+   "zh": "巫光透鏡——蒼白路徑如今將留下標記。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 18",
+   "sp_zh": "低語 18",
+   "en": "The Pale Ones are not hunting you. They are pointing upward.",
+   "zh": "蒼白眾並非在獵你。他們在向上指。"
+  },
+  {
+   "t": "prose",
+   "en": "The other thing the deaths buy is a duel. Die once, and somewhere on the next climb a shape stands in the road wearing your outline. Not a monster with your face; a monster with your hand. It plays Remembered Chisel, then Remembered Eclipse, and on the turn it should be dying it plays First Spark, Last Light — the card you were keeping for exactly that turn — better than you do.",
+   "zh": "死亡買到的另一樣東西是決鬥。死過一次之後，下一段路上某處便有一道形影立在路中，披着你的輪廓。不是長着你的臉的怪物，是擁有你的出手的怪物。牠打出憶中璃鑿，再打憶中蝕月；在牠本該倒下的那一回合，牠打出「初火，終光」——你留到這一回合的牌——而且打得比你好。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Fell",
+   "sp_zh": "墜落之影",
+   "en": "I remember the stone. You walked away before I stopped calling.",
+   "zh": "我記得那塊石。你轉身離去時，我仍未停止呼喚。"
+  },
+  {
+   "t": "prose",
+   "en": "You had walked away. Two runs ago you left a card in the monument and never went back for it, and nothing had suggested anybody was still standing there.\n\nTwo more deaths finish the argument. The second shade speaks about the road rather than about you; the third has stopped talking about the climb at all.",
+   "zh": "你確實轉身離去過。兩次朝聖之前，你把一張牌留在紀念碑裏，沒有再回去取；沒有任何東西暗示過仍然有人站在那裏。\n\n再死兩次，這場爭論才講得完。第二道影談的是路，不是你；第三道影已經完全不再談這條路。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Returned",
+   "sp_zh": "歸來之影",
+   "en": "Each climber leaves a shape behind. 【The Last Place】 has learned to wear ours.",
+   "zh": "每位朝聖者都留下一道形影。【終境】已學會披上我們的模樣。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Shade That Remembers",
+   "sp_zh": "銘記之影",
+   "en": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
+   "zh": "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Your Own Shade",
+   "sp_zh": "自身之影",
+   "en": "We were never climbing out. We were carrying light to the lock.",
+   "zh": "我們從來不是為了逃出去而朝聖；我們一直把光送往鎖孔。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 7 — The first dawn",
+   "zh": "第七次朝聖 — 初次破曉"
+  },
+  {
+   "t": "prose",
+   "en": "【The Last Place — placeholder name】 is the third act, all black glass and thin air, and at the top of it a crowned thing is sitting down. Behind its head is a broken halo with a gap shaped exactly like a shard.\n\nYou win by two Ward. The crown comes apart, the light goes the wrong way — up, past the throne, into a dark this room should not have — and dawn arrives.",
+   "zh": "【終境——暫名】是第三幕，通篇是黑琉璃與稀薄的空氣；最高處有一個戴冠之物坐着。牠腦後是一圈破損的光環，缺口的形狀恰好就是一片碎片。\n\n你以兩點護光險勝。王冠碎開，光走錯方向——向上，越過王座，進入一片這房間不該有的黑暗——然後破曉來了。"
+  },
+  {
+   "t": "art",
+   "img": "sovereign",
+   "en": "Crowned, haloed, incomplete.",
+   "zh": "戴冠，有光環，並不完整。"
+  },
+  {
+   "t": "screen",
+   "en": "THE VIGIL OPENS\nThe Emberglass Rose Window opens.",
+   "zh": "守夜敞開\n餘燼琉璃玫瑰窗開啟。"
+  },
+  {
+   "t": "prose",
+   "en": "So that is what the six spaces were: a wheel of six dark panels around an arch at the hub, and the arch is a doorway, lit although every panel around it is dead. Six journeys are inscribed in a hand older than the room; you started four without knowing.",
+   "zh": "原來那六處空位是這個意思。六格黯淡的畫面圍着輪轂上一道拱——那道拱是一扇門，四周全熄，它本身卻亮着。六段旅途以比這房間更古老的筆跡刻在窗上。其中四段你早已動身，只是不知道。"
+  },
+  {
+   "t": "art",
+   "img": "mural",
+   "en": "Six journeys, and something at the hub.",
+   "zh": "玫瑰窗：六段旅途，輪轂上還有一樣東西。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 8 TO 16 — The six errands",
+   "zh": "第八至第十六次朝聖 — 六樁差事"
+  },
+  {
+   "t": "prose",
+   "en": "The window does not ask for feats. It asks for repetitions. Nine pale motes. Three shades. Five dawns carrying a page that cannot be read or discarded. One night under an omen that is not among the seven. One mask off a false king. Five prices on the Unlit Way.\n\nThis takes weeks. Real ones. You put the game down for eleven days, and when you come back your absence is already on the gambler's board.",
+   "zh": "這扇窗要的不是壯舉，是重複。九粒光塵。三道影。攜着一頁既讀不懂又丟不掉的紙贏五次破曉。在七者之外的凶兆下渡過一夜。從假王臉上取下一副面具。在未燃之路付清五重代價。\n\n這要花上數星期。真實的星期。你把遊戲擱下十一日；回來時，賭徒那塊粉牌已經寫低你缺席的日子。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Bone Gambler",
+   "sp_zh": "骨骰賭徒",
+   "en": "Ninth fall. Ashen Woods, floor 4, second time running. Same throat took you. Odds unchanged.",
+   "zh": "第九次墜落。灰燼樹林，第 4 層，連續兩次。吞你的是同一條喉。賠率照舊。"
+  },
+  {
+   "t": "screen",
+   "en": "FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.\n\nFIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown.",
+   "zh": "第四頁——永恆君王取來一盞空燈，在鎖上披起王者形貌。\n\n第五頁——玫瑰窗是一幅地圖，不是紀念碑。將它點亮，再望向王冠之上。"
+  },
+  {
+   "t": "prose",
+   "en": "The eighth omen is not an omen. Under it, every ordinary fight acquires a title, and broken glyphs follow you up the floors like a sentence being assembled behind your back.",
+   "zh": "第八凶兆不是凶兆。它籠罩之下，每一場尋常戰鬥都會獲得一個題名，破碎的字形一層層跟着你上路，像有人在你背後逐字砌一句話。"
+  },
+  {
+   "t": "screen",
+   "en": "// THE PANE WATCHES //\n// EIGHT IS NOT A NUMBER //\n// CARRY THE WRONG LIGHT UPWARD //\n// THE CROWN IS A MASK //\n\nTHE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR.",
+   "zh": "// 窗片凝視 //\n// 八並非數字 //\n// 攜錯誤之光向上 //\n// 王冠只是一副面具 //\n\n第八凶兆從來不是凶兆。它是一扇門投下的影。"
+  },
+  {
+   "t": "prose",
+   "en": "The cold thing under the merchant's counter costs six hundred and fifty gold: two and a half full purses, one whole run spent buying nothing else. He will not discuss anything but the price.",
+   "zh": "商人櫃下那件冰冷之物索價六百五十金幣：兩個半滿囊，即是要用整整一次朝聖甚麼都不買。除了價錢，他甚麼都不肯談。"
+  },
+  {
+   "t": "art",
+   "img": "merchant",
+   "en": "The merchant, doing business.",
+   "zh": "商人，用他做生意時的那把聲音。"
+  },
+  {
+   "t": "screen",
+   "en": "A Lantern with No Flame\nCold glass. No wick. The merchant will not say who left it.\n\n“Now the summit knows what you carry.”",
+   "zh": "無焰提燈\n冰冷琉璃。沒有燈芯。商人不肯說是誰留下它。\n\n「如今，頂點知曉你攜着何物。」"
+  },
+  {
+   "t": "prose",
+   "en": "Carried to the top, the empty lantern changes the throne room. The crowned thing stands up and does not attack; it looks at the lantern in your off hand and talks to you, which the Sovereign has never done.",
+   "zh": "把空燈帶到最高處，王座廳就變了。那個戴冠之物站起來，沒有出手；牠看着你副手上的提燈，然後開口跟你說話——永恆君王從來沒有這樣做過。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Usurper",
+   "sp_zh": "篡位者",
+   "en": "Duskblade. At last, the lantern brings me a name.\nThe Sovereign was a mask. You have paid to meet the face beneath it.\nBreak me, and the empty lantern will remember fire.",
+   "zh": "暮刃。終於，提燈為我帶來一個名字。\n永恆君王只是一副面具。你已付出代價，得見其下真容。\n打碎我，空燈自會記起火光。"
+  },
+  {
+   "t": "prose",
+   "en": "You break it. The mask comes off the king the way a lid comes off a jar, and the face underneath is pale, and not surprised to see you. It is the calmest thing in the room.",
+   "zh": "你打碎了牠。面具從王的臉上脫下來，像蓋從罐口旋開；底下那張臉蒼白，而且見到你並不驚訝。牠是全場最鎮定的東西。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Usurper",
+   "sp_zh": "篡位者",
+   "en": "The mask is broken. Look above.",
+   "zh": "面具已碎。往上看。"
+  },
+  {
+   "t": "prose",
+   "en": "Which leaves the five prices: the embers, then a hundred and sixty gold, then twelve measures of your vessel — he will not hollow you below thirty, as though the number were a courtesy someone had agreed on — then the boon itself, not the gratitude. By the last meeting you carry a thin deck, a small purse, a smaller body and no advantage.",
+   "zh": "剩下的就是五重代價。空燈掌燈人先要餘燼，再要一百六十金幣，再要你容器的十二格容量——他說他不會把你挖空至三十以下，語氣像那個數字是誰跟誰講好的禮數。然後是恩賜本身，不是你的感激。到最後一次會面，你只剩一副薄牌組、一個小錢囊、一副更小的身體，以及零優勢。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
+   "zh": "最後代價：只留一記心跳在這提燈裏。其餘全歸黑暗。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Light the panes. The door will know you.",
+   "zh": "點亮窗片。門會認得你。"
+  },
+  {
+   "t": "act",
+   "en": "THE SIXTH SHARD",
+   "zh": "第六片碎片"
+  },
+  {
+   "t": "prose",
+   "en": "You come back with the sixth shard at one heart of health, and do not get to sit down.\n\nThe panes light in the order you earned them, so the wheel fills unevenly. The room gets brighter than it ever has. And then, one by one, everybody in it turns around.\n\nThe merchant takes off the faceted plate that has been his face since the first morning. The trader sets down the red glass heart and removes a mask you had assumed was a skull. The gaunt keeper is last, and slowest.\n\nUnderneath, every face is pale, and the same pale — the Pale Ones, who have not once attacked you first in eighteen runs, and who are now all kneeling.\n\nThey are not kneeling towards the window.",
+   "zh": "你帶着第六片碎片、只剩一點生命回來，連坐下的機會都沒有。\n\n窗片按你取得的先後亮起，所以整個輪是歪着填滿的。房間亮到它從未亮過的程度。然後，房裏所有人一個接一個轉過身來。\n\n商人取下那塊自第一個早晨起就充當他臉孔的多面璃板。交易者放下紅琉璃心臟，脫下一副你一直以為是頭骨的面具。枯瘦的掌燈人最後，也最慢。\n\n面具之下，每一張臉都蒼白，而且是同一種蒼白——只有蒼白眾：十八次朝聖以來，他們一次都沒有先動手；而此刻，他們全部跪了下來。\n\n他們跪的方向，不是那扇窗。"
+  },
+  {
+   "t": "art",
+   "img": "unmasking",
+   "en": "The sixth pane catches.",
+   "zh": "第六片窗片燃起。"
+  },
+  {
+   "t": "prose",
+   "en": "The arch at the hub — lit since the first day you saw it, the one thing in the window that never needed a shard — dims, and leaves a flat silvered surface showing the room.\n\nIn the reflection, where you are standing, is a dark figure trailing shadow, two lit eyes, smiling slightly, the way it always does. You have met it in the rubble a dozen times and walked on.\n\nBehind it, the broken halo, its gap exactly the shape of the shard you brought home tonight. Its silhouette and the Sovereign's are the same silhouette. Then the reflection lifts its hand, and so does the thing you are holding, and the thing you are holding is a lantern.",
+   "zh": "輪轂上那道拱——你第一日見到它時就亮着、整扇窗裏唯一不需要碎片的那樣東西——暗了下去。光流走，剩下一面平滑的鍍銀，映着這個房間。\n\n鏡中，站在你所站的位置上，是一個拖着影的黑色身影，兩隻眼睛亮着，嘴角微微在笑——牠一向都是這樣笑。你在瓦礫堆裏見過牠十幾次，然後就走開。\n\n牠身後是那圈破損的光環，缺口正正就是你今夜帶回來那片碎片的形狀。牠的剪影，同永恆君王的剪影，是同一個剪影。然後鏡中的牠抬起手，你手上的東西也抬了起來——而你手上的東西，是一盞提燈。"
+  },
+  {
+   "t": "art",
+   "img": "mirror",
+   "en": "The hub, with the light taken out of it.",
+   "zh": "輪轂，光被抽走之後。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The thing you cut down on that throne is a shape you draped over the lock yourself, long ago, with an empty lantern in your hand. There has only ever been one king here, and he has stood below the stair since the first day, holding the light. We are your subjects, and this is the eighteenth time we have walked your abdication rite beside you — and the first time you got this far.",
+   "zh": "你每一次在那個王座上斬掉的東西，是很久以前你自己披在鎖上的一個形，當時你手裏拿着一盞空燈。這裏由頭到尾只有一位王，而他自第一日起就站在階梯下面，提着光。我們不是你的敵人。我們是你的子民；這是我們第十八次陪你走這場退位儀式——也是你第一次走到這裏。"
+  },
+  {
+   "t": "prose",
+   "en": "The door in the middle of the window opens. It has been three paces from the rack where the merchant hangs your cloak, at eye level, the entire time. It was never above the crown; above the crown was where you had to be looking so that you would not look at it.",
+   "zh": "窗中央那道門開了。它一直都在離商人掛你披篷那個架三步之遙的地方，齊眼高度。它從來都不在王冠之上。王冠之上，只是你必須望着的地方——這樣你才不會望向它。"
+  },
+  {
+   "t": "act",
+   "en": "ACT IV — 【Before the Crowning — placeholder name】",
+   "zh": "第四幕 —【加冕之前——暫名】"
+  },
+  {
+   "t": "screen",
+   "en": "Six panes burn. Something waits above the crown.\nA sealed door opens above the crown.",
+   "zh": "六片琉璃窗片燃起。王冠之上有甚麼在等待。\n王冠之上的封印之門已開。"
+  },
+  {
+   "t": "prose",
+   "en": "Behind the door the glass has not been made yet: molten, half set, colourless, walls still slumping. After three acts of painted glass it is like walking into a sentence before anyone chose the words.\n\nFive nodes. Nine enemies, none of them a monster: a crown with nobody under it, a sceptre walking on its own, a robe holding its shape around an absence. A procession that has stood at attention for an age without being dismissed, attacking because you have not yet said the thing that ends the ceremony.",
+   "zh": "門後的琉璃還未造好：熔融、半凝、無色，牆仍在下墜。走過三幕彩繪琉璃之後，這裏像走進一句還未有人挑好字眼的句子。\n\n五個節點。九隻敵人，沒有一隻是怪物：一頂底下沒有人的冠、一根自己在走的權杖、一襲圍着空缺撐起形狀的袍。一列站了一個時代卻從未被解散的儀仗，攻擊你，只因為你還未講出那句能夠散場的話。"
+  },
+  {
+   "t": "art",
+   "img": "act4",
+   "en": "Past the door.",
+   "zh": "門後。"
+  },
+  {
+   "t": "prose",
+   "en": "The fourth node has no fight. The Pale Ones line the corridor unmasked, and each says the one thing they did as you pass. The one who bought your vitality at a price that had to really hurt. The one who chalked up your defeats so you would have to walk past them. The one who agreed, nine times, to be killed on a throne in a crown he knew was a prop — because you would not believe it until you broke it yourself.",
+   "zh": "第四個節點裏沒有戰鬥。蒼白眾摘下面具在走廊列隊；你經過時，每人講出自己做過的那一件事。那個開一個必須真痛的價、買走你生命力的。那個把你的敗仗用粉筆寫上牌、好逼你每次行經的。還有那個，九次答應戴着一頂他明知是道具的冠坐在王座上被殺的——因為你不會相信那是道具，除非那是你親手打爛的。"
+  },
+  {
+   "t": "prose",
+   "en": "The last node is one figure at the end of the hall in a complete robe under an unbroken crown, a lit lantern low in one hand. It has your entire deck, upgraded the way you upgrade it. Not a shade's fragments of you: all of you, and the crown as well, and it fights like something that intends to keep both.",
+   "zh": "最後一個節點，是走廊盡頭的一個身影：完整的袍，未破的冠，一隻手低低提着一盞燃着的燈。牠擁有你整副牌組，全部照你的習慣升過級。不是影那種零碎的你，是全部的你，還加上那頂冠；牠打起來，像打算兩樣都保住。"
+  },
+  {
+   "t": "art",
+   "img": "lastshade",
+   "en": "The last thing in the hall.",
+   "zh": "走廊盡頭的最後一樣東西，與牠仍然戴着的那件。"
+  },
+  {
+   "t": "prose",
+   "en": "When it goes down it does not die. It kneels, holds the crown up, and waits. Two things are in front of you now, and nothing says which one is the ending.\n\nTake the crown off and walk through: colour comes back into the world, then light, and the cathedral city stands above the cloud. It is a home you were only ever going to be let back into empty-handed.",
+   "zh": "牠倒下時並沒有死。牠跪下，把冠舉起，然後等。兩樣東西此刻擺在你面前，沒有任何東西告訴你哪一樣才是結局。\n\n把冠除下，走進去：顏色先回到世界，然後才是光；雲上那座教堂之城立在破曉裏。那是一個家——一個你只能空手才回得去的家。"
+  },
+  {
+   "t": "art",
+   "img": "ascended",
+   "en": "One of the two ways this ends.",
+   "zh": "兩個結局的其中一個。"
+  },
+  {
+   "t": "prose",
+   "en": "Or put it back on.\n\nThe door seals from the inside. The procession stands back up, relieved, because standing at attention is at least a job. In the Vigil the Pale Ones re-mask one at a time; the last leaves a single lit lantern at the foot of the black monolith, the way you leave a light on for someone who said they would be back.\n\nThe window is dark again. Six spaces are empty. In the morning the merchant will be at the rack with your cloak over his arm, and he will bow, about half an inch lower than the room requires.",
+   "zh": "又或者，把它戴回去。\n\n門從內側封上。儀仗重新站起，鬆一口氣，因為立正待命起碼算是一份差事。守夜之中，蒼白眾一個接一個戴回面具；最後一個在黑曜石碑腳下留了一盞點着的燈，就像你替一個說過會回來的人留燈那樣。\n\n窗又暗了。六處空位是空的。明早，商人會在架旁等着，你的披篷搭在他臂上；他會鞠躬，那個躬比這間房所需要的低了大約半寸。"
+  },
+  {
+   "t": "art",
+   "img": "fallen",
+   "en": "The other one.",
+   "zh": "另一個。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 24",
+   "sp_zh": "低語 24",
+   "en": "The climb continues.",
+   "zh": "朝聖仍在繼續。"
+  }
+ ],
+ "craft": [
+  {
+   "h": {
+    "en": "The last frame was fixed first",
+    "zh": "最後一格先定死"
+   },
+   "body": [
+    {
+     "en": "This story was built backwards from one image: the sixth pane catching, every masked figure in the Vigil turning round and lowering their mask, and the lit arch at the hub of the wheel dimming into a mirror. That frame was non-negotiable, and everything upstream of it is reverse-engineered to make it survivable — because a reveal of this shape dies if the player's first honest reaction is “nothing in the first twenty hours supports that”.",
+     "zh": "呢個故事係由一格畫面倒推出嚟：第六片窗片燃起、守夜入面所有戴面具嘅人轉身摘面具、輪轂上一直亮住嘅拱門暗落去變成一面鏡。呢一格冇得改，上游所有嘢都係逆向砌出嚟遷就佢——因為呢種形狀嘅反轉，一旦玩家第一個誠實反應係「頭二十個鐘冇一樣嘢撐得住呢個講法」，就即刻死。"
+    },
+    {
+     "en": "What it forced into the opening was the bow. The twist needed a piece of evidence that is present on the very first screen, costs nothing to miss, and cannot be read any other way once you know. A bow half an inch too low and half a second too long is deniable on run 1 and undeniable on run 18. It is also the cheapest thing on this page to build: it is a caption on an existing scene, not a system.",
+     "zh": "佢逼返入開場嘅，就係嗰個躬。反轉需要一件證據：第一個畫面就已經擺喺度、錯過咗完全冇代價、但一旦知道咗就再解唔出第二個意思。一個低咗半寸、長咗半秒嘅躬，第一次朝聖時你可以話係錯覺，第十八次時就抵賴唔到。而且佢係成頁入面最平嘅一件嘢：佢係一場已有場景嘅註腳，唔係一套系統。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "起承轉合 laid over runs, not chapters",
+    "zh": "起承轉合鋪喺 run 上面，唔係鋪喺章節上面"
+   },
+   "body": [
+    {
+     "en": "起 is one morning: dressing, the boon, the false crown in the east, and a death. 承 is not a chapter — it is the six Emberglass threads, and every one of them is gated on repetition rather than progress: nine motes, three shade duels, five surviving dawns, five prices, one omen night, one purchase costing two and a half runs of gold. That is deliberate. A pilgrimage that everyone has rehearsed should feel like a rehearsal, and the mechanical shape of grind is already the mechanical shape of ritual. The story does not have to argue for it; it only has to name it late.",
+     "zh": "起係一個朝早：更衣、恩賜、東方嗰頂假冠，然後死。承唔係一章——係六條餘燼琉璃線，而每一條嘅門檻都係重複，唔係推進：九粒光塵、三場影之決鬥、五次捱到破曉、五重代價、一夜凶兆、一筆要兩個半 run 金幣先買得起嘅貨。呢樣係刻意嘅。一場人人都排練過嘅朝聖，本來就應該有排練嘅質感；而 grind 嘅機制形狀，本身已經係儀式嘅機制形狀。故事唔使幫佢辯護，只需要遲啲先幫佢改個名。"
+    },
+    {
+     "en": "轉 is a single unrepeatable scene at six shards, and 合 is Act IV, which is the only part of the whole design that plays once. The honest structural cost: 承 is player-paced, so the turn can land at hour twenty or hour ninety, and it lands with no warning either way. The compensations are the whisper log and the Rose Window, both of which already exist and both of which quietly hold the reader's place in a plot they have not been told they are reading.",
+     "zh": "轉係六片碎片時嘅一場唔會重播嘅戲；合係第四幕，成個設計入面唯一只玩一次嘅部分。老實講結構代價：承係玩家自己控速，所以「轉」可以喺第二十個鐘落，亦可以喺第九十個鐘先落，而且兩邊都係毫無預告噉落。補償係低語日誌同玫瑰窗——兩樣都已經存在，兩樣都默默幫讀者記住佢喺一條冇人話過佢喺度睇緊嘅劇情入面行到邊。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Nothing was rewritten",
+    "zh": "一句都冇改過"
+   },
+   "body": [
+    {
+     "en": "The four re-readings below are the load test. Not one shipped string needed an edit; the reveal changes the referent of the pronouns and the tense of the verbs, and the words stay where they are. That is the whole reason this twist is worth doing on this particular game rather than a different one — the pointing hands, the mask language, the empty lantern and the shape left behind are all already in the product, and they were all already saying it.",
+     "zh": "下面四條回讀係承重測試。冇一句已 shipped 嘅字需要改；反轉改嘅係代名詞指邊個、動詞係咩時態，字本身冇郁過。呢個就係「點解值得喺呢隻 game 而唔係第二隻 game 做呢個反轉」嘅全部理由——指上嘅手、面具嘅措辭、空燈、留低嘅形，統統已經喺產品入面，而且一路都喺度講緊呢件事。"
+    },
+    {
+     "en": "The strongest of them is the Usurper quest, because it is the only thread where the game has always made the player break the crown personally. Read forwards it is a mystery beat. Read backwards it is a lesson, taught by volunteers, that had to be taught by hand: a person will not accept that a crown is a prop on someone else's word.",
+     "zh": "最硬淨嗰條係篡位者線，因為得佢由頭到尾都要玩家親手打爛頂冠。順住讀，佢係一個懸疑節拍。倒返轉讀，佢係一課由義工教、而且必須用手教嘅嘢：得人講你聽頂冠係道具，人係唔會信嘅。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "The five prices are a divestment, in order",
+    "zh": "五重代價係一場有次序嘅剝奪"
+   },
+   "body": [
+    {
+     "en": "Mechanically the Hollow Lamplighter is a resource tax with a pity timer. Diegetically he is stripping royal property in ascending order of what a monarch actually owns: the fire you make, the money you command, the body you keep, the gift somebody else gave you, and finally everything down to one heartbeat. The last price is the one that makes the ending possible. A king with something left to defend cannot abdicate; the design has to bankrupt the player before it offers them the choice, and it already does, in a system that shipped as a difficulty knob.",
+     "zh": "機制上，空燈掌燈人係一個帶保底計時器嘅資源稅。戲劇上，佢係按「一個君主真正擁有嘅嘢」由淺至深剝走王產：你造嘅火、你支配嘅錢、你保住嘅身體、人哋送你嘅禮，最後係剝到得返一記心跳。最後嗰重代價，先令到結局成立。一個仲有嘢要守嘅王係退唔到位嘅；設計必須喺俾選擇之前先整到玩家一無所有——而佢已經做緊，喺一個當初 ship 出嚟做難度旋鈕嘅系統入面。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Act IV is a ceremony that will not disperse",
+    "zh": "第四幕係一場唔肯散嘅儀式"
+   },
+   "body": [
+    {
+     "en": "Act IV had to solve two problems at once: it is the only new region, and it has to feel like the inside of a decision rather than a fifth dungeon. Unfinished glass answers the first — colourless, still slumping, the visual opposite of three acts of painted panes, and cheap to establish because it is defined by the absence of the thing the rest of the game has. The nine-enemy roster answers the second: a crown, a sceptre and a robe, none of them with anybody inside, a regalia procession that keeps standing at attention because nobody has said the words that end it.",
+     "zh": "第四幕要一次過解兩個問題：佢係唯一嘅新區域，而且要似「一個決定嘅內部」，唔係第五個地牢。未成形嘅琉璃解到第一個——無色、仲喺度塌緊，同前三幕彩繪窗片視覺上完全相反，而且成本平，因為佢係靠「冇咗全 game 都有嗰樣嘢」嚟定義。九隻敵人嘅名單解到第二個：一頂冠、一根杖、一襲袍，入面全部冇人，一列因為冇人講出散場嗰句、所以一直立正緊嘅儀仗。"
+    },
+    {
+     "en": "The node with no combat is the piece the whole act is actually for. Nine encounters of regalia are texture; the corridor where the Pale Ones each name the part they played is the payment for eighteen runs of being lied to politely, and it is the only place the design gets to apologise without breaking character.",
+     "zh": "冇戰鬥嗰個節點，先係成幕真正嘅目的。九場儀仗戰係質感；蒼白眾逐個講出自己做過乜嘅嗰條走廊，先係俾返玩家嘅補償——補償佢被人客客氣氣呃咗十八次——而且佢係整個設計唯一可以唔出戲噉道歉嘅位。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "What a loss has to leave behind",
+    "zh": "一場敗仗必須留低啲乜"
+   },
+   "body": [
+    {
+     "en": "The rule is that a defeat must leave residue that refers to that specific defeat, and the cheapest carrier already exists: the Bone Gambler. He moves to the Vigil and keeps a chalk board — fall number, act, floor, what killed you — and on the second meeting he says the previous entry out loud. Same string, two temperatures: a ghoul making light of your death before the reveal, a records clerk logging intervention number nine after it. The monument and the shade are the other two carriers, and both were already built to point at a named earlier death.",
+     "zh": "規則係：一場敗仗必須留低一件指向嗰場敗仗嘅殘留物，而最平嘅載體已經存在：骨骰賭徒。佢搬入守夜，維持一塊粉牌——第幾次墜落、第幾幕、第幾層、俾乜殺——第二次見面時佢會出聲讀返上一條。同一句嘢，兩個溫度：反轉前係一隻拿你條命嚟講笑嘅鬼；反轉後係一個記低第九次 intervention 嘅紀錄員。紀念碑同影係另外兩個載體，而兩者本來就係為咗指向一場有名有姓嘅舊死亡而造。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Risks, stated plainly",
+    "zh": "老實講嘅風險"
+   },
+   "body": [
+    {
+     "en": "One: the fulcrum is the Sovereign, and other candidates in this batch also load their whole twist onto that same figure. Whoever picks the slate can probably only take one of them, and this one is the more expensive of the family because it re-costumes the entire Vigil cast rather than a single boss.",
+     "zh": "一：支點係永恆君王，而呢批入面其他候選都係將成個反轉壓喺同一個角色身上。揀 slate 嗰位大概只能二揀一，而呢個係同族入面較貴嗰個，因為佢要幫成隊守夜角色換戲服，唔係淨係換一隻 boss。"
+    },
+    {
+     "en": "Two, and larger: “it was all staged” deflates stakes. Shutter Island survives it because the harm in the film is real regardless of who arranged it, and this design has to hold the identical line — every cost stays genuinely spent. Max HP taken by the trader does not come back. Gold given to the hollow lantern is gone. Runs 3 to 6 are not fake deaths; they are real deaths inside a real ceremony, and the Pale Ones are staging a rite, not a safety net. If a single system ever softens because the world is in on it, the whole story becomes a shaggy dog.",
+     "zh": "二，而且更大：「原來全部係做戲」會漏氣。Shutter Island 撐得住，係因為戲入面嘅傷害無論邊個安排都係真嘅；呢個設計要守住一模一樣嗰條線——每一項代價都真係付咗。血肉商人攞走嘅生命上限唔會返嚟。俾咗空燈嘅金幣冇咗就係冇咗。第三至第六次朝聖唔係假死，係一場真儀式入面嘅真死，而蒼白眾擺嘅係一場儀式，唔係一張安全網。只要有一個系統因為「全世界都知情」而放軟一次，成個故事就變咗個爛尾笑話。"
+    },
+    {
+     "en": "Three: “you were the king all along” can read as flattery, which is the wrong note for this game. The only defence is that the ending is a renunciation and not a coronation — the good ending is the one where you give the crown away and walk in owning nothing, and the ending where you keep it is the one that puts everybody back to work. If a build ever makes keeping the crown the powerful choice, the theme inverts and cannot be recovered.",
+     "zh": "三：「原來你一直都係個王」好易讀成奉承，而奉承對呢隻 game 係錯嘅音。唯一嘅防守係：結局係放棄，唔係加冕——好結局係你交出頂冠、空手行入去嗰個；戴返個冠嗰個，係令所有人返去繼續開工嗰個。只要有一個版本令「戴返個冠」變成強嘅選擇，主題就反轉，而且救唔返。"
+    },
+    {
+     "en": "Four, the quiet one: the reveal is gated behind six threads of meta-progression, so a player who bounces at run 5 never receives the story at all. That is not only a narrative risk, it is a content-efficiency risk — the most expensive scene in the game would be seen by the smallest cohort. Mitigating it means the misdirection layer has to be worth playing on its own, which is why every thread above is written to work fully as a mystery before it works as a confession.",
+     "zh": "四，靜嗰個：反轉俾六條 meta 進度線鎖住，所以第五次朝聖就走咗嘅玩家，永遠收唔到呢個故事。呢個唔止係敍事風險，係內容效率風險——全 game 最貴嗰場戲，會俾最細嗰批人睇到。要緩解，就要令誤導層本身值得玩；所以上面每一條線都係先寫成一個完整嘅懸疑，然後先做得成一場懺悔。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Names on this page",
+    "zh": "呢頁用到嘅名"
+   },
+   "body": [
+    {
+     "en": "The act-3 landmark is written as 【the Last Place】 and the new region as 【Before the Crowning】; both are placeholders, as is 【the one who will not take it off】 for the Act IV boss. The retired name appears on this page only inside shipped strings quoted verbatim — the second shade's line and the Hollow Lamplighter's third price — because the whole method depends on those strings being unedited. New prose never uses it.",
+     "zh": "第三幕嘅地標喺呢頁寫成【終境】，新區域寫成【加冕之前】，兩個都係暫名；第四幕 boss 嘅【不肯除冠嘅你】亦一樣。已退役嗰個名喺呢頁只出現喺逐字引用嘅已 shipped 字串入面——第二道影嗰句同空燈掌燈人第三重代價——因為成套方法嘅前提就係嗰啲字串一個字都冇改過。新寫嘅散文完全冇用過佢。"
+    }
+   ]
+  }
+ ],
+ "rereadings": [
+  {
+   "line": "The Sovereign is a mask worn below the final stair.",
+   "before": {
+    "en": "The whisper reads as a warning about a boss: the thing on the throne is not what it appears to be, and something truer is waiting higher up.",
+    "zh": "呢句低語讀落似係關於 boss 嘅警告：王座上嗰樣嘢並非表面咁簡單，更真嘅嘢喺上面等緊。"
+   },
+   "after": {
+    "en": "It stops being a metaphor and becomes an inventory. There genuinely is a mask on that throne — a prop, worn over a lock. And the one wearing the sovereign's identity, on the final stair, is the person below it holding the lantern.",
+    "zh": "佢由比喻變成清單。嗰個王座上真係得一副面具——一件道具，披喺一把鎖上面。而喺最終階梯上真正戴住君王身份嘅，係階梯下面提燈嗰位。"
+   }
+  },
+  {
+   "line": "The mask is broken. Look above.",
+   "before": {
+    "en": "A dying king's last strange words, and a hint that the climb has one more floor in it.",
+    "zh": "一個垂死之王最後嘅怪異遺言，兼且暗示條路上面仲有一層。"
+   },
+   "after": {
+    "en": "A stage direction. The volunteer under the costume you have just smashed is prompting you back to your cue: look at the door you sealed, look at the thing you have refused to look at eighteen times.",
+    "zh": "一句提場。你啱啱打爛咗嗰件戲服，底下嗰個義工正按劇本提返你入位：望向你自己封嘅嗰道門，望向你已經拒絕望咗十八次嗰樣嘢。"
+   }
+  },
+  {
+   "line": "The Pale Ones are not hunting you. They are pointing upward.",
+   "before": {
+    "en": "Reassurance with a prophecy attached — the pale variants are a signpost system, and the signposts agree there is something above the crown.",
+    "zh": "帶預言嘅安慰——蒼白變種係一套路標系統，而所有路標都同意王冠之上有嘢。"
+   },
+   "after": {
+    "en": "Of course they are not hunting you. You are their king. The pointing is not prophecy, it is the entire purpose of the ceremony: get him to walk up there himself, and keep pointing until he does.",
+    "zh": "佢哋梗係唔會獵你。你係佢哋個王。指上面唔係預言，係成場儀式嘅全部目的：氹佢自己行上去，一直指到佢肯行為止。"
+   }
+  },
+  {
+   "line": "Each climber leaves a shape behind.",
+   "before": {
+    "en": "Worldbuilding: many pilgrims have died here, and the place has learned to reuse their outlines against the next one.",
+    "zh": "世界觀鋪陳：好多朝聖者死喺呢度，而呢個地方學識咗攞佢哋嘅輪廓嚟對付下一個。"
+   },
+   "after": {
+    "en": "There has only ever been one climber. Every shade on the road is a leftover of one of your own earlier rites, which is why each of them fights with your aspect's kit and why every one of their moves is named Remembered.",
+    "zh": "由頭到尾只有一位朝聖者。路上每一道影，都係你自己上幾次儀式嘅殘留；所以佢哋全部用你面向嘅招式，所以佢哋每一招都叫「憶中○○」。"
+   }
+  }
+ ],
+ "meta": {
+  "twist": {
+   "en": "You are the Eternal Sovereign. Long ago you took an empty lantern and draped a king's shape over the lock of the only door out, sealing the world from the inside. Everyone in the Vigil — the masked merchant, the flesh trader, the bone gambler, the Hollow Lamplighter — is one of the Pale Ones, your own subjects, running an infinitely repeatable pilgrimage designed not to kill you but to walk you up to your own false crown, make you break it with your own hands, and get you to take the real one off voluntarily. The thing you kill on the throne every run is a costume. The king has been at the bottom of the stair the whole time, holding the light.",
+   "zh": "你就係永恆君王。好耐之前，你攞咗一盞空燈，將王者嘅形披喺唯一出口嗰道門嘅鎖上面，由內裏封死咗成個世界。守夜入面所有人——蒙面商人、血肉商人、骨骰賭徒、空燈掌燈人——都係蒼白眾，你自己嘅子民；佢哋設計咗一場可以無限重演嘅朝聖，目的唔係殺你，係帶你行到自己嗰頂假冠面前、逼你親手打爛佢，最後令你自願除低真嗰頂。你每個 run 喺王座上殺嘅，係一套戲服。真正嘅王一直喺樓梯下面，提住盞燈。"
+  },
+  "act4": {
+   "en": "【Before the Crowning】 — placeholder. Five nodes behind the door in the Rose Window, in glass that was never finished: molten, colourless, still slumping, the exact inverse of three acts of painted panes. Nine enemies are the regalia of a ceremony that refuses to disperse — an empty crown, a walking sceptre, a robe around an absence. The fourth node has no combat: the Pale Ones line the corridor unmasked and each names the part they played. The boss is 【the one who will not take it off】, a full-regalia version of you with your complete upgraded deck and the mirror's vocabulary — dark body, lit eyes, no face. Beating it is not a kill; it kneels and offers the crown. Take it off and walk through for ascended.png; put it back on and the door seals, the Pale Ones re-mask, and the rite restarts next run.",
+   "zh": "【加冕之前】——暫名。玫瑰窗那道門之後的五個節點，處於一片從未完成的琉璃：熔融、無色、仍在下墜，與三幕彩繪窗片剛好相反。九隻敵人是一場不肯散場的儀仗——一頂空冠、一根自行遊走的權杖、一襲圍着空缺的袍。第四個節點沒有戰鬥：蒼白眾摘下面具在走廊列隊，逐一說出自己在儀式中擔任的角色。首領是【不肯除冠嘅你】：着全套王袍的你，帶着你完整的升級牌組，用鏡子那套語彙——黑色身體、發光雙眼、沒有臉。打贏牠並不是擊殺；牠會跪下，把冠舉起。除冠走進去，是 ascended.png；戴返上去，門從內側封上，蒼白眾重新戴回面具，儀式下一個 run 再由頭來過。"
+  },
+  "defeat": {
+   "en": "Every loss leaves a residue that names that loss. The Bone Gambler moves into the Vigil and keeps a chalk board — fall number, act, floor, what killed you — and from the second meeting onward he reads the previous entry back to you before offering a new wager. The monument already carries a bequest from one specific earlier death, and the shade already fights with the kit you died holding; both are re-pointed at the same ledger. Before the reveal the board is a ghoul's running joke; after it, it is the record of intervention number N, kept by a clerk who has watched every one of them.",
+   "zh": "每一次敗仗都留低一件指名道姓嘅殘留物。骨骰賭徒搬入守夜，維持一塊粉牌——第幾次墜落、第幾幕、第幾層、俾乜殺——由第二次見面開始，佢會喺開新盤之前讀返上一條俾你聽。紀念碑本來就承載住某一場特定舊死亡嘅遺贈，而影本來就用你死嗰陣揸住嘅牌組打；兩者都重新指向同一本帳。反轉之前，塊牌係隻鬼嘅爛 gag；反轉之後，佢係第 N 次 intervention 嘅紀錄，由一個每一次都親眼睇過嘅紀錄員記低。"
+  },
+  "risks": {
+   "en": "Four. (1) It loads the whole twist onto the Sovereign, as several sibling candidates do, so it is probably an either/or at slate time — and it is the pricier option, since it re-costumes the entire Vigil cast rather than one boss. (2) “It was all staged” deflates stakes unless every cost stays genuinely real: max HP sold to the trader never returns, gold given to the hollow lantern is gone, runs 3-6 are real deaths inside a real ceremony. One softened system and the whole thing becomes a shaggy dog. (3) “You were the king all along” reads as flattery unless the ending is a renunciation — if keeping the crown ever becomes the mechanically strong choice, the theme inverts irrecoverably. (4) The reveal sits behind six meta-progression threads, so the most expensive scene in the game reaches the smallest cohort; the misdirection layer must be worth playing as a mystery on its own.",
+   "zh": "四項。（一）成個反轉壓喺永恆君王身上，而同批幾個候選都係噉做，所以 slate 階段大概只能二揀一——而佢係較貴嗰個，因為要換成隊守夜角色嘅戲服，唔係換一隻 boss。（二）「原來全部係做戲」會漏氣，除非每一項代價都真係真：賣俾血肉商人嘅生命上限唔會返嚟、俾咗空燈嘅金幣冇咗就係冇咗、第三至第六次朝聖係真儀式入面嘅真死。放軟一個系統，成件事就變爛尾笑話。（三）「原來你一直都係個王」會讀成奉承，除非結局係放棄——只要「戴返個冠」變成機制上強嘅選擇，主題就反轉，而且救唔返。（四）反轉鎖喺六條 meta 進度線之後，全 game 最貴嗰場戲會去到最細嗰批人手上；誤導層本身必須當成一個懸疑都值得玩。"
+  }
+ }
+}

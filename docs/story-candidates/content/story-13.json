@@ -1,0 +1,859 @@
+{
+ "no": 13,
+ "title": {
+  "en": "The Borrowed Flame",
+  "zh": "借火"
+ },
+ "family": {
+  "en": "The benefactor is the architect",
+  "zh": "恩人即設局者"
+ },
+ "hook": {
+  "en": "Five times along the road, a gaunt man carrying an unlit lantern asks you for something you own. You pay, every time — because the answers he sells are true.",
+  "zh": "路上五次，一個枯瘦、提着一盞不燃之燈的人，向你索取你身上的一樣東西。你每次都付了——因為他賣的答案，句句是真的。"
+ },
+ "poster": "hero",
+ "images": [
+  {
+   "id": "hero",
+   "source": "generate",
+   "subject": "A tall stone doorway at night. A hooded pilgrim stands with their back to us, holding a small lit lantern on a short chain. Facing them from inside the doorway is a gaunt bald man in a long robe, holding a pole with an unlit lantern hanging from it. Behind them both, a huge circular window of six dark glass panels fills the wall, and not one panel is lit.",
+   "alt": {
+    "en": "A hooded pilgrim in a doorway faces a gaunt robed man with an unlit lantern on a pole; behind them a six-panel round window stands dark.",
+    "zh": "戴兜帽的朝聖者在門廊前，面對一名枯瘦的長袍男子，男子手持長桿，桿上懸着不燃的提燈；其後是一扇六格全暗的圓窗。"
+   }
+  },
+  {
+   "id": "lamplighter",
+   "source": "asset",
+   "path": "assets/art/meta/hollow-lamplighter.png",
+   "alt": {
+    "en": "The Hollow Lamplighter: a gaunt hooded figure carrying an unlit lantern on a long pole.",
+    "zh": "空燈掌燈人：枯瘦的兜帽身影，手執長桿，桿上是一盞不燃的提燈。"
+   }
+  },
+  {
+   "id": "mirror",
+   "source": "asset",
+   "path": "assets/art/events/mirror.png",
+   "alt": {
+    "en": "A tall unbroken mirror standing in rubble; the reflection in it is smiling.",
+    "zh": "碎石中立着一面完好的高鏡；鏡中的倒影在微笑。"
+   }
+  },
+  {
+   "id": "merchant",
+   "source": "asset",
+   "path": "assets/art/props/merchant.png",
+   "alt": {
+    "en": "The merchant behind a lit stall, wearing a faceted glass mask with no eyes and no mouth.",
+    "zh": "商人立於亮燈的攤檔後，戴着無眼無口的多面琉璃面具。"
+   }
+  },
+  {
+   "id": "sovereign",
+   "source": "asset",
+   "path": "assets/art/enemies/sovereign.png",
+   "alt": {
+    "en": "The Eternal Sovereign, crowned and holding a sceptre, beneath a broken halo with a shard-shaped gap at its upper right.",
+    "zh": "永恆君王，戴冠執杖，頭上光環破裂，右上方缺了一塊碎片形狀的空缺。"
+   }
+  },
+  {
+   "id": "mural",
+   "source": "asset",
+   "path": "assets/art/meta/emberglass-mural.png",
+   "alt": {
+    "en": "The Emberglass rose window: six stained-glass panels arranged as a wheel around a glowing arched doorway at the hub.",
+    "zh": "餘燼琉璃玫瑰窗：六格彩繪窗片環繞輪轂，輪轂中央是一道透光的拱門。"
+   }
+  },
+  {
+   "id": "reveal",
+   "source": "generate",
+   "subject": "An iron hook set into a stone arch, with two lanterns hanging side by side from it. The left lantern is bright, but one of its glass panes has gone dark. The right lantern is older and dented and has only just caught fire inside. A gaunt bald man in a robe is lowering his hand from the hook, and a hooded figure stands beside him, seen from behind.",
+   "alt": {
+    "en": "Two lanterns hang side by side from one hook: the brighter one has a dark pane, the older one has just lit.",
+    "zh": "兩盞提燈並掛在同一個鈎上：較亮的一盞有一格已暗，較舊的一盞剛剛燃起。"
+   }
+  },
+  {
+   "id": "lantern-road",
+   "source": "generate",
+   "subject": "A long straight corridor with no visible ceiling. Hundreds of extinguished lanterns hang on chains from both walls and recede into the dark. The floor is wet black stone that reflects one distant light at the far end. Nothing else stands in the corridor.",
+   "alt": {
+    "en": "A corridor lined with hundreds of dead lanterns on chains, receding towards a single distant light.",
+    "zh": "長廊兩壁掛滿數百盞熄滅的提燈，一路延伸向遠處唯一一點光。"
+   }
+  },
+  {
+   "id": "first-fire",
+   "source": "generate",
+   "subject": "A standing flame the height of a man, holding the shape of a human silhouette. Five separate cores burn inside it at different heights: a small cluster of embers, a knot of coins, a rib cage, an open hand, and one slow pulse at the chest. Dozens of empty lantern frames lie around its feet.",
+   "alt": {
+    "en": "A man-shaped standing flame with five burning cores inside it, standing among dozens of empty lantern frames.",
+    "zh": "一團人形立焰，體內有五個各自燃燒的核心，腳下散落數十副空提燈框。"
+   }
+  },
+  {
+   "id": "ascended",
+   "source": "asset",
+   "path": "assets/art/meta/ascended.png",
+   "alt": {
+    "en": "A cathedral city standing above the clouds in a golden dawn.",
+    "zh": "雲海之上的教堂之城，沐於金色破曉。"
+   }
+  },
+  {
+   "id": "fallen",
+   "source": "asset",
+   "path": "assets/art/meta/fallen.png",
+   "alt": {
+    "en": "A dark hall with an obsidian monolith, and one lit lantern set at its foot.",
+    "zh": "幽暗的廳堂，黑曜石碑聳立，碑腳放着一盞仍亮的提燈。"
+   }
+  }
+ ],
+ "story": [
+  {
+   "t": "act",
+   "en": "BEFORE THE FIRST CLIMB — The Vigil, every pane dark",
+   "zh": "首次啟程之前 — 守夜，窗片盡暗"
+  },
+  {
+   "t": "art",
+   "img": "hero",
+   "en": "The doorway of the Vigil, on the night before a first pilgrimage.",
+   "zh": "首次朝聖前夜的守夜門廊。"
+  },
+  {
+   "t": "prose",
+   "en": "The Vigil is a low stone room holding a window it should not be able to hold: six glass panels set in a wall far too thin for them, all six dark. The game does not explain the window. It gives you a lantern and a choice.",
+   "zh": "守夜是一間低矮的石室，室內有一扇它本不該承得住的窗：六格琉璃，嵌在一堵薄得不合理的牆上，六格盡暗。遊戲不解釋那扇窗。它只給你一盞提燈和一個選擇。"
+  },
+  {
+   "t": "screen",
+   "en": "The Ashwarden stands at the foot of 【the Last Place】. Take one parting gift — and choose the fire your lantern will carry.",
+   "zh": "灰衛立於【終境】腳下。取一份臨別贈禮——並選擇提燈將攜的火。"
+  },
+  {
+   "t": "prose",
+   "en": "You take A Warm Hearth and choose Flare for the lantern. Four things are now yours, and the tutorial counts all four out loud — the embers your lantern will catch on the road, the coins in your purse, the measures of your vessel, the gift in your hand.",
+   "zh": "你取了「溫暖爐火」，提燈的火選了「焰閃」。此刻你身上有四樣東西，而教學把四樣都逐一數了一遍——路上提燈將拾得的餘燼、錢囊裏的金幣、容器的格數，以及手上的那份贈禮。"
+  },
+  {
+   "t": "prose",
+   "en": "On your way out there is a man in the doorway who was not there a moment ago. Bald, starved-looking, carrying a lantern on a pole. The lantern is not lit. He does not block you. He looks at the cloak you are wearing for slightly too long.",
+   "zh": "你出門時，門廊裏站着一個剛才並不在那裏的人。光頭、瘦得脫形，手執長桿，桿頭懸着一盞提燈。那盞燈沒有點着。他沒有攔你。他只是望着你身上的斗篷，望得稍微久了一點。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "You wear it like someone I used to know.",
+   "zh": "你這身衣着，像我認識過的一個人。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Embers. Coin. Vessel. A gift. Four things, and not one of them is fastened to you. Everything on that list can be given away. Remember that when the road gets expensive.",
+   "zh": "餘燼、金幣、容器、一份贈禮。四樣東西，沒有一樣是繫死在你身上的。這張清單上每一樣，都可以送出去。路走貴的時候，記住這句。"
+  },
+  {
+   "t": "prose",
+   "en": "Then the doorway is empty and the climb begins. You will not think about this again for eleven days.",
+   "zh": "然後門廊空了，朝聖開始。往後十一日，你都不會再想起這段對話。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 1 — The Ashen Woods",
+   "zh": "第一次朝聖 — 灰燼樹林"
+  },
+  {
+   "t": "prose",
+   "en": "The first climb goes the way first climbs go. The lantern goes out on floor seven with two embers still unspent in the tray.",
+   "zh": "第一次朝聖，走的是所有第一次的走法。第七層提燈熄滅，托盤裏還剩兩點餘燼未用。"
+  },
+  {
+   "t": "screen",
+   "en": "Here ended a climb, on floor 7.\n【The Last Place】 keeps what it takes — but the Vigil remembers.",
+   "zh": "一段朝聖之路在第 7 層終結。\n【終境】留下它所奪走的——守夜卻會銘記。"
+  },
+  {
+   "t": "prose",
+   "en": "The dawn ceremony runs anyway. Losing is still a dawn here; the Vigil counts it and pays out a little of the world in return. The first payment is a name.",
+   "zh": "破曉儀式照樣進行。在這裏，敗仗一樣是破曉；守夜把它記下，然後從世界裏支一小塊給你。第一筆支付，是一個名字。"
+  },
+  {
+   "t": "screen",
+   "en": "THE VIGIL OPENS\nThe Hollow Lamplighter walks 【the Last Place】.",
+   "zh": "守夜敞開\n空燈掌燈人踏上【終境】。"
+  },
+  {
+   "t": "prose",
+   "en": "He is in the doorway again when you get back. He does not ask for anything this time. He has a ledger open across his forearm, and he is already writing when he speaks.",
+   "zh": "你回來時，他又站在門廊。這次他沒有索取任何東西。他把一本帳簿攤在前臂上，未開口便已在寫。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Floor seven. Two embers left in the tray when the light went. That is not death, that is thrift. I have written it down.",
+   "zh": "第七層。燈滅的時候，托盤裏還剩兩點餘燼。那不叫死，那叫慳。我記下了。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 2–4 — the road starts recognising you",
+   "zh": "第二至第四次朝聖 — 路開始認得你"
+  },
+  {
+   "t": "prose",
+   "en": "Phials appear on the climb. Then Omens. The Vigil unfolds on a schedule keyed to how often you have failed. Somewhere in there you die on floor 4 to a pack of duskfang, and something new is standing on the map the next time out.",
+   "zh": "藥瓶出現在朝聖之路上，接着是凶兆。守夜按一張表逐步敞開，而那張表是照你失敗的次數編的。其間某一次，你在第四層死於一群暮牙口下；下一次出發，地圖上多了樣新東西。"
+  },
+  {
+   "t": "art",
+   "img": "mirror",
+   "en": "The Silvered Mirror, an event you will meet many times.",
+   "zh": "銀鏡——你會反覆遇上的事件。"
+  },
+  {
+   "t": "prose",
+   "en": "It wears your build and plays your cards back at you with one more Strength. When it dies it says something that does not fit.",
+   "zh": "它披着你的牌組，把你的牌打回你身上，力量比你多一層。它倒下時，說了一句對不上號的話。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Your Own Shade",
+   "sp_zh": "自身之影",
+   "en": "I remember the stone. You walked away before I stopped calling.",
+   "zh": "我記得那塊石。你轉身離去時，我仍未停止呼喚。"
+  },
+  {
+   "t": "prose",
+   "en": "You have not walked away from any stone. You read it as a shade being a shade — they are supposed to be spooky — take the reward and go to bed. A whisper arrives with the dawn.",
+   "zh": "你並沒有從任何一塊石旁邊轉身走開。你把它當成影在扮影——它們本來就該說些陰森話——收下獎賞，收工睡覺。破曉隨之帶來一句低語。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 9",
+   "sp_zh": "低語 9",
+   "en": "The gaunt keeper remembers the road you did not take.",
+   "zh": "枯瘦的掌燈人記得你未走的路。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 5 — the first price",
+   "zh": "第五次朝聖 — 第一份代價"
+  },
+  {
+   "t": "art",
+   "img": "lamplighter",
+   "en": "The Hollow Lamplighter, met on the Unlit Way.",
+   "zh": "空燈掌燈人，於未燃之路相遇。"
+  },
+  {
+   "t": "prose",
+   "en": "There is a node on the map that is not lit and is not a rest and is not a shop. Stepping onto it opens a screen you have never seen, with a counter in the corner.",
+   "zh": "地圖上有一個節點，不亮、不是爐火、也不是商店。踏上去，開了一個你從未見過的畫面，角落有個計數器。"
+  },
+  {
+   "t": "screen",
+   "en": "THE UNLIT WAY · PRICE 1 OF 5",
+   "zh": "未燃之路 · 第 1 份代價，共 5 份"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your lantern is noisy. Give me the next three embers it catches.",
+   "zh": "你的提燈太吵。把它接下來收集的三點餘燼交給我。"
+  },
+  {
+   "t": "prose",
+   "en": "The refusal button is called Return Later, not Refuse, which tells you what the game thinks of your chances. You pay.",
+   "zh": "拒絕的按鈕寫的是「稍後再來」，不是「拒絕」——遊戲對你的機會率的看法，就寫在這個按鈕上。你付了。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The next three embers belong to the hollow lantern.",
+   "zh": "接下來三點餘燼，歸於空燈。"
+  },
+  {
+   "t": "prose",
+   "en": "For the rest of the climb, every ember your lantern catches slides sideways into his. Afterwards there is a small permanent change most players will not notice for another twenty hours: the ember pips in your HUD keep his colour. Not greyed out. Not disabled. Just a shade colder, from now on, in every run.",
+   "zh": "此後整段朝聖，你的提燈每拾得一點餘燼，都會橫向滑走，落進他那盞。之後有一個細小而永久的改動，大部分玩家再過二十小時都不會察覺：HUD 上你的餘燼點數保留了他的顏色。不是變灰，不是禁用。只是冷了一度——從此以後，每一次朝聖都是這個顏色。"
+  },
+  {
+   "t": "prose",
+   "en": "What you get in exchange is the reason you will keep paying. It is not a buff. It is a sentence.",
+   "zh": "你換回來的，就是你日後會一直付下去的原因。那不是增益，那是一句話。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Six panes were carried away from a window no wall could hold.",
+   "zh": "六片窗片曾從一扇無牆可承的窗中被帶走。"
+  },
+  {
+   "t": "prose",
+   "en": "You go back to the Vigil and look at the wall too thin to hold a window, and there are six dark panels in it, and the man on the road knew. That is the transaction. He sells true things and nobody else in the game does.",
+   "zh": "你回到守夜，望着那堵薄得承不起一扇窗的牆——牆上正是六格黯淡的窗片，而路上那個人知道。這就是交易。他賣真話，而遊戲裏沒有別人賣真話。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 7 — the first dawn",
+   "zh": "第七次朝聖 — 第一次破曉"
+  },
+  {
+   "t": "prose",
+   "en": "At the top of 【the Last Place】(provisional name) the Eternal Sovereign falls at 03:40 on a Tuesday, and the Vigil opens a door you had assumed was scenery.",
+   "zh": "在【終境】（暫名）的頂上，永恆君王於星期二凌晨三點四十倒下；而守夜打開了一道你一直以為只是佈景的門。"
+  },
+  {
+   "t": "screen",
+   "en": "THE VIGIL OPENS\nThe Emberglass Rose Window opens.\nVictory · 1 shard lit",
+   "zh": "守夜敞開\n餘燼琉璃玫瑰窗開啟。\n勝利 · 1 片碎片已點亮"
+  },
+  {
+   "t": "prose",
+   "en": "One panel of six now holds light. Under it is a log with twenty-four numbered slots, two of them filled. Every dawn pays out one more line of a document you are reading badly out of order.",
+   "zh": "六格之中，如今有一格盛着光。窗下是一本日誌，二十四個編號空位，填了兩格。往後每一次破曉，都支付一份你正在嚴重亂序閱讀的文件的其中一行。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 5",
+   "sp_zh": "低語 5",
+   "en": "A lantern without flame is still a key.",
+   "zh": "無焰的提燈仍是一把鑰匙。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 12",
+   "sp_zh": "低語 12",
+   "en": "The merchant keeps one cold thing beneath the counter.",
+   "zh": "商人櫃下藏着一件冰冷之物。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 8–13 — the cold thing under the counter",
+   "zh": "第八至十三次朝聖 — 櫃下那件冰冷之物"
+  },
+  {
+   "t": "art",
+   "img": "merchant",
+   "en": "The merchant, who will not say who left it.",
+   "zh": "商人——他不肯說是誰留下它。"
+  },
+  {
+   "t": "prose",
+   "en": "Six hundred and fifty gold, two and a half full purses, so the run that buys it is built to buy it and nothing else. The item card is three short sentences and all three are working.",
+   "zh": "六百五十金，等於兩個半滿囊；換言之，買到它的那一次朝聖，是為買它而砌的，別無他用。物品說明只有三句短話，而三句都在幹活。"
+  },
+  {
+   "t": "line",
+   "sp_en": "A Lantern with No Flame",
+   "sp_zh": "無焰提燈",
+   "en": "Cold glass. No wick. The merchant will not say who left it.",
+   "zh": "冰冷琉璃。沒有燈芯。商人不肯說是誰留下它。"
+  },
+  {
+   "t": "prose",
+   "en": "You carry it to the summit and the Sovereign's mask comes off in front of it. The lantern is not a weapon, it is credentials. Whisper 5 said so four dawns ago; you filed it under atmosphere.",
+   "zh": "你把它帶上頂點，永恆君王的面具便在它面前脫落。那盞燈不是武器，是憑證。四次破曉之前，低語 5 已經明說過，而你把它歸類為氣氛。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Usurper",
+   "sp_zh": "篡位者",
+   "en": "Now the summit knows what you carry.",
+   "zh": "如今，頂點知曉你攜着何物。"
+  },
+  {
+   "t": "prose",
+   "en": "Two runs later he is on the map again. The second price is money, and money is the only price in the whole sequence with no mystique attached: one hundred and sixty pieces, gone. Your purse icon takes the same cold tint the embers took.",
+   "zh": "兩次朝聖之後，他又出現在地圖上。第二份代價是錢，而錢是整個序列裏唯一毫無神秘感的一份：一百六十枚，沒了。你的錢囊圖示，染上了餘燼那一層同樣的冷色。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
+   "zh": "金幣記得每一隻手。讓一百六十枚忘記你的手。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The Pale Ones watch the paths that point above the crown.",
+   "zh": "蒼白眾凝望着指向王冠之上的路。"
+  },
+  {
+   "t": "act",
+   "en": "RUN 16 — the writing on the floor",
+   "zh": "第十六次朝聖 — 地上的字"
+  },
+  {
+   "t": "prose",
+   "en": "The Eighth Omen does not appear on the omen wheel. It appears as text burnt into the floor of ordinary combats, one line per floor, and it is the only thing in the game that addresses you in capitals.",
+   "zh": "第八凶兆不出現在凶兆盤上。它燒在普通戰鬥的地面上，一層一句；而它是全遊戲唯一用大寫向你說話的東西。"
+  },
+  {
+   "t": "screen",
+   "en": "// THE PANE WATCHES //",
+   "zh": "// 窗片凝視 //"
+  },
+  {
+   "t": "screen",
+   "en": "// CARRY THE WRONG LIGHT UPWARD //",
+   "zh": "// 攜錯誤之光向上 //"
+  },
+  {
+   "t": "prose",
+   "en": "You read it as a curse, because it is written like one, and because the run under it is measurably harder. You reach dawn beneath it anyway, on the fourth attempt, and the glyphs finish their sentence.",
+   "zh": "你把它讀成詛咒，因為它寫得就像詛咒，也因為背着它的那次朝聖確實明顯更難。第四次嘗試，你還是在它籠罩下抵達破曉，而那些字形終於把句子講完。"
+  },
+  {
+   "t": "screen",
+   "en": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR.",
+   "zh": "第八凶兆從來不是凶兆。它是一扇門投下的影。"
+  },
+  {
+   "t": "art",
+   "img": "sovereign",
+   "en": "The Eternal Sovereign, and the gap in the halo that nothing in the Vigil explains.",
+   "zh": "永恆君王，以及守夜從未解釋過的那道光環缺口。"
+  },
+  {
+   "t": "prose",
+   "en": "The fourth page arrives the same week — five separate victories carrying one page, for five lines of text. This is the line that makes the halo look less like damage and more like a record.",
+   "zh": "同一個星期，第四頁到手——帶着一頁贏五次破曉，只為換五行字。而正是這一行，令那道光環看起來不再像損傷，反而像一份紀錄。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Fourth Page",
+   "sp_zh": "第四頁",
+   "en": "The Sovereign took an empty lantern and wore a king's shape over the lock.",
+   "zh": "永恆君王取來一盞空燈，在鎖上披起王者形貌。"
+  },
+  {
+   "t": "act",
+   "en": "RUNS 18–27 — vessel, gift, heartbeat",
+   "zh": "第十八至二十七次朝聖 — 容器、贈禮、心跳"
+  },
+  {
+   "t": "prose",
+   "en": "The third price is flesh. Twelve measures of your vessel, permanently, and the game will not let you take it if it would leave you below thirty, which is the first time an NPC in Glassvow refuses your money for your own good.",
+   "zh": "第三份代價是肉身。你的容器，十二格，永久；而如果會令你跌破三十，遊戲不准你付——這是琉璃誓言裏，第一次有 NPC 為你好而拒收你的錢。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "I will not hollow you below thirty. Return with a larger vessel.",
+   "zh": "我不會把你挖空至三十以下。換一副更大的容器再來。"
+  },
+  {
+   "t": "prose",
+   "en": "So you spend three runs stacking Tempered Glass to make yourself big enough to be cut. Then you pay, the vessel bar takes the tint, and he tells you where your dead have been standing.",
+   "zh": "於是你用三次朝聖去疊「淬鍊琉璃」，把自己養到足夠大，好被切走一塊。然後你付款，容器條染上那層色，而他告訴你，你的死者一直站在甚麼地方。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Your standing dead have seen the stair above the Sovereign.",
+   "zh": "你站立而死的前身，已見過永恆君王之上的階梯。"
+  },
+  {
+   "t": "prose",
+   "en": "The fourth price is the strange one. He does not want a boon. He wants the boon — the one handed to you at the foot of the road, before the first step, by the figure the game simply calls the Lamplighter.",
+   "zh": "第四份代價，是奇怪的那一份。他要的不是一份恩賜。他要的是那一份——在路的起點、在第一步之前，由遊戲僅僅稱為「掌燈人」的那個身影交到你手上的那一份。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+   "zh": "最初的掌燈人曾贈你恩賜。我要那份贈禮，不要你的感激。"
+  },
+  {
+   "t": "prose",
+   "en": "It reads as a quirk. Collectors are particular; he wants the item, not the sentiment. You hand over an unspent Keeper's Eye, the boon slot takes his colour too, and that dawn's whisper sounds like flavour text.",
+   "zh": "這聽起來像個怪癖。收藏家自然講究；他要的是那件物，不是那份心意。你交出一枚未動用的「守望者之眼」，恩賜格也染上他的顏色；而那天破曉的低語，聽起來像純粹的氛圍文字。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 14",
+   "sp_zh": "低語 14",
+   "en": "Five pages make a chapter; five prices make a confession.",
+   "zh": "五頁成章；五重代價成懺言。"
+  },
+  {
+   "t": "prose",
+   "en": "The last price is the one the layout warns you about: no numbers, no threshold, no refusal message that lets you off.",
+   "zh": "最後一份代價，是版面本身在警告你的那一份：沒有數字、沒有門檻、沒有一句能放你走的拒絕訊息。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
+   "zh": "最後代價：只留一記心跳在這提燈裏。其餘全歸黑暗。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "One heartbeat is enough. Refusal is the only poverty left.",
+   "zh": "一記心跳已足夠。如今只剩拒絕才算貧乏。"
+  },
+  {
+   "t": "prose",
+   "en": "You pay on floor 11 at 1 HP and win the run anyway, because by run 27 you are good at this. The sixth pane answers. And on the way to the Vigil your shade catches you one final time and drops the pretence entirely.",
+   "zh": "你在第十一層、剩一點生命時付了款，然後照樣贏下那次朝聖——因為到第二十七次，你已經很擅長這件事。第六格窗片回應了。而在回守夜的路上，你的影最後一次截住你，徹底不再裝了。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Your Own Shade",
+   "sp_zh": "自身之影",
+   "en": "We were never climbing out. We were carrying light to the lock.",
+   "zh": "我們從來不是為了逃出去而朝聖；我們一直把光送往鎖孔。"
+  },
+  {
+   "t": "act",
+   "en": "THE SIXTH PANE",
+   "zh": "第六格窗片"
+  },
+  {
+   "t": "art",
+   "img": "mural",
+   "en": "The Emberglass Rose Window, complete.",
+   "zh": "餘燼琉璃玫瑰窗，全數點亮。"
+  },
+  {
+   "t": "prose",
+   "en": "The unsealing lights the wheel one panel at a time, a beat each: pale figures on black stairs, a hand held flat against a shadow's hand, a crown above a caged lantern, eight shards crossed by one dark slash, a cascade of blank pages. The sixth is a gaunt bald man reaching towards a standing flame. Then the hub opens, and there is an arch there with light behind it.",
+   "zh": "開封逐格點亮整個輪盤，每格給一拍：黑階上的蒼白身影、與影掌相貼的手、王冠之下懸着的籠燈、八片碎片被一道暗痕橫劃、傾瀉而下的空白書頁。第六格，是一個枯瘦的光頭男子，正伸手向一團立焰。然後輪轂裂開，那裏是一道拱門，門後有光。"
+  },
+  {
+   "t": "prose",
+   "en": "He walks out from behind you. Not from the wall, not from the arch — from behind you, where he has been standing for the length of the scene. He reaches up to the hook beside the window where your lantern is hanging, and he hangs his own lantern next to it.",
+   "zh": "他從你身後走出來。不是從牆裏，不是從拱門裏——是從你身後，整場戲他都站在那裏。他伸手向窗邊的掛鈎，你的提燈就掛在那裏；然後他把自己那盞，掛在旁邊。"
+  },
+  {
+   "t": "prose",
+   "en": "Yours drops a pane. His catches.",
+   "zh": "你那盞，暗了一格。他那盞，燃起了。"
+  },
+  {
+   "t": "art",
+   "img": "reveal",
+   "en": "Two lanterns on one hook.",
+   "zh": "同一個鈎上的兩盞提燈。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Hollow Lamplighter",
+   "sp_zh": "空燈掌燈人",
+   "en": "The door knows you. Of course it does. Every scrap of light on you is mine — I put it there one price at a time, and I have been very patient about the order. Walk on, key.",
+   "zh": "門認得你。當然認得。你身上每一忽光都是我的——我一份代價一份代價把它放上去，而我對次序非常有耐性。行啦，鎖匙。"
+  },
+  {
+   "t": "prose",
+   "en": "Then the camera does the only cruel thing in the scene: it pans down your own resource bar. Embers, cold. Purse, cold. Vessel, cold. Boon slot, cold. Lantern, one pane short. Five stains you have looked at for a month, in an order you now recognise as a receipt. He reaches for you, and the animation is not a grab — it is the motion of a man collecting something he left somewhere.",
+   "zh": "然後鏡頭做了整場戲裏唯一殘忍的事。它沿着你自己的資源欄向下推。餘燼，冷。錢囊，冷。容器，冷。恩賜格，冷。提燈，少一格。五處污漬你已看了一個月，而它們的次序，你此刻認得出來——那是一張收據。他向你伸手，而那個動作不是搶——那是一個人去取回自己放在某處的東西的動作。"
+  },
+  {
+   "t": "prose",
+   "en": "The door recognises the keeper's fire and nothing else. Stripped of his, the first keeper could not carry it back through, so he did the only thing left: he put it, over a thousand years and a hundred pilgrims, onto people who were still allowed to walk in.",
+   "zh": "門只認掌燈人之火，除此之外一概不認。火被褫奪之後，最初的掌燈人再帶不回去，於是做了唯一剩下的事：用一千年、上百個朝聖者，把火一件一件安放在仍獲准走進去的人身上。"
+  },
+  {
+   "t": "screen",
+   "en": "Six panes burn. Something waits above the crown.\nA sealed door opens above the crown.",
+   "zh": "六片琉璃窗片燃起。王冠之上有甚麼在等待。\n王冠之上的封印之門已開。"
+  },
+  {
+   "t": "act",
+   "en": "ACT IV —【The Lantern Road】(provisional name)",
+   "zh": "第四章 —【燈道】（暫名）"
+  },
+  {
+   "t": "art",
+   "img": "lantern-road",
+   "en": "Behind the door.",
+   "zh": "門後。"
+  },
+  {
+   "t": "prose",
+   "en": "Five nodes, no branches, no map to survey. The corridor behind the door is hung with dead lanterns on both walls. The door speaks first, and it uses a name that has never appeared anywhere in the game, and it is not yours.",
+   "zh": "五個節點，沒有分岔，沒有可供巡視的地圖。門後的走廊兩壁掛滿熄滅的提燈。門先開口，用的是一個從未在遊戲裏出現過的名字，而那不是你的名字。"
+  },
+  {
+   "t": "line",
+   "sp_en": "The Door",
+   "sp_zh": "那道門",
+   "en": "【the first keeper's name】. You took your time.",
+   "zh": "【初代掌燈人之名】。你倒是不趕。"
+  },
+  {
+   "t": "prose",
+   "en": "Node two is his lamp room, kept as it was on the day he was removed from it. Node three is your shade, wearing your face instead of his — it has stopped remembering things that were never yours, and that is the whole of its dialogue. Node four is the residue of an old sentencing: a crowned figure, a broken halo, a shard-shaped gap. You know now what used to fill that gap, and who took it out.",
+   "zh": "第二個節點是他的燈房，維持着他被逐走那日的原樣。第三個節點是你的影，這次戴的是你的臉、不是他的——它不再記得那些從來不屬於你的事，而這就是它全部的對白。第四個節點是一場舊審判的殘影：戴冠的身影、破裂的光環、一道碎片形狀的缺口。你此刻知道那個缺口原本盛着甚麼，以及是誰把它挖走。"
+  },
+  {
+   "t": "art",
+   "img": "first-fire",
+   "en": "The last node.",
+   "zh": "最後一個節點。"
+  },
+  {
+   "t": "prose",
+   "en": "The boss is not him. He stands to one side for all of it, holding his lantern, not fighting. The boss is 【The First Keeper's Fire】: the five things he transplanted into you, standing up on their own. Phase one throws embers. Phase two charges gold to attack into. Phase three has your Max HP written on it. Phase four opens with your own boon used against you. Phase five is one heartbeat that will not stop, and killing it is the only way to give it back.",
+   "zh": "首領不是他。整場戰鬥他都站在一旁，提着燈，不出手。首領是【初代掌燈人之火】：他移植進你身上的那五樣東西，自己站了起來。第一階段擲餘燼。第二階段，你每次進攻都要付金幣。第三階段身上寫着你的生命上限。第四階段開場，用你自己的恩賜打你。第五階段是一記停不下來的心跳；殺死它，是唯一能把它還回去的方法。"
+  },
+  {
+   "t": "act",
+   "en": "TWO WAYS OUT",
+   "zh": "兩種走法"
+  },
+  {
+   "t": "art",
+   "img": "ascended",
+   "en": "Dawn, past the door.",
+   "zh": "門之後的破曉。"
+  },
+  {
+   "t": "prose",
+   "en": "Win, and you burn all five back off yourself and take the last step through the arch as nobody but you. He does not fight it. He watches a key walk through a door as a person — a thing he has not seen in a thousand years — and the ending does not tell you what he feels about that.",
+   "zh": "贏了，你把那五樣一一燒回去，然後以除你之外誰也不是的身分，踏過拱門的最後一步。他沒有阻止。他看着一把鎖匙以一個人的身分走過那道門——這件事他一千年沒見過——而結局不會告訴你他對此有何感受。"
+  },
+  {
+   "t": "art",
+   "img": "fallen",
+   "en": "The Monument of the Last Fall.",
+   "zh": "上次墜落的紀念碑。"
+  },
+  {
+   "t": "prose",
+   "en": "Or you yield at phase five, which the game offers plainly and does not punish with a joke ending. He takes the last heartbeat, walks through, and your lantern stays on this side of the arch. It is the lit lantern at the foot of the monument — the one that has been in that picture since your first defeat.",
+   "zh": "又或者你在第五階段讓步——遊戲明明白白地提供這個選項，也不會用一個玩笑式結局懲罰你。他取走最後一記心跳，走過去，而你的提燈留在拱門這一邊。它就是碑腳那盞仍亮着的提燈——從你第一次敗仗開始，它就一直在那張圖裏。"
+  },
+  {
+   "t": "line",
+   "sp_en": "Whisper 24",
+   "sp_zh": "低語 24",
+   "en": "The climb continues.",
+   "zh": "朝聖仍在繼續。"
+  }
+ ],
+ "craft": [
+  {
+   "h": {
+    "en": "The last frame was written first",
+    "zh": "最後一格，是最先寫的"
+   },
+   "body": [
+    {
+     "en": "The whole story was reverse-engineered from one image: two lanterns hanging from one hook, one of them dimming by exactly one pane as the other catches. Everything upstream exists to make that shot legible without a line of explanation. If the player has to be told what they are looking at, the ending has failed.",
+     "zh": "整個故事是從一張圖倒推出來的：兩盞提燈掛在同一個鈎上，一盞剛好暗一格，另一盞剛好燃起。它上游的一切，都是為了令那一格畫面不用一句解釋也讀得懂。如果要開口告訴玩家他在看甚麼，這個結局就已經失敗。"
+    },
+    {
+     "en": "That forced three things backwards into the opening. The Lamplighter had to appear before the first climb rather than on the road, so his first look at you is at a cloak and not at a purse. The tutorial had to count your four holdings out loud, because the ending is an itemised list and the list has to have been read aloud once at the start. And the five prices had to be paid in an order that survives being replayed as a receipt.",
+     "zh": "這就迫使三樣東西倒過來塞進開場。掌燈人必須在第一次朝聖之前出場，而不是在路上，這樣他第一眼看的才是斗篷，不是錢囊。教學必須把你那四樣持有物逐一唸出來，因為結局是一張逐項列明的清單，而這張清單必須在開場時被大聲讀過一次。還有，五份代價付款的次序，必須經得起被當成一張收據重播一次。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "起承轉合 across thirty runs, not across chapters",
+    "zh": "起承轉合，攤在三十次朝聖上，不是攤在章節上"
+   },
+   "body": [
+    {
+     "en": "起 is a single doorway scene lasting eleven seconds. 承 is the entire Hollow Lamplighter quest — five meetings, capped at one per run, with a 20% appearance chance and pity from run three. In practice that is fifteen to thirty runs and, for most players, three or four weeks of calendar time. 轉 is the sixth-Shard unsealing, one scene, unskippable. 合 is Act IV.",
+     "zh": "「起」是一場十一秒的門廊戲。「承」是整條空燈掌燈人旅跡——五次會面，每次朝聖上限一次，出現率兩成，第三次朝聖起有保底。實際上即是十五至三十次朝聖；對大部分玩家而言，是三四個星期的日曆時間。「轉」是第六片碎片的開封，一場戲，不可跳過。「合」是第四章。"
+    },
+    {
+     "en": "The unusual load is on 承. In a film the second act is where you keep the audience's attention; here it is where you spend three real weeks quietly staining five UI elements. That is not a narrative beat, it is a paint job with a very long fuse — and it is the only part of the design that cannot be rescued by better writing.",
+     "zh": "不尋常的負擔壓在「承」。電影裏第二幕是留住觀眾注意力的地方；在這裏，它是你用三個現實星期靜靜地把五個 UI 元件逐個染色的地方。那不是敍事節拍，那是一道引信極長的油漆工序——而這也是整個設計裏唯一無法靠寫得更好來搶救的部分。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "The five prices are a transplant table",
+    "zh": "五份代價，是一張移植對照表"
+   },
+   "body": [
+    {
+     "en": "Three embers are his fire-seed. One hundred and sixty gold is his stipend as keeper. Twelve measures of vessel are his flesh. The boon is property — the first keeper handed it out himself, and he is repossessing it. The last heartbeat is the transfer completing: your light steps down one pane so his can step up one.",
+     "zh": "三點餘燼是他的火種。一百六十金是他當掌燈人時的俸祿。十二格容器是他的血肉。那份恩賜是產權——最初的掌燈人親手派出去的，如今他收回。最後一記心跳是移植完成的那一刻：你的光退一格，他的光才進得了一格。"
+    },
+    {
+     "en": "Read as a rising cost curve the five prices are just escalation. Read as a table they are a body being reassembled in the order that a body can be carried: heat, then money, then meat, then property, then the last spark. The order is the tell, and it is placed where nobody looks — in a shop UI.",
+     "zh": "把五份代價讀成一條遞升的成本曲線，它就只是加碼。把它讀成一張表，它就是一具身體按「可以被搬運的次序」重新裝配：先熱，再錢，再肉，再產權，最後一點火星。次序就是破綻，而它被放在沒有人會看的地方——一個買賣介面裏。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "What the player was looking at",
+    "zh": "玩家一直在看着甚麼"
+   },
+   "body": [
+    {
+     "en": "Nothing in this story is hidden. Six shipped lines say it outright and every one of them survives being reread because each has a perfectly good literal meaning on first pass. A lantern without flame is still a key reads as advice about the Usurper item; it is a description of him. The gaunt keeper remembers the road you did not take reads as a hint about branching; it is about the road he was marched down.",
+     "zh": "這個故事沒有任何東西被藏起。六句已 shipped 的原文直接說了出來，而每一句都經得起回讀，因為每一句在初讀時都有一個完全說得通的字面意思。「無焰的提燈仍是一把鑰匙」讀落像是關於篡位者那件道具的提示；其實是對他本人的描述。「枯瘦的掌燈人記得你未走的路」讀落像是分支路線的暗示；其實講的是他被押走的那條路。"
+    },
+    {
+     "en": "The Chinese localisation is closer to the answer than the English is, and it got there by accident. English keeps three surfaces — the Hollow Lamplighter, the gaunt keeper, the first keeper — while zh-Hant renders all three as 掌燈人. A Chinese player is reading the twist in plain sight from whisper 9 onward. That is not a bug to fix; it is a difference in how long the misdirection holds, and it should be measured rather than assumed away.",
+     "zh": "中文版比英文版更接近答案，而且是誤打誤撞得來的。英文保留了三個表面——the Hollow Lamplighter、the gaunt keeper、the first keeper——而 zh-Hant 三個都譯成「掌燈人」。中文玩家由低語 9 開始，其實已經在明面上讀着那個反轉。這不是要修的 bug；這是誤導能撐多久的差異，應該去量，而不是當它不存在。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Defeat has to leave residue (A3)",
+    "zh": "敗仗必須留下殘留（A3）"
+   },
+   "body": [
+    {
+     "en": "Every death returns you to the Vigil and he is in the doorway with the ledger. He says one line about that specific defeat — the floor, the boss, the resource you died holding — and then your page in the ledger visibly gains a line. Not a counter, not a stat screen: a page that gets thicker.",
+     "zh": "每次死亡都把你送回守夜，而他就帶着帳簿站在門廊。他會就那一場敗仗說一句——第幾層、哪個首領、死的時候手上還揸住甚麼資源——然後你那一頁，肉眼可見地多了一行。不是計數器，不是數據頁：是一頁愈來愈厚的紙。"
+    },
+    {
+     "en": "The line is generated from the actual defeat state, so it cannot be read as flavour. And the mechanism means dying is not neutral: deaths are interest on his account, and a player who has died forty times is carrying more of him than a player who has died four. It costs nothing mechanically and it makes the reveal land harder on exactly the players who struggled most, which is the correct direction for that pressure to run.",
+     "zh": "那句是由實際的敗仗狀態生成的，所以讀不成氛圍文字。而這個機制意味住死亡並非中性：死亡是他帳上的利息，死過四十次的玩家，身上背着的「他」，比死過四次的多。它在機制上零成本，卻令反轉在最捱得辛苦的玩家身上砸得最重——而這正是這股壓力應該流向的方向。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Act IV is a corridor, on purpose",
+    "zh": "第四章是一條走廊，這是故意的"
+   },
+   "body": [
+    {
+     "en": "Acts I to III are branching maps you survey and choose through. 【The Lantern Road】 has five nodes in a line and no choices, because the fiction of Act IV is that you are being walked. The nine enemies are previous keys — pilgrims he spent — each carrying a cold lantern and each fighting with the residue of whichever thing was taken out of them.",
+     "zh": "第一至第三章是可以巡視、可以揀路的分岔地圖。【燈道】五個節點排成一直線，沒有選擇，因為第四章的設定就是：你正在被人牽着走。九個敵人是歷任鎖匙——被他用掉的朝聖者——各自提着一盞冷燈，各自用「當年被抽走的那樣東西」的殘影來打你。"
+    },
+    {
+     "en": "The boss being his transplants rather than him is the point. You never fight the man. You fight the five prices, and winning is defined as burning them off yourself rather than as killing anyone — which is the only ending shape that lets the last step through the arch mean anything.",
+     "zh": "首領是他的移植物而不是他本人，正是重點所在。你從頭到尾不會跟那個人打。你打的是五份代價，而勝利的定義是把它們從自己身上燒走，不是殺死任何人——這也是唯一一種能令「踏過拱門的最後一步」有意義的結局形狀。"
+    }
+   ]
+  },
+  {
+   "h": {
+    "en": "Honest risks",
+    "zh": "風險，照實講"
+   },
+   "body": [
+    {
+     "en": "The whole twist rests on one NPC who currently ships six lines of dialogue. A player who never lucks into five meetings never meets the story at all — 20% per run is a coin the narrative cannot afford to lose, and the pity timer at run three is doing more work than the design admits. The safest fix is a hard guarantee of one meeting per three runs once the thread is open, at the cost of some of the road's unpredictability.",
+     "zh": "整個反轉壓在一個 NPC 身上，而這個 NPC 目前只 shipped 了六句對白。運氣不好、湊不齊五次會面的玩家，等於完全沒遇過這個故事——每次朝聖兩成，是敍事輸不起的一注，而第三次朝聖的保底，做的功比設計願意承認的多。最穩陣的修法，是旅跡一開就硬性保證每三次朝聖至少一次會面，代價是路上少一分不可預測。"
+    },
+    {
+     "en": "The second risk is that the payload is presentation, not text. If the five UI elements do not actually keep his colour — persistently, across runs, without a tooltip explaining why — the reveal pans down a resource bar and finds nothing there. That is engineering cost in the HUD, not writing, and it should be built and proven before another word of this quest is authored.",
+     "zh": "第二個風險，是這故事的彈頭在演出，不在文本。如果那五個 UI 元件並無真正保住他的顏色——跨朝聖持續、而且沒有一個 tooltip 出來解釋原因——反轉那一刻鏡頭掃過資源欄，就會掃到一片空白。那是 HUD 的工程成本，不是寫作成本，而且應該在這條旅跡再寫多一隻字之前先做出來、先驗過。"
+    },
+    {
+     "en": "The third is tonal. A benefactor who turns out to have engineered your entire pilgrimage can read as the game telling the player their agency was fake. The mitigation is the ending: the win condition is not exposing him, it is refusing to arrive as his property. He does not get beaten. He gets walked past.",
+     "zh": "第三個是調子。一個到頭來設計了你整趟朝聖的恩人，好容易讀成遊戲在告訴玩家：你的自主權係假嘅。緩解的方法在結局：勝利條件不是揭穿他，而是拒絕以他的財產的身分抵達。他不是被打敗。他是被行過。"
+    }
+   ]
+  }
+ ],
+ "rereadings": [
+  {
+   "line": "A lantern without flame is still a key.",
+   "before": {
+    "en": "Advice about the 650-gold shop item: buy the cold lantern, carry it to the summit, and it will unmask the Usurper.",
+    "zh": "關於那件六百五十金商店道具的提示：買下那盞冷燈，帶上頂點，它就能揭穿篡位者的面具。"
+   },
+   "after": {
+    "en": "It is not about the item. It is a description of him: a lantern with no flame, which is exactly what a key is. You were never carrying the key. You were holding its hand.",
+    "zh": "它講的不是那件道具。它是對他本人的描述：一盞沒有火的燈——而那正正就是一把鎖匙。你從來沒有帶着鎖匙。你只是揸住佢隻手。"
+   }
+  },
+  {
+   "line": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+   "before": {
+    "en": "A collector's fussiness. He wants the object, not the sentiment attached to it — an odd but harmless way to phrase a fetch quest.",
+    "zh": "收藏家的挑剔。他要的是那件物，不是附在物上的心意——一句奇怪但無害的取物任務措辭。"
+   },
+   "after": {
+    "en": "A statement of ownership. He is the first keeper. He is repossessing property he handed out himself, and the correction is legal, not fussy: gratitude was never owed to you, so it is not yours to give.",
+    "zh": "一句產權聲明。他就是最初的掌燈人。他收回的是自己親手派出去的財產；那句更正是法律意義上的，不是挑剔：那份感激從來不欠你，所以也輪不到你來給。"
+   }
+  },
+  {
+   "line": "Five pages make a chapter; five prices make a confession.",
+   "before": {
+    "en": "A neat rhyme between two five-step quest threads. The Unreadable Page and the Unlit Way both take five completions; the line reads as symmetry.",
+    "zh": "兩條五步旅跡之間漂亮的對仗。無法辨讀之頁與未燃之路都要五次完成；這句讀落像是對稱。"
+   },
+   "after": {
+    "en": "The confession is his, and it is signed in instalments. Each price admits one more thing about who he was and what was taken from him. The whisper is telling you a crime has been described to you five times.",
+    "zh": "那份懺言是他的，而且是分期簽署的。每一份代價，都多供認一件關於「他曾是誰」與「他被奪去甚麼」的事。那句低語是在告訴你：一宗罪，已經向你描述過五次。"
+   }
+  },
+  {
+   "line": "// CARRY THE WRONG LIGHT UPWARD //",
+   "before": {
+    "en": "A curse burnt into the combat floor under the Eighth Omen, and the run under it is measurably harder. It reads as a threat.",
+    "zh": "第八凶兆之下，燒在戰鬥地面上的一句詛咒；背着它的那次朝聖確實明顯更難。讀落像威脅。"
+   },
+   "after": {
+    "en": "It is not a warning, it is your job description. The wrong light is his light, you are the one carrying it, and the floor is not cursing you — it is a door describing what is walking towards it.",
+    "zh": "那不是警告，那是你的職務說明。錯誤之光就是他的光，揹住它的人就是你；地面不是在詛咒你——那是一道門，在描述甚麼正朝它走來。"
+   }
+  },
+  {
+   "line": "The gaunt keeper remembers the road you did not take.",
+   "before": {
+    "en": "A hint that the map has branches, and that some NPC tracks the paths you skipped. Standard roguelite bookkeeping flavour.",
+    "zh": "暗示地圖有分岔，而某個 NPC 會記住你略過的路。標準的 roguelite 記帳式氛圍文字。"
+   },
+   "after": {
+    "en": "The road is not yours and it is not a branch. It is the road he was marched down when he was put outside. He has waited a thousand years at that junction for someone who wears it like he did.",
+    "zh": "那條路不是你的，也不是甚麼分岔。那是他被逐出去那日、被押着走的那條路。他在那個路口等了一千年，等一個穿得像他當年那樣的人。"
+   }
+  },
+  {
+   "line": "The merchant keeps one cold thing beneath the counter.",
+   "before": {
+    "en": "A shop tip. There is a hidden expensive item; save up 650 gold and it unlocks the Usurper thread.",
+    "zh": "一句買賣提示。有件貴價隱藏道具；儲夠六百五十金，就能開啟篡位者那條線。"
+   },
+   "after": {
+    "en": "It is his. A flameless lantern confiscated from a keeper and sold on until it reached a stall, and the merchant will not say who left it because the merchant does not know. You bought his lantern back for him, at retail.",
+    "zh": "那是他的。一盞從掌燈人身上沒收的無焰提燈，一手一手轉賣，直到流落到一個攤檔上；商人不肯說是誰留下它，是因為商人根本唔知。你替他買返自己盞燈，仲要係原價。"
+   }
+  }
+ ],
+ "meta": {
+  "twist": {
+   "en": "The Hollow Lamplighter is the first keeper, cast out through the door above the crown and stripped of his fire. The door admits only the keeper's fire, so for a thousand years he has been putting himself back together on other people: the five prices are not a trade, they are a transplant. Three embers are his fire-seed, 160 gold his stipend, 12 measures of vessel his flesh, the boon his own property returning, the last heartbeat the transfer completing. When the sixth pane burns, the door recognises him — worn on you.",
+   "zh": "空燈掌燈人就是最初的掌燈人：他被逐出王冠之上那道門，並被褫奪了火。那道門只認掌燈人之火，所以一千年來，他一直借別人的身體把自己重新裝配起來——五份代價不是買賣，是移植。三點餘燼是他的火種，一百六十金是他的俸祿，十二格容器是他的血肉，那份恩賜是他自己的財產歸位，最後一記心跳是移植完成。當第六格窗片燃起，門認出來的是他——穿在你身上的他。"
+  },
+  "act4": {
+   "en": "【The Lantern Road】(provisional): a five-node corridor behind the door, no branches, hung with hundreds of dead lanterns. The door greets you by his name. Nodes: the threshold, his old lamp room, your shade wearing your own face for the first time, and the residue of the sentencing that put him out — a crowned figure with a shard-shaped gap in its halo. Nine enemies are previous keys, spent pilgrims each carrying a cold lantern and fighting with the residue of what was taken from them. The boss is 【The First Keeper's Fire】: five phases, one per price, each burning that part back off you. He watches without fighting.",
+   "zh": "【燈道】（暫名）：門後一條五節點的走廊，無分岔，兩壁掛滿數百盞死燈。門會用他的名字招呼你。節點依次為：門檻、他的舊燈房、你的影首次戴回你自己的臉、以及那場把他逐出去的判決的殘影——一個戴冠的身影，光環上有一道碎片形狀的缺口。九個敵人是歷任鎖匙，被用掉的朝聖者，各提一盞冷燈，各以「被奪走那樣東西」的殘影作戰。首領是【初代掌燈人之火】：五個階段，一階段對應一份代價，逐份從你身上燒回去。他在旁觀戰，不出手。"
+  },
+  "defeat": {
+   "en": "Every defeat returns you to the Vigil doorway where he is waiting with an open ledger. He speaks one line generated from the actual defeat state — the floor number, the boss, the resource you were still holding when the lantern went out — so it cannot be read as flavour. Then your page in his ledger visibly gains a line. Deaths are interest on his account: the more you have died, the more of him you are carrying, and the reveal lands hardest on the players who struggled most.",
+   "zh": "每次敗仗都把你送回守夜的門廊，而他攤開帳簿在那裏等。他會說一句由實際敗仗狀態生成的話——第幾層、哪個首領、燈滅時你手上仲揸住乜資源——所以那句讀不成氛圍文字。然後你在他帳簿上那一頁，肉眼可見地多一行。死亡是他帳上的利息：你死得愈多，身上背着的他就愈重，而反轉會在最捱得辛苦的玩家身上砸得最重。"
+  },
+  "risks": {
+   "en": "One: the entire twist rests on a single NPC with six shipped lines and a 20% per-run appearance chance — a player who never assembles five meetings never meets the story. Two: the payload is presentation, not text. If the five UI elements do not persistently keep his colour across runs, the reveal pans down an unstained resource bar and finds nothing; that is HUD engineering that must be proven before more prose is written. Three: zh-Hant collapses Hollow Lamplighter, gaunt keeper and first keeper into one word, 掌燈人, so the misdirection holds for a shorter time in Chinese and that gap should be measured, not assumed away. Four: a benefactor who engineered the whole pilgrimage risks reading as the game voiding the player's agency; the mitigation is that the win condition is not exposing him but refusing to arrive as his property.",
+   "zh": "一：整個反轉壓在一個 NPC 身上，佢得六句 shipped 對白，每次朝聖出現率兩成——湊唔齊五次會面嘅玩家，等於冇撞過呢個故事。二：彈頭在演出，唔在文本。如果五個 UI 元件冇跨朝聖持續保住佢嘅顏色，反轉嗰下鏡頭掃落資源欄會掃到一片乾淨，咩都冇；嗰個係 HUD 工程，要喺再寫多啲文本之前先驗過。三：zh-Hant 將 Hollow Lamplighter、gaunt keeper、first keeper 三個表面全部收埋做「掌燈人」一個詞，所以中文版嘅誤導撐得短好多，呢個落差要去量，唔好當佢冇。四：一個設計咗你成趟朝聖嘅恩人，好容易讀成遊戲否定咗玩家嘅自主權；緩解在於勝利條件唔係揭穿佢，而係拒絕以佢嘅財產身分抵達。"
+  }
+ }
+}
