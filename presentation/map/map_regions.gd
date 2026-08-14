@@ -1,12 +1,13 @@
 class_name MapRegions
 extends RefCounted
-## Per-act region config for the pilgrimage map. Built once per theme pick —
-## tuning act 1's shafts must not move act 0's ash (docs/solutions/conventions/
+## Sole per-act palette for the pilgrimage map (#234 slice 4). `for_act`
+## ignores the content pack's per-act theme dict — the 3D ramp owns hue.
+## Tuning act 1's shafts must not move act 0's ash (docs/solutions/conventions/
 ## per-recipe-shader-knobs.md: one recipe's knobs stay off the shared model).
 
-## Documented fallback when `content.acts[i].theme` lacks a key. Content ints
-## are truth for the shipping pack; these mirror the same hexes so a missing
-## key still paints a coherent region rather than black.
+## 2D band sky/fog/weather. Length 3 until slice 6 authors Act IV's row;
+## `for_act` clamps these separately from the 4-row ramp. Hexes match the
+## shipping pack so the live `WorldMapScreen` bands do not jump this slice.
 const FALLBACK_SKIES: Array[Color] = [
 	Color("#0c1410"), Color("#081420"), Color("#120a1e")]
 const FALLBACK_FOGS: Array[Color] = [
@@ -19,6 +20,23 @@ const FALLBACK_ACCENTS: Array[Color] = [
 	Color("#7ddb8f"), Color("#5fd6e8"), Color("#c99aff")]
 
 const WEATHER_BY_ACT: Array[StringName] = [&"ash", &"sunken", &"storm"]
+
+## Light arc (#207 decision 11): dusk → night → storm → dawn. Written onto
+## ramp `band_shade` / `band_key` only — never albedo, never `surface_tex`.
+## Act 0 (1-based act1 plates) takes the crimson forest-floor of
+## `assets/art/stage/act1-backdrop.png` plus the amber window as key.
+const BAND_SHADE: Array[Color] = [
+	Color(0.22, 0.08, 0.15), Color(0.06, 0.10, 0.24),
+	Color(0.10, 0.05, 0.18), Color(0.22, 0.19, 0.12)]
+const BAND_KEY: Array[Color] = [
+	Color(0.96, 0.68, 0.42), Color(0.70, 0.86, 0.96),
+	Color(0.88, 0.72, 0.96), Color(0.96, 0.82, 0.70)]
+## Grade surround hues. Journey 0→1 is `lerpf(near, far)` — same axis as
+## the proxy's 0.71→0.61 cool. Corridor hues stay on the same wheel-arc
+## as the surround so lerps cannot cross green on the crimson wrap.
+const GRADE_HUE_NEAR: Array[float] = [0.95, 0.62, 0.78, 0.08]
+const GRADE_HUE_FAR: Array[float] = [0.88, 0.55, 0.70, 0.12]
+const GRADE_HUE_CORRIDOR: Array[float] = [0.98, 0.50, 0.62, 0.10]
 
 ## Spire nearness by act — the §1 goal-anchor grows as the pilgrimage closes.
 ## One size and one tone at every act was PR #71 DL R2's carried note ("neither
@@ -77,6 +95,11 @@ var fog: Color = FALLBACK_FOGS[0]
 var particles: Color = FALLBACK_PARTICLES[0]
 var glow: Color = FALLBACK_GLOWS[0]
 var accent: Color = FALLBACK_ACCENTS[0]
+var band_shade: Color = BAND_SHADE[0]
+var band_key: Color = BAND_KEY[0]
+var grade_hue_far: float = GRADE_HUE_FAR[0]
+var grade_hue_near: float = GRADE_HUE_NEAR[0]
+var grade_hue_corridor: float = GRADE_HUE_CORRIDOR[0]
 var weather: StringName = &"ash"
 ## How many of the veil's scattered motes this region DRAWS. The scatter itself
 ## stays the full deterministic 128 so switching acts never reshuffles it.
@@ -89,46 +112,22 @@ var weather: StringName = &"ash"
 var particle_count: int = 128
 
 
-static func for_act(act_i: int, content: ContentDB) -> MapRegions:
+## `_content` is accepted so `WorldMapScreen` keeps its call shape. It is not
+## read: palette truth lives in the constants above (#234, #207).
+static func for_act(act_i: int, _content: ContentDB = null) -> MapRegions:
 	var cfg: MapRegions = MapRegions.new()
-	var index: int = clampi(act_i, 0, FALLBACK_SKIES.size() - 1)
+	var index: int = clampi(act_i, 0, BAND_SHADE.size() - 1)
+	var tone: int = clampi(index, 0, FALLBACK_SKIES.size() - 1)
 	cfg.act = index
-	cfg.weather = WEATHER_BY_ACT[index]
-	cfg.sky = FALLBACK_SKIES[index]
-	cfg.fog = FALLBACK_FOGS[index]
-	cfg.particles = FALLBACK_PARTICLES[index]
-	cfg.glow = FALLBACK_GLOWS[index]
-	cfg.accent = FALLBACK_ACCENTS[index]
-	if content == null or index >= content.acts.size():
-		return cfg
-	var act_v: Variant = content.acts[index]
-	if typeof(act_v) != TYPE_DICTIONARY:
-		return cfg
-	var act_dict: Dictionary = act_v
-	var theme_v: Variant = act_dict.get("theme", {})
-	if typeof(theme_v) != TYPE_DICTIONARY:
-		return cfg
-	var theme: Dictionary = theme_v
-	cfg.sky = _theme_colour(theme, "sky", cfg.sky)
-	cfg.fog = _theme_colour(theme, "fog", cfg.fog)
-	cfg.particles = _theme_colour(theme, "particles", cfg.particles)
-	cfg.glow = _theme_colour(theme, "glow", cfg.glow)
-	cfg.accent = _theme_colour(theme, "accent", cfg.accent)
+	cfg.weather = WEATHER_BY_ACT[tone]
+	cfg.sky = FALLBACK_SKIES[tone]
+	cfg.fog = FALLBACK_FOGS[tone]
+	cfg.particles = FALLBACK_PARTICLES[tone]
+	cfg.glow = FALLBACK_GLOWS[tone]
+	cfg.accent = FALLBACK_ACCENTS[tone]
+	cfg.band_shade = BAND_SHADE[index]
+	cfg.band_key = BAND_KEY[index]
+	cfg.grade_hue_far = GRADE_HUE_FAR[index]
+	cfg.grade_hue_near = GRADE_HUE_NEAR[index]
+	cfg.grade_hue_corridor = GRADE_HUE_CORRIDOR[index]
 	return cfg
-
-
-## Content stores 24-bit RGB ints (or "#…" strings for accent/ember). Same
-## `<< 8 | 0xff` widening Color.hex expects; strings go through Color().
-static func _theme_colour(theme: Dictionary, key: String, fallback: Color) -> Color:
-	if not theme.has(key):
-		return fallback
-	var v: Variant = theme[key]
-	if typeof(v) == TYPE_STRING:
-		var s: String = str(v)
-		return Color(s) if s.begins_with("#") else fallback
-	if typeof(v) != TYPE_INT and typeof(v) != TYPE_FLOAT:
-		return fallback
-	# Typed assign from Dictionary.get — same idiom as waystone hue (int()
-	# on a Variant is an unsafe cast under warnings-as-errors).
-	var rgb: int = theme.get(key, 0)
-	return Color.hex((rgb << 8) | 0xff)
