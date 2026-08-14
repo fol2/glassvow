@@ -46,9 +46,11 @@ func _initialize() -> void:
 		print(JSON.stringify({"calibration": report["calibration"], "summary": report["summary"]}))
 	quit(0)
 static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0,
-		ban: PackedStringArray = PackedStringArray(), policy: Dictionary = {}) -> Dictionary:
+		ban: PackedStringArray = PackedStringArray(), policy: Dictionary = {},
+		random_build: bool = false, random_play: bool = false) -> Dictionary:
 	Pilot.set_ban(ban)
 	Pilot.apply_policy(policy)
+	Pilot.set_modes(random_build, random_play)
 	var aspect_index: int = 1 if aspect == "ashwarden" else 0
 	var profile: Dictionary = {
 		"aspect": aspect_index, "vow": vow, "reveals": content.reveal_ids.duplicate(),
@@ -82,7 +84,8 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 			map.clear_current()
 			if node.type == "boss":
 				economy.append(_economy_row(run))
-				var relic: String = Pilot.choose_relic(game.rewards.roll_boss_relics(run), content, run.aspect)
+				var relic: String = Pilot.choose_relic(game.rewards.roll_boss_relics(run), content,
+					run.aspect, run.rng)
 				if not relic.is_empty():
 					game.rewards.gain_relic(run, relic)
 				run.boss_relic_act = run.act
@@ -127,7 +130,8 @@ static func _claim_rewards(game: GlassvowGame, rewards: Dictionary) -> void:
 	var gold: int = int(float(str(rewards.get("gold", 0))))
 	game.run.player.gold += gold
 	game.run.stats["goldEarned"] = int(float(str(game.run.stats.get("goldEarned", 0)))) + gold
-	var card: String = Pilot.choose_card(rewards.get("cards", []), game.content, game.run.aspect)
+	var card: String = Pilot.choose_card(rewards.get("cards", []), game.content, game.run.aspect,
+		game.run.rng)
 	if not card.is_empty() and not Pilot.is_banned(card):
 		var score: float = Pilot.card_score(game.content.cards.get(card, {}), game.run.aspect, card)
 		if Pilot.accepts_card_reward(score):
@@ -185,7 +189,8 @@ static func _resolve_event(game: GlassvowGame) -> void:
 	var pending: Dictionary = game.rewards.apply_event_ops(game.run, ops)
 	match str(pending.get("kind", "")):
 		"card":
-			var id: String = Pilot.choose_card(pending.get("cards", []), game.content, game.run.aspect)
+			var id: String = Pilot.choose_card(pending.get("cards", []), game.content, game.run.aspect,
+				game.run.rng)
 			if not id.is_empty():
 				game.run.player.deck.append(CardInst.new(game.run.next_uid(), StringName(id), false))
 		"upgrade": _upgrade_best(game)
@@ -334,9 +339,15 @@ static func _resolve_shop(game: GlassvowGame) -> void:
 			if slot >= 0:
 				game.run.player.potions[slot] = id
 		elif category == "remove":
-			var worst: CardInst = Pilot.worst_card(game.run, game.content, game.run.player.deck)
-			if worst != null:
-				game.run.player.deck.erase(worst)
+			var remove: CardInst = null
+			for card: CardInst in game.run.player.deck:
+				if card.uid == int(float(str(buy.get("uid", -1)))):
+					remove = card
+					break
+			if remove == null:
+				remove = Pilot.worst_card(game.run, game.content, game.run.player.deck)
+			if remove != null:
+				game.run.player.deck.erase(remove)
 static func _claim_treasure(game: GlassvowGame) -> void:
 	var before: Array[String] = game.run.player.relics.duplicate()
 	game.rewards.claim_treasure(game.run)

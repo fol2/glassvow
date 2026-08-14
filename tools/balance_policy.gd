@@ -69,6 +69,46 @@ static func resolve(over: Dictionary) -> Dictionary:
 	return v
 
 
+static func sample_range(root_seed: int, first: int, count: int) -> Array[Dictionary]:
+	var rng: Rng = Rng.new(root_seed)
+	var out: Array[Dictionary] = []
+	for index: int in range(first + count):
+		var vector: Dictionary = default()
+		for group: String in ["card", "status", "special", "combat", "route", "relics", "relicRarity"]:
+			var weights: Dictionary = vector[group]
+			_scale_group(weights, rng)
+		for key: String in ["potionShopDefault", "potionHealing", "relicFallback",
+				"relicDuskBonus", "relicAshBonus"]:
+			vector[key] = float(str(vector[key])) * _log_factor(rng)
+		vector["cardDecline"] = 40.0 * rng.next()
+		vector["removalAppetite"] = 4.0 + 24.0 * rng.next()
+		vector["removalMinCopies"] = 1 + rng.pick_index(3)
+		vector["shopMinRatio"] = 0.01 + 0.11 * rng.next()
+		vector["restHpPct"] = rng.irange(25, 90)
+		vector["potionHealMissing"] = rng.irange(5, 40)
+		vector["routeLowHpPct"] = rng.irange(25, 90)
+		vector["shopGoldLow"] = rng.irange(0, 90)
+		vector["shopGoldHigh"] = rng.irange(100, 250)
+		if index >= first:
+			out.append(vector)
+	return out
+
+
+static func _scale_group(group: Dictionary, rng: Rng) -> void:
+	for key_v: Variant in group:
+		var key: String = str(key_v)
+		var value: Variant = group[key]
+		if typeof(value) == TYPE_DICTIONARY:
+			var child: Dictionary = value
+			_scale_group(child, rng)
+		elif float(str(value)) != 0.0:
+			group[key] = float(str(value)) * _log_factor(rng)
+
+
+static func _log_factor(rng: Rng) -> float:
+	return 0.25 * (16.0 ** rng.next())
+
+
 static func _merge(base: Dictionary, over: Dictionary) -> void:
 	for key: Variant in over:
 		var k: String = str(key)
