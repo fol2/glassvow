@@ -27,7 +27,7 @@ before it ships.
 |---|---|---|---|
 | Keeper hearth lines (run start) | 留低嗰個 | pool 60 | +60 (shard-count-aware variants) |
 | Waystone interstitials | walker monologues | pool 60 | +60 |
-| Lamplighter meetings ×5 | dialogue scenes | 8–12 lines each | reactive variants |
+| Lamplighter meetings ×5 | dialogue scenes | 8–12 lines each, incl. the explicit「上次」line (#258 R2 Q13) | reactive variants |
 | Whispers | 24 walkers' last words | rewrite/assign all 24 | — |
 | Loss pool (A2/A3) | dying walkers' last words + epitaphs | pool 50 | +50 |
 | Dawn-ceremony prose | Vigil memory archive | 1 passage per quest milestone (~25) | act-transition passages |
@@ -39,12 +39,12 @@ before it ships.
 | Relic/card/status/potion lore | item flavor | — | ~115 entries (needs the un-surveyed icon groups: cards 60, relics 31, statuses 17, potions 7) |
 | Event scripts (library, shrine, knight, traders…) | scene dialogues | top 5 events | remainder |
 
-## Per-channel spoiler ceiling [機制 SETTLED — #258 R1 Q5;逐行值 PROPOSED]
+## Per-channel spoiler ceiling [SETTLED — #258 R1 Q5 + R2 N3]
 
 Every surface records the maximum reveal-ladder level (00 §5) it may carry.
 Canon-lint checks each line's ledger level against its channel's ceiling.
-(*When* a level unlocks in play — shard-count code gating vs discipline-only —
-is a separate decision: #258 R2.)
+*When* a level unlocks in play: shard-count **code gating** — engine child
+task #270 [SETTLED — #258 R2 Q12].
 
 | Surface | Ceiling | Note |
 |---|---|---|
