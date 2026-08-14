@@ -1,5 +1,5 @@
 extends RefCounted
-## #234 slice 2: MapScene shaders, tex_stop bind, freeze switch.
+## #234 slice 2–4: MapScene shaders, tex_stop bind, freeze switch, act palettes.
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -12,6 +12,7 @@ static func run(fails: Array[String]) -> void:
 	_scene(fails)
 	_input(fails)
 	_materials(fails)
+	_palette(fails)
 
 
 static func _rig(fails: Array[String]) -> void:
@@ -232,3 +233,107 @@ static func _as_bool(v: Variant) -> bool:
 		var b: bool = v
 		return b
 	return true
+
+
+static func _palette(fails: Array[String]) -> void:
+	_check(fails, MapRegions.BAND_SHADE.size() == 4
+			and MapRegions.BAND_KEY.size() == 4,
+			"four light-arc palette rows (dusk night storm dawn)")
+	_check(fails, MapRegions.BAND_SHADE[0].h > 0.88,
+			"act 0 shade hue is crimson (~328°, the web act1 stage)")
+	for i: int in range(4):
+		var cfg: MapRegions = MapRegions.for_act(i)
+		_check(fails, cfg.act == i
+				and cfg.band_shade.is_equal_approx(MapRegions.BAND_SHADE[i])
+				and cfg.band_key.is_equal_approx(MapRegions.BAND_KEY[i]),
+				"for_act(%d) returns authored bands" % i)
+		for j: int in range(i + 1, 4):
+			_check(fails, not cfg.band_shade.is_equal_approx(MapRegions.BAND_SHADE[j])
+					and not cfg.band_key.is_equal_approx(MapRegions.BAND_KEY[j])
+					and not is_equal_approx(cfg.grade_hue_corridor,
+					MapRegions.GRADE_HUE_CORRIDOR[j]),
+					"act %d palette disagrees with act %d" % [i, j])
+	var poisoned: ContentDB = ContentDB.new()
+	poisoned.acts = [{"theme": {
+		"sky": "#ffffff", "fog": "#ffffff", "particles": "#ffffff",
+		"glow": "#ffffff", "accent": "#ffffff",
+	}}]
+	var baseline: MapRegions = MapRegions.for_act(0)
+	var with_poison: MapRegions = MapRegions.for_act(0, poisoned)
+	_check(fails, with_poison.sky.is_equal_approx(MapRegions.FALLBACK_SKIES[0])
+			and with_poison.sky.is_equal_approx(baseline.sky)
+			and with_poison.band_shade.is_equal_approx(baseline.band_shade),
+			"for_act ignores the content pack theme dict")
+	var act3: MapRegions = MapRegions.for_act(3, poisoned)
+	_check(fails, act3.act == 3
+			and act3.band_key.is_equal_approx(MapRegions.BAND_KEY[3])
+			and act3.sky.is_equal_approx(MapRegions.FALLBACK_SKIES[2]),
+			"act 3 has its own ramp; 2D sky still clamps to the last authored row")
+	var scene: MapScene = MapScene.new()
+	_check(fails, scene.get_act() == 0, "MapScene starts on act 0")
+	var seen: Array[Texture2D] = []
+	var surface: Variant = null
+	var g_val: float = NAN
+	for act: int in range(4):
+		scene.set_act(act)
+		var ground: ShaderMaterial = _override(scene, "TerrainPlaceholder")
+		var prop: ShaderMaterial = _override(scene, "FlatWedges")
+		if ground == null or prop == null:
+			_check(fails, false, "act %d materials missing" % act)
+			continue
+		if act == 0:
+			surface = ground.get_shader_parameter("surface_tex")
+			g_val = _as_float(ground.get_shader_parameter("surface_value"))
+		_check(fails, scene.get_act() == act, "set_act(%d) sticks" % act)
+		var grade: Variant = ground.get_shader_parameter("grade")
+		var shade: Color = _as_color(ground.get_shader_parameter("band_shade"))
+		_check(fails, grade is Texture2D and is_same(grade, prop.get_shader_parameter("grade")),
+				"act %d ground and prop share one grade" % act)
+		_check(fails, shade.is_equal_approx(_as_color(prop.get_shader_parameter("band_shade")))
+				and not shade.is_equal_approx(_as_color(ground.get_shader_parameter("band_key"))),
+				"act %d ground and prop ramps match and are distinct ends" % act)
+		if grade is Texture2D:
+			var tex: Texture2D = grade
+			for prior: Texture2D in seen:
+				_check(fails, not is_same(tex, prior),
+						"act %d grade is not a previous act's texture" % act)
+			seen.append(tex)
+			if act == 0:
+				_grade_recipe(fails, tex)
+	var ground_end: ShaderMaterial = _override(scene, "TerrainPlaceholder")
+	_check(fails, ground_end != null
+			and is_equal_approx(g_val, MapMaterials.GROUND_VALUE)
+			and is_same(surface, ground_end.get_shader_parameter("surface_tex"))
+			and ground_end.get_shader_parameter("albedo") == null,
+			"act switch does not retint albedo / surface_tex / surface_value")
+	scene.free()
+
+
+static func _grade_recipe(fails: Array[String], tex: Texture2D) -> void:
+	if not (tex is ImageTexture):
+		_check(fails, false, "act 0 grade has a readable Image")
+		return
+	var grade_tex: ImageTexture = tex as ImageTexture
+	var image: Image = grade_tex.get_image()
+	if image == null:
+		_check(fails, false, "act 0 grade has a readable Image")
+		return
+	_check(fails, image.get_width() == MapMaterials.GRADE_RESOLUTION.x
+			and image.get_format() == Image.FORMAT_RGBA8,
+			"grade is world-XZ RGBA8 at the proxy resolution")
+	var under: Color = image.get_pixel(16, 29)
+	var surround: Color = image.get_pixel(image.get_width() >> 1, 0)
+	_check(fails, under.a < 0.5 and is_equal_approx(surround.a, 1.0),
+			"contact lives in alpha (dark under props, 1.0 in the open)")
+	_check(fails, surround.h > 0.85,
+			"act 0 surround hue is crimson, aligned to the web act1 stage")
+
+
+static func _as_color(v: Variant) -> Color:
+	if v is Color:
+		var c: Color = v
+		return c
+	if v is Vector3:
+		var vec: Vector3 = v
+		return Color(vec.x, vec.y, vec.z)
+	return Color(0, 0, 0, 0)

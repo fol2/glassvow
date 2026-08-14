@@ -1,6 +1,6 @@
 class_name MapScene
 extends Control
-## Standalone 3D map surface for one act (#234 slice 3).
+## Standalone 3D map surface for one act (#234 slice 4).
 ##
 ## Instantiable without a WorldMap. `project_pins` takes a node list when the
 ## caller has one; construction does not. The live 2D `WorldMapScreen` is not
@@ -22,6 +22,7 @@ var _display: TextureRect
 var _rig: MapCameraRig
 var _key: DirectionalLight3D
 var _materials: MapMaterials
+var _act: int = -1
 var _dragging: bool = false
 
 
@@ -55,6 +56,7 @@ func _init() -> void:
 	_display.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_display)
+	set_act(0)
 
 
 func _ready() -> void:
@@ -72,6 +74,23 @@ func get_stage() -> SubViewport:
 
 func get_key() -> DirectionalLight3D:
 	return _key
+
+
+func get_act() -> int:
+	return _act
+
+
+## Bind this act's grade + ramp bands. `MapRegions.for_act` is the only
+## palette source; content theme is not consulted. Re-arms freeze so the
+## new look paints once.
+func set_act(act_i: int) -> void:
+	var region: MapRegions = MapRegions.for_act(act_i)
+	if region.act == _act:
+		return
+	_act = region.act
+	_materials.bind_region(region, MapMaterials.grade_for(region, _all_prop_positions()))
+	if not is_live():
+		set_live(false)
 
 
 ## Screen seats for 2D pins, in this Control's pixel space. Empty list is
@@ -244,6 +263,13 @@ func _dab_positions() -> PackedVector3Array:
 		Vector3(2.0, 0.0, -7.7), Vector3(8.5, 0.0, 5.2),
 		Vector3(13.0, 0.0, -7.8), Vector3(20.5, 0.0, 6.9),
 	])
+
+
+func _all_prop_positions() -> PackedVector3Array:
+	var all: PackedVector3Array = _wedge_positions()
+	all.append_array(_slab_positions())
+	all.append_array(_dab_positions())
+	return all
 
 
 func _dab_mesh() -> ArrayMesh:

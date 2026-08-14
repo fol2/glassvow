@@ -381,8 +381,10 @@ func _sync_sealed_door(run: RunState) -> void:
 func _set_act_theme(stage_act: int) -> void:
 	_region = MapRegions.for_act(stage_act, content)
 	_act = _region.act
-	# Palette fields keep their names — bands already read them. Content
-	# theme is truth; MapRegions.FALLBACK_* only fills a missing key.
+	if content != null and not content.acts.is_empty():
+		_act = clampi(stage_act, 0, content.acts.size() - 1)
+	# Palette fields keep their names — bands already read them.
+	# MapRegions is the sole source; the content pack theme dict is not read.
 	_sky_colour = _region.sky
 	_fog_colour = _region.fog
 	_particle_colour = _region.particles
