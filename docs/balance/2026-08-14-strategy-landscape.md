@@ -113,7 +113,7 @@ The completed streaming sweep took **4,004 seconds (66 min 44 s)** on ten Godot 
 
 - shards: `/private/tmp/glassvow-215-slice-c/sweep/shard-0.ndjson` through `shard-9.ndjson` (177–178 MB each);
 - merged dataset: `/private/tmp/glassvow-215-slice-c/sweep/merged.ndjson` (320,001 lines, 1.7 GB);
-- analysis: `/private/tmp/glassvow-215-slice-c/sweep/analysis.json`;
+- analysis: `/private/tmp/glassvow-215-slice-c/sweep/analysis.json`, produced by `tools/balance_landscape.py` (committed; re-run it on the RC content SHA for the rc-bar pillar);
 - controls: `/private/tmp/glassvow-215-slice-c/controls/merged.json`;
 - pre-flight: `/private/tmp/glassvow-215-slice-c/preflight/preflight.json` and `analysis.json`.
 To replay a row, retain the source commit/content hash, `aspect`, `vow`, `seed`, `policyIndex`, sampler root seed **215**, and the row's resolved `policy`. `BalancePolicy.sample_range(215, policyIndex, 1)[0]` must equal that vector. Then call `BalanceSim.simulate(content, aspect, seed, vow, PackedStringArray(), policy)`. To replay every row for one policy through the CLI, run `balance_sweep.gd` with `--policyFirst=POLICY_INDEX --policyCount=1 --seeds=40 --seed0=3000 --rootSeed=215`; all flags follow the bare `--` and use `--name=value`.
