@@ -12,6 +12,7 @@ static func run(fails: Array[String]) -> void:
 	_parse(boot, fails)
 	_isolation(fails)
 	_vigil_write(fails)
+	_locale_apply(fails)
 	_entries(fails)
 	_console(fails)
 
@@ -44,6 +45,49 @@ static func _parse(boot: GDScript, fails: Array[String]) -> void:
 			fails.append("dev tools: unknown override was accepted")
 	if boot.call("parse_scenario_arg", PackedStringArray(["--seed=1"])) != null:
 		fails.append("dev tools: absent flag was not null")
+	var stocked_v: Variant = boot.call("parse_scenario_arg", _arg({
+		"id": "shop-stocked", "revision": 1,
+	}))
+	if not stocked_v is ScenarioReference:
+		fails.append("dev tools: shop-stocked id-only was not parsed")
+	else:
+		var stocked: ScenarioReference = stocked_v
+		if not stocked.error.is_empty():
+			fails.append("dev tools: shop-stocked id-only rejected: %s" % stocked.error)
+		elif stocked.seed != 18501 \
+				or int(float(str(stocked.overrides.get("gold", 0)))) != 999 \
+				or str(stocked.overrides.get("node", "")) != "9,3" \
+				or int(float(str(stocked.overrides.get("act", -1)))) != 0:
+			fails.append("dev tools: shop-stocked id-only missed the catalogue recipe")
+	var miss_v: Variant = boot.call("parse_scenario_arg", _arg({
+		"id": "no-such-scenario", "revision": 1,
+	}))
+	if not miss_v is ScenarioReference:
+		fails.append("dev tools: unknown id-only was not a reference")
+	else:
+		var miss: ScenarioReference = miss_v
+		if miss.error.is_empty():
+			fails.append("dev tools: unknown id-only was accepted")
+		elif miss.error.find("unknown") < 0:
+			fails.append("dev tools: unknown id-only error was not explicit: %s" % miss.error)
+	var bypass_v: Variant = boot.call("parse_scenario_arg", _arg({
+		"id": "shop-stocked", "revision": 1, "seed": 7,
+		"overrides": {"gold": 1},
+	}))
+	if not bypass_v is ScenarioReference:
+		fails.append("dev tools: explicit shop-stocked was not parsed")
+	else:
+		var bypass: ScenarioReference = bypass_v
+		if not bypass.error.is_empty():
+			fails.append("dev tools: explicit shop-stocked rejected: %s" % bypass.error)
+		elif bypass.seed != 7 \
+				or int(float(str(bypass.overrides.get("gold", 0)))) != 1 \
+				or bypass.overrides.has("node"):
+			fails.append("dev tools: explicit seed/overrides still merged the catalogue")
+	var ref_src: String = FileAccess.get_file_as_string(
+		"res://application/scenario_reference.gd")
+	if ref_src.find("ENTRIES") >= 0:
+		fails.append("dev tools: ScenarioReference must not resolve catalogue ENTRIES")
 
 
 static func _isolation(fails: Array[String]) -> void:
@@ -94,6 +138,55 @@ static func _vigil_write(fails: Array[String]) -> void:
 			var stored: VigilState = SaveService.load_vigil(host._vigil_save_path)
 			if stored.whispers != 99:
 				fails.append("dev tools: redirected Vigil write missed the Development profile")
+	ScenarioKernel.new(host.content).clear_profile()
+	host.free()
+	Locale.active = previous_locale
+	Preferences.active = previous_preferences
+
+
+static func _locale_apply(fails: Array[String]) -> void:
+	var apply_src: String = FileAccess.get_file_as_string("res://application/main.gd")
+	var apply_at: int = apply_src.find("func apply_dev_scenario")
+	var next_at: int = apply_src.find("\nfunc ", apply_at + 1)
+	var body: String = apply_src.substr(apply_at, next_at - apply_at) if apply_at >= 0 else ""
+	if body.find("Locale.active") < 0:
+		fails.append("dev tools: apply_dev_scenario does not apply locale")
+	if body.find("Preferences") >= 0:
+		fails.append("dev tools: apply_dev_scenario must not touch Preferences")
+	var before_run: String = _snap(SaveService.RUN_PATH)
+	var before_vigil: String = _snap(SaveService.VIGIL_PATH)
+	var previous_locale: Locale = Locale.active
+	var previous_preferences: Preferences = Preferences.active
+	Preferences.active = Preferences.new()
+	Preferences.active.language = "en"
+	Locale.active = Locale.new(Locale.CODE_EN)
+	var host: Main = _bare_main()
+	var with_loc: ScenarioReference = ScenarioReference.new()
+	with_loc.load_from({
+		"id": "custom", "revision": 1, "build": "t", "seed": 18404,
+		"locale": "zh-Hant", "shape": "pad-landscape", "overrides": {},
+	})
+	if not host.apply_dev_scenario(with_loc):
+		fails.append("dev tools: locale apply failed: %s" % host.last_dev_error)
+	elif Locale.active.code != Locale.CODE_ZH_HANT:
+		fails.append("dev tools: locale zh-Hant was not applied to Locale.active")
+	elif Preferences.active.language != "en":
+		fails.append("dev tools: scenario locale leaked into Preferences")
+	Locale.active = Locale.new(Locale.CODE_ZH_HANT)
+	var none: ScenarioReference = ScenarioReference.new()
+	none.load_from({
+		"id": "custom", "revision": 1, "build": "t", "seed": 18405,
+		"shape": "pad-landscape", "overrides": {},
+	})
+	if not none.locale.is_empty():
+		fails.append("dev tools: omitted locale was stored")
+	elif not host.apply_dev_scenario(none):
+		fails.append("dev tools: omitted-locale apply failed: %s" % host.last_dev_error)
+	elif Locale.active.code != Locale.CODE_ZH_HANT:
+		fails.append("dev tools: omitted locale overwrote Locale.active")
+	if _snap(SaveService.RUN_PATH) != before_run \
+			or _snap(SaveService.VIGIL_PATH) != before_vigil:
+		fails.append("dev tools: locale apply mutated a production path")
 	ScenarioKernel.new(host.content).clear_profile()
 	host.free()
 	Locale.active = previous_locale

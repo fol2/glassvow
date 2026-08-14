@@ -964,6 +964,15 @@ func apply_dev_scenario(ref: ScenarioReference) -> bool:
 		last_dev_error = kernel.last_error
 		push_error(kernel.last_error)
 		return false
+	# Review-state locale only. Do not persist through the player settings file.
+	if not ref.locale.is_empty():
+		var wanted: StringName = StringName(ref.locale)
+		if Locale.active.code != wanted:
+			if not Locale.active.set_language(wanted):
+				last_dev_error = "unsupported locale %s" % ref.locale
+				push_error(last_dev_error)
+				return false
+			_content_hydration_pending = true
 	_run_save_path = kernel.run_path
 	_vigil_save_path = kernel.vigil_path
 	_vigil = _load_vigil()
