@@ -11,6 +11,18 @@ extends RefCounted
 ## -55 degrees; the intended running-scene tuning band is -60 through -50.
 ## The caller owns viewport size and update policy. This builder never touches
 ## `scaling_3d_scale`.
+##
+## `prop_second_octave` DRIVES SHADER WORK, not tile selection. It used to pick
+## between two pre-generated tiles, which meant both settings issued identical
+## fetches and the toggle priced nothing; #233 item 2 needs the runtime reading,
+## so the flag now sets `second_octave` on map_prop.gdshader and buys three more
+## triplanar taps per fragment. One tile is generated and shared by both
+## materials either way.
+##
+## The two flags are not independent, and the bench has to know it:
+## `prop_triplanar = false` puts props on map_ground.gdshader, which has no
+## octave path, so `prop_second_octave` is inert on that pairing. Only the
+## triplanar column carries an octave reading.
 
 const GROUND_SHADER: String = "res://presentation/map/map_ground.gdshader"
 const PROP_SHADER: String = "res://presentation/map/map_prop.gdshader"
@@ -25,8 +37,7 @@ const SUN_TO: Vector3 = Vector3(-0.35, 0.78, 0.52)
 
 var _root: Node3D
 var _camera: Camera3D
-var _ground_mean: float = 0.5
-var _prop_mean: float = 0.5
+var _tex_mean: float = 0.5
 
 
 func _init(prop_second_octave: bool, prop_triplanar: bool,
@@ -35,19 +46,19 @@ func _init(prop_second_octave: bool, prop_triplanar: bool,
 	_root.name = "MapSceneProxy"
 	var positions: PackedVector3Array = _all_prop_positions()
 	var grade: ImageTexture = ImageTexture.create_from_image(_grade_image(positions))
-	var ground_surface: ImageTexture = ImageTexture.create_from_image(
-		_noise_image(true, true))
-	var prop_surface: ImageTexture = ImageTexture.create_from_image(
-		_noise_image(prop_second_octave, false))
+	var surface: ImageTexture = ImageTexture.create_from_image(_surface_image())
 	var light: DirectionalLight3D = _add_key()
 	var shader_sun: Vector3 = light.basis.z.normalized()
 	var ground_material: ShaderMaterial = _material(
-		GROUND_SHADER, ground_surface, grade, _ground_mean,
+		GROUND_SHADER, surface, grade, _tex_mean,
 		GROUND_VALUE_LINEAR, shader_sun)
 	var prop_path: String = PROP_SHADER if prop_triplanar else GROUND_SHADER
 	var prop_material: ShaderMaterial = _material(
-		prop_path, prop_surface, grade, _prop_mean,
+		prop_path, surface, grade, _tex_mean,
 		PROP_VALUE_LINEAR, shader_sun)
+	# Inert when prop_path fell back to the ground shader, which declares no such
+	# uniform — see the header on why that pairing carries no octave reading.
+	prop_material.set_shader_parameter("second_octave", prop_second_octave)
 	_add_ground(ground_material)
 	_add_props(prop_material)
 	_add_environment()
@@ -248,24 +259,26 @@ func _grade_image(positions: PackedVector3Array) -> Image:
 	return image
 
 
-func _noise_image(second_octave: bool, ground: bool) -> Image:
+## ONE tile, shared by both materials. Ground and prop are meant to read as the
+## same material patch under two projections, so a tile that differed between
+## them would separate the two surfaces for a reason the design never asked for.
+##
+## Two octaves, both periodic on the tile edge — which is the point: a tile
+## cannot break its own repeat, whatever is baked into it. That is why
+## `prop_second_octave` had to become shader work and no longer chooses here.
+func _surface_image() -> Image:
 	var image: Image = Image.create_empty(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGB8)
 	var total: float = 0.0
 	for y: int in range(TILE_SIZE):
 		for x: int in range(TILE_SIZE):
 			var u: float = float(x) / float(TILE_SIZE)
 			var v: float = float(y) / float(TILE_SIZE)
-			var noise: float = _value_noise(u, v, TILE_CELLS)
-			if second_octave:
-				noise = noise * 0.68 + _value_noise(u, v, TILE_CELLS * 4) * 0.32
+			var noise: float = _value_noise(u, v, TILE_CELLS) * 0.68 \
+				+ _value_noise(u, v, TILE_CELLS * 4) * 0.32
 			noise = clampf(0.18 + noise * 0.72, 0.0, 1.0)
 			total += noise
 			image.set_pixel(x, y, Color(noise, noise, noise))
-	var mean: float = total / float(TILE_SIZE * TILE_SIZE)
-	if ground:
-		_ground_mean = mean
-	else:
-		_prop_mean = mean
+	_tex_mean = total / float(TILE_SIZE * TILE_SIZE)
 	image.generate_mipmaps()
 	return image
 

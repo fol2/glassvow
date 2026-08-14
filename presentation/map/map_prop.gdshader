@@ -19,6 +19,20 @@ render_mode unshaded, cull_back;
 // of the frame, so the expensive path runs on the small share and the cheap
 // one on the large.
 //
+// SEVEN WITH `second_octave` ON — six triplanar taps plus the grade. That is
+// the optional prop cost #233 item 2 exists to price, and it is optional in
+// the only sense a bench can use: a uniform branch, so the off path pays one
+// scalar compare and nothing else. Every fetch, every multiply and even the
+// second sample position live inside the taken side; nothing was hoisted to a
+// varying, because a varying is interpolated whether the branch runs or not.
+// One compare is the FLOOR for a runtime toggle here, and that was checked
+// rather than assumed: at 4.7.1 `Shader`, `ShaderMaterial`, `Material` and
+// `RenderingServer` expose no define, variant or specialisation method between
+// them, and the shader preprocessor's `#define` is per-file, so nothing can
+// compile the branch away per material. The alternative that would — a third
+// .gdshader carrying the variant — pays a second material and a duplicate of
+// every line this file argues in order to save one compare. Declined.
+//
 // WORLD triplanar, not local. Local space would give every instance of the
 // same module the identical texel pattern, and 25 modules reused across an
 // act would read as 25 stamps. World space breaks that — and then creates its
@@ -58,6 +72,78 @@ uniform sampler2D surface_tex : filter_linear_mipmap, repeat_enable;
 const float TEX_STOPS[4] = {0.035, 0.070, 0.140, 0.280};
 uniform int tex_stop = 1;
 
+// A SECOND SAMPLING OCTAVE, AT A SCALE THAT CANNOT ALIGN (#233 item 2). The
+// tile repeats at its own edge, so at stop 1 the surface pattern repeats every
+// 1/0.070 = 14.3 world units — about two repeats across the 28.8-unit frame
+// the proxy camera sees, which is exactly the range where the eye locks onto a
+// layout and reads the world as wallpaper.
+//
+// BAKING OCTAVES INTO THE TILE CANNOT FIX THAT, and the tile already carries
+// two: an octave baked at 4x cells is periodic on the SAME edge, so it adds
+// detail inside the period without adding a period. A baked toggle therefore
+// costs nothing and changes nothing about the repeat — which is precisely what
+// the proxy measured before this uniform existed.
+//
+// Sampling the same tile a SECOND time at a different scale does add one, and
+// then the ratio decides everything, because the two fields realign wherever
+// m periods of one meet n of the other. Pick 1/2 and they realign every second
+// tile: the repeat comes back at twice the distance, now decorated. 1/phi^2 is
+// the far end of that scale — phi^2's continued fraction is all 1s after the
+// lead, so no small rational approximates it, which is the property "most
+// irrational" names. On the actual periods, 14.29 and 37.40 world units first
+// fall within a quarter-period of each other 71 units out, two and a half
+// frame widths past anything on screen.
+//
+// MEASURED, on a flat plane carrying this material under a flat white grade so
+// the image is the surface pattern and nothing else, four tile periods tall.
+// r is the row autocorrelation at the lag named; a perfect repeat is 1.0000.
+//
+//   ratio  mix    r(P)     r(2P)    strongest repeat  grain kept
+//   —      off    1.0000   1.0000   1.0000 at P       1.000
+//   1/phi2 0.32   0.8003   0.7983   0.8022 at P       0.737
+//   1/phi2 0.40   0.6618   0.6577   0.6656 at P       0.705
+//   1/phi2 0.50   0.4512   0.4445   0.4581 at P       0.690
+//   1/2    0.32   0.8184   1.0000   1.0000 at 2P      0.767
+//   1/2    0.50   0.5093   1.0000   1.0000 at 2P      0.727
+//
+// The last two rows are the argument above, on screen: a commensurate ratio
+// still returns a PERFECT repeat, merely moved to 2P, and no weight touches it
+// — 1/2 at an equal blend halves r(P) and leaves r(2P) at 1.0000 exactly. The
+// ratio removes the period; the weight only decides how much of it is left at
+// P. And since the weight is the only lever on r(P) — w1^2/(w1^2+w2^2), which
+// predicts 0.819/0.692/0.500 against the 0.800/0.662/0.451 measured — the
+// blend is equal. At 0.32 the grid is still legible by eye in the rig; at 0.50
+// it is not.
+//
+// 0.45 IS THE FLOOR FOR AN EQUAL TWO-TAP BLEND, not zero: half the weight is
+// still sitting on an exactly periodic field, and no weight can do better than
+// half. Lower than 0.45 needs a third sample or per-tile stochastic offsets —
+// a different price point, and #233 is pricing this one.
+//
+// COARSER, NOT FINER, deliberately. A finer octave at an irrational ratio
+// would break the period too, but it lands its detail inside the base blob
+// where the baked octave already put some; a coarser one drifts the whole
+// neighbourhood's value across the frame, so each repeat of the base pattern
+// sits on a different level and the eye loses the match it was making.
+const float OCTAVE_SCALE = 0.381966;   // 1/phi^2 — see above
+const float OCTAVE_MIX = 0.50;         // equal — see the table
+
+// The mix is linear and both samples are the same tile, so both carry the same
+// mean and the blend's mean is unchanged: repair 8's value lock survives the
+// octave untouched, at any weight. Measured, mean linear luminance moves from
+// 0.07628 to 0.07626. CONTRAST DOES NOT SURVIVE: an equal blend of two
+// decorrelated samples carries 1/sqrt(2) of one sample's contrast — the same
+// arithmetic that makes triplanar's crossover a contrast trough, appearing a
+// second time in the same shader — and the rig measured 0.690 against that
+// 0.707. Renormalising the deviation about surface_value would buy it back for
+// one multiply, and is declined: 0.707 is only exact while the two samples
+// stay decorrelated, so the correction would be a constant standing in for
+// something that moves with OCTAVE_SCALE. A histogram-preserving blend
+// (Heitz/Neyret) buys it back properly and needs a precomputed decorrelated
+// tile plus an inverse-histogram lookup — a third fetch and an offline step,
+// to repair 31% of the grain on 15% of the frame.
+uniform bool second_octave = false;
+
 // How hard the three projections cut over into one another. Low values blend
 // wide and the band shows as a stripe of halved texture contrast — two
 // decorrelated samples averaged carry 1/sqrt(2) of one sample's contrast, and
@@ -77,6 +163,14 @@ uniform float sharpness = 8.0;
 // the scene sets each instance's Color to three values in 0..1 and this scales
 // them into world units. `phase` is deliberately not a round number: an offset
 // that lands on a multiple of the tile period is no offset at all.
+//
+// The second octave rides the same offset — it scales `tri_pos`, which already
+// carries it — so repair 4 decorrelates instances on both taps for one vec3
+// multiply and no second custom-data channel. At stop 1 the full custom-data
+// range spans 37 * 0.070 = 2.59 tile periods on the base tap and 0.99 on the
+// octave. Both spread instances across a whole period, which is what the
+// offset is for; 0.99 is a coincidence of these two constants and nothing
+// downstream depends on it.
 uniform float phase = 37.0;
 
 // ── the value gap ─────────────────────────────────────────────────────────
@@ -84,6 +178,29 @@ uniform float phase = 37.0;
 // against the ground's 0.68 / 0.420. Props are the dark masses cut into the
 // bright stage, not the other way round. See map_ground.gdshader for why the
 // pin is on the tile's mean rather than on each fragment.
+//
+// THE GAP HAS NO AGREED MEASUREMENT SITE, and that is now understood rather
+// than merely unresolved. Three sites are available and two of them answer a
+// different question:
+//
+//   uniform space         0.420 vs 0.100 linear, by construction. Ignores
+//                         lighting and the grade entirely, so it can only ever
+//                         report the constants back.
+//   whole-screen average  folds in every prop face turned away from the key.
+//                         Those render near-black BY CONSTRUCTION — half-
+//                         lambert bottoms out in band_shade — and are not what
+//                         the anchor's 0.35 describes, which is a lit mass on
+//                         a lit stage.
+//   under the key, in     the only site where both surfaces are answering the
+//   screen space          same question the anchor asked.
+//
+// Measured at the third: ground 0.614, prop 0.342, gap 0.272, against the
+// anchor's 0.68/0.35 and its gap of 0.33. The numbers are recorded as they
+// came out. Nothing here is tuned toward 0.33 — a uniform moved to make one
+// screen-space patch land on a number would be fitting the constant to the
+// measurement site, and the site is the thing in question. Whether 0.272
+// should be widened, and by moving which of surface_value, band_shade or the
+// grade, is #234's decision and not a tuning job in this file.
 uniform float surface_value = 0.100;
 uniform float tex_mean = 0.5;
 
@@ -138,6 +255,14 @@ void fragment() {
 		+ texture(surface_tex, tri_pos.xz).rgb * tri_w.y
 		+ texture(surface_tex, tri_pos.xy).rgb * tri_w.z)
 		* (surface_value / max(tex_mean, 1e-4));
+	if (second_octave) {
+		vec3 o = tri_pos * OCTAVE_SCALE;
+		vec3 coarse = (texture(surface_tex, o.zy).rgb * tri_w.x
+			+ texture(surface_tex, o.xz).rgb * tri_w.y
+			+ texture(surface_tex, o.xy).rgb * tri_w.z)
+			* (surface_value / max(tex_mean, 1e-4));
+		albedo = mix(albedo, coarse, OCTAVE_MIX);
+	}
 	vec4 g = texture(grade, (world_pos.xz - grade_rect.xy) / grade_rect.zw);
 
 	float nl = dot(normalize(world_n), normalize(sun)) * 0.5 + 0.5;
