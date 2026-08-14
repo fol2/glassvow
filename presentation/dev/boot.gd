@@ -29,5 +29,36 @@ static func parse_scenario_arg(args: PackedStringArray) -> ScenarioReference:
 		ref.error = "Scenario reference is unreadable"
 		return ref
 	var blob: Dictionary = parsed
+	if not blob.has("seed") and not blob.has("overrides"):
+		_fill_catalogue_recipe(blob)
 	ref.load_from(blob)
 	return ref
+
+
+## Id-only references resolve against catalogue ENTRIES. Named recipes live
+## here, not in ScenarioReference — that type only holds the id→revision contract.
+static func _fill_catalogue_recipe(blob: Dictionary) -> void:
+	var entry: Dictionary = _catalogue_entry(str(blob.get("id", "")))
+	if entry.is_empty():
+		return
+	blob["seed"] = int(float(str(entry.get("seed", 0))))
+	var ov_v: Variant = entry.get("overrides", {})
+	var ov: Dictionary = ov_v if typeof(ov_v) == TYPE_DICTIONARY else {}
+	blob["overrides"] = ov.duplicate(true)
+
+
+static func _catalogue_entry(id: String) -> Dictionary:
+	var script: GDScript = load("res://presentation/dev/catalogue.gd") as GDScript
+	if script == null:
+		return {}
+	var rows_v: Variant = script.get("ENTRIES")
+	if typeof(rows_v) != TYPE_ARRAY:
+		return {}
+	var rows: Array = rows_v
+	for row_v: Variant in rows:
+		if typeof(row_v) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_v
+		if str(row.get("id", "")) == id:
+			return row
+	return {}
