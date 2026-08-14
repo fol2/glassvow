@@ -239,6 +239,14 @@ static func _palette(fails: Array[String]) -> void:
 	_check(fails, MapRegions.BAND_SHADE.size() == 4
 			and MapRegions.BAND_KEY.size() == 4,
 			"four light-arc palette rows (dusk night storm dawn)")
+	_check(fails, MapRegions.FALLBACK_SKIES.size() == LayoutBook.ACTS
+			and MapRegions.FALLBACK_FOGS.size() == LayoutBook.ACTS
+			and MapRegions.FALLBACK_PARTICLES.size() == LayoutBook.ACTS
+			and MapRegions.FALLBACK_GLOWS.size() == LayoutBook.ACTS
+			and MapRegions.FALLBACK_ACCENTS.size() == LayoutBook.ACTS
+			and MapRegions.WEATHER_BY_ACT.size() == LayoutBook.ACTS
+			and MapRegions.BAND_SHADE.size() == LayoutBook.ACTS,
+			"act count and palette count agree")
 	_check(fails, MapRegions.BAND_SHADE[0].h > 0.88,
 			"act 0 shade hue is crimson (~328°, the web act1 stage)")
 	for i: int in range(4):
@@ -267,8 +275,10 @@ static func _palette(fails: Array[String]) -> void:
 	var act3: MapRegions = MapRegions.for_act(3, poisoned)
 	_check(fails, act3.act == 3
 			and act3.band_key.is_equal_approx(MapRegions.BAND_KEY[3])
-			and act3.sky.is_equal_approx(MapRegions.FALLBACK_SKIES[2]),
-			"act 3 has its own ramp; 2D sky still clamps to the last authored row")
+			and act3.sky.is_equal_approx(MapRegions.FALLBACK_SKIES[3])
+			and act3.weather == &"dawn"
+			and not act3.sky.is_equal_approx(MapRegions.FALLBACK_SKIES[2]),
+			"act 3 has its own ramp and 2D dawn row")
 	var scene: MapScene = MapScene.new()
 	_check(fails, scene.get_act() == 0, "MapScene starts on act 0")
 	var seen: Array[Texture2D] = []

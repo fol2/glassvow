@@ -146,7 +146,7 @@ static func run(fails: Array[String]) -> void:
 		and walked_copy.cleared == walked.cleared
 		and walked_copy.reachable() == walked.reachable(),
 		"a walked map's marker, cleared set and open waystones survive the projection")
-	# ---- one lifecycle law: six Shards open the fourth act over three map themes
+	# ---- one lifecycle law: six Shards open the fourth act over four map themes
 	var full: ContentDB = ContentDB.load_full()
 	var ordinary: RunState = RunState.new_run(full, 918, "run-three-acts")
 	ordinary.act = ordinary.final_act()
@@ -170,8 +170,8 @@ static func run(fails: Array[String]) -> void:
 		and lifecycle.is_final_act(),
 		"three boss transitions reach the fourth and final act with one omen per act")
 	_check(fails, second.region == "sunken_city" and third.region == "obsidian_spire"
-		and fourth.region == "obsidian_spire",
-		"the contentless fourth act reuses the last authored map theme")
+		and fourth.region == "rose_window",
+		"the fourth act names rose_window, not the Spire")
 	_check(fails, lifecycle.player.hp == 26,
 		"each boss transition mends 35 percent without exceeding max HP")
 	var boss_map: WorldMap = WorldMap.slice()
@@ -246,10 +246,11 @@ static func run(fails: Array[String]) -> void:
 		"far-band bleed covers the far drift amplitude")
 	_check(fails, MapStrip.path_for(0, &"skyband")
 		== "res://assets/art/map/act1-skyband.png", "strip paths are 1-based")
-	_check(fails, MapRegions.SPIRE_W_RATE.size() == MapRegions.WEATHER_BY_ACT.size()
-		and MapRegions.SPIRE_H_RATE.size() == MapRegions.WEATHER_BY_ACT.size()
-		and MapRegions.SPIRE_DARKEN.size() == MapRegions.WEATHER_BY_ACT.size(),
-		"spire ramps cover every authored map theme")
+	_check(fails, MapRegions.SPIRE_W_RATE.size() == 3
+		and MapRegions.SPIRE_H_RATE.size() == 3
+		and MapRegions.SPIRE_DARKEN.size() == 3
+		and MapRegions.SPIRE_HAZE.size() == 3,
+		"spire ramps stay three-act; Act IV does not grow a fourth spire")
 	# A same-lane edge must actually run straight. `signf(to.y - from.y)` gave it
 	# the full 10px bow off a sub-pixel jitter difference for three phases while
 	# the comment above it said otherwise (#69); 1.53px is the worst same-lane
