@@ -1,12 +1,11 @@
 extends RefCounted
 ## The Night Stall holds its composition at every shape (#242 slice 1).
 ##
-## Pure-maths half (#242 PR 1 of 2): every authored region inside the safe
-## band, every placed region inside the frame, the counter lip on its line,
-## and the identity shape still reproducing the signed mock's
-## `object-fit: cover` numbers. The screen half — building the real
-## `ShopScreen` at each frame and measuring what it seated — lands with the
-## screen rebuild in the next PR.
+## Two halves. The first drives `StallLayout` as pure maths — every authored
+## region inside the safe band, every placed region inside the frame, the
+## counter lip on its line, and the identity shape still reproducing the signed
+## mock's `object-fit: cover` numbers. The second builds the real `ShopScreen`
+## at each frame and measures what it actually seated.
 ##
 ## No `await`: nothing here is laid out by a container, so the geometry is a
 ## pure function of `size` and needs no frames. That is the point of placing
@@ -28,6 +27,13 @@ const WINDOWS: Dictionary[StringName, Array] = {
 
 static func run(fails: Array[String]) -> void:
 	_authored_inside_safe_band(fails)
+	# One stall, re-seated at each shape: that is the runtime path (`set_shape`
+	# and `resized` both re-run `_relayout`), and it keeps the suite from
+	# building six CardViews five times over.
+	var content: ContentDB = ContentDB.load_slice()
+	var screen: ShopScreen = ShopScreen.new(_stock(content), 100, content,
+		{"id": "flamelessLantern", "name": "A Lantern with No Flame", "price": 300},
+		true)
 	for label: StringName in WINDOWS:
 		var row: Array = WINDOWS[label]
 		var window: Vector2i = row[0]
@@ -36,6 +42,10 @@ static func run(fails: Array[String]) -> void:
 			else reference
 		var frame: Vector2 = Vector2(StageShape.stage_size(shape, window))
 		_fit_holds(fails, label, frame)
+		screen.size = frame
+		screen.set_shape(shape)
+		_screen_holds(fails, label, screen, frame)
+	screen.free()
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -84,3 +94,38 @@ static func _fit_holds(fails: Array[String], label: StringName, frame: Vector2) 
 		"%s rack band is not a usable strip below the lip: %s" % [label, band])
 
 
+static func _screen_holds(fails: Array[String], label: StringName,
+		screen: ShopScreen, frame: Vector2) -> void:
+	var view: Rect2 = Rect2(Vector2.ZERO, frame)
+	for entry: Dictionary in screen._slots:
+		var control: Control = entry["control"]
+		var card: CardView = control as CardView
+		var rect: Rect2 = ShopScreen.card_rect(card) if card != null \
+			else Rect2(control.position, control.size)
+		var price: Label = entry["price_label"]
+		var price_rect: Rect2 = Rect2(price.position, price.size)
+		_check(fails, rect.size.x > 0.0 and rect.size.y > 0.0 and view.encloses(rect),
+			"%s ware %s/%d escapes the frame %s: %s" % [
+				label, entry["kind"], entry["index"], frame, rect])
+		_check(fails, view.encloses(price_rect),
+			"%s price for %s/%d escapes the frame %s: %s" % [
+				label, entry["kind"], entry["index"], frame, price_rect])
+	var leave: Rect2 = Rect2(screen._leave.position, screen._leave.size)
+	_check(fails, view.encloses(leave) and leave.size.y >= 44.0,
+		"%s the stair is not a reachable way out: %s in %s" % [label, leave, frame])
+	_check(fails, screen._say.position.y >= screen._hud_band(),
+		"%s the merchant's line runs under the HUD band: %.1f" % [
+			label, screen._say.position.y])
+
+
+static func _stock(content: ContentDB) -> Dictionary:
+	var cards: Array = []
+	for id: Variant in content.cards.keys().slice(0, 5):
+		cards.append({"id": str(id), "price": 60, "sold": false})
+	var relics: Array = []
+	for id: Variant in content.relics.keys().slice(0, 2):
+		relics.append({"id": str(id), "price": 150, "sold": false})
+	var potions: Array = []
+	for id: Variant in content.potions.keys().slice(0, 2):
+		potions.append({"id": str(id), "price": 55, "sold": false})
+	return {"cards": cards, "relics": relics, "potions": potions, "removeCost": 75}

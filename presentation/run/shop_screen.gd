@@ -1,15 +1,30 @@
 class_name ShopScreen
 extends Control
-## Benchmark merchant stock. This view is read-only: every purchase is emitted
-## using the action id already understood by Main.
+## The Night Stall. Concept C1 (`docs/design/2026-08-14-ui-direction`): the
+## painting IS the screen — no panel, heading, section label or button box.
+## Goods stand on the painted furniture, and `StallLayout` owns where that is
+## and how the crop keeps it on screen at every shape.
+##
+## Slice 1 of #242 places the scene. The wares are still the old buttons and
+## the old price labels, standing in their regions; slice 2 replaces them with
+## thread-tied tags and the SOLD / unaffordable grammar. This view stays
+## read-only either way: every purchase is emitted using the action id already
+## understood by Main.
 
 signal action_selected(id: String)
 
-const PANEL_W: float = 980.0
-const CARD_SCALE: float = 138.0 / CardView.CARD_W
-const MERCHANT_ART: String = "res://assets/art/props/merchant.png"
+const CARD_SIZE: Vector2 = Vector2(CardView.CARD_W, CardView.CARD_H)
+const CARD_ART_RATIO: float = CardView.CARD_H / CardView.CARD_W
 const POTION_ART: String = "res://assets/art/potions/%s.png"
 const RELIC_ART: String = "res://assets/art/relics/%s.png"
+## The mock's two scrims (`shop-c1.html` .vig-top/.vig-bot), which is what keeps
+## the HUD readable over the canopy and the prices readable over the counter.
+const SCRIM_INK: Color = GlassStyle.NIGHT_BOT
+const SCRIM_TOP: float = 0.21
+const SCRIM_BOTTOM: float = 0.33
+## Slice-1 split of a ware's region: the ware, then its price under it.
+const PRICE_BAND: float = 0.26
+const RACK_PRICE_GAP: float = 2.0
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -19,13 +34,14 @@ var _content: ContentDB
 var _quest_offer: Dictionary
 var _potion_slot_available: bool
 var _sfx: SfxBus
-var _centre: CenterContainer
-var _panel: PanelContainer
-var _cards: HFlowContainer
-var _misc: HFlowContainer
+var _painting: TextureRect
+var _say: Label
+var _leave: Button
 var _card_views: Array[CardView] = []
 ## Purchasable slots registered at build; update() refreshes state in place.
 var _slots: Array[Dictionary] = []
+## Slots standing in the foreground rack, in the order they stand there.
+var _rack: Array[Dictionary] = []
 
 
 func update(stock: Dictionary, gold: int, quest_offer: Dictionary,
@@ -49,7 +65,6 @@ func _init(stock: Dictionary, gold: int, content: ContentDB,
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	RunStyle.add_backdrop(self)
 	_sfx = sfx if sfx != null else SfxBus.new()
 	if sfx == null:
 		add_child(_sfx)
@@ -57,86 +72,54 @@ func _init(stock: Dictionary, gold: int, content: ContentDB,
 
 
 func _build() -> void:
-	var margin: MarginContainer = MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 20)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 20)
-	add_child(margin)
+	var ink: ColorRect = ColorRect.new()
+	ink.color = SCRIM_INK
+	ink.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ink.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(ink)
 
-	var scroll: ScrollContainer = ScrollContainer.new()
-	scroll.follow_focus = true
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	margin.add_child(scroll)
+	_painting = TextureRect.new()
+	_painting.texture = load(StallLayout.BACKDROP) as Texture2D
+	_painting.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_painting.stretch_mode = TextureRect.STRETCH_SCALE
+	_painting.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_painting)
+	_add_scrim(0.80, SCRIM_TOP, true)
+	_add_scrim(0.72, SCRIM_BOTTOM, false)
 
-	_centre = CenterContainer.new()
-	_centre.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_centre.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.add_child(_centre)
-
-	_panel = PanelContainer.new()
-	_panel.custom_minimum_size.x = PANEL_W
-	_panel.add_theme_stylebox_override("panel", RunStyle.panel(16, 24, 0.92))
-	_centre.add_child(_panel)
-
-	var column: VBoxContainer = VBoxContainer.new()
-	column.alignment = BoxContainer.ALIGNMENT_CENTER
-	column.add_theme_constant_override("separation", 18)
-	_panel.add_child(column)
-	column.add_child(_header())
-
-	_cards = HFlowContainer.new()
-	_cards.alignment = FlowContainer.ALIGNMENT_CENTER
-	_cards.add_theme_constant_override("h_separation", 16)
-	_cards.add_theme_constant_override("v_separation", 12)
-	_cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	column.add_child(_cards)
-
-	_misc = HFlowContainer.new()
-	_misc.alignment = FlowContainer.ALIGNMENT_CENTER
-	_misc.add_theme_constant_override("h_separation", 16)
-	_misc.add_theme_constant_override("v_separation", 12)
-	_misc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	column.add_child(_misc)
+	_say = _label(Locale.active.t("ui.shop.greeting"), 17, RunStyle.PARCHMENT, false)
+	_say.add_theme_font_override("font", RunStyle.slanted(GlassStyle.ALEGREYA_400))
+	_say.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	add_child(_say)
 
 	_add_stock()
-	var leave: Button = _action_button(Locale.active.t("ui.shop.leaveUpper"), true)
-	leave.custom_minimum_size.x = 160
-	leave.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	leave.pressed.connect(_emit_action.bind("leave"))
-	column.add_child(leave)
+
+	# Leaving is walking up the stair, so the control is the words on the
+	# treads: a real Button for focus and touch, with its box taken away.
+	_leave = Button.new()
+	_leave.text = "←  " + Locale.active.t("ui.shop.leaveUpper")
+	_leave.flat = true
+	_leave.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_leave.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
+	_leave.add_theme_font_size_override("font_size", 14)
+	_leave.add_theme_color_override("font_color", Color("#d8bb71"))
+	_leave.pressed.connect(_emit_action.bind("leave"))
+	add_child(_leave)
 
 
-func _header() -> HBoxContainer:
-	var header: HBoxContainer = HBoxContainer.new()
-	header.alignment = BoxContainer.ALIGNMENT_CENTER
-	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var phone_portrait: bool = shape == &"phone-portrait"
-	header.add_theme_constant_override("separation", 12 if phone_portrait else 18)
-	var merchant: TextureRect = TextureRect.new()
-	merchant.texture = load(MERCHANT_ART) as Texture2D
-	merchant.custom_minimum_size = Vector2(100, 86) if phone_portrait else Vector2(130, 110)
-	merchant.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	merchant.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	merchant.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	header.add_child(merchant)
-	var copy: VBoxContainer = VBoxContainer.new()
-	copy.add_theme_constant_override("separation", 4)
-	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(copy)
-	var title: Label = _label(Locale.active.t("ui.shop.title"), 22 if phone_portrait else 26,
-		RunStyle.PARCHMENT, false)
-	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
-	copy.add_child(title)
-	var greeting: Label = _label(
-		Locale.active.t("ui.shop.greeting"), 14,
-		RunStyle.TEXT_DIM, false)
-	greeting.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	copy.add_child(greeting)
-	return header
+func _add_scrim(alpha: float, rate: float, from_top: bool) -> void:
+	var scrim: TextureRect = TextureRect.new()
+	scrim.texture = GlassStyle.grad_tex(
+		PackedColorArray([Color(SCRIM_INK, alpha), Color(SCRIM_INK, 0.0)]),
+		PackedFloat32Array([0.0, 1.0]), false,
+		Vector2(0.5, 0.0 if from_top else 1.0), Vector2(0.5, 1.0 if from_top else 0.0))
+	scrim.anchor_right = 1.0
+	scrim.anchor_top = 0.0 if from_top else 1.0 - rate
+	scrim.anchor_bottom = rate if from_top else 1.0
+	scrim.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	scrim.stretch_mode = TextureRect.STRETCH_SCALE
+	scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(scrim)
 
 
 func _add_stock() -> void:
@@ -144,11 +127,17 @@ func _add_stock() -> void:
 	for index: int in range(card_rows.size()):
 		var row: Dictionary = card_rows[index]
 		_add_card(row, index)
-	for category: String in ["relics", "potions"]:
-		var rows: Array = _stock.get(category, [])
-		for index: int in range(rows.size()):
-			var row: Dictionary = rows[index]
-			_add_misc(category, row, index)
+	# Phials hang from the canopy hooks, relics stand on the counter.
+	var potion_rows: Array = _stock.get("potions", [])
+	for index: int in range(potion_rows.size()):
+		var potion: Dictionary = potion_rows[index]
+		_add_misc("potions", potion, index,
+			StallLayout.HOOK_ORDER[index % StallLayout.HOOK_ORDER.size()])
+	var relic_rows: Array = _stock.get("relics", [])
+	for index: int in range(relic_rows.size()):
+		var relic: Dictionary = relic_rows[index]
+		_add_misc("relics", relic, index,
+			StallLayout.STANDS[index % StallLayout.STANDS.size()])
 	if not _quest_offer.is_empty():
 		_add_offer()
 	_add_removal()
@@ -161,26 +150,23 @@ func _add_card(row: Dictionary, index: int) -> void:
 	var cost: int = 0 if cost_v == null else int(float(str(cost_v)))
 	var view: CardView = CardView.new(CardInst.new(-index - 1, StringName(id)),
 		definition, cost)
-	view.scale = Vector2.ONE * CARD_SCALE
 	var price_label: Label = _price_label(_price(row), false)
 	var entry: Dictionary = _register_slot("card", "cards", index, view,
-		price_label, RunStyle.GOLD)
+		price_label, RunStyle.GOLD, &"")
 	# Always connect; gate on the slot's live disabled flag from _apply_slot_state.
 	view.released_at.connect(func(_uid: int, _position: Vector2) -> void:
 		if entry.get("disabled", false):
 			return
 		_emit_action("cards:%d" % index)
 	)
-	var column: VBoxContainer = VBoxContainer.new()
-	column.alignment = BoxContainer.ALIGNMENT_CENTER
-	column.add_theme_constant_override("separation", 7)
-	column.add_child(_card_pedestal(view))
-	column.add_child(price_label)
-	_cards.add_child(column)
+	add_child(view)
+	add_child(price_label)
+	_rack.append(entry)
 	_card_views.append(view)
 
 
-func _add_misc(category: String, row: Dictionary, index: int) -> void:
+func _add_misc(category: String, row: Dictionary, index: int,
+		region: StringName) -> void:
 	var id: String = str(row.get("id", ""))
 	var registry: Dictionary = _content.relics if category == "relics" \
 		else _content.potions
@@ -190,8 +176,9 @@ func _add_misc(category: String, row: Dictionary, index: int) -> void:
 		str(definition.get("text", "")), art, false, false)
 	button.pressed.connect(_emit_action.bind("%s:%d" % [category, index]))
 	var price_label: Label = _price_label(_price(row), false)
-	_register_slot("misc", category, index, button, price_label, RunStyle.GOLD)
-	_add_misc_column(button, price_label)
+	_register_slot("misc", category, index, button, price_label, RunStyle.GOLD, region)
+	add_child(button)
+	add_child(price_label)
 
 
 func _add_offer() -> void:
@@ -203,8 +190,9 @@ func _add_offer() -> void:
 	button.pressed.connect(_emit_action.bind("quest:flamelessLantern"))
 	var price_colour: Color = Color("#c7eadf")
 	var price_label: Label = _price_label(price, false, price_colour)
-	_register_slot("offer", "", 0, button, price_label, price_colour)
-	_add_misc_column(button, price_label)
+	_register_slot("offer", "", 0, button, price_label, price_colour, &"jar")
+	add_child(button)
+	add_child(price_label)
 
 
 func _add_removal() -> void:
@@ -214,12 +202,15 @@ func _add_removal() -> void:
 		Locale.active.t("ui.shop.cardRemoval.desc"), "", false, false, "✂")
 	button.pressed.connect(_emit_action.bind("remove"))
 	var price_label: Label = _price_label(price, false)
-	_register_slot("removal", "", 0, button, price_label, RunStyle.GOLD)
-	_add_misc_column(button, price_label)
+	# The merchant's own service stands in the rack beside the cards.
+	_rack.append(_register_slot("removal", "", 0, button, price_label,
+		RunStyle.GOLD, &""))
+	add_child(button)
+	add_child(price_label)
 
 
 func _register_slot(kind: String, category: String, index: int, control: Control,
-		price_label: Label, price_colour: Color) -> Dictionary:
+		price_label: Label, price_colour: Color, region: StringName) -> Dictionary:
 	var entry: Dictionary = {
 		"kind": kind,
 		"category": category,
@@ -227,6 +218,7 @@ func _register_slot(kind: String, category: String, index: int, control: Control
 		"control": control,
 		"price_label": price_label,
 		"price_colour": price_colour,
+		"region": region,
 		"disabled": false,
 	}
 	_slots.append(entry)
@@ -261,10 +253,10 @@ func _apply_slot_state(entry: Dictionary) -> void:
 			# call, and an EMPTY one once bought: the lantern leaves the stall
 			# entirely, exactly as the old full rebuild dropped it.
 			var offer_btn: Button = entry["control"]
-			var column: Control = offer_btn.get_parent() as Control
 			var gone: bool = _quest_offer.is_empty()
-			if column != null:
-				column.visible = not gone
+			offer_btn.visible = not gone
+			var offer_price: Label = entry["price_label"]
+			offer_price.visible = not gone
 			disabled = gone or _gold < _price(_quest_offer) \
 				or _quest_offer.get("sold", false)
 			offer_btn.disabled = disabled
@@ -281,23 +273,14 @@ func _apply_slot_state(entry: Dictionary) -> void:
 		RunStyle.DANGER if disabled else price_colour)
 
 
-func _add_misc_column(button: Button, price_label: Label) -> void:
-	var column: VBoxContainer = VBoxContainer.new()
-	column.alignment = BoxContainer.ALIGNMENT_CENTER
-	column.add_theme_constant_override("separation", 7)
-	column.add_child(button)
-	column.add_child(price_label)
-	_misc.add_child(column)
-
-
 func _item_button(title: String, description: String, art_path: String,
 		disabled: bool, quest: bool, glyph: String = "◇") -> Button:
 	var button: Button = Button.new()
 	button.text = ("%s\n" % glyph if art_path.is_empty() else "") \
 		+ title + ("\n%s" % description if not description.is_empty() else "")
-	button.custom_minimum_size = Vector2(164 if quest else 120, 146 if quest else 122)
 	button.disabled = disabled
 	button.tooltip_text = description
+	button.clip_text = true
 	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
 	button.add_theme_font_size_override("font_size", 12)
 	RunStyle.style_button(button, false, Color("#8ce0cc") if quest else RunStyle.GOLD)
@@ -305,15 +288,6 @@ func _item_button(title: String, description: String, art_path: String,
 		button.icon = load(art_path) as Texture2D
 		button.expand_icon = true
 	button.mouse_entered.connect(_hover.bind(button))
-	return button
-
-
-func _action_button(text: String, primary: bool) -> Button:
-	var button: Button = Button.new()
-	button.text = text
-	button.custom_minimum_size.y = 44
-	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.CINZEL_700))
-	RunStyle.style_button(button, primary)
 	return button
 
 
@@ -334,34 +308,106 @@ func _hover(button: Button) -> void:
 
 
 func _ready() -> void:
-	resized.connect(_fit)
-	_fit()
+	resized.connect(_relayout)
+	_relayout()
 
 
 func set_shape(stage_shape: StringName) -> void:
 	if StageShape.REFERENCES.has(stage_shape):
 		shape = stage_shape
-		_fit()
+		_relayout()
 
 
-func _fit() -> void:
-	if _centre == null:
+## Everything is placed against the painting, so one pass re-seats the whole
+## stall whenever the frame changes. Nothing here reads a container's geometry,
+## which is why `tests/test_stall_layout.gd` can measure it without a frame.
+func _relayout() -> void:
+	var frame: Vector2 = size
+	if frame.x <= 0.0 or frame.y <= 0.0 or _painting == null:
 		return
-	var phone: bool = shape == &"phone-portrait" or shape == &"phone-landscape"
-	_centre.custom_minimum_size = Vector2(maxf(0.0, size.x - 24.0),
-		maxf(0.0, size.y - 40.0))
-	_panel.custom_minimum_size.x = minf(PANEL_W,
-		maxf(300.0, size.x - (16.0 if phone else 24.0)))
+	var canvas: Rect2 = StallLayout.canvas(frame)
+	_painting.position = canvas.position
+	_painting.size = canvas.size
+	for entry: Dictionary in _slots:
+		var region: StringName = entry["region"]
+		if region != &"":
+			var control: Control = entry["control"]
+			var price_label: Label = entry["price_label"]
+			_seat(control, price_label, StallLayout.place(frame, region))
+	_seat_rack(frame)
+	# The canopy compresses to nothing on a wide frame, so the merchant's line
+	# is pushed clear of the HUD band rather than clipped behind it.
+	var say_box: Rect2 = StallLayout.place(frame, &"say")
+	say_box.position.y = maxf(say_box.position.y, _hud_band() + 8.0)
+	_say.position = say_box.position
+	_say.size = say_box.size
+	var stair: Rect2 = StallLayout.place(frame, &"stair")
+	_leave.position = stair.position
+	_leave.size = Vector2(stair.size.x, maxf(stair.size.y, RunStyle.hit_floor(44.0)))
 
 
-static func _card_pedestal(view: CardView) -> Control:
-	var pedestal: Control = Control.new()
-	pedestal.custom_minimum_size = Vector2(
-		CardView.CARD_W * CARD_SCALE, CardView.CARD_H * CARD_SCALE)
-	view.position = (pedestal.custom_minimum_size
-		- Vector2(CardView.CARD_W, CardView.CARD_H)) * 0.5
-	pedestal.add_child(view)
-	return pedestal
+## The top bar RunHud draws over this screen (`run_hud.gd` `_apply_shape`).
+func _hud_band() -> float:
+	if shape == &"phone-portrait":
+		return 58.0
+	return 42.0 if shape == &"phone-landscape" else 56.0
+
+
+## A ware in its region: the goods above, the price under them. The price band
+## is never smaller than the text in it — a Label refuses to shrink below its
+## own line height, and a band that ignores that pushes the number out of the
+## frame on a short one (measured: 20:9 lost the whole rack price row).
+func _seat(control: Control, price_label: Label, box: Rect2) -> void:
+	var price_h: float = maxf(price_label.get_combined_minimum_size().y,
+		box.size.y * PRICE_BAND)
+	control.custom_minimum_size = Vector2.ZERO
+	control.position = box.position
+	control.size = Vector2(box.size.x, maxf(0.0, box.size.y - price_h))
+	price_label.position = Vector2(box.position.x, box.end.y - price_h)
+	price_label.size = Vector2(box.size.x, price_h)
+
+
+func _seat_rack(frame: Vector2) -> void:
+	var band: Rect2 = StallLayout.rack_band(frame)
+	var count: int = _rack.size()
+	if count == 0 or band.size.x <= 0.0 or band.size.y <= 0.0:
+		return
+	var first_price: Label = _rack[0]["price_label"]
+	var price_h: float = maxf(first_price.get_combined_minimum_size().y,
+		band.size.y * 0.11)
+	var separation: float = band.size.x * 0.012
+	var slot_w: float = (band.size.x - separation * float(count - 1)) / float(count)
+	var card_h: float = minf(band.size.y - price_h - RACK_PRICE_GAP,
+		minf(slot_w * CARD_ART_RATIO, CardView.CARD_H))
+	for index: int in range(count):
+		var entry: Dictionary = _rack[index]
+		var slot: Rect2 = Rect2(
+			band.position.x + (slot_w + separation) * float(index),
+			band.position.y, slot_w, card_h)
+		var control: Control = entry["control"]
+		var view: CardView = control as CardView
+		if view != null:
+			var card_scale: float = card_h / CardView.CARD_H
+			view.scale = Vector2.ONE * card_scale
+			view.position = slot.position + Vector2(
+				(slot.size.x - CardView.CARD_W * card_scale) * 0.5, 0.0) \
+				- CARD_SIZE * 0.5 * (1.0 - card_scale)
+		else:
+			control.custom_minimum_size = Vector2.ZERO
+			control.position = slot.position
+			control.size = slot.size
+		var price_label: Label = entry["price_label"]
+		price_label.position = Vector2(slot.position.x, slot.end.y + RACK_PRICE_GAP)
+		price_label.size = Vector2(slot.size.x, price_h)
+
+
+## A rack card's rect on screen. CardView scales around its centre
+## (`card_view.gd:333` sets `pivot_offset = size * 0.5`), so its `position` is
+## not its visible corner; `_seat_rack` seats it by the inverse of this, and
+## `tests/test_stall_layout.gd` measures containment through it.
+static func card_rect(view: CardView) -> Rect2:
+	return Rect2(view.position + CARD_SIZE * 0.5 * (1.0 - view.scale.x),
+		CARD_SIZE * view.scale.x)
 
 
 static func _price(row: Dictionary) -> int:
