@@ -14,15 +14,14 @@ const CAM_HEIGHT: float = 18.0
 const DEFAULT_XZ: Vector2 = Vector2(-7.0, 16.0)
 const ZOOM_STOPS: Array[float] = [12.0, 16.0, 20.0, 28.0]
 const DEFAULT_STOP: int = 2
-## Camera XZ. Default pose is inside; slice 3 replaces this with the lattice
-## footprint. Rect is (min_x, min_z, size_x, size_z).
-const DEFAULT_PAN_BOUNDS: Rect2 = Rect2(-24.0, 2.0, 48.0, 28.0)
+## Camera XZ. Derived from the 15×7 lattice footprint, shifted by the look-at
+## offset so DEFAULT_XZ stays a legal pose. Rect is (min_x, min_z, size_x, size_z).
 const CAM_FAR: float = 80.0
 
 signal zoom_stop_changed(index: int)
 
 var zoom_stop: int = DEFAULT_STOP
-var pan_bounds: Rect2 = DEFAULT_PAN_BOUNDS
+var pan_bounds: Rect2
 
 var _camera: Camera3D
 
@@ -36,6 +35,7 @@ func _init() -> void:
 	_camera.far = CAM_FAR
 	_camera.current = true
 	add_child(_camera)
+	pan_bounds = bounds_from_lattice()
 	_apply_pose(DEFAULT_XZ)
 
 
@@ -69,6 +69,15 @@ func pan_screen(delta_px: Vector2, view_height: float) -> void:
 	var k: float = _camera.size / maxf(view_height, 1.0)
 	var tilt: float = deg_to_rad(absf(TILT_DEGREES))
 	pan_world(Vector2(-delta_px.x * k, -delta_px.y * k / sin(tilt)))
+
+
+## Lattice XZ → camera XZ: the look-at sits `height / tan(|tilt|)` toward −Z
+## of the camera, so clamping camera position to the raw footprint would
+## eject DEFAULT_XZ (z=16) off a ground AABB that ends at z=14.
+static func bounds_from_lattice() -> Rect2:
+	var foot: Rect2 = MapPinProjection.lattice_footprint()
+	var look_dz: float = CAM_HEIGHT / tan(deg_to_rad(absf(TILT_DEGREES)))
+	return Rect2(foot.position.x, foot.position.y + look_dz, foot.size.x, foot.size.y)
 
 
 func _apply_pose(xz: Vector2) -> void:
