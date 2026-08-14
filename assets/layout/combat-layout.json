@@ -990,28 +990,30 @@
         "scale": 1.0,
         "scroll": 420.0,
         "title": {
-          "columnW": 340.0,
-          "gap": 8.0,
+          "columnW": 400.0,
+          "gap": 12.0,
           "primaryCols": 1.0,
-          "primaryPt": 17.0,
+          "primaryPt": 27.0,
           "roseSide": 78.0,
           "tagline": 1.0,
           "taglinePt": 14.0,
           "taglineTrack": 5.0,
-          "utilityCols": 2.0,
-          "utilityPt": 13.0,
+          "utilityCols": 1.0,
+          "utilityPt": 15.0,
           "wordmarkMax": 520.0,
           "wordmarkRate": 0.6,
-          "wrapHelp": 1.0
+          "wrapHelp": 0.0
         },
         "w": 520.0
       },
       "shapes": {
         "pad-portrait": {
           "title": {
-            "columnW": 300.0,
+            "columnW": 400.0,
             "gap": 14.0,
+            "primaryPt": 24.0,
             "utilityCols": 1.0,
+            "utilityPt": 14.0,
             "wordmarkMax": 780.0,
             "wordmarkRate": 0.88,
             "wrapHelp": 0.0
@@ -1022,15 +1024,16 @@
           "scale": 0.86,
           "scroll": 220.0,
           "title": {
-            "columnW": 760.0,
+            "columnW": 360.0,
             "gap": 6.0,
-            "primaryCols": 2.0,
-            "primaryPt": 12.0,
+            "primaryCols": 1.0,
+            "primaryPt": 16.0,
             "roseSide": 58.0,
             "tagline": 0.0,
             "taglinePt": 11.0,
             "taglineTrack": 2.0,
-            "utilityPt": 12.0,
+            "utilityCols": 1.0,
+            "utilityPt": 11.0,
             "wordmarkMax": 230.0,
             "wordmarkRate": 0.28,
             "wrapHelp": 0.0
@@ -1041,10 +1044,14 @@
           "scale": 0.88,
           "scroll": 260.0,
           "title": {
-            "gap": 14.0,
+            "columnW": 320.0,
+            "gap": 10.0,
+            "primaryPt": 20.0,
             "roseSide": 58.0,
             "taglinePt": 11.0,
             "taglineTrack": 2.0,
+            "utilityCols": 1.0,
+            "utilityPt": 11.0,
             "wordmarkMax": 780.0,
             "wordmarkRate": 0.88,
             "wrapHelp": 0.0

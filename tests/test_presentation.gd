@@ -104,6 +104,7 @@ static func run(fails: Array[String]) -> void:
 			(title_world.size.y * 0.5) / tan(deg_to_rad(TitleWorld.FOV_DEG * 0.5)))
 	_check(fails, title_ready, "title projection is ready before its first paint")
 	title_world.free()
+	_title_ceremonial_menu(fails)
 
 	var content: ContentDB = ContentDB.load_slice()
 	_derived_display_labels(fails, content)
@@ -275,6 +276,94 @@ static func _collect_gd_sources(path: String, out: Array[String]) -> void:
 			out.append(child)
 		name = dir.get_next()
 	dir.list_dir_end()
+
+
+## Pins variant B (ceremonial): three tiers, gold-moves-down, unboxed utilities,
+## How to Play never wraps, Developer Console outside the shipped row.
+static func _title_ceremonial_menu(fails: Array[String]) -> void:
+	var shipped: Array[Dictionary] = [
+		{"id": "continue", "label": "Continue Climb"},
+		{"id": "begin", "label": "Begin the Climb"},
+		{"id": "vigil", "label": "The Vigil", "quiet": true},
+		{"id": "help", "label": "How to Play", "quiet": true},
+		{"id": "settings", "label": "Settings", "quiet": true},
+		{"id": "credits", "label": "Credits", "quiet": true},
+		{"id": "quit", "label": "Quit", "quiet": true},
+		{"id": "dev", "label": "Developer Console", "quiet": true},
+	]
+	var saved: ChoiceScreen = _title_menu(shipped, &"pad-landscape")
+	_check(fails, saved._primary_buttons.size() == 2,
+		"saved-run title has Continue + Begin as the two action plates")
+	var continue_btn: ChoiceScreen.TitleFacetButton = saved._primary_buttons[0] as ChoiceScreen.TitleFacetButton
+	var begin_btn: ChoiceScreen.TitleFacetButton = saved._primary_buttons[1] as ChoiceScreen.TitleFacetButton
+	_check(fails, continue_btn != null and continue_btn.text == "Continue Climb"
+		and continue_btn.ceremonial,
+		"saved-run gold primary stays on Continue Climb")
+	_check(fails, begin_btn != null and begin_btn.text == "Begin the Climb"
+		and not begin_btn.ceremonial,
+		"saved-run Begin the Climb is the plain secondary")
+	_check(fails, saved._utility_buttons.size() == 5,
+		"five shipped utilities sit in the unboxed row")
+	_check(fails, saved._utility is HBoxContainer,
+		"utilities are one row, not a grid")
+	_check(fails, saved._seam != null,
+		"gold hairline + lozenge seam sits between actions and utilities")
+	_check(fails, saved._lantern != null and saved._lantern.visible,
+		"lantern bloom rises under the primary")
+	var help_en: Button = saved._utility_buttons[1]
+	_check(fails, help_en.text == "How to Play" and not help_en.text.contains("\n"),
+		"How to Play is not wrapped on the identity stage")
+	_check(fails, help_en.custom_minimum_size.y >= 64.0,
+		"utility tap height is at least 64 px")
+	_check(fails, help_en.get_theme_stylebox("normal") is StyleBoxEmpty,
+		"utility words have no drawn box")
+	_check(fails, saved._dev_button != null
+		and saved._dev_button.text == "Developer Console"
+		and saved._utility_buttons.find(saved._dev_button) < 0,
+		"Developer Console is present and outside the utility row")
+	saved.free()
+
+	var fresh: Array[Dictionary] = []
+	for row: Dictionary in shipped:
+		if str(row.get("id")) != "continue":
+			fresh.append(row)
+	var none: ChoiceScreen = _title_menu(fresh, &"pad-landscape")
+	var none_begin: ChoiceScreen.TitleFacetButton = none._primary_buttons[0] as ChoiceScreen.TitleFacetButton
+	_check(fails, none._primary_buttons.size() == 1 and none_begin != null
+		and none_begin.text == "Begin the Climb" and none_begin.ceremonial,
+		"no saved run: gold primary moves down to Begin the Climb")
+	none.free()
+
+	var zh_rows: Array[Dictionary] = [
+		{"id": "begin", "label": "開始朝聖"},
+		{"id": "vigil", "label": "守夜", "quiet": true},
+		{"id": "help", "label": "玩法說明", "quiet": true},
+		{"id": "settings", "label": "設定", "quiet": true},
+		{"id": "credits", "label": "製作人員", "quiet": true},
+		{"id": "quit", "label": "離開", "quiet": true},
+	]
+	for shape: StringName in [&"pad-landscape", &"phone-portrait"]:
+		var zh: ChoiceScreen = _title_menu(zh_rows, shape)
+		var help_zh: Button = zh._utility_buttons[1]
+		_check(fails, help_zh.text == "玩法說明" and not help_zh.text.contains("\n"),
+			"zh-Hant How to Play does not wrap at %s" % shape)
+		_check(fails, help_zh.custom_minimum_size.y >= 64.0,
+			"zh-Hant utility tap height is at least 64 px at %s" % shape)
+		zh.free()
+		var en: ChoiceScreen = _title_menu(fresh, shape)
+		var help: Button = en._utility_buttons[1]
+		_check(fails, help.text == "How to Play" and not help.text.contains("\n"),
+			"English How to Play does not wrap at %s" % shape)
+		en.free()
+
+
+static func _title_menu(choices: Array[Dictionary], shape: StringName) -> ChoiceScreen:
+	var screen: ChoiceScreen = ChoiceScreen.new(
+		"GLASSVOW", "", choices, {"variant": "title", "shape": shape})
+	screen.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	screen.size = Vector2(StageShape.REFERENCES[shape])
+	screen._fit_title()
+	return screen
 
 
 static func _display_face_consumers(fails: Array[String]) -> void:

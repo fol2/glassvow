@@ -252,24 +252,24 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## share keeps it off both edges on a narrow phone.
 	&"titlescreen/wordmarkMax": {"bind": BIND_NONE, "unit": "px", "min": 80.0, "max": 1600.0, "default": 520.0},
 	&"titlescreen/wordmarkRate": {"bind": BIND_NONE, "unit": "ratio", "min": 0.05, "max": 1.0, "default": 0.60},
-	&"titlescreen/columnW": {"bind": BIND_NONE, "unit": "px", "min": 120.0, "max": 1600.0, "default": 340.0},
-	&"titlescreen/gap": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 80.0, "default": 8.0},
-	## How the two button blocks tile. A phone held sideways has room across and
-	## none down, so the primary block goes two-wide there and nowhere else.
+	## Width of the ceremonial action plates (Continue / Begin), not the whole
+	## column — the utility row is one line of words and needs the stage.
+	&"titlescreen/columnW": {"bind": BIND_NONE, "unit": "px", "min": 120.0, "max": 1600.0, "default": 400.0},
+	&"titlescreen/gap": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 80.0, "default": 12.0},
+	## Retained for the lab. The ceremonial title is always one action column
+	## and one utility row; these counts are no longer read.
 	&"titlescreen/primaryCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 1.0},
-	&"titlescreen/utilityCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 2.0},
-	&"titlescreen/primaryPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 17.0},
-	&"titlescreen/utilityPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 13.0},
+	&"titlescreen/utilityCols": {"bind": BIND_NONE, "unit": "count", "min": 1.0, "max": 4.0, "default": 1.0},
+	&"titlescreen/primaryPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 27.0},
+	&"titlescreen/utilityPt": {"bind": BIND_NONE, "unit": "px", "min": 8.0, "max": 48.0, "default": 15.0},
 	## The tagline is the first thing to go: it is flavour, and a phone held
 	## sideways needs the row for the buttons.
 	&"titlescreen/tagline": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
 	&"titlescreen/taglinePt": {"bind": BIND_NONE, "unit": "px", "min": 6.0, "max": 32.0, "default": 14.0},
 	&"titlescreen/taglineTrack": {"bind": BIND_NONE, "unit": "px", "min": 0.0, "max": 20.0, "default": 5.0},
-	## Break "How to Play" over two rows. Wanted where the utility block is three
-	## across and the buttons are therefore narrow, but never on a phone, where
-	## the same three columns are narrower still and a second row costs more than
-	## the wrap saves.
-	&"titlescreen/wrapHelp": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},
+	## Retired: the ceremonial utility row never wraps "How to Play". Kept at 0
+	## so a stale book cannot re-introduce the two-line split.
+	&"titlescreen/wrapHelp": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 0.0},
 	## The Emberglass medallion in the corner. The last inline shape ternary in
 	## `_fit_title`, and it is here because leaving one behind in the function
 	## whose table was just collected is how the next table starts.
