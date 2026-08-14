@@ -4,7 +4,7 @@ Issue: [fol2/glassvow#203](https://github.com/fol2/glassvow/issues/203).
 Method: [fol2/glassvow#160](https://github.com/fol2/glassvow/issues/160).
 Status: **DRAFT — PENDING JAMES SIGN-OFF** on the four bands. Step 2 (device validation) is HITL and is not this artifact.
 
-**The bands also await a re-measure, not only a signature.** #203 is wired blocked-by [Strategy landscape layer 1](https://github.com/fol2/glassvow/issues/215): Tier 1 opens the pilot's grammar so a policy can *decline* a card reward, and the measured winning deck of ~43 cards is not a build any competent human plays. A new grammar is a new instrument, so these four cells will move again and every number below is provisional against that. Signing before then would fence the game to a superseded ruler.
+**The bands also await a re-measure, not only a signature.** #203 is wired blocked-by [Strategy landscape layer 1](https://github.com/fol2/glassvow/issues/215): Tier 1 opens the pilot's grammar so a policy can *decline* a card reward, and the measured winning deck of ~43 cards is not a build any competent human plays. A new grammar is a new instrument, so these four cells will move again and every number below is provisional against that. Signing before then would fence the game to a superseded ruler. *(Re-measured 2026-08-14 — see the addendum at the end: the numbers did not move, and that is not the same as the ruler surviving.)*
 
 **What the two instrument defects actually cost: nothing this sample can detect.** Repairing them (`deck[0]` duplication and first-affordable event choice) moved every cell by less than its own noise — all four paired cell intervals and both gap-movement intervals contain zero at n = 200, where the half-widths run ±5 to ±6 pp. #213 and #215 both record the defects as depressing the four cells "by an unmeasured amount"; measured here, the depression is **not detectable**, and effects smaller than roughly 5 pp remain un-excluded. The repairs were still correct — a choice decided by array order is not a strategy — but they are not the explanation for anything.
 
@@ -267,3 +267,49 @@ Limits 3 and 4 record the post-fix measurements; none of the five changes a draf
 ## Lookahead
 
 Not implemented. Not indicated. Revisit only if HITL shows this pilot still saturates or disagrees with James's device runs (#203 step 2). Any lookahead must evaluate hidden information by expectation and must not read the run RNG's future draws.
+
+## Addendum — 2026-08-14 re-measure on the Tier 1 grammar
+
+Re-run on main `bf1ecdb` (post-#230 Tier 1 grammar, post-#218 shard-derived
+final act, post-#224/#216), same pilot `p7-d2-v1`, same seeds 4000–4199, same
+content SHA `6334082318…` (unchanged).
+
+**Every re-measured number is bit-identical to this document.** All four
+diagnosis cells (129/200, 149/200, 64/200, 84/200 — 64.5% / 74.5% / 32.0% /
+42.0%), their Wilson intervals, and a spot-checked ablation cell
+(`hollowCrown`: Dusk 95/200, Ash 148/200) reproduce exactly. This is by
+construction, not coincidence: Tier 1 ships with every grammar knob at its
+pre-grammar behaviour (`CARD_DECLINE_DEFAULT = -1.0e9` — the default pilot
+never declines), #218's boss-relic gate resolves identically in a three-act
+run, and the sim is seed-deterministic. The default instrument's readings
+stand; the deterministic replay key of this document remains valid on main.
+Raw re-run files: `/private/tmp/glassvow-203-remeasure/` (vow0.json,
+vow5.json, ablation-hollowCrown.json).
+
+**Reproducing is not the same as surviving.** #215's control arms measured the
+thing this pilot cannot see about itself: at Vow 0, **arm 2 — random build,
+competent play — beats this pilot's planned build** (Dusk 80.5% vs 64.5%, Ash
+87.5% vs 74.5%). A build policy that loses to uniform-random picking is not a
+"substantially stronger heuristic" in the sense step 1 of #203 requires; it is
+the non-discrimination failure #160 warned about, now with a measured
+direction. Step 1's "upgrade the pilot until the statistics discriminate"
+clause is therefore **re-triggered**, and the four drafted bands must not be
+signed against `p7-d2-v1`: they would anchor the game's difficulty to an
+instrument measurably worse at building than chance.
+
+**What the next instrument is anchored on is a decision, not a derivation.**
+The policy vector (#215 slice B) makes the pilot parameterisable; the open
+choice is which policy the diagnosis pins as "competent":
+
+1. **Top-decile-informed default** — set the default vector from the sweep's
+   top-decile audit profile (high draw/energy and regen valuation, low decline
+   threshold). Anchors bands to *measured competent play inside the grammar*.
+   Recommended.
+2. **CEM optimum** — the layer-2 argmax. Wrong anchor for bands: it is the
+   ceiling (Vow 5 91–94%), not a competent human.
+3. **Keep `p7-d2-v1`** — rejected above; loses to random build at Vow 0.
+
+Option 1 needs its own adequacy check before any band is drafted against it:
+it must beat arm 2 at Vow 0 on paired seeds, and the four cells must still
+separate. That validation, the re-drafted bands, and James's signature are
+what remain of #203.
