@@ -372,7 +372,10 @@ func refresh(run: RunState) -> void:
 
 
 func _sync_sealed_door(run: RunState) -> void:
-	_sealed_door.visible = run != null and run.shards.size() >= 6 and run.is_final_act()
+	# The door fronts the final act: it stands on the last ordinary map
+	# (act == final_act() - 1), not inside the act it opens.
+	_sealed_door.visible = run != null and run.shards.size() >= 6 \
+		and run.act + 1 == run.final_act()
 
 
 func _set_act_theme(stage_act: int) -> void:

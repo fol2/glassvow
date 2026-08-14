@@ -107,7 +107,9 @@ static func _final_act_run(content: ContentDB, shards: Array) -> RunState:
 	var run: RunState = RunState.new_run(content, 717, "run-sealed-final", {
 		"shards": shards,
 	})
-	while not run.is_final_act():
+	# The last ordinary map is act 2 whatever the Shard count: with six Shards
+	# it fronts the final act (final_act() - 1), with fewer it is the final act.
+	while run.act < 2:
 		run.start_next_act(content)
 	return run
 
