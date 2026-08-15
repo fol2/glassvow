@@ -126,6 +126,19 @@ static func _screen_holds(fails: Array[String], label: StringName,
 			and view.encloses(tag_rect),
 			"%s tag for %s/%d escapes the frame %s: %s" % [
 				label, entry["kind"], entry["index"], frame, tag_rect])
+		# What is DRAWN, not what was set: a non-wrapping row shrinks to fit,
+		# but below MIN_PX it can still run past the block. Portrait is exempt —
+		# James's 2026-08-15 ruling gives that shape its own master and layout.
+		if label != &"phone-portrait-9x20":
+			for row: Dictionary in tag._rows:
+				var run_w: float = float(str(row["run"]))
+				_check(fails, run_w <= tag.size.x + 0.5,
+					"%s tag row for %s/%d draws past its block: %.1f > %.1f (%s)" % [
+						label, entry["kind"], entry["index"],
+						run_w, tag.size.x, str(row["text"]).left(24)])
+	var jar: Rect2 = Rect2(screen._jar.position, screen._jar.size)
+	_check(fails, jar.size.x > 0.0 and jar.size.y > 0.0 and view.encloses(jar),
+		"%s the bell jar is unseated: %s in %s" % [label, jar, frame])
 	var leave: Rect2 = Rect2(screen._leave.position, screen._leave.size)
 	_check(fails, view.encloses(leave) and leave.size.y >= 44.0,
 		"%s the stair is not a reachable way out: %s in %s" % [label, leave, frame])
