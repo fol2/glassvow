@@ -1,21 +1,26 @@
 class_name MapScene
 extends Control
-## Standalone 3D map surface for one act (#234 slice 4).
+## Standalone 3D map surface for one act (#234 slice 7b).
 ##
 ## Instantiable without a WorldMap. `project_pins` takes a node list when the
-## caller has one; construction does not. The live 2D `WorldMapScreen` is not
-## replaced here — swap-over is a later slice. Ground and placeholder
-## MultiMesh modules (wedge / slab / dab) carry the #255 cel/triplanar pair.
-## Freeze is a switch, not a scene-graph assumption (#207 decision 10). Rest
-## is `UPDATE_ONCE` (one paint, then sleep). Call `set_live(true)` while the
-## camera moves; `set_live(false)` re-arms a single frame at the new pose —
-## the same contract as `presentation/combat/card_view.gd` `_set_live`.
+## caller has one; construction does not. Owns pan / fling / wheel for the
+## world surface; pin pick is `pin_at` (screen rect ∩ hit-test). Ground and
+## placeholder MultiMesh modules (wedge / slab / dab) carry the #255
+## cel/triplanar pair. Freeze is a switch, not a scene-graph assumption
+## (#207 decision 10). Rest is `UPDATE_ONCE` (one paint, then sleep). Call
+## `set_live(true)` while the camera moves; `set_live(false)` re-arms a
+## single frame at the new pose — same contract as `card_view.gd` `_set_live`.
 
 const OVERSAMPLE: float = 1.0
 const VP_MAX: int = 2048
 const GROUND_SIZE: Vector2 = Vector2(48.0, 34.0)
 const SUN_TO: Vector3 = Vector3(-0.35, 0.78, 0.52)
 const SKY: Color = Color(0.018, 0.022, 0.045)
+const TAP_SLOP: float = 12.0
+const FLING_DAMP: float = 0.06
+const FLING_MAX: float = 48.0
+
+signal surface_tapped(screen: Vector2)
 
 var _stage: SubViewport
 var _display: TextureRect
@@ -24,6 +29,10 @@ var _key: DirectionalLight3D
 var _materials: MapMaterials
 var _act: int = -1
 var _dragging: bool = false
+var _lock_input: bool = false
+var _dragged: float = 0.0
+var _fling: Vector2 = Vector2.ZERO
+var _last_velocity: Vector2 = Vector2.ZERO
 
 
 func _init() -> void:
@@ -56,10 +65,13 @@ func _init() -> void:
 	_display.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_display)
+	process_priority = -1
+	set_process(true)
 	set_act(0)
 
 
 func _ready() -> void:
+	_rig.get_camera().current = true
 	_fit()
 	resized.connect(_fit)
 
@@ -103,6 +115,34 @@ func hit_test(screen: Vector2) -> Vector3:
 	return _projection().hit_world(screen)
 
 
+## Among pins whose projected seat is within `radius` px of `screen`, pick the
+## one whose world-anchor is nearest the ground hit. Empty / miss → −1.
+func pin_at(screen: Vector2, nodes: Array[MapNode], radius: float) -> int:
+	var seats: PackedVector2Array = project_pins(nodes)
+	var world: Vector3 = hit_test(screen)
+	var best: int = -1
+	var best_d: float = INF
+	for i: int in range(nodes.size()):
+		if i >= seats.size() or seats[i].distance_to(screen) > radius:
+			continue
+		var d: float = MapPinProjection.world_anchor(nodes[i]).distance_to(world)
+		if d < best_d:
+			best = i
+			best_d = d
+	return best
+
+
+func set_lock_input(on: bool) -> void:
+	_lock_input = on
+	if on:
+		_dragging = false
+		_fling = Vector2.ZERO
+
+
+func is_moving() -> bool:
+	return _dragging or _fling.length() > 0.02
+
+
 func _projection() -> MapPinProjection:
 	var view: Vector2i = _stage.size
 	return MapPinProjection.new(_rig.get_camera(), size, Vector2(view))
@@ -118,6 +158,9 @@ func set_live(on: bool) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
+	if _lock_input:
+		accept_event()
+		return
 	var button: InputEventMouseButton = event as InputEventMouseButton
 	if button != null:
 		if button.pressed and button.button_index in [
@@ -127,28 +170,74 @@ func _gui_input(event: InputEvent) -> void:
 			set_live(false)
 			accept_event()
 		elif button.button_index == MOUSE_BUTTON_LEFT:
-			_dragging = button.pressed
-			set_live(button.pressed)
+			_on_press(button.pressed, button.position)
 			accept_event()
 		return
 	var motion: InputEventMouseMotion = event as InputEventMouseMotion
 	if motion != null and _dragging:
-		_rig.pan_screen(motion.relative, _view_height())
+		_on_drag(motion.relative, motion.velocity)
 		accept_event()
 		return
 	var touch: InputEventScreenTouch = event as InputEventScreenTouch
 	if touch != null:
-		_dragging = touch.pressed
-		set_live(touch.pressed)
+		_on_press(touch.pressed, touch.position)
 		accept_event()
 		return
 	var drag: InputEventScreenDrag = event as InputEventScreenDrag
 	if drag != null and _dragging:
-		_rig.pan_screen(drag.relative, _view_height())
+		_on_drag(drag.relative, drag.velocity)
 		accept_event()
 
 
+func _on_press(pressed: bool, screen: Vector2) -> void:
+	if pressed:
+		_dragging = true
+		_dragged = 0.0
+		_fling = Vector2.ZERO
+		_last_velocity = Vector2.ZERO
+		set_live(true)
+		return
+	var tap: bool = _dragged <= TAP_SLOP
+	_dragging = false
+	if tap:
+		_fling = Vector2.ZERO
+		set_live(false)
+		surface_tapped.emit(screen)
+		return
+	_fling = _screen_to_world(_last_velocity).limit_length(FLING_MAX)
+	if _fling.length() <= 0.02:
+		_fling = Vector2.ZERO
+		set_live(false)
+
+
+func _on_drag(relative: Vector2, velocity: Vector2) -> void:
+	_dragged += relative.length()
+	_last_velocity = velocity
+	_rig.pan_screen(relative, _view_height())
+
+
+func _screen_to_world(delta_px: Vector2) -> Vector2:
+	var k: float = _rig.get_camera().size / maxf(_view_height(), 1.0)
+	var tilt: float = deg_to_rad(absf(MapCameraRig.TILT_DEGREES))
+	return Vector2(-delta_px.x * k, -delta_px.y * k / sin(tilt))
+
+
+func _process(delta: float) -> void:
+	if _dragging or _lock_input:
+		return
+	if _fling.length() > 0.02:
+		_rig.pan_world(_fling * delta)
+		_fling *= pow(FLING_DAMP, delta)
+		if not is_live():
+			set_live(true)
+		return
+	if _fling != Vector2.ZERO:
+		_fling = Vector2.ZERO
+		set_live(false)
+
+
 func _fit() -> void:
+	_rig.get_camera().current = true
 	if size.x <= 1.0 or size.y <= 1.0:
 		return
 	var next: Vector2i = Vector2i(

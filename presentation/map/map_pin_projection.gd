@@ -1,13 +1,14 @@
 class_name MapPinProjection
 extends RefCounted
-## 15×7 world-XZ control lattice and Camera3D pin projection (#234 slice 3).
+## 15×7 world-XZ control lattice and pin projection (#234 slice 3 / 7b).
 ##
 ## Integer (row, col) are lattice vertices. A node's authored wander is the
 ## same pairing the 2D screen already uses: `jy` along the journey (row → −Z),
 ## `jx` across the lanes (col → X). Bilinear sample of the four surrounding
-## vertices is the world anchor; 2D pins seat at the camera's unprojection of
+## vertices is the world anchor; 2D pins seat at the orthogonal projection of
 ## that point. Hit-test is the inverse ray ∩ Y=0, so a tap on a pin recovers
-## the same screen point (the #207 agreement).
+## the same screen point (the #207 agreement). Camera3D.unproject is not used:
+## it returns the origin unless the camera's Viewport has entered the tree.
 
 ## Col 0 / row 0 at the near-left; cell X matches the 6-unit lane, cell Z
 ## walks toward −Z (camera look). Footprint sits inside MapScene.GROUND_SIZE
@@ -67,13 +68,27 @@ static func lattice_footprint() -> Rect2:
 
 
 func to_screen(world: Vector3) -> Vector2:
-	return _camera.unproject_position(world) * _scale()
+	var eye: Vector3 = _xform().affine_inverse() * world
+	var half: Vector2 = _half_extents()
+	var view: Vector2 = Vector2(
+			(eye.x / maxf(half.x, 0.0001) * 0.5 + 0.5) * _view_size.x,
+			(-eye.y / maxf(half.y, 0.0001) * 0.5 + 0.5) * _view_size.y)
+	return view * _scale()
 
 
 func hit_world(screen: Vector2) -> Vector3:
 	var px: Vector2 = screen / _scale()
-	var origin: Vector3 = _camera.project_ray_origin(px)
-	var dir: Vector3 = _camera.project_ray_normal(px)
+	var half: Vector2 = _half_extents()
+	var pos: Vector2 = Vector2(
+			px.x / maxf(_view_size.x, 1.0),
+			px.y / maxf(_view_size.y, 1.0))
+	var local: Vector3 = Vector3(
+			pos.x * half.x * 2.0 - half.x,
+			(1.0 - pos.y) * half.y * 2.0 - half.y,
+			-_camera.near)
+	var xform: Transform3D = _xform()
+	var origin: Vector3 = xform * local
+	var dir: Vector3 = -xform.basis.z.normalized()
 	if absf(dir.y) < 0.0001:
 		return Vector3.ZERO
 	return origin + dir * (-origin.y / dir.y)
@@ -96,3 +111,21 @@ func _scale() -> Vector2:
 			or _control.x < 1.0 or _control.y < 1.0:
 		return Vector2.ONE
 	return _control / _view_size
+
+
+## Camera3D.unproject / project_ray need is_inside_tree() so they can read
+## the Viewport. SceneTree._initialize never finishes enter-tree, and a
+## nested SubViewport is the same: both return the origin. The orthogonal
+## identity is the engine's (camera_3d.cpp), using `_view_size` for aspect.
+func _xform() -> Transform3D:
+	if _camera.is_inside_tree():
+		return _camera.global_transform
+	return _camera.transform
+
+
+func _half_extents() -> Vector2:
+	var aspect: float = _view_size.x / maxf(_view_size.y, 1.0)
+	var span: float = _camera.size
+	if _camera.keep_aspect == Camera3D.KEEP_WIDTH:
+		return Vector2(span * 0.5, span * 0.5 / maxf(aspect, 0.0001))
+	return Vector2(span * 0.5 * aspect, span * 0.5)

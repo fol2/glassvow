@@ -394,6 +394,7 @@ class PathBand extends MapBand:
 
 	func _init() -> void:
 		super(1.0)
+		gated = false
 
 	## The bed and its verge, tapered per column. Four strips: bed and verge,
 	## above and below `path_y`.
@@ -429,20 +430,9 @@ class PathBand extends MapBand:
 	func _draw() -> void:
 		if host == null:
 			return
-		var w: float = size.x
-		# §5 band 3 — the ground line, the leaded path. No longer a stand-in: the
-		# bed tapers with the same depth the stones read and ends at a lip, which
-		# is what #69 A7 filed as missing and #70 owns. Still no hairline at
-		# `pathY` — a crisp lead there doubles with the centre lane's own edge run
-		# and two things drawn the same way read as one thing drawn twice (P5.2,
-		# #64). The graph's dashes own the only hard line on this plane.
-		var path_y: float = size.y * host._trail_num("pathY", 0.64) + drift.y
-		_draw_bed(w, path_y)
-		# Terminus rose-window BEFORE the graph so edges/stones layer over it.
-		_draw_rose_window()
+		# Slice 7b: 3D MapScene owns the ground. This band is the graph overlay
+		# — frozen edges projected between seats, plus the lantern glow.
 		_draw_graph()
-		# The current lantern's glow sits behind its waystone (or mid-glide
-		# along the same bezier the edges draw — host owns travel state).
 		if host.map.at >= 0 and host.map.at < host.map.nodes.size():
 			var at: Vector2 = host.marker_screen_position()
 			var ember: Color = GlassStyle.EMBER
@@ -504,7 +494,7 @@ class PathBand extends MapBand:
 
 	func _draw_graph() -> void:
 		var by_id: Dictionary = {}
-		var step: float = host._step()
+		var frame: Rect2 = Rect2(Vector2.ZERO, size).grow(80.0)
 		for node: MapNode in host.map.nodes:
 			by_id[node.id] = node
 		for node: MapNode in host.map.nodes:
@@ -517,17 +507,10 @@ class PathBand extends MapBand:
 				var to: Vector2 = host._node_pos(next_node)
 				var walked: bool = host.map.is_cleared(host.map.nodes.find(node)) \
 					and host.map.is_cleared(host.map.nodes.find(next_node))
-				var fade: float = clampf(1.0 - maxf(
-					absf(host._world_x(float(node.row)) - host._cam_x),
-					absf(host._world_x(float(next_node.row)) - host._cam_x)) \
-					/ maxf(step, 1.0) * 0.12, 0.10, 1.0)
-				# The host owns the bow so the marker gliding along this edge
-				# cannot drift from the dashes drawn on it — see
-				# `WorldMapScreen.edge_control` for why it is not written twice.
+				var fade: float = 1.0 if frame.has_point(from) or frame.has_point(to) \
+					else 0.10
 				var control: Vector2 = host.edge_control(from, to)
 				var previous: Vector2 = from
-				# ~10–12px dash cells from chord length; first cell drawn so the
-				# dash begins at the source rim instead of detaching from it.
 				var segs: int = maxi(12, int(from.distance_to(to) / 11.0))
 				for segment: int in range(segs):
 					var t: float = float(segment + 1) / float(segs)
