@@ -1,0 +1,35 @@
+name: Temporary map review capture
+
+on:
+  push:
+    branches:
+      - codex/291-map-asset-contract
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7.1
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.1
+          use-dotnet: false
+
+      - name: Import resources
+        run: tools/check_imports.sh
+
+      - name: Capture fallback map
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb
+          xvfb-run -a godot --path . --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
+
+      - name: Upload map review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-review-${{ github.sha }}
+          path: artifacts/map-screenshot.png
+          if-no-files-found: error
+          retention-days: 1
