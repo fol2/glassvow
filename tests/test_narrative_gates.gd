@@ -26,7 +26,7 @@ static func _thresholds(fails: Array[String]) -> void:
 		var row: Array = row_v
 		var level: int = _i(row[0])
 		var shards: int = _i(row[1])
-		_check(fails, NarrativeGates.allows(level, shards) == bool(row[2]),
+		_check(fails, NarrativeGates.allows(level, shards) == (row[2] == true),
 			"level %d / shards %d" % [level, shards])
 	_check(fails, NarrativeGates.loss_pool_index(0, 0) == -1
 		and NarrativeGates.loss_pool_index(0, 1) == 0
@@ -64,7 +64,7 @@ static func _losses(fails: Array[String]) -> void:
 	var vigil: VigilState = VigilState.blank()
 	var l0: RunState = _run(content, vigil, "run-loss-l0")
 	_check(fails, vigil.commit_run(l0, "death", content)
-		and _fall(vigil).get("standing", false)
+		and _fall(vigil).get("standing", false) == true
 		and _i(_fall(vigil).get("lastWords", 99)) == -1
 		and _i(_fall(vigil).get("row", -1)) == 6
 		and _cursor(vigil) == 0 and vigil.whispers == 0,
