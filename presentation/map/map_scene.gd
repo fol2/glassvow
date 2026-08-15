@@ -13,7 +13,14 @@ extends Control
 
 const OVERSAMPLE: float = 1.0
 const VP_MAX: int = 2048
-const GROUND_SIZE: Vector2 = Vector2(48.0, 34.0)
+## The plane must outsize what the camera can EVER see, not the lattice: a
+## legal seat at the pan bounds' corner (the seed-717 start node puts the
+## camera at z≈26.6) looks past a 48×34 plane into void — measured on the
+## live screen as the world filling only ~71%×63% of the frame. Widest case:
+## bounds extent (39×28.8) plus the max zoom stop's frustum on every side
+## (ortho 28 × wide-phone aspect, /sin 55° along Z). One quad, world-XZ
+## triplanar — oversizing is free.
+const GROUND_SIZE: Vector2 = Vector2(128.0, 96.0)
 const SUN_TO: Vector3 = Vector3(-0.35, 0.78, 0.52)
 const SKY: Color = Color(0.018, 0.022, 0.045)
 const TAP_SLOP: float = 12.0
@@ -62,7 +69,10 @@ func _init() -> void:
 	_display.texture = _stage.get_texture()
 	_display.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_display.stretch_mode = TextureRect.STRETCH_SCALE
-	_display.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# SubViewport child controls resolve full-rect anchors in backing pixels at a
+	# HiDPI content scale. Keep the display in this Control's canvas and size it
+	# from the resolved rect in `_fit` instead.
+	_display.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_display)
 	process_priority = -1
@@ -240,6 +250,8 @@ func _fit() -> void:
 	_rig.get_camera().current = true
 	if size.x <= 1.0 or size.y <= 1.0:
 		return
+	_display.position = Vector2.ZERO
+	_display.size = size
 	var next: Vector2i = Vector2i(
 			mini(maxi(int(size.x * OVERSAMPLE), 1), VP_MAX),
 			mini(maxi(int(size.y * OVERSAMPLE), 1), VP_MAX))

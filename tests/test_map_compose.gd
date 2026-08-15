@@ -10,6 +10,7 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 static func run(fails: Array[String]) -> void:
 	_five_shapes(fails)
+	_surface_rects(fails)
 	_act_and_live(fails)
 	_seats(fails)
 	_pin_select(fails)
@@ -84,6 +85,29 @@ static func _act_and_live(fails: Array[String]) -> void:
 	screen._process(0.016)
 	_check(fails, not scene.is_live(), "travel end re-arms freeze")
 	screen.free()
+
+
+static func _surface_rects(fails: Array[String]) -> void:
+	var scene: MapScene = MapScene.new()
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	tree.root.add_child(scene)
+	var targets: Array[Vector2] = []
+	for shape_name: StringName in StageShape.REFERENCES:
+		var reference: Vector2i = StageShape.REFERENCES[shape_name]
+		targets.append(Vector2(reference))
+	targets.append(Vector2(918.0, 1180.0))  # pad letterbox stage at 800²
+	targets.append(Vector2(2800.0, 2200.0))  # VP_MAX first resize
+	targets.append(Vector2(3000.0, 2400.0))  # VP_MAX second resize
+	for target: Vector2 in targets:
+		scene.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		scene.size = target
+		scene._fit()
+		var frame: Rect2 = Rect2(Vector2.ZERO, target)
+		var display: Rect2 = Rect2(scene._display.position, scene._display.size)
+		_check(fails, display.is_equal_approx(frame),
+				"display covers %s: got %s" % [target, display])
+	tree.root.remove_child(scene)
+	scene.free()
 
 
 static func _seats(fails: Array[String]) -> void:
