@@ -23,7 +23,7 @@
 | 9 | (有個朝聖者站着死去) | Unreadable Page 頁文 | L2 | 怪談 | 碑的成因,一直明文寫在紙上 | 保留 |
 | 10 | (mirror.png:鏡中淺笑黑影) | 事件美術 | L0 | 詭異鏡像 | 鏡中人是留者=你;淺笑因為它認得你 | 資產不改,文案圍繞它寫 |
 | 11 | The gaunt keeper remembers the road you did not take. | whisper 9 | L1 | 守關人記得你的岔路 | gaunt keeper=Lamplighter(referent 定案,避撞 Keeper 頭銜);你沒行的路=留者從未走過的路 | 保留 [#258 R2 N4] |
-| 12 | Pale figures carried the shards down so the thing above could not follow. | Second Page | L2 | 蒼白眾藏碎片避上方之物 | 搬運機制為真(00 §3.7 ferry);動機半句=行者年代 legend-drift(門後只有【城】);"down"=垂直語彙 | `[REWRITE:climb]` 排期改寫 [#258 R1 Q4A + R2 Q14] |
+| 12 | Pale figures carried the shards down so the thing above could not follow. | Second Page | L2 | 蒼白眾藏碎片避上方之物 | 搬運機制為真(00 §3.7 ferry);動機半句=行者年代 legend-drift(門後只有金城);"down"=垂直語彙 | `[REWRITE:climb]` 排期改寫 [#258 R1 Q4A + R2 Q14] |
 | 13 | The Spire has learned to wear ours. | ownShade2 死亡句後半(前半見 row 4,同一句 shipped 字串,整句一齊重寫) | L2 | 塔會擬態 | 雙重洩露 Own Shade reveal;Spire 已 banned | `[REWRITE:climb]` 全句重寫 [#258 R2 N7] |
 | 19 | Above the Sovereign there is no dawn — only a door pretending to be the sky. | ownShade fragments[2]=ownShade3(The Shade That Remembers)死亡句 | L2 | 影的絕望詩句 | 字面為真:門後不是天,是城;「假裝天空的門」=封門本體——影死前見過門 | `[REWRITE:climb]`(Above/sky 垂直語彙),語義保留 [#258 verify 補漏] |
 | 14 | half a breath behind — and it is smiling | Silvered Mirror 事件 | L1 | 鏡中怪異 | 鏡中那側=留者;它認得你(L0 motif 的文字版,定級 L1) | 保留 [#258 R2 N7] |
@@ -36,6 +36,17 @@
 ## 新寫文案入賬區
 
 (開稿後逐批 append;canon-lint workflow 會校驗每批新行都已入賬。)
+
+#261 定名批(名字是 player-facing 字串,先入賬;shipped 落地見各欄出處):
+
+| # | 句子(名) | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 21 | 黑曜王庭 / The Obsidian Court | acts[2].name(置換歸 #232) | L0 | 有個王的黑曜宮庭 | 廷臣=千年停下的眾人;王=不肯完成的你 | 新名 [#261 Q8] |
+| 22 | 鏡中歸途 / The Mirrored Road | acts[3].name(#220) | L4 | 鏡中的歸路 | 盡頭=爐邊;「歸」是全遊戲第一次字面為真 | 新名 [#261 Q9] |
+| 23 | 永恆留者 / The Eternal Keeper | acts[3].bossName(#220) | L4 | 終戰 boss 名 | 與永恆君王孖生——不肯開始/不肯完成的兩極並排 | 新名 [#261 Q10] |
+| 24 | 守爐人 / the Keeper | 爐邊 NPC 顯示名(落地隨 copy batch) | L0 | 看火者 | 它「守」爐,因為它從未離開過爐邊 | 新名 [#261 Q11] |
+| 25 | 金城 / the Gilded City | 傳說指涉(落地隨 copy batch) | L1 | 門後的黃金應許 | 爐邊真貌;應許=歸家;名是眾人叫錯的(legend-drift) | 新名 [#261 Q12] |
+| 26 | 續火 / Rekindle | ui.menu.continueClimb 置換(#232) | L0 | 重燃爐火,再上路 | 火再撕你一次;續的是儀式,不是你 | 新名 [#261 Q13] |
 
 ## `[REWRITE:climb]` 清單狀態
 
