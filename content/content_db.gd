@@ -7,6 +7,16 @@ extends RefCounted
 const SLICE_PATH: String = "res://port_fixtures/content/slice-content.json"
 const FULL_PATH: String = "res://content/full-content.json"
 const ORIGINAL_PATH: String = "res://content/original-content.json"
+const ORIGINAL_CONTENT_KEYS: Dictionary = {
+	"cards": true, "enemies": true, "potions": true, "relics": true,
+	"arts": true, "affixes": true, "statuses": true, "events": true,
+	"omens": true, "deeds": true, "themes": true, "quests": true,
+	"variants": true, "boons": true, "progression": true, "shop": true,
+	"shadeKits": true, "cardPools": true, "relicPools": true, "player": true,
+	"poolGate": true, "rewardGold": true, "aspects": true, "vows": true,
+	"acts": true, "encounters": true, "questIds": true, "themeOrder": true,
+	"reveals": true,
+}
 const MOB_OVERRIDES_PATH: String = "res://content/mob-overrides.json"
 const CORE_MECHANICS_PATH: String = "res://port_fixtures/content/core-mechanics.json"
 const ENEMY_INTENTS: Array[String] = [
@@ -73,11 +83,17 @@ func _load_original_content() -> void:
 ## Merge hand-authored original content OVER the generated baseline.
 ## New ids are legitimate. Specified fields overlay; unspecified fields stay.
 ## Top-level arrays append. Keys beginning with "_" are ignored.
+## `acts` may be a dict keyed by index (merge) or an array (append).
 func apply_original_content(raw: Variant) -> void:
 	if typeof(raw) != TYPE_DICTIONARY:
 		push_error("ContentDB: original content must be a dictionary")
 		return
 	var root: Dictionary = raw
+	for key_v: Variant in root:
+		var key: String = str(key_v)
+		if key.begins_with("_") or ORIGINAL_CONTENT_KEYS.has(key):
+			continue
+		push_error("ContentDB: unknown original-content key %s" % key)
 	_merge_entries(cards, root, "cards")
 	_merge_entries(enemies, root, "enemies")
 	_merge_entries(potions, root, "potions")
@@ -105,7 +121,7 @@ func apply_original_content(raw: Variant) -> void:
 	_append_rows(reward_gold, root, "rewardGold")
 	_append_rows(aspects, root, "aspects")
 	_append_rows(vows, root, "vows")
-	_append_rows(acts, root, "acts")
+	_apply_acts(root)
 	_append_rows(encounters, root, "encounters")
 	for id_v: Variant in _array(root, "questIds"):
 		quest_ids.append(str(id_v))
@@ -165,6 +181,37 @@ func _append_rows(dst: Array, root: Dictionary, key: String) -> void:
 	var rows: Array = value
 	for item: Variant in rows:
 		dst.append(_dup(item))
+
+
+func _apply_acts(root: Dictionary) -> void:
+	if not root.has("acts"):
+		return
+	var value: Variant = root["acts"]
+	if typeof(value) == TYPE_ARRAY:
+		_append_rows(acts, root, "acts")
+		return
+	if typeof(value) != TYPE_DICTIONARY:
+		push_error("ContentDB: original acts is not an array or dictionary")
+		return
+	var incoming: Dictionary = value
+	for key_v: Variant in incoming:
+		var key: String = str(key_v)
+		if not key.is_valid_int():
+			push_error("ContentDB: original acts index %s is not an int" % key)
+			continue
+		var index: int = int(key)
+		if index < 0 or index >= acts.size():
+			push_error("ContentDB: original acts index %s is out of range" % key)
+			continue
+		var entry: Variant = incoming[key_v]
+		if typeof(entry) != TYPE_DICTIONARY or typeof(acts[index]) != TYPE_DICTIONARY:
+			push_error("ContentDB: original acts[%d] merge needs a dictionary" % index)
+			continue
+		var current: Dictionary = acts[index]
+		var merged: Dictionary = current.duplicate(true)
+		var overlay: Dictionary = entry
+		_deep_merge(merged, overlay)
+		acts[index] = merged
 
 
 static func _dup(value: Variant) -> Variant:
