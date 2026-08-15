@@ -16,7 +16,7 @@
 | Sixth-shard scripted scene | L3 mirror scene: Rose Window fully lit → becomes mirror → queue revealed → door pushed open by the monuments. Centrepiece art already shipped (emberglass-mural + masks). |
 | Quest memories as full prose in Vigil | Dawn-ceremony prose per quest milestone, archived in Vigil |
 | A8 bilingual, no calque | zh-Hant source (HK 書面語, 着/裏 per #177), en rewritten not translated. Gates: locale-coverage lint #300 (pipeline + CI) and the en native-read pass (pipeline step 6) [SETTLED — #262 Q6]. |
-| Onboarding: story before mechanics | Content: the L0 opening script (this plan). Sequencing, tap = one line, and the distinct-skip control: onboarding design ticket #176 [SETTLED — #262 Q4b]. |
+| Onboarding: story before mechanics | Content: the L0 opening script (this plan). First-run sequencing + hint system + veteran skip: onboarding design ticket #176 [SETTLED — #262 Q4b]. Amended #263 Q2: the tap-one-line / distinct-skip grammar belongs to the shared scene player (`07-scenes.md` §1); #176 consumes it. |
 | Story-arc audio (per-scene soundscape shift; sixth-shard unique sting) | Cue requirements written into each scene script's **brief** (opening, sixth-shard, Act IV); audio production itself belongs to each hosting surface's audio criteria [SETTLED — #262 Q4c]. |
 
 ## Surfaces and pool sizes
