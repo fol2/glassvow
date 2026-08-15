@@ -5,8 +5,9 @@ extends Control
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
 ## dependency) so headless tests can drive it — see the M5 screens.
-## Paint order is child order: sky → region → path → waystones → veil → chrome
-## (DL MAJOR from PR #71: Spire behind trees by construction).
+## Paint order is child order: MapScene (world) → sky → region → path →
+## waystones → veil → chrome. Slice 7a parents the 3D surface behind the
+## live band stack; bands still draw the world. Pin seating stays `_node_pos`.
 
 signal node_chosen(index: int)
 signal sealed_door_requested
@@ -90,6 +91,7 @@ var _lightning_t: float = 0.0
 var _flash: float = 0.0
 
 var _drift: PointerDrift = PointerDrift.new()
+var _map_scene: MapScene = null
 var _sky_band: MapBand.SkyBand = null
 var _region_band: MapBand.RegionBand = null
 var _path_band: MapBand.PathBand = null
@@ -105,7 +107,8 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_trail_layout = LayoutBook.resolve(&"map", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	# Bands → waystones → veil → chrome: child order is paint order.
+	# World → bands → waystones → veil → chrome: child order is paint order.
+	_build_world_surface()
 	_build_bands()
 	_build_waystones()
 	# Between the stones and the weather: the chips label the play plane, so they
@@ -131,6 +134,12 @@ func _notification(what: int) -> void:
 
 
 # ---------------------------------------------------------------- build
+
+func _build_world_surface() -> void:
+	_map_scene = MapScene.new()
+	_map_scene.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_map_scene)
+
 
 func _build_bands() -> void:
 	_sky_band = MapBand.SkyBand.new()
@@ -405,6 +414,16 @@ func _set_act_theme(stage_act: int) -> void:
 		_region_band.set_flash(0.0)
 	if _veil_band != null:
 		_veil_band.apply_region(_region)
+	if _map_scene != null:
+		_map_scene.set_act(stage_act)
+
+
+## 3D lattice seats in this Control's px. Live waystones still sit on
+## `_node_pos` — swap-over is slice 7b.
+func projected_seats() -> PackedVector2Array:
+	if _map_scene == null:
+		return PackedVector2Array()
+	return _map_scene.project_pins(map.nodes)
 
 
 ## Dress the bands in another act's region without mutating the run. Used by
@@ -439,6 +458,11 @@ func _seat_marker() -> void:
 	if _travelling:
 		return
 	_cam_x = seat
+	# A direct seat is a teleport: no motion for _sync_world_live to see, so
+	# re-arm one frozen frame at the new pose (the set_live(false) contract),
+	# or 7b's coupled camera would hold a stale frame after set_shape/refresh.
+	if _map_scene != null:
+		_map_scene.set_live(false)
 
 
 ## World-x of the lead-third seating for node `i`, clamped so node 0 cannot
@@ -582,6 +606,19 @@ func _process(delta: float) -> void:
 	_step_lightning(delta)
 	_layout_waystones()
 	_push_bands()
+	_sync_world_live()
+
+
+## Freeze the 3D surface at rest; unfreeze for this screen's own pan, wheel
+## scroll, or travel. Does not drive the rig — 7b maps those onto the camera.
+func _sync_world_live() -> void:
+	if _map_scene == null:
+		return
+	var moving: bool = _dragging or _travelling \
+		or absf(_cam_velocity) > 0.02 \
+		or absf(_cam_x - _cam_target) > 0.5
+	if moving != _map_scene.is_live():
+		_map_scene.set_live(moving)
 
 
 ## Deterministic heat lightning for act 2. Fixed marks in a 26s loop — irregular
