@@ -50,7 +50,7 @@ task #270 [SETTLED — #258 R2 Q12].
 
 | Surface | Ceiling | Note |
 |---|---|---|
-| Opening scene | L0 | visual-only foreshadow; zero textual confirmation **of the truth** (00 §5 note). The script must name the journey's destination in dialogue before first combat (rubric; [#262 Q3]) |
+| Opening scene | L0 | visual-only foreshadow; zero textual confirmation **of the truth** (00 §5 note). The script must name the journey's destination in dialogue before first combat (rubric; [SETTLED — #262 Q3]) |
 | Keeper hearth lines | L1 | dual-reading, never confirming |
 | Waystone interstitials | L1 | |
 | Lamplighter meetings | L1 | the「上次」ambiguity lives here |
@@ -130,4 +130,4 @@ Steps 3–4 run as a saved workflow (`.claude/workflows/story-draft.js`,
 created when the first batch starts). **Simulation-verified planting** —
 headless N-run assertion that every twist-critical plant fires in ≥2
 independent slots before its payoff — is #270's acceptance gate, not a
-per-batch step [#262 Q6c].
+per-batch step [SETTLED — #262 Q6c].
