@@ -12,24 +12,28 @@ The shipping map asset library is bounded to:
 - **8 neutral 1024×1024 tile textures**: one ground and one prop tile per act;
 - **4 painted 512×256 RGBA grade textures**: one per act;
 - **one manifest and one provenance ledger**, both machine checked;
-- a **planning ceiling of 18.7 MiB** for the complete four-act package delta before
-  container/export overhead, with **14–16 MiB expected** after real GLBs are measured.
+- **11.31 MiB conservative texture VRAM** for all four acts, or **2.83 MiB** for
+  the active act;
+- **7.31 MiB source-GLB ceiling** for the complete library, or **2.25 MiB** for
+  the active act;
+- an iOS payload target of **≤16 MiB measured delta** and a mandatory re-grill if an
+  identical before/after export exceeds **18.7 MiB**.
 
-Only one act is resident. One act sees eight kit meshes, one terminus, two material
-tiles, and one grade. The map does not buy textures from the geometry vendor and no
-module owns a private material.
+Texture VRAM, source GLB bytes, import-cache bytes, and IPA bytes are separate budgets.
+They are never added and reported as one measured quantity. Only the active act is
+resident: eight kit meshes, one terminus, two material tiles, and one grade.
 
-This is deliberately the high end of #207's four-to-eight material allowance and the
-middle of its 25–30-module allowance. It preserves the current renderer's cost shape:
-one `surface_tex` fetch path in the ground shader, one in the prop shader, one grade,
-and per-instance phase rather than per-object textures.
+This is the high end of #207's four-to-eight material allowance and the middle of its
+25–30-module allowance. It preserves the current renderer's cost shape: one
+`surface_tex` path in the ground shader, one in the prop shader, one grade, and
+per-instance phase rather than per-object textures.
 
 ## Why this is the minimum complete bill
 
 `MapScene` currently proves the composition with 25 prop placements split into flat
 wedges, stacked slabs, and dab masses. `MapMaterials` proves one shared ground material,
-one shared prop material, and one grade per active act. The real assets replace those
-three placeholder shape families; they do not add a PBR material stack.
+one shared prop material, and one grade per active act. Real assets replace those
+placeholder shape families; they do not add a PBR material stack.
 
 The signed visual language needs three independent kinds of variation:
 
@@ -37,11 +41,10 @@ The signed visual language needs three independent kinds of variation:
 2. **surface grain** — neutral tile textures projected by the existing shaders;
 3. **region and contact** — the per-act grade plus `MapRegions` ramp colours.
 
-Adding object textures would duplicate variation already owned by (2) and (3), re-open
-UV and de-light work, and break the draw/fetch budget that #233 measured. Fewer than five
-act-specific modules makes the 20-random-placement repetition test fail by construction.
-More than five per act is payload and draw-group growth before any on-device evidence
-asks for it.
+Object textures would duplicate variation already owned by (2) and (3), reopen UV and
+de-light work, and risk the draw/fetch budget that #233 measured. Fewer than five
+act-specific modules leaves little room to pass the 20-placement repetition review;
+more than five grows payload and draw groups before device evidence asks for it.
 
 ## Directory and manifest contract
 
@@ -63,18 +66,17 @@ assets/art/map/
 
 `map-assets.json` is authoritative. Checkers and runtime binding read the same rows;
 filename conventions are for humans, never the classifier. Every row declares `kind`,
-`act`, `role`, `path`, dimensions or triangle cap, and measured values needed by the
-shader/checker. This is required because the present `tools/check_map_assets.py` applies
-seam and de-light checks to every PNG. A painted grade is intentionally non-tileable and
-value-varying, so it would false-fail both checks without a manifest distinction.
+`act`, `role`, `path`, dimensions or triangle cap, and measured shader/checker values.
 
-`provenance.json` records generation and human-edit history. It is not runtime data.
+This is required because the present `tools/check_map_assets.py` applies seam and
+de-light checks to every PNG. A painted grade is intentionally non-tileable and
+value-varying, so it would false-fail both checks without a manifest distinction.
+`provenance.json` records generation and human-edit history; it is not runtime data.
 
 ## Geometry bill — 27 GLBs
 
-Filenames are internal production IDs, not player-facing canon. In particular, Act IV
-naming remains owned by the story/content tickets; changing display copy must not churn
-asset paths.
+Filenames are internal production IDs, not player-facing canon. Act IV naming remains
+owned by the story/content tickets; changing display copy must not churn asset paths.
 
 ### Shared kit — 3
 
@@ -82,7 +84,7 @@ asset paths.
 |---|---|---|
 | S1 | `geometry/shared/road-slab-a.glb` | broad low slab, primary path rhythm |
 | S2 | `geometry/shared/road-slab-b.glb` | broken/offset slab, avoids one repeated contour |
-| S3 | `geometry/shared/standing-monument.glb` | the fallen walker read; broad standing mass, no fine carving |
+| S3 | `geometry/shared/standing-monument.glb` | fallen-walker read; broad standing mass, no carving noise |
 
 ### Act I — 5 kit + 1 terminus
 
@@ -102,7 +104,7 @@ asset paths.
 | A2-1 | `geometry/act2/drowned-wall-corner.glb` | drowned city wall mass |
 | A2-2 | `geometry/act2/silted-stair.glb` | broad stair disappearing into silt |
 | A2-3 | `geometry/act2/library-arch.glb` | flooded-library threshold |
-| A2-4 | `geometry/act2/sunken-shelf-mass.glb` | stacked slab silhouette; no thin shelf slats |
+| A2-4 | `geometry/act2/sunken-shelf-mass.glb` | stacked slab; no thin shelf slats |
 | A2-5 | `geometry/act2/lure-lantern-post.glb` | false-light landmark; no cage bars or chains |
 | A2-H | `geometry/act2/terminus-flooded-threshold.glb` | traced from the shipped Act II stage plates before modelling |
 
@@ -139,9 +141,9 @@ An active act contains:
 - one terminus `MeshInstance3D`;
 - no module-specific material or texture.
 
-This is at most ten world draw groups before any measured need to split a `MultiMesh`:
-one ground, eight kit groups, and one terminus. Spatial chunks are permitted only after
-a capture proves that culling saves more than the added draw groups cost.
+This is ten world groups: one ground, eight kit groups, and one terminus. An optional
+second terminus surface may add one draw. Spatial chunks are permitted only after a
+capture proves that culling saves more than the added groups cost.
 
 ## Geometry acceptance contract
 
@@ -150,7 +152,7 @@ a capture proves that culling saves more than the added draw groups cost.
 - Tripo request target: **1,500 faces**;
 - accepted final range: **600–2,500 triangles**;
 - hard GLB cap: **192 KiB**;
-- one mesh, one surface, no animation, skeleton, texture, UV requirement, or tangent;
+- one mesh, one surface, no animation, skeleton, texture, required UV, or tangent;
 - normals required; material data is stripped or ignored by material override;
 - pivot on ground contact, Y-up, metres, deterministic transform;
 - closed or deliberately open broad forms only; no hidden internal islands.
@@ -178,8 +180,8 @@ criterion:
 5. fail when any intended view exceeds the threshold.
 
 The module is then placed 20 times with deterministic random transforms. Review fails if
-a recognisable repeated contour dominates the frame, even when the scalar gate passes.
-That is a visual acceptance capture, not a unit-test substitute.
+a recognisable repeated contour dominates the frame even when the scalar gate passes.
+That capture is visual acceptance, not a unit-test substitute.
 
 ## Texture bill — 8 material tiles
 
@@ -204,9 +206,9 @@ Every tile must pass the existing gates:
 - no alpha silhouette;
 - ground↔prop value gap remains `≥ 0.272` after binding.
 
-The later binding slice changes `MapMaterials` from one placeholder surface to an
-act-row containing `ground_tile`, `prop_tile`, `grade`, and the measured tile means. It
-does not add a sampler or a shader fetch.
+The binding slice changes `MapMaterials` from one placeholder surface to an act row
+containing `ground_tile`, `prop_tile`, `grade`, and measured tile means. It does not add
+a sampler or shader fetch.
 
 ## Grade bill — 4 painted textures
 
@@ -222,52 +224,52 @@ low-frequency top-down region/aerial grading; alpha carries contact darkening. T
 procedural 256×128 `_grade_image` remains the fallback and test oracle until each painted
 row lands.
 
-Grades require mipmaps and high-quality VRAM compression, but **do not** take tile seam
-or de-light gates. Their manifest kind receives grade-specific checks instead:
+Grades require mipmaps and high-quality VRAM compression, but do **not** take tile seam
+or de-light gates. Their manifest kind receives grade-specific checks:
 
 - exact 2:1 dimensions and RGBA channels;
 - finite channel range and non-empty alpha contact mask;
 - journey-axis value/saturation movement within the act's signed palette arc;
-- contact blobs stay inside declared module footprints;
+- contact blobs remain inside declared module footprints;
 - no high-frequency noise that survives the widest zoom.
 
-## Payload envelope
+## Budget envelope — keep the units separate
 
-Godot's 4.7 import guide budgets a 1024×1024 RGBA8 VRAM-compressed texture with
-mipmaps at about **1.33 MiB**. The same table scales a 512×256 grade to about
-**0.167 MiB**. Those figures are planning estimates, not exported IPA byte counts.
+Godot's 4.7 import guide estimates a 1024×1024 RGBA8 VRAM-compressed texture with
+mipmaps at about **1.33 MiB**. Scaling the same table gives about **0.167 MiB** for a
+512×256 grade. The tile estimate is conservative because the actual tiles are opaque.
 
-| Component | Count × cap | Planning total |
-|---|---:|---:|
-| 1024² material tiles | 8 × 1.33 MiB | 10.64 MiB |
-| 512×256 grades | 4 × 0.167 MiB | 0.67 MiB |
-| ordinary GLBs | 23 × 192 KiB | 4.31 MiB |
-| terminus GLBs | 4 × 768 KiB | 3.00 MiB |
-| **complete library ceiling** | | **18.62 MiB** |
+### Runtime texture VRAM planning
 
-Expected real GLBs are below their hard caps, so the working package expectation is
-**14–16 MiB**. Source PNG size, `.ctex` cache size, and final iOS package size are not
-interchangeable. The payload slice records all three and treats the signed iOS export as
-the source of truth.
+| Component | Count × estimate | All acts | Active act |
+|---|---:|---:|---:|
+| 1024² material tiles | 8 × 1.33 MiB | 10.64 MiB | 2.66 MiB |
+| 512×256 grades | 4 × 0.167 MiB | 0.67 MiB | 0.167 MiB |
+| **texture VRAM ceiling** | | **11.31 MiB** | **2.83 MiB** |
 
-One active act references at most:
+### Source/package geometry caps
 
-- two material tiles: about 2.66 MiB;
-- one grade: about 0.167 MiB;
-- eight ordinary GLBs: at most 1.50 MiB of package bytes;
-- one terminus: at most 0.75 MiB of package bytes.
+| Component | Count × hard cap | All acts | Active act |
+|---|---:|---:|---:|
+| ordinary GLBs | 23 × 192 KiB | 4.31 MiB | 1.50 MiB |
+| terminus GLBs | 4 × 768 KiB | 3.00 MiB | 0.75 MiB |
+| **source-GLB ceiling** | | **7.31 MiB** | **2.25 MiB** |
 
-That is a **5.1 MiB per-act file envelope**, excluding runtime vertex/index expansion,
-the SubViewport, materials, and engine overhead. Those are measured rather than inferred
-from GLB size. The runtime asset table must lazy-load the active act; preloading all four
-would defeat the resident budget without improving the static screen.
+GLB file size does not state runtime vertex/index memory. Likewise, VRAM estimates do
+not state IPA bytes. The payload closeout records four independent measurements:
+source assets, `.godot/imported` cache, identical-export IPA delta, and active-act
+runtime memory. The runtime asset table must lazy-load the active act; preloading all
+four defeats the resident budget without improving a static screen.
+
+The **≤16 MiB IPA target** is a delivery guardrail, not a derived claim. If the measured
+identical-export delta is above 18.7 MiB, this bill is reopened before more assets land.
 
 ## Godot 4.7.1 import contract
 
-The project already enables `textures/vram_compression/import_etc2_astc=true`, but the
-existing art sidecars are `compress/mode=0`. Every map PNG must be imported through the
-Godot editor/import pipeline — never by hand-editing `.import` — and the generated
-sidecar must assert:
+The project already enables
+`rendering/textures/vram_compression/import_etc2_astc=true`, but existing art sidecars
+are `compress/mode=0`. Every map PNG must be imported through Godot — never by manually
+editing `.import` — and the generated sidecar must assert:
 
 ```ini
 compress/mode=2
@@ -277,11 +279,11 @@ mipmaps/generate=true
 
 In Godot's importer enum, mode `2` is **VRAM Compressed**. On the Mobile renderer,
 `high_quality=true` selects ASTC for mobile targets; disabling it falls back to ETC2.
-Mipmaps are mandatory because the map has four discrete zoom stops and because the
-current checker already treats their absence as a failure.
+Mipmaps are mandatory for the four discrete zoom stops and the checker already treats
+their absence as failure.
 
-The ASTC slice extends `tools/check_map_assets.py` to require those three settings for
-both `tile` and `grade` rows, while applying seam/de-light only to `tile`. It also fails
+The ASTC slice extends `tools/check_map_assets.py` to require those settings for both
+`tile` and `grade` rows, while applying seam/de-light only to `tile`. It also fails
 undeclared files under `assets/art/map/`.
 
 ## Tripo gate — independently verified 2026-08-15
@@ -293,15 +295,15 @@ The current generation documentation verifies that the general v2+/v3 path suppo
 `quad=true` forces FBX output. `texture=false` requests geometry without textures, and
 `export_uv=false` avoids unnecessary unwrap work and model size.
 
-The new low-poly model `P1-20260311` is different: it accepts only its listed
-parameters. It supports `face_limit` from 48 to 20,000 plus `texture` and `pbr`, but it
-does **not** list `smart_low_poly`, `quad`, or `export_uv`; passing them is documented to
-return an error. Therefore the first trial uses P1 without those legacy switches.
+The new low-poly model `P1-20260311` accepts only its listed parameters. It supports
+`face_limit` from 48 to 20,000 plus `texture` and `pbr`, but it does **not** list
+`smart_low_poly`, `quad`, or `export_uv`; passing an unlisted parameter is documented to
+return an error. The first trial therefore uses P1 without those legacy switches.
 
 The ticket's old statement that Godot 4.7.1 cannot read FBX without an external
 converter is false. Godot 4.7 imports FBX through built-in `ufbx`; external FBX2glTF is
-the legacy optional path. GLB is still the required shipping format because Godot marks
-glTF 2.0 as recommended and Tripo's base OpenAPI model is GLB before optional conversion.
+the legacy optional path. GLB remains the shipping format because Godot marks glTF 2.0
+as recommended and Tripo's base OpenAPI model is GLB before optional conversion.
 
 ### First-trial parameter profiles
 
@@ -333,33 +335,33 @@ texture=false
 pbr=false
 ```
 
-No request uses `quad=true`. If a generated mesh needs retopology, perform the edit in
-Tripo's post-process or Blender, triangulate/validate there, and export one untextured
-GLB. FBX is accepted only as a temporary interchange file, never committed.
+No request uses `quad=true`. If a mesh needs retopology, perform it in Tripo's
+post-process or Blender, triangulate/validate there, and export one untextured GLB. FBX
+is temporary interchange only and is never committed.
 
 ### Paid-account and rights gate
 
-Tripo's Terms, last updated 2025-07-11, reserve the free user's input/output rights to
-Tripo, while paid users generally receive broad use and commercialisation rights and
-paid inputs/outputs are excluded from AI training under the stated terms. The API FAQ
-also says webapp and API billing are independent.
+Tripo's Terms, last updated 2025-07-11, reserve free-user input/output rights to Tripo.
+Subject to those Terms, paid users generally receive broad use and commercialisation
+rights, and the company says paid inputs/outputs are not used for AI training. The API
+FAQ also says webapp and API billing are independent.
 
 Operational rule: **the exact product that performs generation must be paid before the
-first shipping task**. An active Studio subscription does not prove the API task is paid,
-and API credits do not prove a Studio generation is paid.
+first shipping task**. A Studio subscription does not prove an API task is paid, and API
+credits do not prove a Studio generation is paid.
 
 No task is ordered until the ledger contains:
 
 - current terms URL, last-updated date, and captured digest;
 - product (`API` or `Studio`), paid tier/credit receipt, and account owner;
 - approved input concept path and proof that Glassvow may submit it;
-- task ID, model version, full parameters, prompt, negative prompt, and seeds;
+- task ID, model version, full parameters, prompts, and seeds;
 - downloaded source checksum;
 - Blender/hand-edit steps and tool versions;
 - final GLB checksum and reviewer acceptance.
 
 Free-tier experiments may be discarded, but their outputs, derivatives, or edited
-meshes never enter the repository or become a concept source for a shipping asset.
+meshes never enter the repository or become concept sources for shipping assets.
 
 ## Delivery slices after this decision
 
@@ -368,10 +370,10 @@ meshes never enter the repository or become a concept source for a shipping asse
 2. **First-module slice** — after paid-account evidence, land one ordinary GLB plus the
    Godot GPU silhouette raster gate and deterministic 20-placement capture.
 3. **Act kits** — land ordinary modules act by act, each under its own reviewable PR.
-4. **Grades and termini** — painted grades and hand-curated hero assets, with device
-   captures and no story-name dependency in file paths.
-5. **Payload closeout** — measure source, imported cache, exported iOS package delta,
-   and active-act runtime memory; update this envelope with evidence.
+4. **Grades and termini** — painted grades and hand-curated heroes, with device captures
+   and no story-name dependency in file paths.
+5. **Payload closeout** — measure source, import cache, iOS package delta, and active-act
+   runtime memory; update this envelope with evidence.
 
 No visual asset order was placed in the decision slice.
 
