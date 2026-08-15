@@ -19,14 +19,14 @@ static func run(fails: Array[String]) -> void:
 
 static func _thresholds(fails: Array[String]) -> void:
 	var cases: Array = [
-		[0, 0, true], [1, 0, false], [1, 1, true],
-		[2, 3, false], [2, 4, true], [3, 5, false], [3, 6, true],
+		[0, 0, 1], [1, 0, 0], [1, 1, 1],
+		[2, 3, 0], [2, 4, 1], [3, 5, 0], [3, 6, 1],
 	]
 	for row_v: Variant in cases:
 		var row: Array = row_v
 		var level: int = _i(row[0])
 		var shards: int = _i(row[1])
-		_check(fails, NarrativeGates.allows(level, shards) == (row[2] == true),
+		_check(fails, NarrativeGates.allows(level, shards) == (_i(row[2]) == 1),
 			"level %d / shards %d" % [level, shards])
 	_check(fails, NarrativeGates.loss_pool_index(0, 0) == -1
 		and NarrativeGates.loss_pool_index(0, 1) == 0
@@ -64,7 +64,7 @@ static func _losses(fails: Array[String]) -> void:
 	var vigil: VigilState = VigilState.blank()
 	var l0: RunState = _run(content, vigil, "run-loss-l0")
 	_check(fails, vigil.commit_run(l0, "death", content)
-		and _fall(vigil).get("standing", false) == true
+		and str(_fall(vigil).get("standing", false)) == "true"
 		and _i(_fall(vigil).get("lastWords", 99)) == -1
 		and _i(_fall(vigil).get("row", -1)) == 6
 		and _cursor(vigil) == 0 and vigil.whispers == 0,
