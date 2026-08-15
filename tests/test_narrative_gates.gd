@@ -92,14 +92,13 @@ static func _losses(fails: Array[String]) -> void:
 
 	loaded.quests["ownShade"]["memory"]["lossPoolCursor"] = 49
 	var last: RunState = _run(content, loaded, "run-loss-last")
-	var exhausted: RunState = _run(content, loaded, "run-loss-exhausted")
 	_check(fails, loaded.commit_run(last, "death", content)
 		and _i(_fall(loaded).get("lastWords", -1)) == 49
-		and _cursor(loaded) == 50
-		and loaded.commit_run(exhausted, "death", content)
+		and _cursor(loaded) == 50, "last loss slot was not reachable")
+	var exhausted: RunState = _run(content, loaded, "run-loss-exhausted")
+	_check(fails, loaded.commit_run(exhausted, "death", content)
 		and _i(_fall(loaded).get("lastWords", 99)) == -1
-		and _cursor(loaded) == 50,
-		"last slot/exhaustion wrapped or advanced")
+		and _cursor(loaded) == 50, "exhausted pool wrapped or advanced")
 	var before: int = loaded.whispers
 	_check(fails, loaded.commit_run(_run(content, loaded, "run-win"), "win", content)
 		and loaded.whispers == before + 1,
