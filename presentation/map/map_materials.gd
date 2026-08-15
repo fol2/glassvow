@@ -95,7 +95,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 		var loaded: Variant = _resource_loader.call(path)
 		if not (loaded is Resource):
 			continue
-		var resource: Resource = loaded as Resource
+		var resource: Resource = loaded
 		var kind: String = _row_string(row, "kind")
 		if kind in ["tile", "grade"] and not (resource is Texture2D):
 			continue
@@ -155,7 +155,8 @@ func _read_manifest() -> Dictionary:
 		return {}
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
 	if parsed is Dictionary:
-		return parsed as Dictionary
+		var manifest: Dictionary = parsed
+		return manifest
 	return {}
 
 
@@ -164,10 +165,11 @@ func _rows_from(manifest: Dictionary) -> Array[Dictionary]:
 	var raw: Variant = manifest.get("assets", [])
 	if not (raw is Array):
 		return rows
-	var items: Array = raw as Array
+	var items: Array = raw
 	for item: Variant in items:
 		if item is Dictionary:
-			rows.append(item as Dictionary)
+			var row: Dictionary = item
+			rows.append(row)
 	return rows
 
 
