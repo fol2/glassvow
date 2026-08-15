@@ -81,6 +81,21 @@ const REGIONS: Dictionary[StringName, Rect2] = {
 const HOOK_ORDER: Array[StringName] = [&"hook0", &"hook2", &"hook1"]
 const STANDS: Array[StringName] = [&"stand0", &"stand1"]
 
+## A region's box is the ware PLUS its tag; this is which end the tag takes.
+## Measured off the mock rather than chosen: a relic stands on the counter with
+## the rack immediately below it, so its tag is tied upward. Everything else —
+## the hooks, the bell jar on its own ledge — hangs its tag down.
+const TAG_ABOVE: Array[StringName] = [&"stand0", &"stand1"]
+
+## The identity shape's own cover scale, 820/1100: height-driven, because
+## 1180x820 is taller in proportion than the 1600x1100 painting.
+const IDENTITY_SCALE: float = 820.0 / 1100.0
+## Where type stops shrinking with the painting. Below this a tag is not a
+## smaller tag, it is an unreadable one, so it grows past its region instead and
+## `ShopScreen._seat` clamps it back into the frame. Portrait is the only shape
+## that reaches the floor today (0.36 at 9:20) and slice 3 of #242 owns it.
+const TYPE_FLOOR: float = 0.62
+
 ## The foreground rack is frame-locked, not scene-locked: it stands in front of
 ## the counter rather than on a painted feature, so it takes the band between
 ## the counter lip and the bottom edge and sizes its cards to fit.
@@ -97,6 +112,19 @@ static func fit(frame: Vector2) -> Transform2D:
 	var drawn: Vector2 = IMAGE * scale
 	return Transform2D(0.0, Vector2(scale, scale), 0.0,
 		(frame - drawn) * Vector2(0.5, COUNTER_LINE))
+
+
+## How large type must be drawn at this frame, as a multiple of the sizes the
+## mock was authored at.
+##
+## TYPE SCALES WITH THE PAINTING, NOT WITH THE WINDOW. Every ware sits in a
+## region that cover-fitting has already scaled — at 20:9 the whole scene is
+## drawn at 73% — so a tag held at its authored size overflows first its region
+## and then the frame. That is the 20:9 overflow slice 1 left behind, and one
+## factor off `fit()` is the whole of the fix. 1.0 at the identity shape by
+## construction: `fit(1180x820)` returns exactly IDENTITY_SCALE.
+static func type_scale(frame: Vector2) -> float:
+	return maxf(fit(frame).get_scale().x / IDENTITY_SCALE, TYPE_FLOOR)
 
 
 ## Where the painting itself is drawn.
