@@ -112,30 +112,76 @@ channel** — that is deliberate and `enemy_view.gd:4197` documents why.
 Introduced by 26b49af. **Prompt not recorded** — reconstruct and add it here
 the next time these are touched.
 
-### `scenes/night-stall.png` — 1600×1100 RGB — **INTERIM, concept-grade**
+### `scenes/night-stall.png` — 1512×1040 RGB — the approved landscape master
 
 The Night Stall, the shop's whole screen: concept C1 makes the painting the
 layout, so this is not decoration but the surface every ware is positioned
-against (`presentation/run/stall_layout.gd`). Copied verbatim from the signed
-design record at `docs/design/2026-08-14-ui-direction/stall-scene.png`, which
-is where #163 generated it as a **concept** render; #242 slice 1 gave it a
-`res://assets/` home so the production pass has a stable path to overwrite.
+against (`presentation/run/stall_layout.gd`). **James approved this file as the
+landscape master on 2026-08-15** (#242, "use that").
 
-**This is a placeholder and is listed here so it cannot become the next
-`meta/hollow-lamplighter`.** #242 slice 3 replaces the bytes at this same path
-with a production render, and the replacement is bound by three numbers the
-layout depends on, not by taste alone:
+**It was not generated from a prompt. It is the fourth step of an edit chain**,
+and the chain is the provenance — each step took the previous image as input:
 
-- **1600×1100** (aspect 1.4545), or `StallLayout.IMAGE` moves with it.
-- **The counter's front lip at v = 0.7073** — the horizon the whole crop
-  pivots on.
-- **Nothing load-bearing outside `StallLayout.SAFE_BAND`** — u ∈ [0.042,
-  0.958], v ∈ [0.245, 0.899]. The three canopy hooks, both counter stands, the
-  right-hand ledge and the stair treads must all be painted inside it, because
-  a 20:9 frame crops the rest away.
+1. **The signed C1 concept** — #163's render, still in the design record at
+   `docs/design/2026-08-14-ui-direction/stall-scene.png` (1600×1100, gpt-image
+   lineage, **prompt never logged**). #242 slice 1 copied it verbatim to this
+   asset path as an explicit interim. James rejected its visual state on
+   2026-08-15 on four counts: generation noise, one-asset-per-aspect, zero
+   chrome over the painting, and ware scale — and specifically ruled that
+   **phials hanging on canopy hooks reads wrong; the hooks become a shelf**.
+2. **Cursor/grok partial update** — image-to-image over step 1: canopy hooks
+   replaced by a wooden shelf, carrying **two deliberately big potions** as a
+   scale reference. Edit instruction (verbatim core, `cursor-agent`,
+   `cursor-grok-4.6-high`, 2026-08-15): *"PARTIAL UPDATE of an approved image …
+   THE ONE CHANGE: in the area under the canopy where hanging hooks are,
+   replace the hooks with a wooden potion SHELF (same wood/gothic vocabulary as
+   the stall), holding EXACTLY TWO BIG potion bottles — large enough to read
+   clearly at game scale, standing on the shelf, glass glinting in the lantern
+   light. Nothing else on the shelf. No other goods appear anywhere. ALSO: a
+   gentle global cleanup/denoise pass — clear up AI generation noise and muddy
+   strokes across the image, without changing any composition, colors, or
+   elements."*
+3. **James hand-cleaned the strokes himself** on step 2's output. **His cleaned
+   file is the canonical step 1 of the two-step pipeline he specified**, and it
+   is the file committed as the scale reference (below).
+4. **Cursor removal pass** — the two potions painted out of James's cleaned
+   image, leaving the empty shelf. This file. James's own denoise attempt on
+   step 2 failed and was abandoned; the Cursor output stands as approved.
+   Edit instruction (verbatim core, same tool/model): *"PARTIAL UPDATE, one
+   removal only … THE ONE CHANGE: remove the TWO potion bottles (red and
+   purple) standing on the wooden shelf. The shelf itself stays exactly as it
+   is — same wood, same gothic arch backboard, same shadows and lantern light —
+   just EMPTY where the two bottles stood, showing bare shelf plank and
+   backboard behind. Do not add anything in their place."*
 
-**Prompt not recorded** — #163 generated this without logging one. Slice 3 must
-write its prompt here.
+**The scale reference is a committed artefact, not a scratch file.** Step 3
+lives at `docs/design/2026-08-14-ui-direction/night-stall-2potions-reference.png`
+(1512×1040) and is the ONLY measured datum for how large a ware reads on this
+shelf: two bottles 206 image px tall (in this master's own vertical scale —
+the reference's content sits 3.2% shorter, fitted `empty_y = potions_y * 1.0331
++ 2.1`, correlation 0.994), standing at u 0.6521–0.6997 and 0.7255–0.7705 with
+their bases on the shelf's lit line. `StallLayout`'s region book derives the
+phial columns from it and records, in the same docstring, why the runtime flask
+lands at 79% of that height rather than 100%. Do not delete or crop that file;
+re-measuring the book means re-measuring against it.
+
+Anything that replaces the bytes at this asset path is bound by the numbers the
+layout depends on, not by taste alone. All of them are measured off this file by
+column/row luminance profile, not eyeballed:
+
+- **1512×1040** (aspect 1.4538), or `StallLayout.IMAGE` moves with it.
+- **The counter's front lip at v = 0.7721** — the horizon the whole crop pivots
+  on, dead straight from u 0.32 to 0.91.
+- **The shelf's lit top face at v = 0.5250**, board u 0.5377–0.885 — the seat
+  every phial stands on.
+- **Nothing load-bearing outside `StallLayout.SAFE_BAND`** — u ∈ [0.0415,
+  0.9585], v ∈ [0.2672, 0.9210]. Shelf, both counter stands, the counter's
+  right end and the stair treads are all painted inside it, because a 20:9
+  frame crops the rest away.
+
+**Portrait is still open.** James's per-aspect ruling gives 9:20 its own
+composition (canopy → shelf → counter → foreground rack), through the same
+two-step pipeline once this landscape settles. It is not this file cropped.
 
 ### `title/splash.png` — 2360×1640 RGBA
 

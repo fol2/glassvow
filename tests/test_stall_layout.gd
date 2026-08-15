@@ -68,17 +68,19 @@ static func _authored_inside_safe_band(fails: Array[String]) -> void:
 			"region %s is authored outside the safe band %s: %s" % [
 				region, StallLayout.SAFE_BAND, box])
 	# Every anchor above is a fraction OF THIS IMAGE, so a replacement painting
-	# of another size silently moves all of them. Slice 3 overwrites this file;
-	# this is the line that stops it doing so quietly.
+	# of another size silently moves all of them. Slice 3 overwrote this file
+	# once already; this is the line that stops the next one doing so quietly.
 	var painting: Texture2D = load(StallLayout.BACKDROP) as Texture2D
 	_check(fails, painting != null
 		and Vector2(painting.get_size()) == StallLayout.IMAGE,
 		"the painting at %s is not %s" % [StallLayout.BACKDROP, StallLayout.IMAGE])
-	# The mock this was measured from: 1600x1100 cover-fitted into 1180x820.
+	# The approved master, cover-fitted into 1180x820: 1512x1040 is taller in
+	# proportion than the frame, so the fit is height-driven and the painting
+	# overhangs 6.08px each side.
 	var identity: Rect2 = StallLayout.canvas(Vector2(1180.0, 820.0))
-	_check(fails, identity.position.distance_to(Vector2(-6.36, 0.0)) < 0.1
-		and absf(identity.size.x - 1192.73) < 0.1 and absf(identity.size.y - 820.0) < 0.1,
-		"identity shape no longer reproduces the mock canvas: %s" % identity)
+	_check(fails, identity.position.distance_to(Vector2(-6.0769, 0.0)) < 0.1
+		and absf(identity.size.x - 1192.1538) < 0.1 and absf(identity.size.y - 820.0) < 0.1,
+		"identity shape no longer reproduces the master's cover fit: %s" % identity)
 	# Type is measured at the identity shape, so the factor there must be 1.0 or
 	# every size in `WareTag` has quietly stopped meaning what the mock says.
 	_check(fails, absf(StallLayout.type_scale(Vector2(1180.0, 820.0)) - 1.0) < 0.001,
@@ -136,6 +138,8 @@ static func _screen_holds(fails: Array[String], label: StringName,
 					"%s tag row for %s/%d draws past its block: %.1f > %.1f (%s)" % [
 						label, entry["kind"], entry["index"],
 						run_w, tag.size.x, str(row["text"]).left(24)])
+	if label != &"phone-portrait-9x20":
+		_seated_on_the_painting(fails, label, screen, frame)
 	var jar: Rect2 = Rect2(screen._jar.position, screen._jar.size)
 	_check(fails, jar.size.x > 0.0 and jar.size.y > 0.0 and view.encloses(jar),
 		"%s the bell jar is unseated: %s in %s" % [label, jar, frame])
@@ -145,6 +149,44 @@ static func _screen_holds(fails: Array[String], label: StringName,
 	_check(fails, screen._say.position.y >= screen._hud_band(),
 		"%s the merchant's line runs under the HUD band: %.1f" % [
 			label, screen._say.position.y])
+
+
+## James's scale ruling (#242, 2026-08-15): a ware sits in the painting's own
+## perspective, on the furniture it rests on — never floating at UI scale. Which
+## makes it a measurable property, not a taste one: every phial's foot lands on
+## the painted shelf board and every relic's on the painted counter slab, at
+## every landscape shape.
+##
+## Both feet are EXACT by construction, so the tolerance is a hairline rather
+## than a budget: a relic's tag is above it and `_seat` pins a tag-above foot to
+## the region's bottom edge; a phial's ware rect is its own column, square, so
+## its foot is the region's top plus that width. Neither moves when rules text
+## wraps differently — which is the whole point, and was measured failing at
+## 20px before the square-ware rule landed. Two image px is the assertion.
+const SEAT_TOL: float = 0.002
+
+
+static func _seated_on_the_painting(fails: Array[String], label: StringName,
+		screen: ShopScreen, frame: Vector2) -> void:
+	var canvas: Rect2 = StallLayout.canvas(frame)
+	for entry: Dictionary in screen._slots:
+		var region: StringName = entry["region"]
+		var seat: float = 0.0
+		var surface: String = ""
+		if StallLayout.SHELF_SEATS.has(region):
+			seat = StallLayout.SHELF_LINE + StallLayout.PHIAL_SINK
+			surface = "the shelf board"
+		elif StallLayout.STANDS.has(region):
+			seat = StallLayout.COUNTER_SEAT
+			surface = "the counter slab"
+		else:
+			continue
+		var control: Control = entry["control"]
+		var foot: float = (control.position.y + control.size.y
+			- canvas.position.y) / canvas.size.y
+		_check(fails, absf(foot - seat) <= SEAT_TOL,
+			"%s %s is not standing on %s: foot at v=%.4f, wanted %.4f" % [
+				label, region, surface, foot, seat])
 
 
 ## What the tag DREW, not what it was told: `_rows` is the list `_draw` walks,
