@@ -1,19 +1,12 @@
 class_name MapBand
 extends Control
-## One parallax strip of the pilgrimage map. Host owns camera + PointerDrift;
+## Overlay strip of the pilgrimage map. Host owns camera + PointerDrift;
 ## bands store the amplitude-scaled slice and redraw when it moves enough.
-## Child order IS paint order (sky → region → path → waystones → veil), so the
-## Spire wedge sits behind the region trees by construction.
+## Child order IS paint order: MapScene (world) → path → waystones → chips → veil.
+## SkyBand / RegionBand retired in #234 slice 7b2 — 3D MapScene owns the world.
 
 const CAM_EPS: float = 0.05
 const DRIFT_EPS: float = 0.1
-## Far bands are full-rect Controls painted with a divided drift; the sky bleeds
-## above the frame and the region below it so a pointer lean never opens raw
-## stage. Must stay ≥ the far-band drift amplitude
-## (WorldMapScreen.PATH_DRIFT_AMP.y / 3.0 = 4.0) — asserted in tests/test_map.gd,
-## because map_band and world_map_screen are a cyclic class_name pair and a
-## const expression across them is not safe to write.
-const FAR_BLEED: float = 8.0
 
 var factor: float = 1.0
 var cam_x: float = 0.0
@@ -22,7 +15,6 @@ var drift: Vector2 = Vector2.ZERO  # px; host already scaled the amplitude
 ## freeze weather the moment the camera rests.
 var gated: bool = true
 var host: WorldMapScreen = null
-var _flash: float = 0.0
 
 
 func _init(p_factor: float = 1.0) -> void:
@@ -45,452 +37,23 @@ func set_view(p_cam_x: float, p_drift: Vector2, force: bool = false) -> void:
 		queue_redraw()
 
 
-## Heat-lightning envelope from the host. Redraw only on a meaningful step
-## (or when the flash dies) so a decaying sub-cent pulse does not thrash.
-func set_flash(v: float) -> void:
-	var prev: float = _flash
-	_flash = v
-	if absf(v - prev) > 0.01 or (v <= 0.0 and prev > 0.0):
-		queue_redraw()
-
-
-## Each band washes only the area it painted — both far bands are full-rect
-## Controls, so an unclipped overlay double-applies (composite 0.19, not the
-## intended 0.10) and would sit over P5.6's strips (PR #75 DL R1).
-func _draw_flash_overlay(rect: Rect2) -> void:
-	if _flash <= 0.0:
-		return
-	draw_rect(rect, Color(MapRegions.LIGHTNING_TONE, _flash * 0.10))
-
-
-class SkyBand extends MapBand:
-	var _strip: Texture2D = null
-
-	func _init() -> void:
-		super(0.10)
-
-	func apply_region(region: MapRegions) -> void:
-		_strip = MapStrip.fetch(region.act, &"skyband")
-		queue_redraw()
-
-	func _draw() -> void:
-		if host == null:
-			return
-		var w: float = size.x
-		var h: float = size.y
-		# Night gradient lives on this band — siblings BELOW the waystones, not
-		# a TextureRect that would sit above the screen's old single _draw pass.
-		draw_texture_rect(host._sky_tex, Rect2(Vector2.ZERO, size), false)
-		draw_texture_rect(SkyField.disc(),
-			Rect2(-w * 0.10 + drift.x, h * 0.22 + drift.y, w * 1.20, h * 0.60),
-			false, Color(host._fog_colour.lightened(0.42), 0.28))
-		var horizon: float = h * host._trail_num("horizonY", 0.36)
-		# The strip is the band's ATMOSPHERE; the Spire is an OBJECT on it. They
-		# are drawn together, never one instead of the other: §1 makes the Spire a
-		# single constant goal-anchor doubling as an act meter, and a tiling
-		# backdrop cannot hold a singular landmark — a 3072-wide strip lays two
-		# tiles on a 1180 stage and the anchor becomes wallpaper (PR #77 DL R1).
-		# The screen-anchor rule below survives for the same reason.
-		if _strip != null:
-			MapStrip.draw_tiled(self, _strip, strip_rect(w, horizon),
-				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
-		_draw_spire(w, horizon)
-		# Washes the SKY, not the stage. The full-rect version put a step across
-		# the horizon: below it the region's ground scrim is only 0.38, so the
-		# sky's flash survived at 0.62 of its strength and added to the region's
-		# own wash — one flash counted twice on the lower two thirds of the
-		# frame, for the ~0.5s it lasts. Each band washes what it painted, which
-		# is the same rule `_draw_flash_overlay`'s own docstring states and this
-		# call site did not follow (#69 C2).
-		# Ends exactly where the region's ground begins — `horizon + drift.y`, the
-		# same expression with the same `far_d` both bands are pushed. An earlier
-		# revision used `horizon + FAR_BLEED`, which is drift-blind, so the two
-		# rects overlapped 4-12px and left a full-width band at 1.63x the wash
-		# during a flash: the step became a hairline instead of going (PR #80 DL R1).
-		_draw_flash_overlay(Rect2(0.0, 0.0, w, horizon + drift.y))
-
-	## Atmosphere tile. Horizon is the undrifted book value — the strip is
-	## screen-anchored so a pointer lean cannot open a gap at the top of the
-	## frame. Height is horizon + FAR_BLEED; the extra is a seam into the
-	## region, not exclusive sky. `_draw` asks this, and so does the #86 gate
-	## in tests/test_map.gd, so the two cannot drift.
-	static func strip_rect(w: float, horizon: float) -> Rect2:
-		return Rect2(0.0, 0.0, w, horizon + FAR_BLEED)
-
-	## The §1 goal-anchor. SCREEN-anchored — at 0.10 the whole journey drifts a
-	## lone object only a tenth of the act, so a world anchor parks it off-stage
-	## for every step of the walk (PR #71 DL R2).
-	##
-	## The silhouette is read from near-vertical converging edges, so the SLANT is
-	## the invariant, not the top width: deriving `top_w` from `base_w` made the
-	## flare grow with the act AND with the stage's aspect — one intent gave 14.1°
-	## on phone-portrait and 40.9° on desktop-landscape, and act 2 read as a
-	## mountain (PR #77 DL R1). Holding the slant instead means the three acts are
-	## the same building seen from three distances, which is what an act meter has
-	## to be. `MapRegions.SPIRE_SLANT` documents where the taper floor makes that
-	## ≤13° rather than =13°.
-	##
-	## "Converging edges" is the reading, not a promise that both are on stage: at
-	## act 2 on a wide shape the right edge clears the frame at every visible row
-	## (1194.4 against a 1180 stage), so what ships is one leaning edge and a wall
-	## of glass. That IS standing at its foot. Portrait shapes keep both edges, so
-	## act 2 is shape-dependent before anyone paints it — noted on #70 for P5.8.
-	func _draw_spire(w: float, horizon: float) -> void:
-		var act: int = host._act
-		if host._region != null:
-			act = host._region.act
-		act = clampi(act, 0, MapRegions.SPIRE_W_RATE.size() - 1)
-		var base_w: float = w * MapRegions.SPIRE_W_RATE[act] * 0.5
-		var apex_y: float = horizon * (1.0 - MapRegions.SPIRE_H_RATE[act]) - FAR_BLEED
-		# Floored at a fraction of the base so a tall narrow stage can never
-		# invert the taper into an hourglass.
-		var top_w: float = maxf(base_w - (horizon - apex_y) * MapRegions.SPIRE_SLANT,
-			base_w * 0.18)
-		var centre: float = w * 0.82 - cam_x * factor + drift.x
-		# Near acts cut BELOW the sky, far acts lift toward the fog — see the
-		# ramp docstring in map_regions.gd for why darkening alone leaves act 0
-		# with no readable silhouette at all.
-		var tone: Color = host._sky_colour.darkened(MapRegions.SPIRE_DARKEN[act])
-		tone = tone.lerp(host._fog_colour.lightened(0.35),
-			MapRegions.SPIRE_HAZE[act])
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(centre - top_w, apex_y + drift.y),
-			Vector2(centre + top_w, apex_y + drift.y),
-			Vector2(centre + base_w, horizon + drift.y),
-			Vector2(centre - base_w, horizon + drift.y),
-		]), tone)
-
-
-class RegionBand extends MapBand:
-	## Fallback trees rise past the horizon by at most this fraction of the
-	## horizon→path span: max tree_h 0.783 − min base 0.113 = 0.670, written
-	## 0.67 as the issue states it. A pixel constant would be the BED_HALF
-	## lesson again (#69 C5): 154 px is 0.67 of pad-landscape's span and
-	## nearly 3× phone-landscape's. The region strip opens this room so
-	## authored crowns are not decapitated at the horizon (#86). The strip
-	## may overlay the lower sky — that is the same composition the fallback
-	## already paints — but `strip_rect` will not climb past
-	## `SkyBand.strip_rect`'s top edge; above that is empty stage, not sky.
-	## Clamping against the sky strip's *bottom* (horizon + FAR_BLEED) would
-	## seat the rect *below* the horizon and undo the bleed.
-	const CROWN_OVERSHOOT: float = 0.67
-
-	## Shaft sway clock — advanced only when motion is allowed, so reduce-motion
-	## stills the caustics the same way it stills the veil.
-	var _age: float = 0.0
-	var _strip: Texture2D = null
-
-	func _init() -> void:
-		super(0.35)
-
-	## The sunken region ungates so the shafts keep swaying while the camera
-	## rests; the other weathers stay gated (static silhouettes need no
-	## per-frame paint). The band asks the config, not the act index.
-	func apply_region(region: MapRegions) -> void:
-		gated = region.weather != &"sunken"
-		set_process(region.weather == &"sunken")
-		_strip = MapStrip.fetch(region.act, &"region")
-		queue_redraw()
-
-	## Painted region-strip rect. `horizon` / `path_y` are the drifted book
-	## values `_draw` uses; `sky_horizon` is SkyBand's undrifted horizon so
-	## the clamp asks `SkyBand.strip_rect` rather than restating it. `_draw`
-	## asks this, and so does the #86 gate, so a rect the suite has never
-	## seen cannot ship.
-	static func strip_rect(w: float, h: float, horizon: float, path_y: float,
-			sky_horizon: float) -> Rect2:
-		var span_y: float = path_y - horizon
-		var bleed: float = maxf(span_y, 0.0) * CROWN_OVERSHOOT
-		var sky: Rect2 = SkyBand.strip_rect(w, sky_horizon)
-		# Never climb out of the sky strip. Its top edge is the frame top
-		# (y = 0). Its bottom sits at horizon + FAR_BLEED and is already a
-		# seam into this band; clamping against that bottom would put the
-		# strip below the horizon and decapitate the crowns this function
-		# exists to keep.
-		var top: float = maxf(horizon - bleed, sky.position.y)
-		return Rect2(0.0, top, w, h - top + FAR_BLEED)
-
-	func _process(delta: float) -> void:
-		if host == null:
-			return
-		# Stilled sway re-gates the band: repainting an identical frame is
-		# the cost the gate exists to avoid (PR #75 DL R1 NIT).
-		gated = Preferences.active.reduce_motion
-		if Preferences.active.reduce_motion:
-			return
-		_age += delta
-
-	func _draw() -> void:
-		if host == null:
-			return
-		var w: float = size.x
-		var h: float = size.y
-		var sky_horizon: float = h * host._trail_num("horizonY", 0.36)
-		var horizon: float = sky_horizon + drift.y
-		var path_y: float = h * host._trail_num("pathY", 0.64) + drift.y
-		# Bleeds past the frame bottom by more than the far drift amplitude —
-		# an upward lean must not leave a strip of raw sky under the ground.
-		draw_rect(Rect2(0.0, horizon, w, h - horizon + FAR_BLEED),
-			Color(WorldMapScreen.REGION_GROUND, 0.62 if host._act == 0 else 0.38))
-		var ground: Rect2 = Rect2(0.0, horizon, w, h - horizon)
-		# The strip covers the WHOLE ground, not just the skyline — so it goes in
-		# BEFORE the shafts, not after. The clouds it was modelled on are 54–93px
-		# discs at the horizon; this is a 533px quad that would swallow act 1's
-		# signature weather entirely (PR #77 DL R1). Caustics are volumetric light
-		# between the viewer and the drowned towers: they belong in front.
-		# The rect itself starts ABOVE the horizon by the fallback's crown
-		# overshoot (#86). Ground scrim stays put: lifting it would wash the
-		# sky the crowns stand in front of, and the sky flash already covers
-		# that band (a second wash there is the #69 C2 / PR #80 double-count).
-		if _strip != null:
-			MapStrip.draw_tiled(self, _strip,
-				strip_rect(w, h, horizon, path_y, sky_horizon),
-				cam_x * factor - drift.x, Color(1.0, 1.0, 1.0, 1.0))
-		if host._region != null and host._region.weather == &"sunken":
-			_draw_shafts(w, horizon, path_y)
-		if _strip != null:
-			_draw_flash_overlay(ground)
-			return
-		if host._act > 0:
-			for cloud: int in range(9):
-				var cloud_w: float = w * (0.18 + float(cloud % 3) * 0.035)
-				var cloud_h: float = 54.0 + float(cloud % 4) * 13.0
-				var x: float = fposmod(float(cloud) * w * 0.17 - cam_x * factor,
-					w + cloud_w) - cloud_w + drift.x
-				draw_texture_rect(SkyField.disc(),
-					Rect2(x, horizon - cloud_h * 0.68, cloud_w, cloud_h), false,
-					Color(host._fog_colour.lightened(0.50), 0.15))
-			_draw_flash_overlay(ground)
-			return
-		# Trees derive from the horizon→path span — the RATIOS are the P5.2
-		# absolutes read against that shape's own span (bases 321–351 and
-		# heights 90–180 over a 230px span at pad-landscape → 0.113–0.244 and
-		# 0.391–0.783), so the identity shape keeps its approved look while
-		# phone-landscape (span 55: bases 146.2–153.4, ribbon 195) stays clear.
-		var span_y: float = path_y - horizon
-		var span: float = w + 400.0
-		var trunk: Color = Color(0.025, 0.065, 0.048, 0.94)
-		var rim: Color = Color(host._accent_colour, 0.08)
-		for tree: int in range(20):
-			var index: float = float(tree)
-			var x: float = fposmod(index * 163.0 - cam_x * factor, span) \
-				- 200.0 + drift.x
-			var tree_h: float = span_y * (0.391 + fmod(index * 53.0, 90.0) / 90.0 * 0.392)
-			var base_y: float = horizon + span_y * (0.113 \
-				+ fmod(index * 29.0, 30.0) / 30.0 * 0.131)
-			var top_y: float = base_y - tree_h
-			draw_colored_polygon(PackedVector2Array([
-				Vector2(x - 8.0, base_y), Vector2(x - 2.5, top_y),
-				Vector2(x + 2.5, top_y), Vector2(x + 8.0, base_y),
-			]), trunk)
-			draw_line(Vector2(x, top_y + tree_h * 0.30),
-				Vector2(x - 28.0, top_y + tree_h * 0.06), trunk, 4.0)
-			draw_line(Vector2(x, top_y + tree_h * 0.46),
-				Vector2(x + 32.0, top_y + tree_h * 0.14), trunk, 4.0)
-			draw_line(Vector2(x - 2.5, top_y),
-				Vector2(x - 5.0, top_y + tree_h * 0.45), rim, 1.0)
-		_draw_flash_overlay(ground)
-
-	## Act 1's caustics, in the REGION band only — a deliberate departure from
-	## §3's "sink through the bands", recorded here because this is where the
-	## next reader will come looking for the missing echo (#69 C1).
-	##
-	## The veil is the 1.35 overshoot plane: a shaft drawn there crosses IN FRONT
-	## of the waystones and the graph, which is the wrong-plane failure #66/#67
-	## already cost two rounds. Depth here is bought by the shafts standing
-	## BEHIND the stones while the rising motes drift in front of them — two
-	## planes doing different jobs. A near echo would put the same vocabulary on
-	## both sides of the play plane and flatten the very cue it copies.
-	func _draw_shafts(w: float, horizon: float, path_y: float) -> void:
-		# Six near-vertical caustics between horizon and path — the Sunken
-		# City's drowned light. Sway is deterministic off _age + index. Each
-		# shaft is two per-vertex-ramped quads (a wide veil over a narrower
-		# core) fading to nothing at the road: light that SINKS must not end
-		# in a flat cut a few px under the ribbon (PR #75 DL R1).
-		for i: int in range(6):
-			var fi: float = float(i)
-			var sway: float = sin(_age * 0.4 + fi * 1.7)
-			var x: float = fposmod(fi * w * 0.19 - cam_x * factor, w * 1.2) \
-				- w * 0.1 + sway * 14.0 + drift.x
-			var alpha: float = 0.05 + 0.03 * (0.5 + 0.5 * sway)
-			var glow: Color = host._glow_colour
-			var clear: Color = Color(glow, 0.0)
-			draw_polygon(PackedVector2Array([
-				Vector2(x - 14.0, horizon), Vector2(x + 14.0, horizon),
-				Vector2(x + 34.0, path_y), Vector2(x - 34.0, path_y),
-			]), PackedColorArray([
-				Color(glow, alpha * 0.7), Color(glow, alpha * 0.7),
-				clear, clear,
-			]))
-			draw_polygon(PackedVector2Array([
-				Vector2(x - 7.0, horizon), Vector2(x + 7.0, horizon),
-				Vector2(x + 17.0, path_y), Vector2(x - 17.0, path_y),
-			]), PackedColorArray([
-				Color(glow, alpha * 0.6), Color(glow, alpha * 0.6),
-				clear, clear,
-			]))
-
-
 class PathBand extends MapBand:
-	## Alpha at the crown of the road bed, at the lip where the bed ends, and the
-	## verge's reach as a multiple of the bed's own half-height.
-	##
-	## The lip is what makes this a road rather than a band of haze, and it is a
-	## GRADIENT BREAK, not a stroke: the bed falls 0.09 → 0.03 across its half,
-	## then the verge falls 0.03 → 0 across a further 0.9 of that half — `VERGE`
-	## is the verge's REACH from the crown, so the verge is slightly NARROWER
-	## than the bed, not "nearly twice" it as this sentence read until PR #84
-	## DL R1 m1 measured the profile and found it zero at t = 1.9. The slope
-	## changes at the lip and nothing hard is drawn, because the dashes own the
-	## only hard line on this plane (#64) and a second one reads as one thing
-	## drawn twice (#66/#67).
-	const BED_A: float = 0.09
-	const LIP_A: float = 0.03
-	const VERGE: float = 1.9
-	## Steps across the frame. The taper is piecewise LINEAR — depth is linear in
-	## x and the taper is linear in depth — so this polyline is exact everywhere
-	## except within one cell of the kink at the camera's seat.
-	##
-	## With slope `s = base · 0.18 / step`, cell width `h = W / BED_STEPS` and the
-	## kink sitting `f` of a cell from the nearest vertex, the deficit there is
-	## `2·s·h·f·(1−f)`, bounded by `s·h/2` — HALF the one-cell figure this
-	## docstring used to quote, and quoted for the wrong shape besides (PR #84
-	## PM R1). Solved per shape, the bed boundary is off by **0.0035–0.0762 px**
-	## and the verge's outer boundary, at 1.9× the slope, by up to **0.1448 px**.
-	##
-	## Worst is **phone-portrait**, and the reason is the thing to carry away: it
-	## is the one shape that overrides `lead` (0.22, and `stepMin` 128). Elsewhere
-	## `lead·BED_STEPS = 0.333·24 = 7.992`, so the kink lands within 0.008 of a
-	## cell of vertex 8 and the error is ~0.005 px; at 0.22 it lands 0.28 of a
-	## cell away and the error is 16× larger. **BED_STEPS and `lead` are coupled**
-	## — a value that is not a multiple of three stops the kink landing on a
-	## vertex at the four shapes where it currently does.
-	##
-	## Two further facts measured on this polyline, neither of them its fault:
-	## the `bed_taper` floor IS reached on desktop-landscape, adding a second
-	## kink over the final 5.8 px of a 1458 px stage (sub-pixel, non-degenerate);
-	## and the rendered apex measures 6.85 px against the formula's 7.61 — a
-	## deficit of 0.76 px, quoted to the precision that makes it fall out of the
-	## subtraction as well as out of the ~10% (PR #84 DL R3). Isolated by
-	## re-rendering with the taper disabled and fitting a 12-frame median per
-	## column — a different control from `bed_taper`'s alpha-zero differencing,
-	## and used for a different job, though both fit the SAME 6.85 px.
-	##
-	## That deficit is 0.76 px, i.e. **162× the chord error at pad-landscape
-	## where it was measured** (0.0047 px) and 10× even the worst-shape BED figure
-	## above — two orders of magnitude, not the three an earlier draft of this
-	## sentence claimed, which PR #84 DL R2 falsified against numbers eight lines
-	## up. The conclusion is unchanged and the correction matters anyway: this
-	## sentence is the whole argument for not chasing the defect, so it cannot be
-	## the one carrying an unreproducible figure.
-	##
-	## What IS known, and is worth a reader's time before they spend a capture
-	## round: at the far edge the formula and the measurement agree to within a
-	## couple of percent, against −10% at the apex. **The effect is apex-local —
-	## not a global scale factor and not a constant threshold loss.** The cause
-	## is still unresolved. It is benign, and arguably load-bearing: a blunt apex
-	## is what stops the taper reading as an arrowhead.
-	const BED_STEPS: int = 24
-
 	func _init() -> void:
 		super(1.0)
 		gated = false
 
-	## The bed and its verge, tapered per column. Four strips: bed and verge,
-	## above and below `path_y`.
-	##
-	## The half-height comes from `host.bed_half(x)` — the screen owns it because
-	## the taper reads the same depth the stones do, and this map has twice paid
-	## for a second derivation of one projection (#70, carried from #69 C5/A7).
-	func _draw_bed(w: float, path_y: float) -> void:
-		var glass: Color = GlassStyle.GLASS
-		_draw_ramp(w, path_y, -1.0, 0.0, 1.0, BED_A, LIP_A, glass)
-		_draw_ramp(w, path_y, 1.0, 0.0, 1.0, BED_A, LIP_A, glass)
-		_draw_ramp(w, path_y, -1.0, 1.0, VERGE, LIP_A, 0.0, glass)
-		_draw_ramp(w, path_y, 1.0, 1.0, VERGE, LIP_A, 0.0, glass)
-
-	## One tapered strip: from `from_mul` of the bed's half-height to `to_mul`,
-	## fading `a_from` to `a_to`, on the `sign` side of the road.
-	func _draw_ramp(w: float, path_y: float, sign: float, from_mul: float,
-			to_mul: float, a_from: float, a_to: float, tone: Color) -> void:
-		var points: PackedVector2Array = PackedVector2Array()
-		var colours: PackedColorArray = PackedColorArray()
-		var near: Color = Color(tone.r, tone.g, tone.b, a_from)
-		var far: Color = Color(tone.r, tone.g, tone.b, a_to)
-		for i: int in range(BED_STEPS + 1):
-			var x: float = w * float(i) / float(BED_STEPS)
-			points.append(Vector2(x, path_y + sign * host.bed_half(x) * from_mul))
-			colours.append(near)
-		for i: int in range(BED_STEPS, -1, -1):
-			var x: float = w * float(i) / float(BED_STEPS)
-			points.append(Vector2(x, path_y + sign * host.bed_half(x) * to_mul))
-			colours.append(far)
-		draw_polygon(points, colours)
-
 	func _draw() -> void:
 		if host == null:
 			return
-		# Slice 7b: 3D MapScene owns the ground. This band is the graph overlay
-		# — frozen edges projected between seats, plus the lantern glow.
+		# 3D MapScene owns the ground. This band is the graph overlay —
+		# frozen edges projected between lattice seats, plus the lantern glow.
+		# `_draw_bed` / `_draw_rose_window` retired with the 2D road in #234 7b2.
 		_draw_graph()
 		if host.map.at >= 0 and host.map.at < host.map.nodes.size():
 			var at: Vector2 = host.marker_screen_position()
 			var ember: Color = GlassStyle.EMBER
 			draw_circle(at, 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 			draw_circle(at, 15.0, Color(ember.r, ember.g, ember.b, 0.18))
-
-	## §3 keystone backdrop — quiet night-glass silhouette; painted art is
-	## P5.6+/P5.8. The window is an ARCH the stone stands at the foot of: its
-	## base meets the path, low-alpha panes fill the upper fan (leading needs
-	## glass to separate — rings alone read as a reticle), every weight sits
-	## BELOW the path ribbon's, and the leading springs from the stone's rim.
-	## P5.8 NOTE: anchored to the boss node's _node_pos at parallax 1.0 as a
-	## stand-in; painted terminus architecture belongs to the region plane
-	## (§5 band 2) and must not inherit this placement contract.
-	func _draw_rose_window() -> void:
-		var boss: MapNode = null
-		for node: MapNode in host.map.nodes:
-			if node.type == "boss":
-				boss = node
-				break
-		if boss == null:
-			return
-		var pos: Vector2 = host._node_pos(boss)
-		var depth: float = host.depth_of(host._world_x(float(boss.row)))
-		# The radius lives on the HOST, not here. It was a copy of the stones'
-		# curve once, and when that curve's anchor moved from 1.08 to 1.0 the
-		# copy was left behind for one commit — an arch 8% larger than the
-		# keystone standing at its foot, at the terminus, the one frame this
-		# whole change exists to compose (PR #79 PM R1). One function now, so a
-		# later edit cannot move the stones without moving the arch, and so
-		# `tests/test_map.gd` can assert the fit against what actually draws.
-		var R: float = host.arch_radius(depth, size.y)
-		var path_y: float = size.y * host._trail_num("pathY", 0.64) + drift.y
-		var centre: Vector2 = Vector2(pos.x, path_y - R)
-		var glass: Color = GlassStyle.GLASS
-		var side: float = R * 2.4
-		draw_texture_rect(SkyField.disc(),
-			Rect2(centre - Vector2.ONE * side * 0.5, Vector2.ONE * side), false,
-			Color(host._accent_colour, 0.08))
-		# Six panes across the upper fan, alternating like leaded glass.
-		for pane: int in range(6):
-			var a0: float = deg_to_rad(-160.0 + float(pane) * (140.0 / 6.0))
-			var a1: float = deg_to_rad(-160.0 + float(pane + 1) * (140.0 / 6.0))
-			var points: PackedVector2Array = PackedVector2Array([centre])
-			for seg: int in range(5):
-				var a: float = lerpf(a0, a1, float(seg) / 4.0)
-				points.append(centre + Vector2(cos(a), sin(a)) * R)
-			draw_colored_polygon(points,
-				Color(host._accent_colour, 0.055 if pane % 2 == 0 else 0.035))
-		draw_arc(centre, R, 0.0, TAU, 64, Color(glass.r, glass.g, glass.b, 0.09), 2.0)
-		draw_arc(centre, R * 0.62, 0.0, TAU, 48, Color(glass.r, glass.g, glass.b, 0.06), 1.5)
-		# Leading springs from the stone's rim into the fan — five rays, none
-		# horizontal, so no spoke drowns in the path line.
-		for ray: int in range(5):
-			var ra: float = deg_to_rad(-150.0 + float(ray) * 30.0)
-			var to: Vector2 = centre + Vector2(cos(ra), sin(ra)) * R * 0.98
-			var dir: Vector2 = (to - pos).normalized()
-			draw_line(pos + dir * 46.0, to, Color(glass.r, glass.g, glass.b, 0.10), 1.5)
 
 	func _draw_graph() -> void:
 		var by_id: Dictionary = {}
@@ -662,13 +225,12 @@ class VeilBand extends MapBand:
 ## stone's left — the rule every tooltip uses, and the fix for a number that
 ## rendered as `+1` instead of `+17` at 11% of camera positions.
 class ChipBand extends MapBand:
-	## Hysteresis on the flip, in stage px. `_node_pos` adds
-	## `_drift.n.x * PATH_DRIFT_AMP.x` to every stone's screen x, so a stone's
-	## flip input sweeps 28 px as the pointer crosses the stage WITH NO PAN AT
-	## ALL. Against a bare threshold that pops the pill 98 px across while the
-	## player only moves the cursor (PR #80 DL R2). 32 > that 28 px sweep, with
-	## margin; the cost of the band is a pill that keeps its side while it has up
-	## to 32 px of room back, which reads as nothing.
+	## Hysteresis on the flip, in stage px. Pointer drift sweeps a stone's
+	## screen x by PATH_DRIFT_AMP.x as the pointer crosses the stage WITH NO
+	## PAN AT ALL. Against a bare threshold that pops the pill 98 px across
+	## while the player only moves the cursor (PR #80 DL R2). 32 > that 28 px
+	## sweep, with margin; the cost of the band is a pill that keeps its side
+	## while it has up to 32 px of room back, which reads as nothing.
 	const FLIP_SLACK: float = 32.0
 
 	## Last side chosen per stone index — the flip's only state, and the reason

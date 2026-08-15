@@ -208,9 +208,10 @@ over `edges`. No new transition tech — reuse the combat wipe.
   are one `_draw()` pass on a single Control, and Godot renders children above
   a parent's `_draw()` — so bands must become children in paint order before
   sprites can interleave with waystones.~~ **Resolved 2026-08-01 (P5.2, issue
-  #64):** the bands are now `MapBand` children in paint order
-  (`presentation/map/map_band.gd:1` (`MapBand`)) — sky, region, path, then the
-  waystones, then the veil — so raster strips can seat per band (P5.6).
+  #64):** the remaining overlay bands are `MapBand` children in paint order
+  (`presentation/map/map_band.gd:1` (`MapBand`)) — path, then the
+  waystones, then the veil — with `MapScene` owning the world as of #234
+  slice 7b (SkyBand / RegionBand retired in 7b2).
 
 ---
 

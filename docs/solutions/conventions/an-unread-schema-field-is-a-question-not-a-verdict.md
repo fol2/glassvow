@@ -76,8 +76,8 @@ authors a value into because it is there.
    (Historical example: the vertical Spire has since been replaced by the
    horizontal Pilgrimage, and that rewrite re-applied this very rule in the
    same motion — `rowRate`/`rowMin`/`rowMax` became `trail/stepRate`/`stepMin`/
-   `stepMax`, `_row_gap()` became `_step()`; see
-   `presentation/map/world_map_screen.gd` (`_step`).)
+   `stepMax`, `_row_gap()` became `_step()`. `_step` itself retired with 2D
+   seating in #234 slice 7b2; the lattice owns spacing now.)
 3. **The concept is gone and no defect ever pointed at the field** → delete.
 
 The clause that does the work is the second half of rule 3. A field that was

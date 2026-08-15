@@ -177,8 +177,9 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## default reproduces 8.04 px
 	## at 820, where the constant was tuned.
 	##
-	## **Improved, not settled**, and the residual is on
-	## `WorldMapScreen.bed_half` — read it before retuning these three. The
+	## **Improved, not settled**, and the residual used to live on
+	## `WorldMapScreen.bed_half` — that helper retired with PathBand's 2D road
+	## in #234 slice 7b2. Read this field before retuning these three. The
 	## clamps bind at two of the five shapes, phone-landscape is still 1.57×
 	## wider in proportion than the reference, and measured against LANE PITCH
 	## the rate is less consistent than the constant it replaced. This line said
@@ -201,9 +202,9 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	## phone-portrait overrides it to 0.60 because it carries `scale` 0.68 — a 13%
 	## larger terminus arch — on the narrowest stage, so 0.72 ran the arch 8.7 px
 	## off a 390 px frame (PR #79 DL R1/R2, measured both ways). A seat and an arch
-	## size that were never tied together: `tests/test_map.gd` now asserts
-	## `seat·W + arch_radius ≤ W` over the whole shape matrix, so this pairing
-	## fails a gate rather than a human opening one shape's terminus frame.
+	## size that were never tied together. The 2D terminus arch (`arch_radius`)
+	## retired with PathBand's rose window in #234 slice 7b2; this seat now
+	## only names where the last node sat on the 2D road.
 	&"trail/terminusSeat": {"bind": BIND_NONE, "unit": "ratio", "min": 0.3, "max": 0.95, "default": 0.72},
 	## The smallest a waystone may be to the finger, in stage px. Zero on the
 	## shapes a mouse points at, 44 on a phone — the floor Apple's HIG and

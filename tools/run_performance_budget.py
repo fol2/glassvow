@@ -290,8 +290,7 @@ def validate_logs(stdout: str, stderr: str, expected: dict[str, Any],
                   summary: dict[str, Any]) -> int:
     if "ERROR:" in stderr or "SCRIPT ERROR:" in stderr or "BENCH_ERROR " in stdout:
         die("process log contains an error")
-    allowed = ("skyband uses the procedural draw", "region uses the procedural draw",
-               "ObjectDB instances were leaked at exit")
+    allowed = ("ObjectDB instances were leaked at exit",)
     for line in stderr.splitlines():
         if line.startswith("WARNING:") and not any(token in line for token in allowed):
             die(f"unexpected warning: {line}")

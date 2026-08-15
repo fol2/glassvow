@@ -240,17 +240,6 @@ static func run(fails: Array[String]) -> void:
 	screen.node_chosen.connect(func(i: int) -> void: seen.append(i))
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(screen)
-	# The far bands' bleed must cover the drift they are painted with, and the
-	# strip filenames must stay 1-based against 0-based act indices.
-	_check(fails, MapBand.FAR_BLEED >= WorldMapScreen.PATH_DRIFT_AMP.y / 3.0,
-		"far-band bleed covers the far drift amplitude")
-	_check(fails, MapStrip.path_for(0, &"skyband")
-		== "res://assets/art/map/act1-skyband.png", "strip paths are 1-based")
-	_check(fails, MapRegions.SPIRE_W_RATE.size() == 3
-		and MapRegions.SPIRE_H_RATE.size() == 3
-		and MapRegions.SPIRE_DARKEN.size() == 3
-		and MapRegions.SPIRE_HAZE.size() == 3,
-		"spire ramps stay three-act; Act IV does not grow a fourth spire")
 	# A same-lane edge must actually run straight. `signf(to.y - from.y)` gave it
 	# the full 10px bow off a sub-pixel jitter difference for three phases while
 	# the comment above it said otherwise (#69); 1.53px is the worst same-lane
@@ -262,127 +251,10 @@ static func run(fails: Array[String]) -> void:
 		Vector2(200.0, 100.0 + screen._lane_gap())).y - (100.0 + screen._lane_gap() * 0.5)
 	_check(fails, absf(flat_mid) < 1.0, "a same-lane edge bows under 1px")
 	_check(fails, absf(step_mid - 10.0) < 0.01, "a full lane step still bows 10px")
-	# The terminus arch must fit the frame it is seated in, on every shape. The
-	# seat and the arch's size are separate book values that nothing tied
-	# together: `terminusSeat` reaches 0.95 and `trail/scale` 2.0, and 0.72
-	# against phone-portrait's `scale` 0.68 already ran the arch 8.7px off a
-	# 390px frame once (#69, PR #79 DL R1). Off-tree so `size` is the shape's
-	# reference and no layout pass reclaims it.
-	#
-	# Assert the WORST realisation, not the nominal seat. The boss is drawn at
-	# its own `jy` wander plus the pointer lean, both on the step axis and both
-	# about the size of the margin being defended — and the seed belongs to a
-	# run, so a gate on one realisation guards one run (PR #79 DL R3).
-	var lean: float = WorldMapScreen.STEP_JITTER * WorldMap.JITTER_SPREAD.y * 0.5 \
-		+ WorldMapScreen.PATH_DRIFT_AMP.x
-	for shape_name: StringName in StageShape.REFERENCES:
-		var reference: Vector2i = StageShape.REFERENCES[shape_name]
-		var probe: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
-		probe.set_anchors_preset(Control.PRESET_TOP_LEFT)
-		probe.size = Vector2(reference)
-		probe.set_shape(shape_name)
-		var seat_x: float = probe.size.x * probe._trail_num("terminusSeat", 0.72)
-		var arch: float = probe.arch_radius(probe.terminus_depth(), probe.size.y)
-		_check(fails, seat_x + lean + arch <= probe.size.x,
-			"the terminus arch fits inside %s (%.1f + %.1f lean + %.1f vs %.0f)"
-				% [shape_name, seat_x, lean, arch, probe.size.x])
-		probe.free()
-	# The region strip must open the same crown room the fallback trees take,
-	# on every shape. A texture fitted to a rect that starts at the horizon
-	# cannot place a pixel above it, and the fallback's tallest tree rises
-	# span_y · CROWN_OVERSHOOT past that line (#86). The bleed is a ratio of
-	# span_y, not a pixel constant (the BED_HALF lesson, #69 C5). Off-tree so
-	# `size` is the shape's reference, same as the arch-fit gate above.
-	#
-	# It may overlay the lower sky — that is the composition the trees already
-	# paint — but it must not climb *out* of SkyBand.strip_rect. The boundary
-	# is the sky strip's top edge (always the frame top today); its bottom is
-	# already a FAR_BLEED seam into this band, and a clamp against that
-	# bottom would seat the region *below* the horizon.
-	for shape_name: StringName in StageShape.REFERENCES:
-		var crown: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
-		crown.set_anchors_preset(Control.PRESET_TOP_LEFT)
-		crown.size = Vector2(StageShape.REFERENCES[shape_name])
-		crown.set_shape(shape_name)
-		var frame_w: float = crown.size.x
-		var frame_h: float = crown.size.y
-		var horizon: float = frame_h * crown._trail_num("horizonY", 0.36)
-		var path_y: float = frame_h * crown._trail_num("pathY", 0.64)
-		var span_y: float = path_y - horizon
-		var sky_rect: Rect2 = MapBand.SkyBand.strip_rect(frame_w, horizon)
-		var region_rect: Rect2 = MapBand.RegionBand.strip_rect(
-			frame_w, frame_h, horizon, path_y, horizon)
-		var bleed: float = horizon - region_rect.position.y
-		_check(fails, is_equal_approx(bleed, span_y * MapBand.RegionBand.CROWN_OVERSHOOT),
-			"region strip crown bleed is %.2f of span_y on %s (%.1f vs %.1f)"
-				% [MapBand.RegionBand.CROWN_OVERSHOOT, shape_name, bleed,
-					span_y * MapBand.RegionBand.CROWN_OVERSHOOT])
-		_check(fails, region_rect.position.y >= sky_rect.position.y,
-			"region strip does not climb out of the sky strip on %s (top %.1f vs sky %.1f)"
-				% [shape_name, region_rect.position.y, sky_rect.position.y])
-		crown.free()
-	# The road plane's taper, over the shape matrix (#69 A7/C5, #70). Three laws:
-	# it never inverts, it never grows wide enough to swallow the lane the stones
-	# stand in, and it is actually widest at the camera's seat — a taper that
-	# stopped tapering would still satisfy the first two and would be a rectangle
-	# with a gradient, which is what this task replaced.
-	for shape_name: StringName in StageShape.REFERENCES:
-		var road: WorldMapScreen = WorldMapScreen.new(WorldMap.slice(), content)
-		road.set_anchors_preset(Control.PRESET_TOP_LEFT)
-		road.size = Vector2(StageShape.REFERENCES[shape_name])
-		road.set_shape(shape_name)
-		var w_px: float = road.size.x
-		var widest: float = road.bed_half(road._lead_px())
-		var lane_room: float = road.lane_pitch(0.0) * 0.5
-		var inverted: bool = false
-		for step_i: int in range(0, 41):
-			var probe_x: float = w_px * float(step_i) / 40.0
-			var half: float = road.bed_half(probe_x)
-			if half <= 0.0:
-				inverted = true
-			if half > widest:
-				widest = half
-		_check(fails, not inverted, "the road bed never inverts on %s" % shape_name)
-		_check(fails, is_equal_approx(widest, road.bed_half(road._lead_px())),
-			"the bed is widest at the camera's seat on %s" % shape_name)
-		# BOTH edges, read directly — not the minimum anywhere on the frame.
-		# The first version tracked `thinnest` over the probe sweep, and PR #84
-		# PM R1 broke it with a taper that dipped to 0.8 between depth 0.5 and
-		# 1.5 and then widened back to 1.0 at the far edge: a road that narrows
-		# in the middle and flares at the rim passed a gate whose message says
-		# "by the frame edge". `<=` because the message says "at least a tenth"
-		# and `<` rejected exactly a tenth.
-		var left_edge: float = road.bed_half(0.0)
-		var right_edge: float = road.bed_half(w_px)
-		_check(fails, left_edge <= widest * 0.9 and right_edge <= widest * 0.9,
-			"…and has narrowed at least a tenth AT BOTH frame edges on %s (%.2f | %.2f vs %.2f)"
-				% [shape_name, left_edge, right_edge, widest])
-		_check(fails, widest * MapBand.PathBand.VERGE <= lane_room,
-			"the road and its verge stay out of the next lane on %s (%.1f vs %.1f)"
-				% [shape_name, widest * MapBand.PathBand.VERGE, lane_room])
-		road.free()
-	# The bed keys must be AUTHORED, not merely resolvable. `LayoutBook.resolve`
-	# inserts every declared default through `_defaults()` before `_audit()` runs,
-	# so deleting these three from the JSON leaves the book validating cleanly
-	# and the road silently running on schema defaults — the schema/JSON
-	# atomicity this task claimed was never enforced for the added-key case
-	# (PR #84 PM R1). Read the raw file, not the resolved book.
-	var book_raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://assets/layout/combat-layout.json"))
-	var authored: Dictionary = {}
-	if typeof(book_raw) == TYPE_DICTIONARY:
-		var book: Dictionary = book_raw
-		if book.has("scopes"):
-			var scopes: Dictionary = book["scopes"]
-			if scopes.has("map"):
-				var map_scope: Dictionary = scopes["map"]
-				if map_scope.has("base"):
-					authored = map_scope["base"]
-	for key: String in ["bedRate", "bedMin", "bedMax"]:
-		_check(fails, authored.has(key),
-			"combat-layout.json authors scopes.map.base.%s" % key)
+	# SkyBand/RegionBand, SPIRE_*, MapStrip skyband/region, FAR_BLEED, the
+	# terminus arch, crown bleed, and 2D road bed retired in #234 slice 7b2.
 	# A refresh mid-glide must RE-AIM, not seat. `set_shape` routes through
-	# `refresh` → `_seat_marker`, and a hard `_cam_x` write there tore the walk
+	# `refresh` → `_seat_marker`, and a hard camera write there tore the walk
 	# out from under the lantern when the window crossed an aspect boundary
 	# during a travel (#69 B2). Seated: both move. Travelling: only the target.
 	# The bounty chip flips to the stone's left rather than run off the frame.
