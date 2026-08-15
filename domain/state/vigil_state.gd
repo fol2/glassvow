@@ -127,7 +127,6 @@ func commit_run(run: RunState, outcome: String, content: ContentDB = null) -> bo
 			deeds["wins"] = _ji(deeds["wins"]) + 1
 			deeds["bestVow"] = maxi(_ji(deeds["bestVow"]), run.vow)
 			vow_unlocked = maxi(vow_unlocked, mini(5, run.vow + 1))
-			whispers += 1
 		deeds["bestFloor"] = maxi(_ji(deeds["bestFloor"]), run.act * 15 + run.floors_climbed)
 		for key: String in [
 			"slain", "shatters", "kindles", "perfects", "smolderKills",
@@ -168,6 +167,11 @@ func commit_run(run: RunState, outcome: String, content: ContentDB = null) -> bo
 			else _ji(memory.get("eligibleMisses", 0)) + 1
 	if str(persisted_hollow["state"]) == "complete":
 		persisted_hollow["memory"].erase("eligibleMisses")
+	# Whispers are an L1 channel. Count this run's new shards first so a win
+	# that earns the first pane may speak immediately, while shard-zero wins
+	# remain inside the visual-only L0 contract.
+	if outcome == "win" and NarrativeGates.allows(NarrativeGates.L1, shards.size()):
+		whispers += 1
 	runs_played += 1
 	if outcome == "death":
 		var fall: Dictionary = {
