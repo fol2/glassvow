@@ -5,7 +5,6 @@ extends RefCounted
 ## (playCard, endTurn, kindleFromHand, useArt, usePotion, startCombat,
 ## addCardToDeck) so the fixture replayer is a passthrough.
 
-
 var content: ContentDB
 var rules: CombatRules
 var rewards: RewardRules
@@ -18,7 +17,7 @@ var last_ret: Variant = null
 
 func _init(content_db: ContentDB, run_state: RunState) -> void:
 	content = content_db
-	rules = CombatRules.new(content_db)
+	rules = ShardGatedCombatRules.new(content_db)
 	rewards = RewardRules.new(content_db)
 	quests = QuestRules.new(content_db)
 	run = run_state

@@ -170,13 +170,36 @@ func commit_run(run: RunState, outcome: String, content: ContentDB = null) -> bo
 		persisted_hollow["memory"].erase("eligibleMisses")
 	runs_played += 1
 	if outcome == "death":
+		var fall: Dictionary = {
+			"act": run.act,
+			"row": maxi(0, run.floors_climbed - 1),
+			"shadeAspect": run.aspect,
+			"bequest": null,
+		}
 		var own_shade_v: Variant = run.quest_scratch.get("ownShade")
 		if typeof(own_shade_v) == TYPE_DICTIONARY:
 			var own_shade: Dictionary = own_shade_v
 			var fall_v: Variant = own_shade.get("fall")
 			if typeof(fall_v) == TYPE_DICTIONARY:
-				last_fall = fall_v.duplicate(true)
-				last_fall["standing"] = true
+				var stored_fall: Dictionary = fall_v
+				fall = stored_fall.duplicate(true)
+		fall["standing"] = true
+
+		# The cursor lives inside an already-versioned quest memory dictionary:
+		# additive v2 data, no top-level save migration. L0 losses do not consume
+		# a line; eligible draws advance once and stop cleanly after slot 49.
+		var own_memory_v: Variant = quests["ownShade"].get("memory")
+		var own_memory: Dictionary = {}
+		if typeof(own_memory_v) == TYPE_DICTIONARY:
+			own_memory = own_memory_v
+		var consumed: int = _ji(own_memory.get("lossPoolCursor", 0))
+		var last_words: int = NarrativeGates.loss_pool_index(
+			consumed, shards.size())
+		fall["lastWords"] = last_words
+		if last_words >= 0:
+			own_memory["lossPoolCursor"] = consumed + 1
+			quests["ownShade"]["memory"] = own_memory
+		last_fall = fall
 	receipts["runEnd"] = {
 		"runId": run.run_id,
 		"outcome": outcome,
