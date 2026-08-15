@@ -452,8 +452,16 @@ static func run(fails: Array[String]) -> void:
 	sib.size = Vector2(StageShape.REFERENCES[&"phone-portrait"])
 	tree.root.add_child(sib)
 	sib.set_shape(&"phone-portrait")
-	sib._cam_x = 627.53
 	sib._layout_waystones()
+	# 2D cam 627.53 no longer exists; park the bounty 16/22 pair on-screen with
+	# overlapping pills so ChipBand.seats still has a collision to decline.
+	for ws: GlassWaystone in sib._waystones:
+		if ws.has_chip() and ws.index != 6 and ws.index != 7:
+			ws.position.x = -400.0
+	var n6: GlassWaystone = sib._waystones[6]
+	var n7: GlassWaystone = sib._waystones[7]
+	n6.position = Vector2(48.0, 280.0)
+	n7.position = n6.position + Vector2(n6.size.x * n6.scale.x * 0.35, 0.0)
 	var raw: Array[Rect2] = []
 	for ws: GlassWaystone in sib._waystones:
 		if not ws.has_chip():
@@ -518,11 +526,21 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, is_equal_approx(pin_right.get_center().x - pin_centre.x,
 			pin_centre.x - pin_left.get_center().x),
 		"…and a flip mirrors it about the stone rather than re-seating it")
-	# The over-decline itself, at the camera where three same-column stones share
-	# the frame: judged on x alone the band dropped two of them, and a dark
-	# lantern's bounty appears nowhere else in the game (DL R4 MAJOR).
-	sib._cam_x = 1250.0
-	sib._layout_waystones()
+	# The over-decline itself: three chipped stones a lane apart share a column.
+	# Judged on x alone the band dropped two of them (DL R4 MAJOR).
+	var chipped: Array[GlassWaystone] = []
+	for ws: GlassWaystone in sib._waystones:
+		if ws.has_chip():
+			chipped.append(ws)
+	_check(fails, chipped.size() >= 3,
+		"seed 17634 still has three bounty stones to seat a lane apart")
+	if chipped.size() >= 3:
+		for ws: GlassWaystone in sib._waystones:
+			if ws.has_chip():
+				ws.position.x = -400.0
+		var base_p: Vector2 = Vector2(120.0, 220.0)
+		for lane_i: int in range(3):
+			chipped[lane_i].position = base_p + Vector2(0.0, float(lane_i) * 80.0)
 	var wide: Array[Rect2] = _seated_pills(sib)
 	_check(fails, _on_screen_chips(sib) >= 3,
 		"seed 17634 at cam 1250 still puts three chip stones in one frame")
@@ -532,10 +550,8 @@ static func run(fails: Array[String]) -> void:
 	tree.root.remove_child(sib)
 	sib.free()
 	# Drive the real door — resize, then `set_shape` → `refresh` → `_seat_marker`
-	# — with the marker walked off node 0 and `_cam_target` seeded wrong. Both
-	# matter: `_cam_for(0)` clamps to `_cam_min()` on every shape and
-	# construction already seats the target there, so a re-aim assertion taken at
-	# node 0 passes whether or not anything re-aims (PM R1 on PR #80).
+	# — with the marker walked off node 0. 3D camera pose is world-space, so a
+	# mid-glide shape re-pick must not snap XZ; a seated re-pick still focuses.
 	# Full content, not the slice: `refresh(run)` re-reads `content.acts[act]` for
 	# the title line, which the slice does not carry.
 	var glide_run: RunState = RunState.new_run(full, 717, "run-glide")
@@ -550,21 +566,23 @@ static func run(fails: Array[String]) -> void:
 	glider.map.clear_current()
 	glider.map.enter(2)
 	glider.size = Vector2(StageShape.REFERENCES[&"phone-portrait"])
-	glider._cam_x = 999.0
-	glider._cam_target = -777.0
+	var held: Vector2 = Vector2(10.0, 8.0)
+	glider._map_scene.get_rig().set_camera_xz(held)
 	glider._travelling = true
+	glider._travel_from_xz = held
 	glider.set_shape(&"phone-portrait")
-	var aim: float = glider._cam_for(glider.map.at)
-	_check(fails, aim > 1.0,
+	var aim: Vector2 = glider._focus_xz(glider.map.at)
+	_check(fails, not aim.is_equal_approx(held),
 		"the mid-glide gate stands where the camera's clamps do not decide the seat")
-	_check(fails, is_equal_approx(glider._cam_x, 999.0),
+	_check(fails, glider._map_scene.get_rig().camera_xz().is_equal_approx(held),
 		"a shape re-pick mid-glide leaves the camera where the walk put it")
-	_check(fails, is_equal_approx(glider._cam_target, aim),
-		"…and re-aims the target at the new shape's geometry")
+	_check(fails, glider._travel_to_xz.is_equal_approx(aim),
+		"…and re-aims the target at the node's lattice pose")
 	glider._travelling = false
 	glider.size = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
 	glider.set_shape(StageShape.IDENTITY)
-	_check(fails, is_equal_approx(glider._cam_x, glider._cam_for(glider.map.at)),
+	_check(fails, glider._map_scene.get_rig().camera_xz().is_equal_approx(
+			glider._focus_xz(glider.map.at)),
 		"a shape re-pick while seated still seats the camera")
 	tree.root.remove_child(glider)
 	glider.free()

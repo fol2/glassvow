@@ -39,6 +39,10 @@ func _init() -> void:
 	_apply_pose(DEFAULT_XZ)
 
 
+func _enter_tree() -> void:
+	_camera.current = true
+
+
 func get_camera() -> Camera3D:
 	return _camera
 
@@ -62,6 +66,19 @@ func pan_world(delta_xz: Vector2) -> void:
 	_apply_pose(camera_xz() + delta_xz)
 
 
+func set_camera_xz(xz: Vector2) -> void:
+	_apply_pose(xz)
+
+
+## Camera XZ that frames a ground point: look-at sits `look_dz` toward −Z.
+static func pose_for_world(world: Vector3) -> Vector2:
+	return Vector2(world.x, world.z + look_dz())
+
+
+static func look_dz() -> float:
+	return CAM_HEIGHT / tan(deg_to_rad(absf(TILT_DEGREES)))
+
+
 ## Screen-space drag → world XZ. Orthographic lateral pan is an image translate
 ## (#207). Vertical pan is foreshortened by the tilt: ground coverage along Z
 ## is `size / sin(|tilt|)`, the same identity the #255 bench asserts.
@@ -76,8 +93,8 @@ func pan_screen(delta_px: Vector2, view_height: float) -> void:
 ## eject DEFAULT_XZ (z=16) off a ground AABB that ends at z=14.
 static func bounds_from_lattice() -> Rect2:
 	var foot: Rect2 = MapPinProjection.lattice_footprint()
-	var look_dz: float = CAM_HEIGHT / tan(deg_to_rad(absf(TILT_DEGREES)))
-	return Rect2(foot.position.x, foot.position.y + look_dz, foot.size.x, foot.size.y)
+	var dz: float = look_dz()
+	return Rect2(foot.position.x, foot.position.y + dz, foot.size.x, foot.size.y)
 
 
 func _apply_pose(xz: Vector2) -> void:

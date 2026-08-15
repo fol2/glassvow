@@ -5,9 +5,9 @@ extends Control
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
 ## dependency) so headless tests can drive it — see the M5 screens.
-## Paint order is child order: MapScene (world) → sky → region → path →
-## waystones → veil → chrome. Slice 7a parents the 3D surface behind the
-## live band stack; bands still draw the world. Pin seating stays `_node_pos`.
+## Paint order is child order: MapScene (world) → path overlay → waystones →
+## veil → chrome. Slice 7b seats pins on `projected_seats()`; sky/region bands
+## no longer draw the world. Chips, sealed-door (#217) and HUD stay 2D.
 
 signal node_chosen(index: int)
 signal sealed_door_requested
@@ -58,15 +58,15 @@ var content: ContentDB
 ## under a live screen when the window crosses an aspect boundary.
 var shape: StringName = StageShape.IDENTITY
 
+## Kept for 2D helper math (bed/arch tests). Live pan lives on MapCameraRig.
 var _cam_x: float = 0.0
-var _cam_target: float = 0.0
-var _cam_velocity: float = 0.0
-var _dragging: bool = false
 var _travelling: bool = false
 ## Node index the lantern leaves during a glide; −1 when seated or when the
 ## run starts with no prior seat (path then collapses to the target).
 var _travel_from_i: int = -1
 var _travel_t: float = 0.0
+var _travel_from_xz: Vector2 = MapCameraRig.DEFAULT_XZ
+var _travel_to_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _waystones: Array[GlassWaystone] = []
 var _hint_label: Label
 var _sealed_door: Button
@@ -80,20 +80,12 @@ var _fog_colour: Color
 var _particle_colour: Color
 var _glow_colour: Color
 var _accent_colour: Color
-## Per-act region knobs (palette + weather + lightning). Bands read this;
+## Per-act region knobs (palette + weather). Bands read this;
 ## built in `_set_act_theme` so a theme pick never leaves stale weather.
 var _region: MapRegions = null
-## Row → lane offset in px. Built lazily and never invalidated: it derives only
-## from the map's own `jx`, which is frozen for the life of the screen.
-var _row_jx: Dictionary[int, float] = {}
-## Act-2 heat lightning — fixed mark table, no RNG (captures must repeat).
-var _lightning_t: float = 0.0
-var _flash: float = 0.0
 
 var _drift: PointerDrift = PointerDrift.new()
 var _map_scene: MapScene = null
-var _sky_band: MapBand.SkyBand = null
-var _region_band: MapBand.RegionBand = null
 var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
 var _veil_band: MapBand.VeilBand = null
@@ -107,7 +99,7 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_trail_layout = LayoutBook.resolve(&"map", shape)
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
-	# World → bands → waystones → veil → chrome: child order is paint order.
+	# World → path overlay → waystones → veil → chrome: child order is paint order.
 	_build_world_surface()
 	_build_bands()
 	_build_waystones()
@@ -137,17 +129,11 @@ func _notification(what: int) -> void:
 
 func _build_world_surface() -> void:
 	_map_scene = MapScene.new()
-	_map_scene.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
 
 
 func _build_bands() -> void:
-	_sky_band = MapBand.SkyBand.new()
-	_sky_band.host = self
-	add_child(_sky_band)
-	_region_band = MapBand.RegionBand.new()
-	_region_band.host = self
-	add_child(_region_band)
 	_path_band = MapBand.PathBand.new()
 	_path_band.host = self
 	add_child(_path_band)
@@ -289,6 +275,7 @@ func _build_waystones() -> void:
 		var ws: GlassWaystone = GlassWaystone.new(
 			i, shown_kind, _node_hue(n), caption, n.quest_marked,
 			n.bounty if n.unlit else 0)
+		ws.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		ws.chosen.connect(_on_waystone_chosen)
 		add_child(ws)
 		_waystones.append(ws)
@@ -403,27 +390,30 @@ func _set_act_theme(stage_act: int) -> void:
 		PackedColorArray([_sky_colour, _fog_colour, REGION_GROUND]),
 		PackedFloat32Array([0.0, 0.55, 1.0]), false,
 		Vector2(0.5, 0.0), Vector2(0.5, 1.0))
-	# Lightning clock resets with the region so --act=2 always starts cold.
-	_lightning_t = 0.0
-	_flash = 0.0
-	if _sky_band != null:
-		_sky_band.apply_region(_region)
-		_sky_band.set_flash(0.0)
-	if _region_band != null:
-		_region_band.apply_region(_region)
-		_region_band.set_flash(0.0)
 	if _veil_band != null:
 		_veil_band.apply_region(_region)
 	if _map_scene != null:
 		_map_scene.set_act(stage_act)
 
 
-## 3D lattice seats in this Control's px. Live waystones still sit on
-## `_node_pos` — swap-over is slice 7b.
+## 3D lattice seats in this Control's px. Live waystones sit here.
 func projected_seats() -> PackedVector2Array:
 	if _map_scene == null:
 		return PackedVector2Array()
+	if size.x > 1.0 and size.y > 1.0 and _map_scene.size != size:
+		_map_scene.size = size
+	_map_scene._fit()
 	return _map_scene.project_pins(map.nodes)
+
+
+func pick_node_at(screen: Vector2) -> int:
+	if _map_scene == null:
+		return -1
+	return _map_scene.pin_at(screen, map.nodes, _pin_hit())
+
+
+func _pin_hit() -> float:
+	return maxf(36.0, _trail_num("touch", 44.0) * 0.5)
 
 
 ## Dress the bands in another act's region without mutating the run. Used by
@@ -442,27 +432,28 @@ func set_act_scenery(stage_act: int) -> void:
 ## Put the camera where the marker's node sits. Called on every `refresh`, which
 ## `set_shape` also routes through — and a shape re-pick can land mid-glide, when
 ## a snap would tear the walk out from under the lantern. Re-aim instead: the
-## destination is re-derived at the NEW geometry (`_cam_for` reads `_step` and
-## `_cam_max`, both shape-dependent) while `_cam_x` keeps easing, so the glide
-## finishes at the right place on the new stage (#69 B2, the other door into the
-## state PR #79 closed against input).
+## destination is re-derived at the NEW geometry while the current pose keeps
+## easing, so the glide finishes at the right place on the new stage (#69 B2).
 func _seat_marker() -> void:
 	var i: int = map.at if map.at >= 0 and map.at < map.nodes.size() else 0
-	var seat: float = _cam_for(i) if not map.nodes.is_empty() else _cam_min()
-	_cam_target = seat
-	# Kill the fling either way. `_process` drives `_cam_x` from `_cam_velocity`
-	# while it lives and overwrites `_cam_target` doing it, so an early return
-	# that left a fling running would discard the very re-aim it exists to make
-	# (PR #80 DL R1).
-	_cam_velocity = 0.0
+	var seat: Vector2 = _focus_xz(i) if not map.nodes.is_empty() \
+		else MapCameraRig.DEFAULT_XZ
+	_travel_to_xz = seat
+	if _map_scene != null:
+		_map_scene.set_lock_input(true)
 	if _travelling:
 		return
-	_cam_x = seat
-	# A direct seat is a teleport: no motion for _sync_world_live to see, so
-	# re-arm one frozen frame at the new pose (the set_live(false) contract),
-	# or 7b's coupled camera would hold a stale frame after set_shape/refresh.
 	if _map_scene != null:
+		_map_scene.set_lock_input(false)
+		_map_scene.get_rig().set_camera_xz(seat)
 		_map_scene.set_live(false)
+
+
+func _focus_xz(i: int) -> Vector2:
+	if i < 0 or i >= map.nodes.size() or _map_scene == null:
+		return MapCameraRig.DEFAULT_XZ
+	return MapCameraRig.pose_for_world(
+		MapPinProjection.world_anchor(map.nodes[i]))
 
 
 ## World-x of the lead-third seating for node `i`, clamped so node 0 cannot
@@ -522,12 +513,18 @@ func choose(i: int) -> bool:
 	# away — scroll, drag and choose are all refused for its duration. Half alpha
 	# says "not now" without the label vanishing and re-appearing (PR #79 DL R1).
 	_hint_label.modulate.a = 0.4
-	_cam_target = _cam_for(i)
+	_travel_from_xz = _map_scene.get_rig().camera_xz() if _map_scene != null \
+		else MapCameraRig.DEFAULT_XZ
+	_travel_to_xz = _focus_xz(i)
+	if _map_scene != null:
+		_map_scene.set_lock_input(true)
+		_map_scene.set_live(true)
 	# Reduce-motion skips the walk but still arrives through one path so the
 	# travelling flag clears the same way a tween finish would. No kindle
 	# ceremony — art corrects on the next _show_map rebuild, as today.
 	if Preferences.active.reduce_motion:
-		_cam_x = _cam_target
+		if _map_scene != null:
+			_map_scene.get_rig().set_camera_xz(_travel_to_xz)
 		_on_arrived(i)
 		return true
 	if was_unlit:
@@ -541,17 +538,22 @@ func choose(i: int) -> bool:
 
 func _set_travel_t(v: float) -> void:
 	_travel_t = v
-	# Camera lerp already forces band redraws; force the path so the glow
-	# tracks even if cam and drift happen to sit still for a frame.
+	if _map_scene != null:
+		_map_scene.get_rig().set_camera_xz(
+			_travel_from_xz.lerp(_travel_to_xz, v))
 	var path_d: Vector2 = Vector2(
 		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
-	_path_band.set_view(_cam_x, path_d, true)
+	if _path_band != null:
+		_path_band.set_view(_rig_cam_x(), path_d, true)
 
 
 func _on_arrived(i: int) -> void:
 	_travelling = false
 	_travel_from_i = -1
 	_hint_label.modulate.a = 1.0
+	if _map_scene != null:
+		_map_scene.set_lock_input(false)
+		_map_scene.set_live(false)
 	node_chosen.emit(i)
 
 
@@ -592,142 +594,47 @@ func marker_screen_position() -> Vector2:
 # ---------------------------------------------------------------- frame
 
 func _process(delta: float) -> void:
-	if not _dragging:
-		if absf(_cam_velocity) > 0.02:
-			_cam_x = clampf(_cam_x + _cam_velocity * delta, _cam_min(), _cam_max())
-			_cam_target = _cam_x
-			_cam_velocity *= pow(0.06, delta)
-		else:
-			_cam_velocity = 0.0
-			_cam_x = lerpf(_cam_x, _cam_target, minf(1.0, delta * 9.0))
 	# Scroll and pointer chase are user-initiated — PointerDrift settles home
 	# off-stage; no second reduce-motion gate (P5.1 / P1).
 	_drift.step(self, delta)
-	_step_lightning(delta)
 	_layout_waystones()
 	_push_bands()
 	_sync_world_live()
 
 
-## Freeze the 3D surface at rest; unfreeze for this screen's own pan, wheel
-## scroll, or travel. Does not drive the rig — 7b maps those onto the camera.
+## Freeze the 3D surface at rest; unfreeze for pan, wheel, or travel.
 func _sync_world_live() -> void:
 	if _map_scene == null:
 		return
-	var moving: bool = _dragging or _travelling \
-		or absf(_cam_velocity) > 0.02 \
-		or absf(_cam_x - _cam_target) > 0.5
+	var moving: bool = _travelling or _map_scene.is_moving()
 	if moving != _map_scene.is_live():
 		_map_scene.set_live(moving)
-
-
-## Deterministic heat lightning for act 2. Fixed marks in a 26s loop — irregular
-## enough to read as weather, fixed so two runs film the same sky. Under
-## reduce-motion no flash ever fires (same single gate as weather/sway).
-func _step_lightning(delta: float) -> void:
-	if _region == null or _region.weather != &"storm":
-		if _flash > 0.0:
-			_flash = 0.0
-			if _sky_band != null:
-				_sky_band.set_flash(0.0)
-			if _region_band != null:
-				_region_band.set_flash(0.0)
-		return
-	if Preferences.active.reduce_motion:
-		if _flash > 0.0:
-			_flash = 0.0
-			if _sky_band != null:
-				_sky_band.set_flash(0.0)
-			if _region_band != null:
-				_region_band.set_flash(0.0)
-		return
-	var prev_t: float = _lightning_t
-	_lightning_t += delta
-	for mark: float in MapRegions.LIGHTNING_MARKS:
-		if prev_t < mark and _lightning_t >= mark:
-			_flash = 1.0
-	if _lightning_t >= MapRegions.LIGHTNING_PERIOD:
-		_lightning_t = fmod(_lightning_t, MapRegions.LIGHTNING_PERIOD)
-	# Combat sky's own decay (presentation/combat/sky_field.gd LIGHTNING_DECAY).
-	if _flash > 0.0:
-		_flash *= pow(MapRegions.LIGHTNING_DECAY, delta)
-		if _flash < 0.001:
-			_flash = 0.0
-	if _sky_band != null:
-		_sky_band.set_flash(_flash)
-	if _region_band != null:
-		_region_band.set_flash(_flash)
 
 
 func _push_bands(force: bool = false) -> void:
 	var path_d: Vector2 = Vector2(
 		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
-	var far_d: Vector2 = path_d / 3.0
-	_sky_band.set_view(_cam_x, far_d, force)
-	_region_band.set_view(_cam_x, far_d, force)
-	_path_band.set_view(_cam_x, path_d, force)
-	# Ungated: it reads the waystones' own positions, which relayout every frame.
+	var cam: float = _rig_cam_x()
+	if _path_band != null:
+		_path_band.set_view(cam, path_d, force)
 	if _chip_band != null:
-		_chip_band.set_view(_cam_x, path_d, force)
-	_veil_band.set_view(_cam_x, path_d * 1.35, force)
+		_chip_band.set_view(cam, path_d, force)
+	if _veil_band != null:
+		_veil_band.set_view(cam, path_d * 1.35, force)
 
 
-func _gui_input(event: InputEvent) -> void:
-	# The walk owns the camera while it lasts: PAN AND WHEEL are swallowed. A drag
-	# or a wheel tick mid-glide used to overwrite `_cam_target`, so the lead-third
-	# follow stopped and the lantern finished its bezier somewhere off-frame while
-	# the glow kept riding the trail (#69, carried from P5.3 PM R1).
-	#
-	# This does NOT guard against a stray tap reaching a waystone, whatever an
-	# earlier draft of this comment claimed. Godot delivers `_gui_input` to the
-	# deepest control first and `GlassWaystone` keeps the default
-	# `MOUSE_FILTER_STOP`, so a press over a stone is consumed there and never
-	# arrives here. What stops the wrong move is `choose()`'s own `if _travelling`
-	# — which predates this guard — plus `set_state(false, …)` unlighting every
-	# stone for the duration (PR #79 DL R1 m4).
+func _rig_cam_x() -> float:
+	if _map_scene == null:
+		return 0.0
+	return _map_scene.get_rig().camera_xz().x * 24.0
+
+
+func _on_surface_tapped(screen: Vector2) -> void:
 	if _travelling:
-		accept_event()
 		return
-	var button: InputEventMouseButton = event as InputEventMouseButton
-	if button != null:
-		if button.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN] and button.pressed:
-			var step: float = _step()
-			_cam_target = clampf(_cam_target + (
-				0.9 * step if button.button_index == MOUSE_BUTTON_WHEEL_UP else -0.9 * step),
-				_cam_min(), _cam_max())
-			_cam_velocity = 0.0
-			accept_event()
-		elif button.button_index == MOUSE_BUTTON_LEFT:
-			_dragging = button.pressed
-			if button.pressed:
-				_cam_velocity = 0.0
-			accept_event()
-		return
-	var motion: InputEventMouseMotion = event as InputEventMouseMotion
-	if motion != null and _dragging:
-		_pan(motion.relative.x, motion.velocity.x)
-		accept_event()
-		return
-	var touch: InputEventScreenTouch = event as InputEventScreenTouch
-	if touch != null:
-		_dragging = touch.pressed
-		if touch.pressed:
-			_cam_velocity = 0.0
-		accept_event()
-		return
-	var drag: InputEventScreenDrag = event as InputEventScreenDrag
-	if drag != null and _dragging:
-		_pan(drag.relative.x, drag.velocity.x)
-		accept_event()
-
-
-## Content follows the finger: drag left advances the view right, same
-## convention the vertical map used when drag-down showed higher rows.
-func _pan(delta_x: float, velocity_x: float) -> void:
-	var step: float = _step()
-	_cam_x = clampf(_cam_x - delta_x, _cam_min(), _cam_max())
-	_cam_target = _cam_x
-	_cam_velocity = clampf(-velocity_x, -8.0 * step, 8.0 * step)
+	var i: int = pick_node_at(screen)
+	if i >= 0:
+		choose(i)
 
 
 ## The `map` scope's own numbers. `bar` hangs off it as a sub-dict.
@@ -757,75 +664,24 @@ func set_shape(stage_shape: StringName) -> void:
 func _layout_waystones() -> void:
 	var k: float = _trail_num("scale", 0.36)
 	var touch: float = _trail_num("touch", 0.0)
+	var seats: PackedVector2Array = projected_seats()
 	for i: int in range(_waystones.size()):
 		var ws: GlassWaystone = _waystones[i]
-		var depth: float = depth_of(_world_x(float(map.nodes[i].row)))
-		# Both falloffs are anchored at the NEAREST stone, not past it. They used
-		# to peak at 1.08 and 1.15, so `scale` reached its nominal `k` only at
-		# depth 2.29 and alpha stayed pinned at 1.0 until depth 1.25 — everything
-		# closer was drawn oversized, and a third of the visible range carried no
-		# alpha cue at all (#69, carried from P5.1 DL R2). Anchoring at 1.0 makes
-		# `k` mean what the book says and gives every visible step a distinct
-		# depth reading.
-		var node_scale: float = k * depth_scale(depth)
+		var node_scale: float = k
 		ws.scale = Vector2.ONE * node_scale
-		ws.set_depth_alpha(clampf(1.0 - depth * 0.10, 0.12, 1.0))
-		# Before the seat, not after: the pad changes `size`, and the seat is
-		# computed from it. The drawing sits in the middle of the padded rect,
-		# so centring the rect still centres the stone.
+		ws.set_depth_alpha(1.0)
 		ws.set_touch_min(touch, node_scale)
-		ws.position = _node_pos(map.nodes[i]) - ws.size * node_scale * 0.5
+		var seat: Vector2 = seats[i] if i < seats.size() else Vector2.ZERO
+		ws.position = seat - ws.size * node_scale * 0.5
 
 
-## Where a node sits: row → walk axis (X), col → lane (Y).
-##
-## The camera holds the tracked world-x at the lead-third of the frame, so
-## `screen_x = world_x − cam_x + lead·W`. The wander budget follows the room
-## each axis has — step has 150–290px, lane only 46–50. PointerDrift at the
-## path amplitude keeps the stones on the path plane's lean.
+## Lattice projection of this node, in this Control's px.
 func _node_pos(node: MapNode) -> Vector2:
-	var world_x: float = _world_x(float(node.row))
-	var depth: float = depth_of(world_x)
-	var lane_gap: float = lane_pitch(depth)
-	var d: Vector2 = Vector2(
-		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
-	return Vector2(
-		world_x - _cam_x + _lead_px() + node.jy * STEP_JITTER + d.x,
-		size.y * _trail_num("pathY", 0.64) + float(node.col - 3) * lane_gap \
-			+ _row_lane_jitter(node.row) + d.y,
-	)
-
-
-## Lane wander, applied per ROW rather than per node.
-##
-## Per-node jitter breaks the touch floor it sits under: `laneMin` guarantees the
-## PITCH, but a thumb hits a GAP, and two neighbours can jitter toward each other.
-## Measured over the 33 pairs that actually sit in adjacent lanes on seed 717,
-## with the lane gap at the phone-landscape value where it rests on its floor:
-## at the old ±6 px, three pairs were already under the 44 px touch rect (worst
-## 43.06); the carried "~3× the jitter" ask would have made it nine (worst 37.18).
-##
-## Shifting the whole column by one amount preserves every gap inside it exactly
-## while still setting rows at different heights, which is the lattice-breaking
-## the note actually wanted. The offset is domain-derived and deterministic —
-## presentation reads `jx` differently, it does not invent any (#69).
-##
-## It takes the LOWEST-col node's `jx` as the row's representative, and the
-## choice matters: the row's MEAN was the first thing I tried, and averaging four
-## to six values that span ±0.25 regresses to nothing. Measured on seed 717, the
-## mean gave a total span of −3.14…+1.20 px with most rows inside ±0.8 — LESS
-## lane variation than the ±1.5 px per-node jitter it replaced, i.e. the exact
-## opposite of the intent. A single member keeps the full amplitude.
-func _row_lane_jitter(row: int) -> float:
-	if _row_jx.has(row):
-		return _row_jx[row]
-	var pick: MapNode = null
-	for n: MapNode in map.nodes:
-		if n.row == row and (pick == null or n.col < pick.col):
-			pick = n
-	var offset: float = 0.0 if pick == null else pick.jx * LANE_JITTER
-	_row_jx[row] = offset
-	return offset
+	var i: int = map.nodes.find(node)
+	var seats: PackedVector2Array = projected_seats()
+	if i < 0 or i >= seats.size():
+		return Vector2.ZERO
+	return seats[i]
 
 
 ## How far apart two steps of the pilgrimage stand, in stage px.
