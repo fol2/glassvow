@@ -128,16 +128,34 @@ func _row(y: float, w: float, text: String, font: Font, px: float, track: float,
 	# — so a name too long for its region shrinks to fit it instead of losing
 	# its last word. Measured: "PHIAL OF HELD LIGHT" lost four characters.
 	var run: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, pt).x
-	if run > w and run > 0.0:
-		pt = maxi(MIN_PX, int(floorf(float(pt) * w / run)))
+	# Shrink until the run truly fits. One proportional step is not enough:
+	# integer point sizes and platform hinting mean the re-measured run can
+	# still exceed the block — CI's Linux metrics failed exactly there while
+	# macOS passed (#280). Iterate; the loop is bounded by pt - MIN_PX.
+	while run > w and run > 0.0 and pt > MIN_PX:
+		pt = maxi(MIN_PX, mini(pt - 1, int(floorf(float(pt) * w / run))))
 		if varied != null:
 			varied.spacing_glyph = int(roundf(track * float(pt)))
 		run = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, pt).x
+	if run <= w:
+		_rows.append({
+			"text": text, "font": font, "px": pt, "y": y, "run": run,
+			"colour": colour, "wrap": false, "strike": strike,
+		})
+		return y + font.get_height(pt)
+	# Even MIN_PX cannot fit this block ("A LANTERN WITH NO FLAME" in the
+	# 20:9 jar column). Microscopic type is the wrong trade — go back to the
+	# scale's readable size and let the line wrap instead.
+	pt = maxi(MIN_PX, int(roundf(px * _scale)))
+	if varied != null:
+		varied.spacing_glyph = int(roundf(track * float(pt)))
+	var block: float = font.get_multiline_string_size(text,
+		HORIZONTAL_ALIGNMENT_LEFT, w, pt).y
 	_rows.append({
-		"text": text, "font": font, "px": pt, "y": y, "run": run,
-		"colour": colour, "wrap": false, "strike": strike,
+		"text": text, "font": font, "px": pt, "y": y, "run": w,
+		"colour": colour, "wrap": true, "strike": strike,
 	})
-	return y + font.get_height(pt)
+	return y + block
 
 
 func _draw() -> void:
