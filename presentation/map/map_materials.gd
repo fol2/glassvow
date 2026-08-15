@@ -75,7 +75,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	prop.set_shader_parameter("tex_mean", 0.5)
 	bind_region(region, _fallback_grade)
 	_active_paths = PackedStringArray()
-	_active_resources = []
+	_active_resources.clear()
 	var procedural_grade: ImageTexture = grade_for(region, positions)
 	bind_region(region, procedural_grade)
 	var kits: Array[Resource] = []
@@ -88,15 +88,15 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	var ground_mean: float = 0.5
 	var prop_mean: float = 0.5
 	for row: Dictionary in _manifest_rows:
-		var row_act: int = int(row.get("act", -99))
+		var row_act: int = _row_int(row, "act", -99)
 		if row_act != -1 and row_act != region.act:
 			continue
-		var path: String = ASSET_ROOT + String(row.get("path", ""))
+		var path: String = ASSET_ROOT + _row_string(row, "path")
 		var loaded: Variant = _resource_loader.call(path)
 		if not (loaded is Resource):
 			continue
-		var resource: Resource = loaded
-		var kind: String = String(row.get("kind", ""))
+		var resource: Resource = loaded as Resource
+		var kind: String = _row_string(row, "kind")
 		if kind in ["tile", "grade"] and not (resource is Texture2D):
 			continue
 		if kind in ["kit", "terminus"] and not (resource is Mesh or resource is PackedScene):
@@ -106,18 +106,18 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 		match kind:
 			"kit":
 				kits.append(resource)
-				kit_ids.append(String(row.get("id", "")))
+				kit_ids.append(_row_string(row, "id"))
 			"terminus":
 				terminus = resource
-				terminus_id = String(row.get("id", ""))
+				terminus_id = _row_string(row, "id")
 			"tile":
 				var tile: Texture2D = resource as Texture2D
-				if String(row.get("role", "")) == "ground":
+				if _row_string(row, "role") == "ground":
 					ground_tile = tile
-					ground_mean = float(row.get("tex_mean", 0.5))
+					ground_mean = _row_float(row, "tex_mean", 0.5)
 				else:
 					prop_tile = tile
-					prop_mean = float(row.get("tex_mean", 0.5))
+					prop_mean = _row_float(row, "tex_mean", 0.5)
 			"grade":
 				painted_grade = resource as Texture2D
 	if ground_tile != null:
@@ -155,8 +155,7 @@ func _read_manifest() -> Dictionary:
 		return {}
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
 	if parsed is Dictionary:
-		var manifest: Dictionary = parsed
-		return manifest
+		return parsed as Dictionary
 	return {}
 
 
@@ -165,12 +164,41 @@ func _rows_from(manifest: Dictionary) -> Array[Dictionary]:
 	var raw: Variant = manifest.get("assets", [])
 	if not (raw is Array):
 		return rows
-	var items: Array = raw
+	var items: Array = raw as Array
 	for item: Variant in items:
 		if item is Dictionary:
-			var row: Dictionary = item
-			rows.append(row)
+			rows.append(item as Dictionary)
 	return rows
+
+
+static func _row_int(row: Dictionary, key: String, fallback: int) -> int:
+	var value: Variant = row.get(key, fallback)
+	if value is int:
+		var integer: int = value
+		return integer
+	if value is float:
+		var decimal: float = value
+		return int(decimal)
+	return fallback
+
+
+static func _row_string(row: Dictionary, key: String) -> String:
+	var value: Variant = row.get(key, "")
+	if value is String:
+		var text: String = value
+		return text
+	return ""
+
+
+static func _row_float(row: Dictionary, key: String, fallback: float) -> float:
+	var value: Variant = row.get(key, fallback)
+	if value is float:
+		var decimal: float = value
+		return decimal
+	if value is int:
+		var integer: int = value
+		return float(integer)
+	return fallback
 
 
 func _load_resource(path: String) -> Resource:
