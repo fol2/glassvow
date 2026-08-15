@@ -286,7 +286,6 @@ class PerformanceEvidenceTests(unittest.TestCase):
         stdout = "BENCH_READY " + json.dumps(ready) + "\nBENCH_RESULT " \
             + json.dumps(summary) + "\n"
         warnings = "\n".join((
-            "WARNING: MapStrip: absent — act 1 skyband uses the procedural draw",
             "WARNING: 2 ObjectDB instances were leaked at exit",
         ))
         self.assertEqual(self.pid, PERF.validate_logs(stdout, warnings,

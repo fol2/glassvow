@@ -1,13 +1,13 @@
 class_name WorldMapScreen
 extends Control
-## The benchmark 15×7 pilgrimage graph walking a navigable road toward the Spire.
+## The benchmark 15×7 pilgrimage graph on the 3D lattice road.
 ##
 ## Presentation only. It reads the WorldMap graph and animates; the map's own
 ## `enter()` gate decides what is legal. Fully built in _init (no tree
 ## dependency) so headless tests can drive it — see the M5 screens.
 ## Paint order is child order: MapScene (world) → path overlay → waystones →
-## veil → chrome. Slice 7b seats pins on `projected_seats()`; sky/region bands
-## no longer draw the world. Chips, sealed-door (#217) and HUD stay 2D.
+## veil → chrome. Pins sit on `projected_seats()`. Chips, sealed-door (#217)
+## and HUD stay 2D.
 
 signal node_chosen(index: int)
 signal sealed_door_requested
@@ -18,36 +18,10 @@ const HINT_PT: float = 13.0
 const HINT_TOP: float = -44.0
 const HINT_BOTTOM: float = -18.0
 
-## Path/waystone PointerDrift amplitude (px); sky/region ÷3, veil ×1.35 (#64).
+## Path/waystone PointerDrift amplitude (px); veil ×1.35 (#64).
 const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
-## Wander amplitudes in px. The two domain fields do NOT share a range —
-## `domain/state/world_map.gd:134` scales `jx` by 0.5 (±0.25) and `:135` scales
-## `jy` by 0.4 (**±0.20**). An earlier draft of this docstring said "about ±0.25"
-## for both and the PR body then overstated the step wander by 30% (#69, PR #79
-## DL R1 m3). At 72 the step axis realises ±13.8 px on seed 717, which reads as
-## 5.7% of pad-landscape's 241.9 px step but **10.8% of phone-portrait's 128 px
-## floor** — a ratio is a property of the shape, not of the constant, and quoting
-## the roomiest one alone is how the same figure understated itself twice
-## (PR #79 DL R2 n5). Both are the "~3×" the review asked for; 1.8% was before.
-##
-## The lane axis cannot take the same treatment: at 46–50 px of pitch it has no
-## room, so it trades amplitude for the per-row application in `_row_lane_jitter`.
-##
-## BOTH STAY ABSOLUTE PX, which #69 grouped with `BED_HALF` as "decide once for
-## all three" and only `BED_HALF` had an answer until now (PR #80 DL R1). The
-## other two answer differently, and for the same reason as each other: they are
-## measured against quantities that are ALREADY rate-derived. `STEP_JITTER` is
-## wander within a step that is `W · stepRate` clamped, and `LANE_JITTER` within
-## a pitch that is `H · laneRate` clamped — expressing either as a second rate
-## would compound two ratios and make the wander grow fastest exactly where the
-## floors have already said there is no room. `laneMin` is the third: a TOUCH
-## floor in px by necessity, because 44 px is a finger, not a fraction of a
-## stage. `BED_HALF` was the odd one out precisely because it measures nothing.
-const STEP_JITTER: float = 72.0
-const LANE_JITTER: float = 20.0
 
 const REGION_NAME: String = "The Ashen Woods"
-const REGION_GROUND: Color = Color("#05070d")
 
 var instant: bool = false        # headless: travel resolves without a tween
 var map: WorldMap
@@ -58,8 +32,6 @@ var content: ContentDB
 ## under a live screen when the window crosses an aspect boundary.
 var shape: StringName = StageShape.IDENTITY
 
-## Kept for 2D helper math (bed/arch tests). Live pan lives on MapCameraRig.
-var _cam_x: float = 0.0
 var _travelling: bool = false
 ## Node index the lantern leaves during a glide; −1 when seated or when the
 ## run starts with no prior seat (path then collapses to the target).
@@ -70,17 +42,13 @@ var _travel_to_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _waystones: Array[GlassWaystone] = []
 var _hint_label: Label
 var _sealed_door: Button
-var _sky_tex: GradientTexture2D
 var _trail_layout: Dictionary = {}
 var _title_label: Label
 var _run: RunState = null
 var _act: int = 0
-var _sky_colour: Color
-var _fog_colour: Color
 var _particle_colour: Color
 var _glow_colour: Color
-var _accent_colour: Color
-## Per-act region knobs (palette + weather). Bands read this;
+## Per-act region knobs (palette + weather). VeilBand reads this;
 ## built in `_set_act_theme` so a theme pick never leaves stale weather.
 var _region: MapRegions = null
 
@@ -111,7 +79,7 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_veil_band = MapBand.VeilBand.new()
 	_veil_band.host = self
 	add_child(_veil_band)
-	# Theme after bands exist so apply_region reaches sky + region + veil.
+	# Theme after the veil exists so apply_region reaches it.
 	_set_act_theme(0)
 	_build_chrome()
 	_seat_marker()
@@ -233,7 +201,7 @@ func _scale_chrome() -> void:
 	#
 	# `mapbar/title` was authored for the case where a title has no room and
 	# should go rather than shrink. It went unread for one afternoon and the case
-	# arrived from the other direction: the Spire rail now carries the act, the
+	# arrived from the other direction: the top rail now carries the act, the
 	# floor and the boss, so this label says the same thing a second time. At the
 	# identity shape that is only redundant. On a phone held upright it is clipped
 	# at the right edge, and held sideways it is drawn straight over the top row
@@ -379,17 +347,10 @@ func _set_act_theme(stage_act: int) -> void:
 	_act = _region.act
 	if content != null and not content.acts.is_empty():
 		_act = clampi(stage_act, 0, content.acts.size() - 1)
-	# Palette fields keep their names — bands already read them.
 	# MapRegions is the sole source; the content pack theme dict is not read.
-	_sky_colour = _region.sky
-	_fog_colour = _region.fog
+	# Veil motes read glow/particle; 3D ramp binds band_shade/band_key on MapScene.
 	_particle_colour = _region.particles
 	_glow_colour = _region.glow
-	_accent_colour = _region.accent
-	_sky_tex = GlassStyle.grad_tex(
-		PackedColorArray([_sky_colour, _fog_colour, REGION_GROUND]),
-		PackedFloat32Array([0.0, 0.55, 1.0]), false,
-		Vector2(0.5, 0.0), Vector2(0.5, 1.0))
 	if _veil_band != null:
 		_veil_band.apply_region(_region)
 	if _map_scene != null:
@@ -454,37 +415,6 @@ func _focus_xz(i: int) -> Vector2:
 		return MapCameraRig.DEFAULT_XZ
 	return MapCameraRig.pose_for_world(
 		MapPinProjection.world_anchor(map.nodes[i]))
-
-
-## World-x of the lead-third seating for node `i`, clamped so node 0 cannot
-## underscroll and the terminus keeps act sky to its right.
-func _cam_for(i: int) -> float:
-	if i < 0 or i >= map.nodes.size():
-		return _cam_min()
-	return clampf(_world_x(float(map.nodes[i].row)), _cam_min(), _cam_max())
-
-
-func _cam_min() -> float:
-	# Node 0's screen x == lead·W at the floor: with
-	# `screen = world − cam + lead·W`, that floor is zero — not `−lead·W`,
-	# which would let the map underscroll past the entry seat.
-	return 0.0
-
-
-func _cam_max() -> float:
-	# The terminus does NOT get the entry seat. At `_world_x(ROWS − 1)` the boss
-	# lands at exactly `lead·W` — the same spot node 0 occupies on the opening
-	# frame — leaving 67% of the stage as empty road ahead of it, which reads as
-	# a journey that has not finished (#69, carried from P5.1 DL R2). Stopping
-	# the camera short seats it at `terminusSeat` of the stage instead, keeping
-	# §3's act sky beyond without the frame looking unspent.
-	#
-	# Mind the sign: a LARGER `_cam_max` moves the terminus LEFT, so arriving
-	# further right means stopping EARLIER. Clamped against `_cam_min` so a
-	# stage narrower than the shortfall cannot invert the range.
-	var last: float = _world_x(float(WorldMap.ROWS - 1))
-	var seat: float = size.x * _trail_num("terminusSeat", 0.72)
-	return maxf(last - (seat - _lead_px()), _cam_min())
 
 
 func _on_waystone_chosen(i: int) -> void:
@@ -675,201 +605,14 @@ func _layout_waystones() -> void:
 		ws.position = seat - ws.size * node_scale * 0.5
 
 
-## Lattice projection of this node, in this Control's px.
+## Lattice seat of this node, in this Control's px.
 func _node_pos(node: MapNode) -> Vector2:
 	var i: int = map.nodes.find(node)
 	var seats: PackedVector2Array = projected_seats()
-	if i < 0 or i >= seats.size():
-		return Vector2.ZERO
-	return seats[i]
+	return seats[i] if i >= 0 and i < seats.size() else Vector2.ZERO
 
 
-## How far apart two steps of the pilgrimage stand, in stage px.
-##
-## The rate keeps the same NUMBER of nodes on screen as the stage grows; the
-## band stops a phone held sideways from packing them into each other. It
-## replaced the vertical Spire's `rowRate`/`rowMin`/`rowMax`.
-func _step() -> float:
-	return clampf(size.x * _trail_num("stepRate", 0.22),
-		_trail_num("stepMin", 150.0), _trail_num("stepMax", 290.0))
-
-
-## Lane spacing across the path. Col 3 is centre; depth-compress lives at the
-## call site so scale/alpha falloff can share the same depth reading.
+## Lane spacing across the path. Col 3 is centre.
 func _lane_gap() -> float:
 	return clampf(size.y * _trail_num("laneRate", 0.06),
 		_trail_num("laneMin", 46.0), _trail_num("laneMax", 50.0))
-
-
-func _world_x(row: float) -> float:
-	return row * _step()
-
-
-func _lead_px() -> float:
-	return _trail_num("lead", 0.333) * size.x
-
-
-## Distance between two lanes at `depth` steps from the camera, in stage px.
-##
-## `laneMin` is a TOUCH floor, so depth compression is not allowed to multiply it
-## away: 46 × 0.78 = 35.9 px, under the 44 px rect `set_touch_min` exists to
-## guarantee. Depth compresses while there is room and stops at the floor (#69,
-## carried from P5.1 DL R2). Named rather than inlined because #69 D1 asked
-## whether the bounty chip could be seated against it — it cannot, and the
-## answer is recorded at `GlassWaystone.paint_bounty_chip`.
-func lane_pitch(depth: float) -> float:
-	return maxf(_lane_gap() * clampf(1.0 - depth * 0.025, 0.78, 1.0),
-		_trail_num("laneMin", 46.0))
-
-
-## The map's ONE depth projection: how far a world point sits from the camera,
-## in steps. Every depth curve on this map reads from here — stone size and
-## alpha (`_layout_waystones`), lane compression (`lane_pitch`), the terminus
-## arch (`MapBand.PathBand._draw_rose_window`) and the road's taper (`bed_half`).
-##
-## It is a function rather than the one-line expression it replaces because the
-## expression had been written out three times, and this map has twice paid for
-## a second copy of one geometry going stale — the arch's radius (PR #79 PM R1)
-## and `BED_HALF` (#69 C5). PR #84 PM R1 caught the third.
-func depth_of(world_x: float) -> float:
-	return absf(world_x - _cam_x) / maxf(_step(), 1.0)
-
-
-## The same projection read at a point on the STAGE, for the GROUND PLANE.
-##
-## A node's screen x is `world_x − cam_x + lead·W + jy·STEP_JITTER + drift.x`, so
-## dropping the last two terms and inverting gives `world_x = screen_x − lead·W
-## + cam_x` — which is what this passes to `depth_of`. It is one function, not an
-## identity to be maintained.
-##
-## **The two dropped terms are why this must not be fed a stone's screen x.** The
-## ground does not jitter and does not lean, so for the road they are correctly
-## absent; but a stone carries up to `STEP_JITTER + PATH_DRIFT_AMP.x` of them,
-## and reading a stone's depth from its drawn position would disagree with the
-## depth it was drawn AT. Stones pass their world x to `depth_of` directly
-## (PR #84 PM R1).
-func depth_at(screen_x: float) -> float:
-	return depth_of(screen_x - _lead_px() + _cam_x)
-
-
-## Half-height of the road bed at a point on the stage, in stage px.
-##
-## Rate-derived, which is the question #69 C5 recorded and handed here: the 8 px
-## constant it replaces was 0.98% of a 820-tall stage and 2.05% of a 390-tall
-## one, so the same road read twice as wide on the SHORTEST shape (390 px tall;
-## this said "narrowest" until PR #84 DL R3 — 390 is its height). The default
-## rate reproduces 8.04 px at 820, where the constant was tuned, and the clamps
-## stop a very short or very tall stage from collapsing or flooding it.
-##
-## **Improved, not settled** — the word was `LayoutBook`'s, on the `trail/bedRate`
-## field declaration, and PR #84 DL R1 m3 was right that leaving it there is how
-## the same arithmetic gets re-litigated in six weeks. (DL R2 then caught that
-## this paragraph was written as though the word had been here: it never was.
-## It is retired at its own site and that field now points back to this one.)
-## What the change actually bought, measured over the shape matrix:
-##
-##   phone-portrait      8.27   0.980% of stage H   16.5% of lane pitch
-##   pad-portrait       10.00   0.847%  (bedMax)    20.0%
-##   pad-landscape       8.04   0.980%              16.3%
-##   desktop-landscape   8.04   0.980%              16.3%
-##   phone-landscape     6.00   1.538%  (bedMin)    13.0%
-##
-## Against stage height the spread falls from 3.03× to 1.82× and three shapes
-## land exactly on 0.980%. But **the clamps bind at two of the five**, and the
-## 390-tall stage that motivated deleting the constant is still 1.57× wider in
-## proportion than the reference — `bedMin` floors it at 6.0 where the rate wants
-## 3.82, so the excess over what the rate asks for falls from 4.18 px to 2.18,
-## **48% of it removed, not all**. (That figure read 40% until PR #84 DL R2:
-## 40% is the SPREAD's improvement, 3.03× → 1.82×, two sentences above — a
-## number borrowed from the wrong row of the same paragraph.)
-##
-## And the honest counter-argument, which belongs next to the change rather than
-## in a review thread: measured against LANE PITCH — the only other vertical
-## rhythm on this plane — the rate is *less* consistent than the constant was.
-## `_lane_gap` clamps to 46–50, so lanes vary 8.7% across a 3.03× range of stage
-## heights; bed-to-lane was 16.0–17.4% (1.09×) under `BED_HALF` and is now
-## 13.0–20.0% (1.53×). The book has already decided that vertical spacing here is
-## effectively absolute px, and the road is now measured against a different
-## ruler from the lanes it runs between. Stage-relative is defensible and
-## phone-portrait — the shape the whole question came from — is now exactly
-## right; but if this is ever revisited, `laneMin`/`laneMax` are the precedent
-## pointing the other way.
-func bed_half(screen_x: float) -> float:
-	return clampf(size.y * _trail_num("bedRate", 0.0098),
-		_trail_num("bedMin", 6.0), _trail_num("bedMax", 10.0)) \
-		* bed_taper(depth_at(screen_x))
-
-
-## The road's taper — the FIFTH depth curve on this map, and it is not the
-## stones' 0.035 for a measurable reason rather than a stylistic one.
-##
-## The stones sample depth at their own columns, spread over many steps, so
-## 0.035 accumulates across the whole walk. The bed is drawn continuously across
-## ONE frame, where the visible depth range is only about 0 to 3.3 steps, and the
-## stones' coefficient narrows it by 11% edge to edge — a rectangle with a
-## gradient, not a road.
-##
-## 0.18 was picked by measuring on the running map at pad-landscape, seed 717,
-## and then re-measured independently by PR #84 DL R1, which isolated the road
-## by differencing a 12-frame median against the same frames rendered with the
-## bed's alpha at zero (off-road residual 0.18 luma). Their figures, seat →
-## right edge: 0.12 gives 7.40 → 5.10 px (**31%**), 0.18 gives 6.85 → 3.45
-## (**50%**), 0.24 gives 6.95 → 3.40 (**51%**).
-##
-## **The argument for 0.18 is not that 50% beats 31% — it is that 0.24 buys
-## nothing.** At 0.24 the `0.40` floor below engages at depth 2.5, i.e. x ≈ 998
-## on an 1180 stage, so the far sixth of the frame stops tapering entirely
-## (3.45 px at x = 1050, 3.40 at x = 1150 — flat) and the road ends in a blunt
-## stub exactly where recession should read strongest. At 0.18 the floor lands
-## at x ≈ 1199, just past the reference frame. **0.18 is the largest coefficient
-## whose taper stays live to the right edge at the reference shape**, which also
-## means raising it requires revisiting the floor, not just this constant.
-## (On desktop-landscape, 1458 wide, the floor does clip the final 5.8 px even
-## at 0.18 — sub-pixel and non-degenerate, PR #84 PM R1.)
-##
-## Crown lift over the ground measures 15.2 luma (p5 14.4, p95 16.3) and is
-## identical at phone-portrait and phone-landscape, against dashes at 36–63,
-## stones at 159 and the marker at 208 — the road must not compete with the play
-## plane (#66/#67). Worth knowing before anyone tunes this again: at those alphas
-## 0.12, 0.18 and 0.24 are close to indistinguishable in the far third. The
-## width gradient reads as atmosphere, not as measurement.
-##
-## The other four are named in `depth_scale`'s docstring; this one belongs with
-## them.
-static func bed_taper(depth: float) -> float:
-	return clampf(1.0 - depth * 0.18, 0.40, 1.0)
-
-
-## How far a stone shrinks at `depth` steps from the camera. Anchored at 1.0, so
-## the nearest stone draws at exactly the book's `scale`.
-##
-## The map runs FIVE distinct depth curves, and a review round was spent on the
-## belief that it ran three — so they are named here once: this one (0.035) for
-## stone and arch size, `0.10` for stone alpha in `_layout_waystones`, `0.025`
-## for lane compression in `_node_pos`, `0.12` for edge fade in
-## `MapBand.PathBand._draw_graph`, and `bed_taper`'s `0.18` for the road plane —
-## the steepest of the five, and the reason it is not this one is measured in its
-## docstring. All five anchor at 1.0 (PR #79 PM R2, extended by #70).
-##
-## This is the only one with two call sites, which is why it is a function: the
-## arch used to carry a copy, and the copy went stale for a commit.
-static func depth_scale(depth: float) -> float:
-	return clampf(1.0 - depth * 0.035, 0.72, 1.0)
-
-
-## Radius of the terminus arch at a given boss depth, in stage px.
-##
-## `stage_h` is the drawing band's height rather than this screen's, because the
-## band is what clips it; the two are equal by `PRESET_FULL_RECT` and the
-## parameter keeps that an argument instead of an assumption. The cap exists
-## because a fixed 110 px broke phone-landscape at 61% of the stage's height.
-func arch_radius(depth: float, stage_h: float) -> float:
-	var k: float = _trail_num("scale", 0.36)
-	return minf(110.0 * (k / 0.6) * depth_scale(depth), stage_h * 0.22)
-
-
-## The boss's depth once the camera has run out of map — the terminus frame the
-## arch is composed for. Derived from `_cam_max()` itself, not modelled from the
-## seat, so it cannot disagree with where the camera actually stops.
-func terminus_depth() -> float:
-	return absf(_world_x(float(WorldMap.ROWS - 1)) - _cam_max()) / maxf(_step(), 1.0)

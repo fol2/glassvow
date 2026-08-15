@@ -36,15 +36,15 @@ static func _five_shapes(fails: Array[String]) -> void:
 				and screen._chip_band != null
 				and screen._path_band.get_index() > 0,
 				"%s: path overlay + chips + veil stay in front" % shape_name)
-		var has_sky: bool = false
-		var has_region: bool = false
+		var extra: int = 0
 		for child: Node in screen.get_children():
-			if child is MapBand.SkyBand:
-				has_sky = true
-			if child is MapBand.RegionBand:
-				has_region = true
-		_check(fails, not has_sky and not has_region,
-				"%s: sky/region bands are not in the tree" % shape_name)
+			if child is MapBand and not (
+					child is MapBand.PathBand
+					or child is MapBand.ChipBand
+					or child is MapBand.VeilBand):
+				extra += 1
+		_check(fails, extra == 0,
+				"%s: only path/chip/veil MapBand children remain" % shape_name)
 		_check(fails, not screen.choose(2),
 				"%s: screen refuses an unreachable waystone" % shape_name)
 		_check(fails, screen.choose(0),

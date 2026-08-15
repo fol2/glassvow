@@ -125,7 +125,9 @@ actually lived, now carries the verdict and routes onward:
 ## the rate is less consistent than the constant it replaced.
 ```
 
-`presentation/map/world_map_screen.gd` (`bed_half`) — the file the finding was discussed
+`presentation/map/world_map_screen.gd` — `bed_half` retired in #234 slice 7b2
+with PathBand's 2D road; the residual lives on the `trail/bedRate` field in
+`presentation/stage/layout_book.gd` — the file the finding was discussed
 in — now names where the word lived instead of claiming it as its own, and the
 cross-reference runs both ways so neither end can rot silently.
 
