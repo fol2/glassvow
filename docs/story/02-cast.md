@@ -106,3 +106,10 @@ Keeper 資產行),**零 redraw**——其餘三位主角同全部 minor cast 用
 art,故事只重讀、不要求改圖(skill §6)。Pale Ones 維持「現有敵人變體
 標記」;Act IV 八個「未行過的你」(#261 Q5)的 art 歸 #221(spec 由
 #261/#263 供料),不屬 cast scope。
+
+**修訂 [SETTLED — #263,2026-08-16]**:上段「additive-zero」的加圖上限
+由 James 解除——scripted scenes 與對白演出**可以按 scene blueprint 需要
+新增資產**(對白 staging 用圖在內),數量不設前置上限,逐件由 blueprint
+/batch brief 開列。不變的部分:**shipped 資產永不修改**(skill §6 照舊);
+每件新資產仍行 `docs/art-ledger.md` 契約(style bible + 記錄 prompt),
+候選圖過 James review 先入 `assets/`。

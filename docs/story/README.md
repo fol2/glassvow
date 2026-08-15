@@ -19,6 +19,7 @@ Born from wayfinder ticket #175 (story design). Spine: candidate #8
 | `04-delivery.md` | Delivery surfaces, per-run beat budget, content volume plan, rubric A-criteria mapping | 00 + rubric |
 | `05-foreshadow-ledger.md` | Every line's dual reading: surface / post-twist / leak risk | all copy, shipped and new |
 | `06-glossary.md` | Bilingual canonical terms + placeholder register | 00, domain-modeling discipline |
+| `07-scenes.md` | Scripted-scene blueprints (opening / unsealing / Act IV / finale) + the shared scene player spec | 00 + 03 + 04 (#263) |
 
 ## Review states
 
