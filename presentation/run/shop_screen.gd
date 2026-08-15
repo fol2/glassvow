@@ -143,12 +143,12 @@ func _add_stock() -> void:
 	for index: int in range(card_rows.size()):
 		var row: Dictionary = card_rows[index]
 		_add_card(row, index)
-	# Phials hang from the canopy hooks, relics stand on the counter.
+	# Phials stand on the shelf, relics stand on the counter.
 	var potion_rows: Array = _stock.get("potions", [])
 	for index: int in range(potion_rows.size()):
 		var potion: Dictionary = potion_rows[index]
 		_add_misc("potions", potion, index,
-			StallLayout.HOOK_ORDER[index % StallLayout.HOOK_ORDER.size()])
+			StallLayout.SHELF_SEATS[index % StallLayout.SHELF_SEATS.size()])
 	var relic_rows: Array = _stock.get("relics", [])
 	for index: int in range(relic_rows.size()):
 		var relic: Dictionary = relic_rows[index]
@@ -199,8 +199,8 @@ func _add_misc(category: String, row: Dictionary, index: int,
 	add_child(tag)
 
 
-## The quest offer, set apart on the right-hand ledge under cold glass: the one
-## thing in the room the merchant is not selling for its own sake.
+## The quest offer, set apart at the counter's right end under cold glass: the
+## one thing in the room the merchant is not selling for its own sake.
 func _add_offer() -> void:
 	var button: Button = _ware_button(OFFER_ART)
 	button.modulate = OFFER_TINT
@@ -390,6 +390,14 @@ func _seat(entry: Dictionary, box: Rect2, frame: Vector2, factor: float) -> void
 	# A long effect line otherwise squeezes the ware to a thumbnail, and it is
 	# the ware that has to read from across the room, not the second sentence.
 	var ware_h: float = maxf(box.size.y * WARE_SHARE, box.size.y - tag_h - thread)
+	# A PHIAL ON THE SHELF KEEPS A FIXED FOOTING (#242 slice 3). Its tag hangs
+	# below it, so the residual above would be its height AND its foot: two
+	# phials whose rules text wraps differently then stand at two different
+	# heights on one painted board — measured at 20px apart with the slice's own
+	# stock. Its ware rect is its column instead, square, which is also what
+	# makes an `expand_icon` square sprite exactly fill it.
+	if StallLayout.SHELF_SEATS.has(entry["region"]):
+		ware_h = box.size.x
 	# A ware whose tag is above it STANDS on something, so it keeps a footing
 	# clear of the region's bottom edge — flush, it reads as hung over the lip.
 	var ware: Rect2 = Rect2(box.position.x,
