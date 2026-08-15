@@ -5,11 +5,11 @@ extends Control
 ## Goods stand on the painted furniture, and `StallLayout` owns where that is
 ## and how the crop keeps it on screen at every shape.
 ##
-## Slice 1 of #242 places the scene. The wares are still the old buttons and
-## the old price labels, standing in their regions; slice 2 replaces them with
-## thread-tied tags and the SOLD / unaffordable grammar. This view stays
-## read-only either way: every purchase is emitted using the action id already
-## understood by Main.
+## Slice 2 of #242 hangs the wares' tags (`WareTag`) and the state grammar off
+## that scaffold: SOLD is a physical gap with a struck name, unaffordable is the
+## same ware with a red number, and the quest offer stands under `BellJar` on
+## its own ledge. This view stays read-only: every purchase is emitted using the
+## action id already understood by Main.
 
 signal action_selected(id: String)
 
@@ -17,14 +17,23 @@ const CARD_SIZE: Vector2 = Vector2(CardView.CARD_W, CardView.CARD_H)
 const CARD_ART_RATIO: float = CardView.CARD_H / CardView.CARD_W
 const POTION_ART: String = "res://assets/art/potions/%s.png"
 const RELIC_ART: String = "res://assets/art/relics/%s.png"
+## Cold glass, no wick: the quest lantern is the ember lantern's art with its
+## fire drained by `OFFER_TINT`, not a new raster.
+const OFFER_ART: String = "res://assets/art/relics/emberLantern.png"
+const OFFER_TINT: Color = Color(0.40, 0.78, 1.20, 0.94)
 ## The mock's two scrims (`shop-c1.html` .vig-top/.vig-bot), which is what keeps
 ## the HUD readable over the canopy and the prices readable over the counter.
 const SCRIM_INK: Color = GlassStyle.NIGHT_BOT
 const SCRIM_TOP: float = 0.21
 const SCRIM_BOTTOM: float = 0.33
-## Slice-1 split of a ware's region: the ware, then its price under it.
-const PRICE_BAND: float = 0.26
 const RACK_PRICE_GAP: float = 2.0
+## The least of its region the goods keep when the tag wants more.
+const WARE_SHARE: float = 0.45
+## Slice 5 (#242) words these as `ui.shop.sold` / `ui.shop.removalSpent` and
+## JAMES WORDS THEM AT REVIEW — they stand here as the concept's own placeholder
+## text rather than as locale keys nobody has signed off yet.
+const SOLD_WORD: String = "SOLD"
+const SPENT_WORD: String = "SPENT"
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -37,6 +46,8 @@ var _sfx: SfxBus
 var _painting: TextureRect
 var _say: Label
 var _leave: Button
+var _leave_font: FontVariation = RunStyle.tracked(GlassStyle.CINZEL_700, 3)
+var _jar: BellJar
 var _card_views: Array[CardView] = []
 ## Purchasable slots registered at build; update() refreshes state in place.
 var _slots: Array[Dictionary] = []
@@ -52,6 +63,9 @@ func update(stock: Dictionary, gold: int, quest_offer: Dictionary,
 	_potion_slot_available = potion_slot_available
 	for entry: Dictionary in _slots:
 		_apply_slot_state(entry)
+	# A tag's height now depends on its state — a struck name and a SOLD word
+	# are not a price row — so the seat has to run again after the state does.
+	_relayout()
 
 
 func _init(stock: Dictionary, gold: int, content: ContentDB,
@@ -87,8 +101,10 @@ func _build() -> void:
 	_add_scrim(0.80, SCRIM_TOP, true)
 	_add_scrim(0.72, SCRIM_BOTTOM, false)
 
-	_say = _label(Locale.active.t("ui.shop.greeting"), 17, RunStyle.PARCHMENT, false)
+	_say = Label.new()
+	_say.text = Locale.active.t("ui.shop.greeting")
 	_say.add_theme_font_override("font", RunStyle.slanted(GlassStyle.ALEGREYA_400))
+	_say.add_theme_color_override("font_color", RunStyle.PARCHMENT)
 	_say.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(_say)
 
@@ -100,7 +116,7 @@ func _build() -> void:
 	_leave.text = "←  " + Locale.active.t("ui.shop.leaveUpper")
 	_leave.flat = true
 	_leave.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_leave.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
+	_leave.add_theme_font_override("font", _leave_font)
 	_leave.add_theme_font_size_override("font_size", 14)
 	_leave.add_theme_color_override("font_color", Color("#d8bb71"))
 	_leave.pressed.connect(_emit_action.bind("leave"))
@@ -150,9 +166,11 @@ func _add_card(row: Dictionary, index: int) -> void:
 	var cost: int = 0 if cost_v == null else int(float(str(cost_v)))
 	var view: CardView = CardView.new(CardInst.new(-index - 1, StringName(id)),
 		definition, cost)
-	var price_label: Label = _price_label(_price(row), false)
-	var entry: Dictionary = _register_slot("card", "cards", index, view,
-		price_label, RunStyle.GOLD, &"")
+	# A card carries its own name and rules on its face, so its tag is the price
+	# row alone — until it sells and the pocket needs the struck name.
+	var tag: WareTag = _tag(str(definition.get("name", id)), "", _price(row))
+	tag.price_only = true
+	var entry: Dictionary = _register_slot("card", "cards", index, view, tag, &"")
 	# Always connect; gate on the slot's live disabled flag from _apply_slot_state.
 	view.released_at.connect(func(_uid: int, _position: Vector2) -> void:
 		if entry.get("disabled", false):
@@ -160,7 +178,7 @@ func _add_card(row: Dictionary, index: int) -> void:
 		_emit_action("cards:%d" % index)
 	)
 	add_child(view)
-	add_child(price_label)
+	add_child(tag)
 	_rack.append(entry)
 	_card_views.append(view)
 
@@ -171,53 +189,81 @@ func _add_misc(category: String, row: Dictionary, index: int,
 	var registry: Dictionary = _content.relics if category == "relics" \
 		else _content.potions
 	var definition: Dictionary = registry.get(id, {})
-	var art: String = (RELIC_ART if category == "relics" else POTION_ART) % id
-	var button: Button = _item_button(str(definition.get("name", id)),
-		str(definition.get("text", "")), art, false, false)
+	var button: Button = _ware_button(
+		(RELIC_ART if category == "relics" else POTION_ART) % id)
 	button.pressed.connect(_emit_action.bind("%s:%d" % [category, index]))
-	var price_label: Label = _price_label(_price(row), false)
-	_register_slot("misc", category, index, button, price_label, RunStyle.GOLD, region)
+	var tag: WareTag = _tag(str(definition.get("name", id)),
+		str(definition.get("text", "")), _price(row))
+	_register_slot("misc", category, index, button, tag, region)
 	add_child(button)
-	add_child(price_label)
+	add_child(tag)
 
 
+## The quest offer, set apart on the right-hand ledge under cold glass: the one
+## thing in the room the merchant is not selling for its own sake.
 func _add_offer() -> void:
-	var price: int = _price(_quest_offer)
-	var button: Button = _item_button(
-		str(_quest_offer.get("name", "A Lantern with No Flame")),
-		str(_quest_offer.get("text", _content.quests.get("usurper", {}).get(
-			"itemText", "Cold glass. No wick."))), "", false, true)
+	var button: Button = _ware_button(OFFER_ART)
+	button.modulate = OFFER_TINT
 	button.pressed.connect(_emit_action.bind("quest:flamelessLantern"))
-	var price_colour: Color = Color("#c7eadf")
-	var price_label: Label = _price_label(price, false, price_colour)
-	_register_slot("offer", "", 0, button, price_label, price_colour, &"jar")
+	var tag: WareTag = _tag(str(_quest_offer.get("name", "A Lantern with No Flame")),
+		str(_quest_offer.get("text", _content.quests.get("usurper", {}).get(
+			"itemText", "Cold glass. No wick."))), _price(_quest_offer))
+	tag.cold = true
+	tag.eyebrow = "GATE"
+	_register_slot("offer", "", 0, button, tag, &"jar")
 	add_child(button)
-	add_child(price_label)
+	# The glass stands in FRONT of what it covers, so it is added after the ware
+	# and passes the mouse through to it.
+	_jar = BellJar.new()
+	add_child(_jar)
+	add_child(tag)
 
 
 func _add_removal() -> void:
-	var price: int = int(float(str(_stock.get("removeCost", 0))))
-	var button: Button = _item_button(
-		Locale.active.t("ui.shop.cardRemoval.title").to_upper(),
-		Locale.active.t("ui.shop.cardRemoval.desc"), "", false, false, "✂")
+	var button: Button = _ware_button("")
 	button.pressed.connect(_emit_action.bind("remove"))
-	var price_label: Label = _price_label(price, false)
+	var tag: WareTag = _tag(Locale.active.t("ui.shop.cardRemoval.title"),
+		Locale.active.t("ui.shop.cardRemoval.desc"),
+		int(float(str(_stock.get("removeCost", 0)))))
+	tag.emblem = true
+	tag.state_word = SPENT_WORD
 	# The merchant's own service stands in the rack beside the cards.
-	_rack.append(_register_slot("removal", "", 0, button, price_label,
-		RunStyle.GOLD, &""))
+	_rack.append(_register_slot("removal", "", 0, button, tag, &""))
 	add_child(button)
-	add_child(price_label)
+	add_child(tag)
+
+
+## An unboxed ware: a real Button so keyboard focus and the touch floor survive
+## the loss of the chrome, with the goods themselves as its whole face.
+func _ware_button(art_path: String) -> Button:
+	var button: Button = Button.new()
+	RunStyle.hide_button_boxes(button)
+	button.expand_icon = true
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	if not art_path.is_empty() and ResourceLoader.exists(art_path):
+		button.icon = load(art_path) as Texture2D
+	button.mouse_entered.connect(_hover.bind(button))
+	return button
+
+
+func _tag(ware_name: String, effect: String, price: int) -> WareTag:
+	var tag: WareTag = WareTag.new()
+	tag.ware_name = ware_name
+	tag.effect = effect
+	tag.price = price
+	tag.state_word = SOLD_WORD
+	return tag
 
 
 func _register_slot(kind: String, category: String, index: int, control: Control,
-		price_label: Label, price_colour: Color, region: StringName) -> Dictionary:
+		tag: WareTag, region: StringName) -> Dictionary:
 	var entry: Dictionary = {
 		"kind": kind,
 		"category": category,
 		"index": index,
 		"control": control,
-		"price_label": price_label,
-		"price_colour": price_colour,
+		"tag": tag,
 		"region": region,
 		"disabled": false,
 	}
@@ -226,75 +272,45 @@ func _register_slot(kind: String, category: String, index: int, control: Control
 	return entry
 
 
+## The whole state grammar, in one place. SOLD/SPENT takes the ware away and
+## leaves the tag with a struck name; unaffordable leaves the ware exactly where
+## it stands and turns one number red. Nothing else changes between them.
 func _apply_slot_state(entry: Dictionary) -> void:
-	var kind: String = str(entry["kind"])
 	var index: int = entry["index"]
-	var disabled: bool = false
-	match kind:
-		"card":
-			var rows: Array = _stock.get("cards", [])
-			var row: Dictionary = rows[index]
-			var sold: bool = row.get("sold", false)
-			disabled = sold or _gold < _price(row)
-			var view: CardView = entry["control"]
-			view.modulate.a = 0.28 if sold else (0.58 if disabled else 1.0)
-		"misc":
+	var sold: bool = false
+	var price: int = 0
+	# The offer, once bought, leaves the stall entirely — jar, ware and tag.
+	var gone: bool = false
+	var blocked: bool = false
+	match str(entry["kind"]):
+		"card", "misc":
 			var category: String = str(entry["category"])
 			var rows: Array = _stock.get(category, [])
 			var row: Dictionary = rows[index]
-			var sold: bool = row.get("sold", false)
-			disabled = sold or _gold < _price(row) \
-				or (category == "potions" and not _potion_slot_available)
-			var button: Button = entry["control"]
-			button.disabled = disabled
-			button.modulate.a = 0.28 if sold else 1.0
+			sold = row.get("sold", false)
+			price = _price(row)
+			blocked = category == "potions" and not _potion_slot_available
 		"offer":
 			# Read live _quest_offer — usurper_offer returns a fresh dict each
-			# call, and an EMPTY one once bought: the lantern leaves the stall
-			# entirely, exactly as the old full rebuild dropped it.
-			var offer_btn: Button = entry["control"]
-			var gone: bool = _quest_offer.is_empty()
-			offer_btn.visible = not gone
-			var offer_price: Label = entry["price_label"]
-			offer_price.visible = not gone
-			disabled = gone or _gold < _price(_quest_offer) \
-				or _quest_offer.get("sold", false)
-			offer_btn.disabled = disabled
+			# call, and an EMPTY one once bought.
+			gone = _quest_offer.is_empty()
+			sold = _quest_offer.get("sold", false)
+			price = _price(_quest_offer)
 		"removal":
-			var removed: bool = _stock.get("removed", false)
-			disabled = removed or _gold < int(float(str(_stock.get("removeCost", 0))))
-			var removal_btn: Button = entry["control"]
-			removal_btn.disabled = disabled
-			removal_btn.modulate.a = 0.28 if removed else 1.0
-	entry["disabled"] = disabled
-	var price_label: Label = entry["price_label"]
-	var price_colour: Color = entry["price_colour"]
-	price_label.add_theme_color_override("font_color",
-		RunStyle.DANGER if disabled else price_colour)
-
-
-func _item_button(title: String, description: String, art_path: String,
-		disabled: bool, quest: bool, glyph: String = "◇") -> Button:
-	var button: Button = Button.new()
-	button.text = ("%s\n" % glyph if art_path.is_empty() else "") \
-		+ title + ("\n%s" % description if not description.is_empty() else "")
-	button.disabled = disabled
-	button.tooltip_text = description
-	button.clip_text = true
-	button.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
-	button.add_theme_font_size_override("font_size", 12)
-	RunStyle.style_button(button, false, Color("#8ce0cc") if quest else RunStyle.GOLD)
-	if not art_path.is_empty() and ResourceLoader.exists(art_path):
-		button.icon = load(art_path) as Texture2D
-		button.expand_icon = true
-	button.mouse_entered.connect(_hover.bind(button))
-	return button
-
-
-func _price_label(price: int, disabled: bool,
-		colour: Color = RunStyle.GOLD) -> Label:
-	return _label("◈  %d" % price, 16,
-		RunStyle.DANGER if disabled else colour, true)
+			sold = _stock.get("removed", false)
+			price = int(float(str(_stock.get("removeCost", 0))))
+	var payable: bool = _gold >= price
+	entry["disabled"] = sold or gone or blocked or not payable
+	var control: Control = entry["control"]
+	control.visible = not (sold or gone)
+	var button: Button = control as Button
+	if button != null:
+		button.disabled = entry["disabled"]
+	if entry["region"] == &"jar" and _jar != null:
+		_jar.visible = not gone
+	var tag: WareTag = entry["tag"]
+	tag.visible = not gone
+	tag.set_state(sold, payable)
 
 
 func _emit_action(id: String) -> void:
@@ -328,20 +344,24 @@ func _relayout() -> void:
 	var canvas: Rect2 = StallLayout.canvas(frame)
 	_painting.position = canvas.position
 	_painting.size = canvas.size
+	# One factor, derived from the painting rather than the window, drives every
+	# face on the screen. See `StallLayout.type_scale`.
+	var factor: float = StallLayout.type_scale(frame)
 	for entry: Dictionary in _slots:
 		var region: StringName = entry["region"]
 		if region != &"":
-			var control: Control = entry["control"]
-			var price_label: Label = entry["price_label"]
-			_seat(control, price_label, StallLayout.place(frame, region))
-	_seat_rack(frame)
+			_seat(entry, StallLayout.place(frame, region), frame, factor)
+	_seat_rack(frame, factor)
 	# The canopy compresses to nothing on a wide frame, so the merchant's line
 	# is pushed clear of the HUD band rather than clipped behind it.
 	var say_box: Rect2 = StallLayout.place(frame, &"say")
 	say_box.position.y = maxf(say_box.position.y, _hud_band() + 8.0)
+	_say.add_theme_font_size_override("font_size", maxi(10, int(roundf(17.0 * factor))))
 	_say.position = say_box.position
 	_say.size = say_box.size
 	var stair: Rect2 = StallLayout.place(frame, &"stair")
+	_leave_font.spacing_glyph = maxi(1, int(roundf(3.0 * factor)))
+	_leave.add_theme_font_size_override("font_size", maxi(9, int(roundf(14.0 * factor))))
 	_leave.position = stair.position
 	_leave.size = Vector2(stair.size.x, maxf(stair.size.y, RunStyle.hit_floor(44.0)))
 
@@ -353,52 +373,83 @@ func _hud_band() -> float:
 	return 42.0 if shape == &"phone-landscape" else 56.0
 
 
-## A ware in its region: the goods above, the price under them. The price band
-## is never smaller than the text in it — a Label refuses to shrink below its
-## own line height, and a band that ignores that pushes the number out of the
-## frame on a short one (measured: 20:9 lost the whole rack price row).
-func _seat(control: Control, price_label: Label, box: Rect2) -> void:
-	var price_h: float = maxf(price_label.get_combined_minimum_size().y,
-		box.size.y * PRICE_BAND)
+## A ware in its region. The region box is the WARE PLUS ITS TAG — that is how
+## the mock was measured — so the tag takes one end of it, the goods take the
+## rest, and the thread crosses the gap left between them.
+##
+## The tag is then clamped back inside the frame. Below a certain painting scale
+## a region is narrower than the smallest legible tag, so the tag grows past its
+## region rather than becoming unreadable; containment has to survive that, and
+## clamping is what makes `tests/test_stall_layout.gd` able to assert it.
+func _seat(entry: Dictionary, box: Rect2, frame: Vector2, factor: float) -> void:
+	var tag: WareTag = entry["tag"]
+	var above: bool = StallLayout.TAG_ABOVE.has(entry["region"])
+	var tag_h: float = tag.reflow(box.size.x, factor)
+	var thread: float = maxf(5.0, box.size.y * 0.05)
+	# The goods keep at least this much of their region whatever the tag needs.
+	# A long effect line otherwise squeezes the ware to a thumbnail, and it is
+	# the ware that has to read from across the room, not the second sentence.
+	var ware_h: float = maxf(box.size.y * WARE_SHARE, box.size.y - tag_h - thread)
+	# A ware whose tag is above it STANDS on something, so it keeps a footing
+	# clear of the region's bottom edge — flush, it reads as hung over the lip.
+	var ware: Rect2 = Rect2(box.position.x,
+		box.end.y - ware_h - thread if above else box.position.y,
+		box.size.x, ware_h)
+	var control: Control = entry["control"]
 	control.custom_minimum_size = Vector2.ZERO
-	control.position = box.position
-	control.size = Vector2(box.size.x, maxf(0.0, box.size.y - price_h))
-	price_label.position = Vector2(box.position.x, box.end.y - price_h)
-	price_label.size = Vector2(box.size.x, price_h)
+	control.position = ware.position
+	control.size = ware.size
+	tag.position = _inside(frame, Vector2(box.position.x,
+		ware.position.y - thread - tag_h if above else ware.end.y + thread),
+		tag.size)
+	tag.tie = Vector2(ware.get_center().x,
+		ware.position.y if above else ware.end.y)
+	if entry["region"] == &"jar" and _jar != null:
+		_jar.position = ware.position
+		_jar.size = ware.size
 
 
-func _seat_rack(frame: Vector2) -> void:
+func _seat_rack(frame: Vector2, factor: float) -> void:
 	var band: Rect2 = StallLayout.rack_band(frame)
 	var count: int = _rack.size()
 	if count == 0 or band.size.x <= 0.0 or band.size.y <= 0.0:
 		return
-	var first_price: Label = _rack[0]["price_label"]
-	var price_h: float = maxf(first_price.get_combined_minimum_size().y,
-		band.size.y * 0.11)
 	var separation: float = band.size.x * 0.012
 	var slot_w: float = (band.size.x - separation * float(count - 1)) / float(count)
-	var card_h: float = minf(band.size.y - price_h - RACK_PRICE_GAP,
-		minf(slot_w * CARD_ART_RATIO, CardView.CARD_H))
 	for index: int in range(count):
 		var entry: Dictionary = _rack[index]
-		var slot: Rect2 = Rect2(
-			band.position.x + (slot_w + separation) * float(index),
-			band.position.y, slot_w, card_h)
+		var tag: WareTag = entry["tag"]
+		var tag_h: float = tag.reflow(slot_w, factor)
+		var left: float = band.position.x + (slot_w + separation) * float(index)
 		var control: Control = entry["control"]
 		var view: CardView = control as CardView
-		if view != null:
-			var card_scale: float = card_h / CardView.CARD_H
-			view.scale = Vector2.ONE * card_scale
-			view.position = slot.position + Vector2(
-				(slot.size.x - CardView.CARD_W * card_scale) * 0.5, 0.0) \
-				- CARD_SIZE * 0.5 * (1.0 - card_scale)
-		else:
+		if view == null:
+			# The merchant's service stands the full height of the rack: shears,
+			# name, effect and price are one drawn block over one hit rect.
 			control.custom_minimum_size = Vector2.ZERO
-			control.position = slot.position
-			control.size = slot.size
-		var price_label: Label = entry["price_label"]
-		price_label.position = Vector2(slot.position.x, slot.end.y + RACK_PRICE_GAP)
-		price_label.size = Vector2(slot.size.x, price_h)
+			control.position = Vector2(left, band.position.y)
+			control.size = Vector2(slot_w, band.size.y)
+			tag.position = _inside(frame,
+				Vector2(left, band.end.y - tag_h), tag.size)
+			continue
+		var card_h: float = maxf(8.0, minf(band.size.y - tag_h - RACK_PRICE_GAP,
+			minf(slot_w * CARD_ART_RATIO, CardView.CARD_H)))
+		var card_scale: float = card_h / CardView.CARD_H
+		view.scale = Vector2.ONE * card_scale
+		view.position = Vector2(
+			left + (slot_w - CardView.CARD_W * card_scale) * 0.5,
+			band.position.y) - CARD_SIZE * 0.5 * (1.0 - card_scale)
+		# A sold card leaves a pocket, and the struck name stands IN the gap
+		# rather than under it — the absence is the point.
+		var tag_y: float = band.position.y + card_h + RACK_PRICE_GAP
+		if tag.sold:
+			tag_y = band.position.y + maxf(0.0, card_h - tag_h) * 0.42
+		tag.position = _inside(frame, Vector2(left, tag_y), tag.size)
+
+
+static func _inside(frame: Vector2, at: Vector2, box: Vector2) -> Vector2:
+	return Vector2(clampf(at.x, 0.0, maxf(0.0, frame.x - box.x)),
+		clampf(at.y, 0.0, maxf(0.0, frame.y - box.y)))
 
 
 ## A rack card's rect on screen. CardView scales around its centre
@@ -412,15 +463,3 @@ static func card_rect(view: CardView) -> Rect2:
 
 static func _price(row: Dictionary) -> int:
 	return int(float(str(row.get("price", 0))))
-
-
-static func _label(text: String, font_size: int, colour: Color,
-		centred: bool) -> Label:
-	var label: Label = Label.new()
-	label.text = text
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if centred \
-		else HORIZONTAL_ALIGNMENT_LEFT
-	label.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", colour)
-	return label
