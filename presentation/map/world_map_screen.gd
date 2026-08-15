@@ -458,6 +458,11 @@ func _seat_marker() -> void:
 	if _travelling:
 		return
 	_cam_x = seat
+	# A direct seat is a teleport: no motion for _sync_world_live to see, so
+	# re-arm one frozen frame at the new pose (the set_live(false) contract),
+	# or 7b's coupled camera would hold a stale frame after set_shape/refresh.
+	if _map_scene != null:
+		_map_scene.set_live(false)
 
 
 ## World-x of the lead-third seating for node `i`, clamped so node 0 cannot
