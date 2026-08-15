@@ -9,7 +9,17 @@ jobs:
   capture:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out PR head
+        uses: actions/checkout@v4
+
+      - name: Check out exact PR base
+        uses: actions/checkout@v4
+        with:
+          ref: b0a1e5be039fd068132b9f8ef905c5daf1726f7d
+          path: baseline
+
+      - name: Install base-compatible capture probe
+        run: cp tools/capture_map_review.gd baseline/tools/capture_map_review.gd
 
       - name: Setup Godot 4.7.1
         uses: chickensoft-games/setup-godot@v2
@@ -17,19 +27,54 @@ jobs:
           version: 4.7.1
           use-dotnet: false
 
-      - name: Import resources
-        run: tools/check_imports.sh
+      - name: Import both trees
+        run: |
+          tools/check_imports.sh
+          (cd baseline && tools/check_imports.sh)
 
-      - name: Capture fallback map
+      - name: Capture PR and exact base with one renderer
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb
+          mkdir -p review-artifacts
           xvfb-run -a godot --path . --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
+          cp artifacts/map-screenshot.png review-artifacts/pr-head.png
+          xvfb-run -a godot --path baseline --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
+          cp baseline/artifacts/map-screenshot.png review-artifacts/base-main.png
 
-      - name: Upload map review artifact
+      - name: Require pixel-identical fallback frame
+        run: |
+          python3 -m pip install --quiet 'Pillow>=10,<13'
+          python3 - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+          from PIL import Image, ImageChops
+
+          head_path = Path('review-artifacts/pr-head.png')
+          base_path = Path('review-artifacts/base-main.png')
+          head = Image.open(head_path).convert('RGBA')
+          base = Image.open(base_path).convert('RGBA')
+          if head.size != base.size:
+              raise SystemExit(f'size drift: PR {head.size} != base {base.size}')
+          diff = ImageChops.difference(head, base)
+          bbox = diff.getbbox()
+          if bbox is not None:
+              diff.save('review-artifacts/visual-diff.png')
+              changed = sum(pixel != (0, 0, 0, 0) for pixel in diff.getdata())
+              extrema = diff.getextrema()
+              maximum = max(channel[1] for channel in extrema)
+              raise SystemExit(
+                  f'visual drift: bbox={bbox}, changed_pixels={changed}, max_channel_delta={maximum}'
+              )
+          digest = sha256(head_path.read_bytes()).hexdigest()
+          print(f'pixel-identical map fallback: {head.size[0]}x{head.size[1]}, png_sha256={digest}')
+          PY
+
+      - name: Upload paired review artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: map-review-${{ github.sha }}
-          path: artifacts/map-screenshot.png
+          name: map-review-paired-${{ github.sha }}
+          path: review-artifacts/*.png
           if-no-files-found: error
           retention-days: 1
