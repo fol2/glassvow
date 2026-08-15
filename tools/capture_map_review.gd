@@ -1,5 +1,6 @@
 extends SceneTree
 ## Temporary #291 visual-acceptance probe. Removed after the artifact is reviewed.
+## Compatible with both the PR head and its exact base for paired capture.
 
 const OUTPUT: String = "res://artifacts/map-screenshot.png"
 const REVIEW_SIZE: Vector2i = Vector2i(1280, 720)
@@ -14,10 +15,6 @@ func _initialize() -> void:
 	scene.set_live(true)
 	for _frame: int in range(8):
 		await process_frame
-	if not scene.active_asset_paths().is_empty():
-		printerr("capture_map_review: real payload unexpectedly loaded")
-		quit(1)
-		return
 	if scene.find_child("MapAssetGeometry", true, false) != null:
 		printerr("capture_map_review: fallback unexpectedly replaced")
 		quit(1)
