@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check out PR head
         uses: actions/checkout@v4
+        with:
+          path: head
 
       - name: Check out exact PR base
         uses: actions/checkout@v4
@@ -19,7 +21,7 @@ jobs:
           path: baseline
 
       - name: Install base-compatible capture probe
-        run: cp tools/capture_map_review.gd baseline/tools/capture_map_review.gd
+        run: cp head/tools/capture_map_review.gd baseline/tools/capture_map_review.gd
 
       - name: Setup Godot 4.7.1
         uses: chickensoft-games/setup-godot@v2
@@ -27,9 +29,9 @@ jobs:
           version: 4.7.1
           use-dotnet: false
 
-      - name: Import both trees
+      - name: Import both isolated trees
         run: |
-          tools/check_imports.sh
+          (cd head && tools/check_imports.sh)
           (cd baseline && tools/check_imports.sh)
 
       - name: Capture PR and exact base with one renderer
@@ -37,8 +39,8 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb
           mkdir -p review-artifacts
-          xvfb-run -a godot --path . --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
-          cp artifacts/map-screenshot.png review-artifacts/pr-head.png
+          xvfb-run -a godot --path head --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
+          cp head/artifacts/map-screenshot.png review-artifacts/pr-head.png
           xvfb-run -a godot --path baseline --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
           cp baseline/artifacts/map-screenshot.png review-artifacts/base-main.png
 
