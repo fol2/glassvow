@@ -61,6 +61,17 @@ static func _cursor(vigil: VigilState) -> int:
 
 static func _losses(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
+	var sealed: VigilState = VigilState.blank()
+	_check(fails, sealed.commit_run(_run(content, sealed, "run-win-l0"), "win", content)
+		and sealed.whispers == 0, "shard-zero win exposed an L1 whisper")
+	var opened: VigilState = VigilState.blank()
+	var opening_win: RunState = _run(content, opened, "run-win-first-shard")
+	var opening_quest: Dictionary = opening_win.quests["paleOnes"]
+	opening_quest["state"] = "complete"
+	_check(fails, opened.commit_run(opening_win, "win", content)
+		and opened.shards.has("paleOnes") and opened.whispers == 1,
+		"same-run first shard did not open the whisper channel")
+
 	var vigil: VigilState = VigilState.blank()
 	var l0: RunState = _run(content, vigil, "run-loss-l0")
 	_check(fails, vigil.commit_run(l0, "death", content)
@@ -102,7 +113,7 @@ static func _losses(fails: Array[String]) -> void:
 	var before: int = loaded.whispers
 	_check(fails, loaded.commit_run(_run(content, loaded, "run-win"), "win", content)
 		and loaded.whispers == before + 1,
-		"win whisper path changed")
+		"eligible win whisper path changed")
 
 
 static func _speaks(content: ContentDB, variant: String,
