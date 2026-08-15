@@ -159,6 +159,10 @@
   畫面演出;碑文與 loss 文案由 L1 起計 [SETTLED — #258 R2 Q12]。)
 - **L1(quest 進行中)**:歧義句累積——Lamplighter 的「上次」、影的
   「You walked away before I stopped calling」、碑不躺低。可疑,不可證。
+  (影的控訴句是 **L1 的重量天花**:凡比它更明的句必須定級 L2 以上,
+  並服從 04-delivery 的 per-channel ceiling;canon-lint 以此句作 L1/L2
+  界的比對錨 [SETTLED — #260 Q5;範圍依 #258 per-channel ceiling 收窄
+  至 L1——絕對版與已定級 L2 的 ledger rows 5/13/19 相撞]。)
 - **L2(第 4-5 片燼璃)**:Pages 與 Own Shade 的收束句開始只剩一種讀法,
   但機制仍未明文。
 - **L3(第六片,開封場)**:彩窗成鏡,隊伍現形,真相明文。唯一一次全句
