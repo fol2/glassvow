@@ -647,6 +647,12 @@
       "en": "English",
       "zhHant": "繁體中文",
       "deferNote": "Takes effect on the next screen."
+    },
+    "scene": {
+      "speaker": {
+        "keeper": "Keeper",
+        "queue": "Queue"
+      }
     }
   },
   "content": {
@@ -2136,5 +2142,43 @@
       "Bring six shards to the Rose Window.",
       "The climb continues."
     ]
+  },
+  "story": {
+    "opening": {
+      "b1": {"l1": "opening 1.1 -- placeholder", "l2": "opening 1.2 -- placeholder"},
+      "b2": {"l1": "opening 2.1 -- placeholder", "l2": "opening 2.2 -- placeholder", "l3": "opening 2.3 -- placeholder"},
+      "b3": {"l1": "opening 3.1 -- placeholder", "l2": "opening 3.2 -- placeholder"},
+      "b4": {"l1": "opening 4.1 -- placeholder"}
+    },
+    "unsealing": {
+      "b1": {"l1": "unsealing 1.1 -- placeholder"},
+      "b2": {"l1": "unsealing 2.1 -- placeholder"},
+      "b3": {"l1": "unsealing 3.1 -- placeholder"},
+      "b4": {"l1": "unsealing 4.1 -- placeholder"}
+    },
+    "unsealing-short": {
+      "b1": {"l1": "unsealing-short 1.1 -- placeholder"}
+    },
+    "act4-entry": {
+      "b1": {"l1": "act4-entry 1.1 -- placeholder"}
+    },
+    "act4-node1": {
+      "b1": {"l1": "act4-node1 1.1 -- placeholder"}
+    },
+    "act4-node2": {
+      "b1": {"l1": "act4-node2 1.1 -- placeholder"}
+    },
+    "act4-node3": {
+      "b1": {"l1": "act4-node3 1.1 -- placeholder"}
+    },
+    "act4-node4": {
+      "b1": {"l1": "act4-node4 1.1 -- placeholder", "l2": "act4-node4 1.2 -- placeholder", "l3": "act4-node4 1.3 -- placeholder"}
+    },
+    "act4-node5": {
+      "b1": {"l1": "act4-node5 1.1 -- placeholder", "l2": "act4-node5 1.2 -- placeholder"}
+    },
+    "finale": {
+      "b1": {"l1": "finale 1.1 -- placeholder", "l2": "finale 1.2 -- placeholder"}
+    }
   }
 }
