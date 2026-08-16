@@ -26,6 +26,9 @@ var shards: Array[String] = []
 var whispers: int = 0
 var news: bool = false
 var receipts: Dictionary = {"deeds": null, "runEnd": null}
+## Once-flags for scripted scenes. Not `unlocks`: that set is the title
+## "secrets" count and the Dawn reveal feed.
+var scenes_seen: Array[String] = []
 
 
 static func _ji(value: Variant) -> int:
@@ -52,6 +55,7 @@ func to_dict() -> Dictionary:
 		"whispers": whispers,
 		"news": news,
 		"receipts": receipts.duplicate(true),
+		"scenesSeen": scenes_seen.duplicate(),
 	}
 
 
@@ -94,6 +98,12 @@ static func from_dict(raw: Dictionary) -> VigilState:
 		vigil.shards.append(shard)
 	vigil.whispers = maxi(0, int(float(str(raw.get("whispers", 0)))))
 	vigil.news = raw.get("news", false)
+	var seen_v: Variant = raw.get("scenesSeen", [])
+	if typeof(seen_v) == TYPE_ARRAY:
+		for id_v: Variant in seen_v:
+			var seen: String = str(id_v)
+			if not seen.is_empty() and not vigil.scenes_seen.has(seen):
+				vigil.scenes_seen.append(seen)
 	var raw_receipts: Dictionary = raw["receipts"]
 	for key: String in ["deeds", "runEnd"]:
 		var receipt_v: Variant = raw_receipts.get(key)

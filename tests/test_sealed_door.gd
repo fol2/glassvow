@@ -119,6 +119,7 @@ static func _six_shard_vigil() -> VigilState:
 	for id: String in VigilState.QUEST_IDS:
 		vigil.quests[id]["state"] = "complete"
 		vigil.shards.append(id)
+	vigil.scenes_seen.append("opening")
 	return vigil
 
 

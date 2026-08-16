@@ -58,6 +58,7 @@ var pending_quest_id: Variant = null
 var pending_reward: Variant = null
 var pending_run_end: Variant = null
 var pending_dawn: Variant = null
+var pending_scene: Variant = null
 var pending_hollow: Variant = null
 var pending_hollow_route: Variant = null
 var pending_lamplighter: bool = false
@@ -130,6 +131,7 @@ func to_save_dict() -> Dictionary:
 	out["pendingReward"] = pending_reward
 	out["pendingRunEnd"] = pending_run_end
 	out["pendingDawn"] = pending_dawn
+	out["pendingScene"] = pending_scene
 	out["pendingHollow"] = pending_hollow
 	out["pendingHollowRoute"] = pending_hollow_route
 	out["pendingLamplighter"] = pending_lamplighter
@@ -290,6 +292,7 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	rs.pending_reward = save.get("pendingReward")
 	rs.pending_run_end = save.get("pendingRunEnd")
 	rs.pending_dawn = save.get("pendingDawn")
+	rs.pending_scene = save.get("pendingScene")
 	rs.pending_hollow = save.get("pendingHollow")
 	rs.pending_hollow_route = save.get("pendingHollowRoute")
 	rs.pending_lamplighter = save.get("pendingLamplighter", false)
@@ -338,6 +341,7 @@ static func _valid_pending(save: Dictionary, content: ContentDB) -> bool:
 	var reward: Variant = save.get("pendingReward")
 	var run_end: Variant = save.get("pendingRunEnd")
 	var dawn: Variant = save.get("pendingDawn")
+	var scene: Variant = save.get("pendingScene")
 	var hollow: Variant = save.get("pendingHollow")
 	var route: Variant = save.get("pendingHollowRoute")
 	var lamplighter: Variant = save.get("pendingLamplighter", false)
@@ -361,6 +365,11 @@ static func _valid_pending(save: Dictionary, content: ContentDB) -> bool:
 			return false
 		var cursor: int = _sji(dawn.get("cursor", -1))
 		if cursor < 0 or cursor > dawn["events"].size():
+			return false
+	if scene != null:
+		if typeof(scene) != TYPE_DICTIONARY:
+			return false
+		if str(scene.get("id", "")).is_empty() or _sji(scene.get("cursor", -1)) < 0:
 			return false
 	if hollow != null and typeof(hollow) != TYPE_DICTIONARY:
 		return false
