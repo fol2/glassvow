@@ -133,8 +133,7 @@ static func from_dict(raw: Dictionary) -> VigilState:
 				var drawn: String = str(id_v)
 				if not drawn.is_empty():
 					bucket.append(drawn)
-			if not bucket.is_empty():
-				vigil.line_recent.append(bucket)
+			vigil.line_recent.append(bucket)
 	var raw_receipts: Dictionary = raw["receipts"]
 	for key: String in ["deeds", "runEnd"]:
 		var receipt_v: Variant = raw_receipts.get(key)
@@ -163,7 +162,7 @@ static func _valid_receipt(value: Variant) -> bool:
 
 ## Fold one terminal run into this ledger. Repeating the same runId/outcome is
 ## a successful no-op; changing the outcome for that runId is rejected.
-func commit_run(run: RunState, outcome: String, content: ContentDB = null) -> bool:
+func commit_run(run: RunState, outcome: String, content: ContentDB) -> bool:
 	if outcome not in OUTCOMES or run.run_id.is_empty():
 		return false
 	var prior_v: Variant = receipts.get("runEnd")
@@ -220,6 +219,7 @@ func commit_run(run: RunState, outcome: String, content: ContentDB = null) -> bo
 		persisted_hollow["memory"].erase("eligibleMisses")
 	# Count this run's new shards first so a win that earns the first pane
 	# may speak immediately, while shard-zero wins stay inside L0.
+	var drawn: Array = []
 	if outcome == "win":
 		_hear_whisper(run, content)
 	runs_played += 1
@@ -231,14 +231,14 @@ func commit_run(run: RunState, outcome: String, content: ContentDB = null) -> bo
 			if typeof(fall_v) == TYPE_DICTIONARY:
 				last_fall = fall_v.duplicate(true)
 				last_fall["standing"] = true
-		_write_epitaph(run, content)
+		drawn = _write_epitaph(run, content)
+	line_recent = LineTable.remember(line_recent, drawn)
 	receipts["runEnd"] = {
 		"runId": run.run_id,
 		"outcome": outcome,
 		"completed": completed,
 	}
-	if content != null:
-		_refresh_unlocks(content, outcome)
+	_refresh_unlocks(content, outcome)
 	news = news or not completed.is_empty() or outcome != "abandon"
 	return true
 
@@ -249,18 +249,11 @@ func _line_ctx(run: RunState) -> Dictionary:
 
 
 func _hear_whisper(run: RunState, content: ContentDB) -> void:
-	var ctx: Dictionary = _line_ctx(run)
-	if content != null:
-		if LineTable.slot_open(content.line_table, "whisper", ctx):
-			whispers += 1
-		return
-	if _ji(ctx.get("shards", 0)) >= LineTable.L1_SHARDS:
+	if LineTable.slot_open(content.line_table, "whisper", _line_ctx(run)):
 		whispers += 1
 
 
-func _write_epitaph(run: RunState, content: ContentDB) -> void:
-	if content == null:
-		return
+func _write_epitaph(run: RunState, content: ContentDB) -> Array:
 	var last_id: String = defeat_epitaphs[defeat_epitaphs.size() - 1] \
 		if not defeat_epitaphs.is_empty() else ""
 	var row: Dictionary = LineTable.select(
@@ -271,11 +264,11 @@ func _write_epitaph(run: RunState, content: ContentDB) -> void:
 		})
 	var id: String = str(row.get("id", ""))
 	if id.is_empty():
-		return
+		return []
 	defeat_epitaphs.append(id)
 	if row.get("once", false) and not line_once.has(id):
 		line_once.append(id)
-	line_recent = LineTable.remember(line_recent, [id])
+	return [id]
 
 
 func _refresh_unlocks(content: ContentDB, outcome: String) -> void:
