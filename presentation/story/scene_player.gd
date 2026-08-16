@@ -249,7 +249,7 @@ func _sync_hearth_figure() -> void:
 			_hearth_figure.queue_free()
 			_hearth_figure = null
 		return
-	_hearth_figure = HearthFigure.attach(_plate, false)
+	_hearth_figure = HearthFigure.attach(_plate)
 	_hearth_figure.visible = _plate.visible
 
 
