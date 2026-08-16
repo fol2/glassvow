@@ -168,7 +168,7 @@ func _walk(run: RunState, map: WorldMap, path: Array[int], clear_last: bool) -> 
 			return _bad("Synthesised history could not enter node %d" % i)
 		var n: MapNode = map.current()
 		run.node_id = n.id
-		run.floors_climbed = n.row + 1
+		run.waystones_lit = n.row + 1
 		if n.unlit:
 			var bounty: int = n.bounty * (2 if run.has_relic("thiefOfWicks") else 1)
 			run.player.gold += bounty

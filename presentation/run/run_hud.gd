@@ -271,11 +271,11 @@ func _apply_shape() -> void:
 
 func _location_text(run: RunState) -> String:
 	if content.acts.is_empty():
-		return "UNKNOWN ACT · WAYSTONE %d" % run.floors_climbed
+		return "UNKNOWN ACT · WAYSTONE %d" % run.waystones_lit
 	var act: Dictionary = content.acts[clampi(run.act, 0, content.acts.size() - 1)]
 	return Locale.active.t("ui.hud.location", {
 		"act": str(act.get("name", "Unknown Act")),
-		"floor": run.floors_climbed,
+		"n": run.waystones_lit,
 		"boss": str(act.get("bossName", "Unknown Boss")),
 	}).to_upper()
 

@@ -29,7 +29,7 @@ DISPLAY_LEAVES = frozenset({
     "accepted", "final", "huntInscription", "huntName", "bought", "death",
     "itemName", "itemText", "poor", "ask", "cannot", "paid",
 })
-DISPLAY_STRING_ARRAYS = frozenset({"floorEchoes", "fragments", "progress", "pages", "dialogue"})
+DISPLAY_STRING_ARRAYS = frozenset({"waystoneEchoes", "fragments", "progress", "pages", "dialogue"})
 CONTENT_DOMAINS = {
     "acts": "acts", "affixes": "affixes", "arts": "arts", "aspects": "aspects",
     "boons": "boons", "cards": "cards", "deeds": "deeds", "enemies": "enemies",

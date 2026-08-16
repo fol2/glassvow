@@ -126,13 +126,13 @@ func _build() -> void:
 
 	# The benchmark's emotional close: italic Cinzel, tracked, brighter than
 	# parchment (.door-inscription, styles.css:2554).
-	var climb: Label = Label.new()
-	climb.text = Locale.active.t("ui.map.sealedDoor.inscription")
-	climb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	climb.add_theme_font_override("font", RunStyle.slanted(GlassStyle.CINZEL_500, 1))
-	climb.add_theme_font_size_override("font_size", 18)
-	climb.add_theme_color_override("font_color", Color("#fff3d6"))
-	_answer.add_child(climb)
+	var inscription: Label = Label.new()
+	inscription.text = Locale.active.t("ui.map.sealedDoor.inscription")
+	inscription.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	inscription.add_theme_font_override("font", RunStyle.slanted(GlassStyle.CINZEL_500, 1))
+	inscription.add_theme_font_size_override("font_size", 18)
+	inscription.add_theme_color_override("font_color", Color("#fff3d6"))
+	_answer.add_child(inscription)
 
 	# The primary action breathes apart from the copy above it.
 	var cta_seat: MarginContainer = MarginContainer.new()

@@ -6,6 +6,10 @@ extends RefCounted
 ## subsumes the fixture's rng.calls without a separate counter.
 
 const SLICE_ENEMIES: Array[String] = ["sporeling", "duskfang", "waylayer", "gravewarden"]
+## sovereign is not in the slice. enemy-ai.json still records `ascend` /
+## `ascended` for the boss (981+ rows); those rows are unasserted. The live
+## move id is `holdCourt` (#305). Adding sovereign here without regenerating
+## that fixture is a parity trap, not a missing test.
 
 
 ## JSON.parse_string yields float for every number; whole values are exact.
@@ -60,3 +64,32 @@ static func run(fails: Array[String]) -> void:
 					"ai %s case %d (turn=%d last=%s): rng state expected %d got %d — draw count/order mismatch"
 					% [eid, ci, turn, last, expected_state, got_state]
 				)
+	_sovereign_phase(fails)
+
+
+static func _sovereign_phase(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var def: Dictionary = content.enemy(&"sovereign")
+	var moves_v: Variant = def.get("moves", {})
+	if typeof(moves_v) != TYPE_DICTIONARY:
+		fails.append("ai sovereign: moves is not a dictionary")
+		return
+	var moves: Dictionary = moves_v
+	if not moves.has("holdCourt"):
+		fails.append("ai sovereign: holdCourt missing from content")
+	if moves.has("ascend"):
+		fails.append("ai sovereign: retired ascend move still present")
+	var flags: Dictionary = {}
+	var rng: Rng = Rng.new(1)
+	var first: StringName = EnemyAi.decide(
+		&"sovereign", 4, "scepter", "gravitas", 0.5, rng, flags)
+	if first != &"holdCourt":
+		fails.append("ai sovereign: phase transition returned %s" % String(first))
+	if flags.get("heldCourt", false) != true:
+		fails.append("ai sovereign: heldCourt flag was not set")
+	var second: StringName = EnemyAi.decide(
+		&"sovereign", 5, "holdCourt", "scepter", 0.4, rng, flags)
+	if second == &"holdCourt" or second == &"ascend" or String(second).is_empty():
+		fails.append("ai sovereign: phase 2 stayed on the transform (got %s)" % String(second))
+	elif not moves.has(String(second)):
+		fails.append("ai sovereign: phase 2 move %s is not in content" % String(second))

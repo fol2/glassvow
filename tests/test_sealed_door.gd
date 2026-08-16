@@ -47,8 +47,8 @@ static func _door_on_final_act(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
 	var run: RunState = _final_act_run(content, VigilState.QUEST_IDS.duplicate())
 	var map: WorldMap = WorldMap.benchmark(run)
-	_check(fails, map.nodes.size() > 1 and map.region == "obsidian_spire",
-		"final-act six-shard map is the generated Spire graph")
+	_check(fails, map.nodes.size() > 1 and map.region == "obsidian_court",
+		"final-act six-shard map is the generated court graph")
 	var screen: WorldMapScreen = WorldMapScreen.new(map, content)
 	screen.refresh(run)
 	_check(fails, screen._sealed_door.visible,

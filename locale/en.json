@@ -141,8 +141,8 @@
       "warnSaved": "Beginning anew abandons your saved run."
     },
     "end": {
-      "ascended": "ARRIVED",
-      "ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the road — the first in an age.",
+      "arrived": "ARRIVED",
+      "arrivedSub": "The Eternal Sovereign is dust. Dawn breaks over the road — the first in an age.",
       "bequestDone": "✦ The stone keeps your {name}.<br>It will wait for you in {act}.",
       "bequestNote": {
         "card": "your finest card",
@@ -158,9 +158,9 @@
       "dmgTaken": "Damage Taken",
       "elitesBosses": "Elites & Bosses",
       "fallen": "FALLEN",
-      "fallenSub": "Here ended a run, at waystone <b>{floor}</b>.<br>The road keeps what it takes — but the Vigil remembers.",
+      "fallenSub": "Here ended a run, at waystone <b>{n}</b>.<br>The road keeps what it takes — but the Vigil remembers.",
       "finalDeckTitle": "Final Deck",
-      "floors": "Waystones",
+      "waystones": "Waystones",
       "returnVigil": "Return to the Vigil",
       "runTime": "Run Time",
       "slain": "Slain",
@@ -174,7 +174,7 @@
       "viewDeck": "View Final Deck",
       "abandoned": "THE VOW IS SET ASIDE",
       "abandonedSub": "The pilgrimage ends here. The Vigil will keep the record.",
-      "fallenLantern": "Your lantern went dark at waystone {floor}.",
+      "fallenLantern": "Your lantern went dark at waystone {n}.",
       "elitesBossesPlus": "Elites + Bosses",
       "monument": {
         "body": "A previous pilgrim stands inside the stone.",
@@ -198,8 +198,8 @@
       "chooseCardBody": "The choice is part of the price."
     },
     "help": {
-      "climbBody": "Follow the road of lanterns onward. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
-      "climbTitle": "The Pilgrimage",
+      "roadBody": "Follow the road of lanterns onward. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
+      "roadTitle": "The Pilgrimage",
       "combatBody": "Each turn you draw <b>5 cards</b> and gain <b>3 Energy</b> (⬤). Play a card by clicking or dragging — attacks need a target when several enemies remain. Enemies telegraph their <b>intent</b> above their heads.",
       "combatTitle": "Combat",
       "firesBody": "Rest sites heal <b>30%</b> or upgrade a card. Shops sell cards, relics, phials — and can <b>remove</b> a card from your deck. Keep your deck lean; every reward is optional.",
@@ -243,7 +243,7 @@
       }
     },
     "hud": {
-      "actFloor": "Act {act} · Waystone {floor}",
+      "actWaystone": "Act {act} · Waystone {n}",
       "deckAria": "Deck",
       "deckCount": "{n} cards",
       "deckTitle": "Your Deck",
@@ -257,7 +257,7 @@
       "menu": "Menu",
       "emptyPhial": "Empty phial seat",
       "hpFraction": "{hp} / {maxHp}",
-      "location": "{act} · WAYSTONE {floor} · {boss}",
+      "location": "{act} · WAYSTONE {n} · {boss}",
       "deckOverlayTitle": "DECK",
       "deckOverlayCount": "{count} panes carried",
       "usePotionOn": "Use on {name}"
@@ -391,14 +391,14 @@
       "beginAnew": "Begin Anew",
       "beginAnewBody": "The current pilgrimage will be recorded as abandoned before a new one begins.",
       "beginAnewTitle": "Begin Anew?",
-      "beginClimb": "Rekindle",
+      "rekindle": "Rekindle",
       "chooseBoon": "Choose a boon",
       "close": "Close",
-      "continueClimb": "Back to the Road",
+      "backToRoad": "Back to the Road",
       "credits": "Credits",
       "fightOn": "Fight On",
       "howToPlay": "How to Play",
-      "keepClimbing": "Stay on the Road",
+      "stayOnRoad": "Stay on the Road",
       "lightTheWay": "Light the Way",
       "mute": "Mute",
       "muteSound": "Mute Sound",
@@ -410,12 +410,12 @@
       "theVigil": "The Vigil",
       "unmute": "Unmute",
       "unmuteSound": "Unmute Sound",
-      "leaveSpireTitle": "LEAVE THE ROAD?",
-      "leaveSpireBody": "The lantern keeps your place."
+      "leaveRoadTitle": "LEAVE THE ROAD?",
+      "leaveRoadBody": "The lantern keeps your place."
     },
     "persistence": {
       "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
-      "reloadClimb": "Reload Saved Run",
+      "reloadRoad": "Reload Saved Run",
       "reloadDestination": "Reload Saved Destination",
       "reloadDuel": "Reload Saved Duel",
       "reloadFinalisation": "Reload Saved Finalisation",
@@ -801,7 +801,7 @@
         "text": "Deal @9@ damage and apply 3 Smolder to ALL enemies.",
         "textUp": "Deal @12@ damage and apply 4 Smolder to ALL enemies."
       },
-      "ascension": {
+      "risingLitany": {
         "name": "Rising Litany",
         "text": "At the start of each turn, gain 2 Fervor.",
         "textUp": "At the start of each turn, gain 3 Fervor."
@@ -1377,8 +1377,8 @@
           "annihilation": {
             "name": "Annihilation"
           },
-          "ascend": {
-            "name": "Ascend"
+          "holdCourt": {
+            "name": "Hold Court"
           },
           "gravitas": {
             "name": "Gravitas"
@@ -1759,7 +1759,7 @@
     },
     "quests": {
       "eighthOmen": {
-        "floorEchoes": [
+        "waystoneEchoes": [
           "// THE PANE WATCHES //",
           "// EIGHT IS NOT A NUMBER //",
           "// CARRY THE WRONG LIGHT UPWARD //",

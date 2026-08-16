@@ -234,7 +234,7 @@ const WARD_ICON: Texture2D = preload("res://assets/art/ui/ward.png")
 ## (drain.js:495) — they are the card's gesture, not its landing, so they must
 ## not wait for something to be hit.
 const PLAY_TIME_BESPOKE: Array[String] = [
-	"ascension", "pyreheart", "emberdance", "limitBreak"]
+	"risingLitany", "pyreheart", "emberdance", "limitBreak"]
 
 ## `big` (drain.js:540) — the damage at which a blow earns its own ceremony.
 const BIG_HIT: int = 16
@@ -2386,9 +2386,10 @@ func _handle_event(ev: Dictionary) -> void:
 				_vfx_card_id = str(inst.id)
 			_bespoke_fired = false
 			# `['ascension','pyreheart','emberdance','limitBreak']` (drain.js:495) —
-			# four signatures that are not an impact at all. They fire on the PLAY,
-			# at the hero, before anything has been struck; only limitBreak reaches
-			# out, to the first living foe.
+			# port id `risingLitany` for the first (#305). Four signatures that
+			# are not an impact at all. They fire on the PLAY, at the hero,
+			# before anything has been struck; only limitBreak reaches out, to
+			# the first living foe.
 			if PLAY_TIME_BESPOKE.has(_vfx_card_id):
 				var living: int = _first_living()
 				var from_at: Vector2 = _hero_centre()
