@@ -1147,6 +1147,15 @@ func _show_map() -> void:
 		_transitions.wipe()
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
+	# The L0 hearth linger belongs to DEPARTURE — leaving the hearth to walk
+	# the road (00-truth §5 L0, 07-scenes §2: 每次出發). Every act begins with
+	# the lantern unseated (`WorldMap.benchmark` sets `at = -1`), so the
+	# screen's own `from_i < 0` test fires at the top of acts II and III too,
+	# and would show the hearth from the middle of a journey the player left
+	# long ago — three times a run for a plant meant to be subliminal. Only
+	# main knows which unseated map is the departure.
+	if game.run.act > 0:
+		_map_screen.hearth_plate = ""
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 	add_child(_map_screen)

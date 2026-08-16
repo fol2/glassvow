@@ -20,6 +20,7 @@ static func run(fails: Array[String]) -> void:
 	_opening_once(fails)
 	_resume_owed_line(fails)
 	_hearth_plant_art_gate(fails)
+	_hearth_plant_is_departure_only(fails)
 	if _file_snapshot(SaveService.RUN_PATH) != default_run \
 			or _file_snapshot(SaveService.VIGIL_PATH) != default_vigil:
 		fails.append("scene_wiring: tests touched the default save")
@@ -148,6 +149,26 @@ static func _hearth_plant_art_gate(fails: Array[String]) -> void:
 	_check(fails, arrived.is_empty(), "the plant handed off before the hold")
 	tree.root.remove_child(lit)
 	lit.free()
+
+
+## The screen can only see "the lantern is unseated", and every act starts
+## that way — so main, which knows which unseated map is the DEPARTURE, has to
+## withhold the plate for acts II and III.
+static func _hearth_plant_is_departure_only(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _main(content)
+	main._forced_seed = 30903
+	main._new_run()
+	_drive(main)
+	var screen: WorldMapScreen = main._map_screen as WorldMapScreen
+	_check(fails, screen != null and not screen.hearth_plate.is_empty(),
+		"act I departure lost the hearth plant")
+	main.game.run.act = 1
+	main._show_map()
+	var later: WorldMapScreen = main._map_screen as WorldMapScreen
+	_check(fails, later != null and later.hearth_plate.is_empty(),
+		"act II planted the hearth mid-journey")
+	_dispose(main)
 
 
 static func _wake(main: Main) -> void:
