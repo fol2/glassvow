@@ -5,7 +5,8 @@ extends Control
 ## Instantiable without a WorldMap. `project_pins` takes a node list when the
 ## caller has one; construction does not. Owns pan / fling / wheel for the
 ## world surface; pin pick is `pin_at` (screen rect ∩ hit-test). Ground and
-## placeholder MultiMesh modules (wedge / slab / dab) carry the #255
+## manifest assets replace the placeholder MultiMesh modules only when a full
+## active-act geometry set is available; otherwise wedge / slab / dab carry the #255
 ## cel/triplanar pair. Freeze is a switch, not a scene-graph assumption
 ## (#207 decision 10). Rest is `UPDATE_ONCE` (one paint, then sleep). Call
 ## `set_live(true)` while the camera moves; `set_live(false)` re-arms a
@@ -34,6 +35,8 @@ var _display: TextureRect
 var _rig: MapCameraRig
 var _key: DirectionalLight3D
 var _materials: MapMaterials
+var _world: Node3D
+var _asset_geometry: Node3D
 var _act: int = -1
 var _dragging: bool = false
 var _lock_input: bool = false
@@ -42,7 +45,7 @@ var _fling: Vector2 = Vector2.ZERO
 var _last_velocity: Vector2 = Vector2.ZERO
 
 
-func _init() -> void:
+func _init(manifest: Dictionary = {}, resource_loader: Callable = Callable()) -> void:
 	name = "MapScene"
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -53,17 +56,17 @@ func _init() -> void:
 	_stage.size = Vector2i(64, 64)
 	_stage.render_target_update_mode = SubViewport.UPDATE_ONCE
 	add_child(_stage)
-	var world: Node3D = Node3D.new()
-	world.name = "MapWorld"
-	_stage.add_child(world)
+	_world = Node3D.new()
+	_world.name = "MapWorld"
+	_stage.add_child(_world)
 	_rig = MapCameraRig.new()
-	world.add_child(_rig)
-	_add_key(world)
-	_add_environment(world)
-	_materials = MapMaterials.new(_key.basis.z, _rig.zoom_stop)
+	_world.add_child(_rig)
+	_add_key(_world)
+	_add_environment(_world)
+	_materials = MapMaterials.new(_key.basis.z, _rig.zoom_stop, manifest, resource_loader)
 	_rig.zoom_stop_changed.connect(_materials.set_tex_stop)
-	_add_ground(world)
-	_add_props(world)
+	_add_ground(_world)
+	_add_props(_world)
 	_display = TextureRect.new()
 	_display.name = "MapDisplay"
 	_display.texture = _stage.get_texture()
@@ -102,6 +105,10 @@ func get_act() -> int:
 	return _act
 
 
+func active_asset_paths() -> PackedStringArray:
+	return _materials.active_asset_paths()
+
+
 ## Bind this act's grade + ramp bands. `MapRegions.for_act` is the only
 ## palette source; content theme is not consulted. Re-arms freeze so the
 ## new look paints once.
@@ -110,7 +117,8 @@ func set_act(act_i: int) -> void:
 	if region.act == _act:
 		return
 	_act = region.act
-	_materials.bind_region(region, MapMaterials.grade_for(region, _all_prop_positions()))
+	var assets: Dictionary = _materials.bind_act(region, _all_prop_positions())
+	_bind_asset_geometry(assets)
 	if not is_live():
 		set_live(false)
 
@@ -336,6 +344,90 @@ func _add_multimesh(world: Node3D, node_name: String, mesh: Mesh,
 	instances.material_override = _materials.prop
 	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	world.add_child(instances)
+
+
+## Swap placeholder geometry only after all eight kits and the terminus resolve.
+## Partial asset deliveries may exercise checker/runtime loading without creating
+## a half-authored frame. Removing the prior root synchronously releases its mesh
+## references before the next act is attached.
+func _bind_asset_geometry(assets: Dictionary) -> void:
+	if _asset_geometry != null:
+		_world.remove_child(_asset_geometry)
+		_asset_geometry.free()
+		_asset_geometry = null
+	_set_placeholders_visible(true)
+	var raw_kits: Variant = assets.get("kits", [])
+	var raw_terminus: Variant = assets.get("terminus", null)
+	if not (raw_kits is Array) or not (raw_terminus is Resource):
+		return
+	var kit_resources: Array = raw_kits
+	if kit_resources.size() != 8:
+		return
+	var meshes: Array[Mesh] = []
+	for raw: Variant in kit_resources:
+		if not (raw is Resource):
+			return
+		var resource: Resource = raw
+		var mesh: Mesh = _mesh_from(resource)
+		if mesh == null:
+			return
+		meshes.append(mesh)
+	var terminus_resource: Resource = raw_terminus
+	var terminus_mesh: Mesh = _mesh_from(terminus_resource)
+	if terminus_mesh == null:
+		return
+	_asset_geometry = Node3D.new()
+	_asset_geometry.name = "MapAssetGeometry"
+	_world.add_child(_asset_geometry)
+	var positions: PackedVector3Array = _all_prop_positions()
+	var cursor: int = 0
+	for i: int in range(meshes.size()):
+		var count: int = 4 if i == 0 else 3
+		var placements: PackedVector3Array = PackedVector3Array()
+		for j: int in range(count):
+			placements.append(positions[cursor + j])
+		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements, cursor)
+		cursor += count
+	var terminus: MeshInstance3D = MeshInstance3D.new()
+	terminus.name = "AssetTerminus"
+	terminus.mesh = terminus_mesh
+	terminus.position = Vector3(22.0, 0.0, 0.0)
+	terminus.material_override = _materials.prop
+	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_asset_geometry.add_child(terminus)
+	_set_placeholders_visible(false)
+
+
+func _set_placeholders_visible(on: bool) -> void:
+	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
+		var node: Node = _world.find_child(node_name, false, false)
+		if node is GeometryInstance3D:
+			var geometry: GeometryInstance3D = node
+			geometry.visible = on
+
+
+func _mesh_from(resource: Resource) -> Mesh:
+	if resource is Mesh:
+		return resource as Mesh
+	if not (resource is PackedScene):
+		return null
+	var instance: Node = (resource as PackedScene).instantiate()
+	var mesh_node: MeshInstance3D = _first_mesh(instance)
+	var mesh: Mesh = null
+	if mesh_node != null:
+		mesh = mesh_node.mesh
+	instance.free()
+	return mesh
+
+
+func _first_mesh(root: Node) -> MeshInstance3D:
+	if root is MeshInstance3D:
+		return root as MeshInstance3D
+	for child: Node in root.get_children():
+		var found: MeshInstance3D = _first_mesh(child)
+		if found != null:
+			return found
+	return null
 
 
 func _wedge_positions() -> PackedVector3Array:

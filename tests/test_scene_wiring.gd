@@ -200,7 +200,7 @@ static func _hearth_plant_art_gate(fails: Array[String]) -> void:
 	lit.finished.connect(func() -> void: lit_done[0] += 1)
 	lit._ready()
 	_check(fails, lit.find_child("HearthPlant", true, false) != null
-			and lit.find_child("HearthWindow", true, false) != null,
+			and lit.find_child(WindowReflection.NAME, true, false) != null,
 		"a present hearth plate did not stage the plant")
 	_check(fails, lit_done[0] == 0, "the plant handed off before the hold")
 	lit.free()

@@ -11,7 +11,7 @@ const ALL_IDS: Array[StringName] = [
 	&"voltEel", &"mirelurker", &"tidecaller", &"shellback", &"deepmaw",
 	&"abyssalKnight", &"siren", &"leviathan", &"voidWisp", &"obsidianGolem",
 	&"starCultist", &"shade", &"chaosHound", &"watcherEye", &"voidColossus",
-	&"heraldOfEnd", &"sovereign",
+	&"heraldOfEnd", &"sovereign", &"unwalkedSelf",
 ]
 
 
@@ -129,6 +129,16 @@ static func decide(
 				return &"rise"
 			var herald: Array[StringName] = [&"doom", &"reave", &"flame"]
 			return herald[(turn - 1) % 3]
+		&"unwalkedSelf":
+			var kit: String = str(flags.get(CounterfactualSelf.KIT_FLAG, ""))
+			if kit == "ember":
+				var ember_seq: Array[StringName] = [&"scepterEcho", &"starfallEcho", &"ringbreak"]
+				return ember_seq[(turn - 1) % 3]
+			if kit == "ash":
+				var ash_seq: Array[StringName] = [&"gravitasEcho", &"ruinEcho", &"ringward"]
+				return ash_seq[(turn - 1) % 3]
+			push_error("EnemyAi.decide: unwalkedSelf missing kit")
+			return &""
 		&"sovereign":
 			if hp_frac <= 0.5 and not flags.get("heldCourt", false):
 				flags["heldCourt"] = true

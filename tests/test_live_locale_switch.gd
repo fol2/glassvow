@@ -51,6 +51,7 @@ static func _source_contract(fails: Array[String]) -> void:
 		"_show_dawn": "_remember_route(_show_dawn)",
 		"_show_scene": "_remember_route(_show_scene)",
 		"_show_departure_staging": "_remember_route(_show_departure_staging)",
+		"_show_pending_pool": "_remember_route(_show_pending_pool)",
 		"_show_monument": "_remember_route(_show_monument)",
 		"_show_hollow": "_remember_route(_show_hollow)",
 		"_show_lamplighter": "_remember_route(_show_lamplighter)",

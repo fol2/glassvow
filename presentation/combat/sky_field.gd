@@ -17,10 +17,15 @@ extends Control
 ## Declared a mock on purpose. If the 3D scene is ever ported, this comes out.
 
 ## `themes.js` — `scene.sky`, `scene.fog`, `scene.particles`, `scene.glow`.
-const ACT_SKIES: Array[Color] = [Color("#0c1410"), Color("#081420"), Color("#120a1e")]
-const ACT_FOGS: Array[Color] = [Color("#13241a"), Color("#0d2233"), Color("#1e1230")]
-const ACT_PARTICLES: Array[Color] = [Color("#ffa04d"), Color("#53e8ff"), Color("#c27bff")]
-const ACT_GLOWS: Array[Color] = [Color("#66ff9e"), Color("#2fb8ff"), Color("#ff4fd8")]
+## Row 3 is Glassvow's original Act IV dawn arc, shared with MapRegions.
+const ACT_SKIES: Array[Color] = [
+	Color("#0c1410"), Color("#081420"), Color("#120a1e"), Color("#16120c")]
+const ACT_FOGS: Array[Color] = [
+	Color("#13241a"), Color("#0d2233"), Color("#1e1230"), Color("#241e14")]
+const ACT_PARTICLES: Array[Color] = [
+	Color("#ffa04d"), Color("#53e8ff"), Color("#c27bff"), Color("#ffc08a")]
+const ACT_GLOWS: Array[Color] = [
+	Color("#66ff9e"), Color("#2fb8ff"), Color("#ff4fd8"), Color("#f0a878")]
 
 ## `ptsMain` / `ptsAccent`. The 3D fields are volumetric and thin out with
 ## distance; flattened to two dozen each, which is what reads at this camera.
@@ -97,14 +102,14 @@ const PARALLAX_PX: Vector2 = Vector2(26.0, 16.0)
 const BREATH_RATE: float = 0.13
 const BREATH_ROLL: float = 0.012
 
-## The weather field (scene3d.js:377-399): 300 points in the volume, three
-## behaviours by act — ash sifts down, mire sinks slow with a strong wobble,
-## astral streaks sideways. Flattened to what reads at this camera, denser
-## than the motes because weather is a veil, not points of light. Rates are
-## world units/s through the same SPAN_UNITS ruler the motes use; the source's
-## world-Y points up, so its `y -=` is a screen-space fall here.
+## The weather field (scene3d.js:377-399): 300 points in the volume. The three
+## benchmark behaviours stay byte-shaped — ash, mire, astral — and Act IV adds
+## Glassvow's reversed hearth-light: rose-gold cinders rise toward dawn. Flattened
+## to what reads at this camera, denser than the motes because weather is a veil,
+## not points of light. Rates are world units/s through the same SPAN_UNITS ruler
+## the motes use; the source's world-Y points up, so its `y -=` is screen rise.
 const WEATHER_COUNT: int = 110
-const WEATHER_ALPHA: Array[float] = [0.5, 0.42, 0.62]
+const WEATHER_ALPHA: Array[float] = [0.5, 0.42, 0.62, 0.50]
 const ASH_FALL: Vector2 = Vector2(0.45, 0.55)      # base, seed spread
 const MIRE_FALL: Vector2 = Vector2(0.14, 0.2)
 const MIRE_WOBBLE: float = 0.9
@@ -112,6 +117,10 @@ const MIRE_WOBBLE_RATE: float = 0.35
 const ASTRAL_RUN: Vector2 = Vector2(3.4, 2.8)
 const ASTRAL_FALL: Vector2 = Vector2(0.5, 0.5)
 const ASTRAL_LEN: float = 4.2                       # streak length, in radii
+const DAWN_RISE: Vector2 = Vector2(0.42, 0.52)
+const DAWN_WOBBLE: float = 0.48
+const DAWN_WOBBLE_RATE: float = 0.22
+const DAWN_LEN: float = 2.8                         # upward ember tail, in radii
 const WEATHER_R_MIN: float = 1.1
 const WEATHER_R_MAX: float = 2.6
 
@@ -301,16 +310,31 @@ func _step_weather(dt: float) -> void:
 			1:  # mire sinks slow, wobbles hard
 				m.at.y += dt * (MIRE_FALL.x + s * MIRE_FALL.y) * unit * _speed
 				m.at.x += sin(_t * MIRE_WOBBLE_RATE + m.seed) * dt * MIRE_WOBBLE * unit
-			_:  # astral streaks sideways, drifting down a little
+			2:  # astral streaks sideways, drifting down a little
 				m.at.x -= dt * (ASTRAL_RUN.x + s * ASTRAL_RUN.y) * unit * _speed
 				m.at.y += dt * (ASTRAL_FALL.x + s * ASTRAL_FALL.y) * unit * _speed
-		if m.at.y > size.y + m.radius * 2.0:
+			3:  # reversed hearth-light rises into the Act IV dawn
+				m.at.y -= dt * (DAWN_RISE.x + s * DAWN_RISE.y) * unit * _speed
+				m.at.x += sin(_t * DAWN_WOBBLE_RATE + m.seed) \
+					* dt * DAWN_WOBBLE * unit
+			_:  # future rows fail soft as ash rather than inheriting Act III
+				m.at.y += dt * (ASH_FALL.x + s * ASH_FALL.y) * unit * _speed
+		if _weather_mode == 3:
+			if m.at.y < -m.radius * DAWN_LEN:
+				m.at.y = size.y + m.radius
+				m.at.x = _rng.randf() * size.x
+		elif m.at.y > size.y + m.radius * 2.0:
 			m.at.y = -m.radius
 			m.at.x = _rng.randf() * size.x
-		if m.at.x < -m.radius * ASTRAL_LEN:
+		if _weather_mode == 2:
+			if m.at.x < -m.radius * ASTRAL_LEN:
+				m.at.x = size.x + m.radius
+				m.at.y = _rng.randf() * size.y
+			elif m.at.x > size.x + m.radius * ASTRAL_LEN:
+				m.at.x = -m.radius
+		elif m.at.x < -m.radius * 2.0:
 			m.at.x = size.x + m.radius
-			m.at.y = _rng.randf() * size.y
-		elif m.at.x > size.x + m.radius * ASTRAL_LEN:
+		elif m.at.x > size.x + m.radius * 2.0:
 			m.at.x = -m.radius
 
 
@@ -376,17 +400,19 @@ func paint_motes(host: CanvasItem) -> void:
 	_stamp(host, tex, _accent, _glow * flare, accent_a)
 
 
-## The veil under the light points: discs for ash and mire, short streaks for
-## the astral run. Same additive pass, same parallax rule as the motes.
+## The veil under the light points: discs for ash and mire, a hard crosswind for
+## the astral run, and short upward ember tails for the Act IV dawn.
 func _paint_weather(host: CanvasItem, tex: GradientTexture2D, flare: float) -> void:
 	var col: Color = _particles * flare
 	col.a = WEATHER_ALPHA[clampi(_weather_mode, 0, WEATHER_ALPHA.size() - 1)]
-	var streaking: bool = _weather_mode == 2
 	for m: Mote in _weather:
 		var at: Vector2 = m.at + _lean_of(m)
-		if streaking:
+		if _weather_mode == 2:
 			host.draw_line(at, at + Vector2(m.radius * ASTRAL_LEN, m.radius * 0.6),
 				col, maxf(1.0, m.radius * 0.55))
+		elif _weather_mode == 3:
+			host.draw_line(at, at + Vector2(m.radius * 0.4, -m.radius * DAWN_LEN),
+				col, maxf(1.0, m.radius * 0.48))
 		else:
 			var r: float = m.radius
 			host.draw_texture_rect(tex,

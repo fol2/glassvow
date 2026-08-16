@@ -65,6 +65,23 @@ func line_count() -> int:
 	return lines.size()
 
 
+## One-beat script for a LineTable row. Copy stays on the row; the dummy key
+## is never resolved when ScenePlayer is given the pool row.
+static func pool_beat(art: String) -> SceneScript:
+	var script: SceneScript = SceneScript.new()
+	script.id = "pool"
+	var line: Dictionary = {"key": "pool.inline", "beat": 0}
+	var beat_lines: Array[Dictionary] = [line]
+	script.beats.append({
+		"art": art,
+		"motion": "hold",
+		"lines": beat_lines,
+		"skip_dwell": 0.0,
+	})
+	script.lines.append(line)
+	return script
+
+
 func beat_at(index: int) -> Dictionary:
 	if index < 0 or index >= lines.size():
 		return {}

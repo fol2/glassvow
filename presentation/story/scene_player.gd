@@ -29,8 +29,13 @@ const BEAT_IDLE: int = 0
 const BEAT_REVEAL: int = 1
 const BEAT_WAIT: int = 2
 
+const NAMED_SPEAKERS: Dictionary = {
+	"keeper": true, "lamplighter": true, "queue": true,
+}
+
 var instant: bool = false
 var shape: StringName = StageShape.IDENTITY
+var _pool_row: Dictionary = {}
 
 var _script: SceneScript
 var _cursor: int = 0
@@ -56,12 +61,16 @@ var _caption: Label
 var _skip_fill: ColorRect
 var _letter_top: ColorRect
 var _letter_bot: ColorRect
+var _hearth_figure: HearthFigure = null
+var _unsealing: UnsealingStaging = null
 
 
 func _init(scene_script: SceneScript, cursor: int = 0,
-		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null,
+		pool_row: Dictionary = {}) -> void:
 	_script = scene_script
 	_cursor = clampi(cursor, 0, scene_script.line_count())
+	_pool_row = pool_row.duplicate(true)
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -206,17 +215,26 @@ func _present_line() -> void:
 	if _cursor < 0 or _cursor >= _script.line_count():
 		return
 	var row: Dictionary = _script.lines[_cursor]
-	_line.text = Locale.active.t(str(row["key"]))
-	var speaker_id: String = str(row.get("speaker", "")).strip_edges()
-	_speaker.visible = not speaker_id.is_empty()
-	_speaker.text = Locale.active.t("ui.scene.speaker.%s" % speaker_id) \
-		if _speaker.visible else ""
+	if not _pool_row.is_empty():
+		_line.text = LineTable.text(
+			_pool_row, Locale.active.code == Locale.CODE_ZH_HANT)
+		var pool_speaker: String = str(_pool_row.get("speaker", "")).strip_edges()
+		_speaker.visible = NAMED_SPEAKERS.has(pool_speaker)
+		_speaker.text = Locale.active.t("ui.scene.speaker.%s" % pool_speaker) \
+			if _speaker.visible else ""
+	else:
+		_line.text = Locale.active.t(str(row["key"]))
+		var speaker_id: String = str(row.get("speaker", "")).strip_edges()
+		_speaker.visible = not speaker_id.is_empty()
+		_speaker.text = Locale.active.t("ui.scene.speaker.%s" % speaker_id) \
+			if _speaker.visible else ""
 	var beat_i: int = row["beat"]
 	if beat_i != _beat_i:
 		_beat_i = beat_i
 		_motion_t = 0.0
 		_motion = str(_script.beat_at(_cursor).get("motion", "hold"))
 		_bind_plate()
+		_bind_staging()
 	_caption.visible = true
 	_skip_fill.visible = true
 
@@ -229,6 +247,37 @@ func _bind_plate() -> void:
 		return
 	_plate.texture = load(path) as Texture2D
 	_plate.visible = _plate.texture != null
+
+
+## Per-scene presentation, not new grammar (07-scenes §1). Opening seats
+## the #283 cutout on the empty hearth; unsealing dresses beats 1–2 with
+## the shipped mural/masks/frame and yields to the one-queue plate.
+func _bind_staging() -> void:
+	_sync_hearth_figure()
+	_sync_unsealing()
+
+
+func _sync_hearth_figure() -> void:
+	var wanted: bool = _script.id == "opening" and HearthFigure.present()
+	if not wanted:
+		if _hearth_figure != null:
+			_hearth_figure.queue_free()
+			_hearth_figure = null
+		return
+	_hearth_figure = HearthFigure.attach(_plate)
+	_hearth_figure.visible = _plate.visible
+
+
+func _sync_unsealing() -> void:
+	if _script.id != "unsealing":
+		if _unsealing != null:
+			_unsealing.queue_free()
+			_unsealing = null
+		return
+	if _unsealing == null:
+		_unsealing = UnsealingStaging.new()
+		_plate_host.add_child(_unsealing)
+	_unsealing.present(_beat_i, instant or Preferences.active.reduce_motion)
 
 
 func _art_path(index: int) -> String:

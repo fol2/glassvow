@@ -3271,6 +3271,97 @@
         }
       },
       "name": "The Eternal Sovereign"
+    },
+    "unwalkedSelf": {
+      "hp": [
+        46,
+        52
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 285,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "III-prime",
+        "motif": "broken-ring",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "scepterEcho",
+            "starfallEcho",
+            "ringbreak"
+          ],
+          "ash": [
+            "gravitasEcho",
+            "ruinEcho",
+            "ringward"
+          ]
+        }
+      },
+      "moves": {
+        "scepterEcho": {
+          "intent": "attack",
+          "dmg": 14,
+          "name": "The Scepter You Set Down"
+        },
+        "starfallEcho": {
+          "intent": "attack",
+          "dmg": 8,
+          "times": 2,
+          "name": "Stars Left Uncalled"
+        },
+        "ringbreak": {
+          "intent": "attack_debuff",
+          "dmg": 11,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Ring That Split"
+        },
+        "gravitasEcho": {
+          "intent": "buff",
+          "block": 12,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "The Seat Untaken"
+        },
+        "ruinEcho": {
+          "intent": "attack_debuff",
+          "dmg": 4,
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 1
+            }
+          ],
+          "name": "The Word Unsaid"
+        },
+        "ringward": {
+          "intent": "block",
+          "block": 16,
+          "name": "The Broken Halo"
+        }
+      },
+      "name": "【The Unwalked】"
     }
   },
   "events": {
