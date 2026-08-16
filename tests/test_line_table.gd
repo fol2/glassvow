@@ -30,6 +30,8 @@ static func run(fails: Array[String]) -> void:
 	_losses(fails)
 	_dialogue(fails)
 	_vigil_surface(fails)
+	_progress_persists(fails)
+	_batch3_pools(fails)
 
 
 static func _rows() -> Array:
@@ -57,6 +59,7 @@ static func _conditions(fails: Array[String]) -> void:
 		_probe("g.shards", "probe", "shards>=4", "甲", "Shards"),
 		_probe("g.act", "probe", "act=2", "乙", "ActTwo"),
 		_probe("g.quest", "probe", "quest:ownShade.complete", "丙", "Quest"),
+		_probe("g.progress", "probe", "quest:hollowLamplighter>=1", "丁", "Progress"),
 	])
 	_check(fails, faults.is_empty(), "valid conditions failed to load")
 	if not faults.is_empty():
@@ -78,17 +81,40 @@ static func _conditions(fails: Array[String]) -> void:
 	_check(fails, LineTable.conditions_match(quest_row.get("conditions", {}), ready)
 		and not LineTable.conditions_match(quest_row.get("conditions", {}), dormant),
 		"quest:ownShade.complete did not parse to a quest gate")
+	var progress_row: Dictionary = LineTable.row_by_id(db.line_table, "g.progress")
+	var paid: Dictionary = _ctx(0)
+	paid["quest_progress"] = {"hollowLamplighter": 1}
+	var unpaid: Dictionary = _ctx(0)
+	unpaid["quest_progress"] = {"hollowLamplighter": 0}
+	_check(fails, LineTable.conditions_match(progress_row.get("conditions", {}), paid)
+		and not LineTable.conditions_match(progress_row.get("conditions", {}), unpaid)
+		and LineTable.specificity(progress_row.get("conditions", {})) == 1,
+		"quest:hollowLamplighter>=1 did not parse to a progress gate")
 	_check(fails, LineTable.specificity({"shards_gte": 1, "junk": 9}) == 1,
 		"specificity counted an unvalidated key")
 	var bad: ContentDB = ContentDB.new()
 	var bad_faults: PackedStringArray = bad.apply_line_table([
-		_probe("g.bad", "probe", "nope>=1", "丁", "Nope"),
+		_probe("g.bad", "probe", "nope>=1", "戊", "Nope"),
 	])
 	_check(fails, not bad_faults.is_empty() and bad.line_table.is_empty(),
 		"malformed condition did not fail the table load")
+	var bought: ContentDB = ContentDB.new()
+	var bought_faults: PackedStringArray = bought.apply_line_table([
+		_probe("g.bought", "probe", "quest:usurper.bought", "己", "Bought"),
+	])
+	_check(fails, not bought_faults.is_empty() and bought.line_table.is_empty()
+		and str(bought_faults[0]).contains("unknown quest state bought"),
+		"quest:usurper.bought did not fail the table load")
+	var resolved: ContentDB = ContentDB.new()
+	var resolved_faults: PackedStringArray = resolved.apply_line_table([
+		_probe("g.resolved", "probe", "quest:ownShade.resolved", "庚", "Resolved"),
+	])
+	_check(fails, not resolved_faults.is_empty() and resolved.line_table.is_empty()
+		and str(resolved_faults[0]).contains("unknown quest state resolved"),
+		"quest:ownShade.resolved did not fail the table load")
 	var dict_form: ContentDB = ContentDB.new()
 	_check(fails, not dict_form.apply_line_table([
-		_probe("g.dict", "probe", {"shards_gte": 1}, "戊", "DictForm"),
+		_probe("g.dict", "probe", {"shards_gte": 1}, "辛", "DictForm"),
 	]).is_empty(), "internal dict conditions failed open")
 	var same: ContentDB = ContentDB.new()
 	_check(fails, not same.apply_line_table([
@@ -96,15 +122,15 @@ static func _conditions(fails: Array[String]) -> void:
 	]).is_empty(), "en == zh loaded")
 	var cjk: ContentDB = ContentDB.new()
 	_check(fails, not cjk.apply_line_table([
-		_probe("g.cjk", "probe", "", "己", "Latin中文"),
+		_probe("g.cjk", "probe", "", "壬", "Latin中文"),
 	]).is_empty(), "non-Latin en loaded")
 	var missing: ContentDB = ContentDB.new()
 	_check(fails, not missing.apply_line_table([{
-		"id": "g.miss", "slot": "probe", "zh": "庚", "cooldown_runs": 0,
+		"id": "g.miss", "slot": "probe", "zh": "癸", "cooldown_runs": 0,
 	}]).is_empty(), "row missing en loaded")
 	var one: ContentDB = ContentDB.new()
 	_check(fails, not one.apply_line_table([
-		_probe("pool.loss.e01", "loss", "", "辛", "Alone", 3),
+		_probe("pool.loss.e01", "loss", "", "子", "Alone", 3),
 	]).is_empty() and one.line_table.is_empty(),
 		"single-row pool loaded")
 
@@ -129,14 +155,14 @@ static func _selection(fails: Array[String]) -> void:
 		"shard-zero hearth went silent")
 	_check(fails, not LineTable.select(_rows(), "waystone", _ctx(0), null, {}).is_empty(),
 		"shard-zero waystone went silent")
-	_check(fails, not LineTable.conditions_match(
-			LineTable.row_by_id(_rows(), "pool.loss.e06").get("conditions", {}),
+	_check(fails, LineTable.conditions_match(
+			LineTable.row_by_id(_rows(), "pool.loss.e02").get("conditions", {}),
 			_ctx(0)),
-		"reveal-bearing pool.loss.e06 matched below one shard")
+		"generic pool.loss.e02 did not match at shard zero")
 	_check(fails, not LineTable.conditions_match(
 			LineTable.row_by_id(_rows(), "pool.loss.e21").get("conditions", {}),
-			_ctx(0, 1)),
-		"act-specific pool.loss.e21 matched below one shard")
+			_ctx(0, 0)),
+		"act-specific pool.loss.e21 matched outside act 1")
 	var open: Dictionary = LineTable.select(_rows(), "loss", _ctx(1), null, {})
 	_check(fails, not open.is_empty(), "L1 loss pool went silent")
 	_check(fails, LineTable.slot_open(_rows(), "whisper", _ctx(0)) == false
@@ -386,3 +412,69 @@ static func _vigil_surface(fails: Array[String]) -> void:
 	_check(fails, empty._epitaph_tab == null,
 		"empty ledger still grew an epitaph tab")
 	empty.free()
+
+
+static func _progress_persists(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full(false)
+	var parsed: Dictionary = LineTable.parse_conditions("quest:hollowLamplighter>=1")
+	var parsed_ok: bool = parsed["ok"] == true
+	_check(fails, parsed_ok, "progress clause failed to parse")
+	if not parsed_ok:
+		return
+	var vigil: VigilState = VigilState.blank()
+	var prior: RunState = _run(content, vigil, "run-hollow-pay")
+	prior.quests["hollowLamplighter"]["state"] = "revealed"
+	prior.quests["hollowLamplighter"]["progress"] = 1
+	_check(fails, vigil.commit_run(prior, "death", content), "hollow progress fold rejected")
+	_check(fails, _i(vigil.quests["hollowLamplighter"].get("progress", 0)) == 1,
+		"hollowLamplighter progress did not survive vigil fold")
+	var next: RunState = _run(content, vigil, "run-hollow-next")
+	_check(fails, LineTable.conditions_match(parsed["conditions"], LineTable.context(next)),
+		"folded hollowLamplighter progress did not open quest:id>=1")
+	_check(fails, not LineTable.conditions_match(
+			parsed["conditions"],
+			LineTable.context(_run(content, VigilState.blank(), "run-hollow-zero"))),
+		"zero hollowLamplighter progress opened quest:id>=1")
+
+
+static func _batch3_pools(fails: Array[String]) -> void:
+	var rows: Array = _rows()
+	var counts: Dictionary = {"hearth": 0, "waystone": 0, "loss": 0}
+	for row_v: Variant in rows:
+		if typeof(row_v) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_v
+		var slot: String = str(row.get("slot", ""))
+		if counts.has(slot):
+			counts[slot] = _i(counts[slot]) + 1
+	_check(fails, _i(counts["hearth"]) == 60 and _i(counts["waystone"]) == 60
+		and _i(counts["loss"]) == 50,
+		"pool counts hearth=%d waystone=%d loss=%d" % [
+			_i(counts["hearth"]), _i(counts["waystone"]), _i(counts["loss"])])
+	_check(fails, LineTable.conditions_match(
+			LineTable.row_by_id(rows, "pool.waystone.w18").get("conditions", {}),
+			_ctx(0))
+		and LineTable.conditions_match(
+			LineTable.row_by_id(rows, "pool.loss.e02").get("conditions", {}),
+			_ctx(0)),
+		"generic standing-stone plants w18/e02 did not match at shard zero")
+	var h57: Dictionary = LineTable.row_by_id(rows, "pool.hearth.h57")
+	var bought: Dictionary = _ctx(0)
+	bought["quests"] = {"usurper": "revealed"}
+	_check(fails, LineTable.conditions_match(h57.get("conditions", {}), bought)
+		and not LineTable.conditions_match(h57.get("conditions", {}), _ctx(0)),
+		"h57 did not fire on usurper.revealed")
+	var h58: Dictionary = LineTable.row_by_id(rows, "pool.hearth.h58")
+	var settled: Dictionary = _ctx(0)
+	settled["quests"] = {"ownShade": "complete"}
+	_check(fails, LineTable.conditions_match(h58.get("conditions", {}), settled)
+		and not LineTable.conditions_match(h58.get("conditions", {}), _ctx(0)),
+		"h58 did not fire on ownShade.complete")
+	var h59: Dictionary = LineTable.row_by_id(rows, "pool.hearth.h59")
+	var paid: Dictionary = _ctx(0)
+	paid["quest_progress"] = {"hollowLamplighter": 1}
+	var unpaid: Dictionary = _ctx(0)
+	unpaid["quest_progress"] = {"hollowLamplighter": 0}
+	_check(fails, LineTable.conditions_match(h59.get("conditions", {}), paid)
+		and not LineTable.conditions_match(h59.get("conditions", {}), unpaid),
+		"h59 did not fire on hollowLamplighter>=1")
