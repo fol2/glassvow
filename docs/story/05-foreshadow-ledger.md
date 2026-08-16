@@ -13,24 +13,24 @@
 | # | 句子(shipped 原文) | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
 |---|---|---|---|---|---|---|
 | 1 | Your monument does not always lie down. | whisper 11(編號按 convention 更正 #258) | L1 | 詩意的悼詞 | 碑是站着死去的行者本人;他們沒躺下,因為仍在排隊等門開 | 保留,核心伏筆 |
-| 2 | The dead climb twice: once in flesh, once in memory. | whisper | L1 | 詩句 | 機制說明書:行者以肉身走一次(真死),留者以記憶再走一次 | `[REWRITE:climb]` 改「行」語彙,語義保留 |
+| 2 | 死者朝聖兩次:一次以肉身,一次以記憶。 / The dead walk twice: once in flesh, once in memory. | whisper 4 | L1 | 詩句 | 機制說明書:行者以肉身走一次(真死),留者以記憶再走一次 | 已重寫(Batch 1 #301,en;zh 原句無 climb)[SETTLED James 2026-08-16:照舊——明晰度 blocker 判過,語義保留維持] |
 | 3 | I remember the stone. You walked away before I stopped calling. | Own Shade 碎句 | L1 | 影在追憶 | 控訴對象反轉:死者臨終叫住的 you 就是玩家——行開了沒回頭的是留者 | 保留,全 cast 最重一句 |
-| 4 | Each climber leaves a shape behind. | ownShade fragments[1] 前半=ownShade2 死亡句(後半見 row 13,同一句 shipped 字串) | L1 | 路上留影 | 留下的 shape 是坐回爐邊那個——遊戲主角本人 | `[REWRITE:climb]` |
-| 5 | We were never climbing out. We were carrying light to the lock. | Own Shade 收束 | L2 | 朝聖目的自白 | 字面為真:行者是送火的隊伍;lock 就是門 | `[REWRITE:climb]` 語義照舊 |
+| 4 | 你留下過一道形影。這條路,已學會留住我們。 / You have left a shape behind. The road has learned to keep us. | ownShade fragments[1]=ownShade2 死亡句(與 row 13 合併重寫為一句) | L1 | 影控訴你留下過它、路把它留住 | 雙讀:「你留下的形影」=爐邊那個;「我們」=路留住的碑,影自數其中 | 已重寫 v2(Batch 1 #301,lint 後收回影聲線:第二人稱+現在完成式)待審;降回 body ceiling L1 |
+| 5 | 我們從來不是為了逃出去而朝聖;我們一直把光送往鎖孔。 / We were never walking to be free. We were carrying light to the lock. | Own Shade 收束(closer) | L2 | 朝聖目的自白 | 字面為真:行者是送火的隊伍;lock 就是門 | 已重寫(Batch 1 #301,en;zh 保留)待審 |
 | 6 | Five pages make a chapter; five prices make a confession. | whisper 14(出處更正 #258 R2 N7;非 Lamplighter 對白) | L1 | 怪話 | 某代行者的遺言,說的是掌燈人的五價=認人啟事 | 保留;影響 §8.5 逐句分配 |
-| 7 | The first keeper gave you a boon. | keeper/掌燈 文本 | L1 | 世界觀擺設 | 「first keeper」=留低嗰個;boon 是歷代行者遺物 | 保留;keeper 稱謂待 06 定名 |
+| 7 | 守爐人贈過你一份恩賜。我要那份贈禮,不要你的感激。 / The Keeper gave you a boon. Give me the gift, not the gratitude. | hollowLamplighter meetings[3].ask | L1 | 掌燈人索要爐邊的贈禮 | 守爐人=留低嗰個;boon 是歷代行者遺物——它一直用死者行裝資助下一個死者 | 已重寫(Batch 1 #301:稱謂落 守爐人;zh 舊句「最初的掌燈人」屬誤譯一併修正)待審 |
 | 8 | A pale hand has touched the dark side of the glass. | whisper 2(出處更正 #258;原誤記 thinGlass omen) | L1 | 不祥之兆 | 玻璃另一面一直有人——鏡中那側是留者/隊伍 | 保留 |
-| 9 | (有個朝聖者站着死去) | Unreadable Page 頁文 | L2 | 怪談 | 碑的成因,一直明文寫在紙上 | 保留 |
+| 9 | 第三頁——一名朝聖者站着死去。他止步之處,路未止。 / THIRD PAGE — A pilgrim died standing. Where he stopped, the road did not. | Unreadable Page 頁 3 | L1 | 怪談 | 碑的成因明文照舊;「路未止」=鏡中歸途 | 已重寫(Batch 1 #301:climb 清洗,站死句保留,冷筆記錄體)[SETTLED James 2026-08-16];降回 body ceiling L1 |
 | 10 | (mirror.png:鏡中淺笑黑影) | 事件美術 | L0 | 詭異鏡像 | 鏡中人是留者=你;淺笑因為它認得你 | 資產不改,文案圍繞它寫 |
 | 11 | The gaunt keeper remembers the road you did not take. | whisper 9 | L1 | 守關人記得你的岔路 | gaunt keeper=Lamplighter(referent 定案,避撞 Keeper 頭銜);你沒行的路=留者從未走過的路 | 保留 [#258 R2 N4] |
-| 12 | Pale figures carried the shards down so the thing above could not follow. | Second Page | L2 | 蒼白眾藏碎片避上方之物 | 搬運機制為真(00 §3.7 ferry);動機半句=行者年代 legend-drift(門後只有金城);"down"=垂直語彙 | `[REWRITE:climb]` 排期改寫 [#258 R1 Q4A + R2 Q14] |
-| 13 | The Spire has learned to wear ours. | ownShade2 死亡句後半(前半見 row 4,同一句 shipped 字串,整句一齊重寫) | L2 | 塔會擬態 | 雙重洩露 Own Shade reveal;Spire 已 banned | `[REWRITE:climb]` 全句重寫 [#258 R2 N7] |
-| 19 | Above the Sovereign there is no dawn — only a door pretending to be the sky. | ownShade fragments[2]=ownShade3(The Shade That Remembers)死亡句 | L2 | 影的絕望詩句 | 字面為真:門後不是天,是城;「假裝天空的門」=封門本體——影死前見過門 | `[REWRITE:climb]`(Above/sky 垂直語彙),語義保留 [#258 verify 補漏] |
+| 12 | 第二頁——蒼白身影把碎片攜往西方,使門後之物無從追隨。 / SECOND PAGE — Pale figures carried the shards west, so the thing beyond the door could not follow. | Second Page | L1 | 懼門後之物而藏碎片 | 搬運機制為真(00 §3.7 西行歸爐);動機半句=行者年代 legend-drift(門後只有金城) | 已重寫(Batch 1 #301)待審;降回 body ceiling L1 [#258 R1 Q4A + R2 Q14] |
+| 13 | (舊句後半,與 row 4 合併重寫——新句見 row 4) | ownShade2 死亡句後半 | — | — | — | 已重寫(Batch 1 #301)併入 row 4 [#258 R2 N7] |
+| 19 | 我見過。永恆君王之後沒有破曉——只有一扇偽裝成破曉的門。 / I have seen it. Beyond the Sovereign there is no dawn — only a door pretending to be one. | ownShade fragments[2]=ownShade3(The Shade That Remembers)死亡句 | L1 | 影的絕望見證 | 字面為真:「我見過」——影死前真的見過門;門冒充的正是每個勝者以為的黎明 | 已重寫 v2(Batch 1 #301,lint 後補第一身見證)待審;降回 body ceiling L1 [#258 verify 補漏] |
 | 14 | half a breath behind — and it is smiling | Silvered Mirror 事件 | L1 | 鏡中怪異 | 鏡中那側=留者;它認得你(L0 motif 的文字版,定級 L1) | 保留 [#258 R2 N7] |
 | 15 | carried away from a window no wall could hold | Lamplighter 會面 1 | L1 | 傳說 | legend-drift:六格從未安裝成窗;他的傳聞版本(00 §4 hearsay) | 保留,記 drift [#258 R2 N7] |
 | 16 | 第八凶兆(The Eighth Omen)之「第八」 | quest 標題/文本 | L1 | 凶兆編號 | 門影投落為真;「第八」=第八座碑/隊伍第八人(棄「第八次分身」數法) | 保留 [#258 R2 N5] |
-| 17 | A map, not a memorial. | Fifth Page | L2 | 頁文自辯 | 「不是紀念碑」照舊反讀;「map」=窗中隊伍本身就是路線圖 | 保留 [#258 R2 N6] |
-| 18 | "The Shade That Returned" / …fell… 語彙 | 事件/quest 文本 | L1 | 亡影歸來/倒下 | 無人回來——returned 是留者錯認;fell 與站死 canon 衝突,ironic 重讀:倒下的是意志,不是身體 | 逐句記 ironic 重讀;衝突句排期改寫 [#258 R2 N7] |
+| 17 | 第五頁——彩窗是一幅地圖,不是紀念碑。將它點亮,再望向王冠之後。 / FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look beyond the crown. | Fifth Page(closer) | L2 | 頁文自辯 | 「不是紀念碑」照舊反讀;「map」=窗中隊伍本身就是路線圖;句尾取「王冠之後」公式(row 31) | 已重寫句尾(Batch 1 #301)待審 [#258 R2 N6] |
+| 18 | "The Shade That Returned" / …fell… 語彙 | 事件/quest 文本 | L1 | 亡影歸來/倒下 | 無人回來——returned 是留者錯認;fell 與站死 canon 衝突,ironic 重讀:倒下的是意志,不是身體 | 逐句記 ironic 重讀;衝突句排期改寫 [#258 R2 N7];quest 側(ownShade.inscription「銘記墜落」)已於 Batch 1 重寫,event 側留後批 |
 | 20 | 「同一團火裁成的六片」(裁-語彙) | rose window quest 舖底文案(00 §2.2 引述) | L1 | 窗的來歷:火被有意裁開成六格 | legend-drift:真相是火撞門**碎**成(00 §2.2)——傳說把意外修飾成設計,揭後讀更凍;「裁」照用,不改 shipped 句 | 保留,記 drift [SETTLED — #259 Q7] |
 
 ## 新寫文案入賬區
@@ -46,9 +46,87 @@
 | 23 | 永恆留者 / The Eternal Keeper | acts[3].bossName(#220) | L4 | 終戰 boss 名 | 與永恆君王孖生——不肯開始/不肯完成的兩極並排 | 新名 [#261 Q10] |
 | 24 | 守爐人 / the Keeper | 爐邊 NPC 顯示名(落地隨 copy batch) | L0 | 看火者 | 它「守」爐,因為它從未離開過爐邊 | 新名 [#261 Q11] |
 | 25 | 金城 / the Gilded City | 傳說指涉(落地隨 copy batch) | L1 | 門後的黃金應許 | 爐邊真貌;應許=歸家;名是眾人叫錯的(legend-drift) | 新名 [#261 Q12] |
-| 26 | 續火 / Rekindle | ui.menu.continueClimb 置換(#232) | L0 | 重燃爐火,再上路 | 火再撕你一次;續的是儀式,不是你 | 新名 [#261 Q13] |
+| 26 | 續火 / Rekindle | ui.menu.beginClimb 置換(**#232 Q2 改判**:分身在新 run 出發一刻;resume 掣改取 row 27) | L0 | 重燃爐火,再上路 | 火再撕你一次;續的是儀式,不是你——派新行者出發正是分身本身 | 新名 [#261 Q13;掣位 #232 Q2] |
 
-## `[REWRITE:climb]` 清單狀態
+Batch 1(#301)新名與公式行:
 
-尚未全文掃描 `content/full-content.json` 的 climb/tower/ascend 語彙——
-開稿第一批前先跑一次全量 grep 入賬。[TODO]
+| # | 句子(名/式) | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 27 | 返回路上 / Back to the Road | ui.menu.continueClimb(置換 #232) | L0 | 續行中斷的旅程 | 你「返回」的路,盡頭是爐邊(接 row 22 鏡中歸途) | 新名 [#232 Q2] |
+| 28 | 留在路上 / Stay on the Road | ui.menu.keepClimbing(置換 #232) | L0 | 不離開,繼續行 | 「留」字反照:留在路上的是行者,留在爐邊的是你 | 新名 [#232 Q2 修訂書面語——舊簽「留喺路上」廢:喺不在字庫且屬口語] |
+| 29 | 入城 / ARRIVED | ui.dawn.title + ui.end.ascended(置換 #232 Q4) | L1 [SETTLED James 2026-08-16] | 你抵達了 | 抵達的是隊伍(ascended.png 隊列入門);城=爐邊,入城=歸家 | 新名 [#232 Q4];級已簽 L1(響於 Act III 勝利的雙讀屬設計) |
+| 30 | 第 {n} 塊引路石 / WAYSTONE n | ui.end.floors / ui.hud.* 計數(置換 #232 Q3;落地歸 #303) | L0 | 行程以引路石計 | [SETTLED James 2026-08-16]每塊石都被之前每一個行者點亮過;你數的是隊伍反覆量過的同一段路 | 新名 [#232 Q3];揭後已簽 |
+| 31 | 王冠之後 / beyond the crown | 公式,七址:ui.dawn.act4RevealCopy、ui.dawn.unlock.act4、q.hollowLamplighter.meetings[1].paid、q.unreadablePage.pages[4]、whisper 21、main.gd:372、dawn_phone_containment.gd:140;本批另 usurper.death 與 whisper 20 取此式 | L1 | 封門在王庭之外、王座之後 | 「之後」雙關:過了「不肯完成」,路便向家;門從來不在上方,只在更遠處 | 新公式 [SETTLED James 2026-08-16 — 一次簽,七址共用] |
+
+## Batch 1(#301)入賬區 [PROPOSED — 待 James review]
+
+六 quest 線 + 24 whispers 全句入賬(quest/whisper 名、mode、itemName、
+huntName 等無敘事雙讀的字串不立行)。zh 為源語;「保留」=兩語照舊。
+出處縮寫:q.=content.quests.;w N=content.whispers 第 N 句(1-indexed)。
+行文全表連逐代 mini-bio 分配表見
+`docs/story/batches/2026-08-16-batch1-quests-whispers.md`。
+已重寫句中,rows 2/4/5/7/9/12/17/19 於主表就地更新,不重列。
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 32 | 擊敗三名蒼白之敵,追隨它們留下的寒冷光塵。 / Defeat three pale foes and follow the cold motes they leave behind. | q.paleOnes.huntInscription | L1 | 狩獵指引 | 光塵=行者未完的意志;「追隨」=隊伍給你引路 | 保留 |
+| 33 | 狩獵蒼白眾。從忘卻色彩的琉璃中收集九粒光塵。 / Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour. | q.paleOnes.inscription | L1 | 收集目標 | 玻璃=記憶;忘卻色彩=褪色的記憶;蒼白=耗剩意志的顏色 | 保留 |
+| 34 | 沒有光塵回應透鏡。 / No mote answers the Lens. | q.paleOnes.progress[0] | L1 | 進度提示 | 死者之光不應器物,只應人 | 保留 |
+| 35 | 第一粒蒼白光塵令提燈生寒。 / The first pale mote chills the lantern. | q.paleOnes.progress[1] | L1 | 進度提示 | 你收集的是死者殘留——遺物冰冷 | 保留 |
+| 36 | 擊敗那個仍記得路的自己。三道影必須熄滅。 / Defeat the self that still remembers the road. Three shades must go out. | q.ownShade.inscription | L1 | 你的分身在路上纏擾你 | 影=你之中仍記得怎樣行的那部分(00 §7);熄=憶迴聲之滅,不觸碑 | 重寫(舊「銘記墜落」撞站死 canon,row 18) |
+| 37 | 攜無焰提燈行至封門之前,揭穿篡位者的面具。 / Carry the lantern with no flame to the sealed door, and unmask the Usurper. | q.usurper.inscription | L1 | quest 目標 | 你在把第一行者自己的燈帶回他面前 | 重寫(前提重錨:登頂→門前;summit 清洗) |
+| 38 | 冰冷琉璃。沒有燈芯。商人不肯說是誰留下它。 / Cold glass. No wick. The merchant will not say who left it. | q.usurper.itemText | L1 | 來歷不明的貨 | 燈由蒼白眾攜返西方(00 §2.2);商人知工藝不知機制(矩陣) | 保留 |
+| 39 | 貨冷,價暖。帶着足以買下一次破曉的金幣再來。 / Cold goods, warm price. Come back carrying a dawn's worth of gold. | q.usurper.poor | L1 | 商人開價 | 「一次破曉的價」——破曉在這世界確有價目 | 保留 |
+| 40 | 如今,王座知曉你攜着何物。 / Now the throne knows what you carry. | q.usurper.bought | L1 | 偽王察覺你來 | 王座認得的是他自己的燈——他親手熄掉的那盞 | 重寫(summit 清洗) |
+| 41 | 面具已碎。望向王冠之後。 / The mask is broken. Look beyond the crown. | q.usurper.death(closer) | L2 | 勝利指引 | 過了「不肯完成」,門就在那裏(#217 的 sealed door overlay 正是此刻畫面);取 row 31 公式 | 重寫(舊「往上看」) |
+| 42 | 在第八凶兆籠罩下抵達破曉。 / Reach dawn beneath the Eighth Omen. | q.eighthOmen.inscription | L1 | quest 目標 | 你在一扇門的影下走完全程 | 保留(「籠罩下」場景內字面,Tier B) |
+| 43 | // 窗片凝視 // / // THE PANE WATCHES // | q.eighthOmen.floorEchoes[0] | L1 | 詭異迴響 | 窗的另一面一直有人看着 | 保留 |
+| 44 | // 八並非數字 // / // EIGHT IS NOT A NUMBER // | q.eighthOmen.floorEchoes[1] | L1 | 詭異迴響 | 「八」是隊伍第八人/第八座碑(row 16) | 保留 |
+| 45 | // 攜錯誤之光向東 // / // CARRY THE WRONG LIGHT EAST // | q.eighthOmen.floorEchoes[2] | L1 | 詭異迴響 | 門只認完整的一團火——任何殘光皆「錯」 | 重寫(UPWARD→EAST) |
+| 46 | // 王冠只是一副面具 // / // THE CROWN IS A MASK // | q.eighthOmen.floorEchoes[3] | L1 | 詭異迴響 | 王位本身就是覆在鎖上的面具(第四頁同讀) | 保留 |
+| 47 | 攜無法辨讀之頁贏得五次破曉。 / Win five dawns carrying the Unreadable Page. | q.unreadablePage.inscription | L1 | quest 目標 | 頁要「捱過」五次別人的死才讀得全 | 保留 |
+| 48 | 第四頁——永恆君王取來一盞空燈,在鎖上披起王者形貌。 / FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock. | q.unreadablePage.pages[3] | L1 | 偽王起源傳說 | 逐字為真:00 §2.1 的歷史本身 | 保留 |
+| 49 | 沿未燃之路,向空燈掌燈人付出五重代價。 / Pay the Hollow Lamplighter five prices along the Unlit Way. | q.hollowLamplighter.inscription | L1 | quest 目標 | 五價=認人啟事(00 §7);未燃之路=他一直走在無火的那側 | 保留 |
+| 50 | 你的提燈太吵。把它接下來收集的三點餘燼交給我。 / Your lantern is noisy. Give me the next three embers it catches. | q.hollowLamplighter.meetings[0].ask | L1 | 怪老人索價 | 「吵」=你的燈滿載未完意志;他聽得出 | 保留 |
+| 51 | 接下來三點餘燼,歸於空燈。 / The next three embers belong to the hollow lantern. | q.hollowLamplighter.meetings[0].accepted | L1 | 交易確認 | 空燈收火——他在替誰收集? | 保留 |
+| 52 | 現在便許下餘燼。提燈會先於你付清。 / Promise the embers now. The lantern will pay before you do. | q.hollowLamplighter.meetings[0].cannot | L1 | 賒賬條款 | 「先於你付清」——燈比人長命,行者總是先走 | 保留 |
+| 53 | 金幣記得每一隻手。讓一百六十枚忘記你的手。 / Gold remembers every hand. Let one hundred and sixty pieces forget yours. | q.hollowLamplighter.meetings[1].ask | L1 | 怪老人索價 | 記得/忘記=全線母題;他要你練習被忘記 | 保留 |
+| 54 | 蒼白眾凝望着指向王冠之後的路。 / The Pale Ones watch the paths that point beyond the crown. | q.hollowLamplighter.meetings[1].paid | L1 | 情報 | 他們看守的正是引你過王庭往門的路(指路者,00 §4);取 row 31 公式 | 重寫(公式) |
+| 55 | 你的錢囊尚暖,卻還不夠暖。 / Your purse is warm, but not warm enough. | q.hollowLamplighter.meetings[1].cannot | L1 | 錢不夠 | 暖=將將離手的體溫;他數的從來不是錢 | 保留 |
+| 56 | 路清點容器。把十二格容量交給我。 / The road counts the vessel. Give me twelve measures of yours. | q.hollowLamplighter.meetings[2].ask | L1 | 怪老人索價(HP) | 路對容器的清點=沿路碑列;他說得比自己知的更真 | 重寫(舊「尖塔清點容器」) |
+| 57 | 你的前身站立而死,面向東方。 / Your forebears died standing, facing east. | q.hollowLamplighter.meetings[2].paid | L1 [SETTLED James 2026-08-16:保站轉向] | 表面虛構下=「你以前死嗰幾次」(死而復返的錯覺自足) | 反向雙讀:「前身」是另一些人;站立而死者成碑,面向東方即面向門 | 重寫(舊「君王之上的階梯」;James 判刪「見過門」半句) |
+| 58 | 我不會把你挖空至三十以下。換一副更大的容器再來。 / I will not hollow you below thirty. Return with a larger vessel. | q.hollowLamplighter.meetings[2].cannot | L1 | 拒收條款 | 「挖空」——空燈掌燈人自己就是被挖空的容器 | 保留 |
+| 59 | 空燈就是換取面見那副面具的信物。 / The empty lantern is the token that purchases an audience with the mask. | q.hollowLamplighter.meetings[3].paid | L1 | 情報 | 偽王只接見帶着他的燈的人——他在等它回來 | 保留 |
+| 60 | 你已花掉那份贈禮。帶一份仍屬於你的來。 / You have spent the gift already. Bring me one that is still yours. | q.hollowLamplighter.meetings[3].cannot | L1 | 拒收條款 | 「仍屬於你的」在這條路上越來越少 | 保留 |
+| 61 | 最後代價:只留一記心跳在這提燈裏。其餘全歸黑暗。 / Last price: leave this lantern with one heartbeat. The rest belongs to the dark. | q.hollowLamplighter.meetings[4].ask | L1 | 最後索價(HP→1) | 認人的最後一步:看你剩一記心跳時是不是同一個 | 保留 |
+| 62 | 點亮窗片。門會認得你。 / Light the panes. The door will know you. | q.hollowLamplighter.meetings[4].paid | L1 | 報酬:門的條件 | 傳聞版門條件(00 §4 hearsay)——誠實的錯誤見證;門認的其實是「行過的人+完整的火」 | 保留(hearsay 錨) |
+| 63 | 一記心跳已足夠。如今只剩拒絕才算貧乏。 / One heartbeat is enough. Refusal is the only poverty left. | q.hollowLamplighter.meetings[4].cannot | L1 | 拒收條款 | 拒絕=全書三種拒絕的母題字 | 保留 |
+| 64 | 有一種顏色,長路拒絕為它命名。 / There is a colour the road refuses to name. | w 1 | L1 | 詭異詩句 | 無名之色=蒼白——耗剩意志的顏色,路上無人肯叫破 | 重寫(舊句名 Spire) |
+| 65 | 六處空位在等候,那裏不曾立過窗。 / Six spaces wait where no window stands. | w 3 | L1 | 詭異詩句 | 彩窗六格在等燼璃;「不曾立過窗」接 row 15 drift | 保留 |
+| 66 | 無焰的提燈仍是一把鑰匙。 / A lantern without flame is still a key. | w 5 | L1 | 謎語 | usurper 線指引;空燈=面見面具的信物 | 保留 |
+| 67 | 數一數接不住破曉的窗片。 / Count the panes that do not catch the dawn. | w 6 | L1 | 謎語 | 未亮的格=未歸的火;數窗=數還欠隊伍幾多步 | 保留 |
+| 68 | 這一頁,唯有捱過破曉,方能讀懂。 / A page can be read only after it survives the dawn. | w 7 | L1 | 謎語(五勝解頁) | 「捱過破曉」的是頁,不是攜頁的人——勝仗行者同樣死(00 §3.7) | 重寫(舊「捱過頂點」) |
+| 69 | 第八凶兆不寫在七者之中。 / The eighth sign is not written among the seven. | w 8 | L1 | 謎語 | 第八=冊外之物=門影(row 16) | 保留 |
+| 70 | 蒼白微粒如霜,聚在隱縫周圍。 / Pale motes gather like frost around a hidden seam. | w 10 | L1 | 詭異觀察 | 隱縫=世界的接口;霜=殘留意志遇冷凝聚 | 保留 |
+| 71 | 商人櫃下藏着一件冰冷之物。 / The merchant keeps one cold thing beneath the counter. | w 12 | L1 | 情報 | 冷貨=無焰提燈;商人收拾行者遺物(02-cast) | 保留 |
+| 72 | 破碎字形是完整句子的影子。 / Broken glyphs are the shadow of a complete sentence. | w 13 | L1 | 謎語 | 頁的殘缺是投影——原句在門上(w 22 呼應) | 保留 |
+| 73 | 三次死亡會教你的影直言。 / Three deaths will teach your shade to speak plainly. | w 15 | L1 | 謎語(quest 機制) | 「你的影」學會直言時,說的是控訴(row 3) | 保留 |
+| 74 | 守夜有一扇窗,雖無牆承載它。 / The Vigil has a window, though no wall holds it. | w 16 | L1 | 詭異觀察 | 窗不屬任何牆——它是 threshold 的西面(01 地理) | 保留 |
+| 75 | 每一片燼璃,點亮彩窗的一格。 / Each shard lights one pane of the Rose Window. | w 17 | L1 | 機制提示 | 每片歸位=火逐片透回;窗在重組碎裂那一夜 | 重寫(zh 正名 燼璃/彩窗,舊譯「餘燼琉璃」違 06;en 分清 shard/窗兩 locked terms) |
+| 76 | 蒼白眾並非在獵你。他們在指向東方。 / The Pale Ones are not hunting you. They are pointing east. | w 18 | L1 | 反直覺情報 | 字面為真:指路者(00 §4);東=門的方向 | 重寫(舊「向上指」) |
+| 77 | 永恆君王,只是門前披上的一副面具。 / The Sovereign is a mask worn before the last door. | w 19 | L1 | 情報 | 面具下無臉——王位本身是覆鎖之物(第四頁同讀,L1 先例) | 重寫(舊「最終階梯之下」;斷定強度維持 shipped「只是」級,不加碼) |
+| 78 | 當彩窗六格燃起,望向王冠之後。 / When six panes burn, look beyond the crown. | w 20 | L1 | 指引 | 六格燃起=開封之刻;取 row 31 公式(「齊」不在字庫,避字改句——同「喺」教訓) | 重寫(舊「頂點之外」) |
+| 79 | 王冠之後,有一扇封印之門。 / There is a sealed door beyond the crown. | w 21 | L1 | 情報 | row 31 公式本體址 | 重寫(舊「王冠之上」) |
+| 80 | 它的銘文等候得比守夜更久。 / Its inscription has waited longer than the Vigil. | w 22 | L1 | 詭異觀察 | 門上的字先於爐火——碎裂之夜前門已在等 | 保留 |
+| 81 | 帶六片碎片到彩窗。 / Bring six shards to the Rose Window. | w 23 | L1 | 明文指令 | 最清醒的遺言:怕詩被誤讀,只留指令 | zh 正名(玫瑰窗→彩窗,06 鎖詞);en 保留 |
+| 82 | 朝聖仍在繼續。 / The pilgrimage continues. | w 24 + ui.map.sealedDoor.inscription + 音軌名(一語三址,見 batch 檔) | L1 | 未完的旅程 | 隊伍仍在長;路過門後仍在繼續——Act IV 字面兌現 | zh 保留;en 重寫(舊 The climb continues.) |
+| 83 | 第八凶兆從來不是凶兆。它是一扇門投下的影。 / THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR. | q.eighthOmen.resolved(closer) | L2 | quest 結案句 | 門影投落為真;「第八」=隊伍第八人(motif 見 row 16,該行維持 L1 服務 floorEchoes[1]/w 8) | 保留;Batch 1 專行釐清 closer 級(row 16 不動) |
+
+## `[REWRITE:climb]` 清單狀態 — 已關閉
+
+全量掃描由 #232 的十四-agent 量度完成,記錄於
+[#301 的掃描 comment](https://github.com/fol2/glassvow/issues/301#issuecomment-5304721761)
+(2026-08-15)。content.* 側 Tier A 句已全數入賬:quest/whisper 句在
+Batch 1 區(rows 32–82)重寫或保留;ui.* 側歸 #303(chrome)與 #228
+(prose);scene/finale 側歸 #263/#309;音軌名同 batch 檔「一語三址」節。
+原 [TODO] 於 Batch 1(#301)開稿時關閉。
