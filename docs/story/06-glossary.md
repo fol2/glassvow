@@ -19,7 +19,13 @@
 | 留者 | the stayer | 留在爐邊、繼承記憶的那一個(玩家視角) | placeholder |
 | 守爐人 | the Keeper | 爐邊 NPC 顯示名=沉澱的臉(bible 內部稱【留低嗰個】);L0-safe 雙讀 | locked [#261 Q11] |
 | 永恆留者 | The Eternal Keeper | Keeper 的 Act IV boss form 名;與永恆君王孖生 | locked [#261 Q10] |
-| 續火 | Rekindle | 「繼續」的儀式名;取代 climb 語彙(掣位置換歸 #232) | locked [#261 Q13] |
+| 續火 | Rekindle | 分身儀式名(00 §1);掣位=ui.menu.beginClimb——派新行者出發正是分身一刻,resume 掣另取「返回路上」 | locked [#261 Q13;掣位 #232 Q2] |
+| 返回路上 | Back to the Road | resume 掣(ui.menu.continueClimb)——回到進行中的旅程;無分身 | locked [#232 Q2] |
+| 留在路上 | Stay on the Road | ui.menu.keepClimbing 掣;書面語修訂——舊簽「留喺路上」廢(喺不在字庫且屬口語) | locked [#232 Q2 修訂] |
+| 引路石 | waystone | 路程單位(第 {n} 塊引路石 / WAYSTONE n);CONCEPTS 域模型:石是地點,燈到石而亮 | locked [#232 Q3] |
+| 入城 | ARRIVED | 勝利字(取代 登臨/ASCENDED);表面=你抵達,揭後=隊伍抵達、入城=歸家 | locked [#232 Q4] |
+| 王冠之後 | beyond the crown | 封門方位公式,七址共用(取代「王冠之上 / above the crown」);一次簽,逐址替換(ledger row 31) | placeholder [PROPOSED — Batch 1] |
+| 未燃之路 | the Unlit Way | 掌燈人 quest 的路名 | locked(shipped) |
 | 黑曜王庭 | The Obsidian Court | 第三 act 地區(舊名 Spire banned;shipped 三檔置換歸 #232) | locked [#261 Q8] |
 | 鏡中歸途 | The Mirrored Road | Act IV 門後之地 | locked [#261 Q9] |
 | 原初朝聖者 | the Undivided | 「你」這條人格線的起點(en 避 "First Pilgrim",防撞第一行者) | locked [#261 Q14] |
