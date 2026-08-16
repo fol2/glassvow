@@ -13,12 +13,16 @@ neither: the behaviour matches and only the `file:line` is wrong.
 
 > **Superseded as a standard on 2026-08-16 — kept as measurement.** [#317](https://github.com/fol2/glassvow/issues/317)
 > detached the reference: the port is content- and behaviour-owning, and the
-> benchmark is no longer the authority against which any of this is judged. Every
-> **R** row below is now port-owned UI/UX work judged against the commercial
-> rubric, tracked on [#324](https://github.com/fol2/glassvow/issues/324) — never
-> restored merely because the web did it differently. The measurements stay valid
-> as observations, and the census above is the reason the 612 remaining citations
-> were frozen rather than re-resolved.
+> benchmark is no longer the authority against which any of this is judged.
+> Nothing below is restored merely because the web did it differently; where a row
+> still needs a decision, the standard is the commercial rubric.
+> [#324](https://github.com/fol2/glassvow/issues/324) re-measured all eleven **R**
+> rows against present-day code and carries the current verdict for each — **nine
+> were already fixed**, row 5 had been mis-measured, row 20 was never a
+> regression, and row 25 still has a residual on
+> [#347](https://github.com/fol2/glassvow/issues/347). The measurements stay valid
+> as dated observations, and the census above is the reason the remaining
+> citations were frozen rather than re-resolved.
 
 ## The content baseline stopped being faithful, and said otherwise
 
@@ -89,38 +93,49 @@ opened and compared against the benchmark's actual behaviour.
 
 ## The divergence table
 
-**P** progression — deliberate, defensible, keep it.
-**R** regression — we are behind the benchmark and did not mean to be.
-**C** citation only — behaviour verified equivalent; the anchor is wrong.
-**?** open — not yet compared.
+> **Every row is a dated observation, not a live status.** The `measured` column
+> says when the "this port" cell was read out of the code, and that is the only
+> claim the row makes. **Do not quote a row as the port's current behaviour** —
+> re-read the code, or read the outcome column, which is maintained.
+>
+> This warning is here because the document was quoted as authority on
+> 2026-08-16 and **nine of its eleven R rows had been fixed three weeks
+> earlier**, most within hours of the table being written. Undated, a stale
+> measurement looks eternal. The full re-measurement, and the current verdict for
+> every row, live on
+> [#324](https://github.com/fol2/glassvow/issues/324#issuecomment-5308325374).
 
-| # | Thing | This port | Benchmark `6e06911` | |
-|---|---|---|---|---|
-| 1 | ward shell on mid-combat restore | `set_ward_shell(true, **false**)` — no grow | `syncWardMesh(sprite, true, **true**)` → `meshWard(…, {grow: true})` (`combat.js:1897`) | **P** |
-| 2 | mote flight stagger (`fly_to`) | all `n` motes spawn on one frame | a `delay` of `i * 46` — one mote every 46 ms (`combat.js:1457`) | **R** |
-| 3 | mote flight scale (`fly_to`) | fixed size per mote | `0.5 → 1.05 @0.45 → 0.55` — swells at apex, shrinks on landing | **R** |
-| 4 | mote flight mechanism | gravity 180, drag 0.35, velocity arc | three WAAPI keyframes over a random mid control point | **P** |
-| 5 | enemy name weight | Cinzel 700 (only 700/800 bundled) | `.enemy .name` declares **no** `font-weight` → 400 (`styles.css:793`) | **R** |
-| 6 | `ring()` / `slashArc()` | suppressed by `DEAD_KINDS` | present in source, NaN out before drawing — never on screen | **P** |
-| 7 | enemy hit-test order | reverse iteration, last view wins | DOM `box.onclick` — topmost painted element wins (`combat.js:304`) | **C** |
-| 8 | press on a card during targeting | hand seats resolve first, guard returns | `e.stopPropagation()` on the card (`combat.js:959`) | **C** |
-| 9 | hover tick | one per seat crossed | `c.onmouseenter`, gated `if (FINE)` (`combat.js:961`) | **C** |
-| 10 | aimed foe update | changes when the pointer crosses a body | `hoverEnemyAt` (`combat.js:1050`) | **C** |
-| 11 | `impact_frame()` | `flash(WHITE, 0.28, 0.09)`, `hitstop(90)` | `flash('#ffffff', 0.28, 0.09); hitstop(90)` (`vfx.js:435`) | **C** |
-| 12 | `DEAL_BUDGET` deal pacing | 500 ms budget → 100 ms stagger, 680 ms total | `drawBatchSchedule` (`pile-chrome.js:58`) — arithmetic exact | **C** |
-| 13 | motion curves | `[0.22,1,0.36,1]` / `[0.34,1.56,0.64,1]` | `BASE_EASING` (`tokens.js:31`) — identical | **C** |
-| 14 | `archetypeHit`, `BESPOKE_VFX`, ward underlay | as ported | byte-identical between both trees | **C** |
-| 15 | damage floaters (`floaters.gd`) | 4 tiers, 450/640 ms, no rotation, poison rises | 18 `.floaty` tiers, 1100/1250 ms, ±8°/±16°, **poison drips down** | **R** |
-| 16 | aim arc dashes | 10 dashes at 62% ink, scaled to the arc | `stroke-dasharray: 4 10` — 28.6% duty in path px | **R** |
-| 17 | aim arc ink | `#ff8a92` @0.92, plus a 9px glow pass @0.16 | one stroke, `rgba(255,89,100,.85)`, width 4, no glow | **R** |
-| 18 | aim reticle | r 11, width 2.5, plus a filled r-3 core | `r=9`, width 3, `rgba(255,89,100,.95)`, **no fill** | **R** |
-| 19 | hover / armed card pose | lift 24 px, scale 1.08 | `.lifted` −92 px @1.38, `.armed` −118 px @1.24 | **R** |
-| 20 | tap-after-drag guard | `CLICK_SLOP` — 12 px of travel | **time, not distance**: a click within 350 ms of a drag ends is swallowed | **R** |
-| 21 | drag arm threshold | `DRAG_START_PX = 26`, upward only | `st.y0 - e.clientY > 26` | **C** |
-| 22 | hand fan law | gap 112/640/246, tilt 5/42, sag 3.2, base 26 | `layoutHand` — **all seven identical** | **C** |
-| 23 | aim arc geometry | P0 lifted 80, apex 120, quadratic | `M x,y-80 Q cx,cy x1,y1`, apex `min(y0,y1)-120` | **C** |
-| 24 | press the stage with nothing armed | returns early — a lifted card cannot be set down | `else if (S.hoveredCard != null) { … }` (`combat.js:359`) | **R** |
-| 25 | hover tick on a coarse pointer | fires — twice per tap, with the COARSE branch | `onmouseenter` is wired only `if (FINE)` (`combat.js:960`) | **R** |
+**P** progression — deliberate, defensible, keep it.
+**R** regression — behind the benchmark and not on purpose, **as at the measured date**.
+**C** citation only — behaviour verified equivalent; the anchor is wrong.
+
+| # | Thing | This port | Benchmark `6e06911` | measured | verdict, and what became of it |
+|---|---|---|---|---|---|
+| 1 | ward shell on mid-combat restore | `set_ward_shell(true, **false**)` — no grow | `syncWardMesh(sprite, true, **true**)` → `meshWard(…, {grow: true})` (`combat.js:1897`) | 2026-07-26 | **P** |
+| 2 | mote flight stagger (`fly_to`) | all `n` motes spawn on one frame | a `delay` of `i * 46` — one mote every 46 ms (`combat.js:1457`) | 2026-07-26 | **R** → **resolved** by `65ffac8`. `FLY_STAGGER = 0.046` (`presentation/combat/vfx_layer.gd:570`); verified 2026-08-16 |
+| 3 | mote flight scale (`fly_to`) | fixed size per mote | `0.5 → 1.05 @0.45 → 0.55` — swells at apex, shrinks on landing | 2026-07-26 | **R** → **resolved** by `65ffac8`. `FLY_SCALE = [0.5, 1.05, 0.55]` at `FLY_AT = [0.0, 0.45, 1.0]` (`presentation/combat/vfx_layer.gd:575-576`); verified 2026-08-16 |
+| 4 | mote flight mechanism | gravity 180, drag 0.35, velocity arc | three WAAPI keyframes over a random mid control point | 2026-07-26 | **P** |
+| 5 | enemy name weight | Cinzel 700 (only 700/800 bundled) | `.enemy .name` declares **no** `font-weight` → 400 (`styles.css:793`) | 2026-07-26 | **R** → **the measurement was wrong.** The port uses Cinzel **500** (`presentation/combat/enemy_view.gd:4650`), and 500/700/800 are all on disk (`presentation/combat/glass_style.gd:30-32`), so the stated obstacle never existed. Re-verdicted **P** on #324 — 500 is chosen for 14 px uppercase under a 2 px outline, where 400 would be eaten |
+| 6 | `ring()` / `slashArc()` | suppressed by `DEAD_KINDS` | present in source, NaN out before drawing — never on screen | 2026-07-26 | **P** |
+| 7 | enemy hit-test order | reverse iteration, last view wins | DOM `box.onclick` — topmost painted element wins (`combat.js:304`) | 2026-07-26 | **C** |
+| 8 | press on a card during targeting | hand seats resolve first, guard returns | `e.stopPropagation()` on the card (`combat.js:959`) | 2026-07-26 | **C** |
+| 9 | hover tick | one per seat crossed | `c.onmouseenter`, gated `if (FINE)` (`combat.js:961`) | 2026-07-26 | **C** |
+| 10 | aimed foe update | changes when the pointer crosses a body | `hoverEnemyAt` (`combat.js:1050`) | 2026-07-26 | **C** |
+| 11 | `impact_frame()` | `flash(WHITE, 0.28, 0.09)`, `hitstop(90)` | `flash('#ffffff', 0.28, 0.09); hitstop(90)` (`vfx.js:435`) | 2026-07-26 | **C** |
+| 12 | `DEAL_BUDGET` deal pacing | 500 ms budget → 100 ms stagger, 680 ms total | `drawBatchSchedule` (`pile-chrome.js:58`) — arithmetic exact | 2026-07-26 | **C** |
+| 13 | motion curves | `[0.22,1,0.36,1]` / `[0.34,1.56,0.64,1]` | `BASE_EASING` (`tokens.js:31`) — identical | 2026-07-26 | **C** |
+| 14 | `archetypeHit`, `BESPOKE_VFX`, ward underlay | as ported | byte-identical between both trees | 2026-07-26 | **C** |
+| 15 | damage floaters (`floaters.gd`) | 4 tiers, 450/640 ms, no rotation, poison rises | 18 `.floaty` tiers, 1100/1250 ms, ±8°/±16°, **poison drips down** | 2026-07-26 | **R** → **resolved** by `d400895`. 13 class sizes, `DUR_DEFAULT 1.1` / `DUR_CRIT 1.25`, ±8° on `dmg*` and ±16° on crit, and poison **drips down** — `y_pct = [-50, -26, +80]` (`presentation/combat/floaters.gd:15-21`, `presentation/combat/floaters.gd:44-45`, `presentation/combat/floaters.gd:158-162`, `presentation/combat/floaters.gd:181-190`) |
+| 16 | aim arc dashes | 10 dashes at 62% ink, scaled to the arc | `stroke-dasharray: 4 10` — 28.6% duty in path px | 2026-07-26 | **R** → **resolved** by `21bdcf0` (2026-07-26) |
+| 17 | aim arc ink | `#ff8a92` @0.92, plus a 9px glow pass @0.16 | one stroke, `rgba(255,89,100,.85)`, width 4, no glow | 2026-07-26 | **R** → **resolved** by `21bdcf0` (2026-07-26) |
+| 18 | aim reticle | r 11, width 2.5, plus a filled r-3 core | `r=9`, width 3, `rgba(255,89,100,.95)`, **no fill** | 2026-07-26 | **R** → **resolved** by `21bdcf0` (2026-07-26) |
+| 19 | hover / armed card pose | lift 24 px, scale 1.08 | `.lifted` −92 px @1.38, `.armed` −118 px @1.24 | 2026-07-26 | **R** → **resolved** by `50eb9c2` (2026-07-27) — hover 92 px @1.38, armed 118 px @1.24 |
+| 20 | tap-after-drag guard | `CLICK_SLOP` — 12 px of travel | **time, not distance**: a click within 350 ms of a drag ends is swallowed | 2026-07-26 | **R** → re-verdicted **P** on #324. `was_dragging` already suppresses the tap after a real drag, so the 12 px slop governs only the no-drag case; a 350 ms swallow would eat legitimate fast taps, and the tree already carries a 380 ms constant on this input path for the long-press |
+| 21 | drag arm threshold | `DRAG_START_PX = 26`, upward only | `st.y0 - e.clientY > 26` | 2026-07-26 | **C** |
+| 22 | hand fan law | gap 112/640/246, tilt 5/42, sag 3.2, base 26 | `layoutHand` — **all seven identical** | 2026-07-26 | **C** |
+| 23 | aim arc geometry | P0 lifted 80, apex 120, quadratic | `M x,y-80 Q cx,cy x1,y1`, apex `min(y0,y1)-120` | 2026-07-26 | **C** |
+| 24 | press the stage with nothing armed | returns early — a lifted card cannot be set down | `else if (S.hoveredCard != null) { … }` (`combat.js:359`) | 2026-07-26 | **R** → **resolved** by `038f390` (2026-07-26) — `drop_seat()` sets the lifted card down |
+| 25 | hover tick on a coarse pointer | fires — twice per tap, with the COARSE branch | `onmouseenter` is wired only `if (FINE)` (`combat.js:960`) | 2026-07-26 | **R** → **partly resolved** by `038f390` (the double hover sound). A residual is open: `emulate_mouse_from_touch` is `true` by default, so a synthesised `mouse_entered` may set `hovered_uid` before the finger lifts and defeat the first-tap lift. Inferred, not measured — [#347](https://github.com/fol2/glassvow/issues/347) settles it |
 
 Twelve of the twenty-three are citation-only: the code was read correctly and
 written down against the wrong line. Row 12 is the clearest case — the comment
@@ -225,6 +240,9 @@ thing ends up cannot.
 |---|---|
 | 2 mote stagger, 3 mote scale, 4 mote path, plus a 2x size error found with them | `65ffac8` |
 | 5 enemy name weight — `Cinzel-500.woff2`, byte-identical to the benchmark's own | `d1c228d` |
+| 15 damage floaters, poison drips down | `d400895` |
+| 16–18 aim arc dash, ink, reticle | `21bdcf0` |
+| 19 hover / armed card pose | `50eb9c2` |
 | 24 stage press lowers a lifted card, 25 hover tick behind the pointer test | `038f390` |
 
 The size error is the one worth remembering. `size` in `flyTo` is a DOM width,
@@ -264,10 +282,13 @@ replaces it carries an `else` branch this port never had.
 
 ## Still open, all measured
 
-Rows 15–20 are regressions with a full specification recorded above and no work
-done. Rows 15 (floaters) and 19 (card poses) are the two that touch every fight:
-one is every numeral on the screen, the other is the gesture the hand is read
-through. Rows 16–18 are one file and one afternoon.
+**Superseded 2026-08-16 (#324).** The paragraph that used to live here listed
+rows 15–20 as regressions with no work done. Nine of the eleven **R** rows were
+already fixed, most the same night this table was written; the live verdict for
+each row is the outcome column above, not this heading.
+
+The one residual still open is row 25's first-tap lift under a coarse pointer —
+inferred, not re-measured — on [#347](https://github.com/fol2/glassvow/issues/347).
 
 ## How to keep this from coming back
 
