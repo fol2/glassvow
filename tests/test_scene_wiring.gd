@@ -31,6 +31,13 @@ static func run(fails: Array[String]) -> void:
 	_finish_stores_vigil_before_run(fails)
 	_unsealing_retry_restores_the_scene(fails)
 	_unsealing_replay_is_transient(fails)
+	_lamplighter_pre_once(fails)
+	_lamplighter_pre_resume(fails)
+	_lamplighter_leave_skips_post(fails)
+	_lamplighter_cannot_skips_post(fails)
+	_lamplighter_post_once(fails)
+	_lamplighter_post_resume(fails)
+	_lamplighter_does_not_inflate_unlocks(fails)
 	if _file_snapshot(SaveService.RUN_PATH) != default_run \
 			or _file_snapshot(SaveService.VIGIL_PATH) != default_vigil:
 		fails.append("scene_wiring: tests touched the default save")
@@ -393,6 +400,205 @@ static func _unsealing_replay_is_transient(fails: Array[String]) -> void:
 	_check(fails, dark.find_child("Replay", true, false) == null,
 		"an unlit rose still offered replay")
 	dark.free()
+
+
+static func _lamplighter_pre_once(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	for meeting: int in range(5):
+		var scene_id: String = "lamplighter-m%d-pre" % (meeting + 1)
+		var main: Main = _hollow(content, meeting, false)
+		main._show_hollow()
+		_wake(main)
+		_check(fails, main._route_screen is ScenePlayer,
+			"%s did not play before HollowScreen" % scene_id)
+		if main._route_screen is ScenePlayer:
+			_check(fails, (main._route_screen as ScenePlayer)._script.id == scene_id,
+				"%s played a different scene" % scene_id)
+		_check(fails, typeof(main.game.run.pending_scene) == TYPE_DICTIONARY
+				and str(main.game.run.pending_scene.get("id", "")) == scene_id,
+			"%s did not persist a run-side cursor" % scene_id)
+		_drive(main)
+		_check(fails, main._vigil.scenes_seen.has(scene_id),
+			"finishing %s did not mark scenes_seen" % scene_id)
+		_check(fails, main._route_screen is HollowScreen,
+			"finishing %s did not hand off to HollowScreen" % scene_id)
+		var seen: Array[String] = main._vigil.scenes_seen.duplicate()
+		_dispose(main)
+		var again: Main = _hollow(content, meeting, false)
+		again._vigil.scenes_seen = seen
+		again._show_hollow()
+		_check(fails, again._route_screen is HollowScreen
+				and not (again._route_screen is ScenePlayer),
+			"%s fired a second time" % scene_id)
+		_dispose(again)
+
+
+static func _lamplighter_pre_resume(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var producer: Main = _hollow(content, 0, false)
+	producer._show_hollow()
+	_wake(producer)
+	var player: ScenePlayer = producer._route_screen as ScenePlayer
+	_check(fails, player != null, "pre resume producer did not open m1-pre")
+	if player != null:
+		player._process(0.016)
+	var loaded: RunState = SaveService.load_run(content, RUN_PATH)
+	_dispose(producer)
+	_check(fails, loaded != null and typeof(loaded.pending_scene) == TYPE_DICTIONARY
+			and str(loaded.pending_scene.get("id", "")) == "lamplighter-m1-pre"
+			and int(float(str(loaded.pending_scene.get("cursor", -1)))) == 1,
+		"an interrupted m1-pre did not persist cursor 1")
+	var resumed: Main = _main(content)
+	resumed._vigil.scenes_seen.append("opening")
+	resumed._continue_run(loaded)
+	_wake(resumed)
+	var again: ScenePlayer = resumed._route_screen as ScenePlayer
+	_check(fails, again != null, "resume did not restore the m1-pre ScenePlayer")
+	if again != null:
+		var line: Label = again.find_child("Line", true, false) as Label
+		_check(fails, line != null
+				and line.text == Locale.active.t("story.lamplighter-m1.pre.l2"),
+			"resume replayed m1-pre from line 0 instead of the owed line")
+	_dispose(resumed)
+
+
+static func _lamplighter_leave_skips_post(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _hollow(content, 0, false)
+	main._show_hollow()
+	_drive(main)
+	_check(fails, main._route_screen is HollowScreen, "leave producer did not reach HollowScreen")
+	main._on_hollow_choice("leave")
+	_check(fails, not (main._route_screen is ScenePlayer),
+		"leaving unpaid played a post scene")
+	_check(fails, not main._vigil.scenes_seen.has("lamplighter-m1-post"),
+		"leaving unpaid marked the post as seen")
+	_dispose(main)
+
+
+static func _lamplighter_cannot_skips_post(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _hollow(content, 1, false)
+	main._vigil.scenes_seen.append("lamplighter-m2-pre")
+	main.game.run.player.gold = 0
+	main._show_hollow()
+	_check(fails, main._route_screen is HollowScreen, "cannot producer did not open HollowScreen")
+	main._on_hollow_choice("pay")
+	_check(fails, main._route_screen is HollowScreen
+			and not (main._route_screen as HollowScreen)._error.text.is_empty(),
+		"cannot did not stay a HollowScreen error")
+	_check(fails, not (main._route_screen is ScenePlayer),
+		"cannot played a scene")
+	_check(fails, not main._vigil.scenes_seen.has("lamplighter-m2-post"),
+		"cannot marked the post as seen")
+	_dispose(main)
+
+
+static func _lamplighter_post_once(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _hollow(content, 0, false)
+	main._vigil.scenes_seen.append("lamplighter-m1-pre")
+	main._show_hollow()
+	_check(fails, main._route_screen is HollowScreen, "post producer skipped HollowScreen")
+	main._on_hollow_choice("pay")
+	_check(fails, main._route_screen is HollowScreen
+			and str(main.game.run.pending_hollow.get("paid", false)) == "true",
+		"paying did not return to the paid HollowScreen")
+	main._on_hollow_choice("continue")
+	_wake(main)
+	_check(fails, main._route_screen is ScenePlayer,
+		"continue after pay did not play m1-post")
+	if main._route_screen is ScenePlayer:
+		_check(fails, (main._route_screen as ScenePlayer)._script.id == "lamplighter-m1-post",
+			"continue after pay played a scene other than m1-post")
+	_check(fails, typeof(main.game.run.pending_scene) == TYPE_DICTIONARY
+			and str(main.game.run.pending_scene.get("id", "")) == "lamplighter-m1-post",
+		"m1-post did not persist a run-side cursor")
+	_drive(main)
+	_check(fails, main._vigil.scenes_seen.has("lamplighter-m1-post"),
+		"finishing m1-post did not mark scenes_seen")
+	var persisted: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, persisted.scenes_seen.has("lamplighter-m1-post"),
+		"finishing m1-post did not persist scenes_seen to disk")
+	_check(fails, not (main._route_screen is ScenePlayer),
+		"finishing m1-post did not hand off to the held destination")
+	var seen: Array[String] = main._vigil.scenes_seen.duplicate()
+	_dispose(main)
+	var again: Main = _hollow(content, 0, true)
+	again._vigil.scenes_seen = seen
+	again._on_hollow_choice("continue")
+	_check(fails, not (again._route_screen is ScenePlayer),
+		"m1-post fired a second time")
+	_dispose(again)
+
+
+static func _lamplighter_post_resume(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var producer: Main = _hollow(content, 0, true)
+	producer._vigil.scenes_seen.append("lamplighter-m1-pre")
+	producer._on_hollow_choice("continue")
+	_wake(producer)
+	var player: ScenePlayer = producer._route_screen as ScenePlayer
+	_check(fails, player != null, "post resume producer did not open m1-post")
+	if player != null:
+		player._process(0.016)
+	var loaded: RunState = SaveService.load_run(content, RUN_PATH)
+	_dispose(producer)
+	_check(fails, loaded != null and typeof(loaded.pending_scene) == TYPE_DICTIONARY
+			and str(loaded.pending_scene.get("id", "")) == "lamplighter-m1-post"
+			and int(float(str(loaded.pending_scene.get("cursor", -1)))) == 1,
+		"an interrupted m1-post did not persist cursor 1")
+	var resumed: Main = _main(content)
+	resumed._vigil.scenes_seen.append("opening")
+	resumed._vigil.scenes_seen.append("lamplighter-m1-pre")
+	resumed._continue_run(loaded)
+	_wake(resumed)
+	var again: ScenePlayer = resumed._route_screen as ScenePlayer
+	_check(fails, again != null, "resume did not restore the m1-post ScenePlayer")
+	if again != null:
+		var line: Label = again.find_child("Line", true, false) as Label
+		_check(fails, line != null
+				and line.text == Locale.active.t("story.lamplighter-m1.post.l2"),
+			"resume replayed m1-post from line 0 instead of the owed line")
+	_dispose(resumed)
+
+
+static func _lamplighter_does_not_inflate_unlocks(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _hollow(content, 0, false)
+	var before: int = main._vigil.unlocks.size()
+	main._show_hollow()
+	_drive(main)
+	main._on_hollow_choice("pay")
+	main._on_hollow_choice("continue")
+	_drive(main)
+	_check(fails, main._vigil.unlocks.size() == before,
+		"lamplighter scenes wrote into unlocks")
+	_check(fails, not main._vigil.unlocks.has("lamplighter-m1-pre")
+			and not main._vigil.unlocks.has("lamplighter-m1-post"),
+		"lamplighter scene ids landed in unlocks")
+	_dispose(main)
+
+
+static func _hollow(content: ContentDB, meeting: int, paid: bool) -> Main:
+	var main: Main = _main(content)
+	main._vigil.scenes_seen.append("opening")
+	var run: RunState = RunState.new_run(content, 32801 + meeting, "run-lamp-%d" % meeting)
+	run.quests["hollowLamplighter"] = {
+		"state": "armed", "progress": meeting, "memory": {},
+	}
+	var walk: WorldMap = WorldMap.slice()
+	walk.at = 3
+	walk.nodes[3].type = "rest"
+	run.node_id = walk.nodes[3].id
+	run.map = walk.to_dict()
+	run.pending_hollow = {
+		"nodeId": walk.nodes[3].id, "type": "rest", "meeting": meeting,
+		"paid": paid, "deferred": false, "answer": "",
+	}
+	main.game = GlassvowGame.new(content, run)
+	main._map = walk
+	return main
 
 
 static func _wake(main: Main) -> void:

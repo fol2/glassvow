@@ -1678,7 +1678,7 @@ func _on_shop_remove(uid_text: String) -> void:
 
 # ---------------------------------------------------------------- combat
 
-func _prepare_encounter(n: MapNode) -> void:
+func _arm_encounter(n: MapNode) -> void:
 	var enemies: Array[String] = n.enemies
 	if enemies.is_empty():
 		enemies = game.quests.encounter_override(game.run, n.type, n)
@@ -1686,6 +1686,10 @@ func _prepare_encounter(n: MapNode) -> void:
 			enemies = game.rewards.roll_encounter(game.run, n.type, n.row, n)
 	game.run.pending_combat = n.type
 	game.run.pending_enemy_ids = enemies
+
+
+func _prepare_encounter(n: MapNode) -> void:
+	_arm_encounter(n)
 	if not SaveService.store(game.run):
 		_show_save_error("ui.persistence.detail.encounterFreeze")
 		return
@@ -2562,11 +2566,25 @@ func _on_monument_choice(id: String) -> void:
 		_show_save_error("ui.persistence.detail.standingBequestClear")
 
 
+func _lamplighter_scene_id(meeting: int, phase: String) -> String:
+	return "lamplighter-m%d-%s" % [meeting + 1, phase]
+
+
 func _show_hollow() -> void:
-	_remember_route(_show_hollow)
 	var pending: Dictionary = game.run.pending_hollow
 	var meetings: Array = content.quests["hollowLamplighter"].get("meetings", [])
 	var step: int = clampi(int(float(str(pending.get("meeting", 0)))), 0, meetings.size() - 1)
+	var pre_id: String = _lamplighter_scene_id(step, "pre")
+	if not _vigil.scenes_seen.has(pre_id) and _scene_script(pre_id) != null:
+		if typeof(game.run.pending_scene) != TYPE_DICTIONARY:
+			game.run.pending_scene = {"id": pre_id, "cursor": 0}
+			if not _store_run():
+				game.run.pending_scene = null
+				_show_save_error("ui.persistence.detail.sceneHold")
+				return
+		_show_scene()
+		return
+	_remember_route(_show_hollow)
 	var meeting: Dictionary = meetings[step]
 	var screen: HollowScreen = HollowScreen.new(
 		pending, meeting, step + 1, meetings.size(), _shape, _sfx_bus)
@@ -2583,7 +2601,7 @@ func _on_hollow_choice(id: String) -> void:
 				(_route_screen as HollowScreen).show_error(
 					str(result.get("message", "")))
 			return
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.hollowPriceHold")
 			return
 		_show_hollow()
@@ -2598,8 +2616,23 @@ func _stage_hollow_exit() -> void:
 			or node.type != str(pending.get("type")):
 		_show_save_error("ui.persistence.detail.heldHollowDestinationUnreadable")
 		return
+	var meetings: Array = content.quests["hollowLamplighter"].get("meetings", [])
+	var step: int = clampi(int(float(str(pending.get("meeting", 0)))), 0, meetings.size() - 1)
+	var post_id: String = _lamplighter_scene_id(step, "post")
+	var play_post: bool = pending.get("paid", false) \
+		and not _vigil.scenes_seen.has(post_id) \
+		and _scene_script(post_id) != null
+	if play_post and typeof(game.run.pending_scene) != TYPE_DICTIONARY:
+		game.run.pending_scene = {"id": post_id, "cursor": 0}
 	game.run.pending_hollow = null
 	if node.is_combat():
+		if play_post:
+			_arm_encounter(node)
+			if not _store_run():
+				_show_save_error("ui.persistence.detail.encounterFreeze")
+				return
+			_show_scene()
+			return
 		_prepare_encounter(node)
 		return
 	var event_id: Variant = game.rewards.roll_event(game.run) if node.type == "event" else null
@@ -2609,7 +2642,9 @@ func _stage_hollow_exit() -> void:
 	if event_id != null:
 		game.run.quest_scratch["eventNode"] = event_id
 	if _store_run():
-		if not _dispatch_current_route():
+		if play_post:
+			_show_scene()
+		elif not _dispatch_current_route():
 			_show_save_error("ui.persistence.detail.heldHollowDestinationUnreadable")
 	else:
 		_show_save_error("ui.persistence.detail.hollowDestinationHold")

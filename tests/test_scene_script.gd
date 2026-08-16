@@ -7,6 +7,11 @@ const SCENE_IDS: Array[String] = [
 	"opening", "unsealing", "unsealing-short", "act4-entry",
 	"act4-node1", "act4-node2", "act4-node3", "act4-node4", "act4-node5",
 	"finale",
+	"lamplighter-m1-pre", "lamplighter-m1-post",
+	"lamplighter-m2-pre", "lamplighter-m2-post",
+	"lamplighter-m3-pre", "lamplighter-m3-post",
+	"lamplighter-m4-pre", "lamplighter-m4-post",
+	"lamplighter-m5-pre", "lamplighter-m5-post",
 ]
 
 
@@ -78,6 +83,14 @@ static func _keys_resolve(fails: Array[String]) -> void:
 			var key: String = str(line["key"])
 			_check(fails, en.t(key) != key, "en did not resolve %s" % key)
 			_check(fails, zh.t(key) != key, "zh-Hant did not resolve %s" % key)
+			var speaker: String = str(line.get("speaker", "")).strip_edges()
+			if speaker.is_empty():
+				continue
+			var speaker_key: String = "ui.scene.speaker.%s" % speaker
+			_check(fails, en.t(speaker_key) != speaker_key,
+				"en did not resolve %s" % speaker_key)
+			_check(fails, zh.t(speaker_key) != speaker_key,
+				"zh-Hant did not resolve %s" % speaker_key)
 
 
 static func _flat_cursor(fails: Array[String]) -> void:
@@ -91,6 +104,15 @@ static func _flat_cursor(fails: Array[String]) -> void:
 		return
 	_check(fails, opening.line_count() == 8, "opening is not 8 flat lines")
 	_check(fails, opening.beats.size() == 4, "opening is not 4 beats")
+	var m4_pre: SceneScript = _script(scenes, "lamplighter-m4-pre")
+	_check(fails, m4_pre != null and m4_pre.line_count() == 4
+			and m4_pre.beats.size() == 1,
+		"lamplighter-m4-pre is not one hold beat of 4 lines")
+	var m5_post: SceneScript = _script(scenes, "lamplighter-m5-post")
+	_check(fails, m5_post != null and m5_post.line_count() == 3,
+		"lamplighter-m5-post is not 3 flat lines")
+	_check(fails, str(m4_pre.beat_at(0).get("art", "")) == "",
+		"lamplighter meetings grew an art plate")
 	var expected: Array[int] = [0, 0, 1, 1, 1, 2, 2, 3]
 	for i: int in range(expected.size()):
 		var beat: Dictionary = opening.beat_at(i)
