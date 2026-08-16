@@ -281,9 +281,9 @@ static func _fallback_chain(fails: Array[String]) -> void:
 
 static func _params(fails: Array[String]) -> void:
 	var locale: Locale = Locale.new()
-	var line: String = locale.t("ui.hud.actFloor", {"act": 2, "floor": 7})
+	var line: String = locale.t("ui.hud.actWaystone", {"act": 2, "n": 7})
 	if line != "Act 2 · Waystone 7":
-		fails.append("locale: ui.hud.actFloor params failed (%s)" % line)
+		fails.append("locale: ui.hud.actWaystone params failed (%s)" % line)
 
 
 static func _content_and_whisper(fails: Array[String]) -> void:
@@ -415,8 +415,8 @@ static func _function_body(source: String, name: String) -> String:
 static func _dialog_shells(fails: Array[String]) -> void:
 	var source: String = FileAccess.get_file_as_string("res://application/main.gd")
 	var expected_keys: Array[String] = [
-		"ui.menu.beginAnew", "ui.menu.beginAnewBody", "ui.menu.keepClimbing",
-		"ui.menu.leaveSpireTitle", "ui.menu.leaveSpireBody",
+		"ui.menu.beginAnew", "ui.menu.beginAnewBody", "ui.menu.stayOnRoad",
+		"ui.menu.leaveRoadTitle", "ui.menu.leaveRoadBody",
 		"ui.common.leave", "ui.common.stay", "ui.menu.abandonConfirmTitle",
 		"ui.menu.abandonConfirmBody", "ui.menu.abandonRun",
 	]
@@ -445,7 +445,7 @@ static func _dialog_shells(fails: Array[String]) -> void:
 	if menu != null:
 		menu.quit_requested.emit()
 	var leave: ChoiceScreen = main._choice_screen as ChoiceScreen
-	_check(fails, leave != null, "Leave Spire confirmation did not open")
+	_check(fails, leave != null, "Leave Road confirmation did not open")
 	if leave != null:
 		_check_dialog(fails, leave, "LEAVE THE ROAD?", "The lantern keeps your place.",
 			["Leave", "Stay"], "no", "Leave", "leave")

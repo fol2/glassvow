@@ -705,7 +705,7 @@ func _build_stats(column: VBoxContainer) -> void:
 	_stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_child(_stats_grid)
 	for row: Array in [
-		["waystones", Locale.active.t("ui.end.floors").to_upper()],
+		["waystones", Locale.active.t("ui.end.waystones").to_upper()],
 		["slain", Locale.active.t("ui.end.slain").to_upper()],
 		["elites_bosses", Locale.active.t("ui.end.elitesBossesPlus").to_upper()],
 		["deck_size", Locale.active.t("ui.end.deckSize").to_upper()],

@@ -179,7 +179,7 @@ func _build_stats() -> void:
 	_stats_grid.add_theme_constant_override("v_separation", 6)
 	_stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_column.add_child(_stats_grid)
-	_add_stat("waystones", Locale.active.t("ui.end.floors").to_upper())
+	_add_stat("waystones", Locale.active.t("ui.end.waystones").to_upper())
 	_add_stat("slain", Locale.active.t("ui.end.slain").to_upper())
 	_add_stat("elites_bosses", Locale.active.t("ui.end.elitesBossesPlus").to_upper())
 	_add_stat("deck_size", Locale.active.t("ui.end.deckSize").to_upper())
@@ -340,7 +340,7 @@ func _title_text() -> String:
 
 func _subtitle_text() -> String:
 	match _outcome:
-		"death": return Locale.active.t("ui.end.fallenLantern", {"floor": _fall_waystone})
+		"death": return Locale.active.t("ui.end.fallenLantern", {"n": _fall_waystone})
 		_: return Locale.active.t("ui.end.abandonedSub")
 
 
