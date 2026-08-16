@@ -11,6 +11,52 @@ checked is a **regression**. A value that differs because this engine can do
 better, decided on purpose, is a **progression**. Most of what follows is
 neither: the behaviour matches and only the `file:line` is wrong.
 
+> **Superseded as a standard on 2026-08-16 — kept as measurement.** [#317](https://github.com/fol2/glassvow/issues/317)
+> detached the reference: the port is content- and behaviour-owning, and the
+> benchmark is no longer the authority against which any of this is judged. Every
+> **R** row below is now port-owned UI/UX work judged against the commercial
+> rubric, tracked on [#324](https://github.com/fol2/glassvow/issues/324) — never
+> restored merely because the web did it differently. The measurements stay valid
+> as observations, and the census above is the reason the 612 remaining citations
+> were frozen rather than re-resolved.
+
+## The content baseline stopped being faithful, and said otherwise
+
+This document's subject is presentation. The same question asked of *content*
+has a blunter answer, measured on 2026-08-16: `content/full-content.json`
+carried `_source: {commit: 6e06911}`, claiming to be a verbatim capture, while
+differing from a fresh capture by **12 values and 5 keys**.
+
+| leaf | fresh capture of `6e06911` | checked in |
+|---|---|---|
+| `enemies/sovereign/hp` | 330 / 330 | **650 / 650** |
+| `enemies/heraldOfEnd/hp` | 128 / 142 | **260 / 280** |
+| `enemies/voidColossus/hp` | 155 / 168 | **300 / 320** |
+| `enemies/rootheart/hp` | 150 / 150 | **240 / 240** |
+| `enemies/leviathan/hp` | 260 / 260 | **310 / 310** |
+| `relics/emberHeart/text` | heal 6 HP | **heal 3 HP** |
+| present only in the checked-in file | — | `relics/emberHeart/heal`, `aspects[0].nameBare`, `aspects[1].nameBare`, `shadeKits[…].namePattern` ×2 |
+
+Five boss HP curves, the Emberheart rework and two data-driven mechanisms —
+`1b06346`, `32b45a1`, `1e0f0b9`, `c519def`. Each was a deliberate balance or
+mechanism decision; **none was a decision to stop being a capture**, and
+re-running `tools/capture_full_content.mjs` would have reverted all of them
+without a word. The reasoning behind the numbers belongs to
+[#203](https://github.com/fol2/glassvow/issues/203).
+
+Two mechanism causes are worth recording, because both are the same disease this
+document names elsewhere — a guard that exists in belief rather than mechanism.
+The file was **one line of 65,591 bytes**, so `32b45a1 Lift the two short boss
+curves` appeared in review as `1 insertion, 1 deletion`. And the test believed to
+protect capture fidelity, `tests/test_original_content.gd:61-64` at `89f71c4`
+(`_capture_survives`; the file is deleted below, so the commit is the only place
+left to read it), took the already-edited tree file as its stand-in for a fresh
+capture, so it would have passed at any amount of drift.
+
+[#323](https://github.com/fol2/glassvow/issues/323) resolved it by deleting the
+capture script, pretty-printing the baseline to 5,485 lines, and replacing the
+`_source` claim with an ancestry note. The file is port-authored now, and says so.
+
 ## What was measured
 
 The port carries **174 `file:line` anchors into the web reference**.
