@@ -320,6 +320,7 @@ static func _remaining_run_screen_call_sites(fails: Array[String]) -> void:
 			"_pane_copy": ["ui.rose.shardRecoveredStack"],
 			"_detail_copy": ["ui.rose.shardRecoveredStack", "ui.rose.paneDark"],
 			"_pane_accessible_name": ["ui.rose.dormantPane", "ui.rose.unknownPane"],
+			"_add_replay": ["ui.rose.replayUnsealing"],
 		},
 		"res://presentation/run/choice_screen.gd": {
 			"_add_title_rose": ["ui.rose.openLabel"],
@@ -455,8 +456,8 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 			break
 		call_keys.append(source.substr(start, finish - start))
 		at = source.find(marker, finish + 2)
-	_check(fails, call_keys.size() == 42,
-		"expected 42 save-error call sites, found %d" % call_keys.size())
+	_check(fails, call_keys.size() == 43,
+		"expected 43 save-error call sites, found %d" % call_keys.size())
 	var distinct: Array[String] = []
 	var locale: Locale = Locale.new(Locale.CODE_EN)
 	for key: String in call_keys:

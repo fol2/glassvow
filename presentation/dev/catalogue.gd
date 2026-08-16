@@ -70,7 +70,10 @@ const ENTRIES: Array[Dictionary] = [
 		"description": "A closed treasure chest on the Act I relic row.",
 		"seed": SEED, "overrides": {"act": 0, "node": "8,0"}},
 	{"id": "vigil", "revision": 1,
-		"description": "The Vigil rose with all six panes lit (synthetic fixture; no quest memories).",
+		"description": "The Vigil rose with all six panes lit (synthetic fixture; no quest memories). Window-body tap replays the unsealing.",
+		"seed": SEED, "overrides": {"shards": 6}},
+	{"id": "unsealing-replay", "revision": 1,
+		"description": "Six-pane Vigil with the Rose Window replay live. Same kernel as vigil; pending_scene is not an OVERRIDE_KEY.",
 		"seed": SEED, "overrides": {"shards": 6}},
 ]
 
@@ -113,6 +116,12 @@ const UNSUPPORTED: Array[Dictionary] = [
 		"reason": "pending_scene is not an OVERRIDE_KEY."},
 	{"id": "l0-hearth-plant",
 		"reason": "Ambient departure staging is not a durable checkpoint."},
+	{"id": "unsealing",
+		"reason": "Vigil pending_scene is not an OVERRIDE_KEY."},
+	{"id": "unsealing-resume",
+		"reason": "Vigil pending_scene is not an OVERRIDE_KEY."},
+	{"id": "unsealing-short",
+		"reason": "The repeat door-crossing beat needs an Act IV to cross into (#312)."},
 	{"id": "onboarding",
 		"reason": "Onboarding Scenarios graduate with the guided-first-run feature."},
 ]

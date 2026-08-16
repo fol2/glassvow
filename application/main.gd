@@ -80,6 +80,8 @@ var _settle: float = 0.0
 ## screen. Screens never see it; main fires it around its own route helpers.
 var _transitions: TransitionLayer
 var _scenes: Dictionary = {}
+## Transient Rose Window replay: no cursor, no once-flag.
+var _scene_replay: bool = false
 
 
 func _init() -> void:
@@ -123,7 +125,7 @@ func _rebuild_active_route() -> void:
 	elif game != null:
 		_route_run()
 	else:
-		_show_title()
+		_route_idle()
 
 
 func _ready() -> void:
@@ -389,7 +391,7 @@ func _ready() -> void:
 		_map_screen.instant = true  # skip the travel tween, land on the fight
 		_map_screen.choose(enter_node)
 	else:
-		_show_title()
+		_route_idle()
 	if performance_probe:
 		_attach_performance_probe()
 	elif shot_path != "":
@@ -837,6 +839,7 @@ func _show_vigil(open_rose: bool = false) -> void:
 	var screen: VigilScreen = VigilScreen.new(_vigil, content, _shape, open_rose, _sfx_bus)
 	screen.back_requested.connect(_show_title)
 	screen.cue_requested.connect(func(cue: StringName) -> void: _music.play(cue))
+	screen.replay_requested.connect(_on_unsealing_replay)
 	_show_route(screen, false, &"vigil")
 
 
@@ -1002,7 +1005,7 @@ func apply_dev_scenario(ref: ScenarioReference) -> bool:
 	_run_save_path = kernel.run_path
 	_vigil_save_path = kernel.vigil_path
 	_vigil = _load_vigil()
-	if ref.scenario_id == "vigil":
+	if ref.scenario_id == "vigil" or ref.scenario_id == "unsealing-replay":
 		# Install the constructed run so no earlier run survives the profile
 		# switch; the Vigil is the destination, not a detour from a live run.
 		game = GlassvowGame.new(content, run)
@@ -1018,7 +1021,7 @@ func apply_dev_scenario(ref: ScenarioReference) -> bool:
 func _continue_run(saved: RunState) -> void:
 	_route_checkpoint_quarantined = false
 	if saved == null:
-		_show_title()
+		_route_idle()
 		return
 	var restored: WorldMap = WorldMap.from_dict(saved.map)
 	if restored == null:
@@ -1032,7 +1035,7 @@ func _continue_run(saved: RunState) -> void:
 func _route_run() -> void:
 	_apply_pending_content_hydration()
 	if game == null:
-		_show_title()
+		_route_idle()
 	elif typeof(game.run.pending_scene) == TYPE_DICTIONARY:
 		_show_scene()
 	elif game.run.pending_dawn != null:
@@ -1189,7 +1192,7 @@ func _show_run_menu() -> void:
 		# Save on disk is the truth — drop the in-memory run, same as reset.
 		game = null
 		_map = null
-		_show_title()
+		_route_idle()
 	)
 	menu.quit_requested.connect(func() -> void:
 		_close_overlay()
@@ -2205,10 +2208,10 @@ func _on_terminal_commit(_id: String) -> void:
 		return
 	if outcome != "win":
 		var run_id: String = game.run.run_id
-		if SaveService.clear_run(run_id):
+		if SaveService.clear_run(run_id, _run_save_path):
 			_vigil = _load_vigil()
 			game = null
-			_show_title()
+			_route_idle()
 		else:
 			_show_save_error("ui.persistence.detail.completedRunClose")
 		return
@@ -2287,7 +2290,7 @@ func _on_terminal_commit(_id: String) -> void:
 		})
 	game.run.pending_run_end = null
 	game.run.pending_dawn = {"events": events, "cursor": 0}
-	if SaveService.store(game.run):
+	if _store_run():
 		_show_dawn()
 	else:
 		_show_save_error("ui.persistence.detail.dawnHold")
@@ -2321,17 +2324,69 @@ func _scene_script(scene_id: String) -> SceneScript:
 	return null
 
 
+func _route_idle() -> void:
+	if typeof(_vigil.pending_scene) != TYPE_DICTIONARY \
+			and _vigil.shards.size() >= 6 \
+			and not _vigil.scenes_seen.has("unsealing") \
+			and _scene_script("unsealing") != null:
+		_vigil.pending_scene = {"id": "unsealing", "cursor": 0}
+		if not _store_vigil():
+			_vigil.pending_scene = null
+			_show_save_error("ui.persistence.detail.sceneHold")
+			return
+	if typeof(_vigil.pending_scene) == TYPE_DICTIONARY:
+		_show_scene()
+	else:
+		_show_title()
+
+
+func _active_pending_scene() -> Variant:
+	if game != null and game.run != null and typeof(game.run.pending_scene) == TYPE_DICTIONARY:
+		return game.run.pending_scene
+	if typeof(_vigil.pending_scene) == TYPE_DICTIONARY:
+		return _vigil.pending_scene
+	return null
+
+
+func _on_unsealing_replay() -> void:
+	if _vigil.shards.size() < 6 or _scene_script("unsealing") == null:
+		return
+	_scene_replay = true
+	_show_scene()
+
+
 func _show_scene() -> void:
 	_remember_route(_show_scene)
-	if game == null or game.run == null or typeof(game.run.pending_scene) != TYPE_DICTIONARY:
-		return
-	var pending: Dictionary = game.run.pending_scene
-	var script: SceneScript = _scene_script(str(pending.get("id", "")))
-	if script == null:
-		game.run.pending_scene = null
-		_route_run()
-		return
-	var cursor: int = int(float(str(pending.get("cursor", 0))))
+	var script: SceneScript = null
+	var cursor: int = 0
+	if _scene_replay:
+		script = _scene_script("unsealing")
+		if script == null:
+			_scene_replay = false
+			_show_vigil(true)
+			return
+	else:
+		var pending_v: Variant = _active_pending_scene()
+		if typeof(pending_v) != TYPE_DICTIONARY:
+			if game != null:
+				_route_run()
+			else:
+				_show_title()
+			return
+		var pending: Dictionary = pending_v
+		script = _scene_script(str(pending.get("id", "")))
+		if script == null:
+			if game != null and game.run != null \
+					and typeof(game.run.pending_scene) == TYPE_DICTIONARY:
+				game.run.pending_scene = null
+			else:
+				_vigil.pending_scene = null
+			if game != null:
+				_route_run()
+			else:
+				_show_title()
+			return
+		cursor = int(float(str(pending.get("cursor", 0))))
 	var screen: ScenePlayer = ScenePlayer.new(script, cursor, _shape, _sfx_bus)
 	screen.instant = _transitions != null and _transitions.instant
 	screen.advance_requested.connect(_on_scene_advance.bind(screen))
@@ -2340,11 +2395,21 @@ func _show_scene() -> void:
 
 
 func _on_scene_advance(screen: ScenePlayer) -> void:
-	if game == null or game.run == null or typeof(game.run.pending_scene) != TYPE_DICTIONARY:
+	if _scene_replay:
+		if is_instance_valid(screen):
+			screen.advance_confirmed()
 		return
-	var pending: Dictionary = game.run.pending_scene
+	var pending_v: Variant = _active_pending_scene()
+	if typeof(pending_v) != TYPE_DICTIONARY:
+		return
+	var pending: Dictionary = pending_v
 	pending["cursor"] = int(float(str(pending.get("cursor", 0)))) + 1
-	if not _store_run():
+	var ok: bool = true
+	if game != null and game.run != null and typeof(game.run.pending_scene) == TYPE_DICTIONARY:
+		ok = _store_run()
+	else:
+		ok = _store_vigil()
+	if not ok:
 		_show_save_error("ui.persistence.detail.sceneCursorHold")
 		return
 	if is_instance_valid(screen):
@@ -2352,18 +2417,30 @@ func _on_scene_advance(screen: ScenePlayer) -> void:
 
 
 func _on_scene_finished() -> void:
-	if game == null or game.run == null:
+	if _scene_replay:
+		_scene_replay = false
+		_show_vigil(true)
 		return
-	var pending: Dictionary = game.run.pending_scene \
-		if typeof(game.run.pending_scene) == TYPE_DICTIONARY else {}
-	var scene_id: String = str(pending.get("id", ""))
-	game.run.pending_scene = null
+	var scene_id: String = ""
+	var run_pending: bool = game != null and game.run != null \
+			and typeof(game.run.pending_scene) == TYPE_DICTIONARY
+	if run_pending:
+		var pending: Dictionary = game.run.pending_scene
+		scene_id = str(pending.get("id", ""))
+		game.run.pending_scene = null
+	elif typeof(_vigil.pending_scene) == TYPE_DICTIONARY:
+		var pending: Dictionary = _vigil.pending_scene
+		scene_id = str(pending.get("id", ""))
+		_vigil.pending_scene = null
 	if not scene_id.is_empty() and not _vigil.scenes_seen.has(scene_id):
 		_vigil.scenes_seen.append(scene_id)
-	if not _store_run() or not _store_vigil():
+	if (run_pending and not _store_run()) or not _store_vigil():
 		_show_save_error("ui.persistence.detail.sceneHold")
 		return
-	_route_run()
+	if game != null:
+		_route_run()
+	else:
+		_show_title()
 
 
 func _show_dawn() -> void:
@@ -2412,10 +2489,10 @@ func _finish_dawn() -> void:
 		if int(float(str(dawn.get("cursor", 0)))) < events.size():
 			return
 	var run_id: String = game.run.run_id
-	if SaveService.clear_run(run_id):
+	if SaveService.clear_run(run_id, _run_save_path):
 		_vigil = _load_vigil()
 		game = null
-		_show_title()
+		_route_idle()
 	else:
 		_show_save_error("ui.persistence.detail.completedRunClose")
 
