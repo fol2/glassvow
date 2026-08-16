@@ -296,6 +296,14 @@ func _node_caption(n: MapNode) -> String:
 ## lands on the top waystone row, which on a phone held upright is the row
 ## nearest the player's thumb.
 func _act_line(region: String, boss: String) -> String:
+	# An act with no bossName gets the region alone — the same degraded form this
+	# function already falls back to when the full line will not fit. The retired
+	# `ui.pilgrimage.summit` used to fill the slot, but the slot is inside
+	# "{boss} AWAITS": any sentence put there has to be a noun, and the nearest
+	# surviving key (`roadEnds`, "THE ROAD ENDS HERE") is a clause. Act IV's
+	# `bossName` is not in the catalogue yet, so this path is reachable.
+	if boss.is_empty():
+		return region
 	var full: String = Locale.active.t("ui.pilgrimage.awaits", {
 		"region": region, "boss": boss,
 	})
@@ -325,7 +333,7 @@ func refresh(run: RunState) -> void:
 			if map.region == "rose_window" \
 			else str(act.get("name", REGION_NAME))
 		_title_label.text = _act_line(act_name.to_upper(),
-			str(act.get("bossName", Locale.active.t("ui.pilgrimage.roadEnds"))).to_upper())
+			str(act.get("bossName", "")).to_upper())
 	var live: Array[int] = map.reachable()
 	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
@@ -394,7 +402,7 @@ func set_act_scenery(stage_act: int) -> void:
 		var act: Dictionary = content.acts[_act]
 		_title_label.text = _act_line(
 			str(act.get("name", REGION_NAME)).to_upper(),
-			str(act.get("bossName", Locale.active.t("ui.pilgrimage.roadEnds"))).to_upper())
+			str(act.get("bossName", "")).to_upper())
 	_push_bands(true)
 
 

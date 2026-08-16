@@ -33,10 +33,20 @@ func _run() -> void:
 	var content: ContentDB = ContentDB.load_full(false)
 	var previous: Locale = Locale.active
 	for locale_code: StringName in [Locale.CODE_EN, Locale.CODE_ZH_HANT]:
+		# The act and boss names come out of ContentDB, not the ui.* subtree, and
+		# `Locale.t` never touches them. Without this the zh rows would measure a
+		# zh waystone phrase glued to ENGLISH act and boss names — a string the
+		# game never renders. `restore_content` has to run on the instance that
+		# owns the overlay log, so it happens before the swap, not after.
+		if Locale.active != null:
+			Locale.active.restore_content()
 		Locale.active = Locale.new(locale_code)
+		Locale.active.hydrate_content(content)
 		for stage_shape: StringName in SHAPES:
 			for act: int in content.acts.size():
 				await _measure(content, locale_code, stage_shape, act)
+	if Locale.active != null:
+		Locale.active.restore_content()
 	Locale.active = previous
 	print("MEASURE %s (%d clipped)" % [
 		"FAIL" if _clipped > 0 else "OK", _clipped])

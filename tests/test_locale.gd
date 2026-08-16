@@ -89,10 +89,12 @@ const TIER_A_ZH: Array[String] = [
 	"尖塔", "爬", "攀", "登臨", "頂點", "之上", "向上", "階梯",
 ]
 
-## Tier B keeps that the substring match trips anyway.
+## Tier B keeps that the substring match trips anyway, as `key|term` — forgiving
+## the pair rather than the whole string, so an allowlisted key that later gains
+## a DIFFERENT banned word still fails.
 ## ui.help.combatBody — "intent above their heads" is literal physical position
 ## inside a scene description, not "above" as a place. zh (頭頂) trips nothing.
-const TIER_A_EN_ALLOWLIST: Array[String] = ["ui.help.combatBody"]
+const TIER_A_EN_ALLOWLIST: Array[String] = ["ui.help.combatBody|above"]
 const TIER_A_ZH_ALLOWLIST: Array[String] = []
 
 
@@ -634,10 +636,13 @@ static func _tier_a_pass(fails: Array[String], catalogue: Dictionary,
 		if not key.begins_with("ui."):
 			continue
 		var value: String = str(leaves[key]).to_lower()
+		# Every matching term, not the first: the allowlist forgives a specific
+		# (key, term) pair, so a second banned word smuggled into an already
+		# forgiven string has to surface on its own row rather than hide behind
+		# the sanctioned one.
 		for term: String in banned:
 			if value.contains(term):
-				hits.append(key)
-				break
+				hits.append("%s|%s" % [key, term])
 	hits.sort()
 	var expected: Array[String] = allowlist.duplicate()
 	expected.sort()
