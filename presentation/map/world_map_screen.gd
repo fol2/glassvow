@@ -13,11 +13,6 @@ signal node_chosen(index: int)
 signal sealed_door_requested
 
 const TRAVEL_TIME: float = 0.4
-## L0 ambient plant (00-truth §5): one-second hearth hold + half-beat window
-## lag, every unseated departure. Art-gated — no plate, no linger.
-const HEARTH_PLATE: String = "res://assets/art/scenes/opening-hearth.png"
-const HEARTH_HOLD: float = 1.0
-const WINDOW_LAG: float = 0.5
 
 const HINT_PT: float = 13.0
 const HINT_TOP: float = -44.0
@@ -29,7 +24,6 @@ const PATH_DRIFT_AMP: Vector2 = Vector2(14.0, 12.0)
 const REGION_NAME: String = "The Ashen Woods"
 
 var instant: bool = false        # headless: travel resolves without a tween
-var hearth_plate: String = HEARTH_PLATE
 var map: WorldMap
 var content: ContentDB
 
@@ -63,8 +57,6 @@ var _map_scene: MapScene = null
 var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
 var _veil_band: MapBand.VeilBand = null
-var _hearth_plant: TextureRect = null
-var _hearth_window: TextureRect = null
 
 
 func _init(world_map: WorldMap, content_ref: ContentDB,
@@ -465,54 +457,8 @@ func choose(i: int) -> bool:
 	if _map_scene != null:
 		_map_scene.set_lock_input(true)
 		_map_scene.set_live(true)
-	if from_i < 0 and ResourceLoader.exists(hearth_plate):
-		_begin_hearth_plant(i, was_unlit)
-		return true
 	_glide(i, was_unlit)
 	return true
-
-
-func _begin_hearth_plant(i: int, was_unlit: bool) -> void:
-	_hearth_plant = _hearth_overlay("HearthPlant", 1.0)
-	_hearth_window = _hearth_overlay("HearthWindow",
-		0.45 if Preferences.active.reduce_motion else 0.0)
-	_hearth_window.flip_h = true
-	if not is_inside_tree():
-		_end_hearth_plant(i, was_unlit)
-		return
-	Motion.bez(self, _tick_hearth_window, HEARTH_HOLD, Motion.CSS_EASE) \
-		.finished.connect(_end_hearth_plant.bind(i, was_unlit))
-
-
-func _hearth_overlay(node_name: String, alpha: float) -> TextureRect:
-	var plate: TextureRect = TextureRect.new()
-	plate.name = node_name
-	plate.texture = load(hearth_plate) as Texture2D
-	plate.set_anchors_preset(Control.PRESET_FULL_RECT)
-	plate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	plate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	plate.modulate.a = alpha
-	add_child(plate)
-	return plate
-
-
-func _tick_hearth_window(u: float) -> void:
-	if _hearth_window == null or Preferences.active.reduce_motion:
-		return
-	var elapsed: float = u * HEARTH_HOLD
-	_hearth_window.modulate.a = 0.45 * clampf(
-		(elapsed - WINDOW_LAG) / maxf(HEARTH_HOLD - WINDOW_LAG, 0.01), 0.0, 1.0)
-
-
-func _end_hearth_plant(i: int, was_unlit: bool) -> void:
-	if _hearth_plant != null:
-		_hearth_plant.queue_free()
-		_hearth_plant = null
-	if _hearth_window != null:
-		_hearth_window.queue_free()
-		_hearth_window = null
-	_glide(i, was_unlit)
 
 
 func _glide(i: int, was_unlit: bool) -> void:

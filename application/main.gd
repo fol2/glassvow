@@ -55,6 +55,9 @@ var _run_save_path: String = SaveService.RUN_PATH
 var _vigil_save_path: String = SaveService.VIGIL_PATH
 ## Set when the optional Development boot handled this launch.
 var _dev_claimed: bool = false
+## Dev boots (`--fight=` / `--map` / `--enter=` / `--dawn`) skip the opening
+## and the L0 departure plant — they construct against the real vigil.
+var _opening_suppressed: bool = false
 var last_dev_error: String = ""
 var _forced_seed: int = -1  # --seed=N: reproducible shots for layout diffing
 ## The virtual stage this window is composed against. A 1180x820 window resolves
@@ -356,6 +359,7 @@ func _ready() -> void:
 		# The Dawn ceremony bench: a fresh run handed a representative feed, so
 		# the victory beat can be photographed without walking three acts.
 		# Same reason --fight= exists (see _start_fight's docblock).
+		_opening_suppressed = true
 		_new_run()
 		game.run.pending_run_end = null
 		# The fixture mirrors _on_terminal_commit's event shapes EXACTLY — same
@@ -380,11 +384,14 @@ func _ready() -> void:
 		if SaveService.store(game.run):
 			_show_dawn()
 	elif show_map:
+		_opening_suppressed = true
 		_new_run()
 	elif not fight.is_empty():
+		_opening_suppressed = true
 		_new_run()
 		_start_fight(fight, fight_kind)
 	elif enter_node >= 0:
+		_opening_suppressed = true
 		_new_run()
 		if _map_screen == null:
 			return
@@ -730,7 +737,7 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 func _show_title() -> void:
 	_remember_route(_show_title)
 	_apply_pending_content_hydration()
-	var saved: RunState = SaveService.load_run(content)
+	var saved: RunState = SaveService.load_run(content, _run_save_path)
 	var choices: Array[Dictionary] = []
 	if saved != null:
 		choices.append({"id": "continue", "label": Locale.active.t("ui.menu.continueClimb")})
@@ -774,7 +781,7 @@ func _show_title() -> void:
 func _on_title_choice(id: String, saved: RunState) -> void:
 	match id:
 		"continue": _continue_run(saved)
-		"begin": _show_embark()
+		"begin": _begin_climb()
 		"vigil": _show_vigil()
 		"rose": _show_vigil(true)
 		"help": _show_help()
@@ -784,9 +791,19 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 		"quit": _quit_game()
 
 
+func _begin_climb() -> void:
+	# Fresh profile: 續火 creates the run and plays the opening, skipping
+	# Embark — a first run has no real aspect/vow choice. Embark returns
+	# from run 2 unconditionally (even when still choice-less).
+	if _vigil.scenes_seen.has("opening"):
+		_show_embark()
+	else:
+		_on_embark_begin(0, 0)
+
+
 func _show_embark() -> void:
 	_remember_route(_show_embark)
-	var saved: bool = SaveService.load_run(content) != null
+	var saved: bool = SaveService.load_run(content, _run_save_path) != null
 	var screen: EmbarkScreen = EmbarkScreen.new(
 		content.aspects,
 		content.vows,
@@ -805,7 +822,7 @@ func _show_embark() -> void:
 func _on_embark_begin(aspect: int, vow: int) -> void:
 	_embark_aspect = aspect
 	_embark_vow = vow
-	if SaveService.load_run(content) == null:
+	if SaveService.load_run(content, _run_save_path) == null:
 		_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 	else:
 		_show_choice(Locale.active.t("ui.menu.beginAnew").to_upper(),
@@ -819,7 +836,7 @@ func _on_begin_anew(id: String) -> void:
 	if id == "back":
 		_show_title()
 		return
-	var saved: RunState = SaveService.load_run(content)
+	var saved: RunState = SaveService.load_run(content, _run_save_path)
 	if saved == null:
 		_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 		return
@@ -975,12 +992,28 @@ func _new_run(profile: Dictionary = {}) -> void:
 	game.quests.decorate_map(game.run, _map)
 	game.run.map = _map.to_dict()
 	_run_over = false
-	if not _vigil.scenes_seen.has("opening") and _scene_script("opening") != null:
+	if _plays_opening():
 		game.run.pending_scene = {"id": "opening", "cursor": 0}
 	if _store_run():
-		_route_run()
+		if _plays_departure_staging():
+			_show_departure_staging()
+		else:
+			_route_run()
 	else:
 		_show_save_error("ui.persistence.detail.pilgrimageStart")
+
+
+func _story_flow() -> bool:
+	return not _opening_suppressed and not _dev_claimed
+
+
+func _plays_opening() -> bool:
+	return _story_flow() and not _vigil.scenes_seen.has("opening") \
+		and _scene_script("opening") != null
+
+
+func _plays_departure_staging() -> bool:
+	return _story_flow() and _vigil.scenes_seen.has("opening")
 
 
 ## Route a Development Scenario onto the kernel's default profile. Fail-closed.
@@ -1154,15 +1187,6 @@ func _show_map() -> void:
 		_transitions.wipe()
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
-	# The L0 hearth linger belongs to DEPARTURE — leaving the hearth to walk
-	# the road (00-truth §5 L0, 07-scenes §2: 每次出發). Every act begins with
-	# the lantern unseated (`WorldMap.benchmark` sets `at = -1`), so the
-	# screen's own `from_i < 0` test fires at the top of acts II and III too,
-	# and would show the hearth from the middle of a journey the player left
-	# long ago — three times a run for a plant meant to be subliminal. Only
-	# main knows which unseated map is the departure.
-	if game.run.act > 0:
-		_map_screen.hearth_plate = ""
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 	add_child(_map_screen)
@@ -1177,6 +1201,8 @@ func _show_map() -> void:
 
 
 func _show_run_menu() -> void:
+	if _route_screen is ScenePlayer or _route_screen is DepartureStaging:
+		return
 	var menu: RunMenuPanel = RunMenuPanel.new(_shape, _run_over, _sfx_bus)
 	menu.closed.connect(_close_overlay)
 	menu.help_requested.connect(func() -> void:
@@ -2369,6 +2395,26 @@ func _on_unsealing_replay() -> void:
 	_show_scene()
 
 
+func _show_departure_staging() -> void:
+	_remember_route(_show_departure_staging)
+	_apply_pending_content_hydration()
+	# Headless / instant routes skip the 1 s hold — the plant is ambient,
+	# not a durable checkpoint.
+	if _transitions != null and _transitions.instant:
+		_route_run()
+		return
+	var screen: DepartureStaging = DepartureStaging.new()
+	screen.finished.connect(_on_departure_finished)
+	_show_route(screen, false)
+
+
+func _on_departure_finished() -> void:
+	if game != null:
+		_route_run()
+	else:
+		_show_title()
+
+
 func _show_scene() -> void:
 	_remember_route(_show_scene)
 	var script: SceneScript = null
@@ -2457,6 +2503,31 @@ func _on_scene_finished() -> void:
 	if not _store_vigil() or (run_pending and not _store_run()):
 		_show_save_error("ui.persistence.detail.sceneHold")
 		return
+	var player: ScenePlayer = _route_screen as ScenePlayer
+	if scene_id == "opening" and player != null and player.skipped \
+			and not _vigil.guidance_skipped:
+		_show_skip_guidance_offer()
+		return
+	if game != null:
+		_route_run()
+	else:
+		_show_title()
+
+
+func _show_skip_guidance_offer() -> void:
+	_show_choice(Locale.active.t("ui.scene.skipGuidance.title"), "",
+		[{"id": "skip", "label": Locale.active.t("ui.scene.skipGuidance.skip")},
+			{"id": "keep", "label": Locale.active.t("ui.scene.skipGuidance.keep"),
+				"quiet": true}],
+		_on_skip_guidance_choice)
+
+
+func _on_skip_guidance_choice(id: String) -> void:
+	if id == "skip":
+		_vigil.guidance_skipped = true
+		if not _store_vigil():
+			_show_save_error("ui.persistence.detail.sceneHold")
+			return
 	if game != null:
 		_route_run()
 	else:
