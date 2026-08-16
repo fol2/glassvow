@@ -122,6 +122,51 @@ huntName 等無敘事雙讀的字串不立行)。zh 為源語;「保留」=兩�
 | 82 | 朝聖仍在繼續。 / The pilgrimage continues. | w 24 + ui.map.sealedDoor.inscription + 音軌名(一語三址,見 batch 檔) | L1 | 未完的旅程 | 隊伍仍在長;路過門後仍在繼續——Act IV 字面兌現 | zh 保留;en 重寫(舊 The climb continues.) |
 | 83 | 第八凶兆從來不是凶兆。它是一扇門投下的影。 / THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR. | q.eighthOmen.resolved(closer) | L2 | quest 結案句 | 門影投落為真;「第八」=隊伍第八人(motif 見 row 16,該行維持 L1 服務 floorEchoes[1]/w 8) | 保留;Batch 1 專行釐清 closer 級(row 16 不動) |
 
+## Batch 2(#315)入賬區 [SETTLED — James review 完成 2026-08-16]
+
+開場 scene(`story.opening.*`,ceiling L0)+ 掌燈人五會 script
+(`story.lamplighter-m{i}.*`,ceiling L1)。shipped 交易句(rows 49–63)
+不重列;本區只入本批新句。全文與 script 結構見
+`docs/story/batches/2026-08-16-batch2-opening-lamplighter.md`。
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 84 | 你醒了。 / You're awake. | story.opening.b1.l1(Keeper) | L0 | 死後在爐邊醒來 | #259 Q1 定式:「醒」字面真——留者每次都只是醒來,從未回來過;Keeper 一字不多 | 新寫 |
+| 85 | 慢慢來。路不會走掉。 / Take your time. The road isn't going anywhere. | story.opening.b1.l2(Keeper) | L0 | 溫柔的安慰 | 反催促規則的正面演出:關懷即麻醉;路確實走不掉——路上的隊伍也在等 | 新寫 |
+| 86 | 帶上這個。前人留下的,如今是你的了。 / Take this. Those before you left it behind; now it's yours. | story.opening.b2.l1(Keeper) | L0 | 前輩朝聖者的遺贈 | 字面真:boon=歷代行者遺物——它用死者行裝資助下一個死者(00 §2.4) | 新寫 |
+| 87 | 路向東,盡頭有一道封門。尋回六片燼璃,門便會開。 / The road runs east. At its end stands a sealed door. Bring back the six shards of emberglass, and it will open. | story.opening.b2.l2(Keeper) | L0 | 旅程目標(表面明文事實,#262 Q3 任何級可直說) | 字面真而漏一半:門開那刻是隊伍推的(00 §2.6);misleading by omission | 新寫 |
+| 88 | 他們說,門後是金城。到了那裏,你便到家了。 / Beyond it, they say, lies the Gilded City. Reach it, and you will be home. | story.opening.b2.l3(Keeper) | L0 | 傳說中的應許+祝福套語 | 雙重誠實:「他們說」是真(眾人 legend);「到家」字面即 canon——金城=爐邊真貌,入城=歸家(#259 Q3) | 新寫 [SETTLED James 2026-08-16] |
+| 89 | 你提起燈,推門而出。長路向東,天未亮。 / You take up the lantern and step out. The long road runs east, and the sky is not yet light. | story.opening.b3.l1(敘) | L0 | 出發 | 「推門」與 00 §2.6 的推門暗韻;天未亮=破曉(勝利)之前,字面地理 | 新寫 |
+| 90 | 身後,爐火仍亮着。 / Behind you, the fire is still burning. | story.opening.b3.l2(敘) | L0 | 家還在背後 | 爐火當然仍亮——留下的那個還在;離開才是錯覺 | 新寫 |
+| 91 | 守夜開始了。 / The vigil begins. | story.opening.b4.l1(敘;linger shot) | L0 | 爐火為你守夜 | 留者的守夜由分身一刻開始;linger 畫面(兜帽坐像)零文字確認照舊 | 新寫 [SETTLED James 2026-08-16] |
+| 92 | 路上坐着一個提燈的老人。燈是空的,沒有火。 / An old man sits by the road, holding a lantern. There is no flame in it. | story.lamplighter-m1.pre.l1(敘) | L1 | 路上的怪老人 | 空燈=意志已離開的器皿(01 火的物理);他自己就是被挖空的容器(row 58) | 新寫 |
+| 93 | 你的燈燒得太滿。滿燈的人,我見得多。 / Your lantern burns too full. I have seen plenty like you. | story.lamplighter-m1.pre.l2(掌) | L1 | 老行尊的牢騷 | 「見得多」開多代行者線:滿燈的人他全見過,個個一去不回 | 新寫 |
+| 94 | 這張面孔,又是往東走的。 / This face. East again, then. | story.lamplighter-m1.pre.l3(掌) | L1 | 又一個東行的朝聖者 | 「又」的歸屬歧義:又一個人,還是又一次這張面孔?慢性毒第一滴 | 新寫 |
+| 95 | 油可以分,火不能分。火要自己帶到最後。 / Oil can be shared. Flame cannot. Flame you carry to the end yourself. | story.lamplighter-m1.post.l1(掌) | L1 | 掌燈人的行話 | 火=意志:意志分不了,只能由行者親自帶到底——帶到站着死去為止 | 新寫 |
+| 96 | 他把三點餘燼收進空燈。燈沒有亮。 / He gathers the three embers into the hollow lantern. The lantern does not light. | story.lamplighter-m1.post.l2(敘) | L1 | 詭異:餘燼點不亮燈 | 空燈不承意志——器皿早已空;他收的從來不是火,是認人的線索 | 新寫 |
+| 97 | 上次是你。三點餘燼,一分不少。這雙手,我記得。 / Last time — that was you. Three embers, not one short. I remember these hands. | story.lamplighter-m2.pre.l2(掌) | L1 | 他記得你上次付價 | **明文「上次」句本體(00 §3.6)**:觀察全真(面孔、手、數目),結論「是你」按 canon 屬誠實錯認——跨 run 時身體是另一個;drift 記賬(fair-play 第 7 條) | 新寫;上次句錨 |
+| 98 | 手瘦了。路上的日子,誰都一樣。 / Thinner, these hands. The road feeds no one well. | story.lamplighter-m2.pre.l3(掌) | L1 | 風霜之嘆 | 差異觀察:同 run=消耗,跨 run=另一雙手;兩情境皆真 | 新寫 |
+| 99 | 他把金幣一枚一枚數過,不收起,只沿路放好,向東。 / He counts the coins one by one, and does not pocket them. He lays them out along the road, piece by piece, pointing east. | story.lamplighter-m2.post.l1(敘) | L1 | 怪癖 | 一枚一枚向東排開=沿路一座一座的隊;他不自覺在重演路的真相 | 新寫 |
+| 100 | 去。忘記是要學的。 / Go on. Forgetting takes practice. | story.lamplighter-m2.post.l2(掌) | L1 | 對散財的豁達 | 整個世界靠練熟了的忘記運轉:留者忘記自己沒走過,眾人忘記行者 | 新寫 |
+| 101 | 這一次,老人站着等你。未看清你的面孔,他不開口。 / This time the old man is on his feet, waiting. Until he has looked you full in the face, he does not speak. | story.lamplighter-m3.pre.l1(敘) | L1 | 老人鄭重其事 | 認人越見越急(#260 Q3):由坐到站,先驗貨後開口 | 新寫 |
+| 102 | 站近一點。提高你的燈,讓我看一看這張面孔。 / Stand closer. Raise your lantern — let me see this face properly. | story.lamplighter-m3.pre.l2(掌) | L1 | 老眼昏花 | 他的燈照不了人(無火);認人要靠你自己的光 | 新寫 |
+| 103 | 額上多了一道傷痕。上次沒有。……路上的事,自然。 / A scar on your brow. Last time there was none. …The road gives them out. Naturally. | story.lamplighter-m3.pre.l3(掌) | L1 | 見你添了傷 | 明文「上次」句之二:差異是真差異(另一個身體),「自然」是他親手把證據解釋走——誠實見證人錯誤結論的現場 | 新寫 [SETTLED James 2026-08-16] |
+| 104 | 別那樣看我。老人家見到什麼,便說什麼。 / Don't look at me like that. An old man tells what he has seen — no more than that. | story.lamplighter-m3.post.l1(掌) | L1 | 倔強老人 | 他的憲章句:每句都真,結論都錯(00 §4 hearsay 行的自白) | 新寫 |
+| 105 | 他退後一步,再看你一眼——由面孔,看到腳。 / He steps back and looks you over once more — from the face down to the boots. | story.lamplighter-m3.post.l2(敘) | L1 | 上下打量 | 全身核對:第三會後他已在懷疑什麼,只是說不出口 | 新寫 |
+| 106 | 老人的目光越過你,落在你帶着的東西上,一件一件地數。 / The old man's eyes go past you, to the things you carry, counting them one by one. | story.lamplighter-m4.pre.l1(敘) | L1 | 盤點你的行裝 | 認人升級:認物——物比人可靠,物不會換一個身體 | 新寫 |
+| 107 | 西面爐火出來的東西,我一眼認得。這麼多年,樣式沒有變過。 / Things from the western fire — I know them at a glance. All these years, the make has never changed. | story.lamplighter-m4.pre.l2(掌) | L1 | 老工匠認得老手工 | 樣式當然沒變:boon 是同一批死者遺物循環派發(00 §2.4);他看見證據,讀不出結論 | 新寫 |
+| 108 | 回我一句就好。上次站在這裏的,是不是你? / Give me one answer, that is all. Last time, standing where you stand — was that you? | story.lamplighter-m4.pre.l3(掌) | L1 | 老人的怪問題 | 明文「上次」句之三:認人啟事問到口。答案玩家自己都答錯——他有記憶,身體不是他 | 新寫 [SETTLED James 2026-08-16] |
+| 109 | 你還未出聲,他已擺了擺手,像不願知道那一句之後的事。 / Before you can make a sound, he waves the question away — as if he would rather not learn where it leads. | story.lamplighter-m4.pre.l4(敘) | L1 | 老人怕尷尬 | 他怕的是答案的下文:太多同一張面孔已教過他,有些事問穿就守不住 | 新寫 |
+| 110 | 他把贈禮收好。空燈放在腳前,依然黑着。 / He puts the gift away. The hollow lantern sits by his feet, dark as ever. | story.lamplighter-m4.post.l1(敘) | L1 | 交易完成 | 守爐人的贈禮也點不亮空燈——死者的行裝沒有火,只有記認 | 新寫 |
+| 111 | 下一程遠。自己要慢慢用。 / The next stretch is long. Spend yourself slow. | story.lamplighter-m4.post.l2(掌) | L1 | 粗聲的關心 | 「用自己」講到明:行者正是被逐程用掉的東西;m5 的心跳價由此接力 | 新寫 |
+| 112 | 未燃之路的盡頭,老人提着空燈,站在路的正中,不讓你過。 / Where the Unlit Way runs out, the old man stands in the middle of the road, hollow lantern raised. He does not let you pass. | story.lamplighter-m5.pre.l1(敘) | L1 | 最後的攔路 | 認人最後機會:過此以後他再驗不到下一個面孔 | 新寫 |
+| 113 | 最後一次。過了我,這條路上再沒有人向你收東西。 / The last price. Past me, no one on this road will ask anything more of you. | story.lamplighter-m5.pre.l2(掌) | L1 | 最後一道關 | 字面真:再往東只剩王庭與門——路向行者收的最後一樣東西是命,但那不叫「收」 | 新寫 |
+| 114 | 我提這盞燈,認了一生的人。面孔,我認得出;人,我從來不曾說得定。 / A lifetime under this lamp, learning the ones who pass. The faces I know. The people I was never sure of. | story.lamplighter-m5.pre.l3(掌) | L1 | 老人自嘲眼力衰退 | 字面真到骨:面孔全部相同、人代代不同,誰都分不出;五價=認人啟事的敗訴陳詞 | 新寫 [SETTLED James 2026-08-16 — L1 explicit sign-off:lint 結構陳述軸兩 warn 判撤,hedge 個人認不出成立] |
+| 115 | 去。這一段,我送過太多人。 / Go. I have seen many off along this stretch. | story.lamplighter-m5.post.l1(掌) | L1 | 見慣別離 | 「送」的殮葬義浮出:他一直在做的是送行(00 §7 掌燈人揭後本體) | 新寫 |
+| 116 | 他讓開路,提起空燈,向東照了照——燈中沒有光;他仍是照了。 / He steps aside and lifts the hollow lantern toward the east, as if to light the way. There is no light in it. He lifts it all the same. | story.lamplighter-m5.post.l2(敘) | L1 | 感人的老儀式 | 無火而照=無器之意志;未燃之路的名字在這個手勢裏 | 新寫 |
+| 117 | 路上若再見提燈的,替我看一看那張面孔。 / If you meet another out there who carries a lamp — look close at the face, for me. | story.lamplighter-m5.post.l3(掌) | L1 | 老人的怪託付 | 下一個提燈者=無焰提燈的永恆君王;那張「面孔」是貼着鎖的面具(03-acts)——他把認人之責交給你 | 新寫 |
+| 118 | 未燃之路再向東,老人又在等。空燈放在身前。 / Farther east along the Unlit Way, the old man is waiting again, the hollow lantern set before him. | story.lamplighter-m2.pre.l1(敘) | L1 | 又一次會面 | 「又在等」:等的母題(01 水=等)輕拍一下;他等的是核對下一張面孔 | 新寫 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於
