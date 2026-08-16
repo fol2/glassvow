@@ -1,16 +1,9 @@
 class_name WindowReflection
 extends Control
-## 窗中反影遲半拍 (`docs/story/00-truth.md:173-174`) — the reflection lags half
-## a beat **in the window**, not in the whole hall. This confines it to one
-## opening of `opening-hearth.png` so the seated cutout stays the only body on
-## screen (`docs/art-ledger.md:228-233`: 「James ruled one」).
-##
-## ROUTE FORK, awaiting James (#334). Three readings of the same spec line,
-## rendered side by side in `docs/design/2026-08-16-bespoke-beats/`:
-##   a — the figure's reflection inside the rose window's glass;
-##   b — the same ghost in the arched doorway instead;
-##   c — no figure at all; only the hearth light lagging in the rose.
-## Once one is picked the other two constants go.
+## 窗中反影遲半拍 (`docs/story/00-truth.md:177-178`) — the reflection lags half
+## a beat **in the rose window**, not in the whole hall. James signed route A
+## on #334: a ghost in the glass, never a second body in the doorway and never
+## a lit lobe at zero shards (`docs/art-ledger.md:228-233`: 「James ruled one」).
 ##
 ## Geometry is measured off the plate and converted once. The frame is engine
 ## locked to 1180x820 (`project.godot:45` `window/stretch/aspect="keep"`), and
@@ -18,37 +11,25 @@ extends Control
 ## screen `u * 1.042373 - 0.021186` across and at `u` down.
 
 const NAME: String = "WindowReflection"
-const ROUTE_ROSE_FIGURE: StringName = &"a"
-const ROUTE_DOOR_FIGURE: StringName = &"b"
-const ROUTE_ROSE_GLOW: StringName = &"c"
-const ROUTES: Array[StringName] = [
-	ROUTE_ROSE_FIGURE, ROUTE_DOOR_FIGURE, ROUTE_ROSE_GLOW,
-]
 ## Rose window glass — plate px x 137..288, y 105..262. 「高處左牆一面圓形
 ## 六瓣玫瑰窗,暗玻璃」(`docs/design/2026-08-16-scene-plates/README.md:97-98`).
 const ROSE: Rect2 = Rect2(0.0718, 0.1025, 0.1024, 0.1533)
-## The arched doorway — plate px x 107..265, y 368..730. Route b only.
-const DOOR: Rect2 = Rect2(0.0514, 0.3594, 0.1072, 0.3535)
 ## Ghost height as a fraction of the opening it sits in.
 const GHOST_FILL: float = 0.88
 ## Dark glass at night returns a cold copy of a warm room. Held above the
 ## plate's starfield, which is near-black — a darker ghost is an invisible one.
 const GHOST_GRADE: Color = Color(0.72, 0.82, 1.0)
-## Route c's hearth light, warmed off `RunStyle.GOLD`.
-const GLOW_GRADE: Color = Color(0.62, 0.45, 0.22)
 ## Where the pane stops being solid and starts feathering into the stone.
 const PANE_CORE: float = 0.66
 
-var route: StringName = ROUTE_ROSE_FIGURE
 var _pane: TextureRect
 var _ghost: TextureRect = null
 
 
-func _init(route_id: StringName = ROUTE_ROSE_FIGURE) -> void:
+func _init() -> void:
 	name = NAME
-	route = route_id if ROUTES.has(route_id) else ROUTE_ROSE_FIGURE
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_seat(DOOR if route == ROUTE_DOOR_FIGURE else ROSE)
+	_seat(ROSE)
 	_pane = TextureRect.new()
 	_pane.name = "Pane"
 	_pane.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -56,10 +37,6 @@ func _init(route_id: StringName = ROUTE_ROSE_FIGURE) -> void:
 	_pane.stretch_mode = TextureRect.STRETCH_SCALE
 	_pane.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_pane)
-	if route == ROUTE_ROSE_GLOW:
-		# The lag is carried by the firelight on the glass. No second body.
-		_pane.texture = GlassStyle.disc(GLOW_GRADE, 1.0, 128)
-		return
 	# The disc is the window, not a sprite: it masks the ghost to the opening
 	# with a soft rim, so nothing of the reflection spills onto the stone. Its
 	# core is flat — `GlassStyle.disc` halves by 52% of the radius, which eats

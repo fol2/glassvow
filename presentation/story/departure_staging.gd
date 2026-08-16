@@ -16,8 +16,6 @@ const REFLECT_ALPHA: float = 0.45
 
 var instant: bool = false
 var hearth_plate: String = HEARTH_PLATE
-## Which reading of 窗中反影 to stage — see `WindowReflection`. #334 fork.
-var route: StringName = WindowReflection.ROUTE_ROSE_FIGURE
 var _done: bool = false
 var _plant: TextureRect = null
 var _reflection: WindowReflection = null
@@ -56,7 +54,7 @@ func _ready() -> void:
 	add_child(_plant)
 	if HearthFigure.present():
 		HearthFigure.attach(_plant)
-	_reflection = WindowReflection.new(route)
+	_reflection = WindowReflection.new()
 	_reflection.modulate.a = REFLECT_ALPHA if Preferences.active.reduce_motion else 0.0
 	_plant.add_child(_reflection)
 	Motion.bez(self, _tick_window, HEARTH_HOLD, Motion.CSS_EASE) \

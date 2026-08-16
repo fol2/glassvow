@@ -92,12 +92,12 @@ static func _overlay_absent_elsewhere(fails: Array[String]) -> void:
 		player.free()
 
 
-## 窗中反影遲半拍 is a reflection IN THE WINDOW (`00-truth.md:173-174`). The
-## first cut mirrored the whole hall and seated a second Keeper on it; the
+## 窗中反影遲半拍 is a reflection IN THE ROSE WINDOW (`00-truth.md:177-178`).
+## The first cut mirrored the whole hall and seated a second Keeper on it; the
 ## shape constraints below are what forbid that — one plate, one body, and a
-## reflection region small enough to be an opening in the wall. The half-beat
-## lag itself was correct and is re-pinned unchanged. Every route of the #334
-## fork has to satisfy all of it.
+## reflection region that is the rose, not the doorway and not the hall. The
+## half-beat lag itself was correct and is re-pinned unchanged. James signed
+## route A on #334; B and C are gone.
 static func _departure_lags_the_figure(fails: Array[String]) -> void:
 	var dark: DepartureStaging = DepartureStaging.new(
 		"res://assets/art/scenes/__no_such_plate__.png")
@@ -108,79 +108,71 @@ static func _departure_lags_the_figure(fails: Array[String]) -> void:
 	_check(fails, dark.find_child(WindowReflection.NAME, true, false) == null,
 		"a missing plate still staged a reflection")
 	dark.free()
-	var view: Vector2 = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
-	for route: StringName in WindowReflection.ROUTES:
-		_departure_route(fails, route, view)
+	_departure_linger(fails, Vector2(StageShape.REFERENCES[StageShape.IDENTITY]))
 
 
-static func _departure_route(fails: Array[String], route: StringName,
-		view: Vector2) -> void:
+static func _departure_linger(fails: Array[String], view: Vector2) -> void:
 	var lit: DepartureStaging = DepartureStaging.new()
 	lit.instant = false
-	lit.route = route
 	lit.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	lit.size = view
 	lit._ready()
 	# The hall is painted once. A second full-bleed copy IS the mirror defect.
 	_check(fails, _texture_copies(lit, "opening-hearth.png") == 1,
-		"route %s paints the hall %d times" % [route,
-			_texture_copies(lit, "opening-hearth.png")])
+		"linger paints the hall %d times" % _texture_copies(lit, "opening-hearth.png"))
 	_check(fails, _node_count(lit, HearthFigure.NAME) == 1,
-		"route %s puts %d bodies on screen; James ruled one" % [route,
-			_node_count(lit, HearthFigure.NAME)])
+		"linger puts %d bodies on screen; James ruled one"
+			% _node_count(lit, HearthFigure.NAME))
 	var reflection: WindowReflection = lit.find_child(
 		WindowReflection.NAME, true, false) as WindowReflection
-	_check(fails, reflection != null, "route %s lost its reflection" % route)
+	_check(fails, reflection != null, "linger lost its reflection")
 	if reflection == null:
 		lit.free()
 		return
-	# The region is anchor-driven so it rides the plate; a window, not a screen.
-	var region: Rect2 = _anchor_rect(reflection, view)
+	# The region is the rose, anchor-driven so it rides the plate.
 	_check(fails, is_zero_approx(reflection.offset_left)
 			and is_zero_approx(reflection.offset_right)
 			and is_zero_approx(reflection.offset_top)
 			and is_zero_approx(reflection.offset_bottom),
-		"route %s pins the reflection in pixels; it will drift off the plate" % route)
+		"linger pins the reflection in pixels; it will drift off the plate")
+	_check(fails, is_equal_approx(reflection.anchor_left, WindowReflection.ROSE.position.x)
+			and is_equal_approx(reflection.anchor_top, WindowReflection.ROSE.position.y)
+			and is_equal_approx(reflection.anchor_right, WindowReflection.ROSE.end.x)
+			and is_equal_approx(reflection.anchor_bottom, WindowReflection.ROSE.end.y),
+		"linger did not seat the reflection in the rose window")
+	var region: Rect2 = _anchor_rect(reflection, view)
 	_check(fails, region.get_area() > 0.0
 			and region.get_area() <= view.x * view.y * 0.08,
-		"route %s reflects %.0f%% of the frame; that is the hall, not a window"
-			% [route, 100.0 * region.get_area() / (view.x * view.y)])
+		"linger reflects %.0f%% of the frame; that is the hall, not a window"
+			% (100.0 * region.get_area() / (view.x * view.y)))
 	_check(fails, Rect2(Vector2.ZERO, view).encloses(region),
-		"route %s hangs the reflection off the frame" % route)
-	var aspect: float = region.size.x / maxf(region.size.y, 1.0)
-	_check(fails, aspect >= 0.25 and aspect <= 2.5,
-		"route %s stretched the reflection into a band (aspect %.2f)" % [route, aspect])
+		"linger hangs the reflection off the frame")
 	var ghost: TextureRect = reflection.find_child("Ghost", true, false) as TextureRect
-	if route == WindowReflection.ROUTE_ROSE_GLOW:
-		_check(fails, ghost == null,
-			"route c promises no figure in the glass and staged one")
-	else:
-		_check(fails, ghost != null, "route %s has no reflected figure" % route)
-		if ghost != null:
-			_check(fails, ghost.flip_h, "route %s reflects the figure unmirrored" % route)
-			_check(fails, not ghost.modulate.is_equal_approx(Color.WHITE)
-					and ghost.modulate.b > ghost.modulate.r,
-				"route %s returns the figure at full warm chroma, not as dark glass"
-					% route)
+	_check(fails, ghost != null, "linger has no reflected figure")
+	if ghost != null:
+		_check(fails, ghost.flip_h, "linger reflects the figure unmirrored")
+		_check(fails, not ghost.modulate.is_equal_approx(Color.WHITE)
+				and ghost.modulate.b > ghost.modulate.r,
+			"linger returns the figure at full warm chroma, not as dark glass")
 	if Preferences.active.reduce_motion:
 		_check(fails, is_equal_approx(reflection.modulate.a,
 				DepartureStaging.REFLECT_ALPHA),
-			"route %s dropped the reflection under reduce_motion" % route)
+			"linger dropped the reflection under reduce_motion")
 		lit.free()
 		return
 	_check(fails, is_equal_approx(reflection.modulate.a, 0.0),
-		"route %s showed the reflection before the lag" % route)
+		"linger showed the reflection before the lag")
 	lit._tick_window(DepartureStaging.WINDOW_LAG / DepartureStaging.HEARTH_HOLD)
 	_check(fails, is_equal_approx(reflection.modulate.a, 0.0),
-		"route %s showed the reflection at the lag boundary" % route)
+		"linger showed the reflection at the lag boundary")
 	lit._tick_window(0.75)
 	_check(fails, is_equal_approx(reflection.modulate.a,
 			DepartureStaging.REFLECT_ALPHA * 0.5),
-		"route %s steps the reflection in instead of ramping it" % route)
+		"linger steps the reflection in instead of ramping it")
 	lit._tick_window(1.0)
 	_check(fails, is_equal_approx(reflection.modulate.a,
 			DepartureStaging.REFLECT_ALPHA),
-		"route %s did not reach the reflection's peak after the hold" % route)
+		"linger did not reach the reflection's peak after the hold")
 	lit.free()
 
 
