@@ -7,7 +7,17 @@ signal advance_requested
 signal finished
 
 const REVEAL_TIME: float = 0.55
-const AUTO_ADVANCE: float = 1.6
+## Reading pace, not a fixed beat. DawnScreen's flat 1.6s was sized for a
+## short result card; a line of dialogue is not one, and a long line would
+## walk out from under the player mid-sentence. A tap always pre-empts the
+## dwell, so this only ever sets the hands-off pace.
+##
+## KNOWN CEILING: one rate serves both locales, and zh-Hant carries roughly
+## twice the meaning per character that English does — so a zh line dwells
+## too briefly at the same count. Both constants are placeholder-era and get
+## measured once real copy lands (story Batch 2 / Batch 4, #263).
+const DWELL_BASE: float = 1.2
+const DWELL_PER_CHAR: float = 0.09
 const SKIP_HOLD: float = 0.6
 const SKIP_WAIT: float = 0.04
 const PUSH_IN_TIME: float = 8.0
@@ -258,10 +268,15 @@ func _process(delta: float) -> void:
 				_finish_beat()
 		BEAT_WAIT:
 			_beat_t += delta
-			var wait: float = 0.0 if instant else (SKIP_WAIT if _skipping else AUTO_ADVANCE)
+			var wait: float = 0.0 if instant else (SKIP_WAIT if _skipping else _dwell())
 			if _beat_t >= wait and not _asked:
 				_asked = true
 				advance_requested.emit()
+
+
+## How long a settled line holds before it asks on its own.
+func _dwell() -> float:
+	return DWELL_BASE + DWELL_PER_CHAR * float(_line.text.length())
 
 
 func _gui_input(event: InputEvent) -> void:

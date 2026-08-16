@@ -18,6 +18,7 @@ static func run(fails: Array[String]) -> void:
 	_skip_distinct_from_tap(fails, opening)
 	_finished_once(fails)
 	_missing_plates(fails, opening)
+	_dwell_reads_the_line(fails, opening)
 
 
 static func _fresh_asks_once(fails: Array[String], opening: SceneScript) -> void:
@@ -116,6 +117,30 @@ static func _missing_plates(fails: Array[String], opening: SceneScript) -> void:
 		player._process(0.016)
 		steps += 1
 	_check(fails, done[0] == 1, "a no-plate opening did not finish")
+	player.free()
+
+
+## A long line must hold longer than a short one, and a hands-off player must
+## never be walked past a line the reveal has only just settled.
+static func _dwell_reads_the_line(fails: Array[String], opening: SceneScript) -> void:
+	var player: ScenePlayer = ScenePlayer.new(opening, 0)
+	player._ready()
+	var line: Label = player.find_child("Line", true, false) as Label
+	if line == null:
+		_check(fails, false, "no line label to pace")
+		player.free()
+		return
+	line.text = "12345678"
+	var short_dwell: float = player._dwell()
+	line.text = "123456789012345678901234567890"
+	var long_dwell: float = player._dwell()
+	_check(fails, long_dwell > short_dwell + 1.0,
+		"dwell does not scale with the line (%.2f vs %.2f)" % [short_dwell, long_dwell])
+	_check(fails, short_dwell > ScenePlayer.REVEAL_TIME,
+		"a settled line is owed less dwell than its own reveal (%.2f)" % short_dwell)
+	_check(fails, is_equal_approx(short_dwell,
+		ScenePlayer.DWELL_BASE + ScenePlayer.DWELL_PER_CHAR * 8.0),
+		"dwell is not base + per-character")
 	player.free()
 
 
