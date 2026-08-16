@@ -5,29 +5,43 @@ extends RefCounted
 
 
 static func run(fails: Array[String]) -> void:
-	_skeleton(fails)
+	_manifest(fails)
 	_capture_survives(fails)
 	_merge_semantics(fails)
 	_mob_override_strictness(fails)
 	_validate_requires_ai(fails)
 
 
-static func _skeleton(fails: Array[String]) -> void:
+static func _manifest(fails: Array[String]) -> void:
 	var text: String = FileAccess.get_file_as_string(ContentDB.ORIGINAL_PATH)
 	var raw: Variant = JSON.parse_string(text)
 	if typeof(raw) != TYPE_DICTIONARY:
-		fails.append("original-content: skeleton did not parse to a dictionary")
+		fails.append("original-content: manifest did not parse to a dictionary")
 		return
 	var root: Dictionary = raw
 	if str(root.get("_note", "")).is_empty():
-		fails.append("original-content: skeleton is missing a _note")
-	if typeof(root.get("enemies")) != TYPE_DICTIONARY or not root["enemies"].is_empty():
-		fails.append("original-content: skeleton enemies must be an empty dictionary")
-	for key: String in ["acts", "encounters", "rewardGold"]:
-		if typeof(root.get(key)) != TYPE_ARRAY or not root[key].is_empty():
-			fails.append("original-content: skeleton %s must be an empty array" % key)
+		fails.append("original-content: manifest is missing a _note")
+	for key_v: Variant in root:
+		var key: String = str(key_v)
+		if key.begins_with("_"):
+			continue
+		if not ContentDB.ORIGINAL_CONTENT_KEYS.has(key):
+			fails.append("original-content: unknown top-level key %s" % key)
 	var from_file: ContentDB = ContentDB.load_full(false)
-	var baseline: ContentDB = ContentDB.new()
+	var act_v: Variant = from_file.acts[2] if from_file.acts.size() > 2 else null
+	if typeof(act_v) != TYPE_DICTIONARY:
+		fails.append("original-content: acts[2] is not a dictionary after overlay")
+	else:
+		var act: Dictionary = act_v
+		if str(act.get("name", "")) != "The Obsidian Court":
+			fails.append("original-content: acts[2].name was not overlaid")
+	var theme_v: Variant = from_file.themes.get("act3")
+	if typeof(theme_v) != TYPE_DICTIONARY:
+		fails.append("original-content: themes.act3 is not a dictionary after overlay")
+	else:
+		var theme: Dictionary = theme_v
+		if str(theme.get("name", "")) != "The Obsidian Court":
+			fails.append("original-content: themes.act3.name was not overlaid")
 	var catalogue_v: Variant = JSON.parse_string(
 		FileAccess.get_file_as_string(ContentDB.FULL_PATH)
 	)
@@ -35,11 +49,13 @@ static func _skeleton(fails: Array[String]) -> void:
 		fails.append("original-content: full-content.json did not parse")
 		return
 	var catalogue: Dictionary = catalogue_v
-	baseline.apply_catalogue(catalogue)
-	if from_file.enemies.size() != baseline.enemies.size() \
-			or from_file.acts.size() != baseline.acts.size() \
-			or from_file.reward_gold.size() != baseline.reward_gold.size():
-		fails.append("original-content: empty overlay changed catalogue size")
+	var baseline_acts_v: Variant = catalogue.get("acts", [])
+	if typeof(baseline_acts_v) != TYPE_ARRAY:
+		fails.append("original-content: full-content acts is not an array")
+		return
+	var baseline_acts: Array = baseline_acts_v
+	if from_file.acts.size() != baseline_acts.size():
+		fails.append("original-content: index-merge changed acts.size()")
 
 
 static func _capture_survives(fails: Array[String]) -> void:
@@ -114,6 +130,26 @@ static func _merge_semantics(fails: Array[String]) -> void:
 	if db.acts.size() != act_n + 1 or db.encounters.size() != encounter_n + 1 \
 			or db.reward_gold.size() != gold_n + 1:
 		fails.append("original-content: act-level arrays did not append")
+	var renamed: ContentDB = ContentDB.load_full(false)
+	var renamed_n: int = renamed.acts.size()
+	var first_act_v: Variant = renamed.acts[0] if renamed.acts.size() > 0 else null
+	if typeof(first_act_v) != TYPE_DICTIONARY:
+		fails.append("original-content: acts[0] is not a dictionary")
+	else:
+		var first_act: Dictionary = first_act_v
+		var kept_boss: Variant = first_act.get("boss")
+		renamed.apply_original_content({"acts": {"0": {"name": "Renamed Act"}}})
+		if renamed.acts.size() != renamed_n:
+			fails.append("original-content: dict-form acts merge changed size")
+		var after_act_v: Variant = renamed.acts[0]
+		if typeof(after_act_v) != TYPE_DICTIONARY:
+			fails.append("original-content: dict-form acts[0] is not a dictionary")
+		else:
+			var after_act: Dictionary = after_act_v
+			if str(after_act.get("name", "")) != "Renamed Act":
+				fails.append("original-content: dict-form acts merge did not overlay name")
+			if after_act.get("boss") != kept_boss:
+				fails.append("original-content: dict-form acts merge dropped unspecified field")
 
 
 static func _mob_override_strictness(fails: Array[String]) -> void:
