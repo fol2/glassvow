@@ -34,7 +34,7 @@ const OVERRIDE_KEYS: PackedStringArray = [
 	"hp", "max_hp", "gold", "potions",
 	"add_cards", "remove_cards", "upgrade_cards",
 	"add_relics", "remove_relics",
-	"shards",
+	"shards", "scenes_seen",
 ]
 
 var error: String = ""

@@ -470,6 +470,8 @@ var _aim_hover: int = -1
 ## and whether the card it is on has been ARMED and is waiting for a target.
 var _selected_uid: int = -1
 var _targeting: bool = false
+## Injected by Main. Null in labs and presentation tests — combat stays playable.
+var hint_guide: HintGuide = null
 
 
 ## Fully constructed at new() — no tree dependency, so headless tests can
@@ -1430,11 +1432,18 @@ func start_encounter(enemy_ids: Array, kind: String, encounter_text: String) -> 
 ## the draw pile reports a box at y −162 and an actor reports position zero.
 func _open_fight(slots: Array[Vector2]) -> void:
 	if seq.instant or not is_inside_tree():
+		_offer_combat_hints()
 		return
 	await get_tree().process_frame
 	_play_entrance(slots)
 	_deal_opening_hand()
-	_play_opening_ceremony()
+	await _play_opening_ceremony()
+	_offer_combat_hints()
+
+
+func _offer_combat_hints() -> void:
+	if hint_guide != null:
+		hint_guide.consider_combat(self)
 
 
 ## The start batch is hard-synced, so its bossIntro and variantDialogue events
@@ -1672,11 +1681,74 @@ func request_play(uid: int, target: Variant) -> bool:
 	var inst: CardInst = _find_card(uid)
 	if inst == null or not _rules.can_play(game.run, game.cb, inst, target):
 		return false
+	if hint_guide != null:
+		var view: CardView = _hand.card_view(uid)
+		if view != null and view.target_kind == "enemy":
+			if not hint_guide.record_if_active(HintGuide.TARGETING):
+				return false
+		if not hint_guide.record_if_active(HintGuide.DRAG_PLAY):
+			return false
+		if not hint_guide.record_if_active(HintGuide.INTENT):
+			return false
 	# `drain(targetIdx)` — the drain is told what was aimed at, because the
 	# `play` event does not carry it and a targeted card flies at its foe.
 	_play_target = target
 	seq.enqueue(game.apply({"t": "playCard", "uid": uid, "target": target}))
 	return true
+
+
+func end_turn_anchor() -> Control:
+	return _hud.end_turn_anchor() if _hud != null else self
+
+
+func intent_anchor() -> Control:
+	var ev: EnemyView = _first_living_view()
+	if ev != null:
+		var chip: Control = ev.intent_anchor()
+		if chip != null:
+			return chip
+		return ev
+	return self
+
+
+func first_enemy_anchor() -> Control:
+	var ev: EnemyView = _first_living_view()
+	return ev if ev != null else self
+
+
+func drag_anchor() -> Control:
+	if game.cb == null:
+		return self
+	for c: CardInst in game.cb.hand:
+		var view: CardView = _hand.card_view(c.uid)
+		if view != null and view.target_kind == "enemy" and view.playable:
+			return view
+	if not game.cb.hand.is_empty():
+		var first: CardView = _hand.card_view(game.cb.hand[0].uid)
+		if first != null:
+			return first
+	return self
+
+
+func energy_or_plays_exhausted() -> bool:
+	if game.cb == null:
+		return false
+	if game.cb.player.energy == 0:
+		return true
+	for c: CardInst in game.cb.hand:
+		var view: CardView = _hand.card_view(c.uid)
+		if view != null and view.playable:
+			return false
+	return true
+
+
+func _first_living_view() -> EnemyView:
+	if game.cb == null:
+		return null
+	for e: EnemyCombatant in game.cb.living_enemies():
+		if e.idx >= 0 and e.idx < _enemy_views.size():
+			return _enemy_views[e.idx]
+	return null
 
 
 func request_kindle(uid: int) -> bool:
@@ -1801,6 +1873,8 @@ func _on_card_drag_armed(uid: int) -> void:
 	_hud.set_kindle_target(
 		inst != null and _rules.can_kindle(game.run, game.cb, inst))
 	_update_previews()
+	if hint_guide != null:
+		hint_guide.on_card_grabbed(self, view)
 
 
 ## `beginCardDrag` (combat.js:1112) — a card that can neither be paid for nor
@@ -1885,6 +1959,11 @@ func _enemy_at(global_pos: Vector2) -> int:
 func _on_end_turn_pressed() -> void:
 	if seq.is_busy() or game.cb.over:
 		return
+	if hint_guide != null:
+		if not hint_guide.record_if_active(HintGuide.END_TURN):
+			return
+		if not hint_guide.record_if_active(HintGuide.INTENT):
+			return
 	_sfx.play(&"click")
 	seq.enqueue(game.apply({"t": "endTurn"}))
 
@@ -2945,6 +3024,8 @@ func _on_busy_changed(busy: bool) -> void:
 		# The hand the player is now holding is not the one the last preview was
 		# read against — the card may have been spent, or the foe may be dead.
 		_update_previews()
+		if hint_guide != null:
+			hint_guide.consider_combat(self)
 
 
 ## "7" or "4×2" from the {"dmg", "times"} preview; "" for non-attacks.
@@ -3552,8 +3633,9 @@ func _activate_selected() -> void:
 			_aim.draw_between(_hand.seat_centre(_selected_uid),
 				_enemy_centre(_aim_hover))
 		_update_previews()
+		if hint_guide != null:
+			hint_guide.on_card_grabbed(self, _hand.card_view(_selected_uid))
 		return
-	_commit_selected(-1)
 
 
 func _commit_selected(target_idx: int) -> void:
