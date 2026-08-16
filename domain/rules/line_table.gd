@@ -1,19 +1,97 @@
 class_name LineTable
 extends RefCounted
 ## One flat narrative table. Reveal-ladder enforcement is the `conditions`
-## column — there is no parallel gate. Phase-1 vocabulary: shard-count, act,
-## quest-state. Pools draw here; the whisper queue only asks whether its
-## channel is open.
+## column — there is no parallel gate. Phase-1 signed vocabulary is textual:
+## `shards>=N` / `act=N` / `quest:<id>.<state>`. The loader normalizes those
+## clauses to an internal dict; unknown keys fail the table load.
 
 const L1_SHARDS: int = 1
 const L2_SHARDS: int = 4
 const L3_SHARDS: int = 6
 const DEFAULT_COOLDOWN_RUNS: int = 3
 const RECENT_CAP: int = 8
+const _SHARDS_CLAUSE: String = "^shards>=(\\d+)$"
+const _ACT_CLAUSE: String = "^act=(\\d+)$"
+const _QUEST_CLAUSE: String = "^quest:([A-Za-z][A-Za-z0-9]*)\\.([A-Za-z][A-Za-z0-9]*)$"
 
 
 static func _ji(value: Variant) -> int:
 	return int(float(str(value)))
+
+
+## `{ok: bool, conditions: Dictionary, error: String}`. Empty input is the
+## generic fallback. A non-empty dict is rejected — that is the internal form,
+## not the signed vocabulary.
+static func parse_conditions(value: Variant) -> Dictionary:
+	if typeof(value) == TYPE_NIL:
+		return _parsed({}, "")
+	if typeof(value) == TYPE_DICTIONARY:
+		var as_dict: Dictionary = value
+		if as_dict.is_empty():
+			return _parsed({}, "")
+		return _parsed({}, "conditions must be textual (shards>=N / act=N / quest:<id>.<state>)")
+	if typeof(value) == TYPE_STRING:
+		return _parse_clause_list(_split_clauses(str(value)))
+	if typeof(value) != TYPE_ARRAY:
+		return _parsed({}, "malformed conditions")
+	var clauses: PackedStringArray = PackedStringArray()
+	for item_v: Variant in value:
+		if typeof(item_v) != TYPE_STRING:
+			return _parsed({}, "condition clause must be a string")
+		var item: String = str(item_v).strip_edges()
+		if item.is_empty():
+			return _parsed({}, "empty condition clause")
+		clauses.append(item)
+	return _parse_clause_list(clauses)
+
+
+static func _parsed(conditions: Dictionary, error: String) -> Dictionary:
+	return {"ok": error.is_empty(), "conditions": conditions, "error": error}
+
+
+static func _split_clauses(text: String) -> PackedStringArray:
+	var out: PackedStringArray = PackedStringArray()
+	var normalized: String = text.strip_edges().replace(",", " ")
+	for part: String in normalized.split(" ", false):
+		var clause: String = part.strip_edges()
+		if not clause.is_empty():
+			out.append(clause)
+	return out
+
+
+static func _parse_clause_list(clauses: PackedStringArray) -> Dictionary:
+	var conditions: Dictionary = {}
+	var quests: Dictionary = {}
+	var shards_re: RegEx = RegEx.new()
+	var act_re: RegEx = RegEx.new()
+	var quest_re: RegEx = RegEx.new()
+	shards_re.compile(_SHARDS_CLAUSE)
+	act_re.compile(_ACT_CLAUSE)
+	quest_re.compile(_QUEST_CLAUSE)
+	for clause: String in clauses:
+		var shards_found: RegExMatch = shards_re.search(clause)
+		if shards_found != null:
+			if conditions.has("shards_gte"):
+				return _parsed({}, "duplicate shards clause")
+			conditions["shards_gte"] = _ji(shards_found.get_string(1))
+			continue
+		var act_found: RegExMatch = act_re.search(clause)
+		if act_found != null:
+			if conditions.has("act"):
+				return _parsed({}, "duplicate act clause")
+			conditions["act"] = _ji(act_found.get_string(1))
+			continue
+		var quest_found: RegExMatch = quest_re.search(clause)
+		if quest_found != null:
+			var quest_id: String = quest_found.get_string(1)
+			if quests.has(quest_id):
+				return _parsed({}, "duplicate quest clause")
+			quests[quest_id] = quest_found.get_string(2)
+			continue
+		return _parsed({}, "unknown condition %s" % clause)
+	if not quests.is_empty():
+		conditions["quest_state"] = quests
+	return _parsed(conditions, "")
 
 
 static func context(run: RunState, shard_count: int = -1) -> Dictionary:
@@ -53,7 +131,7 @@ static func projected_shard_count(run: RunState, variant_id: StringName = &"") -
 
 static func conditions_match(conditions_v: Variant, ctx: Dictionary) -> bool:
 	if typeof(conditions_v) != TYPE_DICTIONARY:
-		return true
+		return false
 	var conditions: Dictionary = conditions_v
 	if conditions.has("shards_gte") and _ji(ctx.get("shards", 0)) < _ji(conditions["shards_gte"]):
 		return false
@@ -73,7 +151,16 @@ static func specificity(conditions_v: Variant) -> int:
 	if typeof(conditions_v) != TYPE_DICTIONARY:
 		return 0
 	var conditions: Dictionary = conditions_v
-	return conditions.size()
+	var n: int = 0
+	if conditions.has("shards_gte"):
+		n += 1
+	if conditions.has("act"):
+		n += 1
+	var quests_v: Variant = conditions.get("quest_state")
+	if typeof(quests_v) == TYPE_DICTIONARY:
+		var quests: Dictionary = quests_v
+		n += quests.size()
+	return n
 
 
 static func has_slot(rows: Array, slot: String) -> bool:
@@ -191,7 +278,7 @@ static func _pick(
 		var id: String = str(row.get("id", ""))
 		if not recycle and _used_in(recent, id, _ji(row.get("cooldown_runs", DEFAULT_COOLDOWN_RUNS))):
 			continue
-		if recycle and id == last_id and matching.size() > 1:
+		if recycle and id == last_id:
 			continue
 		var spec: int = specificity(row.get("conditions", {}))
 		var pri: int = _ji(row.get("priority", 0))
@@ -217,14 +304,14 @@ static func _pick(
 	return eligible[0]
 
 
+## Append exactly one run bucket, including an empty bucket when this run
+## drew nothing. Cooldown counts terminal runs, not loss-draws.
 static func remember(recent: Array, ids: Array) -> Array:
 	var bucket: Array = []
 	for id_v: Variant in ids:
 		var id: String = str(id_v)
 		if not id.is_empty():
 			bucket.append(id)
-	if bucket.is_empty():
-		return recent
 	var next: Array = recent.duplicate()
 	next.append(bucket)
 	while next.size() > RECENT_CAP:
