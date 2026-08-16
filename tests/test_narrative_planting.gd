@@ -63,6 +63,15 @@ static func run(fails: Array[String]) -> void:
 				"select returned a line whose conditions fail at shards %d" % shards)
 			_check(fails, LineTable.ladder_of(row) <= _ladder(shards),
 				"post-reveal line %s fired at shards %d" % [str(row.get("id")), shards])
+			if shards < LineTable.L1_SHARDS:
+				var asserts_v: Variant = row.get("asserts", {})
+				var reveal: bool = false
+				if typeof(asserts_v) == TYPE_DICTIONARY:
+					var asserts: Dictionary = asserts_v
+					reveal = not str(asserts.get("plant", "")).is_empty() \
+						or not str(asserts.get("payoff", "")).is_empty()
+				_check(fails, not reveal,
+					"reveal-bearing row %s fired at shards %d" % [str(row.get("id")), shards])
 			var id: String = str(row.get("id", ""))
 			drawn.append(id)
 			if row.get("once", false) and not once.has(id):

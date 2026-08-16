@@ -40,8 +40,19 @@ static func _selection(fails: Array[String]) -> void:
 	_check(fails, str(generic.get("id")) == "g", "empty conditions are the generic fallback")
 	var specific: Dictionary = LineTable.select(rows, "loss", _ctx(0, 1), null, {})
 	_check(fails, str(specific.get("id")) == "a", "most-specific-wins lost to the generic row")
-	var sealed: Dictionary = LineTable.select(_rows(), "loss", _ctx(0), null, {})
-	_check(fails, sealed.is_empty(), "shard-zero loss drew an L1 line")
+	var shard0: Dictionary = LineTable.select(_rows(), "loss", _ctx(0), null, {})
+	_check(fails, str(shard0.get("id")).begins_with("loss.generic."),
+		"shard-zero loss did not draw a generic epitaph")
+	_check(fails, LineTable.ladder_of(shard0) == 0,
+		"generic fallback carried an L1+ ladder")
+	_check(fails, not LineTable.conditions_match(
+			LineTable.row_by_id(_rows(), "loss.standing").get("conditions", {}),
+			_ctx(0)),
+		"reveal-bearing loss.standing matched below one shard")
+	_check(fails, not LineTable.conditions_match(
+			LineTable.row_by_id(_rows(), "loss.act1.01").get("conditions", {}),
+			_ctx(0, 1)),
+		"act-specific loss.act1.01 matched below one shard")
 	var open: Dictionary = LineTable.select(_rows(), "loss", _ctx(1), null, {})
 	_check(fails, not open.is_empty(), "L1 loss pool went silent")
 	_check(fails, LineTable.slot_open(_rows(), "whisper", _ctx(0)) == false
@@ -97,17 +108,19 @@ static func _losses(fails: Array[String]) -> void:
 	var vigil: VigilState = VigilState.blank()
 	var l0: RunState = _run(content, vigil, "run-loss-l0")
 	_check(fails, vigil.commit_run(l0, "death", content)
-		and vigil.defeat_epitaphs.is_empty() and vigil.whispers == 0,
-		"shard-zero death wrote an epitaph")
+		and vigil.defeat_epitaphs.size() == 1 and vigil.whispers == 0,
+		"shard-zero death did not write exactly one epitaph")
+	_check(fails, str(vigil.defeat_epitaphs[0]).begins_with("loss.generic."),
+		"shard-zero death wrote a non-generic epitaph")
 
 	vigil.shards.append("paleOnes")
 	var first: RunState = _run(content, vigil, "run-loss-first")
 	_check(fails, vigil.commit_run(first, "death", content)
-		and vigil.defeat_epitaphs.size() == 1,
+		and vigil.defeat_epitaphs.size() == 2,
 		"first eligible loss did not write an epitaph")
-	var first_id: String = vigil.defeat_epitaphs[0]
+	var first_id: String = vigil.defeat_epitaphs[1]
 	_check(fails, vigil.commit_run(first, "death", content)
-		and vigil.defeat_epitaphs.size() == 1,
+		and vigil.defeat_epitaphs.size() == 2,
 		"terminal retry consumed the pool twice")
 
 	var loaded: VigilState = VigilState.from_dict(vigil.to_dict())
@@ -117,8 +130,8 @@ static func _losses(fails: Array[String]) -> void:
 		return
 	var second: RunState = _run(content, loaded, "run-loss-second")
 	_check(fails, loaded.commit_run(second, "death", content)
-		and loaded.defeat_epitaphs.size() == 2
-		and loaded.defeat_epitaphs[1] != first_id,
+		and loaded.defeat_epitaphs.size() == 3
+		and loaded.defeat_epitaphs[2] != first_id,
 		"second loss repeated the first line inside cooldown")
 
 	var raw: Dictionary = VigilState.blank().to_dict()
@@ -132,7 +145,7 @@ static func _losses(fails: Array[String]) -> void:
 	SaveService.clear_vigil(TEST_VIGIL_PATH)
 	_check(fails, SaveService.store_vigil(loaded, TEST_VIGIL_PATH), "epitaph store failed")
 	var disk: VigilState = SaveService.load_vigil(TEST_VIGIL_PATH)
-	_check(fails, disk.defeat_epitaphs.size() == 2, "epitaphs did not round-trip through SaveService")
+	_check(fails, disk.defeat_epitaphs.size() == 3, "epitaphs did not round-trip through SaveService")
 	SaveService.clear_vigil(TEST_VIGIL_PATH)
 
 	var exhaust: VigilState = VigilState.blank()
