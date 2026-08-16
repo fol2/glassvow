@@ -36,6 +36,14 @@ jobs:
           python3 -m pip install 'fonttools[woff]>=4.63,<4.64'
           python3 -B tools/check_locale_font_coverage.py
 
+      # English ContentDB copy is baked in content/full-content.json while
+      # zh-Hant overlays from locale/zh-Hant.json.  This gate follows that
+      # runtime path rather than comparing the two locale bundles alone.
+      - name: Check narrative locale coverage
+        run: |
+          python3 -B tools/check_locale_coverage.py --self-test
+          python3 -B tools/check_locale_coverage.py
+
       - name: Check store Dev-tree exclusion
         run: python3 tools/check_store_dev_exclusion.py
 
