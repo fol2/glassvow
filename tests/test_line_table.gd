@@ -13,7 +13,18 @@ static func _i(value: Variant) -> int:
 	return int(float(str(value)))
 
 
+static func _empty_bucket(recent: Array, index: int) -> bool:
+	if index < 0 or index >= recent.size():
+		return false
+	var bucket_v: Variant = recent[index]
+	if typeof(bucket_v) != TYPE_ARRAY:
+		return false
+	var bucket: Array = bucket_v
+	return bucket.is_empty()
+
+
 static func run(fails: Array[String]) -> void:
+	_conditions(fails)
 	_selection(fails)
 	_thresholds(fails)
 	_losses(fails)
@@ -29,6 +40,75 @@ static func _ctx(shards: int, act: int = 0) -> Dictionary:
 	return {"shards": shards, "act": act, "quests": {}}
 
 
+static func _probe(
+		id: String, slot: String, conditions: Variant, zh: String, en: String,
+		cooldown: int = 0
+) -> Dictionary:
+	return {
+		"id": id, "slot": slot, "conditions": conditions, "zh": zh, "en": en,
+		"priority": 0, "once": false, "cooldown_runs": cooldown, "weight": 1,
+		"asserts": {},
+	}
+
+
+static func _conditions(fails: Array[String]) -> void:
+	var db: ContentDB = ContentDB.new()
+	var faults: PackedStringArray = db.apply_line_table([
+		_probe("g.shards", "probe", "shards>=4", "甲", "Shards"),
+		_probe("g.act", "probe", "act=2", "乙", "ActTwo"),
+		_probe("g.quest", "probe", "quest:ownShade.complete", "丙", "Quest"),
+	])
+	_check(fails, faults.is_empty(), "valid conditions failed to load")
+	if not faults.is_empty():
+		return
+	var shards_row: Dictionary = LineTable.row_by_id(db.line_table, "g.shards")
+	_check(fails, LineTable.conditions_match(shards_row.get("conditions", {}), _ctx(4))
+		and not LineTable.conditions_match(shards_row.get("conditions", {}), _ctx(3))
+		and LineTable.specificity(shards_row.get("conditions", {})) == 1,
+		"shards>=4 did not parse to the four-shard gate")
+	var act_row: Dictionary = LineTable.row_by_id(db.line_table, "g.act")
+	_check(fails, LineTable.conditions_match(act_row.get("conditions", {}), _ctx(0, 2))
+		and not LineTable.conditions_match(act_row.get("conditions", {}), _ctx(0, 1)),
+		"act=2 did not parse to an act gate")
+	var quest_row: Dictionary = LineTable.row_by_id(db.line_table, "g.quest")
+	var ready: Dictionary = _ctx(0)
+	ready["quests"] = {"ownShade": "complete"}
+	var dormant: Dictionary = _ctx(0)
+	dormant["quests"] = {"ownShade": "dormant"}
+	_check(fails, LineTable.conditions_match(quest_row.get("conditions", {}), ready)
+		and not LineTable.conditions_match(quest_row.get("conditions", {}), dormant),
+		"quest:ownShade.complete did not parse to a quest gate")
+	_check(fails, LineTable.specificity({"shards_gte": 1, "junk": 9}) == 1,
+		"specificity counted an unvalidated key")
+	var bad: ContentDB = ContentDB.new()
+	var bad_faults: PackedStringArray = bad.apply_line_table([
+		_probe("g.bad", "probe", "nope>=1", "丁", "Nope"),
+	])
+	_check(fails, not bad_faults.is_empty() and bad.line_table.is_empty(),
+		"malformed condition did not fail the table load")
+	var dict_form: ContentDB = ContentDB.new()
+	_check(fails, not dict_form.apply_line_table([
+		_probe("g.dict", "probe", {"shards_gte": 1}, "戊", "DictForm"),
+	]).is_empty(), "internal dict conditions failed open")
+	var same: ContentDB = ContentDB.new()
+	_check(fails, not same.apply_line_table([
+		_probe("g.same", "probe", "", "Same", "Same"),
+	]).is_empty(), "en == zh loaded")
+	var cjk: ContentDB = ContentDB.new()
+	_check(fails, not cjk.apply_line_table([
+		_probe("g.cjk", "probe", "", "己", "Latin中文"),
+	]).is_empty(), "non-Latin en loaded")
+	var missing: ContentDB = ContentDB.new()
+	_check(fails, not missing.apply_line_table([{
+		"id": "g.miss", "slot": "probe", "zh": "庚", "cooldown_runs": 0,
+	}]).is_empty(), "row missing en loaded")
+	var one: ContentDB = ContentDB.new()
+	_check(fails, not one.apply_line_table([
+		_probe("pool.loss.e01", "loss", "", "辛", "Alone", 3),
+	]).is_empty() and one.line_table.is_empty(),
+		"single-row pool loaded")
+
+
 static func _selection(fails: Array[String]) -> void:
 	var rows: Array = [
 		{"id": "g", "slot": "loss", "conditions": {}, "weight": 1,
@@ -41,18 +121,22 @@ static func _selection(fails: Array[String]) -> void:
 	var specific: Dictionary = LineTable.select(rows, "loss", _ctx(0, 1), null, {})
 	_check(fails, str(specific.get("id")) == "a", "most-specific-wins lost to the generic row")
 	var shard0: Dictionary = LineTable.select(_rows(), "loss", _ctx(0), null, {})
-	_check(fails, str(shard0.get("id")).begins_with("loss.generic."),
+	_check(fails, str(shard0.get("id")).begins_with("pool.loss.e"),
 		"shard-zero loss did not draw a generic epitaph")
 	_check(fails, LineTable.ladder_of(shard0) == 0,
 		"generic fallback carried an L1+ ladder")
+	_check(fails, not LineTable.select(_rows(), "hearth", _ctx(0), null, {}).is_empty(),
+		"shard-zero hearth went silent")
+	_check(fails, not LineTable.select(_rows(), "waystone", _ctx(0), null, {}).is_empty(),
+		"shard-zero waystone went silent")
 	_check(fails, not LineTable.conditions_match(
-			LineTable.row_by_id(_rows(), "loss.standing").get("conditions", {}),
+			LineTable.row_by_id(_rows(), "pool.loss.e06").get("conditions", {}),
 			_ctx(0)),
-		"reveal-bearing loss.standing matched below one shard")
+		"reveal-bearing pool.loss.e06 matched below one shard")
 	_check(fails, not LineTable.conditions_match(
-			LineTable.row_by_id(_rows(), "loss.act1.01").get("conditions", {}),
+			LineTable.row_by_id(_rows(), "pool.loss.e21").get("conditions", {}),
 			_ctx(0, 1)),
-		"act-specific loss.act1.01 matched below one shard")
+		"act-specific pool.loss.e21 matched below one shard")
 	var open: Dictionary = LineTable.select(_rows(), "loss", _ctx(1), null, {})
 	_check(fails, not open.is_empty(), "L1 loss pool went silent")
 	_check(fails, LineTable.slot_open(_rows(), "whisper", _ctx(0)) == false
@@ -110,7 +194,7 @@ static func _losses(fails: Array[String]) -> void:
 	_check(fails, vigil.commit_run(l0, "death", content)
 		and vigil.defeat_epitaphs.size() == 1 and vigil.whispers == 0,
 		"shard-zero death did not write exactly one epitaph")
-	_check(fails, str(vigil.defeat_epitaphs[0]).begins_with("loss.generic."),
+	_check(fails, str(vigil.defeat_epitaphs[0]).begins_with("pool.loss.e"),
 		"shard-zero death wrote a non-generic epitaph")
 
 	vigil.shards.append("paleOnes")
@@ -162,6 +246,82 @@ static func _losses(fails: Array[String]) -> void:
 		seen[id] = true
 		last = id
 	_check(fails, seen.size() >= 2, "loss pool never recycled across distinct lines")
+	_cooldown_counts_runs(fails)
+	_two_row_pool_never_repeats(fails)
+	_whisper_row_governs(fails)
+
+
+static func _cooldown_counts_runs(fails: Array[String]) -> void:
+	var db: ContentDB = ContentDB.load_full(false)
+	var faults: PackedStringArray = db.apply_line_table([
+		_probe("pool.loss.e01", "loss", "", "甲", "Alpha", 3),
+		_probe("pool.loss.e02", "loss", "", "乙", "Bravo", 3),
+	])
+	_check(fails, faults.is_empty(), "cooldown fixture failed to load")
+	if not faults.is_empty():
+		return
+	var vigil: VigilState = VigilState.blank()
+	var death1: RunState = _run(db, vigil, "cd-d1")
+	_check(fails, vigil.commit_run(death1, "death", db) and vigil.defeat_epitaphs.size() == 1,
+		"run-1 loss did not draw")
+	var first: String = vigil.defeat_epitaphs[0]
+	var recent_after_draw: int = vigil.line_recent.size()
+	_check(fails, vigil.commit_run(death1, "death", db)
+		and vigil.line_recent.size() == recent_after_draw,
+		"retry double-appended a run bucket")
+	for n: int in range(3):
+		var win: RunState = _run(db, vigil, "cd-w%d" % n)
+		_check(fails, vigil.commit_run(win, "win", db), "cooldown win %d rejected" % n)
+	_check(fails, vigil.line_recent.size() == 4
+		and _empty_bucket(vigil.line_recent, 1)
+		and _empty_bucket(vigil.line_recent, 2)
+		and _empty_bucket(vigil.line_recent, 3),
+		"wins did not append empty run buckets")
+	var loaded: VigilState = VigilState.from_dict(vigil.to_dict())
+	_check(fails, loaded != null and loaded.line_recent.size() == 4
+		and _empty_bucket(loaded.line_recent, 1),
+		"empty run buckets did not survive save/load")
+	_check(fails, not LineTable._used_in(vigil.line_recent, first, 3),
+		"run-1 draw was still excluded by a ~3-run cooldown after three wins")
+
+
+static func _two_row_pool_never_repeats(fails: Array[String]) -> void:
+	var db: ContentDB = ContentDB.new()
+	var faults: PackedStringArray = db.apply_line_table([
+		_probe("pool.loss.e01", "loss", "", "甲", "Alpha", 3),
+		_probe("pool.loss.e02", "loss", "", "乙", "Bravo", 3),
+	])
+	_check(fails, faults.is_empty(), "two-row fixture failed to load")
+	if not faults.is_empty():
+		return
+	var last: String = ""
+	var recent: Array = []
+	for n: int in range(6):
+		var row: Dictionary = LineTable.select(db.line_table, "loss", _ctx(0), null, {
+			"recent": recent, "once": [], "last_id": last,
+		})
+		var id: String = str(row.get("id", ""))
+		_check(fails, not id.is_empty(), "two-row pool went silent at draw %d" % n)
+		if n > 0:
+			_check(fails, id != last, "two-row pool repeated %s consecutively" % id)
+		recent = LineTable.remember(recent, [id])
+		last = id
+
+
+static func _whisper_row_governs(fails: Array[String]) -> void:
+	var open_db: ContentDB = ContentDB.load_full(false)
+	var whisper: Dictionary = LineTable.row_by_id(open_db.line_table, "whisper.channel")
+	_check(fails, not whisper.is_empty(), "shipping table has no whisper row")
+	whisper["conditions"] = {}
+	var open_vigil: VigilState = VigilState.blank()
+	_check(fails, open_vigil.commit_run(_run(open_db, open_vigil, "win-open"), "win", open_db)
+		and open_vigil.whispers == 1,
+		"whisper row without a condition still sealed a shard-zero win")
+	var gated: ContentDB = ContentDB.load_full(false)
+	var gated_vigil: VigilState = VigilState.blank()
+	_check(fails, gated_vigil.commit_run(_run(gated, gated_vigil, "win-gated"), "win", gated)
+		and gated_vigil.whispers == 0,
+		"whisper row condition did not govern a shard-zero win")
 
 
 static func _speaks(content: ContentDB, variant: String, shards: Array,
@@ -214,7 +374,7 @@ static func _dialogue(fails: Array[String]) -> void:
 static func _vigil_surface(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full(false)
 	var vigil: VigilState = VigilState.blank()
-	vigil.defeat_epitaphs.append("loss.generic.01")
+	vigil.defeat_epitaphs.append("pool.loss.e01")
 	var screen: VigilScreen = VigilScreen.new(vigil, content)
 	_check(fails, screen._epitaph_tab != null and screen._epitaph_list != null,
 		"Vigil hid a non-empty epitaph ledger")
