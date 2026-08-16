@@ -5,9 +5,21 @@
 > `roguecardv2@6e069118` (the pre-Pixi build; local branch `pre-pixi`) — a
 > raster-art game carried by `src/assets/` (243 images at that commit).
 > Glassvow currently ships **zero** art assets and draws everything in `_draw()`;
-> closing that gap is the active work. §1 (Pilgrimage frame) and §4 (slice data)
-> are unaffected and still stand. Treat every "procedural" / "buildable" note
-> below as describing the *old* plan, not the target.
+> closing that gap is the active work. §4 (slice data) is unaffected and still
+> stands. Treat every "procedural" / "buildable" note below as describing the
+> *old* plan, not the target.
+>
+> **§1 SUPERSEDED TOO (2026-08-16, #207 / #232 / #234).** The horizontal frame
+> §1 argues for survived; the *horizon-Spire* that carried it did not. #207
+> replaced the side-on band stack with a tilted-orthographic cel-shaded 3D scene
+> per act, #234 built it (`SPIRE_*` ramps retired — see
+> `presentation/map/map_regions.gd`), and #232 retired the tower vocabulary
+> game-wide: Spire, climb, ascend, summit, above-as-a-place, upward and
+> stair-as-the-road are banned in every player-facing string. §1, §3's act names
+> and §5's parallax band spec are a **dated record of why the horizontal frame
+> was chosen**, not instructions. Current vocabulary:
+> `docs/story/06-glossary.md`; current act names: `content/original-content.json`
+> (Act III is **The Obsidian Court / 黑曜王庭**).
 
 Founding artifact for the map redesign. **Sign this before any map code is written.**
 The web map is a vertical 3D tower (a helix of lanterns climbed upward). The port

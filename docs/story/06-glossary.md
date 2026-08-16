@@ -36,9 +36,39 @@
 | 鏡面空間 | mirror-space | 門後之地的地理:盡頭即爐邊另一面(00 §2.4) | placeholder(敘述用,非對白詞) |
 | 金城 | the Gilded City | Act IV 盡頭=守夜之爐的真貌;入城=歸家(00 §8.1,#259 Q3)。此名是眾人的 legend 名,真身無另名(舊佔位【城】) | locked(legend-drift 名)[#261 Q12] |
 | 行過 | passed | 勝仗對 Sovereign 的動詞:打退「不肯」,不殺那個人(00 §2.1) | placeholder |
-| 尖塔 / Spire | — | 舊垂直語彙 | **banned** [SETTLED] |
-| 爬 / climb / ascend(敘事用) | — | 垂直朝聖語彙 | **banned**,逐句清洗見 ledger |
+| 路 / 長路 | the road | **世界尺度的普通名詞**,非專名——舊 尖塔 佔的那個主語位由它接。世界無專名:地理是六個地名串成的一條路(01 §地理),朝聖 是活動,路 是那個地方 | locked [#303 James 2026-08-16] |
+| 尖塔 / Spire | — | 舊垂直語彙;地區位由 黑曜王庭 接,世界位由 路 接 | **banned** [SETTLED] |
+| 爬 / 攀 / climb / ascend / 登臨(敘事用) | — | 垂直朝聖語彙 | **banned**,逐句清洗見 ledger |
+| 頂點 / summit ・ 之上(地方)/ above(地方)・ 向上 / upward ・ 階梯(那條路)/ stair(the road) | — | Tier A 其餘四項,補齊七項全表 | **banned** [#232 Q1 → #303] |
 | 上面嗰樣嘢 / the thing above | — | 舊指涉;§8.1 已解——門後沒有嗰樣嘢,只有金城;該詞只作 legend-drift 出現 | **banned** [#258 R1 Q4A] |
+
+## 垂直語彙:banned 全表與 keep 白名單 [#232 → #303]
+
+**Tier A — 任何 player-facing 字串一律禁用**(en 大小寫、詞形變化一併計):
+
+| zh | en |
+|---|---|
+| 尖塔 | Spire |
+| 爬 / 攀 | climb(名詞、動詞、climber、climbing) |
+| 登臨 | ascend / ascended |
+| 頂點 | summit |
+| 之上(作**地方**解) | above(作**地方**解) |
+| 向上 | upward |
+| 階梯(作**那條路**解) | stair(作**那條路**解) |
+
+**Tier B — 以下保留是正確,不是漏執**:
+
+- **層** 作狀態**疊加**量詞(「施加 2 層陰燃」)——`content.status.*.desc` 絕大多數
+  `層` 屬此類,與垂直無關。`ui.*` 內已無 `層`(引路石取代了計數)。
+- **斷層** —— 卡牌 Executioner 的 zh 名。
+- **王冠 / crown** —— 第三幕是王庭,冠讀作王權;方位公式取「王冠之後」(ledger row 31)。
+- **破曉 / dawn** —— 一日之時。
+- 場景描述**之內**的字面上下(角色抬頭、光自上灑落之類)。
+- **朝聖 / pilgrimage** —— 已定的水平框架;原初朝聖者 / the Undivided 是鎖定 canon。
+- **"Slay the Spire"** 作為錨定遊戲名(`docs/commercial-rubric.md`),以及任何外部產品名或 URL。
+  大小寫不敏感的全樹替換會改掉他人遊戲的名字。
+- **`port_fixtures/content/locale-en.json` 永遠保留 "The Obsidian Spire"** —— 它是捕獲下來的
+  web artefact,由 CLAUDE.md 的 Fixture Provenance 凍結,不得「順手修正」。
 
 ## 正字與語域(繼承 #177,對文案 binding)
 

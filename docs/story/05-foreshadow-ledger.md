@@ -56,7 +56,7 @@ Batch 1(#301)新名與公式行:
 | 28 | 留在路上 / Stay on the Road | ui.menu.keepClimbing(置換 #232) | L0 | 不離開,繼續行 | 「留」字反照:留在路上的是行者,留在爐邊的是你 | 新名 [#232 Q2 修訂書面語——舊簽「留喺路上」廢:喺不在字庫且屬口語] |
 | 29 | 入城 / ARRIVED | ui.dawn.title + ui.end.ascended(置換 #232 Q4) | L1 [SETTLED James 2026-08-16] | 你抵達了 | 抵達的是隊伍(ascended.png 隊列入門);城=爐邊,入城=歸家 | 新名 [#232 Q4];級已簽 L1(響於 Act III 勝利的雙讀屬設計) |
 | 30 | 第 {n} 塊引路石 / WAYSTONE n | ui.end.floors / ui.hud.* 計數(置換 #232 Q3;落地歸 #303) | L0 | 行程以引路石計 | [SETTLED James 2026-08-16]每塊石都被之前每一個行者點亮過;你數的是隊伍反覆量過的同一段路 | 新名 [#232 Q3];揭後已簽 |
-| 31 | 王冠之後 / beyond the crown | 公式,七址:ui.dawn.act4RevealCopy、ui.dawn.unlock.act4、q.hollowLamplighter.meetings[1].paid、q.unreadablePage.pages[4]、whisper 21、main.gd:372、dawn_phone_containment.gd:140;本批另 usurper.death 與 whisper 20 取此式 | L1 | 封門在王庭之外、王座之後 | 「之後」雙關:過了「不肯完成」,路便向家;門從來不在上方,只在更遠處 | 新公式 [SETTLED James 2026-08-16 — 一次簽,七址共用] |
+| 31 | 王冠之後 / beyond the crown | 公式,七址:ui.dawn.act4RevealCopy、ui.dawn.unlock.act4、q.hollowLamplighter.meetings[1].paid、q.unreadablePage.pages[4]、whisper 21、main.gd:375(舊記 :372,#303 量得已飄 +3)、dawn_phone_containment.gd:140;本批另 usurper.death 與 whisper 20 取此式 | L1 | 封門在王庭之外、王座之後 | 「之後」雙關:過了「不肯完成」,路便向家;門從來不在上方,只在更遠處 | 新公式 [SETTLED James 2026-08-16 — 一次簽,七址共用] |
 
 ## Batch 1(#301)入賬區 [PROPOSED — 待 James review]
 
@@ -167,11 +167,43 @@ huntName 等無敘事雙讀的字串不立行)。zh 為源語;「保留」=兩�
 | 117 | 路上若再見提燈的,替我看一看那張面孔。 / If you meet another out there who carries a lamp — look close at the face, for me. | story.lamplighter-m5.post.l3(掌) | L1 | 老人的怪託付 | 下一個提燈者=無焰提燈的永恆君王;那張「面孔」是貼着鎖的面具(03-acts)——他把認人之責交給你 | 新寫 |
 | 118 | 未燃之路再向東,老人又在等。空燈放在身前。 / Farther east along the Unlit Way, the old man is waiting again, the hollow lantern set before him. | story.lamplighter-m2.pre.l1(敘) | L1 | 又一次會面 | 「又在等」:等的母題(01 水=等)輕拍一下;他等的是核對下一張面孔 | 新寫 |
 
+## #303 — ui.\* chrome 清洗(2026-08-16)
+
+世界尺度的主語位由 **路 / the road** 接(06-glossary 新增鎖詞,James
+2026-08-16 判)。以下各行**只換名詞、不重寫句式**——James 簽的是「掃埋,
+尖塔→路」,審核方式為逐句讀 PR diff。凡 zh 側原本已是 朝聖之路(Tier B)
+的行,只動 en。
+
+| # | 句子(現行) | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 119 | 路如常。未立任何誓言。 / The road as it is. No vows sworn. | ui.embark.noVows | L0 | 這次不立誓 | 路從不變;變的是每次派出去的那個 | 重寫(舊 尖塔如常 / The Spire as it is) |
+| 120 | 選擇你面對路途的方式。 / Choose how you meet the road. | ui.embark.subChoose | L0 | 選難度 | 「面對」的是同一段路的第 n 次 | 重寫(舊 尖塔) |
+| 121 | 提燈已燃。路在等待。 / The lantern is lit. The road waits. | ui.embark.subWait | L0 | 出發前一刻 | 等的是路,不是你——隊伍排着(01 水=等) | 重寫(舊 尖塔在等待) |
+| 122 | THE PILGRIMAGE BEGINS | ui.embark.title(en) | L0 | 啟程字 | — | en 對齊 zh 既有「朝聖啟程」(舊 THE CLIMB BEGINS) |
+| 123 | 永恆君王已化塵。破曉越過長路——這是漫長年代中的第一次。 / …Dawn breaks over the road — the first in an age. | ui.end.ascendedSub | L1 | 勝利辭 | 破曉越過的是整條隊伍量過的路,不是一座塔 | 重寫(舊 越過尖塔 / over the Spire) |
+| 124 | 一段朝聖之路在第 {floor} 塊引路石終結。路留下它所奪走的——守夜卻會銘記。 / Here ended a run, at waystone {floor}. The road keeps what it takes — but the Vigil remembers. | ui.end.fallenSub | L1 | 敗北辭 | 「路留下它所奪走的」=碑;所奪走的那個仍站着(row 1) | 重寫(舊 尖塔留下 / The Spire keeps;計數併 row 30) |
+| 125 | 沿提燈之路前行。… / Follow the road of lanterns onward. … | ui.help.climbBody・climbTitle | L0 | 玩法說明 | — | 重寫(舊 前往尖塔 / up the Spire);en 標題對齊 zh 既有「朝聖之路」 |
+| 126 | …留給願意踏上更殘酷朝聖之路的人。 / …for those who'd walk a crueler road. | ui.help.vigilBody(en) | L0 | 誓言階梯說明 | — | en 對齊 zh(舊 climb a crueler Spire);zh 側原已乾淨 |
+| 127 | {aspect} 立於路途起點。… / {aspect} stands at the head of the road. … | ui.lamp.sub | L0 | 掌燈人場景 | 「起點」對「路上若再見提燈的」(row 117):他一直站在同一個起點 | 重寫(舊 尖塔腳下 / at the foot of the Spire) |
+| 128 | 爐火噼啪。片刻之間,路安靜。 / …For a moment, the road is quiet. | ui.rest.sub | L0 | 休息點 | 路安靜=隊伍暫停;安靜的從來不是你 | 重寫(舊 尖塔安靜 / the Spire is quiet) |
+| 129 | 離開路途? / LEAVE THE ROAD? | ui.menu.leaveSpireTitle | L0 | 離開確認 | 「離開路」對「留在路上」(row 28):兩個掣是同一組反照 | 重寫(舊 離開尖塔 / LEAVE THE SPIRE?);zh 初稿「離開路上?」語法不通,改「路途」 |
+| 130 | 空燈掌燈人踏上路途。 / The Hollow Lamplighter walks the road. | ui.dawn.unlock.lamplighter | L1 | 解鎖通告 | 他一直在路上——解鎖的是你見到他,不是他出現 | 重寫(舊 踏上尖塔 / walks the Spire) |
+| 131 | 朝聖之路上如今可找到藥瓶。/ 新卡牌與遺物加入朝聖之路。 / Phials may now be found on the road. · New cards and relics join the pilgrimage. | ui.dawn.unlock.phials・pool | L0 | 解鎖通告 | — | **zh 兩行皆未動**(原已是 朝聖之路,Tier B);只有 en 對齊(舊 on the climb / enter the climb) |
+| 132 | {runs} pilgrimages · {wins} dawns · … | ui.brand.stats・ui.vigil.stats(en) | L0 | 統計行 | 數的是派出去的次數 | en 對齊 zh 既有「{runs} 次朝聖」(舊 {runs} climbs);`{runs}` 佔位符不動,故不取 "run" |
+| 132b | {action} 以巡視路途 / {action} to survey the road | ui.map.survey | L0 | 地圖提示 | — | 置換(舊 巡視尖塔 / survey the Spire),#232 簽定字面。**此鍵全樹零 reader**——實際渲染的是 ui.pilgrimage.survey(「巡視朝聖之路」)與 .surveyChoose;兩者同一動詞兩個受詞,連同刪鍵一併歸 [#305](https://github.com/fol2/glassvow/issues/305) |
+| 133 | (功能字串:climb → run) | ui.persistence.reloadClimb・runSaveBody・runSaveRetryFail・ui.embark.warnSaved・ui.end.bequestTitle・ui.settings.resetConfirmBody・resetWarn・resetConfirmPlain | L0 | 存檔/重設提示 | 無揭後讀法:此八行是機器語,不是敘述 | en 置換(#232 簽);zh 八側原已是 朝聖之路(Tier B),不動 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於
 [#301 的掃描 comment](https://github.com/fol2/glassvow/issues/301#issuecomment-5304721761)
 (2026-08-15)。content.* 側 Tier A 句已全數入賬:quest/whisper 句在
-Batch 1 區(rows 32–82)重寫或保留;ui.* 側歸 #303(chrome)與 #228
-(prose);scene/finale 側歸 #263/#309;音軌名同 batch 檔「一語三址」節。
+Batch 1 區(rows 32–82)重寫或保留;scene/finale 側歸 #263/#309;音軌名同
+batch 檔「一語三址」節。
+
+**ui.\* 側已於 #303 全數落地**(rows 119–133 + rows 26–31 的簽定名):
+chrome 與 prose 一併掃,因為 #228 是**讀稿質檢**,不是詞彙掃除,把十一句
+尖塔留到那時等於讓禁詞繼續出貨。#228 仍讀這些行的語氣與 calque。
+禁令自此由 `tests/test_locale.gd` 的 `_retired_vertical_vocabulary` 機檢,
+allowlist 逐條具名(已注入 mutation 驗證可以紅)。
 原 [TODO] 於 Batch 1(#301)開稿時關閉。
