@@ -52,7 +52,7 @@ So a malformed fixture does not error; it loads as `VigilState.blank()`
 (`vigil_state.gd:35-39` — zero deeds, all six quests dormant, **empty
 shards**). Downstream — as re-anchored after the #217 redesign — the vigil's
 shards are copied into the run profile by `_new_run`
-(`application/main.gd:982` (in `_new_run`)), `RunState.final_act()`
+(`application/main.gd:1009` (in `_new_run`)), `RunState.final_act()`
 (`domain/state/run_state.gd` (`final_act`)) extends the journey to a third act
 only with six shards, and the Act IV threshold is a sealed-door overlay on the
 ordinary final-act map (`presentation/map/world_map_screen.gd:377` (in

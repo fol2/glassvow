@@ -792,13 +792,19 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 
 
 func _begin_climb() -> void:
-	# Fresh profile: 續火 creates the run and plays the opening, skipping
-	# Embark — a first run has no real aspect/vow choice. Embark returns
-	# from run 2 unconditionally (even when still choice-less).
-	if _vigil.scenes_seen.has("opening"):
+	# Skip Embark only when the opening is unseen AND the screen would
+	# offer nothing (single aspect, vow 0). The skip exists because run 1
+	# has no real choice; a legacy v2 profile that never saw the opening
+	# but has aspect2 / vow_unlocked > 0 must not be forced onto defaults.
+	# Embark then creates the run, and `_plays_opening()` still fires.
+	if _vigil.scenes_seen.has("opening") or not _embark_is_zero_choice():
 		_show_embark()
 	else:
 		_on_embark_begin(0, 0)
+
+
+func _embark_is_zero_choice() -> bool:
+	return not _vigil.unlocks.has("aspect2") and _vigil.vow_unlocked <= 0
 
 
 func _show_embark() -> void:
@@ -845,7 +851,7 @@ func _on_begin_anew(id: String) -> void:
 	if not _vigil.commit_run(game.run, "abandon", content) or not _store_vigil():
 		_show_save_error("ui.persistence.detail.currentPilgrimageClose")
 		return
-	if not SaveService.clear_run(game.run.run_id):
+	if not SaveService.clear_run(game.run.run_id, _run_save_path):
 		_show_save_error("ui.persistence.detail.currentPilgrimageClear")
 		return
 	_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
@@ -958,6 +964,27 @@ func _show_save_error(detail_key: String) -> void:
 
 
 func _on_save_error_choice(id: String) -> void:
+	# Continuations first, same shape as #332's Vigil-scoped Retry: inspect
+	# live state, re-hold the write that failed, then resume the owed surface.
+	# Generic `_store_run()` → `_route_run()` drops both of these.
+	if id == "retry" and _vigil.guidance_skipped \
+			and not SaveService.load_vigil(_vigil_save_path).guidance_skipped:
+		if _store_vigil():
+			if game != null:
+				_route_run()
+			else:
+				_show_title()
+		else:
+			_show_title()
+		return
+	if id == "retry" and game != null and _plays_departure_staging():
+		var saved: RunState = SaveService.load_run(content, _run_save_path)
+		if saved == null or saved.run_id != game.run.run_id:
+			if _store_run():
+				_show_departure_staging()
+			else:
+				_show_title()
+			return
 	if id == "retry" and game != null and _store_run():
 		_route_run()
 	elif id == "retry" and game == null \

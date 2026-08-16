@@ -5,6 +5,7 @@ extends RefCounted
 
 const RUN_PATH: String = "user://test_opening_flow_run_v2.json"
 const VIGIL_PATH: String = "user://test_opening_flow_vigil_v2.json"
+const DEV_PATH: String = "user://test_opening_flow_dev_run_v2.json"
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -17,16 +18,21 @@ static func run(fails: Array[String]) -> void:
 	var default_vigil: Variant = _file_snapshot(SaveService.VIGIL_PATH)
 	_fresh_begin_skips_embark(fails)
 	_run_two_returns_embark(fails)
+	_choiceful_unseen_gets_embark(fails)
 	_crash_resumes_owed_line(fails)
 	_departure_stages_without_opening(fails)
 	_run_menu_refused_over_opening(fails)
 	_dev_boot_skips_opening(fails)
 	_skip_offer_records_guidance(fails)
+	_skip_guidance_retry_stores_vigil(fails)
+	_new_run_retry_restages(fails)
+	_begin_anew_spares_production(fails)
 	_opening_completion_is_the_hint_gate(fails)
 	if _file_snapshot(SaveService.RUN_PATH) != default_run \
 			or _file_snapshot(SaveService.VIGIL_PATH) != default_vigil:
 		fails.append("opening_flow: tests touched the default save")
 	SaveService.clear(RUN_PATH)
+	SaveService.clear(DEV_PATH)
 	SaveService.clear_vigil(VIGIL_PATH)
 
 
@@ -46,6 +52,32 @@ static func _fresh_begin_skips_embark(fails: Array[String]) -> void:
 			and str(main.game.run.pending_scene.get("id", "")) == "opening",
 		"fresh profile 續火 did not persist pending_scene")
 	_dispose(main)
+
+
+static func _choiceful_unseen_gets_embark(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var cases: Array[Dictionary] = [
+		{"tag": "aspect2", "unlock": "aspect2", "vow": 0},
+		{"tag": "vow", "unlock": "", "vow": 1},
+	]
+	for case: Dictionary in cases:
+		var main: Main = _main(content)
+		var unlock: String = str(case["unlock"])
+		if not unlock.is_empty():
+			main._vigil.unlocks.append(unlock)
+		var vow: int = case["vow"]
+		main._vigil.vow_unlocked = vow
+		main._show_title()
+		main._on_title_choice("begin", null)
+		_check(fails, main._route_screen is EmbarkScreen,
+			"choiceful-but-unseen (%s) skipped Embark" % str(case["tag"]))
+		_check(fails, not (main._route_screen is ScenePlayer),
+			"choiceful-but-unseen (%s) played the opening before Embark" % str(case["tag"]))
+		main._on_embark_begin(0, 0)
+		_wake(main)
+		_check(fails, main._route_screen is ScenePlayer,
+			"choiceful-but-unseen (%s) did not play the opening after Embark" % str(case["tag"]))
+		_dispose(main)
 
 
 static func _run_two_returns_embark(fails: Array[String]) -> void:
@@ -183,6 +215,111 @@ static func _skip_offer_records_guidance(fails: Array[String]) -> void:
 	_check(fails, main._map_screen is WorldMapScreen,
 		"accepting skip-guidance did not hand off to the map")
 	_dispose(main)
+
+
+static func _skip_guidance_retry_stores_vigil(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _main(content)
+	main._forced_seed = 32006
+	main._new_run()
+	_wake(main)
+	var player: ScenePlayer = main._route_screen as ScenePlayer
+	_check(fails, player != null, "guidance-retry producer did not open the opening")
+	if player == null:
+		_dispose(main)
+		return
+	player._press(true)
+	player._process(ScenePlayer.SKIP_HOLD)
+	player._press(false)
+	_drive(main)
+	_check(fails, main._choice_screen is ChoiceScreen,
+		"guidance-retry producer did not offer skip-guidance")
+	main._vigil_save_path = "user://__no_such_dir_320__/vigil.json"
+	main._on_skip_guidance_choice("skip")
+	_check(fails, main._vigil.guidance_skipped,
+		"accepting skip-guidance did not mark memory")
+	var before: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, before != null and not before.guidance_skipped,
+		"a failed Vigil store still wrote guidance_skipped")
+	main._vigil_save_path = VIGIL_PATH
+	main._on_save_error_choice("retry")
+	var persisted: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, persisted != null and persisted.guidance_skipped,
+		"Retry dropped the Vigil continuation; guidance_skipped evaporated")
+	_check(fails, main._map_screen is WorldMapScreen,
+		"Retry stored Vigil but did not continue into the run")
+	_dispose(main)
+	SaveService.clear("user://__no_such_dir_320__/vigil.json")
+
+
+static func _new_run_retry_restages(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _main(content)
+	main._forced_seed = 32007
+	main._vigil.scenes_seen.append("opening")
+	main._transitions.instant = false
+	main._run_save_path = "user://__no_such_dir_320__/run.json"
+	main._new_run()
+	_check(fails, main.game != null, "staging-retry producer did not build a run")
+	_check(fails, not (main._route_screen is DepartureStaging),
+		"a failed run store still entered DepartureStaging")
+	main._run_save_path = RUN_PATH
+	main._on_save_error_choice("retry")
+	_check(fails, main._route_screen is DepartureStaging,
+		"Retry dropped the DepartureStaging continuation")
+	var loaded: RunState = SaveService.load_run(content, RUN_PATH)
+	_check(fails, loaded != null and loaded.run_id == main.game.run.run_id,
+		"Retry did not persist the run before staging")
+	_dispose(main)
+	SaveService.clear("user://__no_such_dir_320__/run.json")
+
+
+static func _begin_anew_spares_production(fails: Array[String]) -> void:
+	var source: String = FileAccess.get_file_as_string("res://application/main.gd")
+	var start: int = source.find("func _on_begin_anew(")
+	var finish: int = source.find("\nfunc ", start + 1)
+	var body: String = ""
+	if start >= 0:
+		body = source.substr(start) if finish < 0 else source.substr(start, finish - start)
+	_check(fails, body.contains("SaveService.clear_run(game.run.run_id, _run_save_path)"),
+		"Begin Anew clear_run does not pass _run_save_path")
+	var content: ContentDB = ContentDB.load_full()
+	var prod_snap: Variant = _file_snapshot(SaveService.RUN_PATH)
+	var prod: RunState = RunState.new_run(content, 32041, "run-prod-320")
+	prod.map = WorldMap.benchmark(prod).to_dict()
+	var dev: RunState = RunState.new_run(content, 32042, "run-dev-320")
+	dev.map = WorldMap.benchmark(dev).to_dict()
+	if not SaveService.store(prod, SaveService.RUN_PATH) \
+			or not SaveService.store(dev, DEV_PATH):
+		_check(fails, false, "could not seed production and dev-profile runs")
+		_restore_snapshot(SaveService.RUN_PATH, prod_snap)
+		SaveService.clear(DEV_PATH)
+		return
+	var main: Main = _main(content)
+	main._forced_seed = 32008
+	main._run_save_path = DEV_PATH
+	main._on_begin_anew("begin")
+	var prod_after: RunState = SaveService.load_run(content, SaveService.RUN_PATH)
+	_check(fails, prod_after != null and prod_after.run_id == "run-prod-320",
+		"Begin Anew in the dev profile touched the production save")
+	var leftover: RunState = SaveService.load_run(content, DEV_PATH)
+	_check(fails, leftover != null and leftover.run_id != "run-dev-320",
+		"Begin Anew in the dev profile did not replace the dev run")
+	_check(fails, leftover != null and leftover.run_id == main.game.run.run_id,
+		"Begin Anew in the dev profile did not create the new run on the injected path")
+	_dispose(main)
+	_restore_snapshot(SaveService.RUN_PATH, prod_snap)
+	SaveService.clear(DEV_PATH)
+
+
+static func _restore_snapshot(path: String, snap: Variant) -> void:
+	if snap == null:
+		SaveService.clear(path)
+		return
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if file != null:
+		file.store_string(str(snap))
+		file.close()
 
 
 static func _opening_completion_is_the_hint_gate(fails: Array[String]) -> void:
