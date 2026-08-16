@@ -25,6 +25,9 @@ obj/
 *.sln.user
 *.user
 
+# Claude Code session worktrees — machine-local checkouts, never commit
+.claude/worktrees/
+
 # IDE / OS
 __pycache__/
 *.py[cod]
