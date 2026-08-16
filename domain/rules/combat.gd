@@ -210,6 +210,7 @@ func start_combat(
 		e.facet_max = maxi(2, facets + _ji(omen.get("facetDelta", 0)) + af_facet_delta \
 			+ (_ji(vow.get("bossFacetDelta", 0)) if e.boss else 0))
 		cb.enemies.append(e)
+		_gate_death_dialogue(run, e)
 		i += 1
 
 	# The boss announces itself, then every variant speaks its lines —
@@ -241,6 +242,16 @@ func start_combat(
 	_compute_intents(run, cb)
 	_start_player_turn(run, cb)
 	return cb
+
+
+func _gate_death_dialogue(run: RunState, enemy: EnemyCombatant) -> void:
+	var slot: String = "death.%s" % String(enemy.variant_id)
+	if not LineTable.has_slot(content.line_table, slot):
+		return
+	var ctx: Dictionary = LineTable.context(
+		run, LineTable.projected_shard_count(run, enemy.variant_id))
+	if not LineTable.slot_open(content.line_table, slot, ctx):
+		enemy.def.erase("deathDialogue")
 
 
 func _apply_start_relics(run: RunState, cb: CombatState) -> void:

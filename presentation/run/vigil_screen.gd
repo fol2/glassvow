@@ -28,7 +28,9 @@ var _sfx: SfxBus
 var _panel: PanelContainer
 var _deeds_tab: Button
 var _rose_tab: Button
+var _epitaph_tab: Button
 var _deed_list: ScrollContainer
+var _epitaph_list: ScrollContainer
 var _rose: RoseWindowView
 var _rows: Array[PanelContainer] = []
 var _arts: Array[TextureRect] = []
@@ -99,6 +101,9 @@ func _build() -> void:
 	if _has_rose:
 		_rose_tab = _tab(Locale.active.t("ui.vigil.roseTab"), _show_rose)
 		tabs.add_child(_rose_tab)
+	if not _vigil.defeat_epitaphs.is_empty():
+		_epitaph_tab = _tab(Locale.active.t("ui.vigil.epitaphTab"), _show_epitaphs)
+		tabs.add_child(_epitaph_tab)
 
 	_deed_list = ScrollContainer.new()
 	_deed_list.custom_minimum_size = Vector2(500, 459)
@@ -115,6 +120,16 @@ func _build() -> void:
 	_deed_list.add_child(rows)
 	for id: String in DEED_IDS:
 		_add_deed(rows, id)
+
+	if not _vigil.defeat_epitaphs.is_empty():
+		_epitaph_list = ScrollContainer.new()
+		_epitaph_list.custom_minimum_size = Vector2(500, 459)
+		_epitaph_list.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_epitaph_list.follow_focus = true
+		_epitaph_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_epitaph_list.visible = false
+		column.add_child(_epitaph_list)
+		_fill_epitaphs()
 
 	if _has_rose:
 		_rose = RoseWindowView.new(
@@ -218,8 +233,10 @@ func _show_deeds() -> void:
 	_deed_list.visible = true
 	if _rose != null:
 		_rose.visible = false
+	if _epitaph_list != null:
+		_epitaph_list.visible = false
 	_sync_panel_width()
-	_style_tabs(false)
+	_style_tabs("deeds")
 	cue_requested.emit(&"vigil")
 
 
@@ -228,15 +245,31 @@ func _show_rose() -> void:
 		return
 	_deed_list.visible = false
 	_rose.visible = true
+	if _epitaph_list != null:
+		_epitaph_list.visible = false
 	_sync_panel_width()
-	_style_tabs(true)
+	_style_tabs("rose")
 	cue_requested.emit(&"roseWindow")
 
 
-func _style_tabs(rose_open: bool) -> void:
-	_style_tab(_deeds_tab, not rose_open)
+func _show_epitaphs() -> void:
+	if _epitaph_list == null:
+		return
+	_deed_list.visible = false
+	if _rose != null:
+		_rose.visible = false
+	_epitaph_list.visible = true
+	_sync_panel_width()
+	_style_tabs("epitaphs")
+	cue_requested.emit(&"vigil")
+
+
+func _style_tabs(selected: String) -> void:
+	_style_tab(_deeds_tab, selected == "deeds")
 	if _rose_tab != null:
-		_style_tab(_rose_tab, rose_open)
+		_style_tab(_rose_tab, selected == "rose")
+	if _epitaph_tab != null:
+		_style_tab(_epitaph_tab, selected == "epitaphs")
 
 
 func set_shape(stage_shape: StringName) -> void:
@@ -247,6 +280,8 @@ func set_shape(stage_shape: StringName) -> void:
 	_sync_panel_width()
 	_deed_list.custom_minimum_size = Vector2(302 if phone else 500,
 		440 if shape == &"phone-portrait" else (215 if phone else 459))
+	if _epitaph_list != null:
+		_epitaph_list.custom_minimum_size = _deed_list.custom_minimum_size
 	for index: int in range(_rows.size()):
 		_rows[index].add_theme_stylebox_override(
 			"panel", _deed_style(_done[index], 7 if phone else 9))
@@ -260,6 +295,21 @@ func _sync_panel_width() -> void:
 	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
 	_panel.custom_minimum_size.x = 350 if phone else (
 		720 if _rose != null and _rose.visible else 560)
+
+
+func _fill_epitaphs() -> void:
+	var rows: VBoxContainer = VBoxContainer.new()
+	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	rows.add_theme_constant_override("separation", 10)
+	_epitaph_list.add_child(rows)
+	var zh: bool = Locale.active.code == Locale.CODE_ZH_HANT
+	for i: int in range(_vigil.defeat_epitaphs.size()):
+		var id: String = _vigil.defeat_epitaphs[i]
+		var row: Dictionary = LineTable.row_by_id(_content.line_table, id)
+		var body: String = LineTable.text(row, zh) if not row.is_empty() else id
+		var line: Label = _label("%d  %s" % [i + 1, body], 13, RunStyle.TEXT_DIM, false)
+		line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		rows.add_child(line)
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
