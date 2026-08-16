@@ -155,10 +155,10 @@ static func _selection(fails: Array[String]) -> void:
 		"shard-zero hearth went silent")
 	_check(fails, not LineTable.select(_rows(), "waystone", _ctx(0), null, {}).is_empty(),
 		"shard-zero waystone went silent")
-	_check(fails, not LineTable.conditions_match(
+	_check(fails, LineTable.conditions_match(
 			LineTable.row_by_id(_rows(), "pool.loss.e02").get("conditions", {}),
 			_ctx(0)),
-		"reveal-bearing pool.loss.e02 matched below one shard")
+		"generic pool.loss.e02 did not match at shard zero")
 	_check(fails, not LineTable.conditions_match(
 			LineTable.row_by_id(_rows(), "pool.loss.e21").get("conditions", {}),
 			_ctx(0, 0)),
@@ -451,6 +451,13 @@ static func _batch3_pools(fails: Array[String]) -> void:
 		and _i(counts["loss"]) == 50,
 		"pool counts hearth=%d waystone=%d loss=%d" % [
 			_i(counts["hearth"]), _i(counts["waystone"]), _i(counts["loss"])])
+	_check(fails, LineTable.conditions_match(
+			LineTable.row_by_id(rows, "pool.waystone.w18").get("conditions", {}),
+			_ctx(0))
+		and LineTable.conditions_match(
+			LineTable.row_by_id(rows, "pool.loss.e02").get("conditions", {}),
+			_ctx(0)),
+		"generic standing-stone plants w18/e02 did not match at shard zero")
 	var h57: Dictionary = LineTable.row_by_id(rows, "pool.hearth.h57")
 	var bought: Dictionary = _ctx(0)
 	bought["quests"] = {"usurper": "revealed"}

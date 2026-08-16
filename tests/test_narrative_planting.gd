@@ -6,9 +6,11 @@ extends RefCounted
 ## own conditions, so a row that loses its gate must fail.
 
 const RUNS: int = 24
-## slot → minimum reveal level that may fire. Pool slots are shard-0
-## reachable (04-delivery loss/hearth/waystone); whisper and Own Shade death
-## are L1; quest closers L2; sixth-shard closer L3.
+## slot → minimum reveal level that may fire. This fixture is the sole
+## reveal gate — including for asserts.plant / asserts.payoff rows — so a
+## dual-reading plant in a shard-0-reachable pool is allowed at shards 0.
+## Pool slots are shard-0 reachable (04-delivery loss/hearth/waystone);
+## whisper and Own Shade death are L1; quest closers L2; sixth-shard closer L3.
 const SLOT_LEVEL: Dictionary = {
 	"whisper": 1,
 	"death.ownShade1": 1,
@@ -74,6 +76,24 @@ static func _simulate(rows: Array, fails: Array[String]) -> void:
 		var key: String = str(key_v)
 		_check(fails, slots.has(key), "SLOT_LEVEL fixture has stale slot %s" % key)
 
+	for plant_id_v: Variant in plants:
+		var plant_id: String = str(plant_id_v)
+		var occupied_slots: Dictionary = {}
+		for id_v: Variant in plants[plant_id]:
+			var plant_row: Dictionary = LineTable.row_by_id(rows, str(id_v))
+			var plant_slot: String = str(plant_row.get("slot", ""))
+			occupied_slots[plant_slot] = true
+			_check(fails, SLOT_LEVEL.has(plant_slot),
+				"plant %s row %s uses slot %s missing from SLOT_LEVEL"
+				% [plant_id, str(id_v), plant_slot])
+		if plant_id == "standing-stone":
+			_check(fails, occupied_slots.has("waystone") and occupied_slots.has("loss"),
+				"standing-stone plants are not in the batch-3 waystone/loss slots")
+			for occupied_slot_v: Variant in occupied_slots:
+				var occupied_slot: String = str(occupied_slot_v)
+				_check(fails, int(float(str(SLOT_LEVEL.get(occupied_slot, 99)))) == 0,
+					"standing-stone slot %s is not shard-0 reachable in SLOT_LEVEL" % occupied_slot)
+
 	var plant_slots: Dictionary = {}
 	var payoff_ready: Dictionary = {}
 	for plant_id_v: Variant in plants:
@@ -108,15 +128,6 @@ static func _simulate(rows: Array, fails: Array[String]) -> void:
 				continue
 			_check(fails, LineTable.conditions_match(picked.get("conditions", {}), ctx),
 				"select returned a line whose conditions fail at shards %d" % shards)
-			if shards < LineTable.L1_SHARDS:
-				var asserts_v: Variant = picked.get("asserts", {})
-				var reveal: bool = false
-				if typeof(asserts_v) == TYPE_DICTIONARY:
-					var asserts: Dictionary = asserts_v
-					reveal = not str(asserts.get("plant", "")).is_empty() \
-						or not str(asserts.get("payoff", "")).is_empty()
-				_check(fails, not reveal,
-					"reveal-bearing row %s fired at shards %d" % [str(picked.get("id")), shards])
 			var id: String = str(picked.get("id", ""))
 			drawn.append(id)
 			if picked.get("once", false) and not once.has(id):
