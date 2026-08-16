@@ -213,7 +213,7 @@ Victory/defeat resolution and credits (`presentation/run/run_end_screen.gd`,
 Decided form: a guided first run — contextual hints inside the real first run, no separate
 tutorial mode. These criteria bind the feature when it is built; its design has its own ticket.
 
-- [ ] `system` First-combat hints appear in play order — drag-to-play, then enemy targeting, then end-turn — each triggered by the game state that first requires it, never on a timer.
+- [ ] `system` First-combat hints are each triggered by the game state that first requires them, never on a timer — on the canonical path this reads drag-to-play, then enemy targeting, then end-turn. The targeting hint's state is the first real target choice (an enemy-target card grabbed with two or more living enemies), so a player-chosen play order may defer it past end-turn, but no hint ever fires before its state exists. (Amended by #176: state-triggering is authoritative; the named order is the canonical path, not a gate.)
 - [ ] `system` Each hint disappears the first time the player performs the action it names, is recorded cross-run, and never reappears in any later run of the same profile.
 - [ ] `system` The very first hint carries a one-tap skip-guidance control that suppresses every remaining onboarding hint for the profile, so a Slay the Spire veteran reaches unhinted play within two taps of starting.
 - [ ] `system` While a hint is visible, the action it names remains directly performable on the live UI — no hint adds a mandatory confirm tap or blocks input to the element it points at.
