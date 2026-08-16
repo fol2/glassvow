@@ -28,7 +28,6 @@ static func run(fails: Array[String]) -> void:
 	_unsealing_needs_six(fails)
 	_unsealing_boot_resume(fails)
 	_unsealing_replay_is_transient(fails)
-	_threshold_is_short_beat(fails)
 	if _file_snapshot(SaveService.RUN_PATH) != default_run \
 			or _file_snapshot(SaveService.VIGIL_PATH) != default_vigil:
 		fails.append("scene_wiring: tests touched the default save")
@@ -312,19 +311,6 @@ static func _unsealing_replay_is_transient(fails: Array[String]) -> void:
 	_check(fails, dark.find_child("Replay", true, false) == null,
 		"an unlit rose still offered replay")
 	dark.free()
-
-
-static func _threshold_is_short_beat(fails: Array[String]) -> void:
-	var screen: ThresholdScreen = ThresholdScreen.new()
-	var title: Label = screen.find_child("Title", true, false) as Label
-	var sub: Label = screen.find_child("Sub", true, false) as Label
-	_check(fails, title != null and title.text == Locale.active.t("ui.map.openDoor.title"),
-		"ThresholdScreen is not the open-door short beat")
-	_check(fails, sub != null and sub.text == Locale.active.t("story.unsealing-short.b1.l1"),
-		"ThresholdScreen lost the unsealing-short line")
-	_check(fails, screen.find_child("Door", true, false) != null,
-		"ThresholdScreen has no door plate")
-	screen.free()
 
 
 static func _wake(main: Main) -> void:

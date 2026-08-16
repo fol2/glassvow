@@ -121,7 +121,7 @@ const UNSUPPORTED: Array[Dictionary] = [
 	{"id": "unsealing-resume",
 		"reason": "Vigil pending_scene is not an OVERRIDE_KEY."},
 	{"id": "unsealing-short",
-		"reason": "ThresholdScreen is an overlay; act-transition wiring is #222."},
+		"reason": "The repeat door-crossing beat needs an Act IV to cross into (#312)."},
 	{"id": "onboarding",
 		"reason": "Onboarding Scenarios graduate with the guided-first-run feature."},
 ]

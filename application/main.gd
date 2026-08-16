@@ -2211,7 +2211,7 @@ func _on_terminal_commit(_id: String) -> void:
 		if SaveService.clear_run(run_id, _run_save_path):
 			_vigil = _load_vigil()
 			game = null
-			_after_run_cleared()
+			_route_idle()
 		else:
 			_show_save_error("ui.persistence.detail.completedRunClose")
 		return
@@ -2338,10 +2338,6 @@ func _route_idle() -> void:
 		_show_scene()
 	else:
 		_show_title()
-
-
-func _after_run_cleared() -> void:
-	_route_idle()
 
 
 func _active_pending_scene() -> Variant:
@@ -2496,7 +2492,7 @@ func _finish_dawn() -> void:
 	if SaveService.clear_run(run_id, _run_save_path):
 		_vigil = _load_vigil()
 		game = null
-		_after_run_cleared()
+		_route_idle()
 	else:
 		_show_save_error("ui.persistence.detail.completedRunClose")
 
