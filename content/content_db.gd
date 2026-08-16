@@ -167,12 +167,17 @@ func _validate_counterfactual(id_key: String, definition: Dictionary,
 			if not moves.has(move_id):
 				faults.append("%s.counterfactual.kits.%s names unknown move %s"
 					% [id_key, kit_id, move_id])
+	var axis_kind: String = str(spec.get("axis", CounterfactualSelf.AXIS_DECK_TYPE))
+	var required: PackedStringArray = CounterfactualSelf.axis_keys(axis_kind)
+	if required.is_empty():
+		faults.append("%s.counterfactual.axis %s is not recognised" % [id_key, axis_kind])
+		return
 	var map_v: Variant = spec.get("axisToKit", null)
 	if typeof(map_v) != TYPE_DICTIONARY:
 		faults.append("%s.counterfactual.axisToKit must be a dictionary" % id_key)
 		return
 	var axis_map: Dictionary = map_v
-	for axis: String in ["ember", "ash"]:
+	for axis: String in required:
 		if not axis_map.has(axis):
 			faults.append("%s.counterfactual.axisToKit missing %s" % [id_key, axis])
 			continue
