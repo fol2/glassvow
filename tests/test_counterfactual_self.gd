@@ -285,7 +285,7 @@ static func _uncrossed_scenario(content: ContentDB, fails: Array[String]) -> voi
 		"id": "combat-uncrossed-self", "revision": 1, "build": BUILD,
 		"seed": 18501, "locale": "en", "shape": "pad-landscape",
 		"overrides": {
-			"act": 1, "node": "1,2", "kind": "monster",
+			"act": 1, "node": "0,6", "kind": "monster",
 			"enemies": ["uncrossedSelf"],
 		},
 	}):

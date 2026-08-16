@@ -83,7 +83,7 @@ const ENTRIES: Array[Dictionary] = [
 	{"id": "combat-uncrossed-self", "revision": 1,
 		"description": "Act IV Slice 2: one silent II-prime self on an Act II monster waystone.",
 		"seed": SEED, "overrides": {
-			"act": 1, "node": "1,2", "kind": "monster",
+			"act": 1, "node": "0,6", "kind": "monster",
 			"enemies": ["uncrossedSelf"]}},
 ]
 
