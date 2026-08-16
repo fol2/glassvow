@@ -13,7 +13,7 @@
 | # | 句子(shipped 原文) | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
 |---|---|---|---|---|---|---|
 | 1 | Your monument does not always lie down. | whisper 11(編號按 convention 更正 #258) | L1 | 詩意的悼詞 | 碑是站着死去的行者本人;他們沒躺下,因為仍在排隊等門開 | 保留,核心伏筆 |
-| 2 | 死者朝聖兩次:一次以肉身,一次以記憶。 / The dead walk twice: once in flesh, once in memory. | whisper 4 | L1 | 詩句 | 機制說明書:行者以肉身走一次(真死),留者以記憶再走一次 | 已重寫(Batch 1 #301,en;zh 原句無 climb)待審 |
+| 2 | 死者朝聖兩次:一次以肉身,一次以記憶。 / The dead walk twice: once in flesh, once in memory. | whisper 4 | L1 | 詩句 | 機制說明書:行者以肉身走一次(真死),留者以記憶再走一次 | 已重寫(Batch 1 #301,en;zh 原句無 climb)[SETTLED James 2026-08-16:照舊——明晰度 blocker 判過,語義保留維持] |
 | 3 | I remember the stone. You walked away before I stopped calling. | Own Shade 碎句 | L1 | 影在追憶 | 控訴對象反轉:死者臨終叫住的 you 就是玩家——行開了沒回頭的是留者 | 保留,全 cast 最重一句 |
 | 4 | 你留下過一道形影。這條路,已學會留住我們。 / You have left a shape behind. The road has learned to keep us. | ownShade fragments[1]=ownShade2 死亡句(與 row 13 合併重寫為一句) | L1 | 影控訴你留下過它、路把它留住 | 雙讀:「你留下的形影」=爐邊那個;「我們」=路留住的碑,影自數其中 | 已重寫 v2(Batch 1 #301,lint 後收回影聲線:第二人稱+現在完成式)待審;降回 body ceiling L1 |
 | 5 | 我們從來不是為了逃出去而朝聖;我們一直把光送往鎖孔。 / We were never walking to be free. We were carrying light to the lock. | Own Shade 收束(closer) | L2 | 朝聖目的自白 | 字面為真:行者是送火的隊伍;lock 就是門 | 已重寫(Batch 1 #301,en;zh 保留)待審 |
@@ -55,7 +55,7 @@ Batch 1(#301)新名與公式行:
 | 27 | 返回路上 / Back to the Road | ui.menu.continueClimb(置換 #232) | L0 | 續行中斷的旅程 | 你「返回」的路,盡頭是爐邊(接 row 22 鏡中歸途) | 新名 [#232 Q2] |
 | 28 | 留在路上 / Stay on the Road | ui.menu.keepClimbing(置換 #232) | L0 | 不離開,繼續行 | 「留」字反照:留在路上的是行者,留在爐邊的是你 | 新名 [#232 Q2 修訂書面語——舊簽「留喺路上」廢:喺不在字庫且屬口語] |
 | 29 | 入城 / ARRIVED | ui.dawn.title + ui.end.ascended(置換 #232 Q4) | L1(級待 James:ui.dawn.title 響於 Act III 勝利,非揭場) | 你抵達了 | 抵達的是隊伍(ascended.png 隊列入門);城=爐邊,入城=歸家 | 新名 [#232 Q4];spoiler-ceiling 判定待 story owner |
-| 30 | 第 {n} 塊引路石 / WAYSTONE n | ui.end.floors / ui.hud.* 計數(置換 #232 Q3;落地歸 #303) | L0 | 行程以引路石計 | [PROPOSED 構作]每塊石都被之前每一個行者點亮過;你數的是隊伍反覆量過的同一段路——真讀法由 James 寫定 | 新名 [#232 Q3];揭後待 James |
+| 30 | 第 {n} 塊引路石 / WAYSTONE n | ui.end.floors / ui.hud.* 計數(置換 #232 Q3;落地歸 #303) | L0 | 行程以引路石計 | [SETTLED James 2026-08-16]每塊石都被之前每一個行者點亮過;你數的是隊伍反覆量過的同一段路 | 新名 [#232 Q3];揭後已簽 |
 | 31 | 王冠之後 / beyond the crown | 公式,七址:ui.dawn.act4RevealCopy、ui.dawn.unlock.act4、q.hollowLamplighter.meetings[1].paid、q.unreadablePage.pages[4]、whisper 21、main.gd:372、dawn_phone_containment.gd:140;本批另 usurper.death 與 whisper 20 取此式 | L1 | 封門在王庭之外、王座之後 | 「之後」雙關:過了「不肯完成」,路便向家;門從來不在上方,只在更遠處 | 新公式 [PROPOSED — Batch 1;James 一次簽,七址共用] |
 
 ## Batch 1(#301)入賬區 [PROPOSED — 待 James review]

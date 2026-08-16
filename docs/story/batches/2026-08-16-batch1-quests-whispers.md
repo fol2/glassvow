@@ -58,6 +58,7 @@
    響於 Act III 勝利,非 Act IV 揭場——級數判定屬 story owner。
 3. **引路石 counter 的揭後讀法**(ledger row 30):現稿係 writer 構作
    [PROPOSED],真讀法由 James 寫定。
+   **判(James 2026-08-16):構作照准——row 30 揭後已簽 SETTLED。**
 4. **Usurper 前提重錨**:shipped 三句以「登頂揭偽王」為軸;橫向 canon 無
    頂可登。本批重錨為「攜燈至封門之前」——見 usurper 表。
 5. **兩句 L1 天花貼線判定**:(a) m3.paid「你站立而死的前身」——表面
@@ -79,6 +80,8 @@
    「死者朝聖,不止一次。」/ "The dead walk more than once."(保 eerie
    通則形,刪去兩媒對映);(c) James 自書。揀 (b)/(c) 則 zh shipped 句
    一併重開(row 2 狀態隨判更新)。
+   **判(James 2026-08-16):(a) 照舊——blocker 撤銷,row 2 已記
+   SETTLED。**
 8. **影聲線兩個 warn 的回應**(記錄,非改動):(a) `ownShade.final` 用
    「我們」非第二人稱——**設計如此**:whisper 15「三次死亡會教你的影
    直言」明文預告 closer 的 register break,影在結案時代整條隊發聲;
