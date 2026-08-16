@@ -488,6 +488,18 @@ L1/L2 行照舊兩讀。
 | 396 | 未出口的禍 / The Word Unsaid | unwalkedSelf.moves.ruinEcho | L4 | 一句沒說出的禍 | 君王的禍詞,由沒行過王庭的你來說 | 佔位 |
 | 397 | 斷了的光環 / The Broken Halo | unwalkedSelf.moves.ringward | L4 | 斷環當盾 | 放棄之刻失去的光,在鏡裏仍替你擋 | 佔位 |
 
+#220 Slice 2 — II-prime self(佔位專名,鎖名前不得裸寫):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 398 | 【未渡者】 / 【The Uncrossed】 | content.enemies.uncrossedSelf.name | L4 | 鏡路上一個不出聲的行者,站在水邊 | 今世沒揀過的 toxin/ward 路;不是隊伍,是未渡水的你 | 佔位 [#220 Slice 2] |
+| 399 | 未學的潮 / The Tide Unlearned | uncrossedSelf.moves.brineBite | L4 | 水裏的一咬 | 你沒學過的潮——陰燃那條路,由另一個你咬 | 佔位 |
+| 400 | 說謊的燈 / The Lamp That Lied | uncrossedSelf.moves.falseLamp | L4 | 一盞不真的燈 | 城的假光:似燈而不透意志;你沒跟過的那盞 | 佔位 |
+| 401 | 未坐之等 / The Wait Unsat | uncrossedSelf.moves.undertowEcho | L4 | 沒人坐下來等 | 第三種拒絕的姿勢——你沒在城裏等過 | 佔位 |
+| 402 | 未離的殼 / The Shell You Kept | uncrossedSelf.moves.closedShell | L4 | 一具不開的殼 | 你沒揀的留守:殼居不出,等門開 | 佔位 |
+| 403 | 不動的水 / Still Water | uncrossedSelf.moves.stillWater | L4 | 停着的水 | 水=等本身;這是你沒停過的那灘 | 佔位 |
+| 404 | 未寫的一頁 / The Unwritten Page | uncrossedSelf.moves.librarySpine | L4 | 圖書館裏空白的一頁 | 等待寫足一座書庫;這一頁是你沒留下來寫的 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

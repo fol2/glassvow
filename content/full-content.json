@@ -3272,6 +3272,98 @@
       },
       "name": "The Eternal Sovereign"
     },
+    "uncrossedSelf": {
+      "hp": [
+        42,
+        48
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 185,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "II-prime",
+        "motif": "false-light",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "shell",
+          "ward": "brine"
+        },
+        "kits": {
+          "brine": [
+            "brineBite",
+            "falseLamp",
+            "undertowEcho"
+          ],
+          "shell": [
+            "closedShell",
+            "stillWater",
+            "librarySpine"
+          ]
+        }
+      },
+      "moves": {
+        "brineBite": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 2
+            }
+          ],
+          "name": "The Tide Unlearned"
+        },
+        "falseLamp": {
+          "intent": "attack",
+          "dmg": 5,
+          "times": 2,
+          "name": "The Lamp That Lied"
+        },
+        "undertowEcho": {
+          "intent": "attack_debuff",
+          "dmg": 6,
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "The Wait Unsat"
+        },
+        "closedShell": {
+          "intent": "block",
+          "block": 14,
+          "name": "The Shell You Kept"
+        },
+        "stillWater": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "Still Water"
+        },
+        "librarySpine": {
+          "intent": "attack_block",
+          "dmg": 7,
+          "block": 8,
+          "name": "The Unwritten Page"
+        }
+      },
+      "name": "【The Uncrossed】"
+    },
     "unwalkedSelf": {
       "hp": [
         46,
@@ -3285,6 +3377,7 @@
       "counterfactual": {
         "node": "III-prime",
         "motif": "broken-ring",
+        "axis": "deckType",
         "axisToKit": {
           "ember": "ash",
           "ash": "ember"

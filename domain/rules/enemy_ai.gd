@@ -11,7 +11,7 @@ const ALL_IDS: Array[StringName] = [
 	&"voltEel", &"mirelurker", &"tidecaller", &"shellback", &"deepmaw",
 	&"abyssalKnight", &"siren", &"leviathan", &"voidWisp", &"obsidianGolem",
 	&"starCultist", &"shade", &"chaosHound", &"watcherEye", &"voidColossus",
-	&"heraldOfEnd", &"sovereign", &"unwalkedSelf",
+	&"heraldOfEnd", &"sovereign", &"unwalkedSelf", &"uncrossedSelf",
 ]
 
 
@@ -130,15 +130,15 @@ static func decide(
 			var herald: Array[StringName] = [&"doom", &"reave", &"flame"]
 			return herald[(turn - 1) % 3]
 		&"unwalkedSelf":
-			var kit: String = str(flags.get(CounterfactualSelf.KIT_FLAG, ""))
-			if kit == "ember":
-				var ember_seq: Array[StringName] = [&"scepterEcho", &"starfallEcho", &"ringbreak"]
-				return ember_seq[(turn - 1) % 3]
-			if kit == "ash":
-				var ash_seq: Array[StringName] = [&"gravitasEcho", &"ruinEcho", &"ringward"]
-				return ash_seq[(turn - 1) % 3]
-			push_error("EnemyAi.decide: unwalkedSelf missing kit")
-			return &""
+			return _counterfactual_cycle(turn, flags, {
+				"ember": [&"scepterEcho", &"starfallEcho", &"ringbreak"],
+				"ash": [&"gravitasEcho", &"ruinEcho", &"ringward"],
+			}, "unwalkedSelf")
+		&"uncrossedSelf":
+			return _counterfactual_cycle(turn, flags, {
+				"brine": [&"brineBite", &"falseLamp", &"undertowEcho"],
+				"shell": [&"closedShell", &"stillWater", &"librarySpine"],
+			}, "uncrossedSelf")
 		&"sovereign":
 			if hp_frac <= 0.5 and not flags.get("heldCourt", false):
 				flags["heldCourt"] = true
@@ -154,3 +154,20 @@ static func decide(
 			return sovereign[(turn - 1) % 4]
 	push_error("EnemyAi.decide: unhandled enemy id %s" % id)
 	return &""
+
+
+static func _counterfactual_cycle(turn: int, flags: Dictionary, sequences: Dictionary,
+		who: String) -> StringName:
+	var kit: String = str(flags.get(CounterfactualSelf.KIT_FLAG, ""))
+	if not sequences.has(kit):
+		push_error("EnemyAi.decide: %s missing kit" % who)
+		return &""
+	var seq_v: Variant = sequences[kit]
+	if typeof(seq_v) != TYPE_ARRAY:
+		push_error("EnemyAi.decide: %s kit %s is not a sequence" % [who, kit])
+		return &""
+	var seq: Array = seq_v
+	if seq.is_empty():
+		push_error("EnemyAi.decide: %s kit %s is empty" % [who, kit])
+		return &""
+	return StringName(str(seq[(turn - 1) % seq.size()]))
