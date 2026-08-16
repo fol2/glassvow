@@ -29,6 +29,9 @@ var receipts: Dictionary = {"deeds": null, "runEnd": null}
 ## Once-flags for scripted scenes. Not `unlocks`: that set is the title
 ## "secrets" count and the Dawn reveal feed.
 var scenes_seen: Array[String] = []
+## Profile-wide hint suppression, written when the opening's skip-guidance
+## offer is accepted. Not `unlocks` — same secrets/dawn-card side effects.
+var guidance_skipped: bool = false
 ## Vigil-scoped scene cursor. The unsealing plays after the run save is gone.
 var pending_scene: Variant = null
 ## Additive v2: defeat epitaphs are line-table ids, never prose. Missing on
@@ -63,6 +66,7 @@ func to_dict() -> Dictionary:
 		"news": news,
 		"receipts": receipts.duplicate(true),
 		"scenesSeen": scenes_seen.duplicate(),
+		"guidanceSkipped": guidance_skipped,
 		"pendingScene": pending_scene.duplicate(true) \
 			if typeof(pending_scene) == TYPE_DICTIONARY else pending_scene,
 		"defeatEpitaphs": defeat_epitaphs.duplicate(),
@@ -116,6 +120,7 @@ static func from_dict(raw: Dictionary) -> VigilState:
 			var seen: String = str(id_v)
 			if not seen.is_empty() and not vigil.scenes_seen.has(seen):
 				vigil.scenes_seen.append(seen)
+	vigil.guidance_skipped = raw.get("guidanceSkipped", false) == true
 	var scene_v: Variant = raw.get("pendingScene")
 	if typeof(scene_v) == TYPE_DICTIONARY:
 		var scene: Dictionary = scene_v

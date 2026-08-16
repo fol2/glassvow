@@ -16,6 +16,8 @@ static func run(fails: Array[String]) -> void:
 	_holds_without_confirm(fails, opening)
 	_resume(fails, opening)
 	_skip_distinct_from_tap(fails, opening)
+	_skip_dwells_on_named_beat(fails, opening)
+	_skip_floor_once_from_destination(fails, opening)
 	_real_input_advances(fails, opening)
 	_finished_once(fails)
 	_missing_plates(fails, opening)
@@ -87,6 +89,58 @@ static func _skip_distinct_from_tap(fails: Array[String], opening: SceneScript) 
 	_check(fails, hold._beat == ScenePlayer.BEAT_WAIT,
 		"skip did not land the next line standing")
 	hold.free()
+
+
+static func _skip_dwells_on_named_beat(fails: Array[String], opening: SceneScript) -> void:
+	var asked: Array[int] = [0]
+	var player: ScenePlayer = ScenePlayer.new(opening, 0)
+	player.advance_requested.connect(func() -> void: asked[0] += 1)
+	player._ready()
+	player._process(ScenePlayer.REVEAL_TIME + 0.01)
+	player._press(true)
+	player._process(ScenePlayer.SKIP_HOLD)
+	_check(fails, player.skipped, "skip hold did not mark skipped")
+	player._press(false)
+	# Beat ① line 1 still uses the 40 ms skip wait.
+	player.advance_confirmed()
+	player._process(ScenePlayer.SKIP_WAIT + 0.01)
+	_check(fails, asked[0] == 2, "beat ① skip wait did not ask (got %d)" % asked[0])
+	# Beat ② holds ~1 s so the destination is named under skip.
+	player.advance_confirmed()
+	player._process(0.5)
+	_check(fails, asked[0] == 2, "beat ② skip asked before the 1 s floor")
+	player._process(0.6)
+	_check(fails, asked[0] == 3, "beat ② skip did not ask after the 1 s floor")
+	player.free()
+
+
+## Hold-skip that arms on beat ② itself must still owe the 1 s floor (the
+## emit-on-arm path used to skip it), and later lines of that beat must not
+## stack another 1 s — the design is a per-beat floor on the destination.
+static func _skip_floor_once_from_destination(
+		fails: Array[String], opening: SceneScript) -> void:
+	var asked: Array[int] = [0]
+	var player: ScenePlayer = ScenePlayer.new(opening, 2)
+	player.advance_requested.connect(func() -> void: asked[0] += 1)
+	player._ready()
+	player._process(ScenePlayer.REVEAL_TIME + 0.01)
+	player._press(true)
+	player._process(ScenePlayer.SKIP_HOLD)
+	_check(fails, player._skipping, "hold from beat ② did not arm skip")
+	_check(fails, asked[0] == 0,
+		"hold-skip on beat ② asked on arm, bypassing the destination floor")
+	player._process(0.30)
+	_check(fails, asked[0] == 0,
+		"hold-skip on beat ② asked before the 1 s floor (got %d)" % asked[0])
+	player._process(0.20)
+	_check(fails, asked[0] == 1,
+		"hold-skip on beat ② did not ask after the 1 s floor (got %d)" % asked[0])
+	player._press(false)
+	player.advance_confirmed()
+	player._process(ScenePlayer.SKIP_WAIT + 0.01)
+	_check(fails, asked[0] == 2,
+		"later lines of beat ② stacked another floor (got %d)" % asked[0])
+	player.free()
 
 
 ## `_press` is an implementation detail. Click, Space and Enter have to reach

@@ -17,6 +17,7 @@ static func run(fails: Array[String]) -> void:
 	var default_vigil: Variant = _file_snapshot(SaveService.VIGIL_PATH)
 	_pending_scene_roundtrip(fails)
 	_scenes_seen_roundtrip(fails)
+	_guidance_skipped_roundtrip(fails)
 	_opening_once(fails)
 	_resume_owed_line(fails)
 	_hearth_plant_art_gate(fails)
@@ -85,6 +86,25 @@ static func _scenes_seen_roundtrip(fails: Array[String]) -> void:
 	SaveService.clear_vigil(VIGIL_PATH)
 
 
+static func _guidance_skipped_roundtrip(fails: Array[String]) -> void:
+	var vigil: VigilState = VigilState.blank()
+	vigil.guidance_skipped = true
+	SaveService.clear_vigil(VIGIL_PATH)
+	_check(fails, SaveService.store_vigil(vigil, VIGIL_PATH),
+		"guidance_skipped store failed")
+	var loaded: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, loaded != null and loaded.guidance_skipped,
+		"guidance_skipped did not round-trip")
+	_check(fails, loaded.unlocks.is_empty(),
+		"guidance_skipped leaked into unlocks")
+	var raw: Dictionary = VigilState.blank().to_dict()
+	raw.erase("guidanceSkipped")
+	var old: VigilState = VigilState.from_dict(raw)
+	_check(fails, old != null and not old.guidance_skipped,
+		"a v2 vigil without guidanceSkipped did not default")
+	SaveService.clear_vigil(VIGIL_PATH)
+
+
 static func _opening_once(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
 	var main: Main = _main(content)
@@ -140,61 +160,66 @@ static func _resume_owed_line(fails: Array[String]) -> void:
 
 
 static func _hearth_plant_art_gate(fails: Array[String]) -> void:
-	var content: ContentDB = ContentDB.load_full()
-	var walk: WorldMap = WorldMap.slice()
-	walk.at = -1
-	var dark: WorldMapScreen = WorldMapScreen.new(walk, content)
+	var dark: DepartureStaging = DepartureStaging.new(
+		"res://assets/art/scenes/__no_such_plate__.png")
 	dark.instant = false
-	# The absent case takes a path that cannot exist, the mirror of the present
-	# case below pointing `hearth_plate` at a stand-in. It used to assert that
-	# HEARTH_PLATE itself was missing, which made this a tripwire on the art's
-	# arrival rather than a test of the gate: #310 shipped the plate and inverted
-	# it. What the gate owes us is "no plate, no plant", true whatever is on disk.
-	dark.hearth_plate = "res://assets/art/scenes/__no_such_plate__.png"
-	var tree: SceneTree = Engine.get_main_loop() as SceneTree
-	tree.root.add_child(dark)
-	_check(fails, ResourceLoader.exists(WorldMapScreen.HEARTH_PLATE),
+	var dark_done: Array[int] = [0]
+	dark.finished.connect(func() -> void: dark_done[0] += 1)
+	dark._ready()
+	_check(fails, ResourceLoader.exists(DepartureStaging.HEARTH_PLATE),
 		"the real hearth plate is missing; #310 shipped it")
-	_check(fails, dark.choose(0), "unseated departure without art was refused")
 	_check(fails, dark.find_child("HearthPlant", true, false) == null,
 		"a missing hearth plate still staged the plant")
-	tree.root.remove_child(dark)
+	_check(fails, dark_done[0] == 1, "a missing plate did not finish immediately")
 	dark.free()
-	walk = WorldMap.slice()
-	walk.at = -1
-	var lit: WorldMapScreen = WorldMapScreen.new(walk, content)
+	var lit: DepartureStaging = DepartureStaging.new(
+		"res://assets/art/scenes/night-stall.png")
 	lit.instant = false
-	lit.hearth_plate = "res://assets/art/scenes/night-stall.png"
-	var arrived: Array[int] = []
-	lit.node_chosen.connect(func(i: int) -> void: arrived.append(i))
-	tree.root.add_child(lit)
-	_check(fails, lit.choose(0), "unseated departure with art was refused")
+	var lit_done: Array[int] = [0]
+	lit.finished.connect(func() -> void: lit_done[0] += 1)
+	lit._ready()
 	_check(fails, lit.find_child("HearthPlant", true, false) != null
 			and lit.find_child("HearthWindow", true, false) != null,
 		"a present hearth plate did not stage the plant")
-	_check(fails, arrived.is_empty(), "the plant handed off before the hold")
-	tree.root.remove_child(lit)
+	_check(fails, lit_done[0] == 0, "the plant handed off before the hold")
 	lit.free()
 
 
-## The screen can only see "the lantern is unseated", and every act starts
-## that way — so main, which knows which unseated map is the DEPARTURE, has to
-## withhold the plate for acts II and III.
+## Run 1 rides the opening's beats ③–④; run 2+ rides DepartureStaging on
+## the Embark → run transition. The map never plants — every act starts
+## unseated, and an unguarded waystone plant would fire the hearth from
+## the middle of acts II and III.
 static func _hearth_plant_is_departure_only(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
 	var main: Main = _main(content)
 	main._forced_seed = 30903
 	main._new_run()
 	_drive(main)
-	var screen: WorldMapScreen = main._map_screen as WorldMapScreen
-	_check(fails, screen != null and not screen.hearth_plate.is_empty(),
-		"act I departure lost the hearth plant")
-	main.game.run.act = 1
-	main._show_map()
-	var later: WorldMapScreen = main._map_screen as WorldMapScreen
-	_check(fails, later != null and later.hearth_plate.is_empty(),
-		"act II planted the hearth mid-journey")
+	_check(fails, main._map_screen is WorldMapScreen
+			and not (main._route_screen is ScenePlayer),
+		"run 1 did not hand the opening to the map")
+	var walk: WorldMap = WorldMap.slice()
+	walk.at = -1
+	var screen: WorldMapScreen = WorldMapScreen.new(walk, content)
+	screen.instant = false
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	tree.root.add_child(screen)
+	_check(fails, screen.choose(0), "unseated map choice was refused")
+	_check(fails, screen.find_child("HearthPlant", true, false) == null,
+		"the map still planted the hearth on a waystone")
+	tree.root.remove_child(screen)
+	screen.free()
 	_dispose(main)
+	var next: Main = _main(content)
+	next._forced_seed = 30903
+	next._vigil.scenes_seen.append("opening")
+	next._transitions.instant = false
+	next._new_run()
+	_check(fails, next._route_screen is DepartureStaging,
+		"run 2 did not fire departure staging")
+	_check(fails, not (next._route_screen is ScenePlayer),
+		"run 2 replayed the opening")
+	_dispose(next)
 
 
 static func _vigil_pending_roundtrip(fails: Array[String]) -> void:
