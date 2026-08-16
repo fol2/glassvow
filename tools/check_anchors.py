@@ -183,9 +183,9 @@ SKIP_DIRS: set[str] = {".git", ".godot", ".claude", "addons", "_attic", "build"}
 # this list is the whole of the escape hatch and adding to it is a visible act.
 EXTERNAL_NAMES: set[str] = {
     # Shared agent tooling under ~/.claude, cited by the imagegen solution doc,
-    # which says so in prose: "tooling, not a repo-relative path".
+    # which says so in prose: "tooling, not a repo-relative path". Only the BARE
+    # spellings need listing — an absolute path is skipped outright, above.
     "run-imagegen.sh",
-    "models.env",
 }
 
 # A commit-ish token on the citing line. A citation into a file this repo no
@@ -355,6 +355,14 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
 
             for m in ANCHOR.finditer(line):
                 cited, start = m.group("path"), int(m.group("start"))
+                # An absolute path is not this repo's to validate, and checking
+                # one makes the verdict depend on the machine. Measured the hard
+                # way: `/Users/…/.claude/scripts/subagents/run-grok-media.sh:11`
+                # passed locally — `Path(repo) / "/abs"` is `/abs`, so the file
+                # resolved and range-checked — and failed in CI, where it does
+                # not exist. Same tree, same commit, two answers.
+                if cited.startswith("/"):
+                    continue
                 # Either spelling of the annotation; see ANCHOR.
                 symbol = m.group("symbol") or m.group("symbol2")
                 text = m.group(0).strip()
