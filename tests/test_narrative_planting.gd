@@ -1,12 +1,27 @@
 extends RefCounted
 ## #270 acceptance: headless N-run planting. No post-reveal line fires
 ## pre-reveal, and every twist-critical plant occupies ≥2 slots before payoff.
+## SLOT_LEVEL is an independent handwritten fixture from 00-truth.md §5 and
+## 04-delivery.md's per-channel ceiling table — never derived from a row's
+## own conditions, so a row that loses its gate must fail.
 
 const RUNS: int = 24
-const SLOTS: PackedStringArray = [
-	"hearth", "waystone", "loss", "death.ownShade1",
-	"closer.ownShade", "closer.usurper", "closer.eighthOmen", "closer.l3",
-]
+## slot → minimum reveal level that may fire. Pool slots are shard-0
+## reachable (04-delivery loss/hearth/waystone); whisper and Own Shade death
+## are L1; quest closers L2; sixth-shard closer L3.
+const SLOT_LEVEL: Dictionary = {
+	"whisper": 1,
+	"death.ownShade1": 1,
+	"death.ownShade2": 1,
+	"death.ownShade3": 1,
+	"closer.ownShade": 2,
+	"closer.usurper": 2,
+	"closer.eighthOmen": 2,
+	"closer.l3": 3,
+	"hearth": 0,
+	"waystone": 0,
+	"loss": 0,
+}
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -17,6 +32,20 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 static func run(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full(false)
 	var rows: Array = content.line_table
+	_simulate(rows, fails)
+	var mutated: Array = _copy_rows(rows)
+	var shade2: Dictionary = LineTable.row_by_id(mutated, "death.ownShade2")
+	_check(fails, not shade2.is_empty(), "shipping table has no death.ownShade2")
+	if shade2.is_empty():
+		return
+	shade2["conditions"] = {}
+	var mutated_fails: Array[String] = []
+	_simulate(mutated, mutated_fails)
+	_check(fails, not mutated_fails.is_empty(),
+		"removing death.ownShade2's condition did not report a planting violation")
+
+
+static func _simulate(rows: Array, fails: Array[String]) -> void:
 	var plants: Dictionary = {}
 	var payoffs: Dictionary = {}
 	for row_v: Variant in rows:
@@ -38,6 +67,13 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, not plants.is_empty() and not payoffs.is_empty(),
 		"shipping table has no twist-critical plants")
 
+	var slots: PackedStringArray = _slots_of(rows)
+	for slot: String in slots:
+		_check(fails, SLOT_LEVEL.has(slot), "SLOT_LEVEL fixture omits slot %s" % slot)
+	for key_v: Variant in SLOT_LEVEL:
+		var key: String = str(key_v)
+		_check(fails, slots.has(key), "SLOT_LEVEL fixture has stale slot %s" % key)
+
 	var plant_slots: Dictionary = {}
 	var payoff_ready: Dictionary = {}
 	for plant_id_v: Variant in plants:
@@ -53,45 +89,79 @@ static func run(fails: Array[String]) -> void:
 		var ctx: Dictionary = {"shards": shards, "act": 0, "quests": {}}
 		var drawn: Array = []
 		var memory: Dictionary = {"recent": recent, "once": once, "last_id": last_id}
-		for slot: String in SLOTS:
+		for row_v: Variant in rows:
+			if typeof(row_v) != TYPE_DICTIONARY:
+				continue
+			var row: Dictionary = row_v
+			if not LineTable.conditions_match(row.get("conditions", {}), ctx):
+				continue
+			var slot: String = str(row.get("slot", ""))
+			var need: int = int(float(str(SLOT_LEVEL.get(slot, 99))))
+			_check(fails, _ladder(shards) >= need,
+				"row %s (slot %s) fired at shards %d; fixture requires L%d"
+				% [str(row.get("id")), slot, shards, need])
+		for slot: String in slots:
 			if not LineTable.slot_open(rows, slot, ctx):
 				continue
-			var row: Dictionary = LineTable.select(rows, slot, ctx, rng, memory)
-			if row.is_empty():
+			var picked: Dictionary = LineTable.select(rows, slot, ctx, rng, memory)
+			if picked.is_empty():
 				continue
-			_check(fails, LineTable.conditions_match(row.get("conditions", {}), ctx),
+			_check(fails, LineTable.conditions_match(picked.get("conditions", {}), ctx),
 				"select returned a line whose conditions fail at shards %d" % shards)
-			_check(fails, LineTable.ladder_of(row) <= _ladder(shards),
-				"post-reveal line %s fired at shards %d" % [str(row.get("id")), shards])
 			if shards < LineTable.L1_SHARDS:
-				var asserts_v: Variant = row.get("asserts", {})
+				var asserts_v: Variant = picked.get("asserts", {})
 				var reveal: bool = false
 				if typeof(asserts_v) == TYPE_DICTIONARY:
 					var asserts: Dictionary = asserts_v
 					reveal = not str(asserts.get("plant", "")).is_empty() \
 						or not str(asserts.get("payoff", "")).is_empty()
 				_check(fails, not reveal,
-					"reveal-bearing row %s fired at shards %d" % [str(row.get("id")), shards])
-			var id: String = str(row.get("id", ""))
+					"reveal-bearing row %s fired at shards %d" % [str(picked.get("id")), shards])
+			var id: String = str(picked.get("id", ""))
 			drawn.append(id)
-			if row.get("once", false) and not once.has(id):
+			if picked.get("once", false) and not once.has(id):
 				once.append(id)
-			_note_plant(row, str(row.get("slot", "")), plant_slots, payoff_ready, payoffs, fails, n)
+			_note_plant(picked, str(picked.get("slot", "")), plant_slots, payoff_ready,
+				payoffs, fails, n)
+		recent = LineTable.remember(recent, drawn)
 		if not drawn.is_empty():
-			recent = LineTable.remember(recent, drawn)
 			last_id = str(drawn[drawn.size() - 1])
 
 	for plant_id_v: Variant in plants:
 		var plant_id: String = str(plant_id_v)
-		var slots: Dictionary = plant_slots[plant_id]
-		_check(fails, slots.size() >= 2,
-			"plant %s occupied %d slot(s) before payoff" % [plant_id, slots.size()])
+		var occupied: Dictionary = plant_slots[plant_id]
+		_check(fails, occupied.size() >= 2,
+			"plant %s occupied %d slot(s) before payoff" % [plant_id, occupied.size()])
 		if payoffs.has(plant_id):
 			var reached: bool = false
 			if payoff_ready[plant_id]:
 				reached = true
 			_check(fails, reached,
 				"plant %s never reached its payoff" % plant_id)
+
+
+static func _copy_rows(rows: Array) -> Array:
+	var out: Array = []
+	for row_v: Variant in rows:
+		if typeof(row_v) == TYPE_DICTIONARY:
+			var row: Dictionary = row_v
+			out.append(row.duplicate(true))
+	return out
+
+
+static func _slots_of(rows: Array) -> PackedStringArray:
+	var seen: Dictionary = {}
+	var out: PackedStringArray = PackedStringArray()
+	for row_v: Variant in rows:
+		if typeof(row_v) != TYPE_DICTIONARY:
+			continue
+		var row: Dictionary = row_v
+		var slot: String = str(row.get("slot", ""))
+		if slot.is_empty() or seen.has(slot):
+			continue
+		seen[slot] = true
+		out.append(slot)
+	return out
 
 
 static func _shards_for(n: int) -> int:
@@ -124,8 +194,8 @@ static func _note_plant(
 	var asserts: Dictionary = asserts_v
 	var plant: String = str(asserts.get("plant", ""))
 	if not plant.is_empty() and plant_slots.has(plant):
-		var slots: Dictionary = plant_slots[plant]
-		slots[slot] = true
+		var occupied: Dictionary = plant_slots[plant]
+		occupied[slot] = true
 	var payoff: String = str(asserts.get("payoff", ""))
 	if payoff.is_empty() or not plant_slots.has(payoff):
 		return
