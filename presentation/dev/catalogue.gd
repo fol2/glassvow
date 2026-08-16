@@ -73,7 +73,7 @@ const ENTRIES: Array[Dictionary] = [
 		"description": "The Vigil rose with all six panes lit (synthetic fixture; no quest memories). Window-body tap replays the unsealing.",
 		"seed": SEED, "overrides": {"shards": 6}},
 	{"id": "unsealing-replay", "revision": 1,
-		"description": "Six-pane Vigil with the Rose Window replay live. Same kernel as vigil; pending_scene is not an OVERRIDE_KEY.",
+		"description": "Six-pane Vigil; Rose Window replay stages the sixth-pane lighting and the one-queue mirror. pending_scene is not an OVERRIDE_KEY.",
 		"seed": SEED, "overrides": {"shards": 6}},
 ]
 

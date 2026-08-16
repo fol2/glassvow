@@ -56,6 +56,8 @@ var _caption: Label
 var _skip_fill: ColorRect
 var _letter_top: ColorRect
 var _letter_bot: ColorRect
+var _hearth_figure: HearthFigure = null
+var _unsealing: UnsealingStaging = null
 
 
 func _init(scene_script: SceneScript, cursor: int = 0,
@@ -217,6 +219,7 @@ func _present_line() -> void:
 		_motion_t = 0.0
 		_motion = str(_script.beat_at(_cursor).get("motion", "hold"))
 		_bind_plate()
+		_bind_staging()
 	_caption.visible = true
 	_skip_fill.visible = true
 
@@ -229,6 +232,37 @@ func _bind_plate() -> void:
 		return
 	_plate.texture = load(path) as Texture2D
 	_plate.visible = _plate.texture != null
+
+
+## Per-scene presentation, not new grammar (07-scenes §1). Opening seats
+## the #283 cutout on the empty hearth; unsealing dresses beats 1–2 with
+## the shipped mural/masks/frame and yields to the one-queue plate.
+func _bind_staging() -> void:
+	_sync_hearth_figure()
+	_sync_unsealing()
+
+
+func _sync_hearth_figure() -> void:
+	var wanted: bool = _script.id == "opening" and HearthFigure.present()
+	if not wanted:
+		if _hearth_figure != null:
+			_hearth_figure.queue_free()
+			_hearth_figure = null
+		return
+	_hearth_figure = HearthFigure.attach(_plate, false)
+	_hearth_figure.visible = _plate.visible
+
+
+func _sync_unsealing() -> void:
+	if _script.id != "unsealing":
+		if _unsealing != null:
+			_unsealing.queue_free()
+			_unsealing = null
+		return
+	if _unsealing == null:
+		_unsealing = UnsealingStaging.new()
+		_plate_host.add_child(_unsealing)
+	_unsealing.present(_beat_i, instant or Preferences.active.reduce_motion)
 
 
 func _art_path(index: int) -> String:

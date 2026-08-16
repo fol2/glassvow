@@ -179,6 +179,8 @@ func _ready() -> void:
 	# tools/shot.sh --fight=… --settle=3 --shot=…  (photograph it at rest)
 	# tools/shot.sh --font-probe --shot=/tmp/font.png  (runtime default font)
 	# tools/shot.sh --onboard=map-select --shot=...    (first-run hint stills)
+	# tools/shot.sh --scene=opening --cursor=2 --shot=…   (bespoke scene beat)
+	# tools/shot.sh --scene=departure --settle=0.7 --shot=…  (L0 linger)
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var lab_flag: String = ""
@@ -201,6 +203,8 @@ func _ready() -> void:
 	var show_font_probe: bool = false
 	var performance_probe: bool = false
 	var map_bench: bool = false
+	var scene_shot: String = ""
+	var scene_cursor: int = 0
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -264,6 +268,10 @@ func _ready() -> void:
 			map_bench = true
 		elif arg.begins_with("--onboard="):
 			_onboard = arg.trim_prefix("--onboard=")
+		elif arg.begins_with("--scene="):
+			scene_shot = arg.trim_prefix("--scene=")
+		elif arg.begins_with("--cursor="):
+			scene_cursor = maxi(0, int(arg.trim_prefix("--cursor=")))
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	if performance_probe and (fight.is_empty() or not shot_path.is_empty()
@@ -365,6 +373,14 @@ func _ready() -> void:
 			return
 	if resume_run:
 		_continue_run(SaveService.load_run(content))
+	elif not scene_shot.is_empty():
+		_opening_suppressed = true
+		if not _show_scene_shot(scene_shot, scene_cursor):
+			get_tree().quit(2)
+			return
+		if shot_path != "":
+			_capture_and_quit(shot_path)
+		return
 	elif show_dawn_bench:
 		# The Dawn ceremony bench: a fresh run handed a representative feed, so
 		# the victory beat can be photographed without walking three acts.
@@ -2618,6 +2634,25 @@ func _show_scene() -> void:
 	screen.advance_requested.connect(_on_scene_advance.bind(screen))
 	screen.finished.connect(_on_scene_finished)
 	_show_route(screen, false)
+
+
+## Capture hook for bespoke beats (`--scene=`). Not ScenePlayer grammar —
+## it mounts an already-authored scene at a cursor, or the L0 linger.
+func _show_scene_shot(scene_id: String, cursor: int) -> bool:
+	if scene_id == "departure":
+		var linger: DepartureStaging = DepartureStaging.new()
+		linger.instant = false
+		_show_route(linger, false, &"", false)
+		return true
+	var script: SceneScript = _scene_script(scene_id)
+	if script == null:
+		push_error("unknown scene %s" % scene_id)
+		return false
+	var screen: ScenePlayer = ScenePlayer.new(
+		script, clampi(cursor, 0, script.line_count()), _shape, _sfx_bus)
+	screen.instant = true
+	_show_route(screen, false, &"", false)
+	return true
 
 
 func _on_scene_advance(screen: ScenePlayer) -> void:

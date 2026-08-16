@@ -43,6 +43,9 @@ func _ready() -> void:
 	_window = _overlay("HearthWindow",
 		0.45 if Preferences.active.reduce_motion else 0.0)
 	_window.flip_h = true
+	if HearthFigure.present():
+		HearthFigure.attach(_plant, false)
+		HearthFigure.attach(_window, true)
 	Motion.bez(self, _tick_window, HEARTH_HOLD, Motion.CSS_EASE) \
 		.finished.connect(_complete)
 
