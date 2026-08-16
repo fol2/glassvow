@@ -102,7 +102,7 @@ opened and compared against the benchmark's actual behaviour.
 > earlier**, most within hours of the table being written. Undated, a stale
 > measurement looks eternal. The full re-measurement, and the current verdict for
 > every row, live on
-> [#324](https://github.com/fol2/glassvow/issues/324#issuecomment-5306950032).
+> [#324](https://github.com/fol2/glassvow/issues/324#issuecomment-5308325374).
 
 **P** progression — deliberate, defensible, keep it.
 **R** regression — behind the benchmark and not on purpose, **as at the measured date**.
