@@ -31,16 +31,51 @@ static func _keeper_art(fails: Array[String]) -> void:
 			"rose mask missing for %s" % id)
 
 
+## The cutout has to survive the frame it is composed into, not merely exist
+## in it (#334 review). Three shape constraints, all measured off live code:
+## the copy panel draws OVER the figure, the figure keeps its mass out of the
+## panel and out of the letterbox band, and it is graded toward the hall.
 static func _overlay_on_opening(fails: Array[String]) -> void:
 	var opening: SceneScript = _script("opening")
 	if opening == null:
 		_check(fails, false, "opening did not load")
 		return
+	var view: Vector2 = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
 	for cursor: int in [0, 2, 5, 7]:
 		var player: ScenePlayer = _live(opening, cursor)
-		var figure: Node = _figure(player)
+		var figure: HearthFigure = _figure(player) as HearthFigure
 		_check(fails, figure != null,
 			"opening cursor %d has no hearth figure" % cursor)
+		if figure == null:
+			player.free()
+			continue
+		# Dialogue over scenery, never a cutout pasted over the UI. Draw order
+		# is tree order, so the copy branch must sit after the plate branch.
+		_check(fails, _branch(player, figure) < _branch(player, player._copy),
+			"cursor %d draws the hearth figure over the dialogue panel" % cursor)
+		var grade: Color = figure.modulate
+		_check(fails, not grade.is_equal_approx(Color.WHITE),
+			"cursor %d ships the cutout ungraded against a warm-black hall" % cursor)
+		_check(fails, grade.r > grade.g and grade.g > grade.b,
+			"cursor %d grades the cutout cold; the hearth lights it warm" % cursor)
+		_check(fails, grade.r <= 0.88 and minf(grade.g, grade.b) >= 0.32,
+			"cursor %d grades the cutout out of the plate's ambient range" % cursor)
+		var seat: Rect2 = _seat_rect(figure, view)
+		_check(fails, seat.size.x > 1.0 and seat.size.y > 1.0,
+			"cursor %d never laid the cutout out" % cursor)
+		# `set_shape` letterboxes the bottom 8%; a hem below it is a robe cut
+		# off by a black bar, not a figure sitting on the hearth platform.
+		_check(fails, seat.end.y <= view.y * 0.92 and seat.end.y >= view.y * 0.70,
+			"cursor %d seats the cutout off the hearth platform (hem at %.0f)"
+				% [cursor, seat.end.y])
+		# The panel is `_copy.custom_minimum_size.x` wide and centre-docked.
+		var panel_right: float = (view.x + player._copy.custom_minimum_size.x) * 0.5
+		var behind: float = clampf(panel_right - seat.position.x, 0.0, seat.size.x)
+		_check(fails, behind <= seat.size.x * 0.25,
+			"cursor %d hides %.0f%% of the cutout behind the panel"
+				% [cursor, 100.0 * behind / maxf(seat.size.x, 1.0)])
+		_check(fails, seat.end.x <= view.x,
+			"cursor %d pushes the cutout off the right edge" % cursor)
 		player.free()
 
 
@@ -57,6 +92,12 @@ static func _overlay_absent_elsewhere(fails: Array[String]) -> void:
 		player.free()
 
 
+## 窗中反影遲半拍 is a reflection IN THE WINDOW (`00-truth.md:173-174`). The
+## first cut mirrored the whole hall and seated a second Keeper on it; the
+## shape constraints below are what forbid that — one plate, one body, and a
+## reflection region small enough to be an opening in the wall. The half-beat
+## lag itself was correct and is re-pinned unchanged. Every route of the #334
+## fork has to satisfy all of it.
 static func _departure_lags_the_figure(fails: Array[String]) -> void:
 	var dark: DepartureStaging = DepartureStaging.new(
 		"res://assets/art/scenes/__no_such_plate__.png")
@@ -64,34 +105,82 @@ static func _departure_lags_the_figure(fails: Array[String]) -> void:
 	dark._ready()
 	_check(fails, dark.find_child(HearthFigure.NAME, true, false) == null,
 		"a missing plate still seated the figure")
+	_check(fails, dark.find_child(WindowReflection.NAME, true, false) == null,
+		"a missing plate still staged a reflection")
 	dark.free()
+	var view: Vector2 = Vector2(StageShape.REFERENCES[StageShape.IDENTITY])
+	for route: StringName in WindowReflection.ROUTES:
+		_departure_route(fails, route, view)
+
+
+static func _departure_route(fails: Array[String], route: StringName,
+		view: Vector2) -> void:
 	var lit: DepartureStaging = DepartureStaging.new()
 	lit.instant = false
+	lit.route = route
+	lit.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	lit.size = view
 	lit._ready()
-	var plant: TextureRect = lit.find_child("HearthPlant", true, false) as TextureRect
-	var window: TextureRect = lit.find_child("HearthWindow", true, false) as TextureRect
-	_check(fails, plant != null and window != null, "linger lost its plates")
-	if plant == null or window == null:
+	# The hall is painted once. A second full-bleed copy IS the mirror defect.
+	_check(fails, _texture_copies(lit, "opening-hearth.png") == 1,
+		"route %s paints the hall %d times" % [route,
+			_texture_copies(lit, "opening-hearth.png")])
+	_check(fails, _node_count(lit, HearthFigure.NAME) == 1,
+		"route %s puts %d bodies on screen; James ruled one" % [route,
+			_node_count(lit, HearthFigure.NAME)])
+	var reflection: WindowReflection = lit.find_child(
+		WindowReflection.NAME, true, false) as WindowReflection
+	_check(fails, reflection != null, "route %s lost its reflection" % route)
+	if reflection == null:
 		lit.free()
 		return
-	var plant_figure: HearthFigure = plant.find_child(HearthFigure.NAME, false, false) as HearthFigure
-	var window_figure: HearthFigure = window.find_child(HearthFigure.NAME, false, false) as HearthFigure
-	_check(fails, plant_figure != null, "plant has no hearth figure")
-	_check(fails, window_figure != null, "window reflection has no hearth figure")
-	if window_figure != null:
-		_check(fails, window_figure._sprite != null and window_figure._sprite.flip_h,
-			"window figure is not flipped with the room")
-	_check(fails, is_equal_approx(window.modulate.a, 0.0),
-		"window reflection was visible before the lag")
+	# The region is anchor-driven so it rides the plate; a window, not a screen.
+	var region: Rect2 = _anchor_rect(reflection, view)
+	_check(fails, is_zero_approx(reflection.offset_left)
+			and is_zero_approx(reflection.offset_right)
+			and is_zero_approx(reflection.offset_top)
+			and is_zero_approx(reflection.offset_bottom),
+		"route %s pins the reflection in pixels; it will drift off the plate" % route)
+	_check(fails, region.get_area() > 0.0
+			and region.get_area() <= view.x * view.y * 0.08,
+		"route %s reflects %.0f%% of the frame; that is the hall, not a window"
+			% [route, 100.0 * region.get_area() / (view.x * view.y)])
+	_check(fails, Rect2(Vector2.ZERO, view).encloses(region),
+		"route %s hangs the reflection off the frame" % route)
+	var aspect: float = region.size.x / maxf(region.size.y, 1.0)
+	_check(fails, aspect >= 0.25 and aspect <= 2.5,
+		"route %s stretched the reflection into a band (aspect %.2f)" % [route, aspect])
+	var ghost: TextureRect = reflection.find_child("Ghost", true, false) as TextureRect
+	if route == WindowReflection.ROUTE_ROSE_GLOW:
+		_check(fails, ghost == null,
+			"route c promises no figure in the glass and staged one")
+	else:
+		_check(fails, ghost != null, "route %s has no reflected figure" % route)
+		if ghost != null:
+			_check(fails, ghost.flip_h, "route %s reflects the figure unmirrored" % route)
+			_check(fails, not ghost.modulate.is_equal_approx(Color.WHITE)
+					and ghost.modulate.b > ghost.modulate.r,
+				"route %s returns the figure at full warm chroma, not as dark glass"
+					% route)
+	if Preferences.active.reduce_motion:
+		_check(fails, is_equal_approx(reflection.modulate.a,
+				DepartureStaging.REFLECT_ALPHA),
+			"route %s dropped the reflection under reduce_motion" % route)
+		lit.free()
+		return
+	_check(fails, is_equal_approx(reflection.modulate.a, 0.0),
+		"route %s showed the reflection before the lag" % route)
 	lit._tick_window(DepartureStaging.WINDOW_LAG / DepartureStaging.HEARTH_HOLD)
-	_check(fails, is_equal_approx(window.modulate.a, 0.0),
-		"window reflection appeared at the lag boundary")
+	_check(fails, is_equal_approx(reflection.modulate.a, 0.0),
+		"route %s showed the reflection at the lag boundary" % route)
+	lit._tick_window(0.75)
+	_check(fails, is_equal_approx(reflection.modulate.a,
+			DepartureStaging.REFLECT_ALPHA * 0.5),
+		"route %s steps the reflection in instead of ramping it" % route)
 	lit._tick_window(1.0)
-	_check(fails, is_equal_approx(window.modulate.a, 0.45),
-		"window reflection did not reach 0.45 after the hold")
-	if window_figure != null:
-		_check(fails, is_equal_approx(window_figure.modulate.a * window.modulate.a, 0.45),
-			"figure in the reflection did not lag with the window")
+	_check(fails, is_equal_approx(reflection.modulate.a,
+			DepartureStaging.REFLECT_ALPHA),
+		"route %s did not reach the reflection's peak after the hold" % route)
 	lit.free()
 
 
@@ -139,8 +228,9 @@ static func _unsealing_mirror_is_one_queue(fails: Array[String]) -> void:
 	if plate != null and plate.texture != null:
 		_check(fails, plate.texture.resource_path.ends_with("unsealing-mirror-queue.png"),
 			"beat 3 bound a plate other than the one-queue mirror")
-	_check(fails, _queue_copies(player) == 1,
-		"beat 3 duplicated the queue (%d copies)" % _queue_copies(player))
+	var queue_file: String = "unsealing-mirror-queue.png"
+	_check(fails, _texture_copies(player, queue_file) == 1,
+		"beat 3 duplicated the queue (%d copies)" % _texture_copies(player, queue_file))
 	if rose != null:
 		_check(fails, rose.mural_is_emberglass(),
 			"the rose sampled the queue plate as a per-pane mural")
@@ -227,13 +317,49 @@ static func _text(player: ScenePlayer) -> String:
 	return line.text if line != null else ""
 
 
-static func _queue_copies(root: Node) -> int:
+static func _texture_copies(root: Node, plate_file: String) -> int:
 	var n: int = 0
 	if root is TextureRect:
 		var plate: TextureRect = root
 		if plate.texture != null \
-				and plate.texture.resource_path.ends_with("unsealing-mirror-queue.png"):
+				and plate.texture.resource_path.ends_with(plate_file):
 			n += 1
 	for child: Node in root.get_children():
-		n += _queue_copies(child)
+		n += _texture_copies(child, plate_file)
 	return n
+
+
+static func _node_count(root: Node, node_name: String) -> int:
+	var n: int = 1 if root.name == node_name else 0
+	for child: Node in root.get_children():
+		n += _node_count(child, node_name)
+	return n
+
+
+## Index, under `root`, of the branch `node` draws in. CanvasItem draw order
+## is tree order, so a smaller index draws first — i.e. underneath.
+static func _branch(root: Node, node: Node) -> int:
+	var walk: Node = node
+	while walk != null and walk.get_parent() != root:
+		walk = walk.get_parent()
+	return walk.get_index() if walk != null else -1
+
+
+static func _anchor_rect(node: Control, view: Vector2) -> Rect2:
+	return Rect2(
+		Vector2(node.anchor_left * view.x, node.anchor_top * view.y),
+		Vector2((node.anchor_right - node.anchor_left) * view.x,
+			(node.anchor_bottom - node.anchor_top) * view.y))
+
+
+## The cutout's painted rect at the reference frame. Anchors do not resolve
+## outside a SceneTree, so the seat box is read off them and then handed to
+## the real `HearthFigure._layout` — a broken fit fails here too.
+static func _seat_rect(figure: HearthFigure, view: Vector2) -> Rect2:
+	var box: Rect2 = _anchor_rect(figure, view)
+	figure.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	figure.size = box.size
+	figure._layout()
+	if figure._sprite == null:
+		return Rect2()
+	return Rect2(box.position + figure._sprite.position, figure._sprite.size)
