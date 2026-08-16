@@ -43,6 +43,14 @@ whose annotation lands after the link's own closing paren. Each read as checked
 and was skipped. When adding a fourth spelling to the docs, add it here first,
 or it joins them.
 
+A fourth class was closed on 2026-08-16, and it was not a spelling: a citation
+into a file this repo carries **zero** times was skipped outright as presumed
+external. A citation into a file the tree DELETED is indistinguishable from one
+into a file the tree never had, so deleting a cited file left a green run over a
+dead anchor — #323 did exactly that. Such citations are now reported unless the
+prose names the commit where the target still resolves, or the basename is in
+`EXTERNAL_NAMES`.
+
 Usage:
     tools/check_anchors.py            # report; exit 1 if anything drifted
     tools/check_anchors.py --fix      # rewrite drifted line numbers in place
@@ -152,7 +160,7 @@ class Finding:
         self.doc = doc
         self.doc_line = doc_line
         self.text = text
-        self.kind = kind          # missing | range | drift | escaped | unanchored | ambiguous
+        self.kind = kind  # missing | range | drift | escaped | unanchored | ambiguous | pathless | dead
         self.detail = detail
         self.actual = actual
 
@@ -169,6 +177,21 @@ class Finding:
 # exactly this reason, and the checker reported "anchors OK" over all of them.
 # A green result on an anchor nobody checked is worse than a red one.
 SKIP_DIRS: set[str] = {".git", ".godot", ".claude", "addons", "_attic", "build"}
+
+# Basenames the docs cite on purpose that this repo does not and will not carry.
+# Everything else that fails to resolve is reported (see `dead` in `check`), so
+# this list is the whole of the escape hatch and adding to it is a visible act.
+EXTERNAL_NAMES: set[str] = {
+    # Shared agent tooling under ~/.claude, cited by the imagegen solution doc,
+    # which says so in prose: "tooling, not a repo-relative path".
+    "run-imagegen.sh",
+    "models.env",
+}
+
+# A commit-ish token on the citing line. A citation into a file this repo no
+# longer carries is unverifiable — unless the prose says where it still
+# resolves, which in practice means naming the commit.
+COMMIT_TOKEN = re.compile(r"`[0-9a-f]{7,40}`")
 
 
 def index_repo_files() -> dict[str, list[Path]]:
@@ -338,19 +361,34 @@ def check(strict: bool) -> tuple[list[Finding], dict[Path, list[tuple[int, int]]
 
                 target = resolve(cited, index)
                 if target is None:
-                    # Two very different reasons land here and they must not
-                    # share one silent path. A name this repo does not carry at
-                    # all is plausibly external (the benchmark's `src/…`) or
-                    # deleted — that is the claims validator's job, not this
-                    # one, so skip it. A name this repo carries MORE THAN ONCE
-                    # is a citation this checker could have verified and simply
-                    # declined to, and staying quiet about it is how a green
-                    # run came to certify anchors nobody had looked at.
+                    # Three reasons land here and they must not share one silent
+                    # path. A name this repo carries MORE THAN ONCE is a
+                    # citation this checker could have verified and simply
+                    # declined to, and staying quiet about it is how a green run
+                    # came to certify anchors nobody had looked at.
                     if len(index.get(Path(cited).name, [])) > 1:
                         findings.append(Finding(
                             doc, doc_line, text, "ambiguous",
                             f"{cited} names %d files — cite the full repo-relative path"
                             % len(index[Path(cited).name])))
+                        continue
+                    # A name this repo carries ZERO times used to be skipped
+                    # outright, on the theory that it was external. That skip
+                    # covered the case it should have caught: a citation into a
+                    # file the tree DELETED reads exactly like one into a file
+                    # the tree never had, and #323 left a live example behind.
+                    # Deliberately-external names are listed above; a deleted
+                    # target is legitimate only when the prose names the commit
+                    # where it still resolves. Anything else is dead and is now
+                    # said out loud.
+                    if Path(cited).name in EXTERNAL_NAMES:
+                        continue
+                    if COMMIT_TOKEN.search(line):
+                        continue
+                    findings.append(Finding(
+                        doc, doc_line, text, "dead",
+                        f"{cited} is not in this repo — if it was deleted, cite the"
+                        " commit where it still resolves"))
                     continue
 
                 body = target.read_text(errors="replace").splitlines()
@@ -431,6 +469,9 @@ def main() -> int:
     # Same standing as `vague`, and for the same reason: --fix cannot repair it
     # and guessing the file would be worse than reporting it.
     pathless = sum(1 for f in findings if f.kind == "pathless")
+    # Same standing again: the checker cannot repair a citation into a file that
+    # is not there, and it must not guess which surviving file was meant.
+    dead = sum(1 for f in findings if f.kind == "dead")
     if soft:
         print(f"\n{soft} anchor(s) carry no symbol and cannot be drift-checked.")
     if vague:
@@ -439,10 +480,13 @@ def main() -> int:
     if pathless:
         print(f"\n{pathless} anchor(s) name no file at all, so they were never"
               " checked despite carrying a symbol. Cite the full repo-relative path.")
+    if dead:
+        print(f"\n{dead} anchor(s) cite a file this repo does not carry. Name the"
+              " commit where it still resolves, or repoint the citation.")
     if drift:
         print(f"\n{drift} anchor(s) no longer point where they claim."
               " Run with --fix to re-anchor the drifted ones.")
-    if drift or vague or pathless:
+    if drift or vague or pathless or dead:
         return 1
     print("anchors OK" + (f" ({soft} uncheckable)" if soft else ""))
     return 1 if (args.strict and soft) else 0
