@@ -53,7 +53,7 @@ static func run(fails: Array[String]) -> void:
 	if full.reveal_ids.size() != 8 or full.aspects.size() != 2 or full.vows.size() != 5:
 		fails.append("ContentDB: full progression registries are incomplete")
 	full.validate(fails)
-	_validate_requires_ai(full, fails)
+	_validate_requires_ai(fails)
 	_emberheart_heal(full, 3, "full content", fails)
 	_emberheart_heal(db, 6, "fixture fallback", fails)
 	_enemy_overrides(fails)
@@ -114,16 +114,18 @@ static func _enemy_overrides(fails: Array[String]) -> void:
 		fails.append("ContentDB: unknown mob art kind was accepted")
 
 
-static func _validate_requires_ai(content: ContentDB, fails: Array[String]) -> void:
-	## Proves that validate() catches an enemy with no AI handler. Since the
-	## full catalogue's original enemies all have handlers, inject one without.
-	var test_def: Dictionary = {
+## Every enemy the catalogue ships has an AI handler, so `validate` above can
+## never demonstrate that the check fires. Inject one that has none — into a
+## private catalogue, because a ghost enemy left in the shared `full` would
+## reach every assertion after this one.
+static func _validate_requires_ai(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full(false)
+	content.enemies["noAiGhost"] = {
 		"hp": [8, 8],
 		"name": "No AI Ghost",
 		"art": {"kind": "wisp", "hue": 0.0, "size": 1.0},
 		"moves": {"wail": {"intent": "attack", "dmg": 1, "name": "Wail"}},
 	}
-	content.enemies["noAiGhost"] = test_def
 	var faults: Array[String] = []
 	content.validate(faults)
 	var found: bool = false
