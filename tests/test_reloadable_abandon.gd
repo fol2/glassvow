@@ -54,6 +54,7 @@ static func _abandon_source_contract(fails: Array[String]) -> void:
 	for field: String in [
 		"pending_combat", "pending_enemy_ids", "pending_quest_id",
 		"pending_reward", "pending_hollow", "pending_hollow_route",
+		"pending_pool",
 	]:
 		var clear_at: int = body.find("game.run.%s = null" % field)
 		if clear_at < 0 or terminal_at < 0 or clear_at > terminal_at:
@@ -139,6 +140,7 @@ static func _run_abandon_case(
 	for field: String in [
 		"pending_combat", "pending_enemy_ids", "pending_quest_id",
 		"pending_reward", "pending_hollow", "pending_hollow_route",
+		"pending_pool",
 	]:
 		if loaded.get(field) != null:
 			fails.append("abandon %s: contradictory %s survived reload" % [tag, field])

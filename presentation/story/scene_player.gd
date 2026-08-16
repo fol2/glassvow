@@ -29,8 +29,13 @@ const BEAT_IDLE: int = 0
 const BEAT_REVEAL: int = 1
 const BEAT_WAIT: int = 2
 
+const NAMED_SPEAKERS: Dictionary = {
+	"keeper": true, "lamplighter": true, "queue": true,
+}
+
 var instant: bool = false
 var shape: StringName = StageShape.IDENTITY
+var _pool_row: Dictionary = {}
 
 var _script: SceneScript
 var _cursor: int = 0
@@ -61,9 +66,11 @@ var _unsealing: UnsealingStaging = null
 
 
 func _init(scene_script: SceneScript, cursor: int = 0,
-		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
+		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null,
+		pool_row: Dictionary = {}) -> void:
 	_script = scene_script
 	_cursor = clampi(cursor, 0, scene_script.line_count())
+	_pool_row = pool_row.duplicate(true)
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -208,11 +215,19 @@ func _present_line() -> void:
 	if _cursor < 0 or _cursor >= _script.line_count():
 		return
 	var row: Dictionary = _script.lines[_cursor]
-	_line.text = Locale.active.t(str(row["key"]))
-	var speaker_id: String = str(row.get("speaker", "")).strip_edges()
-	_speaker.visible = not speaker_id.is_empty()
-	_speaker.text = Locale.active.t("ui.scene.speaker.%s" % speaker_id) \
-		if _speaker.visible else ""
+	if not _pool_row.is_empty():
+		_line.text = LineTable.text(
+			_pool_row, Locale.active.code == Locale.CODE_ZH_HANT)
+		var pool_speaker: String = str(_pool_row.get("speaker", "")).strip_edges()
+		_speaker.visible = NAMED_SPEAKERS.has(pool_speaker)
+		_speaker.text = Locale.active.t("ui.scene.speaker.%s" % pool_speaker) \
+			if _speaker.visible else ""
+	else:
+		_line.text = Locale.active.t(str(row["key"]))
+		var speaker_id: String = str(row.get("speaker", "")).strip_edges()
+		_speaker.visible = not speaker_id.is_empty()
+		_speaker.text = Locale.active.t("ui.scene.speaker.%s" % speaker_id) \
+			if _speaker.visible else ""
 	var beat_i: int = row["beat"]
 	if beat_i != _beat_i:
 		_beat_i = beat_i
