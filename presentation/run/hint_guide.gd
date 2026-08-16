@@ -147,7 +147,7 @@ func record_dismiss(id: String) -> bool:
 
 
 func _disk_has_hint(id: String) -> bool:
-	var disk: VigilState = SaveService.load_vigil(main._vigil_save_path)
+	var disk: VigilState = main._load_vigil()
 	return disk.hints_seen.has(id)
 
 

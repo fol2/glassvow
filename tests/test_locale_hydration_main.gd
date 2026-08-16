@@ -31,7 +31,7 @@ static func _main_source_seams(fails: Array[String]) -> void:
 		fails.append("Main hydration seam: language handler hydrates ContentDB directly")
 	if not _before(route, "_apply_pending_content_hydration()", "if game == null"):
 		fails.append("Main hydration seam: run route constructs before applying pending content")
-	if not _before(title, "_apply_pending_content_hydration()", "SaveService.load_run"):
+	if not _before(title, "_apply_pending_content_hydration()", "_load_run()"):
 		fails.append("Main hydration seam: title constructs before applying pending content")
 	if not _before(map, "_apply_pending_content_hydration()", "WorldMapScreen.new"):
 		fails.append("Main hydration seam: direct map route constructs before applying pending content")
