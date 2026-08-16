@@ -648,6 +648,10 @@ func mark_taken(what: StringName) -> void:
 		_settle(btn)
 
 
+func callout_anchor() -> Control:
+	return _panel if _panel != null else self
+
+
 ## The player asked to leave. Emits `finished` when nothing is left on the glass,
 ## and otherwise puts the question to them first — spoils walked past are gone.
 func request_leave() -> void:

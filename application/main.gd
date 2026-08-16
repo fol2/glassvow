@@ -75,6 +75,9 @@ var _forced_shape: StringName = &""
 ## book authors the benchmark's three and exposes the optional fourth seam.
 ## Map generation is never act-forced.
 var _forced_act: int = -1
+## --onboard=<id>: production-flow photo bench for first-run hints. Not a
+## suppressed boot — scenes_seen gains "opening" in memory so the gate opens.
+var _onboard: String = ""
 ## --settle=SECONDS: extra wait before a `--shot=` capture, so a composition is
 ## photographed at rest rather than mid-entrance.
 var _settle: float = 0.0
@@ -85,6 +88,7 @@ var _transitions: TransitionLayer
 var _scenes: Dictionary = {}
 ## Transient Rose Window replay: no cursor, no once-flag.
 var _scene_replay: bool = false
+var _hints: HintGuide
 
 
 func _init() -> void:
@@ -92,6 +96,9 @@ func _init() -> void:
 	# resources exist. Routed screens may refine this theme; unthemed descendants
 	# such as RunHud still inherit the same Noto Serif TC default.
 	theme = GlassStyle.theme()
+	_hints = HintGuide.new()
+	_hints.main = self
+	add_child(_hints)
 
 
 ## The pool turned into an amount. The fraction is the frozen web law and
@@ -171,6 +178,7 @@ func _ready() -> void:
 	# tools/shot.sh --resume --shot=...          (exercise the durable router)
 	# tools/shot.sh --fight=… --settle=3 --shot=…  (photograph it at rest)
 	# tools/shot.sh --font-probe --shot=/tmp/font.png  (runtime default font)
+	# tools/shot.sh --onboard=map-select --shot=...    (first-run hint stills)
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var lab_flag: String = ""
@@ -254,6 +262,8 @@ func _ready() -> void:
 			performance_probe = true
 		elif arg == "--map-bench":
 			map_bench = true
+		elif arg.begins_with("--onboard="):
+			_onboard = arg.trim_prefix("--onboard=")
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	if performance_probe and (fight.is_empty() or not shot_path.is_empty()
@@ -397,6 +407,8 @@ func _ready() -> void:
 			return
 		_map_screen.instant = true  # skip the travel tween, land on the fight
 		_map_screen.choose(enter_node)
+	elif not _onboard.is_empty():
+		_boot_onboard(_onboard)
 	else:
 		_route_idle()
 	if performance_probe:
@@ -549,10 +561,28 @@ func _capture_and_quit(path: String) -> void:
 		await get_tree().process_frame
 	if _settle > 0.0:
 		await get_tree().create_timer(_settle).timeout
+	if _onboard == "targeting" or _onboard == HintGuide.TARGETING:
+		_onboard_arm_target()
+		for _j: int in range(30):
+			await get_tree().process_frame
 	var img: Image = get_viewport().get_texture().get_image()
 	img.save_png(path)
 	print("shot saved: " + path)
 	get_tree().quit(0)
+
+
+func _onboard_arm_target() -> void:
+	if _screen == null or game == null or game.cb == null:
+		return
+	for c: CardInst in game.cb.hand:
+		var view: CardView = _screen._hand.card_view(c.uid)
+		if view == null or view.target_kind != "enemy" or not view.playable:
+			continue
+		_screen._selected_uid = c.uid
+		_screen._activate_selected()
+		if _hints != null and _hints.showing() != HintGuide.TARGETING:
+			_hints.consider(HintGuide.TARGETING, _screen.first_enemy_anchor())
+		return
 
 
 func _clear_route() -> void:
@@ -560,6 +590,8 @@ func _clear_route() -> void:
 	# one level of it, so no count survives into the next surface.
 	_freeze_count = 0
 	_thaw_surfaces()
+	if _hints != null:
+		_hints.hide_callout()
 	for screen: Control in [
 		_screen, _map_screen, _choice_screen, _reward_screen,
 		_route_screen, _run_hud, _modal,
@@ -967,6 +999,13 @@ func _on_save_error_choice(id: String) -> void:
 	# Continuations first, same shape as #332's Vigil-scoped Retry: inspect
 	# live state, re-hold the write that failed, then resume the owed surface.
 	# Generic `_store_run()` → `_route_run()` drops both of these.
+	if id == "retry" and _hint_layer_ahead():
+		if _store_vigil():
+			if _hints != null:
+				_hints.on_persist_ok()
+		else:
+			_show_title()
+		return
 	if id == "retry" and _vigil.guidance_skipped \
 			and not SaveService.load_vigil(_vigil_save_path).guidance_skipped:
 		if _store_vigil():
@@ -1032,6 +1071,17 @@ func _new_run(profile: Dictionary = {}) -> void:
 
 func _story_flow() -> bool:
 	return not _opening_suppressed and not _dev_claimed
+
+
+func _hint_layer_ahead() -> bool:
+	var disk: VigilState = SaveService.load_vigil(_vigil_save_path)
+	for id: String in _vigil.hints_seen:
+		if disk == null or not disk.hints_seen.has(id):
+			return true
+	if _vigil.guidance_skipped and (disk == null or not disk.guidance_skipped) \
+			and _hints != null and not _hints.showing().is_empty():
+		return true
+	return false
 
 
 func _plays_opening() -> bool:
@@ -1216,6 +1266,7 @@ func _show_map() -> void:
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
+	_map_screen.before_pick = _on_map_before_pick
 	add_child(_map_screen)
 	_map_screen.refresh(game.run)
 	# --map --act=N: dress scenery only (domain map stays the run's act).
@@ -1225,6 +1276,8 @@ func _show_map() -> void:
 	_transitions.screen_in(_map_screen)
 	_attach_run_hud()
 	_music.play(&"map")
+	if _hints != null:
+		_hints.consider_map(_map_screen)
 
 
 func _show_run_menu() -> void:
@@ -1410,6 +1463,12 @@ func _on_combat_potion_choice(action: String, slot: int) -> void:
 		if action.begins_with("use:") else null
 	if _screen.request_potion(slot, target):
 		_close_overlay()
+
+
+func _on_map_before_pick() -> bool:
+	if _hints == null:
+		return true
+	return _hints.record_dismiss(HintGuide.MAP_SELECT)
 
 
 func _on_node_chosen(i: int) -> void:
@@ -1770,6 +1829,7 @@ func _resume_pending_combat() -> void:
 	_screen.result_continue.connect(_on_result_continue)
 	_screen.menu_requested.connect(_show_run_menu)
 	_screen.potion_requested.connect(_show_combat_potion_menu)
+	_screen.hint_guide = _hints
 	add_child(_screen)
 	var route_kind: String = str(game.run.pending_combat)
 	var combat_kind: String = "normal" if route_kind == "monster" else route_kind
@@ -1811,9 +1871,84 @@ func _start_fight(ids: PackedStringArray, kind: String) -> void:
 	_screen.result_continue.connect(_on_result_continue)
 	_screen.menu_requested.connect(_show_run_menu)
 	_screen.potion_requested.connect(_show_combat_potion_menu)
+	_screen.hint_guide = _hints
 	add_child(_screen)
 	_screen.start_encounter(known, kind, "Bench  ·  %s" % kind.capitalize())
 	_music.play(_combat_music(kind))
+
+
+## Production-flow stills of the six first-run hints. Not a suppressed boot:
+## the opening gate is satisfied in memory, `_story_flow()` stays true, and
+## `--fight=` / `--map` remain hint-free.
+func _boot_onboard(id: String) -> void:
+	if not _vigil.scenes_seen.has("opening"):
+		_vigil.scenes_seen.append("opening")
+	if _forced_seed < 0:
+		_forced_seed = 32101
+	_new_run()
+	if _route_screen is DepartureStaging:
+		_show_map()
+	if id != "map-select" and id != HintGuide.MAP_SELECT \
+			and not _vigil.hints_seen.has(HintGuide.MAP_SELECT):
+		_vigil.hints_seen.append(HintGuide.MAP_SELECT)
+	match id:
+		"map-select", HintGuide.MAP_SELECT:
+			return
+		"drag-play", HintGuide.DRAG_PLAY:
+			_onboard_fight(PackedStringArray(["duskfang"]), "normal")
+		"targeting", HintGuide.TARGETING:
+			if not _vigil.hints_seen.has(HintGuide.DRAG_PLAY):
+				_vigil.hints_seen.append(HintGuide.DRAG_PLAY)
+			_onboard_fight(PackedStringArray(["sporeling", "sporeling"]), "normal")
+		"end-turn", HintGuide.END_TURN:
+			if not _vigil.hints_seen.has(HintGuide.DRAG_PLAY):
+				_vigil.hints_seen.append(HintGuide.DRAG_PLAY)
+			_onboard_fight(PackedStringArray(["duskfang"]), "normal")
+			_onboard_spend_energy()
+		"intent", HintGuide.INTENT:
+			if not _vigil.hints_seen.has(HintGuide.DRAG_PLAY):
+				_vigil.hints_seen.append(HintGuide.DRAG_PLAY)
+			_onboard_fight(PackedStringArray(["duskfang"]), "normal")
+			if _screen != null:
+				_screen._on_end_turn_pressed()
+		"reward", HintGuide.REWARD:
+			_onboard_reward()
+		_:
+			push_error("--onboard wants map-select|drag-play|targeting|end-turn|intent|reward")
+
+
+func _onboard_fight(ids: PackedStringArray, kind: String) -> void:
+	_transitions.set_grain(false)
+	_clear_route()
+	_screen = CombatScreen.new(game, _shape, maxi(0, _forced_act), _sfx_bus)
+	_screen.seq.instant = true
+	_screen.combat_over.connect(_on_combat_over)
+	_screen.result_continue.connect(_on_result_continue)
+	_screen.menu_requested.connect(_show_run_menu)
+	_screen.potion_requested.connect(_show_combat_potion_menu)
+	_screen.hint_guide = _hints
+	add_child(_screen)
+	_screen.start_encounter(ids, kind, "Onboard  ·  %s" % kind.capitalize())
+
+
+func _onboard_spend_energy() -> void:
+	if _screen == null or game == null or game.cb == null:
+		return
+	# Playing the hand can kill the foe and skip the still. The trigger is
+	# exhausted energy; write that state directly.
+	game.cb.player.energy = 0
+	_screen._sync_all()
+	if _hints != null:
+		_hints.consider_combat(_screen)
+
+
+func _onboard_reward() -> void:
+	game.run.pending_reward = {
+		"rewards": game.gen_combat_rewards("normal", &""),
+		"taken": {"gold": false, "card": false, "potion": false, "relic": false},
+		"slain_enemy": {},
+	}
+	_show_pending_reward()
 
 
 func _combat_music(kind: String) -> StringName:
@@ -1968,9 +2103,13 @@ func _show_pending_reward() -> void:
 	for key: String in ["gold", "card", "potion", "relic"]:
 		if taken.get(key, false):
 			_reward_screen.mark_taken(StringName(key))
+	if _hints != null:
+		_hints.consider(HintGuide.REWARD, _reward_screen.callout_anchor())
 
 
 func _on_reward_claimed(what: StringName, id: String) -> void:
+	if _hints != null and not _hints.record_dismiss(HintGuide.REWARD):
+		return
 	var pending: Dictionary = game.run.pending_reward
 	var taken: Dictionary = pending["taken"]
 	var key: String = String(what)

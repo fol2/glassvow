@@ -999,6 +999,10 @@ func set_locked(locked: bool) -> void:
 		_end_glow.modulate.a = 0.0
 
 
+func end_turn_anchor() -> Control:
+	return _end_turn
+
+
 ## `.end-turn.ready` — the energy is spent and the fight is live, so the seal
 ## beckons on the same `artReady` breath as the lantern (combat.js:779).
 func set_end_ready(on: bool) -> void:

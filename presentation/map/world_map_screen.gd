@@ -11,6 +11,9 @@ extends Control
 
 signal node_chosen(index: int)
 signal sealed_door_requested
+## Optional persist-first gate. Main binds hint dismissal here so a failed
+## Vigil flush cannot let the lantern walk before the record is on disk.
+var before_pick: Callable = Callable()
 
 const TRAVEL_TIME: float = 0.4
 
@@ -41,6 +44,8 @@ var _travel_from_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _travel_to_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _waystones: Array[GlassWaystone] = []
 var _hint_label: Label
+## H1 retires the persistent survey copy so the map does not double-teach.
+var _survey_retired: bool = false
 var _sealed_door: Button
 var _trail_layout: Dictionary = {}
 var _title_label: Label
@@ -333,8 +338,12 @@ func refresh(run: RunState) -> void:
 		if first_live == null and live.has(i):
 			first_live = _waystones[i]
 	if live.is_empty():
+		_hint_label.visible = true
 		_hint_label.text = Locale.active.t("ui.pilgrimage.roadEnds")
+	elif _survey_retired:
+		_hint_label.visible = false
 	else:
+		_hint_label.visible = true
 		_hint_label.text = Locale.active.t("ui.pilgrimage.surveyChoose")
 		if first_live != null and first_live.is_inside_tree():
 			first_live.grab_focus()
@@ -373,6 +382,22 @@ func projected_seats() -> PackedVector2Array:
 		_map_scene.size = size
 	_map_scene._fit()
 	return _map_scene.project_pins(map.nodes)
+
+
+func set_survey_retired(on: bool) -> void:
+	_survey_retired = on
+	if _hint_label == null:
+		return
+	if on and not (_run != null and map.reachable().is_empty()):
+		_hint_label.visible = false
+
+
+func first_live_waystone() -> Control:
+	var live: Array[int] = map.reachable()
+	for i: int in range(_waystones.size()):
+		if live.has(i):
+			return _waystones[i]
+	return _hint_label
 
 
 func pick_node_at(screen: Vector2) -> int:
@@ -435,6 +460,8 @@ func _on_waystone_chosen(i: int) -> void:
 ## after node_chosen, so the ceremony covers the same-screen window between
 ## click and route swap.
 func choose(i: int) -> bool:
+	if before_pick.is_valid() and not before_pick.call():
+		return false
 	var from_i: int = map.at
 	var was_unlit: bool = map.nodes[i].unlit
 	if _travelling or not map.enter(i):
