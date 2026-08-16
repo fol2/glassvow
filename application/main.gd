@@ -517,7 +517,8 @@ func _quit_game() -> void:
 ## through them, so a Scenario can never read or overwrite a real pilgrimage
 ## and no screen has to know which profile is live.
 ## `tests/test_profile_isolation.gd` re-censuses this file and fails on any
-## seventh site.
+## `SaveService` call outside these six, or on any one of the six that stops
+## handing over its path field.
 func _store_run() -> bool:
 	return SaveService.store(game.run, _run_save_path)
 

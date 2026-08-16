@@ -6,10 +6,10 @@ extends RefCounted
 ## Three legs, because no single one is sufficient. The census fails on any
 ## new default-path `SaveService` site in `application/main.gd` — that is the
 ## mutation gate, and it fires whichever helper is bypassed. The boundary leg
-## keeps `presentation/` from choosing a profile file behind Main's back. The
-## live leg boots a named Development Scenario over deliberately poisoned
-## production sentinels and proves the exercises left them byte-identical,
-## which is the part a source scan cannot claim.
+## keeps `presentation/` from calling `SaveService` or reading Main's path
+## fields. The live leg boots a named Development Scenario over deliberately
+## poisoned production sentinels and proves the exercises left them
+## byte-identical, which is the part a source scan cannot claim.
 
 const MAIN_PATH: String = "res://application/main.gd"
 const PRESENTATION_ROOT: String = "res://presentation"
@@ -20,6 +20,8 @@ const SCENARIO_ID: String = "title-continue"
 const SCENARIO_SEED: int = 18501
 const SENTINEL_RUN_ID: String = "run-sentinel-329"
 const SENTINEL_SCENE: String = "sentinel-329"
+## Where a developer's real save waits while the sentinels stand in for it.
+const STASH_SUFFIX: String = ".pretest"
 const BUILD: String = "test-profile-isolation-sha"
 
 ## The only functions in `application/main.gd` allowed to name `SaveService`,
@@ -46,9 +48,18 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 
 static func run(fails: Array[String]) -> void:
+	# `test_opening_flow.run()`'s convention, and it earns its place twice over
+	# here: this is the only suite that stands sentinels in for BOTH production
+	# files, so the end-to-end comparison is what proves they came back.
+	var run_before: String = _digest(SaveService.RUN_PATH)
+	var vigil_before: String = _digest(SaveService.VIGIL_PATH)
 	_census(fails)
 	_presentation_boundary(fails)
 	_live_isolation(fails)
+	_check(fails, _digest(SaveService.RUN_PATH) == run_before,
+		"the production run was not restored byte-for-byte")
+	_check(fails, _digest(SaveService.VIGIL_PATH) == vigil_before,
+		"the production Vigil was not restored byte-for-byte")
 
 
 # ------------------------------------------------------------------- census
@@ -86,8 +97,14 @@ static func _census(fails: Array[String]) -> void:
 			"helper %s() is gone or no longer reaches SaveService" % name)
 
 
-## Rule 5 of the ticket: presentation asks Main to persist, and never decides
-## which profile file that is. `HintGuide` used to read `main._vigil_save_path`.
+## Rule 5 of the ticket, stated as narrowly as it is actually enforced: no
+## script under `presentation/` may call `SaveService` or read Main's path
+## fields. `HintGuide` used to read `main._vigil_save_path`.
+##
+## This is NOT "presentation never picks a profile file" — `presentation/dev/
+## console.gd` reaches the isolated files through `ScenarioKernel.clear_profile()`
+## without consulting Main at all, which is fine for dev-only UI but is outside
+## what these three tokens can see.
 static func _presentation_boundary(fails: Array[String]) -> void:
 	for path: String in _scripts_under(PRESENTATION_ROOT):
 		var source: String = FileAccess.get_file_as_string(path)
@@ -100,11 +117,18 @@ static func _presentation_boundary(fails: Array[String]) -> void:
 
 static func _live_isolation(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
-	var prod_run: Variant = _snapshot(SaveService.RUN_PATH)
-	var prod_vigil: Variant = _snapshot(SaveService.VIGIL_PATH)
+	# The production pair has to hold sentinels for the exercises to be worth
+	# anything, and this suite shares `user://` with the real game — so a
+	# developer's own save is moved ASIDE rather than overwritten. Rename is
+	# atomic and leaves the file whole: kill the process anywhere below and the
+	# real save is sitting at `<path>.pretest`, recoverable by hand. The
+	# in-memory copy this replaced could not survive a crash, and its restore
+	# truncated the target before writing.
+	var run_stashed: bool = _stash(SaveService.RUN_PATH)
+	var vigil_stashed: bool = _stash(SaveService.VIGIL_PATH)
 	if not _poison_production(content, fails):
-		_restore(SaveService.RUN_PATH, prod_run)
-		_restore(SaveService.VIGIL_PATH, prod_vigil)
+		_unstash(SaveService.RUN_PATH, run_stashed, fails)
+		_unstash(SaveService.VIGIL_PATH, vigil_stashed, fails)
 		return
 	var run_mark: String = _digest(SaveService.RUN_PATH)
 	var vigil_mark: String = _digest(SaveService.VIGIL_PATH)
@@ -127,8 +151,8 @@ static func _live_isolation(fails: Array[String]) -> void:
 	_check(fails, _digest(SaveService.VIGIL_PATH) == vigil_mark,
 		"the production Vigil sentinel was rewritten")
 	kernel.clear_profile()
-	_restore(SaveService.RUN_PATH, prod_run)
-	_restore(SaveService.VIGIL_PATH, prod_vigil)
+	_unstash(SaveService.RUN_PATH, run_stashed, fails)
+	_unstash(SaveService.VIGIL_PATH, vigil_stashed, fails)
 
 
 ## Every runtime shape the ticket names, in one profile, each followed by a
@@ -182,8 +206,15 @@ static func _exercise(
 	_intact(run_mark, vigil_mark, "terminal commit", fails)
 	_dispose(main)
 
-	# Erase everything. This door cleared the production pair unconditionally
-	# until #329 — the whole reason the ticket exists.
+	# Erase everything — and be exact about what was wrong here, because the
+	# shape of it is stranger than "both files were production". Until #329 the
+	# door was `SaveService.clear()` (production run, always) plus
+	# `clear_vigil(_vigil_save_path)` (active Vigil, correct since a74f2a5c).
+	# So with a Scenario live it deleted the player's REAL run while clearing
+	# the DEVELOPMENT Vigil, and `_show_title()` then re-read the dev run and
+	# still offered Continue for the pilgrimage the door claimed to erase.
+	# Only the run assertion below carries that regression: the Vigil one would
+	# have passed before #329 too, and is here to keep the halves independent.
 	var again: RunState = kernel.construct(_reference())
 	_check(fails, again != null, "the Scenario did not rebuild for the erase door")
 	if again != null:
@@ -307,20 +338,27 @@ static func _changed(before: Dictionary, after: Dictionary) -> Array[String]:
 	return out
 
 
-static func _snapshot(path: String) -> Variant:
+## Move a real save out of the way, atomically. Answers whether there was one.
+static func _stash(path: String) -> bool:
 	if not FileAccess.file_exists(path):
-		return null
-	return FileAccess.get_file_as_string(path)
+		return false
+	return DirAccess.rename_absolute(
+		ProjectSettings.globalize_path(path),
+		ProjectSettings.globalize_path(path + STASH_SUFFIX)) == OK
 
 
-static func _restore(path: String, snap: Variant) -> void:
-	if snap == null:
-		SaveService.clear(path)
+## Drop the sentinel this test wrote, then put the real save back. Restoration
+## failure is a test failure — silently leaving a developer's save in the stash
+## is how you find out about it a week later.
+static func _unstash(path: String, stashed: bool, fails: Array[String]) -> void:
+	SaveService.clear(path)
+	if not stashed:
 		return
-	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-	if file != null:
-		file.store_string(str(snap))
-		file.close()
+	_check(fails, DirAccess.rename_absolute(
+			ProjectSettings.globalize_path(path + STASH_SUFFIX),
+			ProjectSettings.globalize_path(path)) == OK,
+		"could not restore %s from its stash — the real save is still at %s"
+			% [path, path + STASH_SUFFIX])
 
 
 # ------------------------------------------------------------------- parsing
