@@ -161,7 +161,7 @@ static func _base_run(content: ContentDB, run_id: String) -> RunState:
 	var world_map: WorldMap = WorldMap.benchmark(run_state)
 	run_state.map = world_map.to_dict()
 	run_state.node_id = "0"
-	run_state.floors_climbed = 3
+	run_state.waystones_lit = 3
 	run_state.rng = Rng.new(0x149149)
 	run_state.stats["slain"] = 4
 	run_state.stats["start"] = 1234567890
@@ -179,7 +179,7 @@ static func _preserved_projection(run_state: RunState) -> Dictionary:
 		"runId": run_state.run_id,
 		"rngState": run_state.rng_state(),
 		"nodeId": run_state.node_id,
-		"floorsClimbed": run_state.floors_climbed,
+		"floorsClimbed": run_state.waystones_lit,
 		"player": run_state.to_save_dict()["player"],
 		"map": run_state.map,
 		"stats": run_state.stats,

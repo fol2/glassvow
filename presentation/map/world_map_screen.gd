@@ -11,6 +11,9 @@ extends Control
 
 signal node_chosen(index: int)
 signal sealed_door_requested
+## Optional persist-first gate. Main binds hint dismissal here so a failed
+## Vigil flush cannot let the lantern walk before the record is on disk.
+var before_pick: Callable = Callable()
 
 const TRAVEL_TIME: float = 0.4
 
@@ -41,6 +44,8 @@ var _travel_from_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _travel_to_xz: Vector2 = MapCameraRig.DEFAULT_XZ
 var _waystones: Array[GlassWaystone] = []
 var _hint_label: Label
+## H1 retires the persistent survey copy so the map does not double-teach.
+var _survey_retired: bool = false
 var _sealed_door: Button
 var _trail_layout: Dictionary = {}
 var _title_label: Label
@@ -288,6 +293,14 @@ func _node_caption(n: MapNode) -> String:
 ## lands on the top waystone row, which on a phone held upright is the row
 ## nearest the player's thumb.
 func _act_line(region: String, boss: String) -> String:
+	# An act with no bossName gets the region alone — the same degraded form this
+	# function already falls back to when the full line will not fit. The retired
+	# `ui.pilgrimage.summit` used to fill the slot, but the slot is inside
+	# "{boss} AWAITS": any sentence put there has to be a noun, and the nearest
+	# surviving key (`roadEnds`, "THE ROAD ENDS HERE") is a clause. Act IV's
+	# `bossName` is not in the catalogue yet, so this path is reachable.
+	if boss.is_empty():
+		return region
 	var full: String = Locale.active.t("ui.pilgrimage.awaits", {
 		"region": region, "boss": boss,
 	})
@@ -317,7 +330,7 @@ func refresh(run: RunState) -> void:
 			if map.region == "rose_window" \
 			else str(act.get("name", REGION_NAME))
 		_title_label.text = _act_line(act_name.to_upper(),
-			str(act.get("bossName", Locale.active.t("ui.pilgrimage.summit"))).to_upper())
+			str(act.get("bossName", "")).to_upper())
 	var live: Array[int] = map.reachable()
 	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
@@ -325,8 +338,12 @@ func refresh(run: RunState) -> void:
 		if first_live == null and live.has(i):
 			first_live = _waystones[i]
 	if live.is_empty():
+		_hint_label.visible = true
 		_hint_label.text = Locale.active.t("ui.pilgrimage.roadEnds")
+	elif _survey_retired:
+		_hint_label.visible = false
 	else:
+		_hint_label.visible = true
 		_hint_label.text = Locale.active.t("ui.pilgrimage.surveyChoose")
 		if first_live != null and first_live.is_inside_tree():
 			first_live.grab_focus()
@@ -367,6 +384,22 @@ func projected_seats() -> PackedVector2Array:
 	return _map_scene.project_pins(map.nodes)
 
 
+func set_survey_retired(on: bool) -> void:
+	_survey_retired = on
+	if _hint_label == null:
+		return
+	if on and not (_run != null and map.reachable().is_empty()):
+		_hint_label.visible = false
+
+
+func first_live_waystone() -> Control:
+	var live: Array[int] = map.reachable()
+	for i: int in range(_waystones.size()):
+		if live.has(i):
+			return _waystones[i]
+	return _hint_label
+
+
 func pick_node_at(screen: Vector2) -> int:
 	if _map_scene == null:
 		return -1
@@ -386,7 +419,7 @@ func set_act_scenery(stage_act: int) -> void:
 		var act: Dictionary = content.acts[_act]
 		_title_label.text = _act_line(
 			str(act.get("name", REGION_NAME)).to_upper(),
-			str(act.get("bossName", Locale.active.t("ui.pilgrimage.summit"))).to_upper())
+			str(act.get("bossName", "")).to_upper())
 	_push_bands(true)
 
 
@@ -427,6 +460,8 @@ func _on_waystone_chosen(i: int) -> void:
 ## after node_chosen, so the ceremony covers the same-screen window between
 ## click and route swap.
 func choose(i: int) -> bool:
+	if before_pick.is_valid() and not before_pick.call():
+		return false
 	var from_i: int = map.at
 	var was_unlit: bool = map.nodes[i].unlit
 	if _travelling or not map.enter(i):
@@ -449,6 +484,11 @@ func choose(i: int) -> bool:
 	if _map_scene != null:
 		_map_scene.set_lock_input(true)
 		_map_scene.set_live(true)
+	_glide(i, was_unlit)
+	return true
+
+
+func _glide(i: int, was_unlit: bool) -> void:
 	# Reduce-motion skips the walk but still arrives through one path so the
 	# travelling flag clears the same way a tween finish would. No kindle
 	# ceremony — art corrects on the next _show_map rebuild, as today.
@@ -456,14 +496,13 @@ func choose(i: int) -> bool:
 		if _map_scene != null:
 			_map_scene.get_rig().set_camera_xz(_travel_to_xz)
 		_on_arrived(i)
-		return true
-	if was_unlit:
+		return
+	if was_unlit and i >= 0 and i < _waystones.size():
 		_waystones[i].kindle_reveal(map.nodes[i].type)
 	# Hold the glide so the 0.45s bloom lands before the route swap.
 	var dur: float = maxf(TRAVEL_TIME, 0.5) if was_unlit else TRAVEL_TIME
 	Motion.bez(self, _set_travel_t, dur, Motion.CSS_EASE) \
 		.finished.connect(_on_arrived.bind(i))
-	return true
 
 
 func _set_travel_t(v: float) -> void:

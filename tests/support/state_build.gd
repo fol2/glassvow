@@ -108,7 +108,7 @@ static func run_from_snapshot(snap: Dictionary) -> RunState:
 	rs.seed = ji(snap["seed"])
 	rs.rng = Rng.new(ji(snap["rngState"]))
 	rs.act = ji(snap["act"])
-	rs.floors_climbed = ji(snap["floorsClimbed"])
+	rs.waystones_lit = ji(snap["floorsClimbed"])
 	rs.aspect = ji(snap["aspect"])
 	rs.vow = ji(snap["vow"])
 	rs.art = StringName(str(snap["art"]))

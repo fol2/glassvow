@@ -19,6 +19,7 @@ Born from wayfinder ticket #175 (story design). Spine: candidate #8
 | `04-delivery.md` | Delivery surfaces, per-run beat budget, content volume plan, rubric A-criteria mapping | 00 + rubric |
 | `05-foreshadow-ledger.md` | Every line's dual reading: surface / post-twist / leak risk | all copy, shipped and new |
 | `06-glossary.md` | Bilingual canonical terms + placeholder register | 00, domain-modeling discipline |
+| `07-scenes.md` | Scripted-scene blueprints (opening / unsealing / Act IV / finale) + the shared scene player spec | 00 + 03 + 04 (#263) |
 
 ## Review states
 
@@ -41,7 +42,8 @@ if 00 itself looks wrong.
 
 - **Assets are immutable; names are not.** Story may reinterpret any shipped
   image but never requires changing one. Placeholder names in 【brackets】.
-- "Spire/尖塔" is retired as a landmark name — use 【終境】 until renamed.
+- "Spire/尖塔" is retired as a landmark name — replaced by 黑曜王庭 / The
+  Obsidian Court (#261 Q8); the game-wide vertical-vocabulary sweep is #232.
 - zh-Hant is the source language (HK 書面語 register, 着/裏 orthography per
   ticket #177); en is a full rewrite, not a calque. Fable drafts, James reviews.
 - The reference implementation's English copy is inherited but not sacred:

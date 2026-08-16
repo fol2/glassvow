@@ -2,7 +2,7 @@
 
 Issue: [fol2/glassvow#203](https://github.com/fol2/glassvow/issues/203).
 Method: [fol2/glassvow#160](https://github.com/fol2/glassvow/issues/160).
-Status: **DRAFT — PENDING JAMES SIGN-OFF** on the **p8-d0-v1** bands (addendum 2026-08-14). Do not sign the p7-d2-v1 bands. Step 2 (device validation) is HITL and is not this artifact.
+Status: **SIGNED — James, 2026-08-16** on the **p8-d0-v1** bands (addendum 2026-08-14), as a **pilot-adequacy checkpoint, not a balance guarantee**, with the four adversarial amendments attached. Band 2's second clause was dropped at sign-off (point-only gate — candidate (a)); band 3 signed as mean ∈ [5.5, 10.5]; band 4 as a point-estimate gate at n = 200. Step 2 (device validation) was folded into [#205](https://github.com/fol2/glassvow/issues/205). The p7-d2-v1 bands were never signed and are superseded. See the sign-off record at the end.
 
 **The bands also await a re-measure, not only a signature.** #203 is wired blocked-by [Strategy landscape layer 1](https://github.com/fol2/glassvow/issues/215): Tier 1 opens the pilot's grammar so a policy can *decline* a card reward, and the measured winning deck of ~43 cards is not a build any competent human plays. A new grammar is a new instrument, so these four cells will move again and every number below is provisional against that. Signing before then would fence the game to a superseded ruler. *(Re-measured 2026-08-14 — see the addendum at the end: the numbers did not move, and that is not the same as the ruler surviving.)*
 
@@ -205,7 +205,7 @@ Caveat for HITL: a competent human will still beat this heuristic. If James's de
 
 ---
 
-## Four bands — DRAFT, PENDING JAMES SIGN-OFF
+## Four bands — p7 draft, never signed (superseded by the signed p8 bands in the addendum)
 
 Instrument: headless `p7-d2-v1` on `mature-three-act-no-side-state-v1`, diagnosis seeds held out from any later proof. Gated vows are 0 (primary) and 5 (sanity). Vows 1–4 ungated. Thresholds below are the same numbers drafted against `p7-d0-v1`; commentary is recomputed on the post-fix sample. Where a post-fix point now fails a drafted line, the line is **not** moved.
 
@@ -496,7 +496,7 @@ compress ablation deltas; band 4 still measures **sensitivity of this pilot**.
 Diagnosis pair ran in parallel; the eight ablations ran as eight Godot
 processes. Per-run cost ~75–110 ms once Godot is up.
 
-### Four bands — DRAFT against p8-d0-v1, PENDING JAMES SIGN-OFF
+### Four bands — SIGNED against p8-d0-v1 (James, 2026-08-16)
 
 Re-fitted to this instrument. The p7 60–80 / 25–50 / 15 pp / [6, 10] lines do
 not contain these points. The four adversarial-review amendments follow
@@ -504,7 +504,7 @@ not contain these points. The four adversarial-review amendments follow
 
 #### 1. Win-rate band per gated vow × aspect
 
-**Draft:** Vow 0 each aspect **80–97%**; Vow 5 each aspect **55–85%**.
+**Signed:** Vow 0 each aspect **80–97%**; Vow 5 each aspect **55–85%**.
 
 p7's 60–80 / 25–50 sat around 64.5–74.5 and 32–42. p8 sits at 89.0 / 92.5 and
 64.0 / 81.0. The floor stays above arm 2's Vow 0 Dusk 80.5% so the instrument
@@ -515,8 +515,10 @@ the ceiling. Vow 5 Dusk at 64.0% sits 9 pp above the 55% floor. Vow 5 Ash at
 
 #### 2. |Ashwarden − Duskblade| gap
 
-**Draft:** paired |Ash − Dusk| **≤ 20 pp** at both gated vows; the paired 95%
-interval must not lie entirely outside [−20, +20] pp.
+**Signed:** paired |Ash − Dusk| point estimate **≤ 20 pp** at both gated vows.
+The drafted second clause ("the paired 95% interval must not lie entirely
+outside [−20, +20] pp") was **dropped at sign-off** — candidate (a) below —
+per amendment 2: that clause shape is vacuous at any cap.
 
 p7's 15 pp line **fails** Vow 5's **+17.00 pp** point. Twenty points is the
 same kind of round cap with ~3 pp margin on the measured 17.00 that fifteen
@@ -536,7 +538,7 @@ Choosing (a′) or (d) at sign-off fails Vow 5 on the day they are signed.
 
 #### 3. Boss 6–10 turn window
 
-**Draft:** **mean** boss length in **[5.5, 10.5]** for every act × aspect ×
+**Signed:** **mean** boss length in **[5.5, 10.5]** for every act × aspect ×
 gated vow (twelve cells). Share-in-window is reported, not gated.
 
 p7's [6, 10] fails three p8 means: Vow 0 Ash act 1 **5.914**, act 2 **5.949**,
@@ -546,7 +548,7 @@ would currently pass all twelve (lowest 60.0%). If James wants the original
 
 #### 4. Ablation concentration
 
-**Draft:** on a matched ≥80-run Vow 0 sample, no single **non-boss** card or
+**Signed:** on a matched ≥80-run Vow 0 sample, no single **non-boss** card or
 relic whose removal shifts a per-aspect win rate by more than **12 pp**; no
 **boss relic** more than **15 pp**. Point-estimate gate (amendment 3).
 
@@ -566,9 +568,9 @@ on https://github.com/fol2/glassvow/pull/208#issuecomment-5281077468.
 3. **Sign band 4 explicitly as a point-estimate gate, or raise the ablation sample.** At n = 80, `hollowCrown`'s −10.62 pp has a paired interval of [−17.01, −4.24] — the point estimate passes the 15 pp line but the interval reaches past it. A ±5 pp half-width needs roughly 131 seeds per aspect.
 4. **Note that the bands were fitted post-hoc** to ~34 uncorrected intervals from one sample; future validation should treat them as one joint hypothesis.
 
-On (2): the p8 draft uses [−20, +20] for the second clause, which is the same
-shape of vacuous gate at a wider cap. The candidate table above is the
-measured choice, not a silent tighten.
+On (2): resolved at sign-off by dropping the second clause — candidate (a),
+point-only ≤ 20 pp. The candidate table above records the measured
+alternatives that were on the table.
 On (3): band 4 is signed as a **point-estimate** gate; the sample is n = 200
 (already above 131), and every interval/half-width is in the table.
 On (4): these four bands were fitted post-hoc to the p8 sample. Treat them as
@@ -577,3 +579,27 @@ one joint hypothesis on a future holdout (seeds 5000+).
 RNG: `_incoming` still clones `run.rng_state()`; `domain/rng/rng.gd` was not
 touched. Ablation bans still live in `choose_card` / `choose_relic` /
 `choose_shop` (next-best, not forfeit).
+
+### Sign-off record — 2026-08-16
+
+Signed by James (wayfinder session on
+[#203](https://github.com/fol2/glassvow/issues/203)), all four bands against
+`p8-d0-v1`:
+
+- The signature certifies the **instrument's envelope** — a pilot-adequacy
+  checkpoint. Per amendment 1 it is no evidence for #160's unwaivable trio,
+  which rests on the strategy-landscape line (#213's decision) and the human
+  feel pass (#205).
+- Band 2's second clause **dropped** (candidate (a): point-only ≤ 20 pp).
+  Band 3's mean gate is **[5.5, 10.5]**, a deliberate widening of the p7
+  [6, 10] intent — boss length is pilot-strength-sensitive, and half a turn
+  sits inside instrument noise; share-in-window stays reported, not gated.
+  Band 4 signed as a point-estimate gate at n = 200.
+- Step 2 (real-device direction runs) **folded into #205's protocol** rather
+  than gating this signature: the pilot is confirmed non-saturating, so a
+  human ~100% Vow 0 result would not move these bands — it would only feed
+  #205's "is Vow 0 challenging for a human" question, which was already
+  #205's to answer.
+- Post-hoc caveat (amendment 4) stays binding: future validation treats the
+  four bands as **one joint hypothesis** on a holdout (seeds 5000+).
+- #204 tunes against these bands as the ruler.

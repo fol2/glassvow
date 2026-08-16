@@ -3,6 +3,16 @@
 Status: **design of record** for P7 (issue #7 / #98). Measured against `main`
 at the P6 close (`5df7a2d`, 2026-08-03). No behaviour change in this commit.
 
+> **VOCABULARY SUPERSEDED (2026-08-16, #232 → #303).** The vertical vocabulary
+> is retired game-wide: Spire, climb, ascend, summit, above-as-a-place, upward
+> and stair-as-the-road are banned in every player-facing string
+> (`docs/story/06-glossary.md` carries the ban and the keep-list). Every
+> `Climb` / `THE SUMMIT` below records the *old* copy, not a target — §5's
+> "English source strings stay as shipped until a deliberate copy pass" is
+> discharged: **#303 was that pass.** The extraction discipline the same
+> section states — copy edits are their own commits, never folded into a
+> mechanical extraction — still stands.
+
 P7 lands full Traditional Chinese beside English in the game's 琉璃 register,
 without touching a single content ID — save schema v2 stays frozen
 (`docs/commercial-game-delivery.md` §2 Locale separation; SKILL.md §3).
@@ -378,9 +388,9 @@ before #103 merges. Starter list (English → 譯名 to be authored in P7.6):
 |---|---|
 | Glassvow / 琉璃誓言 | Brand |
 | Vigil | Meta ledger |
-| Pilgrimage | Map journey (prefer over "Climb" in new copy) |
-| Waystone | Map node |
-| Spire | Destination / Act 3 region |
+| Pilgrimage | Map journey ("Climb" and the rest of the vertical vocabulary are **banned**, #232) |
+| Waystone | Map node; also the run counter (WAYSTONE n / 第 {n} 塊引路石) |
+| The Obsidian Court | Act 3 region — it replaced the Spire, which is retired |
 | Lantern / Lantern Art / Ember(s) | Resource |
 | Kindle | Verb — burn a card for an Ember |
 | Ward | Player-facing block |

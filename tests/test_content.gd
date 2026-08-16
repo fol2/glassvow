@@ -49,10 +49,11 @@ static func run(fails: Array[String]) -> void:
 	var full_counts: Array[int] = [full.cards.size(), full.enemies.size(),
 		full.relics.size(), full.quest_ids.size()]
 	if full_counts != [61, 27, 31, 6]:
-		fails.append("ContentDB: full catalogue counts diverged from 6e06911")
+		fails.append("ContentDB: full catalogue counts diverged from port baseline")
 	if full.reveal_ids.size() != 8 or full.aspects.size() != 2 or full.vows.size() != 5:
 		fails.append("ContentDB: full progression registries are incomplete")
 	full.validate(fails)
+	_validate_requires_ai(fails)
 	_emberheart_heal(full, 3, "full content", fails)
 	_emberheart_heal(db, 6, "fixture fallback", fails)
 	_enemy_overrides(fails)
@@ -74,6 +75,7 @@ static func run(fails: Array[String]) -> void:
 	if not rewards.card_pool(pickup_run, "uncommon").has("quakeblow") \
 			or not rewards.relic_pool(pickup_run, "uncommon").has("smolderingCoal"):
 		fails.append("ContentDB: deed unlocks do not extend reward pools")
+	_rising_litany_pools(full, fails)
 
 
 static func _emberheart_heal(
@@ -111,3 +113,75 @@ static func _enemy_overrides(fails: Array[String]) -> void:
 	bad_kind["art"]["kind"] = "slmie"
 	if untouched.enemy_faults("duskfang", bad_kind).is_empty():
 		fails.append("ContentDB: unknown mob art kind was accepted")
+
+
+## Every enemy the catalogue ships has an AI handler, so `validate` above can
+## never demonstrate that the check fires. Inject one that has none — into a
+## private catalogue, because a ghost enemy left in the shared `full` would
+## reach every assertion after this one.
+static func _validate_requires_ai(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full(false)
+	content.enemies["noAiGhost"] = {
+		"hp": [8, 8],
+		"name": "No AI Ghost",
+		"art": {"kind": "wisp", "hue": 0.0, "size": 1.0},
+		"moves": {"wail": {"intent": "attack", "dmg": 1, "name": "Wail"}},
+	}
+	var faults: Array[String] = []
+	content.validate(faults)
+	var found: bool = false
+	for msg: String in faults:
+		if msg.contains("noAiGhost") and msg.contains("no AI handler"):
+			found = true
+			break
+	if not found:
+		fails.append("ContentDB: validate did not catch enemy without AI handler")
+
+
+static func _rising_litany_pools(full: ContentDB, fails: Array[String]) -> void:
+	if not full.cards.has("risingLitany"):
+		fails.append("ContentDB: risingLitany missing from cards")
+	if full.cards.has("ascension"):
+		fails.append("ContentDB: retired ascension id still present")
+	var rare_v: Variant = full.card_pools.get("rare", [])
+	if typeof(rare_v) != TYPE_ARRAY:
+		fails.append("ContentDB: cardPools.rare is not an array")
+	else:
+		var rare: Array = rare_v
+		if not rare.has("risingLitany"):
+			fails.append("ContentDB: risingLitany missing from cardPools.rare")
+	if str(full.pool_gate_cards.get("risingLitany", "")) != "poolFull":
+		fails.append("ContentDB: risingLitany missing from poolGate.cards")
+	var waves_v: Variant = full.progression.get("poolWaves", {})
+	if typeof(waves_v) != TYPE_DICTIONARY:
+		fails.append("ContentDB: progression.poolWaves is not a dictionary")
+		return
+	var waves: Dictionary = waves_v
+	var pool_full_v: Variant = waves.get("poolFull", {})
+	if typeof(pool_full_v) != TYPE_DICTIONARY:
+		fails.append("ContentDB: poolWaves.poolFull is not a dictionary")
+		return
+	var pool_full: Dictionary = pool_full_v
+	var wave_cards_v: Variant = pool_full.get("cards", [])
+	if typeof(wave_cards_v) != TYPE_ARRAY:
+		fails.append("ContentDB: poolWaves.poolFull.cards is not an array")
+		return
+	var wave_cards: Array = wave_cards_v
+	if not wave_cards.has("risingLitany"):
+		fails.append("ContentDB: risingLitany missing from poolWaves.poolFull.cards")
+	var run: RunState = RunState.new_run(full, 13, "run-rising-litany")
+	run.reveals.append("poolFull")
+	if not RewardRules.new(full).card_pool(run, "rare").has("risingLitany"):
+		fails.append("ContentDB: risingLitany not reachable in rare once poolFull is revealed")
+	if not FileAccess.file_exists("res://assets/art/cards/risingLitany.jpg"):
+		fails.append("ContentDB: risingLitany art file missing")
+	var eighth_v: Variant = full.quests.get("eighthOmen", {})
+	if typeof(eighth_v) != TYPE_DICTIONARY:
+		fails.append("ContentDB: eighthOmen is not a dictionary")
+		return
+	var eighth: Dictionary = eighth_v
+	if not eighth.has("waystoneEchoes"):
+		fails.append("ContentDB: eighthOmen.waystoneEchoes missing")
+	if eighth.has("floorEchoes"):
+		fails.append("ContentDB: retired floorEchoes key still present")
+

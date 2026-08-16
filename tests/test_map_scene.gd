@@ -1,4 +1,21 @@
 extends RefCounted
+
+class FakeAssetLoader:
+	extends RefCounted
+
+	var calls: PackedStringArray = []
+
+	func load_resource(path: String) -> Resource:
+		calls.append(path)
+		if path.ends_with(".png"):
+			var image: Image = Image.create_empty(1, 1, false, Image.FORMAT_RGBA8)
+			image.set_pixel(0, 0, Color(0.5, 0.5, 0.5, 0.5))
+			return ImageTexture.create_from_image(image)
+		var mesh: BoxMesh = BoxMesh.new()
+		mesh.size = Vector3(1.0, 1.0, 1.0)
+		return mesh
+
+
 ## #234 slice 2–4: MapScene shaders, tex_stop bind, freeze switch, act palettes.
 
 
@@ -12,6 +29,7 @@ static func run(fails: Array[String]) -> void:
 	_scene(fails)
 	_input(fails)
 	_materials(fails)
+	_asset_binding(fails)
 	_palette(fails)
 
 
@@ -89,6 +107,14 @@ static func _scene(fails: Array[String]) -> void:
 				"ground does not cast shadows")
 	_check(fails, scene.get_rig().get_camera().current,
 			"act camera is current inside the stage")
+	_check(fails, scene.active_asset_paths().is_empty()
+			and scene.find_child("MapAssetGeometry", true, false) == null,
+			"declared-but-absent assets keep the current placeholder geometry")
+	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
+		var placeholder: Node = scene.find_child(node_name, true, false)
+		_check(fails, placeholder is GeometryInstance3D
+				and (placeholder as GeometryInstance3D).visible,
+				"%s remains visible while payload is absent" % node_name)
 	scene.free()
 
 
@@ -171,6 +197,73 @@ static func _materials(fails: Array[String]) -> void:
 		_tex_stop_follows(fails, scene, stop)
 	rig.set_zoom_stop(99)
 	_tex_stop_follows(fails, scene, 3)
+	scene.free()
+
+
+static func _asset_binding(fails: Array[String]) -> void:
+	var fake: FakeAssetLoader = FakeAssetLoader.new()
+	var materials: MapMaterials = MapMaterials.new(
+			Vector3(0.0, 1.0, 0.0), 1, {}, Callable(fake, "load_resource"))
+	var act0: MapRegions = MapRegions.for_act(0)
+	var first: Dictionary = materials.bind_act(act0, PackedVector3Array())
+	var first_paths: PackedStringArray = materials.active_asset_paths()
+	var first_resources: Array[Resource] = materials.active_asset_resources()
+	var first_ground: Variant = materials.ground.get_shader_parameter("surface_tex")
+	_check(fails, first_paths.size() == 12 and first_resources.size() == 12,
+			"active act loads exactly 2 tiles + grade + 8 kits + terminus")
+	var raw_first_kits: Variant = first.get("kits", [])
+	var first_kit_count: int = 0
+	if raw_first_kits is Array:
+		var first_kits: Array = raw_first_kits
+		first_kit_count = first_kits.size()
+	_check(fails, first_kit_count == 8 and first.get("terminus", null) is Resource,
+			"active set exposes eight kit resources and one terminus")
+	for path: String in first_paths:
+		_check(fails, path.contains("/shared/") or path.contains("/act1/")
+				or path.get_file().begins_with("act1-"),
+				"act 0 does not load another act: %s" % path)
+	var act1: MapRegions = MapRegions.for_act(1)
+	materials.bind_act(act1, PackedVector3Array())
+	var second_paths: PackedStringArray = materials.active_asset_paths()
+	var second_resources: Array[Resource] = materials.active_asset_resources()
+	var retained: bool = false
+	for current: Resource in second_resources:
+		for prior: Resource in first_resources:
+			retained = retained or is_same(current, prior)
+	_check(fails, second_paths.size() == 12 and second_resources.size() == 12
+			and not retained,
+			"act switch replaces every active resource reference")
+	_check(fails, not is_same(first_ground, materials.ground.get_shader_parameter("surface_tex")),
+			"ground shader no longer retains the prior act tile")
+	for path: String in second_paths:
+		_check(fails, path.contains("/shared/") or path.contains("/act2/")
+				or path.get_file().begins_with("act2-"),
+				"act 1 does not retain act 0 paths: %s" % path)
+	var bound_shade: Color = _as_color(materials.ground.get_shader_parameter("band_shade"))
+	_check(fails, bound_shade.is_equal_approx(act1.band_shade),
+			"MapRegions, not manifest metadata, remains palette authority")
+
+	var scene_loader: FakeAssetLoader = FakeAssetLoader.new()
+	var scene: MapScene = MapScene.new({}, Callable(scene_loader, "load_resource"))
+	var first_root: Node = scene.find_child("MapAssetGeometry", true, false)
+	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 12,
+			"complete active set replaces placeholders through MapScene binding")
+	for i: int in range(8):
+		var kit: Node = scene.find_child("AssetKit%02d" % i, true, false)
+		_check(fails, kit is MultiMeshInstance3D
+				and (kit as MultiMeshInstance3D).multimesh.instance_count in [3, 4],
+				"asset kit %d owns three or four deterministic placements" % i)
+	_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
+			"active terminus is attached")
+	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
+		var placeholder: Node = scene.find_child(node_name, true, false)
+		_check(fails, placeholder is GeometryInstance3D
+				and not (placeholder as GeometryInstance3D).visible,
+				"%s hides only after the full real geometry set resolves" % node_name)
+	scene.set_act(1)
+	_check(fails, not is_instance_valid(first_root)
+			and scene.find_child("MapAssetGeometry", true, false) is Node3D,
+			"act switch frees the prior geometry root before replacing it")
 	scene.free()
 
 

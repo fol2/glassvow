@@ -70,7 +70,7 @@ func construct(ref: ScenarioReference) -> RunState:
 	var checked: RunState = _validate_checkpoint(run)
 	if checked == null:
 		return null
-	if not _store_ref(ref) or not _persist_vigil(run, ov.has("shards")):
+	if not _store_ref(ref) or not _persist_vigil(run, ov.has("shards"), ov.get("scenes_seen", [])):
 		return _fail("Development profile could not persist")
 	return checked
 
@@ -168,7 +168,7 @@ func _walk(run: RunState, map: WorldMap, path: Array[int], clear_last: bool) -> 
 			return _bad("Synthesised history could not enter node %d" % i)
 		var n: MapNode = map.current()
 		run.node_id = n.id
-		run.floors_climbed = n.row + 1
+		run.waystones_lit = n.row + 1
 		if n.unlit:
 			var bounty: int = n.bounty * (2 if run.has_relic("thiefOfWicks") else 1)
 			run.player.gold += bounty
@@ -317,12 +317,17 @@ func _validate_checkpoint(run: RunState) -> RunState:
 	return loaded
 
 
-func _persist_vigil(run: RunState, apply_shards: bool) -> bool:
+func _persist_vigil(run: RunState, apply_shards: bool, scenes: Variant = []) -> bool:
 	var vigil: VigilState = VigilState.blank()
 	if apply_shards and not run.shards.is_empty():
 		if not vigil.commit_run(run, "win", content):
 			last_error = "Vigil could not record the Scenario"
 			return false
+	if typeof(scenes) == TYPE_ARRAY:
+		for id_v: Variant in scenes:
+			var seen: String = str(id_v)
+			if not seen.is_empty() and not vigil.scenes_seen.has(seen):
+				vigil.scenes_seen.append(seen)
 	return SaveService.store_vigil(vigil, vigil_path)
 
 

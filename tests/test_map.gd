@@ -169,9 +169,9 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, lifecycle.act == 3 and lifecycle.omens.size() == 4
 		and lifecycle.is_final_act(),
 		"three boss transitions reach the fourth and final act with one omen per act")
-	_check(fails, second.region == "sunken_city" and third.region == "obsidian_spire"
+	_check(fails, second.region == "sunken_city" and third.region == "obsidian_court"
 		and fourth.region == "rose_window",
-		"the fourth act names rose_window, not the Spire")
+		"the fourth act names rose_window, not the court")
 	_check(fails, lifecycle.player.hp == 26,
 		"each boss transition mends 35 percent without exceeding max HP")
 	var boss_map: WorldMap = WorldMap.slice()

@@ -41,9 +41,10 @@ in `GlassStyle.focus_ring`).
 
 ### 3. Title menu — variant B, "Ceremonial"
 
-`title-b.png` / `title-b.html`. Three tiers: one gold primary (Continue
-Climb) on a waystone-facet plate with a lantern bloom rising beneath it, one
-plain-panel secondary (Begin the Climb), and the five utilities stripped of
+`title-b.png` / `title-b.html`. Three tiers: one gold primary (**Back to the
+Road**, `ui.menu.continueClimb`) on a waystone-facet plate with a lantern bloom
+rising beneath it, one plain-panel secondary (**Rekindle**,
+`ui.menu.beginClimb`), and the five utilities stripped of
 their boxes into one row of unboxed words at 64 px tap height — which is what
 kills the "How to Play" two-line wrap. A single gold hairline with a glass
 lozenge separates actions from utilities. Variant A ("quiet hierarchy", same
@@ -52,8 +53,8 @@ skeleton in neutral dress) was presented and not chosen.
 Implementation notes carried from the mock: a scrim cannot hide the current
 buttons (at 0.96 opacity their borders still ghost through on this dark a
 scene — measured); the mock uses backdrop blur instead, but the real screen
-simply won't draw the old menu. A "resume context" sub-label under Continue
-Climb (act · floor) needs a locale key that does not exist yet.
+simply won't draw the old menu. A "resume context" sub-label under **Back to
+the Road** (act · waystone) needs a locale key that does not exist yet.
 
 ### 4. Shop — concept C1, "The Night Stall"
 
@@ -88,7 +89,7 @@ card-stack-opens-on-tap are worth stealing if execution needs them.
 - `ui.shop.removalSpent` — "SPENT" / 已用 (card removal after use)
 - a purse label if the shop shows one ("YOUR PURSE"; nearest existing is
   `ui.reward.goldAmount`)
-- optional title resume sub-label (act · floor) under Continue Climb
+- optional title resume sub-label (act · waystone) under **Back to the Road**
 
 ## Found along the way
 

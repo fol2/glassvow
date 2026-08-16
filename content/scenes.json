@@ -1,0 +1,170 @@
+{
+  "v": 1,
+  "scenes": {
+    "opening": {
+      "beats": [
+        {"art": "res://assets/art/scenes/opening-hearth.png", "motion": "hold", "lines": [
+          {"speaker": "keeper", "key": "story.opening.b1.l1"},
+          {"speaker": "keeper", "key": "story.opening.b1.l2"}
+        ]},
+        {"motion": "hold", "skipDwell": 1.0, "lines": [
+          {"speaker": "keeper", "key": "story.opening.b2.l1"},
+          {"speaker": "keeper", "key": "story.opening.b2.l2"},
+          {"speaker": "keeper", "key": "story.opening.b2.l3"}
+        ]},
+        {"art": "res://assets/art/scenes/opening-hearth.png", "motion": "hold", "lines": [
+          {"key": "story.opening.b3.l1"},
+          {"key": "story.opening.b3.l2"}
+        ]},
+        {"art": "res://assets/art/scenes/opening-hearth.png", "motion": "linger", "lines": [
+          {"key": "story.opening.b4.l1"}
+        ]}
+      ]
+    },
+    "lamplighter-m1-pre": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"key": "story.lamplighter-m1.pre.l1"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m1.pre.l2"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m1.pre.l3"}
+        ]}
+      ]
+    },
+    "lamplighter-m1-post": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"speaker": "lamplighter", "key": "story.lamplighter-m1.post.l1"},
+          {"key": "story.lamplighter-m1.post.l2"}
+        ]}
+      ]
+    },
+    "lamplighter-m2-pre": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"key": "story.lamplighter-m2.pre.l1"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m2.pre.l2"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m2.pre.l3"}
+        ]}
+      ]
+    },
+    "lamplighter-m2-post": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"key": "story.lamplighter-m2.post.l1"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m2.post.l2"}
+        ]}
+      ]
+    },
+    "lamplighter-m3-pre": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"key": "story.lamplighter-m3.pre.l1"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m3.pre.l2"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m3.pre.l3"}
+        ]}
+      ]
+    },
+    "lamplighter-m3-post": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"speaker": "lamplighter", "key": "story.lamplighter-m3.post.l1"},
+          {"key": "story.lamplighter-m3.post.l2"}
+        ]}
+      ]
+    },
+    "lamplighter-m4-pre": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"key": "story.lamplighter-m4.pre.l1"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m4.pre.l2"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m4.pre.l3"},
+          {"key": "story.lamplighter-m4.pre.l4"}
+        ]}
+      ]
+    },
+    "lamplighter-m4-post": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"key": "story.lamplighter-m4.post.l1"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m4.post.l2"}
+        ]}
+      ]
+    },
+    "lamplighter-m5-pre": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"key": "story.lamplighter-m5.pre.l1"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m5.pre.l2"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m5.pre.l3"}
+        ]}
+      ]
+    },
+    "lamplighter-m5-post": {
+      "beats": [
+        {"motion": "hold", "lines": [
+          {"speaker": "lamplighter", "key": "story.lamplighter-m5.post.l1"},
+          {"key": "story.lamplighter-m5.post.l2"},
+          {"speaker": "lamplighter", "key": "story.lamplighter-m5.post.l3"}
+        ]}
+      ]
+    },
+    "unsealing": {
+      "beats": [
+        {"motion": "hold", "lines": [{"key": "story.unsealing.b1.l1"}]},
+        {"motion": "hold", "lines": [{"key": "story.unsealing.b2.l1"}]},
+        {"art": "res://assets/art/scenes/unsealing-mirror-queue.png", "motion": "hold", "lines": [{"key": "story.unsealing.b3.l1"}]},
+        {"art": "res://assets/art/scenes/unsealing-monuments-push.png", "motion": "push-in", "lines": [{"key": "story.unsealing.b4.l1"}]}
+      ]
+    },
+    "unsealing-short": {
+      "beats": [
+        {"art": "res://assets/art/scenes/unsealing-door-open.png", "motion": "hold", "lines": [{"key": "story.unsealing-short.b1.l1"}]}
+      ]
+    },
+    "act4-entry": {
+      "beats": [
+        {"art": "res://assets/art/scenes/act4-node1.png", "motion": "push-in", "lines": [{"key": "story.act4-entry.b1.l1"}]}
+      ]
+    },
+    "act4-node1": {
+      "beats": [
+        {"art": "res://assets/art/scenes/act4-node1.png", "motion": "hold", "lines": [{"speaker": "queue", "key": "story.act4-node1.b1.l1"}]}
+      ]
+    },
+    "act4-node2": {
+      "beats": [
+        {"art": "res://assets/art/scenes/act4-node2.png", "motion": "hold", "lines": [{"speaker": "queue", "key": "story.act4-node2.b1.l1"}]}
+      ]
+    },
+    "act4-node3": {
+      "beats": [
+        {"art": "res://assets/art/scenes/act4-node3.png", "motion": "hold", "lines": [{"speaker": "queue", "key": "story.act4-node3.b1.l1"}]}
+      ]
+    },
+    "act4-node4": {
+      "beats": [
+        {"art": "res://assets/art/scenes/act4-node4.png", "motion": "linger", "lines": [
+          {"key": "story.act4-node4.b1.l1"},
+          {"key": "story.act4-node4.b1.l2"},
+          {"key": "story.act4-node4.b1.l3"}
+        ]}
+      ]
+    },
+    "act4-node5": {
+      "beats": [
+        {"art": "res://assets/art/scenes/act4-node5.png", "motion": "hold", "lines": [
+          {"speaker": "keeper", "key": "story.act4-node5.b1.l1"},
+          {"speaker": "keeper", "key": "story.act4-node5.b1.l2"}
+        ]}
+      ]
+    },
+    "finale": {
+      "beats": [
+        {"art": "res://assets/art/scenes/finale-swap.png", "motion": "hold", "lines": [
+          {"key": "story.finale.b1.l1"},
+          {"key": "story.finale.b1.l2"}
+        ]}
+      ]
+    }
+  }
+}

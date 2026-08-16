@@ -32,7 +32,7 @@ const DISPLAY_LEAVES: Dictionary = {
 	"cannot": true, "paid": true,
 }
 const DISPLAY_STRING_ARRAYS: Dictionary = {
-	"floorEchoes": true, "fragments": true, "progress": true, "pages": true,
+	"waystoneEchoes": true, "fragments": true, "progress": true, "pages": true,
 	"dialogue": true,
 }
 const DISPLAY_DICTIONARY_ARRAYS: Dictionary = {"meetings": true}

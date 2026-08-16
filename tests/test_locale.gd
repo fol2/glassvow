@@ -32,6 +32,8 @@ const PERSISTENCE_DETAILS: Dictionary = {
 	"ui.persistence.detail.completedRunClose": "The completed run could not be closed.",
 	"ui.persistence.detail.dawnHold": "Dawn could not be held.",
 	"ui.persistence.detail.dawnCursorHold": "The Dawn cursor could not be held.",
+	"ui.persistence.detail.sceneCursorHold": "The scene cursor could not be held.",
+	"ui.persistence.detail.sceneHold": "The scene could not be held.",
 	"ui.persistence.detail.shadeDuelHold": "The shade duel could not be held.",
 	"ui.persistence.detail.hollowPriceHold": "The Hollow price could not be held.",
 	"ui.persistence.detail.heldHollowDestinationUnreadable": "The held Hollow destination is unreadable.",
@@ -74,11 +76,33 @@ const ZH_HANT_LATIN_PATH_ALLOWLIST: Array[String] = [
 const ZH_HANT_BANNED_FORM_ALLOWLIST: Array[String] = []
 
 
+## #232 Tier A — the retired vertical vocabulary, banned in every player-facing
+## string. Matched as substrings against the lowercased value, so "climb" also
+## catches climber/climbing and "spire" would catch "inspire": a false positive
+## goes on the allowlist below, which is the point — the ban stays strict and
+## every exception is named. 層 is deliberately absent (Tier B: the status-stack
+## measure word). Keep in step with docs/story/06-glossary.md.
+const TIER_A_EN: Array[String] = [
+	"spire", "climb", "ascend", "summit", "above", "upward", "stair",
+]
+const TIER_A_ZH: Array[String] = [
+	"尖塔", "爬", "攀", "登臨", "頂點", "之上", "向上", "階梯",
+]
+
+## Tier B keeps that the substring match trips anyway, as `key|term` — forgiving
+## the pair rather than the whole string, so an allowlisted key that later gains
+## a DIFFERENT banned word still fails.
+## ui.help.combatBody — "intent above their heads" is literal physical position
+## inside a scene description, not "above" as a place. zh (頭頂) trips nothing.
+const TIER_A_EN_ALLOWLIST: Array[String] = ["ui.help.combatBody|above"]
+const TIER_A_ZH_ALLOWLIST: Array[String] = []
+
+
 const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"ui.brand.title": "琉璃誓言",
 	"ui.vigil.title": "守夜",
 	"ui.pilgrimage.survey": "滾動或拖曳以巡視朝聖之路",
-	"ui.embark.noVows": "尖塔如常。未立任何誓言。",
+	"ui.embark.noVows": "路如常。未立任何誓言。",
 	"ui.combat.lanternTitle": "提燈",
 	"ui.lamp.artLabel": "你的提燈術",
 	"content.cards.firstSpark.text": "抽 1 張牌。燃燼。",
@@ -104,9 +128,9 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"content.variants.ownShade1.name": "墜落之影",
 	"ui.reward.phialRackFullTitle": "藥瓶架已滿",
 	"ui.end.unlock.relic": "遺物已解鎖",
-	"ui.pilgrimage.roseWindow": "玫瑰窗",
+	"ui.pilgrimage.roseWindow": "彩窗",
 	"ui.rose.shardRecoveredShort": "碎片已尋回",
-	"ui.dawn.unlock.lamplighter": "空燈掌燈人踏上尖塔。",
+	"ui.dawn.unlock.lamplighter": "空燈掌燈人踏上路途。",
 	"content.quests.hollowLamplighter.name": "空燈掌燈人",
 	"content.status.ritual.desc": "每回合開始時獲得 N 層熾心。",
 	"ui.menu.abandonConfirmBody": "這段朝聖之路將告終；守夜會留下你所得的一切。",
@@ -127,7 +151,7 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"content.enemies.leviathan.name": "利維坦之喉",
 	"content.enemies.sovereign.name": "永恆君王",
 	"content.enemies.shade.name": "影",
-	"ui.rose.openLabel": "打開餘燼琉璃玫瑰窗",
+	"ui.rose.openLabel": "打開餘燼琉璃彩窗",
 	"content.cards.flurry.name": "碎屑風暴",
 	"content.cards.shardstorm.name": "碎片風暴",
 	"content.cards.leechBlade.name": "渴血碎片",
@@ -188,6 +212,7 @@ static func run(fails: Array[String]) -> void:
 	_dialog_shells(fails)
 	_persistence_calls_and_shell(fails)
 	_zh_hant_catalogue_contract(fails)
+	_retired_vertical_vocabulary(fails)
 	_title_wordmark_locale(fails)
 
 
@@ -197,7 +222,7 @@ static func _english_seed(fails: Array[String]) -> void:
 		fails.append("locale: default language is not en")
 	if locale.t("ui.brand.title") != "GLASSVOW":
 		fails.append("locale: ui.brand.title missing from en seed")
-	if locale.t("ui.embark.title") != "THE CLIMB BEGINS":
+	if locale.t("ui.embark.title") != "THE PILGRIMAGE BEGINS":
 		fails.append("locale: ui.embark.title missing from en seed")
 	if locale.t("ui.keywords.kindle") == "ui.keywords.kindle":
 		fails.append("locale: ui.keywords.kindle missing from en seed")
@@ -256,9 +281,9 @@ static func _fallback_chain(fails: Array[String]) -> void:
 
 static func _params(fails: Array[String]) -> void:
 	var locale: Locale = Locale.new()
-	var line: String = locale.t("ui.hud.actFloor", {"act": 2, "floor": 7})
-	if line != "Act 2 · Floor 7":
-		fails.append("locale: ui.hud.actFloor params failed (%s)" % line)
+	var line: String = locale.t("ui.hud.actWaystone", {"act": 2, "n": 7})
+	if line != "Act 2 · Waystone 7":
+		fails.append("locale: ui.hud.actWaystone params failed (%s)" % line)
 
 
 static func _content_and_whisper(fails: Array[String]) -> void:
@@ -318,12 +343,17 @@ static func _remaining_run_screen_call_sites(fails: Array[String]) -> void:
 			"_pane_copy": ["ui.rose.shardRecoveredStack"],
 			"_detail_copy": ["ui.rose.shardRecoveredStack", "ui.rose.paneDark"],
 			"_pane_accessible_name": ["ui.rose.dormantPane", "ui.rose.unknownPane"],
+			"_add_replay": ["ui.rose.replayUnsealing"],
 		},
 		"res://presentation/run/choice_screen.gd": {
 			"_add_title_rose": ["ui.rose.openLabel"],
 		},
 		"res://presentation/run/dawn_screen.gd": {
 			"_build": ["ui.dawn.inputHint"],
+		},
+		"res://presentation/run/vigil_screen.gd": {
+			"_build": ["ui.vigil.title", "ui.vigil.stats", "ui.vigil.deedsTab",
+				"ui.vigil.roseTab", "ui.vigil.epitaphTab", "ui.vigil.return"],
 		},
 		"res://presentation/run/lamplighter_screen.gd": {
 			"_build": ["ui.lamp.title", "ui.lamp.sub", "ui.lamp.boonLabel",
@@ -385,8 +415,8 @@ static func _function_body(source: String, name: String) -> String:
 static func _dialog_shells(fails: Array[String]) -> void:
 	var source: String = FileAccess.get_file_as_string("res://application/main.gd")
 	var expected_keys: Array[String] = [
-		"ui.menu.beginAnew", "ui.menu.beginAnewBody", "ui.menu.keepClimbing",
-		"ui.menu.leaveSpireTitle", "ui.menu.leaveSpireBody",
+		"ui.menu.beginAnew", "ui.menu.beginAnewBody", "ui.menu.stayOnRoad",
+		"ui.menu.leaveRoadTitle", "ui.menu.leaveRoadBody",
 		"ui.common.leave", "ui.common.stay", "ui.menu.abandonConfirmTitle",
 		"ui.menu.abandonConfirmBody", "ui.menu.abandonRun",
 	]
@@ -407,7 +437,7 @@ static func _dialog_shells(fails: Array[String]) -> void:
 	if abandon != null:
 		_check_dialog(fails, abandon, "ABANDON RUN?",
 			"This pilgrimage will end. The Vigil will keep what was earned.",
-			["Abandon Run", "Keep Climbing"], "no", "Abandon Run", "abandon")
+			["Abandon Run", "Stay on the Road"], "no", "Abandon Run", "abandon")
 	main._close_overlay()
 	main._show_run_menu()
 	var menu: RunMenuPanel = main._modal as RunMenuPanel
@@ -415,9 +445,9 @@ static func _dialog_shells(fails: Array[String]) -> void:
 	if menu != null:
 		menu.quit_requested.emit()
 	var leave: ChoiceScreen = main._choice_screen as ChoiceScreen
-	_check(fails, leave != null, "Leave Spire confirmation did not open")
+	_check(fails, leave != null, "Leave Road confirmation did not open")
 	if leave != null:
-		_check_dialog(fails, leave, "LEAVE THE SPIRE?", "The lantern keeps your place.",
+		_check_dialog(fails, leave, "LEAVE THE ROAD?", "The lantern keeps your place.",
 			["Leave", "Stay"], "no", "Leave", "leave")
 	Locale.active = previous
 
@@ -453,8 +483,8 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 			break
 		call_keys.append(source.substr(start, finish - start))
 		at = source.find(marker, finish + 2)
-	_check(fails, call_keys.size() == 40,
-		"expected 40 save-error call sites, found %d" % call_keys.size())
+	_check(fails, call_keys.size() == 46,
+		"expected 46 save-error call sites, found %d" % call_keys.size())
 	var distinct: Array[String] = []
 	var locale: Locale = Locale.new(Locale.CODE_EN)
 	for key: String in call_keys:
@@ -464,8 +494,8 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 				"save-error key %s does not preserve its English detail" % key)
 		if not distinct.has(key):
 			distinct.append(key)
-	_check(fails, distinct.size() == 35,
-		"expected 35 distinct save-error details, found %d" % distinct.size())
+	_check(fails, distinct.size() == 37,
+		"expected 37 distinct save-error details, found %d" % distinct.size())
 	for key: String in PERSISTENCE_DETAILS:
 		_check(fails, distinct.has(key), "save-error details do not cover %s" % key)
 
@@ -584,6 +614,45 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 	expected_banned_forms.sort()
 	_check(fails, banned_form_paths == expected_banned_forms,
 		"zh-Hant banned-form allowlist drift (replace 著 with 着 and 裡 with 裏): %s" % _first_paths(banned_form_paths))
+
+
+## The Tier A ban from #232, made mechanical so the next copy edit cannot quietly
+## re-authorise the tower. Scope is `ui.*` only: `content.*` still carries the
+## retired vocabulary until #301's rewrite lands, and gating it now would fail on
+## copy this ticket does not own. Tier B look-alikes that are correct to keep get
+## an allowlist row rather than a weaker pattern — see docs/story/06-glossary.md.
+static func _retired_vertical_vocabulary(fails: Array[String]) -> void:
+	var en: Dictionary = _read_catalogue("res://locale/en.json", fails)
+	var zh: Dictionary = _read_catalogue("res://locale/zh-Hant.json", fails)
+	if en.is_empty() or zh.is_empty():
+		return
+	_tier_a_pass(fails, en, TIER_A_EN, TIER_A_EN_ALLOWLIST, "en")
+	_tier_a_pass(fails, zh, TIER_A_ZH, TIER_A_ZH_ALLOWLIST, "zh-Hant")
+
+
+static func _tier_a_pass(fails: Array[String], catalogue: Dictionary,
+		banned: Array[String], allowlist: Array[String], language: String) -> void:
+	var leaves: Dictionary = {}
+	_flatten_strings(catalogue, "", leaves)
+	var hits: Array[String] = []
+	for key_v: Variant in leaves:
+		var key: String = str(key_v)
+		if not key.begins_with("ui."):
+			continue
+		var value: String = str(leaves[key]).to_lower()
+		# Every matching term, not the first: the allowlist forgives a specific
+		# (key, term) pair, so a second banned word smuggled into an already
+		# forgiven string has to surface on its own row rather than hide behind
+		# the sanctioned one.
+		for term: String in banned:
+			if value.contains(term):
+				hits.append("%s|%s" % [key, term])
+	hits.sort()
+	var expected: Array[String] = allowlist.duplicate()
+	expected.sort()
+	_check(fails, hits == expected,
+		"%s ui.* carries retired vertical vocabulary (#232 Tier A): %s" % [
+			language, _first_paths(hits)])
 
 
 static func _keyword_term_contract(fails: Array[String], en: Dictionary,

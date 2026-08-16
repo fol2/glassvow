@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "record_schema": {
+    "required": [
+      "asset_id",
+      "source",
+      "created_at",
+      "license",
+      "source_sha256",
+      "final_sha256",
+      "edits",
+      "reviewer",
+      "verdict"
+    ],
+    "verdicts": ["accepted", "rejected"],
+    "sha256_pattern": "^[0-9a-f]{64}$"
+  },
+  "records": []
+}

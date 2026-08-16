@@ -82,7 +82,7 @@
       "title": "主畫面"
     },
     "dawn": {
-      "act4RevealCopy": "六片琉璃窗片燃起。王冠之上有甚麼在等待。",
+      "act4RevealCopy": "六片琉璃窗片燃起。王冠之後有甚麼在等待。",
       "eighthResolvedKicker": "破碎字形終於解明",
       "pageKicker": "第 {n} 頁",
       "questCompleteKicker": "{mode}完成",
@@ -98,7 +98,7 @@
       "whisperKicker": "一聲低語抵達破曉",
       "witchlightCopy": "蒼白路徑如今將留下標記。",
       "witchlightLens": "巫光透鏡",
-      "title": "登臨",
+      "title": "入城",
       "subtitle": "破曉時，守夜銘記。",
       "quietTitle": "破曉",
       "quietBody": "守夜靜默。",
@@ -114,26 +114,26 @@
       "memoryTitle": "守夜銘記",
       "memoryBody": "勝利 · {count} 片碎片已點亮",
       "unlock": {
-        "lamplighter": "空燈掌燈人踏上尖塔。",
+        "lamplighter": "空燈掌燈人踏上路途。",
         "phials": "朝聖之路上如今可找到藥瓶。",
         "omens": "今後長夜將在凶兆下升起。",
         "pool": "新卡牌與遺物加入朝聖之路。",
-        "emberglass": "餘燼琉璃玫瑰窗開啟。",
-        "act4": "王冠之上的封印之門已開。"
+        "emberglass": "餘燼琉璃彩窗開啟。",
+        "act4": "王冠之後的封印之門已開。"
       }
     },
     "embark": {
       "aspectLabel": "誰執提燈",
-      "noVows": "尖塔如常。未立任何誓言。",
-      "subChoose": "選擇你面對尖塔的方式。",
-      "subWait": "提燈已燃。尖塔在等待。",
+      "noVows": "路如常。未立任何誓言。",
+      "subChoose": "選擇你面對路途的方式。",
+      "subWait": "提燈已燃。路在等待。",
       "title": "朝聖啟程",
       "vowLevel": "誓言 {level}  / {max}",
       "warnSaved": "重新開始將拋棄已保存的朝聖之路。"
     },
     "end": {
-      "ascended": "登臨",
-      "ascendedSub": "永恆君王已化塵。破曉越過尖塔——這是漫長年代中的第一次。",
+      "arrived": "入城",
+      "arrivedSub": "永恆君王已化塵。破曉越過長路——這是漫長年代中的第一次。",
       "bequestDone": "✦ 石碑守住你的{name}。<br>它會在{act}等候你。",
       "bequestNote": {
         "card": "你最上乘的卡牌",
@@ -149,9 +149,9 @@
       "dmgTaken": "受到傷害",
       "elitesBosses": "菁英與首領",
       "fallen": "隕落",
-      "fallenSub": "一段朝聖之路在第 <b>{floor}</b> 層終結。<br>尖塔留下它所奪走的——守夜卻會銘記。",
+      "fallenSub": "一段朝聖之路在第 <b>{n}</b> 塊引路石終結。<br>路留下它所奪走的——守夜卻會銘記。",
       "finalDeckTitle": "最終牌庫",
-      "floors": "層數",
+      "waystones": "引路石數",
       "returnVigil": "返回守夜",
       "runTime": "用時",
       "slain": "擊殺",
@@ -165,7 +165,7 @@
       "viewDeck": "檢視最終牌庫",
       "abandoned": "誓言擱置",
       "abandonedSub": "朝聖止於此。守夜將記下這筆。",
-      "fallenLantern": "你的提燈在第 {floor} 層熄滅。",
+      "fallenLantern": "你的提燈在第 {n} 塊引路石熄滅。",
       "elitesBossesPlus": "菁英 + 首領",
       "monument": {
         "body": "前一位朝聖者站在石中。",
@@ -189,8 +189,8 @@
       "chooseCardBody": "選擇本身也是代價。"
     },
     "help": {
-      "climbBody": "沿提燈之路前往尖塔。擊敗怪物、收集卡牌、遺物與藥瓶，並打倒每一幕的首領，共 <b>{count} 幕</b>。未燃之燈隱匿其所藏——但首次踏足會贈予金幣賞金。",
-      "climbTitle": "朝聖之路",
+      "roadBody": "沿提燈之路前行。擊敗怪物、收集卡牌、遺物與藥瓶，並打倒每一幕的首領，共 <b>{count} 幕</b>。未燃之燈隱匿其所藏——但首次踏足會贈予金幣賞金。",
+      "roadTitle": "朝聖之路",
       "combatBody": "每回合你抽 <b>5 張牌</b>並獲得 <b>3 點能量</b>（⬤）。點擊或拖曳出牌——若場上尚有多名敵人，攻擊須選定目標。敵人頭頂會預示其<b>意圖</b>。",
       "combatTitle": "戰鬥",
       "firesBody": "休息處可回復 <b>30%</b> 生命或升級一張牌。商店販售卡牌、遺物、藥瓶——亦可自牌庫中<b>移除</b>一張。保持牌庫精簡；每份戰利皆可放棄。",
@@ -204,6 +204,15 @@
       "vigilTitle": "守夜——死亡留下之物",
       "wardBody": "<b>護光</b>可吸收傷害，但每回合開始時消散。<b>裂痕</b> ×1.5 受傷 · <b>黯淡</b> −25% 輸出 · <b>脆裂</b> −25% 護光 · <b>陰燃</b>每回合灼燒，宿主死亡或碎裂時躍至另一敵人。",
       "wardTitle": "護光與狀態"
+    },
+    "hint": {
+      "mapSelect": "點選一盞亮着的引路石，踏上朝聖之路。",
+      "dragPlay": "把牌拖到敵人身上，即可打出。",
+      "targeting": "把牌放到你要打的那個敵人身上。",
+      "endTurn": "能量用盡時，點選結束。",
+      "intent": "敵人頭頂的意圖，會預示下一擊。",
+      "reward": "選一張牌加入牌庫，或跳過以保持精簡。",
+      "skip": "跳過指引"
     },
     "hollow": {
       "kicker": "未燃之路 · 第 {current} 份代價，共 {total} 份",
@@ -225,7 +234,7 @@
       }
     },
     "hud": {
-      "actFloor": "第 {act} 幕 · 第 {floor} 層",
+      "actWaystone": "第 {act} 幕 · 第 {n} 塊引路石",
       "deckAria": "牌庫",
       "deckCount": "{n} 張牌",
       "deckTitle": "你的牌庫",
@@ -239,7 +248,7 @@
       "menu": "選單",
       "emptyPhial": "空藥瓶位",
       "hpFraction": "生命 {hp}／{maxHp}",
-      "location": "{act} · 第 {floor} 層 · {boss}",
+      "location": "{act} · 第 {n} 塊引路石 · {boss}",
       "deckOverlayTitle": "牌庫",
       "deckOverlayCount": "攜帶 {count} 張牌",
       "usePotionOn": "對 {name} 使用"
@@ -318,7 +327,7 @@
       "artHint": "（戰鬥中按 A）",
       "artLabel": "你的提燈術",
       "boonLabel": "路上的恩賜",
-      "sub": "{aspect} 立於尖塔腳下。取一份臨別贈禮——並選擇提燈將攜的火。",
+      "sub": "{aspect} 立於路途起點。取一份臨別贈禮——並選擇提燈將攜的火。",
       "title": "掌燈人"
     },
     "map": {
@@ -350,11 +359,10 @@
         "aria": "封印之門",
         "inscription": "朝聖仍在繼續",
         "label": "封印之門",
-        "return": "返回頂點",
         "sub": "六片窗片在你身後燃燒。鎖回應了，卻未開啟。",
         "title": "封印之門"
       },
-      "survey": "{action} 以巡視尖塔",
+      "survey": "{action} 以巡視路途",
       "tap": "輕觸",
       "travelHere": "{action} 以前往此處。",
       "unlitBody": "此處所藏仍是未知——但首次點亮會獲得金幣賞金。",
@@ -374,14 +382,14 @@
       "beginAnew": "重新開始",
       "beginAnewBody": "新的朝聖之路開始前，目前這段旅程會記作放棄。",
       "beginAnewTitle": "重新開始？",
-      "beginClimb": "開始朝聖",
+      "rekindle": "續火",
       "chooseBoon": "選擇恩賜",
       "close": "關閉",
-      "continueClimb": "繼續朝聖",
+      "backToRoad": "返回路上",
       "credits": "製作人員",
       "fightOn": "繼續前行",
       "howToPlay": "玩法說明",
-      "keepClimbing": "繼續朝聖",
+      "stayOnRoad": "留在路上",
       "lightTheWay": "點亮前路",
       "mute": "靜音",
       "muteSound": "靜音",
@@ -393,12 +401,12 @@
       "theVigil": "守夜",
       "unmute": "取消靜音",
       "unmuteSound": "取消靜音",
-      "leaveSpireTitle": "離開尖塔？",
-      "leaveSpireBody": "提燈會守住你的行程。"
+      "leaveRoadTitle": "離開路途？",
+      "leaveRoadBody": "提燈會守住你的行程。"
     },
     "persistence": {
       "hollowRouteBody": "此目的地仍待保存。釋出儲存空間後重試，或重新載入已保存的確切目的地。",
-      "reloadClimb": "重新載入已保存的朝聖之路",
+      "reloadRoad": "重新載入已保存的朝聖之路",
       "reloadDestination": "重新載入已保存的目的地",
       "reloadDuel": "重新載入已保存的決鬥",
       "reloadFinalisation": "重新載入已保存的結算",
@@ -443,6 +451,8 @@
         "completedRunClose": "已完成的朝聖之路未能結束。",
         "dawnHold": "破曉未能保存。",
         "dawnCursorHold": "破曉進度未能保存。",
+        "sceneCursorHold": "這場進度未能保存。",
+        "sceneHold": "這場未能保存。",
         "shadeDuelHold": "影之決鬥未能保存。",
         "hollowPriceHold": "空燈代價未能保存。",
         "heldHollowDestinationUnreadable": "已保存的空燈目的地無法讀取。",
@@ -457,7 +467,7 @@
       "restHeal": "— 回復 {hp} 生命",
       "smithBtn": "鍛造",
       "smithSub": "— 升級一張牌",
-      "sub": "爐火噼啪。片刻之間，尖塔安靜。",
+      "sub": "爐火噼啪。片刻之間，路安靜。",
       "title": "休息處",
       "upgradeSub": "把一張牌鍛成 + 型。",
       "upgradeTitle": "升級一張牌",
@@ -508,7 +518,7 @@
     "rose": {
       "dormantPane": "沉睡的餘燼琉璃窗片 {n}",
       "finalWhisper": "最後的低語在每次破曉歸來。",
-      "openLabel": "打開餘燼琉璃玫瑰窗",
+      "openLabel": "打開餘燼琉璃彩窗",
       "paneDark": "這片窗片仍然黯淡。",
       "selectedPane": "已選的餘燼琉璃窗片",
       "shardRecovered": "{name}，碎片已尋回",
@@ -517,7 +527,8 @@
       "whisperLogTitle": "破曉所聞低語",
       "whisperLogTitleUpper": "破曉所聞低語",
       "finalWhisperMark": "∞  最後的低語在每次破曉歸來。",
-      "shardRecoveredStack": "{name}\n碎片已尋回"
+      "shardRecoveredStack": "{name}\n碎片已尋回",
+      "replayUnsealing": "再看開封"
     },
     "settings": {
       "audio": "音訊",
@@ -576,21 +587,21 @@
     },
     "vigil": {
       "deeds": "功績",
-      "roseWindow": "玫瑰窗",
+      "roseWindow": "彩窗",
       "title": "守夜",
       "return": "返回",
       "ashwarden": "灰衛",
       "stats": "{runs} 次朝聖 · {wins} 次破曉 · 最深誓言：{vow}",
       "deedsTab": "功績",
-      "roseTab": "玫瑰窗"
+      "roseTab": "彩窗",
+      "epitaphTab": "遺言"
     },
     "pilgrimage": {
       "survey": "滾動或拖曳以巡視朝聖之路",
       "surveyChoose": "滾動或拖曳 · 選擇一盞已燃提燈",
-      "summit": "頂點",
       "roadEnds": "此路已盡",
       "unlitWay": "未燃之路",
-      "roseWindow": "玫瑰窗",
+      "roseWindow": "彩窗",
       "hearth": "爐火",
       "awaits": "{region}——{boss}正在等待",
       "notNow": "暫時不要"
@@ -647,6 +658,18 @@
       "special": "特殊",
       "starter": "初始牌",
       "uncommon": "罕見"
+    },
+    "scene": {
+      "skipGuidance": {
+        "keep": "保留指引",
+        "skip": "跳過指引",
+        "title": "跳過教學指引？"
+      },
+      "speaker": {
+        "keeper": "守爐人",
+        "lamplighter": "掌燈人",
+        "queue": "隊伍"
+      }
     }
   },
   "content": {
@@ -661,7 +684,7 @@
       },
       "2": {
         "bossName": "永恆君王",
-        "name": "黑曜尖塔"
+        "name": "黑曜王庭"
       }
     },
     "affixes": {
@@ -778,7 +801,7 @@
         "text": "對所有敵人造成 @9@ 點傷害，並施加 3 層陰燃。",
         "textUp": "對所有敵人造成 @12@ 點傷害，並施加 4 層陰燃。"
       },
-      "ascension": {
+      "risingLitany": {
         "name": "昇華聖詠",
         "text": "每回合開始時獲得 2 層熾心。",
         "textUp": "每回合開始時獲得 3 層熾心。"
@@ -1354,8 +1377,8 @@
           "annihilation": {
             "name": "湮滅"
           },
-          "ascend": {
-            "name": "登臨"
+          "holdCourt": {
+            "name": "臨朝"
           },
           "gravitas": {
             "name": "君威"
@@ -1736,7 +1759,7 @@
     },
     "quests": {
       "eighthOmen": {
-        "floorEchoes": [
+        "waystoneEchoes": [
           "// 窗片凝視 //",
           "// 八並非數字 //",
           "// 攜錯誤之光向上 //",
@@ -2136,5 +2159,100 @@
       "帶六片碎片到玫瑰窗。",
       "朝聖仍在繼續。"
     ]
+  },
+  "story": {
+    "opening": {
+      "b1": {"l1": "你醒了。", "l2": "慢慢來。路不會走掉。"},
+      "b2": {"l1": "帶上這個。前人留下的,如今是你的了。", "l2": "路向東,盡頭有一道封門。尋回六片燼璃,門便會開。", "l3": "他們說,門後是金城。到了那裏,你便到家了。"},
+      "b3": {"l1": "你提起燈,推門而出。長路向東,天未亮。", "l2": "身後,爐火仍亮着。"},
+      "b4": {"l1": "守夜開始了。"}
+    },
+    "lamplighter-m1": {
+      "pre": {
+        "l1": "路上坐着一個提燈的老人。燈是空的,沒有火。",
+        "l2": "你的燈燒得太滿。滿燈的人,我見得多。",
+        "l3": "這張面孔,又是往東走的。"
+      },
+      "post": {
+        "l1": "油可以分,火不能分。火要自己帶到最後。",
+        "l2": "他把三點餘燼收進空燈。燈沒有亮。"
+      }
+    },
+    "lamplighter-m2": {
+      "pre": {
+        "l1": "未燃之路再向東,老人又在等。空燈放在身前。",
+        "l2": "上次是你。三點餘燼,一分不少。這雙手,我記得。",
+        "l3": "手瘦了。路上的日子,誰都一樣。"
+      },
+      "post": {
+        "l1": "他把金幣一枚一枚數過,不收起,只沿路放好,向東。",
+        "l2": "去。忘記是要學的。"
+      }
+    },
+    "lamplighter-m3": {
+      "pre": {
+        "l1": "這一次,老人站着等你。未看清你的面孔,他不開口。",
+        "l2": "站近一點。提高你的燈,讓我看一看這張面孔。",
+        "l3": "額上多了一道傷痕。上次沒有。……路上的事,自然。"
+      },
+      "post": {
+        "l1": "別那樣看我。老人家見到什麼,便說什麼。",
+        "l2": "他退後一步,再看你一眼——由面孔,看到腳。"
+      }
+    },
+    "lamplighter-m4": {
+      "pre": {
+        "l1": "老人的目光越過你,落在你帶着的東西上,一件一件地數。",
+        "l2": "西面爐火出來的東西,我一眼認得。這麼多年,樣式沒有變過。",
+        "l3": "回我一句就好。上次站在這裏的,是不是你?",
+        "l4": "你還未出聲,他已擺了擺手,像不願知道那一句之後的事。"
+      },
+      "post": {
+        "l1": "他把贈禮收好。空燈放在腳前,依然黑着。",
+        "l2": "下一程遠。自己要慢慢用。"
+      }
+    },
+    "lamplighter-m5": {
+      "pre": {
+        "l1": "未燃之路的盡頭,老人提着空燈,站在路的正中,不讓你過。",
+        "l2": "最後一次。過了我,這條路上再沒有人向你收東西。",
+        "l3": "我提這盞燈,認了一生的人。面孔,我認得出;人,我從來不曾說得定。"
+      },
+      "post": {
+        "l1": "去。這一段,我送過太多人。",
+        "l2": "他讓開路,提起空燈,向東照了照——燈中沒有光;他仍是照了。",
+        "l3": "路上若再見提燈的,替我看一看那張面孔。"
+      }
+    },
+    "unsealing": {
+      "b1": {"l1": "1.1 --"},
+      "b2": {"l1": "2.1 --"},
+      "b3": {"l1": "3.1 --"},
+      "b4": {"l1": "4.1 --"}
+    },
+    "unsealing-short": {
+      "b1": {"l1": "1.1 --"}
+    },
+    "act4-entry": {
+      "b1": {"l1": "1.1 --"}
+    },
+    "act4-node1": {
+      "b1": {"l1": "1.1 --"}
+    },
+    "act4-node2": {
+      "b1": {"l1": "1.1 --"}
+    },
+    "act4-node3": {
+      "b1": {"l1": "1.1 --"}
+    },
+    "act4-node4": {
+      "b1": {"l1": "1.1 --", "l2": "1.2 --", "l3": "1.3 --"}
+    },
+    "act4-node5": {
+      "b1": {"l1": "1.1 --", "l2": "1.2 --"}
+    },
+    "finale": {
+      "b1": {"l1": "1.1 --", "l2": "1.2 --"}
+    }
   }
 }

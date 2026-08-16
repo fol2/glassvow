@@ -3,7 +3,7 @@
   "ui": {
     "brand": {
       "secrets": " · {n} secrets unearthed",
-      "stats": "{runs} climbs · {wins} dawns · {slain} slain",
+      "stats": "{runs} pilgrimages · {wins} dawns · {slain} slain",
       "tagline": "A Roguelite Deckbuilder · The Vigil Remembers",
       "title": "GLASSVOW"
     },
@@ -91,7 +91,7 @@
       "title": "Title"
     },
     "dawn": {
-      "act4RevealCopy": "Six panes burn. Something waits above the crown.",
+      "act4RevealCopy": "Six panes burn. Something waits beyond the crown.",
       "eighthResolvedKicker": "The broken glyphs resolve",
       "pageKicker": "Page {n}",
       "questCompleteKicker": "{mode} complete",
@@ -107,7 +107,7 @@
       "whisperKicker": "A whisper reaches the dawn",
       "witchlightCopy": "Pale paths will now be marked.",
       "witchlightLens": "Witchlight Lens",
-      "title": "ASCENDED",
+      "title": "ARRIVED",
       "subtitle": "At Dawn, the Vigil remembers.",
       "quietTitle": "Dawn",
       "quietBody": "The Vigil is quiet.",
@@ -123,26 +123,26 @@
       "memoryTitle": "The Vigil Remembers",
       "memoryBody": "Victory · {count} shards lit",
       "unlock": {
-        "lamplighter": "The Hollow Lamplighter walks the Spire.",
-        "phials": "Phials may now be found on the climb.",
+        "lamplighter": "The Hollow Lamplighter walks the road.",
+        "phials": "Phials may now be found on the road.",
         "omens": "The nights now rise beneath Omens.",
-        "pool": "New cards and relics enter the climb.",
+        "pool": "New cards and relics join the pilgrimage.",
         "emberglass": "The Emberglass Rose Window opens.",
-        "act4": "A sealed door opens above the crown."
+        "act4": "A sealed door opens beyond the crown."
       }
     },
     "embark": {
       "aspectLabel": "Who carries the lantern",
-      "noVows": "The Spire as it is. No vows sworn.",
-      "subChoose": "Choose how you meet the Spire.",
-      "subWait": "The lantern is lit. The Spire waits.",
-      "title": "THE CLIMB BEGINS",
+      "noVows": "The road as it is. No vows sworn.",
+      "subChoose": "Choose how you meet the road.",
+      "subWait": "The lantern is lit. The road waits.",
+      "title": "THE PILGRIMAGE BEGINS",
       "vowLevel": "VOW {level}  / {max}",
-      "warnSaved": "Beginning anew abandons your saved climb."
+      "warnSaved": "Beginning anew abandons your saved run."
     },
     "end": {
-      "ascended": "ASCENDED",
-      "ascendedSub": "The Eternal Sovereign is dust. Dawn breaks over the Spire — the first in an age.",
+      "arrived": "ARRIVED",
+      "arrivedSub": "The Eternal Sovereign is dust. Dawn breaks over the road — the first in an age.",
       "bequestDone": "✦ The stone keeps your {name}.<br>It will wait for you in {act}.",
       "bequestNote": {
         "card": "your finest card",
@@ -150,7 +150,7 @@
         "goldCache": "a cache of gold",
         "relic": "your rarest relic"
       },
-      "bequestTitle": "Carve one thing into the stone — the next climb may recover it in {act}.",
+      "bequestTitle": "Carve one thing into the stone — the next run may recover it in {act}.",
       "bequestUnpaid": "The unpaid gift remains in the standing stone",
       "cardsPlayed": "Cards Played",
       "deckSize": "Deck Size",
@@ -158,9 +158,9 @@
       "dmgTaken": "Damage Taken",
       "elitesBosses": "Elites & Bosses",
       "fallen": "FALLEN",
-      "fallenSub": "Here ended a climb, on floor <b>{floor}</b>.<br>The Spire keeps what it takes — but the Vigil remembers.",
+      "fallenSub": "Here ended a run, at waystone <b>{n}</b>.<br>The road keeps what it takes — but the Vigil remembers.",
       "finalDeckTitle": "Final Deck",
-      "floors": "Floors",
+      "waystones": "Waystones",
       "returnVigil": "Return to the Vigil",
       "runTime": "Run Time",
       "slain": "Slain",
@@ -174,7 +174,7 @@
       "viewDeck": "View Final Deck",
       "abandoned": "THE VOW IS SET ASIDE",
       "abandonedSub": "The pilgrimage ends here. The Vigil will keep the record.",
-      "fallenLantern": "Your lantern went dark on floor {floor}.",
+      "fallenLantern": "Your lantern went dark at waystone {n}.",
       "elitesBossesPlus": "Elites + Bosses",
       "monument": {
         "body": "A previous pilgrim stands inside the stone.",
@@ -198,8 +198,8 @@
       "chooseCardBody": "The choice is part of the price."
     },
     "help": {
-      "climbBody": "Choose a path of lanterns up the Spire. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
-      "climbTitle": "The Climb",
+      "roadBody": "Follow the road of lanterns onward. Fight monsters, gather cards, relics and phials, and defeat the boss of each of the <b>{count} acts</b>. Unlit lanterns hide what they hold — but pay a bounty for the walking.",
+      "roadTitle": "The Pilgrimage",
       "combatBody": "Each turn you draw <b>5 cards</b> and gain <b>3 Energy</b> (⬤). Play a card by clicking or dragging — attacks need a target when several enemies remain. Enemies telegraph their <b>intent</b> above their heads.",
       "combatTitle": "Combat",
       "firesBody": "Rest sites heal <b>30%</b> or upgrade a card. Shops sell cards, relics, phials — and can <b>remove</b> a card from your deck. Keep your deck lean; every reward is optional.",
@@ -209,10 +209,19 @@
       "lanternBody": "Embers fuel your <b>Lantern Art</b> — one signature power, always available, once a turn (press <b>A</b>). Drag any card onto the lantern to <b>kindle</b> it: the card burns away and feeds the lantern 1 ember. Once a turn; curses refuse the fire.",
       "lanternTitle": "The Lantern",
       "title": "How to Play",
-      "vigilBody": "Nothing is wasted. At the foot of each climb the <b>Lamplighter</b> offers a boon and lets you choose your Lantern Art. When you fall, carve one thing into the stone — a <b>monument</b> your next climb can recover in that same act. Every shatter, kindle and slaying feeds lifetime <b>Deeds</b> that unlock new cards, relics, and a second aspect, the <b>Ashwarden</b>. Reach the dawn once and the <b>Vows</b> open: an optional difficulty ladder for those who'd climb a crueler Spire.",
+      "vigilBody": "Nothing is wasted. At the start of each run the <b>Lamplighter</b> offers a boon and lets you choose your Lantern Art. When you fall, carve one thing into the stone — a <b>monument</b> your next run can recover in that same act. Every shatter, kindle and slaying feeds lifetime <b>Deeds</b> that unlock new cards, relics, and a second aspect, the <b>Ashwarden</b>. Reach the dawn once and the <b>Vows</b> open: an optional difficulty ladder for those who'd walk a crueler road.",
       "vigilTitle": "The Vigil — What Death Leaves Behind",
       "wardBody": "<b>Ward</b> is held light that absorbs damage but expires each turn. <b>Cracked</b> ×1.5 damage taken · <b>Dimmed</b> −25% damage dealt · <b>Brittle</b> −25% Ward · <b>Smolder</b> burns each turn, and leaps to another enemy when its host dies or shatters.",
       "wardTitle": "Ward & Statuses"
+    },
+    "hint": {
+      "mapSelect": "Tap a lit lantern to take the next step.",
+      "dragPlay": "Drag a card onto an enemy to play it.",
+      "targeting": "Drop the card on the enemy you mean to hit.",
+      "endTurn": "When energy is spent, tap End.",
+      "intent": "The mark on an enemy shows its next move.",
+      "reward": "Pick a card for your deck, or skip to keep it lean.",
+      "skip": "Skip guidance"
     },
     "hollow": {
       "kicker": "THE UNLIT WAY · PRICE {current} OF {total}",
@@ -234,7 +243,7 @@
       }
     },
     "hud": {
-      "actFloor": "Act {act} · Floor {floor}",
+      "actWaystone": "Act {act} · Waystone {n}",
       "deckAria": "Deck",
       "deckCount": "{n} cards",
       "deckTitle": "Your Deck",
@@ -248,7 +257,7 @@
       "menu": "Menu",
       "emptyPhial": "Empty phial seat",
       "hpFraction": "{hp} / {maxHp}",
-      "location": "{act} · FLOOR {floor} · {boss}",
+      "location": "{act} · WAYSTONE {n} · {boss}",
       "deckOverlayTitle": "DECK",
       "deckOverlayCount": "{count} panes carried",
       "usePotionOn": "Use on {name}"
@@ -327,7 +336,7 @@
       "artHint": "(press A in combat)",
       "artLabel": "Your Lantern Art",
       "boonLabel": "A Boon for the Road",
-      "sub": "{aspect} stands at the foot of the Spire. Take one parting gift — and choose the fire your lantern will carry.",
+      "sub": "{aspect} stands at the head of the road. Take one parting gift — and choose the fire your lantern will carry.",
       "title": "THE LAMPLIGHTER"
     },
     "map": {
@@ -357,13 +366,12 @@
       "scroll": "scroll",
       "sealedDoor": {
         "aria": "The sealed door",
-        "inscription": "the climb continues",
+        "inscription": "the pilgrimage continues",
         "label": "THE SEALED DOOR",
-        "return": "Return to the summit",
         "sub": "Six panes burn behind you. The lock answers, but does not open.",
         "title": "THE SEALED DOOR"
       },
-      "survey": "{action} to survey the Spire",
+      "survey": "{action} to survey the road",
       "tap": "Tap",
       "travelHere": "{action} to travel here.",
       "unlitBody": "What waits here is unknown — but first light pays a bounty of gold.",
@@ -383,14 +391,14 @@
       "beginAnew": "Begin Anew",
       "beginAnewBody": "The current pilgrimage will be recorded as abandoned before a new one begins.",
       "beginAnewTitle": "Begin Anew?",
-      "beginClimb": "Begin the Climb",
+      "rekindle": "Rekindle",
       "chooseBoon": "Choose a boon",
       "close": "Close",
-      "continueClimb": "Continue Climb",
+      "backToRoad": "Back to the Road",
       "credits": "Credits",
       "fightOn": "Fight On",
       "howToPlay": "How to Play",
-      "keepClimbing": "Keep Climbing",
+      "stayOnRoad": "Stay on the Road",
       "lightTheWay": "Light the Way",
       "mute": "Mute",
       "muteSound": "Mute Sound",
@@ -402,19 +410,19 @@
       "theVigil": "The Vigil",
       "unmute": "Unmute",
       "unmuteSound": "Unmute Sound",
-      "leaveSpireTitle": "LEAVE THE SPIRE?",
-      "leaveSpireBody": "The lantern keeps your place."
+      "leaveRoadTitle": "LEAVE THE ROAD?",
+      "leaveRoadBody": "The lantern keeps your place."
     },
     "persistence": {
       "hollowRouteBody": "This destination is still pending. Free storage and retry, or reload the exact saved destination.",
-      "reloadClimb": "Reload Saved Climb",
+      "reloadRoad": "Reload Saved Run",
       "reloadDestination": "Reload Saved Destination",
       "reloadDuel": "Reload Saved Duel",
       "reloadFinalisation": "Reload Saved Finalisation",
       "retryFinalisation": "Retry Finalisation",
       "retrySave": "Retry Save",
-      "runSaveBody": "The climb could not be secured. Free storage and retry, or reload the last durable climb state.",
-      "runSaveRetryFail": "The save is still unavailable. Free storage, then retry or reload the last durable climb state.",
+      "runSaveBody": "The run could not be secured. Free storage and retry, or reload the last durable run state.",
+      "runSaveRetryFail": "The save is still unavailable. Free storage, then retry or reload the last durable run state.",
       "saveFailedTitle": "Save Failed",
       "stoneBody": "The stone could not hold this duel. Free storage and try again.",
       "stoneTitle": "The Stone Could Not Hold",
@@ -452,6 +460,8 @@
         "completedRunClose": "The completed run could not be closed.",
         "dawnHold": "Dawn could not be held.",
         "dawnCursorHold": "The Dawn cursor could not be held.",
+        "sceneCursorHold": "The scene cursor could not be held.",
+        "sceneHold": "The scene could not be held.",
         "shadeDuelHold": "The shade duel could not be held.",
         "hollowPriceHold": "The Hollow price could not be held.",
         "heldHollowDestinationUnreadable": "The held Hollow destination is unreadable.",
@@ -466,7 +476,7 @@
       "restHeal": "— heal {hp} HP",
       "smithBtn": "Smith",
       "smithSub": "— upgrade a card",
-      "sub": "The fire crackles. For a moment, the Spire is quiet.",
+      "sub": "The fire crackles. For a moment, the road is quiet.",
       "title": "REST SITE",
       "upgradeSub": "Forge one card into its + form.",
       "upgradeTitle": "Upgrade a Card",
@@ -526,7 +536,8 @@
       "whisperLogTitle": "Whispers heard at dawn",
       "whisperLogTitleUpper": "WHISPERS HEARD AT DAWN",
       "finalWhisperMark": "∞  The final whisper returns at every dawn.",
-      "shardRecoveredStack": "{name}\nShard recovered"
+      "shardRecoveredStack": "{name}\nShard recovered",
+      "replayUnsealing": "Replay the unsealing"
     },
     "settings": {
       "audio": "Audio",
@@ -543,17 +554,17 @@
       "off": "Off",
       "on": "On",
       "reduceMotion": "Reduce Motion",
-      "resetConfirmBody": "This erases your <b>current climb</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
+      "resetConfirmBody": "This erases your <b>current run</b> and the entire <b>Vigil</b> — deeds, unlocks, vows, monuments, and whispers.<br><br><span style=\"color:#ff8d8d\">This cannot be undone.</span>",
       "resetConfirmTitle": "Reset Save?",
       "resetSave": "Reset Save",
-      "resetWarn": "Wipes the current climb and all Vigil progress. Cannot be undone.",
+      "resetWarn": "Wipes the current run and all Vigil progress. Cannot be undone.",
       "screenShake": "Screen Shake",
       "sfx": "SFX",
       "title": "Settings",
       "unmute": "Unmute",
       "volumeTip": "{name} volume",
       "vsync": "Vsync",
-      "resetConfirmPlain": "This erases your current climb and the entire Vigil — deeds, unlocks, vows, monuments, and whispers.\n\nThis cannot be undone.",
+      "resetConfirmPlain": "This erases your current run and the entire Vigil — deeds, unlocks, vows, monuments, and whispers.\n\nThis cannot be undone.",
       "eraseAllTitle": "ERASE ALL PROGRESS?"
     },
     "shop": {
@@ -589,14 +600,14 @@
       "title": "THE VIGIL",
       "return": "RETURN",
       "ashwarden": "The Ashwarden",
-      "stats": "{runs} climbs · {wins} dawns · deepest Vow: {vow}",
+      "stats": "{runs} pilgrimages · {wins} dawns · deepest Vow: {vow}",
       "deedsTab": "DEEDS",
-      "roseTab": "ROSE WINDOW"
+      "roseTab": "ROSE WINDOW",
+      "epitaphTab": "EPITAPHS"
     },
     "pilgrimage": {
       "survey": "SCROLL OR DRAG TO SURVEY THE PILGRIMAGE",
       "surveyChoose": "SCROLL OR DRAG · CHOOSE A LIT LANTERN",
-      "summit": "THE SUMMIT",
       "roadEnds": "THE ROAD ENDS HERE",
       "unlitWay": "Unlit Way",
       "roseWindow": "The Rose Window",
@@ -647,6 +658,18 @@
       "en": "English",
       "zhHant": "繁體中文",
       "deferNote": "Takes effect on the next screen."
+    },
+    "scene": {
+      "skipGuidance": {
+        "keep": "Keep guidance",
+        "skip": "Skip guidance",
+        "title": "Skip guidance too?"
+      },
+      "speaker": {
+        "keeper": "Keeper",
+        "lamplighter": "Lamplighter",
+        "queue": "Queue"
+      }
     }
   },
   "content": {
@@ -661,7 +684,7 @@
       },
       "2": {
         "bossName": "The Eternal Sovereign",
-        "name": "The Obsidian Spire"
+        "name": "The Obsidian Court"
       }
     },
     "affixes": {
@@ -778,7 +801,7 @@
         "text": "Deal @9@ damage and apply 3 Smolder to ALL enemies.",
         "textUp": "Deal @12@ damage and apply 4 Smolder to ALL enemies."
       },
-      "ascension": {
+      "risingLitany": {
         "name": "Rising Litany",
         "text": "At the start of each turn, gain 2 Fervor.",
         "textUp": "At the start of each turn, gain 3 Fervor."
@@ -1354,8 +1377,8 @@
           "annihilation": {
             "name": "Annihilation"
           },
-          "ascend": {
-            "name": "Ascend"
+          "holdCourt": {
+            "name": "Hold Court"
           },
           "gravitas": {
             "name": "Gravitas"
@@ -1736,7 +1759,7 @@
     },
     "quests": {
       "eighthOmen": {
-        "floorEchoes": [
+        "waystoneEchoes": [
           "// THE PANE WATCHES //",
           "// EIGHT IS NOT A NUMBER //",
           "// CARRY THE WRONG LIGHT UPWARD //",
@@ -2136,5 +2159,100 @@
       "Bring six shards to the Rose Window.",
       "The climb continues."
     ]
+  },
+  "story": {
+    "opening": {
+      "b1": {"l1": "You're awake.", "l2": "Take your time. The road isn't going anywhere."},
+      "b2": {"l1": "Take this. Those before you left it behind; now it's yours.", "l2": "The road runs east. At its end stands a sealed door. Bring back the six shards of emberglass, and it will open.", "l3": "Beyond it, they say, lies the Gilded City. Reach it, and you will be home."},
+      "b3": {"l1": "You take up the lantern and step out. The long road runs east, and the sky is not yet light.", "l2": "Behind you, the fire is still burning."},
+      "b4": {"l1": "The vigil begins."}
+    },
+    "lamplighter-m1": {
+      "pre": {
+        "l1": "An old man sits by the road, holding a lantern. There is no flame in it.",
+        "l2": "Your lantern burns too full. I have seen plenty like you.",
+        "l3": "This face. East again, then."
+      },
+      "post": {
+        "l1": "Oil can be shared. Flame cannot. Flame you carry to the end yourself.",
+        "l2": "He gathers the three embers into the hollow lantern. The lantern does not light."
+      }
+    },
+    "lamplighter-m2": {
+      "pre": {
+        "l1": "Farther east along the Unlit Way, the old man is waiting again, the hollow lantern set before him.",
+        "l2": "Last time — that was you. Three embers, not one short. I remember these hands.",
+        "l3": "Thinner, these hands. The road feeds no one well."
+      },
+      "post": {
+        "l1": "He counts the coins one by one, and does not pocket them. He lays them out along the road, piece by piece, pointing east.",
+        "l2": "Go on. Forgetting takes practice."
+      }
+    },
+    "lamplighter-m3": {
+      "pre": {
+        "l1": "This time the old man is on his feet, waiting. Until he has looked you full in the face, he does not speak.",
+        "l2": "Stand closer. Raise your lantern — let me see this face properly.",
+        "l3": "A scar on your brow. Last time there was none. …The road gives them out. Naturally."
+      },
+      "post": {
+        "l1": "Don't look at me like that. An old man tells what he has seen — no more than that.",
+        "l2": "He steps back and looks you over once more — from the face down to the boots."
+      }
+    },
+    "lamplighter-m4": {
+      "pre": {
+        "l1": "The old man's eyes go past you, to the things you carry, counting them one by one.",
+        "l2": "Things from the western fire — I know them at a glance. All these years, the make has never changed.",
+        "l3": "Give me one answer, that is all. Last time, standing where you stand — was that you?",
+        "l4": "Before you can make a sound, he waves the question away — as if he would rather not learn where it leads."
+      },
+      "post": {
+        "l1": "He puts the gift away. The hollow lantern sits by his feet, dark as ever.",
+        "l2": "The next stretch is long. Spend yourself slow."
+      }
+    },
+    "lamplighter-m5": {
+      "pre": {
+        "l1": "Where the Unlit Way runs out, the old man stands in the middle of the road, hollow lantern raised. He does not let you pass.",
+        "l2": "The last price. Past me, no one on this road will ask anything more of you.",
+        "l3": "A lifetime under this lamp, learning the ones who pass. The faces I know. The people I was never sure of."
+      },
+      "post": {
+        "l1": "Go. I have seen many off along this stretch.",
+        "l2": "He steps aside and lifts the hollow lantern toward the east, as if to light the way. There is no light in it. He lifts it all the same.",
+        "l3": "If you meet another out there who carries a lamp — look close at the face, for me."
+      }
+    },
+    "unsealing": {
+      "b1": {"l1": "unsealing 1.1 -- placeholder"},
+      "b2": {"l1": "unsealing 2.1 -- placeholder"},
+      "b3": {"l1": "unsealing 3.1 -- placeholder"},
+      "b4": {"l1": "unsealing 4.1 -- placeholder"}
+    },
+    "unsealing-short": {
+      "b1": {"l1": "unsealing-short 1.1 -- placeholder"}
+    },
+    "act4-entry": {
+      "b1": {"l1": "act4-entry 1.1 -- placeholder"}
+    },
+    "act4-node1": {
+      "b1": {"l1": "act4-node1 1.1 -- placeholder"}
+    },
+    "act4-node2": {
+      "b1": {"l1": "act4-node2 1.1 -- placeholder"}
+    },
+    "act4-node3": {
+      "b1": {"l1": "act4-node3 1.1 -- placeholder"}
+    },
+    "act4-node4": {
+      "b1": {"l1": "act4-node4 1.1 -- placeholder", "l2": "act4-node4 1.2 -- placeholder", "l3": "act4-node4 1.3 -- placeholder"}
+    },
+    "act4-node5": {
+      "b1": {"l1": "act4-node5 1.1 -- placeholder", "l2": "act4-node5 1.2 -- placeholder"}
+    },
+    "finale": {
+      "b1": {"l1": "finale 1.1 -- placeholder", "l2": "finale 1.2 -- placeholder"}
+    }
   }
 }

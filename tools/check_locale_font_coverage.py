@@ -3,7 +3,8 @@
 
 This is intentionally a cmap gate, rather than a rendered screenshot check: it
 runs in CI before a glyph can reach a player as tofu.  It reads ``locale/*.json``
-and checks the actual woff2 assets committed under ``assets/fonts``.  Pass a
+plus the inline ``zh`` strings in ``content/line-table.json`` and checks the
+actual woff2 assets committed under ``assets/fonts``.  Pass a
 ``--extra-char`` only for the required mutation proof; it is not used by CI.
 """
 
@@ -27,6 +28,7 @@ except ImportError as error:
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LOCALE_DIR = REPO_ROOT / "locale"
+LINE_TABLE = REPO_ROOT / "content" / "line-table.json"
 TEXT_FONTS = (
     REPO_ROOT / "assets/fonts/NotoSerifTC-Regular.woff2",
     REPO_ROOT / "assets/fonts/NotoSerifTC-SemiBold.woff2",
@@ -42,6 +44,12 @@ def parse_args() -> argparse.Namespace:
         action="append",
         default=[],
         help="add one or more characters to the checked corpus (mutation proof only)",
+    )
+    parser.add_argument(
+        "--line-table",
+        type=Path,
+        default=None,
+        help="read zh strings from this line table instead of content/line-table.json (mutation proof only)",
     )
     return parser.parse_args()
 
@@ -60,13 +68,17 @@ def load_coverage() -> set[int]:
     return coverage
 
 
-def locale_characters(extra: list[str]) -> set[str]:
+def locale_characters(extra: list[str], line_table: Path | None = None) -> set[str]:
     paths = sorted(LOCALE_DIR.glob("*.json"))
     if not paths:
         raise RuntimeError(f"no locale JSON files found in {LOCALE_DIR}")
+    table = line_table if line_table is not None else LINE_TABLE
+    if not table.is_file():
+        raise RuntimeError(f"line table missing: {table}")
     characters: set[str] = set()
     for path in paths:
         characters.update(json_string_characters(path))
+    characters.update(line_table_zh_characters(table))
     for value in extra:
         characters.update(value)
     return characters
@@ -92,9 +104,31 @@ def json_string_characters(path: Path) -> set[str]:
     return characters
 
 
+def line_table_zh_characters(path: Path) -> set[str]:
+    """Inline zh copy in the line table is shipped, not locale-overlaid."""
+    parsed = json.loads(path.read_text(encoding="utf-8"))
+    label = str(path)
+    try:
+        label = str(path.resolve().relative_to(REPO_ROOT))
+    except ValueError:
+        pass
+    if not isinstance(parsed, list):
+        raise RuntimeError(f"{label}: expected a JSON array")
+    characters: set[str] = set()
+    for row in parsed:
+        if not isinstance(row, dict):
+            continue
+        value = row.get("zh")
+        if isinstance(value, str):
+            characters.update(character for character in value if ord(character) >= 0x20)
+    if not characters:
+        raise RuntimeError(f"{label}: no zh strings")
+    return characters
+
+
 def main() -> int:
     args = parse_args()
-    characters = locale_characters(args.extra_char)
+    characters = locale_characters(args.extra_char, args.line_table)
     coverage = load_coverage()
     missing = sorted(character for character in characters if ord(character) not in coverage)
     if missing:
@@ -103,7 +137,8 @@ def main() -> int:
         return 1
     print(
         "locale font coverage OK "
-        f"({len(characters)} locale characters, {len(TEXT_FONTS)} bundled subsets)"
+        f"({len(characters)} characters from locale + line-table zh, "
+        f"{len(TEXT_FONTS)} bundled subsets)"
     )
     return 0
 

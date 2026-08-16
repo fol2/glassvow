@@ -17,7 +17,7 @@ var _outcome: String
 var _stats: Dictionary
 var _bequest_choices: Array
 var _bequest_answered: bool
-var _fall_floor: int
+var _fall_waystone: int
 var _sfx: SfxBus
 var _margin: MarginContainer
 var _panel: PanelContainer
@@ -31,13 +31,13 @@ var _rise_snapped: bool = false
 
 
 func _init(outcome: String, stats: Dictionary, bequest_choices: Array,
-		bequest_answered: bool, fall_floor: int,
+		bequest_answered: bool, fall_waystone: int,
 		stage_shape: StringName = StageShape.IDENTITY, sfx: SfxBus = null) -> void:
 	_outcome = outcome
 	_stats = stats.duplicate(true)
 	_bequest_choices = bequest_choices.duplicate(true)
 	_bequest_answered = bequest_answered
-	_fall_floor = maxi(0, fall_floor)
+	_fall_waystone = maxi(0, fall_waystone)
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
@@ -179,7 +179,7 @@ func _build_stats() -> void:
 	_stats_grid.add_theme_constant_override("v_separation", 6)
 	_stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_column.add_child(_stats_grid)
-	_add_stat("floors", Locale.active.t("ui.end.floors").to_upper())
+	_add_stat("waystones", Locale.active.t("ui.end.waystones").to_upper())
 	_add_stat("slain", Locale.active.t("ui.end.slain").to_upper())
 	_add_stat("elites_bosses", Locale.active.t("ui.end.elitesBossesPlus").to_upper())
 	_add_stat("deck_size", Locale.active.t("ui.end.deckSize").to_upper())
@@ -340,7 +340,7 @@ func _title_text() -> String:
 
 func _subtitle_text() -> String:
 	match _outcome:
-		"death": return Locale.active.t("ui.end.fallenLantern", {"floor": _fall_floor})
+		"death": return Locale.active.t("ui.end.fallenLantern", {"n": _fall_waystone})
 		_: return Locale.active.t("ui.end.abandonedSub")
 
 
@@ -380,7 +380,7 @@ func _add_embers() -> void:
 	# Seeded per DEATH, not per build: off the global streams (a field must
 	# not perturb a run's rolls) but keyed to the fall, so two graves are not
 	# the same photograph.
-	add_child(EmberField.new(0x0EA5 ^ (_fall_floor * 2654435761)))
+	add_child(EmberField.new(0x0EA5 ^ (_fall_waystone * 2654435761)))
 
 
 ## The fallen screen's living ash (end.js:212-213, styles.css:1801-1811):

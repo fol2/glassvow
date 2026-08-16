@@ -183,6 +183,62 @@ column/row luminance profile, not eyeballed:
 composition (canopy → shelf → counter → foreground rack), through the same
 two-step pipeline once this landscape settles. It is not this file cropped.
 
+### `scenes/` — the ten scripted-scene plates, 1536×1024 palette PNG
+
+The full-bleed plates behind the four scripted scenes (#310), billed by
+`docs/story/07-scenes.md` §8 after James's Hybrid verdict on the staging
+bake-off. Loaded by path from `content/scenes.json`, never by `preload`.
+
+| Shipped | Winning candidate | Scene |
+|---|---|---|
+| `opening-hearth.png` | `opening-hearth-c` | Opening, beats ①③④ |
+| `unsealing-mirror-queue.png` | `unsealing-mirror-queue-b` | Unsealing, full |
+| `unsealing-monuments-push.png` | `unsealing-monuments-push-a` | Unsealing, full |
+| `unsealing-door-open.png` | crop of `unsealing-monuments-push-a` | Unsealing, short |
+| `act4-node1.png` | `act4-node1-b` | Act IV node 1 (and the entry beat) |
+| `act4-node2.png` | `act4-node2-b` | Act IV node 2 |
+| `act4-node3.png` | `act4-node3-a` | Act IV node 3 |
+| `act4-node4.png` | `act4-node4-b` | Act IV node 4 |
+| `act4-node5.png` | `act4-node5-a` | Act IV node 5 |
+| `finale-swap.png` | `finale-swap-a` | Finale |
+
+**Prompts are not restated here — they are in
+`docs/design/2026-08-16-scene-plates/README.md`**, one per plate, under the
+shared style block, with the canon anchor each was derived from. That file is
+also the candidate table and the rejection record. Generated 2026-08-16 through
+`~/.claude/scripts/subagents/run-imagegen.sh`; candidates in
+`docs/design/2026-08-16-scene-plates/candidates/`;
+`install_plates.py` reproduces the shipped bytes from them.
+
+Four decisions worth keeping:
+
+- **The frame is fixed by the engine, not by taste.** `project.godot:45` is
+  `window/stretch/aspect="keep"`, so every device sees one 1180×820 box. A plate
+  meets exactly one aspect ratio — none of `night-stall.png`'s per-aspect safe
+  band applies. Rendered at 1536×1024, cover-cropped to 1.4390, which takes 2% of
+  width off each side; the dialogue band covers the bottom 12%. Nothing
+  load-bearing goes in either.
+- **A round lobed window structurally invites the treatment James rejected.**
+  The unsealing mirror must show 窗中站滿一排「你」 as *one* queue; the first
+  candidate restarted the crowd inside every lobe, which is the per-pane
+  duplication ruled creepy on the bake-off. Escalating the negative prompt was
+  the wrong lever. Restaging the window as six tall lancets under one arch made
+  the correct reading the only one the geometry allows — a single row crosses all
+  six at one height with the mullions passing in front.
+- **These plates carry no figure that the scene player also supplies.** The
+  opening's first candidates baked in the seated hooded figure; the #283 Keeper
+  overlays the same plate for beat ②, so that put two bodies on screen. James
+  ruled one, and the plate is now an empty hall with a bare hearth step composed
+  as the seat. 爐前仍坐着一個兜帽身影 is the overlay's job in every beat that
+  needs it.
+- **Quantize on the way in, and measure at the `.ctex`, not the PNG.**
+  `compress/mode=0` means Godot stores these losslessly, so the packed texture
+  tracks image content. Measured on `act4-node5`: RGB `.ctex` 2,205,462 B,
+  256-colour `.ctex` 949,946 B — **57% off the shipped texture**, not just the
+  repo file. Ten plates land at 11.99 MB of PNG against 26.21 MB unquantized.
+  Inspected at full size first; the sunset gradient and cloud sea in `act4-node5`
+  are the hardest case in the set and show no visible banding.
+
 ### `title/splash.png` — 2360×1640 RGBA
 
 The Godot boot splash, wired at `project.godot:20`. Last corrected by 4007c11
@@ -206,6 +262,89 @@ RGBA background, no backdrop, no ornaments, no watermark; the characters must
 read exactly 琉璃誓言 with correct stroke structure." First candidate accepted:
 all four characters structurally correct, transparency real (514,654 fully
 transparent pixels, corner alpha 0).
+
+### `meta/keeper.png` — 682×1024 RGBA — hearth seated figure
+
+The Keeper as met at run start: hooded, seated, void face. Overlay for
+opening-hearth beat ② (and the every-departure L0 linger) — the plate itself
+is an empty hall; this cutout is 「爐前仍坐着一個兜帽身影」 (`00-truth.md`
+§5 L0; `07-scenes.md` §8). Shown by the scene player once wiring lands
+(#309). Spec: `docs/story/02-cast.md` › Keeper › 資產
+(`[SETTLED — #260 Q7]`).
+
+James picked candidate `hearth-d` on 2026-08-16 (#283).
+
+Style block, verbatim from `style-bible.md`:
+
+> Serious cartoon-gothic stained-glass game art: chunky dark outer silhouette,
+> simplified exaggerated proportions, one iconic readable pose, 3-5 large
+> jewel-tone glass colour masses with very few thick lead dividers, matte
+> painterly texture, warm amber rim light, soft controlled inner glow. Designed
+> to remain readable at 128px. Fully transparent background (alpha channel). No
+> text, no labels, no watermark.
+
+Construction clause — same load-bearing paragraph as `hollow-lamplighter`:
+
+> CONSTRUCTION, this is the most important instruction: the figure is not
+> painted cloth. The entire robe, hood and body are built from large flat panes
+> of coloured glass separated by thick black lead came lines, exactly like a
+> cathedral stained-glass window rendered as a character. Each fold of the robe
+> is a distinct glass pane with a hard lead border, not a soft painted fold.
+> Only a few big panes, never lacework or many small pieces. The lead lines are
+> heavy, black, and clearly visible across the whole figure. Glass is blue,
+> violet, teal and deep red, lit from within by a faint cold glow, with thin
+> worn gold edging on the lead. Readable as a solid black shape if all internal
+> detail were removed.
+
+Subject:
+
+> The Keeper — a seated hooded figure. Full body, sitting with knees drawn in,
+> hands folded in the lap, completely still and calm. Raised hood; the hood
+> opening is a deep black VOID with NO face, NO eyes, NO glowing points inside
+> the hood. Single complete figure, no cropped limbs, about 15 percent margin,
+> portrait framing taller than wide. Facing slightly left in three-quarter
+> view. The silhouette is a LOW WIDE hooded seated mass — sitting, not
+> standing. Warm amber rim light falling on the figure from the RIGHT, from a
+> fire outside the frame. The figure holds NOTHING: no lantern, no staff, no
+> weapon, no prop. Do NOT draw a hearth, chair, floor, hall, fire, or any
+> background object.
+
+Generated 2026-08-16 through the quality `image-gen` tier. Five hearth
+candidates; table and rejection record in
+`docs/design/2026-08-16-keeper-figures/README.md`. Alpha gate (non-transparent
+pixels ≥240 ≥90%, corners 0, `sips -Z 1024`): A/B/D/E pass, C fail (64.5%,
+washed — same class as Lamplighter B/E).
+
+### `enemies/eternalKeeper.png` — 682×1024 RGBA — Act IV boss form
+
+The Eternal Keeper, same silhouette as `meta/keeper.png`. Recognition at the
+Act IV reveal *is* the design. Lighting is inverted hearth-amber from the
+left; the glass goes cold (violet-grey, teal). Hands still folded; hood still
+a void; no lantern, crown, halo, or weapon.
+
+**Waiver.** `style-bible.md` tells enemy art to avoid "noble cloaks, elegant
+armour, upright protagonist poses, clean symmetry, and knight/priest/warden
+silhouettes". This file is an enemy and uses a keeper silhouette on purpose
+— `#260 Q7` / `#283`. Do not "fix" it toward a monster read.
+
+James picked candidate `boss-c` on 2026-08-16 (#283), as an image-to-image
+edit of `hearth-d`.
+
+Subject delta from the hearth prompt (pose/hood/panes locked to the
+reference):
+
+> INVERTED hearth light: warm amber now arrives from the LEFT / far side
+> (the wrong direction), catching the lead edges. The rest of the glass goes
+> cold — violet-grey, deep teal, less of the domestic warm gold. The glass
+> panes glow from within a little more (monumental, not cute).
+
+Four boss candidates from the same reference. Alpha: A 98.4% pass (rim still
+from the right — lighting miss), B 84.9% fail (washed), C 98.5% pass, D
+98.6% pass. C shipped.
+
+The enemy id `eternalKeeper` is not in `content/full-content.json` yet (Act
+IV roster is `#220`/`#221`). The raster sits at the conventional
+`enemies/<id>.png` path so combat can pick it up without a rename.
 
 ## Rejection note — what "technically shippable" means
 

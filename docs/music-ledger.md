@@ -26,6 +26,22 @@ re-encode or re-title the shipping files without a pack bump.
 - `assets/audio/music/manifest.json` is the track-title source the credits
   screen reads.
 - Titles render in manifest order (dramatic order, not alphabetical).
+- **A `title` is display copy, not provenance.** The renders, the file names
+  and the cue ids are frozen at v1 and a change to any of them needs a pack
+  bump; a `title` string is rendered verbatim into the credits by
+  `presentation/run/credits_screen.gd`, so it is player-facing copy and answers
+  to the story bible like every other line. Retitling does **not** bump the
+  pack — the audio has not changed and claiming it has would be false — but it
+  does have to be recorded below.
+
+## Title changes since v1
+
+| cue | v1 title | now | authority |
+|---|---|---|---|
+| `map` | Lanterns on the Face of the Spire | **Lanterns Along the Road** | [#232](https://github.com/fol2/glassvow/issues/232) Tier A ban, landed by [#303](https://github.com/fol2/glassvow/issues/303) |
+| `sealedDoor` | The Climb Continues | **The Pilgrimage Continues** | foreshadow-ledger row 82 — 「朝聖仍在繼續。」/ "The pilgrimage continues." is one sentence at three sites (whisper 24, `ui.map.sealedDoor.inscription`, this title); signed in story batch 1 ([#301](https://github.com/fol2/glassvow/issues/301)), landed by [#303](https://github.com/fol2/glassvow/issues/303) |
+
+Both audio files are byte-identical to v1. `pack_id` stays `stained-glass-v1`.
 
 ## Pointer
 
