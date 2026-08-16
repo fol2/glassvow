@@ -439,10 +439,11 @@ fallback.
 ## The port
 
 ### Benchmark
-The frozen web build this project is a parallel port of, and the reference any
-ported behaviour is diffed against. It is authority for *what* the game does and
-for measured presentation values — not for *how* those are achieved. A shape the
-web build was forced into by its own platform carries no authority here.
+The frozen web build (`roguecardv2` at `6e069118`, 2026-07-13, pre-Pixi) this
+project was a parallel port of. Until 2026-08-16 it was the reference any
+ported behaviour was diffed against. The port now owns its content and
+behaviour (#317); the commercial rubric is the standard, and this entry is
+vocabulary for the archived measurements, not a live authority.
 
 Its combat screen and this project's viewport are the same size, so measured
 values transfer with no scaling step. That coincidence is what makes parity

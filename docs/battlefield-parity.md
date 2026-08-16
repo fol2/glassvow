@@ -3,8 +3,10 @@
 What the benchmark's combat screen does, and what this port does about it.
 Sources are `roguecardv2@6e069118` — `src/ui/drain.js`, `src/vfx.js`,
 `src/ui/combat-choreo.js`, `src/ui/combat-presentation.js`, `src/styles.css` —
-plus figures read off the running build at `localhost:5190`, which is the only
-way to get the ones the stylesheet's fallbacks lie about.
+plus figures read off the running build at `localhost:5190` while it was served —
+the only way to get the ones the stylesheet's fallbacks lie about. The reference
+was detached on 2026-08-16 (#317); everything below is a measurement of what the
+web did, not a standard this port owes anything to.
 
 Scope is the **battlefield only**: the fight, its actors, its chrome and its
 effects. Reward, map and the run around it are other lanes.

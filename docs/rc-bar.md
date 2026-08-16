@@ -72,7 +72,7 @@ All from the repo root, on the exact RC commit, plus CI green on the same head:
 - [ ] `tools/check_imports.sh`
 - [ ] `tools/check_scripts.sh`
 - [ ] `godot --headless -s res://tests/run_all.gd` exits 0 (PASS)
-- [ ] `python3 tools/check_anchors.py` and `python3 tools/check_web_anchors.py`
+- [ ] `python3 tools/check_anchors.py` and `python3 tools/check_benchmark_freeze.py`
 - [ ] CI green on the exact RC head. A pass obtained by re-running a flaky job does not count
       until the flake itself is filed as a `bug` (it lands in P8's ledger like any other).
 

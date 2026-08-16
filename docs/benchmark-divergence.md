@@ -271,10 +271,20 @@ through. Rows 16–18 are one file and one afternoon.
 
 ## How to keep this from coming back
 
-`tools/` is organiser-owned — lanes run it, no lane edits it — so this is a
-request rather than a commit. A `tools/check_web_anchors.py` belongs in the
-verification block in `AGENTS.md` beside `check_anchors.py`. It is about eighty
-lines and the method is the whole of it:
+> **Granted, then retired — and the sequel matters more than the request.** The
+> gate below was built, and it worked: `tools/check_web_anchors.py` shipped at ~450
+> lines. It also needed the benchmark checkout, so it exited 2 wherever that was
+> absent — every CI runner, every git worktree — and stayed hand-run, which is the
+> weakest kind of gate there is. On 2026-08-16 (#325) it was deleted with the
+> detachment and replaced by `tools/check_benchmark_freeze.py`, which does not
+> resolve citations at all: it **counts** them per file against a frozen census and
+> refuses an increase. New citations being banned, that is the whole of the rule —
+> and needing nothing, it runs in CI. Keep the method below for the record; it is
+> the right design for the problem as it stood.
+
+The method that was requested — and that shipped, then retired — is the record
+below. It is not a live request: `check_web_anchors.py` is gone, and
+`check_benchmark_freeze.py` is the gate in `AGENTS.md`. The design:
 
 1. Pull every `` `symbol` (file.js:NNN) `` out of `presentation/` and
    `application/`, taking the backticked token from the comment block the
@@ -291,9 +301,8 @@ failures deep and the 14 that matter are buried in it. Against two, the 14
 name themselves: they are the anchors that miss the reference and land in the
 tree the reference is not.
 
-Until it exists, the rule from the audit still stands — if a symbol is missing
-from `~/Coding/roguecardv2-benchmark`, it is not portable, however good it looks
-in the newer tree.
+That rule stood until the freeze replaced it. A symbol missing from the archived
+checkout is a fact about the web original, not a reason to write a new citation.
 
 ## Putting the benchmark into a named fight — the reproducible recipe
 

@@ -4,10 +4,11 @@
 > premise below is **withdrawn**. The visual standard for this port is now
 > `roguecardv2@6e069118` (the pre-Pixi build; local branch `pre-pixi`) — a
 > raster-art game carried by `src/assets/` (243 images at that commit).
-> Glassvow currently ships **zero** art assets and draws everything in `_draw()`;
-> closing that gap is the active work. §4 (slice data) is unaffected and still
-> stands. Treat every "procedural" / "buildable" note below as describing the
-> *old* plan, not the target.
+> **Visual standard superseded again 2026-08-16 (#317 / #325).** The line
+> above that named `roguecardv2@6e069118` as the visual standard is itself
+> withdrawn. The port owns its look; the commercial rubric is the standard.
+> §4 (slice data) is unaffected and still stands. Treat every "procedural" /
+> "buildable" note below as describing the *old* plan, not the target.
 >
 > **§1 SUPERSEDED TOO (2026-08-16, #207 / #232 / #234).** The horizontal frame
 > §1 argues for survived; the *horizon-Spire* that carried it did not. #207

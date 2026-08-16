@@ -3,11 +3,10 @@ extends Control
 ## The card designer surface: every card in the loaded content set, laid flat on
 ## the benchmark's own backdrop, at 1:1 with no hand fan, no rotation, no lift.
 ##
-## Why this exists: card art and typography can only be judged against the
-## benchmark (roguecardv2@6e069118), and reading them off a live fight means
-## fighting the hand's arc, overlap and viewport clipping at the same time. This
-## screen removes all three so a `--shot` here diffs directly against the same
-## cards flattened in the browser.
+## Why this exists: card art and typography need a flat 1:1 sheet, and reading
+## them off a live fight means fighting the hand's arc, overlap and viewport
+## clipping at the same time. This screen removes all three so a `--shot` here
+## is a contact sheet of this port's own cards, not a live-fight crop.
 ##
 ##   godot --path . -- --cards                       # window, stays open
 ##   tools/shot.sh --cards --shot=/tmp/cards.png     # contact sheet, then quits
@@ -271,8 +270,7 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 
 	var caption: Label = Label.new()
 	var scale_note: String = "1:1" if is_equal_approx(_zoom, 1.0) else "%d:1" % int(_zoom)
-	caption.text = "card lab · %d cards · %s against roguecardv2@6e069118" % [
-		plan.size(), scale_note] if surfaces.is_empty() \
+	caption.text = "card lab · %d cards · %s" % [plan.size(), scale_note] if surfaces.is_empty() \
 		else "card surfaces · %s · %d materials · %s" % [
 			plan[0][0] if not plan.is_empty() else "-", plan.size(), scale_note]
 	caption.add_theme_font_size_override("font_size", 12)

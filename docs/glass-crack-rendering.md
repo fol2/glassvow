@@ -677,8 +677,10 @@ and for native-pixel strips at 1:1, `--rite` rather than `--states` — the stat
 grid renders at 53 % and downscaling is itself an antialiasing pass, so it cannot
 be used to judge an edge.
 
-The benchmark's own tuning bench is still runnable, and is the reference for the
-approved look:
+The benchmark's own tuning bench was the reference for the approved look while the
+reference stood. It was detached on 2026-08-16 (#317) and nothing serves it now;
+what the port ships is judged on its own. Recorded because the numbers below came
+from it:
 
 ```bash
 npx vite --port 5522

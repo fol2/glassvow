@@ -5,10 +5,11 @@ Living status for the Glassvow Godot port. Two authorities, not one:
 - **Domain/engine spec** = the web engine the fixtures were captured from
   (`roguecardv2` @ `2068b76c`, pinned by `port_fixtures/manifest.json`) —
   mirror `engine.js` behaviour, proven by trace replay.
-- **Visual standard** = the pre-Pixi benchmark **`6e06911`** at
-  `~/Coding/roguecardv2-benchmark` (localhost:5190). Web `main` /
-  `web-reference-v1` is post-Pixi and a visual regression — never read
-  parity specs from it (see CLAUDE.md › THE REFERENCE).
+- **Visual standard** = **this port**, judged against the commercial rubric
+  (#157). It *was* the pre-Pixi benchmark `6e06911` served at localhost:5190;
+  the reference was detached on 2026-08-16 (#317) and nothing is served now.
+  Frozen citations into it stay readable as history — see CLAUDE.md ›
+  THE REFERENCE and `docs/benchmark-divergence.md`.
 
 ## Done (all green, pushed)
 

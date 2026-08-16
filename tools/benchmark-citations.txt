@@ -1,0 +1,64 @@
+# Frozen web-reference citation census — see tools/check_benchmark_freeze.py.
+#
+# One line per file: count, tab, repo-relative path. A count may only ever
+# go DOWN. Raising one means writing a new citation into a benchmark this
+# port detached from on 2026-08-16 (#317), so `--update` refuses to do it and
+# the number has to be edited by hand, in a diff a reviewer can see.
+#
+# 607 occurrence(s) across 55 file(s).
+
+11	application/main.gd
+94	docs/actor-animation-checklist.md
+3	docs/assembly-integration-plan.md
+24	docs/benchmark-divergence.md
+3	docs/dev-tools.md
+5	docs/glass-crack-rendering.md
+2	docs/hud-handoff.md
+23	docs/motion-census.md
+5	docs/session-ownership.md
+1	docs/solutions/conventions/every-number-matched-and-the-declaration-still-did-not.md
+5	docs/solutions/conventions/measure-the-running-reference-not-its-tables.md
+2	docs/solutions/design-patterns/derive-authored-compensations-when-porting.md
+3	docs/solutions/design-patterns/dom-node-per-layer-in-godot.md
+1	docs/solutions/tooling-decisions/drive-the-lab-the-way-the-game-drives-it.md
+2	docs/solutions/ui-bugs/hero-ward-stone-never-answered-the-blow.md
+19	docs/solutions/workflow-issues/audit-port-by-enumerating-reference-css.md
+2	docs/static-census-raw.md
+8	docs/wrong-reference-audit.md
+2	domain/events/event_types.gd
+2	domain/rules/combat.gd
+2	presentation/audio/sfx_bus.gd
+3	presentation/combat/aim_arc.gd
+1	presentation/combat/card_shine.gdshader
+4	presentation/combat/card_view.gd
+93	presentation/combat/combat_screen.gd
+90	presentation/combat/enemy_view.gd
+1	presentation/combat/event_sequencer.gd
+4	presentation/combat/facet_pips.gd
+9	presentation/combat/floaters.gd
+1	presentation/combat/glass_style.gd
+15	presentation/combat/hand_view.gd
+20	presentation/combat/hud_bar.gd
+3	presentation/combat/idle_motes.gd
+2	presentation/combat/intent_chip.gd
+10	presentation/combat/motion.gd
+7	presentation/combat/sky_field.gd
+5	presentation/combat/tooltip_layer.gd
+12	presentation/combat/vfx_layer.gd
+2	presentation/lab/layout_lab.gd
+1	presentation/map/glass_waystone.gd
+1	presentation/map/map_band.gd
+3	presentation/map/world_map_screen.gd
+3	presentation/run/choice_screen.gd
+24	presentation/run/dawn_screen.gd
+1	presentation/run/drop_shadow.gdshader
+9	presentation/run/run_end_screen.gd
+2	presentation/run/threshold_screen.gd
+14	presentation/stage/layout_book.gd
+1	presentation/stage/pointer_drift.gd
+5	presentation/stage/stage_shape.gd
+23	presentation/stage/title_world.gd
+14	presentation/stage/transition_layer.gd
+1	tests/test_layout_book.gd
+2	tests/test_presentation.gd
+2	tests/test_stage_shape.gd

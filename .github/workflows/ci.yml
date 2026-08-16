@@ -53,14 +53,18 @@ jobs:
       - name: Check developer-tool registry and coordinate conversion
         run: python3 -B tools/dev.py --check
 
-      # The web-reference twin, tools/check_web_anchors.py, is deliberately NOT
-      # here: it needs the roguecardv2-benchmark checkout and returns 2 —
-      # "benchmark tree not found" — wherever that is absent, which includes
-      # every CI runner. Adding it would make CI permanently red for a reason
-      # unrelated to the anchors, and silencing that exit would turn a real
-      # gate into a no-op. It stays local-only; CLAUDE.md records the split.
+      # The web-reference twin used to be excluded from CI on purpose: it
+      # resolved citations against the roguecardv2-benchmark checkout and
+      # returned 2 — "benchmark tree not found" — wherever that was absent,
+      # which is every runner here. It was deleted on 2026-08-16 with the
+      # detachment (#317, #325), and the gate below replaces it by counting
+      # citations instead of resolving them, so it needs no checkout and runs
+      # where the rule is actually broken.
       - name: Check doc file:line anchors
         run: python3 -B tools/check_anchors.py
+
+      - name: Check no new web-reference citations
+        run: python3 -B tools/check_benchmark_freeze.py
 
       # Map tile/module gates (#207 repairs 7–9, #234 slice 5). `--self-test`
       # proves the checker can fail against generated fixtures; empty-dir is

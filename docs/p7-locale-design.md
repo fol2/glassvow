@@ -409,8 +409,10 @@ unchanged; CJK line length is verified on phone-portrait, not assumed.
 ## 7. Acceptance for this design commit
 
 - This document answers the four questions in #98.
-- `python3 tools/check_anchors.py` and `python3 tools/check_web_anchors.py` stay
-  green (symbol citations only where code is named).
+- `python3 tools/check_anchors.py` stays green (symbol citations only where code
+  is named). Its web-reference twin `check_web_anchors.py` was still live when this
+  was written; it was deleted with the detachment on 2026-08-16 (#325) and
+  `check_benchmark_freeze.py` now holds the citation count instead.
 - Zero gameplay or presentation behaviour change.
 
 P7.2 begins only after this merges: `application/locale.gd` + `locale/en.json`
