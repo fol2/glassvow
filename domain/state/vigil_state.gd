@@ -13,7 +13,7 @@ const OUTCOMES: Array[String] = ["win", "death", "abandon"]
 const DEFAULT_DEEDS: Dictionary = {
 	"runs": 0, "wins": 0, "slain": 0, "shatters": 0, "kindles": 0,
 	"perfects": 0, "smolderKills": 0, "unlitVisited": 0, "embersSpent": 0,
-	"bestVow": 0, "bestFloor": 0,
+	"bestVow": 0, "bestWaystone": 0,
 }
 
 var deeds: Dictionary = DEFAULT_DEEDS.duplicate()
@@ -182,7 +182,7 @@ func commit_run(run: RunState, outcome: String, content: ContentDB) -> bool:
 			deeds["wins"] = _ji(deeds["wins"]) + 1
 			deeds["bestVow"] = maxi(_ji(deeds["bestVow"]), run.vow)
 			vow_unlocked = maxi(vow_unlocked, mini(5, run.vow + 1))
-		deeds["bestFloor"] = maxi(_ji(deeds["bestFloor"]), run.act * 15 + run.floors_climbed)
+		deeds["bestWaystone"] = maxi(_ji(deeds["bestWaystone"]), run.act * 15 + run.waystones_lit)
 		for key: String in [
 			"slain", "shatters", "kindles", "perfects", "smolderKills",
 			"unlitVisited", "embersSpent",

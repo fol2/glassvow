@@ -59,7 +59,7 @@ func _measure(content: ContentDB, locale_code: StringName,
 	_viewport.size = reference
 	var run: RunState = RunState.new()
 	run.act = act
-	run.floors_climbed = 14
+	run.waystones_lit = 14
 	run.player.gold = 999
 	var hud: RunHud = RunHud.new(run, content, stage_shape)
 	_viewport.add_child(hud)

@@ -17,6 +17,7 @@ static func run(fails: Array[String]) -> void:
 	_run_snapshot_roundtrips(content, fails)
 	_run_transaction_checkpoints(content, fails)
 	_run_terminal_receipt(content, fails)
+	_pre_rename_vigil_still_loads(fails)
 
 
 static func _run_invalid_cases(content: ContentDB, fails: Array[String]) -> void:
@@ -208,7 +209,7 @@ static func _run_transaction_checkpoints(content: ContentDB, fails: Array[String
 static func _run_terminal_receipt(content: ContentDB, fails: Array[String]) -> void:
 	var run: RunState = RunState.new_run(content, 818, "run-exactly-once")
 	run.act = 1
-	run.floors_climbed = 4
+	run.waystones_lit = 4
 	run.stats["slain"] = 3
 	run.quests["ownShade"] = {"state": "complete", "progress": 1, "memory": {}}
 	run.quest_scratch["ownShade"] = {"fall": {
@@ -236,3 +237,63 @@ static func _run_terminal_receipt(content: ContentDB, fails: Array[String]) -> v
 		if not reloaded.commit_run(run, "death", content) or reloaded.deeds["runs"] != 1:
 			fails.append("vigil receipt: persisted retry was not idempotent")
 	SaveService.clear_vigil(TEST_VIGIL_PATH)
+
+
+## #305 D2: neither envelope bumps. A v2 vigil written with `bestFloor` still
+## loads; `bestWaystone` heals to 0 and every neighbouring field survives.
+static func _pre_rename_vigil_still_loads(fails: Array[String]) -> void:
+	var seeded: VigilState = VigilState.blank()
+	seeded.unlocks = ["card:quakeblow"]
+	seeded.vow_unlocked = 2
+	seeded.runs_played = 7
+	seeded.whispers = 4
+	seeded.shards = ["paleOnes"]
+	seeded.deeds["slain"] = 11
+	seeded.deeds["wins"] = 2
+	seeded.deeds["bestVow"] = 1
+	seeded.news = true
+	var raw: Dictionary = seeded.to_dict()
+	if int(float(str(raw.get("v", -1)))) != VigilState.VERSION:
+		fails.append("pre-rename vigil: envelope is not v2")
+		return
+	var deeds_v: Variant = raw["deeds"]
+	if typeof(deeds_v) != TYPE_DICTIONARY:
+		fails.append("pre-rename vigil: to_dict deeds was not a dictionary")
+		return
+	var deeds: Dictionary = deeds_v
+	deeds.erase("bestWaystone")
+	deeds["bestFloor"] = 42
+	raw["deeds"] = deeds
+	var parsed: VigilState = VigilState.from_dict(raw)
+	if parsed == null:
+		fails.append("pre-rename vigil: from_dict rejected a v2 file with bestFloor")
+		return
+	SaveService.clear_vigil(TEST_VIGIL_PATH)
+	var tmp_path: String = TEST_VIGIL_PATH + ".tmp"
+	var f: FileAccess = FileAccess.open(tmp_path, FileAccess.WRITE)
+	if f == null:
+		fails.append("pre-rename vigil: could not write fixture")
+		return
+	f.store_string(JSON.stringify(raw))
+	f.flush()
+	f.close()
+	if DirAccess.rename_absolute(
+			ProjectSettings.globalize_path(tmp_path),
+			ProjectSettings.globalize_path(TEST_VIGIL_PATH)) != OK:
+		fails.append("pre-rename vigil: could not place fixture")
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(tmp_path))
+		return
+	var loaded: VigilState = SaveService.load_vigil(TEST_VIGIL_PATH)
+	SaveService.clear_vigil(TEST_VIGIL_PATH)
+	if int(float(str(loaded.deeds.get("bestWaystone", -1)))) != 0:
+		fails.append("pre-rename vigil: bestWaystone healed to %s, not 0" % [
+			loaded.deeds.get("bestWaystone")])
+	if loaded.deeds.has("bestFloor"):
+		fails.append("pre-rename vigil: bestFloor leaked into live deeds")
+	if loaded.unlocks != ["card:quakeblow"] or loaded.vow_unlocked != 2 \
+			or loaded.runs_played != 7 or loaded.whispers != 4 \
+			or loaded.shards != ["paleOnes"] or loaded.news != true \
+			or int(float(str(loaded.deeds["slain"]))) != 11 \
+			or int(float(str(loaded.deeds["wins"]))) != 2 \
+			or int(float(str(loaded.deeds["bestVow"]))) != 1:
+		fails.append("pre-rename vigil: neighbouring fields did not survive")

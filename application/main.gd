@@ -1418,7 +1418,7 @@ func _on_node_chosen(i: int) -> void:
 	var n: MapNode = _map.nodes[i]
 	var was_unlit: bool = n.unlit
 	game.run.node_id = n.id
-	game.run.floors_climbed = n.row + 1
+	game.run.waystones_lit = n.row + 1
 	if was_unlit:
 		var bounty: int = n.bounty * (2 if game.run.has_relic("thiefOfWicks") else 1)
 		game.run.player.gold += bounty
@@ -2135,7 +2135,7 @@ func _show_run_end() -> void:
 		stats,
 		choices,
 		bequest_answered,
-		game.run.floors_climbed,
+		game.run.waystones_lit,
 		_shape,
 		_sfx_bus)
 	screen.bequest_requested.connect(_on_bequest_chosen)
@@ -2148,7 +2148,7 @@ func _show_run_end() -> void:
 
 func _run_end_stats() -> Dictionary:
 	return {
-		"floors": game.run.floors_climbed,
+		"waystones": game.run.waystones_lit,
 		"slain": int(float(str(game.run.stats.get("slain", 0)))),
 		"elites_bosses": int(float(str(game.run.stats.get("elites", 0)))) \
 			+ int(float(str(game.run.stats.get("bosses", 0)))),
@@ -2245,7 +2245,7 @@ func _on_bequest_chosen(id: String) -> void:
 	var scratch: Dictionary = game.run.quest_scratch.get("ownShade", {})
 	scratch["fall"] = {
 		"act": game.run.act,
-		"row": maxi(0, game.run.floors_climbed - 1),
+		"row": maxi(0, game.run.waystones_lit - 1),
 		"shadeAspect": game.run.aspect,
 		"bequest": bequest,
 	}

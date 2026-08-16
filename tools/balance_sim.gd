@@ -120,7 +120,7 @@ static func _fight(game: GlassvowGame, node: MapNode) -> Dictionary:
 	}
 static func _enter_node(run: RunState, node: MapNode) -> void:
 	run.node_id = node.id
-	run.floors_climbed = node.row + 1
+	run.waystones_lit = node.row + 1
 	if node.unlit:
 		var bounty: int = node.bounty * (2 if run.has_relic("thiefOfWicks") else 1)
 		run.player.gold += bounty

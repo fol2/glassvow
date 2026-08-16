@@ -144,7 +144,7 @@ func _events(locale_code: StringName) -> Array:
 
 func _stats() -> Dictionary:
 	return {
-		"floors": 49,
+		"waystones": 49,
 		"slain": 37,
 		"elites_bosses": 8,
 		"deck_size": 24,
