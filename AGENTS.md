@@ -118,6 +118,34 @@ Organiser-owned files for why and for the two caveats.
 - **Shared Vocabulary** — `CONCEPTS.md` — domain terms with project-specific meaning; relevant when orienting to an area or settling on names.
 - **Art Ledger** — `docs/art-ledger.md` — points at the upstream art bibles that govern every raster asset, and records the prompts for the few this port authored itself. Relevant before generating or replacing any asset under `assets/art/`.
 
+## Cursor Cloud specific instructions
+
+The Cloud Agent environment boots with the toolchain already provisioned — `godot`
+(4.7.1.stable) on `PATH`, `zsh`, and the Python gate deps (`fonttools`, `Pillow`)
+— by an idempotent update script that also runs `godot --headless --import` to
+build the `.godot/` cache. You do **not** install Godot or those deps yourself; the
+script re-provisions any that a boot is missing. There is no `start` service. The
+verification gate is unchanged — run the four commands under **Verification** above.
+
+- **Grade the test suite by its exit code and `PASS (N tests)` line, not stderr.**
+  A headless run prints harmless `… leaked`, `RID … leaked`, and `Parameter
+  "material" is null` warnings from the dummy renderer (no GPU); the run still
+  exits 0. This is the same reasoning as the `--check-only` gate above: read the
+  signal that means failure, not the noise that always fires.
+
+- **Screen captures need a virtual display — the VM has no physical one.** Run the
+  capture wrappers under `xvfb-run` and force an on-screen window position:
+  `xvfb-run -a env GLASSVOW_SHOT_POSITION=0,0 tools/shot.sh <flags> --shot=/tmp/x.png`
+  (or drive Godot directly: `xvfb-run -a godot --path . --position 0,0 -- <flags>
+  --shot=/tmp/x.png`). `tools/shot.sh`'s default `-4000,-4000` is a macOS
+  off-screen workaround that does not apply here, and — per its own header — a
+  capture must never be `--headless`, or it hangs on a null viewport.
+
+- **`python3 tools/dev.py --open` (the browser front door at `127.0.0.1:8766`) is
+  optional and manual.** Its Interactive Web path needs Godot's 4.7.1
+  `web_nothreads_debug` export template, which the environment does not provision;
+  Native Proof and every headless check work without it.
+
 ---
 
 Created during M0 bootstrap (2026-07-24).
