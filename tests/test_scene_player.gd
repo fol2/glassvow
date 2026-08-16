@@ -104,20 +104,36 @@ static func _finished_once(fails: Array[String]) -> void:
 	player.free()
 
 
+## A beat whose art is missing must still draw and still finish. The fixture
+## names a path that cannot exist rather than borrowing the real opening: that
+## borrowed version passed only while the plates were unrendered, and #310
+## shipping them inverted it. The behaviour under test does not depend on which
+## art happens to be on disk today, so neither should the test.
 static func _missing_plates(fails: Array[String], opening: SceneScript) -> void:
+	var raw: Dictionary = {"beats": [{
+		"art": "res://assets/art/scenes/__no_such_plate__.png",
+		"motion": "hold",
+		"lines": [{"key": "story.opening.b1.l1"}],
+	}]}
+	var built: Variant = SceneScript.parse_scene("missing-plate-fixture", raw)
+	if not (built is SceneScript):
+		_check(fails, false, "missing-plate fixture did not parse: %s" % str(built))
+		return
+	var script: SceneScript = built
 	var asked: Array[int] = [0]
 	var done: Array[int] = [0]
-	var player: ScenePlayer = _live(opening, 0, asked, done)
+	var player: ScenePlayer = _live(script, 0, asked, done)
 	var plate: TextureRect = player.find_child("Plate", true, false) as TextureRect
 	_check(fails, plate != null and plate.texture == null,
 		"absent plates did not degrade to an empty plate")
 	var steps: int = 0
-	while done[0] == 0 and steps < opening.line_count() + 1:
+	while done[0] == 0 and steps < script.line_count() + 1:
 		player.advance_confirmed()
 		player._process(0.016)
 		steps += 1
-	_check(fails, done[0] == 1, "a no-plate opening did not finish")
+	_check(fails, done[0] == 1, "a no-plate scene did not finish")
 	player.free()
+	_check(fails, opening.line_count() > 0, "the real opening script is empty")
 
 
 ## A long line must hold longer than a short one, and a hands-off player must
