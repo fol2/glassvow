@@ -79,6 +79,7 @@ var _settle: float = 0.0
 ## screen so a leaf started before a route swap finishes over the incoming
 ## screen. Screens never see it; main fires it around its own route helpers.
 var _transitions: TransitionLayer
+var _scenes: Dictionary = {}
 
 
 func _init() -> void:
@@ -967,6 +968,8 @@ func _new_run(profile: Dictionary = {}) -> void:
 	game.quests.decorate_map(game.run, _map)
 	game.run.map = _map.to_dict()
 	_run_over = false
+	if not _vigil.scenes_seen.has("opening") and _scene_script("opening") != null:
+		game.run.pending_scene = {"id": "opening", "cursor": 0}
 	if _store_run():
 		_route_run()
 	else:
@@ -1030,6 +1033,8 @@ func _route_run() -> void:
 	_apply_pending_content_hydration()
 	if game == null:
 		_show_title()
+	elif typeof(game.run.pending_scene) == TYPE_DICTIONARY:
+		_show_scene()
 	elif game.run.pending_dawn != null:
 		_show_dawn()
 	elif game.run.pending_run_end != null:
@@ -1142,6 +1147,15 @@ func _show_map() -> void:
 		_transitions.wipe()
 	_clear_route()
 	_map_screen = WorldMapScreen.new(_map, content, _shape)
+	# The L0 hearth linger belongs to DEPARTURE — leaving the hearth to walk
+	# the road (00-truth §5 L0, 07-scenes §2: 每次出發). Every act begins with
+	# the lantern unseated (`WorldMap.benchmark` sets `at = -1`), so the
+	# screen's own `from_i < 0` test fires at the top of acts II and III too,
+	# and would show the hearth from the middle of a journey the player left
+	# long ago — three times a run for a plant meant to be subliminal. Only
+	# main knows which unseated map is the departure.
+	if game.run.act > 0:
+		_map_screen.hearth_plate = ""
 	_map_screen.node_chosen.connect(_on_node_chosen)
 	_map_screen.sealed_door_requested.connect(_on_sealed_door_requested)
 	add_child(_map_screen)
@@ -2296,6 +2310,62 @@ func _unlock_dawn_copy(id: String) -> String:
 ## next memory shows — but the screen now ASKS for each advance instead of the
 ## route being rebuilt around a 0.72s timer. drainEndQueue's shape exactly
 ## (end.js:134-151): show, persist, only then the next.
+func _scene_script(scene_id: String) -> SceneScript:
+	if _scenes.is_empty():
+		var loaded: Variant = SceneScript.load_all()
+		if typeof(loaded) == TYPE_DICTIONARY:
+			_scenes = loaded
+	var found: Variant = _scenes.get(scene_id)
+	if found is SceneScript:
+		return found
+	return null
+
+
+func _show_scene() -> void:
+	_remember_route(_show_scene)
+	if game == null or game.run == null or typeof(game.run.pending_scene) != TYPE_DICTIONARY:
+		return
+	var pending: Dictionary = game.run.pending_scene
+	var script: SceneScript = _scene_script(str(pending.get("id", "")))
+	if script == null:
+		game.run.pending_scene = null
+		_route_run()
+		return
+	var cursor: int = int(float(str(pending.get("cursor", 0))))
+	var screen: ScenePlayer = ScenePlayer.new(script, cursor, _shape, _sfx_bus)
+	screen.instant = _transitions != null and _transitions.instant
+	screen.advance_requested.connect(_on_scene_advance.bind(screen))
+	screen.finished.connect(_on_scene_finished)
+	_show_route(screen, false)
+
+
+func _on_scene_advance(screen: ScenePlayer) -> void:
+	if game == null or game.run == null or typeof(game.run.pending_scene) != TYPE_DICTIONARY:
+		return
+	var pending: Dictionary = game.run.pending_scene
+	pending["cursor"] = int(float(str(pending.get("cursor", 0)))) + 1
+	if not _store_run():
+		_show_save_error("ui.persistence.detail.sceneCursorHold")
+		return
+	if is_instance_valid(screen):
+		screen.advance_confirmed()
+
+
+func _on_scene_finished() -> void:
+	if game == null or game.run == null:
+		return
+	var pending: Dictionary = game.run.pending_scene \
+		if typeof(game.run.pending_scene) == TYPE_DICTIONARY else {}
+	var scene_id: String = str(pending.get("id", ""))
+	game.run.pending_scene = null
+	if not scene_id.is_empty() and not _vigil.scenes_seen.has(scene_id):
+		_vigil.scenes_seen.append(scene_id)
+	if not _store_run() or not _store_vigil():
+		_show_save_error("ui.persistence.detail.sceneHold")
+		return
+	_route_run()
+
+
 func _show_dawn() -> void:
 	_remember_route(_show_dawn)
 	var dawn: Dictionary = game.run.pending_dawn
