@@ -18,9 +18,10 @@ neither: the behaviour matches and only the `file:line` is wrong.
 > still needs a decision, the standard is the commercial rubric.
 > [#324](https://github.com/fol2/glassvow/issues/324) re-measured all eleven **R**
 > rows against present-day code and carries the current verdict for each — **nine
-> were already fixed**, one had been mis-measured, and one residual is open on
+> were already fixed**, row 5 had been mis-measured, row 20 was never a
+> regression, and row 25 still has a residual on
 > [#347](https://github.com/fol2/glassvow/issues/347). The measurements stay valid
-> as dated observations, and the census above is the reason the 612 remaining
+> as dated observations, and the census above is the reason the remaining
 > citations were frozen rather than re-resolved.
 
 ## The content baseline stopped being faithful, and said otherwise
@@ -111,8 +112,8 @@ opened and compared against the benchmark's actual behaviour.
 | # | Thing | This port | Benchmark `6e06911` | measured | verdict, and what became of it |
 |---|---|---|---|---|---|
 | 1 | ward shell on mid-combat restore | `set_ward_shell(true, **false**)` — no grow | `syncWardMesh(sprite, true, **true**)` → `meshWard(…, {grow: true})` (`combat.js:1897`) | 2026-07-26 | **P** |
-| 2 | mote flight stagger (`fly_to`) | all `n` motes spawn on one frame | a `delay` of `i * 46` — one mote every 46 ms (`combat.js:1457`) | 2026-07-26 | **R** → **resolved.** `FLY_STAGGER = 0.046` (`presentation/combat/vfx_layer.gd:567`); verified 2026-08-16 |
-| 3 | mote flight scale (`fly_to`) | fixed size per mote | `0.5 → 1.05 @0.45 → 0.55` — swells at apex, shrinks on landing | 2026-07-26 | **R** → **resolved.** `FLY_SCALE = [0.5, 1.05, 0.55]` at `FLY_AT = [0.0, 0.45, 1.0]` (`presentation/combat/vfx_layer.gd:573-577`); verified 2026-08-16 |
+| 2 | mote flight stagger (`fly_to`) | all `n` motes spawn on one frame | a `delay` of `i * 46` — one mote every 46 ms (`combat.js:1457`) | 2026-07-26 | **R** → **resolved** by `65ffac8`. `FLY_STAGGER = 0.046` (`presentation/combat/vfx_layer.gd:570`); verified 2026-08-16 |
+| 3 | mote flight scale (`fly_to`) | fixed size per mote | `0.5 → 1.05 @0.45 → 0.55` — swells at apex, shrinks on landing | 2026-07-26 | **R** → **resolved** by `65ffac8`. `FLY_SCALE = [0.5, 1.05, 0.55]` at `FLY_AT = [0.0, 0.45, 1.0]` (`presentation/combat/vfx_layer.gd:575-576`); verified 2026-08-16 |
 | 4 | mote flight mechanism | gravity 180, drag 0.35, velocity arc | three WAAPI keyframes over a random mid control point | 2026-07-26 | **P** |
 | 5 | enemy name weight | Cinzel 700 (only 700/800 bundled) | `.enemy .name` declares **no** `font-weight` → 400 (`styles.css:793`) | 2026-07-26 | **R** → **the measurement was wrong.** The port uses Cinzel **500** (`presentation/combat/enemy_view.gd:4650`), and 500/700/800 are all on disk (`presentation/combat/glass_style.gd:30-32`), so the stated obstacle never existed. Re-verdicted **P** on #324 — 500 is chosen for 14 px uppercase under a 2 px outline, where 400 would be eaten |
 | 6 | `ring()` / `slashArc()` | suppressed by `DEAD_KINDS` | present in source, NaN out before drawing — never on screen | 2026-07-26 | **P** |
@@ -124,7 +125,7 @@ opened and compared against the benchmark's actual behaviour.
 | 12 | `DEAL_BUDGET` deal pacing | 500 ms budget → 100 ms stagger, 680 ms total | `drawBatchSchedule` (`pile-chrome.js:58`) — arithmetic exact | 2026-07-26 | **C** |
 | 13 | motion curves | `[0.22,1,0.36,1]` / `[0.34,1.56,0.64,1]` | `BASE_EASING` (`tokens.js:31`) — identical | 2026-07-26 | **C** |
 | 14 | `archetypeHit`, `BESPOKE_VFX`, ward underlay | as ported | byte-identical between both trees | 2026-07-26 | **C** |
-| 15 | damage floaters (`floaters.gd`) | 4 tiers, 450/640 ms, no rotation, poison rises | 18 `.floaty` tiers, 1100/1250 ms, ±8°/±16°, **poison drips down** | 2026-07-26 | **R** → **resolved.** 13 class sizes, `DUR_DEFAULT 1.1` / `DUR_CRIT 1.25`, ±8° on `dmg*` and ±16° on crit, and poison **drips down** — `y_pct = [-50, -26, +80]` (`presentation/combat/floaters.gd:15-21`, `presentation/combat/floaters.gd:44-45`, `presentation/combat/floaters.gd:158-162`, `presentation/combat/floaters.gd:181-190`) |
+| 15 | damage floaters (`floaters.gd`) | 4 tiers, 450/640 ms, no rotation, poison rises | 18 `.floaty` tiers, 1100/1250 ms, ±8°/±16°, **poison drips down** | 2026-07-26 | **R** → **resolved** by `d400895`. 13 class sizes, `DUR_DEFAULT 1.1` / `DUR_CRIT 1.25`, ±8° on `dmg*` and ±16° on crit, and poison **drips down** — `y_pct = [-50, -26, +80]` (`presentation/combat/floaters.gd:15-21`, `presentation/combat/floaters.gd:44-45`, `presentation/combat/floaters.gd:158-162`, `presentation/combat/floaters.gd:181-190`) |
 | 16 | aim arc dashes | 10 dashes at 62% ink, scaled to the arc | `stroke-dasharray: 4 10` — 28.6% duty in path px | 2026-07-26 | **R** → **resolved** by `21bdcf0` (2026-07-26) |
 | 17 | aim arc ink | `#ff8a92` @0.92, plus a 9px glow pass @0.16 | one stroke, `rgba(255,89,100,.85)`, width 4, no glow | 2026-07-26 | **R** → **resolved** by `21bdcf0` (2026-07-26) |
 | 18 | aim reticle | r 11, width 2.5, plus a filled r-3 core | `r=9`, width 3, `rgba(255,89,100,.95)`, **no fill** | 2026-07-26 | **R** → **resolved** by `21bdcf0` (2026-07-26) |
@@ -239,6 +240,9 @@ thing ends up cannot.
 |---|---|
 | 2 mote stagger, 3 mote scale, 4 mote path, plus a 2x size error found with them | `65ffac8` |
 | 5 enemy name weight — `Cinzel-500.woff2`, byte-identical to the benchmark's own | `d1c228d` |
+| 15 damage floaters, poison drips down | `d400895` |
+| 16–18 aim arc dash, ink, reticle | `21bdcf0` |
+| 19 hover / armed card pose | `50eb9c2` |
 | 24 stage press lowers a lifted card, 25 hover tick behind the pointer test | `038f390` |
 
 The size error is the one worth remembering. `size` in `flyTo` is a DOM width,
@@ -278,10 +282,13 @@ replaces it carries an `else` branch this port never had.
 
 ## Still open, all measured
 
-Rows 15–20 are regressions with a full specification recorded above and no work
-done. Rows 15 (floaters) and 19 (card poses) are the two that touch every fight:
-one is every numeral on the screen, the other is the gesture the hand is read
-through. Rows 16–18 are one file and one afternoon.
+**Superseded 2026-08-16 (#324).** The paragraph that used to live here listed
+rows 15–20 as regressions with no work done. Nine of the eleven **R** rows were
+already fixed, most the same night this table was written; the live verdict for
+each row is the outcome column above, not this heading.
+
+The one residual still open is row 25's first-tap lift under a coarse pointer —
+inferred, not re-measured — on [#347](https://github.com/fol2/glassvow/issues/347).
 
 ## How to keep this from coming back
 
