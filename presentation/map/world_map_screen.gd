@@ -325,7 +325,7 @@ func refresh(run: RunState) -> void:
 			if map.region == "rose_window" \
 			else str(act.get("name", REGION_NAME))
 		_title_label.text = _act_line(act_name.to_upper(),
-			str(act.get("bossName", Locale.active.t("ui.pilgrimage.summit"))).to_upper())
+			str(act.get("bossName", Locale.active.t("ui.pilgrimage.roadEnds"))).to_upper())
 	var live: Array[int] = map.reachable()
 	var first_live: GlassWaystone = null
 	for i: int in range(_waystones.size()):
@@ -394,7 +394,7 @@ func set_act_scenery(stage_act: int) -> void:
 		var act: Dictionary = content.acts[_act]
 		_title_label.text = _act_line(
 			str(act.get("name", REGION_NAME)).to_upper(),
-			str(act.get("bossName", Locale.active.t("ui.pilgrimage.summit"))).to_upper())
+			str(act.get("bossName", Locale.active.t("ui.pilgrimage.roadEnds"))).to_upper())
 	_push_bands(true)
 
 

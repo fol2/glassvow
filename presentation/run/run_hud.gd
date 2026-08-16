@@ -271,7 +271,7 @@ func _apply_shape() -> void:
 
 func _location_text(run: RunState) -> String:
 	if content.acts.is_empty():
-		return "UNKNOWN ACT · FLOOR %d" % run.floors_climbed
+		return "UNKNOWN ACT · WAYSTONE %d" % run.floors_climbed
 	var act: Dictionary = content.acts[clampi(run.act, 0, content.acts.size() - 1)]
 	return Locale.active.t("ui.hud.location", {
 		"act": str(act.get("name", "Unknown Act")),

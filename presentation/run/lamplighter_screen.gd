@@ -92,7 +92,7 @@ func _build() -> void:
 	_title = _label(Locale.active.t("ui.lamp.title"), 34, RunStyle.GOLD, true)
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	_column.add_child(_title)
-	var aspect_name: String = str(_aspect.get("name", "climber"))
+	var aspect_name: String = str(_aspect.get("name", "walker"))
 	_sub = _label(Locale.active.t("ui.lamp.sub", {"aspect": aspect_name}),
 		14, RunStyle.TEXT_DIM, true)
 	_sub.custom_minimum_size.x = 540

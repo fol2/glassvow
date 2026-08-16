@@ -282,8 +282,8 @@ static func _collect_gd_sources(path: String, out: Array[String]) -> void:
 ## How to Play never wraps, Developer Console outside the shipped row.
 static func _title_ceremonial_menu(fails: Array[String]) -> void:
 	var shipped: Array[Dictionary] = [
-		{"id": "continue", "label": "Continue Climb"},
-		{"id": "begin", "label": "Begin the Climb"},
+		{"id": "continue", "label": "Back to the Road"},
+		{"id": "begin", "label": "Rekindle"},
 		{"id": "vigil", "label": "The Vigil", "quiet": true},
 		{"id": "help", "label": "How to Play", "quiet": true},
 		{"id": "settings", "label": "Settings", "quiet": true},
@@ -296,12 +296,12 @@ static func _title_ceremonial_menu(fails: Array[String]) -> void:
 		"saved-run title has Continue + Begin as the two action plates")
 	var continue_btn: ChoiceScreen.TitleFacetButton = saved._primary_buttons[0] as ChoiceScreen.TitleFacetButton
 	var begin_btn: ChoiceScreen.TitleFacetButton = saved._primary_buttons[1] as ChoiceScreen.TitleFacetButton
-	_check(fails, continue_btn != null and continue_btn.text == "Continue Climb"
+	_check(fails, continue_btn != null and continue_btn.text == "Back to the Road"
 		and continue_btn.ceremonial,
-		"saved-run gold primary stays on Continue Climb")
-	_check(fails, begin_btn != null and begin_btn.text == "Begin the Climb"
+		"saved-run gold primary stays on Back to the Road")
+	_check(fails, begin_btn != null and begin_btn.text == "Rekindle"
 		and not begin_btn.ceremonial,
-		"saved-run Begin the Climb is the plain secondary")
+		"saved-run Rekindle is the plain secondary")
 	_check(fails, saved._utility_buttons.size() == 5,
 		"five shipped utilities sit in the unboxed row")
 	_check(fails, saved._utility is HBoxContainer,
@@ -330,12 +330,12 @@ static func _title_ceremonial_menu(fails: Array[String]) -> void:
 	var none: ChoiceScreen = _title_menu(fresh, &"pad-landscape")
 	var none_begin: ChoiceScreen.TitleFacetButton = none._primary_buttons[0] as ChoiceScreen.TitleFacetButton
 	_check(fails, none._primary_buttons.size() == 1 and none_begin != null
-		and none_begin.text == "Begin the Climb" and none_begin.ceremonial,
-		"no saved run: gold primary moves down to Begin the Climb")
+		and none_begin.text == "Rekindle" and none_begin.ceremonial,
+		"no saved run: gold primary moves to Rekindle")
 	none.free()
 
 	var zh_rows: Array[Dictionary] = [
-		{"id": "begin", "label": "開始朝聖"},
+		{"id": "begin", "label": "續火"},
 		{"id": "vigil", "label": "守夜", "quiet": true},
 		{"id": "help", "label": "玩法說明", "quiet": true},
 		{"id": "settings", "label": "設定", "quiet": true},

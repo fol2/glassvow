@@ -354,7 +354,7 @@ func _ready() -> void:
 		_continue_run(SaveService.load_run(content))
 	elif show_dawn_bench:
 		# The Dawn ceremony bench: a fresh run handed a representative feed, so
-		# the victory beat can be photographed without climbing three acts.
+		# the victory beat can be photographed without walking three acts.
 		# Same reason --fight= exists (see _start_fight's docblock).
 		_new_run()
 		game.run.pending_run_end = null
@@ -363,16 +363,16 @@ func _ready() -> void:
 		# register) — so what the bench photographs is what a player sees.
 		game.run.pending_dawn = {"events": [
 			{"kind": "whisper", "title": "",
-				"body": "The Spire kept none of what you gave it."},
+				"body": "The road kept none of what you gave it."},
 			{"kind": "quest", "title": "The Pale Ones",
-				"body": "Three climbers went pale before you. Find what bleached them."},
+				"body": "Three walkers went pale before you. Find what bleached them."},
 			{"kind": "progress", "title": "The Pale Ones", "body": "",
 				"count": "2/3"},
 			{"kind": "shard", "title": "The Shade That Fell",
 				"body": "One pane answers.", "icon": "shard"},
-			{"kind": "unlock", "title": "New cards and relics enter the climb.",
+			{"kind": "unlock", "title": "New cards and relics join the pilgrimage.",
 				"body": ""},
-			{"kind": "unlock", "title": "A sealed door opens above the crown.",
+			{"kind": "unlock", "title": "A sealed door opens beyond the crown.",
 				"body": "", "icon": "door"},
 			{"kind": "memory", "title": "The Vigil Remembers",
 				"body": "Victory · 3 shards lit"},

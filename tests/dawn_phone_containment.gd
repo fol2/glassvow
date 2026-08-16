@@ -128,7 +128,7 @@ func _events(locale_code: StringName) -> Array:
 			{"kind": "progress", "title": "蒼白者", "body": "旅跡仍在延伸。"},
 			{"kind": "shard", "title": "墜落之影", "body": "一片窗片作出回應。"},
 			{"kind": "unlock", "title": "新卡牌與遺物加入朝聖之路。"},
-			{"kind": "unlock", "title": "王冠之上的封印之門已開。"},
+			{"kind": "unlock", "title": "王冠之後的封印之門已開。"},
 			{"kind": "memory", "title": "守夜銘記", "body": "勝利 · 3 片碎片已點亮"},
 		]
 	return [
@@ -136,8 +136,8 @@ func _events(locale_code: StringName) -> Array:
 		{"kind": "quest", "title": "The Pale Ones", "body": "A journey is revealed."},
 		{"kind": "progress", "title": "The Pale Ones", "body": "The trail continues."},
 		{"kind": "shard", "title": "The Shade That Fell", "body": "One pane answers."},
-		{"kind": "unlock", "title": "New cards and relics enter the climb."},
-		{"kind": "unlock", "title": "A sealed door opens above the crown."},
+		{"kind": "unlock", "title": "New cards and relics join the pilgrimage."},
+		{"kind": "unlock", "title": "A sealed door opens beyond the crown."},
 		{"kind": "memory", "title": "The Vigil Remembers", "body": "Victory · 3 shards lit"},
 	]
 
