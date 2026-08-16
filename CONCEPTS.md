@@ -427,6 +427,13 @@ the further actions are shown alongside it rather than each carrying their own
 colour. A compound intent is therefore one telegraph in one colour, not several
 stacked — treating it as a fallback for "unknown intent" is a misreading.
 
+### Counterfactual self
+A silent Act IV enemy that is a mirror-space reflection of a build this player
+did not take. It is not a Queue member and not Own Shade. Its loadout is a
+closed kit chosen by inverting a classification of the live deck (attack cards
+as ember, skill and power cards as ash). An unknown kit is a fault, not a
+fallback.
+
 ---
 
 ## The port

@@ -76,7 +76,7 @@ func _vow_mods(run: RunState) -> Dictionary:
 func _resolved_enemy(run: RunState, requested_id: String) -> Dictionary:
 	var variant_v: Variant = content.variants.get(requested_id)
 	if typeof(variant_v) != TYPE_DICTIONARY:
-		return {"key": requested_id, "variant": "", "def": content.enemy(requested_id)}
+		return _with_counterfactual(run, requested_id, content.enemy(requested_id))
 	var variant: Dictionary = variant_v
 	var base_id: String = str(variant.get("base"))
 	var base: Dictionary
@@ -129,6 +129,18 @@ func _resolved_enemy(run: RunState, requested_id: String) -> Dictionary:
 	return {"key": base_id, "variant": requested_id, "def": resolved, "shadeKit": shade_kit}
 
 
+func _with_counterfactual(run: RunState, requested_id: String, def: Dictionary) -> Dictionary:
+	var picked: Dictionary = CounterfactualSelf.resolve(run, def, content)
+	if picked.get("ok", false) != true:
+		push_error("CounterfactualSelf: %s" % str(picked.get("error", "unresolved")))
+		return {"key": requested_id, "variant": "", "def": def, "fault": true}
+	var out: Dictionary = {"key": requested_id, "variant": "", "def": def}
+	var kit_id: String = str(picked.get("id", ""))
+	if not kit_id.is_empty():
+		out[CounterfactualSelf.KIT_FLAG] = kit_id
+	return out
+
+
 ## Resolved card data: base def merged with its `up` overrides when upgraded.
 func card_data(inst: CardInst) -> Dictionary:
 	var base: Dictionary = content.card(inst.id)
@@ -175,6 +187,8 @@ func start_combat(
 	for id_v: Variant in enemy_ids:
 		var requested_id: String = str(id_v)
 		var resolved: Dictionary = _resolved_enemy(run, requested_id)
+		if resolved.get("fault", false) == true:
+			continue
 		var eid: StringName = StringName(str(resolved["key"]))
 		var d: Dictionary = resolved["def"]
 		var e: EnemyCombatant = EnemyCombatant.new()
@@ -200,6 +214,8 @@ func start_combat(
 			e.flags["adamant"] = true
 		if not str(resolved.get("shadeKit", "")).is_empty():
 			e.flags["shadeKit"] = resolved["shadeKit"]
+		if not str(resolved.get(CounterfactualSelf.KIT_FLAG, "")).is_empty():
+			e.flags[CounterfactualSelf.KIT_FLAG] = resolved[CounterfactualSelf.KIT_FLAG]
 		var elite_flag: bool = d.get("elite", false)
 		var boss_flag: bool = d.get("boss", false)
 		e.elite = elite_flag

@@ -27,6 +27,7 @@ const CATALOGUE: Dictionary = {
 	"treasure": 1,
 	"vigil": 1,
 	"unsealing-replay": 1,
+	"combat-unwalked-self": 1,
 }
 const LOCALES: PackedStringArray = ["en", "zh-Hant"]
 const OVERRIDE_KEYS: PackedStringArray = [

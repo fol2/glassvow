@@ -206,8 +206,8 @@ static func _real_zh_catalogue(fails: Array[String]) -> void:
 		fails.append("hydration: zh-Hant catalogue did not load")
 		return
 	var written: int = locale.hydrate_content(db)
-	if written != 646:
-		fails.append("hydration: zh-Hant reached %d of 646 live content strings" % written)
+	if written != 653:
+		fails.append("hydration: zh-Hant reached %d of 653 live content strings" % written)
 	if _at(db.cards, ["strike", "name"]) == "Edge":
 		fails.append("hydration: zh-Hant left the card name English")
 	if not _at(db.cards, ["strike", "text"]).contains("@6@"):
