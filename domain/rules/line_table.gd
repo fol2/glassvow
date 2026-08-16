@@ -2,17 +2,20 @@ class_name LineTable
 extends RefCounted
 ## One flat narrative table. Reveal-ladder enforcement is the `conditions`
 ## column — there is no parallel gate. Phase-1 signed vocabulary is textual:
-## `shards>=N` / `act=N` / `quest:<id>.<state>`. The loader normalizes those
-## clauses to an internal dict; unknown keys fail the table load.
+## `shards>=N` / `act=N` / `quest:<id>.<state>` / `quest:<id>>=N`. The loader
+## normalizes those clauses to an internal dict; unknown keys and unknown
+## quest states fail the table load.
 
 const L1_SHARDS: int = 1
 const L2_SHARDS: int = 4
 const L3_SHARDS: int = 6
 const DEFAULT_COOLDOWN_RUNS: int = 3
 const RECENT_CAP: int = 8
+const QUEST_STATES: Array[String] = ["dormant", "armed", "revealed", "complete"]
 const _SHARDS_CLAUSE: String = "^shards>=(\\d+)$"
 const _ACT_CLAUSE: String = "^act=(\\d+)$"
 const _QUEST_CLAUSE: String = "^quest:([A-Za-z][A-Za-z0-9]*)\\.([A-Za-z][A-Za-z0-9]*)$"
+const _QUEST_PROGRESS_CLAUSE: String = "^quest:([A-Za-z][A-Za-z0-9]*)>=(\\d+)$"
 
 
 static func _ji(value: Variant) -> int:
@@ -29,7 +32,7 @@ static func parse_conditions(value: Variant) -> Dictionary:
 		var as_dict: Dictionary = value
 		if as_dict.is_empty():
 			return _parsed({}, "")
-		return _parsed({}, "conditions must be textual (shards>=N / act=N / quest:<id>.<state>)")
+		return _parsed({}, "conditions must be textual (shards>=N / act=N / quest:<id>.<state> / quest:<id>>=N)")
 	if typeof(value) == TYPE_STRING:
 		return _parse_clause_list(_split_clauses(str(value)))
 	if typeof(value) != TYPE_ARRAY:
@@ -62,12 +65,15 @@ static func _split_clauses(text: String) -> PackedStringArray:
 static func _parse_clause_list(clauses: PackedStringArray) -> Dictionary:
 	var conditions: Dictionary = {}
 	var quests: Dictionary = {}
+	var quest_progress: Dictionary = {}
 	var shards_re: RegEx = RegEx.new()
 	var act_re: RegEx = RegEx.new()
 	var quest_re: RegEx = RegEx.new()
+	var progress_re: RegEx = RegEx.new()
 	shards_re.compile(_SHARDS_CLAUSE)
 	act_re.compile(_ACT_CLAUSE)
 	quest_re.compile(_QUEST_CLAUSE)
+	progress_re.compile(_QUEST_PROGRESS_CLAUSE)
 	for clause: String in clauses:
 		var shards_found: RegExMatch = shards_re.search(clause)
 		if shards_found != null:
@@ -81,29 +87,47 @@ static func _parse_clause_list(clauses: PackedStringArray) -> Dictionary:
 				return _parsed({}, "duplicate act clause")
 			conditions["act"] = _ji(act_found.get_string(1))
 			continue
+		var progress_found: RegExMatch = progress_re.search(clause)
+		if progress_found != null:
+			var progress_id: String = progress_found.get_string(1)
+			if quest_progress.has(progress_id):
+				return _parsed({}, "duplicate quest progress clause")
+			quest_progress[progress_id] = _ji(progress_found.get_string(2))
+			continue
 		var quest_found: RegExMatch = quest_re.search(clause)
 		if quest_found != null:
 			var quest_id: String = quest_found.get_string(1)
+			var quest_state: String = quest_found.get_string(2)
+			if quest_state not in QUEST_STATES:
+				return _parsed({}, "unknown quest state %s" % quest_state)
 			if quests.has(quest_id):
 				return _parsed({}, "duplicate quest clause")
-			quests[quest_id] = quest_found.get_string(2)
+			quests[quest_id] = quest_state
 			continue
 		return _parsed({}, "unknown condition %s" % clause)
 	if not quests.is_empty():
 		conditions["quest_state"] = quests
+	if not quest_progress.is_empty():
+		conditions["quest_progress"] = quest_progress
 	return _parsed(conditions, "")
 
 
 static func context(run: RunState, shard_count: int = -1) -> Dictionary:
 	var quests: Dictionary = {}
+	var quest_progress: Dictionary = {}
 	for id_v: Variant in run.quests:
 		var rec_v: Variant = run.quests[id_v]
-		if typeof(rec_v) == TYPE_DICTIONARY:
-			quests[str(id_v)] = str(rec_v.get("state", "dormant"))
+		if typeof(rec_v) != TYPE_DICTIONARY:
+			continue
+		var rec: Dictionary = rec_v
+		var id: String = str(id_v)
+		quests[id] = str(rec.get("state", "dormant"))
+		quest_progress[id] = _ji(rec.get("progress", 0))
 	return {
 		"shards": shard_count if shard_count >= 0 else run.shards.size(),
 		"act": run.act,
 		"quests": quests,
+		"quest_progress": quest_progress,
 	}
 
 
@@ -144,6 +168,13 @@ static func conditions_match(conditions_v: Variant, ctx: Dictionary) -> bool:
 		for id_v: Variant in wanted:
 			if str(quests.get(str(id_v), "")) != str(wanted[id_v]):
 				return false
+	if typeof(conditions.get("quest_progress")) == TYPE_DICTIONARY:
+		var wanted_progress: Dictionary = conditions["quest_progress"]
+		var have_v: Variant = ctx.get("quest_progress", {})
+		var have: Dictionary = have_v if typeof(have_v) == TYPE_DICTIONARY else {}
+		for id_v: Variant in wanted_progress:
+			if _ji(have.get(str(id_v), 0)) < _ji(wanted_progress[id_v]):
+				return false
 	return true
 
 
@@ -160,6 +191,10 @@ static func specificity(conditions_v: Variant) -> int:
 	if typeof(quests_v) == TYPE_DICTIONARY:
 		var quests: Dictionary = quests_v
 		n += quests.size()
+	var progress_v: Variant = conditions.get("quest_progress")
+	if typeof(progress_v) == TYPE_DICTIONARY:
+		var progress: Dictionary = progress_v
+		n += progress.size()
 	return n
 
 
