@@ -16,6 +16,7 @@ static func run(fails: Array[String]) -> void:
 	_holds_without_confirm(fails, opening)
 	_resume(fails, opening)
 	_skip_distinct_from_tap(fails, opening)
+	_real_input_advances(fails, opening)
 	_finished_once(fails)
 	_missing_plates(fails, opening)
 	_dwell_reads_the_line(fails, opening)
@@ -88,6 +89,18 @@ static func _skip_distinct_from_tap(fails: Array[String], opening: SceneScript) 
 	hold.free()
 
 
+## `_press` is an implementation detail. Click, Space and Enter have to reach
+## it through `_gui_input` / `_unhandled_key_input` or the suite stays green
+## with a player that cannot be driven.
+static func _real_input_advances(fails: Array[String], opening: SceneScript) -> void:
+	_check(fails, _ask_via_input(opening, _mouse_tap()) == 1,
+		"a real mouse click did not ask")
+	_check(fails, _ask_via_input(opening, _key_tap(KEY_SPACE)) == 1,
+		"a real Space key did not ask")
+	_check(fails, _ask_via_input(opening, _key_tap(KEY_ENTER)) == 1,
+		"a real Enter key did not ask")
+
+
 static func _finished_once(fails: Array[String]) -> void:
 	var short: SceneScript = _script("unsealing-short")
 	if short == null:
@@ -158,6 +171,26 @@ static func _dwell_reads_the_line(fails: Array[String], opening: SceneScript) ->
 		ScenePlayer.DWELL_BASE + ScenePlayer.DWELL_PER_CHAR * 8.0),
 		"dwell is not base + per-character")
 	player.free()
+	var asked: Array[int] = [0]
+	var waiting: ScenePlayer = ScenePlayer.new(opening, 0)
+	waiting.instant = false
+	waiting.advance_requested.connect(func() -> void: asked[0] += 1)
+	waiting._ready()
+	var paced: Label = waiting.find_child("Line", true, false) as Label
+	if paced == null:
+		_check(fails, false, "no line label to wait on")
+		waiting.free()
+		return
+	paced.text = "12345678"
+	waiting._process(ScenePlayer.REVEAL_TIME + 0.01)
+	_check(fails, asked[0] == 0, "asked during reveal before dwell")
+	waiting._process(short_dwell - 0.08)
+	_check(fails, asked[0] == 0,
+		"asked before a short line's dwell elapsed")
+	waiting._process(0.16)
+	_check(fails, asked[0] == 1,
+		"did not ask after a short line's dwell elapsed")
+	waiting.free()
 
 
 static func _live(script: SceneScript, cursor: int, asked: Array[int],
@@ -186,3 +219,43 @@ static func _script(scene_id: String) -> SceneScript:
 static func _text(player: ScenePlayer, node_name: String) -> String:
 	var node: Label = player.find_child(node_name, true, false) as Label
 	return node.text if node != null else ""
+
+
+static func _ask_via_input(opening: SceneScript, events: Array[InputEvent]) -> int:
+	var asked: Array[int] = [0]
+	var player: ScenePlayer = ScenePlayer.new(opening, 0)
+	player.advance_requested.connect(func() -> void: asked[0] += 1)
+	player._ready()
+	for event: InputEvent in events:
+		if event is InputEventMouseButton:
+			player._gui_input(event)
+		else:
+			player._unhandled_key_input(event)
+	player.free()
+	return asked[0]
+
+
+static func _mouse_tap() -> Array[InputEvent]:
+	var down: InputEventMouseButton = InputEventMouseButton.new()
+	down.button_index = MOUSE_BUTTON_LEFT
+	down.pressed = true
+	var up: InputEventMouseButton = InputEventMouseButton.new()
+	up.button_index = MOUSE_BUTTON_LEFT
+	up.pressed = false
+	var events: Array[InputEvent] = []
+	events.append(down)
+	events.append(up)
+	return events
+
+
+static func _key_tap(keycode: Key) -> Array[InputEvent]:
+	var down: InputEventKey = InputEventKey.new()
+	down.keycode = keycode
+	down.pressed = true
+	var up: InputEventKey = InputEventKey.new()
+	up.keycode = keycode
+	up.pressed = false
+	var events: Array[InputEvent] = []
+	events.append(down)
+	events.append(up)
+	return events

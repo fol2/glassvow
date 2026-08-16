@@ -941,8 +941,12 @@ func _show_save_error(detail_key: String) -> void:
 
 
 func _on_save_error_choice(id: String) -> void:
-	if id == "retry" and game != null and SaveService.store(game.run):
+	if id == "retry" and game != null and _store_run():
 		_route_run()
+	elif id == "retry" and game == null \
+			and typeof(_vigil.pending_scene) == TYPE_DICTIONARY \
+			and _store_vigil():
+		_show_scene()
 	else:
 		_show_title()
 
@@ -2325,7 +2329,13 @@ func _scene_script(scene_id: String) -> SceneScript:
 
 
 func _route_idle() -> void:
-	if typeof(_vigil.pending_scene) != TYPE_DICTIONARY \
+	# A resumable run owns the route — title Continue is how the player
+	# returns to it. Queuing the unsealing here would invert 07-scenes §3
+	# when a process death lands between the Vigil fold and pending_dawn:
+	# six shards, unseen unsealing, and a run still on disk. Once that run
+	# reaches a terminal path, clear_run runs and the next idle fires.
+	if SaveService.load_run(content, _run_save_path) == null \
+			and typeof(_vigil.pending_scene) != TYPE_DICTIONARY \
 			and _vigil.shards.size() >= 6 \
 			and not _vigil.scenes_seen.has("unsealing") \
 			and _scene_script("unsealing") != null:
@@ -2434,7 +2444,13 @@ func _on_scene_finished() -> void:
 		_vigil.pending_scene = null
 	if not scene_id.is_empty() and not _vigil.scenes_seen.has(scene_id):
 		_vigil.scenes_seen.append(scene_id)
-	if (run_pending and not _store_run()) or not _store_vigil():
+	# Vigil first. If the run store then fails or the process dies between
+	# them, the once-flag is already on disk and the run still points at the
+	# scene; resume replays a scene that finishes idempotently because
+	# scenes_seen already holds it. Run-then-Vigil is the harmful order:
+	# the disk run says the opening is done while the disk Vigil never
+	# recorded it, so the next run replays.
+	if not _store_vigil() or (run_pending and not _store_run()):
 		_show_save_error("ui.persistence.detail.sceneHold")
 		return
 	if game != null:

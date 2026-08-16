@@ -27,6 +27,9 @@ static func run(fails: Array[String]) -> void:
 	_unsealing_once(fails)
 	_unsealing_needs_six(fails)
 	_unsealing_boot_resume(fails)
+	_unsealing_yields_to_a_resumable_run(fails)
+	_finish_stores_vigil_before_run(fails)
+	_unsealing_retry_restores_the_scene(fails)
 	_unsealing_replay_is_transient(fails)
 	if _file_snapshot(SaveService.RUN_PATH) != default_run \
 			or _file_snapshot(SaveService.VIGIL_PATH) != default_vigil:
@@ -89,6 +92,9 @@ static func _opening_once(fails: Array[String]) -> void:
 	_drive(main)
 	_check(fails, main._vigil.scenes_seen.has("opening"),
 		"finishing the opening did not mark scenes_seen")
+	var persisted_opening: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, persisted_opening.scenes_seen.has("opening"),
+		"finishing the opening did not persist scenes_seen to disk")
 	_check(fails, main._map_screen is WorldMapScreen
 			and not (main._route_screen is ScenePlayer),
 		"the opening did not hand off to the map")
@@ -250,6 +256,9 @@ static func _unsealing_once(fails: Array[String]) -> void:
 	_drive(main)
 	_check(fails, main._vigil.scenes_seen.has("unsealing"),
 		"finishing the unsealing did not mark scenes_seen")
+	var persisted_unsealing: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, persisted_unsealing.scenes_seen.has("unsealing"),
+		"finishing the unsealing did not persist scenes_seen to disk")
 	_check(fails, not (main._route_screen is ScenePlayer),
 		"the unsealing did not hand off to title")
 	var seen: Array[String] = main._vigil.scenes_seen.duplicate()
@@ -288,6 +297,73 @@ static func _unsealing_boot_resume(fails: Array[String]) -> void:
 		var line: Label = player.find_child("Line", true, false) as Label
 		_check(fails, line != null and line.text == Locale.active.t("story.unsealing.b2.l1"),
 			"boot resume replayed from line 0 instead of the owed line")
+	_dispose(main)
+
+
+## A run that can still be continued owns the boot. Six shards and an unseen
+## unsealing are not enough to queue the scene while pending_dawn is on disk —
+## that is the process-death window between the Vigil fold and the dawn write.
+static func _unsealing_yields_to_a_resumable_run(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _terminal(content, 6, false, "win")
+	main.game.run.pending_run_end = null
+	main.game.run.pending_dawn = {
+		"events": [{"kind": "memory", "title": "x", "body": "y"}],
+		"cursor": 0,
+	}
+	_check(fails, main._store_run(), "yield-to-run could not store pending_dawn")
+	main.game = null
+	main._route_idle()
+	_check(fails, typeof(main._vigil.pending_scene) != TYPE_DICTIONARY,
+		"a resumable run queued the unsealing ahead of its dawn")
+	_check(fails, not (main._route_screen is ScenePlayer),
+		"a resumable run played the unsealing ahead of its dawn")
+	_dispose(main)
+
+
+## Poison the run path so the second store fails. Vigil-first still records
+## the flag; run-first short-circuits and never reaches the Vigil.
+static func _finish_stores_vigil_before_run(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _main(content)
+	main._forced_seed = 30903
+	main._new_run()
+	_wake(main)
+	_check(fails, typeof(main.game.run.pending_scene) == TYPE_DICTIONARY,
+		"finish-order producer did not open the opening")
+	main._run_save_path = "user://__no_such_dir_309__/run.json"
+	main._on_scene_finished()
+	var persisted: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, persisted.scenes_seen.has("opening"),
+		"finishing the opening stored the run before the Vigil")
+	_dispose(main)
+	SaveService.clear("user://__no_such_dir_309__/run.json")
+
+
+## The unsealing plays with game == null, so Retry cannot take the live-run
+## branch. It must re-store the Vigil and route back into the scene.
+static func _unsealing_retry_restores_the_scene(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _terminal(content, 5, true, "death")
+	main._on_terminal_commit("commit")
+	_wake(main)
+	_check(fails, main._route_screen is ScenePlayer and main.game == null,
+		"retry producer did not play a Vigil-scoped unsealing")
+	if typeof(main._vigil.pending_scene) != TYPE_DICTIONARY:
+		_check(fails, false, "retry producer lost the Vigil cursor")
+		_dispose(main)
+		return
+	var pending: Dictionary = main._vigil.pending_scene
+	pending["cursor"] = int(float(str(pending.get("cursor", 0)))) + 1
+	main._on_save_error_choice("retry")
+	_wake(main)
+	_check(fails, main._route_screen is ScenePlayer,
+		"Vigil-scoped Retry dropped the unsealing")
+	var disk: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, typeof(disk.pending_scene) == TYPE_DICTIONARY
+			and int(float(str(disk.pending_scene.get("cursor", -1)))) \
+				== int(float(str(pending.get("cursor", -1)))),
+		"Vigil-scoped Retry did not re-store the cursor")
 	_dispose(main)
 
 
