@@ -1,7 +1,7 @@
 extends RefCounted
-## Slice 3 of #309: pending_scene and scenes_seen round-trip, the opening
-## fires once, a mid-scene kill resumes the owed line, and the L0 plant is
-## art-gated.
+## Slice 3–4 of #309: pending_scene / scenes_seen round-trip, the opening
+## fires once, a mid-scene kill resumes the owed line, the L0 plant is
+## art-gated, and the unsealing fires on both run outcomes.
 
 const RUN_PATH: String = "user://test_scene_wiring_run_v2.json"
 const VIGIL_PATH: String = "user://test_scene_wiring_vigil_v2.json"
@@ -21,6 +21,14 @@ static func run(fails: Array[String]) -> void:
 	_resume_owed_line(fails)
 	_hearth_plant_art_gate(fails)
 	_hearth_plant_is_departure_only(fails)
+	_vigil_pending_roundtrip(fails)
+	_unsealing_on_loss(fails)
+	_unsealing_on_win(fails)
+	_unsealing_once(fails)
+	_unsealing_needs_six(fails)
+	_unsealing_boot_resume(fails)
+	_unsealing_replay_is_transient(fails)
+	_threshold_is_short_beat(fails)
 	if _file_snapshot(SaveService.RUN_PATH) != default_run \
 			or _file_snapshot(SaveService.VIGIL_PATH) != default_vigil:
 		fails.append("scene_wiring: tests touched the default save")
@@ -171,6 +179,154 @@ static func _hearth_plant_is_departure_only(fails: Array[String]) -> void:
 	_dispose(main)
 
 
+static func _vigil_pending_roundtrip(fails: Array[String]) -> void:
+	var vigil: VigilState = VigilState.blank()
+	vigil.pending_scene = {"id": "unsealing", "cursor": 2}
+	SaveService.clear_vigil(VIGIL_PATH)
+	_check(fails, SaveService.store_vigil(vigil, VIGIL_PATH),
+		"vigil pending_scene store failed")
+	var loaded: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, typeof(loaded.pending_scene) == TYPE_DICTIONARY,
+		"vigil pending_scene did not reload")
+	if typeof(loaded.pending_scene) == TYPE_DICTIONARY:
+		var pending: Dictionary = loaded.pending_scene
+		_check(fails, str(pending.get("id", "")) == "unsealing"
+				and int(float(str(pending.get("cursor", -1)))) == 2,
+			"vigil pending_scene round-trip lost id or cursor")
+	var raw: Dictionary = VigilState.blank().to_dict()
+	raw.erase("pendingScene")
+	var old: VigilState = VigilState.from_dict(raw)
+	_check(fails, old != null and old.pending_scene == null,
+		"a v2 vigil without pendingScene did not default")
+	SaveService.clear_vigil(VIGIL_PATH)
+
+
+static func _unsealing_on_loss(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _terminal(content, 5, true, "death")
+	main._on_terminal_commit("commit")
+	_wake(main)
+	_check(fails, main._vigil.shards.size() == 6,
+		"a lost run did not fold the sixth shard")
+	_check(fails, main._route_screen is ScenePlayer,
+		"six shards on a lost run did not play the unsealing")
+	if main._route_screen is ScenePlayer:
+		_check(fails, (main._route_screen as ScenePlayer)._script.id == "unsealing",
+			"the loss path played a scene other than unsealing")
+	_check(fails, typeof(main._vigil.pending_scene) == TYPE_DICTIONARY
+			and str(main._vigil.pending_scene.get("id", "")) == "unsealing",
+		"the loss path did not persist a Vigil-scoped cursor")
+	_dispose(main)
+
+
+static func _unsealing_on_win(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _terminal(content, 5, true, "win")
+	main._on_terminal_commit("commit")
+	_check(fails, main._route_screen is DawnScreen,
+		"a won run skipped Dawn before the unsealing")
+	if main.game != null and typeof(main.game.run.pending_dawn) == TYPE_DICTIONARY:
+		var dawn: Dictionary = main.game.run.pending_dawn
+		var events_v: Variant = dawn.get("events", [])
+		if typeof(events_v) == TYPE_ARRAY:
+			var events: Array = events_v
+			dawn["cursor"] = events.size()
+	main._finish_dawn()
+	_wake(main)
+	_check(fails, main._route_screen is ScenePlayer,
+		"six shards on a won run did not play the unsealing before title")
+	_dispose(main)
+
+
+static func _unsealing_once(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _terminal(content, 5, true, "death")
+	main._on_terminal_commit("commit")
+	_drive(main)
+	_check(fails, main._vigil.scenes_seen.has("unsealing"),
+		"finishing the unsealing did not mark scenes_seen")
+	_check(fails, not (main._route_screen is ScenePlayer),
+		"the unsealing did not hand off to title")
+	var seen: Array[String] = main._vigil.scenes_seen.duplicate()
+	_dispose(main)
+	var again: Main = _terminal(content, 6, false, "death")
+	again._vigil.scenes_seen = seen
+	again._on_terminal_commit("commit")
+	_check(fails, not (again._route_screen is ScenePlayer),
+		"the unsealing fired a second time")
+	_dispose(again)
+
+
+static func _unsealing_needs_six(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _terminal(content, 5, false, "death")
+	main._on_terminal_commit("commit")
+	_check(fails, main._vigil.shards.size() == 5,
+		"five shards grew a sixth without a completion")
+	_check(fails, not (main._route_screen is ScenePlayer),
+		"five shards played the unsealing")
+	_dispose(main)
+
+
+static func _unsealing_boot_resume(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _main(content)
+	main._vigil.pending_scene = {"id": "unsealing", "cursor": 1}
+	_check(fails, main._store_vigil(), "boot resume could not store the cursor")
+	main._vigil = main._load_vigil()
+	main.game = null
+	main._route_idle()
+	_wake(main)
+	var player: ScenePlayer = main._route_screen as ScenePlayer
+	_check(fails, player != null, "a boot with no live run dropped the unsealing")
+	if player != null:
+		var line: Label = player.find_child("Line", true, false) as Label
+		_check(fails, line != null and line.text == Locale.active.t("story.unsealing.b2.l1"),
+			"boot resume replayed from line 0 instead of the owed line")
+	_dispose(main)
+
+
+static func _unsealing_replay_is_transient(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_full()
+	var main: Main = _main(content)
+	main._vigil = _six_pane_vigil()
+	main._vigil.scenes_seen.append("unsealing")
+	var seen: Array[String] = main._vigil.scenes_seen.duplicate()
+	main._show_vigil(true)
+	var replay: Button = main._route_screen.find_child("Replay", true, false) as Button
+	_check(fails, replay != null, "a six-pane rose has no window-body replay")
+	if replay != null:
+		replay.pressed.emit()
+	_wake(main)
+	_check(fails, main._route_screen is ScenePlayer,
+		"rose replay did not play the unsealing")
+	_check(fails, main._vigil.pending_scene == null,
+		"rose replay persisted a cursor")
+	_drive(main)
+	_check(fails, main._vigil.scenes_seen == seen,
+		"rose replay touched scenes_seen")
+	_check(fails, main._route_screen is VigilScreen,
+		"rose replay did not return to the Vigil")
+	_dispose(main)
+	var dark: RoseWindowView = RoseWindowView.new({}, {}, 0, [])
+	_check(fails, dark.find_child("Replay", true, false) == null,
+		"an unlit rose still offered replay")
+	dark.free()
+
+
+static func _threshold_is_short_beat(fails: Array[String]) -> void:
+	var screen: ThresholdScreen = ThresholdScreen.new()
+	var title: Label = screen.find_child("Title", true, false) as Label
+	var sub: Label = screen.find_child("Sub", true, false) as Label
+	_check(fails, title != null and title.text == Locale.active.t("ui.map.openDoor.title"),
+		"ThresholdScreen is not the open-door short beat")
+	_check(fails, sub != null and sub.text == Locale.active.t("story.unsealing-short.b1.l1"),
+		"ThresholdScreen lost the unsealing-short line")
+	_check(fails, screen.find_child("Door", true, false) != null,
+		"ThresholdScreen has no door plate")
+	screen.free()
+
+
 static func _wake(main: Main) -> void:
 	var player: ScenePlayer = main._route_screen as ScenePlayer
 	if player != null and player._beat == ScenePlayer.BEAT_IDLE and not player._done:
@@ -183,6 +339,38 @@ static func _drive(main: Main) -> void:
 	while main._route_screen is ScenePlayer and steps < 24:
 		(main._route_screen as ScenePlayer)._process(0.016)
 		steps += 1
+
+
+static func _terminal(content: ContentDB, shards: int, complete_next: bool,
+		outcome: String) -> Main:
+	var main: Main = _main(content)
+	main._vigil = VigilState.blank()
+	main._vigil.scenes_seen.append("opening")
+	for i: int in range(mini(shards, VigilState.QUEST_IDS.size())):
+		var id: String = VigilState.QUEST_IDS[i]
+		main._vigil.quests[id]["state"] = "complete"
+		main._vigil.shards.append(id)
+	var run: RunState = RunState.new_run(content, 30904, "run-unseal-%s" % outcome, {
+		"quests": main._vigil.quests.duplicate(true),
+		"shards": main._vigil.shards.duplicate(),
+	})
+	if complete_next and shards < VigilState.QUEST_IDS.size():
+		var next_id: String = VigilState.QUEST_IDS[shards]
+		run.quests[next_id] = {"state": "complete", "progress": 1, "memory": {}}
+	run.pending_run_end = {"outcome": outcome, "bequestAnswered": true}
+	main.game = GlassvowGame.new(content, run)
+	main._store_run()
+	return main
+
+
+static func _six_pane_vigil() -> VigilState:
+	var vigil: VigilState = VigilState.blank()
+	vigil.unlocks.append("emberglass")
+	for id: String in VigilState.QUEST_IDS:
+		vigil.quests[id]["state"] = "complete"
+		vigil.shards.append(id)
+	vigil.scenes_seen.append("opening")
+	return vigil
 
 
 static func _main(content: ContentDB) -> Main:

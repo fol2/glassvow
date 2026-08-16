@@ -1,11 +1,13 @@
 class_name ThresholdScreen
 extends Control
-## Act IV threshold ceremony — the sealed door with all six Emberglass panes lit.
+## Short unsealing beat: the door already stands open. Overlay position and
+## act-transition wiring stay with the sealed-door callers (#222).
 
 signal threshold_touched
 signal vigil_requested
 
 const DESIGN: float = 410.0
+const DOOR_PLATE: String = "res://assets/art/scenes/unsealing-door-open.png"
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -71,7 +73,8 @@ func _build() -> void:
 	centre.add_child(column)
 
 	var title: Label = Label.new()
-	title.text = Locale.active.t("ui.map.sealedDoor.title")
+	title.name = "Title"
+	title.text = Locale.active.t("ui.map.openDoor.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_700, 3))
 	title.add_theme_font_size_override("font_size", 28)
@@ -94,12 +97,11 @@ func _build() -> void:
 	rule.stretch_mode = TextureRect.STRETCH_SCALE
 	rule_centre.add_child(rule)
 
-	column.add_child(_build_rose())
+	column.add_child(_build_door())
 
-	# `.ov-sub` is dim in the reference (var(--text-dim), styles.css) — the
-	# payoff lives in the inscription, not here.
 	_sub = Label.new()
-	_sub.text = Locale.active.t("ui.map.sealedDoor.sub")
+	_sub.name = "Sub"
+	_sub.text = Locale.active.t("story.unsealing-short.b1.l1")
 	_sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_sub.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
@@ -107,32 +109,12 @@ func _build() -> void:
 	_sub.add_theme_color_override("font_color", GlassStyle.TEXT_DIM)
 	column.add_child(_sub)
 
-	# Laid out from the first frame at zero alpha, so the reveal costs no
-	# relayout — the CTA must never move out from under the pointer.
+	# Two-step CTA kept for #222: first press blooms, second returns to the Vigil.
 	_answer = VBoxContainer.new()
 	_answer.modulate.a = 0.0
 	_answer.alignment = BoxContainer.ALIGNMENT_CENTER
 	_answer.add_theme_constant_override("separation", 6)
 	column.add_child(_answer)
-
-	var hold: Label = Label.new()
-	hold.text = Locale.active.t("ui.map.holdFast")
-	hold.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hold.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hold.add_theme_font_override("font", GlassStyle.face(GlassStyle.ALEGREYA_400))
-	hold.add_theme_font_size_override("font_size", 16)
-	hold.add_theme_color_override("font_color", GlassStyle.TEXT)
-	_answer.add_child(hold)
-
-	# The benchmark's emotional close: italic Cinzel, tracked, brighter than
-	# parchment (.door-inscription, styles.css:2554).
-	var climb: Label = Label.new()
-	climb.text = Locale.active.t("ui.map.sealedDoor.inscription")
-	climb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	climb.add_theme_font_override("font", RunStyle.slanted(GlassStyle.CINZEL_500, 1))
-	climb.add_theme_font_size_override("font_size", 18)
-	climb.add_theme_color_override("font_color", Color("#fff3d6"))
-	_answer.add_child(climb)
 
 	# The primary action breathes apart from the copy above it.
 	var cta_seat: MarginContainer = MarginContainer.new()
@@ -141,7 +123,7 @@ func _build() -> void:
 	var cta_row: CenterContainer = CenterContainer.new()
 	cta_seat.add_child(cta_row)
 	_cta = Button.new()
-	_cta.text = Locale.active.t("ui.map.standThreshold")
+	_cta.text = Locale.active.t("ui.map.walkIn")
 	_cta.custom_minimum_size = Vector2(280, 44)
 	_cta.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 1))
 	_cta.add_theme_font_size_override("font_size", 17)
@@ -154,16 +136,14 @@ func _build() -> void:
 	set_shape(shape)
 
 
-func _build_rose() -> Control:
+func _build_door() -> Control:
 	var window_centre: CenterContainer = CenterContainer.new()
 	window_centre.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 
 	_window_slot = Control.new()
 	_window_slot.custom_minimum_size = Vector2.ONE * DESIGN
-	# PASS, not IGNORE: the tooltip is the rose's accessible name
-	# (sealedDoor.aria in the reference).
 	_window_slot.mouse_filter = Control.MOUSE_FILTER_PASS
-	_window_slot.tooltip_text = Locale.active.t("ui.map.sealedDoor.aria")
+	_window_slot.tooltip_text = Locale.active.t("ui.map.openDoor.aria")
 	window_centre.add_child(_window_slot)
 
 	_window = Control.new()
@@ -183,27 +163,15 @@ func _build_rose() -> Control:
 	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_window.add_child(backdrop)
 
-	for id: String in RoseWindowView.IDS:
-		var pane: TextureRect = TextureRect.new()
-		pane.texture = load(RoseWindowView.MASK % id) as Texture2D
-		pane.set_anchors_preset(Control.PRESET_FULL_RECT)
-		pane.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		pane.stretch_mode = TextureRect.STRETCH_SCALE
-		pane.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var material: ShaderMaterial = ShaderMaterial.new()
-		material.shader = RoseWindowView.PANE_SHADER
-		material.set_shader_parameter("mural", load(RoseWindowView.MURAL) as Texture2D)
-		material.set_shader_parameter("show_mural", true)
-		pane.material = material
-		_window.add_child(pane)
-
-	var frame: TextureRect = TextureRect.new()
-	frame.texture = load(RoseWindowView.FRAME) as Texture2D
-	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
-	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	frame.stretch_mode = TextureRect.STRETCH_SCALE
-	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_window.add_child(frame)
+	var plate: TextureRect = TextureRect.new()
+	plate.name = "Door"
+	plate.set_anchors_preset(Control.PRESET_FULL_RECT)
+	plate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	plate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if ResourceLoader.exists(DOOR_PLATE):
+		plate.texture = load(DOOR_PLATE) as Texture2D
+	_window.add_child(plate)
 
 	return window_centre
 

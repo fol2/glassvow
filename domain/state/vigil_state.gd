@@ -29,6 +29,8 @@ var receipts: Dictionary = {"deeds": null, "runEnd": null}
 ## Once-flags for scripted scenes. Not `unlocks`: that set is the title
 ## "secrets" count and the Dawn reveal feed.
 var scenes_seen: Array[String] = []
+## Vigil-scoped scene cursor. The unsealing plays after the run save is gone.
+var pending_scene: Variant = null
 
 
 static func _ji(value: Variant) -> int:
@@ -56,6 +58,8 @@ func to_dict() -> Dictionary:
 		"news": news,
 		"receipts": receipts.duplicate(true),
 		"scenesSeen": scenes_seen.duplicate(),
+		"pendingScene": pending_scene.duplicate(true) \
+			if typeof(pending_scene) == TYPE_DICTIONARY else pending_scene,
 	}
 
 
@@ -104,6 +108,11 @@ static func from_dict(raw: Dictionary) -> VigilState:
 			var seen: String = str(id_v)
 			if not seen.is_empty() and not vigil.scenes_seen.has(seen):
 				vigil.scenes_seen.append(seen)
+	var scene_v: Variant = raw.get("pendingScene")
+	if typeof(scene_v) == TYPE_DICTIONARY:
+		var scene: Dictionary = scene_v
+		if not str(scene.get("id", "")).is_empty() and _ji(scene.get("cursor", -1)) >= 0:
+			vigil.pending_scene = scene.duplicate(true)
 	var raw_receipts: Dictionary = raw["receipts"]
 	for key: String in ["deeds", "runEnd"]:
 		var receipt_v: Variant = raw_receipts.get(key)

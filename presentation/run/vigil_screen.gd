@@ -4,6 +4,7 @@ extends Control
 
 signal back_requested
 signal cue_requested(cue: StringName)
+signal replay_requested
 
 const DEED_IDS: PackedStringArray = [
 	"paneBreaker", "lanternFed", "ashSermon", "untouched",
@@ -118,6 +119,7 @@ func _build() -> void:
 	if _has_rose:
 		_rose = RoseWindowView.new(
 			_vigil.quests, _content.quests, _vigil.whispers, _whisper_lines(), shape)
+		_rose.replay_requested.connect(func() -> void: replay_requested.emit())
 		_rose.visible = false
 		column.add_child(_rose)
 
