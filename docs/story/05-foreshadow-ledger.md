@@ -54,9 +54,9 @@ Batch 1(#301)新名與公式行:
 |---|---|---|---|---|---|---|
 | 27 | 返回路上 / Back to the Road | ui.menu.continueClimb(置換 #232) | L0 | 續行中斷的旅程 | 你「返回」的路,盡頭是爐邊(接 row 22 鏡中歸途) | 新名 [#232 Q2] |
 | 28 | 留在路上 / Stay on the Road | ui.menu.keepClimbing(置換 #232) | L0 | 不離開,繼續行 | 「留」字反照:留在路上的是行者,留在爐邊的是你 | 新名 [#232 Q2 修訂書面語——舊簽「留喺路上」廢:喺不在字庫且屬口語] |
-| 29 | 入城 / ARRIVED | ui.dawn.title + ui.end.ascended(置換 #232 Q4) | L1(級待 James:ui.dawn.title 響於 Act III 勝利,非揭場) | 你抵達了 | 抵達的是隊伍(ascended.png 隊列入門);城=爐邊,入城=歸家 | 新名 [#232 Q4];spoiler-ceiling 判定待 story owner |
+| 29 | 入城 / ARRIVED | ui.dawn.title + ui.end.ascended(置換 #232 Q4) | L1 [SETTLED James 2026-08-16] | 你抵達了 | 抵達的是隊伍(ascended.png 隊列入門);城=爐邊,入城=歸家 | 新名 [#232 Q4];級已簽 L1(響於 Act III 勝利的雙讀屬設計) |
 | 30 | 第 {n} 塊引路石 / WAYSTONE n | ui.end.floors / ui.hud.* 計數(置換 #232 Q3;落地歸 #303) | L0 | 行程以引路石計 | [SETTLED James 2026-08-16]每塊石都被之前每一個行者點亮過;你數的是隊伍反覆量過的同一段路 | 新名 [#232 Q3];揭後已簽 |
-| 31 | 王冠之後 / beyond the crown | 公式,七址:ui.dawn.act4RevealCopy、ui.dawn.unlock.act4、q.hollowLamplighter.meetings[1].paid、q.unreadablePage.pages[4]、whisper 21、main.gd:372、dawn_phone_containment.gd:140;本批另 usurper.death 與 whisper 20 取此式 | L1 | 封門在王庭之外、王座之後 | 「之後」雙關:過了「不肯完成」,路便向家;門從來不在上方,只在更遠處 | 新公式 [PROPOSED — Batch 1;James 一次簽,七址共用] |
+| 31 | 王冠之後 / beyond the crown | 公式,七址:ui.dawn.act4RevealCopy、ui.dawn.unlock.act4、q.hollowLamplighter.meetings[1].paid、q.unreadablePage.pages[4]、whisper 21、main.gd:372、dawn_phone_containment.gd:140;本批另 usurper.death 與 whisper 20 取此式 | L1 | 封門在王庭之外、王座之後 | 「之後」雙關:過了「不肯完成」,路便向家;門從來不在上方,只在更遠處 | 新公式 [SETTLED James 2026-08-16 — 一次簽,七址共用] |
 
 ## Batch 1(#301)入賬區 [PROPOSED — 待 James review]
 

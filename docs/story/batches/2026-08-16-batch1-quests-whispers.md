@@ -54,8 +54,10 @@
 1. **「王冠之後 / beyond the crown」公式**——一次過簽,七址共用
    (ledger row 31;本批內三址:m2.paid、第五頁、whisper 21;另
    usurper.death 與 whisper 20 亦取此式)。
+   **判(James 2026-08-16):簽——row 31 SETTLED,七址共用,06 鎖詞。**
 2. **入城 / ARRIVED 的 spoiler ceiling**(ledger row 29):`ui.dawn.title`
    響於 Act III 勝利,非 Act IV 揭場——級數判定屬 story owner。
+   **判(James 2026-08-16):維持 L1——雙讀屬設計,row 29 級已簽。**
 3. **引路石 counter 的揭後讀法**(ledger row 30):現稿係 writer 構作
    [PROPOSED],真讀法由 James 寫定。
    **判(James 2026-08-16):構作照准——row 30 揭後已簽 SETTLED。**

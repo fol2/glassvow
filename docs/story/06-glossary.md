@@ -24,7 +24,7 @@
 | 留在路上 | Stay on the Road | ui.menu.keepClimbing 掣;書面語修訂——舊簽「留喺路上」廢(喺不在字庫且屬口語) | locked [#232 Q2 修訂] |
 | 引路石 | waystone | 路程單位(第 {n} 塊引路石 / WAYSTONE n);CONCEPTS 域模型:石是地點,燈到石而亮 | locked [#232 Q3] |
 | 入城 | ARRIVED | 勝利字(取代 登臨/ASCENDED);表面=你抵達,揭後=隊伍抵達、入城=歸家 | locked [#232 Q4] |
-| 王冠之後 | beyond the crown | 封門方位公式,七址共用(取代「王冠之上 / above the crown」);一次簽,逐址替換(ledger row 31) | placeholder [PROPOSED — Batch 1] |
+| 王冠之後 | beyond the crown | 封門方位公式,七址共用(取代「王冠之上 / above the crown」);一次簽,逐址替換(ledger row 31) | locked [SETTLED James 2026-08-16] |
 | 未燃之路 | the Unlit Way | 掌燈人 quest 的路名 | locked(shipped) |
 | 黑曜王庭 | The Obsidian Court | 第三 act 地區(舊名 Spire banned;shipped 三檔置換歸 #232) | locked [#261 Q8] |
 | 鏡中歸途 | The Mirrored Road | Act IV 門後之地 | locked [#261 Q9] |
