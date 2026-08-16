@@ -218,7 +218,7 @@ static func _run_terminal_receipt(content: ContentDB, fails: Array[String]) -> v
 		"bequest": {"kind": "gold", "amount": 25},
 	}}
 	var vigil: VigilState = VigilState.blank()
-	if not vigil.commit_run(run, "death") or not vigil.commit_run(run, "death"):
+	if not vigil.commit_run(run, "death", content) or not vigil.commit_run(run, "death", content):
 		fails.append("vigil receipt: retry was not accepted")
 		return
 	if vigil.deeds["runs"] != 1 or vigil.deeds["slain"] != 3:
@@ -233,6 +233,6 @@ static func _run_terminal_receipt(content: ContentDB, fails: Array[String]) -> v
 		fails.append("vigil receipt: atomic store failed")
 	else:
 		var reloaded: VigilState = SaveService.load_vigil(TEST_VIGIL_PATH)
-		if not reloaded.commit_run(run, "death") or reloaded.deeds["runs"] != 1:
+		if not reloaded.commit_run(run, "death", content) or reloaded.deeds["runs"] != 1:
 			fails.append("vigil receipt: persisted retry was not idempotent")
 	SaveService.clear_vigil(TEST_VIGIL_PATH)

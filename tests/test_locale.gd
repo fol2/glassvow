@@ -351,6 +351,10 @@ static func _remaining_run_screen_call_sites(fails: Array[String]) -> void:
 		"res://presentation/run/dawn_screen.gd": {
 			"_build": ["ui.dawn.inputHint"],
 		},
+		"res://presentation/run/vigil_screen.gd": {
+			"_build": ["ui.vigil.title", "ui.vigil.stats", "ui.vigil.deedsTab",
+				"ui.vigil.roseTab", "ui.vigil.epitaphTab", "ui.vigil.return"],
+		},
 		"res://presentation/run/lamplighter_screen.gd": {
 			"_build": ["ui.lamp.title", "ui.lamp.sub", "ui.lamp.boonLabel",
 				"ui.lamp.artLabel", "ui.lamp.artHint", "ui.menu.chooseBoon"],

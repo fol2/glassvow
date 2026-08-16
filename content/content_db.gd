@@ -5,6 +5,7 @@ extends RefCounted
 
 const SLICE_PATH: String = "res://port_fixtures/content/slice-content.json"
 const FULL_PATH: String = "res://content/full-content.json"
+const LINE_TABLE_PATH: String = "res://content/line-table.json"
 const MOB_OVERRIDES_PATH: String = "res://content/mob-overrides.json"
 const CORE_MECHANICS_PATH: String = "res://port_fixtures/content/core-mechanics.json"
 const ENEMY_INTENTS: Array[String] = [
@@ -42,6 +43,7 @@ var pool_gate_relics: Dictionary = {}
 var reward_gold: Array = []  # per act: {"normal": [a,b], "elite": [a,b], "boss": [a,b]}
 var player: Dictionary = {}
 var reveal_ids: Array[String] = []
+var line_table: Array = []
 
 
 static func load_slice() -> ContentDB:
@@ -54,6 +56,7 @@ static func load_slice() -> ContentDB:
 static func load_full(with_mob_overrides: bool = true) -> ContentDB:
 	var db: ContentDB = ContentDB.new()
 	db._load(FULL_PATH)
+	db._load_line_table()
 	if with_mob_overrides:
 		db._load_mob_overrides()
 	return db
@@ -233,6 +236,112 @@ static func _number_between(value: Variant, minimum: float, maximum: float) -> b
 	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
 		return false
 	return float(str(value)) >= minimum and float(str(value)) <= maximum
+
+
+func _load_line_table() -> void:
+	var text: String = FileAccess.get_file_as_string(LINE_TABLE_PATH)
+	if text.is_empty():
+		push_error("ContentDB: cannot read %s" % LINE_TABLE_PATH)
+		return
+	var raw: Variant = JSON.parse_string(text)
+	var faults: PackedStringArray = apply_line_table(raw)
+	if not faults.is_empty():
+		line_table = []
+		push_error("ContentDB: refusing %s — %s" % [LINE_TABLE_PATH, faults[0]])
+
+
+func apply_line_table(raw: Variant) -> PackedStringArray:
+	var faults: PackedStringArray = line_table_faults(raw)
+	if not faults.is_empty():
+		return faults
+	var rows: Array = raw
+	var parsed: Array = []
+	for row_v: Variant in rows:
+		var row: Dictionary = row_v
+		var copy: Dictionary = row.duplicate(true)
+		var parsed_conditions: Dictionary = LineTable.parse_conditions(row.get("conditions", {}))
+		copy["conditions"] = parsed_conditions["conditions"]
+		parsed.append(copy)
+	line_table = parsed
+	return PackedStringArray()
+
+
+func line_table_faults(raw: Variant) -> PackedStringArray:
+	var faults: PackedStringArray = PackedStringArray()
+	if typeof(raw) != TYPE_ARRAY:
+		faults.append("line table must be an array")
+		return faults
+	var rows: Array = raw
+	var ids: Dictionary = {}
+	var empty_by_slot: Dictionary = {}
+	var pool_slots: Dictionary = {}
+	for i: int in range(rows.size()):
+		var row_v: Variant = rows[i]
+		if typeof(row_v) != TYPE_DICTIONARY:
+			faults.append("row %d must be a dictionary" % i)
+			continue
+		var row: Dictionary = row_v
+		var id: String = str(row.get("id", "")).strip_edges()
+		var slot: String = str(row.get("slot", "")).strip_edges()
+		var zh: String = str(row.get("zh", ""))
+		var en: String = str(row.get("en", ""))
+		if id.is_empty() or slot.is_empty() or zh.is_empty() or en.is_empty():
+			faults.append("row %d missing required field {id, slot, zh, en}" % i)
+			continue
+		if not row.has("id") or not row.has("slot") or not row.has("zh") or not row.has("en"):
+			faults.append("%s missing required field {id, slot, zh, en}" % id)
+			continue
+		if ids.has(id):
+			faults.append("duplicate line id %s" % id)
+			continue
+		ids[id] = true
+		if en == zh:
+			faults.append("%s en must differ from zh" % id)
+		if not _en_latin_only(en):
+			faults.append("%s en must be Latin-only" % id)
+		var parsed: Dictionary = LineTable.parse_conditions(row.get("conditions", {}))
+		if parsed["ok"] != true:
+			faults.append("%s: %s" % [id, str(parsed["error"])])
+			continue
+		var conditions_v: Variant = parsed["conditions"]
+		var conditions: Dictionary = conditions_v if typeof(conditions_v) == TYPE_DICTIONARY else {}
+		if not empty_by_slot.has(slot):
+			empty_by_slot[slot] = 0
+		if conditions.is_empty():
+			empty_by_slot[slot] = int(float(str(empty_by_slot[slot]))) + 1
+		var cooldown: int = int(float(str(row.get("cooldown_runs", LineTable.DEFAULT_COOLDOWN_RUNS))))
+		if cooldown > 0:
+			pool_slots[slot] = true
+	for slot_v: Variant in pool_slots:
+		var slot: String = str(slot_v)
+		if int(float(str(empty_by_slot.get(slot, 0)))) < 2:
+			faults.append("pool %s needs ≥2 empty-condition fallbacks" % slot)
+	return faults
+
+
+static func _en_latin_only(en: String) -> bool:
+	var has_letter: bool = false
+	for i: int in range(en.length()):
+		var c: int = en.unicode_at(i)
+		if (c >= 65 and c <= 90) or (c >= 97 and c <= 122):
+			has_letter = true
+		elif _is_non_latin_letter(c):
+			return false
+	return has_letter
+
+
+static func _is_non_latin_letter(c: int) -> bool:
+	if c <= 127:
+		return false
+	if c >= 0x00C0 and c <= 0x024F:
+		return true
+	if c >= 0x2E80 and c <= 0x9FFF:
+		return true
+	if c >= 0xAC00 and c <= 0xD7AF:
+		return true
+	if c >= 0xF900 and c <= 0xFAFF:
+		return true
+	return false
 
 
 func _load(path: String) -> void:
