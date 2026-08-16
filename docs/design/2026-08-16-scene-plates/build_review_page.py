@@ -27,29 +27,32 @@ PLATES = [
         n="1", slug="opening-hearth", title="The hearth", scene="Opening · beats ①③④",
         anchor="00 §5 L0 — 出發時鏡頭多留一秒,爐前仍坐着一個兜帽身影",
         band="You are awake.",
-        state="fork",
-        read="Both carry the beat. <b>A</b> has the hall — the long recession, the road "
-             "east, the lit waystones, warm-right against cold-left exactly as the "
-             "reference stages it. <b>B</b> has the better hearth and a more legible "
-             "seated figure, and gives up the depth to get them.",
-        flaw="Neither window counts to six. A is a four-lobe quatrefoil; B is a "
-             "five-lobe cinquefoil, rendered <i>after</i> an explicit instruction to "
-             "count.",
-        variants=["opening-hearth-a", "opening-hearth-b"],
+        state="shipped",
+        read="<b>B</b> won on staging, then the figure ruling voided both first-round "
+             "candidates: A and B bake in a seated hooded figure, and the #283 Keeper "
+             "overlays this same plate for beat ②, which puts two bodies on screen. "
+             "James ruled one. <b>C</b> and <b>D</b> re-render the hall deserted in B's "
+             "staging — <b>C shipped</b>, for the long low bare hearth step that gives "
+             "the overlay the most room and the clearest read of the east road.",
+        flaw="爐前仍坐着一個兜帽身影 is now carried entirely by the #283 overlay, so that "
+             "overlay has to persist through beat ④'s linger and the every-departure "
+             "ambient staging. It is no longer free — #283/#309 wiring.",
+        variants=["opening-hearth-c", "opening-hearth-d",
+                  "opening-hearth-a", "opening-hearth-b"],
     ),
     dict(
         n="2", slug="unsealing-mirror-queue", title="One queue in the mirror",
         scene="Unsealing · full",
         anchor="00 §2.6 — 彩窗全亮的一刻變成鏡:窗中站滿一排「你」,每人胸口一點光",
         band="Stand at the Threshold.",
-        state="settled",
-        read="<b>B</b>, decisively. <b>A</b> reproduces the treatment rejected on the "
+        state="shipped",
+        read="<b>B shipped.</b> <b>A</b> reproduces the treatment rejected on the "
              "bake-off — the crowd restarts inside every lobe. The lever was not a "
              "stronger negative prompt: a round lobed window <i>structurally invites</i> "
              "per-lobe grouping. B restages it as six tall lancets under one arch, so a "
              "single row crosses all six at one height and the mullions pass in front of "
              "it like railings. One queue, seen once.",
-        flaw="B is also the only plate in the set whose pane count came out at six.",
+        flaw="Its six lancets are six because the architecture forces the count — the round windows elsewhere in the set count six too, which an earlier revision of this page wrongly denied.",
         variants=["unsealing-mirror-queue-a", "unsealing-mirror-queue-b"],
     ),
     dict(
@@ -79,8 +82,8 @@ PLATES = [
         n="4", slug="act4-node1", title="門檻′ — the threshold's inner face",
         scene="Act IV · node 1",
         anchor="03-acts — motif 池:彩窗六格、封門浮雕",
-        band="", state="fork",
-        read="<b>A</b> has the richer light, and fills its six lobes with haloed saints — "
+        band="", state="shipped",
+        read="<b>B shipped.</b> <b>A</b> has the richer light, and fills its six lobes with haloed saints — "
              "generic cathedral iconography where the six emberglass shards belong. "
              "<b>B</b> fixes that, counts six, and reads its monuments as grave markers "
              "rather than obelisks.",
@@ -92,8 +95,8 @@ PLATES = [
         n="5", slug="act4-node2", title="III′ — the Obsidian Court mirrored",
         scene="Act IV · node 2",
         anchor="03-acts — motif 池:斷環、星、黑曜",
-        band="", state="fork",
-        read="<b>A</b> sits properly in the indigo and violet, and is canon-true on motif "
+        band="", state="shipped",
+        read="<b>B shipped.</b> <b>A</b> sits properly in the indigo and violet, and is canon-true on motif "
              "— the broken ring, the stars doubled in the floor. But it is "
              "<b>symmetric</b>, against the stated bar, and its monuments are "
              "indistinguishable from the architecture. <b>B</b> fixes both: camera off "
@@ -118,8 +121,8 @@ PLATES = [
         n="7", slug="act4-node4", title="I′ — the Ash Wood mirrored",
         scene="Act IV · node 4",
         anchor="03-acts — motif 池:灰、根、雙燈",
-        band="", state="fork",
-        read="The sharpest fork in the set. <b>A</b> is the prettier picture and it is "
+        band="", state="shipped",
+        read="<b>B shipped.</b> The sharpest fork in the set. <b>A</b> is the prettier picture and it is "
              "just the Ash Wood — the canopy is ordinary branches and nothing is "
              "inverted. <b>B</b> lands it: a ceiling of hanging roots and clotted soil, "
              "trunks growing downward, ash rising.",
@@ -154,9 +157,9 @@ PLATES = [
 ]
 
 STATE_LABEL = {
-    "clean": "clean",
+    "clean": "shipped",
     "fork": "pick one",
-    "settled": "B — constraint met",
+    "shipped": "shipped",
     "derived": "derived",
 }
 
@@ -313,7 +316,7 @@ a{color:var(--ember)}
 }
 .s-clean{color:var(--clean)}
 .s-fork{color:var(--fork)}
-.s-settled{color:var(--ember)}
+.s-shipped{color:var(--ember)}
 .s-derived{color:var(--derived)}
 
 .anchor{
@@ -427,9 +430,9 @@ BODY = """
     <p class="eyebrow">Glassvow · issue 310 · staging hybrid</p>
     <h1>The Nine Plates</h1>
     <p class="dek">Every candidate for the nine full-bleed plates, in the order the
-    scenes play. Six landed clean; four missed a stated constraint and were re-rendered.
-    Nothing here is a game asset — nothing enters <code>assets/art/scenes/</code> until
-    the picks are made.</p>
+    scenes play, with the picks marked. <b>All ten paths are filled</b> — James decided on
+    2026&#8209;08&#8209;16, and <code>install_plates.py</code> wrote the winners into
+    <code>assets/art/scenes/</code> at a 256-colour palette.</p>
     <div class="meta">
       <span><b>Rendered</b> 1536×1024</span>
       <span><b>Shown in</b> 1180×820</span>
@@ -454,32 +457,31 @@ BODY = """
 __ROWS__
 
   <section class="calls">
-    <h2>Two calls that are not an agent's to make</h2>
+    <h2>Two rulings, and one correction</h2>
     <div class="call-grid">
       <div class="call">
-        <h3>No round window will count to six</h3>
-        <p>Three plates put one in frame. None produced six lobes — including the fork
-        whose prompt said <i>count them, there must be six</i>. The generator lands on
-        four or five petals whatever it is told. Six <b>lancets</b> it counts fine, which
-        is why plate 2 is correct.</p>
-        <ol>
-          <li><b>Accept.</b> The window is background in all three, and the authoritative
-          六格 statement is <code>emberglass-mural.png</code> — plus plate 2.</li>
-          <li><b>Retouch.</b> An image-to-image pass on the tracery, the way
-          <code>night-stall.png</code> was corrected.</li>
-          <li><b>Restage.</b> Rebuild the Vigil hall on the six-lancet architecture that
-          demonstrably works — this changes what the hall looks like.</li>
-        </ol>
+        <h3>One figure in the opening, not two</h3>
+        <p>The first candidates baked the seated hooded figure into the plate, on the
+        reasoning that it is the L0 plant and would save beat ④ a second asset. But the
+        <b>#283 Keeper overlays this same plate</b> for beat ②'s dialogue — so a baked
+        figure means two bodies on screen at once.</p>
+        <p><b>James ruled one.</b> C and D re-render the hall deserted, hearth step bare
+        and composed as the seat; C shipped.</p>
+        <p>The cost lands on the scene player, not the plate: 爐前仍坐着一個兜帽身影 is now
+        the overlay's job in beat ④'s linger and in the every-departure ambient staging.
+        It is no longer free.</p>
       </div>
       <div class="call">
-        <h3>Two figures in the opening</h3>
-        <p>The plate carries the seated hooded figure. That is the L0 plant, and it is why
-        beat ④ — the camera holding a second longer on a hearth you have already left —
-        needs no second asset.</p>
-        <p>The <b>#283 Keeper overlays on top of it</b> for beat ②'s dialogue. So the
-        finished beat shows two: the one who speaks, and the one who stays. Canon says
-        they are the same thing at two removes.</p>
-        <p>Correct, or one figure too many?</p>
+        <h3>There was never a six-lobe problem</h3>
+        <p>An earlier revision of this page reported that no round window in the set would
+        count to six, and offered three ways to work around it — including restaging the
+        Vigil hall. <b>That was wrong, and James caught it.</b></p>
+        <p>Measured off 4× crops of the window region: <code>opening-hearth</code> a, b, c
+        and d are all <b>six</b>; so is <code>act4-node1-b</code>. Only the finale's small
+        background rose is five, at a size where the tracery barely resolves.</p>
+        <p>The lesson is not about the generator. A count asserted from a downscaled view
+        is an inference wearing the grammar of a measurement — the crops cost one command,
+        and would have kept the wrong number out of three documents.</p>
       </div>
     </div>
   </section>

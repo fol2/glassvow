@@ -14,14 +14,15 @@ CANDIDATES = HERE / "candidates"
 
 # Scene order, not alphabetical — the sheet is read the way the game plays.
 ROWS = [
-    ("1  opening-hearth", ["opening-hearth-a", "opening-hearth-b"]),
-    ("2  unsealing-mirror-queue", ["unsealing-mirror-queue-a", "unsealing-mirror-queue-b"]),
+    ("1  opening-hearth  [C shipped]", ["opening-hearth-c", "opening-hearth-d",
+                                    "opening-hearth-a", "opening-hearth-b"]),
+    ("2  unsealing-mirror-queue  [B shipped]", ["unsealing-mirror-queue-a", "unsealing-mirror-queue-b"]),
     ("3  unsealing-monuments-push", ["unsealing-monuments-push-a"]),
     ("-  unsealing-door-open (crop of 3)", ["unsealing-door-open-a"]),
-    ("4  act4-node1  threshold'", ["act4-node1-a", "act4-node1-b"]),
-    ("5  act4-node2  obsidian'", ["act4-node2-a", "act4-node2-b"]),
+    ("4  act4-node1  threshold'  [B shipped]", ["act4-node1-a", "act4-node1-b"]),
+    ("5  act4-node2  obsidian'  [B shipped]", ["act4-node2-a", "act4-node2-b"]),
     ("6  act4-node3  sunken'", ["act4-node3-a"]),
-    ("7  act4-node4  ash wood'", ["act4-node4-a", "act4-node4-b"]),
+    ("7  act4-node4  ash wood'  [B shipped]", ["act4-node4-a", "act4-node4-b"]),
     ("8  act4-node5  gilded gate", ["act4-node5-a"]),
     ("9  finale-swap", ["finale-swap-a"]),
 ]

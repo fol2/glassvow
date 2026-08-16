@@ -4,10 +4,10 @@ Production record for the plate bill in `docs/story/07-scenes.md` §8, settled b
 James's Hybrid verdict on the staging bake-off
 (`docs/design/2026-08-16-scene-staging-bakeoff/README.md`, 2026-08-16).
 
-**Candidates live in `candidates/` and are decision material, not game assets.**
-Nothing enters `assets/art/scenes/` until James picks it; the accepted file's
-prompt is then copied into `docs/art-ledger.md` with its candidate table, per the
-ledger contract.
+**All ten paths are filled. James picked on 2026-08-16** — the winners are in the
+candidates table below and encoded in `install_plates.py`, which is what wrote
+`assets/art/scenes/`. Candidates stay in `candidates/` as lossless decision
+material; re-run the installer to reproduce the shipped bytes.
 
 ## Frame contract
 
@@ -104,12 +104,18 @@ Notes bound to this plate:
 
 - **The six lobes are dark.** The opening plays on the first run, at zero
   shards; a lit lobe would contradict the state the plate is shown in.
-- **The seated figure stays in the plate.** It is the L0 plant — 出發時鏡頭多留
-  一秒,爐前仍坐着一個兜帽身影 (`00-truth.md` §5 L0) — and it is why beat ④
-  works without a second asset. The #283 Keeper figure overlays on top of this
-  plate for beat ②'s dialogue, so the finished beat shows two figures: the one
-  who speaks and the one who stays. **Open for James**: whether that reads as
-  intended or as one figure too many.
+- **The plate is an empty room. There is no figure in it** [SETTLED — James,
+  2026-08-16]. The first pass baked the seated hooded figure into the plate, on
+  the reasoning that it is the L0 plant (`00-truth.md` §5 L0) and would save beat
+  ④ a second asset. But the #283 Keeper overlays on this plate for beat ②'s
+  dialogue, so a baked figure means two bodies on screen at once. James ruled one.
+  `-c` and `-d` re-render the hall deserted, with the hearth step left bare and
+  composed as the natural focal point; `-c` shipped.
+
+  **Consequence for the scene player, not for the plate**: 爐前仍坐着一個兜帽身影
+  is now carried entirely by the #283 overlay, so that overlay has to persist
+  through beat ④'s linger and through the every-departure ambient staging — it is
+  no longer free. Belongs to #283/#309 wiring.
 
 ### 2 — `unsealing-mirror-queue.png` · one queue across the whole window
 
@@ -287,33 +293,39 @@ only verdict that counts**.
 
 | Plate | Candidates | Where they stand |
 |---|---|---|
-| 1 opening-hearth | a, b | **Fork, and both miss the lobe count.** `a` has the better hall — long recession, road east, the lit waystones, warm-right/cold-left exactly as the reference. `b` has the better hearth and a better-read seated figure but loses the depth. `a`'s window is a 4-lobe quatrefoil, `b`'s a 5-lobe cinquefoil; **neither is the six of 彩窗六格**, after an explicit count instruction in `b`. See "The six-lobe problem". |
-| 2 unsealing-mirror-queue | a, b | **`b`, decisively.** `a` reproduces the treatment James rejected — the crowd restarts inside each lobe. `b` changes the window's architecture to six tall lancets under one arch, so a single row crosses all six at one height with the mullions passing in front of it. One queue, seen once — 「窗中站滿一排『你』」 literally. Six panes, correct count. |
+| 1 opening-hearth | a, b, **c ← James**, d | `b` won the first round on staging, then the figure ruling voided both: `a` and `b` bake a seated figure that would collide with the #283 overlay. `c` and `d` re-render the hall deserted in `b`'s staging. **`c`** — a long low bare hearth step with the most room for the overlay, and the clearest read of the east road. `d` is more ceremonial (stepped platform, candelabra) but tighter on the seat. All four windows are six-lobe. |
+| 2 unsealing-mirror-queue | a, **b ← James** | **`b`, decisively.** `a` reproduces the treatment James rejected — the crowd restarts inside each lobe. `b` changes the window's architecture to six tall lancets under one arch, so a single row crosses all six at one height with the mullions passing in front of it. One queue, seen once — 「窗中站滿一排『你』」 literally. Six panes, correct count. |
 | 3 unsealing-monuments-push | a | **Clean.** Monuments straightening into walkers along the road, hands on the stone, gold seam, all backs to us; half-sunk stones still crooked in the foreground. |
 | — unsealing-door-open | a | **Derived, not rendered** — crop `(600, 0, 1536, 624)` of plate 3 resampled to 1536×1024, per §8. The door's relief of hooded figures pushing rhymes with the real queue beneath it. ~1.6× upsample, soft but sound under a dialogue band. |
-| 4 act4-node1 | a, b | **Fork.** `a` has the richer light but fills its six lobes with haloed saints — generic cathedral iconography, not the six shards. `b` fixes that (six abstract amber panes, correct count, hooded relief on the sealed door, monuments that read as grave markers) but its light reads as coming *from* the window, so the inversion — the whole grammar of Act IV — goes missing. |
-| 5 act4-node2 | a, b | **Fork, and the two trade different things.** `a` is canon-true on motif — broken gold ring, stars doubled in the floor — and sits properly in the indigo/violet palette, but it is **symmetric**, against the bar James set, and its monuments are indistinguishable from the architecture. `b` fixes both: camera off the left edge, a single colonnade sweeping right to an off-centre vanishing point, rough-hewn monuments legibly distinct from the smooth pillars, light from the vanishing point rimming near edges and throwing shadows forward. The cost is colour — `b` is nearly monochrome gold-on-black and reads as polished stone rather than glass. |
+| 4 act4-node1 | a, **b ← James** | **Fork.** `a` has the richer light but fills its six lobes with haloed saints — generic cathedral iconography, not the six shards. `b` fixes that (six abstract amber panes, correct count, hooded relief on the sealed door, monuments that read as grave markers) but its light reads as coming *from* the window, so the inversion — the whole grammar of Act IV — goes missing. |
+| 5 act4-node2 | a, **b ← James** | **Fork, and the two trade different things.** `a` is canon-true on motif — broken gold ring, stars doubled in the floor — and sits properly in the indigo/violet palette, but it is **symmetric**, against the bar James set, and its monuments are indistinguishable from the architecture. `b` fixes both: camera off the left edge, a single colonnade sweeping right to an off-centre vanishing point, rough-hewn monuments legibly distinct from the smooth pillars, light from the vanishing point rimming near edges and throwing shadows forward. The cost is colour — `b` is nearly monochrome gold-on-black and reads as polished stone rather than glass. |
 | 6 act4-node3 | a | **Clean.** Water as ceiling with books rising into it, drowned shelves, green false lanterns against the one true amber from the far end, shadows thrown forward. |
-| 7 act4-node4 | a, b | **Fork, and the sharpest one.** `a` is the prettier picture but it is just the Ash Wood — the canopy is ordinary branches and nothing is inverted. `b` lands it: a ceiling of hanging roots and clotted soil, trunks growing downward, ash rising. `b` is stranger and less classically pretty; it is the only one of the two that is Act IV. |
+| 7 act4-node4 | a, **b ← James** | **Fork, and the sharpest one.** `a` is the prettier picture but it is just the Ash Wood — the canopy is ordinary branches and nothing is inverted. `b` lands it: a ceiling of hanging roots and clotted soil, trunks growing downward, ash rising. `b` is stranger and less classically pretty; it is the only one of the two that is Act IV. |
 | 8 act4-node5 | a | **Clean, and the best plate of the nine.** The gate is unmistakably a fireplace mouth at cathedral scale — the reveal that 金城=爐邊真貌 is carried by the architecture itself. Queue with chest-lights, cloud sea, monuments. Deviation: the queue reads as walking toward camera rather than away, and the lights are held in hands rather than at the chest. |
-| 9 finale-swap | a | **Clean.** The swap reads at a glance: sitting figure near/right/cold, walking figure far/left/dissolving into gold. Background window is a 4-lobe again (small, background). |
+| 9 finale-swap | a | **Clean.** The swap reads at a glance: sitting figure near/right/cold, walking figure far/left/dissolving into gold. Background window measures five lobes — the only one in the set that is not six, at a size where the tracery barely resolves. |
 
-### The six-lobe problem
+### Counting the lobes
 
-Three plates put a round window in frame and **none produced six lobes**, `b`
-included, where the prompt said "count them, there must be six". The generator
-lands on 4 or 5 petals whatever it is told. Options, for James:
+**There is no six-lobe problem. An earlier revision of this file claimed one and
+was wrong** — James caught it on 2026-08-16, and the counts below are measured
+off 4× crops of the window region rather than read off the contact sheet, which
+is how the error was made in the first place.
 
-1. **Accept.** The window is a background element in all three; the authoritative
-   six-pane statement is `assets/art/meta/emberglass-mural.png`, which is
-   correct, and now plate 2's six lancets, which are also correct.
-2. **Retouch.** Paint the tracery to six by hand or by an image-to-image edit
-   pass on the accepted plate, the way `night-stall.png` was corrected.
-3. **Restage.** Replace the round window with the six-lancet architecture that
-   plate 2 proved the generator *can* count.
+| Plate | Tracery | Count |
+|---|---|---|
+| `opening-hearth-a` | round, petals round a hub | **6** |
+| `opening-hearth-b` | round, petals round a central ring | **6** |
+| `act4-node1-b` | round, petals round a hub | **6** |
+| `unsealing-mirror-queue-b` | six lancets under one arch | **6** |
+| `finale-swap-a` | round, background element | 5 |
 
-Not settled here — it is a taste call, and option 3 changes what the Vigil hall
-looks like.
+Five of the six windows in the set are correct. Only the finale's background
+rose is five, at a size where the tracery is barely resolved; it needs no action
+unless James wants one.
+
+The lesson is not about the generator. A count asserted from a downscaled view
+is an inference wearing the grammar of a measurement — the crops cost one
+command and would have prevented three documents carrying the wrong number.
 
 ## Payload
 
