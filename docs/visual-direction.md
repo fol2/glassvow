@@ -11,12 +11,13 @@ recorded — the rejections are the expensive part.
 ## Standing constraints (all sessions)
 
 - Discussion in Cantonese; working notes and code in UK English.
-- The visual standard is **`roguecardv2@6e069118`** — the pre-pixi approved
-  visual. Web `main` is itself a regression and is *not* the target. The
-  benchmark runs live at `localhost:5190`.
-- Parity work reads the **source**, never samples the render.
-- `port_fixtures/` is generated only by `roguecardv2/tools/capture-port-fixtures.mjs`
-  and is never hand-edited here.
+- The visual standard is **this port**, judged against the commercial rubric
+  (#157). It *was* `roguecardv2@6e069118`, the pre-Pixi approved visual served at
+  `localhost:5190`; the reference was detached on 2026-08-16 (#317) and nothing is
+  served now.
+- `port_fixtures/` holds port-owned goldens. Their immutability contract ended
+  with the detachment (#317 D5): a deliberate behaviour change may update one, in
+  its own commit, saying what changed and why.
 - Shared tree, five concurrent sessions: **commit with explicit paths only,
   never `git add -A`**.
 - Worker sessions build 2–3 variants, screenshot each, and **stop** —

@@ -86,7 +86,7 @@ Changes that don't touch `presentation/` or audio buses (pure domain, architectu
 
 ## 7. Fixtures & Determinism
 
-**Fixtures are immutable:** All test data in `port_fixtures/` is generated once by roguecardv2's `tools/capture-port-fixtures.mjs` and committed here. Never edit fixtures in this repo — regeneration happens only in roguecardv2 and is pushed as commits.
+**Fixtures are port-owned goldens** (amended 2026-08-16 by #317 D5; they were immutable before). The 18 files in `port_fixtures/` were captured once from roguecardv2's `tools/capture-port-fixtures.mjs` and now pin **this port's** behaviour, not the web's. Treat them as goldens: a fixture change is a behaviour change and needs its own commit saying what moved and why — never a silent edit to make a failing test pass. No port-side regeneration tool exists; it gets designed the first time a refactor actually needs one.
 
 **All randomness flows through run Rng:** A run's seed produces one seeded Mulberry32 stream (`run.rngState` int cursor). Every random draw (card pick, enemy AI, damage variance) pulls from this stream. No other randomness sources. This makes runs deterministic and reproducible.
 
@@ -131,6 +131,6 @@ Dictionaries compare natively against the JSON parity fixtures and survive seria
 - **M0:** Scaffold (this).
 - **M1–M4:** Domain parity (RNG, content, combat, saves).
 - **M5–M7:** Presentation slice (combat screen, world map, mobile).
-- **M8:** Decision gate (parity suite green; ship the full port, or return to web).
+- **M8:** ~~Decision gate (parity suite green; ship the full port, or return to web).~~ **Settled 2026-08-16 (#317): the port ships.** The reference is detached and "return to web" is off the table; what replaces this gate is the commercial rubric (#157) and the RC bar (`docs/rc-bar.md`).
 
 **Authority:** User (fol2) signs off on concept briefs (especially M6 map concept), high-level PRs, and the M8 decision. Otherwise, reviewers drive their lane.

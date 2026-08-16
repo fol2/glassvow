@@ -95,8 +95,9 @@ now the full checklist in `docs/actor-animation-checklist.md`.
 - **`CONCEPTS.md`, `AGENTS.md`, `docs/`** — append-only in practice. Two lanes
   appending in the same minute will conflict.
 - **`domain/`, `content/`, `port_fixtures/`, `tests/`** — off-limits to visual
-  work entirely. `port_fixtures/` is generated only by roguecardv2's
-  `tools/capture-port-fixtures.mjs` and is never hand-edited here.
+  work entirely. `port_fixtures/` holds port-owned goldens; since the detachment
+  (#317 D5) they may be updated by a deliberate behaviour change, in its own
+  commit, but never from a visual lane.
 
 **Rule for shared surfaces:** do not edit them from a lane. Raise it with the
 organiser, who sequences the change into one lane at one time. A palette change
@@ -314,22 +315,24 @@ so a scripted run that forgets it leaves a process to be killed by hand.
 
 ## Shared dependency: the visual benchmark
 
-The visual standard is **`roguecardv2@6e069118`** — the pre-pixi approved visual.
-Web `main` is itself a regression and is *not* the target: it has since added
-`pixi.js` and Capacitor. Parity work reads the **source** through the DOM; it
-never samples the render.
+**Retired 2026-08-16 (#317, #325).** The visual standard *was*
+`roguecardv2@6e069118`, the pre-Pixi approved visual, read through the DOM and
+never sampled from the render. The port now owns its own visual standard and is
+judged against the commercial rubric; nothing here parity-checks against the web.
 
-It serves at **`localhost:5190`** from a detached worktree, so roguecardv2's own
-`main` is never disturbed:
+Nothing serves `localhost:5190` any more, and it should not be restarted to settle
+what this port ought to do. The recipe survives only so the archived checkout is
+disposable — it is a **detached worktree** of `~/Coding/roguecardv2` with its own
+`node_modules` (23 packages, `npm ci` against that commit's lockfile, deliberately
+not shared with main's, which would pull `pixi.js` in), so it dies with its parent
+and `git clone` + `git checkout 6e06911853ba8e26d05ac4db0a1ad119a6c2275a` is the
+durable route back:
 
 ```bash
-cd /Users/jamesto/Coding/roguecardv2-benchmark && npx vite --port 5190 --strictPort
+git worktree add --detach /Users/jamesto/Coding/roguecardv2-benchmark 6e069118
+cd /Users/jamesto/Coding/roguecardv2-benchmark && npm ci \
+  && npx vite --port 5190 --strictPort
 ```
-
-The worktree was created with `git worktree add --detach
-/Users/jamesto/Coding/roguecardv2-benchmark 6e069118` and has its own
-`node_modules` (23 packages, `npm ci` against that commit's lockfile) — it must
-not share main's, which would pull `pixi.js` into the benchmark.
 
 **Confirm you are looking at the right build before trusting a comparison:** the
 title screen stamps the version bottom-right. It must read `0.5.0+6e06911`.

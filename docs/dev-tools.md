@@ -112,7 +112,7 @@ outside the Stage.
 `python3 tools/dev.py --check` covers the mapping. Interactive Web does not use
 this path: the browser delivers events to the Godot canvas directly. Non-visual tools remain direct, honest
 commands: `tools/check_imports.sh`, `tools/check_anchors.py`,
-`tools/check_web_anchors.py`, `godot
+`tools/check_benchmark_freeze.py`, `godot
 --headless -s res://tools/check_fracture.gd`, the windowed
 `res://tools/bench_actor_stage.gd` probe, and:
 
@@ -186,24 +186,30 @@ Browser support is earned by a safe lifecycle, not by adding a link. Tools that
 quit, write arbitrary paths, require a real-time renderer, or expose broad editor
 mutation stay CLI-only until those constraints change.
 
-## Web-reference anchors
+## Web-reference citations — frozen, and counted
 
-`tools/check_anchors.py` owns in-repo `.gd` citations. Web references —
-`styles.css:834`, `src/ui/drain.js:511-512`, bare `mesh.js:928` — are checked
-separately against the pinned pre-Pixi benchmark at
-`../roguecardv2-benchmark` (commit `6e06911`):
+`tools/check_anchors.py` owns in-repo citations. Web references — `styles.css:834`,
+`src/ui/drain.js:511-512`, bare `mesh.js:928` — used to be resolved against a
+checkout of the pinned pre-Pixi benchmark. **They are not resolved any more.** The
+port detached from the reference on 2026-08-16 (#317), the 612 existing citations
+are frozen as history, and writing a new one is banned:
 
 ```bash
-python3 tools/check_web_anchors.py           # exit 1 if any citation failed
-python3 tools/check_web_anchors.py --list    # every citation, OK included
+python3 tools/check_benchmark_freeze.py           # exit 1 if the count moved
+python3 tools/check_benchmark_freeze.py --update  # re-baseline DOWNWARD only
 ```
 
-The tool scans `docs/**/*.md`, `CLAUDE.md`, `CONCEPTS.md`, and tracked
-`.gd` files under `presentation/`, `application/`, and `domain/`. It
-range-checks each `*.js` / `*.css` cite against the benchmark `src/` tree, then
-— when a nearby backtick names a token — asks whether that token still sits in
-a ±20-line window (with a longer look-back for `case` / `function` headers).
-**OUT-OF-RANGE** means the line number is past EOF; **DRIFT** means the token
-lives elsewhere in the same file; **MISSING** means a token that should be
-there is gone. Citations with no usable token are range-checked only. The
-benchmark HEAD is verified before any scan; a wrong pin aborts.
+It counts `*.js` / `*.css` `file:line` forms per file against
+`tools/benchmark-citations.txt` and fails on any increase — `--update` refuses to
+raise a number, so adding a citation means editing the census by hand where a
+reviewer sees it. A decrease also fails, with instructions to re-baseline, so that
+removing one citation cannot quietly fund another in the same file.
+
+**Why counting replaced resolving.** The old gate needed the benchmark checkout,
+so it returned exit 2 — "benchmark tree not found" — on every CI runner and inside
+every git worktree, and had to be run by hand. With new citations banned outright,
+the count is the whole of the rule, and a gate that needs nothing runs everywhere
+the rule can be broken. The old tool's method is described in
+`docs/benchmark-divergence.md` if it is ever wanted again; it read `.js` / `.css`
+cites, range-checked them against the benchmark `src/` tree, then asked whether a
+backticked token from the citing prose still sat within ±20 lines.
