@@ -125,10 +125,16 @@ static func _hearth_plant_art_gate(fails: Array[String]) -> void:
 	walk.at = -1
 	var dark: WorldMapScreen = WorldMapScreen.new(walk, content)
 	dark.instant = false
+	# The absent case takes a path that cannot exist, the mirror of the present
+	# case below pointing `hearth_plate` at a stand-in. It used to assert that
+	# HEARTH_PLATE itself was missing, which made this a tripwire on the art's
+	# arrival rather than a test of the gate: #310 shipped the plate and inverted
+	# it. What the gate owes us is "no plate, no plant", true whatever is on disk.
+	dark.hearth_plate = "res://assets/art/scenes/__no_such_plate__.png"
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	tree.root.add_child(dark)
-	_check(fails, not ResourceLoader.exists(WorldMapScreen.HEARTH_PLATE),
-		"opening-hearth.png is on disk; the plant must stay art-gated")
+	_check(fails, ResourceLoader.exists(WorldMapScreen.HEARTH_PLATE),
+		"the real hearth plate is missing; #310 shipped it")
 	_check(fails, dark.choose(0), "unseated departure without art was refused")
 	_check(fails, dark.find_child("HearthPlant", true, false) == null,
 		"a missing hearth plate still staged the plant")

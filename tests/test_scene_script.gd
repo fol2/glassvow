@@ -18,8 +18,33 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 static func run(fails: Array[String]) -> void:
 	_loads(fails)
 	_keys_resolve(fails)
+	_art_resolves(fails)
 	_flat_cursor(fails)
 	_validation(fails)
+
+
+## Every art path a beat names must be a real importable resource. The plates
+## are addressed by string, so a renamed or dropped file fails silently at
+## runtime — the player degrades to an empty plate by design (see
+## test_scene_player), which means nothing would ever surface the typo.
+static func _art_resolves(fails: Array[String]) -> void:
+	var loaded: Variant = SceneScript.load_all()
+	if typeof(loaded) != TYPE_DICTIONARY:
+		return
+	var scenes: Dictionary = loaded
+	var seen: int = 0
+	for scene_id: String in SCENE_IDS:
+		var script: SceneScript = _script(scenes, scene_id)
+		if script == null:
+			continue
+		for i: int in range(script.line_count()):
+			var art: String = str(script.beat_at(i).get("art", ""))
+			if art.is_empty():
+				continue
+			seen += 1
+			_check(fails, ResourceLoader.exists(art),
+				"%s names art that does not resolve: %s" % [scene_id, art])
+	_check(fails, seen > 0, "no beat named any art at all")
 
 
 static func _loads(fails: Array[String]) -> void:
