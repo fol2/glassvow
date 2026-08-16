@@ -5,6 +5,7 @@ extends RefCounted
 
 const SLICE_PATH: String = "res://port_fixtures/content/slice-content.json"
 const FULL_PATH: String = "res://content/full-content.json"
+const LINE_TABLE_PATH: String = "res://content/line-table.json"
 const MOB_OVERRIDES_PATH: String = "res://content/mob-overrides.json"
 const CORE_MECHANICS_PATH: String = "res://port_fixtures/content/core-mechanics.json"
 const ENEMY_INTENTS: Array[String] = [
@@ -42,6 +43,7 @@ var pool_gate_relics: Dictionary = {}
 var reward_gold: Array = []  # per act: {"normal": [a,b], "elite": [a,b], "boss": [a,b]}
 var player: Dictionary = {}
 var reveal_ids: Array[String] = []
+var line_table: Array = []
 
 
 static func load_slice() -> ContentDB:
@@ -54,6 +56,7 @@ static func load_slice() -> ContentDB:
 static func load_full(with_mob_overrides: bool = true) -> ContentDB:
 	var db: ContentDB = ContentDB.new()
 	db._load(FULL_PATH)
+	db._load_line_table()
 	if with_mob_overrides:
 		db._load_mob_overrides()
 	return db
@@ -233,6 +236,21 @@ static func _number_between(value: Variant, minimum: float, maximum: float) -> b
 	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
 		return false
 	return float(str(value)) >= minimum and float(str(value)) <= maximum
+
+
+func _load_line_table() -> void:
+	var text: String = FileAccess.get_file_as_string(LINE_TABLE_PATH)
+	if text.is_empty():
+		push_error("ContentDB: cannot read %s" % LINE_TABLE_PATH)
+		return
+	var raw: Variant = JSON.parse_string(text)
+	if typeof(raw) != TYPE_ARRAY:
+		push_error("ContentDB: %s did not parse to an array" % LINE_TABLE_PATH)
+		return
+	var rows: Array = raw
+	for row_v: Variant in rows:
+		if typeof(row_v) == TYPE_DICTIONARY and not str(row_v.get("id", "")).is_empty():
+			line_table.append(row_v)
 
 
 func _load(path: String) -> void:
