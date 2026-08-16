@@ -73,11 +73,15 @@ definition. Apply is then a whole-entry replacement, not a recursive patch. When
 an edited definition matches the baseline again, remove its ID from the override
 dictionary (`presentation/lab/enemy_lab.gd:1062-1077`).
 
+---
+
+**Since #323:** `content/full-content.json` is now port-authored, not generated. The principle remains unchanged — `mob-overrides` is the only diff layer between authored content and effective game content.
+
 Complete-entry validation should cover the actual trust boundary: HP shape and
 range; tier flags; facets; recognised art kinds and bounds; known starting
 statuses; the exact baseline move-ID set; move intents and numeric values; effects;
 referenced cards; and unchanged locale-owned names
-(`content/content_db.gd:248-260` (`enemy_override_faults`)). Do not put executable AI or localisation into
+(`content/content_db.gd:82-94` (`enemy_override_faults`)). Do not put executable AI or localisation into
 the JSON editor merely to make the object appear more complete.
 
 ### Validate the whole candidate before mutating anything
@@ -93,9 +97,9 @@ for id in raw:
 ```
 
 This is the ordering in `ContentDB.apply_enemy_overrides()`
-(`content/content_db.gd:237-246` (`apply_enemy_overrides`)). The regression check supplies a dictionary with
+(`content/content_db.gd:71-80` (`apply_enemy_overrides`)). The regression check supplies a dictionary with
 both a broken known mob and an unknown ID, then confirms the known mob was not
-partially changed (`tests/test_content.gd:93-109` (`_enemy_overrides`)). Validation interleaved with
+partially changed (`tests/test_content.gd:94-115` (`_enemy_overrides`)). Validation interleaved with
 assignment would fail that guarantee.
 
 ### Preview through effective content, not a private editor model

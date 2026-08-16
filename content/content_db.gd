@@ -1,22 +1,10 @@
 class_name ContentDB
 extends RefCounted
-## Loads either the frozen fixture slice or the complete 6e06911 catalogue,
-## then merges hand-authored original-content over it. File access stays
-## outside the pure domain.
+## Loads either the frozen fixture slice or the complete port-owned catalogue.
+## File access stays outside the pure domain.
 
 const SLICE_PATH: String = "res://port_fixtures/content/slice-content.json"
 const FULL_PATH: String = "res://content/full-content.json"
-const ORIGINAL_PATH: String = "res://content/original-content.json"
-const ORIGINAL_CONTENT_KEYS: Dictionary = {
-	"cards": true, "enemies": true, "potions": true, "relics": true,
-	"arts": true, "affixes": true, "statuses": true, "events": true,
-	"omens": true, "deeds": true, "themes": true, "quests": true,
-	"variants": true, "boons": true, "progression": true, "shop": true,
-	"shadeKits": true, "cardPools": true, "relicPools": true, "player": true,
-	"poolGate": true, "rewardGold": true, "aspects": true, "vows": true,
-	"acts": true, "encounters": true, "questIds": true, "themeOrder": true,
-	"reveals": true,
-}
 const MOB_OVERRIDES_PATH: String = "res://content/mob-overrides.json"
 const CORE_MECHANICS_PATH: String = "res://port_fixtures/content/core-mechanics.json"
 const ENEMY_INTENTS: Array[String] = [
@@ -66,163 +54,9 @@ static func load_slice() -> ContentDB:
 static func load_full(with_mob_overrides: bool = true) -> ContentDB:
 	var db: ContentDB = ContentDB.new()
 	db._load(FULL_PATH)
-	db._load_original_content()
 	if with_mob_overrides:
 		db._load_mob_overrides()
 	return db
-
-
-func _load_original_content() -> void:
-	var text: String = FileAccess.get_file_as_string(ORIGINAL_PATH)
-	if text.is_empty():
-		push_error("ContentDB: cannot read %s" % ORIGINAL_PATH)
-		return
-	apply_original_content(JSON.parse_string(text))
-
-
-## Merge hand-authored original content OVER the generated baseline.
-## New ids are legitimate. Specified fields overlay; unspecified fields stay.
-## Top-level arrays append. Keys beginning with "_" are ignored.
-## `acts` may be a dict keyed by index (merge) or an array (append).
-func apply_original_content(raw: Variant) -> void:
-	if typeof(raw) != TYPE_DICTIONARY:
-		push_error("ContentDB: original content must be a dictionary")
-		return
-	var root: Dictionary = raw
-	for key_v: Variant in root:
-		var key: String = str(key_v)
-		if key.begins_with("_") or ORIGINAL_CONTENT_KEYS.has(key):
-			continue
-		push_error("ContentDB: unknown original-content key %s" % key)
-	_merge_entries(cards, root, "cards")
-	_merge_entries(enemies, root, "enemies")
-	_merge_entries(potions, root, "potions")
-	_merge_entries(relics, root, "relics")
-	_merge_entries(arts, root, "arts")
-	_merge_entries(affixes, root, "affixes")
-	_merge_entries(statuses, root, "statuses")
-	_merge_entries(events, root, "events")
-	_merge_entries(omens, root, "omens")
-	_merge_entries(deeds, root, "deeds")
-	_merge_entries(themes, root, "themes")
-	_merge_entries(quests, root, "quests")
-	_merge_entries(variants, root, "variants")
-	_merge_entries(boons, root, "boons")
-	_merge_entries(progression, root, "progression")
-	_merge_entries(shop, root, "shop")
-	_merge_entries(shade_kits, root, "shadeKits")
-	_merge_entries(card_pools, root, "cardPools")
-	_merge_entries(relic_pools, root, "relicPools")
-	_merge_entries(player, root, "player")
-	if root.has("poolGate"):
-		var gate: Dictionary = _section(root, "poolGate")
-		_merge_entries(pool_gate_cards, gate, "cards")
-		_merge_entries(pool_gate_relics, gate, "relics")
-	_append_rows(reward_gold, root, "rewardGold")
-	_append_rows(aspects, root, "aspects")
-	_append_rows(vows, root, "vows")
-	_apply_acts(root)
-	_append_rows(encounters, root, "encounters")
-	for id_v: Variant in _array(root, "questIds"):
-		quest_ids.append(str(id_v))
-	for id_v: Variant in _array(root, "themeOrder"):
-		theme_order.append(str(id_v))
-	for reveal_v: Variant in _array(root, "reveals"):
-		if typeof(reveal_v) == TYPE_DICTIONARY:
-			reveal_ids.append(str(reveal_v.get("id", "")))
-
-
-func _merge_entries(dst: Dictionary, root: Dictionary, key: String) -> void:
-	if not root.has(key):
-		return
-	var value: Variant = root[key]
-	if typeof(value) != TYPE_DICTIONARY:
-		push_error("ContentDB: original %s is not a dictionary" % key)
-		return
-	var incoming: Dictionary = value
-	for id_v: Variant in incoming:
-		var id_key: String = str(id_v)
-		if id_key.begins_with("_"):
-			continue
-		var entry: Variant = incoming[id_v]
-		if typeof(entry) == TYPE_DICTIONARY and typeof(dst.get(id_key)) == TYPE_DICTIONARY:
-			var current: Dictionary = dst[id_key]
-			var merged: Dictionary = current.duplicate(true)
-			var overlay: Dictionary = entry
-			_deep_merge(merged, overlay)
-			dst[id_key] = merged
-		else:
-			dst[id_key] = _dup(entry)
-
-
-func _deep_merge(dst: Dictionary, src: Dictionary) -> void:
-	for key_v: Variant in src:
-		var key: String = str(key_v)
-		if key.begins_with("_"):
-			continue
-		var incoming: Variant = src[key_v]
-		if typeof(incoming) == TYPE_DICTIONARY and typeof(dst.get(key)) == TYPE_DICTIONARY:
-			var current: Dictionary = dst[key]
-			var nested: Dictionary = current.duplicate(true)
-			var overlay: Dictionary = incoming
-			_deep_merge(nested, overlay)
-			dst[key] = nested
-		else:
-			dst[key] = _dup(incoming)
-
-
-func _append_rows(dst: Array, root: Dictionary, key: String) -> void:
-	if not root.has(key):
-		return
-	var value: Variant = root[key]
-	if typeof(value) != TYPE_ARRAY:
-		push_error("ContentDB: original %s is not an array" % key)
-		return
-	var rows: Array = value
-	for item: Variant in rows:
-		dst.append(_dup(item))
-
-
-func _apply_acts(root: Dictionary) -> void:
-	if not root.has("acts"):
-		return
-	var value: Variant = root["acts"]
-	if typeof(value) == TYPE_ARRAY:
-		_append_rows(acts, root, "acts")
-		return
-	if typeof(value) != TYPE_DICTIONARY:
-		push_error("ContentDB: original acts is not an array or dictionary")
-		return
-	var incoming: Dictionary = value
-	for key_v: Variant in incoming:
-		var key: String = str(key_v)
-		if not key.is_valid_int():
-			push_error("ContentDB: original acts index %s is not an int" % key)
-			continue
-		var index: int = int(key)
-		if index < 0 or index >= acts.size():
-			push_error("ContentDB: original acts index %s is out of range" % key)
-			continue
-		var entry: Variant = incoming[key_v]
-		if typeof(entry) != TYPE_DICTIONARY or typeof(acts[index]) != TYPE_DICTIONARY:
-			push_error("ContentDB: original acts[%d] merge needs a dictionary" % index)
-			continue
-		var current: Dictionary = acts[index]
-		var merged: Dictionary = current.duplicate(true)
-		var overlay: Dictionary = entry
-		_deep_merge(merged, overlay)
-		acts[index] = merged
-
-
-static func _dup(value: Variant) -> Variant:
-	if typeof(value) == TYPE_DICTIONARY:
-		var copied: Dictionary = value
-		return copied.duplicate(true)
-	if typeof(value) == TYPE_ARRAY:
-		var copied_arr: Array = value
-		return copied_arr.duplicate(true)
-	return value
-
 
 func _load_mob_overrides() -> void:
 	var text: String = FileAccess.get_file_as_string(MOB_OVERRIDES_PATH)
