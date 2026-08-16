@@ -281,8 +281,8 @@ static func _begin_anew_spares_production(fails: Array[String]) -> void:
 	var body: String = ""
 	if start >= 0:
 		body = source.substr(start) if finish < 0 else source.substr(start, finish - start)
-	_check(fails, body.contains("SaveService.clear_run(game.run.run_id, _run_save_path)"),
-		"Begin Anew clear_run does not pass _run_save_path")
+	_check(fails, body.contains("_clear_run(game.run.run_id)"),
+		"Begin Anew clear does not route through the active-profile helper")
 	var content: ContentDB = ContentDB.load_full()
 	var prod_snap: Variant = _file_snapshot(SaveService.RUN_PATH)
 	var prod: RunState = RunState.new_run(content, 32041, "run-prod-320")

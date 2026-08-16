@@ -364,7 +364,7 @@ func _ready() -> void:
 				_capture_and_quit(shot_path)
 			return
 	if resume_run:
-		_continue_run(SaveService.load_run(content))
+		_continue_run(_load_run())
 	elif show_dawn_bench:
 		# The Dawn ceremony bench: a fresh run handed a representative feed, so
 		# the victory beat can be photographed without walking three acts.
@@ -391,7 +391,7 @@ func _ready() -> void:
 			{"kind": "memory", "title": "The Vigil Remembers",
 				"body": "Victory · 3 shards lit"},
 		], "cursor": 0}
-		if SaveService.store(game.run):
+		if _store_run():
 			_show_dawn()
 	elif show_map:
 		_opening_suppressed = true
@@ -509,6 +509,15 @@ func _quit_game() -> void:
 	get_tree().quit()
 
 
+## The whole profile boundary. `_run_save_path` / `_vigil_save_path` are the
+## authority — production defaults on a normal boot, the kernel's isolated
+## `user://glassvow_dev_*` files once `apply_dev_scenario` repoints them — and
+## these six helpers are the only place in this file allowed to name a
+## `SaveService` entry point. Every other runtime save, load and clear goes
+## through them, so a Scenario can never read or overwrite a real pilgrimage
+## and no screen has to know which profile is live.
+## `tests/test_profile_isolation.gd` re-censuses this file and fails on any
+## seventh site.
 func _store_run() -> bool:
 	return SaveService.store(game.run, _run_save_path)
 
@@ -517,8 +526,22 @@ func _store_vigil() -> bool:
 	return SaveService.store_vigil(_vigil, _vigil_save_path)
 
 
+func _load_run() -> RunState:
+	return SaveService.load_run(content, _run_save_path)
+
+
 func _load_vigil() -> VigilState:
 	return SaveService.load_vigil(_vigil_save_path)
+
+
+## Terminal receipts pass the run id they durably committed; the empty default
+## is the "erase everything" door, which has no id to protect.
+func _clear_run(expected_run_id: String = "") -> bool:
+	return SaveService.clear_run(expected_run_id, _run_save_path)
+
+
+func _clear_vigil() -> void:
+	SaveService.clear_vigil(_vigil_save_path)
 
 
 ## Window close is a clean quit: with `config/auto_accept_quit=false` the engine
@@ -769,7 +792,7 @@ func _show_choice(title: String, body: String, choices: Array[Dictionary], handl
 func _show_title() -> void:
 	_remember_route(_show_title)
 	_apply_pending_content_hydration()
-	var saved: RunState = SaveService.load_run(content, _run_save_path)
+	var saved: RunState = _load_run()
 	var choices: Array[Dictionary] = []
 	if saved != null:
 		choices.append({"id": "continue", "label": Locale.active.t("ui.menu.backToRoad")})
@@ -841,7 +864,7 @@ func _embark_is_zero_choice() -> bool:
 
 func _show_embark() -> void:
 	_remember_route(_show_embark)
-	var saved: bool = SaveService.load_run(content, _run_save_path) != null
+	var saved: bool = _load_run() != null
 	var screen: EmbarkScreen = EmbarkScreen.new(
 		content.aspects,
 		content.vows,
@@ -860,7 +883,7 @@ func _show_embark() -> void:
 func _on_embark_begin(aspect: int, vow: int) -> void:
 	_embark_aspect = aspect
 	_embark_vow = vow
-	if SaveService.load_run(content, _run_save_path) == null:
+	if _load_run() == null:
 		_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 	else:
 		_show_choice(Locale.active.t("ui.menu.beginAnew").to_upper(),
@@ -874,7 +897,7 @@ func _on_begin_anew(id: String) -> void:
 	if id == "back":
 		_show_title()
 		return
-	var saved: RunState = SaveService.load_run(content, _run_save_path)
+	var saved: RunState = _load_run()
 	if saved == null:
 		_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
 		return
@@ -883,7 +906,7 @@ func _on_begin_anew(id: String) -> void:
 	if not _vigil.commit_run(game.run, "abandon", content) or not _store_vigil():
 		_show_save_error("ui.persistence.detail.currentPilgrimageClose")
 		return
-	if not SaveService.clear_run(game.run.run_id, _run_save_path):
+	if not _clear_run(game.run.run_id):
 		_show_save_error("ui.persistence.detail.currentPilgrimageClear")
 		return
 	_new_run({"aspect": _embark_aspect, "vow": _embark_vow})
@@ -979,8 +1002,8 @@ func _on_reset_choice(id: String) -> void:
 	if id != "yes":
 		_close_overlay()
 		return
-	SaveService.clear()
-	SaveService.clear_vigil(_vigil_save_path)
+	_clear_run()
+	_clear_vigil()
 	game = null
 	_map = null
 	_vigil = _load_vigil()
@@ -1007,7 +1030,7 @@ func _on_save_error_choice(id: String) -> void:
 			_show_title()
 		return
 	if id == "retry" and _vigil.guidance_skipped \
-			and not SaveService.load_vigil(_vigil_save_path).guidance_skipped:
+			and not _load_vigil().guidance_skipped:
 		if _store_vigil():
 			if game != null:
 				_route_run()
@@ -1017,7 +1040,7 @@ func _on_save_error_choice(id: String) -> void:
 			_show_title()
 		return
 	if id == "retry" and game != null and _plays_departure_staging():
-		var saved: RunState = SaveService.load_run(content, _run_save_path)
+		var saved: RunState = _load_run()
 		if saved == null or saved.run_id != game.run.run_id:
 			if _store_run():
 				_show_departure_staging()
@@ -1074,7 +1097,7 @@ func _story_flow() -> bool:
 
 
 func _hint_layer_ahead() -> bool:
-	var disk: VigilState = SaveService.load_vigil(_vigil_save_path)
+	var disk: VigilState = _load_vigil()
 	for id: String in _vigil.hints_seen:
 		if disk == null or not disk.hints_seen.has(id):
 			return true
@@ -1413,7 +1436,7 @@ func _on_potion_menu_choice(action: String, slot: int) -> void:
 		game.run.player.potions[slot] = ""
 	elif not game.rules.use_potion(game.run, null, slot):
 		return
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.phialChoiceHold")
 		return
 	_close_overlay()
@@ -1735,7 +1758,7 @@ func _on_shop_choice(id: String) -> void:
 		_finish_node()
 		return
 	if id == "quest:flamelessLantern":
-		if game.quests.buy_usurper(game.run) and SaveService.store(game.run):
+		if game.quests.buy_usurper(game.run) and _store_run():
 			_refresh_shop()
 		else:
 			_show_save_error("ui.persistence.detail.emptyLanternPurchaseHold")
@@ -1767,7 +1790,7 @@ func _on_shop_choice(id: String) -> void:
 		"potions":
 			game.run.player.potions[game.run.player.potions.find("")] = item_id
 	row["sold"] = true
-	if SaveService.store(game.run):
+	if _store_run():
 		_refresh_shop()
 	else:
 		_show_save_error("ui.persistence.detail.purchaseHold")
@@ -1782,7 +1805,7 @@ func _on_shop_remove(uid_text: String) -> void:
 			break
 	game.run.player.gold -= cost
 	stock["removed"] = true
-	if SaveService.store(game.run):
+	if _store_run():
 		_refresh_shop()
 	else:
 		_show_save_error("ui.persistence.detail.removedCardHold")
@@ -1802,7 +1825,7 @@ func _arm_encounter(n: MapNode) -> void:
 
 func _prepare_encounter(n: MapNode) -> void:
 	_arm_encounter(n)
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.encounterFreeze")
 		return
 	_resume_pending_combat()
@@ -1985,7 +2008,7 @@ func _on_combat_over(result: String) -> void:
 		game.run.pending_combat = null
 		game.run.pending_enemy_ids = null
 		game.run.pending_run_end = {"outcome": "death"}
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.fallHold")
 			return
 		_route_run()
@@ -2004,14 +2027,14 @@ func _on_combat_over(result: String) -> void:
 			scratch.erase("pendingBequest")
 		_map.clear_current()
 		game.run.map = _map.to_dict()
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.shadeVictoryHold")
 			return
 		_route_run()
 		return
 	if node.type == "boss" and game.run.is_final_act():
 		game.run.pending_run_end = {"outcome": "win"}
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.finalVictoryHold")
 			return
 		_route_run()
@@ -2041,7 +2064,7 @@ func _on_combat_over(result: String) -> void:
 		"taken": {"gold": false, "card": false, "potion": false, "relic": false},
 		"slain_enemy": slain_enemy,
 	}
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.victoryRewardsHold")
 		return
 	_route_run()
@@ -2135,7 +2158,7 @@ func _on_reward_claimed(what: StringName, id: String) -> void:
 			if not id.is_empty():
 				game.rewards.gain_relic(game.run, id)
 	taken[key] = true
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.claimedRewardHold")
 
 
@@ -2162,7 +2185,7 @@ func _on_potion_replace(choice: String, id: String) -> void:
 	var pending: Dictionary = game.run.pending_reward
 	var taken: Dictionary = pending["taken"]
 	taken["potion"] = true
-	if SaveService.store(game.run):
+	if _store_run():
 		_show_pending_reward()
 	else:
 		_show_save_error("ui.persistence.detail.phialChoiceHold")
@@ -2172,7 +2195,7 @@ func _on_reward_finished() -> void:
 	game.run.pending_reward = null
 	_map.clear_current()
 	game.run.map = _map.to_dict()
-	if SaveService.store(game.run):
+	if _store_run():
 		_route_run()
 	else:
 		_show_save_error("ui.persistence.detail.clearedWaystoneHold")
@@ -2194,7 +2217,7 @@ func _show_boss_relic() -> void:
 	else:
 		offer = game.rewards.roll_boss_relics(game.run)
 		game.run.quest_scratch["bossRelicOffer"] = offer.duplicate()
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.crownRelicsHold")
 			return
 	var choices: Array[Dictionary] = []
@@ -2224,7 +2247,7 @@ func _on_boss_relic_chosen(id: String) -> void:
 	_map = WorldMap.benchmark(game.run)
 	game.quests.decorate_map(game.run, _map)
 	game.run.map = _map.to_dict()
-	if SaveService.store(game.run):
+	if _store_run():
 		_show_map()
 		# The act-change plate rides over the arriving map, concurrent rather
 		# than awaited (reward.js:181 fires it on the boss-reward continue).
@@ -2391,7 +2414,7 @@ func _on_bequest_chosen(id: String) -> void:
 	game.run.quest_scratch["ownShade"] = scratch
 	var pending: Dictionary = game.run.pending_run_end
 	pending["bequestAnswered"] = true
-	if SaveService.store(game.run):
+	if _store_run():
 		_show_run_end()
 	else:
 		_show_save_error("ui.persistence.detail.bequestHold")
@@ -2408,7 +2431,7 @@ func _on_terminal_commit(_id: String) -> void:
 		return
 	if outcome != "win":
 		var run_id: String = game.run.run_id
-		if SaveService.clear_run(run_id, _run_save_path):
+		if _clear_run(run_id):
 			_vigil = _load_vigil()
 			game = null
 			_route_idle()
@@ -2530,7 +2553,7 @@ func _route_idle() -> void:
 	# when a process death lands between the Vigil fold and pending_dawn:
 	# six shards, unseen unsealing, and a run still on disk. Once that run
 	# reaches a terminal path, clear_run runs and the next idle fires.
-	if SaveService.load_run(content, _run_save_path) == null \
+	if _load_run() == null \
 			and typeof(_vigil.pending_scene) != TYPE_DICTIONARY \
 			and _vigil.shards.size() >= 6 \
 			and not _vigil.scenes_seen.has("unsealing") \
@@ -2723,7 +2746,7 @@ func _on_dawn_advance(screen: DawnScreen) -> void:
 	var dawn: Dictionary = game.run.pending_dawn
 	var next: int = int(float(str(dawn.get("cursor", 0)))) + 1
 	dawn["cursor"] = next
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.dawnCursorHold")
 		return
 	var events: Array = dawn["events"]
@@ -2746,7 +2769,7 @@ func _finish_dawn() -> void:
 		if int(float(str(dawn.get("cursor", 0)))) < events.size():
 			return
 	var run_id: String = game.run.run_id
-	if SaveService.clear_run(run_id, _run_save_path):
+	if _clear_run(run_id):
 		_vigil = _load_vigil()
 		game = null
 		_route_idle()
@@ -2793,7 +2816,7 @@ func _on_monument_choice(id: String) -> void:
 	game.run.pending_combat = "monster"
 	game.run.pending_enemy_ids = ["ownShade%d" % tier]
 	game.run.pending_quest_id = "ownShade"
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.shadeDuelHold")
 		return
 	_vigil.last_fall = null
@@ -2908,7 +2931,7 @@ func _show_lamplighter() -> void:
 			ids.append(pool.pop_at(game.run.rng.pick_index(pool.size())))
 		offer = {"boons": ids}
 		game.run.quest_scratch["lamplighterOffer"] = offer
-		if not SaveService.store(game.run):
+		if not _store_run():
 			_show_save_error("ui.persistence.detail.lamplighterGiftsHold")
 			return
 	var aspect: Dictionary = content.aspects[game.run.aspect]
@@ -2935,7 +2958,7 @@ func _on_lamplighter_confirmed(boon_id: String, art_id: StringName) -> void:
 	game.rewards.apply_boon(game.run, boon_id)
 	game.run.pending_lamplighter = false
 	game.run.quest_scratch.erase("lamplighterOffer")
-	if SaveService.store(game.run):
+	if _store_run():
 		_show_map()
 	else:
 		_show_save_error("ui.persistence.detail.lamplighterGiftHold")
