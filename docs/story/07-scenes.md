@@ -46,7 +46,8 @@ hint 系統 + veteran skip(O-criteria)」,consume 呢套文法。
 - **觸發**:第一次帶住六片返到 Vigil 嗰刻——勝行 dawn 完結後、敗行
   run-end 完結後(第六片可以喺輸咗嘅 run 入賬:`commit_run` fold 唔理
   勝敗,量度於 `domain/state/vigil_state.gd:157-158`)。once-flag 行
-  現有 `unlocks` 機制(additive,無 save bump)。
+  `scenes_seen` 機制(additive,無 save bump;#309 更正——`unlocks`
+  係標題「秘密」計數兼 dawn reveal feed,不可作場景旗標)。
 - **Full 版 beat**:第六格亮 → 窗全亮的一刻成鏡 → 隊伍現形(每人胸口
   一點光)→ 切門:沿路的碑起身、列隊、推門(00 §2.6;窗門同體
   #259 Q4——一場戲兩面剪)。

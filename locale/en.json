@@ -652,6 +652,7 @@
     "scene": {
       "speaker": {
         "keeper": "Keeper",
+        "lamplighter": "Lamplighter",
         "queue": "Queue"
       }
     }
@@ -2150,6 +2151,63 @@
       "b2": {"l1": "Take this. Those before you left it behind; now it's yours.", "l2": "The road runs east. At its end stands a sealed door. Bring back the six shards of emberglass, and it will open.", "l3": "Beyond it, they say, lies the Gilded City. Reach it, and you will be home."},
       "b3": {"l1": "You take up the lantern and step out. The long road runs east, and the sky is not yet light.", "l2": "Behind you, the fire is still burning."},
       "b4": {"l1": "The vigil begins."}
+    },
+    "lamplighter-m1": {
+      "pre": {
+        "l1": "An old man sits by the road, holding a lantern. There is no flame in it.",
+        "l2": "Your lantern burns too full. I have seen plenty like you.",
+        "l3": "This face. East again, then."
+      },
+      "post": {
+        "l1": "Oil can be shared. Flame cannot. Flame you carry to the end yourself.",
+        "l2": "He gathers the three embers into the hollow lantern. The lantern does not light."
+      }
+    },
+    "lamplighter-m2": {
+      "pre": {
+        "l1": "Farther east along the Unlit Way, the old man is waiting again, the hollow lantern set before him.",
+        "l2": "Last time — that was you. Three embers, not one short. I remember these hands.",
+        "l3": "Thinner, these hands. The road feeds no one well."
+      },
+      "post": {
+        "l1": "He counts the coins one by one, and does not pocket them. He lays them out along the road, piece by piece, pointing east.",
+        "l2": "Go on. Forgetting takes practice."
+      }
+    },
+    "lamplighter-m3": {
+      "pre": {
+        "l1": "This time the old man is on his feet, waiting. Until he has looked you full in the face, he does not speak.",
+        "l2": "Stand closer. Raise your lantern — let me see this face properly.",
+        "l3": "A scar on your brow. Last time there was none. …The road gives them out. Naturally."
+      },
+      "post": {
+        "l1": "Don't look at me like that. An old man tells what he has seen — no more than that.",
+        "l2": "He steps back and looks you over once more — from the face down to the boots."
+      }
+    },
+    "lamplighter-m4": {
+      "pre": {
+        "l1": "The old man's eyes go past you, to the things you carry, counting them one by one.",
+        "l2": "Things from the western fire — I know them at a glance. All these years, the make has never changed.",
+        "l3": "Give me one answer, that is all. Last time, standing where you stand — was that you?",
+        "l4": "Before you can make a sound, he waves the question away — as if he would rather not learn where it leads."
+      },
+      "post": {
+        "l1": "He puts the gift away. The hollow lantern sits by his feet, dark as ever.",
+        "l2": "The next stretch is long. Spend yourself slow."
+      }
+    },
+    "lamplighter-m5": {
+      "pre": {
+        "l1": "Where the Unlit Way runs out, the old man stands in the middle of the road, hollow lantern raised. He does not let you pass.",
+        "l2": "The last price. Past me, no one on this road will ask anything more of you.",
+        "l3": "A lifetime under this lamp, learning the ones who pass. The faces I know. The people I was never sure of."
+      },
+      "post": {
+        "l1": "Go. I have seen many off along this stretch.",
+        "l2": "He steps aside and lifts the hollow lantern toward the east, as if to light the way. There is no light in it. He lifts it all the same.",
+        "l3": "If you meet another out there who carries a lamp — look close at the face, for me."
+      }
     },
     "unsealing": {
       "b1": {"l1": "unsealing 1.1 -- placeholder"},
