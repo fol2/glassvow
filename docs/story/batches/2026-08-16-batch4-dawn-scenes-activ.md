@@ -1,7 +1,7 @@
 # Batch 4 — 破曉散文 + 開封場 + Act IV 與終戰 + 五事件(#340)
 
-> 狀態:**[PROPOSED — 待 James review(pipeline step 5)]**。落地全部
-> gated on engine child(見 落地封鎖)。依 `04-delivery.md` batch order
+> 狀態:**[SETTLED — James 2026-08-16, #340]**。落地全部
+> gated on engine child(#355;見 落地封鎖)。依 `04-delivery.md` batch order
 > [SETTLED — #262 Q8]:Batch 4 = 破曉散文 + 開封場 scene + Act IV 五節點
 > 與終戰 script + top-5 event script。Phase 1 最後一批。
 >
@@ -215,7 +215,7 @@ Batch 1 第三頁的定調同族。**視角**:第二人稱為主,守夜偶爾以
 
 | # | slot | milestone | 級 | zh | en |
 |---|---|---|---|---|---|
-| d21 | dawn.pane.1 | shards>=1 | L2 | 第一格亮起,其餘五格仍黑。亮的那一格不生新光:透出來的,是有人一路帶回來的光。 | One pane lights; five stay dark. The lit one makes no light of its own. What comes through it is light that someone carried all the way back. |
+| d21 | dawn.pane.1 | shards>=1 | L2 | 第一格亮起,其餘五格仍黑。一格還不是窗,只是暗裏一個亮點。 | One pane lights; five stay dark. One pane is not a window yet — only a bright point in the dark. |
 | d22 | dawn.pane.2 | shards>=2 | L2 | 兩格亮了。窗開始有形狀:亮的位置不是隨意的,像早已為它們留好。 | Two panes now. The window starts to have a shape. The lit places are not random; they read as places that were kept. |
 | d23 | dawn.pane.3 | shards>=3 | L2 | 三格,一半。窗亮到一半的時候,玻璃開始映人:你走近,窗裏那樣東西也走近。 | Three: half. At half, the glass begins to hold a reflection. You step closer, and the thing in the window steps closer too. |
 | d24 | dawn.pane.4 | shards>=4 | L2 | 四格亮,火比從前暖。你越看那扇窗,它越不像是用來望出去的。 | Four lit, and the hearth is warmer than it was. The longer you look at that window, the less it looks like something built for looking out of. |
@@ -227,7 +227,8 @@ Batch 1 第三頁的定調同族。**視角**:第二人稱為主,守夜偶爾以
   ②碑=行者本人、③守爐人身份、④門的真條件。最貼線的兩段:
   d06(影=自己仍懂得行路的部分——00 §7 的揭後讀法,正是 L2 定義
   「Own Shade 收束句只剩一種讀法」)、d25(窗的光接連成一整塊——形狀,
-  不是身份)。兩段列入 James 議程 2。
+  不是身份)。兩段 James #340 L2 explicit sign-off。d21 原稿與 d03 撞
+  「帶回來的光」,改寫為「一格還不是窗」,把窗格脊柱交給 d22 的「開始有形狀」。
 - **d20 已按 lint 改寫**:原稿收句「他一生認過的面孔,全部同一張」被
   canon-lint(truth 鏡)與 twist-safety(破曉 chunk)**獨立兩次**判為
   越界——不是越 L2,是越**帳面的知識範圍**:破曉散文的 in-fiction 來源
@@ -308,7 +309,7 @@ node 5)。玩家啞角照舊。
 **開口的只有兩個**:node 1–3 是**隊伍**(複數),node 5 是**守爐人**。
 node 4(rest)是敘述,全 act 最長一段靜位。八敵無對白(07 §4)。
 
-**隊伍的聲線(本批新立,待 James 判)**:複數、平、不急;他們知道自己
+**隊伍的聲線 [SETTLED — #340]**:複數、平、不急;他們知道自己
 死了,也知道碑是自己(00 §4 影行:知道分身「自己那次」、知道碑=自己);
 **不控訴**——控訴是影的專利(row 3 是 L1 天花,隊伍不與它爭);
 **不攔路**(00 §2.6「隊伍永不阻你」),所以他們的句全部是**讓路的語氣**。
@@ -358,7 +359,7 @@ node 4(rest)是敘述,全 act 最長一段靜位。八敵無對白(07 §4)。
 |---|---|---|---|---|---|
 | a15 | act4-node5.b1.l1 | keeper | L4 | 你到了。這裏你認得。 | You've arrived. You know this place. |
 | a16 | act4-node5.b1.l2 | keeper | L4 | 我一句都沒有說錯。我只是從來沒有說過,出去的那個是誰。 | I never lied to you. I only never said who it was that went out. |
-| a17 | act4-node5.b1.l3 | keeper | L4 | 每一次撕開,不肯走的那一半都留在這裏。留得多了,便有了一張面孔。這一張。 | Every time the fire tore you in two, the half that would not go stayed here. Enough of it stayed to make a face. This one. |
+| a17 | act4-node5.b1.l3 | keeper | L4 | 每一次撕開,不肯走的那部分都留在這裏。留得多了,便有了一張面孔。這一張。 | Every time the fire tore you, the part that would not go stayed here. Enough of it stayed to make a face. This one. |
 | a18 | act4-node5.b1.l4 | keeper | L4 | 坐下。讓一個出去就是了——一直都是這樣的。 | Sit down. Let one of them do the walking; that is all this has ever been. |
 
 ### 終戰:換位(finale b1)
@@ -414,7 +415,8 @@ node 4(rest)是敘述,全 act 最長一段靜位。八敵無對白(07 §4)。
   這裏是隊伍給的餘裕,不是安排的誘餌;守爐人的「坐下」留到 a18,
   兩處「坐」的落差就是全書的題目。
 - **f02 對 00 §2.6「無撕裂」**:一句寫足三件事(六片重一、隊已到、
-  恐懼無位),不新造形上學。
+  恐懼無位),不新造形上學。「沒有一半可以留下」是原初那一刀的回聲;
+  單位鎖見 00 §2.4(#340)。
 - **f07 與「玩家操作被貶值」的債**:00 §2.6 指定由這一段還清;句子
   不寫「你終於自己走」的自我恭賀,只作一句事實記錄——債由手指還,
   不由旁白還。
@@ -455,7 +457,7 @@ node 4(rest)是敘述,全 act 最長一段靜位。八敵無對白(07 §4)。
 | v05 | event-woundedKnight.c0(救助) | L1 | 你替他止血。他把遺物按進你手裏,然後靠着石柱站起來,說他只是要行得再遠一點。 | You stop the bleeding. He presses the relic into your hand, gets himself upright against the pillar, and says he only wants to get a little further. |
 | v06 | event-woundedKnight.c1(劫掠) | L1 | 你取走鐵手裏的東西。他不推不擋,也沒有躺下;凹面甲後面的呼吸,慢慢停了。 | You take what the gauntlet is holding. He does not fight you, and he does not go down. Behind the crushed visor the breathing slows, and stops. |
 | v07 | event-woundedKnight.c2(離開) | L1 | 你走開。回頭再看一眼,他仍靠着石柱,站着。 | You leave. One look back: still against the pillar, still on his feet. |
-| v08 | event-woundedKnight.coda | L1 | 你下一次行過這裏,石柱前多了一座碑。沒有人替他躺下。 | The next time you come by, there is a monument at the foot of the pillar. Nobody laid him down. |
+| v08 | event-woundedKnight.coda | L1 | 你下一次行過這裏,石柱前多了一座碑。 | The next time you come by, there is a monument at the foot of the pillar. |
 
 ### 沉沒書庫(library)
 
@@ -498,9 +500,10 @@ node 4(rest)是敘述,全 act 最長一段靜位。八敵無對白(07 §4)。
   「知道行者都不會回來」),不觸分身;神龕、書庫是環境,不是角色,
   按 01 渠道紀律可自由承載錯覺與 legend-drift。
 - **站死紀律**:v06/v07/v08 是全遊戲唯一一次「行者當場變成碑」的
-  現場(02-cast 負傷騎士行)——**不寫倒下**,寫「沒有躺下」,呼吸停
-  而人仍立;coda 才補上碑。row 1(碑不躺低)在此第一次以現場證據
-  出現,而非以詩句出現。
+  現場(02-cast 負傷騎士行)——**不寫倒下**;v06 寫呼吸停而人仍立,
+  coda 只補「石柱前多了一座碑」,不關「有人替他埋葬」的逃生門
+  [SETTLED — #340 選 (b)]。row 1(碑不躺低)在此第一次以現場姿勢
+  出現,而非以排他性證據出現。
 - **書庫=等的紀念館**:v09/v10/v11 承 03-acts Act II(城淹於自己的
   等待)與 01(水=等);v11 與 Batch 3 的 e38(「他們把等待寫了下來」)
   同源不同面——遺言問「我們的誰來寫」,書庫答「他們寫足一座」。
@@ -535,8 +538,8 @@ node 4(rest)是敘述,全 act 最長一段靜位。八敵無對白(07 §4)。
   - **d09 "The eighth omen rises"**(vocab 鏡,judgment call)——
     **判過並記錄**:zh 源句「凶兆升起」非 Tier A 詞,下一句即「它落在
     路面」把方向按回水平;Tier B「場景描述之內的字面上下」明文允許。
-  - **v06/v08 負傷騎士**(事件 twist,同 ladder 鏡未判)——**不自行改**,
-    歸 James 議程 10(判詞見該項)。
+  - **v06/v08 負傷騎士**(事件 twist,同 ladder 鏡未判)——James #340
+    選 (b):coda 收在「石柱前多了一座碑」,刪「沒有人替他躺下」。
 - **clean(零 finding)**:twist-safety 的開封場 chunk、Act IV/終戰 chunk;
   canon-lint 的 ladder 鏡除 v02 外全清(87 行逐行核對 ceiling 與
   ledger 1:1,程式核對,非目測)。
@@ -551,87 +554,30 @@ node 4(rest)是敘述,全 act 最長一段靜位。八敵無對白(07 §4)。
 - `python3 tools/check_anchors.py` ✓;本批 docs-only,無新 benchmark
   citation(原稿的 `main.gd:2294-2345` 已換成具名 symbol anchor,不留行號)。
 
-## 待 James 判(step 5 議程)
+## James 判 [SETTLED — 2026-08-16, #340]
 
-1. **破曉散文的 milestone 分配(25 段 = 20 quest + 5 窗格)**——建議
-   照收:20 段掛六個 quest 的 progress/complete(填 `progress` panel
-   今日**空白的 body**、換走六個 `shard` panel 共用的一句
-   `shardGrantCopy`),另 5 段掛 `shards>=1..5`,令記憶帳有一條與
-   quest 無關的主線,而 d25(五格,尚餘一格)正好是 L2 交棒給 L3 的
-   一段。**否決的備選**:只寫 20 段 quest 里程碑——省 5 段,但窗
-   由一格填到五格的過程在帳上完全無字,而那正是玩家最常回看的一頁。
-2. **d06 / d25 — 貼 L2 天花的兩段**:d06 明寫「你熄掉的,是自己之中
-   仍懂得行路的那一部分」(00 §7 的揭後讀法本體);d25 明寫窗光接連成
-   一整塊。兩段皆**單一讀法**、皆**未陳述機制**——正是 00 §5 對 L2 的
-   定義(「只剩一種讀法,但機制仍未明文」)。建議兩段照過並在 ledger 記
-   L2 explicit sign-off。**備選**:d06 降寫成不點名「行路」(例:
-   「你熄掉的,是自己之中最不肯停的那一部分」)——我不建議:00 §7
-   逐字授權了這個讀法,降寫等於把 bible 已批的 payoff 收起。
-   (原稿第三段 d20 已按兩鏡 lint 改寫,不再在此列——判詞見 Gate 記錄。)
-3. **開封場說破的邊界:四項講三項,守爐人身份留給 Act IV**——建議
-   照收。u10/u11/u12 一次過講完分身、碑=行者=你、門的真條件;全場
-   不提守爐人。理由:00 §5 明文把 Keeper 身份劃歸 L4,而且玩家帶着
-   「隊伍是我」返到爐邊、面對那個仍在派 boon 的人,是全遊戲最後一段
-   懸念的燃料。**否決的備選**:在 u13 之後補一句指向爐前兜帽身影
-   ——一次過爽完,但 Act IV node 5 (a16/a17) 便只剩重複。
-4. **u13「門不是你開的。」作全場收句**——建議照收。它是本場唯一
-   一句「奪走」的話,也是 00 §2.6「換位」在情緒上的欠條:玩家操作
-   被貶值的風險由這句拉到最高,再由 f07(最後一步是你自己的腳)還清。
-   **備選**:收在 u12(門的條件)——安全,但開封場會變成解說,不是
-   一記打擊。
-5. **隊伍的聲線(本批新立)**——建議照收「複數、平、讓路、不控訴」
-   四條(見面③自查)。這是隊伍第一次以複數第一人稱開口(此前只有
-   遺言、碑文、引路石的單數聲音)。**備選**:全 act 改為敘述體、
-   隊伍不出聲——但 07 §4 已 SETTLED「會講嘢嘅係隊伍」,改動要回頭
-   動 blueprint。要判的其實是**這把聲音夠不夠像他們**:a06/a08 的
-   「我們不等了」是我認為最能定音的一句。
-6. **a17 的措辭「每一次撕開…便有了一張面孔。這一張。」**——守爐人
-   自述身份。四規自查已過(見面③),但這句是全遊戲**唯一**一次由
-   角色自己講出 00 §2.4 的沉澱機制。建議照過。**備選**:改由敘述
-   體講、守爐人只答「是我」——會弱,而且違反「Keeper 只在 node 5
-   開口、開口就是揭身份」的 blueprint 設計意圖(07 §4)。
-7. **a18「坐下。讓一個出去就是了——一直都是這樣的。」**——它輸掉
-   之前的最後一句推銷。規 3(永不催促出發)自查:它催的是留低,
-   方向相反,合規。但這句同時把 Batch 3 六十句爐邊話一次過翻面
-   (h22/h32/h13 從此重讀為同一句)。建議照過。**備選**:收得更軟
-   (「坐下。火還在。」)——溫度對,但少了那句「一直都是這樣的」,
-   安排本身就沒有被命名過。
-8. **終戰互動拍的四句(f04–f07)是不是文案該管的**——建議照收:
-   f05/f06 兩句(「行一步。」「再一步。」)是**互動提示**,形式由
-   實作 ticket 試(連續 tap 或長按,07 §5);若實作選長按,f05/f06
-   併成一句、f07 不變。我把它們寫成可併可分。**備選**:互動拍完全
-   無字,只有腳步聲——更硬派,但無字=玩家未必知道要按,首次遊玩
-   風險太高。
-9. **Top-5 選件:鏡取代賭徒**——建議照收(理由見面④首段)。
-   **否決的備選**:選骨骰賭徒——喜劇聲部有價值,但它的敘事負載
-   (「跟死人玩,因為死人不賴賬」)是**一句**的事,寫成 script 會
-   稀釋;留 Phase 2 補完整個 event 表時一併處理。
-10. **v06/v08 負傷騎士的死法——本批唯一未自行了結的 lint warn**。
-    全遊戲唯一一次玩家親眼見「行者變成碑」。建議照收:呼吸停而人不倒,
-    coda 才補碑。
-    **Lint 反方(事件 twist chunk,warn)**:v06 的「不推不擋,也沒有
-    躺下……呼吸慢慢停了」加 v08 的「石柱前多了一座碑。沒有人替他躺下」,
-    是一對**有地點、有因果、有排他性**的證據(具名角色、具名石柱、
-    明文否定「有人替他埋葬」這個尋常解釋);L1 錨句(row 3)則始終
-    可以讀成比喻式的鬼話。按此軸,這一對更近 L2 的「只剩一種讀法」,
-    多過 L1 的「可疑,不可證」。lint 給的兩條出路:(i) coda 收在
-    「石柱前多了一座碑」,刪走「沒有人替他躺下」,把尋常紀念碑讀法
-    的逃生門留返;(ii) 認作 L2,搬離 L1 天花的事件渠道。
-    **正方(我的建議)**:①「沒有人替他躺下」在表面上完全自足——
-    荒路無人收殮是常識,不需要任何機制知識;②它不指控玩家、不提
-    分身、不提隊伍;③02-cast 明文把「玩家唯一一次親眼見現場」判給
-    這個事件,刪掉 coda 等於把 bible 指定的位置空出來;④Batch 2 的
-    row 114 與 Batch 3 的 rows 266–268 都是同樣形狀的判斷,兩次都由
-    James 簽 L1 explicit sign-off 而非降寫。
-    **三選一**:(a) 照過(ledger rows 379/381 記 L1 explicit sign-off);
-    (b) 依 lint (i) 刪 coda 後半;(c) 依 lint (ii) 升 L2 並改渠道。
+完整論證在 review 場;此處只記答案。落地(#355)不得重開 canon。
+
+1. **破曉 milestone**:20 quest + 5 窗格。照收。d21 因與 d03 撞車而改寫(見上)。
+2. **分身單位**:「一半」只用於原初那一次;其後每次續火是部分。a17 改口;f02 的「沒有一半」作原初回聲保留。寫入 00 §2.4。
+3. **d06 / d25**:兩段照過,ledger L2 explicit sign-off。00 §7 Own Shade 揭後讀法升 [SETTLED]。
+4. **開封場講三項**:守爐人身份留俾 Act IV。照收。
+5. **u13「門不是你開的。」**:作全場收句。照收。
+6. **隊伍聲線**:複數、平、讓路、不控訴。a06/a08 做定音。照收。
+7. **a17**:守爐人自述過關,單位改「部分」。照收。
+8. **a18**:最後推銷照收。
+9. **終戰互動拍 f04–f07**:可併可分四句骨架照收;f07 不論輸入形式都留。
+10. **Top-5**:鍍銀之鏡取代骨骰賭徒。照收;賭徒 Phase 2。
+11. **v06/v08**:選 (b)——coda 收在「石柱前多了一座碑」,刪「沒有人替他躺下」,留 L1 逃生門。
+12. **50K 軌道**:記低本批字數;Phase 2 量**不**拉前。Q7 服從已改畫的 story-first destination,故事閘過後再量。
 
 ## 本批字數
 
-zh 87 句/段,**2,656 字**(逐格點算,隨 cmap 檢查同步;#262 Q7 量度用)。
-逐面:破曉散文 25 段 1,217 字 / 開封場 14 句 262 字 / Act IV 18 句 405 字
-/ 終戰 12 句 208 字 / 事件 18 句 564 字。
-Phase 1 累計:Batch 2 ~620 + Batch 3 1,799 + Batch 4 2,656 ≈ 5,075 字
-(Batch 1 為重寫,不計新增)——#262 Q7 的 50K 走勢由 James 於 review
-記錄;Phase 1 四批的新增量遠低於 50K 軌道,Phase 2 項目提前的判斷位
-在 James。
+zh 87 句/段,**2,638 字**(逐格點算,隨 cmap 檢查同步;#262 Q7 量度用;
+review 改寫後重算:d21 縮、v08 刪後半)。
+逐面:破曉散文 25 段 1,207 字 / 開封場 14 句 262 字 / Act IV 18 句 405 字
+/ 終戰 12 句 208 字 / 事件 18 句 556 字。
+Phase 1 累計:Batch 2 ~620 + Batch 3 1,799 + Batch 4 2,638 ≈ 5,057 字
+(Batch 1 為重寫,不計新增)。#262 Q7 的 50K 軌道已連續三批低於走勢;
+James #340:**不拉前** Phase 2 量——服從已改畫的 story-first destination,
+故事閘過後再量。
