@@ -29,6 +29,8 @@
 - **資產** [SETTLED — #260 Q7]:兩件新繪——①爐邊兜帽坐像(L0-safe:
   兜帽,面孔永不可見,黑洞面同 Lamplighter 一樣;即 00 §5 L0「爐前兜帽
   身影」的本體);②Act IV boss form。兩件**同一剪影**,揭場一眼認得。
+  爐邊:`assets/art/meta/keeper.png`;boss:`assets/art/enemies/eternalKeeper.png`
+  (James picked hearth-d / boss-c, 2026-08-16, #283)。
   boss form 刻意犯 style-bible「enemy 不得用 keeper/warden 剪影」的禁例
   ——認出嗰下就是設計本身;生成時在 `docs/art-ledger.md` 記 waiver。
   爐火本身是它的第二張臉(不變)。

@@ -263,6 +263,89 @@ read exactly 琉璃誓言 with correct stroke structure." First candidate accept
 all four characters structurally correct, transparency real (514,654 fully
 transparent pixels, corner alpha 0).
 
+### `meta/keeper.png` — 682×1024 RGBA — hearth seated figure
+
+The Keeper as met at run start: hooded, seated, void face. Overlay for
+opening-hearth beat ② (and the every-departure L0 linger) — the plate itself
+is an empty hall; this cutout is 「爐前仍坐着一個兜帽身影」 (`00-truth.md`
+§5 L0; `07-scenes.md` §8). Shown by the scene player once wiring lands
+(#309). Spec: `docs/story/02-cast.md` › Keeper › 資產
+(`[SETTLED — #260 Q7]`).
+
+James picked candidate `hearth-d` on 2026-08-16 (#283).
+
+Style block, verbatim from `style-bible.md`:
+
+> Serious cartoon-gothic stained-glass game art: chunky dark outer silhouette,
+> simplified exaggerated proportions, one iconic readable pose, 3-5 large
+> jewel-tone glass colour masses with very few thick lead dividers, matte
+> painterly texture, warm amber rim light, soft controlled inner glow. Designed
+> to remain readable at 128px. Fully transparent background (alpha channel). No
+> text, no labels, no watermark.
+
+Construction clause — same load-bearing paragraph as `hollow-lamplighter`:
+
+> CONSTRUCTION, this is the most important instruction: the figure is not
+> painted cloth. The entire robe, hood and body are built from large flat panes
+> of coloured glass separated by thick black lead came lines, exactly like a
+> cathedral stained-glass window rendered as a character. Each fold of the robe
+> is a distinct glass pane with a hard lead border, not a soft painted fold.
+> Only a few big panes, never lacework or many small pieces. The lead lines are
+> heavy, black, and clearly visible across the whole figure. Glass is blue,
+> violet, teal and deep red, lit from within by a faint cold glow, with thin
+> worn gold edging on the lead. Readable as a solid black shape if all internal
+> detail were removed.
+
+Subject:
+
+> The Keeper — a seated hooded figure. Full body, sitting with knees drawn in,
+> hands folded in the lap, completely still and calm. Raised hood; the hood
+> opening is a deep black VOID with NO face, NO eyes, NO glowing points inside
+> the hood. Single complete figure, no cropped limbs, about 15 percent margin,
+> portrait framing taller than wide. Facing slightly left in three-quarter
+> view. The silhouette is a LOW WIDE hooded seated mass — sitting, not
+> standing. Warm amber rim light falling on the figure from the RIGHT, from a
+> fire outside the frame. The figure holds NOTHING: no lantern, no staff, no
+> weapon, no prop. Do NOT draw a hearth, chair, floor, hall, fire, or any
+> background object.
+
+Generated 2026-08-16 through the quality `image-gen` tier. Five hearth
+candidates; table and rejection record in
+`docs/design/2026-08-16-keeper-figures/README.md`. Alpha gate (non-transparent
+pixels ≥240 ≥90%, corners 0, `sips -Z 1024`): A/B/D/E pass, C fail (64.5%,
+washed — same class as Lamplighter B/E).
+
+### `enemies/eternalKeeper.png` — 682×1024 RGBA — Act IV boss form
+
+The Eternal Keeper, same silhouette as `meta/keeper.png`. Recognition at the
+Act IV reveal *is* the design. Lighting is inverted hearth-amber from the
+left; the glass goes cold (violet-grey, teal). Hands still folded; hood still
+a void; no lantern, crown, halo, or weapon.
+
+**Waiver.** `style-bible.md` tells enemy art to avoid "noble cloaks, elegant
+armour, upright protagonist poses, clean symmetry, and knight/priest/warden
+silhouettes". This file is an enemy and uses a keeper silhouette on purpose
+— `#260 Q7` / `#283`. Do not "fix" it toward a monster read.
+
+James picked candidate `boss-c` on 2026-08-16 (#283), as an image-to-image
+edit of `hearth-d`.
+
+Subject delta from the hearth prompt (pose/hood/panes locked to the
+reference):
+
+> INVERTED hearth light: warm amber now arrives from the LEFT / far side
+> (the wrong direction), catching the lead edges. The rest of the glass goes
+> cold — violet-grey, deep teal, less of the domestic warm gold. The glass
+> panes glow from within a little more (monumental, not cute).
+
+Four boss candidates from the same reference. Alpha: A 98.4% pass (rim still
+from the right — lighting miss), B 84.9% fail (washed), C 98.5% pass, D
+98.6% pass. C shipped.
+
+The enemy id `eternalKeeper` is not in `content/full-content.json` yet (Act
+IV roster is `#220`/`#221`). The raster sits at the conventional
+`enemies/<id>.png` path so combat can pick it up without a rename.
+
 ## Rejection note — what "technically shippable" means
 
 Judging generated character art by eye is not enough; two of the five
