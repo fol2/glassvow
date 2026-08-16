@@ -1,6 +1,8 @@
 # Batch 1 — 六 quest 線 + 24 whispers 重寫(#301)
 
-> 狀態:**[PROPOSED — 待 James review(pipeline step 5)]**
+> 狀態:**[SETTLED — James review 完成 2026-08-16(pipeline step 5;
+> 九項議程判齊,判詞見下)]**。落地入 `content/`/`locale/` 仍 gated on
+> #307(en 落腳點)/#305(key 更名)。
 > 依 `04-delivery.md` batch order [SETTLED — #262 Q8]:Batch 1 = 全部已 shipped
 > 文案,climb 清洗與逐代分配表先行;餵 #228 / #232。
 
@@ -70,6 +72,9 @@
    「重寫」);(b) pages[2] 第三頁——敘述具體死場,但「有個朝聖者站着
    死去」係 row 9 SETTLED 明文保留的本體(真相一直寫在紙上係設計本身),
    頁渠道係書面記錄,register 本應敘事。確認 L1 或另判。
+   **判(James 2026-08-16):(a) 保站轉向——「你的前身站立而死,面向
+   東方。」刪「見過門」半句;(b) 冷筆記錄體——「一名朝聖者站着死去。
+   他止步之處,路未止。」兩句 L1 照定。**
 6. **逐代分配表**本身(00 §8.5:成表過 James normal review)。
    **判(James 2026-08-16):成表簽收 SETTLED。**
 7. **whisper 4 的明晰度爭議——本批唯一 confirmed blocker**(兩個
@@ -183,14 +188,15 @@
 | quests.unreadablePage.inscription | 碑刻 | L1 | 保留 | 攜無法辨讀之頁贏得五次破曉。 | Win five dawns carrying the Unreadable Page. |
 | quests.unreadablePage.pages[0] | 頁 | L1 | 保留(row 20 SETTLED 不改) | 第一頁——六片窗片從同一團火中切下,於第一次守夜前散落各處。 | FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil. |
 | quests.unreadablePage.pages[1] | 頁 | L1 | 重寫(row 12) | 第二頁——蒼白身影把碎片攜往西方,使門後之物無從追隨。 | SECOND PAGE — Pale figures carried the shards west, so the thing beyond the door could not follow. |
-| quests.unreadablePage.pages[2] | 頁 | L1 | 重寫(row 9 本體) | 第三頁——有朝聖者站着死去,在路本應終結之處,看見路仍向前。 | THIRD PAGE — A pilgrim died standing, and saw the road go on where it should have ended. |
+| quests.unreadablePage.pages[2] | 頁 | L1 | 重寫(row 9 本體) | 第三頁——一名朝聖者站着死去。他止步之處,路未止。 | THIRD PAGE — A pilgrim died standing. Where he stopped, the road did not. |
 | quests.unreadablePage.pages[3] | 頁 | L1 | 保留 | 第四頁——永恆君王取來一盞空燈,在鎖上披起王者形貌。 | FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock. |
 | quests.unreadablePage.pages[4] | 頁 | **L2**(closer) | 重寫(row 17;玫瑰窗→彩窗 正名) | 第五頁——彩窗是一幅地圖,不是紀念碑。將它點亮,再望向王冠之後。 | FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look beyond the crown. |
 
 - 第二頁:搬運機制為真(西行歸爐,00 §3.7),動機半句照舊留 legend-drift
   (fair-play 第 7 條)——「門後之物」取代 banned「上方之物」,drift 記賬。
-- 第三頁:碑因明文照舊(row 9);「路仍向前」=鏡中歸途(揭後),表面讀
-  怪談自足;降回 body ceiling L1(舊句 L2)。
+- 第三頁:碑因明文照舊(row 9);「路未止」=鏡中歸途(揭後),表面讀
+  怪談自足;冷筆記錄體(James 判 2026-08-16),降回 body ceiling L1
+  (舊句 L2)。
 
 ### hollowLamplighter(空燈掌燈人 / The Hollow Lamplighter)
 
@@ -206,7 +212,7 @@
 | …meetings[1].paid | 掌燈人 | L1 | 重寫(公式) | 蒼白眾凝望着指向王冠之後的路。 | The Pale Ones watch the paths that point beyond the crown. |
 | …meetings[1].cannot | 掌燈人 | L1 | 保留 | 你的錢囊尚暖,卻還不夠暖。 | Your purse is warm, but not warm enough. |
 | …meetings[2].ask | 掌燈人 | L1 | 重寫 | 路清點容器。把十二格容量交給我。 | The road counts the vessel. Give me twelve measures of yours. |
-| …meetings[2].paid | 掌燈人 | L1 | 重寫 | 你站立而死的前身,已見過永恆君王之後的門。 | Your standing dead have seen the door beyond the Sovereign. |
+| …meetings[2].paid | 掌燈人 | L1 | 重寫 | 你的前身站立而死,面向東方。 | Your forebears died standing, facing east. |
 | …meetings[2].cannot | 掌燈人 | L1 | 保留 | 我不會把你挖空至三十以下。換一副更大的容器再來。 | I will not hollow you below thirty. Return with a larger vessel. |
 | …meetings[3].ask | 掌燈人 | L1 | 重寫(referent) | 守爐人贈過你一份恩賜。我要那份贈禮,不要你的感激。 | The Keeper gave you a boon. Give me the gift, not the gratitude. |
 | …meetings[3].paid | 掌燈人 | L1 | 保留 | 空燈就是換取面見那副面具的信物。 | The empty lantern is the token that purchases an audience with the mask. |
@@ -218,7 +224,8 @@
 - m3(舊 m2).ask:「尖塔清點容器」→「路清點容器」——聲線照舊只談看得見
   的東西;揭後:路對「容器」的清點=沿路碑列,他說得比自己知的更真。
 - m3.paid:「前身」反向雙讀——表面虛構(死而復返)下讀成「你以前死嗰
-  幾次」;真相下「前身」是另一些人。en 用 "your standing dead" 同構。
+  幾次」;真相下「前身」是另一些人:站立而死者成碑,面向東方即面向門。
+  James 判(2026-08-16)保站轉向,刪「見過門」半句;en "forebears" 同構。
 - m4.ask:en 舊句 "The first keeper" referent 已定=守爐人(row 7);zh 舊句
   誤譯「最初的掌燈人」,一併修正。揭後:守爐人只得一個,「贈過你」的
   正是它一直用死者行裝資助下一個死者(00 §2.4)。

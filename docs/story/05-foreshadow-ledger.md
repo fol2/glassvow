@@ -20,7 +20,7 @@
 | 6 | Five pages make a chapter; five prices make a confession. | whisper 14(出處更正 #258 R2 N7;非 Lamplighter 對白) | L1 | 怪話 | 某代行者的遺言,說的是掌燈人的五價=認人啟事 | 保留;影響 §8.5 逐句分配 |
 | 7 | 守爐人贈過你一份恩賜。我要那份贈禮,不要你的感激。 / The Keeper gave you a boon. Give me the gift, not the gratitude. | hollowLamplighter meetings[3].ask | L1 | 掌燈人索要爐邊的贈禮 | 守爐人=留低嗰個;boon 是歷代行者遺物——它一直用死者行裝資助下一個死者 | 已重寫(Batch 1 #301:稱謂落 守爐人;zh 舊句「最初的掌燈人」屬誤譯一併修正)待審 |
 | 8 | A pale hand has touched the dark side of the glass. | whisper 2(出處更正 #258;原誤記 thinGlass omen) | L1 | 不祥之兆 | 玻璃另一面一直有人——鏡中那側是留者/隊伍 | 保留 |
-| 9 | 第三頁——有朝聖者站着死去,在路本應終結之處,看見路仍向前。 / THIRD PAGE — A pilgrim died standing, and saw the road go on where it should have ended. | Unreadable Page 頁 3 | L1 | 怪談 | 碑的成因明文照舊;「路仍向前」=鏡中歸途 | 已重寫(Batch 1 #301:climber/stair/summit 清洗,站死句保留)待審;降回 body ceiling L1 |
+| 9 | 第三頁——一名朝聖者站着死去。他止步之處,路未止。 / THIRD PAGE — A pilgrim died standing. Where he stopped, the road did not. | Unreadable Page 頁 3 | L1 | 怪談 | 碑的成因明文照舊;「路未止」=鏡中歸途 | 已重寫(Batch 1 #301:climb 清洗,站死句保留,冷筆記錄體)[SETTLED James 2026-08-16];降回 body ceiling L1 |
 | 10 | (mirror.png:鏡中淺笑黑影) | 事件美術 | L0 | 詭異鏡像 | 鏡中人是留者=你;淺笑因為它認得你 | 資產不改,文案圍繞它寫 |
 | 11 | The gaunt keeper remembers the road you did not take. | whisper 9 | L1 | 守關人記得你的岔路 | gaunt keeper=Lamplighter(referent 定案,避撞 Keeper 頭銜);你沒行的路=留者從未走過的路 | 保留 [#258 R2 N4] |
 | 12 | 第二頁——蒼白身影把碎片攜往西方,使門後之物無從追隨。 / SECOND PAGE — Pale figures carried the shards west, so the thing beyond the door could not follow. | Second Page | L1 | 懼門後之物而藏碎片 | 搬運機制為真(00 §3.7 西行歸爐);動機半句=行者年代 legend-drift(門後只有金城) | 已重寫(Batch 1 #301)待審;降回 body ceiling L1 [#258 R1 Q4A + R2 Q14] |
@@ -94,7 +94,7 @@ huntName 等無敘事雙讀的字串不立行)。zh 為源語;「保留」=兩�
 | 54 | 蒼白眾凝望着指向王冠之後的路。 / The Pale Ones watch the paths that point beyond the crown. | q.hollowLamplighter.meetings[1].paid | L1 | 情報 | 他們看守的正是引你過王庭往門的路(指路者,00 §4);取 row 31 公式 | 重寫(公式) |
 | 55 | 你的錢囊尚暖,卻還不夠暖。 / Your purse is warm, but not warm enough. | q.hollowLamplighter.meetings[1].cannot | L1 | 錢不夠 | 暖=將將離手的體溫;他數的從來不是錢 | 保留 |
 | 56 | 路清點容器。把十二格容量交給我。 / The road counts the vessel. Give me twelve measures of yours. | q.hollowLamplighter.meetings[2].ask | L1 | 怪老人索價(HP) | 路對容器的清點=沿路碑列;他說得比自己知的更真 | 重寫(舊「尖塔清點容器」) |
-| 57 | 你站立而死的前身,已見過永恆君王之後的門。 / Your standing dead have seen the door beyond the Sovereign. | q.hollowLamplighter.meetings[2].paid | L1(貼近天花,終判留 James) | 表面虛構下=「你以前死嗰幾次」(死而復返的錯覺自足) | 反向雙讀:「前身」是另一些人;他見過他們每一個 | 重寫(舊「君王之上的階梯」) |
+| 57 | 你的前身站立而死,面向東方。 / Your forebears died standing, facing east. | q.hollowLamplighter.meetings[2].paid | L1 [SETTLED James 2026-08-16:保站轉向] | 表面虛構下=「你以前死嗰幾次」(死而復返的錯覺自足) | 反向雙讀:「前身」是另一些人;站立而死者成碑,面向東方即面向門 | 重寫(舊「君王之上的階梯」;James 判刪「見過門」半句) |
 | 58 | 我不會把你挖空至三十以下。換一副更大的容器再來。 / I will not hollow you below thirty. Return with a larger vessel. | q.hollowLamplighter.meetings[2].cannot | L1 | 拒收條款 | 「挖空」——空燈掌燈人自己就是被挖空的容器 | 保留 |
 | 59 | 空燈就是換取面見那副面具的信物。 / The empty lantern is the token that purchases an audience with the mask. | q.hollowLamplighter.meetings[3].paid | L1 | 情報 | 偽王只接見帶着他的燈的人——他在等它回來 | 保留 |
 | 60 | 你已花掉那份贈禮。帶一份仍屬於你的來。 / You have spent the gift already. Bring me one that is still yours. | q.hollowLamplighter.meetings[3].cannot | L1 | 拒收條款 | 「仍屬於你的」在這條路上越來越少 | 保留 |
