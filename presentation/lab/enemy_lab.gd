@@ -783,7 +783,7 @@ func _build_panel() -> void:
 		_select_bench(_ids[i]))
 	rows.add_child(_picker)
 
-	rows.add_child(_dim("MOB DATA · benchmark 6e06911\nAll serialisable mechanics; names, ids and AI policy are read-only."))
+	rows.add_child(_dim("MOB DATA · content baseline\nAll serialisable mechanics; names, ids and AI policy are read-only."))
 	_mob_editor = CodeEdit.new()
 	_mob_editor.custom_minimum_size = Vector2(0.0, 300.0)
 	_mob_editor.text_changed.connect(func() -> void:
@@ -797,7 +797,7 @@ func _build_panel() -> void:
 	rows.add_child(_mob_status)
 	rows.add_child(_button("apply JSON to preview", _apply_mob_json))
 	rows.add_child(_button("discard JSON edit", func() -> void: _show_mob_json(_bench_id)))
-	rows.add_child(_button("reset mob to 6e06911", _reset_mob))
+	rows.add_child(_button("reset mob to baseline", _reset_mob))
 	_mob_save_button = _button("save mob-overrides.json", _save_mobs)
 	_mob_save_button.disabled = true
 	rows.add_child(_mob_save_button)
@@ -1054,8 +1054,8 @@ func _show_mob_json(id: String) -> void:
 		else "Hero preview only — no mob content is saved."
 	_loading_mob_editor = false
 	_mob_text_dirty = false
-	_mob_status.text = ("%s overrides 6e06911" % id if _mob_overrides.has(id)
-		else "%s matches 6e06911" % id) if editable else "Heroes are presentation-only."
+	_mob_status.text = ("%s overrides the baseline" % id if _mob_overrides.has(id)
+		else "%s matches the baseline" % id) if editable else "Heroes are presentation-only."
 	_mob_save_button.disabled = OS.has_feature("web") or not _mob_file_dirty
 
 
@@ -1094,7 +1094,7 @@ func _reset_mob() -> void:
 	_build_bench(_bench_id)
 	_relayout_bench()
 	_show_mob_json(_bench_id)
-	_mob_status.text = "Reset to 6e06911; save pending."
+	_mob_status.text = "Reset to baseline; save pending."
 
 
 func _save_mobs() -> void:

@@ -271,8 +271,7 @@ func _init(content_ref: ContentDB, only: PackedStringArray = PackedStringArray()
 
 	var caption: Label = Label.new()
 	var scale_note: String = "1:1" if is_equal_approx(_zoom, 1.0) else "%d:1" % int(_zoom)
-	caption.text = "card lab · %d cards · %s against roguecardv2@6e069118" % [
-		plan.size(), scale_note] if surfaces.is_empty() \
+	caption.text = "card lab · %d cards · %s" % [plan.size(), scale_note] if surfaces.is_empty() \
 		else "card surfaces · %s · %d materials · %s" % [
 			plan[0][0] if not plan.is_empty() else "-", plan.size(), scale_note]
 	caption.add_theme_font_size_override("font_size", 12)

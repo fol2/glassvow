@@ -54,7 +54,7 @@ code{display:block;margin-top:6px;color:var(--ember);white-space:normal}.note{mi
 section{padding:16px;min-width:0}.toolbar{align-items:center;margin-bottom:12px}.toolbar label{margin:0 0 0 auto}#stage{height:calc(100vh - 180px);min-height:320px;background:#05070d;border:1px solid var(--line);border-radius:6px;overflow:hidden;display:grid;place-items:center}#frame{display:block;max-width:100%;max-height:calc(100vh - 182px);height:auto;outline:none;touch-action:none;cursor:crosshair}#frame:not([src]),#frame[hidden],#web[hidden]{display:none}#frame:focus{box-shadow:inset 0 0 0 2px var(--ember)}#web{display:block;width:100%;height:100%;border:0;background:#05070d}pre{white-space:pre-wrap;color:var(--dim);max-height:130px;overflow:auto}details{margin-top:18px;color:var(--dim);line-height:1.4}
 @media(max-width:760px){main{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}}
 </style></head><body>
-<header><h1>Glassvow Dev Tools</h1><a id="reference" target="_blank" rel="noreferrer">Web reference ↗</a></header>
+<header><h1>Glassvow Dev Tools</h1></header>
 <main id="layout"><aside id="sidebar"><label>Mode<select id="mode"><option value="web">Interactive Web</option><option value="native">Native Proof</option></select></label>
 <label>Surface<select id="surface"></select></label><label>Fixed route<code id="base"></code></label>
 <label>Additional arguments<input id="args" autocomplete="off" spellcheck="false"></label><p class="note" id="note"></p>
@@ -87,7 +87,7 @@ $("surface").onchange=choose;$("start").onclick=start;
 $("stop").onclick=async()=>{await command("stop");if($("mode").value==="web"){$("web").src="about:blank";$("empty").hidden=false}};
 $("refresh").onclick=()=>{$("mode").value==="web"?$("web").contentWindow.location.reload():refresh()};
 $("reload").onclick=()=>$("mode").value==="web"?start():command("reload");$("status").onclick=()=>api("/api/status").catch(e=>write(e.message));
-$("reference").href=`http://${location.hostname}:5190/`;setInterval(()=>{$("auto").checked&&$("mode").value==="native"&&refresh()},1200);
+setInterval(()=>{$("auto").checked&&$("mode").value==="native"&&refresh()},1200);
 function point(e){const r=$("frame").getBoundingClientRect(),w=$("frame").naturalWidth,h=$("frame").naturalHeight;
  return {x:Math.round((e.clientX-r.left)*w/r.width),y:Math.round((e.clientY-r.top)*h/r.height),width:w,height:h}}
 $("frame").onpointerdown=e=>{down=point(e);$("frame").setPointerCapture(e.pointerId)};
