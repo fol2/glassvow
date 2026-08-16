@@ -30,10 +30,12 @@
 
 ## 落地封鎖(本批不入 `content/`/`locale/`)
 
-1. **#307 未決**:en content 今日無編輯位(`content/full-content.json` 由
-   capture 工具重生成;#219 overlay 空殼且被 `tests/test_original_content.gd:25-28`
-   釘空)。zh 編輯位(`locale/zh-Hant.json` `content.*`)今日存在,但兩語
-   同批落地,一齊等。
+1. ~~**#307 未決**:en content 今日無編輯位(`content/full-content.json` 由
+   capture 工具重生成;#219 overlay 空殼且被 `tests/test_original_content.gd`
+   釘空)。~~ **已解除(#323,2026-08-16)**:capture 工具已刪,overlay 已併入
+   `content/full-content.json`,該檔現為 port 自有、可手改,即 en 編輯位本身;
+   `tests/test_original_content.gd` 隨 overlay 一併刪除。zh 編輯位
+   (`locale/zh-Hant.json` `content.*`)不變,兩語仍同批落地。
 2. **#305 未決**:`floorEchoes` 等 content key 名屬 schema registry
    (`application/locale.gd:35`),key 更名歸 #305;本批只改**值**。
 3. **測試釘**(落地票要一齊改,非本批):`tests/test_locale.gd:266`(whisper 1

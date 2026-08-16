@@ -8,7 +8,7 @@ component: tooling
 severity: medium
 applies_when:
   - "Tuning generated mob mechanics without changing frozen identifiers or executable AI policy"
-  - "Persisting selected content differences while retaining a reproducible Benchmark catalogue"
+  - "Persisting selected content differences while keeping the checked-in catalogue legible"
   - "Building a Lab editor whose preview, applied state and saved JSON must not diverge silently"
 tags: [enemy-lab, benchmark-parity, mob-overrides, content-validation, safe-save]
 ---
@@ -19,23 +19,27 @@ tags: [enemy-lab, benchmark-parity, mob-overrides, content-validation, safe-save
 > `~/Coding/roguecardv2-benchmark` reference repository, so a claims validator
 > running against Glassvow will not resolve it here.
 
+> **Amended by #323 (2026-08-16).** The pattern this document describes is
+> unchanged and still correct. Its *premise* is not: `content/full-content.json`
+> was a generated capture of `6e06911` when this was written, and is now
+> port-authored and hand-editable. Read "the baseline" below as "the checked-in
+> catalogue", not "the frozen upstream". The `original-content.json` overlay this
+> document also described is gone, collapsed into that catalogue.
+
 ## Context
 
-The complete content catalogue is the frozen `6e06911` baseline, but mob tuning
-still needs a practical authoring surface. Editing `content/full-content.json`
-would mix generated parity data with local decisions. Copying the entire catalogue
-into a second authored file would hide which mobs actually changed.
+The checked-in content catalogue is `content/full-content.json`, but mob tuning
+needs an authoring surface that shows what changed. Editing the catalogue in
+place is legitimate for content decisions, yet it records a tuning experiment as
+an indistinguishable edit among 5,485 lines. Copying the entire catalogue into a
+second authored file would hide which mobs actually changed.
 
-The content loader therefore keeps three states distinct: the frozen catalogue,
-the sparse override dictionary, and the effective catalogue consumed by the game.
-`ContentDB.load_full()` loads the baseline first and applies
+The content loader therefore keeps three states distinct: the checked-in
+catalogue, the sparse override dictionary, and the effective catalogue consumed
+by the game. `ContentDB.load_full()` loads the baseline first and applies
 `content/mob-overrides.json` only when requested
-(`content/content_db.gd:56-62`). Since #219 (commit `627503a`), `load_full`
-also interposes `_load_original_content()` — a hand-authored
-`content/original-content.json` overlay merged over the frozen `6e06911`
-baseline before mob overrides — so the "frozen catalogue" the Lab diffs
-against is baseline **plus** that overlay; `mob-overrides` remains the only
-opt-out layer. The Enemy Lab separately loads
+(`content/content_db.gd:54-59`). `mob-overrides` is the only layer between the
+two. The Enemy Lab separately loads
 `ContentDB.load_full(false)` as its comparison baseline and derives the sparse set
 from entries that differ (`presentation/lab/enemy_lab.gd:347-352`). The checked-in
 override file can remain `{}` when there is no local tuning.
@@ -67,15 +71,12 @@ validator enforces both boundaries (`content/content_db.gd`
 
 ### Be sparse between mobs and complete within each changed mob
 
-Keep the generated baseline immutable. Store only changed mob IDs in
+Leave the checked-in baseline alone for *tuning*; a balance decision may edit it,
+but a Lab experiment must not. Store only changed mob IDs in
 `content/mob-overrides.json`, but store each changed mob as a complete serialisable
 definition. Apply is then a whole-entry replacement, not a recursive patch. When
 an edited definition matches the baseline again, remove its ID from the override
 dictionary (`presentation/lab/enemy_lab.gd:1062-1077`).
-
----
-
-**Since #323:** `content/full-content.json` is now port-authored, not generated. The principle remains unchanged — `mob-overrides` is the only diff layer between authored content and effective game content.
 
 Complete-entry validation should cover the actual trust boundary: HP shape and
 range; tier flags; facets; recognised art kinds and bounds; known starting
@@ -145,8 +146,9 @@ protects the previously saved authored file.
 
 ## Why This Matters
 
-The frozen catalogue remains reproducible, the override file shows only deliberate
-local divergence, and the game consumes a validated effective catalogue.
+The checked-in catalogue stays the single readable record of authored content, the
+override file shows only deliberate local tuning, and the game consumes a
+validated effective catalogue.
 Invalid multi-mob input cannot half-apply, fixed IDs cannot drift away from AI,
 unapplied text cannot masquerade as saved work, and a save does not begin by
 truncating the destination.
@@ -157,8 +159,8 @@ or data-driven AI layer.
 
 ## When to Apply
 
-- Use this pattern when a generated or vendor-pinned catalogue must remain
-  reproducible while a bounded serialisable subset needs local tuning.
+- Use this pattern when a large checked-in catalogue must stay legible as a record
+  while a bounded serialisable subset needs experimental tuning.
 - Use it when entries are small enough that a complete replacement is easier to
   validate and review than field-level patch operations.
 - Do not use it for executable policy, localisation or migrations.
