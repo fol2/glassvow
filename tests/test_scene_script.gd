@@ -1,0 +1,110 @@
+extends RefCounted
+## Scene-script data: every authored scene loads, every line key resolves in
+## both catalogues, the flat cursor maps back to its beat, and each validation
+## failure is actually detected.
+
+const SCENE_IDS: Array[String] = [
+	"opening", "unsealing", "unsealing-short", "act4-entry",
+	"act4-node1", "act4-node2", "act4-node3", "act4-node4", "act4-node5",
+	"finale",
+]
+
+
+static func _check(fails: Array[String], ok: bool, what: String) -> void:
+	if not ok:
+		fails.append("scene_script: %s" % what)
+
+
+static func run(fails: Array[String]) -> void:
+	_loads(fails)
+	_keys_resolve(fails)
+	_flat_cursor(fails)
+	_validation(fails)
+
+
+static func _loads(fails: Array[String]) -> void:
+	var loaded: Variant = SceneScript.load_all()
+	_check(fails, typeof(loaded) == TYPE_DICTIONARY, "load_all did not return a dictionary")
+	if typeof(loaded) != TYPE_DICTIONARY:
+		return
+	var scenes: Dictionary = loaded
+	for scene_id: String in SCENE_IDS:
+		var script: SceneScript = _script(scenes, scene_id)
+		_check(fails, script != null, "%s did not load" % scene_id)
+		if script == null:
+			continue
+		_check(fails, script.line_count() > 0, "%s has no flat lines" % scene_id)
+		_check(fails, not script.beats.is_empty(), "%s has no beats" % scene_id)
+
+
+static func _keys_resolve(fails: Array[String]) -> void:
+	var loaded: Variant = SceneScript.load_all()
+	if typeof(loaded) != TYPE_DICTIONARY:
+		return
+	var scenes: Dictionary = loaded
+	var en: Locale = Locale.new(Locale.CODE_EN)
+	var zh: Locale = Locale.new(Locale.CODE_ZH_HANT)
+	_check(fails, zh.set_language(Locale.CODE_ZH_HANT), "zh-Hant catalogue did not load")
+	for scene_id: String in SCENE_IDS:
+		var script: SceneScript = _script(scenes, scene_id)
+		if script == null:
+			continue
+		for line: Dictionary in script.lines:
+			var key: String = str(line["key"])
+			_check(fails, en.t(key) != key, "en did not resolve %s" % key)
+			_check(fails, zh.t(key) != key, "zh-Hant did not resolve %s" % key)
+
+
+static func _flat_cursor(fails: Array[String]) -> void:
+	var loaded: Variant = SceneScript.load_all()
+	if typeof(loaded) != TYPE_DICTIONARY:
+		return
+	var scenes: Dictionary = loaded
+	var opening: SceneScript = _script(scenes, "opening")
+	if opening == null:
+		_check(fails, false, "opening missing for cursor check")
+		return
+	_check(fails, opening.line_count() == 8, "opening is not 8 flat lines")
+	_check(fails, opening.beats.size() == 4, "opening is not 4 beats")
+	var expected: Array[int] = [0, 0, 1, 1, 1, 2, 2, 3]
+	for i: int in range(expected.size()):
+		var beat: Dictionary = opening.beat_at(i)
+		var beat_i: int = opening.lines[i]["beat"]
+		_check(fails, beat_i == expected[i],
+			"opening line %d is not beat %d" % [i, expected[i]])
+		_check(fails, beat == opening.beats[expected[i]],
+			"opening beat_at(%d) is not beat %d" % [i, expected[i]])
+	_check(fails, str(opening.beat_at(0).get("art", "")).ends_with("opening-hearth.png"),
+		"opening beat 0 lost its plate")
+	_check(fails, str(opening.beat_at(2).get("art", "")) == "",
+		"opening beat 1 (lines 2–4) should keep the previous plate")
+	_check(fails, str(opening.beat_at(7).get("motion", "")) == "linger",
+		"opening last line is not the linger beat")
+	_check(fails, opening.beat_at(-1).is_empty() and opening.beat_at(8).is_empty(),
+		"out-of-range beat_at did not return empty")
+
+
+static func _validation(fails: Array[String]) -> void:
+	_rejects(fails, "empty", {"beats": []}, "has no beats")
+	_rejects(fails, "mute", {"beats": [{"motion": "hold", "lines": []}]}, "has no lines")
+	_rejects(fails, "zoom", {"beats": [{"motion": "zoom", "lines": [{"key": "k"}]}]},
+		"unknown motion")
+	_rejects(fails, "blank", {"beats": [{"motion": "hold", "lines": [{}]}]}, "has no key")
+	_rejects(fails, "empty-key", {"beats": [{"motion": "hold", "lines": [{"key": ""}]}]},
+		"has no key")
+
+
+static func _script(scenes: Dictionary, scene_id: String) -> SceneScript:
+	var found: Variant = scenes.get(scene_id)
+	if found is SceneScript:
+		return found
+	return null
+
+
+static func _rejects(fails: Array[String], scene_id: String, raw: Dictionary,
+		needle: String) -> void:
+	var result: Variant = SceneScript.parse_scene(scene_id, raw)
+	_check(fails, typeof(result) == TYPE_STRING, "%s was accepted" % scene_id)
+	if typeof(result) == TYPE_STRING:
+		_check(fails, str(result).contains(needle),
+			"%s error missed '%s': %s" % [scene_id, needle, result])
