@@ -94,6 +94,22 @@ static func _simulate(rows: Array, fails: Array[String]) -> void:
 				_check(fails, int(float(str(SLOT_LEVEL.get(occupied_slot, 99)))) == 0,
 					"standing-stone slot %s is not shard-0 reachable in SLOT_LEVEL" % occupied_slot)
 
+	# A plant may fire at shard 0 — that is what planting means. A payoff may
+	# not: it reads the twist out loud. The fixture gates by slot, so a payoff
+	# authored into a shard-0-reachable pool would pass every other check here.
+	for row_v: Variant in rows:
+		var row: Dictionary = row_v
+		var asserts_v: Variant = row.get("asserts", {})
+		if typeof(asserts_v) != TYPE_DICTIONARY:
+			continue
+		var asserts: Dictionary = asserts_v
+		if str(asserts.get("payoff", "")).is_empty():
+			continue
+		var payoff_slot: String = str(row.get("slot", ""))
+		_check(fails, int(float(str(SLOT_LEVEL.get(payoff_slot, 0)))) > 0,
+			"payoff row %s sits in shard-0-reachable slot %s"
+			% [str(row.get("id")), payoff_slot])
+
 	var plant_slots: Dictionary = {}
 	var payoff_ready: Dictionary = {}
 	for plant_id_v: Variant in plants:
