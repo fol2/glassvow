@@ -18,6 +18,7 @@ static func run(fails: Array[String]) -> void:
 	_pending_scene_roundtrip(fails)
 	_scenes_seen_roundtrip(fails)
 	_guidance_skipped_roundtrip(fails)
+	_hints_seen_roundtrip(fails)
 	_opening_once(fails)
 	_resume_owed_line(fails)
 	_hearth_plant_art_gate(fails)
@@ -102,6 +103,26 @@ static func _guidance_skipped_roundtrip(fails: Array[String]) -> void:
 	var old: VigilState = VigilState.from_dict(raw)
 	_check(fails, old != null and not old.guidance_skipped,
 		"a v2 vigil without guidanceSkipped did not default")
+	SaveService.clear_vigil(VIGIL_PATH)
+
+
+static func _hints_seen_roundtrip(fails: Array[String]) -> void:
+	var vigil: VigilState = VigilState.blank()
+	vigil.hints_seen.append("hint_map_select")
+	SaveService.clear_vigil(VIGIL_PATH)
+	_check(fails, SaveService.store_vigil(vigil, VIGIL_PATH),
+		"hints_seen store failed")
+	var loaded: VigilState = SaveService.load_vigil(VIGIL_PATH)
+	_check(fails, loaded != null and loaded.hints_seen.size() == 1
+			and loaded.hints_seen[0] == "hint_map_select",
+		"hints_seen did not round-trip")
+	_check(fails, loaded.unlocks.is_empty(),
+		"hints_seen leaked into unlocks")
+	var raw: Dictionary = VigilState.blank().to_dict()
+	raw.erase("hintsSeen")
+	var old: VigilState = VigilState.from_dict(raw)
+	_check(fails, old != null and old.hints_seen.is_empty(),
+		"a v2 vigil without hintsSeen did not default")
 	SaveService.clear_vigil(VIGIL_PATH)
 
 
