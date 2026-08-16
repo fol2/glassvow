@@ -193,6 +193,186 @@ huntName 等無敘事雙讀的字串不立行)。zh 為源語;「保留」=兩�
 | 132b | {action} 以巡視路途 / {action} to survey the road | ui.map.survey | L0 | 地圖提示 | — | 置換(舊 巡視尖塔 / survey the Spire),#232 簽定字面。**此鍵全樹零 reader**——實際渲染的是 ui.pilgrimage.survey(「巡視朝聖之路」)與 .surveyChoose;兩者同一動詞兩個受詞,連同刪鍵一併歸 [#305](https://github.com/fol2/glassvow/issues/305) |
 | 133 | (功能字串:climb → run) | ui.persistence.reloadClimb・runSaveBody・runSaveRetryFail・ui.embark.warnSaved・ui.end.bequestTitle・ui.settings.resetConfirmBody・resetWarn・resetConfirmPlain | L0 | 存檔/重設提示 | 無揭後讀法:此八行是機器語,不是敘述 | en 置換(#232 簽);zh 八側原已是 朝聖之路(Tier B),不動 |
 
+## Batch 3(#331)入賬區 [SETTLED — James review 完成 2026-08-16]
+
+三 pool 全句入賬(爐邊 h / 引路石 w / 敗亡遺言 e;出處=
+`pool.<slot>.<id>`,詳表與條件欄見
+`docs/story/batches/2026-08-16-batch3-pools.md`)。全批 L1、全批新寫
+(狀態欄從略);zh 為源語。
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 |
+|---|---|---|---|---|---|
+| 134 | 你醒了。火仍在。 / You're awake. The fire is still here. | pool.hearth.h01 | L1 | 迎接晨醒 | #259 Q1 定式——醒非歸;「火仍在」=它仍在,火是它的臉 |
+| 135 | 坐近一點。路可以等。 / Sit closer. The road can wait. | pool.hearth.h02 | L1 | 不必急 | 在等的正是路上那條隊;等=全書母題 |
+| 136 | 爐火整夜沒有熄。 / The fire didn't go out all night. | pool.hearth.h03 | L1 | 爐火安好 | 它從不熄——守夜與沉澱同壽 |
+| 137 | 慢慢來。夜還長。 / No hurry. The night is long. | pool.hearth.h04 | L1 | 溫言安慰 | 守夜之夜無盡;破曉(勝利)永在東面未到 |
+| 138 | 手先暖了,再拿東西。 / Warm your hands first. The rest can wait. | pool.hearth.h05 | L1 | 關懷 | 關懷即麻醉(#260 Q1);儀式以溫柔運行 |
+| 139 | 這把火,由第一夜燒到現在。 / This fire has burned since the first night. | pool.hearth.h06 | L1 | 爐火的年資 | 第一夜=碎裂之夜;爐火是原初之火餘燼(00 §2.2) |
+| 140 | 灰我清過了,柴也添過了。 / I've cleared the ash and fed the fire. | pool.hearth.h07 | L1 | 家常打點 | 灰=行者燒剩(§2.2 同源);它日日清理儀式的餘燼 |
+| 141 | 外面有霜。多帶一層。 / There's frost out. Take another layer. | pool.hearth.h08 | L1 | 添衣叮嚀 | 它為死者備行裝——一直如此 |
+| 142 | 路上冷,這裏不冷。 / The road is cold. It is not cold here. | pool.hearth.h09 | L1 | 爐邊之暖 | 安排的推銷詞:留低=不冷;八字講盡誘因 |
+| 143 | 你的燈,我上了油。 / I've oiled your lantern for you. | pool.hearth.h10 | L1 | 打點行裝 | 用死者遺物資助下一個死者(00 §2.4)同構——燈油也是資助 |
+| 144 | 芯是新的,油是滿的。 / New wick. Full oil. | pool.hearth.h11 | L1 | 裝備妥當 | 每一程都由它裝備;新芯滿油=儀式的例行 |
+| 145 | 願意走的時候,才走。 / Leave when you want to. Not a moment sooner. | pool.hearth.h12 | L1 | 尊重你的步伐 | 規 3 的機制本體——必須顯得是你自己要走(02-cast) |
+| 146 | 我在這裏。一直都在。 / I'm here. I always am. | pool.hearth.h13 | L1 | 可靠的陪伴 | 字面真到盡——它從未離開過爐邊(#261 Q11) |
+| 147 | 守夜的事,交給我。 / Leave the vigil to me. | pool.hearth.h14 | L1 | 分工 | 守夜就是它的存在方式;「交給我」=安排本身 |
+| 148 | 火光認得你。 / The firelight knows you. | pool.hearth.h15 | L1 | 爐火溫馨 | 爐火是它的第二張臉(02-cast)——認得你的是它 |
+| 149 | 東西都在原位。這裏不變。 / Everything is where it was. Nothing changes here. | pool.hearth.h16 | L1 | 安穩 | 千 run 不變=儀式凝固;m4.2「樣式沒變」同景 |
+| 150 | 窗我抹過了。亮的格,更亮。 / I've wiped the panes. The lit ones shine better for it. | pool.hearth.h17 | L1 | 家務 | 它擦拭的是隊伍的計數板 |
+| 151 | 別站在門口,風大。 / Don't stand in the doorway — the wind. | pool.hearth.h18 | L1 | 擋風關懷 | 把你由 threshold 引回火邊;門口是它永不站的位置 |
+| 152 | 你睡着時,火暗了一次。我添了柴。 / The fire sank while you slept. I fed it. | pool.hearth.h19 | L1 | 夜間照料 | 你每次「睡着」,它都在維持儀式 |
+| 153 | 這條路,你行過的次數,比誰都多。 / No one has walked that road more times than you. | pool.hearth.h20 | L1 | 讚許老手 | 「你」=歷代每一個真正的你(00 §1);二十個你行過 |
+| 154 | 第一段路,你會見到許多碑。不必停。 / The first stretch has many monuments. You needn't stop for them. | pool.hearth.h21 | L1 | 路況提點 | 它明知碑是誰;「不必停」=不要看清 |
+| 155 | 這裏永遠有你的位。 / There will always be a place for you here. | pool.hearth.h22 | L1 | 家的保證 | 永遠有位=安排永續;那個位是留者的座 |
+| 156 | 走得多遠,火都在原地。 / However far you walk, the fire stays where it is. | pool.hearth.h23 | L1 | 家在原地 | 字面地理——路的盡頭就是爐邊(#259 Q3) |
+| 157 | 選一件合手的。前人的手,與你的一樣。 / Take whichever fits your hand. The hands before yours were just the same. | pool.hearth.h24 | L1 | 揀件合用 | 前人的手與你的一樣——字面同一雙手 |
+| 158 | 全是留下來的東西。留下來的,自有用處。 / It's all left-behind things. What stays behind has its uses. | pool.hearth.h25 | L1 | 惜物 | 自我指涉:「留下來的」包括它自己;最有用處的正是留低嗰個 |
+| 159 | 帶上它。它認得路。 / Take it. It knows the road. | pool.hearth.h26 | L1 | 老物可靠 | 行裝行過的次數比「你」更多;物比人長命(row 107 同族) |
+| 160 | 火留給我,你帶燈。 / The fire stays with me. The lamp goes with you. | pool.hearth.h27 | L1 | 分工道別 | §3.2 分身分工的反照——火留、燈走;走的帶走意志 |
+| 161 | 這道門,從不上鎖。 / That door is never locked. | pool.hearth.h28 | L1 | 隨時歡迎 | 儀式需要門常開;上鎖=安排終結 |
+| 162 | 外面起風了。再坐一會。 / The wind's up. Sit a while longer. | pool.hearth.h29 | L1 | 天氣挽留 | 軟性挽留=規 3 反向;拖一刻是一刻 |
+| 163 | 六格都亮起的那一天,門會開。 / The day all six panes are lit, the door will open. | pool.hearth.h30 | L1 | 目標明示(表面明文事實) | o4 已簽同款——漏了「行過的人」那一半(§2.6) |
+| 164 | 金城不會走掉。 / The Gilded City isn't going anywhere. | pool.hearth.h31 | L1 | 不必急的安慰 | 字面真到痛——金城=爐邊真貌,它正在此(#259 Q3) |
+| 165 | 有我看火,你便不必看。 / I'll watch the fire, so you don't have to. | pool.hearth.h32 | L1 | 分擔 | 安排的鏡像句——真相是你走使它不必走 |
+| 166 | 累了便睡。火自己會亮。 / Sleep when you're tired. The fire minds itself. | pool.hearth.h33 | L1 | 體貼 | 火自己會亮,因為火就是它 |
+| 167 | 今夜的火,燒得穩。 / The fire burns steady tonight. | pool.hearth.h34 | L1 | 爐況 | 儀式運行如常;穩=無人打破 |
+| 168 | 你望東面望得太久了。火在這一面。 / You've been looking east too long. The fire is on this side. | pool.hearth.h35 | L1 | 拉你回暖 | 把目光由門拉回火;留的引力有一張溫柔的口 |
+| 169 | 慢火才燒得久。 / A slow fire burns longest. | pool.hearth.h36 | L1 | 爐邊格言 | 它的哲學:拖長儀式;慢=永不完 |
+| 170 | 破曉之前,總是最冷。 / It's coldest just before dawn. | pool.hearth.h37 | L1 | 老話 | 破曉=勝利字;最後一段(黑曜)最冷,亦最近終結 |
+| 171 | 燈也要歇。人更加要。 / Even lamps rest. People need it more. | pool.hearth.h38 | L1 | 勸歇 | 「歇」是它要你熟習的動作;歇的終點是留低 |
+| 172 | 出去之前,再暖一暖手。 / Before you go, warm your hands once more. | pool.hearth.h39 | L1 | 送行關懷 | 為出發的那個暖手——為死者暖手 |
+| 173 | 向東,一直向東。這一句不會錯。 / East, and keep east. That much is always true. | pool.hearth.h40 | L1 | 方向保證 | 一直向東的盡頭是西(#259 Q3 一個圈);「不會錯」=終會歸家 |
+| 174 | 灰會落,火會亮。一直如此。 / Ash falls; fire burns. It has always been so. | pool.hearth.h41 | L1 | 世界如常 | 「一直如此」=行者的年代(§2.3);常態即儀式 |
+| 175 | 我不送了。門口風大。 / I won't see you out. The wind at the door is cruel. | pool.hearth.h42 | L1 | 不送之禮 | 字面真——它不能送:它從未離開過爐火 |
+| 176 | 窗中的東西,有一日你會看清。 / One day you will see that window clearly. | pool.hearth.h43 | L1 | 彩窗之美/quest 應許 | L3 開封場前指——看清那日=見隊伍(議程 3 照過,James 2026-08-16) |
+| 177 | 今夜與上一夜,一樣長。 / Tonight is as long as the last one. | pool.hearth.h44 | L1 | 夜夜如一 | 循環自身;每一夜它都在場 |
+| 178 | 多帶一枚金幣。路上伸手的多。 / Take an extra coin. The road is full of open hands. | pool.hearth.h45 | L1 | 旅費叮嚀 | 伸手的包括收遺物的與索代價的;它全認得 |
+| 179 | 這一面暖。坐這一面。 / This side is warmer. Sit on this side. | pool.hearth.h46 | L1 | 讓座 | 「這一面」對「另一面」——鏡面 motif 的家常版 |
+| 180 | 窗亮了一格。夜沒有之前那麼暗了。 / One pane is lit. The nights are not so dark now. | pool.hearth.h47 | L1 | 進度+安慰 | 火在歸位;夜(守夜)漸近終結,它口不對心 |
+| 181 | 那一格的光,顏色像爐火。 / The light in that pane — the colour of this fire. | pool.hearth.h48 | L1 | 巧合的美 | 非巧合——同一團火(§2.2 字面) |
+| 182 | 兩格了。窗開始記起自己的樣子。 / Two now. The window is remembering its shape. | pool.hearth.h49 | L1 | 詩意 | 玻璃=記憶;窗在記起碎裂之夜(00 §8.6) |
+| 183 | 兩格亮了。餘下的,路知道在甚麼地方。 / Two are lit. The road knows where the rest are waiting. | pool.hearth.h50 | L1 | 尋寶提示 | 「路知道」=隊伍知道;指路者在等你去取(00 §4) |
+| 184 | 三格,半扇窗。半團火。 / Three panes. Half a window. Half a fire. | pool.hearth.h51 | L1 | 進度過半 | 火重一之半;倒數開始 |
+| 185 | 窗亮到一半,我在夜裏都看得見它了。 / Half-lit now. I can see it even in the dark hours. | pool.hearth.h52 | L1 | 窗亮可喜 | 它夜夜看着自己的終結逐格亮起 |
+| 186 | 四格。窗開始照出這裏的東西了。 / Four. The window has begun to show the room. | pool.hearth.h53 | L1 | 玻璃反光 | 成鏡前奏(L3);照出「這裏」=鏡的另一面在成形 |
+| 187 | 還有兩片。之後的事,之後再說。 / Two shards left. What comes after can wait for after. | pool.hearth.h54 | L1 | 不急不急 | 「之後的事」=開封與換位;它不願說下去 |
+| 188 | 五格,餘一片。慢慢來。 / Five panes. One to go. There's no hurry. | pool.hearth.h55 | L1 | 進度+安慰 | 拖延=它的求生;「慢慢來」是對自己說的 |
+| 189 | 五格了。窗比火還亮。 / Five. The window outshines the fire now. | pool.hearth.h56 | L1 | 窗的光彩 | 記憶之光壓過留者之火;隊伍的光>留的火 |
+| 190 | 那盞燈冷。別放近火。 / That lantern is cold. Keep it away from the fire. | pool.hearth.h57 | L1 | 器物保養 | 它認得那盞燈——第一行者之燈回到爐前;不想它近火 |
+| 191 | 今夜靜。連影都不吵了。 / Quiet tonight. Even the shadows have stopped their noise. | pool.hearth.h58 | L1 | 安靜可喜 | 你熄了自己仍記得行的那部分;它滿意 |
+| 192 | 路上那位提燈的老人家——他說的,信一半就好。 / That old lamp-keeper on the road — believe half of what he says. | pool.hearth.h59 | L1 | 風趣提點 | 字面正確的忠告——事實半全真、結論半全錯(00 §4 hearsay)(議程 2 照過,James 2026-08-16) |
+| 193 | 三片歸位。餘下三片,在更東的地方。 / Three home. The other three lie further east. | pool.hearth.h60 | L1 | 進度指引 | 「更東」的盡頭是西;三片在等隊伍遞回 |
+| 194 | 燈到石,石亮。原來石一直在等火。 / The lamp reaches the stone, and the stone lights. It was waiting for fire all along. | pool.waystone.w01 | L1 | 石燈機關 | 等=母題;石等過每一代行者的火(row 30) |
+| 195 | 這段路,足跡比人多。 / More footprints than people on this stretch. | pool.waystone.w02 | L1 | 路多人行 | 人一個一個來,足跡累積成隊伍的量 |
+| 196 | 一步一步數。數到忘了為甚麼要數。 / Counting steps, until I forget why I'm counting. | pool.waystone.w03 | L1 | 行路自遣 | 數=全書計數母題;行者都在數,終有人替你數 |
+| 197 | 石是誰放的?路沒有說。 / Who set these stones? The road isn't saying. | pool.waystone.w04 | L1 | 無主之石 | 開放之問;「路自己學會留住我們」(row 4)一族 |
+| 198 | 碑全部面向東。沒有一座面向爐火。 / The monuments all face east. Not one faces the fire. | pool.waystone.w05 | L1 | 碑向日出 | 站死面向東=面向門(m3.paid);隊伍列隊的方向(議程 4 照過——L1 explicit sign-off,James 2026-08-16) |
+| 199 | 油還有,便不去數餘下的石。 / While there's oil, don't count the stones ahead. | pool.waystone.w06 | L1 | 行路智慧 | 數不到的是餘路——與隊伍一樣知前不知後 |
+| 200 | 風把灰帶向西。灰認得那個方向。 / The wind carries the ash west. The ash knows that way. | pool.waystone.w07 | L1 | 風向觀察 | §2.2 西飄字面——灰歸爐;燒盡者回爐膛 |
+| 201 | 石座有燒痕,一層下面另有一層。 / Scorch marks at the stone's base — a layer, and under it another. | pool.waystone.w08 | L1 | 石座痕漬 | 一層=一代;row 30 的實物證據 |
+| 202 | 越往東,路越靜。 / The further east, the quieter the road. | pool.waystone.w09 | L1 | 路況 | 越東越近門;人聲讓位於等待 |
+| 203 | 回頭,西面仍有火光。仍未算遠。 / Looking back, the firelight is still there. Not far yet, then. | pool.waystone.w10 | L1 | 未走遠 | 幾遠都不算遠——盡頭仍是爐邊(#259 Q3) |
+| 204 | 引路石不引人回頭。 / Waystones never point back. | pool.waystone.w11 | L1 | 石的設計 | 行者之路單向;沒有人回去過 |
+| 205 | 像有人與我同行。回頭,只有碑。 / It feels like company on this road. I look back — only monuments. | pool.waystone.w12 | L1 | 錯覺自嘲 | 錯覺為真——隊伍確與你同行,而他們就是碑 |
+| 206 | 火不重。重的是油。 / The flame weighs nothing. The oil is the weight. | pool.waystone.w13 | L1 | 行囊感受 | 火=意志無重;重的是攜帶它的器皿(01 物理) |
+| 207 | 到下一塊石再歇。到了,又說下一塊。 / Rest at the next stone. At the stone: the next one, then. | pool.waystone.w14 | L1 | 自我哄勸 | 「下一塊」講到站着死去為止 |
+| 208 | 石只數走過的,不數剩下的。 / The stones count what's walked, never what's left. | pool.waystone.w15 | L1 | 石的計法 | 與隊伍同構——知已走,不知餘下 |
+| 209 | 破曉在東面。一直在東面。 / Dawn is east. It stays east. | pool.waystone.w16 | L1 | 方位常識 | 破曉=勝利,永在前方;行者無人見過全亮 |
+| 210 | 路剩多少,無人能說。 / No one can say how much road is left. | pool.waystone.w17 | L1 | 路長未知 | 隊伍的長度同樣無人能說 |
+| 211 | 有一座碑,手仍舉着,像要接甚麼。 / One monument still holds its arm out, as if to catch something. | pool.waystone.w18 | L1 | 碑姿怪異 | 臨終姿勢——交出/接住的一刻凝住(§3.7) |
+| 212 | 灰落在燈罩上,一層,又一層。 / Ash on the lamp glass. A layer, then a layer. | pool.waystone.w19 | L1 | 灰景 | 層層灰下又一層——年代的積聚 |
+| 213 | 林靠灰養大。灰是誰養大的? / The forest feeds on ash. What feeds the ash? | pool.waystone.w20 | L1 | 生態怪談 | 灰=行者燒剩的力氣(#261 Q3);答案是行者 |
+| 214 | 第一段,碑最密。起步之地,停步的人最多。 / The monuments stand thickest here, where the road begins. | pool.waystone.w21 | L1 | 起步碑多 | 第一段淘汰最多(03-acts);最早的碑在此 |
+| 215 | 兩盞燈並亮。火是新的。誰點的? / Two lanterns burning side by side. The flames are fresh. Whose? | pool.waystone.w22 | L1 | 有人先行 | 「有人仍在點燈」(act1-mid);火新=隊伍未停 |
+| 216 | 孢子懸在光裏,像未落的灰。 / Spores hang in the lamplight, like ash that won't come down. | pool.waystone.w23 | L1 | 孢子浮光 | 未落的灰=未燒盡的殘意 |
+| 217 | 樹下有蒼白面具,不止一副。 / Pale masks under the tree. More than one. | pool.waystone.w24 | L1 | 詭異遺物 | 拜灰者的面具;蒼白=耗剩意志之色 |
+| 218 | 根從灰裏伸出來,握着甚麼。 / Roots reach out of the ash, holding something. | pool.waystone.w25 | L1 | 樹根怪狀 | 根靠灰活——握着行者燒剩的力氣(#261 Q3) |
+| 219 | 灰收走腳步聲。這段路,靜得像沒有人走過。 / The ash takes the sound of my steps. As if no one had ever walked here. | pool.waystone.w26 | L1 | 靜路 | 無數人走過;灰把他們的聲音一併收走 |
+| 220 | 有一座碑靠着樹。樹先到,還是碑先到? / A monument leans against a tree. Which of them came first? | pool.waystone.w27 | L1 | 閒問 | 碑先到——樹是靠灰後長的 |
+| 221 | 燒過的林仍在長。長出來的,總會再燒。 / The burnt forest keeps growing. What grows will burn again. | pool.waystone.w28 | L1 | 山火循環 | 續火的循環——長出來的總會再燒(儀式) |
+| 222 | 這裏的白,不像任何一種白。 / The white here is not like any other white. | pool.waystone.w29 | L1 | 顏色難名 | 蒼白——路拒絕命名的那種白(w 1 同讀) |
+| 223 | 他們向灰祈禱。灰不應人。 / They pray to the ash. The ash answers no one. | pool.waystone.w30 | L1 | 邪教怪人 | 灰不應人,因為灰是耗盡的意志——無可應 |
+| 224 | 燈光照到的,全是灰。照不到的,不去看。 / Everything in the lamplight is ash. What's past the light, I don't look at. | pool.waystone.w31 | L1 | 夜行紀律 | 光=意志透物;照不到處=不看的真相 |
+| 225 | 過了樹林,他們說,有一座城。 / Past the forest, they say, there is a city. | pool.waystone.w32 | L1 | 前路傳聞 | 城=等的下場;傳聞照記(drift) |
+| 226 | 水過了城的第二層。城沒有走。 / The water has taken the city's second storey. The city has not moved. | pool.waystone.w33 | L1 | 水浸廢城 | 城沒有走=第三種拒絕(停在中途等) |
+| 227 | 這座城留下來等。水,也留下來。 / The city stayed to wait. So did the water. | pool.waystone.w34 | L1 | 廢城與積水 | 水=等(#261 Q4);兩個「留下來」同一件事 |
+| 228 | 水下有光。那光不引路,只引人。 / There's a light under the water. It leads to nothing — it only leads people. | pool.waystone.w35 | L1 | 水底異光 | 假光=無意志的模仿(deepmaw);引人不引路 |
+| 229 | 鐵欄蝕剩一半。原來等待,咬得動鐵。 / The iron rail is eaten half through. So waiting has teeth after all. | pool.waystone.w36 | L1 | 鏽蝕之景 | 蝕=等待對器皿的慢蝕(#261 Q4)字面 |
+| 230 | 書庫沉在水裏。他們寫下的,如今水在讀。 / The library is under the water. What they wrote, the water is reading now. | pool.waystone.w37 | L1 | 沉沒書庫 | 他們的紀錄歸於等;水讀=等吞掉記錄 |
+| 231 | 水裏有人走動。不上來,也不沉下去。 / Someone is moving in the water. Not rising. Not sinking. | pool.waystone.w38 | L1 | 水中怪影 | 淹死的等待者——等未散故仍走動(#261 Q4) |
+| 232 | 水下有一口鐘,不響。它還在等甚麼? / A bell under the water, silent. What is it still waiting for? | pool.waystone.w39 | L1 | 沉鐘 | 連器皿都在等;等成了地方的物理 |
+| 233 | 城門沒有關。他們不是出不去。 / The gates were never shut. It isn't that they couldn't leave. | pool.waystone.w40 | L1 | 廢城之謎 | 不是不能走,是選了等——三種拒絕的中段 |
+| 234 | 這裏的水不流。等着的東西,都不流。 / The water here doesn't flow. Nothing that waits does. | pool.waystone.w41 | L1 | 死水 | 等=不流的意志(01 物理字面) |
+| 235 | 窗內有人影,仍立在原地。 / Figures at the windows, still standing where they stood. | pool.waystone.w42 | L1 | 窗中殘影 | 大部分人淹沒時仍在等(03-acts);立在原地=等的姿勢 |
+| 236 | 他們信門開那日,人人有份。 / They believed that when the door opened, it would open for everyone. | pool.waystone.w43 | L1 | 信仰紀錄 | legend-drift 明文(#261 Q1)——門不認眾人(§2.2) |
+| 237 | 城選了等。水是等的樣子。 / The city chose to wait. The water is what waiting looks like. | pool.waystone.w44 | L1 | 詠嘆 | 水是等的樣子——物理方程直落景語 |
+| 238 | 城中無一人向東行,無一人向西返。 / No one in this city walks east. No one walks back west. | pool.waystone.w45 | L1 | 死城 | 不走亦不返=等的完全式;兩個方向都放棄 |
+| 239 | 潮聲像在數甚麼。 / The tide sounds like counting. | pool.waystone.w46 | L1 | 潮聲擬人 | 數=Herald 母題;城在數門開的日子 |
+| 240 | 黑曜不透光。燈照上去,只照見自己。 / Obsidian lets no light through. Raise the lamp to it, and you see only yourself. | pool.waystone.w47 | L1 | 黑石反光 | 黑曜不透光(01 物理);照見自己=鏡 motif 前奏 |
+| 241 | 斷了的光環落在地上,無人拾起。 / Broken halos on the ground. No one gathers them. | pool.waystone.w48 | L1 | 廢墟遺物 | 斷環=放棄一刻熄掉的光(00 §8.6);無人拾=無人回頭 |
+| 242 | 越近門,人越多。全部坐着。 / The nearer the door, the more of them. All seated. | pool.waystone.w49 | L1 | 門前人多 | 千年廷——走到門前又不肯完成的人(#261 Q2) |
+| 243 | 這裏的星低,低得像在看。 / The stars hang low here. Low enough to watch. | pool.waystone.w50 | L1 | 星夜低垂 | 注視之眼 motif;王庭一直被看/在看 |
+| 244 | 他們讓路,像讓過許多次。 / They make way for me, as if they had done it many times before. | pool.waystone.w51 | L1 | 有禮的讓路 | 千年來讓過每一個行者;讓路=他們唯一還做的事 |
+| 245 | 庭中無火。他們坐在星光裏,坐了太久。 / No fire in the court. They sit in starlight, and have sat too long. | pool.waystone.w52 | L1 | 無火之庭 | 無火=無意志;星光非他們的光 |
+| 246 | 王座之後,他們說,再沒有路。 / Beyond the throne, they say, the road ends. | pool.waystone.w53 | L1 | 盡頭傳聞 | drift——王座之後其實是門(row 31 公式的反面) |
+| 247 | 石上刻着一列數目。最後一筆是新的。 / A column of tally marks cut into the stone. The last one is fresh. | pool.waystone.w54 | L1 | 怪異刻痕 | 數隊伍的人(Herald 族);新一筆=隊伍剛長了 |
+| 248 | 坐着的人望着我,像在等我坐下。 / The seated ones watch me, as if waiting for me to sit. | pool.waystone.w55 | L1 | 注視的壓力 | 他們在等你加入「停下」;坐=第三種拒絕的姿勢 |
+| 249 | 黑曜裏面,有光死在途中。 / Inside the obsidian, light has died on its way through. | pool.waystone.w56 | L1 | 石中幽光 | 黑曜=不再讓意志通過的記憶;光死在途中=被放棄 |
+| 250 | 王冠之後的事,他們不說。 / Of what lies beyond the crown, they do not speak. | pool.waystone.w57 | L1 | 忌諱 | 王冠之後=封門(row 31);不說=不肯面對最後一步 |
+| 251 | 這段路無灰無水,只有黑曜與靜。 / No ash on this stretch, no water. Only obsidian, and the quiet. | pool.waystone.w58 | L1 | 荒涼對比 | 無灰無水=無燒盡無等待——只剩放棄(黑曜) |
+| 252 | 燈的光,在這裏走不遠。 / Lamplight doesn't travel far here. | pool.waystone.w59 | L1 | 燈光微弱 | 光=意志透物;黑曜盡吞光——放棄之地不讓意志過 |
+| 253 | 離門越近,越少人提起它。 / The closer the door, the less anyone speaks of it. | pool.waystone.w60 | L1 | 忌諱漸深 | 越近真相越無人言;沉默也是拒絕 |
+| 254 | 燈還亮。人先熄。 / The lamp is still burning. I go out first. | pool.loss.e01 | L1 | 油盡燈枯的反轉 | 燈(器)比人長命;火將由蒼白之手接走(§3.7) |
+| 255 | 腳不肯躺。由它站。 / My legs won't lie down. Let them stand, then. | pool.loss.e02 | L1 | 倔強遺言 | 站死物理字面(§3.3)——腳不肯躺,因為碑不躺 |
+| 256 | 東面有一點亮了。全亮,看不到了。 / There's a little light in the east. I won't see it full. | pool.loss.e03 | L1 | 憾別 | 破曉=勝利;全亮那日,整條隊會替他看到(§2.6) |
+| 257 | 油交給風,路交給後來的人。 / The oil goes to the wind. The road goes to whoever comes after. | pool.loss.e04 | L1 | 豁達交託 | 字面成真——風把灰帶西,路交給下一個(§2.2/§2.3) |
+| 258 | 把燈放好。火不該隨我熄。 / Set the lamp down safe. The flame shouldn't go out with me. | pool.loss.e05 | L1 | 惜火 | 火(意志)真不隨他熄——隊伍接力;他說中了機制 |
+| 259 | 冷從腳上來。數到七,不數了。 / The cold rises from my feet. I counted to seven, then stopped. | pool.loss.e06 | L1 | 臨終計數 | 第八不在數中(w 8)——門影正落在他身上 |
+| 260 | 就到這裏?就到這裏。 / This far, then? This far. | pool.loss.e07 | L1 | 自問自答 | 「這裏」成為他永遠的位置——碑立於此 |
+| 261 | 不必記我。路會記。 / Don't remember me. The road will. | pool.loss.e08 | L1 | 謙卑 | 路已學會留住我們(row 4);記的方式是碑 |
+| 262 | 我未到。有人會到。 / Not me. But someone will get there. | pool.loss.e09 | L1 | 信念 | 字面真——隊伍終會到(§2.6);「有人」也包括站着等的他 |
+| 263 | 門等得起。我等不起了。 / The door can afford to wait. I no longer can. | pool.loss.e10 | L1 | 認命 | 門等得比守夜久(w 22);而他其實剛加入等的行列 |
+| 264 | 握不住燈了。誰在接? / I can't hold the lamp any longer. Who is taking it? | pool.loss.e11 | L1 | 脫力 | 接燈的是蒼白的手(§3.7);問句的答案就在身旁 |
+| 265 | 風向西。替我帶一句到爐前。 / The wind runs west. Carry a word to the hearth for me. | pool.loss.e12 | L1 | 寄語家鄉 | 遺言傳回爐前的機制自述(§2.3)——這句正是如此傳回 |
+| 266 | 不必立碑。醒來再走就是。 / Skip the monument. I'll wake and walk it again. | pool.loss.e13 | L1 | 復活信仰的灑脫 | 碑會立(就是他);醒來的另有其人——兩截皆錯而各有真核(議程 1 照過——L1 sign-off + drift,James 2026-08-16) |
+| 267 | 爐前見。 / See you by the fire. | pool.loss.e14 | L1 | 再會之約 | 爐前確有人「見」——以為自己是他的那個(議程 1 照過——L1 sign-off + drift,James 2026-08-16) |
+| 268 | 這次不算。 / This one doesn't count. | pool.loss.e15 | L1 | 不服輸 | 算到盡——隊伍加一,碑加一,帳上有名(議程 1 照過——L1 sign-off + drift,James 2026-08-16) |
+| 269 | 面向東。記得面向東。 / Face east. Remember to face east. | pool.loss.e16 | L1 | 朝聖者的體面 | 他不自知地把自己立成合格的碑(面向東=面向門) |
+| 270 | 門開那日,替我多行一步。 / When the door opens, walk one step of it for me. | pool.loss.e17 | L1 | 託付 | 字面應驗——門開那日整條隊行齊,他那一步有人行(§2.6) |
+| 271 | 燈裏還有油。用不完了。 / There's oil left in the lamp. More than I'll be needing. | pool.loss.e18 | L1 | 輕描淡寫 | 器有餘而意志盡;燈油用不完=火先走了 |
+| 272 | 行到第幾塊石?石記得,我不記得了。 / Which stone was I on? The stone remembers. I don't. | pool.loss.e19 | L1 | 迷糊 | 石記得(row 30)——隊伍反覆量過的路,石都記住 |
+| 273 | 路未完。我完了。 / The road isn't finished. I am. | pool.loss.e20 | L1 | 認命對句 | 路未完——他那一段由隊伍接着行 |
+| 274 | 灰在燈上又一層。這次不抹了。 / Ash on the lamp again. This time I won't wipe it. | pool.loss.e21 | L1 | 疲極小事 | 不抹了=最後一次選擇;灰將蓋過他的燈 |
+| 275 | 未出樹林。第一段都未過。 / Still in the forest. Not even past the first stretch. | pool.loss.e22 | L1 | 出師未捷 | 他加入第一段最密的碑列(w21 同景) |
+| 276 | 兩盞燈仍並亮。我這盞,誰來添油? / The paired lamps still burn. Who will oil mine? | pool.loss.e23 | L1 | 掛念路燈 | 他的燈自有人添——隊伍會經過;答案他看不到 |
+| 277 | 根在灰下握着的,原來是這個。 / So this is what the roots were holding. | pool.loss.e24 | L1 | 臨終謎語 | 根握着行者燒剩的力氣;「這個」=他此刻燒盡的自己(#261 Q3) |
+| 278 | 樹在長。我停了,它還在長。 / The trees keep growing. I stop; they don't. | pool.loss.e25 | L1 | 感嘆生生不息 | 樹靠他的灰長;他停下正是樹長的原因 |
+| 279 | 面具白。灰白。我的手,也開始白。 / The masks are white. The ash is white. My hands are turning white now. | pool.loss.e26 | L1 | 失血蒼白 | 蒼白=耗剩意志之色(01);他正變成那種白——蒼白眾的白 |
+| 280 | 靜。只剩燈芯的聲。 / Quiet. Only the wick still speaking. | pool.loss.e27 | L1 | 靜夜臨終 | 芯聲=火將盡;最後陪他的是器皿 |
+| 281 | 出發時天未亮。原來一直都未亮。 / It wasn't light when I set out. It never grew light. | pool.loss.e28 | L1 | 命途嗟嘆 | 天未亮=破曉未到;對行者而言天從未亮過(勝敗同死,§3.7) |
+| 282 | 還以為第一段容易。 / I thought the first stretch would be the easy one. | pool.loss.e29 | L1 | 輕率的悔 | 第一段淘汰最多;「容易」是爐前聽回來的想像 |
+| 283 | 樹林之後,他們說有一座城。我看不到了。 / Past the forest, they say, there's a city. Not for me. | pool.loss.e30 | L1 | 未見之城 | 城=等的下場;他反而免了第二種拒絕 |
+| 284 | 水到喉頭。就站在這裏,等它再上。 / Water at my throat. I'll stand here and let it rise. | pool.loss.e31 | L1 | 溺前的平靜 | 站着等水=以等待死於等待之城;act2 主題成為死法 |
+| 285 | 城等了那麼久。多我一個。 / The city has waited so long. One more, then. | pool.loss.e32 | L1 | 自嘲 | 多一個等的——他站成碑,加入城的等 |
+| 286 | 水下那口鐘,響過沒有? / That bell under the water — did it ever ring? | pool.loss.e33 | L1 | 臨終懸念 | 鐘未響過——門未開過;響那日全城的等才有下文 |
+| 287 | 水下那點光,不是燈。 / That light down in the water is not a lamp. | pool.loss.e34 | L1 | 遺誡 | 假光=無意志的模仿;他以最後的力氣分辨真火 |
+| 288 | 水中的人仍在走。原來,等是走不完的。 / The drowned are still walking. Waiting, it turns out, is a road without an end. | pool.loss.e35 | L1 | 悟語 | 水=等;等的路走不完——他正走進去 |
+| 289 | 鐵有蝕,城有水。人有甚麼? / Iron has rust. The city has water. What do we have? | pool.loss.e36 | L1 | 排比自問 | 答案是等——城已示範;他此刻正有 |
+| 290 | 燈在水上仍亮着,亮得比我久。 / The lamp still burns above the water. Longer than I will. | pool.loss.e37 | L1 | 燈比人久 | 器皿長命(row 159 同族);火會被接走,燈會被拾回 |
+| 291 | 他們把等待寫了下來。我們的,誰來寫? / They wrote their waiting down. Who will write ours? | pool.loss.e38 | L1 | 求記錄 | 正被寫下——這句就是 Vigil 敗亡帳的帳文(A3 自述) |
+| 292 | 潮退了,又漲。第幾次了? / The tide falls and rises. Which time is this? | pool.loss.e39 | L1 | 潮汐計時 | 第幾次=數不清的重複;隊伍與潮同律 |
+| 293 | 這座城不出聲。今夜多一個不出聲的。 / The city makes no sound. Tonight there is one more who doesn't. | pool.loss.e40 | L1 | 死寂 | 他加入沉默的等待者;城的人口以靜默計 |
+| 294 | 門就在前面。我聞到它的冷。 / The door is just ahead. I can smell its cold. | pool.loss.e41 | L1 | 咫尺之憾 | 門的冷=千年不開之物;近得可以加入王庭,而他沒有 |
+| 295 | 不坐。他們坐,我不坐。 / I will not sit. Let them sit. Not me. | pool.loss.e42 | L1 | 傲骨 | 不坐而站——兩種停下,同一個停;以拒絕的姿勢完成拒絕 |
+| 296 | 有光環斷了,不知是誰的。 / A halo broke somewhere. I don't know whose. | pool.loss.e43 | L1 | 異響 | 斷環=放棄之聲;又一個庭中人熄了光 |
+| 297 | 星在看。看便看。 / The stars are watching. Let them watch. | pool.loss.e44 | L1 | 不屈 | 注視之眼看着每個停下的人;他不肯坐給他們看 |
+| 298 | 王冠之後有甚麼,我到不了了。 / Whatever lies beyond the crown, I will not reach it. | pool.loss.e45 | L1 | 望門興嘆 | 王冠之後=封門(row 31);到不了的,由隊伍帶他到 |
+| 299 | 黑曜裏有個我。它不動了。 / There I am in the obsidian. That one has already stopped moving. | pool.loss.e46 | L1 | 鏡影怪談 | 放棄的形狀先於死亡;鏡那側 motif(Silvered Mirror 族,L1) |
+| 300 | 坐着的人望過來。我明白那個眼神了。 / The seated ones are looking at me. I understand that look now. | pool.loss.e47 | L1 | 讀懂目光 | 眼神=認出「又一個」;他此刻嘗到停的滋味 |
+| 301 | 庭中無火。我的熄了,便真的無火了。 / No fire in this court. When mine goes, there will be none at all. | pool.loss.e48 | L1 | 荒涼 | 他的火是全庭唯一意志;熄了=王庭回復無火常態 |
+| 302 | 就在門前。原來門前也是路。 / At the very door. So even the doorstep is still road. | pool.loss.e49 | L1 | 就差一步 | 門前也是路——門後仍是路(Act IV);他的碑立在隊頭 |
+| 303 | 油盡了。火去了甚麼地方? / The oil is spent. Where has the fire gone? | pool.loss.e50 | L1 | 臨終之問 | 火=意志歸於蒼白之手(§3.7);答案:向西,回爐 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於
