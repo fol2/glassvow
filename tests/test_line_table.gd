@@ -198,7 +198,7 @@ static func _run(content: ContentDB, vigil: VigilState, id: String) -> RunState:
 	var state: RunState = RunState.new_run(content, id.hash() & 0x7FFFFFFF,
 		id, {"quests": vigil.quests, "shards": vigil.shards})
 	state.act = 1
-	state.floors_climbed = 7
+	state.waystones_lit = 7
 	return state
 
 

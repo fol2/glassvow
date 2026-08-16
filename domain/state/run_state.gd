@@ -22,7 +22,7 @@ var run_id: String = ""
 var rng: Rng = Rng.new(0)
 var act: int = 0
 var node_id: Variant = null
-var floors_climbed: int = 0
+var waystones_lit: int = 0
 var aspect: int = 0
 var vow: int = 0
 var art: StringName = &""
@@ -268,7 +268,8 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	rs.rng = Rng.new(_sji(save.get("rngState", 0)))
 	rs.act = _sji(save.get("act", 0))
 	rs.node_id = save.get("nodeId")
-	rs.floors_climbed = _sji(save.get("floorsClimbed", 0))
+	# Wire key stays `floorsClimbed` (#305 D1). The field is waystones_lit.
+	rs.waystones_lit = _sji(save.get("floorsClimbed", 0))
 	rs.aspect = clampi(_sji(save.get("aspect", 0)), 0, maxi(0, content.aspects.size() - 1))
 	rs.vow = clampi(_sji(save.get("vow", 0)), 0, content.vows.size())
 	var content_player: Dictionary = content.player
@@ -443,7 +444,8 @@ func to_dict() -> Dictionary:
 		"seed": seed,
 		"rngState": rng.get_state(),
 		"act": act,
-		"floorsClimbed": floors_climbed,
+		# Wire key stays `floorsClimbed` (#305 D1). 33 fixture hits ride on it.
+		"floorsClimbed": waystones_lit,
 		"aspect": aspect,
 		"vow": vow,
 		"art": String(art),

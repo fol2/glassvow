@@ -132,8 +132,8 @@
       "warnSaved": "重新開始將拋棄已保存的朝聖之路。"
     },
     "end": {
-      "ascended": "入城",
-      "ascendedSub": "永恆君王已化塵。破曉越過長路——這是漫長年代中的第一次。",
+      "arrived": "入城",
+      "arrivedSub": "永恆君王已化塵。破曉越過長路——這是漫長年代中的第一次。",
       "bequestDone": "✦ 石碑守住你的{name}。<br>它會在{act}等候你。",
       "bequestNote": {
         "card": "你最上乘的卡牌",
@@ -149,9 +149,9 @@
       "dmgTaken": "受到傷害",
       "elitesBosses": "菁英與首領",
       "fallen": "隕落",
-      "fallenSub": "一段朝聖之路在第 <b>{floor}</b> 塊引路石終結。<br>路留下它所奪走的——守夜卻會銘記。",
+      "fallenSub": "一段朝聖之路在第 <b>{n}</b> 塊引路石終結。<br>路留下它所奪走的——守夜卻會銘記。",
       "finalDeckTitle": "最終牌庫",
-      "floors": "引路石數",
+      "waystones": "引路石數",
       "returnVigil": "返回守夜",
       "runTime": "用時",
       "slain": "擊殺",
@@ -165,7 +165,7 @@
       "viewDeck": "檢視最終牌庫",
       "abandoned": "誓言擱置",
       "abandonedSub": "朝聖止於此。守夜將記下這筆。",
-      "fallenLantern": "你的提燈在第 {floor} 塊引路石熄滅。",
+      "fallenLantern": "你的提燈在第 {n} 塊引路石熄滅。",
       "elitesBossesPlus": "菁英 + 首領",
       "monument": {
         "body": "前一位朝聖者站在石中。",
@@ -189,8 +189,8 @@
       "chooseCardBody": "選擇本身也是代價。"
     },
     "help": {
-      "climbBody": "沿提燈之路前行。擊敗怪物、收集卡牌、遺物與藥瓶，並打倒每一幕的首領，共 <b>{count} 幕</b>。未燃之燈隱匿其所藏——但首次踏足會贈予金幣賞金。",
-      "climbTitle": "朝聖之路",
+      "roadBody": "沿提燈之路前行。擊敗怪物、收集卡牌、遺物與藥瓶，並打倒每一幕的首領，共 <b>{count} 幕</b>。未燃之燈隱匿其所藏——但首次踏足會贈予金幣賞金。",
+      "roadTitle": "朝聖之路",
       "combatBody": "每回合你抽 <b>5 張牌</b>並獲得 <b>3 點能量</b>（⬤）。點擊或拖曳出牌——若場上尚有多名敵人，攻擊須選定目標。敵人頭頂會預示其<b>意圖</b>。",
       "combatTitle": "戰鬥",
       "firesBody": "休息處可回復 <b>30%</b> 生命或升級一張牌。商店販售卡牌、遺物、藥瓶——亦可自牌庫中<b>移除</b>一張。保持牌庫精簡；每份戰利皆可放棄。",
@@ -225,7 +225,7 @@
       }
     },
     "hud": {
-      "actFloor": "第 {act} 幕 · 第 {floor} 塊引路石",
+      "actWaystone": "第 {act} 幕 · 第 {n} 塊引路石",
       "deckAria": "牌庫",
       "deckCount": "{n} 張牌",
       "deckTitle": "你的牌庫",
@@ -239,7 +239,7 @@
       "menu": "選單",
       "emptyPhial": "空藥瓶位",
       "hpFraction": "生命 {hp}／{maxHp}",
-      "location": "{act} · 第 {floor} 塊引路石 · {boss}",
+      "location": "{act} · 第 {n} 塊引路石 · {boss}",
       "deckOverlayTitle": "牌庫",
       "deckOverlayCount": "攜帶 {count} 張牌",
       "usePotionOn": "對 {name} 使用"
@@ -373,14 +373,14 @@
       "beginAnew": "重新開始",
       "beginAnewBody": "新的朝聖之路開始前，目前這段旅程會記作放棄。",
       "beginAnewTitle": "重新開始？",
-      "beginClimb": "續火",
+      "rekindle": "續火",
       "chooseBoon": "選擇恩賜",
       "close": "關閉",
-      "continueClimb": "返回路上",
+      "backToRoad": "返回路上",
       "credits": "製作人員",
       "fightOn": "繼續前行",
       "howToPlay": "玩法說明",
-      "keepClimbing": "留在路上",
+      "stayOnRoad": "留在路上",
       "lightTheWay": "點亮前路",
       "mute": "靜音",
       "muteSound": "靜音",
@@ -392,12 +392,12 @@
       "theVigil": "守夜",
       "unmute": "取消靜音",
       "unmuteSound": "取消靜音",
-      "leaveSpireTitle": "離開路途？",
-      "leaveSpireBody": "提燈會守住你的行程。"
+      "leaveRoadTitle": "離開路途？",
+      "leaveRoadBody": "提燈會守住你的行程。"
     },
     "persistence": {
       "hollowRouteBody": "此目的地仍待保存。釋出儲存空間後重試，或重新載入已保存的確切目的地。",
-      "reloadClimb": "重新載入已保存的朝聖之路",
+      "reloadRoad": "重新載入已保存的朝聖之路",
       "reloadDestination": "重新載入已保存的目的地",
       "reloadDuel": "重新載入已保存的決鬥",
       "reloadFinalisation": "重新載入已保存的結算",
@@ -792,7 +792,7 @@
         "text": "對所有敵人造成 @9@ 點傷害，並施加 3 層陰燃。",
         "textUp": "對所有敵人造成 @12@ 點傷害，並施加 4 層陰燃。"
       },
-      "ascension": {
+      "risingLitany": {
         "name": "昇華聖詠",
         "text": "每回合開始時獲得 2 層熾心。",
         "textUp": "每回合開始時獲得 3 層熾心。"
@@ -1368,8 +1368,8 @@
           "annihilation": {
             "name": "湮滅"
           },
-          "ascend": {
-            "name": "登臨"
+          "holdCourt": {
+            "name": "臨朝"
           },
           "gravitas": {
             "name": "君威"
@@ -1750,7 +1750,7 @@
     },
     "quests": {
       "eighthOmen": {
-        "floorEchoes": [
+        "waystoneEchoes": [
           "// 窗片凝視 //",
           "// 八並非數字 //",
           "// 攜錯誤之光向上 //",

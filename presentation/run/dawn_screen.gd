@@ -15,7 +15,7 @@ signal commit_requested
 ## nothing and the feed holds — a memory is never shown before it is owed.
 signal advance_requested
 
-const ASCENDED: String = "res://assets/art/meta/ascended.png"
+const ARRIVED: String = "res://assets/art/meta/ascended.png"
 
 ## The benchmark's beat: `.dawn-event` enters over 550ms ease (styles.css:2583)
 ## and `drainEndQueue` sleeps the same 550ms per event (end.js:148).
@@ -131,7 +131,7 @@ func _ready() -> void:
 
 func _build() -> void:
 	var art: TextureRect = TextureRect.new()
-	art.texture = load(ASCENDED) as Texture2D
+	art.texture = load(ARRIVED) as Texture2D
 	art.set_anchors_preset(Control.PRESET_FULL_RECT)
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
@@ -705,7 +705,7 @@ func _build_stats(column: VBoxContainer) -> void:
 	_stats_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_child(_stats_grid)
 	for row: Array in [
-		["floors", Locale.active.t("ui.end.floors").to_upper()],
+		["waystones", Locale.active.t("ui.end.waystones").to_upper()],
 		["slain", Locale.active.t("ui.end.slain").to_upper()],
 		["elites_bosses", Locale.active.t("ui.end.elitesBossesPlus").to_upper()],
 		["deck_size", Locale.active.t("ui.end.deckSize").to_upper()],

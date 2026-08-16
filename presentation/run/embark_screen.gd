@@ -129,7 +129,7 @@ func _build() -> void:
 	_column.add_child(_actions)
 
 	_begin = _action(
-		Locale.active.t("ui.menu.beginAnew" if _saved_run else "ui.menu.beginClimb").to_upper(),
+		Locale.active.t("ui.menu.beginAnew" if _saved_run else "ui.menu.rekindle").to_upper(),
 		true)
 	_begin.pressed.connect(func() -> void:
 		_sfx.play(&"click")

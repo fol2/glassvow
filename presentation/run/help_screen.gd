@@ -12,8 +12,8 @@ const PHONE_INSET: float = 18.0
 static func _sections(act_count: int) -> Array[Dictionary]:
 	var params: Dictionary = {"count": act_count}
 	return [
-		{"title": Locale.active.t("ui.help.climbTitle"),
-			"body": Locale.active.t("ui.help.climbBody", params)},
+		{"title": Locale.active.t("ui.help.roadTitle"),
+			"body": Locale.active.t("ui.help.roadBody", params)},
 		{"title": Locale.active.t("ui.help.combatTitle"),
 			"body": Locale.active.t("ui.help.combatBody")},
 		{"title": Locale.active.t("ui.help.glassTitle"),
