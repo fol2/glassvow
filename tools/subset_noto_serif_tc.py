@@ -17,7 +17,8 @@ Bootstrap FontTools outside the checkout (do not install into system Python):
   /private/tmp/glassvow-fonttools/bin/pip install 'fonttools[woff]>=4.63,<4.64'
   PATH=/private/tmp/glassvow-fonttools/bin:$PATH tools/subset_noto_serif_tc.py
 
-The corpus is all characters in ``locale/*.json`` plus printable ASCII.  It is
+The corpus is all characters in ``locale/*.json``, the inline ``zh`` strings in
+``content/line-table.json``, plus printable ASCII.  It is
 sorted before it reaches pyftsubset; given these pinned sources and FontTools,
 the woff2 output is deterministic and may be regenerated in place.
 """
@@ -38,6 +39,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LOCALE_DIR = REPO_ROOT / "locale"
+LINE_TABLE = REPO_ROOT / "content" / "line-table.json"
 OUTPUT_DIR = REPO_ROOT / "assets" / "fonts"
 DEFAULT_SOURCE_DIR = Path("/private/tmp/glassvow-noto-serif-tc-sources")
 
@@ -166,9 +168,12 @@ def locale_corpus() -> str:
     locale_paths = sorted(LOCALE_DIR.glob("*.json"))
     if not locale_paths:
         raise RuntimeError(f"no locale JSON files found in {LOCALE_DIR}")
+    if not LINE_TABLE.is_file():
+        raise RuntimeError(f"line table missing: {LINE_TABLE.relative_to(REPO_ROOT)}")
     characters = {chr(codepoint) for codepoint in range(0x20, 0x7F)}
     for locale_path in locale_paths:
         characters.update(json_string_characters(locale_path))
+    characters.update(line_table_zh_characters(LINE_TABLE))
     return "".join(sorted(characters))
 
 
@@ -189,6 +194,23 @@ def json_string_characters(locale_path: Path) -> set[str]:
                 visit(item)
 
     visit(json.loads(locale_path.read_text(encoding="utf-8")))
+    return characters
+
+
+def line_table_zh_characters(path: Path) -> set[str]:
+    """Inline zh copy in the line table is shipped, not locale-overlaid."""
+    parsed = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(parsed, list):
+        raise RuntimeError(f"{path.relative_to(REPO_ROOT)}: expected a JSON array")
+    characters: set[str] = set()
+    for row in parsed:
+        if not isinstance(row, dict):
+            continue
+        value = row.get("zh")
+        if isinstance(value, str):
+            characters.update(character for character in value if ord(character) >= 0x20)
+    if not characters:
+        raise RuntimeError(f"{path.relative_to(REPO_ROOT)}: no zh strings")
     return characters
 
 
