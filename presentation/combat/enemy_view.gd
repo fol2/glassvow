@@ -5022,6 +5022,10 @@ func clear_intent() -> void:
 	set_intent(&"", "")
 
 
+func intent_anchor() -> Control:
+	return _intent
+
+
 func set_statuses(statuses: Dictionary, infos: Dictionary = {}) -> void:
 	_statuses.sync(statuses, infos)
 

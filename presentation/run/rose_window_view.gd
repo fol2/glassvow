@@ -2,6 +2,8 @@ class_name RoseWindowView
 extends VBoxContainer
 ## Six persisted Emberglass panes and the whisper ledger beneath them.
 
+signal replay_requested
+
 const IDS: Array[String] = [
 	"paleOnes", "ownShade", "usurper", "eighthOmen", "unreadablePage",
 	"hollowLamplighter",
@@ -85,6 +87,8 @@ func _build() -> void:
 	frame.stretch_mode = TextureRect.STRETCH_SCALE
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_window.add_child(frame)
+	if _all_complete():
+		_add_replay()
 	for copy: Control in _pane_copies:
 		_window.move_child(copy, _window.get_child_count() - 1)
 	for button: Button in _pane_buttons:
@@ -174,6 +178,22 @@ func _add_pane(index: int) -> void:
 	button.pressed.connect(_select.bind(index))
 	_window.add_child(button)
 	_pane_buttons.append(button)
+
+
+func _add_replay() -> void:
+	var replay: Button = Button.new()
+	replay.name = "Replay"
+	replay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	replay.tooltip_text = Locale.active.t("ui.rose.replayUnsealing")
+	replay.add_theme_stylebox_override("focus",
+		GlassStyle.focus_ring(RunStyle.GOLD, 9))
+	for state_name: String in ["normal", "hover", "pressed"]:
+		var style: StyleBoxFlat = StyleBoxFlat.new()
+		style.bg_color = Color.TRANSPARENT
+		style.set_border_width_all(0)
+		replay.add_theme_stylebox_override(state_name, style)
+	replay.pressed.connect(func() -> void: replay_requested.emit())
+	_window.add_child(replay)
 
 
 func _select(index: int) -> void:
@@ -274,6 +294,13 @@ func _quest(id: String) -> Dictionary:
 static func _state(record: Dictionary) -> String:
 	var state: String = str(record.get("state", "dormant"))
 	return state if state in ["dormant", "armed", "revealed", "complete"] else "dormant"
+
+
+func _all_complete() -> bool:
+	for id: String in IDS:
+		if _state(_record(id)) != "complete":
+			return false
+	return true
 
 
 func _pane_copy(id: String, record: Dictionary) -> String:

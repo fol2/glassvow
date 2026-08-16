@@ -17,20 +17,58 @@
 | 蒼白眾 | the Pale Ones | 行者殘影,指路者 | locked(shipped) |
 | 行者 | the walker | 每次「繼續」時走出去、真死的那一個 | placeholder |
 | 留者 | the stayer | 留在爐邊、繼承記憶的那一個(玩家視角) | placeholder |
-| 【留低嗰個】/ Keeper | the One Who Stayed | 沉澱的猶豫;爐邊派 boon 者;最終 boss | placeholder |
-| 【續火】 | (tbd) | 「繼續」的儀式名;取代 climb 語彙 | placeholder |
-| 【終境】 | (tbd) | 第三 act 地區 | placeholder(舊名 Spire 已 banned) |
-| 【行者之邦】 | (tbd) | Act IV 門後之地 | placeholder |
-| 【原初朝聖者】 | (tbd) | 「你」這條人格線的起點 | placeholder |
+| 守爐人 | the Keeper | 爐邊 NPC 顯示名=沉澱的臉(bible 內部稱【留低嗰個】);L0-safe 雙讀 | locked [#261 Q11] |
+| 永恆留者 | The Eternal Keeper | Keeper 的 Act IV boss form 名;與永恆君王孖生 | locked [#261 Q10] |
+| 續火 | Rekindle | 分身儀式名(00 §1);掣位=ui.menu.rekindle——派新行者出發正是分身一刻,resume 掣另取「返回路上」 | locked [#261 Q13;掣位 #232 Q2] |
+| 返回路上 | Back to the Road | resume 掣(ui.menu.backToRoad)——回到進行中的旅程;無分身 | locked [#232 Q2] |
+| 留在路上 | Stay on the Road | ui.menu.stayOnRoad 掣;書面語修訂——舊簽「留喺路上」廢(喺不在字庫且屬口語) | locked [#232 Q2 修訂] |
+| 引路石 | waystone | 路程單位(第 {n} 塊引路石 / WAYSTONE n);CONCEPTS 域模型:石是地點,燈到石而亮 | locked [#232 Q3] |
+| 入城 | ARRIVED | 勝利字(取代 登臨/ASCENDED);表面=你抵達,揭後=隊伍抵達、入城=歸家 | locked [#232 Q4] |
+| 王冠之後 | beyond the crown | 封門方位公式,七址共用(取代「王冠之上 / above the crown」);一次簽,逐址替換(ledger row 31) | locked [SETTLED James 2026-08-16] |
+| 未燃之路 | the Unlit Way | 掌燈人 quest 的路名 | locked(shipped) |
+| 黑曜王庭 | The Obsidian Court | 第三 act 地區(舊名 Spire banned;shipped 三檔置換歸 #232) | locked [#261 Q8] |
+| 鏡中歸途 | The Mirrored Road | Act IV 門後之地 | locked [#261 Q9] |
+| 原初朝聖者 | the Undivided | 「你」這條人格線的起點(en 避 "First Pilgrim",防撞第一行者) | locked [#261 Q14] |
+| 眾人 | (依文案語境) | 非行者的世人:城民、廷臣、路上諸人;正常生死,有屍可腐(00 §3.8) | placeholder [#261 Q1] |
 | 碑 | monument | 站着死去的行者 | placeholder(en shipped) |
 | 隊伍 | the Queue | 歷代行者總稱,第二主角(複數) | placeholder |
 | 臍帶 | the cord | 爐火與行者之間的連結;run 視角所經(00 §3.7) | placeholder |
 | 鏡面空間 | mirror-space | 門後之地的地理:盡頭即爐邊另一面(00 §2.4) | placeholder(敘述用,非對白詞) |
-| 【城】 | (tbd) | Act IV 盡頭=守夜之爐的真貌;入城=歸家(00 §8.1,#259 Q3) | placeholder |
+| 金城 | the Gilded City | Act IV 盡頭=守夜之爐的真貌;入城=歸家(00 §8.1,#259 Q3)。此名是眾人的 legend 名,真身無另名(舊佔位【城】) | locked(legend-drift 名)[#261 Q12] |
 | 行過 | passed | 勝仗對 Sovereign 的動詞:打退「不肯」,不殺那個人(00 §2.1) | placeholder |
-| 尖塔 / Spire | — | 舊垂直語彙 | **banned** [SETTLED] |
-| 爬 / climb / ascend(敘事用) | — | 垂直朝聖語彙 | **banned**,逐句清洗見 ledger |
-| 上面嗰樣嘢 / the thing above | — | 舊指涉;§8.1 已解——門後沒有嗰樣嘢,只有【城】;該詞只作 legend-drift 出現 | **banned** [#258 R1 Q4A] |
+| 路 / 長路 | the road | **世界尺度的普通名詞**,非專名——舊 尖塔 佔的那個主語位由它接。世界無專名:地理是六個地名串成的一條路(01 §地理),朝聖 是活動,路 是那個地方 | locked [#303 James 2026-08-16] |
+| 尖塔 / Spire | — | 舊垂直語彙;地區位由 黑曜王庭 接,世界位由 路 接 | **banned** [SETTLED] |
+| 爬 / 攀 / climb / ascend / 登臨(敘事用) | — | 垂直朝聖語彙 | **banned**,逐句清洗見 ledger |
+| 頂點 / summit ・ 之上(地方)/ above(地方)・ 向上 / upward ・ 階梯(那條路)/ stair(the road) | — | Tier A 其餘四項,補齊七項全表 | **banned** [#232 Q1 → #303] |
+| 上面嗰樣嘢 / the thing above | — | 舊指涉;§8.1 已解——門後沒有嗰樣嘢,只有金城;該詞只作 legend-drift 出現 | **banned** [#258 R1 Q4A] |
+
+## 垂直語彙:banned 全表與 keep 白名單 [#232 → #303]
+
+**Tier A — 任何 player-facing 字串一律禁用**(en 大小寫、詞形變化一併計):
+
+| zh | en |
+|---|---|
+| 尖塔 | Spire |
+| 爬 / 攀 | climb(名詞、動詞、climber、climbing) |
+| 登臨 | ascend / ascended |
+| 頂點 | summit |
+| 之上(作**地方**解) | above(作**地方**解) |
+| 向上 | upward |
+| 階梯(作**那條路**解) | stair(作**那條路**解) |
+
+**Tier B — 以下保留是正確,不是漏執**:
+
+- **層** 作狀態**疊加**量詞(「施加 2 層陰燃」)——`content.status.*.desc` 絕大多數
+  `層` 屬此類,與垂直無關。`ui.*` 內已無 `層`(引路石取代了計數)。
+- **斷層** —— 卡牌 Executioner 的 zh 名。
+- **王冠 / crown** —— 第三幕是王庭,冠讀作王權;方位公式取「王冠之後」(ledger row 31)。
+- **破曉 / dawn** —— 一日之時。
+- 場景描述**之內**的字面上下(角色抬頭、光自上灑落之類)。
+- **朝聖 / pilgrimage** —— 已定的水平框架;原初朝聖者 / the Undivided 是鎖定 canon。
+- **"Slay the Spire"** 作為錨定遊戲名(`docs/commercial-rubric.md`),以及任何外部產品名或 URL。
+  大小寫不敏感的全樹替換會改掉他人遊戲的名字。
+- **`port_fixtures/content/locale-en.json` 永遠保留 "The Obsidian Spire"** —— 它是捕獲下來的
+  web artefact,由 CLAUDE.md 的 Fixture Provenance 凍結,不得「順手修正」。
 
 ## 正字與語域(繼承 #177,對文案 binding)
 

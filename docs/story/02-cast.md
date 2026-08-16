@@ -10,6 +10,10 @@
 
 - **是什麼**:歷代分身中「不肯走的那部分」的沉澱,有了臉。每個 run 開頭
   在爐邊迎接你、派 boon;最終 boss;lite-Hades 的「大廳裏那位」。
+- **名** [SETTLED — #261 Q10+Q11]:爐邊 NPC 顯示名**守爐人 / the
+  Keeper**(L0-safe 雙讀:表面=看火者;揭後=它從未離開過爐邊);
+  Act IV boss form 名**永恆留者 / The Eternal Keeper**——與「永恆君王
+  / The Eternal Sovereign」孖生,00 §2.4 的兩極寫進名字。
 - **想要**:安排永遠繼續——有人代走,它就不必走。它不恨你;它**是**你,
   而且真心待你好,這正是最難堪之處。**關懷與麻醉同時為真** [SETTLED —
   #260 Q1]:關懷是真的(它就是你錫自己);同一份關懷也是令安排行落去的
@@ -25,6 +29,8 @@
 - **資產** [SETTLED — #260 Q7]:兩件新繪——①爐邊兜帽坐像(L0-safe:
   兜帽,面孔永不可見,黑洞面同 Lamplighter 一樣;即 00 §5 L0「爐前兜帽
   身影」的本體);②Act IV boss form。兩件**同一剪影**,揭場一眼認得。
+  爐邊:`assets/art/meta/keeper.png`;boss:`assets/art/enemies/eternalKeeper.png`
+  (James picked hearth-d / boss-c, 2026-08-16, #283)。
   boss form 刻意犯 style-bible「enemy 不得用 keeper/warden 剪影」的禁例
   ——認出嗰下就是設計本身;生成時在 `docs/art-ledger.md` 記 waiver。
   爐火本身是它的第二張臉(不變)。
@@ -90,9 +96,9 @@
 ## 隊伍(the Queue)[SETTLED — #260 Q6]
 
 歷代行者不是背景板,是**第二主角(複數)**。文案曝光面:24 whisper
-(遺言)、waystone 獨白、碑文、敗仗遺言 pool。(Act IV 九敵**不屬
+(遺言)、waystone 獨白、碑文、敗仗遺言 pool。(Act IV 八敵**不屬
 Queue**——鏡面反照的 counterfactual selves,00 §2.6 [SETTLED — #258
-R2 Q9];隊伍永不阻你。)逐代分配表:whisper-rewrite batch 起全表,
+R2 Q9;數目 #261 Q5];隊伍永不阻你。)逐代分配表:whisper-rewrite batch 起全表,
 方法與約束見 00 §8.5 [SETTLED — #258 R3 Q16]。
 
 ## 藝術範圍 [SETTLED — #260 Q7+Q8]
@@ -100,4 +106,12 @@ R2 Q9];隊伍永不阻你。)逐代分配表:whisper-rewrite batch 起全表,
 本 ticket 的 portrait scope 收窄至最細可行:**只加 Keeper 兩件**(見
 Keeper 資產行),**零 redraw**——其餘三位主角同全部 minor cast 用現有
 art,故事只重讀、不要求改圖(skill §6)。Pale Ones 維持「現有敵人變體
-標記」;Act IV 九個「未行過的你」的 art 歸 #261/#263,不屬 cast scope。
+標記」;Act IV 八個「未行過的你」(#261 Q5)的 art 歸 #221(spec 由
+#261/#263 供料),不屬 cast scope。
+
+**修訂 [SETTLED — #263,2026-08-16]**:上段「additive-zero」的加圖上限
+由 James 解除——scripted scenes 與對白演出**可以按 scene blueprint 需要
+新增資產**(對白 staging 用圖在內),數量不設前置上限,逐件由 blueprint
+/batch brief 開列。不變的部分:**shipped 資產永不修改**(skill §6 照舊);
+每件新資產仍行 `docs/art-ledger.md` 契約(style bible + 記錄 prompt),
+候選圖過 James review 先入 `assets/`。

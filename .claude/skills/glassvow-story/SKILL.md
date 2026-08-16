@@ -30,8 +30,11 @@ surface reading, post-twist reading, reveal-ladder level (00 §5), leak risk.
 
 - A line whose post-twist rereading fails is rewritten until it passes.
 - A line that reveals above its ladder level is rewritten or rescheduled.
-- Vertical-pilgrimage vocabulary (climb/spire/ascend/above) is banned in new
-  copy and tagged `[REWRITE:climb]` where shipped.
+- Vertical-pilgrimage vocabulary is banned in new copy and tagged
+  `[REWRITE:climb]` where shipped. The full ban is seven terms, not four —
+  Spire/尖塔, climb/爬/攀, ascend/登臨, summit/頂點, above-as-a-place/之上,
+  upward/向上, stair-as-the-road/階梯 — against the keep-list in
+  `06-glossary.md`; read both before substituting anything.
 
 ## 4. Language pipeline (inherits ticket #177)
 

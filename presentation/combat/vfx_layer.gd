@@ -702,7 +702,7 @@ func bespoke(id: String, at: Vector2) -> bool:
 		"shardstorm":
 			_volley(4, 0.07, at + Vector2(0.0, -40.0), 200.0,
 				Color(0.8745098, 0.91764706, 1.0), 10, &"shards")
-		"ascension":
+		"risingLitany":
 			ember_trail(at + Vector2(0.0, 120.0), at + Vector2(0.0, -120.0),
 				Color(1.0, 0.81960785, 0.4))
 			motes(at + Vector2(0.0, -40.0), Color(1.0, 0.9137255, 0.6745098), 16)

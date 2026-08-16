@@ -61,7 +61,7 @@ static func act4_entrance() -> WorldMap:
 ## Byte-order port of engine.js genMap at roguecardv2-benchmark@6e06911.
 static func benchmark(run: RunState) -> WorldMap:
 	var m: WorldMap = WorldMap.new()
-	var regions: Array[String] = ["ashen_woods", "sunken_city", "obsidian_spire", "rose_window"]
+	var regions: Array[String] = ["ashen_woods", "sunken_city", "obsidian_court", "rose_window"]
 	m.region = regions[clampi(run.act, 0, regions.size() - 1)]
 	m.at = -1
 	var grid: Dictionary = {}

@@ -796,8 +796,12 @@ the act's Terminus. It is a graph the run advances through one node at a time, a
 composed scene the player surveys by dragging — the same structure serving both,
 which is why its geometry is presentation's to project and the run's to decide.
 
-*Avoid:* the trail, the tower, the climb — the last is the vertical arrangement
-this replaced and now means nothing here.
+*Avoid:* the trail, the tower — and the whole retired vertical vocabulary, which
+is banned in every player-facing string: Spire, climb (any form), ascend, summit,
+"above" as a place, upward, and stair as *the road*. That arrangement is what the
+Pilgrimage replaced; the words now mean nothing here. `docs/story/06-glossary.md`
+carries the ban and the keep-list of look-alikes that are correct (層 as the
+status-stack measure word, 王冠, 破曉, 朝聖, literal up/down inside a scene).
 
 ### Waystone
 One node of the Pilgrimage: a place the journey can stop, carrying what waits

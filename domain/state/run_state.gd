@@ -22,7 +22,7 @@ var run_id: String = ""
 var rng: Rng = Rng.new(0)
 var act: int = 0
 var node_id: Variant = null
-var floors_climbed: int = 0
+var waystones_lit: int = 0
 var aspect: int = 0
 var vow: int = 0
 var art: StringName = &""
@@ -58,6 +58,7 @@ var pending_quest_id: Variant = null
 var pending_reward: Variant = null
 var pending_run_end: Variant = null
 var pending_dawn: Variant = null
+var pending_scene: Variant = null
 var pending_hollow: Variant = null
 var pending_hollow_route: Variant = null
 var pending_lamplighter: bool = false
@@ -130,6 +131,7 @@ func to_save_dict() -> Dictionary:
 	out["pendingReward"] = pending_reward
 	out["pendingRunEnd"] = pending_run_end
 	out["pendingDawn"] = pending_dawn
+	out["pendingScene"] = pending_scene
 	out["pendingHollow"] = pending_hollow
 	out["pendingHollowRoute"] = pending_hollow_route
 	out["pendingLamplighter"] = pending_lamplighter
@@ -266,7 +268,8 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	rs.rng = Rng.new(_sji(save.get("rngState", 0)))
 	rs.act = _sji(save.get("act", 0))
 	rs.node_id = save.get("nodeId")
-	rs.floors_climbed = _sji(save.get("floorsClimbed", 0))
+	# Wire key stays `floorsClimbed` (#305 D1). The field is waystones_lit.
+	rs.waystones_lit = _sji(save.get("floorsClimbed", 0))
 	rs.aspect = clampi(_sji(save.get("aspect", 0)), 0, maxi(0, content.aspects.size() - 1))
 	rs.vow = clampi(_sji(save.get("vow", 0)), 0, content.vows.size())
 	var content_player: Dictionary = content.player
@@ -290,6 +293,7 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	rs.pending_reward = save.get("pendingReward")
 	rs.pending_run_end = save.get("pendingRunEnd")
 	rs.pending_dawn = save.get("pendingDawn")
+	rs.pending_scene = save.get("pendingScene")
 	rs.pending_hollow = save.get("pendingHollow")
 	rs.pending_hollow_route = save.get("pendingHollowRoute")
 	rs.pending_lamplighter = save.get("pendingLamplighter", false)
@@ -338,6 +342,7 @@ static func _valid_pending(save: Dictionary, content: ContentDB) -> bool:
 	var reward: Variant = save.get("pendingReward")
 	var run_end: Variant = save.get("pendingRunEnd")
 	var dawn: Variant = save.get("pendingDawn")
+	var scene: Variant = save.get("pendingScene")
 	var hollow: Variant = save.get("pendingHollow")
 	var route: Variant = save.get("pendingHollowRoute")
 	var lamplighter: Variant = save.get("pendingLamplighter", false)
@@ -361,6 +366,11 @@ static func _valid_pending(save: Dictionary, content: ContentDB) -> bool:
 			return false
 		var cursor: int = _sji(dawn.get("cursor", -1))
 		if cursor < 0 or cursor > dawn["events"].size():
+			return false
+	if scene != null:
+		if typeof(scene) != TYPE_DICTIONARY:
+			return false
+		if str(scene.get("id", "")).is_empty() or _sji(scene.get("cursor", -1)) < 0:
 			return false
 	if hollow != null and typeof(hollow) != TYPE_DICTIONARY:
 		return false
@@ -434,7 +444,8 @@ func to_dict() -> Dictionary:
 		"seed": seed,
 		"rngState": rng.get_state(),
 		"act": act,
-		"floorsClimbed": floors_climbed,
+		# Wire key stays `floorsClimbed` (#305 D1). 33 fixture hits ride on it.
+		"floorsClimbed": waystones_lit,
 		"aspect": aspect,
 		"vow": vow,
 		"art": String(art),

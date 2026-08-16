@@ -14,9 +14,9 @@ remain unchanged.
 |---|---|---|
 | Glassvow | 琉璃誓言 | Brand title. |
 | Vigil | 守夜 | The cross-run ledger and its ceremony. |
-| Pilgrimage | 朝聖之路 | The horizontal journey; prefer this to a new use of “climb”. |
-| Waystone | 引路石 | One stopping place on the Pilgrimage. |
-| Spire | 尖塔 | The destination and its regions. |
+| Pilgrimage | 朝聖之路 | The horizontal journey. “Climb” and the rest of the vertical vocabulary are **banned** — full table and keep-list in `docs/story/06-glossary.md` › 垂直語彙. |
+| Waystone | 引路石 | One stopping place on the Pilgrimage; the run counter is 第 {n} 塊引路石 / WAYSTONE n. |
+| The Obsidian Court | 黑曜王庭 | Act III's region (it replaced the Spire, which is banned). |
 | Lantern | 提燈 | The vessel that carries Embers. |
 | Lantern Art | 提燈術 | The once-per-turn power. |
 | Energy | 能量 | The resource spent to play cards. |

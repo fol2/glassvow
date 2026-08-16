@@ -83,7 +83,7 @@ class Fan:
 ```
 
 Updating the pile stops allocating anything —
-[presentation/combat/hud_bar.gd:1251-1254](../../../presentation/combat/hud_bar.gd#L1251) (in `_sync_pile`):
+[presentation/combat/hud_bar.gd:1263-1266](../../../presentation/combat/hud_bar.gd#L1263) (in `_sync_pile`):
 
 ```gdscript
 var faces: int = mini(maxi(n, 0), FAN_FACES)
@@ -122,7 +122,7 @@ Two Godot details this ran into:
   `rect_origin - pivot`. Getting this wrong shifts the fan rather than erroring.
 - **An inner class cannot see the outer class's statics unqualified.**
   `_fan_angle(...)` inside `class Fan` fails to parse; `HudBar._fan_angle(...)`
-  resolves ([presentation/combat/hud_bar.gd:1267](../../../presentation/combat/hud_bar.gd#L973) (`_fan_angle`)).
+  resolves ([presentation/combat/hud_bar.gd:1271](../../../presentation/combat/hud_bar.gd#L973) (`_fan_angle`)).
 
 ## Why This Matters
 
@@ -182,7 +182,7 @@ benchmark's `src/pile-chrome.js:4-8` — `PILE_FAN_DEG`, `PILE_FAN_MAX_DEG`,
 
 **Two live `add_child` loops in this file are exemptions, not survivors.**
 
-- `presentation/combat/hud_bar.gd:1152-1180` (in `fly_backs`) builds a
+- `presentation/combat/hud_bar.gd:1173-1184` (in `fly_backs`) builds a
   `TextureRect` per flyer and gives each its own `Tween` — transient nodes that
   each need an independent animation, which is exactly the case the rule above
   carves out.
