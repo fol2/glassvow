@@ -63,6 +63,7 @@
    **判(James 2026-08-16):構作照准——row 30 揭後已簽 SETTLED。**
 4. **Usurper 前提重錨**:shipped 三句以「登頂揭偽王」為軸;橫向 canon 無
    頂可登。本批重錨為「攜燈至封門之前」——見 usurper 表。
+   **判(James 2026-08-16):簽——重錨 SETTLED。**
 5. **兩句 L1 天花貼線判定**:(a) m3.paid「你站立而死的前身」——表面
    虛構下讀成「你以前死嗰幾次」(反向雙讀),twist-safety 兩讀獨立覆核
    後仍留 James 終判(掌燈人渠道 ceiling 係 L1,升級無位,判「過」或
@@ -70,6 +71,7 @@
    死去」係 row 9 SETTLED 明文保留的本體(真相一直寫在紙上係設計本身),
    頁渠道係書面記錄,register 本應敘事。確認 L1 或另判。
 6. **逐代分配表**本身(00 §8.5:成表過 James normal review)。
+   **判(James 2026-08-16):成表簽收 SETTLED。**
 7. **whisper 4 的明晰度爭議——本批唯一 confirmed blocker**(兩個
    canon-lint lens + 一個 twist lens 獨立 flag;adversarial verify 兩次
    維持原判):「死者朝聖兩次:一次以肉身,一次以記憶。」被指以平鋪
@@ -89,6 +91,7 @@
    直言」明文預告 closer 的 register break,影在結案時代整條隊發聲;
    (b) m3.ask「路清點容器」的擬人——同 shipped「門會認得你」同族
    (物件作主語而其事為真),聲線容納。兩項如 James 另判,照改。
+   **判(James 2026-08-16):接受照記錄。**
 9. **玫瑰窗→彩窗 正名的外溢**:06 鎖詞係 彩窗,shipped zh 尚有其他
    玫瑰窗 位(roseWindow/roseTab 等 ui keys)——歸 #228/#303 一併正名,
    本批只改自己兩句(pages[4]、w23)。
@@ -149,8 +152,9 @@
 | quests.usurper.bought | 系統 | L1 | 重寫 | 如今,王座知曉你攜着何物。 | Now the throne knows what you carry. |
 | quests.usurper.death | 系統 | **L2**(closer) | 重寫 | 面具已碎。望向王冠之後。 | The mask is broken. Look beyond the crown. |
 
-- 前提重錨 [待 James 簽]:偽王坐於封門之前(00 §2.1;第四頁「在鎖上披起
-  王者形貌」),quest 軸由「登頂揭面」改為「攜他的燈回到他面前」。
+- 前提重錨 [SETTLED James 2026-08-16]:偽王坐於封門之前(00 §2.1;第四頁
+  「在鎖上披起王者形貌」),quest 軸由「登頂揭面」改為「攜他的燈回到他
+  面前」。
 - 揭後:itemText——燈由蒼白眾攜返西方(00 §2.2),商人知工藝不知來歷
   (矩陣);bought——王座認得的是**他自己的燈**;death——王冠之後即封門
   (#217 勝後 sealed door overlay 正是玩家此刻所見)。
