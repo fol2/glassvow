@@ -40,6 +40,13 @@ CONTENT_DOMAINS = {
 # Narrative copy has no legitimate byte-for-byte English carry-over.  Any future
 # exception must name its exact canonical path and justify it in the reviewing PR.
 COPY_THROUGH_ALLOWLIST = frozenset()
+# Domains that carry display-named leaves but were measured unrendered on
+# 2026-08-16: `themes` is loaded (content_db.gd:266) and never read for display
+# text — act names and bossName render from the hydrated `acts` domain; and
+# `content.player` has no accessor (code reads game.run.player, the run state).
+# A domain listed here that later grows a rendered string moves to
+# CONTENT_DOMAINS; every other unmapped domain is scanned and fails closed.
+AUDITED_NON_DISPLAY = frozenset({"themes", "player"})
 
 
 def parse_args() -> argparse.Namespace:
@@ -163,6 +170,24 @@ def compare_pair(en: dict[str, str], zh: dict[str, str], errors: list[str]) -> N
             errors.append(f"COPY_THROUGH {path}")
 
 
+def uncovered_domains(content: dict, errors: list[str]) -> None:
+    """Fail closed on any content domain the mapping does not cover.
+
+    A domain added to content/full-content.json that carries display-leaf
+    strings must be mapped in CONTENT_DOMAINS or audited in
+    AUDITED_NON_DISPLAY, or this gate cannot see its missing translations.
+    """
+    covered = set(CONTENT_DOMAINS.values()) | AUDITED_NON_DISPLAY
+    for domain in sorted(content.keys()):
+        if domain in covered:
+            continue
+        for path, _value in display_leaves(content[domain], (domain,), domain):
+            errors.append(
+                f"UNCOVERED_DOMAIN {path_text(path)} — map {domain!r} in "
+                "CONTENT_DOMAINS or audit it in AUDITED_NON_DISPLAY")
+            break
+
+
 def check(content_path: Path, en_path: Path, zh_path: Path) -> tuple[list[str], tuple[int, int, int]]:
     content = read_json(content_path)
     en = read_json(en_path)
@@ -172,6 +197,7 @@ def check(content_path: Path, en_path: Path, zh_path: Path) -> tuple[list[str], 
     direct_en = direct_narrative(en)
     direct_zh = direct_narrative(zh)
     errors: list[str] = []
+    uncovered_domains(content, errors)
     compare_pair(hydrated_en, hydrated_zh_leaves, errors)
     compare_pair(direct_en, direct_zh, errors)
     return errors, (len(hydrated_en), len(direct_en), len(direct_zh))
@@ -191,7 +217,7 @@ def self_test() -> int:
     with tempfile.TemporaryDirectory(prefix="glassvow-locale-coverage-") as temp:
         root = Path(temp)
         content, en, zh = fixture(root)
-        for label in ("missing zh leaf", "missing en leaf", "copy-through"):
+        for label in ("missing zh leaf", "missing en leaf", "copy-through", "uncovered domain"):
             case_dir = root / label.replace(" ", "-")
             case_dir.mkdir()
             files = [case_dir / "content.json", case_dir / "en.json", case_dir / "zh.json"]
@@ -201,6 +227,10 @@ def self_test() -> int:
                 data = json.loads(files[2].read_text(encoding="utf-8"))
                 data["content"]["cards"]["sample"]["name"] = "English narrative"
                 files[2].write_text(json.dumps(data), encoding="utf-8")
+            elif label == "uncovered domain":
+                data = json.loads(files[0].read_text(encoding="utf-8"))
+                data["vessels"] = {"relic": {"name": "English lore"}}
+                files[0].write_text(json.dumps(data), encoding="utf-8")
             else:
                 target = files[2] if label == "missing zh leaf" else files[0]
                 data = json.loads(target.read_text(encoding="utf-8"))
@@ -216,9 +246,9 @@ def self_test() -> int:
             if result.returncode == 0:
                 print(f"locale coverage self-test FAILED: {label} was accepted", file=sys.stderr)
                 return 1
-            detail = next((line for line in result.stderr.splitlines() if line.startswith(("MISSING_", "COPY_"))), "no diagnostic")
+            detail = next((line for line in result.stderr.splitlines() if line.startswith(("MISSING_", "COPY_", "UNCOVERED_"))), "no diagnostic")
             print(f"self-test {label}: rejected (exit {result.returncode}; {detail})")
-    print("locale coverage self-test OK (3 seeded defects rejected)")
+    print("locale coverage self-test OK (4 seeded defects rejected)")
     return 0
 
 
