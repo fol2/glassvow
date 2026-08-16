@@ -75,6 +75,11 @@ const ENTRIES: Array[Dictionary] = [
 	{"id": "unsealing-replay", "revision": 1,
 		"description": "Six-pane Vigil; Rose Window replay stages the sixth-pane lighting and the one-queue mirror. pending_scene is not an OVERRIDE_KEY.",
 		"seed": SEED, "overrides": {"shards": 6}},
+	{"id": "combat-unwalked-self", "revision": 1,
+		"description": "Act IV tracer: one silent counterfactual self on an Act III monster waystone.",
+		"seed": SEED, "overrides": {
+			"act": 2, "node": "0,6", "kind": "monster",
+			"enemies": ["unwalkedSelf"]}},
 ]
 
 const UNSUPPORTED: Array[Dictionary] = [

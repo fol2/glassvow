@@ -476,6 +476,18 @@ L1/L2 行照舊兩讀。
 | 389 | 你退開,轉身。龕聲不變——它嗡了不知多少年,不缺你這一次。 / You step back and turn. The hum goes on as before. It has hummed for years past counting; it is not short of one more visitor. | story.event-forgottenShrine.c2(離開) | L1 | 離開神龕 | 「不缺你這一次」——它見過的往東者太多,一個與一個之間沒有分別 |
 | 390 | 苔蘚長回祭品之上。這座龕收過的東西,比它應許過的多。 / The moss grows back over the offerings. This shrine has taken more than it ever promised. | story.event-forgottenShrine.coda | L1 | 苔蘚長回祭品之上 | 「收過的比應許過的多」:這條路的每一個收價者(掌燈人、血肉商人、龕)都是同一句話的變奏 |
 
+#220 Slice 1 tracer(佔位專名,鎖名前不得裸寫):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 391 | 【未行者】 / 【The Unwalked】 | content.enemies.unwalkedSelf.name | L4 | 鏡路上一個不出聲的行者 | 今世沒揀過的 build;八敵不是隊伍,是未行過的你 | 佔位 [#220 Slice 1] |
+| 392 | 放下的權杖 / The Scepter You Set Down | unwalkedSelf.moves.scepterEcho | L4 | 鏡中的王庭一擊 | 你若揀了權勢那條路,手上會是這根杖 | 佔位 |
+| 393 | 未喚之星 / Stars Left Uncalled | unwalkedSelf.moves.starfallEcho | L4 | 沒有落下的星 | 你沒喚過的星,由另一個你喚 | 佔位 |
+| 394 | 裂開的環 / The Ring That Split | unwalkedSelf.moves.ringbreak | L4 | 斷環的一擊 | 光環在放棄之刻裂開;這是你沒坐上的那一環 | 佔位 |
+| 395 | 未坐之位 / The Seat Untaken | unwalkedSelf.moves.gravitasEcho | L4 | 一個沒人坐的位 | 你沒揀的端坐——不肯開始的那條路的姿勢 | 佔位 |
+| 396 | 未出口的禍 / The Word Unsaid | unwalkedSelf.moves.ruinEcho | L4 | 一句沒說出的禍 | 君王的禍詞,由沒行過王庭的你來說 | 佔位 |
+| 397 | 斷了的光環 / The Broken Halo | unwalkedSelf.moves.ringward | L4 | 斷環當盾 | 放棄之刻失去的光,在鏡裏仍替你擋 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

@@ -126,7 +126,60 @@ func enemy_faults(id_key: String, value: Variant) -> PackedStringArray:
 	_validate_enemy_art(id_key, definition.get("art"), faults)
 	_validate_start_status(id_key, definition.get("startStatus", {}), faults)
 	_validate_enemy_moves(id_key, definition.get("moves"), baseline.get("moves", {}), faults)
+	_validate_counterfactual(id_key, definition, faults)
 	return faults
+
+
+func _validate_counterfactual(id_key: String, definition: Dictionary,
+		faults: PackedStringArray) -> void:
+	if not definition.has("counterfactual"):
+		return
+	var raw: Variant = definition["counterfactual"]
+	if typeof(raw) != TYPE_DICTIONARY:
+		faults.append("%s.counterfactual must be a dictionary" % id_key)
+		return
+	var spec: Dictionary = raw
+	if str(spec.get("node", "")).strip_edges().is_empty():
+		faults.append("%s.counterfactual.node is missing" % id_key)
+	if str(spec.get("motif", "")).strip_edges().is_empty():
+		faults.append("%s.counterfactual.motif is missing" % id_key)
+	var kits_v: Variant = spec.get("kits", null)
+	if typeof(kits_v) != TYPE_DICTIONARY:
+		faults.append("%s.counterfactual.kits must be a non-empty dictionary" % id_key)
+		return
+	var kits: Dictionary = kits_v
+	if kits.is_empty():
+		faults.append("%s.counterfactual.kits must be a non-empty dictionary" % id_key)
+		return
+	var moves: Dictionary = definition.get("moves", {})
+	for kit_v: Variant in kits:
+		var kit_id: String = str(kit_v)
+		var rows_v: Variant = kits[kit_v]
+		if typeof(rows_v) != TYPE_ARRAY:
+			faults.append("%s.counterfactual.kits.%s must be a non-empty array" % [id_key, kit_id])
+			continue
+		var rows: Array = rows_v
+		if rows.is_empty():
+			faults.append("%s.counterfactual.kits.%s must be a non-empty array" % [id_key, kit_id])
+			continue
+		for move_v: Variant in rows:
+			var move_id: String = str(move_v)
+			if not moves.has(move_id):
+				faults.append("%s.counterfactual.kits.%s names unknown move %s"
+					% [id_key, kit_id, move_id])
+	var map_v: Variant = spec.get("axisToKit", null)
+	if typeof(map_v) != TYPE_DICTIONARY:
+		faults.append("%s.counterfactual.axisToKit must be a dictionary" % id_key)
+		return
+	var axis_map: Dictionary = map_v
+	for axis: String in ["ember", "ash"]:
+		if not axis_map.has(axis):
+			faults.append("%s.counterfactual.axisToKit missing %s" % [id_key, axis])
+			continue
+		var kit_id: String = str(axis_map[axis])
+		if not kits.has(kit_id):
+			faults.append("%s.counterfactual.axisToKit.%s names unknown kit %s"
+				% [id_key, axis, kit_id])
 
 
 func _validate_enemy_art(id_key: String, value: Variant, faults: PackedStringArray) -> void:
