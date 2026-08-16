@@ -3,7 +3,7 @@ extends Control
 ## 窗中反影遲半拍 (`docs/story/00-truth.md:173-174`) — the reflection lags half
 ## a beat **in the window**, not in the whole hall. This confines it to one
 ## opening of `opening-hearth.png` so the seated cutout stays the only body on
-## screen (`docs/art-ledger.md:107-111`: 「James ruled one」).
+## screen (`docs/art-ledger.md:228-233`: 「James ruled one」).
 ##
 ## ROUTE FORK, awaiting James (#334). Three readings of the same spec line,
 ## rendered side by side in `docs/design/2026-08-16-bespoke-beats/`:
@@ -30,11 +30,14 @@ const ROSE: Rect2 = Rect2(0.0718, 0.1025, 0.1024, 0.1533)
 ## The arched doorway — plate px x 107..265, y 368..730. Route b only.
 const DOOR: Rect2 = Rect2(0.0514, 0.3594, 0.1072, 0.3535)
 ## Ghost height as a fraction of the opening it sits in.
-const GHOST_FILL: float = 0.72
-## Dark glass at night returns a cold, dim copy of a warm room.
-const GHOST_GRADE: Color = Color(0.46, 0.56, 0.72)
+const GHOST_FILL: float = 0.88
+## Dark glass at night returns a cold copy of a warm room. Held above the
+## plate's starfield, which is near-black — a darker ghost is an invisible one.
+const GHOST_GRADE: Color = Color(0.72, 0.82, 1.0)
 ## Route c's hearth light, warmed off `RunStyle.GOLD`.
 const GLOW_GRADE: Color = Color(0.62, 0.45, 0.22)
+## Where the pane stops being solid and starts feathering into the stone.
+const PANE_CORE: float = 0.66
 
 var route: StringName = ROUTE_ROSE_FIGURE
 var _pane: TextureRect
@@ -58,8 +61,13 @@ func _init(route_id: StringName = ROUTE_ROSE_FIGURE) -> void:
 		_pane.texture = GlassStyle.disc(GLOW_GRADE, 1.0, 128)
 		return
 	# The disc is the window, not a sprite: it masks the ghost to the opening
-	# with a soft rim, so nothing of the reflection spills onto the stone.
-	_pane.texture = GlassStyle.disc(Color.WHITE, 1.0, 128)
+	# with a soft rim, so nothing of the reflection spills onto the stone. Its
+	# core is flat — `GlassStyle.disc` halves by 52% of the radius, which eats
+	# a figure this small before it can be read.
+	_pane.texture = GlassStyle.grad_tex(
+		PackedColorArray([Color.WHITE, Color.WHITE, Color(1.0, 1.0, 1.0, 0.0)]),
+		PackedFloat32Array([0.0, PANE_CORE, 1.0]), true,
+		Vector2(0.5, 0.5), Vector2(1.0, 0.5))
 	_pane.clip_children = CanvasItem.CLIP_CHILDREN_ONLY
 	_ghost = TextureRect.new()
 	_ghost.name = "Ghost"

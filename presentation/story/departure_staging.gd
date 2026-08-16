@@ -10,12 +10,17 @@ signal finished
 const HEARTH_PLATE: String = "res://assets/art/scenes/opening-hearth.png"
 const HEARTH_HOLD: float = 1.0
 const WINDOW_LAG: float = 0.5
+## How far the reflection comes up once the lag is paid. Dark glass returns a
+## fraction of the room, never a second room.
+const REFLECT_ALPHA: float = 0.45
 
 var instant: bool = false
 var hearth_plate: String = HEARTH_PLATE
+## Which reading of 窗中反影 to stage — see `WindowReflection`. #334 fork.
+var route: StringName = WindowReflection.ROUTE_ROSE_FIGURE
 var _done: bool = false
 var _plant: TextureRect = null
-var _window: TextureRect = null
+var _reflection: WindowReflection = null
 
 
 func _init(plate: String = HEARTH_PLATE) -> void:
@@ -39,35 +44,30 @@ func _ready() -> void:
 	if instant or not ResourceLoader.exists(hearth_plate):
 		_complete()
 		return
-	_plant = _overlay("HearthPlant", 1.0)
-	_window = _overlay("HearthWindow",
-		0.45 if Preferences.active.reduce_motion else 0.0)
-	_window.flip_h = true
+	# ONE plate and ONE body. The hall is never mirrored: what lags is the
+	# reflection inside a single window (`docs/art-ledger.md:228-233`).
+	_plant = TextureRect.new()
+	_plant.name = "HearthPlant"
+	_plant.texture = load(hearth_plate) as Texture2D
+	_plant.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_plant.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_plant.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	_plant.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_plant)
 	if HearthFigure.present():
-		HearthFigure.attach(_plant, false)
-		HearthFigure.attach(_window, true)
+		HearthFigure.attach(_plant)
+	_reflection = WindowReflection.new(route)
+	_reflection.modulate.a = REFLECT_ALPHA if Preferences.active.reduce_motion else 0.0
+	_plant.add_child(_reflection)
 	Motion.bez(self, _tick_window, HEARTH_HOLD, Motion.CSS_EASE) \
 		.finished.connect(_complete)
 
 
-func _overlay(node_name: String, alpha: float) -> TextureRect:
-	var plate: TextureRect = TextureRect.new()
-	plate.name = node_name
-	plate.texture = load(hearth_plate) as Texture2D
-	plate.set_anchors_preset(Control.PRESET_FULL_RECT)
-	plate.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	plate.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	plate.modulate.a = alpha
-	add_child(plate)
-	return plate
-
-
 func _tick_window(u: float) -> void:
-	if _window == null or Preferences.active.reduce_motion:
+	if _reflection == null or Preferences.active.reduce_motion:
 		return
 	var elapsed: float = u * HEARTH_HOLD
-	_window.modulate.a = 0.45 * clampf(
+	_reflection.modulate.a = REFLECT_ALPHA * clampf(
 		(elapsed - WINDOW_LAG) / maxf(HEARTH_HOLD - WINDOW_LAG, 0.01), 0.0, 1.0)
 
 

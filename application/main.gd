@@ -205,6 +205,7 @@ func _ready() -> void:
 	var map_bench: bool = false
 	var scene_shot: String = ""
 	var scene_cursor: int = 0
+	var scene_reflect: StringName = &""
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shot="):
 			shot_path = arg.trim_prefix("--shot=")
@@ -272,6 +273,8 @@ func _ready() -> void:
 			scene_shot = arg.trim_prefix("--scene=")
 		elif arg.begins_with("--cursor="):
 			scene_cursor = maxi(0, int(arg.trim_prefix("--cursor=")))
+		elif arg.begins_with("--reflect="):
+			scene_reflect = StringName(arg.trim_prefix("--reflect="))
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	if performance_probe and (fight.is_empty() or not shot_path.is_empty()
@@ -375,7 +378,7 @@ func _ready() -> void:
 		_continue_run(SaveService.load_run(content))
 	elif not scene_shot.is_empty():
 		_opening_suppressed = true
-		if not _show_scene_shot(scene_shot, scene_cursor):
+		if not _show_scene_shot(scene_shot, scene_cursor, scene_reflect):
 			get_tree().quit(2)
 			return
 		if shot_path != "":
@@ -2638,10 +2641,15 @@ func _show_scene() -> void:
 
 ## Capture hook for bespoke beats (`--scene=`). Not ScenePlayer grammar —
 ## it mounts an already-authored scene at a cursor, or the L0 linger.
-func _show_scene_shot(scene_id: String, cursor: int) -> bool:
+## `--reflect=a|b|c` photographs the three 窗中反影 routes of the #334 fork;
+## it goes when James picks one.
+func _show_scene_shot(scene_id: String, cursor: int,
+		reflect: StringName = &"") -> bool:
 	if scene_id == "departure":
 		var linger: DepartureStaging = DepartureStaging.new()
 		linger.instant = false
+		if not reflect.is_empty():
+			linger.route = reflect
 		_show_route(linger, false, &"", false)
 		return true
 	var script: SceneScript = _scene_script(scene_id)
