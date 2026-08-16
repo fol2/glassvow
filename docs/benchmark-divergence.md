@@ -48,9 +48,10 @@ Two mechanism causes are worth recording, because both are the same disease this
 document names elsewhere — a guard that exists in belief rather than mechanism.
 The file was **one line of 65,591 bytes**, so `32b45a1 Lift the two short boss
 curves` appeared in review as `1 insertion, 1 deletion`. And the test believed to
-protect capture fidelity, `tests/test_original_content.gd:61-64`, read the
-already-edited tree file as its stand-in for a fresh capture, so it would have
-passed at any amount of drift.
+protect capture fidelity, `tests/test_original_content.gd:61-64` at `89f71c4`
+(`_capture_survives`; the file is deleted below, so the commit is the only place
+left to read it), took the already-edited tree file as its stand-in for a fresh
+capture, so it would have passed at any amount of drift.
 
 [#323](https://github.com/fol2/glassvow/issues/323) resolved it by deleting the
 capture script, pretty-printing the baseline to 5,485 lines, and replacing the
