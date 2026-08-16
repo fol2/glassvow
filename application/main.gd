@@ -1576,7 +1576,8 @@ func _finish_node() -> void:
 	game.run.pending_hollow_route = null
 	_map.clear_current()
 	game.run.map = _map.to_dict()
-	for key: String in ["eventNode", "eventPending", "shopStock", "treasureClaim"]:
+	for key: String in ["eventNode", "eventPending", "eventStory", "eventChoice",
+			"shopStock", "treasureClaim"]:
 		game.run.quest_scratch.erase(key)
 	if _store_run():
 		_route_run()
@@ -1647,6 +1648,17 @@ func _show_event() -> void:
 			var row: Dictionary = row_v
 			row["disabled"] = game.run.player.gold < int(float(str(
 				row.get("needGold", 0))))
+	var story_v: Variant = game.run.quest_scratch.get("eventStory")
+	if typeof(story_v) == TYPE_DICTIONARY:
+		var story: Dictionary = story_v
+		var phase: String = str(story.get("phase", "result"))
+		var choice: int = int(float(str(story.get("choice", 0))))
+		var key: String = _event_story_key(event_id, choice, phase)
+		var story_screen: EventScreen = EventScreen.new(
+			event_id, event, Locale.active.t(key), false, true, _shape, _sfx_bus)
+		story_screen.continue_requested.connect(_on_event_story_continue)
+		_show_route(story_screen, true, &"map")
+		return
 	var screen: EventScreen = EventScreen.new(
 		event_id, event, "", true, false, _shape, _sfx_bus)
 	screen.choice_selected.connect(func(ordinal: int) -> void:
@@ -1659,16 +1671,15 @@ func _on_event_choice(choice_text: String, event_id: String) -> void:
 	var event: Dictionary = content.events[event_id]
 	var choices: Array = event.get("choices", [])
 	var choice: Dictionary = choices[int(choice_text)]
+	game.run.quest_scratch["eventChoice"] = int(choice_text)
 	var ops: Array = choice.get("ops", [])
 	var pending: Dictionary = game.rewards.apply_event_ops(game.run, ops)
 	if str(pending.get("kind", "")).is_empty():
-		_finish_node()
+		_continue_event_after_ops()
 		return
 	game.run.quest_scratch["eventPending"] = pending
-	if _store_run():
+	if _store_event_choice():
 		_show_event_pick(pending)
-	else:
-		_show_save_error("ui.persistence.detail.eventChoiceHold")
 
 
 func _show_event_pick(pending: Dictionary) -> void:
@@ -1685,7 +1696,7 @@ func _show_event_pick(pending: Dictionary) -> void:
 			if kind != "upgrade" or (not card.up and definition.has("up")):
 				choices.append(_card_choice(card, str(card.uid)))
 	if choices.is_empty():
-		_finish_node()
+		_continue_event_after_ops()
 		return
 	_show_choice(Locale.active.t("ui.event.chooseCardTitle").to_upper(),
 		Locale.active.t("ui.event.chooseCardBody"), choices,
@@ -1708,7 +1719,60 @@ func _on_event_pick(id: String, kind: String) -> void:
 				"duplicate":
 					game.run.player.deck.append(CardInst.new(
 						game.run.next_uid(), picked.id, picked.up))
+	_continue_event_after_ops()
+
+
+func _event_story_key(event_id: String, choice: int, phase: String) -> String:
+	if phase == "coda":
+		return "story.event-%s.coda" % event_id
+	return "story.event-%s.c%d" % [event_id, choice]
+
+
+func _event_has_story(event_id: String, choice: int) -> bool:
+	var result_key: String = _event_story_key(event_id, choice, "result")
+	var coda_key: String = _event_story_key(event_id, choice, "coda")
+	return Locale.active.t(result_key) != result_key \
+		and Locale.active.t(coda_key) != coda_key
+
+
+func _continue_event_after_ops() -> void:
+	game.run.quest_scratch.erase("eventPending")
+	var event_id: String = str(game.run.quest_scratch.get("eventNode", ""))
+	var choice: int = int(float(str(game.run.quest_scratch.get("eventChoice", -1))))
+	if _event_has_story(event_id, choice):
+		_begin_event_story(event_id, choice)
+		return
 	_finish_node()
+
+
+func _begin_event_story(event_id: String, choice: int) -> void:
+	game.run.quest_scratch["eventStory"] = {
+		"id": event_id, "choice": choice, "phase": "result",
+	}
+	if _store_event_choice():
+		_show_event()
+
+
+func _on_event_story_continue() -> void:
+	var story_v: Variant = game.run.quest_scratch.get("eventStory")
+	if typeof(story_v) != TYPE_DICTIONARY:
+		_finish_node()
+		return
+	var story: Dictionary = story_v
+	if str(story.get("phase", "")) == "result":
+		story["phase"] = "coda"
+		game.run.quest_scratch["eventStory"] = story
+		if _store_event_choice():
+			_show_event()
+		return
+	_finish_node()
+
+
+func _store_event_choice() -> bool:
+	if _store_run():
+		return true
+	_show_save_error("ui.persistence.detail.eventChoiceHold")
+	return false
 
 
 func _show_treasure() -> void:
@@ -2474,8 +2538,14 @@ func _on_terminal_commit(_id: String) -> void:
 	var outcome: String = str(pending["outcome"])
 	var before_unlocks: Array = _vigil.unlocks.duplicate()
 	var before_quests: Dictionary = _vigil.quests.duplicate(true)
+	var before_shards: int = _vigil.shards.size()
 	var before_whispers: int = _vigil.whispers
-	if not _vigil.commit_run(game.run, outcome, content) or not _store_vigil():
+	var recorded: bool = _vigil.commit_run(game.run, outcome, content)
+	var dawn_leaves: Array[String] = []
+	if recorded:
+		dawn_leaves = DawnPassages.archive(_vigil, DawnPassages.earned(
+			before_quests, _vigil.quests, before_shards, _vigil.shards.size()))
+	if not recorded or not _store_vigil():
 		_show_save_error("ui.persistence.detail.vigilRecord")
 		return
 	if outcome != "win":
@@ -2514,12 +2584,14 @@ func _on_terminal_commit(_id: String) -> void:
 		if after_state != before_state and after_state in ["armed", "revealed"]:
 			events.append({
 				"kind": "quest",
+				"quest": id,
 				"title": name,
 				"body": str(quest.get("inscription", "")),
 			})
 		if after_progress > before_progress and after_state != "complete":
 			var progress_event: Dictionary = {
 				"kind": "progress",
+				"quest": id,
 				"title": name,
 				"body": "",
 				# `.dawn-count` (styles.css:2589) — progress lives beside the
@@ -2537,6 +2609,7 @@ func _on_terminal_commit(_id: String) -> void:
 		var id: String = str(id_v)
 		events.append({
 			"kind": "shard",
+			"quest": id,
 			"title": str(content.quests[id].get("name", id)),
 			# `ui.dawn.shardGrantCopy` (i18n/en/ui.js:237).
 			"body": Locale.active.t("ui.dawn.shardGrantCopy"),
@@ -2554,6 +2627,7 @@ func _on_terminal_commit(_id: String) -> void:
 				unlock_event["cue"] = "sealedDoor"
 				unlock_event["icon"] = "door"
 			events.append(unlock_event)
+	_fill_dawn_bodies(events, dawn_leaves)
 	if events.is_empty():
 		events.append({
 			"kind": "memory",
@@ -2578,6 +2652,48 @@ func _unlock_dawn_copy(id: String) -> String:
 		"emberglass": return Locale.active.t("ui.dawn.unlock.emberglass")
 		"act4": return Locale.active.t("ui.dawn.unlock.act4")
 		_: return id.capitalize()
+
+
+func _fill_dawn_bodies(events: Array, leaves: Array[String]) -> void:
+	var used: Dictionary = {}
+	for ev_v: Variant in events:
+		if typeof(ev_v) != TYPE_DICTIONARY:
+			continue
+		var ev: Dictionary = ev_v
+		var leaf: String = DawnPassages.attach_leaf(
+			str(ev.get("quest", "")), str(ev.get("kind", "")), leaves)
+		var text: String = _dawn_text(leaf)
+		if text.is_empty():
+			continue
+		ev["body"] = text
+		used[leaf] = true
+	for leaf: String in leaves:
+		if used.has(leaf):
+			continue
+		var text: String = _dawn_text(leaf)
+		if text.is_empty():
+			continue
+		events.append({
+			"kind": "memory",
+			"title": _dawn_card_title(leaf),
+			"body": text,
+		})
+
+
+func _dawn_text(leaf: String) -> String:
+	if leaf.is_empty():
+		return ""
+	var text: String = Locale.active.t(leaf)
+	return "" if text == leaf else text
+
+
+func _dawn_card_title(leaf: String) -> String:
+	if leaf.begins_with("story.dawn.pane."):
+		return Locale.active.t("ui.pilgrimage.roseWindow")
+	var id: String = DawnPassages.quest_of(leaf)
+	if id.is_empty() or not content.quests.has(id):
+		return Locale.active.t("ui.dawn.memoryTitle")
+	return str(content.quests[id].get("name", id))
 
 
 ## Built ONCE; the feed animates in place (DawnScreen, P3.3). The durable

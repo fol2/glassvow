@@ -317,6 +317,9 @@ func _pane_copy(id: String, record: Dictionary) -> String:
 
 
 func _detail_copy(id: String, record: Dictionary) -> String:
+	var archived: String = _archived_dawn(record)
+	if not archived.is_empty():
+		return archived
 	var state: String = _state(record)
 	if state == "armed":
 		return "???"
@@ -329,6 +332,23 @@ func _detail_copy(id: String, record: Dictionary) -> String:
 			"name": str(_quest(id).get("name", id)),
 		})
 	return Locale.active.t("ui.rose.paneDark")
+
+
+func _archived_dawn(record: Dictionary) -> String:
+	var memory_v: Variant = record.get("memory", {})
+	if typeof(memory_v) != TYPE_DICTIONARY:
+		return ""
+	var memory: Dictionary = memory_v
+	var dawn_v: Variant = memory.get("dawn", [])
+	if typeof(dawn_v) != TYPE_ARRAY:
+		return ""
+	var parts: PackedStringArray = PackedStringArray()
+	for id_v: Variant in dawn_v:
+		var key: String = str(id_v)
+		var text: String = Locale.active.t(key)
+		if text != key:
+			parts.append(text)
+	return "\n\n".join(parts)
 
 
 func _pane_accessible_name(index: int, id: String, record: Dictionary) -> String:

@@ -110,60 +110,275 @@
     },
     "unsealing": {
       "beats": [
-        {"motion": "hold", "lines": [{"key": "story.unsealing.b1.l1"}]},
-        {"motion": "hold", "lines": [{"key": "story.unsealing.b2.l1"}]},
-        {"art": "res://assets/art/scenes/unsealing-mirror-queue.png", "motion": "hold", "lines": [{"key": "story.unsealing.b3.l1"}]},
-        {"art": "res://assets/art/scenes/unsealing-monuments-push.png", "motion": "push-in", "lines": [{"key": "story.unsealing.b4.l1"}]}
+        {
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.unsealing.b1.l1"
+            },
+            {
+              "key": "story.unsealing.b1.l2"
+            },
+            {
+              "key": "story.unsealing.b1.l3"
+            }
+          ]
+        },
+        {
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.unsealing.b2.l1"
+            },
+            {
+              "key": "story.unsealing.b2.l2"
+            },
+            {
+              "key": "story.unsealing.b2.l3"
+            }
+          ]
+        },
+        {
+          "art": "res://assets/art/scenes/unsealing-mirror-queue.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.unsealing.b3.l1"
+            },
+            {
+              "key": "story.unsealing.b3.l2"
+            },
+            {
+              "key": "story.unsealing.b3.l3"
+            },
+            {
+              "key": "story.unsealing.b3.l4"
+            }
+          ]
+        },
+        {
+          "art": "res://assets/art/scenes/unsealing-monuments-push.png",
+          "motion": "push-in",
+          "lines": [
+            {
+              "key": "story.unsealing.b4.l1"
+            },
+            {
+              "key": "story.unsealing.b4.l2"
+            },
+            {
+              "key": "story.unsealing.b4.l3"
+            }
+          ]
+        }
       ]
     },
     "unsealing-short": {
       "beats": [
-        {"art": "res://assets/art/scenes/unsealing-door-open.png", "motion": "hold", "lines": [{"key": "story.unsealing-short.b1.l1"}]}
+        {
+          "art": "res://assets/art/scenes/unsealing-door-open.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.unsealing-short.b1.l1"
+            }
+          ]
+        }
       ]
     },
     "act4-entry": {
       "beats": [
-        {"art": "res://assets/art/scenes/act4-node1.png", "motion": "push-in", "lines": [{"key": "story.act4-entry.b1.l1"}]}
+        {
+          "art": "res://assets/art/scenes/act4-node1.png",
+          "motion": "push-in",
+          "lines": [
+            {
+              "key": "story.act4-entry.b1.l1"
+            },
+            {
+              "key": "story.act4-entry.b1.l2"
+            },
+            {
+              "key": "story.act4-entry.b1.l3"
+            }
+          ]
+        }
       ]
     },
     "act4-node1": {
       "beats": [
-        {"art": "res://assets/art/scenes/act4-node1.png", "motion": "hold", "lines": [{"speaker": "queue", "key": "story.act4-node1.b1.l1"}]}
+        {
+          "art": "res://assets/art/scenes/act4-node1.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "speaker": "queue",
+              "key": "story.act4-node1.b1.l1"
+            },
+            {
+              "speaker": "queue",
+              "key": "story.act4-node1.b1.l2"
+            }
+          ]
+        }
       ]
     },
     "act4-node2": {
       "beats": [
-        {"art": "res://assets/art/scenes/act4-node2.png", "motion": "hold", "lines": [{"speaker": "queue", "key": "story.act4-node2.b1.l1"}]}
+        {
+          "art": "res://assets/art/scenes/act4-node2.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "speaker": "queue",
+              "key": "story.act4-node2.b1.l1"
+            },
+            {
+              "speaker": "queue",
+              "key": "story.act4-node2.b1.l2"
+            }
+          ]
+        }
       ]
     },
     "act4-node3": {
       "beats": [
-        {"art": "res://assets/art/scenes/act4-node3.png", "motion": "hold", "lines": [{"speaker": "queue", "key": "story.act4-node3.b1.l1"}]}
+        {
+          "art": "res://assets/art/scenes/act4-node3.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "speaker": "queue",
+              "key": "story.act4-node3.b1.l1"
+            },
+            {
+              "speaker": "queue",
+              "key": "story.act4-node3.b1.l2"
+            }
+          ]
+        }
       ]
     },
     "act4-node4": {
       "beats": [
-        {"art": "res://assets/art/scenes/act4-node4.png", "motion": "linger", "lines": [
-          {"key": "story.act4-node4.b1.l1"},
-          {"key": "story.act4-node4.b1.l2"},
-          {"key": "story.act4-node4.b1.l3"}
-        ]}
+        {
+          "art": "res://assets/art/scenes/act4-node4.png",
+          "motion": "linger",
+          "lines": [
+            {
+              "key": "story.act4-node4.b1.l1"
+            },
+            {
+              "key": "story.act4-node4.b1.l2"
+            },
+            {
+              "key": "story.act4-node4.b1.l3"
+            },
+            {
+              "key": "story.act4-node4.b1.l4"
+            },
+            {
+              "key": "story.act4-node4.b1.l5"
+            }
+          ]
+        }
       ]
     },
     "act4-node5": {
       "beats": [
-        {"art": "res://assets/art/scenes/act4-node5.png", "motion": "hold", "lines": [
-          {"speaker": "keeper", "key": "story.act4-node5.b1.l1"},
-          {"speaker": "keeper", "key": "story.act4-node5.b1.l2"}
-        ]}
+        {
+          "art": "res://assets/art/scenes/act4-node5.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "speaker": "keeper",
+              "key": "story.act4-node5.b1.l1"
+            },
+            {
+              "speaker": "keeper",
+              "key": "story.act4-node5.b1.l2"
+            },
+            {
+              "speaker": "keeper",
+              "key": "story.act4-node5.b1.l3"
+            },
+            {
+              "speaker": "keeper",
+              "key": "story.act4-node5.b1.l4"
+            }
+          ]
+        }
       ]
     },
     "finale": {
       "beats": [
-        {"art": "res://assets/art/scenes/finale-swap.png", "motion": "hold", "lines": [
-          {"key": "story.finale.b1.l1"},
-          {"key": "story.finale.b1.l2"}
-        ]}
+        {
+          "art": "res://assets/art/scenes/finale-swap.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.finale.b1.l1"
+            },
+            {
+              "key": "story.finale.b1.l2"
+            },
+            {
+              "key": "story.finale.b1.l3"
+            }
+          ]
+        },
+        {
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.finale.b2.l1"
+            },
+            {
+              "key": "story.finale.b2.l2"
+            },
+            {
+              "key": "story.finale.b2.l3"
+            },
+            {
+              "key": "story.finale.b2.l4"
+            }
+          ]
+        }
+      ]
+    },
+    "finale-win": {
+      "beats": [
+        {
+          "art": "res://assets/art/meta/ascended.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.finale-win.b1.l1"
+            },
+            {
+              "key": "story.finale-win.b1.l2"
+            },
+            {
+              "key": "story.finale-win.b1.l3"
+            }
+          ]
+        }
+      ]
+    },
+    "finale-loss": {
+      "beats": [
+        {
+          "art": "res://assets/art/meta/fallen.png",
+          "motion": "hold",
+          "lines": [
+            {
+              "key": "story.finale-loss.b1.l1"
+            },
+            {
+              "key": "story.finale-loss.b1.l2"
+            }
+          ]
+        }
       ]
     }
   }

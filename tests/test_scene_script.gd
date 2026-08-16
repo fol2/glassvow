@@ -6,13 +6,19 @@ extends RefCounted
 const SCENE_IDS: Array[String] = [
 	"opening", "unsealing", "unsealing-short", "act4-entry",
 	"act4-node1", "act4-node2", "act4-node3", "act4-node4", "act4-node5",
-	"finale",
+	"finale", "finale-win", "finale-loss",
 	"lamplighter-m1-pre", "lamplighter-m1-post",
 	"lamplighter-m2-pre", "lamplighter-m2-post",
 	"lamplighter-m3-pre", "lamplighter-m3-post",
 	"lamplighter-m4-pre", "lamplighter-m4-post",
 	"lamplighter-m5-pre", "lamplighter-m5-post",
 ]
+const SLOT_COUNTS: Dictionary = {
+	"unsealing": 13, "unsealing-short": 1, "act4-entry": 3,
+	"act4-node1": 2, "act4-node2": 2, "act4-node3": 2,
+	"act4-node4": 5, "act4-node5": 4,
+	"finale": 7, "finale-win": 3, "finale-loss": 2,
+}
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -65,6 +71,11 @@ static func _loads(fails: Array[String]) -> void:
 			continue
 		_check(fails, script.line_count() > 0, "%s has no flat lines" % scene_id)
 		_check(fails, not script.beats.is_empty(), "%s has no beats" % scene_id)
+		if SLOT_COUNTS.has(scene_id):
+			var expected: int = int(float(str(SLOT_COUNTS[scene_id])))
+			_check(fails, script.line_count() == expected,
+				"%s is not %d flat lines (got %d)" % [
+					scene_id, expected, script.line_count()])
 
 
 static func _keys_resolve(fails: Array[String]) -> void:

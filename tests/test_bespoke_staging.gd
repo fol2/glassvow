@@ -195,7 +195,7 @@ static func _unsealing_pane_lighting(fails: Array[String]) -> void:
 	_check(fails, plate != null and not plate.visible,
 		"beat 1 bound a plate the beat does not name")
 	player.free()
-	var lit: ScenePlayer = _live(script, 1)
+	var lit: ScenePlayer = _live(script, _first_of_beat(script, 1))
 	var all_lit: UnsealingStaging = _rose(lit)
 	_check(fails, all_lit != null and all_lit.visible,
 		"beat 2 (窗全亮) has no rose staging")
@@ -210,7 +210,7 @@ static func _unsealing_mirror_is_one_queue(fails: Array[String]) -> void:
 	if script == null:
 		_check(fails, false, "unsealing did not load")
 		return
-	var player: ScenePlayer = _live(script, 2)
+	var player: ScenePlayer = _live(script, _first_of_beat(script, 2))
 	var rose: UnsealingStaging = _rose(player)
 	_check(fails, rose != null and not rose.visible,
 		"beat 3 kept the rose over the mirror plate")
@@ -256,14 +256,14 @@ static func _resume_keeps_staging(fails: Array[String]) -> void:
 	if script == null:
 		_check(fails, false, "unsealing did not load")
 		return
-	var player: ScenePlayer = _live(script, 1)
+	var player: ScenePlayer = _live(script, _first_of_beat(script, 1))
 	_check(fails, _text(player) == Locale.active.t("story.unsealing.b2.l1"),
 		"resume at cursor 1 is not on beat 2's line")
 	var rose: UnsealingStaging = _rose(player)
 	_check(fails, rose != null and rose.visible,
 		"resume at cursor 1 dropped the fully-lit rose")
 	player.free()
-	var mirror: ScenePlayer = _live(script, 2)
+	var mirror: ScenePlayer = _live(script, _first_of_beat(script, 2))
 	_check(fails, _text(mirror) == Locale.active.t("story.unsealing.b3.l1"),
 		"resume at cursor 2 is not on the mirror line")
 	var hidden: UnsealingStaging = _rose(mirror)
@@ -283,6 +283,13 @@ static func _live(script: SceneScript, cursor: int, asked: Array[int] = [],
 	player._ready()
 	player._process(0.016)
 	return player
+
+
+static func _first_of_beat(script: SceneScript, beat_i: int) -> int:
+	for i: int in range(script.lines.size()):
+		if int(float(str(script.lines[i].get("beat", -1)))) == beat_i:
+			return i
+	return 0
 
 
 static func _script(scene_id: String) -> SceneScript:
