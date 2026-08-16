@@ -11,19 +11,19 @@ benchmark at `6e06911`.
 
 ## Sources
 
-- **Benchmark** — `roguecardv2-benchmark` at **`6e06911`**, the approved pre-pixi
-  visual. Not `~/Coding/roguecardv2` / `main`, which is post-Pixi and a
-  regression for parity. Every benchmark claim below carries a `file:line`
-  citation read from that commit. A function existing in source is not evidence
-  it renders — measure on the running page.
+- **Benchmark** — dated measurement against `roguecardv2-benchmark` at **`6e06911`**,
+  the approved pre-pixi visual *as of 2026-07-26*. Not a live standard (detached
+  #317 / #325). Frozen `file:line` citations in this file are observations;
+  new ones are banned — see [`docs/benchmark-divergence.md`](benchmark-divergence.md).
 - **This port** — chiefly `presentation/combat/enemy_view.gd`,
   `presentation/combat/combat_screen.gd`, `presentation/combat/vfx_layer.gd`,
   `presentation/combat/floaters.gd`, `presentation/lab/enemy_lab.gd`, and
   `assets/art/enemies/char-meta.json`.
 
-Per `CONCEPTS.md` › **Benchmark**, the web build is authority for *what* the game
-does, never for *how* it had to achieve it. Beats it only performs because a
-browser could not do better are marked and not ported.
+Per `CONCEPTS.md` › **Benchmark**, the web build *was* authority for *what* the
+game did, never for *how* it had to achieve it. That authority ended 2026-08-16.
+Beats it only performed because a browser could not do better are marked and
+not ported.
 
 ## Verdicts
 

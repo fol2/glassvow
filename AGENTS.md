@@ -12,12 +12,12 @@ now ahead of it, so continuing to benchmark against it would only hold the port
 back. See issue #317 for the decision and `docs/benchmark-divergence.md` for what
 was measured on the way out.
 
-**The 612 surviving `file:line` citations are frozen history, not instructions.**
+**The 607 surviving `file:line` citations are frozen history, not instructions.**
 They explain 403 code sites and cost nothing to leave alone, and the commit they
 name cannot drift. Do not re-resolve them; roughly two thirds were written against
 the wrong tree anyway (see the incident below), so their provenance value is
 already part fiction. **Writing a new one is banned** — cite this port's own code,
-and `python3 tools/check_benchmark_freeze.py` will refuse a 613th.
+and `python3 tools/check_benchmark_freeze.py` will refuse a 608th.
 
 **Nothing serves `http://localhost:5190` any more, and no gate reads the
 checkout.** If you genuinely need to look at the original — which should be rare,

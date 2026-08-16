@@ -3,11 +3,10 @@ extends Control
 ## The card designer surface: every card in the loaded content set, laid flat on
 ## the benchmark's own backdrop, at 1:1 with no hand fan, no rotation, no lift.
 ##
-## Why this exists: card art and typography can only be judged against the
-## benchmark (roguecardv2@6e069118), and reading them off a live fight means
-## fighting the hand's arc, overlap and viewport clipping at the same time. This
-## screen removes all three so a `--shot` here diffs directly against the same
-## cards flattened in the browser.
+## Why this exists: card art and typography need a flat 1:1 sheet, and reading
+## them off a live fight means fighting the hand's arc, overlap and viewport
+## clipping at the same time. This screen removes all three so a `--shot` here
+## is a contact sheet of this port's own cards, not a live-fight crop.
 ##
 ##   godot --path . -- --cards                       # window, stays open
 ##   tools/shot.sh --cards --shot=/tmp/cards.png     # contact sheet, then quits

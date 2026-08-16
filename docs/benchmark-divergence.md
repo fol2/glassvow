@@ -282,10 +282,9 @@ through. Rows 16–18 are one file and one afternoon.
 > and needing nothing, it runs in CI. Keep the method below for the record; it is
 > the right design for the problem as it stood.
 
-`tools/` is organiser-owned — lanes run it, no lane edits it — so this is a
-request rather than a commit. A `tools/check_web_anchors.py` belongs in the
-verification block in `AGENTS.md` beside `check_anchors.py`. It is about eighty
-lines and the method is the whole of it:
+The method that was requested — and that shipped, then retired — is the record
+below. It is not a live request: `check_web_anchors.py` is gone, and
+`check_benchmark_freeze.py` is the gate in `AGENTS.md`. The design:
 
 1. Pull every `` `symbol` (file.js:NNN) `` out of `presentation/` and
    `application/`, taking the backticked token from the comment block the
@@ -302,9 +301,8 @@ failures deep and the 14 that matter are buried in it. Against two, the 14
 name themselves: they are the anchors that miss the reference and land in the
 tree the reference is not.
 
-Until it exists, the rule from the audit still stands — if a symbol is missing
-from `~/Coding/roguecardv2-benchmark`, it is not portable, however good it looks
-in the newer tree.
+That rule stood until the freeze replaced it. A symbol missing from the archived
+checkout is a fact about the web original, not a reason to write a new citation.
 
 ## Putting the benchmark into a named fight — the reproducible recipe
 

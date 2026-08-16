@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Hold the web-reference citation count at or below its frozen census.
 
-The port detached from the benchmark on 2026-08-16 (#317). The 612 `file:line`
+The port detached from the benchmark on 2026-08-16 (#317). The 607 `file:line`
 citations into `roguecardv2 @ 6e06911` that were already in the tree stay: they
 explain 403 code sites, the commit they name cannot drift, and re-resolving them
 would buy little — the divergence ledger's own audit found only 45 of 174 sampled
 anchors landing in the real reference, the rest having been written against the
 post-Pixi tree. Deleting them would destroy the explanation for nothing.
 
-What must not happen is the 613th. A citation written after detachment points
+What must not happen is the 608th. A citation written after detachment points
 into a tree nobody reads, nobody serves, and nobody checks, and it re-opens the
 coupling the detachment closed.
 
@@ -121,6 +121,12 @@ def main() -> int:
     now, frozen = census_now(), census_frozen()
 
     if not frozen:
+        if not args.update:
+            print(f"{CENSUS.relative_to(REPO)} is missing or empty — will not invent"
+                  " a baseline (the same silent-pass as grading `--check-only` by"
+                  " its exit code). Restore the file, or pass --update once to write"
+                  " one.")
+            return 1
         write_census(now)
         print(f"census written: {sum(now.values())} citation(s) in {len(now)} file(s)")
         return 0

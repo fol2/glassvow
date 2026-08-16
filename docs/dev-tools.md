@@ -191,7 +191,7 @@ mutation stay CLI-only until those constraints change.
 `tools/check_anchors.py` owns in-repo citations. Web references — `styles.css:834`,
 `src/ui/drain.js:511-512`, bare `mesh.js:928` — used to be resolved against a
 checkout of the pinned pre-Pixi benchmark. **They are not resolved any more.** The
-port detached from the reference on 2026-08-16 (#317), the 612 existing citations
+port detached from the reference on 2026-08-16 (#317), the 607 existing citations
 are frozen as history, and writing a new one is banned:
 
 ```bash

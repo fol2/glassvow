@@ -1,4 +1,7 @@
 # The motion census — every animated thing on the combat surface
+#
+# Frozen `file.js:NNN` citations here are history (#325); new ones are banned.
+# Ledger: docs/benchmark-divergence.md.
 
 Until now, divergences from the reference were found by someone looking at the
 screen and noticing. That found real bugs, and it found them one at a time, in

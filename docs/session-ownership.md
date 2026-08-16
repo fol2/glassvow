@@ -326,7 +326,9 @@ disposable — it is a **detached worktree** of `~/Coding/roguecardv2` with its 
 `node_modules` (23 packages, `npm ci` against that commit's lockfile, deliberately
 not shared with main's, which would pull `pixi.js` in), so it dies with its parent
 and `git clone` + `git checkout 6e06911853ba8e26d05ac4db0a1ad119a6c2275a` is the
-durable route back:
+durable route back. The block below reconstructs a **retired** surface — do not
+start it to settle what this port ought to do, and nothing should be listening
+on 5190:
 
 ```bash
 git worktree add --detach /Users/jamesto/Coding/roguecardv2-benchmark 6e069118
