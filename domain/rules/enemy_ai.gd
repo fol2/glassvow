@@ -130,10 +130,10 @@ static func decide(
 			var herald: Array[StringName] = [&"doom", &"reave", &"flame"]
 			return herald[(turn - 1) % 3]
 		&"sovereign":
-			if hp_frac <= 0.5 and not flags.get("ascended", false):
-				flags["ascended"] = true
-				return &"ascend"
-			if flags.get("ascended", false):
+			if hp_frac <= 0.5 and not flags.get("heldCourt", false):
+				flags["heldCourt"] = true
+				return &"holdCourt"
+			if flags.get("heldCourt", false):
 				var phase_turn: int = int(float(str(flags.get("p2", 0)))) + 1
 				flags["p2"] = phase_turn
 				if phase_turn % 3 == 0:

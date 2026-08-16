@@ -1275,7 +1275,7 @@
       "name": "Bellows",
       "text": "Double an enemy's Smolder. Kindle."
     },
-    "ascension": {
+    "risingLitany": {
       "type": "power",
       "rarity": "rare",
       "cost": 3,
@@ -1740,7 +1740,7 @@
       "offering",
       "limitBreak",
       "catalyst",
-      "ascension",
+      "risingLitany",
       "bastion",
       "frenzy",
       "virulence"
@@ -3252,7 +3252,7 @@
           ],
           "name": "Word of Ruin"
         },
-        "ascend": {
+        "holdCourt": {
           "intent": "buff",
           "block": 30,
           "fx": [
@@ -3262,7 +3262,7 @@
               "n": 4
             }
           ],
-          "name": "Ascend"
+          "name": "Hold Court"
         },
         "annihilation": {
           "intent": "attack",
@@ -4073,7 +4073,7 @@
       },
       "poolFull": {
         "cards": [
-          "ascension",
+          "risingLitany",
           "frenzy",
           "virulence"
         ],
@@ -4235,7 +4235,7 @@
       "limitBreak": "poolWave2",
       "offering": "poolWave3",
       "catalyst": "poolWave3",
-      "ascension": "poolFull",
+      "risingLitany": "poolFull",
       "frenzy": "poolFull",
       "virulence": "poolFull"
     },
@@ -4324,7 +4324,7 @@
       "mode": "Gate",
       "inscription": "Reach dawn beneath the Eighth Omen.",
       "resolved": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR.",
-      "floorEchoes": [
+      "waystoneEchoes": [
         "// THE PANE WATCHES //",
         "// EIGHT IS NOT A NUMBER //",
         "// CARRY THE WRONG LIGHT UPWARD //",

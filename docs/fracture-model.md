@@ -816,7 +816,7 @@ the spikes. The heatmap is the reason `drive_at` is public.
   the ward path is `set_ward_shell` / `_restore_ward_shell` and it never touches the crack
   model. The two calls are `combat_screen.gd:2264` (in `_handle_event`), which is the **`SHATTER` event** — the
   FACET gauge filling, `CONCEPTS.md` › Facet, and a wholly legitimate glass event on the
-  creature's body — and `combat_screen.gd:2626` (`_hit_enemy`), ordinary damage. Recorded rather than
+  creature's body — and `combat_screen.gd:2627` (`_hit_enemy`), ordinary damage. Recorded rather than
   quietly deleted because the wrong label survived several passes over this file, and a
   question about a call that does not exist is worse than no question.
 - **The ward and the crack no longer share a primitive, and that was the real overlap.**
