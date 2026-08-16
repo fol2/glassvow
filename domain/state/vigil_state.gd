@@ -40,6 +40,9 @@ var pending_scene: Variant = null
 ## Additive v2: defeat epitaphs are line-table ids, never prose. Missing on
 ## load defaults empty — no envelope bump.
 var defeat_epitaphs: Array[String] = []
+## Additive v2: earned Batch 4 dawn leaf ids (`story.dawn.*`). Missing on
+## load defaults empty — no envelope bump.
+var dawn_leaves: Array[String] = []
 var line_recent: Array = []
 var line_once: Array[String] = []
 
@@ -74,6 +77,7 @@ func to_dict() -> Dictionary:
 		"pendingScene": pending_scene.duplicate(true) \
 			if typeof(pending_scene) == TYPE_DICTIONARY else pending_scene,
 		"defeatEpitaphs": defeat_epitaphs.duplicate(),
+		"dawnLeaves": dawn_leaves.duplicate(),
 		"lineRecent": line_recent.duplicate(true),
 		"lineOnce": line_once.duplicate(),
 	}
@@ -132,6 +136,7 @@ static func from_dict(raw: Dictionary) -> VigilState:
 		if not str(scene.get("id", "")).is_empty() and _ji(scene.get("cursor", -1)) >= 0:
 			vigil.pending_scene = scene.duplicate(true)
 	_read_ids(raw.get("defeatEpitaphs", []), vigil.defeat_epitaphs, false)
+	_read_ids(raw.get("dawnLeaves", []), vigil.dawn_leaves, true)
 	_read_ids(raw.get("lineOnce", []), vigil.line_once, true)
 	var recent_v: Variant = raw.get("lineRecent", [])
 	if typeof(recent_v) == TYPE_ARRAY:

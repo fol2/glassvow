@@ -338,7 +338,7 @@ static func _unsealing_needs_six(fails: Array[String]) -> void:
 static func _unsealing_boot_resume(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full()
 	var main: Main = _main(content)
-	main._vigil.pending_scene = {"id": "unsealing", "cursor": 1}
+	main._vigil.pending_scene = {"id": "unsealing", "cursor": 3}
 	_check(fails, main._store_vigil(), "boot resume could not store the cursor")
 	main._vigil = main._load_vigil()
 	main.game = null

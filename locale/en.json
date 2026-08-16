@@ -2247,35 +2247,170 @@
         "l3": "If you meet another out there who carries a lamp — look close at the face, for me."
       }
     },
+    "dawn": {
+      "paleOnes": {
+        "p1": "The first mote settles into the Lens, cold as frost. The Pale Ones do not hunt you; they stand facing east, and that is all. The Vigil records it: someone had already walked this stretch as far as here.",
+        "p2": "The Lens fills. Every mote is what someone had left when there was nothing else to spend. You are not counting kills. You are counting the places where other people ended.",
+        "done": "Nine gathered; the Lens stops chilling. One pane of the Rose Window answers. That light is not new. It is light someone carried, and did not carry as far as the door."
+      },
+      "ownShade": {
+        "p1": "The first shade goes out. It knew you. It called after you, and you did not stop. Where it went out, nothing was left on the ground: a shade is only memory.",
+        "p2": "The second shade goes out. The broken sentences come clearer each time, as though someone were finally learning to speak plainly. The more you put out, the quieter the road gets.",
+        "done": "The third shade goes out and a pane answers. The Vigil sets it down: what you put out was the part of you that still remembered how to walk. You will set out just the same. Nothing on the road will call your name now."
+      },
+      "usurper": {
+        "p1": "The lantern with no flame changes hands. Cold glass; a wick that has never burned. The merchant will not say who left it — only that things of this kind always come back west on their own.",
+        "done": "The mask breaks; the throne does not empty. You pass him, and he goes on sitting, waiting for the next one to reach the door. What you beat was a refusal, not a man."
+      },
+      "eighthOmen": {
+        "p1": "The eighth omen rises. The book lists seven; the eighth is not in the book. It lies across the road too squarely for an omen — more like the shadow of something shut.",
+        "done": "Dawn comes and the omen is still there. It never was an omen. It is the shadow of a door — and a shadow reaching this far means the door has been there all along, and shut all along."
+      },
+      "unreadablePage": {
+        "p1": "The first page comes clear: six panes cut from one fire and scattered before the first Vigil. The Vigil adds a line of its own: whoever wrote that was not there.",
+        "p2": "Second page: pale figures carried the shards west, so that what lay beyond the door could not follow. The carrying is true. The reason is the page's own.",
+        "p3": "Third page: a pilgrim died standing, and where he stopped, the road did not. It is the shortest page and the barest — written flat, the way a man writes what he watched.",
+        "p4": "Fourth page: the Sovereign took an empty lantern and wore a king's shape over the lock. The Vigil sets it down: under that crown there is a lock, not a head.",
+        "done": "All five read. The fifth says the Rose Window is a map, not a memorial. It does not say what the map is of. The more of it you light, the less it looks like a window."
+      },
+      "hollowLamplighter": {
+        "p1": "Three embers into the hollow lantern; it does not light. The old man lifts it and studies — not the lamp, you. First meeting: what he checks is the face.",
+        "p2": "A hundred and sixty coins leave your hand. He pockets none of them; he lays them along the road, facing east — the way a man counts something that is already standing in line.",
+        "p3": "Twelve measures of you, handed over. He looks at the scar first and the face second, then explains the mismatch away himself. Honest men do that. Everything he sees is right; everything he concludes is wrong.",
+        "p4": "The Keeper's gift passes to the old man. He knows the make; he says it has not changed in all these years. Then he stops. He waves the rest of it off before it can get anywhere.",
+        "done": "The last price paid: one heartbeat left in the lantern. The old man stands aside and lifts the hollow lamp toward the east — there is no light in it; he lifts it all the same. A pane answers. He looks at you the way a man looks at a face he has spent his life checking."
+      },
+      "pane": {
+        "1": "One pane lights; five stay dark. One pane is not a window yet — only a bright point in the dark.",
+        "2": "Two panes now. The window starts to have a shape. The lit places are not random; they read as places that were kept.",
+        "3": "Three: half. At half, the glass begins to hold a reflection. You step closer, and the thing in the window steps closer too.",
+        "4": "Four lit, and the hearth is warmer than it was. The longer you look at that window, the less it looks like something built for looking out of.",
+        "5": "Five lit; one short. The light no longer keeps to its own panes. It runs together, the way a thing that was once whole runs together. The last shard is still out on the road."
+      }
+    },
     "unsealing": {
-      "b1": {"l1": "unsealing 1.1 -- placeholder"},
-      "b2": {"l1": "unsealing 2.1 -- placeholder"},
-      "b3": {"l1": "unsealing 3.1 -- placeholder"},
-      "b4": {"l1": "unsealing 4.1 -- placeholder"}
+      "b1": {
+        "l1": "The sixth shard goes back into the window.",
+        "l2": "Six panes, none missing. In the window, the fire is one thing again.",
+        "l3": "The light does not pass through."
+      },
+      "b2": {
+        "l1": "Lit to the last pane, the window stops being a window.",
+        "l2": "You see yourself in it.",
+        "l3": "Then you see that there is another one behind you."
+      },
+      "b3": {
+        "l1": "A single line of them, from one edge of the window to the other.",
+        "l2": "Every one of them is you, and every one of them has a point of light at his breast.",
+        "l3": "There are as many of them as the times you have set out.",
+        "l4": "Every time the fire was rekindled, a real one of you went out through that door. You have never once set out."
+      },
+      "b4": {
+        "l1": "Along the road, the monuments move at once. They were never memorials. Each is a walker who died on his feet and did not lie down, because he was waiting for the door.",
+        "l2": "They straighten, they form up, they push. The door knows two things: those who have walked, and one whole fire. Every one of them has walked.",
+        "l3": "You did not open the door."
+      }
     },
     "unsealing-short": {
-      "b1": {"l1": "unsealing-short 1.1 -- placeholder"}
+      "b1": {
+        "l1": "The door still stands open. The ones who pushed it are still standing on both sides of it. You go in."
+      }
     },
     "act4-entry": {
-      "b1": {"l1": "act4-entry 1.1 -- placeholder"}
+      "b1": {
+        "l1": "You step in through the window. Its far side is the far side of the door.",
+        "l2": "On this side the hearthlight runs backwards: every step forward is brighter than the last.",
+        "l3": "It is the same road. You are walking it back from the far end."
+      }
     },
     "act4-node1": {
-      "b1": {"l1": "act4-node1 1.1 -- placeholder"}
+      "b1": {
+        "l1": "We have been standing on this side all along. You have looked at it many times; you have never stood on it.",
+        "l2": "You know the road. You have only ever known it from the other side."
+      }
     },
     "act4-node2": {
-      "b1": {"l1": "act4-node2 1.1 -- placeholder"}
+      "b1": {
+        "l1": "The king is still sitting. We went past him, and not one of us ever sat down.",
+        "l2": "Broken haloes are still ringing on this side. When we went by, not one of us turned round."
+      }
     },
     "act4-node3": {
-      "b1": {"l1": "act4-node3 1.1 -- placeholder"}
+      "b1": {
+        "l1": "The city is still waiting. We stopped waiting; that is why we are here.",
+        "l2": "That light down in the water is not a lamp. It is not one on this side either."
+      }
     },
     "act4-node4": {
-      "b1": {"l1": "act4-node4 1.1 -- placeholder", "l2": "act4-node4 1.2 -- placeholder", "l3": "act4-node4 1.3 -- placeholder"}
+      "b1": {
+        "l1": "This is where the monuments stand thickest. The ones who stopped earliest ended up nearest the fire.",
+        "l2": "The ash is what they burned down to. The trees grew on it, and the road you walk was laid with their strength.",
+        "l3": "The paired lamps are still burning. Whoever lit them did not get far. He is standing right under them.",
+        "l4": "No one stops you. The monuments stand aside, as though the middle had been kept clear for this one crossing all along.",
+        "l5": "It is the longest stretch and the quietest. You can sit here a while. They can afford to wait."
+      }
     },
     "act4-node5": {
-      "b1": {"l1": "act4-node5 1.1 -- placeholder", "l2": "act4-node5 1.2 -- placeholder"}
+      "b1": {
+        "l1": "You've arrived. You know this place.",
+        "l2": "I never lied to you. I only never said who it was that went out.",
+        "l3": "Every time the fire tore you, the part that would not go stayed here. Enough of it stayed to make a face. This one.",
+        "l4": "Sit down. Let one of them do the walking; that is all this has ever been."
+      }
     },
     "finale": {
-      "b1": {"l1": "finale 1.1 -- placeholder", "l2": "finale 1.2 -- placeholder"}
+      "b1": {
+        "l1": "The six are one fire again, and the Queue has arrived.",
+        "l2": "This time there is no half to leave behind. The fire does not tear you: there is nowhere left for the fear to stand.",
+        "l3": "It sits. You stand."
+      },
+      "b2": {
+        "l1": "The door is ahead. The first one ever to get this far sat down one step short of it.",
+        "l2": "Take a step.",
+        "l3": "And another.",
+        "l4": "That step was yours. No one walked it for you."
+      }
+    },
+    "finale-win": {
+      "b1": {
+        "l1": "The door stands open. One after another the same figure goes through, in the order they stopped.",
+        "l2": "You are the last of them. The whole Queue has arrived.",
+        "l3": "Inside the gate there is a fire that knows you. To arrive is to come home."
+      }
+    },
+    "finale-loss": {
+      "b1": {
+        "l1": "This one did not come back either.",
+        "l2": "The door closes again. The six panes stay lit, and the Queue is one longer. The fire in the west goes on burning, waiting for someone to sit down at it again."
+      }
+    },
+    "event-mirror": {
+      "c0": "The mirror shows the card twice. You can carry one away. The other stays in the glass, as if someone were keeping it for you.",
+      "c1": "The glass breaks. The same reflection lies scattered across every piece, still smiling. You pick one thing out of the wreck that you no longer want to carry, and blood runs down your fingers.",
+      "c2": "You turn away. The one in the glass turns half a breath later, then watches you the whole way out.",
+      "coda": "There is more than one mirror on this road, and every one of them is half a breath behind you."
+    },
+    "event-woundedKnight": {
+      "c0": "You stop the bleeding. He presses the relic into your hand, gets himself upright against the pillar, and says he only wants to get a little further.",
+      "c1": "You take what the gauntlet is holding. He does not fight you, and he does not go down. Behind the crushed visor the breathing slows, and stops.",
+      "c2": "You leave. One look back: still against the pillar, still on his feet.",
+      "coda": "The next time you come by, there is a monument at the foot of the pillar."
+    },
+    "event-library": {
+      "c0": "Among the waterlogged pages you find one still legible. It was written by someone who lived here, and all of it is about what they would do on the day the door opened.",
+      "c1": "You sit down among the stacks. The water noise falls back; your breathing slows. If this city is short of anything, it is not places to sit and wait.",
+      "coda": "They wrote their waiting until it filled a library. Not one page of it is about setting out."
+    },
+    "event-fleshTrader": {
+      "c0": "You hand over a piece of yourself for a relic. He takes it without fuss, like a man who has done this many times.",
+      "c1": "You refuse. He does not press it. The long fingers close. \"Next time,\" he says, like a man who already knows there will be one.",
+      "coda": "He never chases a price. He has seen enough: none of the ones who go east come back — and there is always another going east."
+    },
+    "event-forgottenShrine": {
+      "c0": "At the shrine you set down one thing you no longer want to carry. The thing inside the stone watches, and gives you nothing back. Prayer is not what it is waiting for.",
+      "c1": "You sweep the bone and silver offerings into your pack. The thing inside the stone does not move. It only makes a note.",
+      "c2": "You step back and turn. The hum goes on as before. It has hummed for years past counting; it is not short of one more visitor.",
+      "coda": "The moss grows back over the offerings. This shrine has taken more than it ever promised."
     }
   }
 }
