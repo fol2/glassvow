@@ -46,3 +46,7 @@ export_credentials.cfg
 # Android gradle build template — machine-local, reinstalled from the pinned
 # 4.7.1 android_source.zip (see docs/release-signing.md)
 android/
+
+# Generated review page for #310 — 5 MB of inlined base64, rebuilt by
+# docs/design/2026-08-16-scene-plates/build_review_page.py
+docs/design/2026-08-16-scene-plates/review.html
