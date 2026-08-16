@@ -156,6 +156,11 @@ static func _run_transaction_checkpoints(content: ContentDB, fails: Array[String
 			"accept": true,
 		},
 		{
+			"tag": "pending scene cursor",
+			"patch": {"pendingScene": {"id": "opening", "cursor": 3}},
+			"accept": true,
+		},
+		{
 			"tag": "hollow bequest",
 			"patch": {
 				"pendingHollow": {"nodeId": "3,2", "type": "event", "paid": false},

@@ -32,6 +32,8 @@ const PERSISTENCE_DETAILS: Dictionary = {
 	"ui.persistence.detail.completedRunClose": "The completed run could not be closed.",
 	"ui.persistence.detail.dawnHold": "Dawn could not be held.",
 	"ui.persistence.detail.dawnCursorHold": "The Dawn cursor could not be held.",
+	"ui.persistence.detail.sceneCursorHold": "The scene cursor could not be held.",
+	"ui.persistence.detail.sceneHold": "The scene could not be held.",
 	"ui.persistence.detail.shadeDuelHold": "The shade duel could not be held.",
 	"ui.persistence.detail.hollowPriceHold": "The Hollow price could not be held.",
 	"ui.persistence.detail.heldHollowDestinationUnreadable": "The held Hollow destination is unreadable.",
@@ -453,8 +455,8 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 			break
 		call_keys.append(source.substr(start, finish - start))
 		at = source.find(marker, finish + 2)
-	_check(fails, call_keys.size() == 40,
-		"expected 40 save-error call sites, found %d" % call_keys.size())
+	_check(fails, call_keys.size() == 42,
+		"expected 42 save-error call sites, found %d" % call_keys.size())
 	var distinct: Array[String] = []
 	var locale: Locale = Locale.new(Locale.CODE_EN)
 	for key: String in call_keys:
@@ -464,8 +466,8 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 				"save-error key %s does not preserve its English detail" % key)
 		if not distinct.has(key):
 			distinct.append(key)
-	_check(fails, distinct.size() == 35,
-		"expected 35 distinct save-error details, found %d" % distinct.size())
+	_check(fails, distinct.size() == 37,
+		"expected 37 distinct save-error details, found %d" % distinct.size())
 	for key: String in PERSISTENCE_DETAILS:
 		_check(fails, distinct.has(key), "save-error details do not cover %s" % key)
 
