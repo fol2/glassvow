@@ -1076,6 +1076,9 @@ func _new_run(profile: Dictionary = {}) -> void:
 	_run_over = false
 	if _plays_opening():
 		game.run.pending_scene = {"id": "opening", "cursor": 0}
+	if _plays_departure_staging():
+		PoolBeats.stage(game.run, _vigil, content, PoolBeats.SLOT_HEARTH,
+			PoolBeats.KEY_START, PoolBeats.RESUME_MAP)
 	if _store_run():
 		if _plays_departure_staging():
 			_show_departure_staging()
@@ -1168,6 +1171,8 @@ func _route_run() -> void:
 		_route_idle()
 	elif typeof(game.run.pending_scene) == TYPE_DICTIONARY:
 		_show_scene()
+	elif typeof(game.run.pending_pool) == TYPE_DICTIONARY:
+		_show_pending_pool()
 	elif game.run.pending_dawn != null:
 		_show_dawn()
 	elif game.run.pending_run_end != null:
@@ -1364,6 +1369,7 @@ func _on_abandon_choice(id: String) -> void:
 	game.run.pending_reward = null
 	game.run.pending_hollow = null
 	game.run.pending_hollow_route = null
+	game.run.pending_pool = null
 	game.run.pending_run_end = {"outcome": "abandon", "bequestAnswered": true}
 	if _store_run():
 		_show_run_end()
@@ -1511,6 +1517,21 @@ func _on_node_chosen(i: int) -> void:
 	if hollow:
 		_show_hollow()
 		return
+	if _story_flow() and _stage_pool_line(
+			PoolBeats.SLOT_WAYSTONE, PoolBeats.waystone_key(n.id),
+			PoolBeats.RESUME_NODE):
+		if _transitions != null and _transitions.instant:
+			PoolBeats.clear_pending(game.run)
+			if not _store_run():
+				_show_save_error("ui.persistence.detail.chosenWaystoneHold")
+				return
+		else:
+			_show_pending_pool()
+			return
+	_enter_chosen_node(n)
+
+
+func _enter_chosen_node(n: MapNode) -> void:
 	match n.type:
 		"monster", "elite", "boss":
 			# The iris covers at the chosen waystone and reveals over the
@@ -1748,6 +1769,17 @@ func _refresh_shop() -> void:
 
 func _on_shop_choice(id: String) -> void:
 	if id == "leave":
+		if _story_flow() and _usurper_hearth_owed() and _stage_pool_line(
+				PoolBeats.SLOT_HEARTH, PoolBeats.KEY_USURPER,
+				PoolBeats.RESUME_LEAVE):
+			if _transitions != null and _transitions.instant:
+				PoolBeats.clear_pending(game.run)
+				if not _store_run():
+					_show_save_error("ui.persistence.detail.emptyLanternPurchaseHold")
+					return
+			else:
+				_show_pending_pool()
+				return
 		_finish_node()
 		return
 	if id == "quest:flamelessLantern":
@@ -1818,7 +1850,7 @@ func _arm_encounter(n: MapNode) -> void:
 
 func _prepare_encounter(n: MapNode) -> void:
 	_arm_encounter(n)
-	if not SaveService.store(game.run):
+	if not _store_run():
 		_show_save_error("ui.persistence.detail.encounterFreeze")
 		return
 	_resume_pending_combat()
@@ -2580,21 +2612,105 @@ func _on_unsealing_replay() -> void:
 func _show_departure_staging() -> void:
 	_remember_route(_show_departure_staging)
 	_apply_pending_content_hydration()
-	# Headless / instant routes skip the 1 s hold — the plant is ambient,
-	# not a durable checkpoint.
+	# Instant skips the ambient plant. The hearth row is already staged on
+	# the run; display tests use a non-instant route to read it.
 	if _transitions != null and _transitions.instant:
+		if typeof(game.run.pending_pool) == TYPE_DICTIONARY:
+			PoolBeats.clear_pending(game.run)
+			if not _store_run():
+				_show_save_error("ui.persistence.detail.pilgrimageStart")
+				return
 		_route_run()
 		return
 	var screen: DepartureStaging = DepartureStaging.new()
-	screen.finished.connect(_on_departure_finished)
+	screen.line_row = PoolBeats.row_of(content.line_table, game.run)
+	screen.finished.connect(_on_pool_finished)
 	_show_route(screen, false)
 
 
-func _on_departure_finished() -> void:
-	if game != null:
-		_route_run()
-	else:
+func _stage_pool_line(slot: String, key: String, resume: String) -> bool:
+	if game == null or game.run == null:
+		return false
+	var row: Dictionary = PoolBeats.stage(game.run, _vigil, content, slot, key, resume)
+	if row.is_empty():
+		return false
+	if not _store_run():
+		PoolBeats.clear_pending(game.run)
+		_show_save_error("ui.persistence.detail.chosenWaystoneHold")
+		return false
+	return true
+
+
+func _usurper_hearth_owed() -> bool:
+	if game == null or game.run == null:
+		return false
+	var rec_v: Variant = game.run.quests.get("usurper")
+	if typeof(rec_v) != TYPE_DICTIONARY:
+		return false
+	var rec: Dictionary = rec_v
+	return str(rec.get("state", "")) == "revealed" \
+		and not game.run.pool_beats.has(PoolBeats.KEY_USURPER)
+
+
+func _show_pending_pool() -> void:
+	if game == null or game.run == null:
 		_show_title()
+		return
+	var pending: Dictionary = PoolBeats.pending_of(game.run)
+	if pending.is_empty():
+		_route_run()
+		return
+	if str(pending.get("slot", "")) == PoolBeats.SLOT_HEARTH:
+		_show_departure_staging()
+		return
+	_remember_route(_show_pending_pool)
+	_apply_pending_content_hydration()
+	var row: Dictionary = PoolBeats.row_of(content.line_table, game.run)
+	if row.is_empty():
+		_continue_after_pool()
+		return
+	var screen: ScenePlayer = ScenePlayer.new(
+		SceneScript.pool_beat(""), 0, _shape, _sfx_bus, row)
+	screen.instant = _transitions != null and _transitions.instant
+	screen.advance_requested.connect(_on_pool_advance.bind(screen))
+	screen.finished.connect(_on_pool_finished)
+	_show_route(screen, false)
+
+
+func _on_pool_advance(screen: ScenePlayer) -> void:
+	if not _store_run():
+		_show_save_error("ui.persistence.detail.chosenWaystoneHold")
+		return
+	if is_instance_valid(screen):
+		screen.advance_confirmed()
+
+
+func _on_pool_finished() -> void:
+	_continue_after_pool()
+
+
+func _continue_after_pool() -> void:
+	if game == null or game.run == null:
+		_show_title()
+		return
+	var pending: Dictionary = PoolBeats.pending_of(game.run)
+	var resume: String = str(pending.get("resume", PoolBeats.RESUME_MAP))
+	PoolBeats.clear_pending(game.run)
+	if not _store_run():
+		game.run.pending_pool = pending
+		_show_save_error("ui.persistence.detail.chosenWaystoneHold")
+		return
+	match resume:
+		PoolBeats.RESUME_LEAVE:
+			_finish_node()
+		PoolBeats.RESUME_NODE:
+			var node: MapNode = _map.current() if _map != null else null
+			if node == null:
+				_show_map()
+			else:
+				_enter_chosen_node(node)
+		_:
+			_route_run()
 
 
 func _show_scene() -> void:

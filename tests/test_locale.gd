@@ -483,8 +483,8 @@ static func _persistence_calls_and_shell(fails: Array[String]) -> void:
 			break
 		call_keys.append(source.substr(start, finish - start))
 		at = source.find(marker, finish + 2)
-	_check(fails, call_keys.size() == 46,
-		"expected 46 save-error call sites, found %d" % call_keys.size())
+	_check(fails, call_keys.size() == 52,
+		"expected 52 save-error call sites, found %d" % call_keys.size())
 	var distinct: Array[String] = []
 	var locale: Locale = Locale.new(Locale.CODE_EN)
 	for key: String in call_keys:

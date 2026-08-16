@@ -62,6 +62,10 @@ var pending_scene: Variant = null
 var pending_hollow: Variant = null
 var pending_hollow_route: Variant = null
 var pending_lamplighter: bool = false
+## Additive v2: staged LineTable beats. Missing on load defaults empty.
+var pending_pool: Variant = null
+var pool_beats: Dictionary = {}
+var pool_draws: Array[String] = []
 
 
 func rng_state() -> int:
@@ -135,6 +139,10 @@ func to_save_dict() -> Dictionary:
 	out["pendingHollow"] = pending_hollow
 	out["pendingHollowRoute"] = pending_hollow_route
 	out["pendingLamplighter"] = pending_lamplighter
+	out["pendingPool"] = pending_pool.duplicate(true) \
+		if typeof(pending_pool) == TYPE_DICTIONARY else pending_pool
+	out["poolBeats"] = pool_beats.duplicate(true)
+	out["poolDraws"] = pool_draws.duplicate()
 	return out
 
 
@@ -297,6 +305,21 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	rs.pending_hollow = save.get("pendingHollow")
 	rs.pending_hollow_route = save.get("pendingHollowRoute")
 	rs.pending_lamplighter = save.get("pendingLamplighter", false)
+	rs.pending_pool = save.get("pendingPool")
+	var beats_v: Variant = save.get("poolBeats", {})
+	if typeof(beats_v) == TYPE_DICTIONARY:
+		var beats: Dictionary = beats_v
+		for key_v: Variant in beats:
+			var beat_key: String = str(key_v)
+			var beat_id: String = str(beats[key_v])
+			if not beat_key.is_empty() and not beat_id.is_empty():
+				rs.pool_beats[beat_key] = beat_id
+	var draws_v: Variant = save.get("poolDraws", [])
+	if typeof(draws_v) == TYPE_ARRAY:
+		for id_v: Variant in draws_v:
+			var drawn: String = str(id_v)
+			if not drawn.is_empty() and not rs.pool_draws.has(drawn):
+				rs.pool_draws.append(drawn)
 	var reveals_v: Variant = save.get("reveals")
 	if reveals_v == null:
 		rs.reveals_all = true
@@ -386,6 +409,19 @@ static func _valid_pending(save: Dictionary, content: ContentDB) -> bool:
 		return false
 	if dawn != null and (combat != null or reward != null or run_end != null or hollow != null or route != null):
 		return false
+	var pool: Variant = save.get("pendingPool")
+	if pool != null:
+		if typeof(pool) != TYPE_DICTIONARY:
+			return false
+		var pending_pool: Dictionary = pool
+		if str(pending_pool.get("slot", "")).is_empty() \
+				or str(pending_pool.get("id", "")).is_empty() \
+				or str(pending_pool.get("key", "")).is_empty() \
+				or str(pending_pool.get("resume", "")) not in ["map", "node", "leave"]:
+			return false
+		if combat != null or reward != null or run_end != null or dawn != null \
+				or hollow != null or route != null or scene != null:
+			return false
 	return true
 
 

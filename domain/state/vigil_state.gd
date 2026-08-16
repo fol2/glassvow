@@ -229,7 +229,7 @@ func commit_run(run: RunState, outcome: String, content: ContentDB) -> bool:
 		persisted_hollow["memory"].erase("eligibleMisses")
 	# Count this run's new shards first so a win that earns the first pane
 	# may speak immediately, while shard-zero wins stay inside L0.
-	var drawn: Array = []
+	var drawn: Array = run.pool_draws.duplicate()
 	if outcome == "win":
 		_hear_whisper(run, content)
 	runs_played += 1
@@ -241,7 +241,8 @@ func commit_run(run: RunState, outcome: String, content: ContentDB) -> bool:
 			if typeof(fall_v) == TYPE_DICTIONARY:
 				last_fall = fall_v.duplicate(true)
 				last_fall["standing"] = true
-		drawn = _write_epitaph(run, content)
+		drawn.append_array(_write_epitaph(run, content))
+	_note_drawn(content, run.pool_draws)
 	line_recent = LineTable.remember(line_recent, drawn)
 	receipts["runEnd"] = {
 		"runId": run.run_id,
@@ -279,6 +280,16 @@ func _write_epitaph(run: RunState, content: ContentDB) -> Array:
 	if row.get("once", false) and not line_once.has(id):
 		line_once.append(id)
 	return [id]
+
+
+func _note_drawn(content: ContentDB, ids: Array) -> void:
+	for id_v: Variant in ids:
+		var id: String = str(id_v)
+		if id.is_empty() or line_once.has(id):
+			continue
+		var row: Dictionary = LineTable.row_by_id(content.line_table, id)
+		if row.get("once", false):
+			line_once.append(id)
 
 
 func _refresh_unlocks(content: ContentDB, outcome: String) -> void:
