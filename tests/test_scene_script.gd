@@ -127,6 +127,10 @@ static func _flat_cursor(fails: Array[String]) -> void:
 		"opening beat 1 (lines 2–4) should keep the previous plate")
 	_check(fails, str(opening.beat_at(7).get("motion", "")) == "linger",
 		"opening last line is not the linger beat")
+	_check(fails, is_equal_approx(float(str(opening.beat_at(2).get("skip_dwell", 0.0))), 1.0),
+		"opening beat ② lost its skip dwell")
+	_check(fails, is_equal_approx(float(str(opening.beat_at(0).get("skip_dwell", -1.0))), 0.0),
+		"opening beat ① grew a skip dwell")
 	_check(fails, opening.beat_at(-1).is_empty() and opening.beat_at(8).is_empty(),
 		"out-of-range beat_at did not return empty")
 

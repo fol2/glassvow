@@ -16,6 +16,7 @@ static func run(fails: Array[String]) -> void:
 	_holds_without_confirm(fails, opening)
 	_resume(fails, opening)
 	_skip_distinct_from_tap(fails, opening)
+	_skip_dwells_on_named_beat(fails, opening)
 	_real_input_advances(fails, opening)
 	_finished_once(fails)
 	_missing_plates(fails, opening)
@@ -87,6 +88,29 @@ static func _skip_distinct_from_tap(fails: Array[String], opening: SceneScript) 
 	_check(fails, hold._beat == ScenePlayer.BEAT_WAIT,
 		"skip did not land the next line standing")
 	hold.free()
+
+
+static func _skip_dwells_on_named_beat(fails: Array[String], opening: SceneScript) -> void:
+	var asked: Array[int] = [0]
+	var player: ScenePlayer = ScenePlayer.new(opening, 0)
+	player.advance_requested.connect(func() -> void: asked[0] += 1)
+	player._ready()
+	player._process(ScenePlayer.REVEAL_TIME + 0.01)
+	player._press(true)
+	player._process(ScenePlayer.SKIP_HOLD)
+	_check(fails, player.skipped, "skip hold did not mark skipped")
+	player._press(false)
+	# Beat ① line 1 still uses the 40 ms skip wait.
+	player.advance_confirmed()
+	player._process(ScenePlayer.SKIP_WAIT + 0.01)
+	_check(fails, asked[0] == 2, "beat ① skip wait did not ask (got %d)" % asked[0])
+	# Beat ② holds ~1 s so the destination is named under skip.
+	player.advance_confirmed()
+	player._process(0.5)
+	_check(fails, asked[0] == 2, "beat ② skip asked before the 1 s floor")
+	player._process(0.6)
+	_check(fails, asked[0] == 3, "beat ② skip did not ask after the 1 s floor")
+	player.free()
 
 
 ## `_press` is an implementation detail. Click, Space and Enter have to reach

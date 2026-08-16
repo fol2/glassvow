@@ -7,7 +7,7 @@
           {"speaker": "keeper", "key": "story.opening.b1.l1"},
           {"speaker": "keeper", "key": "story.opening.b1.l2"}
         ]},
-        {"motion": "hold", "lines": [
+        {"motion": "hold", "skipDwell": 1.0, "lines": [
           {"speaker": "keeper", "key": "story.opening.b2.l1"},
           {"speaker": "keeper", "key": "story.opening.b2.l2"},
           {"speaker": "keeper", "key": "story.opening.b2.l3"}

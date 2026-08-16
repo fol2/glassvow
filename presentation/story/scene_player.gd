@@ -37,6 +37,7 @@ var _cursor: int = 0
 var _sfx: SfxBus
 var _beat: int = BEAT_IDLE
 var _beat_t: float = 0.0
+var skipped: bool = false
 var _hold_t: float = 0.0
 var _holding: bool = false
 var _skipping: bool = false
@@ -253,6 +254,7 @@ func _process(delta: float) -> void:
 			* clampf(_hold_t / SKIP_HOLD, 0.0, 1.0)
 		if _hold_t >= SKIP_HOLD and not _skipping:
 			_skipping = true
+			skipped = true
 			_sfx.play(&"click")
 			if _beat == BEAT_WAIT and not _asked:
 				_asked = true
@@ -268,7 +270,7 @@ func _process(delta: float) -> void:
 				_finish_beat()
 		BEAT_WAIT:
 			_beat_t += delta
-			var wait: float = 0.0 if instant else (SKIP_WAIT if _skipping else _dwell())
+			var wait: float = 0.0 if instant else _skip_wait()
 			if _beat_t >= wait and not _asked:
 				_asked = true
 				advance_requested.emit()
@@ -277,6 +279,15 @@ func _process(delta: float) -> void:
 ## How long a settled line holds before it asks on its own.
 func _dwell() -> float:
 	return DWELL_BASE + DWELL_PER_CHAR * float(_line.text.length())
+
+
+## Skip is 40 ms/line unless the beat names a floor — opening beat ② holds
+## ~1 s so the destination is still named under hold-skip.
+func _skip_wait() -> float:
+	if not _skipping:
+		return _dwell()
+	var floor_s: float = float(str(_script.beat_at(_cursor).get("skip_dwell", 0.0)))
+	return floor_s if floor_s > 0.0 else SKIP_WAIT
 
 
 func _gui_input(event: InputEvent) -> void:

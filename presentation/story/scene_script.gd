@@ -94,10 +94,14 @@ static func _beat(scene_id: String, beat_i: int, raw: Variant) -> Variant:
 			return built
 		var line: Dictionary = built
 		cleaned_lines.append(line)
+	var skip_dwell: float = float(str(row.get("skipDwell", 0.0)))
+	if skip_dwell < 0.0:
+		return _fail("scenes: %s beat %d has negative skipDwell" % [scene_id, beat_i])
 	return {
 		"art": str(row.get("art", "")),
 		"motion": motion,
 		"lines": cleaned_lines,
+		"skip_dwell": skip_dwell,
 	}
 
 
