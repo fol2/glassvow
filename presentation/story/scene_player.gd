@@ -256,9 +256,9 @@ func _process(delta: float) -> void:
 			_skipping = true
 			skipped = true
 			_sfx.play(&"click")
-			if _beat == BEAT_WAIT and not _asked:
-				_asked = true
-				advance_requested.emit()
+			# Do not emit on arm. The WAIT branch below enforces `_beat_t`
+			# against `_skip_wait()`, so a hold that arms on beat ② still
+			# owes the destination floor instead of skipping it.
 	match _beat:
 		BEAT_REVEAL:
 			_beat_t += delta
@@ -281,13 +281,23 @@ func _dwell() -> float:
 	return DWELL_BASE + DWELL_PER_CHAR * float(_line.text.length())
 
 
-## Skip is 40 ms/line unless the beat names a floor — opening beat ② holds
-## ~1 s so the destination is still named under hold-skip.
+## Skip is 40 ms/line unless the beat names a floor. The design holds a
+## minimum ~1 s on beat ② (the destination-naming beat) — once, on that
+## beat's first line, not 1 s stacked on every line of the beat.
 func _skip_wait() -> float:
 	if not _skipping:
 		return _dwell()
 	var floor_s: float = float(str(_script.beat_at(_cursor).get("skip_dwell", 0.0)))
-	return floor_s if floor_s > 0.0 else SKIP_WAIT
+	if floor_s <= 0.0:
+		return SKIP_WAIT
+	if _cursor > 0:
+		var row: Dictionary = _script.lines[_cursor]
+		var prev: Dictionary = _script.lines[_cursor - 1]
+		var beat_i: int = row["beat"]
+		var prev_i: int = prev["beat"]
+		if beat_i == prev_i:
+			return SKIP_WAIT
+	return floor_s
 
 
 func _gui_input(event: InputEvent) -> void:
