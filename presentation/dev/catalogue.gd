@@ -155,9 +155,9 @@ const ENTRIES: Array[Dictionary] = [
 			"act": 3, "shards": 6, "node": "n4", "kind": "boss",
 			"enemies": ["eternalKeeper"]}},
 	{"id": "combat-act4-stage", "revision": 1,
-		"description": "Act IV combat plates with the silent unwalkedSelf tracer on the rose-window terminus.",
+		"description": "Act IV combat plates with the silent unwalkedSelf tracer on III-prime.",
 		"seed": SEED, "overrides": {
-			"act": 3, "shards": 6, "node": "14,3", "kind": "monster",
+			"act": 3, "shards": 6, "node": "n1", "kind": "monster",
 			"enemies": ["unwalkedSelf"]}},
 ]
 

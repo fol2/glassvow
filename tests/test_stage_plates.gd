@@ -45,16 +45,8 @@ static func run(fails: Array[String]) -> void:
 	# long as .godot/imported/ still holds the .ctex. Measured — the first draft
 	# of this gate passed with act3-ledge.png removed from the tree, which is the
 	# fail-open failure this test exists to prevent.
-	var last_required: int = mini(acts, 3)
-	for act: int in range(1, last_required + 1):
+	for act: int in range(1, acts + 1):
 		_require_plates(pattern, plates, act, fails)
-	if acts >= 4:
-		var present: int = 0
-		for plate_v: Variant in plates:
-			if FileAccess.file_exists(pattern % [4, str(plate_v)]):
-				present += 1
-		if present > 0:
-			_require_plates(pattern, plates, 4, fails)
 
 
 static func _require_plates(
