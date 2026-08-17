@@ -103,6 +103,10 @@ static func run(fails: Array[String]) -> void:
 		title_ready = is_equal_approx(title_world._focal,
 			(title_world.size.y * 0.5) / tan(deg_to_rad(TitleWorld.FOV_DEG * 0.5)))
 	_check(fails, title_ready, "title projection is ready before its first paint")
+	_check(fails, not title_world.has_method("radius_at"),
+		"title lathe (radius_at) is gone")
+	_check(fails, title_world._lanterns.size() == TitleWorld.LANTERN_PAIRS * 2,
+		"title seeds a lantern chain, not tower window lights")
 	title_world.free()
 	_title_ceremonial_menu(fails)
 
