@@ -101,6 +101,7 @@ static func _walk_line_owes_the_hand(fails: Array[String]) -> void:
 	_check(fails, walk_at >= 0, "finale carries no walk line")
 	if walk_at < 0:
 		return
+	FinaleStaging.form = FinaleStaging.FORM_STEP
 	var asked: Array[int] = [0]
 	var player: ScenePlayer = ScenePlayer.new(finale, walk_at)
 	player.advance_requested.connect(func() -> void: asked[0] += 1)
@@ -126,6 +127,7 @@ static func _walk_line_owes_the_hand(fails: Array[String]) -> void:
 	still._process(0.016)
 	_check(fails, instant_asked[0] == 1, "instant mode stalled on the walk line")
 	still.free()
+	FinaleStaging.form = FinaleStaging.FORM_HOLD
 
 
 ## Both candidate forms render and step (#312: James picks off the renders).
@@ -153,7 +155,7 @@ static func _walk_forms(fails: Array[String]) -> void:
 	var pips: FinaleStaging = player.find_child("FinaleWalk", true, false) as FinaleStaging
 	_check(fails, pips != null and pips.visible, "the walk overlay is not staged")
 	player.free()
-	FinaleStaging.form = FinaleStaging.FORM_STEP
+	FinaleStaging.form = FinaleStaging.FORM_HOLD
 
 
 ## First win at the swap: the full segment plays, chains into the ascended
