@@ -485,6 +485,26 @@ Prompt (binding clauses):
 > water-glass at the hem. NO lantern, NO halo, NO scepter. Brine teal /
 > indigo; amber rim from the LEFT.
 
+### `enemies/uncarvedSelf.png` — Act IV threshold-prime elite
+
+The Uncarved (`uncarvedSelf`, threshold-prime / seal-relief,
+`elite: true`). Blank rectangular relief tablet with an unfinished
+circular seal — the door-face of the same threshold whose window-face
+is the Unopened's rose disc. Combat box `tierSizes.elite * 1.6` (368px).
+
+**Proposed pick C, 2026-08-17, pending James.** A is a stone tome (library
+collision with Unsunk). B's rounded carved tablet reads as a door
+fragment. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Uncarved, full body, slightly
+> broader pilgrim, 15 percent magenta margin. Void hood; black ONLY
+> inside the hood. RECTANGULAR unfinished seal-relief TABLET, mostly
+> blank, one faint circular indent. NOT a book, NOT a rose disc, NOT a
+> door-arch. Amber / sandstone / umber; amber rim from the LEFT.
+
 ## Rejection note — what "technically shippable" means
 
 Judging generated character art by eye is not enough; two of the five

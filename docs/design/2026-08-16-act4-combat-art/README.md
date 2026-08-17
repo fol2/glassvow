@@ -49,10 +49,12 @@ regenerating.
 | `unopenedSelf` | **A** proposed | Handheld six-petal rose disc + wax seal. B's gothic tablet reads as a door-arch. |
 | `unlitSelf` | **B** proposed | Two hand-held unlit lamps, ashroot hem. A failed leftover magenta in the arm-gap (94, below the enclosed-blob punch). |
 | `unsunkSelf` | **A** proposed | Held drowned book-stack + still-tide hem. B's standing unread-shelf reads as furniture. |
+| `uncarvedSelf` | **C** proposed | Blank rectangular seal-relief tablet. A is a book (library collision). B's rounded tablet reads as a door fragment. |
 
 These are the installer's `PICKS`. James picked the plates and
 `unwalkedSelf` on 2026-08-17 (#221). `uncrossedSelf` B, `unopenedSelf` A,
-`unlitSelf` B and `unsunkSelf` A are **proposed**, pending James.
+`unlitSelf` B, `unsunkSelf` A and `uncarvedSelf` C are **proposed**,
+pending James.
 
 Act IV node 4 mirrors Act I's 雙燈 / paired lanterns, but combat plates
 are **one set for the whole act**. They take the act motif (monuments as
@@ -84,6 +86,9 @@ The Uncrossed's hand-held false lamp is a II-prime prop, not a stage lantern-arc
 | `unlit-self-b.png` | enemy | — | pass | **proposed.** Paired unlit lamps, dark wicks, ashroot hem |
 | `unsunk-self-a.png` | enemy | — | pass | **proposed.** Held book-stack, wave hem, no lantern |
 | `unsunk-self-b.png` | enemy | — | pass | standing unread-shelf; furniture read at combat scale |
+| `uncarved-self-a.png` | enemy | — | pass | **rejected.** Stone tome + mace — library collision with Unsunk |
+| `uncarved-self-b.png` | enemy | — | pass | carved rounded tablet + mallet; door-fragment read |
+| `uncarved-self-c.png` | enemy | — | pass | **proposed.** Blank rectangular relief, unfinished circular seal |
 
 ## Prompts
 
@@ -213,11 +218,26 @@ Elite: broader pilgrim, still a hooded self.
 > glass brine teal / indigo / sea-green (hue ~198). Warm amber rim from
 > the LEFT. No text, no watermark.
 
+### Uncarved Self C
+
+Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
+Elite: broader pilgrim, still a hooded self.
+
+> GAME ASSET character cutout. The entire BACKGROUND is a FLAT SOLID
+> MAGENTA field, hex #FF00FF, edge to edge. CONSTRUCTION: the body IS
+> large flat stained-glass panes with thick black lead came. Full-body
+> standing pilgrim, slightly broader than the tracer, 15 percent magenta
+> margin. Raised void hood; black exists ONLY inside the hood. Holds a
+> RECTANGULAR unfinished seal-relief TABLET — blank stone-glass, one
+> faint circular seal indent never finished. NOT a book, NOT a rose
+> disc, NOT a door-arch. Warm amber / sandstone / umber (hue ~24). Amber
+> rim from the LEFT. No text, no watermark.
+
 ## Held
 
-- Remaining 3 counterfactual-self paintings: ids wait on #220 (two more
-  normals and the second elite are not on `main` yet). Do not invent
-  filenames.
+- Remaining 2 counterfactual-self paintings: ids wait on #220 (two more
+  normals are not on `main` yet). Do not invent filenames. Both elites
+  now have ids.
 - `act4-combat` / `act4-boss` / unsealing sting: briefs in
   `docs/music-ledger.md` and `docs/sfx-ledger.md`. No files yet — Suno /
   ElevenLabs are not in this environment. `MusicBus.FILES` still aliases

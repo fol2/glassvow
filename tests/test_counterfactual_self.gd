@@ -997,6 +997,12 @@ static func _uncarved_row(content: ContentDB, fails: Array[String]) -> void:
 	if def.is_empty() or not EnemyAi.handles(&"uncarvedSelf"):
 		fails.append("uncarvedSelf: missing catalogue row or AI handler")
 		return
+	if not FileAccess.file_exists("res://assets/art/enemies/uncarvedSelf.png"):
+		fails.append("uncarvedSelf: missing painting")
+	if EnemyView.art_texture(&"uncarvedSelf") == null:
+		fails.append("uncarvedSelf: painting did not import")
+	if EnemyView.art_box(&"uncarvedSelf") < 230.0 * 1.05 * 1.5:
+		fails.append("uncarvedSelf: elite combat box must be at least 50% above 1.05")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("uncarvedSelf: counterfactual selves must stay silent")
 	if def.get("elite", false) != true:

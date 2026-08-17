@@ -19,6 +19,7 @@ ROWS = [
     ("unopenedSelf  [A proposed]", ["unopened-self-a", "unopened-self-b"]),
     ("unlitSelf  [B proposed]", ["unlit-self-a", "unlit-self-b"]),
     ("unsunkSelf  [A proposed]", ["unsunk-self-a", "unsunk-self-b"]),
+    ("uncarvedSelf  [C proposed]", ["uncarved-self-a", "uncarved-self-b", "uncarved-self-c"]),
 ]
 
 CELL_W, CELL_H = 480, 320
