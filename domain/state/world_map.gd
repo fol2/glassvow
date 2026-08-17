@@ -129,10 +129,9 @@ static func _act4_motif_pin(
 		if typeof(def_v) != TYPE_DICTIONARY:
 			continue
 		var def: Dictionary = def_v
-		if bool(def.get("boss", false)):
+		if def.get("boss", false) == true:
 			continue
-		var is_elite: bool = bool(def.get("elite", false))
-		if type_key == "monster" and is_elite:
+		if type_key == "monster" and def.get("elite", false) == true:
 			continue
 		var spec_v: Variant = def.get("counterfactual", {})
 		if typeof(spec_v) != TYPE_DICTIONARY:
