@@ -2,7 +2,8 @@ class_name CounterfactualSelf
 extends RefCounted
 ## Act IV counterfactual selves: pick the kit this player did not walk.
 ## Each enemy names its axis (`deckType` or `statusLean`). The unwalked kit is
-## `axisToKit[axis]` on the enemy row — never a default, never RNG.
+## `axisToKit[axis]` on the enemy row — never a default, never RNG. Later selves
+## reuse those two axes; a third axis is not a recognised kind.
 
 const AXIS_DECK_TYPE: String = "deckType"
 const AXIS_STATUS_LEAN: String = "statusLean"

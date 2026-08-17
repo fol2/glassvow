@@ -1,5 +1,5 @@
 extends RefCounted
-## Slice 1 tracer plus Slice 2: a second self on a different meta axis.
+## Slice 1 + Slice 2 + one multiplied threshold-prime self on a reused axis.
 ## Kits are deterministic, flip under the intended fixture, and fail closed.
 
 const RUN_PATH: String = "user://glassvow_test_unwalked_run_v2.json"
@@ -10,6 +10,8 @@ const EMBER_MOVES: Array[String] = ["scepterEcho", "starfallEcho", "ringbreak"]
 const ASH_MOVES: Array[String] = ["gravitasEcho", "ruinEcho", "ringward"]
 const BRINE_MOVES: Array[String] = ["brineBite", "falseLamp", "undertowEcho"]
 const SHELL_MOVES: Array[String] = ["closedShell", "stillWater", "librarySpine"]
+const GLASS_EMBER: Array[String] = ["glassCut", "shardVolley", "sealBlow"]
+const GLASS_ASH: Array[String] = ["roseWard", "darkPane", "reliefWait"]
 
 
 static func run(fails: Array[String]) -> void:
@@ -28,6 +30,13 @@ static func run(fails: Array[String]) -> void:
 	_uncrossed_scenario(content, fails)
 	_uncrossed_ai(fails)
 	_axes_diverge(content, fails)
+	_unopened_row(content, fails)
+	_unopened_kit(content, fails)
+	_unopened_flips(content, fails)
+	_unopened_fail_closed(content, fails)
+	_unopened_scenario(content, fails)
+	_unopened_ai(fails)
+	_axis_reuse(content, fails)
 
 
 static func _content_row(content: ContentDB, fails: Array[String]) -> void:
@@ -352,3 +361,165 @@ static func _axes_diverge(content: ContentDB, fails: Array[String]) -> void:
 			% str(water.get("id", water.get("error", ""))))
 	if str(court.get("id", "")) == str(water.get("id", "")):
 		fails.append("axes: both selves wore the same kit on one deck")
+
+
+static func _unopened_row(content: ContentDB, fails: Array[String]) -> void:
+	var def: Dictionary = content.enemy(&"unopenedSelf")
+	if def.is_empty() or not EnemyAi.handles(&"unopenedSelf"):
+		fails.append("unopenedSelf: missing catalogue row or AI handler")
+		return
+	if def.has("dialogue") or def.has("deathDialogue"):
+		fails.append("unopenedSelf: counterfactual selves must stay silent")
+	var spec: Dictionary = def.get("counterfactual", {})
+	if str(spec.get("node", "")) != "threshold-prime" \
+			or str(spec.get("motif", "")) != "stained-glass":
+		fails.append("unopenedSelf: node/motif must stay on threshold-prime / stained-glass")
+	if str(spec.get("axis", "")) != CounterfactualSelf.AXIS_DECK_TYPE:
+		fails.append("unopenedSelf: axis must reuse deckType")
+	var faults: PackedStringArray = content.enemy_faults("unopenedSelf", def)
+	if not faults.is_empty():
+		fails.append("unopenedSelf: authored row failed validation: %s" % faults[0])
+	var broken: Dictionary = def.duplicate(true)
+	var kits: Dictionary = broken["counterfactual"]["kits"]
+	kits["ember"] = ["notAMove"]
+	if content.enemy_faults("unopenedSelf", broken).is_empty():
+		fails.append("unopenedSelf: unknown kit move was accepted")
+	var third: Dictionary = def.duplicate(true)
+	third["counterfactual"]["axis"] = "costLean"
+	if content.enemy_faults("unopenedSelf", third).is_empty():
+		fails.append("unopenedSelf: a third axis was accepted")
+
+
+static func _unopened_kit(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22021, "unopened-dusk")
+	var picked: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unopenedSelf"), content)
+	if picked.get("ok", false) != true or str(picked.get("id", "")) != "ash":
+		fails.append("unopenedSelf: duskblade start deck should select ash, got %s"
+			% str(picked.get("id", picked.get("error", ""))))
+	var again: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unopenedSelf"), content)
+	if str(again.get("id", "")) != str(picked.get("id", "")):
+		fails.append("unopenedSelf: identical deck produced a different kit")
+
+
+static func _unopened_flips(content: ContentDB, fails: Array[String]) -> void:
+	var ash_run: RunState = RunState.new_run(content, 22022, "unopened-ashwarden", {"aspect": 1})
+	var ash_pick: Dictionary = CounterfactualSelf.resolve(
+		ash_run, content.enemy(&"unopenedSelf"), content)
+	if str(ash_pick.get("id", "")) != "ember":
+		fails.append("unopenedSelf: ashwarden start deck should select ember, got %s"
+			% str(ash_pick.get("id", ash_pick.get("error", ""))))
+	var edited: RunState = RunState.new_run(content, 22023, "unopened-edited")
+	var removed: int = 0
+	var kept: Array[CardInst] = []
+	for card: CardInst in edited.player.deck:
+		if String(card.id) == "strike" and removed < 3:
+			removed += 1
+			continue
+		kept.append(card)
+	edited.player.deck = kept
+	var flipped: Dictionary = CounterfactualSelf.resolve(
+		edited, content.enemy(&"unopenedSelf"), content)
+	if str(flipped.get("id", "")) != "ember":
+		fails.append("unopenedSelf: strike-light duskblade should select ember, got %s"
+			% str(flipped.get("id", flipped.get("error", ""))))
+
+
+static func _unopened_fail_closed(content: ContentDB, fails: Array[String]) -> void:
+	var empty: RunState = RunState.new_run(content, 22024, "unopened-empty")
+	empty.player.deck.clear()
+	var none: Dictionary = CounterfactualSelf.resolve(
+		empty, content.enemy(&"unopenedSelf"), content)
+	if none.get("ok", false) == true:
+		fails.append("unopenedSelf: empty deck emitted a kit")
+	var cursed: Dictionary = content.enemy(&"unopenedSelf").duplicate(true)
+	cursed["counterfactual"]["axisToKit"]["ember"] = "noSuchKit"
+	var run: RunState = RunState.new_run(content, 22025, "unopened-bad-kit")
+	var bad: Dictionary = CounterfactualSelf.resolve(run, cursed, content)
+	if bad.get("ok", false) == true:
+		fails.append("unopenedSelf: unknown kit was emitted")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	content.enemies["unopenedSelf"] = cursed
+	game.apply({"t": "startCombat", "enemies": ["unopenedSelf"], "kind": "normal"})
+	if game.cb == null or not game.cb.enemies.is_empty():
+		fails.append("unopenedSelf: invalid kit still entered combat")
+	var restored: ContentDB = ContentDB.load_full()
+	content.enemies["unopenedSelf"] = restored.enemy(&"unopenedSelf")
+
+
+static func _unopened_scenario(content: ContentDB, fails: Array[String]) -> void:
+	var kernel: ScenarioKernel = ScenarioKernel.new(content, RUN_PATH, VIGIL_PATH, REF_PATH)
+	kernel.clear_profile()
+	var ref: ScenarioReference = ScenarioReference.new()
+	if not ref.load_from({
+		"id": "combat-unopened-self", "revision": 1, "build": BUILD,
+		"seed": 18501, "locale": "en", "shape": "pad-landscape",
+		"overrides": {
+			"act": 0, "node": "0,6", "kind": "monster",
+			"enemies": ["unopenedSelf"],
+		},
+	}):
+		fails.append("unopenedSelf: named Scenario rejected: %s" % ref.error)
+		return
+	var run: RunState = kernel.construct(ref)
+	if run == null:
+		fails.append("unopenedSelf: named Scenario failed: %s" % kernel.last_error)
+		kernel.clear_profile()
+		return
+	if run.pending_enemy_ids != ["unopenedSelf"]:
+		fails.append("unopenedSelf: Scenario did not freeze the threshold-prime enemy")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	game.apply({"t": "startCombat", "enemies": run.pending_enemy_ids, "kind": "normal"})
+	if game.cb == null or game.cb.enemies.is_empty():
+		fails.append("unopenedSelf: startCombat dropped the threshold-prime self")
+		kernel.clear_profile()
+		return
+	var enemy: EnemyCombatant = game.cb.enemies[0]
+	if str(enemy.flags.get(CounterfactualSelf.KIT_FLAG, "")) != "ash":
+		fails.append("unopenedSelf: Scenario combat did not wear the ash kit")
+	if String(enemy.move_key) != "roseWard":
+		fails.append("unopenedSelf: ash kit first intent was %s" % String(enemy.move_key))
+	if not GLASS_ASH.has(String(enemy.move_key)):
+		fails.append("unopenedSelf: ash intent is not an ash kit move")
+	kernel.clear_profile()
+
+
+static func _unopened_ai(fails: Array[String]) -> void:
+	var rng: Rng = Rng.new(13)
+	var before: int = rng.get_state()
+	var flags: Dictionary = {CounterfactualSelf.KIT_FLAG: "ember"}
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unopenedSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != GLASS_EMBER[turn - 1]:
+			fails.append("unopenedSelf: ember turn %d expected %s got %s"
+				% [turn, GLASS_EMBER[turn - 1], String(move)])
+	if rng.get_state() != before:
+		fails.append("unopenedSelf: AI consumed RNG")
+	flags[CounterfactualSelf.KIT_FLAG] = "ash"
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unopenedSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != GLASS_ASH[turn - 1]:
+			fails.append("unopenedSelf: ash turn %d expected %s got %s"
+				% [turn, GLASS_ASH[turn - 1], String(move)])
+	var missing: StringName = EnemyAi.decide(&"unopenedSelf", 1, "", "", 1.0, rng, {})
+	if missing != &"":
+		fails.append("unopenedSelf: missing kit returned %s" % String(missing))
+
+
+static func _axis_reuse(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22026, "reuse-ashwarden", {"aspect": 1})
+	var court: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unwalkedSelf"), content)
+	var glass: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unopenedSelf"), content)
+	if str(court.get("id", "")) != "ember" or str(glass.get("id", "")) != "ember":
+		fails.append("reuse: ashwarden should invert both deckType selves to ember")
+	var court_moves: Variant = content.enemy(&"unwalkedSelf")["counterfactual"]["kits"]["ember"]
+	var glass_moves: Variant = content.enemy(&"unopenedSelf")["counterfactual"]["kits"]["ember"]
+	if str(court_moves) == str(glass_moves):
+		fails.append("reuse: threshold-prime reused III-prime ember moves")
+	if CounterfactualSelf.axis_keys("costLean").size() != 0:
+		fails.append("reuse: a third axis kind was registered")

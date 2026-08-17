@@ -3364,6 +3364,91 @@
       },
       "name": "【The Uncrossed】"
     },
+    "unopenedSelf": {
+      "hp": [
+        40,
+        46
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 32,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "threshold-prime",
+        "motif": "stained-glass",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "glassCut",
+            "shardVolley",
+            "sealBlow"
+          ],
+          "ash": [
+            "roseWard",
+            "darkPane",
+            "reliefWait"
+          ]
+        }
+      },
+      "moves": {
+        "glassCut": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "The Window You Left Shut"
+        },
+        "shardVolley": {
+          "intent": "attack",
+          "dmg": 6,
+          "times": 2,
+          "name": "Shards That Did Not Fall"
+        },
+        "sealBlow": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Door Unopened"
+        },
+        "roseWard": {
+          "intent": "block",
+          "block": 13,
+          "name": "The Rose You Stood Behind"
+        },
+        "darkPane": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "The Pane Left Dark"
+        },
+        "reliefWait": {
+          "intent": "attack_block",
+          "dmg": 7,
+          "block": 8,
+          "name": "The Seal Unread"
+        }
+      },
+      "name": "【The Unopened】"
+    },
     "unwalkedSelf": {
       "hp": [
         46,
