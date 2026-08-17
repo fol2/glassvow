@@ -91,3 +91,6 @@ jobs:
 
       - name: Test Dawn phone containment
         run: godot --headless -s res://tests/dawn_phone_containment.gd
+
+      - name: Test run HUD location fit
+        run: godot --headless -s res://tests/measure_hud_location.gd
