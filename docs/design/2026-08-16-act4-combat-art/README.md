@@ -268,7 +268,8 @@ Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
 
 - All eight counterfactual-self paintings plus the three Act IV combat
   plates are on disk. James picked the remaining seven selves on
-  2026-08-17. Audio is still held: `act4-combat` / `act4-boss` /
-  unsealing sting. Briefs in `docs/music-ledger.md` and
-  `docs/sfx-ledger.md`. No files yet — Suno / ElevenLabs are not in this
-  environment. `MusicBus.FILES` still aliases Act IV to Act III.
+  2026-08-17. Music shipped 2026-08-17: combat **C**, boss **A**
+  (`MusicBus.FILES` → `act4-combat` / `act4-boss`; candidates stay in
+  `docs/design/2026-08-17-act4-audio/candidates/`). Unsealing sting
+  shipped on `main` as #377.
+
