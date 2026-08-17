@@ -25,6 +25,8 @@ SHIPPED = [
     ENEMIES / "unwalkedSelf.png",
     ENEMIES / "uncrossedSelf.png",
     ENEMIES / "unopenedSelf.png",
+    ENEMIES / "unlitSelf.png",
+    ENEMIES / "unsunkSelf.png",
     ENEMIES / "eternalKeeper.png",
 ]
 
@@ -44,11 +46,14 @@ def measure(path: Path) -> dict[str, object]:
     pct = (100.0 * len(ge) / len(nz)) if nz else 0.0
     corners = [im.getpixel(c)[3] for c in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))]
     top_clear = corners[0] == 0 and corners[1] == 0
-    char = "unwalked" in path.name or "Keeper" in path.name or "self" in path.name
+    # CamelCase ids: unwalkedSelf, eternalKeeper. A lowercase "self" miss
+    # left uncrossed/unopened counting as stage plates (top-clear only,
+    # leftover magenta never measured).
+    char = "Self" in path.name or "Keeper" in path.name
     mag = leftover_magenta(im) if char else 0
     mdark = margin_dark(im) if char else 0
     ok = pct >= BAR * 100 and (all(c == 0 for c in corners) if char else top_clear)
-    if "unwalked" in path.name or "uncrossed" in path.name or "unopened" in path.name:
+    if char:
         ok = ok and mag < 32 and mdark < 400
     return {
         "name": path.name, "mode": im.mode, "size": f"{w}×{h}",

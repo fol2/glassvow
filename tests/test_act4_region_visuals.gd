@@ -41,6 +41,12 @@ static func _map_rows(fails: Array[String]) -> void:
 
 
 static func _combat_rows(fails: Array[String]) -> void:
+	for plate: String in ["backdrop", "mid", "ledge"]:
+		var path: String = "res://assets/art/stage/act4-%s.png" % plate
+		_check(fails, FileAccess.file_exists(path),
+			"Act IV combat plate %s is on disk" % plate)
+		_check(fails, ResourceLoader.exists(path),
+			"Act IV combat plate %s imported" % plate)
 	_check(fails, SkyField.ACT_SKIES.size() == LayoutBook.ACTS
 		and SkyField.ACT_FOGS.size() == LayoutBook.ACTS
 		and SkyField.ACT_PARTICLES.size() == LayoutBook.ACTS
