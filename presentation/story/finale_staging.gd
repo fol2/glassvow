@@ -2,9 +2,9 @@ class_name FinaleStaging
 extends Control
 ## The finale swap's walk-out beat — the game's one deliberate grammar break
 ## (07-scenes §5): the last steps to the door are walked by the player's own
-## hand, never by the dwell timer and never by skip. Two forms are built
-## (#312): FORM_STEP advances one line per tap; FORM_HOLD walks the step out
-## under a held press. James picked FORM_HOLD off the renders (2026-08-17).
+## hand, never by the dwell timer and never by skip. James picked FORM_HOLD
+## off the renders (#312) — the held press walks the step out. FORM_STEP
+## (one line per tap) is kept as a dev capture switch only.
 
 const WALK_KEYS: PackedStringArray = [
 	"story.finale.b2.l2", "story.finale.b2.l3",
@@ -15,7 +15,7 @@ const HOLD_TIME: float = 0.9
 const PIP_SIZE: Vector2 = Vector2(26.0, 4.0)
 const PIP_DIM: Color = Color(0.51, 0.60, 0.65, 0.35)
 
-## James ruled FORM_HOLD (#312); `--finale-form=step` remains a dev switch.
+## James ruled hold (#312). Dev capture can still force `--finale-form=step`.
 static var form: StringName = FORM_HOLD
 
 var _pips: Array[ColorRect] = []
