@@ -587,6 +587,10 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | 452 | 未冷的燼 / The Cinder That Did Not Cool | unwoodedSelf.moves.cinderHush | L4 | 一撮沒冷下來的燼 | 火熄之後燼仍熱;你沒等它冷,另一個你等 | 佔位 |
 | 453 | 未立的林 / The Grove You Did Not Stand In | unwoodedSelf.moves.standWood | L4 | 一片沒站進去的林 | 出發前的林等過你立;你沒立,所以路仍未成 | 佔位 |
 
+#220 Slice 4 — catalogue assembly. Act/boss display already lives in rows 22 and 412;
+no new player-facing lines. `acts[3]` / `rewardGold[3]` / `encounters[3]` land those
+settled names on the production book. Stage plates remain #221.
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

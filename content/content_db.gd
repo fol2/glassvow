@@ -562,6 +562,43 @@ func validate(fails: Array[String]) -> void:
 	for potion_id: String in potions:
 		if not CombatRules.handles_potion(potion_id):
 			fails.append("ContentDB: potion %s has no handler" % potion_id)
+	_validate_encounters(fails)
+
+
+func _validate_encounters(fails: Array[String]) -> void:
+	if encounters.is_empty():
+		return
+	if not acts.is_empty() and encounters.size() != acts.size():
+		fails.append("ContentDB: encounters rows %d do not match acts %d"
+			% [encounters.size(), acts.size()])
+	for act_i: int in range(encounters.size()):
+		var row_v: Variant = encounters[act_i]
+		if typeof(row_v) != TYPE_DICTIONARY:
+			fails.append("ContentDB: encounters[%d] must be a dictionary" % act_i)
+			continue
+		var row: Dictionary = row_v
+		for tier: String in ["weak", "normal", "elite", "boss"]:
+			var groups_v: Variant = row.get(tier, [])
+			if typeof(groups_v) != TYPE_ARRAY:
+				fails.append("ContentDB: act %d %s encounters must be an array" % [act_i, tier])
+				continue
+			var groups: Array = groups_v
+			if groups.is_empty():
+				fails.append("ContentDB: act %d %s encounters are empty" % [act_i, tier])
+				continue
+			for group_v: Variant in groups:
+				if typeof(group_v) != TYPE_ARRAY:
+					fails.append("ContentDB: act %d %s has a non-array group" % [act_i, tier])
+					continue
+				var group: Array = group_v
+				if group.is_empty():
+					fails.append("ContentDB: act %d %s has an empty group" % [act_i, tier])
+					continue
+				for id_v: Variant in group:
+					var eid: String = str(id_v)
+					if not enemies.has(eid):
+						fails.append("ContentDB: act %d %s names unknown enemy %s"
+							% [act_i, tier, eid])
 
 
 func _validate_effects(effects_v: Variant, fails: Array[String]) -> void:
