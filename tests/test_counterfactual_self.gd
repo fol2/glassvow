@@ -800,8 +800,14 @@ static func _unsunk_row(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("unsunkSelf: missing painting")
 	if EnemyView.art_texture(&"unsunkSelf") == null:
 		fails.append("unsunkSelf: painting did not import")
-	if EnemyView.art_box(&"unsunkSelf") < 230.0 * 1.05 * 1.5:
-		fails.append("unsunkSelf: elite combat box must be at least 50% above 1.05")
+	# Elite base 230 at 1.6 was 368px — larger than the hero (285) and the
+	# tracer (296), and it crowded the END button. 1.4 stays a step above
+	# the tracer without matching the first-landing 50% rule (that floor
+	# on this base is 362px, which forces 1.6).
+	if EnemyView.art_box(&"unsunkSelf") < 230.0 * 1.4:
+		fails.append("unsunkSelf: elite combat box must stay at scale 1.4")
+	if EnemyView.art_box(&"unsunkSelf") <= EnemyView.art_box(&"unwalkedSelf"):
+		fails.append("unsunkSelf: elite must read larger than the tracer")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("unsunkSelf: counterfactual selves must stay silent")
 	if def.get("elite", false) != true:
@@ -1001,8 +1007,10 @@ static func _uncarved_row(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("uncarvedSelf: missing painting")
 	if EnemyView.art_texture(&"uncarvedSelf") == null:
 		fails.append("uncarvedSelf: painting did not import")
-	if EnemyView.art_box(&"uncarvedSelf") < 230.0 * 1.05 * 1.5:
-		fails.append("uncarvedSelf: elite combat box must be at least 50% above 1.05")
+	if EnemyView.art_box(&"uncarvedSelf") < 230.0 * 1.4:
+		fails.append("uncarvedSelf: elite combat box must stay at scale 1.4")
+	if EnemyView.art_box(&"uncarvedSelf") <= EnemyView.art_box(&"unwalkedSelf"):
+		fails.append("uncarvedSelf: elite must read larger than the tracer")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("uncarvedSelf: counterfactual selves must stay silent")
 	if def.get("elite", false) != true:

@@ -469,8 +469,9 @@ Prompt (binding clauses):
 
 The Unsunk (`unsunkSelf`, II-prime / library, `elite: true`). Held
 drowned book-stack; still-tide water-glass at the hem. No lantern.
-Combat box is `tierSizes.elite * 1.6` (368px) — at least 50% above a
-1.05 elite box.
+Combat box is `tierSizes.elite * 1.4` (322px) — a step above the tracer
+self (296px) and the hero (285px). 1.6 (368px) overshot both and crowded
+the END button.
 
 **Proposed pick A, 2026-08-17, pending James.** B's standing unread-shelf
 reads as furniture beside the pilgrim. Magenta field; gate as
@@ -490,7 +491,8 @@ Prompt (binding clauses):
 The Uncarved (`uncarvedSelf`, threshold-prime / seal-relief,
 `elite: true`). Blank rectangular relief tablet with an unfinished
 circular seal — the door-face of the same threshold whose window-face
-is the Unopened's rose disc. Combat box `tierSizes.elite * 1.6` (368px).
+is the Unopened's rose disc. Combat box `tierSizes.elite * 1.4` (322px),
+same as `unsunkSelf`.
 
 **Proposed pick C, 2026-08-17, pending James.** A is a stone tome (library
 collision with Unsunk). B's rounded carved tablet reads as a door
