@@ -46,7 +46,7 @@ remain unchanged.
 | Relic | 遺物 | Persistent run equipment. |
 | Mythic (card rarity) | 秘藏 | The tier above Rare. Chase content: Vow 3 only, never in shop, events or normal offer weights. |
 | Treasure (map node) | 寶箱 | The no-fight chest node and its screen; renamed from 寶藏 so 藏 reads as the rarity term. |
-| Rose Window | 玫瑰窗 | The Vigil's six-pane memorial and map. |
+| Rose Window | 彩窗 | The Vigil's six-pane memorial and map. |
 | Shard | 碎片 | A completed Emberglass quest token. |
 | Unplayable | 無法打出 | A card that cannot be played from hand. |
 | Lamplighter | 掌燈人 | The keeper who offers gifts. |
