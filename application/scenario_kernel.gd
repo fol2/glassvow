@@ -154,7 +154,7 @@ func _synthesise(game: GlassvowGame, target_act: int, node_v: Variant) -> bool:
 
 
 func _new_map(game: GlassvowGame) -> WorldMap:
-	var map: WorldMap = WorldMap.benchmark(game.run)
+	var map: WorldMap = WorldMap.for_run(game.run, content)
 	game.quests.decorate_map(game.run, map)
 	return map
 

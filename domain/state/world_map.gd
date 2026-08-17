@@ -4,7 +4,8 @@ extends RefCounted
 ## columns. Pure state — the screen reads and animates it, never the reverse.
 ##
 ## `benchmark()` is the frozen reference's 15×7, six-path generator. `slice()`
-## remains only until every generated node type has a live route.
+## remains only until every generated node type has a live route. `act4()` is
+## the authored Mirrored Road: five nodes in a line, not a short `benchmark()`.
 
 const ROWS: int = 15
 const COLS: int = 7
@@ -15,6 +16,11 @@ const PATHS: int = 6
 ## worst realisation, and a spread edited here without that gate seeing it would
 ## be a screen defect no test could catch (PR #79 DL R3).
 const JITTER_SPREAD: Vector2 = Vector2(0.5, 0.4)
+## 鏡中歸途 / The Mirrored Road — monster → monster → elite → rest → boss.
+const ACT4_TYPES: PackedStringArray = ["monster", "monster", "elite", "rest", "boss"]
+const ACT4_MOTIFS: PackedStringArray = [
+	"threshold-prime", "III-prime", "II-prime", "I-prime", "hearth-prime",
+]
 
 var region: String = "ashen_woods"
 var nodes: Array[MapNode] = []
@@ -43,6 +49,95 @@ static func slice() -> WorldMap:
 	for i: int in range(m.nodes.size() - 1):
 		m.nodes[i].next.append(m.nodes[i + 1].id)
 	return m
+
+
+## Acts I–III stay generated. Act IV is the authored five-node line.
+static func for_run(run: RunState, content: ContentDB) -> WorldMap:
+	if run.act == 3:
+		return act4(run, content)
+	return benchmark(run)
+
+
+## First clear pins motif-matched landed selves (and `encounters[3]` when
+## present). Later runs redraw the two monsters and the elite from that pool;
+## types, order and the boss stay fixed.
+static func act4(run: RunState, content: ContentDB) -> WorldMap:
+	var m: WorldMap = WorldMap.new()
+	m.region = "rose_window"
+	m.at = -1
+	var first_clear: bool = not run.unlocks.has(RunState.MIRRORED_ROAD)
+	for i: int in range(ACT4_TYPES.size()):
+		var type_key: String = ACT4_TYPES[i]
+		var occupants: Array[String] = []
+		if type_key != "rest":
+			occupants = _act4_occupants(run, content, type_key, i, first_clear)
+		m.nodes.append(MapNode.make(type_key, occupants, i))
+	m.edges = {0: [1], 1: [2], 2: [3], 3: [4]}
+	for i: int in range(m.nodes.size() - 1):
+		m.nodes[i].next.append(m.nodes[i + 1].id)
+	return m
+
+
+static func _act4_occupants(
+	run: RunState, content: ContentDB, type_key: String, index: int, first_clear: bool
+) -> Array[String]:
+	var pool: Array = _act4_pool(content, type_key)
+	if not pool.is_empty():
+		if type_key == "boss" or first_clear:
+			var group_i: int = 0
+			if type_key == "monster" and index == 1 and pool.size() > 1:
+				group_i = 1
+			return _copy_group(pool, group_i)
+		return _copy_group(pool, run.rng.pick_index(pool.size()))
+	return _act4_motif_pin(content, index)
+
+
+static func _act4_pool(content: ContentDB, type_key: String) -> Array:
+	if content == null or content.encounters.size() <= 3:
+		return []
+	var row_v: Variant = content.encounters[3]
+	if typeof(row_v) != TYPE_DICTIONARY:
+		return []
+	var row: Dictionary = row_v
+	var key: String = "boss" if type_key == "boss" else (
+		"elite" if type_key == "elite" else "normal"
+	)
+	var pool_v: Variant = row.get(key, [])
+	return pool_v if typeof(pool_v) == TYPE_ARRAY else []
+
+
+static func _act4_motif_pin(content: ContentDB, index: int) -> Array[String]:
+	var out: Array[String] = []
+	if content == null or index < 0 or index >= ACT4_MOTIFS.size():
+		return out
+	var wanted: String = ACT4_MOTIFS[index]
+	for id_v: Variant in content.enemies.keys():
+		var id: String = str(id_v)
+		var def_v: Variant = content.enemies.get(id, {})
+		if typeof(def_v) != TYPE_DICTIONARY:
+			continue
+		var def: Dictionary = def_v
+		var spec_v: Variant = def.get("counterfactual", {})
+		if typeof(spec_v) != TYPE_DICTIONARY:
+			continue
+		var spec: Dictionary = spec_v
+		if str(spec.get("node", "")) == wanted:
+			out.append(id)
+	return out
+
+
+static func _copy_group(pool: Array, index: int) -> Array[String]:
+	var out: Array[String] = []
+	if pool.is_empty():
+		return out
+	var pick_v: Variant = pool[clampi(index, 0, pool.size() - 1)]
+	if typeof(pick_v) != TYPE_ARRAY:
+		return out
+	for id_v: Variant in pick_v:
+		var id: String = str(id_v)
+		if not id.is_empty():
+			out.append(id)
+	return out
 
 
 static func act4_entrance() -> WorldMap:

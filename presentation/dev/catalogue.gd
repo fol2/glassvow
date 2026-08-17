@@ -131,6 +131,19 @@ const ENTRIES: Array[Dictionary] = [
 		"seed": SEED, "overrides": {
 			"act": 0, "node": "1,2", "kind": "monster",
 			"enemies": ["unwoodedSelf"]}},
+	{"id": "act-4-map-rest", "revision": 1,
+		"description": "Act IV seated on the rest waystone before the terminus.",
+		"seed": SEED, "overrides": {"act": 3, "shards": 6, "node": "n3"}},
+	{"id": "combat-act4-iii-prime", "revision": 1,
+		"description": "Act IV III-prime monster: the landed unwalked self on the authored line.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "n1", "kind": "monster",
+			"enemies": ["unwalkedSelf"]}},
+	{"id": "combat-act4-ii-prime", "revision": 1,
+		"description": "Act IV II-prime elite: both axes on the authored line.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "n2", "kind": "elite",
+			"enemies": ["uncrossedSelf", "unsunkSelf"]}},
 ]
 
 const UNSUPPORTED: Array[Dictionary] = [
@@ -178,6 +191,8 @@ const UNSUPPORTED: Array[Dictionary] = [
 		"reason": "Vigil pending_scene is not an OVERRIDE_KEY."},
 	{"id": "unsealing-short",
 		"reason": "The repeat door-crossing beat needs an Act IV to cross into (#312)."},
+	{"id": "combat-act4-boss",
+		"reason": "The Eternal Keeper is #220 Slice 3; this map pins landed selves only."},
 	{"id": "onboarding",
 		"reason": "Onboarding Scenarios graduate with the guided-first-run feature."},
 ]

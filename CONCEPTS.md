@@ -876,10 +876,16 @@ the state back through the same load path the game uses.
 The token a completed emberglass quest leaves in the Vigil — one per quest,
 never duplicated, never from an unknown quest.
 
-Collecting all six extends the journey to a third act and surfaces the sealed
-Act IV door on that act's final map; with fewer, the run ends after the second
-act. The map is ordinary either way — the door is an overlay on it, not a
-different graph.
+Collecting all six extends the journey to a fourth act. Acts I–III stay the
+generated pilgrimage; the sealed Act IV door is an overlay on Act III's map,
+not a different graph. Act IV itself is the authored five-node Mirrored Road
+(monster → monster → elite → rest → boss), not a generated map.
+
+### Mirrored Road
+Act IV's pilgrimage: five waystones in a line through mirror-space. The first
+clear plays pinned occupants; later runs redraw the two monster nodes and the
+elite from the act-4 pool. Types, order and the boss stay fixed. Recording
+that first clear is the `mirroredRoad` unlock, distinct from the `act4` reveal.
 
 ---
 

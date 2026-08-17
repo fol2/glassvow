@@ -165,13 +165,25 @@ static func run(fails: Array[String]) -> void:
 	var third: WorldMap = WorldMap.benchmark(lifecycle)
 	lifecycle.player.hp = 1
 	lifecycle.start_next_act(full)
-	var fourth: WorldMap = WorldMap.benchmark(lifecycle)
+	var fourth: WorldMap = WorldMap.for_run(lifecycle, full)
 	_check(fails, lifecycle.act == 3 and lifecycle.omens.size() == 4
-		and lifecycle.is_final_act(),
-		"three boss transitions reach the fourth and final act with one omen per act")
+		and lifecycle.omens[3] == null and lifecycle.is_final_act(),
+		"three boss transitions reach Act IV with no omen on the authored act")
 	_check(fails, second.region == "sunken_city" and third.region == "obsidian_court"
 		and fourth.region == "rose_window",
 		"the fourth act names rose_window, not the court")
+	_check(fails, fourth.nodes.size() == 5, "Act IV is the authored five-node line")
+	var fourth_types: Array[String] = []
+	for n: MapNode in fourth.nodes:
+		fourth_types.append(n.type)
+	_check(fails, fourth_types == ["monster", "monster", "elite", "rest", "boss"],
+		"Act IV reads monster → monster → elite → rest → boss")
+	_check(fails, fourth.nodes[1].enemies == ["unwalkedSelf"],
+		"first-clear III-prime pins the landed unwalked self")
+	_check(fails, fourth.nodes[2].enemies == ["uncrossedSelf"],
+		"first-clear II-prime pins the landed uncrossed self")
+	_check(fails, fourth.nodes[0].enemies.is_empty() and fourth.nodes[4].enemies.is_empty(),
+		"unlanded Act IV combat nodes stay empty rather than reuse Act III")
 	_check(fails, lifecycle.player.hp == 26,
 		"each boss transition mends 35 percent without exceeding max HP")
 	var boss_map: WorldMap = WorldMap.slice()
