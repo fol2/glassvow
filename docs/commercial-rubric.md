@@ -73,7 +73,7 @@ Checked once per surface at sign-off, alongside the surface's own list.
 The title-screen world and the scene-transition ceremony layer (`presentation/stage/`).
 
 - [ ] `visual` Within three seconds of the title appearing and with no input, at least three independent motions are visible: motes rising, ash falling, and the hanging chains swinging (AFK Journey: the title is a scene, not a static image).
-- [ ] `visual` Dragging a finger across the title makes the entire scene — spire, near shards, particle fields — lean after the touch with a visible lag, and the scene drifts back to its resting composition within two seconds of the finger lifting.
+- [ ] `visual` Dragging a finger across the title makes the entire scene — road, lanterns, sealed door, near shards, particle fields — lean after the touch with a visible lag, and the scene drifts back to its resting composition within two seconds of the finger lifting.
 - [ ] `visual` On every screen change during a live run, the lantern-light band sweeps fully across and off the screen; it never stops mid-screen or remains visible after the new screen settles.
 - [ ] `visual` Tapping a combat node covers the screen with dark ink on the same frame as the tap, and the cover collapses into the tapped node's position — the combat screen's construction is never visible uncovered.
 - [ ] `visual` With Reduce Motion enabled, the band wipe, iris, bloom, crack, act plate, and grain never appear and the ambient particle motion stills, while the title scene still leans in response to touch drag.
@@ -95,9 +95,9 @@ The horizontal drag-to-survey journey (`presentation/map/`).
 - [ ] `system` Walked edges draw as continuous bright lines and unwalked edges as faint dashes, distinguishable at arm's length (the StS route-you-took trace).
 - [ ] `system` Every bounty chip on screen shows its complete numeral beside its stone — no chip is clipped by the frame edge or overlapped by a neighbour so that its number reads as a different number.
 - [ ] `system` A drag that begins on a waystone pans the map without selecting it, a fling coasts to rest, and the camera never shows dead space before the first stone or past the terminus seat.
-- [ ] `visual` A slow pan separates at least three depth planes moving at visibly different rates — sky and Spire slowest, region silhouettes mid, road and stones at full speed, weather drifting faster in front.
+- [ ] `visual` A slow pan separates at least three depth planes moving at visibly different rates — the per-act ramp and sky slowest, the tilted ground plane mid, waystones and drawn edges at full speed, weather drifting faster in front.
 - [ ] `visual` Panning to the eastern end frames the act boss inside the rose-window arch with its base meeting the road, and open act sky remains visible beyond the terminus.
-- [ ] `story` A screenshot of any act's map is attributable to its act without reading text: the Spire reads nearer act by act, and each act carries its own weather — falling ash, light shafts with rising motes, or storm streaks (Hades: each region owns its look).
+- [ ] `story` A screenshot of any act's map is attributable to its act without reading text: the ramp palette and light arc shift recognisably act by act, and each act carries its own weather — falling ash, light shafts with rising motes, or storm streaks (Hades: each region owns its look).
 - [ ] `story` Choosing an unlit waystone plays the kindle ceremony before departure — flash, true emblem blooming in, bounty chip disappearing as the coin is paid — so the reveal is witnessed on the map, not inferred afterwards.
 - [ ] `story` The title line names the region the player stands in and, when one row can hold it, who awaits at the terminus; it never wraps onto a second row or overlaps the top waystone row in en or zh-Hant.
 - [ ] `audio` Arriving on the map starts an ambience bed audibly distinct from the combat mix within one second, and the bed changes with the act's weather (Hades-class region ambience).
