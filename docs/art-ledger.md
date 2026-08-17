@@ -546,6 +546,44 @@ Prompt (binding clauses):
 > lantern, NO star, NO books, NO paired lamps. Warm amber / ash-grey;
 > amber rim from the LEFT.
 
+### `title-background/background.png` — 1536×1024 RGB — title banner plate
+
+The translucent title banner (`choice_screen.gd`, opacity 0.35) that sits
+over the living `TitleWorld`. Import `compress/mode=0`, no mipmaps, **RGB
+with no alpha** — the banner drop-shadow is a closed-form blur of an opaque
+rectangle; an alpha channel would change that contract.
+
+Replaced 2026-08-17 for #304. The previous plate was a gothic lathed spire
+wreathed in a lit switchback stair (Tier A banned: stair as *the road*).
+The new plate is the same world the procedural backdrop now draws: a
+horizontal pilgrimage road receding east to a sealed gothic door, lanterns
+along both verges, forest closing the frame, cloud sea, night sky. No
+tower, no spire, no wrapping stair.
+
+Style block, landscape (not a character cutout):
+
+> Serious cartoon-gothic stained-glass game art: night landscape, chunky
+> dark silhouettes, 3-5 large jewel-tone colour masses, matte painterly
+> texture, warm amber lantern light, soft controlled glow. No text, no
+> labels, no watermark, no UI.
+
+Subject:
+
+> A HORIZONTAL pilgrimage road receding toward a distant SEALED gothic
+> pointed-arch door, night, dark forest of bare pines closing left and
+> right. Warm amber lanterns in two ranks along the road, leading the eye
+> to the door. The door is a solid near-black silhouette with a faint
+> six-petal rose-window hint in its upper arch — sealed, not open. Cloud
+> sea around the door, deep midnight-blue sky, a thin pale crescent moon
+> far left. Ember motes in the near air. The road is packed earth, slightly
+> warmer than the ground, running from the bottom of the frame to the
+> door at the vanishing point. NO tower, NO spire, NO castle, NO wrapping
+> staircase, NO switchback stair, NO vertical building as the subject.
+> Opaque RGB, edge to edge, no transparency.
+
+Generated 2026-08-17 through Cursor `GenerateImage`. Cropped/resized to
+1536×1024 RGB so the banner's contain-fit and drop-shadow stay valid.
+
 ## Rejection note — what "technically shippable" means
 
 Judging generated character art by eye is not enough; two of the five
