@@ -101,7 +101,6 @@ static func _walk_line_owes_the_hand(fails: Array[String]) -> void:
 	_check(fails, walk_at >= 0, "finale carries no walk line")
 	if walk_at < 0:
 		return
-	FinaleStaging.form = FinaleStaging.FORM_STEP
 	var asked: Array[int] = [0]
 	var player: ScenePlayer = ScenePlayer.new(finale, walk_at)
 	player.advance_requested.connect(func() -> void: asked[0] += 1)
@@ -109,14 +108,16 @@ static func _walk_line_owes_the_hand(fails: Array[String]) -> void:
 	player._process(ScenePlayer.REVEAL_TIME + 0.01)
 	player._process(60.0)
 	_check(fails, asked[0] == 0, "a walk line advanced on its own dwell")
+	_check(fails, FinaleStaging.form == FinaleStaging.FORM_HOLD,
+		"the shipped walk form is not the signed FORM_HOLD")
 	player._press(true)
 	player._process(ScenePlayer.SKIP_HOLD * 3.0)
 	_check(fails, not player._skipping, "skip armed on a walk line")
+	_check(fails, asked[0] == 1, "a filled hold on the walk line did not step")
 	player._press(false)
-	_check(fails, asked[0] == 1, "a tap on a walk line did not step")
 	var caption: Label = player.find_child("Caption", true, false) as Label
 	_check(fails, caption != null
-			and caption.text == Locale.active.t("ui.map.openDoor.step"),
+			and caption.text == Locale.active.t("ui.map.openDoor.hold"),
 		"the walk line does not name its input form")
 	player.free()
 	var instant_asked: Array[int] = [0]
@@ -127,31 +128,26 @@ static func _walk_line_owes_the_hand(fails: Array[String]) -> void:
 	still._process(0.016)
 	_check(fails, instant_asked[0] == 1, "instant mode stalled on the walk line")
 	still.free()
-	FinaleStaging.form = FinaleStaging.FORM_HOLD
 
 
-## Both candidate forms render and step (#312: James picks off the renders).
+## The unshipped FORM_STEP stays a working dev capture switch (#312: James
+## picked FORM_HOLD off the renders; hold semantics live in the default test).
 static func _walk_forms(fails: Array[String]) -> void:
 	var finale: SceneScript = _script("finale")
 	var walk_at: int = _first_walk_cursor(finale)
 	if walk_at < 0:
 		return
-	FinaleStaging.form = FinaleStaging.FORM_HOLD
+	FinaleStaging.form = FinaleStaging.FORM_STEP
 	var asked: Array[int] = [0]
 	var player: ScenePlayer = ScenePlayer.new(finale, walk_at)
 	player.advance_requested.connect(func() -> void: asked[0] += 1)
 	player._ready()
 	player._process(ScenePlayer.REVEAL_TIME + 0.01)
 	player._press(true)
-	player._process(FinaleStaging.HOLD_TIME - 0.1)
-	_check(fails, asked[0] == 0, "FORM_HOLD stepped before the hold filled")
+	player._process(FinaleStaging.HOLD_TIME + 0.5)
+	_check(fails, asked[0] == 0, "FORM_STEP stepped on the hold, not the tap")
 	player._press(false)
-	player._press(true)
-	player._process(FinaleStaging.HOLD_TIME - 0.1)
-	_check(fails, asked[0] == 0, "a released hold kept its progress")
-	player._process(0.2)
-	_check(fails, asked[0] == 1, "FORM_HOLD did not step on a filled hold")
-	player._press(false)
+	_check(fails, asked[0] == 1, "FORM_STEP did not step on the tap")
 	var pips: FinaleStaging = player.find_child("FinaleWalk", true, false) as FinaleStaging
 	_check(fails, pips != null and pips.visible, "the walk overlay is not staged")
 	player.free()
