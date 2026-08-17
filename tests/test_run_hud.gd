@@ -1,5 +1,6 @@
 extends RefCounted
 ## #338: pad-portrait is 820 px wide and must not wear pad-landscape chrome.
+## #382: phone-landscape wraps the location title like pad-portrait.
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -31,6 +32,14 @@ static func run(fails: Array[String]) -> void:
 		"pad-portrait still shows the location title")
 	_check(fails, pad_portrait._title.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART,
 		"pad-portrait wraps the location title")
+	_check(fails, phone_landscape._title.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART,
+		"phone-landscape wraps the location title")
+	_check(fails, phone_landscape._title.max_lines_visible == 2,
+		"phone-landscape location title is two lines")
+	_check(fails, phone_landscape._top.offset_bottom == 62.0,
+		"phone-landscape wrap bar matches pad-portrait")
+	_check(fails, pad_portrait._top.offset_bottom == 62.0,
+		"pad-portrait wrap bar stays 62")
 	_check(fails, pad_landscape._title.autowrap_mode == TextServer.AUTOWRAP_OFF,
 		"pad-landscape keeps a single-line title")
 	_check(fails, not phone_portrait._title.visible,

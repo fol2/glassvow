@@ -260,9 +260,10 @@ func _apply_shape() -> void:
 	# takes compact landscape chrome, not pad-landscape's roomy metrics (#338).
 	var compact: bool = shape == &"phone-landscape" or shape == &"pad-portrait"
 	# Even compact chrome cannot grant the English Act III line a single row
-	# once the three phial seats a live run carries are present. Portrait has
-	# the height; wrap there instead of ellipsizing.
-	var wrap_title: bool = shape == &"pad-portrait"
+	# once the three phial seats a live run carries are present. Wrap instead
+	# of ellipsizing. The wrapped Act III block is 40 px; a 42 px bar holds it
+	# flush, so both compact shapes share pad-portrait's 62 px wrap bar (#382).
+	var wrap_title: bool = shape == &"pad-portrait" or shape == &"phone-landscape"
 	var bar_height: int = 58 if phone_portrait else (62 if wrap_title else (42 if compact else 56))
 	_top.offset_bottom = bar_height
 	_row.offset_left = 10 if phone_portrait else 16
