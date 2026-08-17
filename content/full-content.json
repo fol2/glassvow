@@ -3955,6 +3955,86 @@
         }
       },
       "name": "【The Unwalked】"
+    },
+    "unwoodedSelf": {
+      "hp": [
+        38,
+        44
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 16,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "I-prime",
+        "motif": "ash-root",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "branchCut",
+            "roadVolley",
+            "woodBlow"
+          ],
+          "ash": [
+            "woodWard",
+            "cinderHush",
+            "standWood"
+          ]
+        }
+      },
+      "moves": {
+        "branchCut": {
+          "intent": "attack",
+          "dmg": 13,
+          "name": "The Branch You Did Not Grow"
+        },
+        "roadVolley": {
+          "intent": "attack",
+          "dmg": 5,
+          "times": 2,
+          "name": "The Road You Did Not Lay"
+        },
+        "woodBlow": {
+          "intent": "attack_debuff",
+          "dmg": 9,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Wood You Did Not Burn"
+        },
+        "woodWard": {
+          "intent": "block",
+          "block": 14,
+          "name": "The Rest You Did Not Take"
+        },
+        "cinderHush": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 3
+            }
+          ],
+          "name": "The Cinder That Did Not Cool"
+        },
+        "standWood": {
+          "intent": "attack_block",
+          "dmg": 8,
+          "block": 7,
+          "name": "The Grove You Did Not Stand In"
+        }
+      },
+      "name": "【The Unwooded】"
     }
   },
   "events": {
