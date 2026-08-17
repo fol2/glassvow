@@ -345,6 +345,60 @@ from the right — lighting miss), B 84.9% fail (washed), C 98.5% pass, D
 The enemy id `eternalKeeper` is not in `content/full-content.json` yet (Act
 IV roster is `#220`/`#221`). The raster sits at the conventional
 `enemies/<id>.png` path so combat can pick it up without a rename.
+`char-meta.json` now has a boss block so combat can size it without falling
+through to `layoutDefault`.
+
+### `stage/act4-backdrop.png` — 1536×1024 RGBA
+### `stage/act4-mid.png` — 1536×1024 RGBA
+### `stage/act4-ledge.png` — 1536×797 RGBA
+
+Act IV combat plates for 鏡中歸途 / The Mirrored Road. Cutouts, not the
+cinematic scene plates: sky is true alpha so `SkyField`'s dawn row shows
+through. Motif from `docs/story/03-acts.md` Act IV — monuments queued into
+a road, inverted hearth-light from ahead. One set for the whole act.
+
+**Proposed picks, 2026-08-17, pending James.** Candidates and the verbatim
+prompts are in `docs/design/2026-08-16-act4-combat-art/README.md`.
+Installer: `install.py`. Do not regenerate from taste; swap a `PICKS` row
+and re-run.
+
+| Path | Candidate | ≥240 alpha | Notes |
+|---|---|---|---|
+| `act4-backdrop` | B | 100% | Asymmetric left ruin; far amber; bottom corners opaque like act1 |
+| `act4-mid` | B | 100% | One connected gate, unlit lanterns, amber through the glass |
+| `act4-ledge` | B | 100% | Wide slab, thick front face, two standing-stone posts |
+
+Generated 2026-08-17 through Cursor `GenerateImage`. Void keyed from the
+edges (true `#000000` in the render). Shared void clause and per-plate
+prompts are in the design record, not restated here.
+
+### `enemies/unwalkedSelf.png` — 622×1024 RGBA — Act IV tracer self
+
+The Unwalked, Slice 1's silent counterfactual self (`unwalkedSelf`,
+III-prime / broken-ring). Hero silhouette vocabulary (#261 Q5), not a
+monster and not the seated Keeper. Void hood, stained-glass scepter, a
+broken gold halo snapped at the top. Inverted amber rim from the left;
+body glass cold violet / teal.
+
+**Proposed pick A, 2026-08-17, pending James.** Construction clause is the
+Keeper/Lamplighter paragraph — the body *is* leaded panes. Candidate B
+read as gold-trimmed armour and was rejected. Alpha 100% after hardening
+the LANCZOS fringe (binary cutout, same as the rest of `enemies/`).
+
+Prompt (binding clauses):
+
+> CONSTRUCTION, this is the most important instruction: the figure is not
+> painted cloth. The entire body, cloak and armour are built from large
+> flat panes of coloured glass separated by thick black lead came lines,
+> exactly like a cathedral stained-glass window rendered as a character.
+> Only a few big panes, never lacework. The Unwalked, a silent
+> counterfactual pilgrim, hero silhouette, full body, 15 percent margin.
+> Raised hood; the hood opening is a deep black VOID with NO face, NO
+> eyes. Holds a tall stained-glass scepter. Behind the head a BROKEN
+> golden halo snapped clean through. INVERTED hearth light: warm amber
+> rim from the LEFT; the rest of the glass is cold violet-grey, deep
+> teal, court purple. Fully transparent background. No text, no
+> watermark.
 
 ## Rejection note — what "technically shippable" means
 

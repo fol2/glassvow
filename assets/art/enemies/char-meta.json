@@ -293,6 +293,40 @@
         "cloth": 0.75,
         "pin": 0.5
       }
+    },
+    "eternalKeeper": {
+      "tier": "boss",
+      "scale": 1.15,
+      "footY": 24.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 92.0
+      },
+      "mesh": {
+        "sway": 0.0,
+        "bob": 0.0,
+        "breathe": 0.8,
+        "head": 0.0,
+        "cloth": 0.4
+      }
+    },
+    "unwalkedSelf": {
+      "tier": "normal",
+      "scale": 1.05,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.5,
+        "bob": 0.0,
+        "breathe": 1.2,
+        "head": 1.0,
+        "cloth": 0.7,
+        "pin": 0.4
+      }
     }
   },
   "layoutDefault": {

@@ -43,6 +43,28 @@ re-encode or re-title the shipping files without a pack bump.
 
 Both audio files are byte-identical to v1. `pack_id` stays `stained-glass-v1`.
 
+## Owed — Act IV (#221)
+
+No files yet. `MusicBus.FILES` still aliases `act4Combat` / `act4Boss` to
+the Act III tracks; `tests/test_presentation.gd` asserts that alias until
+these two land. Dispatch to **Suno** (same Pro workspace as v1). A new
+file is a pack bump (`stained-glass-v2` or a dated Act IV addendum) —
+do not re-encode v1 to make room.
+
+Direction inherited from v1: classical gothic stained-glass chamber
+music — dark panes, cold stone, a lantern kept lit. Act IV overlay from
+`docs/story/03-acts.md` and `07-scenes.md` §6: **inverted hearth-light**
+— warmth arrives from ahead, the near field is colder; cinders rise.
+
+| cue | file | brief |
+|---|---|---|
+| `act4Combat` | `act4-combat.mp3` | Loop. The Mirrored Road, not a new biome: the Act I–III chamber palette heard *backwards* — phrases inverted, cadence arriving before the step. Low strings and glass harmonics; a far amber pedal that brightens as the phrase repeats. No choir, no vocals, no climb, no brass fanfare. Title (display copy, after James): **Hearthlight Runs Back**. |
+| `act4Boss` | `act4-boss.mp3` | Loop. The Eternal Keeper's fight: the hearth theme at original speed (node 5 is "home"), but the harmony sits one degree colder than `vigil` / the opening hearth. Stillness is the threat — long held tones, a slow cracked-glass ostinato, no chase. No choir, no vocals, no sovereign-court brass. Title (display copy, after James): **The Seat That Would Not Leave**. |
+
+Wire in `music_bus.gd` and `assets/audio/music/manifest.json` in the same
+commit as the mp3s. Credits copy answers to the story bible like every
+other `title`.
+
 ## Pointer
 
 For prompts, motif law and the render pipeline, see

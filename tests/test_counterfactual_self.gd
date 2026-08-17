@@ -89,6 +89,10 @@ static func _content_row(content: ContentDB, fails: Array[String]) -> void:
 	if def.is_empty() or not EnemyAi.handles(&"unwalkedSelf"):
 		fails.append("unwalkedSelf: missing catalogue row or AI handler")
 		return
+	if not FileAccess.file_exists("res://assets/art/enemies/unwalkedSelf.png"):
+		fails.append("unwalkedSelf: missing painting")
+	if EnemyView.art_texture(&"unwalkedSelf") == null:
+		fails.append("unwalkedSelf: painting did not import")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("unwalkedSelf: counterfactual selves must stay silent")
 	var spec: Dictionary = def.get("counterfactual", {})

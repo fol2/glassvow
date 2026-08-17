@@ -1,25 +1,20 @@
 extends RefCounted
-## Acts 1–3 must ship all three combat stage plates. Act 4's plates are #221;
-## until that ticket lands none, this gate does not fail-open the first three
-## acts and does not invent raster assets here.
+## Every act the layout book knows has all three combat stage plates on disk.
 ##
 ## A missing plate is silent at runtime: `CombatScreen` push_warning()s and then
 ## draws an empty stage (`presentation/combat/combat_screen.gd:1261-1266`). A
 ## warning is not a gate, so the first person to learn is a player looking at a
 ## blank backdrop. This makes absence loud at check time instead.
 ##
-## The act count comes from the same `content.acts` the game itself indexes
-## (`application/main.gd:1956`), the three plate names from `PLATE_PERIODS`
-## (`combat_screen.gd:56`), and the path from `STAGE_ART` (`combat_screen.gd:50`).
-## If any Act IV plate exists, all three are required so #221 cannot ship a
-## partial set.
+## Act count is `LayoutBook.ACTS`, not `content.acts.size()`. The three plate
+## names come from `PLATE_PERIODS` (`combat_screen.gd:56`), the path from
+## `STAGE_ART` (`combat_screen.gd:50`).
 
 
 static func run(fails: Array[String]) -> void:
-	var db: ContentDB = ContentDB.load_full()
-	var acts: int = db.acts.size()
+	var acts: int = LayoutBook.ACTS
 	if acts <= 0:
-		fails.append("test_stage_plates: content book defines no acts")
+		fails.append("test_stage_plates: LayoutBook.ACTS is not positive")
 		return
 
 	var screen: GDScript = load("res://presentation/combat/combat_screen.gd") as GDScript
