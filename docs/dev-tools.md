@@ -78,7 +78,7 @@ failing halfway through one.
 | Stage-shape layout authoring | `--layout --shape=… --scope=… --act=…` | `Layout book` |
 | Scenario launch | `--scenario=<json>` via `python3 tools/dev.py --scenario` | CLI only |
 | Editor scene inspection and mutation | Funplay editor plugin | Editor MCP only |
-| SFX generation | `.claude/skills/glassvow-elevenlabs`, `.cursor/mcp.json` | not a browser surface — ledger `docs/sfx-ledger.md` |
+| Music / SFX generation | `.claude/skills/glassvow-suno`, `.claude/skills/glassvow-elevenlabs`, `.cursor/mcp.json` | not a browser surface — ledgers `docs/music-ledger.md`, `docs/sfx-ledger.md` |
 
 Additional flags stay owned and parsed by their lab. The browser allow-list
 rejects another surface's selector and any flag that deliberately exits the live
