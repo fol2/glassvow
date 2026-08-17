@@ -3442,6 +3442,91 @@
       },
       "name": "【The Uncrossed】"
     },
+    "unlitSelf": {
+      "hp": [
+        42,
+        48
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 38,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "I-prime",
+        "motif": "paired-lanterns",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "lantern",
+          "ward": "ashroot"
+        },
+        "kits": {
+          "ashroot": [
+            "rootLash",
+            "greyAsh",
+            "stillRoot"
+          ],
+          "lantern": [
+            "pairedDark",
+            "wickUnlit",
+            "lampWait"
+          ]
+        }
+      },
+      "moves": {
+        "rootLash": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 2
+            }
+          ],
+          "name": "The Root Unpulled"
+        },
+        "greyAsh": {
+          "intent": "attack",
+          "dmg": 11,
+          "name": "The Ash Unscattered"
+        },
+        "stillRoot": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "The Root That Stayed"
+        },
+        "pairedDark": {
+          "intent": "block",
+          "block": 14,
+          "name": "The Pair Left Dark"
+        },
+        "wickUnlit": {
+          "intent": "attack",
+          "dmg": 5,
+          "times": 2,
+          "name": "The Wick Unburned"
+        },
+        "lampWait": {
+          "intent": "attack_block",
+          "dmg": 7,
+          "block": 8,
+          "name": "The Lamp Unraised"
+        }
+      },
+      "name": "【The Unlit】"
+    },
     "unopenedSelf": {
       "hp": [
         40,

@@ -524,6 +524,19 @@ L1/L2 行照舊兩讀。
 | 417 | 火留給我 / The Fire Stays With Me | eternalKeeper.moves.keepTheFire | L4 | 火由它看着 | 開場分工的終戰版:火留、燈走;它要的是永遠有人代走 | 佔位 |
 | 418 | 我在這裏 / I Am Still Here | eternalKeeper.moves.neverLeave | L4 | 它還在 | 字面真到盡——它從未離開過爐邊;這不是威脅,是身分 | 佔位 |
 
+#220 I-prime self(佔位專名,鎖名前不得裸寫;軸沿用 statusLean,不再發明第三軸;
+I-prime 在首通線是 rest,此敵餵 repeat pool):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 419 | 【未亮者】 / 【The Unlit】 | content.enemies.unlitSelf.name | L4 | 鏡路上一個不出聲的行者,立於雙燈之間 | 今世沒揀過的 toxin/ward 路;不是隊伍,是未點雙燈的你 | 佔位 [#220 I-prime] |
+| 420 | 未拔的根 / The Root Unpulled | unlitSelf.moves.rootLash | L4 | 樹林裏一條沒拔起的根 | 你沒走的灰燼路——根仍在土裏,由另一個你抽 | 佔位 |
+| 421 | 未揚的灰 / The Ash Unscattered | unlitSelf.moves.greyAsh | L4 | 還沒揚起的灰 | 你沒走過的林;灰還堆着,另一個你把它揚開 | 佔位 |
+| 422 | 未動的根 / The Root That Stayed | unlitSelf.moves.stillRoot | L4 | 一條不動的根 | 你沒揀的留守:根留在原處,等門開 | 佔位 |
+| 423 | 未點的雙燈 / The Pair Left Dark | unlitSelf.moves.pairedDark | L4 | 一對沒點着的燈 | Act I 雙燈的鏡面:你沒點過,它們仍替你擋 | 佔位 |
+| 424 | 未燃的芯 / The Wick Unburned | unlitSelf.moves.wickUnlit | L4 | 一條沒燒過的燈芯 | 燈在手裏卻沒燃;另一個你提着空芯走路 | 佔位 |
+| 425 | 未舉的燈 / The Lamp Unraised | unlitSelf.moves.lampWait | L4 | 一盞沒舉起來的燈 | 出發要提燈;這個你沒舉起,所以路仍暗 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於
