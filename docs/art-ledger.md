@@ -394,6 +394,10 @@ does not catch that — the haze is fully opaque. D uses a magenta field;
 arm-gaps. Gate: leftover field-magenta < 32, and opaque near-black in the
 8px canvas frame < 400.
 
+Combat box is `tierSizes.normal * 1.6` (296px) — at least 50% above the
+first landing's `1.05` (194px). The painting already sits on the 1024 max
+edge; on-screen size is the char-meta knob, not a bigger PNG.
+
 Prompt (binding clauses):
 
 > BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field, edge to edge. No black

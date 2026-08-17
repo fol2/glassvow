@@ -93,6 +93,10 @@ static func _content_row(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("unwalkedSelf: missing painting")
 	if EnemyView.art_texture(&"unwalkedSelf") == null:
 		fails.append("unwalkedSelf: painting did not import")
+	# First landing boxed at scale 1.05 (194px). Counterfactual selves share
+	# the hero silhouette, so the combat box has to read at least half again.
+	if float(EnemyView.meta(&"unwalkedSelf").get("scale", 0.0)) < 1.575:
+		fails.append("unwalkedSelf: combat scale must be at least 50% above 1.05")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("unwalkedSelf: counterfactual selves must stay silent")
 	var spec: Dictionary = def.get("counterfactual", {})
