@@ -530,8 +530,8 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
 |---|---|---|---|---|---|---|
 | 419 | 【未亮者】 / 【The Unlit】 | content.enemies.unlitSelf.name | L4 | 鏡路上一個不出聲的行者,立於雙燈之間 | 今世沒揀過的 toxin/ward 路;不是隊伍,是未點雙燈的你 | 佔位 [#220 I-prime] |
-| 420 | 未拔的根 / The Root Unpulled | unlitSelf.moves.rootLash | L4 | 樹林裏一條沒拔起的根 | 你沒走的灰燼路——根仍在土裏,由另一個你抽 | 佔位 |
-| 421 | 未揚的灰 / The Ash Unscattered | unlitSelf.moves.greyAsh | L4 | 還沒揚起的灰 | 你沒走過的林;灰還堆着,另一個你把它揚開 | 佔位 |
+| 420 | 未斬的根 / The Root Uncut | unlitSelf.moves.rootLash | L4 | 樹林裏一條沒斬斷的根 | 你沒走的灰燼路——根仍連着,由另一個你斬 | 佔位 |
+| 421 | 未散的灰 / The Ash Unscattered | unlitSelf.moves.greyAsh | L4 | 還沒散開的灰 | 你沒走過的林;灰還堆着,另一個你把它散開 | 佔位 |
 | 422 | 未動的根 / The Root That Stayed | unlitSelf.moves.stillRoot | L4 | 一條不動的根 | 你沒揀的留守:根留在原處,等門開 | 佔位 |
 | 423 | 未點的雙燈 / The Pair Left Dark | unlitSelf.moves.pairedDark | L4 | 一對沒點着的燈 | Act I 雙燈的鏡面:你沒點過,它們仍替你擋 | 佔位 |
 | 424 | 未燃的芯 / The Wick Unburned | unlitSelf.moves.wickUnlit | L4 | 一條沒燒過的燈芯 | 燈在手裏卻沒燃;另一個你提着空芯走路 | 佔位 |
