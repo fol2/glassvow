@@ -211,6 +211,8 @@ static func _unsealing_sting(fails: Array[String]) -> void:
 		"the unique sting is not on 窗成鏡 (beat 2)")
 	_check(fails, UnsealingStaging.STING_CUE == &"unsealingSting",
 		"the unique sting cue was renamed")
+	_check(fails, ResourceLoader.exists("res://assets/audio/sfx/unsealingSting.mp3"),
+		"unsealingSting.mp3 is not shipped")
 	var script: SceneScript = _script("unsealing")
 	if script == null:
 		_check(fails, false, "unsealing did not load")

@@ -4,10 +4,11 @@ extends Node
 ##
 ## The benchmark ships two things behind `sfx.<id>()`: a bank of 36 ElevenLabs
 ## samples (pack `ashglass-v1`), and a WebAudio oscillator fallback for when the
-## sample has not finished loading. Only the samples are ported. The fallback
-## exists because a browser fetches its audio over the network and the first
-## click can beat the download; a Godot project has its bank on disk before the
-## window opens, so the branch it guards cannot be reached.
+## sample has not finished loading. This port adds the unsealing sting as
+## `ashglass-v1-unsealing`; v1 bytes are untouched. Only the samples are ported.
+## The fallback exists because a browser fetches its audio over the network and
+## the first click can beat the download; a Godot project has its bank on disk
+## before the window opens, so the branch it guards cannot be reached.
 ##
 ## `audio.js` runs every one-shot through a shared gain node — bus 0.55, source
 ## 0.85 — and lets them overlap freely, a fresh BufferSource per call. The

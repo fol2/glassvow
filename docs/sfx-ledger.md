@@ -1,4 +1,4 @@
-# SFX ledger — ashglass-v1
+# SFX ledger — ashglass-v1-unsealing
 
 Port-scoped inventory of the sound pack Glassvow ships. The full generation
 ledger (prompt set, category law, render pipeline) lives at
@@ -14,9 +14,10 @@ this pack. REST fallback is `POST /v1/sound-generation`.
 ## What
 
 The immutable **ashglass-v1** pack: 36 one-shot sounds at
-`assets/audio/sfx/`. Theme: Ashglass Vigil — glass, ash, lantern, and the
-small metallic ticks of a climb. An additive unsealing sting is owed as
-`ashglass-v1-unsealing`; v1 bytes stay untouched.
+`assets/audio/sfx/`, plus the **ashglass-v1-unsealing** addendum
+(`unsealingSting`). Theme: Ashglass Vigil — glass, ash, lantern, and the
+small metallic ticks of a climb. `pack_id` is `ashglass-v1-unsealing`.
+v1 bytes stay untouched.
 
 ## Provenance
 
@@ -34,29 +35,27 @@ without a pack bump.
   reads for the sound count and theme line.
 - Playback is one-shot; looping and music beds belong to `MusicBus`.
 
-## Owed — unsealing sting (#377 leftover from #221)
+## Shipped — unsealing sting (#377 leftover from #221)
 
-No sample yet. James on #263 Q10 / the #221 comment: **one more cue is
-owed**. `sealedDoor` plays on every threshold-overlay open
-(`application/main.gd` switches music when the ceremony opens), so it
-cannot satisfy the rubric's heard-nowhere-else requirement. It stays the
-door/ceremony theme.
+Picked 2026-08-17, candidate **B**. Shipping copy sits at
+`assets/audio/sfx/unsealingSting.mp3`; every candidate stays in
+`docs/design/2026-08-17-unsealingSting/candidates/`. File stem is the
+cue id. `pack_id` bumped to `ashglass-v1-unsealing`; the 36 v1 files are
+byte-identical. `ScenePlayer` fires the cue once on unsealing beat 2
+(窗成鏡). `SfxBus` still warns if the file is missing rather than
+substituting `sealedDoor`, which stays the door/ceremony theme.
 
-The **engine hook is in**: `ScenePlayer` fires `unsealingSting` once on
-unsealing beat 2 (窗成鏡). `SfxBus` warns if the file is missing rather
-than substituting `sealedDoor`. Dispatch via
-`.claude/skills/glassvow-elevenlabs/SKILL.md` (official sound-generation
-API as v1). A new file is a pack bump (`ashglass-v1-unsealing`); do not
-re-encode v1. Wire the sample into `assets/audio/sfx/manifest.json` in
-the same commit as the mp3.
+| cue | file | pick | duration | usage |
+|---|---|---|---|---|
+| `unsealingSting` | `unsealingSting.mp3` | **B** (`unsealingSting-b.mp3`) | 1.515 s | Unsealing beat 2 「窗成鏡」 unique sting |
 
-| cue | file | brief |
-|---|---|---|
-| `unsealingSting` | `unsealingSting.mp3` | One-shot, ~1.2–1.8 s. File stem is the cue id (`SfxBus` loads `DIR % id`). Lands on unsealing beat 2 「窗成鏡」 (`docs/story/07-scenes.md` §6, Batch 4). The six panes become a mirror: a short glass-chord inversion, warm amber bloom turning cold as the reflection takes, no choir, no vocals, no door grind (that grind is a separate low push on beat 4). Must be unique in the pack — if it could pass for `sealedDoor`, `roseWindow`, or `chip`, it is wrong. |
+Prompt that rendered (`eleven_text_to_sound_v2`, `duration_seconds` 1.5,
+`prompt_influence` 0.65):
 
-Wire through `SfxBus` and `assets/audio/sfx/manifest.json` in the same
-commit as the mp3. Do not steal a music-bus slot; this is a sting over
-the ceremony bed.
+> One-shot glass sting: the six panes become a mirror. A short glass-chord inversion, warm amber bloom turning cold as the reflection takes. No choir, no vocals, no door grind, no footsteps, no long cinematic tail. Must not sound like a sealed door theme, a rose-window bed, or a tiny glass chip tick.
+
+Do not steal a music-bus slot; this is a sting over the ceremony bed.
+Beat 4’s low door-push is a separate cue.
 
 ## Pointer
 
