@@ -148,7 +148,9 @@ func _build() -> void:
 	_title = _label("", 14, RunStyle.TEXT_DIM)
 	_title.add_theme_font_override("font", RunStyle.tracked(GlassStyle.CINZEL_500, 2))
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_row.add_child(_title)
@@ -254,17 +256,28 @@ func _content_art(folder: String, id: String, definition: Dictionary,
 
 func _apply_shape() -> void:
 	var phone_portrait: bool = shape == &"phone-portrait"
-	var phone_landscape: bool = shape == &"phone-landscape"
-	var bar_height: int = 58 if phone_portrait else (42 if phone_landscape else 56)
+	# pad-portrait is 820 px wide — narrower than phone-landscape's 844 — so it
+	# takes compact landscape chrome, not pad-landscape's roomy metrics (#338).
+	var compact: bool = shape == &"phone-landscape" or shape == &"pad-portrait"
+	# Even compact chrome cannot grant the English Act III line a single row
+	# once the three phial seats a live run carries are present. Portrait has
+	# the height; wrap there instead of ellipsizing.
+	var wrap_title: bool = shape == &"pad-portrait"
+	var bar_height: int = 58 if phone_portrait else (62 if wrap_title else (42 if compact else 56))
 	_top.offset_bottom = bar_height
 	_row.offset_left = 10 if phone_portrait else 16
 	_row.offset_right = -_row.offset_left
-	_row.offset_top = 4 if phone_landscape else 6
-	_row.offset_bottom = -4 if phone_landscape else -6
-	_row.add_theme_constant_override("separation", 10 if shape.begins_with("phone") else 18)
-	_right.add_theme_constant_override("separation", 6 if shape.begins_with("phone") else 10)
+	_row.offset_top = 4 if compact else 6
+	_row.offset_bottom = -4 if compact else -6
+	_row.add_theme_constant_override("separation", 10 if phone_portrait or compact else 18)
+	_right.add_theme_constant_override("separation", 6 if phone_portrait or compact else 10)
 	_hp_wrap.custom_minimum_size.x = _shape_value(96, 110, 170)
 	_title.visible = not phone_portrait
+	_title.autowrap_mode = (
+		TextServer.AUTOWRAP_WORD_SMART if wrap_title else TextServer.AUTOWRAP_OFF)
+	_title.text_overrun_behavior = (
+		TextServer.OVERRUN_NO_TRIMMING if wrap_title else TextServer.OVERRUN_TRIM_ELLIPSIS)
+	_title.max_lines_visible = 2 if wrap_title else 1
 	_collection.offset_top = bar_height + 4
 	_collection.offset_bottom = bar_height + _shape_value(78, 70, 96)
 
@@ -283,7 +296,7 @@ func _location_text(run: RunState) -> String:
 func _shape_value(phone_portrait: int, phone_landscape: int, roomy: int) -> int:
 	if shape == &"phone-portrait":
 		return phone_portrait
-	if shape == &"phone-landscape":
+	if shape == &"phone-landscape" or shape == &"pad-portrait":
 		return phone_landscape
 	return roomy
 
