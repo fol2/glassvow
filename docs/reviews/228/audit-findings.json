@@ -1,0 +1,2025 @@
+{
+  "census": {
+    "ticket_figure": 1197,
+    "en_leaves": 1400,
+    "zh_leaves": 1400,
+    "paired": 1400,
+    "delta_vs_ticket": 203,
+    "en_words_paired": 8819,
+    "families": {
+      "content": 711,
+      "whispers": 24,
+      "story": 122,
+      "ui": 543
+    },
+    "ui_leaves": 543,
+    "content_leaves": 711,
+    "narrative_leaves": 146,
+    "narrative_en_words": 2658,
+    "ui_en_words": 2620,
+    "content_en_words": 3541
+  },
+  "mechanical": {
+    "missing_zh": [],
+    "extra_zh": [],
+    "empty": [],
+    "placeholders": [],
+    "token_mismatch": [],
+    "interp_mismatch": []
+  },
+  "copy_through": [],
+  "latin_zh": [],
+  "trailing_whitespace": [],
+  "halfwidth_punct_zh": [
+    "story.act4-entry.b1.l1",
+    "story.act4-entry.b1.l2",
+    "story.act4-entry.b1.l3",
+    "story.act4-node1.b1.l1",
+    "story.act4-node2.b1.l1",
+    "story.act4-node2.b1.l2",
+    "story.act4-node3.b1.l1",
+    "story.act4-node4.b1.l1",
+    "story.act4-node4.b1.l2",
+    "story.act4-node4.b1.l3",
+    "story.act4-node4.b1.l4",
+    "story.act4-node4.b1.l5",
+    "story.act4-node5.b1.l2",
+    "story.act4-node5.b1.l3",
+    "story.dawn.eighthOmen.done",
+    "story.dawn.eighthOmen.p1",
+    "story.dawn.hollowLamplighter.done",
+    "story.dawn.hollowLamplighter.p1",
+    "story.dawn.hollowLamplighter.p2",
+    "story.dawn.hollowLamplighter.p3",
+    "story.dawn.hollowLamplighter.p4",
+    "story.dawn.ownShade.done",
+    "story.dawn.ownShade.p1",
+    "story.dawn.ownShade.p2",
+    "story.dawn.paleOnes.done",
+    "story.dawn.paleOnes.p1",
+    "story.dawn.paleOnes.p2",
+    "story.dawn.pane.1",
+    "story.dawn.pane.2",
+    "story.dawn.pane.3",
+    "story.dawn.pane.4",
+    "story.dawn.pane.5",
+    "story.dawn.unreadablePage.done",
+    "story.dawn.unreadablePage.p1",
+    "story.dawn.unreadablePage.p2",
+    "story.dawn.unreadablePage.p3",
+    "story.dawn.unreadablePage.p4",
+    "story.dawn.usurper.done",
+    "story.dawn.usurper.p1",
+    "story.event-fleshTrader.c0",
+    "story.event-fleshTrader.c1",
+    "story.event-fleshTrader.coda",
+    "story.event-forgottenShrine.c0",
+    "story.event-forgottenShrine.c1",
+    "story.event-forgottenShrine.c2",
+    "story.event-forgottenShrine.coda",
+    "story.event-library.c0",
+    "story.event-library.c1",
+    "story.event-mirror.c0",
+    "story.event-mirror.c1",
+    "story.event-mirror.c2",
+    "story.event-woundedKnight.c0",
+    "story.event-woundedKnight.c1",
+    "story.event-woundedKnight.c2",
+    "story.event-woundedKnight.coda",
+    "story.finale-loss.b1.l1",
+    "story.finale-loss.b1.l2",
+    "story.finale-win.b1.l1",
+    "story.finale-win.b1.l3",
+    "story.finale.b1.l1",
+    "story.finale.b1.l2",
+    "story.finale.b2.l1",
+    "story.finale.b2.l4",
+    "story.lamplighter-m1.post.l1",
+    "story.lamplighter-m1.pre.l1",
+    "story.lamplighter-m1.pre.l2",
+    "story.lamplighter-m1.pre.l3",
+    "story.lamplighter-m2.post.l1",
+    "story.lamplighter-m2.pre.l1",
+    "story.lamplighter-m2.pre.l2",
+    "story.lamplighter-m2.pre.l3",
+    "story.lamplighter-m3.post.l1",
+    "story.lamplighter-m3.post.l2",
+    "story.lamplighter-m3.pre.l1",
+    "story.lamplighter-m3.pre.l2",
+    "story.lamplighter-m3.pre.l3",
+    "story.lamplighter-m4.post.l1",
+    "story.lamplighter-m4.pre.l1",
+    "story.lamplighter-m4.pre.l2",
+    "story.lamplighter-m4.pre.l3",
+    "story.lamplighter-m4.pre.l4",
+    "story.lamplighter-m5.post.l1",
+    "story.lamplighter-m5.post.l2",
+    "story.lamplighter-m5.post.l3",
+    "story.lamplighter-m5.pre.l1",
+    "story.lamplighter-m5.pre.l2",
+    "story.lamplighter-m5.pre.l3",
+    "story.opening.b2.l1",
+    "story.opening.b2.l2",
+    "story.opening.b2.l3",
+    "story.opening.b3.l1",
+    "story.opening.b3.l2",
+    "story.unsealing.b1.l2",
+    "story.unsealing.b2.l1",
+    "story.unsealing.b2.l3",
+    "story.unsealing.b3.l1",
+    "story.unsealing.b3.l3",
+    "story.unsealing.b3.l4",
+    "story.unsealing.b4.l1",
+    "story.unsealing.b4.l2"
+  ],
+  "halfwidth_punct_families": {
+    "story": 100
+  },
+  "orthography": [],
+  "colloquial": [],
+  "pronouns": [
+    {
+      "key": "content.cards.unreadablePage.text",
+      "tokens": [
+        "它"
+      ],
+      "zh": "無法打出，亦無法移除。攜它走到破曉，字句或會自行顯現。"
+    },
+    {
+      "key": "content.events.cursedIdol.text",
+      "tokens": [
+        "它"
+      ],
+      "zh": "一尊玉像坐在顱骨砌成的座台上，散發微暖。它被留在此處，顯然另有緣由。"
+    },
+    {
+      "key": "content.events.mirror.choices.1.label",
+      "tokens": [
+        "它"
+      ],
+      "zh": "將它打碎"
+    },
+    {
+      "key": "content.events.voidChest.text",
+      "tokens": [
+        "它"
+      ],
+      "zh": "黑鐵箱獨坐幽暗，低鳴透入齒間。它的鎖早已破開。"
+    },
+    {
+      "key": "content.quests.eighthOmen.resolved",
+      "tokens": [
+        "它"
+      ],
+      "zh": "第八凶兆從來不是凶兆。它是一扇門投下的影。"
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.0.ask",
+      "tokens": [
+        "它"
+      ],
+      "zh": "你的提燈太吵。把它接下來收集的三點餘燼交給我。"
+    },
+    {
+      "key": "content.quests.paleOnes.huntInscription",
+      "tokens": [
+        "它們"
+      ],
+      "zh": "擊敗三名蒼白之敵，追隨它們留下的寒冷光塵。"
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.4",
+      "tokens": [
+        "它"
+      ],
+      "zh": "第五頁——玫瑰窗是一幅地圖，不是紀念碑。將它點亮，再望向王冠之上。"
+    },
+    {
+      "key": "content.quests.usurper.itemText",
+      "tokens": [
+        "它"
+      ],
+      "zh": "冰冷琉璃。沒有燈芯。商人不肯說是誰留下它。"
+    },
+    {
+      "key": "content.whispers.0",
+      "tokens": [
+        "它"
+      ],
+      "zh": "有一種顏色，尖塔拒絕為它命名。"
+    },
+    {
+      "key": "content.whispers.15",
+      "tokens": [
+        "它"
+      ],
+      "zh": "守夜有一扇窗，雖無牆承載它。"
+    },
+    {
+      "key": "content.whispers.17",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "蒼白眾並非在獵你。他們在向上指。"
+    },
+    {
+      "key": "content.whispers.21",
+      "tokens": [
+        "它"
+      ],
+      "zh": "它的銘文等候得比守夜更久。"
+    },
+    {
+      "key": "story.act4-node1.b1.l1",
+      "tokens": [
+        "它"
+      ],
+      "zh": "我們一直站在這一面。你望過它許多次,卻從未站過。"
+    },
+    {
+      "key": "story.act4-node1.b1.l2",
+      "tokens": [
+        "它"
+      ],
+      "zh": "路你認得。你只是一直由另一面認得它。"
+    },
+    {
+      "key": "story.act4-node4.b1.l2",
+      "tokens": [
+        "他們",
+        "他們"
+      ],
+      "zh": "灰是他們燒剩的。樹靠灰長大,你行的路由他們的力氣鋪成。"
+    },
+    {
+      "key": "story.act4-node4.b1.l5",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "這一段最長,也最靜。你可以在這裏坐一會——他們等得起。"
+    },
+    {
+      "key": "story.dawn.eighthOmen.done",
+      "tokens": [
+        "它",
+        "它"
+      ],
+      "zh": "破曉來了,凶兆仍在。它不是凶兆:它是一扇門的影。影落得到這裏,就是說門一直都在,而且一直關着。"
+    },
+    {
+      "key": "story.dawn.eighthOmen.p1",
+      "tokens": [
+        "它"
+      ],
+      "zh": "第八凶兆升起。冊上只有七個,第八個不在冊上。它落在路面,形狀太正,正得不像凶兆,倒像一件關着的東西投下的影。"
+    },
+    {
+      "key": "story.dawn.ownShade.p1",
+      "tokens": [
+        "它",
+        "它"
+      ],
+      "zh": "第一道影熄了。它認得你,喚過你的名字;你沒有停。它熄滅之處,地上沒有留下任何東西——影從來只是記憶。"
+    },
+    {
+      "key": "story.dawn.paleOnes.done",
+      "tokens": [
+        "它"
+      ],
+      "zh": "九粒收足,透鏡不再生寒。彩窗有一格回應了你。窗上那點光不是新的:它是有人一直帶着,而沒有帶到門前的光。"
+    },
+    {
+      "key": "story.dawn.paleOnes.p1",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "第一粒光塵落進透鏡,冷得像霜。蒼白眾不追你,他們只朝東站着。守夜記下這一粒:在你之前,已有人把這段路走到這裏。"
+    },
+    {
+      "key": "story.dawn.pane.2",
+      "tokens": [
+        "它們"
+      ],
+      "zh": "兩格亮了。窗開始有形狀:亮的位置不是隨意的,像早已為它們留好。"
+    },
+    {
+      "key": "story.dawn.pane.4",
+      "tokens": [
+        "它"
+      ],
+      "zh": "四格亮,火比從前暖。你越看那扇窗,它越不像是用來望出去的。"
+    },
+    {
+      "key": "story.dawn.pane.5",
+      "tokens": [
+        "它們"
+      ],
+      "zh": "五格亮,尚餘一格。窗裏的光不再各留各格,它們接連起來,像一件本來就是一整塊的東西。最後一片,還在路上。"
+    },
+    {
+      "key": "story.dawn.unreadablePage.done",
+      "tokens": [
+        "它",
+        "它"
+      ],
+      "zh": "五頁讀全。第五頁說彩窗是一幅地圖,不是紀念碑;地圖畫的是甚麼,頁上沒有寫。你越點亮它,它越不像一扇窗。"
+    },
+    {
+      "key": "story.dawn.usurper.p1",
+      "tokens": [
+        "它"
+      ],
+      "zh": "無焰提燈到手。玻璃是冷的,燈芯不曾燒過。商人不肯說是誰留下它,只說這一種東西,總會自己回到西面來。"
+    },
+    {
+      "key": "story.event-forgottenShrine.c0",
+      "tokens": [
+        "它"
+      ],
+      "zh": "你把一件不願再帶的東西放在龕前。石中那樣東西看着你,沒有回應——它等的不是祈禱。"
+    },
+    {
+      "key": "story.event-forgottenShrine.c2",
+      "tokens": [
+        "它"
+      ],
+      "zh": "你退開,轉身。龕聲不變——它嗡了不知多少年,不缺你這一次。"
+    },
+    {
+      "key": "story.event-forgottenShrine.coda",
+      "tokens": [
+        "它"
+      ],
+      "zh": "苔蘚長回祭品之上。這座龕收過的東西,比它應許過的多。"
+    },
+    {
+      "key": "story.event-library.coda",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "他們把等待寫足了一座書庫。沒有一頁寫過出發。"
+    },
+    {
+      "key": "story.finale-win.b1.l1",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "門開着。相同的身影一個接一個入城,次序與他們停下的次序相同。"
+    },
+    {
+      "key": "story.finale.b1.l3",
+      "tokens": [
+        "它"
+      ],
+      "zh": "它坐下。你站起來。"
+    },
+    {
+      "key": "story.opening.b2.l3",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "他們說,門後是金城。到了那裏,你便到家了。"
+    },
+    {
+      "key": "story.unsealing.b3.l3",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "他們的數目,與你出發過的次數相同。"
+    },
+    {
+      "key": "story.unsealing.b4.l1",
+      "tokens": [
+        "他們",
+        "他們"
+      ],
+      "zh": "路上的碑,同時動了。那不是紀念:每一座都是一個站着死去的行者。他們沒有躺下,他們在等門開。"
+    },
+    {
+      "key": "story.unsealing.b4.l2",
+      "tokens": [
+        "他們"
+      ],
+      "zh": "他們站直,列隊,把門推開。門認的是行過的人,與完整的一團火——整條隊,每一個都行過。"
+    }
+  ],
+  "retired_locale": [
+    {
+      "key": "content.aspects.duskblade.blurb",
+      "locale": "en",
+      "term": "climb",
+      "text": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a versatile climber for any night."
+    },
+    {
+      "key": "content.aspects.duskblade.blurb",
+      "locale": "zh-Hant",
+      "term": "攀",
+      "text": "琉璃磨成殺伐之鋒。揮斬、碎裂，再以破碎璃面化作薪火——任何長夜皆能攀越。"
+    },
+    {
+      "key": "content.omens.eighthOmen.text",
+      "locale": "en",
+      "term": "floor",
+      "text": "Every lesser battle bears a title. The broken words follow every floor."
+    },
+    {
+      "key": "content.omens.longNight.text",
+      "locale": "en",
+      "term": "climb",
+      "text": "The climb stretches on: enemies carry 12% more life, but every victory pays 40% more gold."
+    },
+    {
+      "key": "content.quests.eighthOmen.waystoneEchoes.2",
+      "locale": "en",
+      "term": "upward",
+      "text": "// CARRY THE WRONG LIGHT UPWARD //"
+    },
+    {
+      "key": "content.quests.eighthOmen.waystoneEchoes.2",
+      "locale": "zh-Hant",
+      "term": "向上",
+      "text": "// 攜錯誤之光向上 //"
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.1.paid",
+      "locale": "en",
+      "term": "above",
+      "text": "The Pale Ones watch the paths that point above the crown."
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.1.paid",
+      "locale": "zh-Hant",
+      "term": "之上",
+      "text": "蒼白眾凝望着指向王冠之上的路。"
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.2.ask",
+      "locale": "en",
+      "term": "spire",
+      "text": "The Spire counts the vessel. Give me twelve measures of yours."
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.2.ask",
+      "locale": "zh-Hant",
+      "term": "尖塔",
+      "text": "尖塔清點容器。把十二格容量交給我。"
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.2.paid",
+      "locale": "en",
+      "term": "above",
+      "text": "Your standing dead have seen the stair above the Sovereign."
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.2.paid",
+      "locale": "en",
+      "term": "stair",
+      "text": "Your standing dead have seen the stair above the Sovereign."
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.2.paid",
+      "locale": "zh-Hant",
+      "term": "之上",
+      "text": "你站立而死的前身，已見過永恆君王之上的階梯。"
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.2.paid",
+      "locale": "zh-Hant",
+      "term": "階梯",
+      "text": "你站立而死的前身，已見過永恆君王之上的階梯。"
+    },
+    {
+      "key": "content.quests.ownShade.final",
+      "locale": "en",
+      "term": "climb",
+      "text": "We were never climbing out. We were carrying light to the lock."
+    },
+    {
+      "key": "content.quests.ownShade.fragments.1",
+      "locale": "en",
+      "term": "spire",
+      "text": "Each climber leaves a shape behind. The Spire has learned to wear ours."
+    },
+    {
+      "key": "content.quests.ownShade.fragments.1",
+      "locale": "en",
+      "term": "climb",
+      "text": "Each climber leaves a shape behind. The Spire has learned to wear ours."
+    },
+    {
+      "key": "content.quests.ownShade.fragments.1",
+      "locale": "zh-Hant",
+      "term": "尖塔",
+      "text": "每位朝聖者都留下一道形影。尖塔已學會披上我們的模樣。"
+    },
+    {
+      "key": "content.quests.ownShade.fragments.2",
+      "locale": "en",
+      "term": "above",
+      "text": "Above the Sovereign there is no dawn — only a door pretending to be the sky."
+    },
+    {
+      "key": "content.quests.ownShade.fragments.2",
+      "locale": "zh-Hant",
+      "term": "之上",
+      "text": "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。"
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.1",
+      "locale": "en",
+      "term": "above",
+      "text": "SECOND PAGE — Pale figures carried the shards down so the thing above could not follow."
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.2",
+      "locale": "en",
+      "term": "climb",
+      "text": "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended."
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.2",
+      "locale": "en",
+      "term": "summit",
+      "text": "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended."
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.2",
+      "locale": "en",
+      "term": "stair",
+      "text": "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended."
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.2",
+      "locale": "zh-Hant",
+      "term": "頂點",
+      "text": "第三頁——一名朝聖者站着死去，卻在頂點本應終結之處看見階梯。"
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.2",
+      "locale": "zh-Hant",
+      "term": "階梯",
+      "text": "第三頁——一名朝聖者站着死去，卻在頂點本應終結之處看見階梯。"
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.4",
+      "locale": "en",
+      "term": "above",
+      "text": "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown."
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.4",
+      "locale": "zh-Hant",
+      "term": "之上",
+      "text": "第五頁——玫瑰窗是一幅地圖，不是紀念碑。將它點亮，再望向王冠之上。"
+    },
+    {
+      "key": "content.quests.usurper.bought",
+      "locale": "en",
+      "term": "summit",
+      "text": "Now the summit knows what you carry."
+    },
+    {
+      "key": "content.quests.usurper.bought",
+      "locale": "zh-Hant",
+      "term": "頂點",
+      "text": "如今，頂點知曉你攜着何物。"
+    },
+    {
+      "key": "content.quests.usurper.death",
+      "locale": "en",
+      "term": "above",
+      "text": "The mask is broken. Look above."
+    },
+    {
+      "key": "content.quests.usurper.inscription",
+      "locale": "en",
+      "term": "summit",
+      "text": "Carry the lantern with no flame to the summit and unmask the Usurper."
+    },
+    {
+      "key": "content.quests.usurper.inscription",
+      "locale": "zh-Hant",
+      "term": "頂點",
+      "text": "攜無焰提燈前往頂點，揭穿篡位者的面具。"
+    },
+    {
+      "key": "content.variants.ownShade2.deathDialogue",
+      "locale": "en",
+      "term": "spire",
+      "text": "Each climber leaves a shape behind. The Spire has learned to wear ours."
+    },
+    {
+      "key": "content.variants.ownShade2.deathDialogue",
+      "locale": "en",
+      "term": "climb",
+      "text": "Each climber leaves a shape behind. The Spire has learned to wear ours."
+    },
+    {
+      "key": "content.variants.ownShade2.deathDialogue",
+      "locale": "zh-Hant",
+      "term": "尖塔",
+      "text": "每位朝聖者都留下一道形影。尖塔已學會披上我們的模樣。"
+    },
+    {
+      "key": "content.variants.ownShade3.deathDialogue",
+      "locale": "en",
+      "term": "above",
+      "text": "Above the Sovereign there is no dawn — only a door pretending to be the sky."
+    },
+    {
+      "key": "content.variants.ownShade3.deathDialogue",
+      "locale": "zh-Hant",
+      "term": "之上",
+      "text": "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。"
+    },
+    {
+      "key": "content.vows.3.desc",
+      "locale": "en",
+      "term": "climb",
+      "text": "You climb already cursed — begin every run with a Hex."
+    },
+    {
+      "key": "content.whispers.0",
+      "locale": "en",
+      "term": "spire",
+      "text": "There is a colour the Spire refuses to name."
+    },
+    {
+      "key": "content.whispers.0",
+      "locale": "zh-Hant",
+      "term": "尖塔",
+      "text": "有一種顏色，尖塔拒絕為它命名。"
+    },
+    {
+      "key": "content.whispers.17",
+      "locale": "en",
+      "term": "upward",
+      "text": "The Pale Ones are not hunting you. They are pointing upward."
+    },
+    {
+      "key": "content.whispers.17",
+      "locale": "zh-Hant",
+      "term": "向上",
+      "text": "蒼白眾並非在獵你。他們在向上指。"
+    },
+    {
+      "key": "content.whispers.18",
+      "locale": "en",
+      "term": "stair",
+      "text": "The Sovereign is a mask worn below the final stair."
+    },
+    {
+      "key": "content.whispers.18",
+      "locale": "zh-Hant",
+      "term": "階梯",
+      "text": "永恆君王只是在最終階梯之下披上的面具。"
+    },
+    {
+      "key": "content.whispers.19",
+      "locale": "en",
+      "term": "summit",
+      "text": "When six panes burn, look beyond the summit."
+    },
+    {
+      "key": "content.whispers.19",
+      "locale": "zh-Hant",
+      "term": "頂點",
+      "text": "當六片窗片燃起，望向頂點之外。"
+    },
+    {
+      "key": "content.whispers.20",
+      "locale": "en",
+      "term": "above",
+      "text": "There is a sealed door above the crown."
+    },
+    {
+      "key": "content.whispers.20",
+      "locale": "zh-Hant",
+      "term": "之上",
+      "text": "王冠之上有一扇封印之門。"
+    },
+    {
+      "key": "content.whispers.23",
+      "locale": "en",
+      "term": "climb",
+      "text": "The climb continues."
+    },
+    {
+      "key": "content.whispers.3",
+      "locale": "en",
+      "term": "climb",
+      "text": "The dead climb twice: once in flesh, once in memory."
+    },
+    {
+      "key": "content.whispers.6",
+      "locale": "en",
+      "term": "summit",
+      "text": "A page can be read only after it survives the summit."
+    },
+    {
+      "key": "content.whispers.6",
+      "locale": "zh-Hant",
+      "term": "頂點",
+      "text": "這一頁唯有捱過頂點，方能讀懂。"
+    }
+  ],
+  "retired_keys": [
+    "content.aspects.duskblade.blurb",
+    "content.omens.eighthOmen.text",
+    "content.omens.longNight.text",
+    "content.quests.eighthOmen.waystoneEchoes.2",
+    "content.quests.hollowLamplighter.meetings.1.paid",
+    "content.quests.hollowLamplighter.meetings.2.ask",
+    "content.quests.hollowLamplighter.meetings.2.paid",
+    "content.quests.ownShade.final",
+    "content.quests.ownShade.fragments.1",
+    "content.quests.ownShade.fragments.2",
+    "content.quests.unreadablePage.pages.1",
+    "content.quests.unreadablePage.pages.2",
+    "content.quests.unreadablePage.pages.4",
+    "content.quests.usurper.bought",
+    "content.quests.usurper.death",
+    "content.quests.usurper.inscription",
+    "content.variants.ownShade2.deathDialogue",
+    "content.variants.ownShade3.deathDialogue",
+    "content.vows.3.desc",
+    "content.whispers.0",
+    "content.whispers.17",
+    "content.whispers.18",
+    "content.whispers.19",
+    "content.whispers.20",
+    "content.whispers.23",
+    "content.whispers.3",
+    "content.whispers.6"
+  ],
+  "placeholder_brackets": [
+    "content.enemies.uncarvedSelf.name",
+    "content.enemies.uncrossedSelf.name",
+    "content.enemies.unlitSelf.name",
+    "content.enemies.unobsidianSelf.name",
+    "content.enemies.unopenedSelf.name",
+    "content.enemies.unsunkSelf.name",
+    "content.enemies.unwalkedSelf.name",
+    "content.enemies.unwoodedSelf.name"
+  ],
+  "duplicates_narrative": [
+    {
+      "value": "The Rootheart",
+      "keys": [
+        "content.acts.0.bossName",
+        "content.enemies.rootheart.name"
+      ]
+    },
+    {
+      "value": "Leviathan's Maw",
+      "keys": [
+        "content.acts.1.bossName",
+        "content.enemies.leviathan.name"
+      ]
+    },
+    {
+      "value": "The Eternal Sovereign",
+      "keys": [
+        "content.acts.2.bossName",
+        "content.enemies.sovereign.name"
+      ]
+    },
+    {
+      "value": "The Eternal Keeper",
+      "keys": [
+        "content.acts.3.bossName",
+        "content.enemies.eternalKeeper.name"
+      ]
+    },
+    {
+      "value": "Gain #8# Ward.",
+      "keys": [
+        "content.cards.brace.text",
+        "content.cards.defend.textUp"
+      ]
+    },
+    {
+      "value": "Gain 2 Fervor.",
+      "keys": [
+        "content.cards.empower.text",
+        "content.potions.strength.text"
+      ]
+    },
+    {
+      "value": "Draw 2 cards. Kindle.",
+      "keys": [
+        "content.cards.firstSpark.textUp",
+        "content.cards.preparation.text"
+      ]
+    },
+    {
+      "value": "Double your Ward.",
+      "keys": [
+        "content.cards.fortify.text",
+        "content.cards.fortify.textUp"
+      ]
+    },
+    {
+      "value": "The Unreadable Page",
+      "keys": [
+        "content.cards.unreadablePage.name",
+        "content.quests.unreadablePage.name"
+      ]
+    },
+    {
+      "value": "The Eighth Omen",
+      "keys": [
+        "content.omens.eighthOmen.name",
+        "content.quests.eighthOmen.name"
+      ]
+    },
+    {
+      "value": "I remember the stone. You walked away before I stopped calling.",
+      "keys": [
+        "content.quests.ownShade.fragments.0",
+        "content.variants.ownShade1.deathDialogue"
+      ]
+    },
+    {
+      "value": "Each climber leaves a shape behind. The Spire has learned to wear ours.",
+      "keys": [
+        "content.quests.ownShade.fragments.1",
+        "content.variants.ownShade2.deathDialogue"
+      ]
+    },
+    {
+      "value": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
+      "keys": [
+        "content.quests.ownShade.fragments.2",
+        "content.variants.ownShade3.deathDialogue"
+      ]
+    },
+    {
+      "value": "{aspect} Shade",
+      "keys": [
+        "content.shadeKits.ashwarden.namePattern",
+        "content.shadeKits.duskblade.namePattern"
+      ]
+    }
+  ],
+  "duplicates_zh_narrative": [
+    {
+      "value": "我記得那塊石。你轉身離去時，我仍未停止呼喚。",
+      "keys": [
+        "content.quests.ownShade.fragments.0",
+        "content.variants.ownShade1.deathDialogue"
+      ]
+    },
+    {
+      "value": "每位朝聖者都留下一道形影。尖塔已學會披上我們的模樣。",
+      "keys": [
+        "content.quests.ownShade.fragments.1",
+        "content.variants.ownShade2.deathDialogue"
+      ]
+    },
+    {
+      "value": "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。",
+      "keys": [
+        "content.quests.ownShade.fragments.2",
+        "content.variants.ownShade3.deathDialogue"
+      ]
+    }
+  ],
+  "length_outliers": [
+    {
+      "key": "ui.help.vigilBody",
+      "en_chars": 477,
+      "zh_chars": 177,
+      "why": [
+        "en 477c vs ui median 16",
+        "zh 177c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.help.glassBody",
+      "en_chars": 321,
+      "zh_chars": 130,
+      "why": [
+        "en 321c vs ui median 16",
+        "zh 130c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.help.wardBody",
+      "en_chars": 255,
+      "zh_chars": 115,
+      "why": [
+        "en 255c vs ui median 16",
+        "zh 115c vs ui median 5"
+      ]
+    },
+    {
+      "key": "story.dawn.hollowLamplighter.done",
+      "en_chars": 269,
+      "zh_chars": 73,
+      "why": [
+        "en 269c vs story median 94",
+        "zh 73c vs story median 24"
+      ]
+    },
+    {
+      "key": "ui.help.lanternBody",
+      "en_chars": 246,
+      "zh_chars": 85,
+      "why": [
+        "en 246c vs ui median 16",
+        "zh 85c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.help.combatBody",
+      "en_chars": 209,
+      "zh_chars": 82,
+      "why": [
+        "en 209c vs ui median 16",
+        "zh 82c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.help.roadBody",
+      "en_chars": 211,
+      "zh_chars": 77,
+      "why": [
+        "en 211c vs ui median 16",
+        "zh 77c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.settings.resetConfirmBody",
+      "en_chars": 177,
+      "zh_chars": 99,
+      "why": [
+        "en 177c vs ui median 16",
+        "zh 99c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.combat.facetsBody",
+      "en_chars": 194,
+      "zh_chars": 76,
+      "why": [
+        "en 194c vs ui median 16",
+        "zh 76c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.combat.lanternBody",
+      "en_chars": 184,
+      "zh_chars": 64,
+      "why": [
+        "en 184c vs ui median 16",
+        "zh 64c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.help.firesBody",
+      "en_chars": 172,
+      "zh_chars": 75,
+      "why": [
+        "en 172c vs ui median 16",
+        "zh 75c vs ui median 5"
+      ]
+    },
+    {
+      "key": "story.event-mirror.c1",
+      "en_chars": 191,
+      "zh_chars": 44,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "story.dawn.ownShade.p2",
+      "en_chars": 178,
+      "zh_chars": 38,
+      "why": [
+        "zh/en char ratio 0.21"
+      ]
+    },
+    {
+      "key": "content.status.poison.desc",
+      "en_chars": 156,
+      "zh_chars": 56,
+      "why": [
+        "en 156c vs content median 16",
+        "zh 56c vs content median 4"
+      ]
+    },
+    {
+      "key": "story.dawn.paleOnes.p2",
+      "en_chars": 171,
+      "zh_chars": 41,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "story.event-forgottenShrine.c0",
+      "en_chars": 167,
+      "zh_chars": 40,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "story.event-library.c0",
+      "en_chars": 167,
+      "zh_chars": 39,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "ui.keywords.facetDesc",
+      "en_chars": 161,
+      "zh_chars": 45,
+      "why": [
+        "en 161c vs ui median 16"
+      ]
+    },
+    {
+      "key": "content.aspects.ashwarden.blurb",
+      "en_chars": 156,
+      "zh_chars": 45,
+      "why": [
+        "en 156c vs content median 16",
+        "zh 45c vs content median 4"
+      ]
+    },
+    {
+      "key": "ui.persistence.vigilBody",
+      "en_chars": 145,
+      "zh_chars": 50,
+      "why": [
+        "en 145c vs ui median 16"
+      ]
+    },
+    {
+      "key": "story.finale-loss.b1.l2",
+      "en_chars": 158,
+      "zh_chars": 35,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "story.event-library.c1",
+      "en_chars": 149,
+      "zh_chars": 37,
+      "why": [
+        "zh/en char ratio 0.25"
+      ]
+    },
+    {
+      "key": "content.events.woundedKnight.text",
+      "en_chars": 144,
+      "zh_chars": 41,
+      "why": [
+        "en 144c vs content median 16",
+        "zh 41c vs content median 4"
+      ]
+    },
+    {
+      "key": "content.events.fleshTrader.text",
+      "en_chars": 133,
+      "zh_chars": 48,
+      "why": [
+        "en 133c vs content median 16",
+        "zh 48c vs content median 4"
+      ]
+    },
+    {
+      "key": "story.dawn.pane.4",
+      "en_chars": 142,
+      "zh_chars": 29,
+      "why": [
+        "zh/en char ratio 0.20"
+      ]
+    },
+    {
+      "key": "content.events.forgottenShrine.text",
+      "en_chars": 127,
+      "zh_chars": 37,
+      "why": [
+        "en 127c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m5.post.l2",
+      "en_chars": 135,
+      "zh_chars": 29,
+      "why": [
+        "zh/en char ratio 0.21"
+      ]
+    },
+    {
+      "key": "story.event-fleshTrader.c1",
+      "en_chars": 127,
+      "zh_chars": 31,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "content.aspects.duskblade.blurb",
+      "en_chars": 120,
+      "zh_chars": 36,
+      "why": [
+        "en 120c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.event-forgottenShrine.c2",
+      "en_chars": 126,
+      "zh_chars": 29,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "content.omens.waningMoon.text",
+      "en_chars": 108,
+      "zh_chars": 45,
+      "why": [
+        "en 108c vs content median 16",
+        "zh 45c vs content median 4"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m5.pre.l1",
+      "en_chars": 124,
+      "zh_chars": 27,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "content.events.mirror.text",
+      "en_chars": 113,
+      "zh_chars": 36,
+      "why": [
+        "en 113c vs content median 16"
+      ]
+    },
+    {
+      "key": "content.omens.hungryDark.text",
+      "en_chars": 111,
+      "zh_chars": 37,
+      "why": [
+        "en 111c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.event-forgottenShrine.c1",
+      "en_chars": 119,
+      "zh_chars": 29,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "content.events.emberFountain.text",
+      "en_chars": 111,
+      "zh_chars": 36,
+      "why": [
+        "en 111c vs content median 16"
+      ]
+    },
+    {
+      "key": "content.events.library.text",
+      "en_chars": 107,
+      "zh_chars": 40,
+      "why": [
+        "en 107c vs content median 16",
+        "zh 40c vs content median 4"
+      ]
+    },
+    {
+      "key": "story.act4-node4.b1.l4",
+      "en_chars": 118,
+      "zh_chars": 28,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "content.events.ruinedCamp.text",
+      "en_chars": 111,
+      "zh_chars": 34,
+      "why": [
+        "en 111c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m2.post.l1",
+      "en_chars": 121,
+      "zh_chars": 24,
+      "why": [
+        "zh/en char ratio 0.20"
+      ]
+    },
+    {
+      "key": "content.events.forge.text",
+      "en_chars": 104,
+      "zh_chars": 40,
+      "why": [
+        "en 104c vs content median 16",
+        "zh 40c vs content median 4"
+      ]
+    },
+    {
+      "key": "content.events.cursedIdol.text",
+      "en_chars": 108,
+      "zh_chars": 34,
+      "why": [
+        "en 108c vs content median 16"
+      ]
+    },
+    {
+      "key": "content.omens.emberWind.text",
+      "en_chars": 103,
+      "zh_chars": 39,
+      "why": [
+        "en 103c vs content median 16"
+      ]
+    },
+    {
+      "key": "content.omens.ashfall.text",
+      "en_chars": 99,
+      "zh_chars": 41,
+      "why": [
+        "en 99c vs content median 16",
+        "zh 41c vs content median 4"
+      ]
+    },
+    {
+      "key": "content.events.gambler.text",
+      "en_chars": 100,
+      "zh_chars": 37,
+      "why": [
+        "en 100c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.act4-node4.b1.l2",
+      "en_chars": 110,
+      "zh_chars": 27,
+      "why": [
+        "zh/en char ratio 0.25"
+      ]
+    },
+    {
+      "key": "story.opening.b2.l2",
+      "en_chars": 111,
+      "zh_chars": 24,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "content.events.voidChest.text",
+      "en_chars": 110,
+      "zh_chars": 23,
+      "why": [
+        "en 110c vs content median 16",
+        "zh/en char ratio 0.21"
+      ]
+    },
+    {
+      "key": "story.act4-node1.b1.l1",
+      "en_chars": 107,
+      "zh_chars": 24,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m3.pre.l1",
+      "en_chars": 107,
+      "zh_chars": 24,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m4.pre.l4",
+      "en_chars": 105,
+      "zh_chars": 26,
+      "why": [
+        "zh/en char ratio 0.25"
+      ]
+    },
+    {
+      "key": "content.cards.devour.text",
+      "en_chars": 84,
+      "zh_chars": 45,
+      "why": [
+        "zh 45c vs content median 4"
+      ]
+    },
+    {
+      "key": "content.cards.devour.textUp",
+      "en_chars": 84,
+      "zh_chars": 45,
+      "why": [
+        "zh 45c vs content median 4"
+      ]
+    },
+    {
+      "key": "content.omens.thinGlass.text",
+      "en_chars": 93,
+      "zh_chars": 33,
+      "why": [
+        "en 93c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.act4-node4.b1.l3",
+      "en_chars": 102,
+      "zh_chars": 24,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "content.quests.unreadablePage.pages.4",
+      "en_chars": 91,
+      "zh_chars": 33,
+      "why": [
+        "en 91c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.unsealing-short.b1.l1",
+      "en_chars": 101,
+      "zh_chars": 23,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "story.act4-node4.b1.l1",
+      "en_chars": 100,
+      "zh_chars": 23,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "content.omens.heavyAir.text",
+      "en_chars": 93,
+      "zh_chars": 29,
+      "why": [
+        "en 93c vs content median 16"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m2.pre.l1",
+      "en_chars": 98,
+      "zh_chars": 21,
+      "why": [
+        "zh/en char ratio 0.21"
+      ]
+    },
+    {
+      "key": "story.event-library.coda",
+      "en_chars": 92,
+      "zh_chars": 22,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "story.event-mirror.coda",
+      "en_chars": 94,
+      "zh_chars": 19,
+      "why": [
+        "zh/en char ratio 0.20"
+      ]
+    },
+    {
+      "key": "ui.credits.bodyAlegreya",
+      "en_chars": 57,
+      "zh_chars": 56,
+      "why": [
+        "zh 56c vs ui median 5"
+      ]
+    },
+    {
+      "key": "ui.treasure.relicClaim",
+      "en_chars": 60,
+      "zh_chars": 53,
+      "why": [
+        "zh 53c vs ui median 5"
+      ]
+    },
+    {
+      "key": "story.act4-entry.b1.l2",
+      "en_chars": 90,
+      "zh_chars": 21,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "story.opening.b3.l1",
+      "en_chars": 92,
+      "zh_chars": 19,
+      "why": [
+        "zh/en char ratio 0.21"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m4.pre.l3",
+      "en_chars": 84,
+      "zh_chars": 20,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m3.post.l1",
+      "en_chars": 82,
+      "zh_chars": 19,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m5.post.l3",
+      "en_chars": 82,
+      "zh_chars": 19,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "story.unsealing.b3.l2",
+      "en_chars": 83,
+      "zh_chars": 15,
+      "why": [
+        "zh/en char ratio 0.18"
+      ]
+    },
+    {
+      "key": "story.act4-node2.b1.l1",
+      "en_chars": 77,
+      "zh_chars": 19,
+      "why": [
+        "zh/en char ratio 0.25"
+      ]
+    },
+    {
+      "key": "story.lamplighter-m1.post.l2",
+      "en_chars": 80,
+      "zh_chars": 16,
+      "why": [
+        "zh/en char ratio 0.20"
+      ]
+    },
+    {
+      "key": "story.act4-node3.b1.l2",
+      "en_chars": 78,
+      "zh_chars": 16,
+      "why": [
+        "zh/en char ratio 0.21"
+      ]
+    },
+    {
+      "key": "story.event-woundedKnight.coda",
+      "en_chars": 73,
+      "zh_chars": 18,
+      "why": [
+        "zh/en char ratio 0.25"
+      ]
+    },
+    {
+      "key": "content.quests.hollowLamplighter.meetings.3.paid",
+      "en_chars": 72,
+      "zh_chars": 16,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "ui.end.abandonedSub",
+      "en_chars": 57,
+      "zh_chars": 14,
+      "why": [
+        "zh/en char ratio 0.25"
+      ]
+    },
+    {
+      "key": "content.whispers.13",
+      "en_chars": 57,
+      "zh_chars": 13,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "content.whispers.11",
+      "en_chars": 54,
+      "zh_chars": 13,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "story.finale-win.b1.l2",
+      "en_chars": 54,
+      "zh_chars": 13,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "story.finale.b1.l1",
+      "en_chars": 54,
+      "zh_chars": 12,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "story.unsealing.b2.l1",
+      "en_chars": 54,
+      "zh_chars": 12,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "content.whispers.14",
+      "en_chars": 52,
+      "zh_chars": 12,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "ui.hollow.message.emberDebt",
+      "en_chars": 51,
+      "zh_chars": 12,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "story.opening.b1.l2",
+      "en_chars": 46,
+      "zh_chars": 10,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "ui.map.holdFast",
+      "en_chars": 45,
+      "zh_chars": 10,
+      "why": [
+        "zh/en char ratio 0.22"
+      ]
+    },
+    {
+      "key": "ui.persistence.detail.emptyLanternPurchaseHold",
+      "en_chars": 45,
+      "zh_chars": 9,
+      "why": [
+        "zh/en char ratio 0.20"
+      ]
+    },
+    {
+      "key": "story.unsealing.b1.l1",
+      "en_chars": 42,
+      "zh_chars": 10,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "ui.persistence.detail.hollowDestinationHold",
+      "en_chars": 41,
+      "zh_chars": 10,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "ui.persistence.detail.merchantStockHold",
+      "en_chars": 39,
+      "zh_chars": 9,
+      "why": [
+        "zh/en char ratio 0.23"
+      ]
+    },
+    {
+      "key": "story.opening.b3.l2",
+      "en_chars": 38,
+      "zh_chars": 9,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "ui.persistence.detail.victoryRewardsHold",
+      "en_chars": 38,
+      "zh_chars": 9,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    },
+    {
+      "key": "ui.persistence.detail.claimedRewardHold",
+      "en_chars": 37,
+      "zh_chars": 9,
+      "why": [
+        "zh/en char ratio 0.24"
+      ]
+    }
+  ],
+  "known_calques": [
+    {
+      "key": "content.whispers.14",
+      "en": "Three deaths will teach your shade to speak plainly.",
+      "zh": "三次死亡會教你的影直言。"
+    },
+    {
+      "key": "content.whispers.15",
+      "en": "The Vigil has a window, though no wall holds it.",
+      "zh": "守夜有一扇窗，雖無牆承載它。"
+    },
+    {
+      "key": "content.whispers.17",
+      "en": "The Pale Ones are not hunting you. They are pointing upward.",
+      "zh": "蒼白眾並非在獵你。他們在向上指。"
+    },
+    {
+      "key": "content.whispers.21",
+      "en": "Its inscription has waited longer than the Vigil.",
+      "zh": "它的銘文等候得比守夜更久。"
+    }
+  ],
+  "surfaces": [
+    {
+      "prefix": "content.enemies",
+      "leaves": 176,
+      "host": "Combat nameplates / death lines"
+    },
+    {
+      "prefix": "content.cards",
+      "leaves": 175,
+      "host": "Card faces (en: `content/full-content.json`)"
+    },
+    {
+      "prefix": "content.events",
+      "leaves": 76,
+      "host": "EventScreen body copy"
+    },
+    {
+      "prefix": "content.relics",
+      "leaves": 62,
+      "host": "Relic names / text"
+    },
+    {
+      "prefix": "ui.combat",
+      "leaves": 58,
+      "host": "CombatScreen + HUD piles"
+    },
+    {
+      "prefix": "content.quests",
+      "leaves": 57,
+      "host": "Vigil / Rose Window quest copy"
+    },
+    {
+      "prefix": "ui.persistence",
+      "leaves": 53,
+      "host": "Save-error dialog"
+    },
+    {
+      "prefix": "ui.dawn",
+      "leaves": 37,
+      "host": "Dawn-ceremony chrome"
+    },
+    {
+      "prefix": "ui.map",
+      "leaves": 37,
+      "host": "World map / sealed-door threshold"
+    },
+    {
+      "prefix": "ui.end",
+      "leaves": 36,
+      "host": "Run-end / victory / defeat"
+    },
+    {
+      "prefix": "ui.reward",
+      "leaves": 35,
+      "host": "RewardScreen"
+    },
+    {
+      "prefix": "content.status",
+      "leaves": 34,
+      "host": "Status tooltips"
+    },
+    {
+      "prefix": "ui.keywords",
+      "leaves": 32,
+      "host": "RulesText / keyword tooltips"
+    },
+    {
+      "prefix": "ui.menu",
+      "leaves": 29,
+      "host": "Title, pause, run menu"
+    },
+    {
+      "prefix": "story.lamplighter",
+      "leaves": 27,
+      "host": "ScenePlayer — Lamplighter meetings"
+    },
+    {
+      "prefix": "ui.settings",
+      "leaves": 26,
+      "host": "Settings panel"
+    },
+    {
+      "prefix": "story.dawn",
+      "leaves": 25,
+      "host": "Vigil dawn-ceremony passages"
+    },
+    {
+      "prefix": "ui.credits",
+      "leaves": 25,
+      "host": "Credits sheet"
+    },
+    {
+      "prefix": "content.whispers",
+      "leaves": 24,
+      "host": "Dawn whisper + Rose Window log (`Locale.whisper`)"
+    },
+    {
+      "prefix": "story.act4",
+      "leaves": 18,
+      "host": "ScenePlayer — Act IV nodes"
+    },
+    {
+      "prefix": "story.event",
+      "leaves": 18,
+      "host": "EventScreen result / coda"
+    },
+    {
+      "prefix": "ui.hud",
+      "leaves": 18,
+      "host": "Run HUD (`presentation/combat/hud_bar.gd`)"
+    },
+    {
+      "prefix": "content.boons",
+      "leaves": 16,
+      "host": "Keeper boon pick"
+    },
+    {
+      "prefix": "content.deeds",
+      "leaves": 16,
+      "host": "Vigil deeds"
+    },
+    {
+      "prefix": "content.omens",
+      "leaves": 16,
+      "host": "Omen names / text"
+    },
+    {
+      "prefix": "ui.help",
+      "leaves": 15,
+      "host": "How-to-play panel"
+    },
+    {
+      "prefix": "ui.hollow",
+      "leaves": 15,
+      "host": "HollowScreen (Lamplighter meetings)"
+    },
+    {
+      "prefix": "ui.rest",
+      "leaves": 15,
+      "host": "Rest site"
+    },
+    {
+      "prefix": "content.potions",
+      "leaves": 14,
+      "host": "Phial names / text"
+    },
+    {
+      "prefix": "story.unsealing",
+      "leaves": 14,
+      "host": "ScenePlayer — sixth-shard unsealing"
+    },
+    {
+      "prefix": "content.variants",
+      "leaves": 13,
+      "host": "Enemy variant names / death lines"
+    },
+    {
+      "prefix": "ui.rose",
+      "leaves": 13,
+      "host": "Rose Window"
+    },
+    {
+      "prefix": "content.affixes",
+      "leaves": 12,
+      "host": "Elite titles in combat"
+    },
+    {
+      "prefix": "content.arts",
+      "leaves": 12,
+      "host": "Lantern Art names"
+    },
+    {
+      "prefix": "story.finale",
+      "leaves": 12,
+      "host": "ScenePlayer — finale / win / loss"
+    },
+    {
+      "prefix": "ui.event",
+      "leaves": 11,
+      "host": "EventScreen chrome"
+    },
+    {
+      "prefix": "content.vows",
+      "leaves": 10,
+      "host": "Embark vow list"
+    },
+    {
+      "prefix": "ui.shop",
+      "leaves": 10,
+      "host": "Shop"
+    },
+    {
+      "prefix": "content.acts",
+      "leaves": 8,
+      "host": "Map / embark act titles (ContentDB; en bake)"
+    },
+    {
+      "prefix": "content.shadeKits",
+      "leaves": 8,
+      "host": "Shade-kit names"
+    },
+    {
+      "prefix": "story.opening",
+      "leaves": 8,
+      "host": "ScenePlayer — opening (`content/scenes.json`)"
+    },
+    {
+      "prefix": "ui.common",
+      "leaves": 8,
+      "host": "Shared chrome (buttons, continue/leave)"
+    },
+    {
+      "prefix": "ui.pilgrimage",
+      "leaves": 8,
+      "host": "Map survey prompt"
+    },
+    {
+      "prefix": "ui.treasure",
+      "leaves": 8,
+      "host": "Treasure node"
+    },
+    {
+      "prefix": "ui.vigil",
+      "leaves": 8,
+      "host": "VigilScreen"
+    },
+    {
+      "prefix": "ui.embark",
+      "leaves": 7,
+      "host": "Embark / vow select"
+    },
+    {
+      "prefix": "ui.hint",
+      "leaves": 7,
+      "host": "Hint overlay"
+    },
+    {
+      "prefix": "content.aspects",
+      "leaves": 6,
+      "host": "Aspect select"
+    },
+    {
+      "prefix": "ui.rarity",
+      "leaves": 6,
+      "host": "Card rarity labels"
+    },
+    {
+      "prefix": "ui.scene",
+      "leaves": 6,
+      "host": "ScenePlayer speaker labels"
+    },
+    {
+      "prefix": "ui.card",
+      "leaves": 5,
+      "host": "Card face chrome"
+    },
+    {
+      "prefix": "ui.lamp",
+      "leaves": 5,
+      "host": "Lantern overlay"
+    },
+    {
+      "prefix": "ui.brand",
+      "leaves": 4,
+      "host": "Title / ChoiceScreen (`application/main.gd`)"
+    },
+    {
+      "prefix": "ui.language",
+      "leaves": 4,
+      "host": "Settings language row"
+    },
+    {
+      "prefix": "ui.omen",
+      "leaves": 1,
+      "host": "Act-transition plate"
+    },
+    {
+      "prefix": "ui.smoke",
+      "leaves": 1,
+      "host": "Unused smoke-test leftover (no runtime host found)"
+    }
+  ],
+  "line_table": {
+    "rows": 178,
+    "slots": {
+      "whisper": 1,
+      "death.ownShade1": 1,
+      "death.ownShade2": 1,
+      "death.ownShade3": 1,
+      "closer.ownShade": 1,
+      "closer.usurper": 1,
+      "closer.eighthOmen": 1,
+      "hearth": 60,
+      "waystone": 60,
+      "loss": 50,
+      "closer.l3": 1
+    },
+    "empty_or_placeholder": [],
+    "copy_through": [],
+    "retired": [
+      {
+        "id": "death.ownShade2",
+        "slot": "death.ownShade2",
+        "locale": "en",
+        "term": "spire",
+        "text": "Each climber leaves a shape behind. The Spire has learned to wear ours."
+      },
+      {
+        "id": "death.ownShade2",
+        "slot": "death.ownShade2",
+        "locale": "en",
+        "term": "climb",
+        "text": "Each climber leaves a shape behind. The Spire has learned to wear ours."
+      },
+      {
+        "id": "death.ownShade2",
+        "slot": "death.ownShade2",
+        "locale": "zh-Hant",
+        "term": "尖塔",
+        "text": "每位朝聖者都留下一道形影。尖塔已學會披上我們的模樣。"
+      },
+      {
+        "id": "death.ownShade3",
+        "slot": "death.ownShade3",
+        "locale": "en",
+        "term": "above",
+        "text": "Above the Sovereign there is no dawn — only a door pretending to be the sky."
+      },
+      {
+        "id": "death.ownShade3",
+        "slot": "death.ownShade3",
+        "locale": "zh-Hant",
+        "term": "之上",
+        "text": "永恆君王之上沒有破曉——只有一扇偽裝成天空的門。"
+      },
+      {
+        "id": "closer.ownShade",
+        "slot": "closer.ownShade",
+        "locale": "en",
+        "term": "climb",
+        "text": "We were never climbing out. We were carrying light to the lock."
+      },
+      {
+        "id": "closer.usurper",
+        "slot": "closer.usurper",
+        "locale": "en",
+        "term": "above",
+        "text": "The mask is broken. Look above."
+      }
+    ]
+  },
+  "bake": {
+    "hydrated_display_leaves": 711,
+    "locale_en_content_leaves": 735,
+    "drift_sample": [],
+    "drift_count": 0
+  }
+}
