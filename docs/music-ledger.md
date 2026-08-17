@@ -51,10 +51,11 @@ Both audio files are byte-identical to v1. `pack_id` stays `stained-glass-v1`.
 
 ## Owed — Act IV (#221)
 
-No files yet. `MusicBus.FILES` still aliases `act4Combat` / `act4Boss` to
-the Act III tracks; `tests/test_presentation.gd` asserts that alias until
-these two land. Dispatch via `.claude/skills/glassvow-suno/SKILL.md`
-(Suno Pro website, same as v1). A new file is a pack bump
+Candidates rendered 2026-08-17 in the Suno Pro workspace (Custom +
+Instrumental, artist `fol2hk`). Files sit in
+`docs/design/2026-08-17-act4-audio/candidates/` — **James picks before
+ship**. `MusicBus.FILES` still aliases `act4Combat` / `act4Boss` to the
+Act III tracks until a pick lands. A new file is a pack bump
 (`stained-glass-v2` or a dated Act IV addendum) — do not re-encode v1
 to make room.
 
@@ -65,8 +66,8 @@ music — dark panes, cold stone, a lantern kept lit. Act IV overlay from
 
 | cue | file | brief |
 |---|---|---|
-| `act4Combat` | `act4-combat.mp3` | Loop. The Mirrored Road, not a new biome: the Act I–III chamber palette heard *backwards* — phrases inverted, cadence arriving before the step. Low strings and glass harmonics; a far amber pedal that brightens as the phrase repeats. No choir, no vocals, no climb, no brass fanfare. Title (display copy, after James): **Hearthlight Runs Back**. |
-| `act4Boss` | `act4-boss.mp3` | Loop. The Eternal Keeper's fight: the hearth theme at original speed (node 5 is "home"), but the harmony sits one degree colder than `vigil` / the opening hearth. Stillness is the threat — long held tones, a slow cracked-glass ostinato, no chase. No choir, no vocals, no sovereign-court brass. Title (display copy, after James): **The Seat That Would Not Leave**. |
+| `act4Combat` | `act4-combat.mp3` | Loop. The Mirrored Road, not a new biome: the Act I–III chamber palette heard *backwards* — phrases inverted, cadence arriving before the step. Low strings and glass harmonics; a far amber pedal that brightens as the phrase repeats. No choir, no vocals, no climb, no brass fanfare. Title (display copy, after James): **Hearthlight Runs Back**. Candidates: **A** 104 s (`a7613abf`), **B** 153 s (`83a2af85`), **C** 103 s (`ef55956e`), **D** 98 s (`e5e1d8fa`). |
+| `act4Boss` | `act4-boss.mp3` | Loop. The Eternal Keeper's fight: the hearth theme at original speed (node 5 is "home"), but the harmony sits one degree colder than `vigil` / the opening hearth. Stillness is the threat — long held tones, a slow cracked-glass ostinato, no chase. No choir, no vocals, no sovereign-court brass. Title (display copy, after James): **The Seat That Would Not Leave**. Candidates: **A** 99 s (`5c3b0b31`), **B** 153 s (`6ed76c50`). |
 
 Wire in `music_bus.gd` and `assets/audio/music/manifest.json` in the same
 commit as the mp3s. Credits copy answers to the story bible like every
