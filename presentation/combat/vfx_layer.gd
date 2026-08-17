@@ -77,7 +77,7 @@ const SHAKE_DECAY: float = 0.001
 const SHAKE_FLOOR: float = 0.1
 
 ## `theme.weather` for act 1 (`packs/core/themes.js:21`) — ash. One fleck a
-## second, falling slowly, and one in twenty is an ember climbing the other way.
+## second, falling slowly, and one in twenty is an ember drifting upward.
 ## Inlined because the slice exporter carries no theme record; the day it does,
 ## `set_weather` takes one.
 const ASH_RATE: float = 1.0

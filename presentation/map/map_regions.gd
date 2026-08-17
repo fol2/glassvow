@@ -4,7 +4,7 @@ extends RefCounted
 ## ignores the content pack's per-act theme dict — the 3D ramp owns hue.
 ## Tuning act 1's sunken motes must not move act 0's ash (docs/solutions/
 ## conventions/per-recipe-shader-knobs.md: one recipe's knobs stay off the
-## shared model). `SPIRE_*` ramps retired in #234 slice 7b2 (#207/#232).
+## shared model). Vertical ramp constants retired in #234 slice 7b2 (#207/#232).
 
 ## Per-act sky/fog/weather dress. Rows 0–2 keep the shipping-pack hexes so
 ## the veil palette does not jump; row 3 is Act IV's dawn-arc (residual

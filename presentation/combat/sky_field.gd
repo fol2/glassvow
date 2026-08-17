@@ -3,7 +3,8 @@ extends Control
 ## What is behind the stage plates.
 ##
 ## The benchmark puts a whole three.js scene there (`src/scene3d.js`, 451 lines:
-## a spire, monoliths, cloud sea, a pulsing beacon, bloom) and the act's plate
+## a lathed centre mass, monoliths, cloud sea, a pulsing beacon, bloom) and the
+## act's plate
 ## art has a transparent sky, so that scene is what you actually see above the
 ## treeline. This port drew pure black there, which is why a still frame of the
 ## fight read as flat next to the same frame at localhost:5190.
@@ -11,8 +12,9 @@ extends Control
 ## This is not that scene. It is the part of it the battlefield shows: the sky
 ## and fog colours, and the two drifting mote fields — `ptsMain` in the theme's
 ## `particles` colour and `ptsAccent` in its `glow`, the second at 0.55 of the
-## first's rise and breathing its opacity. The spire, the beacon and the clouds
-## are all below the treeline at this camera and the plates cover them.
+## first's rise and breathing its opacity. The 3D scene's centre mass, the
+## beacon and the clouds are all below the treeline at this camera and the plates
+## cover them.
 ##
 ## Declared a mock on purpose. If the 3D scene is ever ported, this comes out.
 

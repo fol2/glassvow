@@ -395,7 +395,7 @@ class EmberField extends Control:
 		var delay: float    # animation-delay: 0-4s
 		var dur: float      # animation-duration: 3-6s
 
-	## `emberRise` climbs -46cqh from `bottom: 18%` on a LINEAR clock.
+	## `emberRise` rises -46cqh from `bottom: 18%` on a LINEAR clock.
 	const RISE_FRAC: float = 0.46
 	const FLOOR_FRAC: float = 0.82
 	const BODY: Color = Color(1.0, 0.6901961, 0.4)          # #ffb066

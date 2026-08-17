@@ -48,13 +48,13 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, WorldMap.for_run(early, content).nodes.size() > 5,
 		"for_run at act 0 stays generated")
 
-	var climb: RunState = RunState.new_run(content, 404, "run-act4-omen", {
+	var act4_omen: RunState = RunState.new_run(content, 404, "run-act4-omen", {
 		"reveals": null, "shards": VigilState.QUEST_IDS.duplicate(),
 	})
-	climb.start_next_act(content)
-	climb.start_next_act(content)
-	climb.start_next_act(content)
-	_check(fails, climb.act == 3 and climb.omens.size() == 4 and climb.omens[3] == null,
+	act4_omen.start_next_act(content)
+	act4_omen.start_next_act(content)
+	act4_omen.start_next_act(content)
+	_check(fails, act4_omen.act == 3 and act4_omen.omens.size() == 4 and act4_omen.omens[3] == null,
 		"entering Act IV pads a null omen rather than rolling one")
 	var ordinary: RunState = RunState.new_run(content, 405, "run-act3-omen", {"reveals": null})
 	ordinary.start_next_act(content)
@@ -116,16 +116,16 @@ static func run(fails: Array[String]) -> void:
 		]) and _in_pool(prod_repeat.nodes[2].enemies, [["unsunkSelf"], ["uncarvedSelf"]]),
 		"production repeat draws from encounters[3]")
 
-	climb.omens = climb.omens.slice(0, 3)
-	var parsed: Variant = JSON.parse_string(JSON.stringify(climb.to_save_dict()))
+	act4_omen.omens = act4_omen.omens.slice(0, 3)
+	var parsed: Variant = JSON.parse_string(JSON.stringify(act4_omen.to_save_dict()))
 	_check(fails, typeof(parsed) == TYPE_DICTIONARY, "Act IV save encoded")
 	if typeof(parsed) == TYPE_DICTIONARY:
 		var raw: Dictionary = parsed
 		var loaded: RunState = RunState.from_save_dict(raw, content)
 		_check(fails, loaded != null and loaded.omens.size() == 4 and loaded.omens[3] == null,
 			"save top-up does not roll an Act IV omen")
-	climb.mark_mirrored_road_cleared()
-	_check(fails, climb.unlocks.has(RunState.MIRRORED_ROAD),
+	act4_omen.mark_mirrored_road_cleared()
+	_check(fails, act4_omen.unlocks.has(RunState.MIRRORED_ROAD),
 		"a final-act win records mirroredRoad")
 
 
