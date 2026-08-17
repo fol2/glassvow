@@ -550,6 +550,18 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | 431 | 未退的漲 / The Flood That Would Not Recede | unsunkSelf.moves.stillTide | L4 | 不退的漲水 | 城淹於等待;這漲是你沒退過的那道 | 佔位 |
 | 432 | 未完的句 / The Sentence Left Unfinished | unsunkSelf.moves.waitPage | L4 | 沒寫完的一句 | 等待寫足一座書庫;這句你沒留下來寫完 | 佔位 |
 
+#220 threshold-prime elite(佔位專名,鎖名前不得裸寫;軸沿用 statusLean,與同節點【未開者】的 deckType 並立):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 433 | 【未刻者】 / 【The Uncarved】 | content.enemies.uncarvedSelf.name | L4 | 鏡路上一個不出聲的行者,立於封門浮雕前 | 今世沒揀過的 toxin/ward 路;不是隊伍,是未刻入門上的你 | 佔位 [#220 threshold-prime elite] |
+| 434 | 未刻的石 / The Stone You Did Not Carve | uncarvedSelf.moves.stoneCut | L4 | 一塊沒刻過的石 | 封門浮雕等過你的刀;你沒刻,另一個你刻 | 佔位 |
+| 435 | 未印的字 / The Marks You Did Not Press | uncarvedSelf.moves.glyphVolley | L4 | 沒蓋下去的印文 | 門上的字等過你;你沒印,另一個你蓋下去 | 佔位 |
+| 436 | 未承的封 / The Seal You Did Not Bear | uncarvedSelf.moves.sealCrack | L4 | 一道沒承受過的封 | 封是門的重量;你沒承,另一個你把它裂開 | 佔位 |
+| 437 | 封前之守 / The Watch You Did Not Keep | uncarvedSelf.moves.doorWard | L4 | 站在封門前面 | 你沒揀的留守:立於門檻,守着未開的封 | 佔位 |
+| 438 | 未下的印 / The Stamp You Did Not Set | uncarvedSelf.moves.darkStamp | L4 | 一記沒蓋下的印 | 印在手裏卻沒按下;另一個你把空白留在石上 | 佔位 |
+| 439 | 未推的石 / The Slab You Did Not Shift | uncarvedSelf.moves.waitStone | L4 | 一塊沒推過的石 | 封門要推;這個你沒推,所以門仍封 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

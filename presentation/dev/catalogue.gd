@@ -105,6 +105,11 @@ const ENTRIES: Array[Dictionary] = [
 		"seed": SEED, "overrides": {
 			"act": 1, "node": "0,6", "kind": "elite",
 			"enemies": ["unsunkSelf"]}},
+	{"id": "combat-uncarved-self", "revision": 1,
+		"description": "Act IV second elite: one silent threshold-prime self on an Act I elite waystone.",
+		"seed": SEED, "overrides": {
+			"act": 0, "node": "6,3", "kind": "elite",
+			"enemies": ["uncarvedSelf"]}},
 ]
 
 const UNSUPPORTED: Array[Dictionary] = [

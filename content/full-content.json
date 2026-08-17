@@ -3350,6 +3350,87 @@
       },
       "name": "The Eternal Keeper"
     },
+    "uncarvedSelf": {
+      "hp": [
+        82,
+        90
+      ],
+      "elite": true,
+      "art": {
+        "kind": "humanoid",
+        "hue": 24,
+        "size": 1.2
+      },
+      "counterfactual": {
+        "node": "threshold-prime",
+        "motif": "seal-relief",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "door",
+          "ward": "carve"
+        },
+        "kits": {
+          "carve": [
+            "stoneCut",
+            "glyphVolley",
+            "sealCrack"
+          ],
+          "door": [
+            "doorWard",
+            "darkStamp",
+            "waitStone"
+          ]
+        }
+      },
+      "moves": {
+        "stoneCut": {
+          "intent": "attack",
+          "dmg": 15,
+          "name": "The Stone You Did Not Carve"
+        },
+        "glyphVolley": {
+          "intent": "attack",
+          "dmg": 7,
+          "times": 2,
+          "name": "The Marks You Did Not Press"
+        },
+        "sealCrack": {
+          "intent": "attack_debuff",
+          "dmg": 12,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Seal You Did Not Bear"
+        },
+        "doorWard": {
+          "intent": "block",
+          "block": 17,
+          "name": "The Watch You Did Not Keep"
+        },
+        "darkStamp": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 3
+            }
+          ],
+          "name": "The Stamp You Did Not Set"
+        },
+        "waitStone": {
+          "intent": "attack_block",
+          "dmg": 11,
+          "block": 10,
+          "name": "The Slab You Did Not Shift"
+        }
+      },
+      "name": "【The Uncarved】"
+    },
     "uncrossedSelf": {
       "hp": [
         42,
