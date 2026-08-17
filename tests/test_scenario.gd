@@ -160,6 +160,10 @@ static func _shards(kernel: ScenarioKernel, fails: Array[String]) -> void:
 	var final_act: RunState = kernel.construct(_custom(18314, {"act": 3, "shards": 6}))
 	if final_act == null or final_act.act != 3 or not final_act.is_final_act():
 		fails.append("scenario shards: act 3 with six panes was not the final act")
+	else:
+		var road: WorldMap = WorldMap.from_dict(final_act.map)
+		if road == null or road.nodes.size() != 5 or road.region != "rose_window":
+			fails.append("scenario shards: act 3 did not sit on the authored map")
 	if kernel.construct(_custom(18315, {"shards": 7})) != null \
 			or kernel.last_error != "shards 7 is out of range":
 		fails.append("scenario reject: shard count 7 was accepted")

@@ -4,6 +4,8 @@ extends RefCounted
 ## draw uses the one RNG stream whose signed 32-bit state is the fixture cursor.
 
 const SAVE_VERSION: int = 2
+## First Act IV clear, folded by `commit_run`. Distinct from the `act4` reveal.
+const MIRRORED_ROAD: String = "mirroredRoad"
 
 
 ## Persistent run-scoped hero state (web run.player).
@@ -97,8 +99,12 @@ func start_next_act(content: ContentDB) -> void:
 	player.hp = mini(player.max_hp,
 		player.hp + int(roundf(float(player.max_hp) * 0.35)))
 	while omens.size() <= act:
-		omens.append(_roll_omen(self, content)
-			if reveals_all or reveals.has("omens") else null)
+		omens.append(_omen_for_slot(self, content, omens.size()))
+
+
+func mark_mirrored_road_cleared() -> void:
+	if not unlocks.has(MIRRORED_ROAD):
+		unlocks.append(MIRRORED_ROAD)
 
 
 ## Save-result projection (web exporter projectSaveResult) — the trace
@@ -207,8 +213,16 @@ static func new_run(
 	rs.pending_lamplighter = profile.get("lamplighter", false)
 	if rs.vow >= 4:
 		rs.player.deck.append(CardInst.new(rs.next_uid(), &"hex", false))
-	rs.omens.append(_roll_omen(rs, content) if rs.reveals_all or rs.reveals.has("omens") else null)
+	rs.omens.append(_omen_for_slot(rs, content, 0))
 	return rs
+
+
+static func _omen_for_slot(rs: RunState, content: ContentDB, slot: int) -> Variant:
+	if slot == 3:
+		return null
+	if rs.reveals_all or rs.reveals.has("omens"):
+		return _roll_omen(rs, content)
+	return null
 
 
 static func _roll_omen(rs: RunState, content: ContentDB) -> Variant:
@@ -335,10 +349,7 @@ static func from_save_dict(save: Dictionary, content: ContentDB) -> RunState:
 	# Omens are reveal-gated; the slice/fresh profile always tops up with null.
 	# The rollOmen rng path lands with the omen system.
 	while rs.omens.size() <= rs.act:
-		if rs.reveals_all or rs.reveals.has("omens"):
-			rs.omens.append(_roll_omen(rs, content))
-		else:
-			rs.omens.append(null)
+		rs.omens.append(_omen_for_slot(rs, content, rs.omens.size()))
 	rs.player.hp = _sji(p.get("hp", 0))
 	rs.player.max_hp = _sji(p.get("maxHp", 0))
 	rs.player.gold = _sji(p.get("gold", 0))

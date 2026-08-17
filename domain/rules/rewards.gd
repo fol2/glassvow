@@ -148,14 +148,28 @@ func roll_boss_relics(run: RunState) -> Array[String]:
 func roll_encounter(run: RunState, type: String, row: int, node: MapNode = null) -> Array[String]:
 	if node != null and node.quest_variant_id != null:
 		return [str(node.quest_variant_id)]
-	var act_encounters: Dictionary = content.encounters[clampi(run.act, 0, content.encounters.size() - 1)]
-	var pool_key: String = "boss" if type == "boss" else (
-		"elite" if type == "elite" else ("weak" if row < 3 else "normal")
-	)
-	var pool: Array = act_encounters.get(pool_key, [])
-	var picked: Array = pool[run.rng.pick_index(pool.size())]
 	var out: Array[String] = []
-	for id_v: Variant in picked:
+	if run.act < 0 or run.act >= content.encounters.size():
+		return out
+	var row_v: Variant = content.encounters[run.act]
+	if typeof(row_v) != TYPE_DICTIONARY:
+		return out
+	var act_encounters: Dictionary = row_v
+	var pool_key: String = "boss" if type == "boss" else (
+		"elite" if type == "elite" else (
+			"normal" if run.act == 3 else ("weak" if row < 3 else "normal")
+		)
+	)
+	var pool_v: Variant = act_encounters.get(pool_key, [])
+	if typeof(pool_v) != TYPE_ARRAY:
+		return out
+	var pool: Array = pool_v
+	if pool.is_empty():
+		return out
+	var picked_v: Variant = pool[run.rng.pick_index(pool.size())]
+	if typeof(picked_v) != TYPE_ARRAY:
+		return out
+	for id_v: Variant in picked_v:
 		out.append(str(id_v))
 	return out
 

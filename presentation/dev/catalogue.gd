@@ -37,16 +37,11 @@ const ENTRIES: Array[Dictionary] = [
 		"description": "Act III seated on the terminus boss waystone.",
 		"seed": SEED, "overrides": {"act": 2, "node": "14,3"}},
 	{"id": "act-4-map-start", "revision": 1,
-		"description": "Act IV map with the lantern unseated at the first waystones.",
+		"description": "Act IV authored map with the lantern unseated at the first waystone.",
 		"seed": SEED, "overrides": {"act": 3, "shards": 6}},
 	{"id": "act-4-map-branch", "revision": 1,
-		"description": "Act IV seated at a mid-journey fork with two onward roads.",
-		"seed": SEED, "overrides": {"act": 3, "shards": 6, "node": "4,6"}},
-	{"id": "act-4-map-terminus", "revision": 1,
-		"description": "Act IV seated on the terminus boss waystone against the Eternal Keeper.",
-		"seed": SEED, "overrides": {
-			"act": 3, "shards": 6, "node": "14,3",
-			"kind": "boss", "enemies": ["eternalKeeper"]}},
+		"description": "Act IV seated on the II-prime elite waystone. The authored line has no fork.",
+		"seed": SEED, "overrides": {"act": 3, "shards": 6, "node": "n2"}},
 	{"id": "combat-normal", "revision": 1,
 		"description": "A normal two-enemy fight on an Act I monster waystone.",
 		"seed": SEED, "overrides": {
@@ -131,6 +126,34 @@ const ENTRIES: Array[Dictionary] = [
 		"seed": SEED, "overrides": {
 			"act": 0, "node": "1,2", "kind": "monster",
 			"enemies": ["unwoodedSelf"]}},
+	{"id": "act-4-map-rest", "revision": 1,
+		"description": "Act IV seated on the rest waystone before the terminus.",
+		"seed": SEED, "overrides": {"act": 3, "shards": 6, "node": "n3"}},
+	{"id": "act-4-map-terminus", "revision": 1,
+		"description": "Act IV seated on the Eternal Keeper waystone.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "n4",
+			"kind": "boss", "enemies": ["eternalKeeper"]}},
+	{"id": "combat-act4-threshold-prime", "revision": 1,
+		"description": "Act IV threshold-prime monster: the landed unopened self on the authored line.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "n0", "kind": "monster",
+			"enemies": ["unopenedSelf"]}},
+	{"id": "combat-act4-iii-prime", "revision": 1,
+		"description": "Act IV III-prime monster: both landed normals on the authored line.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "n1", "kind": "monster",
+			"enemies": ["unobsidianSelf", "unwalkedSelf"]}},
+	{"id": "combat-act4-ii-prime", "revision": 1,
+		"description": "Act IV II-prime elite: both axes on the authored line.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "n2", "kind": "elite",
+			"enemies": ["uncrossedSelf", "unsunkSelf"]}},
+	{"id": "combat-act4-boss", "revision": 1,
+		"description": "Act IV hearth-prime boss: the Eternal Keeper on the authored line.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "n4", "kind": "boss",
+			"enemies": ["eternalKeeper"]}},
 ]
 
 const UNSUPPORTED: Array[Dictionary] = [

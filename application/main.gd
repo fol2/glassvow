@@ -1927,17 +1927,23 @@ func _on_shop_remove(uid_text: String) -> void:
 # ---------------------------------------------------------------- combat
 
 func _arm_encounter(n: MapNode) -> void:
-	var enemies: Array[String] = n.enemies
+	var enemies: Array[String] = n.enemies.duplicate()
 	if enemies.is_empty():
 		enemies = game.quests.encounter_override(game.run, n.type, n)
 		if enemies.is_empty():
 			enemies = game.rewards.roll_encounter(game.run, n.type, n.row, n)
+	if enemies.is_empty():
+		game.run.pending_combat = null
+		game.run.pending_enemy_ids = null
+		return
 	game.run.pending_combat = n.type
 	game.run.pending_enemy_ids = enemies
 
 
 func _prepare_encounter(n: MapNode) -> void:
 	_arm_encounter(n)
+	if typeof(game.run.pending_enemy_ids) != TYPE_ARRAY:
+		return
 	if not _store_run():
 		_show_save_error("ui.persistence.detail.encounterFreeze")
 		return
@@ -2146,6 +2152,7 @@ func _on_combat_over(result: String) -> void:
 		_route_run()
 		return
 	if node.type == "boss" and game.run.is_final_act():
+		game.run.mark_mirrored_road_cleared()
 		game.run.pending_run_end = {"outcome": "win"}
 		if not _store_run():
 			_show_save_error("ui.persistence.detail.finalVictoryHold")
@@ -2357,7 +2364,7 @@ func _on_boss_relic_chosen(id: String) -> void:
 	game.run.boss_relic_act = game.run.act
 	game.run.quest_scratch.erase("bossRelicOffer")
 	game.run.start_next_act(content)
-	_map = WorldMap.benchmark(game.run)
+	_map = WorldMap.for_run(game.run, content)
 	game.quests.decorate_map(game.run, _map)
 	game.run.map = _map.to_dict()
 	if _store_run():
@@ -2617,7 +2624,7 @@ func _on_terminal_commit(_id: String) -> void:
 		})
 	for unlock_v: Variant in _vigil.unlocks:
 		var unlock: String = str(unlock_v)
-		if not before_unlocks.has(unlock):
+		if not before_unlocks.has(unlock) and unlock != RunState.MIRRORED_ROAD:
 			var unlock_event: Dictionary = {
 				"kind": "unlock",
 				"title": _unlock_dawn_copy(unlock),
