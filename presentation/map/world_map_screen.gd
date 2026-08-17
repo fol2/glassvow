@@ -411,8 +411,8 @@ func _pin_hit() -> float:
 
 
 ## Dress the bands in another act's region without mutating the run. Used by
-## `--map --act=N` so captures can see act 1/2 weather without climbing there —
-## domain map generation stays the run's act (scenery only).
+## `--map --act=N` so captures can see act 1/2 weather without reaching that
+## act in a run — domain map generation stays the run's act (scenery only).
 func set_act_scenery(stage_act: int) -> void:
 	_set_act_theme(stage_act)
 	if content != null and _act < content.acts.size() and _title_label != null:
@@ -540,8 +540,8 @@ func _on_arrived(i: int) -> void:
 ## of that fix while its comment claimed it was "the same control the PathBand
 ## edges use" (PR #78 PM R1). One function cannot disagree with itself.
 func edge_control(from: Vector2, to: Vector2) -> Vector2:
-	var climb: float = clampf((to.y - from.y) / maxf(_lane_gap(), 1.0), -1.0, 1.0)
-	return (from + to) * 0.5 + Vector2(0.0, climb * 10.0)
+	var lane_rise: float = clampf((to.y - from.y) / maxf(_lane_gap(), 1.0), -1.0, 1.0)
+	return (from + to) * 0.5 + Vector2(0.0, lane_rise * 10.0)
 
 
 ## The glow's live screen point — bezier mid-glide, seated otherwise, stage

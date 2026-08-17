@@ -157,8 +157,9 @@ static func _sji(v: Variant) -> int:
 
 
 ## Fresh-profile run built from content.player (web newRun with reveals:[]).
-## Not parity-pinned — the web newRun also rolls the tower map, which is
-## redesigned — but combat parity holds from any rng cursor. reveals stays []
+## Not parity-pinned — the web newRun also rolls its vertical frame, which is
+## redesigned here as the horizontal road — but combat parity holds from any rng
+## cursor. reveals stays []
 ## (fresh profile = core only): omens/lamplighter/pool-waves gated off.
 static func new_run(
 	content: ContentDB,

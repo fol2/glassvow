@@ -2385,8 +2385,8 @@ func _handle_event(ev: Dictionary) -> void:
 				_archetype = str(_rules.card_data(inst).get("vfx", "slash"))
 				_vfx_card_id = str(inst.id)
 			_bespoke_fired = false
-			# `['ascension','pyreheart','emberdance','limitBreak']` (drain.js:495) —
-			# port id `risingLitany` for the first (#305). Four signatures that
+			# drain.js:495 — port id `risingLitany` for the first bespoke slot (#305).
+			# Four signatures that
 			# are not an impact at all. They fire on the PLAY, at the hero,
 			# before anything has been struck; only limitBreak reaches out, to
 			# the first living foe.

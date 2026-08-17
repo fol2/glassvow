@@ -146,12 +146,12 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	&"actor/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.2, "max": 2.0, "default": 1.0},
 
 	# --- map: the waystone field. Rows are steps along the pilgrimage (the
-	# walk axis); columns are lanes across it. The vertical Spire's row-gap and
-	# column-gutter died with that frame — what replaced them is a STEP along X
+	# walk axis); columns are lanes across it. The vertical frame's row-gap and
+	# column-gutter died with that layout — what replaced them is a STEP along X
 	# and a LANE GAP along Y, both rate-clamped so a wider stage shows the same
 	# NUMBER of steps rather than more of them. See `WorldMapScreen._step`.
 	#
-	# `horizonY` sits high so the sky is the Spire's (P5.2); `pathY` fans the
+	# `horizonY` sits high so the sky band reads (P5.2); `pathY` fans the
 	# road across the LAND below it. `lead` is the fraction of the stage the
 	# camera holds the current node at (the lead-third rule). Portrait shapes
 	# may override the rates later — P5.7 — the defaults alone keep every
@@ -218,7 +218,7 @@ const FIELDS: Dictionary[StringName, Dictionary] = {
 	# `region` is gone. It was authored against a `size.x < 650.0` threshold in
 	# the old `refresh()`, that function was rewritten, and no defect ever
 	# pointed at it again — so unlike `title`, which earned its keep the day the
-	# Spire rail started saying the same words, this one had no case behind it.
+	# The old vertical rail started saying the same words; this one had no case.
 	# A field with no reader is not automatically wrong; this one was.
 	&"mapbar/scale": {"bind": BIND_NONE, "unit": "ratio", "min": 0.1, "max": 3.0, "default": 1.0},
 	&"mapbar/title": {"bind": BIND_NONE, "unit": "ratio", "min": 0.0, "max": 1.0, "default": 1.0},

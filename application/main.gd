@@ -853,7 +853,7 @@ func _show_title() -> void:
 func _on_title_choice(id: String, saved: RunState) -> void:
 	match id:
 		"continue": _continue_run(saved)
-		"begin": _begin_climb()
+		"begin": _begin_rekindle()
 		"vigil": _show_vigil()
 		"rose": _show_vigil(true)
 		"help": _show_help()
@@ -863,7 +863,7 @@ func _on_title_choice(id: String, saved: RunState) -> void:
 		"quit": _quit_game()
 
 
-func _begin_climb() -> void:
+func _begin_rekindle() -> void:
 	# Skip Embark only when the opening is unseen AND the screen would
 	# offer nothing (single aspect, vow 0). The skip exists because run 1
 	# has no real choice; a legacy v2 profile that never saw the opening
