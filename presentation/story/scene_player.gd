@@ -64,6 +64,8 @@ var _letter_bot: ColorRect
 var _hearth_figure: HearthFigure = null
 var _unsealing: UnsealingStaging = null
 var _unsealing_sting_beat: int = -1
+var _finale: FinaleStaging = null
+var _walk_t: float = 0.0
 
 
 func _init(scene_script: SceneScript, cursor: int = 0,
@@ -187,6 +189,11 @@ func advance_confirmed() -> void:
 
 func _begin_beat() -> void:
 	_asked = false
+	# Skip momentum dies at the walk (07-scenes §5): a fast-forward that
+	# reaches a walk line still owes the step to the player's own hand.
+	if _walk_line():
+		_skipping = false
+		_walk_t = 0.0
 	_present_line()
 	_beat = BEAT_REVEAL
 	_beat_t = 0.0
@@ -237,7 +244,20 @@ func _present_line() -> void:
 		_bind_plate()
 		_bind_staging()
 	_caption.visible = true
-	_skip_fill.visible = true
+	_caption.text = _caption_text()
+	_skip_fill.visible = not _walk_cursor()
+	_sync_finale()
+
+
+## The caption carries the beat's own hand: the walk lines name their input
+## form, the short door crossing says "walk in", everything else keeps the
+## shared tap/hold hint.
+func _caption_text() -> String:
+	if _walk_cursor():
+		return Locale.active.t(FinaleStaging.caption_key())
+	if _script.id == "unsealing-short":
+		return Locale.active.t("ui.map.walkIn")
+	return Locale.active.t("ui.dawn.inputHint")
 
 
 func _bind_plate() -> void:
@@ -286,6 +306,43 @@ func _sync_unsealing() -> void:
 		_sfx.play(UnsealingStaging.STING_CUE)
 
 
+## The finale's walk-out overlay (07-scenes §5). Attached for the whole
+## scene; it only shows itself from the first walk line onward.
+func _sync_finale() -> void:
+	if _script.id != "finale":
+		if _finale != null:
+			_finale.queue_free()
+			_finale = null
+		return
+	if _finale == null:
+		_finale = FinaleStaging.new()
+		add_child(_finale)
+	_finale.present(_walk_cursor(), _walk_steps_done())
+
+
+## The cursor stands on a walk line — the position check alone, so capture
+## stills (instant) still render the walk affordance.
+func _walk_cursor() -> bool:
+	if _script.id != "finale" or _cursor < 0 or _cursor >= _script.line_count():
+		return false
+	return FinaleStaging.walk_key(str(_script.lines[_cursor]["key"]))
+
+
+## The one grammar-break check (07-scenes §5): a walk line never advances on
+## its own, and skip cannot cross it — only the player's hand moves the step.
+## Instant mode (headless tests) keeps the shared grammar.
+func _walk_line() -> bool:
+	return not instant and _walk_cursor()
+
+
+func _walk_steps_done() -> int:
+	var done: int = 0
+	for i: int in range(mini(_cursor, _script.line_count())):
+		if FinaleStaging.walk_key(str(_script.lines[i]["key"])):
+			done += 1
+	return done
+
+
 func _art_path(index: int) -> String:
 	var intended: String = ""
 	for i: int in range(index + 1):
@@ -304,16 +361,19 @@ func _art_path(index: int) -> String:
 func _process(delta: float) -> void:
 	_apply_motion(delta)
 	if _holding and _beat != BEAT_IDLE:
-		_hold_t += delta
-		_skip_fill.custom_minimum_size.x = maxf(_caption.size.x, 220.0) \
-			* clampf(_hold_t / SKIP_HOLD, 0.0, 1.0)
-		if _hold_t >= SKIP_HOLD and not _skipping:
-			_skipping = true
-			skipped = true
-			_sfx.play(&"click")
-			# Do not emit on arm. The WAIT branch below enforces `_beat_t`
-			# against `_skip_wait()`, so a hold that arms on beat ② still
-			# owes the destination floor instead of skipping it.
+		if _walk_line():
+			_hold_walk(delta)
+		else:
+			_hold_t += delta
+			_skip_fill.custom_minimum_size.x = maxf(_caption.size.x, 220.0) \
+				* clampf(_hold_t / SKIP_HOLD, 0.0, 1.0)
+			if _hold_t >= SKIP_HOLD and not _skipping:
+				_skipping = true
+				skipped = true
+				_sfx.play(&"click")
+				# Do not emit on arm. The WAIT branch below enforces `_beat_t`
+				# against `_skip_wait()`, so a hold that arms on beat ② still
+				# owes the destination floor instead of skipping it.
 	match _beat:
 		BEAT_REVEAL:
 			_beat_t += delta
@@ -324,11 +384,29 @@ func _process(delta: float) -> void:
 			if u >= 1.0:
 				_finish_beat()
 		BEAT_WAIT:
+			if _walk_line():
+				return  # the grammar break: only the hand advances a step
 			_beat_t += delta
 			var wait: float = 0.0 if instant else _skip_wait()
 			if _beat_t >= wait and not _asked:
 				_asked = true
 				advance_requested.emit()
+
+
+## FORM_HOLD's walk: the held press fills to a step. FORM_STEP holds nothing
+## on a walk line — the tap is the step, and skip can never arm here.
+func _hold_walk(delta: float) -> void:
+	if FinaleStaging.form != FinaleStaging.FORM_HOLD \
+			or _beat != BEAT_WAIT or _asked:
+		return
+	_walk_t += delta
+	if _finale != null:
+		_finale.set_fill(_walk_t / FinaleStaging.HOLD_TIME)
+	if _walk_t >= FinaleStaging.HOLD_TIME:
+		_walk_t = 0.0
+		_sfx.play(&"click")
+		_asked = true
+		advance_requested.emit()
 
 
 ## How long a settled line holds before it asks on its own.
@@ -375,6 +453,7 @@ func _press(down: bool) -> void:
 	if down:
 		_holding = true
 		_hold_t = 0.0
+		_walk_t = 0.0
 		return
 	if not _holding:
 		return
@@ -382,6 +461,9 @@ func _press(down: bool) -> void:
 	var was_tap: bool = _hold_t < SKIP_HOLD
 	_hold_t = 0.0
 	_skip_fill.custom_minimum_size.x = 0.0
+	if _walk_line():
+		_release_walk(was_tap)
+		return
 	if not was_tap or _skipping or _asked:
 		return
 	_sfx.play(&"click")
@@ -391,6 +473,25 @@ func _press(down: bool) -> void:
 	elif _beat == BEAT_REVEAL:
 		_copy.modulate.a = 1.0
 		_finish_beat()
+		_asked = true
+		advance_requested.emit()
+
+
+## Release on a walk line. A tap mid-reveal only settles the line — the step
+## itself is a second, deliberate press. FORM_HOLD lets go of an unfinished
+## walk without stepping; FORM_STEP steps on the tap.
+func _release_walk(was_tap: bool) -> void:
+	_walk_t = 0.0
+	if _finale != null:
+		_finale.set_fill(0.0)
+	if not was_tap or _asked:
+		return
+	if _beat == BEAT_REVEAL:
+		_copy.modulate.a = 1.0
+		_finish_beat()
+		return
+	if FinaleStaging.form == FinaleStaging.FORM_STEP and _beat == BEAT_WAIT:
+		_sfx.play(&"click")
 		_asked = true
 		advance_requested.emit()
 
