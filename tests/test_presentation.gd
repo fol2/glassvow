@@ -145,9 +145,9 @@ static func run(fails: Array[String]) -> void:
 	rs.act = 3
 	_check(fails, composition._combat_music("normal") == &"act4Combat"
 		and composition._combat_music("boss") == &"act4Boss"
-		and MusicBus.FILES[&"act4Combat"] == "act3-combat"
-		and MusicBus.FILES[&"act4Boss"] == "act3-boss",
-		"the contentless fourth act reaches the final authored music")
+		and MusicBus.FILES[&"act4Combat"] == "act4-combat"
+		and MusicBus.FILES[&"act4Boss"] == "act4-boss",
+		"Act IV combat and boss cues resolve to their own tracks")
 	var phone_reward_padding: float = RewardScreen._deep_padding_for(366.0, 113.0, 8.0, 3)
 	_check(fails, is_equal_approx(phone_reward_padding, 3.5)
 		and RewardScreen._panel_body_width(366.0, phone_reward_padding) >= 355.0,

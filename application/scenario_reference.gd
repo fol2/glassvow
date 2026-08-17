@@ -44,6 +44,7 @@ const CATALOGUE: Dictionary = {
 	"combat-act4-iii-prime": 1,
 	"combat-act4-ii-prime": 1,
 	"combat-act4-boss": 1,
+	"combat-act4-stage": 1,
 }
 const LOCALES: PackedStringArray = ["en", "zh-Hant"]
 const OVERRIDE_KEYS: PackedStringArray = [

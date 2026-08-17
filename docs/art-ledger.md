@@ -342,9 +342,209 @@ Four boss candidates from the same reference. Alpha: A 98.4% pass (rim still
 from the right — lighting miss), B 84.9% fail (washed), C 98.5% pass, D
 98.6% pass. C shipped.
 
-The enemy id `eternalKeeper` is not in `content/full-content.json` yet (Act
-IV roster is `#220`/`#221`). The raster sits at the conventional
-`enemies/<id>.png` path so combat can pick it up without a rename.
+The enemy id `eternalKeeper` landed in `content/full-content.json` with #369.
+The raster shipped earlier with #283 at the conventional `enemies/<id>.png`
+path. `char-meta.json` has a boss block so combat sizes it without falling
+through to `layoutDefault`.
+
+### `stage/act4-backdrop.png` — 1536×1024 RGBA
+### `stage/act4-mid.png` — 1536×1024 RGBA
+### `stage/act4-ledge.png` — 1536×789 RGBA
+
+Act IV combat plates for 鏡中歸途 / The Mirrored Road. Cutouts, not the
+cinematic scene plates: sky is true alpha so `SkyField`'s dawn row shows
+through. Motif from `docs/story/03-acts.md` Act IV — monuments queued into
+a road, inverted hearth-light from ahead. One set for the whole act.
+
+**James picked these on 2026-08-17 (#221):** backdrop C, mid C, ledge B.
+Candidates and the verbatim prompts are in
+`docs/design/2026-08-16-act4-combat-art/README.md`. Installer: `install.py`.
+Do not regenerate from taste; swap a `PICKS` row and re-run.
+
+First landing used `act1-mid.png` as a style reference and shipped a
+lantern-arch. That was a miss, not canon — Act IV combat plates take the
+rose-window inner face and monument-road, not Act I's paired lanterns
+(those belong to Act IV *node 4* as a mirror, not to the whole-act set).
+
+| Path | Candidate | ≥240 alpha | Notes |
+|---|---|---|---|
+| `act4-backdrop` | C | 100% | Stelae road, inverted amber; B rejected (Act I left ruin) |
+| `act4-mid` | C | 100% | Circular rose window + sentinel stelae; B rejected (lantern-arch) |
+| `act4-ledge` | B | 100% | Wide slab, thick front face, two standing-stone posts |
+
+Generated 2026-08-17 through Cursor `GenerateImage`. Stage voids keyed
+from the edges (true `#000000` in the render). Character voids are a
+**magenta field** — see `unwalkedSelf` below.
+
+### `enemies/unwalkedSelf.png` — Act IV tracer self
+
+The Unwalked, Slice 1's silent counterfactual self (`unwalkedSelf`,
+III-prime / broken-ring). Hero silhouette vocabulary (#261 Q5), not a
+monster and not the seated Keeper. Void hood, stained-glass scepter, a
+broken gold halo. Inverted amber rim from the left; body glass cold
+violet / teal.
+
+**James picked D on 2026-08-17 (#221).** A was generated on black
+and failed the same way as a boxed sprite: GenerateImage emits RGB with a
+near-black haze, the hood is also black, and a flood-fill from the edges
+cannot eat the haze without eating the face. Corners-clear + ≥240-of-nonzero
+does not catch that — the haze is fully opaque. D uses a magenta field;
+`install.py` keys magenta (hood stays) and punches large enclosed magenta
+arm-gaps. Gate: leftover field-magenta < 32, and opaque near-black in the
+8px canvas frame < 400.
+
+Combat box is `tierSizes.normal * 1.6` (296px) — at least 50% above the
+first landing's `1.05` (194px). The painting already sits on the 1024 max
+edge; on-screen size is the char-meta knob, not a bigger PNG.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field, edge to edge. No black
+> vignette. CONSTRUCTION: the body IS leaded stained-glass panes. The
+> Unwalked, silent counterfactual pilgrim, full body, 15 percent magenta
+> margin. Raised hood; hood opening is a deep BLACK VOID with NO face —
+> black exists ONLY inside the hood. Tall stained-glass scepter, not a
+> lantern. BROKEN golden halo snapped at the top. INVERTED hearth light:
+> amber rim from the LEFT; remaining glass cold violet / teal / court
+> purple. No text, no watermark.
+
+### `enemies/uncrossedSelf.png` — Act IV II-prime self
+
+The Uncrossed (`uncrossedSelf`, II-prime / false-light). Same hero
+silhouette and void hood as the Unwalked; prop is a hand-held teal
+false-lamp and a closed library folio — water, lying light, unread page.
+No broken halo (that is III-prime). Combat box `1.6` like the tracer.
+
+**James picked B on 2026-08-17 (#221).** A is the same props,
+narrower. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Uncrossed, full body, 15
+> percent magenta margin. Void hood; black ONLY inside the hood. HAND-HELD
+> false lamp with a cold teal flame, NOT hanging, NOT paired, NOT an
+> arch. Closed library folio. NO golden halo, NO scepter. Brine teal /
+> sea-green glass; amber rim from the LEFT.
+
+### `enemies/unopenedSelf.png` — Act IV threshold-prime self
+
+The Unopened (`unopenedSelf`, threshold-prime / stained-glass). Handheld
+six-petal rose-window disc, some petals dark, some amber; wax seal at
+the belt. Intact rose, not a broken halo. Combat box `1.6`.
+
+**James picked A on 2026-08-17 (#221).** B's gothic tablet reads
+as a door-arch. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unopened, full body, 15 percent
+> magenta margin. Void hood; black ONLY inside the hood. Circular
+> SIX-PETAL rose-window PANE held as a disc — intact, unopened. Wax seal
+> at the belt. NO scepter, NO broken halo, NO hanging lanterns. Honey /
+> amber / dark unlit violet; amber rim from the LEFT.
+
+### `enemies/unlitSelf.png` — Act IV I-prime self
+
+The Unstruck (`unlitSelf`, I-prime / paired-lanterns). English display
+avoids colliding with locked "the Unlit Way". Two hand-held unlit lamps
+(dark wicks, no flame); ashroot glass at the hem. Distinct from the
+Uncrossed's one teal lying lamp. Combat box `1.6` like the tracer.
+
+**James picked B on 2026-08-17 (#221).** A failed leftover
+field-magenta (94) in the right arm-gap — the enclosed punch only eats
+blobs ≥200. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unstruck, full body, 15 percent
+> magenta margin. Void hood; black ONLY inside the hood. TWO HAND-HELD
+> UNLIT lamps, dark wicks, NO flame, NOT hanging, NOT an arch. Ash / root
+> glass at the hem. NO teal lying lamp, NO halo, NO scepter. Grey-ash /
+> worn gold; amber rim from the LEFT.
+
+### `enemies/unsunkSelf.png` — Act IV II-prime elite
+
+The Unsunk (`unsunkSelf`, II-prime / library, `elite: true`). Held
+drowned book-stack; still-tide water-glass at the hem. No lantern.
+Combat box is `tierSizes.elite * 1.4` (322px) — a step above the tracer
+self (296px) and the hero (285px). 1.6 (368px) overshot both and crowded
+the END button.
+
+**James picked A on 2026-08-17 (#221).** B's standing unread-shelf
+reads as furniture beside the pilgrim. Magenta field; gate as
+`unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unsunk, full body, slightly
+> broader pilgrim, 15 percent magenta margin. Void hood; black ONLY
+> inside the hood. Drowned BOOK-STACK held against the chest. Still-tide
+> water-glass at the hem. NO lantern, NO halo, NO scepter. Brine teal /
+> indigo; amber rim from the LEFT.
+
+### `enemies/uncarvedSelf.png` — Act IV threshold-prime elite
+
+The Uncarved (`uncarvedSelf`, threshold-prime / seal-relief,
+`elite: true`). Blank rectangular relief tablet with an unfinished
+circular seal — the door-face of the same threshold whose window-face
+is the Unopened's rose disc. Combat box `tierSizes.elite * 1.4` (322px),
+same as `unsunkSelf`.
+
+**James picked C on 2026-08-17 (#221).** A is a stone tome (library
+collision with Unsunk). B's rounded carved tablet reads as a door
+fragment. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Uncarved, full body, slightly
+> broader pilgrim, 15 percent magenta margin. Void hood; black ONLY
+> inside the hood. RECTANGULAR unfinished seal-relief TABLET, mostly
+> blank, one faint circular indent. NOT a book, NOT a rose disc, NOT a
+> door-arch. Amber / sandstone / umber; amber rim from the LEFT.
+
+### `enemies/unobsidianSelf.png` — Act IV III-prime remaining normal
+
+The Unobsidian (`unobsidianSelf`, III-prime / obsidian-star). Handheld
+eight-point obsidian star; court-violet glass going black. Distinct from
+the Unwalked: no broken halo, no scepter. Combat box `1.6` like the
+tracer.
+
+**James picked A on 2026-08-17 (#221).** B's hanging star-chain
+failed leftover field-magenta (222). Magenta field; gate as
+`unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unobsidian, full body, 15
+> percent magenta margin. Void hood; black ONLY inside the hood. HANDHELD
+> eight-point obsidian STAR, not a scepter, not a hanging lantern. NO
+> broken halo, NO books. Court-violet going black; amber rim from the
+> LEFT.
+
+### `enemies/unwoodedSelf.png` — Act IV I-prime remaining normal
+
+The Unwooded (`unwoodedSelf`, I-prime / ash-root). Held unburned ash-root
+branch bundle (wood-glass, not a crystal scepter); cinders at the hem.
+Distinct from the Unstruck: no paired lamps. Combat box `1.6`.
+
+**James picked B on 2026-08-17 (#221).** A's staff+rooted hem
+failed leftover field-magenta (108) — the enclosed punch only eats
+blobs ≥200. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unwooded, full body, 15 percent
+> magenta margin. Void hood; black ONLY inside the hood. Unburned
+> ASH-ROOT branch bundle, not a crystal scepter. Cinders at the hem. NO
+> lantern, NO star, NO books, NO paired lamps. Warm amber / ash-grey;
+> amber rim from the LEFT.
 
 ## Rejection note — what "technically shippable" means
 

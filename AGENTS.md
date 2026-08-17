@@ -1,6 +1,6 @@
 # Agent Contract — Glassvow Godot
 
-**Glassvow** (琉璃誓言) is a Godot 4.7.1 roguelite deckbuilder, parallel-ported from a web original and, since 2026-08-16, **detached from it** — see THE REFERENCE below. The 18 files in `port_fixtures/` began as exports from that original and are now the port's own regression goldens, pinning its behaviour rather than the web's. The map system was always a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions. SFX generation additionally loads `.claude/skills/glassvow-elevenlabs/SKILL.md`; write the row in `docs/sfx-ledger.md` first.
+**Glassvow** (琉璃誓言) is a Godot 4.7.1 roguelite deckbuilder, parallel-ported from a web original and, since 2026-08-16, **detached from it** — see THE REFERENCE below. The 18 files in `port_fixtures/` began as exports from that original and are now the port's own regression goldens, pinning its behaviour rather than the web's. The map system was always a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions. Music and SFX generation additionally load `.claude/skills/glassvow-suno/SKILL.md` and `.claude/skills/glassvow-elevenlabs/SKILL.md`; write the row in `docs/music-ledger.md` or `docs/sfx-ledger.md` first.
 
 ## THE REFERENCE — detached 2026-08-16
 
@@ -117,6 +117,7 @@ Organiser-owned files for why and for the two caveats.
 - **Developer Tools** — `docs/dev-tools.md` — the shared browser/CLI inventory and the binding creation and maintenance contract.
 - **Shared Vocabulary** — `CONCEPTS.md` — domain terms with project-specific meaning; relevant when orienting to an area or settling on names.
 - **Art Ledger** — `docs/art-ledger.md` — points at the upstream art bibles that govern every raster asset, and records the prompts for the few this port authored itself. Relevant before generating or replacing any asset under `assets/art/`.
+- **Music Ledger** — `docs/music-ledger.md` — stained-glass pack contract, owed Suno briefs, titles. Dispatch: `.claude/skills/glassvow-suno/SKILL.md`.
 - **SFX Ledger** — `docs/sfx-ledger.md` — ashglass pack contract, owed ElevenLabs briefs. Dispatch: `.claude/skills/glassvow-elevenlabs/SKILL.md`.
 
 ## Agent skills
@@ -161,10 +162,14 @@ verification gate is unchanged — run the four commands under **Verification** 
   `web_nothreads_debug` export template, which the environment does not provision;
   Native Proof and every headless check work without it.
 
-- **Audio: ElevenLabs needs the `sk_` secret, not the key ID.** `ELEVENLABS_API_KEY`
-  on the environment unlocks SFX (stdio MCP or REST `/v1/sound-generation`).
-  Project `.cursor/mcp.json` does not reach Cloud Agents; a running agent cannot
-  hot-load MCP. Boot a new one after Save.
+- **Audio: ElevenLabs needs the `sk_` secret, not the key ID; Suno has no API key.**
+  `ELEVENLABS_API_KEY` on the environment unlocks SFX (stdio MCP or REST
+  `/v1/sound-generation`). Music is the Suno Pro website — Custom +
+  Instrumental, paste the ledger brief, download mp3s. There is no
+  `SUNO_API_KEY`. AceDataCloud's token is a third-party wrapper, optional,
+  never a Suno secret. Project `.cursor/mcp.json` does not reach Cloud
+  Agents; a running agent cannot hot-load MCP. Boot a new one after Save.
+
 
 ---
 

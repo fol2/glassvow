@@ -9,6 +9,12 @@
         "ELEVENLABS_MCP_BASE_PATH": "${workspaceFolder}",
         "ELEVENLABS_MCP_OUTPUT_MODE": "files"
       }
+    },
+    "suno": {
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:ACEDATACLOUD_API_TOKEN}"
+      }
     }
   }
 }

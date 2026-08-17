@@ -293,6 +293,166 @@
         "cloth": 0.75,
         "pin": 0.5
       }
+    },
+    "eternalKeeper": {
+      "tier": "boss",
+      "scale": 1.15,
+      "footY": 24.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 92.0
+      },
+      "mesh": {
+        "sway": 0.0,
+        "bob": 0.0,
+        "breathe": 0.8,
+        "head": 0.0,
+        "cloth": 0.4
+      }
+    },
+    "unwalkedSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.5,
+        "bob": 0.0,
+        "breathe": 1.2,
+        "head": 1.0,
+        "cloth": 0.7,
+        "pin": 0.4
+      }
+    },
+    "uncrossedSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.6,
+        "bob": 0.0,
+        "breathe": 1.1,
+        "head": 1.0,
+        "cloth": 0.8,
+        "pin": 0.4
+      }
+    },
+    "unopenedSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.4,
+        "bob": 0.0,
+        "breathe": 1.15,
+        "head": 1.0,
+        "cloth": 0.65,
+        "pin": 0.45
+      }
+    },
+    "unlitSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.55,
+        "bob": 0.0,
+        "breathe": 1.1,
+        "head": 1.0,
+        "cloth": 0.75,
+        "pin": 0.4
+      }
+    },
+    "unsunkSelf": {
+      "tier": "elite",
+      "scale": 1.4,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.35,
+        "bob": 0.0,
+        "breathe": 1.05,
+        "head": 1.0,
+        "cloth": 0.85,
+        "pin": 0.5
+      }
+    },
+    "uncarvedSelf": {
+      "tier": "elite",
+      "scale": 1.4,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.3,
+        "bob": 0.0,
+        "breathe": 1.0,
+        "head": 1.0,
+        "cloth": 0.7,
+        "pin": 0.55
+      }
+    },
+    "unobsidianSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.45,
+        "bob": 0.0,
+        "breathe": 1.15,
+        "head": 1.0,
+        "cloth": 0.7,
+        "pin": 0.4
+      }
+    },
+    "unwoodedSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.5,
+        "bob": 0.0,
+        "breathe": 1.1,
+        "head": 1.0,
+        "cloth": 0.8,
+        "pin": 0.45
+      }
     }
   },
   "layoutDefault": {

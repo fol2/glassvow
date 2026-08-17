@@ -32,9 +32,21 @@ static func _map_rows(fails: Array[String]) -> void:
 		"all three map grade-hue arrays carry one row per act")
 	_check(fails, MapRegions.WEATHER_BY_ACT[3] == &"dawn",
 		"Act IV owns the dawn weather key")
+	_check(fails, FileAccess.file_exists("res://assets/art/enemies/eternalKeeper.png"),
+		"Eternal Keeper painting is on disk")
+	_check(fails, EnemyView.art_texture(&"eternalKeeper") != null,
+		"Eternal Keeper painting imported")
+	_check(fails, not EnemyView.meta(&"eternalKeeper").is_empty(),
+		"Eternal Keeper has a char-meta block")
 
 
 static func _combat_rows(fails: Array[String]) -> void:
+	for plate: String in ["backdrop", "mid", "ledge"]:
+		var path: String = "res://assets/art/stage/act4-%s.png" % plate
+		_check(fails, FileAccess.file_exists(path),
+			"Act IV combat plate %s is on disk" % plate)
+		_check(fails, ResourceLoader.exists(path),
+			"Act IV combat plate %s imported" % plate)
 	_check(fails, SkyField.ACT_SKIES.size() == LayoutBook.ACTS
 		and SkyField.ACT_FOGS.size() == LayoutBook.ACTS
 		and SkyField.ACT_PARTICLES.size() == LayoutBook.ACTS
