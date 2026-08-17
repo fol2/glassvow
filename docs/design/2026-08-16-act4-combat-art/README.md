@@ -5,9 +5,9 @@ stable on `main`. Scene plates (nodes 1–5, unsealing, finale) already
 shipped under `docs/design/2026-08-16-scene-plates/`. The Eternal Keeper
 raster shipped with #283. This record is the **combat** bill.
 
-James reviews the proposed picks before they are treated as signed. The
-installer writes the current `PICKS` into `assets/`; swap a row and
-re-run to change the bytes without regenerating.
+James picked these on 2026-08-17 (#221). The installer writes the current
+`PICKS` into `assets/`; swap a row and re-run to change the bytes without
+regenerating.
 
     python3 docs/design/2026-08-16-act4-combat-art/install.py
     python3 docs/design/2026-08-16-act4-combat-art/measure.py
@@ -37,7 +37,7 @@ re-run to change the bytes without regenerating.
   the sprite). `install.py` keys magenta globally from the edges, punches
   large enclosed magenta arm-gaps, hardens character alpha after LANCZOS.
 
-## Proposed picks
+## Signed picks
 
 | Shipped | Candidate | Why |
 |---|---|---|
@@ -46,7 +46,7 @@ re-run to change the bytes without regenerating.
 | `act4-ledge` | **B** | Wide platform with a thick front face and two standing-stone posts. A is a round disc. |
 | `unwalkedSelf` | **D** | Magenta field, void hood, mosaic glass, cracked halo. A was unkeyable black haze. C punched holes in the chest. |
 
-These are the installer's `PICKS`. They are **proposed**, not James-signed.
+These are the installer's `PICKS`. James picked them on 2026-08-17 (#221).
 
 Act IV node 4 mirrors Act I's 雙燈 / paired lanterns, but combat plates
 are **one set for the whole act**. They take the act motif (monuments as
@@ -58,17 +58,17 @@ a road, inverted hearth, rose-window inner face), not Act I's lantern-arch.
 |---|---|---|---|---|
 | `act4-backdrop-a.png` | backdrop | 1536×1024 | — | centred monument road; rejected for symmetry |
 | `act4-backdrop-b.png` | backdrop | 1536×1024 | — | **rejected.** Left gothic ruin = Act I fragment language |
-| `act4-backdrop-c.png` | backdrop | 1536×1024 | pass | **proposed.** Stelae road, no left tower |
+| `act4-backdrop-c.png` | backdrop | 1536×1024 | pass | **James picked 2026-08-17.** Stelae road, no left tower |
 | `act4-mid-a.png` | mid | 1536×1024 | — | three separate structures |
 | `act4-mid-b.png` | mid | 1536×1024 | — | **rejected.** Act I lantern-arch clone |
-| `act4-mid-c.png` | mid | 1536×1024 | pass | **proposed.** Rose window + sentinel stelae |
+| `act4-mid-c.png` | mid | 1536×1024 | pass | **James picked 2026-08-17.** Rose window + sentinel stelae |
 | `act4-mid-d.png` | mid | 1536×1024 | — | rose window in a door-arch; kept as runner-up |
 | `act4-ledge-a.png` | ledge | — | — | round arena |
-| `act4-ledge-b.png` | ledge | 1536×789 | pass | **proposed.** |
+| `act4-ledge-b.png` | ledge | 1536×789 | pass | **James picked 2026-08-17.** |
 | `unwalked-self-a.png` | enemy | — | fail | **rejected.** Black void + black hood → opaque haze box |
 | `unwalked-self-b.png` | enemy | — | — | gold-trim armour read |
 | `unwalked-self-c.png` | enemy | — | — | magenta field, but pane-holes under a global key |
-| `unwalked-self-d.png` | enemy | — | pass | **proposed.** |
+| `unwalked-self-d.png` | enemy | — | pass | **James picked 2026-08-17.** |
 
 ## Prompts
 

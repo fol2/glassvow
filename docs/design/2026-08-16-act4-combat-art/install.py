@@ -2,8 +2,8 @@
 """Key, measure and install #221 Act IV combat-art candidates.
 
 Lossless RGB candidates stay in candidates/. This writes RGBA cutouts next to
-them as *-cut.png (so measure.py can gate them) and copies the proposed picks
-into assets/. James can swap a pick by editing PICKS and re-running.
+them as *-cut.png (so measure.py can gate them) and copies the signed picks
+into assets/. Swap a pick by editing PICKS and re-running.
 
     python3 docs/design/2026-08-16-act4-combat-art/install.py
 """
@@ -19,8 +19,9 @@ CANDIDATES = HERE / "candidates"
 STAGE = HERE.parents[2] / "assets" / "art" / "stage"
 ENEMIES = HERE.parents[2] / "assets" / "art" / "enemies"
 
-# Proposed picks pending James. C/D replace the Act I lantern-arch mid, the
-# left-ruin backdrop, and the black-void Unwalked whose haze boxed the sprite.
+# James picked these on 2026-08-17 (#221). C/D replace the Act I lantern-arch
+# mid, the left-ruin backdrop, and the black-void Unwalked whose haze boxed
+# the sprite.
 PICKS = {
     "act4-backdrop": ("act4-backdrop-c", STAGE / "act4-backdrop.png", (1536, 1024)),
     "act4-mid": ("act4-mid-c", STAGE / "act4-mid.png", (1536, 1024)),

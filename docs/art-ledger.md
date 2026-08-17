@@ -357,10 +357,10 @@ cinematic scene plates: sky is true alpha so `SkyField`'s dawn row shows
 through. Motif from `docs/story/03-acts.md` Act IV — monuments queued into
 a road, inverted hearth-light from ahead. One set for the whole act.
 
-**Proposed picks, 2026-08-17, pending James.** Candidates and the verbatim
-prompts are in `docs/design/2026-08-16-act4-combat-art/README.md`.
-Installer: `install.py`. Do not regenerate from taste; swap a `PICKS` row
-and re-run.
+**James picked these on 2026-08-17 (#221):** backdrop C, mid C, ledge B.
+Candidates and the verbatim prompts are in
+`docs/design/2026-08-16-act4-combat-art/README.md`. Installer: `install.py`.
+Do not regenerate from taste; swap a `PICKS` row and re-run.
 
 First landing used `act1-mid.png` as a style reference and shipped a
 lantern-arch. That was a miss, not canon — Act IV combat plates take the
@@ -385,7 +385,7 @@ monster and not the seated Keeper. Void hood, stained-glass scepter, a
 broken gold halo. Inverted amber rim from the left; body glass cold
 violet / teal.
 
-**Proposed pick D, 2026-08-17, pending James.** A was generated on black
+**James picked D on 2026-08-17 (#221).** A was generated on black
 and failed the same way as a boxed sprite: GenerateImage emits RGB with a
 near-black haze, the hood is also black, and a flood-fill from the edges
 cannot eat the haze without eating the face. Corners-clear + ≥240-of-nonzero
