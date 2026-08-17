@@ -19,14 +19,15 @@ CANDIDATES = HERE / "candidates"
 STAGE = HERE.parents[2] / "assets" / "art" / "stage"
 ENEMIES = HERE.parents[2] / "assets" / "art" / "enemies"
 
-# James picked these on 2026-08-17 (#221). C/D replace the Act I lantern-arch
-# mid, the left-ruin backdrop, and the black-void Unwalked whose haze boxed
-# the sprite.
+# James picked plates + unwalkedSelf on 2026-08-17 (#221). uncrossedSelf B and
+# unopenedSelf A are proposed pending James.
 PICKS = {
     "act4-backdrop": ("act4-backdrop-c", STAGE / "act4-backdrop.png", (1536, 1024)),
     "act4-mid": ("act4-mid-c", STAGE / "act4-mid.png", (1536, 1024)),
     "act4-ledge": ("act4-ledge-b", STAGE / "act4-ledge.png", None),
     "unwalkedSelf": ("unwalked-self-d", ENEMIES / "unwalkedSelf.png", "char"),
+    "uncrossedSelf": ("uncrossed-self-b", ENEMIES / "uncrossedSelf.png", "char"),
+    "unopenedSelf": ("unopened-self-a", ENEMIES / "unopenedSelf.png", "char"),
 }
 
 BLACK = 16  # max channel for plate voids

@@ -1,6 +1,6 @@
 # Act IV combat art — #221 candidates
 
-Combat stage plates and the one counterfactual-self painting whose id is
+Combat stage plates and the counterfactual-self paintings whose ids are
 stable on `main`. Scene plates (nodes 1–5, unsealing, finale) already
 shipped under `docs/design/2026-08-16-scene-plates/`. The Eternal Keeper
 raster shipped with #283. This record is the **combat** bill.
@@ -45,12 +45,17 @@ regenerating.
 | `act4-mid` | **C** | Circular rose-window inner face, two sentinel stelae. B was an Act I lantern-arch (referenced `act1-mid.png` — a miss, not canon). |
 | `act4-ledge` | **B** | Wide platform with a thick front face and two standing-stone posts. A is a round disc. |
 | `unwalkedSelf` | **D** | Magenta field, void hood, mosaic glass, cracked halo. A was unkeyable black haze. C punched holes in the chest. |
+| `uncrossedSelf` | **B** proposed | Teal false-lamp + library folio. A is the same props, thinner. |
+| `unopenedSelf` | **A** proposed | Handheld six-petal rose disc + wax seal. B's gothic tablet reads as a door-arch. |
 
-These are the installer's `PICKS`. James picked them on 2026-08-17 (#221).
+These are the installer's `PICKS`. James picked the plates and
+`unwalkedSelf` on 2026-08-17 (#221). `uncrossedSelf` B and `unopenedSelf` A
+are **proposed**, pending James.
 
 Act IV node 4 mirrors Act I's 雙燈 / paired lanterns, but combat plates
 are **one set for the whole act**. They take the act motif (monuments as
 a road, inverted hearth, rose-window inner face), not Act I's lantern-arch.
+The Uncrossed's hand-held false lamp is a II-prime prop, not a stage lantern-arch.
 
 ## Candidates
 
@@ -69,6 +74,10 @@ a road, inverted hearth, rose-window inner face), not Act I's lantern-arch.
 | `unwalked-self-b.png` | enemy | — | — | gold-trim armour read |
 | `unwalked-self-c.png` | enemy | — | — | magenta field, but pane-holes under a global key |
 | `unwalked-self-d.png` | enemy | — | pass | **James picked 2026-08-17.** |
+| `uncrossed-self-a.png` | enemy | — | pass | teal lamp + book; runner-up |
+| `uncrossed-self-b.png` | enemy | — | pass | **proposed.** Teal false-lamp + gem folio |
+| `unopened-self-a.png` | enemy | — | pass | **proposed.** Handheld six-petal rose + wax seal |
+| `unopened-self-b.png` | enemy | — | pass | gothic tablet; one amber lobe; thinner |
 
 ## Prompts
 
@@ -138,9 +147,41 @@ Reference: `eternalKeeper.png` (void hood, leaded glass — not duskblade).
 > Warm amber rim from the LEFT; remaining glass cold violet / teal /
 > court purple. No text, no watermark.
 
+### Uncrossed Self B
+
+Reference: `unwalkedSelf.png` (standing void-hood pilgrim — not duskblade,
+not the seated Keeper). 3:4 render. **Magenta field**, not black.
+
+> GAME ASSET character cutout. The entire BACKGROUND is a FLAT SOLID
+> MAGENTA field, hex #FF00FF, edge to edge. No black background, no grey
+> vignette, no dark halo. Magenta touches the silhouette directly.
+> CONSTRUCTION: the body IS large flat stained-glass panes with thick
+> black lead came, not painted cloth. Full-body standing pilgrim-warrior,
+> 15 percent magenta margin. Raised hood; hood opening is a deep BLACK
+> VOID with NO face — black exists ONLY inside the hood. Holds a HAND-HELD
+> false lamp (cold teal flame, NOT hanging, NOT paired, NOT an arch) and
+> a closed library folio. NO golden halo, NO broken ring, NO scepter.
+> Body glass brine teal / sea-green / indigo. Warm amber rim from the
+> LEFT. No text, no watermark.
+
+### Unopened Self A
+
+Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
+
+> GAME ASSET character cutout. The entire BACKGROUND is a FLAT SOLID
+> MAGENTA field, hex #FF00FF, edge to edge. CONSTRUCTION: the body IS
+> large flat stained-glass panes with thick black lead came. Full-body
+> standing pilgrim, 15 percent magenta margin. Raised void hood; black
+> exists ONLY inside the hood. Holds a circular SIX-PETAL rose-window
+> PANE as a handheld disc — intact, unopened, some petals dark, some
+> amber. Wax-sealed tablet at the belt. NO scepter, NO broken halo, NO
+> hanging lanterns. Body glass honey / amber / dark unlit violet. Warm
+> amber rim from the LEFT. No text, no watermark.
+
 ## Held
 
-- Remaining 7 counterfactual-self paintings: ids wait on #220 / PR #364.
+- Remaining 5 counterfactual-self paintings: ids wait on #220 (I-prime
+  and the two elites are not on `main` yet).
 - `act4-combat` / `act4-boss` / unsealing sting: briefs in
   `docs/music-ledger.md` and `docs/sfx-ledger.md`. No files yet — Suno /
   ElevenLabs are not in this environment.

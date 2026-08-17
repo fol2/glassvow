@@ -15,6 +15,8 @@ ROWS = [
     ("mid  [C picked]", ["act4-mid-a", "act4-mid-b", "act4-mid-c", "act4-mid-d"]),
     ("ledge  [B picked]", ["act4-ledge-a", "act4-ledge-b"]),
     ("unwalkedSelf  [D picked]", ["unwalked-self-a", "unwalked-self-b", "unwalked-self-c", "unwalked-self-d"]),
+    ("uncrossedSelf  [B proposed]", ["uncrossed-self-a", "uncrossed-self-b"]),
+    ("unopenedSelf  [A proposed]", ["unopened-self-a", "unopened-self-b"]),
 ]
 
 CELL_W, CELL_H = 480, 320

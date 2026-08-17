@@ -247,6 +247,12 @@ static func _uncrossed_row(content: ContentDB, fails: Array[String]) -> void:
 	if def.is_empty() or not EnemyAi.handles(&"uncrossedSelf"):
 		fails.append("uncrossedSelf: missing catalogue row or AI handler")
 		return
+	if not FileAccess.file_exists("res://assets/art/enemies/uncrossedSelf.png"):
+		fails.append("uncrossedSelf: missing painting")
+	if EnemyView.art_texture(&"uncrossedSelf") == null:
+		fails.append("uncrossedSelf: painting did not import")
+	if EnemyView.art_box(&"uncrossedSelf") < 185.0 * 1.05 * 1.5:
+		fails.append("uncrossedSelf: combat box must be at least 50% above 1.05")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("uncrossedSelf: counterfactual selves must stay silent")
 	var spec: Dictionary = def.get("counterfactual", {})
@@ -421,6 +427,12 @@ static func _unopened_row(content: ContentDB, fails: Array[String]) -> void:
 	if def.is_empty() or not EnemyAi.handles(&"unopenedSelf"):
 		fails.append("unopenedSelf: missing catalogue row or AI handler")
 		return
+	if not FileAccess.file_exists("res://assets/art/enemies/unopenedSelf.png"):
+		fails.append("unopenedSelf: missing painting")
+	if EnemyView.art_texture(&"unopenedSelf") == null:
+		fails.append("unopenedSelf: painting did not import")
+	if EnemyView.art_box(&"unopenedSelf") < 185.0 * 1.05 * 1.5:
+		fails.append("unopenedSelf: combat box must be at least 50% above 1.05")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("unopenedSelf: counterfactual selves must stay silent")
 	var spec: Dictionary = def.get("counterfactual", {})

@@ -23,6 +23,8 @@ SHIPPED = [
     STAGE / "act4-mid.png",
     STAGE / "act4-ledge.png",
     ENEMIES / "unwalkedSelf.png",
+    ENEMIES / "uncrossedSelf.png",
+    ENEMIES / "unopenedSelf.png",
     ENEMIES / "eternalKeeper.png",
 ]
 
@@ -46,7 +48,7 @@ def measure(path: Path) -> dict[str, object]:
     mag = leftover_magenta(im) if char else 0
     mdark = margin_dark(im) if char else 0
     ok = pct >= BAR * 100 and (all(c == 0 for c in corners) if char else top_clear)
-    if "unwalked" in path.name:
+    if "unwalked" in path.name or "uncrossed" in path.name or "unopened" in path.name:
         ok = ok and mag < 32 and mdark < 400
     return {
         "name": path.name, "mode": im.mode, "size": f"{w}×{h}",

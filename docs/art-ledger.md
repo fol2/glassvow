@@ -409,6 +409,43 @@ Prompt (binding clauses):
 > amber rim from the LEFT; remaining glass cold violet / teal / court
 > purple. No text, no watermark.
 
+### `enemies/uncrossedSelf.png` — Act IV II-prime self
+
+The Uncrossed (`uncrossedSelf`, II-prime / false-light). Same hero
+silhouette and void hood as the Unwalked; prop is a hand-held teal
+false-lamp and a closed library folio — water, lying light, unread page.
+No broken halo (that is III-prime). Combat box `1.6` like the tracer.
+
+**Proposed pick B, 2026-08-17, pending James.** A is the same props,
+narrower. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Uncrossed, full body, 15
+> percent magenta margin. Void hood; black ONLY inside the hood. HAND-HELD
+> false lamp with a cold teal flame, NOT hanging, NOT paired, NOT an
+> arch. Closed library folio. NO golden halo, NO scepter. Brine teal /
+> sea-green glass; amber rim from the LEFT.
+
+### `enemies/unopenedSelf.png` — Act IV threshold-prime self
+
+The Unopened (`unopenedSelf`, threshold-prime / stained-glass). Handheld
+six-petal rose-window disc, some petals dark, some amber; wax seal at
+the belt. Intact rose, not a broken halo. Combat box `1.6`.
+
+**Proposed pick A, 2026-08-17, pending James.** B's gothic tablet reads
+as a door-arch. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unopened, full body, 15 percent
+> magenta margin. Void hood; black ONLY inside the hood. Circular
+> SIX-PETAL rose-window PANE held as a disc — intact, unopened. Wax seal
+> at the belt. NO scepter, NO broken halo, NO hanging lanterns. Honey /
+> amber / dark unlit violet; amber rim from the LEFT.
+
 ## Rejection note — what "technically shippable" means
 
 Judging generated character art by eye is not enough; two of the five
