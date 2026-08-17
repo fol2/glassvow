@@ -1976,7 +1976,7 @@
         "waystoneEchoes": [
           "// THE PANE WATCHES //",
           "// EIGHT IS NOT A NUMBER //",
-          "// CARRY THE WRONG LIGHT UPWARD //",
+          "// CARRY THE WRONG LIGHT EAST //",
           "// THE CROWN IS A MASK //"
         ],
         "inscription": "Reach dawn beneath the Eighth Omen.",
@@ -1996,15 +1996,15 @@
           {
             "ask": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
             "cannot": "Your purse is warm, but not warm enough.",
-            "paid": "The Pale Ones watch the paths that point above the crown."
+            "paid": "The Pale Ones watch the paths that point beyond the crown."
           },
           {
-            "ask": "The Spire counts the vessel. Give me twelve measures of yours.",
+            "ask": "The road counts the vessel. Give me twelve measures of yours.",
             "cannot": "I will not hollow you below thirty. Return with a larger vessel.",
-            "paid": "Your standing dead have seen the stair above the Sovereign."
+            "paid": "Your forebears died standing, facing east."
           },
           {
-            "ask": "The first keeper gave you a boon. Give me the gift, not the gratitude.",
+            "ask": "The Keeper gave you a boon. Give me the gift, not the gratitude.",
             "cannot": "You have spent the gift already. Bring me one that is still yours.",
             "paid": "The empty lantern is the token that purchases an audience with the mask."
           },
@@ -2018,13 +2018,13 @@
         "name": "The Hollow Lamplighter"
       },
       "ownShade": {
-        "final": "We were never climbing out. We were carrying light to the lock.",
+        "final": "We were never walking to be free. We were carrying light to the lock.",
         "fragments": [
           "I remember the stone. You walked away before I stopped calling.",
-          "Each climber leaves a shape behind. The Spire has learned to wear ours.",
-          "Above the Sovereign there is no dawn — only a door pretending to be the sky."
+          "You have left a shape behind. The road has learned to keep us.",
+          "I have seen it. Beyond the Sovereign there is no dawn — only a door pretending to be one."
         ],
-        "inscription": "Defeat the self that remembers falling. Three shades must fall.",
+        "inscription": "Defeat the self that still remembers the road. Three shades must go out.",
         "mode": "Trail",
         "name": "Your Own Shade"
       },
@@ -2045,16 +2045,16 @@
         "name": "The Unreadable Page",
         "pages": [
           "FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
-          "SECOND PAGE — Pale figures carried the shards down so the thing above could not follow.",
-          "THIRD PAGE — A climber died standing and saw a stair where the summit should have ended.",
+          "SECOND PAGE — Pale figures carried the shards west, so the thing beyond the door could not follow.",
+          "THIRD PAGE — A pilgrim died standing. Where he stopped, the road did not.",
           "FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.",
-          "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look above the crown."
+          "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look beyond the crown."
         ]
       },
       "usurper": {
-        "bought": "Now the summit knows what you carry.",
-        "death": "The mask is broken. Look above.",
-        "inscription": "Carry the lantern with no flame to the summit and unmask the Usurper.",
+        "bought": "Now the throne knows what you carry.",
+        "death": "The mask is broken. Look beyond the crown.",
+        "inscription": "Carry the lantern with no flame to the sealed door, and unmask the Usurper.",
         "itemName": "A Lantern with No Flame",
         "itemText": "Cold glass. No wick. The merchant will not say who left it.",
         "mode": "Gate",
@@ -2295,12 +2295,12 @@
         "name": "The Shade That Fell"
       },
       "ownShade2": {
-        "deathDialogue": "Each climber leaves a shape behind. The Spire has learned to wear ours.",
+        "deathDialogue": "You have left a shape behind. The road has learned to keep us.",
         "dialogue": [],
         "name": "The Shade That Returned"
       },
       "ownShade3": {
-        "deathDialogue": "Above the Sovereign there is no dawn — only a door pretending to be the sky.",
+        "deathDialogue": "I have seen it. Beyond the Sovereign there is no dawn — only a door pretending to be one.",
         "dialogue": [],
         "name": "The Shade That Remembers"
       },
@@ -2348,13 +2348,13 @@
       }
     },
     "whispers": [
-      "There is a colour the Spire refuses to name.",
+      "There is a colour the road refuses to name.",
       "A pale hand has touched the dark side of the glass.",
       "Six spaces wait where no window stands.",
-      "The dead climb twice: once in flesh, once in memory.",
+      "The dead walk twice: once in flesh, once in memory.",
       "A lantern without flame is still a key.",
       "Count the panes that do not catch the dawn.",
-      "A page can be read only after it survives the summit.",
+      "A page can be read only after it survives the dawn.",
       "The eighth sign is not written among the seven.",
       "The gaunt keeper remembers the road you did not take.",
       "Pale motes gather like frost around a hidden seam.",
@@ -2364,14 +2364,14 @@
       "Five pages make a chapter; five prices make a confession.",
       "Three deaths will teach your shade to speak plainly.",
       "The Vigil has a window, though no wall holds it.",
-      "Each shard lights one pane of Emberglass.",
-      "The Pale Ones are not hunting you. They are pointing upward.",
-      "The Sovereign is a mask worn below the final stair.",
-      "When six panes burn, look beyond the summit.",
-      "There is a sealed door above the crown.",
+      "Each shard lights one pane of the Rose Window.",
+      "The Pale Ones are not hunting you. They are pointing east.",
+      "The Sovereign is a mask worn before the last door.",
+      "When six panes burn, look beyond the crown.",
+      "There is a sealed door beyond the crown.",
       "Its inscription has waited longer than the Vigil.",
       "Bring six shards to the Rose Window.",
-      "The climb continues."
+      "The pilgrimage continues."
     ]
   },
   "story": {

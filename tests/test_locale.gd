@@ -290,9 +290,9 @@ static func _params(fails: Array[String]) -> void:
 
 static func _content_and_whisper(fails: Array[String]) -> void:
 	var locale: Locale = Locale.new()
-	if locale.whisper(0) != "There is a colour the Spire refuses to name.":
+	if locale.whisper(0) != "There is a colour the road refuses to name.":
 		fails.append("locale: whisper 0 did not resolve")
-	if locale.whisper(23) != "The climb continues.":
+	if locale.whisper(23) != "The pilgrimage continues.":
 		fails.append("locale: whisper 23 did not resolve")
 	if locale.whisper(99) != "content.whispers.99":
 		fails.append("locale: out-of-range whisper did not fall back to the key")
@@ -619,10 +619,12 @@ static func _zh_hant_catalogue_contract(fails: Array[String]) -> void:
 
 
 ## The Tier A ban from #232, made mechanical so the next copy edit cannot quietly
-## re-authorise the tower. Scope is `ui.*` only: `content.*` still carries the
-## retired vocabulary until #301's rewrite lands, and gating it now would fail on
-## copy this ticket does not own. Tier B look-alikes that are correct to keep get
-## an allowlist row rather than a weaker pattern — see docs/story/06-glossary.md.
+## re-authorise the tower. Scope is `ui.*` only: Batch 1 (#391) landed the
+## signed quest/whisper rewrite, but four content.* keys outside that batch
+## (duskblade.blurb, two omen texts, vows.3.desc) still carry climb diction.
+## Gating content.* now would fail on copy this ticket does not own. Tier B
+## look-alikes that are correct to keep get an allowlist row rather than a
+## weaker pattern — see docs/story/06-glossary.md.
 static func _retired_vertical_vocabulary(fails: Array[String]) -> void:
 	var en: Dictionary = _read_catalogue("res://locale/en.json", fails)
 	var zh: Dictionary = _read_catalogue("res://locale/zh-Hant.json", fails)
