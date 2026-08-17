@@ -612,6 +612,11 @@ func _on_card_released_at(uid: int, global_pos: Vector2) -> void:
 
 
 func _on_card_hover(uid: int, hovering: bool) -> void:
+	# Coarse has no hover. emulate_mouse_from_touch synthesises mouse_entered
+	# before the finger lifts; writing hovered_uid here would skip the first-tap
+	# lift in CombatScreen._on_card_tapped (#386). Fine-pointer is unchanged.
+	if PointerDevice.coarse():
+		return
 	if locked or _dragging:
 		return
 	var view: CardView = _views.get(uid)

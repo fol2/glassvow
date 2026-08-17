@@ -2,6 +2,8 @@ extends RefCounted
 ## Row 25: coarse-pointer first-tap lift, tooltip long-press, and double
 ## `_press_release` absorption. Declares coarse through PointerDevice and feeds
 ## real InputEventScreenTouch through CardView._gui_input — not `_on_card_tapped`.
+## Synthetic `mouse_entered` before release (emulate_mouse_from_touch) must lift,
+## matching the touch-only path; fine-pointer first tap still arms.
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -13,6 +15,7 @@ static func run(fails: Array[String]) -> void:
 	_predicate_contract(fails)
 	_first_tap_without_synthetic_hover(fails)
 	_first_tap_with_synthetic_hover(fails)
+	_first_tap_fine_pointer_arms(fails)
 	_long_press_tooltip(fails)
 	_double_press_absorption(fails)
 
@@ -81,6 +84,7 @@ static func _first_tap_without_synthetic_hover(fails: Array[String]) -> void:
 	_check(fails, uid >= 0 and view != null, "opening hand has a playable enemy card")
 	if view == null:
 		_teardown(screen)
+		PointerDevice.clear_declaration()
 		return
 	_tap_card(view, false)
 	_check(fails, screen._hand.hovered_uid == uid and not screen._targeting,
@@ -99,13 +103,42 @@ static func _first_tap_with_synthetic_hover(fails: Array[String]) -> void:
 		_teardown(screen)
 		PointerDevice.clear_declaration()
 		return
+	var local: Vector2 = view.size * 0.5
+	_touch(view, true, local)
+	view._on_mouse_entered()
+	_check(fails, screen._hand.hovered_uid != uid and not screen._targeting,
+		"synthetic mouse_entered does not count as hover on coarse")
+	_touch(view, false, local)
+	_check(fails, screen._hand.hovered_uid == uid and not screen._targeting,
+		"first coarse tap lifts with synthetic hover (row 25)")
+	view._on_mouse_exited()
+	_check(fails, screen._hand.hovered_uid == uid and not screen._targeting,
+		"synthetic mouse_exited does not drop the coarse lift")
 	_tap_card(view, true)
-	# emulate_mouse_from_touch sets hovered_uid before release, so the lift
-	# branch in `_on_card_tapped` is skipped and the card arms on first tap.
 	_check(fails, screen._targeting and screen._selected_uid == uid,
-		"synthetic hover before release arms on first tap (row 25 defect measured)")
+		"second coarse tap arms after the lift (row 25)")
+	_teardown(screen)
+	PointerDevice.clear_declaration()
+
+
+static func _first_tap_fine_pointer_arms(fails: Array[String]) -> void:
+	PointerDevice.declare_coarse(false)
+	var screen: CombatScreen = _combat_screen()
+	var uid: int = _playable_enemy_uid(screen)
+	var view: CardView = screen._hand.card_view(uid) if uid >= 0 else null
+	_check(fails, uid >= 0 and view != null, "opening hand has a playable enemy card (fine)")
+	if view == null:
+		_teardown(screen)
+		PointerDevice.clear_declaration()
+		return
+	var local: Vector2 = view.size * 0.5
+	_touch(view, true, local)
+	view._on_mouse_entered()
 	_check(fails, screen._hand.hovered_uid == uid,
-		"synthetic hover sets hovered_uid before tap completes")
+		"fine pointer mouse_entered still writes hovered_uid")
+	_touch(view, false, local)
+	_check(fails, screen._targeting and screen._selected_uid == uid,
+		"fine pointer first tap arms (desktop)")
 	_teardown(screen)
 	PointerDevice.clear_declaration()
 
