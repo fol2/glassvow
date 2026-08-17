@@ -507,6 +507,45 @@ Prompt (binding clauses):
 > blank, one faint circular indent. NOT a book, NOT a rose disc, NOT a
 > door-arch. Amber / sandstone / umber; amber rim from the LEFT.
 
+### `enemies/unobsidianSelf.png` — Act IV III-prime remaining normal
+
+The Unobsidian (`unobsidianSelf`, III-prime / obsidian-star). Handheld
+eight-point obsidian star; court-violet glass going black. Distinct from
+the Unwalked: no broken halo, no scepter. Combat box `1.6` like the
+tracer.
+
+**Proposed pick A, 2026-08-17, pending James.** B's hanging star-chain
+failed leftover field-magenta (222). Magenta field; gate as
+`unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unobsidian, full body, 15
+> percent magenta margin. Void hood; black ONLY inside the hood. HANDHELD
+> eight-point obsidian STAR, not a scepter, not a hanging lantern. NO
+> broken halo, NO books. Court-violet going black; amber rim from the
+> LEFT.
+
+### `enemies/unwoodedSelf.png` — Act IV I-prime remaining normal
+
+The Unwooded (`unwoodedSelf`, I-prime / ash-root). Held unburned ash-root
+branch bundle (wood-glass, not a crystal scepter); cinders at the hem.
+Distinct from the Unstruck: no paired lamps. Combat box `1.6`.
+
+**Proposed pick B, 2026-08-17, pending James.** A's staff+rooted hem
+failed leftover field-magenta (108) — the enclosed punch only eats
+blobs ≥200. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unwooded, full body, 15 percent
+> magenta margin. Void hood; black ONLY inside the hood. Unburned
+> ASH-ROOT branch bundle, not a crystal scepter. Cinders at the hem. NO
+> lantern, NO star, NO books, NO paired lamps. Warm amber / ash-grey;
+> amber rim from the LEFT.
+
 ## Rejection note — what "technically shippable" means
 
 Judging generated character art by eye is not enough; two of the five

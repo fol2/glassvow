@@ -50,11 +50,13 @@ regenerating.
 | `unlitSelf` | **B** proposed | Two hand-held unlit lamps, ashroot hem. A failed leftover magenta in the arm-gap (94, below the enclosed-blob punch). |
 | `unsunkSelf` | **A** proposed | Held drowned book-stack + still-tide hem. B's standing unread-shelf reads as furniture. |
 | `uncarvedSelf` | **C** proposed | Blank rectangular seal-relief tablet. A is a book (library collision). B's rounded tablet reads as a door fragment. |
+| `unobsidianSelf` | **A** proposed | Handheld eight-point obsidian star. B's hanging chain left leftover magenta 222. |
+| `unwoodedSelf` | **B** proposed | Held ash-root branch bundle + cinders. A's staff+roots failed leftover magenta 108. |
 
 These are the installer's `PICKS`. James picked the plates and
 `unwalkedSelf` on 2026-08-17 (#221). `uncrossedSelf` B, `unopenedSelf` A,
-`unlitSelf` B, `unsunkSelf` A and `uncarvedSelf` C are **proposed**,
-pending James.
+`unlitSelf` B, `unsunkSelf` A, `uncarvedSelf` C, `unobsidianSelf` A and
+`unwoodedSelf` B are **proposed**, pending James.
 
 Act IV node 4 mirrors Act I's 雙燈 / paired lanterns, but combat plates
 are **one set for the whole act**. They take the act motif (monuments as
@@ -89,6 +91,10 @@ The Uncrossed's hand-held false lamp is a II-prime prop, not a stage lantern-arc
 | `uncarved-self-a.png` | enemy | — | pass | **rejected.** Stone tome + mace — library collision with Unsunk |
 | `uncarved-self-b.png` | enemy | — | pass | carved rounded tablet + mallet; door-fragment read |
 | `uncarved-self-c.png` | enemy | — | pass | **proposed.** Blank rectangular relief, unfinished circular seal |
+| `unobsidian-self-a.png` | enemy | — | pass | **proposed.** Handheld eight-point star; no halo, no scepter |
+| `unobsidian-self-b.png` | enemy | — | fail | leftover magenta 222 (hanging-star chain / arm-gap) |
+| `unwooded-self-a.png` | enemy | — | fail | leftover magenta 108 (staff / root gaps); enclosed punch is ≥200 |
+| `unwooded-self-b.png` | enemy | — | pass | **proposed.** Held ash-root bundle, cinders at the hem |
 
 ## Prompts
 
@@ -233,12 +239,36 @@ Elite: broader pilgrim, still a hooded self.
 > disc, NOT a door-arch. Warm amber / sandstone / umber (hue ~24). Amber
 > rim from the LEFT. No text, no watermark.
 
+### Unobsidian Self A
+
+Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
+
+> GAME ASSET character cutout. The entire BACKGROUND is a FLAT SOLID
+> MAGENTA field, hex #FF00FF, edge to edge. CONSTRUCTION: the body IS
+> large flat stained-glass panes with thick black lead came. Full-body
+> standing pilgrim, 15 percent magenta margin. Raised void hood; black
+> exists ONLY inside the hood. Holds a HANDHELD obsidian eight-point STAR
+> — geometric crystal, NOT a scepter, NOT a hanging lantern. NO broken
+> halo, NO ring, NO books. Court-violet glass going black (hue ~268).
+> Warm amber rim from the LEFT. No text, no watermark.
+
+### Unwooded Self B
+
+Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
+
+> GAME ASSET character cutout. The entire BACKGROUND is a FLAT SOLID
+> MAGENTA field, hex #FF00FF, edge to edge. CONSTRUCTION: the body IS
+> large flat stained-glass panes with thick black lead came. Full-body
+> standing pilgrim, 15 percent magenta margin. Raised void hood; black
+> exists ONLY inside the hood. Holds an unburned ASH-ROOT branch bundle
+> (wood-glass, NOT a crystal scepter). Cinders at the hem. NO lantern,
+> NO star, NO books, NO paired lamps. Warm amber / ash-grey (hue ~16).
+> Amber rim from the LEFT. No text, no watermark.
+
 ## Held
 
-- Remaining 2 counterfactual-self paintings: ids wait on #220 (two more
-  normals are not on `main` yet). Do not invent filenames. Both elites
-  now have ids.
-- `act4-combat` / `act4-boss` / unsealing sting: briefs in
-  `docs/music-ledger.md` and `docs/sfx-ledger.md`. No files yet — Suno /
-  ElevenLabs are not in this environment. `MusicBus.FILES` still aliases
-  Act IV to Act III.
+- All eight counterfactual-self paintings plus the three Act IV combat
+  plates are on disk. Audio is still held: `act4-combat` / `act4-boss` /
+  unsealing sting. Briefs in `docs/music-ledger.md` and
+  `docs/sfx-ledger.md`. No files yet — Suno / ElevenLabs are not in this
+  environment. `MusicBus.FILES` still aliases Act IV to Act III.

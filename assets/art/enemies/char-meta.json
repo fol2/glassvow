@@ -417,6 +417,42 @@
         "cloth": 0.7,
         "pin": 0.55
       }
+    },
+    "unobsidianSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.45,
+        "bob": 0.0,
+        "breathe": 1.15,
+        "head": 1.0,
+        "cloth": 0.7,
+        "pin": 0.4
+      }
+    },
+    "unwoodedSelf": {
+      "tier": "normal",
+      "scale": 1.6,
+      "footY": -20.0,
+      "shadow": {
+        "ox": 50.0,
+        "oy": 93.0,
+        "skew": 5.0
+      },
+      "mesh": {
+        "sway": 0.5,
+        "bob": 0.0,
+        "breathe": 1.1,
+        "head": 1.0,
+        "cloth": 0.8,
+        "pin": 0.45
+      }
     }
   },
   "layoutDefault": {

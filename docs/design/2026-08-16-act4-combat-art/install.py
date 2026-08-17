@@ -31,6 +31,8 @@ PICKS = {
     "unlitSelf": ("unlit-self-b", ENEMIES / "unlitSelf.png", "char"),
     "unsunkSelf": ("unsunk-self-a", ENEMIES / "unsunkSelf.png", "char"),
     "uncarvedSelf": ("uncarved-self-c", ENEMIES / "uncarvedSelf.png", "char"),
+    "unobsidianSelf": ("unobsidian-self-a", ENEMIES / "unobsidianSelf.png", "char"),
+    "unwoodedSelf": ("unwooded-self-b", ENEMIES / "unwoodedSelf.png", "char"),
 }
 
 BLACK = 16  # max channel for plate voids

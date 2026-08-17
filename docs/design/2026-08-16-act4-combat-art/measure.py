@@ -28,6 +28,8 @@ SHIPPED = [
     ENEMIES / "unlitSelf.png",
     ENEMIES / "unsunkSelf.png",
     ENEMIES / "uncarvedSelf.png",
+    ENEMIES / "unobsidianSelf.png",
+    ENEMIES / "unwoodedSelf.png",
     ENEMIES / "eternalKeeper.png",
 ]
 
