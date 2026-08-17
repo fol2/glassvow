@@ -2686,13 +2686,18 @@ func _handle_event(ev: Dictionary) -> void:
 			_sync_actors()
 			await _wait(0.18)
 		EventTypes.VICTORY:
-			await _wait(0.32)
-			_sfx.play(&"victory")
-			_vfx.flash(Color(1.0, 0.9137255, 0.6745098), 0.16, 0.6)
-			var perfect: bool = ev.get("perfect", false)
-			if perfect:
-				await _floaters.banner(Locale.active.t("ui.combat.perfect"), "perfect", 1.4)
-				await _wait(0.5)
+			# The swap takes the close (07-scenes §5): a fight that did not
+			# end by hit points gets no fanfare — the scene arrives instead.
+			if game.cb != null and game.cb.finale_handoff:
+				await _wait(0.2)
+			else:
+				await _wait(0.32)
+				_sfx.play(&"victory")
+				_vfx.flash(Color(1.0, 0.9137255, 0.6745098), 0.16, 0.6)
+				var perfect: bool = ev.get("perfect", false)
+				if perfect:
+					await _floaters.banner(Locale.active.t("ui.combat.perfect"), "perfect", 1.4)
+					await _wait(0.5)
 		EventTypes.DEFEAT:
 			await _wait(0.4)
 			_sfx.play(&"defeat")

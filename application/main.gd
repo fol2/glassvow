@@ -272,6 +272,10 @@ func _ready() -> void:
 			scene_shot = arg.trim_prefix("--scene=")
 		elif arg.begins_with("--cursor="):
 			scene_cursor = maxi(0, int(arg.trim_prefix("--cursor=")))
+		elif arg.begins_with("--finale-form="):
+			# Render-pick switch for the walk beat's two candidate forms
+			# (#312): --finale-form=step | hold. Dev capture only.
+			FinaleStaging.form = StringName(arg.trim_prefix("--finale-form="))
 		elif arg in ["--enemies", "--chips", "--hud", "--reward", "--layout"]:
 			lab_flag = arg
 	if performance_probe and (fight.is_empty() or not shot_path.is_empty()
@@ -1556,6 +1560,8 @@ func _on_node_chosen(i: int) -> void:
 
 
 func _enter_chosen_node(n: MapNode) -> void:
+	if _stage_act4_arrival(n):
+		return
 	match n.type:
 		"monster", "elite", "boss":
 			# The iris covers at the chosen waystone and reveals over the
@@ -1570,6 +1576,42 @@ func _enter_chosen_node(n: MapNode) -> void:
 		"treasure": _show_treasure()
 		"monument": _show_monument()
 		"act4": _show_act4_entrance()
+
+
+## Act IV node-arrival interstitials (07-scenes §4): 1–3 lines on first
+## arrival at each of the five authored waystones, once per Vigil like the
+## Lamplighter scenes. A combat node arms its encounter in the same store, so
+## a process death mid-scene resumes into the owed fight, never a re-roll.
+## Returns true when it took the route over (including the save-error hold).
+func _stage_act4_arrival(n: MapNode) -> bool:
+	var scene_id: String = _act4_arrival_scene(n)
+	if scene_id.is_empty():
+		return false
+	if n.is_combat():
+		_arm_encounter(n)
+		if typeof(game.run.pending_enemy_ids) != TYPE_ARRAY:
+			return false  # the roll failed closed (#222); no fight to front
+	game.run.pending_scene = {"id": scene_id, "cursor": 0}
+	if not _store_run():
+		game.run.pending_scene = null
+		game.run.pending_combat = null
+		game.run.pending_enemy_ids = null
+		_show_save_error("ui.persistence.detail.sceneHold")
+		return true
+	_route_run()
+	return true
+
+
+func _act4_arrival_scene(n: MapNode) -> String:
+	if not _story_flow() or game == null or game.run == null \
+			or game.run.act != 3 or not game.run.is_final_act():
+		return ""
+	if n.row < 0 or n.row >= WorldMap.ACT4_TYPES.size():
+		return ""
+	var scene_id: String = "act4-node%d" % (n.row + 1)
+	if _vigil.scenes_seen.has(scene_id) or _scene_script(scene_id) == null:
+		return ""
+	return scene_id
 
 
 func _finish_node() -> void:
@@ -2127,6 +2169,14 @@ func _on_combat_over(result: String) -> void:
 		game.run.pending_combat = null
 		game.run.pending_enemy_ids = null
 		game.run.pending_run_end = {"outcome": "death"}
+		# A fall at the swap point carries the finale's own epitaph beat
+		# (07-scenes §5) ahead of the unchanged RunEndScreen flow — every
+		# fall there, not once; the Queue grows by one each time.
+		var fall_node: MapNode = _map.current()
+		if _story_flow() and fall_node != null and fall_node.type == "boss" \
+				and game.run.act == 3 and game.run.is_final_act() \
+				and _scene_script("finale-loss") != null:
+			game.run.pending_scene = {"id": "finale-loss", "cursor": 0}
 		if not _store_run():
 			_show_save_error("ui.persistence.detail.fallHold")
 			return
@@ -2152,6 +2202,15 @@ func _on_combat_over(result: String) -> void:
 		_route_run()
 		return
 	if node.type == "boss" and game.run.is_final_act():
+		# The swap took the fight (finaleHandoff): the scripted segment and
+		# the ascended close play ahead of the terminal commit. A first win
+		# plays the full swap then the ascended sequence; a repeat win plays
+		# only the short close (07-scenes §5).
+		if _story_flow() and game.run.act == 3 \
+				and game.cb != null and game.cb.finale_handoff:
+			var close_id: String = _finale_close_scene()
+			if not close_id.is_empty():
+				game.run.pending_scene = {"id": close_id, "cursor": 0}
 		game.run.mark_mirrored_road_cleared()
 		game.run.pending_run_end = {"outcome": "win"}
 		if not _store_run():
@@ -2367,7 +2426,15 @@ func _on_boss_relic_chosen(id: String) -> void:
 	_map = WorldMap.for_run(game.run, content)
 	game.quests.decorate_map(game.run, _map)
 	game.run.map = _map.to_dict()
+	var crossing: String = _act4_crossing_scene()
+	if not crossing.is_empty():
+		game.run.pending_scene = {"id": crossing, "cursor": 0}
 	if _store_run():
+		if not crossing.is_empty():
+			# The entry beat IS the arrival ceremony (07-scenes §3+§4); the
+			# act plate stays on the sceneless path only.
+			_route_run()
+			return
 		_show_map()
 		# The act-change plate rides over the arriving map, concurrent rather
 		# than awaited (reward.js:181 fires it on the boss-reward continue).
@@ -2391,7 +2458,35 @@ func _on_boss_relic_chosen(id: String) -> void:
 				omen_icon = load(icon_path) as Texture2D
 		_transitions.act_plate(act_name, omen_name, omen_tone, omen_icon)
 	else:
+		game.run.pending_scene = null
 		_show_save_error("ui.persistence.detail.nextActHold")
+
+
+## First win: the full swap segment (the walk beat rides it), which chains
+## into the ascended sequence on finish. Repeat win: only the short close.
+func _finale_close_scene() -> String:
+	if not _vigil.scenes_seen.has("finale") and _scene_script("finale") != null:
+		return "finale"
+	return "finale-win" if _scene_script("finale-win") != null else ""
+
+
+## The Act III→IV door crossing (07-scenes §3+§4). The first crossing plays
+## the act4-entry beat; every later crossing plays the short door-open beat.
+## The short beat degrades to no beat at all when its plate is absent — the
+## L0 hearth-plant precedent — and the map's sealed-door ceremony stays the
+## shipped rose either way.
+func _act4_crossing_scene() -> String:
+	if not _story_flow() or game == null or game.run == null or game.run.act != 3:
+		return ""
+	if not _vigil.scenes_seen.has("act4-entry"):
+		return "act4-entry" if _scene_script("act4-entry") != null else ""
+	var short_script: SceneScript = _scene_script("unsealing-short")
+	if short_script == null:
+		return ""
+	var art: String = str(short_script.beat_at(0).get("art", ""))
+	if art.is_empty() or not ResourceLoader.exists(art):
+		return ""
+	return "unsealing-short"
 
 
 # ---------------------------------------------------------------- terminal and durable side routes
@@ -2958,6 +3053,14 @@ func _on_scene_finished() -> void:
 		_vigil.pending_scene = null
 	if not scene_id.is_empty() and not _vigil.scenes_seen.has(scene_id):
 		_vigil.scenes_seen.append(scene_id)
+	# The swap hands into the ascended sequence (07-scenes §5). Queued before
+	# the store below, so the once-flag and the owed next scene land in one
+	# write; a kill in between replays the swap, which finishes idempotently.
+	if run_pending and scene_id == "finale" \
+			and typeof(game.run.pending_run_end) == TYPE_DICTIONARY \
+			and str(game.run.pending_run_end.get("outcome", "")) == "win" \
+			and _scene_script("finale-win") != null:
+		game.run.pending_scene = {"id": "finale-win", "cursor": 0}
 	# Vigil first. If the run store then fails or the process dies between
 	# them, the once-flag is already on disk and the run still points at the
 	# scene; resume replays a scene that finishes idempotently because
