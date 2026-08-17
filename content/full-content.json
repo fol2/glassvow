@@ -3613,6 +3613,86 @@
       },
       "name": "【The Unstruck】"
     },
+    "unobsidianSelf": {
+      "hp": [
+        50,
+        56
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 268,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "III-prime",
+        "motif": "obsidian-star",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "obsidian",
+          "ward": "star"
+        },
+        "kits": {
+          "star": [
+            "starGaze",
+            "lightHang",
+            "eyeMeet"
+          ],
+          "obsidian": [
+            "obsidianWard",
+            "darkHarden",
+            "courtWait"
+          ]
+        }
+      },
+      "moves": {
+        "starGaze": {
+          "intent": "attack",
+          "dmg": 13,
+          "name": "The Star You Did Not Face"
+        },
+        "lightHang": {
+          "intent": "attack",
+          "dmg": 6,
+          "times": 2,
+          "name": "The Light You Left Hanging"
+        },
+        "eyeMeet": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Eye You Did Not Meet"
+        },
+        "obsidianWard": {
+          "intent": "block",
+          "block": 15,
+          "name": "The Glass That Did Not Blacken"
+        },
+        "darkHarden": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 3
+            }
+          ],
+          "name": "The Dark That Did Not Harden"
+        },
+        "courtWait": {
+          "intent": "attack_block",
+          "dmg": 9,
+          "block": 7,
+          "name": "The Court You Did Not Enter"
+        }
+      },
+      "name": "【The Unobsidian】"
+    },
     "unopenedSelf": {
       "hp": [
         40,

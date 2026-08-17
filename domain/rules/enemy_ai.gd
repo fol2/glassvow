@@ -13,7 +13,7 @@ const ALL_IDS: Array[StringName] = [
 	&"starCultist", &"shade", &"chaosHound", &"watcherEye", &"voidColossus",
 	&"heraldOfEnd", &"sovereign", &"eternalKeeper", &"unwalkedSelf",
 	&"uncrossedSelf", &"unopenedSelf", &"unlitSelf", &"unsunkSelf",
-	&"uncarvedSelf",
+	&"uncarvedSelf", &"unobsidianSelf",
 ]
 
 
@@ -161,6 +161,11 @@ static func decide(
 				"carve": [&"stoneCut", &"glyphVolley", &"sealCrack"],
 				"door": [&"doorWard", &"darkStamp", &"waitStone"],
 			}, "uncarvedSelf")
+		&"unobsidianSelf":
+			return _counterfactual_cycle(turn, flags, {
+				"star": [&"starGaze", &"lightHang", &"eyeMeet"],
+				"obsidian": [&"obsidianWard", &"darkHarden", &"courtWait"],
+			}, "unobsidianSelf")
 		&"eternalKeeper":
 			if hp_frac <= 0.5 and not flags.get("keptFire", false):
 				flags["keptFire"] = true
