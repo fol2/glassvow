@@ -1,5 +1,5 @@
 extends RefCounted
-## Slice 1 + Slice 2 + multiplied selves + first elite on reused axes.
+## Slice 1 + Slice 2 + multiplied selves + both elites on reused axes.
 ## Kits are deterministic, flip under the intended fixture, and fail closed.
 
 const RUN_PATH: String = "user://glassvow_test_unwalked_run_v2.json"
@@ -16,6 +16,8 @@ const ASHROOT_MOVES: Array[String] = ["rootLash", "greyAsh", "stillRoot"]
 const LANTERN_MOVES: Array[String] = ["pairedDark", "wickUnlit", "lampWait"]
 const UNSUNK_EMBER: Array[String] = ["tideCut", "unreadVolley", "brineWake"]
 const UNSUNK_ASH: Array[String] = ["stackWard", "stillTide", "waitPage"]
+const CARVE_MOVES: Array[String] = ["stoneCut", "glyphVolley", "sealCrack"]
+const DOOR_MOVES: Array[String] = ["doorWard", "darkStamp", "waitStone"]
 
 
 static func run(fails: Array[String]) -> void:
@@ -55,6 +57,13 @@ static func run(fails: Array[String]) -> void:
 	_unsunk_scenario(content, fails)
 	_unsunk_ai(fails)
 	_node_share(content, fails)
+	_uncarved_row(content, fails)
+	_uncarved_kit(content, fails)
+	_uncarved_flips(content, fails)
+	_uncarved_fail_closed(content, fails)
+	_uncarved_scenario(content, fails)
+	_uncarved_ai(fails)
+	_threshold_share(content, fails)
 
 
 static func _content_row(content: ContentDB, fails: Array[String]) -> void:
@@ -920,3 +929,231 @@ static func _node_share(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("node: II-prime elite reused the normal kits")
 	if CounterfactualSelf.axis_keys("costLean").size() != 0:
 		fails.append("node: a third axis kind was registered")
+
+
+static func _uncarved_row(content: ContentDB, fails: Array[String]) -> void:
+	var def: Dictionary = content.enemy(&"uncarvedSelf")
+	if def.is_empty() or not EnemyAi.handles(&"uncarvedSelf"):
+		fails.append("uncarvedSelf: missing catalogue row or AI handler")
+		return
+	if def.has("dialogue") or def.has("deathDialogue"):
+		fails.append("uncarvedSelf: counterfactual selves must stay silent")
+	if def.get("elite", false) != true:
+		fails.append("uncarvedSelf: second elite must ship elite: true")
+	if def.get("boss", false) == true:
+		fails.append("uncarvedSelf: elite must not also be a boss")
+	var spec: Dictionary = def.get("counterfactual", {})
+	if str(spec.get("node", "")) != "threshold-prime" \
+			or str(spec.get("motif", "")) != "seal-relief":
+		fails.append("uncarvedSelf: node/motif must stay on threshold-prime / seal-relief")
+	if str(spec.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
+		fails.append("uncarvedSelf: axis must reuse statusLean")
+	if str(def.get("name", "")).contains("Unopened"):
+		fails.append("uncarvedSelf: display name collides with 【The Unopened】")
+	var hp_v: Variant = def.get("hp", [])
+	if str(hp_v) == str(content.enemy(&"unopenedSelf").get("hp", [])) \
+			or str(hp_v) == str(content.enemy(&"unsunkSelf").get("hp", [])):
+		fails.append("uncarvedSelf: HP range cloned a seated self")
+	var banned: PackedStringArray = PackedStringArray([
+		"Uncut", "Unread", "Unwaited", "Tide", "Unopened", "Unclosed", "Unwoken", "Door",
+	])
+	var moves: Dictionary = def.get("moves", {})
+	for move_id_v: Variant in moves.keys():
+		var move_name: String = str(moves[move_id_v].get("name", ""))
+		for word: String in banned:
+			if move_name.contains(word):
+				fails.append("uncarvedSelf: %s display collides on '%s'"
+					% [str(move_id_v), word])
+	var once: PackedStringArray = PackedStringArray(["Stone", "Stamp", "Seal"])
+	for word: String in once:
+		var hits: int = 0
+		for move_id_v: Variant in moves.keys():
+			if str(moves[move_id_v].get("name", "")).contains(word):
+				hits += 1
+		if hits > 1:
+			fails.append("uncarvedSelf: '%s' crowds %d move names" % [word, hits])
+	var pane_fx: Variant = content.enemy(&"unopenedSelf")["moves"]["darkPane"].get("fx", [])
+	var stamp_row: Dictionary = def["moves"]["darkStamp"]
+	if str(stamp_row.get("fx", [])) == str(pane_fx):
+		fails.append("uncarvedSelf: darkStamp cloned darkPane's debuff")
+	var faults: PackedStringArray = content.enemy_faults("uncarvedSelf", def)
+	if not faults.is_empty():
+		fails.append("uncarvedSelf: authored row failed validation: %s" % faults[0])
+	var broken_move: Dictionary = def.duplicate(true)
+	var kits: Dictionary = broken_move["counterfactual"]["kits"]
+	kits["carve"] = ["notAMove"]
+	if content.enemy_faults("uncarvedSelf", broken_move).is_empty():
+		fails.append("uncarvedSelf: unknown kit move was accepted")
+	var broken: Dictionary = def.duplicate(true)
+	broken["counterfactual"]["axis"] = "noSuchAxis"
+	if content.enemy_faults("uncarvedSelf", broken).is_empty():
+		fails.append("uncarvedSelf: unknown axis was accepted")
+	var wrong_keys: Dictionary = def.duplicate(true)
+	wrong_keys["counterfactual"]["axisToKit"] = {"ember": "carve", "ash": "door"}
+	if content.enemy_faults("uncarvedSelf", wrong_keys).is_empty():
+		fails.append("uncarvedSelf: deckType keys were accepted on statusLean")
+	var third: Dictionary = def.duplicate(true)
+	third["counterfactual"]["axis"] = "costLean"
+	if content.enemy_faults("uncarvedSelf", third).is_empty():
+		fails.append("uncarvedSelf: a third axis was accepted")
+	var both: Dictionary = def.duplicate(true)
+	both["boss"] = true
+	if content.enemy_faults("uncarvedSelf", both).is_empty():
+		fails.append("uncarvedSelf: elite+boss was accepted")
+
+
+static func _uncarved_kit(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22051, "uncarved-dusk")
+	var picked: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"uncarvedSelf"), content)
+	if picked.get("ok", false) != true or str(picked.get("id", "")) != "carve":
+		fails.append("uncarvedSelf: duskblade start deck should select carve, got %s"
+			% str(picked.get("id", picked.get("error", ""))))
+	var again: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"uncarvedSelf"), content)
+	if str(again.get("id", "")) != str(picked.get("id", "")):
+		fails.append("uncarvedSelf: identical deck produced a different kit")
+
+
+static func _uncarved_flips(content: ContentDB, fails: Array[String]) -> void:
+	var ash_run: RunState = RunState.new_run(content, 22052, "uncarved-ashwarden", {"aspect": 1})
+	var ash_pick: Dictionary = CounterfactualSelf.resolve(
+		ash_run, content.enemy(&"uncarvedSelf"), content)
+	if str(ash_pick.get("id", "")) != "door":
+		fails.append("uncarvedSelf: ashwarden start deck should select door, got %s"
+			% str(ash_pick.get("id", ash_pick.get("error", ""))))
+	var edited: RunState = RunState.new_run(content, 22053, "uncarved-edited")
+	var removed: int = 0
+	var kept: Array[CardInst] = []
+	for card: CardInst in edited.player.deck:
+		if String(card.id) == "defend" and removed < 3:
+			removed += 1
+			continue
+		kept.append(card)
+	kept.append(CardInst.new(9001, &"ashBite"))
+	kept.append(CardInst.new(9002, &"ashBite"))
+	kept.append(CardInst.new(9003, &"ashBite"))
+	kept.append(CardInst.new(9004, &"ashBite"))
+	edited.player.deck = kept
+	var flipped: Dictionary = CounterfactualSelf.resolve(
+		edited, content.enemy(&"uncarvedSelf"), content)
+	if str(flipped.get("id", "")) != "door":
+		fails.append("uncarvedSelf: toxin-heavy duskblade should select door, got %s"
+			% str(flipped.get("id", flipped.get("error", ""))))
+
+
+static func _uncarved_fail_closed(content: ContentDB, fails: Array[String]) -> void:
+	var empty: RunState = RunState.new_run(content, 22054, "uncarved-empty")
+	empty.player.deck.clear()
+	var none: Dictionary = CounterfactualSelf.resolve(
+		empty, content.enemy(&"uncarvedSelf"), content)
+	if none.get("ok", false) == true:
+		fails.append("uncarvedSelf: empty deck emitted a kit")
+	var dry: RunState = RunState.new_run(content, 22055, "uncarved-dry")
+	var strikes: Array[CardInst] = []
+	for card: CardInst in dry.player.deck:
+		if String(card.id) == "strike":
+			strikes.append(card)
+	dry.player.deck = strikes
+	var dry_pick: Dictionary = CounterfactualSelf.resolve(
+		dry, content.enemy(&"uncarvedSelf"), content)
+	if dry_pick.get("ok", false) == true:
+		fails.append("uncarvedSelf: strike-only deck emitted a kit")
+	var cursed: Dictionary = content.enemy(&"uncarvedSelf").duplicate(true)
+	cursed["counterfactual"]["axisToKit"]["ward"] = "noSuchKit"
+	var run: RunState = RunState.new_run(content, 22056, "uncarved-bad-kit")
+	var bad: Dictionary = CounterfactualSelf.resolve(run, cursed, content)
+	if bad.get("ok", false) == true:
+		fails.append("uncarvedSelf: unknown kit was emitted")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	content.enemies["uncarvedSelf"] = cursed
+	game.apply({"t": "startCombat", "enemies": ["uncarvedSelf"], "kind": "elite"})
+	if game.cb == null or not game.cb.enemies.is_empty():
+		fails.append("uncarvedSelf: invalid kit still entered combat")
+	var restored: ContentDB = ContentDB.load_full()
+	content.enemies["uncarvedSelf"] = restored.enemy(&"uncarvedSelf")
+
+
+static func _uncarved_scenario(content: ContentDB, fails: Array[String]) -> void:
+	var kernel: ScenarioKernel = ScenarioKernel.new(content, RUN_PATH, VIGIL_PATH, REF_PATH)
+	kernel.clear_profile()
+	var ref: ScenarioReference = ScenarioReference.new()
+	if not ref.load_from({
+		"id": "combat-uncarved-self", "revision": 1, "build": BUILD,
+		"seed": 18501, "locale": "en", "shape": "pad-landscape",
+		"overrides": {
+			"act": 0, "node": "6,3", "kind": "elite",
+			"enemies": ["uncarvedSelf"],
+		},
+	}):
+		fails.append("uncarvedSelf: named Scenario rejected: %s" % ref.error)
+		return
+	var run: RunState = kernel.construct(ref)
+	if run == null:
+		fails.append("uncarvedSelf: named Scenario failed: %s" % kernel.last_error)
+		kernel.clear_profile()
+		return
+	if run.pending_enemy_ids != ["uncarvedSelf"]:
+		fails.append("uncarvedSelf: Scenario did not freeze the threshold-prime elite")
+	if str(run.pending_combat) != "elite":
+		fails.append("uncarvedSelf: Scenario did not freeze kind elite")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	game.apply({"t": "startCombat", "enemies": run.pending_enemy_ids, "kind": "elite"})
+	if game.cb == null or game.cb.enemies.is_empty():
+		fails.append("uncarvedSelf: startCombat dropped the threshold-prime elite")
+		kernel.clear_profile()
+		return
+	var enemy: EnemyCombatant = game.cb.enemies[0]
+	if enemy.elite != true or enemy.boss == true:
+		fails.append("uncarvedSelf: combatant was not elite-only")
+	if str(enemy.flags.get(CounterfactualSelf.KIT_FLAG, "")) != "carve":
+		fails.append("uncarvedSelf: Scenario combat did not wear the carve kit")
+	if String(enemy.move_key) != "stoneCut":
+		fails.append("uncarvedSelf: carve kit first intent was %s" % String(enemy.move_key))
+	if not CARVE_MOVES.has(String(enemy.move_key)):
+		fails.append("uncarvedSelf: carve intent is not a carve kit move")
+	kernel.clear_profile()
+
+
+static func _uncarved_ai(fails: Array[String]) -> void:
+	var rng: Rng = Rng.new(23)
+	var before: int = rng.get_state()
+	var flags: Dictionary = {CounterfactualSelf.KIT_FLAG: "carve"}
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"uncarvedSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != CARVE_MOVES[turn - 1]:
+			fails.append("uncarvedSelf: carve turn %d expected %s got %s"
+				% [turn, CARVE_MOVES[turn - 1], String(move)])
+	if rng.get_state() != before:
+		fails.append("uncarvedSelf: AI consumed RNG")
+	flags[CounterfactualSelf.KIT_FLAG] = "door"
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"uncarvedSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != DOOR_MOVES[turn - 1]:
+			fails.append("uncarvedSelf: door turn %d expected %s got %s"
+				% [turn, DOOR_MOVES[turn - 1], String(move)])
+	var missing: StringName = EnemyAi.decide(&"uncarvedSelf", 1, "", "", 1.0, rng, {})
+	if missing != &"":
+		fails.append("uncarvedSelf: missing kit returned %s" % String(missing))
+
+
+static func _threshold_share(content: ContentDB, fails: Array[String]) -> void:
+	var glass: Dictionary = content.enemy(&"unopenedSelf").get("counterfactual", {})
+	var seal: Dictionary = content.enemy(&"uncarvedSelf").get("counterfactual", {})
+	if str(glass.get("node", "")) != "threshold-prime" \
+			or str(seal.get("node", "")) != "threshold-prime":
+		fails.append("threshold: must seat both the normal and the elite")
+	if str(glass.get("axis", "")) != CounterfactualSelf.AXIS_DECK_TYPE:
+		fails.append("threshold: normal must keep deckType")
+	if str(seal.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
+		fails.append("threshold: elite must reuse statusLean")
+	if str(glass.get("axis", "")) == str(seal.get("axis", "")):
+		fails.append("threshold: selves must not share an axis")
+	var glass_moves: Variant = glass.get("kits", {})
+	var seal_moves: Variant = seal.get("kits", {})
+	if str(glass_moves) == str(seal_moves):
+		fails.append("threshold: elite reused the normal kits")
+	if CounterfactualSelf.axis_keys("costLean").size() != 0:
+		fails.append("threshold: a third axis kind was registered")
