@@ -3653,13 +3653,13 @@
         "tideCut": {
           "intent": "attack",
           "dmg": 16,
-          "name": "The Tide Uncut"
+          "name": "The Current You Did Not Break"
         },
         "unreadVolley": {
           "intent": "attack",
           "dmg": 9,
           "times": 2,
-          "name": "Pages Unread"
+          "name": "The Shelf You Walked Past"
         },
         "brineWake": {
           "intent": "attack_debuff",
@@ -3671,12 +3671,12 @@
               "n": 1
             }
           ],
-          "name": "The Water Unwoken"
+          "name": "Water That Did Not Wake"
         },
         "stackWard": {
           "intent": "block",
           "block": 18,
-          "name": "The Stacks Unclosed"
+          "name": "The Stacks You Stood In"
         },
         "stillTide": {
           "intent": "debuff",
@@ -3688,17 +3688,17 @@
             },
             {
               "who": "player",
-              "id": "weak",
-              "n": 2
+              "id": "vulnerable",
+              "n": 1
             }
           ],
-          "name": "The Tide Unstopped"
+          "name": "The Flood That Would Not Recede"
         },
         "waitPage": {
           "intent": "attack_block",
           "dmg": 10,
           "block": 12,
-          "name": "The Page Unwaited"
+          "name": "The Sentence Left Unfinished"
         }
       },
       "name": "【The Unsunk】"

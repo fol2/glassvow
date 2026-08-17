@@ -543,12 +543,12 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
 |---|---|---|---|---|---|---|
 | 426 | 【未沉者】 / 【The Unsunk】 | content.enemies.unsunkSelf.name | L4 | 鏡路上一個不出聲的行者,立於沉沒書庫 | 今世沒揀過的 attack/skill 路;不是隊伍,是未沉入等待的你 | 佔位 [#220 II-prime elite] |
-| 427 | 未切的潮 / The Tide Uncut | unsunkSelf.moves.tideCut | L4 | 一記沒切開的潮 | 你沒走的水路地——潮仍連着,由另一個你切 | 佔位 |
-| 428 | 未讀的頁 / Pages Unread | unsunkSelf.moves.unreadVolley | L4 | 沒人讀過的書頁 | 書庫寫滿等待;這些頁是你沒留下來讀的 | 佔位 |
-| 429 | 未醒的水 / The Water Unwoken | unsunkSelf.moves.brineWake | L4 | 還未醒來的水 | 水=等本身;這灘你沒喚醒,另一個你把它拍醒 | 佔位 |
-| 430 | 未合的庫 / The Stacks Unclosed | unsunkSelf.moves.stackWard | L4 | 一座沒合上的書庫 | 你沒揀的留守:守着未合的架,等門開 | 佔位 |
-| 431 | 未停的潮 / The Tide Unstopped | unsunkSelf.moves.stillTide | L4 | 沒有停下來的潮 | 城淹於等待;這潮是你沒停過的那道 | 佔位 |
-| 432 | 未候的頁 / The Page Unwaited | unsunkSelf.moves.waitPage | L4 | 一頁沒人等候過 | 等待寫足一座書庫;這一頁是你沒留下來候的 | 佔位 |
+| 427 | 未破的流 / The Current You Did Not Break | unsunkSelf.moves.tideCut | L4 | 沒有破開的水流 | 你沒走的水路——流仍連着,由另一個你破 | 佔位 |
+| 428 | 未看的頁 / The Shelf You Walked Past | unsunkSelf.moves.unreadVolley | L4 | 沒看過的書頁 | 書庫寫滿等待;這些頁是你走過沒看的 | 佔位 |
+| 429 | 未醒的水 / Water That Did Not Wake | unsunkSelf.moves.brineWake | L4 | 還未醒來的水 | 水=等本身;這灘你沒喚醒,另一個你把它拍醒 | 佔位 |
+| 430 | 未合的庫 / The Stacks You Stood In | unsunkSelf.moves.stackWard | L4 | 一座沒合上的書庫 | 你沒揀的留守:站在未合的架間,等門開 | 佔位 |
+| 431 | 未退的漲 / The Flood That Would Not Recede | unsunkSelf.moves.stillTide | L4 | 不退的漲水 | 城淹於等待;這漲是你沒退過的那道 | 佔位 |
+| 432 | 未完的句 / The Sentence Left Unfinished | unsunkSelf.moves.waitPage | L4 | 沒寫完的一句 | 等待寫足一座書庫;這句你沒留下來寫完 | 佔位 |
 
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 

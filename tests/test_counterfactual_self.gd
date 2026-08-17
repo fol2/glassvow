@@ -747,6 +747,21 @@ static func _unsunk_row(content: ContentDB, fails: Array[String]) -> void:
 	var other_hp: Variant = content.enemy(&"uncrossedSelf").get("hp", [])
 	if str(hp_v) == str(other_hp):
 		fails.append("unsunkSelf: HP range cloned the II-prime normal")
+	var banned: PackedStringArray = PackedStringArray([
+		"Uncut", "Unread", "Unwaited", "Tide", "Unclosed", "Unwoken",
+	])
+	var moves: Dictionary = def.get("moves", {})
+	for move_id_v: Variant in moves.keys():
+		var move_name: String = str(moves[move_id_v].get("name", ""))
+		for word: String in banned:
+			if move_name.contains(word):
+				fails.append("unsunkSelf: %s display collides on '%s'"
+					% [str(move_id_v), word])
+	var water_fx: Variant = content.enemy(&"uncrossedSelf")["moves"]["stillWater"].get("fx", [])
+	var tide_row: Dictionary = moves["stillTide"]
+	var flood_fx: Variant = tide_row.get("fx", [])
+	if str(water_fx) == str(flood_fx):
+		fails.append("unsunkSelf: stillTide cloned stillWater's debuff")
 	var faults: PackedStringArray = content.enemy_faults("unsunkSelf", def)
 	if not faults.is_empty():
 		fails.append("unsunkSelf: authored row failed validation: %s" % faults[0])
