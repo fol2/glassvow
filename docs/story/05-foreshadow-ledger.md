@@ -500,6 +500,18 @@ L1/L2 行照舊兩讀。
 | 403 | 不動的水 / Still Water | uncrossedSelf.moves.stillWater | L4 | 停着的水 | 水=等本身;這是你沒停過的那灘 | 佔位 |
 | 404 | 未寫的一頁 / The Unwritten Page | uncrossedSelf.moves.librarySpine | L4 | 圖書館裏空白的一頁 | 等待寫足一座書庫;這一頁是你沒留下來寫的 | 佔位 |
 
+#220 threshold-prime self(佔位專名,鎖名前不得裸寫;軸沿用 deckType,不再發明第三軸):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 405 | 【未開者】 / 【The Unopened】 | content.enemies.unopenedSelf.name | L4 | 鏡路上一個不出聲的行者,立於門檻內面 | 今世沒揀過的 attack/skill 路;不是隊伍,是未開窗、未開門的你 | 佔位 [#220 threshold-prime] |
+| 406 | 未開的窗 / The Window You Left Shut | unopenedSelf.moves.glassCut | L4 | 一扇沒打開的窗 | 你沒步入的那面彩窗;門與窗是同一道 threshold | 佔位 |
+| 407 | 未落的片 / Shards That Did Not Fall | unopenedSelf.moves.shardVolley | L4 | 沒有落下的璃片 | 六片未歸位時的你——另一個你把它們打下來 | 佔位 |
+| 408 | 未開的門 / The Door Unopened | unopenedSelf.moves.sealBlow | L4 | 一道沒推開的門 | 封門浮雕的內面;你沒推過,另一個你推 | 佔位 |
+| 409 | 彩窗之守 / The Rose You Stood Behind | unopenedSelf.moves.roseWard | L4 | 站在彩窗後面 | 你沒揀的留守:立於門檻,守着六格,不入 | 佔位 |
+| 410 | 未亮的窗 / The Pane Left Dark | unopenedSelf.moves.darkPane | L4 | 一格沒點亮的窗 | 六格裏你沒燃過的那一格;另一個你把它留黑 | 佔位 |
+| 411 | 封印未讀 / The Seal Unread | unopenedSelf.moves.reliefWait | L4 | 沒讀過的封門浮雕 | 門上的字等過你;你沒停下來讀 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於
