@@ -12,6 +12,10 @@ const NAME: String = "UnsealingRose"
 const DESIGN: float = 520.0
 const SIXTH: int = 5
 const LIGHT_TIME: float = 0.55
+## 窗成鏡 (#377 leftover from #221 / 07-scenes §6). Unique sting on beat 2;
+## SfxBus warns rather than stealing `sealedDoor` if the sample is missing.
+const STING_BEAT: int = 1
+const STING_CUE: StringName = &"unsealingSting"
 
 var _slot: Control
 var _window: Control

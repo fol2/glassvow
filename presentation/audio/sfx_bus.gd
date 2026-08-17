@@ -31,6 +31,7 @@ const HEAVY_AT: int = 16
 const LIGHT_AT: int = 5
 
 var muted: bool = false
+var last_cue: StringName = &""
 
 ## Typed so a cache read is an `AudioStream` rather than a `Variant` that has
 ## to be cast back to one.
@@ -57,6 +58,7 @@ func _init() -> void:
 ## One shot. Unknown ids are named rather than swallowed — a typo in a drain
 ## branch is otherwise a sound that silently never plays.
 func play(id: StringName, gain: float = SOURCE_GAIN) -> void:
+	last_cue = id
 	if muted or _players.is_empty():
 		return
 	var stream: AudioStream = _stream(id)
