@@ -4426,6 +4426,20 @@
         100,
         120
       ]
+    },
+    {
+      "normal": [
+        30,
+        42
+      ],
+      "elite": [
+        55,
+        72
+      ],
+      "boss": [
+        120,
+        140
+      ]
     }
   ],
   "shop": {
@@ -6066,6 +6080,19 @@
       },
       "name": "The Obsidian Court",
       "bossName": "The Eternal Sovereign"
+    },
+    {
+      "boss": "eternalKeeper",
+      "theme": {
+        "sky": 1446412,
+        "fog": 2366996,
+        "particles": 16760970,
+        "glow": 15771768,
+        "accent": "#e8b890",
+        "ember": "#ffc08a"
+      },
+      "name": "The Mirrored Road",
+      "bossName": "The Eternal Keeper"
     }
   ],
   "encounters": [
@@ -6238,6 +6265,59 @@
       "boss": [
         [
           "sovereign"
+        ]
+      ]
+    },
+    {
+      "weak": [
+        [
+          "unopenedSelf"
+        ],
+        [
+          "unwalkedSelf"
+        ],
+        [
+          "uncrossedSelf"
+        ],
+        [
+          "unlitSelf"
+        ],
+        [
+          "unobsidianSelf"
+        ],
+        [
+          "unwoodedSelf"
+        ]
+      ],
+      "normal": [
+        [
+          "unopenedSelf",
+          "uncarvedSelf"
+        ],
+        [
+          "unwalkedSelf",
+          "unobsidianSelf"
+        ],
+        [
+          "uncrossedSelf",
+          "unsunkSelf"
+        ],
+        [
+          "unlitSelf",
+          "unwoodedSelf"
+        ]
+      ],
+      "elite": [
+        [
+          "unsunkSelf"
+        ],
+        [
+          "uncarvedSelf"
+        ]
+      ],
+      "boss": [
+        [
+          "eternalKeeper"
         ]
       ]
     }

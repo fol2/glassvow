@@ -36,6 +36,17 @@ const ENTRIES: Array[Dictionary] = [
 	{"id": "act-3-map-terminus", "revision": 1,
 		"description": "Act III seated on the terminus boss waystone.",
 		"seed": SEED, "overrides": {"act": 2, "node": "14,3"}},
+	{"id": "act-4-map-start", "revision": 1,
+		"description": "Act IV map with the lantern unseated at the first waystones.",
+		"seed": SEED, "overrides": {"act": 3, "shards": 6}},
+	{"id": "act-4-map-branch", "revision": 1,
+		"description": "Act IV seated at a mid-journey fork with two onward roads.",
+		"seed": SEED, "overrides": {"act": 3, "shards": 6, "node": "4,6"}},
+	{"id": "act-4-map-terminus", "revision": 1,
+		"description": "Act IV seated on the terminus boss waystone against the Eternal Keeper.",
+		"seed": SEED, "overrides": {
+			"act": 3, "shards": 6, "node": "14,3",
+			"kind": "boss", "enemies": ["eternalKeeper"]}},
 	{"id": "combat-normal", "revision": 1,
 		"description": "A normal two-enemy fight on an Act I monster waystone.",
 		"seed": SEED, "overrides": {

@@ -210,7 +210,7 @@ static func _combat_defer_and_card_consumer(fails: Array[String]) -> void:
 	main._show_run_end()
 	var undo_v: Variant = Locale.active.get("_overlaid")
 	var undo: Array = undo_v if typeof(undo_v) == TYPE_ARRAY else []
-	if undo.size() != 709 or main.get("_content_hydration_pending") != false:
+	if undo.size() != 711 or main.get("_content_hydration_pending") != false:
 		fails.append("Main hydration integration: combat abandon did not apply zh-Hant once")
 	if JSON.stringify(run.to_save_dict()) != save_before_route:
 		fails.append("Main hydration integration: display overlay changed the v2 run/save dictionary")

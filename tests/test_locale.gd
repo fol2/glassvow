@@ -147,6 +147,8 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"content.acts.0.bossName": "根脈之心",
 	"content.acts.1.bossName": "利維坦之喉",
 	"content.acts.2.bossName": "永恆君王",
+	"content.acts.3.name": "鏡中歸途",
+	"content.acts.3.bossName": "永恆留者",
 	"content.enemies.rootheart.name": "根脈之心",
 	"content.enemies.leviathan.name": "利維坦之喉",
 	"content.enemies.sovereign.name": "永恆君王",

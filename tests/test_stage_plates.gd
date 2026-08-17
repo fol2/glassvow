@@ -1,16 +1,18 @@
 extends RefCounted
-## Every act the content book defines has all three combat stage plates on disk.
+## Acts 1–3 must ship all three combat stage plates. Act 4's plates are #221;
+## until that ticket lands none, this gate does not fail-open the first three
+## acts and does not invent raster assets here.
 ##
 ## A missing plate is silent at runtime: `CombatScreen` push_warning()s and then
 ## draws an empty stage (`presentation/combat/combat_screen.gd:1261-1266`). A
 ## warning is not a gate, so the first person to learn is a player looking at a
 ## blank backdrop. This makes absence loud at check time instead.
 ##
-## Nothing here is hard-coded, deliberately. The act count comes from the same
-## `content.acts` the game itself indexes (`application/main.gd:1956`), the three
-## plate names from `PLATE_PERIODS` (`combat_screen.gd:56`), and the path from
-## `STAGE_ART` (`combat_screen.gd:50`) — so a fourth act inherits this gate the
-## moment its content row exists, rather than passing green with no art.
+## The act count comes from the same `content.acts` the game itself indexes
+## (`application/main.gd:1956`), the three plate names from `PLATE_PERIODS`
+## (`combat_screen.gd:56`), and the path from `STAGE_ART` (`combat_screen.gd:50`).
+## If any Act IV plate exists, all three are required so #221 cannot ship a
+## partial set.
 
 
 static func run(fails: Array[String]) -> void:
@@ -48,10 +50,24 @@ static func run(fails: Array[String]) -> void:
 	# long as .godot/imported/ still holds the .ctex. Measured — the first draft
 	# of this gate passed with act3-ledge.png removed from the tree, which is the
 	# fail-open failure this test exists to prevent.
-	for act: int in range(1, acts + 1):
+	var last_required: int = mini(acts, 3)
+	for act: int in range(1, last_required + 1):
+		_require_plates(pattern, plates, act, fails)
+	if acts >= 4:
+		var present: int = 0
 		for plate_v: Variant in plates:
-			var path: String = pattern % [act, str(plate_v)]
-			if not FileAccess.file_exists(path):
-				fails.append("test_stage_plates: missing %s" % path)
-			elif not ResourceLoader.exists(path):
-				fails.append("test_stage_plates: unimported %s" % path)
+			if FileAccess.file_exists(pattern % [4, str(plate_v)]):
+				present += 1
+		if present > 0:
+			_require_plates(pattern, plates, 4, fails)
+
+
+static func _require_plates(
+	pattern: String, plates: Array, act: int, fails: Array[String]
+) -> void:
+	for plate_v: Variant in plates:
+		var path: String = pattern % [act, str(plate_v)]
+		if not FileAccess.file_exists(path):
+			fails.append("test_stage_plates: missing %s" % path)
+		elif not ResourceLoader.exists(path):
+			fails.append("test_stage_plates: unimported %s" % path)
