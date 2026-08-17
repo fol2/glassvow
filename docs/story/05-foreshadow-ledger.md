@@ -537,6 +537,19 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | 424 | 未燃的芯 / The Wick Unburned | unlitSelf.moves.wickUnlit | L4 | 一條沒燒過的燈芯 | 燈在手裏卻沒燃;另一個你提着空芯走路 | 佔位 |
 | 425 | 未舉的燈 / The Lamp Unraised | unlitSelf.moves.lampWait | L4 | 一盞沒舉起來的燈 | 出發要提燈;這個你沒舉起,所以路仍暗 | 佔位 |
 
+#220 II-prime elite(佔位專名,鎖名前不得裸寫;軸沿用 deckType,與同節點【未渡者】的 statusLean 並立;
+此敵是首通線 elite 節點可釘的佔位):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 426 | 【未沉者】 / 【The Unsunk】 | content.enemies.unsunkSelf.name | L4 | 鏡路上一個不出聲的行者,立於沉沒書庫 | 今世沒揀過的 attack/skill 路;不是隊伍,是未沉入等待的你 | 佔位 [#220 II-prime elite] |
+| 427 | 未破的流 / The Current You Did Not Break | unsunkSelf.moves.tideCut | L4 | 沒有破開的水流 | 你沒走的水路——流仍連着,由另一個你破 | 佔位 |
+| 428 | 未看的頁 / The Shelf You Walked Past | unsunkSelf.moves.unreadVolley | L4 | 沒看過的書頁 | 書庫寫滿等待;這些頁是你走過沒看的 | 佔位 |
+| 429 | 未醒的水 / Water That Did Not Wake | unsunkSelf.moves.brineWake | L4 | 還未醒來的水 | 水=等本身;這灘你沒喚醒,另一個你把它拍醒 | 佔位 |
+| 430 | 未合的庫 / The Stacks You Stood In | unsunkSelf.moves.stackWard | L4 | 一座沒合上的書庫 | 你沒揀的留守:站在未合的架間,等門開 | 佔位 |
+| 431 | 未退的漲 / The Flood That Would Not Recede | unsunkSelf.moves.stillTide | L4 | 不退的漲水 | 城淹於等待;這漲是你沒退過的那道 | 佔位 |
+| 432 | 未完的句 / The Sentence Left Unfinished | unsunkSelf.moves.waitPage | L4 | 沒寫完的一句 | 等待寫足一座書庫;這句你沒留下來寫完 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

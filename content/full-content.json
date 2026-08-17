@@ -3617,6 +3617,92 @@
       },
       "name": "【The Unopened】"
     },
+    "unsunkSelf": {
+      "hp": [
+        88,
+        96
+      ],
+      "elite": true,
+      "art": {
+        "kind": "humanoid",
+        "hue": 198,
+        "size": 1.2
+      },
+      "counterfactual": {
+        "node": "II-prime",
+        "motif": "library",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "tideCut",
+            "unreadVolley",
+            "brineWake"
+          ],
+          "ash": [
+            "stackWard",
+            "stillTide",
+            "waitPage"
+          ]
+        }
+      },
+      "moves": {
+        "tideCut": {
+          "intent": "attack",
+          "dmg": 16,
+          "name": "The Current You Did Not Break"
+        },
+        "unreadVolley": {
+          "intent": "attack",
+          "dmg": 9,
+          "times": 2,
+          "name": "The Shelf You Walked Past"
+        },
+        "brineWake": {
+          "intent": "attack_debuff",
+          "dmg": 13,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "Water That Did Not Wake"
+        },
+        "stackWard": {
+          "intent": "block",
+          "block": 18,
+          "name": "The Stacks You Stood In"
+        },
+        "stillTide": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Flood That Would Not Recede"
+        },
+        "waitPage": {
+          "intent": "attack_block",
+          "dmg": 10,
+          "block": 12,
+          "name": "The Sentence Left Unfinished"
+        }
+      },
+      "name": "【The Unsunk】"
+    },
     "unwalkedSelf": {
       "hp": [
         46,

@@ -12,7 +12,7 @@ const ALL_IDS: Array[StringName] = [
 	&"abyssalKnight", &"siren", &"leviathan", &"voidWisp", &"obsidianGolem",
 	&"starCultist", &"shade", &"chaosHound", &"watcherEye", &"voidColossus",
 	&"heraldOfEnd", &"sovereign", &"eternalKeeper", &"unwalkedSelf",
-	&"uncrossedSelf", &"unopenedSelf", &"unlitSelf",
+	&"uncrossedSelf", &"unopenedSelf", &"unlitSelf", &"unsunkSelf",
 ]
 
 
@@ -150,6 +150,11 @@ static func decide(
 				"ashroot": [&"rootLash", &"greyAsh", &"stillRoot"],
 				"lantern": [&"pairedDark", &"wickUnlit", &"lampWait"],
 			}, "unlitSelf")
+		&"unsunkSelf":
+			return _counterfactual_cycle(turn, flags, {
+				"ember": [&"tideCut", &"unreadVolley", &"brineWake"],
+				"ash": [&"stackWard", &"stillTide", &"waitPage"],
+			}, "unsunkSelf")
 		&"eternalKeeper":
 			if hp_frac <= 0.5 and not flags.get("keptFire", false):
 				flags["keptFire"] = true
