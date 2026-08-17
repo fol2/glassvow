@@ -529,7 +529,7 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 
 | # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
 |---|---|---|---|---|---|---|
-| 419 | 【未亮者】 / 【The Unlit】 | content.enemies.unlitSelf.name | L4 | 鏡路上一個不出聲的行者,立於雙燈之間 | 今世沒揀過的 toxin/ward 路;不是隊伍,是未點雙燈的你 | 佔位 [#220 I-prime] |
+| 419 | 【未點者】 / 【The Unstruck】 | content.enemies.unlitSelf.name | L4 | 鏡路上一個不出聲的行者,立於雙燈之間 | 今世沒揀過的 toxin/ward 路;不是隊伍,是未點雙燈的你 | 佔位 [#220 I-prime] |
 | 420 | 未斬的根 / The Root Uncut | unlitSelf.moves.rootLash | L4 | 樹林裏一條沒斬斷的根 | 你沒走的灰燼路——根仍連着,由另一個你斬 | 佔位 |
 | 421 | 未散的灰 / The Ash Unscattered | unlitSelf.moves.greyAsh | L4 | 還沒散開的灰 | 你沒走過的林;灰還堆着,另一個你把它散開 | 佔位 |
 | 422 | 未動的根 / The Root That Stayed | unlitSelf.moves.stillRoot | L4 | 一條不動的根 | 你沒揀的留守:根留在原處,等門開 | 佔位 |

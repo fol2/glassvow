@@ -546,6 +546,12 @@ static func _unlit_row(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("unlitSelf: node/motif must stay on I-prime / paired-lanterns")
 	if str(spec.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
 		fails.append("unlitSelf: axis must reuse statusLean")
+	if str(def.get("name", "")).contains("Unlit"):
+		fails.append("unlitSelf: display name collides with locked 'the Unlit Way'")
+	var hp_v: Variant = def.get("hp", [])
+	var other_hp: Variant = content.enemy(&"uncrossedSelf").get("hp", [])
+	if str(hp_v) == str(other_hp):
+		fails.append("unlitSelf: HP range cloned the II-prime self")
 	var faults: PackedStringArray = content.enemy_faults("unlitSelf", def)
 	if not faults.is_empty():
 		fails.append("unlitSelf: authored row failed validation: %s" % faults[0])

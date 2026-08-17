@@ -3444,8 +3444,8 @@
     },
     "unlitSelf": {
       "hp": [
-        42,
-        48
+        44,
+        50
       ],
       "art": {
         "kind": "humanoid",
@@ -3476,19 +3476,19 @@
       "moves": {
         "rootLash": {
           "intent": "attack_debuff",
-          "dmg": 10,
+          "dmg": 9,
           "fx": [
             {
               "who": "player",
               "id": "poison",
-              "n": 2
+              "n": 3
             }
           ],
           "name": "The Root Uncut"
         },
         "greyAsh": {
           "intent": "attack",
-          "dmg": 11,
+          "dmg": 12,
           "name": "The Ash Unscattered"
         },
         "stillRoot": {
@@ -3509,23 +3509,28 @@
         },
         "pairedDark": {
           "intent": "block",
-          "block": 14,
+          "block": 16,
           "name": "The Pair Left Dark"
         },
         "wickUnlit": {
-          "intent": "attack",
-          "dmg": 5,
-          "times": 2,
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
           "name": "The Wick Unburned"
         },
         "lampWait": {
           "intent": "attack_block",
-          "dmg": 7,
-          "block": 8,
+          "dmg": 8,
+          "block": 6,
           "name": "The Lamp Unraised"
         }
       },
-      "name": "【The Unlit】"
+      "name": "【The Unstruck】"
     },
     "unopenedSelf": {
       "hp": [
