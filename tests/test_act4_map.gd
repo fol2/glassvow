@@ -96,7 +96,8 @@ static func run(fails: Array[String]) -> void:
 	var parsed: Variant = JSON.parse_string(JSON.stringify(climb.to_save_dict()))
 	_check(fails, typeof(parsed) == TYPE_DICTIONARY, "Act IV save encoded")
 	if typeof(parsed) == TYPE_DICTIONARY:
-		var loaded: RunState = RunState.from_save_dict(parsed, content)
+		var raw: Dictionary = parsed
+		var loaded: RunState = RunState.from_save_dict(raw, content)
 		_check(fails, loaded != null and loaded.omens.size() == 4 and loaded.omens[3] == null,
 			"save top-up does not roll an Act IV omen")
 	climb.mark_mirrored_road_cleared()
@@ -122,11 +123,11 @@ static func _in_pool(got: Array[String], groups: Array) -> bool:
 		var group: Array = group_v
 		if group.size() != got.size():
 			continue
-		var match: bool = true
+		var same: bool = true
 		for i: int in range(got.size()):
 			if str(group[i]) != got[i]:
-				match = false
+				same = false
 				break
-		if match:
+		if same:
 			return true
 	return false
