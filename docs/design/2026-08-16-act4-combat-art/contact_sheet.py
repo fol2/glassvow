@@ -17,6 +17,8 @@ ROWS = [
     ("unwalkedSelf  [D picked]", ["unwalked-self-a", "unwalked-self-b", "unwalked-self-c", "unwalked-self-d"]),
     ("uncrossedSelf  [B proposed]", ["uncrossed-self-a", "uncrossed-self-b"]),
     ("unopenedSelf  [A proposed]", ["unopened-self-a", "unopened-self-b"]),
+    ("unlitSelf  [B proposed]", ["unlit-self-a", "unlit-self-b"]),
+    ("unsunkSelf  [A proposed]", ["unsunk-self-a", "unsunk-self-b"]),
 ]
 
 CELL_W, CELL_H = 480, 320

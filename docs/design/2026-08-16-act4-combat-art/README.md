@@ -47,10 +47,12 @@ regenerating.
 | `unwalkedSelf` | **D** | Magenta field, void hood, mosaic glass, cracked halo. A was unkeyable black haze. C punched holes in the chest. |
 | `uncrossedSelf` | **B** proposed | Teal false-lamp + library folio. A is the same props, thinner. |
 | `unopenedSelf` | **A** proposed | Handheld six-petal rose disc + wax seal. B's gothic tablet reads as a door-arch. |
+| `unlitSelf` | **B** proposed | Two hand-held unlit lamps, ashroot hem. A failed leftover magenta in the arm-gap (94, below the enclosed-blob punch). |
+| `unsunkSelf` | **A** proposed | Held drowned book-stack + still-tide hem. B's standing unread-shelf reads as furniture. |
 
 These are the installer's `PICKS`. James picked the plates and
-`unwalkedSelf` on 2026-08-17 (#221). `uncrossedSelf` B and `unopenedSelf` A
-are **proposed**, pending James.
+`unwalkedSelf` on 2026-08-17 (#221). `uncrossedSelf` B, `unopenedSelf` A,
+`unlitSelf` B and `unsunkSelf` A are **proposed**, pending James.
 
 Act IV node 4 mirrors Act I's 雙燈 / paired lanterns, but combat plates
 are **one set for the whole act**. They take the act motif (monuments as
@@ -78,6 +80,10 @@ The Uncrossed's hand-held false lamp is a II-prime prop, not a stage lantern-arc
 | `uncrossed-self-b.png` | enemy | — | pass | **proposed.** Teal false-lamp + gem folio |
 | `unopened-self-a.png` | enemy | — | pass | **proposed.** Handheld six-petal rose + wax seal |
 | `unopened-self-b.png` | enemy | — | pass | gothic tablet; one amber lobe; thinner |
+| `unlit-self-a.png` | enemy | — | fail | leftover magenta 94 in the right arm-gap; enclosed punch is ≥200 |
+| `unlit-self-b.png` | enemy | — | pass | **proposed.** Paired unlit lamps, dark wicks, ashroot hem |
+| `unsunk-self-a.png` | enemy | — | pass | **proposed.** Held book-stack, wave hem, no lantern |
+| `unsunk-self-b.png` | enemy | — | pass | standing unread-shelf; furniture read at combat scale |
 
 ## Prompts
 
@@ -178,10 +184,41 @@ Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
 > hanging lanterns. Body glass honey / amber / dark unlit violet. Warm
 > amber rim from the LEFT. No text, no watermark.
 
+### Unlit Self B
+
+Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
+
+> GAME ASSET character cutout. The entire BACKGROUND is a FLAT SOLID
+> MAGENTA field, hex #FF00FF, edge to edge. CONSTRUCTION: the body IS
+> large flat stained-glass panes with thick black lead came. Full-body
+> standing pilgrim, 15 percent magenta margin. Raised void hood; black
+> exists ONLY inside the hood. Holds TWO HAND-HELD UNLIT lamps, one in
+> each hand — dark wicks, NO flame, NO inner glow, NOT hanging, NOT an
+> arch. Ash / root glass crawling the hem. Warm amber rim from the LEFT;
+> remaining glass grey-ash / worn gold. NO teal lying lamp (that is the
+> Uncrossed), NO halo, NO scepter, NO books. No text, no watermark.
+
+### Unsunk Self A
+
+Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
+Elite: broader pilgrim, still a hooded self.
+
+> GAME ASSET character cutout. The entire BACKGROUND is a FLAT SOLID
+> MAGENTA field, hex #FF00FF, edge to edge. CONSTRUCTION: the body IS
+> large flat stained-glass panes with thick black lead came. Full-body
+> standing pilgrim, slightly broader than the tracer, 15 percent magenta
+> margin. Raised void hood; black exists ONLY inside the hood. Holds a
+> drowned BOOK-STACK against the chest — unread library, still-tide
+> water-glass curling the hem. NO lantern, NO halo, NO scepter. Body
+> glass brine teal / indigo / sea-green (hue ~198). Warm amber rim from
+> the LEFT. No text, no watermark.
+
 ## Held
 
-- Remaining 5 counterfactual-self paintings: ids wait on #220 (I-prime
-  and the two elites are not on `main` yet).
+- Remaining 3 counterfactual-self paintings: ids wait on #220 (two more
+  normals and the second elite are not on `main` yet). Do not invent
+  filenames.
 - `act4-combat` / `act4-boss` / unsealing sting: briefs in
   `docs/music-ledger.md` and `docs/sfx-ledger.md`. No files yet — Suno /
-  ElevenLabs are not in this environment.
+  ElevenLabs are not in this environment. `MusicBus.FILES` still aliases
+  Act IV to Act III.

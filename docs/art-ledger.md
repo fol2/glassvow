@@ -342,10 +342,9 @@ Four boss candidates from the same reference. Alpha: A 98.4% pass (rim still
 from the right — lighting miss), B 84.9% fail (washed), C 98.5% pass, D
 98.6% pass. C shipped.
 
-The enemy id `eternalKeeper` is not in `content/full-content.json` yet (Act
-IV roster is `#220`/`#221`). The raster sits at the conventional
-`enemies/<id>.png` path so combat can pick it up without a rename.
-`char-meta.json` now has a boss block so combat can size it without falling
+The enemy id `eternalKeeper` landed in `content/full-content.json` with #369.
+The raster shipped earlier with #283 at the conventional `enemies/<id>.png`
+path. `char-meta.json` has a boss block so combat sizes it without falling
 through to `layoutDefault`.
 
 ### `stage/act4-backdrop.png` — 1536×1024 RGBA
@@ -445,6 +444,46 @@ Prompt (binding clauses):
 > SIX-PETAL rose-window PANE held as a disc — intact, unopened. Wax seal
 > at the belt. NO scepter, NO broken halo, NO hanging lanterns. Honey /
 > amber / dark unlit violet; amber rim from the LEFT.
+
+### `enemies/unlitSelf.png` — Act IV I-prime self
+
+The Unstruck (`unlitSelf`, I-prime / paired-lanterns). English display
+avoids colliding with locked "the Unlit Way". Two hand-held unlit lamps
+(dark wicks, no flame); ashroot glass at the hem. Distinct from the
+Uncrossed's one teal lying lamp. Combat box `1.6` like the tracer.
+
+**Proposed pick B, 2026-08-17, pending James.** A failed leftover
+field-magenta (94) in the right arm-gap — the enclosed punch only eats
+blobs ≥200. Magenta field; gate as `unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unstruck, full body, 15 percent
+> magenta margin. Void hood; black ONLY inside the hood. TWO HAND-HELD
+> UNLIT lamps, dark wicks, NO flame, NOT hanging, NOT an arch. Ash / root
+> glass at the hem. NO teal lying lamp, NO halo, NO scepter. Grey-ash /
+> worn gold; amber rim from the LEFT.
+
+### `enemies/unsunkSelf.png` — Act IV II-prime elite
+
+The Unsunk (`unsunkSelf`, II-prime / library, `elite: true`). Held
+drowned book-stack; still-tide water-glass at the hem. No lantern.
+Combat box is `tierSizes.elite * 1.6` (368px) — at least 50% above a
+1.05 elite box.
+
+**Proposed pick A, 2026-08-17, pending James.** B's standing unread-shelf
+reads as furniture beside the pilgrim. Magenta field; gate as
+`unwalkedSelf`.
+
+Prompt (binding clauses):
+
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field. CONSTRUCTION: the
+> body IS leaded stained-glass panes. The Unsunk, full body, slightly
+> broader pilgrim, 15 percent magenta margin. Void hood; black ONLY
+> inside the hood. Drowned BOOK-STACK held against the chest. Still-tide
+> water-glass at the hem. NO lantern, NO halo, NO scepter. Brine teal /
+> indigo; amber rim from the LEFT.
 
 ## Rejection note — what "technically shippable" means
 

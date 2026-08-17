@@ -19,8 +19,8 @@ CANDIDATES = HERE / "candidates"
 STAGE = HERE.parents[2] / "assets" / "art" / "stage"
 ENEMIES = HERE.parents[2] / "assets" / "art" / "enemies"
 
-# James picked plates + unwalkedSelf on 2026-08-17 (#221). uncrossedSelf B and
-# unopenedSelf A are proposed pending James.
+# James picked plates + unwalkedSelf on 2026-08-17 (#221). The other selves
+# are proposed pending James.
 PICKS = {
     "act4-backdrop": ("act4-backdrop-c", STAGE / "act4-backdrop.png", (1536, 1024)),
     "act4-mid": ("act4-mid-c", STAGE / "act4-mid.png", (1536, 1024)),
@@ -28,6 +28,8 @@ PICKS = {
     "unwalkedSelf": ("unwalked-self-d", ENEMIES / "unwalkedSelf.png", "char"),
     "uncrossedSelf": ("uncrossed-self-b", ENEMIES / "uncrossedSelf.png", "char"),
     "unopenedSelf": ("unopened-self-a", ENEMIES / "unopenedSelf.png", "char"),
+    "unlitSelf": ("unlit-self-b", ENEMIES / "unlitSelf.png", "char"),
+    "unsunkSelf": ("unsunk-self-a", ENEMIES / "unsunkSelf.png", "char"),
 }
 
 BLACK = 16  # max channel for plate voids

@@ -601,6 +601,12 @@ static func _unlit_row(content: ContentDB, fails: Array[String]) -> void:
 	if def.is_empty() or not EnemyAi.handles(&"unlitSelf"):
 		fails.append("unlitSelf: missing catalogue row or AI handler")
 		return
+	if not FileAccess.file_exists("res://assets/art/enemies/unlitSelf.png"):
+		fails.append("unlitSelf: missing painting")
+	if EnemyView.art_texture(&"unlitSelf") == null:
+		fails.append("unlitSelf: painting did not import")
+	if EnemyView.art_box(&"unlitSelf") < 185.0 * 1.05 * 1.5:
+		fails.append("unlitSelf: combat box must be at least 50% above 1.05")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("unlitSelf: counterfactual selves must stay silent")
 	var spec: Dictionary = def.get("counterfactual", {})
@@ -790,6 +796,12 @@ static func _unsunk_row(content: ContentDB, fails: Array[String]) -> void:
 	if def.is_empty() or not EnemyAi.handles(&"unsunkSelf"):
 		fails.append("unsunkSelf: missing catalogue row or AI handler")
 		return
+	if not FileAccess.file_exists("res://assets/art/enemies/unsunkSelf.png"):
+		fails.append("unsunkSelf: missing painting")
+	if EnemyView.art_texture(&"unsunkSelf") == null:
+		fails.append("unsunkSelf: painting did not import")
+	if EnemyView.art_box(&"unsunkSelf") < 230.0 * 1.05 * 1.5:
+		fails.append("unsunkSelf: elite combat box must be at least 50% above 1.05")
 	if def.has("dialogue") or def.has("deathDialogue"):
 		fails.append("unsunkSelf: counterfactual selves must stay silent")
 	if def.get("elite", false) != true:
