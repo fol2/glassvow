@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "pack_id": "ashglass-v1",
+  "pack_id": "ashglass-v1-unsealing",
   "theme": "Ashglass Vigil",
   "source": "docs/sfx-ledger.md",
   "items": {
@@ -343,6 +343,16 @@
       "prompt": "Elegant turn banner sound: two small glass chimes and a soft lantern sweep, clear game feedback, restrained gothic UI, dry, no melody beyond two notes, no vocals, no long tail.",
       "usage": "\u201cYour turn\u201d banner, when turn number > 1",
       "review_note": "Clear but not celebratory; it repeats often."
+    },
+    "unsealingSting": {
+      "file": "unsealingSting.mp3",
+      "bytes": 24703,
+      "duration_seconds": 1.515,
+      "requested_duration_seconds": 1.5,
+      "prompt_influence": 0.65,
+      "prompt": "One-shot glass sting: the six panes become a mirror. A short glass-chord inversion, warm amber bloom turning cold as the reflection takes. No choir, no vocals, no door grind, no footsteps, no long cinematic tail. Must not sound like a sealed door theme, a rose-window bed, or a tiny glass chip tick.",
+      "usage": "Unsealing beat 2 \u300c\u7a97\u6210\u93e1\u300d unique sting; not the sealedDoor ceremony bed",
+      "review_note": "Heard nowhere else. Must not pass for sealedDoor, roseWindow, or chip."
     },
     "upgrade": {
       "file": "upgrade.mp3",

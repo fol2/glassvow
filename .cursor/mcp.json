@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "elevenlabs": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["elevenlabs-mcp"],
+      "env": {
+        "ELEVENLABS_API_KEY": "${env:ELEVENLABS_API_KEY}",
+        "ELEVENLABS_MCP_BASE_PATH": "${workspaceFolder}",
+        "ELEVENLABS_MCP_OUTPUT_MODE": "files"
+      }
+    }
+  }
+}

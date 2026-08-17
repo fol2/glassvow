@@ -63,6 +63,7 @@ var _letter_top: ColorRect
 var _letter_bot: ColorRect
 var _hearth_figure: HearthFigure = null
 var _unsealing: UnsealingStaging = null
+var _unsealing_sting_beat: int = -1
 
 
 func _init(scene_script: SceneScript, cursor: int = 0,
@@ -273,11 +274,16 @@ func _sync_unsealing() -> void:
 		if _unsealing != null:
 			_unsealing.queue_free()
 			_unsealing = null
+		_unsealing_sting_beat = -1
 		return
 	if _unsealing == null:
 		_unsealing = UnsealingStaging.new()
 		_plate_host.add_child(_unsealing)
 	_unsealing.present(_beat_i, instant or Preferences.active.reduce_motion)
+	if _beat_i == UnsealingStaging.STING_BEAT \
+			and _unsealing_sting_beat != UnsealingStaging.STING_BEAT:
+		_unsealing_sting_beat = UnsealingStaging.STING_BEAT
+		_sfx.play(UnsealingStaging.STING_CUE)
 
 
 func _art_path(index: int) -> String:

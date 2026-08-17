@@ -104,14 +104,15 @@ func _init(stage_shape: StringName = StageShape.IDENTITY,
 	_add_body(Locale.active.t("ui.credits.bodyGlass"))
 
 	_add_heading(Locale.active.t("ui.credits.headingMusic"))
-	_add_pack_id("stained-glass-v1")
 	var music_manifest: Variant = _read_manifest(MUSIC_MANIFEST)
+	_add_pack_id(_pack_id_of(music_manifest, "stained-glass-v1"))
 	_add_music_attribution(music_manifest)
 	_add_music_rows(music_manifest)
 
 	_add_heading(Locale.active.t("ui.credits.headingSound"))
-	_add_pack_id("ashglass-v1")
-	_add_sfx_rows(_read_manifest(SFX_MANIFEST))
+	var sfx_manifest: Variant = _read_manifest(SFX_MANIFEST)
+	_add_pack_id(_pack_id_of(sfx_manifest, "ashglass-v1"))
+	_add_sfx_rows(sfx_manifest)
 
 	_add_heading(Locale.active.t("ui.credits.headingType"))
 	_add_body(Locale.active.t("ui.credits.bodyCinzel"))
@@ -176,6 +177,14 @@ func _fit() -> void:
 	var panel_height: float = stage_size.y if phone else stage_size.y * PANEL_MAX_HEIGHT
 	_panel.custom_minimum_size = Vector2(panel_width, panel_height)
 	_column.custom_minimum_size.x = maxf(240.0, panel_width - PANE_INSET * 2.0)
+
+
+func _pack_id_of(manifest: Variant, fallback: String) -> String:
+	if typeof(manifest) != TYPE_DICTIONARY:
+		return fallback
+	var pack: Dictionary = manifest
+	var pack_id: String = str(pack.get("pack_id", fallback))
+	return pack_id if not pack_id.is_empty() else fallback
 
 
 func _read_manifest(path: String) -> Variant:

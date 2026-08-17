@@ -15,6 +15,7 @@ static func run(fails: Array[String]) -> void:
 	_overlay_absent_elsewhere(fails)
 	_departure_lags_the_figure(fails)
 	_unsealing_pane_lighting(fails)
+	_unsealing_sting(fails)
 	_unsealing_mirror_is_one_queue(fails)
 	_unsealing_does_not_break_the_player(fails)
 	_resume_keeps_staging(fails)
@@ -203,6 +204,34 @@ static func _unsealing_pane_lighting(fails: Array[String]) -> void:
 		_check(fails, is_equal_approx(all_lit.sixth_alpha(), 1.0),
 			"beat 2 did not keep the sixth pane lit")
 	lit.free()
+
+
+static func _unsealing_sting(fails: Array[String]) -> void:
+	_check(fails, UnsealingStaging.STING_BEAT == 1,
+		"the unique sting is not on 窗成鏡 (beat 2)")
+	_check(fails, UnsealingStaging.STING_CUE == &"unsealingSting",
+		"the unique sting cue was renamed")
+	_check(fails, ResourceLoader.exists("res://assets/audio/sfx/unsealingSting.mp3"),
+		"unsealingSting.mp3 is not shipped")
+	var script: SceneScript = _script("unsealing")
+	if script == null:
+		_check(fails, false, "unsealing did not load")
+		return
+	var first: ScenePlayer = _live(script, 0)
+	var bus0: SfxBus = first.find_child("SfxBus", true, false) as SfxBus
+	_check(fails, bus0 != null and bus0.last_cue != UnsealingStaging.STING_CUE,
+		"beat 1 fired the 窗成鏡 sting")
+	first.free()
+	var lit: ScenePlayer = _live(script, _first_of_beat(script, 1))
+	var bus: SfxBus = lit.find_child("SfxBus", true, false) as SfxBus
+	_check(fails, bus != null and bus.last_cue == UnsealingStaging.STING_CUE,
+		"beat 2 (窗成鏡) did not fire unsealingSting")
+	var later: ScenePlayer = _live(script, _first_of_beat(script, 2))
+	var bus2: SfxBus = later.find_child("SfxBus", true, false) as SfxBus
+	_check(fails, bus2 != null and bus2.last_cue != UnsealingStaging.STING_CUE,
+		"the one-queue plate replayed the sting")
+	lit.free()
+	later.free()
 
 
 static func _unsealing_mirror_is_one_queue(fails: Array[String]) -> void:
