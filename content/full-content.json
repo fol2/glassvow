@@ -3272,6 +3272,84 @@
       },
       "name": "The Eternal Sovereign"
     },
+    "eternalKeeper": {
+      "hp": [
+        650,
+        650
+      ],
+      "boss": true,
+      "finaleHandoff": true,
+      "art": {
+        "kind": "humanoid",
+        "hue": 18,
+        "size": 1.8
+      },
+      "moves": {
+        "hearthBlow": {
+          "intent": "attack",
+          "dmg": 18,
+          "name": "The Blow From the Hearth"
+        },
+        "sitDown": {
+          "intent": "buff",
+          "block": 20,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Sit Down"
+        },
+        "cinderFall": {
+          "intent": "attack",
+          "dmg": 11,
+          "times": 2,
+          "name": "Cinders Coming Home"
+        },
+        "kindWord": {
+          "intent": "attack_debuff",
+          "dmg": 4,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 4
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            }
+          ],
+          "name": "A Kind Word"
+        },
+        "keepTheFire": {
+          "intent": "buff",
+          "block": 30,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 4
+            }
+          ],
+          "name": "The Fire Stays With Me"
+        },
+        "neverLeave": {
+          "intent": "attack",
+          "dmg": 34,
+          "name": "I Am Still Here"
+        }
+      },
+      "name": "The Eternal Keeper"
+    },
     "uncrossedSelf": {
       "hp": [
         42,

@@ -121,6 +121,10 @@ func enemy_faults(id_key: String, value: Variant) -> PackedStringArray:
 			faults.append("%s.%s must be a boolean" % [id_key, flag])
 	if definition.get("elite", false) and definition.get("boss", false):
 		faults.append("%s cannot be both elite and boss" % id_key)
+	if definition.has("finaleHandoff") and typeof(definition["finaleHandoff"]) != TYPE_BOOL:
+		faults.append("%s.finaleHandoff must be a boolean" % id_key)
+	if definition.get("finaleHandoff", false) == true and definition.get("boss", false) != true:
+		faults.append("%s.finaleHandoff requires boss" % id_key)
 	if definition.has("facets") and not _whole_at_least(definition["facets"], 2):
 		faults.append("%s.facets must be a whole number of at least 2" % id_key)
 	_validate_enemy_art(id_key, definition.get("art"), faults)

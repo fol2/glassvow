@@ -11,8 +11,8 @@ const ALL_IDS: Array[StringName] = [
 	&"voltEel", &"mirelurker", &"tidecaller", &"shellback", &"deepmaw",
 	&"abyssalKnight", &"siren", &"leviathan", &"voidWisp", &"obsidianGolem",
 	&"starCultist", &"shade", &"chaosHound", &"watcherEye", &"voidColossus",
-	&"heraldOfEnd", &"sovereign", &"unwalkedSelf", &"uncrossedSelf",
-	&"unopenedSelf",
+	&"heraldOfEnd", &"sovereign", &"eternalKeeper", &"unwalkedSelf",
+	&"uncrossedSelf", &"unopenedSelf",
 ]
 
 
@@ -145,6 +145,19 @@ static func decide(
 				"ember": [&"glassCut", &"shardVolley", &"sealBlow"],
 				"ash": [&"roseWard", &"darkPane", &"reliefWait"],
 			}, "unopenedSelf")
+		&"eternalKeeper":
+			if hp_frac <= 0.5 and not flags.get("keptFire", false):
+				flags["keptFire"] = true
+				return &"keepTheFire"
+			if flags.get("keptFire", false):
+				var phase_turn: int = int(float(str(flags.get("p2", 0)))) + 1
+				flags["p2"] = phase_turn
+				if phase_turn % 3 == 0:
+					return &"neverLeave"
+				var phase: Array[StringName] = [&"hearthBlow", &"cinderFall", &"kindWord", &"sitDown"]
+				return phase[phase_turn % 4]
+			var keeper: Array[StringName] = [&"hearthBlow", &"sitDown", &"cinderFall", &"kindWord"]
+			return keeper[(turn - 1) % 4]
 		&"sovereign":
 			if hp_frac <= 0.5 and not flags.get("heldCourt", false):
 				flags["heldCourt"] = true

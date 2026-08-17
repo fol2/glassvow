@@ -37,3 +37,5 @@ const BOSS_INTRO: StringName = &"bossIntro"
 ## A variant speaks — its authored lines at startCombat, its death line on
 ## the killing blow (engine.js:1135-1139, :1384-1385).
 const VARIANT_DIALOGUE: StringName = &"variantDialogue"
+## Act IV Keeper: a lethal blow does not kill. Combat ends; #312 takes the scene.
+const FINALE_HANDOFF: StringName = &"finaleHandoff"
