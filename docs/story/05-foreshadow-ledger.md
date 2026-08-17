@@ -574,6 +574,19 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | 445 | 未凝的黑 / The Dark That Did Not Harden | unobsidianSelf.moves.darkHarden | L4 | 一攤沒凝住的黑 | 黑曜是失光之後凝成的;這一攤你沒凝 | 佔位 |
 | 446 | 未入的庭 / The Court You Did Not Enter | unobsidianSelf.moves.courtWait | L4 | 一座沒走進的庭 | 門前的庭等過你坐下;你沒入,所以仍是玻璃 | 佔位 |
 
+#220 I-prime remaining normal(佔位專名,鎖名前不得裸寫;軸沿用 deckType,與同節點【未點者】的 statusLean 並立;
+I-prime 在首通線是 rest,此敵餵 repeat pool):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 447 | 【未林者】 / 【The Unwooded】 | content.enemies.unwoodedSelf.name | L4 | 鏡路上一個不出聲的行者,立於灰與根之間 | 今世沒揀過的 attack/skill 路;不是隊伍,是未成林的你 | 佔位 [#220 I-prime] |
+| 448 | 未長的枝 / The Branch You Did Not Grow | unwoodedSelf.moves.branchCut | L4 | 一條沒長出來的枝 | 你沒走的林——枝仍未長,由另一個你斬 | 佔位 |
+| 449 | 未鋪的路 / The Road You Did Not Lay | unwoodedSelf.moves.roadVolley | L4 | 一條沒鋪過的路 | 林中要有路才走得成;你沒鋪,另一個你鋪 | 佔位 |
+| 450 | 未焚的林 / The Wood You Did Not Burn | unwoodedSelf.moves.woodBlow | L4 | 一片沒燒過的林 | 灰燼林要焚才成灰;你沒焚,林仍立着 | 佔位 |
+| 451 | 未歇的林 / The Rest You Did Not Take | unwoodedSelf.moves.woodWard | L4 | 沒有歇過的林 | 你沒揀的留守:I′ 是歇處,這個你沒歇 | 佔位 |
+| 452 | 未冷的燼 / The Cinder That Did Not Cool | unwoodedSelf.moves.cinderHush | L4 | 一撮沒冷下來的燼 | 火熄之後燼仍熱;你沒等它冷,另一個你等 | 佔位 |
+| 453 | 未立的林 / The Grove You Did Not Stand In | unwoodedSelf.moves.standWood | L4 | 一片沒站進去的林 | 出發前的林等過你立;你沒立,所以路仍未成 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

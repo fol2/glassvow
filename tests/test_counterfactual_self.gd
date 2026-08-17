@@ -1,5 +1,5 @@
 extends RefCounted
-## Slice 1 + Slice 2 + multiplied selves + both elites + III-prime statusLean.
+## Slice 1 + Slice 2 + multiplied selves + both elites + remaining normals.
 ## Kits are deterministic, flip under the intended fixture, and fail closed.
 
 const RUN_PATH: String = "user://glassvow_test_unwalked_run_v2.json"
@@ -20,6 +20,8 @@ const CARVE_MOVES: Array[String] = ["stoneCut", "glyphVolley", "sealCrack"]
 const DOOR_MOVES: Array[String] = ["doorWard", "darkStamp", "waitStone"]
 const STAR_MOVES: Array[String] = ["starGaze", "lightHang", "eyeMeet"]
 const OBSIDIAN_MOVES: Array[String] = ["obsidianWard", "darkHarden", "courtWait"]
+const WOOD_EMBER: Array[String] = ["branchCut", "roadVolley", "woodBlow"]
+const WOOD_ASH: Array[String] = ["woodWard", "cinderHush", "standWood"]
 
 
 static func run(fails: Array[String]) -> void:
@@ -73,6 +75,13 @@ static func run(fails: Array[String]) -> void:
 	_unobsidian_scenario(content, fails)
 	_unobsidian_ai(fails)
 	_iii_share(content, fails)
+	_unwooded_row(content, fails)
+	_unwooded_kit(content, fails)
+	_unwooded_flips(content, fails)
+	_unwooded_fail_closed(content, fails)
+	_unwooded_scenario(content, fails)
+	_unwooded_ai(fails)
+	_i_share(content, fails)
 
 
 static func _content_row(content: ContentDB, fails: Array[String]) -> void:
@@ -551,12 +560,18 @@ static func _axis_reuse(content: ContentDB, fails: Array[String]) -> void:
 		run, content.enemy(&"unwalkedSelf"), content)
 	var glass: Dictionary = CounterfactualSelf.resolve(
 		run, content.enemy(&"unopenedSelf"), content)
-	if str(court.get("id", "")) != "ember" or str(glass.get("id", "")) != "ember":
-		fails.append("reuse: ashwarden should invert both deckType selves to ember")
+	var wood: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unwoodedSelf"), content)
+	if str(court.get("id", "")) != "ember" or str(glass.get("id", "")) != "ember" \
+			or str(wood.get("id", "")) != "ember":
+		fails.append("reuse: ashwarden should invert deckType selves to ember")
 	var court_moves: Variant = content.enemy(&"unwalkedSelf")["counterfactual"]["kits"]["ember"]
 	var glass_moves: Variant = content.enemy(&"unopenedSelf")["counterfactual"]["kits"]["ember"]
+	var wood_moves: Variant = content.enemy(&"unwoodedSelf")["counterfactual"]["kits"]["ember"]
 	if str(court_moves) == str(glass_moves):
 		fails.append("reuse: threshold-prime reused III-prime ember moves")
+	if str(wood_moves) == str(court_moves) or str(wood_moves) == str(glass_moves):
+		fails.append("reuse: I-prime reused another deckType ember kit")
 	if CounterfactualSelf.axis_keys("costLean").size() != 0:
 		fails.append("reuse: a third axis kind was registered")
 
@@ -1392,3 +1407,213 @@ static func _iii_share(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("iii: statusLean self reused the deckType kits")
 	if CounterfactualSelf.axis_keys("costLean").size() != 0:
 		fails.append("iii: a third axis kind was registered")
+
+
+static func _unwooded_row(content: ContentDB, fails: Array[String]) -> void:
+	var def: Dictionary = content.enemy(&"unwoodedSelf")
+	if def.is_empty() or not EnemyAi.handles(&"unwoodedSelf"):
+		fails.append("unwoodedSelf: missing catalogue row or AI handler")
+		return
+	if def.has("dialogue") or def.has("deathDialogue"):
+		fails.append("unwoodedSelf: counterfactual selves must stay silent")
+	if def.get("elite", false) == true or def.get("boss", false) == true:
+		fails.append("unwoodedSelf: remaining normal must not be elite or boss")
+	var spec: Dictionary = def.get("counterfactual", {})
+	if str(spec.get("node", "")) != "I-prime" or str(spec.get("motif", "")) != "ash-root":
+		fails.append("unwoodedSelf: node/motif must stay on I-prime / ash-root")
+	if str(spec.get("axis", "")) != CounterfactualSelf.AXIS_DECK_TYPE:
+		fails.append("unwoodedSelf: axis must reuse deckType")
+	if str(def.get("name", "")).contains("Unstruck") or str(def.get("name", "")).contains("Unlit"):
+		fails.append("unwoodedSelf: display name collides with the I-prime lantern self")
+	var hp_v: Variant = def.get("hp", [])
+	if str(hp_v) == str(content.enemy(&"unlitSelf").get("hp", [])):
+		fails.append("unwoodedSelf: HP range cloned the I-prime statusLean self")
+	if str(hp_v) == str(content.enemy(&"unopenedSelf").get("hp", [])):
+		fails.append("unwoodedSelf: HP range cloned the threshold-prime normal")
+	var banned: PackedStringArray = PackedStringArray([
+		"Root", "Ash", "Uncut", "Unscattered", "Unstruck", "Unburned",
+		"Lamp", "Wick", "Pair", "Unwalked", "Tide", "Door", "Ring", "Halo",
+		"Star", "Court", "Stone", "Seal", "Fall", "Unread",
+	])
+	var moves: Dictionary = def.get("moves", {})
+	for move_id_v: Variant in moves.keys():
+		var move_name: String = str(moves[move_id_v].get("name", ""))
+		for word: String in banned:
+			if move_name.contains(word):
+				fails.append("unwoodedSelf: %s display collides on '%s'"
+					% [str(move_id_v), word])
+	var once: PackedStringArray = PackedStringArray([
+		"Branch", "Road", "Wood", "Rest", "Cinder", "Grove",
+	])
+	for word: String in once:
+		var hits: int = 0
+		for move_id_v: Variant in moves.keys():
+			if str(moves[move_id_v].get("name", "")).contains(word):
+				hits += 1
+		if hits != 1:
+			fails.append("unwoodedSelf: '%s' crowds %d move names" % [word, hits])
+	var hush_fx: Variant = def["moves"]["cinderHush"].get("fx", [])
+	var root_fx: Variant = content.enemy(&"unlitSelf")["moves"]["rootLash"].get("fx", [])
+	if str(hush_fx) == str(root_fx) and def["moves"]["cinderHush"].has("dmg"):
+		fails.append("unwoodedSelf: cinderHush cloned rootLash")
+	if def["moves"]["cinderHush"].has("dmg"):
+		fails.append("unwoodedSelf: cinderHush must stay a pure debuff")
+	var still_fx: Variant = content.enemy(&"unlitSelf")["moves"]["stillRoot"].get("fx", [])
+	if str(hush_fx) == str(still_fx):
+		fails.append("unwoodedSelf: cinderHush cloned stillRoot's debuff")
+	var wick_fx: Variant = content.enemy(&"unlitSelf")["moves"]["wickUnlit"].get("fx", [])
+	if str(hush_fx) == str(wick_fx):
+		fails.append("unwoodedSelf: cinderHush cloned wickUnlit's debuff")
+	var ward_name: String = str(def["moves"]["woodWard"].get("name", ""))
+	if ward_name.contains("Wood"):
+		fails.append("unwoodedSelf: woodWard English must not say Wood")
+	var faults: PackedStringArray = content.enemy_faults("unwoodedSelf", def)
+	if not faults.is_empty():
+		fails.append("unwoodedSelf: authored row failed validation: %s" % faults[0])
+	var broken: Dictionary = def.duplicate(true)
+	var kits: Dictionary = broken["counterfactual"]["kits"]
+	kits["ember"] = ["notAMove"]
+	if content.enemy_faults("unwoodedSelf", broken).is_empty():
+		fails.append("unwoodedSelf: unknown kit move was accepted")
+	var third: Dictionary = def.duplicate(true)
+	third["counterfactual"]["axis"] = "costLean"
+	if content.enemy_faults("unwoodedSelf", third).is_empty():
+		fails.append("unwoodedSelf: a third axis was accepted")
+
+
+static func _unwooded_kit(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22071, "unwooded-dusk")
+	var picked: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unwoodedSelf"), content)
+	if picked.get("ok", false) != true or str(picked.get("id", "")) != "ash":
+		fails.append("unwoodedSelf: duskblade start deck should select ash, got %s"
+			% str(picked.get("id", picked.get("error", ""))))
+	var again: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unwoodedSelf"), content)
+	if str(again.get("id", "")) != str(picked.get("id", "")):
+		fails.append("unwoodedSelf: identical deck produced a different kit")
+
+
+static func _unwooded_flips(content: ContentDB, fails: Array[String]) -> void:
+	var ash_run: RunState = RunState.new_run(content, 22072, "unwooded-ashwarden", {"aspect": 1})
+	var ash_pick: Dictionary = CounterfactualSelf.resolve(
+		ash_run, content.enemy(&"unwoodedSelf"), content)
+	if str(ash_pick.get("id", "")) != "ember":
+		fails.append("unwoodedSelf: ashwarden start deck should select ember, got %s"
+			% str(ash_pick.get("id", ash_pick.get("error", ""))))
+	var edited: RunState = RunState.new_run(content, 22073, "unwooded-edited")
+	var removed: int = 0
+	var kept: Array[CardInst] = []
+	for card: CardInst in edited.player.deck:
+		if String(card.id) == "strike" and removed < 3:
+			removed += 1
+			continue
+		kept.append(card)
+	edited.player.deck = kept
+	var flipped: Dictionary = CounterfactualSelf.resolve(
+		edited, content.enemy(&"unwoodedSelf"), content)
+	if str(flipped.get("id", "")) != "ember":
+		fails.append("unwoodedSelf: strike-light duskblade should select ember, got %s"
+			% str(flipped.get("id", flipped.get("error", ""))))
+
+
+static func _unwooded_fail_closed(content: ContentDB, fails: Array[String]) -> void:
+	var empty: RunState = RunState.new_run(content, 22074, "unwooded-empty")
+	empty.player.deck.clear()
+	var none: Dictionary = CounterfactualSelf.resolve(
+		empty, content.enemy(&"unwoodedSelf"), content)
+	if none.get("ok", false) == true:
+		fails.append("unwoodedSelf: empty deck emitted a kit")
+	var cursed: Dictionary = content.enemy(&"unwoodedSelf").duplicate(true)
+	cursed["counterfactual"]["axisToKit"]["ember"] = "noSuchKit"
+	var run: RunState = RunState.new_run(content, 22075, "unwooded-bad-kit")
+	var bad: Dictionary = CounterfactualSelf.resolve(run, cursed, content)
+	if bad.get("ok", false) == true:
+		fails.append("unwoodedSelf: unknown kit was emitted")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	content.enemies["unwoodedSelf"] = cursed
+	game.apply({"t": "startCombat", "enemies": ["unwoodedSelf"], "kind": "normal"})
+	if game.cb == null or not game.cb.enemies.is_empty():
+		fails.append("unwoodedSelf: invalid kit still entered combat")
+	var restored: ContentDB = ContentDB.load_full()
+	content.enemies["unwoodedSelf"] = restored.enemy(&"unwoodedSelf")
+
+
+static func _unwooded_scenario(content: ContentDB, fails: Array[String]) -> void:
+	var kernel: ScenarioKernel = ScenarioKernel.new(content, RUN_PATH, VIGIL_PATH, REF_PATH)
+	kernel.clear_profile()
+	var ref: ScenarioReference = ScenarioReference.new()
+	if not ref.load_from({
+		"id": "combat-unwooded-self", "revision": 1, "build": BUILD,
+		"seed": 18501, "locale": "en", "shape": "pad-landscape",
+		"overrides": {
+			"act": 0, "node": "1,2", "kind": "monster",
+			"enemies": ["unwoodedSelf"],
+		},
+	}):
+		fails.append("unwoodedSelf: named Scenario rejected: %s" % ref.error)
+		return
+	var run: RunState = kernel.construct(ref)
+	if run == null:
+		fails.append("unwoodedSelf: named Scenario failed: %s" % kernel.last_error)
+		kernel.clear_profile()
+		return
+	if run.pending_enemy_ids != ["unwoodedSelf"]:
+		fails.append("unwoodedSelf: Scenario did not freeze the I-prime enemy")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	game.apply({"t": "startCombat", "enemies": run.pending_enemy_ids, "kind": "normal"})
+	if game.cb == null or game.cb.enemies.is_empty():
+		fails.append("unwoodedSelf: startCombat dropped the I-prime self")
+		kernel.clear_profile()
+		return
+	var enemy: EnemyCombatant = game.cb.enemies[0]
+	if str(enemy.flags.get(CounterfactualSelf.KIT_FLAG, "")) != "ash":
+		fails.append("unwoodedSelf: Scenario combat did not wear the ash kit")
+	if String(enemy.move_key) != "woodWard":
+		fails.append("unwoodedSelf: ash kit first intent was %s" % String(enemy.move_key))
+	if not WOOD_ASH.has(String(enemy.move_key)):
+		fails.append("unwoodedSelf: ash intent is not an ash kit move")
+	kernel.clear_profile()
+
+
+static func _unwooded_ai(fails: Array[String]) -> void:
+	var rng: Rng = Rng.new(19)
+	var before: int = rng.get_state()
+	for turn: int in range(1, 4):
+		var flags: Dictionary = {CounterfactualSelf.KIT_FLAG: "ember"}
+		var move: StringName = EnemyAi.decide(
+			&"unwoodedSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != WOOD_EMBER[turn - 1]:
+			fails.append("unwoodedSelf: ember turn %d expected %s got %s"
+				% [turn, WOOD_EMBER[turn - 1], String(move)])
+	if rng.get_state() != before:
+		fails.append("unwoodedSelf: AI consumed RNG")
+	for turn: int in range(1, 4):
+		var flags: Dictionary = {CounterfactualSelf.KIT_FLAG: "ash"}
+		var move: StringName = EnemyAi.decide(
+			&"unwoodedSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != WOOD_ASH[turn - 1]:
+			fails.append("unwoodedSelf: ash turn %d expected %s got %s"
+				% [turn, WOOD_ASH[turn - 1], String(move)])
+	var missing: StringName = EnemyAi.decide(&"unwoodedSelf", 1, "", "", 1.0, rng, {})
+	if missing != &"":
+		fails.append("unwoodedSelf: missing kit returned %s" % String(missing))
+
+
+static func _i_share(content: ContentDB, fails: Array[String]) -> void:
+	var lamps: Dictionary = content.enemy(&"unlitSelf").get("counterfactual", {})
+	var wood: Dictionary = content.enemy(&"unwoodedSelf").get("counterfactual", {})
+	if str(lamps.get("node", "")) != "I-prime" or str(wood.get("node", "")) != "I-prime":
+		fails.append("i: must seat both the statusLean and the deckType self")
+	if str(lamps.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
+		fails.append("i: paired-lanterns must keep statusLean")
+	if str(wood.get("axis", "")) != CounterfactualSelf.AXIS_DECK_TYPE:
+		fails.append("i: ash-root must reuse deckType")
+	if str(lamps.get("axis", "")) == str(wood.get("axis", "")):
+		fails.append("i: selves must not share an axis")
+	var lamp_moves: Variant = lamps.get("kits", {})
+	var wood_moves: Variant = wood.get("kits", {})
+	if str(lamp_moves) == str(wood_moves):
+		fails.append("i: deckType self reused the statusLean kits")
+	if CounterfactualSelf.axis_keys("costLean").size() != 0:
+		fails.append("i: a third axis kind was registered")
