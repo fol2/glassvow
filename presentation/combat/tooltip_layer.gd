@@ -157,7 +157,7 @@ func _process(delta: float) -> void:
 	# `document.addEventListener('pointerover', ...)` only fires for a mouse
 	# (`if (!FINE || event.pointerType !== 'mouse') return`). A touch pointer
 	# has no hover, so it gets the long-press path instead.
-	if DisplayServer.is_touchscreen_available() and not _has_mouse():
+	if PointerDevice.coarse():
 		return
 	var at: Vector2 = get_global_mouse_position()
 	var tip_v: Variant = source.call(at)
@@ -168,10 +168,6 @@ func _process(delta: float) -> void:
 	if tip != _shown:
 		_apply(tip)
 	_place(at, false)
-
-
-func _has_mouse() -> bool:
-	return DisplayServer.has_feature(DisplayServer.FEATURE_MOUSE)
 
 
 ## The touch path. The screen forwards presses; a press that holds still for
