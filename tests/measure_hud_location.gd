@@ -1,20 +1,18 @@
 extends SceneTree
-## #338 regression: the run HUD location line must remain fully visible on
-## pad-portrait, both locales, every act — dressed like a live run.
+## #338 / #382: the run HUD location line must remain fully visible on every
+## shape that shows it, both locales, every act — dressed like a live run.
 ##
-## Compact chrome alone cannot grant the English Act III line a single row once
-## the three phial seats are present, so pad-portrait wraps. The clip check
-## therefore follows the label: single-line shapes compare natural vs granted
-## width; a wrapping title fails only if the wrapped block exceeds the box.
-## Same SubViewport + real-frames pattern as `dawn_phone_containment.gd`.
+## Compact chrome cannot grant the English Act III line a single row once the
+## three phial seats are present, so pad-portrait and phone-landscape wrap.
+## The clip check follows the label: single-line shapes compare natural vs
+## granted width; a wrapping title fails only if the wrapped block exceeds
+## the box. Same SubViewport + real-frames pattern as `dawn_phone_containment.gd`.
 ## Not in `run_all.gd` because the discovered suite is synchronous; CI runs
 ## this script on its own.
 ##
 ##   godot --headless -s res://tests/measure_hud_location.gd
 ##
-## `_apply_shape` hides the title on phone-portrait. phone-landscape English
-## vs a full phial rack is a pre-existing single-line squeeze outside #338 and
-## is printed, not gated.
+## `_apply_shape` hides the title on phone-portrait.
 
 const SHAPES: Array[StringName] = [
 	&"phone-landscape", &"pad-portrait", &"pad-landscape",
@@ -77,13 +75,11 @@ func _measure(content: ContentDB, locale_code: StringName,
 	var natural: float = font.get_string_size(
 		label.text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size).x
 	var over: bool = _over(label, font, font_size, granted, natural)
-	# phone-landscape English vs a full phial rack is outside this ticket.
-	var gated: bool = stage_shape != &"phone-landscape"
-	if over and gated:
+	if over:
 		_clipped += 1
-	var mark: String = "CLIPPED" if over and gated else ("note" if over else "fits")
 	print("%-8s %-16s act%d  granted=%6.1f  natural=%6.1f  %-7s  %s" % [
-		locale_code, stage_shape, act, granted, natural, mark, label.text])
+		locale_code, stage_shape, act, granted, natural,
+		"CLIPPED" if over else "fits", label.text])
 	hud.queue_free()
 	await process_frame
 
