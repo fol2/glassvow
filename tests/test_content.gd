@@ -48,7 +48,7 @@ static func run(fails: Array[String]) -> void:
 	var full: ContentDB = ContentDB.load_full()
 	var full_counts: Array[int] = [full.cards.size(), full.enemies.size(),
 		full.relics.size(), full.quest_ids.size()]
-	if full_counts != [61, 32, 31, 6]:
+	if full_counts != [61, 33, 31, 6]:
 		fails.append("ContentDB: full catalogue counts diverged from port baseline")
 	if full.reveal_ids.size() != 8 or full.aspects.size() != 2 or full.vows.size() != 5:
 		fails.append("ContentDB: full progression registries are incomplete")

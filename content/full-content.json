@@ -3617,6 +3617,92 @@
       },
       "name": "【The Unopened】"
     },
+    "unsunkSelf": {
+      "hp": [
+        88,
+        96
+      ],
+      "elite": true,
+      "art": {
+        "kind": "humanoid",
+        "hue": 198,
+        "size": 1.2
+      },
+      "counterfactual": {
+        "node": "II-prime",
+        "motif": "library",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "tideCut",
+            "unreadVolley",
+            "brineWake"
+          ],
+          "ash": [
+            "stackWard",
+            "stillTide",
+            "waitPage"
+          ]
+        }
+      },
+      "moves": {
+        "tideCut": {
+          "intent": "attack",
+          "dmg": 16,
+          "name": "The Tide Uncut"
+        },
+        "unreadVolley": {
+          "intent": "attack",
+          "dmg": 9,
+          "times": 2,
+          "name": "Pages Unread"
+        },
+        "brineWake": {
+          "intent": "attack_debuff",
+          "dmg": 13,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Water Unwoken"
+        },
+        "stackWard": {
+          "intent": "block",
+          "block": 18,
+          "name": "The Stacks Unclosed"
+        },
+        "stillTide": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "The Tide Unstopped"
+        },
+        "waitPage": {
+          "intent": "attack_block",
+          "dmg": 10,
+          "block": 12,
+          "name": "The Page Unwaited"
+        }
+      },
+      "name": "【The Unsunk】"
+    },
     "unwalkedSelf": {
       "hp": [
         46,

@@ -1,5 +1,5 @@
 extends RefCounted
-## Slice 1 + Slice 2 + two multiplied selves on reused axes.
+## Slice 1 + Slice 2 + multiplied selves + first elite on reused axes.
 ## Kits are deterministic, flip under the intended fixture, and fail closed.
 
 const RUN_PATH: String = "user://glassvow_test_unwalked_run_v2.json"
@@ -14,6 +14,8 @@ const GLASS_EMBER: Array[String] = ["glassCut", "shardVolley", "sealBlow"]
 const GLASS_ASH: Array[String] = ["roseWard", "darkPane", "reliefWait"]
 const ASHROOT_MOVES: Array[String] = ["rootLash", "greyAsh", "stillRoot"]
 const LANTERN_MOVES: Array[String] = ["pairedDark", "wickUnlit", "lampWait"]
+const UNSUNK_EMBER: Array[String] = ["tideCut", "unreadVolley", "brineWake"]
+const UNSUNK_ASH: Array[String] = ["stackWard", "stillTide", "waitPage"]
 
 
 static func run(fails: Array[String]) -> void:
@@ -46,6 +48,13 @@ static func run(fails: Array[String]) -> void:
 	_unlit_scenario(content, fails)
 	_unlit_ai(fails)
 	_lean_reuse(content, fails)
+	_unsunk_row(content, fails)
+	_unsunk_kit(content, fails)
+	_unsunk_flips(content, fails)
+	_unsunk_fail_closed(content, fails)
+	_unsunk_scenario(content, fails)
+	_unsunk_ai(fails)
+	_node_share(content, fails)
 
 
 static func _content_row(content: ContentDB, fails: Array[String]) -> void:
@@ -716,3 +725,183 @@ static func _lean_reuse(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("lean: I-prime reused II-prime shell moves")
 	if CounterfactualSelf.axis_keys("costLean").size() != 0:
 		fails.append("lean: a third axis kind was registered")
+
+
+static func _unsunk_row(content: ContentDB, fails: Array[String]) -> void:
+	var def: Dictionary = content.enemy(&"unsunkSelf")
+	if def.is_empty() or not EnemyAi.handles(&"unsunkSelf"):
+		fails.append("unsunkSelf: missing catalogue row or AI handler")
+		return
+	if def.has("dialogue") or def.has("deathDialogue"):
+		fails.append("unsunkSelf: counterfactual selves must stay silent")
+	if def.get("elite", false) != true:
+		fails.append("unsunkSelf: first elite must ship elite: true")
+	if def.get("boss", false) == true:
+		fails.append("unsunkSelf: elite must not also be a boss")
+	var spec: Dictionary = def.get("counterfactual", {})
+	if str(spec.get("node", "")) != "II-prime" or str(spec.get("motif", "")) != "library":
+		fails.append("unsunkSelf: node/motif must stay on II-prime / library")
+	if str(spec.get("axis", "")) != CounterfactualSelf.AXIS_DECK_TYPE:
+		fails.append("unsunkSelf: axis must reuse deckType")
+	var hp_v: Variant = def.get("hp", [])
+	var other_hp: Variant = content.enemy(&"uncrossedSelf").get("hp", [])
+	if str(hp_v) == str(other_hp):
+		fails.append("unsunkSelf: HP range cloned the II-prime normal")
+	var faults: PackedStringArray = content.enemy_faults("unsunkSelf", def)
+	if not faults.is_empty():
+		fails.append("unsunkSelf: authored row failed validation: %s" % faults[0])
+	var broken: Dictionary = def.duplicate(true)
+	var kits: Dictionary = broken["counterfactual"]["kits"]
+	kits["ember"] = ["notAMove"]
+	if content.enemy_faults("unsunkSelf", broken).is_empty():
+		fails.append("unsunkSelf: unknown kit move was accepted")
+	var third: Dictionary = def.duplicate(true)
+	third["counterfactual"]["axis"] = "costLean"
+	if content.enemy_faults("unsunkSelf", third).is_empty():
+		fails.append("unsunkSelf: a third axis was accepted")
+	var both: Dictionary = def.duplicate(true)
+	both["boss"] = true
+	if content.enemy_faults("unsunkSelf", both).is_empty():
+		fails.append("unsunkSelf: elite+boss was accepted")
+
+
+static func _unsunk_kit(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22041, "unsunk-dusk")
+	var picked: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unsunkSelf"), content)
+	if picked.get("ok", false) != true or str(picked.get("id", "")) != "ash":
+		fails.append("unsunkSelf: duskblade start deck should select ash, got %s"
+			% str(picked.get("id", picked.get("error", ""))))
+	var again: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unsunkSelf"), content)
+	if str(again.get("id", "")) != str(picked.get("id", "")):
+		fails.append("unsunkSelf: identical deck produced a different kit")
+
+
+static func _unsunk_flips(content: ContentDB, fails: Array[String]) -> void:
+	var ash_run: RunState = RunState.new_run(content, 22042, "unsunk-ashwarden", {"aspect": 1})
+	var ash_pick: Dictionary = CounterfactualSelf.resolve(
+		ash_run, content.enemy(&"unsunkSelf"), content)
+	if str(ash_pick.get("id", "")) != "ember":
+		fails.append("unsunkSelf: ashwarden start deck should select ember, got %s"
+			% str(ash_pick.get("id", ash_pick.get("error", ""))))
+	var edited: RunState = RunState.new_run(content, 22043, "unsunk-edited")
+	var removed: int = 0
+	var kept: Array[CardInst] = []
+	for card: CardInst in edited.player.deck:
+		if String(card.id) == "strike" and removed < 3:
+			removed += 1
+			continue
+		kept.append(card)
+	edited.player.deck = kept
+	var flipped: Dictionary = CounterfactualSelf.resolve(
+		edited, content.enemy(&"unsunkSelf"), content)
+	if str(flipped.get("id", "")) != "ember":
+		fails.append("unsunkSelf: strike-light duskblade should select ember, got %s"
+			% str(flipped.get("id", flipped.get("error", ""))))
+
+
+static func _unsunk_fail_closed(content: ContentDB, fails: Array[String]) -> void:
+	var empty: RunState = RunState.new_run(content, 22044, "unsunk-empty")
+	empty.player.deck.clear()
+	var none: Dictionary = CounterfactualSelf.resolve(
+		empty, content.enemy(&"unsunkSelf"), content)
+	if none.get("ok", false) == true:
+		fails.append("unsunkSelf: empty deck emitted a kit")
+	var cursed: Dictionary = content.enemy(&"unsunkSelf").duplicate(true)
+	cursed["counterfactual"]["axisToKit"]["ember"] = "noSuchKit"
+	var run: RunState = RunState.new_run(content, 22045, "unsunk-bad-kit")
+	var bad: Dictionary = CounterfactualSelf.resolve(run, cursed, content)
+	if bad.get("ok", false) == true:
+		fails.append("unsunkSelf: unknown kit was emitted")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	content.enemies["unsunkSelf"] = cursed
+	game.apply({"t": "startCombat", "enemies": ["unsunkSelf"], "kind": "elite"})
+	if game.cb == null or not game.cb.enemies.is_empty():
+		fails.append("unsunkSelf: invalid kit still entered combat")
+	var restored: ContentDB = ContentDB.load_full()
+	content.enemies["unsunkSelf"] = restored.enemy(&"unsunkSelf")
+
+
+static func _unsunk_scenario(content: ContentDB, fails: Array[String]) -> void:
+	var kernel: ScenarioKernel = ScenarioKernel.new(content, RUN_PATH, VIGIL_PATH, REF_PATH)
+	kernel.clear_profile()
+	var ref: ScenarioReference = ScenarioReference.new()
+	if not ref.load_from({
+		"id": "combat-unsunk-self", "revision": 1, "build": BUILD,
+		"seed": 18501, "locale": "en", "shape": "pad-landscape",
+		"overrides": {
+			"act": 1, "node": "0,6", "kind": "elite",
+			"enemies": ["unsunkSelf"],
+		},
+	}):
+		fails.append("unsunkSelf: named Scenario rejected: %s" % ref.error)
+		return
+	var run: RunState = kernel.construct(ref)
+	if run == null:
+		fails.append("unsunkSelf: named Scenario failed: %s" % kernel.last_error)
+		kernel.clear_profile()
+		return
+	if run.pending_enemy_ids != ["unsunkSelf"]:
+		fails.append("unsunkSelf: Scenario did not freeze the II-prime elite")
+	if str(run.pending_combat) != "elite":
+		fails.append("unsunkSelf: Scenario did not freeze kind elite")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	game.apply({"t": "startCombat", "enemies": run.pending_enemy_ids, "kind": "elite"})
+	if game.cb == null or game.cb.enemies.is_empty():
+		fails.append("unsunkSelf: startCombat dropped the II-prime elite")
+		kernel.clear_profile()
+		return
+	var enemy: EnemyCombatant = game.cb.enemies[0]
+	if enemy.elite != true or enemy.boss == true:
+		fails.append("unsunkSelf: combatant was not elite-only")
+	if str(enemy.flags.get(CounterfactualSelf.KIT_FLAG, "")) != "ash":
+		fails.append("unsunkSelf: Scenario combat did not wear the ash kit")
+	if String(enemy.move_key) != "stackWard":
+		fails.append("unsunkSelf: ash kit first intent was %s" % String(enemy.move_key))
+	if not UNSUNK_ASH.has(String(enemy.move_key)):
+		fails.append("unsunkSelf: ash intent is not an ash kit move")
+	kernel.clear_profile()
+
+
+static func _unsunk_ai(fails: Array[String]) -> void:
+	var rng: Rng = Rng.new(19)
+	var before: int = rng.get_state()
+	var flags: Dictionary = {CounterfactualSelf.KIT_FLAG: "ember"}
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unsunkSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != UNSUNK_EMBER[turn - 1]:
+			fails.append("unsunkSelf: ember turn %d expected %s got %s"
+				% [turn, UNSUNK_EMBER[turn - 1], String(move)])
+	if rng.get_state() != before:
+		fails.append("unsunkSelf: AI consumed RNG")
+	flags[CounterfactualSelf.KIT_FLAG] = "ash"
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unsunkSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != UNSUNK_ASH[turn - 1]:
+			fails.append("unsunkSelf: ash turn %d expected %s got %s"
+				% [turn, UNSUNK_ASH[turn - 1], String(move)])
+	var missing: StringName = EnemyAi.decide(&"unsunkSelf", 1, "", "", 1.0, rng, {})
+	if missing != &"":
+		fails.append("unsunkSelf: missing kit returned %s" % String(missing))
+
+
+static func _node_share(content: ContentDB, fails: Array[String]) -> void:
+	var water: Dictionary = content.enemy(&"uncrossedSelf").get("counterfactual", {})
+	var stacks: Dictionary = content.enemy(&"unsunkSelf").get("counterfactual", {})
+	if str(water.get("node", "")) != "II-prime" or str(stacks.get("node", "")) != "II-prime":
+		fails.append("node: II-prime must seat both the normal and the elite")
+	if str(water.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
+		fails.append("node: II-prime normal must keep statusLean")
+	if str(stacks.get("axis", "")) != CounterfactualSelf.AXIS_DECK_TYPE:
+		fails.append("node: II-prime elite must reuse deckType")
+	if str(water.get("axis", "")) == str(stacks.get("axis", "")):
+		fails.append("node: II-prime selves must not share an axis")
+	var water_moves: Variant = water.get("kits", {})
+	var stack_moves: Variant = stacks.get("kits", {})
+	if str(water_moves) == str(stack_moves):
+		fails.append("node: II-prime elite reused the normal kits")
+	if CounterfactualSelf.axis_keys("costLean").size() != 0:
+		fails.append("node: a third axis kind was registered")
