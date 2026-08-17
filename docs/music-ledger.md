@@ -5,11 +5,10 @@ ledger (prompts, motif law, render pipeline) lives at
 `../roguecardv2-benchmark/docs/music-ledger.md` (roguecardv2@6e06911).
 
 Dispatch for new tracks: `.claude/skills/glassvow-suno/SKILL.md`.
-MCP config (IDE): `.cursor/mcp.json` → `suno` (AceDataCloud HTTP gateway,
-`ACEDATACLOUD_API_TOKEN`). Cloud Agents do not read that file; register
-the same URL in the cursor.com/agents MCP dropdown. v1 provenance remains
-the Suno Pro workspace; there is no first-party Suno MCP. Cookie scrapers
-stay out.
+**Suno has no public API key.** v1 was the Suno Pro website; Act IV is
+the same — Custom + Instrumental, paste the owed brief, download mp3s.
+AceDataCloud is an optional third-party wrapper with its *own* token
+(`ACEDATACLOUD_API_TOKEN`), not a Suno secret. Cookie scrapers stay out.
 
 ## What
 
@@ -55,8 +54,7 @@ Both audio files are byte-identical to v1. `pack_id` stays `stained-glass-v1`.
 No files yet. `MusicBus.FILES` still aliases `act4Combat` / `act4Boss` to
 the Act III tracks; `tests/test_presentation.gd` asserts that alias until
 these two land. Dispatch via `.claude/skills/glassvow-suno/SKILL.md`
-(Suno Pro workspace as v1, or AceDataCloud MCP when
-`ACEDATACLOUD_API_TOKEN` is set). A new file is a pack bump
+(Suno Pro website, same as v1). A new file is a pack bump
 (`stained-glass-v2` or a dated Act IV addendum) — do not re-encode v1
 to make room.
 

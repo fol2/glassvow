@@ -162,14 +162,13 @@ verification gate is unchanged — run the four commands under **Verification** 
   `web_nothreads_debug` export template, which the environment does not provision;
   Native Proof and every headless check work without it.
 
-- **Audio: ElevenLabs needs the `sk_` secret, not the key ID.** `ELEVENLABS_API_KEY`
-  on the environment unlocks SFX (stdio MCP or REST `/v1/sound-generation`).
-  Project `.cursor/mcp.json` does not reach Cloud Agents; register ElevenLabs
-  stdio (`uvx elevenlabs-mcp`) and optional Suno HTTP
-  (`https://suno.mcp.acedata.cloud/mcp`) in the MCP dropdown at
-  cursor.com/agents. Secrets `ELEVENLABS_API_KEY` and `ACEDATACLOUD_API_TOKEN`
-  belong on the environment, never in git. A running agent cannot hot-load
-  MCP; boot a new one after Save.
+- **Audio: ElevenLabs needs the `sk_` secret, not the key ID; Suno has no API key.**
+  `ELEVENLABS_API_KEY` on the environment unlocks SFX (stdio MCP or REST
+  `/v1/sound-generation`). Music is the Suno Pro website — Custom +
+  Instrumental, paste the ledger brief, download mp3s. There is no
+  `SUNO_API_KEY`. AceDataCloud's token is a third-party wrapper, optional,
+  never a Suno secret. Project `.cursor/mcp.json` does not reach Cloud
+  Agents; a running agent cannot hot-load MCP. Boot a new one after Save.
 
 
 ---
