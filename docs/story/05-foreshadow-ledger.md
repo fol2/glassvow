@@ -562,6 +562,18 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | 438 | 未下的印 / The Stamp You Did Not Set | uncarvedSelf.moves.darkStamp | L4 | 一記沒蓋下的印 | 印在手裏卻沒按下;另一個你把空白留在石上 | 佔位 |
 | 439 | 未推的石 / The Slab You Did Not Shift | uncarvedSelf.moves.waitStone | L4 | 一塊沒推過的石 | 封門要推;這個你沒推,所以門仍封 | 佔位 |
 
+#220 III-prime remaining normal(佔位專名,鎖名前不得裸寫;軸沿用 statusLean,與同節點【未行者】的 deckType 並立):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 440 | 【未曜者】 / 【The Unobsidian】 | content.enemies.unobsidianSelf.name | L4 | 鏡路上一個不出聲的行者,立於黑曜與星之下 | 今世沒揀過的 toxin/ward 路;不是隊伍,是未成黑曜的你 | 佔位 [#220 III-prime] |
+| 441 | 未望的星 / The Star You Did Not Face | unobsidianSelf.moves.starGaze | L4 | 一顆沒對過的星 | 庭上的星等過你望;你沒望,另一個你望 | 佔位 |
+| 442 | 未落的光 / The Light You Left Hanging | unobsidianSelf.moves.lightHang | L4 | 一點沒落下的光 | 光環斷裂前的光;你沒讓它落,它仍掛着 | 佔位 |
+| 443 | 未視的眼 / The Eye You Did Not Meet | unobsidianSelf.moves.eyeMeet | L4 | 一隻沒對上的眼 | 注視之眼等過你;你沒對視,另一個你對上 | 佔位 |
+| 444 | 未成的曜 / The Glass That Did Not Blacken | unobsidianSelf.moves.obsidianWard | L4 | 一塊沒變黑的玻璃 | 你沒揀的留守:玻璃未失光,未成黑曜 | 佔位 |
+| 445 | 未凝的黑 / The Dark That Did Not Harden | unobsidianSelf.moves.darkHarden | L4 | 一攤沒凝住的黑 | 黑曜是失光之後凝成的;這一攤你沒凝 | 佔位 |
+| 446 | 未入的庭 / The Court You Did Not Enter | unobsidianSelf.moves.courtWait | L4 | 一座沒走進的庭 | 門前的庭等過你坐下;你沒入,所以仍是玻璃 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

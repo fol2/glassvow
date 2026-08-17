@@ -1,5 +1,5 @@
 extends RefCounted
-## Slice 1 + Slice 2 + multiplied selves + both elites on reused axes.
+## Slice 1 + Slice 2 + multiplied selves + both elites + III-prime statusLean.
 ## Kits are deterministic, flip under the intended fixture, and fail closed.
 
 const RUN_PATH: String = "user://glassvow_test_unwalked_run_v2.json"
@@ -18,6 +18,8 @@ const UNSUNK_EMBER: Array[String] = ["tideCut", "unreadVolley", "brineWake"]
 const UNSUNK_ASH: Array[String] = ["stackWard", "stillTide", "waitPage"]
 const CARVE_MOVES: Array[String] = ["stoneCut", "glyphVolley", "sealCrack"]
 const DOOR_MOVES: Array[String] = ["doorWard", "darkStamp", "waitStone"]
+const STAR_MOVES: Array[String] = ["starGaze", "lightHang", "eyeMeet"]
+const OBSIDIAN_MOVES: Array[String] = ["obsidianWard", "darkHarden", "courtWait"]
 
 
 static func run(fails: Array[String]) -> void:
@@ -64,6 +66,13 @@ static func run(fails: Array[String]) -> void:
 	_uncarved_scenario(content, fails)
 	_uncarved_ai(fails)
 	_threshold_share(content, fails)
+	_unobsidian_row(content, fails)
+	_unobsidian_kit(content, fails)
+	_unobsidian_flips(content, fails)
+	_unobsidian_fail_closed(content, fails)
+	_unobsidian_scenario(content, fails)
+	_unobsidian_ai(fails)
+	_iii_share(content, fails)
 
 
 static func _content_row(content: ContentDB, fails: Array[String]) -> void:
@@ -728,6 +737,11 @@ static func _lean_reuse(content: ContentDB, fails: Array[String]) -> void:
 		run, content.enemy(&"unlitSelf"), content)
 	if str(water.get("id", "")) != "shell" or str(lamps.get("id", "")) != "lantern":
 		fails.append("lean: ashwarden should invert both statusLean selves to ward kits")
+	var court: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unobsidianSelf"), content)
+	if str(court.get("id", "")) != "obsidian":
+		fails.append("lean: ashwarden should invert III-prime to obsidian, got %s"
+			% str(court.get("id", court.get("error", ""))))
 	var water_moves: Variant = content.enemy(&"uncrossedSelf")["counterfactual"]["kits"]["shell"]
 	var lamp_moves: Variant = content.enemy(&"unlitSelf")["counterfactual"]["kits"]["lantern"]
 	if str(water_moves) == str(lamp_moves):
@@ -1157,3 +1171,224 @@ static func _threshold_share(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("threshold: elite reused the normal kits")
 	if CounterfactualSelf.axis_keys("costLean").size() != 0:
 		fails.append("threshold: a third axis kind was registered")
+
+
+static func _unobsidian_row(content: ContentDB, fails: Array[String]) -> void:
+	var def: Dictionary = content.enemy(&"unobsidianSelf")
+	if def.is_empty() or not EnemyAi.handles(&"unobsidianSelf"):
+		fails.append("unobsidianSelf: missing catalogue row or AI handler")
+		return
+	if def.has("dialogue") or def.has("deathDialogue"):
+		fails.append("unobsidianSelf: counterfactual selves must stay silent")
+	if def.get("elite", false) == true or def.get("boss", false) == true:
+		fails.append("unobsidianSelf: remaining normal must not be elite or boss")
+	var spec: Dictionary = def.get("counterfactual", {})
+	if str(spec.get("node", "")) != "III-prime" \
+			or str(spec.get("motif", "")) != "obsidian-star":
+		fails.append("unobsidianSelf: node/motif must stay on III-prime / obsidian-star")
+	if str(spec.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
+		fails.append("unobsidianSelf: axis must reuse statusLean")
+	if str(def.get("name", "")).contains("Unwalked"):
+		fails.append("unobsidianSelf: display name collides with 【The Unwalked】")
+	var hp_v: Variant = def.get("hp", [])
+	if str(hp_v) == str(content.enemy(&"unwalkedSelf").get("hp", [])):
+		fails.append("unobsidianSelf: HP range cloned the III-prime deckType self")
+	var banned: PackedStringArray = PackedStringArray([
+		"Uncut", "Unread", "Unwaited", "Tide", "Unopened", "Unclosed", "Unwoken",
+		"Door", "Ring", "Halo", "Seat", "Scepter", "Stars", "Uncalled", "Unsaid",
+		"Fall",
+	])
+	var moves: Dictionary = def.get("moves", {})
+	for move_id_v: Variant in moves.keys():
+		var move_name: String = str(moves[move_id_v].get("name", ""))
+		for word: String in banned:
+			if move_name.contains(word):
+				fails.append("unobsidianSelf: %s display collides on '%s'"
+					% [str(move_id_v), word])
+	var once: PackedStringArray = PackedStringArray(["Star", "Glass", "Court", "Eye"])
+	for word: String in once:
+		var hits: int = 0
+		for move_id_v: Variant in moves.keys():
+			if str(moves[move_id_v].get("name", "")).contains(word):
+				hits += 1
+		if hits > 1:
+			fails.append("unobsidianSelf: '%s' crowds %d move names" % [word, hits])
+	var root_fx: Variant = content.enemy(&"unlitSelf")["moves"]["stillRoot"].get("fx", [])
+	var harden_row: Dictionary = def["moves"]["darkHarden"]
+	if str(harden_row.get("fx", [])) == str(root_fx):
+		fails.append("unobsidianSelf: darkHarden cloned stillRoot's debuff")
+	var wick_fx: Variant = content.enemy(&"unlitSelf")["moves"]["wickUnlit"].get("fx", [])
+	if str(harden_row.get("fx", [])) == str(wick_fx):
+		fails.append("unobsidianSelf: darkHarden cloned wickUnlit's debuff")
+	var faults: PackedStringArray = content.enemy_faults("unobsidianSelf", def)
+	if not faults.is_empty():
+		fails.append("unobsidianSelf: authored row failed validation: %s" % faults[0])
+	var broken_move: Dictionary = def.duplicate(true)
+	var kits: Dictionary = broken_move["counterfactual"]["kits"]
+	kits["star"] = ["notAMove"]
+	if content.enemy_faults("unobsidianSelf", broken_move).is_empty():
+		fails.append("unobsidianSelf: unknown kit move was accepted")
+	var broken: Dictionary = def.duplicate(true)
+	broken["counterfactual"]["axis"] = "noSuchAxis"
+	if content.enemy_faults("unobsidianSelf", broken).is_empty():
+		fails.append("unobsidianSelf: unknown axis was accepted")
+	var wrong_keys: Dictionary = def.duplicate(true)
+	wrong_keys["counterfactual"]["axisToKit"] = {"ember": "star", "ash": "obsidian"}
+	if content.enemy_faults("unobsidianSelf", wrong_keys).is_empty():
+		fails.append("unobsidianSelf: deckType keys were accepted on statusLean")
+	var third: Dictionary = def.duplicate(true)
+	third["counterfactual"]["axis"] = "costLean"
+	if content.enemy_faults("unobsidianSelf", third).is_empty():
+		fails.append("unobsidianSelf: a third axis was accepted")
+
+
+static func _unobsidian_kit(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22061, "unobsidian-dusk")
+	var picked: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unobsidianSelf"), content)
+	if picked.get("ok", false) != true or str(picked.get("id", "")) != "star":
+		fails.append("unobsidianSelf: duskblade start deck should select star, got %s"
+			% str(picked.get("id", picked.get("error", ""))))
+	var again: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unobsidianSelf"), content)
+	if str(again.get("id", "")) != str(picked.get("id", "")):
+		fails.append("unobsidianSelf: identical deck produced a different kit")
+
+
+static func _unobsidian_flips(content: ContentDB, fails: Array[String]) -> void:
+	var ash_run: RunState = RunState.new_run(content, 22062, "unobsidian-ashwarden", {"aspect": 1})
+	var ash_pick: Dictionary = CounterfactualSelf.resolve(
+		ash_run, content.enemy(&"unobsidianSelf"), content)
+	if str(ash_pick.get("id", "")) != "obsidian":
+		fails.append("unobsidianSelf: ashwarden start deck should select obsidian, got %s"
+			% str(ash_pick.get("id", ash_pick.get("error", ""))))
+	var edited: RunState = RunState.new_run(content, 22063, "unobsidian-edited")
+	var removed: int = 0
+	var kept: Array[CardInst] = []
+	for card: CardInst in edited.player.deck:
+		if String(card.id) == "defend" and removed < 3:
+			removed += 1
+			continue
+		kept.append(card)
+	kept.append(CardInst.new(9001, &"ashBite"))
+	kept.append(CardInst.new(9002, &"ashBite"))
+	kept.append(CardInst.new(9003, &"ashBite"))
+	kept.append(CardInst.new(9004, &"ashBite"))
+	edited.player.deck = kept
+	var flipped: Dictionary = CounterfactualSelf.resolve(
+		edited, content.enemy(&"unobsidianSelf"), content)
+	if str(flipped.get("id", "")) != "obsidian":
+		fails.append("unobsidianSelf: toxin-heavy duskblade should select obsidian, got %s"
+			% str(flipped.get("id", flipped.get("error", ""))))
+
+
+static func _unobsidian_fail_closed(content: ContentDB, fails: Array[String]) -> void:
+	var empty: RunState = RunState.new_run(content, 22064, "unobsidian-empty")
+	empty.player.deck.clear()
+	var none: Dictionary = CounterfactualSelf.resolve(
+		empty, content.enemy(&"unobsidianSelf"), content)
+	if none.get("ok", false) == true:
+		fails.append("unobsidianSelf: empty deck emitted a kit")
+	var dry: RunState = RunState.new_run(content, 22065, "unobsidian-dry")
+	var strikes: Array[CardInst] = []
+	for card: CardInst in dry.player.deck:
+		if String(card.id) == "strike":
+			strikes.append(card)
+	dry.player.deck = strikes
+	var dry_pick: Dictionary = CounterfactualSelf.resolve(
+		dry, content.enemy(&"unobsidianSelf"), content)
+	if dry_pick.get("ok", false) == true:
+		fails.append("unobsidianSelf: strike-only deck emitted a kit")
+	var cursed: Dictionary = content.enemy(&"unobsidianSelf").duplicate(true)
+	cursed["counterfactual"]["axisToKit"]["ward"] = "noSuchKit"
+	var run: RunState = RunState.new_run(content, 22066, "unobsidian-bad-kit")
+	var bad: Dictionary = CounterfactualSelf.resolve(run, cursed, content)
+	if bad.get("ok", false) == true:
+		fails.append("unobsidianSelf: unknown kit was emitted")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	content.enemies["unobsidianSelf"] = cursed
+	game.apply({"t": "startCombat", "enemies": ["unobsidianSelf"], "kind": "normal"})
+	if game.cb == null or not game.cb.enemies.is_empty():
+		fails.append("unobsidianSelf: invalid kit still entered combat")
+	var restored: ContentDB = ContentDB.load_full()
+	content.enemies["unobsidianSelf"] = restored.enemy(&"unobsidianSelf")
+
+
+static func _unobsidian_scenario(content: ContentDB, fails: Array[String]) -> void:
+	var kernel: ScenarioKernel = ScenarioKernel.new(content, RUN_PATH, VIGIL_PATH, REF_PATH)
+	kernel.clear_profile()
+	var ref: ScenarioReference = ScenarioReference.new()
+	if not ref.load_from({
+		"id": "combat-unobsidian-self", "revision": 1, "build": BUILD,
+		"seed": 18501, "locale": "en", "shape": "pad-landscape",
+		"overrides": {
+			"act": 2, "node": "0,6", "kind": "monster",
+			"enemies": ["unobsidianSelf"],
+		},
+	}):
+		fails.append("unobsidianSelf: named Scenario rejected: %s" % ref.error)
+		return
+	var run: RunState = kernel.construct(ref)
+	if run == null:
+		fails.append("unobsidianSelf: named Scenario failed: %s" % kernel.last_error)
+		kernel.clear_profile()
+		return
+	if run.pending_enemy_ids != ["unobsidianSelf"]:
+		fails.append("unobsidianSelf: Scenario did not freeze the III-prime self")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	game.apply({"t": "startCombat", "enemies": run.pending_enemy_ids, "kind": "normal"})
+	if game.cb == null or game.cb.enemies.is_empty():
+		fails.append("unobsidianSelf: startCombat dropped the III-prime self")
+		kernel.clear_profile()
+		return
+	var enemy: EnemyCombatant = game.cb.enemies[0]
+	if str(enemy.flags.get(CounterfactualSelf.KIT_FLAG, "")) != "star":
+		fails.append("unobsidianSelf: Scenario combat did not wear the star kit")
+	if String(enemy.move_key) != "starGaze":
+		fails.append("unobsidianSelf: star kit first intent was %s" % String(enemy.move_key))
+	if not STAR_MOVES.has(String(enemy.move_key)):
+		fails.append("unobsidianSelf: star intent is not a star kit move")
+	kernel.clear_profile()
+
+
+static func _unobsidian_ai(fails: Array[String]) -> void:
+	var rng: Rng = Rng.new(23)
+	var before: int = rng.get_state()
+	var flags: Dictionary = {CounterfactualSelf.KIT_FLAG: "star"}
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unobsidianSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != STAR_MOVES[turn - 1]:
+			fails.append("unobsidianSelf: star turn %d expected %s got %s"
+				% [turn, STAR_MOVES[turn - 1], String(move)])
+	if rng.get_state() != before:
+		fails.append("unobsidianSelf: AI consumed RNG")
+	flags[CounterfactualSelf.KIT_FLAG] = "obsidian"
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unobsidianSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != OBSIDIAN_MOVES[turn - 1]:
+			fails.append("unobsidianSelf: obsidian turn %d expected %s got %s"
+				% [turn, OBSIDIAN_MOVES[turn - 1], String(move)])
+	var missing: StringName = EnemyAi.decide(&"unobsidianSelf", 1, "", "", 1.0, rng, {})
+	if missing != &"":
+		fails.append("unobsidianSelf: missing kit returned %s" % String(missing))
+
+
+static func _iii_share(content: ContentDB, fails: Array[String]) -> void:
+	var ring: Dictionary = content.enemy(&"unwalkedSelf").get("counterfactual", {})
+	var star: Dictionary = content.enemy(&"unobsidianSelf").get("counterfactual", {})
+	if str(ring.get("node", "")) != "III-prime" or str(star.get("node", "")) != "III-prime":
+		fails.append("iii: must seat both the deckType and the statusLean self")
+	if str(ring.get("axis", "")) != CounterfactualSelf.AXIS_DECK_TYPE:
+		fails.append("iii: broken-ring must keep deckType")
+	if str(star.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
+		fails.append("iii: obsidian-star must reuse statusLean")
+	if str(ring.get("axis", "")) == str(star.get("axis", "")):
+		fails.append("iii: selves must not share an axis")
+	var ring_moves: Variant = ring.get("kits", {})
+	var star_moves: Variant = star.get("kits", {})
+	if str(ring_moves) == str(star_moves):
+		fails.append("iii: statusLean self reused the deckType kits")
+	if CounterfactualSelf.axis_keys("costLean").size() != 0:
+		fails.append("iii: a third axis kind was registered")

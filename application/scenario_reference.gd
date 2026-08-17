@@ -34,6 +34,7 @@ const CATALOGUE: Dictionary = {
 	"combat-unlit-self": 1,
 	"combat-unsunk-self": 1,
 	"combat-uncarved-self": 1,
+	"combat-unobsidian-self": 1,
 }
 const LOCALES: PackedStringArray = ["en", "zh-Hant"]
 const OVERRIDE_KEYS: PackedStringArray = [
