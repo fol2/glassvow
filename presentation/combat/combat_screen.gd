@@ -1833,8 +1833,7 @@ func _on_card_tapped(uid: int) -> void:
 ## not coarse — the benchmark's query answers for the pointer actually in use, and
 ## the closest honest reading here is "a touchscreen is all there is".
 func _coarse() -> bool:
-	return DisplayServer.is_touchscreen_available() \
-		and not DisplayServer.has_feature(DisplayServer.FEATURE_MOUSE)
+	return PointerDevice.coarse()
 
 
 ## The benchmark wires hover at all only behind `if (FINE)` (combat.js:960) —

@@ -430,7 +430,7 @@ Benchmark: 1100ms normal / 1250ms crit, `cubic-bezier(.2,.7,.3,1)`; scale
 
 Here: `Floaters.float_text` — 1.1s / 1.25s crit, matching ease and keyframes,
 poison descends, crit blaze (`floaters.gd:43-45` (`FLOAT_EASE`), `floaters.gd:146-198` (`float_text`)). Driven
-from `combat_screen._float` (`combat_screen.gd:2309-2314` (`_float`)). The benchmark's crit
+from `combat_screen._float` (`combat_screen.gd:2308-2313` (`_float`)). The benchmark's crit
 branch has no caller, so its presence in both trees is not a visible parity gap.
 
 ### 4.2 Impact particles — **KEEP** (and honour the dead kinds)
@@ -445,7 +445,7 @@ go NaN before paint. Pixel counts on the running page: burst/motes draw; ring an
 slashArc draw 0 (`vfx_layer.gd:43-59` (in `DEAD_KINDS_RENDER`)).
 
 Here: `VfxLayer.archetype_hit` and the drain call sites are built
-(`vfx_layer.gd:617` (`archetype_hit`), `combat_screen.gd:2715` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
+(`vfx_layer.gd:617` (`archetype_hit`), `combat_screen.gd:2714` (`_hit_enemy`)). `DEAD_KINDS_RENDER = false` drops
 `ring` / `slash` at `_push` so the typed `Vector2.ZERO` default does not
 accidentally repair them into visible hoops (`vfx_layer.gd:71-73` (`DEAD_KINDS_RENDER`),
 `vfx_layer.gd:405-410` (`_push`)). Call sites stay as the record of what the source asks
