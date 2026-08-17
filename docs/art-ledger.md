@@ -350,7 +350,7 @@ through to `layoutDefault`.
 
 ### `stage/act4-backdrop.png` — 1536×1024 RGBA
 ### `stage/act4-mid.png` — 1536×1024 RGBA
-### `stage/act4-ledge.png` — 1536×797 RGBA
+### `stage/act4-ledge.png` — 1536×789 RGBA
 
 Act IV combat plates for 鏡中歸途 / The Mirrored Road. Cutouts, not the
 cinematic scene plates: sky is true alpha so `SkyField`'s dawn row shows
@@ -362,43 +362,48 @@ prompts are in `docs/design/2026-08-16-act4-combat-art/README.md`.
 Installer: `install.py`. Do not regenerate from taste; swap a `PICKS` row
 and re-run.
 
+First landing used `act1-mid.png` as a style reference and shipped a
+lantern-arch. That was a miss, not canon — Act IV combat plates take the
+rose-window inner face and monument-road, not Act I's paired lanterns
+(those belong to Act IV *node 4* as a mirror, not to the whole-act set).
+
 | Path | Candidate | ≥240 alpha | Notes |
 |---|---|---|---|
-| `act4-backdrop` | B | 100% | Asymmetric left ruin; far amber; bottom corners opaque like act1 |
-| `act4-mid` | B | 100% | One connected gate, unlit lanterns, amber through the glass |
+| `act4-backdrop` | C | 100% | Stelae road, inverted amber; B rejected (Act I left ruin) |
+| `act4-mid` | C | 100% | Circular rose window + sentinel stelae; B rejected (lantern-arch) |
 | `act4-ledge` | B | 100% | Wide slab, thick front face, two standing-stone posts |
 
-Generated 2026-08-17 through Cursor `GenerateImage`. Void keyed from the
-edges (true `#000000` in the render). Shared void clause and per-plate
-prompts are in the design record, not restated here.
+Generated 2026-08-17 through Cursor `GenerateImage`. Stage voids keyed
+from the edges (true `#000000` in the render). Character voids are a
+**magenta field** — see `unwalkedSelf` below.
 
-### `enemies/unwalkedSelf.png` — 622×1024 RGBA — Act IV tracer self
+### `enemies/unwalkedSelf.png` — Act IV tracer self
 
 The Unwalked, Slice 1's silent counterfactual self (`unwalkedSelf`,
 III-prime / broken-ring). Hero silhouette vocabulary (#261 Q5), not a
 monster and not the seated Keeper. Void hood, stained-glass scepter, a
-broken gold halo snapped at the top. Inverted amber rim from the left;
-body glass cold violet / teal.
+broken gold halo. Inverted amber rim from the left; body glass cold
+violet / teal.
 
-**Proposed pick A, 2026-08-17, pending James.** Construction clause is the
-Keeper/Lamplighter paragraph — the body *is* leaded panes. Candidate B
-read as gold-trimmed armour and was rejected. Alpha 100% after hardening
-the LANCZOS fringe (binary cutout, same as the rest of `enemies/`).
+**Proposed pick D, 2026-08-17, pending James.** A was generated on black
+and failed the same way as a boxed sprite: GenerateImage emits RGB with a
+near-black haze, the hood is also black, and a flood-fill from the edges
+cannot eat the haze without eating the face. Corners-clear + ≥240-of-nonzero
+does not catch that — the haze is fully opaque. D uses a magenta field;
+`install.py` keys magenta (hood stays) and punches large enclosed magenta
+arm-gaps. Gate: leftover field-magenta < 32, and opaque near-black in the
+8px canvas frame < 400.
 
 Prompt (binding clauses):
 
-> CONSTRUCTION, this is the most important instruction: the figure is not
-> painted cloth. The entire body, cloak and armour are built from large
-> flat panes of coloured glass separated by thick black lead came lines,
-> exactly like a cathedral stained-glass window rendered as a character.
-> Only a few big panes, never lacework. The Unwalked, a silent
-> counterfactual pilgrim, hero silhouette, full body, 15 percent margin.
-> Raised hood; the hood opening is a deep black VOID with NO face, NO
-> eyes. Holds a tall stained-glass scepter. Behind the head a BROKEN
-> golden halo snapped clean through. INVERTED hearth light: warm amber
-> rim from the LEFT; the rest of the glass is cold violet-grey, deep
-> teal, court purple. Fully transparent background. No text, no
-> watermark.
+> BACKGROUND is a FLAT SOLID MAGENTA #FF00FF field, edge to edge. No black
+> vignette. CONSTRUCTION: the body IS leaded stained-glass panes. The
+> Unwalked, silent counterfactual pilgrim, full body, 15 percent magenta
+> margin. Raised hood; hood opening is a deep BLACK VOID with NO face —
+> black exists ONLY inside the hood. Tall stained-glass scepter, not a
+> lantern. BROKEN golden halo snapped at the top. INVERTED hearth light:
+> amber rim from the LEFT; remaining glass cold violet / teal / court
+> purple. No text, no watermark.
 
 ## Rejection note — what "technically shippable" means
 

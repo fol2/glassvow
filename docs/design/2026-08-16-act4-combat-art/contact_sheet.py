@@ -11,10 +11,10 @@ HERE = Path(__file__).parent
 CANDIDATES = HERE / "candidates"
 
 ROWS = [
-    ("backdrop  [B proposed]", ["act4-backdrop-a", "act4-backdrop-b"]),
-    ("mid  [B proposed]", ["act4-mid-a", "act4-mid-b"]),
+    ("backdrop  [C proposed]", ["act4-backdrop-a", "act4-backdrop-b", "act4-backdrop-c"]),
+    ("mid  [C proposed]", ["act4-mid-a", "act4-mid-b", "act4-mid-c", "act4-mid-d"]),
     ("ledge  [B proposed]", ["act4-ledge-a", "act4-ledge-b"]),
-    ("unwalkedSelf  [A proposed]", ["unwalked-self-a", "unwalked-self-b"]),
+    ("unwalkedSelf  [D proposed]", ["unwalked-self-a", "unwalked-self-b", "unwalked-self-c", "unwalked-self-d"]),
 ]
 
 CELL_W, CELL_H = 480, 320
