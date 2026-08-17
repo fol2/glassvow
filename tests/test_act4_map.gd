@@ -20,19 +20,24 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, types == ["monster", "monster", "elite", "rest", "boss"],
 		"types are monster → monster → elite → rest → boss")
 	_check(fails, road.reachable() == [0], "the road opens on n0 only")
+	_check(fails, road.nodes[0].enemies == ["unopenedSelf"],
+		"threshold-prime pins unopenedSelf")
 	_check(fails, road.nodes[1].enemies == ["unwalkedSelf"],
 		"III-prime pins unwalkedSelf")
-	_check(fails, road.nodes[2].enemies == ["uncrossedSelf"],
-		"II-prime pins uncrossedSelf")
-	_check(fails, road.nodes[0].enemies.is_empty() and road.nodes[3].enemies.is_empty()
-			and road.nodes[4].enemies.is_empty(),
-		"unlanded nodes stay empty")
+	_check(fails, road.nodes[2].enemies == ["uncrossedSelf", "unsunkSelf"],
+		"II-prime elite pins both axes")
+	_check(fails, road.nodes[3].enemies.is_empty(),
+		"I-prime rest stays empty on first clear")
+	_check(fails, road.nodes[4].enemies == ["eternalKeeper"],
+		"hearth-prime pins the Eternal Keeper")
 	_check(fails, not road.nodes[0].unlit and road.nodes[0].bounty == 0,
 		"the authored line carries no unlit bounty")
 	var copy: WorldMap = WorldMap.from_dict(road.to_dict())
 	_check(fails, copy != null and copy.nodes.size() == 5
+			and copy.nodes[0].enemies == ["unopenedSelf"]
 			and copy.nodes[1].enemies == ["unwalkedSelf"]
-			and copy.nodes[2].enemies == ["uncrossedSelf"],
+			and copy.nodes[2].enemies == ["uncrossedSelf", "unsunkSelf"]
+			and copy.nodes[4].enemies == ["eternalKeeper"],
 		"authored occupants survive the save projection")
 	var generated: WorldMap = WorldMap.for_run(_act4_run(content, 402, []), content)
 	_check(fails, generated.nodes.size() == 5,

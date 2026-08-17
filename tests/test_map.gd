@@ -178,12 +178,14 @@ static func run(fails: Array[String]) -> void:
 		fourth_types.append(n.type)
 	_check(fails, fourth_types == ["monster", "monster", "elite", "rest", "boss"],
 		"Act IV reads monster → monster → elite → rest → boss")
+	_check(fails, fourth.nodes[0].enemies == ["unopenedSelf"],
+		"first-clear threshold-prime pins the landed unopened self")
 	_check(fails, fourth.nodes[1].enemies == ["unwalkedSelf"],
 		"first-clear III-prime pins the landed unwalked self")
-	_check(fails, fourth.nodes[2].enemies == ["uncrossedSelf"],
-		"first-clear II-prime pins the landed uncrossed self")
-	_check(fails, fourth.nodes[0].enemies.is_empty() and fourth.nodes[4].enemies.is_empty(),
-		"unlanded Act IV combat nodes stay empty rather than reuse Act III")
+	_check(fails, fourth.nodes[2].enemies == ["uncrossedSelf", "unsunkSelf"],
+		"first-clear II-prime elite pins both landed axes")
+	_check(fails, fourth.nodes[4].enemies == ["eternalKeeper"],
+		"first-clear hearth-prime pins the Eternal Keeper")
 	_check(fails, lifecycle.player.hp == 26,
 		"each boss transition mends 35 percent without exceeding max HP")
 	var boss_map: WorldMap = WorldMap.slice()

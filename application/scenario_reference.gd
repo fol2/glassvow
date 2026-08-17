@@ -18,7 +18,6 @@ const CATALOGUE: Dictionary = {
 	"act-3-map-terminus": 1,
 	"act-4-map-start": 1,
 	"act-4-map-branch": 1,
-	"act-4-map-terminus": 1,
 	"combat-normal": 1,
 	"combat-elite": 1,
 	"combat-boss": 1,
@@ -40,8 +39,11 @@ const CATALOGUE: Dictionary = {
 	"combat-unobsidian-self": 1,
 	"combat-unwooded-self": 1,
 	"act-4-map-rest": 1,
+	"act-4-map-terminus": 1,
+	"combat-act4-threshold-prime": 1,
 	"combat-act4-iii-prime": 1,
 	"combat-act4-ii-prime": 1,
+	"combat-act4-boss": 1,
 }
 const LOCALES: PackedStringArray = ["en", "zh-Hant"]
 const OVERRIDE_KEYS: PackedStringArray = [

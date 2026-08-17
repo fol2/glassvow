@@ -59,7 +59,8 @@ static func for_run(run: RunState, content: ContentDB) -> WorldMap:
 
 
 ## First clear pins motif-matched landed selves (and `encounters[3]` when
-## present). Later runs redraw the two monsters and the elite from that pool;
+## present). The boss pins `eternalKeeper` (it has no counterfactual.node).
+## Later runs redraw the two monsters and the elite from that pool;
 ## types, order and the boss stay fixed.
 static func act4(run: RunState, content: ContentDB) -> WorldMap:
 	var m: WorldMap = WorldMap.new()
@@ -89,7 +90,9 @@ static func _act4_occupants(
 				group_i = 1
 			return _copy_group(pool, group_i)
 		return _copy_group(pool, run.rng.pick_index(pool.size()))
-	return _act4_motif_pin(content, index)
+	if type_key == "boss":
+		return _act4_boss_pin(content)
+	return _act4_motif_pin(content, index, type_key)
 
 
 static func _act4_pool(content: ContentDB, type_key: String) -> Array:
@@ -106,7 +109,16 @@ static func _act4_pool(content: ContentDB, type_key: String) -> Array:
 	return pool_v if typeof(pool_v) == TYPE_ARRAY else []
 
 
-static func _act4_motif_pin(content: ContentDB, index: int) -> Array[String]:
+static func _act4_boss_pin(content: ContentDB) -> Array[String]:
+	var out: Array[String] = []
+	if content != null and content.enemies.has("eternalKeeper"):
+		out.append("eternalKeeper")
+	return out
+
+
+static func _act4_motif_pin(
+	content: ContentDB, index: int, type_key: String
+) -> Array[String]:
 	var out: Array[String] = []
 	if content == null or index < 0 or index >= ACT4_MOTIFS.size():
 		return out
@@ -117,12 +129,18 @@ static func _act4_motif_pin(content: ContentDB, index: int) -> Array[String]:
 		if typeof(def_v) != TYPE_DICTIONARY:
 			continue
 		var def: Dictionary = def_v
+		if bool(def.get("boss", false)):
+			continue
+		var is_elite: bool = bool(def.get("elite", false))
+		if type_key == "monster" and is_elite:
+			continue
 		var spec_v: Variant = def.get("counterfactual", {})
 		if typeof(spec_v) != TYPE_DICTIONARY:
 			continue
 		var spec: Dictionary = spec_v
 		if str(spec.get("node", "")) == wanted:
 			out.append(id)
+	out.sort()
 	return out
 
 
