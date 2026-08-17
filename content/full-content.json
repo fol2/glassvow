@@ -3442,6 +3442,96 @@
       },
       "name": "【The Uncrossed】"
     },
+    "unlitSelf": {
+      "hp": [
+        44,
+        50
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 38,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "I-prime",
+        "motif": "paired-lanterns",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "lantern",
+          "ward": "ashroot"
+        },
+        "kits": {
+          "ashroot": [
+            "rootLash",
+            "greyAsh",
+            "stillRoot"
+          ],
+          "lantern": [
+            "pairedDark",
+            "wickUnlit",
+            "lampWait"
+          ]
+        }
+      },
+      "moves": {
+        "rootLash": {
+          "intent": "attack_debuff",
+          "dmg": 9,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 3
+            }
+          ],
+          "name": "The Root Uncut"
+        },
+        "greyAsh": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "The Ash Unscattered"
+        },
+        "stillRoot": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "The Root That Stayed"
+        },
+        "pairedDark": {
+          "intent": "block",
+          "block": 16,
+          "name": "The Pair Left Dark"
+        },
+        "wickUnlit": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "The Wick Unburned"
+        },
+        "lampWait": {
+          "intent": "attack_block",
+          "dmg": 8,
+          "block": 6,
+          "name": "The Lamp Unraised"
+        }
+      },
+      "name": "【The Unstruck】"
+    },
     "unopenedSelf": {
       "hp": [
         40,

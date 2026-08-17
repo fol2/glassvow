@@ -1,5 +1,5 @@
 extends RefCounted
-## Slice 1 + Slice 2 + one multiplied threshold-prime self on a reused axis.
+## Slice 1 + Slice 2 + two multiplied selves on reused axes.
 ## Kits are deterministic, flip under the intended fixture, and fail closed.
 
 const RUN_PATH: String = "user://glassvow_test_unwalked_run_v2.json"
@@ -12,6 +12,8 @@ const BRINE_MOVES: Array[String] = ["brineBite", "falseLamp", "undertowEcho"]
 const SHELL_MOVES: Array[String] = ["closedShell", "stillWater", "librarySpine"]
 const GLASS_EMBER: Array[String] = ["glassCut", "shardVolley", "sealBlow"]
 const GLASS_ASH: Array[String] = ["roseWard", "darkPane", "reliefWait"]
+const ASHROOT_MOVES: Array[String] = ["rootLash", "greyAsh", "stillRoot"]
+const LANTERN_MOVES: Array[String] = ["pairedDark", "wickUnlit", "lampWait"]
 
 
 static func run(fails: Array[String]) -> void:
@@ -37,6 +39,13 @@ static func run(fails: Array[String]) -> void:
 	_unopened_scenario(content, fails)
 	_unopened_ai(fails)
 	_axis_reuse(content, fails)
+	_unlit_row(content, fails)
+	_unlit_kit(content, fails)
+	_unlit_flips(content, fails)
+	_unlit_fail_closed(content, fails)
+	_unlit_scenario(content, fails)
+	_unlit_ai(fails)
+	_lean_reuse(content, fails)
 
 
 static func _content_row(content: ContentDB, fails: Array[String]) -> void:
@@ -523,3 +532,187 @@ static func _axis_reuse(content: ContentDB, fails: Array[String]) -> void:
 		fails.append("reuse: threshold-prime reused III-prime ember moves")
 	if CounterfactualSelf.axis_keys("costLean").size() != 0:
 		fails.append("reuse: a third axis kind was registered")
+
+
+static func _unlit_row(content: ContentDB, fails: Array[String]) -> void:
+	var def: Dictionary = content.enemy(&"unlitSelf")
+	if def.is_empty() or not EnemyAi.handles(&"unlitSelf"):
+		fails.append("unlitSelf: missing catalogue row or AI handler")
+		return
+	if def.has("dialogue") or def.has("deathDialogue"):
+		fails.append("unlitSelf: counterfactual selves must stay silent")
+	var spec: Dictionary = def.get("counterfactual", {})
+	if str(spec.get("node", "")) != "I-prime" or str(spec.get("motif", "")) != "paired-lanterns":
+		fails.append("unlitSelf: node/motif must stay on I-prime / paired-lanterns")
+	if str(spec.get("axis", "")) != CounterfactualSelf.AXIS_STATUS_LEAN:
+		fails.append("unlitSelf: axis must reuse statusLean")
+	if str(def.get("name", "")).contains("Unlit"):
+		fails.append("unlitSelf: display name collides with locked 'the Unlit Way'")
+	var hp_v: Variant = def.get("hp", [])
+	var other_hp: Variant = content.enemy(&"uncrossedSelf").get("hp", [])
+	if str(hp_v) == str(other_hp):
+		fails.append("unlitSelf: HP range cloned the II-prime self")
+	var faults: PackedStringArray = content.enemy_faults("unlitSelf", def)
+	if not faults.is_empty():
+		fails.append("unlitSelf: authored row failed validation: %s" % faults[0])
+	var broken: Dictionary = def.duplicate(true)
+	broken["counterfactual"]["axis"] = "noSuchAxis"
+	if content.enemy_faults("unlitSelf", broken).is_empty():
+		fails.append("unlitSelf: unknown axis was accepted")
+	var wrong_keys: Dictionary = def.duplicate(true)
+	wrong_keys["counterfactual"]["axisToKit"] = {"ember": "ashroot", "ash": "lantern"}
+	if content.enemy_faults("unlitSelf", wrong_keys).is_empty():
+		fails.append("unlitSelf: deckType keys were accepted on statusLean")
+	var third: Dictionary = def.duplicate(true)
+	third["counterfactual"]["axis"] = "costLean"
+	if content.enemy_faults("unlitSelf", third).is_empty():
+		fails.append("unlitSelf: a third axis was accepted")
+
+
+static func _unlit_kit(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22031, "unlit-dusk")
+	var picked: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unlitSelf"), content)
+	if picked.get("ok", false) != true or str(picked.get("id", "")) != "ashroot":
+		fails.append("unlitSelf: duskblade start deck should select ashroot, got %s"
+			% str(picked.get("id", picked.get("error", ""))))
+	var again: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unlitSelf"), content)
+	if str(again.get("id", "")) != str(picked.get("id", "")):
+		fails.append("unlitSelf: identical deck produced a different kit")
+
+
+static func _unlit_flips(content: ContentDB, fails: Array[String]) -> void:
+	var ash_run: RunState = RunState.new_run(content, 22032, "unlit-ashwarden", {"aspect": 1})
+	var ash_pick: Dictionary = CounterfactualSelf.resolve(
+		ash_run, content.enemy(&"unlitSelf"), content)
+	if str(ash_pick.get("id", "")) != "lantern":
+		fails.append("unlitSelf: ashwarden start deck should select lantern, got %s"
+			% str(ash_pick.get("id", ash_pick.get("error", ""))))
+	var edited: RunState = RunState.new_run(content, 22033, "unlit-edited")
+	var removed: int = 0
+	var kept: Array[CardInst] = []
+	for card: CardInst in edited.player.deck:
+		if String(card.id) == "defend" and removed < 3:
+			removed += 1
+			continue
+		kept.append(card)
+	kept.append(CardInst.new(9001, &"ashBite"))
+	kept.append(CardInst.new(9002, &"ashBite"))
+	kept.append(CardInst.new(9003, &"ashBite"))
+	kept.append(CardInst.new(9004, &"ashBite"))
+	edited.player.deck = kept
+	var flipped: Dictionary = CounterfactualSelf.resolve(
+		edited, content.enemy(&"unlitSelf"), content)
+	if str(flipped.get("id", "")) != "lantern":
+		fails.append("unlitSelf: toxin-heavy duskblade should select lantern, got %s"
+			% str(flipped.get("id", flipped.get("error", ""))))
+
+
+static func _unlit_fail_closed(content: ContentDB, fails: Array[String]) -> void:
+	var empty: RunState = RunState.new_run(content, 22034, "unlit-empty")
+	empty.player.deck.clear()
+	var none: Dictionary = CounterfactualSelf.resolve(
+		empty, content.enemy(&"unlitSelf"), content)
+	if none.get("ok", false) == true:
+		fails.append("unlitSelf: empty deck emitted a kit")
+	var dry: RunState = RunState.new_run(content, 22035, "unlit-dry")
+	var strikes: Array[CardInst] = []
+	for card: CardInst in dry.player.deck:
+		if String(card.id) == "strike":
+			strikes.append(card)
+	dry.player.deck = strikes
+	var dry_pick: Dictionary = CounterfactualSelf.resolve(
+		dry, content.enemy(&"unlitSelf"), content)
+	if dry_pick.get("ok", false) == true:
+		fails.append("unlitSelf: strike-only deck emitted a kit")
+	var cursed: Dictionary = content.enemy(&"unlitSelf").duplicate(true)
+	cursed["counterfactual"]["axisToKit"]["ward"] = "noSuchKit"
+	var run: RunState = RunState.new_run(content, 22036, "unlit-bad-kit")
+	var bad: Dictionary = CounterfactualSelf.resolve(run, cursed, content)
+	if bad.get("ok", false) == true:
+		fails.append("unlitSelf: unknown kit was emitted")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	content.enemies["unlitSelf"] = cursed
+	game.apply({"t": "startCombat", "enemies": ["unlitSelf"], "kind": "normal"})
+	if game.cb == null or not game.cb.enemies.is_empty():
+		fails.append("unlitSelf: invalid kit still entered combat")
+	var restored: ContentDB = ContentDB.load_full()
+	content.enemies["unlitSelf"] = restored.enemy(&"unlitSelf")
+
+
+static func _unlit_scenario(content: ContentDB, fails: Array[String]) -> void:
+	var kernel: ScenarioKernel = ScenarioKernel.new(content, RUN_PATH, VIGIL_PATH, REF_PATH)
+	kernel.clear_profile()
+	var ref: ScenarioReference = ScenarioReference.new()
+	if not ref.load_from({
+		"id": "combat-unlit-self", "revision": 1, "build": BUILD,
+		"seed": 18501, "locale": "en", "shape": "pad-landscape",
+		"overrides": {
+			"act": 0, "node": "1,2", "kind": "monster",
+			"enemies": ["unlitSelf"],
+		},
+	}):
+		fails.append("unlitSelf: named Scenario rejected: %s" % ref.error)
+		return
+	var run: RunState = kernel.construct(ref)
+	if run == null:
+		fails.append("unlitSelf: named Scenario failed: %s" % kernel.last_error)
+		kernel.clear_profile()
+		return
+	if run.pending_enemy_ids != ["unlitSelf"]:
+		fails.append("unlitSelf: Scenario did not freeze the I-prime enemy")
+	var game: GlassvowGame = GlassvowGame.new(content, run)
+	game.apply({"t": "startCombat", "enemies": run.pending_enemy_ids, "kind": "normal"})
+	if game.cb == null or game.cb.enemies.is_empty():
+		fails.append("unlitSelf: startCombat dropped the I-prime self")
+		kernel.clear_profile()
+		return
+	var enemy: EnemyCombatant = game.cb.enemies[0]
+	if str(enemy.flags.get(CounterfactualSelf.KIT_FLAG, "")) != "ashroot":
+		fails.append("unlitSelf: Scenario combat did not wear the ashroot kit")
+	if String(enemy.move_key) != "rootLash":
+		fails.append("unlitSelf: ashroot kit first intent was %s" % String(enemy.move_key))
+	if not ASHROOT_MOVES.has(String(enemy.move_key)):
+		fails.append("unlitSelf: ashroot intent is not an ashroot kit move")
+	kernel.clear_profile()
+
+
+static func _unlit_ai(fails: Array[String]) -> void:
+	var rng: Rng = Rng.new(17)
+	var before: int = rng.get_state()
+	var flags: Dictionary = {CounterfactualSelf.KIT_FLAG: "ashroot"}
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unlitSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != ASHROOT_MOVES[turn - 1]:
+			fails.append("unlitSelf: ashroot turn %d expected %s got %s"
+				% [turn, ASHROOT_MOVES[turn - 1], String(move)])
+	if rng.get_state() != before:
+		fails.append("unlitSelf: AI consumed RNG")
+	flags[CounterfactualSelf.KIT_FLAG] = "lantern"
+	for turn: int in range(1, 4):
+		var move: StringName = EnemyAi.decide(
+			&"unlitSelf", turn, "", "", 1.0, rng, flags)
+		if String(move) != LANTERN_MOVES[turn - 1]:
+			fails.append("unlitSelf: lantern turn %d expected %s got %s"
+				% [turn, LANTERN_MOVES[turn - 1], String(move)])
+	var missing: StringName = EnemyAi.decide(&"unlitSelf", 1, "", "", 1.0, rng, {})
+	if missing != &"":
+		fails.append("unlitSelf: missing kit returned %s" % String(missing))
+
+
+static func _lean_reuse(content: ContentDB, fails: Array[String]) -> void:
+	var run: RunState = RunState.new_run(content, 22037, "lean-ashwarden", {"aspect": 1})
+	var water: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"uncrossedSelf"), content)
+	var lamps: Dictionary = CounterfactualSelf.resolve(
+		run, content.enemy(&"unlitSelf"), content)
+	if str(water.get("id", "")) != "shell" or str(lamps.get("id", "")) != "lantern":
+		fails.append("lean: ashwarden should invert both statusLean selves to ward kits")
+	var water_moves: Variant = content.enemy(&"uncrossedSelf")["counterfactual"]["kits"]["shell"]
+	var lamp_moves: Variant = content.enemy(&"unlitSelf")["counterfactual"]["kits"]["lantern"]
+	if str(water_moves) == str(lamp_moves):
+		fails.append("lean: I-prime reused II-prime shell moves")
+	if CounterfactualSelf.axis_keys("costLean").size() != 0:
+		fails.append("lean: a third axis kind was registered")
