@@ -15,13 +15,13 @@ ROWS = [
     ("mid  [C picked]", ["act4-mid-a", "act4-mid-b", "act4-mid-c", "act4-mid-d"]),
     ("ledge  [B picked]", ["act4-ledge-a", "act4-ledge-b"]),
     ("unwalkedSelf  [D picked]", ["unwalked-self-a", "unwalked-self-b", "unwalked-self-c", "unwalked-self-d"]),
-    ("uncrossedSelf  [B proposed]", ["uncrossed-self-a", "uncrossed-self-b"]),
-    ("unopenedSelf  [A proposed]", ["unopened-self-a", "unopened-self-b"]),
-    ("unlitSelf  [B proposed]", ["unlit-self-a", "unlit-self-b"]),
-    ("unsunkSelf  [A proposed]", ["unsunk-self-a", "unsunk-self-b"]),
-    ("uncarvedSelf  [C proposed]", ["uncarved-self-a", "uncarved-self-b", "uncarved-self-c"]),
-    ("unobsidianSelf  [A proposed]", ["unobsidian-self-a", "unobsidian-self-b"]),
-    ("unwoodedSelf  [B proposed]", ["unwooded-self-a", "unwooded-self-b"]),
+    ("uncrossedSelf  [B picked]", ["uncrossed-self-a", "uncrossed-self-b"]),
+    ("unopenedSelf  [A picked]", ["unopened-self-a", "unopened-self-b"]),
+    ("unlitSelf  [B picked]", ["unlit-self-a", "unlit-self-b"]),
+    ("unsunkSelf  [A picked]", ["unsunk-self-a", "unsunk-self-b"]),
+    ("uncarvedSelf  [C picked]", ["uncarved-self-a", "uncarved-self-b", "uncarved-self-c"]),
+    ("unobsidianSelf  [A picked]", ["unobsidian-self-a", "unobsidian-self-b"]),
+    ("unwoodedSelf  [B picked]", ["unwooded-self-a", "unwooded-self-b"]),
 ]
 
 CELL_W, CELL_H = 480, 320

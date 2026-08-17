@@ -19,8 +19,7 @@ CANDIDATES = HERE / "candidates"
 STAGE = HERE.parents[2] / "assets" / "art" / "stage"
 ENEMIES = HERE.parents[2] / "assets" / "art" / "enemies"
 
-# James picked plates + unwalkedSelf on 2026-08-17 (#221). The other selves
-# are proposed pending James.
+# James picked the full visual bill on 2026-08-17 (#221).
 PICKS = {
     "act4-backdrop": ("act4-backdrop-c", STAGE / "act4-backdrop.png", (1536, 1024)),
     "act4-mid": ("act4-mid-c", STAGE / "act4-mid.png", (1536, 1024)),

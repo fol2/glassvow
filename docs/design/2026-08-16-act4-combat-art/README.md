@@ -45,18 +45,17 @@ regenerating.
 | `act4-mid` | **C** | Circular rose-window inner face, two sentinel stelae. B was an Act I lantern-arch (referenced `act1-mid.png` — a miss, not canon). |
 | `act4-ledge` | **B** | Wide platform with a thick front face and two standing-stone posts. A is a round disc. |
 | `unwalkedSelf` | **D** | Magenta field, void hood, mosaic glass, cracked halo. A was unkeyable black haze. C punched holes in the chest. |
-| `uncrossedSelf` | **B** proposed | Teal false-lamp + library folio. A is the same props, thinner. |
-| `unopenedSelf` | **A** proposed | Handheld six-petal rose disc + wax seal. B's gothic tablet reads as a door-arch. |
-| `unlitSelf` | **B** proposed | Two hand-held unlit lamps, ashroot hem. A failed leftover magenta in the arm-gap (94, below the enclosed-blob punch). |
-| `unsunkSelf` | **A** proposed | Held drowned book-stack + still-tide hem. B's standing unread-shelf reads as furniture. |
-| `uncarvedSelf` | **C** proposed | Blank rectangular seal-relief tablet. A is a book (library collision). B's rounded tablet reads as a door fragment. |
-| `unobsidianSelf` | **A** proposed | Handheld eight-point obsidian star. B's hanging chain left leftover magenta 222. |
-| `unwoodedSelf` | **B** proposed | Held ash-root branch bundle + cinders. A's staff+roots failed leftover magenta 108. |
+| `uncrossedSelf` | **B** | Teal false-lamp + library folio. A is the same props, thinner. |
+| `unopenedSelf` | **A** | Handheld six-petal rose disc + wax seal. B's gothic tablet reads as a door-arch. |
+| `unlitSelf` | **B** | Two hand-held unlit lamps, ashroot hem. A failed leftover magenta in the arm-gap (94, below the enclosed-blob punch). |
+| `unsunkSelf` | **A** | Held drowned book-stack + still-tide hem. B's standing unread-shelf reads as furniture. |
+| `uncarvedSelf` | **C** | Blank rectangular seal-relief tablet. A is a book (library collision). B's rounded tablet reads as a door fragment. |
+| `unobsidianSelf` | **A** | Handheld eight-point obsidian star. B's hanging chain left leftover magenta 222. |
+| `unwoodedSelf` | **B** | Held ash-root branch bundle + cinders. A's staff+roots failed leftover magenta 108. |
 
 These are the installer's `PICKS`. James picked the plates and
-`unwalkedSelf` on 2026-08-17 (#221). `uncrossedSelf` B, `unopenedSelf` A,
-`unlitSelf` B, `unsunkSelf` A, `uncarvedSelf` C, `unobsidianSelf` A and
-`unwoodedSelf` B are **proposed**, pending James.
+`unwalkedSelf` on 2026-08-17 (#221), then the remaining seven selves the
+same day. Elites stay `scale 1.4`.
 
 Act IV node 4 mirrors Act I's 雙燈 / paired lanterns, but combat plates
 are **one set for the whole act**. They take the act motif (monuments as
@@ -81,20 +80,20 @@ The Uncrossed's hand-held false lamp is a II-prime prop, not a stage lantern-arc
 | `unwalked-self-c.png` | enemy | — | — | magenta field, but pane-holes under a global key |
 | `unwalked-self-d.png` | enemy | — | pass | **James picked 2026-08-17.** |
 | `uncrossed-self-a.png` | enemy | — | pass | teal lamp + book; runner-up |
-| `uncrossed-self-b.png` | enemy | — | pass | **proposed.** Teal false-lamp + gem folio |
-| `unopened-self-a.png` | enemy | — | pass | **proposed.** Handheld six-petal rose + wax seal |
+| `uncrossed-self-b.png` | enemy | — | pass | **James picked 2026-08-17.** Teal false-lamp + gem folio |
+| `unopened-self-a.png` | enemy | — | pass | **James picked 2026-08-17.** Handheld six-petal rose + wax seal |
 | `unopened-self-b.png` | enemy | — | pass | gothic tablet; one amber lobe; thinner |
 | `unlit-self-a.png` | enemy | — | fail | leftover magenta 94 in the right arm-gap; enclosed punch is ≥200 |
-| `unlit-self-b.png` | enemy | — | pass | **proposed.** Paired unlit lamps, dark wicks, ashroot hem |
-| `unsunk-self-a.png` | enemy | — | pass | **proposed.** Held book-stack, wave hem, no lantern |
+| `unlit-self-b.png` | enemy | — | pass | **James picked 2026-08-17.** Paired unlit lamps, dark wicks, ashroot hem |
+| `unsunk-self-a.png` | enemy | — | pass | **James picked 2026-08-17.** Held book-stack, wave hem, no lantern |
 | `unsunk-self-b.png` | enemy | — | pass | standing unread-shelf; furniture read at combat scale |
 | `uncarved-self-a.png` | enemy | — | pass | **rejected.** Stone tome + mace — library collision with Unsunk |
 | `uncarved-self-b.png` | enemy | — | pass | carved rounded tablet + mallet; door-fragment read |
-| `uncarved-self-c.png` | enemy | — | pass | **proposed.** Blank rectangular relief, unfinished circular seal |
-| `unobsidian-self-a.png` | enemy | — | pass | **proposed.** Handheld eight-point star; no halo, no scepter |
+| `uncarved-self-c.png` | enemy | — | pass | **James picked 2026-08-17.** Blank rectangular relief, unfinished circular seal |
+| `unobsidian-self-a.png` | enemy | — | pass | **James picked 2026-08-17.** Handheld eight-point star; no halo, no scepter |
 | `unobsidian-self-b.png` | enemy | — | fail | leftover magenta 222 (hanging-star chain / arm-gap) |
 | `unwooded-self-a.png` | enemy | — | fail | leftover magenta 108 (staff / root gaps); enclosed punch is ≥200 |
-| `unwooded-self-b.png` | enemy | — | pass | **proposed.** Held ash-root bundle, cinders at the hem |
+| `unwooded-self-b.png` | enemy | — | pass | **James picked 2026-08-17.** Held ash-root bundle, cinders at the hem |
 
 ## Prompts
 
@@ -268,7 +267,8 @@ Reference: `unwalkedSelf.png`. 3:4 render. **Magenta field**, not black.
 ## Held
 
 - All eight counterfactual-self paintings plus the three Act IV combat
-  plates are on disk. Audio is still held: `act4-combat` / `act4-boss` /
+  plates are on disk. James picked the remaining seven selves on
+  2026-08-17. Audio is still held: `act4-combat` / `act4-boss` /
   unsealing sting. Briefs in `docs/music-ledger.md` and
   `docs/sfx-ledger.md`. No files yet — Suno / ElevenLabs are not in this
   environment. `MusicBus.FILES` still aliases Act IV to Act III.

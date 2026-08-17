@@ -415,7 +415,7 @@ silhouette and void hood as the Unwalked; prop is a hand-held teal
 false-lamp and a closed library folio — water, lying light, unread page.
 No broken halo (that is III-prime). Combat box `1.6` like the tracer.
 
-**Proposed pick B, 2026-08-17, pending James.** A is the same props,
+**James picked B on 2026-08-17 (#221).** A is the same props,
 narrower. Magenta field; gate as `unwalkedSelf`.
 
 Prompt (binding clauses):
@@ -433,7 +433,7 @@ The Unopened (`unopenedSelf`, threshold-prime / stained-glass). Handheld
 six-petal rose-window disc, some petals dark, some amber; wax seal at
 the belt. Intact rose, not a broken halo. Combat box `1.6`.
 
-**Proposed pick A, 2026-08-17, pending James.** B's gothic tablet reads
+**James picked A on 2026-08-17 (#221).** B's gothic tablet reads
 as a door-arch. Magenta field; gate as `unwalkedSelf`.
 
 Prompt (binding clauses):
@@ -452,7 +452,7 @@ avoids colliding with locked "the Unlit Way". Two hand-held unlit lamps
 (dark wicks, no flame); ashroot glass at the hem. Distinct from the
 Uncrossed's one teal lying lamp. Combat box `1.6` like the tracer.
 
-**Proposed pick B, 2026-08-17, pending James.** A failed leftover
+**James picked B on 2026-08-17 (#221).** A failed leftover
 field-magenta (94) in the right arm-gap — the enclosed punch only eats
 blobs ≥200. Magenta field; gate as `unwalkedSelf`.
 
@@ -473,7 +473,7 @@ Combat box is `tierSizes.elite * 1.4` (322px) — a step above the tracer
 self (296px) and the hero (285px). 1.6 (368px) overshot both and crowded
 the END button.
 
-**Proposed pick A, 2026-08-17, pending James.** B's standing unread-shelf
+**James picked A on 2026-08-17 (#221).** B's standing unread-shelf
 reads as furniture beside the pilgrim. Magenta field; gate as
 `unwalkedSelf`.
 
@@ -494,7 +494,7 @@ circular seal — the door-face of the same threshold whose window-face
 is the Unopened's rose disc. Combat box `tierSizes.elite * 1.4` (322px),
 same as `unsunkSelf`.
 
-**Proposed pick C, 2026-08-17, pending James.** A is a stone tome (library
+**James picked C on 2026-08-17 (#221).** A is a stone tome (library
 collision with Unsunk). B's rounded carved tablet reads as a door
 fragment. Magenta field; gate as `unwalkedSelf`.
 
@@ -514,7 +514,7 @@ eight-point obsidian star; court-violet glass going black. Distinct from
 the Unwalked: no broken halo, no scepter. Combat box `1.6` like the
 tracer.
 
-**Proposed pick A, 2026-08-17, pending James.** B's hanging star-chain
+**James picked A on 2026-08-17 (#221).** B's hanging star-chain
 failed leftover field-magenta (222). Magenta field; gate as
 `unwalkedSelf`.
 
@@ -533,7 +533,7 @@ The Unwooded (`unwoodedSelf`, I-prime / ash-root). Held unburned ash-root
 branch bundle (wood-glass, not a crystal scepter); cinders at the hem.
 Distinct from the Unstruck: no paired lamps. Combat box `1.6`.
 
-**Proposed pick B, 2026-08-17, pending James.** A's staff+rooted hem
+**James picked B on 2026-08-17 (#221).** A's staff+rooted hem
 failed leftover field-magenta (108) — the enclosed punch only eats
 blobs ≥200. Magenta field; gate as `unwalkedSelf`.
 
