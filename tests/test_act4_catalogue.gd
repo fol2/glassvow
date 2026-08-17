@@ -152,7 +152,13 @@ static func _scenarios(content: ContentDB, fails: Array[String]) -> void:
 			continue
 		if run.act != 3:
 			fails.append("act4: %s did not seat act 3" % id)
+		if id == "act-4-map-start" and run.node_id != null:
+			fails.append("act4: start seated a node")
+		if id == "act-4-map-branch" and str(run.node_id) != "n2":
+			fails.append("act4: branch did not seat n2")
 		if id == "act-4-map-terminus":
+			if str(run.node_id) != "n4":
+				fails.append("act4: terminus did not seat n4")
 			if run.pending_enemy_ids != ["eternalKeeper"]:
 				fails.append("act4: terminus did not freeze the Keeper")
 			if str(run.pending_combat) != "boss":
@@ -164,9 +170,9 @@ static func _overrides_for(id: String) -> Dictionary:
 	if id == "act-4-map-start":
 		return {"act": 3, "shards": 6}
 	if id == "act-4-map-branch":
-		return {"act": 3, "shards": 6, "node": "4,6"}
+		return {"act": 3, "shards": 6, "node": "n2"}
 	return {
-		"act": 3, "shards": 6, "node": "14,3",
+		"act": 3, "shards": 6, "node": "n4",
 		"kind": "boss", "enemies": ["eternalKeeper"],
 	}
 

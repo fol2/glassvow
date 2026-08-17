@@ -58,10 +58,11 @@ static func for_run(run: RunState, content: ContentDB) -> WorldMap:
 	return benchmark(run)
 
 
-## First clear pins motif-matched landed selves (and `encounters[3]` when
-## present). The boss pins `eternalKeeper` (it has no counterfactual.node).
-## Later runs redraw the two monsters and the elite from that pool;
-## types, order and the boss stay fixed.
+## First clear pins motif-matched landed selves. It never reads
+## `encounters[3]` group 0/1 — that pair seats the threshold elite on n0
+## and drops the II-prime normal from n2. The boss pins `eternalKeeper`
+## (it has no counterfactual.node). Later runs redraw the two monsters
+## and the elite from that pool; types, order and the boss stay fixed.
 static func act4(run: RunState, content: ContentDB) -> WorldMap:
 	var m: WorldMap = WorldMap.new()
 	m.region = "rose_window"
@@ -82,17 +83,17 @@ static func act4(run: RunState, content: ContentDB) -> WorldMap:
 static func _act4_occupants(
 	run: RunState, content: ContentDB, type_key: String, index: int, first_clear: bool
 ) -> Array[String]:
-	var pool: Array = _act4_pool(content, type_key)
-	if not pool.is_empty():
-		if type_key == "boss" or first_clear:
-			var group_i: int = 0
-			if type_key == "monster" and index == 1 and pool.size() > 1:
-				group_i = 1
-			return _copy_group(pool, group_i)
-		return _copy_group(pool, run.rng.pick_index(pool.size()))
 	if type_key == "boss":
+		var boss_pool: Array = _act4_pool(content, "boss")
+		if not boss_pool.is_empty():
+			return _copy_group(boss_pool, 0)
 		return _act4_boss_pin(content)
-	return _act4_motif_pin(content, index, type_key)
+	if first_clear:
+		return _act4_motif_pin(content, index, type_key)
+	var pool: Array = _act4_pool(content, type_key)
+	if pool.is_empty():
+		return _act4_motif_pin(content, index, type_key)
+	return _copy_group(pool, run.rng.pick_index(pool.size()))
 
 
 static func _act4_pool(content: ContentDB, type_key: String) -> Array:

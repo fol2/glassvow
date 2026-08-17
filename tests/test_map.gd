@@ -180,8 +180,8 @@ static func run(fails: Array[String]) -> void:
 		"Act IV reads monster → monster → elite → rest → boss")
 	_check(fails, fourth.nodes[0].enemies == ["unopenedSelf"],
 		"first-clear threshold-prime pins the landed unopened self")
-	_check(fails, fourth.nodes[1].enemies == ["unwalkedSelf"],
-		"first-clear III-prime pins the landed unwalked self")
+	_check(fails, fourth.nodes[1].enemies == ["unobsidianSelf", "unwalkedSelf"],
+		"first-clear III-prime pins both landed normals")
 	_check(fails, fourth.nodes[2].enemies == ["uncrossedSelf", "unsunkSelf"],
 		"first-clear II-prime elite pins both landed axes")
 	_check(fails, fourth.nodes[4].enemies == ["eternalKeeper"],
