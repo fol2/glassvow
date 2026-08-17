@@ -512,6 +512,18 @@ L1/L2 行照舊兩讀。
 | 410 | 未亮的窗 / The Pane Left Dark | unopenedSelf.moves.darkPane | L4 | 一格沒點亮的窗 | 六格裏你沒燃過的那一格;另一個你把它留黑 | 佔位 |
 | 411 | 封印未讀 / The Seal Unread | unopenedSelf.moves.reliefWait | L4 | 沒讀過的封門浮雕 | 門上的字等過你;你沒停下來讀 | 佔位 |
 
+#220 Slice 3 — Eternal Keeper(鎖名,可裸寫;終戰不以血量取勝收束,換位段歸 #312):
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 412 | 永恆留者 / The Eternal Keeper | content.enemies.eternalKeeper.name | L4 | 爐邊那個人的終戰名 | 與永恆君王孖生——不肯開始/不肯完成的兩極並排;它就是守爐人 | 鎖名 [#261 Q10] |
+| 413 | 爐前一擊 / The Blow From the Hearth | eternalKeeper.moves.hearthBlow | L4 | 從爐邊打來的一擊 | 爐就是這一面;它從未離開過,所以這一擊從家裏來 | 佔位 [#220 Slice 3] |
+| 414 | 坐下 / Sit Down | eternalKeeper.moves.sitDown | L4 | 它坐下,把火守住 | 換位的預演:它坐下,你才走得成 | 佔位 |
+| 415 | 灰落回家 / Cinders Coming Home | eternalKeeper.moves.cinderFall | L4 | 爐灰往回落 | 倒轉爐光的字面:灰本來就落回爐邊,因為盡頭就是家 | 佔位 |
+| 416 | 溫言 / A Kind Word | eternalKeeper.moves.kindWord | L4 | 一句溫柔的話,卻讓你發軟 | 關懷即麻醉(#260 Q1);它真心待你好,所以安排才走得下去 | 佔位 |
+| 417 | 火留給我 / The Fire Stays With Me | eternalKeeper.moves.keepTheFire | L4 | 火由它看着 | 開場分工的終戰版:火留、燈走;它要的是永遠有人代走 | 佔位 |
+| 418 | 我在這裏 / I Am Still Here | eternalKeeper.moves.neverLeave | L4 | 它還在 | 字面真到盡——它從未離開過爐邊;這不是威脅,是身分 | 佔位 |
+
 ## `[REWRITE:climb]` 清單狀態 — 已關閉
 
 全量掃描由 #232 的十四-agent 量度完成,記錄於

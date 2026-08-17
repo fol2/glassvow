@@ -90,6 +90,11 @@ const ENTRIES: Array[Dictionary] = [
 		"seed": SEED, "overrides": {
 			"act": 0, "node": "0,6", "kind": "monster",
 			"enemies": ["unopenedSelf"]}},
+	{"id": "combat-eternal-keeper", "revision": 1,
+		"description": "Act IV Slice 3: Eternal Keeper boss; a lethal blow hands off instead of dying.",
+		"seed": SEED, "overrides": {
+			"act": 0, "node": "14,3", "kind": "boss",
+			"enemies": ["eternalKeeper"]}},
 ]
 
 const UNSUPPORTED: Array[Dictionary] = [

@@ -2648,6 +2648,10 @@ func _handle_event(ev: Dictionary) -> void:
 			_sky.kick(1.6)
 			_sfx.play(&"bigDeath")
 			await _floaters.banner(str(ev.get("name", "")), "boss", 2.1)
+		EventTypes.FINALE_HANDOFF:
+			# Domain already ended the fight. #312 owns the swap scene; this
+			# beat only holds the plate so the drain can reach combat_over.
+			await _wait(0.32)
 		EventTypes.VARIANT_DIALOGUE:
 			await _floaters.banner(str(ev.get("text", "")), "variant", 1.8)
 		EventTypes.END_TURN:

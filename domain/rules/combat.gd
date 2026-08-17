@@ -545,7 +545,13 @@ func hit_enemy(
 	var blocked: int = mini(e.block, dmg)
 	e.block -= blocked
 	var loss: int = dmg - blocked
-	e.hp -= loss
+	var next_hp: int = e.hp - loss
+	var handoff: bool = next_hp <= 0 and _is_finale_handoff(e)
+	if handoff:
+		loss = maxi(0, e.hp - 1)
+		e.hp = 1
+	else:
+		e.hp = next_hp
 	run.stats["dmgDealt"] = _ji(run.stats.get("dmgDealt", 0)) + loss
 	cb.queue.append({
 		"t": EventTypes.HIT_ENEMY,
@@ -553,20 +559,34 @@ func hit_enemy(
 		"amount": loss,
 		"blocked": blocked,
 		"hpAfter": maxi(0, e.hp),
-		"dead": e.hp <= 0,
-		"killingBlow": e.hp <= 0 and loss > 0,
-		"overkill": maxi(0, -e.hp),
+		"dead": (not handoff) and e.hp <= 0,
+		"killingBlow": (not handoff) and e.hp <= 0 and loss > 0,
+		"overkill": 0 if handoff else maxi(0, -e.hp),
 	})
 	# An attack card that draws unblocked blood earns its facet chip (once per card).
 	if cb.pending_chips_active and is_attack and loss > 0:
 		var rec: Dictionary = cb.pending_chips.get(e.idx, {"hit": false, "extra": 0})
 		rec["hit"] = true
 		cb.pending_chips[e.idx] = rec
-	if is_attack and _sget(e.statuses, "thorns") > 0 and e.hp > 0:
+	if is_attack and _sget(e.statuses, "thorns") > 0 and e.hp > 0 and not handoff:
 		damage_player(run, cb, _sget(e.statuses, "thorns"), "thorns")
+	if handoff:
+		_begin_finale_handoff(run, cb, e)
+		return loss
 	if e.hp <= 0:
 		_on_enemy_death(run, cb, e)
 	return loss
+
+
+func _is_finale_handoff(e: EnemyCombatant) -> bool:
+	return e.def.get("finaleHandoff", false) == true
+
+
+func _begin_finale_handoff(run: RunState, cb: CombatState, e: EnemyCombatant) -> void:
+	e.hp = 1
+	cb.finale_handoff = true
+	cb.queue.append({"t": EventTypes.FINALE_HANDOFF, "idx": e.idx, "hpAfter": 1})
+	_win_combat(run, cb)
 
 
 func _on_enemy_death(run: RunState, cb: CombatState, e: EnemyCombatant) -> void:
@@ -1012,17 +1032,27 @@ func end_turn(run: RunState, cb: CombatState) -> void:
 			continue
 		var poison: int = _sget(e.statuses, "poison")
 		if poison > 0:
-			e.hp -= poison
+			var next_hp: int = e.hp - poison
+			var handoff: bool = next_hp <= 0 and _is_finale_handoff(e)
+			var amount: int = poison
+			if handoff:
+				amount = maxi(0, e.hp - 1)
+				e.hp = 1
+			else:
+				e.hp = next_hp
 			cb.queue.append({
 				"t": EventTypes.HIT_ENEMY,
 				"idx": e.idx,
-				"amount": poison,
+				"amount": amount,
 				"blocked": 0,
 				"hpAfter": maxi(0, e.hp),
-				"dead": e.hp <= 0,
+				"dead": (not handoff) and e.hp <= 0,
 				"poison": true,
 			})
 			_tick_status(e.statuses, "poison")
+			if handoff:
+				_begin_finale_handoff(run, cb, e)
+				continue
 			if e.hp <= 0:
 				_on_enemy_death(run, cb, e)
 				continue

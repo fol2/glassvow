@@ -30,6 +30,8 @@ var counters_attacks: int = 0
 var first_card_played: bool = false
 var hp_lost: int = 0
 var prism_procd: bool = false
+## True when the Eternal Keeper's lethal threshold handed the fight to #312.
+var finale_handoff: bool = false
 
 
 func living_enemies() -> Array[EnemyCombatant]:
