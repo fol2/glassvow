@@ -33,21 +33,24 @@ extends RefCounted
 ##      1180x820 is height-driven, so the painting's own lip fraction IS the
 ##      frame's. It is what keeps the foreground rack's band (the 23% below it)
 ##      from collapsing on a wide phone.
-##   2. THE CROP NEVER EATS MORE THAN THE SAFE BAND. Cover-fitting a 1.4538
-##      image into a 0.45 portrait frame shows 31% of its width, which is not a
-##      crop but a different painting. `fit()` therefore stops scaling up once
-##      the visible width reaches `SAFE_BAND`, and lets the frame letterbox
-##      instead. Every region below is inside that band, so every region is on
-##      screen at every shape by construction — that is the property
+##   2. THE CROP NEVER EATS MORE THAN THE SAFE BAND. Cover-fitting past the
+##      4:3 acceptance ratio would crop the painting's width below SAFE_BAND.
+##      `fit()` therefore stops scaling up once the visible width reaches
+##      `SAFE_BAND`, and lets the frame letterbox instead. Every region below
+##      is inside that band, so every region is on screen at every shipping
+##      landscape frame by construction — that is the property
 ##      `tests/test_stall_layout.gd` asserts, and the reason it can.
 ##
-## SAFE_BAND is the intersection of what the two acceptance ratios show:
-## 4:3 (`pad-landscape` flexed to 1180x885) crops the width to
+## SAFE_BAND is the intersection of what the two landscape acceptance ratios
+## show: 4:3 (`pad-landscape` flexed to 1180x885) crops the width to
 ## 1180/1286.7 = 0.9171 and keeps every row; 20:9 (`phone-landscape` flexed to
 ## 867x390) keeps the full width and crops v to [0.2671, 0.9211]. Nothing
-## load-bearing may be authored outside their overlap. Portrait is NOT in that
-## intersection and never will be — James's per-aspect ruling gives 9:20 its own
-## master and its own book; this file is the landscape family only.
+## load-bearing may be authored outside their overlap.
+##
+## Shipping orientations are landscape only (`docs/design/2026-08-18-landscape-only.md`):
+## identity `pad-landscape` 1180×820, phone-landscape's short 844×390 stage, and
+## 4:3 iPad as flexed pad-landscape. `phone-portrait` and `pad-portrait` are
+## retired. This file does not restack the rack or width-contain a top band.
 ##
 ## Pure by construction, like `StageShape`: no Node, no DisplayServer, every
 ## input an argument, so the whole matrix is drivable headlessly.
@@ -167,9 +170,9 @@ const TAG_ABOVE: Array[StringName] = [&"stand0", &"stand1"]
 const IDENTITY_SCALE: float = 820.0 / 1040.0
 ## Where type stops shrinking with the painting. Below this a tag is not a
 ## smaller tag, it is an unreadable one, so it grows past its region instead and
-## `ShopScreen._seat` clamps it back into the frame. Portrait is the only shape
-## that reaches the floor today, and James's per-aspect ruling has taken that
-## shape out of this book altogether.
+## `ShopScreen._seat` clamps it back into the frame. Phone-landscape's short
+## 844×390 stage is the tightest shipping window; type stays readable there as
+## one scaled rack row, not a restack.
 const TYPE_FLOOR: float = 0.62
 
 ## The foreground rack is frame-locked, not scene-locked: it stands in front of
@@ -220,6 +223,7 @@ static func place(frame: Vector2, region: StringName) -> Rect2:
 
 ## The foreground band: below the counter lip, inset from the left, stopping
 ## short of the bell jar's end of the counter so the two never share a column.
+## One row. Phone-landscape scales the cards into this strip; it does not restack.
 static func rack_band(frame: Vector2) -> Rect2:
 	var gap: float = RACK_GAP * frame.y
 	var top: float = COUNTER_LINE * frame.y + gap

@@ -179,9 +179,11 @@ column/row luminance profile, not eyeballed:
   right end and the stair treads are all painted inside it, because a 20:9
   frame crops the rest away.
 
-**Portrait is still open.** James's per-aspect ruling gives 9:20 its own
-composition (canopy → shelf → counter → foreground rack), through the same
-two-step pipeline once this landscape settles. It is not this file cropped.
+**Shipping is landscape only** (`docs/design/2026-08-18-landscape-only.md`).
+Identity is pad-landscape 1180×820; phone-landscape's short 844×390 stage and
+4:3 iPad (flexed pad-landscape) hold this same composition — one rack row,
+scaled, not a restack. `phone-portrait` and `pad-portrait` are retired. This
+file is the landscape master, not a portrait source.
 
 ### `scenes/` — the ten scripted-scene plates, 1536×1024 palette PNG
 

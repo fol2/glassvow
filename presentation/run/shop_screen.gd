@@ -29,11 +29,6 @@ const SCRIM_BOTTOM: float = 0.33
 const RACK_PRICE_GAP: float = 2.0
 ## The least of its region the goods keep when the tag wants more.
 const WARE_SHARE: float = 0.45
-## Slice 5 (#242) words these as `ui.shop.sold` / `ui.shop.removalSpent` and
-## JAMES WORDS THEM AT REVIEW — they stand here as the concept's own placeholder
-## text rather than as locale keys nobody has signed off yet.
-const SOLD_WORD: String = "SOLD"
-const SPENT_WORD: String = "SPENT"
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -79,6 +74,7 @@ func _init(stock: Dictionary, gold: int, content: ContentDB,
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
+	accessibility_name = Locale.active.t("ui.shop.title")
 	_sfx = sfx if sfx != null else SfxBus.new()
 	if sfx == null:
 		add_child(_sfx)
@@ -209,7 +205,7 @@ func _add_offer() -> void:
 		str(_quest_offer.get("text", _content.quests.get("usurper", {}).get(
 			"itemText", "Cold glass. No wick."))), _price(_quest_offer))
 	tag.cold = true
-	tag.eyebrow = "GATE"
+	tag.eyebrow = Locale.active.t("ui.shop.gate")
 	_register_slot("offer", "", 0, button, tag, &"jar")
 	add_child(button)
 	# The glass stands in FRONT of what it covers, so it is added after the ware
@@ -226,7 +222,7 @@ func _add_removal() -> void:
 		Locale.active.t("ui.shop.cardRemoval.desc"),
 		int(float(str(_stock.get("removeCost", 0)))))
 	tag.emblem = true
-	tag.state_word = SPENT_WORD
+	tag.state_word = Locale.active.t("ui.shop.removalSpent")
 	# The merchant's own service stands in the rack beside the cards.
 	_rack.append(_register_slot("removal", "", 0, button, tag, &""))
 	add_child(button)
@@ -252,7 +248,7 @@ func _tag(ware_name: String, effect: String, price: int) -> WareTag:
 	tag.ware_name = ware_name
 	tag.effect = effect
 	tag.price = price
-	tag.state_word = SOLD_WORD
+	tag.state_word = Locale.active.t("ui.shop.sold")
 	return tag
 
 
@@ -367,10 +363,12 @@ func _relayout() -> void:
 
 
 ## The top bar RunHud draws over this screen (`run_hud.gd` `_apply_shape`).
+## Phone-landscape shares the 62 px wrap bar (#382). No pad-portrait special case
+## — that identity is retired (`docs/design/2026-08-18-landscape-only.md`).
 func _hud_band() -> float:
-	if shape == &"phone-portrait":
-		return 58.0
-	return 42.0 if shape == &"phone-landscape" else 56.0
+	if shape == &"phone-landscape":
+		return 62.0
+	return 56.0
 
 
 ## A ware in its region. The region box is the WARE PLUS ITS TAG — that is how
@@ -422,6 +420,8 @@ func _seat_rack(frame: Vector2, factor: float) -> void:
 	var count: int = _rack.size()
 	if count == 0 or band.size.x <= 0.0 or band.size.y <= 0.0:
 		return
+	# One landscape row. Phone-landscape's short 844×390 stage scales the
+	# cards into the strip below the lip; it does not restack.
 	var separation: float = band.size.x * 0.012
 	var slot_w: float = (band.size.x - separation * float(count - 1)) / float(count)
 	for index: int in range(count):
