@@ -173,7 +173,7 @@ func _ready() -> void:
 	# godot --path . -- --studio[=bastion] [--zoom=3]   (material bench)
 	# godot --path . -- --fight=id[,id] [--kind=normal|elite|boss]   (battlefield)
 	# godot --path . -- --vp=1280x720            (watch the shape re-pick live)
-	# godot --path . -- --shape=phone-portrait   (force one; ?shape= ported)
+	# godot --path . -- --shape=phone-landscape   (force one; ?shape= ported)
 	# godot --path . -- --act=2                  (dress fight/map in act 2's scenery)
 	# tools/shot.sh --resume --shot=...          (exercise the durable router)
 	# tools/shot.sh --fight=… --settle=3 --shot=…  (photograph it at rest)
@@ -2055,7 +2055,7 @@ func _resume_pending_combat() -> void:
 ##   godot --path . -- --fight=sporeling,sporeling
 ##   godot --path . -- --fight=gravewarden --kind=elite --seed=7
 ##   godot --path . -- --fight=duskfang --vp=1280x720
-##   godot --path . -- --fight=duskfang --shape=pad-portrait --act=2
+##   godot --path . -- --fight=duskfang --shape=pad-landscape --act=2
 ##
 ## Winning drops back onto the map, which is the honest continuation: the run
 ## behind the bench is a real run.
