@@ -4,6 +4,7 @@ extends SceneTree
 const Pilot: GDScript = preload("res://tools/balance_pilot.gd")
 const Policy: GDScript = preload("res://tools/balance_policy.gd")
 const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
+const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
 const PROFILE: String = "mature-three-act-no-side-state-v1"
 func _initialize() -> void:
 	var opts: Dictionary = _options(OS.get_cmdline_user_args())
@@ -31,7 +32,7 @@ func _initialize() -> void:
 	for aspect: String in aspects:
 		for offset: int in range(int(float(str(opts["runs"])))):
 			rows.append(simulate(content, aspect, int(float(str(opts["seed0"]))) + offset,
-				int(float(str(opts["vow"]))), ban, _policy(opts)))
+				int(float(str(opts["vow"]))), ban, _policy(opts), false, false, _mix(opts)))
 	var report: Dictionary = Metrics.report(rows, _manifest(opts, overlay))
 	var text: String = JSON.stringify(report)
 	if str(opts["out"]).is_empty():
@@ -47,7 +48,8 @@ func _initialize() -> void:
 	quit(0)
 static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0,
 		ban: PackedStringArray = PackedStringArray(), policy: Dictionary = {},
-		random_build: bool = false, random_play: bool = false) -> Dictionary:
+		random_build: bool = false, random_play: bool = false, mix: Dictionary = {},
+		vigil: VigilState = null, strip_start_hex: bool = false) -> Dictionary:
 	Pilot.set_ban(ban)
 	Pilot.apply_policy(policy)
 	Pilot.set_modes(random_build, random_play)
@@ -56,9 +58,15 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 		"aspect": aspect_index, "vow": vow, "reveals": content.reveal_ids.duplicate(),
 		"unlocks": ["aspect2"], "quests": {}, "shards": [], "lamplighter": false,
 	}
+	if vigil != null:
+		profile["quests"] = vigil.quests.duplicate(true)
+		profile["shards"] = vigil.shards.duplicate()
 	var run: RunState = RunState.new_run(content, seed, "sim-%s-%d" % [aspect, seed], profile)
+	if strip_start_hex:
+		_strip_hex(run)
 	_apply_ban(run)
 	var game: GlassvowGame = GlassvowGame.new(content, run)
+	Incentives.apply(game.rewards, mix, vow)
 	var fights: Array[Dictionary] = []
 	var economy: Array[Dictionary] = []
 	for _act: int in range(3):
@@ -66,18 +74,20 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 		while not map.is_finished():
 			var i: int = Pilot.choose_node(map, run)
 			if not map.enter(i):
-				return _result(run, aspect, seed, "error", fights, "unreachable node", economy)
+				return _finish(run, aspect, seed, "error", fights, "unreachable node", economy,
+					vigil, content)
 			var node: MapNode = map.current()
 			_enter_node(run, node)
 			if node.is_combat():
 				var fight: Dictionary = _fight(game, node)
 				fights.append(fight)
 				if fight["result"] != "win":
-					return _result(run, aspect, seed, "stall" if fight["result"] == "stall" else "loss",
-						fights, "", economy)
+					return _finish(run, aspect, seed,
+						"stall" if fight["result"] == "stall" else "loss",
+						fights, "", economy, vigil, content)
 				if node.type == "boss" and run.act == 2:
 					economy.append(_economy_row(run))
-					return _result(run, aspect, seed, "win", fights, "", economy)
+					return _finish(run, aspect, seed, "win", fights, "", economy, vigil, content)
 				_claim_rewards(game, game.gen_combat_rewards(node.combat_kind(), game.cb.affix))
 			else:
 				_resolve_safe_node(game, node)
@@ -91,7 +101,7 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 				run.boss_relic_act = run.act
 				run.start_next_act(content)
 				break
-	return _result(run, aspect, seed, "error", fights, "run route exhausted", economy)
+	return _finish(run, aspect, seed, "error", fights, "run route exhausted", economy, vigil, content)
 static func _fight(game: GlassvowGame, node: MapNode) -> Dictionary:
 	var enemies: Array[String] = node.enemies.duplicate()
 	if enemies.is_empty():
@@ -144,6 +154,9 @@ static func _claim_rewards(game: GlassvowGame, rewards: Dictionary) -> void:
 	var relic_v: Variant = rewards.get("relic")
 	if relic_v != null and not Pilot.is_banned(str(relic_v)):
 		game.rewards.gain_relic(game.run, str(relic_v))
+	var relic2_v: Variant = rewards.get("relic2")
+	if relic2_v != null and not Pilot.is_banned(str(relic2_v)):
+		game.rewards.gain_relic(game.run, str(relic2_v))
 static func _resolve_safe_node(game: GlassvowGame, node: MapNode) -> void:
 	match node.type:
 		"rest":
@@ -391,11 +404,31 @@ static func _result(run: RunState, aspect: String, seed: int, outcome: String,
 		"goldEarned": int(float(str(run.stats.get("goldEarned", 0)))), "economy": economy,
 		"policy": Pilot.policy_snapshot(),
 	}
+
+
+static func _finish(run: RunState, aspect: String, seed: int, outcome: String,
+		fights: Array[Dictionary], error: String, economy: Array[Dictionary],
+		vigil: VigilState, content: ContentDB) -> Dictionary:
+	var row: Dictionary = _result(run, aspect, seed, outcome, fights, error, economy)
+	if vigil != null:
+		var commit: String = "win" if outcome == "win" else "death"
+		vigil.commit_run(run, commit, content)
+	return row
+
+
+static func _strip_hex(run: RunState) -> void:
+	var kept: Array[CardInst] = []
+	for card: CardInst in run.player.deck:
+		if card.id != &"hex":
+			kept.append(card)
+	run.player.deck.clear()
+	for card: CardInst in kept:
+		run.player.deck.append(card)
 static func outcome_digest(row: Dictionary) -> String:
 	return JSON.stringify(row).sha256_text()
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "",
-		"out": "", "ban": "", "cardDecline": Pilot.CARD_DECLINE_DEFAULT,
+		"out": "", "ban": "", "mix": "", "cardDecline": Pilot.CARD_DECLINE_DEFAULT,
 		"removalAppetite": Pilot.REMOVAL_APPETITE_DEFAULT,
 		"removalMinCopies": Pilot.REMOVAL_MIN_COPIES_DEFAULT}
 	for arg: String in args:
@@ -417,7 +450,14 @@ static func _options(args: PackedStringArray) -> Dictionary:
 		return {"error": "--aspect must be all, duskblade or ashwarden"}
 	if int(float(str(out["runs"]))) < 1 or int(float(str(out["vow"]))) < 0 or int(float(str(out["vow"]))) > 5:
 		return {"error": "--runs must be positive and --vow must be 0..5"}
+	if not str(out["mix"]).is_empty() and not Incentives.has_id(str(out["mix"])):
+		return {"error": "unknown --mix %s" % out["mix"]}
 	return out
+static func _mix(opts: Dictionary) -> Dictionary:
+	var id: String = str(opts.get("mix", ""))
+	if id.is_empty():
+		return {}
+	return Incentives.by_id(id)
 static func _policy(opts: Dictionary) -> Dictionary:
 	return Policy.resolve({"cardDecline": opts["cardDecline"],
 		"removalAppetite": opts["removalAppetite"],
@@ -425,7 +465,7 @@ static func _policy(opts: Dictionary) -> Dictionary:
 static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
 	var git_out: Array = []
 	OS.execute("git", ["rev-parse", "HEAD"], git_out)
-	return {
+	var row: Dictionary = {
 		"commit": str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown",
 		"godot": Engine.get_version_info().get("string", "unknown"),
 		"contentSha256": FileAccess.get_sha256(ContentDB.FULL_PATH),
@@ -437,3 +477,6 @@ static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
 			"last": int(float(str(opts["seed0"]))) + int(float(str(opts["runs"]))) - 1,
 			"count": opts["runs"]},
 	}
+	if not str(opts.get("mix", "")).is_empty():
+		row["mix"] = str(opts["mix"])
+	return row

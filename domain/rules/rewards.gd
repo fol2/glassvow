@@ -13,6 +13,13 @@ extends RefCounted
 ## thrown away. We mirror that with a detached Rng for the card rolls.
 ##
 var content: ContentDB
+## Bake-off / future vow-incentive overlay. Defaults are the shipping identity
+## (no extra gold, no rarity shift, no second elite relic) so #204's digest is
+## unchanged until a caller sets them.
+var rarity_shift: float = 0.0
+var rarity_uncommon_only: bool = false
+var gold_vow_mult: float = 1.0
+var elite_relic_second: float = 0.0
 
 
 func _init(content_db: ContentDB) -> void:
@@ -83,7 +90,7 @@ func gen_combat_rewards(run: RunState, kind: String, affix: StringName = &"") ->
 		var af_def: Dictionary = content.affixes.get(String(affix), {})
 		var af_mods: Dictionary = af_def.get("mods", {})
 		gold_mult *= float(str(af_mods.get("goldMult", 1)))
-	gold = int(roundf(float(gold) * gold_mult))
+	gold = int(roundf(float(gold) * gold_mult * gold_vow_mult))
 	var cards: Array = _roll_card_reward(run, kind)
 	var potion: Variant = null
 	if kind != "boss":
@@ -92,9 +99,28 @@ func gen_combat_rewards(run: RunState, kind: String, affix: StringName = &"") ->
 			var potion_ids: Array = content.potions.keys()
 			potion = potion_ids[run.rng.pick_index(potion_ids.size())]
 	var relic: Variant = null
+	var relic2: Variant = null
 	if kind == "elite":
 		relic = _random_relic(run)
-	return {"gold": gold, "cards": cards, "potion": potion, "relic": relic}
+		if elite_relic_second > 0.0 and run.rng.next() < elite_relic_second:
+			relic2 = _random_relic(run)
+	var out: Dictionary = {"gold": gold, "cards": cards, "potion": potion, "relic": relic}
+	if relic2 != null:
+		out["relic2"] = relic2
+	return out
+
+
+func _rarity_cuts(kind: String) -> Vector2:
+	var common_cut: float = 0.45 if kind == "elite" else 0.6
+	var uncommon_cut: float = 0.85 if kind == "elite" else 0.92
+	if rarity_shift == 0.0:
+		return Vector2(common_cut, uncommon_cut)
+	common_cut = clampf(common_cut - rarity_shift, 0.05, 0.9)
+	if not rarity_uncommon_only:
+		uncommon_cut = clampf(uncommon_cut - rarity_shift, common_cut + 0.05, 0.99)
+	elif uncommon_cut <= common_cut:
+		uncommon_cut = clampf(common_cut + 0.2, common_cut + 0.05, 0.99)
+	return Vector2(common_cut, uncommon_cut)
 
 
 func _roll_card_reward(run: RunState, kind: String) -> Array:
@@ -110,10 +136,8 @@ func _roll_card_reward(run: RunState, kind: String) -> Array:
 			pool_tier = "rare"
 		else:
 			var r: float = crng.next()
-			if kind == "elite":
-				pool_tier = "common" if r < 0.45 else ("uncommon" if r < 0.85 else "rare")
-			else:
-				pool_tier = "common" if r < 0.6 else ("uncommon" if r < 0.92 else "rare")
+			var cuts: Vector2 = _rarity_cuts(kind)
+			pool_tier = "common" if r < cuts.x else ("uncommon" if r < cuts.y else "rare")
 		var pool: Array = card_pool(run, pool_tier)
 		var idx: int = crng.pick_index(pool.size())  # the pick draw fires even on an empty pool
 		var id: Variant = pool[idx] if pool.size() > 0 else null
