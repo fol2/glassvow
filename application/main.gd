@@ -55,8 +55,8 @@ var _run_save_path: String = SaveService.RUN_PATH
 var _vigil_save_path: String = SaveService.VIGIL_PATH
 ## Set when the optional Development boot handled this launch.
 var _dev_claimed: bool = false
-## Dev boots (`--fight=` / `--map` / `--enter=` / `--dawn`) skip the opening
-## and the L0 departure plant — they construct against the real vigil.
+## Dev boots (`--fight=` / `--map` / `--enter=` / `--dawn` / `--shop`) skip the
+## opening and the L0 departure plant — they construct against the real vigil.
 var _opening_suppressed: bool = false
 var last_dev_error: String = ""
 var _forced_seed: int = -1  # --seed=N: reproducible shots for layout diffing
@@ -181,6 +181,8 @@ func _ready() -> void:
 	# tools/shot.sh --onboard=map-select --shot=...    (first-run hint stills)
 	# tools/shot.sh --scene=opening --cursor=2 --shot=…   (bespoke scene beat)
 	# tools/shot.sh --scene=departure --settle=0.7 --shot=…  (L0 linger)
+	# tools/shot.sh --shop --shot=/tmp/shop.png           (Night Stall)
+	# tools/shot.sh --shop --locale=zh-Hant --shot=...    (review-state language)
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var lab_flag: String = ""
@@ -200,6 +202,8 @@ func _ready() -> void:
 	# to measure rather than to argue.
 	var show_map: bool = false
 	var show_dawn_bench: bool = false
+	var show_shop_bench: bool = false
+	var forced_locale: String = ""
 	var show_font_probe: bool = false
 	var performance_probe: bool = false
 	var map_bench: bool = false
@@ -260,6 +264,10 @@ func _ready() -> void:
 			show_map = true
 		elif arg == "--dawn":
 			show_dawn_bench = true
+		elif arg == "--shop":
+			show_shop_bench = true
+		elif arg.begins_with("--locale="):
+			forced_locale = arg.trim_prefix("--locale=")
 		elif arg == "--font-probe":
 			show_font_probe = true
 		elif arg.begins_with("--perf-out="):
@@ -375,6 +383,16 @@ func _ready() -> void:
 			elif shot_path != "":
 				_capture_and_quit(shot_path)
 			return
+	# Shot/bench-only language. Preferences already published Locale.active
+	# earlier in `_ready`; this replaces it without writing settings.cfg.
+	if not forced_locale.is_empty():
+		var locale_code: StringName = StringName(forced_locale)
+		if locale_code == Locale.CODE_EN or locale_code == Locale.CODE_ZH_HANT:
+			Locale.active.restore_content()
+			Locale.active = Locale.new(locale_code)
+			Locale.active.hydrate_content(content)
+		else:
+			push_warning("--locale wants en or zh-Hant, got %s" % forced_locale)
 	if resume_run:
 		_continue_run(_load_run())
 	elif not scene_shot.is_empty():
@@ -416,6 +434,14 @@ func _ready() -> void:
 	elif show_map:
 		_opening_suppressed = true
 		_new_run()
+	elif show_shop_bench:
+		# The Night Stall bench: a fresh run with payable gold and seeded
+		# stock, so `_show_shop` does not `_store_run` a new checkpoint.
+		_opening_suppressed = true
+		_new_run()
+		game.run.player.gold = 260
+		game.run.quest_scratch["shopStock"] = game.rewards.gen_shop(game.run)
+		_show_shop()
 	elif not fight.is_empty():
 		_opening_suppressed = true
 		_new_run()

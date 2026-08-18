@@ -29,11 +29,6 @@ const SCRIM_BOTTOM: float = 0.33
 const RACK_PRICE_GAP: float = 2.0
 ## The least of its region the goods keep when the tag wants more.
 const WARE_SHARE: float = 0.45
-## Slice 5 (#242) words these as `ui.shop.sold` / `ui.shop.removalSpent` and
-## JAMES WORDS THEM AT REVIEW — they stand here as the concept's own placeholder
-## text rather than as locale keys nobody has signed off yet.
-const SOLD_WORD: String = "SOLD"
-const SPENT_WORD: String = "SPENT"
 
 var shape: StringName = StageShape.IDENTITY
 
@@ -79,6 +74,7 @@ func _init(stock: Dictionary, gold: int, content: ContentDB,
 	shape = stage_shape if StageShape.REFERENCES.has(stage_shape) else StageShape.IDENTITY
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = GlassStyle.theme()
+	accessibility_name = Locale.active.t("ui.shop.title")
 	_sfx = sfx if sfx != null else SfxBus.new()
 	if sfx == null:
 		add_child(_sfx)
@@ -209,7 +205,7 @@ func _add_offer() -> void:
 		str(_quest_offer.get("text", _content.quests.get("usurper", {}).get(
 			"itemText", "Cold glass. No wick."))), _price(_quest_offer))
 	tag.cold = true
-	tag.eyebrow = "GATE"
+	tag.eyebrow = Locale.active.t("ui.shop.gate")
 	_register_slot("offer", "", 0, button, tag, &"jar")
 	add_child(button)
 	# The glass stands in FRONT of what it covers, so it is added after the ware
@@ -226,7 +222,7 @@ func _add_removal() -> void:
 		Locale.active.t("ui.shop.cardRemoval.desc"),
 		int(float(str(_stock.get("removeCost", 0)))))
 	tag.emblem = true
-	tag.state_word = SPENT_WORD
+	tag.state_word = Locale.active.t("ui.shop.removalSpent")
 	# The merchant's own service stands in the rack beside the cards.
 	_rack.append(_register_slot("removal", "", 0, button, tag, &""))
 	add_child(button)
@@ -252,7 +248,7 @@ func _tag(ware_name: String, effect: String, price: int) -> WareTag:
 	tag.ware_name = ware_name
 	tag.effect = effect
 	tag.price = price
-	tag.state_word = SOLD_WORD
+	tag.state_word = Locale.active.t("ui.shop.sold")
 	return tag
 
 
@@ -370,7 +366,9 @@ func _relayout() -> void:
 func _hud_band() -> float:
 	if shape == &"phone-portrait":
 		return 58.0
-	return 42.0 if shape == &"phone-landscape" else 56.0
+	if shape == &"pad-portrait" or shape == &"phone-landscape":
+		return 62.0
+	return 56.0
 
 
 ## A ware in its region. The region box is the WARE PLUS ITS TAG — that is how
@@ -385,7 +383,9 @@ func _seat(entry: Dictionary, box: Rect2, frame: Vector2, factor: float) -> void
 	var tag: WareTag = entry["tag"]
 	var above: bool = StallLayout.TAG_ABOVE.has(entry["region"])
 	var tag_h: float = tag.reflow(box.size.x, factor)
-	var thread: float = maxf(5.0, box.size.y * 0.05)
+	# Fraction of the region, not a pixel floor: 5 px is a different image-space
+	# gap under portrait width-contain and lifts a relic off the slab.
+	var thread: float = box.size.y * 0.05
 	# The goods keep at least this much of their region whatever the tag needs.
 	# A long effect line otherwise squeezes the ware to a thumbnail, and it is
 	# the ware that has to read from across the room, not the second sentence.
@@ -422,13 +422,31 @@ func _seat_rack(frame: Vector2, factor: float) -> void:
 	var count: int = _rack.size()
 	if count == 0 or band.size.x <= 0.0 or band.size.y <= 0.0:
 		return
+	# Portrait's floor is tall and narrow: one row of six 45 px cards cannot
+	# be read, so the rack stacks into two rows across the full width.
+	var rows: int = 2 if StallLayout.is_portrait(frame) and count > 3 else 1
+	var per_row: int = ceili(float(count) / float(rows))
+	var row_gap: float = band.size.y * 0.04 if rows > 1 else 0.0
+	var row_h: float = (band.size.y - row_gap * float(rows - 1)) / float(rows)
+	for row: int in range(rows):
+		var start: int = row * per_row
+		var n: int = mini(per_row, count - start)
+		if n <= 0:
+			break
+		var row_band: Rect2 = Rect2(band.position.x,
+			band.position.y + (row_h + row_gap) * float(row), band.size.x, row_h)
+		_seat_rack_row(frame, factor, row_band, start, n)
+
+
+func _seat_rack_row(frame: Vector2, factor: float, band: Rect2, start: int,
+		count: int) -> void:
 	var separation: float = band.size.x * 0.012
 	var slot_w: float = (band.size.x - separation * float(count - 1)) / float(count)
-	for index: int in range(count):
-		var entry: Dictionary = _rack[index]
+	for offset: int in range(count):
+		var entry: Dictionary = _rack[start + offset]
 		var tag: WareTag = entry["tag"]
 		var tag_h: float = tag.reflow(slot_w, factor)
-		var left: float = band.position.x + (slot_w + separation) * float(index)
+		var left: float = band.position.x + (slot_w + separation) * float(offset)
 		var control: Control = entry["control"]
 		var view: CardView = control as CardView
 		if view == null:

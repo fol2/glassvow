@@ -179,9 +179,11 @@ column/row luminance profile, not eyeballed:
   right end and the stair treads are all painted inside it, because a 20:9
   frame crops the rest away.
 
-**Portrait is still open.** James's per-aspect ruling gives 9:20 its own
-composition (canopy → shelf → counter → foreground rack), through the same
-two-step pipeline once this landscape settles. It is not this file cropped.
+**Portrait is still open as a painting.** James's per-aspect ruling gives 9:20
+its own composition (canopy → shelf → counter → foreground rack), through the
+same two-step pipeline once this landscape settles. It is not this file cropped.
+Until that master lands, `StallLayout.fit()` width-contains this painting as a
+top band and `ShopScreen` stacks the rack in two rows on the floor below.
 
 ### `scenes/` — the ten scripted-scene plates, 1536×1024 palette PNG
 

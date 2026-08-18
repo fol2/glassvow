@@ -52,7 +52,8 @@ static func run(fails: Array[String]) -> void:
 		_source("res://presentation/run/hollow_screen.gd"),
 	])
 	_check(fails, _has_all(adjacent, ["ui.rest.restHealBtn", "ui.rest.smithBtn",
-		"ui.shop.greeting", "ui.shop.cardRemoval.title", "ui.event.continue",
+		"ui.shop.greeting", "ui.shop.cardRemoval.title", "ui.shop.sold",
+		"ui.shop.gate", "ui.shop.removalSpent", "ui.event.continue",
 		"ui.treasure.title", "ui.treasure.coinsOnly", "ui.hollow.kicker",
 		"ui.hollow.payPrice", "ui.hollow.pricePaid"]),
 		"adjacent live surfaces consume locale keys")

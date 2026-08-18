@@ -17,11 +17,13 @@ extends RefCounted
 ## `dawn_phone_containment.gd`.
 
 ## The window sizes the acceptance names, resolved through the real shape
-## pipeline rather than hardcoded: a 4:3 iPad, a 20:9 phone held either way,
-## and the two landscape references either side of them.
+## pipeline rather than hardcoded: a 4:3 iPad either way, a 20:9 phone
+## either way, and the desktop 16:9 reference beside them. Portrait is the
+## stacked composition (width-contain stall, full-floor rack), not a crop.
 const WINDOWS: Dictionary[StringName, Array] = {
 	&"pad-landscape": [Vector2i(1180, 820), &"identity"],
 	&"pad-landscape-4x3": [Vector2i(2048, 1536), &"pad-landscape"],
+	&"pad-portrait": [Vector2i(820, 1180), &"pad-portrait"],
 	&"phone-landscape-20x9": [Vector2i(2400, 1080), &"phone-landscape"],
 	&"phone-portrait-9x20": [Vector2i(1080, 2400), &"phone-portrait"],
 	&"desktop-16x9": [Vector2i(2560, 1440), &"desktop-landscape"],
@@ -52,6 +54,32 @@ static func run(fails: Array[String]) -> void:
 		_screen_holds(fails, label, screen, frame)
 	_state_grammar(fails, screen, stock, offer)
 	screen.free()
+	# Slice 5: longer zh-Hant tags are what break a label. Build a new
+	# ShopScreen after the switch — tags bake locale at construct time.
+	_zh_screen_holds(fails, content, stock, offer)
+
+
+## zh-Hant tags bake at construct time, so a new ShopScreen is required. Always
+## restore Locale.active and the ContentDB overlay, including on early return.
+static func _zh_screen_holds(fails: Array[String], content: ContentDB,
+		stock: Dictionary, offer: Dictionary) -> void:
+	var previous: Locale = Locale.active
+	Locale.active = Locale.new(Locale.CODE_ZH_HANT)
+	Locale.active.hydrate_content(content)
+	var zh_screen: ShopScreen = ShopScreen.new(stock, 100, content, offer, true)
+	for label: StringName in [&"pad-landscape", &"phone-portrait-9x20"]:
+		var row: Array = WINDOWS[label]
+		var window: Vector2i = row[0]
+		var reference: StringName = row[1]
+		var shape: StringName = StageShape.IDENTITY if reference == &"identity" \
+			else reference
+		var frame: Vector2 = Vector2(StageShape.stage_size(shape, window))
+		zh_screen.size = frame
+		zh_screen.set_shape(shape)
+		_screen_holds(fails, StringName("zh-%s" % label), zh_screen, frame)
+	zh_screen.free()
+	Locale.active.restore_content()
+	Locale.active = previous
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -98,15 +126,22 @@ static func _fit_holds(fails: Array[String], label: StringName, frame: Vector2) 
 			"%s region %s escapes the frame %s: %s" % [label, region, frame, box])
 	var canvas: Rect2 = StallLayout.canvas(frame)
 	var lip: float = canvas.position.y + StallLayout.COUNTER_LINE * canvas.size.y
-	_check(fails, absf(lip - StallLayout.COUNTER_LINE * frame.y) < 0.5,
-		"%s counter lip left its line: %.1f, wanted %.1f" % [
-			label, lip, StallLayout.COUNTER_LINE * frame.y])
+	if StallLayout.is_portrait(frame):
+		_check(fails, canvas.position.y > -0.5 and canvas.size.y < frame.y * 0.55,
+			"%s portrait stall is not a top band: %s in %s" % [label, canvas, frame])
+	else:
+		_check(fails, absf(lip - StallLayout.COUNTER_LINE * frame.y) < 0.5,
+			"%s counter lip left its line: %.1f, wanted %.1f" % [
+				label, lip, StallLayout.COUNTER_LINE * frame.y])
 	_check(fails, canvas.size.x >= frame.x - 0.5,
 		"%s leaves a gap beside the painting: %s in %s" % [label, canvas, frame])
 	var band: Rect2 = StallLayout.rack_band(frame)
 	_check(fails, band.size.x > 0.0 and band.size.y > 0.0 and view.encloses(band)
 		and band.position.y > lip,
 		"%s rack band is not a usable strip below the lip: %s" % [label, band])
+	if StallLayout.is_portrait(frame):
+		_check(fails, band.size.y >= 180.0,
+			"%s portrait rack is too short to read: %s" % [label, band])
 
 
 static func _screen_holds(fails: Array[String], label: StringName,
@@ -129,17 +164,15 @@ static func _screen_holds(fails: Array[String], label: StringName,
 			"%s tag for %s/%d escapes the frame %s: %s" % [
 				label, entry["kind"], entry["index"], frame, tag_rect])
 		# What is DRAWN, not what was set: a non-wrapping row shrinks to fit,
-		# but below MIN_PX it can still run past the block. Portrait is exempt —
-		# James's 2026-08-15 ruling gives that shape its own master and layout.
-		if label != &"phone-portrait-9x20":
-			for row: Dictionary in tag._rows:
-				var run_w: float = float(str(row["run"]))
-				_check(fails, run_w <= tag.size.x + 0.5,
-					"%s tag row for %s/%d draws past its block: %.1f > %.1f (%s)" % [
-						label, entry["kind"], entry["index"],
-						run_w, tag.size.x, str(row["text"]).left(24)])
-	if label != &"phone-portrait-9x20":
-		_seated_on_the_painting(fails, label, screen, frame)
+		# but below MIN_PX it can still run past the block. Portrait is the
+		# stacked composition, so tag rows and seating hold there too.
+		for row: Dictionary in tag._rows:
+			var run_w: float = float(str(row["run"]))
+			_check(fails, run_w <= tag.size.x + 0.5,
+				"%s tag row for %s/%d draws past its block: %.1f > %.1f (%s)" % [
+					label, entry["kind"], entry["index"],
+					run_w, tag.size.x, str(row["text"]).left(24)])
+	_seated_on_the_painting(fails, label, screen, frame)
 	var jar: Rect2 = Rect2(screen._jar.position, screen._jar.size)
 	_check(fails, jar.size.x > 0.0 and jar.size.y > 0.0 and view.encloses(jar),
 		"%s the bell jar is unseated: %s in %s" % [label, jar, frame])
@@ -155,7 +188,8 @@ static func _screen_holds(fails: Array[String], label: StringName,
 ## perspective, on the furniture it rests on — never floating at UI scale. Which
 ## makes it a measurable property, not a taste one: every phial's foot lands on
 ## the painted shelf board and every relic's on the painted counter slab, at
-## every landscape shape.
+## every shape. Seating is exact by construction in image space even under
+## portrait width-contain (shelf foot = SHELF_LINE + PHIAL_SINK).
 ##
 ## Both feet are EXACT by construction, so the tolerance is a hairline rather
 ## than a budget: a relic's tag is above it and `_seat` pins a tag-above foot to
@@ -249,7 +283,7 @@ static func _state_grammar(fails: Array[String], screen: ShopScreen,
 		"a sold ware left no gap, or took its tag with it")
 	_check(fails, struck and not struck_name.is_empty(),
 		"a sold ware's name is not struck through: %s" % name_row)
-	_check(fails, _price_text(card_tag) == ShopScreen.SOLD_WORD,
+	_check(fails, _price_text(card_tag) == Locale.active.t("ui.shop.sold"),
 		"a sold ware does not say so where its price was: %s" % _price_text(card_tag))
 	_check(fails, Rect2(Vector2.ZERO, screen.size).encloses(
 		Rect2(card_tag.position, card_tag.size)),
@@ -264,7 +298,7 @@ static func _state_grammar(fails: Array[String], screen: ShopScreen,
 	var deactivated: bool = removal["disabled"]
 	_check(fails, shears.disabled and deactivated,
 		"card removal is still live after use")
-	_check(fails, _price_text(removal_tag) == ShopScreen.SPENT_WORD,
+	_check(fails, _price_text(removal_tag) == Locale.active.t("ui.shop.removalSpent"),
 		"spent shears do not read as spent: %s" % _price_text(removal_tag))
 	stock["removed"] = false
 	screen.update(stock, 400, offer, true)

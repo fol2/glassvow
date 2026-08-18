@@ -41,13 +41,17 @@ extends RefCounted
 ##      screen at every shape by construction — that is the property
 ##      `tests/test_stall_layout.gd` asserts, and the reason it can.
 ##
-## SAFE_BAND is the intersection of what the two acceptance ratios show:
-## 4:3 (`pad-landscape` flexed to 1180x885) crops the width to
+## SAFE_BAND is the intersection of what the two landscape acceptance ratios
+## show: 4:3 (`pad-landscape` flexed to 1180x885) crops the width to
 ## 1180/1286.7 = 0.9171 and keeps every row; 20:9 (`phone-landscape` flexed to
 ## 867x390) keeps the full width and crops v to [0.2671, 0.9211]. Nothing
-## load-bearing may be authored outside their overlap. Portrait is NOT in that
-## intersection and never will be — James's per-aspect ruling gives 9:20 its own
-## master and its own book; this file is the landscape family only.
+## load-bearing may be authored outside their overlap.
+##
+## Portrait is a second composition, not a crop of this one. James's 2026-08-15
+## ruling still wants a per-aspect master; until that painting lands, `fit()`
+## width-contains the stall at the top of the frame (canopy → shelf → counter)
+## and `rack_band()` gives the floor below the lip to the cards. Letterboxing
+## the landscape painting into a bottom strip is the thing that ruling retired.
 ##
 ## Pure by construction, like `StageShape`: no Node, no DisplayServer, every
 ## input an argument, so the whole matrix is drivable headlessly.
@@ -167,9 +171,8 @@ const TAG_ABOVE: Array[StringName] = [&"stand0", &"stand1"]
 const IDENTITY_SCALE: float = 820.0 / 1040.0
 ## Where type stops shrinking with the painting. Below this a tag is not a
 ## smaller tag, it is an unreadable one, so it grows past its region instead and
-## `ShopScreen._seat` clamps it back into the frame. Portrait is the only shape
-## that reaches the floor today, and James's per-aspect ruling has taken that
-## shape out of this book altogether.
+## `ShopScreen._seat` clamps it back into the frame. Portrait width-contain
+## sits well below this floor, so tags stay readable on the small stall band.
 const TYPE_FLOOR: float = 0.62
 
 ## The foreground rack is frame-locked, not scene-locked: it stands in front of
@@ -180,14 +183,22 @@ const RACK_INSET: float = 0.15
 
 
 ## Image-to-frame transform: cover, pivoted on the counter lip, capped so the
-## visible width never falls below SAFE_BAND's.
+## visible width never falls below SAFE_BAND's. Portrait is width-contain at
+## the top of the frame — a stacked stall, not a cropped one.
 static func fit(frame: Vector2) -> Transform2D:
+	if is_portrait(frame):
+		var scale: float = frame.x / IMAGE.x
+		return Transform2D(0.0, Vector2(scale, scale), 0.0, Vector2.ZERO)
 	var cover: float = maxf(frame.x / IMAGE.x, frame.y / IMAGE.y)
 	var widest: float = frame.x / (IMAGE.x * SAFE_BAND.size.x)
 	var scale: float = minf(cover, widest)
 	var drawn: Vector2 = IMAGE * scale
 	return Transform2D(0.0, Vector2(scale, scale), 0.0,
 		(frame - drawn) * Vector2(0.5, COUNTER_LINE))
+
+
+static func is_portrait(frame: Vector2) -> bool:
+	return frame.y > frame.x
 
 
 ## How large type must be drawn at this frame, as a multiple of the sizes the
@@ -218,10 +229,18 @@ static func place(frame: Vector2, region: StringName) -> Rect2:
 		box.size * IMAGE * scale)
 
 
-## The foreground band: below the counter lip, inset from the left, stopping
-## short of the bell jar's end of the counter so the two never share a column.
+## The foreground band: below the counter lip. Landscape insets from the left
+## and stops short of the bell jar so the two never share a column. Portrait
+## already seats the jar on the stall band above, so the rack takes the full
+## floor in two rows.
 static func rack_band(frame: Vector2) -> Rect2:
 	var gap: float = RACK_GAP * frame.y
+	if is_portrait(frame):
+		var box: Rect2 = canvas(frame)
+		var top: float = box.position.y + COUNTER_LINE * box.size.y + gap
+		var inset: float = frame.x * 0.04
+		return Rect2(inset, top, maxf(0.0, frame.x - inset * 2.0),
+			maxf(0.0, frame.y - gap - top))
 	var top: float = COUNTER_LINE * frame.y + gap
 	var left: float = RACK_INSET * frame.x
 	var right: float = place(frame, &"jar").position.x - gap
