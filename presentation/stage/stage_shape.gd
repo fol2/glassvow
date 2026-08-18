@@ -8,9 +8,11 @@ extends RefCounted
 ## which is why `application/main.gd`'s `--vp=` comment says in as many words
 ## that nothing reflows.
 ##
-## The five sizes are kept verbatim from `src/stage.js:20-26`, names included:
-## every document in this repo already cites them, and `pad-landscape` is the
-## shape every ported number was measured in. It must stay pixel-exact.
+## The authored sizes are kept verbatim from `src/stage.js:20-26`, names
+## included: every document in this repo already cites them, and
+## `pad-landscape` is the shape every ported number was measured in. It must
+## stay pixel-exact. `phone-portrait` and `pad-portrait` remain in REFERENCES
+## so layout-book keys still resolve; they are not shipping candidates.
 ##
 ## WHAT IS NOT PORTED, and why. The benchmark picks a shape from `innerWidth /
 ## innerHeight` against geometric-mean splits, with a `matchMedia('(pointer:
@@ -25,11 +27,12 @@ extends RefCounted
 ##      returned FALSE on a Steam Deck (godot#68518). Device class comes from the
 ##      platform name and the physical diagonal instead, which are knowable.
 ##
-## THE FLEX. A fixed shape means bars on anything that is not one of the five,
-## and Google Play's adaptive quality guidelines want a landscape game full
-## screen at 4:3, 16:10 and 21:9 — none of which the five hit. So a shape is a
-## design REFERENCE, not a fixed frame: the stage stretches along one axis to
-## meet the window, up to FLEX_CAP, and only then gives up and letterboxes.
+## THE FLEX. A fixed shape means bars on anything that is not one of the
+## shipping references, and Google Play's adaptive quality guidelines want a
+## landscape game full screen at 4:3, 16:10 and 21:9 — none of which those
+## three hit. So a shape is a design REFERENCE, not a fixed frame: the stage
+## stretches along one axis to meet the window, up to FLEX_CAP, and only then
+## gives up and letterboxes.
 ##
 ## The stretch is expressed as a SIZE, never as a stretch mode. `content_scale_
 ## aspect` stays `keep` in `project.godot`; when the flexed size matches the
@@ -41,9 +44,12 @@ extends RefCounted
 ## argument, so `tests/test_stage_shape.gd` can drive every device in the matrix
 ## headlessly.
 
-## The five authored sizes (`src/stage.js:20-26`). Insertion order is the order
-## `pick` considers them, and GDScript dictionaries preserve it, so a tie is
-## resolved by this listing rather than by hash order.
+## Authored sizes (`src/stage.js:20-26`). Three ship. `phone-portrait` and
+## `pad-portrait` stay in this table until the layout-book slice so existing
+## keys still resolve; `pick` and `--shape=` never select them.
+## Insertion order is the order `pick` considers CANDIDATES, and GDScript
+## dictionaries preserve it, so a tie is resolved by this listing rather
+## than by hash order.
 const REFERENCES: Dictionary[StringName, Vector2i] = {
 	&"phone-portrait": Vector2i(390, 844),
 	&"pad-portrait": Vector2i(820, 1180),
@@ -51,6 +57,12 @@ const REFERENCES: Dictionary[StringName, Vector2i] = {
 	&"desktop-landscape": Vector2i(1458, 820),  # 1458/820 = 16:9
 	&"phone-landscape": Vector2i(844, 390),
 }
+
+## Names `--shape=` / `pick(..., forced)` may honour. Retired names are
+## ignored the same way an unknown name is.
+const SHIPPING: Array[StringName] = [
+	&"pad-landscape", &"desktop-landscape", &"phone-landscape",
+]
 
 ## The identity shape. Every benchmark number this port carries was measured at
 ## 1180x820, and `CONCEPTS.md` rests the whole parity method on that being 1:1
@@ -65,18 +77,19 @@ const CLASS_DESKTOP: StringName = &"desktop"
 ## Which references each device class may be given. A phone never gets the pad
 ## composition even when its aspect is closer to one — a 4.7" screen showing the
 ## iPad layout is the failure the benchmark's touch branch existed to prevent,
-## and dropping that branch must not drop its purpose.
+## and dropping that branch must not drop its purpose. Portrait names are not
+## candidates: a taller-than-wide window gets that class's landscape shape.
 const CANDIDATES: Dictionary[StringName, Array] = {
-	CLASS_PHONE: [&"phone-portrait", &"phone-landscape"],
-	CLASS_PAD: [&"pad-portrait", &"pad-landscape"],
-	CLASS_DESKTOP: [&"pad-portrait", &"pad-landscape", &"desktop-landscape"],
+	CLASS_PHONE: [&"phone-landscape"],
+	CLASS_PAD: [&"pad-landscape"],
+	CLASS_DESKTOP: [&"pad-landscape", &"desktop-landscape"],
 }
 
 ## How far a stage may stretch from its reference before it stops and lets the
-## window letterbox instead. Measured, not guessed: the worst flex any real
-## device needs is 10.1% (a 16:10 tablet held in portrait against
-## `pad-portrait`), so 12% clears every shipping device with headroom while
-## still refusing a 32:9 monitor, which would want 64%.
+## window letterbox instead. Keep 0.12: the remaining landscape worst cases
+## already sit inside it (iPad 4:3 landscape against `pad-landscape`; 21:9
+## Android phone against `phone-landscape` at 7.8%). The old 10.1% tablet-
+## portrait justification is dead; do not retune the cap in this slice.
 const FLEX_CAP: float = 0.12
 
 ## Diagonal inches below which a touch device is a phone rather than a tablet.
@@ -116,8 +129,8 @@ static func class_for(os_name: String, diagonal: float) -> StringName:
 	return CLASS_DESKTOP
 
 
-## A reference's aspect, exactly as authored: width over height, so portrait
-## references sit below 1 and landscape ones above it.
+## A reference's aspect, exactly as authored: width over height. Shipping
+## references are all landscape (above 1). Retired portrait sizes stay below 1.
 static func aspect_of(shape: StringName) -> float:
 	var ref: Vector2i = REFERENCES.get(shape, REFERENCES[IDENTITY])
 	return float(ref.x) / float(maxi(1, ref.y))
@@ -125,12 +138,13 @@ static func aspect_of(shape: StringName) -> float:
 
 ## The reference this window should be composed against.
 ##
-## `forced` short-circuits everything when it names a real reference — the port
-## of `?shape=` (`src/stage.js:33`), which is how every parity measurement is
-## taken and therefore not a debug nicety.
+## `forced` short-circuits everything when it names a shipping reference — the
+## port of `?shape=` (`src/stage.js:33`), which is how every parity measurement
+## is taken and therefore not a debug nicety. A retired or unknown name is
+## ignored rather than obeyed.
 static func pick(window: Vector2i, device_class: StringName,
 		forced: StringName = &"") -> StringName:
-	if REFERENCES.has(forced):
+	if SHIPPING.has(forced):
 		return forced
 	var candidates: Array = CANDIDATES.get(device_class, CANDIDATES[CLASS_DESKTOP])
 	var want: float = float(maxi(1, window.x)) / float(maxi(1, window.y))

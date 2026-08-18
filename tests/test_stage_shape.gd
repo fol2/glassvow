@@ -23,6 +23,7 @@ static func run(fails: Array[String]) -> void:
 	_classes(fails)
 	_matrix(fails)
 	_flex(fails)
+	_os_lock(fails)
 
 
 # ---------------------------------------------------------------- identity
@@ -38,7 +39,19 @@ static func _identity(fails: Array[String]) -> void:
 		"a 1180x820 window on pad-landscape flexes to exactly 1180x820")
 	_check(fails, absf(StageShape.flex_of(StageShape.IDENTITY, pad)) < 0.0001,
 		"…and reports zero flex doing it")
-	_check(fails, StageShape.REFERENCES.size() == 5, "five authored references")
+	_check(fails, StageShape.REFERENCES.size() == 5,
+		"five authored references (three shipping, two retired)")
+	_check(fails, StageShape.SHIPPING.size() == 3, "three shipping shapes")
+	for shape: StringName in StageShape.SHIPPING:
+		_check(fails, StageShape.REFERENCES.has(shape),
+			"%s is in REFERENCES" % shape)
+	for retired: StringName in [&"phone-portrait", &"pad-portrait"]:
+		_check(fails, not StageShape.SHIPPING.has(retired),
+			"%s is not shipping" % retired)
+		_check(fails, not StageShape.CANDIDATES[StageShape.CLASS_PHONE].has(retired)
+				and not StageShape.CANDIDATES[StageShape.CLASS_PAD].has(retired)
+				and not StageShape.CANDIDATES[StageShape.CLASS_DESKTOP].has(retired),
+			"%s is not a candidate" % retired)
 	for shape: StringName in StageShape.REFERENCES:
 		var ref: Vector2i = StageShape.REFERENCES[shape]
 		_check(fails, StageShape.stage_size(shape, ref) == ref,
@@ -89,23 +102,23 @@ static func _matrix(fails: Array[String]) -> void:
 		["MacBook Pro 14", Vector2i(3024, 1964), StageShape.CLASS_DESKTOP, &"pad-landscape"],
 		["MacBook Air 13", Vector2i(2560, 1664), StageShape.CLASS_DESKTOP, &"pad-landscape"],
 		["Surface 3:2", Vector2i(2880, 1920), StageShape.CLASS_DESKTOP, &"pad-landscape"],
-		["desktop window, portrait", Vector2i(1200, 1920), StageShape.CLASS_DESKTOP, &"pad-portrait"],
+		["desktop window, taller than wide", Vector2i(1200, 1920), StageShape.CLASS_DESKTOP, &"pad-landscape"],
 
 		# pad class
 		["iPad Air landscape", Vector2i(2360, 1640), StageShape.CLASS_PAD, &"pad-landscape"],
-		["iPad Air portrait", Vector2i(1640, 2360), StageShape.CLASS_PAD, &"pad-portrait"],
+		["iPad Air taller-than-wide", Vector2i(1640, 2360), StageShape.CLASS_PAD, &"pad-landscape"],
 		["iPad 4:3 landscape", Vector2i(2048, 1536), StageShape.CLASS_PAD, &"pad-landscape"],
-		["iPad 4:3 portrait", Vector2i(1536, 2048), StageShape.CLASS_PAD, &"pad-portrait"],
+		["iPad 4:3 taller-than-wide", Vector2i(1536, 2048), StageShape.CLASS_PAD, &"pad-landscape"],
 		["Galaxy Tab S9 landscape", Vector2i(2560, 1600), StageShape.CLASS_PAD, &"pad-landscape"],
-		["Galaxy Tab S9 portrait", Vector2i(1600, 2560), StageShape.CLASS_PAD, &"pad-portrait"],
+		["Galaxy Tab S9 taller-than-wide", Vector2i(1600, 2560), StageShape.CLASS_PAD, &"pad-landscape"],
 
 		# phone class — note the SE. Its landscape aspect is 1.7787, which is
 		# desktop-landscape to four decimal places, and it must NOT get it.
-		["iPhone 17 portrait", Vector2i(1179, 2556), StageShape.CLASS_PHONE, &"phone-portrait"],
+		["iPhone 17 taller-than-wide", Vector2i(1179, 2556), StageShape.CLASS_PHONE, &"phone-landscape"],
 		["iPhone 17 landscape", Vector2i(2556, 1179), StageShape.CLASS_PHONE, &"phone-landscape"],
 		["iPhone SE landscape", Vector2i(1334, 750), StageShape.CLASS_PHONE, &"phone-landscape"],
-		["Pixel 9 portrait", Vector2i(1080, 2424), StageShape.CLASS_PHONE, &"phone-portrait"],
-		["Galaxy S24U portrait", Vector2i(1440, 3120), StageShape.CLASS_PHONE, &"phone-portrait"],
+		["Pixel 9 taller-than-wide", Vector2i(1080, 2424), StageShape.CLASS_PHONE, &"phone-landscape"],
+		["Galaxy S24U taller-than-wide", Vector2i(1440, 3120), StageShape.CLASS_PHONE, &"phone-landscape"],
 	]
 	for row: Array in rows:
 		var label: String = row[0]
@@ -123,6 +136,12 @@ static func _matrix(fails: Array[String]) -> void:
 	_check(fails, StageShape.pick(Vector2i(1920, 1080), StageShape.CLASS_DESKTOP,
 		&"not-a-shape") == &"desktop-landscape",
 		"an unknown forced name is ignored rather than obeyed")
+	_check(fails, StageShape.pick(Vector2i(1179, 2556), StageShape.CLASS_PHONE,
+		&"phone-portrait") == &"phone-landscape",
+		"a retired phone-portrait force is ignored")
+	_check(fails, StageShape.pick(Vector2i(1920, 1080), StageShape.CLASS_DESKTOP,
+		&"pad-portrait") == &"desktop-landscape",
+		"a retired pad-portrait force is ignored")
 
 
 # ---------------------------------------------------------------- flex
@@ -150,8 +169,6 @@ static func _flex(fails: Array[String]) -> void:
 		["Steam Deck", Vector2i(1280, 800), &"desktop-landscape"],
 		["MacBook Pro 14", Vector2i(3024, 1964), &"pad-landscape"],
 		["iPad 4:3", Vector2i(2048, 1536), &"pad-landscape"],
-		["16:10 tablet portrait", Vector2i(1600, 2560), &"pad-portrait"],
-		["Pixel 9 portrait", Vector2i(1080, 2424), &"phone-portrait"],
 		# Google Play wants a landscape game full screen at 21:9. That anchor is
 		# an Android PHONE held sideways, and it is met: 2.333 against
 		# phone-landscape's 2.164 is 7.8%. A desktop 21:9 MONITOR is a different
@@ -198,3 +215,30 @@ static func _flex(fails: Array[String]) -> void:
 	var se: Vector2i = Vector2i(1334, 750)
 	_check(fails, absf(StageShape.flex_of(&"phone-landscape", se)) > StageShape.FLEX_CAP,
 		"an iPhone SE in landscape exceeds the cap against phone-landscape")
+
+	# Taller-than-wide windows pick the class landscape shape and letterbox.
+	# Slice 1 observable: phone-class 1179×2556 → phone-landscape; iPad-class
+	# 1640×2360 → pad-landscape.
+	var phone_up: Vector2i = Vector2i(1179, 2556)
+	_check(fails, StageShape.pick(phone_up, StageShape.CLASS_PHONE) == &"phone-landscape",
+		"a phone-class 1179x2556 window picks phone-landscape")
+	_check(fails, absf(StageShape.flex_of(&"phone-landscape", phone_up)) > StageShape.FLEX_CAP,
+		"…and letterboxes past the cap")
+	var pad_up: Vector2i = Vector2i(1640, 2360)
+	_check(fails, StageShape.pick(pad_up, StageShape.CLASS_PAD) == &"pad-landscape",
+		"an iPad-class 1640x2360 window picks pad-landscape")
+	_check(fails, absf(StageShape.flex_of(&"pad-landscape", pad_up)) > StageShape.FLEX_CAP,
+		"…and letterboxes past the cap")
+
+
+static func _os_lock(fails: Array[String]) -> void:
+	var ori: int = int(float(str(ProjectSettings.get_setting(
+		"display/window/handheld/orientation"))))
+	_check(fails, ori == DisplayServer.SCREEN_SENSOR_LANDSCAPE,
+		"project handheld orientation is sensor_landscape")
+	var raw: String = FileAccess.get_file_as_string("res://project.godot")
+	_check(fails, raw.contains("window/handheld/orientation=4"),
+		"project.godot writes sensor_landscape (enum 4)")
+	var presets: String = FileAccess.get_file_as_string("res://export_presets.cfg")
+	_check(fails, presets.contains("sensor_landscape via project.godot"),
+		"iOS/Android export presets name the sensor_landscape lock")
