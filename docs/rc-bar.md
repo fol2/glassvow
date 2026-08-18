@@ -101,9 +101,12 @@ particles):
       measured and recorded in the same packet, **report-only** for this RC — gating launch
       time would be a new decision.
 
-Evidence: immutable packet. A miss on one device creates measured optimisation work; if the
-gate cannot be met without a renderer, fidelity, frame-rate, or supported-device change, that
-trade-off returns to the map ([#158](https://github.com/fol2/glassvow/issues/158)).
+Evidence: immutable packet
+([`docs/performance/2026-08-18-floor-device-profile.md`](performance/2026-08-18-floor-device-profile.md),
+[#172](https://github.com/fol2/glassvow/issues/172)). A miss on one device creates measured
+optimisation work; if the gate cannot be met without a renderer, fidelity, frame-rate, or
+supported-device change, that trade-off returns to the map
+([#158](https://github.com/fol2/glassvow/issues/158)).
 
 ## P3 — Full-run QA on device
 

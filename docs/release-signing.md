@@ -133,19 +133,23 @@ Three things that will stop you:
   produce numbers that look valid. Read the OS version off the device before
   trusting any measurement taken on it.
 
-Benches launch through `main.gd` user-arg routes (`--map-bench`, `--perf-out=`),
-never `-s`: measured 2026-08-14 on iPad 8, the iOS release template silently
-ignores `-s` both as a `devicectl` launch argument and via the Info.plist
-`godot_cmdline` array — the app boots `main.tscn` either way — while generic
-options from the same array (`--log-file`, `--verbose`) are honoured. The
-working recipe: set `godot_cmdline` to
+Benches launch through `main.gd` user-arg routes (`--map-bench`,
+`--floor-profile`, `--perf-out=`), never `-s`: measured 2026-08-14 on iPad 8,
+the iOS release template silently ignores `-s` both as a `devicectl` launch
+argument and via the Info.plist `godot_cmdline` array — the app boots
+`main.tscn` either way — while generic options from the same array
+(`--log-file`, `--verbose`) are honoured. The working recipe: set
+`godot_cmdline` to
 `["--log-file","user://bench.log","--","--map-bench"]` in the generated
 project's Info.plist (plutil, then rebuild — the exporter regenerates the plist
 on every export), and pull the log with
 `xcrun devicectl device copy from … --domain-type appDataContainer
 --domain-identifier io.fol2.glassvow --source Documents/bench.log`, since
 `print()` output never reaches `devicectl --console` (also measured; `user://`
-maps to `Documents/`).
+maps to `Documents/`). Floor-device profiling (#172) uses the same plist
+path with `--floor-profile --locale=en|zh-Hant`; the packet is
+`Documents/floor_profile.json`. Protocol:
+`docs/performance/2026-08-18-floor-device-profile.md`.
 
 Use `--export-debug` only to rehearse the plumbing. Timings for a ticket must
 come from `--export-release`: the debug engine slice is a different binary, and

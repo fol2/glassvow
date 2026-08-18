@@ -183,6 +183,8 @@ func _ready() -> void:
 	# tools/shot.sh --scene=departure --settle=0.7 --shot=…  (L0 linger)
 	# tools/shot.sh --shop --shot=/tmp/shop.png           (Night Stall)
 	# tools/shot.sh --shop --locale=zh-Hant --shot=...    (review-state language)
+	# godot --path . -- --floor-profile --locale=en [--soak-seconds=1800]
+	# godot --path . -- --floor-profile --leg=save --locale=en --resume
 	var shot_path: String = ""
 	var enter_node: int = -1
 	var lab_flag: String = ""
@@ -207,6 +209,8 @@ func _ready() -> void:
 	var show_font_probe: bool = false
 	var performance_probe: bool = false
 	var map_bench: bool = false
+	var floor_profile: bool = false
+	var floor_save_leg: bool = false
 	var scene_shot: String = ""
 	var scene_cursor: int = 0
 	for arg: String in OS.get_cmdline_user_args():
@@ -274,6 +278,16 @@ func _ready() -> void:
 			performance_probe = true
 		elif arg == "--map-bench":
 			map_bench = true
+		elif arg == "--floor-profile":
+			floor_profile = true
+		elif arg.begins_with("--leg="):
+			var floor_leg: String = arg.trim_prefix("--leg=")
+			if floor_leg == "save":
+				floor_save_leg = true
+			elif floor_leg != "route":
+				push_error("--leg wants route|save")
+				get_tree().quit(2)
+				return
 		elif arg.begins_with("--onboard="):
 			_onboard = arg.trim_prefix("--onboard=")
 		elif arg.begins_with("--scene="):
@@ -291,6 +305,26 @@ func _ready() -> void:
 		push_error("--perf-out requires one --fight route and no capture or lab")
 		get_tree().quit(2)
 		return
+	if floor_profile:
+		if map_bench or performance_probe or not fight.is_empty() \
+				or not shot_path.is_empty() or cards_lab or studio \
+				or not lab_flag.is_empty() or show_dawn_bench \
+				or show_shop_bench or not scene_shot.is_empty() \
+				or enter_node >= 0 or not _onboard.is_empty() \
+				or show_font_probe:
+			push_error("--floor-profile is exclusive of fight, capture, lab and other benches")
+			get_tree().quit(2)
+			return
+		if _forced_seed < 0:
+			_forced_seed = 717
+		if floor_save_leg:
+			resume_run = true
+			show_map = false
+		else:
+			resume_run = false
+			show_map = true
+			if _forced_act < 0:
+				_forced_act = 1
 	# `--shape=` means two different things to a screen and to the layout bench.
 	# To a screen it is "run the window at this stage". To the bench it is "author
 	# THIS shape", and the bench already hosts its own stage at that shape's
@@ -457,10 +491,27 @@ func _ready() -> void:
 		_boot_onboard(_onboard)
 	else:
 		_route_idle()
-	if performance_probe:
+	if floor_profile:
+		_attach_floor_profile()
+	elif performance_probe:
 		_attach_performance_probe()
 	elif shot_path != "":
 		_capture_and_quit(shot_path)
+
+
+func _attach_floor_profile() -> void:
+	var script: GDScript = load("res://tools/bench_floor_profile.gd") as GDScript
+	if script == null:
+		push_error("floor profile did not load")
+		get_tree().quit(2)
+		return
+	var instance: Variant = script.new()
+	if not instance is Node:
+		push_error("floor profile did not instantiate")
+		get_tree().quit(2)
+		return
+	var probe: Node = instance
+	add_child(probe)
 
 
 func _attach_performance_probe() -> void:
@@ -2085,6 +2136,12 @@ func _start_fight(ids: PackedStringArray, kind: String) -> void:
 	add_child(_screen)
 	_screen.start_encounter(known, kind, "Bench  ·  %s" % kind.capitalize())
 	_music.play(_combat_music(kind))
+
+
+## #172 route: the signed Leviathan / 96-VFX combat after the map-pan sample.
+func start_floor_combat() -> void:
+	_forced_act = 1
+	_start_fight(PackedStringArray(["leviathan"]), "boss")
 
 
 ## Production-flow stills of the six first-run hints. Not a suppressed boot:

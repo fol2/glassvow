@@ -121,6 +121,16 @@ commands: `tools/check_imports.sh`, `tools/check_anchors.py`,
 godot --headless -s res://tools/probe_layout.gd -- --all [--act=N]
 ```
 
+The #172 floor-device Evidence Harness is CLI / device-only (it is a
+30-minute headed soak and must not join the browser catalogue):
+
+```bash
+godot --path . -- --floor-profile --locale=en --soak-seconds=30 --map-seconds=5
+```
+
+On a tethered iOS device the same flags go in Info.plist `godot_cmdline`;
+see `docs/performance/2026-08-18-floor-device-profile.md`.
+
 The #128 runtime-font proof also stays on the headed capture route. It renders
 an unoverridden `Label` through `GlassStyle.theme().default_font`, verifies the
 four title glyphs, captures, and exits:
