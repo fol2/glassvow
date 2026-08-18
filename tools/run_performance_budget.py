@@ -20,7 +20,6 @@ TARGET_ENVIRONMENT = {
 }
 SHAPES = {
     "desktop-landscape": [1458, 820], "pad-landscape": [1180, 820],
-    "pad-portrait": [820, 1180], "phone-portrait": [390, 844],
     "phone-landscape": [844, 390],
 }
 REPORT_KEYS = {"schema", "provenance", "request", "method", "samples", "summary"}
@@ -110,7 +109,7 @@ def validate_plan(data: Any) -> dict[str, Any]:
         and set(plan["shapes"]) == set(SHAPES) \
         and set(plan["languages"]) == {"en", "zh-Hant"} and repeats >= 5
     if not complete:
-        die("plan: release evidence requires five shapes, both languages and five repeats")
+        die("plan: release evidence requires the three remaining shapes, both languages and five repeats")
     if plan["budgets"] is not None:
         budgets = exact_keys(plan["budgets"],
             {"renderer_mib", "footprint_mib", "frame_p95_ms"}, "plan.budgets")

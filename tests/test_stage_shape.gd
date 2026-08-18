@@ -39,8 +39,8 @@ static func _identity(fails: Array[String]) -> void:
 		"a 1180x820 window on pad-landscape flexes to exactly 1180x820")
 	_check(fails, absf(StageShape.flex_of(StageShape.IDENTITY, pad)) < 0.0001,
 		"…and reports zero flex doing it")
-	_check(fails, StageShape.REFERENCES.size() == 5,
-		"five authored references (three shipping, two retired)")
+	_check(fails, StageShape.REFERENCES.size() == 3,
+		"three authored references, all shipping")
 	_check(fails, StageShape.SHIPPING.size() == 3, "three shipping shapes")
 	for shape: StringName in StageShape.SHIPPING:
 		_check(fails, StageShape.REFERENCES.has(shape),
@@ -48,6 +48,8 @@ static func _identity(fails: Array[String]) -> void:
 	for retired: StringName in [&"phone-portrait", &"pad-portrait"]:
 		_check(fails, not StageShape.SHIPPING.has(retired),
 			"%s is not shipping" % retired)
+		_check(fails, not StageShape.REFERENCES.has(retired),
+			"%s is not a reference" % retired)
 		_check(fails, not StageShape.CANDIDATES[StageShape.CLASS_PHONE].has(retired)
 				and not StageShape.CANDIDATES[StageShape.CLASS_PAD].has(retired)
 				and not StageShape.CANDIDATES[StageShape.CLASS_DESKTOP].has(retired),
