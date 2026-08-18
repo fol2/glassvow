@@ -81,7 +81,9 @@ static func _gates(fails: Array[String]) -> void:
 	var empty_ok: bool = Floor.pacing_ok(empty)
 	_check(fails, empty_ok == false, "empty sample fails pacing")
 	var first: Array[float] = [16.0, 16.0, 16.0]
-	var last_ok: Array[float] = [17.0, 17.0, 17.0]
+	# 16.5 is a 3% P95 rise and still on the 16.67 ms deadline, so miss
+	# rate stays 0 — P2 scores both P95 and missed-deadline rate.
+	var last_ok: Array[float] = [16.5, 16.5, 16.5]
 	var sustain_ok: bool = Floor.sustained_ok(first, last_ok)
 	_check(fails, sustain_ok, "≤10% P95 rise still passes sustained")
 	var last_bad: Array[float] = [18.0, 18.0, 18.0]
