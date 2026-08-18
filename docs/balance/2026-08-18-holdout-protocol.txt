@@ -1,0 +1,23 @@
+#204 holdout protocol (declared BEFORE the holdout is run)
+
+Instrument: p8-d0-v1 on mature-three-act-no-side-state-v1
+Content SHA at declaration: 736090f18546738a2e38b756d81f6ad715a808c4ea321220443f839862cdb102
+Diagnosis inner loop (already run, not the proof): seeds 4000–4199, reproduced p8 cells bit-for-bit
+  V0 Dusk 178/200 89.0%, Ash 185/200 92.5%
+  V5 Dusk 128/200 64.0%, Ash 162/200 81.0%
+
+Holdout block (the joint hypothesis): seeds 5000–5199 inclusive, n=200 per aspect × gated vow.
+Exact list = {5000, 5001, …, 5199}. Never used for diagnosis, ablation design, or tuning.
+
+Ablation: same holdout seeds, Vow 0, eight IDs from the p8 table, matched to the unbanned Vow 0 holdout control.
+
+Top-up: none. Bands are point-estimate gates. If any point fails, this block is spent;
+retune on 4000–4199 and take a new holdout 5200–5399 (reserved, not used unless this block fails).
+
+Trio operationalisation on this block:
+- no unwinnable seed / softlock: stalls=0 and errors=0
+- no strictly dominant aspect: band 2 (|Ash−Dusk| ≤ 20 pp)
+- no trivialize at a gated vow: band 4 ablation ceilings + Vow 5 p8-default cells inside 55–85%
+  (full C1–C4 landscape is a separate 1.5 h instrument; not this holdout)
+
+Out of bounds (untouched): map weights, potion probability, act-transition heal, vows{} five penalties, locale/, story copy.
