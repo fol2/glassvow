@@ -189,11 +189,10 @@ lead-third of the frame. Arrival → a **band-of-light wipe** hands off to the
 CombatScreen (reusing the M5 scene-transition key). Return from combat re-seats
 the marker on the cleared node and re-evaluates reachability.
 
-**Both stage shapes** (fixed virtual stage, uniform scale, layout in stage px):
+**Stage shapes** (fixed virtual stage, uniform scale, layout in stage px).
+Portrait camera is retired — not a shipping composition. See
+[Landscape only](design/2026-08-18-landscape-only.md).
 
-- **Phone-portrait:** path runs in the lower third; camera frames ~2–3 nodes;
-  parallax bands stack to fill height; markers sized up for thumb-reach; horizon
-  Spire sits high and small.
 - **Pad-landscape:** path mid-low; camera frames ~4–5 nodes; wider horizon lets
   the Spire read larger and the region silhouettes spread; same world-x data,
   wider camera window.
