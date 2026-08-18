@@ -29,7 +29,8 @@ extends RefCounted
 ## upstream's rule, kept, because a half-merged slot array has no sane meaning.
 ##
 ## Pure by construction, like `StageShape`: no Node, no `DisplayServer`, every
-## input an argument. `tests/test_layout_book.gd` drives all five shapes headlessly.
+## input an argument. `tests/test_layout_book.gd` drives the three shipping
+## shapes headlessly.
 
 const BOOK_PATH: String = "res://assets/layout/combat-layout.json"
 
@@ -540,9 +541,9 @@ static func validate() -> PackedStringArray:
 			continue
 		var shapes: Dictionary = book.get("shapes", {})
 		for shape: String in shapes:
-			if not StageShape.REFERENCES.has(StringName(shape)):
-				out.append("%s.%s: not a stage shape" % [scope, shape])
-		for shape: StringName in StageShape.REFERENCES:
+			if not StageShape.SHIPPING.has(StringName(shape)):
+				out.append("%s.%s: not a shipping stage shape" % [scope, shape])
+		for shape: StringName in StageShape.SHIPPING:
 			var acts: Array[int] = [0]
 			for act: String in shapes.get(String(shape), {}).get("acts", {}):
 				if act.is_valid_int():

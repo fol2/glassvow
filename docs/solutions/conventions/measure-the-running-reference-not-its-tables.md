@@ -151,7 +151,7 @@ chrome widget — rather than teaching every widget to lay itself out at any siz
 The table is pinned so it cannot quietly drift back:
 
 ```gdscript
-# tests/test_layout_book.gd:377 (`_sizes`)
+# tests/test_layout_book.gd:397 (`_sizes`)
 static func _sizes(fails: Array[String]) -> void:
     var want: Dictionary[StringName, Array] = {
         &"pad-landscape": [152.0, 8.0, 260.0, 120.0, 90.0, 56.0, 1.0],

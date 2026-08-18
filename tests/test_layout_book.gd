@@ -118,6 +118,18 @@ static func _authoring(fails: Array[String]) -> void:
 	_check(fails, not LayoutBook.save().is_empty(), "save refuses a book that fails validate")
 	_check(fails, FileAccess.get_file_as_string(LayoutBook.BOOK_PATH) == on_disk,
 		"and the refused save left the file untouched")
+	LayoutBook.reload()
+	LayoutBook.author(&"battlefield", &"phone-portrait", 0, LayoutBook.FROM_SHAPE,
+		"", "groundY", 250.0)
+	var portrait_faults: PackedStringArray = LayoutBook.validate()
+	var joined: String = ",".join(portrait_faults)
+	_check(fails, joined.contains("phone-portrait"),
+		"validate rejects a retired portrait key (%s)" % joined)
+	_check(fails, not LayoutBook.save().is_empty(),
+		"save refuses a book that carries a retired portrait key")
+	_check(fails, FileAccess.get_file_as_string(LayoutBook.BOOK_PATH) == on_disk,
+		"and that refusal left the file untouched")
+	LayoutBook.reload()
 
 	# The writer's own two fixes, on a scratch path so nothing authored is at risk.
 	var scratch: String = "user://test-data-file.json"
@@ -139,8 +151,16 @@ static func _canonical(fails: Array[String]) -> void:
 	_check(fails, parsed is Dictionary, "the book parses")
 	if not parsed is Dictionary:
 		return
-	_check(fails, JSON.stringify(parsed, "  ") + "\n" == src,
+	var book: Dictionary = parsed
+	_check(fails, JSON.stringify(book, "  ") + "\n" == src,
 		"the book is in canonical form (sorted keys, two-space indent, one trailing newline)")
+	var scopes: Dictionary = book.get("scopes", {})
+	for scope_name: Variant in scopes:
+		var scope: Dictionary = scopes[scope_name]
+		var shapes: Dictionary = scope.get("shapes", {})
+		for shape: Variant in shapes:
+			_check(fails, StageShape.SHIPPING.has(StringName(str(shape))),
+				"%s.%s is a shipping stage shape" % [scope_name, shape])
 
 
 # --------------------------------------------------------------------- schema
@@ -219,10 +239,10 @@ static func _schema(fails: Array[String]) -> void:
 static func _merge(fails: Array[String]) -> void:
 	var bf: StringName = &"battlefield"
 
-	# base only: `phone-portrait` never mentions ledgeLip, so it inherits 14.
-	var phone: Dictionary = LayoutBook.resolve(bf, &"phone-portrait", 0)
-	_near(fails, phone.get("ledgeLip", -1.0), 14.0, "phone-portrait ledgeLip (base)")
-	_near(fails, phone.get("groundY", -1.0), 250.0, "phone-portrait groundY (shape over base 232)")
+	# base only: `phone-landscape` never mentions ledgeLip, so it inherits 14.
+	var phone: Dictionary = LayoutBook.resolve(bf, &"phone-landscape", 0)
+	_near(fails, phone.get("ledgeLip", -1.0), 14.0, "phone-landscape ledgeLip (base)")
+	_near(fails, phone.get("groundY", -1.0), 132.0, "phone-landscape groundY (shape over base 232)")
 
 	# shape over base: pad-landscape moves the hero from 179 to 200 and changes
 	# nothing else about him, so w and h still come from base.
@@ -273,7 +293,7 @@ static func _merge(fails: Array[String]) -> void:
 # --------------------------------------------------------------------- layers
 
 static func _layers(fails: Array[String]) -> void:
-	for shape: StringName in StageShape.REFERENCES:
+	for shape: StringName in StageShape.SHIPPING:
 		var layout: Dictionary = LayoutBook.resolve(&"battlefield", shape, 0)
 		var layers: Dictionary = layout.get("layers", {})
 		for name: String in LayoutBook.LAYERS:
@@ -286,11 +306,11 @@ static func _layers(fails: Array[String]) -> void:
 	var ledge: Dictionary = pad["layers"]["ledge"]
 	_near(fails, ledge.get("drift", -1.0), 0.0, "the ledge never drifts")
 	_near(fails, ledge.get("posY", -1.0), 0.0, "the ledge crops from its top")
-	var phone: Dictionary = LayoutBook.resolve(&"battlefield", &"phone-portrait", 0)
+	var phone: Dictionary = LayoutBook.resolve(&"battlefield", &"phone-landscape", 0)
 	_near(fails, phone["layers"]["backdrop"].get("posY", -1.0), 100.0,
-		"phone-portrait backdrop posY (schema default)")
+		"phone-landscape backdrop posY (schema default)")
 	_near(fails, phone["layers"]["backdrop"].get("drift", -1.0), 20.0,
-		"phone-portrait backdrop drift (authored, beating the default 6)")
+		"phone-landscape backdrop drift (authored, beating the default 6)")
 
 	# The one place all three levels meet on a NESTED key. pad-landscape authors
 	# backdrop.y = 0 at the shape; act 0 overrides it to 280 and act 1 changes the
@@ -352,7 +372,7 @@ static func _provenance(fails: Array[String]) -> void:
 	# which every schema default reports itself as authored at base — invisible in
 	# the composition and fatal to the editor's whole reason for existing.
 	var before: String = JSON.stringify(LayoutBook.raw(), "  ")
-	for shape: StringName in StageShape.REFERENCES:
+	for shape: StringName in StageShape.SHIPPING:
 		for act: int in [0, 1, 2]:
 			LayoutBook.resolve(bf, shape, act)
 			LayoutBook.resolve(&"chrome", shape, act)
@@ -379,8 +399,6 @@ static func _sizes(fails: Array[String]) -> void:
 	var want: Dictionary[StringName, Array] = {
 		&"pad-landscape": [152.0, 8.0, 260.0, 120.0, 90.0, 56.0, 1.0],
 		&"desktop-landscape": [152.0, 8.0, 260.0, 120.0, 90.0, 56.0, 1.0],
-		&"pad-portrait": [132.0, 8.0, 230.0, 102.0, 78.0, 56.0, 1.0],
-		&"phone-portrait": [118.0, 46.0, 214.0, 84.0, 66.0, 47.0, 0.0],
 		&"phone-landscape": [104.0, 0.0, 128.0, 72.0, 57.0, 34.0, 1.0],
 	}
 	var paths: PackedStringArray = ["card/w", "card/inset", "hand/h",
@@ -409,7 +427,7 @@ static func _sizes(fails: Array[String]) -> void:
 
 	# A phone shrinks its actor chrome and a pad does not — one ratio, because
 	# `_plate` is the single box a name, ward, HP rail and facets all hang in.
-	var phone: Dictionary = LayoutBook.resolve(&"chrome", &"phone-portrait", 0)
+	var phone: Dictionary = LayoutBook.resolve(&"chrome", &"phone-landscape", 0)
 	_check(fails, LayoutBook.num(phone.get("actor", {}).get("scale"), 1.0) < 1.0,
 		"a phone shrinks its actor chrome")
 
