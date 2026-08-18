@@ -778,20 +778,12 @@ func set_shape(stage_shape: StringName) -> void:
 	_deck_btn.remove_theme_font_size_override("font_size")
 	_commit_btn.remove_theme_font_size_override("font_size")
 	match shape:
-		&"phone-portrait":
-			_apply_shape(14, 350, 42, 2, 2, 150)
-			_deck_btn.custom_minimum_size.x = 145.0
-			_commit_btn.custom_minimum_size.x = 145.0
-			_deck_btn.add_theme_font_size_override("font_size", 10)
-			_commit_btn.add_theme_font_size_override("font_size", 10)
-		&"pad-portrait":
-			_apply_shape(42, 720, 64, 2, 4, 460)
-		&"pad-landscape":
-			_apply_shape(48, 800, 72, 3, 4, 260)
 		&"desktop-landscape":
 			_apply_shape(52, 900, 80, 4, 4, 260)
 		&"phone-landscape":
 			_apply_shape(10, 760, 46, 2, 4, 150)
+		_:
+			_apply_shape(48, 800, 72, 3, 4, 260)
 
 
 func _apply_shape(inset: int, panel_width: float, title_size: int,

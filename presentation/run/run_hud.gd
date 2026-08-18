@@ -175,14 +175,14 @@ func _rebuild_right(player: RunState.Player) -> void:
 	_clear(_right)
 	for slot: int in range(player.potions.size()):
 		_right.add_child(_potion_seat(slot, player.potions[slot]))
-	var icon_side: int = _shape_value(46, 42, 56)
-	var button_side: int = int(RunStyle.hit_floor(_shape_value(40, 38, 44)))
+	var icon_side: int = _shape_value(42, 56)
+	var button_side: int = int(RunStyle.hit_floor(_shape_value(38, 44)))
 	var deck: Button = _art_button("ui/deck", icon_side, button_side,
 		Locale.active.t("ui.hud.viewDeck"))
 	for state: String in ["normal", "hover", "pressed"]:
 		deck.add_theme_stylebox_override(state, _flat(Color.TRANSPARENT, 0))
 	_deck_count = _label(str(player.deck.size()),
-		_shape_value(18, 16, 22), Color.WHITE)
+		_shape_value(16, 22), Color.WHITE)
 	_deck_count.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_deck_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_deck_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -191,7 +191,7 @@ func _rebuild_right(player: RunState.Player) -> void:
 	deck.pressed.connect(_request.bind(&"deck", -1))
 	_right.add_child(deck)
 	var menu: Button = _art_button("ui/menu",
-		_shape_value(17, 16, 19), _shape_value(36, 34, 40),
+		_shape_value(16, 19), _shape_value(34, 40),
 		Locale.active.t("ui.hud.menu"))
 	menu.pressed.connect(_request.bind(&"menu", -1))
 	_right.add_child(menu)
@@ -199,7 +199,7 @@ func _rebuild_right(player: RunState.Player) -> void:
 
 func _potion_seat(slot: int, id: String) -> Control:
 	var side: Vector2 = Vector2(
-		_shape_value(32, 30, 38), RunStyle.hit_floor(_shape_value(38, 36, 44)))
+		_shape_value(30, 38), RunStyle.hit_floor(_shape_value(36, 44)))
 	var definition: Dictionary = content.potions.get(id, {})
 	if id.is_empty():
 		var empty: Panel = Panel.new()
@@ -209,7 +209,7 @@ func _potion_seat(slot: int, id: String) -> Control:
 		empty.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		return empty
 	var button: Button = _art_button("potions/" + id,
-		_shape_value(25, 24, 30), int(side.x), _tip(definition, "Unknown phial: " + id))
+		_shape_value(24, 30), int(side.x), _tip(definition, "Unknown phial: " + id))
 	button.custom_minimum_size = side
 	button.add_theme_stylebox_override("normal", _seat_style(true))
 	button.pressed.connect(_request.bind(&"potion", slot))
@@ -229,7 +229,7 @@ func _rebuild_collection(run: RunState, player: RunState.Player) -> void:
 
 func _content_art(folder: String, id: String, definition: Dictionary,
 		omen: bool) -> Control:
-	var side: int = _shape_value(34 if omen else 38, 30 if omen else 34, 42 if omen else 44)
+	var side: int = _shape_value(30 if omen else 34, 42 if omen else 44)
 	var seat: PanelContainer = PanelContainer.new()
 	seat.custom_minimum_size = Vector2(side, side)
 	seat.tooltip_text = _tip(definition, "Unknown %s: %s" % [folder.trim_suffix("s"), id])
@@ -255,32 +255,26 @@ func _content_art(folder: String, id: String, definition: Dictionary,
 
 
 func _apply_shape() -> void:
-	var phone_portrait: bool = shape == &"phone-portrait"
-	# pad-portrait is 820 px wide — narrower than phone-landscape's 844 — so it
-	# takes compact landscape chrome, not pad-landscape's roomy metrics (#338).
-	var compact: bool = shape == &"phone-landscape" or shape == &"pad-portrait"
-	# Even compact chrome cannot grant the English Act III line a single row
-	# once the three phial seats a live run carries are present. Wrap instead
-	# of ellipsizing. The wrapped Act III block is 40 px; a 42 px bar holds it
-	# flush, so both compact shapes share pad-portrait's 62 px wrap bar (#382).
-	var wrap_title: bool = shape == &"pad-portrait" or shape == &"phone-landscape"
-	var bar_height: int = 58 if phone_portrait else (62 if wrap_title else (42 if compact else 56))
+	# Compact chrome is phone-landscape only (#382 wrap bar). pad-portrait
+	# retired with the landscape-only cut.
+	var compact: bool = shape == &"phone-landscape"
+	var bar_height: int = 62 if compact else 56
 	_top.offset_bottom = bar_height
-	_row.offset_left = 10 if phone_portrait else 16
+	_row.offset_left = 16
 	_row.offset_right = -_row.offset_left
 	_row.offset_top = 4 if compact else 6
 	_row.offset_bottom = -4 if compact else -6
-	_row.add_theme_constant_override("separation", 10 if phone_portrait or compact else 18)
-	_right.add_theme_constant_override("separation", 6 if phone_portrait or compact else 10)
-	_hp_wrap.custom_minimum_size.x = _shape_value(96, 110, 170)
-	_title.visible = not phone_portrait
+	_row.add_theme_constant_override("separation", 10 if compact else 18)
+	_right.add_theme_constant_override("separation", 6 if compact else 10)
+	_hp_wrap.custom_minimum_size.x = _shape_value(110, 170)
+	_title.visible = true
 	_title.autowrap_mode = (
-		TextServer.AUTOWRAP_WORD_SMART if wrap_title else TextServer.AUTOWRAP_OFF)
+		TextServer.AUTOWRAP_WORD_SMART if compact else TextServer.AUTOWRAP_OFF)
 	_title.text_overrun_behavior = (
-		TextServer.OVERRUN_NO_TRIMMING if wrap_title else TextServer.OVERRUN_TRIM_ELLIPSIS)
-	_title.max_lines_visible = 2 if wrap_title else 1
+		TextServer.OVERRUN_NO_TRIMMING if compact else TextServer.OVERRUN_TRIM_ELLIPSIS)
+	_title.max_lines_visible = 2 if compact else 1
 	_collection.offset_top = bar_height + 4
-	_collection.offset_bottom = bar_height + _shape_value(78, 70, 96)
+	_collection.offset_bottom = bar_height + _shape_value(70, 96)
 
 
 func _location_text(run: RunState) -> String:
@@ -294,11 +288,9 @@ func _location_text(run: RunState) -> String:
 	}).to_upper()
 
 
-func _shape_value(phone_portrait: int, phone_landscape: int, roomy: int) -> int:
-	if shape == &"phone-portrait":
-		return phone_portrait
-	if shape == &"phone-landscape" or shape == &"pad-portrait":
-		return phone_landscape
+func _shape_value(compact: int, roomy: int) -> int:
+	if shape == &"phone-landscape":
+		return compact
 	return roomy
 
 

@@ -172,13 +172,13 @@ static func run(fails: Array[String]) -> void:
 	var foe_before: EnemyView = screen._enemy_views[0]
 	var stage_before: SubViewport = hero_before._stage
 	var card_before: CardView = screen._hand.card_view(game.cb.hand[0].uid)
-	screen.set_shape(&"phone-portrait")
+	screen.set_shape(&"phone-landscape")
 	_check(fails, screen._hero == hero_before and screen._enemy_views[0] == foe_before
 			and screen._hero._stage == stage_before,
 		"shape change preserves actors and their fracture stages")
-	_check(fails, screen._hero.body_frame.is_equal_approx(Vector2(80.0, 130.0))
-			and screen._hud.shape == &"phone-portrait",
-		"phone shape re-frames the hero and combat HUD")
+	_check(fails, screen._hero.body_frame.is_equal_approx(Vector2(100.0, 150.0))
+			and screen._hud.shape == &"phone-landscape",
+		"phone-landscape re-frames the hero and combat HUD")
 	_check(fails, screen._hand.card_view(game.cb.hand[0].uid) == card_before
 			and is_equal_approx(card_before.base_scale,
 				screen._card_metrics().x / CardView.CARD_W),
@@ -346,7 +346,7 @@ static func _title_ceremonial_menu(fails: Array[String]) -> void:
 		{"id": "credits", "label": "製作人員", "quiet": true},
 		{"id": "quit", "label": "離開", "quiet": true},
 	]
-	for shape: StringName in [&"pad-landscape", &"phone-portrait"]:
+	for shape: StringName in [&"pad-landscape", &"phone-landscape"]:
 		var zh: ChoiceScreen = _title_menu(zh_rows, shape)
 		var help_zh: Button = zh._utility_buttons[1]
 		_check(fails, help_zh.text == "玩法說明" and not help_zh.text.contains("\n"),

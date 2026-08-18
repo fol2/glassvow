@@ -240,12 +240,8 @@ func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
-	var diameter: float = 300.0 if shape == &"phone-portrait" \
-		else (250.0 if shape == &"phone-landscape" else DESIGN)
-	# This strut sets the whole column's width: wide enough that the sub line
-	# does not strand "open." alone (needs ~415px at 15pt), narrow enough for
-	# phone-portrait to take a balanced two-line wrap instead.
-	_sub.custom_minimum_size.x = 340.0 if shape == &"phone-portrait" else 440.0
+	var diameter: float = 250.0 if shape == &"phone-landscape" else DESIGN
+	_sub.custom_minimum_size.x = 440.0
 	var scale_factor: float = diameter / DESIGN
 	_window_slot.custom_minimum_size = Vector2.ONE * diameter
 	_window.size = Vector2.ONE * DESIGN

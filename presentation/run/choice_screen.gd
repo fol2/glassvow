@@ -276,8 +276,6 @@ func _apply_card_scale() -> void:
 
 func _card_scale() -> float:
 	match shape:
-		&"phone-portrait":
-			return 0.74 if _card_pick else 0.69
 		&"phone-landscape":
 			return 0.89 if _card_pick else 0.84
 		&"desktop-landscape":

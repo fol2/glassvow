@@ -1,8 +1,8 @@
 extends SceneTree
-## Headless geometry regression for #168. This is separately run because the
-## discovered suite is synchronous while container geometry needs real frames.
+## Headless geometry regression for #168. Portrait was the original
+## surface; it is retired. Identity pad-landscape stays. Phone-landscape
+## Dawn height is a pre-existing 390px budget (not this slice).
 
-const PHONE: StringName = &"phone-portrait"
 const PAD: StringName = &"pad-landscape"
 
 var _fails: Array[String] = []
@@ -20,11 +20,10 @@ func _run() -> void:
 	var previous: Locale = Locale.active
 	for locale_code: StringName in [Locale.CODE_EN, Locale.CODE_ZH_HANT]:
 		Locale.active = Locale.new(locale_code)
-		await _check_shape(locale_code, PHONE)
 		await _check_shape(locale_code, PAD)
 	Locale.active = previous
 	if _fails.is_empty():
-		print("PASS dawn containment (en + zh-Hant, phone + pad)")
+		print("PASS dawn containment (en + zh-Hant, pad-landscape)")
 		quit(0)
 	else:
 		for failure: String in _fails:
@@ -48,12 +47,11 @@ func _check_shape(locale_code: StringName, stage_shape: StringName) -> void:
 	_check_rect(locale_code, stage_shape, "status line", screen._progress, stage)
 	_check_rect(locale_code, stage_shape, "left action", screen._deck_btn, stage)
 	_check_rect(locale_code, stage_shape, "right action", screen._commit_btn, stage)
-	if stage_shape == PHONE:
-		var left_y: float = screen._deck_btn.get_global_rect().position.y
-		var right_y: float = screen._commit_btn.get_global_rect().position.y
-		_check(is_equal_approx(left_y, right_y),
-			"%s phone actions split across rows: left y=%.1f, right y=%.1f" % [
-				locale_code, left_y, right_y])
+	var left_y: float = screen._deck_btn.get_global_rect().position.y
+	var right_y: float = screen._commit_btn.get_global_rect().position.y
+	_check(is_equal_approx(left_y, right_y),
+		"%s actions split across rows: left y=%.1f, right y=%.1f" % [
+			locale_code, left_y, right_y])
 	# Open the actions without advancing persistence: this test owns input and
 	# geometry; the durable cursor handshake remains in test_dawn_screen.gd.
 	screen._complete()

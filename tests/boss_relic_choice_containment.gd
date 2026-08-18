@@ -1,7 +1,10 @@
 extends SceneTree
 ## Focused, frame-backed geometry and input contract for issue #167.
+## Phone-landscape reachability for long choice lists lives in
+## `choice_scroll_reachability.gd` (844×390). This harness keeps the relic
+## wrap + input contract on the identity stage; the retired 390×844 window
+## is no longer a shipping surface.
 
-const PHONE: Vector2i = Vector2i(390, 844)
 const PAD: Vector2i = Vector2i(1180, 820)
 const RELIC_IDS: Array[String] = [
 	"shatterersCrown", "hollowCrown", "crownOfTheHearth",
@@ -25,10 +28,9 @@ func _initialize() -> void:
 
 func _run() -> void:
 	for locale_code: StringName in [Locale.CODE_EN, Locale.CODE_ZH_HANT]:
-		await _check_case(locale_code, &"phone-portrait", PHONE)
 		await _check_case(locale_code, &"pad-landscape", PAD)
 	if _fails.is_empty():
-		print("PASS boss relic choice containment (390x844 en+zh-Hant; 1180x820)")
+		print("PASS boss relic choice containment (1180x820 en+zh-Hant)")
 		quit(0)
 	else:
 		for failure: String in _fails:

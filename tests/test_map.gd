@@ -325,8 +325,8 @@ static func run(fails: Array[String]) -> void:
 		"…and off the left edge, where the pill would sit alone on the road")
 	tree.root.remove_child(chip_screen)
 	chip_screen.free()
-	# The seed-17634 pair, made a fixture: two same-lane bounty stones at
-	# phone-portrait produce overlapping candidate pill rects before seating, so
+	# The seed-17634 pair, made a fixture: two same-lane bounty stones at a
+	# 390-wide window produce overlapping candidate pill rects before seating, so
 	# the right one's frame-flip painted its pill into the left one's and left
 	# `+16` reading as its first digit.
 	# Found independently by capture and probe (PR #80 DL R3 and the PM's third
@@ -335,9 +335,9 @@ static func run(fails: Array[String]) -> void:
 	var sib_run: RunState = RunState.new_run(benchmark_content, 17634, "run-siblings")
 	var sib: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(sib_run), benchmark_content)
 	sib.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	sib.size = Vector2(StageShape.REFERENCES[&"phone-portrait"])
+	sib.size = Vector2(390, 844)
 	tree.root.add_child(sib)
-	sib.set_shape(&"phone-portrait")
+	sib.set_shape(&"phone-landscape")
 	sib._layout_waystones()
 	# 2D cam 627.53 no longer exists; park the bounty 16/22 pair on-screen with
 	# overlapping pills so ChipBand.seats still has a collision to decline.
@@ -451,12 +451,12 @@ static func run(fails: Array[String]) -> void:
 	glider.map.enter(1)
 	glider.map.clear_current()
 	glider.map.enter(2)
-	glider.size = Vector2(StageShape.REFERENCES[&"phone-portrait"])
+	glider.size = Vector2(StageShape.REFERENCES[&"phone-landscape"])
 	var held: Vector2 = Vector2(10.0, 8.0)
 	glider._map_scene.get_rig().set_camera_xz(held)
 	glider._travelling = true
 	glider._travel_from_xz = held
-	glider.set_shape(&"phone-portrait")
+	glider.set_shape(&"phone-landscape")
 	var aim: Vector2 = glider._focus_xz(glider.map.at)
 	_check(fails, not aim.is_equal_approx(held),
 		"the mid-glide gate stands where the camera's clamps do not decide the seat")

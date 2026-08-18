@@ -183,7 +183,7 @@ func set_shape(stage_shape: StringName) -> void:
 func _fit() -> void:
 	if _centre == null:
 		return
-	var phone: bool = shape == &"phone-portrait" or shape == &"phone-landscape"
+	var phone: bool = shape == &"phone-landscape"
 	_centre.custom_minimum_size = Vector2(maxf(0.0, size.x - 24.0),
 		maxf(0.0, size.y - 40.0))
 	_panel.custom_minimum_size.x = minf(PANEL_W,
