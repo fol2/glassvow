@@ -5,6 +5,11 @@ commercial-push map [#156](https://github.com/fol2/glassvow/issues/156). This is
 bar a mobile release candidate must clear. Sign-off records live on executing tickets, never in
 this file.
 
+**Orientation.** Landscape only, James 2026-08-18
+(`docs/design/2026-08-18-landscape-only.md`). Sign-off is on a real device held
+sideways. Portrait is not a surface. The three remaining Stage shapes are
+`phone-landscape`, `pad-landscape` (identity 1180×820), and `desktop-landscape`.
+
 ## How to read this rubric
 
 **Calibration, the hard way.** Each dimension is calibrated against a named shipped game. The
@@ -59,7 +64,7 @@ Checked once per surface at sign-off, alongside the surface's own list.
 - [ ] `visual` Every player-facing string is readable at arm's length on a 6.1-inch phone, and no text renders below 18 px at the 1180×820 design resolution.
 - [ ] `visual` Every zh-Hant string renders entirely from the bundled CJK font with no tofu boxes, no mixed-font fallback glyphs, and no overflow, clipping, or mid-string truncation on any screen.
 - [ ] `visual` No interactive or readable element sits under the notch, camera cutout, rounded corner, or home-indicator zone on any supported device in landscape.
-- [ ] `visual` At both 4:3 (iPad) and 20:9 (tall phone) aspect ratios, no element is cropped, overlapped, or pushed off-screen, and any area outside the 1180×820 canvas shows themed fill rather than content or bare black.
+- [ ] `visual` At both landscape 4:3 (iPad held sideways) and landscape 20:9 (phone held sideways) aspect ratios, no element is cropped, overlapped, or pushed off-screen, and any area outside the 1180×820 canvas shows themed fill rather than content or bare black.
 - [ ] `system` Every tappable element measures at least 60×60 px at the 1180×820 design resolution (about 9 mm on a 6.1-inch phone), including small chrome such as close buttons and toggles.
 - [ ] `system` Every tappable element shows a visible pressed state (tint, scale, or highlight) within one frame of touch-down, and dragging off the element before release cancels the action without triggering it.
 - [ ] `system` Every screen is reachable and every action performable by touch alone, and the Android system back gesture never hard-exits the app mid-run without a confirmation prompt.
@@ -204,7 +209,7 @@ Victory/defeat resolution and credits (`presentation/run/run_end_screen.gd`,
 - [ ] `visual` With Reduce Motion enabled, the death screen appears fully composed on its first frame — no black plate, no panel fade, no rise plays.
 - [ ] `visual` Return to Vigil is dressed in the primary button style and View Deck in the secondary — the two end-screen actions are never identically dressed.
 - [ ] `visual` In zh-Hant, every bequest choice button shows its relic name and note fully inside the card bounds with no clipped or truncated glyphs.
-- [ ] `visual` The credits Close button sits outside the scroll region and is visible without scrolling at every stage shape.
+- [ ] `visual` The credits Close button sits outside the scroll region and is visible without scrolling at every remaining landscape stage shape (`phone-landscape`, `pad-landscape`, `desktop-landscape`).
 - [ ] `audio` Arriving at the defeat screen resolves the music to a defeat cue that is a different piece from the victory resolution when the two are played back to back (Hades class: death and escape each have their own musical arrival).
 - [ ] `audio` Selecting a bequest plays the relic chime, audibly distinct from the plain click used by View Deck and Return to Vigil.
 
