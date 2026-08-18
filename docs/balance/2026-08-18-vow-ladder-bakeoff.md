@@ -6,9 +6,13 @@ Pilot `p8-d0-v1` on profile `mature-three-act-no-side-state-v1`. Godot
 `4.7.1.stable`. Content SHA-256
 `736090f18546738a2e38b756d81f6ad715a808c4ea321220443f839862cdb102`.
 Bake-off seeds **7000–7079** (cells, n = 80 / aspect) and clock seeds
-**9000+**. Shipping `RewardRules` knobs stay identity — this document
-proposes a mix; it does not write numbers into `content/full-content.json`.
-James signs which mix deploys.
+**9000+**. Overlay knobs on `RewardRules` stay identity until `apply()`.
+James signed **`A_modest_linear` as drafted** on 2026-08-18 — live runs call
+`VowIncentives.shipping()`. This file's tables are the bake-off, not a retune.
+
+**Signed (James, 2026-08-18):** deploy catalog A with no number changes. The
+Dusk v2 67.5% both-cuts cell is accepted. F is declined. Mythic rates remain
+authored on the mix and unrolled here (#210 / #212).
 
 **Scope (charter, 2026-08-13):** best of these candidates under this
 instrument, not "safe". Concentration is reported next to every cell. The
@@ -165,6 +169,10 @@ mix cell is 14.3; that chain was not re-run.
 
 ## Recommended mix
 
+Bake-off recommendation was **`F_uncommon_only`**. **Not shipped.** James
+signed **`A_modest_linear`** as drafted (#206 modest: 5 pp both-cuts, 5%
+linear gold, 15% second elite relic at Mark).
+
 **`F_uncommon_only`** — uncommon-only 8 pp rarity, 3% linear gold, 15%
 second elite relic at Mark, mythic `[0, 0, 0, 0.01, 0.02, 0.04]` with
 +1 pp post-Act-IV stack.
@@ -189,23 +197,22 @@ Dusk lifts +7.5 pp, strong +6.2 pp). n = 80 cannot resolve a 5 pp effect.
 The recommendation is "least-wrong catalog mix under this instrument",
 not "proven crossover".
 
-**Do not ship A as drafted.** It is the #206 modest default, and its
-both-cuts rarity shift is the recurring Dusk-v2 67.5% cell. Compound gold
-(C) is indistinguishable from A at this sample. B taxes strong play.
+**Do not ship A as drafted** was the bake-off's advice. James overrode it
+and shipped A with no retune. Compound gold (C) was indistinguishable from
+A at this sample. B taxes strong play.
 
 **Follow-up, not in the catalog:** F's uncommon-only rarity + A's 5%
 linear gold, both-cuts rare shift left at 0. Only worth a cell if James
 wants a second round.
 
-**Shipping none is still a legal signature.** The stacked penalty ladder
-is already combined-monotone, Vow 0 is already hard-enough on the
-diagnosis seeds (different band; #203), and no mix here demonstrated the
-crossover the frame asked for.
+**Shipping none was declined.** James signed A as drafted.
 
 ## What this does not decide
 
-- Numbers in `content/full-content.json`. Overlay knobs default to
-  identity so #204's digest is unchanged until a caller sets them.
+- Numbers in `content/full-content.json`. Tables stay identity. The live
+  overlay is `A_modest_linear` via `VowIncentives.shipping()` on
+  `GlassvowGame`. Vow 0 is still the #204 digest. Vow ≥ 1 live play
+  diverges from the identity holdout — that is the signed deploy.
 - Iron / Deep / Mark as authored values. Isolated, they do not tax this
   pilot; retuning those mods is a different ticket.
 - Whether `startHex` should be wired or deleted. Dead field, recorded.

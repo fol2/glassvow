@@ -1,9 +1,11 @@
 class_name VowIncentives
 extends RefCounted
-## Candidate vow-incentive mixes for the #211 bake-off. Empty mix is a no-op.
-## Does not write content; RewardRules knobs stay identity until apply().
+## Candidate vow-incentive mixes for the #211 bake-off.
+## James signed `A_modest_linear` as drafted (2026-08-18). `apply()` always
+## resets knobs first; `none` is identity. Live runs call `shipping()`.
 
 const NONE_ID: String = "none"
+const SHIPPING_ID: String = "A_modest_linear"
 
 
 static func catalog() -> Array[Dictionary]:
@@ -44,14 +46,26 @@ static func has_id(id: String) -> bool:
 
 static func by_id(id: String) -> Dictionary:
 	if id.is_empty() or id == NONE_ID:
-		return {}
+		return {"id": NONE_ID}
 	for row: Dictionary in catalog():
 		if str(row["id"]) == id:
 			return row.duplicate(true)
 	return {}
 
 
+static func shipping() -> Dictionary:
+	return by_id(SHIPPING_ID)
+
+
+static func reset(rewards: RewardRules) -> void:
+	rewards.rarity_shift = 0.0
+	rewards.rarity_uncommon_only = false
+	rewards.gold_vow_mult = 1.0
+	rewards.elite_relic_second = 0.0
+
+
 static func apply(rewards: RewardRules, mix: Dictionary, vow: int) -> void:
+	reset(rewards)
 	if mix.is_empty() or str(mix.get("id", "")) == NONE_ID:
 		return
 	var steps: int = 0
