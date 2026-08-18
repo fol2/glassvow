@@ -1,5 +1,6 @@
 extends SceneTree
-## #211 bake-off driver. One process, sequential cells. Default mix is a no-op.
+## #211 bake-off driver. One process, sequential cells. Penalty cells pass
+## catalog `none`; empty mix on the sim follows live shipping A.
 const Sim: GDScript = preload("res://tools/balance_sim.gd")
 const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
 const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
@@ -51,18 +52,20 @@ func _initialize() -> void:
 
 static func _run_penalties(n: int) -> Array[Dictionary]:
 	var cells: Array[Dictionary] = []
+	var none: Dictionary = Incentives.by_id("none")
 	for vow: int in range(6):
-		cells.append(_cell("ladder", vow, false, {}, n, false, ""))
+		cells.append(_cell("ladder", vow, false, none, n, false, ""))
 	for name: String in ["iron", "malice", "deep", "mark", "waning", "deadhex", "empty1"]:
 		cells.append(_cell("iso", int(float(str(Incentives.isolate(_fresh(), name)["vow"]))),
-			false, {}, n, false, name))
+			false, none, n, false, name))
 	return cells
 
 
 static func _run_mixes(n: int) -> Array[Dictionary]:
 	var cells: Array[Dictionary] = []
 	# Penalty-only weak control so the crossover (strong lift vs weak lift) is measured.
-	cells.append(_cell("mix", 5, true, {}, n, false, ""))
+	var none: Dictionary = Incentives.by_id("none")
+	cells.append(_cell("mix", 5, true, none, n, false, ""))
 	for mix: Dictionary in Incentives.catalog():
 		var id: String = str(mix["id"])
 		if id == "none":
@@ -76,9 +79,10 @@ static func _run_mixes(n: int) -> Array[Dictionary]:
 static func _run_clock() -> Array[Dictionary]:
 	var cells: Array[Dictionary] = []
 	var content: ContentDB = ContentDB.load_full(false)
+	var none: Dictionary = Incentives.by_id("none")
 	for vow: int in [0, 5]:
-		cells.append(Clock.chain(content, "duskblade", CLOCK_SEED0, vow, {}, 20, 10, 30, false))
-		cells.append(Clock.chain(content, "ashwarden", CLOCK_SEED0, vow, {}, 20, 10, 30, false))
+		cells.append(Clock.chain(content, "duskblade", CLOCK_SEED0, vow, none, 20, 10, 30, false))
+		cells.append(Clock.chain(content, "ashwarden", CLOCK_SEED0, vow, none, 20, 10, 30, false))
 	var modest: Dictionary = Incentives.by_id("A_modest_linear")
 	cells.append(Clock.chain(content, "duskblade", CLOCK_SEED0, 5, modest, 20, 10, 30, false))
 	cells.append(Clock.chain(content, "duskblade", CLOCK_SEED0, 5, modest, 20, 10, 30, true))
@@ -87,8 +91,9 @@ static func _run_clock() -> Array[Dictionary]:
 
 static func _run_smoke() -> Array[Dictionary]:
 	var cells: Array[Dictionary] = []
-	cells.append(_cell("ladder", 0, false, {}, 2, false, ""))
-	cells.append(_cell("iso", 1, false, {}, 2, false, "deadhex"))
+	var none: Dictionary = Incentives.by_id("none")
+	cells.append(_cell("ladder", 0, false, none, 2, false, ""))
+	cells.append(_cell("iso", 1, false, none, 2, false, "deadhex"))
 	return cells
 
 

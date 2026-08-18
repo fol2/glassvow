@@ -66,7 +66,10 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 		_strip_hex(run)
 	_apply_ban(run)
 	var game: GlassvowGame = GlassvowGame.new(content, run)
-	Incentives.apply(game.rewards, mix, vow)
+	# Empty mix follows the live shipping overlay. Pass catalog `none` to measure
+	# the penalty ladder without incentives.
+	Incentives.apply(game.rewards, mix if not mix.is_empty() else Incentives.shipping(),
+		vow)
 	var fights: Array[Dictionary] = []
 	var economy: Array[Dictionary] = []
 	for _act: int in range(3):
@@ -456,7 +459,7 @@ static func _options(args: PackedStringArray) -> Dictionary:
 static func _mix(opts: Dictionary) -> Dictionary:
 	var id: String = str(opts.get("mix", ""))
 	if id.is_empty():
-		return {}
+		return Incentives.shipping()
 	return Incentives.by_id(id)
 static func _policy(opts: Dictionary) -> Dictionary:
 	return Policy.resolve({"cardDecline": opts["cardDecline"],
@@ -477,6 +480,6 @@ static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
 			"last": int(float(str(opts["seed0"]))) + int(float(str(opts["runs"]))) - 1,
 			"count": opts["runs"]},
 	}
-	if not str(opts.get("mix", "")).is_empty():
-		row["mix"] = str(opts["mix"])
+	row["mix"] = str(opts["mix"]) if not str(opts.get("mix", "")).is_empty() \
+		else Incentives.SHIPPING_ID
 	return row

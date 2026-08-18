@@ -13,9 +13,8 @@ extends RefCounted
 ## thrown away. We mirror that with a detached Rng for the card rolls.
 ##
 var content: ContentDB
-## Bake-off / future vow-incentive overlay. Defaults are the shipping identity
-## (no extra gold, no rarity shift, no second elite relic) so #204's digest is
-## unchanged until a caller sets them.
+## Vow-incentive overlay. Defaults are identity. `GlassvowGame` applies
+## `VowIncentives.shipping()` (A, signed 2026-08-18). Vow 0 stays identity.
 var rarity_shift: float = 0.0
 var rarity_uncommon_only: bool = false
 var gold_vow_mult: float = 1.0

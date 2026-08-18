@@ -109,12 +109,15 @@ byte-identical to `af2984e`. The five vow penalties were left for #211.
 
 ## Replay
 
+Identity holdout (penalty-only). After #211, omitting `--mix` applies live
+shipping `A_modest_linear`; pass `--mix=none` to reproduce these tables.
+
 ```bash
 godot --headless -s res://tools/balance_sim.gd -- \
-  --vow=0 --runs=200 --seed0=5000 --aspect=all \
+  --vow=0 --runs=200 --seed0=5000 --aspect=all --mix=none \
   --out=docs/balance/data/2026-08-18-holdout-vow0.json
 godot --headless -s res://tools/balance_sim.gd -- \
-  --vow=5 --runs=200 --seed0=5000 --aspect=all \
+  --vow=5 --runs=200 --seed0=5000 --aspect=all --mix=none \
   --out=docs/balance/data/2026-08-18-holdout-vow5.json
 # eight --ban= IDs, same seeds, Vow 0
 python3 tools/balance_score.py --csv-dir docs/balance/data \

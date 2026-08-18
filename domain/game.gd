@@ -5,6 +5,8 @@ extends RefCounted
 ## (playCard, endTurn, kindleFromHand, useArt, usePotion, startCombat,
 ## addCardToDeck) so the fixture replayer is a passthrough.
 
+const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
+
 
 var content: ContentDB
 var rules: CombatRules
@@ -22,6 +24,8 @@ func _init(content_db: ContentDB, run_state: RunState) -> void:
 	rewards = RewardRules.new(content_db)
 	quests = QuestRules.new(content_db)
 	run = run_state
+	# #211: James signed A as drafted. Vow 0 is identity; higher vows overlay.
+	Incentives.apply(rewards, Incentives.shipping(), run.vow)
 
 
 ## Post-combat rewards (not a queued-event op; the app layer calls this after
