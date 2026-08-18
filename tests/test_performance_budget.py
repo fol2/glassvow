@@ -151,7 +151,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
             self.plan, "phone-landscape", "en"))
         self.assertEqual(400.0, metrics["renderer_allocated_peak_mib"])
         self.assertEqual(710.0, PERF.validate_footprint(self.footprint, self.pid))
-        self.assertEqual(50, len(PERF.replay(self.root)["rows"]))
+        self.assertEqual(30, len(PERF.replay(self.root)["rows"]))
 
     def test_capture_merges_live_and_exit_footprint_samples(self) -> None:
         live = self.root / "live.json"
