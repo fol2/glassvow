@@ -260,9 +260,8 @@ func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
-	var diameter: float = 300.0 if shape == &"phone-portrait" \
-		else (250.0 if shape == &"phone-landscape" else 410.0)
-	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
+	var diameter: float = 250.0 if shape == &"phone-landscape" else 410.0
+	var phone: bool = shape == &"phone-landscape"
 	var copy_width: float = diameter if phone else 620.0
 	_detail_panel.custom_minimum_size.x = copy_width
 	_log_scroll.custom_minimum_size.x = copy_width

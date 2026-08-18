@@ -522,16 +522,14 @@ func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
-	var portrait: bool = shape == &"phone-portrait"
 	var short: bool = shape == &"phone-landscape"
-	var inset: int = 14 if portrait else (10 if short else 48)
+	var inset: int = 10 if short else 48
 	for side: String in ["left", "right", "top", "bottom"]:
 		_margin.add_theme_constant_override("margin_" + side, inset)
-	_copy.custom_minimum_size.x = 330.0 if portrait else (560.0 if short else 520.0)
+	_copy.custom_minimum_size.x = 560.0 if short else 520.0
 	_copy.add_theme_stylebox_override("panel", _copy_style(
-		22.0 if portrait else (18.0 if short else 46.0)))
-	_line.add_theme_font_size_override("font_size",
-		16 if portrait else (13 if short else 19))
+		18.0 if short else 46.0))
+	_line.add_theme_font_size_override("font_size", 13 if short else 19)
 	var band: float = 0.05 if short else 0.08
 	_set_band(_letter_top, 0.0, band)
 	_set_band(_letter_bot, 1.0 - band, 1.0)

@@ -243,19 +243,15 @@ func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
-	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
+	var phone: bool = shape == &"phone-landscape"
 	_hero.custom_minimum_size = Vector2.ONE * (60 if phone else 78)
 	_title.add_theme_font_size_override("font_size", 24 if phone else 34)
 	_sub.custom_minimum_size.x = 330 if phone else 540
 	_column.add_theme_constant_override("separation", 5 if phone else 8)
-	_boon_grid.columns = 1 if shape == &"phone-portrait" else (
-		3 if not phone else _boon_ids.size())
-	_art_grid.columns = 2 if shape == &"phone-portrait" else (
-		_arts.size() if not phone else 3)
+	_boon_grid.columns = 3 if not phone else _boon_ids.size()
+	_art_grid.columns = _arts.size() if not phone else 3
 	for button: Button in _boon_buttons.values():
-		button.custom_minimum_size = Vector2(
-			300 if shape == &"phone-portrait" else (190 if phone else 210),
-			142)
+		button.custom_minimum_size = Vector2(190 if phone else 210, 142)
 	_description.custom_minimum_size.x = 330 if phone else 500
 
 

@@ -3,7 +3,7 @@ extends SceneTree
 ## shape that shows it, both locales, every act — dressed like a live run.
 ##
 ## Compact chrome cannot grant the English Act III line a single row once the
-## three phial seats are present, so pad-portrait and phone-landscape wrap.
+## three phial seats are present, so phone-landscape wraps.
 ## The clip check follows the label: single-line shapes compare natural vs
 ## granted width; a wrapping title fails only if the wrapped block exceeds
 ## the box. Same SubViewport + real-frames pattern as `dawn_phone_containment.gd`.
@@ -11,11 +11,9 @@ extends SceneTree
 ## this script on its own.
 ##
 ##   godot --headless -s res://tests/measure_hud_location.gd
-##
-## `_apply_shape` hides the title on phone-portrait.
 
 const SHAPES: Array[StringName] = [
-	&"phone-landscape", &"pad-portrait", &"pad-landscape",
+	&"phone-landscape", &"pad-landscape", &"desktop-landscape",
 ]
 
 var _viewport: SubViewport

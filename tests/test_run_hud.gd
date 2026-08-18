@@ -1,6 +1,5 @@
 extends RefCounted
-## #338: pad-portrait is 820 px wide and must not wear pad-landscape chrome.
-## #382: phone-landscape wraps the location title like pad-portrait.
+## #382: phone-landscape wraps the location title. pad-portrait chrome is retired.
 
 
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
@@ -11,40 +10,29 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 static func run(fails: Array[String]) -> void:
 	var content: ContentDB = ContentDB.load_full(false)
 	var run: RunState = RunState.new()
-	var pad_portrait: RunHud = RunHud.new(run, content, &"pad-portrait")
 	var phone_landscape: RunHud = RunHud.new(run, content, &"phone-landscape")
 	var pad_landscape: RunHud = RunHud.new(run, content, &"pad-landscape")
-	var phone_portrait: RunHud = RunHud.new(run, content, &"phone-portrait")
-	_check(fails, pad_portrait._shape_value(96, 110, 170) == 110,
-		"pad-portrait takes compact landscape metrics")
-	_check(fails, pad_portrait._shape_value(96, 110, 170)
-			== phone_landscape._shape_value(96, 110, 170),
-		"pad-portrait chrome matches phone-landscape")
-	_check(fails, pad_landscape._shape_value(96, 110, 170) == 170,
+	_check(fails, phone_landscape._shape_value(110, 170) == 110,
+		"phone-landscape takes compact metrics")
+	_check(fails, pad_landscape._shape_value(110, 170) == 170,
 		"pad-landscape keeps roomy metrics")
-	_check(fails, pad_portrait._hp_wrap.custom_minimum_size.x == 110,
-		"pad-portrait HP wrap is compact")
-	_check(fails, pad_portrait._row.get_theme_constant("separation") == 10,
-		"pad-portrait row gap is compact")
+	_check(fails, phone_landscape._hp_wrap.custom_minimum_size.x == 110,
+		"phone-landscape HP wrap is compact")
+	_check(fails, phone_landscape._row.get_theme_constant("separation") == 10,
+		"phone-landscape row gap is compact")
 	_check(fails, pad_landscape._row.get_theme_constant("separation") == 18,
 		"pad-landscape row gap stays roomy")
-	_check(fails, pad_portrait._title.visible,
-		"pad-portrait still shows the location title")
-	_check(fails, pad_portrait._title.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART,
-		"pad-portrait wraps the location title")
+	_check(fails, phone_landscape._title.visible,
+		"phone-landscape shows the location title")
 	_check(fails, phone_landscape._title.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART,
 		"phone-landscape wraps the location title")
 	_check(fails, phone_landscape._title.max_lines_visible == 2,
 		"phone-landscape location title is two lines")
 	_check(fails, phone_landscape._top.offset_bottom == 62.0,
-		"phone-landscape wrap bar matches pad-portrait")
-	_check(fails, pad_portrait._top.offset_bottom == 62.0,
-		"pad-portrait wrap bar stays 62")
+		"phone-landscape wrap bar stays 62")
 	_check(fails, pad_landscape._title.autowrap_mode == TextServer.AUTOWRAP_OFF,
 		"pad-landscape keeps a single-line title")
-	_check(fails, not phone_portrait._title.visible,
-		"phone-portrait still hides the location title")
-	pad_portrait.free()
+	_check(fails, pad_landscape._title.visible,
+		"pad-landscape shows the location title")
 	phone_landscape.free()
 	pad_landscape.free()
-	phone_portrait.free()

@@ -309,16 +309,12 @@ func set_shape(stage_shape: StringName) -> void:
 		return
 	shape = stage_shape
 	match shape:
-		&"phone-portrait":
-			_apply_shape(14, 350, 42, 2, 1)
-		&"pad-portrait":
-			_apply_shape(42, 700, 64, 4, 2)
-		&"pad-landscape":
-			_apply_shape(54, 780, 72, 4, 4)
 		&"desktop-landscape":
 			_apply_shape(58, 820, 80, 4, 4)
 		&"phone-landscape":
 			_apply_shape(10, 720, 46, 4, 2)
+		_:
+			_apply_shape(54, 780, 72, 4, 4)
 
 
 func _apply_shape(inset: int, panel_width: float, title_size: int,

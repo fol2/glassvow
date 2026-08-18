@@ -15,7 +15,6 @@ var _target: int
 var _sfx: SfxBus
 var _layout: GridContainer
 var _figure: TextureRect
-var _portrait_figure: TextureRect
 var _copy: PanelContainer
 var _kicker: Label
 var _title: Label
@@ -65,19 +64,6 @@ func _build() -> void:
 	vignette.stretch_mode = TextureRect.STRETCH_SCALE
 	vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(vignette)
-	_portrait_figure = TextureRect.new()
-	_portrait_figure.texture = load(HOLLOW) as Texture2D
-	_portrait_figure.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_portrait_figure.offset_left = -132
-	_portrait_figure.offset_top = 50
-	_portrait_figure.offset_right = 70
-	_portrait_figure.offset_bottom = -17
-	_portrait_figure.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_portrait_figure.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_portrait_figure.modulate.a = 0.22
-	_portrait_figure.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_portrait_figure.visible = false
-	add_child(_portrait_figure)
 
 	var margin: MarginContainer = MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -197,23 +183,17 @@ func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
-	var portrait: bool = shape == &"phone-portrait"
 	var short: bool = shape == &"phone-landscape"
-	_portrait_figure.visible = portrait
-	_layout.columns = 1 if portrait else 2
+	_layout.columns = 2
 	_layout.add_theme_constant_override("h_separation", 24 if short else 64)
 	_figure.custom_minimum_size = Vector2(
-		180 if short else (250 if portrait else 336),
-		304 if short else (390 if portrait else 558))
-	_figure.visible = not portrait
-	_figure.modulate.a = 0.22 if portrait else 1.0
-	_copy.custom_minimum_size.x = 330 if portrait else (520 if not short else 560)
-	_copy.add_theme_stylebox_override("panel", _copy_style(
-		22 if portrait else (18 if short else 46)))
-	_actions.columns = 1 if portrait else (3 if not short else 2)
-	_title.add_theme_font_size_override("font_size", 24 if portrait else (24 if short else 38))
-	_ask.add_theme_font_size_override("font_size", 16 if portrait else (13 if short else 19))
-	_ask.custom_minimum_size.y = 76 if portrait else (48 if short else 96)
+		180 if short else 336, 304 if short else 558)
+	_copy.custom_minimum_size.x = 560 if short else 520
+	_copy.add_theme_stylebox_override("panel", _copy_style(18 if short else 46))
+	_actions.columns = 2 if short else 3
+	_title.add_theme_font_size_override("font_size", 24 if short else 38)
+	_ask.add_theme_font_size_override("font_size", 13 if short else 19)
+	_ask.custom_minimum_size.y = 48 if short else 96
 
 
 static func _label(text: String, font_size: int, colour: Color) -> Label:

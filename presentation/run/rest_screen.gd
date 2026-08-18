@@ -162,6 +162,6 @@ func set_shape(stage_shape: StringName) -> void:
 		return
 	shape = stage_shape
 	var top: int = 48 if shape == &"phone-landscape" else (
-		70 if shape == &"phone-portrait" else int(TOP_INSET))
+		int(TOP_INSET))
 	_margin.add_theme_constant_override("margin_top", top)
 	_fit()

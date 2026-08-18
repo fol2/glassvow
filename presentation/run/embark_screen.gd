@@ -299,25 +299,21 @@ func _fit() -> void:
 		return
 	_centre.custom_minimum_size = Vector2(maxf(0.0, size.x - 40.0),
 		maxf(0.0, size.y - 40.0))
-	var phone_portrait: bool = shape == &"phone-portrait"
 	var phone_landscape: bool = shape == &"phone-landscape"
 	var short_landscape: bool = size.y <= 860.0 and size.x >= 1000.0
 	_column.add_theme_constant_override(
-		"separation", 6 if phone_landscape else (10 if phone_portrait else 14))
+		"separation", 6 if phone_landscape else 14)
 	_title.add_theme_font_size_override(
-		"font_size", 20 if phone_landscape else (23 if phone_portrait else 26))
+		"font_size", 20 if phone_landscape else 26)
 	_sub.add_theme_font_size_override("font_size", 11 if phone_landscape else 14)
 	if _aspect_row != null:
-		_aspect_row.columns = 1 if phone_portrait else 2
+		_aspect_row.columns = 2
 		for index: int in range(_aspect_cards.size()):
-			var horizontal: bool = phone_portrait or phone_landscape
+			var horizontal: bool = phone_landscape
 			_aspect_grids[index].columns = 2 if horizontal else 1
 			var card_size: Vector2 = Vector2(232, 254)
 			var hero_size: float = 70 if short_landscape else 92
-			if phone_portrait:
-				card_size = Vector2(minf(330.0, size.x * 0.88), 84)
-				hero_size = 52
-			elif phone_landscape:
+			if phone_landscape:
 				card_size = Vector2(252, 66)
 				hero_size = 44
 			_aspect_cards[index].custom_minimum_size = card_size

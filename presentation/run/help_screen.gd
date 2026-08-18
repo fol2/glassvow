@@ -154,7 +154,7 @@ func set_shape(stage_shape: StringName) -> void:
 func _fit() -> void:
 	var reference: Vector2i = StageShape.REFERENCES[shape]
 	var stage_size: Vector2 = size if size.x > 0.0 and size.y > 0.0 else Vector2(reference)
-	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
+	var phone: bool = shape == &"phone-landscape"
 	var inset: float = PHONE_INSET if phone else DESKTOP_INSET
 	var panel_width: float = minf(PANEL_MAX_WIDTH, stage_size.x)
 	var panel_height: float = stage_size.y if phone else stage_size.y * PANEL_MAX_HEIGHT

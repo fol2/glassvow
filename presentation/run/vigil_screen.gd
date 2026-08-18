@@ -276,10 +276,10 @@ func set_shape(stage_shape: StringName) -> void:
 	if not StageShape.REFERENCES.has(stage_shape):
 		return
 	shape = stage_shape
-	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
+	var phone: bool = shape == &"phone-landscape"
 	_sync_panel_width()
 	_deed_list.custom_minimum_size = Vector2(302 if phone else 500,
-		440 if shape == &"phone-portrait" else (215 if phone else 459))
+		215 if phone else 459)
 	if _epitaph_list != null:
 		_epitaph_list.custom_minimum_size = _deed_list.custom_minimum_size
 	for index: int in range(_rows.size()):
@@ -292,7 +292,7 @@ func set_shape(stage_shape: StringName) -> void:
 
 
 func _sync_panel_width() -> void:
-	var phone: bool = shape in [&"phone-portrait", &"phone-landscape"]
+	var phone: bool = shape == &"phone-landscape"
 	_panel.custom_minimum_size.x = 350 if phone else (
 		720 if _rose != null and _rose.visible else 560)
 

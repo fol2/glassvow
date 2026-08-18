@@ -1,13 +1,13 @@
 class_name LayoutLab
 extends Control
 ## The layout bench: `assets/layout/combat-layout.json` drawn over the screen it
-## composes, at any of the five stage shapes, with every number's ORIGIN shown.
+## composes, at any of the three shipping stage shapes, with every number's ORIGIN shown.
 ##
 ##   godot --path . -- --layout                       # opens on pad-landscape
-##   godot --path . -- --layout --shape=phone-portrait --scope=chrome
-##   tools/shot.sh --layout --shape=pad-portrait --shot=/tmp/layout-pp.png
+##   godot --path . -- --layout --shape=phone-landscape --scope=chrome
+##   tools/shot.sh --layout --shape=pad-landscape --shot=/tmp/layout-pl.png
 ##
-## Keys: 1-5 shape · , . act · S scope · L level · left/right field · up/down
+## Keys: 1-3 shape · , . act · S scope · L level · left/right field · up/down
 ## value (shift x10) · R revert · ctrl-S save · O overlay · H panel. Click a box
 ## to select it, drag it to author it. `--nopanel` captures the overlay alone.
 ##
@@ -105,7 +105,7 @@ func _init(content_ref: ContentDB) -> void:
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--shape="):
 			var want: StringName = StringName(arg.trim_prefix("--shape="))
-			if StageShape.REFERENCES.has(want):
+			if StageShape.SHIPPING.has(want):
 				_shape = want
 		elif arg.begins_with("--act="):
 			_act = clampi(int(arg.trim_prefix("--act=")), 0, ACTS - 1)
@@ -160,7 +160,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	var key: InputEventKey = event as InputEventKey
 	if key == null or not key.pressed or key.echo:
 		return
-	var shapes: Array = StageShape.REFERENCES.keys()
+	var shapes: Array[StringName] = StageShape.SHIPPING
 	var index: int = key.keycode - KEY_1
 	if key.ctrl_pressed or key.meta_pressed:
 		if key.keycode != KEY_S:
@@ -567,7 +567,7 @@ func _build_panel() -> PanelContainer:
 	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(col)
 
-	var keys: Label = _caption("1-5 shape · , . act · S scope · L level · left/right field"
+	var keys: Label = _caption("1-3 shape · , . act · S scope · L level · left/right field"
 		+ " · up/down value (shift x10) · R revert · drag a box · ctrl-S save"
 		+ " · O overlay · H panel")
 	# Wrapped, or this one line sets the panel's minimum width and every tab strip
@@ -577,7 +577,7 @@ func _build_panel() -> PanelContainer:
 
 	col.add_child(_heading("SHAPE"))
 	var shapes: PackedStringArray = []
-	for name: StringName in StageShape.REFERENCES:
+	for name: StringName in StageShape.SHIPPING:
 		shapes.append(String(name))
 	col.add_child(_tabs(shapes, shapes.find(String(_shape)), func(i: int) -> void:
 		_shape = StringName(shapes[i])
