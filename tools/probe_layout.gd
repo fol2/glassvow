@@ -9,15 +9,14 @@ extends SceneTree
 ## So: build the real `CombatScreen` at a shape, let it lay out, and read the
 ## nodes back. Headless, so it costs no window and no focus.
 ##
-##   godot --headless -s res://tools/probe_layout.gd -- --shape=phone-portrait --act=0
+##   godot --headless -s res://tools/probe_layout.gd -- --shape=phone-landscape --act=0
 ##   godot --headless -s res://tools/probe_layout.gd -- --all
 ##
 ## Numbers are gaps from the edge each one is bound to, so they can be compared
 ## with the book without arithmetic.
 
 const SHAPES: Array[StringName] = [
-	&"pad-landscape", &"desktop-landscape", &"pad-portrait",
-	&"phone-portrait", &"phone-landscape",
+	&"pad-landscape", &"desktop-landscape", &"phone-landscape",
 ]
 
 
@@ -34,6 +33,9 @@ func _initialize() -> void:
 	if shapes.is_empty():
 		shapes = [StageShape.IDENTITY]
 	for shape: StringName in shapes:
+		if not StageShape.SHIPPING.has(shape):
+			push_warning("probe_layout: ignoring non-shipping shape %s" % shape)
+			continue
 		await _probe(shape, act)
 	quit(0)
 

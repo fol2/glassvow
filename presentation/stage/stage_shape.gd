@@ -2,17 +2,16 @@ class_name StageShape
 extends RefCounted
 ## Which virtual stage this window gets, and how far it may stretch to fill it.
 ##
-## The benchmark renders at one of five authored sizes and scales uniformly into
+## The benchmark rendered at one of five authored sizes and scaled uniformly into
 ## the real window, letterboxed like a console title (`src/stage.js:1-4`). This
 ## port pinned ONE of them — `pad-landscape`, 1180x820 — into `project.godot`,
 ## which is why `application/main.gd`'s `--vp=` comment says in as many words
-## that nothing reflows.
+## that nothing reflows. Portrait sizes were a second product and are gone.
 ##
 ## The authored sizes are kept verbatim from `src/stage.js:20-26`, names
 ## included: every document in this repo already cites them, and
 ## `pad-landscape` is the shape every ported number was measured in. It must
-## stay pixel-exact. `phone-portrait` and `pad-portrait` remain in REFERENCES
-## so layout-book keys still resolve; they are not shipping candidates.
+## stay pixel-exact. Portrait names are not in this table.
 ##
 ## WHAT IS NOT PORTED, and why. The benchmark picks a shape from `innerWidth /
 ## innerHeight` against geometric-mean splits, with a `matchMedia('(pointer:
@@ -44,15 +43,12 @@ extends RefCounted
 ## argument, so `tests/test_stage_shape.gd` can drive every device in the matrix
 ## headlessly.
 
-## Authored sizes (`src/stage.js:20-26`). Three ship. `phone-portrait` and
-## `pad-portrait` stay in this table until the layout-book slice so existing
-## keys still resolve; `pick` and `--shape=` never select them.
+## Authored sizes (`src/stage.js:20-26`). Three ship. Portrait names are gone
+## from this table; `pick` and `--shape=` never selected them after slice 1.
 ## Insertion order is the order `pick` considers CANDIDATES, and GDScript
 ## dictionaries preserve it, so a tie is resolved by this listing rather
 ## than by hash order.
 const REFERENCES: Dictionary[StringName, Vector2i] = {
-	&"phone-portrait": Vector2i(390, 844),
-	&"pad-portrait": Vector2i(820, 1180),
 	&"pad-landscape": Vector2i(1180, 820),
 	&"desktop-landscape": Vector2i(1458, 820),  # 1458/820 = 16:9
 	&"phone-landscape": Vector2i(844, 390),
@@ -130,7 +126,7 @@ static func class_for(os_name: String, diagonal: float) -> StringName:
 
 
 ## A reference's aspect, exactly as authored: width over height. Shipping
-## references are all landscape (above 1). Retired portrait sizes stay below 1.
+## references are all landscape (above 1).
 static func aspect_of(shape: StringName) -> float:
 	var ref: Vector2i = REFERENCES.get(shape, REFERENCES[IDENTITY])
 	return float(ref.x) / float(maxi(1, ref.y))
