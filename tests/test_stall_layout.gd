@@ -1,5 +1,5 @@
 extends RefCounted
-## The Night Stall holds its composition at every shape (#242 slices 1 and 2).
+## The Night Stall holds its landscape composition (#242).
 ##
 ## Three halves, which is one more than there should be. The first drives
 ## `StallLayout` as pure maths — every authored region inside the safe band,
@@ -16,16 +16,16 @@ extends RefCounted
 ## can live in the discovered synchronous suite instead of beside
 ## `dawn_phone_containment.gd`.
 
-## The window sizes the acceptance names, resolved through the real shape
-## pipeline rather than hardcoded: a 4:3 iPad either way, a 20:9 phone
-## either way, and the desktop 16:9 reference beside them. Portrait is the
-## stacked composition (width-contain stall, full-floor rack), not a crop.
+## The window sizes the shipping landscape identities, resolved through the
+## real shape pipeline rather than hardcoded: identity pad-landscape 1180×820,
+## 4:3 iPad as flexed pad-landscape, phone-landscape's short 844×390 stage and
+## its 20:9 flex, and desktop 16:9. Portrait identities are retired
+## (`docs/design/2026-08-18-landscape-only.md`) and are not shipping windows.
 const WINDOWS: Dictionary[StringName, Array] = {
 	&"pad-landscape": [Vector2i(1180, 820), &"identity"],
 	&"pad-landscape-4x3": [Vector2i(2048, 1536), &"pad-landscape"],
-	&"pad-portrait": [Vector2i(820, 1180), &"pad-portrait"],
+	&"phone-landscape": [Vector2i(844, 390), &"phone-landscape"],
 	&"phone-landscape-20x9": [Vector2i(2400, 1080), &"phone-landscape"],
-	&"phone-portrait-9x20": [Vector2i(1080, 2400), &"phone-portrait"],
 	&"desktop-16x9": [Vector2i(2560, 1440), &"desktop-landscape"],
 }
 
@@ -67,7 +67,7 @@ static func _zh_screen_holds(fails: Array[String], content: ContentDB,
 	Locale.active = Locale.new(Locale.CODE_ZH_HANT)
 	Locale.active.hydrate_content(content)
 	var zh_screen: ShopScreen = ShopScreen.new(stock, 100, content, offer, true)
-	for label: StringName in [&"pad-landscape", &"phone-portrait-9x20"]:
+	for label: StringName in [&"pad-landscape", &"phone-landscape"]:
 		var row: Array = WINDOWS[label]
 		var window: Vector2i = row[0]
 		var reference: StringName = row[1]
@@ -126,22 +126,15 @@ static func _fit_holds(fails: Array[String], label: StringName, frame: Vector2) 
 			"%s region %s escapes the frame %s: %s" % [label, region, frame, box])
 	var canvas: Rect2 = StallLayout.canvas(frame)
 	var lip: float = canvas.position.y + StallLayout.COUNTER_LINE * canvas.size.y
-	if StallLayout.is_portrait(frame):
-		_check(fails, canvas.position.y > -0.5 and canvas.size.y < frame.y * 0.55,
-			"%s portrait stall is not a top band: %s in %s" % [label, canvas, frame])
-	else:
-		_check(fails, absf(lip - StallLayout.COUNTER_LINE * frame.y) < 0.5,
-			"%s counter lip left its line: %.1f, wanted %.1f" % [
-				label, lip, StallLayout.COUNTER_LINE * frame.y])
+	_check(fails, absf(lip - StallLayout.COUNTER_LINE * frame.y) < 0.5,
+		"%s counter lip left its line: %.1f, wanted %.1f" % [
+			label, lip, StallLayout.COUNTER_LINE * frame.y])
 	_check(fails, canvas.size.x >= frame.x - 0.5,
 		"%s leaves a gap beside the painting: %s in %s" % [label, canvas, frame])
 	var band: Rect2 = StallLayout.rack_band(frame)
 	_check(fails, band.size.x > 0.0 and band.size.y > 0.0 and view.encloses(band)
 		and band.position.y > lip,
 		"%s rack band is not a usable strip below the lip: %s" % [label, band])
-	if StallLayout.is_portrait(frame):
-		_check(fails, band.size.y >= 180.0,
-			"%s portrait rack is too short to read: %s" % [label, band])
 
 
 static func _screen_holds(fails: Array[String], label: StringName,
@@ -164,8 +157,7 @@ static func _screen_holds(fails: Array[String], label: StringName,
 			"%s tag for %s/%d escapes the frame %s: %s" % [
 				label, entry["kind"], entry["index"], frame, tag_rect])
 		# What is DRAWN, not what was set: a non-wrapping row shrinks to fit,
-		# but below MIN_PX it can still run past the block. Portrait is the
-		# stacked composition, so tag rows and seating hold there too.
+		# but below MIN_PX it can still run past the block.
 		for row: Dictionary in tag._rows:
 			var run_w: float = float(str(row["run"]))
 			_check(fails, run_w <= tag.size.x + 0.5,
@@ -173,6 +165,7 @@ static func _screen_holds(fails: Array[String], label: StringName,
 					label, entry["kind"], entry["index"],
 					run_w, tag.size.x, str(row["text"]).left(24)])
 	_seated_on_the_painting(fails, label, screen, frame)
+	_rack_is_one_row(fails, label, screen)
 	var jar: Rect2 = Rect2(screen._jar.position, screen._jar.size)
 	_check(fails, jar.size.x > 0.0 and jar.size.y > 0.0 and view.encloses(jar),
 		"%s the bell jar is unseated: %s in %s" % [label, jar, frame])
@@ -188,8 +181,7 @@ static func _screen_holds(fails: Array[String], label: StringName,
 ## perspective, on the furniture it rests on — never floating at UI scale. Which
 ## makes it a measurable property, not a taste one: every phial's foot lands on
 ## the painted shelf board and every relic's on the painted counter slab, at
-## every shape. Seating is exact by construction in image space even under
-## portrait width-contain (shelf foot = SHELF_LINE + PHIAL_SINK).
+## every shipping landscape shape.
 ##
 ## Both feet are EXACT by construction, so the tolerance is a hairline rather
 ## than a budget: a relic's tag is above it and `_seat` pins a tag-above foot to
@@ -198,6 +190,24 @@ static func _screen_holds(fails: Array[String], label: StringName,
 ## wraps differently — which is the whole point, and was measured failing at
 ## 20px before the square-ware rule landed. Two image px is the assertion.
 const SEAT_TOL: float = 0.002
+
+
+## Landscape ships one rack row. A two-row restack was the retired portrait
+## interim; phone-landscape's short 844×390 stage must scale, not restack.
+static func _rack_is_one_row(fails: Array[String], label: StringName,
+		screen: ShopScreen) -> void:
+	var tops: Array[float] = []
+	for entry: Dictionary in screen._rack:
+		var control: Control = entry["control"]
+		var card: CardView = control as CardView
+		var rect: Rect2 = ShopScreen.card_rect(card) if card != null \
+			else Rect2(control.position, control.size)
+		tops.append(rect.position.y)
+	if tops.size() < 2:
+		return
+	var spread: float = tops.max() - tops.min()
+	_check(fails, spread < 8.0,
+		"%s rack is not a single row (y-spread %.1f): %s" % [label, spread, tops])
 
 
 static func _seated_on_the_painting(fails: Array[String], label: StringName,

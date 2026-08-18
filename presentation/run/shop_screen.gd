@@ -363,10 +363,10 @@ func _relayout() -> void:
 
 
 ## The top bar RunHud draws over this screen (`run_hud.gd` `_apply_shape`).
+## Phone-landscape shares the 62 px wrap bar (#382). No pad-portrait special case
+## — that identity is retired (`docs/design/2026-08-18-landscape-only.md`).
 func _hud_band() -> float:
-	if shape == &"phone-portrait":
-		return 58.0
-	if shape == &"pad-portrait" or shape == &"phone-landscape":
+	if shape == &"phone-landscape":
 		return 62.0
 	return 56.0
 
@@ -383,9 +383,7 @@ func _seat(entry: Dictionary, box: Rect2, frame: Vector2, factor: float) -> void
 	var tag: WareTag = entry["tag"]
 	var above: bool = StallLayout.TAG_ABOVE.has(entry["region"])
 	var tag_h: float = tag.reflow(box.size.x, factor)
-	# Fraction of the region, not a pixel floor: 5 px is a different image-space
-	# gap under portrait width-contain and lifts a relic off the slab.
-	var thread: float = box.size.y * 0.05
+	var thread: float = maxf(5.0, box.size.y * 0.05)
 	# The goods keep at least this much of their region whatever the tag needs.
 	# A long effect line otherwise squeezes the ware to a thumbnail, and it is
 	# the ware that has to read from across the room, not the second sentence.
@@ -422,31 +420,15 @@ func _seat_rack(frame: Vector2, factor: float) -> void:
 	var count: int = _rack.size()
 	if count == 0 or band.size.x <= 0.0 or band.size.y <= 0.0:
 		return
-	# Portrait's floor is tall and narrow: one row of six 45 px cards cannot
-	# be read, so the rack stacks into two rows across the full width.
-	var rows: int = 2 if StallLayout.is_portrait(frame) and count > 3 else 1
-	var per_row: int = ceili(float(count) / float(rows))
-	var row_gap: float = band.size.y * 0.04 if rows > 1 else 0.0
-	var row_h: float = (band.size.y - row_gap * float(rows - 1)) / float(rows)
-	for row: int in range(rows):
-		var start: int = row * per_row
-		var n: int = mini(per_row, count - start)
-		if n <= 0:
-			break
-		var row_band: Rect2 = Rect2(band.position.x,
-			band.position.y + (row_h + row_gap) * float(row), band.size.x, row_h)
-		_seat_rack_row(frame, factor, row_band, start, n)
-
-
-func _seat_rack_row(frame: Vector2, factor: float, band: Rect2, start: int,
-		count: int) -> void:
+	# One landscape row. Phone-landscape's short 844×390 stage scales the
+	# cards into the strip below the lip; it does not restack.
 	var separation: float = band.size.x * 0.012
 	var slot_w: float = (band.size.x - separation * float(count - 1)) / float(count)
-	for offset: int in range(count):
-		var entry: Dictionary = _rack[start + offset]
+	for index: int in range(count):
+		var entry: Dictionary = _rack[index]
 		var tag: WareTag = entry["tag"]
 		var tag_h: float = tag.reflow(slot_w, factor)
-		var left: float = band.position.x + (slot_w + separation) * float(offset)
+		var left: float = band.position.x + (slot_w + separation) * float(index)
 		var control: Control = entry["control"]
 		var view: CardView = control as CardView
 		if view == null:

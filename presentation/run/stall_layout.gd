@@ -33,12 +33,12 @@ extends RefCounted
 ##      1180x820 is height-driven, so the painting's own lip fraction IS the
 ##      frame's. It is what keeps the foreground rack's band (the 23% below it)
 ##      from collapsing on a wide phone.
-##   2. THE CROP NEVER EATS MORE THAN THE SAFE BAND. Cover-fitting a 1.4538
-##      image into a 0.45 portrait frame shows 31% of its width, which is not a
-##      crop but a different painting. `fit()` therefore stops scaling up once
-##      the visible width reaches `SAFE_BAND`, and lets the frame letterbox
-##      instead. Every region below is inside that band, so every region is on
-##      screen at every shape by construction — that is the property
+##   2. THE CROP NEVER EATS MORE THAN THE SAFE BAND. Cover-fitting past the
+##      4:3 acceptance ratio would crop the painting's width below SAFE_BAND.
+##      `fit()` therefore stops scaling up once the visible width reaches
+##      `SAFE_BAND`, and lets the frame letterbox instead. Every region below
+##      is inside that band, so every region is on screen at every shipping
+##      landscape frame by construction — that is the property
 ##      `tests/test_stall_layout.gd` asserts, and the reason it can.
 ##
 ## SAFE_BAND is the intersection of what the two landscape acceptance ratios
@@ -47,11 +47,10 @@ extends RefCounted
 ## 867x390) keeps the full width and crops v to [0.2671, 0.9211]. Nothing
 ## load-bearing may be authored outside their overlap.
 ##
-## Portrait is a second composition, not a crop of this one. James's 2026-08-15
-## ruling still wants a per-aspect master; until that painting lands, `fit()`
-## width-contains the stall at the top of the frame (canopy → shelf → counter)
-## and `rack_band()` gives the floor below the lip to the cards. Letterboxing
-## the landscape painting into a bottom strip is the thing that ruling retired.
+## Shipping orientations are landscape only (`docs/design/2026-08-18-landscape-only.md`):
+## identity `pad-landscape` 1180×820, phone-landscape's short 844×390 stage, and
+## 4:3 iPad as flexed pad-landscape. `phone-portrait` and `pad-portrait` are
+## retired. This file does not restack the rack or width-contain a top band.
 ##
 ## Pure by construction, like `StageShape`: no Node, no DisplayServer, every
 ## input an argument, so the whole matrix is drivable headlessly.
@@ -171,8 +170,9 @@ const TAG_ABOVE: Array[StringName] = [&"stand0", &"stand1"]
 const IDENTITY_SCALE: float = 820.0 / 1040.0
 ## Where type stops shrinking with the painting. Below this a tag is not a
 ## smaller tag, it is an unreadable one, so it grows past its region instead and
-## `ShopScreen._seat` clamps it back into the frame. Portrait width-contain
-## sits well below this floor, so tags stay readable on the small stall band.
+## `ShopScreen._seat` clamps it back into the frame. Phone-landscape's short
+## 844×390 stage is the tightest shipping window; type stays readable there as
+## one scaled rack row, not a restack.
 const TYPE_FLOOR: float = 0.62
 
 ## The foreground rack is frame-locked, not scene-locked: it stands in front of
@@ -183,22 +183,14 @@ const RACK_INSET: float = 0.15
 
 
 ## Image-to-frame transform: cover, pivoted on the counter lip, capped so the
-## visible width never falls below SAFE_BAND's. Portrait is width-contain at
-## the top of the frame — a stacked stall, not a cropped one.
+## visible width never falls below SAFE_BAND's.
 static func fit(frame: Vector2) -> Transform2D:
-	if is_portrait(frame):
-		var scale: float = frame.x / IMAGE.x
-		return Transform2D(0.0, Vector2(scale, scale), 0.0, Vector2.ZERO)
 	var cover: float = maxf(frame.x / IMAGE.x, frame.y / IMAGE.y)
 	var widest: float = frame.x / (IMAGE.x * SAFE_BAND.size.x)
 	var scale: float = minf(cover, widest)
 	var drawn: Vector2 = IMAGE * scale
 	return Transform2D(0.0, Vector2(scale, scale), 0.0,
 		(frame - drawn) * Vector2(0.5, COUNTER_LINE))
-
-
-static func is_portrait(frame: Vector2) -> bool:
-	return frame.y > frame.x
 
 
 ## How large type must be drawn at this frame, as a multiple of the sizes the
@@ -229,18 +221,11 @@ static func place(frame: Vector2, region: StringName) -> Rect2:
 		box.size * IMAGE * scale)
 
 
-## The foreground band: below the counter lip. Landscape insets from the left
-## and stops short of the bell jar so the two never share a column. Portrait
-## already seats the jar on the stall band above, so the rack takes the full
-## floor in two rows.
+## The foreground band: below the counter lip, inset from the left, stopping
+## short of the bell jar's end of the counter so the two never share a column.
+## One row. Phone-landscape scales the cards into this strip; it does not restack.
 static func rack_band(frame: Vector2) -> Rect2:
 	var gap: float = RACK_GAP * frame.y
-	if is_portrait(frame):
-		var box: Rect2 = canvas(frame)
-		var top: float = box.position.y + COUNTER_LINE * box.size.y + gap
-		var inset: float = frame.x * 0.04
-		return Rect2(inset, top, maxf(0.0, frame.x - inset * 2.0),
-			maxf(0.0, frame.y - gap - top))
 	var top: float = COUNTER_LINE * frame.y + gap
 	var left: float = RACK_INSET * frame.x
 	var right: float = place(frame, &"jar").position.x - gap
