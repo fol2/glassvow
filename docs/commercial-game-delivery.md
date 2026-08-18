@@ -78,7 +78,10 @@ gate. The verifier `pass` proves that the evidence clears the gate; the signatur
 is the distinct PM approval.
 Issue #105 measured a 50-row exported-combat matrix (five authored shapes ×
 `en`/`zh-Hant` × five fresh processes) under the act-1 Leviathan boss,
-seed 717, with 96 sustained VFX particles. Its maxima were 543.640625 MiB
+seed 717, with 96 sustained VFX particles. *(Historical: that capture still
+included portrait. From 2026-08-18 the shipping set is three landscape shapes —
+`docs/design/2026-08-18-landscape-only.md`. The P8.1 signed numbers below are
+untouched.)* Its maxima were 543.640625 MiB
 renderer allocation, 1056.204544 MiB process physical footprint and 9.578 ms
 observed whole-frame p95. The immutable [manifest](https://github.com/fol2/glassvow/blob/1ce1ce8915b33ae1914714a6b2c40af89fb6ac22/manifest.md)
 and [summary](https://github.com/fol2/glassvow/blob/1ce1ce8915b33ae1914714a6b2c40af89fb6ac22/binding/summary.json)

@@ -241,19 +241,24 @@ inconsistent — it is unreachable by every tool that would otherwise notice it 
 wrong or missing.
 
 ### Stage shape
-An authored screen composition for an encounter, selected by device class and
-orientation. A Stage shape is a design reference rather than a frame the game
-is locked into: the real window stretches the stage along one axis to meet it,
-up to a cap, and letterboxes only past that.
+An authored **landscape** screen composition for an encounter, selected by
+device class. Portrait is not a shipping orientation (James, 2026-08-18 —
+`docs/design/2026-08-18-landscape-only.md`). A Stage shape is a design
+reference rather than a frame the game is locked into: the real window
+stretches the stage along one axis to meet it, up to a cap, and letterboxes
+only past that.
 
-One landscape composition is the identity shape, and that is load-bearing
+Three remain: `phone-landscape`, `pad-landscape`, `desktop-landscape`.
+`pad-landscape` (1180×820) is the identity shape, and that is load-bearing
 rather than incidental. Every measured number this port carries was read at
 that size, so a composition that stops resolving to it one-to-one has quietly
 invalidated every Anchor in the repo at once.
 
 A shape says nothing about what device is holding it. Device class — phone, pad,
 desktop — is a separate question answered from the platform name and the physical
-diagonal, and it decides which shapes a window is even allowed to be given.
+diagonal, and it decides which **landscape** shape a window is even allowed to
+be given. A taller-than-wide window does not unlock a portrait composition; it
+letterboxes the landscape one.
 
 ### Edge binding
 Which edge of the stage a layout number is measured from, and therefore what
