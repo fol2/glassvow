@@ -2,6 +2,7 @@
 title: Audit a port by enumerating the reference's CSS instead of waiting for someone to notice
 date: 2026-07-27
 last_refreshed: 2026-07-31
+last_updated: 2026-08-19
 category: workflow-issues
 module: port/audit
 problem_type: workflow_issue
@@ -17,11 +18,20 @@ tags: [port, audit, css, animation, parity, workflow, verification, methodology,
 
 # Audit a port by enumerating the reference's CSS instead of waiting for someone to notice
 
+> **Amended by #317 (2026-08-16).** The *method* this document describes is
+> unchanged: enumerate the source of motion (or layout) instead of waiting to
+> notice a gap. Its *premise* is not. On 2026-08-16 the port detached from the
+> web original; `AGENTS.md` now says nothing parity-checks against that tree,
+> and "the web did it differently" is not by itself an argument. The frozen
+> commit below is history for the census that already ran. Do not clone it to
+> settle what this port ought to do. New citations into it are banned.
+
 ## Context
 
-Glassvow is a parallel port of a web deckbuilder into Godot 4.7. Parity is checked
-against a frozen web reference — `~/Coding/roguecardv2-benchmark` at commit
-`6e06911` (2026-07-13), the pre-Pixi checkout this project treats as authority.
+Glassvow is a parallel port of a web deckbuilder into Godot 4.7. Until
+2026-08-16, parity was checked against a frozen web reference —
+`~/Coding/roguecardv2-benchmark` at commit `6e06911` (2026-07-13), the pre-Pixi
+checkout this project then treated as authority.
 Until the motion census, divergences from that reference were found the way a
 person finds dust on a shelf: by looking at the screen and noticing that
 something was wrong.
