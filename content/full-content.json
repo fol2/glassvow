@@ -300,7 +300,6 @@
       "rarity": "common",
       "cost": 2,
       "target": "enemy",
-      "chip": 1,
       "vfx": "blunt",
       "effects": [
         {
@@ -309,17 +308,17 @@
         }
       ],
       "up": {
-        "chip": 2,
+        "chip": 1,
         "effects": [
           {
             "kind": "dmg",
             "n": 16
           }
         ],
-        "text": "Deal @16@ damage. Chip 2 extra Facets."
+        "text": "Deal @16@ damage. Chip 1 extra Facet."
       },
       "name": "Quarry Maul",
-      "text": "Deal @12@ damage. Chip 1 extra Facet."
+      "text": "Deal @12@ damage."
     },
     "cleave": {
       "type": "attack",
@@ -360,7 +359,7 @@
           "kind": "status",
           "who": "target",
           "id": "poison",
-          "n": 3
+          "n": 4
         }
       ],
       "up": {
@@ -373,13 +372,13 @@
             "kind": "status",
             "who": "target",
             "id": "poison",
-            "n": 4
+            "n": 5
           }
         ],
-        "text": "Deal @6@ damage. Apply 4 Smolder."
+        "text": "Deal @6@ damage. Apply 5 Smolder."
       },
       "name": "Emberbite",
-      "text": "Deal @4@ damage. Apply 3 Smolder."
+      "text": "Deal @4@ damage. Apply 4 Smolder."
     },
     "lunge": {
       "type": "attack",
