@@ -272,7 +272,7 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 3
+          "n": 4
         },
         {
           "kind": "draw",
@@ -283,17 +283,17 @@
         "effects": [
           {
             "kind": "dmg",
-            "n": 5
+            "n": 6
           },
           {
             "kind": "draw",
             "n": 1
           }
         ],
-        "text": "Deal @5@ damage. Draw 1 card."
+        "text": "Deal @6@ damage. Draw 1 card."
       },
       "name": "Flicker",
-      "text": "Deal @3@ damage. Draw 1 card."
+      "text": "Deal @4@ damage. Draw 1 card."
     },
     "heavyBlow": {
       "type": "attack",
