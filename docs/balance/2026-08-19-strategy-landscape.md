@@ -2,6 +2,8 @@
 
 Issue: [fol2/glassvow#412](https://github.com/fol2/glassvow/issues/412). This ticket **measures**. It does not retune. Protocol, arm definitions, sampling distributions, and C1–C4 / Vow-5 gates are those of [`2026-08-14-strategy-landscape.md`](2026-08-14-strategy-landscape.md) (#215 / #216). This file is the dated sibling so the 2026-08-14 readout stays intact.
 
+**Hypothesis-1 retune:** [fol2/glassvow#421](https://github.com/fol2/glassvow/issues/421) measured content SHA `c96ed73196eafaec6c68cca27f0dafd784e810278d53d07fd995d3bd20f446aa` on 2026-08-19. Readout: [`2026-08-19-421-hypothesis-1.md`](2026-08-19-421-hypothesis-1.md). This file stays the #412 measurement on SHA `736090f1…` and is not rewritten.
+
 Content SHA-256 (`FileAccess.get_sha256` of `res://content/full-content.json`):
 `736090f18546738a2e38b756d81f6ad715a808c4ea321220443f839862cdb102`.
 Game-under-test commit `101e7d956bda30848399aa02833e09cbe339495e`.
