@@ -244,3 +244,7 @@ static func _os_lock(fails: Array[String]) -> void:
 	var presets: String = FileAccess.get_file_as_string("res://export_presets.cfg")
 	_check(fails, presets.contains("sensor_landscape via project.godot"),
 		"iOS/Android export presets name the sensor_landscape lock")
+	_check(fails, presets.count("application/targeted_device_family=2") == 2,
+		"both iOS presets use Godot enum 2 (iPhone & iPad)")
+	_check(fails, not presets.contains("application/targeted_device_family=1,2"),
+		"iOS family is Godot enum 2, not Apple string 1,2")
