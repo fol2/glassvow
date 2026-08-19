@@ -425,7 +425,7 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 4
+          "n": 5
         },
         {
           "kind": "block",
@@ -436,17 +436,17 @@
         "effects": [
           {
             "kind": "dmg",
-            "n": 6
+            "n": 7
           },
           {
             "kind": "block",
             "n": 6
           }
         ],
-        "text": "Deal @6@ damage. Gain #6# Ward."
+        "text": "Deal @7@ damage. Gain #6# Ward."
       },
       "name": "Warden's Edge",
-      "text": "Deal @4@ damage. Gain #4# Ward."
+      "text": "Deal @5@ damage. Gain #4# Ward."
     },
     "brace": {
       "type": "skill",
