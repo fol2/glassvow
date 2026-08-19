@@ -587,6 +587,18 @@ I-prime 在首通線是 rest,此敵餵 repeat pool):
 | 452 | 未冷的燼 / The Cinder That Did Not Cool | unwoodedSelf.moves.cinderHush | L4 | 一撮沒冷下來的燼 | 火熄之後燼仍熱;你沒等它冷,另一個你等 | 佔位 |
 | 453 | 未立的林 / The Grove You Did Not Stand In | unwoodedSelf.moves.standWood | L4 | 一片沒站進去的林 | 出發前的林等過你立;你沒立,所以路仍未成 | 佔位 |
 
+## Store listing (#243) [SETTLED James 2026-08-19]
+
+Public before install. Channel ceiling L0 (`04-delivery.md`). Surface fiction
+only; 喚回 / 分身 / 窗成鏡 never stated. Genre: Roguelike 牌組構築, not 肉鴿.
+
+| # | 句子 | 出處 | 級 | 表面讀法 | 揭後讀法 | 狀態 |
+|---|---|---|---|---|---|---|
+| 454 | A pilgrimage in stained glass / 彩窗上的朝聖之路 | App Store subtitle | L0 | 類型+美學 | 彩窗=threshold 西面;朝聖=隊伍反覆量同一條路 | 新寫 |
+| 455 | A stained-glass pilgrimage. Walk the road. The Vigil remembers. / 彩窗上的朝聖。走上長路。守夜銘記。 | App Store promotional text | L0 | 上路;爐火記得你的朝聖紀錄 | 守夜銘記的是每一位行者;記得的不是「你回來」 | 新寫 |
+| 456 | A fire was cut into six pieces… Light the rose. Open the sealed door. / 一團火被裁成六片…點亮彩窗。打開路盡頭的封門。 | App Store description | L0 | 被告知的版本(#262 Q3 可直說) | 「裁」是 legend-drift(row 20);門開那刻是隊伍推的 | 新寫 |
+| 457 | The Vigil / 守夜之爐 | screenshot caption 5 | L0 | 爐邊之家 | 家=從未離開的那一側 | 新寫 |
+
 #220 Slice 4 — catalogue assembly. Act/boss display already lives in rows 22 and 412;
 no new player-facing lines. `acts[3]` / `rewardGold[3]` / `encounters[3]` land those
 settled names on the production book. Stage plates remain #221.

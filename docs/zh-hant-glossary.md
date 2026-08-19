@@ -1,6 +1,6 @@
 # Traditional Chinese canonical glossary
 
-**Version:** 1.1
+**Version:** 1.2
 
 **Locale:** `zh-Hant`
 **Scope:** player-facing Glassvow copy
@@ -12,7 +12,8 @@ remain unchanged.
 
 | English source term | Canonical Traditional Chinese | Usage note |
 |---|---|---|
-| Glassvow | 琉璃誓言 | Brand title. |
+| Glassvow | 琉璃誓言 | Brand title. Store listing title is this string, not `GLASSVOW`. |
+| roguelite / roguelike deckbuilder | Roguelike 牌組構築 | Store-listing genre only. Keep the English loanword. Never 肉鴿 (Mainland slang). Never 爬塔like. |
 | Vigil | 守夜 | The cross-run ledger and its ceremony. |
 | Pilgrimage | 朝聖之路 | The horizontal journey. “Climb” and the rest of the vertical vocabulary are **banned** — full table and keep-list in `docs/story/06-glossary.md` › 垂直語彙. |
 | Waystone | 引路石 | One stopping place on the Pilgrimage; the run counter is 第 {n} 塊引路石 / WAYSTONE n. |

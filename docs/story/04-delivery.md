@@ -63,6 +63,7 @@ task #270 [SETTLED — #258 R2 Q12].
 | Quest line rewrites | L2 | closers only; quest bodies stay L1 |
 | Sixth-shard scene | L3 | the only L3 surface |
 | Act IV five nodes + finale | L4 | |
+| Store listing (App Store / later stores) | L0 | Public before install. Surface fiction only (destination, six shards, door opens). Zero confirmation of the truth. Never state 喚回 / 分身 / 窗成鏡 / 走的人不是同一個. Genre line is Roguelike 牌組構築, never 肉鴿. [SETTLED — Store presence grilling, 2026-08-19] |
 
 ## Line table schema [SETTLED — #262 Q5]
 
