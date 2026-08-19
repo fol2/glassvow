@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Glassvow — iOS RC campaign roadmap</title>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "dark",
+      securityLevel: "loose",
+      flowchart: { curve: "basis", htmlLabels: true, padding: 12 }
+    });
+  </script>
+  <style>
+    :root {
+      --bg: #12141a;
+      --panel: #1b1f2a;
+      --ink: #e8e6df;
+      --muted: #9aa3b5;
+      --line: #2c3344;
+      --gold: #d4b46a;
+      --link: #8ec8ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 16px/1.45 "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    h1 { font-size: 1.7rem; font-weight: 600; margin: 0 0 8px; }
+    h2 { font-size: 1.2rem; font-weight: 600; margin: 2.2rem 0 0.7rem; color: var(--gold); }
+    p, li { color: var(--ink); }
+    .lede { color: var(--muted); margin: 0 0 1.5rem; max-width: 46rem; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 0 0 8px;
+    }
+    .mermaid { min-height: 120px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { color: var(--gold); font-weight: 600; }
+    a { color: var(--link); }
+    .note { color: var(--muted); font-size: 0.9rem; }
+    code { font-family: ui-monospace, Menlo, monospace; font-size: 0.88em; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Glassvow — iOS RC campaign</h1>
+    <p class="lede">
+      Snapshot 2026-08-19. Destination: a port-owned, bilingual, almost-release-ready iOS game.
+      The bar is <code>docs/rc-bar.md</code>. Live control plane:
+      <a href="https://github.com/fol2/glassvow/issues/156">Wayfinder — story-first route to the mobile release candidate</a>.
+    </p>
+    <p class="lede">
+      <strong>Two different “RC”s.</strong>
+      <em>RC-shape</em> is the TestFlight IPA
+      (<a href="https://github.com/fol2/glassvow/issues/413">Produce and upload the RC-shape TestFlight IPA</a>).
+      <em>Declaring the release candidate</em> is the signed receipt on
+      <a href="https://github.com/fol2/glassvow/issues/108">P8.4 — Release gate</a>.
+    </p>
+
+    <h2>1. Time order — left to right</h2>
+    <p class="note">Story is already on <code>main</code>. Four lanes can start today. The kit must land before the IPA (Q1 = B). Feel is a TestFlight purpose, then it gates the receipt (Q2).</p>
+    <div class="panel">
+      <pre class="mermaid">
+flowchart LR
+  subgraph done ["Already on main"]
+    S["Story-surface"]
+  end
+
+  subgraph now ["Now — four parallel lanes"]
+    A["Ship iPhone+iPad preset"]
+    B["Wire Sentry"]
+    C["First paid map GLB"]
+    D["Re-run P9 landscape"]
+  end
+
+  subgraph kit ["Then the kit"]
+    E["Ordinary kits + tiles"]
+    F["Grades + termini"]
+    G["iOS payload closeout"]
+  end
+
+  subgraph ipa ["Then one IPA"]
+    H["Upload RC-shape TestFlight IPA"]
+  end
+
+  subgraph wave ["Then one TestFlight wave"]
+    I["Beta invites + 7 days"]
+    J["Feel sign-off"]
+    K["P3 full-run QA"]
+    L["P5 rubric sign-off"]
+    M["P4 process-kill on SE 2"]
+    N["In-app privacy policy"]
+  end
+
+  subgraph rc ["Last"]
+    R["Declare the release candidate"]
+  end
+
+  S --> now
+  A --> H
+  B --> H
+  C --> E
+  C --> F
+  E --> G
+  F --> G
+  G --> H
+  B --> N
+  A --> M
+  G --> M
+  H --> I
+  H --> J
+  H --> K
+  H --> L
+  I --> R
+  J --> R
+  K --> R
+  L --> R
+  M --> R
+  N --> R
+  D --> R
+      </pre>
+    </div>
+
+    <h2>2. What must land before the receipt</h2>
+    <p class="note">Every open blocker of P8.4 — Release gate. P2’s harness can merge now; the physical packet waits on the kit, same as the IPA.</p>
+    <div class="panel">
+      <pre class="mermaid">
+flowchart TD
+  R["P8.4 — Release gate\n(the receipt)"]
+
+  I["Beta logistics"]
+  J["Balance HITL feel"]
+  K["P3 full-run QA"]
+  L["P5 rubric"]
+  M["P4 process-kill"]
+  N["In-app privacy"]
+  P2["P2 floor profile"]
+  P9["P9 landscape re-run"]
+
+  I --> R
+  J --> R
+  K --> R
+  L --> R
+  M --> R
+  N --> R
+  P2 --> R
+  P9 --> R
+      </pre>
+    </div>
+
+    <h2>3. What you do when</h2>
+    <table>
+      <thead>
+        <tr><th>When</th><th>Who</th><th>Ticket</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Today</td>
+          <td>Agent</td>
+          <td><a href="https://github.com/fol2/glassvow/issues/407">Ship the iOS IPA to iPhone and iPad</a> — preset off iPad-only</td>
+        </tr>
+        <tr>
+          <td>Today</td>
+          <td>You, then agent</td>
+          <td><a href="https://github.com/fol2/glassvow/issues/411">Wire Sentry 2.1.1 into iOS release exports</a> — Sentry project + DSN first</td>
+        </tr>
+        <tr>
+          <td>Today</td>
+          <td>You, then agent</td>
+          <td><a href="https://github.com/fol2/glassvow/issues/292">First paid map GLB…</a> — paid Tripo proof before any generate</td>
+        </tr>
+        <tr>
+          <td>Today</td>
+          <td>Agent, long</td>
+          <td><a href="https://github.com/fol2/glassvow/issues/412">Re-run the strategy landscape on the live content SHA</a> — FAIL graduates a retune before close</td>
+        </tr>
+        <tr>
+          <td>After first GLB</td>
+          <td>Art + agent</td>
+          <td><a href="https://github.com/fol2/glassvow/issues/293">kits + tiles</a> in parallel with <a href="https://github.com/fol2/glassvow/issues/294">grades + termini</a>, then <a href="https://github.com/fol2/glassvow/issues/295">payload closeout</a></td>
+        </tr>
+        <tr>
+          <td>After preset + Sentry + kit</td>
+          <td>You on a Mac</td>
+          <td><a href="https://github.com/fol2/glassvow/issues/413">Produce and upload the RC-shape TestFlight IPA</a></td>
+        </tr>
+        <tr>
+          <td>After that IPA</td>
+          <td>You + testers</td>
+          <td>
+            <a href="https://github.com/fol2/glassvow/issues/195">Beta logistics</a>,
+            <a href="https://github.com/fol2/glassvow/issues/205">Balance HITL feel sign-off</a>,
+            <a href="https://github.com/fol2/glassvow/issues/416">P3</a>,
+            <a href="https://github.com/fol2/glassvow/issues/417">P5</a>
+            on the same build.
+            <a href="https://github.com/fol2/glassvow/issues/414">P4</a> on the twin.
+            <a href="https://github.com/fol2/glassvow/issues/415">Privacy</a> as soon as Sentry exists.
+            One HITL lane at a time.
+          </td>
+        </tr>
+        <tr>
+          <td>When every row above is green</td>
+          <td>You</td>
+          <td><a href="https://github.com/fol2/glassvow/issues/108">P8.4 — Release gate</a> — sign “this build is the release candidate”</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="note" style="margin-top:1.5rem">
+      Off this road on purpose:
+      <a href="https://github.com/fol2/glassvow/issues/212">Mythic card set</a>,
+      <a href="https://github.com/fol2/glassvow/issues/223">Post-endgame balance</a>,
+      <a href="https://github.com/fol2/glassvow/issues/202">Extend the Scenario kernel</a>.
+      Cable-install with the old device-family override is fine for poking around. It is not TestFlight evidence.
+    </p>
+    <p class="note">Needs a network once, to load Mermaid from jsDelivr. Then the diagrams draw in this page.</p>
+  </main>
+</body>
+</html>
