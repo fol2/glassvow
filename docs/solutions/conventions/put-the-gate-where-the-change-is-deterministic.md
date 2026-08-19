@@ -1,6 +1,7 @@
 ---
 title: "Put the gate where the change is deterministic, not where the result is visible"
 date: 2026-07-31
+last_updated: 2026-08-19
 category: conventions
 module: presentation/stage
 problem_type: convention
@@ -170,3 +171,7 @@ context, not as the gate.
 - [A scaled Control shrinks its hit area with its
   picture](../ui-bugs/a-scaled-control-shrinks-its-hit-area-with-its-picture.md)
   — a defect that passed every geometric gate, numeric and visual alike.
+- [The generating product is Studio; a SKIP is not the silhouette
+  gate](../tooling-decisions/studio-not-api-is-the-map-kit-generating-product.md)
+  — the same Gate rule on a named check that printed SKIP and continued: once a
+  map GLB is present, raster it or fail closed.
