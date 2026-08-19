@@ -84,7 +84,7 @@ untracked file outside this repository: nothing in a checkout can confirm or
 contradict it, and every quotation of it here is one session's reading of one
 developer's file on one machine.
 
-**The addon is enabled in the project.** `project.godot:38` (`enabled`) includes
+**The addon is enabled in the project.** `project.godot:40` (`enabled`) includes
 Funplay alongside the Web-export helper:
 
 ```ini
@@ -426,7 +426,7 @@ The addon is committed twice. `addons/funplay_mcp/` holds the full plugin, and
 `addons/plugin.gd`, `addons/core/`, `addons/runtime/`, `addons/ui/`). Both are
 tracked; the `.gd` sources are byte-identical and only the generated `.uid`
 files differ, which is what two unpacks of the same archive at different roots
-would produce. The enabled Funplay plugin is unambiguous — `project.godot:38`
+would produce. The enabled Funplay plugin is unambiguous — `project.godot:40`
 (`enabled`) points at `res://addons/funplay_mcp/plugin.cfg`, and nothing lists
 the root-level copy — so `addons/funplay_mcp/` is live and every citation here is
 against it. Whether the duplicate is harmless or should go was not investigated;
@@ -457,7 +457,7 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
   action.
 - `tools/live.gd` (`BRIDGE_SCRIPT_PATH`) and `tools/live.gd` (in `_ready`) — the
   capture host wiring that same bridge per-process instead of as an autoload.
-- `project.godot:38` (`enabled`) — the enabled Funplay plugin path, and the
+- `project.godot:40` (`enabled`) — the enabled Funplay plugin path, and the
   reason the root-level duplicate is not the live copy.
 - [`application/main.tscn`](../../../application/main.tscn) — a root `Control`
   with a script and no
