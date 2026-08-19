@@ -73,9 +73,11 @@ jobs:
       # disease as grading `--check-only` by its exit code.
       - name: Check map tile and module assets
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri
           python3 -m pip install --quiet 'Pillow>=10,<13'
           python3 -B tools/check_map_assets.py --self-test
-          python3 -B tools/check_map_assets.py
+          xvfb-run -a python3 -B tools/check_map_assets.py
 
       - name: Test performance evidence replay
         run: python3 -B tests/test_performance_budget.py

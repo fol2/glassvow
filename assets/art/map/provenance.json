@@ -1,5 +1,31 @@
 {
   "schema_version": 1,
+  "paid_product": {
+    "product": "Studio",
+    "tier": "Pro",
+    "account_owner": "fol2",
+    "evidenced_at": "2026-08-19T13:11:10+08:00",
+    "credits_balance": 3200,
+    "pro_credit_grant": 3000,
+    "plan_expires": "2026-09-19",
+    "billing": "monthly",
+    "first_month_usd": 13.93,
+    "renews_usd": 19.9,
+    "usage_history": [
+      {
+        "at": "2026-08-19T13:11:10+08:00",
+        "type": "Credit Top-Up",
+        "amount": 3000,
+        "status": "Fulfilled"
+      }
+    ],
+    "terms_url": "https://www.tripo3d.ai/terms",
+    "terms_last_updated": "2025-07-11",
+    "terms_sha256": "7eae974d4e38e6d622beba8531eb2995f38ef4d60b5e00aed9f2b3067a5029eb",
+    "note": "Studio Pro is the generating product. API credits were not purchased. Do not generate shipping meshes on the API with this receipt. Do not call openapi.tripo3d.ai or platform.tripo3d.ai generation. Use the Studio 3000 monthly credits (balance includes leftover 200 free, which are not a generation source).",
+    "generation_surface": "Studio",
+    "api_forbidden": true
+  },
   "record_schema": {
     "required": [
       "asset_id",
@@ -12,8 +38,37 @@
       "reviewer",
       "verdict"
     ],
-    "verdicts": ["accepted", "rejected"],
+    "verdicts": [
+      "accepted",
+      "rejected"
+    ],
     "sha256_pattern": "^[0-9a-f]{64}$"
   },
-  "records": []
+  "records": [
+    {
+      "asset_id": "shared-road-slab-a",
+      "source": "Studio",
+      "created_at": "2026-08-19T13:51:00+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "d28c052a37124c32595c2ca037010c0fd1279d5bbd297681ae048369e0744046",
+      "final_sha256": "d28c052a37124c32595c2ca037010c0fd1279d5bbd297681ae048369e0744046",
+      "edits": [
+        "blender missing on PATH; no join/origin/scale/export pass",
+        "kept Studio Smart Mesh download: one mesh, one triangulated surface, normals, no UV/tangent/animation/skeleton/texture, watertight single island, Y-up metres, ground Y=0"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "cc83bc21-f586-4144-ab80-af200a861dc1",
+      "model": "Smart Mesh P2.0 Preview",
+      "model_id": "4e37bbc6-0db6-4e72-ab7f-90ffc0deb874",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/shared-road-slab-a.jpg",
+      "concept_sha256": "619d97054471996410be36370d1ec128d0f90489e7c55dc00e47bc0d8a31d54a",
+      "studio_url": "https://studio.tripo3d.ai/workspace/generate/cc83bc21-f586-4144-ab80-af200a861dc1",
+      "polycount_target": 1500,
+      "faces_reported": 1560
+    }
+  ]
 }

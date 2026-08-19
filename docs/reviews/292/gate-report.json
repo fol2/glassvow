@@ -1,0 +1,31 @@
+{
+  "asset_id": "shared-road-slab-a",
+  "task_id": "cc83bc21-f586-4144-ab80-af200a861dc1",
+  "source": "Studio",
+  "model": "Smart Mesh P2.0 Preview",
+  "glb_path": "assets/art/map/geometry/shared/road-slab-a.glb",
+  "glb_bytes": 38656,
+  "triangles": 1560,
+  "surfaces": 1,
+  "blender": "missing on PATH; Studio download already met the ordinary contract",
+  "silhouette": {
+    "tilt_degrees": -55.0,
+    "zoom_size": 28.0,
+    "threshold": 0.04,
+    "views": [
+      {"deg": 0, "opaque": 991, "noise": 0.0010},
+      {"deg": 45, "opaque": 1003, "noise": 0.0010},
+      {"deg": 90, "opaque": 926, "noise": 0.0011},
+      {"deg": 135, "opaque": 989, "noise": 0.0},
+      {"deg": 180, "opaque": 952, "noise": 0.0},
+      {"deg": 225, "opaque": 1006, "noise": 0.0010},
+      {"deg": 270, "opaque": 948, "noise": 0.0021},
+      {"deg": 315, "opaque": 1027, "noise": 0.0}
+    ],
+    "verdict": "pass"
+  },
+  "review_capture": "docs/reviews/292/road-slab-a-20.png",
+  "binding": "MapMaterials.bind_act / MapScene._bind_asset_geometry (#291); one kit does not replace placeholders",
+  "credits_after": 3200,
+  "api_forbidden": true
+}

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Fail-closed map manifest, provenance, ASTC, tile, grade, and mesh gates (#291).
+"""Fail-closed map manifest, provenance, ASTC, tile, grade, and mesh gates (#291/#292).
 
 `assets/art/map/map-assets.json` is the classifier shared with runtime binding.
-Declared-but-absent payload is legal; undeclared files are not. Mesh silhouette
-remains an explicit SKIP until #292 adds the production-camera GPU raster.
+Declared-but-absent payload is legal; undeclared files are not. Present GLBs
+are imported in Godot 4.7.1, rastered at MapCameraRig tilt / zoom 28, and
+scored with the existing `_silhouette_noise` metric (fail above 0.04).
 """
 from __future__ import annotations
 
@@ -102,7 +103,7 @@ def self_test() -> int:
         print("\n".join(errors), file=sys.stderr)
         print("self-test FAILED", file=sys.stderr)
         return 1
-    print("self-test OK (all injected gates failed; mesh silhouette remains named SKIP)")
+    print("self-test OK (all injected gates failed; GPU silhouette uses _silhouette_noise)")
     return 0
 
 

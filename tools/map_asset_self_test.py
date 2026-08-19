@@ -5,13 +5,14 @@ import colorsys
 import hashlib
 import json
 import shutil
+import struct
 import tempfile
 from pathlib import Path
 from typing import Any
 
 from map_asset_checks import (
-    Finding, check_grade, check_tile, payload_findings,
-    validate_manifest, validate_provenance,
+    Finding, SILHOUETTE_NOISE, check_grade, check_tile, payload_findings,
+    silhouette_noise, validate_manifest, validate_provenance,
 )
 
 GOOD_IMPORT = """[params]
@@ -82,6 +83,80 @@ def _expect(errors: list[str], name: str, gate: str, found: list[Finding]) -> No
         errors.append(f"{name}: expected {gate}, got {sorted(got)}")
     else:
         print(f"self-test {name}: correctly failed {gate}")
+
+
+def _mask(kind: str, n: int = 64) -> tuple[int, int, list[tuple[int, ...]]]:
+    pixels: list[tuple[int, ...]] = []
+    for y in range(n):
+        for x in range(n):
+            disk = (x - n // 2) ** 2 + (y - n // 2) ** 2 <= 324
+            speck = (x + y * 13) % 7 == 0
+            if kind == "specks":
+                alpha = 255 if disk or speck else 0
+            else:
+                alpha = 255 if disk else 0
+            pixels.append((180, 180, 180, alpha))
+    return n, n, pixels
+
+
+def _disk_raster(_path: Path) -> list[tuple[int, int, list[tuple[int, ...]]]]:
+    return [_mask("disk")] * 8
+
+
+def _speck_raster(_path: Path) -> list[tuple[int, int, list[tuple[int, ...]]]]:
+    return [_mask("specks")] * 8
+
+
+def _write_grid_glb(path: Path, cols: int = 20, rows: int = 15) -> None:
+    positions: list[float] = []
+    normals: list[float] = []
+    indices: list[int] = []
+    for j in range(rows + 1):
+        for i in range(cols + 1):
+            positions.extend([i / cols - 0.5, 0.0, j / rows - 0.5])
+            normals.extend([0.0, 1.0, 0.0])
+    for j in range(rows):
+        for i in range(cols):
+            a = j * (cols + 1) + i
+            b = a + 1
+            c = a + cols + 1
+            d = c + 1
+            indices.extend([a, c, b, b, c, d])
+    pos_b = struct.pack("<%df" % len(positions), *positions)
+    nrm_b = struct.pack("<%df" % len(normals), *normals)
+    idx_b = struct.pack("<%dI" % len(indices), *indices)
+    blob = pos_b + nrm_b + idx_b
+    xs, ys, zs = positions[0::3], positions[1::3], positions[2::3]
+    gltf = {
+        "asset": {"version": "2.0"},
+        "buffers": [{"byteLength": len(blob)}],
+        "bufferViews": [
+            {"buffer": 0, "byteOffset": 0, "byteLength": len(pos_b)},
+            {"buffer": 0, "byteOffset": len(pos_b), "byteLength": len(nrm_b)},
+            {"buffer": 0, "byteOffset": len(pos_b) + len(nrm_b), "byteLength": len(idx_b)},
+        ],
+        "accessors": [
+            {"bufferView": 0, "componentType": 5126, "count": len(xs), "type": "VEC3",
+             "min": [min(xs), min(ys), min(zs)], "max": [max(xs), max(ys), max(zs)]},
+            {"bufferView": 1, "componentType": 5126, "count": len(xs), "type": "VEC3"},
+            {"bufferView": 2, "componentType": 5125, "count": len(indices), "type": "SCALAR"},
+        ],
+        "meshes": [{"primitives": [{"mode": 4, "indices": 2,
+                                    "attributes": {"POSITION": 0, "NORMAL": 1}}]}],
+        "nodes": [{"mesh": 0}],
+        "scenes": [{"nodes": [0]}],
+        "scene": 0,
+    }
+    json_bytes = json.dumps(gltf, separators=(",", ":")).encode("utf-8")
+    json_bytes += b" " * ((4 - len(json_bytes) % 4) % 4)
+    blob += b"\x00" * ((4 - len(blob) % 4) % 4)
+    glb = bytearray()
+    glb += struct.pack("<4sII", b"glTF", 2, 0)
+    glb += struct.pack("<I4s", len(json_bytes), b"JSON") + json_bytes
+    glb += struct.pack("<I4s", len(blob), b"BIN\x00") + blob
+    struct.pack_into("<I", glb, 8, len(glb))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(glb)
 
 
 def _record(asset_id: str, path: Path, final_sha: str | None = None) -> dict[str, Any]:
@@ -155,9 +230,9 @@ def run(manifest_path: Path, provenance_path: Path, regions_path: Path) -> list[
         if findings:
             errors.append(f"live manifest fixture failed: {findings}")
         records, findings = validate_provenance(contract, {str(row["id"]) for row in rows})
-        if findings or records:
-            errors.append(f"empty provenance fixture failed: {findings}/{records}")
-        findings, present = payload_findings(contract, rows, records)
+        if findings:
+            errors.append(f"live provenance fixture failed: {findings}")
+        findings, present = payload_findings(contract, rows, records, rasterize=_disk_raster)
         if findings or present != 0:
             errors.append(f"empty planned payload failed: {findings}/{present}")
         (contract / "notes.txt").write_text("undeclared")
@@ -187,17 +262,32 @@ def run(manifest_path: Path, provenance_path: Path, regions_path: Path) -> list[
         mesh = contract / str(mesh_row["path"])
         mesh.parent.mkdir(parents=True, exist_ok=True)
         mesh.write_bytes(b"fixture glb")
-        findings, _ = payload_findings(contract, rows, {})
+        findings, _ = payload_findings(contract, rows, {}, rasterize=_disk_raster)
         _expect(errors, "provenance-required", "provenance", findings)
+        _expect(errors, "mesh-magic", "mesh", findings)
         bad = _record(str(mesh_row["id"]), mesh, "f" * 64)
-        findings, _ = payload_findings(contract, rows, {str(mesh_row["id"]): bad})
+        findings, _ = payload_findings(contract, rows, {str(mesh_row["id"]): bad},
+                                      rasterize=_disk_raster)
         _expect(errors, "checksum", "checksum", findings)
+        _write_grid_glb(mesh)
         good = _record(str(mesh_row["id"]), mesh)
-        findings, _ = payload_findings(contract, rows, {str(mesh_row["id"]): good})
-        if _gates(findings) & {"provenance", "checksum", "file-size"}:
+        findings, _ = payload_findings(contract, rows, {str(mesh_row["id"]): good},
+                                      rasterize=_disk_raster)
+        if _gates(findings) & {"provenance", "checksum", "file-size", "mesh",
+                               "silhouette", "gpu-raster"}:
             errors.append(f"accepted mesh fixture failed: {findings}")
+        findings, _ = payload_findings(contract, rows, {str(mesh_row["id"]): good},
+                                      rasterize=_speck_raster)
+        _expect(errors, "silhouette", "silhouette", findings)
+        specks = _mask("specks")
+        noise = silhouette_noise(specks[2], specks[0], specks[1])
+        if noise is None or noise <= SILHOUETTE_NOISE:
+            errors.append(f"silhouette criterion should trip specks, got {noise}")
+        else:
+            print(f"self-test silhouette-metric: correctly failed {noise:.3f}")
         mesh.write_bytes(b"x" * (int(mesh_row["bytes_max"]) + 1))
         huge = _record(str(mesh_row["id"]), mesh)
-        findings, _ = payload_findings(contract, rows, {str(mesh_row["id"]): huge})
+        findings, _ = payload_findings(contract, rows, {str(mesh_row["id"]): huge},
+                                      rasterize=_disk_raster)
         _expect(errors, "file-size", "file-size", findings)
     return errors

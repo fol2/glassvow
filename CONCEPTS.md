@@ -75,6 +75,15 @@ subjects carrying some marker, is silent about everything else by construction.
 So a passing gate is quoted with its count, and a claim of the form "the gate
 passes over every X" is only as true as the set actually contained every X.
 
+A named check that prints SKIP and continues is not a gate. It has no failure
+signal, so its green run is habit.
+
+### Generating product
+The billed surface that actually created a shipping mesh. Studio and the API
+are independent products: a receipt for one does not pay the other, and leftover
+free credits on a paid Studio account are not a generation source.
+*Avoid:* "the Tripo account", "API credits from the Pro plan"
+
 ### Evidence Harness
 A tool that records or verifies a named gate under its declared conditions.
 Evidence from a Harness keeps its own proof boundary; reaching the same surface
@@ -111,6 +120,13 @@ The signed comment that pronounces a build the release candidate, binding the
 exact product head, the artifact hash, and every pillar's evidence address. A
 verifier passing proves the evidence clears the gate; the signature is the
 distinct human approval — the two are never merged.
+
+### RC-shape
+A distribution-signed build that matches what will be submitted: `dev_tools`
+absent, crash reporting on, an honest version stamp, and — for this iOS wave —
+installable on iPhone and iPad. The internal beta runs on one RC-shape build.
+RC-shape is not the release candidate; that sentence is only spoken in the RC
+signature receipt.
 
 ### Store name
 The listing title on the App Store (and any later store that reuses it). English

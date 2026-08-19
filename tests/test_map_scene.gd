@@ -107,14 +107,21 @@ static func _scene(fails: Array[String]) -> void:
 				"ground does not cast shadows")
 	_check(fails, scene.get_rig().get_camera().current,
 			"act camera is current inside the stage")
-	_check(fails, scene.active_asset_paths().is_empty()
-			and scene.find_child("MapAssetGeometry", true, false) == null,
-			"declared-but-absent assets keep the current placeholder geometry")
+	_check(fails, scene.find_child("MapAssetGeometry", true, false) == null,
+			"partial or absent payload keeps placeholder geometry")
+	var slab: String = "res://assets/art/map/geometry/shared/road-slab-a.glb"
+	var paths: PackedStringArray = scene.active_asset_paths()
+	if ResourceLoader.exists(slab):
+		_check(fails, paths.has(slab) and paths.size() < 12,
+				"present shared-road-slab-a binds through MapMaterials, not a second loader")
+	else:
+		_check(fails, paths.is_empty(),
+				"declared-but-absent assets keep the current placeholder geometry")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
 		var placeholder: Node = scene.find_child(node_name, true, false)
 		_check(fails, placeholder is GeometryInstance3D
 				and (placeholder as GeometryInstance3D).visible,
-				"%s remains visible while payload is absent" % node_name)
+				"%s remains visible until the full eight-kit act set resolves" % node_name)
 	scene.free()
 
 

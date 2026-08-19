@@ -611,3 +611,23 @@ leaded panes rather than painted cloth.
   `tools/check_scripts.sh` if a script path changed, then
   `godot --headless -s res://tests/run_all.gd`. A wrong `res://` path makes
   `load()` return null, and the suite is what catches it.
+
+### `map-concepts/shared-road-slab-a.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `shared-road-slab-a` (#292).
+Lives outside `assets/art/map/` so `tools/check_map_assets.py` does not treat
+it as undeclared payload. Not imported by Godot.
+
+Prompt (2026-08-19, Grok Imagine):
+
+> Orthographic 3/4 view of a single game-kitbash 3D prop: a broad low stone
+> road slab, like a short thick paving block. Simple geometric mass only — a
+> flat-topped rectangular slab with slightly broken front-right corner, no
+> carved ornament, no cracks as thin lines, no grass, no moss. Flat even
+> studio lighting from above-front, no cast shadow on the ground, no baked
+> AO, no rim light. Isolated subject centered, large in frame. Solid flat
+> medium-gray background (#8A8A8A), no horizon, no environment. Clean
+> silhouette, chunky low-poly look, matte untextured clay-maquette surface.
+> Not a tile texture, not a landscape.
+
+sha256 `619d97054471996410be36370d1ec128d0f90489e7c55dc00e47bc0d8a31d54a`.

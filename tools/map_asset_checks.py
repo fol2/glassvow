@@ -1,11 +1,18 @@
-"""Manifest and payload checks shared by tools/check_map_assets.py (#291)."""
+"""Manifest and payload checks shared by tools/check_map_assets.py (#291/#292)."""
 from __future__ import annotations
 
 import colorsys
 import hashlib
 import json
 import math
+import os
 import re
+import shutil
+import struct
+import subprocess
+import sys
+import tempfile
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any, NamedTuple
 
@@ -14,8 +21,12 @@ CONTROL_FILES = {"map-assets.json", "provenance.json"}
 IMAGE_EXT, MESH_EXT = {".png"}, {".glb"}
 DELIGHT_SPREAD, SEAM_RATIO = 0.15, 3.0
 GRADE_HF_MAX, HUE_MIN_SAT = 0.035, 0.08
+SILHOUETTE_NOISE, TRIANGLE_MIN = 0.04, 600
+YAW_DEGREES = tuple(range(0, 360, 45))
 REC709 = (0.2126, 0.7152, 0.0722)
 EXPECTED_COUNTS = {"kit": 23, "terminus": 4, "tile": 8, "grade": 4}
+REPO = Path(__file__).resolve().parent.parent
+RASTER_SCRIPT = "res://tools/raster_map_silhouette.gd"
 PROVENANCE_REQUIRED = {
     "asset_id", "source", "created_at", "license", "source_sha256",
     "final_sha256", "edits", "reviewer", "verdict",
@@ -28,7 +39,7 @@ class Finding(NamedTuple):
     detail: str
 
     def __str__(self) -> str:
-        return f"{self.gate:14} {self.path}  {self.detail}"
+        return f"{self.gate:16} {self.path}  {self.detail}"
 
 
 def srgb_to_linear(c: float) -> float:
@@ -307,8 +318,157 @@ def check_grade(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
     return found
 
 
+def silhouette_noise(px: list[tuple[int, ...]], w: int, h: int) -> float | None:
+    """3×3 opening residue / opaque area. Same metric the PNG gate used (#234)."""
+    mask = [1 if p[3] >= 128 else 0 for p in px]
+    opaque = sum(mask)
+    if opaque in (0, w * h):
+        return None
+
+    def morph(src: list[int], pick: Any) -> list[int]:
+        out = [0] * (w * h)
+        for y in range(h):
+            for x in range(w):
+                vals = [src[y * w + x]]
+                for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < w and 0 <= ny < h:
+                        vals.append(src[ny * w + nx])
+                out[y * w + x] = int(pick(vals))
+        return out
+
+    opened = morph(morph(mask, min), max)
+    return sum(1 for i, bit in enumerate(mask) if bit and not opened[i]) / opaque
+
+
+def inspect_glb(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
+    data = path.read_bytes()
+    if len(data) < 20 or data[:4] != b"glTF":
+        return [Finding("mesh", rel, "file is not a GLB")]
+    found: list[Finding] = []
+    try:
+        gltf, blob = _glb_chunks(data)
+    except (KeyError, OSError, struct.error, UnicodeDecodeError, ValueError, json.JSONDecodeError) as error:
+        return [Finding("mesh", rel, f"GLB parse failed: {error}")]
+    meshes = gltf.get("meshes") or []
+    if len(meshes) != 1 or len((meshes[0] or {}).get("primitives") or []) != 1:
+        found.append(Finding("mesh", rel, "ordinary/hero contract is one mesh, one surface"))
+        return found
+    primitive = meshes[0]["primitives"][0]
+    attributes = primitive.get("attributes") or {}
+    mode = primitive.get("mode", 4)
+    banned = {"TEXCOORD_0", "TEXCOORD_1", "TANGENT", "JOINTS_0", "WEIGHTS_0"}
+    if mode != 4 or "POSITION" not in attributes or "NORMAL" not in attributes:
+        found.append(Finding("mesh", rel, "need triangulated POSITION+NORMAL"))
+    if banned & set(attributes):
+        found.append(Finding("mesh", rel, f"forbidden attributes {sorted(banned & set(attributes))}"))
+    for extra, label in (
+        (gltf.get("animations") or [], "animation"),
+        (gltf.get("skins") or [], "skeleton"),
+        (gltf.get("textures") or [], "texture"),
+        (gltf.get("images") or [], "image"),
+    ):
+        if extra:
+            found.append(Finding("mesh", rel, f"{label} is not allowed on shipping kit GLBs"))
+    accessors = gltf.get("accessors") or []
+    index_id = primitive.get("indices")
+    tris = 0
+    if isinstance(index_id, int) and 0 <= index_id < len(accessors):
+        tris = int(accessors[index_id].get("count", 0)) // 3
+    elif "POSITION" in attributes:
+        pos = accessors[int(attributes["POSITION"])]
+        tris = int(pos.get("count", 0)) // 3
+    cap = int(row["triangle_max"])
+    lo = TRIANGLE_MIN if row["kind"] == "kit" else 1
+    if not lo <= tris <= cap:
+        found.append(Finding("mesh", rel, f"{tris} triangles outside {lo}–{cap}"))
+    pos_id = attributes.get("POSITION")
+    if isinstance(pos_id, int) and 0 <= pos_id < len(accessors):
+        mins = accessors[pos_id].get("min") or []
+        if len(mins) >= 2 and not (-1e-3 <= float(mins[1]) <= 0.05):
+            found.append(Finding("mesh", rel, f"ground pivot Y min {mins[1]!r}, expected ~0"))
+        components = _connected_components(blob, gltf, primitive)
+        if components > 1:
+            found.append(Finding("mesh", rel, f"{components} connected islands; hidden internals fail"))
+    return found
+
+
+def raster_masks(path: Path, repo: Path = REPO) -> list[tuple[int, int, list[tuple[int, ...]]]]:
+    out = Path(tempfile.mkdtemp(prefix="map-sil-"))
+    rel = path.resolve()
+    try:
+        glb_arg = "res://" + rel.relative_to(repo).as_posix()
+    except ValueError:
+        glb_arg = str(rel)
+    godot = os.environ.get("GODOT", "godot")
+    cmd = [
+        godot, "--path", str(repo),
+        "--position", os.environ.get("GLASSVOW_SHOT_POSITION", "-4000,-4000"),
+        "-s", RASTER_SCRIPT, "--", f"--glb={glb_arg}", f"--out={out}",
+    ]
+    if sys.platform.startswith("linux"):
+        cmd[1:1] = ["--rendering-method", "gl_compatibility", "--rendering-driver", "opengl3"]
+        if not os.environ.get("DISPLAY") and shutil.which("xvfb-run"):
+            cmd = ["xvfb-run", "-a", *cmd]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120, check=False)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise RuntimeError(f"godot raster failed: {error}") from error
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"godot raster rc={proc.returncode}: {(proc.stderr or proc.stdout or '').strip()[-800:]}")
+    masks: list[tuple[int, int, list[tuple[int, ...]]]] = []
+    for deg in YAW_DEGREES:
+        png = out / f"rot-{deg:03d}.png"
+        if not png.is_file():
+            raise RuntimeError(f"missing mask {png.name}: {(proc.stdout or '')[-400:]}")
+        _mode, w, h, px = pixels_of(png)
+        masks.append((w, h, px))
+    return masks
+
+
+def evaluate_masks(masks: list[tuple[int, int, list[tuple[int, ...]]]], rel: str) -> list[Finding]:
+    if len(masks) != len(YAW_DEGREES):
+        return [Finding("gpu-raster", rel, f"{len(masks)} masks, expected {len(YAW_DEGREES)}")]
+    found: list[Finding] = []
+    for deg, (w, h, px) in zip(YAW_DEGREES, masks):
+        noise = silhouette_noise(px, w, h)
+        if noise is None:
+            opaque = sum(1 for pixel in px if pixel[3] >= 128)
+            if opaque == 0:
+                found.append(Finding("silhouette", rel, f"yaw {deg} produced an empty mask"))
+            else:
+                found.append(Finding("silhouette", rel, f"yaw {deg} filled the transparent target"))
+        elif noise > SILHOUETTE_NOISE:
+            found.append(Finding("silhouette", rel,
+                                 f"yaw {deg} small-feature fraction {noise:.3f} > {SILHOUETTE_NOISE}"))
+        else:
+            print(f"gpu-silhouette {rel}  yaw {deg} noise {noise:.4f} ≤ {SILHOUETTE_NOISE}")
+    return found
+
+
+def check_mesh(path: Path, rel: str, row: dict[str, Any],
+               rasterize: Callable[[Path], list[tuple[int, int, list[tuple[int, ...]]]]] | None = None
+               ) -> list[Finding]:
+    found: list[Finding] = []
+    if path.stat().st_size > int(row["bytes_max"]):
+        found.append(Finding("file-size", rel, f"{path.stat().st_size} > {row['bytes_max']}"))
+    found.extend(inspect_glb(path, rel, row))
+    if any(item.gate == "mesh" and "not a GLB" in item.detail for item in found):
+        return found
+    try:
+        masks = (rasterize or raster_masks)(path)
+    except (OSError, RuntimeError, ValueError) as error:
+        found.append(Finding("gpu-raster", rel, str(error)))
+        return found
+    found.extend(evaluate_masks(masks, rel))
+    return found
+
+
 def payload_findings(folder: Path, rows: list[dict[str, Any]],
-                     provenance: dict[str, dict[str, Any]]) -> tuple[list[Finding], int]:
+                     provenance: dict[str, dict[str, Any]],
+                     rasterize: Callable[[Path], list[tuple[int, int, list[tuple[int, ...]]]]] | None = None
+                     ) -> tuple[list[Finding], int]:
     found: list[Finding] = []
     by_path = {str(row["path"]): row for row in rows}
     declared = set(by_path)
@@ -340,7 +500,63 @@ def payload_findings(folder: Path, rows: list[dict[str, Any]],
             elif row["kind"] == "grade":
                 found.extend(check_grade(path, rel, row))
             else:
-                if path.stat().st_size > int(row["bytes_max"]):
-                    found.append(Finding("file-size", rel, f"{path.stat().st_size} > {row['bytes_max']}"))
-                print(f"gpu-silhouette {rel}  SKIP until #292 production-camera raster gate")
+                found.extend(check_mesh(path, rel, row, rasterize=rasterize))
     return found, present
+
+
+def _glb_chunks(data: bytes) -> tuple[dict[str, Any], bytes]:
+    _magic, _version, length = struct.unpack_from("<4sII", data, 0)
+    offset = 12
+    gltf: dict[str, Any] | None = None
+    blob = b""
+    while offset + 8 <= min(length, len(data)):
+        chunk_len, chunk_type = struct.unpack_from("<I4s", data, offset)
+        payload = data[offset + 8:offset + 8 + chunk_len]
+        offset += 8 + chunk_len
+        if chunk_type == b"JSON":
+            gltf = json.loads(payload.decode("utf-8"))
+        elif chunk_type == b"BIN\x00":
+            blob = payload
+    if not isinstance(gltf, dict):
+        raise ValueError("GLB JSON chunk missing")
+    return gltf, blob
+
+
+def _connected_components(blob: bytes, gltf: dict[str, Any], primitive: dict[str, Any]) -> int:
+    attributes = primitive.get("attributes") or {}
+    accessors = gltf.get("accessors") or []
+    views = gltf.get("bufferViews") or []
+    pos_id = attributes.get("POSITION")
+    index_id = primitive.get("indices")
+    if not isinstance(pos_id, int) or not isinstance(index_id, int):
+        return 1
+    pos = _read_accessor(blob, accessors[pos_id], views)
+    indices = _read_accessor(blob, accessors[index_id], views)
+    count = len(pos) // 3
+    parent = list(range(count))
+
+    def find(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for a, b, c in zip(indices[0::3], indices[1::3], indices[2::3]):
+        ia, ib, ic = int(a), int(b), int(c)
+        if max(ia, ib, ic) >= count:
+            continue
+        ra, rb, rc = find(ia), find(ib), find(ic)
+        parent[rb] = ra
+        parent[rc] = ra
+    return len({find(i) for i in range(count)})
+
+
+def _read_accessor(blob: bytes, accessor: dict[str, Any], views: list[Any]) -> tuple[float, ...]:
+    view = views[int(accessor["bufferView"])]
+    start = int(view.get("byteOffset", 0)) + int(accessor.get("byteOffset", 0))
+    component = int(accessor["componentType"])
+    count = int(accessor["count"])
+    comps = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4}[str(accessor["type"])]
+    fmt = {5121: "B", 5123: "H", 5125: "I", 5126: "f"}[component]
+    n = count * comps
+    return struct.unpack_from("<" + fmt * n, blob, start)
