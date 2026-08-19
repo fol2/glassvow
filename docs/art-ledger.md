@@ -631,3 +631,167 @@ Prompt (2026-08-19, Grok Imagine):
 > Not a tile texture, not a landscape.
 
 sha256 `619d97054471996410be36370d1ec128d0f90489e7c55dc00e47bc0d8a31d54a`.
+
+### `map-concepts/shared-road-slab-b.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `shared-road-slab-b` (S2 in
+`docs/map-scene-asset-bill.md`: broken/offset slab). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`
+so lighting and material stay put. Lives outside `assets/art/map/`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured stone
+> surface. Change only the slab mass: this is a different road slab — offset,
+> not a single rectangle. The left half sits a finger-width lower than the
+> right half like a short step, the far-left front corner is a missing chunk,
+> and the right edge is a short raised lip. Same chunky low-poly geometric
+> mass, no carved ornament, no grass, no moss, no thin crack lines, no cast
+> shadow on the ground. Isolated, centered, large in frame. Distinct
+> silhouette from a single clean block.
+
+sha256 `662b5213fca5a475feb2bf7e9a3ebf9cb44e94f90a799a511a716c3bc2b202c9`.
+
+### `map-concepts/shared-standing-monument.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `shared-standing-monument` (S3 in
+`docs/map-scene-asset-bill.md`: fallen-walker read; broad standing mass, no
+carving noise). Same clay-maquette language as `shared-road-slab-a.jpg`;
+derived from that file with `image_edit` so lighting and material stay put.
+Lives outside `assets/art/map/`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured stone
+> surface. Replace the low road slab with one different prop: a single standing
+> monument, a broad upright weathered stele like a thick person-height stone
+> that reads as a fallen walker who is standing — one chunky vertical mass,
+> slightly wider at the base, a blunt rounded top, one missing chunk off the
+> upper-right shoulder. No carved faces, no letters, no ornament, no arms, no
+> grass, no moss, no thin crack lines, no cast shadow on the ground. Isolated,
+> centered, large in frame. Distinct tall silhouette, still a simple geometric
+> kitbash mass.
+
+sha256 `68cc72299c378f1d25414d5fa830292ad6a4ec4c94d6c5a38af5a428c620baf5`.
+
+### `map-concepts/act1-ash-trunk-fork.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-ash-trunk-fork` (A1-1 in
+`docs/map-scene-asset-bill.md`: forked ash-tree mass). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> stone-or-wood surface. Replace the low road slab with one different prop: a
+> single forked ash-tree trunk mass. Short thick charred trunk that splits into
+> two stubby branches like a Y, chunky low-poly geometric volumes, no leaves,
+> no twigs, no bark grain, no grass, no moss, no thin crack lines, no cast
+> shadow on the ground. Isolated, centered, large in frame. Distinct tall
+> forked silhouette, still a simple game-kitbash mass.
+
+sha256 `c39952778ebf599d91ab5c9a22d2ab4b74941d52f418b0f407b433c5c2d0ad24`.
+
+### `map-concepts/act1-root-wedge.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-root-wedge` (A1-2 in
+`docs/map-scene-asset-bill.md`: roots cutting through the ground plane). Same
+clay-maquette language as `shared-road-slab-a.jpg`; derived from that file with
+`image_edit`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> wood-or-stone surface. Replace the low road slab with one different prop: a
+> single root wedge. Thick triangular root mass cutting up through a ground
+> plane, like a buried root bursting the dirt — chunky low-poly geometric
+> volumes, one sharp wedge rising, a short buried heel. No leaves, no twigs,
+> no bark grain, no grass blades, no moss, no thin crack lines, no cast shadow
+> on the ground. Isolated, centered, large in frame. Distinct wedge silhouette,
+> still a simple game-kitbash mass.
+
+sha256 `d0c0e3652fa0f84c85a5e5236f21e41545a50a097d781a5c10bfba1d92cdc2e7`.
+
+### `map-concepts/act1-charred-stump.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-charred-stump` (A1-3 in
+`docs/map-scene-asset-bill.md`: low charred mass). Same clay-maquette language
+as `shared-road-slab-a.jpg`; derived from that file with `image_edit`. One
+connected volume (no detached chips) so Smart Mesh is less likely to emit two
+islands.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> wood-or-stone surface. Replace the low road slab with one different prop: a
+> single low charred stump. One short thick burned tree-base mass, wider than
+> it is tall, a blunt chopped top, the whole thing one connected volume sitting
+> on the ground — no separate chips, no second block, no roots as extra pieces.
+> Chunky low-poly geometric volumes. Isolated, centered, large in frame.
+> Distinct low squat silhouette, still a simple game-kitbash mass.
+
+sha256 `2d07f80575b526291692e31e7410132f8c30ae4a347c8d2a3e5dc9df9313c9c5`.
+
+### `map-concepts/act1-fallen-bough-arch.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-fallen-bough-arch` (A1-4 in
+`docs/map-scene-asset-bill.md`: threshold-shaped fallen tree). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`,
+then a second edit fused segmented blocks into one log so Smart Mesh is less
+likely to emit islands.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> wood-or-stone surface. Replace the low road slab with one different prop: a
+> single fallen-bough arch. One connected threshold-shaped fallen tree, a thick
+> log that bends into a low doorway arch, both ends on the ground, the whole
+> thing one fused volume — no separate branches, no second log, no chips.
+> Chunky low-poly geometric volumes. Isolated, centered, large in frame.
+> Distinct arch silhouette, still a simple game-kitbash mass.
+
+Fuse pass (same day, seeded from the first edit):
+
+> Keep the same clay-maquette look, medium-gray studio background, even
+> lighting, and 3/4 view. Fuse the arch into one continuous bent log — no gaps
+> between blocks, no separate stones, one solid threshold-shaped fallen tree.
+> Both ends on the ground, one connected volume.
+
+sha256 `9f1b95c8e01b49cc516e971722d8d99a1b0e7fb1f72399fd4153d0f74307ec98`.
+
+### `map-concepts/act1-ash-cairn-mass.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-ash-cairn-mass` (A1-5 in
+`docs/map-scene-asset-bill.md`: ash/stone dab mass). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`.
+One connected mound (no loose stones) so Smart Mesh is less likely to emit
+islands.
+
+Edit prompt (2026-08-20, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> stone-or-ash surface. Replace the low road slab with one different prop: a
+> single ash-cairn mass. One compact piled heap of fused ash-stone, a short
+> squat cairn — several chunky stones melted into one connected mound, wider
+> than it is tall, sitting on the ground. No separate rocks, no stacked gaps,
+> no second pile, no grass, no moss, no thin crack lines, no cast shadow on
+> the ground. Isolated, centered, large in frame. Distinct mound silhouette,
+> still a simple game-kitbash mass.
+
+Fuse pass (same day, seeded from the first edit):
+
+> Keep the same clay-maquette look, medium-gray studio background, even
+> lighting, and 3/4 view. Fuse the cairn into one continuous squat mound — no
+> gaps between stones, no stacked seams, no separate rocks. One solid
+> connected ash-stone heap, wider than tall, sitting on the ground. Distinct
+> mound silhouette, still a simple game-kitbash mass.
+
+sha256 `c1d4d34d6f1299f2a162a3fafb9d76ec61ec4e635914aedfd65e5493774447dd`.
+
