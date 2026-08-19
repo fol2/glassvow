@@ -110,6 +110,17 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   that common to 3 again without a new measured reason.
 - **Do not keep H2's Maul damage tax or Ashcloud +1.** Those knobs rode with
   the Emberbite revert and did not drop Ash; they are not isolated keepers.
+- **1-pt common damage/ward taxes are exhausted.** H3–H8 all NO-GO / noise;
+  H9 (`deflect`) unrecorded then reverted. Do not 1-pt the same commons again.
+- **James signed Dusk-only stun: Ash does not shatter.** H10 gated
+  `apply_chips` on `run.aspect != 0`. Identity fired (Ash V0 arm 2 86.0 → 33.0,
+  Ash V5 50.5 → 10.0; Dusk arm 2 unchanged 78.5 / 39.5) and **VETO**'d #204:
+  Ash holdout 72.5% / 42.0% (bands 80–97 / 55–85), |Ash−Dusk| V5 25.0 pp.
+  Reverted. Do not land Dusk-only shatter as a single gate. Do **not** raise
+  HP to compensate. Snapshot: `docs/balance/data/421-h10/phase-a.json`.
+- **Smolder decay is the signed burn nerf** (enemy tick −2, not −1; triangular
+  4+3+2+1=10 → 4+2=6). H11 was not tried: H10 VETO stops the loop. Player-side
+  cinder tick stays −1.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
