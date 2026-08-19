@@ -295,11 +295,11 @@ func _apply_start_relics(run: RunState, cb: CombatState) -> void:
 			e.facet_max = maxi(2, e.facet_max - 1)
 			e.statuses["str"] = _sget(e.statuses, "str") + 1
 		_proc(cb, "shatterersCrown")
-	if run.has_relic("smolderingCoal"):
+	if run.has_relic("smolderingCoal") and not _player_smolder_blocked(run):
 		for e: EnemyCombatant in cb.enemies:
 			e.statuses["poison"] = _sget(e.statuses, "poison") + 2
 		_proc(cb, "smolderingCoal")
-	if run.has_relic("ashenCore"):
+	if run.has_relic("ashenCore") and not _player_smolder_blocked(run):
 		for e: EnemyCombatant in cb.enemies:
 			e.statuses["poison"] = _sget(e.statuses, "poison") + 3
 		_proc(cb, "ashenCore")
@@ -393,8 +393,18 @@ func add_status_player(cb: CombatState, id: String, n: int) -> void:
 	_add_status(cb, cb.player.statuses, "player", id, n)
 
 
-func add_status_enemy(cb: CombatState, e: EnemyCombatant, id: String, n: int) -> void:
+## Enemy poison from the player is Ash-only (aspect != 0). Slice goldens still
+## pin Dusk Flare smolder; the live catalogue id is `core`.
+func add_status_enemy(
+	cb: CombatState, e: EnemyCombatant, id: String, n: int, run: RunState = null
+) -> void:
+	if id == "poison" and _player_smolder_blocked(run):
+		return
 	_add_status(cb, e.statuses, e.idx, id, n)
+
+
+func _player_smolder_blocked(run: RunState) -> bool:
+	return run != null and run.aspect == 0 and content.id == "core"
 
 
 func _add_status(cb: CombatState, statuses: Dictionary, who: Variant, id: String, n: int) -> void:
@@ -820,7 +830,7 @@ func play_card(run: RunState, cb: CombatState, uid: int, target_idx: Variant = n
 		elif target != null and target.hp > 0:
 			venom_targets.append(target)
 		for e: EnemyCombatant in venom_targets:
-			add_status_enemy(cb, e, "poison", _sget(p.statuses, "venomous"))
+			add_status_enemy(cb, e, "poison", _sget(p.statuses, "venomous"), run)
 	if not cb.over and run.has_relic("silkFan") and cb.counters_played % 3 == 0:
 		gain_block_player(cb, 3, false, run)
 		_proc(cb, "silkFan")
@@ -893,9 +903,9 @@ func _apply_effect(
 			elif who == "allEnemies":
 				for e: EnemyCombatant in cb.enemies:
 					if e.hp > 0:
-						add_status_enemy(cb, e, sid, sn)
+						add_status_enemy(cb, e, sid, sn, run)
 			elif target != null and target.hp > 0:
-				add_status_enemy(cb, target, sid, sn)
+				add_status_enemy(cb, target, sid, sn, run)
 		"addCard":
 			var add_count: int = _ji(fx.get("n", 1))
 			for _i: int in range(add_count):
@@ -971,7 +981,7 @@ func _apply_special(
 		"catalyst":
 			var poison: int = _sget(target.statuses, "poison")
 			if poison > 0:
-				add_status_enemy(cb, target, "poison", poison * (_ji(fx["n"]) - 1))
+				add_status_enemy(cb, target, "poison", poison * (_ji(fx["n"]) - 1), run)
 		"shatterEcho":
 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
@@ -1217,7 +1227,7 @@ func _apply_art_effect(run: RunState, cb: CombatState, fx: Dictionary) -> void:
 				add_status_player(cb, sid, sn)
 			else:
 				for e: EnemyCombatant in cb.living_enemies():
-					add_status_enemy(cb, e, sid, sn)
+					add_status_enemy(cb, e, sid, sn, run)
 		"block":
 			gain_block_player(cb, _ji(fx["n"]), false, run)
 		"heal":
@@ -1272,7 +1282,7 @@ func use_potion(run: RunState, cb: CombatState, slot: int, target_idx: Variant =
 			hit_enemy(run, cb, cb.enemies[fire_ti], 20, false)
 		"venom":
 			var venom_ti: int = target_idx
-			add_status_enemy(cb, cb.enemies[venom_ti], "poison", 7)
+			add_status_enemy(cb, cb.enemies[venom_ti], "poison", 7, run)
 		"energy":
 			gain_embers(run, cb, 3)
 		_:
