@@ -69,6 +69,137 @@
       "studio_url": "https://studio.tripo3d.ai/workspace/generate/cc83bc21-f586-4144-ab80-af200a861dc1",
       "polycount_target": 1500,
       "faces_reported": 1560
+    },
+    {
+      "asset_id": "shared-road-slab-b",
+      "source": "Studio",
+      "created_at": "2026-08-19T17:23:00+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "fc8ce26f871843f66d02fce2e7a762b0db58b1f1aba5e6fa5e0b04a8846774c5",
+      "final_sha256": "62084cd0aff84985762e59edb307f9ec0e88d44097431106f4f2c2bff0f4bd09",
+      "edits": [
+        "blender missing on PATH; no Blender join/origin/scale/export pass",
+        "studio_download land: copied /tmp/glassvow-studio-shared-road-slab-b.glb",
+        "joined two visible islands by remapping the nearest vertex pair (4.4mm gap) so the shipping mesh is one connected surface; no regeneration",
+        "kept Studio Smart Mesh download otherwise: one mesh, one triangulated surface, normals, no UV/tangent/animation/skeleton/texture, Y-up metres, ground Y=0"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "model": "Smart Mesh P2.0 Preview",
+      "model_id": "ba2a79cf-b313-40b4-b86e-2eacb7a77102",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/shared-road-slab-b.jpg",
+      "concept_sha256": "662b5213fca5a475feb2bf7e9a3ebf9cb44e94f90a799a511a716c3bc2b202c9",
+      "polycount_target": 1500,
+      "faces_reported": 1453,
+      "land_method": "studio_download"
+    },
+    {
+      "asset_id": "act1-ash-trunk-fork",
+      "source": "Studio",
+      "created_at": "2026-08-20T02:18:55+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "53a7b6b58da82a8f14b2165a896e7656f7b97e3c3c955c1b17af2fa3f367cf81",
+      "final_sha256": "53a7b6b58da82a8f14b2165a896e7656f7b97e3c3c955c1b17af2fa3f367cf81",
+      "edits": [
+        "land_map_glb.py copy of Studio Export GLB; no blender pass"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "35ad1057-5745-4594-af21-4b53e1a6a90e",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-ash-trunk-fork.jpg",
+      "concept_sha256": "c39952778ebf599d91ab5c9a22d2ab4b74941d52f418b0f407b433c5c2d0ad24",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-root-wedge",
+      "source": "Studio",
+      "created_at": "2026-08-20T03:53:31+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "5996894955462132710ef80eb8a9bc279ecee11e333068742605baab976cfa72",
+      "final_sha256": "fb6a2585649948dd95850449abab12c8673277e40aaacab01cbf099458941b01",
+      "edits": [
+        "weld 13 vertex pairs at 5mm (islands were 1.5mm apart); drop 6 degenerate tris; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "27399627-2591-4ef0-a6c3-e1c45d06c5bc",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-root-wedge.jpg",
+      "concept_sha256": "d0c0e3652fa0f84c85a5e5236f21e41545a50a097d781a5c10bfba1d92cdc2e7",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-fallen-bough-arch",
+      "source": "Studio",
+      "created_at": "2026-08-20T05:42:41+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "f667fe39fe231cd06e0c0a1525bbc4a49dea60411cc823e92aa30efdd232d13f",
+      "final_sha256": "f667fe39fe231cd06e0c0a1525bbc4a49dea60411cc823e92aa30efdd232d13f",
+      "edits": [
+        "Studio Export GLB; slider 796 Quad; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "244f5bc6-7a60-42de-8ff0-a21614e86a0c",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-fallen-bough-arch.jpg",
+      "concept_sha256": "9f1b95c8e01b49cc516e971722d8d99a1b0e7fb1f72399fd4153d0f74307ec98",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-charred-stump",
+      "source": "Studio",
+      "created_at": "2026-08-20T07:00:23+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "f11f204b836f50d009123b401dbe31b2a45b8cc3abccff06820b1f12bbaf3101",
+      "final_sha256": "f11f204b836f50d009123b401dbe31b2a45b8cc3abccff06820b1f12bbaf3101",
+      "edits": [
+        "Studio Export GLB; Quad@800; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "799a5b49-be2c-4ec0-ba29-3c60fbe83c2e",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-charred-stump.jpg",
+      "concept_sha256": "2d07f80575b526291692e31e7410132f8c30ae4a347c8d2a3e5dc9df9313c9c5",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-ash-cairn-mass",
+      "source": "Studio",
+      "created_at": "2026-08-20T07:00:38+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "5bcdd92d35735905b1d4a317f9be3058347dbfd33f69b1bc124019c5fce77e4e",
+      "final_sha256": "5bcdd92d35735905b1d4a317f9be3058347dbfd33f69b1bc124019c5fce77e4e",
+      "edits": [
+        "Studio Export GLB; Quad@800; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "a059208a-d1dd-4de2-a5ef-093973c974b5",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-ash-cairn-mass.jpg",
+      "concept_sha256": "c1d4d34d6f1299f2a162a3fafb9d76ec61ec4e635914aedfd65e5493774447dd",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
     }
   ]
 }

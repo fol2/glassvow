@@ -81,7 +81,9 @@ signal, so its green run is habit.
 ### Generating product
 The billed surface that actually created a shipping mesh. Studio and the API
 are independent products: a receipt for one does not pay the other, and leftover
-free credits on a paid Studio account are not a generation source.
+free credits on a paid Studio account are not a generation source. The Godot
+DCC Bridge is a land hop (Studio browser → local editor), not a generating
+product: it does not pay generation and it must not call the API.
 *Avoid:* "the Tripo account", "API credits from the Pro plan"
 
 ### Evidence Harness
