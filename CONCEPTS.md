@@ -112,6 +112,18 @@ exact product head, the artifact hash, and every pillar's evidence address. A
 verifier passing proves the evidence clears the gate; the signature is the
 distinct human approval — the two are never merged.
 
+### Store name
+The listing title on the App Store (and any later store that reuses it). English
+is Glassvow, title case; zh-Hant is 琉璃誓言. It is not the in-game wordmark.
+_Avoid:_ GLASSVOW as a listing title; a colon-suffix genre title (`Glassvow:
+The Vigil`, `琉璃誓言：未燃之路`)
+
+### Store subtitle
+The listing subtitle under the Store name. English is "A pilgrimage in stained
+glass"; zh-Hant is 「彩窗上的朝聖之路」.
+_Avoid:_ leading with roguelite or deckbuilder; Vigil as the first word a
+stranger has to decode
+
 ## Card surface
 
 ### Recipe
