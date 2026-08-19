@@ -1,0 +1,34 @@
+{
+  "label": "H1",
+  "commit": "d4356914da6ab617466b0bdd30e3aa0803406812",
+  "contentSha256": "c96ed73196eafaec6c68cca27f0dafd784e810278d53d07fd995d3bd20f446aa",
+  "godot": "4.7.2-stable (official)",
+  "controls": [
+    {"arm": 1, "aspect": "duskblade", "vow": 0, "wins": 176, "runs": 200, "winRate": 0.88, "stalls": 0, "errors": 0},
+    {"arm": 1, "aspect": "duskblade", "vow": 5, "wins": 116, "runs": 200, "winRate": 0.58, "stalls": 0, "errors": 0},
+    {"arm": 1, "aspect": "ashwarden", "vow": 0, "wins": 188, "runs": 200, "winRate": 0.94, "stalls": 0, "errors": 0},
+    {"arm": 1, "aspect": "ashwarden", "vow": 5, "wins": 129, "runs": 200, "winRate": 0.645, "stalls": 0, "errors": 0},
+    {"arm": 2, "aspect": "duskblade", "vow": 0, "wins": 157, "runs": 200, "winRate": 0.785, "stalls": 0, "errors": 0},
+    {"arm": 2, "aspect": "duskblade", "vow": 5, "wins": 79, "runs": 200, "winRate": 0.395, "stalls": 0, "errors": 0},
+    {"arm": 2, "aspect": "ashwarden", "vow": 0, "wins": 172, "runs": 200, "winRate": 0.86, "stalls": 0, "errors": 0},
+    {"arm": 2, "aspect": "ashwarden", "vow": 5, "wins": 101, "runs": 200, "winRate": 0.505, "stalls": 0, "errors": 0},
+    {"arm": 3, "aspect": "duskblade", "vow": 0, "wins": 146, "runs": 200, "winRate": 0.73, "stalls": 0, "errors": 0},
+    {"arm": 3, "aspect": "duskblade", "vow": 5, "wins": 62, "runs": 200, "winRate": 0.31, "stalls": 0, "errors": 0},
+    {"arm": 3, "aspect": "ashwarden", "vow": 0, "wins": 183, "runs": 200, "winRate": 0.915, "stalls": 0, "errors": 0},
+    {"arm": 3, "aspect": "ashwarden", "vow": 5, "wins": 109, "runs": 200, "winRate": 0.545, "stalls": 0, "errors": 0},
+    {"arm": 4, "aspect": "duskblade", "vow": 0, "wins": 107, "runs": 200, "winRate": 0.535, "stalls": 0, "errors": 0},
+    {"arm": 4, "aspect": "duskblade", "vow": 5, "wins": 42, "runs": 200, "winRate": 0.21, "stalls": 0, "errors": 0},
+    {"arm": 4, "aspect": "ashwarden", "vow": 0, "wins": 159, "runs": 200, "winRate": 0.795, "stalls": 0, "errors": 0},
+    {"arm": 4, "aspect": "ashwarden", "vow": 5, "wins": 66, "runs": 200, "winRate": 0.33, "stalls": 0, "errors": 0}
+  ],
+  "holdout": {
+    "0": {
+      "duskblade": {"wins": 179, "runs": 200, "winRate": 0.895, "stalls": 0, "errors": 0},
+      "ashwarden": {"wins": 189, "runs": 200, "winRate": 0.945, "stalls": 0, "errors": 0}
+    },
+    "5": {
+      "duskblade": {"wins": 134, "runs": 200, "winRate": 0.67, "stalls": 0, "errors": 0},
+      "ashwarden": {"wins": 151, "runs": 200, "winRate": 0.755, "stalls": 0, "errors": 0}
+    }
+  }
+}

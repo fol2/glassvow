@@ -257,6 +257,7 @@ layers on the **RC content SHA** (`FileAccess.get_sha256` of `res://content/full
 Evidence: the landscape doc on the RC commit plus the raw NDJSON / analysis JSON bound
 to that content SHA. Layer 1 took 66 min on this host; layer 2 took **4 h 11 min** on
 ten cores at ~150 ms/run under contention (the ticket's 40–80 min assumed 25–35 ms/run).
+Retune iterations use [`docs/balance/2026-08-19-iteration-protocol.md`](balance/2026-08-19-iteration-protocol.md); a landscape is not started until Phase A prints GO.
 
 ## The RC signature receipt
 
