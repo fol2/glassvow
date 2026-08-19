@@ -67,9 +67,12 @@ is 1.
 
 | Verdict | Meaning | Next |
 |---|---|---|
-| **VETO** | any #204 cell leaves V0 **80–97** / V5 **55–85**, or \|Ash−Dusk\| **>20 pp**, or V5 Ash holdout **>85%** | do not landscape; restore the envelope; new hypothesis on the ticket |
+| **VETO** | any #204 cell leaves V0 **80–97** / V5 **55–85**, or \|Ash−Dusk\| **>20 pp**, or V5 Ash holdout **>85%** | identity split (H10+H11): keep, do not landscape unless all four arm-2 **<50%**, do not claim #204 PASS. Other VETOs: restore the envelope |
 | **NO-GO** | bands hold, but any of the four arm-2 cells **≥50%** | keep iterating Phase A; do not landscape |
 | **GO** | all four arm-2 cells **<50%** and bands hold | *then* one landscape |
+
+Until #204 bands are re-signed, landscape is **arm-2 only** (all four **<50%**).
+Do not claim #204 PASS on the old envelope. Driver may still print VETO.
 
 “Ash dropped a bit” is not GO. Ash −2 pp is inside Wilson noise. C2 needs arm 2
 **<50%** on all four grids (Dusk V0 / Dusk V5 / Ash V0 / Ash V5).
@@ -88,9 +91,11 @@ is 1.
 5. Do not start layer 1 or layer 2. Ticket stays open.
 
 After **VETO**, restore the signed #204 envelope (revert or a compensating
-change that Phase A then re-checks). After **GO**, run **one** landscape. If
-that landscape still FAILs C1–C3, return to Phase A with a new hypothesis —
-do not immediately re-landscape.
+change that Phase A then re-checks), **except** the signed identity split
+(H10 Dusk-only stun + H11 Ash-only Smolder). That pair VETOs the *old*
+2026-08-18 bands by design; keep it, do not raise HP, re-sign later. After
+**GO**, run **one** landscape. If that landscape still FAILs C1–C3, return
+to Phase A with a new hypothesis — do not immediately re-landscape.
 
 ## H1 lessons (binding for this campaign)
 
@@ -114,13 +119,22 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   H9 (`deflect`) unrecorded then reverted. Do not 1-pt the same commons again.
 - **James signed Dusk-only stun: Ash does not shatter.** H10 gated
   `apply_chips` on `run.aspect != 0`. Identity fired (Ash V0 arm 2 86.0 → 33.0,
-  Ash V5 50.5 → 10.0; Dusk arm 2 unchanged 78.5 / 39.5) and **VETO**'d #204:
-  Ash holdout 72.5% / 42.0% (bands 80–97 / 55–85), |Ash−Dusk| V5 25.0 pp.
-  Reverted. Do not land Dusk-only shatter as a single gate. Do **not** raise
-  HP to compensate. Snapshot: `docs/balance/data/421-h10/phase-a.json`.
-- **Smolder decay is the signed burn nerf** (enemy tick −2, not −1; triangular
-  4+3+2+1=10 → 4+2=6). H11 was not tried: H10 VETO stops the loop. Player-side
-  cinder tick stays −1.
+  Ash V5 50.5 → 10.0; Dusk arm 2 unchanged 78.5 / 39.5) and **VETO**'d the
+  *old* #204 envelope: Ash holdout 72.5% / 42.0%. Restored (`03deb60`). Do
+  **not** revert identity because old bands broke. Do **not** raise HP.
+  Snapshot: `docs/balance/data/421-h10/phase-a.json`.
+- **James signed Ash-only Smolder: Dusk cannot apply poison.** H11 no-ops
+  player-sourced enemy `poison` when `run.aspect == 0` (cards, arts,
+  venomous, relics, potions). Flare dropped the Smolder effect, kept 7 AoE.
+  cinderVeined / ashfall omen still hit the player. Arm 2: Dusk V0 **68.5%
+  (−10.0 vs H10)**, Dusk V5 **24.0% (−15.5)**, Ash unchanged 33.0 / 10.0.
+  Holdout Dusk V5 67.0 → 52.0 (old 55% floor). Keep H10+H11. Old envelope,
+  identity split; re-sign later. Snapshot: `docs/balance/data/421-h11/phase-a.json`.
+- **Smolder decay −2 is a later isolated hypothesis**, not this loop. Ash V5
+  arm 2 is already 10%. Player-side cinder tick stays −1. Do not decay until
+  a new signed comment. Continue structural Dusk nerfs (Flicker cost 0→1
+  etc.) without giving Dusk smolder or Ash stun. Dusk V0 arm 2 is still
+  68.5%; GO needs all four arm-2 **<50%**.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
