@@ -1,7 +1,7 @@
 ---
 title: "The generating product is Studio; a SKIP is not the silhouette gate"
 date: 2026-08-19
-last_updated: 2026-08-19
+last_updated: 2026-08-20
 category: tooling-decisions
 module: assets/art/map
 problem_type: tooling_decision
@@ -57,10 +57,16 @@ above 0.04 fails.
    on file.
 
 3. **Ordinary profile (Studio UI equivalent of the bill's P1 trial).**
-   `face_limit` 1500, `texture=false`, `pbr=false`, no quad/FBX, no rig, no
-   animation. The first landed module used Studio's **Smart Mesh P2.0 Preview**
-   (task id on the accepted provenance record), not the API model id
-   `P1-20260311`. That is a Studio-surface fact, not an API fallback.
+   Studio topology default **Quad**; privacy default **Private**;
+   `texture=false`, `pbr=false`, no rig, no animation. `--faces` is the
+   Studio slider (variable per asset), not the shipping triangle count.
+   Measured on the same slab concept: Triangle@1500 → 1492 tris; Quad@1500
+   → 3306 tris. Kit cap is 600–2500 *triangles*, so Quad needs a lower
+   `--faces` (~700–1000) to stay inside it. Export Format must be **GLB**
+   — the dialog can default FBX (a zip). The first landed module used
+   Studio's **Smart Mesh P2.0 Preview** (task id on the accepted provenance
+   record), not the API model id `P1-20260311`. That is a Studio-surface
+   fact, not an API fallback.
 
 4. **Land one untextured GLB** at the manifest path. The first ordinary row is
    `shared-road-slab-a` → `assets/art/map/geometry/shared/road-slab-a.glb`
@@ -72,7 +78,7 @@ above 0.04 fails.
    `tools/raster_map_silhouette.gd` imports the GLB and writes eight alpha
    masks. Python scores each with `silhouette_noise` (3×3 opening residue /
    opaque area) and fails above `SILHOUETTE_NOISE` 0.04
-   (`tools/map_asset_checks.py:24-25`, `:321-341`). Camera constants come from
+   (`tools/map_asset_checks.py:24-25`, `tools/map_asset_checks.py:321-341`). Camera constants come from
    the shipping rig: `TILT_DEGREES = -55.0`, `ZOOM_STOPS[3] = 28.0`
    (`presentation/map/map_camera_rig.gd:12-15`; harness `WIDEST_STOP = 3`
    in `tools/raster_map_silhouette.gd:16-18`).
@@ -86,6 +92,33 @@ above 0.04 fails.
    can write `docs/reviews/292/road-slab-a-20.png`. Recognisable contour
    repetition is still a human verdict. The noise number passing does not
    close that clause of #292.
+
+8. **The Godot DCC Bridge is a land hop, not a generating product.** It is the
+   Studio frontpage talking to a local editor plugin
+   (https://www.tripo3d.ai/blog/tripo-dcc-bridge-for-godot). It does not call
+   `openapi.tripo3d.ai` / `platform.tripo3d.ai` generation. Prefer it over a
+   manual GLB download once the plugin is running in the Godot editor. Override
+   its defaults: texture off, auto material off, auto placement off — this kit
+   is untextured and lands at the manifest path, not wherever the plugin drops
+   a scene. If the plugin is missing, Studio download to
+   `/tmp/glassvow-studio-<asset_id>.glb` is the same generating product.
+   Do not vendor the add-on until its license and hosts are inspected
+   (`addons/tripo*` is gitignored). Workflow: `.grok/workflows/studio-dcc-map-glb.rhai`.
+
+9. **Do not send an LLM to click Studio.** studio-dcc-map-glb-2 / studio-generate
+   spent 19 min, 5.4M tokens, 66 tools, 54 reasoning loops on trial-and-error:
+   multi-view (Generate disabled), Pinia dumps, `model_url` meshopt download,
+   blob-hook Export. The sequence that worked is now
+   `tools/studio_image_to_glb.ts` (generate; `studio_image_to_glb.py` is a
+   bun wrapper) and `tools/land_map_glb.py` (land). The workflow agents run
+   those commands; they do not browse. Default generate is **Chrome for
+   Testing `--headless=new`** on port 9335 (Metal WebGL). gstack
+   `chrome-headless-shell` 500s on `/workspace/generate` — do not use it.
+   The old gstack clicker is archived at
+   `tools/archive/studio_smart_mesh.py`. Cookies come from Chrome Default
+   (`ory_kratos_session` on `.tripo3d.ai`) cached at
+   `~/Library/Caches/glassvow/studio-cookies.json`. Never spawn extra
+   Default Chrome. Never `--kill-chrome` unless asked.
 
 ## Why This Matters
 

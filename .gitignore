@@ -56,3 +56,8 @@ export_credentials.cfg
 # docs/design/2026-08-16-scene-plates/build_review_page.py
 docs/design/2026-08-16-scene-plates/review.html
 .gstack/
+
+# Tripo DCC Bridge is a local editor land hop (Studio → Godot), not runtime.
+# Inspect license/hosts before vendoring. Do not enable on export.
+addons/tripo*/
+addons/Tripo*/
