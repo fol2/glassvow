@@ -304,7 +304,7 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 12
+          "n": 10
         }
       ],
       "up": {
@@ -312,13 +312,13 @@
         "effects": [
           {
             "kind": "dmg",
-            "n": 16
+            "n": 13
           }
         ],
-        "text": "Deal @16@ damage. Chip 1 extra Facet."
+        "text": "Deal @13@ damage. Chip 1 extra Facet."
       },
       "name": "Quarry Maul",
-      "text": "Deal @12@ damage."
+      "text": "Deal @10@ damage."
     },
     "cleave": {
       "type": "attack",
@@ -359,7 +359,7 @@
           "kind": "status",
           "who": "target",
           "id": "poison",
-          "n": 4
+          "n": 3
         }
       ],
       "up": {
@@ -372,13 +372,13 @@
             "kind": "status",
             "who": "target",
             "id": "poison",
-            "n": 5
+            "n": 4
           }
         ],
-        "text": "Deal @6@ damage. Apply 5 Smolder."
+        "text": "Deal @6@ damage. Apply 4 Smolder."
       },
       "name": "Emberbite",
-      "text": "Deal @4@ damage. Apply 4 Smolder."
+      "text": "Deal @4@ damage. Apply 3 Smolder."
     },
     "lunge": {
       "type": "attack",
@@ -802,7 +802,7 @@
           "kind": "status",
           "who": "allEnemies",
           "id": "poison",
-          "n": 3
+          "n": 4
         }
       ],
       "up": {
@@ -811,13 +811,13 @@
             "kind": "status",
             "who": "allEnemies",
             "id": "poison",
-            "n": 5
+            "n": 6
           }
         ],
-        "text": "Apply 5 Smolder to ALL enemies."
+        "text": "Apply 6 Smolder to ALL enemies."
       },
       "name": "Ashcloud",
-      "text": "Apply 3 Smolder to ALL enemies."
+      "text": "Apply 4 Smolder to ALL enemies."
     },
     "cripple": {
       "type": "skill",
