@@ -389,7 +389,7 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 5
+          "n": 6
         },
         {
           "kind": "status",
@@ -402,7 +402,7 @@
         "effects": [
           {
             "kind": "dmg",
-            "n": 7
+            "n": 9
           },
           {
             "kind": "status",
@@ -411,10 +411,10 @@
             "n": 2
           }
         ],
-        "text": "Deal @7@ damage. Apply 2 Dimmed."
+        "text": "Deal @9@ damage. Apply 2 Dimmed."
       },
       "name": "Dimming Cut",
-      "text": "Deal @5@ damage. Apply 1 Dimmed."
+      "text": "Deal @6@ damage. Apply 1 Dimmed."
     },
     "guardedStrike": {
       "type": "attack",
