@@ -3,9 +3,9 @@ extends SceneTree
 ##
 ## Imports a kit GLB, renders eight Y-rotation alpha masks at
 ## MapCameraRig.TILT_DEGREES and widest zoom stop 28, at authored metre scale,
-## against a transparent target. Optional --review= writes the deterministic
-## 20-placement visual-acceptance frame. Never --headless if the dummy
-## renderer returns an empty mask — the Python gate retries headed.
+## against a transparent target. Optional --review= writes a 5×4 lit-clay
+## grid (same seed 292 yaws) a human can actually read. Never --headless
+## if the dummy renderer returns an empty mask — the Python gate retries headed.
 ##
 ##   godot --path . --position -4000,-4000 -s res://tools/raster_map_silhouette.gd -- \
 ##     --glb=res://assets/art/map/geometry/shared/road-slab-a.glb --out=/tmp/sil \
@@ -84,8 +84,9 @@ func _run(opts: Dictionary) -> void:
 			return
 		var review_viewport: SubViewport = _make_stage(REVIEW_SIZE, false)
 		var review_world: Node3D = _stage_world(review_viewport)
+		_add_review_light(review_world)
 		_add_ground(review_world)
-		_add_placements(review_world, mesh, sil_mat)
+		_add_placements(review_world, mesh, _clay_material())
 		var review_image: Image = await _capture(review_viewport, MASK_FRAMES)
 		if review_image == null or review_image.save_png(review_path) != OK:
 			printerr("raster_map_silhouette: review capture failed")
@@ -144,8 +145,14 @@ func _make_stage(size: Vector2i, transparent: bool) -> SubViewport:
 	viewport.add_child(world)
 	var environment: Environment = Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color(0.0, 0.0, 0.0, 0.0 if transparent else 1.0)
-	environment.ambient_light_source = Environment.AMBIENT_SOURCE_DISABLED
+	environment.background_color = Color(0.0, 0.0, 0.0, 0.0) if transparent \
+			else Color(0.14, 0.15, 0.16, 1.0)
+	if transparent:
+		environment.ambient_light_source = Environment.AMBIENT_SOURCE_DISABLED
+	else:
+		environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+		environment.ambient_light_color = Color(0.32, 0.33, 0.34)
+		environment.ambient_light_energy = 0.28
 	environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
 	var world_environment: WorldEnvironment = WorldEnvironment.new()
 	world_environment.environment = environment
@@ -255,6 +262,31 @@ func _silhouette_material() -> ShaderMaterial:
 	return material
 
 
+func _clay_material() -> StandardMaterial3D:
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+	material.albedo_color = Color(0.68, 0.68, 0.70)
+	material.roughness = 0.82
+	material.metallic = 0.0
+	material.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
+	return material
+
+
+func _add_review_light(world: Node3D) -> void:
+	var key: DirectionalLight3D = DirectionalLight3D.new()
+	key.name = "ReviewKey"
+	key.rotation_degrees = Vector3(-52.0, 38.0, 0.0)
+	key.light_energy = 0.72
+	key.shadow_enabled = false
+	world.add_child(key)
+	var fill: DirectionalLight3D = DirectionalLight3D.new()
+	fill.name = "ReviewFill"
+	fill.rotation_degrees = Vector3(-18.0, -70.0, 0.0)
+	fill.light_energy = 0.22
+	fill.shadow_enabled = false
+	world.add_child(fill)
+
+
 func _add_ground(world: Node3D) -> void:
 	var plane: PlaneMesh = PlaneMesh.new()
 	plane.size = Vector2(48.0, 24.0)
@@ -263,30 +295,34 @@ func _add_ground(world: Node3D) -> void:
 	ground.mesh = plane
 	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = Color(0.04, 0.05, 0.07)
+	material.albedo_color = Color(0.18, 0.19, 0.20)
 	ground.material_override = material
 	world.add_child(ground)
 
 
 func _add_placements(world: Node3D, mesh: Mesh, material: Material) -> void:
+	# 5×4 lattice so a human can read each module. Seed 292 still picks yaw
+	# and scale; position is no longer a distant scatter of unreadable dots.
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = PLACEMENT_SEED
+	const COLS: int = 5
+	const ROWS: int = 4
+	const GAP: float = 2.6
 	var multimesh: MultiMesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_custom_data = true
 	multimesh.mesh = mesh
 	multimesh.instance_count = PLACEMENTS
 	for i: int in range(PLACEMENTS):
+		var col: int = i % COLS
+		var row: int = i / COLS
 		var yaw: float = rng.randf() * TAU
 		var scale: float = 0.82 + rng.randf() * 0.27
 		var origin: Vector3 = Vector3(
-				rng.randf_range(-10.0, 10.0), 0.0, rng.randf_range(-6.0, 6.0))
+				(float(col) - 2.0) * GAP,
+				0.0,
+				(float(row) - 1.5) * GAP)
 		var basis: Basis = Basis(Vector3.UP, yaw).scaled(Vector3(scale, scale, scale))
 		multimesh.set_instance_transform(i, Transform3D(basis, origin))
-		multimesh.set_instance_custom_data(i, Color(
-				fposmod(float(i) * 0.173, 1.0),
-				fposmod(float(i) * 0.317, 1.0),
-				fposmod(float(i) * 0.619, 1.0), 1.0))
 	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
 	instances.name = "ReviewPlacements"
 	instances.multimesh = multimesh
