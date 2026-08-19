@@ -58,9 +58,12 @@ jarsigner -verify build/android/glassvow.aab
 Bump `version/code` in the Android preset before every Play upload. Play's
 upload screen re-verifies the target API level (must read 36).
 
-**iOS store build** (Godot signs nothing; Xcode does). Release order note:
-Android is deferred — it ships after the iOS release, before desktop/Steam
-(map #156 decision, 2026-08-13) — so iOS is the release path that matters now.
+**iOS store build** (Godot signs nothing; Xcode does). The shipping iOS
+family is iPhone **and** iPad — both iOS presets already emit Apple
+`TARGETED_DEVICE_FAMILY = "1,2"` from Godot enum `2` (see the tethered
+path below). Release order note: Android is deferred — it ships after
+the iOS release, before desktop/Steam (map #156 decision, 2026-08-13) —
+so iOS is the release path that matters now.
 
 ```bash
 godot --headless --export-release "iOS" build/ios/glassvow.ipa   # emits build/ios/glassvow.xcodeproj
@@ -116,11 +119,16 @@ portal visit.
 
 Three things that will stop you:
 
-- **The preset is iPad-only.** `iOS Dev Review` sets
-  `application/targeted_device_family=2`, so the build refuses to install on an
-  iPhone. Append `TARGETED_DEVICE_FAMILY="1,2"` to the `xcodebuild` line to
-  rehearse on a phone — an override at build time, so `export_presets.cfg` stays
-  untouched and the iPad remains the only *shipped* target.
+- **Do not confuse Godot's family enum with Apple's.** Both iOS presets
+  (`iOS` store and `iOS Dev Review`) set
+  `application/targeted_device_family=2`. That is Godot's INT enum for
+  **iPhone & iPad** (hint: `iPhone,iPad,iPhone & iPad`; default 2). The
+  exporter writes Xcode `TARGETED_DEVICE_FAMILY = "1,2"`. Apple's family
+  `2` is iPad-only; Godot's enum `1` is the iPad-only value. Writing the
+  Apple string `1,2` into that INT field is out of range and can emit an
+  empty family (godotengine/godot#122262). A store-recipe IPA already
+  installs on a phone; do not append `TARGETED_DEVICE_FAMILY="1,2"` at
+  `xcodebuild`.
 - **The device must be tethered and unlocked.** A Wi-Fi-paired device reports
   `available (paired)` from `devicectl list devices` while
   `tunnelState: disconnected` and `tunnelIPAddress: nil`; installing then fails
