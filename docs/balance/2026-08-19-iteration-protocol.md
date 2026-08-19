@@ -78,12 +78,11 @@ is 1.
 
 1. Read the four arm-2 deltas versus the previous SHA. Count a move only at
    **≥6 pp**. Smaller than that is noise; do not “follow” it.
-2. If Vow 0 arm 2 did not drop ≥6 pp on **both** aspects, the hypothesis failed
-   its own stop condition. New hypothesis on the ticket before the next scalar
-   edit.
-3. If a cell moved ≥6 pp the **wrong** way, revert that scalar or write a new
-   hypothesis that explains the reversal. Do not add a second tax on the same
-   card hoping the sign flips.
+2. Keep a knob only if it dropped **at least one** Vow 0 arm-2 cell ≥6 pp
+   without VETO. Noise (both V0 arms <6 pp) is dead weight — revert it and go
+   next. Do not require both aspects to move on a single common.
+3. If a cell moved ≥6 pp the **wrong** way, revert that scalar. Do not add a
+   second tax on the same card hoping the sign flips.
 4. Holdout is only a veto. Do not pick the SHA that “looks healthier” on V0
    Dusk holdout while arm 2 is still 80%.
 5. Do not start layer 1 or layer 2. Ticket stays open.
@@ -104,8 +103,13 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   `quakeblow` / `oblivionStrike` alone.
 - **Do not raise enemy HP or facets this campaign.** HP-up makes shatter more
   mandatory, which is the same C3 trap.
-- **Do not buff `venomStrike`.** H1's +1 Smolder on that common is why Ash V0
-  arm 2 only dropped 2.0 pp (noise). Random-build drinks commons.
+- **Keep Emberbite (`venomStrike`) Smolder at 4 / upgrade 5.** H2 reverted it
+  to 3/4 and Dusk V0 arm 2 moved **+10.0 pp the wrong way** (78.5 → 88.5),
+  restoring the #412 number. Emberbite 4 is load-bearing for Dusk C2. The
+  earlier lesson “do not buff `venomStrike`” is **revoked**. Do not revert
+  that common to 3 again without a new measured reason.
+- **Do not keep H2's Maul damage tax or Ashcloud +1.** Those knobs rode with
+  the Emberbite revert and did not drop Ash; they are not isolated keepers.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
