@@ -34,8 +34,10 @@
  * Speed (2026-08-20): keep Chrome for Testing on port 9335 with a durable
  * profile at `~/Library/Caches/glassvow/studio-cft`. Cookies are cached at
  * `~/Library/Caches/glassvow/studio-cookies.json` (0600) so a cold start
- * does not decrypt Chrome Default. Navigate once to `/workspace/generate`.
+ * does not decrypt Chrome Default. Stay on any `/workspace/generate*` URL
+ * that already shows Smart Mesh — a bare navigate resets P2.0 to v3.1.
  * JSON `timings.driver_ms` is chrome+login+form (not Studio upload/generate).
+ * `timings.generate_ms` starts when a visible Export appears.
  * `--kill-chrome` tears the warm browser down (also valid as a lone flag).
  * Never spawn extra Default Chrome.
  *
@@ -371,7 +373,7 @@ try {
   let state = await ev(cdp, pageStateExpr);
   const already = state && !state.login && !state.err && (
     taskIdArg ? String(state.href).includes(taskIdArg)
-      : state.smart && /\/workspace\/generate\/?$/.test(String(state.href).split("?")[0])
+      : state.smart && /\/workspace\/generate/.test(String(state.href))
   );
   if (!already) {
     await cdp("Page.navigate", { url: targetUrl });
@@ -762,6 +764,9 @@ try {
     let prev = "";
     let watchStarted = Date.now();
     for (let i = 0; i < 20000; i++) {
+      if (!taskIdArg && timings.generate_ms == null && x.exportN >= 1) {
+        lap("generate_ms");
+      }
       const action = decideX(x);
       if (action === prev) same++;
       else {
@@ -806,7 +811,6 @@ try {
       } else if (action === "dismiss_ok") {
         await clickxy(cdp, x.okAt.cx, x.okAt.cy);
       } else if (action === "click_export") {
-        if (!timings.generate_ms && !taskIdArg) lap("generate_ms");
         await ev(cdp, `(() => {
           const b = [...document.querySelectorAll("button")].find(btn => {
             const t = (btn.innerText || "").trim();
