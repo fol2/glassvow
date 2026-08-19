@@ -649,12 +649,8 @@ func gain_block_enemy(
 # ---------------------------------------------------------------- shatter
 
 ## Facet chips land after the card that earned them resolves (see play_card);
-## overflow carries into the next, harder pane. Shatter/stagger is Dusk-only
-## (aspect 0): Ashwarden connecting attacks still compute implicit chip, but
-## this no-op means they never stun.
+## overflow carries into the next, harder pane.
 func apply_chips(run: RunState, cb: CombatState, e: EnemyCombatant, n: int) -> void:
-	if run.aspect != 0:
-		return
 	if cb.over or e.hp <= 0 or n <= 0:
 		return
 	e.chips += n
@@ -1374,13 +1370,10 @@ func preview_play(
 		lethal = loss >= target.hp
 		# Facet arithmetic mirrors play_card: an attack that draws unblocked
 		# blood chips once (plus card/beacon bonuses); explicit chips always land.
-		# Ash (aspect != 0) still computes per, then zeros — apply_chips no-ops.
 		var per: int = 0
 		if str(d.get("type", "")) == "attack":
 			per = 1 + _ji(d.get("chip", 0)) + _sget(p.statuses, "beacon")
 		chips = (per if (hits.size() > 0 and loss > 0) else 0) + fx_chips
-		if run != null and run.aspect != 0:
-			chips = 0
 		will_shatter = chips > 0 and target.chips + chips >= target.facet_max and not lethal
 	return {
 		"hits": hits,
