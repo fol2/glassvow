@@ -14,6 +14,7 @@ config/name="Glassvow"
 config/version="0.6.0"
 config/features=PackedStringArray("4.7")
 run/main_scene="res://application/main.tscn"
+run/main_loop_type="GlassvowMainLoop"
 config/icon="res://assets/icon/glassvow-icon.png"
 config/macos_native_icon="res://assets/icon/glassvow.icns"
 boot_splash/bg_color=Color(0.015, 0.02, 0.045, 1)
@@ -27,6 +28,7 @@ buses/default_bus_layout="res://default_bus_layout.tres"
 
 [debug]
 
+settings/gdscript/always_track_call_stacks=true
 gdscript/warnings/exclude_addons=true
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/inferred_declaration=2
@@ -51,3 +53,22 @@ textures/vram_compression/import_etc2_astc=true
 
 renderer/rendering_method="mobile"
 renderer/rendering_method.web="gl_compatibility"
+
+[sentry]
+
+; Pin: Sentry for Godot 2.1.1 (https://github.com/getsentry/sentry-godot/releases/tag/2.1.1 tree d288ad9). Do not follow latest.
+schema_version=4
+options/auto_init=false
+options/dsn="https://8841bb0fa4e3efca2af6f837d832b30a@o4509920859848704.ingest.de.sentry.io/4511937291354192"
+options/release="io.fol2.glassvow@{app_version}"
+options/dist="0.6.0"
+options/send_default_pii=false
+options/attach_log=false
+options/attach_scene_tree=false
+options/enable_logs=false
+options/enable_metrics=false
+options/app_hang/tracking=true
+godot_logger/include_variables=false
+godot_logger/logs=0
+godot_logger/breadcrumbs=15
+experimental/attach_screenshot=false
