@@ -18,14 +18,18 @@
  *    Set faces by typing in the text box next to the slider (walked:
  *    JS `.value=` does not drive Vue; triple-click, `Input.insertText`,
  *    Tab commits `aria-valuenow`). Escape closes the popover.
- * 5. Generate is done when **Export** is in the DOM. Do not treat
- *    Generating/Queuing-absent as done (true before the label paints).
+ * 5. Generate is done when a visible **Export** button is in the DOM.
+ *    Do not treat Generating/Queuing-absent as done (true before the
+ *    label paints). Do not treat leftover Generating text as blocking
+ *    once Export is visible.
  * 6. After Export appears, dismiss the walked "Retry for better results"
  *    dialog (14px close) or the dialog Export click is a no-op.
- * 7. Export: viewport 1280×900. Format can be **FBX**. Mouse-click Format,
- *    then **GLB**, then the *last* Export. Hook `createObjectURL` before
- *    that click; keep magic `glTF` (a 1853-byte `//#r` worker blob fires
- *    first).
+ * 7. Export is the same detect-decide-act loop as the form. Triggers:
+ *    Export visible → click it; format combo → open if not GLB; GLB
+ *    option → pick; format GLB + second Export → click last Export;
+ *    `createObjectURL` magic `glTF` (skip the 1853-byte `//#r` worker
+ *    blob) → write `--out`. One-shot clicks; detect until the next
+ *    trigger. Viewport 1280×900. Format can default **FBX**.
  *
  * Speed (2026-08-20): keep Chrome for Testing on port 9335 with a durable
  * profile at `~/Library/Caches/glassvow/studio-cft`. Cookies are cached at
@@ -289,34 +293,6 @@ const HOOK_EXPORT = `(() => {
   return "hooked";
 })()`;
 
-async function dismissPostGenerateOverlays(cdp: Cdp) {
-  const retry = await ev(cdp, `(() => {
-    const dlg = [...document.querySelectorAll("[role=dialog]")].find(d =>
-      /Retry for better/.test(d.innerText || ""));
-    if (!dlg) return null;
-    const b = dlg.querySelector("button");
-    if (!b) return null;
-    const r = b.getBoundingClientRect();
-    return { cx: r.x + r.width / 2, cy: r.y + r.height / 2 };
-  })()`);
-  if (retry) {
-    await clickxy(cdp, retry.cx, retry.cy);
-    await waitEv(cdp, `[...document.querySelectorAll("[role=dialog]")].some(d => /Retry for better/.test(d.innerText||""))`,
-      (open) => open === false, 4000).catch(() => null);
-  }
-  const ok = await ev(cdp, `(() => {
-    if (!/View Your Model|Retry for better/.test(document.body.innerText || "")) return null;
-    const b = [...document.querySelectorAll("button")].find(x => (x.innerText || "").trim() === "OK");
-    if (!b) return null;
-    const r = b.getBoundingClientRect();
-    if (r.width < 8) return null;
-    return { cx: r.x + r.width / 2, cy: r.y + r.height / 2 };
-  })()`);
-  if (ok) {
-    await clickxy(cdp, ok.cx, ok.cy);
-  }
-}
-
 const privacyLabel: Record<string, string> = {
   private: "Private",
   public: "Public",
@@ -394,13 +370,13 @@ try {
 
   let state = await ev(cdp, pageStateExpr);
   const already = state && !state.login && !state.err && (
-    taskIdArg ? state.exp && String(state.href).includes(taskIdArg)
+    taskIdArg ? String(state.href).includes(taskIdArg)
       : state.smart && /\/workspace\/generate\/?$/.test(String(state.href).split("?")[0])
   );
   if (!already) {
     await cdp("Page.navigate", { url: targetUrl });
     await cdp("Page.loadEventFired").catch(() => null);
-    state = await waitEv(cdp, pageStateExpr, (s) => s && (s.login || (taskIdArg ? s.exp : s.smart)) && !s.err, 20000);
+    state = await waitEv(cdp, pageStateExpr, (s) => s && (s.login || (taskIdArg ? String(s.href).includes(taskIdArg) : s.smart)) && !s.err, 20000);
   }
 
   async function injectCookies(source: string, cookies: StudioCookie[]) {
@@ -408,7 +384,7 @@ try {
     cookieSource = source;
     await cdp("Page.navigate", { url: targetUrl });
     await cdp("Page.loadEventFired").catch(() => null);
-    state = await waitEv(cdp, pageStateExpr, (s) => s && !s.login && !s.err && (taskIdArg ? s.exp : s.smart), 20000);
+    state = await waitEv(cdp, pageStateExpr, (s) => s && !s.login && !s.err && (taskIdArg ? String(s.href).includes(taskIdArg) : s.smart), 20000);
   }
 
   if (state.login) {
@@ -610,109 +586,258 @@ try {
       cookie_source: cookieSource,
       kept_chrome: !killChrome,
     }));
-  } else if (!taskId) {
-    const doc = await cdp("DOM.getDocument", { depth: 1 });
-    const q = await cdp("DOM.querySelector", {
-      nodeId: doc.root.nodeId,
-      selector: 'input[type=file][accept*="image"]',
-    });
-    if (!q.nodeId) die("no image file input");
-    await cdp("DOM.setFileInputFiles", { nodeId: q.nodeId, files: [resolve(image)] });
-    await waitEv(cdp, `(() => {
-      const pinia = document.querySelector("#__nuxt").__vue_app__.config.globalProperties.$pinia;
-      const s = pinia._s.get("workspace-generate-store").$state;
-      const img = s.imageToModel || {};
-      return { key: img.key || "", audit: img.image_audit_result || "", uploading: s.imageToModelUploading };
-    })()`, (s) => s && s.key && s.audit === "pass" && !s.uploading, 40000, 250);
-    lap("upload_ms");
-
-    const timingPayload = () => {
-      const driver_ms = (timings.chrome_ms || 0) + (timings.login_ms || 0) + (timings.form_ms || 0);
-      return {
-        timings: { ...timings, driver_ms, total_ms: Date.now() - t0 },
-        warm: attachedWarm,
-        cookie_source: cookieSource,
-        kept_chrome: !killChrome,
-      };
-    };
-
-    {
-      const clicked = await ev(cdp, `(() => {
-        const btn = [...document.querySelectorAll("button")].find(b =>
-          /Generate\\s*100/.test((b.innerText || "").replace(/\\s+/g, " ")));
-        if (!btn) return "missing";
-        if (/Multi-Views/.test(btn.innerText || "")) return "refusing-multiview";
-        btn.click();
-        return "clicked";
-      })()`);
-      if (clicked !== "clicked") die(`Generate 100 click: ${clicked}`);
-      const nav = await waitEv(cdp, `location.href`, (h) => /\/workspace\/generate\/[0-9a-f-]{20,}/.test(String(h)), 20000, 200);
-      taskId = String(nav).match(/\/workspace\/generate\/([0-9a-f-]{20,})/)![1];
-      await waitEv(cdp, `[...document.querySelectorAll("button")].some(b => (b.innerText||"").trim() === "Export")`,
-        (v) => v === true, 180000, 250);
-      lap("generate_ms");
-    }
-  }
-
-  if (!stopBefore) {
-    await waitEv(cdp, `[...document.querySelectorAll("button")].some(b => (b.innerText||"").trim() === "Export")`,
-      (v) => v === true, 25000);
-    await dismissPostGenerateOverlays(cdp);
-  }
-
-  if (stopBefore) {
-    // JSON already printed. Skip Export.
   } else {
     await ev(cdp, HOOK_EXPORT);
 
-    const opened = await ev(cdp, `(() => {
-      const b = [...document.querySelectorAll("button")].find(x => (x.innerText||"").trim() === "Export");
-      if (!b) return "missing";
-      b.click();
-      return "opened";
-    })()`);
-    if (opened !== "opened") die("Export button missing");
-    await waitEv(cdp, `[...document.querySelectorAll("button")].filter(b => (b.innerText||"").trim() === "Export").length`,
-      (n) => n >= 2, 5000);
-
-    const fmt = await waitEv(cdp, `(() => {
-      const combo = [...document.querySelectorAll("[role=combobox]")].find(c =>
-        /USD|FBX|OBJ|STL|GLB|3MF/.test(c.innerText||""));
-      if (!combo) return null;
-      const r = combo.getBoundingClientRect();
-      const hit = document.elementFromPoint(r.x + r.width/2, r.y + r.height/2);
-      return { t: (combo.innerText||"").trim(), cx: r.x+r.width/2, cy: r.y+r.height/2, hit: hit && hit.tagName };
-    })()`, (s) => s && s.cx, 5000);
-    if (fmt.t !== "GLB") {
-      await clickxy(cdp, fmt.cx, fmt.cy);
-      const opts = await waitEv(cdp, `[...document.querySelectorAll("[role=option]")].map(o => {
-        const r = o.getBoundingClientRect();
-        return { t: (o.innerText||"").trim(), cx: r.x+r.width/2, cy: r.y+r.height/2 };
-      })`, (o) => Array.isArray(o) && o.some((x: any) => x.t === "GLB"), 4000);
-      const glb = opts.find((o: any) => o.t === "GLB");
-      await clickxy(cdp, glb.cx, glb.cy);
-      await waitEv(cdp, `[...document.querySelectorAll("[role=combobox]")].map(c => (c.innerText||"").trim())`,
-        (now) => Array.isArray(now) && now.includes("GLB"), 3000);
+    if (!taskId) {
+      const detectU = () => ev(cdp, `(() => {
+        const imgIn = [...document.querySelectorAll("input[type=file]")].find(i =>
+          /image|jpg|jpeg|png|webp|gif/.test((i.accept || "").toLowerCase()));
+        if (imgIn) imgIn.setAttribute("data-gv-image", "1");
+        const del = [...document.querySelectorAll("button")].find(b =>
+          [...b.querySelectorAll("div")].some(d => /i-tripo:delete/.test(d.className || "")));
+        const dr = del && del.getBoundingClientRect();
+        let key = "", audit = "", uploading = false;
+        try {
+          const pinia = document.querySelector("#__nuxt").__vue_app__.config.globalProperties.$pinia;
+          const s = pinia._s.get("workspace-generate-store").$state;
+          const img = s.imageToModel || {};
+          key = img.key || "";
+          audit = img.image_audit_result || "";
+          uploading = !!s.imageToModelUploading;
+        } catch (e) {}
+        return {
+          hasImageInput: !!imgIn,
+          delete: !!del,
+          delCx: dr ? dr.x + dr.width / 2 : 0,
+          delCy: dr ? dr.y + dr.height / 2 : 0,
+          key, audit, uploading,
+        };
+      })()`);
+      const u0 = await detectU();
+      const prevKey = u0.key || "";
+      let fileSet = false;
+      let clearClicked = false;
+      let sawUploading = false;
+      const decideU = (s: any): string => {
+        if (fileSet && s.uploading) sawUploading = true;
+        if (fileSet && s.key && s.audit === "pass" && !s.uploading &&
+            (s.key !== prevKey || sawUploading)) return "done";
+        if (s.hasImageInput && !fileSet) return "set_file";
+        if (s.delete && !fileSet && !clearClicked) return "click_clear";
+        return "watch_upload";
+      };
+      const usteps: string[] = [];
+      let u = await detectU();
+      let usame = 0;
+      let uprev = "";
+      for (let i = 0; i < 4000; i++) {
+        const action = decideU(u);
+        if (action === uprev) usame++;
+        else usame = 0;
+        uprev = action;
+        if (action === "watch_upload" && usame > 3000) {
+          die("upload never ready: " + JSON.stringify(u) + " steps=" + usteps.join(">"));
+        }
+        if (action !== "watch_upload" && usame > 20) {
+          die("upload stuck on " + action + ": " + JSON.stringify(u));
+        }
+        if (action !== "watch_upload" || usteps[usteps.length - 1] !== action) {
+          usteps.push(action);
+        }
+        if (action === "done") break;
+        if (action === "watch_upload") {
+          u = await detectU();
+          continue;
+        }
+        if (action === "click_clear") {
+          // Walked: mouse events miss this overlay; element.click() clears the preview.
+          const cleared = await ev(cdp, `(() => {
+            const del = [...document.querySelectorAll("button")].find(b =>
+              [...b.querySelectorAll("div")].some(d => /i-tripo:delete/.test(d.className || "")));
+            if (!del) return "missing";
+            del.click();
+            return "clicked";
+          })()`);
+          if (cleared !== "clicked") die("image delete click: " + cleared);
+          clearClicked = true;
+        } else if (action === "set_file") {
+          const doc = await cdp("DOM.getDocument", { depth: 1 });
+          const q = await cdp("DOM.querySelector", {
+            nodeId: doc.root.nodeId,
+            selector: "input[data-gv-image='1']",
+          });
+          if (!q.nodeId) die("image file input marked but missing from DOM");
+          await cdp("DOM.setFileInputFiles", { nodeId: q.nodeId, files: [resolve(image)] });
+          fileSet = true;
+        }
+        for (let d = 0; d < 40; d++) {
+          u = await detectU();
+          if (decideU(u) !== action) break;
+        }
+      }
+      if (decideU(u) !== "done") die("upload loop ended without audit pass: " + usteps.join(">"));
+      timings.upload_steps = usteps;
+      lap("upload_ms");
     }
 
-    const dialog = await ev(cdp, `(() => {
-      const btns = [...document.querySelectorAll("button")].filter(b => (b.innerText||"").trim() === "Export");
-      const last = btns[btns.length - 1];
-      if (!last) return null;
-      const r = last.getBoundingClientRect();
-      return { n: btns.length, cx: r.x+r.width/2, cy: r.y+r.height/2 };
-    })()`);
-    if (!dialog || dialog.n < 2) die("Export dialog button missing");
-    await clickxy(cdp, dialog.cx, dialog.cy);
+    const exportFn = `() => {
+      const txt = (el) => (el.innerText || "").replace(/\\s+/g, " ").trim();
+      const vis = (el) => {
+        if (!el) return false;
+        const r = el.getBoundingClientRect();
+        return r.width > 8 && r.height > 8;
+      };
+      const box = (el) => {
+        if (!el) return { cx: 0, cy: 0 };
+        const r = el.getBoundingClientRect();
+        return { cx: r.x + r.width / 2, cy: r.y + r.height / 2 };
+      };
+      const exports = [...document.querySelectorAll("button")].filter(b =>
+        txt(b) === "Export" && vis(b));
+      const retry = [...document.querySelectorAll("[role=dialog]")].find(d =>
+        /Retry for better/.test(d.innerText || ""));
+      const fmt = [...document.querySelectorAll("[role=combobox]")].find(c =>
+        vis(c) && /USD|FBX|OBJ|STL|GLB|3MF/.test(c.innerText || ""));
+      const glbOpt = [...document.querySelectorAll("[role=option]")].find(o =>
+        txt(o) === "GLB" && vis(o));
+      const ok = /View Your Model|Retry for better/.test(document.body.innerText || "")
+        ? [...document.querySelectorAll("button")].find(b => txt(b) === "OK" && vis(b))
+        : null;
+      const href = location.href;
+      const m = href.match(/\\/workspace\\/generate\\/([0-9a-f-]{20,})/);
+      const gltf = (window.__gv_files || []).find(f => f.magic === "glTF" && f.size > 100);
+      return {
+        href,
+        taskId: m ? m[1] : "",
+        generating: /Generating|Queuing/.test(document.body.innerText || ""),
+        gen100: [...document.querySelectorAll("button")].some(b =>
+          /Generate\\s*100/.test(txt(b)) && vis(b)),
+        exportN: exports.length,
+        export0: box(exports[0]),
+        exportLast: box(exports[exports.length - 1]),
+        retry: !!retry,
+        retryClose: box(retry && retry.querySelector("button")),
+        viewOk: !!ok,
+        okAt: box(ok),
+        format: fmt ? txt(fmt) : "",
+        formatAt: box(fmt),
+        glbOption: !!glbOpt,
+        glbAt: box(glbOpt),
+        gltf: gltf ? { size: gltf.size, hasB64: !!gltf.b64 } : null,
+      };
+    }`;
+    const detectX = () => ev(cdp, `(${exportFn})()`);
+    let generateClicked = false;
+    let toolbarExportClicked = false;
+    let formatOpened = false;
+    let dialogExportClicked = false;
+    const decideX = (s: any): string => {
+      if (s.gltf) return "done";
+      if (s.retry) return "dismiss_retry";
+      if (s.viewOk) return "dismiss_ok";
+      // Export visible is generate-complete. Leftover Generating text does not block.
+      if (s.exportN >= 1 && !s.format) {
+        return toolbarExportClicked ? "watch_dialog" : "click_export";
+      }
+      if (s.format && s.format !== "GLB" && !s.glbOption) {
+        return formatOpened ? "watch_dialog" : "open_format";
+      }
+      if (s.glbOption && s.format !== "GLB") return "pick_glb";
+      if (s.format === "GLB" && s.exportN < 2) return "watch_dialog";
+      if (s.format === "GLB" && s.exportN >= 2) {
+        return dialogExportClicked ? "watch_download" : "click_dialog_export";
+      }
+      if (dialogExportClicked) return "watch_download";
+      if (generateClicked) return "watch_generate";
+      if (!s.exportN && s.gen100 && !s.taskId) return "click_generate";
+      return "watch_generate";
+    };
+    const watching = (a: string) =>
+      a === "watch_generate" || a === "watch_dialog" || a === "watch_download";
 
-    const blob = await waitEv(cdp, `({
-      files: (window.__gv_files||[]).map(f => ({magic:f.magic, size:f.size})),
-      gltf: (window.__gv_files||[]).find(f => f.magic === "glTF") || null
-    })`, (s) => s && s.gltf && s.gltf.size > 100, 20000, 200);
-    const b64 = await ev(cdp, `(window.__gv_files||[]).find(f => f.magic === "glTF").b64`);
+    let x = await detectX();
+    const xsteps: string[] = [];
+    let same = 0;
+    let prev = "";
+    let watchStarted = Date.now();
+    for (let i = 0; i < 20000; i++) {
+      const action = decideX(x);
+      if (action === prev) same++;
+      else {
+        same = 0;
+        if (watching(action)) watchStarted = Date.now();
+      }
+      prev = action;
+      if (!watching(action) && same > 20) {
+        die("export stuck on " + action + ": " + JSON.stringify(x));
+      }
+      // Abort only. Control is Export/dialog/blob appearing.
+      if (action === "watch_generate" && Date.now() - watchStarted > 180000) {
+        die("generate never offered Export: " + JSON.stringify(x));
+      }
+      if (action === "watch_dialog" && Date.now() - watchStarted > 30000) {
+        die("export dialog never advanced: " + JSON.stringify(x));
+      }
+      if (action === "watch_download" && Date.now() - watchStarted > 180000) {
+        die("GLB blob never arrived: " + JSON.stringify(x));
+      }
+      if (!watching(action) || xsteps[xsteps.length - 1] !== action) {
+        xsteps.push(action);
+      }
+      if (action === "done") break;
+      if (watching(action)) {
+        x = await detectX();
+        continue;
+      }
+      if (action === "click_generate") {
+        const clicked = await ev(cdp, `(() => {
+          const btn = [...document.querySelectorAll("button")].find(b =>
+            /Generate\\s*100/.test((b.innerText || "").replace(/\\s+/g, " ")));
+          if (!btn) return "missing";
+          if (/Multi-Views/.test(btn.innerText || "")) return "refusing-multiview";
+          btn.click();
+          return "clicked";
+        })()`);
+        if (clicked !== "clicked") die(`Generate 100 click: ${clicked}`);
+        generateClicked = true;
+      } else if (action === "dismiss_retry") {
+        await clickxy(cdp, x.retryClose.cx, x.retryClose.cy);
+      } else if (action === "dismiss_ok") {
+        await clickxy(cdp, x.okAt.cx, x.okAt.cy);
+      } else if (action === "click_export") {
+        if (!timings.generate_ms && !taskIdArg) lap("generate_ms");
+        await ev(cdp, `(() => {
+          const b = [...document.querySelectorAll("button")].find(btn => {
+            const t = (btn.innerText || "").trim();
+            const r = btn.getBoundingClientRect();
+            return t === "Export" && r.width > 8 && r.height > 8;
+          });
+          if (b) b.click();
+          return true;
+        })()`);
+        toolbarExportClicked = true;
+      } else if (action === "open_format") {
+        await clickxy(cdp, x.formatAt.cx, x.formatAt.cy);
+        formatOpened = true;
+      } else if (action === "pick_glb") {
+        await clickxy(cdp, x.glbAt.cx, x.glbAt.cy);
+      } else if (action === "click_dialog_export") {
+        await clickxy(cdp, x.exportLast.cx, x.exportLast.cy);
+        dialogExportClicked = true;
+      }
+      for (let d = 0; d < 40; d++) {
+        x = await detectX();
+        if (decideX(x) !== action) break;
+      }
+    }
+    if (x.taskId) taskId = x.taskId;
+    if (!x.gltf) die("export loop ended without glTF: " + xsteps.join(">"));
+    const b64 = await ev(cdp, `(window.__gv_files||[]).find(f => f.magic === "glTF" && f.size > 100).b64`);
     const bytes = Buffer.from(b64, "base64");
     if (bytes.subarray(0, 4).toString() !== "glTF") die(`export magic ${bytes.subarray(0, 4)}`);
     await Bun.write(out, bytes);
+    timings.export_steps = xsteps;
     lap("export_ms");
 
     const driver_ms = (timings.chrome_ms || 0) + (timings.login_ms || 0) + (timings.form_ms || 0);
