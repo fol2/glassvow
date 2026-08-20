@@ -162,6 +162,13 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   (1.0 / 1.5 / 25.5 / 5.0) and the C1 theory is the live SHA → one
   landscape, same protocol as H13. Snapshot:
   `docs/balance/data/421-h19/phase-a.json`.
+- **H19 landscape ran once and FAIL C1–C3.** Readout:
+  [`2026-08-20-421-hypothesis-19.md`](2026-08-20-421-hypothesis-19.md).
+  Arm 2 1.0 / 1.5 / 25.5 / 5.0. Shatter-fat fell (70.79 → 29.61); attrition-fat
+  also fell (40.84 → 7.15) — cells did not cluster. Dusk shatter median is
+  now **0**. C2 FAIL all four (closest Dusk V0 +28.61). Dusk V5 holdout
+  ceiling 4.5%. |Ash−Dusk| V0 **+55.5 pp**. C1 miss is not Ash-only.
+  **No second 5h loop. No Smolder decay.** Identity keepers stay.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
