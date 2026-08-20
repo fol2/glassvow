@@ -210,6 +210,14 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Eclipse cost stays 2. Do not landscape this pass. Do not raise Ash HP.
   Relic stack still later-phase. Readout:
   [`2026-08-20-421-hypothesis-30.md`](2026-08-20-421-hypothesis-30.md).
+- **H30 landscape ran once and FAIL C1–C3.** Readout:
+  [`2026-08-20-421-hypothesis-30.md`](2026-08-20-421-hypothesis-30.md).
+  SHA `e5037f30…`. Arm 2 21.5 / 8.0 / 25.5 / 5.0. Eclipse cost 2
+  **opened Dusk C2** (V0 +41.46, V5 +41.24) because the pack dropped,
+  not because mid closed — C1 window **widened**. Ash C2 miss V0
+  **+31.63** (need ≥35). Vow-5 Ash **84.5% ≤ 90%**. **No second 5h
+  loop.** Do not revert Eclipse cost 2, Flare 9, or Dusk 64. Do not
+  tax more Dusk starters. Relic stack still later-phase.
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
