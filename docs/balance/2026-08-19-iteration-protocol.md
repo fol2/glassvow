@@ -130,11 +130,15 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   (−10.0 vs H10)**, Dusk V5 **24.0% (−15.5)**, Ash unchanged 33.0 / 10.0.
   Holdout Dusk V5 67.0 → 52.0 (old 55% floor). Keep H10+H11. Old envelope,
   identity split; re-sign later. Snapshot: `docs/balance/data/421-h11/phase-a.json`.
+- **Flicker (`quickSlash`) cost 0→1 is a keeper.** H12 kept 4 dmg + draw.
+  Arm 2 vs H11: Dusk V0 **54.0% (−14.5)**, Dusk V5 **14.5% (−9.5)**, Ash V0
+  **21.5% (−11.5)**, Ash V5 **7.0% (−3.0)**. Dusk V0 still ≥50%; GO needs
+  all four **<50%**. Old #204 still VETO (Dusk V0 holdout 76.0%). Keep;
+  do not revert H10/H11. Snapshot: `docs/balance/data/421-h12/phase-a.json`.
 - **Smolder decay −2 is a later isolated hypothesis**, not this loop. Ash V5
-  arm 2 is already 10%. Player-side cinder tick stays −1. Do not decay until
-  a new signed comment. Continue structural Dusk nerfs (Flicker cost 0→1
-  etc.) without giving Dusk smolder or Ash stun. Dusk V0 arm 2 is still
-  68.5%; GO needs all four arm-2 **<50%**.
+  arm 2 is already 7%. Player-side cinder tick stays −1. Do not decay until
+  the cost queue finishes and Dusk V0 is still ≥56%. Continue `sidestep` /
+  `surge` / `eclipseSlash` without giving Dusk smolder or Ash stun.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
