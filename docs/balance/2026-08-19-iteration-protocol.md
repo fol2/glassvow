@@ -132,13 +132,17 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   identity split; re-sign later. Snapshot: `docs/balance/data/421-h11/phase-a.json`.
 - **Flicker (`quickSlash`) cost 0→1 is a keeper.** H12 kept 4 dmg + draw.
   Arm 2 vs H11: Dusk V0 **54.0% (−14.5)**, Dusk V5 **14.5% (−9.5)**, Ash V0
-  **21.5% (−11.5)**, Ash V5 **7.0% (−3.0)**. Dusk V0 still ≥50%; GO needs
-  all four **<50%**. Old #204 still VETO (Dusk V0 holdout 76.0%). Keep;
-  do not revert H10/H11. Snapshot: `docs/balance/data/421-h12/phase-a.json`.
+  **21.5% (−11.5)**, Ash V5 **7.0% (−3.0)**. Snapshot:
+  `docs/balance/data/421-h12/phase-a.json`.
+- **Glasstep (`sidestep`) cost 0→1 is a keeper.** H13 kept 3 ward + draw.
+  Arm 2 vs H12: Dusk V0 **45.0% (−9.0)**, Dusk V5 **16.0% (+1.5 noise)**,
+  Ash V0 **16.5% (−5.0)**, Ash V5 **2.5% (−4.5)**. All four arm-2 **<50%**
+  → Phase A **GO** (old #204 still VETO; identity split). Skip H14
+  (`surge`) and H15 (`eclipseSlash` 7→5). Snapshot:
+  `docs/balance/data/421-h13/phase-a.json`.
 - **Smolder decay −2 is a later isolated hypothesis**, not this loop. Ash V5
-  arm 2 is already 7%. Player-side cinder tick stays −1. Do not decay until
-  the cost queue finishes and Dusk V0 is still ≥56%. Continue `sidestep` /
-  `surge` / `eclipseSlash` without giving Dusk smolder or Ash stun.
+  arm 2 is already 2.5%. Player-side cinder tick stays −1. Do not decay
+  after the cost queue already printed GO.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
