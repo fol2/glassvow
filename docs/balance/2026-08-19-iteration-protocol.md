@@ -251,6 +251,16 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   planned holdout, not random-build. Do not landscape this pass.
   Do not raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-20-421-hypothesis-33.md`](2026-08-20-421-hypothesis-33.md).
+- **H34 (`ashenChoir` 4→5 / 6→7, keep cost 1) is noise — reverted.**
+  Snapshot: `docs/balance/data/421-h34/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 17.5 / 3.5**. Holdout 55.0 / 22.0 / 65.5 / 26.5.
+  Ash−Dusk **+10.5 / +4.5 pp**. Ash V0 arm 1 67.5 and holdout 65.5
+  both +0.0 (bit-identical; KEEP needed ≥6 pp on either). Ash V0
+  arm 2 stayed 17.5 (no random clog). Dusk arm 2 bit-identical
+  (Ash-locked card). Working SHA remains H33 `585b143b…`. Do not
+  landscape. Do not raise Ash HP. Relic stack still later-phase.
+  Readout:
+  [`2026-08-21-421-hypothesis-34.md`](2026-08-21-421-hypothesis-34.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
