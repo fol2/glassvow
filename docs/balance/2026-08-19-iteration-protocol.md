@@ -227,6 +227,18 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   landscape. Do not raise Ash HP. Relic stack still later-phase.
   Readout:
   [`2026-08-20-421-hypothesis-31.md`](2026-08-20-421-hypothesis-31.md).
+- **H32 (`ashBite` cost 1→2, keep 6 / 8 and Smolder 2 / 3) is a
+  keeper.** Snapshot: `docs/balance/data/421-h32/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 13.5 / 1.0**. Holdout 55.0 / 22.0 / 53.5 / 23.5.
+  Ash−Dusk **−1.5 / +1.5 pp**. Ash V0 arm 2 25.5 → 13.5 (−12.0) ≥6
+  the right way. Dusk arm 2 bit-identical (Ash-only starter). V0
+  −1.5 is 107 vs 110 wins (Wilson noise of 0); V5 |gap| closed
+  19.0 → 1.5 — the Ash-tank REVERT (V5 |gap| >20) did not fire.
+  Locale untouched (text does not mention cost). H31 damage tax
+  was noise; this is the H29 cost-tax sibling. Do not landscape
+  this pass. Do not raise Ash HP. Relic stack still later-phase.
+  Readout:
+  [`2026-08-20-421-hypothesis-32.md`](2026-08-20-421-hypothesis-32.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
