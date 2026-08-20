@@ -185,6 +185,13 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   C3 FAIL all four. Vow-5 Ash **72.5% ≤ 90%** (H22 90.5% was Ash 96 +
   mix/relic). **No second 5h loop.** Do not revert Dusk 64. Do not
   raise Ash HP. Relic stack still later-phase.
+- **H28 (`eclipseSlash` 7→5 / 9→7) is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h28/phase-a.json`. Arm 2 **33.0 / 9.5 / 25.5 /
+  5.0**. Holdout 61.0 / 25.0 / 71.5 / 41.0. |Ash−Dusk| **+10.5 / +16.0 pp**.
+  Dusk V0 arm 2 36.0 → 33.0 (−3.0) under 6 pp. Ash unchanged (Dusk-only
+  starter). Working SHA remains H27 `ea5d6cab…`. Do not landscape. Do
+  not raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-20-421-hypothesis-28.md`](2026-08-20-421-hypothesis-28.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
