@@ -149,6 +149,19 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
 - **Smolder decay −2 is a later isolated hypothesis**, not this loop. Ash V5
   arm 2 is already 2.5%. Player-side cinder tick stays −1. Do not decay
   after the cost queue already printed GO.
+- **Ash HP 80→88 (H16) and Ashbite 5→6 / 7→8 keep Smolder 2/3 (H17) are
+  keepers.** Snapshots: `docs/balance/data/421-h16/phase-a.json`,
+  `docs/balance/data/421-h17/phase-a.json`. H17 arm 2 **45.0 / 16.0 / 25.5
+  / 5.0**. Holdout 79.0 / 36.5 / 71.5 / 41.0. |Ash−Dusk| V0 **−7.5 pp**.
+- **H19 drops the implicit connecting-attack chip on the live catalogue.**
+  `per = 0 + card.chip + Beacon` (`content.id == core`); slice goldens still
+  pin the old leading 1. Dusk V0 arm 2 **45.0 → 1.0** (−44.0 vs H17);
+  Dusk holdout **79.0 → 16.0**. Ash unchanged (already no chip). KEEP by
+  the H19 stop rule (Dusk V0 arm 2 down ≥6 pp; revert only if that cell
+  *up* ≥6). Old 80/55 VETO is not a revert. All four arm-2 still **<50%**
+  (1.0 / 1.5 / 25.5 / 5.0) and the C1 theory is the live SHA → one
+  landscape, same protocol as H13. Snapshot:
+  `docs/balance/data/421-h19/phase-a.json`.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
