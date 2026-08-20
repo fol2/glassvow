@@ -218,6 +218,15 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   **+31.63** (need ≥35). Vow-5 Ash **84.5% ≤ 90%**. **No second 5h
   loop.** Do not revert Eclipse cost 2, Flare 9, or Dusk 64. Do not
   tax more Dusk starters. Relic stack still later-phase.
+- **H31 (`ashBite` 6→5 / 8→7, keep Smolder 2/3) is noise — reverted.**
+  Snapshot: `docs/balance/data/421-h31/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 24.0 / 7.0**. Holdout 55.0 / 22.0 / 65.5 / 40.0.
+  Ash−Dusk **+10.5 / +18.0 pp**. Ash V0 arm 2 25.5 → 24.0 (−1.5)
+  under 6 pp. Dusk arm 2 bit-identical (Ash-only starter). KEEP
+  needed ≤19.5%. Working SHA remains H30 `e5037f30…`. Do not
+  landscape. Do not raise Ash HP. Relic stack still later-phase.
+  Readout:
+  [`2026-08-20-421-hypothesis-31.md`](2026-08-20-421-hypothesis-31.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
