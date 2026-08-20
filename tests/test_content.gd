@@ -66,9 +66,11 @@ static func run(fails: Array[String]) -> void:
 	var paid_gold: int = int(float(str(act_four_reward["gold"])))
 	if paid_gold < int(float(str(last_gold[0]))) or paid_gold > int(float(str(last_gold[1]))):
 		fails.append("ContentDB: act 4 reward gold did not clamp to the final authored row")
+	var pickup_hp_before: int = pickup_run.player.max_hp
 	rewards.gain_relic(pickup_run, "sweetRoot")
 	rewards.gain_relic(pickup_run, "hollowCrown")
-	if pickup_run.player.max_hp != 70 or pickup_run.player.hp != 70 \
+	var pickup_hp_after: int = pickup_hp_before + 8 - 10
+	if pickup_run.player.max_hp != pickup_hp_after or pickup_run.player.hp != pickup_hp_after \
 			or pickup_run.player.energy_max != 4:
 		fails.append("ContentDB: instant relic pickup laws are not applied")
 	pickup_run.unlocks = ["card:quakeblow", "relic:smolderingCoal"]
