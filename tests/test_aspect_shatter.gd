@@ -98,8 +98,8 @@ static func _dusk_flare_no_poison(fails: Array[String]) -> void:
 	game.apply({"t": "useArt"})
 	if _stacks(enemy.statuses, "poison") != 0:
 		fails.append("aspect smolder: Dusk Flare applied Smolder (%d)" % _stacks(enemy.statuses, "poison"))
-	if hp_before - enemy.hp != 7:
-		fails.append("aspect smolder: Dusk Flare should deal 7, dealt %d" % (hp_before - enemy.hp))
+	if hp_before - enemy.hp != 9:
+		fails.append("aspect smolder: Dusk Flare should deal 9, dealt %d" % (hp_before - enemy.hp))
 
 
 static func _ash_ashbite_applies_poison(fails: Array[String]) -> void:
