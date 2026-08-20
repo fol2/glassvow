@@ -1,7 +1,7 @@
 ---
 title: "A flat billboard has one depth, so a four-footed shadow planted one foot"
 date: 2026-07-27
-last_refreshed: 2026-07-29
+last_refreshed: 2026-08-20
 category: ui-bugs
 module: presentation/combat/enemy_view
 problem_type: ui_bug
@@ -300,22 +300,30 @@ result.
 
 ## This is a divergence from the reference, not a parity fix
 
-Worth stating plainly, because this project verifies itself against a benchmark.
-**The reference does not solve multi-footed creatures either.** Its model is one
-`transform-origin` per creature, machine-scanned as a single lowest qualifying row
-by `roguecardv2-benchmark src/dev/char-feet-scan.js` (the reference checkout at
-`~/Coding/roguecardv2-benchmark` @ `6e06911`, not a path in this repo) — "prefers the lowest row whose opaque span is ≥ 8%
-of the silhouette width", then a mass-weighted X across that row ±1. It buys
-readability instead, with `opacity .62`, `blur 1.5px`, and a silhouette anchored
-`center bottom`.
+> **Amended by #317 (2026-08-16).** The geometry below still holds. The
+> *standing rule* that used to justify keeping it — "the web build is
+> authority for what the game does, never for how it had to achieve it" —
+> does not. After detachment, nothing parity-checks against the web tree;
+> the standard is the commercial rubric (#157). Keep the per-column ground
+> line because a four-footed painting needs it, not because a reference
+> audit would flag reverting it.
 
-So the first two defects above are genuine bugs — the port double-counted an
-offset and mis-sited a hinge, and fixing them moves the port *towards* the
-reference. The per-column ground line is a different kind of change: it is the
-port doing something the reference never did, on the standing rule that the web
-build is authority for what the game does, never for how it had to achieve it
-(session history: the "do the shadow properly" pass, 2026-07-27). Anyone auditing parity should expect this to show
-as a divergence and should not "fix" it back.
+Worth stating plainly for anyone reading the 2026-07-27 incident. **The
+reference did not solve multi-footed creatures either.** Its model was one
+`transform-origin` per creature, machine-scanned as a single lowest qualifying
+row by `roguecardv2-benchmark src/dev/char-feet-scan.js` (the frozen
+reference checkout at `~/Coding/roguecardv2-benchmark` @ `6e06911`, not a
+path in this repo) — "prefers the lowest row whose opaque span is ≥ 8% of
+the silhouette width", then a mass-weighted X across that row ±1. It bought
+readability instead, with `opacity .62`, `blur 1.5px`, and a silhouette
+anchored `center bottom`.
+
+So the first two defects above were genuine bugs — the port double-counted
+an offset and mis-sited a hinge, and fixing them moved the port *towards*
+the reference as it then stood. The per-column ground line is a different
+kind of change: it is the port doing something the reference never did.
+Anyone comparing the two trees should expect this to show as a divergence
+and should not "fix" it back to a single contact line.
 
 ## Prevention
 

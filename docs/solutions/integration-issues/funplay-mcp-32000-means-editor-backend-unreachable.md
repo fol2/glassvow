@@ -1,7 +1,7 @@
 ---
 title: "A funplay `-32000` means its configured editor backend is unreachable"
 date: 2026-07-27
-last_refreshed: 2026-07-29
+last_refreshed: 2026-08-20
 category: integration-issues
 module: addons/funplay_mcp
 problem_type: integration_issue
@@ -466,10 +466,9 @@ removing it would touch tracked files. Left as found, flagged for the organiser.
   filed under an M5 milestone note. Now stale in the other direction: the
   handshake is no longer pending.
 - `.claude/skills/glassvow-godot/SKILL.md` § 6 *Visual Inspection* — § 6 step 1, the same
-  precondition as a contract clause. Step 3 of that section names a command
-  (`mcp screenshot …`) that does not exist in the 78-tool surface; the real
-  captures are `capture_editor_view` and `capture_runtime_view`. Only visible
-  once the handshake worked.
+  precondition as a contract clause. Step 3 names Funplay `capture_editor_view`
+  and `capture_runtime_view` (the 78-tool surface). Only visible once the
+  handshake worked.
 - `docs/session-ownership.md` — the `project.godot` and `tools/` ownership rules
   both matter before running
   `install_runtime_bridge` or committing what the editor rewrote.
