@@ -239,6 +239,18 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   this pass. Do not raise Ash HP. Relic stack still later-phase.
   Readout:
   [`2026-08-20-421-hypothesis-32.md`](2026-08-20-421-hypothesis-32.md).
+- **H33 (`arts.ashfall` all-enemies Smolder 3→4, keep cost 3 and
+  Ward 5) is a keeper.** Snapshot:
+  `docs/balance/data/421-h33/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 17.5 / 3.5**. Holdout 55.0 / 22.0 / 65.5 / 26.5.
+  Ash−Dusk **+10.5 / +4.5 pp**. V0 Ash-ahead restored (−1.5 → +10.5).
+  Ash V0 arm 2 13.5 → 17.5 (+4.0) under 6 pp and still <20% (revert
+  bar was ≥19.5). Dusk arm 2 bit-identical (Ash-only art). Locale
+  `en` / `zh-Hant` `content.arts.ashfall` followed; omen/affix
+  `ashfall` untouched. Same payback as H30 Flare: aspect art lifts
+  planned holdout, not random-build. Do not landscape this pass.
+  Do not raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-20-421-hypothesis-33.md`](2026-08-20-421-hypothesis-33.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
