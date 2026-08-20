@@ -1,63 +1,53 @@
 extends RefCounted
 ## H10: shatter/stagger is Dusk-only. H11: enemy Smolder from the player is Ash-only.
-## H19: connecting attacks earn 0 + card.chip + Beacon, not a free leading 1.
 
 
 static func run(fails: Array[String]) -> void:
-	_connecting_attack(fails, 0, &"strike", false)
-	_connecting_attack(fails, 1, &"strike", false)
-	_connecting_attack(fails, 0, &"chisel", true)
-	_connecting_attack(fails, 1, &"chisel", false)
+	_connecting_strike(fails, 0, true)
+	_connecting_strike(fails, 1, false)
 	_dusk_emberbite_no_poison(fails)
 	_dusk_flare_no_poison(fails)
 	_ash_ashbite_applies_poison(fails)
 	_dusk_cinder_veined_still_hits_player(fails)
 
 
-static func _connecting_attack(
-	fails: Array[String], aspect: int, card_id: StringName, expect_chip: bool
-) -> void:
+static func _connecting_strike(fails: Array[String], aspect: int, expect_chip: bool) -> void:
 	var who: String = "Dusk" if aspect == 0 else "Ash"
-	var card_name: String = String(card_id)
-	var tag: String = "%s %s" % [who, card_name]
 	var content: ContentDB = ContentDB.load_full(false)
-	var run: RunState = RunState.new_run(content, 42110, "h19-%d-%s" % [aspect, card_name],
-		{"aspect": aspect})
+	var run: RunState = RunState.new_run(content, 42110, "h10-%d" % aspect, {"aspect": aspect})
 	var game: GlassvowGame = GlassvowGame.new(content, run)
 	game.apply({"t": "startCombat", "enemies": ["sporeling"], "kind": "normal"})
 	if game.cb == null or game.cb.enemies.is_empty():
-		fails.append("aspect shatter: %s fight did not start" % tag)
+		fails.append("aspect shatter: %s fight did not start" % who)
 		return
 	var enemy: EnemyCombatant = game.cb.enemies[0]
 	enemy.block = 0
 	enemy.chips = enemy.facet_max - 1
-	var chips_before: int = enemy.chips
 	enemy.staggered = false
 	enemy.hp = maxi(enemy.hp, 20)
-	var card: CardInst = CardInst.new(game.run.next_uid(), card_id, false)
-	game.cb.hand.append(card)
+	var strike: CardInst = CardInst.new(game.run.next_uid(), &"strike", false)
+	game.cb.hand.append(strike)
 	game.cb.player.energy = maxi(game.cb.player.energy, 1)
-	var preview: Variant = game.rules.preview_play(game.cb, card, 0, game.run)
-	game.apply({"t": "playCard", "uid": card.uid, "target": 0})
+	var preview: Variant = game.rules.preview_play(game.cb, strike, 0, game.run)
+	game.apply({"t": "playCard", "uid": strike.uid, "target": 0})
 	if typeof(preview) != TYPE_DICTIONARY:
-		fails.append("aspect shatter: %s preview missing" % tag)
+		fails.append("aspect shatter: %s preview missing" % who)
 		return
 	var pv: Dictionary = preview
 	var preview_chips: int = int(float(str(pv["chips"])))
 	var will: bool = pv["willShatter"] == true
 	if expect_chip:
 		if not enemy.staggered:
-			fails.append("aspect shatter: %s connecting did not stagger" % tag)
-		if preview_chips != 1 or not will:
-			fails.append("aspect shatter: %s preview must chip 1 extra and willShatter (chips=%d)"
-				% [tag, preview_chips])
+			fails.append("aspect shatter: Dusk connecting strike did not stagger")
+		if preview_chips <= 0 or not will:
+			fails.append("aspect shatter: Dusk preview must chip and willShatter")
 	else:
-		if enemy.chips != chips_before:
-			fails.append("aspect shatter: %s connecting chipped (%d)" % [tag, enemy.chips])
+		if enemy.chips != enemy.facet_max - 1:
+			fails.append("aspect shatter: Ash connecting strike chipped (%d)" % enemy.chips)
 		if enemy.staggered:
-			fails.append("aspect shatter: %s connecting staggered" % tag)
+			fails.append("aspect shatter: Ash connecting strike staggered")
 		if preview_chips != 0 or will:
-			fails.append("aspect shatter: %s preview must report chips=0" % tag)
+			fails.append("aspect shatter: Ash preview must report chips=0")
 
 
 static func _stacks(statuses: Dictionary, id: String) -> int:

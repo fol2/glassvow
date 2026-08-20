@@ -407,13 +407,6 @@ func _player_smolder_blocked(run: RunState) -> bool:
 	return run != null and run.aspect == 0 and content.id == "core"
 
 
-func _attack_chip_per(d: Dictionary, p: PlayerCombatant) -> int:
-	# H19: live catalogue (core) drops the implicit connecting-attack chip.
-	# Slice goldens still pin the old leading 1.
-	var implicit: int = 0 if content.id == "core" else 1
-	return implicit + _ji(d.get("chip", 0)) + _sget(p.statuses, "beacon")
-
-
 func _add_status(cb: CombatState, statuses: Dictionary, who: Variant, id: String, n: int) -> void:
 	var next: int = _sget(statuses, id) + n
 	if next == 0:
@@ -667,8 +660,8 @@ func gain_block_enemy(
 
 ## Facet chips land after the card that earned them resolves (see play_card);
 ## overflow carries into the next, harder pane. Shatter/stagger is Dusk-only
-## (aspect 0): connecting attacks no longer earn a free chip — only card.chip,
-## Beacon, and explicit kind:chip. Ash still computes per, then this no-ops.
+## (aspect 0): Ashwarden connecting attacks still compute implicit chip, but
+## this no-op means they never stun.
 func apply_chips(run: RunState, cb: CombatState, e: EnemyCombatant, n: int) -> void:
 	if run.aspect != 0:
 		return
@@ -816,7 +809,7 @@ func play_card(run: RunState, cb: CombatState, uid: int, target_idx: Variant = n
 	if cb.pending_chips_active and not cb.over:
 		var per: int = 0
 		if card_type == "attack":
-			per = _attack_chip_per(d, p)
+			per = 1 + _ji(d.get("chip", 0)) + _sget(p.statuses, "beacon")
 		for idx_v: Variant in cb.pending_chips.keys():  # insertion order == JS Map order
 			var idx: int = idx_v
 			var rec: Dictionary = cb.pending_chips[idx]
@@ -1389,12 +1382,12 @@ func preview_play(
 				b -= soak
 				loss += hd - soak
 		lethal = loss >= target.hp
-		# Facet arithmetic mirrors play_card: unblocked blood no longer chips
-		# by itself on the live catalogue; only card.chip + Beacon. Explicit
-		# kind:chip always lands. Ash still computes per, then zeros.
+		# Facet arithmetic mirrors play_card: an attack that draws unblocked
+		# blood chips once (plus card/beacon bonuses); explicit chips always land.
+		# Ash (aspect != 0) still computes per, then zeros — apply_chips no-ops.
 		var per: int = 0
 		if str(d.get("type", "")) == "attack":
-			per = _attack_chip_per(d, p)
+			per = 1 + _ji(d.get("chip", 0)) + _sget(p.statuses, "beacon")
 		chips = (per if (hits.size() > 0 and loss > 0) else 0) + fx_chips
 		if run != null and run.aspect != 0:
 			chips = 0
