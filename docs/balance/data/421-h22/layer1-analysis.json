@@ -1,0 +1,826 @@
+{
+  "runs": 320000,
+  "outcomes": {
+    "win": 80927,
+    "loss": 239029,
+    "stall": 44
+  },
+  "deckCuts": {
+    "thinMax": 23,
+    "midMax": 31,
+    "min": 8,
+    "max": 58
+  },
+  "medians": {
+    "duskblade": {
+      "shattersPerFight": 1.0833333333333333,
+      "smolderKillsPerFight": 0.0
+    },
+    "ashwarden": {
+      "shattersPerFight": 0.0,
+      "smolderKillsPerFight": 0.88
+    }
+  },
+  "bothHighRuns": {
+    "duskblade:v0": 3178,
+    "duskblade:v5": 1334
+  },
+  "grids": {
+    "duskblade:v0": {
+      "shatter:thin": {
+        "policies": 1817,
+        "runs": 10407,
+        "wins": 2053,
+        "winRate": 0.19727106755068705,
+        "wilson95": [
+          0.18973794281498457,
+          0.20502759799906628
+        ],
+        "valid": true
+      },
+      "shatter:mid": {
+        "policies": 1912,
+        "runs": 12116,
+        "wins": 5752,
+        "winRate": 0.4747441399801915,
+        "wilson95": [
+          0.4658618728040158,
+          0.48364241715890344
+        ],
+        "valid": true
+      },
+      "shatter:fat": {
+        "policies": 1773,
+        "runs": 21877,
+        "wins": 15764,
+        "winRate": 0.7205741189376971,
+        "wilson95": [
+          0.7145897635646945,
+          0.7264810251507663
+        ],
+        "valid": true
+      },
+      "smolder:thin": {
+        "policies": 767,
+        "runs": 1008,
+        "wins": 18,
+        "winRate": 0.017857142857142856,
+        "wilson95": [
+          0.011324905987035148,
+          0.02805029303587257
+        ],
+        "valid": true
+      },
+      "smolder:mid": {
+        "policies": 710,
+        "runs": 909,
+        "wins": 131,
+        "winRate": 0.14411441144114412,
+        "wilson95": [
+          0.12277983727810834,
+          0.16844429178822093
+        ],
+        "valid": true
+      },
+      "smolder:fat": {
+        "policies": 624,
+        "runs": 851,
+        "wins": 405,
+        "winRate": 0.47591069330199764,
+        "wilson95": [
+          0.44253990832033374,
+          0.5094979817738576
+        ],
+        "valid": true
+      },
+      "attrition:thin": {
+        "policies": 1961,
+        "runs": 14950,
+        "wins": 303,
+        "winRate": 0.020267558528428094,
+        "wilson95": [
+          0.018128904598492267,
+          0.022652687241975732
+        ],
+        "valid": true
+      },
+      "attrition:mid": {
+        "policies": 1899,
+        "runs": 10775,
+        "wins": 1212,
+        "winRate": 0.11248259860788863,
+        "wilson95": [
+          0.10665434432396652,
+          0.1185870666473312
+        ],
+        "valid": true
+      },
+      "attrition:fat": {
+        "policies": 1525,
+        "runs": 7107,
+        "wins": 3163,
+        "winRate": 0.44505417194315466,
+        "wilson95": [
+          0.43353282378715935,
+          0.4566348863885185
+        ],
+        "valid": true
+      }
+    },
+    "duskblade:v5": {
+      "shatter:thin": {
+        "policies": 1998,
+        "runs": 16069,
+        "wins": 274,
+        "winRate": 0.017051465554794948,
+        "wilson95": [
+          0.015162101117993331,
+          0.019171682378505122
+        ],
+        "valid": true
+      },
+      "shatter:mid": {
+        "policies": 1940,
+        "runs": 8340,
+        "wins": 1436,
+        "winRate": 0.17218225419664268,
+        "wilson95": [
+          0.164230997741345,
+          0.1804353616344672
+        ],
+        "valid": true
+      },
+      "shatter:fat": {
+        "policies": 1830,
+        "runs": 11117,
+        "wins": 6558,
+        "winRate": 0.5899073491049743,
+        "wilson95": [
+          0.5807348513365309,
+          0.5990177336996003
+        ],
+        "valid": true
+      },
+      "smolder:thin": {
+        "policies": 1249,
+        "runs": 1636,
+        "wins": 1,
+        "winRate": 0.0006112469437652812,
+        "wilson95": [
+          0.00010790824474794336,
+          0.0034543012537819086
+        ],
+        "valid": true
+      },
+      "smolder:mid": {
+        "policies": 429,
+        "runs": 498,
+        "wins": 7,
+        "winRate": 0.014056224899598393,
+        "wilson95": [
+          0.0068251552734684175,
+          0.02872682734395181
+        ],
+        "valid": true
+      },
+      "smolder:fat": {
+        "policies": 208,
+        "runs": 229,
+        "wins": 49,
+        "winRate": 0.21397379912663755,
+        "wilson95": [
+          0.16580528480661527,
+          0.27158013330794784
+        ],
+        "valid": false
+      },
+      "attrition:thin": {
+        "policies": 2000,
+        "runs": 31126,
+        "wins": 9,
+        "winRate": 0.0002891473366317548,
+        "wilson95": [
+          0.00015213319599402425,
+          0.0005494912838346488
+        ],
+        "valid": true
+      },
+      "attrition:mid": {
+        "policies": 1855,
+        "runs": 8331,
+        "wins": 88,
+        "winRate": 0.010562957628135878,
+        "wilson95": [
+          0.00858221695080064,
+          0.012994853196150912
+        ],
+        "valid": true
+      },
+      "attrition:fat": {
+        "policies": 1196,
+        "runs": 2654,
+        "wins": 475,
+        "winRate": 0.17897513187641295,
+        "wilson95": [
+          0.16485842939584217,
+          0.19401980830157162
+        ],
+        "valid": true
+      }
+    },
+    "ashwarden:v0": {
+      "shatter:thin": {
+        "policies": 0,
+        "runs": 0,
+        "wins": 0,
+        "winRate": 0,
+        "wilson95": [
+          0,
+          0
+        ],
+        "valid": false
+      },
+      "shatter:mid": {
+        "policies": 0,
+        "runs": 0,
+        "wins": 0,
+        "winRate": 0,
+        "wilson95": [
+          0,
+          0
+        ],
+        "valid": false
+      },
+      "shatter:fat": {
+        "policies": 0,
+        "runs": 0,
+        "wins": 0,
+        "winRate": 0,
+        "wilson95": [
+          0,
+          0
+        ],
+        "valid": false
+      },
+      "smolder:thin": {
+        "policies": 1416,
+        "runs": 6438,
+        "wins": 869,
+        "winRate": 0.1349798073936005,
+        "wilson95": [
+          0.12685032772399146,
+          0.14354463153655084
+        ],
+        "valid": true
+      },
+      "smolder:mid": {
+        "policies": 1930,
+        "runs": 12366,
+        "wins": 3757,
+        "winRate": 0.30381691735403527,
+        "wilson95": [
+          0.2957729730007065,
+          0.31198271116449905
+        ],
+        "valid": true
+      },
+      "smolder:fat": {
+        "policies": 1829,
+        "runs": 17771,
+        "wins": 11630,
+        "winRate": 0.6544370041078161,
+        "wilson95": [
+          0.6474124921566381,
+          0.6613947629019495
+        ],
+        "valid": true
+      },
+      "attrition:thin": {
+        "policies": 1509,
+        "runs": 8261,
+        "wins": 701,
+        "winRate": 0.08485655489650164,
+        "wilson95": [
+          0.07903857714516604,
+          0.09106044602729937
+        ],
+        "valid": true
+      },
+      "attrition:mid": {
+        "policies": 1964,
+        "runs": 14398,
+        "wins": 3110,
+        "winRate": 0.21600222253090706,
+        "wilson95": [
+          0.20935667578128606,
+          0.2227992729296184
+        ],
+        "valid": true
+      },
+      "attrition:fat": {
+        "policies": 1821,
+        "runs": 20766,
+        "wins": 11707,
+        "winRate": 0.5637580660695367,
+        "wilson95": [
+          0.5570018903385008,
+          0.5704906572213857
+        ],
+        "valid": true
+      }
+    },
+    "ashwarden:v5": {
+      "shatter:thin": {
+        "policies": 0,
+        "runs": 0,
+        "wins": 0,
+        "winRate": 0,
+        "wilson95": [
+          0,
+          0
+        ],
+        "valid": false
+      },
+      "shatter:mid": {
+        "policies": 0,
+        "runs": 0,
+        "wins": 0,
+        "winRate": 0,
+        "wilson95": [
+          0,
+          0
+        ],
+        "valid": false
+      },
+      "shatter:fat": {
+        "policies": 0,
+        "runs": 0,
+        "wins": 0,
+        "winRate": 0,
+        "wilson95": [
+          0,
+          0
+        ],
+        "valid": false
+      },
+      "smolder:thin": {
+        "policies": 1989,
+        "runs": 15675,
+        "wins": 147,
+        "winRate": 0.00937799043062201,
+        "wilson95": [
+          0.007984726133754989,
+          0.01101166844061152
+        ],
+        "valid": true
+      },
+      "smolder:mid": {
+        "policies": 1977,
+        "runs": 14445,
+        "wins": 907,
+        "winRate": 0.06278989269643476,
+        "wilson95": [
+          0.058948983308911754,
+          0.066863280878605
+        ],
+        "valid": true
+      },
+      "smolder:fat": {
+        "policies": 1841,
+        "runs": 12846,
+        "wins": 5792,
+        "winRate": 0.4508796512533084,
+        "wilson95": [
+          0.4422910583919984,
+          0.45949761316132204
+        ],
+        "valid": true
+      },
+      "attrition:thin": {
+        "policies": 1933,
+        "runs": 12282,
+        "wins": 74,
+        "winRate": 0.006025077348965967,
+        "wilson95": [
+          0.0048024362240434,
+          0.007556624352281931
+        ],
+        "valid": true
+      },
+      "attrition:mid": {
+        "policies": 1986,
+        "runs": 13583,
+        "wins": 511,
+        "winRate": 0.03762055510564676,
+        "wilson95": [
+          0.03454917097549543,
+          0.04095339979710375
+        ],
+        "valid": true
+      },
+      "attrition:fat": {
+        "policies": 1826,
+        "runs": 11169,
+        "wins": 4024,
+        "winRate": 0.36028292595577044,
+        "wilson95": [
+          0.3514289468696818,
+          0.3692329804025391
+        ],
+        "valid": true
+      }
+    }
+  },
+  "verdicts": {
+    "duskblade:v0": {
+      "topCell": "shatter:fat",
+      "topRate": 0.7205741189376971,
+      "within10pp": [
+        "shatter:fat"
+      ],
+      "viabilityFloor": 0.5852870594688485,
+      "viableCells": [
+        "shatter:fat"
+      ],
+      "arm2Rate": 0.45,
+      "arm2Gap": 0.27057411893769706,
+      "C1a": false,
+      "C1b": false,
+      "C2": false,
+      "underSampledHigh": [],
+      "maxPolicy": {
+        "policyIndex": 846,
+        "winRate": 0.9,
+        "wins": 36,
+        "runs": 40
+      }
+    },
+    "duskblade:v5": {
+      "topCell": "shatter:fat",
+      "topRate": 0.5899073491049743,
+      "within10pp": [
+        "shatter:fat"
+      ],
+      "viabilityFloor": 0.3749536745524872,
+      "viableCells": [
+        "shatter:fat"
+      ],
+      "arm2Rate": 0.16,
+      "arm2Gap": 0.4299073491049743,
+      "C1a": false,
+      "C1b": false,
+      "C2": true,
+      "underSampledHigh": [],
+      "maxPolicy": {
+        "policyIndex": 1581,
+        "winRate": 0.6,
+        "wins": 24,
+        "runs": 40
+      }
+    },
+    "ashwarden:v0": {
+      "topCell": "smolder:fat",
+      "topRate": 0.6544370041078161,
+      "within10pp": [
+        "smolder:fat",
+        "attrition:fat"
+      ],
+      "viabilityFloor": 0.4847185020539081,
+      "viableCells": [
+        "smolder:fat",
+        "attrition:fat"
+      ],
+      "arm2Rate": 0.315,
+      "arm2Gap": 0.33943700410781613,
+      "C1a": false,
+      "C1b": false,
+      "C2": false,
+      "underSampledHigh": [],
+      "maxPolicy": {
+        "policyIndex": 1964,
+        "winRate": 0.95,
+        "wins": 38,
+        "runs": 40
+      }
+    },
+    "ashwarden:v5": {
+      "topCell": "smolder:fat",
+      "topRate": 0.4508796512533084,
+      "within10pp": [
+        "smolder:fat",
+        "attrition:fat"
+      ],
+      "viabilityFloor": 0.2779398256266542,
+      "viableCells": [
+        "smolder:fat",
+        "attrition:fat"
+      ],
+      "arm2Rate": 0.105,
+      "arm2Gap": 0.34587965125330844,
+      "C1a": false,
+      "C1b": false,
+      "C2": false,
+      "underSampledHigh": [],
+      "maxPolicy": {
+        "policyIndex": 1475,
+        "winRate": 0.675,
+        "wins": 27,
+        "runs": 40
+      }
+    }
+  },
+  "audit": {
+    "duskblade:v0": {
+      "topPolicies": 200,
+      "cutoffWinRate": 0.575,
+      "magnitude": [
+        {
+          "path": "relics.hollowCrown",
+          "topMedian": 182.429667191904,
+          "restMedian": 82.35352409404805,
+          "ratio": 2.2152017075015342
+        },
+        {
+          "path": "status.regen",
+          "topMedian": 11.88546146756245,
+          "restMedian": 5.784534975404625,
+          "ratio": 2.054696102296636
+        },
+        {
+          "path": "card.power",
+          "topMedian": 6.346345328157611,
+          "restMedian": 10.6166328792753,
+          "ratio": 0.5977738328454678
+        },
+        {
+          "path": "status.vulnerableDusk",
+          "topMedian": 7.88273943191364,
+          "restMedian": 12.776550831861101,
+          "ratio": 0.6169692850324141
+        },
+        {
+          "path": "card.rarity.rare",
+          "topMedian": 7.18470322163515,
+          "restMedian": 11.3451353196814,
+          "ratio": 0.6332849295478403
+        }
+      ],
+      "thresholds": [
+        {
+          "path": "restHpPct",
+          "topMedian": 67.0,
+          "restMedian": 56.0,
+          "difference": 11.0,
+          "rangeFraction": 0.16923076923076924
+        },
+        {
+          "path": "cardDecline",
+          "topMedian": 23.24138518888505,
+          "restMedian": 19.11677805706855,
+          "difference": 4.1246071318165,
+          "rangeFraction": 0.1031151782954125
+        },
+        {
+          "path": "potionHealMissing",
+          "topMedian": 25.5,
+          "restMedian": 23.0,
+          "difference": 2.5,
+          "rangeFraction": 0.07142857142857142
+        },
+        {
+          "path": "removalAppetite",
+          "topMedian": 17.13487368356435,
+          "restMedian": 15.688796936534349,
+          "difference": 1.446076747030002,
+          "rangeFraction": 0.06025319779291675
+        },
+        {
+          "path": "shopMinRatio",
+          "topMedian": 0.0638229771051556,
+          "restMedian": 0.0678239278902765,
+          "difference": -0.004000950785120902,
+          "rangeFraction": -0.03637227986473547
+        }
+      ]
+    },
+    "duskblade:v5": {
+      "topPolicies": 200,
+      "cutoffWinRate": 0.225,
+      "magnitude": [
+        {
+          "path": "status.regen",
+          "topMedian": 13.5053126520151,
+          "restMedian": 5.6751201446639605,
+          "ratio": 2.37974039452072
+        },
+        {
+          "path": "relics.hollowCrown",
+          "topMedian": 143.437174905814,
+          "restMedian": 84.66889021663785,
+          "ratio": 1.694095370079953
+        },
+        {
+          "path": "card.chipDusk",
+          "topMedian": 9.68701988625261,
+          "restMedian": 5.78644045798597,
+          "ratio": 1.6740896163345778
+        },
+        {
+          "path": "card.rarity.rare",
+          "topMedian": 6.93661082940366,
+          "restMedian": 11.42328030678175,
+          "ratio": 0.6072345808835267
+        },
+        {
+          "path": "card.power",
+          "topMedian": 6.591141813468335,
+          "restMedian": 10.62507997592695,
+          "ratio": 0.6203380895392566
+        }
+      ],
+      "thresholds": [
+        {
+          "path": "cardDecline",
+          "topMedian": 24.53394495416435,
+          "restMedian": 19.02855022344735,
+          "difference": 5.505394730717001,
+          "rangeFraction": 0.137634868267925
+        },
+        {
+          "path": "restHpPct",
+          "topMedian": 61.5,
+          "restMedian": 57.0,
+          "difference": 4.5,
+          "rangeFraction": 0.06923076923076923
+        },
+        {
+          "path": "removalAppetite",
+          "topMedian": 16.92640845663845,
+          "restMedian": 15.76663745567205,
+          "difference": 1.1597710009663977,
+          "rangeFraction": 0.04832379170693324
+        },
+        {
+          "path": "shopMinRatio",
+          "topMedian": 0.0635666141088586,
+          "restMedian": 0.06769713457324544,
+          "difference": -0.004130520464386847,
+          "rangeFraction": -0.037550186039880425
+        },
+        {
+          "path": "routeLowHpPct",
+          "topMedian": 58.0,
+          "restMedian": 56.0,
+          "difference": 2.0,
+          "rangeFraction": 0.03076923076923077
+        }
+      ]
+    },
+    "ashwarden:v0": {
+      "topPolicies": 200,
+      "cutoffWinRate": 0.65,
+      "magnitude": [
+        {
+          "path": "status.regen",
+          "topMedian": 11.540659801928399,
+          "restMedian": 5.776845537854335,
+          "ratio": 1.9977442232625262
+        },
+        {
+          "path": "relics.shatterersCrown",
+          "topMedian": 33.0255135379396,
+          "restMedian": 61.3330743127964,
+          "ratio": 0.5384617338682668
+        },
+        {
+          "path": "card.blockHeal",
+          "topMedian": 1.193152943686385,
+          "restMedian": 0.666453750053847,
+          "ratio": 1.7903011928284336
+        },
+        {
+          "path": "card.drawEnergy",
+          "topMedian": 7.196387736170575,
+          "restMedian": 4.261460451448025,
+          "ratio": 1.6887139557344184
+        },
+        {
+          "path": "status.ritual",
+          "topMedian": 6.597066082250265,
+          "restMedian": 10.482226502480401,
+          "ratio": 0.6293573298277046
+        }
+      ],
+      "thresholds": [
+        {
+          "path": "restHpPct",
+          "topMedian": 71.0,
+          "restMedian": 55.0,
+          "difference": 16.0,
+          "rangeFraction": 0.24615384615384617
+        },
+        {
+          "path": "cardDecline",
+          "topMedian": 23.3085734443739,
+          "restMedian": 19.352176557295003,
+          "difference": 3.9563968870788955,
+          "rangeFraction": 0.09890992217697239
+        },
+        {
+          "path": "removalAppetite",
+          "topMedian": 17.0993974879384,
+          "restMedian": 15.730233972892151,
+          "difference": 1.3691635150462496,
+          "rangeFraction": 0.05704847979359373
+        },
+        {
+          "path": "shopMinRatio",
+          "topMedian": 0.061827208948088797,
+          "restMedian": 0.0677733597240876,
+          "difference": -0.005946150775998804,
+          "rangeFraction": -0.05405591614544367
+        },
+        {
+          "path": "routeLowHpPct",
+          "topMedian": 59.0,
+          "restMedian": 56.0,
+          "difference": 3.0,
+          "rangeFraction": 0.046153846153846156
+        }
+      ]
+    },
+    "ashwarden:v5": {
+      "topPolicies": 200,
+      "cutoffWinRate": 0.3,
+      "magnitude": [
+        {
+          "path": "status.regen",
+          "topMedian": 13.30929343374235,
+          "restMedian": 5.60337962307153,
+          "ratio": 2.3752260830128753
+        },
+        {
+          "path": "card.blockHeal",
+          "topMedian": 1.295906193221155,
+          "restMedian": 0.652520796279027,
+          "ratio": 1.985999834198399
+        },
+        {
+          "path": "card.power",
+          "topMedian": 6.220770138806605,
+          "restMedian": 10.69403847049675,
+          "ratio": 0.5817044847901733
+        },
+        {
+          "path": "special.catalystAsh",
+          "topMedian": 45.1565685533449,
+          "restMedian": 27.78155510192485,
+          "ratio": 1.6254154379650336
+        },
+        {
+          "path": "route.monster",
+          "topMedian": 204.20242231465699,
+          "restMedian": 329.23612499846854,
+          "ratio": 0.6202309127396237
+        }
+      ],
+      "thresholds": [
+        {
+          "path": "restHpPct",
+          "topMedian": 70.0,
+          "restMedian": 56.0,
+          "difference": 14.0,
+          "rangeFraction": 0.2153846153846154
+        },
+        {
+          "path": "shopMinRatio",
+          "topMedian": 0.05934185196994805,
+          "restMedian": 0.06789179190178404,
+          "difference": -0.00854993993183599,
+          "rangeFraction": -0.07772672665305445
+        },
+        {
+          "path": "removalAppetite",
+          "topMedian": 16.9812350524589,
+          "restMedian": 15.673185664229099,
+          "difference": 1.3080493882298008,
+          "rangeFraction": 0.05450205784290837
+        },
+        {
+          "path": "cardDecline",
+          "topMedian": 21.4855639683083,
+          "restMedian": 19.37334567774085,
+          "difference": 2.112218290567448,
+          "rangeFraction": 0.052805457264186194
+        },
+        {
+          "path": "routeLowHpPct",
+          "topMedian": 59.0,
+          "restMedian": 56.0,
+          "difference": 3.0,
+          "rangeFraction": 0.046153846153846156
+        }
+      ]
+    }
+  }
+}
