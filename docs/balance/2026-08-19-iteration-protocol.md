@@ -169,6 +169,28 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   now **0**. C2 FAIL all four (closest Dusk V0 +28.61). Dusk V5 holdout
   ceiling 4.5%. |Ash−Dusk| V0 **+55.5 pp**. C1 miss is not Ash-only.
   **No second 5h loop. No Smolder decay.** Identity keepers stay.
+- **Dusk HP 72→64 (H27) is a keeper.** Snapshot:
+  `docs/balance/data/421-h27/phase-a.json`. Arm 2 **36.0 / 12.0 / 25.5 /
+  5.0**. Holdout 66.0 / 27.5 / 71.5 / 41.0. |Ash−Dusk| **+5.5 / +13.5 pp**.
+  KEEP because Dusk V0 arm 2 dropped ≥6 pp the right way (45.0 → 36.0).
+  Old 80/55 VETO is record, not a revert. C1 theory: frailer Dusk drops
+  shatter-fat toward mid without deleting implicit chip. One landscape
+  next. **Do not raise Ash HP.** H22 (Ash 96) was reverted after Vow-5
+  90.5%; Ash stays 88.
+- **Relic stack is a later-phase binding lesson, not this loop.** Do not
+  retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
+  `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
+  tick 5+4+3+2+1 = **15** DoT with zero Ashbite. H11 already no-ops both
+  for Dusk (`_player_smolder_blocked` in `domain/rules/combat.gd`).
+  `hollowCrown` = +1 energy/turn, −10 max HP. H21 starter energy 4 failed
+  C2 (Ash arm 2 56.5%) and |gap| +29.5. Crown can re-apply energy on the
+  mixed landscape. Phase A holdout is `--mix=none`. Landscape mix
+  `A_modest_linear` is 15% elite 2nd relic; Ash pilot prefers coal
+  (`relicAshBonus`). H22 gap: Phase A Ash V5 holdout 50% vs landscape
+  Vow-5 Ash **90.5%**. If a later landscape trips Vow-5, that is
+  relic-stack/mix, not a reason to revert H27 Dusk 64 or to raise Ash HP.
+  Later isolated loop: coal 2→1 and/or ashenCore 3→2, Crown energy, and/or
+  smolder decay-2. James confirmed 2026-08-20 this is next-phase.
 
 Out of bounds unless a signed iteration brings one in: map weights, potion
 probability, act-transition heal, the five `vows` penalties, mix, `port_fixtures/`.
