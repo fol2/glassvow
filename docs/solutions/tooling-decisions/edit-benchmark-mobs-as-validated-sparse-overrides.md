@@ -38,7 +38,7 @@ The content loader therefore keeps three states distinct: the checked-in
 catalogue, the sparse override dictionary, and the effective catalogue consumed
 by the game. `ContentDB.load_full()` loads the baseline first and applies
 `content/mob-overrides.json` only when requested
-(`content/content_db.gd:54-59`). `mob-overrides` is the only layer between the
+(`content/content_db.gd:56-62`). `mob-overrides` is the only layer between the
 two. The Enemy Lab separately loads
 `ContentDB.load_full(false)` as its comparison baseline and derives the sparse set
 from entries that differ (`presentation/lab/enemy_lab.gd:347-352`). The checked-in

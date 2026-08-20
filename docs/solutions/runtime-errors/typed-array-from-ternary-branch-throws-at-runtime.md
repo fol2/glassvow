@@ -58,9 +58,11 @@ PR #59.
   time, at runtime. This survives the gate rewrite: `tools/check_scripts.sh`
   reads stderr rather than trusting the exit status, and still reports the
   seeded ternary clean.
-- **Relying on the test suite.** No test exercises the abandon route, so a
-  runtime-only throw on that path is invisible to CI. Green gates proved
-  parseability, not reachability.
+- **Relying on the test suite (as of the original incident).** No test then
+  exercised the abandon route. `tests/test_reloadable_abandon.gd` now
+  round-trips abandon as a reloadable RunEnd; the language trap is still
+  invisible to `--check-only`. Green parse gates still prove parseability,
+  not reachability of every ternary.
 
 ## Solution
 

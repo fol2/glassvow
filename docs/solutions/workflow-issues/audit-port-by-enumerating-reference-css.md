@@ -252,15 +252,12 @@ not for inventory.
 
 ## When to Apply
 
-Apply this when the reference surface is CSS (or another declarative stylesheet
-with the same shape), the port claims visual parity with that surface, and
-divergences are still being found by playthrough or screenshot inspection. It
-is the right move for combat, and it will be the right move for reward, shop
-and aspect once those screens are in scope — five of the sixty-seven live
-declarations already belong to those screens and were held out of the first
-census on purpose. Apply it also when a parallel audit is about to spend
-several sessions on "does the port feel right"; spend the first session on
-extraction so the later sessions have rows to mark.
+The *method* — enumerate a declarative surface, quote every row, mark
+judgement against the inventory — still applies. After #317 the web
+stylesheet is frozen history, not a live authority. Apply this to
+enumerable surfaces *this port owns* (Godot shaders, tweens, layout-book
+fields), not to claim visual parity with the detached reference. The
+2026-07 combat census remains the worked example.
 
 The honest limits matter as much as the method:
 

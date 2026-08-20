@@ -36,7 +36,7 @@ Studio Pro (3000 monthly credits; header showed 3200 including leftover free)
 and forbade `openapi.tripo3d.ai` / `platform.tripo3d.ai` generation. The
 receipt lives on `assets/art/map/provenance.json` under `paid_product` with
 `generation_surface: Studio` and `api_forbidden: true`
-(`assets/art/map/provenance.json:26-27`). That receipt does not pay the API.
+(`assets/art/map/provenance.json:27-28`). That receipt does not pay the API.
 
 Until this work, a present kit GLB could not fail the production-camera
 silhouette check: the checker printed SKIP. A named check that prints SKIP and
@@ -88,10 +88,14 @@ above 0.04 fails.
    wraps `xvfb-run` (`tools/map_asset_checks.py:409-412`). CI installs xvfb
    for the same reason.
 
-7. **A 20-placement PNG is review evidence, not the scalar gate.** The harness
-   can write `docs/reviews/292/road-slab-a-20.png`. Recognisable contour
-   repetition is still a human verdict. The noise number passing does not
-   close that clause of #292.
+7. **A 20-placement PNG is review evidence, not the scalar gate.** The
+   harness writes a *lit 5×4 clay grid* a human can read
+   (`docs/reviews/292/road-slab-a-20.png`). A white unshaded scatter is not
+   that evidence — see
+   [A signable 20-placement review is a lit 5×4 clay grid](a-signable-20-placement-review-is-a-lit-clay-grid.md).
+   Recognisable contour repetition is still a human verdict. The noise
+   number passing does not close the visual clause. #292 closed after the
+   owner signed the clay grid (same item, different size and angle).
 
 8. **The Godot DCC Bridge is a land hop, not a generating product.** It is the
    Studio frontpage talking to a local editor plugin
@@ -134,11 +138,12 @@ checker must raster it or fail closed (`gpu-raster`), not print SKIP.
 
 ## When to Apply
 
-- Any of the remaining 26 kit/terminus GLBs.
+- Any of the remaining kit/terminus GLBs (7 ordinary payloads are landed;
+  the rest live on #293 / #294).
 - Any temptation to "just hit the API, it is cheaper / scriptable."
 - Any change to `tools/map_asset_checks.py` or `tools/raster_map_silhouette.gd`.
-- Before claiming #292 done: provenance accepted, geometry gates, silhouette
-  scores, 20-placement *visual* review, and #291 lazy binding.
+- Before landing the next module: provenance accepted, geometry gates,
+  silhouette scores, and a *readable* 20-placement visual review.
 
 ## Examples
 
@@ -148,19 +153,20 @@ and the checker exited 0.
 **After (first module, this tree):** `shared-road-slab-a` is an accepted Studio
 record (`source: Studio`, `verdict: accepted`, 1560 triangles, 38656 bytes,
 Blender missing so the Studio download was kept as-is). Independent re-run of
-`python3 tools/check_map_assets.py` printed eight `gpu-silhouette` lines,
-max noise 0.0021 ≤ 0.04, then `map assets OK (1 payload files; declared
-absence uses fallbacks)`.
+`python3 tools/check_map_assets.py` printed eight `gpu-silhouette` lines per
+present GLB, max noise on slab-a 0.0021 ≤ 0.04, then
+`map assets OK (7 payload files; declared absence uses fallbacks)`.
 
 **Do not claim from this session:** a measured Studio credit drop
 (`paid_product.credits_balance` and `usage_history` still show only the
 2026-08-19 +3000 top-up). Godot on PATH here printed `4.7.2.stable`; the
-contract pin remains 4.7.1. #292 stays open until the 20-placement visual
-review is signed.
+contract pin remains 4.7.1. #292 is closed (owner signed the clay-grid
+20-placement). Remaining generate is #293.
 
 ## Related
 
 - [Put the gate where the change is deterministic](../conventions/put-the-gate-where-the-change-is-deterministic.md)
 - [Capture through a long-lived host](./long-lived-capture-host-not-process-per-shot.md)
+- [A signable 20-placement review is a lit 5×4 clay grid](a-signable-20-placement-review-is-a-lit-clay-grid.md)
 - `docs/map-scene-asset-bill.md` — generating-product rule and ordinary contract
-- GitHub #292 (open), #289, #207, #291
+- GitHub #292 (closed), #293 (open), #289, #207, #291

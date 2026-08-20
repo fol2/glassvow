@@ -26,10 +26,12 @@ tags: [godot, web-port, presentation, draw-call, node-count, refactor-verificati
 
 ## Context
 
-This project is a parallel port of a web build. Porting presentation faithfully
-means copying measured CSS pixels — which is correct and is why the chrome
-matches. But it also copies the DOM's *structure*, and one piece of that
-structure is wrong in Godot.
+This project began as a parallel port of a web build. After #317 the web
+tree is not the live standard; collapsing repeated non-interactive nodes
+into `_draw()` is. Copying DOM *structure* is still the trap: in a browser
+the only independently rotatable, offsetable, fadeable thing is an element,
+so the old piles were a stack of `.pile-layer` nodes. That structure is
+wrong in Godot.
 
 In a browser, the only thing you can independently rotate, offset or fade is an
 element. So the benchmark's card piles are drawn as a stack of `.pile-layer`
