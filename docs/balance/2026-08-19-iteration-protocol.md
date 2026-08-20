@@ -140,6 +140,12 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   → Phase A **GO** (old #204 still VETO; identity split). Skip H14
   (`surge`) and H15 (`eclipseSlash` 7→5). Snapshot:
   `docs/balance/data/421-h13/phase-a.json`.
+- **H13 landscape ran once and FAIL C1–C3.** Readout:
+  [`2026-08-20-421-hypothesis-13.md`](2026-08-20-421-hypothesis-13.md).
+  Arm 2 45.0 / 16.0 / 16.5 / 2.5. C2 PASS Dusk V5 and Ash V0; miss Dusk V0
+  +25.79 and Ash V5 +33.22. Ash top cell is **smolder:fat**; Ash CEM did
+  not drift to shatter. Dusk still does. C1 not close. **No second 5h
+  loop.** Identity keepers stay. Re-sign #204 later.
 - **Smolder decay −2 is a later isolated hypothesis**, not this loop. Ash V5
   arm 2 is already 2.5%. Player-side cinder tick stays −1. Do not decay
   after the cost queue already printed GO.
