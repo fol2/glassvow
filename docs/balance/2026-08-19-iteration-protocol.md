@@ -192,6 +192,15 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   starter). Working SHA remains H27 `ea5d6cab…`. Do not landscape. Do
   not raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-20-421-hypothesis-28.md`](2026-08-20-421-hypothesis-28.md).
+- **H29 (`eclipseSlash` cost 1→2, keep 7 / 9 and Cracked 1 / 2) is a
+  keeper.** Snapshot: `docs/balance/data/421-h29/phase-a.json`. Arm 2
+  **19.0 / 7.0 / 25.5 / 5.0**. Holdout 55.0 / 18.0 / 71.5 / 41.0.
+  Ash−Dusk **+16.5 / +23.0 pp**. Dusk V0 arm 2 36.0 → 19.0 (−17.0) ≥6
+  the right way. Ash unchanged (Dusk-only starter). V5 |gap| exceeds 20
+  because Dusk holdout tanked, not Ash — record; old 80/55 already VETO.
+  Locale untouched (text does not mention cost). Do not landscape this
+  pass. Do not raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-20-421-hypothesis-29.md`](2026-08-20-421-hypothesis-29.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
