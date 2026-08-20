@@ -177,6 +177,14 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   shatter-fat toward mid without deleting implicit chip. One landscape
   next. **Do not raise Ash HP.** H22 (Ash 96) was reverted after Vow-5
   90.5%; Ash stays 88.
+- **H27 landscape ran once and FAIL C1–C3.** Readout:
+  [`2026-08-20-421-hypothesis-27.md`](2026-08-20-421-hypothesis-27.md).
+  Arm 2 36.0 / 12.0 / 25.5 / 5.0. Shatter-fat 65.54% (H22 72.06); mid
+  dropped more (−13.0 pp) so the 10 pp window did not open. C2 PASS
+  Dusk V5 +38.92; miss Dusk V0 +29.54, Ash V0 +33.97, Ash V5 +32.98.
+  C3 FAIL all four. Vow-5 Ash **72.5% ≤ 90%** (H22 90.5% was Ash 96 +
+  mix/relic). **No second 5h loop.** Do not revert Dusk 64. Do not
+  raise Ash HP. Relic stack still later-phase.
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
