@@ -201,6 +201,15 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Locale untouched (text does not mention cost). Do not landscape this
   pass. Do not raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-20-421-hypothesis-29.md`](2026-08-20-421-hypothesis-29.md).
+- **H30 (`flare` AoE 7→9, keep cost 3 and no Smolder) is a keeper.**
+  Snapshot: `docs/balance/data/421-h30/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 25.5 / 5.0**. Holdout 55.0 / 22.0 / 71.5 / 41.0.
+  Ash−Dusk **+16.5 / +19.0 pp**. V5 |gap| 23.0 → 19.0 (cap met) because
+  Dusk V5 holdout rose +4.0 pp; Ash unchanged (Dusk-only art). Dusk V0
+  arm 2 19.0 → 21.5 (+2.5) under 6 pp and still <30%. Locale followed.
+  Eclipse cost stays 2. Do not landscape this pass. Do not raise Ash HP.
+  Relic stack still later-phase. Readout:
+  [`2026-08-20-421-hypothesis-30.md`](2026-08-20-421-hypothesis-30.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
