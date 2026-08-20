@@ -213,8 +213,10 @@ dictionary and IDs do not change (`tests/test_locale_hydration_main.gd` (`_comba
 - Preserve the real-control cancellation test. A single-request defer test does
   not prove latest-request-wins (`tests/test_locale_hydration_main.gd` (`_combat_latest_request_wins`)).
 - Run the repository gates after any change to this transaction: cache-cold
-  asset import, script parsing, the full headless test suite, and both anchor
-  checkers. PR #140 merged only after those project gates and the live-switch
+  asset import, script parsing, the full headless test suite,
+  `tools/check_anchors.py`, and `tools/check_benchmark_freeze.py`.
+  (`check_web_anchors.py` is deleted.) PR #140 merged only after those
+  project gates and the live-switch
   integration evidence passed.
 
 ## Why This Matters

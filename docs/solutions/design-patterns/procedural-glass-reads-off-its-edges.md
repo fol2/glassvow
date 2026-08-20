@@ -24,12 +24,10 @@ fallback enemy avatar, which is also pure `_draw`. (Enemies normally render as
 painted Actors; the gem survives as the fallback when a painting is missing, and
 as the world map's emblem.)
 
-Status note (2026-08-01): the reward's OWN drawing layer is being superseded by
-a real-3D stage (`docs/reward-embers-3d-plan.md`, staged behind the reward lab
-pending the owner's integration call) — that plan's premise is precisely that a
-flat drawing cannot be a material. This lesson remains the standing contract
-for glass that IS drawn in 2D — `GlassGem`, the map emblem, and any future
-`_draw`-based pane.
+Status note (2026-08-20): `RewardEmbers` is a design study; the shipping
+reward path is `RewardScreen` / `RewardStage`. This lesson remains the
+standing 2D contract for `GlassGem`, the map emblem, and any remaining
+`_draw` glass — not a claim that the reward screen still draws shards.
 
 The first pass drew each shard the obvious way: a filled polygon plus an outline.
 It was rejected on sight; the note in the session was that the pieces read as

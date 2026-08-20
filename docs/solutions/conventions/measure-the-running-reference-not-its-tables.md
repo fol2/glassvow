@@ -26,8 +26,9 @@ tags: [port, parity, layout, container-queries, verification, methodology, web-r
 ## Context
 
 The stage-shape work gave this port five authored screen compositions where it
-had one. Its data came from the benchmark's two layout files, transliterated
-verbatim into `assets/layout/combat-layout.json`: `src/battlefield-layout.js`
+had one (phone-portrait and pad-portrait have since been retired; three
+landscape shapes ship). Its data came from the benchmark's two layout files,
+transliterated verbatim into `assets/layout/combat-layout.json`: `src/battlefield-layout.js`
 (209 lines — ground line, hero seat, foe formations, three scenery plates, per
 act) and `src/ui-chrome-layout.js` (74 lines — ten chrome widgets).
 

@@ -93,7 +93,9 @@ through the Developer Console does not inherit that evidence — except the
 endgame surfaces named in `docs/rc-bar.md` P5, which may be signed on a Dev
 Review build reached through the Scenario kernel. That exception is an
 amendment of the sign-off protocol, not a waiver of any criterion, and it does
-not make Console-reached states evidence for any other surface.
+not make Console-reached states evidence for any other surface. A capture
+meant for a human-signed gate is evidence only when a person can actually
+read the picture; an unreadable file on disk is not that gate running.
 
 ### Diagnostic overlay
 A development-only live performance readout used to spot and reproduce likely

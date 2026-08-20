@@ -11,7 +11,7 @@ applies_when:
   - "Retro-fitting symbol annotations onto a backlog of existing file:line citations in bulk"
   - "A checker reports items as uncheckable and the obvious fix is to annotate every one of them"
   - "The evidence for a check is derived from the same tree the check is meant to verify"
-  - "Writing a new file:line citation in docs/ while several lanes move the same tree"
+  - "Repairing the frozen 607 file:line citations; new citations into the detached web tree are banned (`check_benchmark_freeze.py`). Prefer `cite-the-symbol-not-the-line.md` for new work."
   - "Deciding whether a mechanical pass may close a gate whose real question the tool cannot see"
 symptoms:
   - "--strict reported 226 anchors carrying no (symbol); the audit worked a set of 225"
