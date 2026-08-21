@@ -8,7 +8,7 @@ page this check are marked **[verify at entry]**.
 
 **Scope invariants — nothing below assumes these exist:** no IAP, no ads, no
 accounts, no cloud saves, no network play. Ship profile: premium one-price,
-offline, local saves only, Godot 4.7.1, locales en + zh-Hant. A crash-reporting
+offline, local saves only, Godot 4.7.2, locales en + zh-Hant. A crash-reporting
 SDK MAY be added later; both disclosure paths are covered in §4.
 
 Legend: 🔴 launch blocker · 🟡 nice-to-have / conditional · ⏰ carries a deadline
@@ -30,7 +30,7 @@ or version number.
 | 8 | iOS distribution signing: Team ID + bundle ID in Godot export; cert/profile/upload via Xcode | Apple | Configure export preset; archive + upload in Xcode | 🔴 | [Godot iOS export](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_ios.html) |
 | 9 | ⏰ New apps must target **Android 16 (API 36)** from **2026-08-31** (extension to 2026-11-01 requestable) | Google | Set `gradle_build/target_sdk` = 36 (Godot 4.7 docs describe SDK 35 tooling) and verify | 🔴⏰ | [target API](https://support.google.com/googleplay/android-developer/answer/11926878) |
 | 10 | AAB required for new apps ⇒ Gradle build in Godot; Play App Signing mandatory (auto-enrolled), upload keystore held by you | Google | Enable Gradle build, generate release keystore, upload AAB | 🔴 | [Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756) · [Godot Android export](https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_android.html) |
-| 11 | ⏰ 16 KB page sizes required for apps targeting Android 15+; update hard-stop **2027-02-01**. Godot ≥4.5 templates (NDK r28b) comply → 4.7.1 OK | Google | No action for GDScript builds; verify with `zipalign -c -P 16` on the artifact | 🔴⏰ | [page sizes](https://developer.android.com/guide/practices/page-sizes) · [godot PR #106358](https://github.com/godotengine/godot/pull/106358) |
+| 11 | ⏰ 16 KB page sizes required for apps targeting Android 15+; update hard-stop **2027-02-01**. Godot ≥4.5 templates (NDK r28b) comply → 4.7.2 OK | Google | No action for GDScript builds; verify with `zipalign -c -P 16` on the artifact | 🔴⏰ | [page sizes](https://developer.android.com/guide/practices/page-sizes) · [godot PR #106358](https://github.com/godotengine/godot/pull/106358) |
 | 12 | ⏰ Apple age rating: updated system (4+/9+/13+/16+/18+) live; updated questions mandatory since **2026-01-31** | Apple | Answer new questionnaire; expect 9+ (Cartoon/Fantasy Violence), no gambling descriptors | 🔴⏰ | [age ratings](https://developer.apple.com/help/app-store-connect/reference/age-ratings) |
 | 13 | IARC content rating questionnaire mandatory | Google | Complete honestly; declare NO gambling/simulated gambling | 🔴 | [content rating](https://support.google.com/googleplay/android-developer/answer/9859655) |
 | 14 | Privacy policy URL required on BOTH stores even with zero collection | Both | Publish a policy URL; also link it inside the app (Apple 5.1.1(i)) | 🔴 | [Apple 5.1.1](https://developer.apple.com/app-store/review/guidelines/) · [Data safety](https://support.google.com/googleplay/android-developer/answer/10787469) |
@@ -139,7 +139,7 @@ or version number.
   page sizes, you won't be able to release these updates." (Requirement began
   applying to new submissions 2025-11-01.) NDK **r28+ aligns 16 KB by default**.
   Godot added 16 KB support (and moved to NDK r28b) in **4.5 dev 5** via
-  godotengine/godot **PR #106358** — so **Godot 4.7.1 export templates comply**.
+  godotengine/godot **PR #106358** — so **Godot 4.7.2 export templates comply**.
   Caveat: gradle-generated **.NET/C#** exports had an alignment bug
   (godotengine/godot #110262) — irrelevant to this GDScript project, but re-check
   if C# ever enters the tree. Verify the shipped artifact with
@@ -413,7 +413,7 @@ https://support.google.com/googleplay/android-developer/answer/9898842
 4. Build pipeline: Xcode 26 on macOS for iOS (in force since 2026-04-28);
    Gradle/AAB export with `gradle_build/target_sdk = 36` (Play cutoff
    **2026-08-31** — 18 days from this dossier's check date) and release keystore;
-   verify 16 KB alignment of the shipped AAB (Godot 4.7.1 templates comply).
+   verify 16 KB alignment of the shipped AAB (Godot 4.7.2 templates comply).
 5. Publish privacy policy URL (en + zh-Hant), link it in-app; declare
    "Data Not Collected" (Apple) / no collection (Play Data safety).
 6. Answer Apple's updated age-rating questionnaire (expect 9+) and Play's IARC

@@ -1,7 +1,9 @@
 # Crash reporting for Godot 4.7 mobile — vendor and wiring
 
 **Decision date:** 2026-08-13
-**Target:** Glassvow, Godot **4.7.1**, iOS and Android (desktop-aware)
+**Target at decision date:** Glassvow, Godot **4.7.1**, iOS and Android
+(desktop-aware). The exact project pin moved to **4.7.2** on 2026-08-21; the
+vendor decision remains valid because the selected SDK supports Godot 4.5+.
 **Status:** research decision; SDK integration remains a separate platform deliverable
 
 ## Decision

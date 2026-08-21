@@ -3,11 +3,15 @@ name: glassvow-godot
 description: Binding contract for working in the glassvow Godot repo — engine pin, architecture boundaries, editing methods, verification, save compatibility, stop conditions. Load before any implementation work here.
 ---
 
-# Glassvow Godot 4.7.1 Binding Contract
+# Glassvow Godot 4.7.2 Binding Contract
 
 ## 1. Engine Contract
 
-**Pin:** Godot 4.7.1 exact. Verify before starting work: `godot --version` must print `4.7.1.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
+**Pin:** Godot 4.7.2 exact. Verify before starting work: `godot --version` must print `4.7.2.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
+
+Historical evidence keeps the engine version it actually used. A dated packet
+that truthfully records 4.7.1 is not an active pin and must not be rewritten as
+though the run happened on 4.7.2.
 
 **4.7 Gotchas (trap setters):**
 - **Typed-return overrides need an explicit `return`:** since 4.7, overriding a method whose declared return type is non-void without a `return` on every path is an error, not a silent null.
@@ -52,7 +56,7 @@ description: Binding contract for working in the glassvow Godot repo — engine 
 Run these three from the repo root, in order. All must pass before pushing:
 
 ```bash
-godot --version                          # confirm 4.7.1.stable
+godot --version                          # confirm 4.7.2.stable
 tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
 tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 with PASS

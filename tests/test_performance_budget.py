@@ -273,7 +273,7 @@ class PerformanceEvidenceTests(unittest.TestCase):
 
     def test_runtime_provenance_matches_the_signed_target(self) -> None:
         self.assert_report_rejected(lambda: self.report["provenance"]
-                                    .update(godot="4.7.1.counterfeit"))
+                                    .update(godot="4.7.2.counterfeit"))
         self._reset()
         self.assert_report_rejected(lambda: self.report["provenance"]
                                     .update(renderer="Another GPU"))

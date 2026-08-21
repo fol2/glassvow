@@ -227,8 +227,8 @@ work, and one per widget is the correct count.
 - `presentation/combat/hud_bar.gd` — the widget this was found in. The
   node-per-layer version and its `.pile-layer` lineage are in this file's git
   history on `main`; the `_draw()` version shipped in `4f52bd8`.
-- Verified on Godot 4.7.1.stable, the version pinned by this project's
-  `CLAUDE.md`.
+- Verified on Godot 4.7.1.stable, the project pin at the time. The current pin
+  is 4.7.2.stable; see `CLAUDE.md`.
 - The same question is worth asking of any other ported cluster that repeats a
   node per value. The two obvious candidates named when this was written —
   status stacks and facet pips — **have since been checked, and both are
