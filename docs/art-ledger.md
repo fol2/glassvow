@@ -837,3 +837,29 @@ parts. It is Y-up, grounded at Y=0, one mesh and one triangulated surface with
 POSITION+NORMAL only: 4,446 triangles, 107,504 bytes. No vendor, textures or
 paid credits. sha256
 `81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc`. fol2 accepted the final asset on 2026-08-21; evidence is in `docs/reviews/294/act1-terminus/`.
+
+### `map-concepts/act2-terminus-flooded-threshold.png` — Act II hero concept (#294)
+
+Project-authored concept generated from the Glassvow brief: a monumental drowned
+pointed arch with uneven ruined wings, three or four broad masonry courses, two
+fused pendant masses (left larger and higher), coarse side apertures and one
+continuous silt slab; no chains, cages, grout, kelp, coral or painted water.
+fol2 accepted the concept on 2026-08-21. sha256 `7286e70e628b9c29d98c8037769e7ab1784fc7f7ee24f1b9076d4f42772ba9b0`.
+
+### `map/grades/act2-grade.png` — 512×256 RGBA — Act II grade (#294)
+
+Locally authored low-frequency blue-night to cyan-distance flooded-corridor
+grade, with alpha restricted to contact darkening. Godot 4.7.2 generated its
+VRAM mode 2, high-quality, mipmapped sidecar; it was not hand-edited. No vendor
+or paid generation. sha256 `b992ae08e638080e39aa32221edb6c811d9bfc4d9f4a8ede1a0a05f500f95906`. fol2 accepted the Act II slice on
+2026-08-21; evidence is in `docs/reviews/294/act2-grade/`.
+
+### `map/geometry/act2/terminus-flooded-threshold.glb` — Act II hero terminus (#294)
+
+Locally modelled from the accepted flooded-threshold concept. Parametric arch
+surfaces, ruined wings, through-apertures, silt courses and two fused pendant
+masses were reduced by manifold boolean union to one watertight component. The
+shipping GLB is Y-up and grounded at Y=0, one mesh and one triangulated surface,
+POSITION+NORMAL only: 5,568 triangles, 134,416 bytes. No vendor, textures or
+paid credits. sha256 `d093ccc134faa8118e5a724bef33c4ee8a0fda15fc95826a0b608541ab58aa99`. fol2 accepted the final hero on 2026-08-21;
+evidence is in `docs/reviews/294/act2-terminus/`.
