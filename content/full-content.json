@@ -1333,7 +1333,7 @@
           "kind": "status",
           "who": "self",
           "id": "vulnerable",
-          "n": 2
+          "n": 1
         },
         {
           "kind": "status",
@@ -1347,20 +1347,14 @@
           {
             "kind": "status",
             "who": "self",
-            "id": "vulnerable",
-            "n": 1
-          },
-          {
-            "kind": "status",
-            "who": "self",
             "id": "energized",
             "n": 1
           }
         ],
-        "text": "Your glass runs too hot: gain 1 Cracked. At the start of each turn, gain 1 Energy."
+        "text": "At the start of each turn, gain 1 Energy."
       },
       "name": "Overglow",
-      "text": "Your glass runs too hot: gain 2 Cracked. At the start of each turn, gain 1 Energy."
+      "text": "Your glass runs too hot: gain 1 Cracked. At the start of each turn, gain 1 Energy."
     },
     "virulence": {
       "type": "power",
