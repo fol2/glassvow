@@ -719,6 +719,25 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Working SHA remains H39 `a0d608a5…`. Do not landscape. Do
   not raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-68.md`](2026-08-21-421-hypothesis-68.md).
+- **H69 (`cards.ashBite` +4 Ward / +6 upgrade, keep 6/8 dmg,
+  Smolder 2/3, cost 2) is reverted — Ash V0 arm 2 clog and
+  |Ash−Dusk| over 20.** Snapshot:
+  `docs/balance/data/421-h69/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 45.0 / 16.0**. Holdout 55.0 / 22.0 / 87.0 /
+  61.5. Ash−Dusk **+32.0 / +39.5 pp** (cap broken). Dusk
+  **bit-identical** (Ash-only theory held). Ash V0 arm 1
+  **+11.5** and holdout **+16.5** both ≥6. Ash V0 arm 2
+  17.5→45.0 (**+27.5 clog**). 4 copies of +4 Ward is H20/H44
+  every-fight Ward even at cost 2. Do not add Ward to
+  Ashbite this loop. Not relic-stack, not Dusk chip, not
+  lantern arts, not H55 smolder-top, not shared smash, not
+  Fervor, not 1-cost powers, not Twin Shards, not Requiem,
+  not Inner Blaze, not First Spark, not Choir, not Ashbite
+  damage. H39 landscape already FAIL C1–C3 (`595377b`);
+  this is not a second 5h. Working SHA remains H39
+  `a0d608a5…`. Do not landscape. Do not raise Ash HP.
+  Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-69.md`](2026-08-21-421-hypothesis-69.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
