@@ -109,6 +109,10 @@ func active_asset_paths() -> PackedStringArray:
 	return _materials.active_asset_paths()
 
 
+func active_asset_resources() -> Array[Resource]:
+	return _materials.active_asset_resources()
+
+
 ## Bind this act's grade + ramp bands. `MapRegions.for_act` is the only
 ## palette source; content theme is not consulted. Re-arms freeze so the
 ## new look paints once.
