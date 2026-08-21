@@ -87,6 +87,14 @@ xcodebuild -exportArchive -archivePath build/ios/glassvow.xcarchive \
   -allowProvisioningUpdates
 ```
 
+`scripts/ios_export_options.plist` keeps `method = app-store-connect`,
+`teamID = V45S7U2LZB`, and `signingStyle = automatic`. It also pins
+`manageAppVersionAndBuildNumber = false` so App Store Connect cannot rewrite
+marketing **1.0.0** / build **1**, and `uploadSymbols = true` so a direct
+App Store Connect upload includes symbols. With `destination = export`, retain
+the archive's `dSYMs/` for the later Apple and Sentry symbol-upload steps; dSYMs
+are not embedded in the IPA.
+
 Headless, `-exportArchive` alone fails with **"No Accounts"** (the CLI can't
 reach Xcode's Apple ID session). The working path — verified 2026-08-13, it
 produced a distribution-signed `glassvow.ipa` (Team V45S7U2LZB, full Apple
