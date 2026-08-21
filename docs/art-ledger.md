@@ -674,7 +674,29 @@ Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
 > centered, large in frame. Distinct tall silhouette, still a simple geometric
 > kitbash mass.
 
-sha256 `68cc72299c378f1d25414d5fa830292ad6a4ec4c94d6c5a38af5a428c620baf5`.
+Fuse pass (2026-08-21, Grok Imagine, seeded from the 2026-08-19 concept). The
+first Studio Smart Mesh output from that file was two islands (2026-08-19);
+a 2026-08-21 retry on the same bytes was three islands, two of them 28–49 mm
+chips in the shoulder notch. The fuse makes the missing chunk a concave bite
+in one volume:
+
+> Keep the same clay-maquette look, medium-gray studio background, even
+> above-front lighting, and 3/4 orthographic view. Fuse the standing monument
+> into one continuous upright stone — no gaps, no separate chips, no second
+> block sitting in the shoulder. The missing upper-right chunk is a concave
+> bite in the same solid volume. One connected stele, slightly wider at the
+> base, blunt rounded top, sitting on the ground. Distinct tall silhouette,
+> still a simple game-kitbash mass.
+
+Isolate pass (same day, seeded from the fuse): drop the ground plane, horizon,
+and cast shadow so Smart Mesh does not emit a floor island.
+
+sha256 `b4b0ddfaa07e2b6f5083e9185413931123154ee5bd6ec7cb59f2c68aef80d2b3`.
+
+Accepted by fol2 on 2026-08-21. Shipping mesh is the fused Studio Pro Export
+GLB at `geometry/shared/standing-monument.glb`. Studio Pro is the generating
+product; API generation is forbidden. Canonical 20-placement capture:
+`docs/reviews/293/shared-standing-monument-20.png`.
 
 ### `map-concepts/act1-ash-trunk-fork.jpg` — 1:1 concept, not a shipping texture
 
