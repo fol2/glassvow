@@ -592,6 +592,20 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   `a0d608a5…`. Do not landscape. Do not raise Ash HP. Relic
   stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-60.md`](2026-08-21-421-hypothesis-60.md).
+- **H61 (`cards.heavyBlow` 12→16 / 16→20, keep cost 2 and no
+  base chip) is reverted — Ash V0 arm 1 −6.0 wrong way.**
+  Snapshot: `docs/balance/data/421-h61/phase-a.json`. Arm 2
+  **21.5 / 8.5 / 18.5 / 5.0**. Holdout 56.5 / 23.5 / 69.5 /
+  37.5. Ash−Dusk **+13.0 / +14.0 pp**. Ash V0 arm 1
+  77.5→71.5 (**−6.0**, wrong way; H52 class). No arm-2 clog.
+  Digest moved (`1f796b9c…`); not re-pinned. Do not buff
+  2-cost common smash again this loop. Not relic-stack, not
+  Dusk chip, not 1-cost Dimmed/ward/regen, not H55
+  smolder-top. H39 landscape already FAIL C1–C3 (`595377b`);
+  this is not a second 5h. Working SHA remains H39
+  `a0d608a5…`. Do not landscape. Do not raise Ash HP. Relic
+  stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-61.md`](2026-08-21-421-hypothesis-61.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
