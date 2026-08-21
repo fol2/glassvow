@@ -1,0 +1,48 @@
+{
+  "measurement_commit": "3d5bc33bb0886d1d18673e9d1310d1c17a37fe75",
+  "preset": "iOS",
+  "configuration": "Release",
+  "xcode": {
+    "version": "26.6",
+    "build": "17F113",
+    "sdk": "iPhoneOS 26.5"
+  },
+  "comparison": "same tree and export settings; baseline deletes only 12 GLB, 4 PNG and their import sidecars under assets/art/map",
+  "signed_identity": {
+    "bundle_id": "io.fol2.glassvow",
+    "team": "V45S7U2LZB",
+    "certificate_class": "Apple Distribution",
+    "profile_class": "iOS App Store"
+  },
+  "pck": {
+    "final_bytes": 347963472,
+    "baseline_bytes": 346401776,
+    "delta_bytes": 1561696,
+    "delta_mib": 1.489349,
+    "final_sha256": "7d30c692270e00b087c96b844d854a110bf6c0dc398a19b51c0963e7ebbff1ff",
+    "baseline_sha256": "13f50680525d3856b3d0ad67d08aad468f8cd4173fa0fbd47b984ca7199418f4"
+  },
+  "ipa": {
+    "final_bytes": 375556316,
+    "baseline_bytes": 374483047,
+    "delta_bytes": 1073269,
+    "delta_mib": 1.023549,
+    "final_sha256": "dc4dbff6725d147be24574c5713be17a105e77f72b46d41b2342fdffe60fce2c",
+    "baseline_sha256": "985f292a6f6cc6032d8232bab62db4b0470ed7b75551786b1a61bb10d5e086c0"
+  },
+  "inventory": {
+    "entries_each": 112,
+    "expected_changed_entries": [
+      "glassvow.pck",
+      "app signature resources",
+      "signed executable",
+      "matching symbol UUID"
+    ],
+    "unexpected_payload_entries": []
+  },
+  "guardrail": {
+    "target_mib": 16.0,
+    "reopen_mib": 18.7,
+    "pass": true
+  }
+}

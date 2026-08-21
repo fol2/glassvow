@@ -1,0 +1,40 @@
+{
+  "issue": 295,
+  "measurement_commit": "3d5bc33bb0886d1d18673e9d1310d1c17a37fe75",
+  "canonical_merge": "a28e02588a40e82b55cea93205a0641bb6f61b22",
+  "tree_identity": "git diff between measurement commit and canonical merge is empty",
+  "base_commit": "82b9eab05f6dda5696861e476eae7346305a8b26",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "xcode": {
+    "version": "26.6",
+    "build": "17F113",
+    "sdk": "iPhoneOS 26.5"
+  },
+  "export": {
+    "store_preset": "iOS",
+    "device_preset": "iOS Dev Review",
+    "configuration": "Release",
+    "store_signing": "Apple Distribution / App Store profile",
+    "device_signing": "Apple Development / two-floor-device profile"
+  },
+  "bundle_id": "io.fol2.glassvow",
+  "version": "1.0.0",
+  "build": "1",
+  "manifest_sha256": "900949d3eaead1dea2aadb8ec2e3551820a6ef5c6d3d41d27cd4a92c89671b8e",
+  "devices": [
+    {
+      "name": "iPhone SE 2",
+      "product": "iPhone12,8",
+      "os": "iOS 26.2"
+    },
+    {
+      "name": "iPad 8",
+      "product": "iPad11,6",
+      "os": "iPadOS 26.1"
+    }
+  ],
+  "locales": [
+    "en",
+    "zh-Hant"
+  ]
+}
