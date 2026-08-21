@@ -285,6 +285,20 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Working SHA remains H33 `585b143b…`. Do not landscape. Do not
   raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-36.md`](2026-08-21-421-hypothesis-36.md).
+- **H37 (`smother` cost 1→2, keep 5 Ward and Smolder 2)
+  is noise-on-ahead — reverted.** Snapshot:
+  `docs/balance/data/421-h37/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 8.5 / 1.0**. Holdout 55.0 / 22.0 / 53.0 / 20.5.
+  Ash−Dusk **−2.0 / −1.5 pp**. Ash V0 arm 2 17.5→8.5 (−9.0)
+  ≥6 the C2 way (≤11.5). Dusk arm 2 bit-identical (Ash-only
+  starter). Ash−Dusk V0 +10.5→−2.0 (Ash 53.0 < Dusk 55.0) —
+  planned Ash tanked; hard REVERT. Locale untouched (text
+  does not mention cost). H32 sibling; two 2-cost starters
+  tax random *and* planned. H33 landscape already FAIL
+  C1–C3 (`fbb92f6`); this is not a second 5h. Working SHA
+  remains H33 `585b143b…`. Do not landscape. Do not raise
+  Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-37.md`](2026-08-21-421-hypothesis-37.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
