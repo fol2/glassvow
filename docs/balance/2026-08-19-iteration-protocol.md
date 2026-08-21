@@ -416,6 +416,18 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   landscape. Do not raise Ash HP. Relic stack still
   later-phase. Readout:
   [`2026-08-21-421-hypothesis-46.md`](2026-08-21-421-hypothesis-46.md).
+- **H47 (`cards.leechBlade` leech 9→13 / 13→17, keep cost 2)
+  is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h47/phase-a.json`. Arm 2
+  **22.0 / 9.0 / 17.0 / 6.5**. Holdout 55.5 / 23.0 / 70.5 / 40.5.
+  Ash−Dusk **+15.0 / +17.5 pp**. Ash V0 arm 1 77.5→78.0 (+0.5)
+  and holdout 70.5→70.5 (+0.0) both |delta| <6. No arm-2 clog.
+  Digest moved (`c92be4b3…`); not re-pinned. Not 1-cost
+  sustain/ward. H39 landscape already FAIL C1–C3 (`595377b`);
+  this is not a second 5h. Working SHA remains H39 `a0d608a5…`.
+  Do not landscape. Do not raise Ash HP. Relic stack still
+  later-phase. Readout:
+  [`2026-08-21-421-hypothesis-47.md`](2026-08-21-421-hypothesis-47.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
