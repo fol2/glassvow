@@ -716,8 +716,8 @@
         {
           "kind": "special",
           "id": "momentum",
-          "n": 10,
-          "grow": 6
+          "n": 6,
+          "grow": 4
         }
       ],
       "up": {
@@ -725,14 +725,14 @@
           {
             "kind": "special",
             "id": "momentum",
-            "n": 12,
-            "grow": 8
+            "n": 8,
+            "grow": 6
           }
         ],
-        "text": "Deal @12@ damage. Each play, this card gains +8 damage this combat."
+        "text": "Deal @8@ damage. Each play, this card gains +6 damage this combat."
       },
       "name": "Honing Edge",
-      "text": "Deal @10@ damage. Each play, this card gains +6 damage this combat."
+      "text": "Deal @6@ damage. Each play, this card gains +4 damage this combat."
     },
     "bulwark": {
       "type": "skill",
