@@ -181,10 +181,6 @@
           "who": "target",
           "id": "poison",
           "n": 2
-        },
-        {
-          "kind": "block",
-          "n": 4
         }
       ],
       "up": {
@@ -198,16 +194,12 @@
             "who": "target",
             "id": "poison",
             "n": 3
-          },
-          {
-            "kind": "block",
-            "n": 6
           }
         ],
-        "text": "Deal @8@ damage. Apply 3 Smolder. Gain #6# Ward."
+        "text": "Deal @8@ damage. Apply 3 Smolder."
       },
       "name": "Ashbite",
-      "text": "Deal @6@ damage. Apply 2 Smolder. Gain #4# Ward."
+      "text": "Deal @6@ damage. Apply 2 Smolder."
     },
     "smother": {
       "type": "skill",
