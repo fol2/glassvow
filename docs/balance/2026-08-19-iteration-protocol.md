@@ -685,6 +685,22 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   SHA remains H39 `a0d608a5…`. Do not landscape. Do not
   raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-66.md`](2026-08-21-421-hypothesis-66.md).
+- **H67 (`cards.annihilate` 9→13 / 12→16 AoE, keep Smolder 3/4,
+  cost 2) is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h67/phase-a.json`. Arm 2
+  **19.0 / 8.0 / 19.5 / 7.0**. Holdout 57.5 / 22.0 / 70.0 /
+  41.5. Ash−Dusk **+12.5 / +19.5 pp**. Ash V0 arm 1 77.5→75.0
+  (−2.5). Digest unchanged. Ash-preferred rare smash did not
+  fire n=200 planned (H50/H57/H64; catalyst remains the rare
+  exception). Do not buff Requiem damage this loop. Not
+  relic-stack, not Dusk chip, not lantern arts, not H55
+  smolder-top, not shared Dimmed, not 1-cost Dimmed/ward/
+  regen, not 2-cost common smash, not Twin Shards, not First
+  Spark draw, not Choir. H39 landscape already FAIL C1–C3
+  (`595377b`); this is not a second 5h. Working SHA remains
+  H39 `a0d608a5…`. Do not landscape. Do not raise Ash HP.
+  Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-67.md`](2026-08-21-421-hypothesis-67.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
