@@ -379,6 +379,18 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Working SHA remains H39 `a0d608a5…`. Do not landscape. Do
   not raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-43.md`](2026-08-21-421-hypothesis-43.md).
+- **H44 (`arts.ashfall` Ward 5→8, keep Smolder 6 and cost 3)
+  is an arm-2-clog / gap-cap revert.** Snapshot:
+  `docs/balance/data/421-h44/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 27.0 / 7.5**. Holdout 55.0 / 22.0 / 77.0 / 52.5.
+  Ash−Dusk **+22.0 / +30.5 pp** (both over 20). Ash V0 holdout
+  70.5→77.0 (+6.5) fires KEEP-OR; Ash V0 arm 2 17.5→27.0
+  (**+9.5**) is the ≥6 clog. Extra Ward on the always-present
+  Ash art is starter-like. H39 landscape already FAIL C1–C3
+  (`595377b`); this is not a second 5h. Working SHA remains
+  H39 `a0d608a5…`. Do not landscape. Do not raise Ash HP.
+  Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-44.md`](2026-08-21-421-hypothesis-44.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
