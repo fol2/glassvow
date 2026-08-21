@@ -1116,7 +1116,7 @@
           "id": "devour",
           "n": 10,
           "embers": 3,
-          "heal": 8
+          "heal": 4
         }
       ],
       "up": {
@@ -1126,13 +1126,13 @@
             "id": "devour",
             "n": 13,
             "embers": 4,
-            "heal": 12
+            "heal": 6
           }
         ],
-        "text": "Deal @13@ damage. If this kills, swallow its fire: gain 4 Embers and heal 12. Kindle."
+        "text": "Deal @13@ damage. If this kills, swallow its fire: gain 4 Embers and heal 6. Kindle."
       },
       "name": "Eat the Flame",
-      "text": "Deal @10@ damage. If this kills, swallow its fire: gain 3 Embers and heal 8. Kindle."
+      "text": "Deal @10@ damage. If this kills, swallow its fire: gain 3 Embers and heal 4. Kindle."
     },
     "annihilate": {
       "type": "attack",
