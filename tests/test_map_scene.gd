@@ -107,21 +107,31 @@ static func _scene(fails: Array[String]) -> void:
 				"ground does not cast shadows")
 	_check(fails, scene.get_rig().get_camera().current,
 			"act camera is current inside the stage")
-	_check(fails, scene.find_child("MapAssetGeometry", true, false) == null,
-			"partial or absent payload keeps placeholder geometry")
 	var slab: String = "res://assets/art/map/geometry/shared/road-slab-a.glb"
+	var terminus_path: String = "res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb"
 	var paths: PackedStringArray = scene.active_asset_paths()
-	if ResourceLoader.exists(slab):
-		_check(fails, paths.has(slab) and paths.size() < 12,
-				"present shared-road-slab-a binds through MapMaterials, not a second loader")
+	var complete: bool = ResourceLoader.exists(slab) and ResourceLoader.exists(terminus_path)
+	if complete:
+		_check(fails, scene.find_child("MapAssetGeometry", true, false) is Node3D,
+				"complete eight-kit + terminus set replaces placeholder geometry")
+		_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
+				"active terminus is attached")
+		_check(fails, paths.has(slab) and paths.has(terminus_path),
+				"present shared-road-slab-a and terminus bind through MapMaterials")
 	else:
-		_check(fails, paths.is_empty(),
-				"declared-but-absent assets keep the current placeholder geometry")
+		_check(fails, scene.find_child("MapAssetGeometry", true, false) == null,
+				"partial or absent payload keeps placeholder geometry")
+		if ResourceLoader.exists(slab):
+			_check(fails, paths.has(slab) and paths.size() < 12,
+					"present shared-road-slab-a binds through MapMaterials, not a second loader")
+		else:
+			_check(fails, paths.is_empty(),
+					"declared-but-absent assets keep the current placeholder geometry")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
 		var placeholder: Node = scene.find_child(node_name, true, false)
 		_check(fails, placeholder is GeometryInstance3D
-				and (placeholder as GeometryInstance3D).visible,
-				"%s remains visible until the full eight-kit act set resolves" % node_name)
+				and (placeholder as GeometryInstance3D).visible == not complete,
+				"%s visibility follows whether the full eight-kit act set resolved" % node_name)
 	scene.free()
 
 
@@ -409,7 +419,11 @@ static func _palette(fails: Array[String]) -> void:
 						"act %d grade is not a previous act's texture" % act)
 			seen.append(tex)
 			if act == 0:
-				_grade_recipe(fails, tex)
+				if tex is ImageTexture:
+					_grade_recipe(fails, tex)
+				else:
+					_check(fails, tex.get_width() == 512 and tex.get_height() == 256,
+							"painted act 0 grade is the declared 512×256 row")
 	var ground_end: ShaderMaterial = _override(scene, "TerrainPlaceholder")
 	_check(fails, ground_end != null
 			and is_equal_approx(g_val, MapMaterials.GROUND_VALUE)

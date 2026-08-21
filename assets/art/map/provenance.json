@@ -222,6 +222,40 @@
       "concept_sha256": "b4b0ddfaa07e2b6f5083e9185413931123154ee5bd6ec7cb59f2c68aef80d2b3",
       "land_method": "studio_download",
       "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-grade",
+      "source": "local-deterministic",
+      "created_at": "2026-08-21T13:38:00+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "e9c74f792dec12d4c70940d651b611c341940320f1544d440cafdb523aaf3fa7",
+      "final_sha256": "e9c74f792dec12d4c70940d651b611c341940320f1544d440cafdb523aaf3fa7",
+      "edits": [
+        "sampled the owned Act I palette arc at exact 512x256 RGBA with low-frequency contact darkening",
+        "Godot 4.7.2 generated the import sidecar from the temporary texture importer default profile: VRAM mode 2, high quality, mipmaps"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User approved final Act I hero and grade with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act1-terminus/twenty-placements.png"
+    },
+    {
+      "asset_id": "act1-terminus",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-21T13:38:00+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc",
+      "final_sha256": "81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc",
+      "edits": [
+        "locally authored parametric pointed-window surround, tower masonry, crenellations and tiered turret from the shipped Act I stage device",
+        "manifold boolean union removed intersections into one watertight component; one mesh, one surface, POSITION+NORMAL, no textures, 4446 triangles, grounded Y-up metres"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User approved final Act I hero and grade with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act1-terminus/twenty-placements.png",
+      "polycount_target": 5000,
+      "triangles": 4446
     }
   ]
 }

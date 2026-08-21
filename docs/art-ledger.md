@@ -817,3 +817,23 @@ Fuse pass (same day, seeded from the first edit):
 
 sha256 `c1d4d34d6f1299f2a162a3fafb9d76ec61ec4e635914aedfd65e5493774447dd`.
 
+
+### `map/grades/act1-grade.png` — 512×256 RGBA — Act I grade (#294)
+
+Locally authored low-frequency crimson-dusk to amber-key grade following the
+Act I palette arc, with alpha used only for prop and terminus contact darkening.
+No vendor or paid generation. Godot 4.7.2 generated the VRAM-compressed mode 2,
+high-quality, mipmapped import sidecar from a temporary importer-default profile;
+the sidecar was not hand-edited. sha256
+`e9c74f792dec12d4c70940d651b611c341940320f1544d440cafdb523aaf3fa7`. fol2 accepted the final asset on 2026-08-21; evidence is in `docs/reviews/294/act1-grade/`.
+
+### `map/geometry/act1/terminus-amber-window-tower.glb` — Act I hero terminus (#294)
+
+Locally authored against the shipped Act I amber arched-window tower: pointed
+window surround, grounded masonry, crenellated crown and tiered lower-right
+turret. Parametric surfaces were combined with a manifold boolean union so the
+shipping payload is one watertight connected component rather than overlapping
+parts. It is Y-up, grounded at Y=0, one mesh and one triangulated surface with
+POSITION+NORMAL only: 4,446 triangles, 107,504 bytes. No vendor, textures or
+paid credits. sha256
+`81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc`. fol2 accepted the final asset on 2026-08-21; evidence is in `docs/reviews/294/act1-terminus/`.
