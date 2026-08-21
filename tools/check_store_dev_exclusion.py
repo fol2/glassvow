@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""CI-negative check: store/RC packs cannot carry the Console tree or its CLI."""
+"""CI-negative check: store/RC packs cannot carry developer-only bytecode."""
 
 from __future__ import annotations
 
 import os
 import re
+import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -19,6 +20,38 @@ TOKENS = (
     "class_name DeveloperConsole",
     'preload("res://presentation/dev/',
 )
+PACKABLE_TOOLS = (".gd", ".tscn", ".tres")
+STORE_MUST_EXCLUDE = (
+    "tests/run_all.gd",
+    "presentation/dev/console.gd",
+)
+STORE_MUST_KEEP = (
+    ("tools/vow_incentives.gd", "tools/vow_incentives.gd"),
+    ("addons/sentry/sentry.gdextension", "Sentry"),
+    ("application/dev_tools.gd", "application/dev_tools.gd"),
+    ("presentation/lab/card_lab.gd", "presentation/lab"),
+)
+DEV_TREE_PREFIXES = (
+    DEV_PREFIX,
+    "tests/",
+    "addons/funplay_mcp/",
+    "addons/core/",
+    "addons/runtime/",
+    "addons/ui/",
+    "addons/glassvow_ios_export/",
+    "addons/glassvow_web_export/",
+)
+DEV_TREE_FILES = ("addons/plugin.gd", "addons/plugin.cfg", "addons/icon.svg")
+PCK_FORBIDDEN_PREFIXES = DEV_TREE_PREFIXES + ("port_fixtures/",)
+PCK_REQUIRED = (
+    "tools/vow_incentives.gd",
+    "application/dev_tools.gd",
+    "addons/sentry/sentry.gdextension",
+    "presentation/lab/card_lab.gd",
+)
+PACK_MAGIC = 0x43504447
+PACK_DIR_ENCRYPTED = 1 << 0
+PACK_VERSIONS = (2, 3, 4)
 PRESET_RE = re.compile(r"^\[preset\.(\d+)\]\s*$")
 KEY_RE = re.compile(r'^(name|custom_features|exclude_filter)="(.*)"\s*$')
 
@@ -56,6 +89,10 @@ def glob_match(pattern: str, path: str) -> bool:
     return re.fullmatch(escaped, path, flags=re.IGNORECASE) is not None
 
 
+def hits(globs: list[str], path: str) -> bool:
+    return any(glob_match(g, path) for g in globs)
+
+
 def tracked_paths(root: Path) -> list[str]:
     listed = os.environ.get("STORE_DEV_TRACKED")
     if listed:
@@ -64,9 +101,99 @@ def tracked_paths(root: Path) -> list[str]:
     return [ln for ln in out.splitlines() if ln]
 
 
-def main() -> int:
-    root = Path(os.environ.get("STORE_DEV_ROOT", Path(__file__).resolve().parent.parent))
-    presets_path = Path(os.environ.get("STORE_DEV_PRESETS", root / "export_presets.cfg"))
+def pack_rel(path: str) -> str:
+    rel = path.split("\x00", 1)[0]
+    if rel.startswith("res://"):
+        return rel[6:]
+    return rel
+
+
+def pck_key(path: str) -> str:
+    rel = pack_rel(path)
+    if rel.endswith(".remap"):
+        rel = rel[:-6]
+    if rel.endswith(".gdc"):
+        rel = rel[:-4] + ".gd"
+    return rel
+
+
+def is_runtime_tool(path: str) -> bool:
+    return path == "tools/vow_incentives.gd" or path.startswith("tools/vow_incentives.gd.")
+
+
+def is_dev_tree_path(path: str) -> bool:
+    if path.startswith(DEV_TREE_PREFIXES) or path in DEV_TREE_FILES:
+        return True
+    if path.startswith("addons/plugin.") or path.startswith("addons/icon.svg"):
+        return True
+    if path.startswith("tools/") and not is_runtime_tool(path):
+        return path.endswith(PACKABLE_TOOLS) or path.endswith(".uid")
+    return False
+
+
+def list_pck_paths(data: bytes) -> list[str]:
+    if len(data) < 32:
+        raise ValueError("pck too small")
+    magic, version, _maj, _min, _patch, flags = struct.unpack_from("<6I", data, 0)
+    if magic != PACK_MAGIC:
+        raise ValueError("not a GDPC pack")
+    if version not in PACK_VERSIONS:
+        raise ValueError("unsupported pck version %d" % version)
+    if flags & PACK_DIR_ENCRYPTED:
+        raise ValueError("encrypted pck directory")
+    pos = 24
+    struct.unpack_from("<Q", data, pos)
+    pos += 8
+    if version >= 3:
+        if pos + 8 > len(data):
+            raise ValueError("pck directory offset truncated")
+        dir_offset = struct.unpack_from("<Q", data, pos)[0]
+        pos = dir_offset
+    else:
+        pos += 16 * 4
+    if pos + 4 > len(data):
+        raise ValueError("pck directory truncated")
+    file_count = struct.unpack_from("<I", data, pos)[0]
+    pos += 4
+    paths: list[str] = []
+    for _ in range(file_count):
+        if pos + 4 > len(data):
+            raise ValueError("pck entry truncated")
+        sl = struct.unpack_from("<I", data, pos)[0]
+        pos += 4
+        if pos + sl + 8 + 8 + 16 + 4 > len(data):
+            raise ValueError("pck path truncated")
+        raw = data[pos : pos + sl].split(b"\x00", 1)[0]
+        try:
+            paths.append(raw.decode("utf-8"))
+        except UnicodeDecodeError as exc:
+            raise ValueError("pck path is not UTF-8") from exc
+        pos += sl + 8 + 8 + 16 + 4
+    return paths
+
+
+def check_pck_paths(paths: list[str]) -> list[str]:
+    errors: list[str] = []
+    keys = [pck_key(p) for p in paths]
+    keyset = set(keys)
+    for prefix in PCK_FORBIDDEN_PREFIXES:
+        if any(k.startswith(prefix) for k in keys):
+            errors.append("pck carries %s" % prefix)
+    for path in DEV_TREE_FILES:
+        if path in keyset:
+            errors.append("pck carries %s" % path)
+    for key in keys:
+        if key.startswith("tools/") and not is_runtime_tool(key):
+            errors.append("pck carries %s" % key)
+            break
+    for required in PCK_REQUIRED:
+        if required not in keyset:
+            label = "Sentry extension" if required.startswith("addons/sentry/") else required
+            errors.append("pck missing %s" % label)
+    return errors
+
+
+def check_presets(root: Path, presets_path: Path) -> list[str]:
     errors: list[str] = []
     presets = parse_presets(presets_path.read_text())
     by_name = {item["name"]: item for item in presets}
@@ -75,6 +202,9 @@ def main() -> int:
     dev_gd = [p for p in dev_files if p.endswith(".gd")]
     if not dev_gd:
         errors.append("presentation/dev/ has no tracked .gd (vacuous exclude)")
+    if not any(p == "tests/run_all.gd" or p.startswith("tests/") for p in tracked):
+        errors.append("tests/ has no tracked files (vacuous exclude)")
+    sweep = [p for p in tracked if is_dev_tree_path(p)]
     for name in STORE:
         if REVIEW_MARK in name:
             continue
@@ -85,9 +215,15 @@ def main() -> int:
         if "dev_tools" in csv(preset["custom_features"]):
             errors.append("%s lists custom feature dev_tools" % name)
         globs = csv(preset["exclude_filter"])
-        for path in dev_files:
-            if not any(glob_match(g, path) for g in globs):
+        for path in STORE_MUST_EXCLUDE:
+            if not hits(globs, path):
                 errors.append("%s exclude_filter does not match %s" % (name, path))
+        for path in sweep:
+            if not hits(globs, path):
+                errors.append("%s exclude_filter does not match %s" % (name, path))
+        for path, label in STORE_MUST_KEEP:
+            if hits(globs, path):
+                errors.append("%s exclude_filter drops %s" % (name, label))
     for preset in presets:
         name = preset["name"]
         if REVIEW_MARK not in name:
@@ -109,12 +245,47 @@ def main() -> int:
         for token in TOKENS:
             if token in text:
                 errors.append("%s: forbidden token %s" % (path, token))
+    return errors
+
+
+def report(errors: list[str]) -> int:
     if errors:
         for msg in errors:
             print(msg, file=sys.stderr)
         return 1
-    print("store-dev-exclusion OK")
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    list_only = False
+    pck_path: Path | None = None
+    if argv[:1] == ["--list-pck"] and len(argv) == 2:
+        list_only = True
+        pck_path = Path(argv[1])
+    elif argv[:1] == ["--pck"] and len(argv) == 2:
+        pck_path = Path(argv[1])
+    elif argv:
+        print("usage: check_store_dev_exclusion.py [--pck FILE | --list-pck FILE]",
+              file=sys.stderr)
+        return 2
+    if list_only:
+        assert pck_path is not None
+        for path in list_pck_paths(pck_path.read_bytes()):
+            print(path)
+        return 0
+    root = Path(os.environ.get("STORE_DEV_ROOT", Path(__file__).resolve().parent.parent))
+    presets_path = Path(os.environ.get("STORE_DEV_PRESETS", root / "export_presets.cfg"))
+    errors = check_presets(root, presets_path)
+    if pck_path is not None:
+        try:
+            errors.extend(check_pck_paths(list_pck_paths(pck_path.read_bytes())))
+        except ValueError as exc:
+            errors.append("pck: %s" % exc)
+    rc = report(errors)
+    if rc == 0:
+        print("store-dev-exclusion OK" if pck_path is None else "store-dev-exclusion OK\npck-dir OK")
+    return rc
 
 
 if __name__ == "__main__":
