@@ -105,7 +105,7 @@ const ZH_HANT_GLOSSARY_SAMPLES: Dictionary = {
 	"ui.embark.noVows": "路如常。未立任何誓言。",
 	"ui.combat.lanternTitle": "提燈",
 	"ui.lamp.artLabel": "你的提燈術",
-	"content.cards.firstSpark.text": "抽 2 張牌。燃燼。",
+	"content.cards.firstSpark.text": "抽 1 張牌。燃燼。",
 	"ui.combat.ashesSub": "焚去的牌——每張都曾餵提燈一點餘燼",
 	"ui.rose.selectedPane": "已選的餘燼琉璃窗片",
 	"ui.combat.facetsTitle": "璃面",
