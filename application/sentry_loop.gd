@@ -7,7 +7,7 @@ extends SceneTree
 ## Numeric iOS CFBundleVersion. Must match both iOS export presets'
 ## `application/version` and `sentry/options/dist`. Not the marketing
 ## version (`application/config/version` / `application/short_version`).
-const IOS_BUILD_NUMBER: String = "1"
+const IOS_BUILD_NUMBER: String = "2"
 
 var _privacy: SentryPrivacy = SentryPrivacy.new()
 
