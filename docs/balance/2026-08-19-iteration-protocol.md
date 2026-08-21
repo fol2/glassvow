@@ -621,6 +621,21 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   remains H39 `a0d608a5…`. Do not landscape. Do not raise
   Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-62.md`](2026-08-21-421-hypothesis-62.md).
+- **H63 (`cards.uppercut` Dimmed 1→2 / 2→3, keep 10/13 dmg,
+  cost 2, chip 1/2) is reverted — paid Dusk planned.**
+  Snapshot: `docs/balance/data/421-h63/phase-a.json`. Arm 2
+  **23.0 / 8.5 / 20.5 / 7.5**. Holdout 54.5 / 26.0 / 71.5 /
+  40.5. Ash−Dusk **+17.0 / +14.5 pp**. Ash V0 arm 1 +1.0 and
+  holdout +1.0 both under 6. Ash V0 arm 2 +3.0 (no clog —
+  cost-2 theory held). Dusk V0 arm 1 53.5→63.0 (**+9.5**,
+  H60 pattern). Digest unchanged. Do not buff Dimmed on
+  shared attacks this loop. Not relic-stack, not Dusk chip,
+  not 1-cost Dimmed/ward/regen, not 2-cost common smash, not
+  H55 smolder-top, not lantern arts. H39 landscape already
+  FAIL C1–C3 (`595377b`); this is not a second 5h. Working
+  SHA remains H39 `a0d608a5…`. Do not landscape. Do not
+  raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-63.md`](2026-08-21-421-hypothesis-63.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
