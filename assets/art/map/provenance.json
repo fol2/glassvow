@@ -292,6 +292,40 @@
       "concept_sha256": "7286e70e628b9c29d98c8037769e7ab1784fc7f7ee24f1b9076d4f42772ba9b0",
       "polycount_target": 5000,
       "triangles": 5568
+    },
+    {
+      "asset_id": "act3-grade",
+      "source": "local-deterministic",
+      "created_at": "2026-08-21T14:10:45+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "56d9bb012038351f35fe2ea28086e2633b5d7811fc42cefeeb2fd67f155de332",
+      "final_sha256": "56d9bb012038351f35fe2ea28086e2633b5d7811fc42cefeeb2fd67f155de332",
+      "edits": [
+        "authored the owned Act III violet-storm to obsidian-court palette arc at exact 512x256 RGBA with low-frequency broken-ring contact darkening",
+        "Godot 4.7.2 generated VRAM mode 2, high-quality, mipmapped import metadata from a temporary importer-default profile"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act III slice with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act3-grade/review-sheet.png"
+    },
+    {
+      "asset_id": "act3-terminus",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-21T14:10:45+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "607615ca3bd5a5d5ffa382ab19866891a49f220685fe6c2f4272427b6ea423fe",
+      "final_sha256": "607615ca3bd5a5d5ffa382ab19866891a49f220685fe6c2f4272427b6ea423fe",
+      "edits": [
+        "modelled a deliberately broken monumental ring-arch, faceted court pylons, central suspended shard and continuous grounded plinth",
+        "manifold boolean union produced one watertight connected component; one mesh, one surface, POSITION+NORMAL, no textures, 5504 triangles, grounded Y-up metres"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the final Act III hero on 2026-08-21",
+      "review_path": "docs/reviews/294/act3-terminus/twenty-placements.png",
+      "polycount_target": 5000,
+      "triangles": 5504
     }
   ]
 }

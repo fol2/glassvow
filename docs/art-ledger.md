@@ -863,3 +863,22 @@ shipping GLB is Y-up and grounded at Y=0, one mesh and one triangulated surface,
 POSITION+NORMAL only: 5,568 triangles, 134,416 bytes. No vendor, textures or
 paid credits. sha256 `d093ccc134faa8118e5a724bef33c4ee8a0fda15fc95826a0b608541ab58aa99`. fol2 accepted the final hero on 2026-08-21;
 evidence is in `docs/reviews/294/act2-terminus/`.
+
+
+### `map/grades/act3-grade.png` — 512×256 RGBA — Act III grade (#294)
+
+Locally authored low-frequency violet-storm to obsidian-court broken-ring
+grade, with alpha restricted to contact darkening. Godot 4.7.2 generated its
+VRAM mode 2, high-quality, mipmapped sidecar; it was not hand-edited. No vendor
+or paid generation. sha256 `56d9bb012038351f35fe2ea28086e2633b5d7811fc42cefeeb2fd67f155de332`. fol2 accepted the Act III slice on
+2026-08-21; evidence is in `docs/reviews/294/act3-grade/`.
+
+### `map/geometry/act3/terminus-broken-ring-arch.glb` — Act III hero terminus (#294)
+
+Locally modelled as a deliberately broken monumental ring-arch with faceted
+court pylons, a central suspended shard and a continuous grounded plinth.
+Manifold boolean union reduced the construction to one watertight component.
+The shipping GLB is Y-up and grounded at Y=0, one mesh and one triangulated
+surface, POSITION+NORMAL only: 5,504 triangles, 132,952 bytes. No vendor,
+textures or paid credits. sha256 `607615ca3bd5a5d5ffa382ab19866891a49f220685fe6c2f4272427b6ea423fe`. fol2 accepted the final hero on
+2026-08-21; evidence is in `docs/reviews/294/act3-terminus/`.
