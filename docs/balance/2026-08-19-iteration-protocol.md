@@ -367,6 +367,18 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   landscape. Do not raise Ash HP. Relic stack still
   later-phase. Readout:
   [`2026-08-21-421-hypothesis-42.md`](2026-08-21-421-hypothesis-42.md).
+- **H43 (`cards.ironSkin` metallicize 3→5 / 4→6, keep cost 1)
+  is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h43/phase-a.json`. Arm 2
+  **25.0 / 8.5 / 20.0 / 6.5**. Holdout 63.5 / 27.0 / 76.0 / 45.0.
+  Ash−Dusk **+12.5 / +18.0 pp**. Ash V0 arm 1 77.5→80.5 (+3.0)
+  and holdout 70.5→76.0 (+5.5) both |delta| <6. Dusk V0 arm 1
+  53.5→60.5 (+7.0) — shared power paid Dusk more than Ash.
+  Digest moved (`98d634e7…`); not re-pinned. H39 landscape
+  already FAIL C1–C3 (`595377b`); this is not a second 5h.
+  Working SHA remains H39 `a0d608a5…`. Do not landscape. Do
+  not raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-43.md`](2026-08-21-421-hypothesis-43.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
