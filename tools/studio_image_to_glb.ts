@@ -34,8 +34,10 @@
  * Speed (2026-08-20): keep Chrome for Testing on port 9335 with a durable
  * profile at `~/Library/Caches/glassvow/studio-cft`. Cookies are cached at
  * `~/Library/Caches/glassvow/studio-cookies.json` (0600) so a cold start
- * does not decrypt Chrome Default. Stay on any `/workspace/generate*` URL
- * that already shows Smart Mesh — a bare navigate resets P2.0 to v3.1.
+ * does not decrypt Chrome Default. Stay on a bare `/workspace/generate` that
+ * already shows Smart Mesh. Never reuse `/workspace/generate/<task-id>` for a
+ * new `--image`; reset via about:blank and fail closed if that task id remains.
+ * `--task-id` re-export is unchanged. Do not kill Chrome to start a new image.
  * JSON `timings.driver_ms` is chrome+login+form (not Studio upload/generate).
  * `timings.generate_ms` starts when a visible Export appears.
  * `--kill-chrome` tears the warm browser down (also valid as a lone flag).
@@ -49,8 +51,20 @@ import {
 } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
+import {
+  BLANK_RESET_URL,
+  UPLOAD_WATCH_LIMIT_MS,
+  UPLOAD_WATCH_POLL_MS,
+  blankResetArrived,
+  generateTargetUrl,
+  generateWaitReady,
+  isTransientEvaluateError,
+  newImageExportGuard,
+  planWarmGeneratePage,
+  refuseNewImageOnTaskUrl,
+  uploadWatchTimedOut,
+} from "./studio_image_to_glb_logic.ts";
 
-const STUDIO = "https://studio.tripo3d.ai";
 const FORBIDDEN = ["openapi.tripo3d.ai", "platform.tripo3d.ai"];
 const WARM_PORT = 9335;
 const WARM_PROFILE = join(homedir(), "Library/Caches/glassvow/studio-cft");
@@ -264,9 +278,13 @@ async function waitEv(cdp: Cdp, expr: string, ok: (v: any) => boolean, timeoutMs
   const deadline = Date.now() + timeoutMs;
   let last: any = null;
   while (Date.now() < deadline) {
-    last = await ev(cdp, expr);
-    if (ok(last)) return last;
-    await new Promise((r) => setTimeout(r, 0));
+    try {
+      last = await ev(cdp, expr);
+      if (ok(last)) return last;
+    } catch (e) {
+      if (!isTransientEvaluateError(e)) throw e;
+    }
+    await sleep(UPLOAD_WATCH_POLL_MS);
   }
   throw new Error(`timeout: ${JSON.stringify(last)}`.slice(0, 400));
 }
@@ -366,27 +384,24 @@ try {
   lap("chrome_ms");
 
   let cookieSource = "profile";
-  const targetUrl = taskIdArg
-    ? `${STUDIO}/workspace/generate/${taskIdArg}`
-    : `${STUDIO}/workspace/generate`;
+  const targetUrl = generateTargetUrl(taskIdArg);
 
   let state = await ev(cdp, pageStateExpr);
-  const already = state && !state.login && !state.err && (
-    taskIdArg ? String(state.href).includes(taskIdArg)
-      : state.smart && /\/workspace\/generate/.test(String(state.href))
-  );
-  if (!already) {
+  const plan = planWarmGeneratePage(state, taskIdArg);
+  if (!plan.reuse) {
+    if (plan.resetViaBlank) {
+      await cdp("Page.navigate", { url: BLANK_RESET_URL });
+      await waitEv(cdp, "({ href: location.href })", (s) => s && blankResetArrived(String(s.href || ""), plan.leftoverTaskId), 10000);
+    }
     await cdp("Page.navigate", { url: targetUrl });
-    await cdp("Page.loadEventFired").catch(() => null);
-    state = await waitEv(cdp, pageStateExpr, (s) => s && (s.login || (taskIdArg ? String(s.href).includes(taskIdArg) : s.smart)) && !s.err, 20000);
+    state = await waitEv(cdp, pageStateExpr, (s) => generateWaitReady(s, taskIdArg, "initial"), 20000);
   }
 
   async function injectCookies(source: string, cookies: StudioCookie[]) {
     await applyCookies(cdp, cookies);
     cookieSource = source;
     await cdp("Page.navigate", { url: targetUrl });
-    await cdp("Page.loadEventFired").catch(() => null);
-    state = await waitEv(cdp, pageStateExpr, (s) => s && !s.login && !s.err && (taskIdArg ? String(s.href).includes(taskIdArg) : s.smart), 20000);
+    state = await waitEv(cdp, pageStateExpr, (s) => generateWaitReady(s, taskIdArg, "authed"), 20000);
   }
 
   if (state.login) {
@@ -401,6 +416,7 @@ try {
       await injectCookies("chrome-default", await importFreshCookies());
     }
   }
+  refuseNewImageOnTaskUrl(String(state.href || ""), taskIdArg);
   lap("login_ms");
   await ev(cdp, HOOK_EXPORT);
 
@@ -592,6 +608,7 @@ try {
     await ev(cdp, HOOK_EXPORT);
 
     if (!taskId) {
+      refuseNewImageOnTaskUrl(String(await ev(cdp, "location.href") || state.href || ""), taskIdArg);
       const detectU = () => ev(cdp, `(() => {
         const imgIn = [...document.querySelectorAll("input[type=file]")].find(i =>
           /image|jpg|jpeg|png|webp|gif/.test((i.accept || "").toLowerCase()));
@@ -633,12 +650,13 @@ try {
       let u = await detectU();
       let usame = 0;
       let uprev = "";
-      for (let i = 0; i < 4000; i++) {
+      const uploadStarted = Date.now();
+      while (true) {
         const action = decideU(u);
         if (action === uprev) usame++;
         else usame = 0;
         uprev = action;
-        if (action === "watch_upload" && usame > 3000) {
+        if (uploadWatchTimedOut(Date.now() - uploadStarted, UPLOAD_WATCH_LIMIT_MS)) {
           die("upload never ready: " + JSON.stringify(u) + " steps=" + usteps.join(">"));
         }
         if (action !== "watch_upload" && usame > 20) {
@@ -649,6 +667,7 @@ try {
         }
         if (action === "done") break;
         if (action === "watch_upload") {
+          await sleep(UPLOAD_WATCH_POLL_MS);
           u = await detectU();
           continue;
         }
@@ -734,7 +753,16 @@ try {
     let toolbarExportClicked = false;
     let formatOpened = false;
     let dialogExportClicked = false;
+    if (!taskIdArg) await ev(cdp, "window.__gv_files = []");
     const decideX = (s: any): string => {
+      if (!taskIdArg) {
+        const g = newImageExportGuard(s, {
+          generateClicked, leftoverTaskId: plan.leftoverTaskId,
+        });
+        if (g === "refuse_prior_export") return g;
+        if (g === "accept_gltf") return "done";
+        if (g === "watch_generate") return "watch_generate";
+      }
       if (s.gltf) return "done";
       if (s.retry) return "dismiss_retry";
       if (s.viewOk) return "dismiss_ok";
@@ -791,6 +819,9 @@ try {
         xsteps.push(action);
       }
       if (action === "done") break;
+      if (action === "refuse_prior_export") {
+        die("refusing prior GLB: Generate must have been clicked with a new task id, leftover=" + (plan.leftoverTaskId || "") + " now=" + (x.taskId || ""));
+      }
       if (watching(action)) {
         x = await detectX();
         continue;
@@ -833,6 +864,15 @@ try {
       for (let d = 0; d < 40; d++) {
         x = await detectX();
         if (decideX(x) !== action) break;
+      }
+    }
+    if (!taskIdArg) {
+      const g = newImageExportGuard(x, {
+        generateClicked, leftoverTaskId: plan.leftoverTaskId,
+      });
+      if (g !== "accept_gltf") {
+        die("refusing to write GLB without Generate click and a new task id, leftover=" +
+          (plan.leftoverTaskId || "") + " now=" + (x.taskId || "") + " guard=" + g);
       }
     }
     if (x.taskId) taskId = x.taskId;
