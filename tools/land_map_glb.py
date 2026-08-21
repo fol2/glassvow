@@ -24,7 +24,7 @@ from typing import Any
 FILE_REPO = Path(__file__).resolve().parent.parent
 REPO = FILE_REPO
 sys.path.insert(0, str(FILE_REPO / "tools"))
-from map_asset_checks import inspect_glb  # noqa: E402
+from map_asset_checks import Finding, inspect_glb  # noqa: E402
 
 HKT = timezone(timedelta(hours=8))
 AUTHORITY_REVIEWER = "fol2"
@@ -197,7 +197,13 @@ def review_png(dest: Path, asset_id: str) -> Path:
     return png
 
 
-def gates() -> str:
+def _retained_findings(found: list[Finding], ignore_rel: str | None) -> list[Finding]:
+    return [item for item in found if not (
+        ignore_rel is not None and item.path == ignore_rel
+        and item.gate in {"provenance", "checksum"})]
+
+
+def gates(ignore_unaccepted_rel: str | None = None) -> str:
     chunks: list[str] = []
     chunks.append(run(["bash", "tools/check_imports.sh"], timeout=180))
     chunks.append(run(["bash", "tools/check_scripts.sh"], timeout=180))
@@ -208,7 +214,15 @@ def gates() -> str:
     if "PASS" not in suite:
         raise RuntimeError("test suite did not print PASS")
     chunks.append(suite)
-    chunks.append(run([sys.executable, "tools/check_map_assets.py"], timeout=180))
+    if ignore_unaccepted_rel is None:
+        chunks.append(run([sys.executable, "tools/check_map_assets.py"], timeout=180))
+    else:
+        from check_map_assets import scan
+        found, present = scan(REPO / "assets/art/map")
+        found = _retained_findings(found, ignore_unaccepted_rel)
+        if found:
+            raise RuntimeError("; ".join(str(item) for item in found)[:1200])
+        chunks.append(f"map assets OK ({present} payload files; one signed review pending)")
     chunks.append(run([sys.executable, "tools/check_anchors.py"], timeout=60))
     chunks.append(run([sys.executable, "tools/check_benchmark_freeze.py"], timeout=60))
     return "\n".join(chunks)
@@ -296,7 +310,7 @@ def main(argv: list[str] | None = None) -> int:
             shutil.copy2(src, dest)
         provenance_written = False
         review = None if args.no_review else str(review_png(dest, args.asset).relative_to(REPO))
-    gate_out = gates() if args.gates else ""
+    gate_out = gates(None if provenance_written else str(row["path"])) if args.gates else ""
     print(json.dumps({
         "ok": True,
         "summary": f"landed {dest.relative_to(REPO)}" + ("; gates ran" if args.gates else ""),
@@ -366,6 +380,11 @@ def self_test() -> int:
         errors.append(f"default land would accept {should_append}")
     else:
         print("self-test default-land: does not write provenance")
+    probe = [Finding("provenance", "a", ""), Finding("checksum", "a", ""), Finding("mesh", "a", ""), Finding("provenance", "b", "")]
+    if [item.gate for item in _retained_findings(probe, "a")] != ["mesh", "provenance"]:
+        errors.append("ordinary gate filter did not retain non-target findings")
+    else:
+        print("self-test ordinary-gates: only target provenance/checksum ignored")
 
     must_fail(lambda: validate_signed_acceptance(None, Path("x"), "a"), "missing reviewer")
     must_fail(lambda: validate_signed_acceptance("not-fol2", Path("x"), "a"), "arbitrary reviewer")
