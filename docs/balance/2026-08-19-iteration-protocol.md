@@ -439,6 +439,19 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Working SHA remains H39 `a0d608a5…`. Do not landscape. Do
   not raise Ash HP. Relic stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-48.md`](2026-08-21-421-hypothesis-48.md).
+- **H49 (`cards.guardedStrike` dmg 5→8 / 7→10, keep 4/6 Ward
+  and cost 1) is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h49/phase-a.json`. Arm 2
+  **24.5 / 10.0 / 19.5 / 2.5**. Holdout 58.5 / 24.0 / 66.5 / 38.0.
+  Ash−Dusk **+8.0 / +14.0 pp**. Ash V0 arm 1 77.5→76.0 (−1.5)
+  and holdout 70.5→66.5 (−4.0) both |delta| <6. Dusk V0 arm 1
+  +3.5 (shared attack paid Dusk more). No V0 arm-2 ≥6 clog.
+  Digest moved (`e10ddeea…`); not re-pinned. Damage-only, not
+  a ward/sustain buff. H39 landscape already FAIL C1–C3
+  (`595377b`); this is not a second 5h. Working SHA remains
+  H39 `a0d608a5…`. Do not landscape. Do not raise Ash HP.
+  Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-49.md`](2026-08-21-421-hypothesis-49.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
