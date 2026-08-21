@@ -304,7 +304,7 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 16
+          "n": 12
         }
       ],
       "up": {
@@ -312,13 +312,13 @@
         "effects": [
           {
             "kind": "dmg",
-            "n": 20
+            "n": 16
           }
         ],
-        "text": "Deal @20@ damage. Chip 1 extra Facet."
+        "text": "Deal @16@ damage. Chip 1 extra Facet."
       },
       "name": "Quarry Maul",
-      "text": "Deal @16@ damage."
+      "text": "Deal @12@ damage."
     },
     "cleave": {
       "type": "attack",
