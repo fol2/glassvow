@@ -428,6 +428,17 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Do not landscape. Do not raise Ash HP. Relic stack still
   later-phase. Readout:
   [`2026-08-21-421-hypothesis-47.md`](2026-08-21-421-hypothesis-47.md).
+- **H48 (`cards.tempest` all-enemies 4→6 twice / 6→8 twice, keep
+  cost 2) is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h48/phase-a.json`. Arm 2
+  **23.0 / 7.5 / 22.0 / 7.0**. Holdout 54.0 / 22.5 / 69.5 / 38.0.
+  Ash−Dusk **+15.5 / +15.5 pp**. Ash V0 arm 1 77.5→73.0 (−4.5)
+  and holdout 70.5→69.5 (−1.0) both |delta| <6. Ash V0 arm 2
+  +4.5 under clog. Not 1-cost sustain/ward. H39 landscape
+  already FAIL C1–C3 (`595377b`); this is not a second 5h.
+  Working SHA remains H39 `a0d608a5…`. Do not landscape. Do
+  not raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-48.md`](2026-08-21-421-hypothesis-48.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
