@@ -39,6 +39,57 @@ replaying historical evidence.
 - **`export_credentials.cfg`**: written by the Godot editor if keystore fields
   are ever filled in the Export dialog; gitignored along with `*.keystore`.
 
+### Sentry operator access
+
+**Decision (2026-08-21):** Codex has a full-access Sentry Personal Token for
+Glassvow operations. The Sentry record is named `Glassvow Codex Full Access` and
+has the maximum permissions offered by the Personal Tokens UI: Project, Team,
+Release, Issue & Event, Organization and Member are **Admin**; Alerts is
+**Read & Write**. The resulting scopes are:
+
+```text
+alerts:read alerts:write event:admin event:read event:write member:admin
+member:read member:write org:admin org:integrations org:read org:write
+project:admin project:read project:releases project:write team:admin
+team:read team:write
+```
+
+Sentry Personal Tokens have no project selector. The credential is therefore
+technically organization-wide even though its operating boundary is Glassvow:
+
+```text
+SENTRY_ORG=pgnetwork
+SENTRY_PROJECT=glassvow
+SENTRY_BASE_URL=https://sentry.io
+```
+
+Godot release exports arrive in Sentry as environment `export_release`, not
+`prod` or `production`. Pass `--environment export_release` explicitly to the
+read-only Sentry helper; relying on its `prod` default hides live release
+issues. `GLASSVOW-1` exposed this distinction on 2026-08-21.
+
+On James's Mac the token value is stored in macOS Keychain, service
+`codex-sentry-glassvow-full-access`, account equal to the local macOS user. It
+is not stored in this repository. The mode-`0600` loader
+`~/.config/glassvow/sentry.sh` exports the three defaults above and reads
+`SENTRY_AUTH_TOKEN` from Keychain at runtime:
+
+```bash
+source ~/.config/glassvow/sentry.sh
+```
+
+Full credential scope does not broaden the task boundary: use it only against
+the `glassvow` project. Credential possession records capability, not standing
+approval for an unrelated project or an unrequested production mutation. Never
+print the token, paste it into issues/evidence, write it to a repo `.env`, or
+commit it. A Cloud Agent has no access to this Mac's Keychain; provision its
+secret environment separately when that execution surface is intentionally
+used.
+
+To rotate, create the replacement first, update the same Keychain service with
+`security add-generic-password -U`, verify one authenticated Glassvow request,
+then revoke the superseded Sentry token. This avoids an observability gap.
+
 ## Export recipe
 
 Presets live in `export_presets.cfg`: `iOS` (project-only export) and
