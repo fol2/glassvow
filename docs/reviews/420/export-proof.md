@@ -54,6 +54,11 @@ glassvow/dylibs/addons/sentry/bin/ios/Sentry.xcframework
 Checked-in copy of the Cocoa manifest: [SentryObjC.PrivacyInfo.xcprivacy](SentryObjC.PrivacyInfo.xcprivacy).
 Plist/version excerpts: [glassvow-Info.plist.excerpt](glassvow-Info.plist.excerpt),
 [pbxproj-versions.excerpt](pbxproj-versions.excerpt).
+Source vs generated-framework `ls`/`shasum` (fresh 4.7.2 project-only
+export; source plugin path and exported copies share the pin, Godot
+app-level `PrivacyInfo.xcprivacy` does not):
+[generated-framework-ls-shasum.txt](generated-framework-ls-shasum.txt).
+`tests/test_sentry_release.gd` pins that SHA with `FileAccess.get_sha256`.
 
 `libsentry.ios.release.xcframework` (the Godot GDExtension wrapper) still
 has no privacy manifest. This slice packaged a static file into the Cocoa

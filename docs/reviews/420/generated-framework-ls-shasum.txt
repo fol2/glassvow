@@ -1,0 +1,55 @@
+engine: 4.7.2.stable.official.ed1daf0bf
+export: godot --headless --export-release "iOS" build/ios/glassvow.ipa
+pin:    118b16e0e97ffe8b6f1f01b7e04f68e5da764474a4d39d2933b0eeaef3cdc0ca
+
+==== SOURCE (plugin export path; not the generated Xcode project) ====
+-- ls addons/sentry/bin/ios/Sentry.xcframework/ios-arm64/SentryObjC.framework --
+total 9088
+drwxr-xr-x@  7 jamesto  wheel      224 Aug 21 03:32 [34m.[39;49m[0m
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 03:29 [34m..[39;49m[0m
+drwxr-xr-x@ 87 jamesto  wheel     2784 Aug 21 03:29 [34mHeaders[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel      829 Aug 21 03:29 Info.plist
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 03:29 [34mModules[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel     2108 Aug 21 03:42 PrivacyInfo.xcprivacy
+-rw-r--r--@  1 jamesto  wheel  4642632 Aug 21 03:29 SentryObjC
+-- ls addons/sentry/bin/ios/Sentry.xcframework/ios-arm64_x86_64-simulator/SentryObjC.framework --
+total 18216
+drwxr-xr-x@  7 jamesto  wheel      224 Aug 21 03:32 [34m.[39;49m[0m
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 03:29 [34m..[39;49m[0m
+drwxr-xr-x@ 87 jamesto  wheel     2784 Aug 21 03:29 [34mHeaders[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel      836 Aug 21 03:29 Info.plist
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 03:29 [34mModules[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel     2108 Aug 21 03:42 PrivacyInfo.xcprivacy
+-rw-r--r--@  1 jamesto  wheel  9315400 Aug 21 03:29 SentryObjC
+-- shasum -a 256 source PrivacyInfo.xcprivacy --
+118b16e0e97ffe8b6f1f01b7e04f68e5da764474a4d39d2933b0eeaef3cdc0ca  addons/sentry/bin/ios/Sentry.xcframework/ios-arm64/SentryObjC.framework/PrivacyInfo.xcprivacy
+118b16e0e97ffe8b6f1f01b7e04f68e5da764474a4d39d2933b0eeaef3cdc0ca  addons/sentry/bin/ios/Sentry.xcframework/ios-arm64_x86_64-simulator/SentryObjC.framework/PrivacyInfo.xcprivacy
+
+==== EXPORTED (generated Xcode project copies) ====
+-- ls build/ios/glassvow/dylibs/addons/sentry/bin/ios/Sentry.xcframework/ios-arm64/SentryObjC.framework --
+total 9088
+drwxr-xr-x@  7 jamesto  wheel      224 Aug 21 04:03 [34m.[39;49m[0m
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 04:03 [34m..[39;49m[0m
+drwxr-xr-x@ 87 jamesto  wheel     2784 Aug 21 04:03 [34mHeaders[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel      829 Aug 21 04:03 Info.plist
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 04:03 [34mModules[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel     2108 Aug 21 04:03 PrivacyInfo.xcprivacy
+-rw-r--r--@  1 jamesto  wheel  4642632 Aug 21 04:03 SentryObjC
+-- ls build/ios/glassvow/dylibs/addons/sentry/bin/ios/Sentry.xcframework/ios-arm64_x86_64-simulator/SentryObjC.framework --
+total 18216
+drwxr-xr-x@  7 jamesto  wheel      224 Aug 21 04:03 [34m.[39;49m[0m
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 04:03 [34m..[39;49m[0m
+drwxr-xr-x@ 87 jamesto  wheel     2784 Aug 21 04:03 [34mHeaders[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel      836 Aug 21 04:03 Info.plist
+drwxr-xr-x@  3 jamesto  wheel       96 Aug 21 04:03 [34mModules[39;49m[0m
+-rw-r--r--@  1 jamesto  wheel     2108 Aug 21 04:03 PrivacyInfo.xcprivacy
+-rw-r--r--@  1 jamesto  wheel  9315400 Aug 21 04:03 SentryObjC
+-- shasum -a 256 exported PrivacyInfo.xcprivacy --
+118b16e0e97ffe8b6f1f01b7e04f68e5da764474a4d39d2933b0eeaef3cdc0ca  build/ios/glassvow/dylibs/addons/sentry/bin/ios/Sentry.xcframework/ios-arm64/SentryObjC.framework/PrivacyInfo.xcprivacy
+118b16e0e97ffe8b6f1f01b7e04f68e5da764474a4d39d2933b0eeaef3cdc0ca  build/ios/glassvow/dylibs/addons/sentry/bin/ios/Sentry.xcframework/ios-arm64_x86_64-simulator/SentryObjC.framework/PrivacyInfo.xcprivacy
+
+==== APP-LEVEL (Godot template; distinct from Sentry Cocoa) ====
+-- ls build/ios/PrivacyInfo.xcprivacy --
+-rw-r--r--@ 1 jamesto  wheel  990 Aug 21 04:03 build/ios/PrivacyInfo.xcprivacy
+-- shasum -a 256 app-level PrivacyInfo.xcprivacy --
+4b61978794a0d6042d6fb5751bf9474cded649ab89956a1304667a1f0260ab2e  build/ios/PrivacyInfo.xcprivacy
