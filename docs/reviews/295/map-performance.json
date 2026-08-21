@@ -68,7 +68,7 @@
     }
   ],
   "actual_asset_switch_trace": {
-    "scope": "cold entry, 16 act switches, then static freeze",
+    "scope": "16 act switches, then static freeze",
     "presented_intervals": 599,
     "p50_ms": 16.6711,
     "p90_ms": 16.9222,
@@ -84,5 +84,14 @@
   "verdict": {
     "completed_library_invalidates_233": false,
     "pass": true
+  },
+  "cold_launch": {
+    "template": "App Launch",
+    "launch_mode": "Instruments --launch (not post-launch attach)",
+    "foreground_active_ms": 1426.263,
+    "initial_frame_rendering_ms": 49.308,
+    "process_creation_ms": 663.492,
+    "did_finish_launching_ms": 133.97,
+    "source_sha256": "f251ea40a73eaed8d1067e7d6346470d801806aa5079be4a6a87d08aaa4613b7"
   }
 }

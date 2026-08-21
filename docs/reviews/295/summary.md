@@ -31,9 +31,10 @@ do not show a process-footprint regression attributable to the map payload.
 On iPad 8 the completed pan matrix ran five repeats of 180 measured frames for
 each of 12 configurations in both locales. P50/P90/P95/P99/max rounded to
 16.667 ms, missed deadlines were 0%, and every row was correctly classified as
-a 60 Hz presentation floor. A separate Game Performance trace covered cold
-entry, 16 actual-asset act switches and the ensuing static freeze: no interval
-exceeded 25 ms and Instruments reported no potential hang.
+a 60 Hz presentation floor. A true cold `App Launch` trace reached foreground
+active at 1.426 s; initial-frame rendering took 49.308 ms. A separate Game
+Performance trace covered 16 actual-asset act switches and the ensuing static
+freeze: no interval exceeded 25 ms and Instruments reported no potential hang.
 
 The four units remain separate throughout. No map-specific optimisation ticket
 is required, and the completed asset library does not invalidate #233.
