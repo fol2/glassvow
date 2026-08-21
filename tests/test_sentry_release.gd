@@ -2,6 +2,11 @@ extends RefCounted
 ## Locks the Sentry 2.1.1 pin, privacy-minimal Project Settings, and iOS
 ## store/Dev Review exports that must carry the addon.
 
+## sentry-cocoa 9.24.0 Sources/Resources/PrivacyInfo.xcprivacy (exact bytes).
+## Pins Linked=false, Tracking=false, AppFunctionality per collected type
+## without a plist parser.
+const COCOA_PRIVACY_SHA256: String = "118b16e0e97ffe8b6f1f01b7e04f68e5da764474a4d39d2933b0eeaef3cdc0ca"
+
 
 static func run(fails: Array[String]) -> void:
 	_pin(fails)
@@ -97,35 +102,12 @@ static func _cocoa_privacy_manifest(fails: Array[String]) -> void:
 	if not FileAccess.file_exists(device) or not FileAccess.file_exists(sim):
 		fails.append("sentry: Sentry Cocoa PrivacyInfo.xcprivacy is missing")
 		return
-	var body: String = FileAccess.get_file_as_string(device)
-	if body != FileAccess.get_file_as_string(sim):
-		fails.append("sentry: Sentry Cocoa PrivacyInfo slices differ")
-	for token: String in [
-		"NSPrivacyCollectedDataTypeCrashData",
-		"NSPrivacyCollectedDataTypePerformanceData",
-		"NSPrivacyCollectedDataTypeOtherDiagnosticData",
-		"NSPrivacyAccessedAPICategoryUserDefaults",
-		"CA92.1",
-		"NSPrivacyAccessedAPICategorySystemBootTime",
-		"35F9.1",
-		"NSPrivacyAccessedAPICategoryFileTimestamp",
-		"C617.1",
-	]:
-		if not body.contains(token):
-			fails.append("sentry: Cocoa PrivacyInfo missing %s" % token)
-	for invented: String in [
-		"NSPrivacyCollectedDataTypeDeviceID",
-		"NSPrivacyCollectedDataTypeUserID",
-		"NSPrivacyCollectedDataTypeName",
-		"NSPrivacyCollectedDataTypeEmailAddress",
-		"NSPrivacyCollectedDataTypeLocation",
-		"NSPrivacyCollectedDataTypePhotos",
-		"NSPrivacyCollectedDataTypeContacts",
-		"NSPrivacyCollectedDataTypePurposeAdvertising",
-		"NSPrivacyCollectedDataTypePurposeThirdPartyAdvertising",
-	]:
-		if body.contains(invented):
-			fails.append("sentry: Cocoa PrivacyInfo invented %s" % invented)
+	var device_sha: String = FileAccess.get_sha256(device)
+	var sim_sha: String = FileAccess.get_sha256(sim)
+	if device_sha != COCOA_PRIVACY_SHA256:
+		fails.append("sentry: Cocoa PrivacyInfo is not sentry-cocoa 9.24.0 (%s)" % device_sha)
+	if sim_sha != COCOA_PRIVACY_SHA256:
+		fails.append("sentry: Cocoa PrivacyInfo simulator slice drifted (%s)" % sim_sha)
 
 
 static func _redact(fails: Array[String]) -> void:
