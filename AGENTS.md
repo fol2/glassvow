@@ -119,6 +119,7 @@ Organiser-owned files for why and for the two caveats.
 - **Art Ledger** — `docs/art-ledger.md` — points at the upstream art bibles that govern every raster asset, and records the prompts for the few this port authored itself. Relevant before generating or replacing any asset under `assets/art/`.
 - **Music Ledger** — `docs/music-ledger.md` — stained-glass pack contract, owed Suno briefs, titles. Dispatch: `.claude/skills/glassvow-suno/SKILL.md`.
 - **SFX Ledger** — `docs/sfx-ledger.md` — ashglass pack contract, owed ElevenLabs briefs. Dispatch: `.claude/skills/glassvow-elevenlabs/SKILL.md`.
+- **Sentry operator access** — `docs/release-signing.md` › Sentry operator access — the 2026-08-21 full-access decision, macOS Keychain service, local environment loader, Glassvow-only operating boundary, and token-rotation procedure. Never put the token itself in this repository or in agent output.
 
 ## Agent skills
 
@@ -169,6 +170,17 @@ verification gate is unchanged — run the four commands under **Verification** 
   `SUNO_API_KEY`. AceDataCloud's token is a third-party wrapper, optional,
   never a Suno secret. Project `.cursor/mcp.json` does not reach Cloud
   Agents; a running agent cannot hot-load MCP. Boot a new one after Save.
+
+- **Sentry operator access is full-scope but Glassvow-bound.** On James's Mac,
+  source `~/.config/glassvow/sentry.sh`; it reads the token from macOS Keychain
+  service `codex-sentry-glassvow-full-access` and sets organization `pgnetwork`
+  plus project `glassvow`. Sentry Personal Tokens cannot be restricted to one
+  project, so the credential is technically organization-wide. Use it only for
+  Glassvow. Release exports report environment `export_release`, not `prod`;
+  pass that value explicitly when filtering issues or events. Possessing the
+  credential is capability, not standing authority for
+  an unrelated project or an unrequested production mutation. See
+  `docs/release-signing.md` › Sentry operator access.
 
 
 ---
