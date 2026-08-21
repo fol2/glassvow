@@ -256,6 +256,42 @@
       "review_path": "docs/reviews/294/act1-terminus/twenty-placements.png",
       "polycount_target": 5000,
       "triangles": 4446
+    },
+    {
+      "asset_id": "act2-grade",
+      "source": "local-deterministic",
+      "created_at": "2026-08-21T13:53:00+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "b992ae08e638080e39aa32221edb6c811d9bfc4d9f4a8ede1a0a05f500f95906",
+      "final_sha256": "b992ae08e638080e39aa32221edb6c811d9bfc4d9f4a8ede1a0a05f500f95906",
+      "edits": [
+        "authored the owned Act II blue-night to cyan-distance palette arc at exact 512x256 RGBA with low-frequency flooded-corridor contact darkening",
+        "Godot 4.7.2 generated VRAM mode 2, high-quality, mipmapped import metadata from a temporary importer-default profile"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act II slice with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act2-grade/review-sheet.png"
+    },
+    {
+      "asset_id": "act2-terminus",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-21T13:53:00+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "d093ccc134faa8118e5a724bef33c4ee8a0fda15fc95826a0b608541ab58aa99",
+      "final_sha256": "d093ccc134faa8118e5a724bef33c4ee8a0fda15fc95826a0b608541ab58aa99",
+      "edits": [
+        "modelled the accepted flooded-threshold concept as a thick pointed arch, uneven ruined wings, two through-apertures, broad silt courses and two fused pendant masses",
+        "manifold boolean union produced one watertight connected component; one mesh, one surface, POSITION+NORMAL, no textures, 5568 triangles, grounded Y-up metres"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act II concept and final hero on 2026-08-21",
+      "review_path": "docs/reviews/294/act2-terminus/twenty-placements.png",
+      "concept_path": "assets/art/map-concepts/act2-terminus-flooded-threshold.png",
+      "concept_sha256": "7286e70e628b9c29d98c8037769e7ab1784fc7f7ee24f1b9076d4f42772ba9b0",
+      "polycount_target": 5000,
+      "triangles": 5568
     }
   ]
 }
