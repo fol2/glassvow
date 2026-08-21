@@ -1,0 +1,62 @@
+{
+  "source_commit": "3d5bc33bb0886d1d18673e9d1310d1c17a37fe75",
+  "manifest_sha256": "900949d3eaead1dea2aadb8ec2e3551820a6ef5c6d3d41d27cd4a92c89671b8e",
+  "source": {
+    "payload_files": 18,
+    "payload_bytes": 1043479,
+    "payload_mib": 0.995139,
+    "glb_files": 12,
+    "glb_bytes": 871440,
+    "glb_mib": 0.83107,
+    "png_files": 4,
+    "png_bytes": 147243,
+    "json_files": 2,
+    "json_bytes": 24796,
+    "sidecar_files": 16,
+    "sidecar_bytes": 19102
+  },
+  "active_act_source_glb": {
+    "1": {
+      "glb_bytes": 447412,
+      "glb_mib": 0.426685
+    },
+    "2": {
+      "glb_bytes": 240696,
+      "glb_mib": 0.229546
+    },
+    "3": {
+      "glb_bytes": 239232,
+      "glb_mib": 0.228149
+    },
+    "4": {
+      "glb_bytes": 262940,
+      "glb_mib": 0.250759
+    }
+  },
+  "texture_vram_planning": {
+    "format": "RGBA8 + full mip chain; uncompressed conservative allocation",
+    "all_acts_bytes": 2796200,
+    "all_acts_mib": 2.666664,
+    "active_act_bytes": 699050,
+    "active_act_mib": 0.666666
+  },
+  "imported_cache": {
+    "files": 20,
+    "bytes": 2253303,
+    "mib": 2.148917
+  },
+  "guardrails": {
+    "source_glb_all_ceiling_mib": 7.31,
+    "source_glb_all_actual_mib": 0.83107,
+    "source_glb_all_pass": true,
+    "source_glb_active_ceiling_mib": 2.25,
+    "source_glb_active_max_mib": 0.426685,
+    "source_glb_active_pass": true,
+    "texture_all_ceiling_mib": 11.31,
+    "texture_all_actual_mib": 2.666664,
+    "texture_all_pass": true,
+    "texture_active_ceiling_mib": 2.83,
+    "texture_active_actual_mib": 0.666666,
+    "texture_active_pass": true
+  }
+}

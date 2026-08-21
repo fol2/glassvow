@@ -1,0 +1,88 @@
+{
+  "measurement_commit": "3d5bc33bb0886d1d18673e9d1310d1c17a37fe75",
+  "device": {
+    "name": "iPad 8",
+    "product": "iPad11,6",
+    "os": "iPadOS 26.1",
+    "refresh_hz": 60
+  },
+  "camera": {
+    "tilt_degrees": -55,
+    "coverage_z": "-8.81..15.60",
+    "coverage_x": "-20.33..6.33 -> -2.78..23.88",
+    "pan_world_units": 17.55,
+    "oversample": [
+      1.0,
+      1.25,
+      1.5
+    ]
+  },
+  "locales": [
+    {
+      "locale": "en",
+      "full_report_sha256": "d2657b16e6243e38a0925bcb7b240a1b436c5ed55963281c9fb1dec890e97f19",
+      "configs": 12,
+      "repeats_per_config": 5,
+      "frames_per_repeat": 180,
+      "p50_ms": 16.667,
+      "p90_ms": 16.667,
+      "p95_ms": 16.667,
+      "p99_ms": 16.667,
+      "max_ms": 16.667,
+      "missed_deadline_pct": 0.0,
+      "refresh_floor": 12,
+      "miss": 0,
+      "viewport_cpu_median_range_ms": [
+        0.443,
+        0.465
+      ],
+      "renderer_mib_by_oversample": {
+        "1.0": 99.02,
+        "1.25": 107.44,
+        "1.5": 115.47
+      }
+    },
+    {
+      "locale": "zh-Hant",
+      "full_report_sha256": "2e0aa50dfce6e028c7d552dd54b59adefd5be1d9e6692d3098231ae5d9703297",
+      "configs": 12,
+      "repeats_per_config": 5,
+      "frames_per_repeat": 180,
+      "p50_ms": 16.667,
+      "p90_ms": 16.667,
+      "p95_ms": 16.667,
+      "p99_ms": 16.667,
+      "max_ms": 16.667,
+      "missed_deadline_pct": 0.0,
+      "refresh_floor": 12,
+      "miss": 0,
+      "viewport_cpu_median_range_ms": [
+        0.441,
+        0.462
+      ],
+      "renderer_mib_by_oversample": {
+        "1.0": 99.02,
+        "1.25": 107.44,
+        "1.5": 115.47
+      }
+    }
+  ],
+  "actual_asset_switch_trace": {
+    "scope": "cold entry, 16 act switches, then static freeze",
+    "presented_intervals": 599,
+    "p50_ms": 16.6711,
+    "p90_ms": 16.9222,
+    "p95_ms": 17.0139,
+    "p99_ms": 17.1988,
+    "max_ms": 17.3595,
+    "over_25_ms": 0,
+    "over_50_ms": 0,
+    "potential_hangs": 0,
+    "classification": "60 Hz presentation floor, not a scene-cost timer",
+    "source_sha256": "991d0b01d7094063a3ee302c98d55191cd630093567f6862aef50cc5449fe4ac"
+  },
+  "verdict": {
+    "completed_library_invalidates_233": false,
+    "pass": true
+  }
+}
