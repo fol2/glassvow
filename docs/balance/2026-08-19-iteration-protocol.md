@@ -272,6 +272,19 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   `585b143b…`. Do not landscape. Do not raise Ash HP. Relic stack
   still later-phase. Readout:
   [`2026-08-21-421-hypothesis-35.md`](2026-08-21-421-hypothesis-35.md).
+- **H36 (`arts.ashfall` all-enemies Smolder 4→5, keep cost 3 and
+  Ward 5) is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h36/phase-a.json`. Arm 2
+  **21.5 / 8.0 / 21.5 / 4.5**. Holdout 55.0 / 22.0 / 68.5 / 31.0.
+  Ash−Dusk **+13.5 / +9.0 pp**. Ash V0 arm 1 67.5→71.0 (+3.5) and
+  holdout 65.5→68.5 (+3.0) both |delta| <6 (KEEP needed ≥6 pp on
+  either). Ash V0 arm 2 17.5→21.5 (+4.0; still <23.5%; not the
+  ≥6 clog). Dusk arm 2 bit-identical (Ash-only art). Same art as
+  H33; the second +1 did not repeat +8.5 / +12. H33 landscape
+  already FAIL C1–C3 (`fbb92f6`); this is not a second 5h.
+  Working SHA remains H33 `585b143b…`. Do not landscape. Do not
+  raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-36.md`](2026-08-21-421-hypothesis-36.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
