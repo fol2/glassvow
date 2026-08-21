@@ -325,6 +325,21 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   Do not landscape. Do not raise Ash HP. Relic stack still
   later-phase. Readout:
   [`2026-08-21-421-hypothesis-39.md`](2026-08-21-421-hypothesis-39.md).
+- **H40 (`cards.bulwark` Ward 13→18 / 18→23, keep cost 2)
+  is noise — reverted.** Snapshot:
+  `docs/balance/data/421-h40/phase-a.json`. Arm 2
+  **26.5 / 7.0 / 20.5 / 7.0**. Holdout 59.0 / 22.5 / 69.0 / 36.5.
+  Ash−Dusk **+10.0 / +14.0 pp**. Ash V0 arm 1 77.5→79.5 (+2.0)
+  and holdout 70.5→69.0 (−1.5) both |delta| <6 (KEEP needed ≥6
+  pp on either). Ash V0 arm 2 17.5→20.5 (+3.0; still <23.5%;
+  not the ≥6 clog). Dusk V0 arm 2 21.5→26.5 (+5.0; shared
+  uncommon; under 6, thin). H38 Emberveil +3 Ward was
+  bit-identical; this larger 2-cost wall still did not fire
+  planned. H39 landscape already FAIL C1–C3 (`595377b`);
+  this is not a second 5h. Working SHA remains H39
+  `a0d608a5…`. Do not landscape. Do not raise Ash HP.
+  Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-40.md`](2026-08-21-421-hypothesis-40.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
