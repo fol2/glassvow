@@ -123,6 +123,6 @@ M5/M6 — author it with the map concept brief).
   locals before `append_array`; `floorf` not `floor`; explicit `return` per path.
 - Gate: `tools/check_imports.sh`, then `tools/check_scripts.sh`, then
   `godot --headless -s res://tests/run_all.gd`.
-  godot 4.7.1 is on PATH — the local `run_all` loop makes inline work fast for
+  Godot 4.7.2 is on PATH — the local `run_all` loop makes inline work fast for
   this parity-critical layer. Trunk flow: commit + push `main`; commit `.uid`,
   never touch `.godot/`.

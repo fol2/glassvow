@@ -56,7 +56,7 @@ pre_prompt += "platform.tripo3d.ai generation endpoints, any curl/http to /v2/op
 pre_prompt += "Generation surface is Tripo Studio only (studio.tripo3d.ai), using the paid Pro 3000 monthly credits. ";
 pre_prompt += "Read assets/art/map/provenance.json paid_product. Confirm api_forbidden is true, product is Studio, tier is Pro. ";
 pre_prompt += "Confirm this concept file exists and hash it: " + concept_path + ". ";
-pre_prompt += "Confirm godot --version prints 4.7.1.stable. ";
+pre_prompt += "Confirm godot --version prints 4.7.2.stable. ";
 pre_prompt += "Do not generate a mesh. Do not edit shipping GLBs. ";
 pre_prompt += "Return ok=true only if paid Studio evidence, concept file, and Godot pin are all present. ";
 pre_prompt += "summary must name the concept sha256 and the paid_product.plan_expires value.";
@@ -122,7 +122,7 @@ land_prompt += "source must say Studio (not API). Include task id, model shown i
 land_prompt += "texture=false, pbr=false, concept path, concept sha256, source_sha256, final_sha256, edits, ";
 land_prompt += "reviewer fol2, verdict accepted only if gates pass. Keep paid_product.api_forbidden true. ";
 land_prompt += "Implement the missing GPU silhouette raster gate required by #292: ";
-land_prompt += "Godot 4.7.1 harness imports the GLB, renders alpha masks at MapCameraRig.TILT_DEGREES, ";
+land_prompt += "Godot 4.7.2 harness imports the GLB, renders alpha masks at MapCameraRig.TILT_DEGREES, ";
 land_prompt += "widest zoom stop 28, eight Y rotations at 45 degrees, intended world scale, transparent target. ";
 land_prompt += "Feed each mask through the existing silhouette-noise definition; fail above 0.04. ";
 land_prompt += "Replace the SKIP in tools/map_asset_checks.py / tools/check_map_assets.py. ";
@@ -148,7 +148,7 @@ if land.output != () && land.output.ok == false {
 phase("Verify");
 let verify_prompt = "";
 verify_prompt += "Repo: /Users/jamesto/Coding/glassvow. HARD RULE: no Tripo API. ";
-verify_prompt += "Run from repo root, in order: godot --version (must be 4.7.1.stable); ";
+verify_prompt += "Run from repo root, in order: godot --version (must be 4.7.2.stable); ";
 verify_prompt += "tools/check_imports.sh; tools/check_scripts.sh; ";
 verify_prompt += "godot --headless -s res://tests/run_all.gd (grade by exit 0 and PASS line); ";
 verify_prompt += "python3 tools/check_map_assets.py ; python3 tools/check_map_assets.py --self-test. ";

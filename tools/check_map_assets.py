@@ -3,7 +3,7 @@
 
 `assets/art/map/map-assets.json` is the classifier shared with runtime binding.
 Declared-but-absent payload is legal; undeclared files are not. Present GLBs
-are imported in Godot 4.7.1, rastered at MapCameraRig tilt / zoom 28, and
+are imported in Godot 4.7.2, rastered at MapCameraRig tilt / zoom 28, and
 scored with the existing `_silhouette_noise` metric (fail above 0.04).
 """
 from __future__ import annotations
