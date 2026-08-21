@@ -5,7 +5,10 @@ Issue: [fol2/glassvow#412](https://github.com/fol2/glassvow/issues/412). This ti
 Content SHA-256 (`FileAccess.get_sha256` of `res://content/full-content.json`):
 `736090f18546738a2e38b756d81f6ad715a808c4ea321220443f839862cdb102`.
 Game-under-test commit `101e7d956bda30848399aa02833e09cbe339495e`.
-Godot used: `4.7.2-stable (official)` at `/opt/homebrew/bin/godot` (project pin remains 4.7.1; this host's installed binary is 4.7.2).
+Godot used: `4.7.2-stable (official)` at `/opt/homebrew/bin/godot`. At capture
+time the project pin was still 4.7.1; James adopted 4.7.2 as the exact pin on
+2026-08-21, so this run now matches the engine contract without rewriting its
+original provenance.
 Live shipping mix `A_modest_linear` (no `--mix`). Sampler root **215**. CEM root **216**.
 
 Every published ceiling below is **holdout-only** (seeds 5000–5199). Training-seed fitness is shown only as a convergence curve.

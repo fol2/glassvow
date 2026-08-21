@@ -169,7 +169,7 @@ capture proves that culling saves more than the added groups cost.
 ### Silhouette gate
 
 The first real module must land with the missing GPU raster gate. The gate imports the
-GLB in Godot 4.7.1, renders alpha masks at the production camera tilt and widest zoom,
+GLB in Godot 4.7.2, renders alpha masks at the production camera tilt and widest zoom,
 and evaluates the existing `_silhouette_noise` metric rather than inventing a second
 criterion:
 
@@ -264,7 +264,7 @@ four defeats the resident budget without improving a static screen.
 The **≤16 MiB IPA target** is a delivery guardrail, not a derived claim. If the measured
 identical-export delta is above 18.7 MiB, this bill is reopened before more assets land.
 
-## Godot 4.7.1 import contract
+## Godot 4.7.2 import contract
 
 The project already enables
 `rendering/textures/vram_compression/import_etc2_astc=true`, but existing art sidecars

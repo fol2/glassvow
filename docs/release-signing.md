@@ -10,13 +10,20 @@ this pipeline is wayfinder #165.
 
 | Piece | Where | Why this one |
 |---|---|---|
-| Godot 4.7.1.stable | `godot` on PATH | engine pin (SKILL.md §1) |
-| Export templates 4.7.1 | `~/Library/Application Support/Godot/export_templates/4.7.1.stable/` — must contain `ios.zip`, `android_source.zip`, `android_debug.apk`, `android_release.apk` (the slim install shipped only macOS+web; the mobile four were added 2026-08-13 from the official `.tpz`) | must match engine version exactly |
+| Godot 4.7.2.stable | `godot` on PATH | engine pin (SKILL.md §1) |
+| Export templates 4.7.2 | `~/Library/Application Support/Godot/export_templates/4.7.2.stable/` — must contain `ios.zip`, `android_source.zip`, `android_debug.apk`, `android_release.apk`; the selected mobile, macOS and no-thread web templates were installed 2026-08-21 from the checksum-verified official `.tpz` | must match engine version exactly |
 | JDK 17 (Temurin 17.0.20) | `~/.local/share/jdk-17/Contents/Home`, wired into Godot's `export/android/java_sdk_path` editor setting | Godot 4.7's gradle template runs Gradle 8.11.1, which rejects JDK >23 ("Unsupported class file major version 69" on the machine's JDK 25); docs pin OpenJDK 17 |
 | Android SDK | `~/Library/Android/sdk` (platform android-36, build-tools 36.0.0) | Play requires target API 36 from 2026-08-31 |
 | Xcode 26 | `/Applications/Xcode.app` | App Store uploads must be built with the iOS 26 SDK since 2026-04-28 |
-| Android gradle template | `android/` (gitignored, machine-local) | reinstall any checkout: `mkdir -p android/build && unzip -o ~/Library/Application\ Support/Godot/export_templates/4.7.1.stable/android_source.zip -d android/build && echo 4.7.1.stable > android/.build_version && touch android/build/.gdignore` — the wizard's preflight does this automatically |
+| Android gradle template | `android/` (gitignored, machine-local) | reinstall any checkout: `mkdir -p android/build && unzip -o ~/Library/Application\ Support/Godot/export_templates/4.7.2.stable/android_source.zip -d android/build && echo 4.7.2.stable > android/.build_version && touch android/build/.gdignore` — the wizard's preflight does this automatically |
 | Sentry for Godot **2.1.1** | `addons/sentry` ([release](https://github.com/getsentry/sentry-godot/releases/tag/2.1.1), tree `d288ad9`) | crash reporting on iOS store + Dev Review; do not follow `latest`. Client DSN lives in `project.godot` `[sentry]`; privacy-minimal (`attach_log=false`). Android Gradle injection is a later wave |
+
+**4.7.2 template install receipt (2026-08-21):** the official
+`Godot_v4.7.2-stable_export_templates.tpz` matched its published SHA-512,
+`ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079`.
+The selected iOS, Android, macOS and no-thread Web templates are installed
+under the 4.7.2 directory; the old 4.7.1 directory remains available only for
+replaying historical evidence.
 
 ## Credentials — where they live
 

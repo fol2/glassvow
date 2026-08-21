@@ -259,8 +259,8 @@ def web_url(arguments: list[str], token: str) -> str:
 def build_web() -> str:
     version = subprocess.run(
         ["godot", "--version"], text=True, capture_output=True, timeout=10, check=False)
-    if version.returncode or not version.stdout.startswith("4.7.1.stable"):
-        raise ToolError("Godot 4.7.1.stable is required for the Web development export.")
+    if version.returncode or not version.stdout.startswith("4.7.2.stable"):
+        raise ToolError("Godot 4.7.2.stable is required for the Web development export.")
     if WEB_BUILD.exists():
         shutil.rmtree(WEB_BUILD)
     WEB_BUILD.mkdir(parents=True)

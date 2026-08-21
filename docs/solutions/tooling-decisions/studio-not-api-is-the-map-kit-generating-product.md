@@ -160,7 +160,8 @@ present GLB, max noise on slab-a 0.0021 ≤ 0.04, then
 **Do not claim from this session:** a measured Studio credit drop
 (`paid_product.credits_balance` and `usage_history` still show only the
 2026-08-19 +3000 top-up). Godot on PATH here printed `4.7.2.stable`; the
-contract pin remains 4.7.1. #292 is closed (owner signed the clay-grid
+contract pin was still 4.7.1 during this session and changed to 4.7.2 on
+2026-08-21. #292 is closed (owner signed the clay-grid
 20-placement). Remaining generate is #293.
 
 ## Related
