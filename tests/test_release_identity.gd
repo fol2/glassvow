@@ -1,10 +1,11 @@
 extends RefCounted
-## Locks 1.0.0 marketing identity vs numeric build 1, and the App Store
+## Locks 1.0.0 marketing identity vs the current numeric iOS build, and the App Store
 ## Connect export options that must not rewrite either. Does not replace
 ## Sentry dist (#420) or iOS privacy-plist (#432) gates.
 
 const MARKETING: String = "1.0.0"
-const BUILD: String = "1"
+const IOS_BUILD: String = "2"
+const ANDROID_BUILD: String = "1"
 
 
 static func run(fails: Array[String]) -> void:
@@ -23,7 +24,7 @@ static func _project(fails: Array[String]) -> void:
 			FileAccess.get_file_as_string("res://project.godot"), "config/version")
 	if file_val != MARKETING:
 		fails.append("identity: project.godot config/version is %s, not %s" % [file_val, MARKETING])
-	if file_val == BUILD:
+	if file_val == IOS_BUILD:
 		fails.append("identity: marketing version equals numeric build")
 
 
@@ -36,8 +37,8 @@ static func _ios_identity(fails: Array[String]) -> void:
 			continue
 		if str(opts.get("application/short_version", "")) != MARKETING:
 			fails.append("identity: %s short_version is not %s" % [name, MARKETING])
-		if str(opts.get("application/version", "")) != BUILD:
-			fails.append("identity: %s CFBundleVersion is not %s" % [name, BUILD])
+		if str(opts.get("application/version", "")) != IOS_BUILD:
+			fails.append("identity: %s CFBundleVersion is not %s" % [name, IOS_BUILD])
 
 
 static func _shared_marketing(fails: Array[String]) -> void:
@@ -51,18 +52,18 @@ static func _shared_marketing(fails: Array[String]) -> void:
 		var opts: Dictionary = _preset_options(presets, name)
 		if str(opts.get("version/name", "")) != MARKETING:
 			fails.append("identity: %s version/name is not %s" % [name, MARKETING])
-		if str(opts.get("version/code", "")) != BUILD:
-			fails.append("identity: %s version/code is not %s" % [name, BUILD])
+		if str(opts.get("version/code", "")) != ANDROID_BUILD:
+			fails.append("identity: %s version/code is not %s" % [name, ANDROID_BUILD])
 
 
 static func _sentry_dist(fails: Array[String]) -> void:
 	var loop_src: String = FileAccess.get_file_as_string("res://application/sentry_loop.gd")
-	if not loop_src.contains("const IOS_BUILD_NUMBER: String = \"%s\"" % BUILD):
-		fails.append("identity: IOS_BUILD_NUMBER is not %s" % BUILD)
+	if not loop_src.contains("const IOS_BUILD_NUMBER: String = \"%s\"" % IOS_BUILD):
+		fails.append("identity: IOS_BUILD_NUMBER is not %s" % IOS_BUILD)
 	var dist: String = _godot_value(
 			FileAccess.get_file_as_string("res://project.godot"), "options/dist")
-	if dist != BUILD:
-		fails.append("identity: sentry options/dist is not %s" % BUILD)
+	if dist != IOS_BUILD:
+		fails.append("identity: sentry options/dist is not %s" % IOS_BUILD)
 
 
 static func _export_options(fails: Array[String]) -> void:
