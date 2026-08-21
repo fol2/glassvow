@@ -769,6 +769,22 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   landscape. Do not raise Ash HP. Relic stack still
   later-phase. Readout:
   [`2026-08-21-421-hypothesis-71.md`](2026-08-21-421-hypothesis-71.md).
+- **H72 (`cards.frenzy` self-Cracked 2→1 / upgrade 1→0, keep
+  +1 energy, cost 2) is reverted — paid Dusk planned.**
+  Snapshot: `docs/balance/data/421-h72/phase-a.json`. Arm 2
+  **22.0 / 7.5 / 20.5 / 7.5**. Holdout 67.0 / 28.5 / 74.0 /
+  43.0. Ash−Dusk **+7.0 / +14.5 pp**. Dusk V0 holdout
+  55.0→67.0 (**+12.0**). Dusk V0 arm 1 **+7.5**. Ash V0 arm 1
+  +0.5 and holdout +3.5. Digest moved (`d6617bde…`); not
+  re-pinned. Do not buff Overglow / shared energy rares this
+  loop (H21 family). Not Emberfang n, not Emberbite damage,
+  not relic-stack, not 1-pt commons, not Ashbite Ward, not
+  Twin Shards, not Inner Blaze, not First Spark, not Choir.
+  H39 landscape already FAIL C1–C3 (`595377b`); this is not
+  a second 5h. Working SHA remains H39 `a0d608a5…`. Do not
+  landscape. Do not raise Ash HP. Relic stack still
+  later-phase. Readout:
+  [`2026-08-21-421-hypothesis-72.md`](2026-08-21-421-hypothesis-72.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
