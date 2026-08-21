@@ -13,6 +13,7 @@ static func _check(fails: Array[String], ok: bool, what: String) -> void:
 
 static func run(fails: Array[String]) -> void:
 	_predicate_contract(fails)
+	_pointer_drift_without_mouse(fails)
 	_first_tap_without_synthetic_hover(fails)
 	_first_tap_with_synthetic_hover(fails)
 	_first_tap_fine_pointer_arms(fails)
@@ -32,6 +33,21 @@ static func _predicate_contract(fails: Array[String]) -> void:
 	PointerDevice.declare_coarse(false)
 	_check(fails, not PointerDevice.coarse(), "declare_coarse(false) is fine")
 	PointerDevice.clear_declaration()
+
+
+static func _pointer_drift_without_mouse(fails: Array[String]) -> void:
+	# The sampler is the engine call that reports GLASSVOW-1 on iOS. A no-mouse
+	# display must return centre without invoking it at all.
+	var sampled: Array[bool] = [false]
+	var sample: Callable = func() -> Vector2:
+		sampled[0] = true
+		return Vector2(100.0, 100.0)
+	var target: Vector2 = PointerDrift.target_for(
+		Rect2(Vector2.ZERO, Vector2(1280.0, 720.0)), false, sample)
+	_check(fails, not sampled[0],
+		"PointerDrift does not sample an absent mouse")
+	_check(fails, target == Vector2.ZERO,
+		"PointerDrift targets centre without a mouse")
 
 
 static func _combat_screen() -> CombatScreen:
