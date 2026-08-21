@@ -701,6 +701,24 @@ SHA `c96ed731…`. Arm 2 78.5 / 39.5 / 86.0 / 50.5. Holdout 89.5 / 94.5 / 67.0 /
   H39 `a0d608a5…`. Do not landscape. Do not raise Ash HP.
   Relic stack still later-phase. Readout:
   [`2026-08-21-421-hypothesis-67.md`](2026-08-21-421-hypothesis-67.md).
+- **H68 (`cards.empower` Fervor 2→4 / 3→5, keep cost 1) is
+  reverted — paid Dusk random and planned.** Snapshot:
+  `docs/balance/data/421-h68/phase-a.json`. Arm 2
+  **28.0 / 7.5 / 20.0 / 7.0**. Holdout 62.0 / 26.0 / 70.5 /
+  33.0. Ash−Dusk **+8.5 / +7.0 pp**. Dusk V0 arm 2
+  21.5→28.0 (**+6.5** C2 wrong way). Dusk V0 holdout **+7.0**.
+  Ash V0 arm 1 −3.0 and holdout +0.0. Ash V5 holdout **−6.5**.
+  Digest moved (`03265faf…`); not re-pinned. Do not buff
+  Inner Blaze Fervor n this loop (H54 cost and H68 n are
+  both dead). Do not buff 1-cost shared powers this loop.
+  Not relic-stack, not Dusk chip, not lantern arts, not H55
+  smolder-top, not shared Dimmed, not 1-cost Dimmed/ward/
+  regen, not 2-cost common smash, not Twin Shards, not
+  Requiem, not First Spark draw, not Choir. H39 landscape
+  already FAIL C1–C3 (`595377b`); this is not a second 5h.
+  Working SHA remains H39 `a0d608a5…`. Do not landscape. Do
+  not raise Ash HP. Relic stack still later-phase. Readout:
+  [`2026-08-21-421-hypothesis-68.md`](2026-08-21-421-hypothesis-68.md).
 - **Relic stack is a later-phase binding lesson, not this loop.** Do not
   retune these now. `ashenCore` (Ash starter) = 3 start Smolder;
   `smolderingCoal` (uncommon, `ashSermon`) = +2; together **5**; triangular
