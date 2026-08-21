@@ -882,3 +882,28 @@ The shipping GLB is Y-up and grounded at Y=0, one mesh and one triangulated
 surface, POSITION+NORMAL only: 5,504 triangles, 132,952 bytes. No vendor,
 textures or paid credits. sha256 `607615ca3bd5a5d5ffa382ab19866891a49f220685fe6c2f4272427b6ea423fe`. fol2 accepted the final hero on
 2026-08-21; evidence is in `docs/reviews/294/act3-terminus/`.
+
+### `map-concepts/act4-terminus-rose-threshold.png` — Act IV hero concept (#294)
+
+Project-authored concept generated from the Glassvow brief: a monumental rose
+threshold with a thick four-aperture wheel, tall faceted flanking pylons, broad
+stepped courses and one continuous plinth; no character, text, foliage or loose
+props. fol2 accepted the concept on 2026-08-21. sha256 `44b5ee7dec5d6ef10c732a03190923ddbe6df1d26b5f4148e3a6146e7b9af00d`.
+
+### `map/grades/act4-grade.png` — 512×256 RGBA — Act IV grade (#294)
+
+Locally authored low-frequency umber-to-rose dawn reversed hearth-light grade,
+with alpha restricted to contact darkening. Godot 4.7.2 generated its VRAM mode
+2, high-quality, mipmapped sidecar; it was not hand-edited. No vendor or paid
+generation. sha256 `abc2371033603c4f927d0a225c28b1cf36d2c10e03c8719f03d3d20b2ee8ad5a`. fol2 accepted the Act IV slice on 2026-08-21;
+evidence is in `docs/reviews/294/act4-grade/`.
+
+### `map/geometry/act4/terminus-threshold.glb` — Act IV hero terminus (#294)
+
+Locally modelled from the accepted rose-threshold concept as a thick
+four-aperture wheel, faceted flanking pylons, stepped threshold courses and a
+continuous plinth. Manifold boolean union reduced the construction to one
+watertight component. The shipping GLB is Y-up and grounded at Y=0, one mesh and
+one triangulated surface, POSITION+NORMAL only: 5,460 triangles, 156,660 bytes.
+No vendor, textures or paid credits. sha256 `137fdfe77386ff02b8c825ec1b2d9fb14315f2c09409dd30b629d1e6570c0d9f`. fol2 accepted the final
+hero on 2026-08-21; evidence is in `docs/reviews/294/act4-terminus/`.
