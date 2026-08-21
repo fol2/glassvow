@@ -597,7 +597,7 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 6,
+          "n": 4,
           "times": 2
         }
       ],
@@ -605,14 +605,14 @@
         "effects": [
           {
             "kind": "dmg",
-            "n": 8,
+            "n": 6,
             "times": 2
           }
         ],
-        "text": "Deal @8@ damage to ALL enemies twice."
+        "text": "Deal @6@ damage to ALL enemies twice."
       },
       "name": "Hailglass",
-      "text": "Deal @6@ damage to ALL enemies twice."
+      "text": "Deal @4@ damage to ALL enemies twice."
     },
     "uppercut": {
       "type": "attack",
