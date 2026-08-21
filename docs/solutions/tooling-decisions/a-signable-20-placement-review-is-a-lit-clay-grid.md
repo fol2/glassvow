@@ -82,9 +82,23 @@ var origin: Vector3 = Vector3(
         (float(row) - 1.5) * GAP)
 ```
 
-`land_map_glb.review_png` (`tools/land_map_glb.py:106-122`) only asserts
-the PNG exists. Existence is a land-step, not a Gate. The Gate is
-`human_review.verdict` in `docs/reviews/292/gate-report.json`.
+`tools/land_map_glb.py` (`review_png`) only asserts the PNG exists.
+Existence is a land-step, not a Gate. Default landing still captures under
+`docs/reviews/292/` and does **not** write provenance. Accepted provenance
+is a later provenance-only step (`tools/land_map_glb.py` (`validate_signed_acceptance`)):
+
+```
+python3 tools/land_map_glb.py --asset ID --src GLB
+python3 tools/land_map_glb.py --asset ID --src DEST \
+  --accept-signed-capture docs/reviews/TICKET/ID-20.png --reviewer fol2
+```
+
+`--src` on accept must already be the landed dest (no copy). Recapture is
+skipped automatically; `--no-review` is not required. Reviewer must be
+`fol2`. The PNG must be the canonical non-symlink
+`docs/reviews/<positive-ticket>/<asset_id>-20.png`, 1280×720 RGB/RGBA.
+`pending` is not a shipping verdict. The Gate is `human_review.verdict`
+in `docs/reviews/292/gate-report.json`.
 
 Do not ask a human to sign an unreadable capture. Do not upscale a mask
 and call it review. Do not close a one-module ticket as if it had passed
@@ -121,7 +135,8 @@ test that. One kit does not replace placeholders. Further acts stay on
 - Any ask for a human to sign "same item" or "contour repetition" from a PNG.
 - Any edit that "simplifies" review back onto `SILHOUETTE_SHADER`.
 - Landing the next ordinary GLB with `tools/land_map_glb.py` (it writes the
-  review PNG from this harness).
+  review PNG from this harness). Write accepted provenance only with
+  `--accept-signed-capture` and `--reviewer fol2` after that PNG is signed.
 
 ## Examples
 
