@@ -73,7 +73,7 @@ static func _dist(fails: Array[String]) -> void:
 	var loop_src: String = FileAccess.get_file_as_string("res://application/sentry_loop.gd")
 	if loop_src.contains("get_setting(\"application/config/version\")"):
 		fails.append("sentry: dist is still sourced from marketing version")
-	if not loop_src.contains("const IOS_BUILD_NUMBER: String = \"2\""):
+	if not loop_src.contains("const IOS_BUILD_NUMBER: String = \"3\""):
 		fails.append("sentry: IOS_BUILD_NUMBER is not the numeric iOS build")
 	if not loop_src.contains("options.dist = IOS_BUILD_NUMBER"):
 		fails.append("sentry: dist is not assigned from IOS_BUILD_NUMBER")

@@ -141,7 +141,7 @@ xcodebuild -exportArchive -archivePath build/ios/glassvow.xcarchive \
 `scripts/ios_export_options.plist` keeps `method = app-store-connect`,
 `teamID = V45S7U2LZB`, and `signingStyle = automatic`. It also pins
 `manageAppVersionAndBuildNumber = false` so App Store Connect cannot rewrite
-the tracked marketing version and build number (currently **1.0.0 (2)**), and
+the tracked marketing version and build number (currently **1.0.0 (3)**), and
 `uploadSymbols = true` so a direct
 App Store Connect upload includes symbols. With `destination = export`, retain
 the archive's `dSYMs/` for the later Apple and Sentry symbol-upload steps; dSYMs
