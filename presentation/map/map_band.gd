@@ -55,7 +55,11 @@ class PathBand extends MapBand:
 			draw_circle(at, 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 			draw_circle(at, 15.0, Color(ember.r, ember.g, ember.b, 0.18))
 
+	## Cold glass, for road the pilgrimage has not opened yet.
+	const COLD: Color = Color(0.36, 0.44, 0.60)
+
 	func _draw_graph() -> void:
+		var live: Array[int] = host.map.reachable()
 		var by_id: Dictionary = {}
 		var frame: Rect2 = Rect2(Vector2.ZERO, size).grow(80.0)
 		for node: MapNode in host.map.nodes:
@@ -72,20 +76,40 @@ class PathBand extends MapBand:
 					and host.map.is_cleared(host.map.nodes.find(next_node))
 				var fade: float = 1.0 if frame.has_point(from) or frame.has_point(to) \
 					else 0.10
+				# POC (#156 direction B). The edge is the road, so it is drawn as
+				# came: a dark lead channel with a glass core on top. Gold where
+				# the pilgrimage has been, ember where it may go next, cold
+				# ahead. The 2 px dash this replaces carried a 15x7 graph at 24%
+				# alpha and read as a hairline over unrelated ground.
+				var open_now: bool = live.has(host.map.nodes.find(next_node)) \
+					and host.map.at == host.map.nodes.find(node)
+				var core: Color = COLD
+				var width: float = 5.0
+				if walked:
+					core = GlassStyle.GOLD
+					width = 8.0
+				elif open_now:
+					core = GlassStyle.EMBER
+					width = 9.0
 				var control: Vector2 = host.edge_control(from, to)
 				var previous: Vector2 = from
 				var segs: int = maxi(12, int(from.distance_to(to) / 11.0))
+				var points: PackedVector2Array = PackedVector2Array([from])
 				for segment: int in range(segs):
 					var t: float = float(segment + 1) / float(segs)
-					var point: Vector2 = from * (1.0 - t) * (1.0 - t) \
-						+ control * 2.0 * (1.0 - t) * t + to * t * t
-					if walked or segment % 2 == 0:
-						var tone: Color = Color(0.85, 0.87, 0.92) if walked \
-							else GlassStyle.GLASS
-						draw_line(previous, point, Color(tone.r, tone.g, tone.b,
-							fade * (0.72 if walked else 0.24)),
-							3.0 if walked else 2.0)
-					previous = point
+					points.append(from * (1.0 - t) * (1.0 - t) \
+						+ control * 2.0 * (1.0 - t) * t + to * t * t)
+				for segment: int in range(1, points.size()):
+					draw_line(points[segment - 1], points[segment],
+						Color(0.02, 0.025, 0.045, fade * 0.85), width + 6.0)
+				for segment: int in range(1, points.size()):
+					if open_now:
+						draw_line(points[segment - 1], points[segment],
+							Color(core.r, core.g, core.b, fade * 0.30), width + 10.0)
+					draw_line(points[segment - 1], points[segment],
+						Color(core.r, core.g, core.b,
+							fade * (0.92 if walked or open_now else 0.42)), width)
+				previous = points[points.size() - 1]
 
 
 class VeilBand extends MapBand:

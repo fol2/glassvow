@@ -265,11 +265,27 @@ static func _asset_binding(fails: Array[String]) -> void:
 	var first_root: Node = scene.find_child("MapAssetGeometry", true, false)
 	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 12,
 			"complete active set replaces placeholders through MapScene binding")
-	for i: int in range(8):
+	# Kits 0 and 1 are shared-road-slab-a/b and are laid along the graph as the
+	# ROAD (#156 direction B), not scattered as scenery, so they have no
+	# AssetKit node at all. The remaining six share every scenery seat between
+	# them. Counting the sum rather than each kit's share is the check that
+	# matters: it fails if a seat is dropped or served twice, and it does not
+	# re-break every time the seat list is retuned.
+	for i: int in range(2):
+		_check(fails, scene.find_child("AssetKit%02d" % i, true, false) == null,
+				"road kit %d is not scattered as scenery" % i)
+	var seated: int = 0
+	for i: int in range(2, 8):
 		var kit: Node = scene.find_child("AssetKit%02d" % i, true, false)
-		_check(fails, kit is MultiMeshInstance3D
-				and (kit as MultiMeshInstance3D).multimesh.instance_count in [3, 4],
-				"asset kit %d owns three or four deterministic placements" % i)
+		_check(fails, kit is MultiMeshInstance3D,
+				"asset kit %d is bound as a multimesh" % i)
+		if kit is MultiMeshInstance3D:
+			seated += (kit as MultiMeshInstance3D).multimesh.instance_count
+	_check(fails, seated == scene._all_prop_positions().size(),
+			"the six scenery kits between them fill every seat exactly once")
+	for i: int in range(2):
+		_check(fails, scene.find_child("AssetRoad%d" % i, true, false) is MultiMeshInstance3D,
+				"road slab %d is laid along the graph" % i)
 	_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
 			"active terminus is attached")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
@@ -357,8 +373,19 @@ static func _palette(fails: Array[String]) -> void:
 			and MapRegions.WEATHER_BY_ACT.size() == LayoutBook.ACTS
 			and MapRegions.BAND_SHADE.size() == LayoutBook.ACTS,
 			"act count and palette count agree")
-	_check(fails, MapRegions.BAND_SHADE[0].h > 0.88,
-			"act 0 shade hue is crimson (~328°, the web act1 stage)")
+	# Act 0 was crimson because it was matched to the web act1 stage plate. The
+	# port owns its look now and act 0 is night glass (#156 direction B), so
+	# the hue this pins moved. What replaces it is the constraint that actually
+	# protects the frame: a prop is the ground times PROP_VALUE / GROUND_VALUE,
+	# so if the KEY loses luminance the props stop reading against the ground.
+	# Hue is nearly free — the amber this replaced carried luma 0.505 and the
+	# glass-blue carries 0.438 — but a genuinely dark key is not, and that is
+	# the mistake this floor is here to catch. The darkness belongs in the
+	# grade, which multiplies per position; see MapRegions.BAND_KEY.
+	_check(fails, MapRegions.BAND_SHADE[0].h > 0.55 and MapRegions.BAND_SHADE[0].h < 0.72,
+			"act 0 shade is night indigo, not the retired crimson stage plate")
+	_check(fails, MapRegions.BAND_KEY[0].get_luminance() > 0.5,
+			"act 0 key keeps the luminance the ground↔prop gap depends on")
 	for i: int in range(4):
 		var cfg: MapRegions = MapRegions.for_act(i)
 		_check(fails, cfg.act == i
@@ -425,11 +452,23 @@ static func _palette(fails: Array[String]) -> void:
 					_check(fails, tex.get_width() == 512 and tex.get_height() == 256,
 							"painted act 0 grade is the declared 512×256 row")
 	var ground_end: ShaderMaterial = _override(scene, "TerrainPlaceholder")
+	# `surface_tex` used to be asserted IDENTICAL across every act, which held
+	# only while no act had a real tile and all four shared the one in-memory
+	# fallback. Act I now binds `materials/act1-ground-ash-loam.png` while the
+	# other three still fall back, so identity is the wrong invariant — and
+	# keeping it would mean the gate fails the moment any act's tile lands.
+	# What the check is really for is that an act switch never retints the
+	# GROUND: the value lock holds and no albedo uniform appears. Hue lives in
+	# the ramp ends and the grade, never in the surface.
 	_check(fails, ground_end != null
 			and is_equal_approx(g_val, MapMaterials.GROUND_VALUE)
-			and is_same(surface, ground_end.get_shader_parameter("surface_tex"))
+			and is_equal_approx(_as_float(ground_end.get_shader_parameter("surface_value")),
+				MapMaterials.GROUND_VALUE)
+			and ground_end.get_shader_parameter("surface_tex") != null
 			and ground_end.get_shader_parameter("albedo") == null,
-			"act switch does not retint albedo / surface_tex / surface_value")
+			"act switch does not retint albedo / surface_value")
+	_check(fails, surface != null,
+			"act 0 binds a surface texture")
 	scene.free()
 
 

@@ -226,18 +226,19 @@
     {
       "asset_id": "act1-grade",
       "source": "local-deterministic",
-      "created_at": "2026-08-21T13:38:00+01:00",
+      "created_at": "2026-08-22T18:40:00+08:00",
       "license": "original Glassvow authorship (no vendor, no paid credits)",
-      "source_sha256": "e9c74f792dec12d4c70940d651b611c341940320f1544d440cafdb523aaf3fa7",
-      "final_sha256": "e9c74f792dec12d4c70940d651b611c341940320f1544d440cafdb523aaf3fa7",
+      "source_sha256": "da18e953757052dafadc24189c7f129cd941385933af0376d215653e759751cf",
+      "final_sha256": "da18e953757052dafadc24189c7f129cd941385933af0376d215653e759751cf",
       "edits": [
-        "sampled the owned Act I palette arc at exact 512x256 RGBA with low-frequency contact darkening",
-        "Godot 4.7.2 generated the import sidecar from the temporary texture importer default profile: VRAM mode 2, high quality, mipmaps"
+        "repainted for the direction-B journey axis (#156): U is the X journey from the entrance at x=-24 to the boss at x=+24, V the seven z lanes, so one grade covers the 48x24 lattice exactly",
+        "hue walks 0.95 -> 0.88 along the journey with saturation draining and value lifting, carrying the aerial-perspective ramp that direction B cannot get from a horizon",
+        "broad corridor exp(-(Z/9.5)^4) with night beyond the lanes; alpha contact blobs sized to the 21 shipped scenery seats plus the terminus"
       ],
       "reviewer": "fol2",
       "verdict": "accepted",
-      "acceptance": "User approved final Act I hero and grade with 1-4 YES on 2026-08-21",
-      "review_path": "docs/reviews/294/act1-terminus/twenty-placements.png"
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/act1-baseline/B-final.png"
     },
     {
       "asset_id": "act1-terminus",
@@ -362,6 +363,40 @@
       "concept_sha256": "44b5ee7dec5d6ef10c732a03190923ddbe6df1d26b5f4148e3a6146e7b9af00d",
       "polycount_target": 5000,
       "triangles": 5460
+    },
+    {
+      "asset_id": "act1-ground",
+      "source": "local-deterministic",
+      "created_at": "2026-08-22T18:40:00+08:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "f09ec8c591fadc1274a229195b5222125d80b4cb5b84ca91f70cd3f60f5a1b83",
+      "final_sha256": "f09ec8c591fadc1274a229195b5222125d80b4cb5b84ca91f70cd3f60f5a1b83",
+      "edits": [
+        "synthesised a seamless ash-loam ground tile by FFT: spectral shaping in the frequency domain makes the period exact rather than retouched, so the seam ratio is a property of the construction and not of a fix-up pass",
+        "normalised the stored mean to 0.500 for the ground shader's tex_mean path, and flattened baked lighting so de-light spread stays near zero",
+        "Godot 4.7.2 import sidecar set to VRAM compressed mode 2, high quality, mipmaps on, matching the other map raster assets"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/act1-baseline/B-final.png"
+    },
+    {
+      "asset_id": "act1-prop",
+      "source": "local-deterministic",
+      "created_at": "2026-08-22T18:40:00+08:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "ef491648573e9af7ef07b5c65c4a702422fec11980b381b4f666e3935c1910d8",
+      "final_sha256": "ef491648573e9af7ef07b5c65c4a702422fec11980b381b4f666e3935c1910d8",
+      "edits": [
+        "synthesised a seamless charred-bark prop tile by FFT: spectral shaping in the frequency domain makes the period exact rather than retouched, so the seam ratio is a property of the construction and not of a fix-up pass",
+        "normalised the stored mean to 0.500 for the prop shader's tex_mean path, and flattened baked lighting so de-light spread stays near zero",
+        "Godot 4.7.2 import sidecar set to VRAM compressed mode 2, high quality, mipmaps on, matching the other map raster assets"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/act1-baseline/B-final.png"
     }
   ]
 }
