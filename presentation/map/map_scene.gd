@@ -24,6 +24,14 @@ const VP_MAX: int = 2048
 const GROUND_SIZE: Vector2 = Vector2(128.0, 96.0)
 const SUN_TO: Vector3 = Vector3(-0.35, 0.78, 0.52)
 const SKY: Color = Color(0.018, 0.022, 0.045)
+## Metres each unit-scale kit is grown to, indexed as the manifest orders them:
+## road-slab-a, road-slab-b, standing-monument, ash-trunk-fork, root-wedge,
+## charred-stump, fallen-bough-arch, ash-cairn-mass.
+const KIT_SCALE: Array[float] = [3.0, 3.0, 3.4, 6.2, 2.8, 2.2, 4.6, 3.2]
+const TERMINUS_SCALE: float = 3.6
+## Metres between paving slabs along a road segment.
+const ROAD_STEP: float = 1.15
+const ROAD_SCALE: float = 1.75
 const TAP_SLOP: float = 12.0
 const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
@@ -37,6 +45,10 @@ var _key: DirectionalLight3D
 var _materials: MapMaterials
 var _world: Node3D
 var _asset_geometry: Node3D
+var _road_meshes: Array[Mesh] = []
+## Flat list of segment endpoints (a, b, a, b, ...) in world XZ, handed down by
+## the screen that owns the graph. MapScene stays instantiable without one.
+var _road_segments: PackedVector3Array = PackedVector3Array()
 var _act: int = -1
 var _dragging: bool = false
 var _lock_input: bool = false
@@ -177,6 +189,23 @@ func is_live() -> bool:
 func set_live(on: bool) -> void:
 	_stage.render_target_update_mode = (
 			SubViewport.UPDATE_ALWAYS if on else SubViewport.UPDATE_ONCE)
+
+
+## Re-arm one paint after the 3D content changes.
+##
+## The stage sleeps after its single frame, so ANY change to the world made
+## after that paint is invisible: Godot flips `UPDATE_ONCE` to
+## `UPDATE_DISABLED` once it has rendered. Ground and placeholders survive only
+## because they are built in the constructor, before the first paint. The act's
+## real geometry is not — it binds when the manifest resolves, several frames
+## later — so without this the map showed placeholder wedges and slabs forever
+## and no kit, terminus or road ever reached the screen.
+##
+## Never downgrade a live stage: while the camera moves the screen holds
+## `UPDATE_ALWAYS`, and re-arming a single frame there would freeze the pan.
+func _repaint() -> void:
+	if _stage.render_target_update_mode != SubViewport.UPDATE_ALWAYS:
+		_stage.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -321,7 +350,8 @@ func _add_props(world: Node3D) -> void:
 ## INSTANCE_CUSTOM.xyz phase copied from MapSceneProxy._add_multimesh
 ## (#207 repair 4). Do not parent or subclass the proxy.
 func _add_multimesh(world: Node3D, node_name: String, mesh: Mesh,
-		positions: PackedVector3Array, first_index: int) -> void:
+		positions: PackedVector3Array, first_index: int,
+		unit_scale: float = 1.0) -> void:
 	var multimesh: MultiMesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_custom_data = true
@@ -336,6 +366,11 @@ func _add_multimesh(world: Node3D, node_name: String, mesh: Mesh,
 				0.84 + 0.07 * float((index + 1) % 4))
 		if node_name == "StackedSlabs" and i % 2 == 1:
 			scale *= 0.76
+		# POC: every kit GLB is authored at unit scale -- an ash-trunk-fork is
+		# 0.9 x 1.0 x 0.48 metres. Placed raw into a frame the camera covers at
+		# ortho size 20, a tree is 5% of the frame height, which is the whole
+		# reason the map reads as empty ground with specks on it.
+		scale *= unit_scale
 		var basis: Basis = Basis(Vector3.UP, angle).scaled(scale)
 		multimesh.set_instance_transform(i, Transform3D(basis, positions[i]))
 		multimesh.set_instance_custom_data(i, Color(
@@ -359,6 +394,7 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		_world.remove_child(_asset_geometry)
 		_asset_geometry.free()
 		_asset_geometry = null
+	_road_meshes.clear()
 	_set_placeholders_visible(true)
 	var raw_kits: Variant = assets.get("kits", [])
 	var raw_terminus: Variant = assets.get("terminus", null)
@@ -366,6 +402,13 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		return
 	var kit_resources: Array = raw_kits
 	if kit_resources.size() != 8:
+		# Keeping the placeholders on a partial set is deliberate (see above).
+		# Doing it silently is not: the previous act's geometry has ALREADY been
+		# freed and the placeholders re-shown by the time we get here, so the
+		# frame is indistinguishable from a broken renderer. Act N's kits live
+		# under manifest `act: N-1` — an off-by-one in the caller lands here.
+		push_warning("map: act %d resolved %d of 8 kits; keeping placeholders"
+				% [_act, kit_resources.size()])
 		return
 	var meshes: Array[Mesh] = []
 	for raw: Variant in kit_resources:
@@ -383,23 +426,105 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	_asset_geometry = Node3D.new()
 	_asset_geometry.name = "MapAssetGeometry"
 	_world.add_child(_asset_geometry)
+	# Kits 0 and 1 are shared-road-slab-a/b. They ARE the road. Handing them to
+	# the scenery scatter is what left a pilgrimage map with no road on it, and
+	# left the graph to be carried by a 2 px dashed line drawn over the top.
+	_road_meshes = [meshes[0], meshes[1]]
 	var positions: PackedVector3Array = _all_prop_positions()
-	var cursor: int = 0
-	for i: int in range(meshes.size()):
-		var count: int = 4 if i == 0 else 3
+	var kinds: int = meshes.size() - 2
+	for i: int in range(2, meshes.size()):
 		var placements: PackedVector3Array = PackedVector3Array()
-		for j: int in range(count):
-			placements.append(positions[cursor + j])
-		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements, cursor)
-		cursor += count
+		for j: int in range(positions.size()):
+			if j % kinds == i - 2:
+				placements.append(positions[j])
+		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements,
+				i * 7, KIT_SCALE[i])
 	var terminus: MeshInstance3D = MeshInstance3D.new()
 	terminus.name = "AssetTerminus"
 	terminus.mesh = terminus_mesh
-	terminus.position = Vector3(22.0, 0.0, 0.0)
+	# Just past the boss, which is lattice row 14 col 3 = world (24, 0, 0).
+	terminus.position = Vector3(28.0, 0.0, 0.0)
+	terminus.scale = Vector3.ONE * TERMINUS_SCALE
 	terminus.material_override = _materials.prop
 	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_asset_geometry.add_child(terminus)
+	# Seat the road pair now, empty, so anything resolving them by name finds
+	# them before the screen has a graph to hand down. `lay_road` rebuilds
+	# them in place once it does.
+	_build_road()
 	_set_placeholders_visible(false)
+	_repaint()
+
+
+## The graph, as road. Segments are world-space endpoint pairs; the screen that
+## owns the WorldMap supplies them, so MapScene never learns the graph type.
+func lay_road(segments: PackedVector3Array) -> void:
+	_road_segments = segments
+	_build_road()
+	_repaint()
+
+
+func _build_road() -> void:
+	if _asset_geometry == null or _road_meshes.size() < 2:
+		return
+	# This runs twice on a normal boot: once from `_bind_asset_geometry` while
+	# `_road_segments` is still empty, and again when the screen hands the graph
+	# down through `lay_road`. Without this the second pass ADDS a second pair
+	# and Godot renames it, leaving the empty pair holding the AssetRoad names —
+	# so the road would draw correctly while anything looking the nodes up by
+	# name found nothing on them.
+	for m: int in range(2):
+		var stale: Node = _asset_geometry.find_child("AssetRoad%d" % m, false, false)
+		if stale != null:
+			_asset_geometry.remove_child(stale)
+			stale.free()
+	var laid: Array[PackedVector3Array] = [PackedVector3Array(), PackedVector3Array()]
+	var yaws: Array[PackedFloat32Array] = [PackedFloat32Array(), PackedFloat32Array()]
+	var pairs: int = _road_segments.size() / 2
+	var slab: int = 0
+	for i: int in range(pairs):
+		var a: Vector3 = _road_segments[i * 2]
+		var b: Vector3 = _road_segments[i * 2 + 1]
+		var span: float = a.distance_to(b)
+		var steps: int = maxi(1, int(span / ROAD_STEP))
+		var yaw: float = atan2(b.x - a.x, b.z - a.z)
+		for k: int in range(steps + 1):
+			var t: float = float(k) / float(steps)
+			laid[slab & 1].append(a.lerp(b, t))
+			yaws[slab & 1].append(yaw)
+			slab += 1
+	for m: int in range(2):
+		var node: MultiMeshInstance3D = _road_multimesh(
+				_road_meshes[m], laid[m], yaws[m], m)
+		node.name = "AssetRoad%d" % m
+		_asset_geometry.add_child(node)
+
+
+func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
+		yaws: PackedFloat32Array, seed_index: int) -> MultiMeshInstance3D:
+	var multimesh: MultiMesh = MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.use_custom_data = true
+	multimesh.mesh = mesh
+	multimesh.instance_count = positions.size()
+	for i: int in range(positions.size()):
+		var index: int = seed_index * 131 + i
+		var wobble: float = 0.08 * sin(float(index) * 1.71)
+		var scale: Vector3 = Vector3(
+				ROAD_SCALE * (1.0 + wobble),
+				ROAD_SCALE * 0.6,
+				ROAD_SCALE * (1.0 - wobble))
+		var basis: Basis = Basis(Vector3.UP, yaws[i] + wobble).scaled(scale)
+		multimesh.set_instance_transform(i, Transform3D(basis, positions[i]))
+		multimesh.set_instance_custom_data(i, Color(
+				fposmod(float(index) * 0.173, 1.0),
+				fposmod(float(index) * 0.317, 1.0),
+				fposmod(float(index) * 0.619, 1.0), 1.0))
+	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
+	instances.multimesh = multimesh
+	instances.material_override = _materials.road
+	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return instances
 
 
 func _set_placeholders_visible(on: bool) -> void:
@@ -493,3 +618,5 @@ func _dab_mesh() -> ArrayMesh:
 			surface.set_normal(normal)
 			surface.add_vertex(vertex)
 	return surface.commit()
+
+

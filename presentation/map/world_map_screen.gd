@@ -104,6 +104,27 @@ func _build_world_surface() -> void:
 	_map_scene = MapScene.new()
 	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
+	_map_scene.lay_road(_road_segments())
+
+
+## Every graph edge as a world-space endpoint pair, for MapScene to pave. The
+## graph lives here, so the conversion does too: MapScene stays buildable
+## without a WorldMap.
+func _road_segments() -> PackedVector3Array:
+	var by_id: Dictionary = {}
+	for node: MapNode in map.nodes:
+		by_id[node.id] = node
+	var out: PackedVector3Array = PackedVector3Array()
+	for node: MapNode in map.nodes:
+		var from: Vector3 = MapPinProjection.world_anchor(node)
+		for next_id: String in node.next:
+			var next_v: Variant = by_id.get(next_id)
+			if typeof(next_v) != TYPE_OBJECT:
+				continue
+			var next_node: MapNode = next_v
+			out.append(from)
+			out.append(MapPinProjection.world_anchor(next_node))
+	return out
 
 
 func _build_bands() -> void:
@@ -446,8 +467,16 @@ func _seat_marker() -> void:
 func _focus_xz(i: int) -> Vector2:
 	if i < 0 or i >= map.nodes.size() or _map_scene == null:
 		return MapCameraRig.DEFAULT_XZ
-	return MapCameraRig.pose_for_world(
-		MapPinProjection.world_anchor(map.nodes[i]))
+	# Aspect comes from the STAGE SHAPE, not from `_map_scene.size`. The child
+	# Control only has its real size after a layout pass, so reading it here
+	# would make the camera seat depend on WHEN the seat is asked for — a
+	# mid-glide `set_shape` would aim at something a later call could not
+	# reproduce, which is exactly what test_map's re-aim gate is watching for.
+	# The shape is known without a frame.
+	var reference: Vector2 = Vector2(StageShape.REFERENCES[shape])
+	var aspect: float = reference.x / maxf(reference.y, 1.0)
+	return _map_scene.get_rig().pose_leading(
+		MapPinProjection.world_anchor(map.nodes[i]), aspect)
 
 
 func _on_waystone_chosen(i: int) -> void:

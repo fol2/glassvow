@@ -26,11 +26,26 @@ const WEATHER_BY_ACT: Array[StringName] = [&"ash", &"sunken", &"storm", &"dawn"]
 ## ramp `band_shade` / `band_key` only — never albedo, never `surface_tex`.
 ## Act 0 (1-based act1 plates) takes the crimson forest-floor of
 ## `assets/art/stage/act1-backdrop.png` plus the amber window as key.
+## Act 0 moved to night glass (#156 direction B). Hue on the key is close to
+## free: the value-gap gate only fails at <= 0, and what actually decides
+## whether a prop reads against the ground is the KEY'S LUMINANCE, because a
+## prop is the ground times PROP_VALUE / GROUND_VALUE. Measured under REC709,
+## the retired amber (0.96, 0.68, 0.42) carries luma 0.505 and a ground-to-prop
+## separation of 0.249; this glass-blue carries 0.438 and 0.235. A whole hue
+## rotation costs 0.014 of separation. Dropping the key to a true dark instead
+## -- say (0.34, 0.44, 0.62), luma 0.161 -- would have cost 0.094, most of the
+## separation the props have.
+##
+## So the darkness does not come from here. It comes from the GRADE, which
+## multiplies per world position and can take the land away from the road down
+## to night while the key stays bright enough to keep the props legible. That
+## is the division map_ground.gdshader already documents: the ramp ends carry
+## the act's tint, the grade carries the spatial work.
 const BAND_SHADE: Array[Color] = [
-	Color(0.22, 0.08, 0.15), Color(0.06, 0.10, 0.24),
+	Color(0.05, 0.09, 0.18), Color(0.06, 0.10, 0.24),
 	Color(0.10, 0.05, 0.18), Color(0.22, 0.19, 0.12)]
 const BAND_KEY: Array[Color] = [
-	Color(0.96, 0.68, 0.42), Color(0.70, 0.86, 0.96),
+	Color(0.56, 0.70, 0.92), Color(0.70, 0.86, 0.96),
 	Color(0.88, 0.72, 0.96), Color(0.96, 0.82, 0.70)]
 ## Grade surround hues. Journey 0→1 is `lerpf(near, far)` — same axis as
 ## the proxy's 0.71→0.61 cool. Corridor hues stay on the same wheel-arc
