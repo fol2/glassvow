@@ -14,6 +14,7 @@ static func run(fails: Array[String]) -> void:
 	_act_and_live(fails)
 	_seats(fails)
 	_pin_select(fails)
+	_projection_cache(fails)
 
 
 static func _five_shapes(fails: Array[String]) -> void:
@@ -168,6 +169,43 @@ static func _pin_select(fails: Array[String]) -> void:
 		var miss: Vector2 = Vector2(-80.0, -80.0)
 		_check(fails, screen.pick_node_at(miss) == -1,
 				"a tap off every pin rect chooses nothing")
+	tree.root.remove_child(screen)
+	screen.free()
+
+
+## Production graph paint asks for both endpoints of every edge. All readers at
+## one camera pose must share one whole-map projection rather than multiplying
+## it by the edge count (#447).
+static func _projection_cache(fails: Array[String]) -> void:
+	var content: ContentDB = ContentDB.load_slice()
+	var run: RunState = RunState.new_run(content, 717, "run-map-projection-cache")
+	var screen: WorldMapScreen = WorldMapScreen.new(WorldMap.benchmark(run), content)
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	tree.root.add_child(screen)
+	_mount(screen, StageShape.IDENTITY)
+	var before: int = screen._seat_projection_passes
+	var first: PackedVector2Array = screen.projected_seats()
+	var after_first: int = screen._seat_projection_passes
+	for node: MapNode in screen.map.nodes:
+		screen._node_pos(node)
+	screen._layout_waystones()
+	var after_readers: int = screen._seat_projection_passes
+	_check(fails, first.size() == screen.map.nodes.size()
+			and after_first == before + 1,
+			"first reader performs one whole-map projection")
+	_check(fails, after_readers == after_first,
+			"same-pose layout and graph readers reuse the projection")
+	screen._map_scene.get_rig().pan_world(Vector2(1.0, 0.0))
+	var moved: PackedVector2Array = screen.projected_seats()
+	_check(fails, screen._seat_projection_passes == after_first + 1,
+			"camera movement performs exactly one new projection")
+	_check(fails, not moved.is_empty() and not first.is_empty()
+			and not moved[0].is_equal_approx(first[0]),
+			"camera movement changes the cached seats")
+	var after_move: int = screen._seat_projection_passes
+	screen.projected_seats()
+	_check(fails, screen._seat_projection_passes == after_move,
+			"repeated reader at the moved pose reuses the projection")
 	tree.root.remove_child(screen)
 	screen.free()
 

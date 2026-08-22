@@ -62,6 +62,18 @@ var _map_scene: MapScene = null
 var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
 var _veil_band: MapBand.VeilBand = null
+## Projection is shared by waystone layout, graph paint and marker queries.
+## The old path rebuilt all 65 seats for every edge endpoint, turning one
+## production frame into thousands of identical camera transforms (#447).
+var _projected_seats_cache: PackedVector2Array = PackedVector2Array()
+var _projected_pose: Vector2 = Vector2(INF, INF)
+var _projected_zoom_stop: int = -1
+var _projected_control_size: Vector2 = Vector2(-1.0, -1.0)
+var _projected_view_size: Vector2i = Vector2i(-1, -1)
+## Test-visible count of actual whole-map projection passes. It is deliberately
+## not reset: a camera or shape change should add one pass, while every reader
+## at the same pose should reuse it.
+var _seat_projection_passes: int = 0
 
 
 func _init(world_map: WorldMap, content_ref: ContentDB,
@@ -402,7 +414,21 @@ func projected_seats() -> PackedVector2Array:
 	if size.x > 1.0 and size.y > 1.0 and _map_scene.size != size:
 		_map_scene.size = size
 	_map_scene._fit()
-	return _map_scene.project_pins(map.nodes)
+	var rig: MapCameraRig = _map_scene.get_rig()
+	var pose: Vector2 = rig.camera_xz()
+	var view_size: Vector2i = _map_scene.get_stage().size
+	if _projected_seats_cache.size() != map.nodes.size() \
+			or not _projected_pose.is_equal_approx(pose) \
+			or _projected_zoom_stop != rig.zoom_stop \
+			or not _projected_control_size.is_equal_approx(size) \
+			or _projected_view_size != view_size:
+		_projected_seats_cache = _map_scene.project_pins(map.nodes)
+		_projected_pose = pose
+		_projected_zoom_stop = rig.zoom_stop
+		_projected_control_size = size
+		_projected_view_size = view_size
+		_seat_projection_passes += 1
+	return _projected_seats_cache
 
 
 func set_survey_retired(on: bool) -> void:
