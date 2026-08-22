@@ -14,11 +14,15 @@ const MANIFEST_PATH: String = "res://assets/art/map/map-assets.json"
 const ASSET_ROOT: String = "res://assets/art/map/"
 const GROUND_VALUE: float = 0.420
 const PROP_VALUE: float = 0.100
+## The paved corridor. Brighter than the ground it crosses, which is the
+## reading `map_ground.gdshader` already describes for the grade corridor.
+const ROAD_VALUE: float = 0.760
 const GRADE_MIN: Vector2 = Vector2(-24.0, -12.0)
 const GRADE_SIZE: Vector2 = Vector2(48.0, 24.0)
 const GRADE_RESOLUTION: Vector2i = Vector2i(256, 128)
 
 var ground: ShaderMaterial
+var road: ShaderMaterial
 var prop: ShaderMaterial
 var _fallback_surface: ImageTexture
 var _fallback_grade: ImageTexture
@@ -34,6 +38,8 @@ func _init(sun: Vector3, tex_stop: int, manifest: Dictionary = {},
 	_fallback_grade = _placeholder_grade()
 	ground = _make(GROUND_SHADER, _fallback_surface, _fallback_grade,
 			GROUND_VALUE, sun, tex_stop)
+	road = _make(GROUND_SHADER, _fallback_surface, _fallback_grade,
+			ROAD_VALUE, sun, tex_stop)
 	prop = _make(PROP_SHADER, _fallback_surface, _fallback_grade,
 			PROP_VALUE, sun, tex_stop)
 	prop.set_shader_parameter("second_octave", false)
@@ -48,16 +54,21 @@ func _init(sun: Vector3, tex_stop: int, manifest: Dictionary = {},
 
 func set_tex_stop(index: int) -> void:
 	ground.set_shader_parameter("tex_stop", index)
+	road.set_shader_parameter("tex_stop", index)
 	prop.set_shader_parameter("tex_stop", index)
 
 
 func set_sun(direction: Vector3) -> void:
 	var sun: Vector3 = direction.normalized()
 	ground.set_shader_parameter("sun", sun)
+	road.set_shader_parameter("sun", sun)
 	prop.set_shader_parameter("sun", sun)
 
 
 func bind_region(region: MapRegions, grade: Texture2D) -> void:
+	road.set_shader_parameter("band_shade", region.band_shade)
+	road.set_shader_parameter("band_key", region.band_key)
+	road.set_shader_parameter("grade", grade)
 	ground.set_shader_parameter("band_shade", region.band_shade)
 	ground.set_shader_parameter("band_key", region.band_key)
 	prop.set_shader_parameter("band_shade", region.band_shade)
@@ -70,7 +81,9 @@ func bind_region(region: MapRegions, grade: Texture2D) -> void:
 ## two tiles, one grade, three shared + five act kits, and one terminus.
 func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	ground.set_shader_parameter("surface_tex", _fallback_surface)
+	road.set_shader_parameter("surface_tex", _fallback_surface)
 	prop.set_shader_parameter("surface_tex", _fallback_surface)
+	road.set_shader_parameter("tex_mean", 0.5)
 	ground.set_shader_parameter("tex_mean", 0.5)
 	prop.set_shader_parameter("tex_mean", 0.5)
 	bind_region(region, _fallback_grade)
@@ -123,6 +136,8 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	if ground_tile != null:
 		ground.set_shader_parameter("surface_tex", ground_tile)
 		ground.set_shader_parameter("tex_mean", ground_mean)
+		road.set_shader_parameter("surface_tex", ground_tile)
+		road.set_shader_parameter("tex_mean", ground_mean)
 	if prop_tile != null:
 		prop.set_shader_parameter("surface_tex", prop_tile)
 		prop.set_shader_parameter("tex_mean", prop_mean)

@@ -3,18 +3,31 @@ extends RefCounted
 ## 15×7 world-XZ control lattice and pin projection (#234 slice 3 / 7b).
 ##
 ## Integer (row, col) are lattice vertices. A node's authored wander is the
-## same pairing the 2D screen already uses: `jy` along the journey (row → −Z),
-## `jx` across the lanes (col → X). Bilinear sample of the four surrounding
+## same pairing the 2D screen already uses: `jy` along the journey (row → +X),
+## `jx` across the lanes (col → +Z). Bilinear sample of the four surrounding
 ## vertices is the world anchor; 2D pins seat at the orthogonal projection of
 ## that point. Hit-test is the inverse ray ∩ Y=0, so a tap on a pin recovers
 ## the same screen point (the #207 agreement). Camera3D.unproject is not used:
 ## it returns the origin unless the camera's Viewport has entered the tree.
+##
+## THE JOURNEY RUNS ALONG X (#156 direction B). It used to run along −Z, and
+## the entire dress layer disagreed with it: `MapMaterials.grade_rect` is
+## 48×24 with a 512×256 grade, which is 15 rows at 3.43 units by 7 lanes at
+## 4.00; `MapScene`'s scenery scatter spans x −22..21 and hugs |z| 4..8, which
+## flanks a corridor along X; `AssetTerminus` sat at (22, 0, 0), which is the
+## boss end of an X journey and nowhere on a Z one; and `map_asset_checks.py`
+## samples the grade's left and right fifths to measure the journey's hue arc,
+## which only means anything if the journey is the image's horizontal axis.
+## Four independent artefacts describe an X journey. The lattice was the piece
+## out of step, so the lattice is what moved.
 
-## Col 0 / row 0 at the near-left; cell X matches the 6-unit lane, cell Z
-## walks toward −Z (camera look). Footprint sits inside MapScene.GROUND_SIZE
-## with a 3-unit Z margin and 6-unit X margin.
-const CELL: Vector2 = Vector2(6.0, -2.0)
-const ORIGIN_XZ: Vector2 = Vector2(-18.0, 14.0)
+## Row 0 / col 0 at the far-left, near lane. Rows walk the journey along +X in
+## 3.43-unit steps (15 rows spanning 48); cols spread the lanes along +Z in
+## 4-unit steps (7 cols spanning 24). Both match `MapMaterials.GRADE_SIZE`, so
+## one painted grade covers the run exactly. Footprint sits inside
+## MapScene.GROUND_SIZE with room for the pan frustum on every side.
+const CELL: Vector2 = Vector2(48.0 / 14.0, 4.0)
+const ORIGIN_XZ: Vector2 = Vector2(-24.0, -12.0)
 
 
 var _camera: Camera3D
@@ -30,9 +43,9 @@ func _init(camera: Camera3D, control_size: Vector2, view_size: Vector2) -> void:
 
 static func lattice_point(row: int, col: int) -> Vector3:
 	return Vector3(
-			ORIGIN_XZ.x + float(col) * CELL.x,
+			ORIGIN_XZ.x + float(row) * CELL.x,
 			0.0,
-			ORIGIN_XZ.y + float(row) * CELL.y)
+			ORIGIN_XZ.y + float(col) * CELL.y)
 
 
 ## Sample the lattice at a (possibly fractional) row/col. Out-of-range
@@ -58,8 +71,10 @@ static func world_anchor(node: MapNode) -> Vector3:
 static func lattice_footprint() -> Rect2:
 	var lo: Vector3 = lattice_point(WorldMap.ROWS - 1, 0)
 	var hi: Vector3 = lattice_point(0, WorldMap.COLS - 1)
-	var mx: float = absf(CELL.x) * WorldMap.JITTER_SPREAD.x * 0.5
-	var mz: float = absf(CELL.y) * WorldMap.JITTER_SPREAD.y * 0.5
+	# `jy` wanders the ROW and rows now run along X; `jx` wanders the COL and
+	# cols run along Z. The two spreads swapped sides with the axes (#156 B).
+	var mx: float = absf(CELL.x) * WorldMap.JITTER_SPREAD.y * 0.5
+	var mz: float = absf(CELL.y) * WorldMap.JITTER_SPREAD.x * 0.5
 	var x0: float = minf(lo.x, hi.x) - mx
 	var z0: float = minf(lo.z, hi.z) - mz
 	return Rect2(x0, z0,
