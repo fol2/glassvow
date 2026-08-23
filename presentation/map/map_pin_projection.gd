@@ -81,8 +81,89 @@ static func set_scenery(pieces: Array[Vector4]) -> void:
 	_scenery = pieces
 
 
+## How far apart two medallions must be in z before they stop overlapping.
+## A medallion is a fixed pixel size, so the 40 degree tilt makes the same radius
+## cover 1 / sin(40) more ground in z than it does in x.
+const NODE_HALF_Z: float = 1.87
+
+## Anchors resolved as a set, by node id. Empty until the screen resolves them.
+static var _resolved: Dictionary[String, Vector3] = {}
+
+
+## Settle every node against the scenery AND against each other.
+##
+## Solved together because they fight: stepping out from behind a rock can put a
+## node on top of its neighbour, and separating from the neighbour can put it
+## back behind the rock. Three passes, alternating, then whatever it has
+## converged to -- a node that cannot satisfy both keeps the better position
+## rather than oscillating between two bad ones.
+static func resolve(nodes: Array[MapNode]) -> void:
+	_resolved.clear()
+	if nodes.is_empty():
+		return
+	var base: PackedVector3Array = PackedVector3Array()
+	var out: PackedVector3Array = PackedVector3Array()
+	for node: MapNode in nodes:
+		var seat: Vector3 = sample(
+				float(node.row) + node.jy, float(node.col) + node.jx)
+		base.append(seat)
+		out.append(seat)
+	for _pass: int in range(3):
+		for i: int in range(out.size()):
+			out[i] = _off_scenery(out[i])
+		_spread(out)
+		# Never let the accumulated shove carry a node further than one step from
+		# where its own jitter put it: past that it stops reading as the same node
+		# nudged and starts reading as a different lattice cell.
+		for i: int in range(out.size()):
+			out[i] = Vector3(base[i].x + clampf(
+					out[i].x - base[i].x, -STEP_ASIDE_MAX, STEP_ASIDE_MAX),
+					base[i].y, base[i].z)
+	for i: int in range(nodes.size()):
+		_resolved[nodes[i].id] = out[i]
+
+
+## Push overlapping medallions apart along X, sharing the correction between
+## them so neither is treated as the one in the wrong place.
+static func _spread(seats: PackedVector3Array) -> void:
+	for i: int in range(seats.size()):
+		for j: int in range(i + 1, seats.size()):
+			var dz: float = absf(seats[i].z - seats[j].z)
+			if dz >= NODE_HALF_Z * 2.0:
+				continue
+			# The x separation that clears the ellipse at this z separation.
+			var zt: float = dz / (NODE_HALF_Z * 2.0)
+			var want: float = NODE_HALF_X * 2.0 * sqrt(maxf(1.0 - zt * zt, 0.0))
+			var dx: float = seats[i].x - seats[j].x
+			if absf(dx) >= want:
+				continue
+			var push: float = (want - absf(dx)) * 0.5
+			var dir: float = 1.0 if dx >= 0.0 else -1.0
+			seats[i] = Vector3(seats[i].x + push * dir, seats[i].y, seats[i].z)
+			seats[j] = Vector3(seats[j].x - push * dir, seats[j].y, seats[j].z)
+
+
 static func world_anchor(node: MapNode) -> Vector3:
+	if _resolved.has(node.id):
+		return _resolved[node.id]
 	return step_aside(sample(float(node.row) + node.jy, float(node.col) + node.jx))
+
+
+## Slide one seat clear of the scenery, with no regard for other nodes.
+static func _off_scenery(seat: Vector3) -> Vector3:
+	if _scenery.is_empty():
+		return seat
+	var out: Vector3 = seat
+	for piece: Vector4 in _scenery:
+		var ahead: float = piece.y - out.z
+		if ahead <= 0.0 or ahead > piece.w:
+			continue
+		var gap: float = piece.z + NODE_HALF_X
+		var dx: float = out.x - piece.x
+		if absf(dx) >= gap:
+			continue
+		out.x = piece.x + (gap if dx >= 0.0 else -gap)
+	return out
 
 
 ## Slide a seat along X until nothing stands in front of it.
@@ -92,22 +173,7 @@ static func world_anchor(node: MapNode) -> Vector3:
 ## itself, and only for as long as its own height reaches. A node behind nothing
 ## does not move at all.
 static func step_aside(seat: Vector3) -> Vector3:
-	if _scenery.is_empty():
-		return seat
-	var out: Vector3 = seat
-	# Two passes: clearing one piece can slide a node under another. It settles
-	# or it does not, and a node that cannot clear both keeps the better of the
-	# two positions rather than oscillating.
-	for _pass: int in range(2):
-		for piece: Vector4 in _scenery:
-			var ahead: float = piece.y - out.z
-			if ahead <= 0.0 or ahead > piece.w:
-				continue
-			var gap: float = piece.z + NODE_HALF_X
-			var dx: float = out.x - piece.x
-			if absf(dx) >= gap:
-				continue
-			out.x = piece.x + (gap if dx >= 0.0 else -gap)
+	var out: Vector3 = _off_scenery(_off_scenery(seat))
 	var moved: float = clampf(out.x - seat.x, -STEP_ASIDE_MAX, STEP_ASIDE_MAX)
 	return Vector3(seat.x + moved, seat.y, seat.z)
 

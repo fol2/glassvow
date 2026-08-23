@@ -110,6 +110,7 @@ func _build_world_surface() -> void:
 	_map_scene = MapScene.new()
 	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
+	MapPinProjection.resolve(map.nodes)
 	_map_scene.lay_road(_road_segments())
 
 
@@ -395,6 +396,10 @@ func _set_act_theme(stage_act: int) -> void:
 	# The 3D ramp binds band_shade/band_key on MapScene.
 	if _map_scene != null:
 		_map_scene.set_act(stage_act)
+		# set_act rebinds the act's geometry, so the footprints the nodes step
+		# around have just changed underneath them.
+		MapPinProjection.resolve(map.nodes)
+		_map_scene.lay_road(_road_segments())
 
 
 ## 3D lattice seats in this Control's px. Live waystones sit here.
