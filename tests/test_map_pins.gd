@@ -78,6 +78,12 @@ static func _pan_bounds(fails: Array[String]) -> void:
 			"rig pan_bounds is the lattice-derived rect")
 	_check(fails, derived.has_point(MapCameraRig.DEFAULT_XZ),
 			"default pose sits inside the lattice pan bounds")
+	# The default pose looks at ground z = 0, which is only true while its z
+	# equals the camera's ground offset. Both move with the tilt; nothing else
+	# notices if only one of them does.
+	_check(fails, is_equal_approx(
+			MapCameraRig.DEFAULT_XZ.y, snappedf(MapCameraRig.look_dz(), 0.01)),
+			"default pose z is the camera ground offset, so it looks at z = 0")
 	var shifted: Vector2 = MapCameraRig.DEFAULT_XZ + Vector2(1.5, -2.0)
 	_check(fails, derived.has_point(shifted),
 			"slice-1 pan delta still fits the new bounds")
