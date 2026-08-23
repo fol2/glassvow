@@ -295,8 +295,8 @@ static func _asset_binding(fails: Array[String]) -> void:
 				"road slab %d is laid along the graph" % i)
 	_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
 			"active terminus is attached")
-	_check(fails, scene.find_child("AssetThreshold", true, false) is MeshInstance3D,
-			"the Vigil threshold is seated at the west end")
+	_check(fails, scene.find_child("AssetVigil", true, false) is MeshInstance3D,
+			"the Vigil is seated at the west end")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
 		var placeholder: Node = scene.find_child(node_name, true, false)
 		_check(fails, placeholder is GeometryInstance3D

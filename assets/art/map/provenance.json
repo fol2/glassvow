@@ -399,23 +399,24 @@
       "review_path": "docs/reviews/156/act1-baseline/B-final.png"
     },
     {
-      "asset_id": "act1-threshold",
+      "asset_id": "act1-vigil",
       "source": "local-parametric-manifold",
       "created_at": "2026-08-23T04:20:00+08:00",
       "license": "original Glassvow authorship (no vendor, no paid credits)",
-      "source_sha256": "8f63a07394aca92e8c9a6b2b8b10af532d9aa99eca6d6e45c248e521d138c56a",
-      "final_sha256": "8f63a07394aca92e8c9a6b2b8b10af532d9aa99eca6d6e45c248e521d138c56a",
+      "source_sha256": "a852c2adca33b37bbb88e1e4ba280bbf11ba0fe98bc33b76e24dca78753e32cb",
+      "final_sha256": "a852c2adca33b37bbb88e1e4ba280bbf11ba0fe98bc33b76e24dca78753e32cb",
       "edits": [
-        "modelled the Vigil's west face from docs/story/01-world.md: a six-pane rose wheel over a plinth between two flanking pylons. Six is story, not styling -- the fire broke into six shards and they return into the west face's six compartments -- and assets/art/scenes/opening-hearth.png, the still shown at the start of every run, shows exactly that wheel",
-        "manifold boolean union produced one watertight connected component, verified against the repo's own inspect_glb: one mesh, one surface, POSITION+NORMAL, no textures, 1330 triangles, grounded Y-up metres",
-        "welded and indexed on purpose: the gate's connected-component check returns 1 for any unindexed mesh, so splitting normals per face for a crisper facet would have bought the look by making that check meaningless"
+        "modelled the Vigil as it is seen FROM THE ROAD: a gabled hall end-on, blank east gable, a shallow pointed doorway cut as a recess rather than a hole, two flank buttresses, and a chimney with its smoke",
+        "the rose window is deliberately absent. docs/story/01-world.md grades the window becoming a mirror as L3, the single reveal point, and the foreshadow ledger's rule 2 defers anything that discloses before its tier; the six panes ARE the shard count. It is also the wrong side of the wall -- 爐邊彩窗 faces in at the fire, and from the road you stand outside it",
+        "manifold boolean union produced one watertight connected component, verified against the repo's own inspect_glb: one mesh, one surface, POSITION+NORMAL, no textures, 1724 triangles, 42220 bytes, grounded Y-up metres",
+        "welded and indexed on purpose: the gate's connected-component check returns 1 for any unindexed mesh, so splitting normals per face would have bought a crisper facet by making that check meaningless"
       ],
       "reviewer": "fol2",
       "verdict": "accepted",
       "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
-      "review_path": "docs/reviews/156/round2/threshold-yaws.png",
+      "review_path": "docs/reviews/156/round2/vigil-yaws.png",
       "polycount_target": 8000,
-      "triangles": 1330
+      "triangles": 1724
     }
   ]
 }
