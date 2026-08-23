@@ -462,8 +462,8 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	var terminus: MeshInstance3D = MeshInstance3D.new()
 	terminus.name = "AssetTerminus"
 	terminus.mesh = terminus_mesh
-	# Just past the boss, which is lattice row 14 col 3 = world (24, 0, 0).
-	terminus.position = Vector3(28.0, 0.0, 0.0)
+	# Just past the boss, which is lattice row 14 col 3 = world (36, 0, 0).
+	terminus.position = Vector3(40.0, 0.0, 0.0)
 	terminus.scale = Vector3.ONE * TERMINUS_SCALE
 	terminus.material_override = _materials.prop
 	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -581,29 +581,29 @@ func _first_mesh(root: Node) -> MeshInstance3D:
 
 func _wedge_positions() -> PackedVector3Array:
 	return PackedVector3Array([
-		Vector3(-21.0, 1.7, -6.5), Vector3(-17.0, 1.7, 5.7),
-		Vector3(-12.0, 1.7, -7.7), Vector3(-6.5, 1.7, 6.4),
-		Vector3(-1.0, 1.7, -5.8), Vector3(5.0, 1.7, 7.2),
-		Vector3(10.5, 1.7, -6.7), Vector3(16.0, 1.7, 5.9),
-		Vector3(21.0, 1.7, -7.5),
+		Vector3(-31.5, 1.7, -9.75), Vector3(-25.5, 1.7, 8.55),
+		Vector3(-18.0, 1.7, -11.55), Vector3(-9.75, 1.7, 9.6),
+		Vector3(-1.5, 1.7, -8.7), Vector3(7.5, 1.7, 10.8),
+		Vector3(15.75, 1.7, -10.05), Vector3(24.0, 1.7, 8.85),
+		Vector3(31.5, 1.7, -11.25),
 	])
 
 
 func _slab_positions() -> PackedVector3Array:
 	return PackedVector3Array([
-		Vector3(-18.5, 0.31, 3.9), Vector3(-18.5, 0.86, 3.9),
-		Vector3(-8.0, 0.31, -4.5), Vector3(-8.0, 0.86, -4.5),
-		Vector3(4.0, 0.31, 4.2), Vector3(4.0, 0.86, 4.2),
-		Vector3(15.5, 0.31, -4.0), Vector3(15.5, 0.86, -4.0),
+		Vector3(-27.75, 0.31, 5.85), Vector3(-27.75, 0.86, 5.85),
+		Vector3(-12.0, 0.31, -6.75), Vector3(-12.0, 0.86, -6.75),
+		Vector3(6.0, 0.31, 6.3), Vector3(6.0, 0.86, 6.3),
+		Vector3(23.25, 0.31, -6.0), Vector3(23.25, 0.86, -6.0),
 	])
 
 
 func _dab_positions() -> PackedVector3Array:
 	return PackedVector3Array([
-		Vector3(-22.0, 0.0, 7.8), Vector3(-14.0, 0.0, -5.2),
-		Vector3(-10.5, 0.0, 7.6), Vector3(-3.5, 0.0, 5.0),
-		Vector3(2.0, 0.0, -7.7), Vector3(8.5, 0.0, 5.2),
-		Vector3(13.0, 0.0, -7.8), Vector3(20.5, 0.0, 6.9),
+		Vector3(-33.0, 0.0, 11.7), Vector3(-21.0, 0.0, -7.8),
+		Vector3(-15.75, 0.0, 11.4), Vector3(-5.25, 0.0, 7.5),
+		Vector3(3.0, 0.0, -11.55), Vector3(12.75, 0.0, 7.8),
+		Vector3(19.5, 0.0, -11.7), Vector3(30.75, 0.0, 10.35),
 	])
 
 

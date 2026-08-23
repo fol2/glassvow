@@ -27,13 +27,13 @@ static func _lattice(fails: Array[String]) -> void:
 	# `MapMaterials.GRADE_SIZE` — one painted grade covers the run, and the
 	# last check below is what keeps the two from drifting apart again.
 	var origin: Vector3 = MapPinProjection.lattice_point(0, 0)
-	_check(fails, origin.is_equal_approx(Vector3(-24.0, 0.0, -12.0)),
+	_check(fails, origin.is_equal_approx(Vector3(-36.0, 0.0, -18.0)),
 			"row 0 col 0 is the entrance end of the near lane")
 	_check(fails, MapPinProjection.lattice_point(0, 6).is_equal_approx(
-			Vector3(-24.0, 0.0, 12.0)),
+			Vector3(-36.0, 0.0, 18.0)),
 			"row 0 col 6 is the entrance end of the far lane")
 	_check(fails, MapPinProjection.lattice_point(14, 3).is_equal_approx(
-			Vector3(24.0, 0.0, 0.0)),
+			Vector3(36.0, 0.0, 0.0)),
 			"boss cell is the centre lane at the far end of the journey")
 	_check(fails, is_equal_approx(
 			MapPinProjection.lattice_point(14, 0).x - origin.x,
@@ -109,7 +109,7 @@ static func _agreement(fails: Array[String]) -> void:
 				MapCameraRig.DEFAULT_XZ.x, MapCameraRig.DEFAULT_XZ.y),
 		Vector3(0.0, MapCameraRig.DEFAULT_XZ.x, MapCameraRig.DEFAULT_XZ.y),
 		Vector3(3.0, MapCameraRig.DEFAULT_XZ.x, MapCameraRig.DEFAULT_XZ.y),
-		Vector3(2.0, -12.0, 22.0),
+		Vector3(2.0, -18.0, 26.0),
 		Vector3(1.0, 10.0, 4.0),
 		Vector3(3.0, -7.0, 8.0),
 	]

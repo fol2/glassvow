@@ -22,7 +22,7 @@ const CAM_HEIGHT: float = 18.0
 ## looks at ground z = 0 rather than off to one side. It tracks the tilt --
 ## 12.6 while the camera sat at 55°, 21.45 now it sits at 40° -- and
 ## `test_map_pins` asserts the equality so the two cannot drift apart.
-const DEFAULT_XZ: Vector2 = Vector2(-19.8, 21.45)
+const DEFAULT_XZ: Vector2 = Vector2(-29.7, 21.45)
 const ZOOM_STOPS: Array[float] = [12.0, 16.0, 20.0, 28.0]
 const DEFAULT_STOP: int = 2
 ## Camera XZ. Derived from the 15×7 lattice footprint, shifted by the look-at

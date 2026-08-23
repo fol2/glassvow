@@ -17,8 +17,10 @@ const PROP_VALUE: float = 0.100
 ## The paved corridor. Brighter than the ground it crosses, which is the
 ## reading `map_ground.gdshader` already describes for the grade corridor.
 const ROAD_VALUE: float = 0.760
-const GRADE_MIN: Vector2 = Vector2(-24.0, -12.0)
-const GRADE_SIZE: Vector2 = Vector2(48.0, 24.0)
+const GRADE_MIN: Vector2 = Vector2(-36.0, -18.0)
+## Still 2:1, which the 512x256 grade PNG requires. Widened with the lattice
+## so the map reads less dense.
+const GRADE_SIZE: Vector2 = Vector2(72.0, 36.0)
 const GRADE_RESOLUTION: Vector2i = Vector2i(256, 128)
 
 var ground: ShaderMaterial
