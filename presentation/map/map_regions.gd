@@ -75,10 +75,10 @@ var weather: StringName = &"ash"
 ##
 ## Every act now draws all 128. Storm used to halve it, under a docstring
 ## claiming "64 hard streaks already carry more luminance than 128 soft discs" —
-## measured, they carried **16× less**, because the same commit that halved the
-## count also changed the primitive and dimmed it. The count stays a per-region
-## seam; it is simply not a lever any act needs pulled today (#69 C3).
-var particle_count: int = 128
+## The per-region particle count died with VeilBand in #156 round 2. Its long
+## history — halved in #69, and measured at 16× less carry than the halving
+## alone implied because the same commit changed the primitive and dimmed it —
+## is kept here only so a future weather pass does not rediscover it the hard way.
 
 
 ## `_content` is accepted so `WorldMapScreen` keeps its call shape. It is not
