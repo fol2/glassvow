@@ -287,16 +287,9 @@ static func _asset_binding(fails: Array[String]) -> void:
 			seated += (kit as MultiMeshInstance3D).multimesh.instance_count
 	_check(fails, seated == scene._all_prop_positions().size(),
 			"the six scenery kits between them fill every seat exactly once")
-	# Six road multimeshes, not two: the paving carries the edge state now that
-	# the 2D path line is gone, so each of the two slab meshes exists once per
-	# RoadState. All six are built even when a state has no edges — an empty
-	# one still has to hold its name, or `_build_road` would find nothing to
-	# clear on its second pass and start stacking duplicates.
-	for state: int in range(3):
-		for m: int in range(2):
-			_check(fails, scene.find_child(
-					"AssetRoad%d_%d" % [state, m], true, false) is MultiMeshInstance3D,
-					"road slab %d for state %d is laid along the graph" % [m, state])
+	for i: int in range(2):
+		_check(fails, scene.find_child("AssetRoad%d" % i, true, false) is MultiMeshInstance3D,
+				"road slab %d is laid along the graph" % i)
 	_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
 			"active terminus is attached")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:

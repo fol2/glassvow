@@ -2,12 +2,10 @@ class_name MapBand
 extends Control
 ## Overlay strip of the pilgrimage map. Host owns camera + PointerDrift;
 ## bands store the amplitude-scaled slice and redraw when it moves enough.
-## Child order IS paint order: MapScene (world) → waystones → chips.
+## Child order IS paint order: MapScene (world) → path → waystones → chips.
 ## SkyBand / RegionBand retired in #234 slice 7b2 — 3D MapScene owns the world.
 ## VeilBand retired in #156 round 2 — the falling ash read as snow over a
-## journey the 3D world now carries on its own. PathBand went the same way and
-## for the same reason: it drew the graph a second time, in 2D, over a 3D road
-## that already draws it and that knows what stands in front of what.
+## journey the 3D world now carries on its own.
 
 const CAM_EPS: float = 0.05
 const DRIFT_EPS: float = 0.1
@@ -40,6 +38,100 @@ func set_view(p_cam_x: float, p_drift: Vector2, force: bool = false) -> void:
 		cam_x = p_cam_x
 		drift = p_drift
 		queue_redraw()
+
+
+class PathBand extends MapBand:
+	## A thin dotted route marker, not a second road.
+	##
+	## This drew a thick lead channel with a glass core for one round, which put a
+	## heavy 2D line over 3D paving that already says where the graph runs -- and
+	## the line, being 2D chrome over the whole image, ran straight through the
+	## scenery the road correctly disappeared behind. Dots keep the state reading
+	## (cold ahead, ember next, gold walked) at a fraction of the ink, and at this
+	## weight the disagreement with the world stops being something you notice.
+	const DOT_GAP: float = 9.0
+	const DOT_RADIUS: float = 1.7
+
+	func _init() -> void:
+		super(1.0)
+		gated = false
+
+	func _draw() -> void:
+		if host == null:
+			return
+		# 3D MapScene owns the ground. This band is the graph overlay —
+		# frozen edges projected between lattice seats, plus the lantern glow.
+		# `_draw_bed` / `_draw_rose_window` retired with the 2D road in #234 7b2.
+		_draw_graph()
+		if host.map.at >= 0 and host.map.at < host.map.nodes.size():
+			var at: Vector2 = host.marker_screen_position()
+			var ember: Color = GlassStyle.EMBER
+			draw_circle(at, 30.0, Color(ember.r, ember.g, ember.b, 0.10))
+			draw_circle(at, 15.0, Color(ember.r, ember.g, ember.b, 0.18))
+
+	## Cold glass, for road the pilgrimage has not opened yet.
+	const COLD: Color = Color(0.36, 0.44, 0.60)
+
+	func _draw_graph() -> void:
+		var live: Array[int] = host.map.reachable()
+		var by_id: Dictionary = {}
+		var frame: Rect2 = Rect2(Vector2.ZERO, size).grow(80.0)
+		for node: MapNode in host.map.nodes:
+			by_id[node.id] = node
+		for node: MapNode in host.map.nodes:
+			var from: Vector2 = host._node_pos(node)
+			for next_id: String in node.next:
+				var next_v: Variant = by_id.get(next_id)
+				if typeof(next_v) != TYPE_OBJECT:
+					continue
+				var next_node: MapNode = next_v
+				var to: Vector2 = host._node_pos(next_node)
+				var walked: bool = host.map.is_cleared(host.map.nodes.find(node)) \
+					and host.map.is_cleared(host.map.nodes.find(next_node))
+				var fade: float = 1.0 if frame.has_point(from) or frame.has_point(to) \
+					else 0.10
+				# POC (#156 direction B). The edge is the road, so it is drawn as
+				# came: a dark lead channel with a glass core on top. Gold where
+				# the pilgrimage has been, ember where it may go next, cold
+				# ahead. The 2 px dash this replaces carried a 15x7 graph at 24%
+				# alpha and read as a hairline over unrelated ground.
+				var open_now: bool = live.has(host.map.nodes.find(next_node)) \
+					and host.map.at == host.map.nodes.find(node)
+				var core: Color = COLD
+				var radius: float = DOT_RADIUS
+				var alpha: float = 0.46
+				if walked:
+					core = GlassStyle.GOLD
+					radius = DOT_RADIUS * 1.35
+					alpha = 0.92
+				elif open_now:
+					core = GlassStyle.EMBER
+					radius = DOT_RADIUS * 1.35
+					alpha = 0.95
+				var control: Vector2 = host.edge_control(from, to)
+				var segs: int = maxi(12, int(from.distance_to(to) / 11.0))
+				var points: PackedVector2Array = PackedVector2Array([from])
+				for segment: int in range(segs):
+					var t: float = float(segment + 1) / float(segs)
+					points.append(from * (1.0 - t) * (1.0 - t) \
+						+ control * 2.0 * (1.0 - t) * t + to * t * t)
+				# Dots at a fixed SCREEN spacing, measured along the curve rather
+				# than per polyline segment: the bezier's segments bunch up where
+				# it turns, so spacing them per segment would crowd the dots
+				# exactly where the eye is already busiest.
+				var run: float = 0.0
+				var tint: Color = Color(core.r, core.g, core.b, fade * alpha)
+				for segment: int in range(1, points.size()):
+					var a: Vector2 = points[segment - 1]
+					var b: Vector2 = points[segment]
+					var span: float = a.distance_to(b)
+					if span < 0.001:
+						continue
+					var d: float = fposmod(-run, DOT_GAP)
+					while d < span:
+						draw_circle(a.lerp(b, d / span), radius, tint)
+						d += DOT_GAP
+					run += span
 
 
 ## The bounty chips, as ONE layer sitting above the waystones.
