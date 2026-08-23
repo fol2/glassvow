@@ -228,12 +228,12 @@
       "source": "local-deterministic",
       "created_at": "2026-08-22T18:40:00+08:00",
       "license": "original Glassvow authorship (no vendor, no paid credits)",
-      "source_sha256": "da18e953757052dafadc24189c7f129cd941385933af0376d215653e759751cf",
-      "final_sha256": "da18e953757052dafadc24189c7f129cd941385933af0376d215653e759751cf",
+      "source_sha256": "3cbd88e3adce368886cf7a20867eeef1d376428dec70250e50fd77cc6dd74780",
+      "final_sha256": "3cbd88e3adce368886cf7a20867eeef1d376428dec70250e50fd77cc6dd74780",
       "edits": [
         "repainted for the direction-B journey axis (#156): U is the X journey from the entrance at x=-24 to the boss at x=+24, V the seven z lanes, so one grade covers the 48x24 lattice exactly",
         "hue walks 0.95 -> 0.88 along the journey with saturation draining and value lifting, carrying the aerial-perspective ramp that direction B cannot get from a horizon",
-        "broad corridor exp(-(Z/9.5)^4) with night beyond the lanes; alpha contact blobs sized to the 21 shipped scenery seats plus the terminus"
+        "contact shadows resized per kit (#156 round 2): one 2.4x2.0 gaussian for every seat put a ~7 m puddle under a 2 m stump and darkened 68% of the rect; each blob now takes the footprint radius of the kit the round-robin actually seats there, and the darkened area is 38%"
       ],
       "reviewer": "fol2",
       "verdict": "accepted",

@@ -62,8 +62,54 @@ static func sample(row_u: float, col_v: float) -> Vector3:
 	return p00.lerp(p01, fv).lerp(p10.lerp(p11, fv), fu)
 
 
+## Half the world width a waystone medallion covers at the widest zoom stop.
+## The pane is UNLIT_RADIUS = 28 px, not WIDTH / 2.
+const NODE_HALF_X: float = 1.2
+## The furthest a node will slide to get out from behind something. Roughly
+## three quarters of a cell: enough to clear any kit the map ships, not enough
+## for a node to swap places with its neighbour.
+const STEP_ASIDE_MAX: float = 2.6
+
+## Scenery the nodes step aside for: (world x, world z, footprint radius, how
+## far behind itself the piece can hide something). Published by MapScene when
+## it binds an act's geometry, and empty until then -- with nothing registered
+## `world_anchor` is exactly the bilinear sample it always was.
+static var _scenery: Array[Vector4] = []
+
+
+static func set_scenery(pieces: Array[Vector4]) -> void:
+	_scenery = pieces
+
+
 static func world_anchor(node: MapNode) -> Vector3:
-	return sample(float(node.row) + node.jy, float(node.col) + node.jx)
+	return step_aside(sample(float(node.row) + node.jy, float(node.col) + node.jx))
+
+
+## Slide a seat along X until nothing stands in front of it.
+##
+## "In front of" is the whole rule and it is directional: the camera looks from
+## +z toward -z, so a piece hides only what is further from the camera than
+## itself, and only for as long as its own height reaches. A node behind nothing
+## does not move at all.
+static func step_aside(seat: Vector3) -> Vector3:
+	if _scenery.is_empty():
+		return seat
+	var out: Vector3 = seat
+	# Two passes: clearing one piece can slide a node under another. It settles
+	# or it does not, and a node that cannot clear both keeps the better of the
+	# two positions rather than oscillating.
+	for _pass: int in range(2):
+		for piece: Vector4 in _scenery:
+			var ahead: float = piece.y - out.z
+			if ahead <= 0.0 or ahead > piece.w:
+				continue
+			var gap: float = piece.z + NODE_HALF_X
+			var dx: float = out.x - piece.x
+			if absf(dx) >= gap:
+				continue
+			out.x = piece.x + (gap if dx >= 0.0 else -gap)
+	var moved: float = clampf(out.x - seat.x, -STEP_ASIDE_MAX, STEP_ASIDE_MAX)
+	return Vector3(seat.x + moved, seat.y, seat.z)
 
 
 ## Ground XZ AABB of the 15×7 vertices, grown by the authored jitter so a

@@ -32,6 +32,9 @@ const TERMINUS_SCALE: float = 3.6
 ## Metres between paving slabs along a road segment.
 const ROAD_STEP: float = 1.15
 const ROAD_SCALE: float = 1.75
+## Metres of ground a piece of scenery hides per metre of its own height, at
+## the camera's tilt: 1 / tan(40°).
+const HIDE_PER_HEIGHT: float = 1.19
 const TAP_SLOP: float = 12.0
 const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
@@ -395,6 +398,10 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		_asset_geometry.free()
 		_asset_geometry = null
 	_road_meshes.clear()
+	# Nothing is standing yet, so nothing is worth stepping aside for. An act
+	# whose geometry fails to resolve must not leave the previous act's
+	# footprints pushing this act's nodes around.
+	MapPinProjection.set_scenery([])
 	_set_placeholders_visible(true)
 	var raw_kits: Variant = assets.get("kits", [])
 	var raw_terminus: Variant = assets.get("terminus", null)
@@ -439,6 +446,19 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 				placements.append(positions[j])
 		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements,
 				i * 7, KIT_SCALE[i])
+	# Tell the projection what now stands where, so the nodes can step out
+	# from behind it. Radius takes the wider of x and z because yaw can swing
+	# one into the other; depth is how much ground the piece's own height
+	# hides at the camera's tilt.
+	var pieces: Array[Vector4] = []
+	for j: int in range(positions.size()):
+		var kit: int = 2 + (j % kinds)
+		var box: AABB = meshes[kit].get_aabb()
+		var unit: float = KIT_SCALE[kit]
+		pieces.append(Vector4(positions[j].x, positions[j].z,
+				maxf(box.size.x, box.size.z) * 0.5 * unit,
+				box.size.y * unit * HIDE_PER_HEIGHT))
+	MapPinProjection.set_scenery(pieces)
 	var terminus: MeshInstance3D = MeshInstance3D.new()
 	terminus.name = "AssetTerminus"
 	terminus.mesh = terminus_mesh
@@ -587,11 +607,21 @@ func _dab_positions() -> PackedVector3Array:
 	])
 
 
+## Ground level, for the real kits and for the grade's contact shadows.
+##
+## Every kit GLB is authored grounded -- measured, all six AABBs start at
+## y = 0 -- while the seat lists carry the centre offset their PLACEHOLDER
+## primitive needs, and the prism's half-height is exactly 1.7. Passing those
+## through unchanged floated the whole scenery set 1.7 m, with the grade's
+## contact shadows still painted on the ground beneath it.
 func _all_prop_positions() -> PackedVector3Array:
-	var all: PackedVector3Array = _wedge_positions()
-	all.append_array(_slab_positions())
-	all.append_array(_dab_positions())
-	return all
+	var seats: PackedVector3Array = _wedge_positions()
+	seats.append_array(_slab_positions())
+	seats.append_array(_dab_positions())
+	var grounded: PackedVector3Array = PackedVector3Array()
+	for seat: Vector3 in seats:
+		grounded.append(Vector3(seat.x, 0.0, seat.z))
+	return grounded
 
 
 func _dab_mesh() -> ArrayMesh:
