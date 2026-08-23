@@ -397,6 +397,25 @@
       "verdict": "accepted",
       "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
       "review_path": "docs/reviews/156/act1-baseline/B-final.png"
+    },
+    {
+      "asset_id": "act1-threshold",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-23T04:20:00+08:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "8f63a07394aca92e8c9a6b2b8b10af532d9aa99eca6d6e45c248e521d138c56a",
+      "final_sha256": "8f63a07394aca92e8c9a6b2b8b10af532d9aa99eca6d6e45c248e521d138c56a",
+      "edits": [
+        "modelled the Vigil's west face from docs/story/01-world.md: a six-pane rose wheel over a plinth between two flanking pylons. Six is story, not styling -- the fire broke into six shards and they return into the west face's six compartments -- and assets/art/scenes/opening-hearth.png, the still shown at the start of every run, shows exactly that wheel",
+        "manifold boolean union produced one watertight connected component, verified against the repo's own inspect_glb: one mesh, one surface, POSITION+NORMAL, no textures, 1330 triangles, grounded Y-up metres",
+        "welded and indexed on purpose: the gate's connected-component check returns 1 for any unindexed mesh, so splitting normals per face for a crisper facet would have bought the look by making that check meaningless"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/round2/threshold-yaws.png",
+      "polycount_target": 8000,
+      "triangles": 1330
     }
   ]
 }

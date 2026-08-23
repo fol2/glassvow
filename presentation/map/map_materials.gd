@@ -98,6 +98,9 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	var kit_ids: PackedStringArray = []
 	var terminus: Resource = null
 	var terminus_id: String = ""
+	## The Vigil at the west end. Only Act I ships one, so every other act binds
+	## null here and MapScene simply seats nothing.
+	var threshold: Resource = null
 	var ground_tile: Texture2D = null
 	var prop_tile: Texture2D = null
 	var painted_grade: Texture2D = null
@@ -115,7 +118,8 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 		var kind: String = _row_string(row, "kind")
 		if kind in ["tile", "grade"] and not (resource is Texture2D):
 			continue
-		if kind in ["kit", "terminus"] and not (resource is Mesh or resource is PackedScene):
+		if kind in ["kit", "terminus", "threshold"] \
+				and not (resource is Mesh or resource is PackedScene):
 			continue
 		_active_paths.append(path)
 		_active_resources.append(resource)
@@ -126,6 +130,8 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 			"terminus":
 				terminus = resource
 				terminus_id = _row_string(row, "id")
+			"threshold":
+				threshold = resource
 			"tile":
 				var tile: Texture2D = resource as Texture2D
 				if _row_string(row, "role") == "ground":
@@ -149,6 +155,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	return {
 		"kits": kits, "kit_ids": kit_ids,
 		"terminus": terminus, "terminus_id": terminus_id,
+		"threshold": threshold,
 		"ground_tile": ground_tile, "prop_tile": prop_tile,
 		"grade": painted_grade,
 	}
