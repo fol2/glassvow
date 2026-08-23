@@ -29,14 +29,21 @@ const SKY: Color = Color(0.018, 0.022, 0.045)
 ## charred-stump, fallen-bough-arch, ash-cairn-mass.
 const KIT_SCALE: Array[float] = [3.0, 3.0, 3.4, 6.2, 2.8, 2.2, 4.6, 3.2]
 const TERMINUS_SCALE: float = 3.6
-## Where the Vigil stands: four metres short of the entrance row, mirroring the
-## terminus four metres past the boss. The screen reads this too, to run the
-## road out from it to the first waystones.
-const THRESHOLD_XZ: Vector2 = Vector2(-40.0, 0.0)
-## The threshold is authored at 7.2 m wide and 5.8 m tall, so unlike the
-## unit-scale kits it barely needs growing: at 1.9 it filled a third of the
-## opening frame and read as scenery the camera had clipped into.
-const THRESHOLD_SCALE: float = 1.05
+## Where the Vigil stands: short of the entrance row, mirroring the terminus
+## past the boss. The screen reads this too, to run the road out from its door
+## to the first waystones.
+## Pulled east and toward the camera until the whole hall is inside the opening
+## frame: at x = -41 the camera's left edge cut it in half, and a landmark the
+## player has to pan to find is not marking the start of anything.
+const THRESHOLD_XZ: Vector2 = Vector2(-38.4, 6.5)
+## Turned so the gable is seen in three-quarter rather than edge-on. The hall
+## is authored with its gable facing +X, down the road; the camera looks along
+## -Z, so unturned the player sees ten metres of blank flank and the end of the
+## building disappears into the frame edge.
+const THRESHOLD_YAW: float = -46.0
+## The hall is authored at 10.9 m long and 11.6 m to the top of its smoke, so
+## unlike the unit-scale kits it needs shrinking rather than growing.
+const THRESHOLD_SCALE: float = 0.78
 ## Metres between paving slabs along a road segment.
 ## Denser and wider than the first pass. The paving is the map's main statement
 ## of where the graph runs; the 2D dots over it are a route marker, not a road.
@@ -478,8 +485,9 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	terminus.material_override = _materials.prop
 	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_asset_geometry.add_child(terminus)
-	# The Vigil, at the west end of the road: the hearth-side face of the same
-	# threshold whose east face is the sealed door (docs/story/01-world.md).
+	# The Vigil, at the west end of the road, seen from outside: a gabled hall
+	# end-on with its chimney. The rose window is on the far side, turned in at
+	# the fire, and stays there — it is the L3 reveal (docs/story/01-world.md).
 	# Only Act I has one, so a null here seats nothing rather than failing the
 	# bind -- the other three acts are not missing an asset, they never had one.
 	var raw_threshold: Variant = assets.get("threshold", null)
@@ -488,11 +496,12 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		var gate_mesh: Mesh = _mesh_from(gate_res)
 		if gate_mesh != null:
 			var gate: MeshInstance3D = MeshInstance3D.new()
-			gate.name = "AssetThreshold"
+			gate.name = "AssetVigil"
 			gate.mesh = gate_mesh
 			# Just short of the entrance, which is lattice row 0 = world x -36,
 			# mirroring the terminus four metres past the boss at the far end.
 			gate.position = Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y)
+			gate.rotation_degrees = Vector3(0.0, THRESHOLD_YAW, 0.0)
 			gate.scale = Vector3.ONE * THRESHOLD_SCALE
 			gate.material_override = _materials.prop
 			gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
