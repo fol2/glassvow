@@ -51,17 +51,14 @@ var _trail_layout: Dictionary = {}
 var _title_label: Label
 var _run: RunState = null
 var _act: int = 0
-var _particle_colour: Color
-var _glow_colour: Color
-## Per-act region knobs (palette + weather). VeilBand reads this;
-## built in `_set_act_theme` so a theme pick never leaves stale weather.
+## Per-act region knobs. The 3D ramp reads this; it is built in
+## `_set_act_theme` so a theme pick never leaves a stale palette behind.
 var _region: MapRegions = null
 
 var _drift: PointerDrift = PointerDrift.new()
 var _map_scene: MapScene = null
 var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
-var _veil_band: MapBand.VeilBand = null
 ## Projection is shared by waystone layout, graph paint and marker queries.
 ## The old path rebuilt all 65 seats for every edge endpoint, turning one
 ## production frame into thousands of identical camera transforms (#447).
@@ -93,10 +90,7 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_chip_band = MapBand.ChipBand.new()
 	_chip_band.host = self
 	add_child(_chip_band)
-	_veil_band = MapBand.VeilBand.new()
-	_veil_band.host = self
-	add_child(_veil_band)
-	# Theme after the veil exists so apply_region reaches it.
+	# Theme after the bands exist so apply_region reaches them.
 	_set_act_theme(0)
 	_build_chrome()
 	_seat_marker()
@@ -116,6 +110,7 @@ func _build_world_surface() -> void:
 	_map_scene = MapScene.new()
 	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
+	MapPinProjection.resolve(map.nodes)
 	_map_scene.lay_road(_road_segments())
 
 
@@ -398,13 +393,13 @@ func _set_act_theme(stage_act: int) -> void:
 	if content != null and not content.acts.is_empty():
 		_act = clampi(stage_act, 0, content.acts.size() - 1)
 	# MapRegions is the sole source; the content pack theme dict is not read.
-	# Veil motes read glow/particle; 3D ramp binds band_shade/band_key on MapScene.
-	_particle_colour = _region.particles
-	_glow_colour = _region.glow
-	if _veil_band != null:
-		_veil_band.apply_region(_region)
+	# The 3D ramp binds band_shade/band_key on MapScene.
 	if _map_scene != null:
 		_map_scene.set_act(stage_act)
+		# set_act rebinds the act's geometry, so the footprints the nodes step
+		# around have just changed underneath them.
+		MapPinProjection.resolve(map.nodes)
+		_map_scene.lay_road(_road_segments())
 
 
 ## 3D lattice seats in this Control's px. Live waystones sit here.
@@ -643,8 +638,6 @@ func _push_bands(force: bool = false) -> void:
 		_path_band.set_view(cam, path_d, force)
 	if _chip_band != null:
 		_chip_band.set_view(cam, path_d, force)
-	if _veil_band != null:
-		_veil_band.set_view(cam, path_d * 1.35, force)
 
 
 func _rig_cam_x() -> float:

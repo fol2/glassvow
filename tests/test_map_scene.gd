@@ -38,9 +38,13 @@ static func _rig(fails: Array[String]) -> void:
 	var cam: Camera3D = rig.get_camera()
 	_check(fails, cam.projection == Camera3D.PROJECTION_ORTHOGONAL,
 			"camera is orthographic")
-	_check(fails, cam.rotation_degrees.x >= -60.0
-			and cam.rotation_degrees.x <= -50.0,
-			"pitch sits in the signed 50–60° band")
+	# Moved off the 50–60 band in #156 round 2: at 55° the frame read flat and
+	# panning up or down showed almost none of the 3D it was paying for. The
+	# band is still a band, not a point, because the exact degree is a taste
+	# call — what must not happen is a silent drift back toward top-down.
+	_check(fails, cam.rotation_degrees.x >= -45.0
+			and cam.rotation_degrees.x <= -35.0,
+			"pitch sits in the signed 35–45° band")
 	_check(fails, is_equal_approx(cam.rotation_degrees.x, MapCameraRig.TILT_DEGREES),
 			"default pitch is the #255 −55° stop")
 	_check(fails, rig.zoom_stop == MapCameraRig.DEFAULT_STOP

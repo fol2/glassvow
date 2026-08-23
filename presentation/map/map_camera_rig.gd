@@ -9,7 +9,7 @@ extends Node3D
 ## MapScene can push it into both materials. This file only owns camera size.
 ## Pan is world XZ; Y and tilt never move.
 
-const TILT_DEGREES: float = -55.0
+const TILT_DEGREES: float = -40.0
 const CAM_HEIGHT: float = 18.0
 ## Opening pose, re-derived for the X journey (#156 direction B). z sits one
 ## `look_dz` behind the lane centre so the look-at lands on z=0 and the seven
@@ -18,7 +18,11 @@ const CAM_HEIGHT: float = 18.0
 ## the bottom. x puts the row-0 entrances (x ~= -24) on the left third rather
 ## than off-frame, which is the lead the concept brief asks for and which
 ## `trail/lead` (0.333) already names for the 2D chrome.
-const DEFAULT_XZ: Vector2 = Vector2(-19.8, 12.6)
+## The z half is not a free number: it IS `look_dz()`, so the default pose
+## looks at ground z = 0 rather than off to one side. It tracks the tilt --
+## 12.6 while the camera sat at 55°, 21.45 now it sits at 40° -- and
+## `test_map_pins` asserts the equality so the two cannot drift apart.
+const DEFAULT_XZ: Vector2 = Vector2(-29.7, 21.45)
 const ZOOM_STOPS: Array[float] = [12.0, 16.0, 20.0, 28.0]
 const DEFAULT_STOP: int = 2
 ## Camera XZ. Derived from the 15×7 lattice footprint, shifted by the look-at

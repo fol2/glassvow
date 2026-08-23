@@ -30,8 +30,13 @@ const SKY: Color = Color(0.018, 0.022, 0.045)
 const KIT_SCALE: Array[float] = [3.0, 3.0, 3.4, 6.2, 2.8, 2.2, 4.6, 3.2]
 const TERMINUS_SCALE: float = 3.6
 ## Metres between paving slabs along a road segment.
-const ROAD_STEP: float = 1.15
-const ROAD_SCALE: float = 1.75
+## Denser and wider than the first pass. The paving is the map's main statement
+## of where the graph runs; the 2D dots over it are a route marker, not a road.
+const ROAD_STEP: float = 0.95
+const ROAD_SCALE: float = 2.15
+## Metres of ground a piece of scenery hides per metre of its own height, at
+## the camera's tilt: 1 / tan(40°).
+const HIDE_PER_HEIGHT: float = 1.19
 const TAP_SLOP: float = 12.0
 const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
@@ -395,6 +400,10 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		_asset_geometry.free()
 		_asset_geometry = null
 	_road_meshes.clear()
+	# Nothing is standing yet, so nothing is worth stepping aside for. An act
+	# whose geometry fails to resolve must not leave the previous act's
+	# footprints pushing this act's nodes around.
+	MapPinProjection.set_scenery([])
 	_set_placeholders_visible(true)
 	var raw_kits: Variant = assets.get("kits", [])
 	var raw_terminus: Variant = assets.get("terminus", null)
@@ -439,11 +448,24 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 				placements.append(positions[j])
 		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements,
 				i * 7, KIT_SCALE[i])
+	# Tell the projection what now stands where, so the nodes can step out
+	# from behind it. Radius takes the wider of x and z because yaw can swing
+	# one into the other; depth is how much ground the piece's own height
+	# hides at the camera's tilt.
+	var pieces: Array[Vector4] = []
+	for j: int in range(positions.size()):
+		var kit: int = 2 + (j % kinds)
+		var box: AABB = meshes[kit].get_aabb()
+		var unit: float = KIT_SCALE[kit]
+		pieces.append(Vector4(positions[j].x, positions[j].z,
+				maxf(box.size.x, box.size.z) * 0.5 * unit,
+				box.size.y * unit * HIDE_PER_HEIGHT))
+	MapPinProjection.set_scenery(pieces)
 	var terminus: MeshInstance3D = MeshInstance3D.new()
 	terminus.name = "AssetTerminus"
 	terminus.mesh = terminus_mesh
-	# Just past the boss, which is lattice row 14 col 3 = world (24, 0, 0).
-	terminus.position = Vector3(28.0, 0.0, 0.0)
+	# Just past the boss, which is lattice row 14 col 3 = world (36, 0, 0).
+	terminus.position = Vector3(40.0, 0.0, 0.0)
 	terminus.scale = Vector3.ONE * TERMINUS_SCALE
 	terminus.material_override = _materials.prop
 	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -509,7 +531,9 @@ func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
 	multimesh.instance_count = positions.size()
 	for i: int in range(positions.size()):
 		var index: int = seed_index * 131 + i
-		var wobble: float = 0.08 * sin(float(index) * 1.71)
+		# Small: enough that the paving is not a stamped ribbon, little enough
+		# that consecutive slabs still read as one road rather than as rubble.
+		var wobble: float = 0.045 * sin(float(index) * 1.71)
 		var scale: Vector3 = Vector3(
 				ROAD_SCALE * (1.0 + wobble),
 				ROAD_SCALE * 0.6,
@@ -561,37 +585,47 @@ func _first_mesh(root: Node) -> MeshInstance3D:
 
 func _wedge_positions() -> PackedVector3Array:
 	return PackedVector3Array([
-		Vector3(-21.0, 1.7, -6.5), Vector3(-17.0, 1.7, 5.7),
-		Vector3(-12.0, 1.7, -7.7), Vector3(-6.5, 1.7, 6.4),
-		Vector3(-1.0, 1.7, -5.8), Vector3(5.0, 1.7, 7.2),
-		Vector3(10.5, 1.7, -6.7), Vector3(16.0, 1.7, 5.9),
-		Vector3(21.0, 1.7, -7.5),
+		Vector3(-31.5, 1.7, -9.75), Vector3(-25.5, 1.7, 8.55),
+		Vector3(-18.0, 1.7, -11.55), Vector3(-9.75, 1.7, 9.6),
+		Vector3(-1.5, 1.7, -8.7), Vector3(7.5, 1.7, 10.8),
+		Vector3(15.75, 1.7, -10.05), Vector3(24.0, 1.7, 8.85),
+		Vector3(31.5, 1.7, -11.25),
 	])
 
 
 func _slab_positions() -> PackedVector3Array:
 	return PackedVector3Array([
-		Vector3(-18.5, 0.31, 3.9), Vector3(-18.5, 0.86, 3.9),
-		Vector3(-8.0, 0.31, -4.5), Vector3(-8.0, 0.86, -4.5),
-		Vector3(4.0, 0.31, 4.2), Vector3(4.0, 0.86, 4.2),
-		Vector3(15.5, 0.31, -4.0), Vector3(15.5, 0.86, -4.0),
+		Vector3(-27.75, 0.31, 5.85), Vector3(-27.75, 0.86, 5.85),
+		Vector3(-12.0, 0.31, -6.75), Vector3(-12.0, 0.86, -6.75),
+		Vector3(6.0, 0.31, 6.3), Vector3(6.0, 0.86, 6.3),
+		Vector3(23.25, 0.31, -6.0), Vector3(23.25, 0.86, -6.0),
 	])
 
 
 func _dab_positions() -> PackedVector3Array:
 	return PackedVector3Array([
-		Vector3(-22.0, 0.0, 7.8), Vector3(-14.0, 0.0, -5.2),
-		Vector3(-10.5, 0.0, 7.6), Vector3(-3.5, 0.0, 5.0),
-		Vector3(2.0, 0.0, -7.7), Vector3(8.5, 0.0, 5.2),
-		Vector3(13.0, 0.0, -7.8), Vector3(20.5, 0.0, 6.9),
+		Vector3(-33.0, 0.0, 11.7), Vector3(-21.0, 0.0, -7.8),
+		Vector3(-15.75, 0.0, 11.4), Vector3(-5.25, 0.0, 7.5),
+		Vector3(3.0, 0.0, -11.55), Vector3(12.75, 0.0, 7.8),
+		Vector3(19.5, 0.0, -11.7), Vector3(30.75, 0.0, 10.35),
 	])
 
 
+## Ground level, for the real kits and for the grade's contact shadows.
+##
+## Every kit GLB is authored grounded -- measured, all six AABBs start at
+## y = 0 -- while the seat lists carry the centre offset their PLACEHOLDER
+## primitive needs, and the prism's half-height is exactly 1.7. Passing those
+## through unchanged floated the whole scenery set 1.7 m, with the grade's
+## contact shadows still painted on the ground beneath it.
 func _all_prop_positions() -> PackedVector3Array:
-	var all: PackedVector3Array = _wedge_positions()
-	all.append_array(_slab_positions())
-	all.append_array(_dab_positions())
-	return all
+	var seats: PackedVector3Array = _wedge_positions()
+	seats.append_array(_slab_positions())
+	seats.append_array(_dab_positions())
+	var grounded: PackedVector3Array = PackedVector3Array()
+	for seat: Vector3 in seats:
+		grounded.append(Vector3(seat.x, 0.0, seat.z))
+	return grounded
 
 
 func _dab_mesh() -> ArrayMesh:

@@ -23,11 +23,11 @@ extends RefCounted
 
 ## Row 0 / col 0 at the far-left, near lane. Rows walk the journey along +X in
 ## 3.43-unit steps (15 rows spanning 48); cols spread the lanes along +Z in
-## 4-unit steps (7 cols spanning 24). Both match `MapMaterials.GRADE_SIZE`, so
+## 6-unit steps (7 cols spanning 36). Both match `MapMaterials.GRADE_SIZE`, so
 ## one painted grade covers the run exactly. Footprint sits inside
 ## MapScene.GROUND_SIZE with room for the pan frustum on every side.
-const CELL: Vector2 = Vector2(48.0 / 14.0, 4.0)
-const ORIGIN_XZ: Vector2 = Vector2(-24.0, -12.0)
+const CELL: Vector2 = Vector2(72.0 / 14.0, 6.0)
+const ORIGIN_XZ: Vector2 = Vector2(-36.0, -18.0)
 
 
 var _camera: Camera3D
@@ -62,8 +62,156 @@ static func sample(row_u: float, col_v: float) -> Vector3:
 	return p00.lerp(p01, fv).lerp(p10.lerp(p11, fv), fu)
 
 
+## Half the ground a waystone medallion covers, at the zoom the map is played
+## at. The pane is UNLIT_RADIUS = 28 px, not WIDTH / 2.
+##
+## This was 1.2, taken at the WIDEST zoom stop, and that was a mistake worth
+## recording: it made the scenery test fire for nodes that were not really
+## occluded, and shoved each one `piece radius + 1.2` sideways. Measured on
+## seed 717, the raw lattice has 2 barely-touching node pairs; clearance at 1.2
+## turned that into 4 much worse ones. The avoidance was manufacturing the
+## crowding it was then asked to fix.
+const NODE_HALF_X: float = 0.82
+## The furthest a node will slide to get out from behind something. Roughly
+## three quarters of a cell: enough to clear any kit the map ships, not enough
+## for a node to swap places with its neighbour.
+const STEP_ASIDE_MAX: float = 3.4
+
+## Scenery the nodes step aside for: (world x, world z, footprint radius, how
+## far behind itself the piece can hide something). Published by MapScene when
+## it binds an act's geometry, and empty until then -- with nothing registered
+## `world_anchor` is exactly the bilinear sample it always was.
+static var _scenery: Array[Vector4] = []
+
+
+static func set_scenery(pieces: Array[Vector4]) -> void:
+	_scenery = pieces
+
+
+## Half the ground a medallion covers for the purpose of not overlapping ANOTHER
+## medallion. Deliberately smaller than NODE_HALF_X, which is taken at the widest
+## zoom stop: two nodes only have to be legible at the zoom the map is played at,
+## and demanding they never touch at stop 28 asks for 98 px of separation between
+## discs 52 px across -- more than the lattice can give without shoving nodes into
+## the wrong cell. Scenery clearance keeps the strict figure; pairs use this one.
+## = UNLIT_RADIUS 28 px * the 0.92 layout scale, over the 20-unit view height:
+## two medallions clear each other at 51.6 px between centres, which is 1.26
+## world units, so each contributes 0.63. Demanding more than the discs actually
+## occupy just shoves nodes around for nothing.
+const NODE_PAIR_X: float = 0.63
+## The same radius in z, foreshortened by the 40 degree tilt.
+const NODE_PAIR_Z: float = 0.98
+
+## Anchors resolved as a set, by node id. Empty until the screen resolves them.
+static var _resolved: Dictionary[String, Vector3] = {}
+
+
+## Settle every node against the scenery AND against each other.
+##
+## Solved together because they fight: stepping out from behind a rock can put a
+## node on top of its neighbour, and separating from the neighbour can put it
+## back behind the rock. Three passes, alternating, then whatever it has
+## converged to -- a node that cannot satisfy both keeps the better position
+## rather than oscillating between two bad ones.
+static func resolve(nodes: Array[MapNode]) -> void:
+	_resolved.clear()
+	if nodes.is_empty():
+		return
+	var base: PackedVector3Array = PackedVector3Array()
+	var out: PackedVector3Array = PackedVector3Array()
+	for node: MapNode in nodes:
+		var seat: Vector3 = sample(
+				float(node.row) + node.jy, float(node.col) + node.jx)
+		base.append(seat)
+		out.append(seat)
+	for _pass: int in range(20):
+		for i: int in range(out.size()):
+			out[i] = _off_scenery(out[i])
+		out = _spread(out)
+		# Never let the accumulated shove carry a node further than one step from
+		# where its own jitter put it: past that it stops reading as the same node
+		# nudged and starts reading as a different lattice cell.
+		for i: int in range(out.size()):
+			out[i] = Vector3(base[i].x + clampf(
+					out[i].x - base[i].x, -STEP_ASIDE_MAX, STEP_ASIDE_MAX),
+					base[i].y, base[i].z)
+	# Spacing gets the last word. Where the two constraints genuinely cannot both
+	# hold, a node slightly clipped by scenery is a smaller sin than two
+	# medallions overlapping: the player can still see and press both.
+	out = _spread(out)
+	for i: int in range(nodes.size()):
+		_resolved[nodes[i].id] = Vector3(base[i].x + clampf(
+				out[i].x - base[i].x, -STEP_ASIDE_MAX, STEP_ASIDE_MAX),
+				out[i].y, out[i].z)
+
+
+## Push overlapping medallions apart along X, sharing the correction between
+## them so neither is treated as the one in the wrong place.
+##
+## Returns the array rather than mutating the argument: PackedVector3Array is
+## a VALUE type with copy-on-write, so the first write inside a function forks
+## it and the caller never sees the change. This read as an in-place mutation
+## for one commit and silently did nothing.
+static func _spread(seats: PackedVector3Array) -> PackedVector3Array:
+	var out: PackedVector3Array = seats
+	for i: int in range(out.size()):
+		for j: int in range(i + 1, out.size()):
+			var dz: float = absf(out[i].z - out[j].z)
+			if dz >= NODE_PAIR_Z * 2.0:
+				continue
+			# The x separation that clears the ellipse at this z separation.
+			var zt: float = dz / (NODE_PAIR_Z * 2.0)
+			var want: float = NODE_PAIR_X * 2.0 * sqrt(maxf(1.0 - zt * zt, 0.0))
+			var dx: float = out[i].x - out[j].x
+			if absf(dx) >= want:
+				continue
+			# Two seats at the same x have no side to be pushed to; break the tie
+			# by index so the result is the same on every boot.
+			var dir: float = 1.0 if dx > 0.0 or (dx == 0.0 and i < j) else -1.0
+			# Slightly over-relaxed: exact halves stall where three nodes crowd one
+			# gap, each satisfied pairwise and none of them actually clear.
+			var push: float = (want - absf(dx)) * 0.58
+			out[i] = Vector3(out[i].x + push * dir, out[i].y, out[i].z)
+			out[j] = Vector3(out[j].x - push * dir, out[j].y, out[j].z)
+	return out
+
+
 static func world_anchor(node: MapNode) -> Vector3:
-	return sample(float(node.row) + node.jy, float(node.col) + node.jx)
+	if _resolved.has(node.id):
+		return _resolved[node.id]
+	return step_aside(sample(float(node.row) + node.jy, float(node.col) + node.jx))
+
+
+## Slide one seat clear of the scenery, with no regard for other nodes.
+##
+static func _off_scenery(seat: Vector3) -> Vector3:
+	if _scenery.is_empty():
+		return seat
+	var out: Vector3 = seat
+	for piece: Vector4 in _scenery:
+		var ahead: float = piece.y - out.z
+		if ahead <= 0.0 or ahead > piece.w:
+			continue
+		var gap: float = piece.z + NODE_HALF_X
+		var dx: float = out.x - piece.x
+		if absf(dx) >= gap:
+			continue
+		# Clearly to one side already? Keep that side -- the shorter move. Only a
+		# seat near the piece's centre line takes the bias.
+		out.x = piece.x + (gap if dx >= 0.0 else -gap)
+	return out
+
+
+## Slide a seat along X until nothing stands in front of it.
+##
+## "In front of" is the whole rule and it is directional: the camera looks from
+## +z toward -z, so a piece hides only what is further from the camera than
+## itself, and only for as long as its own height reaches. A node behind nothing
+## does not move at all.
+static func step_aside(seat: Vector3) -> Vector3:
+	var out: Vector3 = _off_scenery(_off_scenery(seat))
+	var moved: float = clampf(out.x - seat.x, -STEP_ASIDE_MAX, STEP_ASIDE_MAX)
+	return Vector3(seat.x + moved, seat.y, seat.z)
 
 
 ## Ground XZ AABB of the 15×7 vertices, grown by the authored jitter so a
