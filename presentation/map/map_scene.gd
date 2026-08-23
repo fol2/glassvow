@@ -30,8 +30,15 @@ const SKY: Color = Color(0.018, 0.022, 0.045)
 const KIT_SCALE: Array[float] = [3.0, 3.0, 3.4, 6.2, 2.8, 2.2, 4.6, 3.2]
 const TERMINUS_SCALE: float = 3.6
 ## Metres between paving slabs along a road segment.
-const ROAD_STEP: float = 1.15
-const ROAD_SCALE: float = 1.75
+## Bigger and denser than they were: with the 2D line gone the paving is the
+## only thing drawing the graph, and it has to read as a road from a standing
+## pose rather than as a scuff in the ground.
+const ROAD_STEP: float = 0.95
+const ROAD_SCALE: float = 2.15
+
+## What an edge says about the pilgrimage. Indexed into MapMaterials.roads
+## and MapMaterials.ROAD_KEY, so the three stay in step.
+enum RoadState { COLD, OPEN, WALKED }
 ## Metres of ground a piece of scenery hides per metre of its own height, at
 ## the camera's tilt: 1 / tan(40°).
 const HIDE_PER_HEIGHT: float = 1.19
@@ -52,6 +59,9 @@ var _road_meshes: Array[Mesh] = []
 ## Flat list of segment endpoints (a, b, a, b, ...) in world XZ, handed down by
 ## the screen that owns the graph. MapScene stays instantiable without one.
 var _road_segments: PackedVector3Array = PackedVector3Array()
+## One RoadState per SEGMENT, so `_road_states.size()` is half the endpoint
+## count. `lay_road` refuses a pair that does not line up.
+var _road_states: PackedInt32Array = PackedInt32Array()
 var _act: int = -1
 var _dragging: bool = false
 var _lock_input: bool = false
@@ -478,8 +488,16 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 
 ## The graph, as road. Segments are world-space endpoint pairs; the screen that
 ## owns the WorldMap supplies them, so MapScene never learns the graph type.
-func lay_road(segments: PackedVector3Array) -> void:
+func lay_road(segments: PackedVector3Array, states: PackedInt32Array) -> void:
+	# The screen builds these in two passes over the same graph. If they ever
+	# fall out of step the road would colour edges at random, which is the kind
+	# of wrong that looks like a design choice.
+	if states.size() * 2 != segments.size():
+		push_error("map: %d road segments against %d states"
+				% [segments.size() / 2, states.size()])
+		return
 	_road_segments = segments
+	_road_states = states
 	_build_road()
 	_repaint()
 
@@ -487,41 +505,49 @@ func lay_road(segments: PackedVector3Array) -> void:
 func _build_road() -> void:
 	if _asset_geometry == null or _road_meshes.size() < 2:
 		return
-	# This runs twice on a normal boot: once from `_bind_asset_geometry` while
-	# `_road_segments` is still empty, and again when the screen hands the graph
-	# down through `lay_road`. Without this the second pass ADDS a second pair
-	# and Godot renames it, leaving the empty pair holding the AssetRoad names —
-	# so the road would draw correctly while anything looking the nodes up by
-	# name found nothing on them.
-	for m: int in range(2):
-		var stale: Node = _asset_geometry.find_child("AssetRoad%d" % m, false, false)
-		if stale != null:
-			_asset_geometry.remove_child(stale)
-			stale.free()
-	var laid: Array[PackedVector3Array] = [PackedVector3Array(), PackedVector3Array()]
-	var yaws: Array[PackedFloat32Array] = [PackedFloat32Array(), PackedFloat32Array()]
+	# Runs twice on a normal boot: once from `_bind_asset_geometry` while there is
+	# no graph yet, and again when the screen hands one down. Without clearing,
+	# the second pass ADDS a second set and Godot renames it, leaving the empty
+	# one holding the names anything looking them up would find.
+	for state: int in range(3):
+		for m: int in range(2):
+			var stale: Node = _asset_geometry.find_child(
+					"AssetRoad%d_%d" % [state, m], false, false)
+			if stale != null:
+				_asset_geometry.remove_child(stale)
+				stale.free()
+	var laid: Array[PackedVector3Array] = []
+	var yaws: Array[PackedFloat32Array] = []
+	for _i: int in range(6):
+		laid.append(PackedVector3Array())
+		yaws.append(PackedFloat32Array())
 	var pairs: int = _road_segments.size() / 2
 	var slab: int = 0
 	for i: int in range(pairs):
 		var a: Vector3 = _road_segments[i * 2]
 		var b: Vector3 = _road_segments[i * 2 + 1]
+		var state: int = _road_states[i] if i < _road_states.size() else 0
 		var span: float = a.distance_to(b)
 		var steps: int = maxi(1, int(span / ROAD_STEP))
 		var yaw: float = atan2(b.x - a.x, b.z - a.z)
 		for k: int in range(steps + 1):
 			var t: float = float(k) / float(steps)
-			laid[slab & 1].append(a.lerp(b, t))
-			yaws[slab & 1].append(yaw)
+			var bucket: int = state * 2 + (slab & 1)
+			laid[bucket].append(a.lerp(b, t))
+			yaws[bucket].append(yaw)
 			slab += 1
-	for m: int in range(2):
-		var node: MultiMeshInstance3D = _road_multimesh(
-				_road_meshes[m], laid[m], yaws[m], m)
-		node.name = "AssetRoad%d" % m
-		_asset_geometry.add_child(node)
+	for state: int in range(3):
+		for m: int in range(2):
+			var bucket: int = state * 2 + m
+			var node: MultiMeshInstance3D = _road_multimesh(
+					_road_meshes[m], laid[bucket], yaws[bucket], bucket, state)
+			node.name = "AssetRoad%d_%d" % [state, m]
+			_asset_geometry.add_child(node)
 
 
 func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
-		yaws: PackedFloat32Array, seed_index: int) -> MultiMeshInstance3D:
+		yaws: PackedFloat32Array, seed_index: int,
+		state: int) -> MultiMeshInstance3D:
 	var multimesh: MultiMesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_custom_data = true
@@ -529,7 +555,9 @@ func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
 	multimesh.instance_count = positions.size()
 	for i: int in range(positions.size()):
 		var index: int = seed_index * 131 + i
-		var wobble: float = 0.08 * sin(float(index) * 1.71)
+		# Small: enough that the paving is not a stamped ribbon, little enough
+		# that consecutive slabs still read as one road rather than as rubble.
+		var wobble: float = 0.045 * sin(float(index) * 1.71)
 		var scale: Vector3 = Vector3(
 				ROAD_SCALE * (1.0 + wobble),
 				ROAD_SCALE * 0.6,
@@ -542,7 +570,7 @@ func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
 				fposmod(float(index) * 0.619, 1.0), 1.0))
 	var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
 	instances.multimesh = multimesh
-	instances.material_override = _materials.road
+	instances.material_override = _materials.roads[state]
 	instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return instances
 

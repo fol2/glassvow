@@ -34,21 +34,20 @@ static func _five_shapes(fails: Array[String]) -> void:
 		_check(fails, scene != null
 				and scene.mouse_filter == Control.MOUSE_FILTER_STOP,
 				"%s: MapScene owns world-surface input" % shape_name)
-		_check(fails, screen._path_band != null
-				and screen._chip_band != null
-				and screen._path_band.get_index() > 0,
-				"%s: path overlay + chips stay in front" % shape_name)
+		_check(fails, screen._chip_band != null
+				and screen._chip_band.get_index() > 0,
+				"%s: the chip overlay stays in front of the world" % shape_name)
 		var extra: int = 0
 		for child: Node in screen.get_children():
-			if child is MapBand and not (
-					child is MapBand.PathBand
-					or child is MapBand.ChipBand):
+			if child is MapBand and not child is MapBand.ChipBand:
 				extra += 1
-		# VeilBand was retired in #156 round 2; the falling ash read as snow.
-		# Two bands is now the whole overlay set, and this is the check that
-		# fails if a third ever creeps back in unannounced.
+		# Both other bands were retired in #156 round 2: VeilBand because its
+		# falling ash read as snow, PathBand because it drew the graph a second
+		# time in 2D over a 3D road that already draws it. Chips are the whole
+		# overlay set now, and this is the check that fails if a second creeps
+		# back in unannounced.
 		_check(fails, extra == 0,
-				"%s: only path/chip MapBand children remain" % shape_name)
+				"%s: chips are the only MapBand child" % shape_name)
 		_check(fails, not screen.choose(2),
 				"%s: screen refuses an unreachable waystone" % shape_name)
 		_check(fails, screen.choose(0),

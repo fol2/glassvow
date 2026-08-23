@@ -57,7 +57,6 @@ var _region: MapRegions = null
 
 var _drift: PointerDrift = PointerDrift.new()
 var _map_scene: MapScene = null
-var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
 ## Projection is shared by waystone layout, graph paint and marker queries.
 ## The old path rebuilt all 65 seats for every edge endpoint, turning one
@@ -83,7 +82,6 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	theme = GlassStyle.theme()
 	# World → path overlay → waystones → veil → chrome: child order is paint order.
 	_build_world_surface()
-	_build_bands()
 	_build_waystones()
 	# Between the stones and the weather: the chips label the play plane, so they
 	# sit on it, and the veil still drifts in front of them.
@@ -111,7 +109,7 @@ func _build_world_surface() -> void:
 	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
 	MapPinProjection.resolve(map.nodes)
-	_map_scene.lay_road(_road_segments())
+	_map_scene.lay_road(_road_segments(), _road_states())
 
 
 ## Every graph edge as a world-space endpoint pair, for MapScene to pave. The
@@ -134,10 +132,37 @@ func _road_segments() -> PackedVector3Array:
 	return out
 
 
-func _build_bands() -> void:
-	_path_band = MapBand.PathBand.new()
-	_path_band.host = self
-	add_child(_path_band)
+## What each edge says about the pilgrimage, in the SAME order `_road_segments`
+## walks the graph. The two are separate passes because a packed array cannot be
+## filled through an out-parameter -- they are value types -- and `lay_road`
+## refuses the pair if their sizes ever disagree.
+##
+## This used to be the 2D PathBand's job. The band drew the same edges a second
+## time over the top of the whole 3D image, so a line ran straight through a
+## monolith that the road itself correctly disappeared behind. One edge, one
+## drawing, and the drawing is the one that knows where the world is.
+func _road_states() -> PackedInt32Array:
+	var live: Array[int] = map.reachable()
+	var here: int = map.at
+	var by_id: Dictionary = {}
+	for node: MapNode in map.nodes:
+		by_id[node.id] = node
+	var out: PackedInt32Array = PackedInt32Array()
+	for node: MapNode in map.nodes:
+		var from_i: int = map.nodes.find(node)
+		for next_id: String in node.next:
+			var next_v: Variant = by_id.get(next_id)
+			if typeof(next_v) != TYPE_OBJECT:
+				continue
+			var next_node: MapNode = next_v
+			var to_i: int = map.nodes.find(next_node)
+			if map.is_cleared(from_i) and map.is_cleared(to_i):
+				out.append(MapScene.RoadState.WALKED)
+			elif from_i == here and live.has(to_i):
+				out.append(MapScene.RoadState.OPEN)
+			else:
+				out.append(MapScene.RoadState.COLD)
+	return out
 
 
 func _build_chrome() -> void:
@@ -399,7 +424,7 @@ func _set_act_theme(stage_act: int) -> void:
 		# set_act rebinds the act's geometry, so the footprints the nodes step
 		# around have just changed underneath them.
 		MapPinProjection.resolve(map.nodes)
-		_map_scene.lay_road(_road_segments())
+		_map_scene.lay_road(_road_segments(), _road_states())
 
 
 ## 3D lattice seats in this Control's px. Live waystones sit here.
@@ -560,10 +585,6 @@ func _set_travel_t(v: float) -> void:
 	if _map_scene != null:
 		_map_scene.get_rig().set_camera_xz(
 			_travel_from_xz.lerp(_travel_to_xz, v))
-	var path_d: Vector2 = Vector2(
-		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
-	if _path_band != null:
-		_path_band.set_view(_rig_cam_x(), path_d, true)
 
 
 func _on_arrived(i: int) -> void:
@@ -576,8 +597,9 @@ func _on_arrived(i: int) -> void:
 	node_chosen.emit(i)
 
 
-## The one control point for a trail edge, shared by the drawn dashes
-## (`MapBand.PathBand._draw_graph`) and by the marker gliding along them.
+## The one control point for a trail edge, used by the marker gliding along it.
+## The drawn edges left for the 3D road in #156 round 2; this stayed, because
+## the marker still has to travel the same curve the player was shown.
 ##
 ## Rising bows up, falling bows down so crossing paths pull apart rather than
 ## stacking, SCALED by how far the edge actually climbs — a same-lane run is then
@@ -588,7 +610,8 @@ func _on_arrived(i: int) -> void:
 ## It lives here, in one place, because the same expression written twice is how
 ## it went wrong: the marker's copy kept the old `signf` through the first draft
 ## of that fix while its comment claimed it was "the same control the PathBand
-## edges use" (PR #78 PM R1). One function cannot disagree with itself.
+## edges use" (PR #78 PM R1). One function cannot disagree with itself, and
+## that lesson outlived the band it was learned on.
 func edge_control(from: Vector2, to: Vector2) -> Vector2:
 	var lane_rise: float = clampf((to.y - from.y) / maxf(_lane_gap(), 1.0), -1.0, 1.0)
 	return (from + to) * 0.5 + Vector2(0.0, lane_rise * 10.0)
@@ -634,8 +657,6 @@ func _push_bands(force: bool = false) -> void:
 	var path_d: Vector2 = Vector2(
 		_drift.n.x * PATH_DRIFT_AMP.x, _drift.n.y * PATH_DRIFT_AMP.y)
 	var cam: float = _rig_cam_x()
-	if _path_band != null:
-		_path_band.set_view(cam, path_d, force)
 	if _chip_band != null:
 		_chip_band.set_view(cam, path_d, force)
 

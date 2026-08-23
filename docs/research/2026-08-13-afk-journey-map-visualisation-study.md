@@ -583,7 +583,9 @@ precisely what the anchor does (per-device tiering from a proprietary device
 database, 30 fps default).
 
 **Engine work.** Everything in B, plus a new `MapBand` subclass inserted in order
-at `presentation/map/world_map_screen.gd` (`_build_bands`), per-band strip
+at `presentation/map/world_map_screen.gd` (`_init`) — the study cited
+`_build_bands`, which retired with PathBand in #156 round 2 once the 3D road
+took over drawing the graph — per-band strip
 variants keyed on cleared state, a device-tier switch, and — the real line item —
 an art pipeline producing and holding style across ~30 large paintings.
 
