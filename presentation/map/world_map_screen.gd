@@ -131,6 +131,15 @@ func _road_segments() -> PackedVector3Array:
 			var next_node: MapNode = next_v
 			out.append(from)
 			out.append(MapPinProjection.world_anchor(next_node))
+	# The Vigil is where every run starts, so the road has to leave it. One arm
+	# per entrance waystone, which is what makes the fan read as a choice of
+	# first step rather than as one road that happens to begin somewhere.
+	var gate: Vector3 = Vector3(MapScene.THRESHOLD_XZ.x, 0.0, MapScene.THRESHOLD_XZ.y)
+	for node: MapNode in map.nodes:
+		if node.row != 0:
+			continue
+		out.append(gate)
+		out.append(MapPinProjection.world_anchor(node))
 	return out
 
 

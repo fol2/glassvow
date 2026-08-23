@@ -29,6 +29,14 @@ const SKY: Color = Color(0.018, 0.022, 0.045)
 ## charred-stump, fallen-bough-arch, ash-cairn-mass.
 const KIT_SCALE: Array[float] = [3.0, 3.0, 3.4, 6.2, 2.8, 2.2, 4.6, 3.2]
 const TERMINUS_SCALE: float = 3.6
+## Where the Vigil stands: four metres short of the entrance row, mirroring the
+## terminus four metres past the boss. The screen reads this too, to run the
+## road out from it to the first waystones.
+const THRESHOLD_XZ: Vector2 = Vector2(-40.0, 0.0)
+## The threshold is authored at 7.2 m wide and 5.8 m tall, so unlike the
+## unit-scale kits it barely needs growing: at 1.9 it filled a third of the
+## opening frame and read as scenery the camera had clipped into.
+const THRESHOLD_SCALE: float = 1.05
 ## Metres between paving slabs along a road segment.
 ## Denser and wider than the first pass. The paving is the map's main statement
 ## of where the graph runs; the 2D dots over it are a route marker, not a road.
@@ -470,6 +478,25 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	terminus.material_override = _materials.prop
 	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_asset_geometry.add_child(terminus)
+	# The Vigil, at the west end of the road: the hearth-side face of the same
+	# threshold whose east face is the sealed door (docs/story/01-world.md).
+	# Only Act I has one, so a null here seats nothing rather than failing the
+	# bind -- the other three acts are not missing an asset, they never had one.
+	var raw_threshold: Variant = assets.get("threshold", null)
+	if raw_threshold is Resource:
+		var gate_res: Resource = raw_threshold
+		var gate_mesh: Mesh = _mesh_from(gate_res)
+		if gate_mesh != null:
+			var gate: MeshInstance3D = MeshInstance3D.new()
+			gate.name = "AssetThreshold"
+			gate.mesh = gate_mesh
+			# Just short of the entrance, which is lattice row 0 = world x -36,
+			# mirroring the terminus four metres past the boss at the far end.
+			gate.position = Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y)
+			gate.scale = Vector3.ONE * THRESHOLD_SCALE
+			gate.material_override = _materials.prop
+			gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			_asset_geometry.add_child(gate)
 	# Seat the road pair now, empty, so anything resolving them by name finds
 	# them before the screen has a graph to hand down. `lay_road` rebuilds
 	# them in place once it does.

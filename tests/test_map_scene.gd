@@ -230,8 +230,11 @@ static func _asset_binding(fails: Array[String]) -> void:
 	var first_paths: PackedStringArray = materials.active_asset_paths()
 	var first_resources: Array[Resource] = materials.active_asset_resources()
 	var first_ground: Variant = materials.ground.get_shader_parameter("surface_tex")
-	_check(fails, first_paths.size() == 12 and first_resources.size() == 12,
-			"active act loads exactly 2 tiles + grade + 8 kits + terminus")
+	# 13 for Act I, 12 for the rest: only the first act has a threshold, because
+	# the Vigil stands at the start of the road and nowhere else. Asserted as a
+	# count rather than a set so a silently DROPPED asset still fails here.
+	_check(fails, first_paths.size() == 13 and first_resources.size() == 13,
+			"act I loads 2 tiles + grade + 8 kits + terminus + threshold")
 	var raw_first_kits: Variant = first.get("kits", [])
 	var first_kit_count: int = 0
 	if raw_first_kits is Array:
@@ -267,7 +270,7 @@ static func _asset_binding(fails: Array[String]) -> void:
 	var scene_loader: FakeAssetLoader = FakeAssetLoader.new()
 	var scene: MapScene = MapScene.new({}, Callable(scene_loader, "load_resource"))
 	var first_root: Node = scene.find_child("MapAssetGeometry", true, false)
-	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 12,
+	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 13,
 			"complete active set replaces placeholders through MapScene binding")
 	# Kits 0 and 1 are shared-road-slab-a/b and are laid along the graph as the
 	# ROAD (#156 direction B), not scattered as scenery, so they have no
@@ -292,6 +295,8 @@ static func _asset_binding(fails: Array[String]) -> void:
 				"road slab %d is laid along the graph" % i)
 	_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
 			"active terminus is attached")
+	_check(fails, scene.find_child("AssetThreshold", true, false) is MeshInstance3D,
+			"the Vigil threshold is seated at the west end")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
 		var placeholder: Node = scene.find_child(node_name, true, false)
 		_check(fails, placeholder is GeometryInstance3D

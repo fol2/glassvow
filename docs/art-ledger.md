@@ -838,6 +838,33 @@ POSITION+NORMAL only: 4,446 triangles, 107,504 bytes. No vendor, textures or
 paid credits. sha256
 `81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc`. fol2 accepted the final asset on 2026-08-21; evidence is in `docs/reviews/294/act1-terminus/`.
 
+### `map/geometry/act1/threshold-rose-window.glb` — the Vigil, west bookend (#156)
+
+Locally authored, no concept image and no prompt: the subject was already
+settled in prose and in shipped art. `docs/story/01-world.md` puts 【守夜之爐
+Vigil】at the west end of the road and fixes 「彩窗與封門是同一道 threshold 的
+兩面」 — the rose window and the sealed door are two faces of one object. The
+same file fixes the pane count: 「火在東面撞碎,六片歸位嵌回西面六格」, the six
+shards return into the west face's six compartments. So six panes is story, not
+styling, and `assets/art/scenes/opening-hearth.png` — the still shown at the
+start of every run — draws exactly that wheel: six lobes around a central eye.
+
+A six-pane rose wheel with a moulded rim over a stepped plinth, flanked by two
+pointed pylons that echo the Act IV threshold's. Parametric surfaces combined
+with a manifold boolean union so the payload is one watertight connected
+component. Y-up, grounded at Y=0, one mesh and one triangulated surface with
+POSITION+NORMAL only: 1,330 triangles, 32288 bytes. Welded and indexed
+deliberately — the gate's connected-component check returns 1 for any unindexed
+mesh, so splitting normals per face would have bought a crisper facet by making
+that check meaningless. No vendor, textures or paid credits. sha256
+`8f63a07394aca92e8c9a6b2b8b10af532d9aa99eca6d6e45c248e521d138c56a`. Eight-yaw evidence is in
+`docs/reviews/156/round2/threshold-yaws.png`.
+
+**Open, not fixed here.** `map-concepts/act4-terminus-rose-threshold.png` draws
+the same threshold's east face with FIVE petals. Both faces cannot differ if
+they are one object, and the west count is the one the story pins. Act IV is
+left as it shipped; reconciling the two is a call for #156's owner.
+
 ### `map-concepts/act2-terminus-flooded-threshold.png` — Act II hero concept (#294)
 
 Project-authored concept generated from the Glassvow brief: a monumental drowned
