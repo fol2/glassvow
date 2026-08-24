@@ -26,8 +26,12 @@ Arms 3–4 remain in the immutable raw rows as unused diagnostics.
 
 Driver: `python3 -B tools/balance_f0.py --jobs 8 --boot 1000 --out DIR`.
 Raw shards and `observations.jsonl` stay in the output directory (replayable,
-not committed). Tidy product: [`data/457/summary.json`](data/457/summary.json).
-Candidate identities: [`data/457/doe-manifest.json`](data/457/doe-manifest.json).
+not committed). Each bound row carries `deck` and `fights` as the simulator’s
+cell ingredients (the frozen-axis inputs). Tidy product:
+[`data/457/summary.json`](data/457/summary.json). Candidate identities:
+[`data/457/doe-manifest.json`](data/457/doe-manifest.json). The packet records
+engine `4.7.2.stable.official.ed1daf0bf`, host fingerprint `27a837c0…`, and
+simulator commit `2e89548`.
 
 ## Completeness
 
