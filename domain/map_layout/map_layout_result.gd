@@ -131,8 +131,6 @@ static func _validate_payload(raw: Dictionary, errors: Array[String]) -> void:
 
 static func _validate_edges(value: Variant, anchors: Dictionary, errors: Array[String]) -> void:
 	var edges: Dictionary = _dict(value, "edges", errors)
-	if edges.is_empty():
-		errors.append("result.edges must not be empty")
 	for id: String in _ids(edges, "edges", errors):
 		if typeof(edges[id]) != TYPE_DICTIONARY:
 			errors.append("result.edges.%s must be a Dictionary" % id)
