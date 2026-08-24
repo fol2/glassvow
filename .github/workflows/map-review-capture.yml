@@ -45,12 +45,51 @@ jobs:
       - name: Import assets
         run: tools/check_imports.sh
 
-      - name: Capture and repeat the fixed build-4 matrix
+      - name: Record capture environment
+        shell: bash
         run: |
+          mkdir -p artifacts/build4-map-corpus-diagnostics
+          {
+            printf 'git_head=%s\n' "$(git rev-parse HEAD)"
+            printf 'godot_bin=%s\n' "$(command -v godot || true)"
+            printf 'godot_version=%s\n' "$(godot --version 2>/dev/null | head -n 1 | tr -d '\r' || true)"
+            printf 'display=%s\n' "${DISPLAY:-}"
+            printf 'wayland_display=%s\n' "${WAYLAND_DISPLAY:-}"
+            printf 'xdg_session_type=%s\n' "${XDG_SESSION_TYPE:-}"
+            printf 'rendering_method=gl_compatibility\n'
+            printf 'uname=%s\n' "$(uname -a)"
+            printf 'python=%s\n' "$(python3 --version 2>&1 || true)"
+            if command -v glxinfo >/dev/null 2>&1; then
+              echo '--- glxinfo -B ---'
+              glxinfo -B || true
+            fi
+          } > artifacts/build4-map-corpus-diagnostics/environment.txt
+
+      - name: Capture and repeat the fixed build-4 matrix
+        shell: bash
+        run: |
+          mkdir -p artifacts/build4-map-corpus-diagnostics
+          CAPTURE_HEAD="$(git rev-parse HEAD)"
+          printf 'capture_head=%s\n' "$CAPTURE_HEAD" >> artifacts/build4-map-corpus-diagnostics/environment.txt
+          set +e
+          set -o pipefail
           tools/capture_build4_map_corpus.sh \
             --verify-repeat \
-            --capture-head '${{ steps.head.outputs.sha }}' \
-            --output artifacts/build4-map-corpus
+            --capture-head "$CAPTURE_HEAD" \
+            --output artifacts/build4-map-corpus \
+            2>&1 | tee artifacts/build4-map-corpus-diagnostics/capture.log
+          status=${PIPESTATUS[0]}
+          printf 'capture_exit_code=%s\n' "$status" >> artifacts/build4-map-corpus-diagnostics/environment.txt
+          exit "$status"
+
+      - name: Upload capture diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build4-map-corpus-diagnostics-${{ steps.head.outputs.sha }}
+          path: artifacts/build4-map-corpus-diagnostics
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Upload raw captures, compact packet, and repeatability report
         if: always()
@@ -58,5 +97,5 @@ jobs:
         with:
           name: build4-map-defect-corpus-${{ steps.head.outputs.sha }}
           path: artifacts/build4-map-corpus
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
