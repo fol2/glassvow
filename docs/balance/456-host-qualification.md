@@ -66,7 +66,7 @@ default policy, shipping mix, H39 content, Godot **4.7.2.stable**.
 | Host | `godot --version` | Seed-1000 digest | 256-row hash | Stalls/errors | Verdict |
 |---|---|---|---|---|---|
 | **M4 Mac mini 16GB** | `4.7.2.stable.official.ed1daf0bf` | `b02bca98…` **PIN_MATCH** | `27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8` | 0 / 0 | **QUALIFIED** (canonical) |
-| **M1 Max 64GB** | — | — | — | — | **PENDING** packet |
+| **M1 Max 64GB** | `4.7.2.stable.official.ed1daf0bf` | `b02bca98…` **PIN_MATCH** | `27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8` | 0 / 0 | **QUALIFIED** (primary sim worker) |
 | **Linux/x86 cloud VM** | — | — | — | — | **NOT QUALIFIED** |
 
 A fingerprint packet is **QUALIFIED** only when it matches
@@ -85,8 +85,20 @@ M4 Mac mini 16GB, Apple M4, arm64, Darwin:
 | 6 | 5.483 | 46.690 | `27a837c0…` |
 | 8 | 4.296 | **59.591** | `27a837c0…` |
 
-Chosen on this host: **8 workers** (stable rows/s, zero drift). The M1 Max
-must still measure 6 / 8 / 10 itself; do not copy the mini's count.
+Chosen on this host: **8 workers** (stable rows/s, zero drift).
+
+M1 Max 64GB, Apple M1 Max, arm64, Darwin (`MacBookPro.lan`):
+
+| Workers | Wall (s) | Rows/s | Fingerprint |
+|---:|---:|---:|---|
+| 6 | 4.484 | 57.087 | `27a837c0…` |
+| 8 | 2.755 | **92.918** | `27a837c0…` |
+| 10 | 2.972 | 86.137 | `27a837c0…` |
+
+Chosen on this host: **8 workers** (stable rows/s, zero drift; 10 workers
+was slower). Homebrew `godot` on this laptop is still 4.7.1; qualification
+used `~/Applications/Godot-4.7.2.app` (`4.7.2.stable.official.ed1daf0bf`).
+F0/F1 shards must call that binary, not the 4.7.1 PATH default.
 
 ## Commands for the M1 Max (immutable packet only)
 

@@ -1,7 +1,67 @@
 {
+  "commit": "06978deeb3eec4a1bdb95a3b84943a6cb3a6d26b",
+  "contentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "contentSemanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+  "digest": {
+    "outcomeDigest": "b02bca98709f70ddc5e1b163bd580f54bece86ece2e6fd2b364784245ec8fecf",
+    "pin": "b02bca98709f70ddc5e1b163bd580f54bece86ece2e6fd2b364784245ec8fecf",
+    "status": "PIN_MATCH"
+  },
+  "driverSha256": "619bc0e70d5b74bc0538f4568a0a30dcb1162d6d9994b681f64bbf3ad04b33ee",
+  "fingerprint": {
+    "errors": 0,
+    "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+    "grid": "2 aspects \u00d7 vows 0/5 \u00d7 64 seeds",
+    "rows": 256,
+    "rowsPerSecond": 93.296,
+    "seeds": {
+      "first": 5600,
+      "last": 5663
+    },
+    "stalls": 0,
+    "wallSeconds": 2.744,
+    "workers": 8
+  },
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "host": {
+    "arch": "arm64",
+    "cpu": "Apple M1 Max",
+    "hostname": "MacBookPro.lan",
+    "os": "Darwin",
+    "workers": 8
+  },
   "issue": 456,
   "machine": "M1 Max 64GB",
-  "qualified": null,
-  "status": "PENDING",
-  "reason": "Awaiting an immutable fingerprint packet from the M1 Max running the commands in docs/balance/456-host-qualification.md. The M4 owner is the only writer of the conclusion."
+  "qualified": true,
+  "role": "primary-sim-worker",
+  "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+  "status": "QUALIFIED",
+  "throughput": {
+    "chosenWorkers": 8,
+    "drift": false,
+    "issue": 456,
+    "runs": [
+      {
+        "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "qualified": true,
+        "rowsPerSecond": 57.087,
+        "wallSeconds": 4.484,
+        "workers": 6
+      },
+      {
+        "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "qualified": true,
+        "rowsPerSecond": 92.918,
+        "wallSeconds": 2.755,
+        "workers": 8
+      },
+      {
+        "fingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "qualified": true,
+        "rowsPerSecond": 86.137,
+        "wallSeconds": 2.972,
+        "workers": 10
+      }
+    ]
+  }
 }
