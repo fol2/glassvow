@@ -233,8 +233,8 @@ static func _asset_binding(fails: Array[String]) -> void:
 	# 13 for Act I, 12 for the rest: only the first act has a threshold, because
 	# the Vigil stands at the start of the road and nowhere else. Asserted as a
 	# count rather than a set so a silently DROPPED asset still fails here.
-	_check(fails, first_paths.size() == 13 and first_resources.size() == 13,
-			"act I loads 2 tiles + grade + 8 kits + terminus + threshold")
+	_check(fails, first_paths.size() == 14 and first_resources.size() == 14,
+			"act I loads 2 tiles + grade + 8 kits + terminus + vigil + its trim")
 	var raw_first_kits: Variant = first.get("kits", [])
 	var first_kit_count: int = 0
 	if raw_first_kits is Array:
@@ -270,7 +270,7 @@ static func _asset_binding(fails: Array[String]) -> void:
 	var scene_loader: FakeAssetLoader = FakeAssetLoader.new()
 	var scene: MapScene = MapScene.new({}, Callable(scene_loader, "load_resource"))
 	var first_root: Node = scene.find_child("MapAssetGeometry", true, false)
-	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 13,
+	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 14,
 			"complete active set replaces placeholders through MapScene binding")
 	# Kits 0 and 1 are shared-road-slab-a/b and are laid along the graph as the
 	# ROAD (#156 direction B), not scattered as scenery, so they have no

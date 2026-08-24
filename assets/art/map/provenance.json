@@ -403,13 +403,14 @@
       "source": "local-parametric-manifold",
       "created_at": "2026-08-23T04:20:00+08:00",
       "license": "original Glassvow authorship (no vendor, no paid credits)",
-      "source_sha256": "a852c2adca33b37bbb88e1e4ba280bbf11ba0fe98bc33b76e24dca78753e32cb",
-      "final_sha256": "a852c2adca33b37bbb88e1e4ba280bbf11ba0fe98bc33b76e24dca78753e32cb",
+      "source_sha256": "4f26168651ade1d17abed187a82a527e7f80b165f38c3ce996ac7d3d734564dc",
+      "final_sha256": "4f26168651ade1d17abed187a82a527e7f80b165f38c3ce996ac7d3d734564dc",
       "edits": [
         "modelled the Vigil as it is seen FROM THE ROAD: a gabled hall end-on, blank east gable, a shallow pointed doorway cut as a recess rather than a hole, two flank buttresses, and a chimney with its smoke",
         "the rose window is deliberately absent. docs/story/01-world.md grades the window becoming a mirror as L3, the single reveal point, and the foreshadow ledger's rule 2 defers anything that discloses before its tier; the six panes ARE the shard count. It is also the wrong side of the wall -- 爐邊彩窗 faces in at the fire, and from the road you stand outside it",
         "manifold boolean union produced one watertight connected component, verified against the repo's own inspect_glb: one mesh, one surface, POSITION+NORMAL, no textures, 1724 triangles, 42220 bytes, grounded Y-up metres",
-        "welded and indexed on purpose: the gate's connected-component check returns 1 for any unindexed mesh, so splitting normals per face would have bought a crisper facet by making that check meaningless"
+        "welded and indexed on purpose: the gate's connected-component check returns 1 for any unindexed mesh, so splitting normals per face would have bought a crisper facet by making that check meaningless",
+        "carries TEXCOORD_0, the only map GLB that does: V is world height over the building's height and U runs around it, so a band on the sheet lands at that fraction of the building on every face including the pitched roof. Chosen over a real unwrap because seams split vertices and split vertices read to the gate's connected-component check as hidden internals"
       ],
       "reviewer": "fol2",
       "verdict": "accepted",
@@ -417,6 +418,24 @@
       "review_path": "docs/reviews/156/round2/vigil-yaws.png",
       "polycount_target": 8000,
       "triangles": 1724
+    },
+    {
+      "asset_id": "act1-vigil-trim",
+      "source": "local-deterministic",
+      "created_at": "2026-08-24T02:10:00+08:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "97b588fdb0b0d1cc4f145a12d1cc0bf51b54dde523440010d9bc35c46fd01de7",
+      "final_sha256": "97b588fdb0b0d1cc4f145a12d1cc0bf51b54dde523440010d9bc35c46fd01de7",
+      "edits": [
+        "generated as a vertical trim sheet, not a tile: U repeats around the building, V is its height, and the bands painted along V are the building's own — plinth, coursed ashlar, corbel under the eaves, slate, and smoke above the ridge",
+        "band fractions live in tools/vigil_bands.py and are read by BOTH the sheet and the mesh, and the mesh asserts its height against them, so a re-proportioned building cannot slide its bands off the features",
+        "Godot 4.7.2 import sidecar set to VRAM compressed mode 2, high quality, mipmaps on, matching the other map raster assets",
+        "contrast raised after a first render read as a flat grey box: bigger blocks, much deeper joints, and slate darkened from 0.32 to 0.10 so the roof beats the ramp, which otherwise gives every up-facing surface the bright band regardless of what the sheet says"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/round2/vigil-hall.png"
     }
   ]
 }

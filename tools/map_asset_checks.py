@@ -20,7 +20,7 @@ from typing import Any, NamedTuple
 ## Vigil at the start of the road and nowhere else (docs/story/01-world.md).
 ## Every other kind is a fixed bill per act; this one is a fixed bill of one
 ## for the whole map, which is why the per-act shape below accepts 0 or 1.
-KINDS = {"kit", "terminus", "threshold", "tile", "grade"}
+KINDS = {"kit", "terminus", "threshold", "tile", "grade", "trim"}
 CONTROL_FILES = {"map-assets.json", "provenance.json"}
 IMAGE_EXT, MESH_EXT = {".png"}, {".glb"}
 DELIGHT_SPREAD, SEAM_RATIO = 0.15, 3.0
@@ -28,7 +28,8 @@ GRADE_HF_MAX, HUE_MIN_SAT = 0.035, 0.08
 SILHOUETTE_NOISE, TRIANGLE_MIN = 0.04, 600
 YAW_DEGREES = tuple(range(0, 360, 45))
 REC709 = (0.2126, 0.7152, 0.0722)
-EXPECTED_COUNTS = {"kit": 23, "terminus": 4, "threshold": 1, "tile": 8, "grade": 4}
+EXPECTED_COUNTS = {"kit": 23, "terminus": 4, "threshold": 1, "tile": 8,
+                   "grade": 4, "trim": 1}
 REPO = Path(__file__).resolve().parent.parent
 RASTER_SCRIPT = "res://tools/raster_map_silhouette.gd"
 PROVENANCE_REQUIRED = {
@@ -139,6 +140,12 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
             if row.get("triangle_max") != 8000 or row.get("bytes_max") != 786432:
                 found.append(Finding("manifest", where,
                                      "threshold caps must be 8000 triangles / 768 KiB"))
+        elif kind == "trim":
+            if role != "trim" or clean.suffix != ".png" or act != 0:
+                found.append(Finding("manifest", where,
+                                     "trim requires trim role, PNG, act 0"))
+            if row.get("width") != 512 or row.get("height") != 512:
+                found.append(Finding("manifest", where, "trim sheet is exactly 512×512"))
         elif kind == "tile":
             if role not in {"ground", "prop"} or clean.suffix != ".png" or act not in range(4):
                 found.append(Finding("manifest", where, "tile requires ground/prop role, PNG, act 0..3"))
@@ -173,8 +180,10 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
         shape = {kind: sum(row.get("kind") == kind for row in active) for kind in KINDS}
         roles = {str(row.get("role")) for row in active if row.get("kind") == "tile"}
         threshold = shape.pop("threshold", 0)
+        trim = shape.pop("trim", 0)
         if shape != {"kit": 8, "terminus": 1, "tile": 2, "grade": 1} \
-                or roles != {"ground", "prop"} or threshold not in (0, 1):
+                or roles != {"ground", "prop"} or threshold not in (0, 1) \
+                or trim not in (0, 1):
             found.append(Finding("manifest", str(path), f"act {act} active payload shape is {shape}/{roles}"))
     return rows, found
 
@@ -308,6 +317,24 @@ def check_tile(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
     return found
 
 
+def check_trim(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
+    """A trim sheet is not a tile and must not be judged as one.
+
+    A tile is checked for a stored mean near 0.5, a flat de-light field and a
+    seam ratio, because it repeats in both axes under a triplanar projection.
+    This sheet repeats in U only, and its V axis is the building's height with
+    deliberately different bands painted along it -- plinth, wall, corbel,
+    slate, smoke. Every one of those tile checks would fail it for doing its job.
+    """
+    found = import_findings(path, rel)
+    mode, w, h, _ = pixels_of(path)
+    if mode not in {"RGB", "RGBA"}:
+        found.append(Finding("channels", rel, f"trim mode {mode}, expected RGB"))
+    if (w, h) != (int(row["width"]), int(row["height"])):
+        found.append(Finding("dimensions", rel, f"trim {w}×{h} is not declared"))
+    return found
+
+
 def check_grade(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
     found = import_findings(path, rel)
     mode, w, h, px = pixels_of(path)
@@ -370,7 +397,15 @@ def inspect_glb(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
     primitive = meshes[0]["primitives"][0]
     attributes = primitive.get("attributes") or {}
     mode = primitive.get("mode", 4)
-    banned = {"TEXCOORD_0", "TEXCOORD_1", "TANGENT", "JOINTS_0", "WEIGHTS_0"}
+    # Everything on this map is surfaced by projection, not by unwrap, which is
+    # what makes a bought GLB's UV layout irrelevant and keeps 23 separately
+    # generated kits from drifting apart in texture style (map_prop.gdshader).
+    # The Vigil is the one exception: it is authored here, not bought, its UVs
+    # are a deliberate vertical trim rather than an auto-unwrap, and it is the
+    # one asset meant to look unlike the scenery. Named, so nothing inherits it.
+    banned = {"TEXCOORD_1", "TANGENT", "JOINTS_0", "WEIGHTS_0"}
+    if row["kind"] != "threshold":
+        banned.add("TEXCOORD_0")
     if mode != 4 or "POSITION" not in attributes or "NORMAL" not in attributes:
         found.append(Finding("mesh", rel, "need triangulated POSITION+NORMAL"))
     if banned & set(attributes):
@@ -508,7 +543,9 @@ def payload_findings(folder: Path, rows: list[dict[str, Any]],
                 actual = hashlib.sha256(path.read_bytes()).hexdigest()
                 if actual != record.get("final_sha256"):
                     found.append(Finding("checksum", rel, f"{actual} != provenance final_sha256"))
-            if row["kind"] == "tile":
+            if row["kind"] == "trim":
+                found.extend(check_trim(path, rel, row))
+            elif row["kind"] == "tile":
                 found.extend(check_tile(path, rel, row))
             elif row["kind"] == "grade":
                 found.extend(check_grade(path, rel, row))
