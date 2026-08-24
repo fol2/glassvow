@@ -69,7 +69,13 @@ var _shape: StringName = StageShape.IDENTITY
 ## bare wide window silently resolves to `desktop-landscape` and reads a
 ## different layout table entirely (docs/battlefield-parity.md).
 var _forced_shape: StringName = &""
-## --act=N: which act's scenery the fight or map is dressed in. The domain does
+## --act=N: which act's scenery the fight or map is dressed in. **N IS 0-BASED**:
+## `--act=0` is Act I and `--act=1` is Act II, matching `map-assets.json`. Only
+## Act I has an authored kit set, so any higher N renders placeholder prisms and
+## no road -- indistinguishable from a broken renderer, which cost most of a
+## session to tell apart in #450. `_bind_asset_geometry` warns when it happens.
+## Whether the manifest should become 1-based instead is still open in #451.
+## The domain does
 ## not model acts yet, so a fight from `--fight=` / a `--map` run is act 0 and
 ## there was no way to see the other two outside the layout bench — while the
 ## book authors the benchmark's three and exposes the optional fourth seam.

@@ -81,6 +81,15 @@ var _scatter_salt: int = 0
 ## unchanged act, and a second run also starts in Act I, so without this the
 ## new run stands in the old run's wood.
 var _salt_dirty: bool = false
+## The dealt seats, and the salt they were dealt from. `_dealt_seats` is asked
+## five times per bind -- once by `_all_prop_positions` and once by each of the
+## three slice functions, twice over -- and re-running six relaxation passes over
+## 25 seats each time is waste. Cached rather than merely deterministic: while
+## the two agree today, nothing structural made them agree, and a grade painted
+## from one deal over geometry placed from another is a bug with no symptom
+## until someone looks at a contact shadow.
+var _seats_cache: PackedVector3Array = PackedVector3Array()
+var _seats_cache_salt: int = -1
 const TAP_SLOP: float = 12.0
 const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
@@ -839,10 +848,14 @@ func _band_seats(count: int, z_band: Vector2, height: float,
 ## family drawing on its own stream has no idea where the other two families
 ## went. This is the only point where all 25 exist at once.
 func _dealt_seats() -> PackedVector3Array:
+	if _seats_cache_salt == _scatter_salt:
+		return _seats_cache
 	var seats: PackedVector3Array = _band_seats(WEDGE_N, WEDGE_Z, 1.7, 1)
 	seats.append_array(_slab_seats())
 	seats.append_array(_band_seats(DAB_N, DAB_Z, 0.0, 3))
-	return _separate(seats)
+	_seats_cache = _separate(seats)
+	_seats_cache_salt = _scatter_salt
+	return _seats_cache
 
 
 ## Push crowded seats apart ALONG X ONLY.
@@ -862,6 +875,24 @@ func _separate(seats: PackedVector3Array) -> PackedVector3Array:
 			for b: int in range(a + 1, out.size()):
 				var dx: float = out[b].x - out[a].x
 				var dz: float = out[b].z - out[a].z
+				# Coincident seats are left alone: the slab family stacks two
+				# kits on one point deliberately.
+				#
+				# A reviewer flagged that testing by DISTANCE rather than by
+				# identity could also exempt two pieces from different families
+				# that happened to collide exactly -- the one case this pass
+				# exists to fix, excusing itself by being bad enough. Measured
+				# over 200 seeds: that fires ZERO times. Every skip is a slab
+				# stack, which is what the continuous draws in `_band_seats`
+				# predict, since two independent floats matching to a
+				# millimetre in BOTH axes is not something a uniform
+				# distribution does.
+				#
+				# It was tried the other way -- skip by index, `b == a + 1`
+				# inside the slab range -- and that is NOT equivalent: it welds
+				# each stack against its own halves permanently, and pairs
+				# closer than half their combined footprint went from 0.00 per
+				# seed to 0.95. Distance stays.
 				if absf(dx) < 0.001 and absf(dz) < 0.001:
 					continue
 				var gap: float = Vector2(dx, dz).length()
