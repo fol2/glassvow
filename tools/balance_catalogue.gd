@@ -92,6 +92,8 @@ static func stage_error(opts: Dictionary) -> String:
 	if typeof(spec_v) != TYPE_DICTIONARY:
 		return "unknown --stage %s" % stage
 	var spec: Dictionary = spec_v
+	if not str(spec.get("sealedUntil", "")).strip_edges().is_empty():
+		return "--stage %s is sealed until %s" % [stage, spec["sealedUntil"]]
 	var first: int = _seed_first(opts)
 	var last: int = first + _seed_count(opts) - 1
 	var exam_v: Variant = contract.get("exam", {})
@@ -149,6 +151,11 @@ static func stage_error(opts: Dictionary) -> String:
 		if hold_first < int(float(str(hold["first"]))) or hold_last > int(float(str(hold["last"]))):
 			return "--stage %s holdout %d..%d must sit inside %s..%s" % [stage, hold_first, hold_last,
 				hold["first"], hold["last"]]
+		if _overlaps_protected(contract, hold_first, hold_last):
+			return "--stage %s holdout overlaps the frozen exam or reserve" % stage
+	elif opts.has("holdoutSeed0"):
+		var hold_first: int = int(float(str(opts["holdoutSeed0"])))
+		var hold_last: int = hold_first + _holdout_count(opts) - 1
 		if _overlaps_protected(contract, hold_first, hold_last):
 			return "--stage %s holdout overlaps the frozen exam or reserve" % stage
 	return ""

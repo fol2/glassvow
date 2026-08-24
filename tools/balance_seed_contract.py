@@ -154,6 +154,8 @@ def check_invocation(contract: dict[str, Any], stage: str, seed_first: int, seed
     if stage not in stages:
         return f"unknown --stage {stage}"
     spec = stages[stage]
+    if spec.get("sealedUntil"):
+        return f"--stage {stage} is sealed until {spec['sealedUntil']}"
     seed_span = _span(seed_first, seed_last)
     exam_roots = {int(r) for r in contract["exam"]["roots"]}
     if stage == "exam":
@@ -226,10 +228,17 @@ def self_test() -> int:
     assert err, "exam must reject development policy root 454"
     err = check_invocation(contract, "f1-mini-cem", 6400, 6439, root=2454, holdout_first=5000, holdout_last=5039)
     assert err, "mini-CEM must reject acceptance holdout 5000"
+    err = check_invocation(contract, "f1-mini-cem-train", 6400, 6439, root=2454,
+                           holdout_first=5000, holdout_last=5199)
+    assert err, "mini-CEM train must reject CEM's default exam holdout 5000"
+    err = check_invocation(contract, "audit", 8000, 8000, root=454)
+    assert err, "audit must stay sealed until finalist"
     assert not check_invocation(contract, "f0-controls", 6000, 6031, root=454)
     assert not check_invocation(contract, "f0-mini-landscape", 6100, 6107, root=454)
     assert not check_invocation(contract, "fingerprint", 5600, 5663)
     assert not check_invocation(contract, "f1-mini-cem", 6400, 6439, root=2454, holdout_first=6800, holdout_last=6839)
+    assert not check_invocation(contract, "f1-mini-cem-train", 6400, 6439, root=2454,
+                                holdout_first=6800, holdout_last=6999)
     assert not check_invocation(contract, "exam", 5000, 5199, root=215)
     assert check_invocation(contract, "nope", 6000, 6000)
     live = REPO / LIVE_REL

@@ -34,6 +34,7 @@ VOWS = (0, 5)
 FINGERPRINT = (5600, 5663)
 REQUIRED_GODOT_PREFIX = "4.7.2.stable"
 H39_FILE_SHA = "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+CANONICAL_REL = "docs/balance/data/456/canonical-host.json"
 
 
 def run(cmd: list[str], cwd: Path = REPO) -> subprocess.CompletedProcess[str]:
@@ -318,6 +319,11 @@ def fail_closed_cli(godot: str, out_dir: Path) -> None:
                    "--stage=f0-controls", f"--out={out_dir / 'overlap.json'}"])
     if overlap.returncode == 0:
         raise RuntimeError("F0 overlapping acceptance seeds must fail closed")
+    sealed = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                  "--aspect=duskblade", "--runs=1", "--seed0=8000", "--vow=0",
+                  "--stage=audit", f"--out={out_dir / 'audit.json'}"])
+    if sealed.returncode == 0:
+        raise RuntimeError("audit stage must stay sealed until finalist")
 
 
 def self_test(godot: str) -> int:
@@ -325,9 +331,8 @@ def self_test(godot: str) -> int:
     assert len(fingerprint_shards(4)) == 4
     assert len(fingerprint_shards(8)) == 8
     assert sum(shard["runs"] for shard in fingerprint_shards(6)) == 256
-    if shutil.which(godot) is None and godot == "godot":
-        print("balance host qualify self-test OK (no godot)")
-        return 0
+    if shutil.which(godot) is None and not Path(godot).is_file():
+        raise ValueError(f"{godot} is required for host-qualify self-test")
     require_godot(godot)
     with tempfile.TemporaryDirectory(prefix="glassvow-456-") as temp:
         root = Path(temp)
@@ -348,7 +353,27 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--content", default="")
     parser.add_argument("--out", default="/tmp/glassvow-456-host")
     parser.add_argument("--compare", type=Path, help="canonical host packet to grade against")
+    parser.add_argument("--mint", action="store_true",
+                        help="write a packet without grading against the in-repo canonical")
     return parser.parse_args()
+
+
+def _canonical_packet() -> dict[str, Any] | None:
+    path = REPO / CANONICAL_REL
+    if not path.is_file():
+        return None
+    blob = json.loads(path.read_text(encoding="utf-8"))
+    return blob if isinstance(blob, dict) else None
+
+
+def grade_against_canonical(packet: dict[str, Any], canonical_path: Path) -> None:
+    canonical = json.loads(canonical_path.read_text(encoding="utf-8"))
+    faults = compare_packets(canonical, packet)
+    packet["canonical"] = str(canonical_path)
+    packet["qualified"] = bool(packet.get("qualified")) and not faults
+    packet["parityFaults"] = faults
+    if faults:
+        packet["reason"] = "; ".join(faults)
 
 
 def main() -> int:
@@ -358,9 +383,16 @@ def main() -> int:
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     job_list = [int(part) for part in str(args.jobs).split(",") if part]
+    compare_path = args.compare
+    if compare_path is None and not args.mint:
+        default_canonical = REPO / CANONICAL_REL
+        if default_canonical.is_file():
+            compare_path = default_canonical
     if args.bench:
         results = []
         hashes: set[str] = set()
+        canonical = None if args.mint else _canonical_packet()
+        packet: dict[str, Any] = {}
         for jobs in job_list:
             packet = build_packet(args.godot, out_dir / f"bench-{jobs}", jobs, args.content)
             write_packet(out_dir / f"bench-{jobs}.json", packet)
@@ -372,6 +404,8 @@ def main() -> int:
                 "qualified": packet["qualified"],
             })
             hashes.add(packet["fingerprint"]["fingerprintHash"])
+        if canonical and packet.get("contentFileSha256") == canonical.get("contentFileSha256"):
+            hashes.add(str(canonical.get("fingerprint", {}).get("fingerprintHash", "")))
         chosen = max(results, key=lambda row: (row["qualified"], row["rowsPerSecond"]))
         summary = {
             "issue": 456,
@@ -383,14 +417,11 @@ def main() -> int:
         print(json.dumps(summary, indent=2, sort_keys=True))
         return 0 if not summary["drift"] else 2
     packet = build_packet(args.godot, out_dir, job_list[0], args.content)
-    if args.compare:
-        canonical = json.loads(args.compare.read_text(encoding="utf-8"))
-        faults = compare_packets(canonical, packet)
-        packet["canonical"] = str(args.compare)
-        packet["qualified"] = packet["qualified"] and not faults
-        packet["parityFaults"] = faults
-        if faults:
-            packet["reason"] = "; ".join(faults)
+    if compare_path is not None:
+        grade_against_canonical(packet, compare_path)
+    elif not args.mint:
+        packet["qualified"] = False
+        packet["reason"] = f"run with --compare {CANONICAL_REL}"
     write_packet(out_dir / "host.json", packet)
     print(json.dumps({
         "qualified": packet["qualified"],

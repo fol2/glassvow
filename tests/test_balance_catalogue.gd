@@ -45,6 +45,17 @@ static func _check_stage(fails: Array[String]) -> void:
 		fails.append("balance catalogue: F0 controls 6000–6031 / root 454 must pass")
 	if not BalanceCatalogue.stage_error({"stage": "fingerprint", "seed0": 5600, "runs": 64}).is_empty():
 		fails.append("balance catalogue: fingerprint 5600–5663 must pass")
+	if BalanceCatalogue.stage_error({"stage": "f1-mini-cem-train", "trainSeed0": 6400,
+			"maxGen": 1, "seedCount": 40, "rootSeed": 2454, "holdoutSeed0": 5000,
+			"holdoutCount": 200}).is_empty():
+		fails.append("balance catalogue: CEM train must reject exam holdout 5000")
+	if not BalanceCatalogue.stage_error({"stage": "f1-mini-cem-train", "trainSeed0": 6400,
+			"maxGen": 1, "seedCount": 40, "rootSeed": 2454, "holdoutSeed0": 6800,
+			"holdoutCount": 200}).is_empty():
+		fails.append("balance catalogue: CEM train with holdout 6800–6999 must pass")
+	if BalanceCatalogue.stage_error({"stage": "audit", "seed0": 8000, "runs": 1,
+			"rootSeed": 454}).is_empty():
+		fails.append("balance catalogue: audit must stay sealed until finalist")
 	var missing: Dictionary = BalanceCatalogue.open({"content": "/no/such/glassvow-candidate.json"})
 	if not missing.has("error"):
 		fails.append("balance catalogue: missing candidate path must fail closed")

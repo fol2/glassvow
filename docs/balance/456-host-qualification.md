@@ -44,6 +44,12 @@ same rules inside `BalanceCatalogue.stage_error` when `--stage` is set.
 | F1 mini-CEM validate | 6800–6999 | **2454** |
 | Audit (sealed until finalist) | 8000–8199 | 454 / 1454 / 2454 |
 
+`balance_cem.gd` still defaults `--holdoutSeed0=5000` / `--holdoutCount=200`
+(the frozen exam acceptance band). `--stage=f1-mini-cem-train` must pass a
+development holdout (`--holdoutSeed0=6800`) or use combined
+`--stage=f1-mini-cem`; the default 5000–5199 fails closed. `--stage=audit`
+is sealed until a finalist exists.
+
 Frozen exam keeps roots **215 / 216**, layer-1 3000–3039, controls 4000–4199,
 CEM train 4200–4999, acceptance **5000–5199**. Reserve **5200–5399** is still
 untouched. Overlap with any of those from an F0/F1 `--stage` fails closed.
@@ -63,8 +69,11 @@ default policy, shipping mix, H39 content, Godot **4.7.2.stable**.
 | **M1 Max 64GB** | — | — | — | — | **PENDING** packet |
 | **Linux/x86 cloud VM** | — | — | — | — | **NOT QUALIFIED** |
 
-Do not pool rows from a host that fails exact parity with
-`docs/balance/data/456/canonical-host.json`.
+A fingerprint packet is **QUALIFIED** only when it matches
+`docs/balance/data/456/canonical-host.json` (godot, content SHAs, search-space
+SHA, driver SHA, seed-1000 digest, 256-row hash). `balance_host_qualify.py`
+grades against that file by default; `--mint` writes a packet without grading.
+Do not pool rows from a host that fails exact parity.
 
 ## 4. Throughput (zero fingerprint drift)
 
