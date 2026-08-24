@@ -62,7 +62,7 @@ func _initialize() -> void:
 		var run: RunState = RunState.new_run(content, s, "probe-%d" % s, {})
 		var map: WorldMap = WorldMap.benchmark(run)
 		scene.set_scatter_salt(s)
-		var pieces: Array[Vector4] = _pieces(scene.prop_positions(), boxes, s)
+		var pieces: Array[Vector4] = _pieces(scene, scene.prop_positions(), boxes)
 		MapPinProjection.set_scenery(pieces)
 		MapPinProjection.resolve(map.nodes)
 		counts.append(map.nodes.size())
@@ -102,12 +102,17 @@ func _initialize() -> void:
 	quit(0)
 
 
-## Repeated from MapScene._bind_asset_geometry -- see the header.
-func _pieces(seats: PackedVector3Array, boxes: Array[AABB],
-		salt: int) -> Array[Vector4]:
+## Radius and hide-depth are repeated from MapScene._bind_asset_geometry -- see
+## the header. WHICH KIT is not repeated: it asks `MapScene.seat_kit`, because
+## that is the half that already drifted once. The salted placement loop and the
+## unsalted footprint loop disagreed for five run seeds in six, and this probe
+## was the side that happened to be right, so it reported a rate for a map that
+## was not being shipped.
+func _pieces(scene: MapScene, seats: PackedVector3Array,
+		boxes: Array[AABB]) -> Array[Vector4]:
 	var out: Array[Vector4] = []
 	for j: int in range(seats.size()):
-		var kit: int = 2 + posmod(j + salt, KINDS)
+		var kit: int = scene.seat_kit(j, KINDS)
 		var box: AABB = boxes[kit]
 		var unit: float = MapScene.KIT_SCALE[kit]
 		out.append(Vector4(seats[j].x, seats[j].z,
