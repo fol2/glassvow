@@ -84,6 +84,52 @@ jobs:
                   raise RuntimeError(f"scene comment patch mismatch: {old_comment}")
               text = text.replace(old_comment, new_comment, 1)
           scene.write_text(text)
+
+          tests = Path("tests/test_map_asset_profiles.gd")
+          text = tests.read_text()
+          replacements = {
+              '''\t\t_check(fails,
+          \t\t\t\tby_id["shared-road-slab-a"].get("semantic_class")
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_ROAD
+          \t\t\t\tand by_id["act1-charred-stump"].get("semantic_class")
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_SCENERY,''':
+              '''\t\t_check(fails,
+          \t\t\t\tstr(by_id["shared-road-slab-a"].get("semantic_class", ""))
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_ROAD
+          \t\t\t\tand str(by_id["act1-charred-stump"].get("semantic_class", ""))
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_SCENERY,''',
+              '''\t\t_check(fails,
+          \t\t\t\tby_id["act1-vigil"].get("semantic_class")
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_HERO
+          \t\t\t\tand by_id["act1-terminus"].get("semantic_class")
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_HERO,''':
+              '''\t\t_check(fails,
+          \t\t\t\tstr(by_id["act1-vigil"].get("semantic_class", ""))
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_HERO
+          \t\t\t\tand str(by_id["act1-terminus"].get("semantic_class", ""))
+          \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_HERO,''',
+              '''\t_check(fails, canonical_clockwise.get("points") == canonical_counter.get("points"),
+          \t\t\t"clockwise, counter-clockwise and closing/consecutive duplicates canonicalise")''':
+              '''\t_check(fails, _packed_vector2_value(canonical_clockwise, "points")
+          \t\t\t== _packed_vector2_value(canonical_counter, "points"),
+          \t\t\t"clockwise, counter-clockwise and closing/consecutive duplicates canonicalise")''',
+              '''static func _bool_value(source: Dictionary, key: String, fallback: bool) -> bool:''':
+              '''static func _packed_vector2_value(
+          \t\tsource: Dictionary, key: String) -> PackedVector2Array:
+          \tvar raw: Variant = source.get(key, PackedVector2Array())
+          \tif raw is PackedVector2Array:
+          \t\tvar value: PackedVector2Array = raw
+          \t\treturn value
+          \treturn PackedVector2Array()
+
+
+          static func _bool_value(source: Dictionary, key: String, fallback: bool) -> bool:''',
+          }
+          for old_text, new_text in replacements.items():
+              if text.count(old_text) != 1:
+                  raise RuntimeError("test assertion typing patch did not match exactly once")
+              text = text.replace(old_text, new_text, 1)
+          tests.write_text(text)
           PY
           rm tools/_patch_465_data.py
           rm tools/_patch_465_scene.py
