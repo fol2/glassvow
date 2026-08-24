@@ -78,7 +78,7 @@ func ids_for_act(act: int, kind_filter: String = "") -> PackedStringArray:
 	var out: PackedStringArray = PackedStringArray()
 	for asset_id: String in _ordered_ids:
 		var row: Dictionary = _rows[asset_id]
-		var row_act: int = int(row.get("act", -99))
+		var row_act: int = _int_value(row, "act", -99)
 		var kind: String = _string_value(row, "kind")
 		if row_act in [-1, act] and (kind_filter.is_empty() or kind == kind_filter):
 			out.append(asset_id)
@@ -115,12 +115,12 @@ func profile(asset_id: String, mesh: Mesh) -> Dictionary:
 		var canonical: Dictionary = canonical_polygon(override.get("footprint", null))
 		override_reason = _string_value(override, "reason").strip_edges()
 		var raw_points: Variant = canonical.get("points", PackedVector2Array())
-		if not bool(canonical.get("ok", false)) or override_reason.is_empty() \
+		if not _bool_value(canonical, "ok", false) or override_reason.is_empty() \
 				or not (raw_points is PackedVector2Array):
 			return {}
 		footprint = raw_points
 		footprint_source = "manifest_override"
-	var source_identity: String = _source_identity(asset_id, local_aabb)
+	var source_identity: String = _source_identity(asset_id, mesh, local_aabb)
 	if source_identity.length() != 64:
 		return {}
 	return {
@@ -220,7 +220,8 @@ static func canonical_polygon(raw: Variant) -> Dictionary:
 			var pair: Array = item
 			if pair.size() != 2 or not _is_number(pair[0]) or not _is_number(pair[1]):
 				return _polygon_error("point must be two numbers")
-			var point: Vector2 = Vector2(float(pair[0]), float(pair[1]))
+			var point: Vector2 = Vector2(
+					_number_to_float(pair[0]), _number_to_float(pair[1]))
 			if not is_finite(point.x) or not is_finite(point.y):
 				return _polygon_error("point must be finite")
 			if points.is_empty() or not points[points.size() - 1].is_equal_approx(point):
@@ -297,12 +298,17 @@ func _digest_row(value: Dictionary) -> Array:
 	]
 
 
-func _source_identity(asset_id: String, local_aabb: AABB) -> String:
-	var path: String = resource_path(asset_id)
-	if FileAccess.file_exists(path):
-		var bytes: PackedByteArray = FileAccess.get_file_as_bytes(path)
-		return _hash(bytes)
-	return _hash([path, local_aabb.position, local_aabb.size])
+## Imported mesh arrays, not engine instance IDs or raw-source availability,
+## define identity. Runtime and headless tools therefore hash the same geometry.
+func _source_identity(asset_id: String, mesh: Mesh, local_aabb: AABB) -> String:
+	var canonical: Array = [
+		resource_path(asset_id), local_aabb.position, local_aabb.size,
+		mesh.get_surface_count(),
+	]
+	for surface: int in range(mesh.get_surface_count()):
+		canonical.append(mesh.surface_get_primitive_type(surface))
+		canonical.append(mesh.surface_get_arrays(surface))
+	return _hash(canonical)
 
 
 static func _hash(value: Variant) -> String:
@@ -357,12 +363,33 @@ static func _is_number(value: Variant) -> bool:
 	return value is int or value is float
 
 
+static func _number_to_float(value: Variant) -> float:
+	if value is float:
+		var decimal: float = value
+		return decimal
+	if value is int:
+		var integer: int = value
+		return float(integer)
+	return NAN
+
+
 static func _string_value(source: Dictionary, key: String) -> String:
 	var raw: Variant = source.get(key, "")
 	if raw is String:
 		var value: String = raw
 		return value
 	return ""
+
+
+static func _int_value(source: Dictionary, key: String, fallback: int) -> int:
+	var raw: Variant = source.get(key, fallback)
+	if raw is int:
+		var integer: int = raw
+		return integer
+	if raw is float:
+		var decimal: float = raw
+		return int(decimal)
+	return fallback
 
 
 static func _float_value(source: Dictionary, key: String, fallback: float) -> float:
@@ -373,6 +400,14 @@ static func _float_value(source: Dictionary, key: String, fallback: float) -> fl
 	if raw is int:
 		var integer: int = raw
 		return float(integer)
+	return fallback
+
+
+static func _bool_value(source: Dictionary, key: String, fallback: bool) -> bool:
+	var raw: Variant = source.get(key, fallback)
+	if raw is bool:
+		var value: bool = raw
+		return value
 	return fallback
 
 
