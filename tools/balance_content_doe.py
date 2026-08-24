@@ -96,7 +96,7 @@ def feature_levels(feature: dict[str, Any]) -> list[int | float]:
     return levels
 
 
-def baseline_value(content: Any, feature: dict[str, Any]) -> int | float:
+def matched_feature_value(content: Any, feature: dict[str, Any]) -> int | float:
     levels = feature_levels(feature)
     matches: list[int | float] = []
     for candidate in levels:
@@ -105,7 +105,7 @@ def baseline_value(content: Any, feature: dict[str, Any]) -> int | float:
             matches.append(candidate)
     if len(matches) != 1:
         raise ValueError(
-            f"feature {feature['id']} baseline must match exactly one level; matched {matches}"
+            f"feature {feature['id']} must match exactly one level; matched {matches}"
         )
     return matches[0]
 
@@ -119,7 +119,7 @@ def validate_space(content: Any, space: dict[str, Any]) -> dict[str, Any]:
     ids = [str(feature.get("id", "")) for feature in features]
     if any(not feature_id for feature_id in ids) or len(set(ids)) != len(ids):
         raise ValueError("feature ids must be non-empty and unique")
-    seen_paths: set[str] = set()
+    seen_paths: set[tuple[str | int, ...]] = set()
     baseline: dict[str, Any] = {}
     for feature in features:
         writes = feature.get("writes")
@@ -130,24 +130,29 @@ def validate_space(content: Any, space: dict[str, Any]) -> dict[str, Any]:
             if not isinstance(write, dict):
                 raise ValueError(f"feature {feature['id']} writes must be objects")
             path = write.get("path")
-            if not isinstance(path, str) or path in seen_paths:
+            if not isinstance(path, str):
                 raise ValueError(f"write path must be non-empty and unique: {path!r}")
-            path_tokens(path)
-            seen_paths.add(path)
+            tokens = tuple(path_tokens(path))
+            if tokens in seen_paths:
+                raise ValueError(f"write path must be non-empty and unique: {path!r}")
+            seen_paths.add(tokens)
             current = get_path(content, path)
             if isinstance(current, bool) or not isinstance(current, (int, float)):
                 raise ValueError(f"v1 only supports numeric leaves: {path}")
-            if write.get("type", "int") not in ("int", "float"):
+            write_type = write.get("type", "int")
+            if write_type not in ("int", "float"):
                 raise ValueError(f"write type must be 'int' or 'float': {path}")
+            if type(current) is not (int if write_type == "int" else float):
+                raise ValueError(f"write type does not match the numeric leaf: {path}")
             for field, default in (("scale", 1), ("offset", 0)):
                 parameter = write.get(field, default)
                 if isinstance(parameter, bool) or not isinstance(parameter, (int, float)) \
                         or not math.isfinite(float(parameter)):
                     raise ValueError(f"write {field} must be a finite non-boolean number: {path}")
-        vectors = [tuple(transformed(level, write) for write in writes) for level in levels]
-        if len(set(vectors)) != len(vectors):
-            raise ValueError(f"feature {feature['id']} has transformed-level collisions")
-        baseline[feature["id"]] = baseline_value(content, feature)
+            outputs = [transformed(level, write) for level in levels]
+            if len(set(outputs)) != len(outputs):
+                raise ValueError(f"write transforms distinct levels to collisions: {path}")
+        baseline[feature["id"]] = matched_feature_value(content, feature)
     return baseline
 
 
@@ -183,7 +188,6 @@ def design_metrics(rows: list[list[int]], features: list[dict[str, Any]]) -> dic
         "minimumHammingDistance": minimum,
         "closestPairCount": distances.count(minimum),
         "maximumAbsoluteColumnCorrelation": max(correlations, default=0.0),
-        "correlationEncoding": "ordinal-level-index",
         "uniqueVectors": len(set(map(tuple, rows))),
     }
 
@@ -259,15 +263,11 @@ def apply_values(base: Any, features: list[dict[str, Any]], values: dict[str, An
 def verify_requested_values(content: Any, features: list[dict[str, Any]],
                             requested: dict[str, Any]) -> None:
     for feature in features:
-        matches = [
-            level for level in feature_levels(feature)
-            if all(get_path(content, write["path"]) == transformed(level, write)
-                   for write in feature["writes"])
-        ]
-        if matches != [requested[feature["id"]]]:
+        matched = matched_feature_value(content, feature)
+        if matched != requested[feature["id"]]:
             raise ValueError(
                 f"candidate does not map back to requested {feature['id']}="
-                f"{requested[feature['id']]!r}; matched {matches}"
+                f"{requested[feature['id']]!r}; matched {matched!r}"
             )
 
 
@@ -278,19 +278,18 @@ def prepare_output(out: Path, force: bool) -> None:
         if not force:
             raise ValueError(f"output exists: {out}; pass --force to replace it")
         marker = out / MARKER
-        if not out.is_dir() or not marker.is_file() or marker.read_text() != f"{TOOL_ID}\n":
+        if (not out.is_dir() or marker.is_symlink() or not marker.is_file()
+                or marker.read_text(encoding="utf-8") != f"{TOOL_ID}\n"):
             raise ValueError(f"refusing --force for unmarked output directory: {out}")
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    (out / MARKER).write_text(f"{TOOL_ID}\n")
+    (out / MARKER).write_text(f"{TOOL_ID}\n", encoding="utf-8")
 
 
 def compile_bundle(base_path: Path, space_path: Path, count: int,
                    seed: int) -> tuple[dict[str, Any], list[tuple[dict[str, Any], bytes]]]:
-    base_bytes = base_path.read_bytes()
-    space_bytes = space_path.read_bytes()
-    base = read_json(base_path)
-    space = read_json(space_path)
+    base_bytes, space_bytes = base_path.read_bytes(), space_path.read_bytes()
+    base, space = read_json(base_path), read_json(space_path)
     baseline = validate_space(base, space)
     features: list[dict[str, Any]] = space["features"]
     combinations = math.prod(len(feature_levels(feature)) for feature in features)
@@ -326,14 +325,10 @@ def compile_bundle(base_path: Path, space_path: Path, count: int,
         "seed": seed,
         "count": count,
         "design": metrics,
-        "baseIdentity": {
-            "fileSha256": sha256_bytes(base_bytes),
-            "semanticSha256": sha256_bytes(canonical_json_bytes(base)),
-        },
-        "spaceIdentity": {
-            "fileSha256": sha256_bytes(space_bytes),
-            "semanticSha256": sha256_bytes(canonical_json_bytes(space)),
-        },
+        "baseIdentity": {"fileSha256": sha256_bytes(base_bytes),
+                         "semanticSha256": sha256_bytes(canonical_json_bytes(base))},
+        "spaceIdentity": {"fileSha256": sha256_bytes(space_bytes),
+                          "semanticSha256": sha256_bytes(canonical_json_bytes(space))},
         "candidates": [candidate for candidate, _content_bytes in candidates],
     }
     return manifest, candidates
@@ -348,10 +343,10 @@ def generate_bundle(base_path: Path, space_path: Path, out: Path, count: int,
         candidate_dir.mkdir()
         (candidate_dir / "full-content.json").write_bytes(content_bytes)
         (candidate_dir / "candidate.json").write_text(
-            json.dumps(candidate, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+            json.dumps(candidate, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
     (out / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     return manifest
 
@@ -396,8 +391,7 @@ def parse_args() -> argparse.Namespace:
 def self_test() -> int:
     with tempfile.TemporaryDirectory(prefix="glassvow-content-doe-") as temp:
         root = Path(temp)
-        base_path = root / "base.json"
-        space_path = root / "space.json"
+        base_path, space_path = root / "base.json", root / "space.json"
         values: list[int] = []
         features: list[dict[str, Any]] = []
         for feature_index, level_count in enumerate([5, 5, 5, 5, 4, 4, 4, 4]):
@@ -433,8 +427,7 @@ def self_test() -> int:
         generate_bundle(base_path, space_path, first, 32, 421, True)
         assert expected == snapshot(first)
         generate_bundle(base_path, space_path, changed, 32, 422, False)
-        changed_manifest = read_json(changed / "manifest.json")
-        assert manifest["candidates"][1:] != changed_manifest["candidates"][1:]
+        assert manifest["candidates"][1:] != read_json(changed / "manifest.json")["candidates"][1:]
 
         for malformed in ("foo..bar", "foo[x]", "foo[1]bar", "foo.", "foo["):
             try:
@@ -470,27 +463,22 @@ def main() -> int:
         inventory = numeric_inventory(base)
         print(json.dumps({"numericLeaves": inventory.pop("__total__", 0), "byTopLevel": inventory}, indent=2, sort_keys=True))
         return 0
-    manifest, _candidates = compile_bundle(base_path, space_path, args.count, args.seed)
     if args.check:
+        manifest, _candidates = compile_bundle(base_path, space_path, args.count, args.seed)
         summary = {key: value for key, value in manifest.items() if key != "candidates"}
         print(json.dumps(summary, indent=2, sort_keys=True))
         return 0
     out = Path(args.out)
-    generate_bundle(base_path, space_path, out, args.count, args.seed, args.force)
-    print(json.dumps({
-        "out": str(out),
-        "features": manifest["features"],
-        "numericWrites": manifest["numericWrites"],
-        "combinations": manifest["combinations"],
-        "count": args.count,
-        "design": manifest["design"],
-    }, sort_keys=True))
+    manifest = generate_bundle(base_path, space_path, out, args.count, args.seed, args.force)
+    print(json.dumps({"out": str(out), "features": manifest["features"],
+                      "numericWrites": manifest["numericWrites"], "combinations": manifest["combinations"],
+                      "count": args.count, "design": manifest["design"]}, sort_keys=True))
     return 0
 
 
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (KeyError, TypeError, ValueError, RuntimeError) as exc:
+    except (KeyError, OSError, TypeError, ValueError, RuntimeError) as exc:
         print(f"balance_content_doe: {exc}", file=sys.stderr)
         raise SystemExit(2) from exc
