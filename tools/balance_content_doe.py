@@ -299,7 +299,7 @@ def compile_bundle(base_path: Path, space_path: Path, count: int,
     for index, values in enumerate(design):
         content, patch = apply_values(base, features, values)
         verify_requested_values(content, features, values)
-        semantic_bytes = canonical_json_bytes(content)
+        semantic_bytes = canonical_json_bytes(base if index == 0 else content)
         previous = semantic_catalogues.get(semantic_bytes)
         if previous is not None and previous != values:
             raise ValueError(f"different feature vectors produce one semantic catalogue: {previous} and {values}")
