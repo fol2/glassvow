@@ -52,6 +52,19 @@ jobs:
           \tcanonical.append(mesh.get_faces())'''
           if text.count(old) != 1:
               raise RuntimeError("profile source-identity patch did not match exactly once")
+          text = text.replace(old, new, 1)
+
+          old = '''\telse:
+          \t\treturn _polygon_error("footprint must be an array")
+          \tif points.size() > 1 and points[0].is_equal_approx(points[points.size() - 1]):'''
+          new = '''\telse:
+          \t\treturn _polygon_error("footprint must be an array")
+          \tfor point: Vector2 in points:
+          \t\tif not is_finite(point.x) or not is_finite(point.y):
+          \t\t\treturn _polygon_error("point must be finite")
+          \tif points.size() > 1 and points[0].is_equal_approx(points[points.size() - 1]):'''
+          if text.count(old) != 1:
+              raise RuntimeError("packed polygon finite check did not match exactly once")
           profile.write_text(text.replace(old, new, 1))
 
           scene = Path("presentation/map/map_scene.gd")
@@ -81,7 +94,7 @@ jobs:
           echo '--- generated map_scene authority lines ---'
           nl -ba presentation/map/map_scene.gd | sed -n '20,55p'
           echo '--- generated source identity ---'
-          nl -ba presentation/map/map_asset_profiles.gd | sed -n '265,290p'
+          nl -ba presentation/map/map_asset_profiles.gd | sed -n '265,295p'
           changed=$(git diff --numstat 52a56e726da70c2dd57254e8c6618682c7558f90 | awk '{a += $1; d += $2} END {print a + d}')
           echo "issue #465 owner-authorised changed lines: ${changed}"
 
