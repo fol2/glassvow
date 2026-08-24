@@ -144,18 +144,35 @@ jobs:
           changed=$(git diff --numstat 52a56e726da70c2dd57254e8c6618682c7558f90 | awk '{a += $1; d += $2} END {print a + d}')
           echo "issue #465 owner-authorised changed lines: ${changed}"
 
-      - name: Verify exact candidate tree
-        run: |
-          godot --version | grep '^4.7.2.stable'
-          tools/check_imports.sh
-          tools/check_scripts.sh
-          python3 -B tools/check_map_assets.py --self-test
-          python3 -B tools/land_map_glb.py --self-test
-          xvfb-run -a python3 -B tools/check_map_assets.py
-          godot --headless -s res://tests/run_all.gd
-          godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=200
-          python3 -B tools/check_anchors.py
-          python3 -B tools/check_benchmark_freeze.py
+      - name: Verify Godot version
+        run: godot --version | grep '^4.7.2.stable'
+
+      - name: Verify imported resources
+        run: tools/check_imports.sh
+
+      - name: Verify GDScript warnings as errors
+        run: tools/check_scripts.sh
+
+      - name: Verify map asset checker self-tests
+        run: python3 -B tools/check_map_assets.py --self-test
+
+      - name: Verify GLB landing self-tests
+        run: python3 -B tools/land_map_glb.py --self-test
+
+      - name: Verify production map assets
+        run: xvfb-run -a python3 -B tools/check_map_assets.py
+
+      - name: Verify full Godot suite
+        run: godot --headless -s res://tests/run_all.gd
+
+      - name: Verify 200 deterministic map seeds
+        run: godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=200
+
+      - name: Verify anchors
+        run: python3 -B tools/check_anchors.py
+
+      - name: Verify benchmark freeze
+        run: python3 -B tools/check_benchmark_freeze.py
 
       - name: Commit final implementation tree
         run: |
