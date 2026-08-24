@@ -38,12 +38,18 @@ const TERMINUS_SCALE: float = 3.6
 const THRESHOLD_XZ: Vector2 = Vector2(-38.4, 6.5)
 ## Turned so the gable is seen in three-quarter rather than edge-on. The hall
 ## is authored with its gable facing +X, down the road; the camera looks along
-## -Z, so unturned the player sees ten metres of blank flank and the end of the
-## building disappears into the frame edge.
+## -Z, so unturned the player sees the length of the flank and the end of the
+## building disappears into the frame edge. Turned, the doorway in the gable
+## faces the road, which is the whole point of putting it at the start of one.
 const THRESHOLD_YAW: float = -46.0
-## The hall is authored at 10.9 m long and 11.6 m to the top of its smoke, so
-## unlike the unit-scale kits it needs shrinking rather than growing.
-const THRESHOLD_SCALE: float = 0.78
+## Metres, like KIT_SCALE: the Tripo hall arrives unit-scale (0.979 x 0.933 x
+## 0.743) where the parametric one it replaced was authored at 10.9 m long and
+## shrunk by 0.78. Matching that one's world height wanted 9.7, and at 9.7 the
+## opening frame cuts the hall off at its left edge — the same failure
+## THRESHOLD_XZ was moved to fix. 7.0 keeps it whole: 6.9 m long, a 5.4 m ridge
+## and 6.5 m to the top of the smoke, so it stands among the 6.2 m ash trunks
+## rather than over them, and the doorway is legible at the played zoom.
+const THRESHOLD_SCALE: float = 7.0
 ## Metres between paving slabs along a road segment.
 ## Denser and wider than the first pass. The paving is the map's main statement
 ## of where the graph runs; the 2D dots over it are a route marker, not a road.
@@ -503,10 +509,11 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 			gate.position = Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y)
 			gate.rotation_degrees = Vector3(0.0, THRESHOLD_YAW, 0.0)
 			gate.scale = Vector3.ONE * THRESHOLD_SCALE
-			# Its own material when its sheet is present; the prop shader otherwise,
-			# so a missing trim degrades to untextured rather than to nothing.
-			gate.material_override = _materials.vigil \
-					if _materials.vigil != null else _materials.prop
+			# Its own material once its baked albedo is in hand; the prop shader
+			# otherwise, so a mesh that arrives without one degrades to projected
+			# stone rather than to a building painted with nothing.
+			var dressed: bool = _materials.bind_vigil_albedo(_baked_albedo(gate_mesh))
+			gate.material_override = _materials.vigil if dressed else _materials.prop
 			gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			_asset_geometry.add_child(gate)
 	# Seat the road pair now, empty, so anything resolving them by name finds
@@ -610,6 +617,19 @@ func _mesh_from(resource: Resource) -> Mesh:
 		mesh = mesh_node.mesh
 	instance.free()
 	return mesh
+
+
+## The Vigil is the one asset whose texture ships inside its GLB rather than as
+## a manifest row of its own, so it is read back off the imported surface
+## material. Everything else on the map is surfaced by projection and has no
+## material of its own to read.
+func _baked_albedo(mesh: Mesh) -> Texture2D:
+	if mesh == null or mesh.get_surface_count() < 1:
+		return null
+	var material: Material = mesh.surface_get_material(0)
+	if material is BaseMaterial3D:
+		return (material as BaseMaterial3D).albedo_texture
+	return null
 
 
 func _first_mesh(root: Node) -> MeshInstance3D:

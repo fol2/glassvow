@@ -840,14 +840,15 @@ paid credits. sha256
 
 ### `map/geometry/act1/vigil-hall.glb` — the Vigil, west bookend (#156)
 
-Locally authored, no concept image and no prompt: the subject was settled in
-prose and in shipped art. `docs/story/01-world.md` puts 【守夜之爐 Vigil】at the
-west end of the road, and `assets/art/scenes/opening-hearth.png` — the still
-shown at the start of every run — is unmistakably the inside of a tall gothic
-hall. So the map shows that hall from outside: gabled, end-on, blank east gable,
-a shallow pointed doorway cut as a recess rather than a hole, two flank
-buttresses, and a chimney with its smoke. The chimney is the only identity cue,
-and it is deliberate — it says *hearth*, which is what the place is named for.
+Converted by Tripo Studio from `map-concepts/act1-vigil-hall.png` (below). The
+subject was settled in prose and in shipped art before any picture existed:
+`docs/story/01-world.md` puts 【守夜之爐 Vigil】at the west end of the road, and
+`assets/art/scenes/opening-hearth.png` — the still shown at the start of every
+run — is unmistakably the inside of a tall gothic hall. So the map shows that
+hall from outside: gabled, end-on, blank east gable, a shallow recessed pointed
+doorway, flank buttresses, and a chimney with its smoke. The chimney is the only
+identity cue, and it is deliberate — it says *hearth*, which is what the place is
+named for.
 
 **What it does not show, on purpose.** An earlier cut of this asset put the
 六格 rose window on the road-facing face. That was wrong twice. It was a
@@ -860,14 +861,37 @@ the model, where `mirror.png` ships as L0 art with its meaning withheld. It was
 also the wrong side of the wall: 爐邊彩窗 faces in at the fire, so from the road
 you are outside it and could not see it in any case.
 
-Parametric surfaces combined with a manifold boolean union so the payload is one
-watertight connected component. Y-up, grounded at Y=0, one mesh and one
-triangulated surface with POSITION+NORMAL only: 1,724 triangles, 42220 bytes.
-Welded and indexed deliberately — the gate's connected-component check returns 1
-for any unindexed mesh, so splitting normals per face would have bought a
-crisper facet by making that check meaningless. No vendor, textures or paid
-credits. sha256 `a852c2adca33b37bbb88e1e4ba280bbf11ba0fe98bc33b76e24dca78753e32cb`. Eight-yaw evidence is in
-`docs/reviews/156/round2/vigil-yaws.png`.
+**This is the map's one textured asset, and the first.** Everything else is
+surfaced by triplanar projection, which is what keeps 23 separately generated
+kits from drifting apart in style. That discipline still governs the kits. It
+stopped governing the Vigil on 2026-08-24, because it was holding the map's one
+BUILDING to the rule written for its rocks: what makes a building read as a
+building is coursed ashlar that lines up along the wall, a corbel band where the
+roof meets it and slate above — none of which projection can place, since it has
+no idea which way is up on a given face. The predecessor asset worked around
+that with a hand-authored trim sheet whose V axis was the building's height;
+that could only ever paint horizontal bands, so the arched door, the buttress
+faces and the gable had no way to differ from the wall behind them. The sheet
+and its two generator scripts were deleted with this replacement.
+
+Y-up, grounded at Y=0 as exported. One mesh, one triangulated surface,
+POSITION+NORMAL+TEXCOORD_0: 5,615 triangles, 3,824 verts, 604,608 bytes, of
+which a 2048×2048 JPEG baseColor is 413,216. Texture 2K and PBR off were chosen
+against this repo's budgets, not Studio's defaults — 4K would not fit
+`bytes_max`, and the unshaded shader samples exactly one map, so
+metallic/roughness/normal would be three more images inside the same cap for
+nothing on screen. Polycount was set to 6,000 against a Studio default of
+2,000,000. Tripo Studio Pro commercial grant, 40 credits.
+
+**Two connected components, and that is the asset, not a defect.** The hall
+(2,683 v / 5,362 t) and the smoke above the chimney (142 v / 253 t), which
+floats clear of it. In raw index space the gate counted 118, which was UV seams
+rather than geometry — an unwrap splits a vertex at every chart cut, and
+3,824 → 2,825 verts on a weld is exactly the Euler prediction for a closed
+surface at 5,615 triangles. `map_asset_checks._connected_components` now welds by
+position before counting, and the row declares `components_max: 2`.
+
+sha256 `6ee66212ddd504f92f5de896c5b5c3d053a8ab1bc5b692103a6bd0d2a0098f13`.
 
 ### `map-concepts/act1-vigil-hall.png` — the Vigil, conversion concept (#156)
 

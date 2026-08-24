@@ -2,6 +2,21 @@
 /**
  * Studio image → GLB. No LLM. No Tripo API.
  *
+ * THIS DRIVES THE **Smart Mesh** TAB, WHICH HAS NO TEXTURE STAGE. Everything
+ * below is accurate for that tab, and the 23 map kits want exactly it — they
+ * are bought untextured on purpose and surfaced by triplanar projection. But
+ * do not read "the output has no texture" as a fact about Tripo: the `HD Model`
+ * tab, which is the DEFAULT on a cold /workspace/generate and which step 2
+ * below actively clicks away from, bakes an albedo and an unwrap. The Vigil was
+ * generated there by hand on 2026-08-24 and the bytes fetched back through this
+ * script's `--task-id` path. Full walk, settings and traps:
+ * `docs/solutions/tooling-decisions/the-textured-studio-path-is-the-hd-tab-not-the-script.md`.
+ *
+ * One caveat that bites there and is invisible here: on a `--task-id` re-export
+ * this script reports `faces` and `topology` from ITS OWN form state, which it
+ * never set for that run. For a hand-generated task those two fields are
+ * fiction. The `glb_path` and the byte count are real.
+ *
  * Walked 2026-08-19 on Chrome for Testing 145 *new Headless* (Metal M4),
  * cookies decrypted from Chrome Default (`ory_kratos_session` on `.tripo3d.ai`).
  *

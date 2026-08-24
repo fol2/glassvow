@@ -74,6 +74,18 @@ func set_sun(direction: Vector3) -> void:
 		vigil.set_shader_parameter("sun", sun)
 
 
+## Hands the Vigil its baked albedo. It arrives separately from `bind_act`
+## because it is not a manifest row of its own: it rides inside the GLB, and
+## only MapScene has resolved that GLB down to a Mesh by the time it is
+## readable. Returns whether the material is now complete, so a caller can fall
+## back to the prop shader rather than seating a building painted with nothing.
+func bind_vigil_albedo(texture: Texture2D) -> bool:
+	if vigil == null or texture == null:
+		return false
+	vigil.set_shader_parameter("surface_tex", texture)
+	return true
+
+
 func bind_region(region: MapRegions, grade: Texture2D) -> void:
 	road.set_shader_parameter("band_shade", region.band_shade)
 	road.set_shader_parameter("band_key", region.band_key)
@@ -111,7 +123,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	## The Vigil at the west end. Only Act I ships one, so every other act binds
 	## null here and MapScene simply seats nothing.
 	var threshold: Resource = null
-	var vigil_trim: Texture2D = null
+	var vigil_mean: float = 0.252
 	var ground_tile: Texture2D = null
 	var prop_tile: Texture2D = null
 	var painted_grade: Texture2D = null
@@ -127,7 +139,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 			continue
 		var resource: Resource = loaded
 		var kind: String = _row_string(row, "kind")
-		if kind in ["tile", "grade", "trim"] and not (resource is Texture2D):
+		if kind in ["tile", "grade"] and not (resource is Texture2D):
 			continue
 		if kind in ["kit", "terminus", "threshold"] \
 				and not (resource is Mesh or resource is PackedScene):
@@ -143,8 +155,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 				terminus_id = _row_string(row, "id")
 			"threshold":
 				threshold = resource
-			"trim":
-				vigil_trim = resource as Texture2D
+				vigil_mean = _row_float(row, "tex_mean", 0.252)
 			"tile":
 				var tile: Texture2D = resource as Texture2D
 				if _row_string(row, "role") == "ground":
@@ -163,16 +174,17 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	if prop_tile != null:
 		prop.set_shader_parameter("surface_tex", prop_tile)
 		prop.set_shader_parameter("tex_mean", prop_mean)
-	# The Vigil only exists in Act I, so its material is built when its sheet
-	# turns up rather than alongside the three that every act has.
-	if vigil_trim != null:
+	# The Vigil only exists in Act I, so its material is built when its mesh
+	# turns up rather than alongside the three that every act has. Its albedo is
+	# baked into that mesh rather than shipped as a row of its own, so the
+	# texture arrives later, from `bind_vigil_albedo`.
+	if threshold != null:
 		if vigil == null:
 			vigil = ShaderMaterial.new()
 			vigil.shader = load(VIGIL_SHADER) as Shader
 			vigil.set_shader_parameter("grade_rect", Vector4(
 					GRADE_MIN.x, GRADE_MIN.y, GRADE_SIZE.x, GRADE_SIZE.y))
-			vigil.set_shader_parameter("tex_mean", 0.5)
-		vigil.set_shader_parameter("trim", vigil_trim)
+		vigil.set_shader_parameter("tex_mean", vigil_mean)
 	else:
 		vigil = null
 	if painted_grade != null:
