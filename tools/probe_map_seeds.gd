@@ -56,6 +56,9 @@ func _initialize() -> void:
 	var bad_pair_seeds: int = 0
 	var bad_vigil_seeds: int = 0
 	var counts: Array[int] = []
+	var clumps: int = 0
+	var worst_clump: float = 1.0
+	var clump_seeds: int = 0
 	var vc: Vector2 = MapScene.THRESHOLD_XZ
 
 	for s: int in range(1, seeds + 1):
@@ -82,6 +85,24 @@ func _initialize() -> void:
 				behind += 1
 		if vf > 0:
 			bad_vigil_seeds += 1
+		# Scenery against scenery. `_band_seats` stratifies each family on its own
+		# stream and the families never see each other, so two pieces from
+		# different families can land in the same metre -- the hand-authored set
+		# could not do that, because a person placed all 25 at once.
+		var cf: int = 0
+		for a: int in range(pieces.size()):
+			for b: int in range(a + 1, pieces.size()):
+				var reach: float = pieces[a].z + pieces[b].z
+				if reach <= 0.0:
+					continue
+				var gap: float = Vector2(pieces[a].x - pieces[b].x,
+						pieces[a].y - pieces[b].y).length() / reach
+				if gap < 1.0:
+					cf += 1
+					worst_clump = minf(worst_clump, gap)
+		if cf > 0:
+			clumps += cf
+			clump_seeds += 1
 		var pf: int = _overlaps(pts)
 		if pf > 0:
 			bad_pair_seeds += 1
@@ -98,6 +119,9 @@ func _initialize() -> void:
 			% [behind, 100.0 * float(behind) / maxf(float(total), 1.0)])
 	print("largest shove         : %.3f  (cap %.2f)"
 			% [max_shove, MapPinProjection.STEP_ASIDE_MAX])
+	print("scenery pieces fouling: %d in %d seed(s)" % [clumps, clump_seeds])
+	print("worst scenery overlap : %.4f   (1.0 = footprints just touching)"
+			% worst_clump)
 	scene.free()
 	quit(0)
 

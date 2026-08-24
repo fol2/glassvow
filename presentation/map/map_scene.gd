@@ -766,6 +766,33 @@ const DAB_Z: Vector2 = Vector2(7.4, 11.8)
 ## How much of its own band a piece may wander in. At 1.0 two neighbours could
 ## meet on the shared edge and the stratification would buy nothing.
 const BAND_INSET: float = 0.7
+## How many pieces each family seats. `_add_props` slices the dealt list by
+## these, so they are the one statement of the bill.
+const WEDGE_N: int = 9
+const SLAB_N: int = 4
+const DAB_N: int = 8
+## Metres two seats must keep between them once every family is on the ground.
+##
+## Stratification only spaces a family against ITSELF -- three independent
+## streams cannot see each other, and `WEDGE_Z` and `DAB_Z` overlap outright. A
+## person placing 25 pieces sees all 25 at once, and it showed: measured over
+## 200 seeds, the hand-authored set had ZERO pairs closer than half their
+## combined footprint radius and the first dealt version had 1.30 per seed.
+## 3.4 is the widest kit pair on this map (two 6.2-scaled ash trunks) at about
+## half their combined reach, and it is a BALANCE POINT rather than an optimum.
+## The trade is monotone, measured over 200 seeds with
+## `tools/probe_map_seeds.gd` -- a wider gap buys less clumping and fewer
+## overlapping medallions, and pays for both by pushing more nodes behind
+## scenery, because spreading the pieces along X covers more lanes:
+##
+##   gap   pairs <0.75 reach   overlapping nodes   nodes behind
+##   2.8         1.88            27 / 24 seeds        4.8%
+##   3.4         0.28            19 / 17 seeds        5.3%
+##   4.0         0.06            18 / 18 seeds        5.7%
+##   (authored)  1.00            51 / 50 seeds        3.9%
+##
+## Move this one number to re-weigh it; do not re-derive the mechanism.
+const SEAT_GAP: float = 3.4
 
 
 ## One RNG per family, so adding a piece to one does not reshuffle the others.
@@ -806,23 +833,73 @@ func _band_seats(count: int, z_band: Vector2, height: float,
 	return out
 
 
+## Every seat this run, in one list, spaced against each other.
+##
+## The separation has to happen HERE and cannot move into `_band_seats`: a
+## family drawing on its own stream has no idea where the other two families
+## went. This is the only point where all 25 exist at once.
+func _dealt_seats() -> PackedVector3Array:
+	var seats: PackedVector3Array = _band_seats(WEDGE_N, WEDGE_Z, 1.7, 1)
+	seats.append_array(_slab_seats())
+	seats.append_array(_band_seats(DAB_N, DAB_Z, 0.0, 3))
+	return _separate(seats)
+
+
+## Push crowded seats apart ALONG X ONLY.
+##
+## X because the z bands carry the design: which side of the road a piece sits
+## on, how far off the centre line, and the open corridor down the middle are
+## all statements `_band_seats` makes in z, and a relaxation free to move in z
+## would quietly undo them. X has room -- a wedge band is 7.2 m wide and the gap
+## wanted is 3.4.
+##
+## Coincident seats are skipped rather than separated: the slab family seats two
+## kits at one point on purpose, and that stack is the family's whole point.
+func _separate(seats: PackedVector3Array) -> PackedVector3Array:
+	var out: PackedVector3Array = seats
+	for _pass: int in range(6):
+		for a: int in range(out.size()):
+			for b: int in range(a + 1, out.size()):
+				var dx: float = out[b].x - out[a].x
+				var dz: float = out[b].z - out[a].z
+				if absf(dx) < 0.001 and absf(dz) < 0.001:
+					continue
+				var gap: float = Vector2(dx, dz).length()
+				if gap >= SEAT_GAP:
+					continue
+				# Along X, away from each other, half the shortfall each. A pair
+				# that happens to share an x takes an arbitrary but stable side
+				# so the pass cannot stall on a division by zero.
+				var push: float = (SEAT_GAP - gap) * 0.5
+				var dir: float = signf(dx) if absf(dx) > 0.001 else 1.0
+				out[a] = Vector3(clampf(out[a].x - dir * push,
+						SCATTER_X.x, SCATTER_X.y), out[a].y, out[a].z)
+				out[b] = Vector3(clampf(out[b].x + dir * push,
+						SCATTER_X.x, SCATTER_X.y), out[b].y, out[b].z)
+	return out
+
+
 func _wedge_positions() -> PackedVector3Array:
-	return _band_seats(9, WEDGE_Z, 1.7, 1)
+	return _dealt_seats().slice(0, WEDGE_N)
 
 
 ## Two entries per seat, at the two heights the placeholder prism stacks at.
 ## The real kits flatten y to 0 in `_all_prop_positions`, so a pair becomes two
 ## kits sharing one footprint -- which is the stack this family is named for.
-func _slab_positions() -> PackedVector3Array:
+func _slab_seats() -> PackedVector3Array:
 	var out: PackedVector3Array = PackedVector3Array()
-	for base: Vector3 in _band_seats(4, SLAB_Z, 0.0, 2):
+	for base: Vector3 in _band_seats(SLAB_N, SLAB_Z, 0.0, 2):
 		out.append(Vector3(base.x, 0.31, base.z))
 		out.append(Vector3(base.x, 0.86, base.z))
 	return out
 
 
+func _slab_positions() -> PackedVector3Array:
+	return _dealt_seats().slice(WEDGE_N, WEDGE_N + SLAB_N * 2)
+
+
 func _dab_positions() -> PackedVector3Array:
-	return _band_seats(8, DAB_Z, 0.0, 3)
+	return _dealt_seats().slice(WEDGE_N + SLAB_N * 2)
 
 
 ## Ground level, for the real kits and for the grade's contact shadows.
@@ -839,9 +916,7 @@ func prop_positions() -> PackedVector3Array:
 
 
 func _all_prop_positions() -> PackedVector3Array:
-	var seats: PackedVector3Array = _wedge_positions()
-	seats.append_array(_slab_positions())
-	seats.append_array(_dab_positions())
+	var seats: PackedVector3Array = _dealt_seats()
 	var grounded: PackedVector3Array = PackedVector3Array()
 	for seat: Vector3 in seats:
 		grounded.append(Vector3(seat.x, 0.0, seat.z))
