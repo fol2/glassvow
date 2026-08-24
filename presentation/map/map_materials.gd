@@ -9,6 +9,8 @@ extends RefCounted
 ## surface texture each and one shared grade.
 
 const GROUND_SHADER: String = "res://presentation/map/map_ground.gdshader"
+## The Vigil is the only unwrapped surface on the map; see the shader header.
+const VIGIL_SHADER: String = "res://presentation/map/map_vigil.gdshader"
 const PROP_SHADER: String = "res://presentation/map/map_prop.gdshader"
 const MANIFEST_PATH: String = "res://assets/art/map/map-assets.json"
 const ASSET_ROOT: String = "res://assets/art/map/"
@@ -26,6 +28,8 @@ const GRADE_RESOLUTION: Vector2i = Vector2i(256, 128)
 
 var ground: ShaderMaterial
 var road: ShaderMaterial
+## Built only when Act I binds; every other act leaves it null.
+var vigil: ShaderMaterial = null
 var prop: ShaderMaterial
 var _fallback_surface: ImageTexture
 var _fallback_grade: ImageTexture
@@ -66,12 +70,18 @@ func set_sun(direction: Vector3) -> void:
 	ground.set_shader_parameter("sun", sun)
 	road.set_shader_parameter("sun", sun)
 	prop.set_shader_parameter("sun", sun)
+	if vigil != null:
+		vigil.set_shader_parameter("sun", sun)
 
 
 func bind_region(region: MapRegions, grade: Texture2D) -> void:
 	road.set_shader_parameter("band_shade", region.band_shade)
 	road.set_shader_parameter("band_key", region.band_key)
 	road.set_shader_parameter("grade", grade)
+	if vigil != null:
+		vigil.set_shader_parameter("band_shade", region.band_shade)
+		vigil.set_shader_parameter("band_key", region.band_key)
+		vigil.set_shader_parameter("grade", grade)
 	ground.set_shader_parameter("band_shade", region.band_shade)
 	ground.set_shader_parameter("band_key", region.band_key)
 	prop.set_shader_parameter("band_shade", region.band_shade)
@@ -101,6 +111,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	## The Vigil at the west end. Only Act I ships one, so every other act binds
 	## null here and MapScene simply seats nothing.
 	var threshold: Resource = null
+	var vigil_trim: Texture2D = null
 	var ground_tile: Texture2D = null
 	var prop_tile: Texture2D = null
 	var painted_grade: Texture2D = null
@@ -116,7 +127,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 			continue
 		var resource: Resource = loaded
 		var kind: String = _row_string(row, "kind")
-		if kind in ["tile", "grade"] and not (resource is Texture2D):
+		if kind in ["tile", "grade", "trim"] and not (resource is Texture2D):
 			continue
 		if kind in ["kit", "terminus", "threshold"] \
 				and not (resource is Mesh or resource is PackedScene):
@@ -132,6 +143,8 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 				terminus_id = _row_string(row, "id")
 			"threshold":
 				threshold = resource
+			"trim":
+				vigil_trim = resource as Texture2D
 			"tile":
 				var tile: Texture2D = resource as Texture2D
 				if _row_string(row, "role") == "ground":
@@ -150,6 +163,18 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	if prop_tile != null:
 		prop.set_shader_parameter("surface_tex", prop_tile)
 		prop.set_shader_parameter("tex_mean", prop_mean)
+	# The Vigil only exists in Act I, so its material is built when its sheet
+	# turns up rather than alongside the three that every act has.
+	if vigil_trim != null:
+		if vigil == null:
+			vigil = ShaderMaterial.new()
+			vigil.shader = load(VIGIL_SHADER) as Shader
+			vigil.set_shader_parameter("grade_rect", Vector4(
+					GRADE_MIN.x, GRADE_MIN.y, GRADE_SIZE.x, GRADE_SIZE.y))
+			vigil.set_shader_parameter("tex_mean", 0.5)
+		vigil.set_shader_parameter("trim", vigil_trim)
+	else:
+		vigil = null
 	if painted_grade != null:
 		bind_region(region, painted_grade)
 	return {

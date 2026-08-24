@@ -869,6 +869,38 @@ crisper facet by making that check meaningless. No vendor, textures or paid
 credits. sha256 `a852c2adca33b37bbb88e1e4ba280bbf11ba0fe98bc33b76e24dca78753e32cb`. Eight-yaw evidence is in
 `docs/reviews/156/round2/vigil-yaws.png`.
 
+### `map-concepts/act1-vigil-hall.png` — the Vigil, conversion concept (#156)
+
+Generated 2026-08-24 with the built-in image tool, as the input to a Tripo
+image-to-3D conversion. Not a shipping texture, and not a shipping asset: the
+map gate scans `assets/art/map/`, and concepts live outside it.
+
+**Why there is no window on it.** The subject is the hall the player walks out
+of at the start of every run, and `docs/story/01-world.md` grades 「彩窗成鏡,
+隊伍現形」 as L3, the single reveal point. The rose window's six panes are the
+shard count, so an earlier parametric cut of this asset that showed them handed
+an L3 fact to a player at L0; `05-foreshadow-ledger.md` rule 2 defers exactly
+that. It is also 爐邊彩窗 — the hearth-side face, turned in at the fire — so from
+the road you are outside it regardless. The prompt therefore bans rose, wheel
+and circular windows outright and allows at most a narrow slit.
+
+The framing constraints in the prompt are for the converter, not for the
+picture: whole object in frame, centred, square, flat mid-grey ground-free
+background, no cast shadow, no depth of field. Tripo reconstructs what it can
+see, and a horizon or a contact shadow comes back as geometry.
+
+Prompt, verbatim:
+
+> Small ancient Gothic stone hall, exterior three-quarter view from 35–40° above;
+> entire building centred with even margin in a square frame. Steep dark slate
+> roof with visible courses; weathered coursed grey ashlar, heavy plinth, three
+> deep flank buttresses, one shallow recessed pointed arch doorway at near gable,
+> corbel course at eaves, ridge chimney and pale smoke. Cold blue-grey
+> low-contrast matte illumination; clean planar, low-poly-friendly game-asset
+> concept; flat neutral mid-grey background with no ground or cast shadow.
+
+1254×1254 RGB. sha256 `8c6f47f7442798a67408789b5c69aa8cc9ae137fcda86fcc91283f119d724087`.
+
 ### `map-concepts/act2-terminus-flooded-threshold.png` — Act II hero concept (#294)
 
 Project-authored concept generated from the Glassvow brief: a monumental drowned

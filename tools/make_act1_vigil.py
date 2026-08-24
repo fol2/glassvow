@@ -28,8 +28,13 @@ import math
 import struct
 from pathlib import Path
 
+import sys
+
 import numpy as np
 from manifold3d import CrossSection, Manifold
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from vigil_bands import TOTAL  # noqa: E402
 
 OUT = Path(__file__).resolve().parent.parent / (
     "assets/art/map/geometry/act1/vigil-hall.glb")
@@ -98,28 +103,50 @@ def build() -> Manifold:
     return hall
 
 
-def write_glb(verts: np.ndarray, norms: np.ndarray, tris: np.ndarray, path: Path) -> None:
+def trim_uvs(verts: np.ndarray, norms: np.ndarray) -> np.ndarray:
+    """UVs for the trim sheet: V is height, U is around the building.
+
+    No seams anywhere, which is the whole point -- see the sheet's own header.
+    V is world height over the building's full height, so a band painted at a
+    fraction of the sheet lands at that fraction of the building on EVERY face,
+    the pitched roof included. U takes whichever horizontal axis the face points
+    away from, and repeats.
+    """
+    U_METRES = 3.2
+    facing_x = np.abs(norms[:, 0]) > np.abs(norms[:, 2])
+    u = np.where(facing_x, verts[:, 2], verts[:, 0]) / U_METRES
+    v = np.clip(verts[:, 1] / TOTAL, 0.0, 1.0)
+    return np.stack([u, v], axis=1)
+
+
+def write_glb(verts: np.ndarray, norms: np.ndarray, uvs: np.ndarray,
+              tris: np.ndarray, path: Path) -> None:
     pos, nrm = verts.astype("<f4"), norms.astype("<f4")
+    uv = uvs.astype("<f4")
     idx = tris.astype("<u4").reshape(-1)
-    blob = pos.tobytes() + nrm.tobytes() + idx.tobytes()
+    blob = pos.tobytes() + nrm.tobytes() + uv.tobytes() + idx.tobytes()
     blob += b"\x00" * ((4 - len(blob) % 4) % 4)
     gltf = {
         "asset": {"version": "2.0", "generator": "glassvow local-parametric-manifold"},
         "scene": 0, "scenes": [{"nodes": [0]}],
         "nodes": [{"mesh": 0, "name": "VigilHall"}],
         "meshes": [{"name": "VigilHall", "primitives": [
-            {"attributes": {"POSITION": 0, "NORMAL": 1}, "indices": 2, "mode": 4}]}],
+            {"attributes": {"POSITION": 0, "NORMAL": 1, "TEXCOORD_0": 2},
+             "indices": 3, "mode": 4}]}],
         "accessors": [
             {"bufferView": 0, "componentType": 5126, "count": len(pos), "type": "VEC3",
              "min": [float(v) for v in pos.min(axis=0)],
              "max": [float(v) for v in pos.max(axis=0)]},
             {"bufferView": 1, "componentType": 5126, "count": len(nrm), "type": "VEC3"},
-            {"bufferView": 2, "componentType": 5125, "count": len(idx), "type": "SCALAR"},
+            {"bufferView": 2, "componentType": 5126, "count": len(uv), "type": "VEC2"},
+            {"bufferView": 3, "componentType": 5125, "count": len(idx), "type": "SCALAR"},
         ],
         "bufferViews": [
             {"buffer": 0, "byteOffset": 0, "byteLength": pos.nbytes, "target": 34962},
             {"buffer": 0, "byteOffset": pos.nbytes, "byteLength": nrm.nbytes, "target": 34962},
             {"buffer": 0, "byteOffset": pos.nbytes + nrm.nbytes,
+             "byteLength": uv.nbytes, "target": 34962},
+            {"buffer": 0, "byteOffset": pos.nbytes + nrm.nbytes + uv.nbytes,
              "byteLength": idx.nbytes, "target": 34963},
         ],
         "buffers": [{"byteLength": len(blob)}],
@@ -147,7 +174,12 @@ lens = np.linalg.norm(norms, axis=1, keepdims=True)
 norms = np.divide(norms, np.where(lens < 1e-12, 1.0, lens))
 
 OUT.parent.mkdir(parents=True, exist_ok=True)
-write_glb(verts, norms, tris, OUT)
+uvs = trim_uvs(verts, norms)
+# The sheet's bands are fractions of this number. If the model grows and the
+# constant does not, every band slides off the feature it was painted for.
+assert abs(verts[:, 1].max() - TOTAL) < 0.02, (
+    f"height {verts[:, 1].max():.2f} has drifted from vigil_bands.TOTAL {TOTAL}")
+write_glb(verts, norms, uvs, tris, OUT)
 lo, hi = verts.min(axis=0), verts.max(axis=0)
 print(f"{OUT.name}: {len(tris)} triangles, {len(verts)} verts, {OUT.stat().st_size} bytes")
 print(f"  x {lo[0]:.2f}..{hi[0]:.2f}   y {lo[1]:.2f}..{hi[1]:.2f}   z {lo[2]:.2f}..{hi[2]:.2f}")

@@ -503,7 +503,10 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 			gate.position = Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y)
 			gate.rotation_degrees = Vector3(0.0, THRESHOLD_YAW, 0.0)
 			gate.scale = Vector3.ONE * THRESHOLD_SCALE
-			gate.material_override = _materials.prop
+			# Its own material when its sheet is present; the prop shader otherwise,
+			# so a missing trim degrades to untextured rather than to nothing.
+			gate.material_override = _materials.vigil \
+					if _materials.vigil != null else _materials.prop
 			gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			_asset_geometry.add_child(gate)
 	# Seat the road pair now, empty, so anything resolving them by name finds
