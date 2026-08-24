@@ -1,0 +1,3164 @@
+{
+  "base": "/Users/jamesto/Coding/glassvow/content/full-content.json",
+  "baseIdentity": {
+    "fileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "semanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa"
+  },
+  "baseline": {
+    "ashfallSmolder": 6,
+    "ashfallWard": 5,
+    "duskMaxHp": 64,
+    "flareDamage": 9,
+    "guardedStrikeWard": 4,
+    "ironSkinWard": 3,
+    "regrowthHeal": 2,
+    "venomStrikeSmolder": 4
+  },
+  "candidates": [
+    {
+      "baseline": true,
+      "fileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "id": "c000",
+      "patch": [
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 9,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 5,
+        "duskMaxHp": 64,
+        "flareDamage": 9,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 3,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "6c57a0d5b987a9380af895844adff56ffd4e3cce5c94fb07d5dd31db751224f7",
+      "id": "c001",
+      "patch": [
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 8,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "0bc5e9832ac90f42d3c662ab40bb24b8b15abb9097ba9689ef92ab9e973414a7",
+      "values": {
+        "ashfallSmolder": 5,
+        "ashfallWard": 6,
+        "duskMaxHp": 66,
+        "flareDamage": 8,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 4,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "31cade9d35da7ea08eaa8595acb43fbe27a8794e8343609695425b52dbe85fd9",
+      "id": "c002",
+      "patch": [
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 7,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "717f2b91184d4d103a57a40a937dba2d966724670f4f8846aedf14f4eeb254e5",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 7,
+        "duskMaxHp": 62,
+        "flareDamage": 7,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 5,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "9321f90560b9ca506507f491406cc8a8f3165c009b03a4f0700866d8f028f93c",
+      "id": "c003",
+      "patch": [
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "98be84ddaf18977a17e908c81e9db87afffd0df313c220b8fa6b516c1ac31abf",
+      "values": {
+        "ashfallSmolder": 3,
+        "ashfallWard": 3,
+        "duskMaxHp": 66,
+        "flareDamage": 10,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 3,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 3
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "9d3af9baba56776a2a5f96aae2f08033be38c38aba9eb25b90db1de7cfb35627",
+      "id": "c004",
+      "patch": [
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 7,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "9ffe89e2e511c808159e8b58896047c3ffff38c08fc581665215f6edcc385376",
+      "values": {
+        "ashfallSmolder": 7,
+        "ashfallWard": 4,
+        "duskMaxHp": 66,
+        "flareDamage": 7,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 5,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "d3e89d8755b05842091f37ba2cd8fcf61a32266b0510ef2d1cd98f1d7f77cdfb",
+      "id": "c005",
+      "patch": [
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 9,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "d57f8753f66ac9c2f9251645cf0541381657cdc7b252e5769fa0550d882550ae",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 5,
+        "duskMaxHp": 62,
+        "flareDamage": 9,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 3,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "8b5bea632c3927e7bdfa5f79776cd659086eb32eefb5bdbee4a27b18bf08a6da",
+      "id": "c006",
+      "patch": [
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "cc6f68f275138e1792b316d16686f4a3d9859c9ec349c6a482f88ef465acffae",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 6,
+        "duskMaxHp": 68,
+        "flareDamage": 10,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 5,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "d0b8f1cb09484e99c069713f055aa58621eb51434707bc8ff675d13e26bb9ab3",
+      "id": "c007",
+      "patch": [
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 9,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "610d4aa185dcaa2b298b72753c9ea9d1d8ba892c202e7b46eb38f91438442afe",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 7,
+        "duskMaxHp": 66,
+        "flareDamage": 9,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 2,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "489abf0b1409515ab8734ea01e9774c0b0ca93fef1978d500e840a224b4e70ab",
+      "id": "c008",
+      "patch": [
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 9,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "89f21d2c44a72907b8b8c16aed52a52c4c90071abeb81300d21489d69cb202a0",
+      "values": {
+        "ashfallSmolder": 5,
+        "ashfallWard": 5,
+        "duskMaxHp": 66,
+        "flareDamage": 9,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 4,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "e1cd9d8ad518125cfd9a2a08bb65146c1269e3a50f2550ed579d5a502e70e843",
+      "id": "c009",
+      "patch": [
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 8,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "3021cb45d89bd26e238a9338ff55a6b612ccfb5cdc406ce4111e15ccf0192ef8",
+      "values": {
+        "ashfallSmolder": 7,
+        "ashfallWard": 7,
+        "duskMaxHp": 62,
+        "flareDamage": 8,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 4,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 3
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "8dcdcbc41732ef28240ec7a04e5a3064ea12907c85499d8e04c43d3d5aa6ce71",
+      "id": "c010",
+      "patch": [
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "fae2805510470b54925a14944672e4ae2d37fe5239b45ab7662d3abaee88cf50",
+      "values": {
+        "ashfallSmolder": 3,
+        "ashfallWard": 4,
+        "duskMaxHp": 68,
+        "flareDamage": 10,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 2,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "a095f87ab78f30b6162ab2b25f23637bdad790813a46ae0544191fe6385154b2",
+      "id": "c011",
+      "patch": [
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "96396a7de0062dc3ad6ceecf8874c3cf261c26cd55084792482458e4cec3d790",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 4,
+        "duskMaxHp": 62,
+        "flareDamage": 10,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 3,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "7a0fea10ad4175a5cb5b416608899ef9d9b615ff9c6a65a692173bb6eeed9910",
+      "id": "c012",
+      "patch": [
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 8,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "9c471f4299d0aff878c4f30ab930a17fd3acb22a9690c24dc95a7f69ec9f7bb1",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 5,
+        "duskMaxHp": 62,
+        "flareDamage": 8,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 4,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "b38ab4d8fceec939035ea105546c79756ab8e9c6f4b0ecf1a1024493ceab5d13",
+      "id": "c013",
+      "patch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "3665d4dc0de9a9b0b969105baa8cd2e7c4163d846295530d510f72d6244dce7b",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 7,
+        "duskMaxHp": 60,
+        "flareDamage": 10,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 5,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "daaf40ae86a8e6f66e486bc15b622766565c93372aeb46022db1d753178a21f2",
+      "id": "c014",
+      "patch": [
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 8,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "4bea955e2fa7e4ca89e55d92dc5877cc830cb748eb88c83a5286a02595dd6c4d",
+      "values": {
+        "ashfallSmolder": 5,
+        "ashfallWard": 4,
+        "duskMaxHp": 66,
+        "flareDamage": 8,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 3,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "81bdde5f9d1a877eec99f0c3ea3f37ae866cce96b76d3160a313e156fcd68b02",
+      "id": "c015",
+      "patch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 11,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "44451b5ebf8d5bb632a4a346dd02f7f5f4cd3ccccd05db7b23a3e36675a6f3a4",
+      "values": {
+        "ashfallSmolder": 5,
+        "ashfallWard": 4,
+        "duskMaxHp": 60,
+        "flareDamage": 11,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 2,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "120c45a6cc9857758763f9a2abe3a3e81e6b4000934bd17bef354482d2c07f06",
+      "id": "c016",
+      "patch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 7,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "35cad4a30203fd8cb1c6d68b7ee408e1240823c999978e3ca66d8afefeb23826",
+      "values": {
+        "ashfallSmolder": 3,
+        "ashfallWard": 3,
+        "duskMaxHp": 60,
+        "flareDamage": 7,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 5,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "15acf43956621e72bb8b4fadc53a3bb7ae1c4e505d7c6d67d78af109a242c66b",
+      "id": "c017",
+      "patch": [
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "f5dc7a35374f4847f17a85b388e44ae876c9c33dec3b747ab3188fbf138c47ac",
+      "values": {
+        "ashfallSmolder": 5,
+        "ashfallWard": 3,
+        "duskMaxHp": 64,
+        "flareDamage": 10,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 4,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 3
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "55dad9503244e08889b604e1d60e6693c11491a426c4960851dab763a7e0ed07",
+      "id": "c018",
+      "patch": [
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 7,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "ee1798e70ab4aa9373446f70ef7e6f5dc1d2ad83ac06b849d245f1e2a7a6b637",
+      "values": {
+        "ashfallSmolder": 7,
+        "ashfallWard": 5,
+        "duskMaxHp": 68,
+        "flareDamage": 7,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 2,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 3
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "27cfe33bd69c912c81398e1f6325af36f854bec5a21c97d77de24613c9189422",
+      "id": "c019",
+      "patch": [
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 62,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "7570488bcbb02d61435cffd3e020c0afc16e3447455830126f2121343b25c782",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 4,
+        "duskMaxHp": 62,
+        "flareDamage": 10,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 4,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "9e49cbc766f40ec56cb3a91b4dbc8b50097155a323d932c9089c25a9d4794aa9",
+      "id": "c020",
+      "patch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 11,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "925f820861ccb4a8ea15819989aefcb845f11d86ab253979da74317ed30288a5",
+      "values": {
+        "ashfallSmolder": 7,
+        "ashfallWard": 5,
+        "duskMaxHp": 60,
+        "flareDamage": 11,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 5,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 3
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "5ed0759406a175826de64ba1ae2a7ac8ed7d8205918aa7136d6baa80fbe5241a",
+      "id": "c021",
+      "patch": [
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 7,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "c55c046e45b1cfa8977e726595dd886d05eaa5510af1b621ad18ed7e0244985c",
+      "values": {
+        "ashfallSmolder": 3,
+        "ashfallWard": 6,
+        "duskMaxHp": 64,
+        "flareDamage": 7,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 4,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "a3d3500071fdad286a2fbf767ec3eb5289f9d8002aa7698c9984b0a2c52fa35f",
+      "id": "c022",
+      "patch": [
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 7,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "a451ab2a324efd57ebccadb159cb1f3dbeb0698b8d5c2b3b459f59fc1ae24a0c",
+      "values": {
+        "ashfallSmolder": 7,
+        "ashfallWard": 6,
+        "duskMaxHp": 68,
+        "flareDamage": 7,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 5,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 4
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "f616e1f0632f23bc070bdafbbc2676f1da49a1683e6ea7208ac17079b4038a57",
+      "id": "c023",
+      "patch": [
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 9,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "0274dbd7d1190d11be3e3f3ebdedb2303e41821865b893a7b9d3866dc3712bf3",
+      "values": {
+        "ashfallSmolder": 3,
+        "ashfallWard": 3,
+        "duskMaxHp": 64,
+        "flareDamage": 9,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 2,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "ae88882844eee137a5a182e1baab505e7a7cd6766384a81177b1683bce4ab17a",
+      "id": "c024",
+      "patch": [
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 8,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "d2f028c7e3ceed4d81312c009d79852fb70c110dc67cf7f356b471680069b97b",
+      "values": {
+        "ashfallSmolder": 7,
+        "ashfallWard": 3,
+        "duskMaxHp": 68,
+        "flareDamage": 8,
+        "guardedStrikeWard": 3,
+        "ironSkinWard": 5,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "211db33f9160fba7156f8da0c244b4f1a80b20089c155ad731b79ba903037933",
+      "id": "c025",
+      "patch": [
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 66,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 11,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "e8ab36590ad328870586a1ce066d801c6399dad3c9455b0f1494e873dfa0152e",
+      "values": {
+        "ashfallSmolder": 5,
+        "ashfallWard": 7,
+        "duskMaxHp": 66,
+        "flareDamage": 11,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 2,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "0a0412cf03eb9ff8b8396c1a843095e4afce8358bce55a2e5190a0c82bb802cc",
+      "id": "c026",
+      "patch": [
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 7,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "bfcd6c0e961244f718483183383134d23690a6b7acc63d9ff5fe1ca2c41d331e",
+      "values": {
+        "ashfallSmolder": 3,
+        "ashfallWard": 3,
+        "duskMaxHp": 64,
+        "flareDamage": 7,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 3,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 3
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "fd696f8726fda97c24aea94627120ae0554268b0b4a5f66c2eab9407a30b1a17",
+      "id": "c027",
+      "patch": [
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 8,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 7,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "258ed49037c27971be8761df00a04d20165c6f02ab669f50aa59c4ceb5de9b46",
+      "values": {
+        "ashfallSmolder": 3,
+        "ashfallWard": 7,
+        "duskMaxHp": 68,
+        "flareDamage": 8,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 4,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "6deb41117c739a8cd438c4822f8e11acbd1eb57415dcc37d4dae5ac7b8d29c3c",
+      "id": "c028",
+      "patch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 11,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 1,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 8,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "4408779b072c9b1d73606e581e041fbd9b66ba4edf76c559156b21c0963b2940",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 3,
+        "duskMaxHp": 60,
+        "flareDamage": 11,
+        "guardedStrikeWard": 6,
+        "ironSkinWard": 3,
+        "regrowthHeal": 1,
+        "venomStrikeSmolder": 5
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "c9cff8da97e5d74ac24858009bddff39327321d321bb38904283e9ec250b8429",
+      "id": "c029",
+      "patch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 11,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "6c711b7509bd81371736fb393b9d5a7d41aad58ec4349999041b970872648be9",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 6,
+        "duskMaxHp": 60,
+        "flareDamage": 11,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 2,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "4148b8a03313f0774e104f099089b5f34c230a6dd8e12099c7429d49dde8cd72",
+      "id": "c030",
+      "patch": [
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 68,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 11,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "611287ceca852e41b68899f5548e6a59819b72b32c8d821f36158b7863c20e4d",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 6,
+        "duskMaxHp": 68,
+        "flareDamage": 11,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 3,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 3
+      }
+    },
+    {
+      "baseline": false,
+      "fileSha256": "a445b16bce32f7be13e03fd6bfedd3baa2486741cb43c98eaa35a78f6c83a898",
+      "id": "c031",
+      "patch": [
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 64,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 9,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "semanticSha256": "a3b774bab9b7c4c3d1fa03b6f4ff14f69b6643d2d21b01762ce801e8f1378e95",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 4,
+        "duskMaxHp": 64,
+        "flareDamage": 9,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 2,
+        "regrowthHeal": 3,
+        "venomStrikeSmolder": 3
+      }
+    }
+  ],
+  "combinations": 160000,
+  "count": 32,
+  "design": {
+    "closestPairCount": 28,
+    "marginalCounts": {
+      "ashfallSmolder": {
+        "3": 7,
+        "4": 7,
+        "5": 6,
+        "6": 6,
+        "7": 6
+      },
+      "ashfallWard": {
+        "3": 7,
+        "4": 7,
+        "5": 6,
+        "6": 6,
+        "7": 6
+      },
+      "duskMaxHp": {
+        "60": 6,
+        "62": 6,
+        "64": 6,
+        "66": 7,
+        "68": 7
+      },
+      "flareDamage": {
+        "10": 7,
+        "11": 6,
+        "7": 7,
+        "8": 6,
+        "9": 6
+      },
+      "guardedStrikeWard": {
+        "3": 8,
+        "4": 8,
+        "5": 8,
+        "6": 8
+      },
+      "ironSkinWard": {
+        "2": 8,
+        "3": 8,
+        "4": 8,
+        "5": 8
+      },
+      "regrowthHeal": {
+        "1": 8,
+        "2": 8,
+        "3": 8,
+        "4": 8
+      },
+      "venomStrikeSmolder": {
+        "2": 8,
+        "3": 8,
+        "4": 8,
+        "5": 8
+      }
+    },
+    "maximumAbsoluteColumnCorrelation": 0.3636023424671654,
+    "method": "balanced-maximin-discrete-v1",
+    "minimumHammingDistance": 4,
+    "restarts": 256,
+    "uniqueVectors": 32
+  },
+  "features": 8,
+  "numericWrites": 13,
+  "seed": 421,
+  "space": "/Users/jamesto/Coding/glassvow/docs/balance/421-content-search-space-v1.json",
+  "spaceIdentity": {
+    "fileSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+    "semanticSha256": "e0f7e6a37fafafe240849a109509ddf8fcc92dc9d88b9701676ea253c7fbe206"
+  },
+  "tool": "glassvow-balance-content-doe"
+}
