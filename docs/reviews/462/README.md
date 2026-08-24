@@ -44,10 +44,10 @@ That one command:
 
 ## Evidence layout
 
-- `docs/reviews/462/contact-sheets/`: compact review sheets committed after capture.
+- `docs/reviews/462/contact-sheets/`: compact review sheets from the first successful 168-frame capture. The GitHub Actions artifact `build4-map-defect-corpus-<full-head>` is the packet bound to the HEAD that produced it.
 - `docs/reviews/462/defect-ledger.csv`: stable defect-class IDs and exact frame references, or `NOT_OBSERVED` for a class absent from this corpus.
 - `docs/reviews/462/summary.md`: architectural-vs-asset classification only; no fixes.
-- `docs/reviews/462/device/`: owner-supplied TestFlight/device images, kept separate from desktop/Xvfb evidence.
+- `docs/reviews/462/device/`: owner-supplied TestFlight/device images, kept separate from desktop/Xvfb evidence. None were supplied for this packet.
 - GitHub Actions artifact `build4-map-defect-corpus-<full-head>`: both raw 168-frame runs, canonical manifest/dimensions/hash indexes, contact sheets, and repeatability report.
 
 The desktop/Xvfb corpus proves reproducibility of the checked-in production composition. It is not evidence of iPhone GPU output, safe-area behaviour, touch interaction, or TestFlight packaging.
