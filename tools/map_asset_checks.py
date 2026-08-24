@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import colorsys
 import hashlib
+import io
 import json
 import math
 import os
@@ -116,6 +117,14 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
         if rel in seen_paths or clean.is_absolute() or ".." in clean.parts or rel.startswith("res://"):
             found.append(Finding("manifest", where, f"duplicate or unsafe path {rel!r}"))
         seen_paths.add(rel)
+        # `components_max` switches off the hidden-internals check for a row, so
+        # it is gated here rather than merely read in `inspect_glb`. Unbounded
+        # and unvalidated it would let any kit write `components_max: 99` and
+        # turn the check off with the manifest still green -- an opt-out with no
+        # gate on the opt-out is not a gate.
+        if "components_max" in row and kind != "threshold":
+            found.append(Finding("manifest", where,
+                                 f"components_max is not available to kind {kind!r}"))
         if kind not in KINDS:
             found.append(Finding("manifest", where, f"unknown kind {kind!r}"))
             continue
@@ -139,6 +148,10 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
             if row.get("triangle_max") != 8000 or row.get("bytes_max") != 786432:
                 found.append(Finding("manifest", where,
                                      "threshold caps must be 8000 triangles / 768 KiB"))
+            if row.get("components_max") != 2:
+                found.append(Finding("manifest", where,
+                                     "threshold declares exactly components_max 2: "
+                                     "the hall and the smoke over its chimney"))
         elif kind == "tile":
             if role not in {"ground", "prop"} or clean.suffix != ".png" or act not in range(4):
                 found.append(Finding("manifest", where, "tile requires ground/prop role, PNG, act 0..3"))
@@ -395,6 +408,7 @@ def inspect_glb(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
             found.append(Finding("mesh", rel, f"{label} is not allowed on shipping kit GLBs"))
     # An embedded texture is allowed but not free: it rides inside the GLB, so
     # the row's `bytes_max` is what bounds it. No separate knob -- one budget.
+    found.extend(_embedded_mean_findings(gltf, blob, rel, row))
     accessors = gltf.get("accessors") or []
     index_id = primitive.get("indices")
     tris = 0
@@ -551,6 +565,37 @@ def _glb_chunks(data: bytes) -> tuple[dict[str, Any], bytes]:
     return gltf, blob
 
 
+## `tex_mean` is what the shader divides by to put a surface on the value
+## ladder, so it is a MEASUREMENT of the baked atlas, not a preference. Nothing
+## checked it: a re-bake would leave the number, and the `surface_value` derived
+## from it, quietly describing an image that no longer exists. This is the check
+## that makes the shader comment true.
+def _embedded_mean_findings(gltf: dict[str, Any], blob: bytes, rel: str,
+                            row: dict[str, Any]) -> list[Finding]:
+    declared = row.get("tex_mean")
+    images = gltf.get("images") or []
+    if declared is None or not images:
+        return []
+    view_id = (images[0] or {}).get("bufferView")
+    views = gltf.get("bufferViews") or []
+    if not isinstance(view_id, int) or not 0 <= view_id < len(views):
+        return [Finding("mesh", rel, "declares tex_mean but its image is not embedded")]
+    view = views[view_id]
+    start = int(view.get("byteOffset", 0))
+    raw = blob[start:start + int(view["byteLength"])]
+    try:
+        image = _pil().open(io.BytesIO(raw)).convert("L")
+    except (OSError, ValueError) as error:
+        return [Finding("mesh", rel, f"embedded image unreadable: {error}")]
+    pixels = image.tobytes()
+    measured = (sum(pixels) / len(pixels)) / 255.0 if pixels else 0.0
+    if abs(measured - float(declared)) > 0.01:
+        return [Finding("mesh", rel,
+                        f"embedded atlas mean {measured:.3f} is not the declared "
+                        f"tex_mean {float(declared):.3f}")]
+    return []
+
+
 def _connected_components(blob: bytes, gltf: dict[str, Any], primitive: dict[str, Any]) -> int:
     attributes = primitive.get("attributes") or {}
     accessors = gltf.get("accessors") or []
@@ -565,9 +610,23 @@ def _connected_components(blob: bytes, gltf: dict[str, Any], primitive: dict[str
     # splits a vertex everywhere the chart is cut, so the same corner arrives as
     # two indices that no triangle joins: the Vigil measured 118 "islands" raw
     # and 2 welded, and 3824 -> 2825 verts is exactly the Euler prediction for a
-    # closed surface at 5615 triangles. Welding costs the check nothing it was
-    # there to catch -- a hidden internal box is still disconnected afterwards,
-    # because nothing welds two surfaces that do not share a corner.
+    # closed surface at 5615 triangles.
+    #
+    # THIS IS A WEAKER CHECK THAN IT WAS, and the honest statement of how much.
+    # The invariant moved from "no vertex-disjoint bodies" to "no
+    # POSITION-disjoint bodies". A hidden interior body that floats free still
+    # fails, measured -- but one that touches the shell at a single coincident
+    # vertex now welds into the same component and passes: an unmerged CSG
+    # union, an inset partition that kept its shared edge, an interior box
+    # standing on the same floor plane. That is the price of letting an
+    # unwrapped asset through at all, and it is worth paying only because the
+    # alternative was banning UVs outright, which is what put a hand-painted
+    # trim sheet on the map's one building.
+    #
+    # `round(..., 5)` is a bucket, not a tolerance: two coincident vertices
+    # either side of a bucket edge stay split, and two distinct surfaces 10 um
+    # apart merge. At this map's unit scale neither is a way to hide anything,
+    # so it stays a bucket rather than growing a spatial index.
     seats: dict[tuple[float, float, float], int] = {}
     weld: list[int] = []
     for i in range(0, len(pos) - 2, 3):

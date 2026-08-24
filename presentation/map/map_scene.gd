@@ -77,6 +77,10 @@ const HIDE_PER_HEIGHT: float = 1.19
 ## what every construction that never sees a run gets, so a bare `MapScene.new()`
 ## is still deterministic.
 var _scatter_salt: int = 0
+## Set when the salt moves, cleared by the next bind. `set_act` no-ops on an
+## unchanged act, and a second run also starts in Act I, so without this the
+## new run stands in the old run's wood.
+var _salt_dirty: bool = false
 const TAP_SLOP: float = 12.0
 const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
@@ -186,10 +190,12 @@ func set_scatter_salt(salt: int) -> void:
 			stale.queue_free()
 	_add_props(_world)
 	_set_placeholders_visible(showing)
-	# Anything already standing was dealt from the old salt. Re-deal it, which
-	# also takes the placeholders back down at the end of the bind.
-	if _asset_geometry != null:
-		_deal_act(MapRegions.for_act(_act))
+	# Anything already standing was dealt from the old salt, but do NOT re-deal
+	# here: `_init` ends on Act I, so a save resumed in Act III would bind Act I
+	# in full -- eight kits, a terminus, the Vigil and a grade repaint -- purely
+	# to throw it away when the real act arrives a moment later. Flag it instead
+	# and let the next `set_act` do exactly one bind, of the right act.
+	_salt_dirty = _asset_geometry != null
 
 
 func active_asset_paths() -> PackedStringArray:
@@ -205,7 +211,7 @@ func active_asset_resources() -> Array[Resource]:
 ## new look paints once.
 func set_act(act_i: int) -> void:
 	var region: MapRegions = MapRegions.for_act(act_i)
-	if region.act == _act:
+	if region.act == _act and not _salt_dirty:
 		return
 	_act = region.act
 	_deal_act(region)
@@ -218,6 +224,7 @@ func set_act(act_i: int) -> void:
 ## starts in Act I. `set_act` no-ops on an unchanged act, so on its own it
 ## would leave the new run standing in the previous run's wood.
 func _deal_act(region: MapRegions) -> void:
+	_salt_dirty = false
 	var assets: Dictionary = _materials.bind_act(region, _all_prop_positions())
 	_bind_asset_geometry(assets)
 	if not is_live():
@@ -439,6 +446,21 @@ func _add_props(world: Node3D) -> void:
 ## leaves the fractional part of the product carrying it only a handful of
 ## digits. 997 is prime and larger than any period in the dressing, so folding
 ## here still reaches every yaw phase and every scale combination.
+## Which kit stands at seat `j` this run. THE ONE PLACE THAT DECIDES IT.
+##
+## Public because `tools/probe_map_seeds.gd` has to reach the same answer, and
+## it previously reached it by repeating the arithmetic -- which is how the two
+## drifted apart in the first place.
+##
+## Two loops need the answer -- the one that places the mesh and the one that
+## publishes its footprint to `MapPinProjection` -- and they must not disagree.
+## They did: the salt landed on the placement loop alone, and a footprint list
+## built from the other rotation is worse than no list at all, because the node
+## solver believes it.
+func seat_kit(j: int, kinds: int) -> int:
+	return 2 + posmod(j + _scatter_salt, kinds)
+
+
 func _dress_salt() -> int:
 	return posmod(_scatter_salt, 997)
 
@@ -535,11 +557,7 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	for i: int in range(2, meshes.size()):
 		var placements: PackedVector3Array = PackedVector3Array()
 		for j: int in range(positions.size()):
-			# WHICH species stands at a seat is a free variable, and it used to
-			# be `j % kinds` -- the same tree in the same hole every run. The
-			# run rotates it. Positions are untouched, so nothing the node
-			# solver, the road or the Vigil gap depend on moves.
-			if posmod(j + _scatter_salt, kinds) == i - 2:
+			if seat_kit(j, kinds) == i:
 				placements.append(positions[j])
 		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements,
 				i * 7 + _dress_salt(), KIT_SCALE[i])
@@ -547,9 +565,16 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	# from behind it. Radius takes the wider of x and z because yaw can swing
 	# one into the other; depth is how much ground the piece's own height
 	# hides at the camera's tilt.
+	#
+	# BOTH of those are per-SPECIES, which is why this reads `_seat_kit` rather
+	# than repeating the arithmetic. It used to repeat it, and when the salt
+	# arrived only the placement loop above was updated: five run seeds in six
+	# then published a 6.2 m ash trunk as whatever the unsalted rotation
+	# happened to name, so the solver stepped nodes around footprints belonging
+	# to trees that were not there.
 	var pieces: Array[Vector4] = []
 	for j: int in range(positions.size()):
-		var kit: int = 2 + (j % kinds)
+		var kit: int = seat_kit(j, kinds)
 		var box: AABB = meshes[kit].get_aabb()
 		var unit: float = KIT_SCALE[kit]
 		pieces.append(Vector4(positions[j].x, positions[j].z,
@@ -587,6 +612,12 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 			# otherwise, so a mesh that arrives without one degrades to projected
 			# stone rather than to a building painted with nothing.
 			var dressed: bool = _materials.bind_vigil_albedo(_baked_albedo(gate_mesh))
+			if not dressed:
+				# The whole point of this asset is that it is textured. Falling
+				# back to projected stone is survivable; doing it silently is
+				# not, because the building still renders and nothing looks
+				# broken enough to investigate.
+				push_warning("Vigil has no baked albedo; falling back to the prop shader")
 			gate.material_override = _materials.vigil if dressed else _materials.prop
 			gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			_asset_geometry.add_child(gate)
