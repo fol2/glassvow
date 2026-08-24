@@ -1,65 +1,237 @@
 extends RefCounted
 
+
 static func _check(fails: Array[String], ok: bool, what: String) -> void:
-	if not ok: fails.append("test_map_asset_profiles: %s" % what)
+	if not ok:
+		fails.append("test_map_asset_profiles: %s" % what)
+
 
 static func run(fails: Array[String]) -> void:
-	var registry: MapAssetProfiles = MapAssetProfiles.new(); var profiles: Array[Dictionary] = []; var by_id: Dictionary[String, Dictionary] = {}
+	_live_profiles(fails)
+	_geometry_contract(fails)
+	_runtime_digest(fails)
+
+
+static func _live_profiles(fails: Array[String]) -> void:
+	var registry: MapAssetProfiles = MapAssetProfiles.new()
+	var profiles: Array[Dictionary] = []
+	var by_id: Dictionary[String, Dictionary] = {}
 	for asset_id: String in registry.all_ids():
-		var resource: Resource = load(registry.resource_path(asset_id)); var mesh: Mesh = _mesh(resource)
-		var value: Dictionary = registry.profile(asset_id, mesh); var footprint_v: Variant = value.get("local_footprint", PackedVector2Array())
-		var footprint_size: int = footprint_v.size() if footprint_v is PackedVector2Array else 0
-		_check(fails, not value.is_empty() and footprint_size >= 3 and float(value.get("grounded_height", 0.0)) > 0.0
-				and str(value.get("source_mesh_identity", "")).length() == 64, "%s yields one finite non-empty profile" % asset_id)
-		profiles.append(value); by_id[asset_id] = value
-	_check(fails, profiles.size() == 28, "all 23 kits, four termini and the Vigil are profiled")
-	for fixture: String in ["act2-drowned-wall-corner", "act1-charred-stump", "act1-vigil", "act1-terminus"]:
-		_check(fails, by_id.has(fixture) and not by_id[fixture].is_empty(), "%s fixture is present" % fixture)
-	_check(fails, by_id["shared-road-slab-a"].get("semantic_class") == "road"
-			and by_id["act1-charred-stump"].get("semantic_class") == "scenery", "road kits are not scenery")
+		var resource: Resource = load(registry.resource_path(asset_id))
+		var mesh: Mesh = _mesh(resource)
+		var value: Dictionary = registry.profile(asset_id, mesh)
+		if value.is_empty():
+			_check(fails, false, "%s yields a profile" % asset_id)
+			continue
+		profiles.append(value)
+		by_id[asset_id] = value
+		var raw_points: Variant = value.get("local_footprint", PackedVector2Array())
+		var points: PackedVector2Array = PackedVector2Array()
+		if raw_points is PackedVector2Array:
+			points = raw_points
+		_check(fails, points.size() >= 3 and _signed_area(points) < 0.0,
+				"%s footprint is finite, non-empty and clockwise" % asset_id)
+		_check(fails, float(value.get("grounded_height", 0.0)) > 0.0,
+				"%s has positive grounded height" % asset_id)
+		_check(fails, str(value.get("source_mesh_identity", "")).length() == 64,
+				"%s has a stable source identity" % asset_id)
+	_check(fails, profiles.size() == 28,
+			"all 23 kits, four termini and the Vigil are profiled")
+	for fixture: String in [
+		"act2-drowned-wall-corner",
+		"act1-charred-stump",
+		"act1-vigil",
+		"act1-terminus",
+	]:
+		_check(fails, by_id.has(fixture), "%s fixture is present" % fixture)
+	if by_id.has("shared-road-slab-a") and by_id.has("act1-charred-stump"):
+		_check(fails,
+				by_id["shared-road-slab-a"].get("semantic_class")
+						== MapAssetProfiles.SEMANTIC_ROAD
+				and by_id["act1-charred-stump"].get("semantic_class")
+						== MapAssetProfiles.SEMANTIC_SCENERY,
+				"road kits remain classified separately from scenery")
+	if by_id.has("act1-vigil") and by_id.has("act1-terminus"):
+		_check(fails,
+				by_id["act1-vigil"].get("semantic_class")
+						== MapAssetProfiles.SEMANTIC_HERO
+				and by_id["act1-terminus"].get("semantic_class")
+						== MapAssetProfiles.SEMANTIC_HERO,
+				"the Vigil and terminus are hero fixtures")
 
-	var policy: Dictionary = {"kit_scales": [1.0, 1.0], "road_ids": [], "arch_passable_ids": [], "overrides": {}}
-	var fixture_manifest: Dictionary = {"profile_policy": policy, "assets": [
-		{"id": "long-wall", "kind": "kit", "act": -1, "path": "missing-long.glb"},
-		{"id": "compact", "kind": "kit", "act": -1, "path": "missing-compact.glb"}]}
-	var fixtures: MapAssetProfiles = MapAssetProfiles.new(fixture_manifest)
-	var long_mesh: BoxMesh = BoxMesh.new(); long_mesh.size = Vector3(8.0, 2.0, 1.0)
-	var changed_mesh: BoxMesh = BoxMesh.new(); changed_mesh.size = Vector3(7.0, 2.0, 1.0)
-	var long_value: Dictionary = fixtures.profile("long-wall", long_mesh); var changed_value: Dictionary = fixtures.profile("long-wall", changed_mesh)
-	var long_points_v: Variant = long_value.get("local_footprint", PackedVector2Array())
-	var long_points: PackedVector2Array = long_points_v if long_points_v is PackedVector2Array else PackedVector2Array()
-	_check(fails, absf(long_points[2].x - long_points[0].x) > absf(long_points[2].y - long_points[0].y) * 4.0,
-			"elongated wall remains elongated, not an equal-radius disc")
-	var transform: Transform3D = Transform3D(Basis(Vector3.UP, 0.7).scaled(Vector3(1.2, 1.0, 0.8)), Vector3(4.0, 0.0, -3.0))
-	_check(fails, fixtures.world_footprint(long_value, transform) == fixtures.world_footprint(long_value, transform), "world footprint transform is deterministic")
-	var clockwise: Array = [[0, 0], [0, 1], [2, 1], [2, 0]]; var counter: Array = [[0, 0], [2, 0], [2, 1], [0, 1], [0, 0]]
-	_check(fails, MapAssetProfiles.canonical_polygon(clockwise).get("points") == MapAssetProfiles.canonical_polygon(counter).get("points"),
-			"clockwise/counter-clockwise and closing duplicate canonicalise")
-	_check(fails, not bool(MapAssetProfiles.canonical_polygon([[0, 0], [1, 0], [0, 0], [0, 1]]).get("ok")), "non-closing duplicate hull fails explicitly")
-	_check(fails, fixtures.digest([long_value]) != fixtures.digest([changed_value]), "source AABB changes profile digest")
-	var bad_policy: Dictionary = policy.duplicate(true); bad_policy["kit_scales"] = [-1.0, 1.0]
-	var bad_manifest: Dictionary = fixture_manifest.duplicate(true); bad_manifest["profile_policy"] = bad_policy
-	_check(fails, MapAssetProfiles.new(bad_manifest).profile("long-wall", long_mesh).is_empty(), "negative scale fails closed")
-	policy["overrides"] = {"long-wall": {"footprint": [[0, 0], [0, 2], [3, 2], [3, 0]], "reason": "fixture"}}
-	fixture_manifest["profile_policy"] = policy
-	var overridden: Dictionary = MapAssetProfiles.new(fixture_manifest).profile("long-wall", long_mesh)
-	_check(fails, fixtures.digest([long_value]) != fixtures.digest([overridden]), "profile override changes digest")
-	var empty_mesh: ArrayMesh = ArrayMesh.new(); _check(fails, fixtures.profile("long-wall", empty_mesh).is_empty(), "non-positive grounded height fails closed")
-	_check(fails, fixtures.profile("missing-id", long_mesh).is_empty(), "missing asset ID fails closed")
 
-	var scene: MapScene = MapScene.new(); var active: Array[Dictionary] = []
-	for asset_id: String in registry.ids_for_act(0): active.append(by_id[asset_id])
-	_check(fails, not scene.asset_profile_digest().is_empty() and scene.asset_profile_digest() == registry.digest(active),
-			"runtime and headless profile digests agree")
+static func _geometry_contract(fails: Array[String]) -> void:
+	var fixture_manifest: Dictionary = _fixture_manifest()
+	var registry: MapAssetProfiles = MapAssetProfiles.new(fixture_manifest)
+	var long_mesh: BoxMesh = BoxMesh.new()
+	long_mesh.size = Vector3(8.0, 2.0, 1.0)
+	var compact_mesh: BoxMesh = BoxMesh.new()
+	compact_mesh.size = Vector3(1.5, 1.0, 1.2)
+	var changed_mesh: BoxMesh = BoxMesh.new()
+	changed_mesh.size = Vector3(7.0, 2.0, 1.0)
+	var long_value: Dictionary = registry.profile("long-wall", long_mesh)
+	var compact_value: Dictionary = registry.profile("compact", compact_mesh)
+	var changed_value: Dictionary = registry.profile("long-wall", changed_mesh)
+	var raw_long_points: Variant = long_value.get(
+			"local_footprint", PackedVector2Array())
+	var long_points: PackedVector2Array = PackedVector2Array()
+	if raw_long_points is PackedVector2Array:
+		long_points = raw_long_points
+	_check(fails, long_points.size() == 4,
+			"mesh AABB produces one conservative oriented rectangle")
+	if long_points.size() == 4:
+		var width: float = absf(long_points[2].x - long_points[0].x)
+		var depth: float = absf(long_points[2].y - long_points[0].y)
+		_check(fails, width > depth * 4.0,
+				"elongated wall remains elongated rather than becoming a disc")
+
+	var position: Vector3 = Vector3(4.0, 0.0, -3.0)
+	var yaw_degrees: float = 37.0
+	var scale: Vector3 = Vector3(1.2, 1.0, 0.8)
+	var transformed: PackedVector2Array = registry.transformed_footprint(
+			long_value, position, yaw_degrees, scale)
+	var expected: PackedVector2Array = _expected_transform(
+			long_points, position, yaw_degrees, scale)
+	_check(fails, transformed == expected and transformed == registry.transformed_footprint(
+			long_value, position, yaw_degrees, scale),
+			"footprint rotation, translation and scaling are deterministic")
+	_check(fails, registry.transformed_footprint(long_value, position, yaw_degrees,
+			Vector3(-1.0, 1.0, 1.0)).is_empty(),
+			"negative transformed scale fails closed")
+
+	var clockwise: Array = [[0, 0], [0, 1], [2, 1], [2, 0]]
+	var counter_with_duplicates: Array = [
+		[0, 0], [2, 0], [2, 1], [2, 1], [0, 1], [0, 0],
+	]
+	var canonical_clockwise: Dictionary = MapAssetProfiles.canonical_polygon(clockwise)
+	var canonical_counter: Dictionary = MapAssetProfiles.canonical_polygon(
+			counter_with_duplicates)
+	_check(fails, canonical_clockwise.get("points") == canonical_counter.get("points"),
+			"clockwise, counter-clockwise and closing/consecutive duplicates canonicalise")
+	_check(fails, not bool(MapAssetProfiles.canonical_polygon(
+			[[0, 0], [1, 0], [0, 0], [0, 1]]).get("ok", false)),
+			"non-consecutive duplicate hull input fails explicitly")
+	_check(fails, not bool(MapAssetProfiles.canonical_polygon(
+			[[0, 0], [2, 0], [1, 0.5], [2, 1], [0, 1]]).get("ok", false)),
+			"concave hull input fails explicitly")
+
+	_check(fails, registry.digest([long_value, compact_value])
+			== registry.digest([compact_value, long_value]),
+			"profile digest is independent of caller order")
+	_check(fails, registry.digest([long_value]) != registry.digest([changed_value]),
+			"changing source AABB changes the digest")
+
+	var override_manifest: Dictionary = fixture_manifest.duplicate(true)
+	override_manifest["profile_overrides"] = {
+		"long-wall": {
+			"footprint": [[0, 0], [0, 2], [3, 2], [3, 0]],
+			"reason": "test fixture narrows an over-conservative mesh AABB",
+		},
+	}
+	var override_registry: MapAssetProfiles = MapAssetProfiles.new(override_manifest)
+	var overridden: Dictionary = override_registry.profile("long-wall", long_mesh)
+	_check(fails, registry.digest([long_value])
+			!= override_registry.digest([overridden]),
+			"changing an authored footprint override changes the digest")
+
+	var negative_manifest: Dictionary = fixture_manifest.duplicate(true)
+	var negative_defaults: Dictionary = negative_manifest["profile_defaults"]
+	var negative_long: Dictionary = negative_defaults["long-wall"]
+	negative_long["scale"] = -1.0
+	negative_defaults["long-wall"] = negative_long
+	negative_manifest["profile_defaults"] = negative_defaults
+	_check(fails, MapAssetProfiles.new(negative_manifest).profile(
+			"long-wall", long_mesh).is_empty(),
+			"negative default scale fails closed")
+
+	var missing_default_manifest: Dictionary = fixture_manifest.duplicate(true)
+	var missing_defaults: Dictionary = missing_default_manifest["profile_defaults"]
+	missing_defaults.erase("long-wall")
+	missing_default_manifest["profile_defaults"] = missing_defaults
+	_check(fails, MapAssetProfiles.new(missing_default_manifest).profile(
+			"long-wall", long_mesh).is_empty(),
+			"missing asset profile defaults fail closed")
+	var empty_mesh: ArrayMesh = ArrayMesh.new()
+	_check(fails, registry.profile("long-wall", empty_mesh).is_empty(),
+			"non-positive mesh height fails closed")
+	_check(fails, registry.profile("missing-id", long_mesh).is_empty(),
+			"missing asset ID fails closed")
+
+
+static func _runtime_digest(fails: Array[String]) -> void:
+	var registry: MapAssetProfiles = MapAssetProfiles.new()
+	var active: Array[Dictionary] = []
+	for asset_id: String in registry.ids_for_act(0):
+		var resource: Resource = load(registry.resource_path(asset_id))
+		var value: Dictionary = registry.profile(asset_id, _mesh(resource))
+		if not value.is_empty():
+			active.append(value)
+	var headless_digest: String = registry.digest(active)
+	var scene: MapScene = MapScene.new()
+	_check(fails, not headless_digest.is_empty()
+			and scene.asset_profile_digest() == headless_digest,
+			"runtime and headless tools read the same active profile digest")
 	scene.free()
 
+
+static func _fixture_manifest() -> Dictionary:
+	return {
+		"assets": [
+			{"id": "long-wall", "kind": "kit", "act": -1,
+				"path": "missing-long.glb"},
+			{"id": "compact", "kind": "kit", "act": -1,
+				"path": "missing-compact.glb"},
+		],
+		"profile_defaults": {
+			"long-wall": {
+				"scale": 1.0,
+				"semantic_class": MapAssetProfiles.SEMANTIC_SCENERY,
+				"yaw_mode": MapAssetProfiles.YAW_FREE,
+			},
+			"compact": {
+				"scale": 1.0,
+				"semantic_class": MapAssetProfiles.SEMANTIC_SCENERY,
+				"yaw_mode": MapAssetProfiles.YAW_FREE,
+			},
+		},
+		"profile_overrides": {},
+	}
+
+
+static func _expected_transform(points: PackedVector2Array, position: Vector3,
+		yaw_degrees: float, scale: Vector3) -> PackedVector2Array:
+	var out: PackedVector2Array = PackedVector2Array()
+	var basis: Basis = Basis(Vector3.UP, deg_to_rad(yaw_degrees)).scaled(scale)
+	var transform: Transform3D = Transform3D(basis, position)
+	for point: Vector2 in points:
+		var world: Vector3 = transform * Vector3(point.x, 0.0, point.y)
+		out.append(Vector2(world.x, world.z))
+	return out
+
+
+static func _signed_area(points: PackedVector2Array) -> float:
+	var area: float = 0.0
+	for i: int in range(points.size()):
+		area += points[i].cross(points[(i + 1) % points.size()])
+	return area
+
+
 static func _mesh(resource: Resource) -> Mesh:
-	if resource is Mesh: return resource as Mesh
-	if not (resource is PackedScene): return null
-	var root: Node = (resource as PackedScene).instantiate(); var out: Mesh = _first_mesh(root); root.free(); return out
+	if resource is Mesh:
+		return resource as Mesh
+	if not (resource is PackedScene):
+		return null
+	var root: Node = (resource as PackedScene).instantiate()
+	var mesh: Mesh = _first_mesh(root)
+	root.free()
+	return mesh
+
+
 static func _first_mesh(root: Node) -> Mesh:
-	if root is MeshInstance3D: return (root as MeshInstance3D).mesh
+	if root is MeshInstance3D:
+		return (root as MeshInstance3D).mesh
 	for child: Node in root.get_children():
 		var found: Mesh = _first_mesh(child)
-		if found != null: return found
+		if found != null:
+			return found
 	return null
