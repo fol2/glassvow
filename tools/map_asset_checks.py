@@ -427,6 +427,11 @@ def inspect_glb(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
         if len(mins) >= 2 and not (-1e-3 <= float(mins[1]) <= 0.05):
             found.append(Finding("mesh", rel, f"ground pivot Y min {mins[1]!r}, expected ~0"))
         components = _connected_components(blob, gltf, primitive)
+        if components == 0:
+            found.append(Finding("mesh", rel,
+                                 "mesh is not indexed, so the connected-component "
+                                 "check cannot mean anything"))
+
         # Most assets are one body. A row says so explicitly when it is not:
         # the Vigil's smoke floats clear of its chimney and is a second body on
         # purpose. Defaulting to 1 keeps every other row as strict as before.
@@ -574,8 +579,14 @@ def _embedded_mean_findings(gltf: dict[str, Any], blob: bytes, rel: str,
                             row: dict[str, Any]) -> list[Finding]:
     declared = row.get("tex_mean")
     images = gltf.get("images") or []
-    if declared is None or not images:
+    if declared is None:
         return []
+    # Declared but nothing to measure is the silent pass this check exists to
+    # close: strip the atlas out of the GLB, or point the material at an
+    # external URI, and the number would go on describing an image that is no
+    # longer in the file.
+    if not images:
+        return [Finding("mesh", rel, "declares tex_mean but embeds no image to measure")]
     view_id = (images[0] or {}).get("bufferView")
     views = gltf.get("bufferViews") or []
     if not isinstance(view_id, int) or not 0 <= view_id < len(views):
@@ -584,9 +595,14 @@ def _embedded_mean_findings(gltf: dict[str, Any], blob: bytes, rel: str,
     start = int(view.get("byteOffset", 0))
     raw = blob[start:start + int(view["byteLength"])]
     try:
-        image = _pil().open(io.BytesIO(raw)).convert("L")
+        image = _pil().open(io.BytesIO(raw)).convert("RGB")
     except (OSError, ValueError) as error:
         return [Finding("mesh", rel, f"embedded image unreadable: {error}")]
+    # RGB mean, NOT luma. `tex_mean` is what the shader divides the sampled
+    # `.rgb` by, so the only mean that means anything here is the same one
+    # `stored_mean` takes for a tile. On the shipped atlas the two agree to
+    # 0.001 -- which is exactly why picking the wrong one would have gone
+    # unnoticed until an atlas with a colour cast arrived.
     pixels = image.tobytes()
     measured = (sum(pixels) / len(pixels)) / 255.0 if pixels else 0.0
     if abs(measured - float(declared)) > 0.01:
@@ -603,7 +619,11 @@ def _connected_components(blob: bytes, gltf: dict[str, Any], primitive: dict[str
     pos_id = attributes.get("POSITION")
     index_id = primitive.get("indices")
     if not isinstance(pos_id, int) or not isinstance(index_id, int):
-        return 1
+        # Caller turns this into a finding: an unindexed mesh has no shared
+        # vertices to union, so every triangle is its own island and the count
+        # would be meaningless. Returning 1 here used to make the whole check
+        # vacuous for such a file. All 13 shipping GLBs are indexed.
+        return 0
     pos = _read_accessor(blob, accessors[pos_id], views)
     indices = _read_accessor(blob, accessors[index_id], views)
     # Weld by POSITION before counting, or a UV seam reads as a tear. An unwrap
