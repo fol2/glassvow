@@ -145,14 +145,14 @@ def patch_checker() -> None:
         "profile validator")
     text = replace_once(text,
         '    if not isinstance(data, dict) or data.get("schema_version") != 1:\n        return [], [Finding("manifest", str(path), "schema_version must be 1")]',
-        '    if not isinstance(data, dict) or data.get("schema_version") != 2:\n        return [], [Finding("manifest", str(path), "schema_version must be 2")]\n'
+        '    if not isinstance(data, dict) or data.get("schema_version") != 2:\n        return [], [Finding("manifest", str(path), "schema_version must be 2")]',
+        "manifest schema")
+    text = replace_once(text, '    found: list[Finding] = []\n    if data.get("asset_root")',
+        '    found: list[Finding] = []\n'
         '    unknown_top = set(data) - {"schema_version", "asset_root", "profile_policy", "assets"}\n'
         '    if unknown_top:\n'
-        '        found = [Finding("manifest", str(path), f"unknown fields {sorted(unknown_top)}")]\n'
-        '    else:\n'
-        '        found = []', "manifest schema")
-    text = replace_once(text, '    found: list[Finding] = []\n    if data.get("asset_root")',
-        '    if data.get("asset_root")', "deduplicate found")
+        '        found.append(Finding("manifest", str(path), f"unknown fields {sorted(unknown_top)}"))\n'
+        '    if data.get("asset_root")', "top-level fields")
     text = replace_once(text, '    for kind, expected in EXPECTED_COUNTS.items():',
         '    found.extend(_profile_policy_findings(path, data.get("profile_policy"), rows))\n'
         '    for kind, expected in EXPECTED_COUNTS.items():', "profile policy call")
