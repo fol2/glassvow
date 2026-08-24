@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   apply:
+    # This workflow removes itself before committing the verified candidate.
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
