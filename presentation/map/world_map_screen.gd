@@ -361,6 +361,10 @@ func _act_line(region: String, boss: String) -> String:
 func refresh(run: RunState) -> void:
 	if run != null:
 		_run = run
+		# Before the act binds: the salt is what the scenery is dealt from, and
+		# `_set_act_theme` is what rebinds the geometry that reads it.
+		if _map_scene != null:
+			_map_scene.set_scatter_salt(run.seed)
 		_set_act_theme(run.act)
 		var act: Dictionary = content.acts[_act]
 		var act_name: String = Locale.active.t("ui.pilgrimage.roseWindow") \

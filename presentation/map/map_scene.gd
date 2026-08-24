@@ -72,6 +72,11 @@ const ROAD_SCALE: float = 2.15
 ## Metres of ground a piece of scenery hides per metre of its own height, at
 ## the camera's tilt: 1 / tan(40°).
 const HIDE_PER_HEIGHT: float = 1.19
+
+## The run's own number, dealt into the landscape. 0 is a legal value and is
+## what every construction that never sees a run gets, so a bare `MapScene.new()`
+## is still deterministic.
+var _scatter_salt: int = 0
 const TAP_SLOP: float = 12.0
 const FLING_DAMP: float = 0.06
 const FLING_MAX: float = 48.0
@@ -157,6 +162,36 @@ func get_act() -> int:
 	return _act
 
 
+## Deal this run's landscape. Call BEFORE `set_act`, which is what rebinds the
+## geometry that reads it.
+##
+## The placeholders are rebuilt here rather than left alone. They are what shows
+## if an act's real assets fail to load, and the grade's contact shadows are
+## painted from these same seats -- a fallback standing somewhere the shadows
+## are not is worse than a fallback that is merely grey.
+func set_scatter_salt(salt: int) -> void:
+	if salt == _scatter_salt:
+		return
+	_scatter_salt = salt
+	# `_add_props` builds them visible, which is right at boot and wrong here:
+	# a rebuild that forgets they were down paints the placeholder prisms
+	# straight over the real kits, and they are dark enough to read as flat
+	# black plates lying on the ground. Measured, not guessed -- three of six
+	# review seeds showed them before this line existed.
+	var showing: bool = _placeholders_visible()
+	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
+		var stale: Node = _world.find_child(node_name, false, false)
+		if stale != null:
+			_world.remove_child(stale)
+			stale.queue_free()
+	_add_props(_world)
+	_set_placeholders_visible(showing)
+	# Anything already standing was dealt from the old salt. Re-deal it, which
+	# also takes the placeholders back down at the end of the bind.
+	if _asset_geometry != null:
+		_deal_act(MapRegions.for_act(_act))
+
+
 func active_asset_paths() -> PackedStringArray:
 	return _materials.active_asset_paths()
 
@@ -173,6 +208,16 @@ func set_act(act_i: int) -> void:
 	if region.act == _act:
 		return
 	_act = region.act
+	_deal_act(region)
+
+
+## Bind an act's materials and geometry from the CURRENT salt.
+##
+## Split out of `set_act` because the salt changes without the act changing,
+## and that is the ordinary case rather than an odd one: a second run also
+## starts in Act I. `set_act` no-ops on an unchanged act, so on its own it
+## would leave the new run standing in the previous run's wood.
+func _deal_act(region: MapRegions) -> void:
 	var assets: Dictionary = _materials.bind_act(region, _all_prop_positions())
 	_bind_asset_geometry(assets)
 	if not is_live():
@@ -387,6 +432,17 @@ func _add_props(world: Node3D) -> void:
 	_add_multimesh(world, "DabMasses", _dab_mesh(), _dab_positions(), 17)
 
 
+## The salt, folded small, for the instance index `_add_multimesh` dresses from.
+##
+## That index becomes a yaw by `index * 1.117` radians and a scale by
+## `index % 4` and `% 3`. A raw run seed near 2^31 still yields a yaw, but it
+## leaves the fractional part of the product carrying it only a handful of
+## digits. 997 is prime and larger than any period in the dressing, so folding
+## here still reaches every yaw phase and every scale combination.
+func _dress_salt() -> int:
+	return posmod(_scatter_salt, 997)
+
+
 ## INSTANCE_CUSTOM.xyz phase copied from MapSceneProxy._add_multimesh
 ## (#207 repair 4). Do not parent or subclass the proxy.
 func _add_multimesh(world: Node3D, node_name: String, mesh: Mesh,
@@ -479,10 +535,14 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	for i: int in range(2, meshes.size()):
 		var placements: PackedVector3Array = PackedVector3Array()
 		for j: int in range(positions.size()):
-			if j % kinds == i - 2:
+			# WHICH species stands at a seat is a free variable, and it used to
+			# be `j % kinds` -- the same tree in the same hole every run. The
+			# run rotates it. Positions are untouched, so nothing the node
+			# solver, the road or the Vigil gap depend on moves.
+			if posmod(j + _scatter_salt, kinds) == i - 2:
 				placements.append(positions[j])
 		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements,
-				i * 7, KIT_SCALE[i])
+				i * 7 + _dress_salt(), KIT_SCALE[i])
 	# Tell the projection what now stands where, so the nodes can step out
 	# from behind it. Radius takes the wider of x and z because yaw can swing
 	# one into the other; depth is how much ground the piece's own height
@@ -611,6 +671,11 @@ func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
 	return instances
 
 
+func _placeholders_visible() -> bool:
+	var node: Node = _world.find_child("FlatWedges", false, false)
+	return node is GeometryInstance3D and (node as GeometryInstance3D).visible
+
+
 func _set_placeholders_visible(on: bool) -> void:
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
 		var node: Node = _world.find_child(node_name, false, false)
@@ -656,32 +721,77 @@ func _first_mesh(root: Node) -> MeshInstance3D:
 	return null
 
 
+## The ground the scenery may stand on, along the journey. Clears the Vigil to
+## the west and the terminus at x = 40 to the east; it is the span the authored
+## set this replaced already used, so nothing downstream sees a wider field.
+const SCATTER_X: Vector2 = Vector2(-33.0, 31.5)
+## How far off the centre line each family sits, as |z|. The lanes run
+## z = -18..18 in 6-unit steps, so these bands put scenery INSIDE the node
+## field rather than on its banks -- nodes step around it, which is
+## `MapPinProjection.resolve`'s job, and the corridor down z = 0 stays open.
+const WEDGE_Z: Vector2 = Vector2(8.5, 11.7)
+const SLAB_Z: Vector2 = Vector2(5.6, 6.9)
+const DAB_Z: Vector2 = Vector2(7.4, 11.8)
+## How much of its own band a piece may wander in. At 1.0 two neighbours could
+## meet on the shared edge and the stratification would buy nothing.
+const BAND_INSET: float = 0.7
+
+
+## One RNG per family, so adding a piece to one does not reshuffle the others.
+##
+## Deliberately NOT `RunState.rng`. That stream belongs to the domain, and
+## drawing from it here would advance it and change what the map generator
+## rolls next -- the scenery would silently move the graph.
+func _scatter_rng(stream: int) -> RandomNumberGenerator:
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.seed = _scatter_salt ^ (stream * 0x9E3779B9)
+	return rng
+
+
+## Seats for one family: stratified along the journey, alternating sides.
+##
+## Stratified rather than free, and that is what makes a dealt landscape read
+## like the authored one it replaces. Each family cuts the journey into as many
+## bands as it has pieces and draws one piece inside each, so neighbour spacing
+## stays in a narrow range. Nine uniform draws over the same 64 units put
+## neighbours anywhere from touching to twenty apart, which reads as three
+## thickets and a desert rather than as a wood.
+##
+## The side flips every piece, from a start the run picks. That is what keeps
+## the middle open without anything having to test for it.
+func _band_seats(count: int, z_band: Vector2, height: float,
+		stream: int) -> PackedVector3Array:
+	var rng: RandomNumberGenerator = _scatter_rng(stream)
+	var out: PackedVector3Array = PackedVector3Array()
+	var span: float = (SCATTER_X.y - SCATTER_X.x) / float(count)
+	var side: float = 1.0 if rng.randf() < 0.5 else -1.0
+	for i: int in range(count):
+		var centre: float = SCATTER_X.x + (float(i) + 0.5) * span
+		out.append(Vector3(
+				centre + rng.randf_range(-0.5, 0.5) * span * BAND_INSET,
+				height,
+				side * rng.randf_range(z_band.x, z_band.y)))
+		side = -side
+	return out
+
+
 func _wedge_positions() -> PackedVector3Array:
-	return PackedVector3Array([
-		Vector3(-31.5, 1.7, -9.75), Vector3(-25.5, 1.7, 8.55),
-		Vector3(-18.0, 1.7, -11.55), Vector3(-9.75, 1.7, 9.6),
-		Vector3(-1.5, 1.7, -8.7), Vector3(7.5, 1.7, 10.8),
-		Vector3(15.75, 1.7, -10.05), Vector3(24.0, 1.7, 8.85),
-		Vector3(31.5, 1.7, -11.25),
-	])
+	return _band_seats(9, WEDGE_Z, 1.7, 1)
 
 
+## Two entries per seat, at the two heights the placeholder prism stacks at.
+## The real kits flatten y to 0 in `_all_prop_positions`, so a pair becomes two
+## kits sharing one footprint -- which is the stack this family is named for.
 func _slab_positions() -> PackedVector3Array:
-	return PackedVector3Array([
-		Vector3(-27.75, 0.31, 5.85), Vector3(-27.75, 0.86, 5.85),
-		Vector3(-12.0, 0.31, -6.75), Vector3(-12.0, 0.86, -6.75),
-		Vector3(6.0, 0.31, 6.3), Vector3(6.0, 0.86, 6.3),
-		Vector3(23.25, 0.31, -6.0), Vector3(23.25, 0.86, -6.0),
-	])
+	var out: PackedVector3Array = PackedVector3Array()
+	for base: Vector3 in _band_seats(4, SLAB_Z, 0.0, 2):
+		out.append(Vector3(base.x, 0.31, base.z))
+		out.append(Vector3(base.x, 0.86, base.z))
+	return out
 
 
 func _dab_positions() -> PackedVector3Array:
-	return PackedVector3Array([
-		Vector3(-33.0, 0.0, 11.7), Vector3(-21.0, 0.0, -7.8),
-		Vector3(-15.75, 0.0, 11.4), Vector3(-5.25, 0.0, 7.5),
-		Vector3(3.0, 0.0, -11.55), Vector3(12.75, 0.0, 7.8),
-		Vector3(19.5, 0.0, -11.7), Vector3(30.75, 0.0, 10.35),
-	])
+	return _band_seats(8, DAB_Z, 0.0, 3)
 
 
 ## Ground level, for the real kits and for the grade's contact shadows.
@@ -691,6 +801,12 @@ func _dab_positions() -> PackedVector3Array:
 ## primitive needs, and the prism's half-height is exactly 1.7. Passing those
 ## through unchanged floated the whole scenery set 1.7 m, with the grade's
 ## contact shadows still painted on the ground beneath it.
+## The dealt seats, for anything that has to measure them without standing up
+## a viewport -- `tools/probe_map_seeds.gd` is the caller this exists for.
+func prop_positions() -> PackedVector3Array:
+	return _all_prop_positions()
+
+
 func _all_prop_positions() -> PackedVector3Array:
 	var seats: PackedVector3Array = _wedge_positions()
 	seats.append_array(_slab_positions())
