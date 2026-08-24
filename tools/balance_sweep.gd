@@ -11,13 +11,25 @@ func _initialize() -> void:
 		push_error("balance_sweep: %s" % opts["error"])
 		quit(2)
 		return
-	var content: ContentDB = ContentDB.load_full(false)
-	var git_out: Array = []
-	OS.execute("git", ["rev-parse", "HEAD"], git_out)
+	var loaded: Dictionary = BalanceCatalogue.open(opts)
+	if loaded.has("error"):
+		push_error("balance_sweep: %s" % loaded["error"])
+		quit(2)
+		return
+	var identity_v: Variant = loaded["identity"]
+	if typeof(identity_v) != TYPE_DICTIONARY:
+		push_error("balance_sweep: missing catalogue identity")
+		quit(2)
+		return
+	var identity: Dictionary = identity_v
+	var content: ContentDB = BalanceCatalogue.load_prepared(loaded)
+	if content == null:
+		push_error("balance_sweep: content did not load a catalogue")
+		quit(2)
+		return
 	var manifest: Dictionary = opts.duplicate()
-	manifest["commit"] = str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown"
-	manifest["godot"] = Engine.get_version_info().get("string", "unknown")
-	manifest["contentSha256"] = FileAccess.get_sha256(ContentDB.FULL_PATH)
+	manifest.merge(identity)
+	manifest["contentSha256"] = str(identity.get("contentFileSha256", ""))
 	var file: FileAccess = FileAccess.open(str(opts["out"]), FileAccess.WRITE)
 	if file == null:
 		push_error("balance_sweep: cannot write --out")
@@ -73,7 +85,8 @@ static func _write_policies(content: ContentDB, opts: Dictionary, file: FileAcce
 
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"mode": "sweep", "out": "", "rootSeed": 215,
-		"policyFirst": 0, "policyCount": 2000, "seeds": 40, "seed0": 3000}
+		"policyFirst": 0, "policyCount": 2000, "seeds": 40, "seed0": 3000,
+		"content": "", "space": BalanceCatalogue.DEFAULT_SPACE, "stage": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}
