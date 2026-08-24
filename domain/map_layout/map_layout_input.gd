@@ -122,12 +122,9 @@ static func _validate_edges(
 	value: Variant, nodes_v: Variant, errors: Array[String]
 ) -> void:
 	if typeof(value) != TYPE_ARRAY:
-		errors.append("input.edges must be a non-empty Array")
+		errors.append("input.edges must be an Array")
 		return
 	var rows: Array = value
-	if rows.is_empty():
-		errors.append("input.edges must be a non-empty Array")
-		return
 	var node_ids: Dictionary = {}
 	if typeof(nodes_v) == TYPE_ARRAY:
 		var node_rows: Array = nodes_v
