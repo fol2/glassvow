@@ -53,28 +53,20 @@ func _initialize() -> void:
 	var content: ContentDB = ContentDB.load_full()
 	Locale.active.hydrate_content(content)
 
-	var cases: Array[Dictionary] = []
 	for act_index: int in GENERATED_ACTS:
 		for seed: int in GENERATED_SEEDS:
-			cases.append({
-				"act_index": act_index,
-				"act_number": act_index + 1,
-				"seed": seed,
-				"generated": true,
-			})
-	cases.append({
-		"act_index": AUTHORED_ACT,
-		"act_number": AUTHORED_ACT + 1,
-		"seed": AUTHORED_ACT_SEED,
-		"generated": false,
-	})
-
-	for case: Dictionary in cases:
-		for shape: StringName in StageShape.SHIPPING:
-			var capture_error: Error = await _capture_case_shape(content, case, shape)
-			if capture_error != OK:
-				quit(1)
-				return
+			for shape: StringName in StageShape.SHIPPING:
+				var generated_error: Error = await _capture_case_shape(
+					content, act_index, act_index + 1, seed, true, shape)
+				if generated_error != OK:
+					quit(1)
+					return
+	for shape: StringName in StageShape.SHIPPING:
+		var authored_error: Error = await _capture_case_shape(
+			content, AUTHORED_ACT, AUTHORED_ACT + 1, AUTHORED_ACT_SEED, false, shape)
+		if authored_error != OK:
+			quit(1)
+			return
 
 	var manifest: Dictionary = _manifest(manifest_sha256)
 	var manifest_path: String = _absolute(_output_dir.path_join("manifest.json"))
@@ -104,7 +96,14 @@ func _parse_args() -> String:
 	return ""
 
 
-func _capture_case_shape(content: ContentDB, case: Dictionary, shape: StringName) -> Error:
+func _capture_case_shape(
+		content: ContentDB,
+		act_index: int,
+		act_number: int,
+		seed: int,
+		generated: bool,
+		shape: StringName
+) -> Error:
 	var viewport_size: Vector2i = StageShape.REFERENCES[shape]
 	DisplayServer.window_set_size(viewport_size)
 	root.size = viewport_size
@@ -112,8 +111,8 @@ func _capture_case_shape(content: ContentDB, case: Dictionary, shape: StringName
 	await process_frame
 	await process_frame
 
-	var run: RunState = RunState.new_run(content, int(case["seed"]))
-	run.act = int(case["act_index"])
+	var run: RunState = RunState.new_run(content, seed)
+	run.act = act_index
 	var world_map: WorldMap = WorldMap.for_run(run, content)
 	var rng_after_map: int = run.rng_state()
 	var screen: WorldMapScreen = WorldMapScreen.new(world_map, content, shape)
@@ -145,7 +144,8 @@ func _capture_case_shape(content: ContentDB, case: Dictionary, shape: StringName
 	for zoom_stop: int in range(MapCameraRig.ZOOM_STOPS.size()):
 		for pose: String in ["opening", "focused"]:
 			var capture_error: Error = await _capture_frame(
-				screen, map_scene, run, world_map, case, shape, viewport_size,
+				screen, map_scene, run, world_map,
+				act_index, act_number, seed, generated, shape, viewport_size,
 				zoom_stop, pose, rng_after_map, active_assets)
 			if capture_error != OK:
 				root.remove_child(screen)
@@ -163,7 +163,10 @@ func _capture_frame(
 		map_scene: MapScene,
 		run: RunState,
 		world_map: WorldMap,
-		case: Dictionary,
+		act_index: int,
+		act_number: int,
+		seed: int,
+		generated: bool,
 		shape: StringName,
 		viewport_size: Vector2i,
 		zoom_stop: int,
@@ -194,9 +197,8 @@ func _capture_frame(
 			shape, viewport_size, image.get_width(), image.get_height()])
 		return ERR_INVALID_DATA
 
-	var filename: String = _filename(
-		int(case["act_number"]), int(case["seed"]), shape,
-		zoom_stop, int(MapCameraRig.ZOOM_STOPS[zoom_stop]), pose)
+	var zoom_size: int = int(MapCameraRig.ZOOM_STOPS[zoom_stop])
+	var filename: String = _filename(act_number, seed, shape, zoom_stop, zoom_size, pose)
 	var relative_path: String = "raw/" + filename
 	var output_path: String = _absolute(_output_dir.path_join(relative_path))
 	var save_error: Error = image.save_png(output_path)
@@ -209,10 +211,10 @@ func _capture_frame(
 	_frames.append({
 		"frame_id": "F%03d" % _next_frame_number,
 		"file": relative_path,
-		"act": int(case["act_number"]),
-		"act_index": int(case["act_index"]),
-		"seed": int(case["seed"]),
-		"generated_act": bool(case["generated"]),
+		"act": act_number,
+		"act_index": act_index,
+		"seed": seed,
+		"generated_act": generated,
 		"shape": String(shape),
 		"viewport": {"width": viewport_size.x, "height": viewport_size.y},
 		"zoom_stop": zoom_stop,
