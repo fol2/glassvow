@@ -31,7 +31,7 @@ static func _live_profiles(fails: Array[String]) -> void:
 			points = raw_points
 		_check(fails, points.size() >= 3 and _signed_area(points) < 0.0,
 				"%s footprint is finite, non-empty and clockwise" % asset_id)
-		_check(fails, float(value.get("grounded_height", 0.0)) > 0.0,
+		_check(fails, _float_value(value, "grounded_height", 0.0) > 0.0,
 				"%s has positive grounded height" % asset_id)
 		_check(fails, str(value.get("source_mesh_identity", "")).length() == 64,
 				"%s has a stable source identity" % asset_id)
@@ -108,11 +108,13 @@ static func _geometry_contract(fails: Array[String]) -> void:
 			counter_with_duplicates)
 	_check(fails, canonical_clockwise.get("points") == canonical_counter.get("points"),
 			"clockwise, counter-clockwise and closing/consecutive duplicates canonicalise")
-	_check(fails, not bool(MapAssetProfiles.canonical_polygon(
-			[[0, 0], [1, 0], [0, 0], [0, 1]]).get("ok", false)),
+	var duplicate_result: Dictionary = MapAssetProfiles.canonical_polygon(
+			[[0, 0], [1, 0], [0, 0], [0, 1]])
+	_check(fails, not _bool_value(duplicate_result, "ok", false),
 			"non-consecutive duplicate hull input fails explicitly")
-	_check(fails, not bool(MapAssetProfiles.canonical_polygon(
-			[[0, 0], [2, 0], [1, 0.5], [2, 1], [0, 1]]).get("ok", false)),
+	var concave_result: Dictionary = MapAssetProfiles.canonical_polygon(
+			[[0, 0], [2, 0], [1, 0.5], [2, 1], [0, 1]])
+	_check(fails, not _bool_value(concave_result, "ok", false),
 			"concave hull input fails explicitly")
 
 	_check(fails, registry.digest([long_value, compact_value])
@@ -135,8 +137,9 @@ static func _geometry_contract(fails: Array[String]) -> void:
 			"changing an authored footprint override changes the digest")
 
 	var negative_manifest: Dictionary = fixture_manifest.duplicate(true)
-	var negative_defaults: Dictionary = negative_manifest["profile_defaults"]
-	var negative_long: Dictionary = negative_defaults["long-wall"]
+	var negative_defaults: Dictionary = _dictionary_value(
+			negative_manifest, "profile_defaults")
+	var negative_long: Dictionary = _dictionary_value(negative_defaults, "long-wall")
 	negative_long["scale"] = -1.0
 	negative_defaults["long-wall"] = negative_long
 	negative_manifest["profile_defaults"] = negative_defaults
@@ -145,7 +148,8 @@ static func _geometry_contract(fails: Array[String]) -> void:
 			"negative default scale fails closed")
 
 	var missing_default_manifest: Dictionary = fixture_manifest.duplicate(true)
-	var missing_defaults: Dictionary = missing_default_manifest["profile_defaults"]
+	var missing_defaults: Dictionary = _dictionary_value(
+			missing_default_manifest, "profile_defaults")
 	missing_defaults.erase("long-wall")
 	missing_default_manifest["profile_defaults"] = missing_defaults
 	_check(fails, MapAssetProfiles.new(missing_default_manifest).profile(
@@ -235,3 +239,30 @@ static func _first_mesh(root: Node) -> Mesh:
 		if found != null:
 			return found
 	return null
+
+
+static func _dictionary_value(source: Dictionary, key: String) -> Dictionary:
+	var raw: Variant = source.get(key, {})
+	if raw is Dictionary:
+		var value: Dictionary = raw
+		return value.duplicate(true)
+	return {}
+
+
+static func _float_value(source: Dictionary, key: String, fallback: float) -> float:
+	var raw: Variant = source.get(key, fallback)
+	if raw is float:
+		var decimal: float = raw
+		return decimal
+	if raw is int:
+		var integer: int = raw
+		return float(integer)
+	return fallback
+
+
+static func _bool_value(source: Dictionary, key: String, fallback: bool) -> bool:
+	var raw: Variant = source.get(key, fallback)
+	if raw is bool:
+		var value: bool = raw
+		return value
+	return fallback
