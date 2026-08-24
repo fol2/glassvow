@@ -95,11 +95,42 @@ def split_count(total: int, jobs: int) -> list[dict[str, int]]:
 def protocol(contract: dict[str, Any]) -> dict[str, Any]:
     return {
         "issue": 457,
-        "controls": {"first": CONTROL_SEEDS[0], "last": CONTROL_SEEDS[1], "arms": list(RANK_ARMS)},
-        "landscape": {"root": POLICY_ROOT, "policyFirst": 0, "policyCount": POLICY_COUNT,
+        "controls": {"stage": "f0-controls", "root": POLICY_ROOT,
+                     "first": CONTROL_SEEDS[0], "last": CONTROL_SEEDS[1], "arms": list(RANK_ARMS)},
+        "landscape": {"stage": "f0-mini-landscape", "root": POLICY_ROOT,
+                      "policyFirst": 0, "policyCount": POLICY_COUNT,
                       "first": LAND_SEEDS[0], "last": LAND_SEEDS[1]},
         "frozenLandscape": contract["frozenLandscape"],
         "bootSeed": BOOT_SEED,
+    }
+
+
+def evaluation_spec(proto: dict[str, Any]) -> dict[str, Any]:
+    """Resolve the generic evaluator ranges while preserving the F0 defaults."""
+    controls, landscape = proto["controls"], proto["landscape"]
+    return {
+        "controlStage": str(controls.get("stage", "f0-controls")),
+        "controlRoot": int(controls.get("root", landscape.get("root", POLICY_ROOT))),
+        "controlFirst": int(controls["first"]), "controlLast": int(controls["last"]),
+        "landscapeStage": str(landscape.get("stage", "f0-mini-landscape")),
+        "landscapeRoot": int(landscape.get("root", POLICY_ROOT)),
+        "landscapeFirst": int(landscape["first"]), "landscapeLast": int(landscape["last"]),
+        "policyFirst": int(landscape.get("policyFirst", 0)),
+        "policyCount": int(landscape["policyCount"]),
+    }
+
+
+def evaluation_from_registry(registry: dict[str, Any], name: str,
+                             axes: dict[str, Any]) -> dict[str, Any]:
+    """Select one immutable evaluation without leaking unrelated registry fields."""
+    selected = registry.get("evaluations", {}).get(name)
+    if not isinstance(selected, dict):
+        raise ValueError(f"unknown evaluation {name!r}")
+    return {
+        "issue": int(registry["issue"]), "evaluation": name,
+        "controls": selected["controls"], "landscape": selected["landscape"],
+        "frozenLandscape": axes, "bootstrap": int(selected.get("bootstrap", 1000)),
+        "finalistAudit": bool(selected.get("finalistAudit", False)),
     }
 
 
@@ -506,8 +537,10 @@ def write_observations(path: Path, rows: list[dict[str, Any]], identity: dict[st
     return sha256_bytes(text.encode())
 
 
-def require_stage(stage: str, first: int, last: int) -> None:
-    err = check_invocation(load_contract(), stage, first, last, POLICY_ROOT)
+def require_stage(stage: str, first: int, last: int, root: int,
+                  sealed_token: str | None = None) -> None:
+    err = check_invocation(load_contract(), stage, first, last, root,
+                           sealed_token=sealed_token)
     if err:
         raise ValueError(err)
 
@@ -550,10 +583,17 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     }
     dump(input_path, {"inputHash": digest, "parts": parts})
     t0 = time.perf_counter()
-    c_plan, l_plan = split_span(*CONTROL_SEEDS, jobs), split_count(POLICY_COUNT, jobs)
-    for spec in c_plan:
-        require_stage("f0-controls", spec["seed0"], spec["seed0"] + spec["seeds"] - 1)
-    require_stage("f0-mini-landscape", LAND_SEEDS[0], LAND_SEEDS[1])
+    resolved = evaluation_spec(proto)
+    c_plan = split_span(resolved["controlFirst"], resolved["controlLast"], jobs)
+    l_plan = split_count(resolved["policyCount"], jobs)
+    land_n = resolved["landscapeLast"] - resolved["landscapeFirst"] + 1
+    for shard in c_plan:
+        require_stage(resolved["controlStage"], shard["seed0"],
+                      shard["seed0"] + shard["seeds"] - 1, resolved["controlRoot"],
+                      proto.get("sealedToken"))
+    require_stage(resolved["landscapeStage"], resolved["landscapeFirst"],
+                  resolved["landscapeLast"], resolved["landscapeRoot"],
+                  proto.get("sealedToken"))
 
     def control_job(item: tuple[int, dict[str, int]]) -> Path:
         index, spec = item
@@ -565,7 +605,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         tmp = dest.with_suffix(".json.tmp")
         godot_sweep(godot, [
             "--mode=controls", f"--seeds={spec['seeds']}", f"--seed0={spec['seed0']}",
-            f"--rootSeed={POLICY_ROOT}", "--stage=f0-controls", f"--content={content}",
+            f"--rootSeed={resolved['controlRoot']}", f"--stage={resolved['controlStage']}",
+            f"--content={content}",
             f"--out={tmp}",
         ], tmp, dest.with_suffix(".log"))
         tmp.replace(dest)
@@ -584,15 +625,17 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
             index, spec = item
             dest = cand_dir / "landscape" / f"shard-{index}.ndjson"
             dest.parent.mkdir(parents=True, exist_ok=True)
-            expected = spec["policyCount"] * 4 * LAND_N
+            expected = spec["policyCount"] * 4 * land_n
             if resume and landscape_complete(dest, expected, cand["fileSha256"]):
                 return dest
             tmp = Path(str(dest) + ".tmp")
             godot_sweep(godot, [
-                "--mode=sweep", f"--rootSeed={POLICY_ROOT}",
-                f"--policyFirst={spec['policyFirst']}", f"--policyCount={spec['policyCount']}",
-                f"--seeds={LAND_N}", f"--seed0={LAND_SEEDS[0]}",
-                "--stage=f0-mini-landscape", f"--content={content}", f"--out={tmp}",
+                "--mode=sweep", f"--rootSeed={resolved['landscapeRoot']}",
+                f"--policyFirst={resolved['policyFirst'] + spec['policyFirst']}",
+                f"--policyCount={spec['policyCount']}",
+                f"--seeds={land_n}", f"--seed0={resolved['landscapeFirst']}",
+                f"--stage={resolved['landscapeStage']}",
+                f"--content={content}", f"--out={tmp}",
             ], tmp, dest.with_suffix(".log"))
             tmp.replace(dest)
             if not landscape_complete(dest, expected, cand["fileSha256"]):
@@ -669,7 +712,8 @@ def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
     display = sorted((row for row in public if row.get("deficits")),
                      key=lambda row: (row["deficits"]["sum"], row["id"]))
     summary = {
-        "issue": 457, "protocol": proto, "commit": commit, "godotVersion": godot,
+        "issue": int(proto.get("issue", 457)), "protocol": proto,
+        "commit": commit, "godotVersion": godot,
         "liveContentFileSha256": live_sha,
         "searchSpaceSha256": identity["searchSpaceSha256"],
         "seedRegistrySha256": identity["seedRegistrySha256"],
@@ -804,11 +848,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fresh", action="store_true")
     parser.add_argument("--jobs", type=int, default=8)
     parser.add_argument("--godot", default="godot")
+    parser.add_argument("--protocol", default="", help="versioned protocol registry JSON")
+    parser.add_argument("--evaluation", default="", help="evaluation name within --protocol")
+    parser.add_argument("--finalist-audit", action="store_true",
+                        help="explicitly unseal a registry evaluation marked finalistAudit")
     parser.add_argument("--out", default="/tmp/glassvow-457-f0")
     parser.add_argument("--candidates", default="")
     parser.add_argument("--count", type=int, default=32)
     parser.add_argument("--seed", type=int, default=421)
-    parser.add_argument("--boot", type=int, default=1000)
+    parser.add_argument("--boot", type=int, default=None)
     parser.add_argument("--only", default="", help="comma-separated candidate ids")
     parser.add_argument("--replay", default="", help="re-run one candidate into --out")
     return parser.parse_args()
@@ -821,7 +869,24 @@ def main() -> int:
     out = Path(args.out)
     prepare_out(out, args.fresh)
     contract = load_contract()
-    proto, axes = protocol(contract), protocol(contract)["frozenLandscape"]
+    axes = contract["frozenLandscape"]
+    if args.protocol:
+        if not args.evaluation:
+            raise ValueError("--evaluation is required with --protocol")
+        proto = evaluation_from_registry(read_json(Path(args.protocol)), args.evaluation, axes)
+    elif args.evaluation:
+        raise ValueError("--protocol is required with --evaluation")
+    else:
+        proto = protocol(contract)
+    if args.finalist_audit:
+        resolved = evaluation_spec(proto)
+        audit = contract["stages"]["audit"]["seeds"]
+        if not proto.get("finalistAudit") or resolved["controlStage"] != "audit" \
+                or resolved["controlFirst"] != int(audit["first"]) \
+                or resolved["controlLast"] != int(audit["last"]):
+            raise ValueError("--finalist-audit requires the full registered finalist audit")
+        proto["sealedToken"] = "finalist"
+    boot_n = int(args.boot if args.boot is not None else proto.get("bootstrap", 1000))
     live, live_sha = REPO / LIVE_REL, file_sha256(REPO / LIVE_REL)
     identity = catalogue_identity(live, REPO / SPACE_REL)
     identity["seedRegistrySha256"] = file_sha256(REPO / CONTRACT_REL)
@@ -858,7 +923,7 @@ def main() -> int:
         row = evaluate_candidate(
             args.godot, args.jobs, doe_path, by_id[name], out, proto,
             str(packet["fingerprint"]["fingerprintHash"]), commit, godot_version,
-            not args.fresh, baseline, args.boot, axes)
+            not args.fresh, baseline, boot_n, axes)
         if name == "c000":
             baseline = row
         results.append(row)
