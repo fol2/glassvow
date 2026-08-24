@@ -147,14 +147,14 @@ def _inside_one(span: tuple[int, int], bands: list[tuple[int, int]]) -> bool:
 
 def check_invocation(contract: dict[str, Any], stage: str, seed_first: int, seed_last: int,
                      root: int | None = None, holdout_first: int | None = None,
-                     holdout_last: int | None = None) -> str:
+                     holdout_last: int | None = None, sealed_token: str | None = None) -> str:
     if not stage:
         return ""
     stages = contract["stages"]
     if stage not in stages:
         return f"unknown --stage {stage}"
     spec = stages[stage]
-    if spec.get("sealedUntil"):
+    if spec.get("sealedUntil") and sealed_token != str(spec["sealedUntil"]):
         return f"--stage {stage} is sealed until {spec['sealedUntil']}"
     seed_span = _span(seed_first, seed_last)
     exam_roots = {int(r) for r in contract["exam"]["roots"]}
@@ -233,6 +233,8 @@ def self_test() -> int:
     assert err, "mini-CEM train must reject CEM's default exam holdout 5000"
     err = check_invocation(contract, "audit", 8000, 8000, root=454)
     assert err, "audit must stay sealed until finalist"
+    assert not check_invocation(contract, "audit", 8000, 8199, root=1454,
+                                sealed_token="finalist")
     assert not check_invocation(contract, "f0-controls", 6000, 6031, root=454)
     assert not check_invocation(contract, "f0-mini-landscape", 6100, 6107, root=454)
     assert not check_invocation(contract, "fingerprint", 5600, 5663)

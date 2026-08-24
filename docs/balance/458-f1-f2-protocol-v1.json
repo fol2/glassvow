@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "458-f1-f2-v1",
+  "issue": 458,
+  "seedRegistry": "docs/balance/421-content-search-seeds-v1.json",
+  "surrogate": {
+    "estimator": "sklearn.ensemble.ExtraTreesRegressor",
+    "nEstimators": 512,
+    "minSamplesLeaf": 2,
+    "maxFeatures": 1.0,
+    "bootstrap": true,
+    "maxSamples": 0.85,
+    "randomSeed": 458,
+    "validation": "leave-one-candidate-out",
+    "baseline": "five-nearest inverse-Hamming mean",
+    "interval": "outer prediction plus training OOB absolute-residual 95th percentile",
+    "permutationRepeats": 64,
+    "responses": [
+      "topRate",
+      "thirdRate",
+      "fourthRate",
+      "within10",
+      "viable",
+      "arm2Rate",
+      "margin"
+    ],
+    "adequacy": {
+      "maxNormalisedMaeRatio": 0.95,
+      "minDeficitSpearman": 0.5,
+      "minSpearmanLift": 0.05,
+      "minTopQuartileRecall": 0.625,
+      "minTopQuartileRecallLift": 0.125,
+      "minIntervalCoverage": 0.8,
+      "maxIntervalCoverage": 0.98
+    }
+  },
+  "supplemental": {
+    "count": 16,
+    "seed": 458,
+    "restarts": 8192,
+    "method": "balanced-maximin-discrete-v1-supplemental",
+    "exclude": "docs/balance/data/457/doe-manifest.json"
+  },
+  "evaluations": {
+    "layer1": {
+      "controls": {"stage": "f1-racing", "root": 1454, "first": 6200, "last": 6231, "arms": [1, 2]},
+      "landscape": {"stage": "f1-racing", "root": 1454, "policyFirst": 0, "policyCount": 128, "first": 6200, "last": 6207},
+      "maxPromotions": 6,
+      "bootstrap": 2000
+    },
+    "layer2": {
+      "controls": {"stage": "f1-racing", "root": 1454, "first": 6200, "last": 6263, "arms": [1, 2]},
+      "landscape": {"stage": "f1-racing", "root": 1454, "policyFirst": 0, "policyCount": 256, "first": 6200, "last": 6215},
+      "maxPromotions": 3,
+      "bootstrap": 2000
+    },
+    "layer3": {
+      "controls": {"stage": "f1-racing", "root": 1454, "first": 6200, "last": 6327, "arms": [1, 2]},
+      "landscape": {"stage": "f1-racing", "root": 1454, "policyFirst": 0, "policyCount": 512, "first": 6200, "last": 6231},
+      "maxPromotions": 2,
+      "bootstrap": 4000
+    },
+    "audit": {
+      "controls": {"stage": "audit", "root": 1454, "first": 8000, "last": 8199, "arms": [1, 2]},
+      "landscape": {"stage": "audit", "root": 1454, "policyFirst": 0, "policyCount": 128, "first": 8000, "last": 8007},
+      "finalistAudit": true,
+      "bootstrap": 4000
+    }
+  },
+  "racing": {
+    "bindingDeficits": ["c1a", "c1b"],
+    "slackHardConstraints": ["c2arm", "c2gap"],
+    "stop": "confidence-envelope Pareto dominance or hard/identity fault",
+    "promotion": "lowest point deficit among non-dominated candidates within each bounded layer"
+  },
+  "miniCem": {
+    "policyRoot": 1454,
+    "root": 2454,
+    "islands": 24,
+    "popSize": 16,
+    "elite": 4,
+    "maxGen": 6,
+    "seedCount": 8,
+    "trainSeed0": 6400,
+    "holdoutSeed0": 6800,
+    "holdoutCount": 40
+  },
+  "audit": {
+    "nonGating": true,
+    "materialControlContradictionPp": 10,
+    "materialProxyContradiction": "paired 95% interval excludes zero and median absolute change is at least 0.10"
+  }
+}
