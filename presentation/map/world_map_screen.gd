@@ -51,17 +51,26 @@ var _trail_layout: Dictionary = {}
 var _title_label: Label
 var _run: RunState = null
 var _act: int = 0
-var _particle_colour: Color
-var _glow_colour: Color
-## Per-act region knobs (palette + weather). VeilBand reads this;
-## built in `_set_act_theme` so a theme pick never leaves stale weather.
+## Per-act region knobs. The 3D ramp reads this; it is built in
+## `_set_act_theme` so a theme pick never leaves a stale palette behind.
 var _region: MapRegions = null
 
 var _drift: PointerDrift = PointerDrift.new()
 var _map_scene: MapScene = null
 var _path_band: MapBand.PathBand = null
 var _chip_band: MapBand.ChipBand = null
-var _veil_band: MapBand.VeilBand = null
+## Projection is shared by waystone layout, graph paint and marker queries.
+## The old path rebuilt all 65 seats for every edge endpoint, turning one
+## production frame into thousands of identical camera transforms (#447).
+var _projected_seats_cache: PackedVector2Array = PackedVector2Array()
+var _projected_pose: Vector2 = Vector2(INF, INF)
+var _projected_zoom_stop: int = -1
+var _projected_control_size: Vector2 = Vector2(-1.0, -1.0)
+var _projected_view_size: Vector2i = Vector2i(-1, -1)
+## Test-visible count of actual whole-map projection passes. It is deliberately
+## not reset: a camera or shape change should add one pass, while every reader
+## at the same pose should reuse it.
+var _seat_projection_passes: int = 0
 
 
 func _init(world_map: WorldMap, content_ref: ContentDB,
@@ -81,10 +90,7 @@ func _init(world_map: WorldMap, content_ref: ContentDB,
 	_chip_band = MapBand.ChipBand.new()
 	_chip_band.host = self
 	add_child(_chip_band)
-	_veil_band = MapBand.VeilBand.new()
-	_veil_band.host = self
-	add_child(_veil_band)
-	# Theme after the veil exists so apply_region reaches it.
+	# Theme after the bands exist so apply_region reaches them.
 	_set_act_theme(0)
 	_build_chrome()
 	_seat_marker()
@@ -104,6 +110,37 @@ func _build_world_surface() -> void:
 	_map_scene = MapScene.new()
 	_map_scene.surface_tapped.connect(_on_surface_tapped)
 	add_child(_map_scene)
+	MapPinProjection.resolve(map.nodes)
+	_map_scene.lay_road(_road_segments())
+
+
+## Every graph edge as a world-space endpoint pair, for MapScene to pave. The
+## graph lives here, so the conversion does too: MapScene stays buildable
+## without a WorldMap.
+func _road_segments() -> PackedVector3Array:
+	var by_id: Dictionary = {}
+	for node: MapNode in map.nodes:
+		by_id[node.id] = node
+	var out: PackedVector3Array = PackedVector3Array()
+	for node: MapNode in map.nodes:
+		var from: Vector3 = MapPinProjection.world_anchor(node)
+		for next_id: String in node.next:
+			var next_v: Variant = by_id.get(next_id)
+			if typeof(next_v) != TYPE_OBJECT:
+				continue
+			var next_node: MapNode = next_v
+			out.append(from)
+			out.append(MapPinProjection.world_anchor(next_node))
+	# The Vigil is where every run starts, so the road has to leave it. One arm
+	# per entrance waystone, which is what makes the fan read as a choice of
+	# first step rather than as one road that happens to begin somewhere.
+	var gate: Vector3 = Vector3(MapScene.THRESHOLD_XZ.x, 0.0, MapScene.THRESHOLD_XZ.y)
+	for node: MapNode in map.nodes:
+		if node.row != 0:
+			continue
+		out.append(gate)
+		out.append(MapPinProjection.world_anchor(node))
+	return out
 
 
 func _build_bands() -> void:
@@ -324,6 +361,10 @@ func _act_line(region: String, boss: String) -> String:
 func refresh(run: RunState) -> void:
 	if run != null:
 		_run = run
+		# Before the act binds: the salt is what the scenery is dealt from, and
+		# `_set_act_theme` is what rebinds the geometry that reads it.
+		if _map_scene != null:
+			_map_scene.set_scatter_salt(run.seed)
 		_set_act_theme(run.act)
 		var act: Dictionary = content.acts[_act]
 		var act_name: String = Locale.active.t("ui.pilgrimage.roseWindow") \
@@ -365,13 +406,13 @@ func _set_act_theme(stage_act: int) -> void:
 	if content != null and not content.acts.is_empty():
 		_act = clampi(stage_act, 0, content.acts.size() - 1)
 	# MapRegions is the sole source; the content pack theme dict is not read.
-	# Veil motes read glow/particle; 3D ramp binds band_shade/band_key on MapScene.
-	_particle_colour = _region.particles
-	_glow_colour = _region.glow
-	if _veil_band != null:
-		_veil_band.apply_region(_region)
+	# The 3D ramp binds band_shade/band_key on MapScene.
 	if _map_scene != null:
 		_map_scene.set_act(stage_act)
+		# set_act rebinds the act's geometry, so the footprints the nodes step
+		# around have just changed underneath them.
+		MapPinProjection.resolve(map.nodes)
+		_map_scene.lay_road(_road_segments())
 
 
 ## 3D lattice seats in this Control's px. Live waystones sit here.
@@ -381,7 +422,21 @@ func projected_seats() -> PackedVector2Array:
 	if size.x > 1.0 and size.y > 1.0 and _map_scene.size != size:
 		_map_scene.size = size
 	_map_scene._fit()
-	return _map_scene.project_pins(map.nodes)
+	var rig: MapCameraRig = _map_scene.get_rig()
+	var pose: Vector2 = rig.camera_xz()
+	var view_size: Vector2i = _map_scene.get_stage().size
+	if _projected_seats_cache.size() != map.nodes.size() \
+			or not _projected_pose.is_equal_approx(pose) \
+			or _projected_zoom_stop != rig.zoom_stop \
+			or not _projected_control_size.is_equal_approx(size) \
+			or _projected_view_size != view_size:
+		_projected_seats_cache = _map_scene.project_pins(map.nodes)
+		_projected_pose = pose
+		_projected_zoom_stop = rig.zoom_stop
+		_projected_control_size = size
+		_projected_view_size = view_size
+		_seat_projection_passes += 1
+	return _projected_seats_cache
 
 
 func set_survey_retired(on: bool) -> void:
@@ -446,8 +501,16 @@ func _seat_marker() -> void:
 func _focus_xz(i: int) -> Vector2:
 	if i < 0 or i >= map.nodes.size() or _map_scene == null:
 		return MapCameraRig.DEFAULT_XZ
-	return MapCameraRig.pose_for_world(
-		MapPinProjection.world_anchor(map.nodes[i]))
+	# Aspect comes from the STAGE SHAPE, not from `_map_scene.size`. The child
+	# Control only has its real size after a layout pass, so reading it here
+	# would make the camera seat depend on WHEN the seat is asked for — a
+	# mid-glide `set_shape` would aim at something a later call could not
+	# reproduce, which is exactly what test_map's re-aim gate is watching for.
+	# The shape is known without a frame.
+	var reference: Vector2 = Vector2(StageShape.REFERENCES[shape])
+	var aspect: float = reference.x / maxf(reference.y, 1.0)
+	return _map_scene.get_rig().pose_leading(
+		MapPinProjection.world_anchor(map.nodes[i]), aspect)
 
 
 func _on_waystone_chosen(i: int) -> void:
@@ -588,8 +651,6 @@ func _push_bands(force: bool = false) -> void:
 		_path_band.set_view(cam, path_d, force)
 	if _chip_band != null:
 		_chip_band.set_view(cam, path_d, force)
-	if _veil_band != null:
-		_veil_band.set_view(cam, path_d * 1.35, force)
 
 
 func _rig_cam_x() -> float:

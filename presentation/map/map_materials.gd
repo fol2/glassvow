@@ -9,16 +9,27 @@ extends RefCounted
 ## surface texture each and one shared grade.
 
 const GROUND_SHADER: String = "res://presentation/map/map_ground.gdshader"
+## The Vigil is the only unwrapped surface on the map; see the shader header.
+const VIGIL_SHADER: String = "res://presentation/map/map_vigil.gdshader"
 const PROP_SHADER: String = "res://presentation/map/map_prop.gdshader"
 const MANIFEST_PATH: String = "res://assets/art/map/map-assets.json"
 const ASSET_ROOT: String = "res://assets/art/map/"
 const GROUND_VALUE: float = 0.420
 const PROP_VALUE: float = 0.100
-const GRADE_MIN: Vector2 = Vector2(-24.0, -12.0)
-const GRADE_SIZE: Vector2 = Vector2(48.0, 24.0)
+## The paved corridor. Brighter than the ground it crosses, which is the
+## reading `map_ground.gdshader` already describes for the grade corridor.
+## Lifted so the paving reads as a road rather than as slightly paler ground.
+const ROAD_VALUE: float = 0.880
+const GRADE_MIN: Vector2 = Vector2(-36.0, -18.0)
+## Still 2:1, which the 512x256 grade PNG requires. Widened with the lattice
+## so the map reads less dense.
+const GRADE_SIZE: Vector2 = Vector2(72.0, 36.0)
 const GRADE_RESOLUTION: Vector2i = Vector2i(256, 128)
 
 var ground: ShaderMaterial
+var road: ShaderMaterial
+## Built only when Act I binds; every other act leaves it null.
+var vigil: ShaderMaterial = null
 var prop: ShaderMaterial
 var _fallback_surface: ImageTexture
 var _fallback_grade: ImageTexture
@@ -34,6 +45,8 @@ func _init(sun: Vector3, tex_stop: int, manifest: Dictionary = {},
 	_fallback_grade = _placeholder_grade()
 	ground = _make(GROUND_SHADER, _fallback_surface, _fallback_grade,
 			GROUND_VALUE, sun, tex_stop)
+	road = _make(GROUND_SHADER, _fallback_surface, _fallback_grade,
+			ROAD_VALUE, sun, tex_stop)
 	prop = _make(PROP_SHADER, _fallback_surface, _fallback_grade,
 			PROP_VALUE, sun, tex_stop)
 	prop.set_shader_parameter("second_octave", false)
@@ -48,16 +61,39 @@ func _init(sun: Vector3, tex_stop: int, manifest: Dictionary = {},
 
 func set_tex_stop(index: int) -> void:
 	ground.set_shader_parameter("tex_stop", index)
+	road.set_shader_parameter("tex_stop", index)
 	prop.set_shader_parameter("tex_stop", index)
 
 
 func set_sun(direction: Vector3) -> void:
 	var sun: Vector3 = direction.normalized()
 	ground.set_shader_parameter("sun", sun)
+	road.set_shader_parameter("sun", sun)
 	prop.set_shader_parameter("sun", sun)
+	if vigil != null:
+		vigil.set_shader_parameter("sun", sun)
+
+
+## Hands the Vigil its baked albedo. It arrives separately from `bind_act`
+## because it is not a manifest row of its own: it rides inside the GLB, and
+## only MapScene has resolved that GLB down to a Mesh by the time it is
+## readable. Returns whether the material is now complete, so a caller can fall
+## back to the prop shader rather than seating a building painted with nothing.
+func bind_vigil_albedo(texture: Texture2D) -> bool:
+	if vigil == null or texture == null:
+		return false
+	vigil.set_shader_parameter("surface_tex", texture)
+	return true
 
 
 func bind_region(region: MapRegions, grade: Texture2D) -> void:
+	road.set_shader_parameter("band_shade", region.band_shade)
+	road.set_shader_parameter("band_key", region.band_key)
+	road.set_shader_parameter("grade", grade)
+	if vigil != null:
+		vigil.set_shader_parameter("band_shade", region.band_shade)
+		vigil.set_shader_parameter("band_key", region.band_key)
+		vigil.set_shader_parameter("grade", grade)
 	ground.set_shader_parameter("band_shade", region.band_shade)
 	ground.set_shader_parameter("band_key", region.band_key)
 	prop.set_shader_parameter("band_shade", region.band_shade)
@@ -70,7 +106,9 @@ func bind_region(region: MapRegions, grade: Texture2D) -> void:
 ## two tiles, one grade, three shared + five act kits, and one terminus.
 func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	ground.set_shader_parameter("surface_tex", _fallback_surface)
+	road.set_shader_parameter("surface_tex", _fallback_surface)
 	prop.set_shader_parameter("surface_tex", _fallback_surface)
+	road.set_shader_parameter("tex_mean", 0.5)
 	ground.set_shader_parameter("tex_mean", 0.5)
 	prop.set_shader_parameter("tex_mean", 0.5)
 	bind_region(region, _fallback_grade)
@@ -82,6 +120,10 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	var kit_ids: PackedStringArray = []
 	var terminus: Resource = null
 	var terminus_id: String = ""
+	## The Vigil at the west end. Only Act I ships one, so every other act binds
+	## null here and MapScene simply seats nothing.
+	var threshold: Resource = null
+	var vigil_mean: float = 0.252
 	var ground_tile: Texture2D = null
 	var prop_tile: Texture2D = null
 	var painted_grade: Texture2D = null
@@ -99,7 +141,8 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 		var kind: String = _row_string(row, "kind")
 		if kind in ["tile", "grade"] and not (resource is Texture2D):
 			continue
-		if kind in ["kit", "terminus"] and not (resource is Mesh or resource is PackedScene):
+		if kind in ["kit", "terminus", "threshold"] \
+				and not (resource is Mesh or resource is PackedScene):
 			continue
 		_active_paths.append(path)
 		_active_resources.append(resource)
@@ -110,6 +153,9 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 			"terminus":
 				terminus = resource
 				terminus_id = _row_string(row, "id")
+			"threshold":
+				threshold = resource
+				vigil_mean = _row_float(row, "tex_mean", 0.252)
 			"tile":
 				var tile: Texture2D = resource as Texture2D
 				if _row_string(row, "role") == "ground":
@@ -123,14 +169,30 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	if ground_tile != null:
 		ground.set_shader_parameter("surface_tex", ground_tile)
 		ground.set_shader_parameter("tex_mean", ground_mean)
+		road.set_shader_parameter("surface_tex", ground_tile)
+		road.set_shader_parameter("tex_mean", ground_mean)
 	if prop_tile != null:
 		prop.set_shader_parameter("surface_tex", prop_tile)
 		prop.set_shader_parameter("tex_mean", prop_mean)
+	# The Vigil only exists in Act I, so its material is built when its mesh
+	# turns up rather than alongside the three that every act has. Its albedo is
+	# baked into that mesh rather than shipped as a row of its own, so the
+	# texture arrives later, from `bind_vigil_albedo`.
+	if threshold != null:
+		if vigil == null:
+			vigil = ShaderMaterial.new()
+			vigil.shader = load(VIGIL_SHADER) as Shader
+			vigil.set_shader_parameter("grade_rect", Vector4(
+					GRADE_MIN.x, GRADE_MIN.y, GRADE_SIZE.x, GRADE_SIZE.y))
+		vigil.set_shader_parameter("tex_mean", vigil_mean)
+	else:
+		vigil = null
 	if painted_grade != null:
 		bind_region(region, painted_grade)
 	return {
 		"kits": kits, "kit_ids": kit_ids,
 		"terminus": terminus, "terminus_id": terminus_id,
+		"threshold": threshold,
 		"ground_tile": ground_tile, "prop_tile": prop_tile,
 		"grade": painted_grade,
 	}

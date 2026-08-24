@@ -118,11 +118,9 @@ happen anyway.
 actually lived, now carries the verdict and routes onward:
 
 ```gdscript
-## **Improved, not settled**, and the residual is on
-## `WorldMapScreen.bed_half` — read it before retuning these three. The
-## clamps bind at two of the five shapes, phone-landscape is still 1.57×
-## wider in proportion than the reference, and measured against LANE PITCH
-## the rate is less consistent than the constant it replaced.
+## **Improved, not settled.** The residual used to live on
+## `WorldMapScreen.bed_half` (retired #234 slice 7b2). Read
+## `trail/bedRate` before retuning these three.
 ```
 
 `presentation/map/world_map_screen.gd` — `bed_half` retired in #234 slice 7b2

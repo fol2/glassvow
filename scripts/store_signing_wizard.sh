@@ -186,7 +186,7 @@ finish() {
 
 TOTAL_STAGES=7
 
-TEMPLATES_DIR="$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable"
+TEMPLATES_DIR="$HOME/Library/Application Support/Godot/export_templates/4.7.2.stable"
 KEYSTORE_DIR="$HOME/Library/Application Support/Godot/keystores"
 KEYSTORE="$KEYSTORE_DIR/glassvow-upload.keystore"
 KEY_ALIAS="glassvow-upload"
@@ -198,10 +198,10 @@ banner "Glassvow — store accounts + signing pipeline"
 stage "Preflight — toolchain check"
 [[ -f export_presets.cfg ]] || { warn "run this from the glassvow repo root"; exit 1; }
 GODOT_V=$(godot --version 2>/dev/null || true)
-[[ "$GODOT_V" == 4.7.1.stable* ]] || { warn "godot --version says '$GODOT_V', need 4.7.1.stable"; exit 1; }
-say "Godot 4.7.1.stable ✓"
+[[ "$GODOT_V" == 4.7.2.stable* ]] || { warn "godot --version says '$GODOT_V', need 4.7.2.stable"; exit 1; }
+say "Godot 4.7.2.stable ✓"
 for f in ios.zip android_source.zip android_debug.apk android_release.apk; do
-  [[ -f "$TEMPLATES_DIR/$f" ]] || { warn "missing $TEMPLATES_DIR/$f — reinstall 4.7.1 export templates"; exit 1; }
+  [[ -f "$TEMPLATES_DIR/$f" ]] || { warn "missing $TEMPLATES_DIR/$f — reinstall 4.7.2 export templates"; exit 1; }
 done
 say "iOS + Android export templates ✓"
 xcodebuild -version | head -1
@@ -215,11 +215,12 @@ else
   warn "Expected /Users/jamesto/.local/share/jdk-17/Contents/Home (Temurin 17)."
   exit 1
 fi
-if [[ ! -f android/.build_version ]]; then
+if [[ ! -f android/.build_version ]] || [[ "$(cat android/.build_version)" != "4.7.2.stable" ]]; then
   say "installing Android gradle build template (android/build)..."
+  python3 -c 'import shutil; shutil.rmtree("android/build", ignore_errors=True)'
   mkdir -p android/build
   unzip -q -o "$TEMPLATES_DIR/android_source.zip" -d android/build
-  echo "4.7.1.stable" > android/.build_version
+  echo "4.7.2.stable" > android/.build_version
   touch android/build/.gdignore
 fi
 say "Android gradle build template ✓"

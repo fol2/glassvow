@@ -38,7 +38,7 @@ tags: [verification-tooling, lab-harness, capture-modes, screenshot-verification
 
 The enemy lab is the surface this project built to judge how its actors move. It
 stands every creature in the content set on a shared ground line at true relative
-size — 27 enemies, read out of `port_fixtures/content/core-mechanics.json`
+size — the live catalogue via `ContentDB.load_full()`
 (`presentation/lab/enemy_lab.gd:185` (`load_roster`)) — and it carried five
 strip modes — six since
 `--idle` — that photograph an animation across several instants and tile the

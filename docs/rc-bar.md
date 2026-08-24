@@ -52,7 +52,7 @@ earlier commit survives only through this table.
 ## P0 — Build identity
 
 - [ ] The RC commit is named. The distribution-signed `glassvow.ipa` is produced from it per
-      `docs/release-signing.md`, from the pinned Godot 4.7.1 templates.
+      `docs/release-signing.md`, from the pinned Godot 4.7.2 templates.
 - [ ] The version stamp is honest: marketing version and build number identify this RC, build
       numbers increment monotonically across RC attempts, the submitted build number is
       recorded in the receipt, and no player-facing surface carries a foreign or benchmark
@@ -67,7 +67,7 @@ earlier commit survives only through this table.
 
 All from the repo root, on the exact RC commit, plus CI green on the same head:
 
-- [ ] `godot --version` prints 4.7.1.stable (the engine pin — a PASS from any other editor
+- [ ] `godot --version` prints 4.7.2.stable (the engine pin — a PASS from any other editor
       version is not evidence)
 - [ ] `tools/check_imports.sh`
 - [ ] `tools/check_scripts.sh`

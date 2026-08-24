@@ -3,11 +3,15 @@ name: glassvow-godot
 description: Binding contract for working in the glassvow Godot repo — engine pin, architecture boundaries, editing methods, verification, save compatibility, stop conditions. Load before any implementation work here.
 ---
 
-# Glassvow Godot 4.7.1 Binding Contract
+# Glassvow Godot 4.7.2 Binding Contract
 
 ## 1. Engine Contract
 
-**Pin:** Godot 4.7.1 exact. Verify before starting work: `godot --version` must print `4.7.1.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
+**Pin:** Godot 4.7.2 exact. Verify before starting work: `godot --version` must print `4.7.2.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
+
+Historical evidence keeps the engine version it actually used. A dated packet
+that truthfully records 4.7.1 is not an active pin and must not be rewritten as
+though the run happened on 4.7.2.
 
 **4.7 Gotchas (trap setters):**
 - **Typed-return overrides need an explicit `return`:** since 4.7, overriding a method whose declared return type is non-void without a `return` on every path is an error, not a silent null.
@@ -17,7 +21,7 @@ description: Binding contract for working in the glassvow Godot repo — engine 
 
 **Domain purity:** `domain/` holds pure game logic as `RefCounted` classes only — zero Node, SceneTree, FileAccess, DirAccess, Input, DisplayServer, OS, or `get_tree()` references. Tested in `tests/test_arch.gd` (banned-token scan). This boundary allows headless testing and deterministic playback.
 
-**Command → Event seam:** The facade `GlassvowGame.apply(cmd: Dictionary) -> Array[Dictionary]` receives a command dict (e.g. `{"t": "play_card", "idx": 0}`) and returns an array of GameEvent dicts (`{"t": StringName, ...}`). Constants live in `domain/events/event_types.gd`. The presentation layer (`presentation/`) subscribes to these events and never owns game truth.
+**Command → Event seam:** The facade `GlassvowGame.apply(cmd: Dictionary) -> Array[Dictionary]` receives a command dict (e.g. `{"t": "playCard", "uid": 1}` or `{"t": "endTurn"}`) and returns an array of GameEvent dicts (`{"t": StringName, ...}`). Command `t` values live in `domain/game.gd`; event type constants live in `domain/events/event_types.gd`. The presentation layer (`presentation/`) subscribes to these events and never owns game truth.
 
 **Anti-patterns forbidden:**
 - **No global EventBus autoload.** Screens and managers signal upward to `application/main.tscn`; main routes and holds the single `GlassvowGame` instance.
@@ -27,7 +31,7 @@ description: Binding contract for working in the glassvow Godot repo — engine 
 
 **Internal StringName IDs frozen:** Card, relic, enemy, status, and ability IDs are engine-internal constants (e.g. `poison`, `vulnerable`, `str`, `strike`, `leech`). Once M4 lands, these IDs never change — saves depend on them. Changes to an ID require a migration step or a new save-version envelope.
 
-**Display names are locale data:** Render "Block" instead of "defend"? Change the display string, never the internal key `defend`. This separation protects cross-version save loading. Today display names live in the content catalogue's `name`/text fields (`content/full-content.json`); the dedicated locale layer (`locale/en.json`, `locale/zh-Hant.json`) is the planned home once the localisation workstream lands — the invariant is the same either way.
+**Display names are locale data:** Render "Block" instead of "defend"? Change the display string, never the internal key `defend`. This separation protects cross-version save loading. English display names live in the content catalogue (`content/full-content.json`). `Locale.hydrate_content` overlays the active language's `content.*` strings from `locale/<code>.json` onto those rows at boot (`application/locale.gd`); hydrating `en` is a no-op because the bake already is English.
 
 ## 4. Editing Methods
 
@@ -52,7 +56,7 @@ description: Binding contract for working in the glassvow Godot repo — engine 
 Run these three from the repo root, in order. All must pass before pushing:
 
 ```bash
-godot --version                          # confirm 4.7.1.stable
+godot --version                          # confirm 4.7.2.stable
 tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
 tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 with PASS
@@ -75,12 +79,14 @@ not by the exit code.
 
 ## 6. Visual Inspection
 
-Any presentation-affecting change (screen layout, tween, VFX, audio routing) requires a screenshot before review. Use the funplay MCP editor integration:
+Any presentation-affecting change (screen layout, tween, VFX, audio routing) requires a screenshot before review. Use the Funplay MCP editor integration:
 
 1. Godot editor open, MCP connected (port 8765).
 2. Make the change, Save the scene.
-3. Run `mcp screenshot res://application/main.tscn` (or targeted screen path).
+3. Call Funplay `capture_editor_view` (editor 2D/3D viewport) or `capture_runtime_view` (live game viewport via the runtime bridge). Both photograph the view that is showing; they do not take a `res://` scene path.
 4. Review the screenshot before committing.
+
+Without the editor, capture through `tools/shot.sh` (one-off) or `tools/live.sh` (iteration) — see `docs/dev-tools.md`.
 
 Changes that don't touch `presentation/` or audio buses (pure domain, architecture, test-only) skip this step.
 

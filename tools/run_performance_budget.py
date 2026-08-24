@@ -15,7 +15,7 @@ from typing import Any
 TARGET_ENVIRONMENT = {
     "model": "Mac16,10", "chip": "Apple M4", "memory_gib": 16,
     "macos": "26.6.1", "build": "25G76",
-    "godot": "4.7.1.stable.official.a13da4feb", "architecture": "arm64",
+    "godot": "4.7.2.stable.official.ed1daf0bf", "architecture": "arm64",
     "renderer": "Apple M4 (Apple9)", "method": "mobile",
 }
 SHAPES = {

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import colorsys
 import hashlib
+import io
 import json
 import math
 import os
@@ -16,7 +17,11 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any, NamedTuple
 
-KINDS = {"kit", "terminus", "tile", "grade"}
+## `threshold` is the west bookend, and only Act I has one: the story puts the
+## Vigil at the start of the road and nowhere else (docs/story/01-world.md).
+## Every other kind is a fixed bill per act; this one is a fixed bill of one
+## for the whole map, which is why the per-act shape below accepts 0 or 1.
+KINDS = {"kit", "terminus", "threshold", "tile", "grade"}
 CONTROL_FILES = {"map-assets.json", "provenance.json"}
 IMAGE_EXT, MESH_EXT = {".png"}, {".glb"}
 DELIGHT_SPREAD, SEAM_RATIO = 0.15, 3.0
@@ -24,7 +29,7 @@ GRADE_HF_MAX, HUE_MIN_SAT = 0.035, 0.08
 SILHOUETTE_NOISE, TRIANGLE_MIN = 0.04, 600
 YAW_DEGREES = tuple(range(0, 360, 45))
 REC709 = (0.2126, 0.7152, 0.0722)
-EXPECTED_COUNTS = {"kit": 23, "terminus": 4, "tile": 8, "grade": 4}
+EXPECTED_COUNTS = {"kit": 23, "terminus": 4, "threshold": 1, "tile": 8, "grade": 4}
 REPO = Path(__file__).resolve().parent.parent
 RASTER_SCRIPT = "res://tools/raster_map_silhouette.gd"
 PROVENANCE_REQUIRED = {
@@ -112,6 +117,14 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
         if rel in seen_paths or clean.is_absolute() or ".." in clean.parts or rel.startswith("res://"):
             found.append(Finding("manifest", where, f"duplicate or unsafe path {rel!r}"))
         seen_paths.add(rel)
+        # `components_max` switches off the hidden-internals check for a row, so
+        # it is gated here rather than merely read in `inspect_glb`. Unbounded
+        # and unvalidated it would let any kit write `components_max: 99` and
+        # turn the check off with the manifest still green -- an opt-out with no
+        # gate on the opt-out is not a gate.
+        if "components_max" in row and kind != "threshold":
+            found.append(Finding("manifest", where,
+                                 f"components_max is not available to kind {kind!r}"))
         if kind not in KINDS:
             found.append(Finding("manifest", where, f"unknown kind {kind!r}"))
             continue
@@ -128,6 +141,17 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
                 found.append(Finding("manifest", where, "terminus requires hero role, GLB, act 0..3"))
             if row.get("triangle_max") != 8000 or row.get("bytes_max") != 786432:
                 found.append(Finding("manifest", where, "terminus caps must be 8000 triangles / 768 KiB"))
+        elif kind == "threshold":
+            if role != "hero" or clean.suffix != ".glb" or act != 0:
+                found.append(Finding("manifest", where,
+                                     "threshold requires hero role, GLB, act 0"))
+            if row.get("triangle_max") != 8000 or row.get("bytes_max") != 786432:
+                found.append(Finding("manifest", where,
+                                     "threshold caps must be 8000 triangles / 768 KiB"))
+            if row.get("components_max") != 2:
+                found.append(Finding("manifest", where,
+                                     "threshold declares exactly components_max 2: "
+                                     "the hall and the smoke over its chimney"))
         elif kind == "tile":
             if role not in {"ground", "prop"} or clean.suffix != ".png" or act not in range(4):
                 found.append(Finding("manifest", where, "tile requires ground/prop role, PNG, act 0..3"))
@@ -161,7 +185,9 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
         active = [row for row in rows if isinstance(row, dict) and row.get("act") in (-1, act)]
         shape = {kind: sum(row.get("kind") == kind for row in active) for kind in KINDS}
         roles = {str(row.get("role")) for row in active if row.get("kind") == "tile"}
-        if shape != {"kit": 8, "terminus": 1, "tile": 2, "grade": 1} or roles != {"ground", "prop"}:
+        threshold = shape.pop("threshold", 0)
+        if shape != {"kit": 8, "terminus": 1, "tile": 2, "grade": 1} \
+                or roles != {"ground", "prop"} or threshold not in (0, 1):
             found.append(Finding("manifest", str(path), f"act {act} active payload shape is {shape}/{roles}"))
     return rows, found
 
@@ -357,7 +383,19 @@ def inspect_glb(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
     primitive = meshes[0]["primitives"][0]
     attributes = primitive.get("attributes") or {}
     mode = primitive.get("mode", 4)
-    banned = {"TEXCOORD_0", "TEXCOORD_1", "TANGENT", "JOINTS_0", "WEIGHTS_0"}
+    # UVs and a baked texture used to be banned outright here, on the reasoning
+    # that surfacing everything by projection is what keeps 23 separately
+    # generated kits from drifting apart in style (map_prop.gdshader). That ban
+    # was retired on 2026-08-24: it was holding the map's one BUILDING to the
+    # same rule as its rocks, and a building that cannot carry coursed stone,
+    # a slate roof and a corbel band reads as another boulder. The kits are
+    # still untextured -- by how they are authored, which is the discipline
+    # that was actually doing the work, not by a gate refusing the file.
+    #
+    # What is still banned is what the map genuinely cannot use: a second UV
+    # set, tangents for a normal map the unshaded shader never reads, and skin
+    # weights for a rig that does not exist.
+    banned = {"TEXCOORD_1", "TANGENT", "JOINTS_0", "WEIGHTS_0"}
     if mode != 4 or "POSITION" not in attributes or "NORMAL" not in attributes:
         found.append(Finding("mesh", rel, "need triangulated POSITION+NORMAL"))
     if banned & set(attributes):
@@ -365,11 +403,12 @@ def inspect_glb(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
     for extra, label in (
         (gltf.get("animations") or [], "animation"),
         (gltf.get("skins") or [], "skeleton"),
-        (gltf.get("textures") or [], "texture"),
-        (gltf.get("images") or [], "image"),
     ):
         if extra:
             found.append(Finding("mesh", rel, f"{label} is not allowed on shipping kit GLBs"))
+    # An embedded texture is allowed but not free: it rides inside the GLB, so
+    # the row's `bytes_max` is what bounds it. No separate knob -- one budget.
+    found.extend(_embedded_mean_findings(gltf, blob, rel, row))
     accessors = gltf.get("accessors") or []
     index_id = primitive.get("indices")
     tris = 0
@@ -388,7 +427,16 @@ def inspect_glb(path: Path, rel: str, row: dict[str, Any]) -> list[Finding]:
         if len(mins) >= 2 and not (-1e-3 <= float(mins[1]) <= 0.05):
             found.append(Finding("mesh", rel, f"ground pivot Y min {mins[1]!r}, expected ~0"))
         components = _connected_components(blob, gltf, primitive)
-        if components > 1:
+        if components == 0:
+            found.append(Finding("mesh", rel,
+                                 "mesh is not indexed, so the connected-component "
+                                 "check cannot mean anything"))
+
+        # Most assets are one body. A row says so explicitly when it is not:
+        # the Vigil's smoke floats clear of its chimney and is a second body on
+        # purpose. Defaulting to 1 keeps every other row as strict as before.
+        allowed = int(row.get("components_max", 1))
+        if components > allowed:
             found.append(Finding("mesh", rel, f"{components} connected islands; hidden internals fail"))
     return found
 
@@ -522,6 +570,48 @@ def _glb_chunks(data: bytes) -> tuple[dict[str, Any], bytes]:
     return gltf, blob
 
 
+## `tex_mean` is what the shader divides by to put a surface on the value
+## ladder, so it is a MEASUREMENT of the baked atlas, not a preference. Nothing
+## checked it: a re-bake would leave the number, and the `surface_value` derived
+## from it, quietly describing an image that no longer exists. This is the check
+## that makes the shader comment true.
+def _embedded_mean_findings(gltf: dict[str, Any], blob: bytes, rel: str,
+                            row: dict[str, Any]) -> list[Finding]:
+    declared = row.get("tex_mean")
+    images = gltf.get("images") or []
+    if declared is None:
+        return []
+    # Declared but nothing to measure is the silent pass this check exists to
+    # close: strip the atlas out of the GLB, or point the material at an
+    # external URI, and the number would go on describing an image that is no
+    # longer in the file.
+    if not images:
+        return [Finding("mesh", rel, "declares tex_mean but embeds no image to measure")]
+    view_id = (images[0] or {}).get("bufferView")
+    views = gltf.get("bufferViews") or []
+    if not isinstance(view_id, int) or not 0 <= view_id < len(views):
+        return [Finding("mesh", rel, "declares tex_mean but its image is not embedded")]
+    view = views[view_id]
+    start = int(view.get("byteOffset", 0))
+    raw = blob[start:start + int(view["byteLength"])]
+    try:
+        image = _pil().open(io.BytesIO(raw)).convert("RGB")
+    except (OSError, ValueError) as error:
+        return [Finding("mesh", rel, f"embedded image unreadable: {error}")]
+    # RGB mean, NOT luma. `tex_mean` is what the shader divides the sampled
+    # `.rgb` by, so the only mean that means anything here is the same one
+    # `stored_mean` takes for a tile. On the shipped atlas the two agree to
+    # 0.001 -- which is exactly why picking the wrong one would have gone
+    # unnoticed until an atlas with a colour cast arrived.
+    pixels = image.tobytes()
+    measured = (sum(pixels) / len(pixels)) / 255.0 if pixels else 0.0
+    if abs(measured - float(declared)) > 0.01:
+        return [Finding("mesh", rel,
+                        f"embedded atlas mean {measured:.3f} is not the declared "
+                        f"tex_mean {float(declared):.3f}")]
+    return []
+
+
 def _connected_components(blob: bytes, gltf: dict[str, Any], primitive: dict[str, Any]) -> int:
     attributes = primitive.get("attributes") or {}
     accessors = gltf.get("accessors") or []
@@ -529,10 +619,42 @@ def _connected_components(blob: bytes, gltf: dict[str, Any], primitive: dict[str
     pos_id = attributes.get("POSITION")
     index_id = primitive.get("indices")
     if not isinstance(pos_id, int) or not isinstance(index_id, int):
-        return 1
+        # Caller turns this into a finding: an unindexed mesh has no shared
+        # vertices to union, so every triangle is its own island and the count
+        # would be meaningless. Returning 1 here used to make the whole check
+        # vacuous for such a file. All 13 shipping GLBs are indexed.
+        return 0
     pos = _read_accessor(blob, accessors[pos_id], views)
     indices = _read_accessor(blob, accessors[index_id], views)
-    count = len(pos) // 3
+    # Weld by POSITION before counting, or a UV seam reads as a tear. An unwrap
+    # splits a vertex everywhere the chart is cut, so the same corner arrives as
+    # two indices that no triangle joins: the Vigil measured 118 "islands" raw
+    # and 2 welded, and 3824 -> 2825 verts is exactly the Euler prediction for a
+    # closed surface at 5615 triangles.
+    #
+    # THIS IS A WEAKER CHECK THAN IT WAS, and the honest statement of how much.
+    # The invariant moved from "no vertex-disjoint bodies" to "no
+    # POSITION-disjoint bodies". A hidden interior body that floats free still
+    # fails, measured -- but one that touches the shell at a single coincident
+    # vertex now welds into the same component and passes: an unmerged CSG
+    # union, an inset partition that kept its shared edge, an interior box
+    # standing on the same floor plane. That is the price of letting an
+    # unwrapped asset through at all, and it is worth paying only because the
+    # alternative was banning UVs outright, which is what put a hand-painted
+    # trim sheet on the map's one building.
+    #
+    # `round(..., 5)` is a bucket, not a tolerance: two coincident vertices
+    # either side of a bucket edge stay split, and two distinct surfaces 10 um
+    # apart merge. At this map's unit scale neither is a way to hide anything,
+    # so it stays a bucket rather than growing a spatial index.
+    seats: dict[tuple[float, float, float], int] = {}
+    weld: list[int] = []
+    for i in range(0, len(pos) - 2, 3):
+        key = (round(float(pos[i]), 5),
+               round(float(pos[i + 1]), 5),
+               round(float(pos[i + 2]), 5))
+        weld.append(seats.setdefault(key, len(seats)))
+    count = len(seats)
     parent = list(range(count))
 
     def find(i: int) -> int:
@@ -543,9 +665,9 @@ def _connected_components(blob: bytes, gltf: dict[str, Any], primitive: dict[str
 
     for a, b, c in zip(indices[0::3], indices[1::3], indices[2::3]):
         ia, ib, ic = int(a), int(b), int(c)
-        if max(ia, ib, ic) >= count:
+        if max(ia, ib, ic) >= len(weld):
             continue
-        ra, rb, rc = find(ia), find(ib), find(ic)
+        ra, rb, rc = find(weld[ia]), find(weld[ib]), find(weld[ic])
         parent[rb] = ra
         parent[rc] = ra
     return len({find(i) for i in range(count)})

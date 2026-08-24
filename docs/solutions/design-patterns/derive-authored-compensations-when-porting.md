@@ -24,9 +24,12 @@ tags: [godot, porting, rendering, shadows, derived-parameters, web-reference, ar
 
 ## Context
 
-Glassvow is a parallel port of a web deckbuilder into Godot 4.7. Parity is checked
-against the frozen web reference, so the default instinct on any ported feature is
-to transcribe what the reference does.
+Glassvow is a Godot 4.7 deckbuilder that began as a parallel port of a web
+game. After #317 the web tree is frozen history, not a live authority. The
+default instinct on a ported feature used to be to transcribe what the
+reference does; that instinct is still right for *design* and still wrong
+for **compensations** — values that exist only because the source platform
+could not compute them.
 
 That instinct is right for design decisions and wrong for **compensations** — values
 that exist only because the source platform could not compute them.

@@ -26,10 +26,12 @@ tags: [godot, web-port, presentation, draw-call, node-count, refactor-verificati
 
 ## Context
 
-This project is a parallel port of a web build. Porting presentation faithfully
-means copying measured CSS pixels — which is correct and is why the chrome
-matches. But it also copies the DOM's *structure*, and one piece of that
-structure is wrong in Godot.
+This project began as a parallel port of a web build. After #317 the web
+tree is not the live standard; collapsing repeated non-interactive nodes
+into `_draw()` is. Copying DOM *structure* is still the trap: in a browser
+the only independently rotatable, offsetable, fadeable thing is an element,
+so the old piles were a stack of `.pile-layer` nodes. That structure is
+wrong in Godot.
 
 In a browser, the only thing you can independently rotate, offset or fade is an
 element. So the benchmark's card piles are drawn as a stack of `.pile-layer`
@@ -225,8 +227,8 @@ work, and one per widget is the correct count.
 - `presentation/combat/hud_bar.gd` — the widget this was found in. The
   node-per-layer version and its `.pile-layer` lineage are in this file's git
   history on `main`; the `_draw()` version shipped in `4f52bd8`.
-- Verified on Godot 4.7.1.stable, the version pinned by this project's
-  `CLAUDE.md`.
+- Verified on Godot 4.7.1.stable, the project pin at the time. The current pin
+  is 4.7.2.stable; see `CLAUDE.md`.
 - The same question is worth asking of any other ported cluster that repeats a
   node per value. The two obvious candidates named when this was written —
   status stacks and facet pips — **have since been checked, and both are

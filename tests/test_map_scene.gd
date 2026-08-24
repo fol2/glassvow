@@ -38,9 +38,13 @@ static func _rig(fails: Array[String]) -> void:
 	var cam: Camera3D = rig.get_camera()
 	_check(fails, cam.projection == Camera3D.PROJECTION_ORTHOGONAL,
 			"camera is orthographic")
-	_check(fails, cam.rotation_degrees.x >= -60.0
-			and cam.rotation_degrees.x <= -50.0,
-			"pitch sits in the signed 50–60° band")
+	# Moved off the 50–60 band in #156 round 2: at 55° the frame read flat and
+	# panning up or down showed almost none of the 3D it was paying for. The
+	# band is still a band, not a point, because the exact degree is a taste
+	# call — what must not happen is a silent drift back toward top-down.
+	_check(fails, cam.rotation_degrees.x >= -45.0
+			and cam.rotation_degrees.x <= -35.0,
+			"pitch sits in the signed 35–45° band")
 	_check(fails, is_equal_approx(cam.rotation_degrees.x, MapCameraRig.TILT_DEGREES),
 			"default pitch is the #255 −55° stop")
 	_check(fails, rig.zoom_stop == MapCameraRig.DEFAULT_STOP
@@ -107,21 +111,31 @@ static func _scene(fails: Array[String]) -> void:
 				"ground does not cast shadows")
 	_check(fails, scene.get_rig().get_camera().current,
 			"act camera is current inside the stage")
-	_check(fails, scene.find_child("MapAssetGeometry", true, false) == null,
-			"partial or absent payload keeps placeholder geometry")
 	var slab: String = "res://assets/art/map/geometry/shared/road-slab-a.glb"
+	var terminus_path: String = "res://assets/art/map/geometry/act1/terminus-amber-window-tower.glb"
 	var paths: PackedStringArray = scene.active_asset_paths()
-	if ResourceLoader.exists(slab):
-		_check(fails, paths.has(slab) and paths.size() < 12,
-				"present shared-road-slab-a binds through MapMaterials, not a second loader")
+	var complete: bool = ResourceLoader.exists(slab) and ResourceLoader.exists(terminus_path)
+	if complete:
+		_check(fails, scene.find_child("MapAssetGeometry", true, false) is Node3D,
+				"complete eight-kit + terminus set replaces placeholder geometry")
+		_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
+				"active terminus is attached")
+		_check(fails, paths.has(slab) and paths.has(terminus_path),
+				"present shared-road-slab-a and terminus bind through MapMaterials")
 	else:
-		_check(fails, paths.is_empty(),
-				"declared-but-absent assets keep the current placeholder geometry")
+		_check(fails, scene.find_child("MapAssetGeometry", true, false) == null,
+				"partial or absent payload keeps placeholder geometry")
+		if ResourceLoader.exists(slab):
+			_check(fails, paths.has(slab) and paths.size() < 12,
+					"present shared-road-slab-a binds through MapMaterials, not a second loader")
+		else:
+			_check(fails, paths.is_empty(),
+					"declared-but-absent assets keep the current placeholder geometry")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
 		var placeholder: Node = scene.find_child(node_name, true, false)
 		_check(fails, placeholder is GeometryInstance3D
-				and (placeholder as GeometryInstance3D).visible,
-				"%s remains visible until the full eight-kit act set resolves" % node_name)
+				and (placeholder as GeometryInstance3D).visible == not complete,
+				"%s visibility follows whether the full eight-kit act set resolved" % node_name)
 	scene.free()
 
 
@@ -216,8 +230,12 @@ static func _asset_binding(fails: Array[String]) -> void:
 	var first_paths: PackedStringArray = materials.active_asset_paths()
 	var first_resources: Array[Resource] = materials.active_asset_resources()
 	var first_ground: Variant = materials.ground.get_shader_parameter("surface_tex")
-	_check(fails, first_paths.size() == 12 and first_resources.size() == 12,
-			"active act loads exactly 2 tiles + grade + 8 kits + terminus")
+	# 13 for Act I, 12 for the rest: only the first act has a threshold, because
+	# the Vigil stands at the start of the road and nowhere else. The Vigil's
+	# texture is not a fourteenth row — it is baked into that GLB. Asserted as a
+	# count rather than a set so a silently DROPPED asset still fails here.
+	_check(fails, first_paths.size() == 13 and first_resources.size() == 13,
+			"act I loads 2 tiles + grade + 8 kits + terminus + vigil")
 	var raw_first_kits: Variant = first.get("kits", [])
 	var first_kit_count: int = 0
 	if raw_first_kits is Array:
@@ -253,15 +271,33 @@ static func _asset_binding(fails: Array[String]) -> void:
 	var scene_loader: FakeAssetLoader = FakeAssetLoader.new()
 	var scene: MapScene = MapScene.new({}, Callable(scene_loader, "load_resource"))
 	var first_root: Node = scene.find_child("MapAssetGeometry", true, false)
-	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 12,
+	_check(fails, first_root is Node3D and scene.active_asset_paths().size() == 13,
 			"complete active set replaces placeholders through MapScene binding")
-	for i: int in range(8):
+	# Kits 0 and 1 are shared-road-slab-a/b and are laid along the graph as the
+	# ROAD (#156 direction B), not scattered as scenery, so they have no
+	# AssetKit node at all. The remaining six share every scenery seat between
+	# them. Counting the sum rather than each kit's share is the check that
+	# matters: it fails if a seat is dropped or served twice, and it does not
+	# re-break every time the seat list is retuned.
+	for i: int in range(2):
+		_check(fails, scene.find_child("AssetKit%02d" % i, true, false) == null,
+				"road kit %d is not scattered as scenery" % i)
+	var seated: int = 0
+	for i: int in range(2, 8):
 		var kit: Node = scene.find_child("AssetKit%02d" % i, true, false)
-		_check(fails, kit is MultiMeshInstance3D
-				and (kit as MultiMeshInstance3D).multimesh.instance_count in [3, 4],
-				"asset kit %d owns three or four deterministic placements" % i)
+		_check(fails, kit is MultiMeshInstance3D,
+				"asset kit %d is bound as a multimesh" % i)
+		if kit is MultiMeshInstance3D:
+			seated += (kit as MultiMeshInstance3D).multimesh.instance_count
+	_check(fails, seated == scene._all_prop_positions().size(),
+			"the six scenery kits between them fill every seat exactly once")
+	for i: int in range(2):
+		_check(fails, scene.find_child("AssetRoad%d" % i, true, false) is MultiMeshInstance3D,
+				"road slab %d is laid along the graph" % i)
 	_check(fails, scene.find_child("AssetTerminus", true, false) is MeshInstance3D,
 			"active terminus is attached")
+	_check(fails, scene.find_child("AssetVigil", true, false) is MeshInstance3D,
+			"the Vigil is seated at the west end")
 	for node_name: String in ["FlatWedges", "StackedSlabs", "DabMasses"]:
 		var placeholder: Node = scene.find_child(node_name, true, false)
 		_check(fails, placeholder is GeometryInstance3D
@@ -347,8 +383,19 @@ static func _palette(fails: Array[String]) -> void:
 			and MapRegions.WEATHER_BY_ACT.size() == LayoutBook.ACTS
 			and MapRegions.BAND_SHADE.size() == LayoutBook.ACTS,
 			"act count and palette count agree")
-	_check(fails, MapRegions.BAND_SHADE[0].h > 0.88,
-			"act 0 shade hue is crimson (~328°, the web act1 stage)")
+	# Act 0 was crimson because it was matched to the web act1 stage plate. The
+	# port owns its look now and act 0 is night glass (#156 direction B), so
+	# the hue this pins moved. What replaces it is the constraint that actually
+	# protects the frame: a prop is the ground times PROP_VALUE / GROUND_VALUE,
+	# so if the KEY loses luminance the props stop reading against the ground.
+	# Hue is nearly free — the amber this replaced carried luma 0.505 and the
+	# glass-blue carries 0.438 — but a genuinely dark key is not, and that is
+	# the mistake this floor is here to catch. The darkness belongs in the
+	# grade, which multiplies per position; see MapRegions.BAND_KEY.
+	_check(fails, MapRegions.BAND_SHADE[0].h > 0.55 and MapRegions.BAND_SHADE[0].h < 0.72,
+			"act 0 shade is night indigo, not the retired crimson stage plate")
+	_check(fails, MapRegions.BAND_KEY[0].get_luminance() > 0.5,
+			"act 0 key keeps the luminance the ground↔prop gap depends on")
 	for i: int in range(4):
 		var cfg: MapRegions = MapRegions.for_act(i)
 		_check(fails, cfg.act == i
@@ -409,13 +456,29 @@ static func _palette(fails: Array[String]) -> void:
 						"act %d grade is not a previous act's texture" % act)
 			seen.append(tex)
 			if act == 0:
-				_grade_recipe(fails, tex)
+				if tex is ImageTexture:
+					_grade_recipe(fails, tex)
+				else:
+					_check(fails, tex.get_width() == 512 and tex.get_height() == 256,
+							"painted act 0 grade is the declared 512×256 row")
 	var ground_end: ShaderMaterial = _override(scene, "TerrainPlaceholder")
+	# `surface_tex` used to be asserted IDENTICAL across every act, which held
+	# only while no act had a real tile and all four shared the one in-memory
+	# fallback. Act I now binds `materials/act1-ground-ash-loam.png` while the
+	# other three still fall back, so identity is the wrong invariant — and
+	# keeping it would mean the gate fails the moment any act's tile lands.
+	# What the check is really for is that an act switch never retints the
+	# GROUND: the value lock holds and no albedo uniform appears. Hue lives in
+	# the ramp ends and the grade, never in the surface.
 	_check(fails, ground_end != null
 			and is_equal_approx(g_val, MapMaterials.GROUND_VALUE)
-			and is_same(surface, ground_end.get_shader_parameter("surface_tex"))
+			and is_equal_approx(_as_float(ground_end.get_shader_parameter("surface_value")),
+				MapMaterials.GROUND_VALUE)
+			and ground_end.get_shader_parameter("surface_tex") != null
 			and ground_end.get_shader_parameter("albedo") == null,
-			"act switch does not retint albedo / surface_tex / surface_value")
+			"act switch does not retint albedo / surface_value")
+	_check(fails, surface != null,
+			"act 0 binds a surface texture")
 	scene.free()
 
 

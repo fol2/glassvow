@@ -10,13 +10,20 @@ this pipeline is wayfinder #165.
 
 | Piece | Where | Why this one |
 |---|---|---|
-| Godot 4.7.1.stable | `godot` on PATH | engine pin (SKILL.md §1) |
-| Export templates 4.7.1 | `~/Library/Application Support/Godot/export_templates/4.7.1.stable/` — must contain `ios.zip`, `android_source.zip`, `android_debug.apk`, `android_release.apk` (the slim install shipped only macOS+web; the mobile four were added 2026-08-13 from the official `.tpz`) | must match engine version exactly |
+| Godot 4.7.2.stable | `godot` on PATH | engine pin (SKILL.md §1) |
+| Export templates 4.7.2 | `~/Library/Application Support/Godot/export_templates/4.7.2.stable/` — must contain `ios.zip`, `android_source.zip`, `android_debug.apk`, `android_release.apk`; the selected mobile, macOS and no-thread web templates were installed 2026-08-21 from the checksum-verified official `.tpz` | must match engine version exactly |
 | JDK 17 (Temurin 17.0.20) | `~/.local/share/jdk-17/Contents/Home`, wired into Godot's `export/android/java_sdk_path` editor setting | Godot 4.7's gradle template runs Gradle 8.11.1, which rejects JDK >23 ("Unsupported class file major version 69" on the machine's JDK 25); docs pin OpenJDK 17 |
 | Android SDK | `~/Library/Android/sdk` (platform android-36, build-tools 36.0.0) | Play requires target API 36 from 2026-08-31 |
 | Xcode 26 | `/Applications/Xcode.app` | App Store uploads must be built with the iOS 26 SDK since 2026-04-28 |
-| Android gradle template | `android/` (gitignored, machine-local) | reinstall any checkout: `mkdir -p android/build && unzip -o ~/Library/Application\ Support/Godot/export_templates/4.7.1.stable/android_source.zip -d android/build && echo 4.7.1.stable > android/.build_version && touch android/build/.gdignore` — the wizard's preflight does this automatically |
+| Android gradle template | `android/` (gitignored, machine-local) | reinstall any checkout: `mkdir -p android/build && unzip -o ~/Library/Application\ Support/Godot/export_templates/4.7.2.stable/android_source.zip -d android/build && echo 4.7.2.stable > android/.build_version && touch android/build/.gdignore` — the wizard's preflight does this automatically |
 | Sentry for Godot **2.1.1** | `addons/sentry` ([release](https://github.com/getsentry/sentry-godot/releases/tag/2.1.1), tree `d288ad9`) | crash reporting on iOS store + Dev Review; do not follow `latest`. Client DSN lives in `project.godot` `[sentry]`; privacy-minimal (`attach_log=false`). Android Gradle injection is a later wave |
+
+**4.7.2 template install receipt (2026-08-21):** the official
+`Godot_v4.7.2-stable_export_templates.tpz` matched its published SHA-512,
+`ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079`.
+The selected iOS, Android, macOS and no-thread Web templates are installed
+under the 4.7.2 directory; the old 4.7.1 directory remains available only for
+replaying historical evidence.
 
 ## Credentials — where they live
 
@@ -31,6 +38,57 @@ this pipeline is wayfinder #165.
   Xcode automatic signing (Keychain); nothing to manage by hand.
 - **`export_credentials.cfg`**: written by the Godot editor if keystore fields
   are ever filled in the Export dialog; gitignored along with `*.keystore`.
+
+### Sentry operator access
+
+**Decision (2026-08-21):** Codex has a full-access Sentry Personal Token for
+Glassvow operations. The Sentry record is named `Glassvow Codex Full Access` and
+has the maximum permissions offered by the Personal Tokens UI: Project, Team,
+Release, Issue & Event, Organization and Member are **Admin**; Alerts is
+**Read & Write**. The resulting scopes are:
+
+```text
+alerts:read alerts:write event:admin event:read event:write member:admin
+member:read member:write org:admin org:integrations org:read org:write
+project:admin project:read project:releases project:write team:admin
+team:read team:write
+```
+
+Sentry Personal Tokens have no project selector. The credential is therefore
+technically organization-wide even though its operating boundary is Glassvow:
+
+```text
+SENTRY_ORG=pgnetwork
+SENTRY_PROJECT=glassvow
+SENTRY_BASE_URL=https://sentry.io
+```
+
+Godot release exports arrive in Sentry as environment `export_release`, not
+`prod` or `production`. Pass `--environment export_release` explicitly to the
+read-only Sentry helper; relying on its `prod` default hides live release
+issues. `GLASSVOW-1` exposed this distinction on 2026-08-21.
+
+On James's Mac the token value is stored in macOS Keychain, service
+`codex-sentry-glassvow-full-access`, account equal to the local macOS user. It
+is not stored in this repository. The mode-`0600` loader
+`~/.config/glassvow/sentry.sh` exports the three defaults above and reads
+`SENTRY_AUTH_TOKEN` from Keychain at runtime:
+
+```bash
+source ~/.config/glassvow/sentry.sh
+```
+
+Full credential scope does not broaden the task boundary: use it only against
+the `glassvow` project. Credential possession records capability, not standing
+approval for an unrelated project or an unrequested production mutation. Never
+print the token, paste it into issues/evidence, write it to a repo `.env`, or
+commit it. A Cloud Agent has no access to this Mac's Keychain; provision its
+secret environment separately when that execution surface is intentionally
+used.
+
+To rotate, create the replacement first, update the same Keychain service with
+`security add-generic-password -U`, verify one authenticated Glassvow request,
+then revoke the superseded Sentry token. This avoids an observability gap.
 
 ## Export recipe
 
@@ -79,6 +137,15 @@ xcodebuild -exportArchive -archivePath build/ios/glassvow.xcarchive \
   -exportOptionsPlist scripts/ios_export_options.plist \
   -allowProvisioningUpdates
 ```
+
+`scripts/ios_export_options.plist` keeps `method = app-store-connect`,
+`teamID = V45S7U2LZB`, and `signingStyle = automatic`. It also pins
+`manageAppVersionAndBuildNumber = false` so App Store Connect cannot rewrite
+the tracked marketing version and build number (currently **1.0.0 (3)**), and
+`uploadSymbols = true` so a direct
+App Store Connect upload includes symbols. With `destination = export`, retain
+the archive's `dSYMs/` for the later Apple and Sentry symbol-upload steps; dSYMs
+are not embedded in the IPA.
 
 Headless, `-exportArchive` alone fails with **"No Accounts"** (the CLI can't
 reach Xcode's Apple ID session). The working path — verified 2026-08-13, it

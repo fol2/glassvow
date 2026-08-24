@@ -38,12 +38,13 @@ the picture shrank the target by exactly the same factor.
   | phone-portrait | 0.30 | **36.0 x 45.0** | under 44pt |
   | phone-landscape | 0.18 | **21.6 x 27.0** | half the floor |
 
-  The picture has since been re-authored at 104x104, with current trail scales
-  of 0.60 / 0.68 / 0.58 for pad landscape / phone portrait / phone landscape.
-  Those pictures are already 62.4 / 70.72 / 60.32 stage px, so the current
-  `trail/touch = 44` phone settings add no padding. The field and
-  `set_touch_min` remain the defensive authoring seam: a future smaller scale
-  grows the hit rect without requiring the picture to grow with it.
+  The picture has since been re-authored at 104x104. After landscape-only,
+  shipping trail scale is 0.6 base / 0.58 on phone-landscape; phone-portrait
+  is retired. `trail/touch = 44` on phone-landscape still adds no padding at
+  that scale. `set_touch_min` remains the defensive authoring seam: a future
+  smaller scale grows the hit rect without requiring the picture to grow
+  with it. The discovery table above is the 2026-07 incident, not the live
+  inventory.
 
 - **Every layout gate passed.** Nothing overflowed, nothing overlapped, the
   identity capture was pixel-identical. A composition can be geometrically

@@ -2,11 +2,18 @@ extends RefCounted
 ## Locks the Sentry 2.1.1 pin, privacy-minimal Project Settings, and iOS
 ## store/Dev Review exports that must carry the addon.
 
+## sentry-cocoa 9.24.0 Sources/Resources/PrivacyInfo.xcprivacy (exact bytes).
+## Pins Linked=false, Tracking=false, AppFunctionality per collected type
+## without a plist parser.
+const COCOA_PRIVACY_SHA256: String = "118b16e0e97ffe8b6f1f01b7e04f68e5da764474a4d39d2933b0eeaef3cdc0ca"
+
 
 static func run(fails: Array[String]) -> void:
 	_pin(fails)
 	_privacy(fails)
 	_ios_exports(fails)
+	_dist(fails)
+	_cocoa_privacy_manifest(fails)
 	_redact(fails)
 
 
@@ -62,6 +69,47 @@ static func _ios_exports(fails: Array[String]) -> void:
 			fails.append("sentry: %s exclude_filter drops Sentry" % name)
 
 
+static func _dist(fails: Array[String]) -> void:
+	var loop_src: String = FileAccess.get_file_as_string("res://application/sentry_loop.gd")
+	if loop_src.contains("get_setting(\"application/config/version\")"):
+		fails.append("sentry: dist is still sourced from marketing version")
+	if not loop_src.contains("const IOS_BUILD_NUMBER: String = \"3\""):
+		fails.append("sentry: IOS_BUILD_NUMBER is not the numeric iOS build")
+	if not loop_src.contains("options.dist = IOS_BUILD_NUMBER"):
+		fails.append("sentry: dist is not assigned from IOS_BUILD_NUMBER")
+	var project: String = FileAccess.get_file_as_string("res://project.godot")
+	if _sentry_value(project, "options/dist") != GlassvowMainLoop.IOS_BUILD_NUMBER:
+		fails.append("sentry: project options/dist is not the iOS build number")
+	if _sentry_value(project, "config/version") == GlassvowMainLoop.IOS_BUILD_NUMBER:
+		fails.append("sentry: marketing config/version collides with dist")
+	var rx: RegEx = RegEx.new()
+	if rx.compile("^[0-9]+$") != OK or rx.search(GlassvowMainLoop.IOS_BUILD_NUMBER) == null:
+		fails.append("sentry: IOS_BUILD_NUMBER is not numeric")
+	var presets: String = FileAccess.get_file_as_string("res://export_presets.cfg")
+	var store: Dictionary = _preset(presets, "iOS")
+	var review: Dictionary = _preset(presets, "iOS Dev Review")
+	for row: Dictionary in [store, review]:
+		var name: String = str(row.get("name", ""))
+		if str(row.get("application/version", "")) != GlassvowMainLoop.IOS_BUILD_NUMBER:
+			fails.append("sentry: %s CFBundleVersion is not the numeric build" % name)
+		if str(row.get("application/short_version", "")) == GlassvowMainLoop.IOS_BUILD_NUMBER:
+			fails.append("sentry: %s marketing version equals dist" % name)
+
+
+static func _cocoa_privacy_manifest(fails: Array[String]) -> void:
+	var device: String = "res://addons/sentry/bin/ios/Sentry.xcframework/ios-arm64/SentryObjC.framework/PrivacyInfo.xcprivacy"
+	var sim: String = "res://addons/sentry/bin/ios/Sentry.xcframework/ios-arm64_x86_64-simulator/SentryObjC.framework/PrivacyInfo.xcprivacy"
+	if not FileAccess.file_exists(device) or not FileAccess.file_exists(sim):
+		fails.append("sentry: Sentry Cocoa PrivacyInfo.xcprivacy is missing")
+		return
+	var device_sha: String = FileAccess.get_sha256(device)
+	var sim_sha: String = FileAccess.get_sha256(sim)
+	if device_sha != COCOA_PRIVACY_SHA256:
+		fails.append("sentry: Cocoa PrivacyInfo is not sentry-cocoa 9.24.0 (%s)" % device_sha)
+	if sim_sha != COCOA_PRIVACY_SHA256:
+		fails.append("sentry: Cocoa PrivacyInfo simulator slice drifted (%s)" % sim_sha)
+
+
 static func _redact(fails: Array[String]) -> void:
 	if SentryPrivacy.redact("boom user://glassvow_run_v2.json") == "boom user://glassvow_run_v2.json":
 		fails.append("sentry: redact left a user:// path")
@@ -102,9 +150,14 @@ static func _preset(text: String, want: String) -> Dictionary:
 			current = {"name": ""}
 			in_options = false
 			continue
-		if in_options:
-			continue
 		if current.is_empty():
+			continue
+		if in_options:
+			if line.begins_with("application/version=") \
+					or line.begins_with("application/short_version="):
+				var opt_eq: int = line.find("=")
+				current[line.substr(0, opt_eq)] = line.substr(opt_eq + 1) \
+						.trim_prefix("\"").trim_suffix("\"")
 			continue
 		if line.begins_with("name=") or line.begins_with("custom_features=") \
 				or line.begins_with("exclude_filter="):

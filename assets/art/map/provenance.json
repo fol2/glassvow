@@ -69,6 +69,363 @@
       "studio_url": "https://studio.tripo3d.ai/workspace/generate/cc83bc21-f586-4144-ab80-af200a861dc1",
       "polycount_target": 1500,
       "faces_reported": 1560
+    },
+    {
+      "asset_id": "shared-road-slab-b",
+      "source": "Studio",
+      "created_at": "2026-08-19T17:23:00+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "fc8ce26f871843f66d02fce2e7a762b0db58b1f1aba5e6fa5e0b04a8846774c5",
+      "final_sha256": "62084cd0aff84985762e59edb307f9ec0e88d44097431106f4f2c2bff0f4bd09",
+      "edits": [
+        "blender missing on PATH; no Blender join/origin/scale/export pass",
+        "studio_download land: copied /tmp/glassvow-studio-shared-road-slab-b.glb",
+        "joined two visible islands by remapping the nearest vertex pair (4.4mm gap) so the shipping mesh is one connected surface; no regeneration",
+        "kept Studio Smart Mesh download otherwise: one mesh, one triangulated surface, normals, no UV/tangent/animation/skeleton/texture, Y-up metres, ground Y=0"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "model": "Smart Mesh P2.0 Preview",
+      "model_id": "ba2a79cf-b313-40b4-b86e-2eacb7a77102",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/shared-road-slab-b.jpg",
+      "concept_sha256": "662b5213fca5a475feb2bf7e9a3ebf9cb44e94f90a799a511a716c3bc2b202c9",
+      "polycount_target": 1500,
+      "faces_reported": 1453,
+      "land_method": "studio_download"
+    },
+    {
+      "asset_id": "act1-ash-trunk-fork",
+      "source": "Studio",
+      "created_at": "2026-08-20T02:18:55+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "53a7b6b58da82a8f14b2165a896e7656f7b97e3c3c955c1b17af2fa3f367cf81",
+      "final_sha256": "53a7b6b58da82a8f14b2165a896e7656f7b97e3c3c955c1b17af2fa3f367cf81",
+      "edits": [
+        "land_map_glb.py copy of Studio Export GLB; no blender pass"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "35ad1057-5745-4594-af21-4b53e1a6a90e",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-ash-trunk-fork.jpg",
+      "concept_sha256": "c39952778ebf599d91ab5c9a22d2ab4b74941d52f418b0f407b433c5c2d0ad24",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-root-wedge",
+      "source": "Studio",
+      "created_at": "2026-08-20T03:53:31+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "5996894955462132710ef80eb8a9bc279ecee11e333068742605baab976cfa72",
+      "final_sha256": "fb6a2585649948dd95850449abab12c8673277e40aaacab01cbf099458941b01",
+      "edits": [
+        "weld 13 vertex pairs at 5mm (islands were 1.5mm apart); drop 6 degenerate tris; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "27399627-2591-4ef0-a6c3-e1c45d06c5bc",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-root-wedge.jpg",
+      "concept_sha256": "d0c0e3652fa0f84c85a5e5236f21e41545a50a097d781a5c10bfba1d92cdc2e7",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-fallen-bough-arch",
+      "source": "Studio",
+      "created_at": "2026-08-20T05:42:41+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "f667fe39fe231cd06e0c0a1525bbc4a49dea60411cc823e92aa30efdd232d13f",
+      "final_sha256": "f667fe39fe231cd06e0c0a1525bbc4a49dea60411cc823e92aa30efdd232d13f",
+      "edits": [
+        "Studio Export GLB; slider 796 Quad; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "244f5bc6-7a60-42de-8ff0-a21614e86a0c",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-fallen-bough-arch.jpg",
+      "concept_sha256": "9f1b95c8e01b49cc516e971722d8d99a1b0e7fb1f72399fd4153d0f74307ec98",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-charred-stump",
+      "source": "Studio",
+      "created_at": "2026-08-20T07:00:23+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "f11f204b836f50d009123b401dbe31b2a45b8cc3abccff06820b1f12bbaf3101",
+      "final_sha256": "f11f204b836f50d009123b401dbe31b2a45b8cc3abccff06820b1f12bbaf3101",
+      "edits": [
+        "Studio Export GLB; Quad@800; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "799a5b49-be2c-4ec0-ba29-3c60fbe83c2e",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-charred-stump.jpg",
+      "concept_sha256": "2d07f80575b526291692e31e7410132f8c30ae4a347c8d2a3e5dc9df9313c9c5",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-ash-cairn-mass",
+      "source": "Studio",
+      "created_at": "2026-08-20T07:00:38+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "5bcdd92d35735905b1d4a317f9be3058347dbfd33f69b1bc124019c5fce77e4e",
+      "final_sha256": "5bcdd92d35735905b1d4a317f9be3058347dbfd33f69b1bc124019c5fce77e4e",
+      "edits": [
+        "Studio Export GLB; Quad@800; no blender"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "a059208a-d1dd-4de2-a5ef-093973c974b5",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-ash-cairn-mass.jpg",
+      "concept_sha256": "c1d4d34d6f1299f2a162a3fafb9d76ec61ec4e635914aedfd65e5493774447dd",
+      "land_method": "studio_new_headless_export",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "shared-standing-monument",
+      "source": "Studio",
+      "created_at": "2026-08-21T17:56:38+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "fb0ee05c97a176559d7b6bc0263a9d4fcd46224c4e1510f9f250373609b6fe8a",
+      "final_sha256": "fb0ee05c97a176559d7b6bc0263a9d4fcd46224c4e1510f9f250373609b6fe8a",
+      "edits": [
+        "land_map_glb.py copy of Studio Export GLB; no blender pass",
+        "accepted after signed capture docs/reviews/293/shared-standing-monument-20.png sha256 f40dd372c7ac594727210388a415122b2c7cbd251b76cefcaca1f1dd9d5fe0aa"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "task_id": "d499af93-fc94-402d-9e56-18fab6f9377a",
+      "face_limit": 1500,
+      "texture": false,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/shared-standing-monument.jpg",
+      "concept_sha256": "b4b0ddfaa07e2b6f5083e9185413931123154ee5bd6ec7cb59f2c68aef80d2b3",
+      "land_method": "studio_download",
+      "polycount_target": 1500
+    },
+    {
+      "asset_id": "act1-grade",
+      "source": "local-deterministic",
+      "created_at": "2026-08-22T18:40:00+08:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "2106e73177804dc35e27b71fa45fc159db358530504078b6d2ae4a6d81358b7d",
+      "final_sha256": "2106e73177804dc35e27b71fa45fc159db358530504078b6d2ae4a6d81358b7d",
+      "edits": [
+        "repainted for the direction-B journey axis (#156) and widened with the lattice: U is the X journey from the entrance at x=-36 to the boss at x=+36, V the seven z lanes across 36, so one grade still covers the 72x36 lattice exactly",
+        "hue walks 0.95 -> 0.88 along the journey with saturation draining and value lifting, carrying the aerial-perspective ramp that direction B cannot get from a horizon",
+        "contact shadows resized per kit (#156 round 2): one 2.4x2.0 gaussian for every seat put a ~7 m puddle under a 2 m stump and darkened 68% of the rect; each blob now takes the footprint radius of the kit the round-robin actually seats there, and the darkened area is 38%"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/act1-baseline/B-final.png"
+    },
+    {
+      "asset_id": "act1-terminus",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-21T13:38:00+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc",
+      "final_sha256": "81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc",
+      "edits": [
+        "locally authored parametric pointed-window surround, tower masonry, crenellations and tiered turret from the shipped Act I stage device",
+        "manifold boolean union removed intersections into one watertight component; one mesh, one surface, POSITION+NORMAL, no textures, 4446 triangles, grounded Y-up metres"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User approved final Act I hero and grade with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act1-terminus/twenty-placements.png",
+      "polycount_target": 5000,
+      "triangles": 4446
+    },
+    {
+      "asset_id": "act2-grade",
+      "source": "local-deterministic",
+      "created_at": "2026-08-21T13:53:00+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "b992ae08e638080e39aa32221edb6c811d9bfc4d9f4a8ede1a0a05f500f95906",
+      "final_sha256": "b992ae08e638080e39aa32221edb6c811d9bfc4d9f4a8ede1a0a05f500f95906",
+      "edits": [
+        "authored the owned Act II blue-night to cyan-distance palette arc at exact 512x256 RGBA with low-frequency flooded-corridor contact darkening",
+        "Godot 4.7.2 generated VRAM mode 2, high-quality, mipmapped import metadata from a temporary importer-default profile"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act II slice with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act2-grade/review-sheet.png"
+    },
+    {
+      "asset_id": "act2-terminus",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-21T13:53:00+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "d093ccc134faa8118e5a724bef33c4ee8a0fda15fc95826a0b608541ab58aa99",
+      "final_sha256": "d093ccc134faa8118e5a724bef33c4ee8a0fda15fc95826a0b608541ab58aa99",
+      "edits": [
+        "modelled the accepted flooded-threshold concept as a thick pointed arch, uneven ruined wings, two through-apertures, broad silt courses and two fused pendant masses",
+        "manifold boolean union produced one watertight connected component; one mesh, one surface, POSITION+NORMAL, no textures, 5568 triangles, grounded Y-up metres"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act II concept and final hero on 2026-08-21",
+      "review_path": "docs/reviews/294/act2-terminus/twenty-placements.png",
+      "concept_path": "assets/art/map-concepts/act2-terminus-flooded-threshold.png",
+      "concept_sha256": "7286e70e628b9c29d98c8037769e7ab1784fc7f7ee24f1b9076d4f42772ba9b0",
+      "polycount_target": 5000,
+      "triangles": 5568
+    },
+    {
+      "asset_id": "act3-grade",
+      "source": "local-deterministic",
+      "created_at": "2026-08-21T14:10:45+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "56d9bb012038351f35fe2ea28086e2633b5d7811fc42cefeeb2fd67f155de332",
+      "final_sha256": "56d9bb012038351f35fe2ea28086e2633b5d7811fc42cefeeb2fd67f155de332",
+      "edits": [
+        "authored the owned Act III violet-storm to obsidian-court palette arc at exact 512x256 RGBA with low-frequency broken-ring contact darkening",
+        "Godot 4.7.2 generated VRAM mode 2, high-quality, mipmapped import metadata from a temporary importer-default profile"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act III slice with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act3-grade/review-sheet.png"
+    },
+    {
+      "asset_id": "act3-terminus",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-21T14:10:45+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "607615ca3bd5a5d5ffa382ab19866891a49f220685fe6c2f4272427b6ea423fe",
+      "final_sha256": "607615ca3bd5a5d5ffa382ab19866891a49f220685fe6c2f4272427b6ea423fe",
+      "edits": [
+        "modelled a deliberately broken monumental ring-arch, faceted court pylons, central suspended shard and continuous grounded plinth",
+        "manifold boolean union produced one watertight connected component; one mesh, one surface, POSITION+NORMAL, no textures, 5504 triangles, grounded Y-up metres"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the final Act III hero on 2026-08-21",
+      "review_path": "docs/reviews/294/act3-terminus/twenty-placements.png",
+      "polycount_target": 5000,
+      "triangles": 5504
+    },
+    {
+      "asset_id": "act4-grade",
+      "source": "local-deterministic",
+      "created_at": "2026-08-21T14:26:57+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "abc2371033603c4f927d0a225c28b1cf36d2c10e03c8719f03d3d20b2ee8ad5a",
+      "final_sha256": "abc2371033603c4f927d0a225c28b1cf36d2c10e03c8719f03d3d20b2ee8ad5a",
+      "edits": [
+        "authored the owned Act IV umber-to-rose dawn palette arc at exact 512x256 RGBA with low-frequency threshold contact darkening",
+        "Godot 4.7.2 generated VRAM mode 2, high-quality, mipmapped import metadata from a temporary importer-default profile"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act IV slice with 1-4 YES on 2026-08-21",
+      "review_path": "docs/reviews/294/act4-grade/review-sheet.png"
+    },
+    {
+      "asset_id": "act4-terminus",
+      "source": "local-parametric-manifold",
+      "created_at": "2026-08-21T14:26:57+01:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "137fdfe77386ff02b8c825ec1b2d9fb14315f2c09409dd30b629d1e6570c0d9f",
+      "final_sha256": "137fdfe77386ff02b8c825ec1b2d9fb14315f2c09409dd30b629d1e6570c0d9f",
+      "edits": [
+        "modelled the accepted rose-threshold concept as a thick four-aperture wheel, faceted flanking pylons, stepped threshold courses and continuous plinth",
+        "manifold boolean union produced one watertight connected component; one mesh, one surface, POSITION+NORMAL, no textures, 5460 triangles, grounded Y-up metres"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "User accepted the Act IV concept and final hero on 2026-08-21",
+      "review_path": "docs/reviews/294/act4-terminus/twenty-placements.png",
+      "concept_path": "assets/art/map-concepts/act4-terminus-rose-threshold.png",
+      "concept_sha256": "44b5ee7dec5d6ef10c732a03190923ddbe6df1d26b5f4148e3a6146e7b9af00d",
+      "polycount_target": 5000,
+      "triangles": 5460
+    },
+    {
+      "asset_id": "act1-ground",
+      "source": "local-deterministic",
+      "created_at": "2026-08-22T18:40:00+08:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "f09ec8c591fadc1274a229195b5222125d80b4cb5b84ca91f70cd3f60f5a1b83",
+      "final_sha256": "f09ec8c591fadc1274a229195b5222125d80b4cb5b84ca91f70cd3f60f5a1b83",
+      "edits": [
+        "synthesised a seamless ash-loam ground tile by FFT: spectral shaping in the frequency domain makes the period exact rather than retouched, so the seam ratio is a property of the construction and not of a fix-up pass",
+        "normalised the stored mean to 0.500 for the ground shader's tex_mean path, and flattened baked lighting so de-light spread stays near zero",
+        "Godot 4.7.2 import sidecar set to VRAM compressed mode 2, high quality, mipmaps on, matching the other map raster assets"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/act1-baseline/B-final.png"
+    },
+    {
+      "asset_id": "act1-prop",
+      "source": "local-deterministic",
+      "created_at": "2026-08-22T18:40:00+08:00",
+      "license": "original Glassvow authorship (no vendor, no paid credits)",
+      "source_sha256": "ef491648573e9af7ef07b5c65c4a702422fec11980b381b4f666e3935c1910d8",
+      "final_sha256": "ef491648573e9af7ef07b5c65c4a702422fec11980b381b4f666e3935c1910d8",
+      "edits": [
+        "synthesised a seamless charred-bark prop tile by FFT: spectral shaping in the frequency domain makes the period exact rather than retouched, so the seam ratio is a property of the construction and not of a fix-up pass",
+        "normalised the stored mean to 0.500 for the prop shader's tex_mean path, and flattened baked lighting so de-light spread stays near zero",
+        "Godot 4.7.2 import sidecar set to VRAM compressed mode 2, high quality, mipmaps on, matching the other map raster assets"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "Accepted as the map baseline on 2026-08-23 (issue #156 direction B). Baseline for merge and TestFlight, not a final design sign-off.",
+      "review_path": "docs/reviews/156/act1-baseline/B-final.png"
+    },
+    {
+      "asset_id": "act1-vigil",
+      "source": "Studio",
+      "created_at": "2026-08-24T02:32:00+08:00",
+      "license": "Tripo Studio Pro commercial grant (paid product Studio, not API)",
+      "source_sha256": "6ee66212ddd504f92f5de896c5b5c3d053a8ab1bc5b692103a6bd0d2a0098f13",
+      "final_sha256": "6ee66212ddd504f92f5de896c5b5c3d053a8ab1bc5b692103a6bd0d2a0098f13",
+      "edits": [
+        "generated by hand on Studio's HD Model tab, not through tools/studio_image_to_glb.ts. That script drives the Smart Mesh (low_poly) tab, which has no texture stage at all: its output came back with textures 0 / images 0 and in 66 open shells that could not be boolean-unioned, because only 2 of 70 pieces were volumes. HD Model is the DEFAULT tab on a cold /workspace/generate and the script actively clicks away from it",
+        "settings against this repo's budgets rather than Studio's defaults: Texture 2K (default 4K would not fit bytes_max), PBR OFF (map_vigil.gdshader is unshaded and samples one map, so metallic/roughness/normal would be three more images inside the same byte cap for nothing on screen), Polycount 6000 (default 2,000,000) against triangle_max 8000, Triangle topology, Privacy Private. Cost moved 55 -> 40 credits with those choices",
+        "one mesh, one surface, POSITION+NORMAL+TEXCOORD_0, 5615 triangles, 3824 verts, 604,608 bytes with a 2048x2048 JPEG baseColor embedded at 413,216 of them. min Y exactly 0.0 as exported, so it needed no re-grounding",
+        "two connected components by design, welded: the hall (2683 v / 5362 t, y 0.000..0.776) and the smoke above the chimney (142 v / 253 t, y 0.797..0.933). Raw index-space it counts 118, which is UV seams and not geometry -- 3824 -> 2825 verts on a weld is exactly the Euler prediction for a closed surface at 5615 triangles. The gate now welds before counting",
+        "the rose window stays absent, unchanged from the parametric version it replaces: docs/story/01-world.md grades the window becoming a mirror as L3, the single reveal point, and the foreshadow ledger's rule 2 defers anything that discloses before its tier. It is also the wrong side of the wall -- the hearth-side window faces in at the fire, and from the road you stand outside it",
+        "the export's own download never reached disk under the Chrome extension: the page builds a 604,604-byte blob with download=act1-vigil-hall.glb, but Chrome wrote nothing and a fetch to localhost hangs without resolving or rejecting. The bytes came out by handing the task id to the existing re-export path, which matched at 604,608"
+      ],
+      "reviewer": "fol2",
+      "verdict": "accepted",
+      "acceptance": "fol2 approved the building in-engine on 2026-08-24 (\"I approve this building\"), having seen it seated on the Act I map at THRESHOLD_SCALE 7.0. The same message approved dropping the gate's blanket no-texture ban (\"I don't think I still support that decision anymore\") and the connected-component weld fix. Map LAYOUT around it — the spacing between the Vigil and the first wave of nodes — is still open.",
+      "task_id": "5f44379a-face-4238-a5eb-4d2ec18a5663",
+      "face_limit": 6000,
+      "texture": true,
+      "pbr": false,
+      "concept_path": "assets/art/map-concepts/act1-vigil-hall.png",
+      "concept_sha256": "8c6f47f7442798a67408789b5c69aa8cc9ae137fcda86fcc91283f119d724087",
+      "land_method": "studio_hd_manual_generate_then_taskid_export",
+      "polycount_target": 8000,
+      "triangles": 5615,
+      "review_path": "docs/reviews/156/round2/vigil-hall-in-map.png"
     }
   ]
 }

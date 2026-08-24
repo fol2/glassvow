@@ -1,7 +1,7 @@
 ---
 title: "The generating product is Studio; a SKIP is not the silhouette gate"
 date: 2026-08-19
-last_updated: 2026-08-19
+last_updated: 2026-08-20
 category: tooling-decisions
 module: assets/art/map
 problem_type: tooling_decision
@@ -36,7 +36,7 @@ Studio Pro (3000 monthly credits; header showed 3200 including leftover free)
 and forbade `openapi.tripo3d.ai` / `platform.tripo3d.ai` generation. The
 receipt lives on `assets/art/map/provenance.json` under `paid_product` with
 `generation_surface: Studio` and `api_forbidden: true`
-(`assets/art/map/provenance.json:26-27`). That receipt does not pay the API.
+(`assets/art/map/provenance.json:27-28`). That receipt does not pay the API.
 
 Until this work, a present kit GLB could not fail the production-camera
 silhouette check: the checker printed SKIP. A named check that prints SKIP and
@@ -57,10 +57,16 @@ above 0.04 fails.
    on file.
 
 3. **Ordinary profile (Studio UI equivalent of the bill's P1 trial).**
-   `face_limit` 1500, `texture=false`, `pbr=false`, no quad/FBX, no rig, no
-   animation. The first landed module used Studio's **Smart Mesh P2.0 Preview**
-   (task id on the accepted provenance record), not the API model id
-   `P1-20260311`. That is a Studio-surface fact, not an API fallback.
+   Studio topology default **Quad**; privacy default **Private**;
+   `texture=false`, `pbr=false`, no rig, no animation. `--faces` is the
+   Studio slider (variable per asset), not the shipping triangle count.
+   Measured on the same slab concept: Triangle@1500 → 1492 tris; Quad@1500
+   → 3306 tris. Kit cap is 600–2500 *triangles*, so Quad needs a lower
+   `--faces` (~700–1000) to stay inside it. Export Format must be **GLB**
+   — the dialog can default FBX (a zip). The first landed module used
+   Studio's **Smart Mesh P2.0 Preview** (task id on the accepted provenance
+   record), not the API model id `P1-20260311`. That is a Studio-surface
+   fact, not an API fallback.
 
 4. **Land one untextured GLB** at the manifest path. The first ordinary row is
    `shared-road-slab-a` → `assets/art/map/geometry/shared/road-slab-a.glb`
@@ -72,7 +78,7 @@ above 0.04 fails.
    `tools/raster_map_silhouette.gd` imports the GLB and writes eight alpha
    masks. Python scores each with `silhouette_noise` (3×3 opening residue /
    opaque area) and fails above `SILHOUETTE_NOISE` 0.04
-   (`tools/map_asset_checks.py:24-25`, `:321-341`). Camera constants come from
+   (`tools/map_asset_checks.py:24-25`, `tools/map_asset_checks.py:321-341`). Camera constants come from
    the shipping rig: `TILT_DEGREES = -55.0`, `ZOOM_STOPS[3] = 28.0`
    (`presentation/map/map_camera_rig.gd:12-15`; harness `WIDEST_STOP = 3`
    in `tools/raster_map_silhouette.gd:16-18`).
@@ -82,10 +88,41 @@ above 0.04 fails.
    wraps `xvfb-run` (`tools/map_asset_checks.py:409-412`). CI installs xvfb
    for the same reason.
 
-7. **A 20-placement PNG is review evidence, not the scalar gate.** The harness
-   can write `docs/reviews/292/road-slab-a-20.png`. Recognisable contour
-   repetition is still a human verdict. The noise number passing does not
-   close that clause of #292.
+7. **A 20-placement PNG is review evidence, not the scalar gate.** The
+   harness writes a *lit 5×4 clay grid* a human can read
+   (`docs/reviews/292/road-slab-a-20.png`). A white unshaded scatter is not
+   that evidence — see
+   [A signable 20-placement review is a lit 5×4 clay grid](a-signable-20-placement-review-is-a-lit-clay-grid.md).
+   Recognisable contour repetition is still a human verdict. The noise
+   number passing does not close the visual clause. #292 closed after the
+   owner signed the clay grid (same item, different size and angle).
+
+8. **The Godot DCC Bridge is a land hop, not a generating product.** It is the
+   Studio frontpage talking to a local editor plugin
+   (https://www.tripo3d.ai/blog/tripo-dcc-bridge-for-godot). It does not call
+   `openapi.tripo3d.ai` / `platform.tripo3d.ai` generation. Prefer it over a
+   manual GLB download once the plugin is running in the Godot editor. Override
+   its defaults: texture off, auto material off, auto placement off — this kit
+   is untextured and lands at the manifest path, not wherever the plugin drops
+   a scene. If the plugin is missing, Studio download to
+   `/tmp/glassvow-studio-<asset_id>.glb` is the same generating product.
+   Do not vendor the add-on until its license and hosts are inspected
+   (`addons/tripo*` is gitignored). Workflow: `.grok/workflows/studio-dcc-map-glb.rhai`.
+
+9. **Do not send an LLM to click Studio.** studio-dcc-map-glb-2 / studio-generate
+   spent 19 min, 5.4M tokens, 66 tools, 54 reasoning loops on trial-and-error:
+   multi-view (Generate disabled), Pinia dumps, `model_url` meshopt download,
+   blob-hook Export. The sequence that worked is now
+   `tools/studio_image_to_glb.ts` (generate; `studio_image_to_glb.py` is a
+   bun wrapper) and `tools/land_map_glb.py` (land). The workflow agents run
+   those commands; they do not browse. Default generate is **Chrome for
+   Testing `--headless=new`** on port 9335 (Metal WebGL). gstack
+   `chrome-headless-shell` 500s on `/workspace/generate` — do not use it.
+   The old gstack clicker is archived at
+   `tools/archive/studio_smart_mesh.py`. Cookies come from Chrome Default
+   (`ory_kratos_session` on `.tripo3d.ai`) cached at
+   `~/Library/Caches/glassvow/studio-cookies.json`. Never spawn extra
+   Default Chrome. Never `--kill-chrome` unless asked.
 
 ## Why This Matters
 
@@ -101,11 +138,12 @@ checker must raster it or fail closed (`gpu-raster`), not print SKIP.
 
 ## When to Apply
 
-- Any of the remaining 26 kit/terminus GLBs.
+- Any of the remaining kit/terminus GLBs (7 ordinary payloads are landed;
+  the rest live on #293 / #294).
 - Any temptation to "just hit the API, it is cheaper / scriptable."
 - Any change to `tools/map_asset_checks.py` or `tools/raster_map_silhouette.gd`.
-- Before claiming #292 done: provenance accepted, geometry gates, silhouette
-  scores, 20-placement *visual* review, and #291 lazy binding.
+- Before landing the next module: provenance accepted, geometry gates,
+  silhouette scores, and a *readable* 20-placement visual review.
 
 ## Examples
 
@@ -115,19 +153,21 @@ and the checker exited 0.
 **After (first module, this tree):** `shared-road-slab-a` is an accepted Studio
 record (`source: Studio`, `verdict: accepted`, 1560 triangles, 38656 bytes,
 Blender missing so the Studio download was kept as-is). Independent re-run of
-`python3 tools/check_map_assets.py` printed eight `gpu-silhouette` lines,
-max noise 0.0021 ≤ 0.04, then `map assets OK (1 payload files; declared
-absence uses fallbacks)`.
+`python3 tools/check_map_assets.py` printed eight `gpu-silhouette` lines per
+present GLB, max noise on slab-a 0.0021 ≤ 0.04, then
+`map assets OK (7 payload files; declared absence uses fallbacks)`.
 
 **Do not claim from this session:** a measured Studio credit drop
 (`paid_product.credits_balance` and `usage_history` still show only the
 2026-08-19 +3000 top-up). Godot on PATH here printed `4.7.2.stable`; the
-contract pin remains 4.7.1. #292 stays open until the 20-placement visual
-review is signed.
+contract pin was still 4.7.1 during this session and changed to 4.7.2 on
+2026-08-21. #292 is closed (owner signed the clay-grid
+20-placement). Remaining generate is #293.
 
 ## Related
 
 - [Put the gate where the change is deterministic](../conventions/put-the-gate-where-the-change-is-deterministic.md)
 - [Capture through a long-lived host](./long-lived-capture-host-not-process-per-shot.md)
+- [A signable 20-placement review is a lit 5×4 clay grid](a-signable-20-placement-review-is-a-lit-clay-grid.md)
 - `docs/map-scene-asset-bill.md` — generating-product rule and ordinary contract
-- GitHub #292 (open), #289, #207, #291
+- GitHub #292 (closed), #293 (open), #289, #207, #291

@@ -2,8 +2,10 @@ class_name MapBand
 extends Control
 ## Overlay strip of the pilgrimage map. Host owns camera + PointerDrift;
 ## bands store the amplitude-scaled slice and redraw when it moves enough.
-## Child order IS paint order: MapScene (world) → path → waystones → chips → veil.
+## Child order IS paint order: MapScene (world) → path → waystones → chips.
 ## SkyBand / RegionBand retired in #234 slice 7b2 — 3D MapScene owns the world.
+## VeilBand retired in #156 round 2 — the falling ash read as snow over a
+## journey the 3D world now carries on its own.
 
 const CAM_EPS: float = 0.05
 const DRIFT_EPS: float = 0.1
@@ -11,8 +13,9 @@ const DRIFT_EPS: float = 0.1
 var factor: float = 1.0
 var cam_x: float = 0.0
 var drift: Vector2 = Vector2.ZERO  # px; host already scaled the amplitude
-## False on the veil: ash animates every frame, so the cam/drift gate would
-## freeze weather the moment the camera rests.
+## Every surviving band redraws only when the camera or drift actually moves.
+## The one band that opted out was the veil, whose ash animated every frame;
+## it is gone, and the flag stays because bands are free to opt out again.
 var gated: bool = true
 var host: WorldMapScreen = null
 
@@ -38,6 +41,17 @@ func set_view(p_cam_x: float, p_drift: Vector2, force: bool = false) -> void:
 
 
 class PathBand extends MapBand:
+	## A thin dotted route marker, not a second road.
+	##
+	## This drew a thick lead channel with a glass core for one round, which put a
+	## heavy 2D line over 3D paving that already says where the graph runs -- and
+	## the line, being 2D chrome over the whole image, ran straight through the
+	## scenery the road correctly disappeared behind. Dots keep the state reading
+	## (cold ahead, ember next, gold walked) at a fraction of the ink, and at this
+	## weight the disagreement with the world stops being something you notice.
+	const DOT_GAP: float = 9.0
+	const DOT_RADIUS: float = 1.7
+
 	func _init() -> void:
 		super(1.0)
 		gated = false
@@ -55,7 +69,11 @@ class PathBand extends MapBand:
 			draw_circle(at, 30.0, Color(ember.r, ember.g, ember.b, 0.10))
 			draw_circle(at, 15.0, Color(ember.r, ember.g, ember.b, 0.18))
 
+	## Cold glass, for road the pilgrimage has not opened yet.
+	const COLD: Color = Color(0.36, 0.44, 0.60)
+
 	func _draw_graph() -> void:
+		var live: Array[int] = host.map.reachable()
 		var by_id: Dictionary = {}
 		var frame: Rect2 = Rect2(Vector2.ZERO, size).grow(80.0)
 		for node: MapNode in host.map.nodes:
@@ -72,145 +90,51 @@ class PathBand extends MapBand:
 					and host.map.is_cleared(host.map.nodes.find(next_node))
 				var fade: float = 1.0 if frame.has_point(from) or frame.has_point(to) \
 					else 0.10
+				# POC (#156 direction B). The edge is the road, so it is drawn as
+				# came: a dark lead channel with a glass core on top. Gold where
+				# the pilgrimage has been, ember where it may go next, cold
+				# ahead. The 2 px dash this replaces carried a 15x7 graph at 24%
+				# alpha and read as a hairline over unrelated ground.
+				var open_now: bool = live.has(host.map.nodes.find(next_node)) \
+					and host.map.at == host.map.nodes.find(node)
+				var core: Color = COLD
+				var radius: float = DOT_RADIUS
+				var alpha: float = 0.46
+				if walked:
+					core = GlassStyle.GOLD
+					radius = DOT_RADIUS * 1.35
+					alpha = 0.92
+				elif open_now:
+					core = GlassStyle.EMBER
+					radius = DOT_RADIUS * 1.35
+					alpha = 0.95
 				var control: Vector2 = host.edge_control(from, to)
-				var previous: Vector2 = from
 				var segs: int = maxi(12, int(from.distance_to(to) / 11.0))
+				var points: PackedVector2Array = PackedVector2Array([from])
 				for segment: int in range(segs):
 					var t: float = float(segment + 1) / float(segs)
-					var point: Vector2 = from * (1.0 - t) * (1.0 - t) \
-						+ control * 2.0 * (1.0 - t) * t + to * t * t
-					if walked or segment % 2 == 0:
-						var tone: Color = Color(0.85, 0.87, 0.92) if walked \
-							else GlassStyle.GLASS
-						draw_line(previous, point, Color(tone.r, tone.g, tone.b,
-							fade * (0.72 if walked else 0.24)),
-							3.0 if walked else 2.0)
-					previous = point
+					points.append(from * (1.0 - t) * (1.0 - t) \
+						+ control * 2.0 * (1.0 - t) * t + to * t * t)
+				# Dots at a fixed SCREEN spacing, measured along the curve rather
+				# than per polyline segment: the bezier's segments bunch up where
+				# it turns, so spacing them per segment would crowd the dots
+				# exactly where the eye is already busiest.
+				var run: float = 0.0
+				var tint: Color = Color(core.r, core.g, core.b, fade * alpha)
+				for segment: int in range(1, points.size()):
+					var a: Vector2 = points[segment - 1]
+					var b: Vector2 = points[segment]
+					var span: float = a.distance_to(b)
+					if span < 0.001:
+						continue
+					var d: float = fposmod(-run, DOT_GAP)
+					while d < span:
+						draw_circle(a.lerp(b, d / span), radius, tint)
+						d += DOT_GAP
+					run += span
 
 
-class VeilBand extends MapBand:
-	const ASH_COUNT: int = 128
-	var _ash: Array[Vector3] = []    # x, y, fall speed
-	var _weather: StringName = &"ash"
-
-	func _init() -> void:
-		super(1.35)
-		gated = false
-		# Deterministic scatter — the --shot loop diffs frames, so no randomness.
-		for i: int in range(ASH_COUNT):
-			var fi: float = float(i)
-			_ash.append(Vector3(
-				fmod(fi * 137.0, 2400.0), fmod(fi * 211.0, 900.0),
-				14.0 + fmod(fi * 7.0, 22.0)))
-		set_process(true)
-
-	func apply_region(region: MapRegions) -> void:
-		_weather = region.weather
-		# Particle budget stays 128 unless the config names another count —
-		# rebuilding would shuffle the deterministic scatter mid-walk.
-		queue_redraw()
-
-	func _process(delta: float) -> void:
-		if host == null:
-			return
-		# REDUCE MOTION: the ash hangs where it is — the region keeps its weather
-		# as dressing, it just stops falling (the benchmark stills `.ember` and
-		# every map keyframe the same way, styles.css:2042-2049).
-		if Preferences.active.reduce_motion:
-			return
-		var span: float = maxf(size.x, 1.0) * 2.0
-		var kind: StringName = _weather
-		if host._region != null:
-			kind = host._region.weather
-		# Step only what `_draw` renders — storm drew 64 of 128 and stepped all
-		# 128 (#69, carried from P5.4 DL R2). The undrawn tail holds its
-		# position, which cannot show: `main._show_map` builds a fresh
-		# WorldMapScreen on every route to the map, so the scatter is reborn
-		# before an act advance could ever resume a frozen mote. The one path
-		# that raises the count on a LIVE band is `--map --act=N`, and that
-		# applies in the same frame as the build.
-		var moving: int = _ash.size()
-		if host._region != null:
-			moving = mini(host._region.particle_count, _ash.size())
-		for i: int in range(moving):
-			var m: Vector3 = _ash[i]
-			var fi: float = float(i)
-			match kind:
-				&"sunken":
-					# Rising motes with a per-index lateral sway — deterministic.
-					m.y -= m.z * delta * 0.55
-					m.x += sin((m.y + fi) * 0.02) * 12.0 * delta
-					if m.y < -40.0:
-						m.y += size.y + 40.0
-				&"storm":
-					# Sideways ember streaks against the walk.
-					m.x -= m.z * delta * 2.6
-					m.y += m.z * delta * 0.22
-					if m.y > size.y:
-						m.y -= size.y + 40.0
-					elif m.y < -40.0:
-						m.y += size.y + 40.0
-				_:
-					# Act-0 ash — byte-identical fall/drift/wrap.
-					m.y += m.z * delta
-					m.x -= m.z * delta * 0.35  # ash drifts against the walk
-					if m.y > size.y:
-						m.y -= size.y + 40.0
-			_ash[i] = Vector3(fposmod(m.x, span), m.y, m.z)
-
-	## Band 4 (1.35) — near ash, overshooting the walk to sell the depth.
-	func _draw() -> void:
-		if host == null:
-			return
-		var w: float = size.x
-		var span: float = maxf(w, 1.0) * 2.0
-		var glow: Texture2D = SkyField.disc()
-		# Veil answers the camera at 1.35 overshoot rather than welding to the
-		# glass. Under reduce-motion the fall stills; scroll stays user-initiated
-		# (same principle as the pointer-chased title camera).
-		var cam_shift: float = cam_x * factor
-		var kind: StringName = _weather
-		var visible_count: int = _ash.size()
-		if host._region != null:
-			kind = host._region.weather
-			visible_count = mini(host._region.particle_count, _ash.size())
-		for index: int in range(visible_count):
-			var m: Vector3 = _ash[index]
-			var x: float = fposmod(m.x - cam_shift + drift.x, span)
-			if x > w:
-				continue
-			var y: float = fposmod(m.y + drift.y, maxf(size.y, 1.0))
-			var radius: float = 2.0 + m.z * 0.08
-			var tint: Color = host._glow_colour if index % 3 != 0 \
-				else host._particle_colour
-			var alpha: float = 0.20 + 0.26 * (m.z / 36.0)
-			if kind == &"storm":
-				# Speed reads as a streak — the SAME soft disc stretched along
-				# the velocity, never a `draw_line`, and always ≥3× longer than
-				# tall, so an ember cannot be confused with the graph's crisp
-				# lead dashes on the play plane (PR #75 DL R1 MAJOR).
-				#
-				# That fix was right in kind and 5–10× too strong in degree: the
-				# primitive change is what stopped the impersonation, and the
-				# dimming and thinning on top of it left the act-3 storm as the
-				# QUIETEST weather in the game. The aspect floor is what keeps
-				# the streak safe, not its faintness, so the ink comes back —
-				# thicker, longer, brighter — with the 3:1 floor measured
-				# against the new thickness (#69 C3).
-				var thick: float = radius * 2.2
-				var length: float = maxf(thick * 3.0, m.z * 0.9)
-				draw_texture_rect(glow, Rect2(
-					Vector2(x - length * 0.5, y - thick * 0.5),
-					Vector2(length, thick)), false,
-					Color(tint, alpha))
-			else:
-				draw_texture_rect(glow, Rect2(
-					Vector2(x, y) - Vector2.ONE * radius * 2.0,
-					Vector2.ONE * radius * 4.0), false,
-					Color(tint, alpha))
-
-
-## The bounty chips, as ONE layer sitting between the waystones and the veil.
+## The bounty chips, as ONE layer sitting above the waystones.
 ##
 ## Every stone drew its own chip once, first inside `_draw` (where the stone's
 ## art and every later sibling painted over it) and then in a per-stone child at

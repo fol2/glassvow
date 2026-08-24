@@ -4,6 +4,11 @@ extends SceneTree
 ## attach; `_initialize()` is still earlier than any game script.
 
 
+## Numeric iOS CFBundleVersion. Must match both iOS export presets'
+## `application/version` and `sentry/options/dist`. Not the marketing
+## version (`application/config/version` / `application/short_version`).
+const IOS_BUILD_NUMBER: String = "3"
+
 var _privacy: SentryPrivacy = SentryPrivacy.new()
 
 
@@ -15,7 +20,7 @@ func _initialize() -> void:
 
 func _configure(options: SentryOptions) -> void:
 	options.release = "io.fol2.glassvow@{app_version}"
-	options.dist = str(ProjectSettings.get_setting("application/config/version"))
+	options.dist = IOS_BUILD_NUMBER
 	options.before_send = _before_send
 
 

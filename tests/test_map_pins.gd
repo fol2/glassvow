@@ -21,15 +21,27 @@ static func run(fails: Array[String]) -> void:
 static func _lattice(fails: Array[String]) -> void:
 	_check(fails, WorldMap.ROWS == 15 and WorldMap.COLS == 7,
 			"lattice is the frozen 15×7")
+	# The journey runs along +X (#156 direction B): row 0 is the entrance edge
+	# at x = −24, row 14 the boss edge at x = +24, and the seven lanes spread
+	# across z = −12..+12. Those two spans are 48 × 24, which is exactly
+	# `MapMaterials.GRADE_SIZE` — one painted grade covers the run, and the
+	# last check below is what keeps the two from drifting apart again.
 	var origin: Vector3 = MapPinProjection.lattice_point(0, 0)
-	_check(fails, origin.is_equal_approx(Vector3(-18.0, 0.0, 14.0)),
-			"row 0 col 0 is the near-left vertex")
+	_check(fails, origin.is_equal_approx(Vector3(-36.0, 0.0, -18.0)),
+			"row 0 col 0 is the entrance end of the near lane")
 	_check(fails, MapPinProjection.lattice_point(0, 6).is_equal_approx(
-			Vector3(18.0, 0.0, 14.0)),
-			"row 0 col 6 is the near-right vertex")
+			Vector3(-36.0, 0.0, 18.0)),
+			"row 0 col 6 is the entrance end of the far lane")
 	_check(fails, MapPinProjection.lattice_point(14, 3).is_equal_approx(
-			Vector3(0.0, 0.0, -14.0)),
-			"boss cell is far-centre, toward −Z")
+			Vector3(36.0, 0.0, 0.0)),
+			"boss cell is the centre lane at the far end of the journey")
+	_check(fails, is_equal_approx(
+			MapPinProjection.lattice_point(14, 0).x - origin.x,
+			MapMaterials.GRADE_SIZE.x)
+			and is_equal_approx(
+			MapPinProjection.lattice_point(0, 6).z - origin.z,
+			MapMaterials.GRADE_SIZE.y),
+			"lattice footprint is the grade rect, so one grade covers the run")
 	var mid: Vector3 = MapPinProjection.sample(0.5, 0.5)
 	var avg: Vector3 = (
 			MapPinProjection.lattice_point(0, 0)
@@ -66,6 +78,12 @@ static func _pan_bounds(fails: Array[String]) -> void:
 			"rig pan_bounds is the lattice-derived rect")
 	_check(fails, derived.has_point(MapCameraRig.DEFAULT_XZ),
 			"default pose sits inside the lattice pan bounds")
+	# The default pose looks at ground z = 0, which is only true while its z
+	# equals the camera's ground offset. Both move with the tilt; nothing else
+	# notices if only one of them does.
+	_check(fails, is_equal_approx(
+			MapCameraRig.DEFAULT_XZ.y, snappedf(MapCameraRig.look_dz(), 0.01)),
+			"default pose z is the camera ground offset, so it looks at z = 0")
 	var shifted: Vector2 = MapCameraRig.DEFAULT_XZ + Vector2(1.5, -2.0)
 	_check(fails, derived.has_point(shifted),
 			"slice-1 pan delta still fits the new bounds")
@@ -91,7 +109,7 @@ static func _agreement(fails: Array[String]) -> void:
 				MapCameraRig.DEFAULT_XZ.x, MapCameraRig.DEFAULT_XZ.y),
 		Vector3(0.0, MapCameraRig.DEFAULT_XZ.x, MapCameraRig.DEFAULT_XZ.y),
 		Vector3(3.0, MapCameraRig.DEFAULT_XZ.x, MapCameraRig.DEFAULT_XZ.y),
-		Vector3(2.0, -12.0, 22.0),
+		Vector3(2.0, -18.0, 26.0),
 		Vector3(1.0, 10.0, 4.0),
 		Vector3(3.0, -7.0, 8.0),
 	]

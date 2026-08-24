@@ -631,3 +631,366 @@ Prompt (2026-08-19, Grok Imagine):
 > Not a tile texture, not a landscape.
 
 sha256 `619d97054471996410be36370d1ec128d0f90489e7c55dc00e47bc0d8a31d54a`.
+
+### `map-concepts/shared-road-slab-b.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `shared-road-slab-b` (S2 in
+`docs/map-scene-asset-bill.md`: broken/offset slab). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`
+so lighting and material stay put. Lives outside `assets/art/map/`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured stone
+> surface. Change only the slab mass: this is a different road slab — offset,
+> not a single rectangle. The left half sits a finger-width lower than the
+> right half like a short step, the far-left front corner is a missing chunk,
+> and the right edge is a short raised lip. Same chunky low-poly geometric
+> mass, no carved ornament, no grass, no moss, no thin crack lines, no cast
+> shadow on the ground. Isolated, centered, large in frame. Distinct
+> silhouette from a single clean block.
+
+sha256 `662b5213fca5a475feb2bf7e9a3ebf9cb44e94f90a799a511a716c3bc2b202c9`.
+
+### `map-concepts/shared-standing-monument.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `shared-standing-monument` (S3 in
+`docs/map-scene-asset-bill.md`: fallen-walker read; broad standing mass, no
+carving noise). Same clay-maquette language as `shared-road-slab-a.jpg`;
+derived from that file with `image_edit` so lighting and material stay put.
+Lives outside `assets/art/map/`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured stone
+> surface. Replace the low road slab with one different prop: a single standing
+> monument, a broad upright weathered stele like a thick person-height stone
+> that reads as a fallen walker who is standing — one chunky vertical mass,
+> slightly wider at the base, a blunt rounded top, one missing chunk off the
+> upper-right shoulder. No carved faces, no letters, no ornament, no arms, no
+> grass, no moss, no thin crack lines, no cast shadow on the ground. Isolated,
+> centered, large in frame. Distinct tall silhouette, still a simple geometric
+> kitbash mass.
+
+Fuse pass (2026-08-21, Grok Imagine, seeded from the 2026-08-19 concept). The
+first Studio Smart Mesh output from that file was two islands (2026-08-19);
+a 2026-08-21 retry on the same bytes was three islands, two of them 28–49 mm
+chips in the shoulder notch. The fuse makes the missing chunk a concave bite
+in one volume:
+
+> Keep the same clay-maquette look, medium-gray studio background, even
+> above-front lighting, and 3/4 orthographic view. Fuse the standing monument
+> into one continuous upright stone — no gaps, no separate chips, no second
+> block sitting in the shoulder. The missing upper-right chunk is a concave
+> bite in the same solid volume. One connected stele, slightly wider at the
+> base, blunt rounded top, sitting on the ground. Distinct tall silhouette,
+> still a simple game-kitbash mass.
+
+Isolate pass (same day, seeded from the fuse): drop the ground plane, horizon,
+and cast shadow so Smart Mesh does not emit a floor island.
+
+sha256 `b4b0ddfaa07e2b6f5083e9185413931123154ee5bd6ec7cb59f2c68aef80d2b3`.
+
+Accepted by fol2 on 2026-08-21. Shipping mesh is the fused Studio Pro Export
+GLB at `geometry/shared/standing-monument.glb`. Studio Pro is the generating
+product; API generation is forbidden. Canonical 20-placement capture:
+`docs/reviews/293/shared-standing-monument-20.png`.
+
+### `map-concepts/act1-ash-trunk-fork.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-ash-trunk-fork` (A1-1 in
+`docs/map-scene-asset-bill.md`: forked ash-tree mass). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> stone-or-wood surface. Replace the low road slab with one different prop: a
+> single forked ash-tree trunk mass. Short thick charred trunk that splits into
+> two stubby branches like a Y, chunky low-poly geometric volumes, no leaves,
+> no twigs, no bark grain, no grass, no moss, no thin crack lines, no cast
+> shadow on the ground. Isolated, centered, large in frame. Distinct tall
+> forked silhouette, still a simple game-kitbash mass.
+
+sha256 `c39952778ebf599d91ab5c9a22d2ab4b74941d52f418b0f407b433c5c2d0ad24`.
+
+### `map-concepts/act1-root-wedge.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-root-wedge` (A1-2 in
+`docs/map-scene-asset-bill.md`: roots cutting through the ground plane). Same
+clay-maquette language as `shared-road-slab-a.jpg`; derived from that file with
+`image_edit`.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> wood-or-stone surface. Replace the low road slab with one different prop: a
+> single root wedge. Thick triangular root mass cutting up through a ground
+> plane, like a buried root bursting the dirt — chunky low-poly geometric
+> volumes, one sharp wedge rising, a short buried heel. No leaves, no twigs,
+> no bark grain, no grass blades, no moss, no thin crack lines, no cast shadow
+> on the ground. Isolated, centered, large in frame. Distinct wedge silhouette,
+> still a simple game-kitbash mass.
+
+sha256 `d0c0e3652fa0f84c85a5e5236f21e41545a50a097d781a5c10bfba1d92cdc2e7`.
+
+### `map-concepts/act1-charred-stump.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-charred-stump` (A1-3 in
+`docs/map-scene-asset-bill.md`: low charred mass). Same clay-maquette language
+as `shared-road-slab-a.jpg`; derived from that file with `image_edit`. One
+connected volume (no detached chips) so Smart Mesh is less likely to emit two
+islands.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> wood-or-stone surface. Replace the low road slab with one different prop: a
+> single low charred stump. One short thick burned tree-base mass, wider than
+> it is tall, a blunt chopped top, the whole thing one connected volume sitting
+> on the ground — no separate chips, no second block, no roots as extra pieces.
+> Chunky low-poly geometric volumes. Isolated, centered, large in frame.
+> Distinct low squat silhouette, still a simple game-kitbash mass.
+
+sha256 `2d07f80575b526291692e31e7410132f8c30ae4a347c8d2a3e5dc9df9313c9c5`.
+
+### `map-concepts/act1-fallen-bough-arch.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-fallen-bough-arch` (A1-4 in
+`docs/map-scene-asset-bill.md`: threshold-shaped fallen tree). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`,
+then a second edit fused segmented blocks into one log so Smart Mesh is less
+likely to emit islands.
+
+Edit prompt (2026-08-19, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> wood-or-stone surface. Replace the low road slab with one different prop: a
+> single fallen-bough arch. One connected threshold-shaped fallen tree, a thick
+> log that bends into a low doorway arch, both ends on the ground, the whole
+> thing one fused volume — no separate branches, no second log, no chips.
+> Chunky low-poly geometric volumes. Isolated, centered, large in frame.
+> Distinct arch silhouette, still a simple game-kitbash mass.
+
+Fuse pass (same day, seeded from the first edit):
+
+> Keep the same clay-maquette look, medium-gray studio background, even
+> lighting, and 3/4 view. Fuse the arch into one continuous bent log — no gaps
+> between blocks, no separate stones, one solid threshold-shaped fallen tree.
+> Both ends on the ground, one connected volume.
+
+sha256 `9f1b95c8e01b49cc516e971722d8d99a1b0e7fb1f72399fd4153d0f74307ec98`.
+
+### `map-concepts/act1-ash-cairn-mass.jpg` — 1:1 concept, not a shipping texture
+
+Tripo Studio image-to-3D input for kit module `act1-ash-cairn-mass` (A1-5 in
+`docs/map-scene-asset-bill.md`: ash/stone dab mass). Same clay-maquette
+language as `shared-road-slab-a.jpg`; derived from that file with `image_edit`.
+One connected mound (no loose stones) so Smart Mesh is less likely to emit
+islands.
+
+Edit prompt (2026-08-20, Grok Imagine, seeded from slab-a):
+
+> Keep the exact same clay-maquette look, medium-gray studio background, even
+> above-front lighting, 3/4 orthographic view, and matte untextured
+> stone-or-ash surface. Replace the low road slab with one different prop: a
+> single ash-cairn mass. One compact piled heap of fused ash-stone, a short
+> squat cairn — several chunky stones melted into one connected mound, wider
+> than it is tall, sitting on the ground. No separate rocks, no stacked gaps,
+> no second pile, no grass, no moss, no thin crack lines, no cast shadow on
+> the ground. Isolated, centered, large in frame. Distinct mound silhouette,
+> still a simple game-kitbash mass.
+
+Fuse pass (same day, seeded from the first edit):
+
+> Keep the same clay-maquette look, medium-gray studio background, even
+> lighting, and 3/4 view. Fuse the cairn into one continuous squat mound — no
+> gaps between stones, no stacked seams, no separate rocks. One solid
+> connected ash-stone heap, wider than tall, sitting on the ground. Distinct
+> mound silhouette, still a simple game-kitbash mass.
+
+sha256 `c1d4d34d6f1299f2a162a3fafb9d76ec61ec4e635914aedfd65e5493774447dd`.
+
+
+### `map/grades/act1-grade.png` — 512×256 RGBA — Act I grade (#294)
+
+Locally authored low-frequency crimson-dusk to amber-key grade following the
+Act I palette arc, with alpha used only for prop and terminus contact darkening.
+No vendor or paid generation. Godot 4.7.2 generated the VRAM-compressed mode 2,
+high-quality, mipmapped import sidecar from a temporary importer-default profile;
+the sidecar was not hand-edited. sha256
+`e9c74f792dec12d4c70940d651b611c341940320f1544d440cafdb523aaf3fa7`. fol2 accepted the final asset on 2026-08-21; evidence is in `docs/reviews/294/act1-grade/`.
+
+### `map/geometry/act1/terminus-amber-window-tower.glb` — Act I hero terminus (#294)
+
+Locally authored against the shipped Act I amber arched-window tower: pointed
+window surround, grounded masonry, crenellated crown and tiered lower-right
+turret. Parametric surfaces were combined with a manifold boolean union so the
+shipping payload is one watertight connected component rather than overlapping
+parts. It is Y-up, grounded at Y=0, one mesh and one triangulated surface with
+POSITION+NORMAL only: 4,446 triangles, 107,504 bytes. No vendor, textures or
+paid credits. sha256
+`81904b2421f0ad2f2d03689e7062801dc87a8928e8de733030c4d67a36f0dfbc`. fol2 accepted the final asset on 2026-08-21; evidence is in `docs/reviews/294/act1-terminus/`.
+
+### `map/geometry/act1/vigil-hall.glb` — the Vigil, west bookend (#156)
+
+Converted by Tripo Studio from `map-concepts/act1-vigil-hall.png` (below). The
+subject was settled in prose and in shipped art before any picture existed:
+`docs/story/01-world.md` puts 【守夜之爐 Vigil】at the west end of the road, and
+`assets/art/scenes/opening-hearth.png` — the still shown at the start of every
+run — is unmistakably the inside of a tall gothic hall. So the map shows that
+hall from outside: gabled, end-on, blank east gable, a shallow recessed pointed
+doorway, flank buttresses, and a chimney with its smoke. The chimney is the only
+identity cue, and it is deliberate — it says *hearth*, which is what the place is
+named for.
+
+**What it does not show, on purpose.** An earlier cut of this asset put the
+六格 rose window on the road-facing face. That was wrong twice. It was a
+spoiler: `01-world.md` grades 「彩窗成鏡,隊伍現形」 as **L3, the single reveal
+point**, and `05-foreshadow-ledger.md` rule 2 defers anything disclosing before
+its tier — the six panes ARE the shard count, and standing them at the start of
+every run hands an L3 fact to a player at L0. That the fiction says the west
+face HAS six compartments does not license showing them; row 10 of the ledger is
+the model, where `mirror.png` ships as L0 art with its meaning withheld. It was
+also the wrong side of the wall: 爐邊彩窗 faces in at the fire, so from the road
+you are outside it and could not see it in any case.
+
+**This is the map's one textured asset, and the first.** Everything else is
+surfaced by triplanar projection, which is what keeps 23 separately generated
+kits from drifting apart in style. That discipline still governs the kits. It
+stopped governing the Vigil on 2026-08-24, because it was holding the map's one
+BUILDING to the rule written for its rocks: what makes a building read as a
+building is coursed ashlar that lines up along the wall, a corbel band where the
+roof meets it and slate above — none of which projection can place, since it has
+no idea which way is up on a given face. The predecessor asset worked around
+that with a hand-authored trim sheet whose V axis was the building's height;
+that could only ever paint horizontal bands, so the arched door, the buttress
+faces and the gable had no way to differ from the wall behind them. The sheet
+and its two generator scripts were deleted with this replacement.
+
+Y-up, grounded at Y=0 as exported. One mesh, one triangulated surface,
+POSITION+NORMAL+TEXCOORD_0: 5,615 triangles, 3,824 verts, 604,608 bytes, of
+which a 2048×2048 JPEG baseColor is 413,216. Texture 2K and PBR off were chosen
+against this repo's budgets, not Studio's defaults — 4K would not fit
+`bytes_max`, and the unshaded shader samples exactly one map, so
+metallic/roughness/normal would be three more images inside the same cap for
+nothing on screen. Polycount was set to 6,000 against a Studio default of
+2,000,000. Tripo Studio Pro commercial grant, 40 credits.
+
+**Two connected components, and that is the asset, not a defect.** The hall
+(2,683 v / 5,362 t) and the smoke above the chimney (142 v / 253 t), which
+floats clear of it. In raw index space the gate counted 118, which was UV seams
+rather than geometry — an unwrap splits a vertex at every chart cut, and
+3,824 → 2,825 verts on a weld is exactly the Euler prediction for a closed
+surface at 5,615 triangles. `map_asset_checks._connected_components` now welds by
+position before counting, and the row declares `components_max: 2`.
+
+sha256 `6ee66212ddd504f92f5de896c5b5c3d053a8ab1bc5b692103a6bd0d2a0098f13`.
+
+### `map-concepts/act1-vigil-hall.png` — the Vigil, conversion concept (#156)
+
+Generated 2026-08-24 with the built-in image tool, as the input to a Tripo
+image-to-3D conversion. Not a shipping texture, and not a shipping asset: the
+map gate scans `assets/art/map/`, and concepts live outside it.
+
+**Why there is no window on it.** The subject is the hall the player walks out
+of at the start of every run, and `docs/story/01-world.md` grades 「彩窗成鏡,
+隊伍現形」 as L3, the single reveal point. The rose window's six panes are the
+shard count, so an earlier parametric cut of this asset that showed them handed
+an L3 fact to a player at L0; `05-foreshadow-ledger.md` rule 2 defers exactly
+that. It is also 爐邊彩窗 — the hearth-side face, turned in at the fire — so from
+the road you are outside it regardless. The prompt therefore bans rose, wheel
+and circular windows outright and allows at most a narrow slit.
+
+The framing constraints in the prompt are for the converter, not for the
+picture: whole object in frame, centred, square, flat mid-grey ground-free
+background, no cast shadow, no depth of field. Tripo reconstructs what it can
+see, and a horizon or a contact shadow comes back as geometry.
+
+Prompt, verbatim:
+
+> Small ancient Gothic stone hall, exterior three-quarter view from 35–40° above;
+> entire building centred with even margin in a square frame. Steep dark slate
+> roof with visible courses; weathered coursed grey ashlar, heavy plinth, three
+> deep flank buttresses, one shallow recessed pointed arch doorway at near gable,
+> corbel course at eaves, ridge chimney and pale smoke. Cold blue-grey
+> low-contrast matte illumination; clean planar, low-poly-friendly game-asset
+> concept; flat neutral mid-grey background with no ground or cast shadow.
+
+1254×1254 RGB. sha256 `8c6f47f7442798a67408789b5c69aa8cc9ae137fcda86fcc91283f119d724087`.
+
+### `map-concepts/act2-terminus-flooded-threshold.png` — Act II hero concept (#294)
+
+Project-authored concept generated from the Glassvow brief: a monumental drowned
+pointed arch with uneven ruined wings, three or four broad masonry courses, two
+fused pendant masses (left larger and higher), coarse side apertures and one
+continuous silt slab; no chains, cages, grout, kelp, coral or painted water.
+fol2 accepted the concept on 2026-08-21. sha256 `7286e70e628b9c29d98c8037769e7ab1784fc7f7ee24f1b9076d4f42772ba9b0`.
+
+### `map/grades/act2-grade.png` — 512×256 RGBA — Act II grade (#294)
+
+Locally authored low-frequency blue-night to cyan-distance flooded-corridor
+grade, with alpha restricted to contact darkening. Godot 4.7.2 generated its
+VRAM mode 2, high-quality, mipmapped sidecar; it was not hand-edited. No vendor
+or paid generation. sha256 `b992ae08e638080e39aa32221edb6c811d9bfc4d9f4a8ede1a0a05f500f95906`. fol2 accepted the Act II slice on
+2026-08-21; evidence is in `docs/reviews/294/act2-grade/`.
+
+### `map/geometry/act2/terminus-flooded-threshold.glb` — Act II hero terminus (#294)
+
+Locally modelled from the accepted flooded-threshold concept. Parametric arch
+surfaces, ruined wings, through-apertures, silt courses and two fused pendant
+masses were reduced by manifold boolean union to one watertight component. The
+shipping GLB is Y-up and grounded at Y=0, one mesh and one triangulated surface,
+POSITION+NORMAL only: 5,568 triangles, 134,416 bytes. No vendor, textures or
+paid credits. sha256 `d093ccc134faa8118e5a724bef33c4ee8a0fda15fc95826a0b608541ab58aa99`. fol2 accepted the final hero on 2026-08-21;
+evidence is in `docs/reviews/294/act2-terminus/`.
+
+
+### `map/grades/act3-grade.png` — 512×256 RGBA — Act III grade (#294)
+
+Locally authored low-frequency violet-storm to obsidian-court broken-ring
+grade, with alpha restricted to contact darkening. Godot 4.7.2 generated its
+VRAM mode 2, high-quality, mipmapped sidecar; it was not hand-edited. No vendor
+or paid generation. sha256 `56d9bb012038351f35fe2ea28086e2633b5d7811fc42cefeeb2fd67f155de332`. fol2 accepted the Act III slice on
+2026-08-21; evidence is in `docs/reviews/294/act3-grade/`.
+
+### `map/geometry/act3/terminus-broken-ring-arch.glb` — Act III hero terminus (#294)
+
+Locally modelled as a deliberately broken monumental ring-arch with faceted
+court pylons, a central suspended shard and a continuous grounded plinth.
+Manifold boolean union reduced the construction to one watertight component.
+The shipping GLB is Y-up and grounded at Y=0, one mesh and one triangulated
+surface, POSITION+NORMAL only: 5,504 triangles, 132,952 bytes. No vendor,
+textures or paid credits. sha256 `607615ca3bd5a5d5ffa382ab19866891a49f220685fe6c2f4272427b6ea423fe`. fol2 accepted the final hero on
+2026-08-21; evidence is in `docs/reviews/294/act3-terminus/`.
+
+### `map-concepts/act4-terminus-rose-threshold.png` — Act IV hero concept (#294)
+
+Project-authored concept generated from the Glassvow brief: a monumental rose
+threshold with a thick four-aperture wheel, tall faceted flanking pylons, broad
+stepped courses and one continuous plinth; no character, text, foliage or loose
+props. fol2 accepted the concept on 2026-08-21. sha256 `44b5ee7dec5d6ef10c732a03190923ddbe6df1d26b5f4148e3a6146e7b9af00d`.
+
+### `map/grades/act4-grade.png` — 512×256 RGBA — Act IV grade (#294)
+
+Locally authored low-frequency umber-to-rose dawn reversed hearth-light grade,
+with alpha restricted to contact darkening. Godot 4.7.2 generated its VRAM mode
+2, high-quality, mipmapped sidecar; it was not hand-edited. No vendor or paid
+generation. sha256 `abc2371033603c4f927d0a225c28b1cf36d2c10e03c8719f03d3d20b2ee8ad5a`. fol2 accepted the Act IV slice on 2026-08-21;
+evidence is in `docs/reviews/294/act4-grade/`.
+
+### `map/geometry/act4/terminus-threshold.glb` — Act IV hero terminus (#294)
+
+Locally modelled from the accepted rose-threshold concept as a thick
+four-aperture wheel, faceted flanking pylons, stepped threshold courses and a
+continuous plinth. Manifold boolean union reduced the construction to one
+watertight component. The shipping GLB is Y-up and grounded at Y=0, one mesh and
+one triangulated surface, POSITION+NORMAL only: 5,460 triangles, 156,660 bytes.
+No vendor, textures or paid credits. sha256 `137fdfe77386ff02b8c825ec1b2d9fb14315f2c09409dd30b629d1e6570c0d9f`. fol2 accepted the final
+hero on 2026-08-21; evidence is in `docs/reviews/294/act4-terminus/`.

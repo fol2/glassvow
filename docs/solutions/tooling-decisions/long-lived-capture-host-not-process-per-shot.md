@@ -2,6 +2,7 @@
 title: "Capture through a long-lived host, not a process per screenshot"
 date: 2026-07-26
 last_refreshed: 2026-07-29
+last_updated: 2026-08-20
 category: tooling-decisions
 module: tools/live
 problem_type: tooling_decision
@@ -33,8 +34,8 @@ tags: [godot, macos, window-focus, screenshot-capture, hot-reload, gdscript-relo
 ## Context
 
 The visual-iteration loop in this project is a screenshot hook in the game's own
-entry point. `application/main.gd:149-168` (in `_ready`) documents it and
-`application/main.gd:169-241` (in `_ready`) parses it out of
+entry point. `application/main.gd:162-185` (in `_ready`) documents it and
+`application/main.gd:212-214` (in `_ready`) parses `--shot=` out of
 `OS.get_cmdline_user_args()`:
 
 ```gdscript
@@ -45,10 +46,10 @@ entry point. `application/main.gd:149-168` (in `_ready`) documents it and
 # tools/shot.sh --shot=/tmp/map.png [--seed=N] [--enter=0]
 ```
 
-`--shot=PATH` is read at `application/main.gd:191-192` (in `_ready`), and each
+`--shot=PATH` is read at `application/main.gd:213-214` (in `_ready`), and each
 route exit — font probe, studio, card lab, the other labs, and the real run —
-calls `_capture_and_quit()` (`application/main.gd:286`, `313`, `319`, `338`,
-`348`, `395`, all in `_ready`). That function is short and worth reading in full,
+calls `_capture_and_quit()` (`application/main.gd:322`, `349`, `355`, `374`,
+`384`, `404`, `463`, all in `_ready`). That function is short and worth reading in full,
 because two of its lines become load-bearing later:
 
 ```gdscript
@@ -57,14 +58,19 @@ func _capture_and_quit(path: String) -> void:
 		await get_tree().process_frame
 	if _settle > 0.0:
 		await get_tree().create_timer(_settle).timeout
+	if _onboard == "targeting" or _onboard == HintGuide.TARGETING:
+		_onboard_arm_target()
+		for _j: int in range(30):
+			await get_tree().process_frame
 	var img: Image = get_viewport().get_texture().get_image()
 	img.save_png(path)
 	print("shot saved: " + path)
 	get_tree().quit(0)
 ```
 
-(`application/main.gd:629` (`_capture_and_quit`).) It waits 30 frames for the
-first paint, reads the viewport texture, and quits.
+(`application/main.gd:653` (`_capture_and_quit`).) It waits 30 frames for the
+first paint, optionally a `--settle=` timer and a targeting-hint extra settle,
+reads the viewport texture, and quits.
 
 The capture must run windowed. `docs/hud-handoff.md:167-169` already states the
 constraint plainly: captures "must be run **windowed** — headless has no
