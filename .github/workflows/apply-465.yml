@@ -1,0 +1,45 @@
+name: Apply issue 465 implementation
+
+on:
+  push:
+    branches:
+      - work/465-asset-profile-authority
+    paths:
+      - 'tools/_patch_465_*.py'
+      - '.github/workflows/apply-465.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/465-asset-profile-authority
+          fetch-depth: 0
+
+      - name: Apply exact-source migrations
+        run: |
+          python3 tools/_patch_465_data.py
+          python3 tools/_patch_465_scene.py
+          python3 tools/_patch_465_probe.py
+          rm tools/_patch_465_data.py
+          rm tools/_patch_465_scene.py
+          rm tools/_patch_465_probe.py
+          rm .github/workflows/apply-465.yml
+          python3 -m py_compile tools/map_asset_checks.py
+          git diff --check
+          changed=$(git diff --numstat 52a56e726da70c2dd57254e8c6618682c7558f90 | awk '{a += $1; d += $2} END {print a + d}')
+          echo "issue #465 changed lines: ${changed}"
+          test "${changed}" -le 400
+
+      - name: Commit final implementation tree
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat(map): centralize asset footprint profiles (#465)'
+          git push origin HEAD:work/465-asset-profile-authority
