@@ -82,7 +82,7 @@ Complete-entry validation should cover the actual trust boundary: HP shape and
 range; tier flags; facets; recognised art kinds and bounds; known starting
 statuses; the exact baseline move-ID set; move intents and numeric values; effects;
 referenced cards; and unchanged locale-owned names
-(`content/content_db.gd:85-97` (`enemy_override_faults`)). Do not put executable AI or localisation into
+(`content/content_db.gd:90-102` (`enemy_override_faults`)). Do not put executable AI or localisation into
 the JSON editor merely to make the object appear more complete.
 
 ### Validate the whole candidate before mutating anything
@@ -98,7 +98,7 @@ for id in raw:
 ```
 
 This is the ordering in `ContentDB.apply_enemy_overrides()`
-(`content/content_db.gd:74-83` (`apply_enemy_overrides`)). The regression check supplies a dictionary with
+(`content/content_db.gd:79-88` (`apply_enemy_overrides`)). The regression check supplies a dictionary with
 both a broken known mob and an unknown ID, then confirms the known mob was not
 partially changed (`tests/test_content.gd:97-116` (`_enemy_overrides`)). Validation interleaved with
 assignment would fail that guarantee.

@@ -12,7 +12,22 @@ func _initialize() -> void:
 		push_error("balance_sim: %s" % opts["error"])
 		quit(2)
 		return
-	var content: ContentDB = ContentDB.load_full(false)
+	var loaded: Dictionary = BalanceCatalogue.open(opts)
+	if loaded.has("error"):
+		push_error("balance_sim: %s" % loaded["error"])
+		quit(2)
+		return
+	var identity_v: Variant = loaded["identity"]
+	if typeof(identity_v) != TYPE_DICTIONARY:
+		push_error("balance_sim: missing catalogue identity")
+		quit(2)
+		return
+	var identity: Dictionary = identity_v
+	var content: ContentDB = BalanceCatalogue.load_prepared(loaded)
+	if content == null:
+		push_error("balance_sim: content did not load a catalogue")
+		quit(2)
+		return
 	var overlay: String = str(opts["mobs"])
 	if not overlay.is_empty():
 		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(overlay))
@@ -33,7 +48,9 @@ func _initialize() -> void:
 		for offset: int in range(int(float(str(opts["runs"])))):
 			rows.append(simulate(content, aspect, int(float(str(opts["seed0"]))) + offset,
 				int(float(str(opts["vow"]))), ban, _policy(opts), false, false, _mix(opts)))
-	var report: Dictionary = Metrics.report(rows, _manifest(opts, overlay))
+	var report: Dictionary = Metrics.report(rows, _manifest(opts, overlay, identity))
+	if rows.size() == 1:
+		report["outcomeDigest"] = outcome_digest(rows[0])
 	var text: String = JSON.stringify(report)
 	if str(opts["out"]).is_empty():
 		print(text)
@@ -431,7 +448,8 @@ static func outcome_digest(row: Dictionary) -> String:
 	return JSON.stringify(row).sha256_text()
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "",
-		"out": "", "ban": "", "mix": "", "cardDecline": Pilot.CARD_DECLINE_DEFAULT,
+		"out": "", "ban": "", "mix": "", "content": "", "space": BalanceCatalogue.DEFAULT_SPACE,
+		"stage": "", "cardDecline": Pilot.CARD_DECLINE_DEFAULT,
 		"removalAppetite": Pilot.REMOVAL_APPETITE_DEFAULT,
 		"removalMinCopies": Pilot.REMOVAL_MIN_COPIES_DEFAULT}
 	for arg: String in args:
@@ -465,21 +483,20 @@ static func _policy(opts: Dictionary) -> Dictionary:
 	return Policy.resolve({"cardDecline": opts["cardDecline"],
 		"removalAppetite": opts["removalAppetite"],
 		"removalMinCopies": opts["removalMinCopies"]})
-static func _manifest(opts: Dictionary, overlay: String) -> Dictionary:
-	var git_out: Array = []
-	OS.execute("git", ["rev-parse", "HEAD"], git_out)
-	var row: Dictionary = {
-		"commit": str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown",
-		"godot": Engine.get_version_info().get("string", "unknown"),
-		"contentSha256": FileAccess.get_sha256(ContentDB.FULL_PATH),
-		"overlay": null if overlay.is_empty() else {"path": overlay,
-			"sha256": FileAccess.get_sha256(overlay)},
-		"pilot": Pilot.VERSION, "profile": PROFILE, "aspect": opts["aspect"],
-		"vow": opts["vow"], "ban": opts["ban"], "policy": _policy(opts),
-		"seeds": {"first": opts["seed0"],
-			"last": int(float(str(opts["seed0"]))) + int(float(str(opts["runs"]))) - 1,
-			"count": opts["runs"]},
-	}
+static func _manifest(opts: Dictionary, overlay: String, identity: Dictionary) -> Dictionary:
+	var row: Dictionary = identity.duplicate()
+	row["contentSha256"] = str(identity.get("contentFileSha256", ""))
+	row["overlay"] = null if overlay.is_empty() else {"path": overlay,
+		"sha256": FileAccess.get_sha256(overlay)}
+	row["pilot"] = Pilot.VERSION
+	row["profile"] = PROFILE
+	row["aspect"] = opts["aspect"]
+	row["vow"] = opts["vow"]
+	row["ban"] = opts["ban"]
+	row["policy"] = _policy(opts)
+	row["seeds"] = {"first": opts["seed0"],
+		"last": int(float(str(opts["seed0"]))) + int(float(str(opts["runs"]))) - 1,
+		"count": opts["runs"]}
 	row["mix"] = str(opts["mix"]) if not str(opts.get("mix", "")).is_empty() \
 		else Incentives.SHIPPING_ID
 	return row

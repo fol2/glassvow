@@ -19,9 +19,22 @@ func _initialize() -> void:
 		quit(2)
 		return
 	var t0: int = Time.get_ticks_msec()
-	var content: ContentDB = ContentDB.load_full(false)
-	var git_out: Array = []
-	OS.execute("git", ["rev-parse", "HEAD"], git_out)
+	var loaded: Dictionary = BalanceCatalogue.open(opts)
+	if loaded.has("error"):
+		push_error("balance_cem: %s" % loaded["error"])
+		quit(2)
+		return
+	var identity_v: Variant = loaded["identity"]
+	if typeof(identity_v) != TYPE_DICTIONARY:
+		push_error("balance_cem: missing catalogue identity")
+		quit(2)
+		return
+	var identity: Dictionary = identity_v
+	var content: ContentDB = BalanceCatalogue.load_prepared(loaded)
+	if content == null:
+		push_error("balance_cem: content did not load a catalogue")
+		quit(2)
+		return
 	var island: int = _i(opts, "island")
 	var spec: Dictionary = _spec(str(opts["seedsJson"]), island)
 	if spec.has("error"):
@@ -57,10 +70,9 @@ func _initialize() -> void:
 	var n_train: int = _i(opts, "seedCount")
 	var train0: int = _i(opts, "trainSeed0")
 	var manifest: Dictionary = opts.duplicate()
+	manifest.merge(identity)
 	manifest["t"] = "manifest"
-	manifest["commit"] = str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown"
-	manifest["godot"] = Engine.get_version_info().get("string", "unknown")
-	manifest["contentSha256"] = FileAccess.get_sha256(ContentDB.FULL_PATH)
+	manifest["contentSha256"] = str(identity.get("contentFileSha256", ""))
 	manifest["grid"] = grid
 	manifest["startCell"] = str(spec["cell"])
 	manifest["policyIndex"] = _i(spec, "policyIndex")
@@ -266,7 +278,8 @@ static func _spec(path: String, island: int) -> Dictionary:
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"island": 0, "seedsJson": "", "out": "", "popSize": 60, "elite": 15,
 		"maxGen": 20, "seedCount": 40, "trainSeed0": 4200, "holdoutSeed0": 5000,
-		"holdoutCount": 200, "rootSeed": 216}
+		"holdoutCount": 200, "rootSeed": 216, "content": "",
+		"space": BalanceCatalogue.DEFAULT_SPACE, "stage": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}

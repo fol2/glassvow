@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "421-content-search-seeds-v1",
+  "description": "Development seed and policy-root contract for #454. The frozen #215/#216 exam is unchanged. Mini-landscapes must reuse the frozen #215 axes; never re-fit per candidate.",
+  "engine": "4.7.2.stable",
+  "digestPin": {
+    "seed": 1000,
+    "aspect": "duskblade",
+    "vow": 0,
+    "outcomeDigest": "b02bca98709f70ddc5e1b163bd580f54bece86ece2e6fd2b364784245ec8fecf"
+  },
+  "exam": {
+    "policyRoot": 215,
+    "cemRoot": 216,
+    "roots": [215, 216],
+    "seedBands": [
+      {"id": "layer1", "first": 3000, "last": 3039},
+      {"id": "controls", "first": 4000, "last": 4199},
+      {"id": "cem-train", "first": 4200, "last": 4999},
+      {"id": "acceptance", "first": 5000, "last": 5199}
+    ],
+    "reserve": {"id": "reserve", "first": 5200, "last": 5399}
+  },
+  "development": {
+    "f0PolicyRoot": 454,
+    "f1PolicyRoot": 1454,
+    "miniCemRoot": 2454
+  },
+  "stages": {
+    "fingerprint": {
+      "seeds": {"first": 5600, "last": 5663},
+      "roots": []
+    },
+    "f0-controls": {
+      "seeds": {"first": 6000, "last": 6031},
+      "roots": [454]
+    },
+    "f0-mini-landscape": {
+      "seeds": {"first": 6100, "last": 6107},
+      "roots": [454]
+    },
+    "f1-racing": {
+      "seeds": {"first": 6200, "last": 6399},
+      "roots": [1454]
+    },
+    "f1-mini-cem": {
+      "seeds": {"first": 6400, "last": 6799},
+      "holdout": {"first": 6800, "last": 6999},
+      "roots": [2454]
+    },
+    "f1-mini-cem-train": {
+      "seeds": {"first": 6400, "last": 6799},
+      "roots": [2454]
+    },
+    "f1-mini-cem-validate": {
+      "seeds": {"first": 6800, "last": 6999},
+      "roots": [2454]
+    },
+    "audit": {
+      "seeds": {"first": 8000, "last": 8199},
+      "roots": [454, 1454, 2454],
+      "sealedUntil": "finalist"
+    },
+    "exam": {
+      "seedBands": [
+        {"first": 3000, "last": 3039},
+        {"first": 4000, "last": 4199},
+        {"first": 4200, "last": 4999},
+        {"first": 5000, "last": 5199}
+      ],
+      "roots": [215, 216]
+    }
+  },
+  "frozenLandscape": {
+    "source": "#215",
+    "deckCuts": {"thinMax": 25, "midMax": 35},
+    "medians": {
+      "duskblade": {"shattersPerFight": 1.1111, "smolderKillsPerFight": 0.1111},
+      "ashwarden": {"shattersPerFight": 0.6154, "smolderKillsPerFight": 0.8519}
+    },
+    "tieOrder": ["shatter", "smolder", "attrition"]
+  }
+}

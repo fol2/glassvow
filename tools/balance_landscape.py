@@ -1,14 +1,18 @@
 """Landscape readout for #215 layer 1 (docs/balance/2026-08-14-strategy-landscape.md).
 
-Usage: python3 tools/balance_landscape.py MERGED_NDJSON CONTROLS_ANALYSIS_JSON OUT_JSON
+Usage: python3 tools/balance_landscape.py MERGED_NDJSON CONTROLS_ANALYSIS_JSON OUT_JSON [--frozen-axes]
 MERGED_NDJSON is the merged sweep from tools/balance_sweep.gd (manifest line first);
 CONTROLS_ANALYSIS_JSON holds per-arm winRate rows for the four control arms.
 Re-run on the RC content SHA as the rc-bar pillar #213 requires.
+#454 mini-landscapes must pass --frozen-axes so deck cuts, medians and tie order stay the #215 freeze.
 """
 import json,math,statistics,sys
+from pathlib import Path
 from collections import defaultdict,Counter
-p=sys.argv[1]
-controls=json.load(open(sys.argv[2]))
+frozen='--frozen-axes' in sys.argv[1:]
+argv=[a for a in sys.argv[1:] if a!='--frozen-axes']
+p=argv[0]
+controls=json.load(open(argv[1]))
 arm2={(r['aspect'],r['vow']):r['winRate'] for r in controls if r['arm']==2}
 decks=[]; rates={'duskblade':([],[]),'ashwarden':([],[])}
 with open(p) as f:
@@ -19,8 +23,12 @@ with open(p) as f:
         rates[r['aspect']][0].append(sum(x['shatters'] for x in fs)/n)
         rates[r['aspect']][1].append(sum(x['smolderKills'] for x in fs)/n)
 decks.sort(); n=len(decks)
-low=decks[(n-1)//3]; high=decks[(2*(n-1))//3]
-medians={a:{'shattersPerFight':statistics.median(x[0]),'smolderKillsPerFight':statistics.median(x[1])} for a,x in rates.items()}
+if frozen:
+    axes=json.load(open(Path(__file__).resolve().parents[1]/'docs/balance/421-content-search-seeds-v1.json'))['frozenLandscape']
+    low=axes['deckCuts']['thinMax']; high=axes['deckCuts']['midMax']; medians=axes['medians']
+else:
+    low=decks[(n-1)//3]; high=decks[(2*(n-1))//3]
+    medians={a:{'shattersPerFight':statistics.median(x[0]),'smolderKillsPerFight':statistics.median(x[1])} for a,x in rates.items()}
 
 def thick(d): return 'thin' if d<=low else ('mid' if d<=high else 'fat')
 def wilson(w,n):
@@ -77,7 +85,7 @@ for a in ['duskblade','ashwarden']:
     magnitude.sort(key=lambda x:abs(math.log(x['ratio'],2)),reverse=True)
     thresholds.sort(key=lambda x:abs(x['rangeFraction']),reverse=True)
     result['audit'][gkey]={'topPolicies':200,'cutoffWinRate':top_p[-1][0],'magnitude':magnitude[:5],'thresholds':thresholds[:5]}
-json.dump(result,open(sys.argv[3],'w'),indent=2)
+json.dump(result,open(argv[2],'w'),indent=2)
 print(json.dumps({k:result[k] for k in ['runs','outcomes','deckCuts','medians','bothHighRuns']},indent=2))
 for k,v in result['verdicts'].items(): print(k,v)
 for k,v in result['audit'].items(): print('AUDIT',k,v)
