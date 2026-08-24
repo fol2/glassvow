@@ -617,6 +617,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
             cand_dir / "observations.jsonl", control_rows + landscape_rows, bind),
         "controlRowCount": len(control_rows), "landscapeRowCount": len(landscape_rows),
         "wallSeconds": round(time.perf_counter() - t0, 3),
+        "godotVersion": godot_version, "hostFingerprint": host_fp, "commit": commit,
         "_controlRows": control_rows, "_landscapeRows": landscape_rows,
     }
     if landscape_rows:
@@ -634,6 +635,30 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     print(f"{cand['id']} {result['status']} controls={len(control_rows)} "
           f"landscape={len(landscape_rows)} {result.get('earlyStop') or ''}", flush=True)
     return result
+
+
+def recover_provenance(out: Path, rows: list[dict[str, Any]]) -> dict[str, str]:
+    for row in rows:
+        godot = str(row.get("godotVersion") or "")
+        fingerprint = str(row.get("hostFingerprint") or "")
+        commit = str(row.get("commit") or "")
+        if godot and godot != "summarise-only" and fingerprint:
+            return {"godotVersion": godot, "hostFingerprint": fingerprint, "commit": commit}
+    for cid in ("c000", *(row.get("id") for row in rows)):
+        obs = out / str(cid) / "observations.jsonl"
+        if not cid or not obs.is_file():
+            continue
+        with obs.open(encoding="utf-8") as handle:
+            line = handle.readline()
+        if not line:
+            continue
+        first = json.loads(line)
+        godot = str(first.get("godotVersion") or "")
+        fingerprint = str(first.get("hostFingerprint") or "")
+        commit = str(first.get("commit") or "")
+        if godot and fingerprint:
+            return {"godotVersion": godot, "hostFingerprint": fingerprint, "commit": commit}
+    raise ValueError("cannot recover godotVersion/hostFingerprint from manifests or observations")
 
 
 def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
@@ -747,6 +772,21 @@ def self_test() -> int:
     assert identity_fault(collapse) == "identity-collapse"
     assert drop_volatile({"wallSeconds": 1, "out": "/tmp/a", "runs": [{"outcome": "win"}]}) == \
         drop_volatile({"wallSeconds": 9, "out": "/tmp/b", "runs": [{"outcome": "win"}]})
+    proven = Path(tempfile.mkdtemp(prefix="glassvow-f0-prov-"))
+    try:
+        obs = proven / "c000" / "observations.jsonl"
+        obs.parent.mkdir(parents=True)
+        obs.write_text(json.dumps({
+            "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+            "hostFingerprint": "27a837c0" + "ab" * 28,
+            "commit": "deadbeef",
+        }, sort_keys=True) + "\n", encoding="utf-8")
+        recovered = recover_provenance(proven, [{"id": "c000"}])
+        assert recovered["godotVersion"].startswith("4.7.2.stable")
+        assert recovered["hostFingerprint"].startswith("27a837c0")
+        assert recovered["commit"] == "deadbeef"
+    finally:
+        shutil.rmtree(proven)
     stale = Path(tempfile.mkdtemp(prefix="glassvow-f0-stale-"))
     try:
         dump(stale / "shard.json", {"manifest": {"contentFileSha256": "nope"}, "runs": [1]})
@@ -793,12 +833,14 @@ def main() -> int:
         rows = [read_json(out / row["id"] / "manifest.json")
                 for row in manifest["candidates"]
                 if (out / row["id"] / "manifest.json").is_file()]
+        provenance = recover_provenance(out, rows)
         host = host_identity(args.jobs)
-        packet = {"fingerprint": {"fingerprintHash": rows[0].get("hostFingerprint", "")}} \
-            if rows else {"fingerprint": {"fingerprintHash": ""}}
-        summary = publish_summary(rows, proto, host, packet, identity, commit, "summarise-only",
-                                  live_sha, out)
-        print(json.dumps({"pareto": summary["pareto"], "n": len(rows)}, sort_keys=True))
+        packet = {"fingerprint": {"fingerprintHash": provenance["hostFingerprint"]}}
+        summary = publish_summary(rows, proto, host, packet, identity, provenance["commit"],
+                                  provenance["godotVersion"], live_sha, out)
+        print(json.dumps({"pareto": summary["pareto"], "n": len(rows),
+                          "godotVersion": provenance["godotVersion"],
+                          "hostFingerprint": provenance["hostFingerprint"][:16]}, sort_keys=True))
         return 0
     godot_version = require_godot(args.godot)
     host = host_identity(args.jobs)
@@ -825,6 +867,13 @@ def main() -> int:
     if args.replay:
         print(json.dumps({"id": args.replay, "observationsSha256": results[0]["observationsSha256"],
                           "status": results[0]["status"]}, sort_keys=True))
+        return 0
+    if wanted:
+        print(json.dumps({
+            "complete": sum(1 for row in results if row["status"] == "complete"),
+            "earlyStop": sum(1 for row in results if row["status"] == "early-stop"),
+            "ids": [row["id"] for row in results],
+        }, indent=2, sort_keys=True))
         return 0
     summary = publish_summary(results, proto, host, packet, identity, commit, godot_version,
                               live_sha, out)
