@@ -4,7 +4,7 @@ extends RefCounted
 ## Sentry dist (#420) or iOS privacy-plist (#432) gates.
 
 const MARKETING: String = "1.0.0"
-const IOS_BUILD: String = "3"
+const IOS_BUILD: String = "4"
 const ANDROID_BUILD: String = "1"
 
 
