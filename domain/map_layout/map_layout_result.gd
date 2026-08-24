@@ -120,8 +120,8 @@ static func _validate_payload(raw: Dictionary, errors: Array[String]) -> void:
 	for id: String in _ids(scores, "soft_scores", errors):
 		if not MapLayoutCanonical.number(scores[id]):
 			errors.append("result.soft_scores.%s must be finite and numeric" % id)
-	if typeof(raw.get("selected_restart_id", null)) != TYPE_INT \
-			or int(raw.get("selected_restart_id", -1)) < 0:
+	var restart_v: Variant = raw.get("selected_restart_id", null)
+	if typeof(restart_v) != TYPE_INT or MapLayoutCanonical.int_value(restart_v) < 0:
 		errors.append("result.selected_restart_id must be a non-negative int")
 	if not MapLayoutCanonical.nonempty(raw.get("selected_candidate_id", null)):
 		errors.append("result.selected_candidate_id must be non-empty")

@@ -8,12 +8,30 @@ const CODEC_VERSION: String = "map-layout-canonical-v1"
 const FLOAT_POLICY: String = "finite-binary64-little-endian-hex; signed-zero-normalised"
 
 
+static func float_value(value: Variant) -> float:
+	assert(typeof(value) == TYPE_FLOAT or typeof(value) == TYPE_INT)
+	@warning_ignore("unsafe_call_argument")
+	return float(value)
+
+
+static func int_value(value: Variant) -> int:
+	assert(typeof(value) == TYPE_INT)
+	@warning_ignore("unsafe_call_argument")
+	return int(value)
+
+
+static func bool_value(value: Variant) -> bool:
+	assert(typeof(value) == TYPE_BOOL)
+	@warning_ignore("unsafe_call_argument")
+	return bool(value)
+
+
 static func validate(value: Variant, path: String, errors: Array[String]) -> void:
 	match typeof(value):
 		TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_STRING:
 			pass
 		TYPE_FLOAT:
-			if not is_finite(float(value)):
+			if not is_finite(float_value(value)):
 				errors.append("%s must be finite" % path)
 		TYPE_ARRAY:
 			var rows: Array = value
@@ -73,7 +91,7 @@ static func vector(value: Variant, size: int, positive: bool = false) -> bool:
 	for part: Variant in parts:
 		if typeof(part) != TYPE_FLOAT and typeof(part) != TYPE_INT:
 			return false
-		var number: float = float(part)
+		var number: float = float_value(part)
 		if not is_finite(number) or (positive and number <= 0.0):
 			return false
 	return true
@@ -85,7 +103,7 @@ static func same_vector(a_v: Variant, b_v: Variant, size: int) -> bool:
 	var a: Array = a_v
 	var b: Array = b_v
 	for i: int in range(size):
-		if float(a[i]) != float(b[i]):
+		if float_value(a[i]) != float_value(b[i]):
 			return false
 	return true
 
@@ -93,7 +111,7 @@ static func same_vector(a_v: Variant, b_v: Variant, size: int) -> bool:
 static func number(value: Variant, positive: bool = false) -> bool:
 	if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
 		return false
-	var parsed: float = float(value)
+	var parsed: float = float_value(value)
 	return is_finite(parsed) and (not positive or parsed > 0.0)
 
 
@@ -117,7 +135,7 @@ static func ordered(value: Variant) -> Variant:
 		TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_STRING:
 			return value
 		TYPE_FLOAT:
-			var number_value: float = float(value)
+			var number_value: float = float_value(value)
 			return 0.0 if number_value == 0.0 else number_value
 		TYPE_ARRAY:
 			var rows: Array = value
@@ -159,11 +177,11 @@ static func _encode(value: Variant) -> String:
 		TYPE_NIL:
 			return "n;"
 		TYPE_BOOL:
-			return "b1;" if bool(value) else "b0;"
+			return "b1;" if bool_value(value) else "b0;"
 		TYPE_INT:
 			return "i%s;" % str(value)
 		TYPE_FLOAT:
-			var number_value: float = float(value)
+			var number_value: float = float_value(value)
 			var bytes: PackedByteArray = PackedByteArray()
 			bytes.resize(8)
 			bytes.encode_double(0, 0.0 if number_value == 0.0 else number_value)

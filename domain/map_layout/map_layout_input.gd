@@ -44,7 +44,8 @@ static func validate_dict(raw: Dictionary) -> Array[String]:
 			errors.append("input.%s must be non-empty" % field)
 	_validate_nodes(raw.get("nodes", null), errors)
 	_validate_edges(raw.get("edges", null), raw.get("nodes", null), errors)
-	if typeof(raw.get("act", null)) != TYPE_INT or int(raw.get("act", -1)) < 0:
+	var act_v: Variant = raw.get("act", null)
+	if typeof(act_v) != TYPE_INT or MapLayoutCanonical.int_value(act_v) < 0:
 		errors.append("input.act must be a non-negative int")
 	for field: String in _SEED_FIELDS:
 		if typeof(raw.get(field, null)) != TYPE_INT:
@@ -105,9 +106,11 @@ static func _validate_nodes(value: Variant, errors: Array[String]) -> void:
 		if id.is_empty() or seen.has(id):
 			errors.append("%s.id must be non-empty and unique" % path)
 		seen[id] = true
-		if typeof(row.get("row", null)) != TYPE_INT or int(row.get("row", -1)) < 0:
+		var row_v: Variant = row.get("row", null)
+		if typeof(row_v) != TYPE_INT or MapLayoutCanonical.int_value(row_v) < 0:
 			errors.append("%s.row must be a non-negative int" % path)
-		if typeof(row.get("col", null)) != TYPE_INT or int(row.get("col", -1)) < 0:
+		var col_v: Variant = row.get("col", null)
+		if typeof(col_v) != TYPE_INT or MapLayoutCanonical.int_value(col_v) < 0:
 			errors.append("%s.col must be a non-negative int" % path)
 		if not MapLayoutCanonical.nonempty(row.get("type", null)):
 			errors.append("%s.type must be non-empty" % path)

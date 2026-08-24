@@ -267,18 +267,26 @@ static func _result_identity(input: MapLayoutInput) -> Dictionary:
 	for node: Dictionary in input.node_records():
 		var jitter: Array = node["jitter"]
 		anchors[node["id"]] = [
-			float(node["col"]) + float(jitter[0]),
+			MapLayoutCanonical.float_value(node["col"])
+				+ MapLayoutCanonical.float_value(jitter[0]),
 			0.0,
-			float(node["row"]) + float(jitter[1]),
+			MapLayoutCanonical.float_value(node["row"])
+				+ MapLayoutCanonical.float_value(jitter[1]),
 		]
 	var edges: Dictionary = {}
 	for edge: Dictionary in input.edge_records():
 		var start: Array = anchors[edge["from"]]
 		var finish: Array = anchors[edge["to"]]
 		var midpoint: Array[float] = [
-			(float(start[0]) + float(finish[0])) * 0.5,
+			(
+				MapLayoutCanonical.float_value(start[0])
+				+ MapLayoutCanonical.float_value(finish[0])
+			) * 0.5,
 			0.0,
-			(float(start[2]) + float(finish[2])) * 0.5,
+			(
+				MapLayoutCanonical.float_value(start[2])
+				+ MapLayoutCanonical.float_value(finish[2])
+			) * 0.5,
 		]
 		edges[edge["id"]] = {
 			"from": edge["from"],
@@ -386,7 +394,7 @@ static func _test_result_fail_closed(result: MapLayoutResult, fails: Array[Strin
 	_check(fails, MapLayoutResult.create(unknown_field) == null, "unknown identity field fails closed")
 	var tampered: Dictionary = result.to_dict()
 	var scores: Dictionary = tampered["soft_scores"]
-	scores["route_length"] = float(scores["route_length"]) + 1.0
+	scores["route_length"] = MapLayoutCanonical.float_value(scores["route_length"]) + 1.0
 	_check(fails, MapLayoutResult.from_dict(tampered) == null,
 		"tampered serial content fails its layout digest")
 	var object_metadata: Dictionary = result.to_dict()
