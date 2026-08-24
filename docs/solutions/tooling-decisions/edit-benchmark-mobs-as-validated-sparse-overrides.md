@@ -100,7 +100,7 @@ for id in raw:
 This is the ordering in `ContentDB.apply_enemy_overrides()`
 (`content/content_db.gd:74-83` (`apply_enemy_overrides`)). The regression check supplies a dictionary with
 both a broken known mob and an unknown ID, then confirms the known mob was not
-partially changed (`tests/test_content.gd:95-116` (`_enemy_overrides`)). Validation interleaved with
+partially changed (`tests/test_content.gd:97-116` (`_enemy_overrides`)). Validation interleaved with
 assignment would fail that guarantee.
 
 ### Preview through effective content, not a private editor model
