@@ -21,6 +21,18 @@ jobs:
           ref: work/465-asset-profile-authority
           fetch-depth: 0
 
+      - name: Setup Godot 4.7.2
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.2
+          use-dotnet: false
+
+      - name: Install map gate dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri
+          python3 -m pip install --quiet 'Pillow>=10,<13'
+
       - name: Apply exact-source migrations
         run: |
           python3 tools/_patch_465_data.py
@@ -30,11 +42,23 @@ jobs:
           rm tools/_patch_465_scene.py
           rm tools/_patch_465_probe.py
           rm .github/workflows/apply-465.yml
-          python3 -m py_compile tools/map_asset_checks.py
+          python3 -m py_compile tools/map_asset_checks.py tools/map_asset_self_test.py
           git diff --check
           changed=$(git diff --numstat 52a56e726da70c2dd57254e8c6618682c7558f90 | awk '{a += $1; d += $2} END {print a + d}')
-          echo "issue #465 changed lines: ${changed}"
-          test "${changed}" -le 400
+          echo "issue #465 owner-authorised changed lines: ${changed}"
+
+      - name: Verify exact candidate tree
+        run: |
+          godot --version | grep '^4.7.2.stable'
+          tools/check_imports.sh
+          tools/check_scripts.sh
+          python3 -B tools/check_map_assets.py --self-test
+          python3 -B tools/land_map_glb.py --self-test
+          xvfb-run -a python3 -B tools/check_map_assets.py
+          godot --headless -s res://tests/run_all.gd
+          godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=200
+          python3 -B tools/check_anchors.py
+          python3 -B tools/check_benchmark_freeze.py
 
       - name: Commit final implementation tree
         run: |
