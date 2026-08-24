@@ -53,6 +53,9 @@ jobs:
       - name: Check developer-tool registry and coordinate conversion
         run: python3 -B tools/dev.py --check
 
+      - name: Test balanced content DOE generator
+        run: python3 -B tools/balance_content_doe.py --self-test
+
       # The web-reference twin used to be excluded from CI on purpose: it
       # resolved citations against the roguecardv2-benchmark checkout and
       # returned 2 — "benchmark tree not found" — wherever that was absent,
