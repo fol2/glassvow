@@ -67,10 +67,13 @@ jobs:
 
       - name: Capture and repeat the fixed build-4 matrix
         shell: bash
+        env:
+          GLASSVOW_SHOT_POSITION: "0,0"
         run: |
           mkdir -p artifacts/build4-map-corpus-diagnostics
           CAPTURE_HEAD="$(git rev-parse HEAD)"
           printf 'capture_head=%s\n' "$CAPTURE_HEAD" >> artifacts/build4-map-corpus-diagnostics/environment.txt
+          printf 'shot_position=%s\n' "$GLASSVOW_SHOT_POSITION" >> artifacts/build4-map-corpus-diagnostics/environment.txt
           set +e
           set -o pipefail
           tools/capture_build4_map_corpus.sh \

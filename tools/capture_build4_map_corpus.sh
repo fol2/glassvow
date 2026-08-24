@@ -139,7 +139,7 @@ run_godot_capture() {
     --path "$ROOT"
     --rendering-method gl_compatibility
     --resolution 1180x820
-    --position -4000,-4000
+    --position "${GLASSVOW_SHOT_POSITION:--4000,-4000}"
     -s res://tools/capture_build4_map_corpus.gd
     --
     "--output=$run_dir"
