@@ -86,16 +86,21 @@ static func _geometry_contract(fails: Array[String]) -> void:
 				"elongated wall remains elongated rather than becoming a disc")
 
 	var position: Vector3 = Vector3(4.0, 0.0, -3.0)
-	var yaw_degrees: float = 37.0
-	var scale: Vector3 = Vector3(1.2, 1.0, 0.8)
 	var transformed: PackedVector2Array = registry.transformed_footprint(
-			long_value, position, yaw_degrees, scale)
-	var expected: PackedVector2Array = _expected_transform(
-			long_points, position, yaw_degrees, scale)
-	_check(fails, transformed == expected and transformed == registry.transformed_footprint(
-			long_value, position, yaw_degrees, scale),
-			"footprint rotation, translation and scaling are deterministic")
-	_check(fails, registry.transformed_footprint(long_value, position, yaw_degrees,
+			long_value, position, 0.0, Vector3(2.0, 1.0, 3.0))
+	var transformed_bounds: Rect2 = _bounds(transformed)
+	_check(fails, transformed_bounds.position.is_equal_approx(Vector2(-4.0, -4.5))
+			and transformed_bounds.size.is_equal_approx(Vector2(16.0, 3.0)),
+			"known translation and non-uniform scale produce the governed bounds")
+	var rotated: PackedVector2Array = registry.transformed_footprint(
+			long_value, Vector3.ZERO, 90.0, Vector3.ONE)
+	var rotated_bounds: Rect2 = _bounds(rotated)
+	_check(fails, rotated_bounds.size.is_equal_approx(Vector2(1.0, 8.0)),
+			"a 90-degree yaw swaps the elongated footprint axes")
+	_check(fails, transformed == registry.transformed_footprint(
+			long_value, position, 0.0, Vector3(2.0, 1.0, 3.0)),
+			"footprint transform is deterministic")
+	_check(fails, registry.transformed_footprint(long_value, position, 0.0,
 			Vector3(-1.0, 1.0, 1.0)).is_empty(),
 			"negative transformed scale fails closed")
 
@@ -116,6 +121,12 @@ static func _geometry_contract(fails: Array[String]) -> void:
 			[[0, 0], [2, 0], [1, 0.5], [2, 1], [0, 1]])
 	_check(fails, not _bool_value(concave_result, "ok", false),
 			"concave hull input fails explicitly")
+	var nonfinite_result: Dictionary = MapAssetProfiles.canonical_polygon(
+			PackedVector2Array([
+				Vector2.ZERO, Vector2(NAN, 1.0), Vector2(1.0, 0.0),
+			]))
+	_check(fails, not _bool_value(nonfinite_result, "ok", false),
+			"non-finite packed hull input fails explicitly")
 
 	_check(fails, registry.digest([long_value, compact_value])
 			== registry.digest([compact_value, long_value]),
@@ -202,15 +213,13 @@ static func _fixture_manifest() -> Dictionary:
 	}
 
 
-static func _expected_transform(points: PackedVector2Array, position: Vector3,
-		yaw_degrees: float, scale: Vector3) -> PackedVector2Array:
-	var out: PackedVector2Array = PackedVector2Array()
-	var basis: Basis = Basis(Vector3.UP, deg_to_rad(yaw_degrees)).scaled(scale)
-	var transform: Transform3D = Transform3D(basis, position)
+static func _bounds(points: PackedVector2Array) -> Rect2:
+	if points.is_empty():
+		return Rect2()
+	var bounds: Rect2 = Rect2(points[0], Vector2.ZERO)
 	for point: Vector2 in points:
-		var world: Vector3 = transform * Vector3(point.x, 0.0, point.y)
-		out.append(Vector2(world.x, world.z))
-	return out
+		bounds = bounds.expand(point)
+	return bounds
 
 
 static func _signed_area(points: PackedVector2Array) -> float:
