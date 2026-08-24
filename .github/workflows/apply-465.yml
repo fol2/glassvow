@@ -39,12 +39,49 @@ jobs:
           python3 tools/_patch_465_data.py
           python3 tools/_patch_465_scene.py
           python3 tools/_patch_465_probe.py
+          python3 - <<'PY'
+          from pathlib import Path
+
+          profile = Path("presentation/map/map_asset_profiles.gd")
+          text = profile.read_text()
+          old = '''\tfor surface: int in range(mesh.get_surface_count()):
+          \t\tcanonical.append(mesh.surface_get_primitive_type(surface))
+          \t\tcanonical.append(mesh.surface_get_arrays(surface))'''
+          new = '''\tfor surface: int in range(mesh.get_surface_count()):
+          \t\tcanonical.append(mesh.surface_get_primitive_type(surface))
+          \tcanonical.append(mesh.get_faces())'''
+          if text.count(old) != 1:
+              raise RuntimeError("profile source-identity patch did not match exactly once")
+          profile.write_text(text.replace(old, new, 1))
+
+          scene = Path("presentation/map/map_scene.gd")
+          text = scene.read_text()
+          comments = {
+              "## The fixed −46° yaw is declared by the act1-vigil profile.":
+                  "# Fixed yaw comes from the act1-vigil profile.",
+              "## The 7.0 world scale is declared by the act1-vigil profile.":
+                  "# World scale comes from the act1-vigil profile.",
+              "## Road slab default scale is declared by each shared-road profile.":
+                  "# Road slab scale comes from the shared-road profiles.",
+              "## The current camera-directional hide envelope is owned by MapAssetProfiles.":
+                  "# The current camera-directional hide envelope is owned by MapAssetProfiles.",
+          }
+          for old_comment, new_comment in comments.items():
+              if text.count(old_comment) != 1:
+                  raise RuntimeError(f"scene comment patch mismatch: {old_comment}")
+              text = text.replace(old_comment, new_comment, 1)
+          scene.write_text(text)
+          PY
           rm tools/_patch_465_data.py
           rm tools/_patch_465_scene.py
           rm tools/_patch_465_probe.py
           rm .github/workflows/apply-465.yml
           python3 -m py_compile tools/map_asset_checks.py tools/map_asset_self_test.py
           git diff --check
+          echo '--- generated map_scene authority lines ---'
+          nl -ba presentation/map/map_scene.gd | sed -n '20,55p'
+          echo '--- generated source identity ---'
+          nl -ba presentation/map/map_asset_profiles.gd | sed -n '265,290p'
           changed=$(git diff --numstat 52a56e726da70c2dd57254e8c6618682c7558f90 | awk '{a += $1; d += $2} END {print a + d}')
           echo "issue #465 owner-authorised changed lines: ${changed}"
 
