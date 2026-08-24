@@ -32,10 +32,24 @@ const TERMINUS_SCALE: float = 3.6
 ## Where the Vigil stands: short of the entrance row, mirroring the terminus
 ## past the boss. The screen reads this too, to run the road out from its door
 ## to the first waystones.
-## Pulled east and toward the camera until the whole hall is inside the opening
-## frame: at x = -41 the camera's left edge cut it in half, and a landmark the
-## player has to pan to find is not marking the start of anything.
-const THRESHOLD_XZ: Vector2 = Vector2(-38.4, 6.5)
+##
+## x is pinned by the opening frame, and the budget is tight enough to write
+## down. The camera seats the focused node at `MapCameraRig.LEAD_X` = 1/3 of
+## the frame width, so at the played zoom stop (20) and the narrowest shipping
+## aspect (pad-landscape, 1180x820) there are 28.8 / 3 = 9.59 units of ground
+## west of row 0 before the frame ends. The hall's rotated footprint is 8.50 of
+## them. Everything left over — 1.09 units — is the whole available gap between
+## the Vigil and the first wave of nodes.
+##
+## -41.3 spends it: the west wall lands just inside the frame edge at -45.6 and
+## the east wall at -37.1, a clear 1.1 short of row 0's x = -36. It was -38.4,
+## which put the hall 1.85 units PAST row 0 — the first wave stood on its roof.
+## An earlier note here claimed x = -41 cut the hall in half; that was measured
+## against the parametric hall before the Tripo one halved its footprint.
+##
+## More separation than this cannot come from moving the building. It needs the
+## opening zoom stop, `LEAD_X`, or `THRESHOLD_SCALE` to give.
+const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
 ## Turned so the gable is seen in three-quarter rather than edge-on. The hall
 ## is authored with its gable facing +X, down the road; the camera looks along
 ## -Z, so unturned the player sees the length of the flank and the end of the
