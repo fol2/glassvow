@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   apply:
-    # The verified candidate removes this staging workflow before committing.
+    # The verified candidate removes every staging workflow before committing.
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -55,6 +55,7 @@ jobs:
           rm tools/_patch_465_scene.py
           rm tools/_patch_465_probe.py
           rm tools/_patch_465_review.py
+          rm .github/workflows/diagnose-465-fast.yml
           rm .github/workflows/apply-465.yml
           python3 -m py_compile tools/map_asset_checks.py tools/map_asset_self_test.py
           git diff --check
@@ -130,22 +131,7 @@ jobs:
         run: godot --headless --path . --script /tmp/run_465_focus.gd -- _live_profiles
 
       - name: Verify profile geometry contract
-        run: |
-          set +e
-          godot --headless --path . --script /tmp/run_465_focus.gd -- _geometry_contract 2>&1 | tee /tmp/geometry.log
-          rc=${PIPESTATUS[0]}
-          while IFS= read -r line; do
-            case "$line" in
-              "  - "*) echo "::error title=profile geometry contract::${line#  - }" ;;
-            esac
-          done < /tmp/geometry.log
-          if [ "$rc" -ne 0 ]; then
-            cp /tmp/geometry.log tools/_patch_465_geometry_failure.txt
-            git add tools/_patch_465_geometry_failure.txt
-            git commit -m 'ci(#465): capture geometry contract failure'
-            git push --force-with-lease origin HEAD:work/465-asset-profile-authority
-          fi
-          exit "$rc"
+        run: godot --headless --path . --script /tmp/run_465_focus.gd -- _geometry_contract
 
       - name: Verify profile runtime digest
         run: godot --headless --path . --script /tmp/run_465_focus.gd -- _runtime_digest
