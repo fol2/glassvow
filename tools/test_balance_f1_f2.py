@@ -15,7 +15,7 @@ from balance_f1_f2 import (
     response_deficit,
     write_search_bundle,
 )
-from balance_f0 import evaluation_from_registry, evaluation_spec
+from balance_f0 import evaluation_from_registry, evaluation_spec, progressive_plans
 from balance_seed_contract import check_invocation, load_contract
 from balance_f1_evidence import (
     audit_comparison,
@@ -28,6 +28,31 @@ from balance_f1_cem import cem_spec
 
 
 class BalanceF1F2Test(unittest.TestCase):
+    def test_progressive_layer_plans_cover_only_new_disjoint_rectangles(self) -> None:
+        def layer(control_last: int, policy_count: int, landscape_last: int) -> dict:
+            return {"controlStage": "f1-racing", "controlRoot": 1454,
+                    "controlFirst": 6200, "controlLast": control_last,
+                    "landscapeStage": "f1-racing", "landscapeRoot": 1454,
+                    "landscapeFirst": 6200, "landscapeLast": landscape_last,
+                    "policyFirst": 0, "policyCount": policy_count}
+
+        controls, landscape = progressive_plans(layer(6231, 128, 6207),
+                                                layer(6263, 256, 6215), 8)
+        self.assertEqual(32, sum(row["seeds"] for row in controls))
+        new_rows = sum(row["policyCount"] * 4 * row["seeds"] for row in landscape)
+        self.assertEqual(256 * 4 * 16 - 128 * 4 * 8, new_rows)
+        covered = set()
+        for row in landscape:
+            cells = {(policy, seed)
+                     for policy in range(row["policyFirst"],
+                                         row["policyFirst"] + row["policyCount"])
+                     for seed in range(row["seed0"], row["seed0"] + row["seeds"])}
+            self.assertFalse(covered & cells)
+            covered |= cells
+        self.assertNotIn((0, 6200), covered)
+        self.assertIn((0, 6208), covered)
+        self.assertIn((128, 6200), covered)
+
     def test_finalist_hydration_and_boundary_diagnostics_are_complete(self) -> None:
         values = {"duskMaxHp": 60, "flareDamage": 11, "ashfallSmolder": 4,
                   "ashfallWard": 7, "regrowthHeal": 4, "ironSkinWard": 2,

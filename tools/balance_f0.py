@@ -93,6 +93,48 @@ def split_count(total: int, jobs: int) -> list[dict[str, int]]:
     return out
 
 
+def progressive_plans(previous: dict[str, Any], current: dict[str, Any],
+                      jobs: int) -> tuple[list[dict[str, int]], list[dict[str, int]]]:
+    """Return only the disjoint rectangles not already present in a nested layer."""
+    if previous["controlStage"] != current["controlStage"] \
+            or previous["controlRoot"] != current["controlRoot"] \
+            or previous["controlFirst"] != current["controlFirst"] \
+            or previous["controlLast"] > current["controlLast"]:
+        raise ValueError("inherited control range is not nested inside the current layer")
+    if previous["landscapeStage"] != current["landscapeStage"] \
+            or previous["landscapeRoot"] != current["landscapeRoot"] \
+            or previous["landscapeFirst"] != current["landscapeFirst"] \
+            or previous["landscapeLast"] > current["landscapeLast"] \
+            or previous["policyFirst"] != current["policyFirst"] \
+            or previous["policyCount"] > current["policyCount"]:
+        raise ValueError("inherited landscape rectangle is not nested inside the current layer")
+    controls = split_span(previous["controlLast"] + 1, current["controlLast"], jobs) \
+        if previous["controlLast"] < current["controlLast"] else []
+    rectangles: list[dict[str, int]] = []
+    if previous["landscapeLast"] < current["landscapeLast"]:
+        rectangles.append({
+            "policyFirst": current["policyFirst"], "policyCount": previous["policyCount"],
+            "seed0": previous["landscapeLast"] + 1,
+            "seeds": current["landscapeLast"] - previous["landscapeLast"],
+        })
+    if previous["policyCount"] < current["policyCount"]:
+        rectangles.append({
+            "policyFirst": current["policyFirst"] + previous["policyCount"],
+            "policyCount": current["policyCount"] - previous["policyCount"],
+            "seed0": current["landscapeFirst"],
+            "seeds": current["landscapeLast"] - current["landscapeFirst"] + 1,
+        })
+    landscape: list[dict[str, int]] = []
+    for rectangle in rectangles:
+        for part in split_count(rectangle["policyCount"], jobs):
+            landscape.append({
+                "policyFirst": rectangle["policyFirst"] + part["policyFirst"],
+                "policyCount": part["policyCount"],
+                "seed0": rectangle["seed0"], "seeds": rectangle["seeds"],
+            })
+    return controls, landscape
+
+
 def protocol(contract: dict[str, Any]) -> dict[str, Any]:
     return {
         "issue": 457,
@@ -618,14 +660,39 @@ def launch(godot: str, jobs: int, plan: list[dict[str, int]], worker: Any) -> li
 def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], out: Path,
                        proto: dict[str, Any], host_fp: str, commit: str, godot_version: str,
                        resume: bool, baseline: dict[str, Any] | None, n_boot: int,
-                       axes: dict[str, Any]) -> dict[str, Any]:
+                       axes: dict[str, Any], inherit: Path | None = None,
+                       inherit_proto: dict[str, Any] | None = None) -> dict[str, Any]:
     cand_dir = out / cand["id"]
     content = doe / cand["id"] / "full-content.json"
     if file_sha256(content) != cand["fileSha256"]:
         raise ValueError(f"{cand['id']} file SHA drifted")
     cat = catalogue_identity(content, REPO / SPACE_REL)
     cat["seedRegistrySha256"] = file_sha256(REPO / CONTRACT_REL)
+    resolved = evaluation_spec(proto)
+    prior_dir: Path | None = None
+    prior_manifest: dict[str, Any] | None = None
+    prior_resolved: dict[str, Any] | None = None
+    if inherit is not None:
+        if inherit_proto is None:
+            raise ValueError("inherited output has no protocol")
+        prior_dir = inherit / str(cand["id"])
+        prior_manifest_path = prior_dir / "manifest.json"
+        if not prior_manifest_path.is_file():
+            raise ValueError(f"inherited layer has no {cand['id']} manifest")
+        prior_manifest = read_json(prior_manifest_path)
+        if prior_manifest.get("status") != "complete" \
+                or str(prior_manifest.get("fileSha256")) != str(cand["fileSha256"]):
+            raise ValueError(f"candidate {cand['id']} is not complete and identical in inherited layer")
+        prior_resolved = evaluation_spec(inherit_proto)
+        progressive_plans(prior_resolved, resolved, jobs)  # Validate before touching output.
     parts = input_parts(proto, cat, cand, godot_version, commit)
+    if prior_manifest is not None and prior_resolved is not None:
+        parts["inheritance"] = {
+            "protocol": inherit_proto,
+            "resolved": prior_resolved,
+            "observationsSha256": prior_manifest["observationsSha256"],
+            "inputHash": prior_manifest["inputHash"],
+        }
     digest = input_hash(parts)
     input_path = cand_dir / "input.json"
     if cand_dir.exists() and resume and input_path.is_file() \
@@ -648,10 +715,25 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     }
     dump(input_path, {"inputHash": digest, "parts": parts})
     t0 = time.perf_counter()
-    resolved = evaluation_spec(proto)
-    c_plan = split_span(resolved["controlFirst"], resolved["controlLast"], jobs)
-    l_plan = split_count(resolved["policyCount"], jobs)
-    land_n = resolved["landscapeLast"] - resolved["landscapeFirst"] + 1
+    if prior_resolved is not None:
+        c_plan, l_plan = progressive_plans(prior_resolved, resolved, jobs)
+        assert prior_dir is not None
+        for kind, pattern in (("controls", "shard-*.json"),
+                              ("landscape", "shard-*.ndjson")):
+            destination_dir = cand_dir / kind
+            destination_dir.mkdir(parents=True, exist_ok=True)
+            for index, source in enumerate(sorted((prior_dir / kind).glob(pattern))):
+                suffix = ".ndjson" if kind == "landscape" else ".json"
+                destination = destination_dir / f"shard-inherited-{index:02d}{suffix}"
+                if not destination.exists():
+                    shutil.copy2(source, destination)
+    else:
+        c_plan = split_span(resolved["controlFirst"], resolved["controlLast"], jobs)
+        l_plan = [{"policyFirst": resolved["policyFirst"] + part["policyFirst"],
+                   "policyCount": part["policyCount"],
+                   "seed0": resolved["landscapeFirst"],
+                   "seeds": resolved["landscapeLast"] - resolved["landscapeFirst"] + 1}
+                  for part in split_count(resolved["policyCount"], jobs)]
     for shard in c_plan:
         require_stage(resolved["controlStage"], shard["seed0"],
                       shard["seed0"] + shard["seeds"] - 1, resolved["controlRoot"],
@@ -662,7 +744,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
 
     def control_job(item: tuple[int, dict[str, int]]) -> Path:
         index, spec = item
-        dest = cand_dir / "controls" / f"shard-{index}.json"
+        dest = cand_dir / "controls" / f"shard-new-{index:02d}.json"
         dest.parent.mkdir(parents=True, exist_ok=True)
         expected = 16 * spec["seeds"]
         if resume and controls_complete(dest, expected, cand["fileSha256"]):
@@ -679,7 +761,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
             raise RuntimeError(f"control shard incomplete: {dest}")
         return dest
 
-    control_rows = load_control_rows(launch(godot, jobs, c_plan, control_job))
+    launch(godot, jobs, c_plan, control_job)
+    control_rows = load_control_rows(sorted((cand_dir / "controls").glob("shard-*.json")))
     ranked_controls = ranked_control_rows(control_rows)
     baseline_stalls = int(baseline["controlStalls"]) if baseline else sum(
         1 for row in ranked_controls if row.get("outcome") == "stall")
@@ -688,17 +771,17 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     if not fault:
         def land_job(item: tuple[int, dict[str, int]]) -> Path:
             index, spec = item
-            dest = cand_dir / "landscape" / f"shard-{index}.ndjson"
+            dest = cand_dir / "landscape" / f"shard-new-{index:02d}.ndjson"
             dest.parent.mkdir(parents=True, exist_ok=True)
-            expected = spec["policyCount"] * 4 * land_n
+            expected = spec["policyCount"] * 4 * spec["seeds"]
             if resume and landscape_complete(dest, expected, cand["fileSha256"]):
                 return dest
             tmp = Path(str(dest) + ".tmp")
             godot_sweep(godot, [
                 "--mode=sweep", f"--rootSeed={resolved['landscapeRoot']}",
-                f"--policyFirst={resolved['policyFirst'] + spec['policyFirst']}",
+                f"--policyFirst={spec['policyFirst']}",
                 f"--policyCount={spec['policyCount']}",
-                f"--seeds={land_n}", f"--seed0={resolved['landscapeFirst']}",
+                f"--seeds={spec['seeds']}", f"--seed0={spec['seed0']}",
                 f"--stage={resolved['landscapeStage']}",
                 f"--content={content}", f"--out={tmp}",
             ], tmp, dest.with_suffix(".log"))
@@ -707,7 +790,9 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
                 raise RuntimeError(f"landscape shard incomplete: {dest}")
             return dest
 
-        landscape_rows = load_landscape_rows(launch(godot, jobs, l_plan, land_job))
+        launch(godot, jobs, l_plan, land_job)
+        landscape_rows = load_landscape_rows(
+            sorted((cand_dir / "landscape").glob("shard-*.ndjson")))
     controls = aggregate_controls(control_rows)
     cells = aggregate_cells(landscape_rows, axes) if landscape_rows else {}
     proxies = grid_proxies(controls, cells) if landscape_rows else {}
@@ -728,6 +813,20 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         "godotVersion": godot_version, "hostFingerprint": host_fp, "commit": commit,
         "_controlRows": control_rows, "_landscapeRows": landscape_rows,
     }
+    if prior_manifest is not None:
+        result["inheritance"] = parts["inheritance"]
+    expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) * 16
+    expected_landscape = resolved["policyCount"] * 4 \
+        * (resolved["landscapeLast"] - resolved["landscapeFirst"] + 1)
+    control_keys = {(int(row["arm"]), str(row["aspect"]), int(row["vow"]), int(row["seed"]))
+                    for row in control_rows}
+    landscape_keys = {(int(row["policyIndex"]), str(row["aspect"]), int(row["vow"]),
+                       int(row["seed"])) for row in landscape_rows}
+    if len(control_rows) != expected_controls or len(control_keys) != expected_controls:
+        raise RuntimeError(f"control coverage is not exact for {cand['id']}")
+    if landscape_rows and (len(landscape_rows) != expected_landscape
+                           or len(landscape_keys) != expected_landscape):
+        raise RuntimeError(f"landscape coverage is not exact for {cand['id']}")
     if landscape_rows:
         result["deficits"] = deficits(proxies)
         base_c = by_seed(baseline["_controlRows"]) if baseline and baseline.get("_controlRows") else None
@@ -923,6 +1022,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=421)
     parser.add_argument("--boot", type=int, default=None)
     parser.add_argument("--only", default="", help="comma-separated candidate ids")
+    parser.add_argument("--inherit", default="",
+                        help="prior nested layer output; simulate only disjoint new rectangles")
     parser.add_argument("--replay", default="", help="re-run one candidate into --out")
     return parser.parse_args()
 
@@ -957,6 +1058,13 @@ def main() -> int:
     identity["seedRegistrySha256"] = file_sha256(REPO / CONTRACT_REL)
     commit = git_head()
     wanted = [part for part in args.only.split(",") if part]
+    inherit_path = Path(args.inherit) if args.inherit else None
+    inherit_proto: dict[str, Any] | None = None
+    if inherit_path is not None:
+        inherit_summary = read_json(inherit_path / "summary.json")
+        inherit_proto = inherit_summary.get("protocol")
+        if not isinstance(inherit_proto, dict):
+            raise ValueError("--inherit summary has no protocol")
     doe_path = Path(args.candidates) if args.candidates else out / "doe"
     manifest = ensure_candidates(doe_path, args.count, args.seed)
     if args.summarise_only:
@@ -988,7 +1096,7 @@ def main() -> int:
         row = evaluate_candidate(
             args.godot, args.jobs, doe_path, by_id[name], out, proto,
             str(packet["fingerprint"]["fingerprintHash"]), commit, godot_version,
-            not args.fresh, baseline, boot_n, axes)
+            not args.fresh, baseline, boot_n, axes, inherit_path, inherit_proto)
         if name == "c000":
             baseline = row
         results.append(row)

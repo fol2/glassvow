@@ -73,6 +73,8 @@ def reanalyse_layer(summary: dict[str, Any], layer_dir: Path,
     baseline_land = by_seed(load_landscape_rows(baseline_land_paths))
     for row in rebuilt["candidates"]:
         candidate_id = str(row["id"])
+        if row.get("status") != "complete" or row.get("earlyStop"):
+            continue
         control_paths = sorted((layer_dir / candidate_id / "controls").glob("shard-*.json"))
         land_paths = sorted((layer_dir / candidate_id / "landscape").glob("shard-*.ndjson"))
         if not control_paths or not land_paths:
