@@ -114,3 +114,446 @@ export function newImageExportGuard(
   if (ctx.generateClicked && !isNewTask) return "watch_generate";
   return "allow";
 }
+
+export const STUDIO_TABS = ["smart-mesh", "hd-model"] as const;
+export type StudioTab = (typeof STUDIO_TABS)[number];
+export const TEXTURE_QUALITIES = ["1k", "2k", "4k"] as const;
+export type TextureQuality = (typeof TEXTURE_QUALITIES)[number];
+export const TOPOLOGIES = ["quad", "triangle"] as const;
+export type StudioTopology = (typeof TOPOLOGIES)[number];
+export const PRIVACIES = ["private", "public", "sharing"] as const;
+export type StudioPrivacy = (typeof PRIVACIES)[number];
+
+export const SMART_MESH_FACES_DEFAULT = 800;
+export const HD_FACES_DEFAULT = 6000;
+export const SMART_MESH_FACES_MAX = 25000;
+export const HD_FACES_MAX = 2_000_000;
+export const FACES_MIN = 500;
+
+export const STUDIO_HELP = `Studio image → GLB. No Tripo API.
+
+Workflow: image in → arguments → 3D model out.
+
+Usage:
+  bun tools/studio_image_to_glb.ts --image <path> --out <path> [options]
+  bun tools/studio_image_to_glb.ts --dry-run --textured --image <path> --out <path>
+  bun tools/studio_image_to_glb.ts --smoke-run --textured --image <path> --out <path>
+  bun tools/studio_image_to_glb.ts --task-id <id> --out <path>
+  bun tools/studio_image_to_glb.ts --kill-chrome
+
+Options:
+  --image PATH
+  --out PATH                  default /tmp/glassvow-studio.glb
+  --tab smart-mesh|hd-model   --model is an alias
+  --textured                  HD Model + albedo, 2K, PBR off, faces 6000, triangle
+  --faces N                   Smart Mesh 500-25000 (default 800); HD 500-2000000 (default 6000)
+  --topology quad|triangle    Smart Mesh default quad; HD default triangle
+  --privacy private|public|sharing   default private
+  --texture on|off            HD only; Smart Mesh has no texture stage
+  --texture-quality 1k|2k|4k  HD only; default 2k (4K blows the hero bytes_max)
+  --pbr on|off                HD only; default off (map shaders sample one map)
+  --ultra-mesh on|off         HD only; default on
+  --ai-complete on|off        HD only; default off (invents unseen backsides)
+  --dry-run                   print the planned arguments; no Chrome; no credits
+  --smoke-run                 fill the form; do not click Generate
+  --stop-before-generate      same Generate-not-clicked stop as --smoke-run
+  --task-id ID                re-export an existing task (no Generate)
+  --cookie-browser NAME       default Chrome
+  --kill-chrome
+  --help
+
+Smart Mesh (tab=low_poly) has no texture stage. Textured game content uses
+--textured, which stays on the HD Model tab (tab=high_detail).
+
+--dry-run JSON remaining_studio_features lists Studio controls this driver
+does not spend credits on (rig, Multi-Views, 8K trial, OpenAPI, …).
+`;
+
+export function remainingStudioFeatures(): string[] {
+  return [
+    "rig / animation",
+    "Generate Multi-Views",
+    "PBR metallic/roughness/normal maps",
+    "4K texture (over this repo's hero bytes_max)",
+    "8K Texture trial",
+    "AI Complete (invents unseen backsides)",
+    "Ultra Mesh Quality off",
+    "FBX/OBJ/STL/USD/3MF export formats",
+    "Public or Sharing Only privacy",
+    "Godot DCC Bridge auto-import",
+    "Tripo OpenAPI / platform generation (forbidden: Studio is the paid product)",
+  ];
+}
+
+export function argValue(argv: string[], name: string, fallback = ""): string {
+  const i = argv.indexOf(name);
+  return i >= 0 && argv[i + 1] && !String(argv[i + 1]).startsWith("--")
+    ? String(argv[i + 1]) : fallback;
+}
+
+export function hasFlag(argv: string[], name: string): boolean {
+  return argv.includes(name);
+}
+
+function parseOnOff(raw: string): boolean {
+  const t = String(raw || "").toLowerCase();
+  if (["on", "true", "1", "yes"].includes(t)) return true;
+  if (["off", "false", "0", "no"].includes(t)) return false;
+  throw new Error(`bad on/off value ${raw}`);
+}
+
+/** Bare `--name` is on. `--name off` is off. Missing is undefined. */
+export function optionalOnOff(argv: string[], name: string): boolean | undefined {
+  const i = argv.indexOf(name);
+  if (i < 0) return undefined;
+  const next = argv[i + 1];
+  if (next && !String(next).startsWith("--") && /^(on|off|true|false|1|0|yes|no)$/i.test(next)) {
+    return parseOnOff(next);
+  }
+  return true;
+}
+
+export type StudioRawArgs = {
+  image: string;
+  out: string;
+  facesRaw: string;
+  topologyRaw: string;
+  privacyRaw: string;
+  tabRaw: string;
+  modelRaw: string;
+  textured: boolean;
+  texture: boolean | undefined;
+  textureQualityRaw: string;
+  pbr: boolean | undefined;
+  ultraMesh: boolean | undefined;
+  aiComplete: boolean | undefined;
+  dryRun: boolean;
+  smokeRun: boolean;
+  stopBeforeGenerate: boolean;
+  taskId: string;
+  killChrome: boolean;
+  cookieBrowser: string;
+  help: boolean;
+};
+
+export type StudioRequest = {
+  image: string;
+  out: string;
+  faces: number;
+  topology: StudioTopology;
+  privacy: StudioPrivacy;
+  tab: StudioTab;
+  textured: boolean;
+  texture: boolean;
+  textureQuality: TextureQuality;
+  pbr: boolean;
+  ultraMesh: boolean;
+  aiComplete: boolean;
+  dryRun: boolean;
+  smokeRun: boolean;
+  stopBeforeGenerate: boolean;
+  wouldClickGenerate: boolean;
+  taskId: string;
+  killChrome: boolean;
+  cookieBrowser: string;
+  help: boolean;
+};
+
+export function parseStudioArgv(argv: string[]): StudioRawArgs {
+  return {
+    image: argValue(argv, "--image"),
+    out: argValue(argv, "--out", "/tmp/glassvow-studio.glb"),
+    facesRaw: argValue(argv, "--faces"),
+    topologyRaw: argValue(argv, "--topology"),
+    privacyRaw: argValue(argv, "--privacy", "private"),
+    tabRaw: argValue(argv, "--tab"),
+    modelRaw: argValue(argv, "--model"),
+    textured: hasFlag(argv, "--textured"),
+    texture: optionalOnOff(argv, "--texture"),
+    textureQualityRaw: argValue(argv, "--texture-quality"),
+    pbr: optionalOnOff(argv, "--pbr"),
+    ultraMesh: optionalOnOff(argv, "--ultra-mesh"),
+    aiComplete: optionalOnOff(argv, "--ai-complete"),
+    dryRun: hasFlag(argv, "--dry-run"),
+    smokeRun: hasFlag(argv, "--smoke-run"),
+    stopBeforeGenerate: hasFlag(argv, "--stop-before-generate") || hasFlag(argv, "--smoke-run"),
+    taskId: argValue(argv, "--task-id"),
+    killChrome: hasFlag(argv, "--kill-chrome"),
+    cookieBrowser: argValue(argv, "--cookie-browser", "Chrome"),
+    help: hasFlag(argv, "--help") || hasFlag(argv, "-h"),
+  };
+}
+
+function asTab(raw: string): StudioTab | "" {
+  if (!raw) return "";
+  if (raw === "smart-mesh" || raw === "low_poly") return "smart-mesh";
+  if (raw === "hd-model" || raw === "high_detail" || raw === "hd") return "hd-model";
+  throw new Error(`bad --tab/--model ${raw}`);
+}
+
+export function resolveStudioRequest(raw: StudioRawArgs): StudioRequest {
+  if (raw.help) {
+    return {
+      image: raw.image, out: raw.out, faces: SMART_MESH_FACES_DEFAULT,
+      topology: "quad", privacy: "private", tab: "smart-mesh", textured: false,
+      texture: false, textureQuality: "2k", pbr: false, ultraMesh: true,
+      aiComplete: false, dryRun: raw.dryRun, smokeRun: raw.smokeRun,
+      stopBeforeGenerate: raw.stopBeforeGenerate, wouldClickGenerate: false,
+      taskId: raw.taskId, killChrome: raw.killChrome, cookieBrowser: raw.cookieBrowser,
+      help: true,
+    };
+  }
+  if (!raw.image && !raw.taskId && !raw.killChrome) {
+    throw new Error("need --image, --task-id, or --kill-chrome");
+  }
+
+  const fromTab = asTab(raw.tabRaw);
+  const fromModel = asTab(raw.modelRaw);
+  if (fromTab && fromModel && fromTab !== fromModel) {
+    throw new Error(`--tab ${fromTab} conflicts with --model ${fromModel}`);
+  }
+  let tab: StudioTab = fromTab || fromModel || "smart-mesh";
+  if (raw.textured) {
+    if (tab === "smart-mesh" && (fromTab || fromModel)) {
+      throw new Error("--textured needs --tab hd-model; Smart Mesh has no texture stage");
+    }
+    tab = "hd-model";
+  }
+
+  const hd = tab === "hd-model";
+  const textured = raw.textured || (hd && raw.texture !== false);
+  let texture = hd ? (raw.texture === undefined ? true : raw.texture) : false;
+  if (!hd && raw.texture === true) {
+    throw new Error("Smart Mesh has no texture stage; use --textured / --tab hd-model");
+  }
+  if (raw.textured && !texture) {
+    throw new Error("--textured requires texture on");
+  }
+  const pbr = hd ? (raw.pbr === undefined ? false : raw.pbr) : false;
+  if (pbr && !texture) {
+    throw new Error("PBR needs texture on");
+  }
+  const ultraMesh = hd ? (raw.ultraMesh === undefined ? true : raw.ultraMesh) : true;
+  const aiComplete = hd ? (raw.aiComplete === undefined ? false : raw.aiComplete) : false;
+
+  const topologyRaw = (raw.topologyRaw || (hd ? "triangle" : "quad")).toLowerCase();
+  if (!TOPOLOGIES.includes(topologyRaw as StudioTopology)) {
+    throw new Error(`bad --topology ${raw.topologyRaw}`);
+  }
+  const topology = topologyRaw as StudioTopology;
+
+  const privacyRaw = raw.privacyRaw || "private";
+  if (!PRIVACIES.includes(privacyRaw as StudioPrivacy)) {
+    throw new Error(`bad --privacy ${privacyRaw}`);
+  }
+  const privacy = privacyRaw as StudioPrivacy;
+
+  const qualityRaw = (raw.textureQualityRaw || "2k").toLowerCase();
+  if (!TEXTURE_QUALITIES.includes(qualityRaw as TextureQuality)) {
+    throw new Error(`bad --texture-quality ${raw.textureQualityRaw}`);
+  }
+  const textureQuality = qualityRaw as TextureQuality;
+  if (!hd) {
+    if (raw.textureQualityRaw) throw new Error("--texture-quality is HD Model only");
+    if (raw.pbr !== undefined) throw new Error("--pbr is HD Model only");
+    if (raw.ultraMesh !== undefined) throw new Error("--ultra-mesh is HD Model only");
+    if (raw.aiComplete !== undefined) throw new Error("--ai-complete is HD Model only");
+  }
+
+  const defaultFaces = hd ? HD_FACES_DEFAULT : SMART_MESH_FACES_DEFAULT;
+  const faces = raw.facesRaw ? Number(raw.facesRaw) : defaultFaces;
+  const facesMax = hd ? HD_FACES_MAX : SMART_MESH_FACES_MAX;
+  if (!Number.isFinite(faces) || faces < FACES_MIN || faces > facesMax) {
+    throw new Error(`--faces ${faces} outside ${FACES_MIN}-${facesMax}`);
+  }
+
+  const stopBeforeGenerate = raw.stopBeforeGenerate || raw.smokeRun || raw.dryRun;
+  const wouldClickGenerate = !!(
+    raw.image && !raw.taskId && !stopBeforeGenerate && !raw.help
+    && !(raw.killChrome && !raw.image)
+  );
+
+  return {
+    image: raw.image,
+    out: raw.out,
+    faces,
+    topology,
+    privacy,
+    tab,
+    textured,
+    texture,
+    textureQuality,
+    pbr,
+    ultraMesh,
+    aiComplete,
+    dryRun: raw.dryRun,
+    smokeRun: raw.smokeRun,
+    stopBeforeGenerate,
+    wouldClickGenerate,
+    taskId: raw.taskId,
+    killChrome: raw.killChrome,
+    cookieBrowser: raw.cookieBrowser,
+    help: false,
+  };
+}
+
+/** `--task-id` never set the form. Do not report argv as if it did. */
+export function studioExportFormFields(req: StudioRequest): Record<string, unknown> {
+  if (req.taskId) {
+    return { form_state: "unset_for_reexport" };
+  }
+  return {
+    tab: req.tab,
+    textured: req.textured,
+    texture: req.texture,
+    texture_quality: req.textureQuality,
+    pbr: req.pbr,
+    ultra_mesh: req.ultraMesh,
+    ai_complete: req.aiComplete,
+    privacy: req.privacy,
+    faces: req.faces,
+    topology: req.topology,
+  };
+}
+
+export function planStudioRun(req: StudioRequest): Record<string, unknown> {
+  const kind = req.texture ? "textured" : "untextured";
+  const stop = req.dryRun ? "dry-run" : req.smokeRun ? "smoke-run" : req.stopBeforeGenerate
+    ? "stop-before-generate" : "generate";
+  return {
+    ok: true,
+    summary: `${stop}: ${req.tab} ${kind} GLB; Generate ${req.wouldClickGenerate ? "will be clicked" : "not clicked"}`,
+    dry_run: req.dryRun,
+    smoke_run: req.smokeRun,
+    would_spend_credits: req.wouldClickGenerate,
+    workflow: ["image", "arguments", "3d-model"],
+    image: req.image,
+    out: req.out,
+    tab: req.tab,
+    textured: req.textured,
+    texture: req.texture,
+    texture_quality: req.textureQuality,
+    pbr: req.pbr,
+    ultra_mesh: req.ultraMesh,
+    ai_complete: req.aiComplete,
+    faces: req.faces,
+    topology: req.topology,
+    privacy: req.privacy,
+    generate_match: "price-agnostic Generate (not Multi-Views)",
+    remaining_studio_features: remainingStudioFeatures(),
+  };
+}
+
+export function isPriceAgnosticGenerateLabel(text: string): boolean {
+  const t = String(text || "").replace(/\s+/g, " ").trim();
+  if (/multi-?views/i.test(t)) return false;
+  // Walked labels always include a price: "Generate 40", "Generate 100 65".
+  // Bare "Generate" is not a credit button we should click.
+  return /^Generate\s+\d+(\s+\d+)?$/.test(t);
+}
+
+export type GenerateButton = { t: string; vis: boolean; cx: number; cy: number };
+
+export function pickVisibleGenerate(buttons: GenerateButton[]): GenerateButton | null {
+  return buttons.find((b) => b.vis && isPriceAgnosticGenerateLabel(b.t)) ?? null;
+}
+
+export function quotedCreditsFromGenerateLabel(text: string): number | null {
+  if (!isPriceAgnosticGenerateLabel(text)) return null;
+  const t = String(text || "").replace(/\s+/g, " ").trim();
+  const m = t.match(/^Generate(?:\s+(\d+))?(?:\s+(\d+))?$/);
+  if (!m) return null;
+  if (m[2]) return Number(m[2]);
+  if (m[1]) return Number(m[1]);
+  return null;
+}
+
+export function normalizeTextureQuality(v: string): string {
+  const m = String(v || "").toLowerCase().match(/([124])k/);
+  return m ? `${m[1]}k` : String(v || "").toLowerCase().replace(/\s+/g, "");
+}
+
+export function normalizeTopology(v: string): string {
+  const t = String(v || "").toLowerCase();
+  if (t.includes("quad")) return "quad";
+  if (t.includes("triangle")) return "triangle";
+  return t;
+}
+
+export function isHdStoreTab(tab: string): boolean {
+  const t = String(tab || "").toLowerCase();
+  return t === "high_detail" || t === "hd-model" || t === "hd";
+}
+
+export type HdFormState = {
+  tab?: string;
+  hdPresent?: boolean;
+  privacy?: string;
+  geoOpen?: boolean;
+  settingsApplied?: boolean;
+  ultra?: boolean;
+  aiComplete?: boolean;
+  texture?: boolean;
+  textureQuality?: string;
+  pbr?: boolean;
+  topology?: string;
+  facesVal?: number | null;
+  slider?: number | null;
+};
+
+export type HdFormAction =
+  | "click_hd"
+  | "set_privacy"
+  | "open_geo_texture"
+  | "watch_geo"
+  | "set_ultra"
+  | "set_ai_complete"
+  | "set_texture"
+  | "set_texture_quality"
+  | "set_pbr"
+  | "set_topology"
+  | "type_faces"
+  | "close_geo"
+  | "done";
+
+const privacyLabel: Record<string, string> = {
+  private: "Private",
+  public: "Public",
+  sharing: "Sharing Only",
+};
+
+/** After upload Studio often parks a draft task on the URL. That is not a reason to skip Generate. Re-export (`--task-id`) never clicks Generate. */
+export function shouldClickGenerate(
+  snap: { exportN?: number },
+  ctx: { taskIdArg: string; generateClicked: boolean; hasGenerateButton: boolean; stopBeforeGenerate?: boolean },
+): boolean {
+  if (ctx.taskIdArg) return false;
+  if (ctx.stopBeforeGenerate) return false;
+  if (ctx.generateClicked) return false;
+  if (snap.exportN) return false;
+  return ctx.hasGenerateButton;
+}
+
+export function decideHdForm(state: HdFormState, want: StudioRequest): HdFormAction {
+  const wantPriv = privacyLabel[want.privacy] || want.privacy;
+  const tabIsHd = isHdStoreTab(String(state.tab || ""));
+  if (!tabIsHd) return "click_hd";
+  if (state.privacy && state.privacy !== wantPriv) return "set_privacy";
+  if (state.settingsApplied) return "done";
+  if (!state.geoOpen) return "open_geo_texture";
+  if ([state.ultra, state.aiComplete, state.texture, state.pbr].some((v) => v === undefined)) {
+    return "watch_geo";
+  }
+  if (state.ultra !== want.ultraMesh) return "set_ultra";
+  if (state.aiComplete !== want.aiComplete) return "set_ai_complete";
+  if (state.texture !== want.texture) return "set_texture";
+  if (want.texture && normalizeTextureQuality(String(state.textureQuality || "")) !== want.textureQuality) {
+    return "set_texture_quality";
+  }
+  if (state.pbr !== want.pbr) return "set_pbr";
+  if (normalizeTopology(String(state.topology || "")) !== want.topology) return "set_topology";
+  const now = state.slider ?? state.facesVal;
+  if (now !== want.faces) return "type_faces";
+  if (state.geoOpen) return "close_geo";
+  return "done";
+}

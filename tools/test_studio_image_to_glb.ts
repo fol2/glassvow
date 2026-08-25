@@ -5,9 +5,12 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   BARE_GENERATE_URL, STUDIO, UPLOAD_WATCH_LIMIT_MS,
-  blankResetArrived, generateTaskIdFromHref, generateTargetUrl, generateWaitReady,
-  isBareGenerateHref, isTransientEvaluateError, newImageExportGuard,
-  planWarmGeneratePage, refuseNewImageOnTaskUrl, uploadWatchTimedOut,
+  blankResetArrived, decideHdForm, generateTargetUrl, generateTaskIdFromHref,
+  generateWaitReady, isBareGenerateHref, isPriceAgnosticGenerateLabel,
+  isTransientEvaluateError, newImageExportGuard, parseStudioArgv,
+  pickVisibleGenerate, planStudioRun, planWarmGeneratePage, quotedCreditsFromGenerateLabel,
+  refuseNewImageOnTaskUrl, remainingStudioFeatures, resolveStudioRequest,
+  shouldClickGenerate, studioExportFormFields, uploadWatchTimedOut,
 } from "./studio_image_to_glb_logic.ts";
 
 const DRIVER = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "studio_image_to_glb.ts"), "utf8");
@@ -141,4 +144,234 @@ test("driver source: poll blank reset, overall upload deadline, export guard, Op
   expect(isTransientEvaluateError("Cannot find context with specified id")).toBe(true);
   expect(isTransientEvaluateError(new Error("Execution context was destroyed."))).toBe(true);
   expect(isTransientEvaluateError("cdp timeout DOM.getDocument")).toBe(false);
+});
+
+test("smart-mesh defaults stay image→args→glb and do not spend credits on dry-run", () => {
+  const raw = parseStudioArgv([
+    "--image", "concept.png", "--out", "/tmp/x.glb", "--dry-run",
+  ]);
+  const req = resolveStudioRequest(raw);
+  expect(req.tab).toBe("smart-mesh");
+  expect(req.textured).toBe(false);
+  expect(req.texture).toBe(false);
+  expect(req.pbr).toBe(false);
+  expect(req.faces).toBe(800);
+  expect(req.topology).toBe("quad");
+  expect(req.privacy).toBe("private");
+  expect(req.dryRun).toBe(true);
+  expect(req.wouldClickGenerate).toBe(false);
+  const plan = planStudioRun(req);
+  expect(plan.ok).toBe(true);
+  expect(plan.dry_run).toBe(true);
+  expect(plan.would_spend_credits).toBe(false);
+  expect(plan.tab).toBe("smart-mesh");
+  expect(plan.workflow).toEqual(["image", "arguments", "3d-model"]);
+});
+
+test("--textured selects HD Model defaults for game-content albedo, not Smart Mesh", () => {
+  const req = resolveStudioRequest(parseStudioArgv([
+    "--image", "assets/art/map-concepts/act1-vigil-hall.png",
+    "--out", "/tmp/vigil.glb",
+    "--textured",
+    "--dry-run",
+  ]));
+  expect(req.tab).toBe("hd-model");
+  expect(req.textured).toBe(true);
+  expect(req.texture).toBe(true);
+  expect(req.textureQuality).toBe("2k");
+  expect(req.pbr).toBe(false);
+  expect(req.ultraMesh).toBe(true);
+  expect(req.aiComplete).toBe(false);
+  expect(req.faces).toBe(6000);
+  expect(req.topology).toBe("triangle");
+  const plan = planStudioRun(req);
+  expect(plan.tab).toBe("hd-model");
+  expect(plan.texture).toBe(true);
+  expect(plan.texture_quality).toBe("2k");
+  expect(plan.pbr).toBe(false);
+  expect(plan.would_spend_credits).toBe(false);
+  expect(plan.remaining_studio_features).toEqual(remainingStudioFeatures());
+  expect(plan.remaining_studio_features).toContain("rig / animation");
+  expect(plan.remaining_studio_features).toContain("Generate Multi-Views");
+  expect(plan.remaining_studio_features).toContain("PBR metallic/roughness/normal maps");
+  expect(plan.remaining_studio_features).toContain("4K texture (over this repo's hero bytes_max)");
+});
+
+test("enriched HD flags and aliases validate, and refuse Smart Mesh + texture", () => {
+  const hd = resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--out", "o.glb",
+    "--tab", "hd-model",
+    "--faces", "5000",
+    "--topology", "triangle",
+    "--privacy", "private",
+    "--texture", "on",
+    "--texture-quality", "2k",
+    "--pbr", "off",
+    "--ultra-mesh", "on",
+    "--ai-complete", "off",
+    "--smoke-run",
+  ]));
+  expect(hd.tab).toBe("hd-model");
+  expect(hd.faces).toBe(5000);
+  expect(hd.smokeRun).toBe(true);
+  expect(hd.stopBeforeGenerate).toBe(true);
+  expect(hd.wouldClickGenerate).toBe(false);
+
+  const alias = resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--model", "hd-model", "--out", "o.glb",
+  ]));
+  expect(alias.tab).toBe("hd-model");
+  expect(alias.texture).toBe(true);
+
+  expect(() => resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--textured", "--tab", "smart-mesh", "--out", "o.glb",
+  ]))).toThrow(/HD Model|hd-model|texture/i);
+
+  expect(() => resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--tab", "smart-mesh", "--texture", "on", "--out", "o.glb",
+  ]))).toThrow(/Smart Mesh has no texture/i);
+
+  expect(() => resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--textured", "--pbr", "on", "--texture", "off", "--out", "o.glb",
+  ]))).toThrow(/texture/i);
+
+  expect(() => resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--textured", "--faces", "50", "--out", "o.glb",
+  ]))).toThrow(/faces/);
+  expect(() => resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--pbr", "on", "--out", "o.glb",
+  ]))).toThrow(/HD Model only/);
+});
+
+test("--task-id export JSON does not invent form state", () => {
+  const req = resolveStudioRequest(parseStudioArgv([
+    "--task-id", TASK, "--out", "o.glb",
+  ]));
+  expect(req.wouldClickGenerate).toBe(false);
+  expect(studioExportFormFields(req)).toEqual({ form_state: "unset_for_reexport" });
+  expect(studioExportFormFields(req)).not.toHaveProperty("texture");
+  expect(studioExportFormFields(req)).not.toHaveProperty("faces");
+  const live = resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--textured", "--out", "o.glb",
+  ]));
+  expect(live.wouldClickGenerate).toBe(true);
+  expect(studioExportFormFields(live).texture).toBe(true);
+  expect(studioExportFormFields(live).faces).toBe(6000);
+});
+
+test("Generate still clicks after upload parks a draft task id on the URL", () => {
+  const ready = { hasGenerateButton: true, generateClicked: false, taskIdArg: "" };
+  expect(shouldClickGenerate({ exportN: 0 }, ready)).toBe(true);
+  expect(shouldClickGenerate({ exportN: 1 }, ready)).toBe(false);
+  expect(shouldClickGenerate({ exportN: 0 }, { ...ready, generateClicked: true })).toBe(false);
+  expect(shouldClickGenerate({ exportN: 0 }, { ...ready, taskIdArg: TASK })).toBe(false);
+  expect(shouldClickGenerate({ exportN: 0 }, { ...ready, hasGenerateButton: false })).toBe(false);
+  expect(shouldClickGenerate({ exportN: 0 }, { ...ready, stopBeforeGenerate: true })).toBe(false);
+});
+
+test("Generate click is price-agnostic and never Multi-Views", () => {
+  expect(isPriceAgnosticGenerateLabel("Generate 100 65")).toBe(true);
+  expect(isPriceAgnosticGenerateLabel("Generate 40")).toBe(true);
+  expect(isPriceAgnosticGenerateLabel("Generate 55")).toBe(true);
+  expect(isPriceAgnosticGenerateLabel("Generate")).toBe(false);
+  expect(isPriceAgnosticGenerateLabel("Generate Multi-Views")).toBe(false);
+  expect(isPriceAgnosticGenerateLabel("Generate Multi Views")).toBe(false);
+  expect(isPriceAgnosticGenerateLabel("Export")).toBe(false);
+  expect(quotedCreditsFromGenerateLabel("Generate 100 65")).toBe(65);
+  expect(quotedCreditsFromGenerateLabel("Generate 40")).toBe(40);
+  expect(quotedCreditsFromGenerateLabel("Generate")).toBeNull();
+  expect(quotedCreditsFromGenerateLabel("Generate Multi-Views")).toBeNull();
+  const picked = pickVisibleGenerate([
+    { t: "Generate Multi-Views", vis: true, cx: 10, cy: 10 },
+    { t: "Generate 100 65", vis: false, cx: 20, cy: 20 },
+    { t: "Generate 40", vis: true, cx: 373, cy: 800 },
+  ]);
+  expect(picked?.t).toBe("Generate 40");
+  expect(quotedCreditsFromGenerateLabel(picked?.t || "")).toBe(40);
+});
+
+test("HD form decide: stay on HD, drive Geometry & Texture, then done", () => {
+  const want = resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--textured", "--out", "o.glb",
+  ]));
+  expect(decideHdForm({ tab: "low_poly", hdPresent: true }, want)).toBe("click_hd");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Sharing Only",
+  }, want)).toBe("set_privacy");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: false,
+  }, want)).toBe("open_geo_texture");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: false, aiComplete: false, texture: true, textureQuality: "2k",
+    pbr: false, topology: "triangle", facesVal: 6000,
+  }, want)).toBe("set_ultra");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: true, texture: true, textureQuality: "2k",
+    pbr: false, topology: "triangle", facesVal: 6000,
+  }, want)).toBe("set_ai_complete");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: false, textureQuality: "2k",
+    pbr: false, topology: "triangle", facesVal: 6000,
+  }, want)).toBe("set_texture");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: true, textureQuality: "4k",
+    pbr: false, topology: "triangle", facesVal: 6000,
+  }, want)).toBe("set_texture_quality");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: true, textureQuality: "2K",
+    pbr: true, topology: "triangle", facesVal: 6000,
+  }, want)).toBe("set_pbr");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: true, textureQuality: "2k",
+    pbr: false, topology: "quad", facesVal: 6000,
+  }, want)).toBe("set_topology");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: true, textureQuality: "2k",
+    pbr: false, topology: "triangle", facesVal: 2000000, slider: 2000000,
+  }, want)).toBe("type_faces");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: true, textureQuality: "2k",
+    pbr: false, topology: "triangle", facesVal: 6000, slider: 6000,
+  }, want)).toBe("close_geo");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: false,
+    settingsApplied: true, ultra: true, aiComplete: false, texture: true,
+    textureQuality: "2k", pbr: false, topology: "triangle", facesVal: 6000,
+  }, want)).toBe("done");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: false,
+    settingsApplied: false, ultra: true, aiComplete: false, texture: true,
+    textureQuality: "2k", pbr: false, topology: "triangle", facesVal: 2000000,
+  }, want)).toBe("open_geo_texture");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: undefined, aiComplete: false, texture: true, textureQuality: "2k",
+    pbr: false, topology: "triangle", facesVal: 6000,
+  }, want)).toBe("watch_geo");
+});
+
+test("driver source: HD textured path, dry-run/smoke-run, price-agnostic Generate", () => {
+  expect(DRIVER).toContain("parseStudioArgv");
+  expect(DRIVER).toContain("resolveStudioRequest");
+  expect(DRIVER).toContain("planStudioRun");
+  expect(DRIVER).toContain("decideHdForm");
+  expect(DRIVER).toContain("shouldClickGenerate");
+  expect(DRIVER).toContain("pickVisibleGenerate");
+  expect(DRIVER).toContain("studioExportFormFields");
+  expect(DRIVER).toContain("--dry-run");
+  expect(DRIVER).toContain("--smoke-run");
+  expect(DRIVER).toContain("--textured");
+  expect(DRIVER).not.toContain("/Generate\\s*100/");
+  expect(DRIVER).toContain("HD Model");
+  expect(DRIVER).toContain("Geometry & Texture");
+  expect(DRIVER.indexOf("if (dryRun)")).toBeLessThan(DRIVER.indexOf("function findChrome"));
+  expect(DRIVER.indexOf("if (!taskId && stopBefore)")).toBeLessThan(DRIVER.indexOf('action === "click_generate"'));
 });
