@@ -9,6 +9,10 @@ on:
       - 'tools/_patch_465_*.gd'
       - '.github/workflows/apply-465.yml'
 
+concurrency:
+  group: issue-465-finalize
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -125,7 +129,8 @@ jobs:
         run: rm tools/_patch_465_registry_probe.gd
 
       - name: Verify production map assets
-        run: xvfb-run -a python3 -B tools/check_map_assets.py
+        timeout-minutes: 18
+        run: timeout --signal=TERM --kill-after=30s 15m xvfb-run -a python3 -B tools/check_map_assets.py
 
       - name: Verify profile live registry
         run: godot --headless --path . --script /tmp/run_465_focus.gd -- _live_profiles
