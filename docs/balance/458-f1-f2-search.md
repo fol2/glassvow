@@ -187,11 +187,11 @@ host-packet hashes are in
 
 ## Replay and non-effects
 
-F2 fitting is reproducible with the pinned hash-locked package set:
+F2 fitting is reproducible with the version-pinned package set:
 
 ```bash
 python3 -m venv VENV
-VENV/bin/pip install --require-hashes -r tools/requirements-balance-f2.txt
+VENV/bin/pip install -r tools/requirements-balance-f2.txt
 VENV/bin/python -B tools/balance_f1_f2.py --report REPORT --bundle BUNDLE
 ```
 

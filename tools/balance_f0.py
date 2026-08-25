@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""F0 evaluator for #457: paired controls, mini-landscape, tidy uncertainty.
+"""Registry-driven evaluator for paired controls and mini-landscapes.
 
-Screening only. No CEM, no seeds >= 5000, no C1–C4 PASS/FAIL verdicts.
+It supports F0 screening, progressive F1 racing and explicitly unsealed,
+non-gating audits. It never emits C1-C4 acceptance verdicts. The historical
+filename is retained so recorded replay commands remain valid.
 """
 from __future__ import annotations
 

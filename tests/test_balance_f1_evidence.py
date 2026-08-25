@@ -3,9 +3,14 @@
 from __future__ import annotations
 
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+
+TOOLS = Path(__file__).resolve().parents[1] / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
 
 from balance_f0 import observation_bytes, progressive_plans
 from balance_f1_cem import cem_output_complete, cem_spec
