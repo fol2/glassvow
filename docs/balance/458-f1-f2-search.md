@@ -75,12 +75,13 @@ faults and the pre-registered layer cap were fail-closed stops.
 
 Layers 2 and 3 inherited the preceding raw rectangle and simulated only the
 disjoint additions. Layer 1's original sweep also emitted arms 3–4 as unused
-diagnostics; the ranking ignored them, and the driver was then narrowed so all
-additional control spend requested arms 1–2 only. No candidate was stopped by a
-clear hard regression, missing credible path or non-overlapping dominance
-envelope; all non-promotions were the bounded layer cap. Every decision retains
-the point evidence, paired intervals, simulator identity and raw observation
-SHA available at that moment:
+diagnostics. That was avoidable spend and a protocol deviation: the ranking
+ignored those rows, and the driver was then narrowed so all additional control
+spend requested arms 1–2 only. No candidate was stopped by a clear hard
+regression, missing credible path or non-overlapping dominance envelope; all
+non-promotions were the bounded layer cap. Every decision retains the point
+evidence, paired intervals, simulator identity and raw observation SHA available
+at that moment:
 
 - [`Layer 1 summary`](data/458/layer1-summary.json) and
   [`decisions`](data/458/layer1-decisions.json)
@@ -162,8 +163,9 @@ stage guard and emitted **zero rows** because the finalist token was not forward
 to the Godot driver; the propagation fix then passed `PASS (62 tests)`. The sole
 data-bearing invocation ran at commit `7f4b8c9`.
 
-`c000` completed 1,600 controls and 4,096 landscape rows with zero stalls.
-Both finalists hit the existing fail-closed control rule before landscape spend:
+`c000` completed 1,600 controls and 4,096 landscape rows with zero control
+stalls and one landscape stall. Both finalists hit the existing fail-closed
+control rule before landscape spend:
 
 | Candidate | exact contradiction | control rows | landscape rows | confidence |
 |---|---|---:|---:|---|
