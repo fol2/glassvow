@@ -347,6 +347,8 @@ def seed_block_bootstrap(control: dict[int, list[dict[str, Any]]],
                 aggregate_cells(_draw(baseline_landscape, l_draw), axes))
             b_def = deficits(b_proxies)
             vs_acc["sum"].append(float(b_def["sum"] - deficit["sum"]))
+            for key in DEFICIT_KEYS:
+                vs_acc[f"deficit:{key}"].append(float(b_def[key] - deficit[key]))
             vs_acc["margin"].append(float(
                 sum(proxies[g]["margin"] - b_proxies[g]["margin"] for g in proxies) / len(proxies)))
     result: dict[str, Any] = {
@@ -359,6 +361,9 @@ def seed_block_bootstrap(control: dict[int, list[dict[str, Any]]],
         result["vsC000"] = {
             "pLowerDeficitSum": sum(1 for value in vs_acc["sum"] if value > 0) / n_boot,
             "deficitSumDelta": _interval(vs_acc["sum"]),
+            "deficitDelta": {
+                key: _interval(vs_acc[f"deficit:{key}"]) for key in DEFICIT_KEYS
+            },
             "marginDelta": _interval(vs_acc["margin"]),
         }
     return result

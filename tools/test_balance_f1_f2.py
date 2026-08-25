@@ -17,9 +17,51 @@ from balance_f1_f2 import (
 )
 from balance_f0 import evaluation_from_registry, evaluation_spec
 from balance_seed_contract import check_invocation, load_contract
+from balance_f1_evidence import decision_record, select_cem_policies
+from balance_f1_cem import cem_spec
 
 
 class BalanceF1F2Test(unittest.TestCase):
+    def test_mini_cem_spec_is_bounded_to_development_roots_and_seeds(self) -> None:
+        contract = load_contract()
+        protocol = {
+            "miniCem": {
+                "policyRoot": 1454, "root": 2454, "islands": 24,
+                "popSize": 16, "elite": 4, "maxGen": 6, "seedCount": 8,
+                "trainSeed0": 6400, "holdoutSeed0": 6800, "holdoutCount": 40,
+            }
+        }
+        selected = cem_spec(protocol, contract)
+        self.assertEqual(6447, selected["trainSeed0"]
+                         + selected["maxGen"] * selected["seedCount"] - 1)
+        protocol["miniCem"]["holdoutSeed0"] = 5000
+        with self.assertRaises(ValueError):
+            cem_spec(protocol, contract)
+
+    def test_decision_record_carries_the_evidence_available_at_that_layer(self) -> None:
+        candidate = {
+            "id": "c000", "status": "complete", "earlyStop": None,
+            "deficits": {"sum": 1.0}, "proxies": {"duskblade:v0": {"topCell": "shatter:fat"}},
+            "bootstrap": {"deficits": {"c1a": {"p025": 0, "p50": 1, "p975": 2}}},
+        }
+        record = decision_record({"candidates": [candidate]},
+                                 [{"id": "c000", "decision": "baseline", "reason": "paired-incumbent"}],
+                                 "layer1")
+        self.assertEqual("shatter:fat",
+                         record["decisions"][0]["evidence"]["proxies"]["duskblade:v0"]["topCell"])
+        self.assertEqual([], record["promoted"])
+
+    def test_mini_cem_policy_selection_preserves_cell_variety_then_strength(self) -> None:
+        rows = []
+        for policy, cell, wins in [(0, "shatter:fat", 4), (1, "attrition:fat", 3),
+                                   (2, "smolder:mid", 2), (3, "shatter:fat", 3),
+                                   (4, "attrition:fat", 2), (5, "smolder:mid", 1),
+                                   (6, "shatter:fat", 2)]:
+            rows.append({"policyIndex": policy, "cell": cell, "wins": wins, "runs": 4})
+        selected = select_cem_policies(rows, 6)
+        self.assertEqual([0, 1, 2], [row["policyIndex"] for row in selected[:3]])
+        self.assertEqual(6, len(selected))
+
     def test_search_bundle_replays_f0_baseline_and_supplemental_catalogues(self) -> None:
         repo = Path(__file__).resolve().parents[1]
         space = json.loads((repo / "docs/balance/421-content-search-space-v1.json").read_text())
@@ -139,7 +181,10 @@ class BalanceF1F2Test(unittest.TestCase):
             intervals = {key: {"p025": low, "p50": (low + high) / 2, "p975": high}
                          for key in ("c1a", "c1b", "c2arm", "c2gap")}
             return {"id": candidate_id, "status": "complete", "earlyStop": None,
-                    "bootstrap": {"deficits": intervals},
+                    "bootstrap": {"deficits": intervals, "vsC000": {"deficitDelta": {
+                        "c1a": {"p025": -0.1, "p50": 0.1, "p975": 0.3},
+                        "c1b": {"p025": -0.1, "p50": 0.1, "p975": 0.3},
+                    }}},
                     "deficits": {"c1a": low, "c1b": low, "c2arm": 0.0,
                                  "c2gap": 0.0, "sum": 2 * low}}
 
@@ -149,6 +194,40 @@ class BalanceF1F2Test(unittest.TestCase):
         self.assertEqual("promote", by_id["lead"]["decision"])
         self.assertEqual("stop", by_id["lag"]["decision"])
         self.assertEqual("confidence-envelope-dominated", by_id["lag"]["reason"])
+
+    def test_racing_requires_a_credible_binding_path_and_no_clear_c2_regression(self) -> None:
+        def row(candidate_id: str, c1_low: float, c1_high: float) -> dict:
+            intervals = {
+                "c1a": {"p025": c1_low, "p50": c1_low, "p975": c1_high},
+                "c1b": {"p025": c1_low, "p50": c1_low, "p975": c1_high},
+                "c2arm": {"p025": 0.0, "p50": 0.0, "p975": 0.0},
+                "c2gap": {"p025": 0.0, "p50": 0.0, "p975": 0.0},
+            }
+            return {"id": candidate_id, "status": "complete", "earlyStop": None,
+                    "bootstrap": {"deficits": intervals, "grids": {},
+                                  "vsC000": {"deficitDelta": {
+                                      "c1a": {"p025": -0.2, "p50": 0.0, "p975": 0.2},
+                                      "c1b": {"p025": -0.2, "p50": 0.0, "p975": 0.2},
+                                  }}},
+                    "deficits": {"c1a": c1_low, "c1b": c1_low, "c2arm": 0.0,
+                                 "c2gap": 0.0, "sum": 2 * c1_low}}
+
+        baseline = row("c000", 0.8, 1.0)
+        baseline["bootstrap"]["deficits"]["c2arm"]["p975"] = 0.2
+        baseline["bootstrap"]["deficits"]["c2gap"]["p975"] = 0.2
+        no_path = row("no-path", 1.1, 1.3)
+        no_path["bootstrap"]["vsC000"]["deficitDelta"] = {
+            "c1a": {"p025": -0.4, "p50": -0.2, "p975": 0.0},
+            "c1b": {"p025": -0.4, "p50": -0.2, "p975": 0.0},
+        }
+        hard = row("hard", 0.2, 0.5)
+        hard["bootstrap"]["grids"] = {
+            "duskblade:v0": {"arm2Rate": {"p025": 0.51, "p50": 0.55, "p975": 0.60},
+                              "margin": {"p025": 0.10, "p50": 0.20, "p975": 0.40}}
+        }
+        by_id = {item["id"]: item for item in racing_decisions([baseline, no_path, hard], 3)}
+        self.assertEqual("no-credible-binding-improvement", by_id["no-path"]["reason"])
+        self.assertEqual("hard-constraint-regression", by_id["hard"]["reason"])
 
 
 if __name__ == "__main__":
