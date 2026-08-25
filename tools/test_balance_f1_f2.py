@@ -17,11 +17,59 @@ from balance_f1_f2 import (
 )
 from balance_f0 import evaluation_from_registry, evaluation_spec
 from balance_seed_contract import check_invocation, load_contract
-from balance_f1_evidence import decision_record, select_cem_policies
+from balance_f1_evidence import (
+    audit_comparison,
+    boundary_diagnostics,
+    decision_record,
+    hydrated_updates,
+    select_cem_policies,
+)
 from balance_f1_cem import cem_spec
 
 
 class BalanceF1F2Test(unittest.TestCase):
+    def test_finalist_hydration_and_boundary_diagnostics_are_complete(self) -> None:
+        values = {"duskMaxHp": 60, "flareDamage": 11, "ashfallSmolder": 4,
+                  "ashfallWard": 7, "regrowthHeal": 4, "ironSkinWard": 2,
+                  "guardedStrikeWard": 3, "venomStrikeSmolder": 5}
+        updates = hydrated_updates(values)
+        self.assertEqual("Deal @7@ damage. Gain #5# Ward.",
+                         updates["content/full-content.json"]["cards.guardedStrike.up.text"])
+        self.assertEqual("造成 @6@ 點傷害。施加 6 層陰燃。",
+                         updates["locale/zh-Hant.json"]["content.cards.venomStrike.textUp"])
+        repo = Path(__file__).resolve().parents[1]
+        space = json.loads((repo / "docs/balance/421-content-search-space-v1.json").read_text())
+        diagnostics = boundary_diagnostics(values, space)
+        self.assertEqual(8, len(diagnostics["features"]))
+        self.assertEqual(7, diagnostics["boundaryCount"])
+
+    def test_audit_contradiction_uses_paired_effect_change_not_absolute_rates(self) -> None:
+        def row(candidate_id: str, effect: tuple[float, float, float], identity: bool) -> dict:
+            grid_delta = {grid: {key: {"p025": effect[0], "p50": effect[1], "p975": effect[2]}
+                                      for key in ("arm2Rate", "topRate", "thirdRate",
+                                                  "fourthRate", "margin")}
+                          for grid in ("duskblade:v0", "duskblade:v5",
+                                       "ashwarden:v0", "ashwarden:v5")}
+            proxies = {}
+            for grid in grid_delta:
+                aspect = grid.split(":")[0]
+                proxies[grid] = {"topCell": ("shatter:fat" if aspect == "duskblade" and identity
+                                               else "smolder:fat"),
+                                 "arm2Rate": 0.2, "margin": 0.5}
+            return {"id": candidate_id, "proxies": proxies,
+                    "bootstrap": {"vsC000": {"gridDelta": grid_delta},
+                                  "grids": {grid: {
+                                      "arm2Rate": {"p025": 0.1, "p50": 0.2, "p975": 0.3},
+                                      "margin": {"p025": 0.4, "p50": 0.5, "p975": 0.6},
+                                  } for grid in grid_delta}}}
+
+        development = {"candidates": [row("c001", (0.18, 0.20, 0.22), True)]}
+        audit = {"candidates": [row("c001", (-0.04, -0.02, 0.0), True)]}
+        report = audit_comparison(development, audit, ["c001"], 0.10)
+        self.assertTrue(report["candidates"][0]["confidenceBlocked"])
+        self.assertIn("duskblade:v0:arm2Rate",
+                      report["candidates"][0]["materialContradictions"])
+
     def test_mini_cem_spec_is_bounded_to_development_roots_and_seeds(self) -> None:
         contract = load_contract()
         protocol = {
