@@ -1,0 +1,935 @@
+{
+  "candidates": [
+    {
+      "bootstrap": {
+        "deficits": {
+          "c1a": {
+            "p025": 1.6666666666666665,
+            "p50": 2.0,
+            "p975": 2.6666666666666665
+          },
+          "c1b": {
+            "p025": 1.75,
+            "p50": 2.0,
+            "p975": 2.5
+          },
+          "c2arm": {
+            "p025": 0.0,
+            "p50": 0.0,
+            "p975": 0.0
+          },
+          "c2gap": {
+            "p025": 0.0,
+            "p50": 0.0,
+            "p975": 0.0
+          },
+          "sum": {
+            "p025": 3.6666666666666665,
+            "p50": 4.25,
+            "p975": 4.916666666666666
+          }
+        },
+        "grids": {
+          "ashwarden:v0": {
+            "arm2Rate": {
+              "p025": 0.125,
+              "p50": 0.175,
+              "p975": 0.225
+            },
+            "fourthRate": {
+              "p025": 0.1027190332326284,
+              "p50": 0.16216216216216217,
+              "p975": 0.2413793103448276
+            },
+            "margin": {
+              "p025": 0.44166666666666665,
+              "p50": 0.5242857142857142,
+              "p975": 0.695
+            },
+            "thirdRate": {
+              "p025": 0.21003134796238246,
+              "p50": 0.2459016393442623,
+              "p975": 0.2806451612903226
+            },
+            "topRate": {
+              "p025": 0.6363636363636364,
+              "p50": 0.6944444444444444,
+              "p975": 0.8666666666666667
+            },
+            "viable": {
+              "p025": 2.0,
+              "p50": 2.0,
+              "p975": 2.0
+            },
+            "within10": {
+              "p025": 1.0,
+              "p50": 2.0,
+              "p975": 2.0
+            }
+          },
+          "ashwarden:v5": {
+            "arm2Rate": {
+              "p025": 0.02,
+              "p50": 0.045,
+              "p975": 0.075
+            },
+            "fourthRate": {
+              "p025": 0.0037174721189591076,
+              "p50": 0.03571428571428571,
+              "p975": 0.0975609756097561
+            },
+            "margin": {
+              "p025": 0.5390410958904109,
+              "p50": 0.6499152542372881,
+              "p975": 0.7297058823529411
+            },
+            "thirdRate": {
+              "p025": 0.08045977011494253,
+              "p50": 0.12429378531073447,
+              "p975": 0.16483516483516483
+            },
+            "topRate": {
+              "p025": 0.589041095890411,
+              "p50": 0.695364238410596,
+              "p975": 0.7684210526315789
+            },
+            "viable": {
+              "p025": 1.0,
+              "p50": 2.0,
+              "p975": 2.0
+            },
+            "within10": {
+              "p025": 1.0,
+              "p50": 1.0,
+              "p975": 2.0
+            }
+          },
+          "duskblade:v0": {
+            "arm2Rate": {
+              "p025": 0.185,
+              "p50": 0.245,
+              "p975": 0.305
+            },
+            "fourthRate": {
+              "p025": 0.08396946564885496,
+              "p50": 0.1574074074074074,
+              "p975": 0.2789115646258503
+            },
+            "margin": {
+              "p025": 0.4035443037974683,
+              "p50": 0.495632183908046,
+              "p975": 0.6571052631578946
+            },
+            "thirdRate": {
+              "p025": 0.27586206896551724,
+              "p50": 0.3614457831325301,
+              "p975": 0.4520547945205479
+            },
+            "topRate": {
+              "p025": 0.6666666666666666,
+              "p50": 0.7368421052631579,
+              "p975": 0.8888888888888888
+            },
+            "viable": {
+              "p025": 2.0,
+              "p50": 2.0,
+              "p975": 2.0
+            },
+            "within10": {
+              "p025": 1.0,
+              "p50": 2.0,
+              "p975": 2.0
+            }
+          },
+          "duskblade:v5": {
+            "arm2Rate": {
+              "p025": 0.025,
+              "p50": 0.05,
+              "p975": 0.08
+            },
+            "fourthRate": {
+              "p025": 0.0,
+              "p50": 0.0136986301369863,
+              "p975": 0.047619047619047616
+            },
+            "margin": {
+              "p025": 0.4521951219512195,
+              "p50": 0.6573076923076923,
+              "p975": 0.8161111111111111
+            },
+            "thirdRate": {
+              "p025": 0.0045662100456621,
+              "p50": 0.18181818181818182,
+              "p975": 0.37037037037037035
+            },
+            "topRate": {
+              "p025": 0.5,
+              "p50": 0.7073170731707317,
+              "p975": 0.8611111111111112
+            },
+            "viable": {
+              "p025": 1.0,
+              "p50": 2.0,
+              "p975": 2.0
+            },
+            "within10": {
+              "p025": 1.0,
+              "p50": 1.0,
+              "p975": 2.0
+            }
+          }
+        },
+        "nBoot": 4000
+      },
+      "cells": {
+        "ashwarden:v0:attrition:fat": {
+          "errors": 0,
+          "policies": 27,
+          "runs": 33,
+          "stalls": 0,
+          "winRate": 0.6666666666666666,
+          "wins": 22
+        },
+        "ashwarden:v0:attrition:mid": {
+          "errors": 0,
+          "policies": 33,
+          "runs": 40,
+          "stalls": 0,
+          "winRate": 0.15,
+          "wins": 6
+        },
+        "ashwarden:v0:attrition:thin": {
+          "errors": 0,
+          "policies": 37,
+          "runs": 42,
+          "stalls": 0,
+          "winRate": 0.09523809523809523,
+          "wins": 4
+        },
+        "ashwarden:v0:shatter:fat": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "ashwarden:v0:shatter:mid": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "ashwarden:v0:shatter:thin": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "ashwarden:v0:smolder:fat": {
+          "errors": 0,
+          "policies": 81,
+          "runs": 217,
+          "stalls": 0,
+          "winRate": 0.6728110599078341,
+          "wins": 146
+        },
+        "ashwarden:v0:smolder:mid": {
+          "errors": 0,
+          "policies": 115,
+          "runs": 312,
+          "stalls": 0,
+          "winRate": 0.24358974358974358,
+          "wins": 76
+        },
+        "ashwarden:v0:smolder:thin": {
+          "errors": 0,
+          "policies": 112,
+          "runs": 380,
+          "stalls": 0,
+          "winRate": 0.07894736842105263,
+          "wins": 30
+        },
+        "ashwarden:v5:attrition:fat": {
+          "errors": 0,
+          "policies": 23,
+          "runs": 25,
+          "stalls": 0,
+          "winRate": 0.52,
+          "wins": 13
+        },
+        "ashwarden:v5:attrition:mid": {
+          "errors": 0,
+          "policies": 43,
+          "runs": 54,
+          "stalls": 0,
+          "winRate": 0.037037037037037035,
+          "wins": 2
+        },
+        "ashwarden:v5:attrition:thin": {
+          "errors": 0,
+          "policies": 92,
+          "runs": 147,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "ashwarden:v5:shatter:fat": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "ashwarden:v5:shatter:mid": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "ashwarden:v5:shatter:thin": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "ashwarden:v5:smolder:fat": {
+          "errors": 0,
+          "policies": 63,
+          "runs": 118,
+          "stalls": 0,
+          "winRate": 0.6949152542372882,
+          "wins": 82
+        },
+        "ashwarden:v5:smolder:mid": {
+          "errors": 0,
+          "policies": 104,
+          "runs": 225,
+          "stalls": 0,
+          "winRate": 0.12444444444444444,
+          "wins": 28
+        },
+        "ashwarden:v5:smolder:thin": {
+          "errors": 0,
+          "policies": 122,
+          "runs": 455,
+          "stalls": 0,
+          "winRate": 0.006593406593406593,
+          "wins": 3
+        },
+        "duskblade:v0:attrition:fat": {
+          "errors": 0,
+          "policies": 32,
+          "runs": 44,
+          "stalls": 0,
+          "winRate": 0.6818181818181818,
+          "wins": 30
+        },
+        "duskblade:v0:attrition:mid": {
+          "errors": 0,
+          "policies": 74,
+          "runs": 116,
+          "stalls": 0,
+          "winRate": 0.14655172413793102,
+          "wins": 17
+        },
+        "duskblade:v0:attrition:thin": {
+          "errors": 0,
+          "policies": 124,
+          "runs": 547,
+          "stalls": 0,
+          "winRate": 0.010968921389396709,
+          "wins": 6
+        },
+        "duskblade:v0:shatter:fat": {
+          "errors": 0,
+          "policies": 46,
+          "runs": 87,
+          "stalls": 0,
+          "winRate": 0.7241379310344828,
+          "wins": 63
+        },
+        "duskblade:v0:shatter:mid": {
+          "errors": 0,
+          "policies": 60,
+          "runs": 81,
+          "stalls": 1,
+          "winRate": 0.35802469135802467,
+          "wins": 29
+        },
+        "duskblade:v0:shatter:thin": {
+          "errors": 0,
+          "policies": 81,
+          "runs": 124,
+          "stalls": 0,
+          "winRate": 0.13709677419354838,
+          "wins": 17
+        },
+        "duskblade:v0:smolder:fat": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "duskblade:v0:smolder:mid": {
+          "errors": 0,
+          "policies": 1,
+          "runs": 1,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "duskblade:v0:smolder:thin": {
+          "errors": 0,
+          "policies": 24,
+          "runs": 24,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "duskblade:v5:attrition:fat": {
+          "errors": 0,
+          "policies": 15,
+          "runs": 17,
+          "stalls": 0,
+          "winRate": 0.4117647058823529,
+          "wins": 7
+        },
+        "duskblade:v5:attrition:mid": {
+          "errors": 0,
+          "policies": 41,
+          "runs": 53,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "duskblade:v5:attrition:thin": {
+          "errors": 0,
+          "policies": 128,
+          "runs": 693,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "duskblade:v5:shatter:fat": {
+          "errors": 0,
+          "policies": 29,
+          "runs": 40,
+          "stalls": 0,
+          "winRate": 0.7,
+          "wins": 28
+        },
+        "duskblade:v5:shatter:mid": {
+          "errors": 0,
+          "policies": 31,
+          "runs": 37,
+          "stalls": 0,
+          "winRate": 0.1891891891891892,
+          "wins": 7
+        },
+        "duskblade:v5:shatter:thin": {
+          "errors": 0,
+          "policies": 78,
+          "runs": 136,
+          "stalls": 0,
+          "winRate": 0.014705882352941176,
+          "wins": 2
+        },
+        "duskblade:v5:smolder:fat": {
+          "errors": 0,
+          "policies": 0,
+          "runs": 0,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "duskblade:v5:smolder:mid": {
+          "errors": 0,
+          "policies": 1,
+          "runs": 1,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        },
+        "duskblade:v5:smolder:thin": {
+          "errors": 0,
+          "policies": 47,
+          "runs": 47,
+          "stalls": 0,
+          "winRate": 0.0,
+          "wins": 0
+        }
+      },
+      "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+      "controlArms": [
+        1,
+        2
+      ],
+      "controlErrors": 0,
+      "controlRowCount": 1600,
+      "controlStalls": 0,
+      "controls": {
+        "1:ashwarden:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.73,
+          "wins": 146
+        },
+        "1:ashwarden:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.4,
+          "wins": 80
+        },
+        "1:duskblade:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.615,
+          "wins": 123
+        },
+        "1:duskblade:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.23,
+          "wins": 46
+        },
+        "2:ashwarden:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.175,
+          "wins": 35
+        },
+        "2:ashwarden:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.045,
+          "wins": 9
+        },
+        "2:duskblade:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.245,
+          "wins": 49
+        },
+        "2:duskblade:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.05,
+          "wins": 10
+        }
+      },
+      "deficits": {
+        "c1a": 2.0,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.0
+      },
+      "earlyStop": null,
+      "fileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+      "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+      "id": "c000",
+      "inputHash": "48e798d6da810f5117d18fcd6674cd1bffb3331a2d830436592ddf7e3a5d4a67",
+      "landscapeErrors": 0,
+      "landscapeRowCount": 4096,
+      "landscapeStalls": 1,
+      "observationsSha256": "ad0e55faad357d3bbc1f2fc62a80d3e757819e60399729edc2eb24a3e5b30e2c",
+      "proxies": {
+        "ashwarden:v0": {
+          "arm2Rate": 0.175,
+          "arm2Runs": 200,
+          "arm2Wins": 35,
+          "fourthRate": 0.15,
+          "margin": 0.4978110599078341,
+          "thirdRate": 0.24358974358974358,
+          "topCell": "smolder:fat",
+          "topRate": 0.6728110599078341,
+          "viable": 2,
+          "within10": 2
+        },
+        "ashwarden:v5": {
+          "arm2Rate": 0.045,
+          "arm2Runs": 200,
+          "arm2Wins": 9,
+          "fourthRate": 0.037037037037037035,
+          "margin": 0.6499152542372881,
+          "thirdRate": 0.12444444444444444,
+          "topCell": "smolder:fat",
+          "topRate": 0.6949152542372882,
+          "viable": 2,
+          "within10": 1
+        },
+        "duskblade:v0": {
+          "arm2Rate": 0.245,
+          "arm2Runs": 200,
+          "arm2Wins": 49,
+          "fourthRate": 0.14655172413793102,
+          "margin": 0.47913793103448277,
+          "thirdRate": 0.35802469135802467,
+          "topCell": "shatter:fat",
+          "topRate": 0.7241379310344828,
+          "viable": 2,
+          "within10": 2
+        },
+        "duskblade:v5": {
+          "arm2Rate": 0.05,
+          "arm2Runs": 200,
+          "arm2Wins": 10,
+          "fourthRate": 0.014705882352941176,
+          "margin": 0.6499999999999999,
+          "thirdRate": 0.1891891891891892,
+          "topCell": "shatter:fat",
+          "topRate": 0.7,
+          "viable": 2,
+          "within10": 1
+        }
+      },
+      "semanticSha256": "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa",
+      "status": "complete",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 5,
+        "duskMaxHp": 64,
+        "flareDamage": 9,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 3,
+        "regrowthHeal": 2,
+        "venomStrikeSmolder": 4
+      },
+      "wallSeconds": 29.294
+    },
+    {
+      "cells": {},
+      "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+      "controlArms": [
+        1,
+        2
+      ],
+      "controlErrors": 0,
+      "controlRowCount": 1600,
+      "controlStalls": 1,
+      "controls": {
+        "1:ashwarden:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.845,
+          "wins": 169
+        },
+        "1:ashwarden:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.59,
+          "wins": 118
+        },
+        "1:duskblade:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.675,
+          "wins": 135
+        },
+        "1:duskblade:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 1,
+          "winRate": 0.28,
+          "wins": 56
+        },
+        "2:ashwarden:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.22,
+          "wins": 44
+        },
+        "2:ashwarden:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.12,
+          "wins": 24
+        },
+        "2:duskblade:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.32,
+          "wins": 64
+        },
+        "2:duskblade:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.095,
+          "wins": 19
+        }
+      },
+      "earlyStop": "stalls-beyond-baseline",
+      "fileSha256": "c9cff8da97e5d74ac24858009bddff39327321d321bb38904283e9ec250b8429",
+      "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+      "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+      "id": "c029",
+      "inputHash": "5cdef349d88938d41157b271e4a7c61698435de453dcce8f532e01b631df1b05",
+      "landscapeErrors": 0,
+      "landscapeRowCount": 0,
+      "landscapeStalls": 0,
+      "observationsSha256": "c621503296f34d45317d08dd30520e56b5205a3376358baca84208d14d07a2cc",
+      "proxies": {},
+      "semanticSha256": "6c711b7509bd81371736fb393b9d5a7d41aad58ec4349999041b970872648be9",
+      "status": "early-stop",
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 6,
+        "duskMaxHp": 60,
+        "flareDamage": 11,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 2,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 2
+      },
+      "wallSeconds": 11.64
+    },
+    {
+      "cells": {},
+      "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+      "controlArms": [
+        1,
+        2
+      ],
+      "controlErrors": 0,
+      "controlRowCount": 1600,
+      "controlStalls": 1,
+      "controls": {
+        "1:ashwarden:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.74,
+          "wins": 148
+        },
+        "1:ashwarden:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.525,
+          "wins": 105
+        },
+        "1:duskblade:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.705,
+          "wins": 141
+        },
+        "1:duskblade:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 1,
+          "winRate": 0.295,
+          "wins": 59
+        },
+        "2:ashwarden:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.19,
+          "wins": 38
+        },
+        "2:ashwarden:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.1,
+          "wins": 20
+        },
+        "2:duskblade:v0": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.32,
+          "wins": 64
+        },
+        "2:duskblade:v5": {
+          "errors": 0,
+          "runs": 200,
+          "stalls": 0,
+          "winRate": 0.095,
+          "wins": 19
+        }
+      },
+      "earlyStop": "stalls-beyond-baseline",
+      "fileSha256": "0b277c9a7929d7a763694bdbb7934e2a4e338070bd9b5a40bc4cb11ef01a44bc",
+      "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+      "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+      "id": "s009",
+      "inputHash": "edf26c6be8ec9d13a0ccf5befa309686c24653cd83d722edab03358ef5efdb44",
+      "landscapeErrors": 0,
+      "landscapeRowCount": 0,
+      "landscapeStalls": 0,
+      "observationsSha256": "f3086e5ad9cf3ac8418ba19897fc6178d7f4aa629332fbf25d240f833beb946b",
+      "proxies": {},
+      "semanticSha256": "ee114c7dfad5aa3e9bc213cf4b0b86c484d8c2d4e327ce6d72836a035181b602",
+      "status": "early-stop",
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 5,
+        "duskMaxHp": 60,
+        "flareDamage": 10,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 4,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 5
+      },
+      "wallSeconds": 10.805
+    }
+  ],
+  "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+  "displayOrder": [
+    "c000"
+  ],
+  "displayOrderNote": "sorted by summed normalised gate deficit for readability, not a score",
+  "driverSha256": "97a7b07381eda0c5cdbbb4b154aeb2abc1df75249562ec75db88f1b6740b6f6c",
+  "effects": [
+    {
+      "feature": "ashfallSmolder",
+      "levelMeans": {
+        "6": 4.0
+      },
+      "range": 0.0
+    },
+    {
+      "feature": "ashfallWard",
+      "levelMeans": {
+        "5": 4.0
+      },
+      "range": 0.0
+    },
+    {
+      "feature": "duskMaxHp",
+      "levelMeans": {
+        "64": 4.0
+      },
+      "range": 0.0
+    },
+    {
+      "feature": "flareDamage",
+      "levelMeans": {
+        "9": 4.0
+      },
+      "range": 0.0
+    },
+    {
+      "feature": "guardedStrikeWard",
+      "levelMeans": {
+        "4": 4.0
+      },
+      "range": 0.0
+    },
+    {
+      "feature": "ironSkinWard",
+      "levelMeans": {
+        "3": 4.0
+      },
+      "range": 0.0
+    },
+    {
+      "feature": "regrowthHeal",
+      "levelMeans": {
+        "2": 4.0
+      },
+      "range": 0.0
+    },
+    {
+      "feature": "venomStrikeSmolder",
+      "levelMeans": {
+        "4": 4.0
+      },
+      "range": 0.0
+    }
+  ],
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "host": {
+    "arch": "arm64",
+    "cpu": "Apple M1 Max",
+    "hostname": "MacBookPro.lan",
+    "os": "Darwin",
+    "workers": 8
+  },
+  "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+  "issue": 458,
+  "liveContentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "pareto": [
+    "c000"
+  ],
+  "protocol": {
+    "bootstrap": 4000,
+    "controls": {
+      "arms": [
+        1,
+        2
+      ],
+      "first": 8000,
+      "last": 8199,
+      "root": 1454,
+      "stage": "audit"
+    },
+    "evaluation": "audit",
+    "finalistAudit": true,
+    "frozenLandscape": {
+      "deckCuts": {
+        "midMax": 35,
+        "thinMax": 25
+      },
+      "medians": {
+        "ashwarden": {
+          "shattersPerFight": 0.6154,
+          "smolderKillsPerFight": 0.8519
+        },
+        "duskblade": {
+          "shattersPerFight": 1.1111,
+          "smolderKillsPerFight": 0.1111
+        }
+      },
+      "source": "#215",
+      "tieOrder": [
+        "shatter",
+        "smolder",
+        "attrition"
+      ]
+    },
+    "issue": 458,
+    "landscape": {
+      "first": 8000,
+      "last": 8007,
+      "policyCount": 128,
+      "policyFirst": 0,
+      "root": 1454,
+      "stage": "audit"
+    },
+    "sealedToken": "finalist"
+  },
+  "searchSpaceSha256": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+  "seedRegistrySha256": "c166c18195b0d9f780df67fb30c145fa11c6ac30521d5e3353c39c63bb0e9f9a"
+}

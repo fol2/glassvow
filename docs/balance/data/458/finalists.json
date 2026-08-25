@@ -1,0 +1,2217 @@
+{
+  "auditNonGating": true,
+  "inputs": {
+    "audit_report": "dc8fc089bd247e147b7fe6849346b83d90d4423806d1474b0dc437761450db55",
+    "candidate_manifest": "eaa3bd1846f4013bde46ae4120b03fb4801b441153994d86c3211d02ef697643",
+    "cem_report": "b2be8fa5acb5b559ed883c7cab924bbce8dab9a5f92664580d461dba398112e8",
+    "layer_decisions": "85cee25c443e509e506185516ed32f666f5eb29c3a4290afa0aac6614bec9cd5",
+    "space": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
+    "toolSha256ByModule": {
+      "balance_f1_evidence.py": "1d1c12431bd36907679231d9d4dd4eea12ec00ae252f8c1094b547a1c99e26bc",
+      "balance_f1_finalists.py": "095562bec02542ec88a5a6931719fe5be7351395c53e7e7b68e18bbe768be72c"
+    }
+  },
+  "issue": 458,
+  "orderedFinalists": [
+    {
+      "boundaryDiagnostics": {
+        "boundaryCount": 5,
+        "features": [
+          {
+            "feature": "duskMaxHp",
+            "position": "minimum",
+            "range": [
+              60,
+              68
+            ],
+            "value": 60
+          },
+          {
+            "feature": "flareDamage",
+            "position": "maximum",
+            "range": [
+              7,
+              11
+            ],
+            "value": 11
+          },
+          {
+            "feature": "ashfallSmolder",
+            "position": "interior",
+            "range": [
+              3,
+              7
+            ],
+            "value": 6
+          },
+          {
+            "feature": "ashfallWard",
+            "position": "interior",
+            "range": [
+              3,
+              7
+            ],
+            "value": 6
+          },
+          {
+            "feature": "regrowthHeal",
+            "position": "maximum",
+            "range": [
+              1,
+              4
+            ],
+            "value": 4
+          },
+          {
+            "feature": "ironSkinWard",
+            "position": "minimum",
+            "range": [
+              2,
+              5
+            ],
+            "value": 2
+          },
+          {
+            "feature": "guardedStrikeWard",
+            "position": "interior",
+            "range": [
+              3,
+              6
+            ],
+            "value": 4
+          },
+          {
+            "feature": "venomStrikeSmolder",
+            "position": "minimum",
+            "range": [
+              2,
+              5
+            ],
+            "value": 2
+          }
+        ]
+      },
+      "development": {
+        "deficits": {
+          "c1a": 1.9999999999999998,
+          "c1b": 1.5,
+          "c2arm": 0.0,
+          "c2gap": 0.0,
+          "sum": 3.5
+        },
+        "pairedVsC000": {
+          "deficitDelta": {
+            "c1a": {
+              "p025": 0.0,
+              "p50": 0.33333333333333326,
+              "p975": 1.0
+            },
+            "c1b": {
+              "p025": 0.0,
+              "p50": 0.5,
+              "p975": 1.0
+            },
+            "c2arm": {
+              "p025": 0.0,
+              "p50": 0.0,
+              "p975": 0.0
+            },
+            "c2gap": {
+              "p025": 0.0,
+              "p50": 0.0,
+              "p975": 0.0
+            }
+          },
+          "deficitSumDelta": {
+            "p025": 0.25,
+            "p50": 0.833333333333333,
+            "p975": 1.416666666666666
+          },
+          "gridDelta": {
+            "ashwarden:v0": {
+              "arm2Rate": {
+                "p025": -0.0078125,
+                "p50": 0.0859375,
+                "p975": 0.1796875
+              },
+              "fourthRate": {
+                "p025": 0.08609137942507322,
+                "p50": 0.14966231674120367,
+                "p975": 0.19842352447532663
+              },
+              "margin": {
+                "p025": -0.07382965783860085,
+                "p50": 0.025688434545501293,
+                "p975": 0.12131655208968872
+              },
+              "thirdRate": {
+                "p025": 0.09742375732155506,
+                "p50": 0.13806983473417067,
+                "p975": 0.18033727019103746
+              },
+              "topRate": {
+                "p025": 0.07868927792026503,
+                "p50": 0.11225403086696994,
+                "p975": 0.14234380642831346
+              }
+            },
+            "ashwarden:v5": {
+              "arm2Rate": {
+                "p025": 0.015625,
+                "p50": 0.0703125,
+                "p975": 0.125
+              },
+              "fourthRate": {
+                "p025": 0.07203435625857733,
+                "p50": 0.11615629675844896,
+                "p975": 0.15639561677505248
+              },
+              "margin": {
+                "p025": 0.021338328389871153,
+                "p50": 0.0964353102167178,
+                "p975": 0.17064500091475499
+              },
+              "thirdRate": {
+                "p025": 0.08510260691232728,
+                "p50": 0.11026824587655448,
+                "p975": 0.13751159001940932
+              },
+              "topRate": {
+                "p025": 0.11855718585402564,
+                "p50": 0.1663323815856378,
+                "p975": 0.2118777077892149
+              }
+            },
+            "duskblade:v0": {
+              "arm2Rate": {
+                "p025": -0.0703125,
+                "p50": 0.03125,
+                "p975": 0.1328125
+              },
+              "fourthRate": {
+                "p025": 0.0714285714285714,
+                "p50": 0.3304006245430551,
+                "p975": 0.48877033225023514
+              },
+              "margin": {
+                "p025": -0.06472363837811268,
+                "p50": 0.048190625829176326,
+                "p975": 0.19391491502683367
+              },
+              "thirdRate": {
+                "p025": 0.10477855659455504,
+                "p50": 0.14844209288653742,
+                "p975": 0.1961933656587136
+              },
+              "topRate": {
+                "p025": 0.040947906006366774,
+                "p50": 0.07393336609753598,
+                "p975": 0.22203293583191364
+              }
+            },
+            "duskblade:v5": {
+              "arm2Rate": {
+                "p025": -0.0234375,
+                "p50": 0.046875,
+                "p975": 0.1171875
+              },
+              "fourthRate": {
+                "p025": 0.027028840725694867,
+                "p50": 0.3119976466720309,
+                "p975": 0.4281825426646317
+              },
+              "margin": {
+                "p025": -0.03759265598952133,
+                "p50": 0.05080732643524699,
+                "p975": 0.277085880195599
+              },
+              "thirdRate": {
+                "p025": 0.0963282977846085,
+                "p50": 0.1796192961595613,
+                "p975": 0.30930545365615064
+              },
+              "topRate": {
+                "p025": 0.0452015402463406,
+                "p50": 0.09583478707971427,
+                "p975": 0.31382316313823166
+              }
+            }
+          },
+          "marginDelta": {
+            "p025": 0.011422594334764724,
+            "p50": 0.0571860377758579,
+            "p975": 0.11723406201504535
+          },
+          "pLowerDeficitSum": 0.98475
+        }
+      },
+      "hardConstraintChecks": {
+        "developmentVow5Ceiling": {
+          "clear": true,
+          "grids": {
+            "ashwarden:v5": {
+              "bestCeiling": 0.65,
+              "clear": true
+            },
+            "duskblade:v5": {
+              "bestCeiling": 0.45,
+              "clear": true
+            }
+          }
+        },
+        "grids": {
+          "ashwarden:v0": {
+            "arm2Rate": 0.265625,
+            "arm2RateInterval": {
+              "p025": 0.1875,
+              "p50": 0.265625,
+              "p975": 0.34375
+            },
+            "margin": 0.5178075933946941,
+            "marginInterval": {
+              "p025": 0.43520564516129034,
+              "p50": 0.518405720338983,
+              "p975": 0.5971296870158042
+            }
+          },
+          "ashwarden:v5": {
+            "arm2Rate": 0.09375,
+            "arm2RateInterval": {
+              "p025": 0.046875,
+              "p50": 0.09375,
+              "p975": 0.1484375
+            },
+            "margin": 0.6449948840381992,
+            "marginInterval": {
+              "p025": 0.5795251193001061,
+              "p50": 0.6456321649029982,
+              "p975": 0.7073945063694268
+            }
+          },
+          "duskblade:v0": {
+            "arm2Rate": 0.2421875,
+            "arm2RateInterval": {
+              "p025": 0.171875,
+              "p50": 0.2421875,
+              "p975": 0.3203125
+            },
+            "margin": 0.6046792255075022,
+            "marginInterval": {
+              "p025": 0.5254971013018714,
+              "p50": 0.6095049076212471,
+              "p975": 0.75
+            }
+          },
+          "duskblade:v5": {
+            "arm2Rate": 0.109375,
+            "arm2RateInterval": {
+              "p025": 0.0546875,
+              "p50": 0.109375,
+              "p975": 0.1640625
+            },
+            "margin": 0.6768061391223156,
+            "marginInterval": {
+              "p025": 0.6103136825922422,
+              "p50": 0.6805909863945578,
+              "p975": 0.90625
+            }
+          }
+        },
+        "noClearBootstrapRegression": true,
+        "pointClear": true
+      },
+      "id": "c029",
+      "identityChecks": {
+        "expectedDuskShatterAshSmolder": true,
+        "topCells": {
+          "ashwarden:v0": "smolder:fat",
+          "ashwarden:v5": "smolder:fat",
+          "duskblade:v0": "shatter:fat",
+          "duskblade:v5": "shatter:fat"
+        }
+      },
+      "intendedHydratedUpdates": {
+        "content/full-content.json": {
+          "arts.ashfall.text": "The Ashwarden's breath. Apply 6 Smolder to ALL enemies and gain 6 Ward.",
+          "arts.flare.text": "The lantern vents. Deal 11 damage to ALL enemies.",
+          "cards.guardedStrike.text": "Deal @5@ damage. Gain #4# Ward.",
+          "cards.guardedStrike.up.text": "Deal @7@ damage. Gain #6# Ward.",
+          "cards.ironSkin.text": "At the end of your turn, gain 2 Ward.",
+          "cards.ironSkin.up.text": "At the end of your turn, gain 3 Ward.",
+          "cards.regrowth.text": "At the end of your turn, heal 4 HP.",
+          "cards.regrowth.up.text": "At the end of your turn, heal 5 HP.",
+          "cards.venomStrike.text": "Deal @4@ damage. Apply 2 Smolder.",
+          "cards.venomStrike.up.text": "Deal @6@ damage. Apply 3 Smolder."
+        },
+        "locale/en.json": {
+          "content.arts.ashfall.text": "The Ashwarden's breath. Apply 6 Smolder to ALL enemies and gain 6 Ward.",
+          "content.arts.flare.text": "The lantern vents. Deal 11 damage to ALL enemies.",
+          "content.cards.guardedStrike.text": "Deal @5@ damage. Gain #4# Ward.",
+          "content.cards.guardedStrike.textUp": "Deal @7@ damage. Gain #6# Ward.",
+          "content.cards.ironSkin.text": "At the end of your turn, gain 2 Ward.",
+          "content.cards.ironSkin.textUp": "At the end of your turn, gain 3 Ward.",
+          "content.cards.regrowth.text": "At the end of your turn, heal 4 HP.",
+          "content.cards.regrowth.textUp": "At the end of your turn, heal 5 HP.",
+          "content.cards.venomStrike.text": "Deal @4@ damage. Apply 2 Smolder.",
+          "content.cards.venomStrike.textUp": "Deal @6@ damage. Apply 3 Smolder."
+        },
+        "locale/zh-Hant.json": {
+          "content.arts.ashfall.text": "灰衛之息。對所有敵人施加 6 層陰燃，並獲得 6 點護光。",
+          "content.arts.flare.text": "提燈吐焰。對所有敵人造成 11 點傷害。",
+          "content.cards.guardedStrike.text": "造成 @5@ 點傷害。獲得 #4# 點護光。",
+          "content.cards.guardedStrike.textUp": "造成 @7@ 點傷害。獲得 #6# 點護光。",
+          "content.cards.ironSkin.text": "你的回合結束時獲得 2 點護光。",
+          "content.cards.ironSkin.textUp": "你的回合結束時獲得 3 點護光。",
+          "content.cards.regrowth.text": "你的回合結束時回復 4 點生命。",
+          "content.cards.regrowth.textUp": "你的回合結束時回復 5 點生命。",
+          "content.cards.venomStrike.text": "造成 @4@ 點傷害。施加 2 層陰燃。",
+          "content.cards.venomStrike.textUp": "造成 @6@ 點傷害。施加 3 層陰燃。"
+        }
+      },
+      "miniCem": {
+        "grids": {
+          "ashwarden:v0": {
+            "bestCeiling": 0.875,
+            "cellCeilings": {
+              "attrition:fat": 0.75,
+              "smolder:fat": 0.875,
+              "smolder:thin": 0.85
+            },
+            "closeToBest": 3,
+            "developmentC3": true,
+            "developmentC4": true,
+            "islands": [
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 11,
+                  "smolder:fat": 27,
+                  "smolder:mid": 2
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.875,
+                "holdoutRuns": 40,
+                "holdoutWins": 35,
+                "island": 12,
+                "policyIndex": 64,
+                "startCell": "smolder:fat",
+                "stop": "stall"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:mid": 1,
+                  "attrition:thin": 8,
+                  "smolder:mid": 11,
+                  "smolder:thin": 20
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.85,
+                "holdoutRuns": 40,
+                "holdoutWins": 34,
+                "island": 13,
+                "policyIndex": 218,
+                "startCell": "smolder:thin",
+                "stop": "stall"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:thin": 1,
+                  "smolder:mid": 10,
+                  "smolder:thin": 29
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.7,
+                "holdoutRuns": 40,
+                "holdoutWins": 28,
+                "island": 14,
+                "policyIndex": 309,
+                "startCell": "smolder:thin",
+                "stop": "stall"
+              },
+              {
+                "endCell": "attrition:fat",
+                "endCounts": {
+                  "attrition:fat": 11,
+                  "attrition:mid": 10,
+                  "attrition:thin": 3,
+                  "smolder:fat": 5,
+                  "smolder:mid": 7,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.75,
+                "holdoutRuns": 40,
+                "holdoutWins": 30,
+                "island": 15,
+                "policyIndex": 59,
+                "startCell": "attrition:mid",
+                "stop": "stall"
+              },
+              {
+                "endCell": "attrition:fat",
+                "endCounts": {
+                  "attrition:fat": 15,
+                  "attrition:mid": 6,
+                  "attrition:thin": 5,
+                  "smolder:fat": 8,
+                  "smolder:mid": 2,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.475,
+                "holdoutRuns": 40,
+                "holdoutWins": 19,
+                "island": 16,
+                "policyIndex": 285,
+                "startCell": "attrition:fat",
+                "stop": "stall"
+              },
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 8,
+                  "attrition:thin": 1,
+                  "smolder:fat": 27,
+                  "smolder:mid": 2,
+                  "smolder:thin": 2
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.825,
+                "holdoutRuns": 40,
+                "holdoutWins": 33,
+                "island": 17,
+                "policyIndex": 322,
+                "startCell": "smolder:fat",
+                "stop": "stall"
+              }
+            ],
+            "layerProxyTopRate": 0.7834325933946941,
+            "medianCeiling": 0.75,
+            "stayedViable": 4,
+            "viabilityFloor": 0.5245287966973471
+          },
+          "ashwarden:v5": {
+            "bestCeiling": 0.65,
+            "cellCeilings": {
+              "smolder:fat": 0.65,
+              "smolder:mid": 0.15,
+              "smolder:thin": 0.625
+            },
+            "closeToBest": 2,
+            "developmentC3": false,
+            "developmentC4": true,
+            "islands": [
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 11,
+                  "attrition:mid": 2,
+                  "attrition:thin": 1,
+                  "smolder:fat": 18,
+                  "smolder:mid": 5,
+                  "smolder:thin": 3
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.65,
+                "holdoutRuns": 40,
+                "holdoutWins": 26,
+                "island": 18,
+                "policyIndex": 14,
+                "startCell": "smolder:fat",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:mid",
+                "endCounts": {
+                  "attrition:fat": 5,
+                  "attrition:mid": 1,
+                  "attrition:thin": 2,
+                  "smolder:fat": 9,
+                  "smolder:mid": 12,
+                  "smolder:thin": 11
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.15,
+                "holdoutRuns": 40,
+                "holdoutWins": 6,
+                "island": 19,
+                "policyIndex": 293,
+                "startCell": "smolder:mid",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "smolder:mid": 9,
+                  "smolder:thin": 31
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.625,
+                "holdoutRuns": 40,
+                "holdoutWins": 25,
+                "island": 20,
+                "policyIndex": 309,
+                "startCell": "smolder:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 8,
+                  "attrition:mid": 5,
+                  "attrition:thin": 3,
+                  "smolder:fat": 14,
+                  "smolder:mid": 4,
+                  "smolder:thin": 6
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.425,
+                "holdoutRuns": 40,
+                "holdoutWins": 17,
+                "island": 21,
+                "policyIndex": 285,
+                "startCell": "attrition:fat",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:fat": 7,
+                  "attrition:mid": 6,
+                  "attrition:thin": 4,
+                  "smolder:fat": 6,
+                  "smolder:mid": 4,
+                  "smolder:thin": 13
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.225,
+                "holdoutRuns": 40,
+                "holdoutWins": 9,
+                "island": 22,
+                "policyIndex": 246,
+                "startCell": "smolder:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:fat": 8,
+                  "attrition:mid": 2,
+                  "attrition:thin": 3,
+                  "smolder:fat": 8,
+                  "smolder:mid": 6,
+                  "smolder:thin": 13
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.275,
+                "holdoutRuns": 40,
+                "holdoutWins": 11,
+                "island": 23,
+                "policyIndex": 328,
+                "startCell": "smolder:mid",
+                "stop": "maxGen"
+              }
+            ],
+            "layerProxyTopRate": 0.7387448840381992,
+            "medianCeiling": 0.275,
+            "stayedViable": 2,
+            "viabilityFloor": 0.4162474420190996
+          },
+          "duskblade:v0": {
+            "bestCeiling": 0.7,
+            "cellCeilings": {
+              "attrition:fat": 0.4,
+              "attrition:mid": 0.625,
+              "attrition:thin": 0.6,
+              "shatter:fat": 0.525,
+              "shatter:mid": 0.7
+            },
+            "closeToBest": 2,
+            "developmentC3": false,
+            "developmentC4": true,
+            "islands": [
+              {
+                "endCell": "shatter:fat",
+                "endCounts": {
+                  "attrition:fat": 10,
+                  "attrition:mid": 7,
+                  "attrition:thin": 3,
+                  "shatter:fat": 13,
+                  "shatter:mid": 3,
+                  "shatter:thin": 3,
+                  "smolder:thin": 1
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.525,
+                "holdoutRuns": 40,
+                "holdoutWins": 21,
+                "island": 0,
+                "policyIndex": 115,
+                "startCell": "shatter:fat",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:mid",
+                "endCounts": {
+                  "attrition:mid": 2,
+                  "attrition:thin": 9,
+                  "shatter:fat": 3,
+                  "shatter:mid": 21,
+                  "shatter:thin": 4,
+                  "smolder:thin": 1
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.5,
+                "holdoutRuns": 40,
+                "holdoutWins": 20,
+                "island": 1,
+                "policyIndex": 38,
+                "startCell": "shatter:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:mid",
+                "endCounts": {
+                  "attrition:mid": 1,
+                  "attrition:thin": 1,
+                  "shatter:fat": 8,
+                  "shatter:mid": 24,
+                  "shatter:thin": 4,
+                  "smolder:thin": 2
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.7,
+                "holdoutRuns": 40,
+                "holdoutWins": 28,
+                "island": 2,
+                "policyIndex": 244,
+                "startCell": "shatter:mid",
+                "stop": "stall"
+              },
+              {
+                "endCell": "attrition:thin",
+                "endCounts": {
+                  "attrition:mid": 13,
+                  "attrition:thin": 15,
+                  "shatter:mid": 2,
+                  "shatter:thin": 5,
+                  "smolder:thin": 5
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.6,
+                "holdoutRuns": 40,
+                "holdoutWins": 24,
+                "island": 3,
+                "policyIndex": 349,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "attrition:mid",
+                "endCounts": {
+                  "attrition:fat": 2,
+                  "attrition:mid": 10,
+                  "attrition:thin": 8,
+                  "shatter:fat": 4,
+                  "shatter:mid": 10,
+                  "shatter:thin": 4,
+                  "smolder:thin": 2
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.625,
+                "holdoutRuns": 40,
+                "holdoutWins": 25,
+                "island": 4,
+                "policyIndex": 241,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "attrition:fat",
+                "endCounts": {
+                  "attrition:fat": 9,
+                  "attrition:mid": 5,
+                  "attrition:thin": 6,
+                  "shatter:fat": 7,
+                  "shatter:mid": 3,
+                  "shatter:thin": 2,
+                  "smolder:mid": 3,
+                  "smolder:thin": 5
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.4,
+                "holdoutRuns": 40,
+                "holdoutWins": 16,
+                "island": 5,
+                "policyIndex": 285,
+                "startCell": "shatter:fat",
+                "stop": "stall"
+              }
+            ],
+            "layerProxyTopRate": 0.8468667255075022,
+            "medianCeiling": 0.525,
+            "stayedViable": 2,
+            "viabilityFloor": 0.5445271127537511
+          },
+          "duskblade:v5": {
+            "bestCeiling": 0.45,
+            "cellCeilings": {
+              "attrition:thin": 0.15,
+              "shatter:fat": 0.45,
+              "shatter:mid": 0.375,
+              "shatter:thin": 0.375
+            },
+            "closeToBest": 0,
+            "developmentC3": false,
+            "developmentC4": true,
+            "islands": [
+              {
+                "endCell": "shatter:fat",
+                "endCounts": {
+                  "attrition:fat": 2,
+                  "attrition:mid": 1,
+                  "attrition:thin": 12,
+                  "shatter:fat": 15,
+                  "shatter:mid": 1,
+                  "shatter:thin": 4,
+                  "smolder:mid": 1,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.325,
+                "holdoutRuns": 40,
+                "holdoutWins": 13,
+                "island": 6,
+                "policyIndex": 43,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:mid",
+                "endCounts": {
+                  "attrition:fat": 1,
+                  "attrition:mid": 2,
+                  "attrition:thin": 7,
+                  "shatter:fat": 1,
+                  "shatter:mid": 13,
+                  "shatter:thin": 13,
+                  "smolder:thin": 3
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.375,
+                "holdoutRuns": 40,
+                "holdoutWins": 15,
+                "island": 7,
+                "policyIndex": 244,
+                "startCell": "shatter:mid",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "attrition:thin",
+                "endCounts": {
+                  "attrition:mid": 5,
+                  "attrition:thin": 16,
+                  "shatter:fat": 10,
+                  "shatter:mid": 2,
+                  "shatter:thin": 5,
+                  "smolder:thin": 2
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.15,
+                "holdoutRuns": 40,
+                "holdoutWins": 6,
+                "island": 8,
+                "policyIndex": 175,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:thin",
+                "endCounts": {
+                  "attrition:thin": 8,
+                  "shatter:mid": 4,
+                  "shatter:thin": 25,
+                  "smolder:thin": 3
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.375,
+                "holdoutRuns": 40,
+                "holdoutWins": 15,
+                "island": 9,
+                "policyIndex": 210,
+                "startCell": "shatter:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "attrition:thin",
+                "endCounts": {
+                  "attrition:mid": 6,
+                  "attrition:thin": 13,
+                  "shatter:fat": 7,
+                  "shatter:mid": 5,
+                  "shatter:thin": 5,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.125,
+                "holdoutRuns": 40,
+                "holdoutWins": 5,
+                "island": 10,
+                "policyIndex": 62,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:fat",
+                "endCounts": {
+                  "attrition:fat": 4,
+                  "attrition:mid": 1,
+                  "attrition:thin": 10,
+                  "shatter:fat": 15,
+                  "shatter:mid": 2,
+                  "shatter:thin": 3,
+                  "smolder:mid": 1,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.45,
+                "holdoutRuns": 40,
+                "holdoutWins": 18,
+                "island": 11,
+                "policyIndex": 64,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              }
+            ],
+            "layerProxyTopRate": 0.7861811391223156,
+            "medianCeiling": 0.325,
+            "stayedViable": 0,
+            "viabilityFloor": 0.4477780695611578
+          }
+        },
+        "id": "c029",
+        "pairedVsC000": {
+          "ashwarden:v0": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.029166666666666667,
+              "p50": 0.1,
+              "p975": 0.16666666666666666
+            },
+            "islands": 6,
+            "pHigher": 0.9955,
+            "seedBlocks": 40,
+            "winRateDelta": 0.1
+          },
+          "ashwarden:v5": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.13333333333333333,
+              "p50": 0.21666666666666667,
+              "p975": 0.3
+            },
+            "islands": 6,
+            "pHigher": 1.0,
+            "seedBlocks": 40,
+            "winRateDelta": 0.21666666666666667
+          },
+          "duskblade:v0": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.016666666666666666,
+              "p50": 0.10416666666666667,
+              "p975": 0.19166666666666668
+            },
+            "islands": 6,
+            "pHigher": 0.99025,
+            "seedBlocks": 40,
+            "winRateDelta": 0.10416666666666667
+          },
+          "duskblade:v5": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.016666666666666666,
+              "p50": 0.1,
+              "p975": 0.17916666666666667
+            },
+            "islands": 6,
+            "pHigher": 0.98925,
+            "seedBlocks": 40,
+            "winRateDelta": 0.1
+          }
+        },
+        "vow5Ceiling": {
+          "clear": true,
+          "grids": {
+            "ashwarden:v5": {
+              "bestCeiling": 0.65,
+              "clear": true
+            },
+            "duskblade:v5": {
+              "bestCeiling": 0.45,
+              "clear": true
+            }
+          }
+        }
+      },
+      "numericPatch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 11,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 2,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 3,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 2,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 3,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "rank": 1,
+      "replayIdentity": {
+        "candidateFileSha256": "c9cff8da97e5d74ac24858009bddff39327321d321bb38904283e9ec250b8429",
+        "candidateSemanticSha256": "6c711b7509bd81371736fb393b9d5a7d41aad58ec4349999041b970872648be9",
+        "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+        "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "layerCommit": "bf8b194575debfddf5d39035334a473262e778cf",
+        "layerInputHash": "7098b1dccb82a4f0d908c18846ac0b24be6dada42c65c8c7966bd1e5edde1163",
+        "layerObservationsSha256": "7de4d504028ffdb7a2b19691475a37776ace9a2f1a008de01447e6c70a0c6455"
+      },
+      "sealedAudit": {
+        "auditEarlyStop": "stalls-beyond-baseline",
+        "auditFaultRows": [
+          {
+            "arm": 1,
+            "aspect": "duskblade",
+            "error": "",
+            "outcome": "stall",
+            "seed": 8078,
+            "vow": 5
+          }
+        ],
+        "auditHardConstraints": {},
+        "auditIdentity": null,
+        "auditReplayIdentity": {
+          "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+          "controlRowCount": 1600,
+          "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+          "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+          "landscapeRowCount": 0,
+          "observationsSha256": "c621503296f34d45317d08dd30520e56b5205a3376358baca84208d14d07a2cc"
+        },
+        "auditStatus": "early-stop",
+        "bindingDeficitChanges": {},
+        "confidenceBlocked": true,
+        "developmentIdentity": {
+          "expectedDuskShatterAshSmolder": true,
+          "topCells": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          }
+        },
+        "effectChanges": {},
+        "id": "c029",
+        "identityContradiction": false,
+        "materialContradictions": [
+          "audit-early-stop:stalls-beyond-baseline"
+        ]
+      },
+      "values": {
+        "ashfallSmolder": 6,
+        "ashfallWard": 6,
+        "duskMaxHp": 60,
+        "flareDamage": 11,
+        "guardedStrikeWard": 4,
+        "ironSkinWard": 2,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 2
+      }
+    },
+    {
+      "boundaryDiagnostics": {
+        "boundaryCount": 3,
+        "features": [
+          {
+            "feature": "duskMaxHp",
+            "position": "minimum",
+            "range": [
+              60,
+              68
+            ],
+            "value": 60
+          },
+          {
+            "feature": "flareDamage",
+            "position": "interior",
+            "range": [
+              7,
+              11
+            ],
+            "value": 10
+          },
+          {
+            "feature": "ashfallSmolder",
+            "position": "interior",
+            "range": [
+              3,
+              7
+            ],
+            "value": 4
+          },
+          {
+            "feature": "ashfallWard",
+            "position": "interior",
+            "range": [
+              3,
+              7
+            ],
+            "value": 5
+          },
+          {
+            "feature": "regrowthHeal",
+            "position": "maximum",
+            "range": [
+              1,
+              4
+            ],
+            "value": 4
+          },
+          {
+            "feature": "ironSkinWard",
+            "position": "interior",
+            "range": [
+              2,
+              5
+            ],
+            "value": 4
+          },
+          {
+            "feature": "guardedStrikeWard",
+            "position": "interior",
+            "range": [
+              3,
+              6
+            ],
+            "value": 5
+          },
+          {
+            "feature": "venomStrikeSmolder",
+            "position": "maximum",
+            "range": [
+              2,
+              5
+            ],
+            "value": 5
+          }
+        ]
+      },
+      "development": {
+        "deficits": {
+          "c1a": 1.6666666666666665,
+          "c1b": 1.5,
+          "c2arm": 0.0,
+          "c2gap": 0.0,
+          "sum": 3.1666666666666665
+        },
+        "pairedVsC000": {
+          "deficitDelta": {
+            "c1a": {
+              "p025": 0.0,
+              "p50": 0.6666666666666665,
+              "p975": 1.3333333333333333
+            },
+            "c1b": {
+              "p025": 0.0,
+              "p50": 0.25,
+              "p975": 0.75
+            },
+            "c2arm": {
+              "p025": 0.0,
+              "p50": 0.0,
+              "p975": 0.0
+            },
+            "c2gap": {
+              "p025": 0.0,
+              "p50": 0.0,
+              "p975": 0.0
+            }
+          },
+          "deficitSumDelta": {
+            "p025": 0.33333333333333215,
+            "p50": 0.9166666666666665,
+            "p975": 1.7499999999999996
+          },
+          "gridDelta": {
+            "ashwarden:v0": {
+              "arm2Rate": {
+                "p025": -0.0546875,
+                "p50": 0.03125,
+                "p975": 0.1171875
+              },
+              "fourthRate": {
+                "p025": 0.05995257380802982,
+                "p50": 0.1250902512627172,
+                "p975": 0.17983587512301963
+              },
+              "margin": {
+                "p025": 0.0007095640355614385,
+                "p50": 0.09258720093384154,
+                "p975": 0.18483339572006652
+              },
+              "thirdRate": {
+                "p025": 0.10450571074819542,
+                "p50": 0.14169995131178126,
+                "p975": 0.1781111334091467
+              },
+              "topRate": {
+                "p025": 0.09586732139808496,
+                "p50": 0.12529799442045397,
+                "p975": 0.15461128070317165
+              }
+            },
+            "ashwarden:v5": {
+              "arm2Rate": {
+                "p025": -0.0078125,
+                "p50": 0.046875,
+                "p975": 0.1015625
+              },
+              "fourthRate": {
+                "p025": 0.03866325551646946,
+                "p50": 0.07291392028721287,
+                "p975": 0.10602515943608609
+              },
+              "margin": {
+                "p025": 0.03488907022071552,
+                "p50": 0.10421795773406128,
+                "p975": 0.17025445623155488
+              },
+              "thirdRate": {
+                "p025": 0.06456518836149977,
+                "p50": 0.0907747348310759,
+                "p975": 0.12000811825592801
+              },
+              "topRate": {
+                "p025": 0.10764435855643073,
+                "p50": 0.15146517871193,
+                "p975": 0.19217837305570695
+              }
+            },
+            "duskblade:v0": {
+              "arm2Rate": {
+                "p025": -0.03125,
+                "p50": 0.078125,
+                "p975": 0.1796875
+              },
+              "fourthRate": {
+                "p025": 0.1545739721994312,
+                "p50": 0.4022675736961452,
+                "p975": 0.5209086694483078
+              },
+              "margin": {
+                "p025": -0.10208994069997823,
+                "p50": 0.016544373303761017,
+                "p975": 0.19626399253731341
+              },
+              "thirdRate": {
+                "p025": 0.13335326254132063,
+                "p50": 0.21317833015870613,
+                "p975": 0.2751469335452326
+              },
+              "topRate": {
+                "p025": 0.05454343229982017,
+                "p50": 0.0849599893759635,
+                "p975": 0.23582089552238805
+              }
+            },
+            "duskblade:v5": {
+              "arm2Rate": {
+                "p025": -0.0390625,
+                "p50": 0.0234375,
+                "p975": 0.0859375
+              },
+              "fourthRate": {
+                "p025": 0.0014831074321115523,
+                "p50": 0.018208852974605692,
+                "p975": 0.03644323478893638
+              },
+              "margin": {
+                "p025": 0.004566528931817526,
+                "p50": 0.08079689149567781,
+                "p975": 0.15732578907103478
+              },
+              "thirdRate": {
+                "p025": 0.08282447036246426,
+                "p50": 0.136692280143114,
+                "p975": 0.19529529897260695
+              },
+              "topRate": {
+                "p025": 0.05998208832511154,
+                "p50": 0.10336626289311712,
+                "p975": 0.1547791580400275
+              }
+            }
+          },
+          "marginDelta": {
+            "p025": 0.026720622276568073,
+            "p50": 0.07509198797889782,
+            "p975": 0.12877024806218207
+          },
+          "pLowerDeficitSum": 0.99275
+        }
+      },
+      "hardConstraintChecks": {
+        "developmentVow5Ceiling": {
+          "clear": true,
+          "grids": {
+            "ashwarden:v5": {
+              "bestCeiling": 0.6,
+              "clear": true
+            },
+            "duskblade:v5": {
+              "bestCeiling": 0.475,
+              "clear": true
+            }
+          }
+        },
+        "grids": {
+          "ashwarden:v0": {
+            "arm2Rate": 0.2109375,
+            "arm2RateInterval": {
+              "p025": 0.140625,
+              "p50": 0.2109375,
+              "p975": 0.28125
+            },
+            "margin": 0.5861077894163236,
+            "marginInterval": {
+              "p025": 0.5100673042059464,
+              "p50": 0.5856890060240963,
+              "p975": 0.6584573472591162
+            }
+          },
+          "ashwarden:v5": {
+            "arm2Rate": 0.0703125,
+            "arm2RateInterval": {
+              "p025": 0.03125,
+              "p50": 0.0703125,
+              "p975": 0.1171875
+            },
+            "margin": 0.653391768292683,
+            "marginInterval": {
+              "p025": 0.5946442766295708,
+              "p50": 0.6551035005048805,
+              "p975": 0.7079559178743962
+            }
+          },
+          "duskblade:v0": {
+            "arm2Rate": 0.2890625,
+            "arm2RateInterval": {
+              "p025": 0.2109375,
+              "p50": 0.2890625,
+              "p975": 0.3671875
+            },
+            "margin": 0.5665281063792499,
+            "marginInterval": {
+              "p025": 0.4873143829168093,
+              "p50": 0.5768036912751678,
+              "p975": 0.75
+            }
+          },
+          "duskblade:v5": {
+            "arm2Rate": 0.0859375,
+            "arm2RateInterval": {
+              "p025": 0.0390625,
+              "p50": 0.0859375,
+              "p975": 0.140625
+            },
+            "margin": 0.7119172854785478,
+            "marginInterval": {
+              "p025": 0.6495953588143526,
+              "p50": 0.7130810018050542,
+              "p975": 0.7687361213915618
+            }
+          }
+        },
+        "noClearBootstrapRegression": true,
+        "pointClear": true
+      },
+      "id": "s009",
+      "identityChecks": {
+        "expectedDuskShatterAshSmolder": true,
+        "topCells": {
+          "ashwarden:v0": "smolder:fat",
+          "ashwarden:v5": "smolder:fat",
+          "duskblade:v0": "shatter:fat",
+          "duskblade:v5": "shatter:fat"
+        }
+      },
+      "intendedHydratedUpdates": {
+        "content/full-content.json": {
+          "arts.ashfall.text": "The Ashwarden's breath. Apply 4 Smolder to ALL enemies and gain 5 Ward.",
+          "arts.flare.text": "The lantern vents. Deal 10 damage to ALL enemies.",
+          "cards.guardedStrike.text": "Deal @5@ damage. Gain #5# Ward.",
+          "cards.guardedStrike.up.text": "Deal @7@ damage. Gain #7# Ward.",
+          "cards.ironSkin.text": "At the end of your turn, gain 4 Ward.",
+          "cards.ironSkin.up.text": "At the end of your turn, gain 5 Ward.",
+          "cards.regrowth.text": "At the end of your turn, heal 4 HP.",
+          "cards.regrowth.up.text": "At the end of your turn, heal 5 HP.",
+          "cards.venomStrike.text": "Deal @4@ damage. Apply 5 Smolder.",
+          "cards.venomStrike.up.text": "Deal @6@ damage. Apply 6 Smolder."
+        },
+        "locale/en.json": {
+          "content.arts.ashfall.text": "The Ashwarden's breath. Apply 4 Smolder to ALL enemies and gain 5 Ward.",
+          "content.arts.flare.text": "The lantern vents. Deal 10 damage to ALL enemies.",
+          "content.cards.guardedStrike.text": "Deal @5@ damage. Gain #5# Ward.",
+          "content.cards.guardedStrike.textUp": "Deal @7@ damage. Gain #7# Ward.",
+          "content.cards.ironSkin.text": "At the end of your turn, gain 4 Ward.",
+          "content.cards.ironSkin.textUp": "At the end of your turn, gain 5 Ward.",
+          "content.cards.regrowth.text": "At the end of your turn, heal 4 HP.",
+          "content.cards.regrowth.textUp": "At the end of your turn, heal 5 HP.",
+          "content.cards.venomStrike.text": "Deal @4@ damage. Apply 5 Smolder.",
+          "content.cards.venomStrike.textUp": "Deal @6@ damage. Apply 6 Smolder."
+        },
+        "locale/zh-Hant.json": {
+          "content.arts.ashfall.text": "灰衛之息。對所有敵人施加 4 層陰燃，並獲得 5 點護光。",
+          "content.arts.flare.text": "提燈吐焰。對所有敵人造成 10 點傷害。",
+          "content.cards.guardedStrike.text": "造成 @5@ 點傷害。獲得 #5# 點護光。",
+          "content.cards.guardedStrike.textUp": "造成 @7@ 點傷害。獲得 #7# 點護光。",
+          "content.cards.ironSkin.text": "你的回合結束時獲得 4 點護光。",
+          "content.cards.ironSkin.textUp": "你的回合結束時獲得 5 點護光。",
+          "content.cards.regrowth.text": "你的回合結束時回復 4 點生命。",
+          "content.cards.regrowth.textUp": "你的回合結束時回復 5 點生命。",
+          "content.cards.venomStrike.text": "造成 @4@ 點傷害。施加 5 層陰燃。",
+          "content.cards.venomStrike.textUp": "造成 @6@ 點傷害。施加 6 層陰燃。"
+        }
+      },
+      "miniCem": {
+        "grids": {
+          "ashwarden:v0": {
+            "bestCeiling": 0.925,
+            "cellCeilings": {
+              "attrition:fat": 0.7,
+              "smolder:fat": 0.925,
+              "smolder:mid": 0.8,
+              "smolder:thin": 0.725
+            },
+            "closeToBest": 2,
+            "developmentC3": false,
+            "developmentC4": true,
+            "islands": [
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 14,
+                  "smolder:fat": 26
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.925,
+                "holdoutRuns": 40,
+                "holdoutWins": 37,
+                "island": 12,
+                "policyIndex": 64,
+                "startCell": "smolder:fat",
+                "stop": "stall"
+              },
+              {
+                "endCell": "smolder:mid",
+                "endCounts": {
+                  "attrition:mid": 3,
+                  "smolder:fat": 8,
+                  "smolder:mid": 23,
+                  "smolder:thin": 6
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.8,
+                "holdoutRuns": 40,
+                "holdoutWins": 32,
+                "island": 13,
+                "policyIndex": 218,
+                "startCell": "smolder:mid",
+                "stop": "stall"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "smolder:mid": 5,
+                  "smolder:thin": 35
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.725,
+                "holdoutRuns": 40,
+                "holdoutWins": 29,
+                "island": 14,
+                "policyIndex": 309,
+                "startCell": "smolder:thin",
+                "stop": "stall"
+              },
+              {
+                "endCell": "attrition:fat",
+                "endCounts": {
+                  "attrition:fat": 13,
+                  "attrition:mid": 13,
+                  "attrition:thin": 2,
+                  "smolder:fat": 3,
+                  "smolder:mid": 4,
+                  "smolder:thin": 5
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.7,
+                "holdoutRuns": 40,
+                "holdoutWins": 28,
+                "island": 15,
+                "policyIndex": 59,
+                "startCell": "attrition:mid",
+                "stop": "stall"
+              },
+              {
+                "endCell": "attrition:fat",
+                "endCounts": {
+                  "attrition:fat": 16,
+                  "attrition:mid": 2,
+                  "attrition:thin": 2,
+                  "smolder:fat": 14,
+                  "smolder:mid": 4,
+                  "smolder:thin": 2
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.675,
+                "holdoutRuns": 40,
+                "holdoutWins": 27,
+                "island": 16,
+                "policyIndex": 285,
+                "startCell": "attrition:fat",
+                "stop": "stall"
+              },
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 8,
+                  "attrition:mid": 1,
+                  "smolder:fat": 24,
+                  "smolder:mid": 3,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.725,
+                "holdoutRuns": 40,
+                "holdoutWins": 29,
+                "island": 17,
+                "policyIndex": 322,
+                "startCell": "smolder:fat",
+                "stop": "stall"
+              }
+            ],
+            "layerProxyTopRate": 0.7970452894163236,
+            "medianCeiling": 0.725,
+            "stayedViable": 5,
+            "viabilityFloor": 0.5039913947081618
+          },
+          "ashwarden:v5": {
+            "bestCeiling": 0.6,
+            "cellCeilings": {
+              "smolder:fat": 0.375,
+              "smolder:thin": 0.6
+            },
+            "closeToBest": 1,
+            "developmentC3": false,
+            "developmentC4": false,
+            "islands": [
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 7,
+                  "attrition:mid": 6,
+                  "attrition:thin": 3,
+                  "smolder:fat": 11,
+                  "smolder:mid": 5,
+                  "smolder:thin": 8
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.375,
+                "holdoutRuns": 40,
+                "holdoutWins": 15,
+                "island": 18,
+                "policyIndex": 14,
+                "startCell": "smolder:fat",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:fat": 2,
+                  "attrition:mid": 5,
+                  "attrition:thin": 2,
+                  "smolder:fat": 2,
+                  "smolder:mid": 13,
+                  "smolder:thin": 16
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.125,
+                "holdoutRuns": 40,
+                "holdoutWins": 5,
+                "island": 19,
+                "policyIndex": 293,
+                "startCell": "smolder:mid",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:thin": 4,
+                  "smolder:mid": 15,
+                  "smolder:thin": 21
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.6,
+                "holdoutRuns": 40,
+                "holdoutWins": 24,
+                "island": 20,
+                "policyIndex": 309,
+                "startCell": "smolder:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:fat",
+                "endCounts": {
+                  "attrition:fat": 9,
+                  "attrition:mid": 6,
+                  "attrition:thin": 2,
+                  "smolder:fat": 12,
+                  "smolder:mid": 2,
+                  "smolder:thin": 9
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.35,
+                "holdoutRuns": 40,
+                "holdoutWins": 14,
+                "island": 21,
+                "policyIndex": 285,
+                "startCell": "attrition:fat",
+                "stop": "stall"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:fat": 3,
+                  "attrition:mid": 3,
+                  "attrition:thin": 9,
+                  "smolder:fat": 3,
+                  "smolder:mid": 6,
+                  "smolder:thin": 16
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.15,
+                "holdoutRuns": 40,
+                "holdoutWins": 6,
+                "island": 22,
+                "policyIndex": 246,
+                "startCell": "smolder:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "smolder:thin",
+                "endCounts": {
+                  "attrition:fat": 1,
+                  "attrition:mid": 4,
+                  "attrition:thin": 4,
+                  "smolder:fat": 5,
+                  "smolder:mid": 10,
+                  "smolder:thin": 16
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.15,
+                "holdoutRuns": 40,
+                "holdoutWins": 6,
+                "island": 23,
+                "policyIndex": 328,
+                "startCell": "smolder:fat",
+                "stop": "maxGen"
+              }
+            ],
+            "layerProxyTopRate": 0.723704268292683,
+            "medianCeiling": 0.15,
+            "stayedViable": 1,
+            "viabilityFloor": 0.3970083841463415
+          },
+          "duskblade:v0": {
+            "bestCeiling": 0.825,
+            "cellCeilings": {
+              "attrition:mid": 0.825,
+              "shatter:fat": 0.625,
+              "shatter:mid": 0.7
+            },
+            "closeToBest": 1,
+            "developmentC3": false,
+            "developmentC4": true,
+            "islands": [
+              {
+                "endCell": "shatter:fat",
+                "endCounts": {
+                  "attrition:fat": 5,
+                  "attrition:mid": 5,
+                  "attrition:thin": 7,
+                  "shatter:fat": 16,
+                  "shatter:mid": 2,
+                  "shatter:thin": 2,
+                  "smolder:thin": 3
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.45,
+                "holdoutRuns": 40,
+                "holdoutWins": 18,
+                "island": 0,
+                "policyIndex": 115,
+                "startCell": "shatter:fat",
+                "stop": "stall"
+              },
+              {
+                "endCell": "shatter:fat",
+                "endCounts": {
+                  "attrition:fat": 1,
+                  "attrition:mid": 2,
+                  "attrition:thin": 3,
+                  "shatter:fat": 22,
+                  "shatter:mid": 9,
+                  "shatter:thin": 2,
+                  "smolder:thin": 1
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.6,
+                "holdoutRuns": 40,
+                "holdoutWins": 24,
+                "island": 1,
+                "policyIndex": 38,
+                "startCell": "shatter:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:mid",
+                "endCounts": {
+                  "attrition:mid": 3,
+                  "attrition:thin": 3,
+                  "shatter:fat": 4,
+                  "shatter:mid": 26,
+                  "shatter:thin": 3,
+                  "smolder:thin": 1
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.7,
+                "holdoutRuns": 40,
+                "holdoutWins": 28,
+                "island": 2,
+                "policyIndex": 244,
+                "startCell": "shatter:mid",
+                "stop": "stall"
+              },
+              {
+                "endCell": "attrition:mid",
+                "endCounts": {
+                  "attrition:fat": 1,
+                  "attrition:mid": 17,
+                  "attrition:thin": 11,
+                  "shatter:mid": 3,
+                  "shatter:thin": 8
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.825,
+                "holdoutRuns": 40,
+                "holdoutWins": 33,
+                "island": 3,
+                "policyIndex": 349,
+                "startCell": "attrition:thin",
+                "stop": "stall"
+              },
+              {
+                "endCell": "shatter:mid",
+                "endCounts": {
+                  "attrition:fat": 8,
+                  "attrition:mid": 7,
+                  "attrition:thin": 6,
+                  "shatter:fat": 5,
+                  "shatter:mid": 9,
+                  "shatter:thin": 2,
+                  "smolder:thin": 3
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.625,
+                "holdoutRuns": 40,
+                "holdoutWins": 25,
+                "island": 4,
+                "policyIndex": 241,
+                "startCell": "attrition:mid",
+                "stop": "stall"
+              },
+              {
+                "endCell": "shatter:fat",
+                "endCounts": {
+                  "attrition:fat": 6,
+                  "attrition:mid": 2,
+                  "attrition:thin": 5,
+                  "shatter:fat": 19,
+                  "shatter:mid": 3,
+                  "shatter:thin": 3,
+                  "smolder:thin": 2
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.625,
+                "holdoutRuns": 40,
+                "holdoutWins": 25,
+                "island": 5,
+                "policyIndex": 285,
+                "startCell": "shatter:fat",
+                "stop": "stall"
+              }
+            ],
+            "layerProxyTopRate": 0.8555906063792499,
+            "medianCeiling": 0.625,
+            "stayedViable": 2,
+            "viabilityFloor": 0.5723265531896249
+          },
+          "duskblade:v5": {
+            "bestCeiling": 0.475,
+            "cellCeilings": {
+              "attrition:thin": 0.275,
+              "shatter:fat": 0.475,
+              "shatter:mid": 0.425
+            },
+            "closeToBest": 0,
+            "developmentC3": false,
+            "developmentC4": true,
+            "islands": [
+              {
+                "endCell": "shatter:fat",
+                "endCounts": {
+                  "attrition:fat": 2,
+                  "attrition:thin": 8,
+                  "shatter:fat": 20,
+                  "shatter:mid": 3,
+                  "shatter:thin": 3,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.475,
+                "holdoutRuns": 40,
+                "holdoutWins": 19,
+                "island": 6,
+                "policyIndex": 43,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:mid",
+                "endCounts": {
+                  "attrition:mid": 1,
+                  "attrition:thin": 4,
+                  "shatter:mid": 19,
+                  "shatter:thin": 15,
+                  "smolder:thin": 1
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.425,
+                "holdoutRuns": 40,
+                "holdoutWins": 17,
+                "island": 7,
+                "policyIndex": 244,
+                "startCell": "shatter:mid",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "attrition:thin",
+                "endCounts": {
+                  "attrition:fat": 3,
+                  "attrition:thin": 15,
+                  "shatter:fat": 10,
+                  "shatter:mid": 1,
+                  "shatter:thin": 7,
+                  "smolder:thin": 4
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.275,
+                "holdoutRuns": 40,
+                "holdoutWins": 11,
+                "island": 8,
+                "policyIndex": 175,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "shatter:mid",
+                "endCounts": {
+                  "attrition:thin": 9,
+                  "shatter:fat": 5,
+                  "shatter:mid": 14,
+                  "shatter:thin": 9,
+                  "smolder:thin": 3
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.35,
+                "holdoutRuns": 40,
+                "holdoutWins": 14,
+                "island": 9,
+                "policyIndex": 210,
+                "startCell": "shatter:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "attrition:thin",
+                "endCounts": {
+                  "attrition:fat": 1,
+                  "attrition:mid": 3,
+                  "attrition:thin": 16,
+                  "shatter:fat": 4,
+                  "shatter:mid": 2,
+                  "shatter:thin": 9,
+                  "smolder:thin": 5
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.1,
+                "holdoutRuns": 40,
+                "holdoutWins": 4,
+                "island": 10,
+                "policyIndex": 62,
+                "startCell": "attrition:thin",
+                "stop": "maxGen"
+              },
+              {
+                "endCell": "attrition:thin",
+                "endCounts": {
+                  "attrition:fat": 3,
+                  "attrition:mid": 3,
+                  "attrition:thin": 11,
+                  "shatter:fat": 8,
+                  "shatter:mid": 3,
+                  "shatter:thin": 4,
+                  "smolder:mid": 1,
+                  "smolder:thin": 7
+                },
+                "generations": 6,
+                "holdoutCeiling": 0.25,
+                "holdoutRuns": 40,
+                "holdoutWins": 10,
+                "island": 11,
+                "policyIndex": 64,
+                "startCell": "attrition:thin",
+                "stop": "stall"
+              }
+            ],
+            "layerProxyTopRate": 0.7978547854785478,
+            "medianCeiling": 0.275,
+            "stayedViable": 0,
+            "viabilityFloor": 0.4418961427392739
+          }
+        },
+        "id": "s009",
+        "pairedVsC000": {
+          "ashwarden:v0": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.04583333333333333,
+              "p50": 0.1125,
+              "p975": 0.175
+            },
+            "islands": 6,
+            "pHigher": 0.999,
+            "seedBlocks": 40,
+            "winRateDelta": 0.1125
+          },
+          "ashwarden:v5": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.058333333333333334,
+              "p50": 0.11666666666666667,
+              "p975": 0.175
+            },
+            "islands": 6,
+            "pHigher": 1.0,
+            "seedBlocks": 40,
+            "winRateDelta": 0.11666666666666667
+          },
+          "duskblade:v0": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.0875,
+              "p50": 0.18333333333333332,
+              "p975": 0.275
+            },
+            "islands": 6,
+            "pHigher": 0.99975,
+            "seedBlocks": 40,
+            "winRateDelta": 0.18333333333333332
+          },
+          "duskblade:v5": {
+            "bootstrap": 4000,
+            "holdoutSeeds": [
+              6800,
+              6839
+            ],
+            "interval": {
+              "p025": 0.020833333333333332,
+              "p50": 0.1125,
+              "p975": 0.20416666666666666
+            },
+            "islands": 6,
+            "pHigher": 0.9895,
+            "seedBlocks": 40,
+            "winRateDelta": 0.1125
+          }
+        },
+        "vow5Ceiling": {
+          "clear": true,
+          "grids": {
+            "ashwarden:v5": {
+              "bestCeiling": 0.6,
+              "clear": true
+            },
+            "duskblade:v5": {
+              "bestCeiling": 0.475,
+              "clear": true
+            }
+          }
+        }
+      },
+      "numericPatch": [
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "player.maxHp"
+        },
+        {
+          "after": 60,
+          "before": 64,
+          "feature": "duskMaxHp",
+          "path": "aspects[0].maxHp"
+        },
+        {
+          "after": 10,
+          "before": 9,
+          "feature": "flareDamage",
+          "path": "arts.flare.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 6,
+          "feature": "ashfallSmolder",
+          "path": "arts.ashfall.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 5,
+          "feature": "ashfallWard",
+          "path": "arts.ashfall.effects[1].n"
+        },
+        {
+          "after": 4,
+          "before": 2,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 3,
+          "feature": "regrowthHeal",
+          "path": "cards.regrowth.up.effects[0].n"
+        },
+        {
+          "after": 4,
+          "before": 3,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "ironSkinWard",
+          "path": "cards.ironSkin.up.effects[0].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.effects[1].n"
+        },
+        {
+          "after": 7,
+          "before": 6,
+          "feature": "guardedStrikeWard",
+          "path": "cards.guardedStrike.up.effects[1].n"
+        },
+        {
+          "after": 5,
+          "before": 4,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.effects[1].n"
+        },
+        {
+          "after": 6,
+          "before": 5,
+          "feature": "venomStrikeSmolder",
+          "path": "cards.venomStrike.up.effects[1].n"
+        }
+      ],
+      "rank": 2,
+      "replayIdentity": {
+        "candidateFileSha256": "0b277c9a7929d7a763694bdbb7934e2a4e338070bd9b5a40bc4cb11ef01a44bc",
+        "candidateSemanticSha256": "ee114c7dfad5aa3e9bc213cf4b0b86c484d8c2d4e327ce6d72836a035181b602",
+        "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+        "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "layerCommit": "bf8b194575debfddf5d39035334a473262e778cf",
+        "layerInputHash": "ae3a0c0b4598eb8c9f059dc2d91b0a927171f4cdd2231e0f4dfc436fb8b53f15",
+        "layerObservationsSha256": "8f0b7ed6f874b04b3b93d09c07aedc739aab5e2f91c049e2755022c077d1973d"
+      },
+      "sealedAudit": {
+        "auditEarlyStop": "stalls-beyond-baseline",
+        "auditFaultRows": [
+          {
+            "arm": 1,
+            "aspect": "duskblade",
+            "error": "",
+            "outcome": "stall",
+            "seed": 8144,
+            "vow": 5
+          }
+        ],
+        "auditHardConstraints": {},
+        "auditIdentity": null,
+        "auditReplayIdentity": {
+          "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+          "controlRowCount": 1600,
+          "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+          "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+          "landscapeRowCount": 0,
+          "observationsSha256": "f3086e5ad9cf3ac8418ba19897fc6178d7f4aa629332fbf25d240f833beb946b"
+        },
+        "auditStatus": "early-stop",
+        "bindingDeficitChanges": {},
+        "confidenceBlocked": true,
+        "developmentIdentity": {
+          "expectedDuskShatterAshSmolder": true,
+          "topCells": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          }
+        },
+        "effectChanges": {},
+        "id": "s009",
+        "identityContradiction": false,
+        "materialContradictions": [
+          "audit-early-stop:stalls-beyond-baseline"
+        ]
+      },
+      "values": {
+        "ashfallSmolder": 4,
+        "ashfallWard": 5,
+        "duskMaxHp": 60,
+        "flareDamage": 10,
+        "guardedStrikeWard": 5,
+        "ironSkinWard": 4,
+        "regrowthHeal": 4,
+        "venomStrikeSmolder": 5
+      }
+    }
+  ],
+  "tier0BoundaryCounts": {
+    "c029": 5,
+    "s009": 3
+  }
+}
