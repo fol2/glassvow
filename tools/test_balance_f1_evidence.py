@@ -147,7 +147,8 @@ class BalanceF1EvidenceTest(unittest.TestCase):
                                  "arm2Rate": 0.2, "margin": 0.5}
             deficit_delta = {key: {"p025": effect[0], "p50": effect[1], "p975": effect[2]}
                              for key in ("c1a", "c1b")}
-            return {"id": candidate_id, "fileSha256": "f" * 64,
+            return {"id": candidate_id, "status": "complete", "earlyStop": None,
+                    "fileSha256": "f" * 64,
                     "semanticSha256": "e" * 64, "values": {"flareDamage": 9},
                     "proxies": proxies,
                     "bootstrap": {"vsC000": {"gridDelta": grid_delta,
@@ -167,6 +168,26 @@ class BalanceF1EvidenceTest(unittest.TestCase):
         audit["candidates"][0]["fileSha256"] = "a" * 64
         with self.assertRaisesRegex(ValueError, "sealed audit identity drift"):
             audit_comparison(development, audit, ["c001"], 0.10)
+
+    def test_audit_early_stop_is_a_non_gating_confidence_block(self) -> None:
+        grids = ("duskblade:v0", "duskblade:v5", "ashwarden:v0", "ashwarden:v5")
+        identity = {"fileSha256": "f" * 64, "semanticSha256": "e" * 64,
+                    "values": {"flareDamage": 9}}
+        development = {"candidates": [{"id": "c001", **identity,
+                                        "proxies": {grid: {
+                                            "topCell": "shatter:fat" if grid.startswith(
+                                                "duskblade") else "smolder:fat"
+                                        } for grid in grids}}]}
+        audit = {"candidates": [{"id": "c001", **identity, "status": "early-stop",
+                                  "earlyStop": "stalls-beyond-baseline",
+                                  "observationsSha256": "o" * 64,
+                                  "controlRowCount": 1600, "landscapeRowCount": 0}]}
+        report = audit_comparison(development, audit, ["c001"], 0.10)
+        row = report["candidates"][0]
+        self.assertTrue(row["confidenceBlocked"])
+        self.assertEqual(["audit-early-stop:stalls-beyond-baseline"],
+                         row["materialContradictions"])
+        self.assertEqual(0, row["auditReplayIdentity"]["landscapeRowCount"])
 
     def test_mini_cem_spec_is_bounded_to_development_roots_and_seeds(self) -> None:
         contract = load_contract()
