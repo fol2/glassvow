@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "421-content-search-seeds-v1",
-  "description": "Development seed and policy-root contract for #454. The frozen #215/#216 exam is unchanged. Mini-landscapes must reuse the frozen #215 axes; never re-fit per candidate.",
+  "description": "Development seed and policy-root contract for #454, extended with the sealed #489 Tier-1 namespace. The frozen #215/#216 exam is unchanged. Mini-landscapes must reuse the frozen #215 axes; never re-fit per candidate. Prior #454 bands remain occupied and fail-closed against the new bands.",
   "engine": "4.7.2.stable",
   "digestPin": {
     "seed": 1000,
@@ -25,6 +25,11 @@
     "f0PolicyRoot": 454,
     "f1PolicyRoot": 1454,
     "miniCemRoot": 2454
+  },
+  "tier1": {
+    "f0PolicyRoot": 3454,
+    "f1PolicyRoot": 4454,
+    "miniCemRoot": 6454
   },
   "stages": {
     "fingerprint": {
@@ -60,6 +65,40 @@
       "seeds": {"first": 8000, "last": 8199},
       "roots": [454, 1454, 2454],
       "sealedUntil": "finalist"
+    },
+    "tier1-fingerprint": {
+      "seeds": {"first": 9000, "last": 9063},
+      "roots": []
+    },
+    "tier1-f0-controls": {
+      "seeds": {"first": 9100, "last": 9131},
+      "roots": [3454]
+    },
+    "tier1-f0-mini-landscape": {
+      "seeds": {"first": 9200, "last": 9207},
+      "roots": [3454]
+    },
+    "tier1-f1-racing": {
+      "seeds": {"first": 9300, "last": 9599},
+      "roots": [4454]
+    },
+    "tier1-mini-cem": {
+      "seeds": {"first": 9600, "last": 9999},
+      "holdout": {"first": 10000, "last": 10399},
+      "roots": [6454]
+    },
+    "tier1-mini-cem-train": {
+      "seeds": {"first": 9600, "last": 9999},
+      "roots": [6454]
+    },
+    "tier1-mini-cem-validate": {
+      "seeds": {"first": 10000, "last": 10399},
+      "roots": [6454]
+    },
+    "tier1-audit": {
+      "seeds": {"first": 11000, "last": 11199},
+      "roots": [3454, 4454, 6454],
+      "sealedUntil": "tier1-finalist"
     },
     "exam": {
       "seedBands": [

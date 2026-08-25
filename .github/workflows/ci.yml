@@ -59,6 +59,9 @@ jobs:
       - name: Test content-search seed contract
         run: python3 -B tools/balance_seed_contract.py --self-test
 
+      - name: Test s009 exam catalogue reconstruction
+        run: python3 -B tools/balance_s009_reconstruct.py --self-test
+
       - name: Test candidate loading and host-qualify fail-closed
         run: python3 -B tools/balance_host_qualify.py --self-test
 

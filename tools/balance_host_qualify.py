@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Host fingerprint, seed-1000 digest and worker-count benchmark for #456."""
+"""Host fingerprint, seed-1000 digest and worker-count benchmark for #489."""
 from __future__ import annotations
 
 import argparse
@@ -31,10 +31,11 @@ from balance_seed_contract import (  # noqa: E402
 
 ASPECTS = ("duskblade", "ashwarden")
 VOWS = (0, 5)
-FINGERPRINT = (5600, 5663)
+FINGERPRINT = (9000, 9063)
+FINGERPRINT_STAGE = "tier1-fingerprint"
 REQUIRED_GODOT_PREFIX = "4.7.2.stable"
 H39_FILE_SHA = "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
-CANONICAL_REL = "docs/balance/data/456/canonical-host.json"
+CANONICAL_REL = "docs/balance/data/489/canonical-host.json"
 
 
 def run(cmd: list[str], cwd: Path = REPO) -> subprocess.CompletedProcess[str]:
@@ -155,7 +156,7 @@ def run_digest(godot: str, out_dir: Path, content: str) -> dict[str, Any]:
 
 
 def run_fingerprint(godot: str, out_dir: Path, jobs: int, content: str) -> dict[str, Any]:
-    error = check_invocation(load_contract(), "fingerprint", FINGERPRINT[0], FINGERPRINT[1])
+    error = check_invocation(load_contract(), FINGERPRINT_STAGE, FINGERPRINT[0], FINGERPRINT[1])
     if error:
         raise ValueError(error)
     shards = fingerprint_shards(jobs)
@@ -169,7 +170,7 @@ def run_fingerprint(godot: str, out_dir: Path, jobs: int, content: str) -> dict[
         flags = [
             f"--aspect={shard['aspect']}", f"--vow={shard['vow']}",
             f"--seed0={shard['seed0']}", f"--runs={shard['runs']}",
-            "--stage=fingerprint",
+            f"--stage={FINGERPRINT_STAGE}",
         ]
         if content:
             flags.append(f"--content={content}")
@@ -244,7 +245,7 @@ def build_packet(godot: str, out_dir: Path, jobs: int, content: str) -> dict[str
         qualified = True
         reason = ""
     return {
-        "issue": 456,
+        "issue": 489,
         "godotVersion": version,
         "commit": commit,
         **identity,
@@ -277,8 +278,8 @@ def prove_concurrent(godot: str, out_dir: Path) -> dict[str, Any]:
 
     def _run(name: str, path: Path) -> dict[str, Any]:
         out = out_dir / f"{name}.json"
-        godot_sim(godot, ["--aspect=duskblade", "--runs=1", "--seed0=5600", "--vow=0",
-                          f"--content={path}", "--stage=fingerprint"], out, out_dir / f"{name}.log")
+        godot_sim(godot, ["--aspect=duskblade", "--runs=1", "--seed0=9000", "--vow=0",
+                          f"--content={path}", f"--stage={FINGERPRINT_STAGE}"], out, out_dir / f"{name}.log")
         return load_report(out)
 
     with ThreadPoolExecutor(max_workers=2) as pool:
@@ -306,7 +307,7 @@ def fail_closed_cli(godot: str, out_dir: Path) -> None:
     missing = out_dir / "missing-out.json"
     proc = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
                 "--content=/no/such/glassvow-candidate.json", "--aspect=duskblade",
-                "--runs=1", "--seed0=5600", "--vow=0", "--stage=fingerprint",
+                "--runs=1", "--seed0=9000", "--vow=0", f"--stage={FINGERPRINT_STAGE}",
                 f"--out={missing}"])
     if proc.returncode == 0:
         raise RuntimeError("missing --content must fail closed")
@@ -319,11 +320,26 @@ def fail_closed_cli(godot: str, out_dir: Path) -> None:
                    "--stage=f0-controls", f"--out={out_dir / 'overlap.json'}"])
     if overlap.returncode == 0:
         raise RuntimeError("F0 overlapping acceptance seeds must fail closed")
+    tier1_overlap = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                         "--aspect=duskblade", "--runs=1", "--seed0=5000", "--vow=0",
+                         "--stage=tier1-f0-controls", f"--out={out_dir / 'tier1-overlap.json'}"])
+    if tier1_overlap.returncode == 0:
+        raise RuntimeError("Tier-1 F0 overlapping acceptance seeds must fail closed")
+    prior = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                 "--aspect=duskblade", "--runs=1", "--seed0=6000", "--vow=0",
+                 "--stage=tier1-f0-controls", f"--out={out_dir / 'tier1-prior.json'}"])
+    if prior.returncode == 0:
+        raise RuntimeError("Tier-1 F0 overlapping the #454 F0 band must fail closed")
     sealed = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
                   "--aspect=duskblade", "--runs=1", "--seed0=8000", "--vow=0",
                   "--stage=audit", f"--out={out_dir / 'audit.json'}"])
     if sealed.returncode == 0:
         raise RuntimeError("audit stage must stay sealed until finalist")
+    tier1_sealed = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                        "--aspect=duskblade", "--runs=1", "--seed0=11000", "--vow=0",
+                        "--stage=tier1-audit", f"--out={out_dir / 'tier1-audit.json'}"])
+    if tier1_sealed.returncode == 0:
+        raise RuntimeError("Tier-1 audit stage must stay sealed until a Tier-1 finalist")
 
 
 def self_test(godot: str) -> int:
@@ -334,7 +350,10 @@ def self_test(godot: str) -> int:
     if shutil.which(godot) is None and not Path(godot).is_file():
         raise ValueError(f"{godot} is required for host-qualify self-test")
     require_godot(godot)
-    with tempfile.TemporaryDirectory(prefix="glassvow-456-") as temp:
+    contract = load_contract()
+    assert contract["stages"][FINGERPRINT_STAGE]["seeds"]["first"] == FINGERPRINT[0]
+    assert contract["stages"][FINGERPRINT_STAGE]["seeds"]["last"] == FINGERPRINT[1]
+    with tempfile.TemporaryDirectory(prefix="glassvow-489-") as temp:
         root = Path(temp)
         fail_closed_cli(godot, root)
         prove_concurrent(godot, root / "concurrent")
@@ -351,7 +370,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--jobs", default="4", help="worker count, or comma list for --bench")
     parser.add_argument("--godot", default="godot")
     parser.add_argument("--content", default="")
-    parser.add_argument("--out", default="/tmp/glassvow-456-host")
+    parser.add_argument("--out", default="/tmp/glassvow-489-host")
     parser.add_argument("--compare", type=Path, help="canonical host packet to grade against")
     parser.add_argument("--mint", action="store_true",
                         help="write a packet without grading against the in-repo canonical")
@@ -408,7 +427,7 @@ def main() -> int:
             hashes.add(str(canonical.get("fingerprint", {}).get("fingerprintHash", "")))
         chosen = max(results, key=lambda row: (row["qualified"], row["rowsPerSecond"]))
         summary = {
-            "issue": 456,
+            "issue": 489,
             "drift": len(hashes) != 1,
             "chosenWorkers": None if len(hashes) != 1 else chosen["workers"],
             "runs": results,
