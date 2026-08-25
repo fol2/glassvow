@@ -97,7 +97,96 @@ export type ExportSnap = {
   exportN?: number;
   format?: string;
   glbOption?: boolean;
+  retry?: boolean;
+  viewOk?: boolean;
+  hasTexRes?: boolean;
+  texIs1k?: boolean;
+  tex1kOption?: boolean;
+  hasConvertHref?: boolean;
+  generate?: { t: string; vis?: boolean; cx?: number; cy?: number }[];
 };
+
+export type HdExportCtx = {
+  taskIdArg: string;
+  generateClicked: boolean;
+  leftoverTaskId: string;
+  toolbarExportClicked: boolean;
+  formatOpened: boolean;
+  texResOpened: boolean;
+  dialogExportClicked: boolean;
+  cdnFetched: boolean;
+  textureQuality: string;
+  stopBeforeGenerate?: boolean;
+};
+
+/** HD 1K lives on Export Texture Resolution, not the generate form. Never loop on close_tex_list. */
+export function decideHdExport(s: ExportSnap, ctx: HdExportCtx): string {
+  if (!ctx.taskIdArg) {
+    const g = newImageExportGuard(s, {
+      generateClicked: ctx.generateClicked, leftoverTaskId: ctx.leftoverTaskId,
+    });
+    if (g === "refuse_prior_export") return g;
+    if (g === "accept_gltf") return "done";
+    if (g === "watch_generate") return "watch_generate";
+  }
+  if (s.gltf) return "done";
+  if (s.retry) return "dismiss_retry";
+  if (s.viewOk) return "dismiss_ok";
+  if ((s.exportN || 0) >= 1 && !s.format) {
+    return ctx.toolbarExportClicked ? "watch_dialog" : "click_export";
+  }
+  if (s.format && s.format !== "GLB" && !s.glbOption) {
+    return ctx.formatOpened ? "watch_dialog" : "open_format";
+  }
+  if (s.glbOption && s.format !== "GLB") return "pick_glb";
+  if (s.format === "GLB" && (s.exportN || 0) < 2) return "watch_dialog";
+  if (s.format === "GLB" && (s.exportN || 0) >= 2) {
+    if (ctx.textureQuality === "1k" && s.hasTexRes && !s.texIs1k) {
+      if (s.tex1kOption) return "pick_tex_1k";
+      return ctx.texResOpened ? "watch_dialog" : "open_tex_res";
+    }
+    if (ctx.dialogExportClicked) {
+      if (!s.gltf && s.hasConvertHref && !ctx.cdnFetched) return "fetch_cdn";
+      return "watch_download";
+    }
+    return "click_dialog_export";
+  }
+  if (ctx.dialogExportClicked) {
+    if (!s.gltf && s.hasConvertHref && !ctx.cdnFetched) return "fetch_cdn";
+    return "watch_download";
+  }
+  if (ctx.generateClicked) return "watch_generate";
+  const genBtn = Array.isArray(s.generate) ? pickVisibleGenerate(s.generate) : null;
+  if (shouldClickGenerate(s, {
+    taskIdArg: ctx.taskIdArg,
+    generateClicked: ctx.generateClicked,
+    hasGenerateButton: !!genBtn,
+    stopBeforeGenerate: ctx.stopBeforeGenerate,
+  })) return "click_generate";
+  return "watch_generate";
+}
+
+export function hookedGltf<T extends { magic?: string; size?: number }>(
+  files: T[] | undefined,
+): T | undefined {
+  return (files || []).find((f) => f.magic === "glTF" && (f.size || 0) > 100);
+}
+
+export function isStudioConvertHref(href: string, download = ""): boolean {
+  try {
+    const u = new URL(String(href || ""));
+    const host = u.hostname.toLowerCase();
+    const tripo = host === "tripo3d.ai" || host.endsWith(".tripo3d.ai")
+      || host === "tripo3d.com" || host.endsWith(".tripo3d.com")
+      || host.includes("tripo-data");
+    if (!tripo) return false;
+    const n = String(download || "");
+    return /\.glb(\?|$)/i.test(n) || /\.glb(\?|$)/i.test(u.pathname + u.search)
+      || host.includes("tripo-data");
+  } catch {
+    return false;
+  }
+}
 
 /** New `--image` must not click or write a leftover task's GLB. */
 export function newImageExportGuard(
@@ -177,7 +266,6 @@ export function remainingStudioFeatures(): string[] {
     "4K texture (over this repo's hero bytes_max)",
     "8K Texture trial",
     "AI Complete (invents unseen backsides)",
-    "Ultra Mesh Quality off",
     "FBX/OBJ/STL/USD/3MF export formats",
     "Public or Sharing Only privacy",
     "Godot DCC Bridge auto-import",
@@ -473,6 +561,24 @@ export function normalizeTextureQuality(v: string): string {
   return m ? `${m[1]}k` : String(v || "").toLowerCase().replace(/\s+/g, "");
 }
 
+/**
+ * Quality the HD generate form can actually click.
+ * Walked 2026-08-25: Geometry & Texture offers 2K / 4K / 8K Trial; 1K is gone.
+ * Ordinary kits still want 1K (192 KiB), applied at Export Texture Resolution
+ * when that combobox exists.
+ */
+export function hdGenerateTextureQuality(
+  want: string,
+  available: readonly string[] | undefined,
+): string {
+  const wantN = normalizeTextureQuality(want);
+  const avail = (available || []).map((q) => normalizeTextureQuality(q)).filter(Boolean);
+  if (!avail.length || avail.includes(wantN)) return wantN;
+  if (wantN === "1k" && avail.includes("2k")) return "2k";
+  if (avail.includes("2k")) return "2k";
+  return avail[0];
+}
+
 export function normalizeTopology(v: string): string {
   const t = String(v || "").toLowerCase();
   if (t.includes("quad")) return "quad";
@@ -495,6 +601,7 @@ export type HdFormState = {
   aiComplete?: boolean;
   texture?: boolean;
   textureQuality?: string;
+  availableTextureQualities?: string[];
   pbr?: boolean;
   topology?: string;
   facesVal?: number | null;
@@ -547,7 +654,8 @@ export function decideHdForm(state: HdFormState, want: StudioRequest): HdFormAct
   if (state.ultra !== want.ultraMesh) return "set_ultra";
   if (state.aiComplete !== want.aiComplete) return "set_ai_complete";
   if (state.texture !== want.texture) return "set_texture";
-  if (want.texture && normalizeTextureQuality(String(state.textureQuality || "")) !== want.textureQuality) {
+  if (want.texture && normalizeTextureQuality(String(state.textureQuality || "")) !==
+      hdGenerateTextureQuality(want.textureQuality, state.availableTextureQualities)) {
     return "set_texture_quality";
   }
   if (state.pbr !== want.pbr) return "set_pbr";

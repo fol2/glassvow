@@ -5,7 +5,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   BARE_GENERATE_URL, STUDIO, UPLOAD_WATCH_LIMIT_MS,
-  blankResetArrived, decideHdForm, generateTargetUrl, generateTaskIdFromHref,
+  blankResetArrived, decideHdForm, decideHdExport, generateTargetUrl, generateTaskIdFromHref,
+  hdGenerateTextureQuality, isStudioConvertHref,
   generateWaitReady, isBareGenerateHref, isPriceAgnosticGenerateLabel,
   isTransientEvaluateError, newImageExportGuard, parseStudioArgv,
   pickVisibleGenerate, planStudioRun, planWarmGeneratePage, quotedCreditsFromGenerateLabel,
@@ -358,11 +359,81 @@ test("HD form decide: stay on HD, drive Geometry & Texture, then done", () => {
   }, want)).toBe("watch_geo");
 });
 
+test("ordinary HD --ultra-mesh off toggles Ultra Mesh Quality", () => {
+  const want = resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--textured", "--out", "o.glb",
+    "--faces", "1500", "--texture-quality", "1k", "--ultra-mesh", "off",
+  ]));
+  expect(want.ultraMesh).toBe(false);
+  expect(want.faces).toBe(1500);
+  expect(want.textureQuality).toBe("1k");
+  expect(decideHdForm({
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: true, textureQuality: "2k",
+    availableTextureQualities: ["2k", "4k"],
+    pbr: false, topology: "triangle", facesVal: 1500, slider: 1500,
+  }, want)).toBe("set_ultra");
+  expect(remainingStudioFeatures()).not.toContain("Ultra Mesh Quality off");
+});
+
+test("HD generate form 1K is optional: 2K floor when Studio dropped the button", () => {
+  expect(hdGenerateTextureQuality("1k", undefined)).toBe("1k");
+  expect(hdGenerateTextureQuality("1k", [])).toBe("1k");
+  expect(hdGenerateTextureQuality("1k", ["1k", "2k", "4k"])).toBe("1k");
+  expect(hdGenerateTextureQuality("1k", ["2k", "4k"])).toBe("2k");
+  expect(hdGenerateTextureQuality("2k", ["2k", "4k"])).toBe("2k");
+  const want1k = resolveStudioRequest(parseStudioArgv([
+    "--image", "a.png", "--textured", "--out", "o.glb",
+    "--faces", "1500", "--texture-quality", "1k",
+  ]));
+  expect(want1k.textureQuality).toBe("1k");
+  const geo = {
+    tab: "high_detail", hdPresent: true, privacy: "Private", geoOpen: true,
+    ultra: true, aiComplete: false, texture: true, textureQuality: "2k",
+    availableTextureQualities: ["2k", "4k"],
+    pbr: false, topology: "triangle", facesVal: 1500, slider: 1500,
+  };
+  expect(decideHdForm(geo, want1k)).toBe("close_geo");
+  expect(decideHdForm({ ...geo, textureQuality: "4k" }, want1k)).toBe("set_texture_quality");
+  expect(decideHdForm({
+    ...geo, availableTextureQualities: ["1k", "2k", "4k"], textureQuality: "2k",
+  }, want1k)).toBe("set_texture_quality");
+});
+
+test("HD export: 1K is Export Texture Resolution, CDN fallback, never close_tex_list loop", () => {
+  const base = {
+    taskIdArg: "", generateClicked: true, leftoverTaskId: "",
+    toolbarExportClicked: true, formatOpened: true, texResOpened: false,
+    dialogExportClicked: false, cdnFetched: false, textureQuality: "1k",
+  };
+  const dialog = {
+    taskId: NEW_TASK, exportN: 2, format: "GLB", glbOption: true,
+    hasTexRes: true, texIs1k: false, tex1kOption: false,
+  };
+  expect(decideHdExport(dialog, base)).toBe("open_tex_res");
+  expect(decideHdExport({ ...dialog, tex1kOption: true }, base)).toBe("pick_tex_1k");
+  expect(decideHdExport({ ...dialog, texIs1k: true, tex1kOption: true }, base)).toBe("click_dialog_export");
+  expect(decideHdExport({ ...dialog, texIs1k: true, tex1kOption: true }, {
+    ...base, dialogExportClicked: true,
+  })).toBe("watch_download");
+  expect(decideHdExport({ ...dialog, texIs1k: true, hasConvertHref: true }, {
+    ...base, dialogExportClicked: true,
+  })).toBe("fetch_cdn");
+  expect(decideHdExport({ ...dialog, texIs1k: true, gltf: { size: 200 } }, {
+    ...base, dialogExportClicked: true, generateClicked: true,
+  })).toBe("done");
+  expect(isStudioConvertHref("https://tripo-data.rg1.data.tripo3d.com/x", "a.glb")).toBe(true);
+  expect(isStudioConvertHref("https://evil.example/x.glb", "")).toBe(false);
+});
+
 test("driver source: HD textured path, dry-run/smoke-run, price-agnostic Generate", () => {
   expect(DRIVER).toContain("parseStudioArgv");
   expect(DRIVER).toContain("resolveStudioRequest");
   expect(DRIVER).toContain("planStudioRun");
   expect(DRIVER).toContain("decideHdForm");
+  expect(DRIVER).toContain("decideHdExport");
+  expect(DRIVER).toContain("HTMLAnchorElement.prototype.click");
+  expect(DRIVER).toContain("fetch_cdn");
   expect(DRIVER).toContain("shouldClickGenerate");
   expect(DRIVER).toContain("pickVisibleGenerate");
   expect(DRIVER).toContain("studioExportFormFields");
