@@ -96,6 +96,6 @@
   "audit": {
     "nonGating": true,
     "materialControlContradictionPp": 10,
-    "materialProxyContradiction": "paired 95% interval excludes zero and median absolute change is at least 0.10"
+    "materialProxyContradiction": "the conservative difference of development and audit paired candidate-vs-c000 95% envelopes excludes zero and the median effect changes by at least 0.10"
   }
 }

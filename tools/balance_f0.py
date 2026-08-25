@@ -60,6 +60,7 @@ HOST_PACKETS = (
     "docs/balance/data/456/m4-mac-mini.json",
 )
 PROXY_KEYS = ("topRate", "thirdRate", "fourthRate", "within10", "viable", "arm2Rate", "margin")
+RATE_PROXY_KEYS = ("topRate", "thirdRate", "fourthRate", "arm2Rate", "margin")
 DEFICIT_KEYS = ("c1a", "c1b", "c2arm", "c2gap")
 
 
@@ -320,6 +321,42 @@ def _draw(grouped: dict[int, list[dict[str, Any]]], ids: list[int]) -> list[dict
     return [row for seed in ids for row in grouped[seed]]
 
 
+def _seed_tallies(grouped: dict[int, list[dict[str, Any]]], key_fn: Any) \
+        -> dict[int, dict[tuple[Any, ...], dict[str, int]]]:
+    return {seed: _tally(rows, key_fn) for seed, rows in grouped.items()}
+
+
+def _combine_tallies(seed_tallies: dict[int, dict[tuple[Any, ...], dict[str, int]]],
+                     ids: list[int]) -> dict[tuple[Any, ...], dict[str, int]]:
+    combined: dict[tuple[Any, ...], dict[str, int]] = defaultdict(
+        lambda: {"wins": 0, "runs": 0, "stalls": 0, "errors": 0})
+    for seed in ids:
+        for key, values in seed_tallies[seed].items():
+            for field in ("wins", "runs", "stalls", "errors"):
+                combined[key][field] += values[field]
+    return combined
+
+
+def _controls_from_tallies(tallies: dict[tuple[Any, ...], dict[str, int]]) \
+        -> dict[str, dict[str, Any]]:
+    arms = sorted({int(key[0]) for key in tallies}) or list(RANK_ARMS)
+    return {f"{arm}:{aspect}:v{vow}": _cell(**tallies[(arm, aspect, vow)])
+            for arm in arms for aspect in ASPECTS for vow in VOWS}
+
+
+def _cells_from_tallies(tallies: dict[tuple[Any, ...], dict[str, int]]) \
+        -> dict[str, dict[str, Any]]:
+    cells: dict[str, dict[str, Any]] = {}
+    for aspect in ASPECTS:
+        for vow in VOWS:
+            for lean in TIE:
+                for thick in THICK:
+                    cell = _cell(**tallies[(aspect, vow, lean, thick)])
+                    cell["policies"] = 0  # Policy cardinality is not a bootstrap response.
+                    cells[f"{aspect}:v{vow}:{lean}:{thick}"] = cell
+    return cells
+
+
 def seed_block_bootstrap(control: dict[int, list[dict[str, Any]]],
                          landscape: dict[int, list[dict[str, Any]]],
                          baseline_control: dict[int, list[dict[str, Any]]] | None,
@@ -327,14 +364,27 @@ def seed_block_bootstrap(control: dict[int, list[dict[str, Any]]],
                          axes: dict[str, Any], n_boot: int, rng_seed: int) -> dict[str, Any]:
     rng = random.Random(rng_seed)
     c_ids, l_ids = sorted(control), sorted(landscape)
+    control_tallies = _seed_tallies(
+        control, lambda row: (int(row["arm"]), str(row["aspect"]), int(row["vow"])))
+    landscape_tallies = _seed_tallies(
+        landscape, lambda row: (str(row["aspect"]), int(row["vow"]),
+                                *lean_and_thick(row, axes)))
+    baseline_control_tallies = _seed_tallies(
+        baseline_control, lambda row: (int(row["arm"]), str(row["aspect"]), int(row["vow"]))) \
+        if baseline_control is not None else None
+    baseline_landscape_tallies = _seed_tallies(
+        baseline_landscape, lambda row: (str(row["aspect"]), int(row["vow"]),
+                                         *lean_and_thick(row, axes))) \
+        if baseline_landscape is not None else None
     grid_acc: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
     def_acc: dict[str, list[float]] = defaultdict(list)
     vs_acc: dict[str, list[float]] = defaultdict(list)
     for _ in range(n_boot):
         c_draw = [rng.choice(c_ids) for _ in c_ids] if c_ids else []
         l_draw = [rng.choice(l_ids) for _ in l_ids] if l_ids else []
-        proxies = grid_proxies(aggregate_controls(_draw(control, c_draw)),
-                               aggregate_cells(_draw(landscape, l_draw), axes))
+        proxies = grid_proxies(
+            _controls_from_tallies(_combine_tallies(control_tallies, c_draw)),
+            _cells_from_tallies(_combine_tallies(landscape_tallies, l_draw)))
         deficit = deficits(proxies)
         for grid, proxy in proxies.items():
             for key in PROXY_KEYS:
@@ -342,13 +392,18 @@ def seed_block_bootstrap(control: dict[int, list[dict[str, Any]]],
         for key, value in deficit.items():
             def_acc[key].append(float(value))
         if baseline_control is not None and baseline_landscape is not None:
+            assert baseline_control_tallies is not None and baseline_landscape_tallies is not None
             b_proxies = grid_proxies(
-                aggregate_controls(_draw(baseline_control, c_draw)),
-                aggregate_cells(_draw(baseline_landscape, l_draw), axes))
+                _controls_from_tallies(_combine_tallies(baseline_control_tallies, c_draw)),
+                _cells_from_tallies(_combine_tallies(baseline_landscape_tallies, l_draw)))
             b_def = deficits(b_proxies)
             vs_acc["sum"].append(float(b_def["sum"] - deficit["sum"]))
             for key in DEFICIT_KEYS:
                 vs_acc[f"deficit:{key}"].append(float(b_def[key] - deficit[key]))
+            for grid in proxies:
+                for key in RATE_PROXY_KEYS:
+                    vs_acc[f"grid:{grid}:{key}"].append(
+                        float(proxies[grid][key] - b_proxies[grid][key]))
             vs_acc["margin"].append(float(
                 sum(proxies[g]["margin"] - b_proxies[g]["margin"] for g in proxies) / len(proxies)))
     result: dict[str, Any] = {
@@ -363,6 +418,11 @@ def seed_block_bootstrap(control: dict[int, list[dict[str, Any]]],
             "deficitSumDelta": _interval(vs_acc["sum"]),
             "deficitDelta": {
                 key: _interval(vs_acc[f"deficit:{key}"]) for key in DEFICIT_KEYS
+            },
+            "gridDelta": {
+                grid: {key: _interval(vs_acc[f"grid:{grid}:{key}"])
+                       for key in RATE_PROXY_KEYS}
+                for grid in sorted(proxies)
             },
             "marginDelta": _interval(vs_acc["margin"]),
         }
