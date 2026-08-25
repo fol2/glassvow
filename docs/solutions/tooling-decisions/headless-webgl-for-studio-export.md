@@ -1,7 +1,7 @@
 ---
 title: "Headless WebGL for Studio Export is a Chromium launch problem, not a Studio URL problem"
 date: 2026-08-19
-last_updated: 2026-08-19
+last_updated: 2026-08-25
 category: tooling-decisions
 module: assets/art/map
 problem_type: tooling_decision
@@ -467,6 +467,17 @@ Chrome** (new Headless or headed / off-screen headed), not a SwiftShader
 shell and not a stubbed `getContext`.
 
 ## What to try next on this box
+
+> **Resolved — this list is history, not a plan.** Probe 1 below was taken and
+> it works: the shipping pipeline runs Chrome for Testing in **new Headless**
+> on port 9335, and that is exactly what this section proposed. See
+> `tools/studio_image_to_glb.ts:20` and its step-1 note that
+> `chrome-headless-shell` still 500s on `/workspace/generate`. Item 5 ("keep
+> generate in the shell; Export in headed") is now **wrong as advice** —
+> generate does not run in the shell either. The list is kept because the
+> reasoning behind each probe is what makes the verdict above checkable, not
+> because anything here is still open.
+
 
 1. **New Headless probe, no gstack fork.** One-off Playwright against
    the full `chromium-1208` binary:

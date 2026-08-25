@@ -1,7 +1,7 @@
 ---
 title: "The generating product is Studio; a SKIP is not the silhouette gate"
 date: 2026-08-19
-last_updated: 2026-08-20
+last_updated: 2026-08-25
 category: tooling-decisions
 module: assets/art/map
 problem_type: tooling_decision
@@ -24,7 +24,8 @@ tags: [tripo, studio, map-glb, silhouette, provenance, no-api, verification]
 
 ## Context
 
-The map library is 27 untextured GLBs. Tripo Studio and the Tripo API are
+The map library is 28 GLBs — 27 untextured kits and termini, plus the one
+textured hero added on 2026-08-24 (see the HD-tab doc linked below). Tripo Studio and the Tripo API are
 independently billed. The asset bill already states the operational rule: the
 exact product that performs generation must be paid before the first shipping
 task — a Studio subscription does not prove an API task is paid, and API
@@ -36,7 +37,7 @@ Studio Pro (3000 monthly credits; header showed 3200 including leftover free)
 and forbade `openapi.tripo3d.ai` / `platform.tripo3d.ai` generation. The
 receipt lives on `assets/art/map/provenance.json` under `paid_product` with
 `generation_surface: Studio` and `api_forbidden: true`
-(`assets/art/map/provenance.json:27-28`). That receipt does not pay the API.
+(`assets/art/map/provenance.json:26-27`). That receipt does not pay the API.
 
 Until this work, a present kit GLB could not fail the production-camera
 silhouette check: the checker printed SKIP. A named check that prints SKIP and
@@ -48,7 +49,11 @@ above 0.04 fails.
 
 1. **Generate on the product you paid.** For this kit that is headed
    Studio (`studio.tripo3d.ai`), image-to-3D / Smart Mesh, using the monthly
-   Studio credits. Do not send an `Authorization: Bearer` call to the OpenAPI
+   Studio credits. **Smart Mesh is the tab for untextured kits, not for
+   Studio as a whole** — the textured hero path is Studio's `HD Model` tab
+   and is documented in
+   [The textured Studio path is the HD Model tab](the-textured-studio-path-is-the-hd-tab-not-the-script.md).
+   That changes which tab, never which product: the rule below is unaffected. Do not send an `Authorization: Bearer` call to the OpenAPI
    hosts. Do not treat leftover free credits as a generation source.
 
 2. **Record the product before the first mesh.** `paid_product` is the receipt;
@@ -56,7 +61,9 @@ above 0.04 fails.
    produced the file. Keep `api_forbidden` true while this receipt is the one
    on file.
 
-3. **Ordinary profile (Studio UI equivalent of the bill's P1 trial).**
+3. **Ordinary profile (Studio UI equivalent of the bill's P1 trial).** These
+   are the **Smart Mesh** defaults; HD Model's differ (Triangle topology,
+   texture on, a 2,000,000 polycount).
    Studio topology default **Quad**; privacy default **Private**;
    `texture=false`, `pbr=false`, no rig, no animation. `--faces` is the
    Studio slider (variable per asset), not the shipping triangle count.
@@ -71,21 +78,25 @@ above 0.04 fails.
 4. **Land one untextured GLB** at the manifest path. The first ordinary row is
    `shared-road-slab-a` → `assets/art/map/geometry/shared/road-slab-a.glb`
    (`assets/art/map/map-assets.json:5`). Contract: 600–2500 triangles, GLB
-   ≤192 KiB, one mesh, one surface, normals, no animation/skeleton/texture,
-   pivot on ground Y, Y-up metres.
+   ≤192 KiB, one mesh, one surface, normals, no animation/skeleton, and — for
+   an ORDINARY kit row — no texture. The gate's blanket texture ban was retired
+   on 2026-08-24 (`tools/map_asset_checks.py:409-411`): an embedded atlas is now
+   bounded by the row's `bytes_max` rather than refused. Kits stay untextured by
+   how they are authored, not because the gate rejects the file.
+   Pivot on ground Y, Y-up metres.
 
 5. **Score silhouette at the production camera, not in SKIP.**
    `tools/raster_map_silhouette.gd` imports the GLB and writes eight alpha
    masks. Python scores each with `silhouette_noise` (3×3 opening residue /
    opaque area) and fails above `SILHOUETTE_NOISE` 0.04
-   (`tools/map_asset_checks.py:24-25`, `tools/map_asset_checks.py:321-341`). Camera constants come from
-   the shipping rig: `TILT_DEGREES = -55.0`, `ZOOM_STOPS[3] = 28.0`
+   (`tools/map_asset_checks.py:29`, scoring loop `tools/map_asset_checks.py:483-494`). Camera constants come from
+   the shipping rig: `TILT_DEGREES = -40.0`, `ZOOM_STOPS[3] = 28.0`
    (`presentation/map/map_camera_rig.gd:12-15`; harness `WIDEST_STOP = 3`
    in `tools/raster_map_silhouette.gd:16-18`).
 
 6. **Do not `--headless` the raster.** The dummy renderer returns an empty
    mask. The Python gate launches a positioned windowed Godot, and on Linux
-   wraps `xvfb-run` (`tools/map_asset_checks.py:409-412`). CI installs xvfb
+   wraps `xvfb-run` (`tools/map_asset_checks.py:459-460`). CI installs xvfb
    for the same reason.
 
 7. **A 20-placement PNG is review evidence, not the scalar gate.** The
@@ -112,7 +123,7 @@ above 0.04 fails.
 9. **Do not send an LLM to click Studio.** studio-dcc-map-glb-2 / studio-generate
    spent 19 min, 5.4M tokens, 66 tools, 54 reasoning loops on trial-and-error:
    multi-view (Generate disabled), Pinia dumps, `model_url` meshopt download,
-   blob-hook Export. The sequence that worked is now
+   blob-hook Export. The sequence that worked **for Smart Mesh** is now
    `tools/studio_image_to_glb.ts` (generate; `studio_image_to_glb.py` is a
    bun wrapper) and `tools/land_map_glb.py` (land). The workflow agents run
    those commands; they do not browse. Default generate is **Chrome for
@@ -155,7 +166,8 @@ record (`source: Studio`, `verdict: accepted`, 1560 triangles, 38656 bytes,
 Blender missing so the Studio download was kept as-is). Independent re-run of
 `python3 tools/check_map_assets.py` printed eight `gpu-silhouette` lines per
 present GLB, max noise on slab-a 0.0021 ≤ 0.04, then
-`map assets OK (7 payload files; declared absence uses fallbacks)`.
+`map assets OK (7 payload files; declared absence uses fallbacks)` — the
+same line reads 19 payload files today.
 
 **Do not claim from this session:** a measured Studio credit drop
 (`paid_product.credits_balance` and `usage_history` still show only the

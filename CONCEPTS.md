@@ -869,6 +869,19 @@ there and whether it has been reached. Unlit until the lantern arrives, lit
 after. What a Waystone *is* comes from the run; how large, how faint and how far
 apart it draws comes from Depth.
 
+### Touch floor
+The smallest a Waystone is allowed to be *hittable* at, independent of how large
+it is drawn.
+
+A Waystone's drawn size scales with the shape, and past a point a correctly
+composed map becomes an untappable one — a finger is a fixed size and the
+picture is not. The floor is declared per Stage shape rather than globally,
+because only some shapes get small enough to need it. It grows the hit area
+ONLY, never the picture: a stone that already draws larger than the floor is
+padded by nothing, so the floor is invisible until it binds. Raising it can
+therefore change nothing at all and still be correct — it is a guarantee about
+the worst shape, not a size anything is set to.
+
 ### Step
 The unit of the walk axis. One Step is the distance between consecutive rows of
 the graph, and every other distance on the map is quoted in Steps rather than in
@@ -978,6 +991,12 @@ discloses above its rung no matter how early chance surfaces it.
   about "the lane" is unreadable without its cluster. The collision is live —
   both are in daily use — so prefer "work lane" and "map lane" wherever the two
   could be read in the same breath.
+- **"Trail" is banned in player-facing strings, not in code.** The Pilgrimage
+  entry retires "the trail" as a word for the road the player walks. The map's
+  layout-book namespace is nonetheless `trail/*`, and that is not a violation:
+  the ban is scoped to what a player reads. A schema field named `trail/bedRate`
+  and a UI string saying "the trail" are different objects, and only the second
+  one is retired.
 - **"Depth" on the map is a distance in Steps, not a paint order.** Depth is how
   far a point is from the camera's seat. Which plane a thing is drawn on is its
   Band. They move together in the far distance and come apart on the play plane,

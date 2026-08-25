@@ -1,7 +1,7 @@
 ---
 title: "A scaled Control shrinks its hit area with its picture — and 44pt is a floor, not a preference"
 date: 2026-07-30
-last_refreshed: 2026-07-31
+last_refreshed: 2026-08-25
 category: ui-bugs
 module: presentation/map
 problem_type: ui_bug
@@ -39,7 +39,7 @@ the picture shrank the target by exactly the same factor.
   | phone-landscape | 0.18 | **21.6 x 27.0** | half the floor |
 
   The picture has since been re-authored at 104x104. After landscape-only,
-  shipping trail scale is 0.6 base / 0.58 on phone-landscape; phone-portrait
+  shipping trail scale is 0.92 base / 0.58 on phone-landscape; phone-portrait
   is retired. `trail/touch = 44` on phone-landscape still adds no padding at
   that scale. `set_touch_min` remains the defensive authoring seam: a future
   smaller scale grows the hit rect without requiring the picture to grow

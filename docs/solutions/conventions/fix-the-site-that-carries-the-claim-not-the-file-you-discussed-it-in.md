@@ -1,6 +1,7 @@
 ---
 title: Fix the site that carries the claim, not the file you discussed it in
 date: 2026-08-02
+last_refreshed: 2026-08-25
 category: conventions
 module: docs
 problem_type: convention
@@ -114,20 +115,33 @@ happen anyway.
 
 ## Examples
 
-**The mislocated fix** — `presentation/stage/layout_book.gd:180`, where the word
-actually lived, now carries the verdict and routes onward:
+**The mislocated fix** — `presentation/stage/layout_book.gd:181` (in
+`trail/bedRate`), where the word actually lived, now carries the verdict and
+routes onward:
 
 ```gdscript
-## **Improved, not settled.** The residual used to live on
-## `WorldMapScreen.bed_half` (retired #234 slice 7b2). Read
-## `trail/bedRate` before retuning these three.
+## **Improved, not settled**, and the residual used to live on
+## `WorldMapScreen.bed_half` — that helper retired with PathBand's 2D road
+## in #234 slice 7b2. Read this field before retuning these three. The
+## clamps bind at two of the five shapes, phone-landscape is still 1.57×
+## wider in proportion than the reference, and measured against LANE PITCH
+## the rate is less consistent than the constant it replaced. This line said
+## "settled in #70" until PR #84 DL R2, which is the word a tuner would have
+## read first and stopped at.
 ```
 
-`presentation/map/world_map_screen.gd` — `bed_half` retired in #234 slice 7b2
-with PathBand's 2D road; the residual lives on the `trail/bedRate` field in
-`presentation/stage/layout_book.gd` — the file the finding was discussed
-in — now names where the word lived instead of claiming it as its own, and the
-cross-reference runs both ways so neither end can rot silently.
+`presentation/map/world_map_screen.gd` is the file the finding was *discussed*
+in, and `bed_half` — the helper whose docstring took the first, mislocated fix —
+retired there with PathBand's 2D road in #234 slice 7b2.
+
+**Only one end of that cross-reference survives, and the doc used to claim
+both did.** This section previously said "the cross-reference runs both ways so
+neither end can rot silently". It does not: `bed_half` and its docstring are
+gone, so nothing in `world_map_screen.gd` points back. What is left is the
+surviving end naming a retired one, which is the correct shape — the claim
+lives with the field a tuner reads, and it records its own history rather than
+depending on a second site to stay alive. A two-way reference between a live
+field and a retired helper was never going to be the thing that held.
 
 **The verification that caught all three**, and the reason it is the whole
 technique:
@@ -141,7 +155,9 @@ $ git log -S'settled' --oneline -- presentation/map/world_map_screen.gd
 ```
 
 The second result is the finding: the only commit that ever put the word in that
-file is the commit that claimed to be removing it.
+file is the commit that claimed to be removing it. (Re-run today and that
+command returns two commits, `cd5703c` then `9c24607` — the retirement, then
+the fix. "The second result" means the second *command*, not the second row.)
 
 **The borrowed figure** — the correction states its inputs so the next reader
 re-derives instead of trusting:

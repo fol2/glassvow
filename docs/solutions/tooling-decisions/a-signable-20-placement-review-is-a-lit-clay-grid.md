@@ -1,6 +1,7 @@
 ---
 title: "A signable 20-placement review is a lit 5×4 clay grid, not white scatter"
 date: 2026-08-20
+last_refreshed: 2026-08-25
 category: tooling-decisions
 module: assets/art/map
 problem_type: tooling_decision
@@ -58,7 +59,7 @@ material, a zoom stop, or a layout.
 **Masks (scalar Gate).** `SILHOUETTE_SHADER` is unshaded white
 (`tools/raster_map_silhouette.gd:22-25`). Transparent 1024×1024 target,
 one centred mesh, `WIDEST_STOP` 3 → `ZOOM_STOPS[3] = 28.0`, tilt
-`MapCameraRig.TILT_DEGREES` −55° (`presentation/map/map_camera_rig.gd:12-15`).
+`MapCameraRig.TILT_DEGREES` −40° (`presentation/map/map_camera_rig.gd:12-15`).
 `silhouette_noise` fails above 0.04. Lighting is a contaminant here.
 
 **Review (human picture).** Non-transparent 1280×720 viewport, opaque

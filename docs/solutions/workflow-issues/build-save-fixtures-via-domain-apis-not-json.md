@@ -1,6 +1,7 @@
 ---
 title: "Plant save fixtures through the domain API and roundtrip-verify — hand-written JSON is silently swallowed"
 date: 2026-08-01
+last_refreshed: 2026-08-25
 category: workflow-issues
 module: application
 problem_type: workflow_issue
@@ -25,18 +26,18 @@ all six emberglass shards. The obvious shortcut — hand-writing a minimal
 invisibly.
 
 The v2 vigil validator is strict and total. `VigilState.from_dict()`
-(`domain/state/vigil_state.gd:58`) returns `null` — with no log, push_error, or
+(`domain/state/vigil_state.gd:86` (in `from_dict`)) returns `null` — with no log, push_error, or
 assert — whenever:
 
-- the version tag is not exactly `VERSION` (2): `vigil_state.gd:59-60`;
+- the version tag is not exactly `VERSION` (2): `vigil_state.gd:87-88`;
 - `deeds`, `quests`, or `receipts` is missing or not a Dictionary:
-  `vigil_state.gd:61-64`;
-- any of the eleven `DEFAULT_DEEDS` counters is negative: `vigil_state.gd:69-70`;
+  `vigil_state.gd:89-92`;
+- any of the eleven `DEFAULT_DEEDS` counters is negative: `vigil_state.gd:97-98`;
 - **any** of the six `QUEST_IDS` is absent from `quests`, or its entry lacks a
-  valid `state`/`progress`/`memory`: `vigil_state.gd:78-86` — this is the clause
+  valid `state`/`progress`/`memory`: `vigil_state.gd:106-114` — this is the clause
   a "just the shards" fixture trips, because every quest must be present;
-- a shard is not a known quest id, or is duplicated: `vigil_state.gd:91-92`;
-- a receipt is non-null but malformed: `vigil_state.gd:100-101`.
+- a shard is not a known quest id, or is duplicated: `vigil_state.gd:119-120`;
+- a receipt is non-null but malformed: `vigil_state.gd:155-156`.
 
 The silence lives one layer up. `SaveService.load_vigil()`
 (`application/save_service.gd:50-58`) substitutes a blank ledger on every
@@ -49,15 +50,15 @@ return loaded if loaded != null else VigilState.blank()   # save_service.gd:58
 ```
 
 So a malformed fixture does not error; it loads as `VigilState.blank()`
-(`vigil_state.gd:35-39` — zero deeds, all six quests dormant, **empty
+(`vigil_state.gd:54-58` (in `blank`) — zero deeds, all six quests dormant, **empty
 shards**). Downstream — as re-anchored after the #217 redesign — the vigil's
 shards are copied into the run profile by `_new_run`
-(`application/main.gd:1136` (in `_new_run`)), `RunState.final_act()`
-(`domain/state/run_state.gd` (`final_act`)) extends the journey to a third act
-only with six shards, and the Act IV threshold is a sealed-door overlay on the
-ordinary final-act map (`presentation/map/world_map_screen.gd:377` (in
-`_sync_sealed_door`)). Empty shards means the drive silently shortens the run
-to two acts and never shows the sealed door — the failure presents as a
+(`application/main.gd:1142` (in `_new_run`)), `RunState.final_act()`
+(`domain/state/run_state.gd:81` (in `final_act`)) extends the journey to a
+FOURTH act only with six shards, and the Act IV threshold is a sealed-door
+overlay on the ordinary final-act map
+(`presentation/map/world_map_screen.gd:396` (in `_sync_sealed_door`)). Empty
+shards means the drive silently shortens the run to three acts and never shows the sealed door — the failure presents as a
 routing bug in the map code, three layers away
 from the actual cause, a rejected fixture.
 
@@ -101,11 +102,11 @@ way to know the fixture is real is to pull it back through the exact code path
 the game will use and assert on the property the drive depends on. If the
 assert fires, the fixture is wrong — not the routing.
 
-`to_dict()` (`vigil_state.gd:42-55`) always serialises the complete envelope,
+`to_dict()` (`vigil_state.gd:61-84` (in `to_dict`)) always serialises the complete envelope,
 so state built from `blank()` and mutated on the object can never be missing a
 required key. For states that a normal game reaches (deed counts, receipts,
 quest memory), prefer the real mutation method `commit_run()`
-(`vigil_state.gd:115`) over poking fields, so invariants like the runId
+(`vigil_state.gd:180` (in `commit_run`)) over poking fields, so invariants like the runId
 receipts stay coherent.
 
 ## Why This Matters
@@ -140,9 +141,9 @@ receipts stay coherent.
 
 **Before (P4.16, first attempt).** A hand-written
 `glassvow_vigil_v2.json` containing `{"v": 2, "shards": [ ...six ids... ]}` and
-little else. `from_dict()` returned `null` at `vigil_state.gd:61-64` (missing
+little else. `from_dict()` returned `null` at `vigil_state.gd:89-92` (missing
 `deeds`/`quests`/`receipts`), `load_vigil()` swapped in `blank()` with zero
-shards, `main.gd:760` took the `else` branch, and the drive landed on a normal
+shards, `main.gd:1628` took the `else` branch, and the drive landed on a normal
 act map. Time was spent reading `WorldMap.act4_entrance()` and the routing in
 `_show_act4_entrance()` for a bug that was never there.
 

@@ -156,10 +156,17 @@ func _gui_input(event: InputEvent) -> void:
 ## Grow the hit rect until the stone is at least `min_px` across on screen,
 ## without moving a pixel of it.
 ##
-## A waystone is 120x150 and the trail scales the whole node, so a phone gets a
-## 36x45 target and a phone held sideways a 21x27 one. Both are under the 44pt
-## floor Apple's HIG and Android's Material guidance both set, and a target that
+## The trail scales the whole node, so the drawn target is WIDTH times the
+## shape's trail scale. That is what once put a phone under the 44pt floor
+## Apple's HIG and Android's Material guidance both set, and a target that
 ## small is not a polish item — it is the thing between the player and the game.
+##
+## At the shipping numbers the floor no longer binds: WIDTH is 104 and the map
+## scope runs 0.92 base / 0.58 on phone-landscape, so the smallest drawn target
+## is about 60 px. `trail/touch` is 44.0 there and `set_touch_min` clamps the
+## padding to zero. The mechanism stays because the floor is a property of the
+## hand, not of this month's constants — re-tune the scale down and it binds
+## again with no code change.
 ##
 ## Growing the node is free here because `_draw` measures from `WIDTH` and
 ## `EMBLEM_H` rather than from `size`, so the picture does not know the rect
