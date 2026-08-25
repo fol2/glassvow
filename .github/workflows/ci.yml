@@ -66,7 +66,9 @@ jobs:
         run: python3 -B tools/balance_f0.py --self-test
 
       - name: Test F1/F2 racing and model adequacy rules
-        run: python3 -B tools/test_balance_f1_f2.py
+        run: |
+          python3 -B tools/test_balance_f1_f2.py
+          python3 -B tools/test_balance_f1_evidence.py
 
       # The web-reference twin used to be excluded from CI on purpose: it
       # resolved citations against the roguecardv2-benchmark checkout and
