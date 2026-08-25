@@ -243,7 +243,7 @@ class BalanceF1EvidenceTest(unittest.TestCase):
         self.assertFalse(report["grids"]["ashwarden:v5"]["clear"])
         self.assertFalse(report["clear"])
 
-    def test_finalist_contract_rejects_a_development_vow5_ceiling_fault(self) -> None:
+    def test_finalist_contract_rejects_development_identity_and_vow5_faults(self) -> None:
         grids = ("duskblade:v0", "duskblade:v5", "ashwarden:v0", "ashwarden:v5")
         values = {"duskMaxHp": 60, "flareDamage": 11, "ashfallSmolder": 4,
                   "ashfallWard": 7, "regrowthHeal": 4, "ironSkinWard": 2,
@@ -251,7 +251,8 @@ class BalanceF1EvidenceTest(unittest.TestCase):
         interval = {"p025": 0.1, "p50": 0.2, "p975": 0.3}
         evidence = {
             "proxies": {grid: {"arm2Rate": 0.2, "margin": 0.5,
-                                "topCell": "shatter:fat"}
+                                "topCell": ("shatter:fat" if grid.startswith("duskblade")
+                                            else "smolder:fat")}
                         for grid in grids},
             "bootstrap": {"grids": {grid: {
                 "arm2Rate": interval, "margin": {"p025": 0.4, "p50": 0.5, "p975": 0.6},
@@ -264,6 +265,14 @@ class BalanceF1EvidenceTest(unittest.TestCase):
                 ["c001"], {"candidates": [{"id": "c001", "values": values, "patch": []}]},
                 {"promoted": ["c001"], "decisions": [{"id": "c001", "evidence": evidence}]},
                 {"candidates": [{"id": "c001", "vow5Ceiling": {"clear": False}}]},
+                {"candidates": [{"id": "c001"}], "nonGating": True}, space,
+            )
+        evidence["proxies"]["ashwarden:v0"]["topCell"] = "attrition:fat"
+        with self.assertRaisesRegex(ValueError, "development hard-constraint fault"):
+            finalist_contract(
+                ["c001"], {"candidates": [{"id": "c001", "values": values, "patch": []}]},
+                {"promoted": ["c001"], "decisions": [{"id": "c001", "evidence": evidence}]},
+                {"candidates": [{"id": "c001", "vow5Ceiling": {"clear": True}}]},
                 {"candidates": [{"id": "c001"}], "nonGating": True}, space,
             )
 

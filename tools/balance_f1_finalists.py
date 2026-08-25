@@ -190,7 +190,9 @@ def finalist_contract(candidate_ids: list[str], candidate_manifest: dict[str, An
             and float(bootstrap["grids"][grid]["margin"]["p975"]) >= 0.35
             for grid in GRIDS)
         vow5 = cem_by_id[candidate_id]["vow5Ceiling"]
-        if not point_clear or not no_clear_regression or not bool(vow5["clear"]):
+        identity_clear = bool(identity["expectedDuskShatterAshSmolder"])
+        if (not point_clear or not no_clear_regression or not identity_clear
+                or not bool(vow5["clear"])):
             raise ValueError(f"finalist {candidate_id} has a development hard-constraint fault")
         finalists.append({
             "rank": rank, "id": candidate_id, "values": candidate["values"],
@@ -199,6 +201,7 @@ def finalist_contract(candidate_ids: list[str], candidate_manifest: dict[str, An
             "boundaryDiagnostics": boundary_diagnostics(candidate["values"], space),
             "hardConstraintChecks": {"pointClear": point_clear,
                                      "noClearBootstrapRegression": no_clear_regression,
+                                     "identityShapeClear": identity_clear,
                                      "developmentVow5Ceiling": vow5,
                                      "grids": {grid: {
                                          "arm2Rate": proxies[grid]["arm2Rate"],
