@@ -76,6 +76,8 @@
   "racing": {
     "bindingDeficits": ["c1a", "c1b"],
     "slackHardConstraints": ["c2arm", "c2gap"],
+    "crediblePath": "paired c000-minus-candidate 95% bootstrap interval has an upper bound above zero for c1a or c1b",
+    "hardRegression": "stop when any grid has arm-2-rate p025 >= 0.50 or top-minus-arm-2 margin p975 < 0.35",
     "stop": "confidence-envelope Pareto dominance or hard/identity fault",
     "promotion": "lowest point deficit among non-dominated candidates within each bounded layer"
   },
