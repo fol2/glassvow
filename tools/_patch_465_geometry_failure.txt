@@ -1,0 +1,39 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+Sentry: DEBUG: starting Sentry SDK version 2.1.1+d288ad9
+Sentry: DEBUG: Automatic initialization is disabled in the project settings.
+Sentry: INFO: Automatic initialization is disabled! Operations with Sentry SDK will result in no-ops.
+SCRIPT ERROR: Invalid call. Nonexistent function 'surface_get_primitive_type' in base 'BoxMesh'.
+          at: MapAssetProfiles._source_identity (res://presentation/map/map_asset_profiles.gd:312)
+          GDScript backtrace (most recent call first):
+              [0] _source_identity (res://presentation/map/map_asset_profiles.gd:312)
+              [1] profile (res://presentation/map/map_asset_profiles.gd:123)
+              [2] _geometry_contract (res://tests/test_map_asset_profiles.gd:72)
+              [3] _initialize (/tmp/run_465_focus.gd:10)
+SCRIPT ERROR: Invalid call. Nonexistent function 'surface_get_primitive_type' in base 'BoxMesh'.
+          at: MapAssetProfiles._source_identity (res://presentation/map/map_asset_profiles.gd:312)
+          GDScript backtrace (most recent call first):
+              [0] _source_identity (res://presentation/map/map_asset_profiles.gd:312)
+              [1] profile (res://presentation/map/map_asset_profiles.gd:123)
+              [2] _geometry_contract (res://tests/test_map_asset_profiles.gd:73)
+              [3] _initialize (/tmp/run_465_focus.gd:10)
+SCRIPT ERROR: Invalid call. Nonexistent function 'surface_get_primitive_type' in base 'BoxMesh'.
+          at: MapAssetProfiles._source_identity (res://presentation/map/map_asset_profiles.gd:312)
+          GDScript backtrace (most recent call first):
+              [0] _source_identity (res://presentation/map/map_asset_profiles.gd:312)
+              [1] profile (res://presentation/map/map_asset_profiles.gd:123)
+              [2] _geometry_contract (res://tests/test_map_asset_profiles.gd:74)
+              [3] _initialize (/tmp/run_465_focus.gd:10)
+SCRIPT ERROR: Invalid call. Nonexistent function 'surface_get_primitive_type' in base 'BoxMesh'.
+          at: MapAssetProfiles._source_identity (res://presentation/map/map_asset_profiles.gd:312)
+          GDScript backtrace (most recent call first):
+              [0] _source_identity (res://presentation/map/map_asset_profiles.gd:312)
+              [1] profile (res://presentation/map/map_asset_profiles.gd:123)
+              [2] _geometry_contract (res://tests/test_map_asset_profiles.gd:146)
+              [3] _initialize (/tmp/run_465_focus.gd:10)
+FAIL _geometry_contract (5)
+  - test_map_asset_profiles: mesh AABB produces one conservative oriented rectangle
+  - test_map_asset_profiles: known translation and non-uniform scale produce the governed bounds
+  - test_map_asset_profiles: a 90-degree yaw swaps the elongated footprint axes
+  - test_map_asset_profiles: changing source AABB changes the digest
+  - test_map_asset_profiles: changing an authored footprint override changes the digest
