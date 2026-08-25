@@ -1,0 +1,103 @@
+{
+  "candidates": [
+    {
+      "auditEarlyStop": "stalls-beyond-baseline",
+      "auditFaultRows": [
+        {
+          "arm": 1,
+          "aspect": "duskblade",
+          "error": "",
+          "outcome": "stall",
+          "seed": 8078,
+          "vow": 5
+        }
+      ],
+      "auditHardConstraints": {},
+      "auditIdentity": null,
+      "auditReplayIdentity": {
+        "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+        "controlRowCount": 1600,
+        "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+        "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "landscapeRowCount": 0,
+        "observationsSha256": "c621503296f34d45317d08dd30520e56b5205a3376358baca84208d14d07a2cc"
+      },
+      "auditStatus": "early-stop",
+      "bindingDeficitChanges": {},
+      "confidenceBlocked": true,
+      "developmentIdentity": {
+        "expectedDuskShatterAshSmolder": true,
+        "topCells": {
+          "ashwarden:v0": "smolder:fat",
+          "ashwarden:v5": "smolder:fat",
+          "duskblade:v0": "shatter:fat",
+          "duskblade:v5": "shatter:fat"
+        }
+      },
+      "effectChanges": {},
+      "id": "c029",
+      "identityContradiction": false,
+      "materialContradictions": [
+        "audit-early-stop:stalls-beyond-baseline"
+      ]
+    },
+    {
+      "auditEarlyStop": "stalls-beyond-baseline",
+      "auditFaultRows": [
+        {
+          "arm": 1,
+          "aspect": "duskblade",
+          "error": "",
+          "outcome": "stall",
+          "seed": 8144,
+          "vow": 5
+        }
+      ],
+      "auditHardConstraints": {},
+      "auditIdentity": null,
+      "auditReplayIdentity": {
+        "commit": "7f4b8c991a48981c5ad4a17365cec4efafc3b3d1",
+        "controlRowCount": 1600,
+        "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+        "hostFingerprint": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8",
+        "landscapeRowCount": 0,
+        "observationsSha256": "f3086e5ad9cf3ac8418ba19897fc6178d7f4aa629332fbf25d240f833beb946b"
+      },
+      "auditStatus": "early-stop",
+      "bindingDeficitChanges": {},
+      "confidenceBlocked": true,
+      "developmentIdentity": {
+        "expectedDuskShatterAshSmolder": true,
+        "topCells": {
+          "ashwarden:v0": "smolder:fat",
+          "ashwarden:v5": "smolder:fat",
+          "duskblade:v0": "shatter:fat",
+          "duskblade:v5": "shatter:fat"
+        }
+      },
+      "effectChanges": {},
+      "id": "s009",
+      "identityContradiction": false,
+      "materialContradictions": [
+        "audit-early-stop:stalls-beyond-baseline"
+      ]
+    }
+  ],
+  "inputs": {
+    "auditObservationSha256ByCandidate": {
+      "c000": "ad0e55faad357d3bbc1f2fc62a80d3e757819e60399729edc2eb24a3e5b30e2c",
+      "c029": "c621503296f34d45317d08dd30520e56b5205a3376358baca84208d14d07a2cc",
+      "s009": "f3086e5ad9cf3ac8418ba19897fc6178d7f4aa629332fbf25d240f833beb946b"
+    },
+    "auditSummarySha256": "012780478d42a37b239dd91c944edf6a5759e3077b00434371e61425afd7c2b5",
+    "developmentSummarySha256": "6ed2d1c4920dda748609b7ed4233102beeb8da42ee7ec76ebcae995a06374ab2",
+    "toolSha256ByModule": {
+      "balance_f1_evidence.py": "1d1c12431bd36907679231d9d4dd4eea12ec00ae252f8c1094b547a1c99e26bc",
+      "balance_f1_finalists.py": "095562bec02542ec88a5a6931719fe5be7351395c53e7e7b68e18bbe768be72c"
+    }
+  },
+  "issue": 458,
+  "method": "fail-closed audit early stops; otherwise conservative difference of paired candidate-vs-c000 envelopes",
+  "nonGating": true,
+  "threshold": 0.1
+}

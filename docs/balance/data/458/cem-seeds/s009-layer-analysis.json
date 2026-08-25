@@ -1,0 +1,34 @@
+{
+  "deckCuts": {
+    "midMax": 35,
+    "thinMax": 25
+  },
+  "medians": {
+    "ashwarden": {
+      "shattersPerFight": 0.6154,
+      "smolderKillsPerFight": 0.8519
+    },
+    "duskblade": {
+      "shattersPerFight": 1.1111,
+      "smolderKillsPerFight": 0.1111
+    }
+  },
+  "verdicts": {
+    "ashwarden:v0": {
+      "topRate": 0.7970452894163236,
+      "viabilityFloor": 0.5039913947081618
+    },
+    "ashwarden:v5": {
+      "topRate": 0.723704268292683,
+      "viabilityFloor": 0.3970083841463415
+    },
+    "duskblade:v0": {
+      "topRate": 0.8555906063792499,
+      "viabilityFloor": 0.5723265531896249
+    },
+    "duskblade:v5": {
+      "topRate": 0.7978547854785478,
+      "viabilityFloor": 0.4418961427392739
+    }
+  }
+}
