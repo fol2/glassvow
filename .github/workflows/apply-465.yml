@@ -44,6 +44,7 @@ jobs:
 
       - name: Apply exact-source migrations
         run: |
+          rm -f tools/_patch_465_geometry_failure.txt
           grep -q 'reads `_seat_kit` rather' tools/_patch_465_scene.py
           sed -i 's/reads `_seat_kit` rather/reads `seat_kit` rather/' tools/_patch_465_scene.py
           python3 tools/_patch_465_data.py
@@ -129,7 +130,22 @@ jobs:
         run: godot --headless --path . --script /tmp/run_465_focus.gd -- _live_profiles
 
       - name: Verify profile geometry contract
-        run: godot --headless --path . --script /tmp/run_465_focus.gd -- _geometry_contract
+        run: |
+          set +e
+          godot --headless --path . --script /tmp/run_465_focus.gd -- _geometry_contract 2>&1 | tee /tmp/geometry.log
+          rc=${PIPESTATUS[0]}
+          while IFS= read -r line; do
+            case "$line" in
+              "  - "*) echo "::error title=profile geometry contract::${line#  - }" ;;
+            esac
+          done < /tmp/geometry.log
+          if [ "$rc" -ne 0 ]; then
+            cp /tmp/geometry.log tools/_patch_465_geometry_failure.txt
+            git add tools/_patch_465_geometry_failure.txt
+            git commit -m 'ci(#465): capture geometry contract failure'
+            git push --force-with-lease origin HEAD:work/465-asset-profile-authority
+          fi
+          exit "$rc"
 
       - name: Verify profile runtime digest
         run: godot --headless --path . --script /tmp/run_465_focus.gd -- _runtime_digest
