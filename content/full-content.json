@@ -9,7 +9,7 @@
     "id": "duskblade",
     "hue": 225,
     "art": "flare",
-    "maxHp": 60,
+    "maxHp": 64,
     "energy": 3,
     "handSize": 5,
     "potionSlots": 3,
@@ -359,7 +359,7 @@
           "kind": "status",
           "who": "target",
           "id": "poison",
-          "n": 2
+          "n": 4
         }
       ],
       "up": {
@@ -372,13 +372,13 @@
             "kind": "status",
             "who": "target",
             "id": "poison",
-            "n": 3
+            "n": 5
           }
         ],
-        "text": "Deal @6@ damage. Apply 3 Smolder."
+        "text": "Deal @6@ damage. Apply 5 Smolder."
       },
       "name": "Emberbite",
-      "text": "Deal @4@ damage. Apply 2 Smolder."
+      "text": "Deal @4@ damage. Apply 4 Smolder."
     },
     "lunge": {
       "type": "attack",
@@ -1006,7 +1006,7 @@
           "kind": "status",
           "who": "self",
           "id": "metallicize",
-          "n": 2
+          "n": 3
         }
       ],
       "up": {
@@ -1015,13 +1015,13 @@
             "kind": "status",
             "who": "self",
             "id": "metallicize",
-            "n": 3
+            "n": 4
           }
         ],
-        "text": "At the end of your turn, gain 3 Ward."
+        "text": "At the end of your turn, gain 4 Ward."
       },
       "name": "Vitrify",
-      "text": "At the end of your turn, gain 2 Ward."
+      "text": "At the end of your turn, gain 3 Ward."
     },
     "regrowth": {
       "type": "power",
@@ -1034,7 +1034,7 @@
           "kind": "status",
           "who": "self",
           "id": "regen",
-          "n": 4
+          "n": 2
         }
       ],
       "up": {
@@ -1043,13 +1043,13 @@
             "kind": "status",
             "who": "self",
             "id": "regen",
-            "n": 5
+            "n": 3
           }
         ],
-        "text": "At the end of your turn, heal 5 HP."
+        "text": "At the end of your turn, heal 3 HP."
       },
       "name": "Hearthglow",
-      "text": "At the end of your turn, heal 4 HP."
+      "text": "At the end of your turn, heal 2 HP."
     },
     "oblivionStrike": {
       "type": "attack",
@@ -4623,11 +4623,11 @@
       "effects": [
         {
           "kind": "dmg",
-          "n": 11
+          "n": 9
         }
       ],
       "name": "Flare",
-      "text": "The lantern vents. Deal 11 damage to ALL enemies."
+      "text": "The lantern vents. Deal 9 damage to ALL enemies."
     },
     "mendglass": {
       "glyph": "❋",
@@ -4700,11 +4700,11 @@
         },
         {
           "kind": "block",
-          "n": 6
+          "n": 5
         }
       ],
       "name": "Ashfall",
-      "text": "The Ashwarden's breath. Apply 6 Smolder to ALL enemies and gain 6 Ward."
+      "text": "The Ashwarden's breath. Apply 6 Smolder to ALL enemies and gain 5 Ward."
     }
   },
   "deeds": {
@@ -5415,7 +5415,7 @@
       "id": "duskblade",
       "hue": 225,
       "art": "flare",
-      "maxHp": 60,
+      "maxHp": 64,
       "energy": 3,
       "handSize": 5,
       "potionSlots": 3,
