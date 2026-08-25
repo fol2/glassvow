@@ -14,7 +14,7 @@ from balance_f1_f2 import (
     response_deficit,
     write_search_bundle,
 )
-from balance_f0 import evaluation_from_registry, evaluation_spec
+from balance_f0 import evaluation_from_registry, evaluation_spec, stage_args
 from balance_f1_racing import racing_decisions
 from balance_seed_contract import check_invocation, load_contract
 
@@ -48,6 +48,8 @@ class BalanceF1F2Test(unittest.TestCase):
         self.assertTrue(check_invocation(contract, "audit", 8000, 8199, 1454))
         self.assertEqual("", check_invocation(
             contract, "audit", 8000, 8199, 1454, sealed_token="finalist"))
+        self.assertEqual(["--stage=audit", "--sealedToken=finalist"],
+                         stage_args("audit", "finalist"))
 
     def test_generic_evaluator_uses_the_versioned_layer_ranges(self) -> None:
         protocol = {
