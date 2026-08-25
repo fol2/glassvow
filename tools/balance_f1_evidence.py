@@ -184,7 +184,7 @@ def main() -> int:
     if args.command == "cem-compare":
         report = mini_cem_comparison(
             Path(args.cem_dir), args.candidates.split(","), Path(args.seeds_dir), args.boot)
-        report["inputs"]["toolSha256ByModule"] = _tool_hashes(
+        report["inputs"]["entrypointSha256ByModule"] = _tool_hashes(
             "balance_f1_cem_evidence.py")
         out = Path(args.out)
         out.parent.mkdir(parents=True, exist_ok=True)
