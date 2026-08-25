@@ -1,0 +1,32 @@
+{
+  "holdout": {
+    "bytes": 31454026,
+    "outcomes": {
+      "error": 0,
+      "loss": 1544,
+      "stall": 5,
+      "win": 3251
+    },
+    "rows": 4800,
+    "selection": "t=holdout lines from island-0.ndjson .. island-23.ndjson in island order",
+    "sha256": "d4ec1a70c8c9d0f3f621d098d568bedf110c8f06909e7eb652392d3767c11fa4"
+  },
+  "host": "MacBookPro.lan",
+  "immutableDirectory": "/private/tmp/glassvow-421-s009-landscape.HML9Pn",
+  "layer1": {
+    "bytes": 1722615995,
+    "dataRows": 320000,
+    "dataRowsSha256": "f75b51b382b3715a3ffdfedede6bf2f9a1cb249e84801b45f5d38cb98b7a9058",
+    "lines": 320001,
+    "outcomes": {
+      "error": 0,
+      "loss": 233968,
+      "stall": 213,
+      "win": 85819
+    },
+    "path": "/private/tmp/glassvow-421-s009-landscape.HML9Pn/layer1-merged.ndjson",
+    "sha256": "fd7e725b4c343eb0450030627cf11b643513b65206f07b71545809c299be5cf9"
+  },
+  "machine": "M1 Max 64GB",
+  "phaseADirectory": "/private/tmp/glassvow-421-s009-phase-a.K8djq9"
+}

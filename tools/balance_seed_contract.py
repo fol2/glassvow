@@ -118,6 +118,15 @@ def validate_contract(contract: dict[str, Any]) -> None:
             raise ValueError(f"{key} must be {expected}")
         if int(development[key]) in exam_roots:
             raise ValueError(f"{key} overlaps the frozen exam roots")
+    tier1 = contract["tier1"]
+    for key, expected in (("f0PolicyRoot", 3454), ("f1PolicyRoot", 4454), ("miniCemRoot", 6454)):
+        if int(tier1[key]) != expected:
+            raise ValueError(f"tier1.{key} must be {expected}")
+        if int(tier1[key]) in exam_roots:
+            raise ValueError(f"tier1.{key} overlaps the frozen exam roots")
+        if int(tier1[key]) in {int(development["f0PolicyRoot"]), int(development["f1PolicyRoot"]),
+                               int(development["miniCemRoot"])}:
+            raise ValueError(f"tier1.{key} overlaps a #454 development root")
     bands = _named_bands(contract)
     unique_spans: dict[tuple[int, int], list[str]] = {}
     for name, span in bands.items():
@@ -243,6 +252,44 @@ def self_test() -> int:
                                 holdout_first=6800, holdout_last=6999)
     assert not check_invocation(contract, "exam", 5000, 5199, root=215)
     assert check_invocation(contract, "nope", 6000, 6000)
+    tier1 = contract["tier1"]
+    assert int(tier1["f0PolicyRoot"]) == 3454
+    assert int(tier1["f1PolicyRoot"]) == 4454
+    assert int(tier1["miniCemRoot"]) == 6454
+    assert not check_invocation(contract, "tier1-fingerprint", 9000, 9063)
+    assert not check_invocation(contract, "tier1-f0-controls", 9100, 9131, root=3454)
+    assert not check_invocation(contract, "tier1-f0-mini-landscape", 9200, 9207, root=3454)
+    assert not check_invocation(contract, "tier1-f1-racing", 9300, 9599, root=4454)
+    assert not check_invocation(contract, "tier1-mini-cem", 9600, 9639, root=6454,
+                                holdout_first=10000, holdout_last=10039)
+    assert not check_invocation(contract, "tier1-mini-cem-train", 9600, 9999, root=6454,
+                                holdout_first=10000, holdout_last=10399)
+    assert not check_invocation(contract, "tier1-mini-cem-validate", 10000, 10399, root=6454)
+    assert not check_invocation(contract, "tier1-audit", 11000, 11199, root=3454,
+                                sealed_token="tier1-finalist")
+    assert check_invocation(contract, "tier1-fingerprint", 5600, 5663), (
+        "Tier-1 fingerprint must reject the #456 host-fingerprint band")
+    assert check_invocation(contract, "tier1-f0-controls", 5000, 5000, root=3454), (
+        "Tier-1 F0 must reject acceptance seed 5000")
+    assert check_invocation(contract, "tier1-f0-controls", 6000, 6000, root=3454), (
+        "Tier-1 F0 must reject the #454 F0 control band")
+    assert check_invocation(contract, "tier1-f0-controls", 9100, 9131, root=454), (
+        "Tier-1 F0 must reject the #454 policy root")
+    assert check_invocation(contract, "tier1-f1-racing", 9300, 9300, root=215), (
+        "Tier-1 F1 must reject exam policy root 215")
+    assert check_invocation(contract, "tier1-f1-racing", 9300, 9300, root=1454), (
+        "Tier-1 F1 must reject the #454 F1 policy root")
+    assert check_invocation(contract, "tier1-mini-cem", 9600, 9639, root=6454,
+                            holdout_first=5000, holdout_last=5039), (
+        "Tier-1 mini-CEM must reject acceptance holdout 5000")
+    assert check_invocation(contract, "tier1-mini-cem", 9600, 9639, root=6454,
+                            holdout_first=6800, holdout_last=6839), (
+        "Tier-1 mini-CEM must reject the #454 development holdout")
+    assert check_invocation(contract, "tier1-audit", 11000, 11000, root=3454), (
+        "Tier-1 audit must stay sealed until a Tier-1 finalist")
+    assert check_invocation(contract, "tier1-audit", 8000, 8000, root=3454,
+                            sealed_token="tier1-finalist"), (
+        "Tier-1 audit must reject the #454 audit band")
     live = REPO / LIVE_REL
     space = REPO / SPACE_REL
     identity = catalogue_identity(live, space)

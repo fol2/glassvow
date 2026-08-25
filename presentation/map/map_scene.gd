@@ -575,7 +575,7 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	# one into the other; depth is how much ground the piece's own height
 	# hides at the camera's tilt.
 	#
-	# BOTH of those are per-SPECIES, which is why this reads `_seat_kit` rather
+	# BOTH of those are per-SPECIES, which is why this reads `seat_kit` rather
 	# than repeating the arithmetic. It used to repeat it, and when the salt
 	# arrived only the placement loop above was updated: five run seeds in six
 	# then published a 6.2 m ash trunk as whatever the unsalted rotation

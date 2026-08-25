@@ -59,6 +59,37 @@ static func _check_stage(fails: Array[String]) -> void:
 	if not BalanceCatalogue.stage_error({"stage": "audit", "seed0": 8000, "runs": 200,
 			"rootSeed": 1454, "sealedToken": "finalist"}).is_empty():
 		fails.append("balance catalogue: finalist audit token must unseal 8000–8199")
+	if not BalanceCatalogue.stage_error({"stage": "tier1-fingerprint", "seed0": 9000, "runs": 64}).is_empty():
+		fails.append("balance catalogue: Tier-1 fingerprint 9000–9063 must pass")
+	if BalanceCatalogue.stage_error({"stage": "tier1-fingerprint", "seed0": 5600, "runs": 64}).is_empty():
+		fails.append("balance catalogue: Tier-1 fingerprint must reject the #456 band")
+	if BalanceCatalogue.stage_error({"stage": "tier1-f0-controls", "seed0": 5000, "runs": 1,
+			"rootSeed": 3454}).is_empty():
+		fails.append("balance catalogue: Tier-1 F0 must reject acceptance seed 5000")
+	if BalanceCatalogue.stage_error({"stage": "tier1-f0-controls", "seed0": 6000, "runs": 1,
+			"rootSeed": 3454}).is_empty():
+		fails.append("balance catalogue: Tier-1 F0 must reject the #454 F0 band")
+	if not BalanceCatalogue.stage_error({"stage": "tier1-f0-controls", "seed0": 9100, "runs": 32,
+			"rootSeed": 3454}).is_empty():
+		fails.append("balance catalogue: Tier-1 F0 controls 9100–9131 / root 3454 must pass")
+	if BalanceCatalogue.stage_error({"stage": "tier1-f1-racing", "seed0": 9300, "runs": 1,
+			"rootSeed": 1454}).is_empty():
+		fails.append("balance catalogue: Tier-1 F1 must reject the #454 F1 root")
+	if not BalanceCatalogue.stage_error({"stage": "tier1-f1-racing", "seed0": 9300, "runs": 300,
+			"rootSeed": 4454}).is_empty():
+		fails.append("balance catalogue: Tier-1 F1 racing 9300–9599 / root 4454 must pass")
+	if BalanceCatalogue.stage_error({"stage": "tier1-mini-cem", "seed0": 9600, "runs": 40,
+			"rootSeed": 6454, "holdoutSeed0": 5000, "holdoutCount": 200}).is_empty():
+		fails.append("balance catalogue: Tier-1 mini-CEM must reject exam holdout 5000")
+	if not BalanceCatalogue.stage_error({"stage": "tier1-mini-cem", "seed0": 9600, "runs": 40,
+			"rootSeed": 6454, "holdoutSeed0": 10000, "holdoutCount": 400}).is_empty():
+		fails.append("balance catalogue: Tier-1 mini-CEM holdout 10000–10399 must pass")
+	if BalanceCatalogue.stage_error({"stage": "tier1-audit", "seed0": 11000, "runs": 1,
+			"rootSeed": 3454}).is_empty():
+		fails.append("balance catalogue: Tier-1 audit must stay sealed until a Tier-1 finalist")
+	if not BalanceCatalogue.stage_error({"stage": "tier1-audit", "seed0": 11000, "runs": 200,
+			"rootSeed": 4454, "sealedToken": "tier1-finalist"}).is_empty():
+		fails.append("balance catalogue: Tier-1 finalist token must unseal 11000–11199")
 	var missing: Dictionary = BalanceCatalogue.open({"content": "/no/such/glassvow-candidate.json"})
 	if not missing.has("error"):
 		fails.append("balance catalogue: missing candidate path must fail closed")
