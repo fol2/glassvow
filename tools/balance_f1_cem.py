@@ -12,7 +12,13 @@ from pathlib import Path
 from typing import Any
 
 from balance_f0 import REPO, git_head, host_identity, qualified_packet, require_godot
-from balance_seed_contract import check_invocation, file_sha256, load_contract
+from balance_seed_contract import (
+    CONTRACT_REL,
+    check_invocation,
+    driver_sha256,
+    file_sha256,
+    load_contract,
+)
 
 TOOL_ID = "glassvow-balance-f1-cem-v1"
 MARKER = ".glassvow-balance-f1-cem"
@@ -190,7 +196,10 @@ def run(godot: str, jobs: int, bundle_dir: Path, seeds_dir: Path, out: Path,
         "candidateIds": candidate_ids, "spec": spec,
         "inputs": {
             "protocolSha256": file_sha256(protocol_path),
+            "seedRegistrySha256": file_sha256(REPO / CONTRACT_REL),
             "bundleManifestSha256": file_sha256(bundle_dir / "manifest.json"),
+            "driverSha256": driver_sha256(),
+            "runnerSha256": file_sha256(Path(__file__)),
             "seedPacketSha256ByCandidate": {
                 candidate_id: file_sha256(seeds_dir / f"{candidate_id}-seeds.json")
                 for candidate_id in candidate_ids

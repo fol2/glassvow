@@ -10,7 +10,13 @@ from typing import Any
 
 from balance_f1_f2 import GRIDS
 from balance_f0 import lean_and_thick, load_landscape_rows
-from balance_seed_contract import file_sha256, load_contract
+from balance_seed_contract import CONTRACT_REL, REPO, file_sha256, load_contract
+
+
+def _tool_hashes() -> dict[str, str]:
+    tools_dir = Path(__file__).parent
+    names = (Path(__file__).name, "balance_f0.py", "balance_seed_contract.py")
+    return {name: file_sha256(tools_dir / name) for name in names}
 
 
 def select_cem_policies(rows: list[dict[str, Any]], count: int) -> list[dict[str, Any]]:
@@ -53,7 +59,8 @@ def _policy_evidence(rows: list[dict[str, Any]], axes: dict[str, Any]) -> dict[s
 
 def prepare_cem_seeds(layer_dir: Path, candidate_ids: list[str], out: Path) -> dict[str, Any]:
     """Use common development policy indices with candidate-specific start-cell identities."""
-    axes = load_contract()["frozenLandscape"]
+    contract = load_contract()
+    axes = contract["frozenLandscape"]
 
     def evidence(candidate_id: str) -> dict[str, list[dict[str, Any]]]:
         paths = sorted((layer_dir / candidate_id / "landscape").glob("shard-*.ndjson"))
@@ -86,7 +93,8 @@ def prepare_cem_seeds(layer_dir: Path, candidate_ids: list[str], out: Path) -> d
         (out / f"{candidate_id}-layer-analysis.json").write_text(
             json.dumps(analysis, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     packet = {
-        "issue": 458, "policyRoot": 1454, "candidates": candidate_ids,
+        "issue": 458, "policyRoot": int(contract["development"]["f1PolicyRoot"]),
+        "candidates": candidate_ids,
         "commonPolicies": {
             grid: [int(row["policyIndex"]) for row in common[grid]] for grid in GRIDS
         },
@@ -99,7 +107,8 @@ def prepare_cem_seeds(layer_dir: Path, candidate_ids: list[str], out: Path) -> d
                 candidate_id: file_sha256(layer_dir / candidate_id / "observations.jsonl")
                 for candidate_id in candidate_ids
             },
-            "toolSha256": file_sha256(Path(__file__)),
+            "seedRegistrySha256": file_sha256(REPO / CONTRACT_REL),
+            "toolSha256ByModule": _tool_hashes(),
         },
     }
     (out / "common.json").write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n",
@@ -295,6 +304,6 @@ def mini_cem_comparison(cem_dir: Path, candidate_ids: list[str], seeds_dir: Path
                     for candidate_id in candidate_ids
                 },
                 "cemManifestSha256": file_sha256(cem_dir / "manifest.json"),
-                "toolSha256": file_sha256(Path(__file__)),
+                "seedRegistrySha256": file_sha256(REPO / CONTRACT_REL),
+                "toolSha256ByModule": _tool_hashes(),
             }}
-
