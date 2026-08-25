@@ -17,14 +17,9 @@ from balance_f1_f2 import (
 )
 from balance_f0 import evaluation_from_registry, evaluation_spec, observation_bytes, progressive_plans
 from balance_seed_contract import check_invocation, load_contract, sha256_bytes
-from balance_f1_evidence import (
-    audit_comparison,
-    boundary_diagnostics,
-    decision_record,
-    hydrated_updates,
-    reanalyse_layer,
-    select_cem_policies,
-)
+from balance_f1_cem_evidence import select_cem_policies, vow5_ceiling
+from balance_f1_evidence import decision_record, reanalyse_layer
+from balance_f1_finalists import audit_comparison, boundary_diagnostics, hydrated_updates
 from balance_f1_cem import cem_output_complete, cem_spec
 
 
@@ -210,6 +205,15 @@ class BalanceF1F2Test(unittest.TestCase):
         selected = select_cem_policies(rows, 6)
         self.assertEqual([0, 1, 2], [row["policyIndex"] for row in selected[:3]])
         self.assertEqual(6, len(selected))
+
+    def test_mini_cem_vow5_ceiling_checks_both_grids(self) -> None:
+        report = vow5_ceiling({
+            "duskblade:v5": {"bestCeiling": 0.90},
+            "ashwarden:v5": {"bestCeiling": 0.91},
+        })
+        self.assertTrue(report["grids"]["duskblade:v5"]["clear"])
+        self.assertFalse(report["grids"]["ashwarden:v5"]["clear"])
+        self.assertFalse(report["clear"])
 
     def test_search_bundle_replays_f0_baseline_and_supplemental_catalogues(self) -> None:
         repo = Path(__file__).resolve().parents[1]
