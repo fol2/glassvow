@@ -7,7 +7,7 @@ This packet freezes the visual baseline for TestFlight `1.0.0 (4)`. It records t
 - Build-4 production source: `52a56e726da70c2dd57254e8c6618682c7558f90`.
 - Godot: exact runtime string recorded in every generated `manifest.json`; the workflow installs `4.7.2` and rejects any version not beginning `4.7.2.stable`.
 - Asset manifest: `res://assets/art/map/map-assets.json`; its SHA-256 is computed before capture, passed into the driver, independently recomputed there, and recorded in the manifest.
-- Capture head: the wrapper requires the full checked-out `git rev-parse HEAD`, and the generated manifest records it. The wrapper also refuses to run when production inputs differ from the build-4 source commit.
+- Capture head: the wrapper requires the full checked-out `git rev-parse HEAD`, and the generated manifest records it. Local capture refuses when production inputs differ from the build-4 source commit (`--on-production-drift=fail`, the default). GitHub Actions detects that drift first and skips capture green rather than regenerating a later map or painting the tree red. The frozen packet remains the artifact bound to the HEAD that captured build-4.
 - Locale: `en`.
 
 The fixed matrix is 168 frames:

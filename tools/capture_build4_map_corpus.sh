@@ -9,17 +9,29 @@ OUTPUT="$ROOT/artifacts/build4-map-corpus"
 VERIFY_REPEAT=false
 CAPTURE_HEAD=""
 GODOT_BIN="${GODOT_BIN:-godot}"
+ON_PRODUCTION_DRIFT="fail"
+DETECT_DRIFT_ONLY=false
+PRODUCTION_PATHS=(
+  application
+  assets/art/map
+  content
+  domain
+  presentation
+  project.godot
+)
 
 usage() {
   cat <<'USAGE'
 Usage: tools/capture_build4_map_corpus.sh [options]
 
 Options:
-  --output PATH       Packet output (default: artifacts/build4-map-corpus)
-  --verify-repeat     Capture twice; require byte-identical manifest/dimensions
-  --capture-head SHA  Exact checked-out head (normally inferred from git)
-  --godot PATH        Godot executable (default: $GODOT_BIN or godot)
-  -h, --help          Show this help
+  --output PATH                 Packet output (default: artifacts/build4-map-corpus)
+  --verify-repeat               Capture twice; require byte-identical manifest/dimensions
+  --capture-head SHA            Exact checked-out head (normally inferred from git)
+  --godot PATH                  Godot executable (default: $GODOT_BIN or godot)
+  --on-production-drift MODE    fail (default) or skip when production inputs drifted
+  --detect-drift-only           Print drifted=true|false and exit 0; no Godot capture
+  -h, --help                    Show this help
 USAGE
 }
 
@@ -56,6 +68,19 @@ while (($#)); do
       GODOT_BIN="${1#*=}"
       shift
       ;;
+    --on-production-drift)
+      [[ $# -ge 2 ]] || { echo "--on-production-drift requires fail or skip" >&2; exit 2; }
+      ON_PRODUCTION_DRIFT="$2"
+      shift 2
+      ;;
+    --on-production-drift=*)
+      ON_PRODUCTION_DRIFT="${1#*=}"
+      shift
+      ;;
+    --detect-drift-only)
+      DETECT_DRIFT_ONLY=true
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -70,11 +95,10 @@ done
 
 cd "$ROOT"
 command -v git >/dev/null || { echo "capture_build4_map_corpus: git is required" >&2; exit 2; }
-command -v "$GODOT_BIN" >/dev/null || { echo "capture_build4_map_corpus: Godot executable not found: $GODOT_BIN" >&2; exit 2; }
-python3 -c 'from PIL import Image' >/dev/null 2>&1 || {
-  echo "capture_build4_map_corpus: Pillow is required (python3 -m pip install 'Pillow>=10,<13')" >&2
+if [[ "$ON_PRODUCTION_DRIFT" != "fail" && "$ON_PRODUCTION_DRIFT" != "skip" ]]; then
+  echo "capture_build4_map_corpus: --on-production-drift must be fail or skip, got $ON_PRODUCTION_DRIFT" >&2
   exit 2
-}
+fi
 
 ACTUAL_HEAD="$(git rev-parse HEAD)"
 CAPTURE_HEAD="${CAPTURE_HEAD:-$ACTUAL_HEAD}"
@@ -91,22 +115,64 @@ if ! git cat-file -e "${BUILD4_SOURCE_COMMIT}^{commit}" 2>/dev/null; then
   exit 2
 fi
 
-# The ticket is evidence-only. Refuse to capture if this branch changed any
-# production map, generator, material, camera, layout, content, or asset input
-# relative to the TestFlight build-4 source.
-PRODUCTION_PATHS=(
-  application
-  assets/art/map
-  content
-  domain
-  presentation
-  project.godot
-)
+write_drift_status() {
+  local reason_dir="$ROOT/artifacts/build4-map-corpus-diagnostics"
+  mkdir -p "$reason_dir"
+  if $DRIFTED; then
+    printf 'drifted=true\n' > "$reason_dir/drift.txt"
+    {
+      printf 'skipped=true\n'
+      printf 'reason=production_inputs_differ_from_build4_source\n'
+      printf 'build4_source=%s\n' "$BUILD4_SOURCE_COMMIT"
+      printf 'capture_head=%s\n' "$CAPTURE_HEAD"
+      printf 'changed_paths=\n'
+      git diff --name-only "$BUILD4_SOURCE_COMMIT" "$CAPTURE_HEAD" -- "${PRODUCTION_PATHS[@]}"
+    } > "$reason_dir/skip_reason.txt"
+  else
+    printf 'drifted=false\n' > "$reason_dir/drift.txt"
+  fi
+}
+
+# The ticket is evidence-only. A drifted tree cannot regenerate the frozen
+# build-4 corpus. Local capture fails; CI may skip green instead of failing.
+DRIFTED=false
 if ! git diff --quiet "$BUILD4_SOURCE_COMMIT" "$CAPTURE_HEAD" -- "${PRODUCTION_PATHS[@]}"; then
+  DRIFTED=true
+fi
+
+if $DETECT_DRIFT_ONLY; then
+  write_drift_status
+  if $DRIFTED; then
+    printf 'drifted=true\n'
+  else
+    printf 'drifted=false\n'
+  fi
+  if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+    if $DRIFTED; then
+      echo "drifted=true" >> "$GITHUB_OUTPUT"
+    else
+      echo "drifted=false" >> "$GITHUB_OUTPUT"
+    fi
+  fi
+  exit 0
+fi
+
+if $DRIFTED; then
   echo "capture_build4_map_corpus: production inputs differ from build-4 source $BUILD4_SOURCE_COMMIT" >&2
   git diff --name-only "$BUILD4_SOURCE_COMMIT" "$CAPTURE_HEAD" -- "${PRODUCTION_PATHS[@]}" >&2
+  if [[ "$ON_PRODUCTION_DRIFT" == "skip" ]]; then
+    write_drift_status
+    echo "capture_build4_map_corpus: skipping capture (--on-production-drift=skip)" >&2
+    exit 0
+  fi
   exit 2
 fi
+
+command -v "$GODOT_BIN" >/dev/null || { echo "capture_build4_map_corpus: Godot executable not found: $GODOT_BIN" >&2; exit 2; }
+python3 -c 'from PIL import Image' >/dev/null 2>&1 || {
+  echo "capture_build4_map_corpus: Pillow is required (python3 -m pip install 'Pillow>=10,<13')" >&2
+  exit 2
+}
 
 GODOT_VERSION="$($GODOT_BIN --version | head -n 1 | tr -d '\r')"
 if [[ "$GODOT_VERSION" != "$EXPECTED_GODOT_PREFIX"* ]]; then
