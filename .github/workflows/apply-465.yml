@@ -6,6 +6,7 @@ on:
       - work/465-asset-profile-authority
     paths:
       - 'tools/_patch_465_*.py'
+      - 'tools/_patch_465_*.gd'
       - '.github/workflows/apply-465.yml'
 
 permissions:
@@ -90,6 +91,27 @@ jobs:
 
       - name: Verify GLB landing self-tests
         run: python3 -B tools/land_map_glb.py --self-test
+
+      - name: Verify registry manifest count
+        run: godot --headless -s res://tools/_patch_465_registry_probe.gd -- manifest-count
+
+      - name: Verify registry profile generation
+        run: godot --headless -s res://tools/_patch_465_registry_probe.gd -- generation-count
+
+      - name: Verify registry required fields
+        run: godot --headless -s res://tools/_patch_465_registry_probe.gd -- required-fields
+
+      - name: Verify registry active-act residency
+        run: godot --headless -s res://tools/_patch_465_registry_probe.gd -- act-residency
+
+      - name: Verify registry semantic classes
+        run: godot --headless -s res://tools/_patch_465_registry_probe.gd -- semantics
+
+      - name: Verify registry digest
+        run: godot --headless -s res://tools/_patch_465_registry_probe.gd -- digest
+
+      - name: Remove staging-only registry probe
+        run: rm tools/_patch_465_registry_probe.gd
 
       - name: Verify production map assets
         run: xvfb-run -a python3 -B tools/check_map_assets.py
