@@ -147,16 +147,25 @@ def surrogate_report(f0: dict[str, Any], config: dict[str, Any]) -> dict[str, An
             interactions.append({"features": [features[left], features[right]],
                                  "jointPermutationInteraction": _summary(strength, np)})
     interactions.sort(key=lambda row: -abs(row["jointPermutationInteraction"]["p50"]))
+    response_names = [f"{grid}:{key}" for grid in GRIDS for key in RESPONSE_KEYS]
     predictions = [{
         "id": row["id"], "actualDeficit": float(actual_deficit[index]),
         "predictedDeficit": float(model_deficit[index]),
         "baselinePredictedDeficit": float(baseline_deficit[index]),
+        "rawResponses": {
+            name: {"actual": float(y[index, column]),
+                   "predicted": float(predicted[index, column]),
+                   "baselinePredicted": float(baseline[index, column]),
+                   "interval": {"lower": float(lower[index, column]),
+                                "upper": float(upper[index, column])}}
+            for column, name in enumerate(response_names)
+        },
     } for index, row in enumerate(rows)]
     return {
         "method": config["estimator"], "sklearnVersion": sklearn.__version__,
         "numpyVersion": np.__version__, "candidateHeldOut": True,
         "candidates": len(rows), "features": features,
-        "responses": [f"{grid}:{key}" for grid in GRIDS for key in RESPONSE_KEYS],
+        "responses": response_names,
         "metrics": metrics, "adequacy": adequacy_decision(metrics, config["adequacy"]),
         "predictions": predictions, "importance": importance, "interactions": interactions,
     }

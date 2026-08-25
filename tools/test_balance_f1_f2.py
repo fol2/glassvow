@@ -15,23 +15,95 @@ from balance_f1_f2 import (
     response_deficit,
     write_search_bundle,
 )
-from balance_f0 import evaluation_from_registry, evaluation_spec, progressive_plans
-from balance_seed_contract import check_invocation, load_contract
+from balance_f0 import evaluation_from_registry, evaluation_spec, observation_bytes, progressive_plans
+from balance_seed_contract import check_invocation, load_contract, sha256_bytes
 from balance_f1_evidence import (
     audit_comparison,
     boundary_diagnostics,
     decision_record,
     hydrated_updates,
+    reanalyse_layer,
     select_cem_policies,
 )
-from balance_f1_cem import cem_spec
+from balance_f1_cem import cem_output_complete, cem_spec
 
 
 class BalanceF1F2Test(unittest.TestCase):
+    def test_racing_reanalysis_fails_closed_when_a_complete_raw_shard_is_missing(self) -> None:
+        axes = load_contract()["frozenLandscape"]
+        controls = [{"arm": arm, "aspect": aspect, "vow": vow, "seed": 6200,
+                     "outcome": "win" if arm == 1 else "loss", "error": "",
+                     "deck": 30, "fights": []}
+                    for arm in (1, 2, 3, 4) for aspect in ("duskblade", "ashwarden")
+                    for vow in (0, 5)]
+        landscape = [{"policyIndex": 0, "aspect": aspect, "vow": vow, "seed": 6200,
+                      "outcome": "win", "error": "", "deck": 40,
+                      "fights": [{"shatters": 2, "smolderKills": 2}]}
+                     for aspect in ("duskblade", "ashwarden") for vow in (0, 5)]
+        controls.sort(key=lambda row: (row["arm"], row["aspect"], row["vow"], row["seed"]))
+        landscape.sort(key=lambda row: (row["policyIndex"], row["aspect"],
+                                        row["vow"], row["seed"]))
+        identity = {"id": "c000", "values": {"flareDamage": 9},
+                    "fileSha256": "f" * 64, "semanticSha256": "e" * 64,
+                    "searchSpaceSha256": "s" * 64, "seedRegistrySha256": "r" * 64,
+                    "commit": "deadbeef", "driverSha256": "d" * 64,
+                    "godotVersion": "4.7.2.stable", "hostFingerprint": "h" * 64}
+        payload = observation_bytes(controls + landscape, identity)
+        candidate = {"id": "c000", "values": identity["values"],
+                     "fileSha256": identity["fileSha256"],
+                     "semanticSha256": identity["semanticSha256"],
+                     "commit": identity["commit"], "godotVersion": identity["godotVersion"],
+                     "hostFingerprint": identity["hostFingerprint"], "status": "complete",
+                     "earlyStop": None, "controlRowCount": 16, "landscapeRowCount": 4,
+                     "observationsSha256": sha256_bytes(payload)}
+        summary = {"protocol": {
+            "controls": {"stage": "f1-racing", "root": 1454,
+                         "first": 6200, "last": 6200},
+            "landscape": {"stage": "f1-racing", "root": 1454, "first": 6200,
+                          "last": 6200, "policyFirst": 0, "policyCount": 1}},
+            "searchSpaceSha256": identity["searchSpaceSha256"],
+            "seedRegistrySha256": identity["seedRegistrySha256"],
+            "driverSha256": identity["driverSha256"], "candidates": [candidate]}
+        with tempfile.TemporaryDirectory(prefix="glassvow-raw-reanalyse-") as temp:
+            root = Path(temp) / "c000"
+            (root / "controls").mkdir(parents=True)
+            (root / "landscape").mkdir()
+            (root / "controls/shard-0.json").write_text(
+                json.dumps({"runs": controls}), encoding="utf-8")
+            landscape_path = root / "landscape/shard-0.ndjson"
+            landscape_path.write_text("{}\n" + "".join(
+                json.dumps(row) + "\n" for row in landscape), encoding="utf-8")
+            (root / "observations.jsonl").write_bytes(payload)
+            self.assertEqual("c000", reanalyse_layer(summary, Path(temp), 10, axes)
+                             ["candidates"][0]["id"])
+            landscape_path.unlink()
+            with self.assertRaisesRegex(ValueError, "raw row count drifted"):
+                reanalyse_layer(summary, Path(temp), 10, axes)
+
+    def test_mini_cem_resume_is_bound_to_the_candidate_seed_packet(self) -> None:
+        spec = {"popSize": 16, "elite": 4, "maxGen": 6, "seedCount": 8,
+                "trainSeed0": 6400, "holdoutSeed0": 6800, "holdoutCount": 2,
+                "root": 2454, "policyRoot": 1454}
+        manifest = {"t": "manifest", "contentFileSha256": "candidate",
+                    "seedPacketSha256": "old", "stage": "f1-mini-cem", "island": 0,
+                    "popSize": 16, "elite": 4, "maxGen": 6, "seedCount": 8,
+                    "trainSeed0": 6400, "holdoutSeed0": 6800, "holdoutCount": 2,
+                    "rootSeed": 2454, "samplerRoot": 1454}
+        rows = [manifest,
+                {"t": "holdout", "outcome": "win"},
+                {"t": "holdout", "outcome": "loss"},
+                {"t": "final", "island": 0, "holdoutRuns": 2}]
+        with tempfile.TemporaryDirectory(prefix="glassvow-cem-resume-") as temp:
+            output = Path(temp) / "island.ndjson"
+            output.write_text("".join(json.dumps(row) + "\n" for row in rows))
+            self.assertTrue(cem_output_complete(output, "candidate", "old", spec, 0))
+            self.assertFalse(cem_output_complete(output, "candidate", "new", spec, 0))
+
     def test_progressive_layer_plans_cover_only_new_disjoint_rectangles(self) -> None:
         def layer(control_last: int, policy_count: int, landscape_last: int) -> dict:
             return {"controlStage": "f1-racing", "controlRoot": 1454,
                     "controlFirst": 6200, "controlLast": control_last,
+                    "controlArms": [1, 2],
                     "landscapeStage": "f1-racing", "landscapeRoot": 1454,
                     "landscapeFirst": 6200, "landscapeLast": landscape_last,
                     "policyFirst": 0, "policyCount": policy_count}
@@ -81,8 +153,11 @@ class BalanceF1F2Test(unittest.TestCase):
                 proxies[grid] = {"topCell": ("shatter:fat" if aspect == "duskblade" and identity
                                                else "smolder:fat"),
                                  "arm2Rate": 0.2, "margin": 0.5}
+            deficit_delta = {key: {"p025": effect[0], "p50": effect[1], "p975": effect[2]}
+                             for key in ("c1a", "c1b")}
             return {"id": candidate_id, "proxies": proxies,
-                    "bootstrap": {"vsC000": {"gridDelta": grid_delta},
+                    "bootstrap": {"vsC000": {"gridDelta": grid_delta,
+                                              "deficitDelta": deficit_delta},
                                   "grids": {grid: {
                                       "arm2Rate": {"p025": 0.1, "p50": 0.2, "p975": 0.3},
                                       "margin": {"p025": 0.4, "p50": 0.5, "p975": 0.6},
@@ -94,6 +169,7 @@ class BalanceF1F2Test(unittest.TestCase):
         self.assertTrue(report["candidates"][0]["confidenceBlocked"])
         self.assertIn("duskblade:v0:arm2Rate",
                       report["candidates"][0]["materialContradictions"])
+        self.assertIn("binding:c1a", report["candidates"][0]["materialContradictions"])
 
     def test_mini_cem_spec_is_bounded_to_development_roots_and_seeds(self) -> None:
         contract = load_contract()
@@ -173,6 +249,7 @@ class BalanceF1F2Test(unittest.TestCase):
         self.assertEqual({
             "controlStage": "f1-racing", "controlRoot": 1454,
             "controlFirst": 6200, "controlLast": 6263,
+            "controlArms": [1, 2, 3, 4],
             "landscapeStage": "f1-racing", "landscapeRoot": 1454,
             "landscapeFirst": 6200, "landscapeLast": 6215,
             "policyFirst": 0, "policyCount": 256,

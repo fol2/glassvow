@@ -99,6 +99,7 @@ def progressive_plans(previous: dict[str, Any], current: dict[str, Any],
     if previous["controlStage"] != current["controlStage"] \
             or previous["controlRoot"] != current["controlRoot"] \
             or previous["controlFirst"] != current["controlFirst"] \
+            or previous["controlArms"] != current["controlArms"] \
             or previous["controlLast"] > current["controlLast"]:
         raise ValueError("inherited control range is not nested inside the current layer")
     if previous["landscapeStage"] != current["landscapeStage"] \
@@ -139,7 +140,8 @@ def protocol(contract: dict[str, Any]) -> dict[str, Any]:
     return {
         "issue": 457,
         "controls": {"stage": "f0-controls", "root": POLICY_ROOT,
-                     "first": CONTROL_SEEDS[0], "last": CONTROL_SEEDS[1], "arms": list(RANK_ARMS)},
+                     "first": CONTROL_SEEDS[0], "last": CONTROL_SEEDS[1],
+                     "arms": list(RANK_ARMS), "emitArms": [1, 2, 3, 4]},
         "landscape": {"stage": "f0-mini-landscape", "root": POLICY_ROOT,
                       "policyFirst": 0, "policyCount": POLICY_COUNT,
                       "first": LAND_SEEDS[0], "last": LAND_SEEDS[1]},
@@ -155,6 +157,8 @@ def evaluation_spec(proto: dict[str, Any]) -> dict[str, Any]:
         "controlStage": str(controls.get("stage", "f0-controls")),
         "controlRoot": int(controls.get("root", landscape.get("root", POLICY_ROOT))),
         "controlFirst": int(controls["first"]), "controlLast": int(controls["last"]),
+        "controlArms": [int(arm) for arm in controls.get(
+            "emitArms", controls.get("arms", [1, 2, 3, 4]))],
         "landscapeStage": str(landscape.get("stage", "f0-mini-landscape")),
         "landscapeRoot": int(landscape.get("root", POLICY_ROOT)),
         "landscapeFirst": int(landscape["first"]), "landscapeLast": int(landscape["last"]),
@@ -632,16 +636,24 @@ def load_landscape_rows(paths: list[Path]) -> list[dict[str, Any]]:
 def attach_raw(result: dict[str, Any], cand_dir: Path) -> dict[str, Any]:
     c_paths = sorted((cand_dir / "controls").glob("shard-*.json"))
     l_paths = sorted((cand_dir / "landscape").glob("shard-*.ndjson"))
-    result["_controlRows"] = load_control_rows(c_paths) if c_paths else []
+    control_rows = load_control_rows(c_paths) if c_paths else []
+    if isinstance(result.get("controlArms"), list):
+        selected = {int(arm) for arm in result["controlArms"]}
+        control_rows = [row for row in control_rows if int(row["arm"]) in selected]
+    result["_controlRows"] = control_rows
     result["_landscapeRows"] = load_landscape_rows(l_paths) if l_paths else []
     return result
 
 
+def observation_bytes(rows: list[dict[str, Any]], identity: dict[str, Any]) -> bytes:
+    return "".join(json.dumps(bind_row(row, identity), ensure_ascii=False, sort_keys=True,
+                              separators=(",", ":")) + "\n" for row in rows).encode()
+
+
 def write_observations(path: Path, rows: list[dict[str, Any]], identity: dict[str, Any]) -> str:
-    text = "".join(json.dumps(bind_row(row, identity), ensure_ascii=False, sort_keys=True,
-                              separators=(",", ":")) + "\n" for row in rows)
-    path.write_text(text, encoding="utf-8")
-    return sha256_bytes(text.encode())
+    payload = observation_bytes(rows, identity)
+    path.write_bytes(payload)
+    return sha256_bytes(payload)
 
 
 def require_stage(stage: str, first: int, last: int, root: int,
@@ -746,12 +758,13 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         index, spec = item
         dest = cand_dir / "controls" / f"shard-new-{index:02d}.json"
         dest.parent.mkdir(parents=True, exist_ok=True)
-        expected = 16 * spec["seeds"]
+        expected = len(resolved["controlArms"]) * 4 * spec["seeds"]
         if resume and controls_complete(dest, expected, cand["fileSha256"]):
             return dest
         tmp = dest.with_suffix(".json.tmp")
         godot_sweep(godot, [
             "--mode=controls", f"--seeds={spec['seeds']}", f"--seed0={spec['seed0']}",
+            f"--arms={','.join(str(arm) for arm in resolved['controlArms'])}",
             f"--rootSeed={resolved['controlRoot']}", f"--stage={resolved['controlStage']}",
             f"--content={content}",
             f"--out={tmp}",
@@ -762,7 +775,10 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         return dest
 
     launch(godot, jobs, c_plan, control_job)
-    control_rows = load_control_rows(sorted((cand_dir / "controls").glob("shard-*.json")))
+    selected_arms = set(resolved["controlArms"])
+    control_rows = [row for row in load_control_rows(
+        sorted((cand_dir / "controls").glob("shard-*.json")))
+                    if int(row["arm"]) in selected_arms]
     ranked_controls = ranked_control_rows(control_rows)
     baseline_stalls = int(baseline["controlStalls"]) if baseline else sum(
         1 for row in ranked_controls if row.get("outcome") == "stall")
@@ -801,6 +817,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     result: dict[str, Any] = {
         "id": cand["id"], "values": cand["values"], "fileSha256": cand["fileSha256"],
         "semanticSha256": cand["semanticSha256"], "inputHash": digest,
+        "controlArms": resolved["controlArms"],
         "controls": controls, "cells": cells, "proxies": proxies,
         "controlStalls": sum(1 for row in ranked_controls if row.get("outcome") == "stall"),
         "controlErrors": sum(1 for row in ranked_controls if row.get("outcome") == "error"),
@@ -815,7 +832,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     }
     if prior_manifest is not None:
         result["inheritance"] = parts["inheritance"]
-    expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) * 16
+    expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) \
+        * len(resolved["controlArms"]) * 4
     expected_landscape = resolved["policyCount"] * 4 \
         * (resolved["landscapeLast"] - resolved["landscapeFirst"] + 1)
     control_keys = {(int(row["arm"]), str(row["aspect"]), int(row["vow"]), int(row["seed"]))

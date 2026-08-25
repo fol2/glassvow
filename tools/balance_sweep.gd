@@ -53,6 +53,8 @@ static func _controls(content: ContentDB, opts: Dictionary) -> Array[Dictionary]
 		{"arm": 3, "build": 0, "play": 1}, {"arm": 4, "build": 1, "play": 1},
 	]
 	for arm: Dictionary in arms:
+		if not str(opts["arms"]).split(",").has(str(arm["arm"])):
+			continue
 		for aspect: String in ["duskblade", "ashwarden"]:
 			for vow: int in [0, 5]:
 				for offset: int in range(_i(opts, "seeds")):
@@ -86,7 +88,7 @@ static func _write_policies(content: ContentDB, opts: Dictionary, file: FileAcce
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"mode": "sweep", "out": "", "rootSeed": 215,
 		"policyFirst": 0, "policyCount": 2000, "seeds": 40, "seed0": 3000,
-		"content": "", "space": BalanceCatalogue.DEFAULT_SPACE, "stage": ""}
+		"arms": "1,2,3,4", "content": "", "space": BalanceCatalogue.DEFAULT_SPACE, "stage": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
 			return {"error": "expected --name=value, got %s" % arg}
@@ -100,6 +102,14 @@ static func _options(args: PackedStringArray) -> Dictionary:
 		out[key] = int(float(str(out[key])))
 	if str(out["mode"]) not in ["preflight", "controls", "sweep"]:
 		return {"error": "--mode must be preflight, controls or sweep"}
+	var seen_arms: Dictionary = {}
+	for arm_text: String in str(out["arms"]).split(","):
+		if not arm_text.is_valid_int() or int(arm_text) < 1 or int(arm_text) > 4 \
+				or seen_arms.has(arm_text):
+			return {"error": "--arms must be unique values from 1,2,3,4"}
+		seen_arms[arm_text] = true
+	if seen_arms.is_empty():
+		return {"error": "--arms must not be empty"}
 	if str(out["out"]).is_empty() or _i(out, "policyFirst") < 0 \
 			or _i(out, "policyCount") < 1 or _i(out, "seeds") < 1:
 		return {"error": "--out is required and counts must be positive"}
