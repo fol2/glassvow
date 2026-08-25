@@ -688,7 +688,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     if file_sha256(content) != cand["fileSha256"]:
         raise ValueError(f"{cand['id']} file SHA drifted")
     cat = catalogue_identity(content, REPO / SPACE_REL)
-    cat["seedRegistrySha256"] = file_sha256(REPO / CONTRACT_REL)
+    cat["searchSpaceSha256"] = str(cand.get("searchSpaceSha256", cat["searchSpaceSha256"])); cat["seedRegistrySha256"] = file_sha256(REPO / CONTRACT_REL)
     resolved = evaluation_spec(proto)
     prior_dir: Path | None = None
     prior_manifest: dict[str, Any] | None = None
@@ -1094,7 +1094,7 @@ def main() -> int:
         if not isinstance(inherit_proto, dict):
             raise ValueError("--inherit summary has no protocol")
     doe_path = Path(args.candidates) if args.candidates else out / "doe"
-    manifest = ensure_candidates(doe_path, args.count, args.seed)
+    manifest = ensure_candidates(doe_path, args.count, args.seed); identity["searchSpaceSha256"] = str(manifest.get("registryIdentity", {}).get("fileSha256", identity["searchSpaceSha256"]))
     if args.summarise_only:
         rows = [read_json(out / row["id"] / "manifest.json")
                 for row in manifest["candidates"]
@@ -1111,12 +1111,12 @@ def main() -> int:
     godot_version = require_godot(args.godot)
     host = host_identity(args.jobs)
     packet = qualified_packet(host, godot_version)
-    names = [args.replay] if args.replay else (wanted or [row["id"] for row in manifest["candidates"]])
-    by_id = {row["id"]: row for row in manifest["candidates"]}
-    baseline: dict[str, Any] | None = None
-    if "c000" not in names and (out / "c000" / "manifest.json").is_file():
-        baseline = attach_raw(read_json(out / "c000" / "manifest.json"), out / "c000")
-    ordered = ["c000"] + [name for name in names if name != "c000"] if "c000" in names else names
+    baseline_ids = [row["id"] for row in manifest["candidates"] if row.get("baseline")]
+    if len(baseline_ids) != 1: raise ValueError("candidate manifest must identify exactly one baseline")
+    baseline_id = baseline_ids[0]; names = [args.replay] if args.replay else (wanted or [row["id"] for row in manifest["candidates"]])
+    by_id = {row["id"]: row for row in manifest["candidates"]}; baseline: dict[str, Any] | None = None
+    if baseline_id not in names and (out / baseline_id / "manifest.json").is_file(): baseline = attach_raw(read_json(out / baseline_id / "manifest.json"), out / baseline_id)
+    ordered = [baseline_id] + [name for name in names if name != baseline_id] if baseline_id in names else names
     results: list[dict[str, Any]] = []
     for name in ordered:
         if name not in by_id:
@@ -1125,7 +1125,7 @@ def main() -> int:
             args.godot, args.jobs, doe_path, by_id[name], out, proto,
             str(packet["fingerprint"]["fingerprintHash"]), commit, godot_version,
             not args.fresh, baseline, boot_n, axes, inherit_path, inherit_proto)
-        if name == "c000":
+        if name == baseline_id:
             baseline = row
         results.append(row)
         if file_sha256(live) != live_sha:

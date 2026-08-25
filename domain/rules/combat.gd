@@ -296,12 +296,14 @@ func _apply_start_relics(run: RunState, cb: CombatState) -> void:
 			e.statuses["str"] = _sget(e.statuses, "str") + 1
 		_proc(cb, "shatterersCrown")
 	if run.has_relic("smolderingCoal") and not _player_smolder_blocked(run):
+		var coal_smolder: int = _ji(content.relic(&"smolderingCoal").get("startSmolder", 2))
 		for e: EnemyCombatant in cb.enemies:
-			e.statuses["poison"] = _sget(e.statuses, "poison") + 2
+			e.statuses["poison"] = _sget(e.statuses, "poison") + coal_smolder
 		_proc(cb, "smolderingCoal")
 	if run.has_relic("ashenCore") and not _player_smolder_blocked(run):
+		var core_smolder: int = _ji(content.relic(&"ashenCore").get("startSmolder", 3))
 		for e: EnemyCombatant in cb.enemies:
-			e.statuses["poison"] = _sget(e.statuses, "poison") + 3
+			e.statuses["poison"] = _sget(e.statuses, "poison") + core_smolder
 		_proc(cb, "ashenCore")
 
 
