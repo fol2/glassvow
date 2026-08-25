@@ -73,6 +73,21 @@ static func run(fails: Array[String]) -> void:
 	if pickup_run.player.max_hp != pickup_hp_after or pickup_run.player.hp != pickup_hp_after \
 			or pickup_run.player.energy_max != 4:
 		fails.append("ContentDB: instant relic pickup laws are not applied")
+	var tuned: ContentDB = ContentDB.load_full()
+	tuned.relics["hollowCrown"]["energyGain"] = 2
+	tuned.relics["hollowCrown"]["maxHpPenalty"] = 18
+	var tuned_run: RunState = RunState.new_run(tuned, 5, "tuned-relic", {"aspect": 1})
+	var tuned_hp: int = tuned_run.player.max_hp
+	RewardRules.new(tuned).gain_relic(tuned_run, "hollowCrown")
+	if tuned_run.player.energy_max != 5 or tuned_run.player.max_hp != tuned_hp - 18:
+		fails.append("ContentDB: Hollow Crown ignores registered energy/HP scalars")
+	tuned.relics["ashenCore"]["startSmolder"] = 4
+	tuned.relics["smolderingCoal"]["startSmolder"] = 3
+	tuned_run.player.relics.append("smolderingCoal")
+	var tuned_cb: CombatState = CombatRules.new(tuned).start_combat(
+		tuned_run, ["sporeling"], &"normal")
+	if tuned_cb.enemies[0].statuses.get("poison", 0) != 7:
+		fails.append("ContentDB: Smolder relics ignore registered start scalars")
 	pickup_run.unlocks = ["card:quakeblow", "relic:smolderingCoal"]
 	if not rewards.card_pool(pickup_run, "uncommon").has("quakeblow") \
 			or not rewards.relic_pool(pickup_run, "uncommon").has("smolderingCoal"):
@@ -186,4 +201,3 @@ static func _rising_litany_pools(full: ContentDB, fails: Array[String]) -> void:
 		fails.append("ContentDB: eighthOmen.waystoneEchoes missing")
 	if eighth.has("floorEchoes"):
 		fails.append("ContentDB: retired floorEchoes key still present")
-
