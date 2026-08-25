@@ -1,7 +1,7 @@
 ---
-title: "The textured Studio path is the HD Model tab the script clicks away from"
+title: "The textured Studio path is the HD Model tab, now --textured on the script"
 date: 2026-08-24
-last_updated: 2026-08-24
+last_updated: 2026-08-25
 category: tooling-decisions
 module: assets/art/map
 problem_type: tooling_decision
@@ -12,24 +12,31 @@ applies_when:
   - "Wanting a baked albedo out of Tripo Studio rather than bare geometry"
   - "tools/studio_image_to_glb.ts output arrives in dozens of open shells"
   - "A Studio export blob is built in the page but never reaches disk"
+  - "Spending Studio credits on a textured generate"
 root_cause: wrong_tool_surface
-resolution_type: documented_workaround
+resolution_type: tooling_addition
 related_components:
   - "development_workflow"
   - "documentation"
-tags: [tripo, studio, texture, glb, hd-model, smart-mesh, chrome, download, pna]
+tags: [tripo, studio, texture, glb, hd-model, smart-mesh, chrome, download, pna, dry-run]
 ---
 
-# The textured Studio path is the HD Model tab the script clicks away from
+# The textured Studio path is the HD Model tab, now `--textured` on the script
 
 ## Context
 
-`tools/studio_image_to_glb.ts` drives Studio's **Smart Mesh** tab
-(`tab=low_poly`). Everything it does there is correct, and its walked-path
-header is still accurate for that tab. But Smart Mesh has **no texture stage at
-all**, so every GLB the script has ever produced is bare geometry — which was
-invisible as a limitation for the 23 map kits, because those are deliberately
-bought untextured and surfaced by triplanar projection.
+`tools/studio_image_to_glb.ts` is one driver with two tabs. The workflow is
+still **image in → arguments → 3D model out**. Smart Mesh (`tab=low_poly`) is
+the default and still has **no texture stage** — that is the 23 map kits,
+bought untextured on purpose and surfaced by triplanar projection. Textured
+game content uses `--textured`, which stays on **HD Model** (`tab=high_detail`)
+and drives the Geometry & Texture popover.
+
+Until 2026-08-25 the script always clicked away from HD Model. The Vigil
+(`act1-vigil-hall.glb`) was generated on that tab by hand, then fetched back
+through `--task-id`. That gap is closed: `--textured` is the HD path, and
+`--dry-run` / `--smoke-run` exist so Generate is not clicked until the form
+is proven.
 
 It stopped being invisible when the map needed a BUILDING. A first attempt at
 the Vigil through the script measured:
@@ -53,9 +60,10 @@ tab the script happens to drive to the product as a whole.
 
 ## What is actually there
 
-**`HD Model` is the DEFAULT tab on a cold `/workspace/generate`.** The script
-actively clicks away from it. It carries a `General Settings > Geometry &
-Texture` popover that Smart Mesh does not have at all:
+**`HD Model` is the DEFAULT tab on a cold `/workspace/generate`.** Until
+`--textured`, the script actively clicked away from it onto Smart Mesh. It
+carries a `General Settings > Geometry & Texture` popover that Smart Mesh does
+not have at all:
 
 | Control | Default | Chosen for this repo, and why |
 |---|---|---|
@@ -68,8 +76,9 @@ Texture` popover that Smart Mesh does not have at all:
 | Polycount | **2,000,000** | **6,000**, against `triangle_max: 8000` |
 
 The Generate price moves with those choices — 55 credits at the defaults, 40
-after 2K + PBR off — so the script's hardcoded `"Generate 100 65"` label match
-would not fire on this tab even if it went there.
+after 2K + PBR off. That is why Generate matching is price-agnostic
+(`Generate 40` / `Generate 100 65`) and why `--smoke-run` prints
+`quoted_credits` before anyone spends them.
 
 Everything else matches the script's existing notes: privacy needs a real mouse
 click (`element.click()` does not open the listbox; the HD default is
@@ -78,7 +87,8 @@ click (`element.click()` does not open the listbox; the HD default is
 upload and must not be clicked. One new dialog: a first-run **`View Your
 Model`** rotate/pan/zoom tutorial fires right after Generate, with an `OK`
 button. It is not the `Retry for better results` dialog and needs its own
-dismissal. A **`Guide`** panel follows it.
+dismissal (`dismiss_ok` in the export loop). A **`Guide`** panel follows it
+and is left up — the 2026-08-25 generate reached Export without dismissing it.
 
 Two file inputs exist on the page. The image one is
 `accept="image/png,image/webp,image/jpg,image/jpeg"`, class
@@ -120,11 +130,10 @@ bun tools/studio_image_to_glb.ts --task-id <task-id> --out <path>
 Its CDP `createObjectURL` hook writes the file (8.8 s warm), and the byte count
 matched the in-page blob at 604,608 vs 604,604.
 
-Read its JSON summary with care. For a `--task-id` re-export it still prints
-`"Studio Smart Mesh Export"` and reports `faces` and `topology` **from its own
-form state, which it never set for this run** — those fields were `800` and
-`quad` for a 5,615-triangle triangle mesh. The path and the byte count are real;
-those two are not.
+`--task-id` re-export does not set the form. JSON now omits `faces` /
+`topology` on that path (`form_state: "unset_for_reexport"`) so they cannot be
+mistaken for the task that ran. The path and the byte count are the real
+fields.
 
 ## The export panel differs too
 
@@ -133,10 +142,90 @@ those two are not.
 dance is dead code on this tab. The toolbar `Export` only opens the panel; a
 second `Export` inside it does the work.
 
-## If the script is ever extended
+## The script now takes that path
 
-The gap is a tab choice and a settings popover, not an architecture problem.
-What it would need: a `--textured` flag that stays on `HD Model`, drives the six
-`Geometry & Texture` controls above, dismisses the two first-run dialogs, and
-drops the `"Generate 100 65"` label match for something that does not encode a
-price. The export loop and the download hook already work unchanged.
+`--textured` stays on HD Model, drives the Geometry & Texture controls above,
+dismisses **View Your Model** / **OK** (the existing export loop already had
+`dismiss_ok`), and matches Generate without encoding a price. The export loop
+and the download hook are unchanged.
+
+Credit safety, in this order. Do not skip:
+
+```bash
+# 1. dry-run — no Chrome, no credits. Prints the planned arguments.
+bun tools/studio_image_to_glb.ts --dry-run --textured \
+  --image assets/art/map-concepts/act1-vigil-hall.png \
+  --out /tmp/glassvow-studio-act1-vigil-hall-textured.glb
+
+# 2. smoke-run — Chrome + login + form. Generate is not clicked.
+bun tools/studio_image_to_glb.ts --smoke-run --textured \
+  --image assets/art/map-concepts/act1-vigil-hall.png \
+  --out /tmp/glassvow-studio-act1-vigil-hall-textured.glb
+
+# 3. generate — spends the quoted HD credits (walked: 40 after 2K + PBR off).
+bun tools/studio_image_to_glb.ts --textured \
+  --image assets/art/map-concepts/act1-vigil-hall.png \
+  --out /tmp/glassvow-studio-act1-vigil-hall-textured.glb
+```
+
+`--smoke-run` is `--stop-before-generate` plus a form snapshot, the live
+Generate labels, and `quoted_credits` parsed from the last number on that
+label. `would_spend_credits` is false until step 3.
+
+HD defaults for this repo, not Studio's:
+
+| Flag | Default with `--textured` |
+|---|---|
+| `--faces` | 6000 |
+| `--topology` | triangle |
+| `--texture` | on |
+| `--texture-quality` | 2k |
+| `--pbr` | off |
+| `--ultra-mesh` | on |
+| `--ai-complete` | off |
+| `--privacy` | private |
+| `--tab` / `--model` | hd-model |
+
+Smart Mesh remains the no-flag default (`--faces 800 --topology quad`, no
+texture). `--texture on` on Smart Mesh is refused.
+
+## Remaining Studio features the script still does not drive
+
+Logged so a later pass does not rediscover them as if they were missing from
+the product. They are available in Studio; they are not this pipeline.
+
+- **rig / animation**
+- **Generate Multi-Views** (appears after upload; must not be clicked)
+- **PBR metallic/roughness/normal maps** (`--pbr on` is wired, default off)
+- **4K texture** (`--texture-quality 4k` is wired; blows hero `bytes_max`)
+- **8K Texture trial** (Studio upsell; not a pipeline flag)
+- **AI Complete** (`--ai-complete on` is wired; invents unseen backsides)
+- **Ultra Mesh Quality off** (`--ultra-mesh off` is wired)
+- **FBX / OBJ / STL / USD / 3MF** export — this driver writes GLB
+- **Public or Sharing Only** privacy (`--privacy` is wired; default Private)
+- **Godot DCC Bridge** auto-import
+- **Tripo OpenAPI / platform generation** — forbidden; Studio is the paid product
+
+The dry-run JSON field `remaining_studio_features` prints this same list.
+`--help` documents the flags, not the leftover Studio surfaces.
+
+## Measured 2026-08-25 (this tree)
+
+Credit order was dry-run → smoke-run → generate. Smoke quoted **Generate 40**
+and `would_spend_credits: false`. Generate then spent those 40 on HD Model
+from `assets/art/map-concepts/act1-vigil-hall.png`:
+
+| | this run | signed shipping Vigil |
+|---|---|---|
+| task | `4c5f8b19-c33d-4014-ade5-a38abc094c65` | `5f44379a-face-4238-a5eb-4d2ec18a5663` |
+| bytes | 597,376 | 604,608 |
+| triangles | 5,530 | 5,615 |
+| attributes | POSITION, NORMAL, TEXCOORD_0 | same |
+| textures / images | 1 / 1 JPEG (410,810) | 1 / 1 JPEG (413,216) |
+| baseColor / PBR maps | yes / no | yes / no |
+| min Y | 0.0 | 0.0 |
+| `inspect_glb` vs `act1-vigil` row | no findings | accepted |
+
+The signed shipping mesh is unchanged. This run is pipeline proof that
+`--textured` writes a game-content GLB; replacing `vigil-hall.glb` still
+needs a signed 20-placement.
