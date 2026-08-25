@@ -664,6 +664,13 @@ def require_stage(stage: str, first: int, last: int, root: int,
         raise ValueError(err)
 
 
+def stage_args(stage: str, sealed_token: str | None) -> list[str]:
+    args = [f"--stage={stage}"]
+    if sealed_token:
+        args.append(f"--sealedToken={sealed_token}")
+    return args
+
+
 def launch(godot: str, jobs: int, plan: list[dict[str, int]], worker: Any) -> list[Path]:
     with ThreadPoolExecutor(max_workers=max(1, min(jobs, len(plan)))) as pool:
         return list(pool.map(worker, enumerate(plan)))
@@ -765,7 +772,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         godot_sweep(godot, [
             "--mode=controls", f"--seeds={spec['seeds']}", f"--seed0={spec['seed0']}",
             f"--arms={','.join(str(arm) for arm in resolved['controlArms'])}",
-            f"--rootSeed={resolved['controlRoot']}", f"--stage={resolved['controlStage']}",
+            f"--rootSeed={resolved['controlRoot']}",
+            *stage_args(resolved["controlStage"], proto.get("sealedToken")),
             f"--content={content}",
             f"--out={tmp}",
         ], tmp, dest.with_suffix(".log"))
@@ -798,7 +806,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
                 f"--policyFirst={spec['policyFirst']}",
                 f"--policyCount={spec['policyCount']}",
                 f"--seeds={spec['seeds']}", f"--seed0={spec['seed0']}",
-                f"--stage={resolved['landscapeStage']}",
+                *stage_args(resolved["landscapeStage"], proto.get("sealedToken")),
                 f"--content={content}", f"--out={tmp}",
             ], tmp, dest.with_suffix(".log"))
             tmp.replace(dest)

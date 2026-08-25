@@ -92,8 +92,9 @@ static func stage_error(opts: Dictionary) -> String:
 	if typeof(spec_v) != TYPE_DICTIONARY:
 		return "unknown --stage %s" % stage
 	var spec: Dictionary = spec_v
-	if not str(spec.get("sealedUntil", "")).strip_edges().is_empty():
-		return "--stage %s is sealed until %s" % [stage, spec["sealedUntil"]]
+	var sealed_until: String = str(spec.get("sealedUntil", "")).strip_edges()
+	if not sealed_until.is_empty() and str(opts.get("sealedToken", "")) != sealed_until:
+		return "--stage %s is sealed until %s" % [stage, sealed_until]
 	var first: int = _seed_first(opts)
 	var last: int = first + _seed_count(opts) - 1
 	var exam_v: Variant = contract.get("exam", {})

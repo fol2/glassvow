@@ -56,6 +56,9 @@ static func _check_stage(fails: Array[String]) -> void:
 	if BalanceCatalogue.stage_error({"stage": "audit", "seed0": 8000, "runs": 1,
 			"rootSeed": 454}).is_empty():
 		fails.append("balance catalogue: audit must stay sealed until finalist")
+	if not BalanceCatalogue.stage_error({"stage": "audit", "seed0": 8000, "runs": 200,
+			"rootSeed": 1454, "sealedToken": "finalist"}).is_empty():
+		fails.append("balance catalogue: finalist audit token must unseal 8000–8199")
 	var missing: Dictionary = BalanceCatalogue.open({"content": "/no/such/glassvow-candidate.json"})
 	if not missing.has("error"):
 		fails.append("balance catalogue: missing candidate path must fail closed")
