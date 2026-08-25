@@ -37,6 +37,9 @@ def audit_comparison(development: dict[str, Any], audit: dict[str, Any],
         if candidate_id == "c000":
             continue
         development_row, audit_row = development_by_id[candidate_id], audit_by_id[candidate_id]
+        for key in ("fileSha256", "semanticSha256", "values"):
+            if development_row.get(key) != audit_row.get(key):
+                raise ValueError(f"sealed audit identity drift for {candidate_id}: {key}")
         dev_delta = development_row["bootstrap"]["vsC000"]["gridDelta"]
         audit_delta = audit_row["bootstrap"]["vsC000"]["gridDelta"]
         dev_deficit = development_row["bootstrap"]["vsC000"]["deficitDelta"]
@@ -198,4 +201,3 @@ def finalist_contract(candidate_ids: list[str], candidate_manifest: dict[str, An
             "auditNonGating": bool(audit["nonGating"]),
             "tier0BoundaryCounts": {row["id"]: row["boundaryDiagnostics"]["boundaryCount"]
                                     for row in finalists}}
-
