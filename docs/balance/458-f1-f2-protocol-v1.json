@@ -10,11 +10,17 @@
     "maxFeatures": 1.0,
     "bootstrap": true,
     "maxSamples": 0.85,
+    "nJobs": 1,
     "randomSeed": 458,
     "validation": "leave-one-candidate-out",
     "baseline": "five-nearest inverse-Hamming mean",
     "interval": "outer prediction plus training OOB absolute-residual 95th percentile",
     "permutationRepeats": 64,
+    "acquisition": {
+      "criteria": ["constrained feasibility", "expected deficit reduction", "uncertainty", "novelty"],
+      "selection": "Pareto set only; no weighted aggregate score",
+      "simulatorPromotion": false
+    },
     "responses": [
       "topRate",
       "thirdRate",

@@ -3,18 +3,46 @@
 from __future__ import annotations
 
 import unittest
+import json
+import tempfile
+from pathlib import Path
 
 from balance_f1_f2 import (
     adequacy_decision,
     balanced_supplemental,
     pareto_front,
     racing_decisions,
+    response_deficit,
+    write_search_bundle,
 )
 from balance_f0 import evaluation_from_registry, evaluation_spec
 from balance_seed_contract import check_invocation, load_contract
 
 
 class BalanceF1F2Test(unittest.TestCase):
+    def test_search_bundle_replays_f0_baseline_and_supplemental_catalogues(self) -> None:
+        repo = Path(__file__).resolve().parents[1]
+        space = json.loads((repo / "docs/balance/421-content-search-space-v1.json").read_text())
+        f0 = json.loads((repo / "docs/balance/data/457/doe-manifest.json").read_text())
+        supplemental, metrics = balanced_supplemental(
+            space["features"], [row["values"] for row in f0["candidates"]], 4, 458, 256)
+        with tempfile.TemporaryDirectory(prefix="glassvow-f1-bundle-") as temp:
+            out = Path(temp) / "bundle"
+            manifest = write_search_bundle(
+                repo / "content/full-content.json",
+                repo / "docs/balance/421-content-search-space-v1.json",
+                f0, supplemental, metrics, out, ("c000", "c002"), 458)
+            self.assertEqual(6, manifest["count"])
+            self.assertEqual((repo / "content/full-content.json").read_bytes(),
+                             (out / "c000/full-content.json").read_bytes())
+            self.assertEqual(6, len({row["semanticSha256"] for row in manifest["candidates"]}))
+
+    def test_response_deficit_uses_raw_components_not_a_pass_label(self) -> None:
+        one_grid = [0.8, 0.75, 0.70, 3.0, 4.0, 0.40, 0.40]
+        self.assertEqual(0.0, response_deficit(one_grid * 4))
+        binding = [0.8, 0.5, 0.4, 1.0, 2.0, 0.40, 0.40]
+        self.assertAlmostEqual(7.0 / 6.0, response_deficit(binding + one_grid * 3))
+
     def test_audit_band_needs_an_explicit_finalist_unseal(self) -> None:
         contract = load_contract()
         self.assertTrue(check_invocation(contract, "audit", 8000, 8199, 1454))
@@ -82,8 +110,8 @@ class BalanceF1F2Test(unittest.TestCase):
              for column in range(8)}
             for row in range(32)
         ]
-        first, metrics = balanced_supplemental(features, excluded, 16, 458, 256)
-        second, _ = balanced_supplemental(features, excluded, 16, 458, 256)
+        first, metrics = balanced_supplemental(features, excluded, 16, 458, 257)
+        second, _ = balanced_supplemental(features, excluded, 16, 458, 257)
 
         self.assertEqual(first, second)
         self.assertEqual(16, len(first))
@@ -91,6 +119,7 @@ class BalanceF1F2Test(unittest.TestCase):
         self.assertFalse({tuple(row.values()) for row in first}
                          & {tuple(row.values()) for row in excluded})
         self.assertGreaterEqual(metrics["minimumDistanceFromF0"], 2)
+        self.assertEqual(257, metrics["restarts"])
         for counts in metrics["marginalCounts"].values():
             self.assertLessEqual(max(counts.values()) - min(counts.values()), 1)
 
