@@ -77,7 +77,8 @@ def _seed_packet(path: Path) -> dict[str, Any]:
     return packet
 
 
-def _complete(path: Path, candidate_sha: str, spec: dict[str, int], island: int) -> bool:
+def cem_output_complete(path: Path, candidate_sha: str, seed_packet_sha: str,
+                        spec: dict[str, int], island: int) -> bool:
     if not path.is_file():
         return False
     manifest: dict[str, Any] | None = None
@@ -105,6 +106,7 @@ def _complete(path: Path, candidate_sha: str, spec: dict[str, int], island: int)
         "samplerRoot": spec["policyRoot"],
     }
     return str(manifest.get("contentFileSha256")) == candidate_sha \
+        and str(manifest.get("seedPacketSha256")) == seed_packet_sha \
         and str(manifest.get("stage")) == "f1-mini-cem" \
         and all(int(manifest.get(key, -1)) == value for key, value in expected.items()) \
         and int(final.get("island", -1)) == island \
@@ -112,7 +114,7 @@ def _complete(path: Path, candidate_sha: str, spec: dict[str, int], island: int)
 
 
 def _command(godot: str, content: Path, seeds: Path, out: Path,
-             spec: dict[str, int], island: int) -> list[str]:
+             seed_packet_sha: str, spec: dict[str, int], island: int) -> list[str]:
     return [
         godot, "--headless", "-s", "res://tools/balance_cem.gd", "--",
         f"--island={island}", f"--seedsJson={seeds}", f"--out={out}",
@@ -121,6 +123,7 @@ def _command(godot: str, content: Path, seeds: Path, out: Path,
         f"--trainSeed0={spec['trainSeed0']}", f"--holdoutSeed0={spec['holdoutSeed0']}",
         f"--holdoutCount={spec['holdoutCount']}", f"--rootSeed={spec['root']}",
         f"--samplerRoot={spec['policyRoot']}", "--stage=f1-mini-cem",
+        f"--seedPacketSha256={seed_packet_sha}",
         f"--content={content}",
     ]
 
@@ -151,23 +154,26 @@ def run(godot: str, jobs: int, bundle_dir: Path, seeds_dir: Path, out: Path,
         candidate_id, island = task
         candidate = by_id[candidate_id]
         content = bundle_dir / candidate_id / "full-content.json"
+        seed_packet = seeds_dir / f"{candidate_id}-seeds.json"
+        seed_packet_sha = file_sha256(seed_packet)
         if file_sha256(content) != str(candidate["fileSha256"]):
             raise ValueError(f"candidate {candidate_id} content SHA drifted")
         destination = out / candidate_id / f"island-{island:02d}.ndjson"
         destination.parent.mkdir(parents=True, exist_ok=True)
-        if _complete(destination, str(candidate["fileSha256"]), spec, island):
+        if cem_output_complete(destination, str(candidate["fileSha256"]),
+                               seed_packet_sha, spec, island):
             return candidate_id, island, file_sha256(destination)
         temporary = Path(str(destination) + ".tmp")
         temporary.unlink(missing_ok=True)
-        command = _command(godot, content, seeds_dir / f"{candidate_id}-seeds.json",
-                           temporary, spec, island)
+        command = _command(godot, content, seed_packet, temporary,
+                           seed_packet_sha, spec, island)
         log = destination.with_suffix(".log")
         with log.open("w", encoding="utf-8") as handle:
             handle.write(" ".join(command) + "\n")
             process = subprocess.run(command, cwd=REPO, stdout=handle,
                                      stderr=subprocess.STDOUT, check=False)
-        if process.returncode != 0 or not _complete(
-                temporary, str(candidate["fileSha256"]), spec, island):
+        if process.returncode != 0 or not cem_output_complete(
+                temporary, str(candidate["fileSha256"]), seed_packet_sha, spec, island):
             raise RuntimeError(f"mini-CEM failed for {candidate_id} island {island}; see {log}")
         temporary.replace(destination)
         return candidate_id, island, file_sha256(destination)

@@ -18,13 +18,15 @@ from balance_f0 import (
     aggregate_controls,
     by_seed,
     deficits,
+    evaluation_spec,
     grid_proxies,
     lean_and_thick,
     load_control_rows,
     load_landscape_rows,
+    observation_bytes,
     seed_block_bootstrap,
 )
-from balance_seed_contract import file_sha256, load_contract
+from balance_seed_contract import file_sha256, load_contract, sha256_bytes
 
 
 def decision_record(summary: dict[str, Any], decisions: list[dict[str, str]],
@@ -65,22 +67,60 @@ def reanalyse_layer(summary: dict[str, Any], layer_dir: Path,
                     n_boot: int, axes: dict[str, Any]) -> dict[str, Any]:
     """Rebuild point and paired bootstrap evidence from immutable raw shards."""
     rebuilt = copy.deepcopy(summary)
-    baseline_control_paths = sorted((layer_dir / "c000" / "controls").glob("shard-*.json"))
-    baseline_land_paths = sorted((layer_dir / "c000" / "landscape").glob("shard-*.ndjson"))
-    if not baseline_control_paths or not baseline_land_paths:
+    resolved = evaluation_spec(summary["protocol"])
+    expected_landscape = resolved["policyCount"] * 4 \
+        * (resolved["landscapeLast"] - resolved["landscapeFirst"] + 1)
+
+    def raw(row: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+        candidate_id = str(row["id"])
+        candidate_dir = layer_dir / candidate_id
+        observation_path = candidate_dir / "observations.jsonl"
+        if not observation_path.is_file() \
+                or file_sha256(observation_path) != str(row.get("observationsSha256", "")):
+            raise ValueError(f"raw observation digest is missing or stale for {candidate_id}")
+        control_paths = sorted((candidate_dir / "controls").glob("shard-*.json"))
+        land_paths = sorted((candidate_dir / "landscape").glob("shard-*.ndjson"))
+        control_rows = load_control_rows(control_paths) if control_paths else []
+        recorded_arms = row.get("controlArms")
+        if isinstance(recorded_arms, list):
+            selected = {int(arm) for arm in recorded_arms}
+            control_rows = [item for item in control_rows if int(item["arm"]) in selected]
+            expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) \
+                * len(selected) * 4
+        else:
+            # Legacy F0/first-layer manifests emitted all four diagnostic arms.
+            expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) * 16
+        land_rows = load_landscape_rows(land_paths) if land_paths else []
+        if len(control_rows) != int(row.get("controlRowCount", -1)) \
+                or len(land_rows) != int(row.get("landscapeRowCount", -1)):
+            raise ValueError(f"raw row count drifted for {candidate_id}")
+        identity = {
+            "id": candidate_id, "values": row["values"], "fileSha256": row["fileSha256"],
+            "semanticSha256": row["semanticSha256"],
+            "searchSpaceSha256": summary["searchSpaceSha256"],
+            "seedRegistrySha256": summary["seedRegistrySha256"],
+            "commit": row["commit"], "driverSha256": summary["driverSha256"],
+            "godotVersion": row["godotVersion"], "hostFingerprint": row["hostFingerprint"],
+        }
+        if sha256_bytes(observation_bytes(control_rows + land_rows, identity)) \
+                != str(row["observationsSha256"]):
+            raise ValueError(f"raw shards do not reproduce observations for {candidate_id}")
+        if row.get("status") == "complete" and not row.get("earlyStop"):
+            if len(control_rows) != expected_controls or len(land_rows) != expected_landscape:
+                raise ValueError(f"complete raw coverage is truncated for {candidate_id}")
+        return control_rows, land_rows
+
+    by_candidate = {str(row["id"]): raw(row) for row in rebuilt["candidates"]}
+    baseline_row = next((row for row in rebuilt["candidates"] if row["id"] == "c000"), None)
+    if baseline_row is None or baseline_row.get("status") != "complete":
         raise ValueError("raw layer has no complete c000 incumbent")
-    baseline_control = by_seed(load_control_rows(baseline_control_paths))
-    baseline_land = by_seed(load_landscape_rows(baseline_land_paths))
+    baseline_control = by_seed(by_candidate["c000"][0])
+    baseline_land = by_seed(by_candidate["c000"][1])
     for row in rebuilt["candidates"]:
         candidate_id = str(row["id"])
         if row.get("status") != "complete" or row.get("earlyStop"):
             continue
-        control_paths = sorted((layer_dir / candidate_id / "controls").glob("shard-*.json"))
-        land_paths = sorted((layer_dir / candidate_id / "landscape").glob("shard-*.ndjson"))
-        if not control_paths or not land_paths:
-            continue
-        control_rows = load_control_rows(control_paths)
-        land_rows = load_landscape_rows(land_paths)
+        control_rows, land_rows = by_candidate[candidate_id]
         proxies = grid_proxies(aggregate_controls(control_rows), aggregate_cells(land_rows, axes))
         row["proxies"] = proxies
         row["deficits"] = deficits(proxies)
@@ -266,7 +306,13 @@ def mini_cem_report(candidate_dir: Path, analysis_path: Path,
                 "stop": str(row["final"]["stop"]),
             } for row in current],
         }
-    return {"islands": len(islands), "grids": grids, "_raw": islands}
+    vow5 = {grid: {"bestCeiling": grids[grid]["bestCeiling"],
+                   "clear": grids[grid]["bestCeiling"] <= 0.90 + 1e-12}
+            for grid in ("duskblade:v5", "ashwarden:v5")}
+    return {"islands": len(islands), "grids": grids,
+            "vow5Ceiling": {"grids": vow5,
+                            "clear": all(row["clear"] for row in vow5.values())},
+            "_raw": islands}
 
 
 def _paired_cem_grid(candidate: list[dict[str, Any]], baseline: list[dict[str, Any]],
@@ -323,6 +369,7 @@ def mini_cem_comparison(cem_dir: Path, candidate_ids: list[str], seeds_dir: Path
                 random.Random(458 + offset * 101 + grid_index),
             )
         candidates.append({"id": candidate_id, "grids": report["grids"],
+                           "vow5Ceiling": report["vow5Ceiling"],
                            "pairedVsC000": paired})
     raw_hashes = {
         candidate_id: {path.name: file_sha256(path)
@@ -369,8 +416,16 @@ def audit_comparison(development: dict[str, Any], audit: dict[str, Any],
         development_row, audit_row = development_by_id[candidate_id], audit_by_id[candidate_id]
         dev_delta = development_row["bootstrap"]["vsC000"]["gridDelta"]
         audit_delta = audit_row["bootstrap"]["vsC000"]["gridDelta"]
+        dev_deficit = development_row["bootstrap"]["vsC000"]["deficitDelta"]
+        audit_deficit = audit_row["bootstrap"]["vsC000"]["deficitDelta"]
         changes: dict[str, Any] = {}
         contradictions: list[str] = []
+        binding_changes = {
+            key: _effect_change(dev_deficit[key], audit_deficit[key], threshold)
+            for key in ("c1a", "c1b")
+        }
+        contradictions.extend(f"binding:{key}" for key, change in binding_changes.items()
+                              if change["material"])
         for grid in GRIDS:
             changes[grid] = {}
             for key in ("arm2Rate", "topRate", "thirdRate", "fourthRate", "margin"):
@@ -385,7 +440,8 @@ def audit_comparison(development: dict[str, Any], audit: dict[str, Any],
         if identity_contradiction:
             contradictions.append("identity-shape")
         candidates.append({
-            "id": candidate_id, "effectChanges": changes,
+            "id": candidate_id, "bindingDeficitChanges": binding_changes,
+            "effectChanges": changes,
             "developmentIdentity": dev_identity, "auditIdentity": audit_identity,
             "identityContradiction": identity_contradiction,
             "materialContradictions": contradictions,
@@ -491,6 +547,8 @@ def finalist_contract(candidate_ids: list[str], candidate_manifest: dict[str, An
             "boundaryDiagnostics": boundary_diagnostics(candidate["values"], space),
             "hardConstraintChecks": {"pointClear": point_clear,
                                      "noClearBootstrapRegression": no_clear_regression,
+                                     "developmentVow5Ceiling": cem_by_id[candidate_id][
+                                         "vow5Ceiling"],
                                      "grids": {grid: {
                                          "arm2Rate": proxies[grid]["arm2Rate"],
                                          "arm2RateInterval": bootstrap["grids"][grid]["arm2Rate"],
