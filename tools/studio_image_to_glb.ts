@@ -2,41 +2,51 @@
 /**
  * Studio image → GLB. No LLM. No Tripo API.
  *
- * THIS DRIVES THE **Smart Mesh** TAB, WHICH HAS NO TEXTURE STAGE. Everything
- * below is accurate for that tab, and the 23 map kits want exactly it — they
- * are bought untextured on purpose and surfaced by triplanar projection. But
- * do not read "the output has no texture" as a fact about Tripo: the `HD Model`
- * tab, which is the DEFAULT on a cold /workspace/generate and which step 2
- * below actively clicks away from, bakes an albedo and an unwrap. The Vigil was
- * generated there by hand on 2026-08-24 and the bytes fetched back through this
- * script's `--task-id` path. Full walk, settings and traps:
- * `docs/solutions/tooling-decisions/the-textured-studio-path-is-the-hd-tab-not-the-script.md`.
+ * Workflow: image in → arguments → 3D model out.
  *
- * One caveat that bites there and is invisible here: on a `--task-id` re-export
- * this script reports `faces` and `topology` from ITS OWN form state, which it
- * never set for that run. For a hand-generated task those two fields are
- * fiction. The `glb_path` and the byte count are real.
+ * Two tabs, one driver:
+ * - **Smart Mesh** (`tab=low_poly`) — untextured kits. No texture stage.
+ *   Default `--faces 800 --topology quad`. 23 map kits want this.
+ * - **HD Model** (`tab=high_detail`) — `--textured`. Bakes albedo + unwrap.
+ *   Default `--faces 6000 --topology triangle --texture on --texture-quality 2k
+ *   --pbr off --ultra-mesh on --ai-complete off`. The Vigil's game-content
+ *   path. HD is the DEFAULT on a cold `/workspace/generate`; Smart Mesh used
+ *   to click away from it. `--textured` stays.
+ *
+ * Credit safety: `--dry-run` never opens Chrome. `--smoke-run` (and
+ * `--stop-before-generate`) fill the form and refuse to click Generate.
+ * Generate matching is price-agnostic (`Generate 40` / `Generate 100 65`);
+ * never click **Generate Multi-Views**.
+ *
+ * `--task-id` re-export does not set the form. JSON `faces`/`topology` are
+ * omitted on that path so they cannot be mistaken for the task that ran.
+ *
+ * Walk, settings, remaining Studio features:
+ * `docs/solutions/tooling-decisions/the-textured-studio-path-is-the-hd-tab-not-the-script.md`.
  *
  * Walked 2026-08-19 on Chrome for Testing 145 *new Headless* (Metal M4),
  * cookies decrypted from Chrome Default (`ory_kratos_session` on `.tripo3d.ai`).
+ * HD Geometry & Texture walk: 2026-08-24.
  *
  * Measured path (do not skip):
  * 1. After cookie login, `Page.navigate` `/workspace/generate`. New Headless
  *    has WebGL so this cold GET works. Gallery home at 1280px hides
  *    **More Settings**; header **3D Workspace** is a no-op. gstack
  *    chrome-headless-shell still 500s on that URL.
- * 2. **Smart Mesh** (`tab=low_poly`). Generate button **Generate 100 65**.
+ * 2. Smart Mesh (`tab=low_poly`) or stay on HD Model (`tab=high_detail`).
  *    After upload a **Generate Multi-Views** button appears — do not click it.
  * 3. Privacy: `element.click()` does not open the listbox. Mouse-click the
  *    Sharing/Private/Public combobox, then mouse-click **Private**.
- * 4. Topology: mouse-click **Topology**. Default **Quad New**, slider 500–25000.
- *    Set faces by typing in the text box next to the slider (walked:
- *    JS `.value=` does not drive Vue; triple-click, `Input.insertText`,
- *    Tab commits `aria-valuenow`). Escape closes the popover.
+ * 4. Smart Mesh topology: mouse-click **Topology**. Default **Quad New**,
+ *    slider 500–25000. HD: **Geometry & Texture** popover (Ultra / AI Complete /
+ *    Texture / Texture Quality / PBR / Topology / Polycount). Set faces by
+ *    typing in the text box (JS `.value=` does not drive Vue; triple-click,
+ *    `Input.insertText`, Tab commits `aria-valuenow`). Escape closes the
+ *    popover.
  * 5. Generate is done when a visible **Export** button is in the DOM.
  *    Do not treat Generating/Queuing-absent as done (true before the
  *    label paints). Do not treat leftover Generating text as blocking
- *    once Export is visible.
+ *    once Export is visible. HD may show **View Your Model** then **Guide**.
  * 6. After Export appears, dismiss the walked "Retry for better results"
  *    dialog (14px close) or the dialog Export click is a no-op.
  * 7. Export is the same detect-decide-act loop as the form. Triggers:
@@ -44,19 +54,18 @@
  *    option → pick; format GLB + second Export → click last Export;
  *    `createObjectURL` magic `glTF` (skip the 1853-byte `//#r` worker
  *    blob) → write `--out`. One-shot clicks; detect until the next
- *    trigger. Viewport 1280×900. Format can default **FBX**.
+ *    trigger. Viewport 1280×900. HD Format already defaults **GLB**.
  *
  * Speed (2026-08-20): keep Chrome for Testing on port 9335 with a durable
  * profile at `~/Library/Caches/glassvow/studio-cft`. Cookies are cached at
  * `~/Library/Caches/glassvow/studio-cookies.json` (0600) so a cold start
- * does not decrypt Chrome Default. Stay on a bare `/workspace/generate` that
- * already shows Smart Mesh. Never reuse `/workspace/generate/<task-id>` for a
- * new `--image`; reset via about:blank and fail closed if that task id remains.
- * `--task-id` re-export is unchanged. Do not kill Chrome to start a new image.
- * JSON `timings.driver_ms` is chrome+login+form (not Studio upload/generate).
- * `timings.generate_ms` starts when a visible Export appears.
- * `--kill-chrome` tears the warm browser down (also valid as a lone flag).
- * Never spawn extra Default Chrome.
+ * does not decrypt Chrome Default. Never reuse `/workspace/generate/<task-id>`
+ * for a new `--image`; reset via about:blank and fail closed if that task id
+ * remains. `--task-id` re-export is unchanged. Do not kill Chrome to start a
+ * new image. JSON `timings.driver_ms` is chrome+login+form (not Studio
+ * upload/generate). `timings.generate_ms` starts when a visible Export
+ * appears. `--kill-chrome` tears the warm browser down (also valid as a lone
+ * flag). Never spawn extra Default Chrome.
  *
  * gstack `Mode: launched` is chrome-headless-shell — Export never mounts there.
  */
@@ -68,15 +77,25 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import {
   BLANK_RESET_URL,
+  STUDIO_HELP,
   UPLOAD_WATCH_LIMIT_MS,
   UPLOAD_WATCH_POLL_MS,
   blankResetArrived,
+  decideHdForm,
   generateTargetUrl,
   generateWaitReady,
   isTransientEvaluateError,
   newImageExportGuard,
+  parseStudioArgv,
+  pickVisibleGenerate,
+  planStudioRun,
   planWarmGeneratePage,
+  quotedCreditsFromGenerateLabel,
   refuseNewImageOnTaskUrl,
+  remainingStudioFeatures,
+  resolveStudioRequest,
+  shouldClickGenerate,
+  studioExportFormFields,
   uploadWatchTimedOut,
 } from "./studio_image_to_glb_logic.ts";
 
@@ -92,35 +111,41 @@ function die(summary: string): never {
   throw new Error(summary);
 }
 
-function arg(name: string, fallback = ""): string {
-  const i = process.argv.indexOf(name);
-  return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
+const rawArgs = parseStudioArgv(process.argv.slice(2));
+let req: ReturnType<typeof resolveStudioRequest>;
+try {
+  req = resolveStudioRequest(rawArgs);
+} catch (e) {
+  console.log(JSON.stringify({ ok: false, summary: String(e) }));
+  process.exit(2);
 }
-function flag(name: string): boolean {
-  return process.argv.includes(name);
+if (req.help) {
+  console.log(STUDIO_HELP);
+  process.exit(0);
 }
+const image = req.image;
+const out = req.out;
+const faces = req.faces;
+const topology = req.topology;
+const privacy = req.privacy;
+const taskIdArg = req.taskId;
+const stopBefore = req.stopBeforeGenerate;
+const cookieBrowser = req.cookieBrowser;
+const killChrome = req.killChrome;
+const dryRun = req.dryRun;
+const smokeRun = req.smokeRun;
 
-const image = arg("--image");
-const out = arg("--out", "/tmp/glassvow-studio.glb");
-// Quad@1344 → 2701 tris. Default under 1000 so a coarse slider still
-// lands inside the ordinary 2500-tri cap.
-const faces = Number(arg("--faces", "800"));
-const topology = arg("--topology", "quad");
-const privacy = arg("--privacy", "private");
-const taskIdArg = arg("--task-id");
-const stopBefore = flag("--stop-before-generate");
-const cookieBrowser = arg("--cookie-browser", "Chrome");
-const killChrome = flag("--kill-chrome");
-
-if (!image && !taskIdArg && !killChrome) die("need --image, --task-id, or --kill-chrome");
 if (image && !existsSync(image)) die(`image missing: ${image}`);
-if (image || taskIdArg) {
-  if (faces < 500 || faces > 25000) die(`--faces ${faces} outside Studio slider 500-25000`);
-  if (!["quad", "triangle"].includes(topology)) die(`bad --topology ${topology}`);
-  if (!["private", "public", "sharing"].includes(privacy)) die(`bad --privacy ${privacy}`);
-}
 for (const h of FORBIDDEN) {
   if (process.argv.join(" ").includes(h)) die(`refusing ${h}`);
+}
+
+if (dryRun) {
+  console.log(JSON.stringify({
+    ...planStudioRun(req),
+    remaining_studio_features: remainingStudioFeatures(),
+  }));
+  process.exit(0);
 }
 
 function findChrome(): string {
@@ -435,9 +460,224 @@ try {
   lap("login_ms");
   await ev(cdp, HOOK_EXPORT);
 
+  async function typeFacesAt(cx: number, cy: number) {
+    await clickxy(cdp, cx, cy);
+    await cdp("Input.dispatchMouseEvent", { type: "mousePressed", x: cx, y: cy, button: "left", clickCount: 3 });
+    await cdp("Input.dispatchMouseEvent", { type: "mouseReleased", x: cx, y: cy, button: "left", clickCount: 3 });
+    await cdp("Input.insertText", { text: String(faces) });
+    await cdp("Input.dispatchKeyEvent", { type: "keyDown", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
+    await cdp("Input.dispatchKeyEvent", { type: "keyUp", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
+  }
+
+  async function pressEscape() {
+    await cdp("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+    await cdp("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+  }
+
   let taskId = taskIdArg;
   let sliderNow = faces;
-  if (!taskIdArg) {
+  let formSnapshot: Record<string, unknown> = {};
+  if (!taskIdArg && req.tab === "hd-model") {
+    const hdFormFn = `() => {
+      const txt = (el) => (el.innerText || "").replace(/\\s+/g, " ").trim();
+      const vis = (el) => {
+        if (!el) return false;
+        const r = el.getBoundingClientRect();
+        return r.width > 8 && r.height > 8;
+      };
+      const box = (el) => {
+        if (!el) return { cx: 0, cy: 0 };
+        const r = el.getBoundingClientRect();
+        return { cx: r.x + r.width / 2, cy: r.y + r.height / 2 };
+      };
+      const pressed = (el) => {
+        if (!el) return undefined;
+        const aria = el.getAttribute("aria-checked") || el.getAttribute("aria-pressed");
+        if (aria === "true") return true;
+        if (aria === "false") return false;
+        if (el.checked === true) return true;
+        if (el.checked === false) return false;
+        return undefined;
+      };
+      const switchByRow = (label) => [...document.querySelectorAll("[role=switch]")].find(el => {
+        if (!vis(el)) return false;
+        let node = el;
+        for (let i = 0; i < 8 && node; i++) {
+          if (txt(node) === label) return true;
+          node = node.parentElement;
+        }
+        return false;
+      });
+      const qualityBtn = (name) => [...document.querySelectorAll("button")].find(b =>
+        vis(b) && txt(b) === name);
+      let tab = "";
+      try {
+        tab = document.querySelector("#__nuxt").__vue_app__.config.globalProperties.$pinia._s.get("workspace-generate-store").$state.tab;
+      } catch (e) {}
+      const hdBtn = [...document.querySelectorAll("button")].find(b => txt(b) === "HD Model" && vis(b));
+      const combo = [...document.querySelectorAll("[role=combobox]")].find(c =>
+        vis(c) && /Private|Public|Sharing/.test(c.innerText || ""));
+      const geoHit = [...document.querySelectorAll("button, span, div, p")].find(n =>
+        vis(n) && /^Geometry\\s*&\\s*Texture$/.test(txt(n)));
+      const body = document.body.innerText || "";
+      const geoOpen = /Ultra Mesh Quality/.test(body) && /PBR|Texture Quality/.test(body);
+      const ultraSw = switchByRow("Ultra Mesh Quality");
+      const aiSw = switchByRow("AI Complete");
+      const texSw = switchByRow("Texture");
+      const pbrSw = switchByRow("PBR");
+      const q2 = qualityBtn("2K");
+      const q4 = qualityBtn("4K");
+      const q1 = qualityBtn("1K");
+      let textureQuality = "";
+      if (pressed(q1) === true) textureQuality = "1k";
+      else if (pressed(q2) === true) textureQuality = "2k";
+      else if (pressed(q4) === true) textureQuality = "4k";
+      const tri = [...document.querySelectorAll("button, [role=button]")].find(b =>
+        vis(b) && /^Triangle$/.test(txt(b)));
+      const quad = [...document.querySelectorAll("button, [role=button]")].find(b =>
+        vis(b) && /^(Quad|Quad New)$/.test(txt(b)));
+      const input = [...document.querySelectorAll("input[type=text], input[type=number]")].find(x => {
+        const r = x.getBoundingClientRect();
+        return r.width > 20 && r.height > 10 && /^\\d+$/.test(x.value);
+      });
+      const slider = document.querySelector("[role=slider]");
+      const gens = [...document.querySelectorAll("button")].map(b => txt(b)).filter(t => /^Generate/.test(t));
+      let topology = "";
+      if (tri && tri.getAttribute("aria-pressed") === "true") topology = "triangle";
+      else if (quad && quad.getAttribute("aria-pressed") === "true") topology = "quad";
+      else if (tri) topology = "triangle";
+      else if (quad) topology = "quad";
+      return {
+        tab,
+        hdPresent: !!hdBtn,
+        hdAt: box(hdBtn),
+        privacy: combo ? txt(combo) : "",
+        privCx: combo ? box(combo).cx : 0,
+        privCy: combo ? box(combo).cy : 0,
+        geoOpen,
+        geoAt: box(geoHit),
+        ultra: pressed(ultraSw),
+        ultraAt: box(ultraSw),
+        aiComplete: pressed(aiSw),
+        aiAt: box(aiSw),
+        texture: pressed(texSw),
+        texAt: box(texSw),
+        textureQuality,
+        q1At: box(q1),
+        q2At: box(q2),
+        q4At: box(q4),
+        pbr: pressed(pbrSw),
+        pbrAt: box(pbrSw),
+        topology,
+        topoTriAt: box(tri),
+        topoQuadAt: box(quad),
+        facesVal: input ? Number(input.value) : (slider ? Number(slider.getAttribute("aria-valuenow")) : null),
+        slider: slider ? Number(slider.getAttribute("aria-valuenow")) : null,
+        facesCx: input ? box(input).cx : 0,
+        facesCy: input ? box(input).cy : 0,
+        generateLabels: gens,
+      };
+    }`;
+    const detectHd = () => ev(cdp, `(${hdFormFn})()`);
+    let settingsApplied = false;
+    let observed: Record<string, unknown> | null = null;
+    let f = await detectHd();
+    f.settingsApplied = settingsApplied;
+    const steps: string[] = [];
+    let same = 0;
+    let prev = "";
+    for (let i = 0; i < 50; i++) {
+      const action = decideHdForm(f, req);
+      if (action === prev) same++;
+      else same = 0;
+      prev = action;
+      if (action !== "watch_geo" && same > 12) die("HD form stuck on " + action + ": " + JSON.stringify(f));
+      if (action === "watch_geo" && same > 40) die("HD form stuck on " + action + ": " + JSON.stringify(f));
+      steps.push(action);
+      if (action === "done") break;
+      if (action === "click_hd") {
+        if (!f.hdAt || f.hdAt.cx === 0) die("HD Model button missing: " + JSON.stringify(f));
+        await clickxy(cdp, f.hdAt.cx, f.hdAt.cy);
+      } else if (action === "set_privacy") {
+        await clickxy(cdp, f.privCx, f.privCy);
+        const opts = await waitEv(cdp, `[...document.querySelectorAll("[role=option]")].map(o => {
+          const r = o.getBoundingClientRect();
+          return { t: (o.innerText||"").trim(), cx: r.x+r.width/2, cy: r.y+r.height/2 };
+        })`, (o) => Array.isArray(o) && o.length >= 2, 15000);
+        const wantPriv = privacy === "private" ? "Private" : privacy === "public" ? "Public" : "Sharing Only";
+        const hit = opts.find((o: any) => o.t === wantPriv);
+        if (!hit) die(`Privacy option ${wantPriv} missing`);
+        await clickxy(cdp, hit.cx, hit.cy);
+      } else if (action === "open_geo_texture") {
+        if (!f.geoAt || f.geoAt.cx === 0) {
+          const opened = await ev(cdp, `(() => {
+            const el = [...document.querySelectorAll("button, span, div, p")].find(n =>
+              /^Geometry\\s*&\\s*Texture$/.test((n.innerText || "").replace(/\\s+/g, " ").trim()));
+            if (!el) return "missing";
+            el.click();
+            return "ok";
+          })()`);
+          if (opened !== "ok") die("Geometry & Texture control missing: " + JSON.stringify(f));
+        } else {
+          await clickxy(cdp, f.geoAt.cx, f.geoAt.cy);
+        }
+      } else if (action === "set_ultra") {
+        if (!f.ultraAt || f.ultraAt.cx === 0) die("Ultra Mesh Quality switch missing: " + JSON.stringify(f));
+        await clickxy(cdp, f.ultraAt.cx, f.ultraAt.cy);
+      } else if (action === "set_ai_complete") {
+        if (!f.aiAt || f.aiAt.cx === 0) die("AI Complete switch missing: " + JSON.stringify(f));
+        await clickxy(cdp, f.aiAt.cx, f.aiAt.cy);
+      } else if (action === "set_texture") {
+        if (!f.texAt || f.texAt.cx === 0) die("Texture switch missing: " + JSON.stringify(f));
+        await clickxy(cdp, f.texAt.cx, f.texAt.cy);
+      } else if (action === "set_texture_quality") {
+        const at = req.textureQuality === "1k" ? f.q1At
+          : req.textureQuality === "4k" ? f.q4At : f.q2At;
+        if (!at || at.cx === 0) die("Texture Quality " + req.textureQuality + " missing: " + JSON.stringify(f));
+        await clickxy(cdp, at.cx, at.cy);
+      } else if (action === "set_pbr") {
+        if (!f.pbrAt || f.pbrAt.cx === 0) die("PBR switch missing: " + JSON.stringify(f));
+        await clickxy(cdp, f.pbrAt.cx, f.pbrAt.cy);
+      } else if (action === "set_topology") {
+        const at = req.topology === "triangle" ? f.topoTriAt : f.topoQuadAt;
+        if (!at || at.cx === 0) die("HD topology control missing: " + JSON.stringify(f));
+        await clickxy(cdp, at.cx, at.cy);
+      } else if (action === "type_faces") {
+        if (!f.facesCx) die("HD faces input missing: " + JSON.stringify(f));
+        await typeFacesAt(f.facesCx, f.facesCy);
+      } else if (action === "watch_geo") {
+        await sleep(UPLOAD_WATCH_POLL_MS);
+      } else if (action === "close_geo") {
+        observed = { ...f };
+        await pressEscape();
+        settingsApplied = true;
+      }
+      for (let d = 0; d < 30; d++) {
+        f = await detectHd();
+        f.settingsApplied = settingsApplied;
+        if (decideHdForm(f, req) !== action) break;
+      }
+    }
+    if (!settingsApplied || !observed) {
+      die("HD form ended without applying Geometry & Texture: " + steps.join(">") + " " + JSON.stringify(f));
+    }
+    const observedFaces = Number(observed.slider ?? observed.facesVal);
+    if (observedFaces !== faces) {
+      die("HD form ended without faces=" + faces + " observed=" + observedFaces + " steps=" + steps.join(">"));
+    }
+    if (observed.texture !== req.texture) {
+      die("HD form ended without texture=" + req.texture + " " + JSON.stringify(observed));
+    }
+    sliderNow = observedFaces;
+    for (let i = 0; i < 4; i++) {
+      f = await detectHd();
+      if (!f.geoOpen) break;
+      await pressEscape();
+    }
+    formSnapshot = observed;
+    timings.form_steps = steps;
+    lap("form_ms");
+  } else if (!taskIdArg) {
     const formFn = `() => {
       const txt = (el) => (el.innerText || "").replace(/\\s+/g, " ").trim();
       let tab = "";
@@ -472,8 +712,8 @@ try {
           [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim() === "Topology")),
         p2Banner: [...document.querySelectorAll("button")].some(b =>
           /P2\\.0 Preview Try Now/.test((b.innerText || "").replace(/\\s+/g, " "))),
-        gen100: [...document.querySelectorAll("button")].some(b =>
-          /Generate\\s*100/.test(txt(b))),
+        p2Form: [...document.querySelectorAll("button")].some(b =>
+          /^Generate\\s+\\d+/.test(txt(b))),
         model: (() => {
           const c = [...document.querySelectorAll("[role=combobox]")].find(x =>
             /P2|v3|Preview|Best Quality/.test(x.innerText || ""));
@@ -501,7 +741,7 @@ try {
     const decide = (s: any): string => {
       if (!s.smart) return "click_smart";
       if (!s.hasTopo && s.p2Banner) return "click_p2_banner";
-      if (!s.hasTopo && (/v3/i.test(s.model || "") || s.gen100 === false)) return "reset_via_hd";
+      if (!s.hasTopo && (/v3/i.test(s.model || "") || s.p2Form === false)) return "reset_via_hd";
       if (s.privacy && s.privacy !== wantPriv) return "set_privacy";
       if (s.hasTopo && !s.facesOpen) return "open_topology";
       const now = s.slider ?? s.facesVal;
@@ -524,7 +764,7 @@ try {
       steps.push(action);
       if (action === "done") break;
       if (action === "need_p2") die("on v3.1 form, no P2.0 control to click: " + JSON.stringify({
-        model: f.model, p2Banner: f.p2Banner, hasTopo: f.hasTopo, gen100: f.gen100,
+        model: f.model, p2Banner: f.p2Banner, hasTopo: f.hasTopo, p2Form: f.p2Form,
       }));
       if (action === "click_smart") {
         await ev(cdp, `(() => {
@@ -578,12 +818,7 @@ try {
         })()`);
         if (topoClicked !== "ok") die("Topology control missing");
       } else if (action === "type_faces") {
-        await clickxy(cdp, f.facesCx, f.facesCy);
-        await cdp("Input.dispatchMouseEvent", { type: "mousePressed", x: f.facesCx, y: f.facesCy, button: "left", clickCount: 3 });
-        await cdp("Input.dispatchMouseEvent", { type: "mouseReleased", x: f.facesCx, y: f.facesCy, button: "left", clickCount: 3 });
-        await cdp("Input.insertText", { text: String(faces) });
-        await cdp("Input.dispatchKeyEvent", { type: "keyDown", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
-        await cdp("Input.dispatchKeyEvent", { type: "keyUp", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9 });
+        await typeFacesAt(f.facesCx, f.facesCy);
       }
       // Continuous detect until this action is no longer what decide() wants.
       for (let d = 0; d < 30; d++) {
@@ -592,9 +827,9 @@ try {
       }
     }
     sliderNow = f.slider ?? f.facesVal;
+    formSnapshot = f;
     if (f.facesOpen) {
-      await cdp("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
-      await cdp("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27 });
+      await pressEscape();
     }
     timings.form_steps = steps;
     if (sliderNow !== faces) die("form ended without faces=" + faces + " slider=" + sliderNow + " steps=" + steps.join(">"));
@@ -604,16 +839,40 @@ try {
   }
 
   if (!taskId && stopBefore) {
-    const gen = await ev(cdp, `[...document.querySelectorAll("button")].map(b => (b.innerText||"").replace(/\\s+/g," ").trim()).filter(t => /Generate/.test(t))`);
+    const gen = await ev(cdp, `[...document.querySelectorAll("button")].map(b => {
+      const t = (b.innerText||"").replace(/\\s+/g," ").trim();
+      const r = b.getBoundingClientRect();
+      return { t, vis: r.width > 8 && r.height > 8, cx: r.x + r.width / 2, cy: r.y + r.height / 2 };
+    }).filter(g => /^Generate/.test(g.t))`);
+    const genList = Array.isArray(gen) ? gen : [];
+    const picked = pickVisibleGenerate(genList);
+    const quoted = picked ? quotedCreditsFromGenerateLabel(picked.t) : null;
+    if (quoted == null) {
+      die("smoke/stop: no visible priced Generate button: " + JSON.stringify(genList));
+    }
     const driver_ms = (timings.chrome_ms || 0) + (timings.login_ms || 0) + (timings.form_ms || 0);
+    const stopKind = smokeRun ? "smoke-run" : "stop-before-generate";
     console.log(JSON.stringify({
       ok: true,
-      summary: "stop-before-generate: form ready, Generate not clicked",
+      summary: `${stopKind}: ${req.tab} form ready, Generate not clicked`,
       stopped: true,
+      smoke_run: smokeRun,
+      would_spend_credits: false,
+      workflow: ["image", "arguments", "3d-model"],
+      tab: req.tab,
+      textured: req.textured,
+      texture: req.texture,
+      texture_quality: req.textureQuality,
+      pbr: req.pbr,
+      ultra_mesh: req.ultraMesh,
+      ai_complete: req.aiComplete,
       faces: sliderNow,
       topology,
       privacy,
-      generate_buttons: gen,
+      generate_buttons: genList.map((g: { t: string }) => g.t),
+      quoted_credits: quoted,
+      form_snapshot: formSnapshot,
+      remaining_studio_features: remainingStudioFeatures(),
       timings: { ...timings, driver_ms, total_ms: Date.now() - t0 },
       warm: attachedWarm,
       cookie_source: cookieSource,
@@ -747,8 +1006,11 @@ try {
         href,
         taskId: m ? m[1] : "",
         generating: /Generating|Queuing/.test(document.body.innerText || ""),
-        gen100: [...document.querySelectorAll("button")].some(b =>
-          /Generate\\s*100/.test(txt(b)) && vis(b)),
+        generate: [...document.querySelectorAll("button")].map(b => {
+          const t = txt(b);
+          const r = b.getBoundingClientRect();
+          return { t, vis: r.width > 8 && r.height > 8, cx: r.x + r.width / 2, cy: r.y + r.height / 2 };
+        }).filter(g => /^Generate/.test(g.t)),
         exportN: exports.length,
         export0: box(exports[0]),
         exportLast: box(exports[exports.length - 1]),
@@ -795,7 +1057,11 @@ try {
       }
       if (dialogExportClicked) return "watch_download";
       if (generateClicked) return "watch_generate";
-      if (!s.exportN && s.gen100 && !s.taskId) return "click_generate";
+      const genBtn = Array.isArray(s.generate) ? pickVisibleGenerate(s.generate) : null;
+      if (shouldClickGenerate(s, {
+        taskIdArg, generateClicked, hasGenerateButton: !!genBtn,
+        stopBeforeGenerate: stopBefore,
+      })) return "click_generate";
       return "watch_generate";
     };
     const watching = (a: string) =>
@@ -806,6 +1072,7 @@ try {
     let same = 0;
     let prev = "";
     let watchStarted = Date.now();
+    const generateWaitMs = req.tab === "hd-model" ? 600000 : 180000;
     for (let i = 0; i < 20000; i++) {
       if (!taskIdArg && timings.generate_ms == null && x.exportN >= 1) {
         lap("generate_ms");
@@ -821,7 +1088,7 @@ try {
         die("export stuck on " + action + ": " + JSON.stringify(x));
       }
       // Abort only. Control is Export/dialog/blob appearing.
-      if (action === "watch_generate" && Date.now() - watchStarted > 180000) {
+      if (action === "watch_generate" && Date.now() - watchStarted > generateWaitMs) {
         die("generate never offered Export: " + JSON.stringify(x));
       }
       if (action === "watch_dialog" && Date.now() - watchStarted > 30000) {
@@ -838,19 +1105,14 @@ try {
         die("refusing prior GLB: Generate must have been clicked with a new task id, leftover=" + (plan.leftoverTaskId || "") + " now=" + (x.taskId || ""));
       }
       if (watching(action)) {
+        await sleep(UPLOAD_WATCH_POLL_MS);
         x = await detectX();
         continue;
       }
       if (action === "click_generate") {
-        const clicked = await ev(cdp, `(() => {
-          const btn = [...document.querySelectorAll("button")].find(b =>
-            /Generate\\s*100/.test((b.innerText || "").replace(/\\s+/g, " ")));
-          if (!btn) return "missing";
-          if (/Multi-Views/.test(btn.innerText || "")) return "refusing-multiview";
-          btn.click();
-          return "clicked";
-        })()`);
-        if (clicked !== "clicked") die(`Generate 100 click: ${clicked}`);
+        const genBtn = pickVisibleGenerate(Array.isArray(x.generate) ? x.generate : []);
+        if (!genBtn) die("Generate click: no visible priced Generate");
+        await clickxy(cdp, genBtn.cx, genBtn.cy);
         generateClicked = true;
       } else if (action === "dismiss_retry") {
         await clickxy(cdp, x.retryClose.cx, x.retryClose.cy);
@@ -900,21 +1162,22 @@ try {
     lap("export_ms");
 
     const driver_ms = (timings.chrome_ms || 0) + (timings.login_ms || 0) + (timings.form_ms || 0);
-    console.log(JSON.stringify({
+    const tabName = req.tab === "hd-model" ? "HD Model" : "Smart Mesh";
+    const payload: Record<string, unknown> = {
       ok: true,
-      summary: `Studio Smart Mesh Export GLB ${out} (${bytes.length} bytes)`,
+      summary: `Studio ${tabName} Export GLB ${out} (${bytes.length} bytes)`,
       glb_path: out,
       task_id: taskId,
-      faces,
-      slider_faces: sliderNow,
-      topology,
-      privacy,
       driver: "chrome-for-testing-new-headless",
       timings: { ...timings, driver_ms, total_ms: Date.now() - t0 },
       warm: attachedWarm,
       cookie_source: cookieSource,
       kept_chrome: !killChrome,
-    }));
+      remaining_studio_features: remainingStudioFeatures(),
+      ...studioExportFormFields(req),
+    };
+    if (!taskIdArg) payload.slider_faces = sliderNow;
+    console.log(JSON.stringify(payload));
   }
 } catch (e) {
   console.log(JSON.stringify({
