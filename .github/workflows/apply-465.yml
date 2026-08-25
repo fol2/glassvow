@@ -44,6 +44,8 @@ jobs:
 
       - name: Apply exact-source migrations
         run: |
+          grep -q 'reads `_seat_kit` rather' tools/_patch_465_scene.py
+          sed -i 's/reads `_seat_kit` rather/reads `seat_kit` rather/' tools/_patch_465_scene.py
           python3 tools/_patch_465_data.py
           python3 tools/_patch_465_scene.py
           python3 tools/_patch_465_probe.py
