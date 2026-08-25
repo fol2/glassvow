@@ -138,6 +138,22 @@ def reanalyse_layer(summary: dict[str, Any], layer_dir: Path,
     return rebuilt
 
 
+def raw_fault_rows(layer_dir: Path, candidate_ids: list[str]) -> dict[str, list[dict[str, Any]]]:
+    """Retain the exact simulator rows behind any fail-closed audit decision."""
+    fields = ("arm", "policyIndex", "aspect", "vow", "seed", "outcome", "error")
+    result: dict[str, list[dict[str, Any]]] = {}
+    for candidate_id in candidate_ids:
+        candidate_dir = layer_dir / candidate_id
+        rows = load_control_rows(sorted((candidate_dir / "controls").glob("shard-*.json")))
+        rows += load_landscape_rows(sorted(
+            (candidate_dir / "landscape").glob("shard-*.ndjson")))
+        result[candidate_id] = [
+            {key: row[key] for key in fields if key in row}
+            for row in rows if row.get("outcome") in ("stall", "error")
+        ]
+    return result
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -161,8 +177,10 @@ def parse_args() -> argparse.Namespace:
     audit_parser = sub.add_parser("audit-compare")
     audit_parser.add_argument("--development-summary", required=True)
     audit_parser.add_argument("--audit-summary", required=True)
+    audit_parser.add_argument("--audit-dir", required=True)
     audit_parser.add_argument("--candidates", required=True)
     audit_parser.add_argument("--threshold", type=float, default=0.10)
+    audit_parser.add_argument("--boot", type=int, default=4000)
     audit_parser.add_argument("--out", required=True)
     finalist_parser = sub.add_parser("finalists")
     finalist_parser.add_argument("--candidate-manifest", required=True)
@@ -194,13 +212,24 @@ def main() -> int:
         return 0
     if args.command == "audit-compare":
         development_path, audit_path = Path(args.development_summary), Path(args.audit_summary)
+        candidate_ids = args.candidates.split(",")
+        audit_summary = reanalyse_layer(
+            json.loads(audit_path.read_text(encoding="utf-8")), Path(args.audit_dir),
+            args.boot, load_contract()["frozenLandscape"],
+        )
         report = audit_comparison(
             json.loads(development_path.read_text(encoding="utf-8")),
-            json.loads(audit_path.read_text(encoding="utf-8")),
-            args.candidates.split(","), args.threshold,
+            audit_summary, candidate_ids, args.threshold,
         )
+        faults = raw_fault_rows(Path(args.audit_dir), candidate_ids)
+        for row in report["candidates"]:
+            row["auditFaultRows"] = faults[str(row["id"])]
         report["inputs"] = {"developmentSummarySha256": file_sha256(development_path),
                             "auditSummarySha256": file_sha256(audit_path),
+                            "auditObservationSha256ByCandidate": {
+                                str(row["id"]): str(row.get("observationsSha256", ""))
+                                for row in audit_summary["candidates"]
+                            },
                             "toolSha256ByModule": _tool_hashes(
                                 "balance_f1_finalists.py")}
         out = Path(args.out)

@@ -104,7 +104,8 @@ def audit_comparison(development: dict[str, Any], audit: dict[str, Any],
             },
         })
     return {"issue": 458, "nonGating": True, "threshold": threshold,
-            "method": "conservative difference of paired candidate-vs-c000 envelopes",
+            "method": ("fail-closed audit early stops; otherwise conservative difference "
+                       "of paired candidate-vs-c000 envelopes"),
             "candidates": candidates}
 
 
