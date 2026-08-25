@@ -19,7 +19,12 @@ from balance_f0 import evaluation_from_registry, evaluation_spec, observation_by
 from balance_seed_contract import check_invocation, load_contract, sha256_bytes
 from balance_f1_cem_evidence import select_cem_policies, vow5_ceiling
 from balance_f1_evidence import decision_record, reanalyse_layer
-from balance_f1_finalists import audit_comparison, boundary_diagnostics, hydrated_updates
+from balance_f1_finalists import (
+    audit_comparison,
+    boundary_diagnostics,
+    finalist_contract,
+    hydrated_updates,
+)
 from balance_f1_cem import cem_output_complete, cem_spec
 
 
@@ -214,6 +219,30 @@ class BalanceF1F2Test(unittest.TestCase):
         self.assertTrue(report["grids"]["duskblade:v5"]["clear"])
         self.assertFalse(report["grids"]["ashwarden:v5"]["clear"])
         self.assertFalse(report["clear"])
+
+    def test_finalist_contract_rejects_a_development_vow5_ceiling_fault(self) -> None:
+        grids = ("duskblade:v0", "duskblade:v5", "ashwarden:v0", "ashwarden:v5")
+        values = {"duskMaxHp": 60, "flareDamage": 11, "ashfallSmolder": 4,
+                  "ashfallWard": 7, "regrowthHeal": 4, "ironSkinWard": 2,
+                  "guardedStrikeWard": 3, "venomStrikeSmolder": 5}
+        interval = {"p025": 0.1, "p50": 0.2, "p975": 0.3}
+        evidence = {
+            "proxies": {grid: {"arm2Rate": 0.2, "margin": 0.5,
+                                "topCell": "shatter:fat"}
+                        for grid in grids},
+            "bootstrap": {"grids": {grid: {
+                "arm2Rate": interval, "margin": {"p025": 0.4, "p50": 0.5, "p975": 0.6},
+            } for grid in grids}},
+        }
+        repo = Path(__file__).resolve().parents[1]
+        space = json.loads((repo / "docs/balance/421-content-search-space-v1.json").read_text())
+        with self.assertRaisesRegex(ValueError, "development hard-constraint fault"):
+            finalist_contract(
+                ["c001"], {"candidates": [{"id": "c001", "values": values, "patch": []}]},
+                {"promoted": ["c001"], "decisions": [{"id": "c001", "evidence": evidence}]},
+                {"candidates": [{"id": "c001", "vow5Ceiling": {"clear": False}}]},
+                {"candidates": [{"id": "c001"}], "nonGating": True}, space,
+            )
 
     def test_search_bundle_replays_f0_baseline_and_supplemental_catalogues(self) -> None:
         repo = Path(__file__).resolve().parents[1]
