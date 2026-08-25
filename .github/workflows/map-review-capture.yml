@@ -1,82 +1,122 @@
-name: Temporary map review capture
+name: Build-4 map defect corpus
 
 on:
-  push:
-    branches:
-      - codex/291-map-asset-contract
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/map-review-capture.yml'
+      - 'tools/capture_build4_map_corpus.gd'
+      - 'tools/capture_build4_map_corpus.sh'
+      - 'tools/package_build4_map_corpus.py'
+      - 'docs/reviews/462/**'
+
+permissions:
+  contents: read
 
 jobs:
   capture:
+    name: Reproduce 168-frame matrix twice
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
-      - name: Check out PR head
+      - name: Check out exact branch head
         uses: actions/checkout@v4
         with:
-          path: head
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
 
-      - name: Check out exact PR base
-        uses: actions/checkout@v4
-        with:
-          ref: b0a1e5be039fd068132b9f8ef905c5daf1726f7d
-          path: baseline
+      - name: Record exact capture head
+        id: head
+        shell: bash
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Install base-compatible capture probe
-        run: cp head/tools/capture_map_review.gd baseline/tools/capture_map_review.gd
+      - name: Detect production drift from build-4 source
+        id: drift
+        shell: bash
+        run: tools/capture_build4_map_corpus.sh --detect-drift-only
+
+      - name: Skip capture because production drifted
+        if: steps.drift.outputs.drifted == 'true'
+        shell: bash
+        run: |
+          echo "Production inputs differ from the frozen build-4 source."
+          echo "Capture skipped; the bound packet remains the previous corpus artifact."
+          cat artifacts/build4-map-corpus-diagnostics/skip_reason.txt
 
       - name: Setup Godot 4.7.2
+        if: steps.drift.outputs.drifted != 'true'
         uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.7.2
           use-dotnet: false
 
-      - name: Import both isolated trees
-        run: |
-          (cd head && tools/check_imports.sh)
-          (cd baseline && tools/check_imports.sh)
-
-      - name: Capture PR and exact base with one renderer
+      - name: Install capture dependencies
+        if: steps.drift.outputs.drifted != 'true'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb
-          mkdir -p review-artifacts
-          xvfb-run -a godot --path head --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
-          cp head/artifacts/map-screenshot.png review-artifacts/pr-head.png
-          xvfb-run -a godot --path baseline --rendering-method gl_compatibility --resolution 1280x720 -s res://tools/capture_map_review.gd
-          cp baseline/artifacts/map-screenshot.png review-artifacts/base-main.png
-
-      - name: Require pixel-identical fallback frame
-        run: |
           python3 -m pip install --quiet 'Pillow>=10,<13'
-          python3 - <<'PY'
-          from hashlib import sha256
-          from pathlib import Path
-          from PIL import Image, ImageChops
 
-          head_path = Path('review-artifacts/pr-head.png')
-          base_path = Path('review-artifacts/base-main.png')
-          head = Image.open(head_path).convert('RGBA')
-          base = Image.open(base_path).convert('RGBA')
-          if head.size != base.size:
-              raise SystemExit(f'size drift: PR {head.size} != base {base.size}')
-          diff = ImageChops.difference(head, base)
-          bbox = diff.getbbox()
-          if bbox is not None:
-              diff.save('review-artifacts/visual-diff.png')
-              changed = sum(pixel != (0, 0, 0, 0) for pixel in diff.getdata())
-              extrema = diff.getextrema()
-              maximum = max(channel[1] for channel in extrema)
-              raise SystemExit(
-                  f'visual drift: bbox={bbox}, changed_pixels={changed}, max_channel_delta={maximum}'
-              )
-          digest = sha256(head_path.read_bytes()).hexdigest()
-          print(f'pixel-identical map fallback: {head.size[0]}x{head.size[1]}, png_sha256={digest}')
-          PY
+      - name: Import assets
+        if: steps.drift.outputs.drifted != 'true'
+        run: tools/check_imports.sh
 
-      - name: Upload paired review artifact
+      - name: Record capture environment
+        if: steps.drift.outputs.drifted != 'true'
+        shell: bash
+        run: |
+          mkdir -p artifacts/build4-map-corpus-diagnostics
+          {
+            printf 'git_head=%s\n' "$(git rev-parse HEAD)"
+            printf 'godot_bin=%s\n' "$(command -v godot || true)"
+            printf 'godot_version=%s\n' "$(godot --version 2>/dev/null | head -n 1 | tr -d '\r' || true)"
+            printf 'display=%s\n' "${DISPLAY:-}"
+            printf 'wayland_display=%s\n' "${WAYLAND_DISPLAY:-}"
+            printf 'xdg_session_type=%s\n' "${XDG_SESSION_TYPE:-}"
+            printf 'rendering_method=gl_compatibility\n'
+            printf 'uname=%s\n' "$(uname -a)"
+            printf 'python=%s\n' "$(python3 --version 2>&1 || true)"
+            if command -v glxinfo >/dev/null 2>&1; then
+              echo '--- glxinfo -B ---'
+              glxinfo -B || true
+            fi
+          } > artifacts/build4-map-corpus-diagnostics/environment.txt
+
+      - name: Capture and repeat the fixed build-4 matrix
+        if: steps.drift.outputs.drifted != 'true'
+        shell: bash
+        env:
+          GLASSVOW_SHOT_POSITION: "0,0"
+        run: |
+          mkdir -p artifacts/build4-map-corpus-diagnostics
+          CAPTURE_HEAD="$(git rev-parse HEAD)"
+          printf 'capture_head=%s\n' "$CAPTURE_HEAD" >> artifacts/build4-map-corpus-diagnostics/environment.txt
+          printf 'shot_position=%s\n' "$GLASSVOW_SHOT_POSITION" >> artifacts/build4-map-corpus-diagnostics/environment.txt
+          set +e
+          set -o pipefail
+          tools/capture_build4_map_corpus.sh \
+            --verify-repeat \
+            --capture-head "$CAPTURE_HEAD" \
+            --output artifacts/build4-map-corpus \
+            2>&1 | tee artifacts/build4-map-corpus-diagnostics/capture.log
+          status=${PIPESTATUS[0]}
+          printf 'capture_exit_code=%s\n' "$status" >> artifacts/build4-map-corpus-diagnostics/environment.txt
+          exit "$status"
+
+      - name: Upload capture diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: map-review-paired-${{ github.sha }}
-          path: review-artifacts/*.png
+          name: build4-map-corpus-diagnostics-${{ steps.head.outputs.sha }}
+          path: artifacts/build4-map-corpus-diagnostics
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 14
+
+      - name: Upload raw captures, compact packet, and repeatability report
+        if: always() && steps.drift.outputs.drifted != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build4-map-defect-corpus-${{ steps.head.outputs.sha }}
+          path: artifacts/build4-map-corpus
+          if-no-files-found: warn
+          retention-days: 14
