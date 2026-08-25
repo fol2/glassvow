@@ -40,6 +40,28 @@ def audit_comparison(development: dict[str, Any], audit: dict[str, Any],
         for key in ("fileSha256", "semanticSha256", "values"):
             if development_row.get(key) != audit_row.get(key):
                 raise ValueError(f"sealed audit identity drift for {candidate_id}: {key}")
+        development_identity = _identity_shape(development_row["proxies"])
+        if audit_row.get("status") != "complete" or audit_row.get("earlyStop"):
+            reason = str(audit_row.get("earlyStop") or audit_row.get("status") or "incomplete")
+            candidates.append({
+                "id": candidate_id,
+                "auditStatus": audit_row.get("status"),
+                "auditEarlyStop": audit_row.get("earlyStop"),
+                "bindingDeficitChanges": {}, "effectChanges": {},
+                "developmentIdentity": development_identity, "auditIdentity": None,
+                "identityContradiction": False,
+                "materialContradictions": [f"audit-early-stop:{reason}"],
+                "confidenceBlocked": True, "auditHardConstraints": {},
+                "auditReplayIdentity": {
+                    "observationsSha256": audit_row.get("observationsSha256", ""),
+                    "controlRowCount": audit_row.get("controlRowCount", 0),
+                    "landscapeRowCount": audit_row.get("landscapeRowCount", 0),
+                    "commit": audit_row.get("commit", ""),
+                    "godotVersion": audit_row.get("godotVersion", ""),
+                    "hostFingerprint": audit_row.get("hostFingerprint", ""),
+                },
+            })
+            continue
         dev_delta = development_row["bootstrap"]["vsC000"]["gridDelta"]
         audit_delta = audit_row["bootstrap"]["vsC000"]["gridDelta"]
         dev_deficit = development_row["bootstrap"]["vsC000"]["deficitDelta"]
@@ -59,7 +81,7 @@ def audit_comparison(development: dict[str, Any], audit: dict[str, Any],
                 changes[grid][key] = comparison
                 if comparison["material"]:
                     contradictions.append(f"{grid}:{key}")
-        dev_identity = _identity_shape(development_row["proxies"])
+        dev_identity = development_identity
         audit_identity = _identity_shape(audit_row["proxies"])
         identity_contradiction = (dev_identity["expectedDuskShatterAshSmolder"]
                                   != audit_identity["expectedDuskShatterAshSmolder"])
