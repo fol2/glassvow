@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from balance_f1_f2 import racing_decisions
+from balance_f1_racing import racing_decisions
 from balance_f0 import (
     BOOT_SEED,
     aggregate_cells,
@@ -244,7 +244,7 @@ def main() -> int:
     record["inputs"] = {"summarySha256": file_sha256(summary_path),
                         "protocolSha256": file_sha256(protocol_path),
                         "toolSha256ByModule": _tool_hashes(
-                            "balance_f0.py", "balance_f1_f2.py"),
+                            "balance_f0.py", "balance_f1_racing.py"),
                         "observationSha256ByCandidate": {
                             str(row["id"]): str(row.get("observationsSha256", ""))
                             for row in summary["candidates"]

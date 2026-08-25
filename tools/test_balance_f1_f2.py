@@ -11,10 +11,10 @@ from balance_f1_f2 import (
     adequacy_decision,
     balanced_supplemental,
     pareto_front,
-    racing_decisions,
     response_deficit,
     write_search_bundle,
 )
+from balance_f1_racing import racing_decisions
 from balance_f0 import evaluation_from_registry, evaluation_spec, observation_bytes, progressive_plans
 from balance_seed_contract import check_invocation, load_contract, sha256_bytes
 from balance_f1_cem_evidence import select_cem_policies, vow5_ceiling
