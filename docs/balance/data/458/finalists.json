@@ -8,7 +8,7 @@
     "space": "524f277331012daeec1a70d9c193141c4b8cfa4723f896341e25547e99c72bca",
     "toolSha256ByModule": {
       "balance_f1_evidence.py": "1d1c12431bd36907679231d9d4dd4eea12ec00ae252f8c1094b547a1c99e26bc",
-      "balance_f1_finalists.py": "095562bec02542ec88a5a6931719fe5be7351395c53e7e7b68e18bbe768be72c"
+      "balance_f1_finalists.py": "e4947733c11fbc2cd53fc63dab037f305f57184b86879c2148e2c2aa43ef22ef"
     }
   },
   "issue": 458,
@@ -317,6 +317,7 @@
             }
           }
         },
+        "identityShapeClear": true,
         "noClearBootstrapRegression": true,
         "pointClear": true
       },
@@ -1418,6 +1419,7 @@
             }
           }
         },
+        "identityShapeClear": true,
         "noClearBootstrapRegression": true,
         "pointClear": true
       },
