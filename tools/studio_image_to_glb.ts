@@ -82,6 +82,9 @@ import {
   UPLOAD_WATCH_POLL_MS,
   blankResetArrived,
   decideHdForm,
+  decideHdExport,
+  hdGenerateTextureQuality,
+  isStudioConvertHref,
   generateTargetUrl,
   generateWaitReady,
   isTransientEvaluateError,
@@ -333,22 +336,36 @@ const HOOK_EXPORT = `(() => {
   if (window.__gv_hooked) return "already";
   const orig = URL.createObjectURL.bind(URL);
   window.__gv_files = [];
+  window.__gv_hrefs = [];
   window.__gv_hooked = true;
+  const pushBuf = (buf) => {
+    const bytes = new Uint8Array(buf);
+    let bin = "";
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk)
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    window.__gv_files.push({
+      magic: String.fromCharCode(bytes[0], bytes[1], bytes[2], bytes[3]),
+      size: bytes.length,
+      b64: btoa(bin),
+    });
+  };
   URL.createObjectURL = function(obj) {
     const url = orig(obj);
-    Promise.resolve(obj.arrayBuffer()).then(buf => {
-      const bytes = new Uint8Array(buf);
-      let bin = "";
-      const chunk = 0x8000;
-      for (let i = 0; i < bytes.length; i += chunk)
-        bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
-      window.__gv_files.push({
-        magic: String.fromCharCode(bytes[0], bytes[1], bytes[2], bytes[3]),
-        size: bytes.length,
-        b64: btoa(bin),
-      });
-    });
+    Promise.resolve(obj.arrayBuffer()).then(pushBuf);
     return url;
+  };
+  const origClick = HTMLAnchorElement.prototype.click;
+  HTMLAnchorElement.prototype.click = function() {
+    try {
+      const href = this.href || "";
+      const name = this.getAttribute("download") || "";
+      window.__gv_hrefs.push({ href, name });
+      if (/\\.glb(\\?|$)/i.test(href) || /\\.glb$/i.test(name) || /tripo-data/i.test(href)) {
+        fetch(href).then(r => r.arrayBuffer()).then(pushBuf).catch(() => {});
+      }
+    } catch (e) {}
+    return origClick.call(this);
   };
   return "hooked";
 })()`;
@@ -532,6 +549,11 @@ try {
       if (pressed(q1) === true) textureQuality = "1k";
       else if (pressed(q2) === true) textureQuality = "2k";
       else if (pressed(q4) === true) textureQuality = "4k";
+      const availableTextureQualities = [
+        q1 ? "1k" : "",
+        q2 ? "2k" : "",
+        q4 ? "4k" : "",
+      ].filter(Boolean);
       const tri = [...document.querySelectorAll("button, [role=button]")].find(b =>
         vis(b) && /^Triangle$/.test(txt(b)));
       const quad = [...document.querySelectorAll("button, [role=button]")].find(b =>
@@ -563,6 +585,7 @@ try {
         texture: pressed(texSw),
         texAt: box(texSw),
         textureQuality,
+        availableTextureQualities,
         q1At: box(q1),
         q2At: box(q2),
         q4At: box(q4),
@@ -631,9 +654,12 @@ try {
         if (!f.texAt || f.texAt.cx === 0) die("Texture switch missing: " + JSON.stringify(f));
         await clickxy(cdp, f.texAt.cx, f.texAt.cy);
       } else if (action === "set_texture_quality") {
-        const at = req.textureQuality === "1k" ? f.q1At
-          : req.textureQuality === "4k" ? f.q4At : f.q2At;
-        if (!at || at.cx === 0) die("Texture Quality " + req.textureQuality + " missing: " + JSON.stringify(f));
+        const target = hdGenerateTextureQuality(
+          req.textureQuality, f.availableTextureQualities as string[] | undefined,
+        );
+        const at = target === "1k" ? f.q1At
+          : target === "4k" ? f.q4At : f.q2At;
+        if (!at || at.cx === 0) die("Texture Quality " + target + " missing: " + JSON.stringify(f));
         await clickxy(cdp, at.cx, at.cy);
       } else if (action === "set_pbr") {
         if (!f.pbrAt || f.pbrAt.cx === 0) die("PBR switch missing: " + JSON.stringify(f));
@@ -996,15 +1022,34 @@ try {
         vis(c) && /USD|FBX|OBJ|STL|GLB|3MF/.test(c.innerText || ""));
       const glbOpt = [...document.querySelectorAll("[role=option]")].find(o =>
         txt(o) === "GLB" && vis(o));
+      const texResCombo = [...document.querySelectorAll("[role=combobox]")].find(c =>
+        vis(c) && /1k|2k|4k|8k/i.test(txt(c)) && !/USD|FBX|OBJ|STL|GLB|3MF/.test(txt(c)));
+      const tex1kOpt = [...document.querySelectorAll("[role=option]")].find(o =>
+        vis(o) && /^1k$/i.test(txt(o)));
+      const geoDlg = [...document.querySelectorAll("[role=dialog]")].find(d =>
+        vis(d) && /Ultra Mesh Quality/.test(txt(d)));
+      const geoClose = geoDlg && [...geoDlg.querySelectorAll("button")].find(b => {
+        const r = b.getBoundingClientRect();
+        return r.width <= 20 && r.height <= 20 && r.width > 8 && vis(b);
+      });
+      const exportDlg = [...document.querySelectorAll("[role=dialog]")].find(d =>
+        vis(d) && /Texture Resolution|Export File Name/.test(txt(d)));
+      const dialogExportBtn = exportDlg && [...exportDlg.querySelectorAll("button")].find(b =>
+        vis(b) && txt(b) === "Export");
       const ok = /View Your Model|Retry for better/.test(document.body.innerText || "")
         ? [...document.querySelectorAll("button")].find(b => txt(b) === "OK" && vis(b))
         : null;
       const href = location.href;
       const m = href.match(/\\/workspace\\/generate\\/([0-9a-f-]{20,})/);
       const gltf = (window.__gv_files || []).find(f => f.magic === "glTF" && f.size > 100);
+      const hrefs = window.__gv_hrefs || [];
+      const hasConvertHref = hrefs.some(h =>
+        /\\.glb(\\?|$)/i.test(h.name || "") || /\\.glb(\\?|$)/i.test(h.href || "") || /tripo-data/i.test(h.href || ""));
       return {
         href,
         taskId: m ? m[1] : "",
+        hrefs,
+        hasConvertHref,
         generating: /Generating|Queuing/.test(document.body.innerText || ""),
         generate: [...document.querySelectorAll("button")].map(b => {
           const t = txt(b);
@@ -1022,6 +1067,15 @@ try {
         formatAt: box(fmt),
         glbOption: !!glbOpt,
         glbAt: box(glbOpt),
+        hasTexRes: /Texture Resolution/.test(document.body.innerText || ""),
+        texRes: texResCombo ? txt(texResCombo) : "",
+        texResAt: box(texResCombo),
+        texIs1k: !!(texResCombo && /1k/i.test(txt(texResCombo))),
+        tex1kOption: !!tex1kOpt,
+        tex1kAt: box(tex1kOpt),
+        geoOpen: !!geoDlg,
+        geoCloseAt: box(geoClose),
+        dialogExportAt: box(dialogExportBtn),
         gltf: gltf ? { size: gltf.size, hasB64: !!gltf.b64 } : null,
       };
     }`;
@@ -1029,41 +1083,15 @@ try {
     let generateClicked = false;
     let toolbarExportClicked = false;
     let formatOpened = false;
+    let texResOpened = false;
     let dialogExportClicked = false;
+    let cdnFetched = false;
     if (!taskIdArg) await ev(cdp, "window.__gv_files = []");
-    const decideX = (s: any): string => {
-      if (!taskIdArg) {
-        const g = newImageExportGuard(s, {
-          generateClicked, leftoverTaskId: plan.leftoverTaskId,
-        });
-        if (g === "refuse_prior_export") return g;
-        if (g === "accept_gltf") return "done";
-        if (g === "watch_generate") return "watch_generate";
-      }
-      if (s.gltf) return "done";
-      if (s.retry) return "dismiss_retry";
-      if (s.viewOk) return "dismiss_ok";
-      // Export visible is generate-complete. Leftover Generating text does not block.
-      if (s.exportN >= 1 && !s.format) {
-        return toolbarExportClicked ? "watch_dialog" : "click_export";
-      }
-      if (s.format && s.format !== "GLB" && !s.glbOption) {
-        return formatOpened ? "watch_dialog" : "open_format";
-      }
-      if (s.glbOption && s.format !== "GLB") return "pick_glb";
-      if (s.format === "GLB" && s.exportN < 2) return "watch_dialog";
-      if (s.format === "GLB" && s.exportN >= 2) {
-        return dialogExportClicked ? "watch_download" : "click_dialog_export";
-      }
-      if (dialogExportClicked) return "watch_download";
-      if (generateClicked) return "watch_generate";
-      const genBtn = Array.isArray(s.generate) ? pickVisibleGenerate(s.generate) : null;
-      if (shouldClickGenerate(s, {
-        taskIdArg, generateClicked, hasGenerateButton: !!genBtn,
-        stopBeforeGenerate: stopBefore,
-      })) return "click_generate";
-      return "watch_generate";
-    };
+    const decideX = (s: any): string => decideHdExport(s, {
+      taskIdArg, generateClicked, leftoverTaskId: plan.leftoverTaskId,
+      toolbarExportClicked, formatOpened, texResOpened, dialogExportClicked,
+      cdnFetched, textureQuality: req.textureQuality, stopBeforeGenerate: stopBefore,
+    });
     const watching = (a: string) =>
       a === "watch_generate" || a === "watch_dialog" || a === "watch_download";
 
@@ -1134,9 +1162,29 @@ try {
         formatOpened = true;
       } else if (action === "pick_glb") {
         await clickxy(cdp, x.glbAt.cx, x.glbAt.cy);
+      } else if (action === "open_tex_res") {
+        if (!x.texResAt || x.texResAt.cx === 0) die("Texture Resolution combobox missing: " + JSON.stringify(x));
+        await clickxy(cdp, x.texResAt.cx, x.texResAt.cy);
+        texResOpened = true;
+      } else if (action === "pick_tex_1k") {
+        if (!x.tex1kAt || x.tex1kAt.cx === 0) die("Texture Resolution 1K option missing: " + JSON.stringify(x));
+        await clickxy(cdp, x.tex1kAt.cx, x.tex1kAt.cy);
       } else if (action === "click_dialog_export") {
-        await clickxy(cdp, x.exportLast.cx, x.exportLast.cy);
+        const at = (x.dialogExportAt && x.dialogExportAt.cx) ? x.dialogExportAt : x.exportLast;
+        await clickxy(cdp, at.cx, at.cy);
         dialogExportClicked = true;
+      } else if (action === "fetch_cdn") {
+        const hrefs = Array.isArray(x.hrefs) ? x.hrefs : [];
+        const hit = hrefs.find((h: { href?: string; name?: string }) =>
+          isStudioConvertHref(String(h.href || ""), String(h.name || "")));
+        if (!hit || !hit.href) die("fetch_cdn: no Studio convert href: " + JSON.stringify(hrefs));
+        const res = await fetch(hit.href);
+        const buf = Buffer.from(await res.arrayBuffer());
+        if (buf.subarray(0, 4).toString() !== "glTF") {
+          die("fetch_cdn magic " + buf.subarray(0, 4).toString() + " from " + hit.href);
+        }
+        await ev(cdp, `window.__gv_files.push({ magic: "glTF", size: ${buf.length}, b64: ${JSON.stringify(buf.toString("base64"))} })`);
+        cdnFetched = true;
       }
       for (let d = 0; d < 40; d++) {
         x = await detectX();
@@ -1155,6 +1203,7 @@ try {
     if (x.taskId) taskId = x.taskId;
     if (!x.gltf) die("export loop ended without glTF: " + xsteps.join(">"));
     const b64 = await ev(cdp, `(window.__gv_files||[]).find(f => f.magic === "glTF" && f.size > 100).b64`);
+    if (!b64) die("hooked glTF missing b64");
     const bytes = Buffer.from(b64, "base64");
     if (bytes.subarray(0, 4).toString() !== "glTF") die(`export magic ${bytes.subarray(0, 4)}`);
     await Bun.write(out, bytes);

@@ -570,6 +570,60 @@ def _glb_chunks(data: bytes) -> tuple[dict[str, Any], bytes]:
     return gltf, blob
 
 
+def write_glb(gltf: dict[str, Any], blob: bytes) -> bytes:
+    json_bytes = json.dumps(gltf, separators=(",", ":")).encode("utf-8")
+    json_pad = (4 - len(json_bytes) % 4) % 4
+    json_bytes += b" " * json_pad
+    blob_pad = (4 - len(blob) % 4) % 4
+    blob_out = blob + b"\x00" * blob_pad
+    total = 12 + 8 + len(json_bytes) + 8 + len(blob_out)
+    header = struct.pack("<4sII", b"glTF", 2, total)
+    json_chunk = struct.pack("<I4s", len(json_bytes), b"JSON") + json_bytes
+    bin_chunk = struct.pack("<I4s", len(blob_out), b"BIN\x00") + blob_out
+    return header + json_chunk + bin_chunk
+
+
+def pack_embedded_jpeg(path: Path, bytes_max: int) -> bool:
+    """Recompress the first embedded JPEG so the GLB fits bytes_max. True if rewritten."""
+    data = path.read_bytes()
+    if len(data) <= bytes_max:
+        return False
+    gltf, blob = _glb_chunks(data)
+    images = gltf.get("images") or []
+    views = gltf.get("bufferViews") or []
+    if not images:
+        raise ValueError("no embedded image to pack")
+    view_id = (images[0] or {}).get("bufferView")
+    if not isinstance(view_id, int) or not 0 <= view_id < len(views):
+        raise ValueError("embedded image is not a bufferView")
+    view = views[view_id]
+    start = int(view.get("byteOffset", 0))
+    length = int(view["byteLength"])
+    raw = blob[start:start + length]
+    image = _pil().open(io.BytesIO(raw)).convert("RGB")
+    for quality in (85, 70, 55, 40, 25):
+        out = io.BytesIO()
+        image.save(out, format="JPEG", quality=quality, optimize=True)
+        jpeg = out.getvalue()
+        new_blob = blob[:start] + jpeg + blob[start + length:]
+        shift = len(jpeg) - length
+        view["byteLength"] = len(jpeg)
+        if shift != 0:
+            for other in views:
+                off = int(other.get("byteOffset", 0))
+                if off > start:
+                    other["byteOffset"] = off + shift
+        buffers = gltf.get("buffers") or [{}]
+        buffers[0]["byteLength"] = len(new_blob)
+        gltf["buffers"] = buffers
+        packed = write_glb(gltf, new_blob)
+        if len(packed) <= bytes_max:
+            path.write_bytes(packed)
+            return True
+        blob, length = new_blob, len(jpeg)
+    raise ValueError(f"embedded JPEG still {len(path.read_bytes())} after recompress, cap {bytes_max}")
+
+
 ## `tex_mean` is what the shader divides by to put a surface on the value
 ## ladder, so it is a MEASUREMENT of the baked atlas, not a preference. Nothing
 ## checked it: a re-bake would leave the number, and the `surface_value` derived
