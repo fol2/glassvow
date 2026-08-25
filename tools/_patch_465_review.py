@@ -19,10 +19,23 @@ text = replace_once(
     """\tfor surface: int in range(mesh.get_surface_count()):
 \t\tcanonical.append(mesh.surface_get_primitive_type(surface))
 \t\tcanonical.append(mesh.surface_get_arrays(surface))""",
-    """\tfor surface: int in range(mesh.get_surface_count()):
-\t\tcanonical.append(mesh.surface_get_primitive_type(surface))
-\tcanonical.append(mesh.get_faces())""",
+    "\tcanonical.append(mesh.get_faces())",
     "profile source identity",
+)
+text = replace_once(
+    text,
+    """## Imported mesh arrays, not engine instance IDs or raw-source availability,
+## define identity. Runtime and headless tools therefore hash the same geometry.""",
+    """## Imported triangle faces, not engine instance IDs or raw-source availability,
+## define identity. AABB and surface count remain in the canonical row, so runtime,
+## primitive-mesh tests and headless tools hash the same grounded geometry.""",
+    "profile source identity comment",
+)
+text = replace_once(
+    text,
+    "var basis: Basis = Basis(Vector3.UP, deg_to_rad(yaw_degrees)).scaled(scale)",
+    "var basis: Basis = Basis(Vector3.UP, deg_to_rad(yaw_degrees)).scaled_local(scale)",
+    "profile local transform scale",
 )
 text = replace_once(
     text,
@@ -86,6 +99,20 @@ text = replace_once(
 \t\t\t\tand str(by_id[\"act1-terminus\"].get(\"semantic_class\", \"\"))
 \t\t\t\t\t\t== MapAssetProfiles.SEMANTIC_HERO,""",
     "hero semantic test typing",
+)
+text = replace_once(
+    text,
+    """\t_check(fails, rotated_bounds.size.is_equal_approx(Vector2(1.0, 8.0)),
+\t\t\t\"a 90-degree yaw swaps the elongated footprint axes\")
+\t_check(fails, transformed == registry.transformed_footprint(""",
+    """\t_check(fails, rotated_bounds.size.is_equal_approx(Vector2(1.0, 8.0)),
+\t\t\t\"a 90-degree yaw swaps the elongated footprint axes\")
+\tvar rotated_scaled: PackedVector2Array = registry.transformed_footprint(
+\t\t\tlong_value, Vector3.ZERO, 90.0, Vector3(2.0, 1.0, 3.0))
+\t_check(fails, _bounds(rotated_scaled).size.is_equal_approx(Vector2(3.0, 16.0)),
+\t\t\t\"rotation preserves supplied scale in asset-local axes\")
+\t_check(fails, transformed == registry.transformed_footprint(""",
+    "rotated local-scale regression",
 )
 text = replace_once(
     text,
