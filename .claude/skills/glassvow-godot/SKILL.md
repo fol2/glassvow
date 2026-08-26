@@ -57,7 +57,11 @@ require one exact supported version; that narrower protocol pin remains binding.
 
 ## 5. Verification Commands
 
-Run these three from the repo root, in order. All must pass before pushing:
+Research and issue-comment work has no branch, pull request, or CI run. During
+implementation, use targeted local checks while iterating. Do not publish
+exploratory intermediate commits: immediately before the first push, run this
+complete local import/script/test gate once from the repository root against the
+final candidate, in order, under the supported stable-version contract:
 
 ```bash
 godot --version                          # confirm 4.7.2 stable or later stable
@@ -66,9 +70,12 @@ tools/check_scripts.sh                   # per-file parse + warnings-as-errors g
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 with PASS
 ```
 
-CI runs this same gate on every push to verify nothing is broken — literally the
-same script, called from `.github/workflows/ci.yml`, so local and CI cannot
-drift.
+Pull-request CI is scope-aware. It parses only changed GDScript files through the
+same explicit-path script gate, retains the discovered Godot suite for Godot-code
+changes, and audits every selected and skipped check in the workflow summary.
+Feature-branch pushes do not create duplicate standalone runs. Pushes to `main`
+and manual dispatches run the complete CI check set; that full gate is the
+milestone integration boundary.
 
 **Never grade `--check-only` by its exit code.** It writes diagnostics to stderr
 and exits 0 whatever it found; measured on 4.7.1, a duplicate `var`, an
@@ -137,7 +144,11 @@ Dictionaries compare natively against the JSON parity fixtures and survive seria
 
 ## 10. Governance
 
-**Narrow loop:** One implementer + one reviewer + fast local gate (the three verification commands) + milestone gate (CI + parity fixtures + one human visual decision). No auto-revert machinery for this project — a red CI is a handled event, not an emergency.
+**Narrow loop:** One implementer + one reviewer + targeted local iteration + one
+complete final-candidate local gate + scope-aware PR CI + the complete
+main/manual milestone gate (including port fixtures and one human visual
+decision where presentation changes). No auto-revert machinery for this project
+— a red CI is a handled event, not an emergency.
 
 **Milestone checkpoints:**
 - **M0:** Scaffold (this).
