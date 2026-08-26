@@ -323,7 +323,9 @@ class Tier1F1DecisionTest(unittest.TestCase):
                              "hostFingerprint": identity["hostFingerprint"], "status": "complete",
                              "earlyStop": None, "controlArms": [1, 2], "controlRowCount": 8,
                              "landscapeRowCount": 4, "observationsSha256": sha256_bytes(payload),
-                             "validC1a": -999})
+                             "validC1a": -999,
+                             "packageDiagnostics": {"duskNonShatter": {
+                                 "duskblade:v0": {"mechanismFired": True}}}})
             (bundle / "manifest.json").write_text(json.dumps({"candidates": rows}))
             summary = {"protocol": protocol, "searchSpaceSha256": "s" * 64,
                        "seedRegistrySha256": "r" * 64, "driverSha256": "d" * 64,
@@ -331,6 +333,8 @@ class Tier1F1DecisionTest(unittest.TestCase):
             rebuilt = reanalyse_layer(summary, root, 10, load_contract()["frozenLandscape"],
                                       bundle)
             self.assertGreaterEqual(rebuilt["candidates"][1]["validC1a"], 0.0)
+            self.assertFalse(rebuilt["candidates"][1]["packageDiagnostics"]
+                             ["duskNonShatter"]["duskblade:v0"]["mechanismFired"])
             pairwise = pairwise_c1(
                 root, rebuilt["candidates"], 10, 49201,
                 json.loads((REPO / protocol["responseContract"]).read_text()))

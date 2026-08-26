@@ -510,8 +510,12 @@ def attach_tier1_fields(result: dict[str, Any], axes: dict[str, Any],
     result["rankGaps"] = rank_gaps(result.get("cells") or {}, contract)
     result["occupiedValidCells"] = occupied_valid_cells(result.get("cells") or {}, contract)
     result["finalDeckSize"] = final_deck_size(landscape)
-    result["packageDiagnostics"] = result.get("packageDiagnostics") or package_diagnostics(
-        controls + landscape, contract)
+    # Explicit raw inputs are a provenance boundary: never retain derived summary evidence.
+    if landscape_rows is not None or control_rows is not None:
+        result["packageDiagnostics"] = package_diagnostics(controls + landscape, contract)
+    else:
+        result["packageDiagnostics"] = result.get("packageDiagnostics") or package_diagnostics(
+            controls + landscape, contract)
     result["validProxies"] = valid_proxies(result.get("controls") or {},
                                            result.get("cells") or {}, contract)
     c1 = valid_c1(result["validProxies"])
