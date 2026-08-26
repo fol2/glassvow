@@ -39,11 +39,11 @@ static func run(fails: Array[String]) -> void:
 		and tracer.geometry_build_count() == original_builds
 		and _transforms(tracer) == cold_transforms,
 		"state-only update preserves the MultiMesh and every transform")
-	var open_code: float = tracer.multimesh.get_instance_custom_data(0).r
+	var open_data: Color = tracer.multimesh.get_instance_custom_data(0)
 	tracer.set_route_state(MapWaylightTracer.STATE_WALKED)
-	var walked_code: float = tracer.multimesh.get_instance_custom_data(0).r
-	_check(fails, cold_data[0].r != open_code and open_code != walked_code
-		and cold_data[0].r != walked_code, "cold/open/walked state codes stay distinct")
+	var walked_data: Color = tracer.multimesh.get_instance_custom_data(0)
+	_check(fails, cold_data[0] != open_data and open_data != walked_data
+		and cold_data[0] != walked_data, "cold/open/walked state payloads stay distinct")
 	var obstacle: Array[Dictionary] = [{"id": "box", "polygon": PackedVector2Array([
 		Vector2(-1.0, -1.0), Vector2(-1.0, 1.0), Vector2(1.0, 1.0), Vector2(1.0, -1.0)])}]
 	var routed: Dictionary = MapSingleEdgeRouter.route(
@@ -69,6 +69,6 @@ static func _covers_bent_legs(transforms: Array[Transform3D]) -> bool:
 	for transform: Transform3D in transforms:
 		var point: Vector3 = transform.origin
 		first = first or (point.x < -1.0 and absf(point.z + 2.0) < 0.01)
-		turn = turn or (absf(point.x) < 0.01 and absf(point.z) < 1.0)
+		turn = turn or (absf(point.x) < 0.01 and point.z > -2.0 and point.z < 2.0)
 		last = last or (point.x > 1.0 and absf(point.z - 2.0) < 0.01)
 	return first and turn and last
