@@ -55,6 +55,12 @@ have been a port of nothing. Measure the running thing; do not infer from source
 
 ## Verification (all from repo root)
 
+Research and issue-comment work has no branch, pull request, or CI run. Once
+implementation starts, run only the checks relevant to the files being changed
+while iterating. Immediately before the first push, run the complete block below
+once against the final candidate under the supported Godot version contract;
+publish that candidate rather than exploratory intermediate commits.
+
 ```bash
 godot --version                          # must report 4.7.2 stable or later stable
 tools/check_imports.sh                   # asset import; fails on stderr ERRORs or process status
@@ -63,6 +69,13 @@ godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS
 python3 tools/check_anchors.py           # doc file:line anchors still point where they claim
 python3 tools/check_benchmark_freeze.py  # no new citations into the detached reference
 ```
+
+Pull-request CI is scope-aware: it classifies the complete PR diff, parses only
+changed GDScript files, runs the discovered Godot suite for Godot-code changes,
+and records every selected and skipped check in the workflow summary. A
+feature-branch push does not create a second run. Pushes to `main` and manual
+dispatches run the complete CI check set and remain the milestone integration
+gate.
 
 **Why the parse gate is a script and not a one-line loop.** `godot --headless
 --check-only -s FILE` writes its diagnostics to **stderr and exits 0 whatever it

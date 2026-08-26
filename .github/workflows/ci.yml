@@ -1,37 +1,109 @@
 name: CI
 
 on:
-  push:
   pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0
+
+      - name: Classify changed paths
+        id: scope
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          changed_paths="$RUNNER_TEMP/ci-changed-paths.zlist"
+          changed_gdscript="$RUNNER_TEMP/ci-changed-gdscript.zlist"
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ || ! "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "Malformed pull-request base/head SHA." >&2
+              exit 2
+            fi
+            git cat-file -e "$BASE_SHA^{commit}"
+            git cat-file -e "$HEAD_SHA^{commit}"
+            git diff --name-only --no-renames -z "$BASE_SHA...$HEAD_SHA" >"$changed_paths"
+            python3 -B tools/ci_scope.py \
+              --changed-paths-nul "$changed_paths" \
+              --repository-root "$GITHUB_WORKSPACE" \
+              --changed-gdscript-nul "$changed_gdscript" \
+              --github-output "$GITHUB_OUTPUT" \
+              --github-summary "$GITHUB_STEP_SUMMARY"
+          else
+            python3 -B tools/ci_scope.py \
+              --full-gate \
+              --changed-gdscript-nul "$changed_gdscript" \
+              --github-output "$GITHUB_OUTPUT" \
+              --github-summary "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Test CI scope classifier
+        run: python3 -B tests/test_ci_scope.py
+
       - name: Setup Godot
+        if: steps.scope.outputs.setup_godot == 'true'
         uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.7.2
           use-dotnet: false
-      
+
       - name: Import assets
+        if: steps.scope.outputs.run_import_assets == 'true'
         run: tools/check_imports.sh
 
       - name: Test asset import gate failures
+        if: steps.scope.outputs.run_import_gate_tests == 'true'
         run: tools/test_check_imports.sh
-      
+
       # `--check-only` exits 0 on every parse error and reports only on stderr,
       # so the loop that stood here could never fail. The script grades stderr
       # and process status; AGENTS.md calls the same gate so local and CI agree.
       - name: Check GDScript syntax
-        run: tools/check_scripts.sh
+        if: steps.scope.outputs.run_gdscript_parse == 'true'
+        shell: bash
+        env:
+          FULL_GATE: ${{ steps.scope.outputs.full_gate }}
+        run: |
+          set -euo pipefail
+          if [[ "$FULL_GATE" == "true" ]]; then
+            tools/check_scripts.sh
+          else
+            changed_gdscript="$RUNNER_TEMP/ci-changed-gdscript.zlist"
+            [[ -f "$changed_gdscript" ]] || {
+              echo "Changed GDScript path list is missing." >&2
+              exit 2
+            }
+            scripts=()
+            while IFS= read -r -d '' script; do
+              scripts+=("$script")
+            done <"$changed_gdscript"
+            (( ${#scripts[@]} > 0 )) || {
+              echo "GDScript parse was selected without a changed script." >&2
+              exit 2
+            }
+            tools/check_scripts.sh "${scripts[@]}"
+          fi
 
       - name: Test GDScript gate failures
+        if: steps.scope.outputs.run_gdscript_gate_tests == 'true'
         run: tools/test_check_scripts.sh
 
       - name: Check zh-Hant bundled font coverage
+        if: steps.scope.outputs.run_locale_font == 'true'
         run: |
           python3 -m pip install 'fonttools[woff]>=4.63,<4.64'
           python3 -B tools/check_locale_font_coverage.py
@@ -40,41 +112,53 @@ jobs:
       # zh-Hant overlays from locale/zh-Hant.json.  This gate follows that
       # runtime path rather than comparing the two locale bundles alone.
       - name: Check narrative locale coverage
+        if: steps.scope.outputs.run_locale_coverage == 'true'
         run: |
           python3 -B tools/check_locale_coverage.py --self-test
           python3 -B tools/check_locale_coverage.py
 
       - name: Check store Dev-tree exclusion
+        if: steps.scope.outputs.run_store_exclusion == 'true'
         run: python3 tools/check_store_dev_exclusion.py
 
       - name: Test store Dev-tree exclusion gate
+        if: steps.scope.outputs.run_store_gate_tests == 'true'
         run: tools/test_check_store_dev_exclusion.sh
 
       - name: Check developer-tool registry and coordinate conversion
+        if: steps.scope.outputs.run_dev_tools == 'true'
         run: python3 -B tools/dev.py --check
 
       - name: Test balanced content DOE generator
+        if: steps.scope.outputs.run_balance_doe == 'true'
         run: python3 -B tools/balance_content_doe.py --self-test
 
       - name: Test content-search seed contract
+        if: steps.scope.outputs.run_balance_seed == 'true'
         run: python3 -B tools/balance_seed_contract.py --self-test
 
       - name: Test s009 exam catalogue reconstruction
+        if: steps.scope.outputs.run_balance_s009 == 'true'
         run: python3 -B tools/balance_s009_reconstruct.py --self-test
 
       - name: Test Tier-1 grouped breadth registry
+        if: steps.scope.outputs.run_balance_registry == 'true'
         run: python3 -B tests/test_balance_tier1_design.py
 
       - name: Test candidate loading and host-qualify fail-closed
+        if: steps.scope.outputs.run_balance_host == 'true'
         run: python3 -B tools/balance_host_qualify.py --self-test
 
       - name: Test F0 evaluator protocol
+        if: steps.scope.outputs.run_balance_f0 == 'true'
         run: python3 -B tools/balance_f0.py --self-test
 
       - name: Test Tier-1 F0 response contract
+        if: steps.scope.outputs.run_balance_tier1_f0 == 'true'
         run: python3 -B tests/test_balance_tier1_f0.py
 
       - name: Test F1/F2 racing and model adequacy rules
+        if: steps.scope.outputs.run_balance_f1_f2 == 'true'
         run: |
           python3 -B tests/test_balance_f1_f2.py
           python3 -B tests/test_balance_f1_evidence.py
@@ -87,9 +171,11 @@ jobs:
       # citations instead of resolving them, so it needs no checkout and runs
       # where the rule is actually broken.
       - name: Check doc file:line anchors
+        if: steps.scope.outputs.run_doc_anchors == 'true'
         run: python3 -B tools/check_anchors.py
 
       - name: Check no new web-reference citations
+        if: steps.scope.outputs.run_benchmark_freeze == 'true'
         run: python3 -B tools/check_benchmark_freeze.py
 
       # Map tile/module gates (#207 repairs 7–9, #234 slice 5). `--self-test`
@@ -98,6 +184,7 @@ jobs:
       # A green empty run without --self-test would be the same silent-pass
       # disease as grading `--check-only` by its exit code.
       - name: Check map tile and module assets
+        if: steps.scope.outputs.run_map_assets == 'true'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb libgl1-mesa-dri
@@ -107,27 +194,35 @@ jobs:
           xvfb-run -a python3 -B tools/check_map_assets.py
 
       - name: Check Map Compiler v2 quality contract
+        if: steps.scope.outputs.run_map_quality == 'true'
         run: |
           python3 -B tools/check_map_quality_v2.py --self-test
           python3 -B tools/check_map_quality_v2.py
 
       - name: Test performance evidence replay
+        if: steps.scope.outputs.run_performance_evidence == 'true'
         run: python3 -B tests/test_performance_budget.py
-      
+
       - name: Run tests
+        if: steps.scope.outputs.run_godot_tests == 'true'
         run: godot --headless -s res://tests/run_all.gd
 
       - name: Probe shared map asset profiles
+        if: steps.scope.outputs.run_map_profiles == 'true'
         run: godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=20
 
       - name: Test phone-landscape scroll reachability
+        if: steps.scope.outputs.run_choice_scroll == 'true'
         run: godot --headless -s res://tests/choice_scroll_reachability.gd
 
       - name: Test boss-relic phone containment
+        if: steps.scope.outputs.run_boss_relic == 'true'
         run: godot --headless -s res://tests/boss_relic_choice_containment.gd
 
       - name: Test Dawn phone containment
+        if: steps.scope.outputs.run_dawn_containment == 'true'
         run: godot --headless -s res://tests/dawn_phone_containment.gd
 
       - name: Test run HUD location fit
+        if: steps.scope.outputs.run_hud_location == 'true'
         run: godot --headless -s res://tests/measure_hud_location.gd
