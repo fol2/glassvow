@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "421-content-search-seeds-v1",
-  "description": "Development seed and policy-root contract for #454, extended with the sealed #489 Tier-1 namespace and the #501 Tier-2 namespace. The frozen #215/#216 exam is unchanged. Mini-landscapes must reuse the frozen #215 axes; never re-fit per candidate. Prior development, audit, acceptance and reserve bands remain occupied and fail-closed against the new bands. 13400–13999 stays unused.",
+  "description": "Development seed and policy-root contract for #454, extended with the sealed #489 Tier-1 namespace and the #501/#508 Tier-2 namespaces. The frozen #215/#216 exam is unchanged. Mini-landscapes must reuse the frozen #215 axes; never re-fit per candidate. Prior development, audit, acceptance and reserve bands remain occupied and fail-closed against the new bands. 13400–13999 stays unused.",
   "engine": "4.7.2.stable",
   "digestPin": {
     "seed": 1000,
@@ -36,6 +36,7 @@
     "f1PolicyRoot": 8454,
     "miniCemRoot": 9454,
     "profileCensusRoot": 7354,
+    "levelProbeRoot": 7554,
     "unused": {"id": "tier2-unused", "first": 13400, "last": 13999}
   },
   "stages": {
@@ -122,6 +123,10 @@
     "tier2-f0-mini-landscape": {
       "seeds": {"first": 12200, "last": 12207},
       "roots": [7454]
+    },
+    "tier2-level-probe": {
+      "seeds": {"first": 12232, "last": 12263},
+      "roots": [7554]
     },
     "tier2-f1-racing": {
       "seeds": {"first": 12300, "last": 12599},
