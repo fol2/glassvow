@@ -63,6 +63,13 @@ def _validate_registry(repo: Path, registry: dict[str, Any], base: dict[str, Any
             raise ValueError(f"{enemy_id} is not an admissible reachable localised profile")
         if sorted(base["enemies"][enemy_id]["moves"]) != sorted(row["moveIds"]):
             raise ValueError(f"{enemy_id} move-ID set drifted")
+        expected_disruption = {(fx["move"], fx["status"], fx["who"], fx["n"])
+                               for fx in frozen.get("statusEffects", [])
+                               if fx.get("who") == "player" and fx.get("status") in ALLOWED_STATUS}
+        registered_disruption = {(move.get("id"), move.get("status"), move.get("target"), move.get("amount"))
+                                  for move in row.get("disruptionMoves", [])}
+        if registered_disruption != expected_disruption:
+            raise ValueError(f"{enemy_id} attributable disruption inventory drifted")
         for move in row.get("disruptionMoves", []):
             move_def = base["enemies"][enemy_id]["moves"].get(move.get("id"), {})
             effects = [fx for fx in move_def.get("fx", []) if fx.get("who") == move.get("target")
@@ -92,7 +99,10 @@ def _validate_registry(repo: Path, registry: dict[str, Any], base: dict[str, Any
                 raise ValueError(f"invalid whole-number centre or bound: {path}")
             seen.add(path); touched.add(parts[2])
         if touched != pair_ids: raise ValueError(f"{knob['id']} must couple both selected enemies")
-    if not all(registry.get("fixed", {}).values()): raise ValueError("fixed candidate invariants drifted")
+    expected_fixed = {key: True for key in ("completeDefinitions", "sparseBetweenMobs", "names",
+        "moveIdSets", "ai", "localeFiles", "tierFlags", "art", "startStatusShape",
+        "wholeNumbers", "liveFiles")}
+    if registry.get("fixed") != expected_fixed: raise ValueError("fixed candidate invariants drifted")
 def _effective(base: dict[str, Any], registry: dict[str, Any], vector: dict[str, str]) \
         -> tuple[dict[str, Any], dict[str, Any]]:
     selected = _selected(registry); definitions = {key: deepcopy(base["enemies"][key]) for key in selected}

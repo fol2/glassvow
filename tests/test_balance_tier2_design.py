@@ -34,6 +34,7 @@ class BalanceTier2DesignTest(unittest.TestCase):
     def test_registry_and_complete_overrides_fail_closed(self) -> None:
         registry = json.loads((REPO / "docs/balance/421-mob-disruption-space-v1.json").read_text())
         mutations = [
+            lambda row: row.__setitem__("fixed", {}),
             lambda row: row["knobs"][0]["writes"][0]["values"].__setitem__("high", 1.5),
             lambda row: row["knobs"][0]["writes"][0].__setitem__("path", "/enemies/gravewarden/name"),
             lambda row: row["knobs"][1]["writes"].append(deepcopy(row["knobs"][0]["writes"][0])),
