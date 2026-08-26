@@ -24,41 +24,47 @@ static func route(source: Vector2, target: Vector2, obstacles: Array[Dictionary]
 			or not is_finite(half_width) or half_width <= 0.0 or not is_finite(safety) or safety < 0.0:
 		return _result(INVALID_INPUT, [], half_width, {}, {}, "invalid input")
 	var prepared: Dictionary = _prepare(obstacles, half_width + safety)
-	if not bool(prepared.get("ok", false)):
+	if prepared.get("ok", false) != true:
 		return _result(INVALID_INPUT, [], half_width, {}, {}, str(prepared.get("reason", "invalid obstacle")))
 	var channel: PackedVector2Array = PackedVector2Array()
 	if not channel_raw.is_empty():
 		var channel_value: Dictionary = MapAssetProfiles.canonical_polygon(channel_raw)
 		var channel_v: Variant = channel_value.get("points", PackedVector2Array())
-		if not bool(channel_value.get("ok", false)) or not (channel_v is PackedVector2Array):
+		if channel_value.get("ok", false) != true or typeof(channel_v) != TYPE_PACKED_VECTOR2_ARRAY:
 			return _result(INVALID_INPUT, [], half_width, {}, {}, "invalid channel")
 		channel = channel_v
 		if channel.size() > MAX_CHANNEL_VERTICES:
 			return _result(INVALID_INPUT, [], half_width, {}, {}, "channel bound exceeded")
 	var rows_v: Variant = prepared.get("rows", [])
-	var inflated: Array = rows_v if rows_v is Array else []
+	var inflated: Array = rows_v if typeof(rows_v) == TYPE_ARRAY else []
 	var diagnostics: Dictionary = _diagnostics(prepared, 0, 0, 0, 0)
 	if (not channel.is_empty() and (not _inside(source, channel) or not _inside(target, channel))) \
 			or not _clear(source, source, inflated) or not _clear(target, target, inflated):
 		return _result(NO_ROUTE, [], half_width, {}, diagnostics, "endpoint infeasible")
-	var points: Array = _candidates(source, target, inflated, channel)
+	var points: Array[Vector2] = _candidates(source, target, inflated, channel)
 	if points.size() > MAX_CANDIDATES:
 		diagnostics = _diagnostics(prepared, points.size(), 0, 0, 0)
 		return _result(INVALID_INPUT, [], half_width, {}, diagnostics, "candidate bound exceeded")
 	var graph: Dictionary = _graph(points, inflated)
 	var search: Dictionary = _search(points, graph, inflated, source, target)
-	diagnostics = _diagnostics(prepared, points.size(), int(graph.get("edge_count", 0)),
-			int(search.get("state_count", 0)), int(search.get("expansions", 0)))
-	if not bool(search.get("ok", false)):
+	diagnostics = _diagnostics(prepared, points.size(), MapLayoutCanonical.int_value(graph.get("edge_count", 0)),
+			MapLayoutCanonical.int_value(search.get("state_count", 0)), MapLayoutCanonical.int_value(search.get("expansions", 0)))
+	if search.get("ok", false) != true:
 		return _result(NO_ROUTE, [], half_width, {}, diagnostics, "visibility graph disconnected")
 	var path_v: Variant = search.get("path", [])
-	var path: Array = _simplify(path_v if path_v is Array else [], inflated)
+	var path_raw: Array = []
+	if typeof(path_v) == TYPE_ARRAY:
+		path_raw = path_v
+	var path: Array[Vector2] = _simplify(path_raw, inflated)
 	var cost: Array = _path_cost(path, inflated, source, target)
 	return _result(ROUTED, path, half_width, _cost_dict(cost, source.distance_to(target)), diagnostics, "")
 static func inflate_obstacles(obstacles: Array[Dictionary], radius: float) -> Array:
 	var prepared: Dictionary = _prepare(obstacles, radius)
 	var rows_v: Variant = prepared.get("rows", [])
-	return rows_v if bool(prepared.get("ok", false)) and rows_v is Array else []
+	if prepared.get("ok", false) != true or typeof(rows_v) != TYPE_ARRAY:
+		return []
+	var rows: Array = rows_v
+	return rows
 static func segment_is_clear(a: Vector2, b: Vector2, inflated: Array) -> bool:
 	return _clear(a, b, inflated)
 static func _prepare(obstacles: Array[Dictionary], radius: float) -> Dictionary:
@@ -69,7 +75,7 @@ static func _prepare(obstacles: Array[Dictionary], radius: float) -> Dictionary:
 		var id: String = str(raw.get("id", ""))
 		var canonical: Dictionary = MapAssetProfiles.canonical_polygon(raw.get("polygon", null))
 		var points_v: Variant = canonical.get("points", PackedVector2Array())
-		if id.is_empty() or by_id.has(id) or not bool(canonical.get("ok", false)) or not (points_v is PackedVector2Array):
+		if id.is_empty() or by_id.has(id) or canonical.get("ok", false) != true or typeof(points_v) != TYPE_PACKED_VECTOR2_ARRAY:
 			return {"ok": false, "reason": "invalid obstacle"}
 		var points: PackedVector2Array = points_v
 		if points.size() > MAX_VERTICES:
@@ -86,15 +92,15 @@ static func _prepare(obstacles: Array[Dictionary], radius: float) -> Dictionary:
 				return {"ok": false, "reason": "inflation failed"}
 			var canonical: Dictionary = MapAssetProfiles.canonical_polygon(offsets[0])
 			var inflated_v: Variant = canonical.get("points", PackedVector2Array())
-			if not bool(canonical.get("ok", false)) or not (inflated_v is PackedVector2Array):
+			if canonical.get("ok", false) != true or typeof(inflated_v) != TYPE_PACKED_VECTOR2_ARRAY:
 				return {"ok": false, "reason": "inflation failed"}
 			inflated = inflated_v
 		rows.append({"id": id, "polygon": inflated})
 		vertices += inflated.size()
 	return {"ok": true, "rows": rows, "vertex_count": vertices}
 static func _candidates(source: Vector2, target: Vector2, obstacles: Array,
-		channel: PackedVector2Array) -> Array:
-	var points: Array = [source, target]
+		channel: PackedVector2Array) -> Array[Vector2]:
+	var points: Array[Vector2] = [source, target]
 	for row_v: Variant in obstacles:
 		var row: Dictionary = row_v
 		var polygon: PackedVector2Array = row["polygon"]
@@ -103,7 +109,7 @@ static func _candidates(source: Vector2, target: Vector2, obstacles: Array,
 	for point: Vector2 in channel:
 		_add(points, point, obstacles, channel)
 	return points
-static func _add(points: Array, point: Vector2, obstacles: Array, channel: PackedVector2Array) -> void:
+static func _add(points: Array[Vector2], point: Vector2, obstacles: Array, channel: PackedVector2Array) -> void:
 	if (not channel.is_empty() and not _inside(point, channel)) or not _clear(point, point, obstacles):
 		return
 	for existing_v: Variant in points:
@@ -111,8 +117,8 @@ static func _add(points: Array, point: Vector2, obstacles: Array, channel: Packe
 		if existing.distance_to(point) <= WORLD_EPSILON_M:
 			return
 	points.append(point)
-static func _graph(points: Array, obstacles: Array) -> Dictionary:
-	var adjacency: Array = []
+static func _graph(points: Array[Vector2], obstacles: Array) -> Dictionary:
+	var adjacency: Array[PackedInt32Array] = []
 	adjacency.resize(points.size())
 	for i: int in range(points.size()):
 		adjacency[i] = PackedInt32Array()
@@ -120,11 +126,11 @@ static func _graph(points: Array, obstacles: Array) -> Dictionary:
 	for i: int in range(points.size()):
 		for j: int in range(i + 1, points.size()):
 			if _clear(points[i], points[j], obstacles):
-				(adjacency[i] as PackedInt32Array).append(j)
-				(adjacency[j] as PackedInt32Array).append(i)
+				adjacency[i].append(j)
+				adjacency[j].append(i)
 				count += 1
 	return {"adjacency": adjacency, "edge_count": count}
-static func _search(points: Array, graph: Dictionary, obstacles: Array,
+static func _search(points: Array[Vector2], graph: Dictionary, obstacles: Array,
 		source: Vector2, target: Vector2) -> Dictionary:
 	var open: Array = []
 	var labels: Dictionary = {}
@@ -141,17 +147,19 @@ static func _search(points: Array, graph: Dictionary, obstacles: Array,
 			return _less(a["c"], str(a["k"]), b["c"], str(b["k"])))
 		var current: Dictionary = open.pop_front()
 		var state: String = str(current["s"])
-		if closed.has(state) or int((labels[state] as Dictionary)["v"]) != int(current["v"]):
+		var latest: Dictionary = labels[state]
+		if closed.has(state) or MapLayoutCanonical.int_value(latest["v"]) != MapLayoutCanonical.int_value(current["v"]):
 			continue
 		closed[state] = true
 		expansions += 1
-		var at: int = int(current["n"])
+		var at: int = MapLayoutCanonical.int_value(current["n"])
 		if at == 1:
 			target_state = state
 			break
-		var neighbours: PackedInt32Array = (graph["adjacency"] as Array)[at]
+		var adjacency: Array = graph["adjacency"]
+		var neighbours: PackedInt32Array = adjacency[at]
 		for next: int in neighbours:
-			var previous: int = int(current["p"])
+			var previous: int = MapLayoutCanonical.int_value(current["p"])
 			if next == previous:
 				continue
 			var previous_point: Variant = points[previous] if previous >= 0 else null
@@ -172,33 +180,35 @@ static func _search(points: Array, graph: Dictionary, obstacles: Array,
 	var path: Array = []
 	while not target_state.is_empty():
 		var label: Dictionary = labels[target_state]
-		path.push_front(points[int(label["n"])])
+		path.push_front(points[MapLayoutCanonical.int_value(label["n"])])
 		target_state = str(label["parent"])
 	return {"ok": true, "path": path, "state_count": labels.size(), "expansions": expansions}
 static func _advance(cost_v: Variant, previous_v: Variant, a: Vector2, b: Vector2,
 		obstacles: Array, source: Vector2, target: Vector2) -> Array:
-	var cost: Array = (cost_v as Array).duplicate()
+	var source_cost: Array = cost_v
+	var cost: Array = source_cost.duplicate()
 	var leg: float = a.distance_to(b)
-	cost[LENGTH] = float(cost[LENGTH]) + leg
-	cost[LANE] = float(cost[LANE]) + leg * absf((target - source).cross((a + b) * 0.5 - source)) / source.distance_to(target)
-	cost[CLEARANCE] = float(cost[CLEARANCE]) + _clearance(leg, a, b, obstacles)
+	cost[LENGTH] = MapLayoutCanonical.float_value(cost[LENGTH]) + leg
+	cost[LANE] = MapLayoutCanonical.float_value(cost[LANE]) + leg * absf((target - source).cross((a + b) * 0.5 - source)) / source.distance_to(target)
+	cost[CLEARANCE] = MapLayoutCanonical.float_value(cost[CLEARANCE]) + _clearance(leg, a, b, obstacles)
 	if previous_v is Vector2:
 		var previous: Vector2 = previous_v
 		var turn: float = absf(rad_to_deg((a - previous).angle_to(b - a)))
 		if turn > RATIO_EPSILON:
-			cost[BENDS] = int(cost[BENDS]) + 1
-			cost[ANGLE] = float(cost[ANGLE]) + turn
+			cost[BENDS] = MapLayoutCanonical.int_value(cost[BENDS]) + 1
+			cost[ANGLE] = MapLayoutCanonical.float_value(cost[ANGLE]) + turn
 	return cost
 static func _less(a_v: Variant, a_key: String, b_v: Variant, b_key: String) -> bool:
 	var a: Array = a_v
 	var b: Array = b_v
 	for i: int in range(a.size()):
 		var epsilon: float = WORLD_EPSILON_M if i == LENGTH else RATIO_EPSILON
-		if absf(float(a[i]) - float(b[i])) > epsilon:
-			return float(a[i]) < float(b[i])
+		if absf(MapLayoutCanonical.float_value(a[i]) - MapLayoutCanonical.float_value(b[i])) > epsilon:
+			return MapLayoutCanonical.float_value(a[i]) < MapLayoutCanonical.float_value(b[i])
 	return a_key < b_key
-static func _simplify(path: Array, obstacles: Array) -> Array:
-	var out: Array = path.duplicate()
+static func _simplify(path: Array, obstacles: Array) -> Array[Vector2]:
+	var out: Array[Vector2] = []
+	out.assign(path)
 	var i: int = 1
 	while i + 1 < out.size():
 		var a: Vector2 = out[i - 1]
@@ -209,19 +219,20 @@ static func _simplify(path: Array, obstacles: Array) -> Array:
 		else:
 			i += 1
 	return out
-static func _path_cost(path: Array, obstacles: Array, source: Vector2, target: Vector2) -> Array:
+static func _path_cost(path: Array[Vector2], obstacles: Array, source: Vector2, target: Vector2) -> Array:
 	var cost: Array = [0.0, 0, 0.0, 0.0, 0.0]
 	for i: int in range(path.size() - 1):
 		cost = _advance(cost, path[i - 1] if i > 0 else null, path[i], path[i + 1], obstacles, source, target)
 	return cost
 static func _cost_dict(cost: Array, direct: float) -> Dictionary:
-	return {"total_length_m": cost[LENGTH], "route_length_ratio": float(cost[LENGTH]) / direct,
+	return {"total_length_m": cost[LENGTH], "route_length_ratio": MapLayoutCanonical.float_value(cost[LENGTH]) / direct,
 		"bend_count": cost[BENDS], "bend_angle_deg_per_edge": cost[ANGLE],
 		"lane_deviation_m2": cost[LANE], "obstacle_clearance_penalty": cost[CLEARANCE]}
 static func _clear(a: Vector2, b: Vector2, obstacles: Array) -> bool:
 	for row_v: Variant in obstacles:
 		var row: Dictionary = row_v
-		if _penetrates(a, b, row["polygon"]):
+		var polygon: PackedVector2Array = row["polygon"]
+		if _penetrates(a, b, polygon):
 			return false
 	return true
 static func _penetrates(a: Vector2, b: Vector2, polygon: PackedVector2Array) -> bool:
@@ -265,8 +276,9 @@ static func _clearance(length: float, a: Vector2, b: Vector2, obstacles: Array) 
 static func _diagnostics(prepared: Dictionary, candidates: int, edges: int,
 		states: int, expansions: int) -> Dictionary:
 	var rows_v: Variant = prepared.get("rows", [])
-	return {"obstacle_count": (rows_v as Array).size() if rows_v is Array else 0,
-		"inflated_vertex_count": int(prepared.get("vertex_count", 0)), "candidate_count": candidates,
+	var rows: Array = rows_v if typeof(rows_v) == TYPE_ARRAY else []
+	return {"obstacle_count": rows.size(),
+		"inflated_vertex_count": MapLayoutCanonical.int_value(prepared.get("vertex_count", 0)), "candidate_count": candidates,
 		"visibility_edge_count": edges, "search_state_count": states, "search_expansion_count": expansions,
 		"max_obstacles": MAX_OBSTACLES, "max_candidates": MAX_CANDIDATES,
 		"max_visibility_edges": MAX_VISIBILITY_EDGES, "max_search_states": MAX_SEARCH_STATES}
