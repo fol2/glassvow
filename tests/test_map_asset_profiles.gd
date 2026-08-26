@@ -46,16 +46,16 @@ static func _live_profiles(fails: Array[String]) -> void:
 		_check(fails, by_id.has(fixture), "%s fixture is present" % fixture)
 	if by_id.has("shared-road-slab-a") and by_id.has("act1-charred-stump"):
 		_check(fails,
-				by_id["shared-road-slab-a"].get("semantic_class")
+				str(by_id["shared-road-slab-a"].get("semantic_class", ""))
 						== MapAssetProfiles.SEMANTIC_ROAD
-				and by_id["act1-charred-stump"].get("semantic_class")
+				and str(by_id["act1-charred-stump"].get("semantic_class", ""))
 						== MapAssetProfiles.SEMANTIC_SCENERY,
 				"road kits remain classified separately from scenery")
 	if by_id.has("act1-vigil") and by_id.has("act1-terminus"):
 		_check(fails,
-				by_id["act1-vigil"].get("semantic_class")
+				str(by_id["act1-vigil"].get("semantic_class", ""))
 						== MapAssetProfiles.SEMANTIC_HERO
-				and by_id["act1-terminus"].get("semantic_class")
+				and str(by_id["act1-terminus"].get("semantic_class", ""))
 						== MapAssetProfiles.SEMANTIC_HERO,
 				"the Vigil and terminus are hero fixtures")
 
@@ -97,6 +97,10 @@ static func _geometry_contract(fails: Array[String]) -> void:
 	var rotated_bounds: Rect2 = _bounds(rotated)
 	_check(fails, rotated_bounds.size.is_equal_approx(Vector2(1.0, 8.0)),
 			"a 90-degree yaw swaps the elongated footprint axes")
+	var rotated_scaled: PackedVector2Array = registry.transformed_footprint(
+			long_value, Vector3.ZERO, 90.0, Vector3(2.0, 1.0, 3.0))
+	_check(fails, _bounds(rotated_scaled).size.is_equal_approx(Vector2(3.0, 16.0)),
+			"rotation preserves supplied scale in asset-local axes")
 	_check(fails, transformed == registry.transformed_footprint(
 			long_value, position, 0.0, Vector3(2.0, 1.0, 3.0)),
 			"footprint transform is deterministic")
@@ -111,7 +115,8 @@ static func _geometry_contract(fails: Array[String]) -> void:
 	var canonical_clockwise: Dictionary = MapAssetProfiles.canonical_polygon(clockwise)
 	var canonical_counter: Dictionary = MapAssetProfiles.canonical_polygon(
 			counter_with_duplicates)
-	_check(fails, canonical_clockwise.get("points") == canonical_counter.get("points"),
+	_check(fails, _packed_vector2_value(canonical_clockwise, "points")
+			== _packed_vector2_value(canonical_counter, "points"),
 			"clockwise, counter-clockwise and closing/consecutive duplicates canonicalise")
 	var duplicate_result: Dictionary = MapAssetProfiles.canonical_polygon(
 			[[0, 0], [1, 0], [0, 0], [0, 1]])
@@ -267,6 +272,15 @@ static func _float_value(source: Dictionary, key: String, fallback: float) -> fl
 		var integer: int = raw
 		return float(integer)
 	return fallback
+
+
+static func _packed_vector2_value(
+		source: Dictionary, key: String) -> PackedVector2Array:
+	var raw: Variant = source.get(key, PackedVector2Array())
+	if raw is PackedVector2Array:
+		var value: PackedVector2Array = raw
+		return value
+	return PackedVector2Array()
 
 
 static func _bool_value(source: Dictionary, key: String, fallback: bool) -> bool:

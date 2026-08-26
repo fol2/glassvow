@@ -153,7 +153,7 @@ func transformed_footprint(value: Dictionary, position: Vector3,
 			or not _positive_vector3(scale):
 		return out
 	var points: PackedVector2Array = raw_points
-	var basis: Basis = Basis(Vector3.UP, deg_to_rad(yaw_degrees)).scaled(scale)
+	var basis: Basis = Basis(Vector3.UP, deg_to_rad(yaw_degrees)).scaled_local(scale)
 	var transform: Transform3D = Transform3D(basis, position)
 	for point: Vector2 in points:
 		var world: Vector3 = transform * Vector3(point.x, 0.0, point.y)
@@ -228,6 +228,9 @@ static func canonical_polygon(raw: Variant) -> Dictionary:
 				points.append(point)
 	else:
 		return _polygon_error("footprint must be an array")
+	for point: Vector2 in points:
+		if not is_finite(point.x) or not is_finite(point.y):
+			return _polygon_error("point must be finite")
 	if points.size() > 1 and points[0].is_equal_approx(points[points.size() - 1]):
 		points.remove_at(points.size() - 1)
 	if points.size() < 3:
@@ -298,16 +301,15 @@ func _digest_row(value: Dictionary) -> Array:
 	]
 
 
-## Imported mesh arrays, not engine instance IDs or raw-source availability,
-## define identity. Runtime and headless tools therefore hash the same geometry.
+## Imported triangle faces, not engine instance IDs or raw-source availability,
+## define identity. AABB and surface count remain in the canonical row, so runtime,
+## primitive-mesh tests and headless tools hash the same grounded geometry.
 func _source_identity(asset_id: String, mesh: Mesh, local_aabb: AABB) -> String:
 	var canonical: Array = [
 		resource_path(asset_id), local_aabb.position, local_aabb.size,
 		mesh.get_surface_count(),
 	]
-	for surface: int in range(mesh.get_surface_count()):
-		canonical.append(mesh.surface_get_primitive_type(surface))
-		canonical.append(mesh.surface_get_arrays(surface))
+	canonical.append(mesh.get_faces())
 	return _hash(canonical)
 
 

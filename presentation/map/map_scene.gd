@@ -24,11 +24,8 @@ const VP_MAX: int = 2048
 const GROUND_SIZE: Vector2 = Vector2(128.0, 96.0)
 const SUN_TO: Vector3 = Vector3(-0.35, 0.78, 0.52)
 const SKY: Color = Color(0.018, 0.022, 0.045)
-## Metres each unit-scale kit is grown to, indexed as the manifest orders them:
-## road-slab-a, road-slab-b, standing-monument, ash-trunk-fork, root-wedge,
-## charred-stump, fallen-bough-arch, ash-cairn-mass.
-const KIT_SCALE: Array[float] = [3.0, 3.0, 3.4, 6.2, 2.8, 2.2, 4.6, 3.2]
-const TERMINUS_SCALE: float = 3.6
+## Mesh scale, yaw policy, semantic class, footprint and occlusion facts
+## are owned by MapAssetProfiles and keyed by manifest asset ID.
 ## Where the Vigil stands: short of the entrance row, mirroring the terminus
 ## past the boss. The screen reads this too, to run the road out from its door
 ## to the first waystones.
@@ -48,14 +45,14 @@ const TERMINUS_SCALE: float = 3.6
 ## against the parametric hall before the Tripo one halved its footprint.
 ##
 ## More separation than this cannot come from moving the building. It needs the
-## opening zoom stop, `LEAD_X`, or `THRESHOLD_SCALE` to give.
+## opening zoom stop, `LEAD_X`, or the `act1-vigil` profile scale to give.
 const THRESHOLD_XZ: Vector2 = Vector2(-41.3, 6.5)
 ## Turned so the gable is seen in three-quarter rather than edge-on. The hall
 ## is authored with its gable facing +X, down the road; the camera looks along
 ## -Z, so unturned the player sees the length of the flank and the end of the
 ## building disappears into the frame edge. Turned, the doorway in the gable
 ## faces the road, which is the whole point of putting it at the start of one.
-const THRESHOLD_YAW: float = -46.0
+# Fixed yaw comes from the act1-vigil profile.
 ## Metres, like KIT_SCALE: the Tripo hall arrives unit-scale (0.979 x 0.933 x
 ## 0.743) where the parametric one it replaced was authored at 10.9 m long and
 ## shrunk by 0.78. Matching that one's world height wanted 9.7, and at 9.7 the
@@ -63,15 +60,13 @@ const THRESHOLD_YAW: float = -46.0
 ## THRESHOLD_XZ was moved to fix. 7.0 keeps it whole: 6.9 m long, a 5.4 m ridge
 ## and 6.5 m to the top of the smoke, so it stands among the 6.2 m ash trunks
 ## rather than over them, and the doorway is legible at the played zoom.
-const THRESHOLD_SCALE: float = 7.0
+# World scale comes from the act1-vigil profile.
 ## Metres between paving slabs along a road segment.
 ## Denser and wider than the first pass. The paving is the map's main statement
 ## of where the graph runs; the 2D dots over it are a route marker, not a road.
 const ROAD_STEP: float = 0.95
-const ROAD_SCALE: float = 2.15
-## Metres of ground a piece of scenery hides per metre of its own height, at
-## the camera's tilt: 1 / tan(40°).
-const HIDE_PER_HEIGHT: float = 1.19
+# Road slab scale comes from the shared-road profiles.
+# The current camera-directional hide envelope is owned by MapAssetProfiles.
 
 ## The run's own number, dealt into the landscape. 0 is a legal value and is
 ## what every construction that never sees a run gets, so a bare `MapScene.new()`
@@ -103,7 +98,10 @@ var _key: DirectionalLight3D
 var _materials: MapMaterials
 var _world: Node3D
 var _asset_geometry: Node3D
+var _asset_profiles: MapAssetProfiles
+var _active_profile_digest: String = ""
 var _road_meshes: Array[Mesh] = []
+var _road_profiles: Array[Dictionary] = []
 ## Flat list of segment endpoints (a, b, a, b, ...) in world XZ, handed down by
 ## the screen that owns the graph. MapScene stays instantiable without one.
 var _road_segments: PackedVector3Array = PackedVector3Array()
@@ -133,6 +131,7 @@ func _init(manifest: Dictionary = {}, resource_loader: Callable = Callable()) ->
 	_world.add_child(_rig)
 	_add_key(_world)
 	_add_environment(_world)
+	_asset_profiles = MapAssetProfiles.new(manifest)
 	_materials = MapMaterials.new(_key.basis.z, _rig.zoom_stop, manifest, resource_loader)
 	_rig.zoom_stop_changed.connect(_materials.set_tex_stop)
 	_add_ground(_world)
@@ -213,6 +212,10 @@ func active_asset_paths() -> PackedStringArray:
 
 func active_asset_resources() -> Array[Resource]:
 	return _materials.active_asset_resources()
+
+
+func asset_profile_digest() -> String:
+	return _active_profile_digest
 
 
 ## Bind this act's grade + ramp bands. `MapRegions.for_act` is the only
@@ -522,14 +525,19 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		_asset_geometry.free()
 		_asset_geometry = null
 	_road_meshes.clear()
+	_road_profiles.clear()
+	_active_profile_digest = ""
 	# Nothing is standing yet, so nothing is worth stepping aside for. An act
 	# whose geometry fails to resolve must not leave the previous act's
 	# footprints pushing this act's nodes around.
 	MapPinProjection.set_scenery([])
 	_set_placeholders_visible(true)
 	var raw_kits: Variant = assets.get("kits", [])
+	var raw_kit_ids: Variant = assets.get("kit_ids", PackedStringArray())
 	var raw_terminus: Variant = assets.get("terminus", null)
-	if not (raw_kits is Array) or not (raw_terminus is Resource):
+	var terminus_id: String = str(assets.get("terminus_id", ""))
+	if not (raw_kits is Array) or not (raw_kit_ids is PackedStringArray) \
+			or not (raw_terminus is Resource):
 		return
 	var kit_resources: Array = raw_kits
 	if kit_resources.size() != 8:
@@ -541,18 +549,50 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 		push_warning("map: act %d resolved %d of 8 kits; keeping placeholders"
 				% [_act, kit_resources.size()])
 		return
+	var kit_ids: PackedStringArray = raw_kit_ids
+	if kit_ids.size() != 8:
+		return
 	var meshes: Array[Mesh] = []
-	for raw: Variant in kit_resources:
+	var profiles: Array[Dictionary] = []
+	for i: int in range(kit_resources.size()):
+		var raw: Variant = kit_resources[i]
 		if not (raw is Resource):
 			return
 		var resource: Resource = raw
 		var mesh: Mesh = _mesh_from(resource)
 		if mesh == null:
 			return
+		var value: Dictionary = _asset_profiles.profile(kit_ids[i], mesh)
+		if value.is_empty():
+			return
 		meshes.append(mesh)
+		profiles.append(value)
 	var terminus_resource: Resource = raw_terminus
 	var terminus_mesh: Mesh = _mesh_from(terminus_resource)
 	if terminus_mesh == null:
+		return
+	var terminus_profile: Dictionary = _asset_profiles.profile(
+			terminus_id, terminus_mesh)
+	if terminus_profile.is_empty():
+		return
+	var active_profiles: Array[Dictionary] = []
+	active_profiles.assign(profiles)
+	active_profiles.append(terminus_profile)
+	var raw_threshold: Variant = assets.get("threshold", null)
+	var threshold_mesh: Mesh = null
+	var threshold_profile: Dictionary = {}
+	if raw_threshold is Resource:
+		var threshold_resource: Resource = raw_threshold
+		threshold_mesh = _mesh_from(threshold_resource)
+		if threshold_mesh == null:
+			return
+		threshold_profile = _asset_profiles.profile(
+				str(assets.get("threshold_id", "")), threshold_mesh)
+		if threshold_profile.is_empty():
+			return
+		active_profiles.append(threshold_profile)
+	_active_profile_digest = _asset_profiles.digest(active_profiles)
+	if _active_profile_digest.is_empty():
 		return
 	_asset_geometry = Node3D.new()
 	_asset_geometry.name = "MapAssetGeometry"
@@ -561,6 +601,7 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	# the scenery scatter is what left a pilgrimage map with no road on it, and
 	# left the graph to be carried by a 2 px dashed line drawn over the top.
 	_road_meshes = [meshes[0], meshes[1]]
+	_road_profiles = [profiles[0], profiles[1]]
 	var positions: PackedVector3Array = _all_prop_positions()
 	var kinds: int = meshes.size() - 2
 	for i: int in range(2, meshes.size()):
@@ -569,33 +610,21 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 			if seat_kit(j, kinds) == i:
 				placements.append(positions[j])
 		_add_multimesh(_asset_geometry, "AssetKit%02d" % i, meshes[i], placements,
-				i * 7 + _dress_salt(), KIT_SCALE[i])
-	# Tell the projection what now stands where, so the nodes can step out
-	# from behind it. Radius takes the wider of x and z because yaw can swing
-	# one into the other; depth is how much ground the piece's own height
-	# hides at the camera's tilt.
-	#
-	# BOTH of those are per-SPECIES, which is why this reads `seat_kit` rather
-	# than repeating the arithmetic. It used to repeat it, and when the salt
-	# arrived only the placement loop above was updated: five run seeds in six
-	# then published a 6.2 m ash trunk as whatever the unsalted rotation
-	# happened to name, so the solver stepped nodes around footprints belonging
-	# to trees that were not there.
+				i * 7 + _dress_salt(), _asset_profiles.default_scale(profiles[i]))
+	# Publish the build-4-compatible directional envelope from the same
+	# profiles whose polygons the compiler will consume. No second formula lives here.
 	var pieces: Array[Vector4] = []
 	for j: int in range(positions.size()):
 		var kit: int = seat_kit(j, kinds)
-		var box: AABB = meshes[kit].get_aabb()
-		var unit: float = KIT_SCALE[kit]
-		pieces.append(Vector4(positions[j].x, positions[j].z,
-				maxf(box.size.x, box.size.z) * 0.5 * unit,
-				box.size.y * unit * HIDE_PER_HEIGHT))
+		pieces.append(_asset_profiles.directional_envelope(
+				profiles[kit], positions[j]))
 	MapPinProjection.set_scenery(pieces)
 	var terminus: MeshInstance3D = MeshInstance3D.new()
 	terminus.name = "AssetTerminus"
 	terminus.mesh = terminus_mesh
 	# Just past the boss, which is lattice row 14 col 3 = world (36, 0, 0).
 	terminus.position = Vector3(40.0, 0.0, 0.0)
-	terminus.scale = Vector3.ONE * TERMINUS_SCALE
+	terminus.scale = Vector3.ONE * _asset_profiles.default_scale(terminus_profile)
 	terminus.material_override = _materials.prop
 	terminus.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_asset_geometry.add_child(terminus)
@@ -604,32 +633,30 @@ func _bind_asset_geometry(assets: Dictionary) -> void:
 	# the fire, and stays there — it is the L3 reveal (docs/story/01-world.md).
 	# Only Act I has one, so a null here seats nothing rather than failing the
 	# bind -- the other three acts are not missing an asset, they never had one.
-	var raw_threshold: Variant = assets.get("threshold", null)
-	if raw_threshold is Resource:
-		var gate_res: Resource = raw_threshold
-		var gate_mesh: Mesh = _mesh_from(gate_res)
-		if gate_mesh != null:
-			var gate: MeshInstance3D = MeshInstance3D.new()
-			gate.name = "AssetVigil"
-			gate.mesh = gate_mesh
-			# Just short of the entrance, which is lattice row 0 = world x -36,
-			# mirroring the terminus four metres past the boss at the far end.
-			gate.position = Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y)
-			gate.rotation_degrees = Vector3(0.0, THRESHOLD_YAW, 0.0)
-			gate.scale = Vector3.ONE * THRESHOLD_SCALE
-			# Its own material once its baked albedo is in hand; the prop shader
-			# otherwise, so a mesh that arrives without one degrades to projected
-			# stone rather than to a building painted with nothing.
-			var dressed: bool = _materials.bind_vigil_albedo(_baked_albedo(gate_mesh))
-			if not dressed:
-				# The whole point of this asset is that it is textured. Falling
-				# back to projected stone is survivable; doing it silently is
-				# not, because the building still renders and nothing looks
-				# broken enough to investigate.
-				push_warning("Vigil has no baked albedo; falling back to the prop shader")
-			gate.material_override = _materials.vigil if dressed else _materials.prop
-			gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			_asset_geometry.add_child(gate)
+	if threshold_mesh != null and not threshold_profile.is_empty():
+		var gate_mesh: Mesh = threshold_mesh
+		var gate: MeshInstance3D = MeshInstance3D.new()
+		gate.name = "AssetVigil"
+		gate.mesh = gate_mesh
+		# Just short of the entrance, which is lattice row 0 = world x -36,
+		# mirroring the terminus four metres past the boss at the far end.
+		gate.position = Vector3(THRESHOLD_XZ.x, 0.0, THRESHOLD_XZ.y)
+		gate.rotation_degrees = Vector3(
+			0.0, _asset_profiles.fixed_yaw(threshold_profile), 0.0)
+		gate.scale = Vector3.ONE * _asset_profiles.default_scale(threshold_profile)
+		# Its own material once its baked albedo is in hand; the prop shader
+		# otherwise, so a mesh that arrives without one degrades to projected
+		# stone rather than to a building painted with nothing.
+		var dressed: bool = _materials.bind_vigil_albedo(_baked_albedo(gate_mesh))
+		if not dressed:
+			# The whole point of this asset is that it is textured. Falling
+			# back to projected stone is survivable; doing it silently is
+			# not, because the building still renders and nothing looks
+			# broken enough to investigate.
+			push_warning("Vigil has no baked albedo; falling back to the prop shader")
+		gate.material_override = _materials.vigil if dressed else _materials.prop
+		gate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_asset_geometry.add_child(gate)
 	# Seat the road pair now, empty, so anything resolving them by name finds
 	# them before the screen has a graph to hand down. `lay_road` rebuilds
 	# them in place once it does.
@@ -647,7 +674,8 @@ func lay_road(segments: PackedVector3Array) -> void:
 
 
 func _build_road() -> void:
-	if _asset_geometry == null or _road_meshes.size() < 2:
+	if _asset_geometry == null or _road_meshes.size() < 2 \
+			or _road_profiles.size() < 2:
 		return
 	# This runs twice on a normal boot: once from `_bind_asset_geometry` while
 	# `_road_segments` is still empty, and again when the screen hands the graph
@@ -677,13 +705,14 @@ func _build_road() -> void:
 			slab += 1
 	for m: int in range(2):
 		var node: MultiMeshInstance3D = _road_multimesh(
-				_road_meshes[m], laid[m], yaws[m], m)
+				_road_meshes[m], laid[m], yaws[m], m, _road_profiles[m])
 		node.name = "AssetRoad%d" % m
 		_asset_geometry.add_child(node)
 
 
 func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
-		yaws: PackedFloat32Array, seed_index: int) -> MultiMeshInstance3D:
+		yaws: PackedFloat32Array, seed_index: int,
+		profile: Dictionary) -> MultiMeshInstance3D:
 	var multimesh: MultiMesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_custom_data = true
@@ -694,10 +723,11 @@ func _road_multimesh(mesh: Mesh, positions: PackedVector3Array,
 		# Small: enough that the paving is not a stamped ribbon, little enough
 		# that consecutive slabs still read as one road rather than as rubble.
 		var wobble: float = 0.045 * sin(float(index) * 1.71)
+		var unit: float = _asset_profiles.default_scale(profile)
 		var scale: Vector3 = Vector3(
-				ROAD_SCALE * (1.0 + wobble),
-				ROAD_SCALE * 0.6,
-				ROAD_SCALE * (1.0 - wobble))
+				unit * (1.0 + wobble),
+				unit * 0.6,
+				unit * (1.0 - wobble))
 		var basis: Basis = Basis(Vector3.UP, yaws[i] + wobble).scaled(scale)
 		multimesh.set_instance_transform(i, Transform3D(basis, positions[i]))
 		multimesh.set_instance_custom_data(i, Color(
