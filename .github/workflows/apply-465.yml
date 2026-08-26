@@ -18,7 +18,9 @@ permissions:
 
 jobs:
   apply:
-    # The verified candidate removes every staging workflow before committing.
+    # The final implementation push is made by Actions; the connector performs
+    # the already-verified workflow delta and staging-workflow deletions because
+    # the Actions app cannot publish workflow-file mutations.
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -126,7 +128,7 @@ jobs:
         run: godot --headless -s res://tools/_patch_465_registry_probe.gd -- digest
 
       - name: Remove staging-only registry probe
-        run: rm tools/_patch_465_registry_probe.gd
+        run: rm -f tools/_patch_465_registry_probe.gd tools/_patch_465_registry_probe.gd.uid
 
       - name: Verify production map assets
         timeout-minutes: 18
@@ -153,8 +155,20 @@ jobs:
       - name: Verify benchmark freeze
         run: python3 -B tools/check_benchmark_freeze.py
 
-      - name: Commit final implementation tree
+      - name: Commit verified non-workflow implementation tree
         run: |
+          # Preserve workflow paths at this branch head. The GitHub Actions app
+          # has contents:write but no workflows:write, which is the sole reason
+          # run 32911605960 could not publish its otherwise verified commit.
+          git restore --source=HEAD --staged --worktree -- \
+            .github/workflows/ci.yml \
+            .github/workflows/apply-465.yml \
+            .github/workflows/diagnose-465-fast.yml
           git add -A
+          test -z "$(git ls-files 'tools/_patch_465_*')"
+          test -z "$(git diff --cached --name-only -- '.github/workflows/**')"
+          git diff --cached --check
           git commit -m 'feat(map): centralize asset footprint profiles (#465)'
-          git push --force-with-lease origin HEAD:work/465-asset-profile-authority
+          git push \
+            --force-with-lease=refs/heads/work/465-asset-profile-authority:${GITHUB_SHA} \
+            origin HEAD:work/465-asset-profile-authority
