@@ -269,7 +269,7 @@ def identity_load(content: dict[str, Any]) -> dict[str, bool]:
 
 
 def _identity_observation(control_rows: list[dict[str, Any]],
-                          valid: dict[str, Any]) -> str:
+                          valid: dict[str, Any], strict: bool = False) -> str:
     paired: dict[tuple[Any, ...], dict[str, str]] = {}
     for row in control_rows:
         if int(row.get("arm", 0)) not in (1, 2):
@@ -282,13 +282,17 @@ def _identity_observation(control_rows: list[dict[str, Any]],
     for vow in VOWS:
         dusk = str(valid[_grid("duskblade", vow)].get("topCell") or "")
         ash = str(valid[_grid("ashwarden", vow)].get("topCell") or "")
+        if strict and not dusk.startswith("shatter"):
+            return f"dusk-not-shatter-led:v{vow}"
+        if strict and not ash.startswith("smolder"):
+            return f"ash-not-smolder-led:v{vow}"
         if dusk.startswith("smolder") and ash.startswith("shatter"):
             return "identity-reversal"
     return ""
 
 
 def guardrails(result: dict[str, Any], contract: dict[str, Any],
-               load_rules: dict[str, bool]) -> dict[str, Any]:
+               load_rules: dict[str, bool], strict: bool = False) -> dict[str, Any]:
     proxies = result["proxies"]
     valid = result["validProxies"]
     c2_by: dict[str, bool] = {}
@@ -302,10 +306,10 @@ def guardrails(result: dict[str, Any], contract: dict[str, Any],
     vow5_ok = True
     for grid in ("duskblade:v5", "ashwarden:v5"):
         rate = valid[grid]["topRate"]
-        ok = rate is not None and float(rate) <= 0.9
+        ok = rate is not None and (float(rate) < 0.9 if strict else float(rate) <= 0.9)
         vow5_by[grid] = ok
         vow5_ok = vow5_ok and ok
-    fault = _identity_observation(result.get("_controlRows") or [], valid)
+    fault = _identity_observation(result.get("_controlRows") or [], valid, strict)
     identity_ok = all(load_rules.values()) and not fault
     reasons: list[str] = []
     if not c2_ok:
@@ -497,7 +501,8 @@ def breadth_pareto(candidates: list[dict[str, Any]]) -> list[str]:
 def attach_tier1_fields(result: dict[str, Any], axes: dict[str, Any],
                         contract: dict[str, Any], load_rules: dict[str, bool],
                         landscape_rows: list[dict[str, Any]] | None = None,
-                        control_rows: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+                        control_rows: list[dict[str, Any]] | None = None,
+                        strict: bool = False) -> dict[str, Any]:
     landscape = landscape_rows if landscape_rows is not None else result.get("_landscapeRows") or []
     controls = control_rows if control_rows is not None else result.get("_controlRows") or []
     result["_controlRows"] = controls
@@ -516,7 +521,7 @@ def attach_tier1_fields(result: dict[str, Any], axes: dict[str, Any],
     occ = occupancy_deficits(result["deckBands"])
     result["thinDeficit"] = occ["thin"]
     result["midDeficit"] = occ["mid"]
-    result["guardrails"] = guardrails(result, contract, load_rules)
+    result["guardrails"] = guardrails(result, contract, load_rules, strict)
     return result
 
 
@@ -526,12 +531,16 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
                       baseline_landscape: dict[int, list[dict[str, Any]]] | None,
                       axes: dict[str, Any], contract: dict[str, Any],
                       cells: dict[str, dict[str, Any]],
-                      n_boot: int, rng_seed: int) -> dict[str, Any]:
+                      n_boot: int, rng_seed: int,
+                      baseline_cells: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
     """Seed-block bootstrap of valid-cell breadth. Policy occupancy is frozen."""
     rng = random.Random(rng_seed)
     c_ids, l_ids = sorted(control), sorted(landscape)
     policies: dict[str, int] = {
         key: int(cell.get("policies", 0)) for key, cell in cells.items()
+    }
+    baseline_policies: dict[str, int] = {
+        key: int(cell.get("policies", 0)) for key, cell in (baseline_cells or cells).items()
     }
 
     def _tally(rows: list[dict[str, Any]], kind: str) -> dict[tuple[Any, ...], dict[str, int]]:
@@ -567,7 +576,8 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
                     combined[key][field] += values[field]
         return combined
 
-    def _cell_dict(tallies: dict[tuple[Any, ...], dict[str, int]]) -> dict[str, dict[str, Any]]:
+    def _cell_dict(tallies: dict[tuple[Any, ...], dict[str, int]],
+                   policy_counts: dict[str, int]) -> dict[str, dict[str, Any]]:
         out: dict[str, dict[str, Any]] = {}
         for aspect in ASPECTS:
             for vow in VOWS:
@@ -582,7 +592,7 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
                             "wins": wins, "runs": runs,
                             "stalls": int(stats["stalls"]), "errors": int(stats["errors"]),
                             "winRate": (wins / runs) if runs else 0.0,
-                            "policies": int(policies.get(name, 0)),
+                            "policies": int(policy_counts.get(name, 0)),
                         }
         return out
 
@@ -609,7 +619,7 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
                         "errors": int(stats["errors"]),
                         "winRate": (wins / runs) if runs else 0.0,
                     }
-        cand_cells = _cell_dict(_combine(l_t, l_draw))
+        cand_cells = _cell_dict(_combine(l_t, l_draw), policies)
         cand_valid = valid_proxies(controls, cand_cells, contract)
         cand_c1 = valid_c1(cand_valid)
         for grid in GRIDS:
@@ -634,7 +644,7 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
                             "errors": int(stats["errors"]),
                             "winRate": (wins / runs) if runs else 0.0,
                         }
-            base_cells = _cell_dict(_combine(b_l, l_draw))
+            base_cells = _cell_dict(_combine(b_l, l_draw), baseline_policies)
             base_valid = valid_proxies(base_controls, base_cells, contract)
             base_c1 = valid_c1(base_valid)
             vs["c1a"].append(float(cand_c1["c1a"] - base_c1["c1a"]))

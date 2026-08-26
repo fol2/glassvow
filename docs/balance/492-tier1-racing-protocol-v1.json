@@ -6,6 +6,7 @@
   "responseContract": "docs/balance/490-f0-response-contract-v1.json",
   "registry": "docs/balance/490-tier1-registry-v1.json",
   "candidateManifest": "docs/balance/data/491/candidate-manifest.json",
+  "strictGuardrails": true,
   "hostPackets": [
     "docs/balance/data/489/m4-mac-mini.json"
   ],
@@ -23,7 +24,10 @@
         "root": 4454,
         "first": 9300,
         "last": 9331,
-        "arms": [1, 2]
+        "arms": [
+          1,
+          2
+        ]
       },
       "landscape": {
         "stage": "tier1-f1-racing",
@@ -46,7 +50,10 @@
         "root": 4454,
         "first": 9300,
         "last": 9363,
-        "arms": [1, 2]
+        "arms": [
+          1,
+          2
+        ]
       },
       "landscape": {
         "stage": "tier1-f1-racing",
@@ -69,7 +76,10 @@
         "root": 4454,
         "first": 9300,
         "last": 9427,
-        "arms": [1, 2]
+        "arms": [
+          1,
+          2
+        ]
       },
       "landscape": {
         "stage": "tier1-f1-racing",
@@ -92,7 +102,10 @@
         "root": 4454,
         "first": 11000,
         "last": 11199,
-        "arms": [1, 2]
+        "arms": [
+          1,
+          2
+        ]
       },
       "landscape": {
         "stage": "tier1-audit",
@@ -111,10 +124,14 @@
     }
   },
   "racing": {
-    "responseVector": ["validC1a", "validC1b"],
+    "responseVector": [
+      "validC1a",
+      "validC1b"
+    ],
     "pairedUnit": "seed block with common policy and seed rectangles",
     "promotion": "point improvement in C1a or C1b, no credible paired regression in either, and confidence-envelope Pareto non-domination",
-    "dominance": "one candidate's absolute 95% upper bounds are no higher in C1a and C1b, and lower in at least one, than another candidate's lower bounds",
+    "dominance": "one candidate's paired candidate-minus-candidate 95% CRN upper bound is no higher than zero in C1a and C1b, and lower than zero in at least one",
+    "candidatePairBootstrap": "ordered pairs of complete candidates use lexical candidate-id order, exclude self-pairs, and use bootstrapSeed plus the one-based nested-pair offset",
     "capTieBreak": "pre-registered racingSet order after all hard stops and confidence-envelope dominance; no weighted score",
     "stop": [
       "incomplete or simulator error",
@@ -168,7 +185,22 @@
     "holdoutCount": 40,
     "stopRule": "after six generations, stop when best-ever improvement across the latest six generations is below 0.01; otherwise maxGen",
     "islandSeeds": "six common final-layer t1-c000 policy representatives per grid, with candidate-specific frozen start-cell labels",
-    "commonRandomNumbers": "same training seed block within each generation and same validation seeds for every candidate and paired t1-c000"
+    "commonRandomNumbers": "same training seed block within each generation and same validation seeds for every candidate and paired t1-c000",
+    "islandSelection": {
+      "method": "strongest-per-cell-then-win-rate-v1",
+      "source": "final layer t1-c000 raw landscape rows",
+      "policyEvidence": "per grid and policy, modal frozen cell by row count with lexical cell tie-break; win rate is wins divided by all rows",
+      "selection": "within each occupied cell choose highest win rate then lowest policy index; order those representatives by win rate descending then cell id and take six; if fewer than six cells are occupied, fill from remaining policies by win rate descending then policy index",
+      "candidateStartCell": "for each selected common policy, use that candidate's modal frozen cell with lexical cell tie-break"
+    },
+    "pairedBootstrap": {
+      "resamples": 4000,
+      "seed": 49250,
+      "unit": "holdout seed block across six islands",
+      "pairing": "candidate minus t1-c000 on identical island and validation seed",
+      "candidateSeedOffset": 101,
+      "gridSeedOffset": 1
+    }
   },
   "finalistBar": {
     "layer1": {
@@ -181,10 +213,19 @@
       "cellMinimumPolicies": 20,
       "cellMinimumRuns": 400,
       "cellMinimumWinRateDelta": 0.05,
-      "thickness": ["thin", "mid"],
+      "thickness": [
+        "thin",
+        "mid"
+      ],
       "nonDominant": {
-        "duskblade": ["smolder", "attrition"],
-        "ashwarden": ["shatter", "attrition"]
+        "duskblade": [
+          "smolder",
+          "attrition"
+        ],
+        "ashwarden": [
+          "shatter",
+          "attrition"
+        ]
       }
     },
     "developmentC3": {
@@ -210,6 +251,29 @@
   "audit": {
     "singleDataBearingInvocation": true,
     "sealedToken": "tier1-finalist",
+    "exactCandidates": "baseline plus frozen layer3 promoted ids",
+    "finalistSetPath": "docs/balance/data/492/finalist-set.json",
+    "auditOutput": "/private/tmp/glassvow-492-audit",
+    "invocation": "python3 -B tools/balance_f0.py --protocol docs/balance/492-tier1-racing-protocol-v1.json --evaluation audit --finalist-audit --audit-finalists FINALIST_SET --only BASELINE,FINALISTS --out AUDIT_DIR",
+    "finalistSetSchema": {
+      "required": [
+        "schemaVersion",
+        "issue",
+        "protocolSha256",
+        "candidateManifestSha256",
+        "layer3Decisions",
+        "layer3DecisionsSha256",
+        "baseline",
+        "finalists"
+      ],
+      "finalists": "exact ordered layer3 promoted ids; one or two only"
+    },
+    "receipt": {
+      "path": "AUDIT_DIR/audit-invocation.json",
+      "exclusiveCreate": true,
+      "secondInvocation": "fail closed even after a partial first invocation",
+      "freshRerun": false
+    },
     "nonGating": true,
     "blockOn": [
       "stall or error",

@@ -11,18 +11,24 @@ from typing import Any
 
 from balance_f1_racing import racing_decisions
 from balance_f0 import (
+    ASPECTS,
     BOOT_SEED,
+    VOWS,
     aggregate_cells,
     aggregate_controls,
     by_seed,
+    control_fault,
     deficits,
     evaluation_spec,
     grid_proxies,
+    is_tier1_profile,
     load_control_rows,
     load_landscape_rows,
     observation_bytes,
     seed_block_bootstrap,
+    validate_candidate_manifest,
 )
+from balance_f0_tier1 import attach_tier1_fields, bootstrap_breadth, identity_load
 from balance_seed_contract import file_sha256, load_contract, sha256_bytes
 from balance_f1_cem_evidence import mini_cem_comparison, prepare_cem_seeds
 from balance_f1_finalists import audit_comparison, finalist_contract
@@ -69,10 +75,22 @@ def decision_record(summary: dict[str, Any], decisions: list[dict[str, str]],
 
 
 def reanalyse_layer(summary: dict[str, Any], layer_dir: Path,
-                    n_boot: int, axes: dict[str, Any]) -> dict[str, Any]:
+                    n_boot: int, axes: dict[str, Any],
+                    candidate_bundle: Path | None = None) -> dict[str, Any]:
     """Rebuild point and paired bootstrap evidence from immutable raw shards."""
     rebuilt = copy.deepcopy(summary)
     resolved = evaluation_spec(summary["protocol"])
+    tier1 = is_tier1_profile(summary["protocol"])
+    baseline_id = str(summary["protocol"].get("baseline", "c000"))
+    bundle_by_id: dict[str, dict[str, Any]] = {}
+    repo = Path(__file__).resolve().parents[1]
+    if candidate_bundle is not None:
+        bundle = json.loads((candidate_bundle / "manifest.json").read_text(encoding="utf-8"))
+        frozen_manifest = summary["protocol"].get("candidateManifest")
+        if tier1 and frozen_manifest:
+            validate_candidate_manifest(
+                bundle, json.loads((repo / str(frozen_manifest)).read_text(encoding="utf-8")))
+        bundle_by_id = {str(row["id"]): row for row in bundle["candidates"]}
     expected_landscape = resolved["policyCount"] * 4 \
         * (resolved["landscapeLast"] - resolved["landscapeFirst"] + 1)
 
@@ -87,7 +105,14 @@ def reanalyse_layer(summary: dict[str, Any], layer_dir: Path,
         land_paths = sorted((candidate_dir / "landscape").glob("shard-*.ndjson"))
         control_rows = load_control_rows(control_paths) if control_paths else []
         recorded_arms = row.get("controlArms")
-        if isinstance(recorded_arms, list):
+        if tier1:
+            if recorded_arms != resolved["controlArms"]:
+                raise ValueError(f"control-arm coverage drifted for {candidate_id}")
+            selected = set(resolved["controlArms"])
+            control_rows = [item for item in control_rows if int(item["arm"]) in selected]
+            expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) \
+                * len(selected) * 4
+        elif isinstance(recorded_arms, list):
             selected = {int(arm) for arm in recorded_arms}
             control_rows = [item for item in control_rows if int(item["arm"]) in selected]
             expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) \
@@ -96,9 +121,37 @@ def reanalyse_layer(summary: dict[str, Any], layer_dir: Path,
             # Legacy F0/first-layer manifests emitted all four diagnostic arms.
             expected_controls = (resolved["controlLast"] - resolved["controlFirst"] + 1) * 16
         land_rows = load_landscape_rows(land_paths) if land_paths else []
-        if len(control_rows) != int(row.get("controlRowCount", -1)) \
-                or len(land_rows) != int(row.get("landscapeRowCount", -1)):
+        control_keys = {(int(item["arm"]), str(item["aspect"]), int(item["vow"]),
+                         int(item["seed"])) for item in control_rows}
+        expected_control_keys = {
+            (arm, aspect, vow, seed)
+            for arm in resolved["controlArms"]
+            for aspect in ASPECTS for vow in VOWS
+            for seed in range(resolved["controlFirst"], resolved["controlLast"] + 1)
+        }
+        landscape_keys = {(int(item["policyIndex"]), str(item["aspect"]),
+                           int(item["vow"]), int(item["seed"])) for item in land_rows}
+        expected_landscape_keys = {
+            (policy, aspect, vow, seed)
+            for policy in range(resolved["policyFirst"],
+                                resolved["policyFirst"] + resolved["policyCount"])
+            for aspect in ASPECTS for vow in VOWS
+            for seed in range(resolved["landscapeFirst"], resolved["landscapeLast"] + 1)
+        }
+        if len(control_rows) != expected_controls \
+                or len(land_rows) not in (0, expected_landscape) \
+                or control_keys != expected_control_keys \
+                or (land_rows and landscape_keys != expected_landscape_keys) \
+                or (not land_rows and row.get("status") != "early-stop"):
             raise ValueError(f"raw row count drifted for {candidate_id}")
+        if bundle_by_id:
+            expected = bundle_by_id.get(candidate_id)
+            if expected is None or any(row.get(key) != expected.get(key) for key in
+                                       ("values", "fileSha256", "semanticSha256")):
+                raise ValueError(f"candidate identity drifted for {candidate_id}")
+            content_path = candidate_bundle / candidate_id / "full-content.json"
+            if not content_path.is_file() or file_sha256(content_path) != str(row["fileSha256"]):
+                raise ValueError(f"candidate content digest drifted for {candidate_id}")
         identity = {
             "id": candidate_id, "values": row["values"], "fileSha256": row["fileSha256"],
             "semanticSha256": row["semanticSha256"],
@@ -107,34 +160,76 @@ def reanalyse_layer(summary: dict[str, Any], layer_dir: Path,
             "commit": row["commit"], "driverSha256": summary["driverSha256"],
             "godotVersion": row["godotVersion"], "hostFingerprint": row["hostFingerprint"],
         }
-        if sha256_bytes(observation_bytes(control_rows + land_rows, identity)) \
+        if sha256_bytes(observation_bytes(control_rows + land_rows, identity, extras=tier1)) \
                 != str(row["observationsSha256"]):
             raise ValueError(f"raw shards do not reproduce observations for {candidate_id}")
-        if row.get("status") == "complete" and not row.get("earlyStop"):
-            if len(control_rows) != expected_controls or len(land_rows) != expected_landscape:
-                raise ValueError(f"complete raw coverage is truncated for {candidate_id}")
         return control_rows, land_rows
 
     by_candidate = {str(row["id"]): raw(row) for row in rebuilt["candidates"]}
-    baseline_row = next((row for row in rebuilt["candidates"] if row["id"] == "c000"), None)
-    if baseline_row is None or baseline_row.get("status") != "complete":
-        raise ValueError("raw layer has no complete c000 incumbent")
-    baseline_control = by_seed(by_candidate["c000"][0])
-    baseline_land = by_seed(by_candidate["c000"][1])
+    baseline_row = next((row for row in rebuilt["candidates"] if row["id"] == baseline_id), None)
+    if baseline_row is None or not by_candidate[baseline_id][1]:
+        raise ValueError(f"raw layer has no complete {baseline_id} incumbent")
+    baseline_control = by_seed(by_candidate[baseline_id][0])
+    baseline_land = by_seed(by_candidate[baseline_id][1])
+    baseline_stalls = sum(str(row.get("outcome")) == "stall"
+                          for row in by_candidate[baseline_id][0])
+    baseline_cells = aggregate_cells(by_candidate[baseline_id][1], axes)
+    response_contract = json.loads((repo / str(summary["protocol"].get(
+        "responseContract", "docs/balance/490-f0-response-contract-v1.json"))).read_text()) \
+        if tier1 else None
     for row in rebuilt["candidates"]:
         candidate_id = str(row["id"])
-        if row.get("status") != "complete" or row.get("earlyStop"):
-            continue
         control_rows, land_rows = by_candidate[candidate_id]
-        proxies = grid_proxies(aggregate_controls(control_rows), aggregate_cells(land_rows, axes))
+        control_stalls = sum(str(item.get("outcome")) == "stall" for item in control_rows)
+        control_errors = sum(str(item.get("outcome")) == "error" for item in control_rows)
+        row.update({"controlArms": resolved["controlArms"],
+                    "controlRowCount": len(control_rows), "landscapeRowCount": len(land_rows),
+                    "controlStalls": control_stalls, "controlErrors": control_errors,
+                    "landscapeStalls": sum(str(item.get("outcome")) == "stall"
+                                           for item in land_rows),
+                    "landscapeErrors": sum(str(item.get("outcome")) == "error"
+                                           for item in land_rows)})
+        if not land_rows:
+            raw_fault = control_fault(
+                control_rows, baseline_stalls,
+                complete_rectangle=bool(summary["protocol"].get("completeRectangle")))
+            if not raw_fault:
+                raise ValueError(f"unexplained missing landscape rows for {candidate_id}")
+            row["status"] = "early-stop"
+            row["earlyStop"] = raw_fault
+            if candidate_id == baseline_id:
+                raise ValueError(f"raw layer has no complete {baseline_id} incumbent")
+            continue
+        row["status"], row["earlyStop"] = "complete", None
+        controls = aggregate_controls(control_rows)
+        cells = aggregate_cells(land_rows, axes)
+        proxies = grid_proxies(controls, cells)
+        row["controls"], row["cells"] = controls, cells
         row["proxies"] = proxies
         row["deficits"] = deficits(proxies)
         row["bootstrap"] = seed_block_bootstrap(
             by_seed(control_rows), by_seed(land_rows),
-            None if candidate_id == "c000" else baseline_control,
-            None if candidate_id == "c000" else baseline_land,
-            axes, n_boot, BOOT_SEED,
+            None if candidate_id == baseline_id else baseline_control,
+            None if candidate_id == baseline_id else baseline_land,
+            axes, n_boot, int(summary["protocol"].get("bootSeed", BOOT_SEED)),
         )
+        if tier1:
+            if candidate_bundle is None or response_contract is None:
+                raise ValueError("Tier-1 raw reanalysis requires the candidate bundle")
+            attach_tier1_fields(
+                row, axes, response_contract,
+                identity_load(json.loads((candidate_bundle / candidate_id / "full-content.json")
+                                         .read_text(encoding="utf-8"))),
+                land_rows, control_rows,
+                strict=bool(summary["protocol"].get("strictGuardrails", False)))
+            extra = bootstrap_breadth(
+                by_seed(control_rows), by_seed(land_rows),
+                None if candidate_id == baseline_id else baseline_control,
+                None if candidate_id == baseline_id else baseline_land,
+                axes, response_contract, cells, n_boot,
+                int(summary["protocol"].get("bootSeed", BOOT_SEED)),
+                baseline_cells=None if candidate_id == baseline_id else baseline_cells)
+            row["bootstrap"] = {**row["bootstrap"], **extra}
     return rebuilt
 
 
