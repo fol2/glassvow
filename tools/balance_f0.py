@@ -208,7 +208,7 @@ def evaluation_from_registry(registry: dict[str, Any], name: str,
         selected_out["hostPackets"] = list(selected["hostPackets"])
     if registry.get("responseContract"):
         selected_out["responseContract"] = str(registry["responseContract"])
-    for key in ("baseline", "racingSet"):
+    for key in ("baseline", "racingSet", "candidateManifest", "strictGuardrails"):
         if key in registry:
             selected_out[key] = registry[key]
     return selected_out
@@ -217,6 +217,76 @@ def evaluation_from_registry(registry: dict[str, Any], name: str,
 def is_tier1_profile(proto: dict[str, Any]) -> bool:
     """Tier-1 analysis is selected by its candidate source, not one issue number."""
     return str(proto.get("candidateSource", "")) == "tier1"
+
+
+def validate_candidate_manifest(actual: dict[str, Any], expected: dict[str, Any]) -> None:
+    """Require the generated bundle to preserve #491's exact candidate identities."""
+    keys = ("id", "baseline", "values", "fileSha256", "semanticSha256")
+
+    def identities(value: dict[str, Any]) -> list[dict[str, Any]]:
+        return [{key: row.get(key) for key in keys} for row in value.get("candidates", [])]
+
+    if int(actual.get("count", -1)) != int(expected.get("count", -2)) \
+            or int(actual.get("seed", -1)) != int(expected.get("seed", -2)) \
+            or identities(actual) != identities(expected):
+        raise ValueError("candidate manifest drifted from the committed #491 identities")
+
+
+def validate_audit_finalist_set(path: Path, protocol_path: Path, registry: dict[str, Any],
+                                candidate_manifest: dict[str, Any], wanted: list[str],
+                                out: Path) -> dict[str, Any]:
+    """Bind the one sealed audit to the committed Layer-3 promotion receipt."""
+    audit = registry["audit"]
+    expected_path = (REPO / str(audit["finalistSetPath"])).resolve()
+    if path.resolve() != expected_path or out.resolve() != Path(str(audit["auditOutput"])).resolve():
+        raise ValueError("sealed audit paths do not match the frozen invocation")
+    packet = read_json(path)
+    required = set(audit["finalistSetSchema"]["required"])
+    if not required.issubset(packet) or int(packet.get("schemaVersion", 0)) != 1 \
+            or int(packet.get("issue", 0)) != int(registry["issue"]):
+        raise ValueError("sealed audit finalist set is malformed")
+    if packet["protocolSha256"] != file_sha256(protocol_path) \
+            or packet["candidateManifestSha256"] != file_sha256(
+                REPO / str(registry["candidateManifest"])):
+        raise ValueError("sealed audit finalist-set inputs drifted")
+    decisions_path = REPO / str(packet["layer3Decisions"])
+    if not decisions_path.is_file() \
+            or packet["layer3DecisionsSha256"] != file_sha256(decisions_path):
+        raise ValueError("sealed audit Layer-3 decisions are missing or stale")
+    decisions = read_json(decisions_path)
+    finalists = [str(value) for value in packet.get("finalists", [])]
+    if decisions.get("evaluation") != "layer3" or decisions.get("promoted") != finalists \
+            or not 1 <= len(finalists) <= int(registry["finalistBar"]["maximumFinalists"]):
+        raise ValueError("sealed audit finalists do not equal the Layer-3 promotions")
+    promoted_rows = {str(row["id"]): row for row in decisions.get("decisions", [])}
+    if any(not promoted_rows.get(candidate_id, {}).get("strongBreadth", {}).get("clear")
+           for candidate_id in finalists):
+        raise ValueError("sealed audit finalist did not clear strong breadth")
+    baseline = str(packet.get("baseline", ""))
+    if baseline != str(registry["baseline"]) or wanted != [baseline, *finalists]:
+        raise ValueError("sealed audit --only is not the exact frozen candidate set")
+    validate_candidate_manifest(candidate_manifest,
+                                read_json(REPO / str(registry["candidateManifest"])))
+    known_candidates = {str(row["id"]) for row in candidate_manifest["candidates"]}
+    if baseline not in known_candidates or baseline in finalists \
+            or len(finalists) != len(set(finalists)) \
+            or any(candidate_id not in known_candidates for candidate_id in finalists):
+        raise ValueError("sealed audit finalist is not in the frozen candidate manifest")
+    return packet
+
+
+def create_audit_receipt(out: Path, finalist_set: Path, packet: dict[str, Any],
+                         protocol_path: Path) -> None:
+    receipt = out / "audit-invocation.json"
+    if receipt.exists() or any((out / candidate_id).exists()
+                               for candidate_id in [packet["baseline"], *packet["finalists"]]):
+        raise ValueError("sealed audit invocation receipt already exists")
+    value = {"issue": int(packet["issue"]), "protocolSha256": file_sha256(protocol_path),
+             "finalistSetSha256": file_sha256(finalist_set),
+             "baseline": packet["baseline"], "finalists": packet["finalists"]}
+    with receipt.open("x", encoding="utf-8") as handle:
+        json.dump(value, handle, indent=2, sort_keys=True)
+        handle.write("\n")
 
 
 def input_parts(proto: dict[str, Any], identity: dict[str, Any], candidate: dict[str, Any],
@@ -809,18 +879,20 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     }
     dump(input_path, {"inputHash": digest, "parts": parts})
     t0 = time.perf_counter()
+
+    def copy_inherited(kind: str, pattern: str) -> None:
+        assert prior_dir is not None
+        destination_dir = cand_dir / kind
+        destination_dir.mkdir(parents=True, exist_ok=True)
+        for index, source_path in enumerate(sorted((prior_dir / kind).glob(pattern))):
+            suffix = ".ndjson" if kind == "landscape" else ".json"
+            destination = destination_dir / f"shard-inherited-{index:02d}{suffix}"
+            if not destination.exists():
+                shutil.copy2(source_path, destination)
+
     if prior_resolved is not None:
         c_plan, l_plan = progressive_plans(prior_resolved, resolved, jobs)
-        assert prior_dir is not None
-        for kind, pattern in (("controls", "shard-*.json"),
-                              ("landscape", "shard-*.ndjson")):
-            destination_dir = cand_dir / kind
-            destination_dir.mkdir(parents=True, exist_ok=True)
-            for index, source in enumerate(sorted((prior_dir / kind).glob(pattern))):
-                suffix = ".ndjson" if kind == "landscape" else ".json"
-                destination = destination_dir / f"shard-inherited-{index:02d}{suffix}"
-                if not destination.exists():
-                    shutil.copy2(source, destination)
+        copy_inherited("controls", "shard-*.json")
     else:
         c_plan = split_span(resolved["controlFirst"], resolved["controlLast"], jobs)
         l_plan = [{"policyFirst": resolved["policyFirst"] + part["policyFirst"],
@@ -870,6 +942,9 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
                           complete_rectangle=complete_rectangle)
     landscape_rows: list[dict[str, Any]] = []
     if not fault:
+        if prior_resolved is not None:
+            copy_inherited("landscape", "shard-*.ndjson")
+
         def land_job(item: tuple[int, dict[str, int]]) -> Path:
             index, spec = item
             dest = cand_dir / "landscape" / f"shard-new-{index:02d}.ndjson"
@@ -894,6 +969,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         launch(godot, jobs, l_plan, land_job)
         landscape_rows = load_landscape_rows(
             sorted((cand_dir / "landscape").glob("shard-*.ndjson")))
+    elif any((cand_dir / "landscape").glob("shard-*.ndjson")):
+        raise RuntimeError(f"landscape rows exist after control early-stop for {cand['id']}")
     fault = fault or landscape_errors_fault(landscape_rows)
     controls = aggregate_controls(control_rows)
     cells = aggregate_cells(landscape_rows, axes) if landscape_rows else {}
@@ -944,7 +1021,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
             extra = bootstrap_breadth(
                 by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes,
                 read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL))),
-                result.get("cells") or {}, n_boot, boot_seed)
+                result.get("cells") or {}, n_boot, boot_seed,
+                baseline_cells=(baseline or {}).get("cells"))
             result["bootstrap"] = {**result["bootstrap"], **extra}
         if baseline and baseline.get("bootstrap"):
             fault = fault or screening_metric_fault(
@@ -954,7 +1032,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     if is_tier1_profile(proto):
         contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
         attach_tier1_fields(result, axes, contract, identity_load(read_json(content)),
-                            landscape_rows, control_rows)
+                            landscape_rows, control_rows,
+                            strict=bool(proto.get("strictGuardrails", False)))
     result["status"] = "early-stop" if fault else "complete"
     result["earlyStop"] = fault or None
     dump(cand_dir / "manifest.json", {k: v for k, v in result.items() if not k.startswith("_")})
@@ -1173,6 +1252,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--evaluation", default="", help="evaluation name within --protocol")
     parser.add_argument("--finalist-audit", action="store_true",
                         help="explicitly unseal a registry evaluation marked finalistAudit")
+    parser.add_argument("--audit-finalists", default="",
+                        help="committed finalist-set receipt required by a sealed audit")
     parser.add_argument("--out", default="/tmp/glassvow-457-f0")
     parser.add_argument("--candidates", default="")
     parser.add_argument("--count", type=int, default=32)
@@ -1189,6 +1270,8 @@ def main() -> int:
     args = parse_args()
     if args.self_test:
         return self_test()
+    if args.finalist_audit and args.fresh:
+        raise ValueError("sealed audit forbids --fresh and any second data-bearing invocation")
     out = Path(args.out)
     prepare_out(out, args.fresh)
     contract = load_contract()
@@ -1230,6 +1313,9 @@ def main() -> int:
     seed = int(proto.get("candidateSeed") or args.seed)
     source = str(proto.get("candidateSource") or "doe")
     manifest = ensure_candidates(doe_path, count, seed, source)
+    if proto.get("candidateManifest"):
+        validate_candidate_manifest(
+            manifest, read_json(REPO / str(proto["candidateManifest"])))
     identity["searchSpaceSha256"] = str(manifest.get("registryIdentity", {}).get("fileSha256", identity["searchSpaceSha256"]))
     if args.summarise_only:
         rows = [read_json(out / row["id"] / "manifest.json")
@@ -1252,6 +1338,14 @@ def main() -> int:
     baseline_ids = [row["id"] for row in manifest["candidates"] if row.get("baseline")]
     if len(baseline_ids) != 1: raise ValueError("candidate manifest must identify exactly one baseline")
     baseline_id = baseline_ids[0]; names = [args.replay] if args.replay else (wanted or [row["id"] for row in manifest["candidates"]])
+    if args.finalist_audit:
+        if not args.audit_finalists or args.replay or args.inherit or not wanted:
+            raise ValueError("sealed audit requires its finalist set and exact --only invocation")
+        finalist_path = Path(args.audit_finalists)
+        finalist_packet = validate_audit_finalist_set(
+            finalist_path, Path(args.protocol), read_json(Path(args.protocol)),
+            manifest, wanted, out)
+        create_audit_receipt(out, finalist_path, finalist_packet, Path(args.protocol))
     by_id = {row["id"]: row for row in manifest["candidates"]}; baseline: dict[str, Any] | None = None
     if baseline_id not in names and (out / baseline_id / "manifest.json").is_file(): baseline = attach_raw(read_json(out / baseline_id / "manifest.json"), out / baseline_id)
     ordered = [baseline_id] + [name for name in names if name != baseline_id] if baseline_id in names else names
