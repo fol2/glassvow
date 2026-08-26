@@ -13,6 +13,7 @@ REPO = Path(__file__).resolve().parents[1]
 CONTRACT_REL = "docs/balance/421-content-search-seeds-v1.json"
 SPACE_REL = "docs/balance/421-content-search-space-v1.json"
 LIVE_REL = "content/full-content.json"
+MOBS_REL = "content/mob-overrides.json"
 DRIVER_RELS = (
     "tools/balance_sim.gd",
     "tools/balance_sweep.gd",
@@ -87,6 +88,9 @@ def _named_bands(contract: dict[str, Any]) -> dict[str, tuple[int, int]]:
         bands[name] = _band_span(stage["seeds"])
         if "holdout" in stage:
             bands[f"{name}-holdout"] = _band_span(stage["holdout"])
+    unused = contract.get("tier2", {}).get("unused")
+    if unused:
+        bands[str(unused["id"])] = _band_span(unused)
     return bands
 
 
@@ -127,6 +131,19 @@ def validate_contract(contract: dict[str, Any]) -> None:
         if int(tier1[key]) in {int(development["f0PolicyRoot"]), int(development["f1PolicyRoot"]),
                                int(development["miniCemRoot"])}:
             raise ValueError(f"tier1.{key} overlaps a #454 development root")
+    prior_roots = exam_roots | {int(development["f0PolicyRoot"]), int(development["f1PolicyRoot"]),
+                                int(development["miniCemRoot"]), int(tier1["f0PolicyRoot"]),
+                                int(tier1["f1PolicyRoot"]), int(tier1["miniCemRoot"])}
+    tier2 = contract["tier2"]
+    for key, expected in (("f0PolicyRoot", 7454), ("f1PolicyRoot", 8454), ("miniCemRoot", 9454),
+                          ("profileCensusRoot", 7354)):
+        if int(tier2[key]) != expected:
+            raise ValueError(f"tier2.{key} must be {expected}")
+        if int(tier2[key]) in prior_roots:
+            raise ValueError(f"tier2.{key} overlaps a prior exam or development root")
+    unused = _band_span(tier2["unused"])
+    if unused != (13400, 13999):
+        raise ValueError("tier2 unused band must remain 13400–13999")
     bands = _named_bands(contract)
     unique_spans: dict[tuple[int, int], list[str]] = {}
     for name, span in bands.items():
@@ -209,13 +226,33 @@ def check_invocation(contract: dict[str, Any], stage: str, seed_first: int, seed
     return ""
 
 
-def catalogue_identity(content_path: Path, space_path: Path, repo: Path = REPO) -> dict[str, str]:
+def resolve_mobs_path(candidate: dict[str, Any] | None = None, bundle: Path | None = None,
+                      repo: Path = REPO) -> Path:
+    if candidate:
+        raw = candidate.get("mobsPath") or candidate.get("mobs")
+        if raw:
+            return Path(str(raw))
+        ident = str(candidate.get("id", ""))
+        if bundle is not None and ident:
+            sibling = bundle / ident / "mob-overrides.json"
+            if sibling.is_file():
+                return sibling
+    return repo / MOBS_REL
+
+
+def catalogue_identity(content_path: Path, space_path: Path, repo: Path = REPO,
+                       mobs_path: Path | None = None) -> dict[str, str]:
+    mobs = Path(mobs_path) if mobs_path is not None else repo / MOBS_REL
     return {
         "contentPath": str(content_path),
         "contentFileSha256": file_sha256(content_path),
         "contentSemanticSha256": semantic_sha256(content_path),
+        "mobOverridePath": str(mobs),
+        "mobOverrideFileSha256": file_sha256(mobs),
+        "mobOverrideSemanticSha256": semantic_sha256(mobs),
         "searchSpacePath": str(space_path),
         "searchSpaceSha256": file_sha256(space_path),
+        "seedContractSha256": file_sha256(repo / CONTRACT_REL),
         "driverSha256": driver_sha256(repo),
     }
 
@@ -290,11 +327,57 @@ def self_test() -> int:
     assert check_invocation(contract, "tier1-audit", 8000, 8000, root=3454,
                             sealed_token="tier1-finalist"), (
         "Tier-1 audit must reject the #454 audit band")
+    tier2 = contract["tier2"]
+    assert int(tier2["f0PolicyRoot"]) == 7454
+    assert int(tier2["f1PolicyRoot"]) == 8454
+    assert int(tier2["miniCemRoot"]) == 9454
+    assert int(tier2["profileCensusRoot"]) == 7354
+    assert not check_invocation(contract, "tier2-fingerprint", 12000, 12063)
+    assert not check_invocation(contract, "tier2-profile-census", 12064, 12095, root=7354)
+    assert not check_invocation(contract, "tier2-f0-controls", 12100, 12131, root=7454)
+    assert not check_invocation(contract, "tier2-f0-mini-landscape", 12200, 12207, root=7454)
+    assert not check_invocation(contract, "tier2-f1-racing", 12300, 12599, root=8454)
+    assert not check_invocation(contract, "tier2-mini-cem", 12600, 12639, root=9454,
+                                holdout_first=13000, holdout_last=13039)
+    assert not check_invocation(contract, "tier2-mini-cem-train", 12600, 12999, root=9454,
+                                holdout_first=13000, holdout_last=13399)
+    assert not check_invocation(contract, "tier2-mini-cem-validate", 13000, 13399, root=9454)
+    assert not check_invocation(contract, "tier2-audit", 14000, 14199, root=7454,
+                                sealed_token="tier2-finalist")
+    assert check_invocation(contract, "tier2-fingerprint", 9000, 9063), (
+        "Tier-2 fingerprint must reject the Tier-1 host-fingerprint band")
+    assert check_invocation(contract, "tier2-fingerprint", 12064, 12064), (
+        "Tier-2 fingerprint must reject the profile-census band")
+    assert check_invocation(contract, "tier2-f0-controls", 5000, 5000, root=7454), (
+        "Tier-2 F0 must reject acceptance seed 5000")
+    assert check_invocation(contract, "tier2-f0-controls", 9100, 9100, root=7454), (
+        "Tier-2 F0 must reject the Tier-1 F0 control band")
+    assert check_invocation(contract, "tier2-f0-controls", 12100, 12131, root=3454), (
+        "Tier-2 F0 must reject the Tier-1 policy root")
+    assert check_invocation(contract, "tier2-f0-controls", 13400, 13400, root=7454), (
+        "Tier-2 F0 must reject the unused 13400–13999 band")
+    assert check_invocation(contract, "tier2-profile-census", 12064, 12095, root=7454), (
+        "profile census must reject the Tier-2 F0 policy root")
+    assert check_invocation(contract, "tier2-f1-racing", 12300, 12300, root=215), (
+        "Tier-2 F1 must reject exam policy root 215")
+    assert check_invocation(contract, "tier2-mini-cem", 12600, 12639, root=9454,
+                            holdout_first=5000, holdout_last=5039), (
+        "Tier-2 mini-CEM must reject acceptance holdout 5000")
+    assert check_invocation(contract, "tier2-mini-cem", 12600, 12639, root=9454,
+                            holdout_first=10000, holdout_last=10039), (
+        "Tier-2 mini-CEM must reject the Tier-1 holdout")
+    assert check_invocation(contract, "tier2-audit", 14000, 14000, root=7454), (
+        "Tier-2 audit must stay sealed until a Tier-2 finalist")
+    assert check_invocation(contract, "tier2-audit", 11000, 11000, root=7454,
+                            sealed_token="tier2-finalist"), (
+        "Tier-2 audit must reject the Tier-1 audit band")
     live = REPO / LIVE_REL
     space = REPO / SPACE_REL
     identity = catalogue_identity(live, space)
     assert len(identity["contentFileSha256"]) == 64
     assert identity["contentFileSha256"] != identity["contentSemanticSha256"]
+    assert identity["mobOverrideFileSha256"] != identity["mobOverrideSemanticSha256"]
+    assert identity["mobOverrideSemanticSha256"] == semantic_sha256(REPO / MOBS_REL)
     print("balance seed contract self-test OK")
     return 0
 

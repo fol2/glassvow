@@ -3,6 +3,8 @@ extends RefCounted
 
 const LIVE_FILE: String = "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
 const LIVE_SEMANTIC: String = "38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa"
+const LIVE_MOBS_FILE: String = "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+const LIVE_MOBS_SEMANTIC: String = "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
 
 
 static func run(fails: Array[String]) -> void:
@@ -23,10 +25,24 @@ static func run(fails: Array[String]) -> void:
 			% [LIVE_SEMANTIC, identity.get("contentSemanticSha256", "")])
 	if before != LIVE_FILE:
 		fails.append("balance catalogue: live file SHA expected %s got %s" % [LIVE_FILE, before])
+	if str(identity.get("mobOverrideFileSha256", "")) != LIVE_MOBS_FILE:
+		fails.append("balance catalogue: default mobs file SHA expected %s got %s"
+			% [LIVE_MOBS_FILE, identity.get("mobOverrideFileSha256", "")])
+	if str(identity.get("mobOverrideSemanticSha256", "")) != LIVE_MOBS_SEMANTIC:
+		fails.append("balance catalogue: default mobs semantic SHA expected %s got %s"
+			% [LIVE_MOBS_SEMANTIC, identity.get("mobOverrideSemanticSha256", "")])
+	if str(identity.get("mobOverrideFileSha256", "")) == str(identity.get("mobOverrideSemanticSha256", "")):
+		fails.append("balance catalogue: mobs file and semantic SHA must stay distinct")
+	if str(identity.get("seedContractSha256", "")).length() != 64:
+		fails.append("balance catalogue: seed contract SHA missing")
+	var mobs_before: String = FileAccess.get_sha256(ContentDB.MOB_OVERRIDES_PATH)
 	_check_stage(fails)
 	_check_two_catalogues(fails, before)
+	_check_mobs(fails, mobs_before)
 	if FileAccess.get_sha256(ContentDB.FULL_PATH) != before:
 		fails.append("balance catalogue: live content file changed")
+	if FileAccess.get_sha256(ContentDB.MOB_OVERRIDES_PATH) != mobs_before:
+		fails.append("balance catalogue: live mob-overrides.json changed")
 
 
 static func _check_stage(fails: Array[String]) -> void:
@@ -90,6 +106,34 @@ static func _check_stage(fails: Array[String]) -> void:
 	if not BalanceCatalogue.stage_error({"stage": "tier1-audit", "seed0": 11000, "runs": 200,
 			"rootSeed": 4454, "sealedToken": "tier1-finalist"}).is_empty():
 		fails.append("balance catalogue: Tier-1 finalist token must unseal 11000–11199")
+	if not BalanceCatalogue.stage_error({"stage": "tier2-fingerprint", "seed0": 12000, "runs": 64}).is_empty():
+		fails.append("balance catalogue: Tier-2 fingerprint 12000–12063 must pass")
+	if BalanceCatalogue.stage_error({"stage": "tier2-fingerprint", "seed0": 9000, "runs": 64}).is_empty():
+		fails.append("balance catalogue: Tier-2 fingerprint must reject the Tier-1 band")
+	if BalanceCatalogue.stage_error({"stage": "tier2-f0-controls", "seed0": 5000, "runs": 1,
+			"rootSeed": 7454}).is_empty():
+		fails.append("balance catalogue: Tier-2 F0 must reject acceptance seed 5000")
+	if BalanceCatalogue.stage_error({"stage": "tier2-f0-controls", "seed0": 13400, "runs": 1,
+			"rootSeed": 7454}).is_empty():
+		fails.append("balance catalogue: Tier-2 F0 must reject unused 13400–13999")
+	if not BalanceCatalogue.stage_error({"stage": "tier2-profile-census", "seed0": 12064, "runs": 32,
+			"rootSeed": 7354}).is_empty():
+		fails.append("balance catalogue: profile census 12064–12095 / root 7354 must pass")
+	if BalanceCatalogue.stage_error({"stage": "tier2-profile-census", "seed0": 12064, "runs": 32,
+			"rootSeed": 7454}).is_empty():
+		fails.append("balance catalogue: profile census must reject F0 policy root 7454")
+	if not BalanceCatalogue.stage_error({"stage": "tier2-f0-controls", "seed0": 12100, "runs": 32,
+			"rootSeed": 7454}).is_empty():
+		fails.append("balance catalogue: Tier-2 F0 controls 12100–12131 / root 7454 must pass")
+	if BalanceCatalogue.stage_error({"stage": "tier2-f1-racing", "seed0": 12300, "runs": 1,
+			"rootSeed": 4454}).is_empty():
+		fails.append("balance catalogue: Tier-2 F1 must reject the Tier-1 F1 root")
+	if BalanceCatalogue.stage_error({"stage": "tier2-audit", "seed0": 14000, "runs": 1,
+			"rootSeed": 7454}).is_empty():
+		fails.append("balance catalogue: Tier-2 audit must stay sealed until a Tier-2 finalist")
+	if not BalanceCatalogue.stage_error({"stage": "tier2-audit", "seed0": 14000, "runs": 200,
+			"rootSeed": 8454, "sealedToken": "tier2-finalist"}).is_empty():
+		fails.append("balance catalogue: Tier-2 finalist token must unseal 14000–14199")
 	var missing: Dictionary = BalanceCatalogue.open({"content": "/no/such/glassvow-candidate.json"})
 	if not missing.has("error"):
 		fails.append("balance catalogue: missing candidate path must fail closed")
@@ -145,6 +189,77 @@ static func _check_two_catalogues(fails: Array[String], live_sha: String) -> voi
 	var live: ContentDB = ContentDB.load_full(false)
 	if live == null or int(float(str(live.player.get("maxHp", 0)))) == int(float(str(left_db.player.get("maxHp", 0)))):
 		fails.append("balance catalogue: live catalogue was replaced by a candidate")
+
+
+static func _check_mobs(fails: Array[String], live_sha: String) -> void:
+	var missing: Dictionary = BalanceCatalogue.open({"mobs": "/no/such/glassvow-mobs.json"})
+	if not missing.has("error"):
+		fails.append("balance catalogue: missing --mobs must fail closed")
+	var bad_path: String = "user://balance-501-malformed.json"
+	var bad_file: FileAccess = FileAccess.open(bad_path, FileAccess.WRITE)
+	if bad_file != null:
+		bad_file.store_string("not-json")
+		bad_file.close()
+	var malformed: Dictionary = BalanceCatalogue.open({"mobs": bad_path})
+	if not malformed.has("error"):
+		fails.append("balance catalogue: malformed --mobs must fail closed")
+	var content: ContentDB = ContentDB.load_full(false)
+	if content == null:
+		fails.append("balance catalogue: live content missing for mob tests")
+		return
+	var sporeling: Dictionary = content.enemy(&"sporeling").duplicate(true)
+	var incomplete_path: String = "user://balance-501-incomplete.json"
+	_write_json(incomplete_path, {"sporeling": {"hp": [1, 1]}})
+	var incomplete: Dictionary = BalanceCatalogue.open({"mobs": incomplete_path})
+	if not incomplete.has("error"):
+		fails.append("balance catalogue: incomplete --mobs must fail closed")
+	var unknown_path: String = "user://balance-501-unknown.json"
+	_write_json(unknown_path, {"notAMob": sporeling})
+	var unknown: Dictionary = BalanceCatalogue.open({"mobs": unknown_path})
+	if not unknown.has("error"):
+		fails.append("balance catalogue: unknown --mobs id must fail closed")
+	var left_row: Dictionary = sporeling.duplicate(true)
+	var right_row: Dictionary = sporeling.duplicate(true)
+	left_row["hp"] = [1, 1]
+	right_row["hp"] = [200, 200]
+	var left_path: String = "user://balance-501-mobs-left.json"
+	var right_path: String = "user://balance-501-mobs-right.json"
+	_write_json(left_path, {"sporeling": left_row})
+	_write_json(right_path, {"sporeling": right_row})
+	var left: Dictionary = BalanceCatalogue.open({"mobs": left_path})
+	var right: Dictionary = BalanceCatalogue.open({"mobs": right_path})
+	if left.has("error") or right.has("error"):
+		fails.append("balance catalogue: valid --mobs open failed: %s / %s"
+			% [left.get("error", ""), right.get("error", "")])
+		return
+	var left_id_v: Variant = left["identity"]
+	var right_id_v: Variant = right["identity"]
+	if typeof(left_id_v) != TYPE_DICTIONARY or typeof(right_id_v) != TYPE_DICTIONARY:
+		fails.append("balance catalogue: --mobs identity missing")
+		return
+	var left_id: Dictionary = left_id_v
+	var right_id: Dictionary = right_id_v
+	if str(left_id.get("mobOverrideFileSha256", "")) == str(right_id.get("mobOverrideFileSha256", "")):
+		fails.append("balance catalogue: two --mobs files produced the same file SHA")
+	if str(left_id.get("mobOverrideFileSha256", "")) == live_sha \
+			or str(right_id.get("mobOverrideFileSha256", "")) == live_sha:
+		fails.append("balance catalogue: candidate mob SHA collapsed onto the live file")
+	if str(left_id.get("mobOverrideFileSha256", "")) != FileAccess.get_sha256(left_path):
+		fails.append("balance catalogue: left --mobs did not bind its file SHA")
+	var left_db: ContentDB = BalanceCatalogue.load_prepared(left)
+	var right_db: ContentDB = BalanceCatalogue.load_prepared(right)
+	if left_db == null or right_db == null:
+		fails.append("balance catalogue: candidate mob ContentDB was null")
+		return
+	var left_hp: Variant = left_db.enemy(&"sporeling").get("hp")
+	var right_hp: Variant = right_db.enemy(&"sporeling").get("hp")
+	if left_hp == right_hp:
+		fails.append("balance catalogue: two --mobs candidates observed one sporeling")
+	var live: ContentDB = ContentDB.load_full(false)
+	if live == null or live.enemy(&"sporeling").get("hp") == left_hp:
+		fails.append("balance catalogue: live enemies were replaced by a --mobs candidate")
+	if FileAccess.get_sha256(ContentDB.MOB_OVERRIDES_PATH) != live_sha:
+		fails.append("balance catalogue: live mob-overrides.json changed during candidate --mobs")
 
 
 static func _write_json(path: String, value: Dictionary) -> void:

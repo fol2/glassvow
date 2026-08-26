@@ -1,0 +1,29 @@
+{
+  "chosenWorkers": 8,
+  "drift": false,
+  "identityFaults": [],
+  "issue": 501,
+  "runs": [
+    {
+      "fingerprintHash": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+      "qualified": true,
+      "rowsPerSecond": 69.366,
+      "wallSeconds": 3.691,
+      "workers": 4
+    },
+    {
+      "fingerprintHash": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+      "qualified": true,
+      "rowsPerSecond": 64.127,
+      "wallSeconds": 3.992,
+      "workers": 6
+    },
+    {
+      "fingerprintHash": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+      "qualified": true,
+      "rowsPerSecond": 83.84,
+      "wallSeconds": 3.053,
+      "workers": 8
+    }
+  ]
+}

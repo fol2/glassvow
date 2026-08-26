@@ -40,6 +40,7 @@ from balance_f0_tier1 import (  # noqa: E402
 from balance_seed_contract import (  # noqa: E402
     CONTRACT_REL,
     LIVE_REL,
+    MOBS_REL,
     REPO,
     SPACE_REL,
     canonical_json_bytes,
@@ -48,6 +49,7 @@ from balance_seed_contract import (  # noqa: E402
     file_sha256,
     load_contract,
     read_json,
+    resolve_mobs_path,
     sha256_bytes,
 )
 
@@ -66,7 +68,7 @@ TOOL_ID = "glassvow-balance-f0"
 MARKER = f".{TOOL_ID}"
 VOLATILE = frozenset({
     "wallSeconds", "rowsPerSecond", "startedAt", "finishedAt", "hostname",
-    "out", "contentPath", "searchSpacePath",
+    "out", "contentPath", "searchSpacePath", "mobOverridePath",
 })
 HOST_PACKETS = (
     "docs/balance/data/456/m1-max.json",
@@ -298,7 +300,7 @@ def input_parts(proto: dict[str, Any], identity: dict[str, Any], candidate: dict
                       "semanticSha256": candidate["semanticSha256"]},
         "identity": {k: identity[k] for k in
                      ("contentFileSha256", "contentSemanticSha256", "searchSpaceSha256",
-                      "driverSha256")},
+                      "driverSha256", "mobOverrideFileSha256", "mobOverrideSemanticSha256")},
         "seedRegistrySha256": identity["seedRegistrySha256"],
         "godotVersion": godot,
         "commit": commit,
@@ -730,17 +732,20 @@ def godot_sweep(godot: str, flags: list[str], dest: Path, log: Path) -> None:
         raise RuntimeError(f"balance_sweep wrote no output: {dest}")
 
 
-def controls_complete(path: Path, expected: int, content_sha: str) -> bool:
+def controls_complete(path: Path, expected: int, content_sha: str,
+                      mobs_sha: str = "") -> bool:
     if not path.is_file():
         return False
     blob = read_json(path)
     runs = blob.get("runs") if isinstance(blob, dict) else None
     man = blob.get("manifest", {}) if isinstance(blob, dict) else {}
     return isinstance(runs, list) and len(runs) == expected \
-        and str(man.get("contentFileSha256", "")) == content_sha
+        and str(man.get("contentFileSha256", "")) == content_sha \
+        and (not mobs_sha or str(man.get("mobOverrideFileSha256", "")) == mobs_sha)
 
 
-def landscape_complete(path: Path, expected: int, content_sha: str) -> bool:
+def landscape_complete(path: Path, expected: int, content_sha: str,
+                       mobs_sha: str = "") -> bool:
     if not path.is_file():
         return False
     with path.open(encoding="utf-8") as handle:
@@ -753,7 +758,8 @@ def landscape_complete(path: Path, expected: int, content_sha: str) -> bool:
     except json.JSONDecodeError:
         return False
     man = header.get("manifest", header) if isinstance(header, dict) else {}
-    return str(man.get("contentFileSha256", "")) == content_sha
+    return str(man.get("contentFileSha256", "")) == content_sha \
+        and (not mobs_sha or str(man.get("mobOverrideFileSha256", "")) == mobs_sha)
 
 
 def load_control_rows(paths: list[Path]) -> list[dict[str, Any]]:
@@ -830,7 +836,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     content = doe / cand["id"] / "full-content.json"
     if file_sha256(content) != cand["fileSha256"]:
         raise ValueError(f"{cand['id']} file SHA drifted")
-    cat = catalogue_identity(content, REPO / SPACE_REL)
+    mobs = resolve_mobs_path(cand, doe)
+    cat = catalogue_identity(content, REPO / SPACE_REL, mobs_path=mobs)
     cat["searchSpaceSha256"] = str(cand.get("searchSpaceSha256", cat["searchSpaceSha256"])); cat["seedRegistrySha256"] = file_sha256(REPO / CONTRACT_REL)
     resolved = evaluation_spec(proto)
     prior_dir: Path | None = None
@@ -913,7 +920,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         dest = cand_dir / "controls" / f"shard-new-{index:02d}.json"
         dest.parent.mkdir(parents=True, exist_ok=True)
         expected = len(resolved["controlArms"]) * 4 * spec["seeds"]
-        if resume and controls_complete(dest, expected, cand["fileSha256"]):
+        if resume and controls_complete(dest, expected, cand["fileSha256"],
+                                        cat["mobOverrideFileSha256"]):
             return dest
         tmp = dest.with_suffix(".json.tmp")
         godot_sweep(godot, [
@@ -921,11 +929,12 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
             f"--arms={','.join(str(arm) for arm in resolved['controlArms'])}",
             f"--rootSeed={resolved['controlRoot']}",
             *stage_args(resolved["controlStage"], proto.get("sealedToken")),
-            f"--content={content}",
+            f"--content={content}", f"--mobs={mobs}",
             f"--out={tmp}",
         ], tmp, dest.with_suffix(".log"))
         tmp.replace(dest)
-        if not controls_complete(dest, expected, cand["fileSha256"]):
+        if not controls_complete(dest, expected, cand["fileSha256"],
+                                 cat["mobOverrideFileSha256"]):
             raise RuntimeError(f"control shard incomplete: {dest}")
         return dest
 
@@ -950,7 +959,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
             dest = cand_dir / "landscape" / f"shard-new-{index:02d}.ndjson"
             dest.parent.mkdir(parents=True, exist_ok=True)
             expected = spec["policyCount"] * 4 * spec["seeds"]
-            if resume and landscape_complete(dest, expected, cand["fileSha256"]):
+            if resume and landscape_complete(dest, expected, cand["fileSha256"],
+                                            cat["mobOverrideFileSha256"]):
                 return dest
             tmp = Path(str(dest) + ".tmp")
             godot_sweep(godot, [
@@ -959,10 +969,11 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
                 f"--policyCount={spec['policyCount']}",
                 f"--seeds={spec['seeds']}", f"--seed0={spec['seed0']}",
                 *stage_args(resolved["landscapeStage"], proto.get("sealedToken")),
-                f"--content={content}", f"--out={tmp}",
+                f"--content={content}", f"--mobs={mobs}", f"--out={tmp}",
             ], tmp, dest.with_suffix(".log"))
             tmp.replace(dest)
-            if not landscape_complete(dest, expected, cand["fileSha256"]):
+            if not landscape_complete(dest, expected, cand["fileSha256"],
+                                     cat["mobOverrideFileSha256"]):
                 raise RuntimeError(f"landscape shard incomplete: {dest}")
             return dest
 
@@ -1140,10 +1151,14 @@ def self_test() -> int:
         "contentFileSha256": "a" * 64, "contentSemanticSha256": "b" * 64,
         "searchSpaceSha256": "c" * 64, "driverSha256": "d" * 64,
         "seedRegistrySha256": "e" * 64,
+        "mobOverrideFileSha256": "m" * 64, "mobOverrideSemanticSha256": "n" * 64,
     }, {"id": "c001", "values": {"flareDamage": 9}, "fileSha256": "f" * 64,
         "semanticSha256": "g" * 64}, "4.7.2.stable", "deadbeef")
     digest = input_hash(parts)
     parts["identity"]["contentFileSha256"] = "0" * 64
+    assert input_hash(parts) != digest
+    parts["identity"]["contentFileSha256"] = "a" * 64
+    parts["identity"]["mobOverrideFileSha256"] = "1" * 64
     assert input_hash(parts) != digest
     row = {"aspect": "duskblade", "vow": 0, "deck": 20, "outcome": "win", "policyIndex": 0,
            "seed": 6100, "fights": [{"shatters": 2, "smolderKills": 0}]}
@@ -1297,6 +1312,7 @@ def main() -> int:
         proto["sealedToken"] = seal
     boot_n = int(args.boot if args.boot is not None else proto.get("bootstrap", 1000))
     live, live_sha = REPO / LIVE_REL, file_sha256(REPO / LIVE_REL)
+    live_mobs, live_mobs_sha = REPO / MOBS_REL, file_sha256(REPO / MOBS_REL)
     identity = catalogue_identity(live, REPO / SPACE_REL)
     identity["seedRegistrySha256"] = file_sha256(REPO / CONTRACT_REL)
     commit = git_head()
@@ -1362,6 +1378,8 @@ def main() -> int:
         results.append(row)
         if file_sha256(live) != live_sha:
             raise RuntimeError("live content/full-content.json changed during F0")
+        if file_sha256(live_mobs) != live_mobs_sha:
+            raise RuntimeError("live content/mob-overrides.json changed during F0")
     if args.replay:
         print(json.dumps({"id": args.replay, "observationsSha256": results[0]["observationsSha256"],
                           "status": results[0]["status"]}, sort_keys=True))

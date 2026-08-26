@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "421-content-search-seeds-v1",
-  "description": "Development seed and policy-root contract for #454, extended with the sealed #489 Tier-1 namespace. The frozen #215/#216 exam is unchanged. Mini-landscapes must reuse the frozen #215 axes; never re-fit per candidate. Prior #454 bands remain occupied and fail-closed against the new bands.",
+  "description": "Development seed and policy-root contract for #454, extended with the sealed #489 Tier-1 namespace and the #501 Tier-2 namespace. The frozen #215/#216 exam is unchanged. Mini-landscapes must reuse the frozen #215 axes; never re-fit per candidate. Prior development, audit, acceptance and reserve bands remain occupied and fail-closed against the new bands. 13400–13999 stays unused.",
   "engine": "4.7.2.stable",
   "digestPin": {
     "seed": 1000,
@@ -30,6 +30,13 @@
     "f0PolicyRoot": 3454,
     "f1PolicyRoot": 4454,
     "miniCemRoot": 6454
+  },
+  "tier2": {
+    "f0PolicyRoot": 7454,
+    "f1PolicyRoot": 8454,
+    "miniCemRoot": 9454,
+    "profileCensusRoot": 7354,
+    "unused": {"id": "tier2-unused", "first": 13400, "last": 13999}
   },
   "stages": {
     "fingerprint": {
@@ -99,6 +106,44 @@
       "seeds": {"first": 11000, "last": 11199},
       "roots": [3454, 4454, 6454],
       "sealedUntil": "tier1-finalist"
+    },
+    "tier2-fingerprint": {
+      "seeds": {"first": 12000, "last": 12063},
+      "roots": []
+    },
+    "tier2-profile-census": {
+      "seeds": {"first": 12064, "last": 12095},
+      "roots": [7354]
+    },
+    "tier2-f0-controls": {
+      "seeds": {"first": 12100, "last": 12131},
+      "roots": [7454]
+    },
+    "tier2-f0-mini-landscape": {
+      "seeds": {"first": 12200, "last": 12207},
+      "roots": [7454]
+    },
+    "tier2-f1-racing": {
+      "seeds": {"first": 12300, "last": 12599},
+      "roots": [8454]
+    },
+    "tier2-mini-cem": {
+      "seeds": {"first": 12600, "last": 12999},
+      "holdout": {"first": 13000, "last": 13399},
+      "roots": [9454]
+    },
+    "tier2-mini-cem-train": {
+      "seeds": {"first": 12600, "last": 12999},
+      "roots": [9454]
+    },
+    "tier2-mini-cem-validate": {
+      "seeds": {"first": 13000, "last": 13399},
+      "roots": [9454]
+    },
+    "tier2-audit": {
+      "seeds": {"first": 14000, "last": 14199},
+      "roots": [7454, 8454, 9454],
+      "sealedUntil": "tier2-finalist"
     },
     "exam": {
       "seedBands": [

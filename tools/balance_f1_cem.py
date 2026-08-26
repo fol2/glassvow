@@ -14,10 +14,12 @@ from typing import Any
 from balance_f0 import REPO, git_head, host_identity, qualified_packet, require_godot
 from balance_seed_contract import (
     CONTRACT_REL,
+    MOBS_REL,
     check_invocation,
     driver_sha256,
     file_sha256,
     load_contract,
+    resolve_mobs_path,
 )
 
 TOOL_ID = "glassvow-balance-f1-cem-v1"
@@ -84,7 +86,7 @@ def _seed_packet(path: Path) -> dict[str, Any]:
 
 
 def cem_output_complete(path: Path, candidate_sha: str, seed_packet_sha: str,
-                        spec: dict[str, int], island: int) -> bool:
+                        spec: dict[str, int], island: int, mobs_sha: str = "") -> bool:
     if not path.is_file():
         return False
     manifest: dict[str, Any] | None = None
@@ -112,6 +114,7 @@ def cem_output_complete(path: Path, candidate_sha: str, seed_packet_sha: str,
         "samplerRoot": spec["policyRoot"],
     }
     return str(manifest.get("contentFileSha256")) == candidate_sha \
+        and (not mobs_sha or str(manifest.get("mobOverrideFileSha256", "")) == mobs_sha) \
         and str(manifest.get("seedPacketSha256")) == seed_packet_sha \
         and str(manifest.get("stage")) == "f1-mini-cem" \
         and all(int(manifest.get(key, -1)) == value for key, value in expected.items()) \
@@ -120,7 +123,8 @@ def cem_output_complete(path: Path, candidate_sha: str, seed_packet_sha: str,
 
 
 def _command(godot: str, content: Path, seeds: Path, out: Path,
-             seed_packet_sha: str, spec: dict[str, int], island: int) -> list[str]:
+             seed_packet_sha: str, spec: dict[str, int], island: int,
+             mobs: Path) -> list[str]:
     return [
         godot, "--headless", "-s", "res://tools/balance_cem.gd", "--",
         f"--island={island}", f"--seedsJson={seeds}", f"--out={out}",
@@ -130,7 +134,7 @@ def _command(godot: str, content: Path, seeds: Path, out: Path,
         f"--holdoutCount={spec['holdoutCount']}", f"--rootSeed={spec['root']}",
         f"--samplerRoot={spec['policyRoot']}", "--stage=f1-mini-cem",
         f"--seedPacketSha256={seed_packet_sha}",
-        f"--content={content}",
+        f"--content={content}", f"--mobs={mobs}",
     ]
 
 
@@ -151,6 +155,8 @@ def run(godot: str, jobs: int, bundle_dir: Path, seeds_dir: Path, out: Path,
     godot_version = require_godot(godot)
     host = host_identity(jobs)
     packet = qualified_packet(host, godot_version)
+    live_mobs = REPO / MOBS_REL
+    live_mobs_sha = file_sha256(live_mobs)
 
     tasks: list[tuple[str, int]] = [
         (candidate_id, island) for candidate_id in candidate_ids for island in range(spec["islands"])
@@ -160,6 +166,8 @@ def run(godot: str, jobs: int, bundle_dir: Path, seeds_dir: Path, out: Path,
         candidate_id, island = task
         candidate = by_id[candidate_id]
         content = bundle_dir / candidate_id / "full-content.json"
+        mobs = resolve_mobs_path(candidate, bundle_dir)
+        mobs_sha = file_sha256(mobs)
         seed_packet = seeds_dir / f"{candidate_id}-seeds.json"
         seed_packet_sha = file_sha256(seed_packet)
         if file_sha256(content) != str(candidate["fileSha256"]):
@@ -167,19 +175,19 @@ def run(godot: str, jobs: int, bundle_dir: Path, seeds_dir: Path, out: Path,
         destination = out / candidate_id / f"island-{island:02d}.ndjson"
         destination.parent.mkdir(parents=True, exist_ok=True)
         if cem_output_complete(destination, str(candidate["fileSha256"]),
-                               seed_packet_sha, spec, island):
+                               seed_packet_sha, spec, island, mobs_sha):
             return candidate_id, island, file_sha256(destination)
         temporary = Path(str(destination) + ".tmp")
         temporary.unlink(missing_ok=True)
         command = _command(godot, content, seed_packet, temporary,
-                           seed_packet_sha, spec, island)
+                           seed_packet_sha, spec, island, mobs)
         log = destination.with_suffix(".log")
         with log.open("w", encoding="utf-8") as handle:
             handle.write(" ".join(command) + "\n")
             process = subprocess.run(command, cwd=REPO, stdout=handle,
                                      stderr=subprocess.STDOUT, check=False)
         if process.returncode != 0 or not cem_output_complete(
-                temporary, str(candidate["fileSha256"]), seed_packet_sha, spec, island):
+                temporary, str(candidate["fileSha256"]), seed_packet_sha, spec, island, mobs_sha):
             raise RuntimeError(f"mini-CEM failed for {candidate_id} island {island}; see {log}")
         temporary.replace(destination)
         return candidate_id, island, file_sha256(destination)
@@ -189,6 +197,8 @@ def run(godot: str, jobs: int, bundle_dir: Path, seeds_dir: Path, out: Path,
         for candidate_id, island, digest in pool.map(worker, tasks):
             raw[candidate_id][f"island-{island:02d}.ndjson"] = digest
             print(f"{candidate_id} island {island:02d} complete", flush=True)
+    if file_sha256(live_mobs) != live_mobs_sha:
+        raise RuntimeError("live content/mob-overrides.json changed during mini-CEM")
     manifest = {
         "tool": TOOL_ID, "issue": 458, "commit": git_head(),
         "godotVersion": godot_version, "host": host,
