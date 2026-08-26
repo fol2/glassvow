@@ -1,0 +1,3313 @@
+{
+  "candidate": "t2-c000",
+  "command": "godot --headless --path . -s res://tools/balance_sweep.gd -- --mode=controls --seeds=4 --seed0=12100 --arms=1 --rootSeed=7454 --stage=tier2-f0-controls --content=CANDIDATE/full-content.json --mobs=CANDIDATE/mob-overrides.json --out=OUT.json",
+  "driverSha256": "9ed92fcafb6cba25a80f0067236d2f0001e5d70c356facc718056337de2d71ec",
+  "evaluation": "f0",
+  "expectedOutcomes": [
+    "win",
+    "win",
+    "win",
+    "win"
+  ],
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "hostFingerprint": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+  "issue": 503,
+  "observationsSha256": "91e58450e16bbf20b5f6d2e774265b6557a725a4f89748eac7a8ccbfbedebd51",
+  "protocol": "docs/balance/503-f0-protocol-v1.json",
+  "replayOf": "t2-c000 arm 1 duskblade vow 0 seeds 12100-12103",
+  "root": 7454,
+  "rows": [
+    {
+      "arm": 1,
+      "aspect": "duskblade",
+      "candidateFileSha256": "07750bb9aee3b15ffea1e82f06371dd27968973e25263c197ce60664c1845372",
+      "candidateId": "t2-c000",
+      "candidateSemanticSha256": "2918420e3a40b42f570b431cc1fd7b6d483d2610ce1b7f36b3b7bf918ef256c1",
+      "commit": "a6e9f6472618ebc3bd3842e150a90048bc274bd8",
+      "contentFileSha256": "5b3504f133a7e180f20426a8f28c5f2685c9d00d4e3c93c39a432a1a859ea448",
+      "contentSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "deck": 43,
+      "deckIds": [
+        "strike",
+        "strike",
+        "strike",
+        "strike",
+        "defend",
+        "defend",
+        "eclipseSlash",
+        "chisel",
+        "firstSpark",
+        "quickSlash",
+        "uppercut",
+        "bloodRite",
+        "uppercut",
+        "executioner",
+        "heavyBlow",
+        "heavyBlow",
+        "bloodRite",
+        "oblivionStrike",
+        "deflect",
+        "limitBreak",
+        "preparation",
+        "bloodRite",
+        "regrowth",
+        "bastion",
+        "heavyBlow",
+        "ironSkin",
+        "hex",
+        "oblivionStrike",
+        "preparation",
+        "bastion",
+        "regrowth",
+        "virulence",
+        "warCry",
+        "deflect",
+        "sidestep",
+        "fortify",
+        "preparation",
+        "agility",
+        "preparation",
+        "empower",
+        "guardedStrike",
+        "warCry",
+        "preparation"
+      ],
+      "driverSha256": "9ed92fcafb6cba25a80f0067236d2f0001e5d70c356facc718056337de2d71ec",
+      "effectiveCatalogueSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "error": "",
+      "fights": [
+        {
+          "act": 1,
+          "enemies": [
+            "sporeling",
+            "sporeling",
+            "sporeling"
+          ],
+          "hpLost": 7,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "sporeling",
+            "sporeling"
+          ],
+          "hpLost": 6,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "waylayer",
+            "sporeling"
+          ],
+          "hpLost": 3,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [
+              {
+                "amount": 2,
+                "enemy": "waylayer",
+                "move": "trick",
+                "status": "frail",
+                "target": "player"
+              }
+            ],
+            "encounters": {
+              "waylayer": 1
+            },
+            "heal": [],
+            "moves": {
+              "waylayer": {
+                "trick": 1
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "waylayer",
+                "kind": "act",
+                "move": "trick",
+                "turn": 1
+              },
+              {
+                "amount": 3,
+                "blocked": 3,
+                "enemy": "waylayer",
+                "kind": "attack",
+                "move": "trick",
+                "turn": 1
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "alphaFang"
+          ],
+          "hpLost": 20,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 4
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "waylayer"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "waylayer": 1
+            },
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 1
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "thornling",
+            "thornling"
+          ],
+          "hpLost": 7,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "rootheart"
+          ],
+          "hpLost": 30,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 3,
+          "smolderKills": 0,
+          "turns": 6
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 1
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "drownedOne",
+            "voltEel"
+          ],
+          "hpLost": 11,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "drownedOne",
+            "voltEel"
+          ],
+          "hpLost": 3,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "tidecaller",
+            "voltEel"
+          ],
+          "hpLost": 3,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker",
+            "mirelurker"
+          ],
+          "hpLost": 24,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "shellback"
+          ],
+          "hpLost": 5,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "shellback": 1
+            },
+            "heal": [],
+            "moves": {
+              "shellback": {
+                "snap": 1
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "shellback",
+                "kind": "act",
+                "move": "snap",
+                "turn": 1
+              },
+              {
+                "amount": 2,
+                "blocked": 8,
+                "enemy": "shellback",
+                "kind": "attack",
+                "move": "snap",
+                "turn": 1
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "deepmaw"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "leviathan"
+          ],
+          "hpLost": 45,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 3,
+          "smolderKills": 0,
+          "turns": 6
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "starCultist"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 1
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 4,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "watcherEye",
+            "starCultist"
+          ],
+          "hpLost": 6,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "watcherEye": 1
+            },
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "obsidianGolem"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "heraldOfEnd"
+          ],
+          "hpLost": 28,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 3,
+          "smolderKills": 0,
+          "turns": 7
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "voidColossus"
+          ],
+          "hpLost": 26,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 5
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "chaosHound",
+            "voidWisp"
+          ],
+          "hpLost": 3,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "sovereign"
+          ],
+          "hpLost": 39,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 6,
+          "smolderKills": 0,
+          "turns": 11
+        }
+      ],
+      "godotVersion": "4.7.1.stable.official.a13da4feb",
+      "hostFingerprint": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+      "mobOverrideFileSha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "mobOverrideSemanticSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "outcome": "win",
+      "packageEvents": {
+        "agilityDrawn": 3,
+        "agilityOffered": 2,
+        "agilityPlayed": 2,
+        "annihilateOffered": 1,
+        "bastionDrawn": 15,
+        "bastionOffered": 3,
+        "bastionPlayed": 3,
+        "bloodRiteDrawn": 38,
+        "bloodRiteOffered": 4,
+        "bloodRitePlayed": 32,
+        "braceOffered": 6,
+        "cardsDrawnByCycle": 52,
+        "cardsDrawnByDeflect": 4,
+        "catalystOffered": 1,
+        "chiselDrawn": 20,
+        "chiselPlayed": 15,
+        "cleaveOffered": 2,
+        "crackedAppliedByEclipseSlash": 11,
+        "crippleOffered": 4,
+        "defendDrawn": 44,
+        "defendPlayed": 9,
+        "deflectDrawn": 16,
+        "deflectOffered": 3,
+        "deflectPlayed": 4,
+        "devourOffered": 1,
+        "eclipseSlashDrawn": 21,
+        "eclipseSlashPlayed": 12,
+        "empowerDrawn": 2,
+        "empowerOffered": 1,
+        "empowerPlayed": 1,
+        "executionerDrawn": 19,
+        "executionerOffered": 1,
+        "executionerPlayed": 16,
+        "extraEnergyGrantedByCrown": 35,
+        "firstSparkDrawn": 16,
+        "firstSparkPlayed": 14,
+        "flurryOffered": 1,
+        "forgottenShrineSeen": 1,
+        "fortifyDrawn": 3,
+        "fortifyOffered": 5,
+        "guardedStrikeDrawn": 2,
+        "guardedStrikeOffered": 3,
+        "guardedStrikePlayed": 2,
+        "heavyBlowDrawn": 38,
+        "heavyBlowOffered": 10,
+        "heavyBlowPlayed": 25,
+        "hexDrawn": 7,
+        "hollowCrownOffered": 1,
+        "hollowCrownOwned": 9,
+        "hollowCrownPicked": 1,
+        "ironSkinDrawn": 6,
+        "ironSkinOffered": 1,
+        "ironSkinPlayed": 3,
+        "leechBladeOffered": 1,
+        "limitBreakDrawn": 9,
+        "limitBreakOffered": 4,
+        "limitBreakPlayed": 2,
+        "lungeOffered": 4,
+        "maxHpLostToCrown": 10,
+        "momentumOffered": 2,
+        "oblivionStrikeDrawn": 20,
+        "oblivionStrikeOffered": 3,
+        "oblivionStrikePlayed": 19,
+        "offeringOffered": 1,
+        "phantomBladesOffered": 4,
+        "preparationDrawn": 25,
+        "preparationOffered": 5,
+        "preparationPlayed": 20,
+        "quickSlashDrawn": 20,
+        "quickSlashOffered": 6,
+        "quickSlashPlayed": 13,
+        "regrowthDrawn": 10,
+        "regrowthOffered": 2,
+        "regrowthPlayed": 9,
+        "shopVisited": 4,
+        "shrineRemovalChosen": 1,
+        "sidestepDrawn": 6,
+        "sidestepOffered": 9,
+        "strikeDrawn": 80,
+        "strikePlayed": 47,
+        "surgeOffered": 1,
+        "tempestOffered": 1,
+        "toxicMistOffered": 4,
+        "twinFangsOffered": 5,
+        "uppercutDrawn": 37,
+        "uppercutOffered": 2,
+        "uppercutPlayed": 28,
+        "venomStrikeOffered": 4,
+        "virulenceDrawn": 5,
+        "virulenceOffered": 4,
+        "warCryDrawn": 6,
+        "warCryOffered": 2,
+        "warCryPlayed": 2,
+        "wardGainedByDeflect": 4
+      },
+      "registryFileSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "registrySemanticSha256": "fc4b080feda77d2b86ae8b0538ec849a2b059285d881c29fe3e5d7f460a3ab62",
+      "relics": [
+        "emberHeart",
+        "emberLantern",
+        "silkFan",
+        "seersOrb",
+        "thornBand",
+        "crownOfTheHearth",
+        "basaltIdol",
+        "ironTalisman",
+        "sweetRoot",
+        "hollowCrown",
+        "travelersPack",
+        "merchantsMark",
+        "executionersSeal",
+        "warFetish",
+        "riverPearl"
+      ],
+      "rng": 483652567,
+      "searchSpaceSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "seed": 12100,
+      "seedRegistrySha256": "cf1a808fa5b60b08424841223002a20521619771e2b528f91f4b6d8a6b63fead",
+      "values": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vector": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vow": 0
+    },
+    {
+      "arm": 1,
+      "aspect": "duskblade",
+      "candidateFileSha256": "07750bb9aee3b15ffea1e82f06371dd27968973e25263c197ce60664c1845372",
+      "candidateId": "t2-c000",
+      "candidateSemanticSha256": "2918420e3a40b42f570b431cc1fd7b6d483d2610ce1b7f36b3b7bf918ef256c1",
+      "commit": "a6e9f6472618ebc3bd3842e150a90048bc274bd8",
+      "contentFileSha256": "5b3504f133a7e180f20426a8f28c5f2685c9d00d4e3c93c39a432a1a859ea448",
+      "contentSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "deck": 41,
+      "deckIds": [
+        "strike",
+        "strike",
+        "strike",
+        "strike",
+        "defend",
+        "eclipseSlash",
+        "chisel",
+        "firstSpark",
+        "preparation",
+        "deflect",
+        "preparation",
+        "quickSlash",
+        "preparation",
+        "quickSlash",
+        "oblivionStrike",
+        "aegis",
+        "preparation",
+        "venomStrike",
+        "uppercut",
+        "virulence",
+        "preparation",
+        "limitBreak",
+        "heavyBlow",
+        "warCry",
+        "regrowth",
+        "preparation",
+        "ironSkin",
+        "preparation",
+        "empower",
+        "oblivionStrike",
+        "guardedStrike",
+        "risingLitany",
+        "agility",
+        "preparation",
+        "empower",
+        "regrowth",
+        "regrowth",
+        "deflect",
+        "venomStrike",
+        "venomStrike",
+        "empower"
+      ],
+      "driverSha256": "9ed92fcafb6cba25a80f0067236d2f0001e5d70c356facc718056337de2d71ec",
+      "effectiveCatalogueSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "error": "",
+      "fights": [
+        {
+          "act": 1,
+          "enemies": [
+            "duskfang"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "sporeling",
+            "sporeling"
+          ],
+          "hpLost": 6,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "gloomslime"
+          ],
+          "hpLost": 5,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "gloomslime",
+            "sporeling"
+          ],
+          "hpLost": 5,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "thornling",
+            "thornling"
+          ],
+          "hpLost": 14,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "waylayer"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "waylayer": 1
+            },
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 1
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "ashAcolyte"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "waylayer"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "waylayer": 1
+            },
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 1
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "rootheart"
+          ],
+          "hpLost": 29,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 7
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "voltEel"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 1
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker"
+          ],
+          "hpLost": 9,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "drownedOne",
+            "voltEel"
+          ],
+          "hpLost": 23,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 4
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "deepmaw"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker",
+            "mirelurker"
+          ],
+          "hpLost": 28,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "leviathan"
+          ],
+          "hpLost": 36,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 4,
+          "smolderKills": 0,
+          "turns": 10
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 10,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade",
+            "shade"
+          ],
+          "hpLost": 21,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 4
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "starCultist",
+            "voidWisp"
+          ],
+          "hpLost": 13,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade",
+            "shade"
+          ],
+          "hpLost": 16,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "sovereign"
+          ],
+          "hpLost": 131,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 5,
+          "smolderKills": 0,
+          "turns": 15
+        }
+      ],
+      "godotVersion": "4.7.1.stable.official.a13da4feb",
+      "hostFingerprint": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+      "mobOverrideFileSha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "mobOverrideSemanticSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "outcome": "win",
+      "packageEvents": {
+        "aegisDrawn": 11,
+        "aegisOffered": 2,
+        "aegisPlayed": 4,
+        "agilityDrawn": 5,
+        "agilityOffered": 2,
+        "agilityPlayed": 1,
+        "annihilateOffered": 1,
+        "bastionOffered": 2,
+        "bloodRiteOffered": 1,
+        "braceOffered": 7,
+        "cardsDrawnByCycle": 128,
+        "cardsDrawnByDeflect": 2,
+        "catalystOffered": 3,
+        "chiselDrawn": 21,
+        "chiselPlayed": 11,
+        "cleaveOffered": 8,
+        "crackedAppliedByEclipseSlash": 11,
+        "crippleOffered": 2,
+        "defendDrawn": 39,
+        "deflectDrawn": 20,
+        "deflectOffered": 6,
+        "deflectPlayed": 2,
+        "devourOffered": 2,
+        "eclipseSlashDrawn": 25,
+        "eclipseSlashPlayed": 13,
+        "empowerDrawn": 15,
+        "empowerOffered": 4,
+        "empowerPlayed": 3,
+        "executionerOffered": 1,
+        "firstSparkDrawn": 15,
+        "firstSparkPlayed": 11,
+        "flurryOffered": 3,
+        "forgottenShrineSeen": 1,
+        "fortifyOffered": 1,
+        "guardedStrikeDrawn": 9,
+        "guardedStrikeOffered": 6,
+        "guardedStrikePlayed": 5,
+        "heavyBlowDrawn": 11,
+        "heavyBlowOffered": 4,
+        "heavyBlowPlayed": 3,
+        "ironSkinDrawn": 12,
+        "ironSkinOffered": 1,
+        "ironSkinPlayed": 3,
+        "leechBladeOffered": 2,
+        "limitBreakDrawn": 10,
+        "limitBreakOffered": 4,
+        "limitBreakPlayed": 2,
+        "lungeOffered": 1,
+        "mirrorSeen": 1,
+        "momentumOffered": 2,
+        "oblivionStrikeDrawn": 28,
+        "oblivionStrikeOffered": 2,
+        "oblivionStrikePlayed": 21,
+        "offeringOffered": 2,
+        "phantomBladesOffered": 1,
+        "preparationDrawn": 65,
+        "preparationOffered": 8,
+        "preparationPlayed": 57,
+        "quickSlashDrawn": 33,
+        "quickSlashOffered": 8,
+        "quickSlashPlayed": 14,
+        "regrowthDrawn": 10,
+        "regrowthOffered": 5,
+        "regrowthPlayed": 6,
+        "risingLitanyDrawn": 3,
+        "risingLitanyOffered": 1,
+        "risingLitanyPlayed": 2,
+        "shopRemovalBought": 1,
+        "shopVisited": 7,
+        "shrineRemovalChosen": 1,
+        "sidestepOffered": 2,
+        "strikeDrawn": 83,
+        "strikePlayed": 25,
+        "tempestOffered": 1,
+        "toxicMistOffered": 1,
+        "twinFangsOffered": 1,
+        "uppercutDrawn": 18,
+        "uppercutOffered": 3,
+        "uppercutPlayed": 10,
+        "venomStrikeDrawn": 22,
+        "venomStrikeOffered": 7,
+        "venomStrikePlayed": 6,
+        "virulenceDrawn": 12,
+        "virulenceOffered": 1,
+        "warCryDrawn": 9,
+        "warCryOffered": 1,
+        "warCryPlayed": 2,
+        "wardGainedByDeflect": 2
+      },
+      "registryFileSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "registrySemanticSha256": "fc4b080feda77d2b86ae8b0538ec849a2b059285d881c29fe3e5d7f460a3ab62",
+      "relics": [
+        "emberHeart",
+        "executionersSeal",
+        "crownOfTheHearth",
+        "sweetRoot",
+        "seersOrb",
+        "shatterersCrown",
+        "vialOfLife"
+      ],
+      "rng": 619111262,
+      "searchSpaceSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "seed": 12101,
+      "seedRegistrySha256": "cf1a808fa5b60b08424841223002a20521619771e2b528f91f4b6d8a6b63fead",
+      "values": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vector": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vow": 0
+    },
+    {
+      "arm": 1,
+      "aspect": "duskblade",
+      "candidateFileSha256": "07750bb9aee3b15ffea1e82f06371dd27968973e25263c197ce60664c1845372",
+      "candidateId": "t2-c000",
+      "candidateSemanticSha256": "2918420e3a40b42f570b431cc1fd7b6d483d2610ce1b7f36b3b7bf918ef256c1",
+      "commit": "a6e9f6472618ebc3bd3842e150a90048bc274bd8",
+      "contentFileSha256": "5b3504f133a7e180f20426a8f28c5f2685c9d00d4e3c93c39a432a1a859ea448",
+      "contentSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "deck": 43,
+      "deckIds": [
+        "strike",
+        "strike",
+        "strike",
+        "strike",
+        "defend",
+        "defend",
+        "defend",
+        "eclipseSlash",
+        "chisel",
+        "firstSpark",
+        "ironSkin",
+        "regrowth",
+        "empower",
+        "regrowth",
+        "ironSkin",
+        "warCry",
+        "uppercut",
+        "quickSlash",
+        "surge",
+        "executioner",
+        "limitBreak",
+        "empower",
+        "hex",
+        "aegis",
+        "uppercut",
+        "bastion",
+        "deflect",
+        "preparation",
+        "ironSkin",
+        "risingLitany",
+        "annihilate",
+        "limitBreak",
+        "deflect",
+        "lunge",
+        "deflect",
+        "regrowth",
+        "preparation",
+        "lunge",
+        "regrowth",
+        "quickSlash",
+        "surge",
+        "agility",
+        "devour"
+      ],
+      "driverSha256": "9ed92fcafb6cba25a80f0067236d2f0001e5d70c356facc718056337de2d71ec",
+      "effectiveCatalogueSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "error": "",
+      "fights": [
+        {
+          "act": 1,
+          "enemies": [
+            "duskfang"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "sporeling",
+            "sporeling",
+            "sporeling"
+          ],
+          "hpLost": 12,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "duskfang",
+            "duskfang"
+          ],
+          "hpLost": 5,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "ashAcolyte"
+          ],
+          "hpLost": 4,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "gravewarden"
+          ],
+          "hpLost": 18,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [
+              {
+                "amount": 12,
+                "enemy": "gravewarden",
+                "move": "bulwark"
+              }
+            ],
+            "disruption": [
+              {
+                "amount": 2,
+                "enemy": "gravewarden",
+                "move": "entomb",
+                "status": "frail",
+                "target": "player"
+              },
+              {
+                "amount": 2,
+                "enemy": "gravewarden",
+                "move": "entomb",
+                "status": "vulnerable",
+                "target": "player"
+              }
+            ],
+            "encounters": {
+              "gravewarden": 1
+            },
+            "heal": [],
+            "moves": {
+              "gravewarden": {
+                "bulwark": 1,
+                "crush": 2,
+                "entomb": 1
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "entomb",
+                "turn": 1
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "crush",
+                "turn": 2
+              },
+              {
+                "amount": 14,
+                "blocked": 4,
+                "enemy": "gravewarden",
+                "kind": "attack",
+                "move": "crush",
+                "turn": 2
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "bulwark",
+                "turn": 3
+              },
+              {
+                "amount": 0,
+                "blocked": 6,
+                "enemy": "gravewarden",
+                "kind": "attack",
+                "move": "bulwark",
+                "turn": 3
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "crush",
+                "turn": 4
+              },
+              {
+                "amount": 4,
+                "blocked": 8,
+                "enemy": "gravewarden",
+                "kind": "attack",
+                "move": "crush",
+                "turn": 4
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 5
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "gravewarden"
+          ],
+          "hpLost": 11,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [
+              {
+                "amount": 12,
+                "enemy": "gravewarden",
+                "move": "bulwark"
+              }
+            ],
+            "disruption": [
+              {
+                "amount": 2,
+                "enemy": "gravewarden",
+                "move": "entomb",
+                "status": "frail",
+                "target": "player"
+              },
+              {
+                "amount": 2,
+                "enemy": "gravewarden",
+                "move": "entomb",
+                "status": "vulnerable",
+                "target": "player"
+              },
+              {
+                "amount": 2,
+                "enemy": "gravewarden",
+                "move": "entomb",
+                "status": "frail",
+                "target": "player"
+              },
+              {
+                "amount": 2,
+                "enemy": "gravewarden",
+                "move": "entomb",
+                "status": "vulnerable",
+                "target": "player"
+              }
+            ],
+            "encounters": {
+              "gravewarden": 1
+            },
+            "heal": [],
+            "moves": {
+              "gravewarden": {
+                "bulwark": 1,
+                "crush": 2,
+                "entomb": 2
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "entomb",
+                "turn": 1
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "crush",
+                "turn": 2
+              },
+              {
+                "amount": 7,
+                "blocked": 11,
+                "enemy": "gravewarden",
+                "kind": "attack",
+                "move": "crush",
+                "turn": 2
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "bulwark",
+                "turn": 3
+              },
+              {
+                "amount": 0,
+                "blocked": 6,
+                "enemy": "gravewarden",
+                "kind": "attack",
+                "move": "bulwark",
+                "turn": 3
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "crush",
+                "turn": 4
+              },
+              {
+                "amount": 4,
+                "blocked": 8,
+                "enemy": "gravewarden",
+                "kind": "attack",
+                "move": "crush",
+                "turn": 4
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "gravewarden",
+                "kind": "act",
+                "move": "entomb",
+                "turn": 5
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 6
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "ashAcolyte"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "thornling",
+            "thornling"
+          ],
+          "hpLost": 6,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "rootheart"
+          ],
+          "hpLost": 36,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 8
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "deepmaw"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "tidecaller",
+            "mirelurker"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "abyssalKnight"
+          ],
+          "hpLost": 1,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 5
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "shellback"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "shellback": 1
+            },
+            "heal": [],
+            "moves": {
+              "shellback": {
+                "snap": 1
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "shellback",
+                "kind": "act",
+                "move": "snap",
+                "turn": 1
+              },
+              {
+                "amount": 0,
+                "blocked": 10,
+                "enemy": "shellback",
+                "kind": "attack",
+                "move": "snap",
+                "turn": 1
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "drownedOne",
+            "drownedOne"
+          ],
+          "hpLost": 7,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 5
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "tidecaller",
+            "mirelurker"
+          ],
+          "hpLost": 7,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 4
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "leviathan"
+          ],
+          "hpLost": 44,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 4,
+          "smolderKills": 0,
+          "turns": 11
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "starCultist"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "obsidianGolem"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 4
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade",
+            "shade"
+          ],
+          "hpLost": 1,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 3,
+          "smolderKills": 0,
+          "turns": 5
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "heraldOfEnd"
+          ],
+          "hpLost": 41,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 3,
+          "smolderKills": 0,
+          "turns": 9
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "voidColossus"
+          ],
+          "hpLost": 10,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 5,
+          "smolderKills": 0,
+          "turns": 11
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "obsidianGolem"
+          ],
+          "hpLost": 2,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "watcherEye"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "watcherEye": 1
+            },
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "heraldOfEnd"
+          ],
+          "hpLost": 11,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 3,
+          "smolderKills": 0,
+          "turns": 7
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "sovereign"
+          ],
+          "hpLost": 48,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 8,
+          "smolderKills": 0,
+          "turns": 18
+        }
+      ],
+      "godotVersion": "4.7.1.stable.official.a13da4feb",
+      "hostFingerprint": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+      "mobOverrideFileSha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "mobOverrideSemanticSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "outcome": "win",
+      "packageEvents": {
+        "aegisDrawn": 16,
+        "aegisOffered": 1,
+        "aegisPlayed": 6,
+        "agilityDrawn": 3,
+        "agilityOffered": 4,
+        "agilityPlayed": 2,
+        "annihilateDrawn": 14,
+        "annihilateOffered": 3,
+        "annihilatePlayed": 1,
+        "bastionDrawn": 14,
+        "bastionOffered": 2,
+        "bastionPlayed": 4,
+        "bloodRiteOffered": 1,
+        "braceOffered": 6,
+        "bulwarkOffered": 2,
+        "cardsDrawnByCycle": 61,
+        "cardsDrawnByDeflect": 14,
+        "catalystOffered": 2,
+        "chiselDrawn": 47,
+        "chiselPlayed": 34,
+        "cleaveOffered": 5,
+        "crackedAppliedByEclipseSlash": 34,
+        "defendDrawn": 80,
+        "defendPlayed": 3,
+        "deflectDrawn": 41,
+        "deflectOffered": 4,
+        "deflectPlayed": 11,
+        "devourDrawn": 2,
+        "devourOffered": 1,
+        "devourPlayed": 1,
+        "eclipseSlashDrawn": 45,
+        "eclipseSlashPlayed": 30,
+        "empowerDrawn": 42,
+        "empowerOffered": 3,
+        "empowerPlayed": 25,
+        "executionerDrawn": 28,
+        "executionerOffered": 3,
+        "executionerPlayed": 22,
+        "extraEnergyGrantedByCrown": 104,
+        "firstSparkDrawn": 24,
+        "firstSparkPlayed": 20,
+        "flurryOffered": 3,
+        "fortifyOffered": 2,
+        "guardedStrikeOffered": 4,
+        "heavyBlowOffered": 6,
+        "hexDrawn": 22,
+        "hollowCrownOffered": 1,
+        "hollowCrownOwned": 19,
+        "hollowCrownPicked": 1,
+        "ironSkinDrawn": 52,
+        "ironSkinOffered": 3,
+        "ironSkinPlayed": 43,
+        "leechBladeOffered": 3,
+        "limitBreakDrawn": 27,
+        "limitBreakOffered": 2,
+        "limitBreakPlayed": 10,
+        "lungeDrawn": 29,
+        "lungeOffered": 7,
+        "lungePlayed": 19,
+        "maxHpLostToCrown": 10,
+        "mirrorSeen": 1,
+        "momentumOffered": 1,
+        "phantomBladesOffered": 3,
+        "preparationDrawn": 14,
+        "preparationOffered": 4,
+        "preparationPlayed": 12,
+        "quickSlashDrawn": 39,
+        "quickSlashOffered": 7,
+        "quickSlashPlayed": 28,
+        "regrowthDrawn": 51,
+        "regrowthOffered": 3,
+        "regrowthPlayed": 41,
+        "risingLitanyDrawn": 15,
+        "risingLitanyOffered": 3,
+        "risingLitanyPlayed": 2,
+        "shopVisited": 2,
+        "sidestepOffered": 4,
+        "strikeDrawn": 133,
+        "strikePlayed": 60,
+        "surgeDrawn": 19,
+        "surgeOffered": 5,
+        "surgePlayed": 16,
+        "tempestOffered": 1,
+        "toxicMistOffered": 2,
+        "twinFangsOffered": 2,
+        "uppercutDrawn": 64,
+        "uppercutOffered": 5,
+        "uppercutPlayed": 50,
+        "venomStrikeOffered": 3,
+        "virulenceOffered": 2,
+        "warCryDrawn": 34,
+        "warCryOffered": 1,
+        "warCryPlayed": 18,
+        "wardGainedByDeflect": 20
+      },
+      "registryFileSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "registrySemanticSha256": "fc4b080feda77d2b86ae8b0538ec849a2b059285d881c29fe3e5d7f460a3ab62",
+      "relics": [
+        "emberHeart",
+        "silkFan",
+        "gravebloom",
+        "basaltIdol",
+        "thornBand",
+        "hollowCrown",
+        "emberLantern",
+        "sweetRoot",
+        "wardingCharm",
+        "frozenCore",
+        "shatterersCrown",
+        "verdantBranch",
+        "warFetish",
+        "reapersBell",
+        "vialOfLife"
+      ],
+      "rng": -1066088759,
+      "searchSpaceSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "seed": 12102,
+      "seedRegistrySha256": "cf1a808fa5b60b08424841223002a20521619771e2b528f91f4b6d8a6b63fead",
+      "values": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vector": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vow": 0
+    },
+    {
+      "arm": 1,
+      "aspect": "duskblade",
+      "candidateFileSha256": "07750bb9aee3b15ffea1e82f06371dd27968973e25263c197ce60664c1845372",
+      "candidateId": "t2-c000",
+      "candidateSemanticSha256": "2918420e3a40b42f570b431cc1fd7b6d483d2610ce1b7f36b3b7bf918ef256c1",
+      "commit": "a6e9f6472618ebc3bd3842e150a90048bc274bd8",
+      "contentFileSha256": "5b3504f133a7e180f20426a8f28c5f2685c9d00d4e3c93c39a432a1a859ea448",
+      "contentSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "deck": 45,
+      "deckIds": [
+        "strike",
+        "strike",
+        "strike",
+        "strike",
+        "defend",
+        "defend",
+        "defend",
+        "eclipseSlash",
+        "chisel",
+        "firstSpark",
+        "lunge",
+        "agility",
+        "lunge",
+        "uppercut",
+        "ironSkin",
+        "empower",
+        "warCry",
+        "lunge",
+        "ironSkin",
+        "quickSlash",
+        "aegis",
+        "aegis",
+        "empower",
+        "regrowth",
+        "regrowth",
+        "deflect",
+        "executioner",
+        "sidestep",
+        "bloodRite",
+        "sidestep",
+        "frenzy",
+        "quickSlash",
+        "warCry",
+        "uppercut",
+        "aegis",
+        "executioner",
+        "deflect",
+        "empower",
+        "bloodRite",
+        "preparation",
+        "empower",
+        "oblivionStrike",
+        "lunge",
+        "uppercut",
+        "ironSkin"
+      ],
+      "driverSha256": "9ed92fcafb6cba25a80f0067236d2f0001e5d70c356facc718056337de2d71ec",
+      "effectiveCatalogueSemanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "error": "",
+      "fights": [
+        {
+          "act": 1,
+          "enemies": [
+            "duskfang"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "waylayer",
+            "sporeling"
+          ],
+          "hpLost": 6,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [
+              {
+                "amount": 2,
+                "enemy": "waylayer",
+                "move": "trick",
+                "status": "frail",
+                "target": "player"
+              }
+            ],
+            "encounters": {
+              "waylayer": 1
+            },
+            "heal": [],
+            "moves": {
+              "waylayer": {
+                "trick": 1
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "waylayer",
+                "kind": "act",
+                "move": "trick",
+                "turn": 1
+              },
+              {
+                "amount": 4,
+                "blocked": 0,
+                "enemy": "waylayer",
+                "kind": "attack",
+                "move": "trick",
+                "turn": 1
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "gloomslime",
+            "sporeling"
+          ],
+          "hpLost": 5,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "gloomslime",
+            "sporeling"
+          ],
+          "hpLost": 4,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "duskfang",
+            "duskfang"
+          ],
+          "hpLost": 7,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 0,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "thornling",
+            "thornling"
+          ],
+          "hpLost": 7,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "duskfang",
+            "sporeling"
+          ],
+          "hpLost": 1,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 1,
+          "enemies": [
+            "rootheart"
+          ],
+          "hpLost": 26,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 9
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "drownedOne"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 1
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker"
+          ],
+          "hpLost": 1,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker"
+          ],
+          "hpLost": 6,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "mirelurker",
+            "mirelurker"
+          ],
+          "hpLost": 20,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "tidecaller",
+            "mirelurker"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "siren"
+          ],
+          "hpLost": 1,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 5
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "shellback"
+          ],
+          "hpLost": 4,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "shellback": 1
+            },
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "tidecaller",
+            "voltEel"
+          ],
+          "hpLost": 3,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 2,
+          "enemies": [
+            "leviathan"
+          ],
+          "hpLost": 54,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 4,
+          "smolderKills": 0,
+          "turns": 9
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 5,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 4
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "shade"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "watcherEye"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [
+              {
+                "amount": 2,
+                "enemy": "watcherEye",
+                "move": "gaze",
+                "status": "vulnerable",
+                "target": "player"
+              }
+            ],
+            "encounters": {
+              "watcherEye": 1
+            },
+            "heal": [],
+            "moves": {
+              "watcherEye": {
+                "gaze": 1
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "watcherEye",
+                "kind": "act",
+                "move": "gaze",
+                "turn": 1
+              },
+              {
+                "amount": 0,
+                "blocked": 6,
+                "enemy": "watcherEye",
+                "kind": "attack",
+                "move": "gaze",
+                "turn": 1
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "voidColossus"
+          ],
+          "hpLost": 9,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 3,
+          "smolderKills": 0,
+          "turns": 8
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "watcherEye",
+            "starCultist"
+          ],
+          "hpLost": 4,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [
+              {
+                "amount": 10,
+                "enemy": "watcherEye",
+                "move": "blink"
+              }
+            ],
+            "disruption": [
+              {
+                "amount": 2,
+                "enemy": "watcherEye",
+                "move": "gaze",
+                "status": "vulnerable",
+                "target": "player"
+              }
+            ],
+            "encounters": {
+              "watcherEye": 1
+            },
+            "heal": [],
+            "moves": {
+              "watcherEye": {
+                "beam": 1,
+                "blink": 1,
+                "gaze": 1
+              }
+            },
+            "tempo": [
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "watcherEye",
+                "kind": "act",
+                "move": "gaze",
+                "turn": 1
+              },
+              {
+                "amount": 0,
+                "blocked": 8,
+                "enemy": "watcherEye",
+                "kind": "attack",
+                "move": "gaze",
+                "turn": 1
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "watcherEye",
+                "kind": "act",
+                "move": "beam",
+                "turn": 2
+              },
+              {
+                "amount": 1,
+                "blocked": 21,
+                "enemy": "watcherEye",
+                "kind": "attack",
+                "move": "beam",
+                "turn": 2
+              },
+              {
+                "amount": 0,
+                "blocked": 0,
+                "enemy": "watcherEye",
+                "kind": "act",
+                "move": "blink",
+                "turn": 3
+              },
+              {
+                "amount": 0,
+                "blocked": 7,
+                "enemy": "watcherEye",
+                "kind": "attack",
+                "move": "blink",
+                "turn": 3
+              }
+            ]
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 4
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "heraldOfEnd"
+          ],
+          "hpLost": 31,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 8
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "chaosHound",
+            "voidWisp"
+          ],
+          "hpLost": 0,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 2
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "heraldOfEnd"
+          ],
+          "hpLost": 28,
+          "kind": "elite",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 2,
+          "smolderKills": 0,
+          "turns": 6
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "watcherEye",
+            "starCultist"
+          ],
+          "hpLost": 14,
+          "kind": "normal",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {
+              "watcherEye": 1
+            },
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 1,
+          "smolderKills": 0,
+          "turns": 3
+        },
+        {
+          "act": 3,
+          "enemies": [
+            "sovereign"
+          ],
+          "hpLost": 13,
+          "kind": "boss",
+          "profileDiagnostics": {
+            "block": [],
+            "disruption": [],
+            "encounters": {},
+            "heal": [],
+            "moves": {},
+            "tempo": []
+          },
+          "result": "win",
+          "shatters": 4,
+          "smolderKills": 0,
+          "turns": 11
+        }
+      ],
+      "godotVersion": "4.7.1.stable.official.a13da4feb",
+      "hostFingerprint": "3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648",
+      "mobOverrideFileSha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "mobOverrideSemanticSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "outcome": "win",
+      "packageEvents": {
+        "aegisDrawn": 33,
+        "aegisOffered": 4,
+        "aegisPlayed": 15,
+        "agilityDrawn": 23,
+        "agilityOffered": 1,
+        "agilityPlayed": 8,
+        "bastionOffered": 2,
+        "bloodRiteDrawn": 20,
+        "bloodRiteOffered": 3,
+        "bloodRitePlayed": 18,
+        "braceOffered": 3,
+        "bulwarkOffered": 1,
+        "cardsDrawnByCycle": 48,
+        "cardsDrawnByDeflect": 13,
+        "catalystOffered": 2,
+        "chiselDrawn": 24,
+        "chiselPlayed": 20,
+        "cleaveOffered": 3,
+        "crackedAppliedByEclipseSlash": 16,
+        "defendDrawn": 63,
+        "defendPlayed": 3,
+        "deflectDrawn": 19,
+        "deflectOffered": 4,
+        "deflectPlayed": 13,
+        "devourOffered": 2,
+        "eclipseSlashDrawn": 21,
+        "eclipseSlashPlayed": 16,
+        "empowerDrawn": 37,
+        "empowerOffered": 5,
+        "empowerPlayed": 25,
+        "executionerDrawn": 18,
+        "executionerOffered": 2,
+        "executionerPlayed": 16,
+        "extraEnergyGrantedByCrown": 83,
+        "firstSparkDrawn": 23,
+        "firstSparkPlayed": 19,
+        "flurryOffered": 1,
+        "forgottenShrineSeen": 1,
+        "frenzyDrawn": 10,
+        "frenzyOffered": 1,
+        "frenzyPlayed": 10,
+        "guardedStrikeOffered": 6,
+        "heavyBlowOffered": 7,
+        "hexDrawn": 14,
+        "hollowCrownOffered": 1,
+        "hollowCrownOwned": 20,
+        "hollowCrownPicked": 1,
+        "ironSkinDrawn": 35,
+        "ironSkinOffered": 3,
+        "ironSkinPlayed": 32,
+        "leechBladeOffered": 3,
+        "lungeDrawn": 79,
+        "lungeOffered": 10,
+        "lungePlayed": 64,
+        "maxHpLostToCrown": 10,
+        "mirrorSeen": 1,
+        "momentumOffered": 1,
+        "oblivionStrikeDrawn": 4,
+        "oblivionStrikeOffered": 2,
+        "oblivionStrikePlayed": 3,
+        "offeringOffered": 1,
+        "phantomBladesOffered": 2,
+        "preparationDrawn": 5,
+        "preparationOffered": 2,
+        "preparationPlayed": 5,
+        "quickSlashDrawn": 30,
+        "quickSlashOffered": 4,
+        "quickSlashPlayed": 24,
+        "regrowthDrawn": 24,
+        "regrowthOffered": 1,
+        "regrowthPlayed": 24,
+        "shopVisited": 4,
+        "shrineRemovalChosen": 1,
+        "sidestepDrawn": 23,
+        "sidestepOffered": 6,
+        "sidestepPlayed": 15,
+        "strikeDrawn": 102,
+        "strikePlayed": 62,
+        "surgeOffered": 1,
+        "tempestOffered": 2,
+        "toxicMistOffered": 1,
+        "twinFangsOffered": 2,
+        "uppercutDrawn": 32,
+        "uppercutOffered": 3,
+        "uppercutPlayed": 30,
+        "venomStrikeOffered": 6,
+        "virulenceOffered": 1,
+        "warCryDrawn": 32,
+        "warCryOffered": 3,
+        "warCryPlayed": 22,
+        "wardGainedByDeflect": 16,
+        "woundDrawn": 2
+      },
+      "registryFileSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "registrySemanticSha256": "fc4b080feda77d2b86ae8b0538ec849a2b059285d881c29fe3e5d7f460a3ab62",
+      "relics": [
+        "emberHeart",
+        "travelersPack",
+        "emberLantern",
+        "riverPearl",
+        "hollowCrown",
+        "reapersBell",
+        "warFetish",
+        "crownOfTheHearth",
+        "vialOfLife",
+        "thornBand",
+        "executionersSeal",
+        "silkFan",
+        "sweetRoot"
+      ],
+      "rng": 1788536207,
+      "searchSpaceSha256": "d51ccde6033319d733366326369762d95057a9ba734233dbdedc7020557cb06a",
+      "seed": 12103,
+      "seedRegistrySha256": "cf1a808fa5b60b08424841223002a20521619771e2b528f91f4b6d8a6b63fead",
+      "values": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vector": {
+        "blockMitigation": "baseline",
+        "blockTempoTrade": "baseline",
+        "disruptionIntensity": "baseline",
+        "disruptionTempoTrade": "baseline"
+      },
+      "vow": 0
+    }
+  ],
+  "stage": "tier2-f0-controls"
+}

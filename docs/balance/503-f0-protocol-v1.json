@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "503-tier2-f0-v1",
+  "issue": 503,
+  "seedRegistry": "docs/balance/421-content-search-seeds-v1.json",
+  "responseContract": "docs/balance/508-f0-response-contract-v1.json",
+  "registry": "docs/balance/421-mob-disruption-space-v1.json",
+  "hostPackets": [
+    "docs/balance/data/501/m1-macbook-pro.json",
+    "docs/balance/data/501/m4-mac-mini.json"
+  ],
+  "godotPrefixes": ["4.7.1.stable", "4.7.2.stable"],
+  "inheritHostQualification": true,
+  "evaluations": {
+    "f0": {
+      "controls": {
+        "stage": "tier2-f0-controls",
+        "root": 7454,
+        "first": 12100,
+        "last": 12131,
+        "arms": [1, 2]
+      },
+      "landscape": {
+        "stage": "tier2-f0-mini-landscape",
+        "root": 7454,
+        "policyFirst": 0,
+        "policyCount": 128,
+        "first": 12200,
+        "last": 12207
+      },
+      "bootstrap": 10000,
+      "bootstrapSeed": 508,
+      "completeRectangle": true,
+      "candidateSource": "tier2",
+      "candidateCount": 81,
+      "candidateSeed": 508
+    }
+  },
+  "m4Replay": {
+    "candidate": "t2-c000",
+    "mode": "controls",
+    "aspect": "duskblade",
+    "vow": 0,
+    "arm": 1,
+    "seeds": {"first": 12100, "last": 12103},
+    "root": 7454,
+    "stage": "tier2-f0-controls"
+  }
+}
