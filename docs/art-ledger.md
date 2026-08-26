@@ -861,18 +861,13 @@ the model, where `mirror.png` ships as L0 art with its meaning withheld. It was
 also the wrong side of the wall: 爐邊彩窗 faces in at the fire, so from the road
 you are outside it and could not see it in any case.
 
-**This is the map's one textured asset, and the first.** Everything else is
-surfaced by triplanar projection, which is what keeps 23 separately generated
-kits from drifting apart in style. That discipline still governs the kits. It
-stopped governing the Vigil on 2026-08-24, because it was holding the map's one
-BUILDING to the rule written for its rocks: what makes a building read as a
-building is coursed ashlar that lines up along the wall, a corbel band where the
-roof meets it and slate above — none of which projection can place, since it has
-no idea which way is up on a given face. The predecessor asset worked around
-that with a hand-authored trim sheet whose V axis was the building's height;
-that could only ever paint horizontal bands, so the arched door, the buttress
-faces and the gable had no way to differ from the wall behind them. The sheet
-and its two generator scripts were deleted with this replacement.
+**This was the map's first textured asset (2026-08-24).** On 2026-08-25 the
+other 27 dests joined it as Studio HD textured kits; see the inventory at the
+end of this file. The Vigil remains the west bookend hero. The 2026-08-24
+reason still holds for why a building cannot live on triplanar projection
+alone: coursed ashlar, a corbel band and slate have to sit on UVs. The
+predecessor trim sheet and its two generator scripts were deleted with this
+replacement.
 
 Y-up, grounded at Y=0 as exported. One mesh, one triangulated surface,
 POSITION+NORMAL+TEXCOORD_0: 5,615 triangles, 3,824 verts, 604,608 bytes, of
@@ -994,3 +989,23 @@ watertight component. The shipping GLB is Y-up and grounded at Y=0, one mesh and
 one triangulated surface, POSITION+NORMAL only: 5,460 triangles, 156,660 bytes.
 No vendor, textures or paid credits. sha256 `137fdfe77386ff02b8c825ec1b2d9fb14315f2c09409dd30b629d1e6570c0d9f`. fol2 accepted the final
 hero on 2026-08-21; evidence is in `docs/reviews/294/act4-terminus/`.
+
+### Map kit textured Studio library (2026-08-25)
+
+The 28 dest GLBs under `assets/art/map/geometry/` are now Studio HD `--textured`
+payloads (baked JPEG albedo + `TEXCOORD_0`). Ordinary kits: `--faces 1500`,
+export 1K, Ultra Mesh Quality off. Heroes (four termini + Vigil): `--faces 6000`,
+2K, Ultra on. PBR off, Private, triangle topology. Generate is the HD tab, never
+Smart Mesh and never the Tripo API. `tools/kit_from_concept.py` is the one-shot
+CLI (`--asset ID` or `--remaining`).
+
+This supersedes the 2026-08-21 untextured terminus write-ups above and the
+claim that Vigil was the map's only textured asset. Vigil is still the west
+bookend hero (`components_max: 2`); it was not regenerated on 2026-08-25.
+
+Act I / shared concept prompts remain in the rows earlier in this file. Act II–IV
+concept prompts live in `docs/map-kit/` (per-act direction + per-kit ledgers).
+20-placement captures: `docs/reviews/292/<asset_id>-20.png`.
+
+Operator: `python3 tools/land_map_glb.py --asset <id> --src <dest> --concept <jpg>
+--accept-signed-capture docs/reviews/292/<id>-20.png --reviewer fol2`.

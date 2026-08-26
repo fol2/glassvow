@@ -67,13 +67,13 @@ not have at all:
 
 | Control | Default | Chosen for this repo, and why |
 |---|---|---|
-| Ultra Mesh Quality | ON | kept |
+| Ultra Mesh Quality | ON | **OFF** for ordinary kits (`--faces 1500`). **ON** for hero/terminus/vigil (`--faces 6000`). Ultra is an extra high-poly pass on HD generate — the ~100s wait is HD+texture, not the form; turning Ultra off is the lever on ordinary kits. Historic Smart Mesh ~15s is a different tab with no texture stage. |
 | AI Complete | OFF | kept — it invents unseen backsides |
 | **Texture** | **ON** | the whole difference |
-| Texture Quality | 4K | **2K** — the GLB embeds it, and a hero row caps at 768 KiB |
+| Texture Quality | 4K | generate form is now 2K/4K/8K; 1K is **Export** Texture Resolution. Ordinary kits request `--texture-quality 1k` at export; heroes stay 2K. |
 | PBR | ON | **OFF** — `map_vigil.gdshader` is `unshaded` and samples one map, so metallic/roughness/normal are three more images inside the same byte cap for nothing on screen |
 | Topology | Triangle | kept |
-| Polycount | **2,000,000** | **6,000**, against `triangle_max: 8000` |
+| Polycount | **2,000,000** | **1,500** ordinary (cap 2500); **6,000** hero (cap 8000) |
 
 The Generate price moves with those choices — 55 credits at the defaults, 40
 after 2K + PBR off. That is why Generate matching is price-agnostic
@@ -141,6 +141,14 @@ fields.
 **GLB** and resolution to **2k (Current)** — so the script's FBX→GLB combobox
 dance is dead code on this tab. The toolbar `Export` only opens the panel; a
 second `Export` inside it does the work.
+
+Walked 2026-08-25 on ordinary `--texture-quality 1k` kits: **Geometry &
+Texture no longer offers 1K** (2K / 4K / 8K Trial). Generate at 2K; pick **1K**
+on the Export **Texture Resolution** combobox. `createObjectURL` then often
+sees only a JPEG; the GLB is an `<a download>` to
+`tripo-data.*.tripo3d.com`. The driver must hook that click and `fetch` the
+href. Do not spawn an agent to patch the script — that is how the 2026-08-25
+mesh wave burned tens of millions of tokens per GLB.
 
 ## The script now takes that path
 
