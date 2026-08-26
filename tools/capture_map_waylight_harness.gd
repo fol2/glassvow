@@ -49,12 +49,18 @@ func _capture_all() -> void:
 		var profile: String = PROFILE_NAMES[profile_index]
 		var size: Vector2i = PROFILE_SIZES[profile_index]
 		var stage: Dictionary = _make_stage(size)
-		var viewport: SubViewport = stage.get("viewport") as SubViewport
-		var tracer: MapWaylightTracer = stage.get("tracer") as MapWaylightTracer
-		if viewport == null or tracer == null:
-			printerr("capture_map_waylight_harness: stage creation failed for %s" % profile)
+		var viewport_v: Variant = stage.get("viewport")
+		if not (viewport_v is SubViewport):
+			printerr("capture_map_waylight_harness: viewport creation failed for %s" % profile)
 			quit(1)
 			return
+		var viewport: SubViewport = viewport_v
+		var tracer_v: Variant = stage.get("tracer")
+		if not (tracer_v is MapWaylightTracer):
+			printerr("capture_map_waylight_harness: tracer creation failed for %s" % profile)
+			quit(1)
+			return
+		var tracer: MapWaylightTracer = tracer_v
 		if route_digest.is_empty():
 			route_digest = tracer.geometry_digest()
 			overhead = tracer.overhead()
