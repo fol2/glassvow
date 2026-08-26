@@ -30,13 +30,6 @@ func _initialize() -> void:
 		quit(2)
 		return
 	var overlay: String = str(opts["mobs"])
-	if not overlay.is_empty():
-		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(overlay))
-		var faults: PackedStringArray = content.apply_enemy_overrides(raw)
-		if not faults.is_empty():
-			push_error("balance_sim: invalid --mobs: %s" % faults[0])
-			quit(2)
-			return
 	var rows: Array[Dictionary] = []
 	var aspects: Array[String] = [str(opts["aspect"])]
 	if aspects[0] == "all":
@@ -576,8 +569,13 @@ static func _policy(opts: Dictionary) -> Dictionary:
 static func _manifest(opts: Dictionary, overlay: String, identity: Dictionary) -> Dictionary:
 	var row: Dictionary = identity.duplicate()
 	row["contentSha256"] = str(identity.get("contentFileSha256", ""))
-	row["overlay"] = null if overlay.is_empty() else {"path": overlay,
-		"sha256": FileAccess.get_sha256(overlay)}
+	if overlay.is_empty():
+		row["overlay"] = null
+	else:
+		row["overlay"] = {
+			"path": str(identity.get("mobOverridePath", overlay)),
+			"sha256": str(identity.get("mobOverrideFileSha256", "")),
+		}
 	row["pilot"] = Pilot.VERSION
 	row["profile"] = PROFILE
 	row["aspect"] = opts["aspect"]

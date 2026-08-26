@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Host fingerprint, seed-1000 digest and worker-count benchmark for #489."""
+"""Host fingerprint, seed-1000 digest and worker-count benchmark for #501."""
 from __future__ import annotations
 
 import argparse
@@ -19,23 +19,27 @@ _TOOLS = Path(__file__).resolve().parent
 if str(_TOOLS) not in sys.path:
     sys.path.insert(0, str(_TOOLS))
 
+from balance_s009_reconstruct import reconstruct  # noqa: E402
 from balance_seed_contract import (  # noqa: E402
     LIVE_REL,
+    MOBS_REL,
     REPO,
     SPACE_REL,
     catalogue_identity,
     check_invocation,
     file_sha256,
     load_contract,
+    semantic_sha256,
 )
 
 ASPECTS = ("duskblade", "ashwarden")
 VOWS = (0, 5)
-FINGERPRINT = (9000, 9063)
-FINGERPRINT_STAGE = "tier1-fingerprint"
+FINGERPRINT = (12000, 12063)
+FINGERPRINT_STAGE = "tier2-fingerprint"
 REQUIRED_GODOT_PREFIX = "4.7.2.stable"
 H39_FILE_SHA = "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
-CANONICAL_REL = "docs/balance/data/489/canonical-host.json"
+CANONICAL_REL = "docs/balance/data/501/canonical-host.json"
+ISSUE = 501
 
 
 def run(cmd: list[str], cwd: Path = REPO) -> subprocess.CompletedProcess[str]:
@@ -213,7 +217,9 @@ def write_packet(path: Path, packet: dict[str, Any]) -> None:
 def compare_packets(canonical: dict[str, Any], other: dict[str, Any]) -> list[str]:
     faults: list[str] = []
     for key in ("godotVersion", "contentFileSha256", "contentSemanticSha256",
-                "searchSpaceSha256", "driverSha256"):
+                "mobOverrideFileSha256", "mobOverrideSemanticSha256",
+                "searchSpaceSha256", "seedContractSha256", "driverSha256",
+                "s009FileSha256", "s009SemanticSha256"):
         if canonical.get(key) != other.get(key):
             faults.append(f"{key} {other.get(key)} != canonical {canonical.get(key)}")
     if canonical.get("digest", {}).get("outcomeDigest") != other.get("digest", {}).get("outcomeDigest"):
@@ -227,6 +233,7 @@ def build_packet(godot: str, out_dir: Path, jobs: int, content: str) -> dict[str
     version = require_godot(godot)
     content_path = Path(content) if content else REPO / LIVE_REL
     identity = catalogue_identity(content_path, REPO / SPACE_REL)
+    s009 = reconstruct()["identity"]
     digest = run_digest(godot, out_dir, content)
     fingerprint = run_fingerprint(godot, out_dir, jobs, content)
     commit = str(fingerprint.get("manifest", {}).get("commit")
@@ -245,10 +252,12 @@ def build_packet(godot: str, out_dir: Path, jobs: int, content: str) -> dict[str
         qualified = True
         reason = ""
     return {
-        "issue": 489,
+        "issue": ISSUE,
         "godotVersion": version,
         "commit": commit,
         **identity,
+        "s009FileSha256": s009["fileSha256"],
+        "s009SemanticSha256": s009["semanticSha256"],
         "host": host_identity(jobs),
         "digest": {**digest, "pin": pin, "status": digest_status},
         "fingerprint": fingerprint,
@@ -278,7 +287,7 @@ def prove_concurrent(godot: str, out_dir: Path) -> dict[str, Any]:
 
     def _run(name: str, path: Path) -> dict[str, Any]:
         out = out_dir / f"{name}.json"
-        godot_sim(godot, ["--aspect=duskblade", "--runs=1", "--seed0=9000", "--vow=0",
+        godot_sim(godot, ["--aspect=duskblade", "--runs=1", "--seed0=12000", "--vow=0",
                           f"--content={path}", f"--stage={FINGERPRINT_STAGE}"], out, out_dir / f"{name}.log")
         return load_report(out)
 
@@ -303,11 +312,72 @@ def prove_concurrent(godot: str, out_dir: Path) -> dict[str, Any]:
     }
 
 
+def _enemy_overlay(enemy_id: str, hp: list[int]) -> dict[str, Any]:
+    blob = json.loads((REPO / LIVE_REL).read_text(encoding="utf-8"))
+    row = json.loads(json.dumps(blob["enemies"][enemy_id]))
+    row["hp"] = hp
+    return {enemy_id: row}
+
+
+def _write_overlay(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def prove_mobs(godot: str, out_dir: Path) -> dict[str, Any]:
+    live = REPO / MOBS_REL
+    before = file_sha256(live)
+    overlay_dir = out_dir / "overlays"
+    left_path, right_path = overlay_dir / "left.json", overlay_dir / "right.json"
+    _write_overlay(left_path, _enemy_overlay("sporeling", [1, 1]))
+    _write_overlay(right_path, _enemy_overlay("sporeling", [200, 200]))
+
+    def _run(name: str, flags: list[str]) -> dict[str, Any]:
+        out = out_dir / f"{name}.json"
+        godot_sim(godot, ["--aspect=duskblade", "--runs=1", "--seed0=12000", "--vow=0",
+                          f"--stage={FINGERPRINT_STAGE}", *flags],
+                  out, out_dir / f"{name}.log")
+        return load_report(out)
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        left_report, right_report = list(pool.map(
+            lambda item: _run(item[0], [f"--mobs={item[1]}"]),
+            (("left", left_path), ("right", right_path)),
+        ))
+    if file_sha256(live) != before:
+        raise RuntimeError("live content/mob-overrides.json changed during concurrent --mobs runs")
+    left_sha = str(left_report["manifest"]["mobOverrideFileSha256"])
+    right_sha = str(right_report["manifest"]["mobOverrideFileSha256"])
+    if left_sha == right_sha or left_sha != file_sha256(left_path) or right_sha != file_sha256(right_path):
+        raise RuntimeError("concurrent --mobs candidates did not bind distinct loaded file SHAs")
+    left_row, right_row = left_report["runs"][0], right_report["runs"][0]
+    if left_row["rng"] == right_row["rng"] and left_row["hp"] == right_row["hp"] \
+            and left_row["outcome"] == right_row["outcome"]:
+        raise RuntimeError("concurrent --mobs candidates observed one mob catalogue")
+    replay = _run("replay", [f"--mobs={left_path}"])
+    if str(replay.get("outcomeDigest", "")) != str(left_report.get("outcomeDigest", "")) \
+            or not replay.get("outcomeDigest"):
+        raise RuntimeError("same --mobs candidate/seed did not replay byte-identically")
+    defaulted = _run("default", [])
+    explicit = _run("explicit-empty", [f"--mobs={live}"])
+    if str(defaulted.get("outcomeDigest", "")) != str(explicit.get("outcomeDigest", "")):
+        raise RuntimeError("default no --mobs must match the live empty overlay")
+    if str(defaulted["manifest"]["mobOverrideFileSha256"]) != before \
+            or str(defaulted["manifest"]["mobOverrideSemanticSha256"]) != semantic_sha256(live):
+        raise RuntimeError("default no --mobs must bind the live empty overlay identity")
+    return {
+        "liveUnchanged": True,
+        "leftFileSha256": left_sha,
+        "rightFileSha256": right_sha,
+        "replayDigest": replay.get("outcomeDigest", ""),
+    }
+
+
 def fail_closed_cli(godot: str, out_dir: Path) -> None:
     missing = out_dir / "missing-out.json"
     proc = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
                 "--content=/no/such/glassvow-candidate.json", "--aspect=duskblade",
-                "--runs=1", "--seed0=9000", "--vow=0", f"--stage={FINGERPRINT_STAGE}",
+                "--runs=1", "--seed0=12000", "--vow=0", f"--stage={FINGERPRINT_STAGE}",
                 f"--out={missing}"])
     if proc.returncode == 0:
         raise RuntimeError("missing --content must fail closed")
@@ -340,6 +410,59 @@ def fail_closed_cli(godot: str, out_dir: Path) -> None:
                         "--stage=tier1-audit", f"--out={out_dir / 'tier1-audit.json'}"])
     if tier1_sealed.returncode == 0:
         raise RuntimeError("Tier-1 audit stage must stay sealed until a Tier-1 finalist")
+    tier2_overlap = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                         "--aspect=duskblade", "--runs=1", "--seed0=5000", "--vow=0",
+                         "--stage=tier2-f0-controls", f"--out={out_dir / 'tier2-overlap.json'}"])
+    if tier2_overlap.returncode == 0:
+        raise RuntimeError("Tier-2 F0 overlapping acceptance seeds must fail closed")
+    unused = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                  "--aspect=duskblade", "--runs=1", "--seed0=13400", "--vow=0",
+                  "--stage=tier2-f0-controls", f"--out={out_dir / 'tier2-unused.json'}"])
+    if unused.returncode == 0:
+        raise RuntimeError("Tier-2 F0 overlapping unused 13400–13999 must fail closed")
+    tier2_sealed = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                        "--aspect=duskblade", "--runs=1", "--seed0=14000", "--vow=0",
+                        "--stage=tier2-audit", f"--out={out_dir / 'tier2-audit.json'}"])
+    if tier2_sealed.returncode == 0:
+        raise RuntimeError("Tier-2 audit stage must stay sealed until a Tier-2 finalist")
+    missing_mobs = out_dir / "missing-mobs.json"
+    missing_mobs_proc = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                             "--mobs=/no/such/glassvow-mobs.json", "--aspect=duskblade",
+                             "--runs=1", "--seed0=12000", "--vow=0", f"--stage={FINGERPRINT_STAGE}",
+                             f"--out={missing_mobs}"])
+    if missing_mobs_proc.returncode == 0:
+        raise RuntimeError("missing --mobs must fail closed")
+    if missing_mobs.exists() and missing_mobs.stat().st_size:
+        blob = json.loads(missing_mobs.read_text(encoding="utf-8"))
+        if isinstance(blob, dict) and blob.get("runs"):
+            raise RuntimeError("missing --mobs emitted simulation rows")
+    malformed = out_dir / "malformed-mobs.json"
+    malformed.write_text("not-json\n", encoding="utf-8")
+    malformed_out = out_dir / "malformed-out.json"
+    malformed_proc = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                          f"--mobs={malformed}", "--aspect=duskblade", "--runs=1",
+                          "--seed0=12000", "--vow=0", f"--stage={FINGERPRINT_STAGE}",
+                          f"--out={malformed_out}"])
+    if malformed_proc.returncode == 0:
+        raise RuntimeError("malformed --mobs must fail closed")
+    incomplete = out_dir / "incomplete-mobs.json"
+    _write_overlay(incomplete, {"sporeling": {"hp": [1, 1]}})
+    incomplete_out = out_dir / "incomplete-out.json"
+    incomplete_proc = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                           f"--mobs={incomplete}", "--aspect=duskblade", "--runs=1",
+                           "--seed0=12000", "--vow=0", f"--stage={FINGERPRINT_STAGE}",
+                           f"--out={incomplete_out}"])
+    if incomplete_proc.returncode == 0:
+        raise RuntimeError("incomplete --mobs must fail closed")
+    unknown = out_dir / "unknown-mobs.json"
+    _write_overlay(unknown, {"notAMob": _enemy_overlay("sporeling", [1, 1])["sporeling"]})
+    unknown_out = out_dir / "unknown-out.json"
+    unknown_proc = run([godot, "--headless", "-s", "res://tools/balance_sim.gd", "--",
+                        f"--mobs={unknown}", "--aspect=duskblade", "--runs=1",
+                        "--seed0=12000", "--vow=0", f"--stage={FINGERPRINT_STAGE}",
+                        f"--out={unknown_out}"])
+    if unknown_proc.returncode == 0:
+        raise RuntimeError("unknown --mobs id must fail closed")
 
 
 def self_test(godot: str) -> int:
@@ -353,10 +476,11 @@ def self_test(godot: str) -> int:
     contract = load_contract()
     assert contract["stages"][FINGERPRINT_STAGE]["seeds"]["first"] == FINGERPRINT[0]
     assert contract["stages"][FINGERPRINT_STAGE]["seeds"]["last"] == FINGERPRINT[1]
-    with tempfile.TemporaryDirectory(prefix="glassvow-489-") as temp:
+    with tempfile.TemporaryDirectory(prefix="glassvow-501-") as temp:
         root = Path(temp)
         fail_closed_cli(godot, root)
         prove_concurrent(godot, root / "concurrent")
+        prove_mobs(godot, root / "mobs")
     print("balance host qualify self-test OK")
     return 0
 
@@ -370,7 +494,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--jobs", default="4", help="worker count, or comma list for --bench")
     parser.add_argument("--godot", default="godot")
     parser.add_argument("--content", default="")
-    parser.add_argument("--out", default="/tmp/glassvow-489-host")
+    parser.add_argument("--out", default="/tmp/glassvow-501-host")
     parser.add_argument("--compare", type=Path, help="canonical host packet to grade against")
     parser.add_argument("--mint", action="store_true",
                         help="write a packet without grading against the in-repo canonical")
@@ -412,8 +536,12 @@ def main() -> int:
         hashes: set[str] = set()
         canonical = None if args.mint else _canonical_packet()
         packet: dict[str, Any] = {}
+        identity_faults: list[str] = []
         for jobs in job_list:
             packet = build_packet(args.godot, out_dir / f"bench-{jobs}", jobs, args.content)
+            if compare_path is not None:
+                grade_against_canonical(packet, compare_path)
+                identity_faults.extend(str(fault) for fault in packet.get("parityFaults") or [])
             write_packet(out_dir / f"bench-{jobs}.json", packet)
             results.append({
                 "workers": jobs,
@@ -427,14 +555,15 @@ def main() -> int:
             hashes.add(str(canonical.get("fingerprint", {}).get("fingerprintHash", "")))
         chosen = max(results, key=lambda row: (row["qualified"], row["rowsPerSecond"]))
         summary = {
-            "issue": 489,
+            "issue": ISSUE,
             "drift": len(hashes) != 1,
+            "identityFaults": identity_faults,
             "chosenWorkers": None if len(hashes) != 1 else chosen["workers"],
             "runs": results,
         }
         write_packet(out_dir / "bench-summary.json", summary)
         print(json.dumps(summary, indent=2, sort_keys=True))
-        return 0 if not summary["drift"] else 2
+        return 0 if not summary["drift"] and not identity_faults else 2
     packet = build_packet(args.godot, out_dir, job_list[0], args.content)
     if compare_path is not None:
         grade_against_canonical(packet, compare_path)

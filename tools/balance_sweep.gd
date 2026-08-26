@@ -90,7 +90,7 @@ static func _write_policies(content: ContentDB, opts: Dictionary, file: FileAcce
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"mode": "sweep", "out": "", "rootSeed": 215,
 		"policyFirst": 0, "policyCount": 2000, "seeds": 40, "seed0": 3000,
-		"arms": "1,2,3,4", "content": "", "space": BalanceCatalogue.DEFAULT_SPACE,
+		"arms": "1,2,3,4", "content": "", "mobs": "", "space": BalanceCatalogue.DEFAULT_SPACE,
 		"stage": "", "sealedToken": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):

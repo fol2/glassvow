@@ -44,26 +44,74 @@ static func open(opts: Dictionary) -> Dictionary:
 	var semantic: String = _semantic_sha(content_path)
 	if semantic.length() != 64:
 		return {"error": "cannot compute semantic content SHA for %s" % content_path}
+	var mobs: Dictionary = _mobs(opts)
+	if mobs.has("error"):
+		return mobs
+	var mobs_raw: Variant = mobs["raw"]
+	if typeof(mobs_raw) == TYPE_DICTIONARY:
+		var overlay: Dictionary = mobs_raw
+		if not overlay.is_empty():
+			var preview: ContentDB = ContentDB.load_from(content_path, false)
+			if preview == null:
+				return {"error": "content did not load a catalogue: %s" % content_path}
+			var faults: PackedStringArray = preview.enemy_override_faults(overlay)
+			if not faults.is_empty():
+				return {"error": "invalid --mobs: %s" % faults[0]}
 	var git_out: Array = []
 	OS.execute("git", ["rev-parse", "HEAD"], git_out)
-	return {
-		"path": content_path,
-		"identity": {
-			"contentPath": content_path,
-			"contentFileSha256": FileAccess.get_sha256(content_path),
-			"contentSemanticSha256": semantic,
-			"searchSpacePath": space_path,
-			"searchSpaceSha256": FileAccess.get_sha256(space_path),
-			"driverSha256": _driver_sha(),
-			"commit": str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown",
-			"godot": Engine.get_version_info().get("string", "unknown"),
-			"stage": str(opts.get("stage", "")),
-		},
+	var identity: Dictionary = {
+		"contentPath": content_path,
+		"contentFileSha256": FileAccess.get_sha256(content_path),
+		"contentSemanticSha256": semantic,
+		"searchSpacePath": space_path,
+		"searchSpaceSha256": FileAccess.get_sha256(space_path),
+		"seedContractSha256": FileAccess.get_sha256(SEEDS_PATH),
+		"driverSha256": _driver_sha(),
+		"commit": str(git_out[0]).strip_edges() if not git_out.is_empty() else "unknown",
+		"godot": Engine.get_version_info().get("string", "unknown"),
+		"stage": str(opts.get("stage", "")),
 	}
+	var mobs_id_v: Variant = mobs["identity"]
+	if typeof(mobs_id_v) != TYPE_DICTIONARY:
+		return {"error": "missing mob identity"}
+	var mobs_id: Dictionary = mobs_id_v
+	identity.merge(mobs_id)
+	return {"path": content_path, "identity": identity, "mobsRaw": mobs_raw}
 
 
 static func load_prepared(prepared: Dictionary) -> ContentDB:
-	return ContentDB.load_from(str(prepared.get("path", "")), false)
+	var content: ContentDB = ContentDB.load_from(str(prepared.get("path", "")), false)
+	if content == null:
+		return null
+	var raw: Variant = prepared.get("mobsRaw", {})
+	var faults: PackedStringArray = content.apply_enemy_overrides(raw)
+	if not faults.is_empty():
+		return null
+	return content
+
+
+static func _mobs(opts: Dictionary) -> Dictionary:
+	var requested: String = str(opts.get("mobs", "")).strip_edges()
+	var path: String = resolve_path(requested) if not requested.is_empty() else ContentDB.MOB_OVERRIDES_PATH
+	if not FileAccess.file_exists(path):
+		return {"error": "missing mobs: %s" % path}
+	var text: String = FileAccess.get_file_as_string(path)
+	if text.strip_edges().is_empty():
+		return {"error": "empty mobs: %s" % path}
+	var raw: Variant = JSON.parse_string(text)
+	if typeof(raw) != TYPE_DICTIONARY:
+		return {"error": "invalid mobs JSON: %s" % path}
+	var semantic: String = _semantic_sha(path)
+	if semantic.length() != 64:
+		return {"error": "cannot compute semantic mob SHA for %s" % path}
+	return {
+		"raw": raw,
+		"identity": {
+			"mobOverridePath": path,
+			"mobOverrideFileSha256": FileAccess.get_sha256(path),
+			"mobOverrideSemanticSha256": semantic,
+		},
+	}
 
 
 static func _semantic_sha(path: String) -> String:

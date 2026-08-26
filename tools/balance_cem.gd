@@ -280,7 +280,7 @@ static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"island": 0, "seedsJson": "", "out": "", "popSize": 60, "elite": 15,
 		"maxGen": 20, "seedCount": 40, "trainSeed0": 4200, "holdoutSeed0": 5000,
 		"holdoutCount": 200, "rootSeed": 216, "samplerRoot": 215, "seedPacketSha256": "",
-		"content": "",
+		"content": "", "mobs": "",
 		"space": BalanceCatalogue.DEFAULT_SPACE, "stage": ""}
 	for arg: String in args:
 		if not arg.begins_with("--") or not arg.contains("="):
