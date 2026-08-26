@@ -16,11 +16,12 @@ static func run(fails: Array[String]) -> void:
 		depth_ok = not material.no_depth_test \
 			and material.depth_draw_mode != BaseMaterial3D.DEPTH_DRAW_DISABLED
 	_check(fails, depth_ok, "opaque material keeps normal depth testing and depth drawing")
-	var cold_transforms: Array[Transform3D] = _transforms(tracer)
-	var cold_data: Array[Color] = _custom_data(tracer)
+	var cold_transforms: Array[Transform3D] = tracer.instance_transforms()
+	var cold_data: Array[Color] = tracer.instance_custom_data()
 	var cold_count: int = cold_transforms.size()
 	var report: Dictionary = tracer.overhead()
-	_check(fails, cold_count == 16 and cold_count <= MapWaylightTracer.MAX_INSTANCES
+	_check(fails, cold_count == 16 and tracer.multimesh.instance_count == cold_count
+		and cold_count <= MapWaylightTracer.MAX_INSTANCES
 		and MapLayoutCanonical.int_value(report.get("draw_calls", 0)) == 1
 		and MapLayoutCanonical.int_value(report.get("mesh_resources", 0)) == 1
 		and MapLayoutCanonical.int_value(report.get("material_resources", 0)) == 1,
@@ -30,18 +31,19 @@ static func run(fails: Array[String]) -> void:
 	var replay: MapWaylightTracer = MapWaylightTracer.new()
 	_check(fails, replay.configure_route(edge, MapWaylightTracer.STATE_COLD)
 		and replay.geometry_digest() == tracer.geometry_digest()
-		and _transforms(replay) == cold_transforms and _custom_data(replay) == cold_data,
+		and replay.instance_transforms() == cold_transforms
+		and replay.instance_custom_data() == cold_data,
 		"canonical route and state replay byte-stable instance data")
 	var original_multimesh: MultiMesh = tracer.multimesh
 	var original_builds: int = tracer.geometry_build_count()
 	_check(fails, tracer.set_route_state(MapWaylightTracer.STATE_OPEN)
 		and tracer.multimesh == original_multimesh
 		and tracer.geometry_build_count() == original_builds
-		and _transforms(tracer) == cold_transforms,
+		and tracer.instance_transforms() == cold_transforms,
 		"state-only update preserves the MultiMesh and every transform")
-	var open_data: Color = tracer.multimesh.get_instance_custom_data(0)
+	var open_data: Color = tracer.instance_custom_data()[0]
 	tracer.set_route_state(MapWaylightTracer.STATE_WALKED)
-	var walked_data: Color = tracer.multimesh.get_instance_custom_data(0)
+	var walked_data: Color = tracer.instance_custom_data()[0]
 	_check(fails, cold_data[0] != open_data and open_data != walked_data
 		and cold_data[0] != walked_data, "cold/open/walked state payloads stay distinct")
 	var obstacle: Array[Dictionary] = [{"id": "box", "polygon": PackedVector2Array([
@@ -52,16 +54,6 @@ static func run(fails: Array[String]) -> void:
 	_check(fails, str(routed.get("status", "")) == MapSingleEdgeRouter.ROUTED
 		and routed_tracer.configure_route(routed, MapWaylightTracer.STATE_COLD),
 		"component directly consumes deterministic #468 output")
-static func _transforms(tracer: MapWaylightTracer) -> Array[Transform3D]:
-	var out: Array[Transform3D] = []
-	for i: int in range(tracer.multimesh.instance_count):
-		out.append(tracer.multimesh.get_instance_transform(i))
-	return out
-static func _custom_data(tracer: MapWaylightTracer) -> Array[Color]:
-	var out: Array[Color] = []
-	for i: int in range(tracer.multimesh.instance_count):
-		out.append(tracer.multimesh.get_instance_custom_data(i))
-	return out
 static func _covers_bent_legs(transforms: Array[Transform3D]) -> bool:
 	var first: bool = false
 	var turn: bool = false
