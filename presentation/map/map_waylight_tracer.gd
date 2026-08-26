@@ -141,7 +141,7 @@ static func _sample_transforms(points: Array[Vector3]) -> Array[Transform3D]:
 	var total: float = 0.0
 	for i: int in range(points.size() - 1):
 		total += points[i].distance_to(points[i + 1])
-	if total <= WORLD_EPSILON_M or int(ceil(total / SAMPLE_SPACING_M)) + 1 > MAX_INSTANCES:
+	if total <= WORLD_EPSILON_M or ceili(total / SAMPLE_SPACING_M) + 1 > MAX_INSTANCES:
 		return out
 	var distance: float = 0.0
 	while distance < total - WORLD_EPSILON_M:
