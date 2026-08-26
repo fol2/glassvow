@@ -9,8 +9,8 @@ static func run(fails: Array[String]) -> void:
 	var straight_points: Array[Vector2] = _points(straight)
 	var straight_cost: Dictionary = straight.get("cost_vector", {})
 	_check(fails, str(straight.get("status", "")) == MapSingleEdgeRouter.ROUTED
-			and straight_points.size() == 2 and is_equal_approx(float(straight_cost.get("route_length_ratio", 0.0)), 1.0)
-			and int(straight_cost.get("bend_count", -1)) == 0, "unobstructed edge stays straight")
+			and straight_points.size() == 2 and is_equal_approx(MapLayoutCanonical.float_value(straight_cost.get("route_length_ratio", 0.0)), 1.0)
+			and MapLayoutCanonical.int_value(straight_cost.get("bend_count", -1)) == 0, "unobstructed edge stays straight")
 	var box: Array[Dictionary] = [{"id": "box", "polygon": _rect(-1.0, -1.0, 1.0, 1.0)}]
 	var inflated: Array = MapSingleEdgeRouter.inflate_obstacles(box, 0.3)
 	var detour: Dictionary = MapSingleEdgeRouter.route(source, target, box, 0.2, 0.1)
@@ -50,10 +50,10 @@ static func run(fails: Array[String]) -> void:
 	var replay: Dictionary = MapSingleEdgeRouter.route(source, target, reordered, 0.15, 0.05, channel)
 	_check(fails, MapLayoutCanonical.canonical_bytes(narrow) == MapLayoutCanonical.canonical_bytes(replay), "obstacle reordering is byte-equivalent")
 	var diagnostics: Dictionary = detour.get("diagnostics", {})
-	_check(fails, int(diagnostics.get("candidate_count", 1)) <= int(diagnostics.get("max_candidates", 0))
-			and int(diagnostics.get("visibility_edge_count", 1)) <= int(diagnostics.get("max_visibility_edges", 0))
-			and int(diagnostics.get("search_state_count", 1)) <= int(diagnostics.get("max_search_states", 0))
-			and int(diagnostics.get("max_obstacles", 0)) >= 15 * 7, "diagnostics report fixed 15x7-appropriate bounds")
+	_check(fails, MapLayoutCanonical.int_value(diagnostics.get("candidate_count", 1)) <= MapLayoutCanonical.int_value(diagnostics.get("max_candidates", 0))
+			and MapLayoutCanonical.int_value(diagnostics.get("visibility_edge_count", 1)) <= MapLayoutCanonical.int_value(diagnostics.get("max_visibility_edges", 0))
+			and MapLayoutCanonical.int_value(diagnostics.get("search_state_count", 1)) <= MapLayoutCanonical.int_value(diagnostics.get("max_search_states", 0))
+			and MapLayoutCanonical.int_value(diagnostics.get("max_obstacles", 0)) >= 15 * 7, "diagnostics report fixed 15x7-appropriate bounds")
 static func _rect(x0: float, y0: float, x1: float, y1: float) -> PackedVector2Array:
 	return PackedVector2Array([Vector2(x0, y0), Vector2(x0, y1), Vector2(x1, y1), Vector2(x1, y0)])
 static func _points(result: Dictionary) -> Array[Vector2]:
@@ -63,9 +63,10 @@ static func _points(result: Dictionary) -> Array[Vector2]:
 		return out
 	var rows: Array = rows_v
 	for row_v: Variant in rows:
-		if row_v is Array and (row_v as Array).size() == 3:
+		if typeof(row_v) == TYPE_ARRAY:
 			var row: Array = row_v
-			out.append(Vector2(float(row[0]), float(row[2])))
+			if row.size() == 3 and MapLayoutCanonical.number(row[0]) and MapLayoutCanonical.number(row[2]):
+				out.append(Vector2(MapLayoutCanonical.float_value(row[0]), MapLayoutCanonical.float_value(row[2])))
 	return out
 static func _clear_and_simple(points: Array[Vector2], inflated: Array) -> bool:
 	for i: int in range(points.size() - 1):
