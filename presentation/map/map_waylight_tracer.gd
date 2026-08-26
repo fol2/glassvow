@@ -19,6 +19,8 @@ var _waylight_material: StandardMaterial3D
 var _geometry_digest: String = ""
 var _geometry_builds: int = 0
 var _state: StringName = STATE_COLD
+var _instance_transforms: Array[Transform3D] = []
+var _instance_custom_data: Array[Color] = []
 
 func _init() -> void:
 	name = "MapWaylightTracer"
@@ -55,14 +57,19 @@ func configure_route(edge_record: Dictionary, state: StringName = STATE_COLD) ->
 	return set_route_state(state)
 
 func set_route_state(state: StringName) -> bool:
-	if not is_route_state(state) or multimesh == null:
+	if not is_route_state(state) or multimesh == null or _instance_transforms.is_empty():
+		return false
+	var count: int = _instance_transforms.size()
+	if multimesh.instance_count != count:
 		return false
 	_state = state
-	var count: int = multimesh.instance_count
+	_instance_custom_data.resize(count)
 	for i: int in range(count):
 		var progress: float = 0.0 if count <= 1 else float(i) / float(count - 1)
+		var data: Color = Color(route_state_code(state), progress, 0.0, 1.0)
+		_instance_custom_data[i] = data
 		multimesh.set_instance_color(i, route_state_color(state))
-		multimesh.set_instance_custom_data(i, Color(route_state_code(state), progress, 0.0, 1.0))
+		multimesh.set_instance_custom_data(i, data)
 	return true
 
 func geometry_digest() -> String:
@@ -73,6 +80,18 @@ func geometry_build_count() -> int:
 
 func route_state() -> StringName:
 	return _state
+
+## CPU-owned copies are the deterministic audit surface. Godot's headless dummy
+## rendering server does not retain MultiMesh per-instance readback values.
+func instance_transforms() -> Array[Transform3D]:
+	var out: Array[Transform3D] = []
+	out.assign(_instance_transforms)
+	return out
+
+func instance_custom_data() -> Array[Color]:
+	var out: Array[Color] = []
+	out.assign(_instance_custom_data)
+	return out
 
 func overhead() -> Dictionary:
 	return {"draw_calls": 1, "mesh_resources": 1, "material_resources": 1,
@@ -104,14 +123,16 @@ static func route_state_color(state: StringName) -> Color:
 			return COLD_COLOR
 
 func _rebuild(transforms: Array[Transform3D]) -> void:
+	_instance_transforms.assign(transforms)
+	_instance_custom_data.clear()
 	var next: MultiMesh = MultiMesh.new()
 	next.transform_format = MultiMesh.TRANSFORM_3D
 	next.use_colors = true
 	next.use_custom_data = true
 	next.mesh = _bead_mesh
-	next.instance_count = transforms.size()
-	for i: int in range(transforms.size()):
-		next.set_instance_transform(i, transforms[i])
+	next.instance_count = _instance_transforms.size()
+	for i: int in range(_instance_transforms.size()):
+		next.set_instance_transform(i, _instance_transforms[i])
 	multimesh = next
 	_geometry_builds += 1
 
