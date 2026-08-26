@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "id": "492-tier1-racing-v1",
+  "issue": 492,
+  "seedRegistry": "docs/balance/421-content-search-seeds-v1.json",
+  "responseContract": "docs/balance/490-f0-response-contract-v1.json",
+  "registry": "docs/balance/490-tier1-registry-v1.json",
+  "candidateManifest": "docs/balance/data/491/candidate-manifest.json",
+  "hostPackets": [
+    "docs/balance/data/489/m4-mac-mini.json"
+  ],
+  "baseline": "t1-c000",
+  "racingSet": [
+    "t1-c012",
+    "t1-c036",
+    "t1-c040",
+    "t1-c005"
+  ],
+  "evaluations": {
+    "layer1": {
+      "controls": {
+        "stage": "tier1-f1-racing",
+        "root": 4454,
+        "first": 9300,
+        "last": 9331,
+        "arms": [1, 2]
+      },
+      "landscape": {
+        "stage": "tier1-f1-racing",
+        "root": 4454,
+        "policyFirst": 0,
+        "policyCount": 128,
+        "first": 9300,
+        "last": 9307
+      },
+      "bootstrap": 2000,
+      "bootstrapSeed": 49201,
+      "maxPromotions": 4,
+      "candidateSource": "tier1",
+      "candidateCount": 48,
+      "candidateSeed": 490
+    },
+    "layer2": {
+      "controls": {
+        "stage": "tier1-f1-racing",
+        "root": 4454,
+        "first": 9300,
+        "last": 9363,
+        "arms": [1, 2]
+      },
+      "landscape": {
+        "stage": "tier1-f1-racing",
+        "root": 4454,
+        "policyFirst": 0,
+        "policyCount": 256,
+        "first": 9300,
+        "last": 9315
+      },
+      "bootstrap": 3000,
+      "bootstrapSeed": 49202,
+      "maxPromotions": 3,
+      "candidateSource": "tier1",
+      "candidateCount": 48,
+      "candidateSeed": 490
+    },
+    "layer3": {
+      "controls": {
+        "stage": "tier1-f1-racing",
+        "root": 4454,
+        "first": 9300,
+        "last": 9427,
+        "arms": [1, 2]
+      },
+      "landscape": {
+        "stage": "tier1-f1-racing",
+        "root": 4454,
+        "policyFirst": 0,
+        "policyCount": 512,
+        "first": 9300,
+        "last": 9331
+      },
+      "bootstrap": 4000,
+      "bootstrapSeed": 49203,
+      "maxPromotions": 2,
+      "candidateSource": "tier1",
+      "candidateCount": 48,
+      "candidateSeed": 490
+    },
+    "audit": {
+      "controls": {
+        "stage": "tier1-audit",
+        "root": 4454,
+        "first": 11000,
+        "last": 11199,
+        "arms": [1, 2]
+      },
+      "landscape": {
+        "stage": "tier1-audit",
+        "root": 4454,
+        "policyFirst": 0,
+        "policyCount": 128,
+        "first": 11000,
+        "last": 11007
+      },
+      "bootstrap": 4000,
+      "bootstrapSeed": 49204,
+      "finalistAudit": true,
+      "candidateSource": "tier1",
+      "candidateCount": 48,
+      "candidateSeed": 490
+    }
+  },
+  "racing": {
+    "responseVector": ["validC1a", "validC1b"],
+    "pairedUnit": "seed block with common policy and seed rectangles",
+    "promotion": "point improvement in C1a or C1b, no credible paired regression in either, and confidence-envelope Pareto non-domination",
+    "dominance": "one candidate's absolute 95% upper bounds are no higher in C1a and C1b, and lower in at least one, than another candidate's lower bounds",
+    "capTieBreak": "pre-registered racingSet order after all hard stops and confidence-envelope dominance; no weighted score",
+    "stop": [
+      "incomplete or simulator error",
+      "stall beyond paired t1-c000",
+      "C2, aspect-identity or Vow-5 guardrail failure",
+      "changed package mechanism did not fire",
+      "credible paired regression in C1a or C1b",
+      "confidence-envelope dominance",
+      "bounded promotion cap"
+    ],
+    "incremental": "each layer inherits the exact previous rectangle and simulates only disjoint added seeds and policies",
+    "weightedScore": false
+  },
+  "surrogate": {
+    "enabled": false,
+    "decision": "zero model proposals and zero balanced supplement candidates; the inherited four-candidate race is the complete bounded campaign",
+    "validation": "candidate-held-out",
+    "baseline": "five-nearest inverse-Hamming mean",
+    "responses": [
+      "topRate",
+      "thirdRate",
+      "fourthRate",
+      "within10",
+      "viable",
+      "arm2Rate",
+      "margin"
+    ],
+    "adequacy": {
+      "minDeficitSpearman": 0.5,
+      "minDeficitSpearmanLift": 0.05,
+      "minTopQuartileRecall": 0.625,
+      "minTopQuartileRecallLift": 0.125,
+      "minIntervalCoverage": 0.8,
+      "maxIntervalCoverage": 0.98,
+      "maxNormalisedMaeRatio": 0.95
+    },
+    "proposalCap": 0,
+    "balancedSupplementCount": 0
+  },
+  "miniCem": {
+    "stage": "tier1-mini-cem",
+    "policyRoot": 4454,
+    "root": 6454,
+    "islands": 24,
+    "popSize": 16,
+    "elite": 4,
+    "maxGen": 6,
+    "seedCount": 8,
+    "trainSeed0": 9600,
+    "holdoutSeed0": 10000,
+    "holdoutCount": 40,
+    "stopRule": "after six generations, stop when best-ever improvement across the latest six generations is below 0.01; otherwise maxGen",
+    "islandSeeds": "six common final-layer t1-c000 policy representatives per grid, with candidate-specific frozen start-cell labels",
+    "commonRandomNumbers": "same training seed block within each generation and same validation seeds for every candidate and paired t1-c000"
+  },
+  "finalistBar": {
+    "layer1": {
+      "primaryGridCount": 3,
+      "primaryWithin10": 3,
+      "primaryViable": 4,
+      "remainingWithin10": 2,
+      "remainingViable": 3,
+      "credibleRegressionLowerBoundMax": 0.0,
+      "cellMinimumPolicies": 20,
+      "cellMinimumRuns": 400,
+      "cellMinimumWinRateDelta": 0.05,
+      "thickness": ["thin", "mid"],
+      "nonDominant": {
+        "duskblade": ["smolder", "attrition"],
+        "ashwarden": ["shatter", "attrition"]
+      }
+    },
+    "developmentC3": {
+      "primaryGridCount": 3,
+      "primaryStayed": 4,
+      "primaryClose": 3,
+      "remainingStayed": 2,
+      "remainingClose": 1,
+      "forbidZeroZero": true,
+      "requireAlternativeEndCells": true
+    },
+    "guardrails": {
+      "arm2RateExclusiveMax": 0.5,
+      "topMinusArm2Minimum": 0.35,
+      "duskIdentity": "shatter-led",
+      "ashIdentity": "smolder-led",
+      "vow5CeilingExclusiveMax": 0.9,
+      "stallAndErrorDeltaMax": 0,
+      "requireNumericAndHydratedPackets": true
+    },
+    "maximumFinalists": 2
+  },
+  "audit": {
+    "singleDataBearingInvocation": true,
+    "sealedToken": "tier1-finalist",
+    "nonGating": true,
+    "blockOn": [
+      "stall or error",
+      "aspect identity break",
+      "C2 break",
+      "material reversal of final racing breadth or development C3"
+    ],
+    "adaptiveRerun": false
+  }
+}

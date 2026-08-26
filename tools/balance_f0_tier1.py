@@ -616,6 +616,8 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
             acc[f"{grid}:breadth"].append(float(cand_c1[f"grid:{grid}"]))
             acc[f"{grid}:within10"].append(float(cand_valid[grid]["within10"]))
             acc[f"{grid}:viable"].append(float(cand_valid[grid]["viable"]))
+        acc["c1a"].append(float(cand_c1["c1a"]))
+        acc["c1b"].append(float(cand_c1["c1b"]))
         acc["sum"].append(float(cand_c1["sum"]))
         if b_c is not None and b_l is not None:
             base_tbl = _combine(b_c, c_draw)
@@ -635,6 +637,8 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
             base_cells = _cell_dict(_combine(b_l, l_draw))
             base_valid = valid_proxies(base_controls, base_cells, contract)
             base_c1 = valid_c1(base_valid)
+            vs["c1a"].append(float(cand_c1["c1a"] - base_c1["c1a"]))
+            vs["c1b"].append(float(cand_c1["c1b"] - base_c1["c1b"]))
             vs["sum"].append(float(cand_c1["sum"] - base_c1["sum"]))
             for grid in GRIDS:
                 vs[grid].append(float(cand_c1[f"grid:{grid}"] - base_c1[f"grid:{grid}"]))
@@ -643,10 +647,12 @@ def bootstrap_breadth(control: dict[int, list[dict[str, Any]]],
         "breadth": {grid: _interval(acc[f"{grid}:breadth"]) for grid in GRIDS},
         "within10": {grid: _interval(acc[f"{grid}:within10"]) for grid in GRIDS},
         "viable": {grid: _interval(acc[f"{grid}:viable"]) for grid in GRIDS},
+        "c1": {key: _interval(acc[key]) for key in ("c1a", "c1b")},
         "sum": _interval(acc["sum"]),
     }
     if vs:
         result["vsBaseline"] = {
+            "c1": {key: _interval(vs[key]) for key in ("c1a", "c1b")},
             "breadth": {grid: _interval(vs[grid]) for grid in GRIDS},
             "sum": _interval(vs["sum"]),
         }
