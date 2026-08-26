@@ -25,8 +25,10 @@ if str(_TOOLS) not in sys.path:
     sys.path.insert(0, str(_TOOLS))
 
 from balance_content_doe import generate_bundle as generate_doe_bundle  # noqa: E402
-from balance_host_qualify import host_identity, require_godot  # noqa: E402
+from balance_host_qualify import godot_version, host_identity, require_godot  # noqa: E402
+from balance_host_qualify import REQUIRED_GODOT_PREFIX  # noqa: E402
 from balance_tier1_design import generate_bundle as generate_tier1_bundle  # noqa: E402
+from balance_tier2_design import generate_bundle as generate_tier2_bundle  # noqa: E402
 from balance_f0_tier1 import (  # noqa: E402
     RACING_SET,
     attach_tier1_fields,
@@ -36,6 +38,15 @@ from balance_f0_tier1 import (  # noqa: E402
     identity_load,
     package_effects,
     pairwise_effects,
+)
+from balance_f0_tier2 import (  # noqa: E402
+    attach_tier2_fields,
+    decide as decide_tier2,
+    factorial_effects,
+    racing_set as tier2_racing_set,
+    tidy_candidate,
+    pareto_ids as tier2_pareto_ids,
+    profile_attribution_fault,
 )
 from balance_seed_contract import (  # noqa: E402
     CONTRACT_REL,
@@ -210,6 +221,9 @@ def evaluation_from_registry(registry: dict[str, Any], name: str,
         selected_out["hostPackets"] = list(selected["hostPackets"])
     if registry.get("responseContract"):
         selected_out["responseContract"] = str(registry["responseContract"])
+    for key in ("godotPrefixes", "inheritHostQualification"):
+        if key in registry:
+            selected_out[key] = registry[key]
     for key in ("baseline", "racingSet", "candidateManifest", "strictGuardrails"):
         if key in registry:
             selected_out[key] = registry[key]
@@ -219,6 +233,40 @@ def evaluation_from_registry(registry: dict[str, Any], name: str,
 def is_tier1_profile(proto: dict[str, Any]) -> bool:
     """Tier-1 analysis is selected by its candidate source, not one issue number."""
     return str(proto.get("candidateSource", "")) == "tier1"
+
+
+def is_tier2_profile(proto: dict[str, Any]) -> bool:
+    """Tier-2 analysis is selected by its candidate source, not one issue number."""
+    return str(proto.get("candidateSource", "")) == "tier2"
+
+
+def require_eval_godot(godot: str, proto: dict[str, Any]) -> str:
+    version = godot_version(godot)
+    prefixes = [str(item) for item in proto.get("godotPrefixes") or [REQUIRED_GODOT_PREFIX]]
+    if not any(version.startswith(prefix) for prefix in prefixes):
+        raise ValueError(f"godot --version must start with one of {prefixes}, got {version}")
+    return version
+
+
+def normalise_tier2_candidate(row: dict[str, Any]) -> dict[str, Any]:
+    content = row.get("contentIdentity") or {}
+    mobs = row.get("mobOverrideIdentity") or {}
+    registry = row.get("registryIdentity") or {}
+    out = dict(row)
+    out["values"] = dict(row.get("vector") or row.get("values") or {})
+    out["fileSha256"] = str(content.get("fileSha256") or row.get("fileSha256") or "")
+    out["semanticSha256"] = str(content.get("semanticSha256") or row.get("semanticSha256") or "")
+    out["candidateFileSha256"] = str(row.get("candidateFileSha256") or "")
+    out["candidateSemanticSha256"] = str(row.get("candidateSemanticSha256") or "")
+    out["searchSpaceSha256"] = str(registry.get("fileSha256") or row.get("searchSpaceSha256") or "")
+    out["contentFileSha256"] = str(content.get("fileSha256") or "")
+    out["contentSemanticSha256"] = str(content.get("semanticSha256") or "")
+    out["mobOverrideFileSha256"] = str(mobs.get("fileSha256") or "")
+    out["mobOverrideSemanticSha256"] = str(mobs.get("semanticSha256") or "")
+    out["registryFileSha256"] = str(registry.get("fileSha256") or "")
+    out["registrySemanticSha256"] = str(registry.get("semanticSha256") or "")
+    out["effectiveCatalogueSemanticSha256"] = str(row.get("effectiveCatalogueSemanticSha256") or "")
+    return out
 
 
 def validate_candidate_manifest(actual: dict[str, Any], expected: dict[str, Any]) -> None:
@@ -297,7 +345,10 @@ def input_parts(proto: dict[str, Any], identity: dict[str, Any], candidate: dict
         "protocol": proto,
         "candidate": {"id": candidate["id"], "values": candidate["values"],
                       "fileSha256": candidate["fileSha256"],
-                      "semanticSha256": candidate["semanticSha256"]},
+                      "semanticSha256": candidate["semanticSha256"],
+                      **({k: candidate[k] for k in (
+                          "candidateFileSha256", "candidateSemanticSha256",
+                          "effectiveCatalogueSemanticSha256") if candidate.get(k)})},
         "identity": {k: identity[k] for k in
                      ("contentFileSha256", "contentSemanticSha256", "searchSpaceSha256",
                       "driverSha256", "mobOverrideFileSha256", "mobOverrideSemanticSha256")},
@@ -670,6 +721,18 @@ def bind_row(row: dict[str, Any], identity: dict[str, Any],
             bound["relics"] = row["relics"]
         if "packageEvents" in row:
             bound["packageEvents"] = row["packageEvents"]
+        if identity.get("candidateFileSha256"):
+            bound["candidateFileSha256"] = identity["candidateFileSha256"]
+            bound["candidateSemanticSha256"] = identity.get(
+                "candidateSemanticSha256", bound["candidateSemanticSha256"])
+        for key in ("contentFileSha256", "contentSemanticSha256",
+                    "mobOverrideFileSha256", "mobOverrideSemanticSha256",
+                    "registryFileSha256", "registrySemanticSha256",
+                    "effectiveCatalogueSemanticSha256"):
+            if identity.get(key):
+                bound[key] = identity[key]
+        if "blockMitigation" in (identity.get("values") or {}):
+            bound["vector"] = identity["values"]
     return bound
 
 
@@ -679,14 +742,16 @@ def git_head() -> str:
 
 
 def qualified_packet(host: dict[str, Any], godot: str,
-                     packets: tuple[str, ...] | list[str] | None = None) -> dict[str, Any]:
+                     packets: tuple[str, ...] | list[str] | None = None,
+                     proto: dict[str, Any] | None = None) -> dict[str, Any]:
+    inherit = bool((proto or {}).get("inheritHostQualification"))
     for rel in packets or HOST_PACKETS:
         path = REPO / rel
         if not path.is_file():
             continue
         packet = read_json(path)
-        if packet.get("qualified") and packet.get("godotVersion") == godot \
-                and packet.get("host", {}).get("cpu") == host.get("cpu"):
+        cpu_ok = packet.get("qualified") and packet.get("host", {}).get("cpu") == host.get("cpu")
+        if cpu_ok and (packet.get("godotVersion") == godot or inherit):
             return packet
     raise ValueError(f"host {host.get('cpu')} / {godot} is not QUALIFIED by #456")
 
@@ -712,8 +777,18 @@ def ensure_candidates(path: Path, count: int, seed: int,
     manifest_path = path / "manifest.json"
     if manifest_path.is_file():
         manifest = read_json(manifest_path)
-        if int(manifest.get("count", -1)) != count or int(manifest.get("seed", -1)) != seed:
+        if int(manifest.get("count", -1)) != count:
             raise ValueError(f"stale DOE bundle at {path}")
+        if source != "tier2" and int(manifest.get("seed", -1)) != seed:
+            raise ValueError(f"stale DOE bundle at {path}")
+        if source == "tier2":
+            manifest["candidates"] = [normalise_tier2_candidate(row)
+                                      for row in manifest.get("candidates") or []]
+        return manifest
+    if source == "tier2":
+        manifest = generate_tier2_bundle(REPO, path, False)
+        manifest["candidates"] = [normalise_tier2_candidate(row)
+                                  for row in manifest.get("candidates") or []]
         return manifest
     if source == "tier1":
         return generate_tier1_bundle(REPO, path, False, seed)
@@ -883,6 +958,12 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         "seedRegistrySha256": cat["seedRegistrySha256"], "commit": commit,
         "driverSha256": cat["driverSha256"], "godotVersion": godot_version,
         "hostFingerprint": host_fp,
+        **{k: cand[k] for k in (
+            "candidateFileSha256", "candidateSemanticSha256",
+            "contentFileSha256", "contentSemanticSha256",
+            "mobOverrideFileSha256", "mobOverrideSemanticSha256",
+            "registryFileSha256", "registrySemanticSha256",
+            "effectiveCatalogueSemanticSha256") if cand.get(k)},
     }
     dump(input_path, {"inputHash": digest, "parts": parts})
     t0 = time.perf_counter()
@@ -983,6 +1064,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     elif any((cand_dir / "landscape").glob("shard-*.ndjson")):
         raise RuntimeError(f"landscape rows exist after control early-stop for {cand['id']}")
     fault = fault or landscape_errors_fault(landscape_rows)
+    if is_tier2_profile(proto):
+        fault = fault or profile_attribution_fault(control_rows + landscape_rows)
     controls = aggregate_controls(control_rows)
     cells = aggregate_cells(landscape_rows, axes) if landscape_rows else {}
     proxies = grid_proxies(controls, cells) if landscape_rows else {}
@@ -1000,7 +1083,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         "landscapeErrors": sum(1 for row in landscape_rows if row.get("outcome") == "error"),
         "observationsSha256": write_observations(
             cand_dir / "observations.jsonl", control_rows + landscape_rows, bind,
-            extras=is_tier1_profile(proto)),
+            extras=is_tier1_profile(proto) or is_tier2_profile(proto)),
         "controlRowCount": len(control_rows), "landscapeRowCount": len(landscape_rows),
         "wallSeconds": round(time.perf_counter() - t0, 3),
         "godotVersion": godot_version, "hostFingerprint": host_fp, "commit": commit,
@@ -1028,7 +1111,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         boot_seed = int(proto.get("bootSeed", BOOT_SEED))
         result["bootstrap"] = seed_block_bootstrap(
             by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes, n_boot, boot_seed)
-        if is_tier1_profile(proto):
+        if is_tier1_profile(proto) or is_tier2_profile(proto):
             extra = bootstrap_breadth(
                 by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes,
                 read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL))),
@@ -1045,6 +1128,10 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         attach_tier1_fields(result, axes, contract, identity_load(read_json(content)),
                             landscape_rows, control_rows,
                             strict=bool(proto.get("strictGuardrails", False)))
+    if is_tier2_profile(proto):
+        contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
+        attach_tier2_fields(result, axes, contract, identity_load(read_json(content)),
+                            landscape_rows, control_rows)
     result["status"] = "early-stop" if fault else "complete"
     result["earlyStop"] = fault or None
     dump(cand_dir / "manifest.json", {k: v for k, v in result.items() if not k.startswith("_")})
@@ -1082,6 +1169,63 @@ def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
                     identity: dict[str, Any], commit: str, godot: str,
                     live_sha: str, out: Path) -> dict[str, Any]:
     public = [{k: v for k, v in row.items() if not k.startswith("_")} for row in candidates]
+    if is_tier2_profile(proto):
+        contract = read_json(REPO / str(proto.get("responseContract")))
+        boot_n = int(proto.get("bootstrap", 10000))
+        boot_seed = int(proto.get("bootSeed", 508))
+        effects = factorial_effects(candidates, boot_n, boot_seed,
+                                    axes=proto.get("frozenLandscape"))
+        baseline = next((row for row in candidates if row.get("id") == "t2-c000"), None)
+        for row in public:
+            full = next(item for item in candidates if item["id"] == row["id"])
+            row["decision"] = decide_tier2(full, baseline, contract)
+            full["decision"] = row["decision"]
+            dump(out / row["id"] / "manifest.json",
+                 {k: v for k, v in {**full, **row}.items() if not str(k).startswith("_")})
+        display = sorted((row for row in public if row.get("validC1a") is not None),
+                         key=lambda row: (float(row.get("validC1a") or 0.0)
+                                          + float(row.get("validC1b") or 0.0), row["id"]))
+        racing = tier2_racing_set(public)
+        summary = {
+            "issue": int(proto.get("issue", 503)), "protocol": proto,
+            "commit": commit, "godotVersion": godot,
+            "liveContentFileSha256": live_sha,
+            "liveMobOverrideFileSha256": file_sha256(REPO / MOBS_REL),
+            "searchSpaceSha256": identity["searchSpaceSha256"],
+            "seedRegistrySha256": identity["seedRegistrySha256"],
+            "driverSha256": identity["driverSha256"], "host": host,
+            "hostFingerprint": packet["fingerprint"]["fingerprintHash"],
+            "candidates": public,
+            "pareto": tier2_pareto_ids(public),
+            "displayOrder": [row["id"] for row in display],
+            "displayOrderNote": "sorted by valid-cell C1a+C1b deficit for readability, not a score",
+            "factorialEffects": effects,
+            "shortlist": [row["id"] for row in public
+                          if (row.get("decision") or {}).get("eligible")],
+            "racingSet": racing,
+            "totalRows": sum(int(row.get("controlRowCount") or 0)
+                             + int(row.get("landscapeRowCount") or 0) for row in public),
+            "complete": sum(1 for row in public if row.get("status") == "complete"),
+            "earlyStop": sum(1 for row in public if row.get("status") == "early-stop"),
+        }
+        dump(out / "summary.json", summary)
+        tidy = {
+            "issue": summary["issue"], "commit": commit, "godotVersion": godot,
+            "hostFingerprint": summary["hostFingerprint"],
+            "liveContentFileSha256": live_sha,
+            "liveMobOverrideFileSha256": summary["liveMobOverrideFileSha256"],
+            "searchSpaceSha256": identity["searchSpaceSha256"],
+            "seedRegistrySha256": identity["seedRegistrySha256"],
+            "driverSha256": identity["driverSha256"],
+            "totalRows": summary["totalRows"],
+            "complete": summary["complete"], "earlyStop": summary["earlyStop"],
+            "pareto": summary["pareto"], "shortlist": summary["shortlist"],
+            "racingSet": racing,
+            "factorialEffects": effects,
+            "candidates": [tidy_candidate(row) for row in public],
+        }
+        dump(out / "tidy.json", tidy)
+        return summary
     if is_tier1_profile(proto):
         contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
         features = list(contract["packageDiagnostics"]["packages"])
@@ -1346,11 +1490,12 @@ def main() -> int:
                           "godotVersion": provenance["godotVersion"],
                           "hostFingerprint": provenance["hostFingerprint"][:16]}, sort_keys=True))
         return 0
-    godot_version = require_godot(args.godot)
+    godot_version = require_eval_godot(args.godot, proto) if proto.get("godotPrefixes") \
+        else require_godot(args.godot)
     host = host_identity(args.jobs)
     packets = tuple(proto["hostPackets"]) if proto.get("hostPackets") else (
         HOST_PACKETS_TIER1 if is_tier1_profile(proto) else HOST_PACKETS)
-    packet = qualified_packet(host, godot_version, packets)
+    packet = qualified_packet(host, godot_version, packets, proto)
     baseline_ids = [row["id"] for row in manifest["candidates"] if row.get("baseline")]
     if len(baseline_ids) != 1: raise ValueError("candidate manifest must identify exactly one baseline")
     baseline_id = baseline_ids[0]; names = [args.replay] if args.replay else (wanted or [row["id"] for row in manifest["candidates"]])
