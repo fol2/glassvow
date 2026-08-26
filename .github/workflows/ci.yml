@@ -74,6 +74,9 @@ jobs:
       - name: Test Tier-1 F0 response contract
         run: python3 -B tests/test_balance_tier1_f0.py
 
+      - name: Test Tier-1 F1 racing contract
+        run: python3 -B tests/test_balance_tier1_f1.py
+
       - name: Test F1/F2 racing and model adequacy rules
         run: |
           python3 -B tests/test_balance_f1_f2.py

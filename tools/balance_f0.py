@@ -208,7 +208,15 @@ def evaluation_from_registry(registry: dict[str, Any], name: str,
         selected_out["hostPackets"] = list(selected["hostPackets"])
     if registry.get("responseContract"):
         selected_out["responseContract"] = str(registry["responseContract"])
+    for key in ("baseline", "racingSet"):
+        if key in registry:
+            selected_out[key] = registry[key]
     return selected_out
+
+
+def is_tier1_profile(proto: dict[str, Any]) -> bool:
+    """Tier-1 analysis is selected by its candidate source, not one issue number."""
+    return str(proto.get("candidateSource", "")) == "tier1"
 
 
 def input_parts(proto: dict[str, Any], identity: dict[str, Any], candidate: dict[str, Any],
@@ -904,7 +912,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         "landscapeErrors": sum(1 for row in landscape_rows if row.get("outcome") == "error"),
         "observationsSha256": write_observations(
             cand_dir / "observations.jsonl", control_rows + landscape_rows, bind,
-            extras=int(proto.get("issue", 0)) == 491),
+            extras=is_tier1_profile(proto)),
         "controlRowCount": len(control_rows), "landscapeRowCount": len(landscape_rows),
         "wallSeconds": round(time.perf_counter() - t0, 3),
         "godotVersion": godot_version, "hostFingerprint": host_fp, "commit": commit,
@@ -932,7 +940,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         boot_seed = int(proto.get("bootSeed", BOOT_SEED))
         result["bootstrap"] = seed_block_bootstrap(
             by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes, n_boot, boot_seed)
-        if int(proto.get("issue", 0)) == 491:
+        if is_tier1_profile(proto):
             extra = bootstrap_breadth(
                 by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes,
                 read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL))),
@@ -943,7 +951,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
                 bootstrap=result["bootstrap"],
                 baseline_bootstrap=baseline["bootstrap"],
                 complete_rectangle=complete_rectangle)
-    if int(proto.get("issue", 0)) == 491:
+    if is_tier1_profile(proto):
         contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
         attach_tier1_fields(result, axes, contract, identity_load(read_json(content)),
                             landscape_rows, control_rows)
@@ -984,7 +992,7 @@ def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
                     identity: dict[str, Any], commit: str, godot: str,
                     live_sha: str, out: Path) -> dict[str, Any]:
     public = [{k: v for k, v in row.items() if not k.startswith("_")} for row in candidates]
-    if int(proto.get("issue", 0)) == 491:
+    if is_tier1_profile(proto):
         contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
         features = list(contract["packageDiagnostics"]["packages"])
         boot_n = int(proto.get("bootstrap", 1000))
@@ -1001,7 +1009,7 @@ def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
         display = sorted((row for row in public if row.get("validBreadthSum") is not None),
                          key=lambda row: (float(row["validBreadthSum"]), row["id"]))
         summary = {
-            "issue": 491, "protocol": proto,
+            "issue": int(proto.get("issue", 491)), "protocol": proto,
             "commit": commit, "godotVersion": godot,
             "liveContentFileSha256": live_sha,
             "searchSpaceSha256": identity["searchSpaceSha256"],
@@ -1018,7 +1026,7 @@ def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
             "pairwiseEffects": [row for row in interactions if row["excludesZero"]],
             "shortlist": [row["id"] for row in public
                           if (row.get("decision") or {}).get("eligible")],
-            "racingSet": list(RACING_SET),
+            "racingSet": list(proto.get("racingSet", RACING_SET)),
         }
         dump(out / "summary.json", summary)
         return summary
@@ -1195,12 +1203,15 @@ def main() -> int:
         proto = protocol(contract)
     if args.finalist_audit:
         resolved = evaluation_spec(proto)
-        audit = contract["stages"]["audit"]["seeds"]
-        if not proto.get("finalistAudit") or resolved["controlStage"] != "audit" \
-                or resolved["controlFirst"] != int(audit["first"]) \
-                or resolved["controlLast"] != int(audit["last"]):
+        stage = contract["stages"].get(resolved["controlStage"], {})
+        audit = stage.get("seeds", {})
+        seal = str(stage.get("sealedUntil", ""))
+        if not proto.get("finalistAudit") or not seal \
+                or resolved["landscapeStage"] != resolved["controlStage"] \
+                or resolved["controlFirst"] != int(audit.get("first", -1)) \
+                or resolved["controlLast"] != int(audit.get("last", -1)):
             raise ValueError("--finalist-audit requires the full registered finalist audit")
-        proto["sealedToken"] = "finalist"
+        proto["sealedToken"] = seal
     boot_n = int(args.boot if args.boot is not None else proto.get("bootstrap", 1000))
     live, live_sha = REPO / LIVE_REL, file_sha256(REPO / LIVE_REL)
     identity = catalogue_identity(live, REPO / SPACE_REL)
@@ -1236,7 +1247,7 @@ def main() -> int:
     godot_version = require_godot(args.godot)
     host = host_identity(args.jobs)
     packets = tuple(proto["hostPackets"]) if proto.get("hostPackets") else (
-        HOST_PACKETS_TIER1 if int(proto.get("issue", 0)) == 491 else HOST_PACKETS)
+        HOST_PACKETS_TIER1 if is_tier1_profile(proto) else HOST_PACKETS)
     packet = qualified_packet(host, godot_version, packets)
     baseline_ids = [row["id"] for row in manifest["candidates"] if row.get("baseline")]
     if len(baseline_ids) != 1: raise ValueError("candidate manifest must identify exactly one baseline")
