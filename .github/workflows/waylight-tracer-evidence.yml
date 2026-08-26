@@ -1,0 +1,44 @@
+name: Waylight tracer evidence
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/waylight-tracer-evidence.yml'
+      - 'presentation/map/map_waylight_tracer.gd'
+      - 'tests/test_map_waylight_tracer.gd'
+      - 'tools/capture_map_waylight_harness.gd'
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - id: head
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.2
+          use-dotnet: false
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libgl1-mesa-dri
+      - run: tools/check_imports.sh
+      - run: tools/check_scripts.sh
+      - run: godot --headless -s res://tests/run_all.gd
+      - name: Capture phone and pad route states
+        run: |
+          xvfb-run -a godot --path . --rendering-method gl_compatibility \
+            --resolution 1180x820 --position 0,0 \
+            -s res://tools/capture_map_waylight_harness.gd -- \
+            --output=res://artifacts/waylight-tracer \
+            --capture-head=${{ steps.head.outputs.sha }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: waylight-tracer-${{ steps.head.outputs.sha }}
+          path: artifacts/waylight-tracer
+          if-no-files-found: error
+          retention-days: 14
