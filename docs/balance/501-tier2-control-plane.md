@@ -77,50 +77,31 @@ policy, shipping mix, H39, Godot **4.7.2.stable**, `--stage=tier2-fingerprint`.
 Canonical packet: [`data/501/canonical-host.json`](data/501/canonical-host.json).
 
 Seed-1000 digest `b02bca98709f70ddc5e1b163bd580f54bece86ece2e6fd2b364784245ec8fecf`
-**PIN_MATCH** on M4.
+**PIN_MATCH** on M4 and M1 Max.
 
 | Host | `godot --version` | 256-row hash | Stalls/errors | Rows/s (8 workers) | Verdict |
 |---|---|---|---|---:|---|
 | **M4 Mac mini 16GB** | `4.7.2.stable.official.ed1daf0bf` | `3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648` | 0 / 0 | 83.840 | **QUALIFIED** (canonical) |
-| **M1 Max 64GB** | — | — | — | — | **NOT YET QUALIFIED** (no parity packet on this head) |
+| **M1 Max 64GB** | `4.7.2.stable.official.ed1daf0bf` | `3a887fec19d0ca50d2738056d6f5ca3e07d12c2edff59095b12acefce71fc648` | 0 / 0 | 93.031 | **QUALIFIED** |
 | **Linux/x86 cloud VM** | — | — | — | — | **NOT QUALIFIED** |
 
 M4 bench 4/6/8 workers: fingerprint hash identical; 8 workers is the stable
-throughput pick (4: 69.366, 6: 64.127, 8: 83.840 rows/s). Cloud remains NOT
-QUALIFIED: no exact-parity packet. Host packets also bind reconstructed s009
-file/semantic SHA `5b3504f133a7e180f20426a8f28c5f2685c9d00d4e3c93c39a432a1a859ea448`
-/ `6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3`.
+throughput pick (4: 69.366, 6: 64.127, 8: 83.840 rows/s). M1 Max bench 6/8/10:
+zero drift; 8 workers is the pick (6: 58.304, 8: 86.895, 10: 83.915 rows/s).
+Cloud remains NOT QUALIFIED: no exact-parity packet. Host packets also bind
+reconstructed s009 file/semantic SHA
+`5b3504f133a7e180f20426a8f28c5f2685c9d00d4e3c93c39a432a1a859ea448` /
+`6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3`.
 
-## Ticket stop
-
-M4 is QUALIFIED. This session has no M1 Max SSH path, so per done-when the
-ticket **stops** with M1 **NOT YET QUALIFIED**. #502 stays blocked until an
-immutable M1 packet compares empty against `canonical-host.json`. Cloud remains
-NOT QUALIFIED.
-
-Host packets bind feat `5fa98a375fa8ea0aade5c4c083c606fb540472f3` (the dirty-tree
-M4 run sat on merge `39167244`; a docs stamp rewrote the recorded commit only).
-`compare_packets` does not grade git commit. M1 must rsync this feat (or later
-docs-only stamp) so the tree contains `--stage=tier2-fingerprint`, and must not
-mutate the checkout.
+M1 ran detached at stamp `9b863234` in `/tmp/glassvow-501-qualify`. The live
+M1 checkout `work/421-h34` was not mutated. Packets:
+[`data/501/m1-macbook-pro.json`](data/501/m1-macbook-pro.json),
+[`data/501/m1-bench-summary.json`](data/501/m1-bench-summary.json).
 
 Authored tools+tests exceed the 400-line stop (self-tests, seed JSON, host
 packets). No enemy IDs, F0/racing/CEM/audit rows, or live-catalogue edits.
 
-Owner-generated M1 command:
-
-```bash
-python3 -B tools/balance_seed_contract.py --self-test
-python3 -B tools/balance_host_qualify.py --self-test
-python3 -B tools/balance_host_qualify.py --jobs 8 \
-  --compare docs/balance/data/501/canonical-host.json \
-  --out /tmp/glassvow-501-m1
-python3 -B tools/balance_host_qualify.py --bench --jobs 6,8,10 \
-  --compare docs/balance/data/501/canonical-host.json \
-  --out /tmp/glassvow-501-m1-bench
-```
-
-Replay on M4:
+Replay:
 
 ```bash
 python3 -B tools/balance_seed_contract.py --self-test
