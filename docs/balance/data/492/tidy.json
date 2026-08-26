@@ -1,0 +1,1780 @@
+{
+  "exactHead": "deb5a282c9715c43d4021c5c76cb15499e4afc34",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "host": {
+    "arch": "arm64",
+    "cpu": "Apple M4",
+    "hostname": "Jamess-Mac-mini.local",
+    "os": "Darwin",
+    "workers": 8
+  },
+  "hostFingerprint": "12c28a6523463cc642e86cd56194bb2f48c68073f94aad384f597b422afcfd8e",
+  "issue": 492,
+  "layers": {
+    "layer1": {
+      "candidates": [
+        {
+          "allCellTop": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          },
+          "changedPackages": [],
+          "controlErrors": 0,
+          "controlStalls": 0,
+          "decision": "baseline",
+          "guardrails": {
+            "byGrid": {
+              "c2": {
+                "ashwarden:v0": true,
+                "ashwarden:v5": true,
+                "duskblade:v0": true,
+                "duskblade:v5": true
+              },
+              "vow5Proxy": {
+                "ashwarden:v5": false,
+                "duskblade:v5": true
+              }
+            },
+            "clear": false,
+            "identity": {
+              "clear": true,
+              "loadRules": {
+                "ashwarden:shatter-blocked": true,
+                "ashwarden:smolder-enabled": true,
+                "duskblade:shatter-enabled": true,
+                "duskblade:smolder-application-blocked": true
+              },
+              "observationFault": null
+            },
+            "reasons": [
+              "vow5-proxy-failed"
+            ]
+          },
+          "id": "t1-c000",
+          "landscapeErrors": 0,
+          "landscapeStalls": 3,
+          "mechanismEvidence": {},
+          "observationsSha256": "03e9bc4a7d98fe0d27764010be23b6ae54d6b6cf65abe112c3556e0c3b45933f",
+          "pairedVsBaselineC1": null,
+          "reason": "paired-incumbent",
+          "validC1a": 3.333333333333333,
+          "validC1b": 4.0,
+          "validCell": {
+            "ashwarden:v0": {
+              "arm2Rate": 0.21875,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "ashwarden:v5": {
+              "arm2Rate": 0.03125,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "duskblade:v0": {
+              "arm2Rate": 0.28125,
+              "margin": -0.27355769230769234,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.007692307692307693,
+              "viable": 0,
+              "within10": 1
+            },
+            "duskblade:v5": {
+              "arm2Rate": 0.21875,
+              "margin": -0.21875,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.0,
+              "viable": 0,
+              "within10": 1
+            }
+          },
+          "values": {
+            "ashStarterThinSustain": "s009",
+            "ashcloudRoute": "s009",
+            "bossEnergyRoute": "s009",
+            "duskNonShatter": "s009",
+            "duskStarterAttrition": "s009",
+            "neutralCycle": "s009",
+            "removalEconomy": "s009",
+            "smolderRelicStack": "s009"
+          }
+        },
+        {
+          "allCellTop": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          },
+          "changedPackages": [
+            "duskNonShatter"
+          ],
+          "controlErrors": 0,
+          "controlStalls": 0,
+          "decision": "stop",
+          "guardrails": {
+            "byGrid": {
+              "c2": {
+                "ashwarden:v0": true,
+                "ashwarden:v5": true,
+                "duskblade:v0": true,
+                "duskblade:v5": true
+              },
+              "vow5Proxy": {
+                "ashwarden:v5": false,
+                "duskblade:v5": true
+              }
+            },
+            "clear": false,
+            "identity": {
+              "clear": true,
+              "loadRules": {
+                "ashwarden:shatter-blocked": true,
+                "ashwarden:smolder-enabled": true,
+                "duskblade:shatter-enabled": true,
+                "duskblade:smolder-application-blocked": true
+              },
+              "observationFault": null
+            },
+            "reasons": [
+              "vow5-proxy-failed"
+            ]
+          },
+          "id": "t1-c012",
+          "landscapeErrors": 0,
+          "landscapeStalls": 2,
+          "mechanismEvidence": {
+            "duskNonShatter": {
+              "ashwarden:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 991,
+                "exposureRate": 0.9108455882352942,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.3521695257315843,
+                "usedRuns": 349
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 777,
+                "exposureRate": 0.7141544117647058,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.3333333333333333,
+                "usedRuns": 259
+              }
+            }
+          },
+          "observationsSha256": "5c4413d560d2b2e61ff24a32f5d877a342ffd71f12441d2d830aae5ce6945f37",
+          "pairedVsBaselineC1": {
+            "c1a": {
+              "p025": 0.0,
+              "p50": 0.0,
+              "p975": 0.0
+            },
+            "c1b": {
+              "p025": 0.0,
+              "p50": 0.0,
+              "p975": 0.25
+            }
+          },
+          "reason": "hard-guardrail-failed",
+          "validC1a": 3.333333333333333,
+          "validC1b": 4.0,
+          "validCell": {
+            "ashwarden:v0": {
+              "arm2Rate": 0.21875,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "ashwarden:v5": {
+              "arm2Rate": 0.09375,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "duskblade:v0": {
+              "arm2Rate": 0.40625,
+              "margin": -0.39832920792079207,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.007920792079207921,
+              "viable": 0,
+              "within10": 1
+            },
+            "duskblade:v5": {
+              "arm2Rate": 0.21875,
+              "margin": -0.21875,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.0,
+              "viable": 0,
+              "within10": 1
+            }
+          },
+          "values": {
+            "ashStarterThinSustain": "s009",
+            "ashcloudRoute": "s009",
+            "bossEnergyRoute": "s009",
+            "duskNonShatter": "high",
+            "duskStarterAttrition": "s009",
+            "neutralCycle": "s009",
+            "removalEconomy": "s009",
+            "smolderRelicStack": "s009"
+          }
+        },
+        {
+          "allCellTop": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          },
+          "changedPackages": [
+            "ashStarterThinSustain",
+            "ashcloudRoute",
+            "bossEnergyRoute",
+            "duskNonShatter",
+            "duskStarterAttrition",
+            "neutralCycle",
+            "removalEconomy",
+            "smolderRelicStack"
+          ],
+          "controlErrors": 0,
+          "controlStalls": 0,
+          "decision": "promote",
+          "guardrails": {
+            "byGrid": {
+              "c2": {
+                "ashwarden:v0": true,
+                "ashwarden:v5": true,
+                "duskblade:v0": true,
+                "duskblade:v5": true
+              },
+              "vow5Proxy": {
+                "ashwarden:v5": true,
+                "duskblade:v5": true
+              }
+            },
+            "clear": true,
+            "identity": {
+              "clear": true,
+              "loadRules": {
+                "ashwarden:shatter-blocked": true,
+                "ashwarden:smolder-enabled": true,
+                "duskblade:shatter-enabled": true,
+                "duskblade:smolder-application-blocked": true
+              },
+              "observationFault": null
+            },
+            "reasons": []
+          },
+          "id": "t1-c036",
+          "landscapeErrors": 0,
+          "landscapeStalls": 0,
+          "mechanismEvidence": {
+            "ashStarterThinSustain": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            },
+            "ashcloudRoute": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 794,
+                "exposureRate": 0.7297794117647058,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.6977329974811083,
+                "usedRuns": 554
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 623,
+                "exposureRate": 0.5726102941176471,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.6260032102728732,
+                "usedRuns": 390
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            },
+            "bossEnergyRoute": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 682,
+                "exposureRate": 0.6268382352941176,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5439882697947214,
+                "usedRuns": 371
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 363,
+                "exposureRate": 0.3336397058823529,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.48760330578512395,
+                "usedRuns": 177
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 496,
+                "exposureRate": 0.45588235294117646,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4879032258064516,
+                "usedRuns": 242
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 219,
+                "exposureRate": 0.20128676470588236,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4931506849315068,
+                "usedRuns": 108
+              }
+            },
+            "duskNonShatter": {
+              "ashwarden:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 992,
+                "exposureRate": 0.9117647058823529,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.2006048387096774,
+                "usedRuns": 199
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 827,
+                "exposureRate": 0.7601102941176471,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.20314389359129384,
+                "usedRuns": 168
+              }
+            },
+            "duskStarterAttrition": {
+              "ashwarden:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              }
+            },
+            "neutralCycle": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1087,
+                "exposureRate": 0.9990808823529411,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.6182152713891444,
+                "usedRuns": 672
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1073,
+                "exposureRate": 0.9862132352941176,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4603914259086673,
+                "usedRuns": 494
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1085,
+                "exposureRate": 0.9972426470588235,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5769585253456221,
+                "usedRuns": 626
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1047,
+                "exposureRate": 0.9623161764705882,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4393505253104107,
+                "usedRuns": 460
+              }
+            },
+            "removalEconomy": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1035,
+                "exposureRate": 0.9512867647058824,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4927536231884058,
+                "usedRuns": 510
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 827,
+                "exposureRate": 0.7601102941176471,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.38331318016928656,
+                "usedRuns": 317
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 958,
+                "exposureRate": 0.8805147058823529,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.39979123173277664,
+                "usedRuns": 383
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 850,
+                "exposureRate": 0.78125,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.3411764705882353,
+                "usedRuns": 290
+              }
+            },
+            "smolderRelicStack": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            }
+          },
+          "observationsSha256": "b13d5350e9e345c6959c94ed7877182828414039ee9e74eb70c5294a8f0a47f7",
+          "pairedVsBaselineC1": {
+            "c1a": {
+              "p025": -0.6666666666666665,
+              "p50": -0.3333333333333335,
+              "p975": 0.0
+            },
+            "c1b": {
+              "p025": -0.25,
+              "p50": 0.0,
+              "p975": 0.25
+            }
+          },
+          "reason": "paired-pareto-non-dominated",
+          "validC1a": 2.9999999999999996,
+          "validC1b": 4.0,
+          "validCell": {
+            "ashwarden:v0": {
+              "arm2Rate": 0.3125,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "ashwarden:v5": {
+              "arm2Rate": 0.0625,
+              "margin": -0.0625,
+              "occupiedValidCells": 1,
+              "topCell": "smolder:thin",
+              "topRate": 0.0,
+              "viable": 0,
+              "within10": 1
+            },
+            "duskblade:v0": {
+              "arm2Rate": 0.3125,
+              "margin": -0.29893410852713176,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.013565891472868217,
+              "viable": 0,
+              "within10": 1
+            },
+            "duskblade:v5": {
+              "arm2Rate": 0.15625,
+              "margin": -0.15625,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.0,
+              "viable": 0,
+              "within10": 1
+            }
+          },
+          "values": {
+            "ashStarterThinSustain": "low",
+            "ashcloudRoute": "high",
+            "bossEnergyRoute": "high",
+            "duskNonShatter": "low",
+            "duskStarterAttrition": "high",
+            "neutralCycle": "high",
+            "removalEconomy": "low",
+            "smolderRelicStack": "high"
+          }
+        },
+        {
+          "allCellTop": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          },
+          "changedPackages": [
+            "ashStarterThinSustain",
+            "ashcloudRoute",
+            "bossEnergyRoute",
+            "duskNonShatter",
+            "duskStarterAttrition",
+            "neutralCycle",
+            "smolderRelicStack"
+          ],
+          "controlErrors": 0,
+          "controlStalls": 0,
+          "decision": "stop",
+          "guardrails": {
+            "byGrid": {
+              "c2": {
+                "ashwarden:v0": false,
+                "ashwarden:v5": true,
+                "duskblade:v0": true,
+                "duskblade:v5": true
+              },
+              "vow5Proxy": {
+                "ashwarden:v5": false,
+                "duskblade:v5": true
+              }
+            },
+            "clear": false,
+            "identity": {
+              "clear": true,
+              "loadRules": {
+                "ashwarden:shatter-blocked": true,
+                "ashwarden:smolder-enabled": true,
+                "duskblade:shatter-enabled": true,
+                "duskblade:smolder-application-blocked": true
+              },
+              "observationFault": null
+            },
+            "reasons": [
+              "c2-failed",
+              "vow5-proxy-failed"
+            ]
+          },
+          "id": "t1-c040",
+          "landscapeErrors": 0,
+          "landscapeStalls": 0,
+          "mechanismEvidence": {
+            "ashStarterThinSustain": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            },
+            "ashcloudRoute": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 838,
+                "exposureRate": 0.7702205882352942,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.6909307875894988,
+                "usedRuns": 579
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 805,
+                "exposureRate": 0.7398897058823529,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.631055900621118,
+                "usedRuns": 508
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            },
+            "bossEnergyRoute": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 855,
+                "exposureRate": 0.7858455882352942,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5508771929824562,
+                "usedRuns": 471
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 650,
+                "exposureRate": 0.5974264705882353,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5230769230769231,
+                "usedRuns": 340
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 502,
+                "exposureRate": 0.46139705882352944,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.48804780876494025,
+                "usedRuns": 245
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 228,
+                "exposureRate": 0.20955882352941177,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4649122807017544,
+                "usedRuns": 106
+              }
+            },
+            "duskNonShatter": {
+              "ashwarden:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 988,
+                "exposureRate": 0.9080882352941176,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.35931174089068824,
+                "usedRuns": 355
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 827,
+                "exposureRate": 0.7601102941176471,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.3349455864570738,
+                "usedRuns": 277
+              }
+            },
+            "duskStarterAttrition": {
+              "ashwarden:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              }
+            },
+            "neutralCycle": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.6544117647058824,
+                "usedRuns": 712
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5137867647058824,
+                "usedRuns": 559
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1085,
+                "exposureRate": 0.9972426470588235,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5714285714285714,
+                "usedRuns": 620
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1051,
+                "exposureRate": 0.9659926470588235,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.43101807802093245,
+                "usedRuns": 453
+              }
+            },
+            "smolderRelicStack": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1088,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 1088
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            }
+          },
+          "observationsSha256": "a0f829e943439bca245fbf20347a234e3b242f120db656c928812ba0a89402ec",
+          "pairedVsBaselineC1": {
+            "c1a": {
+              "p025": -0.3333333333333335,
+              "p50": 0.0,
+              "p975": 0.3333333333333335
+            },
+            "c1b": {
+              "p025": -0.25,
+              "p50": 0.0,
+              "p975": 0.25
+            }
+          },
+          "reason": "hard-guardrail-failed",
+          "validC1a": 3.333333333333333,
+          "validC1b": 4.0,
+          "validCell": {
+            "ashwarden:v0": {
+              "arm2Rate": 0.5,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "ashwarden:v5": {
+              "arm2Rate": 0.125,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "duskblade:v0": {
+              "arm2Rate": 0.3125,
+              "margin": -0.2951254826254826,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.017374517374517374,
+              "viable": 0,
+              "within10": 1
+            },
+            "duskblade:v5": {
+              "arm2Rate": 0.15625,
+              "margin": -0.15473484848484848,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.0015151515151515152,
+              "viable": 0,
+              "within10": 1
+            }
+          },
+          "values": {
+            "ashStarterThinSustain": "high",
+            "ashcloudRoute": "high",
+            "bossEnergyRoute": "high",
+            "duskNonShatter": "high",
+            "duskStarterAttrition": "high",
+            "neutralCycle": "high",
+            "removalEconomy": "s009",
+            "smolderRelicStack": "high"
+          }
+        },
+        {
+          "allCellTop": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          },
+          "changedPackages": [
+            "neutralCycle"
+          ],
+          "controlErrors": 0,
+          "controlStalls": 0,
+          "decision": "stop",
+          "guardrails": {
+            "byGrid": {
+              "c2": {
+                "ashwarden:v0": true,
+                "ashwarden:v5": true,
+                "duskblade:v0": true,
+                "duskblade:v5": true
+              },
+              "vow5Proxy": {
+                "ashwarden:v5": false,
+                "duskblade:v5": true
+              }
+            },
+            "clear": false,
+            "identity": {
+              "clear": true,
+              "loadRules": {
+                "ashwarden:shatter-blocked": true,
+                "ashwarden:smolder-enabled": true,
+                "duskblade:shatter-enabled": true,
+                "duskblade:smolder-application-blocked": true
+              },
+              "observationFault": null
+            },
+            "reasons": [
+              "vow5-proxy-failed"
+            ]
+          },
+          "id": "t1-c005",
+          "landscapeErrors": 0,
+          "landscapeStalls": 2,
+          "mechanismEvidence": {
+            "neutralCycle": {
+              "ashwarden:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1087,
+                "exposureRate": 0.9990808823529411,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.37258509659613614,
+                "usedRuns": 405
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1083,
+                "exposureRate": 0.9954044117647058,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.2807017543859649,
+                "usedRuns": 304
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1083,
+                "exposureRate": 0.9954044117647058,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.33056325023084027,
+                "usedRuns": 358
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 1088,
+                "exposedRuns": 1064,
+                "exposureRate": 0.9779411764705882,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.24530075187969924,
+                "usedRuns": 261
+              }
+            }
+          },
+          "observationsSha256": "cc04b9b0f938b94723e5b3213463b7507d07d6ac9a962ba042ed30b25ccb2aa7",
+          "pairedVsBaselineC1": {
+            "c1a": {
+              "p025": -0.3333333333333335,
+              "p50": 0.0,
+              "p975": 0.0
+            },
+            "c1b": {
+              "p025": -0.25,
+              "p50": 0.0,
+              "p975": 0.25
+            }
+          },
+          "reason": "hard-guardrail-failed",
+          "validC1a": 3.333333333333333,
+          "validC1b": 4.0,
+          "validCell": {
+            "ashwarden:v0": {
+              "arm2Rate": 0.25,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "ashwarden:v5": {
+              "arm2Rate": 0.03125,
+              "margin": null,
+              "occupiedValidCells": 0,
+              "topCell": null,
+              "topRate": null,
+              "viable": 0,
+              "within10": 0
+            },
+            "duskblade:v0": {
+              "arm2Rate": 0.1875,
+              "margin": -0.17786608863198458,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.009633911368015413,
+              "viable": 0,
+              "within10": 1
+            },
+            "duskblade:v5": {
+              "arm2Rate": 0.1875,
+              "margin": -0.1875,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.0,
+              "viable": 0,
+              "within10": 1
+            }
+          },
+          "values": {
+            "ashStarterThinSustain": "s009",
+            "ashcloudRoute": "s009",
+            "bossEnergyRoute": "s009",
+            "duskNonShatter": "s009",
+            "duskStarterAttrition": "s009",
+            "neutralCycle": "low",
+            "removalEconomy": "s009",
+            "smolderRelicStack": "s009"
+          }
+        }
+      ],
+      "promoted": [
+        "t1-c036"
+      ],
+      "stopped": [
+        "t1-c012",
+        "t1-c040",
+        "t1-c005"
+      ]
+    },
+    "layer2": {
+      "candidates": [
+        {
+          "allCellTop": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          },
+          "changedPackages": [],
+          "controlErrors": 0,
+          "controlStalls": 0,
+          "decision": "baseline",
+          "guardrails": {
+            "byGrid": {
+              "c2": {
+                "ashwarden:v0": true,
+                "ashwarden:v5": true,
+                "duskblade:v0": true,
+                "duskblade:v5": true
+              },
+              "vow5Proxy": {
+                "ashwarden:v5": true,
+                "duskblade:v5": true
+              }
+            },
+            "clear": true,
+            "identity": {
+              "clear": true,
+              "loadRules": {
+                "ashwarden:shatter-blocked": true,
+                "ashwarden:smolder-enabled": true,
+                "duskblade:shatter-enabled": true,
+                "duskblade:smolder-application-blocked": true
+              },
+              "observationFault": null
+            },
+            "reasons": []
+          },
+          "id": "t1-c000",
+          "landscapeErrors": 0,
+          "landscapeStalls": 10,
+          "mechanismEvidence": {},
+          "observationsSha256": "1ee097daaccc825dc38cec04d2d3ed21ce1c31e8dd14d439a6712d9657d26d4d",
+          "pairedVsBaselineC1": null,
+          "reason": "paired-incumbent",
+          "validC1a": 2.333333333333333,
+          "validC1b": 3.0,
+          "validCell": {
+            "ashwarden:v0": {
+              "arm2Rate": 0.21875,
+              "margin": 0.5878991688538933,
+              "occupiedValidCells": 3,
+              "topCell": "smolder:fat",
+              "topRate": 0.8066491688538933,
+              "viable": 1,
+              "within10": 1
+            },
+            "ashwarden:v5": {
+              "arm2Rate": 0.015625,
+              "margin": 0.7263104838709677,
+              "occupiedValidCells": 4,
+              "topCell": "smolder:fat",
+              "topRate": 0.7419354838709677,
+              "viable": 1,
+              "within10": 1
+            },
+            "duskblade:v0": {
+              "arm2Rate": 0.3125,
+              "margin": 0.5300720620842572,
+              "occupiedValidCells": 5,
+              "topCell": "shatter:fat",
+              "topRate": 0.8425720620842572,
+              "viable": 2,
+              "within10": 1
+            },
+            "duskblade:v5": {
+              "arm2Rate": 0.15625,
+              "margin": -0.1300872093023256,
+              "occupiedValidCells": 2,
+              "topCell": "shatter:thin",
+              "topRate": 0.02616279069767442,
+              "viable": 0,
+              "within10": 2
+            }
+          },
+          "values": {
+            "ashStarterThinSustain": "s009",
+            "ashcloudRoute": "s009",
+            "bossEnergyRoute": "s009",
+            "duskNonShatter": "s009",
+            "duskStarterAttrition": "s009",
+            "neutralCycle": "s009",
+            "removalEconomy": "s009",
+            "smolderRelicStack": "s009"
+          }
+        },
+        {
+          "allCellTop": {
+            "ashwarden:v0": "smolder:fat",
+            "ashwarden:v5": "smolder:fat",
+            "duskblade:v0": "shatter:fat",
+            "duskblade:v5": "shatter:fat"
+          },
+          "changedPackages": [
+            "ashStarterThinSustain",
+            "ashcloudRoute",
+            "bossEnergyRoute",
+            "duskNonShatter",
+            "duskStarterAttrition",
+            "neutralCycle",
+            "removalEconomy",
+            "smolderRelicStack"
+          ],
+          "controlErrors": 0,
+          "controlStalls": 0,
+          "decision": "stop",
+          "guardrails": {
+            "byGrid": {
+              "c2": {
+                "ashwarden:v0": true,
+                "ashwarden:v5": true,
+                "duskblade:v0": true,
+                "duskblade:v5": true
+              },
+              "vow5Proxy": {
+                "ashwarden:v5": true,
+                "duskblade:v5": true
+              }
+            },
+            "clear": true,
+            "identity": {
+              "clear": true,
+              "loadRules": {
+                "ashwarden:shatter-blocked": true,
+                "ashwarden:smolder-enabled": true,
+                "duskblade:shatter-enabled": true,
+                "duskblade:smolder-application-blocked": true
+              },
+              "observationFault": null
+            },
+            "reasons": []
+          },
+          "id": "t1-c036",
+          "landscapeErrors": 0,
+          "landscapeStalls": 2,
+          "mechanismEvidence": {
+            "ashStarterThinSustain": {
+              "ashwarden:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4224,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 4224
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4224,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 4224
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            },
+            "ashcloudRoute": {
+              "ashwarden:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 3076,
+                "exposureRate": 0.728219696969697,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.7025357607282184,
+                "usedRuns": 2161
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 2349,
+                "exposureRate": 0.5561079545454546,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.6807151979565773,
+                "usedRuns": 1599
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            },
+            "bossEnergyRoute": {
+              "ashwarden:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 2718,
+                "exposureRate": 0.6434659090909091,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5342163355408388,
+                "usedRuns": 1452
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 1454,
+                "exposureRate": 0.34422348484848486,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5027510316368639,
+                "usedRuns": 731
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 2103,
+                "exposureRate": 0.4978693181818182,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4916785544460295,
+                "usedRuns": 1034
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 993,
+                "exposureRate": 0.23508522727272727,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4914400805639476,
+                "usedRuns": 488
+              }
+            },
+            "duskNonShatter": {
+              "ashwarden:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 3867,
+                "exposureRate": 0.9154829545454546,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.20196534781484354,
+                "usedRuns": 781
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 3493,
+                "exposureRate": 0.8269412878787878,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.15717148582880044,
+                "usedRuns": 549
+              }
+            },
+            "duskStarterAttrition": {
+              "ashwarden:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4224,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 4224
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4224,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 4224
+              }
+            },
+            "neutralCycle": {
+              "ashwarden:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4218,
+                "exposureRate": 0.9985795454545454,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5995732574679943,
+                "usedRuns": 2529
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4184,
+                "exposureRate": 0.990530303030303,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.44933078393881454,
+                "usedRuns": 1880
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4216,
+                "exposureRate": 0.9981060606060606,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.5808823529411765,
+                "usedRuns": 2449
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4128,
+                "exposureRate": 0.9772727272727273,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.42902131782945735,
+                "usedRuns": 1771
+              }
+            },
+            "removalEconomy": {
+              "ashwarden:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4071,
+                "exposureRate": 0.9637784090909091,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.48931466470154755,
+                "usedRuns": 1992
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 3552,
+                "exposureRate": 0.8409090909090909,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.3713400900900901,
+                "usedRuns": 1319
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 3922,
+                "exposureRate": 0.9285037878787878,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.4321774604793473,
+                "usedRuns": 1695
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 3438,
+                "exposureRate": 0.8139204545454546,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 0.36736474694589877,
+                "usedRuns": 1263
+              }
+            },
+            "smolderRelicStack": {
+              "ashwarden:v0": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4224,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 4224
+              },
+              "ashwarden:v5": {
+                "eligibleRuns": 4224,
+                "exposedRuns": 4224,
+                "exposureRate": 1.0,
+                "mechanismFired": true,
+                "reachability": "reached",
+                "useRate": 1.0,
+                "usedRuns": 4224
+              },
+              "duskblade:v0": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              },
+              "duskblade:v5": {
+                "eligibleRuns": 0,
+                "exposedRuns": 0,
+                "exposureRate": null,
+                "mechanismFired": false,
+                "reachability": "not-applicable",
+                "useRate": null,
+                "usedRuns": 0
+              }
+            }
+          },
+          "observationsSha256": "18b584728ec7dd7d33cc5b67a0e23c1c53508c0234c493344bb805ad1a9bfb6c",
+          "pairedVsBaselineC1": {
+            "c1a": {
+              "p025": -0.33333333333333304,
+              "p50": 0.0,
+              "p975": 0.6666666666666665
+            },
+            "c1b": {
+              "p025": -0.25,
+              "p50": 0.0,
+              "p975": 0.25
+            }
+          },
+          "reason": "no-point-c1-improvement",
+          "validC1a": 2.6666666666666665,
+          "validC1b": 3.25,
+          "validCell": {
+            "ashwarden:v0": {
+              "arm2Rate": 0.21875,
+              "margin": 0.5920865019011406,
+              "occupiedValidCells": 3,
+              "topCell": "smolder:fat",
+              "topRate": 0.8108365019011406,
+              "viable": 1,
+              "within10": 1
+            },
+            "ashwarden:v5": {
+              "arm2Rate": 0.078125,
+              "margin": 0.63758572319202,
+              "occupiedValidCells": 4,
+              "topCell": "smolder:fat",
+              "topRate": 0.71571072319202,
+              "viable": 1,
+              "within10": 1
+            },
+            "duskblade:v0": {
+              "arm2Rate": 0.375,
+              "margin": 0.5004863813229572,
+              "occupiedValidCells": 3,
+              "topCell": "shatter:fat",
+              "topRate": 0.8754863813229572,
+              "viable": 1,
+              "within10": 1
+            },
+            "duskblade:v5": {
+              "arm2Rate": 0.171875,
+              "margin": -0.1711084227673438,
+              "occupiedValidCells": 1,
+              "topCell": "attrition:thin",
+              "topRate": 0.0007665772326561902,
+              "viable": 0,
+              "within10": 1
+            }
+          },
+          "values": {
+            "ashStarterThinSustain": "low",
+            "ashcloudRoute": "high",
+            "bossEnergyRoute": "high",
+            "duskNonShatter": "low",
+            "duskStarterAttrition": "high",
+            "neutralCycle": "high",
+            "removalEconomy": "low",
+            "smolderRelicStack": "high"
+          }
+        }
+      ],
+      "promoted": [],
+      "stopped": [
+        "t1-c036"
+      ]
+    }
+  },
+  "result": "tier1-insufficient-no-finalist",
+  "rows": {
+    "discardedIncident": 21760,
+    "replacementLayer1": {
+      "controls": 1280,
+      "landscape": 20480,
+      "total": 21760
+    },
+    "replacementLayer2Increment": {
+      "controls": 512,
+      "landscape": 24576,
+      "total": 25088
+    },
+    "replacementUniqueTotal": 46848
+  },
+  "schemaVersion": 1,
+  "skipped": {
+    "handoff421": "No candidate reached the strong finalist bar",
+    "layer3": "Layer 2 promoted no candidate",
+    "miniCem": "No final racing survivor",
+    "sealedAudit": "No frozen strong finalist set; audit band remained sealed"
+  },
+  "surrogate": {
+    "balancedSupplement": 0,
+    "enabled": false,
+    "modelProposals": 0
+  },
+  "tier2Decision": {
+    "boundary": "Pre-register at most four sparse complete enemy entries: a paired block-heavy profile that tests Smolder/attrition routes and a paired cleanse/tempo profile that tests Shatter/thin routes. Keep enemy/move IDs, executable AI and locale text fixed; screen on new development seeds before any acceptance spend.",
+    "name": "four-entry counter-profile mob override package"
+  }
+}
