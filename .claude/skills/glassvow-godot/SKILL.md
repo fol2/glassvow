@@ -1,17 +1,21 @@
 ---
 name: glassvow-godot
-description: Binding contract for working in the glassvow Godot repo — engine pin, architecture boundaries, editing methods, verification, save compatibility, stop conditions. Load before any implementation work here.
+description: Binding contract for working in the glassvow Godot repo — engine minimum, architecture boundaries, editing methods, verification, save compatibility, stop conditions. Load before any implementation work here.
 ---
 
-# Glassvow Godot 4.7.2 Binding Contract
+# Glassvow Godot 4.7.2+ Binding Contract
 
 ## 1. Engine Contract
 
-**Pin:** Godot 4.7.2 exact. Verify before starting work: `godot --version` must print `4.7.2.stable`. Running any GDScript requires this exact version; mismatches silently break type checking and produce confusing test failures.
+**Minimum:** Godot 4.7.2 stable. Verify before starting work:
+`godot --version` must report 4.7.2 stable or a later stable release. Pre-release
+builds are unsupported; an older or pre-release engine can silently change type
+checking and produce confusing test failures.
 
 Historical evidence keeps the engine version it actually used. A dated packet
-that truthfully records 4.7.1 is not an active pin and must not be rewritten as
-though the run happened on 4.7.2.
+that truthfully records 4.7.1 is not the active minimum and must not be rewritten
+as though the run happened on 4.7.2. A release or evidence protocol may still
+require one exact supported version; that narrower protocol pin remains binding.
 
 **4.7 Gotchas (trap setters):**
 - **Typed-return overrides need an explicit `return`:** since 4.7, overriding a method whose declared return type is non-void without a `return` on every path is an error, not a silent null.
@@ -56,7 +60,7 @@ though the run happened on 4.7.2.
 Run these three from the repo root, in order. All must pass before pushing:
 
 ```bash
-godot --version                          # confirm 4.7.2.stable
+godot --version                          # confirm 4.7.2 stable or later stable
 tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
 tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 with PASS
@@ -127,7 +131,9 @@ Dictionaries compare natively against the JSON parity fixtures and survive seria
 
 1. **Save-schema change** — a breaking change to the save envelope or top-level structure that would require a new version.
 2. **Platform plugin work** — native Android/iOS SDK integration (push, analytics, in-app purchase). This is a separate skillset and project.
-3. **Scope creep >400 changed lines** — any single task that modifies >400 lines without review. Stop, present the findings, get a new plan (indicates the task is larger than estimated).
+3. **Per-file code change >600 lines** — in one commit, additions plus deletions
+   to any one code file must not exceed 600 lines. Evidence artefacts are
+   excluded. Split the commit or present a revised plan before proceeding.
 
 ## 10. Governance
 

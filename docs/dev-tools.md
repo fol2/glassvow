@@ -33,8 +33,8 @@ server is enabled. Native Proof instead uses Funplay's file-backed **runtime
 bridge** inside the running game; it does not depend on the editor MCP or port
 8765.
 
-The first Web build needs Godot's exact `4.7.2.stable`
-`web_nothreads_debug.zip` export template. Install the Web debug template from
+The first Web build needs Godot 4.7.2 stable or later stable, with that engine's
+matching `web_nothreads_debug.zip` export template. Install the Web debug template from
 **Editor → Manage Export Templates**, or ask the organiser to provision it.
 For a build-only check:
 

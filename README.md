@@ -1,11 +1,11 @@
 # Glassvow / 琉璃誓言
 
-A Godot 4.7.2 reimplementation of **Glassvow**, the web-based roguelite deckbuilder. This repo is a parallel port of the reference implementation frozen at [`web-reference-v1`](https://github.com/fol2/roguecardv2/tree/web-reference-v1) in the original roguecardv2 repository. The web engine is the executable specification; parity is proven against the JSON fixtures in `port_fixtures/`. One deliberate redesign: the map is a horizontally-traversed glassvow world, not the web version's vertical tower.
+A Godot 4.7.2+ reimplementation of **Glassvow**, the web-based roguelite deckbuilder. This repo is a parallel port of the reference implementation frozen at [`web-reference-v1`](https://github.com/fol2/roguecardv2/tree/web-reference-v1) in the original roguecardv2 repository. The web engine is the executable specification; parity is proven against the JSON fixtures in `port_fixtures/`. One deliberate redesign: the map is a horizontally-traversed glassvow world, not the web version's vertical tower.
 
 ## Verification
 
 ```bash
-godot --version                          # must print 4.7.2.stable
+godot --version                          # must report 4.7.2 stable or later stable
 tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
 tools/check_scripts.sh                   # tracked parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0
