@@ -309,7 +309,11 @@ def guardrails(result: dict[str, Any], contract: dict[str, Any],
         ok = rate is not None and (float(rate) < 0.9 if strict else float(rate) <= 0.9)
         vow5_by[grid] = ok
         vow5_ok = vow5_ok and ok
-    fault = _identity_observation(result.get("_controlRows") or [], valid, strict)
+    # #492's stronger identity bar is aspect-level, so it follows the best observed
+    # all-cell route. The valid-cell floor can be empty or contain only populated
+    # loss buckets at early racing fidelity and is not an identity observation.
+    identity_proxies = proxies if strict else valid
+    fault = _identity_observation(result.get("_controlRows") or [], identity_proxies, strict)
     identity_ok = all(load_rules.values()) and not fault
     reasons: list[str] = []
     if not c2_ok:

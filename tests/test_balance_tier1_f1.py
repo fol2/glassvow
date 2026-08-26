@@ -209,8 +209,10 @@ class Tier1F1DecisionTest(unittest.TestCase):
                    if row["decision"] == "stop"}
         self.assertEqual("paired-confidence-dominated", stopped["t1-c036"])
 
-    def test_strict_identity_and_vow5_ceiling_are_exclusive(self) -> None:
-        proxies = {grid: {"arm2Rate": 0.1, "margin": 0.5} for grid in GRIDS}
+    def test_strict_identity_uses_aspect_top_and_vow5_ceiling_is_exclusive(self) -> None:
+        proxies = {grid: {"arm2Rate": 0.1, "margin": 0.5,
+                          "topCell": "shatter:fat" if grid.startswith("duskblade")
+                          else "smolder:fat"} for grid in GRIDS}
         valid = {grid: {"topRate": 0.8,
                         "topCell": "shatter:fat" if grid.startswith("duskblade")
                         else "smolder:fat"} for grid in GRIDS}
@@ -224,8 +226,12 @@ class Tier1F1DecisionTest(unittest.TestCase):
         strict = guardrails(result, json.loads(
             (REPO / "docs/balance/490-f0-response-contract-v1.json").read_text()),
             load_rules, strict=True)
-        self.assertFalse(strict["identity"]["clear"])
+        self.assertTrue(strict["identity"]["clear"])
         self.assertFalse(strict["byGrid"]["vow5Proxy"]["duskblade:v5"])
+        proxies["duskblade:v0"]["topCell"] = "smolder:fat"
+        self.assertFalse(guardrails(result, json.loads(
+            (REPO / "docs/balance/490-f0-response-contract-v1.json").read_text()),
+            load_rules, strict=True)["identity"]["clear"])
 
     def test_sealed_audit_binds_known_finalists_and_is_single_use(self) -> None:
         manifest_path = REPO / "docs/balance/data/491/candidate-manifest.json"
