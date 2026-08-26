@@ -24,8 +24,18 @@ _TOOLS = Path(__file__).resolve().parent
 if str(_TOOLS) not in sys.path:
     sys.path.insert(0, str(_TOOLS))
 
-from balance_content_doe import generate_bundle  # noqa: E402
+from balance_content_doe import generate_bundle as generate_doe_bundle  # noqa: E402
 from balance_host_qualify import host_identity, require_godot  # noqa: E402
+from balance_tier1_design import generate_bundle as generate_tier1_bundle  # noqa: E402
+from balance_f0_tier1 import (  # noqa: E402
+    attach_tier1_fields,
+    bootstrap_breadth,
+    breadth_pareto,
+    decide,
+    identity_load,
+    package_effects,
+    pairwise_effects,
+)
 from balance_seed_contract import (  # noqa: E402
     CONTRACT_REL,
     LIVE_REL,
@@ -61,6 +71,11 @@ HOST_PACKETS = (
     "docs/balance/data/456/m1-max.json",
     "docs/balance/data/456/m4-mac-mini.json",
 )
+HOST_PACKETS_TIER1 = (
+    "docs/balance/data/489/m1-max.json",
+    "docs/balance/data/489/m4-mac-mini.json",
+)
+RESPONSE_CONTRACT_REL = "docs/balance/490-f0-response-contract-v1.json"
 PROXY_KEYS = ("topRate", "thirdRate", "fourthRate", "within10", "viable", "arm2Rate", "margin")
 RATE_PROXY_KEYS = ("topRate", "thirdRate", "fourthRate", "arm2Rate", "margin")
 DEFICIT_KEYS = ("c1a", "c1b", "c2arm", "c2gap")
@@ -175,12 +190,24 @@ def evaluation_from_registry(registry: dict[str, Any], name: str,
     selected = registry.get("evaluations", {}).get(name)
     if not isinstance(selected, dict):
         raise ValueError(f"unknown evaluation {name!r}")
-    return {
+    selected_out: dict[str, Any] = {
         "issue": int(registry["issue"]), "evaluation": name,
         "controls": selected["controls"], "landscape": selected["landscape"],
         "frozenLandscape": axes, "bootstrap": int(selected.get("bootstrap", 1000)),
         "finalistAudit": bool(selected.get("finalistAudit", False)),
     }
+    for key in ("completeRectangle", "candidateSource", "candidateCount", "candidateSeed"):
+        if key in selected:
+            selected_out[key] = selected[key]
+    if "bootstrapSeed" in selected:
+        selected_out["bootSeed"] = int(selected["bootstrapSeed"])
+    if registry.get("hostPackets"):
+        selected_out["hostPackets"] = list(registry["hostPackets"])
+    elif selected.get("hostPackets"):
+        selected_out["hostPackets"] = list(selected["hostPackets"])
+    if registry.get("responseContract"):
+        selected_out["responseContract"] = str(registry["responseContract"])
+    return selected_out
 
 
 def input_parts(proto: dict[str, Any], identity: dict[str, Any], candidate: dict[str, Any],
@@ -334,12 +361,15 @@ def ranked_control_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [row for row in rows if int(row.get("arm", 0)) in RANK_ARMS]
 
 
-def control_fault(rows: list[dict[str, Any]], baseline_stalls: int) -> str:
+def control_fault(rows: list[dict[str, Any]], baseline_stalls: int,
+                  complete_rectangle: bool = False) -> str:
     ranked = ranked_control_rows(rows)
     errors = sum(1 for row in ranked if row.get("outcome") == "error")
     stalls = sum(1 for row in ranked if row.get("outcome") == "stall")
     if errors:
         return "errors"
+    if complete_rectangle:
+        return ""
     if stalls > baseline_stalls:
         return "stalls-beyond-baseline"
     return identity_fault(ranked)
@@ -514,7 +544,8 @@ def screening_effects(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return effects
 
 
-def bind_row(row: dict[str, Any], identity: dict[str, Any]) -> dict[str, Any]:
+def bind_row(row: dict[str, Any], identity: dict[str, Any],
+             extras: bool = False) -> dict[str, Any]:
     bound = {
         "candidateId": identity["id"], "values": identity["values"],
         "candidateFileSha256": identity["fileSha256"],
@@ -531,6 +562,13 @@ def bind_row(row: dict[str, Any], identity: dict[str, Any]) -> dict[str, Any]:
         bound["arm"] = int(row["arm"])
     if "policyIndex" in row:
         bound["policyIndex"] = int(row["policyIndex"])
+    if extras:
+        if "deckIds" in row:
+            bound["deckIds"] = row["deckIds"]
+        if "relics" in row:
+            bound["relics"] = row["relics"]
+        if "packageEvents" in row:
+            bound["packageEvents"] = row["packageEvents"]
     return bound
 
 
@@ -539,8 +577,9 @@ def git_head() -> str:
     return proc.stdout.strip() if proc.returncode == 0 else "unknown"
 
 
-def qualified_packet(host: dict[str, Any], godot: str) -> dict[str, Any]:
-    for rel in HOST_PACKETS:
+def qualified_packet(host: dict[str, Any], godot: str,
+                     packets: tuple[str, ...] | list[str] | None = None) -> dict[str, Any]:
+    for rel in packets or HOST_PACKETS:
         path = REPO / rel
         if not path.is_file():
             continue
@@ -567,14 +606,17 @@ def prepare_out(out: Path, fresh: bool) -> None:
     (out / MARKER).write_text(f"{TOOL_ID}\n", encoding="utf-8")
 
 
-def ensure_candidates(path: Path, count: int, seed: int) -> dict[str, Any]:
+def ensure_candidates(path: Path, count: int, seed: int,
+                      source: str = "doe") -> dict[str, Any]:
     manifest_path = path / "manifest.json"
     if manifest_path.is_file():
         manifest = read_json(manifest_path)
         if int(manifest.get("count", -1)) != count or int(manifest.get("seed", -1)) != seed:
             raise ValueError(f"stale DOE bundle at {path}")
         return manifest
-    return generate_bundle(REPO / LIVE_REL, REPO / SPACE_REL, path, count, seed, False)
+    if source == "tier1":
+        return generate_tier1_bundle(REPO, path, False, seed)
+    return generate_doe_bundle(REPO / LIVE_REL, REPO / SPACE_REL, path, count, seed, False)
 
 
 def godot_sweep(godot: str, flags: list[str], dest: Path, log: Path) -> None:
@@ -647,13 +689,15 @@ def attach_raw(result: dict[str, Any], cand_dir: Path) -> dict[str, Any]:
     return result
 
 
-def observation_bytes(rows: list[dict[str, Any]], identity: dict[str, Any]) -> bytes:
-    return "".join(json.dumps(bind_row(row, identity), ensure_ascii=False, sort_keys=True,
+def observation_bytes(rows: list[dict[str, Any]], identity: dict[str, Any],
+                      extras: bool = False) -> bytes:
+    return "".join(json.dumps(bind_row(row, identity, extras), ensure_ascii=False, sort_keys=True,
                               separators=(",", ":")) + "\n" for row in rows).encode()
 
 
-def write_observations(path: Path, rows: list[dict[str, Any]], identity: dict[str, Any]) -> str:
-    payload = observation_bytes(rows, identity)
+def write_observations(path: Path, rows: list[dict[str, Any]], identity: dict[str, Any],
+                       extras: bool = False) -> str:
+    payload = observation_bytes(rows, identity, extras)
     path.write_bytes(payload)
     return sha256_bytes(payload)
 
@@ -792,7 +836,9 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     ranked_controls = ranked_control_rows(control_rows)
     baseline_stalls = int(baseline["controlStalls"]) if baseline else sum(
         1 for row in ranked_controls if row.get("outcome") == "stall")
-    fault = control_fault(control_rows, baseline_stalls)
+    complete_rectangle = bool(proto.get("completeRectangle"))
+    fault = control_fault(control_rows, baseline_stalls,
+                          complete_rectangle=complete_rectangle)
     landscape_rows: list[dict[str, Any]] = []
     if not fault:
         def land_job(item: tuple[int, dict[str, int]]) -> Path:
@@ -822,7 +868,7 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
     controls = aggregate_controls(control_rows)
     cells = aggregate_cells(landscape_rows, axes) if landscape_rows else {}
     proxies = grid_proxies(controls, cells) if landscape_rows else {}
-    if not fault and proxies:
+    if not fault and proxies and not complete_rectangle:
         fault = landscape_fault(proxies)
     result: dict[str, Any] = {
         "id": cand["id"], "values": cand["values"], "fileSha256": cand["fileSha256"],
@@ -834,7 +880,8 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         "landscapeStalls": sum(1 for row in landscape_rows if row.get("outcome") == "stall"),
         "landscapeErrors": sum(1 for row in landscape_rows if row.get("outcome") == "error"),
         "observationsSha256": write_observations(
-            cand_dir / "observations.jsonl", control_rows + landscape_rows, bind),
+            cand_dir / "observations.jsonl", control_rows + landscape_rows, bind,
+            extras=int(proto.get("issue", 0)) == 491),
         "controlRowCount": len(control_rows), "landscapeRowCount": len(landscape_rows),
         "wallSeconds": round(time.perf_counter() - t0, 3),
         "godotVersion": godot_version, "hostFingerprint": host_fp, "commit": commit,
@@ -859,11 +906,22 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         result["deficits"] = deficits(proxies)
         base_c = by_seed(baseline["_controlRows"]) if baseline and baseline.get("_controlRows") else None
         base_l = by_seed(baseline["_landscapeRows"]) if baseline and baseline.get("_landscapeRows") else None
+        boot_seed = int(proto.get("bootSeed", BOOT_SEED))
         result["bootstrap"] = seed_block_bootstrap(
-            by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes, n_boot, BOOT_SEED)
+            by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes, n_boot, boot_seed)
+        if int(proto.get("issue", 0)) == 491:
+            extra = bootstrap_breadth(
+                by_seed(control_rows), by_seed(landscape_rows), base_c, base_l, axes,
+                read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL))),
+                result.get("cells") or {}, n_boot, boot_seed)
+            result["bootstrap"] = {**result["bootstrap"], **extra}
         if baseline and baseline.get("bootstrap") and envelope_dominated(
-                result["bootstrap"], baseline["bootstrap"]):
+                result["bootstrap"], baseline["bootstrap"]) and not complete_rectangle:
             fault = fault or "dominated-envelope"
+    if int(proto.get("issue", 0)) == 491:
+        contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
+        attach_tier1_fields(result, axes, contract, identity_load(read_json(content)),
+                            landscape_rows, control_rows)
     result["status"] = "early-stop" if fault else "complete"
     result["earlyStop"] = fault or None
     dump(cand_dir / "manifest.json", {k: v for k, v in result.items() if not k.startswith("_")})
@@ -901,6 +959,43 @@ def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
                     identity: dict[str, Any], commit: str, godot: str,
                     live_sha: str, out: Path) -> dict[str, Any]:
     public = [{k: v for k, v in row.items() if not k.startswith("_")} for row in candidates]
+    if int(proto.get("issue", 0)) == 491:
+        contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
+        features = list(contract["packageDiagnostics"]["packages"])
+        boot_n = int(proto.get("bootstrap", 1000))
+        boot_seed = int(proto.get("bootSeed", 3454))
+        effects = package_effects(public, features, boot_n, boot_seed)
+        interactions = pairwise_effects(public, features, min(400, boot_n), boot_seed)
+        by_id = {row["id"]: row for row in public}
+        baseline = next((row for row in public if row.get("id") == "t1-c000"), None)
+        for row in public:
+            row["decision"] = decide(row, baseline, effects, contract)
+            dump(out / row["id"] / "manifest.json",
+                 {k: v for k, v in {**by_id.get(row["id"], {}), **row}.items()
+                  if not str(k).startswith("_")})
+        display = sorted((row for row in public if row.get("validBreadthSum") is not None),
+                         key=lambda row: (float(row["validBreadthSum"]), row["id"]))
+        summary = {
+            "issue": 491, "protocol": proto,
+            "commit": commit, "godotVersion": godot,
+            "liveContentFileSha256": live_sha,
+            "searchSpaceSha256": identity["searchSpaceSha256"],
+            "seedRegistrySha256": identity["seedRegistrySha256"],
+            "driverSha256": identity["driverSha256"], "host": host,
+            "hostFingerprint": packet["fingerprint"]["fingerprintHash"],
+            "candidates": public,
+            "pareto": pareto_ids(public),
+            "breadthPareto": breadth_pareto(public),
+            "displayOrder": [row["id"] for row in display],
+            "displayOrderNote": "sorted by valid-cell C1 breadth deficit for readability, not a score",
+            "effects": screening_effects(public),
+            "packageEffects": effects,
+            "pairwiseEffects": [row for row in interactions if row["excludesZero"]],
+            "shortlist": [row["id"] for row in public
+                          if (row.get("decision") or {}).get("eligible")],
+        }
+        dump(out / "summary.json", summary)
+        return summary
     display = sorted((row for row in public if row.get("deficits")),
                      key=lambda row: (row["deficits"]["sum"], row["id"]))
     summary = {
@@ -1094,7 +1189,11 @@ def main() -> int:
         if not isinstance(inherit_proto, dict):
             raise ValueError("--inherit summary has no protocol")
     doe_path = Path(args.candidates) if args.candidates else out / "doe"
-    manifest = ensure_candidates(doe_path, args.count, args.seed); identity["searchSpaceSha256"] = str(manifest.get("registryIdentity", {}).get("fileSha256", identity["searchSpaceSha256"]))
+    count = int(proto.get("candidateCount") or args.count)
+    seed = int(proto.get("candidateSeed") or args.seed)
+    source = str(proto.get("candidateSource") or "doe")
+    manifest = ensure_candidates(doe_path, count, seed, source)
+    identity["searchSpaceSha256"] = str(manifest.get("registryIdentity", {}).get("fileSha256", identity["searchSpaceSha256"]))
     if args.summarise_only:
         rows = [read_json(out / row["id"] / "manifest.json")
                 for row in manifest["candidates"]
@@ -1110,7 +1209,9 @@ def main() -> int:
         return 0
     godot_version = require_godot(args.godot)
     host = host_identity(args.jobs)
-    packet = qualified_packet(host, godot_version)
+    packets = tuple(proto["hostPackets"]) if proto.get("hostPackets") else (
+        HOST_PACKETS_TIER1 if int(proto.get("issue", 0)) == 491 else HOST_PACKETS)
+    packet = qualified_packet(host, godot_version, packets)
     baseline_ids = [row["id"] for row in manifest["candidates"] if row.get("baseline")]
     if len(baseline_ids) != 1: raise ValueError("candidate manifest must identify exactly one baseline")
     baseline_id = baseline_ids[0]; names = [args.replay] if args.replay else (wanted or [row["id"] for row in manifest["candidates"]])

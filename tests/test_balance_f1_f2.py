@@ -81,6 +81,9 @@ class BalanceF1F2Test(unittest.TestCase):
         self.assertEqual(458, selected["issue"])
         self.assertEqual(axes, selected["frozenLandscape"])
         self.assertNotIn("maxPromotions", selected)
+        self.assertNotIn("completeRectangle", selected)
+        self.assertNotIn("responseContract", selected)
+        self.assertNotIn("hostPackets", selected)
 
     def test_surrogate_must_beat_the_transparent_ranking_baseline(self) -> None:
         thresholds = {

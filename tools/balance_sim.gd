@@ -6,6 +6,7 @@ const Policy: GDScript = preload("res://tools/balance_policy.gd")
 const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
 const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
 const PROFILE: String = "mature-three-act-no-side-state-v1"
+static var _probe: Dictionary = {}
 func _initialize() -> void:
 	var opts: Dictionary = _options(OS.get_cmdline_user_args())
 	if opts.has("error"):
@@ -67,6 +68,7 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 		ban: PackedStringArray = PackedStringArray(), policy: Dictionary = {},
 		random_build: bool = false, random_play: bool = false, mix: Dictionary = {},
 		vigil: VigilState = null, strip_start_hex: bool = false) -> Dictionary:
+	_probe = {}
 	Pilot.set_ban(ban)
 	Pilot.apply_policy(policy)
 	Pilot.set_modes(random_build, random_play)
@@ -100,6 +102,7 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 			_enter_node(run, node)
 			if node.is_combat():
 				var fight: Dictionary = _fight(game, node)
+				_harvest_fight(game)
 				fights.append(fight)
 				if fight["result"] != "win":
 					return _finish(run, aspect, seed,
@@ -114,9 +117,15 @@ static func simulate(content: ContentDB, aspect: String, seed: int, vow: int = 0
 			map.clear_current()
 			if node.type == "boss" and not run.is_final_act():
 				economy.append(_economy_row(run))
-				var relic: String = Pilot.choose_relic(game.rewards.roll_boss_relics(run), content,
-					run.aspect, run.rng)
+				var offered: Array[String] = game.rewards.roll_boss_relics(run)
+				for offered_id: String in offered:
+					if offered_id == "hollowCrown":
+						_bump("hollowCrownOffered")
+				var relic: String = Pilot.choose_relic(offered, content, run.aspect, run.rng)
 				if not relic.is_empty():
+					if relic == "hollowCrown":
+						_bump("hollowCrownPicked")
+						_bump("maxHpLostToCrown", _ji(content.relic(&"hollowCrown").get("maxHpPenalty", 10)))
 					game.rewards.gain_relic(run, relic)
 				run.boss_relic_act = run.act
 				run.start_next_act(content)
@@ -160,6 +169,8 @@ static func _claim_rewards(game: GlassvowGame, rewards: Dictionary) -> void:
 	var gold: int = int(float(str(rewards.get("gold", 0))))
 	game.run.player.gold += gold
 	game.run.stats["goldEarned"] = int(float(str(game.run.stats.get("goldEarned", 0)))) + gold
+	for card_v: Variant in rewards.get("cards", []):
+		_bump("%sOffered" % str(card_v))
 	var card: String = Pilot.choose_card(rewards.get("cards", []), game.content, game.run.aspect,
 		game.run.rng)
 	if not card.is_empty() and not Pilot.is_banned(card):
@@ -207,7 +218,12 @@ static func _upgrade_best(game: GlassvowGame) -> void:
 	if best != null:
 		best.up = true
 static func _resolve_event(game: GlassvowGame) -> void:
-	var event: Dictionary = game.content.events[game.rewards.roll_event(game.run)]
+	var event_id: String = game.rewards.roll_event(game.run)
+	if event_id == "forgottenShrine":
+		_bump("forgottenShrineSeen")
+	elif event_id == "mirror":
+		_bump("mirrorSeen")
+	var event: Dictionary = game.content.events[event_id]
 	var choice: Dictionary = {}
 	var best_score: float = -INF
 	for row_v: Variant in event.get("choices", []):
@@ -222,6 +238,8 @@ static func _resolve_event(game: GlassvowGame) -> void:
 	var pending: Dictionary = game.rewards.apply_event_ops(game.run, ops)
 	match str(pending.get("kind", "")):
 		"card":
+			for pending_card: Variant in pending.get("cards", []):
+				_bump("%sOffered" % str(pending_card))
 			var id: String = Pilot.choose_card(pending.get("cards", []), game.content, game.run.aspect,
 				game.run.rng)
 			if not id.is_empty():
@@ -229,7 +247,12 @@ static func _resolve_event(game: GlassvowGame) -> void:
 		"upgrade": _upgrade_best(game)
 		"remove":
 			var worst: CardInst = Pilot.worst_card(game.run, game.content, game.run.player.deck)
-			if worst != null: game.run.player.deck.erase(worst)
+			if worst != null:
+				game.run.player.deck.erase(worst)
+				if event_id == "forgottenShrine":
+					_bump("shrineRemovalChosen")
+				elif event_id == "mirror":
+					_bump("mirrorRemovalChosen")
 		"duplicate":
 			var source: CardInst = Pilot.best_card(game.run, game.content, game.run.player.deck)
 			if source != null:
@@ -354,7 +377,11 @@ static func _best_upgrade_delta(game: GlassvowGame) -> float:
 			best_score = score
 	return best_score if found else 0.0
 static func _resolve_shop(game: GlassvowGame) -> void:
+	_bump("shopVisited")
 	var stock: Dictionary = game.rewards.gen_shop(game.run)
+	for row_v: Variant in stock.get("cards", []):
+		var row: Dictionary = row_v
+		_bump("%sOffered" % str(row.get("id", "")))
 	var buys: Array[Dictionary] = Pilot.choose_shop(stock, game.run, game.content)
 	for buy: Dictionary in buys:
 		var price: int = int(float(str(buy["price"])))
@@ -372,6 +399,7 @@ static func _resolve_shop(game: GlassvowGame) -> void:
 			if slot >= 0:
 				game.run.player.potions[slot] = id
 		elif category == "remove":
+			_bump("shopRemovalBought")
 			var remove: CardInst = null
 			for card: CardInst in game.run.player.deck:
 				if card.uid == int(float(str(buy.get("uid", -1)))):
@@ -408,6 +436,65 @@ static func _apply_ban(run: RunState) -> void:
 	run.player.relics.clear()
 	for id: String in kept_relics:
 		run.player.relics.append(id)
+static func _ji(value: Variant) -> int:
+	return int(float(str(value)))
+
+
+static func _bump(key: String, n: int = 1) -> void:
+	_probe[key] = int(float(str(_probe.get(key, 0)))) + n
+
+
+static func _harvest_fight(game: GlassvowGame) -> void:
+	var relics: Array[String] = game.run.player.relics
+	if relics.has("ashenCore"):
+		_bump("ashenCoreOwned")
+	if relics.has("smolderingCoal"):
+		_bump("smolderingCoalOwned")
+	if relics.has("hollowCrown"):
+		_bump("hollowCrownOwned")
+	var last_play: String = ""
+	for event_v: Variant in game.cb.queue:
+		var event: Dictionary = event_v
+		var kind: String = str(event.get("t", ""))
+		if kind == "turn":
+			last_play = ""
+			if relics.has("hollowCrown"):
+				var gain: int = _ji(game.content.relic(&"hollowCrown").get("energyGain", 1))
+				if gain > 0:
+					_bump("extraEnergyGrantedByCrown", gain)
+		elif kind == "draw":
+			var drawn: String = str(event.get("id", ""))
+			_bump("%sDrawn" % drawn)
+			if last_play in ["quickSlash", "sidestep", "preparation"]:
+				_bump("cardsDrawnByCycle")
+			elif last_play == "deflect":
+				_bump("cardsDrawnByDeflect")
+		elif kind == "play":
+			last_play = str(event.get("id", ""))
+			_bump("%sPlayed" % last_play)
+		elif kind == "status":
+			var status_id: String = str(event.get("id", ""))
+			if last_play == "eclipseSlash" and status_id == "vulnerable":
+				_bump("crackedAppliedByEclipseSlash")
+			elif last_play in ["ashBite", "smother"] and status_id == "poison":
+				_bump("smolderAppliedByStarters")
+			elif last_play == "toxicMist" and status_id == "poison":
+				_bump("smolderAppliedByToxicMist")
+			elif last_play == "ashenChoir" and status_id == "poison":
+				_bump("smolderAppliedByStack")
+		elif kind == "blockGain" and str(event.get("who", "")) == "player":
+			if last_play == "smother":
+				_bump("wardGainedBySmother")
+			elif last_play == "deflect":
+				_bump("wardGainedByDeflect")
+		elif kind == "relicProc":
+			var relic_id: String = str(event.get("id", ""))
+			if relic_id == "ashenCore":
+				_bump("ashenCoreTriggered")
+			elif relic_id == "smolderingCoal":
+				_bump("smolderingCoalTriggered")
+
+
 static func _economy_row(run: RunState) -> Dictionary:
 	return {"act": run.act + 1, "gold": run.player.gold, "hp": run.player.hp,
 		"maxHp": run.player.max_hp, "deck": run.player.deck.size()}
@@ -423,6 +510,7 @@ static func _result(run: RunState, aspect: String, seed: int, outcome: String,
 		"fights": fights, "relics": run.player.relics.duplicate(), "deckIds": deck_ids,
 		"goldEarned": int(float(str(run.stats.get("goldEarned", 0)))), "economy": economy,
 		"policy": Pilot.policy_snapshot(),
+		"packageEvents": _probe.duplicate(),
 	}
 
 
@@ -445,7 +533,9 @@ static func _strip_hex(run: RunState) -> void:
 	for card: CardInst in kept:
 		run.player.deck.append(card)
 static func outcome_digest(row: Dictionary) -> String:
-	return JSON.stringify(row).sha256_text()
+	var copy: Dictionary = row.duplicate(true)
+	copy.erase("packageEvents")
+	return JSON.stringify(copy).sha256_text()
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "",
 		"out": "", "ban": "", "mix": "", "content": "", "space": BalanceCatalogue.DEFAULT_SPACE,
