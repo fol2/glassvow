@@ -125,11 +125,9 @@ static func _check_stage(fails: Array[String]) -> void:
 	if not BalanceCatalogue.stage_error({"stage": "tier2-f0-controls", "seed0": 12100, "runs": 32,
 			"rootSeed": 7454}).is_empty():
 		fails.append("balance catalogue: Tier-2 F0 controls 12100–12131 / root 7454 must pass")
-	if not BalanceCatalogue.stage_error({"stage": "tier2-level-probe", "seed0": 12232, "runs": 32,
-			"rootSeed": 7554}).is_empty():
+	if not BalanceCatalogue.stage_error({"stage": "tier2-level-probe", "seed0": 12232, "runs": 32, "rootSeed": 7554}).is_empty():
 		fails.append("balance catalogue: #508 level probe 12232–12263 / root 7554 must pass")
-	if BalanceCatalogue.stage_error({"stage": "tier2-level-probe", "seed0": 12232, "runs": 32,
-			"rootSeed": 7454}).is_empty():
+	if BalanceCatalogue.stage_error({"stage": "tier2-level-probe", "seed0": 12232, "runs": 32, "rootSeed": 7454}).is_empty():
 		fails.append("balance catalogue: #508 level probe must reject F0 root 7454")
 	if BalanceCatalogue.stage_error({"stage": "tier2-f1-racing", "seed0": 12300, "runs": 1,
 			"rootSeed": 4454}).is_empty():

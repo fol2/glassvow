@@ -29,8 +29,7 @@ static func run(fails: Array[String]) -> void:
 
 
 static func _check_tier2_profiles(content: ContentDB, fails: Array[String]) -> void:
-	var run_state: RunState = RunState.new_run(content, 12232, "tier2-disruption")
-	var game: GlassvowGame = GlassvowGame.new(content, run_state)
+	var run_state: RunState = RunState.new_run(content, 12232, "tier2-disruption"); var game: GlassvowGame = GlassvowGame.new(content, run_state)
 	game.apply({"t": "startCombat", "enemies": ["waylayer", "watcherEye"], "kind": "normal"})
 	game.apply({"t": "endTurn"})
 	var disruption: Dictionary = Sim.tier2_profile_diagnostics(game.cb)
@@ -40,23 +39,21 @@ static func _check_tier2_profiles(content: ContentDB, fails: Array[String]) -> v
 	for event_v: Variant in disruption["disruption"]:
 		var event: Dictionary = event_v
 		if event.get("target") != "player" or event.get("amount") != 2 \
-				or str(event.get("status")) not in ["frail", "vulnerable"]:
+				or [event.get("move"), event.get("status")] != {"waylayer": ["trick", "frail"], "watcherEye": ["gaze", "vulnerable"]}.get(event.get("enemy"), []):
 			fails.append("balance sim: disruption telemetry did not match the status application")
-	run_state = RunState.new_run(content, 12232, "tier2-block")
-	game = GlassvowGame.new(content, run_state)
+	run_state = RunState.new_run(content, 12232, "tier2-block"); game = GlassvowGame.new(content, run_state)
 	game.apply({"t": "startCombat", "enemies": ["gravewarden", "shellback"], "kind": "elite"})
 	for _turn: int in range(3):
 		game.apply({"t": "endTurn"})
 	var block: Dictionary = Sim.tier2_profile_diagnostics(game.cb)
 	if block["block"].size() < 2 or block["tempo"].is_empty():
 		fails.append("balance sim: targeted block profiles did not emit block and tempo events")
-	run_state = RunState.new_run(content, 12232, "tier2-unrelated")
-	game = GlassvowGame.new(content, run_state)
+	run_state = RunState.new_run(content, 12232, "tier2-unrelated"); game = GlassvowGame.new(content, run_state)
 	game.apply({"t": "startCombat", "enemies": ["sporeling"], "kind": "normal"})
 	game.apply({"t": "endTurn"})
 	var unrelated: Dictionary = Sim.tier2_profile_diagnostics(game.cb)
 	if not unrelated["encounters"].is_empty() or not unrelated["moves"].is_empty() \
-			or not unrelated["block"].is_empty() or not unrelated["disruption"].is_empty() \
+			or not unrelated["block"].is_empty() or not unrelated["heal"].is_empty() or not unrelated["disruption"].is_empty() \
 			or not unrelated["tempo"].is_empty():
 		fails.append("balance sim: unrelated fight emitted Tier-2 profile diagnostics")
 static func _check_sampler(content: ContentDB, fails: Array[String]) -> void:

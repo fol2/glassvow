@@ -65,6 +65,9 @@ jobs:
       - name: Test Tier-1 grouped breadth registry
         run: python3 -B tests/test_balance_tier1_design.py
 
+      - name: Test Tier-2 disruption factorial
+        run: python3 -B tests/test_balance_tier2_design.py
+
       - name: Test candidate loading and host-qualify fail-closed
         run: python3 -B tools/balance_host_qualify.py --self-test
 

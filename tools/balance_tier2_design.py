@@ -160,7 +160,7 @@ def compile_design(repo: Path = REPO, registry_path: Path | None = None) \
         if effective_sha in semantic: raise ValueError("duplicate semantic effective catalogue")
         semantic.add(effective_sha)
     manifest = {"tool": TOOL_ID, "registryPath": REGISTRY_REL, "design": registry["design"],
-                "baseIdentity": packet["identity"], "registryIdentity": registry_id,
+                "baseIdentity": {key: value for key, value in packet["identity"].items() if key != "livePath"}, "registryIdentity": registry_id,
                 "responseContractIdentity": response_id, "frozenCensusIdentity": census_id,
                 "seedContractIdentity": _identity(repo / "docs/balance/421-content-search-seeds-v1.json",
                                                    read_json(repo / "docs/balance/421-content-search-seeds-v1.json")),

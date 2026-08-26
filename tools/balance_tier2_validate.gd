@@ -32,7 +32,7 @@ func _initialize() -> void:
 			if not EnemyAi.handles(StringName(str(enemy_v))):
 				faults.append("%s has no EnemyAi path" % str(enemy_v))
 		if not faults.is_empty() or not content.apply_enemy_overrides(mobs).is_empty():
-			_fail("%s failed enemy_override_faults: %s" % [candidate.get("id", ""), faults[0]])
+			_fail("%s failed enemy_override_faults: %s" % [candidate.get("id", ""), faults[0] if not faults.is_empty() else "apply rejected prevalidated overrides"])
 			return
 		count += 1
 	print(JSON.stringify({"validated": count, "method": "ContentDB.enemy_override_faults"}))
