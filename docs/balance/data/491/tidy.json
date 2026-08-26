@@ -1,0 +1,3818 @@
+{
+  "breadthPareto": [
+    "t1-c019",
+    "t1-c042"
+  ],
+  "candidates": [
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.0
+      },
+      "eligible": false,
+      "fatRuns": 852,
+      "fatWinRate": 0.7535211267605634,
+      "fileSha256": "5b3504f133a7e180f20426a8f28c5f2685c9d00d4e3c93c39a432a1a859ea448",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c000",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1247,
+      "midWinRate": 0.3103448275862069,
+      "observationsSha256": "5e4e09677bc6fd0aa15859aaaf0c558f8b848365ad9475dd08d519cde9526127",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "6359c4958039d37fc05df5bd9487fac12c4cb3b0e8ee4c4f287d87d876b89fc3",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1997,
+      "thinWinRate": 0.019529293940911366,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.21875,
+        "duskblade:v5": 0.1875
+      },
+      "controlErrors": 0,
+      "controlStalls": 1,
+      "creditedPackages": [
+        "duskStarterAttrition"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.0
+      },
+      "eligible": false,
+      "fatRuns": 795,
+      "fatWinRate": 0.7559748427672957,
+      "fileSha256": "66e4da9cc64dbad24c1072232353f4225af49cc729c0e43ea973096f0d72f8a5",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c001",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1229,
+      "midWinRate": 0.31814483319772174,
+      "observationsSha256": "c4ed8a1c9fa454512685f51a6680f2e7dcbfe65b5a0a6dd186d5d87c882a3ba1",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "2da897eee309c5010665767867183afc1e382d77a749096258bcec123b2fb5b9",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2072,
+      "thinWinRate": 0.019305019305019305,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.40625,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.0
+      },
+      "eligible": false,
+      "fatRuns": 833,
+      "fatWinRate": 0.7466986794717887,
+      "fileSha256": "626b97a39aa4afe80d49aa82b8743670e6bdb839eece233584b5a2a9bf4ddf03",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c002",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1314,
+      "midWinRate": 0.302130898021309,
+      "observationsSha256": "47f7a0b1e081b179dbf2aea73c729a27e0be53d387caa6f91b4797c29d06e84e",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "f3353c2244e5b9291813d31b8021850907a3fd38f74166fc7927d28c635d688c",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1949,
+      "thinWinRate": 0.021549512570549,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.125,
+        "ashwarden:v5": 0.03125,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "ashStarterThinSustain"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 714,
+      "fatWinRate": 0.7366946778711485,
+      "fileSha256": "6fa8a5b4e208db7226ac0f9f57d4dacde4a47be43b9fcaf15f1d3d241a0900ac",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c003",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1108,
+      "midWinRate": 0.3249097472924188,
+      "observationsSha256": "09d10eea54d01b44175f4aa89433390aeec0273170383325682ff5455eba9a12",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "bd507b3eea532e791229c3c19f130a881ff0778c918db786b3daed3fabecbf02",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2274,
+      "thinWinRate": 0.01802990325417766,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.28125,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.916666666666666
+      },
+      "eligible": false,
+      "fatRuns": 1006,
+      "fatWinRate": 0.7345924453280318,
+      "fileSha256": "2913c39b24f31c31036181be996392a69df6141b0d7ac3646f0e703327261f06",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c004",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1332,
+      "midWinRate": 0.3408408408408408,
+      "observationsSha256": "224206f5f2a0c47ec96ab348052fc4130c6950e6bdca85126ad9e9e65a81a1c7",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "af08a14d56a5f3601f2049d1e4a29e735478b93280cca6b50e5e7dd2428eb985",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1758,
+      "thinWinRate": 0.03185437997724687,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.125,
+        "ashwarden:v5": 0.0625,
+        "duskblade:v0": 0.3125,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "neutralCycle"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 1.75,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.75
+      },
+      "eligible": false,
+      "fatRuns": 793,
+      "fatWinRate": 0.7414880201765448,
+      "fileSha256": "be084689d6be6bbd3fc3447a0c3f3cbb1a8c73b93a6b35b25e65ba0fa9eed819",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c005",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1246,
+      "midWinRate": 0.31942215088282505,
+      "observationsSha256": "9214809041c3e21f178001b73866d387d23ea797a3e2d93a579883689b8d0842",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "8487ce3ca1d0fff1dd2d830d9d57f1cf51c6fb57891f20e582cc0a03f0aa3d3f",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2057,
+      "thinWinRate": 0.019931939718035974,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "attrition:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "low",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 2
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.1875,
+        "ashwarden:v5": 0.09375,
+        "duskblade:v0": 0.25,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "neutralCycle"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 889,
+      "fatWinRate": 0.7390326209223848,
+      "fileSha256": "cfa9c974f0ab32a5b390aa8f3bb6b6d2bbbeb2569d14e278fce9d65352cbd7c8",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c006",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 3,
+      "midRuns": 1234,
+      "midWinRate": 0.3055105348460292,
+      "observationsSha256": "5900e8342d83ea987726a828858dd4045aaa9c09598e6f7362a796618c98f901",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "0849a96a3eac21948960cfb17558b598d354189560c8ca5616706d03f600a1de",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 1973,
+      "thinWinRate": 0.017739483020780537,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "high",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.15625,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "removalEconomy"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 850,
+      "fatWinRate": 0.7588235294117647,
+      "fileSha256": "4b718ed0c39686ad87ef1a573e95ca33c40fbfd187e923391dbd76f5ff6db57b",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c007",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1262,
+      "midWinRate": 0.3011093502377179,
+      "observationsSha256": "fc5f237a2f81fa6a626a54d0622c522094a455e9f0c75389e0b43d7bce9886a3",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "f73bfe038691612aa2b2c7a006f8ce320a9a87dc49f3501d9adea8d789778743",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1984,
+      "thinWinRate": 0.019153225806451613,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "low",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.09375,
+        "duskblade:v0": 0.3125,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "removalEconomy"
+      ],
+      "deficits": {
+        "c1a": 2.0,
+        "c1b": 1.75,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.75
+      },
+      "eligible": false,
+      "fatRuns": 832,
+      "fatWinRate": 0.7824519230769231,
+      "fileSha256": "cd85481d89f15ac43efa197bc861020ecfc35cd0aecfb89f8317f77e95dfee4f",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c008",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 3,
+      "midRuns": 1223,
+      "midWinRate": 0.3197056418642682,
+      "observationsSha256": "e73a46c4f0cd6ef3e8aa66bcd47377397016bf5abcb0491476c123978672b83e",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "b6205498531bd80a5c90493c06c32e16eb6be255fbb56cf1d070cc2f1960adff",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2041,
+      "thinWinRate": 0.023517883390494855,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "high",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 2
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.25,
+        "ashwarden:v5": 0.15625,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "ashcloudRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 841,
+      "fatWinRate": 0.7550535077288941,
+      "fileSha256": "6601e8c363f4e18dc970c069864d7118685538e64b22462fd89649f6c90271e4",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c009",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1249,
+      "midWinRate": 0.31625300240192156,
+      "observationsSha256": "e5ee5cec266c3fbde543f4377857d94a6774e17729322550ca6d83393a776473",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "9fe0661aa84043ecc9c072ee96b2b13980fee635c7bcce91bfc688e5d6182ae2",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2006,
+      "thinWinRate": 0.020438683948155532,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.09375,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "ashcloudRoute"
+      ],
+      "deficits": {
+        "c1a": 2.0,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.0
+      },
+      "eligible": false,
+      "fatRuns": 840,
+      "fatWinRate": 0.7428571428571429,
+      "fileSha256": "2570726f401d9cc7851a570b6fef58c3671df6680a5152f1aa130f6919d3f778",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c010",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1223,
+      "midWinRate": 0.3008994276369583,
+      "observationsSha256": "4f9ded71cc56018d986f7b9f99f90a54581c7982e9bcedd011034ce4d20c9b4f",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "204ee13b16caa07d8aa62c16894485713db4f4d7f2c31b3f913ac26dc02419d0",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2033,
+      "thinWinRate": 0.018691588785046728,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.1875,
+        "ashwarden:v5": 0.09375,
+        "duskblade:v0": 0.34375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.0
+      },
+      "eligible": false,
+      "fatRuns": 848,
+      "fatWinRate": 0.7441037735849056,
+      "fileSha256": "d4cdcf2c8774b1b1a3fbab80c669bde3ab9ab58e8fbb97c111a48ffb06cebf28",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c011",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1228,
+      "midWinRate": 0.30700325732899025,
+      "observationsSha256": "8616af1666888c742dde135993105cb159c076950c360957cc96d59afc963208",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "71f4cedc14d4a64c77a708bbb350e192af5bf59d786005ff5c6a15705e8694c7",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2020,
+      "thinWinRate": 0.020792079207920793,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.1875,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.34375,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskNonShatter"
+      ],
+      "deficits": {
+        "c1a": 1.6666666666666665,
+        "c1b": 1.75,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.4166666666666665
+      },
+      "eligible": false,
+      "fatRuns": 876,
+      "fatWinRate": 0.7317351598173516,
+      "fileSha256": "1bd71b03a8fad6f612a5912c75f074692fc321a2c171f73f480d742ac1f9ae23",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c012",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1252,
+      "midWinRate": 0.31150159744408945,
+      "observationsSha256": "b5bf881e0a7202d536ab7f108eff7d02c12c8d57b1cfc3b3f28de8dfdfda96ac",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "65b54122b60059a6814904e79d8e3d442585c9ecd7a2f65788ec793f3081a1f1",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1968,
+      "thinWinRate": 0.019308943089430895,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "attrition:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 2
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.03125,
+        "ashwarden:v5": 0.03125,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "smolderRelicStack"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 1.75,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.75
+      },
+      "eligible": false,
+      "fatRuns": 777,
+      "fatWinRate": 0.7284427284427284,
+      "fileSha256": "db98870b7c83475d46ce5d0d71666d8508e34823abbc2125fa787b1a05c63dc6",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c013",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1220,
+      "midWinRate": 0.30901639344262294,
+      "observationsSha256": "d5eafacf2aef22114394a84757f8f150eb61d742e59853a87473bbbbd75640aa",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "27fb9e9f0f257b8fab26f63fc2d07c8b454de5c859722fdd283c3d2880b8ec54",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2099,
+      "thinWinRate": 0.019056693663649357,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 3,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.0625,
+        "ashwarden:v5": 0.09375,
+        "duskblade:v0": 0.375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "smolderRelicStack"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 1.75,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.083333333333333
+      },
+      "eligible": false,
+      "fatRuns": 923,
+      "fatWinRate": 0.742145178764897,
+      "fileSha256": "50085ca036000eeff6ce843fcf65d5eb741298df25ef886ea0ead9a86ef6bf69",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c014",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1199,
+      "midWinRate": 0.32777314428690574,
+      "observationsSha256": "b1be43216bf2f5aa63ead558853b94c38a816a4e1ae00645e4c7069af4bbc4c3",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "496d24ede6c589b2de953ddb13e3d07e5bdd51fe6240f54d20db5b280ec2e7d2",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1974,
+      "thinWinRate": 0.02735562310030395,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 3,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.15625,
+        "ashwarden:v5": 0.09375,
+        "duskblade:v0": 0.40625,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.5,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 5.166666666666666
+      },
+      "eligible": false,
+      "fatRuns": 763,
+      "fatWinRate": 0.7038007863695938,
+      "fileSha256": "d1fecc9ec99a834a13a2597312352c2d9ed13a9302da7450311500a1ebfe5f69",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c015",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1230,
+      "midWinRate": 0.26097560975609757,
+      "observationsSha256": "393a2e9d218f142e2ba8a908f0501cb16370e6de319ac60e0e9c3884213f4fb0",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "80bd0440c6a41faf21842c93c328b792797f72ebdfed4ae4a7941e53155f0adc",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2103,
+      "thinWinRate": 0.014265335235378032,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.25,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.4375,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 923,
+      "fatWinRate": 0.789815817984832,
+      "fileSha256": "f63ee451b3f5a87faf35b77a74eabd4dbebf4860107f53405f42329bb01ec8e6",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c016",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1236,
+      "midWinRate": 0.3446601941747573,
+      "observationsSha256": "65332b81eb88a72e643d45c6c9cb15e437f277f492cd738e6c8c231e09ef470d",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "26fde2130b23a9db67815c60ae3b12696e438551786d7a7a849e1d55d3c97fbd",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1937,
+      "thinWinRate": 0.02219927723283428,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "s009",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.28125,
+        "ashwarden:v5": 0.15625,
+        "duskblade:v0": 0.15625,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.666666666666666
+      },
+      "eligible": false,
+      "fatRuns": 922,
+      "fatWinRate": 0.6973969631236443,
+      "fileSha256": "bd71211bfafb21b97327f6770277252cef908e4213e70de85e93cd684d47b83c",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c017",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 5,
+      "midRuns": 1299,
+      "midWinRate": 0.2863741339491917,
+      "observationsSha256": "68fc1d97274e857aa6f54faa79860757416c36f742212133a6ae506b28c51753",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "04b19a7188b05e5a1994baf08318bfb6fe5cbce74f43cd4618e3b96d28250e04",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 1875,
+      "thinWinRate": 0.0208,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "high",
+        "removalEconomy": "low",
+        "smolderRelicStack": "s009"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.0625,
+        "duskblade:v0": 0.40625,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.3333333333333335,
+        "c1b": 1.5,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.8333333333333335
+      },
+      "eligible": false,
+      "fatRuns": 759,
+      "fatWinRate": 0.782608695652174,
+      "fileSha256": "12a337541f7f8d84333ba05bce85ee485ca39c9e89502d6b05152a1410a34a63",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c018",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1098,
+      "midWinRate": 0.2923497267759563,
+      "observationsSha256": "de0991c55d5edb2dd6f2dc33aa77cf9bcd3c75beb87ce139a3d48ca3289ac705",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "12059c1d9a0036cce24d94d1ea6302540f8cc50eca98de4d41ea028717509693",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2239,
+      "thinWinRate": 0.02009825815096025,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "attrition:fat",
+        "duskblade:v0": "smolder:mid",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "high",
+        "removalEconomy": "low",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 3
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.0625,
+        "ashwarden:v5": 0.0,
+        "duskblade:v0": 0.3125,
+        "duskblade:v5": 0.03125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 606,
+      "fatWinRate": 0.66996699669967,
+      "fileSha256": "cef18a3fa0b8feb528e0e261b21c8f7dce09b0c95030b42c6cf68b3c4976ae51",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c019",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1182,
+      "midWinRate": 0.23688663282571912,
+      "observationsSha256": "842b26f8fba4b9ad35a21a4fb0bc7759bb63b498ccac84c57ee786bc225f0938",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "97766270332f5450eb1672fa74718a72884cb58b3904a6e2ffc86bd6a3c04d78",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2308,
+      "thinWinRate": 0.013431542461005199,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "s009",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.0625,
+        "ashwarden:v5": 0.0,
+        "duskblade:v0": 0.1875,
+        "duskblade:v5": 0.15625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 598,
+      "fatWinRate": 0.6672240802675585,
+      "fileSha256": "a7cbfb4cee83d384d345b15b11123f22ebce2973271a5b28e1e2fe9695b4d0cc",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c020",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 6,
+      "midRuns": 1117,
+      "midWinRate": 0.24888093106535364,
+      "observationsSha256": "917c889de0f5c69672e562a0101a9ca8b97c6309cc1f0b2c11fb71faef2779ef",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "095761537315ee67f3911a7d6f617530afde18aff709148564fb47daf481752f",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2381,
+      "thinWinRate": 0.013439731205375893,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.4375,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.21875,
+        "duskblade:v5": 0.1875
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.12601078167115912,
+        "sum": 5.042677448337825
+      },
+      "eligible": false,
+      "fatRuns": 741,
+      "fatWinRate": 0.6815114709851552,
+      "fileSha256": "cb2c58098476b99ef62f8f6b517cf849b89ecb41febf8bed1e9a1d65edb080ac",
+      "guardReasons": [
+        "c2-failed",
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c021",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 3,
+      "midRuns": 1263,
+      "midWinRate": 0.29849564528899447,
+      "observationsSha256": "8a8410d69a111e518da7e7db1780bd5078bbed86eb8d571f1cd2e38809db1f56",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "8c402925471c3a4a332164a8efc41459ca430f3b0eeb2dd774672e89c5d4627b",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2092,
+      "thinWinRate": 0.020076481835564052,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "low",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.0625,
+        "duskblade:v0": 0.28125,
+        "duskblade:v5": 0.0625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.3333333333333335,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.583333333333334
+      },
+      "eligible": false,
+      "fatRuns": 543,
+      "fatWinRate": 0.7200736648250461,
+      "fileSha256": "871d9ac2138ae99e24240e8f9a8f1e9de050b741c73c288f4e52d29fe66e8fd8",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c022",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 4,
+      "midRuns": 1036,
+      "midWinRate": 0.2693050193050193,
+      "observationsSha256": "cb7e532bb6f1b50da91e41abeb2e4d6592ab9c2c2e41fe55b5fb45c251265ffe",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "ac3b49fe2b6cbf474ddb2c0c1d1cfca276c04025ed47c8490c24daed8587e9fe",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2517,
+      "thinWinRate": 0.014700039729837107,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "high",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.0625,
+        "duskblade:v0": 0.34375,
+        "duskblade:v5": 0.28125
+      },
+      "controlErrors": 0,
+      "controlStalls": 1,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 640,
+      "fatWinRate": 0.759375,
+      "fileSha256": "77b090f1287e09559fd3dad261dff29f007d031088baf9ebca50983de31681f6",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c023",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 6,
+      "midRuns": 999,
+      "midWinRate": 0.35835835835835833,
+      "observationsSha256": "d4f57fe0b24ebcfa055a2d1b74967ab505f523072e848d1c31b4fe0f52dffb9a",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "a3479c551fd3d5b71ccc2762c9c25188e23a5987a144b78c49df2506487b46ca",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2457,
+      "thinWinRate": 0.018315018315018316,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "s009",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.125,
+        "ashwarden:v5": 0.0,
+        "duskblade:v0": 0.28125,
+        "duskblade:v5": 0.0625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.583333333333333
+      },
+      "eligible": false,
+      "fatRuns": 674,
+      "fatWinRate": 0.7002967359050445,
+      "fileSha256": "217d07a09dfdbc41d7f0247b8747d22d1202620ef1fa5114ab84a689137fb1ca",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c024",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 4,
+      "midRuns": 1127,
+      "midWinRate": 0.28127772848269744,
+      "observationsSha256": "959885b870fff300c7b4e170a266408439e9b73bd49ed5c37ff19cd41cb44252",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "bef835ad1959006ec86c02754c4ef3b075c54f71abaaede7383b0130860e90fe",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2295,
+      "thinWinRate": 0.012200435729847494,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "attrition:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "high",
+        "removalEconomy": "high",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.09375,
+        "ashwarden:v5": 0.0,
+        "duskblade:v0": 0.28125,
+        "duskblade:v5": 0.15625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 1.75,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.75
+      },
+      "eligible": false,
+      "fatRuns": 705,
+      "fatWinRate": 0.7489361702127659,
+      "fileSha256": "42529576d38e8a8543569c78c0b2ac901c42fc8f37ea93c05685e331930fcca1",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c025",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1120,
+      "midWinRate": 0.3455357142857143,
+      "observationsSha256": "b221d600ae67605bd5991a28cb653dc9e4588e094ce1a6dc2bde2847cfaefcb7",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "22e9a314b90d9d1ea35522597def461573a4570e9ddd6c8fc668d0a65a8f0dea",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2271,
+      "thinWinRate": 0.02025539409951563,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "attrition:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 3,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.53125,
+        "ashwarden:v5": 0.15625,
+        "duskblade:v0": 0.5,
+        "duskblade:v5": 0.0625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 1.75,
+        "c2arm": 0.0625,
+        "c2gap": 0.06093400092956416,
+        "sum": 3.873434000929564
+      },
+      "eligible": false,
+      "fatRuns": 980,
+      "fatWinRate": 0.7765306122448979,
+      "fileSha256": "baf1856de9e476368e430b4841fd96c9033e016e35dcd17d64a72da93d5f55e0",
+      "guardReasons": [
+        "c2-failed",
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c026",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1327,
+      "midWinRate": 0.3790504898266767,
+      "observationsSha256": "50d8171dd52d689da3a82c10a3246e320292c9c51f251476938de95e4355230e",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "46d0d41edb50a846b5fb32764f6e7c1e67b1f9b080643ef8ac35876bd75dc28a",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1789,
+      "thinWinRate": 0.03912800447177194,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 2
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.4375,
+        "ashwarden:v5": 0.21875,
+        "duskblade:v0": 0.40625,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 1044,
+      "fatWinRate": 0.7576628352490421,
+      "fileSha256": "98c22b3d9130bc9deb8a3cf5246e19ed742d75241004b86520abced584cdedc7",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c027",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1384,
+      "midWinRate": 0.37716763005780346,
+      "observationsSha256": "0572fc782c2e8634d5336e2aeb602d221a936a67310faab9642c8788ebc97bf2",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "447daf12c9f120f59d1394d1eef81ba4c15925e9f9d479e6a17f9333da72c759",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1668,
+      "thinWinRate": 0.04136690647482014,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.34375,
+        "ashwarden:v5": 0.15625,
+        "duskblade:v0": 0.21875,
+        "duskblade:v5": 0.1875
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "smolderRelicStack"
+      ],
+      "deficits": {
+        "c1a": 2.3333333333333335,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333334
+      },
+      "eligible": false,
+      "fatRuns": 1039,
+      "fatWinRate": 0.7487969201154957,
+      "fileSha256": "e7dc7972dab91e5fecf91f12eb66584fe7eb3a9c3a7babebd5dfcdd4af6a4bda",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c028",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 4,
+      "midRuns": 1228,
+      "midWinRate": 0.31758957654723124,
+      "observationsSha256": "cda7b2396dd30878630634f423f8ebb30154ee60c82a19cb8db0352c05ca9128",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "65d3a20c30d0478235f0aea67d5601905b31449346d7f422637d258ad1c04a3b",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 1829,
+      "thinWinRate": 0.026243849097867686,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "s009",
+        "bossEnergyRoute": "s009",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "high",
+        "removalEconomy": "low",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.15625,
+        "ashwarden:v5": 0.03125,
+        "duskblade:v0": 0.28125,
+        "duskblade:v5": 0.15625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 1.75,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.75
+      },
+      "eligible": false,
+      "fatRuns": 824,
+      "fatWinRate": 0.7694174757281553,
+      "fileSha256": "6c136987287d29dd904d8be903a23998f8d44cdeddef3f8d3854959e4f513680",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c029",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 3,
+      "midRuns": 1097,
+      "midWinRate": 0.34275296262534183,
+      "observationsSha256": "e1615d72f450fa577d8cf90781a020020989b5949cfea5228d6b1ee4805b7963",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "fe5f8ce8138173e78720411d2b76313f04bdfc63b6e01648f9709ec980646e0d",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2175,
+      "thinWinRate": 0.015172413793103448,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "high",
+        "removalEconomy": "low",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 3,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.40625,
+        "ashwarden:v5": 0.25,
+        "duskblade:v0": 0.28125,
+        "duskblade:v5": 0.0625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.916666666666666
+      },
+      "eligible": false,
+      "fatRuns": 932,
+      "fatWinRate": 0.7178111587982833,
+      "fileSha256": "33d667a2758db7e427934505f61fd78c5a48fc76e3a6622e1addc3579b4663eb",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c030",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 4,
+      "midRuns": 1341,
+      "midWinRate": 0.30648769574944074,
+      "observationsSha256": "eebb7ce0a7f041d9c33a92fb24b5629ce2076e209dc201c81821a2062a7edb5c",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "7809117c358704d92a7f53e8c04fcb6a4ad3bf9fa3dda7807cf5762c47db560d",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 1823,
+      "thinWinRate": 0.027975863960504662,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "high",
+        "removalEconomy": "high",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.5,
+        "ashwarden:v5": 0.1875,
+        "duskblade:v0": 0.28125,
+        "duskblade:v5": 0.1875
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 1.6666666666666665,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.00938477580813351,
+        "sum": 3.6760514424748
+      },
+      "eligible": false,
+      "fatRuns": 905,
+      "fatWinRate": 0.7690607734806629,
+      "fileSha256": "5e5fb8392547471766d7b2c5744ebbfea9b5a6492e96ceb8f16b1c62739eed8a",
+      "guardReasons": [
+        "c2-failed",
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c031",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 3,
+      "midRuns": 1253,
+      "midWinRate": 0.38148443735035914,
+      "observationsSha256": "ef146e5b84240bdc09824c25664796c22a192e61c094a81e3e4833b1f336506b",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "9a053865842ecd7ec8e7c56be2def8c0a865a7f7144cd444e1bed8b7843c76f2",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 1938,
+      "thinWinRate": 0.032507739938080496,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "low",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.25,
+        "ashwarden:v5": 0.15625,
+        "duskblade:v0": 0.15625,
+        "duskblade:v5": 0.125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.916666666666666
+      },
+      "eligible": false,
+      "fatRuns": 890,
+      "fatWinRate": 0.6898876404494382,
+      "fileSha256": "dc6affb4c6c6914229fadea8772742af6097c8dcb334c6cd5c0ada492ddbdb5f",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c032",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 4,
+      "midRuns": 1232,
+      "midWinRate": 0.26055194805194803,
+      "observationsSha256": "78b3108b5394c27cc8a3342aa5f7b1a58294f8b334df2e85ebf5c2dd313f1fc4",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "4fbf90e7551a30f75383ee8cdb868b29751e21d9b32544079a849301fadb4c75",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 1974,
+      "thinWinRate": 0.01773049645390071,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "high",
+        "removalEconomy": "low",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.40625,
+        "ashwarden:v5": 0.21875,
+        "duskblade:v0": 0.53125,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.0,
+        "c1b": 2.25,
+        "c2arm": 0.0625,
+        "c2gap": 0.19404761904761894,
+        "sum": 4.506547619047619
+      },
+      "eligible": false,
+      "fatRuns": 1108,
+      "fatWinRate": 0.7572202166064982,
+      "fileSha256": "866c558e9f7e27120adbca5a56d1114939fe651e41501f34aaca3f095e27c0c2",
+      "guardReasons": [
+        "c2-failed",
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c033",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1345,
+      "midWinRate": 0.3576208178438662,
+      "observationsSha256": "2549a16b7c322a8786eba7bbfbd2928c4904c9a7ea94bcbcdc3ca6cc72201e63",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "d548924b0f0fb9f9faa6e5f3aa4574fd0d0717fc3b29ce55c3754ab811ba5d76",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1643,
+      "thinWinRate": 0.03712720632988436,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.15625,
+        "ashwarden:v5": 0.03125,
+        "duskblade:v0": 0.3125,
+        "duskblade:v5": 0.0625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 1.9999999999999998,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.0
+      },
+      "eligible": false,
+      "fatRuns": 835,
+      "fatWinRate": 0.7760479041916167,
+      "fileSha256": "4becbf4d98ae30c0747c5b3f3525c7082c4a35b698bcb5db8edb450c84fc0ba7",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c034",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1145,
+      "midWinRate": 0.359825327510917,
+      "observationsSha256": "2e185af5daba11856385f07750cce0cbfc95e523f02be449310214a9c2a711c4",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "9d39f96d4dd4b92666a62edb41e27317a027296db1606b87efaa95d79a0a343d",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2116,
+      "thinWinRate": 0.019376181474480152,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "s009",
+        "neutralCycle": "high",
+        "removalEconomy": "high",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.25,
+        "ashwarden:v5": 0.0625,
+        "duskblade:v0": 0.40625,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.666666666666666
+      },
+      "eligible": false,
+      "fatRuns": 627,
+      "fatWinRate": 0.7416267942583732,
+      "fileSha256": "8a48845bc70858a8e42263c844888d522520b1090af2b0aa11801798df954d06",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c035",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1109,
+      "midWinRate": 0.31199278629395855,
+      "observationsSha256": "4a38aa117489e837a8270c80acfc15d4e445062315fdb7188b49cdc8511b8e48",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "51790ea34431e1fe5fd6f918d4fe802b22b45952b2c3fb3f71ea5ab43a1f937b",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2360,
+      "thinWinRate": 0.022457627118644068,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.15625,
+        "ashwarden:v5": 0.03125,
+        "duskblade:v0": 0.34375,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 1.6666666666666665,
+        "c1b": 1.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 2.6666666666666665
+      },
+      "eligible": false,
+      "fatRuns": 878,
+      "fatWinRate": 0.7619589977220956,
+      "fileSha256": "fbd8f6f8cf83d64d208ac5ba05150787fef96d2588e30ddc78c8213dfb0b4c64",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c036",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1187,
+      "midWinRate": 0.3159224936815501,
+      "observationsSha256": "9538af5e3634fd10029c8fa4f48efaefc21e9a3370a1f329b495d11cafc48f13",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "87dceb3d3d52bd18e8867c2b328355fda8f0116425880796a7bea8538fed035a",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2031,
+      "thinWinRate": 0.022648941408173313,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "smolder:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "high",
+        "removalEconomy": "low",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 3,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 4,
+        "duskblade:v5": 3
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.25,
+        "ashwarden:v5": 0.0625,
+        "duskblade:v0": 0.21875,
+        "duskblade:v5": 0.15625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.916666666666666
+      },
+      "eligible": false,
+      "fatRuns": 469,
+      "fatWinRate": 0.6844349680170576,
+      "fileSha256": "829a56e919d57c6fc07b62c1b50304db2328700427ae2c30603163b8b08e3c4b",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c037",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 3,
+      "midRuns": 1010,
+      "midWinRate": 0.2495049504950495,
+      "observationsSha256": "ceee9adb76884a1fcdb3fca41660768a1472587905f2ff7d392f56cb604ff199",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "bc204924b2eab219d2babcdd61f9ef8344fe068d6aaa765d699a73b1651f2602",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2617,
+      "thinWinRate": 0.012609858616736722,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.4375,
+        "ashwarden:v5": 0.125,
+        "duskblade:v0": 0.1875,
+        "duskblade:v5": 0.15625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.916666666666666
+      },
+      "eligible": false,
+      "fatRuns": 801,
+      "fatWinRate": 0.7166042446941323,
+      "fileSha256": "dddea6d869600bcd8ebd5111d36f3951dd1d16d5e0e85362bd4834665c394ef5",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c038",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 6,
+      "midRuns": 1281,
+      "midWinRate": 0.2693208430913349,
+      "observationsSha256": "8ea9a8e03dc4186c38045e4a92c3bc5ca72ca4960afbd20cd2384670849a98b5",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "da4db7f368b3e9dee0bd9ced62ee26af3b33b4a8d1d4b9e038c57b0098fe568b",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2014,
+      "thinWinRate": 0.02035749751737835,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "low",
+        "removalEconomy": "low",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.40625,
+        "ashwarden:v5": 0.25,
+        "duskblade:v0": 0.40625,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 1.5,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.833333333333333
+      },
+      "eligible": false,
+      "fatRuns": 1150,
+      "fatWinRate": 0.7808695652173913,
+      "fileSha256": "1bbce904698422a19c414480911e2d7d80fdbc1e334beef0186aa40a8857de5d",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c039",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1320,
+      "midWinRate": 0.33636363636363636,
+      "observationsSha256": "2d2b529d0e71e96801a70769f460dc5d2d81c9ad04b6c3c0226232b72a13e728",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "2be15f7b14ee2ce01f35a43760dd223e56a85bdac721d51a56946de240141de1",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1626,
+      "thinWinRate": 0.038130381303813035,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "smolder:mid",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "high",
+        "removalEconomy": "low",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 3
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.375,
+        "ashwarden:v5": 0.21875,
+        "duskblade:v0": 0.4375,
+        "duskblade:v5": 0.15625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 1.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 3.583333333333333
+      },
+      "eligible": false,
+      "fatRuns": 1198,
+      "fatWinRate": 0.7796327212020033,
+      "fileSha256": "760515b26ab513a99e1b39ddc63403b05ff88c359ab94953d294d5c2dd1ba212",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c040",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1334,
+      "midWinRate": 0.3613193403298351,
+      "observationsSha256": "5f7304fa24da3f76d3c6aef3077c377a87598967ad9ad97ea7ee510240f8b0e8",
+      "occupiedValidCells": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "c152e0ba31f8ceece150328adc55640f093ca339f21fb66994fa1754cf4b9183",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1564,
+      "thinWinRate": 0.04028132992327366,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "smolder:mid",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "high",
+        "removalEconomy": "s009",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 3,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 3
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.0625,
+        "ashwarden:v5": 0.0,
+        "duskblade:v0": 0.25,
+        "duskblade:v5": 0.1875
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.3333333333333335,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333334
+      },
+      "eligible": false,
+      "fatRuns": 689,
+      "fatWinRate": 0.7706821480406386,
+      "fileSha256": "fdaea1693ba002fecc4c9d1632941660201d354da04ead43b13a3937d36c829f",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c041",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 6,
+      "midRuns": 1131,
+      "midWinRate": 0.3651635720601238,
+      "observationsSha256": "b4edc5020d2685a885e1cdd10bc9c920a3e633910e658f615090012c116dce57",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "d9c2bb2744072aad792e21e7934f5c5f54a3875ec7332e4fb73387a0f01221f3",
+      "simulatorClear": false,
+      "status": "complete",
+      "thinRuns": 2276,
+      "thinWinRate": 0.02460456942003515,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "attrition:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "low",
+        "neutralCycle": "low",
+        "removalEconomy": "high",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.03125,
+        "ashwarden:v5": 0.0,
+        "duskblade:v0": 0.34375,
+        "duskblade:v5": 0.0625
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333333
+      },
+      "eligible": false,
+      "fatRuns": 578,
+      "fatWinRate": 0.6626297577854672,
+      "fileSha256": "d28c2deb4514a440cbfcb93876c5813e0fdbb55b7f09c4851aca0c0433180c93",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c042",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1182,
+      "midWinRate": 0.2893401015228426,
+      "observationsSha256": "c18902256317b035b8348c56003f4b0364ed1d57824350d51a2b00a2c69a2d77",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "2aa9a1387607d81637bb61afb08b93a18b4a340e6111f115322ce5aa9abf7c6d",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2336,
+      "thinWinRate": 0.01797945205479452,
+      "topCell": {
+        "ashwarden:v0": "attrition:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "high",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 2,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.28125,
+        "ashwarden:v5": 0.1875,
+        "duskblade:v0": 0.28125,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.666666666666666
+      },
+      "eligible": false,
+      "fatRuns": 886,
+      "fatWinRate": 0.6952595936794582,
+      "fileSha256": "c1b6e47652a098c3cc44abd8d0363b38618d360e2066d88827d98f2c60e9b634",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c043",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1346,
+      "midWinRate": 0.25928677563150077,
+      "observationsSha256": "6035886ecbdbc7c6e11748d7455f72132b17c405e665fbcf1806a9c08d814254",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "591c7760340ecfa8c38333958f3e55cf07eaf2a8ecb0a164de16b09dd94648a2",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1864,
+      "thinWinRate": 0.023068669527896997,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "high",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 2,
+        "duskblade:v5": 2
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.34375,
+        "ashwarden:v5": 0.25,
+        "duskblade:v0": 0.5,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 1.5,
+        "c2arm": 0.0,
+        "c2gap": 0.09266409266409267,
+        "sum": 3.9259974259974255
+      },
+      "eligible": false,
+      "fatRuns": 1078,
+      "fatWinRate": 0.774582560296846,
+      "fileSha256": "19d7de6abf617bbc110fa1f541241f4bb3bcf64d550770dca724ebcf242988c7",
+      "guardReasons": [
+        "c2-failed",
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c044",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 1,
+      "midRuns": 1348,
+      "midWinRate": 0.39020771513353114,
+      "observationsSha256": "3dd3ab4b7791579128ef5f4c3abb9a4f72938592ee77d844e1e6c613f6d5d293",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "b521c415fdc9b9a904ee67694174b0cdc33561b0559b20008f579fb10ddcbf76",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1670,
+      "thinWinRate": 0.04131736526946108,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "high",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "high",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 3
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.15625,
+        "ashwarden:v5": 0.0,
+        "duskblade:v0": 0.3125,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.3333333333333335,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.333333333333334
+      },
+      "eligible": false,
+      "fatRuns": 817,
+      "fatWinRate": 0.7086903304773562,
+      "fileSha256": "5b79656422716579750e6870356d3561ab4ef6d6d1ee553b1809131c533f9114",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c045",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1277,
+      "midWinRate": 0.26233359436178544,
+      "observationsSha256": "1c0203e36c59e0d3b2af5ac89d75a08af6a51ea26840999914294ddfe74e4cbd",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "3eed868da409f91228b5aa67db3fac5246c447c569769fc3f21e0c245c51297b",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2002,
+      "thinWinRate": 0.01848151848151848,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "attrition:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "s009",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "high",
+        "removalEconomy": "high",
+        "smolderRelicStack": "high"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.0625,
+        "duskblade:v0": 0.34375,
+        "duskblade:v5": 0.03125
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "ashStarterThinSustain",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "duskNonShatter",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.6666666666666665,
+        "c1b": 2.0,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.666666666666666
+      },
+      "eligible": false,
+      "fatRuns": 507,
+      "fatWinRate": 0.6706114398422091,
+      "fileSha256": "af8e848ac2dc4c3582122d9a161048ff91176036269b66c7cdcfb184d10a8ec9",
+      "guardReasons": [],
+      "guardrailsClear": true,
+      "id": "t1-c046",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1071,
+      "midWinRate": 0.26143790849673204,
+      "observationsSha256": "46680947eed1a0afa8fa0eaef37c90394d3b5177319827a1d91b9ce9b098c1a1",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "7860461edad56a3b1dd9fa47e30795da8cff2eb871903a4401088b31b816126a",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 2518,
+      "thinWinRate": 0.014694201747418586,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "low",
+        "ashcloudRoute": "high",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "high",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "low",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 2,
+        "duskblade:v0": 3,
+        "duskblade:v5": 1
+      },
+      "within10": {
+        "ashwarden:v0": 1,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    },
+    {
+      "arm2": {
+        "ashwarden:v0": 0.21875,
+        "ashwarden:v5": 0.1875,
+        "duskblade:v0": 0.3125,
+        "duskblade:v5": 0.09375
+      },
+      "controlErrors": 0,
+      "controlStalls": 0,
+      "creditedPackages": [
+        "duskStarterAttrition",
+        "neutralCycle",
+        "removalEconomy",
+        "ashcloudRoute",
+        "smolderRelicStack",
+        "bossEnergyRoute"
+      ],
+      "deficits": {
+        "c1a": 2.333333333333333,
+        "c1b": 2.25,
+        "c2arm": 0.0,
+        "c2gap": 0.0,
+        "sum": 4.583333333333333
+      },
+      "eligible": false,
+      "fatRuns": 905,
+      "fatWinRate": 0.7138121546961326,
+      "fileSha256": "f907ba9a8632a0f6caedd8523efa99c623dda3b7765aaf4a7981376a9f2e2bfd",
+      "guardReasons": [
+        "vow5-proxy-failed"
+      ],
+      "guardrailsClear": false,
+      "id": "t1-c047",
+      "identityClear": true,
+      "landscapeErrors": 0,
+      "landscapeStalls": 2,
+      "midRuns": 1321,
+      "midWinRate": 0.267221801665405,
+      "observationsSha256": "2fb66b33712af618306e0150a633c559c8b7560977b751a69c791e1707fbbc86",
+      "occupiedValidCells": {
+        "ashwarden:v0": 0,
+        "ashwarden:v5": 0,
+        "duskblade:v0": 0,
+        "duskblade:v5": 1
+      },
+      "semanticSha256": "ae7a3da23152465a9951ab72ac28d477ba13f81af5752a07fa765a339bd54108",
+      "simulatorClear": true,
+      "status": "complete",
+      "thinRuns": 1870,
+      "thinWinRate": 0.027807486631016044,
+      "topCell": {
+        "ashwarden:v0": "smolder:fat",
+        "ashwarden:v5": "smolder:fat",
+        "duskblade:v0": "shatter:fat",
+        "duskblade:v5": "shatter:fat"
+      },
+      "values": {
+        "ashStarterThinSustain": "high",
+        "ashcloudRoute": "low",
+        "bossEnergyRoute": "low",
+        "duskNonShatter": "low",
+        "duskStarterAttrition": "high",
+        "neutralCycle": "high",
+        "removalEconomy": "high",
+        "smolderRelicStack": "low"
+      },
+      "viable": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 2,
+        "duskblade:v5": 2
+      },
+      "within10": {
+        "ashwarden:v0": 2,
+        "ashwarden:v5": 1,
+        "duskblade:v0": 1,
+        "duskblade:v5": 1
+      }
+    }
+  ],
+  "commit": "ca7f58be991a890c7c1e603e39f2afc4f0a8a39b",
+  "driverSha256": "d399e38c77988f0c039c8efda8ad349a141fac1a97ebca765b0a0103a95a67c7",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "hostFingerprint": "12c28a6523463cc642e86cd56194bb2f48c68073f94aad384f597b422afcfd8e",
+  "issue": 491,
+  "liveContentFileSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "n": 48,
+  "packageEffects": {
+    "ashStarterThinSustain": {
+      "highVsS009": {
+        "p025": -0.14583333333333304,
+        "p50": -0.03799019607843235,
+        "p975": 0.05555555555555536
+      },
+      "lowVsS009": {
+        "p025": -0.5660130718954246,
+        "p50": -0.4478438228438222,
+        "p975": -0.3366402116402112
+      }
+    },
+    "ashcloudRoute": {
+      "highVsS009": {
+        "p025": -0.3676470588235281,
+        "p50": -0.23905723905723875,
+        "p975": -0.1126855600539809
+      },
+      "lowVsS009": {
+        "p025": -0.4208333333333325,
+        "p50": -0.24444444444444446,
+        "p975": -0.07916666666666572
+      }
+    },
+    "bossEnergyRoute": {
+      "highVsS009": {
+        "p025": -0.3511904761904754,
+        "p50": -0.23406862745097978,
+        "p975": -0.12168560606060552
+      },
+      "lowVsS009": {
+        "p025": -0.47549019607843057,
+        "p50": -0.3078149920255182,
+        "p975": -0.1555555555555559
+      }
+    },
+    "duskNonShatter": {
+      "highVsS009": {
+        "p025": -0.3555555555555552,
+        "p50": -0.19751602564102555,
+        "p975": -0.012698412698412653
+      },
+      "lowVsS009": {
+        "p025": -0.2911255411255418,
+        "p50": -0.12438725490195957,
+        "p975": 0.05064102564102679
+      }
+    },
+    "duskStarterAttrition": {
+      "highVsS009": {
+        "p025": -0.4166666666666661,
+        "p50": -0.2564102564102564,
+        "p975": -0.08640350877192926
+      },
+      "lowVsS009": {
+        "p025": -0.3046558704453446,
+        "p50": -0.15876906318082806,
+        "p975": -0.022035256410256387
+      }
+    },
+    "neutralCycle": {
+      "highVsS009": {
+        "p025": -0.2833333333333323,
+        "p50": -0.15625,
+        "p975": -0.010683760683759758
+      },
+      "lowVsS009": {
+        "p025": -0.4530812324929965,
+        "p50": -0.26111111111111196,
+        "p975": -0.08901515151515138
+      }
+    },
+    "removalEconomy": {
+      "highVsS009": {
+        "p025": -0.3779761904761898,
+        "p50": -0.21891025641025674,
+        "p975": -0.05439814814814792
+      },
+      "lowVsS009": {
+        "p025": -0.31747638326585736,
+        "p50": -0.1616809116809117,
+        "p975": -0.002777777777777324
+      }
+    },
+    "smolderRelicStack": {
+      "highVsS009": {
+        "p025": -0.5051834130781492,
+        "p50": -0.35622710622710674,
+        "p975": -0.19940476190476186
+      },
+      "lowVsS009": {
+        "p025": -0.24501424501424385,
+        "p50": -0.1269841269841283,
+        "p975": -0.011904761904761862
+      }
+    }
+  },
+  "pareto": [
+    "t1-c036"
+  ],
+  "searchSpaceSha256": "0441d9030e090a1b5d02ff45ccd1398b94a83597e0607d459c6303c58d3a7e8c",
+  "seedRegistrySha256": "4dcbc5e04c9e983007f9b8a9ff7628c7bd8db45169768d45f7d0607e66e7a011",
+  "shortlist": [],
+  "totalRows": 208896
+}

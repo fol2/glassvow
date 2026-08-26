@@ -81,7 +81,9 @@ static func _write_policies(content: ContentDB, opts: Dictionary, file: FileAcce
 					file.store_line(JSON.stringify({"policyIndex": policy_index, "seed": row["seed"],
 						"aspect": row["aspect"], "vow": row["vow"], "outcome": row["outcome"],
 						"error": row["error"], "deck": row["deck"], "fights": row["fights"],
-						"rng": row["rng"], "policy": row["policy"]}))
+						"rng": row["rng"], "policy": row["policy"],
+						"deckIds": row.get("deckIds", []), "relics": row.get("relics", []),
+						"packageEvents": row.get("packageEvents", {})}))
 					count += 1
 	return count
 
