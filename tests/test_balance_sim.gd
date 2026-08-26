@@ -48,6 +48,14 @@ static func _check_tier2_profiles(content: ContentDB, fails: Array[String]) -> v
 	var block: Dictionary = Sim.tier2_profile_diagnostics(game.cb)
 	if block["block"].size() < 2 or block["tempo"].is_empty():
 		fails.append("balance sim: targeted block profiles did not emit block and tempo events")
+	if block["disruption"].size() != 2:
+		fails.append("balance sim: block profile disruption applications were not attributable")
+	for event_v: Variant in block["disruption"]:
+		var event: Dictionary = event_v
+		if event.get("enemy") != "gravewarden" or event.get("move") != "entomb" \
+				or event.get("target") != "player" or event.get("amount") != 2 \
+				or event.get("status") not in ["frail", "vulnerable"]:
+			fails.append("balance sim: gravewarden disruption telemetry did not match Entomb")
 	run_state = RunState.new_run(content, 12232, "tier2-unrelated"); game = GlassvowGame.new(content, run_state)
 	game.apply({"t": "startCombat", "enemies": ["sporeling"], "kind": "normal"})
 	game.apply({"t": "endTurn"})

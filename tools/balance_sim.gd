@@ -7,8 +7,10 @@ const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
 const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
 const PROFILE: String = "mature-three-act-no-side-state-v1"
 const TIER2_PROFILE_IDS: Array[String] = ["gravewarden", "shellback", "waylayer", "watcherEye"]
-const TIER2_DISRUPTION_MOVES: Dictionary = {"waylayer": {"trick": "frail"},
-	"watcherEye": {"gaze": "vulnerable"}}
+const TIER2_DISRUPTION_EVENTS: Dictionary = {
+	"gravewarden:entomb:frail": true, "gravewarden:entomb:vulnerable": true,
+	"waylayer:trick:frail": true, "watcherEye:gaze:vulnerable": true,
+}
 static var _probe: Dictionary = {}
 func _initialize() -> void:
 	var opts: Dictionary = _options(OS.get_cmdline_user_args())
@@ -181,7 +183,7 @@ static func tier2_profile_diagnostics(cb: CombatState) -> Dictionary:
 		elif not actor.is_empty() and kind == "heal" and _ji(event.get("who", -2)) == idx:
 			out["heal"].append({"enemy": actor, "move": move, "amount": _ji(event.get("n", 0))})
 		elif not actor.is_empty() and kind == "status" and str(event.get("who", "")) == "player" \
-				and str(TIER2_DISRUPTION_MOVES.get(actor, {}).get(move, "")) == str(event.get("id", "")):
+				and TIER2_DISRUPTION_EVENTS.has("%s:%s:%s" % [actor, move, event.get("id", "")]):
 			out["disruption"].append({"enemy": actor, "move": move, "status": str(event["id"]),
 				"target": "player", "amount": _ji(event.get("n", 0))})
 		elif not actor.is_empty() and kind == "hitPlayer" and _ji(event.get("source", -2)) == idx:
