@@ -19,14 +19,18 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "tools"))
 
 from balance_f0 import (  # noqa: E402
+    bind_row,
     control_fault,
     evaluation_from_registry,
     evaluation_spec,
     grid_proxies,
     aggregate_cells,
     aggregate_controls,
+    landscape_errors_fault,
+    screening_metric_fault,
 )
 from balance_f0_tier1 import (  # noqa: E402
+    RACING_SET,
     attach_tier1_fields,
     breadth_metric,
     cell_is_valid,
@@ -108,6 +112,78 @@ class Tier1F0ProtocolTest(unittest.TestCase):
         errors = split_ok + [{"arm": 1, "aspect": "duskblade", "vow": 0, "seed": 9101,
                               "outcome": "error", "error": "boom", "deck": 30, "fights": []}]
         self.assertEqual("errors", control_fault(errors, 0, complete_rectangle=True))
+        self.assertEqual("errors", landscape_errors_fault(
+            [{"outcome": "error", "error": "boom"}]))
+        self.assertEqual("", landscape_errors_fault([{"outcome": "stall"}]))
+        reversal = {
+            "duskblade:v0": {"topCell": "smolder:fat"},
+            "duskblade:v5": {"topCell": "shatter:fat"},
+            "ashwarden:v0": {"topCell": "shatter:fat"},
+            "ashwarden:v5": {"topCell": "smolder:fat"},
+        }
+        self.assertEqual("identity-reversal", screening_metric_fault(proxies=reversal))
+        self.assertEqual("", screening_metric_fault(
+            proxies=reversal, complete_rectangle=True))
+        band = {"p025": 1.0, "p975": 1.2}
+        low = {"p025": 0.0, "p975": 0.2}
+        dominated = {"deficits": {key: band for key in ("c1a", "c1b", "c2arm", "c2gap")}}
+        baseline = {"deficits": {key: low for key in ("c1a", "c1b", "c2arm", "c2gap")}}
+        self.assertEqual("dominated-envelope", screening_metric_fault(
+            bootstrap=dominated, baseline_bootstrap=baseline))
+        self.assertEqual("", screening_metric_fault(
+            bootstrap=dominated, baseline_bootstrap=baseline, complete_rectangle=True))
+
+    def test_bind_row_keeps_package_events_off_non_491_observations(self) -> None:
+        identity = {
+            "id": "t1-c000", "values": {"duskNonShatter": "s009"},
+            "fileSha256": "a" * 64, "semanticSha256": "b" * 64,
+            "searchSpaceSha256": "c" * 64, "seedRegistrySha256": "d" * 64,
+            "commit": "deadbeef", "driverSha256": "e" * 64,
+            "godotVersion": "4.7.2.stable", "hostFingerprint": "f" * 64,
+        }
+        row = {
+            "aspect": "duskblade", "vow": 0, "seed": 9100, "outcome": "win",
+            "error": "", "deck": 30, "fights": [],
+            "packageEvents": {"eclipseSlashPlayed": 1},
+            "deckIds": ["strike"], "relics": ["hollowCrown"],
+        }
+        plain = bind_row(row, identity, extras=False)
+        extra = bind_row(row, identity, extras=True)
+        self.assertNotIn("packageEvents", plain)
+        self.assertNotIn("deckIds", plain)
+        self.assertNotIn("relics", plain)
+        self.assertEqual({"eclipseSlashPlayed": 1}, extra["packageEvents"])
+        self.assertEqual(["strike"], extra["deckIds"])
+        self.assertEqual(["hollowCrown"], extra["relics"])
+
+
+class Tier1F0ProductTest(unittest.TestCase):
+    def test_tidy_pins_the_published_harvest_claims(self) -> None:
+        tidy = json.loads((REPO / "docs/balance/data/491/tidy.json").read_text())
+        rows = tidy["candidates"]
+        self.assertEqual(48, len(rows))
+        self.assertEqual(208_896, tidy["totalRows"])
+        self.assertEqual([], tidy["shortlist"])
+        self.assertEqual(list(RACING_SET), tidy["racingSet"])
+        self.assertTrue(set(RACING_SET).isdisjoint(set(tidy["breadthPareto"])))
+        self.assertNotIn("t1-c019", tidy["racingSet"])
+        for row in rows:
+            self.assertEqual("complete", row["status"])
+            self.assertEqual(0, int(row["controlErrors"]))
+            self.assertEqual(0, int(row["landscapeErrors"]))
+            self.assertIn(row["id"], {f"t1-c{i:03d}" for i in range(48)})
+        by_id = {row["id"]: row for row in rows}
+        self.assertEqual("low", by_id["t1-c019"]["values"]["bossEnergyRoute"])
+
+    def test_m4_packet_records_crown_energy_and_cycle_draws(self) -> None:
+        packet = json.loads(
+            (REPO / "docs/balance/data/491/m4-replay-packet.json").read_text())
+        self.assertEqual(["win", "win", "win", "win"], packet["expectedOutcomes"])
+        first = packet["rows"][0]["packageEvents"]
+        self.assertEqual(90, first["extraEnergyGrantedByCrown"])
+        self.assertEqual(106, first["cardsDrawnByCycle"])
+        self.assertGreater(first["eclipseSlashPlayed"], 0)
+        self.assertGreater(first["hollowCrownOwned"], 0)
 
 
 class Tier1F0MetricsTest(unittest.TestCase):

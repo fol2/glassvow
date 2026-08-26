@@ -28,6 +28,7 @@ from balance_content_doe import generate_bundle as generate_doe_bundle  # noqa: 
 from balance_host_qualify import host_identity, require_godot  # noqa: E402
 from balance_tier1_design import generate_bundle as generate_tier1_bundle  # noqa: E402
 from balance_f0_tier1 import (  # noqa: E402
+    RACING_SET,
     attach_tier1_fields,
     bootstrap_breadth,
     breadth_pareto,
@@ -373,6 +374,26 @@ def control_fault(rows: list[dict[str, Any]], baseline_stalls: int,
     if stalls > baseline_stalls:
         return "stalls-beyond-baseline"
     return identity_fault(ranked)
+
+
+def landscape_errors_fault(rows: list[dict[str, Any]]) -> str:
+    return "errors" if any(row.get("outcome") == "error" for row in rows) else ""
+
+
+def screening_metric_fault(proxies: dict[str, dict[str, Any]] | None = None,
+                           bootstrap: dict[str, Any] | None = None,
+                           baseline_bootstrap: dict[str, Any] | None = None,
+                           complete_rectangle: bool = False) -> str:
+    """Poor metrics must not stop a complete-rectangle candidate."""
+    if complete_rectangle:
+        return ""
+    if proxies:
+        found = landscape_fault(proxies)
+        if found:
+            return found
+    if bootstrap and baseline_bootstrap and envelope_dominated(bootstrap, baseline_bootstrap):
+        return "dominated-envelope"
+    return ""
 
 
 def by_seed(rows: list[dict[str, Any]]) -> dict[int, list[dict[str, Any]]]:
@@ -865,11 +886,13 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
         launch(godot, jobs, l_plan, land_job)
         landscape_rows = load_landscape_rows(
             sorted((cand_dir / "landscape").glob("shard-*.ndjson")))
+    fault = fault or landscape_errors_fault(landscape_rows)
     controls = aggregate_controls(control_rows)
     cells = aggregate_cells(landscape_rows, axes) if landscape_rows else {}
     proxies = grid_proxies(controls, cells) if landscape_rows else {}
-    if not fault and proxies and not complete_rectangle:
-        fault = landscape_fault(proxies)
+    if not fault:
+        fault = screening_metric_fault(
+            proxies=proxies or None, complete_rectangle=complete_rectangle)
     result: dict[str, Any] = {
         "id": cand["id"], "values": cand["values"], "fileSha256": cand["fileSha256"],
         "semanticSha256": cand["semanticSha256"], "inputHash": digest,
@@ -915,9 +938,11 @@ def evaluate_candidate(godot: str, jobs: int, doe: Path, cand: dict[str, Any], o
                 read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL))),
                 result.get("cells") or {}, n_boot, boot_seed)
             result["bootstrap"] = {**result["bootstrap"], **extra}
-        if baseline and baseline.get("bootstrap") and envelope_dominated(
-                result["bootstrap"], baseline["bootstrap"]) and not complete_rectangle:
-            fault = fault or "dominated-envelope"
+        if baseline and baseline.get("bootstrap"):
+            fault = fault or screening_metric_fault(
+                bootstrap=result["bootstrap"],
+                baseline_bootstrap=baseline["bootstrap"],
+                complete_rectangle=complete_rectangle)
     if int(proto.get("issue", 0)) == 491:
         contract = read_json(REPO / str(proto.get("responseContract", RESPONSE_CONTRACT_REL)))
         attach_tier1_fields(result, axes, contract, identity_load(read_json(content)),
@@ -993,6 +1018,7 @@ def publish_summary(candidates: list[dict[str, Any]], proto: dict[str, Any],
             "pairwiseEffects": [row for row in interactions if row["excludesZero"]],
             "shortlist": [row["id"] for row in public
                           if (row.get("decision") or {}).get("eligible")],
+            "racingSet": list(RACING_SET),
         }
         dump(out / "summary.json", summary)
         return summary

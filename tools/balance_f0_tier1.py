@@ -27,6 +27,9 @@ REASON = {
     "mechanism": "mechanism-not-fired",
     "effect": "package-effect-uncertain",
 }
+# Distinct from breadth_pareto (valid-cell occupancy at 128x8). Recorded in
+# docs/balance/2026-08-26-491-tier1-f0.md for the #492 race.
+RACING_SET = ("t1-c012", "t1-c036", "t1-c040", "t1-c005")
 
 
 def _grid(aspect: str, vow: int) -> str:
@@ -49,18 +52,8 @@ def _validity(contract: dict[str, Any]) -> tuple[int, int]:
 
 
 def _lean_thick(row: dict[str, Any], axes: dict[str, Any]) -> tuple[str, str]:
-    fights = row.get("fights") or []
-    n = len(fights)
-    shatter = sum(float(fight["shatters"]) for fight in fights) / n if n else 0.0
-    smolder = sum(float(fight["smolderKills"]) for fight in fights) / n if n else 0.0
-    med = axes["medians"][str(row["aspect"])]
-    lean = "shatter" if shatter > med["shattersPerFight"] else (
-        "smolder" if smolder > med["smolderKillsPerFight"] else "attrition")
-    deck = int(row.get("deck") or 0)
-    cuts = axes["deckCuts"]
-    thick = "thin" if deck <= int(cuts["thinMax"]) else (
-        "mid" if deck <= int(cuts["midMax"]) else "fat")
-    return lean, thick
+    from balance_f0 import lean_and_thick
+    return lean_and_thick(row, axes)
 
 
 def _valid_cells(cells: dict[str, dict[str, Any]], contract: dict[str, Any],
