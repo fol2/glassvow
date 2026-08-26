@@ -123,6 +123,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	## The Vigil at the west end. Only Act I ships one, so every other act binds
 	## null here and MapScene simply seats nothing.
 	var threshold: Resource = null
+	var threshold_id: String = ""
 	var vigil_mean: float = 0.252
 	var ground_tile: Texture2D = null
 	var prop_tile: Texture2D = null
@@ -155,6 +156,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 				terminus_id = _row_string(row, "id")
 			"threshold":
 				threshold = resource
+				threshold_id = _row_string(row, "id")
 				vigil_mean = _row_float(row, "tex_mean", 0.252)
 			"tile":
 				var tile: Texture2D = resource as Texture2D
@@ -192,7 +194,7 @@ func bind_act(region: MapRegions, positions: PackedVector3Array) -> Dictionary:
 	return {
 		"kits": kits, "kit_ids": kit_ids,
 		"terminus": terminus, "terminus_id": terminus_id,
-		"threshold": threshold,
+		"threshold": threshold, "threshold_id": threshold_id,
 		"ground_tile": ground_tile, "prop_tile": prop_tile,
 		"grade": painted_grade,
 	}
