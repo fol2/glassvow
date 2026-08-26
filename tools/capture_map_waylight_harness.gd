@@ -173,9 +173,12 @@ func _make_stage(size: Vector2i) -> Dictionary:
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.keep_aspect = Camera3D.KEEP_HEIGHT
 	camera.size = 9.5
-	camera.position = Vector3(8.0, 9.0, 10.0)
+	camera.look_at_from_position(
+		Vector3(8.0, 9.0, 10.0),
+		Vector3.ZERO,
+		Vector3.UP
+	)
 	world.add_child(camera)
-	camera.look_at(Vector3.ZERO, Vector3.UP)
 	camera.current = true
 	return {"viewport": viewport, "tracer": tracer}
 
