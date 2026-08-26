@@ -46,6 +46,128 @@ class Finding(NamedTuple):
     def __str__(self) -> str:
         return f"{self.gate:16} {self.path}  {self.detail}"
 
+PROFILE_SEMANTICS = {"road", "scenery", "hero", "arch_passable"}
+PROFILE_YAW_MODES = {"free", "road_aligned", "fixed"}
+PROFILE_DEFAULT_KEYS = {"scale", "semantic_class", "yaw_mode", "yaw_degrees"}
+PROFILE_OVERRIDE_KEYS = {"footprint", "reason"}
+
+
+def _finite_number(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) \
+        and math.isfinite(float(value))
+
+
+def profile_findings(path: Path, defaults: Any, overrides: Any,
+                     rows: list[dict[str, Any]]) -> list[Finding]:
+    found: list[Finding] = []
+    mesh_ids = {str(row.get("id")) for row in rows
+                if row.get("kind") in {"kit", "terminus", "threshold"}}
+    where = f"{path} profile_defaults"
+    if not isinstance(defaults, dict):
+        return [Finding("manifest", where, "profile_defaults must be an object")]
+    default_ids = {str(asset_id) for asset_id in defaults}
+    missing = sorted(mesh_ids - default_ids)
+    unknown = sorted(default_ids - mesh_ids)
+    if missing:
+        found.append(Finding("manifest", where, f"missing mesh asset IDs {missing}"))
+    if unknown:
+        found.append(Finding("manifest", where, f"unknown mesh asset IDs {unknown}"))
+    for raw_id, raw in defaults.items():
+        asset_id = str(raw_id)
+        item_where = f"{where}[{asset_id!r}]"
+        if not isinstance(raw, dict):
+            found.append(Finding("manifest", item_where, "default must be an object"))
+            continue
+        extra = sorted(set(raw) - PROFILE_DEFAULT_KEYS)
+        if extra:
+            found.append(Finding("manifest", item_where, f"unknown fields {extra}"))
+        scale = raw.get("scale")
+        semantic = raw.get("semantic_class")
+        yaw_mode = raw.get("yaw_mode")
+        if not _finite_number(scale) or float(scale) <= 0.0:
+            found.append(Finding("manifest", item_where,
+                                 "scale must be a positive finite number"))
+        if semantic not in PROFILE_SEMANTICS:
+            found.append(Finding("manifest", item_where,
+                                 f"semantic_class must be one of {sorted(PROFILE_SEMANTICS)}"))
+        if yaw_mode not in PROFILE_YAW_MODES:
+            found.append(Finding("manifest", item_where,
+                                 f"yaw_mode must be one of {sorted(PROFILE_YAW_MODES)}"))
+        if yaw_mode == "fixed":
+            if not _finite_number(raw.get("yaw_degrees")):
+                found.append(Finding("manifest", item_where,
+                                     "fixed yaw requires finite yaw_degrees"))
+        elif "yaw_degrees" in raw:
+            found.append(Finding("manifest", item_where,
+                                 "yaw_degrees is only valid for fixed yaw"))
+        expected_yaw = {
+            "road": "road_aligned",
+            "hero": "fixed",
+            "scenery": "free",
+            "arch_passable": "free",
+        }.get(semantic)
+        if expected_yaw is not None and yaw_mode != expected_yaw:
+            found.append(Finding("manifest", item_where,
+                                 f"{semantic} requires yaw_mode {expected_yaw}"))
+    override_where = f"{path} profile_overrides"
+    if not isinstance(overrides, dict):
+        found.append(Finding("manifest", override_where,
+                             "profile_overrides must be an object"))
+        return found
+    for raw_id, raw in overrides.items():
+        asset_id = str(raw_id)
+        item_where = f"{override_where}[{asset_id!r}]"
+        if asset_id not in mesh_ids:
+            found.append(Finding("manifest", item_where, "unknown mesh asset ID"))
+        if not isinstance(raw, dict):
+            found.append(Finding("manifest", item_where, "override must be an object"))
+            continue
+        extra = sorted(set(raw) - PROFILE_OVERRIDE_KEYS)
+        if extra:
+            found.append(Finding("manifest", item_where, f"unknown fields {extra}"))
+        reason = raw.get("reason")
+        if not isinstance(reason, str) or not reason.strip():
+            found.append(Finding("manifest", item_where,
+                                 "override reason must be non-empty"))
+        polygon_error = _profile_polygon_error(raw.get("footprint"))
+        if polygon_error:
+            found.append(Finding("manifest", item_where, polygon_error))
+    return found
+
+
+def _profile_polygon_error(raw: Any) -> str:
+    if not isinstance(raw, list):
+        return "footprint must be an array"
+    points: list[tuple[float, float]] = []
+    for item in raw:
+        if not isinstance(item, list) or len(item) != 2 \
+                or not all(_finite_number(value) for value in item):
+            return "footprint points must be finite [x,z] pairs"
+        point = (float(item[0]), float(item[1]))
+        if not points or point != points[-1]:
+            points.append(point)
+    if len(points) > 1 and points[0] == points[-1]:
+        points.pop()
+    if len(points) < 3 or len(set(points)) != len(points):
+        return "footprint must contain at least three unique points"
+    area = 0.0
+    turn_sign = 0.0
+    for index, point in enumerate(points):
+        a = points[(index + 1) % len(points)]
+        b = points[(index + 2) % len(points)]
+        area += point[0] * a[1] - point[1] * a[0]
+        turn = (a[0] - point[0]) * (b[1] - a[1]) \
+            - (a[1] - point[1]) * (b[0] - a[0])
+        if abs(turn) <= 1e-9:
+            continue
+        if turn_sign and math.copysign(1.0, turn) != math.copysign(1.0, turn_sign):
+            return "footprint must be convex"
+        turn_sign = turn
+    if abs(area) <= 1e-9 or not turn_sign:
+        return "footprint must have non-zero area"
+    return ""
+
+
 
 def srgb_to_linear(c: float) -> float:
     return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
@@ -83,8 +205,16 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
         return [], [Finding("manifest", str(path), "authoritative manifest is missing")]
     data = _json(path)
     found: list[Finding] = []
-    if not isinstance(data, dict) or data.get("schema_version") != 1:
-        return [], [Finding("manifest", str(path), "schema_version must be 1")]
+    if not isinstance(data, dict) or data.get("schema_version") != 2:
+        return [], [Finding("manifest", str(path), "schema_version must be 2")]
+    allowed_top = {
+        "schema_version", "asset_root", "profile_defaults",
+        "profile_overrides", "assets",
+    }
+    unknown_top = sorted(set(data) - allowed_top)
+    if unknown_top:
+        found.append(Finding("manifest", str(path),
+                             f"unknown fields {unknown_top}"))
     if data.get("asset_root") != "res://assets/art/map/":
         found.append(Finding("manifest", str(path), "asset_root must be res://assets/art/map/"))
     rows = data.get("assets")
@@ -177,6 +307,8 @@ def validate_manifest(folder: Path, regions_text: str) -> tuple[list[dict[str, A
                                              f"{key} must follow MapRegions ({expected:.2f})"))
                 if arc.get("tolerance") != 0.1:
                     found.append(Finding("manifest", where, "grade hue tolerance must be 0.1"))
+    found.extend(profile_findings(
+        path, data.get("profile_defaults"), data.get("profile_overrides"), rows))
     for kind, expected in EXPECTED_COUNTS.items():
         if counts[kind] != expected:
             found.append(Finding("manifest", str(path),

@@ -1,0 +1,650 @@
+{
+  "schema_version": 1,
+  "contract_version": "2.0.0",
+  "registry_id": "map-quality-v2",
+  "evaluation_order": [
+    "hard",
+    "soft"
+  ],
+  "units": {
+    "world": "m",
+    "screen": "px",
+    "screen_area": "px2",
+    "angle": "deg",
+    "angle_per_edge": "deg_per_edge",
+    "count": "count",
+    "ratio": "ratio"
+  },
+  "epsilon": {
+    "world_m": 0.001,
+    "screen_px": 0.25,
+    "ratio": 1e-06
+  },
+  "hard_empty_policy": {
+    "empty_maximum_or_count": "emit_zero",
+    "optional_minimum_ids": [
+      "branch_fanout_separation_px"
+    ],
+    "empty_optional_minimum": "emit_not_applicable_and_pass",
+    "required_minimum_ids": [
+      "focused_node_safe_frame_margin_px",
+      "node_ink_clearance_px",
+      "node_touch_target_min_px"
+    ],
+    "missing_required_entity_or_profile": "evidence_error",
+    "deterministic_replay_minimum_samples": 2
+  },
+  "soft_not_applicable_policy": "exclude_component_and_renormalise_remaining_initial_weights",
+  "profiles": {
+    "shapes": {
+      "pad-landscape": [
+        1180,
+        820
+      ],
+      "desktop-landscape": [
+        1458,
+        820
+      ],
+      "phone-landscape": [
+        844,
+        390
+      ]
+    },
+    "zoom_stops_m": [
+      12.0,
+      16.0,
+      20.0,
+      28.0
+    ],
+    "tilt_deg": -40.0,
+    "height_m": 18.0,
+    "poses": [
+      "opening",
+      "leading_each_occupied_row",
+      "pan_bounds",
+      "pan_corners"
+    ],
+    "flex_cap": 0.12,
+    "class": "stage_zoom_geometry"
+  },
+  "calibration": {
+    "classes": [
+      "shipping_touch_waystone",
+      "stage_zoom_geometry",
+      "provisional_owner_review",
+      "immutable_zero_tolerance"
+    ],
+    "shipping_touch_waystone": {
+      "ink_radius_px": 28.0,
+      "phone_touch_floor_px": 44.0,
+      "default_layout_scale": 0.92,
+      "node_pair_half_extent_m": [
+        0.63,
+        0.98
+      ],
+      "node_scenery_half_extent_x_m": 0.82
+    },
+    "stage_zoom_geometry": {
+      "lattice_rows": 15,
+      "lattice_cols": 7,
+      "cell_m": [
+        5.142857142857143,
+        6.0
+      ],
+      "origin_xz_m": [
+        -36.0,
+        -18.0
+      ],
+      "authored_jitter_fraction": [
+        0.5,
+        0.4
+      ]
+    },
+    "status": "baseline_available_quantitative_review_pending",
+    "release_review_required": true,
+    "baseline": {
+      "issue": 462,
+      "status": "available",
+      "production_source_sha": "52a56e726da70c2dd57254e8c6618682c7558f90",
+      "artifact_head": "4fe17d40b51178fe2f9a1e92d848787b3dc337c7",
+      "contact_sheet_index_capture_head": "d5346a369985e4b7ef3f852d7b8fd45276319889",
+      "workflow_run": 32790383346,
+      "frame_count": 168,
+      "locale": "en",
+      "generated_seeds": [
+        717,
+        17634
+      ],
+      "shapes": [
+        "pad-landscape",
+        "desktop-landscape",
+        "phone-landscape"
+      ],
+      "zoom_stop_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "poses": [
+        "opening",
+        "focused"
+      ],
+      "readme_path": "docs/reviews/462/README.md",
+      "summary_path": "docs/reviews/462/summary.md",
+      "defect_ledger_path": "docs/reviews/462/defect-ledger.csv",
+      "contact_sheet_index_path": "docs/reviews/462/contact-sheets/index.json",
+      "evidence_scope": "desktop_xvfb_not_device",
+      "device_evidence_status": "not_supplied"
+    }
+  },
+  "geometry": {
+    "road_corridor": {
+      "physical_half_width_m": 1.25,
+      "world_clearance_m": 0.35,
+      "waylight_max_width_ratio": 0.22,
+      "class": "provisional_owner_review"
+    },
+    "branch_fanout": {
+      "common_departure_max_m": 1.0,
+      "sample_distance_m": 4.0,
+      "class": "provisional_owner_review"
+    },
+    "row_lane_envelope": {
+      "row_half_extent_m": 2.0571428571428574,
+      "lane_half_extent_m": 2.4,
+      "minimum_forward_progress_m": 0.25,
+      "class": "provisional_owner_review"
+    },
+    "vigil_protected_zone": {
+      "padding_m": 2.5,
+      "framing_margin_px": 16.0,
+      "class": "provisional_owner_review"
+    },
+    "terminus_protected_zone": {
+      "padding_m": 3.0,
+      "framing_margin_px": 20.0,
+      "class": "provisional_owner_review"
+    }
+  },
+  "hard": [
+    {
+      "id": "node_ink_clearance_px",
+      "measure": "minimum signed projected gap from node ink to every other node/scenery/hero silhouette",
+      "unit": "px",
+      "op": "gte",
+      "limit": 8.0,
+      "scope": "every_profile",
+      "class": "provisional_owner_review",
+      "provisional": true,
+      "owner": 466
+    },
+    {
+      "id": "node_touch_target_min_px",
+      "measure": "minimum width and height of every interactive node hit region",
+      "unit": "px",
+      "op": "gte",
+      "limit": 44.0,
+      "scope": "every_profile",
+      "class": "shipping_touch_waystone",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "node_touch_overlap_area_px2",
+      "measure": "maximum intersection area of two distinct node hit regions",
+      "unit": "px2",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "node_touch_scenery_silhouette_overlap_area_px2",
+      "measure": "maximum projected touch-safety-region/scenery-silhouette intersection area",
+      "unit": "px2",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "node_touch_hero_silhouette_overlap_area_px2",
+      "measure": "maximum projected touch-safety-region/Vigil-or-terminus-silhouette intersection area",
+      "unit": "px2",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "node_node_ink_overlap_area_px2",
+      "measure": "maximum projected ink intersection area of two nodes",
+      "unit": "px2",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "node_scenery_silhouette_overlap_area_px2",
+      "measure": "maximum projected node-ink/scenery-silhouette intersection area",
+      "unit": "px2",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "node_hero_silhouette_overlap_area_px2",
+      "measure": "maximum projected node-ink/Vigil-or-terminus-silhouette intersection area",
+      "unit": "px2",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "edge_scenery_corridor_penetration_m",
+      "measure": "maximum world-XZ edge-corridor penetration into scenery or hero occupancy after inflation",
+      "unit": "m",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "layout_world",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 468
+    },
+    {
+      "id": "edge_nonendpoint_node_penetration_m",
+      "measure": "maximum edge-corridor penetration into a non-endpoint node safety polygon",
+      "unit": "m",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "layout_world",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 466
+    },
+    {
+      "id": "unrelated_edge_intersection_count",
+      "measure": "proper crossings, positive-length collinear overlaps, or corridor overlaps between edges without a shared endpoint",
+      "unit": "count",
+      "op": "lte",
+      "limit": 0,
+      "scope": "layout_world",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 469
+    },
+    {
+      "id": "branch_fanout_separation_px",
+      "measure": "minimum projected separation of alternatives at geometry.branch_fanout.sample_distance_m",
+      "unit": "px",
+      "op": "gte",
+      "limit": 32.0,
+      "scope": "every_profile",
+      "class": "provisional_owner_review",
+      "provisional": true,
+      "owner": 469
+    },
+    {
+      "id": "row_lane_envelope_excess_m",
+      "measure": "maximum distance outside the governed row/lane envelope",
+      "unit": "m",
+      "op": "lte",
+      "limit": 0.0,
+      "scope": "layout_world",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 467
+    },
+    {
+      "id": "journey_order_reversal_count",
+      "measure": "directed edges failing geometry.row_lane_envelope.minimum_forward_progress_m on +X",
+      "unit": "count",
+      "op": "lte",
+      "limit": 0,
+      "scope": "layout_world",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 467
+    },
+    {
+      "id": "vigil_protected_zone_intrusion_count",
+      "measure": "unapproved footprints inside the padded Vigil world or projected reserve",
+      "unit": "count",
+      "op": "lte",
+      "limit": 0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 470
+    },
+    {
+      "id": "terminus_protected_zone_intrusion_count",
+      "measure": "unapproved footprints inside the padded terminus world or projected reserve",
+      "unit": "count",
+      "op": "lte",
+      "limit": 0,
+      "scope": "every_profile",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 470
+    },
+    {
+      "id": "focused_node_safe_frame_margin_px",
+      "measure": "minimum complete focused touch-region margin to the stage safe frame",
+      "unit": "px",
+      "op": "gte",
+      "limit": 8.0,
+      "scope": "focus_and_pan_bounds",
+      "class": "provisional_owner_review",
+      "provisional": true,
+      "owner": 466
+    },
+    {
+      "id": "deterministic_identity_mismatch_count",
+      "measure": "canonical input/layout/profile/registry/generator digest disagreements for equivalent inputs",
+      "unit": "count",
+      "op": "lte",
+      "limit": 0,
+      "scope": "all_replays",
+      "class": "immutable_zero_tolerance",
+      "provisional": false,
+      "owner": 464
+    }
+  ],
+  "soft": [
+    {
+      "id": "route_length_ratio",
+      "measure": "sum routed centreline length / sum direct endpoint distance",
+      "unit": "ratio",
+      "direction": "lower_is_better",
+      "best": 1.0,
+      "worst": 1.55,
+      "aggregation": "layout_sum_ratio",
+      "weight": 0.09,
+      "owner": 468,
+      "rationale": "Avoid arbitrary detours.",
+      "empty_policy": "no_edges_is_not_applicable;nonpositive_direct_distance_with_edges_is_evidence_error"
+    },
+    {
+      "id": "bend_angle_deg_per_edge",
+      "measure": "sum absolute interior turn angle / routed edge count",
+      "unit": "deg_per_edge",
+      "direction": "lower_is_better",
+      "best": 12.0,
+      "worst": 110.0,
+      "aggregation": "mean_over_edges",
+      "weight": 0.07,
+      "owner": 468,
+      "rationale": "Prefer deliberate bends over repair zig-zags.",
+      "empty_policy": "no_routed_edges_is_not_applicable"
+    },
+    {
+      "id": "branch_separation_margin_px",
+      "measure": "minimum branch separation minus the hard fan-out floor",
+      "unit": "px",
+      "direction": "higher_is_better",
+      "best": 48.0,
+      "worst": 0.0,
+      "aggregation": "minimum_over_branches_and_profiles",
+      "weight": 0.14,
+      "owner": 469,
+      "rationale": "Reward decision readability beyond feasibility.",
+      "empty_policy": "no_decision_branches_is_not_applicable"
+    },
+    {
+      "id": "route_state_exposure_ratio",
+      "measure": "visible projected waylight length after depth/silhouette occlusion / total projected length",
+      "unit": "ratio",
+      "direction": "higher_is_better",
+      "best": 0.85,
+      "worst": 0.45,
+      "aggregation": "minimum_over_profiles",
+      "weight": 0.14,
+      "owner": 466,
+      "rationale": "Keep enough depth-correct state visible to follow.",
+      "empty_policy": "no_routed_edges_is_not_applicable;nonpositive_total_projected_length_with_edges_is_evidence_error"
+    },
+    {
+      "id": "landmark_framing_margin_px",
+      "measure": "minimum hero-silhouette margin to stage edges and competing silhouettes",
+      "unit": "px",
+      "direction": "higher_is_better",
+      "best": 48.0,
+      "worst": 8.0,
+      "aggregation": "minimum_over_landmarks_and_profiles",
+      "weight": 0.1,
+      "owner": 470,
+      "rationale": "Let hero landmarks establish place and destination.",
+      "empty_policy": "no_governed_landmarks_is_evidence_error"
+    },
+    {
+      "id": "zone_density_error_ratio",
+      "measure": "area-weighted absolute error from semantic-zone occupancy targets",
+      "unit": "ratio",
+      "direction": "lower_is_better",
+      "best": 0.0,
+      "worst": 0.35,
+      "aggregation": "area_weighted_mean_over_zones",
+      "weight": 0.1,
+      "owner": 470,
+      "rationale": "Avoid one uniform scatter across unlike zones.",
+      "empty_policy": "exclude_zero_legal_area_zones;all_excluded_is_evidence_error"
+    },
+    {
+      "id": "negative_space_error_ratio",
+      "measure": "empty-mask symmetric-difference area / governed empty-mask area",
+      "unit": "ratio",
+      "direction": "lower_is_better",
+      "best": 0.0,
+      "worst": 0.4,
+      "aggregation": "area_weighted_mean_over_reservations",
+      "weight": 0.1,
+      "owner": 470,
+      "rationale": "Preserve authored breathing room and sight lines.",
+      "empty_policy": "exclude_zero_area_reservations;all_excluded_is_evidence_error"
+    },
+    {
+      "id": "asset_family_diversity_ratio",
+      "measure": "effective Shannon family count / legal available family count",
+      "unit": "ratio",
+      "direction": "higher_is_better",
+      "best": 0.75,
+      "worst": 0.3,
+      "aggregation": "layout_level",
+      "weight": 0.06,
+      "owner": 470,
+      "rationale": "Use the region's available visual vocabulary.",
+      "empty_policy": "zero_available_families_is_evidence_error;zero_placements_raw_zero"
+    },
+    {
+      "id": "asset_repetition_distance_m",
+      "measure": "minimum route-progress distance between non-hero same-family instances",
+      "unit": "m",
+      "direction": "higher_is_better",
+      "best": 18.0,
+      "worst": 6.0,
+      "aggregation": "minimum_over_same_family_pairs",
+      "weight": 0.06,
+      "owner": 470,
+      "rationale": "Prevent repeated families from stamping the route.",
+      "empty_policy": "fewer_than_two_same_family_instances_raw_best"
+    },
+    {
+      "id": "stamping_symmetry_ratio",
+      "measure": "ordinary placements in repeated transform/spacing or untagged mirror motifs / ordinary placements",
+      "unit": "ratio",
+      "direction": "lower_is_better",
+      "best": 0.05,
+      "worst": 0.45,
+      "aggregation": "layout_level",
+      "weight": 0.05,
+      "owner": 470,
+      "rationale": "Hide procedural regularity unless symmetry is authored.",
+      "empty_policy": "zero_ordinary_placements_raw_zero"
+    },
+    {
+      "id": "node_displacement_rms_m",
+      "measure": "RMS XZ distance from resolved anchor to authored lattice-plus-jitter anchor",
+      "unit": "m",
+      "direction": "lower_is_better",
+      "best": 0.0,
+      "worst": 2.0,
+      "aggregation": "rms_over_nodes",
+      "weight": 0.05,
+      "owner": 471,
+      "rationale": "Preserve authored row/lane intent after legality.",
+      "empty_policy": "no_nodes_is_evidence_error"
+    },
+    {
+      "id": "camera_profile_consistency_ratio",
+      "measure": "minimum per-profile subscore / maximum per-profile subscore, excluding this term",
+      "unit": "ratio",
+      "direction": "higher_is_better",
+      "best": 0.95,
+      "worst": 0.65,
+      "aggregation": "minimum_to_maximum_over_profiles",
+      "weight": 0.04,
+      "owner": 466,
+      "rationale": "Reject layouts that work only on one shape or zoom.",
+      "empty_policy": "fewer_than_two_profiles_is_evidence_error;zero_max_subscore_raw_one"
+    }
+  ],
+  "hierarchy": [
+    "regional_world_and_landmark",
+    "permanent_physical_road",
+    "narrow_depth_tested_waylight",
+    "waystones_and_interaction",
+    "chrome"
+  ],
+  "renderer": [
+    {
+      "id": "physical_road_readable_without_state_colour",
+      "required": true,
+      "owner": 472
+    },
+    {
+      "id": "whole_road_state_recolour_forbidden",
+      "required": true,
+      "owner": 475
+    },
+    {
+      "id": "route_state_2d_overlay_forbidden",
+      "required": true,
+      "owner": 475
+    },
+    {
+      "id": "route_state_depth_test_required",
+      "required": true,
+      "owner": 473
+    }
+  ],
+  "zones": [
+    {
+      "id": "hero",
+      "density_role": "single authored landmark plus protected negative space",
+      "height_role": "dominant",
+      "occupancy_ratio": [
+        0.0,
+        0.08
+      ],
+      "route_relation": "ordinary scenery excluded from reserve",
+      "class": "provisional_owner_review"
+    },
+    {
+      "id": "foreground-frame",
+      "density_role": "sparse edge frame",
+      "height_role": "tall_or_occluding",
+      "occupancy_ratio": [
+        0.08,
+        0.18
+      ],
+      "route_relation": "frame edges; never cross node/road reserves",
+      "class": "provisional_owner_review"
+    },
+    {
+      "id": "road-bank",
+      "density_role": "low broken rhythm",
+      "height_role": "low_compact",
+      "occupancy_ratio": [
+        0.08,
+        0.2
+      ],
+      "route_relation": "nearest ordinary zone; strict corridor/silhouette clearance",
+      "class": "provisional_owner_review"
+    },
+    {
+      "id": "midground",
+      "density_role": "coherent regional mass",
+      "height_role": "low_to_medium",
+      "occupancy_ratio": [
+        0.18,
+        0.34
+      ],
+      "route_relation": "support region identity without competing with branches",
+      "class": "provisional_owner_review"
+    },
+    {
+      "id": "vista",
+      "density_role": "sparse distant punctuation",
+      "height_role": "medium_to_tall",
+      "occupancy_ratio": [
+        0.08,
+        0.22
+      ],
+      "route_relation": "tall only when every profile retains route exposure",
+      "class": "provisional_owner_review"
+    }
+  ],
+  "provisional_ids": [
+    "asset_family_diversity_ratio",
+    "asset_repetition_distance_m",
+    "bend_angle_deg_per_edge",
+    "branch_fanout_separation_px",
+    "branch_separation_margin_px",
+    "camera_profile_consistency_ratio",
+    "focused_node_safe_frame_margin_px",
+    "geometry.branch_fanout",
+    "geometry.road_corridor",
+    "geometry.row_lane_envelope",
+    "geometry.terminus_protected_zone",
+    "geometry.vigil_protected_zone",
+    "landmark_framing_margin_px",
+    "negative_space_error_ratio",
+    "node_displacement_rms_m",
+    "node_ink_clearance_px",
+    "route_length_ratio",
+    "route_state_exposure_ratio",
+    "stamping_symmetry_ratio",
+    "zone_density_error_ratio",
+    "zones.foreground-frame",
+    "zones.hero",
+    "zones.midground",
+    "zones.road-bank",
+    "zones.vista"
+  ],
+  "review_items": [
+    "D462-001: physical-road corridor dimensions and obstruction clearance",
+    "D462-002/D462-003: node ink and touch-safety clearance across all shapes and zooms",
+    "D462-004/D462-005/D462-006: branch fan-out separation and route-state exposure",
+    "D462-007: Vigil and terminus framing reserves",
+    "D462-008: semantic-zone density and intentional negative-space targets",
+    "D462-009: asset diversity, repetition distance, stamping, and related soft anchors",
+    "D462-001/D462-002/D462-003/D462-004/D462-005/D462-006/D462-007/D462-008/D462-009: all provisional soft normalisation anchors and initial weights"
+  ]
+}

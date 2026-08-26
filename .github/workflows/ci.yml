@@ -109,11 +109,19 @@ jobs:
           python3 -B tools/land_map_glb.py --self-test
           xvfb-run -a python3 -B tools/check_map_assets.py
 
+      - name: Check Map Compiler v2 quality contract
+        run: |
+          python3 -B tools/check_map_quality_v2.py --self-test
+          python3 -B tools/check_map_quality_v2.py
+
       - name: Test performance evidence replay
         run: python3 -B tests/test_performance_budget.py
       
       - name: Run tests
         run: godot --headless -s res://tests/run_all.gd
+
+      - name: Probe shared map asset profiles
+        run: godot --headless -s res://tools/probe_map_seeds.gd -- --seeds=20
 
       - name: Test phone-landscape scroll reachability
         run: godot --headless -s res://tests/choice_scroll_reachability.gd
