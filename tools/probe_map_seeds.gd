@@ -10,30 +10,11 @@ extends SceneTree
 ##
 ## Costs no window and no focus, so it is safe to run beside anything.
 ##
-## WHY IT REBUILDS THE SCENERY LIST INSTEAD OF ASKING MapScene FOR IT.
-## `MapScene._bind_asset_geometry` is what normally publishes footprints to
-## `MapPinProjection`, and it needs the act's real GLBs bound through a live
-## SubViewport. Driving that headless once cost six minutes of wall clock and
-## six seconds of CPU -- it blocks rather than works. So the seats come from
-## MapScene (they are its own dealt output) and the footprint maths is
-## repeated here from `_bind_asset_geometry`. THAT DUPLICATION IS THE ONE
-## THING TO WATCH: if the radius or hide-depth formula changes there and not
-## here, this probe will keep reporting a rate for a map that no longer exists.
-
-const KIT_PATHS: Array[String] = [
-	"res://assets/art/map/geometry/shared/road-slab-a.glb",
-	"res://assets/art/map/geometry/shared/road-slab-b.glb",
-	"res://assets/art/map/geometry/shared/standing-monument.glb",
-	"res://assets/art/map/geometry/act1/ash-trunk-fork.glb",
-	"res://assets/art/map/geometry/act1/root-wedge.glb",
-	"res://assets/art/map/geometry/act1/charred-stump.glb",
-	"res://assets/art/map/geometry/act1/fallen-bough-arch.glb",
-	"res://assets/art/map/geometry/act1/ash-cairn-mass.glb",
-]
-## Kits 0 and 1 are the road, not scenery -- the same split MapScene makes.
+## The probe still rebuilds placements headlessly, but MapAssetProfiles is
+## now the one source for mesh identity, scale, footprint and hide-depth facts.
+## It loads only Act I's active set, matching runtime residency.
+const ACT: int = 0
 const KINDS: int = 6
-## Half the Vigil's rotated footprint, from THRESHOLD_SCALE and THRESHOLD_YAW.
-const VIGIL_HALF: Vector2 = Vector2(4.25, 4.27)
 
 
 func _initialize() -> void:
@@ -41,10 +22,28 @@ func _initialize() -> void:
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--seeds="):
 			seeds = maxi(1, int(arg.trim_prefix("--seeds=")))
-	var boxes: Array[AABB] = []
-	for path: String in KIT_PATHS:
-		boxes.append(_aabb(path))
+	var registry: MapAssetProfiles = MapAssetProfiles.new()
+	var by_id: Dictionary[String, Dictionary] = {}
+	var active_profiles: Array[Dictionary] = []
+	for asset_id: String in registry.ids_for_act(ACT):
+		var resource: Resource = load(registry.resource_path(asset_id))
+		var value: Dictionary = registry.profile(asset_id, _mesh(resource))
+		if value.is_empty():
+			push_error("map profile failed: %s" % asset_id)
+			quit(2)
+			return
+		by_id[asset_id] = value
+		active_profiles.append(value)
+	var kit_profiles: Array[Dictionary] = []
+	for asset_id: String in registry.ids_for_act(ACT, "kit"):
+		kit_profiles.append(by_id[asset_id])
 	var scene: MapScene = MapScene.new()
+	var profile_digest: String = registry.digest(active_profiles)
+	if profile_digest.is_empty() or profile_digest != scene.asset_profile_digest():
+		push_error("runtime/probe map profile digest mismatch")
+		scene.free()
+		quit(2)
+		return
 	var content: ContentDB = ContentDB.load_slice()
 
 	var pair_hits: int = 0
@@ -59,13 +58,21 @@ func _initialize() -> void:
 	var clumps: int = 0
 	var worst_clump: float = 1.0
 	var clump_seeds: int = 0
-	var vc: Vector2 = MapScene.THRESHOLD_XZ
+	var vigil: Dictionary = by_id["act1-vigil"]
+	var vigil_position: Vector3 = Vector3(
+			MapScene.THRESHOLD_XZ.x, 0.0, MapScene.THRESHOLD_XZ.y)
+	var vigil_scale: float = registry.default_scale(vigil)
+	var vigil_points: PackedVector2Array = registry.transformed_footprint(
+			vigil, vigil_position, registry.fixed_yaw(vigil),
+			Vector3.ONE * vigil_scale)
+	var vigil_rect: Rect2 = _bounds(vigil_points)
 
 	for s: int in range(1, seeds + 1):
 		var run: RunState = RunState.new_run(content, s, "probe-%d" % s, {})
 		var map: WorldMap = WorldMap.benchmark(run)
 		scene.set_scatter_salt(s)
-		var pieces: Array[Vector4] = _pieces(scene, scene.prop_positions(), boxes)
+		var pieces: Array[Vector4] = _pieces(
+				scene, scene.prop_positions(), kit_profiles, registry)
 		MapPinProjection.set_scenery(pieces)
 		MapPinProjection.resolve(map.nodes)
 		counts.append(map.nodes.size())
@@ -78,7 +85,7 @@ func _initialize() -> void:
 			var raw: Vector3 = MapPinProjection.sample(
 					float(n.row) + n.jy, float(n.col) + n.jx)
 			max_shove = maxf(max_shove, Vector2(w.x - raw.x, w.z - raw.z).length())
-			if absf(w.x - vc.x) < VIGIL_HALF.x and absf(w.z - vc.y) < VIGIL_HALF.y:
+			if vigil_rect.has_point(Vector2(w.x, w.z)):
 				vigil_hits += 1
 				vf += 1
 			if _is_behind(w, pieces):
@@ -110,6 +117,7 @@ func _initialize() -> void:
 			worst = minf(worst, _worst_separation(pts))
 	counts.sort()
 	print("=== %d seeds, Act I ===" % seeds)
+	print("asset profile digest : %s" % profile_digest)
 	print("nodes/map min|med|max : %d | %d | %d   total %d"
 			% [counts[0], counts[counts.size() / 2], counts[-1], total])
 	print("overlapping node pairs: %d in %d seed(s)" % [pair_hits, bad_pair_seeds])
@@ -126,22 +134,14 @@ func _initialize() -> void:
 	quit(0)
 
 
-## Radius and hide-depth are repeated from MapScene._bind_asset_geometry -- see
-## the header. WHICH KIT is not repeated: it asks `MapScene.seat_kit`, because
-## that is the half that already drifted once. The salted placement loop and the
-## unsalted footprint loop disagreed for five run seeds in six, and this probe
-## was the side that happened to be right, so it reported a rate for a map that
-## was not being shipped.
+## Build the compatibility envelopes through the shared authority. Which
+## species occupies a seat remains MapScene's deterministic placement decision.
 func _pieces(scene: MapScene, seats: PackedVector3Array,
-		boxes: Array[AABB]) -> Array[Vector4]:
+		profiles: Array[Dictionary], registry: MapAssetProfiles) -> Array[Vector4]:
 	var out: Array[Vector4] = []
 	for j: int in range(seats.size()):
 		var kit: int = scene.seat_kit(j, KINDS)
-		var box: AABB = boxes[kit]
-		var unit: float = MapScene.KIT_SCALE[kit]
-		out.append(Vector4(seats[j].x, seats[j].z,
-				maxf(box.size.x, box.size.z) * 0.5 * unit,
-				box.size.y * unit * MapScene.HIDE_PER_HEIGHT))
+		out.append(registry.directional_envelope(profiles[kit], seats[j]))
 	return out
 
 
@@ -179,17 +179,18 @@ func _worst_separation(pts: Array[Vector3]) -> float:
 	return worst
 
 
-func _aabb(path: String) -> AABB:
-	var res: Resource = load(path)
-	if res is Mesh:
-		return (res as Mesh).get_aabb()
-	if not (res is PackedScene):
-		return AABB()
-	var inst: Node = (res as PackedScene).instantiate()
-	var mesh_node: MeshInstance3D = _first_mesh(inst)
-	var box: AABB = mesh_node.mesh.get_aabb() if mesh_node != null else AABB()
-	inst.free()
-	return box
+func _mesh(resource: Resource) -> Mesh:
+	if resource is Mesh:
+		return resource as Mesh
+	if not (resource is PackedScene):
+		return null
+	var root: Node = (resource as PackedScene).instantiate()
+	var mesh_node: MeshInstance3D = _first_mesh(root)
+	var mesh: Mesh = null
+	if mesh_node != null:
+		mesh = mesh_node.mesh
+	root.free()
+	return mesh
 
 
 func _first_mesh(root: Node) -> MeshInstance3D:
@@ -200,3 +201,12 @@ func _first_mesh(root: Node) -> MeshInstance3D:
 		if found != null:
 			return found
 	return null
+
+
+func _bounds(points: PackedVector2Array) -> Rect2:
+	if points.is_empty():
+		return Rect2()
+	var out: Rect2 = Rect2(points[0], Vector2.ZERO)
+	for point: Vector2 in points:
+		out = out.expand(point)
+	return out
