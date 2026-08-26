@@ -14,6 +14,7 @@ remains canonical `{}`. `s009` stays the non-destructive reference candidate.
 | Integrated `origin/main` | `455dd6071b3cc0b0ff87083a42287265e83f7442` |
 | Merge commit | `39167244d9d1286c8b705a0797c5afdee61079b6` |
 | Merge tree | `2f8d27acf8f912124478b678b24df13badc0d142` |
+| Feat commit | `5fa98a375fa8ea0aade5c4c083c606fb540472f3` |
 | H39 file SHA-256 | `a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1` |
 | H39 semantic SHA-256 | `38e1f4f65901fefd4e6a0f6399c5f76d17355a19c8317f4714c33c9199dbe7aa` |
 | Live mobs file SHA-256 | `ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356` |
@@ -97,11 +98,11 @@ ticket **stops** with M1 **NOT YET QUALIFIED**. #502 stays blocked until an
 immutable M1 packet compares empty against `canonical-host.json`. Cloud remains
 NOT QUALIFIED.
 
-The M4 fingerprint ran on the dirty tree atop merge `39167244`. Packet `commit`
-fields record that merge until a follow-up docs commit restamps them to the
-feat SHA. `compare_packets` does not grade git commit. M1 must rsync a tree that
-contains `--stage=tier2-fingerprint` (the feat, not the merge alone) and must
-not mutate the checkout.
+Host packets bind feat `5fa98a375fa8ea0aade5c4c083c606fb540472f3` (the dirty-tree
+M4 run sat on merge `39167244`; a docs stamp rewrote the recorded commit only).
+`compare_packets` does not grade git commit. M1 must rsync this feat (or later
+docs-only stamp) so the tree contains `--stage=tier2-fingerprint`, and must not
+mutate the checkout.
 
 Authored tools+tests exceed the 400-line stop (self-tests, seed JSON, host
 packets). No enemy IDs, F0/racing/CEM/audit rows, or live-catalogue edits.
