@@ -6,6 +6,9 @@ const Policy: GDScript = preload("res://tools/balance_policy.gd")
 const Metrics: GDScript = preload("res://tools/balance_metrics.gd")
 const Incentives: GDScript = preload("res://tools/vow_incentives.gd")
 const PROFILE: String = "mature-three-act-no-side-state-v1"
+const TIER2_PROFILE_IDS: Array[String] = ["gravewarden", "shellback", "waylayer", "watcherEye"]
+const TIER2_DISRUPTION_MOVES: Dictionary = {"waylayer": {"trick": "frail"},
+	"watcherEye": {"gaze": "vulnerable"}}
 static var _probe: Dictionary = {}
 func _initialize() -> void:
 	var opts: Dictionary = _options(OS.get_cmdline_user_args())
@@ -149,7 +152,42 @@ static func _fight(game: GlassvowGame, node: MapNode) -> Dictionary:
 		"hpLost": game.cb.hp_lost,
 		"shatters": int(float(str(game.run.stats.get("shatters", 0)))) - shatters_before,
 		"smolderKills": smolder_kills,
+		"profileDiagnostics": tier2_profile_diagnostics(game.cb),
 	}
+static func tier2_profile_diagnostics(cb: CombatState) -> Dictionary:
+	var out: Dictionary = {"encounters": {}, "moves": {}, "block": [], "heal": [],
+		"disruption": [], "tempo": []}
+	var by_idx: Dictionary = {}
+	for enemy: EnemyCombatant in cb.enemies:
+		var enemy_id: String = String(enemy.key)
+		if TIER2_PROFILE_IDS.has(enemy_id):
+			by_idx[enemy.idx] = enemy_id
+			out["encounters"][enemy_id] = _ji(out["encounters"].get(enemy_id, 0)) + 1
+	var actor: String = ""; var move: String = ""; var idx: int = -1; var turn: int = 0
+	for event_v: Variant in cb.queue:
+		var event: Dictionary = event_v
+		var kind: String = str(event.get("t", ""))
+		if kind == "turn":
+			turn = _ji(event.get("n", 0)); actor = ""; move = ""; idx = -1
+		elif kind == "enemyAct":
+			idx = _ji(event.get("idx", -1)); actor = str(by_idx.get(idx, "")); move = str(event.get("move", ""))
+			if not actor.is_empty():
+				if not out["moves"].has(actor): out["moves"][actor] = {}
+				out["moves"][actor][move] = _ji(out["moves"][actor].get(move, 0)) + 1
+				out["tempo"].append({"enemy": actor, "move": move, "kind": "act", "amount": 0,
+					"blocked": 0, "turn": turn})
+		elif not actor.is_empty() and kind == "blockGain" and _ji(event.get("who", -2)) == idx:
+			out["block"].append({"enemy": actor, "move": move, "amount": _ji(event.get("n", 0))})
+		elif not actor.is_empty() and kind == "heal" and _ji(event.get("who", -2)) == idx:
+			out["heal"].append({"enemy": actor, "move": move, "amount": _ji(event.get("n", 0))})
+		elif not actor.is_empty() and kind == "status" and str(event.get("who", "")) == "player" \
+				and str(TIER2_DISRUPTION_MOVES.get(actor, {}).get(move, "")) == str(event.get("id", "")):
+			out["disruption"].append({"enemy": actor, "move": move, "status": str(event["id"]),
+				"target": "player", "amount": _ji(event.get("n", 0))})
+		elif not actor.is_empty() and kind == "hitPlayer" and _ji(event.get("source", -2)) == idx:
+			out["tempo"].append({"enemy": actor, "move": move, "kind": "attack",
+				"amount": _ji(event.get("amount", 0)), "blocked": _ji(event.get("blocked", 0)), "turn": turn})
+	return out
 static func _enter_node(run: RunState, node: MapNode) -> void:
 	run.node_id = node.id
 	run.waystones_lit = node.row + 1
@@ -528,6 +566,9 @@ static func _strip_hex(run: RunState) -> void:
 static func outcome_digest(row: Dictionary) -> String:
 	var copy: Dictionary = row.duplicate(true)
 	copy.erase("packageEvents")
+	for fight_v: Variant in copy.get("fights", []):
+		var fight: Dictionary = fight_v
+		fight.erase("profileDiagnostics")
 	return JSON.stringify(copy).sha256_text()
 static func _options(args: PackedStringArray) -> Dictionary:
 	var out: Dictionary = {"aspect": "all", "runs": 200, "seed0": 1000, "vow": 0, "mobs": "",
