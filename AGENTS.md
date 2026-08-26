@@ -1,6 +1,6 @@
 # Agent Contract — Glassvow Godot
 
-**Glassvow** (琉璃誓言) is a Godot 4.7.2 roguelite deckbuilder, parallel-ported from a web original and, since 2026-08-16, **detached from it** — see THE REFERENCE below. The 18 files in `port_fixtures/` began as exports from that original and are now the port's own regression goldens, pinning its behaviour rather than the web's. The map system was always a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions. Music and SFX generation additionally load `.claude/skills/glassvow-suno/SKILL.md` and `.claude/skills/glassvow-elevenlabs/SKILL.md`; write the row in `docs/music-ledger.md` or `docs/sfx-ledger.md` first.
+**Glassvow** (琉璃誓言) is a Godot 4.7.2+ roguelite deckbuilder, parallel-ported from a web original and, since 2026-08-16, **detached from it** — see THE REFERENCE below. The 18 files in `port_fixtures/` began as exports from that original and are now the port's own regression goldens, pinning its behaviour rather than the web's. The map system was always a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions. Music and SFX generation additionally load `.claude/skills/glassvow-suno/SKILL.md` and `.claude/skills/glassvow-elevenlabs/SKILL.md`; write the row in `docs/music-ledger.md` or `docs/sfx-ledger.md` first.
 
 ## THE REFERENCE — detached 2026-08-16
 
@@ -56,7 +56,7 @@ have been a port of nothing. Measure the running thing; do not infer from source
 ## Verification (all from repo root)
 
 ```bash
-godot --version                          # must print 4.7.2.stable
+godot --version                          # must report 4.7.2 stable or later stable
 tools/check_imports.sh                   # asset import; fails on stderr ERRORs or process status
 tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
 godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS)

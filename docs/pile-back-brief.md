@@ -93,7 +93,7 @@ would pass 30° (the benchmark's `pile-chrome.js`).
   line — please do not edit those two files.
 - **Shared tree, five concurrent sessions: commit with explicit paths only,
   never `git add -A`.**
-- Godot 4.7.2 exact; the per-file parse gate is warnings-as-errors. A lab file
+- Godot 4.7.2 stable or later stable; the per-file parse gate is warnings-as-errors. A lab file
   that fails to parse takes down *every* lab entry point, not only its own —
   `enemy_lab.gd` did this to all five sessions once.
 - Judge it at real size: `godot --path . -- --hud` and press `6`. That state

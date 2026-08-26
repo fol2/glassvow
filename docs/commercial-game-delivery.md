@@ -116,7 +116,9 @@ release candidate — the nine-pillar bar that issue #108 checks a build against
 **Stop conditions (halt and re-plan):**
 - **Schema change** — save format breaks compatibility without a migration story.
 - **New platform plugin work** — native SDK integration (e.g., push notifications, in-app purchase) is a separate deliverable and expertise.
-- **Scope creep >threshold** — a single task balloons beyond estimation (e.g., >400 line changes). Stop, surface findings, produce a revised plan.
+- **Per-file code change >600 lines** — in one commit, additions plus deletions
+  to any one code file exceed 600 lines. Evidence artefacts are excluded. Split
+  the commit or surface the findings and produce a revised plan.
 
 **Red = handled event, not emergency:** A failed test or CI gate means the change is incomplete. Fix it, re-run, and advance. There is no "we'll ship it anyway and fix it later" for save-critical or determinism-critical code.
 
