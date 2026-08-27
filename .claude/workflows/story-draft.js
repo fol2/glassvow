@@ -54,8 +54,9 @@ const COMMON =
   `Read ${batchFile} in full, then the bible files you need: ${BIBLE}. ` +
   'The batch file is the draft under review; the bible is the authority. ' +
   'Report ONLY defects (empty findings = clean). Every finding must cite the bible rule it violates ' +
-  '(file + section). severity=block for a canon/leak/ban violation; warn for judgment calls worth ' +
-  "James's attention. Do not propose stylistic rewrites of lines that pass."
+  '(file + section). severity=block for a canon/leak/ban violation; warn for unresolved judgment calls ' +
+  'that merit a dedicated fresh-context reviewer. Escalate only under the bounded conditions in ' +
+  '.claude/skills/glassvow-story/SKILL.md §2. Do not propose stylistic rewrites of lines that pass.'
 
 // ---- Phase 1: canon lint (pipeline step 3), four independent lenses ----
 const LENSES = [

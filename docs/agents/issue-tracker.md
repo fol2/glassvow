@@ -8,6 +8,8 @@ An independently mergeable delivery outcome gets one issue when durable tracking
 
 A concise delivery issue states outcome, non-goals, acceptance, active constraints, dependencies, and stop conditions. Implementation transcripts and repeated status summaries do not belong in the specification.
 
+Unless the issue or owner instruction explicitly says not to merge, the owner agent carries the outcome through implementation, the risk-required independent review, batched fixes, relevant green gates, merge, and branch cleanup. Do not hand routine plan approval, candidate selection, review resolution, or merge-button work to a person.
+
 ## Research is not a ticket tree
 
 A bounded research question may use one research issue containing its hypothesis, experiment budget, immutable inputs, evidence, stop rule, and decision. Individual runs are rows or artifacts under that issue—not child tickets and not PRs.
@@ -35,3 +37,5 @@ GitHub shares one number space for issues and PRs; resolve an ambiguous `#n` bef
 ## Pull request record
 
 The PR body is the compact integration record: outcome, key design choice, selected CI scopes, final-head commands and results, visual evidence when relevant, and residual risk. Do not paste full logs or duplicate the issue. Review findings should be concrete and batched; another loop is justified only by a new defect or invalidated evidence.
+
+A semantic or policy change, or a non-mechanical multi-file change with interacting risks, receives one exact-head review from `.claude/agents/ai-sdlc-reviewer.md`. A fully mechanical change with decisive deterministic proof does not need a ceremonial model review. When the reviewer shares the owner's connector identity, record its verdict as a PR `COMMENT` rather than manufacturing `APPROVE`. Human review is requested only under the escalation conditions in `docs/agents/ai-sdlc.md` or when repository policy requires it.

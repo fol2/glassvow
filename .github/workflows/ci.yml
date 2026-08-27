@@ -4,11 +4,13 @@ on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    - cron: '23 3 * * *'
   workflow_dispatch:
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
@@ -23,26 +25,49 @@ jobs:
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+          PUSH_HEAD_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
           changed_paths="$RUNNER_TEMP/ci-changed-paths.zlist"
           changed_gdscript="$RUNNER_TEMP/ci-changed-gdscript.zlist"
-          if [[ "$EVENT_NAME" == "pull_request" ]]; then
-            if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ || ! "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]; then
-              echo "Malformed pull-request base/head SHA." >&2
+
+          classify_diff() {
+            local base_sha="$1"
+            local head_sha="$2"
+            local diff_mode="$3"
+            if [[ ! "$base_sha" =~ ^[0-9a-f]{40}$ || ! "$head_sha" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "Malformed changed-path base/head SHA." >&2
               exit 2
             fi
-            git cat-file -e "$BASE_SHA^{commit}"
-            git cat-file -e "$HEAD_SHA^{commit}"
-            git diff --name-only --no-renames -z "$BASE_SHA...$HEAD_SHA" >"$changed_paths"
+            if [[ "$base_sha" == "0000000000000000000000000000000000000000" ]]; then
+              echo "Changed-path base SHA may not be the all-zero ref." >&2
+              exit 2
+            fi
+            git cat-file -e "$base_sha^{commit}"
+            git cat-file -e "$head_sha^{commit}"
+            if [[ "$diff_mode" == "merge-base" ]]; then
+              git diff --name-only --no-renames -z "$base_sha...$head_sha" >"$changed_paths"
+            elif [[ "$diff_mode" == "tree" ]]; then
+              git diff --name-only --no-renames -z "$base_sha" "$head_sha" >"$changed_paths"
+            else
+              echo "Unknown diff mode: $diff_mode" >&2
+              exit 2
+            fi
             python3 -B tools/ci_scope.py \
               --changed-paths-nul "$changed_paths" \
               --repository-root "$GITHUB_WORKSPACE" \
               --changed-gdscript-nul "$changed_gdscript" \
               --github-output "$GITHUB_OUTPUT" \
               --github-summary "$GITHUB_STEP_SUMMARY"
+          }
+
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            classify_diff "$PR_BASE_SHA" "$PR_HEAD_SHA" merge-base
+          elif [[ "$EVENT_NAME" == "push" ]]; then
+            classify_diff "$PUSH_BEFORE_SHA" "$PUSH_HEAD_SHA" tree
           else
             python3 -B tools/ci_scope.py \
               --full-gate \
@@ -53,6 +78,15 @@ jobs:
 
       - name: Test CI scope classifier
         run: python3 -B tests/test_ci_scope.py
+
+      # Active agent instructions steer every later task. Keep their regression
+      # gate deterministic and first so a broken contract fails before Godot or
+      # asset setup consumes runner time.
+      - name: Check AI-SDLC agent contracts
+        if: steps.scope.outputs.run_agent_contracts == 'true'
+        run: |
+          python3 -B tests/test_agent_contracts.py
+          python3 -B tools/check_agent_contracts.py
 
       - name: Setup Godot
         if: steps.scope.outputs.setup_godot == 'true'
@@ -76,10 +110,10 @@ jobs:
         if: steps.scope.outputs.run_gdscript_parse == 'true'
         shell: bash
         env:
-          FULL_GATE: ${{ steps.scope.outputs.full_gate }}
+          FULL_SCRIPT_PARSE: ${{ steps.scope.outputs.full_gate == 'true' || steps.scope.outputs.ci_infra == 'true' }}
         run: |
           set -euo pipefail
-          if [[ "$FULL_GATE" == "true" ]]; then
+          if [[ "$FULL_SCRIPT_PARSE" == "true" ]]; then
             tools/check_scripts.sh
           else
             changed_gdscript="$RUNNER_TEMP/ci-changed-gdscript.zlist"
