@@ -1,0 +1,207 @@
+{
+  "admittedAtProbePanelGate": false,
+  "aspect": "duskblade",
+  "candidate": {
+    "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+    "changedFields": 6,
+    "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81.json",
+    "contentSha256": "f60f89bb63c84d49d45af99e6c4a72e47a81ee6b2cd19575b592348c55b51782",
+    "family": "dusk-branch-flare-l3",
+    "id": "20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81",
+    "method": "exhaustive-level3",
+    "normalisedL1": 4.25,
+    "parameters": {
+      "/relics/verdantBranch/kindleDamage": 3
+    },
+    "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8"
+  },
+  "controlled": {
+    "cinderCut->verdantBranch|discovery": {
+      "delta": 3.0,
+      "pairedBootstrapP05": 3.0,
+      "pairedBootstrapP95": 3.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 1.5,
+      "standardisedDelta": 2.0
+    },
+    "cinderCut->verdantBranch|validation": {
+      "delta": 3.0,
+      "pairedBootstrapP05": 3.0,
+      "pairedBootstrapP95": 3.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 1.5,
+      "standardisedDelta": 2.0
+    },
+    "offering->verdantBranch|discovery": {
+      "delta": 12.0,
+      "pairedBootstrapP05": 12.0,
+      "pairedBootstrapP95": 12.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 6.0,
+      "standardisedDelta": 2.0
+    },
+    "offering->verdantBranch|validation": {
+      "delta": 12.0,
+      "pairedBootstrapP05": 12.0,
+      "pairedBootstrapP95": 12.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 6.0,
+      "standardisedDelta": 2.0
+    }
+  },
+  "decision": "MINIMAL_PRIMITIVE_VALIDATION_FAILED",
+  "edges": {
+    "cinderCut->verdantBranch|discovery": {
+      "controlledProbePass": true,
+      "delta": 0.7421875,
+      "extraTreesInteraction": 0.7421875,
+      "pairedBootstrapP05": 0.0390625,
+      "pairedBootstrapP95": 1.4375,
+      "pairs": 128,
+      "pass": false,
+      "ridgeInteractionCoefficient": 0.3105270856837248,
+      "scale": 20.06031240735336,
+      "standardisedDelta": 0.036997803669694684
+    },
+    "cinderCut->verdantBranch|validation": {
+      "controlledProbePass": true,
+      "delta": 0.625,
+      "extraTreesInteraction": 0.625,
+      "pairedBootstrapP05": -0.046875,
+      "pairedBootstrapP95": 1.2734375,
+      "pairs": 128,
+      "pass": false,
+      "ridgeInteractionCoefficient": 0.2048127167916963,
+      "scale": 19.925960059112427,
+      "standardisedDelta": 0.03136611727343991
+    },
+    "offering->verdantBranch|discovery": {
+      "controlledProbePass": true,
+      "delta": 0.984375,
+      "extraTreesInteraction": 0.984375,
+      "pairedBootstrapP05": 0.0390625,
+      "pairedBootstrapP95": 2.0078125,
+      "pairs": 128,
+      "pass": false,
+      "ridgeInteractionCoefficient": 0.5332653808651031,
+      "scale": 20.069078929466304,
+      "standardisedDelta": 0.049049336218150864
+    },
+    "offering->verdantBranch|validation": {
+      "controlledProbePass": true,
+      "delta": -0.265625,
+      "extraTreesInteraction": -0.265625,
+      "pairedBootstrapP05": -1.15625,
+      "pairedBootstrapP95": 0.59375,
+      "pairs": 128,
+      "pass": false,
+      "ridgeInteractionCoefficient": -0.6568388372795926,
+      "scale": 19.99885098017743,
+      "standardisedDelta": -0.013282013064814755
+    }
+  },
+  "family": "dusk-branch-flare-l3",
+  "issue": 525,
+  "package": "dusk-branch-flare",
+  "panels": {
+    "discovery": {
+      "activation": {
+        "delta": -0.9609375,
+        "pairedBootstrapP05": -1.6328125,
+        "pairedBootstrapP95": -0.2734375,
+        "pairs": 128,
+        "scale": 19.728577790003285,
+        "standardisedDelta": -0.04870789522835847
+      },
+      "bothEdgesPass": false,
+      "error": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "packagePass": false,
+      "panelPass": false,
+      "stall": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "turns": {
+        "delta": -0.7890625,
+        "pairedBootstrapP05": -0.8984375,
+        "pairedBootstrapP95": -0.6796875,
+        "pairs": 128,
+        "scale": 0.9868443110926554,
+        "standardisedDelta": -0.7995815460762326
+      },
+      "win": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      }
+    },
+    "validation": {
+      "activation": {
+        "delta": -0.6640625,
+        "pairedBootstrapP05": -1.2734375,
+        "pairedBootstrapP95": -0.046875,
+        "pairs": 128,
+        "scale": 19.87936909954384,
+        "standardisedDelta": -0.03340460638739475
+      },
+      "bothEdgesPass": false,
+      "error": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "packagePass": false,
+      "panelPass": false,
+      "stall": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "turns": {
+        "delta": -0.7734375,
+        "pairedBootstrapP05": -0.8828125,
+        "pairedBootstrapP95": -0.6640625,
+        "pairs": 128,
+        "scale": 1.0427785407079193,
+        "standardisedDelta": -0.7417083012419208
+      },
+      "win": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      }
+    }
+  },
+  "phaseCProbePanelRows": 39968,
+  "rows": 2816,
+  "schemaVersion": 1,
+  "score": -0.011710091558663788,
+  "strict": true
+}

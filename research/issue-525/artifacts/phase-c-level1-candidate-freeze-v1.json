@@ -1,0 +1,871 @@
+{
+  "candidateCount": 48,
+  "candidates": [
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/d190db120470487578040c4f078329a60890dc1d94a5021f7c0e4b1182d639f1.json",
+      "contentSha256": "ca73261ae36a5eb3cab964149e65f7af2e3e47520e86101c311ebd125e1f77a0",
+      "family": "ash-poison-catalyst-l1",
+      "id": "d190db120470487578040c4f078329a60890dc1d94a5021f7c0e4b1182d639f1",
+      "method": "sobol",
+      "normalisedL1": 1.9999999999999998,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 6
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/f155d61708a26715ce0f09ac881713d7807ee564f0fe52f18275882f5fe2cf0b.json",
+      "contentSha256": "31e2c6a7b4315baff096cc465683132e28faabd26075387f778ae1f3f9d64d45",
+      "family": "ash-poison-catalyst-l1",
+      "id": "f155d61708a26715ce0f09ac881713d7807ee564f0fe52f18275882f5fe2cf0b",
+      "method": "sobol",
+      "normalisedL1": 5.000000000000001,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 7
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/4d0bc54ed5bf4bd529d5b9d8e519ff5e82286893f026316c339293c1a3af9fac.json",
+      "contentSha256": "fd771462f4ec0e179e4a32efc956ea62f29c57f832cab6c27dda51f052605207",
+      "family": "ash-poison-catalyst-l1",
+      "id": "4d0bc54ed5bf4bd529d5b9d8e519ff5e82286893f026316c339293c1a3af9fac",
+      "method": "sobol",
+      "normalisedL1": 3.0,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 3,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 5
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/28a790975466a9821a6efe09f38e4371774ba895012bf21a1fc3943f86b60413.json",
+      "contentSha256": "f848950ec42f6caac6dd260dbe9ed53e2eb9cc082a309047df64086d05c941c3",
+      "family": "ash-poison-catalyst-l1",
+      "id": "28a790975466a9821a6efe09f38e4371774ba895012bf21a1fc3943f86b60413",
+      "method": "sobol",
+      "normalisedL1": 4.0,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 8
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/ee4d65201ce85954c712643b743c7635bb7eb979c35ea0710477f1bd8dc8de7e.json",
+      "contentSha256": "e8e51be51e8003f7fabcaef2650113cfe0d0339c738ad6fb069f4e96fceb0110",
+      "family": "ash-poison-catalyst-l1",
+      "id": "ee4d65201ce85954c712643b743c7635bb7eb979c35ea0710477f1bd8dc8de7e",
+      "method": "sobol",
+      "normalisedL1": 5.0,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 3,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 8
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/be2af116517fc573fee5aba17155fb48ff88d60e0d1855d0247faa82686ec351.json",
+      "contentSha256": "b2ac97ec2a9c6a1e0f89f181c48cdb71eb51f159b04d724f3cf8c9d8afad83ad",
+      "family": "ash-poison-catalyst-l1",
+      "id": "be2af116517fc573fee5aba17155fb48ff88d60e0d1855d0247faa82686ec351",
+      "method": "sobol",
+      "normalisedL1": 3.666666666666667,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/050f147606908274f412e849ea2a5279266fb0c81f629e915b64c14bde45607c.json",
+      "contentSha256": "c7b1874467267931d71b66fa1dd753f6ab983ce2cd01d8e954c589ba4098eb06",
+      "family": "ash-poison-catalyst-l1",
+      "id": "050f147606908274f412e849ea2a5279266fb0c81f629e915b64c14bde45607c",
+      "method": "sobol",
+      "normalisedL1": 3.333333333333333,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/e1b37397f77227bb1c5a0a64624ab25f6c283e788f4c13a40f270504049fff54.json",
+      "contentSha256": "0b23afefd0a5eac2bb13f5406bd7c3fa265326b881610b70971c4a080cdb2ddc",
+      "family": "ash-poison-catalyst-l1",
+      "id": "e1b37397f77227bb1c5a0a64624ab25f6c283e788f4c13a40f270504049fff54",
+      "method": "sobol",
+      "normalisedL1": 2.3333333333333335,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 5
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/3969e1c652267205cd043f72e30630aa7c8d19d5461caece2c288a49bce01f2a.json",
+      "contentSha256": "dbeb3c9f7dff8c673dfb588333959615723021fae6bd4b027da83d298d610a25",
+      "family": "ash-poison-catalyst-l1",
+      "id": "3969e1c652267205cd043f72e30630aa7c8d19d5461caece2c288a49bce01f2a",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 6
+      }
+    },
+    {
+      "changedFields": 2,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/3b43a129ca427de47321962cff35776c62dea0b78d2c2092ac7d1c57c1be675e.json",
+      "contentSha256": "c68d644f23806421eeaf1c33a0af97e19c13d76e4eeef8b0c80adbc14797e477",
+      "family": "ash-poison-catalyst-l1",
+      "id": "3b43a129ca427de47321962cff35776c62dea0b78d2c2092ac7d1c57c1be675e",
+      "method": "random",
+      "normalisedL1": 1.3333333333333333,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      }
+    },
+    {
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/b279168c1c1e8f5cbdd99b93feb57c9da029d75ceb597bc0f8b3c46523de9b2f.json",
+      "contentSha256": "eabb881ce86d3dcb13feb0c794780f861caf9dc53d47801b30cd736234de379f",
+      "family": "ash-poison-catalyst-l1",
+      "id": "b279168c1c1e8f5cbdd99b93feb57c9da029d75ceb597bc0f8b3c46523de9b2f",
+      "method": "random",
+      "normalisedL1": 6.333333333333333,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/98d259c0e82a1111f5b6047cd9fa4fb8797c4939309a487c500cbc22393c3318.json",
+      "contentSha256": "bbdcb1dc012b81137bd44091204e2fb571e32248ec60947df5d804e294e744e1",
+      "family": "ash-poison-catalyst-l1",
+      "id": "98d259c0e82a1111f5b6047cd9fa4fb8797c4939309a487c500cbc22393c3318",
+      "method": "random",
+      "normalisedL1": 4.666666666666666,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 8
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/4ec0d9fbc42cb8ff21826c556574f0daf4ff0d84e5bc8dd282540246d338a72b.json",
+      "contentSha256": "73bd4b8672a2a822a31e0e0b57cd15da969d8376565f342d62e9c9073a5de85a",
+      "family": "ash-poison-catalyst-l1",
+      "id": "4ec0d9fbc42cb8ff21826c556574f0daf4ff0d84e5bc8dd282540246d338a72b",
+      "method": "random",
+      "normalisedL1": 1.6666666666666665,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 6
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/22eb0721441d8ccf9a659abf3eeeb7a9b50aa587079250e4f18e12c011f36d78.json",
+      "contentSha256": "98d7f19e4117217db04e5dc98dae527c81142e579909c92430b29387a7e17650",
+      "family": "ash-poison-catalyst-l1",
+      "id": "22eb0721441d8ccf9a659abf3eeeb7a9b50aa587079250e4f18e12c011f36d78",
+      "method": "random",
+      "normalisedL1": 4.333333333333333,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      }
+    },
+    {
+      "changedFields": 2,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/583b6bb3625f7de269b6447f939dc0ddbc86b5db5d6f139c67a47bf277100b58.json",
+      "contentSha256": "a621f8a7f52453295f5e9996585c3266b8f83c7beb18ea2bea81dbd41cdb3e56",
+      "family": "ash-poison-catalyst-l1",
+      "id": "583b6bb3625f7de269b6447f939dc0ddbc86b5db5d6f139c67a47bf277100b58",
+      "method": "random",
+      "normalisedL1": 1.6666666666666665,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/b83188b7b4cd0e262ab8e9da8ffab5deab4df5a2886f246f28d7b058c1739cc5.json",
+      "contentSha256": "5aadb49b68a4044879b9b5035743ef533f5ca697f4d2d052dd99ac6601ad6937",
+      "family": "ash-poison-catalyst-l1",
+      "id": "b83188b7b4cd0e262ab8e9da8ffab5deab4df5a2886f246f28d7b058c1739cc5",
+      "method": "random",
+      "normalisedL1": 4.333333333333333,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e.json",
+      "contentSha256": "fecd1a4ae5449e365fca18a47f7819b3862cefc2afe103fed6c0e22f50c67cff",
+      "family": "ward-double-l1",
+      "id": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "method": "sobol",
+      "normalisedL1": 5.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/51f02eea967f784cd973ba8fe9a80474b70acb39bfed07b15f4ed7254988aeef.json",
+      "contentSha256": "d59dac431bd450380591b9e14fc035f38cb20f2698b6cf1e55ac17d532ac4c19",
+      "family": "ward-double-l1",
+      "id": "51f02eea967f784cd973ba8fe9a80474b70acb39bfed07b15f4ed7254988aeef",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 2,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/a8758ed45b701a3ba37cfbf371f1007271b0bc2881f26cfb0eb11f98d1a5efff.json",
+      "contentSha256": "41bfb525a6d05ca8f6d16eafcd377c5adf459a9d779471d59b2c7f27ecfe1919",
+      "family": "ward-double-l1",
+      "id": "a8758ed45b701a3ba37cfbf371f1007271b0bc2881f26cfb0eb11f98d1a5efff",
+      "method": "sobol",
+      "normalisedL1": 2.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 18,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/1690366a3ac9447681c542ea23eec20413deca1c3e9785948ed908baa595889f.json",
+      "contentSha256": "89a93db8d5804175717d85373d205da606a20fbddf2d07fa7f562dc41a6c2cd9",
+      "family": "ward-double-l1",
+      "id": "1690366a3ac9447681c542ea23eec20413deca1c3e9785948ed908baa595889f",
+      "method": "sobol",
+      "normalisedL1": 2.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 18,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/b910ecc60a1a3497ade795e9132e7430cd6333bc5c44730e283db13c3f29e43b.json",
+      "contentSha256": "20b4aebf2ed0134dcf3154f830d22c4a942ddf83efe746d66bb9a0f82c6f0ab8",
+      "family": "ward-double-l1",
+      "id": "b910ecc60a1a3497ade795e9132e7430cd6333bc5c44730e283db13c3f29e43b",
+      "method": "sobol",
+      "normalisedL1": 4.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "common"
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/8d3ba0d098edb4a957903fb01a104ff84085f89c0f635ce0dfc011222d894ba7.json",
+      "contentSha256": "f1e3cc6e21050a2717e357e89bc6145533b89811f90f1002b3b0612132f12d00",
+      "family": "ward-double-l1",
+      "id": "8d3ba0d098edb4a957903fb01a104ff84085f89c0f635ce0dfc011222d894ba7",
+      "method": "sobol",
+      "normalisedL1": 3.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 12,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/66ba354cb88d5a7e29258571fe91567170fc7d316956b2998e54d376cf9b1594.json",
+      "contentSha256": "30a8b530fd589e589ab8af0c581c77c74107ac6afeec78e428a1f134f0f464c8",
+      "family": "ward-double-l1",
+      "id": "66ba354cb88d5a7e29258571fe91567170fc7d316956b2998e54d376cf9b1594",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/d31bd4f2eb457fa4c4c7d6cde3dafa10f82c6817703a1456c2c06460abebf26a.json",
+      "contentSha256": "6c2c0fd3fb4d21fa34cef42deb91fd35fa73bb5309c72ac3db9a07b0cc7e6fa7",
+      "family": "ward-double-l1",
+      "id": "d31bd4f2eb457fa4c4c7d6cde3dafa10f82c6817703a1456c2c06460abebf26a",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/2b40e6d1a4a5f835439caf4eff0fb6fb7e135c630d6ff0eb0bc4a11b859b4359.json",
+      "contentSha256": "b44c39117962f194694716f89f9df12ec9b22ee3bada488b90908411e82dc362",
+      "family": "ward-double-l1",
+      "id": "2b40e6d1a4a5f835439caf4eff0fb6fb7e135c630d6ff0eb0bc4a11b859b4359",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/055f4536fd7e6116fa27c8f52d49608170bd3896d0646a6f2a235d961c3c9054.json",
+      "contentSha256": "e672eec3d9e589188b613d89830f28a92c6d1f59abe2552fe2c9a79ec03c7163",
+      "family": "ward-double-l1",
+      "id": "055f4536fd7e6116fa27c8f52d49608170bd3896d0646a6f2a235d961c3c9054",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 12,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/c5a5ce1e0616679613644bf865ad653f3a44944c24789161728c490599512574.json",
+      "contentSha256": "d598f22aec5c63aeeef127000914184b575cf7106c7e63ce5ae1aa19b80603de",
+      "family": "ward-double-l1",
+      "id": "c5a5ce1e0616679613644bf865ad653f3a44944c24789161728c490599512574",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      }
+    },
+    {
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/94aa6bb292e1795d908fa843fa7e4598eb3f971bbd9536f5c508cc689d64c0fa.json",
+      "contentSha256": "0abf71c0be5b5c9ea5bc3d9a575f67bf0158bf0b948c00e73dcb23c5ed85b54b",
+      "family": "ward-double-l1",
+      "id": "94aa6bb292e1795d908fa843fa7e4598eb3f971bbd9536f5c508cc689d64c0fa",
+      "method": "random",
+      "normalisedL1": 6.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/dec3dd652ea5c820337d9ba5a0491509e04f186f12fe0a3799392251d647064c.json",
+      "contentSha256": "e9fe01b76d769ed995ec325a4dd6611c32e25940d09b06d733246d011b55a2cc",
+      "family": "ward-double-l1",
+      "id": "dec3dd652ea5c820337d9ba5a0491509e04f186f12fe0a3799392251d647064c",
+      "method": "random",
+      "normalisedL1": 5.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 12,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/693457d74585dd5663a4d3956ebd8022f0db3f8f24dfd6bc66bd2d7c858ed846.json",
+      "contentSha256": "7bc6f4d9cb35ed58203aa853dc033b79a355f461feb1bf74f4ade7bb705dd0ae",
+      "family": "ward-double-l1",
+      "id": "693457d74585dd5663a4d3956ebd8022f0db3f8f24dfd6bc66bd2d7c858ed846",
+      "method": "random",
+      "normalisedL1": 4.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/ee94dd8080a97d69c88249dcc881b550f58ed20a25083a63dab4d5ecd8bca926.json",
+      "contentSha256": "cdcecb17315f7b3b037de6ea9bca1b686e540f1028e1380d6aade145a4993559",
+      "family": "ward-double-l1",
+      "id": "ee94dd8080a97d69c88249dcc881b550f58ed20a25083a63dab4d5ecd8bca926",
+      "method": "random",
+      "normalisedL1": 1.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/f2a999d2bd6033fb852836dbc2398dc88214a0e18b07d6d290488f325cf2580a.json",
+      "contentSha256": "c9c4e3feac593277cd19ef967d0899438e4dcc5767548e95f488ae61e1ff6e64",
+      "family": "ward-double-l1",
+      "id": "f2a999d2bd6033fb852836dbc2398dc88214a0e18b07d6d290488f325cf2580a",
+      "method": "random",
+      "normalisedL1": 2.5,
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 2,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/a415bc29b4cb1a8b347b6d2172f370304941bb35a40781b4fe0811a5d3653732.json",
+      "contentSha256": "14e2f11884e7fa77a460ecaf004bbc7692f78eff7e11284892c9f30d834ae952",
+      "family": "dusk-kindle-draw-l1",
+      "id": "a415bc29b4cb1a8b347b6d2172f370304941bb35a40781b4fe0811a5d3653732",
+      "method": "sobol",
+      "normalisedL1": 2.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 2,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/44f2ec08a4343b82174e0a941817b0e427633fbfcb35b717ba3c12c81f623e80.json",
+      "contentSha256": "2297d44df6078fd45cb31dd7860571d9a887c5e3cf36742b2a3dc4863702d4b3",
+      "family": "dusk-kindle-draw-l1",
+      "id": "44f2ec08a4343b82174e0a941817b0e427633fbfcb35b717ba3c12c81f623e80",
+      "method": "sobol",
+      "normalisedL1": 4.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 4,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/6ab00daf5c49439222a19eb9f1a18bddd4d19f104affb1cf5fd5addba0d1bbe6.json",
+      "contentSha256": "a8b75e112de9726800169579fcfde07b362506fde96ebe39144ae7e9c75f25d4",
+      "family": "dusk-kindle-draw-l1",
+      "id": "6ab00daf5c49439222a19eb9f1a18bddd4d19f104affb1cf5fd5addba0d1bbe6",
+      "method": "sobol",
+      "normalisedL1": 6.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/6a01bf9cce7cebd34a58e4ed199d7f28738c04720d180ade9b670b4cce7979fc.json",
+      "contentSha256": "57b0a492bd5b44e777191a8523f33e4f8c7496fd05b8e856ee0b92f45c3f411d",
+      "family": "dusk-kindle-draw-l1",
+      "id": "6a01bf9cce7cebd34a58e4ed199d7f28738c04720d180ade9b670b4cce7979fc",
+      "method": "sobol",
+      "normalisedL1": 5.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/dc7d9b74114c7cc34a765b622f54e7a54e13c1e67fe2f59f9cf360f2eb35f092.json",
+      "contentSha256": "d57549ba7e8ef62b59dca2c2571d78a7b651fd13ade188f4ac0e7062726ac2e6",
+      "family": "dusk-kindle-draw-l1",
+      "id": "dc7d9b74114c7cc34a765b622f54e7a54e13c1e67fe2f59f9cf360f2eb35f092",
+      "method": "sobol",
+      "normalisedL1": 2.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 4,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/0865499b98dfeaa58c8a158b68823cd453d0ea8ea4c7d3380f1d762e2d245ef7.json",
+      "contentSha256": "99e4f5ca85f43a6e50dce74a047344e0c8ea86c9913f1922285a89b4eab2d313",
+      "family": "dusk-kindle-draw-l1",
+      "id": "0865499b98dfeaa58c8a158b68823cd453d0ea8ea4c7d3380f1d762e2d245ef7",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 3,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/169fc1b6522be16431d899146400d63f9a2f3157e5e528e4e2ec4bc173957664.json",
+      "contentSha256": "c38d4c9bf8bf989870daad05cf9e6d8f01e57a6602d162345102bcce42398f62",
+      "family": "dusk-kindle-draw-l1",
+      "id": "169fc1b6522be16431d899146400d63f9a2f3157e5e528e4e2ec4bc173957664",
+      "method": "sobol",
+      "normalisedL1": 2.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "rare"
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/5509a3e0fbbeeef93add47ddfdbaad0cf12c35385a77edba3077883eee3039c6.json",
+      "contentSha256": "8694885a57d7488d678f95c5963bf53b82f9fe36a6db20342f483cab5d151b47",
+      "family": "dusk-kindle-draw-l1",
+      "id": "5509a3e0fbbeeef93add47ddfdbaad0cf12c35385a77edba3077883eee3039c6",
+      "method": "sobol",
+      "normalisedL1": 5.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/e9567f47add9eac6fb9bc28458ae8912509087b581bc8b40d20816ecf847af99.json",
+      "contentSha256": "83c3766de9ca05a2ec09843f27013cf78357491672176ebf7c36f8b5c09d21be",
+      "family": "dusk-kindle-draw-l1",
+      "id": "e9567f47add9eac6fb9bc28458ae8912509087b581bc8b40d20816ecf847af99",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 2,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/a70f4e8b4eb700e81948388c5d17dbacd915c98383b4bece89c45f1067a89d62.json",
+      "contentSha256": "484d1a3ec5ec3665b4c54effc853cad7239e07b7f644cfe1d69b1a9ae5161d66",
+      "family": "dusk-kindle-draw-l1",
+      "id": "a70f4e8b4eb700e81948388c5d17dbacd915c98383b4bece89c45f1067a89d62",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/33e9199ab3630b70168309b6587692938e61bb210a8dba487b48d93a1a01f5f3.json",
+      "contentSha256": "f296ef855b8efe1b9ce696694d670401ab55d4b57de129c81de063ec5efdbf71",
+      "family": "dusk-kindle-draw-l1",
+      "id": "33e9199ab3630b70168309b6587692938e61bb210a8dba487b48d93a1a01f5f3",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84.json",
+      "contentSha256": "8a41ca36f56a06d27d85b4b38e19f7a502d1ee809fdfa6a3115d2e5190bfd5b0",
+      "family": "dusk-kindle-draw-l1",
+      "id": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "method": "random",
+      "normalisedL1": 2.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "rare"
+      }
+    },
+    {
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/eca1b53380d7c5bce6b11fcee64646eafa6c03c76ef40cbe52a8f4ee42fea2d8.json",
+      "contentSha256": "240a0e54d9e2d13e5680d7cc4c3dc3949ea09172503fbc99637d2af81c2b413e",
+      "family": "dusk-kindle-draw-l1",
+      "id": "eca1b53380d7c5bce6b11fcee64646eafa6c03c76ef40cbe52a8f4ee42fea2d8",
+      "method": "random",
+      "normalisedL1": 6.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/30c6ba97b6c463f83b5f8e852137087b39c1263259d381c81db3bb61ce7ad8bc.json",
+      "contentSha256": "71c0e99c856d476d55e808890e53c540beba1b996ab5a918838d8b6ddb76c1da",
+      "family": "dusk-kindle-draw-l1",
+      "id": "30c6ba97b6c463f83b5f8e852137087b39c1263259d381c81db3bb61ce7ad8bc",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/c5d133d8fdc5fba2a7e811fd29062d6146d3fbf97199f301f4e3e4d8c88c3591.json",
+      "contentSha256": "df502e775721382c78bbcf9dbf5550006fc3a0f318cdf9190fba7a51095cbf6b",
+      "family": "dusk-kindle-draw-l1",
+      "id": "c5d133d8fdc5fba2a7e811fd29062d6146d3fbf97199f301f4e3e4d8c88c3591",
+      "method": "random",
+      "normalisedL1": 4.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "uncommon"
+      }
+    },
+    {
+      "changedFields": 4,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/dcde7f1faf600ae5823670b911e705628a197b707913a89d8ff678cffba0dc1c.json",
+      "contentSha256": "1289d2103d1593d061800123b86718b35341ca198b5b20e8686f03fd70ba68a1",
+      "family": "dusk-kindle-draw-l1",
+      "id": "dcde7f1faf600ae5823670b911e705628a197b707913a89d8ff678cffba0dc1c",
+      "method": "random",
+      "normalisedL1": 2.0,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "rare"
+      }
+    }
+  ],
+  "issue": 525,
+  "schemaVersion": 1
+}

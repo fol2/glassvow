@@ -1,0 +1,53 @@
+{
+  "candidateCount": 3,
+  "candidates": [
+    {
+      "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/599878605416b14a6264704943f5ebf599fe897b78a86ab8819cfc7a53d88d45.json",
+      "contentSha256": "14041579a6bffe8685d7d80832df0be5e4bde1f294032e0a62d9a04619782b74",
+      "family": "dusk-branch-flare-l3",
+      "id": "599878605416b14a6264704943f5ebf599fe897b78a86ab8819cfc7a53d88d45",
+      "method": "exhaustive-level3",
+      "normalisedL1": 4.0,
+      "parameters": {
+        "/relics/verdantBranch/kindleDamage": 2
+      },
+      "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8"
+    },
+    {
+      "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81.json",
+      "contentSha256": "f60f89bb63c84d49d45af99e6c4a72e47a81ee6b2cd19575b592348c55b51782",
+      "family": "dusk-branch-flare-l3",
+      "id": "20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81",
+      "method": "exhaustive-level3",
+      "normalisedL1": 4.25,
+      "parameters": {
+        "/relics/verdantBranch/kindleDamage": 3
+      },
+      "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8"
+    },
+    {
+      "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/a7ae935cedbb36911bd3007efc36787b63c0c82f346ef56c066e1da6db1295d5.json",
+      "contentSha256": "87a198a1b032d729c9fa5d7decaf9750b15c2fbbaa5225ede520237172cf630f",
+      "family": "dusk-branch-flare-l3",
+      "id": "a7ae935cedbb36911bd3007efc36787b63c0c82f346ef56c066e1da6db1295d5",
+      "method": "exhaustive-level3",
+      "normalisedL1": 4.5,
+      "parameters": {
+        "/relics/verdantBranch/kindleDamage": 4
+      },
+      "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8"
+    }
+  ],
+  "expressibilityFailure": "Existing draw and exhaust primitives moved the local mediator but did not produce held-out complementarity, package activation or non-regressed wins.",
+  "issue": 525,
+  "level": 3,
+  "primitive": "Optional verdantBranch.kindleDamage; positive values deal fixed non-attack damage to every living enemy after a Kindle/burn. Missing or zero is the exact legacy path.",
+  "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+  "schemaVersion": 1
+}

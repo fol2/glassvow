@@ -1,0 +1,47 @@
+{
+  "acceptanceOrReserveRows": 0,
+  "cumulativeWholeRunRows": 0,
+  "extensionUsed": false,
+  "initialWholeRunCeiling": 73728,
+  "issue": 525,
+  "newSeedMaximum": 23131,
+  "newSeedMinimum": 23000,
+  "phaseA": {
+    "ceiling": 2048,
+    "controlledOrQueryRows": 0,
+    "wholeRunRows": 0
+  },
+  "phaseC": {
+    "ceiling": 40000,
+    "controlledMicrodeckShortPanelRows": 39968,
+    "fullRunCeiling": 12288,
+    "fullRunRows": 0,
+    "remaining": 32
+  },
+  "phaseD": {
+    "fullRunRows": 0,
+    "partialOrShortRows": 0,
+    "reached": false
+  },
+  "phaseE": {
+    "jointFullRunRows": 0,
+    "reached": false,
+    "rewardFullRunRows": 0
+  },
+  "rowsByFidelity": {
+    "issue-524-stage-a-mediation-v1": 5760,
+    "issue-524-stage-b-controlled-v1": 256,
+    "issue-524-stage-b-microdeck-v1": 768,
+    "issue-524-stage-b-panel-v1": 256,
+    "issue-525-phase-c-level1-screen-v1": 8448,
+    "issue-525-phase-c-level1-validation-v1": 16896,
+    "issue-525-phase-c-level2-screen-v1": 2816,
+    "issue-525-phase-c-level2-validation-v1": 5632,
+    "issue-525-phase-c-level3-legacy-identity-v1": 16,
+    "issue-525-phase-c-level3-screen-v1": 528,
+    "issue-525-phase-c-level3-validation-v1": 2816,
+    "issue-525-phase-c-positive-control-v1": 2816
+  },
+  "schemaVersion": 1,
+  "stop": "Phase-C package minimum failed after the final authorised primitive family; later phases were not legal to enter."
+}

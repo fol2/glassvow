@@ -1,0 +1,1480 @@
+{
+  "candidates": [
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/cdc4a84f0a7948f6ec4c3b375a11ba5935ddf35ba5643fe41c895f2f5d8e4438.json",
+      "contentSha256": "1f1e0afd889042b78bd81881a68bd8c6ebdf90b087fac70234971064552624a2",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.625,
+          "extraTreesInteraction": -0.625,
+          "pairedBootstrapP05": -1.875,
+          "pairedBootstrapP95": 0.5,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.8409998711506232,
+          "scale": 5.30983388982179,
+          "standardisedDelta": -0.11770613035523347
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "cdc4a84f0a7948f6ec4c3b375a11ba5935ddf35ba5643fe41c895f2f5d8e4438",
+      "method": "sobol-level2",
+      "normalisedL1": 2.8333333333333335,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 1.25,
+            "pairedBootstrapP05": -0.4375,
+            "pairedBootstrapP95": 2.875,
+            "pairs": 16,
+            "scale": 4.175823272122517,
+            "standardisedDelta": 0.2993421700446248
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.4375,
+            "pairedBootstrapP05": -0.6875,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.8143008887997114,
+            "standardisedDelta": -0.5372706895173354
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 0,
+        "damage": 7,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": 0.18163603968939135
+    },
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/5d03658dbec445eb721865441f6c12759c9f95de4b8f5e311f6709799aa33556.json",
+      "contentSha256": "09a801a5d4a30fe617a5fb41e0fc23afd482803c15e16a20408455b957f35024",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 1.4375,
+          "extraTreesInteraction": 1.4375,
+          "pairedBootstrapP05": 0.5,
+          "pairedBootstrapP95": 2.4375,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 0.7097023579435691,
+          "scale": 5.496780840580694,
+          "standardisedDelta": 0.26151670253750536
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "5d03658dbec445eb721865441f6c12759c9f95de4b8f5e311f6709799aa33556",
+      "method": "sobol-level2",
+      "normalisedL1": 5.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 0.5625,
+            "pairedBootstrapP05": -0.625,
+            "pairedBootstrapP95": 1.8125,
+            "pairs": 16,
+            "scale": 4.730944507970897,
+            "standardisedDelta": 0.11889803379690377
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.3125,
+            "pairedBootstrapP05": -0.5,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 0.7997802432543579,
+            "standardisedDelta": -0.3907323325822818
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 1,
+        "damage": 11,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.263655065992918
+    },
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb.json",
+      "contentSha256": "bff4c736ab72c619650ff9ea1219226f134c9489d14a7af6accfaad0a14a715f",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 1.9375,
+          "extraTreesInteraction": 1.9375,
+          "pairedBootstrapP05": 0.8125,
+          "pairedBootstrapP95": 3.1875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 1.2298672851436687,
+          "scale": 5.53502254822643,
+          "standardisedDelta": 0.3500437411263712
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "method": "sobol-level2",
+      "normalisedL1": 3.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 1.6875,
+            "pairedBootstrapP05": 0.9375,
+            "pairedBootstrapP95": 2.5,
+            "pairs": 16,
+            "scale": 5.0326085122429305,
+            "standardisedDelta": 0.3353131871662149
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 0.0,
+            "pairedBootstrapP05": -0.125,
+            "pairedBootstrapP95": 0.125,
+            "pairs": 16,
+            "scale": 0.9921567416492215,
+            "standardisedDelta": 0.0
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 1,
+        "damage": 5,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": 0.48007021936222916
+    },
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/294b8dcfd56936103d07b4c6db48a184fc1ac728ebaee8c99803cb515335730d.json",
+      "contentSha256": "86bb76480220842e2aa99bf21a5c370a18dc203fa9152da7a3f165db96457690",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.5,
+          "extraTreesInteraction": -0.5,
+          "pairedBootstrapP05": -1.75,
+          "pairedBootstrapP95": 0.5625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.8549156036593201,
+          "scale": 5.2826366522788595,
+          "standardisedDelta": -0.09464970485606021
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "294b8dcfd56936103d07b4c6db48a184fc1ac728ebaee8c99803cb515335730d",
+      "method": "sobol-level2",
+      "normalisedL1": 4.166666666666666,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -1.6875,
+            "pairedBootstrapP95": 1.4375,
+            "pairs": 16,
+            "scale": 4.26788516129476,
+            "standardisedDelta": -0.029288510650103433
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.75,
+            "pairedBootstrapP05": -1.0,
+            "pairedBootstrapP95": -0.5,
+            "pairs": 16,
+            "scale": 0.9354143466934853,
+            "standardisedDelta": -0.8017837257372732
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 0,
+        "damage": 9,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -0.12393821550616364
+    },
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/59848c3eee46a945e1ab968686f61e3b93f407bd79c5ea4ed71217c8ebb07fb7.json",
+      "contentSha256": "b35299716cee2803a47c373e77f928ca80aaa53995ee0edb0c6dbd8d53bc3e55",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.875,
+          "extraTreesInteraction": -0.875,
+          "pairedBootstrapP05": -2.1875,
+          "pairedBootstrapP95": 0.375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -1.0244813812652984,
+          "scale": 5.221556131796344,
+          "standardisedDelta": -0.16757456549624
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "59848c3eee46a945e1ab968686f61e3b93f407bd79c5ea4ed71217c8ebb07fb7",
+      "method": "sobol-level2",
+      "normalisedL1": 3.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 1.5,
+            "pairedBootstrapP05": -0.3125,
+            "pairedBootstrapP95": 3.1875,
+            "pairs": 16,
+            "scale": 4.09839907768875,
+            "standardisedDelta": 0.3659965687982512
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.375,
+            "pairedBootstrapP05": -0.625,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 0.7680128579652817,
+            "standardisedDelta": -0.48827307526269564
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 0,
+        "damage": 5,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.1984220033020112
+    },
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/b6b2aa7dcb1a4f73ddaf3d7a8ed26c52ef673de5715d9d2b85fb8acfb9a91cdd.json",
+      "contentSha256": "15fd13d10c630bd176ddc4f6e09072c768987279e3a2605b8190299978f0cb9e",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 1.4375,
+          "extraTreesInteraction": 1.4375,
+          "pairedBootstrapP05": 0.5,
+          "pairedBootstrapP95": 2.4375,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 0.7361164798350751,
+          "scale": 5.455765836193394,
+          "standardisedDelta": 0.2634827159303037
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "b6b2aa7dcb1a4f73ddaf3d7a8ed26c52ef673de5715d9d2b85fb8acfb9a91cdd",
+      "method": "sobol-level2",
+      "normalisedL1": 4.166666666666666,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 0.5625,
+            "pairedBootstrapP05": -0.625,
+            "pairedBootstrapP95": 1.8125,
+            "pairs": 16,
+            "scale": 4.730944507970897,
+            "standardisedDelta": 0.11889803379690377
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.3125,
+            "pairedBootstrapP05": -0.5,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 0.7997802432543579,
+            "standardisedDelta": -0.3907323325822818
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 1,
+        "damage": 9,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": 0.263655065992918
+    },
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/f7401eab7811b06900081bfc86ecdc6beb449dea32847749ca725c87694c109b.json",
+      "contentSha256": "f17a7bae43b05ad0145520268ffd0bfb8b216480d76e7240c9f340142c8b2a79",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 1.875,
+          "extraTreesInteraction": 1.875,
+          "pairedBootstrapP05": 0.8125,
+          "pairedBootstrapP95": 3.125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 1.1575827857234915,
+          "scale": 5.66513459681233,
+          "standardisedDelta": 0.33097183623051585
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "f7401eab7811b06900081bfc86ecdc6beb449dea32847749ca725c87694c109b",
+      "method": "sobol-level2",
+      "normalisedL1": 4.833333333333334,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 1.375,
+            "pairedBootstrapP05": 0.375,
+            "pairedBootstrapP95": 2.375,
+            "pairs": 16,
+            "scale": 4.821420304225716,
+            "standardisedDelta": 0.2851856741871034
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.8816709987291178,
+            "standardisedDelta": -0.14177624100166716
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 1,
+        "damage": 7,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.4299427063831176
+    },
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/e3319f308a920cfe7dba587c02564cc0c3b8982bed0b58de5ab742bbe1f6c5c3.json",
+      "contentSha256": "603b94ff620c8cbf3d9ec8c0200c209f1f5179995f2dd6a2faaf2878e3f8542d",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.3125,
+          "extraTreesInteraction": -0.3125,
+          "pairedBootstrapP05": -1.5,
+          "pairedBootstrapP95": 0.6875,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.7225872954516123,
+          "scale": 5.258340658836683,
+          "standardisedDelta": -0.05942939422816612
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.25,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-cinder-cut-l2",
+      "id": "e3319f308a920cfe7dba587c02564cc0c3b8982bed0b58de5ab742bbe1f6c5c3",
+      "method": "sobol-level2",
+      "normalisedL1": 3.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -1.6875,
+            "pairedBootstrapP95": 1.4375,
+            "pairs": 16,
+            "scale": 4.26788516129476,
+            "standardisedDelta": -0.029288510650103433
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.75,
+            "pairedBootstrapP05": -1.0,
+            "pairedBootstrapP95": -0.5,
+            "pairs": 16,
+            "scale": 0.9354143466934853,
+            "standardisedDelta": -0.8017837257372732
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "cost": 0,
+        "damage": 11,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": -0.08871790487826955
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/4b3371a6cc40958859bd6493f2f88135c85fe987e796ccef1f314ed7bdc2064d.json",
+      "contentSha256": "da6a3992b6b25056b6d863aa5628e0ed9578f835c14ee32e2155f83cfac62709",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 25.875,
+          "extraTreesInteraction": 25.875,
+          "pairedBootstrapP05": 18.5,
+          "pairedBootstrapP95": 33.56562500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 22.596830305373025,
+          "scale": 22.431645301615752,
+          "standardisedDelta": 1.1535043306937554
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "4b3371a6cc40958859bd6493f2f88135c85fe987e796ccef1f314ed7bdc2064d",
+      "method": "sobol-level2",
+      "normalisedL1": 6.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 25.5625,
+            "pairedBootstrapP05": 19.0,
+            "pairedBootstrapP95": 32.625,
+            "pairs": 16,
+            "scale": 17.641586831617502,
+            "standardisedDelta": 1.448990969122263
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.375,
+            "pairedBootstrapP05": -0.5625,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.9662265521087692,
+            "standardisedDelta": -0.38810773641189056
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 7,
+        "damage": 10,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": 2.6024952998160185
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/f91d3d81793b89b2db9502806c10c83ad0eef68af1aa7080cf29e03307145bf1.json",
+      "contentSha256": "7475a843633a9ccc019f5fd360e7225c5661bf6df1c0c0ba99a7ce8176f711cb",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 35.25,
+          "extraTreesInteraction": 35.25,
+          "pairedBootstrapP05": 26.0,
+          "pairedBootstrapP95": 44.875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 30.813941502383727,
+          "scale": 29.32041137906322,
+          "standardisedDelta": 1.202234155049097
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "f91d3d81793b89b2db9502806c10c83ad0eef68af1aa7080cf29e03307145bf1",
+      "method": "sobol-level2",
+      "normalisedL1": 7.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 33.625,
+            "pairedBootstrapP05": 26.1875,
+            "pairedBootstrapP95": 41.75,
+            "pairs": 16,
+            "scale": 21.821362812620112,
+            "standardisedDelta": 1.540921173839491
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.1875,
+            "pairedBootstrapP05": -0.375,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0150238605569821,
+            "standardisedDelta": -0.18472472154212377
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 9,
+        "damage": 8,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 2.743155328888588
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/08971298e5bc969eefd2eae72066a50a25f5be4f2037865dd6656d5f2b680c74.json",
+      "contentSha256": "98fbf29097d7de0e5243720ed452e59e564eae2e291fda9b88deeae17e24f91a",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 25.9375,
+          "extraTreesInteraction": 25.9375,
+          "pairedBootstrapP05": 17.246875000000003,
+          "pairedBootstrapP95": 35.125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 23.371730447107325,
+          "scale": 26.453189604173918,
+          "standardisedDelta": 0.9805055794068572
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "08971298e5bc969eefd2eae72066a50a25f5be4f2037865dd6656d5f2b680c74",
+      "method": "sobol-level2",
+      "normalisedL1": 7.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 32.375,
+            "pairedBootstrapP05": 24.809375000000003,
+            "pairedBootstrapP95": 40.25,
+            "pairs": 16,
+            "scale": 21.465087933665682,
+            "standardisedDelta": 1.5082630968039639
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.375,
+            "pairedBootstrapP05": -0.5625,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.9662265521087692,
+            "standardisedDelta": -0.38810773641189056
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 11,
+        "damage": 12,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": 2.488768676210821
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/cecf523671c62e208e6f0dad6b268887370e804764a17b0196923f99c8099885.json",
+      "contentSha256": "86e9e72b6d79d3c401ca26f91045aec41527ac82d4b3a475237ff99798d216c0",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 20.125,
+          "extraTreesInteraction": 20.125,
+          "pairedBootstrapP05": 15.4375,
+          "pairedBootstrapP95": 25.0,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 17.753382296095868,
+          "scale": 18.4815945182633,
+          "standardisedDelta": 1.0889211956312916
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "cecf523671c62e208e6f0dad6b268887370e804764a17b0196923f99c8099885",
+      "method": "sobol-level2",
+      "normalisedL1": 6.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 24.8125,
+            "pairedBootstrapP05": 19.1875,
+            "pairedBootstrapP95": 31.0,
+            "pairs": 16,
+            "scale": 16.377355508063566,
+            "standardisedDelta": 1.5150492390412664
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 0.0625,
+            "pairedBootstrapP05": -0.1875,
+            "pairedBootstrapP95": 0.3125,
+            "pairs": 16,
+            "scale": 1.0340870067358936,
+            "standardisedDelta": 0.06043978852154994
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 5,
+        "damage": 6,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 2.541470434672558
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/01bc8a7cf9757d15da24359a49ad405ce185748c18e37ab9cf07f86477fd1157.json",
+      "contentSha256": "0b1ecac560b909f28c9e280d34cd719ad53247e87715808f417ae2f4fa504363",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 12.125,
+          "extraTreesInteraction": 12.125,
+          "pairedBootstrapP05": 7.625,
+          "pairedBootstrapP95": 16.75,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 10.872954516170598,
+          "scale": 13.897925879425317,
+          "standardisedDelta": 0.8724323402782007
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "01bc8a7cf9757d15da24359a49ad405ce185748c18e37ab9cf07f86477fd1157",
+      "method": "sobol-level2",
+      "normalisedL1": 7.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 18.9375,
+            "pairedBootstrapP05": 13.1875,
+            "pairedBootstrapP95": 25.0625,
+            "pairs": 16,
+            "scale": 14.55696649159776,
+            "standardisedDelta": 1.300923513901792
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.25,
+            "pairedBootstrapP05": -0.5,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.9682458365518543,
+            "standardisedDelta": -0.2581988897471611
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 5,
+        "damage": 12,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 2.173355854179993
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json",
+      "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 41.5,
+          "extraTreesInteraction": 41.5,
+          "pairedBootstrapP05": 30.1875,
+          "pairedBootstrapP95": 53.1875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 36.73225099858266,
+          "scale": 36.32383375192519,
+          "standardisedDelta": 1.142500548907519
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+      "method": "sobol-level2",
+      "normalisedL1": 6.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 43.5,
+            "pairedBootstrapP05": 34.75,
+            "pairedBootstrapP95": 52.5625,
+            "pairs": 16,
+            "scale": 26.877543484291863,
+            "standardisedDelta": 1.6184514788497266
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 0.0,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.25,
+            "pairs": 16,
+            "scale": 0.9921567416492215,
+            "standardisedDelta": 0.0
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 11,
+        "damage": 6,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": 2.760952027757246
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/ea67b9f7fed001f1b1e41de92a4e6d3f163a13a21458354d933b3a2ecc8ca0af.json",
+      "contentSha256": "796001846e62e4b7ab967eeba5aa2fd70bf2161b1c7ae49f89422d17a8d0433f",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 32.125,
+          "extraTreesInteraction": 32.125,
+          "pairedBootstrapP05": 22.5625,
+          "pairedBootstrapP95": 42.3125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 28.108362324442716,
+          "scale": 27.707103669456323,
+          "standardisedDelta": 1.1594499512922336
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "ea67b9f7fed001f1b1e41de92a4e6d3f163a13a21458354d933b3a2ecc8ca0af",
+      "method": "sobol-level2",
+      "normalisedL1": 7.333333333333333,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 32.375,
+            "pairedBootstrapP05": 24.0625,
+            "pairedBootstrapP95": 41.37812500000001,
+            "pairs": 16,
+            "scale": 22.27947485916129,
+            "standardisedDelta": 1.4531311983185027
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.375,
+            "pairedBootstrapP05": -0.5625,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.9662265521087692,
+            "standardisedDelta": -0.38810773641189056
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 9,
+        "damage": 10,
+        "rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 2.6125811496107363
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/a78a36971b1ba1ab2af4975823322ae2767caff303286ebf4e287cdfbc028712.json",
+      "contentSha256": "b1a4eb6c47405adcf51f0688367903ff1dd1c4ac5f4096420310aa72e5fec833",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.059375,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "mirrorEdge->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 27.5,
+          "extraTreesInteraction": 27.5,
+          "pairedBootstrapP05": 20.184375,
+          "pairedBootstrapP95": 35.06562500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 24.03775286689859,
+          "scale": 23.35592052216097,
+          "standardisedDelta": 1.1774316483868392
+        }
+      },
+      "family": "ward-mirror-edge-l2",
+      "id": "a78a36971b1ba1ab2af4975823322ae2767caff303286ebf4e287cdfbc028712",
+      "method": "sobol-level2",
+      "normalisedL1": 5.666666666666667,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 26.625,
+            "pairedBootstrapP05": 20.4375,
+            "pairedBootstrapP95": 33.4375,
+            "pairs": 16,
+            "scale": 17.805810147252497,
+            "standardisedDelta": 1.4952984323551455
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.1875,
+            "pairedBootstrapP05": -0.375,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0150238605569821,
+            "standardisedDelta": -0.18472472154212377
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "block": 7,
+        "damage": 8,
+        "rarity": "common"
+      },
+      "rows": 176,
+      "score": 2.6727300807419847
+    }
+  ],
+  "decision": "VALIDATE_ONE_LEVEL2_RECOMMENDATION_PER_FAILED_FAMILY",
+  "issue": 525,
+  "recommendations": [
+    {
+      "baseCandidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 5,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb.json",
+      "contentSha256": "bff4c736ab72c619650ff9ea1219226f134c9489d14a7af6accfaad0a14a715f",
+      "family": "dusk-cinder-cut-l2",
+      "id": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "normalisedL1": 3.5,
+      "parameters": {
+        "cost": 1,
+        "damage": 5,
+        "rarity": "common"
+      },
+      "score": 0.48007021936222916
+    },
+    {
+      "baseCandidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 7,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c.json",
+      "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+      "family": "ward-mirror-edge-l2",
+      "id": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+      "normalisedL1": 6.0,
+      "parameters": {
+        "block": 11,
+        "damage": 6,
+        "rarity": "common"
+      },
+      "score": 2.760952027757246
+    }
+  ],
+  "schemaVersion": 1,
+  "screenRows": 2816
+}

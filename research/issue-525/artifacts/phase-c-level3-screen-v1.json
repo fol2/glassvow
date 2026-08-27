@@ -1,0 +1,296 @@
+{
+  "candidates": [
+    {
+      "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/599878605416b14a6264704943f5ebf599fe897b78a86ab8819cfc7a53d88d45.json",
+      "contentSha256": "14041579a6bffe8685d7d80832df0be5e4bde1f294032e0a62d9a04619782b74",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 1.75,
+          "extraTreesInteraction": 1.75,
+          "pairedBootstrapP05": 0.125,
+          "pairedBootstrapP95": 3.375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.9046514624403867,
+          "scale": 18.814031291498907,
+          "standardisedDelta": 0.09301568456467567
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.4375,
+          "extraTreesInteraction": 0.4375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 2.625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -1.8309496198943254,
+          "scale": 18.28890731726133,
+          "standardisedDelta": 0.023921604085503857
+        }
+      },
+      "family": "dusk-branch-flare-l3",
+      "id": "599878605416b14a6264704943f5ebf599fe897b78a86ab8819cfc7a53d88d45",
+      "method": "exhaustive-level3",
+      "normalisedL1": 4.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": -1.6875,
+            "pairedBootstrapP05": -3.8125,
+            "pairedBootstrapP95": 0.375,
+            "pairs": 16,
+            "scale": 18.70972236398766,
+            "standardisedDelta": -0.09019374885263333
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.4375,
+            "pairedBootstrapP05": -0.6875,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.7749747979773278,
+            "standardisedDelta": -0.5645344869818583
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/relics/verdantBranch/kindleDamage": 2
+      },
+      "rows": 176,
+      "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+      "score": -0.06627214476712948
+    },
+    {
+      "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81.json",
+      "contentSha256": "f60f89bb63c84d49d45af99e6c4a72e47a81ee6b2cd19575b592348c55b51782",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 1.8125,
+          "extraTreesInteraction": 1.8125,
+          "pairedBootstrapP05": 0.3125,
+          "pairedBootstrapP95": 3.3125,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.9168921530730394,
+          "scale": 19.629471773569836,
+          "standardisedDelta": 0.09233564819815714
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 2.25,
+          "extraTreesInteraction": 2.25,
+          "pairedBootstrapP05": -0.375,
+          "pairedBootstrapP95": 5.3125,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.41090065713180024,
+          "scale": 19.425915961351734,
+          "standardisedDelta": 0.11582465426476785
+        }
+      },
+      "family": "dusk-branch-flare-l3",
+      "id": "20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81",
+      "method": "exhaustive-level3",
+      "normalisedL1": 4.25,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": -2.375,
+            "pairedBootstrapP05": -4.75,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 19.528824849437306,
+            "standardisedDelta": -0.12161510066840668
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.625,
+            "pairedBootstrapP05": -0.9375,
+            "pairedBootstrapP95": -0.3125,
+            "pairs": 16,
+            "scale": 0.8267972847076845,
+            "standardisedDelta": -0.7559289460184545
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/relics/verdantBranch/kindleDamage": 3
+      },
+      "rows": 176,
+      "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+      "score": -0.029279452470249545
+    },
+    {
+      "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+      "changedFields": 6,
+      "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/a7ae935cedbb36911bd3007efc36787b63c0c82f346ef56c066e1da6db1295d5.json",
+      "contentSha256": "87a198a1b032d729c9fa5d7decaf9750b15c2fbbaa5225ede520237172cf630f",
+      "edges": {
+        "cinderCut->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 1.9375,
+          "extraTreesInteraction": 1.9375,
+          "pairedBootstrapP05": -0.1875,
+          "pairedBootstrapP95": 4.0,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.7089292616930608,
+          "scale": 19.500594692454253,
+          "standardisedDelta": 0.09935594429587907
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -1.0,
+          "extraTreesInteraction": -1.0,
+          "pairedBootstrapP05": -3.3125,
+          "pairedBootstrapP95": 1.5,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -2.965210668728242,
+          "scale": 19.234343267642387,
+          "standardisedDelta": -0.051990337600051215
+        }
+      },
+      "family": "dusk-branch-flare-l3",
+      "id": "a7ae935cedbb36911bd3007efc36787b63c0c82f346ef56c066e1da6db1295d5",
+      "method": "exhaustive-level3",
+      "normalisedL1": 4.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": -1.25,
+            "pairedBootstrapP05": -2.9375,
+            "pairedBootstrapP95": 0.5625,
+            "pairs": 16,
+            "scale": 18.802322828576262,
+            "standardisedDelta": -0.06648114764311021
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.75,
+            "pairedBootstrapP05": -1.0,
+            "pairedBootstrapP95": -0.5,
+            "pairs": 16,
+            "scale": 0.8660254037844386,
+            "standardisedDelta": -0.8660254037844387
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/relics/verdantBranch/kindleDamage": 4
+      },
+      "rows": 176,
+      "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+      "score": -0.11847148524316142
+    }
+  ],
+  "decision": "VALIDATE_MINIMAL_PRIMITIVE_RECOMMENDATION",
+  "issue": 525,
+  "legacyIdentity": {
+    "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+    "exactMatches": 16,
+    "priorFidelity": "issue-525-phase-c-level2-validation-v1",
+    "rows": 16,
+    "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8"
+  },
+  "recommendation": {
+    "baseCandidateId": "b9a93bbb02dee222c75615f1226e5a81c9c5a43def8aa2e8c7eae51a86a6e3fb",
+    "changedFields": 6,
+    "contentPath": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis/candidates/20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81.json",
+    "contentSha256": "f60f89bb63c84d49d45af99e6c4a72e47a81ee6b2cd19575b592348c55b51782",
+    "family": "dusk-branch-flare-l3",
+    "id": "20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81",
+    "normalisedL1": 4.25,
+    "parameters": {
+      "/relics/verdantBranch/kindleDamage": 3
+    },
+    "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+    "score": -0.029279452470249545
+  },
+  "schemaVersion": 1,
+  "screenRows": 528
+}

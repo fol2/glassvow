@@ -1,0 +1,167 @@
+{
+  "antiGenericUtility": {
+    "activationSetJaccardMaximum": 0.5,
+    "broadRandomBuildWinDeltaMaximum": 0.03,
+    "unrelatedPackageStandardisedInteractionMaximum": 0.1
+  },
+  "complexityTieBreak": "fewest changed fields, then smallest normalised L1 distance, then candidate SHA-256",
+  "families": [
+    {
+      "aspect": "ashwarden",
+      "constraints": [
+        "upgrade values are no weaker than base",
+        "finite valid catalogue"
+      ],
+      "id": "ash-poison-catalyst-l1",
+      "level": 1,
+      "parameters": {
+        "/cards/catalyst/cost": [
+          0,
+          1
+        ],
+        "/cards/catalyst/effects/0/n": [
+          2,
+          3
+        ],
+        "/cards/catalyst/rarity": [
+          "uncommon",
+          "rare"
+        ],
+        "/cards/catalyst/up/effects/0/n": [
+          3,
+          4
+        ],
+        "/cards/toxicMist/effects/0/n": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "/cards/toxicMist/rarity": [
+          "common",
+          "uncommon"
+        ],
+        "/cards/toxicMist/up/effects/0/n": [
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      "priorEdges": [
+        "ash-poison-catalyst|venomStrike->catalyst|ashwarden"
+      ]
+    },
+    {
+      "aspect": "duskblade",
+      "constraints": [
+        "upgrade values are no weaker than base",
+        "Fortify remains deterministic"
+      ],
+      "id": "ward-double-l1",
+      "level": 1,
+      "parameters": {
+        "/cards/brace/effects/0/n": [
+          8,
+          10,
+          12
+        ],
+        "/cards/brace/up/effects/0/n": [
+          11,
+          14,
+          17
+        ],
+        "/cards/bulwark/cost": [
+          1,
+          2
+        ],
+        "/cards/bulwark/effects/0/n": [
+          13,
+          16,
+          20
+        ],
+        "/cards/bulwark/up/effects/0/n": [
+          18,
+          22,
+          26
+        ],
+        "/cards/fortify/cost": [
+          1,
+          2
+        ],
+        "/cards/fortify/rarity": [
+          "common",
+          "uncommon"
+        ]
+      },
+      "priorEdges": [
+        "ward-double|brace->fortify|duskblade",
+        "ward-double|bulwark->fortify|duskblade"
+      ]
+    },
+    {
+      "aspect": "duskblade",
+      "constraints": [
+        "upgrade draw is no weaker than base",
+        "outer RNG contract unchanged"
+      ],
+      "id": "dusk-kindle-draw-l1",
+      "level": 1,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": [
+          1,
+          2,
+          3
+        ],
+        "/cards/firstSpark/up/effects/0/n": [
+          2,
+          3,
+          4
+        ],
+        "/cards/offering/cost": [
+          0,
+          1
+        ],
+        "/cards/offering/effects/0/draw": [
+          3,
+          4,
+          5
+        ],
+        "/cards/offering/rarity": [
+          "uncommon",
+          "rare"
+        ],
+        "/cards/offering/up/effects/0/draw": [
+          4,
+          5,
+          6
+        ],
+        "/relics/verdantBranch/rarity": [
+          "uncommon",
+          "rare"
+        ]
+      },
+      "priorEdges": [
+        "kindle-draw|offering->verdantBranch|duskblade"
+      ]
+    },
+    {
+      "aspect": "ashwarden",
+      "frozenAdmission": "issue-524 held-out package admission; must reproduce before detector work",
+      "id": "hand-size-payoff-positive-control",
+      "level": 0,
+      "parameters": {}
+    }
+  ],
+  "generation": "deterministic Sobol/QMC over finite conditional families",
+  "issue": 525,
+  "level2": {
+    "maximumNewDefinitionsPerFamily": 1,
+    "rule": "At most one smallest new card or relic per failed family, using existing effects only, after level-1 held-out failure."
+  },
+  "level3": {
+    "identityRule": "A new patch hash creates a disjoint simulator identity namespace; no earlier row is treated as equivalent.",
+    "rule": "At most one minimal deterministic effect primitive after an explicit level-1 and level-2 expressibility failure."
+  },
+  "schemaVersion": 1
+}

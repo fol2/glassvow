@@ -1,0 +1,485 @@
+{
+  "edgeCount": 9,
+  "edges": [
+    {
+      "aspect": "ashwarden",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "catalyst",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": "poolWave3",
+        "source": "base-pool",
+        "tier": "rare"
+      },
+      "consumerConsumes": [
+        "enemy:poison"
+      ],
+      "identity": "ash-poison-catalyst|venomStrike->catalyst|ashwarden",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 1.6666666666666667,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.7800239190689393
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 12.333333333333334,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 1.3183850518769442
+        }
+      },
+      "package": "ash-poison-catalyst",
+      "producer": "venomStrike",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "common"
+      },
+      "producerProduces": [
+        "attack-play",
+        "damage",
+        "enemy:poison",
+        "facet-chip",
+        "shatter"
+      ],
+      "resourceOrTrigger": "poison",
+      "response": "poisonApplied"
+    },
+    {
+      "aspect": "ashwarden",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "phantomBlades",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "rare"
+      },
+      "consumerConsumes": [
+        "enemy:vulnerable",
+        "hand-size",
+        "player:str",
+        "player:venomous"
+      ],
+      "identity": "hand-size-payoff|preparation->phantomBlades|ashwarden",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 6.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.7642295911298777
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 3.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.4706713355146694
+        }
+      },
+      "package": "hand-size-payoff",
+      "producer": "preparation",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "common"
+      },
+      "producerProduces": [
+        "draw",
+        "embers",
+        "exhaust",
+        "hand-size"
+      ],
+      "resourceOrTrigger": "hand",
+      "response": "directDamage"
+    },
+    {
+      "aspect": "ashwarden",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "phantomBlades",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "rare"
+      },
+      "consumerConsumes": [
+        "enemy:vulnerable",
+        "hand-size",
+        "player:str",
+        "player:venomous"
+      ],
+      "identity": "hand-size-payoff|surge->phantomBlades|ashwarden",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 2.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.3368607684266076
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 1.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.3320903209244786
+        }
+      },
+      "package": "hand-size-payoff",
+      "producer": "surge",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "producerProduces": [
+        "draw",
+        "embers",
+        "energy",
+        "exhaust",
+        "hand-size"
+      ],
+      "resourceOrTrigger": "hand",
+      "response": "directDamage"
+    },
+    {
+      "aspect": "ashwarden",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "sunBlossom",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "rare"
+      },
+      "consumerConsumes": [
+        "healing"
+      ],
+      "identity": "healing-amplifier|leechBlade->sunBlossom|ashwarden",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 0.6666666666666666,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.549442255794756
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 0.6666666666666666,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.46977617561176277
+        }
+      },
+      "package": "healing-amplifier",
+      "producer": "leechBlade",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "producerProduces": [
+        "attack-play",
+        "damage",
+        "facet-chip",
+        "healing",
+        "shatter"
+      ],
+      "resourceOrTrigger": "sun-leech",
+      "response": "heal"
+    },
+    {
+      "aspect": "duskblade",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "verdantBranch",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": "poolFull",
+        "source": "base-pool",
+        "tier": "rare"
+      },
+      "consumerConsumes": [
+        "exhaust"
+      ],
+      "identity": "kindle-draw|offering->verdantBranch|duskblade",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 1.6666666666666667,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.7179581586177382
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 1.3333333333333333,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.4948716593053935
+        }
+      },
+      "package": "kindle-draw",
+      "producer": "offering",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": "poolWave3",
+        "source": "base-pool",
+        "tier": "rare"
+      },
+      "producerProduces": [
+        "draw",
+        "embers",
+        "exhaust"
+      ],
+      "resourceOrTrigger": "branch",
+      "response": "draw"
+    },
+    {
+      "aspect": "ashwarden",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "fortify",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "consumerConsumes": [
+        "block",
+        "energy",
+        "energy-discount",
+        "player:dex"
+      ],
+      "identity": "ward-double|brace->fortify|ashwarden",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 12.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 1.0612215861544159
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 17.666666666666668,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.985816812641185
+        }
+      },
+      "package": "ward-double",
+      "producer": "brace",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "common"
+      },
+      "producerProduces": [
+        "block"
+      ],
+      "resourceOrTrigger": "block",
+      "response": "blockGain"
+    },
+    {
+      "aspect": "duskblade",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "fortify",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "consumerConsumes": [
+        "block",
+        "energy",
+        "energy-discount",
+        "player:dex"
+      ],
+      "identity": "ward-double|brace->fortify|duskblade",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 26.333333333333332,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 1.7506182962730892
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 30.666666666666668,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 1.2197389672002865
+        }
+      },
+      "package": "ward-double",
+      "producer": "brace",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "common"
+      },
+      "producerProduces": [
+        "block"
+      ],
+      "resourceOrTrigger": "block",
+      "response": "blockGain"
+    },
+    {
+      "aspect": "ashwarden",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "fortify",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "consumerConsumes": [
+        "block",
+        "energy",
+        "energy-discount",
+        "player:dex"
+      ],
+      "identity": "ward-double|bulwark->fortify|ashwarden",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 1.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 0.5026627966530354
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 13.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 1.1811797395902797
+        }
+      },
+      "package": "ward-double",
+      "producer": "bulwark",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "producerProduces": [
+        "block"
+      ],
+      "resourceOrTrigger": "block",
+      "response": "blockGain"
+    },
+    {
+      "aspect": "duskblade",
+      "claimBoundary": "local context-indexed interaction only; not a route or global DAG",
+      "consumer": "fortify",
+      "consumerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "consumerConsumes": [
+        "block",
+        "energy",
+        "energy-discount",
+        "player:dex"
+      ],
+      "identity": "ward-double|bulwark->fortify|duskblade",
+      "legalContexts": [
+        "controlled legal state",
+        "matched micro-deck",
+        "paired short combat panel"
+      ],
+      "measuredBoundary": {
+        "discovery": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 22.666666666666668,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 1.5810477913577083
+        },
+        "heldOut": {
+          "extraTreesSign": 1.0,
+          "pairedBootstrapP05": 20.0,
+          "pairs": 3,
+          "ridgeSign": 1.0,
+          "standardisedDelta": 1.239689948669089
+        }
+      },
+      "package": "ward-double",
+      "producer": "bulwark",
+      "producerAcquisition": {
+        "deed": null,
+        "reveal": null,
+        "source": "base-pool",
+        "tier": "uncommon"
+      },
+      "producerProduces": [
+        "block"
+      ],
+      "resourceOrTrigger": "block",
+      "response": "blockGain"
+    }
+  ],
+  "issue": 525,
+  "newSimulatorRows": 0,
+  "schemaVersion": 1,
+  "sourceIssue": 524
+}

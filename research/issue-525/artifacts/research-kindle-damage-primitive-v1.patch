@@ -1,0 +1,15 @@
+diff --git a/domain/rules/combat.gd b/domain/rules/combat.gd
+index 58c9b8c..1b7ebc4 100644
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -855,6 +855,10 @@ func exhaust_card(run: RunState, cb: CombatState, inst: CardInst) -> void:
+ 	gain_embers(run, cb, 1)  # everything burned feeds the lantern
+ 	if run.has_relic("verdantBranch"):
+ 		draw_cards(run, cb, 1)
++		var kindle_damage: int = _ji(content.relic(&"verdantBranch").get("kindleDamage", 0))
++		if kindle_damage > 0:
++			for enemy: EnemyCombatant in cb.living_enemies():
++				hit_enemy(run, cb, enemy, kindle_damage, false)
+ 		_proc(cb, "verdantBranch")
+ 
+ 

@@ -1,0 +1,190 @@
+{
+  "admittedAtProbePanelGate": true,
+  "aspect": "ashwarden",
+  "candidateId": "e3337db509c63c851237ffcd4c91b4625365494af50ac22c9a58477760d2cddc",
+  "controlled": {
+    "preparation->phantomBlades|discovery": {
+      "delta": 12.0,
+      "pairedBootstrapP05": 12.0,
+      "pairedBootstrapP95": 12.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 6.0,
+      "standardisedDelta": 2.0
+    },
+    "preparation->phantomBlades|validation": {
+      "delta": 12.0,
+      "pairedBootstrapP05": 12.0,
+      "pairedBootstrapP95": 12.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 6.0,
+      "standardisedDelta": 2.0
+    },
+    "surge->phantomBlades|discovery": {
+      "delta": 12.0,
+      "pairedBootstrapP05": 12.0,
+      "pairedBootstrapP95": 12.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 6.0,
+      "standardisedDelta": 2.0
+    },
+    "surge->phantomBlades|validation": {
+      "delta": 12.0,
+      "pairedBootstrapP05": 12.0,
+      "pairedBootstrapP95": 12.0,
+      "pairs": 32,
+      "pass": true,
+      "scale": 6.0,
+      "standardisedDelta": 2.0
+    }
+  },
+  "edges": {
+    "preparation->phantomBlades|discovery": {
+      "controlledProbePass": true,
+      "delta": 7.7578125,
+      "extraTreesInteraction": 7.7578125,
+      "pairedBootstrapP05": 6.75,
+      "pairedBootstrapP95": 8.7890625,
+      "pairs": 128,
+      "pass": true,
+      "ridgeInteractionCoefficient": 7.172133354083289,
+      "scale": 14.788850858355877,
+      "standardisedDelta": 0.5245716908164466
+    },
+    "preparation->phantomBlades|validation": {
+      "controlledProbePass": true,
+      "delta": 9.6640625,
+      "extraTreesInteraction": 9.6640625,
+      "pairedBootstrapP05": 8.6796875,
+      "pairedBootstrapP95": 10.641015625000001,
+      "pairs": 128,
+      "pass": true,
+      "ridgeInteractionCoefficient": 8.988318093746377,
+      "scale": 14.937481485139871,
+      "standardisedDelta": 0.6469673291052456
+    },
+    "surge->phantomBlades|discovery": {
+      "controlledProbePass": true,
+      "delta": 4.59375,
+      "extraTreesInteraction": 4.59375,
+      "pairedBootstrapP05": 3.5859375,
+      "pairedBootstrapP95": 5.6015625,
+      "pairs": 128,
+      "pass": true,
+      "ridgeInteractionCoefficient": 4.0811673783585745,
+      "scale": 14.723695738044965,
+      "standardisedDelta": 0.311997074765005
+    },
+    "surge->phantomBlades|validation": {
+      "controlledProbePass": true,
+      "delta": 5.1484375,
+      "extraTreesInteraction": 5.1484375,
+      "pairedBootstrapP05": 4.203125,
+      "pairedBootstrapP95": 6.1484375,
+      "pairs": 128,
+      "pass": true,
+      "ridgeInteractionCoefficient": 4.591042350369515,
+      "scale": 15.025983431045981,
+      "standardisedDelta": 0.3426356433591255
+    }
+  },
+  "family": "hand-size-payoff-positive-control",
+  "package": "hand-size-payoff",
+  "panels": {
+    "discovery": {
+      "activation": {
+        "delta": 15.78125,
+        "pairedBootstrapP05": 14.53125,
+        "pairedBootstrapP95": 17.0390625,
+        "pairs": 128,
+        "scale": 10.531006581014704,
+        "standardisedDelta": 1.4985509579350593
+      },
+      "bothEdgesPass": true,
+      "error": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "packagePass": true,
+      "panelPass": true,
+      "stall": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "turns": {
+        "delta": -0.8125,
+        "pairedBootstrapP05": -0.9140625,
+        "pairedBootstrapP95": -0.7109375,
+        "pairs": 128,
+        "scale": 0.8737435175009884,
+        "standardisedDelta": -0.9299067560739652
+      },
+      "win": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      }
+    },
+    "validation": {
+      "activation": {
+        "delta": 15.8125,
+        "pairedBootstrapP05": 14.663671874999999,
+        "pairedBootstrapP95": 16.921875,
+        "pairs": 128,
+        "scale": 10.244365352933045,
+        "standardisedDelta": 1.5435314395022774
+      },
+      "bothEdgesPass": true,
+      "error": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "packagePass": true,
+      "panelPass": true,
+      "stall": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      },
+      "turns": {
+        "delta": -0.9296875,
+        "pairedBootstrapP05": -1.03125,
+        "pairedBootstrapP95": -0.8203125,
+        "pairs": 128,
+        "scale": 0.9240490123085666,
+        "standardisedDelta": -1.0061019357375283
+      },
+      "win": {
+        "delta": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 128,
+        "scale": 1.0,
+        "standardisedDelta": 0.0
+      }
+    }
+  },
+  "rows": 2816,
+  "score": 1.8105480327000643,
+  "strict": true
+}

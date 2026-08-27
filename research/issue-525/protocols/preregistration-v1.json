@@ -1,0 +1,522 @@
+{
+  "architecture": {
+    "forbidden": [
+      "subagents",
+      "second synthesis session",
+      "M4 or cloud compute",
+      "human labels or calibration",
+      "acceptance seeds 3000-5199",
+      "reserve seeds 5200-5399",
+      "research or product pull requests",
+      "GitHub Actions",
+      "product-wide CI",
+      "child issues",
+      "LLM calls inside candidate, interaction, policy, seed-block, batch or generation loops"
+    ],
+    "host": "Apple M1 Max 64 GB arm64",
+    "owner": "one continuous GPT Sol Max local session at Max effort",
+    "researchRoot": "/Users/jamesto/Research/glassvow-mechanism-package-synthesis",
+    "sourceMode": "one detached worktree"
+  },
+  "budgets": {
+    "conditionalWholeRunExtensionCeiling": 98304,
+    "initialWholeRunCeiling": 73728,
+    "modelContextBytesPerDecisionBoundary": 65536,
+    "phaseA": {
+      "controlledOrQueryRows": 2048,
+      "wallMinutes": 45,
+      "wholeRunRows": 0
+    },
+    "phaseC": {
+      "controlledMicrodeckShortPanelRows": 40000,
+      "fullRunRows": 12288,
+      "wallHours": 10
+    },
+    "phaseD": {
+      "fullRunRows": 24576,
+      "partialOrShortRows": 16384,
+      "wallHours": 16
+    },
+    "phaseE": {
+      "jointCodesignFullRunRows": 24576,
+      "rewardFamilyFullRunRows": 12288,
+      "wallHours": 20
+    }
+  },
+  "cohorts": {
+    "policies": {
+      "authorityPath": "/Users/jamesto/Research/glassvow-codesign-520/work/detector3-policies-confirmatory-v1.ndjson",
+      "authoritySha256": "834de5668313914fec7dc8b3050a271d350fa30eb9a67bfe5f8f0ecbe72f01f5",
+      "controls": [
+        "detector-confirmatory-random-build",
+        "detector-confirmatory-random-play"
+      ],
+      "discovery": [
+        {
+          "authoritySha256": "460480dd3804d04b81d8bee0de31a75c90d98274eb4390023d5e16d55d7f2d23",
+          "id": "detector-confirmatory-11",
+          "semanticSha256": "0932e51fa3062728f9e6bc7e50c81d41b87214b4b0aa50a3e5b04cc293bd0059"
+        },
+        {
+          "authoritySha256": "811e9e9cc422f613f6a60bacc8a7693cc9aed82c1d54ec044c2574ce7c4d6cbd",
+          "id": "detector-confirmatory-0",
+          "semanticSha256": "0d653495e2566dc225698ef9aae86d9a4d36df17969ef5ed2e04b41ea5337ab3"
+        },
+        {
+          "authoritySha256": "8b9cb64b14b7d1b3c1fd05708a4948994b2e57ac477af84e3ed407a7cf76422f",
+          "id": "detector-confirmatory-8",
+          "semanticSha256": "5228fb4b95537304790eed8ad2f6201cd494d5fbe38a0b5c462dc76026da8012"
+        },
+        {
+          "authoritySha256": "5d0de7b547a96f786f85fee384ca3da2630792e78a16d85bf5f683a0bfc2926e",
+          "id": "detector-confirmatory-7",
+          "semanticSha256": "6afbfdf4c3f9b01b270d581a17531a1d4cee65ced69f36236728c1b4c09c4f55"
+        },
+        {
+          "authoritySha256": "ba94cb7d8a595fdaa7b4f0f6c18b241b90b8e473727469031752c74df58837aa",
+          "id": "detector-confirmatory-15",
+          "semanticSha256": "9c96fc8aea5ab55079e19cf7d605ecbb63513e7f5ac4d8c8cc74d53a82f8255b"
+        },
+        {
+          "authoritySha256": "7bfbea37b0827f0539b538572c41d6e76278033347119d98ce2b3199a84b10be",
+          "id": "detector-confirmatory-13",
+          "semanticSha256": "c9a4543847048b9d154221f7eec84ac917d3810296aafde29632405fcefb6c6f"
+        },
+        {
+          "authoritySha256": "f3f02968500b39b9fdd5f23cca7cd82ae4aaa2408ecc83b0a726aaf38daebee9",
+          "id": "detector-confirmatory-6",
+          "semanticSha256": "ca16b993a80b17c637f69d08c7fa44c85aef8e8fa950f6b694745c3a9011512a"
+        },
+        {
+          "authoritySha256": "70a7dc4721641eb03d4997989d9d0e797d1256fb310c528afcd9616db82dc37b",
+          "id": "detector-confirmatory-10",
+          "semanticSha256": "e4db9d383a45c8855138eac5412de67e7445d5769d6dd5cd5d8253eaa1f20924"
+        }
+      ],
+      "selectionAuthoritySha256": "f87cf811ce584f883faddead261088f0d5e1f50b4ab764e58392a95763864105",
+      "validation": [
+        {
+          "authoritySha256": "1f08caec0802b7a78b3824fe1773dd74f2a6dc5443242a228d68b0d51a609bb5",
+          "id": "detector-confirmatory-2",
+          "semanticSha256": "0a95c0753d814c5e8156a59d03f5513a0d789da19b5df1b50507d9c14c40dc5f"
+        },
+        {
+          "authoritySha256": "d6ab68795da34a94bd5e02ddae015a348c625d7829c8ce8515bb47de67bc69f6",
+          "id": "detector-confirmatory-4",
+          "semanticSha256": "10829090426e8c43419f893e95ba5e236df3f8e341c9a27bcd92b182915cc392"
+        },
+        {
+          "authoritySha256": "8ae9b014dcb59234d86ba016c63dc4f9730d936e88b17f77cda59bcfcf7e11d4",
+          "id": "detector-confirmatory-12",
+          "semanticSha256": "599d1e7f546825386ba13ca272518ef13588b1a9d524a6956d6529b712b6f3e5"
+        },
+        {
+          "authoritySha256": "c8b7dfa1861545198cbeaf469bb50d2fde6c8c64978b3039bd101f1bdd70b2f3",
+          "id": "detector-confirmatory-5",
+          "semanticSha256": "711c102f87b79e8fe135896faa39840cefd85488205276d7d85456d52be1e80c"
+        },
+        {
+          "authoritySha256": "951028fac0fd19c2f229be7fe9408d3116c2774a64cdb90b3217d007b50f6981",
+          "id": "detector-confirmatory-1",
+          "semanticSha256": "bc4ed77475b1d91b9d9b46d091158a3ec82b2d6666554294564ea16ea3791290"
+        },
+        {
+          "authoritySha256": "f174df4f2ea7807039cb6d8f65c89844564e7e3b56dce93a190c0ad57dba02c7",
+          "id": "detector-confirmatory-9",
+          "semanticSha256": "c9d1a50e3764465c23c72e1cccb1e96d9cf38d5fcb1cd5b968d6621227d12b6d"
+        },
+        {
+          "authoritySha256": "b57b12dad85fec7e3540f234efda6aedf5152a7653d567995dae5159b2530e83",
+          "id": "detector-confirmatory-14",
+          "semanticSha256": "d14c99b8d3f6fbf2eacd03c24b6482e7e27dc4ca5121981ab3b7e498f9316d55"
+        },
+        {
+          "authoritySha256": "265c31c59993c9ce327838b646441e415455d99bf5c519347d473a7001bd451a",
+          "id": "detector-confirmatory-3",
+          "semanticSha256": "ebcdda918f02461ba2bf96d78cea78df6c844ff307c7de7813f7cfda2835e29e"
+        }
+      ]
+    },
+    "seeds": {
+      "finalResearchConfirmation": [
+        23700,
+        23701,
+        23702,
+        23703,
+        23704,
+        23705,
+        23706,
+        23707,
+        23708,
+        23709,
+        23710,
+        23711,
+        23712,
+        23713,
+        23714,
+        23715,
+        23716,
+        23717,
+        23718,
+        23719,
+        23720,
+        23721,
+        23722,
+        23723,
+        23724,
+        23725,
+        23726,
+        23727,
+        23728,
+        23729,
+        23730,
+        23731
+      ],
+      "localRetention": [
+        23600,
+        23601,
+        23602,
+        23603,
+        23604,
+        23605,
+        23606,
+        23607,
+        23608,
+        23609,
+        23610,
+        23611,
+        23612,
+        23613,
+        23614,
+        23615,
+        23616,
+        23617,
+        23618,
+        23619,
+        23620,
+        23621,
+        23622,
+        23623,
+        23624,
+        23625,
+        23626,
+        23627,
+        23628,
+        23629,
+        23630,
+        23631
+      ],
+      "mutationDiscovery": [
+        23200,
+        23201,
+        23202,
+        23203,
+        23204,
+        23205,
+        23206,
+        23207,
+        23208,
+        23209,
+        23210,
+        23211,
+        23212,
+        23213,
+        23214,
+        23215,
+        23216,
+        23217,
+        23218,
+        23219,
+        23220,
+        23221,
+        23222,
+        23223,
+        23224,
+        23225,
+        23226,
+        23227,
+        23228,
+        23229,
+        23230,
+        23231
+      ],
+      "mutationValidation": [
+        23300,
+        23301,
+        23302,
+        23303,
+        23304,
+        23305,
+        23306,
+        23307,
+        23308,
+        23309,
+        23310,
+        23311,
+        23312,
+        23313,
+        23314,
+        23315,
+        23316,
+        23317,
+        23318,
+        23319,
+        23320,
+        23321,
+        23322,
+        23323,
+        23324,
+        23325,
+        23326,
+        23327,
+        23328,
+        23329,
+        23330,
+        23331
+      ],
+      "packageDiscovery": [
+        23000,
+        23001,
+        23002,
+        23003,
+        23004,
+        23005,
+        23006,
+        23007,
+        23008,
+        23009,
+        23010,
+        23011,
+        23012,
+        23013,
+        23014,
+        23015,
+        23016,
+        23017,
+        23018,
+        23019,
+        23020,
+        23021,
+        23022,
+        23023,
+        23024,
+        23025,
+        23026,
+        23027,
+        23028,
+        23029,
+        23030,
+        23031
+      ],
+      "packageValidation": [
+        23100,
+        23101,
+        23102,
+        23103,
+        23104,
+        23105,
+        23106,
+        23107,
+        23108,
+        23109,
+        23110,
+        23111,
+        23112,
+        23113,
+        23114,
+        23115,
+        23116,
+        23117,
+        23118,
+        23119,
+        23120,
+        23121,
+        23122,
+        23123,
+        23124,
+        23125,
+        23126,
+        23127,
+        23128,
+        23129,
+        23130,
+        23131
+      ],
+      "slateDiscovery": [
+        23400,
+        23401,
+        23402,
+        23403,
+        23404,
+        23405,
+        23406,
+        23407,
+        23408,
+        23409,
+        23410,
+        23411,
+        23412,
+        23413,
+        23414,
+        23415,
+        23416,
+        23417,
+        23418,
+        23419,
+        23420,
+        23421,
+        23422,
+        23423,
+        23424,
+        23425,
+        23426,
+        23427,
+        23428,
+        23429,
+        23430,
+        23431
+      ],
+      "slateValidation": [
+        23500,
+        23501,
+        23502,
+        23503,
+        23504,
+        23505,
+        23506,
+        23507,
+        23508,
+        23509,
+        23510,
+        23511,
+        23512,
+        23513,
+        23514,
+        23515,
+        23516,
+        23517,
+        23518,
+        23519,
+        23520,
+        23521,
+        23522,
+        23523,
+        23524,
+        23525,
+        23526,
+        23527,
+        23528,
+        23529,
+        23530,
+        23531
+      ]
+    }
+  },
+  "estimands": {
+    "behaviouralSeparation": "activation-set Jaccard plus held-out functional policy-response distance",
+    "edgeComplementarity": "paired A/B/AB difference-in-differences under common random numbers",
+    "nuisance": [
+      "global win mean",
+      "RandomBuild response",
+      "turns",
+      "stalls",
+      "errors",
+      "unrelated activation"
+    ],
+    "packageActivation": "paired package-minus-baseline mechanism activation divided by pooled predeclared scale",
+    "reachability": "offer, pick, accept, acquisition and activation probability on real source-specific paths"
+  },
+  "exclusions": {
+    "issue519ResumeDriftIdentities": 504,
+    "issue521QuarantinedReadouts": [
+      "aspectIdentityCrossEventCount",
+      "reusedIssue520BaselineIdentityComparison",
+      "vow5IdentityComparison"
+    ],
+    "rule": "Excluded and quarantined identities cannot enter generation, selection, fitting, thresholds or confirmatory inference."
+  },
+  "identities": {
+    "authorisedLaterRewardPatchSha256": "4b09ca50124b573883902fd644c6cfd8e4ea3540ff1b276f83c43781b3a95dc1",
+    "baseSimulatorSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "cleanDetachedPatchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "designGrammarSha256": "2c2abdc114bc745d99e66b0875e5f501f797d016804648b11ef8c8700ef8766b",
+    "godotSha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "issue524ManifestFilesVerified": 31,
+    "keyArchiveHashes": {
+      "artifacts/authored-mechanism-graph-v1.json": "61ab0bd24964293df7ea610911a66a32d41850cdb71100d96566607884b3c5ec",
+      "artifacts/scope-insufficiency-finding-v1.json": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2",
+      "artifacts/stage-a-mediation-audit-v1.json": "f9408de4d65695ac67a6807991a076572208d1e9c0c84362ea17146e38fc555e",
+      "artifacts/stage-b-mechanism-package-gate-v1.json": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a"
+    },
+    "mechanismRunnerSha256": "a11e959070f47cee8ff00dc3d7df67d255d3d7d90e3418337e918e256fa14a05",
+    "policyAuthoritySha256": "834de5668313914fec7dc8b3050a271d350fa30eb9a67bfe5f8f0ecbe72f01f5",
+    "policySelectionAuthoritySha256": "f87cf811ce584f883faddead261088f0d5e1f50b4ab764e58392a95763864105",
+    "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+    "sourcePatchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sourceReconciliation": {
+      "affectedIdentities": 0,
+      "currentMainEqualsIssue524Base": true
+    },
+    "upstreamAuthoritiesVerified": 29
+  },
+  "issue": 525,
+  "methodRace": {
+    "continuation": [
+      "held-out package improvement",
+      "recommendation quality",
+      "unique orthogonal package",
+      "positive measured value of information"
+    ],
+    "first": "scrambled Sobol/QMC plus transparent random baseline",
+    "highDimension": "TuRBO/SAASBO unavailable and not run unless measured dimension and held-out residual value justify one installed implementation",
+    "qualityDiversity": "MAP-Elites/CMA-ME only after unresolved objective is several orthogonal viable packages",
+    "second": "TPE and ExtraTrees only if held-out recommendation quality beats baseline at matched cost"
+  },
+  "outcomes": {
+    "escalation": "level 1 values/cost/rarity/coupling, then one smallest new card/relic, then one minimal primitive after explicit expressibility failure",
+    "inconclusive": "precision budget cannot resolve a material boundary; use the one pre-authorised extension only if value of information exceeds cost",
+    "rejection": "candidate/family stops when its mediator fails, held-out uncertainty rules out target, or a matched-cost family dominates",
+    "success": "one fully simulated product candidate or one validated detector implementation contract",
+    "terminalStop": [
+      "binding product-invariant contradiction",
+      "unimplementable deterministic mechanism under runtime/RNG/content contracts",
+      "all scalar, structural-card/relic and minimal-primitive families exhausted with sufficient held-out precision ruling out target"
+    ]
+  },
+  "practicalTargets": {
+    "activationSetJaccardMaximum": 0.5,
+    "activationStandardised": 0.25,
+    "additionalStallsOrErrors": 0,
+    "broadRandomBuildWinDeltaMaximum": 0.03,
+    "globalPowerWinDeltaMaximum": 0.03,
+    "materialDurationRegressionTurns": 1.0,
+    "positiveComplementarityStandardised": 0.25,
+    "realEconomyProbabilityMinimum": 0.05
+  },
+  "precisionAndPower": {
+    "alphaTwoSided": 0.05,
+    "binaryReachability": "512 validation policy-seed-vow opportunities; exact interval reported and lower bound must exceed zero, point estimate at least 0.05",
+    "fullRunPlan": "8 policies x 32 seeds = 256 paired rows per split/aspect before vows are pooled",
+    "microdeckPlan": "4 legal contexts x 32 common seeds = 128 paired contrasts per promoted edge",
+    "normalApproximationRequiredPairs": 126,
+    "power": 0.8,
+    "targetPairedStandardisedEffect": 0.25
+  },
+  "promotion": {
+    "detectorContract": "exact implementation and thresholds, mutation/probe protocol, calibration/uncertainty and exact #421 integration instructions",
+    "issue421Rule": "remain open and unassigned until a validated handoff; no final P9 exam or protected seeds before then",
+    "maximumOutputs": 1,
+    "productCandidate": "minimal deterministic runtime/schema/content changes, exact values, en and zh-Hant hydration, identity proof, detector/repertoire/retention/guardrail evidence and one replay manifest"
+  },
+  "registeredAtUtc": "2026-08-27T13:18:10Z",
+  "schemaVersion": 1,
+  "stageGates": {
+    "phaseA": "Every rejected package has an actionable cause or an explicit instrumentation-bounded non-identifiability; no route inferred from one edge.",
+    "phaseC": "At least two independently validated packages per aspect including hand-size-payoff or an improvement; every issue-525 package-admission clause passes.",
+    "phaseD": "All seven matched mutations and every detector admission threshold pass on independent policies and seeds.",
+    "phaseE": "Sequential reward comparison and joint search continue only after detector admission; legacy wins ties."
+  }
+}

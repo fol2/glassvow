@@ -1,0 +1,145 @@
+{
+  "claimsNotMade": [
+    "autonomous balancing is impossible",
+    "Glassvow cannot support multiple strategies",
+    "the three probe-panel candidates are shipping-authorised"
+  ],
+  "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+  "designFamilyExhaustion": [
+    {
+      "candidatesScreened": 16,
+      "family": "dusk-kindle-draw-l1",
+      "level": 1,
+      "recommendationsIndependentlyValidated": 2,
+      "result": "local interaction did not reproduce on both splits; panel win regressed"
+    },
+    {
+      "candidatesScreened": 8,
+      "family": "dusk-cinder-cut-l2",
+      "level": 2,
+      "newDefinitions": 1,
+      "recommendationsIndependentlyValidated": 1,
+      "result": "held-out package activation upper bound 0.052 SD and win delta -0.047"
+    },
+    {
+      "family": "dusk-branch-flare-l3",
+      "level": 3,
+      "newPrimitives": 1,
+      "recommendationsIndependentlyValidated": 1,
+      "result": "held-out edge and panel upper bounds rule out the 0.25-SD practical target",
+      "valuesExhaustivelyScreened": [
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "detector": {
+    "contract": null,
+    "reached": false,
+    "reason": "package minimum not met"
+  },
+  "excludedRows": 504,
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "issue": 525,
+  "issue421Disposition": "leave open and unassigned; do not run the final P9 exam",
+  "issue421Handoff": null,
+  "mutations": {
+    "reached": false,
+    "reason": "package minimum not met"
+  },
+  "newRows": 39968,
+  "packageInventory": [
+    {
+      "aspect": "ashwarden",
+      "candidateId": "e3337db509c63c851237ffcd4c91b4625365494af50ac22c9a58477760d2cddc",
+      "discoveryPass": true,
+      "newRows": 2816,
+      "package": "hand-size-payoff",
+      "status": "ISSUE_524_COMPLETE_PACKAGE_REPRODUCED",
+      "validationPass": true
+    },
+    {
+      "aspect": "ashwarden",
+      "candidateId": "050f147606908274f412e849ea2a5279266fb0c81f629e915b64c14bde45607c",
+      "contentSha256": "c7b1874467267931d71b66fa1dd753f6ab983ce2cd01d8e954c589ba4098eb06",
+      "discoveryPass": true,
+      "package": "ash-poison-catalyst",
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      },
+      "status": "PROBE_PANEL_PROMOTABLE_NOT_FULL_RUN_ADMITTED",
+      "validationPass": true
+    },
+    {
+      "aspect": "duskblade",
+      "candidateId": "4f02c9b78c4fa0d211f44f87257f2d4ca493559160619eeb2d785f8a7e8cc52c",
+      "contentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb",
+      "discoveryPass": true,
+      "package": "ward-mirror-edge",
+      "parameters": {
+        "block": 11,
+        "damage": 6,
+        "rarity": "common"
+      },
+      "status": "PROBE_PANEL_PROMOTABLE_NOT_FULL_RUN_ADMITTED",
+      "validationPass": true
+    },
+    {
+      "aspect": "duskblade",
+      "candidateId": "20aa3fdab7c39f9d01853982a13e995e63ded5b2768d58db66b2fb55d5d38a81",
+      "contentSha256": "f60f89bb63c84d49d45af99e6c4a72e47a81ee6b2cd19575b592348c55b51782",
+      "discoveryPass": false,
+      "edgeStandardisedUpper95": {
+        "cinderCut->verdantBranch|discovery": 0.07165890394972445,
+        "cinderCut->verdantBranch|validation": 0.06390846394463381,
+        "offering->verdantBranch|discovery": 0.10004507466718074,
+        "offering->verdantBranch|validation": 0.029689205674291806
+      },
+      "package": "dusk-branch-flare",
+      "panelActivationStandardisedUpper95": {
+        "discovery": -0.013859970186931274,
+        "validation": -0.002357972215580806
+      },
+      "parameters": {
+        "/relics/verdantBranch/kindleDamage": 3
+      },
+      "practicalTarget": 0.25,
+      "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+      "status": "REJECTED_WITH_SUFFICIENT_HELD_OUT_PRECISION",
+      "validationPass": false
+    }
+  ],
+  "packageMinimum": {
+    "blockingAspect": "duskblade",
+    "met": false,
+    "missingPackages": 1,
+    "requiredPerAspect": 2
+  },
+  "precision": {
+    "heldOutPanelActivationStandardisedUpper95": -0.002357972215580806,
+    "maximumHeldOutEdgeStandardisedUpper95": 0.06390846394463381,
+    "target": 0.25,
+    "targetRuledOut": true
+  },
+  "productCandidate": null,
+  "quarantinedReadouts": 3,
+  "reusedRows": 7040,
+  "runtimePatchSha256": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+  "schemaVersion": 1,
+  "scope": "The missing second Duskblade package only; not a game-wide or programme-wide impossibility claim.",
+  "slateAndJointSearch": {
+    "reached": false,
+    "reason": "detector not admitted"
+  },
+  "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+  "status": "TERMINAL_STOP_EXHAUSTED_PREREGISTERED_DESIGN_FAMILIES",
+  "successorDisposition": "do not create another issue or successor",
+  "unresolvedProductDecision": "Choose whether to authorise a different evidence-backed Duskblade mechanism degree of freedom beyond #525's exhausted one-card/one-primitive Kindle/Branch ladder, or leave the P9 package minimum unmet. #525 does not authorise that expansion."
+}

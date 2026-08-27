@@ -1,0 +1,62 @@
+{
+  "archive": {
+    "compressedBytes": 20155563,
+    "contents": "All 261 paths named by immutable-manifest-v1.json",
+    "memberCount": 261,
+    "path": "raw/raw-evidence-v1.tar.gz",
+    "sha256": "20fe408eb971d3aefc128fa46de57e77eae8a45dfbf6b78cffad5b04dd8c6f83",
+    "uncompressedBytes": 220617168
+  },
+  "branch": "research/issue-525-mechanism-package-synthesis-evidence",
+  "campaignManifestSha256": "d537981f9444de5804bf566a29c97e5f230bb834eef3e6b3f845feb80a72d3ae",
+  "files": {
+    "README.md": "33ca6f3fce7d68b6497182eb8c7df9d930bcce811b82fefdac256bfab7e63b51",
+    "artifacts/authority-and-preregistration-freeze-v1.json": "568b140de939438e618f055936b71dc2896105e3d3a9a4ac67de8a09aa589405",
+    "artifacts/budget-and-stop-ledger-v1.json": "2280b75aae1d2961cd7ee2b3b70c74056988218db73a3ddd2aa9c7aeb772a4e7",
+    "artifacts/campaign-close-v1.json": "698d25db9c8c4e14fef5a2971a00066fc4f0c92f7b45b1f20c2b2d48f76ddd7a",
+    "artifacts/design-grammar-v1.json": "2c2abdc114bc745d99e66b0875e5f501f797d016804648b11ef8c8700ef8766b",
+    "artifacts/final-targeted-verification-v1.json": "aa7dbb0e8ed640eaf9d4a34ceb58a9182786413a53a2f823a9e3271324536270",
+    "artifacts/ledger-integrity-v1.json": "28c091a9e4c2e5238fb971ee42d9268e3bb994598c2ab75371798b7d831416c7",
+    "artifacts/phase-a-failure-matrix-v1.json": "39ec3d6372c2ef325fa6f42cc52740fb8ce5933c81eab40b25b003106b5d575f",
+    "artifacts/phase-a-local-edge-map-v1.json": "592de38e2d01d9fff559806605f05cc7e9f254819436e42429b8a8a51bfd0caa",
+    "artifacts/phase-c-level1-candidate-freeze-v1.json": "4b2e11dd1975724883223b103b64a77cb3d5b1b56bbfe25bb7e7e1d641bd3b26",
+    "artifacts/phase-c-level1-screen-v1.json": "3755cc2354a8f8e8f8d911b929a7385cc3555efa14bc7011dc8d49fcdb7c0567",
+    "artifacts/phase-c-level1-validation-v1.json": "7b5bf4f594e223c09ba83dedc20d920ecc06c24c2f6d6ad427e0bf52baa9c79a",
+    "artifacts/phase-c-level2-candidate-freeze-v1.json": "a8a966663f260b9128376d332c173ae0944bd5f006099f96589f8fefa85ba351",
+    "artifacts/phase-c-level2-screen-v1.json": "1045dbdb794e10f9661dde5a469517eb2f30c0f8e1e6dad4d2210bca986d56ef",
+    "artifacts/phase-c-level2-validation-v1.json": "1655f9be631c2cff1791d004ff7940718f2fa5b5f47b9ea13b9017cd118ed436",
+    "artifacts/phase-c-level3-candidate-freeze-v1.json": "63da1b594489e88a3a7c7fec043a38bb84995fb2265b4ab3766c36b59bb3ebd1",
+    "artifacts/phase-c-level3-legacy-identity-v1.json": "f96ee34b1d569e7da2277ecd08a737e5c8d0453183b4ef0384230d49cb3c4a80",
+    "artifacts/phase-c-level3-screen-v1.json": "67dd7d253f46cf7a62f0a927145d7e951518568dc613d7f89529922ada96305c",
+    "artifacts/phase-c-level3-validation-v1.json": "4e983bf0436dafc7f518e9ceb46dd6c81b4de1bc1b4e96c08282d5d14d3c7271",
+    "artifacts/phase-c-positive-control-v1.json": "202eb434198aaa4df76a16c0577a804a88bfbbd7dc40973c445f85f1bd110374",
+    "artifacts/research-kindle-damage-primitive-v1.patch": "b74c46fa6d7b9c44ae42a6863a069ef0a732bd6ce35e35bbee28d1393beef9b8",
+    "artifacts/terminal-stop-finding-v1.json": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c",
+    "immutable-manifest-v1.json": "d537981f9444de5804bf566a29c97e5f230bb834eef3e6b3f845feb80a72d3ae",
+    "protocols/preregistration-v1.json": "e493981086c63da2cff05c3abd170e44cdc4d231faab7c82d1d903aadbe883d4",
+    "raw/raw-evidence-v1.tar.gz": "20fe408eb971d3aefc128fa46de57e77eae8a45dfbf6b78cffad5b04dd8c6f83",
+    "summaries/final-report-v1.md": "c09fc7d256e3c28329213bbd611c0d81ebc5d0d68dd0a8b33b3385f35028a9fe",
+    "tools/bootstrap.py": "1e9f5b4c1a2bc1e1f1ef405557522401a8a165444522e1ef681722483f920325",
+    "tools/mechanism_probe.gd": "a11e959070f47cee8ff00dc3d7df67d255d3d7d90e3418337e918e256fa14a05",
+    "tools/primitive.py": "6f5421922016872b2650d5c8169b517ea1e89023db29e4d05e0b243beebfcd32",
+    "tools/seal.py": "24e69adda33fd1fd736700206552c96c18b9cd6e78dff637c30e26ec4a228e47",
+    "tools/structural.py": "76d6a666c9e2f66f82f4934410fc21604296babfa613f375a0f97be98e488d87",
+    "tools/synthesise.py": "c1c7e7aa58072223f4d7bfdfa3c66548fb83bad1ea277ce6e4a96b413044232d"
+  },
+  "finalOutputSha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c",
+  "github": {
+    "campaignComment": "https://github.com/fol2/glassvow/issues/525#issuecomment-5440112219",
+    "campaignIssue": "https://github.com/fol2/glassvow/issues/525",
+    "parentIssue": "https://github.com/fol2/glassvow/issues/421"
+  },
+  "issue": 525,
+  "omissions": [
+    "The detached Kindle/Branch primitive is represented by its patch and is not applied to this branch.",
+    "Candidate definitions and batch plans are kept in the complete raw archive rather than duplicated as loose files.",
+    "Generated imports, duplicate source working copies and transient SQLite sidecars are not published."
+  ],
+  "purpose": "remote-review-only; do-not-merge",
+  "schemaVersion": 1,
+  "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+  "verdict": "TERMINAL_STOP_EXHAUSTED_PREREGISTERED_DESIGN_FAMILIES"
+}

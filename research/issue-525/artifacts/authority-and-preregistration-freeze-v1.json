@@ -1,0 +1,39 @@
+{
+  "authority": {
+    "baseSimulatorSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "godotSha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "issue524ManifestFilesVerified": 31,
+    "keyArchiveHashes": {
+      "artifacts/authored-mechanism-graph-v1.json": "61ab0bd24964293df7ea610911a66a32d41850cdb71100d96566607884b3c5ec",
+      "artifacts/scope-insufficiency-finding-v1.json": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2",
+      "artifacts/stage-a-mediation-audit-v1.json": "f9408de4d65695ac67a6807991a076572208d1e9c0c84362ea17146e38fc555e",
+      "artifacts/stage-b-mechanism-package-gate-v1.json": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a"
+    },
+    "mechanismRunnerSha256": "a11e959070f47cee8ff00dc3d7df67d255d3d7d90e3418337e918e256fa14a05",
+    "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+    "sourcePatchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sourceReconciliation": {
+      "affectedIdentities": 0,
+      "currentMainEqualsIssue524Base": true
+    },
+    "upstreamAuthoritiesVerified": 29
+  },
+  "bootstrapProgramSha256": "1e9f5b4c1a2bc1e1f1ef405557522401a8a165444522e1ef681722483f920325",
+  "designGrammarSha256": "2c2abdc114bc745d99e66b0875e5f501f797d016804648b11ef8c8700ef8766b",
+  "failureMatrixSha256": "39ec3d6372c2ef325fa6f42cc52740fb8ce5933c81eab40b25b003106b5d575f",
+  "issue": 525,
+  "ledgerImport": {
+    "excludedIdentities": 504,
+    "newRows": 0,
+    "quarantinedReadouts": 3,
+    "reusedObjects": 8,
+    "reusedRows": 7040
+  },
+  "localEdgeMapSha256": "592de38e2d01d9fff559806605f05cc7e9f254819436e42429b8a8a51bfd0caa",
+  "newSimulatorRows": 0,
+  "preregistrationSha256": "e493981086c63da2cff05c3abd170e44cdc4d231faab7c82d1d903aadbe883d4",
+  "schemaVersion": 1
+}

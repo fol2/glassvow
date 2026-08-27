@@ -1,0 +1,4540 @@
+{
+  "candidateCount": 48,
+  "candidates": [
+    {
+      "candidateId": "d190db120470487578040c4f078329a60890dc1d94a5021f7c0e4b1182d639f1",
+      "changedFields": 3,
+      "contentSha256": "ca73261ae36a5eb3cab964149e65f7af2e3e47520e86101c311ebd125e1f77a0",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 16.9375,
+          "extraTreesInteraction": 16.9375,
+          "pairedBootstrapP05": 10.4375,
+          "pairedBootstrapP95": 23.5625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 16.8721814199201,
+          "scale": 28.118362932154763,
+          "standardisedDelta": 0.602364370958137
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 15.5625,
+          "extraTreesInteraction": 15.5625,
+          "pairedBootstrapP05": 8.1875,
+          "pairedBootstrapP95": 23.19062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 14.906841901816783,
+          "scale": 23.475380845885653,
+          "standardisedDelta": 0.6629285421253355
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 1.9999999999999998,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 38.6875,
+            "pairedBootstrapP05": 30.375,
+            "pairedBootstrapP95": 47.4375,
+            "pairs": 16,
+            "scale": 29.82499410624418,
+            "standardisedDelta": 1.2971502982426528
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.875,
+            "pairedBootstrapP05": -1.125,
+            "pairedBootstrapP95": -0.625,
+            "pairs": 16,
+            "scale": 0.7880950133074057,
+            "standardisedDelta": -1.1102722200054018
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "rows": 176,
+      "score": 1.8995146692007898
+    },
+    {
+      "candidateId": "f155d61708a26715ce0f09ac881713d7807ee564f0fe52f18275882f5fe2cf0b",
+      "changedFields": 6,
+      "contentSha256": "31e2c6a7b4315baff096cc465683132e28faabd26075387f778ae1f3f9d64d45",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 18.125,
+          "extraTreesInteraction": 18.125,
+          "pairedBootstrapP05": 10.5,
+          "pairedBootstrapP95": 26.31562500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 18.46746553279216,
+          "scale": 37.678688853913165,
+          "standardisedDelta": 0.4810411548627337
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 39.5625,
+          "extraTreesInteraction": 39.5625,
+          "pairedBootstrapP05": 28.25,
+          "pairedBootstrapP95": 51.8125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 35.548125241592594,
+          "scale": 42.69946014277435,
+          "standardisedDelta": 0.9265339624368719
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 5.000000000000001,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 57.5,
+            "pairedBootstrapP05": 41.4375,
+            "pairedBootstrapP95": 73.75,
+            "pairs": 16,
+            "scale": 42.62843644505391,
+            "standardisedDelta": 1.3488648609975376
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.125,
+            "pairedBootstrapP05": -1.375,
+            "pairedBootstrapP95": -0.875,
+            "pairs": 16,
+            "scale": 0.8454843286542927,
+            "standardisedDelta": -1.3305982877182312
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 7
+      },
+      "rows": 176,
+      "score": 1.8299060158602711
+    },
+    {
+      "candidateId": "4d0bc54ed5bf4bd529d5b9d8e519ff5e82286893f026316c339293c1a3af9fac",
+      "changedFields": 3,
+      "contentSha256": "fd771462f4ec0e179e4a32efc956ea62f29c57f832cab6c27dda51f052605207",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 3.5625,
+          "extraTreesInteraction": 3.5625,
+          "pairedBootstrapP05": -0.375,
+          "pairedBootstrapP95": 7.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 5.428810720267995,
+          "scale": 20.728098145618063,
+          "standardisedDelta": 0.1718681557262462
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 13.5625,
+          "extraTreesInteraction": 13.5625,
+          "pairedBootstrapP05": 6.75,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 13.354464630846548,
+          "scale": 22.857569990254323,
+          "standardisedDelta": 0.5933482870568736
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 3.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 36.1875,
+            "pairedBootstrapP05": 30.0,
+            "pairedBootstrapP95": 42.81562500000001,
+            "pairs": 16,
+            "scale": 27.005479044769785,
+            "standardisedDelta": 1.3400058536272668
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.875,
+            "pairedBootstrapP05": -1.125,
+            "pairedBootstrapP95": -0.625,
+            "pairs": 16,
+            "scale": 0.7880950133074057,
+            "standardisedDelta": -1.1102722200054018
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 3,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 5
+      },
+      "rows": 176,
+      "score": 1.511874009353513
+    },
+    {
+      "candidateId": "28a790975466a9821a6efe09f38e4371774ba895012bf21a1fc3943f86b60413",
+      "changedFields": 4,
+      "contentSha256": "f848950ec42f6caac6dd260dbe9ed53e2eb9cc082a309047df64086d05c941c3",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 55.125,
+          "extraTreesInteraction": 55.125,
+          "pairedBootstrapP05": 35.309375,
+          "pairedBootstrapP95": 77.375,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 49.42107975776316,
+          "scale": 56.22442995209022,
+          "standardisedDelta": 0.9804456896579109
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 38.75,
+          "extraTreesInteraction": 38.75,
+          "pairedBootstrapP05": 26.3125,
+          "pairedBootstrapP95": 52.6875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 35.04690117252932,
+          "scale": 43.6369521592652,
+          "standardisedDelta": 0.8880088567728354
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 4.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 69.5,
+            "pairedBootstrapP05": 48.375,
+            "pairedBootstrapP95": 92.25,
+            "pairs": 16,
+            "scale": 55.532050148990535,
+            "standardisedDelta": 1.2515295187830082
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.3125,
+            "pairedBootstrapP05": -1.5625,
+            "pairedBootstrapP95": -1.0625,
+            "pairs": 16,
+            "scale": 0.9264979425233496,
+            "standardisedDelta": -1.4166248404452582
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 8
+      },
+      "rows": 176,
+      "score": 2.1395383755558437
+    },
+    {
+      "candidateId": "ee4d65201ce85954c712643b743c7635bb7eb979c35ea0710477f1bd8dc8de7e",
+      "changedFields": 5,
+      "contentSha256": "e8e51be51e8003f7fabcaef2650113cfe0d0339c738ad6fb069f4e96fceb0110",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 11.3125,
+          "extraTreesInteraction": 11.3125,
+          "pairedBootstrapP05": 4.9375,
+          "pairedBootstrapP95": 18.125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 12.685736374178589,
+          "scale": 34.08313236939021,
+          "standardisedDelta": 0.33190904748413513
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 39.5625,
+          "extraTreesInteraction": 39.5625,
+          "pairedBootstrapP05": 28.25,
+          "pairedBootstrapP95": 51.8125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 35.548125241592594,
+          "scale": 42.69946014277435,
+          "standardisedDelta": 0.9265339624368719
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 5.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 59.375,
+            "pairedBootstrapP05": 44.625,
+            "pairedBootstrapP95": 74.625,
+            "pairs": 16,
+            "scale": 41.841030998291615,
+            "standardisedDelta": 1.4190615905813675
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.125,
+            "pairedBootstrapP05": -1.375,
+            "pairedBootstrapP95": -0.875,
+            "pairs": 16,
+            "scale": 0.8454843286542927,
+            "standardisedDelta": -1.3305982877182312
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 3,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 8
+      },
+      "rows": 176,
+      "score": 1.7509706380655026
+    },
+    {
+      "candidateId": "be2af116517fc573fee5aba17155fb48ff88d60e0d1855d0247faa82686ec351",
+      "changedFields": 5,
+      "contentSha256": "b2ac97ec2a9c6a1e0f89f181c48cdb71eb51f159b04d724f3cf8c9d8afad83ad",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 6.9375,
+          "extraTreesInteraction": 6.9375,
+          "pairedBootstrapP05": 2.184375000000001,
+          "pairedBootstrapP95": 11.5625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 8.397113773998203,
+          "scale": 22.654757493943187,
+          "standardisedDelta": 0.30622706960578855
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 13.5625,
+          "extraTreesInteraction": 13.5625,
+          "pairedBootstrapP05": 6.75,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 13.354464630846548,
+          "scale": 22.857569990254323,
+          "standardisedDelta": 0.5933482870568736
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 3.666666666666667,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 35.75,
+            "pairedBootstrapP05": 28.371875000000003,
+            "pairedBootstrapP95": 43.5,
+            "pairs": 16,
+            "scale": 27.847730495499988,
+            "standardisedDelta": 1.2837670921074509
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.0,
+            "pairedBootstrapP05": -1.3125,
+            "pairedBootstrapP95": -0.6875,
+            "pairs": 16,
+            "scale": 0.7806247497997998,
+            "standardisedDelta": -1.281025230440697
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "rows": 176,
+      "score": 1.5899941617132394
+    },
+    {
+      "candidateId": "050f147606908274f412e849ea2a5279266fb0c81f629e915b64c14bde45607c",
+      "changedFields": 4,
+      "contentSha256": "c7b1874467267931d71b66fa1dd753f6ab983ce2cd01d8e954c589ba4098eb06",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 38.9375,
+          "extraTreesInteraction": 38.9375,
+          "pairedBootstrapP05": 24.6875,
+          "pairedBootstrapP95": 52.87812500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 36.04032985440024,
+          "scale": 47.23120647659103,
+          "standardisedDelta": 0.8244019770974599
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 38.75,
+          "extraTreesInteraction": 38.75,
+          "pairedBootstrapP05": 26.3125,
+          "pairedBootstrapP95": 52.6875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 35.04690117252932,
+          "scale": 43.6369521592652,
+          "standardisedDelta": 0.8880088567728354
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 3.333333333333333,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 67.75,
+            "pairedBootstrapP05": 50.309375,
+            "pairedBootstrapP95": 86.625,
+            "pairs": 16,
+            "scale": 50.32639559664491,
+            "standardisedDelta": 1.3462120463186253
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.125,
+            "pairedBootstrapP05": -1.375,
+            "pairedBootstrapP95": -0.875,
+            "pairs": 16,
+            "scale": 0.8454843286542927,
+            "standardisedDelta": -1.3305982877182312
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      },
+      "rows": 176,
+      "score": 2.170614023416085
+    },
+    {
+      "candidateId": "e1b37397f77227bb1c5a0a64624ab25f6c283e788f4c13a40f270504049fff54",
+      "changedFields": 3,
+      "contentSha256": "0b23afefd0a5eac2bb13f5406bd7c3fa265326b881610b70971c4a080cdb2ddc",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 8.5,
+          "extraTreesInteraction": 8.5,
+          "pairedBootstrapP05": 3.1875,
+          "pairedBootstrapP95": 13.75,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 9.591418631619641,
+          "scale": 22.787057730211682,
+          "standardisedDelta": 0.373018759184977
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 15.5625,
+          "extraTreesInteraction": 15.5625,
+          "pairedBootstrapP05": 8.1875,
+          "pairedBootstrapP95": 23.19062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 14.906841901816783,
+          "scale": 23.475380845885653,
+          "standardisedDelta": 0.6629285421253355
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 2.3333333333333335,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 34.5625,
+            "pairedBootstrapP05": 26.75,
+            "pairedBootstrapP95": 43.19062500000001,
+            "pairs": 16,
+            "scale": 26.939149456460203,
+            "standardisedDelta": 1.2829840844032907
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.8125,
+            "pairedBootstrapP05": -1.0625,
+            "pairedBootstrapP95": -0.5625,
+            "pairs": 16,
+            "scale": 0.7493486755176124,
+            "standardisedDelta": -1.0842749530967888
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 5
+      },
+      "rows": 176,
+      "score": 1.6560028435882677
+    },
+    {
+      "candidateId": "3969e1c652267205cd043f72e30630aa7c8d19d5461caece2c288a49bce01f2a",
+      "changedFields": 4,
+      "contentSha256": "dbeb3c9f7dff8c673dfb588333959615723021fae6bd4b027da83d298d610a25",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 14.8125,
+          "extraTreesInteraction": 14.8125,
+          "pairedBootstrapP05": 8.934375000000001,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 15.217497745135924,
+          "scale": 27.49441971081359,
+          "standardisedDelta": 0.5387456856990593
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 13.5625,
+          "extraTreesInteraction": 13.5625,
+          "pairedBootstrapP05": 6.75,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 13.354464630846548,
+          "scale": 22.857569990254323,
+          "standardisedDelta": 0.5933482870568736
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 40.4375,
+            "pairedBootstrapP05": 32.5625,
+            "pairedBootstrapP95": 48.87812500000001,
+            "pairs": 16,
+            "scale": 30.500368209867567,
+            "standardisedDelta": 1.3258036664264776
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.0625,
+            "pairedBootstrapP05": -1.3125,
+            "pairedBootstrapP95": -0.8125,
+            "pairs": 16,
+            "scale": 0.8143008887997114,
+            "standardisedDelta": -1.3048002459706716
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "rows": 176,
+      "score": 1.864549352125537
+    },
+    {
+      "candidateId": "3b43a129ca427de47321962cff35776c62dea0b78d2c2092ac7d1c57c1be675e",
+      "changedFields": 2,
+      "contentSha256": "c68d644f23806421eeaf1c33a0af97e19c13d76e4eeef8b0c80adbc14797e477",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 16.9375,
+          "extraTreesInteraction": 16.9375,
+          "pairedBootstrapP05": 10.4375,
+          "pairedBootstrapP95": 23.5625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 16.8721814199201,
+          "scale": 28.118362932154763,
+          "standardisedDelta": 0.602364370958137
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 15.5625,
+          "extraTreesInteraction": 15.5625,
+          "pairedBootstrapP05": 8.1875,
+          "pairedBootstrapP95": 23.19062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 14.906841901816783,
+          "scale": 23.475380845885653,
+          "standardisedDelta": 0.6629285421253355
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 1.3333333333333333,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 38.6875,
+            "pairedBootstrapP05": 30.375,
+            "pairedBootstrapP95": 47.4375,
+            "pairs": 16,
+            "scale": 29.82499410624418,
+            "standardisedDelta": 1.2971502982426528
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.875,
+            "pairedBootstrapP05": -1.125,
+            "pairedBootstrapP95": -0.625,
+            "pairs": 16,
+            "scale": 0.7880950133074057,
+            "standardisedDelta": -1.1102722200054018
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      },
+      "rows": 176,
+      "score": 1.8995146692007898
+    },
+    {
+      "candidateId": "b279168c1c1e8f5cbdd99b93feb57c9da029d75ceb597bc0f8b3c46523de9b2f",
+      "changedFields": 7,
+      "contentSha256": "eabb881ce86d3dcb13feb0c794780f861caf9dc53d47801b30cd736234de379f",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 55.9375,
+          "extraTreesInteraction": 55.9375,
+          "pairedBootstrapP05": 37.625,
+          "pairedBootstrapP95": 75.94062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 49.92230382682647,
+          "scale": 55.20932954093334,
+          "standardisedDelta": 1.013189264660908
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 39.5625,
+          "extraTreesInteraction": 39.5625,
+          "pairedBootstrapP05": 28.25,
+          "pairedBootstrapP95": 51.8125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 35.548125241592594,
+          "scale": 42.69946014277435,
+          "standardisedDelta": 0.9265339624368719
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 6.333333333333333,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 68.8125,
+            "pairedBootstrapP05": 47.375,
+            "pairedBootstrapP95": 91.57187500000003,
+            "pairs": 16,
+            "scale": 53.2895154879222,
+            "standardisedDelta": 1.2912952833207125
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.4375,
+            "pairedBootstrapP05": -1.625,
+            "pairedBootstrapP95": -1.25,
+            "pairs": 16,
+            "scale": 0.9717694878416383,
+            "standardisedDelta": -1.4792602751839623
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "rows": 176,
+      "score": 2.2178292457575846
+    },
+    {
+      "candidateId": "98d259c0e82a1111f5b6047cd9fa4fb8797c4939309a487c500cbc22393c3318",
+      "changedFields": 5,
+      "contentSha256": "bbdcb1dc012b81137bd44091204e2fb571e32248ec60947df5d804e294e744e1",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 14.8125,
+          "extraTreesInteraction": 14.8125,
+          "pairedBootstrapP05": 8.934375000000001,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 15.217497745135924,
+          "scale": 27.49441971081359,
+          "standardisedDelta": 0.5387456856990593
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 13.5625,
+          "extraTreesInteraction": 13.5625,
+          "pairedBootstrapP05": 6.75,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 13.354464630846548,
+          "scale": 22.857569990254323,
+          "standardisedDelta": 0.5933482870568736
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 4.666666666666666,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 40.4375,
+            "pairedBootstrapP05": 32.5625,
+            "pairedBootstrapP95": 48.87812500000001,
+            "pairs": 16,
+            "scale": 30.500368209867567,
+            "standardisedDelta": 1.3258036664264776
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.0625,
+            "pairedBootstrapP05": -1.3125,
+            "pairedBootstrapP95": -0.8125,
+            "pairs": 16,
+            "scale": 0.8143008887997114,
+            "standardisedDelta": -1.3048002459706716
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 8
+      },
+      "rows": 176,
+      "score": 1.864549352125537
+    },
+    {
+      "candidateId": "4ec0d9fbc42cb8ff21826c556574f0daf4ff0d84e5bc8dd282540246d338a72b",
+      "changedFields": 3,
+      "contentSha256": "73bd4b8672a2a822a31e0e0b57cd15da969d8376565f342d62e9c9073a5de85a",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 6.9375,
+          "extraTreesInteraction": 6.9375,
+          "pairedBootstrapP05": 2.184375000000001,
+          "pairedBootstrapP95": 11.5625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 8.397113773998203,
+          "scale": 22.654757493943187,
+          "standardisedDelta": 0.30622706960578855
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 13.5625,
+          "extraTreesInteraction": 13.5625,
+          "pairedBootstrapP05": 6.75,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 13.354464630846548,
+          "scale": 22.857569990254323,
+          "standardisedDelta": 0.5933482870568736
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 1.6666666666666665,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 35.75,
+            "pairedBootstrapP05": 28.371875000000003,
+            "pairedBootstrapP95": 43.5,
+            "pairs": 16,
+            "scale": 27.847730495499988,
+            "standardisedDelta": 1.2837670921074509
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.0,
+            "pairedBootstrapP05": -1.3125,
+            "pairedBootstrapP95": -0.6875,
+            "pairs": 16,
+            "scale": 0.7806247497997998,
+            "standardisedDelta": -1.281025230440697
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 4,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "rows": 176,
+      "score": 1.5899941617132394
+    },
+    {
+      "candidateId": "22eb0721441d8ccf9a659abf3eeeb7a9b50aa587079250e4f18e12c011f36d78",
+      "changedFields": 5,
+      "contentSha256": "98d7f19e4117217db04e5dc98dae527c81142e579909c92430b29387a7e17650",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 55.125,
+          "extraTreesInteraction": 55.125,
+          "pairedBootstrapP05": 35.309375,
+          "pairedBootstrapP95": 77.375,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 49.42107975776316,
+          "scale": 56.22442995209022,
+          "standardisedDelta": 0.9804456896579109
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 38.75,
+          "extraTreesInteraction": 38.75,
+          "pairedBootstrapP05": 26.3125,
+          "pairedBootstrapP95": 52.6875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 35.04690117252932,
+          "scale": 43.6369521592652,
+          "standardisedDelta": 0.8880088567728354
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 4.333333333333333,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 69.5,
+            "pairedBootstrapP05": 48.375,
+            "pairedBootstrapP95": 92.25,
+            "pairs": 16,
+            "scale": 55.532050148990535,
+            "standardisedDelta": 1.2515295187830082
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.3125,
+            "pairedBootstrapP05": -1.5625,
+            "pairedBootstrapP95": -1.0625,
+            "pairs": 16,
+            "scale": 0.9264979425233496,
+            "standardisedDelta": -1.4166248404452582
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "rows": 176,
+      "score": 2.1395383755558437
+    },
+    {
+      "candidateId": "583b6bb3625f7de269b6447f939dc0ddbc86b5db5d6f139c67a47bf277100b58",
+      "changedFields": 2,
+      "contentSha256": "a621f8a7f52453295f5e9996585c3266b8f83c7beb18ea2bea81dbd41cdb3e56",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 22.375,
+          "extraTreesInteraction": 22.375,
+          "pairedBootstrapP05": 14.0,
+          "pairedBootstrapP95": 32.0625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 21.454580595284124,
+          "scale": 31.405099481413842,
+          "standardisedDelta": 0.7124639109403862
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 15.5625,
+          "extraTreesInteraction": 15.5625,
+          "pairedBootstrapP05": 8.1875,
+          "pairedBootstrapP95": 23.19062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 14.906841901816783,
+          "scale": 23.475380845885653,
+          "standardisedDelta": 0.6629285421253355
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 1.6666666666666665,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 40.25,
+            "pairedBootstrapP05": 29.8125,
+            "pairedBootstrapP95": 51.8125,
+            "pairs": 16,
+            "scale": 33.878862787142076,
+            "standardisedDelta": 1.1880564071139939
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.0625,
+            "pairedBootstrapP05": -1.3125,
+            "pairedBootstrapP95": -0.8125,
+            "pairs": 16,
+            "scale": 0.8143008887997114,
+            "standardisedDelta": -1.3048002459706716
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 3,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      },
+      "rows": 176,
+      "score": 1.8509849492393293
+    },
+    {
+      "candidateId": "b83188b7b4cd0e262ab8e9da8ffab5deab4df5a2886f246f28d7b058c1739cc5",
+      "changedFields": 5,
+      "contentSha256": "5aadb49b68a4044879b9b5035743ef533f5ca697f4d2d052dd99ac6601ad6937",
+      "edges": {
+        "toxicMist->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 21.0,
+          "extraTreesInteraction": 21.0,
+          "pairedBootstrapP05": 13.434375000000001,
+          "pairedBootstrapP95": 29.3125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 20.413735343383586,
+          "scale": 30.630101615894127,
+          "standardisedDelta": 0.6856000761389243
+        },
+        "venomStrike->catalyst|discovery": {
+          "controlledProbePass": true,
+          "delta": 13.5625,
+          "extraTreesInteraction": 13.5625,
+          "pairedBootstrapP05": 6.75,
+          "pairedBootstrapP95": 20.625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 13.354464630846548,
+          "scale": 22.857569990254323,
+          "standardisedDelta": 0.5933482870568736
+        }
+      },
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 4.333333333333333,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 42.0625,
+            "pairedBootstrapP05": 30.25,
+            "pairedBootstrapP95": 55.0625,
+            "pairs": 16,
+            "scale": 36.38872968980231,
+            "standardisedDelta": 1.1559210876159747
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": true,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -1.1875,
+            "pairedBootstrapP05": -1.375,
+            "pairedBootstrapP95": -1.0,
+            "pairs": 16,
+            "scale": 0.8744417862270764,
+            "standardisedDelta": -1.3580092107945403
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 2,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "rows": 176,
+      "score": 1.7492693746728483
+    },
+    {
+      "candidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 6,
+      "contentSha256": "fecd1a4ae5449e365fca18a47f7819b3862cefc2afe103fed6c0e22f50c67cff",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.625,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 227.1875,
+          "extraTreesInteraction": 227.1875,
+          "pairedBootstrapP05": 134.984375,
+          "pairedBootstrapP95": 337.20312500000006,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 190.08723102692954,
+          "scale": 179.3513370443872,
+          "standardisedDelta": 1.2667176266646618
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 5.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 68.8125,
+            "pairedBootstrapP05": 50.684375,
+            "pairedBootstrapP95": 88.1875,
+            "pairs": 16,
+            "scale": 47.87906926243972,
+            "standardisedDelta": 1.4372146547548321
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 1.375,
+            "pairedBootstrapP05": 1.125,
+            "pairedBootstrapP95": 1.625,
+            "pairs": 16,
+            "scale": 1.4017288432503627,
+            "standardisedDelta": 0.9809315165489616
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 1.328932281419494
+    },
+    {
+      "candidateId": "51f02eea967f784cd973ba8fe9a80474b70acb39bfed07b15f4ed7254988aeef",
+      "changedFields": 5,
+      "contentSha256": "d59dac431bd450380591b9e14fc035f38cb20f2698b6cf1e55ac17d532ac4c19",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 45.1875,
+          "extraTreesInteraction": 45.1875,
+          "pairedBootstrapP05": 32.875,
+          "pairedBootstrapP95": 58.0625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 39.91934029119958,
+          "scale": 42.16380989941937,
+          "standardisedDelta": 1.0717129241354981
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.375,
+          "extraTreesInteraction": 100.375,
+          "pairedBootstrapP05": 65.246875,
+          "pairedBootstrapP95": 141.5,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 86.48756603530474,
+          "scale": 88.69355048952264,
+          "standardisedDelta": 1.1317057378581015
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 58.9375,
+            "pairedBootstrapP05": 43.8125,
+            "pairedBootstrapP95": 74.375,
+            "pairs": 16,
+            "scale": 39.97458909654357,
+            "standardisedDelta": 1.4743741294665633
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 1.5,
+            "pairedBootstrapP05": 1.1875,
+            "pairedBootstrapP95": 1.875,
+            "pairs": 16,
+            "scale": 1.5360257159305635,
+            "standardisedDelta": 0.9765461505253913
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 1.0460870536020614
+    },
+    {
+      "candidateId": "a8758ed45b701a3ba37cfbf371f1007271b0bc2881f26cfb0eb11f98d1a5efff",
+      "changedFields": 2,
+      "contentSha256": "41bfb525a6d05ca8f6d16eafcd377c5adf459a9d779471d59b2c7f27ecfe1919",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 83.8125,
+          "extraTreesInteraction": 83.8125,
+          "pairedBootstrapP05": 55.875,
+          "pairedBootstrapP95": 116.75,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 70.9086457930679,
+          "scale": 68.19768019503577,
+          "standardisedDelta": 1.2289640902785555
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 97.5,
+          "extraTreesInteraction": 97.5,
+          "pairedBootstrapP05": 53.871874999999996,
+          "pairedBootstrapP95": 149.0625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 82.72928746295581,
+          "scale": 88.40867463094331,
+          "standardisedDelta": 1.1028329562343049
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 2.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 89.25,
+            "pairedBootstrapP05": 49.0,
+            "pairedBootstrapP95": 146.75625000000002,
+            "pairs": 16,
+            "scale": 97.47738119045874,
+            "standardisedDelta": 0.9155970227145982
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 4.6875,
+            "pairedBootstrapP05": 2.9375,
+            "pairedBootstrapP95": 6.75,
+            "pairs": 16,
+            "scale": 4.555109596650777,
+            "standardisedDelta": 1.0290641532415743
+          },
+          "win": {
+            "delta": -0.25,
+            "pairedBootstrapP05": -0.4375,
+            "pairedBootstrapP95": -0.0625,
+            "pairs": 16,
+            "scale": 0.33071891388307384,
+            "standardisedDelta": -0.7559289460184544
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 18,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      },
+      "rows": 176,
+      "score": -2.669070021051097
+    },
+    {
+      "candidateId": "1690366a3ac9447681c542ea23eec20413deca1c3e9785948ed908baa595889f",
+      "changedFields": 3,
+      "contentSha256": "89a93db8d5804175717d85373d205da606a20fbddf2d07fa7f562dc41a6c2cd9",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 85.125,
+          "extraTreesInteraction": 85.125,
+          "pairedBootstrapP05": 56.3125,
+          "pairedBootstrapP95": 119.44062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 71.90362066743977,
+          "scale": 68.3703080542826,
+          "standardisedDelta": 1.245058014546534
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 99.0625,
+          "extraTreesInteraction": 99.0625,
+          "pairedBootstrapP05": 55.684375,
+          "pairedBootstrapP95": 152.875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 84.59979384099987,
+          "scale": 91.0037545907276,
+          "standardisedDelta": 1.088553988189994
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 2.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 72.6875,
+            "pairedBootstrapP05": 54.434375,
+            "pairedBootstrapP95": 90.75312500000001,
+            "pairs": 16,
+            "scale": 48.59549836083071,
+            "standardisedDelta": 1.495766119328207
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 3.875,
+            "pairedBootstrapP05": 2.625,
+            "pairedBootstrapP95": 5.3125,
+            "pairs": 16,
+            "scale": 3.5261301379841328,
+            "standardisedDelta": 1.0989384533082815
+          },
+          "win": {
+            "delta": -0.1875,
+            "pairedBootstrapP05": -0.375,
+            "pairedBootstrapP95": -0.0625,
+            "pairs": 16,
+            "scale": 0.2914805954090255,
+            "standardisedDelta": -0.6432675209026768
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 18,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -1.290679892481799
+    },
+    {
+      "candidateId": "b910ecc60a1a3497ade795e9132e7430cd6333bc5c44730e283db13c3f29e43b",
+      "changedFields": 6,
+      "contentSha256": "20b4aebf2ed0134dcf3154f830d22c4a942ddf83efe746d66bb9a0f82c6f0ab8",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 45.1875,
+          "extraTreesInteraction": 45.1875,
+          "pairedBootstrapP05": 32.875,
+          "pairedBootstrapP95": 58.0625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 39.91934029119958,
+          "scale": 42.16380989941937,
+          "standardisedDelta": 1.0717129241354981
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 65.5,
+          "extraTreesInteraction": 65.5,
+          "pairedBootstrapP05": 47.809375,
+          "pairedBootstrapP95": 86.94062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 57.24146372890091,
+          "scale": 58.38576419759786,
+          "standardisedDelta": 1.1218488085267682
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 4.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 50.0,
+            "pairedBootstrapP05": 37.371874999999996,
+            "pairedBootstrapP95": 62.9375,
+            "pairs": 16,
+            "scale": 33.82301130517506,
+            "standardisedDelta": 1.4782835138144486
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 1.5,
+            "pairedBootstrapP05": 1.1875,
+            "pairedBootstrapP95": 1.875,
+            "pairs": 16,
+            "scale": 1.5360257159305635,
+            "standardisedDelta": 0.9765461505253913
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "common"
+      },
+      "rows": 176,
+      "score": 1.0499964379499467
+    },
+    {
+      "candidateId": "8d3ba0d098edb4a957903fb01a104ff84085f89c0f635ce0dfc011222d894ba7",
+      "changedFields": 3,
+      "contentSha256": "f1e3cc6e21050a2717e357e89bc6145533b89811f90f1002b3b0612132f12d00",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 50.875,
+          "extraTreesInteraction": 50.875,
+          "pairedBootstrapP05": 38.5,
+          "pairedBootstrapP95": 63.94062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 44.57428166473394,
+          "scale": 44.810189968354294,
+          "standardisedDelta": 1.1353444391985121
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 16.5625,
+          "extraTreesInteraction": 16.5625,
+          "pairedBootstrapP05": 10.246875000000001,
+          "pairedBootstrapP95": 22.1875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 16.596830305373018,
+          "scale": 28.770674461756627,
+          "standardisedDelta": 0.5756729833364065
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 3.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 64.25,
+            "pairedBootstrapP05": 44.25,
+            "pairedBootstrapP95": 88.25312500000001,
+            "pairs": 16,
+            "scale": 50.70776413676706,
+            "standardisedDelta": 1.2670643459393582
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 3.375,
+            "pairedBootstrapP05": 2.375,
+            "pairedBootstrapP95": 4.5,
+            "pairs": 16,
+            "scale": 3.0149367737980843,
+            "standardisedDelta": 1.119426460060827
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 12,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -1.5322626707242353
+    },
+    {
+      "candidateId": "66ba354cb88d5a7e29258571fe91567170fc7d316956b2998e54d376cf9b1594",
+      "changedFields": 5,
+      "contentSha256": "30a8b530fd589e589ab8af0c581c77c74107ac6afeec78e428a1f134f0f464c8",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.75,
+          "extraTreesInteraction": 100.75,
+          "pairedBootstrapP05": 70.625,
+          "pairedBootstrapP95": 139.440625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 85.20435510887775,
+          "scale": 77.75602242551699,
+          "standardisedDelta": 1.295719570744621
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 99.0625,
+          "extraTreesInteraction": 99.0625,
+          "pairedBootstrapP05": 55.684375,
+          "pairedBootstrapP95": 152.875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 84.59979384099987,
+          "scale": 91.0037545907276,
+          "standardisedDelta": 1.088553988189994
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 73.75,
+            "pairedBootstrapP05": 54.934375,
+            "pairedBootstrapP95": 92.06562500000001,
+            "pairs": 16,
+            "scale": 49.37037161851225,
+            "standardisedDelta": 1.493810914972862
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 3.5625,
+            "pairedBootstrapP05": 2.5,
+            "pairedBootstrapP95": 4.75,
+            "pairs": 16,
+            "scale": 3.1658270542624405,
+            "standardisedDelta": 1.1252983624621828
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -0.9801350968371443
+    },
+    {
+      "candidateId": "d31bd4f2eb457fa4c4c7d6cde3dafa10f82c6817703a1456c2c06460abebf26a",
+      "changedFields": 4,
+      "contentSha256": "6c2c0fd3fb4d21fa34cef42deb91fd35fa73bb5309c72ac3db9a07b0cc7e6fa7",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 83.8125,
+          "extraTreesInteraction": 83.8125,
+          "pairedBootstrapP05": 55.875,
+          "pairedBootstrapP95": 116.75,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 70.9086457930679,
+          "scale": 68.19768019503577,
+          "standardisedDelta": 1.2289640902785555
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 142.4375,
+          "extraTreesInteraction": 142.4375,
+          "pairedBootstrapP05": 86.30937499999999,
+          "pairedBootstrapP95": 208.378125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 119.46617703904134,
+          "scale": 112.77573738778823,
+          "standardisedDelta": 1.263015461474816
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 51.625,
+            "pairedBootstrapP05": 37.5,
+            "pairedBootstrapP95": 66.44062500000001,
+            "pairs": 16,
+            "scale": 36.344488921981004,
+            "standardisedDelta": 1.4204354368779528
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 1.5625,
+            "pairedBootstrapP05": 1.25,
+            "pairedBootstrapP95": 1.9375,
+            "pairs": 16,
+            "scale": 1.5684262614162006,
+            "standardisedDelta": 0.9962215237260504
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      },
+      "rows": 176,
+      "score": 1.0868995271565085
+    },
+    {
+      "candidateId": "2b40e6d1a4a5f835439caf4eff0fb6fb7e135c630d6ff0eb0bc4a11b859b4359",
+      "changedFields": 3,
+      "contentSha256": "b44c39117962f194694716f89f9df12ec9b22ee3bada488b90908411e82dc362",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 85.125,
+          "extraTreesInteraction": 85.125,
+          "pairedBootstrapP05": 56.3125,
+          "pairedBootstrapP95": 119.44062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 71.90362066743977,
+          "scale": 68.3703080542826,
+          "standardisedDelta": 1.245058014546534
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 143.375,
+          "extraTreesInteraction": 143.375,
+          "pairedBootstrapP05": 86.30937499999999,
+          "pairedBootstrapP95": 209.690625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 120.15423270197144,
+          "scale": 112.84350335752607,
+          "standardisedDelta": 1.2705649482162913
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 56.875,
+            "pairedBootstrapP05": 38.809375,
+            "pairedBootstrapP95": 78.31562500000001,
+            "pairs": 16,
+            "scale": 45.0673107695589,
+            "standardisedDelta": 1.262001193965554
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 1.75,
+            "pairedBootstrapP05": 1.3125,
+            "pairedBootstrapP95": 2.25,
+            "pairs": 16,
+            "scale": 1.75,
+            "standardisedDelta": 1.0
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.757059208512088
+    },
+    {
+      "candidateId": "055f4536fd7e6116fa27c8f52d49608170bd3896d0646a6f2a235d961c3c9054",
+      "changedFields": 5,
+      "contentSha256": "e672eec3d9e589188b613d89830f28a92c6d1f59abe2552fe2c9a79ec03c7163",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 131.8125,
+          "extraTreesInteraction": 131.8125,
+          "pairedBootstrapP05": 80.684375,
+          "pairedBootstrapP95": 191.3125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 110.62749645664222,
+          "scale": 104.5253022878163,
+          "standardisedDelta": 1.2610582999037578
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 99.0625,
+          "extraTreesInteraction": 99.0625,
+          "pairedBootstrapP05": 55.684375,
+          "pairedBootstrapP95": 152.875,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 84.59979384099987,
+          "scale": 91.0037545907276,
+          "standardisedDelta": 1.088553988189994
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 85.75,
+            "pairedBootstrapP05": 57.1875,
+            "pairedBootstrapP95": 120.8125,
+            "pairs": 16,
+            "scale": 70.74555529324793,
+            "standardisedDelta": 1.2120902810721752
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 3.9375,
+            "pairedBootstrapP05": 2.625,
+            "pairedBootstrapP95": 5.375,
+            "pairs": 16,
+            "scale": 3.625942765337037,
+            "standardisedDelta": 1.085924476701993
+          },
+          "win": {
+            "delta": -0.1875,
+            "pairedBootstrapP05": -0.375,
+            "pairedBootstrapP95": -0.0625,
+            "pairs": 16,
+            "scale": 0.2914805954090255,
+            "standardisedDelta": -0.6432675209026768
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 12,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -1.6368557307378309
+    },
+    {
+      "candidateId": "c5a5ce1e0616679613644bf865ad653f3a44944c24789161728c490599512574",
+      "changedFields": 6,
+      "contentSha256": "d598f22aec5c63aeeef127000914184b575cf7106c7e63ce5ae1aa19b80603de",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 99.8125,
+          "extraTreesInteraction": 99.8125,
+          "pairedBootstrapP05": 69.871875,
+          "pairedBootstrapP95": 138.75,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 84.5162994459477,
+          "scale": 77.69093007059688,
+          "standardisedDelta": 1.2847381272086908
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 97.125,
+          "extraTreesInteraction": 97.125,
+          "pairedBootstrapP05": 54.4375,
+          "pairedBootstrapP95": 150.5625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 83.09328694755828,
+          "scale": 90.72615044737653,
+          "standardisedDelta": 1.0705292743169454
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 73.3125,
+            "pairedBootstrapP05": 54.621875,
+            "pairedBootstrapP95": 91.62812500000001,
+            "pairs": 16,
+            "scale": 49.03616928796029,
+            "standardisedDelta": 1.4950698854447466
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 3.4375,
+            "pairedBootstrapP05": 2.4375,
+            "pairedBootstrapP95": 4.5,
+            "pairs": 16,
+            "scale": 3.021892773991162,
+            "standardisedDelta": 1.1375320890224456
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      },
+      "rows": 176,
+      "score": -0.8719008402383079
+    },
+    {
+      "candidateId": "94aa6bb292e1795d908fa843fa7e4598eb3f971bbd9536f5c508cc689d64c0fa",
+      "changedFields": 7,
+      "contentSha256": "0abf71c0be5b5c9ea5bc3d9a575f67bf0158bf0b948c00e73dcb23c5ed85b54b",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 99.8125,
+          "extraTreesInteraction": 99.8125,
+          "pairedBootstrapP05": 69.871875,
+          "pairedBootstrapP95": 138.75,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 84.5162994459477,
+          "scale": 77.69093007059688,
+          "standardisedDelta": 1.2847381272086908
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 226.25,
+          "extraTreesInteraction": 226.25,
+          "pairedBootstrapP05": 134.984375,
+          "pairedBootstrapP95": 335.9375,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 189.39917536399946,
+          "scale": 179.27098192662834,
+          "standardisedDelta": 1.2620558975495495
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 6.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 68.8125,
+            "pairedBootstrapP05": 50.684375,
+            "pairedBootstrapP95": 88.1875,
+            "pairs": 16,
+            "scale": 47.87906926243972,
+            "standardisedDelta": 1.4372146547548321
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 1.375,
+            "pairedBootstrapP05": 1.125,
+            "pairedBootstrapP95": 1.625,
+            "pairs": 16,
+            "scale": 1.4017288432503627,
+            "standardisedDelta": 0.9809315165489616
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      },
+      "rows": 176,
+      "score": 1.3242705523043816
+    },
+    {
+      "candidateId": "dec3dd652ea5c820337d9ba5a0491509e04f186f12fe0a3799392251d647064c",
+      "changedFields": 6,
+      "contentSha256": "e9fe01b76d769ed995ec325a4dd6611c32e25940d09b06d733246d011b55a2cc",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 130.875,
+          "extraTreesInteraction": 130.875,
+          "pairedBootstrapP05": 80.625,
+          "pairedBootstrapP95": 189.940625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 109.9394407937122,
+          "scale": 104.4594671316942,
+          "standardisedDelta": 1.252878303840122
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 125.0,
+          "extraTreesInteraction": 125.0,
+          "pairedBootstrapP05": 72.1875,
+          "pairedBootstrapP95": 191.25,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 106.58381651848988,
+          "scale": 113.26941317468498,
+          "standardisedDelta": 1.1035635878789627
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 5.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 82.6875,
+            "pairedBootstrapP05": 62.059375,
+            "pairedBootstrapP95": 103.625,
+            "pairs": 16,
+            "scale": 55.34401468033829,
+            "standardisedDelta": 1.4940640009149146
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 3.0625,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.0625,
+            "pairs": 16,
+            "scale": 2.7111964033429965,
+            "standardisedDelta": 1.12957511902267
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 12,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      },
+      "rows": 176,
+      "score": -0.46487241120612266
+    },
+    {
+      "candidateId": "693457d74585dd5663a4d3956ebd8022f0db3f8f24dfd6bc66bd2d7c858ed846",
+      "changedFields": 5,
+      "contentSha256": "7bc6f4d9cb35ed58203aa853dc033b79a355f461feb1bf74f4ade7bb705dd0ae",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 99.8125,
+          "extraTreesInteraction": 99.8125,
+          "pairedBootstrapP05": 69.871875,
+          "pairedBootstrapP95": 138.75,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 84.5162994459477,
+          "scale": 77.69093007059688,
+          "standardisedDelta": 1.2847381272086908
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 142.4375,
+          "extraTreesInteraction": 142.4375,
+          "pairedBootstrapP05": 86.30937499999999,
+          "pairedBootstrapP95": 208.378125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 119.46617703904134,
+          "scale": 112.77573738778823,
+          "standardisedDelta": 1.263015461474816
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 4.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 56.625,
+            "pairedBootstrapP05": 38.4375,
+            "pairedBootstrapP95": 78.31562500000001,
+            "pairs": 16,
+            "scale": 45.245683495776696,
+            "standardisedDelta": 1.2515005990634547
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 1.625,
+            "pairedBootstrapP05": 1.25,
+            "pairedBootstrapP95": 2.0625,
+            "pairs": 16,
+            "scale": 1.6381678027601445,
+            "standardisedDelta": 0.9919618718314704
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      },
+      "rows": 176,
+      "score": 0.8895160605382708
+    },
+    {
+      "candidateId": "ee94dd8080a97d69c88249dcc881b550f58ed20a25083a63dab4d5ecd8bca926",
+      "changedFields": 3,
+      "contentSha256": "cdcecb17315f7b3b037de6ea9bca1b686e540f1028e1380d6aade145a4993559",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 45.1875,
+          "extraTreesInteraction": 45.1875,
+          "pairedBootstrapP05": 32.875,
+          "pairedBootstrapP95": 58.0625,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 39.91934029119958,
+          "scale": 42.16380989941937,
+          "standardisedDelta": 1.0717129241354981
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 23.375,
+          "extraTreesInteraction": 23.375,
+          "pairedBootstrapP05": 15.625,
+          "pairedBootstrapP95": 29.75312500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 22.843448009277147,
+          "scale": 36.486392476339724,
+          "standardisedDelta": 0.6406497988300145
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 1.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 61.1875,
+            "pairedBootstrapP05": 46.246875,
+            "pairedBootstrapP95": 76.19062500000001,
+            "pairs": 16,
+            "scale": 40.681007066412455,
+            "standardisedDelta": 1.5040802677305982
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 2.875,
+            "pairedBootstrapP05": 2.1875,
+            "pairedBootstrapP95": 3.625,
+            "pairs": 16,
+            "scale": 2.4358969087381346,
+            "standardisedDelta": 1.1802634133188066
+          },
+          "win": {
+            "delta": -0.0625,
+            "pairedBootstrapP05": -0.1875,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.17399263633843817,
+            "standardisedDelta": -0.3592106040535498
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 11,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 16,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 2,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -0.7302699334393874
+    },
+    {
+      "candidateId": "f2a999d2bd6033fb852836dbc2398dc88214a0e18b07d6d290488f325cf2580a",
+      "changedFields": 3,
+      "contentSha256": "c9c4e3feac593277cd19ef967d0899438e4dcc5767548e95f488ae61e1ff6e64",
+      "edges": {
+        "brace->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 85.125,
+          "extraTreesInteraction": 85.125,
+          "pairedBootstrapP05": 56.3125,
+          "pairedBootstrapP95": 119.44062500000001,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 71.90362066743977,
+          "scale": 68.3703080542826,
+          "standardisedDelta": 1.245058014546534
+        },
+        "bulwark->fortify|discovery": {
+          "controlledProbePass": true,
+          "delta": 100.0625,
+          "extraTreesInteraction": 100.0625,
+          "pairedBootstrapP05": 55.996875,
+          "pairedBootstrapP95": 152.128125,
+          "pairs": 16,
+          "pass": true,
+          "ridgeInteractionCoefficient": 84.74732637546708,
+          "scale": 88.71721307888552,
+          "standardisedDelta": 1.1278814620904116
+        }
+      },
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 2.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 89.75,
+            "pairedBootstrapP05": 49.5625,
+            "pairedBootstrapP95": 147.190625,
+            "pairs": 16,
+            "scale": 97.4560598103063,
+            "standardisedDelta": 0.9209278537906643
+          },
+          "bothEdgesPass": true,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 4.6875,
+            "pairedBootstrapP05": 2.9375,
+            "pairedBootstrapP95": 6.75,
+            "pairs": 16,
+            "scale": 4.555109596650777,
+            "standardisedDelta": 1.0290641532415743
+          },
+          "win": {
+            "delta": -0.25,
+            "pairedBootstrapP05": -0.4375,
+            "pairedBootstrapP95": -0.0625,
+            "pairs": 16,
+            "scale": 0.33071891388307384,
+            "standardisedDelta": -0.7559289460184544
+          }
+        }
+      },
+      "parameters": {
+        "/cards/brace/effects/0/n": 8,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 2,
+        "/cards/bulwark/effects/0/n": 13,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -2.638690684118924
+    },
+    {
+      "candidateId": "a415bc29b4cb1a8b347b6d2172f370304941bb35a40781b4fe0811a5d3653732",
+      "changedFields": 2,
+      "contentSha256": "14e2f11884e7fa77a460ecaf004bbc7692f78eff7e11284892c9f30d834ae952",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.75,
+          "extraTreesInteraction": -0.75,
+          "pairedBootstrapP05": -2.003124999999999,
+          "pairedBootstrapP95": 0.5625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.626336812266456,
+          "scale": 5.323884859761714,
+          "standardisedDelta": -0.14087457181287885
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.8125,
+          "extraTreesInteraction": 0.8125,
+          "pairedBootstrapP05": -0.375,
+          "pairedBootstrapP95": 2.0625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5574023965983799,
+          "scale": 4.989221781437963,
+          "standardisedDelta": 0.1628510488394898
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 2.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 3.4375,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.5625,
+            "pairs": 16,
+            "scale": 4.7218532841989065,
+            "standardisedDelta": 0.7279980535403684
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.375,
+            "pairedBootstrapP05": -0.5625,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.9333240326917549,
+            "standardisedDelta": -0.401789718109455
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 2,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "rows": 176,
+      "score": 0.5871234817274895
+    },
+    {
+      "candidateId": "44f2ec08a4343b82174e0a941817b0e427633fbfcb35b717ba3c12c81f623e80",
+      "changedFields": 5,
+      "contentSha256": "2297d44df6078fd45cb31dd7860571d9a887c5e3cf36742b2a3dc4863702d4b3",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.125,
+          "extraTreesInteraction": -0.125,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.9375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.08839067130524199,
+          "scale": 5.168640416008837,
+          "standardisedDelta": -0.02418430959384161
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.9375,
+          "extraTreesInteraction": -0.9375,
+          "pairedBootstrapP05": -2.1875,
+          "pairedBootstrapP95": 0.1875,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.9118670274449147,
+          "scale": 4.852688325492891,
+          "standardisedDelta": -0.1931918839862392
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 4.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -2.5625,
+            "pairedBootstrapP95": 2.125,
+            "pairs": 16,
+            "scale": 3.9404750665370285,
+            "standardisedDelta": -0.031722063428725765
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 0.0625,
+            "pairedBootstrapP05": -0.1875,
+            "pairedBootstrapP95": 0.375,
+            "pairs": 16,
+            "scale": 1.0999822441748777,
+            "standardisedDelta": 0.05681909897271361
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 4,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -0.28741394741496495
+    },
+    {
+      "candidateId": "6ab00daf5c49439222a19eb9f1a18bddd4d19f104affb1cf5fd5addba0d1bbe6",
+      "changedFields": 7,
+      "contentSha256": "a8b75e112de9726800169579fcfde07b362506fde96ebe39144ae7e9c75f25d4",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.375,
+          "extraTreesInteraction": -0.375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.293003478933126,
+          "scale": 5.376453291901642,
+          "standardisedDelta": -0.06974858324629156
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -1.625,
+          "extraTreesInteraction": -1.625,
+          "pairedBootstrapP05": -2.75,
+          "pairedBootstrapP95": -0.4375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -1.421724004638576,
+          "scale": 4.8116882432260715,
+          "standardisedDelta": -0.3377193030507923
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 6.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 0.1875,
+            "pairedBootstrapP05": -2.125,
+            "pairedBootstrapP95": 2.375,
+            "pairs": 16,
+            "scale": 3.6889562802369995,
+            "standardisedDelta": 0.05082738470078966
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.4375,
+            "pairedBootstrapP95": 0.1875,
+            "pairs": 16,
+            "scale": 1.0897247358851685,
+            "standardisedDelta": -0.11470786693528087
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": -0.2868919183500026
+    },
+    {
+      "candidateId": "6a01bf9cce7cebd34a58e4ed199d7f28738c04720d180ade9b670b4cce7979fc",
+      "changedFields": 6,
+      "contentSha256": "57b0a492bd5b44e777191a8523f33e4f8c7496fd05b8e856ee0b92f45c3f411d",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.375,
+          "extraTreesInteraction": -0.375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.293003478933126,
+          "scale": 5.376453291901642,
+          "standardisedDelta": -0.06974858324629156
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -1.625,
+          "extraTreesInteraction": -1.625,
+          "pairedBootstrapP05": -2.75,
+          "pairedBootstrapP95": -0.4375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -1.421724004638576,
+          "scale": 4.8116882432260715,
+          "standardisedDelta": -0.3377193030507923
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 5.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 0.1875,
+            "pairedBootstrapP05": -2.125,
+            "pairedBootstrapP95": 2.375,
+            "pairs": 16,
+            "scale": 3.6889562802369995,
+            "standardisedDelta": 0.05082738470078966
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.4375,
+            "pairedBootstrapP95": 0.1875,
+            "pairs": 16,
+            "scale": 1.0897247358851685,
+            "standardisedDelta": -0.11470786693528087
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "rows": 176,
+      "score": -0.2868919183500026
+    },
+    {
+      "candidateId": "dc7d9b74114c7cc34a765b622f54e7a54e13c1e67fe2f59f9cf360f2eb35f092",
+      "changedFields": 3,
+      "contentSha256": "d57549ba7e8ef62b59dca2c2571d78a7b651fd13ade188f4ac0e7062726ac2e6",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.375,
+          "extraTreesInteraction": -0.375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.293003478933126,
+          "scale": 5.376453291901642,
+          "standardisedDelta": -0.06974858324629156
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.8125,
+          "extraTreesInteraction": 0.8125,
+          "pairedBootstrapP05": -0.375,
+          "pairedBootstrapP95": 2.0625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5574023965983799,
+          "scale": 4.989221781437963,
+          "standardisedDelta": 0.1628510488394898
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 2.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 3.5625,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.875,
+            "pairs": 16,
+            "scale": 4.955958377296969,
+            "standardisedDelta": 0.7188317029294795
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.3125,
+            "pairedBootstrapP05": -0.5,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 0.8425917976695477,
+            "standardisedDelta": -0.37087947077614203
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 4,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.649083119683188
+    },
+    {
+      "candidateId": "0865499b98dfeaa58c8a158b68823cd453d0ea8ea4c7d3380f1d762e2d245ef7",
+      "changedFields": 4,
+      "contentSha256": "99e4f5ca85f43a6e50dce74a047344e0c8ea86c9913f1922285a89b4eab2d313",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.75,
+          "extraTreesInteraction": -0.75,
+          "pairedBootstrapP05": -2.003124999999999,
+          "pairedBootstrapP95": 0.5625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.626336812266456,
+          "scale": 5.323884859761714,
+          "standardisedDelta": -0.14087457181287885
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.8125,
+          "extraTreesInteraction": 0.8125,
+          "pairedBootstrapP05": -0.375,
+          "pairedBootstrapP95": 2.0625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5574023965983799,
+          "scale": 4.989221781437963,
+          "standardisedDelta": 0.1628510488394898
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 3.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 3.4375,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.5625,
+            "pairs": 16,
+            "scale": 4.7218532841989065,
+            "standardisedDelta": 0.7279980535403684
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.375,
+            "pairedBootstrapP05": -0.5625,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.9333240326917549,
+            "standardisedDelta": -0.401789718109455
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.5871234817274895
+    },
+    {
+      "candidateId": "169fc1b6522be16431d899146400d63f9a2f3157e5e528e4e2ec4bc173957664",
+      "changedFields": 3,
+      "contentSha256": "c38d4c9bf8bf989870daad05cf9e6d8f01e57a6602d162345102bcce42398f62",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.75,
+          "extraTreesInteraction": -0.75,
+          "pairedBootstrapP05": -2.003124999999999,
+          "pairedBootstrapP95": 0.5625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.626336812266456,
+          "scale": 5.323884859761714,
+          "standardisedDelta": -0.14087457181287885
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.4375,
+          "extraTreesInteraction": -0.4375,
+          "pairedBootstrapP05": -1.3125,
+          "pairedBootstrapP95": 0.5,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.5449040072155583,
+          "scale": 4.731641124850341,
+          "standardisedDelta": -0.09246263367318201
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 2.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 0.3125,
+            "pairedBootstrapP05": -1.375,
+            "pairedBootstrapP95": 2.0625,
+            "pairs": 16,
+            "scale": 4.059975176956135,
+            "standardisedDelta": 0.07697091395378655
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 0.625,
+            "pairedBootstrapP05": 0.125,
+            "pairedBootstrapP95": 1.1875,
+            "pairs": 16,
+            "scale": 1.6381678027601445,
+            "standardisedDelta": 0.3815237968582579
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "rows": 176,
+      "score": -0.6889036578590924
+    },
+    {
+      "candidateId": "5509a3e0fbbeeef93add47ddfdbaad0cf12c35385a77edba3077883eee3039c6",
+      "changedFields": 6,
+      "contentSha256": "8694885a57d7488d678f95c5963bf53b82f9fe36a6db20342f483cab5d151b47",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.125,
+          "extraTreesInteraction": -0.125,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.9375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.08839067130524199,
+          "scale": 5.168640416008837,
+          "standardisedDelta": -0.02418430959384161
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.125,
+          "extraTreesInteraction": 0.125,
+          "pairedBootstrapP05": -1.625,
+          "pairedBootstrapP95": 2.0625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.08452519005283118,
+          "scale": 5.141361079519703,
+          "standardisedDelta": 0.024312628128362712
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 5.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 4.25,
+            "pairedBootstrapP05": 2.5625,
+            "pairedBootstrapP95": 6.0,
+            "pairs": 16,
+            "scale": 5.326818938165629,
+            "standardisedDelta": 0.7978495325886845
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.3125,
+            "pairedBootstrapP95": 0.0625,
+            "pairs": 16,
+            "scale": 0.8454843286542927,
+            "standardisedDelta": -0.14784425419091457
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.7736652229948429
+    },
+    {
+      "candidateId": "e9567f47add9eac6fb9bc28458ae8912509087b581bc8b40d20816ecf847af99",
+      "changedFields": 4,
+      "contentSha256": "83c3766de9ca05a2ec09843f27013cf78357491672176ebf7c36f8b5c09d21be",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.375,
+          "extraTreesInteraction": -0.375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.293003478933126,
+          "scale": 5.376453291901642,
+          "standardisedDelta": -0.06974858324629156
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.8125,
+          "extraTreesInteraction": 0.8125,
+          "pairedBootstrapP05": -0.375,
+          "pairedBootstrapP95": 2.0625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5574023965983799,
+          "scale": 4.989221781437963,
+          "standardisedDelta": 0.1628510488394898
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 3.5625,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.875,
+            "pairs": 16,
+            "scale": 4.955958377296969,
+            "standardisedDelta": 0.7188317029294795
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.3125,
+            "pairedBootstrapP05": -0.5,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 0.8425917976695477,
+            "standardisedDelta": -0.37087947077614203
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 2,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.649083119683188
+    },
+    {
+      "candidateId": "a70f4e8b4eb700e81948388c5d17dbacd915c98383b4bece89c45f1067a89d62",
+      "changedFields": 5,
+      "contentSha256": "484d1a3ec5ec3665b4c54effc853cad7239e07b7f644cfe1d69b1a9ae5161d66",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.375,
+          "extraTreesInteraction": -0.375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.293003478933126,
+          "scale": 5.376453291901642,
+          "standardisedDelta": -0.06974858324629156
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.4375,
+          "extraTreesInteraction": -0.4375,
+          "pairedBootstrapP05": -1.3125,
+          "pairedBootstrapP95": 0.5,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.5449040072155583,
+          "scale": 4.731641124850341,
+          "standardisedDelta": -0.09246263367318201
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 0.1875,
+            "pairedBootstrapP05": -2.125,
+            "pairedBootstrapP95": 2.375,
+            "pairs": 16,
+            "scale": 3.6889562802369995,
+            "standardisedDelta": 0.05082738470078966
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.4375,
+            "pairedBootstrapP95": 0.1875,
+            "pairs": 16,
+            "scale": 1.0897247358851685,
+            "standardisedDelta": -0.11470786693528087
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 3,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "rows": 176,
+      "score": -0.041635248972392354
+    },
+    {
+      "candidateId": "33e9199ab3630b70168309b6587692938e61bb210a8dba487b48d93a1a01f5f3",
+      "changedFields": 5,
+      "contentSha256": "f296ef855b8efe1b9ce696694d670401ab55d4b57de129c81de063ec5efdbf71",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.375,
+          "extraTreesInteraction": -0.375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.293003478933126,
+          "scale": 5.376453291901642,
+          "standardisedDelta": -0.06974858324629156
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.3125,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 3.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 3.5625,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.875,
+            "pairs": 16,
+            "scale": 4.955958377296969,
+            "standardisedDelta": 0.7188317029294795
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.3125,
+            "pairedBootstrapP05": -0.5,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 0.8425917976695477,
+            "standardisedDelta": -0.37087947077614203
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.649083119683188
+    },
+    {
+      "candidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 4,
+      "contentSha256": "8a41ca36f56a06d27d85b4b38e19f7a502d1ee809fdfa6a3115d2e5190bfd5b0",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.125,
+          "extraTreesInteraction": -0.125,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.9375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.08839067130524199,
+          "scale": 5.168640416008837,
+          "standardisedDelta": -0.02418430959384161
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.3125,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 2.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 4.25,
+            "pairedBootstrapP05": 2.5625,
+            "pairedBootstrapP95": 6.0,
+            "pairs": 16,
+            "scale": 5.326818938165629,
+            "standardisedDelta": 0.7978495325886845
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.3125,
+            "pairedBootstrapP95": 0.0625,
+            "pairs": 16,
+            "scale": 0.8454843286542927,
+            "standardisedDelta": -0.14784425419091457
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "rows": 176,
+      "score": 0.7736652229948429
+    },
+    {
+      "candidateId": "eca1b53380d7c5bce6b11fcee64646eafa6c03c76ef40cbe52a8f4ee42fea2d8",
+      "changedFields": 6,
+      "contentSha256": "240a0e54d9e2d13e5680d7cc4c3dc3949ea09172503fbc99637d2af81c2b413e",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.125,
+          "extraTreesInteraction": -0.125,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.9375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.08839067130524199,
+          "scale": 5.168640416008837,
+          "standardisedDelta": -0.02418430959384161
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -1.625,
+          "extraTreesInteraction": -1.625,
+          "pairedBootstrapP05": -2.75,
+          "pairedBootstrapP95": -0.4375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -1.421724004638576,
+          "scale": 4.8116882432260715,
+          "standardisedDelta": -0.3377193030507923
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 6.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -2.5625,
+            "pairedBootstrapP95": 2.125,
+            "pairs": 16,
+            "scale": 3.9404750665370285,
+            "standardisedDelta": -0.031722063428725765
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": false,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": 0.0625,
+            "pairedBootstrapP05": -0.1875,
+            "pairedBootstrapP95": 0.375,
+            "pairs": 16,
+            "scale": 1.0999822441748777,
+            "standardisedDelta": 0.05681909897271361
+          },
+          "win": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 0.24206145913796356,
+            "standardisedDelta": -0.5163977794943222
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 0,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "rows": 176,
+      "score": -0.43194136647951803
+    },
+    {
+      "candidateId": "30c6ba97b6c463f83b5f8e852137087b39c1263259d381c81db3bb61ce7ad8bc",
+      "changedFields": 5,
+      "contentSha256": "71c0e99c856d476d55e808890e53c540beba1b996ab5a918838d8b6ddb76c1da",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.125,
+          "extraTreesInteraction": -0.125,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.9375,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.08839067130524199,
+          "scale": 5.168640416008837,
+          "standardisedDelta": -0.02418430959384161
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.3125,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 4.5,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 4.25,
+            "pairedBootstrapP05": 2.5625,
+            "pairedBootstrapP95": 6.0,
+            "pairs": 16,
+            "scale": 5.326818938165629,
+            "standardisedDelta": 0.7978495325886845
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.125,
+            "pairedBootstrapP05": -0.3125,
+            "pairedBootstrapP95": 0.0625,
+            "pairs": 16,
+            "scale": 0.8454843286542927,
+            "standardisedDelta": -0.14784425419091457
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.7736652229948429
+    },
+    {
+      "candidateId": "c5d133d8fdc5fba2a7e811fd29062d6146d3fbf97199f301f4e3e4d8c88c3591",
+      "changedFields": 5,
+      "contentSha256": "df502e775721382c78bbcf9dbf5550006fc3a0f318cdf9190fba7a51095cbf6b",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.75,
+          "extraTreesInteraction": -0.75,
+          "pairedBootstrapP05": -2.003124999999999,
+          "pairedBootstrapP95": 0.5625,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.626336812266456,
+          "scale": 5.323884859761714,
+          "standardisedDelta": -0.14087457181287885
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.3125,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 4.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 3.4375,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.5625,
+            "pairs": 16,
+            "scale": 4.7218532841989065,
+            "standardisedDelta": 0.7279980535403684
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.375,
+            "pairedBootstrapP05": -0.5625,
+            "pairedBootstrapP95": -0.1875,
+            "pairs": 16,
+            "scale": 0.9333240326917549,
+            "standardisedDelta": -0.401789718109455
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 1,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 6,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "rows": 176,
+      "score": 0.5871234817274895
+    },
+    {
+      "candidateId": "dcde7f1faf600ae5823670b911e705628a197b707913a89d8ff678cffba0dc1c",
+      "changedFields": 4,
+      "contentSha256": "1289d2103d1593d061800123b86718b35341ca198b5b20e8686f03fd70ba68a1",
+      "edges": {
+        "firstSpark->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": -0.375,
+          "extraTreesInteraction": -0.375,
+          "pairedBootstrapP05": -1.4375,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": -0.293003478933126,
+          "scale": 5.376453291901642,
+          "standardisedDelta": -0.06974858324629156
+        },
+        "offering->verdantBranch|discovery": {
+          "controlledProbePass": true,
+          "delta": 0.75,
+          "extraTreesInteraction": 0.75,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 2.3125,
+          "pairs": 16,
+          "pass": false,
+          "ridgeInteractionCoefficient": 0.5379461409612224,
+          "scale": 5.181095444015677,
+          "standardisedDelta": 0.14475703219601424
+        }
+      },
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 2.0,
+      "panels": {
+        "discovery": {
+          "activation": {
+            "delta": 3.5625,
+            "pairedBootstrapP05": 2.25,
+            "pairedBootstrapP95": 4.875,
+            "pairs": 16,
+            "scale": 4.955958377296969,
+            "standardisedDelta": 0.7188317029294795
+          },
+          "bothEdgesPass": false,
+          "error": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "packagePass": false,
+          "panelPass": true,
+          "stall": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          },
+          "turns": {
+            "delta": -0.3125,
+            "pairedBootstrapP05": -0.5,
+            "pairedBootstrapP95": -0.125,
+            "pairs": 16,
+            "scale": 0.8425917976695477,
+            "standardisedDelta": -0.37087947077614203
+          },
+          "win": {
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 16,
+            "scale": 1.0,
+            "standardisedDelta": 0.0
+          }
+        }
+      },
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 2,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "rows": 176,
+      "score": 0.649083119683188
+    }
+  ],
+  "decision": "VALIDATE_MATCHED_METHOD_RECOMMENDATIONS",
+  "issue": 525,
+  "positiveControl": {
+    "candidateId": "e3337db509c63c851237ffcd4c91b4625365494af50ac22c9a58477760d2cddc",
+    "pass": true,
+    "rows": 2816
+  },
+  "recommendations": [
+    {
+      "candidateId": "050f147606908274f412e849ea2a5279266fb0c81f629e915b64c14bde45607c",
+      "changedFields": 4,
+      "contentSha256": "c7b1874467267931d71b66fa1dd753f6ab983ce2cd01d8e954c589ba4098eb06",
+      "family": "ash-poison-catalyst-l1",
+      "method": "sobol",
+      "normalisedL1": 3.333333333333333,
+      "parameters": {
+        "/cards/catalyst/cost": 1,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "rare",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 5,
+        "/cards/toxicMist/rarity": "uncommon",
+        "/cards/toxicMist/up/effects/0/n": 7
+      },
+      "score": 2.170614023416085
+    },
+    {
+      "candidateId": "b279168c1c1e8f5cbdd99b93feb57c9da029d75ceb597bc0f8b3c46523de9b2f",
+      "changedFields": 7,
+      "contentSha256": "eabb881ce86d3dcb13feb0c794780f861caf9dc53d47801b30cd736234de379f",
+      "family": "ash-poison-catalyst-l1",
+      "method": "random",
+      "normalisedL1": 6.333333333333333,
+      "parameters": {
+        "/cards/catalyst/cost": 0,
+        "/cards/catalyst/effects/0/n": 3,
+        "/cards/catalyst/rarity": "uncommon",
+        "/cards/catalyst/up/effects/0/n": 4,
+        "/cards/toxicMist/effects/0/n": 6,
+        "/cards/toxicMist/rarity": "common",
+        "/cards/toxicMist/up/effects/0/n": 6
+      },
+      "score": 2.2178292457575846
+    },
+    {
+      "candidateId": "5509a3e0fbbeeef93add47ddfdbaad0cf12c35385a77edba3077883eee3039c6",
+      "changedFields": 6,
+      "contentSha256": "8694885a57d7488d678f95c5963bf53b82f9fe36a6db20342f483cab5d151b47",
+      "family": "dusk-kindle-draw-l1",
+      "method": "sobol",
+      "normalisedL1": 5.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 4,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 5,
+        "/cards/offering/rarity": "uncommon",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "uncommon"
+      },
+      "score": 0.7736652229948429
+    },
+    {
+      "candidateId": "969ea687ded76c3ffe7ee44c14bb3b6e54ddab6ef65bc56fd2bf384c1f841d84",
+      "changedFields": 4,
+      "contentSha256": "8a41ca36f56a06d27d85b4b38e19f7a502d1ee809fdfa6a3115d2e5190bfd5b0",
+      "family": "dusk-kindle-draw-l1",
+      "method": "random",
+      "normalisedL1": 2.5,
+      "parameters": {
+        "/cards/firstSpark/effects/0/n": 3,
+        "/cards/firstSpark/up/effects/0/n": 3,
+        "/cards/offering/cost": 1,
+        "/cards/offering/effects/0/draw": 4,
+        "/cards/offering/rarity": "rare",
+        "/cards/offering/up/effects/0/draw": 5,
+        "/relics/verdantBranch/rarity": "rare"
+      },
+      "score": 0.7736652229948429
+    },
+    {
+      "candidateId": "e7b16d99b13c9cfdee41170be41d91927983d5ec2999395afd118cd4a3c3087e",
+      "changedFields": 6,
+      "contentSha256": "fecd1a4ae5449e365fca18a47f7819b3862cefc2afe103fed6c0e22f50c67cff",
+      "family": "ward-double-l1",
+      "method": "sobol",
+      "normalisedL1": 5.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 17,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 22,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "uncommon"
+      },
+      "score": 1.328932281419494
+    },
+    {
+      "candidateId": "94aa6bb292e1795d908fa843fa7e4598eb3f971bbd9536f5c508cc689d64c0fa",
+      "changedFields": 7,
+      "contentSha256": "0abf71c0be5b5c9ea5bc3d9a575f67bf0158bf0b948c00e73dcb23c5ed85b54b",
+      "family": "ward-double-l1",
+      "method": "random",
+      "normalisedL1": 6.0,
+      "parameters": {
+        "/cards/brace/effects/0/n": 10,
+        "/cards/brace/up/effects/0/n": 14,
+        "/cards/bulwark/cost": 1,
+        "/cards/bulwark/effects/0/n": 20,
+        "/cards/bulwark/up/effects/0/n": 26,
+        "/cards/fortify/cost": 1,
+        "/cards/fortify/rarity": "common"
+      },
+      "score": 1.3242705523043816
+    }
+  ],
+  "schemaVersion": 1,
+  "screenRows": 8448
+}
