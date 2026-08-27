@@ -320,7 +320,8 @@ static func _route_edge(edge: Dictionary, plan: Dictionary,
 		edge, plan, (half_width + safety) * 2.0
 	)
 	var obstacles_report: Dictionary = _Routes.route_obstacles(
-		edge, plan, heroes, accepted_routes, source, assets, channel
+		edge, plan, heroes, accepted_routes, source, assets, channel,
+		half_width + safety
 	)
 	if obstacles_report.get("ok", false) != true:
 		return {"ok": false, "binding": obstacles_report.get("binding", {}),
@@ -721,14 +722,10 @@ static func _binding_nodes(binding: Dictionary,
 	for edge: Dictionary in input.edge_records():
 		edges[str(edge["id"])] = edge
 	var affected: Dictionary = {}
-	var local_nodes: Array = binding.get("details", {}).get("local_node_ids", [])
-	if not local_nodes.is_empty():
-		for node_id_v: Variant in local_nodes:
-			var node_id: String = str(node_id_v)
-			if nodes.has(node_id):
-				affected[node_id] = true
-		return MapLayoutCanonical.sorted_keys(affected)
-	var entities: Array = binding.get("details", {}).get("entities", []).duplicate()
+	var entities: Array = binding.get(
+		"details", {}
+	).get("local_node_ids", []).duplicate()
+	entities.append_array(binding.get("details", {}).get("entities", []))
 	entities.append(binding.get("node_id", ""))
 	entities.append(binding.get("edge_id", ""))
 	for entity_v: Variant in entities:

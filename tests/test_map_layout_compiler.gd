@@ -17,6 +17,8 @@ static func run(fails: Array[String]) -> void:
 		"res://docs/map/map-quality-v2.json"
 	))
 	_test_portal_geometry(fails, quality)
+	_test_causal_binding_closure(fails, quality)
+	_test_inflation_safe_corridor_culling(fails, quality)
 	_test_complete_chain(fails, quality)
 	_test_layered_route_plan(fails, quality)
 	_test_atomic_component_failure(fails, quality)
@@ -24,6 +26,218 @@ static func run(fails: Array[String]) -> void:
 	_test_three_way_fanout_merge(fails, quality)
 	_test_bounded_local_substitution(fails, quality)
 	_test_production_graphs(fails, quality)
+
+
+static func _test_causal_binding_closure(fails: Array[String],
+		quality: Dictionary) -> void:
+	var nodes: Array = [
+		_node("11,5", 11, 5), _node("12,5", 12, 5), _node("12,6", 12, 6),
+		_node("12,1", 12, 1), _node("13,1", 13, 1), _node("13,2", 13, 2),
+		_node("S", 2, 3), _node("A", 3, 2), _node("B", 3, 4),
+		_node("U", 4, 1), _node("V", 5, 1),
+		_node("X", 4, 5), _node("Y", 5, 5),
+		_node("C1", 6, 2), _node("C2", 6, 4),
+		_node("D1", 7, 2), _node("D2", 7, 4),
+	]
+	var first_edge: Dictionary = _edge("11,5", "12,5")
+	var second_edge: Dictionary = _edge("12,1", "13,1")
+	var fanout_a: Dictionary = _edge("S", "A")
+	var fanout_b: Dictionary = _edge("S", "B")
+	var unrelated_a: Dictionary = _edge("U", "V")
+	var unrelated_b: Dictionary = _edge("X", "Y")
+	var component_a: Dictionary = _edge("C1", "D2")
+	var component_b: Dictionary = _edge("C2", "D1")
+	var edges: Array = [
+		first_edge, second_edge, fanout_a, fanout_b,
+		unrelated_a, unrelated_b, component_a, component_b,
+	]
+	var assets: Dictionary = _assets()
+	var input: MapLayoutInput = _input(
+		nodes, edges, 717, 0, _hero(), quality, assets
+	)
+	var first_binding: Dictionary = {
+		"node_id": "12,6",
+		"edge_id": first_edge["id"],
+		"details": {
+			"local_node_ids": ["12,5", "missing", "11,5", ""],
+			"entities": [first_edge["id"], "12,6", "missing"],
+		},
+	}
+	var second_binding: Dictionary = {
+		"node_id": "13,2",
+		"edge_id": second_edge["id"],
+		"details": {
+			"local_node_ids": ["13,1", "12,1"],
+			"entities": ["13,2", second_edge["id"]],
+		},
+	}
+	_check(fails, _binding_nodes_with_early_return(first_binding, input) \
+			== ["11,5", "12,5"]
+			and MapLayoutCompiler._binding_nodes(first_binding, input) \
+				== ["11,5", "12,5", "12,6"]
+			and _binding_nodes_with_early_return(second_binding, input) \
+				== ["12,1", "13,1"]
+			and MapLayoutCompiler._binding_nodes(second_binding, input) \
+				== ["12,1", "13,1", "13,2"],
+		"causal closure includes failed edge endpoints and named non-endpoint blockers")
+	var fanout_binding: Dictionary = {
+		"node_id": "S",
+		"edge_id": fanout_a["id"],
+		"details": {
+			"local_node_ids": ["S"],
+			"entities": ["S", fanout_a["id"], fanout_b["id"]],
+		},
+	}
+	_check(fails, _binding_nodes_with_early_return(fanout_binding, input) == ["S"]
+			and MapLayoutCompiler._binding_nodes(fanout_binding, input) \
+				== ["A", "B", "S"],
+		"causal closure includes the source and both governed fan-out targets")
+	var unrelated_binding: Dictionary = {
+		"node_id": "",
+		"edge_id": unrelated_a["id"],
+		"details": {"local_node_ids": [],
+			"entities": [unrelated_b["id"], unrelated_a["id"]]},
+	}
+	_check(fails, MapLayoutCompiler._binding_nodes(unrelated_binding, input) \
+			== ["U", "V", "X", "Y"],
+		"unrelated-edge closure includes both offending edges' endpoints")
+	var component_nodes: Array = ["C1", "C2", "D1", "D2"]
+	var component_binding: Dictionary = {
+		"node_id": "",
+		"edge_id": "",
+		"details": {
+			"local_node_ids": component_nodes.duplicate(),
+			"entities": [component_b["id"], "D2", component_a["id"], "C1"],
+		},
+	}
+	_check(fails, MapLayoutCompiler._binding_nodes(component_binding, input) \
+			== component_nodes,
+		"two-edge inversion-component closure remains exactly governed")
+	var reordered_nodes: Array = nodes.duplicate(true)
+	var reordered_edges: Array = edges.duplicate(true)
+	reordered_nodes.reverse()
+	reordered_edges.reverse()
+	var reordered_input: MapLayoutInput = _input(
+		reordered_nodes, reordered_edges, 717, 0, _hero(), quality, assets
+	)
+	var reordered_binding: Dictionary = fanout_binding.duplicate(true)
+	reordered_binding["details"]["local_node_ids"].reverse()
+	reordered_binding["details"]["entities"].reverse()
+	_check(fails, MapLayoutCompiler._binding_nodes(
+			reordered_binding, reordered_input
+		) == ["A", "B", "S"],
+		"causal closure ordering is canonical under reordered equivalent input")
+
+
+static func _binding_nodes_with_early_return(binding: Dictionary,
+		input: MapLayoutInput) -> Array[String]:
+	var nodes: Dictionary = {}
+	for node: Dictionary in input.node_records():
+		nodes[str(node["id"])] = true
+	var edges: Dictionary = {}
+	for edge: Dictionary in input.edge_records():
+		edges[str(edge["id"])] = edge
+	var affected: Dictionary = {}
+	var local_nodes: Array = binding.get("details", {}).get("local_node_ids", [])
+	if not local_nodes.is_empty():
+		for node_id_v: Variant in local_nodes:
+			var node_id: String = str(node_id_v)
+			if nodes.has(node_id):
+				affected[node_id] = true
+		return MapLayoutCanonical.sorted_keys(affected)
+	var entities: Array = binding.get("details", {}).get("entities", []).duplicate()
+	entities.append(binding.get("node_id", ""))
+	entities.append(binding.get("edge_id", ""))
+	for entity_v: Variant in entities:
+		var entity: String = str(entity_v)
+		if nodes.has(entity):
+			affected[entity] = true
+		if edges.has(entity):
+			var edge: Dictionary = edges[entity]
+			affected[str(edge["from"])] = true
+			affected[str(edge["to"])] = true
+	return MapLayoutCanonical.sorted_keys(affected)
+
+
+static func _attempted_candidate_ids(diagnostics: Dictionary) -> Dictionary:
+	var by_node: Dictionary = {}
+	for substitution_v: Variant in diagnostics.get("substitutions", []):
+		var substitution: Dictionary = substitution_v
+		var node_ids: Array = substitution.get("node_ids", [])
+		var candidate_ids: Array = substitution.get("to_candidate_ids", [])
+		for i: int in range(mini(node_ids.size(), candidate_ids.size())):
+			var node_id: String = str(node_ids[i])
+			var candidate_id: String = str(candidate_ids[i])
+			var attempted: Array = by_node.get(node_id, []).duplicate()
+			if not candidate_id.is_empty() and candidate_id not in attempted:
+				attempted.append(candidate_id)
+				attempted.sort()
+			by_node[node_id] = attempted
+	return MapLayoutCanonical.ordered_dictionary(by_node)
+
+
+static func _last_route_attempt(diagnostics: Dictionary) -> Dictionary:
+	var attempts: Array = diagnostics.get("attempts", [])
+	if attempts.is_empty():
+		return {}
+	var last: Dictionary = attempts[-1]
+	var routes: Array[Dictionary] = []
+	for route_v: Variant in last.get("routes", []):
+		var route: Dictionary = route_v
+		var plan: Dictionary = route.get("plan", {})
+		routes.append({
+			"edge_id": route.get("edge_id", ""),
+			"route_digest": route.get("route_digest", ""),
+			"status": route.get("status", ""),
+			"obstacle_ids": route.get("obstacle_ids", []),
+			"router_calls": plan.get("router_calls", {}),
+			"first_blocker": plan.get("first_blocker", {}),
+		})
+	return {
+		"chosen_candidate_ids": last.get("chosen_candidate_ids", {}),
+		"routes": routes,
+	}
+
+
+static func _test_inflation_safe_corridor_culling(fails: Array[String],
+		quality: Dictionary) -> void:
+	var current: Dictionary = _edge("A", "B")
+	var accepted_edge: Dictionary = _edge("C", "D")
+	var accepted_id: String = str(accepted_edge["id"])
+	var half_width: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["physical_half_width_m"]
+	)
+	var pending_radius: float = half_width + MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["world_clearance_m"]
+	)
+	var channel: PackedVector2Array = Routes._rectangle(0.0, 10.0, -1.0, 1.0)
+	var physical: PackedVector2Array = Routes._segment_envelope(
+		Vector2(0.0, 3.0), Vector2(10.0, 3.0), half_width, false, false
+	)
+	var channel_bounds: Rect2 = Routes._bounds(channel)
+	var physical_bounds: Rect2 = Routes._bounds(physical)
+	var grown_bounds: Rect2 = physical_bounds.grow(pending_radius)
+	var accepted_routes: Dictionary = {
+		accepted_id: {
+			"from": accepted_edge["from"],
+			"to": accepted_edge["to"],
+			"centerline": [[0.0, 0.0, 3.0], [10.0, 0.0, 3.0]],
+			"corridor_width": half_width * 2.0,
+		},
+	}
+	var obstacles: Dictionary = Routes.route_obstacles(
+		current,
+		{"portal_reservations": {},
+			"ports": {accepted_id: {"stub_m": 0.0}}},
+		{}, accepted_routes,
+		{"hero_anchor_contract": {"protected_zones": {}}},
+		{"profiles": {}}, channel, pending_radius
+	)
+	_check(fails, not physical_bounds.intersects(channel_bounds, true)
+			and grown_bounds.intersects(channel_bounds, true)
+			and obstacles.get("obstacle_ids", []) \
+				== ["edge:%s/s00" % accepted_id],
+		"pending-radius culling retains an accepted segment whose inflated bounds reach the channel")
 
 
 static func _test_portal_geometry(fails: Array[String], quality: Dictionary) -> void:
@@ -88,7 +302,7 @@ static func _test_portal_geometry(fails: Array[String], quality: Dictionary) -> 
 		var obstacle_report: Dictionary = Routes.route_obstacles(
 			edge, terminal_plan, {}, greedy_routes,
 			{"hero_anchor_contract": {"protected_zones": {}}},
-			{"profiles": {}}, channel
+			{"profiles": {}}, channel, half_width + safety
 		)
 		var routed: Dictionary = Routes.route_planned(
 			edge, terminal_plan, obstacle_report.get("obstacles", []),
@@ -187,7 +401,7 @@ static func _test_portal_geometry(fails: Array[String], quality: Dictionary) -> 
 	var obstacles: Dictionary = Routes.route_obstacles(
 		chain_edges[0], chain_plan, {}, {},
 		{"hero_anchor_contract": {"protected_zones": {}}}, {"profiles": {}},
-		Routes.route_channel(chain_edges[0], chain_plan, 4.0)
+		Routes.route_channel(chain_edges[0], chain_plan, 4.0), half_width + safety
 	)
 	_check(fails, obstacles.get("obstacle_ids", []) == ["node:R"],
 		"an edge omits only its own endpoint reservations and sees one obstacle per other node")
@@ -443,11 +657,14 @@ static func _test_crossing_detour(fails: Array[String], quality: Dictionary) -> 
 	var compiled: Dictionary = MapLayoutCompiler.compile(
 		_input(nodes, edges, 17634, 0, _hero(), quality, assets), quality, assets
 	)
+	var diagnostics: Dictionary = compiled.get("diagnostics", {})
 	var result_v: Variant = compiled.get("result", null)
 	_check(fails, str(compiled.get("status", "")) == MapLayoutCompiler.COMPILED
 			and result_v is MapLayoutResult,
 		"crossing shortest paths compile by routing one legal deterministic detour: %s" \
-			% str(compiled.get("failure", {})))
+			% str({"failure": compiled.get("failure", {}),
+				"attempted_candidate_ids": _attempted_candidate_ids(diagnostics),
+				"last_attempt": _last_route_attempt(diagnostics)}))
 	if not (result_v is MapLayoutResult):
 		return
 	var result: MapLayoutResult = result_v
@@ -482,11 +699,23 @@ static func _test_three_way_fanout_merge(fails: Array[String],
 	var compiled: Dictionary = MapLayoutCompiler.compile(
 		_input(nodes, edges, 717, 0, _hero(), quality, assets), quality, assets
 	)
+	var attempted: Dictionary = _attempted_candidate_ids(
+		compiled.get("diagnostics", {})
+	)
+	_check(fails, not attempted.get("S", []).is_empty()
+			and not attempted.get("A", []).is_empty()
+			and not attempted.get("B", []).is_empty(),
+		"fan-out repair actually attempts source and branch-target candidates: %s" \
+			% str(attempted))
 	var result_v: Variant = compiled.get("result", null)
 	_check(fails, str(compiled.get("status", "")) == MapLayoutCompiler.COMPILED
 			and result_v is MapLayoutResult,
 		"three-way fan-out followed by merge compiles: %s" \
-			% str(compiled.get("failure", {})))
+			% str({"failure": compiled.get("failure", {}),
+				"attempted_candidate_ids": {
+					"A": attempted.get("A", []), "B": attempted.get("B", []),
+					"S": attempted.get("S", []),
+				}}))
 	if not (result_v is MapLayoutResult):
 		return
 	var result: MapLayoutResult = result_v
@@ -557,10 +786,26 @@ static func _test_production_graphs(fails: Array[String], quality: Dictionary) -
 			bound["nodes"], bound["edges"], seed, act, _hero(), quality, assets
 		)
 		var compiled: Dictionary = MapLayoutCompiler.compile(input, quality, assets)
+		var attempted: Dictionary = _attempted_candidate_ids(
+			compiled.get("diagnostics", {})
+		)
+		if seed == 717 and act == 0:
+			_check(fails, not attempted.get("12,6", []).is_empty(),
+				"seed 717 actually attempts candidates for blocker 12,6: %s" \
+					% str(attempted))
+		if seed == 17634 and act == 0:
+			_check(fails, not attempted.get("13,2", []).is_empty(),
+				"seed 17634 actually attempts candidates for blocker 13,2: %s" \
+					% str(attempted))
 		var result_v: Variant = compiled.get("result", null)
 		_check(fails, str(compiled.get("status", "")) == MapLayoutCompiler.COMPILED
 				and result_v is MapLayoutResult,
-			"%s production graph compiles: %s" % [label, compiled.get("failure", {})])
+			"%s production graph compiles: %s" % [label, {
+				"failure": compiled.get("failure", {}),
+				"blocker_candidate_ids": attempted.get(
+					"12,6" if seed == 717 else "13,2", []
+				) if act == 0 and seed in [717, 17634] else [],
+			}])
 		if result_v is MapLayoutResult:
 			var result: MapLayoutResult = result_v
 			var serial: Dictionary = result.to_dict()

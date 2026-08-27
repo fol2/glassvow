@@ -190,7 +190,8 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 
 static func route_obstacles(edge: Dictionary, plan: Dictionary,
 		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
-		assets: Dictionary, channel: PackedVector2Array) -> Dictionary:
+		assets: Dictionary, channel: PackedVector2Array,
+		pending_radius_m: float) -> Dictionary:
 	var obstacles: Array[Dictionary] = []
 	var reservations: Dictionary = plan["portal_reservations"]
 	for node_id: String in MapLayoutCanonical.sorted_keys(reservations):
@@ -262,7 +263,8 @@ static func route_obstacles(edge: Dictionary, plan: Dictionary,
 					"edge_corridor", accepted_id,
 					"accepted route contains a degenerate segment"
 				)}
-			if not _bounds(polygon).intersects(_bounds(channel), true):
+			if not _bounds(polygon).grow(pending_radius_m).intersects(
+					_bounds(channel), true):
 				continue
 			obstacles.append({
 				"id": "edge:%s/s%02d" % [accepted_id, segment],
