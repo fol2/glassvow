@@ -26,7 +26,9 @@ static func compile(input: MapLayoutInput, quality: Dictionary,
 		"access_lengths": {},
 		"route_calls": {"normal": 0, "bypass": 0},
 		"chosen_bypass_sides": {},
+		"selected_bypass_owners": {},
 		"rejected_route_plans": [],
+		"component_route_plans": [],
 		"chosen_candidate_ids": {},
 		"substitutions": [],
 		"attempts": [],
@@ -89,7 +91,9 @@ static func compile(input: MapLayoutInput, quality: Dictionary,
 		diagnostics["attempts"].append(attempt["diagnostics"])
 		for key: String in [
 			"route_order", "inversion_components", "access_lengths",
-			"route_calls", "chosen_bypass_sides", "rejected_route_plans",
+			"route_calls", "chosen_bypass_sides", "selected_bypass_owners",
+			"rejected_route_plans",
+			"component_route_plans",
 		]:
 			diagnostics[key] = attempt["diagnostics"].get(key, diagnostics[key])
 		diagnostics["chosen_candidate_ids"] = attempt.get("chosen_candidate_ids", {})
@@ -206,6 +210,10 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 	var routes: Dictionary = {}
 	var route_rows: Array = []
 	var bypass_usage: Dictionary = {"total": 0, "components": {}}
+	var completed_components: Dictionary = {}
+	var edges_by_id: Dictionary = {}
+	for edge: Dictionary in route_order:
+		edges_by_id[str(edge["id"])] = edge
 	var half_width: float = MapLayoutCanonical.float_value(
 		quality["geometry"]["road_corridor"]["physical_half_width_m"]
 	)
@@ -214,69 +222,44 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 	)
 	for edge: Dictionary in route_order:
 		var edge_id: String = str(edge["id"])
-		var channel: PackedVector2Array = _Routes.route_channel(
-			edge, plan, (half_width + safety) * 2.0
+		var component_id: String = str(plan["edge_components"].get(edge_id, ""))
+		if completed_components.has(component_id):
+			continue
+		if not component_id.is_empty():
+			var component: Dictionary = plan["components_by_id"][component_id]
+			if component["edge_ids"].size() == 2:
+				var atomic: Dictionary = _route_atomic_component(
+					component, _component_plan_specs(
+						component, plan, half_width + safety, quality
+					), edges_by_id, plan, heroes, routes, source, assets,
+					quality, half_width, safety, bypass_usage
+				)
+				_record_atomic_diagnostics(plan_diagnostics, atomic)
+				plan_diagnostics["component_route_plans"].append(
+					atomic["component_diagnostics"]
+				)
+				if atomic.get("ok", false) != true:
+					return _attempt_failure(chosen_ids, route_rows,
+						atomic["binding"], plan_diagnostics)
+				routes = atomic["routes"]
+				bypass_usage = atomic["usage"]
+				route_rows.append_array(atomic["route_rows"])
+				completed_components[component_id] = true
+				continue
+		var routed_edge: Dictionary = _route_edge(
+			edge, plan, heroes, routes, source, assets, quality,
+			half_width, safety, bypass_usage
 		)
-		var obstacles_report: Dictionary = _Routes.route_obstacles(
-			edge, plan, heroes, routes, source, assets, channel
+		var route_plan_diagnostics: Dictionary = routed_edge.get("plan", {})
+		_record_route_diagnostics(
+			plan_diagnostics, edge_id, route_plan_diagnostics, true
 		)
-		if obstacles_report.get("ok", false) != true:
+		if not routed_edge.get("row", {}).is_empty():
+			route_rows.append(routed_edge["row"])
+		if routed_edge.get("ok", false) != true:
 			return _attempt_failure(chosen_ids, route_rows,
-				obstacles_report.get("binding", {}), plan_diagnostics)
-		var routed: Dictionary = _Routes.route_planned(
-			edge, plan, obstacles_report["obstacles"], half_width, safety,
-			quality, channel, bypass_usage
-		)
-		var route_plan_diagnostics: Dictionary = routed.get("plan_diagnostics", {})
-		plan_diagnostics["route_calls"]["normal"] += MapLayoutCanonical.int_value(
-			route_plan_diagnostics.get("normal_calls", 0)
-		)
-		plan_diagnostics["route_calls"]["bypass"] += MapLayoutCanonical.int_value(
-			route_plan_diagnostics.get("bypass_calls", 0)
-		)
-		var side: String = str(route_plan_diagnostics.get("chosen_bypass_side", ""))
-		if not side.is_empty():
-			plan_diagnostics["chosen_bypass_sides"][edge_id] = side
-		plan_diagnostics["rejected_route_plans"].append_array(
-			route_plan_diagnostics.get("rejected_plans", [])
-		)
-		route_rows.append({
-			"edge_id": edge_id,
-			"route_digest": routed.get("digest", ""),
-			"status": routed.get("status", ""),
-			"obstacle_ids": obstacles_report["obstacle_ids"],
-			"plan": route_plan_diagnostics,
-		})
-		if str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
-			var blocked: Dictionary = route_plan_diagnostics.get("first_blocker", {})
-			var blocker: String = str(blocked.get("obstacle_id", ""))
-			var blocker_node: String = blocker.trim_prefix("node:") \
-				if blocker.begins_with("node:") else ""
-			var route_details: Dictionary = routed.get("diagnostics", {}).duplicate(true)
-			route_details["blocking_obstacle_id"] = blocker
-			route_details["local_node_ids"] = blocked.get("local_node_ids", [])
-			route_details["route_plan"] = route_plan_diagnostics
-			route_details["terminal"] = route_plan_diagnostics.get("terminal", false)
-			var entities: Array = [edge_id]
-			var blocker_entity: String = _Routes.obstacle_entity(blocker)
-			if not blocker_entity.is_empty():
-				entities.append(blocker_entity)
-			route_details["entities"] = entities
-			return _attempt_failure(chosen_ids, route_rows, {
-				"kind": "edge_route",
-				"id": edge_id,
-				"node_id": blocker_node,
-				"edge_id": edge_id,
-				"profile_id": "world",
-				"reason": str(routed.get("reason", "route failed")),
-				"details": route_details,
-			}, plan_diagnostics)
-		routes[edge_id] = {
-			"from": edge["from"],
-			"to": edge["to"],
-			"centerline": routed["centerline"],
-			"corridor_width": routed["corridor_width"],
-		}
+				routed_edge["binding"], plan_diagnostics)
+		routes[edge_id] = routed_edge["route"]
 	var selected_id: String = "selection/%s" % MapLayoutCanonical.digest(chosen_ids)
 	var provisional: MapLayoutResult = _result(
 		source, input, anchors, routes, heroes, {}, {}, selected_id
@@ -325,6 +308,314 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		"chosen_candidate_ids": chosen_ids,
 		"diagnostics": attempt_diagnostics,
 	}
+
+
+static func _route_edge(edge: Dictionary, plan: Dictionary,
+		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
+		assets: Dictionary, quality: Dictionary, half_width: float,
+		safety: float, usage: Dictionary,
+		reverse_side_order: bool = false) -> Dictionary:
+	var edge_id: String = str(edge["id"])
+	var channel: PackedVector2Array = _Routes.route_channel(
+		edge, plan, (half_width + safety) * 2.0
+	)
+	var obstacles_report: Dictionary = _Routes.route_obstacles(
+		edge, plan, heroes, accepted_routes, source, assets, channel
+	)
+	if obstacles_report.get("ok", false) != true:
+		return {"ok": false, "binding": obstacles_report.get("binding", {}),
+			"row": {}, "plan": {}}
+	var routed: Dictionary = _Routes.route_planned(
+		edge, plan, obstacles_report["obstacles"], half_width, safety,
+		quality, channel, usage, reverse_side_order
+	)
+	var route_diagnostics: Dictionary = routed.get("plan_diagnostics", {})
+	var row: Dictionary = {
+		"edge_id": edge_id,
+		"route_digest": routed.get("digest", ""),
+		"status": routed.get("status", ""),
+		"obstacle_ids": obstacles_report["obstacle_ids"],
+		"plan": route_diagnostics,
+	}
+	if str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
+		return {"ok": false, "binding": _edge_route_binding(
+			edge, routed, route_diagnostics
+		), "row": row, "plan": route_diagnostics, "routed": routed}
+	return {
+		"ok": true,
+		"binding": {},
+		"row": row,
+		"plan": route_diagnostics,
+		"routed": routed,
+		"route": {
+			"from": edge["from"],
+			"to": edge["to"],
+			"centerline": routed["centerline"],
+			"corridor_width": routed["corridor_width"],
+		},
+	}
+
+
+static func _edge_route_binding(edge: Dictionary, routed: Dictionary,
+		route_diagnostics: Dictionary) -> Dictionary:
+	var edge_id: String = str(edge["id"])
+	var blocked: Dictionary = route_diagnostics.get("first_blocker", {})
+	var blocker: String = str(blocked.get("obstacle_id", ""))
+	var blocker_node: String = blocker.trim_prefix("node:") \
+		if blocker.begins_with("node:") else ""
+	var details: Dictionary = routed.get("diagnostics", {}).duplicate(true)
+	details["blocking_obstacle_id"] = blocker
+	details["local_node_ids"] = blocked.get("local_node_ids", [])
+	details["route_plan"] = route_diagnostics
+	details["terminal"] = route_diagnostics.get("terminal", false)
+	var entities: Array = [edge_id]
+	var blocker_entity: String = _Routes.obstacle_entity(blocker)
+	if not blocker_entity.is_empty():
+		entities.append(blocker_entity)
+	details["entities"] = entities
+	return {
+		"kind": "edge_route",
+		"id": edge_id,
+		"node_id": blocker_node,
+		"edge_id": edge_id,
+		"profile_id": "world",
+		"reason": str(routed.get("reason", "route failed")),
+		"details": details,
+	}
+
+
+static func _record_route_diagnostics(plan_diagnostics: Dictionary,
+		edge_id: String, route_diagnostics: Dictionary,
+		selected_side: bool, component_plan_id: String = "") -> void:
+	plan_diagnostics["route_calls"]["normal"] += MapLayoutCanonical.int_value(
+		route_diagnostics.get("normal_calls", 0)
+	)
+	plan_diagnostics["route_calls"]["bypass"] += MapLayoutCanonical.int_value(
+		route_diagnostics.get("bypass_calls", 0)
+	)
+	var side: String = str(route_diagnostics.get("chosen_bypass_side", ""))
+	if selected_side and not side.is_empty():
+		plan_diagnostics["chosen_bypass_sides"][edge_id] = side
+	for rejected_v: Variant in route_diagnostics.get("rejected_plans", []):
+		var rejected: Dictionary = rejected_v.duplicate(true)
+		if not component_plan_id.is_empty():
+			rejected["component_plan_id"] = component_plan_id
+		plan_diagnostics["rejected_route_plans"].append(rejected)
+
+
+static func _route_atomic_component(component: Dictionary,
+		specs: Array[Dictionary], edges_by_id: Dictionary, plan: Dictionary,
+		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
+		assets: Dictionary, quality: Dictionary, half_width: float,
+		safety: float, entry_usage: Dictionary) -> Dictionary:
+	var component_id: String = str(component["id"])
+	var prefix: Dictionary = _accepted_prefix(accepted_routes)
+	var plan_records: Array[Dictionary] = []
+	var rejected_routes: Array[Dictionary] = []
+	var total_calls: Dictionary = {"normal": 0, "bypass": 0}
+	var first_binding: Dictionary = {}
+	var selected: Dictionary = {}
+	for plan_index: int in range(specs.size()):
+		var spec: Dictionary = specs[plan_index]
+		var provisional_routes: Dictionary = accepted_routes.duplicate(true)
+		var provisional_usage: Dictionary = entry_usage.duplicate(true)
+		var member_rows: Array = []
+		var members: Array[Dictionary] = []
+		var route_digests: Dictionary = {}
+		var chosen_sides: Dictionary = {}
+		var bypass_owner: String = ""
+		var failure: Dictionary = {}
+		var plan_calls: Dictionary = {"ordinary": 0, "near": 0, "far": 0}
+		for edge_id_v: Variant in spec["edge_order"]:
+			var edge_id: String = str(edge_id_v)
+			var routed_edge: Dictionary = _route_edge(
+				edges_by_id[edge_id], plan, heroes, provisional_routes,
+				source, assets, quality, half_width, safety,
+				provisional_usage, bool(spec["reverse_side_order"])
+			)
+			var route_diagnostics: Dictionary = routed_edge.get("plan", {})
+			var router_calls: Dictionary = route_diagnostics.get("router_calls", {})
+			for call_id: String in ["ordinary", "near", "far"]:
+				plan_calls[call_id] += MapLayoutCanonical.int_value(
+					router_calls.get(call_id, 0)
+				)
+			total_calls["normal"] += MapLayoutCanonical.int_value(
+				route_diagnostics.get("normal_calls", 0)
+			)
+			total_calls["bypass"] += MapLayoutCanonical.int_value(
+				route_diagnostics.get("bypass_calls", 0)
+			)
+			for rejected_v: Variant in route_diagnostics.get("rejected_plans", []):
+				var rejected: Dictionary = rejected_v.duplicate(true)
+				rejected["component_id"] = component_id
+				rejected["component_plan_id"] = spec["plan_id"]
+				rejected_routes.append(rejected)
+			var routed: Dictionary = routed_edge.get("routed", {})
+			members.append({
+				"edge_id": edge_id,
+				"status": routed.get("status", "OBSTACLE_FAILURE"),
+				"route_digest": routed.get("digest", ""),
+				"chosen_bypass_side": route_diagnostics.get(
+					"chosen_bypass_side", ""),
+				"bypass_side_order": route_diagnostics.get(
+					"bypass_side_order", []),
+				"router_calls": router_calls,
+				"router_diagnostics": route_diagnostics.get(
+					"router_diagnostics", {}),
+				"first_blocker": route_diagnostics.get("first_blocker", {}),
+				"binding": routed_edge.get("binding", {}),
+			})
+			if routed_edge.get("ok", false) != true:
+				failure = routed_edge.get("binding", {})
+				if first_binding.is_empty():
+					first_binding = failure
+				break
+			provisional_routes[edge_id] = routed_edge["route"]
+			member_rows.append(routed_edge["row"])
+			route_digests[edge_id] = routed.get("digest", "")
+			var side: String = str(route_diagnostics.get("chosen_bypass_side", ""))
+			if not side.is_empty():
+				chosen_sides[edge_id] = side
+				bypass_owner = edge_id
+		var record: Dictionary = spec.duplicate(true)
+		record["status"] = "succeeded" if failure.is_empty() else "rejected"
+		record["committed"] = false
+		record["members"] = members
+		record["route_calls"] = plan_calls
+		record["accepted_route_digests"] = route_digests
+		record["bypass_owner"] = bypass_owner
+		record["entry_bypass_usage"] = entry_usage.duplicate(true)
+		record["provisional_bypass_usage"] = provisional_usage
+		record["first_binding"] = failure
+		plan_records.append(record)
+		if failure.is_empty() and selected.is_empty():
+			selected = {
+				"index": plan_index,
+				"routes": provisional_routes,
+				"usage": provisional_usage,
+				"route_rows": member_rows,
+				"chosen_sides": chosen_sides,
+				"bypass_owner": bypass_owner,
+				"route_digests": route_digests,
+			}
+	if not selected.is_empty():
+		var selected_index: int = MapLayoutCanonical.int_value(selected["index"])
+		for plan_index: int in range(plan_records.size()):
+			var record: Dictionary = plan_records[plan_index]
+			if plan_index == selected_index:
+				record["status"] = "selected"
+				record["committed"] = true
+			elif str(record["status"]) == "succeeded":
+				record["status"] = "not_selected"
+			plan_records[plan_index] = record
+	var plan_ids: Array[String] = []
+	for spec: Dictionary in specs:
+		plan_ids.append(str(spec["plan_id"]))
+	var component_diagnostics: Dictionary = {
+		"component_id": component_id,
+		"edge_ids": component["edge_ids"],
+		"node_ids": component["node_ids"],
+		"accepted_prefix": prefix,
+		"plan_ids": plan_ids,
+		"plans": plan_records,
+		"selected_plan_id": "" if selected.is_empty() else \
+			str(specs[MapLayoutCanonical.int_value(selected["index"])]["plan_id"]),
+		"selected_bypass_owner": "" if selected.is_empty() else \
+			str(selected["bypass_owner"]),
+		"accepted_route_digests": {} if selected.is_empty() else \
+			selected["route_digests"],
+		"route_calls": total_calls,
+	}
+	var base: Dictionary = {
+		"component_diagnostics": component_diagnostics,
+		"route_calls": total_calls,
+		"rejected_route_plans": rejected_routes,
+		"chosen_sides": {} if selected.is_empty() else selected["chosen_sides"],
+		"bypass_owner": "" if selected.is_empty() else selected["bypass_owner"],
+	}
+	if not selected.is_empty():
+		base.merge({"ok": true, "routes": selected["routes"],
+			"usage": selected["usage"], "route_rows": selected["route_rows"]})
+		return base
+	var entities: Array = component["edge_ids"].duplicate()
+	entities.append_array(component["node_ids"])
+	base.merge({"ok": false, "binding": {
+		"kind": "inversion_component_route",
+		"id": component_id,
+		"node_id": "",
+		"edge_id": "",
+		"profile_id": "world",
+		"reason": "all four bounded component plans rejected",
+		"details": {
+			"component_id": component_id,
+			"edge_ids": component["edge_ids"],
+			"local_node_ids": component["node_ids"],
+			"entities": entities,
+			"plan_ids": plan_ids,
+			"plans": plan_records,
+			"first_binding_blocker": first_binding,
+			"accepted_prefix": prefix,
+			"terminal": false,
+		},
+	}})
+	return base
+
+
+static func _record_atomic_diagnostics(plan_diagnostics: Dictionary,
+		atomic: Dictionary) -> void:
+	var calls: Dictionary = atomic["route_calls"]
+	plan_diagnostics["route_calls"]["normal"] += MapLayoutCanonical.int_value(
+		calls["normal"]
+	)
+	plan_diagnostics["route_calls"]["bypass"] += MapLayoutCanonical.int_value(
+		calls["bypass"]
+	)
+	plan_diagnostics["rejected_route_plans"].append_array(
+		atomic["rejected_route_plans"]
+	)
+	for edge_id: String in MapLayoutCanonical.sorted_keys(atomic["chosen_sides"]):
+		plan_diagnostics["chosen_bypass_sides"][edge_id] = atomic["chosen_sides"][edge_id]
+	var owner: String = str(atomic["bypass_owner"])
+	if not owner.is_empty():
+		var component_id: String = str(atomic["component_diagnostics"]["component_id"])
+		plan_diagnostics["selected_bypass_owners"][component_id] = owner
+
+
+static func _accepted_prefix(routes: Dictionary) -> Dictionary:
+	var route_digests: Dictionary = {}
+	for edge_id: String in MapLayoutCanonical.sorted_keys(routes):
+		route_digests[edge_id] = MapLayoutCanonical.digest(routes[edge_id])
+	return {
+		"edge_ids": MapLayoutCanonical.sorted_keys(routes),
+		"route_digests": MapLayoutCanonical.ordered_dictionary(route_digests),
+		"digest": MapLayoutCanonical.digest(route_digests),
+	}
+
+
+static func _component_plan_specs(component: Dictionary, plan: Dictionary,
+		radius: float, quality: Dictionary) -> Array[Dictionary]:
+	var no_obstacles: Array[Dictionary] = []
+	var sides: Array[Dictionary] = _Routes._bypass_sides(
+		component, plan, no_obstacles, radius, quality
+	)
+	var canonical_sides: Array[String] = []
+	for side: Dictionary in sides:
+		canonical_sides.append(str(side["id"]))
+	var reversed_sides: Array[String] = canonical_sides.duplicate()
+	reversed_sides.reverse()
+	var canonical_edges: Array = component["edge_ids"].duplicate()
+	var reversed_edges: Array = canonical_edges.duplicate()
+	reversed_edges.reverse()
+	return [
+		{"plan_id": "canonical/current", "edge_order": canonical_edges,
+			"side_order": canonical_sides, "reverse_side_order": false},
+		{"plan_id": "canonical/reversed", "edge_order": canonical_edges,
+			"side_order": reversed_sides, "reverse_side_order": true},
+		{"plan_id": "reversed/current", "edge_order": reversed_edges,
+			"side_order": canonical_sides, "reverse_side_order": false},
+		{"plan_id": "reversed/reversed", "edge_order": reversed_edges,
+			"side_order": reversed_sides, "reverse_side_order": true},
+	]
 
 
 static func _result(source: Dictionary, input: MapLayoutInput,

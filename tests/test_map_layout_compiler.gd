@@ -19,6 +19,7 @@ static func run(fails: Array[String]) -> void:
 	_test_portal_geometry(fails, quality)
 	_test_complete_chain(fails, quality)
 	_test_layered_route_plan(fails, quality)
+	_test_atomic_component_failure(fails, quality)
 	_test_crossing_detour(fails, quality)
 	_test_three_way_fanout_merge(fails, quality)
 	_test_bounded_local_substitution(fails, quality)
@@ -74,6 +75,66 @@ static func _test_portal_geometry(fails: Array[String], quality: Dictionary) -> 
 				+ MapLayoutCanonical.float_value(
 					quality["geometry"]["road_corridor"]["world_clearance_m"]),
 		"#466 boundary ports make the recorded terminal pair feasible")
+	var safety: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["world_clearance_m"]
+	)
+	var greedy_routes: Dictionary = {}
+	var greedy_usage: Dictionary = {"total": 0, "components": {}}
+	var greedy_rows: Array[Dictionary] = []
+	for edge: Dictionary in terminal_plan["route_order"]:
+		var channel: PackedVector2Array = Routes.route_channel(
+			edge, terminal_plan, (half_width + safety) * 2.0
+		)
+		var obstacle_report: Dictionary = Routes.route_obstacles(
+			edge, terminal_plan, {}, greedy_routes,
+			{"hero_anchor_contract": {"protected_zones": {}}},
+			{"profiles": {}}, channel
+		)
+		var routed: Dictionary = Routes.route_planned(
+			edge, terminal_plan, obstacle_report.get("obstacles", []),
+			half_width, safety, quality, channel, greedy_usage
+		)
+		greedy_rows.append({"edge_id": edge["id"],
+			"status": routed.get("status", ""),
+			"reason": routed.get("reason", ""),
+			"plan": routed.get("plan_diagnostics", {})})
+		if str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
+			break
+		greedy_routes[str(edge["id"])] = {"from": edge["from"], "to": edge["to"],
+			"centerline": routed["centerline"],
+			"corridor_width": routed["corridor_width"]}
+	var greedy_blocker: String = ""
+	if greedy_rows.size() == 2:
+		greedy_blocker = str(greedy_rows[1]["plan"].get(
+			"first_blocker", {}).get("obstacle_id", ""))
+	_check(fails, greedy_rows.size() == 2
+			and str(greedy_rows[0]["status"]) == MapSingleEdgeRouter.ROUTED
+			and str(greedy_rows[1]["status"]) == MapSingleEdgeRouter.NO_ROUTE
+			and greedy_blocker.begins_with("edge:%s/" % first_id),
+		"reducing the atomic slate to the old greedy plan reproduces the partner failure: %s"
+			% str(greedy_rows))
+	var terminal_edges_by_id: Dictionary = {}
+	for edge: Dictionary in terminal_edges:
+		terminal_edges_by_id[str(edge["id"])] = edge
+	var terminal_component: Dictionary = terminal_plan["components"][0]
+	var atomic: Dictionary = MapLayoutCompiler._route_atomic_component(
+		terminal_component, MapLayoutCompiler._component_plan_specs(
+			terminal_component, terminal_plan, half_width + safety, quality
+		), terminal_edges_by_id, terminal_plan, {}, {},
+		{"hero_anchor_contract": {"protected_zones": {}}},
+		{"profiles": {}}, quality, half_width, safety,
+		{"total": 0, "components": {}}
+	)
+	var atomic_diagnostics: Dictionary = atomic.get("component_diagnostics", {})
+	_check(fails, atomic.get("ok", false) == true
+			and atomic.get("routes", {}).size() == 2
+			and str(atomic_diagnostics.get("selected_plan_id", "")) \
+				== "reversed/current"
+			and str(atomic_diagnostics.get("selected_bypass_owner", "")) == ""
+			and atomic.get("usage", {}).get("total", -1) == 0
+			and atomic_diagnostics.get("accepted_route_digests", {}).size() == 2,
+		"the atomic slate selects both seed-717 routes and records that no bypass owner was consumed: %s"
+			% str(atomic_diagnostics))
 	var changed_quality: Dictionary = quality.duplicate(true)
 	changed_quality["calibration"]["shipping_touch_waystone"][
 		"node_pair_half_extent_m"] = [0.57, 0.98]
@@ -231,6 +292,7 @@ static func _test_layered_route_plan(fails: Array[String], quality: Dictionary) 
 	var access: Dictionary = diagnostics.get("access_lengths", {})
 	var calls: Dictionary = diagnostics.get("route_calls", {})
 	var sides: Dictionary = diagnostics.get("chosen_bypass_sides", {})
+	var component_plans: Array = diagnostics.get("component_route_plans", [])
 	_check(fails, str(compiled.get("status", "")) == MapLayoutCompiler.COMPILED,
 		"an adjacent-row inversion pair uses the bounded layered route plan: %s" \
 		% str(compiled.get("failure", {})))
@@ -243,10 +305,46 @@ static func _test_layered_route_plan(fails: Array[String], quality: Dictionary) 
 				MapLayoutInput.edge_id("A", "C"), MapLayoutInput.edge_id("B", "D"),
 			],
 		"route order and strict inversion components are canonical")
+	var plan_ids: Array = []
+	if component_plans.size() == 1:
+		for row: Dictionary in component_plans[0].get("plans", []):
+			plan_ids.append(str(row.get("plan_id", "")))
+	_check(fails, plan_ids == [
+		"canonical/current", "canonical/reversed",
+		"reversed/current", "reversed/reversed",
+	], "a two-edge inversion enumerates exactly four canonical component plans")
+	var expected_edges: Array = [
+		MapLayoutInput.edge_id("A", "C"), MapLayoutInput.edge_id("B", "D"),
+	]
+	var reversed_edges: Array = expected_edges.duplicate()
+	reversed_edges.reverse()
+	var plans: Array = [] if component_plans.is_empty() else component_plans[0].get(
+		"plans", [])
+	var plan_shape_ok: bool = plans.size() == 4
+	var entry_usage_ok: bool = true
+	var committed_count: int = 0
+	for i: int in range(plans.size()):
+		var row: Dictionary = plans[i]
+		var expected_order: Array = expected_edges if i < 2 else reversed_edges
+		var expected_sides: Array = ["near", "far"] if i % 2 == 0 \
+			else ["far", "near"]
+		plan_shape_ok = plan_shape_ok and row.get("edge_order", []) == expected_order \
+			and row.get("side_order", []) == expected_sides
+		entry_usage_ok = entry_usage_ok and row.get("entry_bypass_usage", {}) \
+			== {"total": 0, "components": {}}
+		if row.get("committed", false) == true:
+			committed_count += 1
+	_check(fails, plan_shape_ok and entry_usage_ok and committed_count == 1
+			and component_plans[0].get("selected_plan_id", "") == "canonical/current"
+			and component_plans[0].get("selected_bypass_owner", "") == ""
+			and component_plans[0].get("accepted_route_digests", {}).size() == 2
+			and diagnostics.get("selected_bypass_owners", {}).is_empty(),
+		"component plans isolate route and bypass state and commit only the first success")
 	_check(fails, is_equal_approx(float(access.get("A", {}).get("outgoing_m", 0.0)), 0.63)
 			and is_equal_approx(float(access.get("C", {}).get("incoming_m", 0.0)), 0.63)
-			and MapLayoutCanonical.int_value(calls.get("normal", 0)) == edges.size()
-			and sides.size() <= MapLayoutCanonical.int_value(calls.get("bypass", 0)),
+			and MapLayoutCanonical.int_value(calls.get("normal", 0)) == 8
+			and MapLayoutCanonical.int_value(calls.get("bypass", 0)) == 6
+			and sides.is_empty(),
 		"boundary-derived access lengths and bounded route calls are reported: %s" \
 			% str({"access": access, "calls": calls, "sides": sides}))
 	if compiled.get("result", null) is MapLayoutResult:
@@ -254,8 +352,9 @@ static func _test_layered_route_plan(fails: Array[String], quality: Dictionary) 
 		var serial: Dictionary = result.to_dict()
 		var first: Dictionary = serial["edges"][MapLayoutInput.edge_id("A", "C")]
 		var line: Array = first["centerline"]
+		var selected_anchor: Vector3 = _v3(serial["node_anchors"]["A"])
 		_check(fails, line.size() >= 4
-				and _v3(line[0]).is_equal_approx(MapPinProjection.lattice_point(3, 2))
+				and _v3(line[0]).is_equal_approx(selected_anchor)
 				and is_equal_approx(_v3(line[1]).x - _v3(line[0]).x, 0.63),
 			"the result prepends the straight governed source access stub")
 	var reordered_nodes: Array = nodes.duplicate(true)
@@ -274,9 +373,62 @@ static func _test_layered_route_plan(fails: Array[String], quality: Dictionary) 
 		var replay_result: MapLayoutResult = replay_result_v
 		var compiled_result: MapLayoutResult = compiled_result_v
 		same_result = replay_result.canonical_bytes() == compiled_result.canonical_bytes()
-	_check(fails, same_result and replay.get("diagnostics", {}).get(
-			"diagnostics_digest", "") == diagnostics.get("diagnostics_digest", ""),
+	_check(fails, same_result
+			and replay.get("diagnostics", {}).get("component_route_plans", []) \
+				== component_plans
+			and replay.get("diagnostics", {}).get(
+				"diagnostics_digest", "") == diagnostics.get("diagnostics_digest", ""),
 		"equivalent reordered input preserves result and diagnostic identity")
+
+
+static func _test_atomic_component_failure(fails: Array[String],
+		quality: Dictionary) -> void:
+	var nodes: Array = [
+		_node("A", 3, 2), _node("B", 3, 3),
+		_node("C", 4, 3), _node("D", 4, 2),
+	]
+	var edges: Array = [_edge("A", "C"), _edge("B", "D")]
+	var anchors: Dictionary = {
+		"A": [0.0, 0.0, 0.0], "B": [0.0, 0.0, 0.5],
+		"C": [6.0, 0.0, 0.5], "D": [6.0, 0.0, 0.0],
+	}
+	var plan: Dictionary = Routes.route_plan(nodes, edges, anchors, quality)
+	var component: Dictionary = plan.get("components", [{}])[0]
+	var half_width: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["physical_half_width_m"]
+	)
+	var safety: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["world_clearance_m"]
+	)
+	var edges_by_id: Dictionary = {}
+	for edge: Dictionary in edges:
+		edges_by_id[str(edge["id"])] = edge
+	var atomic: Dictionary = MapLayoutCompiler._route_atomic_component(
+		component, MapLayoutCompiler._component_plan_specs(
+			component, plan, half_width + safety, quality
+		), edges_by_id, plan, {}, {},
+		{"hero_anchor_contract": {"protected_zones": {}}},
+		{"profiles": {}}, quality, half_width, safety,
+		{"total": 0, "components": {}}
+	)
+	var binding: Dictionary = atomic.get("binding", {})
+	var details: Dictionary = binding.get("details", {})
+	var plan_rows: Array = details.get("plans", [])
+	var calls_ok: bool = plan_rows.size() == 4
+	for row: Dictionary in plan_rows:
+		var calls: Dictionary = row.get("route_calls", {})
+		calls_ok = calls_ok and MapLayoutCanonical.int_value(calls.get("ordinary", 0)) == 1 \
+			and MapLayoutCanonical.int_value(calls.get("near", 0)) == 1 \
+			and MapLayoutCanonical.int_value(calls.get("far", 0)) == 1 \
+			and row.get("committed", false) == false
+	_check(fails, atomic.get("ok", true) == false
+			and str(binding.get("kind", "")) == "inversion_component_route"
+			and details.get("edge_ids", []) == component["edge_ids"]
+			and details.get("local_node_ids", []) == component["node_ids"]
+			and details.get("plan_ids", []).size() == 4
+			and calls_ok and not atomic.has("routes") and not atomic.has("usage"),
+		"an all-plan failure binds both edges and all component nodes without provisional leakage: %s"
+			% str(binding))
 
 
 static func _test_crossing_detour(fails: Array[String], quality: Dictionary) -> void:

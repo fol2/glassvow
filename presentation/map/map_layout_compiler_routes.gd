@@ -104,7 +104,9 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 			"access_lengths": MapLayoutCanonical.ordered_dictionary(access),
 			"route_calls": {"normal": 0, "bypass": 0},
 			"chosen_bypass_sides": {},
+			"selected_bypass_owners": {},
 			"rejected_route_plans": [],
+			"component_route_plans": [],
 		},
 	}
 
@@ -112,7 +114,7 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 static func route_planned(edge: Dictionary, plan: Dictionary,
 		obstacles: Array[Dictionary], half_width: float, safety: float,
 		quality: Dictionary, channel: PackedVector2Array,
-		usage: Dictionary) -> Dictionary:
+		usage: Dictionary, reverse_side_order: bool = false) -> Dictionary:
 	var edge_id: String = str(edge["id"])
 	var port: Dictionary = plan["ports"][edge_id]
 	var source: Vector2 = port["source"]
@@ -124,11 +126,15 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 		"chosen_bypass_side": "",
 		"first_blocker": {},
 		"rejected_plans": [],
+		"bypass_side_order": [],
+		"router_calls": {"ordinary": 1, "near": 0, "far": 0},
+		"router_diagnostics": {"ordinary": {}, "near": [], "far": []},
 		"terminal": false,
 	}
 	var ordinary: Dictionary = MapSingleEdgeRouter.route(
 		source, target, obstacles, half_width, safety, channel
 	)
+	diagnostics["router_diagnostics"]["ordinary"] = _router_evidence(ordinary)
 	if str(ordinary.get("status", "")) == MapSingleEdgeRouter.ROUTED:
 		return _with_access_stubs(ordinary, edge, plan, diagnostics)
 	var blocker: Dictionary = blocking_binding(edge, plan, obstacles, radius)
@@ -150,11 +156,22 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 			or component_used >= MapLayoutCanonical.int_value(component["max_bypassed_edges"]):
 		diagnostics["terminal"] = true
 		return _failed(ordinary, "bounded inversion bypass cap exceeded", diagnostics)
-	for side: Dictionary in _bypass_sides(component, plan, obstacles, radius, quality):
+	var sides: Array[Dictionary] = _bypass_sides(
+		component, plan, obstacles, radius, quality
+	)
+	if reverse_side_order:
+		sides.reverse()
+	for side: Dictionary in sides:
+		diagnostics["bypass_side_order"].append(str(side["id"]))
+	for side: Dictionary in sides:
 		var bypass: Dictionary = _route_bypass(
 			edge, plan, obstacles, half_width, safety, side, radius
 		)
-		diagnostics["bypass_calls"] += MapLayoutCanonical.int_value(bypass["calls"])
+		var side_id: String = str(side["id"])
+		var calls: int = MapLayoutCanonical.int_value(bypass["calls"])
+		diagnostics["bypass_calls"] += calls
+		diagnostics["router_calls"][side_id] = calls
+		diagnostics["router_diagnostics"][side_id] = bypass["leg_diagnostics"]
 		if bypass.get("ok", false) == true:
 			usage["total"] = MapLayoutCanonical.int_value(usage["total"]) + 1
 			used_components[component_id] = component_used + 1
@@ -438,6 +455,7 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 		Vector2(MapLayoutCanonical.float_value(side["east_x"]), z), target]
 	var centreline: Array = []
 	var digests: Array[String] = []
+	var leg_diagnostics: Array[Dictionary] = []
 	var calls: int = 0
 	for i: int in range(points.size() - 1):
 		var routed: Dictionary = MapSingleEdgeRouter.route(
@@ -445,16 +463,30 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 			_leg_channel(points[i], points[i + 1], radius)
 		)
 		calls += 1
+		var evidence: Dictionary = _router_evidence(routed)
+		evidence["leg"] = i
+		leg_diagnostics.append(evidence)
 		if str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
 			return {"ok": false, "calls": calls, "reason": "%s leg %d: %s" % [
-				side["id"], i, routed.get("reason", "route failed")], "route": routed}
+				side["id"], i, routed.get("reason", "route failed")], "route": routed,
+				"leg_diagnostics": leg_diagnostics}
 		digests.append(str(routed["digest"]))
 		_append_path(centreline, routed["centerline"])
 	var out: Dictionary = {"status": MapSingleEdgeRouter.ROUTED,
 		"centerline": centreline, "corridor_width": half_width * 2.0,
 		"cost_vector": {}, "diagnostics": {"leg_digests": digests}, "reason": ""}
 	out["digest"] = MapLayoutCanonical.digest(out)
-	return {"ok": true, "calls": calls, "reason": "", "route": out}
+	return {"ok": true, "calls": calls, "reason": "", "route": out,
+		"leg_diagnostics": leg_diagnostics}
+
+
+static func _router_evidence(route: Dictionary) -> Dictionary:
+	return {
+		"status": route.get("status", ""),
+		"reason": route.get("reason", ""),
+		"digest": route.get("digest", ""),
+		"diagnostics": route.get("diagnostics", {}),
+	}
 
 
 static func _with_access_stubs(route: Dictionary, edge: Dictionary,
