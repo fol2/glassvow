@@ -254,11 +254,40 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 		_record_route_diagnostics(
 			plan_diagnostics, edge_id, route_plan_diagnostics, true
 		)
-		if not routed_edge.get("row", {}).is_empty():
-			route_rows.append(routed_edge["row"])
 		if routed_edge.get("ok", false) != true:
+			var repaired: Dictionary = _repair_blocking_component(
+				edge, routed_edge, edges_by_id, plan, heroes, routes,
+				source, assets, quality, half_width, safety, bypass_usage,
+				completed_components
+			)
+			if repaired.get("ok", false) == true:
+				var component: Dictionary = repaired["component"]
+				var member_ids: Array = component["edge_ids"]
+				var kept_rows: Array = []
+				for row: Dictionary in route_rows:
+					if str(row.get("edge_id", "")) not in member_ids:
+						kept_rows.append(row)
+				route_rows = kept_rows
+				var current: Dictionary = repaired["current"]
+				_record_route_diagnostics(
+					plan_diagnostics, edge_id, current["plan"], true
+				)
+				var replay: Dictionary = repaired["replay"]
+				_record_atomic_diagnostics(plan_diagnostics, replay)
+				plan_diagnostics["component_route_plans"].append(
+					replay["component_diagnostics"]
+				)
+				route_rows.append(current["row"])
+				route_rows.append_array(replay["route_rows"])
+				routes = replay["routes"]
+				bypass_usage = replay["usage"]
+				continue
+			if not routed_edge.get("row", {}).is_empty():
+				route_rows.append(routed_edge["row"])
 			return _attempt_failure(chosen_ids, route_rows,
 				routed_edge["binding"], plan_diagnostics)
+		if not routed_edge.get("row", {}).is_empty():
+			route_rows.append(routed_edge["row"])
 		routes[edge_id] = routed_edge["route"]
 	var selected_id: String = "selection/%s" % MapLayoutCanonical.digest(chosen_ids)
 	var provisional: MapLayoutResult = _result(
@@ -355,6 +384,58 @@ static func _route_edge(edge: Dictionary, plan: Dictionary,
 			"corridor_width": routed["corridor_width"],
 		},
 	}
+
+
+static func _repair_blocking_component(edge: Dictionary, failed: Dictionary,
+		edges_by_id: Dictionary, plan: Dictionary, heroes: Dictionary,
+		accepted_routes: Dictionary, source: Dictionary, assets: Dictionary,
+		quality: Dictionary, half_width: float, safety: float, usage: Dictionary,
+		completed_components: Dictionary) -> Dictionary:
+	var blocker_id: String = str(
+		failed.get("binding", {}).get("details", {}).get("blocking_obstacle_id", "")
+	)
+	var blocker_entity: String = _Routes.obstacle_entity(blocker_id)
+	var component_id: String = str(plan["edge_components"].get(blocker_entity, ""))
+	if component_id.is_empty() and blocker_id.begins_with("node:"):
+		var matches: Array[String] = []
+		for completed_id: String in MapLayoutCanonical.sorted_keys(completed_components):
+			if blocker_entity in plan["components_by_id"][completed_id]["node_ids"]:
+				matches.append(completed_id)
+		if matches.size() == 1:
+			component_id = matches[0]
+	if component_id.is_empty() or not completed_components.has(component_id):
+		return {}
+	var component: Dictionary = plan["components_by_id"][component_id]
+	if component["edge_ids"].size() != 2:
+		return {}
+	var provisional_routes: Dictionary = accepted_routes.duplicate(true)
+	for member_id_v: Variant in component["edge_ids"]:
+		provisional_routes.erase(str(member_id_v))
+	var provisional_usage: Dictionary = usage.duplicate(true)
+	var component_usage: int = MapLayoutCanonical.int_value(
+		provisional_usage["components"].get(component_id, 0)
+	)
+	provisional_usage["total"] = MapLayoutCanonical.int_value(
+		provisional_usage["total"]
+	) - component_usage
+	provisional_usage["components"].erase(component_id)
+	var current: Dictionary = _route_edge(
+		edge, plan, heroes, provisional_routes, source, assets, quality,
+		half_width, safety, provisional_usage
+	)
+	if current.get("ok", false) != true:
+		return {}
+	provisional_routes[str(edge["id"])] = current["route"]
+	var replay: Dictionary = _route_atomic_component(
+		component, _component_plan_specs(
+			component, plan, half_width + safety, quality
+		), edges_by_id, plan, heroes, provisional_routes, source, assets,
+		quality, half_width, safety, provisional_usage
+	)
+	if replay.get("ok", false) != true:
+		return {}
+	return {"ok": true, "component": component, "current": current,
+		"replay": replay}
 
 
 static func _edge_route_binding(edge: Dictionary, routed: Dictionary,
@@ -640,6 +721,19 @@ static func _substitution_children(binding: Dictionary, input: MapLayoutInput,
 		node_sets: Dictionary, selection: Dictionary) -> Array[Dictionary]:
 	var out: Array[Dictionary] = []
 	var node_ids: Array[String] = _binding_nodes(binding, input)
+	var blocker_id: String = str(binding.get("node_id", ""))
+	var priority_nodes: Dictionary = {}
+	if not blocker_id.is_empty():
+		priority_nodes[blocker_id] = true
+	var details: Dictionary = binding.get("details", {})
+	var blocker_entity: String = _Routes.obstacle_entity(
+		str(details.get("blocking_obstacle_id", ""))
+	)
+	for edge: Dictionary in input.edge_records():
+		if str(edge["id"]) == blocker_entity:
+			priority_nodes[str(edge["from"])] = true
+			priority_nodes[str(edge["to"])] = true
+			break
 	if node_ids.size() == 2:
 		var a_id: String = node_ids[0]
 		var b_id: String = node_ids[1]
@@ -675,7 +769,7 @@ static func _substitution_children(binding: Dictionary, input: MapLayoutInput,
 				changed[node_id] = candidate_index
 				out.append({
 					"selection": changed,
-					"priority": 0.0,
+					"priority": 1.0 if priority_nodes.has(node_id) else 0.0,
 					"substitution": {
 						"node_ids": [node_id],
 						"from_candidate_ids": [candidates[current]["id"]],
@@ -764,7 +858,23 @@ static func _bound_exhausted(binding: Dictionary) -> Dictionary:
 
 static func _quality_binding(report: Dictionary, input: MapLayoutInput) -> Dictionary:
 	var violations: Array = report.get("violations", []).duplicate(true)
+	var hard_values: Dictionary = report.get("hard_values", {})
 	violations.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_metric: String = str(a.get("metric_id", ""))
+		var b_metric: String = str(b.get("metric_id", ""))
+		if a_metric != b_metric:
+			return a_metric < b_metric
+		var aggregate: float = MapLayoutCanonical.float_value(
+			hard_values.get(a_metric, 0.0)
+		)
+		var a_delta: float = absf(
+			MapLayoutCanonical.float_value(a.get("value", 0.0)) - aggregate
+		)
+		var b_delta: float = absf(
+			MapLayoutCanonical.float_value(b.get("value", 0.0)) - aggregate
+		)
+		if not is_equal_approx(a_delta, b_delta):
+			return a_delta < b_delta
 		return MapLayoutCanonical.canonical_text(a) < MapLayoutCanonical.canonical_text(b)
 	)
 	if violations.is_empty():

@@ -62,6 +62,7 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 			"source": source + Vector2.RIGHT * stub,
 			"target": target - Vector2.RIGHT * stub,
 			"stub_m": stub,
+			"branch_egress": null,
 		}
 		access[from_id]["outgoing_m"] = maxf(
 			MapLayoutCanonical.float_value(access[from_id]["outgoing_m"]), stub
@@ -69,6 +70,48 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 		access[to_id]["incoming_m"] = maxf(
 			MapLayoutCanonical.float_value(access[to_id]["incoming_m"]), stub
 		)
+	var inversion: Dictionary = _inversion_components(
+		order, nodes_by_id, anchors, epsilon
+	)
+	var preview_edges: Dictionary = {}
+	for edge: Dictionary in order:
+		var edge_id: String = str(edge["id"])
+		preview_edges[edge_id] = {
+			"from": edge["from"], "to": edge["to"],
+			"centerline": [anchors[str(edge["from"])],
+				_a3(ports[edge_id]["source"]),
+				_a3(ports[edge_id]["target"]), anchors[str(edge["to"])]],
+		}
+	var egress_sources: Dictionary = {}
+	var camera_registry: Dictionary = MapQualityEvaluator.camera_registry(
+		nodes, quality
+	)
+	var hard: Dictionary = MapQualityEvaluator._index(quality["hard"])
+	for profile: Dictionary in camera_registry["profiles"]:
+		var fanout: Dictionary = MapQualityEvaluator._fanout(
+			profile, order, preview_edges, quality, hard
+		)
+		for violation: Dictionary in fanout["violations"]:
+			egress_sources[str(violation["entities"][0])] = true
+	var sample: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["branch_fanout"]["sample_distance_m"]
+	)
+	for edge: Dictionary in order:
+		var from_id: String = str(edge["from"])
+		var edge_id: String = str(edge["id"])
+		if not egress_sources.has(from_id) \
+				or inversion["edge_components"].has(edge_id):
+			continue
+		var source: Vector2 = _xz(anchors[from_id])
+		var target: Vector2 = _xz(anchors[str(edge["to"])])
+		var guide: Vector2 = Vector2(
+			minf(source.x + sample, ports[edge_id]["target"].x), target.y
+		)
+		if guide.distance_to(ports[edge_id]["source"]) \
+				> MapSingleEdgeRouter.WORLD_EPSILON_M \
+				and guide.distance_to(ports[edge_id]["target"]) \
+					> MapSingleEdgeRouter.WORLD_EPSILON_M:
+			ports[edge_id]["branch_egress"] = guide
 	var half_width: float = MapLayoutCanonical.float_value(
 		quality["geometry"]["road_corridor"]["physical_half_width_m"]
 	)
@@ -85,7 +128,6 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 		if reservation.is_empty():
 			return _plan_failure(node_id, "swept portal reservation is invalid")
 		reservations[node_id] = reservation
-	var inversion: Dictionary = _inversion_components(order, nodes_by_id, anchors, epsilon)
 	var route_ids: Array[String] = []
 	for edge: Dictionary in order:
 		route_ids.append(str(edge["id"]))
@@ -131,9 +173,24 @@ static func route_planned(edge: Dictionary, plan: Dictionary,
 		"router_diagnostics": {"ordinary": {}, "near": [], "far": []},
 		"terminal": false,
 	}
-	var ordinary: Dictionary = MapSingleEdgeRouter.route(
-		source, target, obstacles, half_width, safety, channel
-	)
+	var ordinary: Dictionary
+	if port["branch_egress"] is Vector2:
+		ordinary = _route_through(
+			source, port["branch_egress"], target,
+			obstacles, half_width, safety, radius
+		)
+		diagnostics["normal_calls"] = 2
+		diagnostics["router_calls"]["ordinary"] = 2
+		if str(ordinary.get("status", "")) != MapSingleEdgeRouter.ROUTED:
+			ordinary = MapSingleEdgeRouter.route(
+				source, target, obstacles, half_width, safety, channel
+			)
+			diagnostics["normal_calls"] = 3
+			diagnostics["router_calls"]["ordinary"] = 3
+	else:
+		ordinary = MapSingleEdgeRouter.route(
+			source, target, obstacles, half_width, safety, channel
+		)
 	diagnostics["router_diagnostics"]["ordinary"] = _router_evidence(ordinary)
 	if str(ordinary.get("status", "")) == MapSingleEdgeRouter.ROUTED:
 		return _with_access_stubs(ordinary, edge, plan, diagnostics)
@@ -252,11 +309,11 @@ static func route_obstacles(edge: Dictionary, plan: Dictionary,
 			plan["ports"][accepted_id]["stub_m"]
 		) > MapSingleEdgeRouter.WORLD_EPSILON_M
 		var first_segment: int = 1 if has_stubs else 0
-		var last_segment: int = points.size() - (2 if has_stubs else 1)
+		var last_segment: int = points.size() - 1
 		for segment: int in range(first_segment, last_segment):
 			var polygon: PackedVector2Array = _segment_envelope(
 				_xz(points[segment]), _xz(points[segment + 1]), radius,
-				segment > first_segment, segment + 1 < last_segment
+				segment > first_segment, segment + 1 < last_segment or has_stubs
 			)
 			if polygon.is_empty():
 				return {"ok": false, "binding": _binding(
@@ -302,7 +359,11 @@ static func blocking_binding(edge: Dictionary, plan: Dictionary,
 	]
 	var ordered: Array[Dictionary] = obstacles.duplicate(true)
 	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return str(a["id"]) < str(b["id"])
+		var a_id: String = str(a["id"])
+		var b_id: String = str(b["id"])
+		var a_node: bool = a_id.begins_with("node:")
+		var b_node: bool = b_id.begins_with("node:")
+		return a_node if a_node != b_node else a_id < b_id
 	)
 	for obstacle: Dictionary in ordered:
 		var inflated: Array = MapSingleEdgeRouter.inflate_obstacles([obstacle], radius)
@@ -444,7 +505,6 @@ static func _bypass_sides(component: Dictionary, plan: Dictionary,
 	)
 	return sides
 
-
 static func _route_bypass(edge: Dictionary, plan: Dictionary,
 		obstacles: Array[Dictionary], half_width: float, safety: float,
 		side: Dictionary, radius: float) -> Dictionary:
@@ -455,6 +515,12 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 	var points: Array[Vector2] = [source,
 		Vector2(MapLayoutCanonical.float_value(side["west_x"]), z),
 		Vector2(MapLayoutCanonical.float_value(side["east_x"]), z), target]
+	var stage: Rect2 = MapPinProjection.lattice_footprint().grow(radius)
+	var channel: PackedVector2Array = _rectangle(
+		stage.position.x, stage.end.x,
+		minf(z, minf(source.y, target.y)) - radius,
+		maxf(z, maxf(source.y, target.y)) + radius
+	)
 	var centreline: Array = []
 	var digests: Array[String] = []
 	var leg_diagnostics: Array[Dictionary] = []
@@ -462,7 +528,7 @@ static func _route_bypass(edge: Dictionary, plan: Dictionary,
 	for i: int in range(points.size() - 1):
 		var routed: Dictionary = MapSingleEdgeRouter.route(
 			points[i], points[i + 1], obstacles, half_width, safety,
-			_leg_channel(points[i], points[i + 1], radius)
+			channel
 		)
 		calls += 1
 		var evidence: Dictionary = _router_evidence(routed)
@@ -489,6 +555,33 @@ static func _router_evidence(route: Dictionary) -> Dictionary:
 		"digest": route.get("digest", ""),
 		"diagnostics": route.get("diagnostics", {}),
 	}
+
+
+static func _route_through(source: Vector2, guide: Vector2, target: Vector2,
+		obstacles: Array[Dictionary], half_width: float, safety: float,
+		radius: float) -> Dictionary:
+	var centreline: Array = []
+	var digests: Array[String] = []
+	var points: Array[Vector2] = [source, guide, target]
+	for i: int in range(points.size() - 1):
+		var routed: Dictionary = MapSingleEdgeRouter.route(
+			points[i], points[i + 1], obstacles, half_width, safety,
+			_leg_channel(points[i], points[i + 1], radius)
+		)
+		if str(routed.get("status", "")) != MapSingleEdgeRouter.ROUTED:
+			return routed
+		digests.append(str(routed["digest"]))
+		_append_path(centreline, routed["centerline"])
+	var out: Dictionary = {
+		"status": MapSingleEdgeRouter.ROUTED,
+		"centerline": centreline,
+		"corridor_width": half_width * 2.0,
+		"cost_vector": {},
+		"diagnostics": {"leg_digests": digests},
+		"reason": "",
+	}
+	out["digest"] = MapLayoutCanonical.digest(out)
+	return out
 
 
 static func _with_access_stubs(route: Dictionary, edge: Dictionary,
