@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "question": "Does a package-completion-aware, lower-standalone-power finalist retain four causal strategies without broad RandomBuild uplift?",
+  "competingOptions": [
+    {
+      "id": "completion-aware-finalist-admissible",
+      "statement": "Planned build policies assemble and activate all four packages while RandomBuild, reliability and difficulty guardrails remain bounded."
+    },
+    {
+      "id": "completion-aware-finalist-inactive-or-unsafe",
+      "statement": "At least one package loses causal activation or the candidate still creates broad power, aspect leakage, failures or duration regression."
+    }
+  ],
+  "candidate": {
+    "contentSha256": "391a069217c11ac5cd93246e3634defccf483b2a52035131b618295e33c0f805",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-poison",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "scoreline",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "mirrorEdge",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedCombinedV3ControlsSha256": "e1269fff5fc92cfe063364cf94e967fe9aaf1dbedcf1d71a1cc03f254ca5d7e3",
+      "scorelineSummarySha256": "82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "391a069217c11ac5cd93246e3634defccf483b2a52035131b618295e33c0f805",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "88681d8fc04618f1a7f14e9c06b41efa77767a978b9c3a53fc19541d461e42bc",
+    "pilotSha256": "7e7a73daf77f7b258f626003661aca672604dbe8d84327b2047cc2988bad842b",
+    "probeSha256": "49e12cb300d35bca45332758b049e3cc8ab2f3776034c5a9ee2deeda7c12335f",
+    "researchBalanceSimSha256": "1f73de23ad6611052b012a7efb076cea6263a32a9d14b29d33e2134237dc25a5",
+    "prototypePatchSha256": "394017230a156f5ca067dae9755f6981d68289d767d6adf67a74df09e7c87309"
+  },
+  "seedBases": {
+    "separationDiscovery": 94000,
+    "separationValidation": 95000,
+    "panelDiscovery": 96000,
+    "panelValidation": 97000,
+    "policyRootDiscovery": 438,
+    "policyRootValidation": 439,
+    "controlDiscovery": 98000,
+    "controlValidation": 99000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "94000-94127",
+      "validation": "95000-95127"
+    },
+    "panels": {
+      "discoveryPolicies": "root 438, indices 0-127",
+      "discoverySeeds": "96000-96127",
+      "validationPolicies": "root 439, indices 0-127",
+      "validationSeeds": "97000-97127"
+    },
+    "controls": {
+      "discovery": "98000-98127",
+      "validation": "99000-99127"
+    },
+    "landscape": {
+      "discoveryPolicies": "root 440, indices 0-127; seeds 100000-100015",
+      "validationPolicies": "root 441, indices 0-127; seeds 101000-101015"
+    }
+  },
+  "estimands": {
+    "functionalSeparation": "For each consumer response, matched I = AB - A - B + none. The named producer lower 95% standardised interaction bound must be at least 0.25 and all off-diagonal upper bounds below 0.25.",
+    "panelActivation": "Within each independent-policy block, activation is the named consumer card response in AB minus B, standardised by pooled consumer response.",
+    "policySensitivity": "A witness completes every arm, plays both cards, applies and consumes the mediator, and has positive consumer activation.",
+    "buildSensitivity": "Only a planned build policy with the partner already in its deck receives one existing aspect-bonus unit for a completing reward. RandomBuild remains unchanged.",
+    "reliability": "In the applicable aspect, AB adds no non-win and its turns-minus-fastest-component upper 95% bound is at most 0.25.",
+    "reachability": "The unchanged legacy reward path must acquire, play and activate both components for at least two distinct policy witnesses per applicable aspect/vow and split, or pass a frozen deterministic acquisition proof.",
+    "globalMovement": "Candidate-minus-live RandomBuild arm-2 win-rate movement is bounded to 0.10 per aspect/vow, alongside C2 and Vow-5."
+  },
+  "successRule": {
+    "functionalSeparation": "All four diagonals and all twelve off-diagonals pass in discovery and held-out cohorts.",
+    "packageActivation": "Every package activation lower 95% bound is at least 0.25 SD in both splits.",
+    "policySensitivity": "Every package has at least eight witnesses per split.",
+    "aspectIdentity": "Scoreline and Afterimage remain Dusk-only; Smolder and Bloodfire remain Ash-only.",
+    "reliability": "Every package has zero applicable-aspect added non-wins/errors and duration upper 95% bound at most 0.25 turns.",
+    "reachability": "Every package meets the legacy-economy witness rule in both splits or has a frozen deterministic acquisition proof.",
+    "globalMovement": "Every held-out RandomBuild candidate-minus-live absolute win-rate delta is at most 0.10.",
+    "c2": "For every aspect/vow grid, RandomBuild arm 2 win rate is below 0.50 and the top viable policy minus arm 2 is at least 0.35.",
+    "vow5": "Every held-out top viable-policy win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "landscapeRowsMaximumPerContentAndSplit": 8192,
+    "wholeRunRowsBeforePackagePass": 0
+  },
+  "cheapestDiscriminatingExperiment": "Re-run separation and independent-policy panels on the exact candidate, then run paired 32-seed controls before any landscape.",
+  "inconclusiveRule": "An interval overlapping its threshold at 32 extends to 64 and 128 on the same frozen cohort. At 128 it stops inconclusive. Candidate values, pilot logic and estimands do not change within this protocol.",
+  "stopRule": "Reject immediately after a decisive package, separation, reliability, C2, aspect-identity, Vow-5, reachability or global-movement failure. Detector mutations remain forbidden until all content gates pass.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,6354 @@
+{
+  "contextVersion": 1,
+  "id": "core",
+  "localeToken": "en",
+  "packIds": [
+    "core"
+  ],
+  "player": {
+    "id": "duskblade",
+    "hue": 225,
+    "art": "flare",
+    "maxHp": 64,
+    "energy": 3,
+    "handSize": 5,
+    "potionSlots": 3,
+    "startDeck": [
+      "strike",
+      "strike",
+      "strike",
+      "strike",
+      "defend",
+      "defend",
+      "defend",
+      "eclipseSlash",
+      "chisel",
+      "firstSpark"
+    ],
+    "startRelic": "emberHeart",
+    "startGold": 99,
+    "name": "The Duskblade",
+    "blurb": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a blade that cuts a road through any night."
+  },
+  "cards": {
+    "strike": {
+      "type": "attack",
+      "rarity": "starter",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 6
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 9
+          }
+        ],
+        "text": "Deal @9@ damage."
+      },
+      "name": "Edge",
+      "text": "Deal @6@ damage."
+    },
+    "defend": {
+      "type": "skill",
+      "rarity": "starter",
+      "cost": 1,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "block",
+          "n": 5
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "block",
+            "n": 8
+          }
+        ],
+        "text": "Gain #8# Ward."
+      },
+      "name": "Ward",
+      "text": "Gain #5# Ward."
+    },
+    "eclipseSlash": {
+      "type": "attack",
+      "rarity": "starter",
+      "cost": 2,
+      "target": "enemy",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 7
+        },
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "vulnerable",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 9
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "vulnerable",
+            "n": 2
+          }
+        ],
+        "text": "Deal @9@ damage. Apply 2 Cracked."
+      },
+      "name": "Eclipse Slash",
+      "text": "Deal @7@ damage. Apply 1 Cracked."
+    },
+    "chisel": {
+      "type": "attack",
+      "rarity": "starter",
+      "cost": 1,
+      "target": "enemy",
+      "chip": 1,
+      "vfx": "pierce",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 7
+          }
+        ],
+        "text": "Deal @7@ damage. Chip 1 extra Facet."
+      },
+      "name": "Chisel",
+      "text": "Deal @4@ damage. Chip 1 extra Facet."
+    },
+    "crackstep": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "slash",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "special",
+          "id": "crackedTempo",
+          "n": 5,
+          "energy": 1,
+          "draw": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "crackedTempo",
+            "n": 7,
+            "energy": 1,
+            "draw": 2
+          }
+        ],
+        "text": "Deal @7@ damage. Duskblade: against Cracked, refund 1 Energy and draw 2 cards. Kindle."
+      },
+      "name": "Crackstep",
+      "text": "Deal @5@ damage. Duskblade: against Cracked, refund 1 Energy and draw 2 cards. Kindle."
+    },
+    "firstSpark": {
+      "type": "skill",
+      "rarity": "starter",
+      "cost": 0,
+      "target": "self",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "text": "Draw 2 cards. Kindle."
+      },
+      "name": "First Spark",
+      "text": "Draw 1 card. Kindle."
+    },
+    "ashBite": {
+      "type": "attack",
+      "rarity": "starter",
+      "cost": 2,
+      "target": "enemy",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 6
+        },
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 8
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 3
+          }
+        ],
+        "text": "Deal @8@ damage. Apply 3 Smolder."
+      },
+      "name": "Ashbite",
+      "text": "Deal @6@ damage. Apply 2 Smolder."
+    },
+    "smother": {
+      "type": "skill",
+      "rarity": "starter",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "block",
+          "n": 5
+        },
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "block",
+            "n": 8
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 3
+          }
+        ],
+        "text": "Gain #8# Ward. Apply 3 Smolder."
+      },
+      "name": "Smother",
+      "text": "Gain #5# Ward. Apply 2 Smolder."
+    },
+    "twinFangs": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "pierce",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4,
+          "times": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 6,
+            "times": 2
+          }
+        ],
+        "text": "Deal @6@ damage twice."
+      },
+      "name": "Twin Shards",
+      "text": "Deal @4@ damage twice."
+    },
+    "quickSlash": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4
+        },
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 6
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "text": "Deal @6@ damage. Draw 1 card."
+      },
+      "name": "Flicker",
+      "text": "Deal @4@ damage. Draw 1 card."
+    },
+    "heavyBlow": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 2,
+      "target": "enemy",
+      "vfx": "blunt",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 12
+        }
+      ],
+      "up": {
+        "chip": 1,
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 16
+          }
+        ],
+        "text": "Deal @16@ damage. Chip 1 extra Facet."
+      },
+      "name": "Quarry Maul",
+      "text": "Deal @12@ damage."
+    },
+    "cleave": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "allEnemies",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 6
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 9
+          }
+        ],
+        "text": "Deal @9@ damage to ALL enemies."
+      },
+      "name": "Fan of Glass",
+      "text": "Deal @6@ damage to ALL enemies."
+    },
+    "venomStrike": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4
+        },
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 6
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 5
+          }
+        ],
+        "text": "Deal @6@ damage. Apply 5 Smolder."
+      },
+      "name": "Emberbite",
+      "text": "Deal @4@ damage. Apply 4 Smolder."
+    },
+    "lunge": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 6
+        },
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "weak",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 9
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "weak",
+            "n": 2
+          }
+        ],
+        "text": "Deal @9@ damage. Apply 2 Dimmed."
+      },
+      "name": "Dimming Cut",
+      "text": "Deal @6@ damage. Apply 1 Dimmed."
+    },
+    "guardedStrike": {
+      "type": "attack",
+      "rarity": "common",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 5
+        },
+        {
+          "kind": "block",
+          "n": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 7
+          },
+          {
+            "kind": "block",
+            "n": 6
+          }
+        ],
+        "text": "Deal @7@ damage. Gain #6# Ward."
+      },
+      "name": "Warden's Edge",
+      "text": "Deal @5@ damage. Gain #4# Ward."
+    },
+    "brace": {
+      "type": "skill",
+      "rarity": "common",
+      "cost": 1,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "block",
+          "n": 8
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "block",
+            "n": 11
+          }
+        ],
+        "text": "Gain #11# Ward."
+      },
+      "name": "Held Light",
+      "text": "Gain #8# Ward."
+    },
+    "sidestep": {
+      "type": "skill",
+      "rarity": "common",
+      "cost": 1,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "block",
+          "n": 3
+        },
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "block",
+            "n": 5
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "text": "Gain #5# Ward. Draw 1 card."
+      },
+      "name": "Glasstep",
+      "text": "Gain #3# Ward. Draw 1 card."
+    },
+    "preparation": {
+      "type": "skill",
+      "rarity": "common",
+      "cost": 0,
+      "target": "self",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ],
+      "up": {
+        "exhaust": false,
+        "effects": [
+          {
+            "kind": "draw",
+            "n": 2
+          }
+        ],
+        "text": "Draw 2 cards."
+      },
+      "name": "Tinder",
+      "text": "Draw 2 cards. Kindle."
+    },
+    "deflect": {
+      "type": "skill",
+      "rarity": "common",
+      "cost": 1,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "block",
+          "n": 6
+        },
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "block",
+            "n": 9
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "text": "Gain #9# Ward. Draw 1 card."
+      },
+      "name": "Refract",
+      "text": "Gain #6# Ward. Draw 1 card."
+    },
+    "leechBlade": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "enemy",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "leech",
+          "n": 9
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "leech",
+            "n": 13
+          }
+        ],
+        "text": "Deal @13@ damage. Heal for half the unblocked damage."
+      },
+      "name": "Thirsting Shard",
+      "text": "Deal @9@ damage. Heal for half the unblocked damage."
+    },
+    "tempest": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "allEnemies",
+      "vfx": "pierce",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 4,
+          "times": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 6,
+            "times": 2
+          }
+        ],
+        "text": "Deal @6@ damage to ALL enemies twice."
+      },
+      "name": "Hailglass",
+      "text": "Deal @4@ damage to ALL enemies twice."
+    },
+    "uppercut": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "enemy",
+      "chip": 1,
+      "vfx": "blunt",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 10
+        },
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "weak",
+          "n": 1
+        }
+      ],
+      "up": {
+        "chip": 2,
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 13
+          },
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "weak",
+            "n": 2
+          }
+        ],
+        "text": "Deal @13@ damage. Chip 2 extra Facets. Apply 2 Dimmed."
+      },
+      "name": "Ringing Blow",
+      "text": "Deal @10@ damage. Chip 1 extra Facet. Apply 1 Dimmed."
+    },
+    "flurry": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "pierce",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 2,
+          "times": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 3,
+            "times": 3
+          }
+        ],
+        "text": "Deal @3@ damage 3 times."
+      },
+      "name": "Splinterstorm",
+      "text": "Deal @2@ damage 3 times."
+    },
+    "executioner": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "blunt",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "execute",
+          "n": 8,
+          "bonus": 6
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "execute",
+            "n": 11,
+            "bonus": 8
+          }
+        ],
+        "text": "Deal @11@ damage. Cracked enemies take 8 more."
+      },
+      "name": "Faultline",
+      "text": "Deal @8@ damage. Cracked enemies take 6 more."
+    },
+    "momentum": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "slash",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "momentum",
+          "n": 6,
+          "grow": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "momentum",
+            "n": 8,
+            "grow": 6
+          }
+        ],
+        "text": "Deal @8@ damage. Each play, this card gains +6 damage this combat."
+      },
+      "name": "Honing Edge",
+      "text": "Deal @6@ damage. Each play, this card gains +4 damage this combat."
+    },
+    "bulwark": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "block",
+          "n": 13
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "block",
+            "n": 18
+          }
+        ],
+        "text": "Gain #18# Ward."
+      },
+      "name": "Glasswall",
+      "text": "Gain #13# Ward."
+    },
+    "surge": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 0,
+      "target": "self",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "energy",
+          "n": 1
+        },
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "energy",
+            "n": 2
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "text": "Gain 2 Energy. Draw 1 card. Kindle."
+      },
+      "name": "Struck Match",
+      "text": "Gain 1 Energy. Draw 1 card. Kindle."
+    },
+    "toxicMist": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "allEnemies",
+      "vfx": "poison",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "allEnemies",
+            "id": "poison",
+            "n": 5
+          }
+        ],
+        "text": "Apply 5 Smolder to ALL enemies."
+      },
+      "name": "Ashcloud",
+      "text": "Apply 3 Smolder to ALL enemies."
+    },
+    "cripple": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "void",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "str",
+          "n": -2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "str",
+            "n": -3
+          }
+        ],
+        "text": "Snuff an enemy's fire: it loses 3 Fervor. Kindle."
+      },
+      "name": "Gutter",
+      "text": "Snuff an enemy's fire: it loses 2 Fervor. Kindle."
+    },
+    "warCry": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "allEnemies",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "weak",
+          "n": 1
+        },
+        {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "vulnerable",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "allEnemies",
+            "id": "weak",
+            "n": 2
+          },
+          {
+            "kind": "status",
+            "who": "allEnemies",
+            "id": "vulnerable",
+            "n": 2
+          }
+        ],
+        "text": "Apply 2 Dimmed and 2 Cracked to ALL enemies."
+      },
+      "name": "Shatterhymn",
+      "text": "Apply 1 Dimmed and 1 Cracked to ALL enemies."
+    },
+    "fortify": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "doubleBlock"
+        }
+      ],
+      "up": {
+        "cost": 1,
+        "text": "Double your Ward."
+      },
+      "name": "Mirrorlight",
+      "text": "Double your Ward."
+    },
+    "bloodRite": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 0,
+      "target": "self",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "loseHp",
+          "n": 3
+        },
+        {
+          "kind": "energy",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "loseHp",
+            "n": 3
+          },
+          {
+            "kind": "energy",
+            "n": 3
+          }
+        ],
+        "text": "Lose 3 HP. Gain 3 Energy."
+      },
+      "name": "Blood for Oil",
+      "text": "Lose 3 HP. Gain 2 Energy."
+    },
+    "empower": {
+      "type": "power",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "str",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "str",
+            "n": 3
+          }
+        ],
+        "text": "Gain 3 Fervor."
+      },
+      "name": "Inner Blaze",
+      "text": "Gain 2 Fervor."
+    },
+    "agility": {
+      "type": "power",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "dex",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "dex",
+            "n": 3
+          }
+        ],
+        "text": "Gain 3 Poise."
+      },
+      "name": "Glazier's Poise",
+      "text": "Gain 2 Poise."
+    },
+    "ironSkin": {
+      "type": "power",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "metallicize",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "metallicize",
+            "n": 4
+          }
+        ],
+        "text": "At the end of your turn, gain 4 Ward."
+      },
+      "name": "Vitrify",
+      "text": "At the end of your turn, gain 3 Ward."
+    },
+    "regrowth": {
+      "type": "power",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "regen",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "regen",
+            "n": 3
+          }
+        ],
+        "text": "At the end of your turn, heal 3 HP."
+      },
+      "name": "Hearthglow",
+      "text": "At the end of your turn, heal 2 HP."
+    },
+    "oblivionStrike": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 3,
+      "target": "enemy",
+      "chip": 2,
+      "vfx": "blunt",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 30
+        }
+      ],
+      "up": {
+        "chip": 3,
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 40
+          }
+        ],
+        "text": "Deal @40@ damage. Chip 3 extra Facets."
+      },
+      "name": "Bellstrike",
+      "text": "Deal @30@ damage. Chip 2 extra Facets."
+    },
+    "phantomBlades": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "pierce",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "phantom",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "phantom",
+            "n": 4
+          }
+        ],
+        "text": "Deal @4@ damage for each card in your hand."
+      },
+      "name": "Phantom Blades",
+      "text": "Deal @3@ damage for each card in your hand."
+    },
+    "devour": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "void",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "special",
+          "id": "devour",
+          "n": 10,
+          "embers": 3,
+          "heal": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "devour",
+            "n": 13,
+            "embers": 4,
+            "heal": 6
+          }
+        ],
+        "text": "Deal @13@ damage. If this kills, swallow its fire: gain 4 Embers and heal 6. Kindle."
+      },
+      "name": "Eat the Flame",
+      "text": "Deal @10@ damage. If this kills, swallow its fire: gain 3 Embers and heal 4. Kindle."
+    },
+    "annihilate": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 2,
+      "target": "allEnemies",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 9
+        },
+        {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 12
+          },
+          {
+            "kind": "status",
+            "who": "allEnemies",
+            "id": "poison",
+            "n": 4
+          }
+        ],
+        "text": "Deal @12@ damage and apply 4 Smolder to ALL enemies."
+      },
+      "name": "Requiem",
+      "text": "Deal @9@ damage and apply 3 Smolder to ALL enemies."
+    },
+    "aegis": {
+      "type": "skill",
+      "rarity": "rare",
+      "cost": 2,
+      "target": "self",
+      "vfx": "ward",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "block",
+          "n": 30
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "block",
+            "n": 40
+          }
+        ],
+        "text": "Gain #40# Ward. Kindle."
+      },
+      "name": "Cathedral Glass",
+      "text": "Gain #30# Ward. Kindle."
+    },
+    "offering": {
+      "type": "skill",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "self",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "special",
+          "id": "pyreTithe",
+          "draw": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "pyreTithe",
+            "draw": 4
+          }
+        ],
+        "text": "Burn every other card in your hand — each feeds the lantern. Draw 4 cards. Kindle."
+      },
+      "name": "Pyre Tithe",
+      "text": "Burn every other card in your hand — each feeds the lantern. Draw 3 cards. Kindle."
+    },
+    "limitBreak": {
+      "type": "skill",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "allEnemies",
+      "vfx": "blunt",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "chip",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "chip",
+            "n": 3
+          }
+        ],
+        "text": "Chip 3 Facets of every enemy. Kindle."
+      },
+      "name": "Annealing Rite",
+      "text": "Chip 2 Facets of every enemy. Kindle."
+    },
+    "catalyst": {
+      "type": "skill",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "enemy",
+      "vfx": "poison",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "special",
+          "id": "catalyst",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "catalyst",
+            "n": 3
+          }
+        ],
+        "text": "Triple an enemy's Smolder. Kindle."
+      },
+      "name": "Bellows",
+      "text": "Double an enemy's Smolder. Kindle."
+    },
+    "risingLitany": {
+      "type": "power",
+      "rarity": "rare",
+      "cost": 3,
+      "target": "self",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "ritual",
+          "n": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "ritual",
+            "n": 3
+          }
+        ],
+        "text": "At the start of each turn, gain 3 Fervor."
+      },
+      "name": "Rising Litany",
+      "text": "At the start of each turn, gain 2 Fervor."
+    },
+    "bastion": {
+      "type": "power",
+      "rarity": "rare",
+      "cost": 3,
+      "target": "self",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "barricade",
+          "n": 1
+        }
+      ],
+      "up": {
+        "cost": 2
+      },
+      "name": "Anneal",
+      "text": "Ward no longer expires at the start of your turn."
+    },
+    "frenzy": {
+      "type": "power",
+      "rarity": "rare",
+      "cost": 2,
+      "target": "self",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "vulnerable",
+          "n": 2
+        },
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "energized",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "vulnerable",
+            "n": 1
+          },
+          {
+            "kind": "status",
+            "who": "self",
+            "id": "energized",
+            "n": 1
+          }
+        ],
+        "text": "Your glass runs too hot: gain 1 Cracked. At the start of each turn, gain 1 Energy."
+      },
+      "name": "Overglow",
+      "text": "Your glass runs too hot: gain 2 Cracked. At the start of each turn, gain 1 Energy."
+    },
+    "virulence": {
+      "type": "power",
+      "rarity": "rare",
+      "cost": 2,
+      "target": "self",
+      "vfx": "poison",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "venomous",
+          "n": 1
+        }
+      ],
+      "up": {
+        "cost": 1
+      },
+      "name": "Emberfang",
+      "text": "Whenever you play an Attack, apply 1 Smolder to the enemy."
+    },
+    "quakeblow": {
+      "type": "attack",
+      "rarity": "uncommon",
+      "cost": 2,
+      "target": "enemy",
+      "chip": 2,
+      "locked": "paneBreaker",
+      "vfx": "blunt",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 8
+        }
+      ],
+      "up": {
+        "chip": 3,
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 11
+          }
+        ],
+        "text": "Deal @11@ damage. Chip 3 extra Facets."
+      },
+      "name": "Quakeblow",
+      "text": "Deal @8@ damage. Chip 2 extra Facets."
+    },
+    "resonantLance": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "enemy",
+      "locked": "paneBreaker",
+      "vfx": "pierce",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "shatterEcho",
+          "n": 7
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "shatterEcho",
+            "n": 10
+          }
+        ],
+        "text": "Deal @10@ damage. Deals double to Staggered or Cracked glass."
+      },
+      "name": "Resonant Lance",
+      "text": "Deal @7@ damage. Deals double to Staggered or Cracked glass."
+    },
+    "tithe": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "locked": "lanternFed",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "ember",
+          "n": 2
+        },
+        {
+          "kind": "draw",
+          "n": 1
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "ember",
+            "n": 3
+          },
+          {
+            "kind": "draw",
+            "n": 1
+          }
+        ],
+        "text": "Gain 3 Embers. Draw 1 card."
+      },
+      "name": "Tithe of Panes",
+      "text": "Gain 2 Embers. Draw 1 card."
+    },
+    "pyreheart": {
+      "type": "power",
+      "rarity": "rare",
+      "cost": 2,
+      "target": "self",
+      "locked": "lanternFed",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "emberflow",
+          "n": 1
+        }
+      ],
+      "up": {
+        "cost": 1
+      },
+      "name": "Pyreheart",
+      "text": "At the start of each turn, gain 1 Ember."
+    },
+    "ashenChoir": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "enemy",
+      "locked": "ashSermon",
+      "vfx": "poison",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "target",
+          "id": "poison",
+          "n": 4
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "status",
+            "who": "target",
+            "id": "poison",
+            "n": 6
+          }
+        ],
+        "text": "Apply 6 Smolder. When smoldering glass dies, its fire leaps on."
+      },
+      "name": "Ashen Choir",
+      "text": "Apply 4 Smolder. When smoldering glass dies, its fire leaps on."
+    },
+    "flawlessForm": {
+      "type": "skill",
+      "rarity": "rare",
+      "cost": 1,
+      "target": "self",
+      "locked": "untouched",
+      "vfx": "ward",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "flawless",
+          "n": 8
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "flawless",
+            "n": 11
+          }
+        ],
+        "text": "Gain #11# Ward. If your glass is untouched this combat, gain #11# more."
+      },
+      "name": "Flawless Form",
+      "text": "Gain #8# Ward. If your glass is untouched this combat, gain #8# more."
+    },
+    "nightSight": {
+      "type": "power",
+      "rarity": "uncommon",
+      "cost": 1,
+      "target": "self",
+      "locked": "darkWalker",
+      "vfx": "void",
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "nightsight",
+          "n": 1
+        }
+      ],
+      "up": {
+        "cost": 0
+      },
+      "name": "Night Sight",
+      "text": "At the start of each turn, draw 1 extra card."
+    },
+    "novaflare": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 2,
+      "target": "enemy",
+      "locked": "spendthrift",
+      "vfx": "fire",
+      "effects": [
+        {
+          "kind": "special",
+          "id": "emberNova",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "emberNova",
+            "n": 4
+          }
+        ],
+        "text": "Deal @4@ damage for every Ember in your lantern."
+      },
+      "name": "Novaflare",
+      "text": "Deal @3@ damage for every Ember in your lantern."
+    },
+    "emberdance": {
+      "type": "skill",
+      "rarity": "uncommon",
+      "cost": 0,
+      "target": "self",
+      "locked": "spendthrift",
+      "vfx": "fire",
+      "exhaust": true,
+      "effects": [
+        {
+          "kind": "special",
+          "id": "emberdance",
+          "n": 3
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "special",
+            "id": "emberdance",
+            "n": 4
+          }
+        ],
+        "text": "Spill your lantern: gain 4 Ward for each Ember spent. Kindle."
+      },
+      "name": "Emberdance",
+      "text": "Spill your lantern: gain 3 Ward for each Ember spent. Kindle."
+    },
+    "shardstorm": {
+      "type": "attack",
+      "rarity": "rare",
+      "cost": 3,
+      "target": "allEnemies",
+      "vfx": "pierce",
+      "locked": "hundredShards",
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 5,
+          "times": 2
+        }
+      ],
+      "up": {
+        "effects": [
+          {
+            "kind": "dmg",
+            "n": 7,
+            "times": 2
+          }
+        ],
+        "text": "Deal @7@ damage to ALL enemies twice."
+      },
+      "name": "Shardstorm",
+      "text": "Deal @5@ damage to ALL enemies twice."
+    },
+    "unreadablePage": {
+      "type": "curse",
+      "rarity": "special",
+      "cost": 0,
+      "target": "self",
+      "vfx": "void",
+      "unplayable": true,
+      "unremovable": true,
+      "effects": [],
+      "name": "The Unreadable Page",
+      "text": "It cannot be played or removed. Carry it to dawn and it may read itself."
+    },
+    "wound": {
+      "type": "status",
+      "rarity": "special",
+      "cost": null,
+      "target": "none",
+      "vfx": "pierce",
+      "unplayable": true,
+      "effects": [],
+      "name": "Shard",
+      "text": "Unplayable. Broken glass rattling in your deck."
+    },
+    "burn": {
+      "type": "status",
+      "rarity": "special",
+      "cost": null,
+      "target": "none",
+      "vfx": "fire",
+      "unplayable": true,
+      "endTurnDmg": 2,
+      "effects": [],
+      "name": "Cinder",
+      "text": "Unplayable. At the end of your turn, take 2 damage if this is in your hand."
+    },
+    "hex": {
+      "type": "curse",
+      "rarity": "special",
+      "cost": null,
+      "target": "none",
+      "vfx": "void",
+      "unplayable": true,
+      "endTurnLoseHp": 1,
+      "effects": [],
+      "name": "Hex",
+      "text": "Unplayable. At the end of your turn, lose 1 HP if this is in your hand. Refuses the fire."
+    }
+  },
+  "cardPools": {
+    "common": [
+      "twinFangs",
+      "quickSlash",
+      "heavyBlow",
+      "cleave",
+      "venomStrike",
+      "lunge",
+      "guardedStrike",
+      "brace",
+      "sidestep",
+      "preparation",
+      "deflect",
+      "crackstep"
+    ],
+    "uncommon": [
+      "leechBlade",
+      "tempest",
+      "uppercut",
+      "flurry",
+      "executioner",
+      "momentum",
+      "bulwark",
+      "surge",
+      "toxicMist",
+      "cripple",
+      "warCry",
+      "fortify",
+      "bloodRite",
+      "empower",
+      "agility",
+      "ironSkin",
+      "regrowth"
+    ],
+    "rare": [
+      "oblivionStrike",
+      "phantomBlades",
+      "devour",
+      "annihilate",
+      "aegis",
+      "offering",
+      "limitBreak",
+      "catalyst",
+      "risingLitany",
+      "bastion",
+      "frenzy",
+      "virulence"
+    ]
+  },
+  "statuses": {
+    "str": {
+      "icon": "⚔",
+      "kind": "buff",
+      "name": "Fervor",
+      "desc": "The inner fire stoked: attacks deal +N damage."
+    },
+    "dex": {
+      "icon": "🛡",
+      "kind": "buff",
+      "name": "Poise",
+      "desc": "Ward cards grant +N Ward."
+    },
+    "vulnerable": {
+      "icon": "◎",
+      "kind": "debuff",
+      "name": "Cracked",
+      "desc": "The glass is scored: takes 50% more attack damage. Wears off each turn."
+    },
+    "weak": {
+      "icon": "↓",
+      "kind": "debuff",
+      "name": "Dimmed",
+      "desc": "The fire gutters: deals 25% less attack damage. Wears off each turn."
+    },
+    "frail": {
+      "icon": "✖",
+      "kind": "debuff",
+      "name": "Brittle",
+      "desc": "Ward gained reduced 25%. Wears off each turn."
+    },
+    "poison": {
+      "icon": "☠",
+      "kind": "debuff",
+      "name": "Smolder",
+      "desc": "Burns from within: loses N HP at the start of its turn, then Smolder falls by 1. When smoldering glass shatters or dies, the Smolder leaps to another enemy."
+    },
+    "thorns": {
+      "icon": "❈",
+      "kind": "buff",
+      "name": "Splinters",
+      "desc": "Attackers take N damage back."
+    },
+    "ritual": {
+      "icon": "☽",
+      "kind": "buff",
+      "name": "Litany",
+      "desc": "Gains N Fervor at the start of each turn."
+    },
+    "metallicize": {
+      "icon": "⬡",
+      "kind": "buff",
+      "name": "Vitrified",
+      "desc": "Gains N Ward at the end of each turn."
+    },
+    "regen": {
+      "icon": "❋",
+      "kind": "buff",
+      "name": "Warmth",
+      "desc": "Heals N HP at the end of each turn."
+    },
+    "barricade": {
+      "icon": "☗",
+      "kind": "buff",
+      "name": "Annealed",
+      "desc": "Ward no longer expires."
+    },
+    "energized": {
+      "icon": "✦",
+      "kind": "buff",
+      "name": "Alight",
+      "desc": "Gain N extra Energy at the start of each turn."
+    },
+    "venomous": {
+      "icon": "☠",
+      "kind": "buff",
+      "name": "Emberfang",
+      "desc": "Attacks apply N Smolder."
+    },
+    "rampage": {
+      "icon": "⤴",
+      "kind": "buff",
+      "name": "Crescendo",
+      "desc": "Attack grows stronger with each use."
+    },
+    "beacon": {
+      "icon": "☀",
+      "kind": "buff",
+      "name": "Beacon",
+      "desc": "Attacks chip N extra Facet(s). Fades at end of turn."
+    },
+    "emberflow": {
+      "icon": "♥",
+      "kind": "buff",
+      "name": "Pyreheart",
+      "desc": "Gain N Ember(s) at the start of each turn."
+    },
+    "nightsight": {
+      "icon": "☾",
+      "kind": "buff",
+      "name": "Night Sight",
+      "desc": "Draw N extra card(s) at the start of each turn."
+    }
+  },
+  "relics": {
+    "emberHeart": {
+      "rarity": "starter",
+      "glyph": "♥",
+      "tone": "#ff5964",
+      "name": "Emberheart",
+      "heal": 3,
+      "text": "At the end of combat, heal 3 HP."
+    },
+    "ashenCore": {
+      "rarity": "starter",
+      "glyph": "☁",
+      "tone": "#d3a15a",
+      "name": "Ashen Core",
+      "text": "Enemies begin each combat with 3 Smolder."
+    },
+    "basaltIdol": {
+      "rarity": "common",
+      "glyph": "☗",
+      "tone": "#9aa7b8",
+      "name": "Basalt Idol",
+      "text": "Begin each combat with 10 Ward."
+    },
+    "warFetish": {
+      "rarity": "common",
+      "glyph": "⚔",
+      "tone": "#ff8c5a",
+      "name": "War Fetish",
+      "text": "Begin each combat with 1 Fervor."
+    },
+    "riverPearl": {
+      "rarity": "common",
+      "glyph": "◉",
+      "tone": "#6fd6e8",
+      "name": "River Pearl",
+      "text": "Begin each combat with 1 Poise."
+    },
+    "travelersPack": {
+      "rarity": "common",
+      "glyph": "⌘",
+      "tone": "#c9a86a",
+      "name": "Traveler's Pack",
+      "text": "Draw 2 extra cards on your first turn."
+    },
+    "emberLantern": {
+      "rarity": "common",
+      "glyph": "☀",
+      "tone": "#ffd166",
+      "name": "Ember Lantern",
+      "text": "Gain 1 extra Energy on your first turn."
+    },
+    "vialOfLife": {
+      "rarity": "common",
+      "glyph": "♣",
+      "tone": "#7ddb8f",
+      "name": "Vial of Life",
+      "text": "Heal 2 HP at the start of each combat."
+    },
+    "thornBand": {
+      "rarity": "common",
+      "glyph": "❈",
+      "tone": "#a3e06c",
+      "name": "Thorn Band",
+      "text": "Begin each combat with 2 Splinters."
+    },
+    "sweetRoot": {
+      "rarity": "common",
+      "glyph": "✿",
+      "tone": "#ff9ecb",
+      "instant": true,
+      "name": "Sweet Root",
+      "text": "On pickup: gain 8 Max HP."
+    },
+    "gravebloom": {
+      "rarity": "uncommon",
+      "glyph": "❀",
+      "tone": "#b18cff",
+      "name": "Gravebloom",
+      "text": "After combat, if at or below 50% HP, heal 10."
+    },
+    "silkFan": {
+      "rarity": "uncommon",
+      "glyph": "⛉",
+      "tone": "#8fd0ff",
+      "name": "Silk Fan",
+      "text": "Every 3rd card you play each combat grants 3 Ward."
+    },
+    "reapersBell": {
+      "rarity": "uncommon",
+      "glyph": "♫",
+      "tone": "#d8c27a",
+      "name": "Reaper's Bell",
+      "text": "When an enemy dies, gain 1 Energy and draw 1 card."
+    },
+    "executionersSeal": {
+      "rarity": "uncommon",
+      "glyph": "✠",
+      "tone": "#ff6b6b",
+      "name": "Executioner's Seal",
+      "text": "Every 10th Attack you play deals double damage."
+    },
+    "ironTalisman": {
+      "rarity": "uncommon",
+      "glyph": "◈",
+      "tone": "#c0c8d4",
+      "name": "Iron Talisman",
+      "text": "Every 3rd Attack you play grants 1 Fervor."
+    },
+    "merchantsMark": {
+      "rarity": "uncommon",
+      "glyph": "¤",
+      "tone": "#f2c14e",
+      "name": "Merchant's Mark",
+      "text": "Shop prices are 25% lower."
+    },
+    "seersOrb": {
+      "rarity": "uncommon",
+      "glyph": "☉",
+      "tone": "#9be8d8",
+      "name": "Seer's Orb",
+      "text": "Card rewards offer 1 additional choice."
+    },
+    "frozenCore": {
+      "rarity": "rare",
+      "glyph": "❆",
+      "tone": "#a8e6ff",
+      "name": "Frozen Core",
+      "text": "Unspent Energy carries over between turns."
+    },
+    "verdantBranch": {
+      "rarity": "rare",
+      "glyph": "⚕",
+      "tone": "#7ddb8f",
+      "name": "Verdant Branch",
+      "text": "Whenever a card is Kindled or burned away, draw 1 card."
+    },
+    "sunBlossom": {
+      "rarity": "rare",
+      "glyph": "❂",
+      "tone": "#ffd166",
+      "name": "Sun Blossom",
+      "text": "All healing is increased by 50%."
+    },
+    "wardingCharm": {
+      "rarity": "rare",
+      "glyph": "⛨",
+      "tone": "#8fa8ff",
+      "name": "Warding Charm",
+      "text": "Enemy attacks that would deal 5 or less damage deal 1."
+    },
+    "duskmirror": {
+      "rarity": "rare",
+      "glyph": "◐",
+      "tone": "#c99aff",
+      "name": "Duskmirror",
+      "text": "The first card you play each turn costs 0."
+    },
+    "smolderingCoal": {
+      "rarity": "uncommon",
+      "glyph": "♨",
+      "tone": "#ff9a4d",
+      "locked": "ashSermon",
+      "name": "Smoldering Coal",
+      "text": "Enemies begin each combat with 2 Smolder."
+    },
+    "thiefOfWicks": {
+      "rarity": "uncommon",
+      "glyph": "☄",
+      "tone": "#c9a86a",
+      "locked": "darkWalker",
+      "name": "Thief of Wicks",
+      "text": "Unlit lanterns pay double bounty."
+    },
+    "prismCharm": {
+      "rarity": "rare",
+      "glyph": "◬",
+      "tone": "#9be8d8",
+      "locked": "untouched",
+      "name": "Prism Charm",
+      "text": "Your first Shatter each combat spills 2 extra Embers."
+    },
+    "bellOfEndings": {
+      "rarity": "rare",
+      "glyph": "♪",
+      "tone": "#dfeaff",
+      "locked": "hundredShards",
+      "name": "Bell of Endings",
+      "text": "Whenever glass Shatters, every other enemy takes 4 damage."
+    },
+    "crownOfCinders": {
+      "rarity": "boss",
+      "glyph": "♛",
+      "tone": "#ff9a4d",
+      "name": "Crown of Cinders",
+      "text": "Your lantern holds 12 Embers and begins each combat holding 2."
+    },
+    "hollowCrown": {
+      "rarity": "boss",
+      "glyph": "♕",
+      "tone": "#b18cff",
+      "instant": true,
+      "name": "Hollow Crown",
+      "text": "Gain 1 Energy each turn. The glass dims: on pickup, lose 10 Max HP."
+    },
+    "crownOfTithes": {
+      "rarity": "boss",
+      "glyph": "♜",
+      "tone": "#d8c27a",
+      "name": "Crown of Tithes",
+      "text": "You may kindle twice each turn, and each kindling grants 3 Ward."
+    },
+    "shatterersCrown": {
+      "rarity": "boss",
+      "glyph": "♚",
+      "tone": "#8fd0ff",
+      "name": "Shatterer's Crown",
+      "text": "Enemy glass runs thin: all facet gauges are 1 smaller. Enemies begin with 1 Fervor."
+    },
+    "crownOfTheHearth": {
+      "rarity": "boss",
+      "glyph": "♥",
+      "tone": "#ff5964",
+      "name": "Crown of the Hearth",
+      "text": "At the end of combat, heal 3 HP for every Ember still in your lantern."
+    }
+  },
+  "relicPools": {
+    "common": [
+      "basaltIdol",
+      "warFetish",
+      "riverPearl",
+      "travelersPack",
+      "emberLantern",
+      "vialOfLife",
+      "thornBand",
+      "sweetRoot"
+    ],
+    "uncommon": [
+      "gravebloom",
+      "silkFan",
+      "reapersBell",
+      "executionersSeal",
+      "ironTalisman",
+      "merchantsMark",
+      "seersOrb"
+    ],
+    "rare": [
+      "frozenCore",
+      "verdantBranch",
+      "sunBlossom",
+      "wardingCharm",
+      "duskmirror"
+    ],
+    "boss": [
+      "crownOfCinders",
+      "hollowCrown",
+      "crownOfTithes",
+      "shatterersCrown",
+      "crownOfTheHearth"
+    ]
+  },
+  "potions": {
+    "healing": {
+      "tone": "#ff6b81",
+      "glyph": "♥",
+      "combatOnly": false,
+      "name": "Phial of Dawn",
+      "text": "Heal 20 HP."
+    },
+    "strength": {
+      "tone": "#ff8c5a",
+      "glyph": "⚔",
+      "combatOnly": true,
+      "name": "Phial of Fervor",
+      "text": "Gain 2 Fervor."
+    },
+    "swift": {
+      "tone": "#8fd0ff",
+      "glyph": "»",
+      "combatOnly": true,
+      "name": "Inkdraught",
+      "text": "Draw 3 cards."
+    },
+    "block": {
+      "tone": "#9aa7b8",
+      "glyph": "☗",
+      "combatOnly": true,
+      "name": "Phial of Held Light",
+      "text": "Gain 12 Ward."
+    },
+    "fire": {
+      "tone": "#ffd166",
+      "glyph": "✹",
+      "combatOnly": true,
+      "needsTarget": true,
+      "name": "Stormglass Phial",
+      "text": "Deal 20 damage to an enemy."
+    },
+    "venom": {
+      "tone": "#a3e06c",
+      "glyph": "☠",
+      "combatOnly": true,
+      "needsTarget": true,
+      "name": "Smolderphial",
+      "text": "Apply 7 Smolder to an enemy."
+    },
+    "energy": {
+      "tone": "#ff9a4d",
+      "glyph": "✦",
+      "combatOnly": true,
+      "name": "Emberphial",
+      "text": "Gain 3 Embers."
+    }
+  },
+  "enemies": {
+    "sporeling": {
+      "hp": [
+        13,
+        17
+      ],
+      "facets": 3,
+      "art": {
+        "kind": "wisp",
+        "hue": 95,
+        "size": 0.72
+      },
+      "moves": {
+        "spit": {
+          "intent": "attack",
+          "dmg": 4,
+          "name": "Spore Spit"
+        },
+        "grow": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 1
+            }
+          ],
+          "name": "Bloom"
+        }
+      },
+      "name": "Sporeling"
+    },
+    "duskfang": {
+      "hp": [
+        26,
+        30
+      ],
+      "art": {
+        "kind": "beast",
+        "hue": 22,
+        "size": 1
+      },
+      "moves": {
+        "howl": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Howl"
+        },
+        "bite": {
+          "intent": "attack",
+          "dmg": 7,
+          "name": "Bite"
+        },
+        "rend": {
+          "intent": "attack",
+          "dmg": 4,
+          "times": 2,
+          "name": "Rend"
+        }
+      },
+      "name": "Duskfang"
+    },
+    "gloomslime": {
+      "hp": [
+        30,
+        34
+      ],
+      "art": {
+        "kind": "slime",
+        "hue": 150,
+        "size": 1
+      },
+      "moves": {
+        "slam": {
+          "intent": "attack",
+          "dmg": 8,
+          "name": "Slam"
+        },
+        "ooze": {
+          "intent": "attack_debuff",
+          "dmg": 3,
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "Corrosive Ooze"
+        },
+        "harden": {
+          "intent": "attack_block",
+          "dmg": 4,
+          "block": 6,
+          "name": "Congeal"
+        }
+      },
+      "name": "Gloomslime"
+    },
+    "waylayer": {
+      "hp": [
+        28,
+        32
+      ],
+      "art": {
+        "kind": "rogue",
+        "hue": 0,
+        "size": 0.95
+      },
+      "moves": {
+        "stab": {
+          "intent": "attack",
+          "dmg": 9,
+          "name": "Stab"
+        },
+        "smoke": {
+          "intent": "block",
+          "block": 8,
+          "name": "Smokescreen"
+        },
+        "trick": {
+          "intent": "attack_debuff",
+          "dmg": 4,
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            }
+          ],
+          "name": "Dirty Trick"
+        }
+      },
+      "name": "Waylayer"
+    },
+    "thornling": {
+      "hp": [
+        18,
+        22
+      ],
+      "facets": 3,
+      "art": {
+        "kind": "plant",
+        "hue": 80,
+        "size": 0.85
+      },
+      "startStatus": {
+        "thorns": 2
+      },
+      "moves": {
+        "prick": {
+          "intent": "attack",
+          "dmg": 6,
+          "name": "Prick"
+        },
+        "bristle": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "thorns",
+              "n": 2
+            }
+          ],
+          "name": "Bristle"
+        },
+        "burst": {
+          "intent": "attack",
+          "dmg": 10,
+          "name": "Spike Burst"
+        }
+      },
+      "name": "Thornling"
+    },
+    "ashAcolyte": {
+      "hp": [
+        34,
+        38
+      ],
+      "art": {
+        "kind": "cultist",
+        "hue": 28,
+        "size": 1
+      },
+      "moves": {
+        "ritual": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "ritual",
+              "n": 2
+            }
+          ],
+          "name": "Dark Ritual"
+        },
+        "scorch": {
+          "intent": "attack",
+          "dmg": 6,
+          "name": "Scorch"
+        }
+      },
+      "name": "Ash Acolyte"
+    },
+    "gravewarden": {
+      "hp": [
+        70,
+        76
+      ],
+      "elite": true,
+      "art": {
+        "kind": "golem",
+        "hue": 210,
+        "size": 1.25
+      },
+      "moves": {
+        "crush": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "Crush"
+        },
+        "entomb": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 2
+            }
+          ],
+          "name": "Entomb"
+        },
+        "bulwark": {
+          "intent": "attack_block",
+          "dmg": 6,
+          "block": 12,
+          "name": "Bulwark"
+        }
+      },
+      "name": "Gravewarden"
+    },
+    "alphaFang": {
+      "hp": [
+        64,
+        70
+      ],
+      "elite": true,
+      "art": {
+        "kind": "beast",
+        "hue": 350,
+        "size": 1.3
+      },
+      "moves": {
+        "howl": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 3
+            }
+          ],
+          "name": "Alpha Howl"
+        },
+        "savage": {
+          "intent": "attack",
+          "dmg": 5,
+          "times": 2,
+          "name": "Savage"
+        },
+        "throat": {
+          "intent": "attack",
+          "dmg": 13,
+          "name": "Throat Rip"
+        }
+      },
+      "name": "Alpha Duskfang"
+    },
+    "rootheart": {
+      "hp": [
+        240,
+        240
+      ],
+      "boss": true,
+      "art": {
+        "kind": "treeboss",
+        "hue": 100,
+        "size": 1.6
+      },
+      "moves": {
+        "awaken": {
+          "intent": "buff",
+          "block": 10,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Awaken"
+        },
+        "lash": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "Root Lash"
+        },
+        "spores": {
+          "intent": "attack_debuff",
+          "dmg": 5,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 4
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "Choking Spores"
+        },
+        "entangle": {
+          "intent": "attack_debuff",
+          "dmg": 7,
+          "addCards": {
+            "id": "wound",
+            "n": 2
+          },
+          "name": "Entangle"
+        },
+        "slam": {
+          "intent": "attack",
+          "dmg": 22,
+          "name": "Colossal Slam"
+        }
+      },
+      "name": "The Rootheart"
+    },
+    "drownedOne": {
+      "hp": [
+        38,
+        44
+      ],
+      "art": {
+        "kind": "zombie",
+        "hue": 185,
+        "size": 1
+      },
+      "moves": {
+        "claw": {
+          "intent": "attack",
+          "dmg": 11,
+          "name": "Claw"
+        },
+        "frenzy": {
+          "intent": "attack",
+          "dmg": 4,
+          "times": 3,
+          "name": "Frenzy"
+        },
+        "gurgle": {
+          "intent": "attack_debuff",
+          "dmg": 5,
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "Gurgle"
+        }
+      },
+      "name": "Drowned One"
+    },
+    "voltEel": {
+      "hp": [
+        30,
+        36
+      ],
+      "art": {
+        "kind": "serpent",
+        "hue": 190,
+        "size": 0.9
+      },
+      "moves": {
+        "shock": {
+          "intent": "attack_block",
+          "dmg": 7,
+          "block": 5,
+          "name": "Shock"
+        },
+        "discharge": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "Discharge"
+        },
+        "coil": {
+          "intent": "buff",
+          "block": 8,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 1
+            }
+          ],
+          "name": "Coil"
+        }
+      },
+      "name": "Voltaic Eel"
+    },
+    "mirelurker": {
+      "hp": [
+        34,
+        40
+      ],
+      "art": {
+        "kind": "crawler",
+        "hue": 160,
+        "size": 0.95
+      },
+      "moves": {
+        "sting": {
+          "intent": "attack_debuff",
+          "dmg": 6,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 3
+            }
+          ],
+          "name": "Venom Sting"
+        },
+        "burrow": {
+          "intent": "block",
+          "block": 10,
+          "name": "Burrow"
+        },
+        "barb": {
+          "intent": "attack",
+          "dmg": 9,
+          "name": "Barb"
+        }
+      },
+      "name": "Mirelurker"
+    },
+    "tidecaller": {
+      "hp": [
+        42,
+        48
+      ],
+      "art": {
+        "kind": "cultist",
+        "hue": 195,
+        "size": 1.05
+      },
+      "moves": {
+        "surge": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "allies",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Tidal Blessing"
+        },
+        "bolt": {
+          "intent": "attack",
+          "dmg": 9,
+          "name": "Water Bolt"
+        },
+        "undertow": {
+          "intent": "attack_debuff",
+          "dmg": 4,
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            }
+          ],
+          "name": "Undertow"
+        }
+      },
+      "name": "Tidecaller"
+    },
+    "shellback": {
+      "hp": [
+        50,
+        56
+      ],
+      "art": {
+        "kind": "crab",
+        "hue": 15,
+        "size": 1.15
+      },
+      "moves": {
+        "snap": {
+          "intent": "attack",
+          "dmg": 10,
+          "name": "Snap"
+        },
+        "shell": {
+          "intent": "block",
+          "block": 13,
+          "fx": [
+            {
+              "who": "self",
+              "id": "thorns",
+              "n": 1
+            }
+          ],
+          "name": "Shell Up"
+        },
+        "jet": {
+          "intent": "attack",
+          "dmg": 6,
+          "times": 2,
+          "name": "Water Jet"
+        }
+      },
+      "name": "Shellback"
+    },
+    "deepmaw": {
+      "hp": [
+        54,
+        60
+      ],
+      "art": {
+        "kind": "maw",
+        "hue": 200,
+        "size": 1.2
+      },
+      "moves": {
+        "bite": {
+          "intent": "attack",
+          "dmg": 14,
+          "name": "Bite"
+        },
+        "lure": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 2
+            }
+          ],
+          "name": "Luminous Lure"
+        },
+        "swallow": {
+          "intent": "attack_buff",
+          "dmg": 8,
+          "heal": 8,
+          "name": "Swallow"
+        }
+      },
+      "name": "Deepmaw"
+    },
+    "abyssalKnight": {
+      "hp": [
+        108,
+        116
+      ],
+      "elite": true,
+      "art": {
+        "kind": "knight",
+        "hue": 215,
+        "size": 1.3
+      },
+      "moves": {
+        "blade": {
+          "intent": "attack",
+          "dmg": 15,
+          "name": "Voidblade"
+        },
+        "oath": {
+          "intent": "buff",
+          "block": 14,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Dark Oath"
+        },
+        "condemn": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "Condemn"
+        },
+        "execute": {
+          "intent": "attack",
+          "dmg": 9,
+          "times": 2,
+          "name": "Execute"
+        }
+      },
+      "name": "Abyssal Knight"
+    },
+    "siren": {
+      "hp": [
+        92,
+        100
+      ],
+      "elite": true,
+      "art": {
+        "kind": "siren",
+        "hue": 280,
+        "size": 1.15
+      },
+      "moves": {
+        "song": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            }
+          ],
+          "name": "Dirge"
+        },
+        "rend": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "Talon Rend"
+        },
+        "mend": {
+          "intent": "heal",
+          "heal": 12,
+          "block": 6,
+          "name": "Mend"
+        },
+        "shriek": {
+          "intent": "attack",
+          "dmg": 7,
+          "times": 2,
+          "name": "Shriek"
+        }
+      },
+      "name": "Siren"
+    },
+    "leviathan": {
+      "hp": [
+        310,
+        310
+      ],
+      "boss": true,
+      "art": {
+        "kind": "leviathan",
+        "hue": 195,
+        "size": 1.7
+      },
+      "moves": {
+        "tide": {
+          "intent": "buff",
+          "block": 15,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 1
+            }
+          ],
+          "name": "Rising Tide"
+        },
+        "crush": {
+          "intent": "attack",
+          "dmg": 17,
+          "name": "Crushing Jaws"
+        },
+        "brine": {
+          "intent": "attack_debuff",
+          "dmg": 6,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 5
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "Black Brine"
+        },
+        "consume": {
+          "intent": "heal",
+          "heal": 20,
+          "block": 10,
+          "name": "Consume the Deep"
+        },
+        "cataclysm": {
+          "intent": "attack",
+          "dmg": 30,
+          "name": "Cataclysm"
+        }
+      },
+      "name": "Leviathan's Maw"
+    },
+    "voidWisp": {
+      "hp": [
+        26,
+        30
+      ],
+      "facets": 3,
+      "art": {
+        "kind": "wisp",
+        "hue": 275,
+        "size": 0.78
+      },
+      "moves": {
+        "zap": {
+          "intent": "attack",
+          "dmg": 7,
+          "name": "Void Zap"
+        },
+        "siphon": {
+          "intent": "attack_buff",
+          "dmg": 5,
+          "heal": 5,
+          "name": "Siphon"
+        }
+      },
+      "name": "Void Wisp"
+    },
+    "obsidianGolem": {
+      "hp": [
+        64,
+        72
+      ],
+      "art": {
+        "kind": "golem",
+        "hue": 270,
+        "size": 1.3
+      },
+      "moves": {
+        "pound": {
+          "intent": "attack",
+          "dmg": 14,
+          "name": "Pound"
+        },
+        "harden": {
+          "intent": "block",
+          "block": 14,
+          "name": "Harden"
+        },
+        "quake": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            }
+          ],
+          "name": "Quake"
+        }
+      },
+      "name": "Obsidian Golem"
+    },
+    "starCultist": {
+      "hp": [
+        46,
+        52
+      ],
+      "art": {
+        "kind": "cultist",
+        "hue": 290,
+        "size": 1.05
+      },
+      "moves": {
+        "ritual": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "ritual",
+              "n": 3
+            }
+          ],
+          "name": "Star Ritual"
+        },
+        "scorch": {
+          "intent": "attack",
+          "dmg": 9,
+          "name": "Starfire"
+        }
+      },
+      "name": "Star Cultist"
+    },
+    "shade": {
+      "hp": [
+        42,
+        48
+      ],
+      "art": {
+        "kind": "shade",
+        "hue": 260,
+        "size": 1
+      },
+      "moves": {
+        "slash": {
+          "intent": "attack",
+          "dmg": 6,
+          "times": 2,
+          "name": "Dual Slash"
+        },
+        "gloom": {
+          "intent": "attack_debuff",
+          "dmg": 6,
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "Gloom"
+        },
+        "vanish": {
+          "intent": "block",
+          "block": 12,
+          "name": "Vanish"
+        }
+      },
+      "name": "Shade"
+    },
+    "chaosHound": {
+      "hp": [
+        56,
+        64
+      ],
+      "art": {
+        "kind": "beast",
+        "hue": 315,
+        "size": 1.1
+      },
+      "startStatus": {
+        "rampage": 1
+      },
+      "moves": {
+        "bite": {
+          "intent": "attack",
+          "dmg": 9,
+          "ramp": 3,
+          "name": "Chaos Bite"
+        },
+        "howl": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Warp Howl"
+        }
+      },
+      "name": "Chaos Hound"
+    },
+    "watcherEye": {
+      "hp": [
+        48,
+        56
+      ],
+      "art": {
+        "kind": "eye",
+        "hue": 250,
+        "size": 1.05
+      },
+      "moves": {
+        "gaze": {
+          "intent": "attack_debuff",
+          "dmg": 8,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 2
+            }
+          ],
+          "name": "Piercing Gaze"
+        },
+        "beam": {
+          "intent": "attack",
+          "dmg": 15,
+          "name": "Ruin Beam"
+        },
+        "blink": {
+          "intent": "attack_block",
+          "dmg": 5,
+          "block": 10,
+          "name": "Blink"
+        }
+      },
+      "name": "Watcher Eye"
+    },
+    "voidColossus": {
+      "hp": [
+        300,
+        320
+      ],
+      "elite": true,
+      "art": {
+        "kind": "golem",
+        "hue": 305,
+        "size": 1.5
+      },
+      "moves": {
+        "slam": {
+          "intent": "attack",
+          "dmg": 20,
+          "name": "Void Slam"
+        },
+        "fortify": {
+          "intent": "buff",
+          "block": 18,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Fortify"
+        },
+        "shatter": {
+          "intent": "attack_debuff",
+          "dmg": 8,
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 3
+            }
+          ],
+          "name": "Shatter"
+        }
+      },
+      "name": "Voidforged Colossus"
+    },
+    "heraldOfEnd": {
+      "hp": [
+        260,
+        280
+      ],
+      "elite": true,
+      "art": {
+        "kind": "shade",
+        "hue": 335,
+        "size": 1.4
+      },
+      "moves": {
+        "doom": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 7
+            }
+          ],
+          "name": "Doomsong"
+        },
+        "reave": {
+          "intent": "attack",
+          "dmg": 16,
+          "name": "Reave"
+        },
+        "flame": {
+          "intent": "attack",
+          "dmg": 8,
+          "times": 2,
+          "name": "Black Flame"
+        },
+        "rise": {
+          "intent": "buff",
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 3
+            }
+          ],
+          "name": "Apotheosis"
+        }
+      },
+      "name": "Herald of the End"
+    },
+    "sovereign": {
+      "hp": [
+        650,
+        650
+      ],
+      "boss": true,
+      "art": {
+        "kind": "sovereign",
+        "hue": 285,
+        "size": 1.8
+      },
+      "moves": {
+        "scepter": {
+          "intent": "attack",
+          "dmg": 18,
+          "name": "Scepter Strike"
+        },
+        "gravitas": {
+          "intent": "buff",
+          "block": 20,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Gravitas"
+        },
+        "starfall": {
+          "intent": "attack",
+          "dmg": 11,
+          "times": 2,
+          "name": "Starfall"
+        },
+        "ruin": {
+          "intent": "attack_debuff",
+          "dmg": 4,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 4
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            }
+          ],
+          "name": "Word of Ruin"
+        },
+        "holdCourt": {
+          "intent": "buff",
+          "block": 30,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 4
+            }
+          ],
+          "name": "Hold Court"
+        },
+        "annihilation": {
+          "intent": "attack",
+          "dmg": 34,
+          "name": "Annihilation"
+        }
+      },
+      "name": "The Eternal Sovereign"
+    },
+    "eternalKeeper": {
+      "hp": [
+        650,
+        650
+      ],
+      "boss": true,
+      "finaleHandoff": true,
+      "art": {
+        "kind": "humanoid",
+        "hue": 18,
+        "size": 1.8
+      },
+      "moves": {
+        "hearthBlow": {
+          "intent": "attack",
+          "dmg": 18,
+          "name": "The Blow From the Hearth"
+        },
+        "sitDown": {
+          "intent": "buff",
+          "block": 20,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "Sit Down"
+        },
+        "cinderFall": {
+          "intent": "attack",
+          "dmg": 11,
+          "times": 2,
+          "name": "Cinders Coming Home"
+        },
+        "kindWord": {
+          "intent": "attack_debuff",
+          "dmg": 4,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 4
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            }
+          ],
+          "name": "A Kind Word"
+        },
+        "keepTheFire": {
+          "intent": "buff",
+          "block": 30,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 4
+            }
+          ],
+          "name": "The Fire Stays With Me"
+        },
+        "neverLeave": {
+          "intent": "attack",
+          "dmg": 34,
+          "name": "I Am Still Here"
+        }
+      },
+      "name": "The Eternal Keeper"
+    },
+    "uncarvedSelf": {
+      "hp": [
+        82,
+        90
+      ],
+      "elite": true,
+      "art": {
+        "kind": "humanoid",
+        "hue": 24,
+        "size": 1.2
+      },
+      "counterfactual": {
+        "node": "threshold-prime",
+        "motif": "seal-relief",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "door",
+          "ward": "carve"
+        },
+        "kits": {
+          "carve": [
+            "stoneCut",
+            "glyphVolley",
+            "sealCrack"
+          ],
+          "door": [
+            "doorWard",
+            "darkStamp",
+            "waitStone"
+          ]
+        }
+      },
+      "moves": {
+        "stoneCut": {
+          "intent": "attack",
+          "dmg": 15,
+          "name": "The Stone You Did Not Carve"
+        },
+        "glyphVolley": {
+          "intent": "attack",
+          "dmg": 7,
+          "times": 2,
+          "name": "The Marks You Did Not Press"
+        },
+        "sealCrack": {
+          "intent": "attack_debuff",
+          "dmg": 12,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Seal You Did Not Bear"
+        },
+        "doorWard": {
+          "intent": "block",
+          "block": 17,
+          "name": "The Watch You Did Not Keep"
+        },
+        "darkStamp": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 3
+            }
+          ],
+          "name": "The Stamp You Did Not Set"
+        },
+        "waitStone": {
+          "intent": "attack_block",
+          "dmg": 11,
+          "block": 10,
+          "name": "The Slab You Did Not Shift"
+        }
+      },
+      "name": "【The Uncarved】"
+    },
+    "uncrossedSelf": {
+      "hp": [
+        42,
+        48
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 185,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "II-prime",
+        "motif": "false-light",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "shell",
+          "ward": "brine"
+        },
+        "kits": {
+          "brine": [
+            "brineBite",
+            "falseLamp",
+            "undertowEcho"
+          ],
+          "shell": [
+            "closedShell",
+            "stillWater",
+            "librarySpine"
+          ]
+        }
+      },
+      "moves": {
+        "brineBite": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 2
+            }
+          ],
+          "name": "The Tide Unlearned"
+        },
+        "falseLamp": {
+          "intent": "attack",
+          "dmg": 5,
+          "times": 2,
+          "name": "The Lamp That Lied"
+        },
+        "undertowEcho": {
+          "intent": "attack_debuff",
+          "dmg": 6,
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "The Wait Unsat"
+        },
+        "closedShell": {
+          "intent": "block",
+          "block": 14,
+          "name": "The Shell You Kept"
+        },
+        "stillWater": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "Still Water"
+        },
+        "librarySpine": {
+          "intent": "attack_block",
+          "dmg": 7,
+          "block": 8,
+          "name": "The Unwritten Page"
+        }
+      },
+      "name": "【The Uncrossed】"
+    },
+    "unlitSelf": {
+      "hp": [
+        44,
+        50
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 38,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "I-prime",
+        "motif": "paired-lanterns",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "lantern",
+          "ward": "ashroot"
+        },
+        "kits": {
+          "ashroot": [
+            "rootLash",
+            "greyAsh",
+            "stillRoot"
+          ],
+          "lantern": [
+            "pairedDark",
+            "wickUnlit",
+            "lampWait"
+          ]
+        }
+      },
+      "moves": {
+        "rootLash": {
+          "intent": "attack_debuff",
+          "dmg": 9,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 3
+            }
+          ],
+          "name": "The Root Uncut"
+        },
+        "greyAsh": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "The Ash Unscattered"
+        },
+        "stillRoot": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "The Root That Stayed"
+        },
+        "pairedDark": {
+          "intent": "block",
+          "block": 16,
+          "name": "The Pair Left Dark"
+        },
+        "wickUnlit": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            }
+          ],
+          "name": "The Wick Unburned"
+        },
+        "lampWait": {
+          "intent": "attack_block",
+          "dmg": 8,
+          "block": 6,
+          "name": "The Lamp Unraised"
+        }
+      },
+      "name": "【The Unstruck】"
+    },
+    "unobsidianSelf": {
+      "hp": [
+        50,
+        56
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 268,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "III-prime",
+        "motif": "obsidian-star",
+        "axis": "statusLean",
+        "axisToKit": {
+          "toxin": "obsidian",
+          "ward": "star"
+        },
+        "kits": {
+          "star": [
+            "starGaze",
+            "lightHang",
+            "eyeMeet"
+          ],
+          "obsidian": [
+            "obsidianWard",
+            "darkHarden",
+            "courtWait"
+          ]
+        }
+      },
+      "moves": {
+        "starGaze": {
+          "intent": "attack",
+          "dmg": 13,
+          "name": "The Star You Did Not Face"
+        },
+        "lightHang": {
+          "intent": "attack",
+          "dmg": 6,
+          "times": 2,
+          "name": "The Light You Left Hanging"
+        },
+        "eyeMeet": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Eye You Did Not Meet"
+        },
+        "obsidianWard": {
+          "intent": "block",
+          "block": 15,
+          "name": "The Glass That Did Not Blacken"
+        },
+        "darkHarden": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 3
+            }
+          ],
+          "name": "The Dark That Did Not Harden"
+        },
+        "courtWait": {
+          "intent": "attack_block",
+          "dmg": 9,
+          "block": 7,
+          "name": "The Court You Did Not Enter"
+        }
+      },
+      "name": "【The Unobsidian】"
+    },
+    "unopenedSelf": {
+      "hp": [
+        40,
+        46
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 32,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "threshold-prime",
+        "motif": "stained-glass",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "glassCut",
+            "shardVolley",
+            "sealBlow"
+          ],
+          "ash": [
+            "roseWard",
+            "darkPane",
+            "reliefWait"
+          ]
+        }
+      },
+      "moves": {
+        "glassCut": {
+          "intent": "attack",
+          "dmg": 12,
+          "name": "The Window You Left Shut"
+        },
+        "shardVolley": {
+          "intent": "attack",
+          "dmg": 6,
+          "times": 2,
+          "name": "Shards That Did Not Fall"
+        },
+        "sealBlow": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Door Unopened"
+        },
+        "roseWard": {
+          "intent": "block",
+          "block": 13,
+          "name": "The Rose You Stood Behind"
+        },
+        "darkPane": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "The Pane Left Dark"
+        },
+        "reliefWait": {
+          "intent": "attack_block",
+          "dmg": 7,
+          "block": 8,
+          "name": "The Seal Unread"
+        }
+      },
+      "name": "【The Unopened】"
+    },
+    "unsunkSelf": {
+      "hp": [
+        88,
+        96
+      ],
+      "elite": true,
+      "art": {
+        "kind": "humanoid",
+        "hue": 198,
+        "size": 1.2
+      },
+      "counterfactual": {
+        "node": "II-prime",
+        "motif": "library",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "tideCut",
+            "unreadVolley",
+            "brineWake"
+          ],
+          "ash": [
+            "stackWard",
+            "stillTide",
+            "waitPage"
+          ]
+        }
+      },
+      "moves": {
+        "tideCut": {
+          "intent": "attack",
+          "dmg": 16,
+          "name": "The Current You Did Not Break"
+        },
+        "unreadVolley": {
+          "intent": "attack",
+          "dmg": 9,
+          "times": 2,
+          "name": "The Shelf You Walked Past"
+        },
+        "brineWake": {
+          "intent": "attack_debuff",
+          "dmg": 13,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "Water That Did Not Wake"
+        },
+        "stackWard": {
+          "intent": "block",
+          "block": 18,
+          "name": "The Stacks You Stood In"
+        },
+        "stillTide": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Flood That Would Not Recede"
+        },
+        "waitPage": {
+          "intent": "attack_block",
+          "dmg": 10,
+          "block": 12,
+          "name": "The Sentence Left Unfinished"
+        }
+      },
+      "name": "【The Unsunk】"
+    },
+    "unwalkedSelf": {
+      "hp": [
+        46,
+        52
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 285,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "III-prime",
+        "motif": "broken-ring",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "scepterEcho",
+            "starfallEcho",
+            "ringbreak"
+          ],
+          "ash": [
+            "gravitasEcho",
+            "ruinEcho",
+            "ringward"
+          ]
+        }
+      },
+      "moves": {
+        "scepterEcho": {
+          "intent": "attack",
+          "dmg": 14,
+          "name": "The Scepter You Set Down"
+        },
+        "starfallEcho": {
+          "intent": "attack",
+          "dmg": 8,
+          "times": 2,
+          "name": "Stars Left Uncalled"
+        },
+        "ringbreak": {
+          "intent": "attack_debuff",
+          "dmg": 11,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Ring That Split"
+        },
+        "gravitasEcho": {
+          "intent": "buff",
+          "block": 12,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "The Seat Untaken"
+        },
+        "ruinEcho": {
+          "intent": "attack_debuff",
+          "dmg": 4,
+          "fx": [
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 2
+            },
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 1
+            }
+          ],
+          "name": "The Word Unsaid"
+        },
+        "ringward": {
+          "intent": "block",
+          "block": 16,
+          "name": "The Broken Halo"
+        }
+      },
+      "name": "【The Unwalked】"
+    },
+    "unwoodedSelf": {
+      "hp": [
+        38,
+        44
+      ],
+      "art": {
+        "kind": "humanoid",
+        "hue": 16,
+        "size": 1.05
+      },
+      "counterfactual": {
+        "node": "I-prime",
+        "motif": "ash-root",
+        "axis": "deckType",
+        "axisToKit": {
+          "ember": "ash",
+          "ash": "ember"
+        },
+        "kits": {
+          "ember": [
+            "branchCut",
+            "roadVolley",
+            "woodBlow"
+          ],
+          "ash": [
+            "woodWard",
+            "cinderHush",
+            "standWood"
+          ]
+        }
+      },
+      "moves": {
+        "branchCut": {
+          "intent": "attack",
+          "dmg": 13,
+          "name": "The Branch You Did Not Grow"
+        },
+        "roadVolley": {
+          "intent": "attack",
+          "dmg": 5,
+          "times": 2,
+          "name": "The Road You Did Not Lay"
+        },
+        "woodBlow": {
+          "intent": "attack_debuff",
+          "dmg": 9,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "The Wood You Did Not Burn"
+        },
+        "woodWard": {
+          "intent": "block",
+          "block": 14,
+          "name": "The Rest You Did Not Take"
+        },
+        "cinderHush": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 3
+            }
+          ],
+          "name": "The Cinder That Did Not Cool"
+        },
+        "standWood": {
+          "intent": "attack_block",
+          "dmg": 8,
+          "block": 7,
+          "name": "The Grove You Did Not Stand In"
+        }
+      },
+      "name": "【The Unwooded】"
+    }
+  },
+  "events": {
+    "forgottenShrine": {
+      "glyph": "⛩",
+      "hue": 45,
+      "choices": [
+        {
+          "ops": [
+            {
+              "pickRemove": true
+            }
+          ],
+          "sub": "Remove a card from your deck.",
+          "label": "Pray"
+        },
+        {
+          "ops": [
+            {
+              "gold": 90
+            },
+            {
+              "addCard": "hex"
+            }
+          ],
+          "sub": "Gain 90 gold. Gain a Hex.",
+          "label": "Desecrate"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Leave"
+        }
+      ],
+      "name": "Forgotten Shrine",
+      "text": "A moss-eaten shrine hums with old power. Offerings of bone and silver litter its base. Something watches from inside the stone."
+    },
+    "woundedKnight": {
+      "glyph": "⚔",
+      "hue": 210,
+      "choices": [
+        {
+          "ops": [
+            {
+              "hp": -8
+            },
+            {
+              "addRelic": "random"
+            }
+          ],
+          "sub": "Lose 8 HP. He rewards you with a relic.",
+          "label": "Aid him"
+        },
+        {
+          "ops": [
+            {
+              "gold": 65
+            },
+            {
+              "addCard": "hex"
+            }
+          ],
+          "sub": "Gain 65 gold. Gain a Hex.",
+          "label": "Loot him"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Leave"
+        }
+      ],
+      "name": "The Wounded Knight",
+      "text": "A knight slumps against a shattered pillar, breath rattling behind a crushed visor. One gauntlet clutches a relic; the other beckons you closer."
+    },
+    "voidChest": {
+      "glyph": "▣",
+      "hue": 280,
+      "choices": [
+        {
+          "ops": [
+            {
+              "roll": [
+                {
+                  "p": 0.55,
+                  "ops": [
+                    {
+                      "addRelic": "random"
+                    }
+                  ]
+                },
+                {
+                  "p": 0.45,
+                  "ops": [
+                    {
+                      "hp": -12
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "sub": "It might hold a relic... or teeth.",
+          "label": "Open it"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Leave"
+        }
+      ],
+      "name": "Humming Chest",
+      "text": "A black iron chest sits alone in the gloom, humming a note you feel in your teeth. Its lock is already broken."
+    },
+    "emberFountain": {
+      "glyph": "❂",
+      "hue": 30,
+      "choices": [
+        {
+          "ops": [
+            {
+              "heal": 0.35
+            }
+          ],
+          "sub": "Heal 35% of your Max HP.",
+          "label": "Bathe"
+        },
+        {
+          "ops": [
+            {
+              "potion": "healing"
+            }
+          ],
+          "sub": "Gain a Phial of Dawn.",
+          "label": "Bottle it"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Leave"
+        }
+      ],
+      "name": "Fountain of Embers",
+      "text": "Liquid light pools in a cracked basin, throwing sparks that do not burn. It smells of summer and old victories."
+    },
+    "forge": {
+      "glyph": "⚒",
+      "hue": 15,
+      "choices": [
+        {
+          "ops": [
+            {
+              "pickUpgrade": true
+            }
+          ],
+          "sub": "Upgrade a card.",
+          "label": "Temper"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Leave"
+        }
+      ],
+      "name": "The Forgotten Forge",
+      "text": "An anvil of black star-metal, still warm. Hammers hang in racks, waiting for hands that died an age ago."
+    },
+    "gambler": {
+      "glyph": "⚄",
+      "hue": 50,
+      "choices": [
+        {
+          "needGold": 40,
+          "ops": [
+            {
+              "gold": -40
+            },
+            {
+              "roll": [
+                {
+                  "id": "win",
+                  "p": 0.45,
+                  "ops": [
+                    {
+                      "gold": 110
+                    }
+                  ],
+                  "text": "The bones land in your favour. You claim 110 gold."
+                },
+                {
+                  "id": "lose",
+                  "p": 0.55,
+                  "ops": [],
+                  "text": "The bones rattle against you. The wager is lost."
+                }
+              ]
+            }
+          ],
+          "sub": "45% chance to win 110 gold.",
+          "label": "Bet 40 gold"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Walk away"
+        }
+      ],
+      "name": "The Bone Gambler",
+      "text": "A grinning figure rattles a cup of knuckle-bones. \"One throw, stranger. Fortune loves the reckless.\""
+    },
+    "mirror": {
+      "glyph": "◐",
+      "hue": 220,
+      "choices": [
+        {
+          "ops": [
+            {
+              "pickDuplicate": true
+            }
+          ],
+          "sub": "Duplicate a card in your deck.",
+          "label": "Reflect"
+        },
+        {
+          "ops": [
+            {
+              "hp": -6
+            },
+            {
+              "pickRemove": true
+            }
+          ],
+          "sub": "Lose 6 HP. Remove a card from your deck.",
+          "label": "Shatter it"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Leave"
+        }
+      ],
+      "name": "The Silvered Mirror",
+      "text": "A tall mirror stands in the rubble, unbroken. Your reflection moves half a breath behind you — and it is smiling."
+    },
+    "library": {
+      "glyph": "❦",
+      "hue": 190,
+      "choices": [
+        {
+          "ops": [
+            {
+              "pickCard": 5
+            }
+          ],
+          "sub": "Choose 1 of 5 cards to add to your deck.",
+          "label": "Study"
+        },
+        {
+          "ops": [
+            {
+              "heal": 0.2
+            }
+          ],
+          "sub": "Heal 20% of your Max HP.",
+          "label": "Rest among the stacks"
+        }
+      ],
+      "name": "The Drowned Library",
+      "text": "Shelves of waterlogged grimoires stretch into the dark. Most are pulp — but a few pages still glow faintly."
+    },
+    "fleshTrader": {
+      "glyph": "♠",
+      "hue": 320,
+      "choices": [
+        {
+          "ops": [
+            {
+              "maxHp": -8
+            },
+            {
+              "addRelic": "random"
+            }
+          ],
+          "sub": "Lose 8 Max HP. Gain a relic.",
+          "label": "Trade"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Refuse"
+        }
+      ],
+      "name": "The Flesh Trader",
+      "text": "\"Vitality is a currency,\" purrs a thing wearing a merchant's coat. \"And you look flush with it.\" Long fingers open to reveal a relic."
+    },
+    "cursedIdol": {
+      "glyph": "☿",
+      "hue": 100,
+      "choices": [
+        {
+          "ops": [
+            {
+              "addRelic": "random"
+            },
+            {
+              "addCard": "hex"
+            }
+          ],
+          "sub": "Gain a relic. Gain a Hex.",
+          "label": "Take it"
+        },
+        {
+          "ops": [],
+          "sub": "",
+          "label": "Leave it"
+        }
+      ],
+      "name": "The Cursed Idol",
+      "text": "A jade idol sits on a plinth of skulls, radiating a soft warmth. It has clearly been left here for a reason."
+    },
+    "ruinedCamp": {
+      "glyph": "⛺",
+      "hue": 35,
+      "choices": [
+        {
+          "ops": [
+            {
+              "heal": 0.15
+            }
+          ],
+          "sub": "Heal 15% of your Max HP.",
+          "label": "Rest"
+        },
+        {
+          "ops": [
+            {
+              "gold": 45
+            },
+            {
+              "potion": "random"
+            }
+          ],
+          "sub": "Gain 45 gold and a random potion.",
+          "label": "Scavenge"
+        }
+      ],
+      "name": "Ruined Camp",
+      "text": "A campfire, still smoldering. Bedrolls, torn. Whoever slept here left in a hurry — and left their packs behind."
+    }
+  },
+  "rewardGold": [
+    {
+      "normal": [
+        12,
+        20
+      ],
+      "elite": [
+        28,
+        38
+      ],
+      "boss": [
+        70,
+        80
+      ]
+    },
+    {
+      "normal": [
+        18,
+        28
+      ],
+      "elite": [
+        35,
+        48
+      ],
+      "boss": [
+        85,
+        100
+      ]
+    },
+    {
+      "normal": [
+        24,
+        36
+      ],
+      "elite": [
+        45,
+        60
+      ],
+      "boss": [
+        100,
+        120
+      ]
+    },
+    {
+      "normal": [
+        30,
+        42
+      ],
+      "elite": [
+        55,
+        72
+      ],
+      "boss": [
+        120,
+        140
+      ]
+    }
+  ],
+  "shop": {
+    "removeCost": 75,
+    "cardPrice": {
+      "common": [
+        45,
+        55
+      ],
+      "uncommon": [
+        68,
+        82
+      ],
+      "rare": [
+        135,
+        160
+      ]
+    },
+    "relicPrice": {
+      "common": [
+        140,
+        160
+      ],
+      "uncommon": [
+        220,
+        250
+      ],
+      "rare": [
+        270,
+        300
+      ]
+    },
+    "potionPrice": [
+      48,
+      62
+    ]
+  },
+  "omens": {
+    "eighthOmen": {
+      "glyph": null,
+      "tone": "#e8e0ff",
+      "mods": {
+        "allCombatsAffixed": true
+      },
+      "name": "The Eighth Omen",
+      "text": "Every lesser battle bears a title. The broken words follow every waystone."
+    },
+    "ashfall": {
+      "glyph": "☁",
+      "tone": "#d3f2a1",
+      "mods": {
+        "enemyStartStatus": {
+          "poison": 2
+        },
+        "playerHitApplies": {
+          "poison": 1
+        }
+      },
+      "name": "Ashfall",
+      "text": "Ash chokes every fire: enemies begin combat with 2 Smolder, but their blows leave 1 Smolder on you."
+    },
+    "heavyAir": {
+      "glyph": "☗",
+      "tone": "#8fd0ff",
+      "mods": {
+        "wardMult": 1.25
+      },
+      "name": "Heavy Air",
+      "text": "The air holds light like water: all Ward gained is increased by a quarter — yours and theirs."
+    },
+    "thinGlass": {
+      "glyph": "◬",
+      "tone": "#dfeaff",
+      "mods": {
+        "facetDelta": -1,
+        "enemyDmgBonus": 2
+      },
+      "name": "Thin Glass",
+      "text": "Tonight all glass runs thin: every facet gauge is 1 smaller, but enemy blows strike 2 harder."
+    },
+    "hungryDark": {
+      "glyph": "☾",
+      "tone": "#c99aff",
+      "mods": {
+        "shopMult": 1.25,
+        "rewardChoiceBonus": 1
+      },
+      "name": "The Hungry Dark",
+      "text": "The dark eats coin but sharpens choice: shop prices are a quarter higher, and card rewards offer 1 more choice."
+    },
+    "emberWind": {
+      "glyph": "✦",
+      "tone": "#ff9a4d",
+      "mods": {
+        "startEmbers": 2,
+        "drawDelta": -1
+      },
+      "name": "Ember Wind",
+      "text": "Sparks ride the wind into your lantern: begin each combat with 2 Embers, but draw 4 cards instead of 5."
+    },
+    "longNight": {
+      "glyph": "★",
+      "tone": "#b18cff",
+      "mods": {
+        "hpMult": 1.12,
+        "goldMult": 1.4
+      },
+      "name": "The Long Night",
+      "text": "The road stretches on: enemies carry 12% more life, but every victory pays 40% more gold."
+    },
+    "waningMoon": {
+      "glyph": "◐",
+      "tone": "#ffe9ac",
+      "mods": {
+        "firstCardDiscount": 1,
+        "restHealFrac": 0.2
+      },
+      "name": "Waning Moon",
+      "text": "The moon spends her last light on you: your first card each turn costs 1 less, but rest sites heal only 20%."
+    }
+  },
+  "affixes": {
+    "vitrified": {
+      "tone": "#8fd0ff",
+      "mods": {
+        "facetDelta": 2,
+        "hpMult": 1.15
+      },
+      "name": "Vitrified",
+      "text": "Thicker glass: +2 facets and +15% HP."
+    },
+    "cinderVeined": {
+      "tone": "#ff9a4d",
+      "mods": {
+        "attackApplies": {
+          "poison": 1
+        }
+      },
+      "name": "Cinder-Veined",
+      "text": "Its blows leave 1 Smolder on you."
+    },
+    "adamant": {
+      "tone": "#d8c27a",
+      "mods": {
+        "adamant": true
+      },
+      "name": "Adamant",
+      "text": "The first time its glass would shatter, it holds."
+    },
+    "emberFat": {
+      "tone": "#ffe9ac",
+      "mods": {
+        "goldMult": 2
+      },
+      "name": "Ember-Fat",
+      "text": "Slaying it pays double gold."
+    },
+    "veiled": {
+      "tone": "#9aa7b8",
+      "mods": {
+        "startBlock": 15
+      },
+      "name": "Veiled",
+      "text": "Begins the fight behind 15 Ward."
+    },
+    "fervent": {
+      "tone": "#ff8d8d",
+      "mods": {
+        "startStatus": {
+          "str": 2
+        }
+      },
+      "name": "Fervent",
+      "text": "Begins the fight with 2 Fervor."
+    }
+  },
+  "arts": {
+    "flare": {
+      "glyph": "✹",
+      "tone": "#ff9a4d",
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 9
+        }
+      ],
+      "name": "Flare",
+      "text": "The lantern vents. Deal 9 damage to ALL enemies."
+    },
+    "mendglass": {
+      "glyph": "❋",
+      "tone": "#8fe8a0",
+      "cost": 4,
+      "effects": [
+        {
+          "kind": "heal",
+          "n": 8
+        }
+      ],
+      "name": "Mendglass",
+      "text": "Warm light knits the cracks. Heal 8 HP."
+    },
+    "beacon": {
+      "glyph": "☀",
+      "tone": "#ffe9ac",
+      "cost": 2,
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "beacon",
+          "n": 1
+        }
+      ],
+      "name": "Beacon",
+      "text": "Raise the light. Your attacks chip 1 extra facet this turn."
+    },
+    "emberveil": {
+      "glyph": "⛨",
+      "tone": "#8fd0ff",
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "block",
+          "n": 12
+        }
+      ],
+      "name": "Emberveil",
+      "text": "A curtain of held fire. Gain 12 Ward."
+    },
+    "stoke": {
+      "glyph": "✦",
+      "tone": "#c99aff",
+      "cost": 4,
+      "effects": [
+        {
+          "kind": "energy",
+          "n": 1
+        },
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ],
+      "name": "Stoke",
+      "text": "Feed the flame to the hand that carries it. Gain 1 Energy and draw 2 cards."
+    },
+    "ashfall": {
+      "glyph": "☁",
+      "tone": "#d3f2a1",
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 6
+        },
+        {
+          "kind": "block",
+          "n": 5
+        }
+      ],
+      "name": "Ashfall",
+      "text": "The Ashwarden's breath. Apply 6 Smolder to ALL enemies and gain 5 Ward."
+    }
+  },
+  "deeds": {
+    "paneBreaker": {
+      "stat": "shatters",
+      "n": 15,
+      "unlocks": [
+        "card:quakeblow",
+        "card:resonantLance"
+      ],
+      "name": "Breaker of Panes",
+      "desc": "Shatter 15 facets"
+    },
+    "lanternFed": {
+      "stat": "kindles",
+      "n": 20,
+      "unlocks": [
+        "card:tithe",
+        "card:pyreheart"
+      ],
+      "name": "The Lantern Fed",
+      "desc": "Kindle 20 cards by hand"
+    },
+    "ashSermon": {
+      "stat": "smolderKills",
+      "n": 10,
+      "unlocks": [
+        "card:ashenChoir",
+        "relic:smolderingCoal"
+      ],
+      "name": "Sermon of Ash",
+      "desc": "Let Smolder claim 10 lives"
+    },
+    "untouched": {
+      "stat": "perfects",
+      "n": 3,
+      "unlocks": [
+        "card:flawlessForm",
+        "relic:prismCharm"
+      ],
+      "name": "The Glass Untouched",
+      "desc": "Win 3 fights without a scratch"
+    },
+    "darkWalker": {
+      "stat": "unlitVisited",
+      "n": 6,
+      "unlocks": [
+        "card:nightSight",
+        "relic:thiefOfWicks"
+      ],
+      "name": "Walker of Unlit Ways",
+      "desc": "Enter 6 unlit lanterns"
+    },
+    "spendthrift": {
+      "stat": "embersSpent",
+      "n": 30,
+      "unlocks": [
+        "card:novaflare",
+        "card:emberdance"
+      ],
+      "name": "Fire Given Freely",
+      "desc": "Spend 30 embers on Lantern Arts"
+    },
+    "hundredShards": {
+      "stat": "slain",
+      "n": 100,
+      "unlocks": [
+        "card:shardstorm",
+        "relic:bellOfEndings"
+      ],
+      "name": "A Hundred Shards",
+      "desc": "Slay 100 creatures"
+    },
+    "firstDawn": {
+      "stat": "wins",
+      "n": 1,
+      "unlocks": [
+        "aspect2"
+      ],
+      "name": "The First Dawn",
+      "desc": "Reach the sunrise once"
+    }
+  },
+  "progression": {
+    "revealThresholds": {
+      "lamplighter": {
+        "runsPlayed": 1
+      },
+      "phials": {
+        "runsPlayed": 2
+      },
+      "omens": {
+        "runsPlayed": 3
+      },
+      "poolWave2": {
+        "runsPlayed": 2
+      },
+      "poolWave3": {
+        "runsPlayed": 4
+      },
+      "poolFull": {
+        "runsPlayed": 6
+      },
+      "emberglass": {
+        "wins": 1
+      },
+      "act4": {
+        "shards": 6
+      }
+    },
+    "poolWaves": {
+      "poolWave2": {
+        "cards": [
+          "executioner",
+          "momentum",
+          "toxicMist",
+          "regrowth",
+          "bloodRite",
+          "devour",
+          "annihilate",
+          "limitBreak"
+        ],
+        "relics": [
+          "reapersBell",
+          "seersOrb",
+          "frozenCore"
+        ]
+      },
+      "poolWave3": {
+        "cards": [
+          "offering",
+          "catalyst"
+        ],
+        "relics": [
+          "executionersSeal"
+        ]
+      },
+      "poolFull": {
+        "cards": [
+          "risingLitany",
+          "frenzy",
+          "virulence"
+        ],
+        "relics": [
+          "verdantBranch",
+          "duskmirror"
+        ]
+      }
+    },
+    "emberglass": {
+      "armWins": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "paleOnes": {
+        "lensAt": 3,
+        "completeAt": 9,
+        "hiddenPerRun": 1,
+        "markedAct1": 1,
+        "markedAct2Chance": 0.6
+      },
+      "ownShade": {
+        "minDeathAct": 1,
+        "completeAt": 3,
+        "tiers": [
+          {
+            "hpMult": 1,
+            "dmgMult": 1,
+            "addStatuses": {},
+            "scale": 1.05
+          },
+          {
+            "hpMult": 1.25,
+            "dmgMult": 1.15,
+            "addStatuses": {
+              "str": 1
+            },
+            "scale": 1.12
+          },
+          {
+            "hpMult": 1.55,
+            "dmgMult": 1.3,
+            "addStatuses": {
+              "str": 2
+            },
+            "scale": 1.2
+          }
+        ]
+      },
+      "usurper": {
+        "minShopAct": 1,
+        "referencePurse": 260,
+        "priceMultiplier": 2.5,
+        "price": 650,
+        "completeAt": 1
+      },
+      "eighthOmen": {
+        "guaranteeRuns": 2,
+        "saveDueInMax": 2,
+        "recurrenceChance": 0.3333333333333333,
+        "completeAt": 1
+      },
+      "unreadablePage": {
+        "offerRewardOrdinal": 2,
+        "completeAt": 5
+      },
+      "hollowLamplighter": {
+        "appearanceChance": 0.2,
+        "pityEligibleRuns": 3,
+        "maxMeetingsPerRun": 1,
+        "completeAt": 5,
+        "emberDebt": 3,
+        "saveEmberDebtMax": 3,
+        "gold": 160,
+        "maxHp": 12,
+        "minMaxHpAfter": 30,
+        "finalHp": 1
+      },
+      "variantStats": {
+        "pale": {
+          "hpMult": 1.18,
+          "dmgMult": 1.1,
+          "addStatuses": {
+            "str": 1
+          }
+        },
+        "usurper": {
+          "hpMult": 1.25,
+          "dmgMult": 1.15,
+          "addStatuses": {
+            "str": 2
+          }
+        }
+      }
+    }
+  },
+  "reveals": [
+    {
+      "id": "lamplighter",
+      "trigger": {
+        "runsPlayed": 1
+      }
+    },
+    {
+      "id": "phials",
+      "trigger": {
+        "runsPlayed": 2
+      }
+    },
+    {
+      "id": "omens",
+      "trigger": {
+        "runsPlayed": 3
+      }
+    },
+    {
+      "id": "poolWave2",
+      "trigger": {
+        "runsPlayed": 2
+      }
+    },
+    {
+      "id": "poolWave3",
+      "trigger": {
+        "runsPlayed": 4
+      }
+    },
+    {
+      "id": "poolFull",
+      "trigger": {
+        "runsPlayed": 6
+      }
+    },
+    {
+      "id": "emberglass",
+      "trigger": {
+        "wins": 1
+      }
+    },
+    {
+      "id": "act4",
+      "trigger": {
+        "shards": 6
+      }
+    }
+  ],
+  "poolGate": {
+    "cards": {
+      "executioner": "poolWave2",
+      "momentum": "poolWave2",
+      "toxicMist": "poolWave2",
+      "regrowth": "poolWave2",
+      "bloodRite": "poolWave2",
+      "devour": "poolWave2",
+      "annihilate": "poolWave2",
+      "limitBreak": "poolWave2",
+      "offering": "poolWave3",
+      "catalyst": "poolWave3",
+      "risingLitany": "poolFull",
+      "frenzy": "poolFull",
+      "virulence": "poolFull"
+    },
+    "relics": {
+      "reapersBell": "poolWave2",
+      "seersOrb": "poolWave2",
+      "frozenCore": "poolWave2",
+      "executionersSeal": "poolWave3",
+      "verdantBranch": "poolFull",
+      "duskmirror": "poolFull"
+    }
+  },
+  "questIds": [
+    "paleOnes",
+    "ownShade",
+    "usurper",
+    "eighthOmen",
+    "unreadablePage",
+    "hollowLamplighter"
+  ],
+  "whispers": [
+    "There is a colour the road refuses to name.",
+    "A pale hand has touched the dark side of the glass.",
+    "Six spaces wait where no window stands.",
+    "The dead walk twice: once in flesh, once in memory.",
+    "A lantern without flame is still a key.",
+    "Count the panes that do not catch the dawn.",
+    "A page can be read only after it survives the dawn.",
+    "The eighth sign is not written among the seven.",
+    "The gaunt keeper remembers the road you did not take.",
+    "Pale motes gather like frost around a hidden seam.",
+    "Your monument does not always lie down.",
+    "The merchant keeps one cold thing beneath the counter.",
+    "Broken glyphs are the shadow of a complete sentence.",
+    "Five pages make a chapter; five prices make a confession.",
+    "Three deaths will teach your shade to speak plainly.",
+    "The Vigil has a window, though no wall holds it.",
+    "Each shard lights one pane of the Rose Window.",
+    "The Pale Ones are not hunting you. They are pointing east.",
+    "The Sovereign is a mask worn before the last door.",
+    "When six panes burn, look beyond the crown.",
+    "There is a sealed door beyond the crown.",
+    "Its inscription has waited longer than the Vigil.",
+    "Bring six shards to the Rose Window.",
+    "The pilgrimage continues."
+  ],
+  "quests": {
+    "paleOnes": {
+      "target": 9,
+      "name": "The Pale Ones",
+      "mode": "Trail",
+      "huntName": "Hunt the Pale Ones",
+      "huntInscription": "Defeat three pale foes and follow the cold motes they leave behind.",
+      "inscription": "Hunt the Pale Ones. Gather nine motes from glass that has forgotten colour.",
+      "progress": [
+        "No mote answers the Lens.",
+        "The first pale mote chills the lantern."
+      ]
+    },
+    "ownShade": {
+      "target": 3,
+      "name": "Your Own Shade",
+      "mode": "Trail",
+      "inscription": "Defeat the self that still remembers the road. Three shades must go out.",
+      "fragments": [
+        "I remember the stone. You walked away before I stopped calling.",
+        "You have left a shape behind. The road has learned to keep us.",
+        "I have seen it. Beyond the Sovereign there is no dawn — only a door pretending to be one."
+      ],
+      "final": "We were never walking to be free. We were carrying light to the lock."
+    },
+    "usurper": {
+      "target": 1,
+      "name": "The Usurper",
+      "mode": "Gate",
+      "inscription": "Carry the lantern with no flame to the sealed door, and unmask the Usurper.",
+      "itemName": "A Lantern with No Flame",
+      "itemText": "Cold glass. No wick. The merchant will not say who left it.",
+      "poor": "Cold goods, warm price. Come back carrying a dawn's worth of gold.",
+      "bought": "Now the throne knows what you carry.",
+      "death": "The mask is broken. Look beyond the crown."
+    },
+    "eighthOmen": {
+      "target": 1,
+      "name": "The Eighth Omen",
+      "mode": "Gate",
+      "inscription": "Reach dawn beneath the Eighth Omen.",
+      "resolved": "THE EIGHTH OMEN WAS NEVER AN OMEN. IT WAS THE SHADOW OF A DOOR.",
+      "waystoneEchoes": [
+        "// THE PANE WATCHES //",
+        "// EIGHT IS NOT A NUMBER //",
+        "// CARRY THE WRONG LIGHT EAST //",
+        "// THE CROWN IS A MASK //"
+      ]
+    },
+    "unreadablePage": {
+      "target": 5,
+      "name": "The Unreadable Page",
+      "mode": "Trail",
+      "inscription": "Win five dawns carrying the Unreadable Page.",
+      "pages": [
+        "FIRST PAGE — Six panes were cut from one fire, then scattered before the first Vigil.",
+        "SECOND PAGE — Pale figures carried the shards west, so the thing beyond the door could not follow.",
+        "THIRD PAGE — A pilgrim died standing. Where he stopped, the road did not.",
+        "FOURTH PAGE — The Sovereign took an empty lantern and wore a king's shape over the lock.",
+        "FIFTH PAGE — The Rose Window is a map, not a memorial. Light it, then look beyond the crown."
+      ]
+    },
+    "hollowLamplighter": {
+      "target": 5,
+      "meetings": [
+        {
+          "ask": "Your lantern is noisy. Give me the next three embers it catches.",
+          "accepted": "The next three embers belong to the hollow lantern.",
+          "paid": "Six panes were carried away from a window no wall could hold.",
+          "cannot": "Promise the embers now. The lantern will pay before you do."
+        },
+        {
+          "ask": "Gold remembers every hand. Let one hundred and sixty pieces forget yours.",
+          "paid": "The Pale Ones watch the paths that point beyond the crown.",
+          "cannot": "Your purse is warm, but not warm enough."
+        },
+        {
+          "ask": "The road counts the vessel. Give me twelve measures of yours.",
+          "paid": "Your forebears died standing, facing east.",
+          "cannot": "I will not hollow you below thirty. Return with a larger vessel."
+        },
+        {
+          "ask": "The Keeper gave you a boon. Give me the gift, not the gratitude.",
+          "paid": "The empty lantern is the token that purchases an audience with the mask.",
+          "cannot": "You have spent the gift already. Bring me one that is still yours."
+        },
+        {
+          "ask": "Last price: leave this lantern with one heartbeat. The rest belongs to the dark.",
+          "paid": "Light the panes. The door will know you.",
+          "cannot": "One heartbeat is enough. Refusal is the only poverty left."
+        }
+      ],
+      "name": "The Hollow Lamplighter",
+      "mode": "Trail",
+      "inscription": "Pay the Hollow Lamplighter five prices along the Unlit Way."
+    }
+  },
+  "shadeKits": {
+    "duskblade": {
+      "namePattern": "{aspect} Shade",
+      "moves": {
+        "eclipse": {
+          "intent": "attack_debuff",
+          "dmg": 12,
+          "fx": [
+            {
+              "who": "player",
+              "id": "vulnerable",
+              "n": 1
+            }
+          ],
+          "name": "Remembered Eclipse"
+        },
+        "chisel": {
+          "intent": "attack_debuff",
+          "dmg": 8,
+          "fx": [
+            {
+              "who": "player",
+              "id": "frail",
+              "n": 1
+            }
+          ],
+          "name": "Remembered Chisel"
+        },
+        "spark": {
+          "intent": "buff",
+          "block": 10,
+          "fx": [
+            {
+              "who": "self",
+              "id": "str",
+              "n": 2
+            }
+          ],
+          "name": "First Spark, Last Light"
+        }
+      }
+    },
+    "ashwarden": {
+      "namePattern": "{aspect} Shade",
+      "moves": {
+        "ashbite": {
+          "intent": "attack_debuff",
+          "dmg": 10,
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 2
+            }
+          ],
+          "name": "Remembered Ashbite"
+        },
+        "smother": {
+          "intent": "attack_block",
+          "dmg": 6,
+          "block": 12,
+          "name": "Remembered Smother"
+        },
+        "ashfall": {
+          "intent": "debuff",
+          "fx": [
+            {
+              "who": "player",
+              "id": "poison",
+              "n": 5
+            },
+            {
+              "who": "player",
+              "id": "weak",
+              "n": 1
+            }
+          ],
+          "name": "First Ash, Last Breath"
+        }
+      }
+    }
+  },
+  "variants": {
+    "paleDuskfang": {
+      "id": "paleDuskfang",
+      "base": "duskfang",
+      "tint": {
+        "hue": 165,
+        "saturation": 0.45,
+        "brightness": 1.18
+      },
+      "scale": 1.08,
+      "statMods": {
+        "hpMult": 1.18,
+        "dmgMult": 1.1,
+        "addStatuses": {
+          "str": 1
+        }
+      },
+      "drop": {
+        "quest": "paleOnes",
+        "kind": "paleMote",
+        "n": 1
+      },
+      "name": "Pale Duskfang",
+      "dialogue": []
+    },
+    "paleDrownedOne": {
+      "id": "paleDrownedOne",
+      "base": "drownedOne",
+      "tint": {
+        "hue": 120,
+        "saturation": 0.38,
+        "brightness": 1.2
+      },
+      "scale": 1.1,
+      "statMods": {
+        "hpMult": 1.18,
+        "dmgMult": 1.1,
+        "addStatuses": {
+          "str": 1
+        }
+      },
+      "drop": {
+        "quest": "paleOnes",
+        "kind": "paleMote",
+        "n": 1
+      },
+      "name": "Pale Drowned One",
+      "dialogue": []
+    },
+    "paleVoidWisp": {
+      "id": "paleVoidWisp",
+      "base": "voidWisp",
+      "tint": {
+        "hue": -90,
+        "saturation": 0.32,
+        "brightness": 1.25
+      },
+      "scale": 1.12,
+      "statMods": {
+        "hpMult": 1.18,
+        "dmgMult": 1.1,
+        "addStatuses": {
+          "str": 1
+        }
+      },
+      "drop": {
+        "quest": "paleOnes",
+        "kind": "paleMote",
+        "n": 1
+      },
+      "name": "Pale Void Wisp",
+      "dialogue": []
+    },
+    "ownShade1": {
+      "id": "ownShade1",
+      "base": "hero",
+      "tint": {
+        "hue": 35,
+        "saturation": 0.25,
+        "brightness": 0.62
+      },
+      "scale": 1.05,
+      "statMods": {
+        "hpMult": 1,
+        "dmgMult": 1,
+        "addStatuses": {},
+        "scale": 1.05
+      },
+      "drop": {
+        "quest": "ownShade",
+        "kind": "shadeMemory",
+        "n": 1
+      },
+      "name": "The Shade That Fell",
+      "deathDialogue": "I remember the stone. You walked away before I stopped calling.",
+      "dialogue": []
+    },
+    "ownShade2": {
+      "id": "ownShade2",
+      "base": "hero",
+      "tint": {
+        "hue": 20,
+        "saturation": 0.2,
+        "brightness": 0.55
+      },
+      "scale": 1.12,
+      "statMods": {
+        "hpMult": 1.25,
+        "dmgMult": 1.15,
+        "addStatuses": {
+          "str": 1
+        },
+        "scale": 1.12
+      },
+      "drop": {
+        "quest": "ownShade",
+        "kind": "shadeMemory",
+        "n": 1
+      },
+      "name": "The Shade That Returned",
+      "deathDialogue": "You have left a shape behind. The road has learned to keep us.",
+      "dialogue": []
+    },
+    "ownShade3": {
+      "id": "ownShade3",
+      "base": "hero",
+      "tint": {
+        "hue": 0,
+        "saturation": 0.16,
+        "brightness": 0.48
+      },
+      "scale": 1.2,
+      "statMods": {
+        "hpMult": 1.55,
+        "dmgMult": 1.3,
+        "addStatuses": {
+          "str": 2
+        },
+        "scale": 1.2
+      },
+      "drop": {
+        "quest": "ownShade",
+        "kind": "shadeMemory",
+        "n": 1
+      },
+      "name": "The Shade That Remembers",
+      "deathDialogue": "I have seen it. Beyond the Sovereign there is no dawn — only a door pretending to be one.",
+      "dialogue": []
+    },
+    "usurpedSovereign": {
+      "id": "usurpedSovereign",
+      "base": "sovereign",
+      "tint": {
+        "hue": 105,
+        "saturation": 0.65,
+        "brightness": 1.08
+      },
+      "scale": 1.15,
+      "statMods": {
+        "hpMult": 1.25,
+        "dmgMult": 1.15,
+        "addStatuses": {
+          "str": 2
+        }
+      },
+      "drop": {
+        "quest": "usurper",
+        "kind": "shard",
+        "n": 1
+      },
+      "name": "The Usurper",
+      "dialogue": [
+        "{aspect}. At last, the lantern brings me a name.",
+        "The Sovereign was a mask. You have paid to meet the face beneath it.",
+        "Break me, and the empty lantern will remember fire."
+      ]
+    }
+  },
+  "aspects": [
+    {
+      "id": "duskblade",
+      "hue": 225,
+      "art": "flare",
+      "maxHp": 64,
+      "energy": 3,
+      "handSize": 5,
+      "potionSlots": 3,
+      "startDeck": [
+        "strike",
+        "strike",
+        "strike",
+        "strike",
+        "defend",
+        "defend",
+        "defend",
+        "eclipseSlash",
+        "chisel",
+        "firstSpark"
+      ],
+      "startRelic": "emberHeart",
+      "startGold": 99,
+      "name": "The Duskblade",
+      "nameBare": "Duskblade",
+      "blurb": "Glass honed to a killing edge. Strikes, shatters, and turns broken facets into fuel — a blade that cuts a road through any night."
+    },
+    {
+      "id": "ashwarden",
+      "hue": 26,
+      "art": "ashfall",
+      "unlock": "aspect2",
+      "maxHp": 88,
+      "energy": 3,
+      "handSize": 5,
+      "potionSlots": 3,
+      "startDeck": [
+        "ashBite",
+        "ashBite",
+        "ashBite",
+        "ashBite",
+        "defend",
+        "defend",
+        "defend",
+        "smother",
+        "smother",
+        "firstSpark"
+      ],
+      "startRelic": "ashenCore",
+      "startGold": 99,
+      "name": "The Ashwarden",
+      "nameBare": "Ashwarden",
+      "blurb": "Smoke given a shape. Lets the Smolder do the killing and kindles its own hand to feed the lantern. Slower, but it endures — and everything it touches burns."
+    }
+  ],
+  "vows": [
+    {
+      "mods": {
+        "hpMult": 1.12
+      },
+      "name": "Vow of Iron",
+      "desc": "Every creature is harder to break — enemy HP +12%."
+    },
+    {
+      "mods": {
+        "enemyDmgBonus": 1
+      },
+      "name": "Vow of Malice",
+      "desc": "Their blows land heavier — enemy attacks deal +1."
+    },
+    {
+      "mods": {
+        "bossFacetDelta": 1
+      },
+      "name": "Vow of the Deep",
+      "desc": "Bosses armor their cores — boss Facets +1."
+    },
+    {
+      "mods": {
+        "startHex": true
+      },
+      "name": "Vow of the Mark",
+      "desc": "You set out already cursed — begin every run with a Hex."
+    },
+    {
+      "mods": {
+        "restHealFrac": 0.2
+      },
+      "name": "Vow of the Waning",
+      "desc": "The dark drinks your rest — campfires heal 20%, not 30%."
+    }
+  ],
+  "boons": {
+    "fullPurse": {
+      "ops": [
+        {
+          "gold": 120
+        }
+      ],
+      "name": "A Full Purse",
+      "text": "Set out with 120 extra gold."
+    },
+    "temperedGlass": {
+      "ops": [
+        {
+          "maxHp": 14
+        }
+      ],
+      "name": "Tempered Glass",
+      "text": "Raise your Max HP by 14."
+    },
+    "keenEye": {
+      "ops": [
+        {
+          "addRelic": "random"
+        }
+      ],
+      "name": "A Keeper's Eye",
+      "text": "Begin with a random relic."
+    },
+    "warmHearth": {
+      "ops": [
+        {
+          "maxHp": 6
+        },
+        {
+          "heal": 1
+        }
+      ],
+      "name": "A Warm Hearth",
+      "text": "Mend to full and gain 6 Max HP."
+    },
+    "emberFlask": {
+      "ops": [
+        {
+          "potion": "fire"
+        },
+        {
+          "potion": "healing"
+        }
+      ],
+      "name": "Ember Flask",
+      "text": "Pack a Fire Phial and a Draught of Vigor."
+    },
+    "twinPhials": {
+      "ops": [
+        {
+          "potion": "swift"
+        },
+        {
+          "potion": "energy"
+        }
+      ],
+      "name": "Twin Phials",
+      "text": "Pack a Swift Phial and an Energy Phial."
+    },
+    "pilgrimsCache": {
+      "ops": [
+        {
+          "gold": 60
+        },
+        {
+          "potion": "block"
+        }
+      ],
+      "name": "Pilgrim's Cache",
+      "text": "Gain 60 gold and a Ward Phial."
+    },
+    "venomPouch": {
+      "ops": [
+        {
+          "gold": 40
+        },
+        {
+          "potion": "venom"
+        }
+      ],
+      "name": "A Pouch of Ash",
+      "text": "Gain 40 gold and a Venom Phial."
+    }
+  },
+  "themes": {
+    "act1": {
+      "legacyAct": {
+        "boss": "rootheart",
+        "theme": {
+          "sky": 791568,
+          "fog": 1254426,
+          "particles": 16752717,
+          "glow": 6750110,
+          "accent": "#7ddb8f",
+          "ember": "#ff9a4d"
+        }
+      },
+      "plates": {
+        "backdrop": "act1-backdrop",
+        "mid": "act1-mid",
+        "ledge": "act1-ledge"
+      },
+      "atmosphere": "ash",
+      "weather": {
+        "rate": 1,
+        "colors": [
+          "#b8b0a0",
+          "#8a8378"
+        ],
+        "vx": [
+          -6,
+          6
+        ],
+        "vy": [
+          10,
+          26
+        ],
+        "size": [
+          1.4,
+          2.6
+        ],
+        "drift": 0.4,
+        "emberRate": 0.5
+      },
+      "palette": {
+        "tint": "good",
+        "glow": "gold",
+        "haze": "text-dim"
+      },
+      "music": {
+        "map": "map",
+        "combat": "act1Combat",
+        "boss": "act1Boss",
+        "victory": "victory"
+      },
+      "roster": {
+        "normal": [
+          "sporeling",
+          "duskfang",
+          "gloomslime",
+          "ashAcolyte",
+          "waylayer",
+          "thornling"
+        ],
+        "elite": [
+          "gravewarden",
+          "alphaFang"
+        ],
+        "boss": [
+          "rootheart"
+        ]
+      },
+      "encounters": {
+        "weak": [
+          [
+            "sporeling",
+            "sporeling"
+          ],
+          [
+            "duskfang"
+          ],
+          [
+            "gloomslime"
+          ],
+          [
+            "sporeling",
+            "sporeling",
+            "sporeling"
+          ]
+        ],
+        "normal": [
+          [
+            "duskfang",
+            "sporeling"
+          ],
+          [
+            "ashAcolyte"
+          ],
+          [
+            "waylayer"
+          ],
+          [
+            "thornling",
+            "thornling"
+          ],
+          [
+            "gloomslime",
+            "sporeling"
+          ],
+          [
+            "duskfang",
+            "duskfang"
+          ],
+          [
+            "waylayer",
+            "sporeling"
+          ]
+        ],
+        "elite": [
+          [
+            "gravewarden"
+          ],
+          [
+            "alphaFang"
+          ]
+        ],
+        "boss": [
+          [
+            "rootheart"
+          ]
+        ]
+      },
+      "rewardGold": {
+        "normal": [
+          12,
+          20
+        ],
+        "elite": [
+          28,
+          38
+        ],
+        "boss": [
+          70,
+          80
+        ]
+      },
+      "mapHaze": "text-dim",
+      "lanternLights": [],
+      "bossPlates": {},
+      "name": "The Ashen Woods",
+      "bossName": "The Rootheart",
+      "id": "act1"
+    },
+    "act2": {
+      "legacyAct": {
+        "boss": "leviathan",
+        "theme": {
+          "sky": 529440,
+          "fog": 860723,
+          "particles": 5499135,
+          "glow": 3127551,
+          "accent": "#5fd6e8",
+          "ember": "#53e8ff"
+        }
+      },
+      "plates": {
+        "backdrop": "act2-backdrop",
+        "mid": "act2-mid",
+        "ledge": "act2-ledge"
+      },
+      "atmosphere": "mire",
+      "weather": {
+        "rate": 0.75,
+        "colors": [
+          "#9fd4ff",
+          "#cfe6ff"
+        ],
+        "vx": [
+          -4,
+          4
+        ],
+        "vy": [
+          8,
+          18
+        ],
+        "size": [
+          1.6,
+          3
+        ],
+        "drift": 0.7,
+        "emberRate": 0.25
+      },
+      "palette": {
+        "tint": "atk",
+        "glow": "gold",
+        "haze": "text-dim"
+      },
+      "music": {
+        "map": "map",
+        "combat": "act2Combat",
+        "boss": "act2Boss",
+        "victory": "victory"
+      },
+      "roster": {
+        "normal": [
+          "voltEel",
+          "mirelurker",
+          "drownedOne",
+          "tidecaller",
+          "shellback",
+          "deepmaw"
+        ],
+        "elite": [
+          "abyssalKnight",
+          "siren"
+        ],
+        "boss": [
+          "leviathan"
+        ]
+      },
+      "encounters": {
+        "weak": [
+          [
+            "voltEel"
+          ],
+          [
+            "mirelurker"
+          ],
+          [
+            "drownedOne"
+          ]
+        ],
+        "normal": [
+          [
+            "drownedOne",
+            "voltEel"
+          ],
+          [
+            "tidecaller",
+            "mirelurker"
+          ],
+          [
+            "shellback"
+          ],
+          [
+            "deepmaw"
+          ],
+          [
+            "drownedOne",
+            "drownedOne"
+          ],
+          [
+            "tidecaller",
+            "voltEel"
+          ],
+          [
+            "mirelurker",
+            "mirelurker"
+          ]
+        ],
+        "elite": [
+          [
+            "abyssalKnight"
+          ],
+          [
+            "siren"
+          ]
+        ],
+        "boss": [
+          [
+            "leviathan"
+          ]
+        ]
+      },
+      "rewardGold": {
+        "normal": [
+          18,
+          28
+        ],
+        "elite": [
+          35,
+          48
+        ],
+        "boss": [
+          85,
+          100
+        ]
+      },
+      "mapHaze": "text-dim",
+      "lanternLights": [],
+      "bossPlates": {},
+      "name": "The Sunken City",
+      "bossName": "Leviathan's Maw",
+      "id": "act2"
+    },
+    "act3": {
+      "legacyAct": {
+        "boss": "sovereign",
+        "theme": {
+          "sky": 1182238,
+          "fog": 1970736,
+          "particles": 12745727,
+          "glow": 16732120,
+          "accent": "#c99aff",
+          "ember": "#ff6fe0"
+        }
+      },
+      "plates": {
+        "backdrop": "act3-backdrop",
+        "mid": "act3-mid",
+        "ledge": "act3-ledge"
+      },
+      "atmosphere": "astral",
+      "weather": {
+        "rate": 1.25,
+        "colors": [
+          "#ff9a4d",
+          "#ffd166"
+        ],
+        "vx": [
+          24,
+          60
+        ],
+        "vy": [
+          -18,
+          -4
+        ],
+        "size": [
+          1.4,
+          2.4
+        ],
+        "drift": 1.1,
+        "emberRate": 0.9
+      },
+      "palette": {
+        "tint": "pwr",
+        "glow": "gold",
+        "haze": "text-dim"
+      },
+      "music": {
+        "map": "map",
+        "combat": "act3Combat",
+        "boss": "act3Boss",
+        "victory": "victory"
+      },
+      "roster": {
+        "normal": [
+          "voidWisp",
+          "shade",
+          "starCultist",
+          "obsidianGolem",
+          "chaosHound",
+          "watcherEye"
+        ],
+        "elite": [
+          "voidColossus",
+          "heraldOfEnd"
+        ],
+        "boss": [
+          "sovereign"
+        ]
+      },
+      "encounters": {
+        "weak": [
+          [
+            "voidWisp",
+            "voidWisp"
+          ],
+          [
+            "shade"
+          ],
+          [
+            "starCultist"
+          ]
+        ],
+        "normal": [
+          [
+            "obsidianGolem"
+          ],
+          [
+            "shade",
+            "voidWisp"
+          ],
+          [
+            "chaosHound"
+          ],
+          [
+            "watcherEye"
+          ],
+          [
+            "starCultist",
+            "voidWisp"
+          ],
+          [
+            "shade",
+            "shade"
+          ],
+          [
+            "chaosHound",
+            "voidWisp"
+          ],
+          [
+            "watcherEye",
+            "starCultist"
+          ]
+        ],
+        "elite": [
+          [
+            "voidColossus"
+          ],
+          [
+            "heraldOfEnd"
+          ]
+        ],
+        "boss": [
+          [
+            "sovereign"
+          ]
+        ]
+      },
+      "rewardGold": {
+        "normal": [
+          24,
+          36
+        ],
+        "elite": [
+          45,
+          60
+        ],
+        "boss": [
+          100,
+          120
+        ]
+      },
+      "mapHaze": "text-dim",
+      "lanternLights": [],
+      "bossPlates": {},
+      "name": "The Obsidian Court",
+      "bossName": "The Eternal Sovereign",
+      "id": "act3"
+    }
+  },
+  "themeOrder": [
+    "act1",
+    "act2",
+    "act3"
+  ],
+  "acts": [
+    {
+      "boss": "rootheart",
+      "theme": {
+        "sky": 791568,
+        "fog": 1254426,
+        "particles": 16752717,
+        "glow": 6750110,
+        "accent": "#7ddb8f",
+        "ember": "#ff9a4d"
+      },
+      "name": "The Ashen Woods",
+      "bossName": "The Rootheart"
+    },
+    {
+      "boss": "leviathan",
+      "theme": {
+        "sky": 529440,
+        "fog": 860723,
+        "particles": 5499135,
+        "glow": 3127551,
+        "accent": "#5fd6e8",
+        "ember": "#53e8ff"
+      },
+      "name": "The Sunken City",
+      "bossName": "Leviathan's Maw"
+    },
+    {
+      "boss": "sovereign",
+      "theme": {
+        "sky": 1182238,
+        "fog": 1970736,
+        "particles": 12745727,
+        "glow": 16732120,
+        "accent": "#c99aff",
+        "ember": "#ff6fe0"
+      },
+      "name": "The Obsidian Court",
+      "bossName": "The Eternal Sovereign"
+    },
+    {
+      "boss": "eternalKeeper",
+      "theme": {
+        "sky": 1446412,
+        "fog": 2366996,
+        "particles": 16760970,
+        "glow": 15771768,
+        "accent": "#e8b890",
+        "ember": "#ffc08a"
+      },
+      "name": "The Mirrored Road",
+      "bossName": "The Eternal Keeper"
+    }
+  ],
+  "encounters": [
+    {
+      "weak": [
+        [
+          "sporeling",
+          "sporeling"
+        ],
+        [
+          "duskfang"
+        ],
+        [
+          "gloomslime"
+        ],
+        [
+          "sporeling",
+          "sporeling",
+          "sporeling"
+        ]
+      ],
+      "normal": [
+        [
+          "duskfang",
+          "sporeling"
+        ],
+        [
+          "ashAcolyte"
+        ],
+        [
+          "waylayer"
+        ],
+        [
+          "thornling",
+          "thornling"
+        ],
+        [
+          "gloomslime",
+          "sporeling"
+        ],
+        [
+          "duskfang",
+          "duskfang"
+        ],
+        [
+          "waylayer",
+          "sporeling"
+        ]
+      ],
+      "elite": [
+        [
+          "gravewarden"
+        ],
+        [
+          "alphaFang"
+        ]
+      ],
+      "boss": [
+        [
+          "rootheart"
+        ]
+      ]
+    },
+    {
+      "weak": [
+        [
+          "voltEel"
+        ],
+        [
+          "mirelurker"
+        ],
+        [
+          "drownedOne"
+        ]
+      ],
+      "normal": [
+        [
+          "drownedOne",
+          "voltEel"
+        ],
+        [
+          "tidecaller",
+          "mirelurker"
+        ],
+        [
+          "shellback"
+        ],
+        [
+          "deepmaw"
+        ],
+        [
+          "drownedOne",
+          "drownedOne"
+        ],
+        [
+          "tidecaller",
+          "voltEel"
+        ],
+        [
+          "mirelurker",
+          "mirelurker"
+        ]
+      ],
+      "elite": [
+        [
+          "abyssalKnight"
+        ],
+        [
+          "siren"
+        ]
+      ],
+      "boss": [
+        [
+          "leviathan"
+        ]
+      ]
+    },
+    {
+      "weak": [
+        [
+          "voidWisp",
+          "voidWisp"
+        ],
+        [
+          "shade"
+        ],
+        [
+          "starCultist"
+        ]
+      ],
+      "normal": [
+        [
+          "obsidianGolem"
+        ],
+        [
+          "shade",
+          "voidWisp"
+        ],
+        [
+          "chaosHound"
+        ],
+        [
+          "watcherEye"
+        ],
+        [
+          "starCultist",
+          "voidWisp"
+        ],
+        [
+          "shade",
+          "shade"
+        ],
+        [
+          "chaosHound",
+          "voidWisp"
+        ],
+        [
+          "watcherEye",
+          "starCultist"
+        ]
+      ],
+      "elite": [
+        [
+          "voidColossus"
+        ],
+        [
+          "heraldOfEnd"
+        ]
+      ],
+      "boss": [
+        [
+          "sovereign"
+        ]
+      ]
+    },
+    {
+      "weak": [
+        [
+          "unopenedSelf"
+        ],
+        [
+          "unwalkedSelf"
+        ],
+        [
+          "uncrossedSelf"
+        ],
+        [
+          "unlitSelf"
+        ],
+        [
+          "unobsidianSelf"
+        ],
+        [
+          "unwoodedSelf"
+        ]
+      ],
+      "normal": [
+        [
+          "unopenedSelf",
+          "uncarvedSelf"
+        ],
+        [
+          "unwalkedSelf",
+          "unobsidianSelf"
+        ],
+        [
+          "uncrossedSelf",
+          "unsunkSelf"
+        ],
+        [
+          "unlitSelf",
+          "unwoodedSelf"
+        ]
+      ],
+      "elite": [
+        [
+          "unsunkSelf"
+        ],
+        [
+          "uncarvedSelf"
+        ]
+      ],
+      "boss": [
+        [
+          "eternalKeeper"
+        ]
+      ]
+    }
+  ],
+  "_source": {
+    "ancestry": "began from roguecardv2-benchmark commit 6e06911 (2026-07-13)",
+    "note": "This file is now port-owned. It is not a fresh capture from the benchmark."
+  }
+}

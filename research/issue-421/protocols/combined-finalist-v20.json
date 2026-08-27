@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "question": "Do the frozen route-active screen policies satisfy C2 before optimisation, distinguishing content insufficiency from noisy CEM collapse?",
+  "candidate": {
+    "contentSha256": "10dbcffe872984a73ccc715e2074d3c7583442a19f8c5998c308dab083cc5abd",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "fortify",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "provenance": {
+      "rejectedV19SummarySha256": "eb38c1ff4dc3268a8da678c204c293cdc7e0dfa701260545978ebdef16cd9b3c",
+      "frozenSelectionAnalysisSha256": "4eab54321969ca28f2d9c8e9100126592704da9345f1489aaa93d35b116f2337",
+      "frozenSelectionSha256": "1b10e64bdbb91a3c95a958637e206f487e150d65fb7c14bbf15be0a416e4c46e"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "10dbcffe872984a73ccc715e2074d3c7583442a19f8c5998c308dab083cc5abd",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "b89cc080c24a01e183dd210687abf2a10fbdc63d0ff122b0d7a08f8134c12ff6",
+    "pilotSha256": "6c832e6bfcf0c6f015d1ac3e80c754a03fd60972672f1a4da1dd8c250b2cc6a9",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "43307a096539ddaf9fcd86fb7a0f3286b32d8705bea33915332270bf4af19130",
+    "prototypePatchSha256": "02293def7187c4a65b9fad4d0705cde2570d84e0acf5c0977af3cefd4dc6a850"
+  },
+  "seedBases": {
+    "controlDiscovery": 200000,
+    "controlValidation": 201000,
+    "repertoireDiscoverySeed": 202000,
+    "repertoireValidationSeed": 203000
+  },
+  "researchCohorts": {
+    "controls": {
+      "discovery": "200000-200063",
+      "validation": "201000-201063"
+    },
+    "repertoire": {
+      "discovery": "frozen root-490 selection, seeds 202000-202031, Duskblade vows 0 and 5",
+      "validation": "frozen root-490 selection, seeds 203000-203063, Duskblade vows 0 and 5"
+    }
+  },
+  "estimands": {
+    "heldoutViability": "For each route and vow, at least two frozen policies activate the mediator and beat same-split RandomBuild by at least 0.35.",
+    "retention": "Route-best rates remain within 0.10 and credited policy sets differ.",
+    "reliability": "No paired candidate-added stall or simulator error.",
+    "vow5": "Every frozen-policy Vow-5 win rate is at most 0.90."
+  },
+  "budget": {
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "repertoireDiscoverySeeds": 32,
+    "repertoireValidationSeeds": 64,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireValidationRowsMaximumPerContent": 2048
+  },
+  "successRule": "Both routes retain at least two distinct C2 policies under both vows in discovery and validation, with controls, reliability and Vow-5 green.",
+  "inconclusiveRule": "Each frozen rectangle is final; do not reselect policies or add seeds after readout.",
+  "stopRule": "Reject the current content lever if either route/vow lacks two C2 policies, endpoints collapse, controls fail, an added fault appears or Vow-5 exceeds 0.90.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

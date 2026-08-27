@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v23",
+  "protocolSha256": "51f31299f4aba4af21d78fc02294df6d83053fdf64941e88bbe95669e3ef7cba",
+  "decision": "inconclusive-stop",
+  "reason": "Moving Afterimage to Refract removed the negative direction and all local faults, but the defensive route's aspect separation remained non-decisive at the maximum panel.",
+  "evidence": {
+    "separationDiscoverySha256": "9fd452e81226d5f7f7805a40f6e571d5c084de54eabafe871ece449d4f1f27f1",
+    "panelDiscovery32Sha256": "54363e06c05bfba7cb14d2872e53c787b28cca35b2c3c1226da42066aa0c45f7",
+    "panelDiscovery128Sha256": "d208b9ca690e988179869e452816d173c8207482f7387b040e849ec78076e9fe"
+  },
+  "boundedNegative": {
+    "scope": "One-times current-Ward reflection through Refract and Warden's Edge",
+    "afterimageActivationPoint": 0.38952015619376684,
+    "afterimageAspectSeparationPoint": 0.5546875,
+    "afterimageAspectSeparationP025": -0.43769531249999993,
+    "afterimageAspectSeparationP975": 1.625,
+    "afterimagePolicyWitnesses": 57,
+    "afterimageAddedStalls": 0,
+    "scorelineAspectSeparationP025": 0.796875,
+    "scorelinePolicyWitnesses": 105,
+    "protectedSeedsUsed": false
+  }
+}

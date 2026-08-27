@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v24",
+  "protocolSha256": "9302b546d1cf086afd207f4c01bc74dea47e06a4e4c11c7730667a08b9c5f485",
+  "decision": "reject",
+  "reason": "Twice-current-Ward reflection passed all local gates and global-movement limits, but its extra Ward caused one candidate-added Sovereign stall in validation.",
+  "evidence": {
+    "separationDiscoverySha256": "77508437595d38e4738d09ab164b5db945df273050d5a080d5d0a2813c3053cf",
+    "panelDiscoverySha256": "a606151e82899d627189036b6bb549b5878bb89986c61d742e225b2a7af0d9ef",
+    "separationValidationSha256": "e827616a39a68832dedbc2aadd31604d26993d5a393cadcb8cb98a822741c93b",
+    "panelValidation32Sha256": "51784e66852cab2dddefe747a1f6d64e617d4d191b4514c93e11e24922da3dd4",
+    "panelValidation128Sha256": "672116db2d9f8988bba804a0562a79af57eb2347e74d784e79ed156c5a131b4e",
+    "controlsDiscoverySha256": "c5c5cfc7f9fb89c603f57aef74e9c279a746a021800f51350b022bbff09c3a89",
+    "controlsValidationSha256": "a7579139ed1bff9eecab91bd9f3ec13906fb0b66a2d9ee34662583f9509a2bed"
+  },
+  "boundedNegative": {
+    "scope": "Reflecting twice the current Ward as both damage and additional Ward",
+    "candidateAddedFaults": 1,
+    "faultAspect": "duskblade",
+    "faultVow": 0,
+    "faultArm": 3,
+    "faultSeed": 233040,
+    "faultEncounter": "sovereign",
+    "candidateTurns": 30,
+    "candidateOutcome": "stall",
+    "pairedLiveOutcome": "win",
+    "duskVow0RandomBuildMovementPoint": 0.015625,
+    "duskVow5RandomBuildMovementPoint": 0.0,
+    "protectedSeedsUsed": false
+  }
+}

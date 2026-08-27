@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v17",
+  "protocolSha256": "5b5f31b7f7cadc7ecdd481c4edd6e60355005fc6901414a7225d8eef3fecde9e",
+  "decision": "reject",
+  "reason": "Local package and paired-control gates passed, but the CEM routes were fitted from policy indices whose route labels belonged to sampler root 458 while v17 used root 488. The resulting six endpoints all failed C2 and cannot admit the candidate.",
+  "evidence": {
+    "separationDiscoverySha256": "954ffa7e55709f189738703a089f3fc18f8af85388b29ead43dec05a1e3c7fd9",
+    "separationValidationSha256": "7ba612b3d21c17e17a291fa93d2f42db94b4e195c6d453911a97dfa4686f8f80",
+    "panelDiscoverySha256": "c34b56d06ab519dbfbf9e98285739a72983a52386e3f46e83dfde9edb778e598",
+    "panelValidationSha256": "8a7a1d84397b4aedfb5b80c1fc8b66903c9f9de3086c6fb839f4a8c4464911bd",
+    "controlsDiscoverySha256": "ccd7cacceb56ff69e4e03951c5a0186371a0462eda4a24932db0f38211e88585",
+    "pairedControlsValidationSha256": "1921424d7fbb977689651f9a1e44bcb02453002e0d1872bf9c348640eb731a99",
+    "cemAnalysisSha256": "28ca7209070f86266134787f351c70cbbe0c5a1225e518b04245d0c8756a04c0"
+  },
+  "boundedNegative": {
+    "samplerRoot": 488,
+    "seedPacketSamplerRoot": 458,
+    "afterimageBestPolicyRate": 0.0625,
+    "scorelineBestPolicyRate": 0.0625,
+    "randomBuildRate": 0.1171875,
+    "creditedPolicies": 0,
+    "candidateAddedControlFaults": 0,
+    "simulatorErrors": 0,
+    "scope": "The CEM result is negative only for the mismatched start-policy rectangle; it is not evidence that correctly screened existing-card routes fail.",
+    "protectedSeedsUsed": false
+  }
+}

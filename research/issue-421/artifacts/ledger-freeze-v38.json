@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "ledger": "ledger/research.sqlite",
+  "sha256": "78651f5d2b51b5f11bd4466500542643083e3def1c56a705463d3b323adcd493",
+  "sqliteIntegrity": "ok",
+  "firstCreatedUtc": "2026-08-27T15:44:07+00:00",
+  "lastCreatedUtc": "2026-08-27T22:11:44+00:00",
+  "minSeq": 1,
+  "maxSeq": 412502,
+  "records": 412502,
+  "recordsByKind": {
+    "analysis": 209,
+    "cem-run": 42,
+    "decision": 5,
+    "observation": 411520,
+    "plan": 338,
+    "probe-run": 171,
+    "protocol": 48,
+    "run": 125,
+    "source-identity": 44
+  },
+  "payloadBytesByKind": {
+    "analysis": 908895,
+    "cem-run": 44144,
+    "decision": 7244,
+    "observation": 1587543402,
+    "plan": 179356487,
+    "probe-run": 58770,
+    "protocol": 248876,
+    "run": 84187,
+    "source-identity": 30635
+  },
+  "protectedSeedRows": 0,
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

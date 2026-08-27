@@ -1,0 +1,64 @@
+{
+  "decision": "inconclusive",
+  "exactZeroFixedDeckLocalEffects": [
+    "acquisitionPriority",
+    "faultlineRarity"
+  ],
+  "identifiedBetweenLevelLevers": [],
+  "newSimulatorRows": 0,
+  "nextExperimentRequirement": "One preregistered common-random-number identification design; no candidate may be selected from this audit.",
+  "oneLeverPairs": [
+    {
+      "betweenLevelOutcomeIdentified": false,
+      "changedLever": "mediatorPayoff",
+      "commonPoliciesAndSeeds": false,
+      "exactPathInvariantLocalZero": false,
+      "left": "v33",
+      "right": "v34"
+    },
+    {
+      "betweenLevelOutcomeIdentified": false,
+      "changedLever": "acquisitionPriority",
+      "commonPoliciesAndSeeds": false,
+      "exactPathInvariantLocalZero": true,
+      "left": "v34",
+      "right": "v35"
+    },
+    {
+      "betweenLevelOutcomeIdentified": false,
+      "changedLever": "wardSetupPriority",
+      "commonPoliciesAndSeeds": false,
+      "exactPathInvariantLocalZero": false,
+      "left": "v35",
+      "right": "v36"
+    },
+    {
+      "betweenLevelOutcomeIdentified": false,
+      "changedLever": "wardSetupPriority",
+      "commonPoliciesAndSeeds": false,
+      "exactPathInvariantLocalZero": false,
+      "left": "v35",
+      "right": "v37"
+    },
+    {
+      "betweenLevelOutcomeIdentified": false,
+      "changedLever": "wardSetupPriority",
+      "commonPoliciesAndSeeds": false,
+      "exactPathInvariantLocalZero": false,
+      "left": "v36",
+      "right": "v37"
+    },
+    {
+      "betweenLevelOutcomeIdentified": false,
+      "changedLever": "faultlineRarity",
+      "commonPoliciesAndSeeds": false,
+      "exactPathInvariantLocalZero": true,
+      "left": "v37",
+      "right": "v38"
+    }
+  ],
+  "protectedSeedsUsed": false,
+  "protocolSha256": "5a4fdfd9c24331430d08b239fd4c62edb884c16728e6e09afe15909b137eb3c1",
+  "reason": "No one-lever pair used common policies and simulation seeds. Path invariance proves only that acquisition priority and rarity have zero effect on fixed-deck local combat; it cannot identify their whole-run effects. V33-V38 therefore remain combination-level bounded negatives.",
+  "schemaVersion": 1
+}

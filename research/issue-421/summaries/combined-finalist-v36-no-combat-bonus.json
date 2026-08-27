@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v36-no-combat-bonus",
+  "protocolSha256": "4481cc6de6d5309a9f1472ecf3f045efceade217e4ad0a5239399c9eff89366b",
+  "decision": "reject",
+  "reason": "Removing the in-combat setup bonus made the Afterimage package decisively fail its maximum discovery panel, so no whole-run controls were permitted.",
+  "evidence": {
+    "separationDiscoverySha256": "13fbadc220eb0a5320ad9a34b55a6cd8f95249f7560e6290d9a0308fcb106780",
+    "panelDiscovery32Sha256": "509039c37043e0eb1723b2fcd6a673d4f4cd2ccd11158277c0cec7437f609c06",
+    "panelDiscovery128Sha256": "cdc56385b8b75043f362b80dc31c7dadd61599012b20d9c6181d4839ffcaca7d"
+  },
+  "boundedNegative": {
+    "scope": "Zero package-specific Ward combat setup bonus with four-times acquisition priority",
+    "afterimageActivationP025": 0.13339922576796256,
+    "afterimageActivationPoint": 0.44466408589320855,
+    "afterimagePolicyWitnesses": 7,
+    "afterimageAddedStalls": 0,
+    "protectedSeedsUsed": false
+  }
+}

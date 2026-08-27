@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v30-policy-aware",
+  "protocolSha256": "29a54d8091bca39054fd0f2f6a6ddf0f19b945c7b9246723b709f55d53e39acf",
+  "decision": "reject-eager-setup",
+  "reason": "The pilot began playing Ward as setup, but did so before Warden's Edge was available; the short panel gained only one positive response witness and lengthened fights.",
+  "evidence": {
+    "separationDiscoverySha256": "3b9cf303ea6bab7793df8832c28766e6bdbaf087071f29b0cf5499f4383da096",
+    "panelDiscoverySha256": "550bc3fc4851b7b145f342a3f87426a9f509fb9f18eba49070016fd3b0403d2e"
+  },
+  "boundedNegative": {
+    "scope": "Afterimage-aware Ward scoring without checking whether Warden's Edge is in hand",
+    "afterimagePolicyWitnesses": 1,
+    "afterimageActivationPoint": 0.018560491336530392,
+    "afterimageDurationPoint": 0.34375,
+    "afterimageDurationP025": 0.15625,
+    "afterimageDurationP975": 0.5625,
+    "afterimageAddedStalls": 0,
+    "protectedSeedsUsed": false
+  }
+}

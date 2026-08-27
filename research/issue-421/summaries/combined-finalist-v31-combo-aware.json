@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v31-combo-aware",
+  "protocolSha256": "3c38a2a8a926374d7018fb8e004b75f30eb80bee9c629dd7d3e4ddc347270aa0",
+  "decision": "reject-confounded-panel-metric",
+  "reason": "Combo-aware setup reduced the duration cost, but total Warden's Edge damage remained confounded by different play counts between factorial arms and did not measure mediator consumption.",
+  "evidence": {
+    "separationDiscoverySha256": "f06ad8e72a237a1f56e9c98c917482b13591ed118124e113febfca2ce448c92c",
+    "panelDiscoverySha256": "d5f14cb912387074f5a87fd98e34f05ee13427c14aa266e5b371331a7ffa3e1d"
+  },
+  "boundedNegative": {
+    "scope": "Total consumer damage as the Afterimage panel activation metric",
+    "afterimageActivationPoint": -0.040197079658014806,
+    "afterimageDurationPoint": 0.15625,
+    "afterimageDurationP975": 0.28125,
+    "afterimageAddedStalls": 0,
+    "protectedSeedsUsed": false
+  },
+  "nextBoundedStep": "Use the signed Afterimage-consumption event as the panel activation metric; retain direct damage as the controlled response."
+}

@@ -1,0 +1,26 @@
+{
+  "analysisSha256": {
+    "controlledDiscovery": "603118c7ca174ef72da355f2b1a392d36f2ee4540a98b0d9242f89618bea3309",
+    "controlledValidation": "ac589db59fbd2e94abeaa67d4f6c95a38b9a8870f19a4663a691bdaa8370ff04",
+    "panelDiscovery": "ffd15074f006b7422b5718c5a6e16a7dccdd0ab41bb1803442c5b6d10c78a098",
+    "panelValidation": "b7362815717dce792d03e3a79f13f6194778324f1d25580b296c548821675285"
+  },
+  "decision": "ADMIT_LOCAL_PANEL_SCORELINE_HANDSHAKE",
+  "finding": "The frozen Scoreline and Snap Cut pair reproduced a Duskblade-only direct-damage interaction on discovery and held-out cohorts. The held-out pilot panel admitted practical activation (lower 95% bound 0.3105 SD), rejected activation under the Ashwarden control (upper 95% bound -0.7752 SD), retained positive aspect separation, added no stalls and reduced Duskblade combat duration by 0.4688 turns on average.",
+  "issue": 421,
+  "limits": [
+    "This admits the package at local and short-panel scope only; reachability, independent-policy sensitivity and whole-run balance remain untested.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "cfc90844c253dfbf0bf67823d4f231240e9fa9684915b8ae7bcdfb9ba739ec77",
+  "reliability": {
+    "addedStalls": 0,
+    "errors": 0,
+    "heldoutDurationUpper95Turns": -0.25
+  },
+  "researchRows": 1024,
+  "runnerSha256": "461141de509721993148554768a68b733f93f36bcf587e4c25209d6e06744cf9",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_LOCAL_PANEL_ADMISSION"
+}

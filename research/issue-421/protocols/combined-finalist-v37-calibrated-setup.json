@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "question": "Does a one-times Ward setup signal retain Afterimage activation while avoiding the two-times signal's added stall under four-times package acquisition?",
+  "candidate": {
+    "contentSha256": "a5ccf7d3347f7c3ea0f9b4527445dcaa2cb40337d62456d119785c4798d460dc",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "chisel",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "shatter",
+        "cardMetric": "shatter",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "defend",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "directDamage",
+        "cardMetric": "status:afterimage",
+        "cardMetricDirection": -1,
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Duskblade Chisel applies one Scoreline; Faultline consumes it for 12 or 15 bonus damage and completes the target's remaining Facets.",
+      "Duskblade Ward applies one Afterimage; Warden's Edge consumes it to deal damage equal to three times the current Ward.",
+      "The balance pilot gives a package-completing reward four times its sampled aspect weight; Ward receives that weight once in combat only when Warden's Edge is held and no Afterimage is active."
+    ],
+    "provenance": {
+      "rejectedV36SummarySha256": "1598a082e0e5f5ededb82a9ff85069ffb714e4c7266fde27d4f2b2a5e6dbec26"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "a5ccf7d3347f7c3ea0f9b4527445dcaa2cb40337d62456d119785c4798d460dc",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "69a828935bd4cde98e7d79509d11a13884452713690e3916f4805cb02334cf8f",
+    "probeSha256": "eff6d42396236a29749b9b971838991a187e6dea66bf73f184cde9b2d46b7cab",
+    "researchBalanceSimSha256": "229353ed36235fd60514459ea48267bc58fa3aaaf5a244f02d5b4e2c10d0dce4",
+    "prototypePatchSha256": "4740428d3ff4064077ddd41bdeb32987259a47a5cde1715b42148c5a7b059170"
+  },
+  "seedBases": {
+    "separationDiscovery": 323000,
+    "separationValidation": 324000,
+    "panelDiscovery": 325000,
+    "panelValidation": 326000,
+    "policyRootDiscovery": 534,
+    "policyRootValidation": 535,
+    "controlDiscovery": 327000,
+    "controlValidation": 328000,
+    "repertoirePolicyRoot": 536,
+    "repertoireScreenSeed": 329000,
+    "repertoireValidationSeed": 330000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "323000-323127",
+      "validation": "324000-324127"
+    },
+    "panels": {
+      "discovery": "root 534, indices 0-127, seeds 325000-325127",
+      "validation": "root 535, indices 0-127, seeds 326000-326127"
+    },
+    "controls": {
+      "discovery": "327000-327063",
+      "validation": "328000-328063"
+    },
+    "screen": "root 536, policy indices 0-511, seeds 329000-329003, Duskblade Vow-5",
+    "repertoireValidation": "selected route-active cells, seeds 330000-330063, paired candidate/live Duskblade Vow-5"
+  },
+  "estimands": {
+    "functionalSeparation": "Every named diagonal lower 95% bound is at least 0.25 SD and every off-diagonal upper bound is below 0.25.",
+    "globalMovement": "Candidate-minus-live RandomBuild arm-2 point movement is at most 0.10 per grid.",
+    "routeViability": "Each Dusk route has at least two held-out policies at least 0.35 above paired RandomBuild.",
+    "reliability": "No candidate-added stall or simulator error.",
+    "vow5": "Every selected-policy Vow-5 win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "repertoireScreenPolicies": 512,
+    "repertoireScreenSeeds": 4,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireScreenRowsMaximum": 2048,
+    "repertoireValidationSeeds": 64,
+    "repertoireValidationRowsMaximumPerContent": 2048
+  },
+  "successRule": "All local and control gates admit, then each Dusk route retains two distinct Vow-5 endpoints with zero reliability regression and the Vow-5 ceiling.",
+  "inconclusiveRule": "Only a non-decisive panel may extend once to 128; the route screen and held-out rectangle are final.",
+  "stopRule": "Reject on a local gate, controls, fewer than eight active screen cells per route, fewer than two held-out endpoints, collapse, added fault or Vow-5 above 0.90.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

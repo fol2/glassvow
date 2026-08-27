@@ -1,0 +1,23 @@
+{
+  "analysisSha256": {
+    "functionalSeparationDiscovery": "e039fd21ee8d48a95840e224b0d0aec0c0f79f9e57449c792874761ca83fe0a8",
+    "functionalSeparationValidation": "44d6c0c8063e0c4a3b6d196e586795f77f4915d56626a1882ba229f2dd73a8f4",
+    "policyPanelDiscovery64": "f0fd95a7a0c3ebd809a19b270b6e1df1b6eee3fa573d80c2dd02094f483a2611",
+    "policyPanelValidation32": "bd6a9fef43c10451e6b032355ca27217d603672a4ec8d6d3ba5de50838e5928b",
+    "wholeRunControlsDiscovery32": "e1269fff5fc92cfe063364cf94e967fe9aaf1dbedcf1d71a1cc03f254ca5d7e3"
+  },
+  "decision": "REJECT_EXACT_COMBINED_FINALIST_V3",
+  "finding": "All four packages passed discovery and held-out functional-separation and independent-policy panels. The first paired whole-run controls then rejected the exact candidate: RandomBuild arm 2 moved by +0.2188 in Duskblade vow 0 and +0.1563 in both Ashwarden grids versus live, exceeding the 0.10 global bound, while three candidate grids also missed C2. No policy landscape or detector work was permitted after that failure.",
+  "issue": 421,
+  "limits": [
+    "This is a bounded negative for candidate content f601e583825f7150df73f4ee2f91ad3dae93d745db6628f20fbfc570e0403db5 and its frozen pilot/protocol only.",
+    "Paired attribution implicated broad component power and static component scoring, not a loss of local package causality; later candidates may preserve the interaction while reducing standalone power and teaching planned build policy to value completion.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "57d7fcef9ebd9f3141d55bb5297c166a166301a002ffd9fa07243a2068cd617d",
+  "researchRows": 8192,
+  "runnerSha256": "d5f6c912f9c3c5a20d451c754eddb2f37707117b61d8b72d4fa33199f55bfe25",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_NEGATIVE"
+}

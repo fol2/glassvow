@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v18b",
+  "protocolSha256": "37547d72e928af2a4ab30718a1c57fa88b97cb73e58809681d96da8e0d89edfe",
+  "decision": "reject",
+  "reason": "Correctly screened route starts increased activation and Scoreline performance, but neither route produced a C2 endpoint; Afterimage also recorded one CEM holdout stall.",
+  "evidence": {
+    "controlsDiscoverySha256": "9766b6e79b69a88833f47eca6404c8a9959db1f57b139fe229bed0bf12d90724",
+    "controlsValidationSha256": "dde2761d7669e62b124e8e6e6f43e313a36fa991cb83a640ef009e41eae05832",
+    "cemAnalysisSha256": "15cd0bcb3ed1d5e0eef4c11c83e2d215ebec0b9d3fc625165c2b9f02a15a7d15"
+  },
+  "boundedNegative": {
+    "randomBuildRate": 0.1015625,
+    "afterimageBestPolicyRate": 0.125,
+    "afterimageBestMargin": 0.0234375,
+    "scorelineBestPolicyRate": 0.21875,
+    "scorelineBestMargin": 0.1171875,
+    "creditedPolicies": 0,
+    "cemHoldoutFaults": 1,
+    "finalValidationAddedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

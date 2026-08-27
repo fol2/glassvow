@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v16",
+  "protocolSha256": "a2e7e003596b47e3ecf0f7a306e0ec1281506418c157773a8b288dde8bd893a8",
+  "decision": "preflight-fault",
+  "reason": "The research probe compared the Ashwarden completion score with the Duskblade base score. The aspect-specific base comparison failed before any experiment row ran.",
+  "correction": "Compare each aspect's completion score with that same aspect's base score.",
+  "experimentRows": 0,
+  "cohortsObserved": false,
+  "protectedSeedsUsed": false
+}

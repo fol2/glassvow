@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v26-screen",
+  "protocolSha256": "ee7e80e7356420cce87bc2005015db4cd3b8b8317278c86c6aa2758860c7ec65",
+  "decision": "reject-heldout",
+  "screenAnalysisSha256": "1ec71c641742be5714a62fb54daf1acd8af8cfc74421ca728c2ff164f491e35b",
+  "selectionSha256": "20778908771afb8218c36898ceb5c43bcefc58d504b01e89929e302dda8fe7bc",
+  "validationAnalysisSha256": "825ff46403426a907459812cf6592c6a072b4f3913a9f6de1f9e9aeca8d3d525",
+  "reason": "Fresh route-active cells existed for both V25 routes, but none retained the required Vow-5 margin on 64 held-out seeds.",
+  "boundedNegative": {
+    "scope": "Unoptimised root-505 sampled policies on unchanged V25 content",
+    "screenFaults": 0,
+    "selectedPerRoute": 8,
+    "heldoutRandomBuildRate": 0.171875,
+    "heldoutAfterimageBestRate": 0.25,
+    "heldoutScorelineBestRate": 0.25,
+    "heldoutCreditedEndpoints": 0,
+    "candidateAddedStalls": 0,
+    "candidateErrors": 0,
+    "protectedSeedsUsed": false
+  },
+  "cemStartRule": "Take the first three ranked cells per route while keeping policy indices unique across routes."
+}

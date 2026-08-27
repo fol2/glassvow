@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v25",
+  "protocolSha256": "02c15345431304a74d1b175f8f8ab414b5263c6dd1aa17c535ca313927a11821",
+  "decision": "reject-stale-selection",
+  "reason": "The damage-only Afterimage candidate passed local and control gates, but the frozen root-490 policies selected for the earlier Fortify route did not supply two Vow-5 endpoints for either changed Duskblade route.",
+  "evidence": {
+    "separationDiscoverySha256": "5c36c1b3afbf2375298abc463277f491a72defdc68029a9f8be7e82e128921c2",
+    "panelDiscovery32Sha256": "d9dc5c727f634c458262ecdb8508597d49cf05a3bae2bab817c47199d9e81d52",
+    "panelDiscovery128Sha256": "30041a7ad7eaa7e61a9466a8f466c15fa0181d9daf7dbfb55f6e381653cdaf86",
+    "separationValidationSha256": "4800654d262beaecf407f288b5340b073afafd28c2698b61a7ef8e76aaed9dd7",
+    "panelValidation32Sha256": "1911809d695a2f9511c3fc819f16a9e778b2640d3467175247c29aec3a9d5de9",
+    "panelValidation128Sha256": "07a2363cfe0b5904b9a9e482cf938f9ba6a326435792ac289c0331fb47942ba2",
+    "controlsDiscoverySha256": "f7ca6cf2550d3cabbf5c095dd7fd13a76e58319792e2f2908a0c181c7d49c9ee",
+    "controlsValidationSha256": "fb3664629e1162fd4c1205c59cf4a206e6abc7b2d6a95ecdb103cb00edf0a8c4",
+    "frozenRepertoireDiscoverySha256": "bad220c1ef4ea3745c38ddcc0e0ec5fa07b10ed25d259eecf9f5bc91da993c34"
+  },
+  "boundedNegative": {
+    "scope": "The root-490 policies selected for the obsolete Fortify producer, not the V25 route identity",
+    "duskVow0RandomBuildRate": 0.1875,
+    "duskVow0AfterimageBestRate": 0.59375,
+    "duskVow0AfterimageCreditedPolicies": 1,
+    "duskVow0ScorelineBestRate": 0.625,
+    "duskVow0ScorelineCreditedPolicies": 3,
+    "duskVow5RandomBuildRate": 0.125,
+    "duskVow5AfterimageBestRate": 0.28125,
+    "duskVow5AfterimageCreditedPolicies": 0,
+    "duskVow5ScorelineBestRate": 0.28125,
+    "duskVow5ScorelineCreditedPolicies": 0,
+    "candidateAddedStalls": 0,
+    "candidateErrors": 0,
+    "protectedSeedsUsed": false
+  },
+  "nextBoundedStep": "Run one fresh route-activation screen against the unchanged V25 content before any optimiser or content change."
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v38-scoreline-rarity",
+  "protocolSha256": "163ba57eb52e8836aa044ba86e388d39203503f3cd331836d8b0ae37063fc28a",
+  "decision": "reject",
+  "reason": "The complete frozen discovery control cohort found 0.125 Duskblade Vow-0 RandomBuild movement against a 0.10 limit and one candidate-added stall, so no local rerun, policy screen or held-out control was permitted.",
+  "evidence": {
+    "reusedFunctionalSeparationValidationSha256": "314dd360c3d384584752357bb44000d0b9929ce8ce044736545bcbc05d9d748b",
+    "reusedPackagePanelValidationSha256": "fbab7d76bac144479cc75402f07ef4da4fb2b23d403c82ccf5629696a82a4611",
+    "controlsDiscovery32Sha256": "8e41cf8e0a80849d4957c587c8694eab781ae46a1b72b43c5d972f49091c3f5e",
+    "controlsDiscovery64Sha256": "109656f4b71073eea7c61b51f1604bcdbe6e41bddc10a6a9b7c2d0be90be40fb"
+  },
+  "boundedNegative": {
+    "scope": "Rare Faultline with the V37 package payoffs, four-times acquisition priority and one-times Ward setup signal",
+    "broadMovementGrid": "duskblade:v0",
+    "randomBuildMovementPoint": 0.125,
+    "randomBuildMovementLimit": 0.10,
+    "addedStallArm": 4,
+    "addedStallSeed": 335049,
+    "candidateAddedStalls": 1,
+    "candidateErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

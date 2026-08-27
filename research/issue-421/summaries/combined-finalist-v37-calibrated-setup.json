@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v37-calibrated-setup",
+  "protocolSha256": "b160986419f37b5d9b80cf97e4ad0be404e6a48f487d55f126eb96dafeef6f9c",
+  "decision": "reject",
+  "reason": "Local gates admitted and no reliability fault appeared, but the fixed validation controls found 0.125 Duskblade Vow-0 RandomBuild movement against a 0.10 limit.",
+  "evidence": {
+    "separationDiscoverySha256": "974ed6a4cd2c6c9f49cbfed203a676216a487bf4b2bc7f4382df0c4460bb8a77",
+    "panelDiscovery32Sha256": "72775a7156b98417be46cde0056929d3e280287b32f21ad5dd68ac304558bd2c",
+    "panelDiscovery128Sha256": "4ed1a695c9fb28c4bdcc482f1fc15b60a18f1e597b1e0e0035ee566f89f43258",
+    "controlsDiscovery32Sha256": "5fec41f217bc21c415d291ed89d9749516acf370d40be20b65e2e1ba41536f10",
+    "controlsDiscovery64Sha256": "68995d149db9fb4352592fe54c36f541f3d0caa1a202357101ec4a590ab08f9f",
+    "separationValidationSha256": "314dd360c3d384584752357bb44000d0b9929ce8ce044736545bcbc05d9d748b",
+    "panelValidation32Sha256": "4b38cc35fb17c12f345b57e1fcbd90df2317459af319dcd7aa3a50d9cce270cc",
+    "panelValidation128Sha256": "fbab7d76bac144479cc75402f07ef4da4fb2b23d403c82ccf5629696a82a4611",
+    "controlsValidation64Sha256": "7557920817498da1bdbfdfd78eba3aba429e7e6e06b7ee6c9c8f40cdd76cc394"
+  },
+  "boundedNegative": {
+    "scope": "One-times Ward setup signal, four-times acquisition priority and V34 package payoffs",
+    "broadMovementGrid": "duskblade:v0",
+    "randomBuildMovementPoint": 0.125,
+    "randomBuildMovementLimit": 0.10,
+    "candidateAddedStalls": 0,
+    "candidateErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

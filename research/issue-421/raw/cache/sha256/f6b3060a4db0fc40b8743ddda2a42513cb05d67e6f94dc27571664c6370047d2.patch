@@ -1,0 +1,97 @@
+diff --git a/content/full-content.json b/content/full-content.json
+index 1fdf17c..6d1c60b 100644
+--- a/content/full-content.json
++++ b/content/full-content.json
+@@ -140,6 +140,34 @@
+       "name": "Chisel",
+       "text": "Deal @4@ damage. Chip 1 extra Facet."
+     },
++    "faultline": {
++      "type": "skill",
++      "rarity": "common",
++      "cost": 1,
++      "target": "enemy",
++      "vfx": "pierce",
++      "effects": [
++        {
++          "kind": "special",
++          "id": "facetFocus",
++          "n": 5,
++          "perChip": 4
++        }
++      ],
++      "up": {
++        "effects": [
++          {
++            "kind": "special",
++            "id": "facetFocus",
++            "n": 7,
++            "perChip": 5
++          }
++        ],
++        "text": "Deal @7@ damage, plus @5@ for each chipped Facet."
++      },
++      "name": "Faultline",
++      "text": "Deal @5@ damage, plus @4@ for each chipped Facet."
++    },
+     "firstSpark": {
+       "type": "skill",
+       "rarity": "starter",
+@@ -1709,7 +1737,8 @@
+       "brace",
+       "sidestep",
+       "preparation",
+-      "deflect"
++      "deflect",
++      "faultline"
+     ],
+     "uncommon": [
+       "leechBlade",
+diff --git a/domain/rules/combat.gd b/domain/rules/combat.gd
+index 58c9b8c..2522737 100644
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -16,6 +16,7 @@ var quests: QuestRules
+ const SPECIAL_IDS: Array[String] = [
+ 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
+ 	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance",
++	"facetFocus",
+ ]
+ const POTION_IDS: Array[String] = [
+ 	"healing", "strength", "swift", "block", "fire", "venom", "energy",
+@@ -987,6 +988,10 @@ func _apply_special(
+ 		"shatterEcho":
+ 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
++		"facetFocus":
++			var chipped: int = target.chips if run.aspect == 0 else 0
++			hit_enemy(run, cb, target,
++				_ji(fx["n"]) + chipped * _ji(fx["perChip"]), true, damage_mult)
+ 		"emberNova":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.embers, true, damage_mult)
+ 		"pyreTithe":
+@@ -1355,6 +1360,11 @@ func preview_play(
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + bonus), "times": 1})
+ 			elif sid == "momentum":
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
++			elif sid == "facetFocus":
++				var chipped: int = target.chips if target != null and run != null \
++						and run.aspect == 0 else 0
++				hits.append({"dmg": _preview_hit(p, target,
++					_ji(fx["n"]) + chipped * _ji(fx["perChip"])), "times": 1})
+ 			elif sid == "doubleBlock":
+ 				block += p.block
+ 	var fx_chips: int = 0
+diff --git a/tools/balance_pilot.gd b/tools/balance_pilot.gd
+index 40bedc8..5298723 100644
+--- a/tools/balance_pilot.gd
++++ b/tools/balance_pilot.gd
+@@ -292,7 +292,7 @@ static func card_score(d: Dictionary, aspect: int, card_id: String = "") -> floa
+ 	if str(d.get("type", "")) == "power":
+ 		score += _w("card", "power")
+ 	score += float(str(d.get("chip", 0))) * (_w("card", "chipDusk") if dusk else _w("card", "chipAsh"))
+-	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner"]:
++	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner", "faultline"]:
+ 		score += _w("card", "aspectBonus")
+ 	if not dusk and card_id in ["ashBite", "smother", "venomStrike", "toxicMist", "ashenChoir",
+ 			"catalyst", "virulence", "annihilate"]:

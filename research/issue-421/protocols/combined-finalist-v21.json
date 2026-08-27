@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "question": "Does four-charge mediator capacity turn the frozen Duskblade routes into distinct C2 strategies without changing base cards or global power?",
+  "candidate": {
+    "contentSha256": "d8512ee27a66d9738fa4e56faa58616b24198cd55fbc8dcf0af3cb3ac4976f67",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "fortify",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Keep current-main card identities, reward pools and base effects unchanged.",
+      "Flicker and Mirrorlight each create four aspect-gated mediator charges.",
+      "Consumers spend one charge per conditional response; no Energy refund."
+    ],
+    "provenance": {
+      "rejectedV20SummarySha256": "febfb86c0cb3534b2febfc27cafe73e58bc3cbcb5dfb4152aac2fd2b3b9a1c1a",
+      "frozenSelectionAnalysisSha256": "4eab54321969ca28f2d9c8e9100126592704da9345f1489aaa93d35b116f2337",
+      "frozenSelectionSha256": "1b10e64bdbb91a3c95a958637e206f487e150d65fb7c14bbf15be0a416e4c46e"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "d8512ee27a66d9738fa4e56faa58616b24198cd55fbc8dcf0af3cb3ac4976f67",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "b89cc080c24a01e183dd210687abf2a10fbdc63d0ff122b0d7a08f8134c12ff6",
+    "pilotSha256": "6c832e6bfcf0c6f015d1ac3e80c754a03fd60972672f1a4da1dd8c250b2cc6a9",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "43307a096539ddaf9fcd86fb7a0f3286b32d8705bea33915332270bf4af19130",
+    "prototypePatchSha256": "1b4398ba1c3f5b9335d3ce7cf4bee64ce5a69db36b7bd21d95ba39729d4c5d31"
+  },
+  "seedBases": {
+    "separationDiscovery": 204000,
+    "separationValidation": 205000,
+    "panelDiscovery": 206000,
+    "panelValidation": 207000,
+    "policyRootDiscovery": 495,
+    "policyRootValidation": 496,
+    "controlDiscovery": 208000,
+    "controlValidation": 209000,
+    "repertoireDiscoverySeed": 210000,
+    "repertoireValidationSeed": 211000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "204000-204127",
+      "validation": "205000-205127"
+    },
+    "panels": {
+      "discovery": "root 495, indices 0-127, seeds 206000-206127",
+      "validation": "root 496, indices 0-127, seeds 207000-207127"
+    },
+    "controls": {
+      "discovery": "208000-208063",
+      "validation": "209000-209063"
+    },
+    "repertoire": {
+      "discovery": "frozen root-490 selection, seeds 210000-210031, Duskblade vows 0 and 5",
+      "validation": "frozen root-490 selection, seeds 211000-211063, Duskblade vows 0 and 5"
+    }
+  },
+  "estimands": {
+    "functionalSeparation": "Every named diagonal lower 95% bound is at least 0.25 SD and every off-diagonal upper bound is below 0.25.",
+    "heldoutViability": "For each Dusk route and vow, at least two frozen policies activate the mediator and beat same-split RandomBuild by at least 0.35.",
+    "retention": "Route-best rates remain within 0.10 and credited policy sets differ.",
+    "reliability": "No paired candidate-added stall or simulator error.",
+    "vow5": "Every frozen-policy Vow-5 win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "repertoireDiscoverySeeds": 32,
+    "repertoireValidationSeeds": 64,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireValidationRowsMaximumPerContent": 2048
+  },
+  "successRule": "All local gates admit; both routes retain at least two distinct C2 policies under both vows in discovery and validation, with controls, reliability and Vow-5 green.",
+  "inconclusiveRule": "Only a non-decisive panel may extend once to 128. Frozen whole-run rectangles are final.",
+  "stopRule": "Reject on a local gate, either route/vow lacking two C2 policies, collapse, controls, added fault or Vow-5 above 0.90.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

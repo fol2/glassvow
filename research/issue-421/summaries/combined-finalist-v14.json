@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v14",
+  "protocolSha256": "f4d1746b1c7cbde4b2e55815759e933ac4275c97549d3462e8d6ffff1e653dfe",
+  "decision": "reject",
+  "reason": "Conditional Duskblade refunds passed independent separation and local-panel gates, but whole-run discovery stopped at the frozen 128-seed maximum because Ashwarden-v0 RandomBuild moved by 0.1171875 with a wholly positive interval.",
+  "evidence": {
+    "separationDiscoverySha256": "118e7417513aeb3d514d90140f1c688f431998f7017623e93954962c7bd39862",
+    "separationValidationSha256": "25fbdd110c0a6d49e173ea74e4f1f9b3f0b4e22d1cb39ba81e1fd54207c7c2ef",
+    "panelDiscoverySha256": "4ffdc8fb38da38c153f7dafe3259bd0e9e1b967a166f10d89c06240199963e2d",
+    "panelValidationSha256": "fca4ee407d647ad33e31d934d5768163240a78268132521588e6d074dc1f9e75",
+    "controlsDiscoverySha256": "112660a9b93f3cf875a2a2a86484a6c14fb6a03ff0fdee9c588c9117205233ff"
+  },
+  "boundedNegative": {
+    "ashwardenVow0RandomBuildMovement": 0.1171875,
+    "ashwardenVow0MovementInterval": [0.015625, 0.21875],
+    "candidateRescuesWithCatalyst": 11,
+    "candidateRescuesWithBloodfire": 6,
+    "addedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

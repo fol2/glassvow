@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "question": "Does stronger policy-weighted package completion fix the observed consumer-decline bottleneck and expose two held-out Dusk Vow-5 endpoints without changing package mechanics?",
+  "candidate": {
+    "contentSha256": "a5ccf7d3347f7c3ea0f9b4527445dcaa2cb40337d62456d119785c4798d460dc",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "chisel",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "shatter",
+        "cardMetric": "shatter",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "defend",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "directDamage",
+        "cardMetric": "status:afterimage",
+        "cardMetricDirection": -1,
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Duskblade Chisel applies one Scoreline; Faultline consumes it for 12 or 15 bonus damage and completes the target's remaining Facets.",
+      "Duskblade Ward applies one Afterimage; Warden's Edge consumes it to deal damage equal to three times the current Ward.",
+      "The balance pilot gives a package-completing reward four times its sampled aspect weight; Ward receives twice that weight in combat only when Warden's Edge is held and no Afterimage is active."
+    ],
+    "provenance": {
+      "rejectedV34SummarySha256": "8f4751eca192d5f8cf5684a8e688fe528d600ed79442da53f9ad39ba48a03478",
+      "localGateReuse": {
+        "reason": "V35 changes only card_reward_score, which is outside the fixed-deck combat probe path; content, combat rules and combat scoring are byte-identical to V34.",
+        "functionalSeparationValidationSha256": "759d79e5d47d6a2aa250806c473f76a7f652d2158049373a79fce8ffc2e76c69",
+        "packagePanelValidationSha256": "f1f3e28f0a09c8cc17737e8a7d0397aee8ef149a38f95a5538e29b9ce9ac73d5"
+      }
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "a5ccf7d3347f7c3ea0f9b4527445dcaa2cb40337d62456d119785c4798d460dc",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "56b008bdbeac686fcb14ce1e3c36943d5726f4d0c2608409679b1c118b5d52b6",
+    "probeSha256": "5a2b03a68385a455cff5e34005bc88036f6c8aedb19ae8fe04cb8bf51e168eda",
+    "researchBalanceSimSha256": "229353ed36235fd60514459ea48267bc58fa3aaaf5a244f02d5b4e2c10d0dce4",
+    "prototypePatchSha256": "5a5dca26bc7417a1f8f4bb5e9d7c4254de6cc5d1d6622728dffd46d4c0d60be4"
+  },
+  "seedBases": {
+    "separationDiscovery": 307000,
+    "separationValidation": 308000,
+    "panelDiscovery": 309000,
+    "panelValidation": 310000,
+    "policyRootDiscovery": 528,
+    "policyRootValidation": 529,
+    "controlDiscovery": 311000,
+    "controlValidation": 312000,
+    "repertoirePolicyRoot": 530,
+    "repertoireScreenSeed": 313000,
+    "repertoireValidationSeed": 314000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "307000-307127",
+      "validation": "308000-308127"
+    },
+    "panels": {
+      "discovery": "root 528, indices 0-127, seeds 309000-309127",
+      "validation": "root 529, indices 0-127, seeds 310000-310127"
+    },
+    "controls": {
+      "discovery": "311000-311063",
+      "validation": "312000-312063"
+    },
+    "screen": "root 530, policy indices 0-511, seeds 313000-313003, Duskblade Vow-5",
+    "repertoireValidation": "selected route-active cells, seeds 314000-314063, paired candidate/live Duskblade Vow-5"
+  },
+  "estimands": {
+    "functionalSeparation": "Every named diagonal lower 95% bound is at least 0.25 SD and every off-diagonal upper bound is below 0.25.",
+    "globalMovement": "Candidate-minus-live RandomBuild arm-2 point movement is at most 0.10 per grid.",
+    "routeViability": "Each Dusk route has at least two held-out policies at least 0.35 above paired RandomBuild.",
+    "reliability": "No candidate-added stall or simulator error.",
+    "vow5": "Every selected-policy Vow-5 win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "repertoireScreenPolicies": 512,
+    "repertoireScreenSeeds": 4,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireScreenRowsMaximum": 2048,
+    "repertoireValidationSeeds": 64,
+    "repertoireValidationRowsMaximumPerContent": 2048
+  },
+  "successRule": "All local and control gates admit, then each Dusk route retains two distinct Vow-5 endpoints with zero reliability regression and the Vow-5 ceiling.",
+  "inconclusiveRule": "Only a non-decisive panel may extend once to 128; the route screen and held-out rectangle are final.",
+  "stopRule": "Reject on a local gate, controls, fewer than eight active screen cells per route, fewer than two held-out endpoints, collapse, added fault or Vow-5 above 0.90.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

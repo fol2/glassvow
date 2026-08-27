@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v7",
+  "protocolSha256": "a4d2b7761091ad972e14d8ff471e82bda41632e698dde762b0b3dad5a8d754e2",
+  "decision": "reject",
+  "reason": "Paired reliability and every Ashwarden route passed, but Duskblade v0 missed C2 by 0.00625 and Duskblade v5 retained only one viable policy per route at the frozen maximum.",
+  "evidence": {
+    "landscapeDiscoveryFirstLookSha256": "d9c34627e666e8756e93ed9141a6faf038633a98fcbb72e944df1286f4ce6062",
+    "landscapeDiscoveryMaximumSha256": "692e8ae1d1985180b152712a9cb1f7592e7efcbb259d18dc3c92f98bde0a323e"
+  },
+  "boundedNegative": {
+    "candidateStalls": 1,
+    "liveStalls": 1,
+    "addedStalls": 0,
+    "candidateErrors": 0,
+    "liveErrors": 0,
+    "duskbladeVow0BestMargin": 0.34375,
+    "duskbladeVow5ViablePoliciesPerRoute": 1,
+    "ashwardenGridsClear": 2,
+    "protectedSeedsUsed": false
+  }
+}

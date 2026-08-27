@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v6",
+  "protocolSha256": "6de701d45c1aaa3d10e638ede7174d3d9b3a891f281779a99065e5cdea8d127e",
+  "decision": "reject",
+  "reason": "All four route grids cleared the first landscape rectangle, but the v6 absolute-zero reliability rule rejected three sampled-policy stalls without a paired live comparator.",
+  "evidence": {
+    "separationDiscoverySha256": "2b6a79b730ccf21e51ed4343fbe329be094ebf7f4952ab96e21656930c8a01ca",
+    "separationValidationSha256": "2b6e5d5d91b4dc8a1da5bbb079c70d44dfdd69a2d43c64e725e7263cfcd8680a",
+    "panelDiscoverySha256": "093ae476ab9f039dc887bb16e585ed2d5966ecafddee2882dd27c012e4f4f190",
+    "panelValidationSha256": "8e396a3aaa40061327d90471b4688eea24aa90d1ed18ad2cab79380ad359705d",
+    "controlsDiscoverySha256": "9f1cabf1ac7872de937f939ebd4210c1b24c1d081933523969891686c8d194ed",
+    "controlsValidationSha256": "f8ce3e4f11fbc5d42876e4c26144e44cc7fc304b4dfec6fd44ae6ca4af735d0e",
+    "landscapeDiscoverySha256": "0231bc2dd1aed9438c7b1ffc6441e9002f7a70778cdfce6e24448b7d989d4abb"
+  },
+  "boundedNegative": {
+    "routeGridsClear": 4,
+    "candidateStalls": 3,
+    "candidateErrors": 0,
+    "pairedReliabilityMeasured": false,
+    "protectedSeedsUsed": false
+  }
+}

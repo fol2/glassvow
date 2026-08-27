@@ -1,0 +1,25 @@
+{
+  "analysisSha256": {
+    "controlledDiscovery": "436eda44ef8fe045905f740d38475a3832f13b2a3e3d42e3c43cb8e12f4f8bd6",
+    "controlledValidation": "b111b8a65db51cae3197e9a5fb9e2944c31baeee7bd96eb5f8f9beb18d290ebc",
+    "panelDiscovery": "5125f5c54b318abf44a5dea72bb3bc677ee9f9cf0a6d92ca8e6a2b65fc7607c0"
+  },
+  "decision": "REJECT_CRACKED_TEMPO_PROTOTYPE",
+  "finding": "The new Dusk-only conditional draw effect passed both local edges on discovery and held-out evidence while both Ashwarden controls stayed exactly zero. In the discovery pilot panel, however, both Duskblade activation upper 95% bounds were below the 0.25-SD target (Eclipse Slash 0.2309; Shatterhymn 0.2009), and the combined duration upper bound was 0.2969 turns. The prototype is not promoted.",
+  "issue": 421,
+  "noFurtherRows": [
+    "No held-out panel rows were run after the decisive discovery rejection.",
+    "No whole-run rows were run.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "abe0147b3d18d0a58c1ca66595eb3b1d3e59e2b4e07083840d5ef4f1b1b26292",
+  "reliability": {
+    "addedStalls": 0,
+    "errors": 0
+  },
+  "researchRows": 1536,
+  "runnerSha256": "3d21f8722002a6961d172603826b556373c03a6d24a2d7437b20654d92dcf2b9",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_NEGATIVE"
+}

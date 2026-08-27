@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v15",
+  "protocolSha256": "d82a870f33270bebee30192c765812c203bc776e16bf260a59707c9f97788371",
+  "decision": "reject",
+  "reason": "Mistbound cleared all four broad-movement grids, but the frozen 128-seed discovery rectangle added one Duskblade-v5 planned-build/random-play stall; Duskblade-v0 RandomBuild also remained outside the 0.10 point bound at the maximum, so v15 could not enter validation.",
+  "evidence": {
+    "separationDiscoverySha256": "7077dc8767c66fca80c9ff2ebd8ddec94a169550f8cf96e80b2b80e8fc8674b5",
+    "separationValidationSha256": "a0acfbd5e53ace0959a272ec128e3dc6411b0866b51fafe342c9cdc9e1d64e9b",
+    "panelDiscoverySha256": "06f25f354fa620f8feea16539a2bb8c119df7e0ebc90542bffd75f34601025d0",
+    "panelValidationSha256": "535ecf093f5b525f669a19266337953b558ba4b437e7d11f5472230dd38115a0",
+    "controlsDiscoverySha256": "325565a535067b9fcc6d9b88caa8381cac0a2241c81c0ecdd9870927396f0cad"
+  },
+  "boundedNegative": {
+    "ashMovementClear": true,
+    "duskbladeVow0RandomBuildMovement": 0.1171875,
+    "duskbladeVow0MovementInterval": [
+      0.015625,
+      0.21875
+    ],
+    "candidateAddedStalls": 1,
+    "stallGrid": "duskblade:v5:arm3",
+    "stallSeed": 162121,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

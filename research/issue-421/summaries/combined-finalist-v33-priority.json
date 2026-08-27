@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v33-priority",
+  "protocolSha256": "4cac01897ab029903ad0dc89184af5a5c38c1a14a5c668bfee36fc77c8dbcc3b",
+  "decision": "reject",
+  "reason": "All controlled, package-panel and whole-run control gates admitted, but neither Dusk route produced a held-out Vow-5 policy at least 0.35 above RandomBuild.",
+  "evidence": {
+    "separationDiscoverySha256": "b71184e4e0ba9208abe44dd8514a5895feb3377e9d7199ad78e84b4d3ac4b08c",
+    "panelDiscovery32Sha256": "e903e3e45ba04b5089df0d3a1b5d336a2a64cff6d8f1682f328b75c3d1ddfc98",
+    "panelDiscovery128Sha256": "9ab1442c1615e7b517d5cbe6595ac413f1a5c079d8ebf344d91ebf904a7914c7",
+    "controlsDiscoverySha256": "4c5be28363fc4ac126caffdfca3f54233c1eccff6daa155a3e1863cedb4cdf8f",
+    "separationValidationSha256": "b5c120a4cbeb961d8902baddacfdfc026784ae746c7619109fb13151699d11a3",
+    "panelValidation32Sha256": "083d9d6a10c174f9bbfd28e6cd352b693723a3818260220e7694d58373153403",
+    "panelValidation128Sha256": "e335b5b113e608db1d2391ea6fcbb0a94ed60de06b2365c7030631b47aa3fcd3",
+    "controlsValidationSha256": "cbe40aeef8fcc9bf54114f4e8d63d4decf1e1613970eec5892cfff184c936aa4",
+    "screenSha256": "0bd55c7690646b49a4de093718a43494e5fffaaec36721e7ec5de6cd6940ca78",
+    "repertoireValidationSha256": "0242f3f94000ee4577cc2fdb6e1d3872c1614640c7a9d23fd4bd55f72abc1b5d"
+  },
+  "boundedNegative": {
+    "scope": "Two-times combo-aware Ward setup priority with the V25 Dusk route mechanics and the root-524 policy screen",
+    "screenSelectionSha256": "a030e6c6f77777a9fcb03193c9041bb5402b22555e643e7cccdbbeccc9eb1986",
+    "randomBuildVow5WinRate": 0.15625,
+    "afterimageBestHeldoutWinRate": 0.28125,
+    "scorelineBestHeldoutWinRate": 0.3125,
+    "afterimageCreditedPolicies": 0,
+    "scorelineCreditedPolicies": 0,
+    "candidateAddedStalls": 0,
+    "candidateErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

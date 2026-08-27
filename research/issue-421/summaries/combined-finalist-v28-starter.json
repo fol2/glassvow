@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v28-starter",
+  "protocolSha256": "c3fd56a9ed75c9cd6e05ae5e989babbf342d9b8a8f56de7cd8e887b0080ef924",
+  "decision": "reject-panel-context",
+  "reason": "The starter-mediated candidate passed controlled separation, but the panel's four stronger Held Light controls prevented Ward from ever being played, leaving the Afterimage route with zero witnesses.",
+  "evidence": {
+    "separationDiscoverySha256": "3d1ab57995d9d7d8622d97eab6d09bbef4bb932b74e00e3c1dd75b2180b3acbf",
+    "panelDiscoverySha256": "5edf4a589f8364e77599632c0a640ac6fde6cb389a0c91d70d09defb3ccbb35a"
+  },
+  "boundedNegative": {
+    "scope": "A ten-card panel containing four 8-Ward Held Light controls alongside one 5-Ward producer",
+    "afterimagePolicyWitnesses": 0,
+    "afterimageActivationPoint": 0.008781923800781986,
+    "afterimageAddedStalls": 0,
+    "scorelinePolicyWitnesses": 17,
+    "scorelineAspectSeparationP025": 0.40625,
+    "protectedSeedsUsed": false
+  },
+  "nextBoundedStep": "Repeat the panel once with an all-attack neutral base so the manipulated producer, rather than a stronger always-on control, owns the defensive decision."
+}

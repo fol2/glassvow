@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "question": "Are the four mediator packages viable and reliable without the two Duskblade Energy refunds that pushed RandomBuild to its ceiling?",
+  "candidate": {
+    "contentSha256": "c2aab0d298e5a0ab8577b4a11784e851fe48dddb4618f7925e9df5ddde141db2",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "fortify",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Keep the current-main card catalogue and reward pools unchanged.",
+      "Keep the four aspect-gated mediators and their conditional damage or Ward responses.",
+      "Do not refund Energy when Scoreline or Afterimage is consumed."
+    ],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedV16aControlsSha256": "d2a47386a1204c8172300d3bf0651c58ac1e0d0a984be6388f1ce758a6aceea8",
+      "rejectedV16aSummarySha256": "b6b2e64e01f6736b37f88f24204a311392f4b084d10ae4c207da5a3e427b0e59"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "c2aab0d298e5a0ab8577b4a11784e851fe48dddb4618f7925e9df5ddde141db2",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "b89cc080c24a01e183dd210687abf2a10fbdc63d0ff122b0d7a08f8134c12ff6",
+    "pilotSha256": "6c832e6bfcf0c6f015d1ac3e80c754a03fd60972672f1a4da1dd8c250b2cc6a9",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "43307a096539ddaf9fcd86fb7a0f3286b32d8705bea33915332270bf4af19130",
+    "cemSha256": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+    "cemSeedPacketSha256": "5ba28729e1b48fc60bb359e73a4078c65d6407c34a4fb5ca7584438a87184ee3",
+    "prototypePatchSha256": "cd32e1f5f213bcb50107b17b4b01303cc3c067561306a2b4f3cd06135d357fd5"
+  },
+  "seedBases": {
+    "separationDiscovery": 176000,
+    "separationValidation": 177000,
+    "panelDiscovery": 178000,
+    "panelValidation": 179000,
+    "policyRootDiscovery": 486,
+    "policyRootValidation": 487,
+    "controlDiscovery": 180000,
+    "controlValidation": 181000,
+    "cemSamplerRoot": 488,
+    "cemRoot": 489,
+    "cemTrain": 182000,
+    "cemHoldout": 183000,
+    "cemFinalValidation": 184000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "176000-176127",
+      "validation": "177000-177127"
+    },
+    "panels": {
+      "discovery": "root 486, indices 0-127, seeds 178000-178127",
+      "validation": "root 487, indices 0-127, seeds 179000-179127"
+    },
+    "controls": {
+      "discovery": "180000-180127",
+      "validation": "181000-181127"
+    },
+    "cemTrain": "six Duskblade-v5 islands, generations 0-5, eight CRN seeds per generation, 182000-182047",
+    "cemHoldout": "all six final policies, 183000-183063",
+    "finalValidation": "all six frozen final policies, paired candidate/live, 184000-184063"
+  },
+  "competingOptions": [
+    {
+      "id": "responses-without-refunds-pass",
+      "statement": "Conditional damage and Ward alone retain four packages, Dusk endpoints and clear controls."
+    },
+    {
+      "id": "responses-without-refunds-fail",
+      "statement": "Local activation, endpoint C2, retention, reliability or Vow-5 fails without refund tempo."
+    }
+  ],
+  "cem": {
+    "islands": [6, 7, 8, 9, 10, 11],
+    "population": 16,
+    "elite": 4,
+    "maximumGenerations": 6,
+    "trainingSeedsPerGeneration": 8,
+    "holdoutSeeds": 64,
+    "assignedRoutes": {
+      "6": "dusk-afterimage-guard",
+      "7": "dusk-afterimage-guard",
+      "8": "dusk-afterimage-guard",
+      "9": "dusk-scoreline",
+      "10": "dusk-scoreline",
+      "11": "dusk-scoreline"
+    },
+    "seedPacket": "protocols/cem-v11-seeds.json"
+  },
+  "estimands": {
+    "routeViability": "At least two final policies per route activate the mediator and beat held-out RandomBuild arm 2 by at least 0.35.",
+    "retention": "At least two distinct final policies remain within 0.10 of the overall top, and route-best rates remain within 0.10.",
+    "reliability": "No CEM holdout fault and no candidate-added stall or simulator error.",
+    "vow5": "Every final-policy validation win rate is at most 0.90."
+  },
+  "successRule": {
+    "local": "All four packages pass functional separation, activation, aspect separation, duration and stall gates.",
+    "routeViability": "At least two independently fitted final policies per assigned route meet activation and the 0.35 C2 margin.",
+    "retention": "Both assigned routes retain distinct endpoints without collapse.",
+    "reliability": "Zero simulator errors and no candidate-added stalls.",
+    "vow5": "All final-policy win rates are at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "cemTrainingRowsMaximum": 4608,
+    "cemHoldoutRows": 384,
+    "cemFinalValidationRowsPerContent": 384,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048
+  },
+  "cheapestDiscriminatingExperiment": "Run 32-pair separation and policy panels, then their independent validation. Run controls before the existing six-island mini-CEM.",
+  "inconclusiveRule": "Only a non-decisive policy-panel result may extend once from 32 to 128 pairs. CEM and the 64-seed final rectangle are final.",
+  "stopRule": "Reject on a failed local gate, broad movement, fault, fewer than two C2 endpoints per route, collapse, added stall/error or Vow-5 above 0.90. Detector mutations remain forbidden until the repertoire passes.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "question": "Can the frozen V33-V38 evidence identify which of mediator payoff, package-completion acquisition priority, Ward setup priority or Faultline rarity causally controls local activation, route viability, reliability and RandomBuild movement?",
+  "competingOptions": [
+    "The frozen evidence identifies at least one lever with an isolated, reproducible causal contrast.",
+    "The adaptive studies only bound candidate combinations and do not identify individual lever effects."
+  ],
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "ledgerSha256AtV38Freeze": "78651f5d2b51b5f11bd4466500542643083e3def1c56a705463d3b323adcd493",
+    "files": {
+      "protocols/combined-finalist-v33-priority.json": "4cac01897ab029903ad0dc89184af5a5c38c1a14a5c668bfee36fc77c8dbcc3b",
+      "protocols/combined-finalist-v34-mediator-payoff.json": "e480c4b4a147a17bf26dba412daf86996680e21075e4aa31b119482ec2988b93",
+      "protocols/combined-finalist-v35-acquisition.json": "e21897cdda44c8eadd419f549a3b4113eff1cb0a6b8c293ab51d8c57d12ffed6",
+      "protocols/combined-finalist-v36-no-combat-bonus.json": "4481cc6de6d5309a9f1472ecf3f045efceade217e4ad0a5239399c9eff89366b",
+      "protocols/combined-finalist-v37-calibrated-setup.json": "b160986419f37b5d9b80cf97e4ad0be404e6a48f487d55f126eb96dafeef6f9c",
+      "protocols/combined-finalist-v38-scoreline-rarity.json": "163ba57eb52e8836aa044ba86e388d39203503f3cd331836d8b0ae37063fc28a",
+      "summaries/combined-finalist-v33-priority.json": "a584230ff8df328222744f33ad6db22e0bcbae2be79d92d6c864990aa8148964",
+      "summaries/combined-finalist-v34-mediator-payoff.json": "8f4751eca192d5f8cf5684a8e688fe528d600ed79442da53f9ad39ba48a03478",
+      "summaries/combined-finalist-v35-acquisition.json": "61c9b26af90e6f7975853bfd421198a2e2ebcaee2fe7596796f04998d68cec4f",
+      "summaries/combined-finalist-v36-no-combat-bonus.json": "1598a082e0e5f5ededb82a9ff85069ffb714e4c7266fde27d4f2b2a5e6dbec26",
+      "summaries/combined-finalist-v37-calibrated-setup.json": "9eb8f8948a76bee98eb4aae4168819dbfa97a100c07a12ae0c45b4148ce5bf09",
+      "summaries/combined-finalist-v38-scoreline-rarity.json": "aa695bd0818d164fd7cd7a4b34d63c88717ffba5fac9eff01623a4f4523929dc"
+    }
+  },
+  "designMatrix": [
+    {"study": "v33", "mediatorPayoff": "low", "acquisitionPriority": 2, "wardSetupPriority": 2, "faultlineRarity": "uncommon"},
+    {"study": "v34", "mediatorPayoff": "high", "acquisitionPriority": 2, "wardSetupPriority": 2, "faultlineRarity": "uncommon"},
+    {"study": "v35", "mediatorPayoff": "high", "acquisitionPriority": 4, "wardSetupPriority": 2, "faultlineRarity": "uncommon"},
+    {"study": "v36", "mediatorPayoff": "high", "acquisitionPriority": 4, "wardSetupPriority": 0, "faultlineRarity": "uncommon"},
+    {"study": "v37", "mediatorPayoff": "high", "acquisitionPriority": 4, "wardSetupPriority": 1, "faultlineRarity": "uncommon"},
+    {"study": "v38", "mediatorPayoff": "high", "acquisitionPriority": 4, "wardSetupPriority": 1, "faultlineRarity": "rare"}
+  ],
+  "studyFiles": {
+    "v33": ["protocols/combined-finalist-v33-priority.json", "summaries/combined-finalist-v33-priority.json"],
+    "v34": ["protocols/combined-finalist-v34-mediator-payoff.json", "summaries/combined-finalist-v34-mediator-payoff.json"],
+    "v35": ["protocols/combined-finalist-v35-acquisition.json", "summaries/combined-finalist-v35-acquisition.json"],
+    "v36": ["protocols/combined-finalist-v36-no-combat-bonus.json", "summaries/combined-finalist-v36-no-combat-bonus.json"],
+    "v37": ["protocols/combined-finalist-v37-calibrated-setup.json", "summaries/combined-finalist-v37-calibrated-setup.json"],
+    "v38": ["protocols/combined-finalist-v38-scoreline-rarity.json", "summaries/combined-finalist-v38-scoreline-rarity.json"]
+  },
+  "cheapestDiscriminatingExperiment": "Perform a zero-new-row audit of every one-lever pair. A numerical effect is identifiable only when the two studies use the same policies and common simulation seeds for the relevant endpoint; path-invariance reuse may establish that an endpoint is unaffected, but may not substitute for a missing between-level contrast.",
+  "budget": {
+    "newSimulatorRows": 0,
+    "protectedSeeds": 0,
+    "maximumStudies": 6
+  },
+  "successRule": "Identify a lever only when at least one one-lever pair has the same relevant policy roots and seed cohort, or two independent held-out one-lever pairs establish the same direction under exact path invariance.",
+  "stopRule": "Do not estimate an effect from unmatched studies, post-treatment mediator slices or a study stopped at a different gate. Stop the audit after all one-lever pairs are classified.",
+  "inconclusiveRule": "If no lever meets the success rule, conclude that V33-V38 are bounded combination-level negatives only and preregister one common-random-number identification experiment before any new candidate is selected.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

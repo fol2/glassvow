@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v29-starter-panel",
+  "protocolSha256": "65976bf9512b78dd319f51e945582de9cbd4c577c49cde6c85704ddc1238933b",
+  "decision": "reject-policy-blindness",
+  "reason": "Removing the stronger panel controls exposed a balance-pilot blind spot: Ward was still skipped whenever immediate block was unnecessary, so it could not be valued as an Afterimage setup action.",
+  "evidence": {
+    "separationDiscoverySha256": "e3893822b38f76567fe4626da0b63dd97401bed4cfd467724698e103d088e26b",
+    "panelDiscoverySha256": "279fe2156d0aedd357e5fdf74366a933dd47209c3194c2cca2b1e6eb7af65875"
+  },
+  "boundedNegative": {
+    "scope": "Starter-mediated Afterimage under the current pilot, which skips non-urgent Ward",
+    "afterimagePolicyWitnesses": 1,
+    "afterimageActivationPoint": -0.01601716536172092,
+    "afterimageAspectSeparationP025": 0.375,
+    "afterimageAddedStalls": 0,
+    "scorelinePolicyWitnesses": 14,
+    "scorelineAspectSeparationP025": 0.28125,
+    "protectedSeedsUsed": false
+  }
+}

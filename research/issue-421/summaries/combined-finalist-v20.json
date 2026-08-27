@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v20",
+  "protocolSha256": "7a596675c32659d33b2051edf05f05018a625887380b5b970cf4322074dd8a09",
+  "decision": "reject",
+  "reason": "Frozen route-active policies also failed C2 before optimisation, so the v19 content payoff is insufficient rather than merely lost by noisy CEM fitting.",
+  "evidence": {
+    "frozenRepertoireDiscoverySha256": "6c85b164876bd4e2e443d9073577886349cb78807c631d0c98444d661ee0bfa7"
+  },
+  "boundedNegative": {
+    "duskbladeVow0RandomBuildRate": 0.28125,
+    "duskbladeVow0BestPolicyRate": 0.5625,
+    "duskbladeVow0BestMargin": 0.28125,
+    "duskbladeVow5RandomBuildRate": 0.078125,
+    "duskbladeVow5AfterimageBestRate": 0.1875,
+    "duskbladeVow5ScorelineBestRate": 0.21875,
+    "creditedPolicies": 0,
+    "candidateAddedStalls": 1,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

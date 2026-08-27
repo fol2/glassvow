@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "question": "Does the midpoint Dusk tempo and stronger planned completion policy retain four causal packages without stalls or broad RandomBuild movement?",
+  "candidate": {
+    "contentSha256": "a83556468b3061da0ad2f9ce05fc89092e605f55f8ed057df648db650af11dcf",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-poison",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "scoreline",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "mirrorEdge",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedCombinedV4ControlsSha256": "e6ece926812f4e361b39305c4b578f696edb6d36779f61386387f2fc14efbaab",
+      "v4StallDiagnostic": "seed 98030, Duskblade vow 5 arm 3; v5 prototype completed in 29 turns"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "a83556468b3061da0ad2f9ce05fc89092e605f55f8ed057df648db650af11dcf",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "88681d8fc04618f1a7f14e9c06b41efa77767a978b9c3a53fc19541d461e42bc",
+    "pilotSha256": "360967cea2c09ec3f60a7644ed97663fa4bdd27b314f86866fd0cba1cd88013b",
+    "probeSha256": "49e12cb300d35bca45332758b049e3cc8ab2f3776034c5a9ee2deeda7c12335f",
+    "researchBalanceSimSha256": "1f73de23ad6611052b012a7efb076cea6263a32a9d14b29d33e2134237dc25a5",
+    "prototypePatchSha256": "4c543369dafd2ae7b905b987408d19eb9fc02990067185ec2afdde90c7094a9c"
+  },
+  "seedBases": {
+    "separationDiscovery": 102000,
+    "separationValidation": 103000,
+    "panelDiscovery": 104000,
+    "panelValidation": 105000,
+    "policyRootDiscovery": 442,
+    "policyRootValidation": 443,
+    "controlDiscovery": 106000,
+    "controlValidation": 107000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "102000-102127",
+      "validation": "103000-103127"
+    },
+    "panels": {
+      "discovery": "root 442, indices 0-127, seeds 104000-104127",
+      "validation": "root 443, indices 0-127, seeds 105000-105127"
+    },
+    "controls": {
+      "discovery": "106000-106127",
+      "validation": "107000-107127"
+    },
+    "landscape": {
+      "discovery": "root 444, indices 0-127, seeds 108000-108015",
+      "validation": "root 445, indices 0-127, seeds 109000-109015"
+    }
+  },
+  "competingOptions": [
+    {
+      "id": "v5-admissible",
+      "statement": "All packages remain distinct and practical, planned policies complete them, and whole-run guardrails stay bounded."
+    },
+    {
+      "id": "v5-inactive-or-unsafe",
+      "statement": "A package collapses or the exact candidate causes a stall, global movement, identity, C2 or Vow-5 failure."
+    }
+  ],
+  "estimands": {
+    "functionalSeparation": "Named diagonal interaction lower 95% bound at least 0.25 SD; every off-diagonal upper bound below 0.25.",
+    "panelActivation": "Named consumer response in AB minus B, standardised by pooled consumer response; lower 95% bound at least 0.25 SD.",
+    "policySensitivity": "At least eight independent policies per package and split apply and consume the mediator with positive consumer activation.",
+    "buildSensitivity": "A planned build policy receives two existing aspect-bonus units only when a reward completes a package already represented in its deck. RandomBuild is unchanged.",
+    "reliability": "Applicable-aspect package panels add no non-win and do not lengthen combat; whole-run errors and stalls fail closed.",
+    "reachability": "Legacy rewards acquire, play and activate both components for at least two distinct policies per applicable aspect/vow and split, or a frozen deterministic acquisition proof passes.",
+    "globalMovement": "Candidate-minus-live RandomBuild arm-2 win-rate point movement is at most 0.10 in magnitude per grid; an interval crossing the bound extends under the frozen ladder."
+  },
+  "successRule": {
+    "functionalSeparation": "All four diagonals and twelve off-diagonals pass discovery and held-out evidence.",
+    "packageActivation": "All four packages meet activation, witness, aspect-separation, reliability and duration gates in both splits.",
+    "aspectIdentity": "Scoreline and Afterimage remain Dusk-only; Smolder and Bloodfire remain Ash-only.",
+    "reachability": "All four packages meet the legacy-economy rule in both splits.",
+    "globalMovement": "Every held-out RandomBuild movement is within 0.10.",
+    "c2": "In every grid, RandomBuild arm 2 is below 0.50 and the top viable landscape policy minus arm 2 is at least 0.35.",
+    "vow5": "Every held-out top viable-policy win rate is at most 0.90.",
+    "reliability": "No simulator errors or stalls."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "landscapeRowsMaximumPerContentAndSplit": 8192,
+    "wholeRunRowsBeforePackagePass": 0
+  },
+  "cheapestDiscriminatingExperiment": "Re-run separation and panels, then paired 32-seed controls. Landscape work starts only after controls clear or remain genuinely inconclusive under the frozen ladder.",
+  "inconclusiveRule": "Intervals overlapping a threshold at 32 extend to 64 and 128 on the same cohort. At 128 they stop inconclusive. Candidate values, pilot logic and estimands do not change.",
+  "stopRule": "Reject immediately after any decisive package, separation, reliability, global-movement, identity, C2 or Vow-5 failure. Detector mutations remain forbidden until all content gates pass.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

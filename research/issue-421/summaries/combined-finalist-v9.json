@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v9",
+  "protocolSha256": "e71e38fcaf69b8950a2c25a1313b1b21e5af4a9331b65b1cfc8c37cb027ba76a",
+  "decision": "reject",
+  "reason": "A frozen 13-policy repertoire selected from 512 policies did not retain a Duskblade-v5 C2 endpoint on 64 independent seeds.",
+  "evidence": {
+    "screenSha256": "c29a216f6a059701425f0543f8b13bbccc02ad416aaf68735ed0b6a84b7b0560",
+    "selectionSha256": "cb18601a2f0e5e5af64e0dac0c901072be1fcf89fb0aa31b76a8908f3614cc65",
+    "validationSha256": "a8d02b78dc59ac1d4ce3adf1b58ddaf72ef3f0a5de7cb79dad7496c627bc5ff7"
+  },
+  "boundedNegative": {
+    "screenPolicies": 512,
+    "selectedUniquePolicies": 13,
+    "heldoutSeeds": 64,
+    "bestHeldoutWinRate": 0.3125,
+    "randomBuildRate": 0.109375,
+    "creditedPoliciesPerRoute": 0,
+    "addedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

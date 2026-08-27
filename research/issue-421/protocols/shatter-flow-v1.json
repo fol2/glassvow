@@ -1,0 +1,75 @@
+{
+  "budget": {
+    "controlledRowsMaximum": 2048,
+    "firstLookPairsPerArmAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "panelRowsMaximum": 2048,
+    "wholeRunRowsBeforePass": 0
+  },
+  "candidate": {
+    "enabler": "fractureRhythm",
+    "package": "dusk-shatter-flow",
+    "shatterProducers": [
+      "chisel",
+      "limitBreak"
+    ],
+    "reachability": "Chisel is in the Duskblade starter deck; Fracture Rhythm is in the uncommon reward pool; Annealing Rite remains in the rare reward pool.",
+    "shippingChangesAtThisStage": [],
+    "specification": {
+      "cardCost": 1,
+      "cardRarity": "uncommon",
+      "drawPerShatterPerStack": 2,
+      "energyPerShatterPerStack": 1,
+      "status": "shatterflow",
+      "upgradeCost": 0
+    }
+  },
+  "cheapestDiscriminatingExperiment": "Matched none/A/B/AB legal-combat draw contrasts for Fracture Rhythm with Chisel and Annealing Rite in a near-Shatter state, followed only on local success by matched short pilot panels for Duskblade and the Ashwarden aspect control.",
+  "competingOptions": [
+    {
+      "id": "persistent-shatter-flow-suffices",
+      "statement": "One persistent action-economy power turns the Duskblade's existing Shatter producers into a practical strategy package without global difficulty movement."
+    },
+    {
+      "id": "persistent-shatter-flow-insufficient",
+      "statement": "The held-out practical interaction or panel target is ruled out; reject the prototype and continue to a materially different mechanism within issue #421."
+    }
+  ],
+  "estimands": {
+    "bootstrap": "Matched seed-block percentile bootstrap with 5000 draws; discovery seed 42401 and validation seed 42402.",
+    "controlledEdge": "For draw events, I = AB - A - B + none within every matched seed. Standardise I by the pooled population standard deviation of the four arm responses. An all-zero negative control is recorded as a degenerate zero interval; any other zero scale is an automatic rejection.",
+    "panelActivation": "For combat utility U = damage - hpLost, activation is U(AB) - max(U(A), U(B), U(none)) within every matched seed. Standardise by the pooled population standard deviation of all four arm utilities; a zero scale is an automatic rejection.",
+    "panelAspectSeparation": "Paired Duskblade activation minus Ashwarden activation on the same seed and arm decks.",
+    "panelDuration": "AB turns minus the minimum turns among A, B and none for matched rows that all win; any AB-only loss or capped combat counts as an added stall.",
+    "precisionUnit": "The seed is the resampling block. Exact repeated values remain evidence of deterministic reproducibility, not additional within-seed samples."
+  },
+  "immutableInputs": {
+    "candidateContentSha256": "32d3753b6fd61d3546123b932ee63b3c58ccdec560d2e09ae04d774bb482f88b",
+    "combatRulesSha256": "a40af5c3168cf984fbd094167e6c31d18e69e29d99f046a6566b6ef0710f3671",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "pilotSha256": "5e52b5b0db1011789c74a79d2c5fe6487f43dd5a7909cbd49c233565309f7976",
+    "probeSha256": "63fd7e70d17a37861ed7d1ad5d07a29168287ce96071596a5c93059aedb07451",
+    "prototypePatchSha256": "8c06782b008a97c5e7f3f3f960ecca7366047afc972023b9900a06aa707825c2",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "inconclusiveRule": "If an interval overlaps its practical target at 32 pairs, extend the same frozen cohort to 64 and then 128 pairs. At 128 pairs, an overlapping interval is inconclusive and the family stops without promotion.",
+  "noveltyBoundary": "This does not rerun the exhausted Shatter-relic package. The new mediator is persistent action economy after Shatter, not fixed Ember or off-target damage from Prism Charm or Bell of Endings.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  },
+  "question": "Can a minimal persistent action-economy payoff turn the Duskblade's existing Shatter producers into the missing practical strategy package?",
+  "researchSeeds": {
+    "discovery": "66000-66127",
+    "validation": "67000-67127"
+  },
+  "schemaVersion": 1,
+  "stopRule": "Reject immediately when a held-out upper 95% bound is below 0.25 standard deviations, any error or added stall occurs, or the Ashwarden control is not functionally separable. Do not spend whole-run rows after rejection.",
+  "successRule": {
+    "aspectSeparation": "The held-out Duskblade package activation exceeds the Ashwarden control with a positive paired lower 95% bound.",
+    "duration": "The held-out package does not increase mean combat duration; upper 95% turn delta is at most 0.25 turns.",
+    "localEdges": "Both Duskblade held-out lower 95% standardised draw-interaction bounds are at least 0.25, while Ashwarden effects remain below the target.",
+    "panel": "Both Duskblade held-out package activation lower 95% standardised bounds are at least 0.25.",
+    "reliability": "Zero added errors and stalls on both splits."
+  }
+}

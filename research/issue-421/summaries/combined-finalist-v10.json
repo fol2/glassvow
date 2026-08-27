@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v10",
+  "protocolSha256": "722b0883509d8d0638d68b04a393ed2d6755df11df681b6a1e5ff2b88c8d16e3",
+  "decision": "reject",
+  "reason": "Package and 128-seed control gates passed, but the immutable v9 repertoire did not meet C2 on fresh Duskblade-v0 or v5 discovery seeds.",
+  "evidence": {
+    "separationDiscoverySha256": "c1b4d7589340238e3578bb7d776296cc046d3f64520b2a07bfeb471300641b08",
+    "separationValidationSha256": "58289956210c2a76e6cd102f53366fc0c1eaeeb75f7746d8422ceb99c67c66bc",
+    "panelDiscoverySha256": "5fd764d69dd21c41cb39ac077acde65c86ceb5903263a0132fadf85be070cb75",
+    "panelValidationSha256": "15c9a2a66d3c2a19847267a08f53bac8276d76682d19bfb2dd5a6f6c90f80226",
+    "controlsDiscoverySha256": "4ee31a6f946b75e29051e573d1071085a14d69cba4a029d6893b7651ca2ee5a8",
+    "controlsValidationSha256": "84794d0304a98bd3fbaeb9b96fd0c771999637fafbfcc232965a86a5d2d0aa68",
+    "frozenRepertoireDiscoverySha256": "ac84425ef219929c9dc9fd983e714a1ea53bbf2817e971363a4cf451c1bb1308"
+  },
+  "boundedNegative": {
+    "duskbladeVow0BestPolicyRate": 0.625,
+    "duskbladeVow0RandomBuildRate": 0.28125,
+    "duskbladeVow5BestPolicyRate": 0.21875,
+    "duskbladeVow5RandomBuildRate": 0.046875,
+    "addedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

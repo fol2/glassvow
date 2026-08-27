@@ -1,0 +1,27 @@
+{
+  "analysisSha256": {
+    "functionalSeparationDiscovery": "af9c003522faab6f577fa4d4913a20abe918265c7500366a5b9faac3d0f5b910",
+    "functionalSeparationValidation": "d1720e168d8f47c7505595b666a16e274e3cba331f1619f52c5e6c0f6f886b05",
+    "policyPanelDiscovery": "55434109c2329f1d60e996e8d0725602f8e0e9e595d6885c70ae4fd06f8d4cd4"
+  },
+  "decision": "REJECT_EXACT_COMBINED_FINALIST_V1",
+  "finding": "All four intended package interactions reproduced on discovery and held-out controlled matrices, and all twelve cross-package interactions stayed below target. The first independent-policy panel then rejected the exact combination: none of the four packages met the frozen activation gate, Ash poison added one non-win, and Dusk ward-mirror increased combat duration while producing only six policy witnesses. No whole-run, detector or protected-seed work was permitted after that decisive failure.",
+  "issue": 421,
+  "limits": [
+    "This is a bounded negative for candidate content d1e725734176ed9dde0d7712fa5bb9c11142847277b9664a821053b6d63f88b5 and its frozen pilot/protocol only.",
+    "The panel also showed that capped total combat damage is a poor activation response when every arm wins; any successor experiment must preregister a mechanism-level response rather than reinterpret these rows.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "policyWitnesses": {
+    "ash-hand-size": 16,
+    "ash-poison-catalyst": 15,
+    "dusk-scoreline": 19,
+    "dusk-ward-mirror": 6
+  },
+  "protocolSha256": "a7a02a9a76c8265b1d53ba1619347c95a5619c4853f50003174c0955d8c2b5c9",
+  "researchRows": 5120,
+  "runnerSha256": "d3fb43eb75a4d946b7eea6c0d96ab2c7682817453bcbd5202e4926fe6fe2532f",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_NEGATIVE"
+}

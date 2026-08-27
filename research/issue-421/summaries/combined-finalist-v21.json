@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v21",
+  "protocolSha256": "a2c0396718db1c8691951df55b2669353fef375339817485fb67cc0a01bb9f24",
+  "decision": "reject",
+  "reason": "Four-charge capacity passed local gates but did not improve Vow-5 endpoint viability, exhausting the fixed-bonus and charge-count lever.",
+  "evidence": {
+    "separationDiscoverySha256": "a730859a415e511458e13d611fad07bb96a3539948dd99784d766334b39e86e9",
+    "separationValidationSha256": "058a2355aa1dd3ccb5e02231373f84925f78131a07ddab0d4ab6c4c0934f80a1",
+    "panelDiscoverySha256": "4280acd5fe7aeb795bf458dc64850e79b4d731223ccaf6c3da94194d6945f9ca",
+    "panelValidationSha256": "1712f9722b674e9619c37ac89ebc7759f6349606ed6b4ef3ae556b4fdc26463b",
+    "frozenRepertoireDiscoverySha256": "6ab86702d368e2562d14a4a2ca03232a151d214fe3f6564ea9e480cddb87030c"
+  },
+  "boundedNegative": {
+    "duskbladeVow0RandomBuildRate": 0.328125,
+    "duskbladeVow0AfterimageBestRate": 0.5625,
+    "duskbladeVow0ScorelineBestRate": 0.59375,
+    "duskbladeVow5RandomBuildRate": 0.078125,
+    "duskbladeVow5AfterimageBestRate": 0.1875,
+    "duskbladeVow5ScorelineBestRate": 0.1875,
+    "creditedPolicies": 0,
+    "candidateAddedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

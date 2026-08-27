@@ -1,0 +1,77 @@
+{
+  "budget": {
+    "controlledRowsMaximum": 2048,
+    "firstLookPairsPerArmAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "panelRowsMaximum": 2048,
+    "wholeRunRowsBeforePass": 0
+  },
+  "candidate": {
+    "consumer": "crackstep",
+    "package": "dusk-cracked-tempo",
+    "producers": [
+      "eclipseSlash",
+      "warCry"
+    ],
+    "reachability": "Eclipse Slash is exclusive to the Duskblade starter deck; Crackstep is in the common reward pool; Shatterhymn remains in the uncommon reward pool.",
+    "shippingChangesAtThisStage": [],
+    "specification": {
+      "baseDamage": 5,
+      "conditionalDraw": 2,
+      "conditionalEnergyRefund": 1,
+      "cost": 1,
+      "effect": "crackedTempo",
+      "exhaust": true,
+      "rarity": "common",
+      "upgradeDamage": 7
+    }
+  },
+  "cheapestDiscriminatingExperiment": "Matched none/A/B/AB legal-combat draw contrasts for Eclipse Slash->Crackstep and Shatterhymn->Crackstep, followed only on local success by matched short pilot panels for Duskblade and the Ashwarden aspect control.",
+  "competingOptions": [
+    {
+      "id": "conditional-tempo-suffices",
+      "statement": "A one-use Dusk-only Cracked action-economy payoff converts a real starter/reward edge into practical package activation without another scalar damage route."
+    },
+    {
+      "id": "conditional-tempo-insufficient",
+      "statement": "The held-out practical interaction or panel target is ruled out; reject the prototype and continue to a materially different mechanism within issue #421."
+    }
+  ],
+  "estimands": {
+    "bootstrap": "Matched seed-block percentile bootstrap with 5000 draws; discovery seed 42301 and validation seed 42302.",
+    "controlledEdge": "For draw events, I = AB - A - B + none within every matched seed. Standardise I by the pooled population standard deviation of the four arm responses; a zero scale is an automatic rejection.",
+    "panelActivation": "For combat utility U = damage - hpLost, activation is U(AB) - max(U(A), U(B), U(none)) within every matched seed. Standardise by the pooled population standard deviation of all four arm utilities; a zero scale is an automatic rejection.",
+    "panelAspectSeparation": "Paired Duskblade activation minus Ashwarden activation on the same seed and arm decks.",
+    "panelDuration": "AB turns minus the minimum turns among A, B and none for matched rows that all win; any AB-only loss or capped combat counts as an added stall.",
+    "precisionUnit": "The seed is the resampling block. Exact repeated values remain evidence of deterministic reproducibility, not additional within-seed samples."
+  },
+  "immutableInputs": {
+    "candidateContentSha256": "b9ac76fe8a6b4b33a7a3a5ec02968834fb10e625b55e3bfe92db7843fc0e2756",
+    "combatRulesSha256": "a47b886f3f2c459edba2d5f31bfd67dec9b7134f9010492b2608e2a87c9c5a31",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "pilotSha256": "9866d62cbe734496e11d97293fea4404cce514521b267fcc60153bb7cde67dcd",
+    "probeSha256": "63fd7e70d17a37861ed7d1ad5d07a29168287ce96071596a5c93059aedb07451",
+    "prototypePatchSha256": "75fde97acb33181f5954549334237a9fb8c631a75f303d9c1463575c75dad3d9",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "inconclusiveRule": "If an interval overlaps its practical target at 32 pairs, extend the same frozen cohort to 64 and then 128 pairs. At 128 pairs, an overlapping interval is inconclusive and the family stops without promotion.",
+  "noveltyBoundary": "This prototype does not repeat the old Crack damage-payoff label. Its consumer creates conditional draw and an Energy refund, is one-use, and changes action economy rather than multiplying a damage scalar.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  },
+  "question": "Can a minimal conditional action-economy payoff turn the Duskblade's existing Cracked producer into the missing practical strategy package?",
+  "researchSeeds": {
+    "discovery": "64000-64127",
+    "validation": "65000-65127"
+  },
+  "schemaVersion": 1,
+  "stopRule": "Reject immediately when a held-out upper 95% bound is below 0.25 standard deviations, any error or added stall occurs, or the Ashwarden control is not functionally separable. Do not spend whole-run rows after rejection.",
+  "successRule": {
+    "aspectSeparation": "The held-out Duskblade package activation exceeds the Ashwarden control with a positive paired lower 95% bound.",
+    "duration": "The held-out package does not increase mean combat duration; upper 95% turn delta is at most 0.25 turns.",
+    "localEdges": "Both Duskblade held-out lower 95% standardised draw-interaction bounds are at least 0.25, while Ashwarden effects remain below the target.",
+    "panel": "Both Duskblade held-out package activation lower 95% standardised bounds are at least 0.25.",
+    "reliability": "Zero added errors and stalls on both splits."
+  }
+}

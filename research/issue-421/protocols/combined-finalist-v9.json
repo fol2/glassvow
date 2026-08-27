@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "question": "Can deterministic policy screening recover two independently held-out Duskblade v5 endpoints for each admitted mediator without changing v8 content?",
+  "candidate": {
+    "contentSha256": "765c2cdc07f6d773a7230dd830a7b4778bf7af5e72e191bfa8a912528c239a9c",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-poison",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "scoreline",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "mirrorEdge",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedV8LandscapeSha256": "3e45dfb6236ce34a80e0ea694e42243f08af1863f3ab7ad439250603e5c8f433"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "765c2cdc07f6d773a7230dd830a7b4778bf7af5e72e191bfa8a912528c239a9c",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "88681d8fc04618f1a7f14e9c06b41efa77767a978b9c3a53fc19541d461e42bc",
+    "pilotSha256": "360967cea2c09ec3f60a7644ed97663fa4bdd27b314f86866fd0cba1cd88013b",
+    "probeSha256": "ac5356f20317e7a13b88290fee1eab7c0c6944730ede8082658f1bf1e5141680",
+    "researchBalanceSimSha256": "1f73de23ad6611052b012a7efb076cea6263a32a9d14b29d33e2134237dc25a5",
+    "prototypePatchSha256": "50543452faa8cbe836d9aac2683f2665ce7ef02d888ca84c7834ebd4e42b7659"
+  },
+  "seedBases": {
+    "controlDiscovery": 124000,
+    "controlValidation": 125000,
+    "repertoirePolicyRoot": 458,
+    "repertoireScreenSeed": 128000,
+    "repertoireValidationSeed": 129000
+  },
+  "researchCohorts": {
+    "screen": "root 458, indices 0-511, seeds 128000-128003, Duskblade vow 5",
+    "validation": "selected frozen policies, seeds 129000-129063, Duskblade vow 5"
+  },
+  "adoptedExactInputEvidence": {
+    "separationDiscoverySha256": "2e0db346d4f0949be784d3f92d8e5be711af64b1193d6e60db4894275fa395e0",
+    "separationValidationSha256": "6e471143b284f3797f1e4bd9e5dc2c3bdf02151e98b405c51cda877259bc11a2",
+    "panelDiscoverySha256": "299473296528a21753f905adcdee688f2d167fb633e74f8f1204b5ebc2b30a17",
+    "panelValidationSha256": "2c84d3cd9a4ea4088d02fe21e9b8a139f3aaf833c1b415a40856604092c9534a",
+    "controlsDiscoverySha256": "47385914d9861be98f45c9ef6fb973cf2831454f703db71821a07ba7666e8536",
+    "controlsValidationSha256": "c943925df2e5661ec4be6b605b6071995fc3231c79d6e6528aacde174cd411c0",
+    "threeGridLandscapeSha256": "3e45dfb6236ce34a80e0ea694e42243f08af1863f3ab7ad439250603e5c8f433"
+  },
+  "competingOptions": [
+    {
+      "id": "competent-repertoire-exists",
+      "statement": "Fresh deterministic screening identifies route-grounded policies that retain both Dusk endpoints on independent seeds."
+    },
+    {
+      "id": "content-still-lacks-v5-support",
+      "statement": "Screened route policies do not retain two held-out C2-viable endpoints under the exact candidate."
+    }
+  ],
+  "estimands": {
+    "screen": "For each Dusk package, rank policies that acquire and activate the mediator by four-seed wins, then target activation and policy index; freeze eight per route.",
+    "heldoutViability": "Each route retains at least two selected policies whose 64-seed win rate exceeds held-out RandomBuild arm 2 by at least 0.35.",
+    "heldoutActivation": "Every credited selected policy applies and consumes its route mediator on held-out seeds.",
+    "retention": "Both route best-policy rates remain within 0.10 and credited policy sets differ.",
+    "reliability": "Paired candidate-minus-live added stalls on the selected policy rectangle; any added stall or simulator error fails.",
+    "vow5": "Every selected-policy held-out win rate is at most 0.90."
+  },
+  "successRule": {
+    "screen": "Eight distinct policies per Dusk route are frozen without simulator faults.",
+    "heldoutViability": "At least two policies per route meet activation and the 0.35 C2 margin.",
+    "retention": "Both route endpoints are within 0.10 and use distinct credited policy sets.",
+    "reliability": "No candidate-added stall and zero candidate/live simulator errors.",
+    "vow5": "All selected-policy held-out win rates are at most 0.90."
+  },
+  "budget": {
+    "repertoireScreenPolicies": 512,
+    "repertoireScreenSeeds": 4,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireValidationSeeds": 64,
+    "repertoireScreenRowsMaximum": 2048,
+    "repertoireValidationRowsMaximumPerContent": 1024,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048
+  },
+  "cheapestDiscriminatingExperiment": "Screen 512 policies on four fresh Duskblade-v5 seeds, freeze eight per route, then evaluate only that frozen repertoire on 64 independent paired candidate/live seeds.",
+  "inconclusiveRule": "The held-out 64-seed rectangle is final for this repertoire. No top-up, reselection or content change is allowed inside v9.",
+  "stopRule": "Reject on an incomplete screen, fewer than two held-out viable policies per route, endpoint collapse, a candidate-added stall, simulator error or Vow-5 ceiling breach. Detector mutations remain forbidden until the repertoire passes.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "budget": {
+    "controlledRowsMaximum": 2048,
+    "firstLookPairsPerArmAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "panelRowsMaximum": 2048,
+    "wholeRunRowsBeforePass": 0
+  },
+  "candidate": {
+    "consumer": "faultline",
+    "package": "dusk-facet-focus",
+    "producers": [
+      "chisel",
+      "limitBreak"
+    ],
+    "reachability": "Chisel is in the Duskblade starter deck; Faultline is in the common reward pool; Annealing Rite remains in the rare reward pool.",
+    "shippingChangesAtThisStage": [],
+    "specification": {
+      "baseDamage": 5,
+      "cost": 1,
+      "effect": "facetFocus",
+      "perChippedFacet": 4,
+      "rarity": "common",
+      "upgradeBaseDamage": 7,
+      "upgradePerChippedFacet": 5
+    }
+  },
+  "cheapestDiscriminatingExperiment": "Matched none/A/B/AB legal-combat contrasts for Chisel->Faultline and Annealing Rite->Faultline, followed only on local success by matched short pilot panels for Duskblade and the Ashwarden aspect control.",
+  "competingOptions": [
+    {
+      "id": "partial-facet-payoff-suffices",
+      "statement": "A common deterministic card reading Duskblade's existing partial-Facet state supplies a practical, aspect-specific package without another general power increase."
+    },
+    {
+      "id": "partial-facet-payoff-insufficient",
+      "statement": "The held-out practical interaction or panel target is ruled out; reject the prototype and continue to a materially different mechanism within issue #421."
+    }
+  ],
+  "estimands": {
+    "bootstrap": "Matched seed-block percentile bootstrap with 5000 draws; discovery seed 42201 and validation seed 42202.",
+    "controlledEdge": "For directDamage, I = AB - A - B + none within every matched seed. Standardise I by the pooled population standard deviation of the four arm responses; a zero scale is an automatic rejection.",
+    "panelActivation": "For combat utility U = damage - hpLost, activation is U(AB) - max(U(A), U(B), U(none)) within every matched seed. Standardise by the pooled population standard deviation of all four arm utilities; a zero scale is an automatic rejection.",
+    "panelAspectSeparation": "Paired Duskblade activation minus Ashwarden activation on the same seed and arm decks.",
+    "panelDuration": "AB turns minus the minimum turns among A, B and none for matched rows that all win; any AB-only loss or capped combat counts as an added stall.",
+    "precisionUnit": "The seed is the resampling block. Exact repeated values remain evidence of deterministic reproducibility, not additional within-seed samples."
+  },
+  "immutableInputs": {
+    "candidateContentSha256": "27769c85a280333b767a3200924638d62e6fc7783bb82627323d90549afaf855",
+    "combatRulesSha256": "87152d2e241f32a424b19377d7d9a4f6db760c9f73084337c40812c12a8ba97d",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "pilotSha256": "deeb406e8279504e831ff6caa7b0dd53f98a72429252917b828a394c887a5740",
+    "probeSha256": "63fd7e70d17a37861ed7d1ad5d07a29168287ce96071596a5c93059aedb07451",
+    "prototypePatchSha256": "f6b3060a4db0fc40b8743ddda2a42513cb05d67e6f94dc27571664c6370047d2",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "inconclusiveRule": "If an interval overlaps its practical target at 32 pairs, extend the same frozen cohort to 64 and then 128 pairs. At 128 pairs, an overlapping interval is inconclusive and the family stops without promotion.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  },
+  "question": "Can one minimal Dusk-only payoff for the existing partial-Facet state supply the missing second Duskblade strategy package?",
+  "researchSeeds": {
+    "discovery": "62000-62127",
+    "validation": "63000-63127"
+  },
+  "schemaVersion": 1,
+  "stopRule": "Reject immediately when a held-out upper 95% bound is below 0.25 standard deviations, any error or added stall occurs, or the Ashwarden control is not functionally separable. Do not spend whole-run rows after rejection.",
+  "successRule": {
+    "aspectSeparation": "The held-out Duskblade package activation exceeds the Ashwarden control with a positive paired lower 95% bound.",
+    "duration": "The held-out package does not increase mean combat duration; upper 95% turn delta is at most 0.25 turns.",
+    "localEdges": "Both Duskblade edge held-out lower 95% standardised interaction bounds are at least 0.25, while Ashwarden effects remain below the target.",
+    "panel": "Both Duskblade held-out package activation lower 95% standardised bounds are at least 0.25.",
+    "reliability": "Zero added errors and stalls on both splits."
+  }
+}

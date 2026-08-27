@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v34-mediator-payoff",
+  "protocolSha256": "e480c4b4a147a17bf26dba412daf86996680e21075e4aa31b119482ec2988b93",
+  "decision": "reject",
+  "reason": "All controlled, package-panel and whole-run control gates admitted, but the best held-out Vow-5 policy for either Dusk route was only 0.21875 above RandomBuild.",
+  "evidence": {
+    "separationDiscoverySha256": "d4aa1d283fd90b209f513360a4dfb83885c65129077e14cac5c37023bed4437c",
+    "panelDiscovery32Sha256": "615bdec40423f83ed9ca2d24a717b3bf21ce62d4e4fa35afc07ca7b1efcb43d6",
+    "panelDiscovery128Sha256": "446522c6a785d6cdaf436178e27856f9fd096993637527da0e4ae0dece847b1b",
+    "controlsDiscoverySha256": "469654048cf72d400495d7331d6006e6ceb244ffb8156198d252cb1dcba41f1b",
+    "separationValidationSha256": "759d79e5d47d6a2aa250806c473f76a7f652d2158049373a79fce8ffc2e76c69",
+    "panelValidation32Sha256": "414b53a046d05b0e9956dc0ca2bda3bc4cf4d76d2612d7a6b843734fd1cf7403",
+    "panelValidation128Sha256": "f1f3e28f0a09c8cc17737e8a7d0397aee8ef149a38f95a5538e29b9ce9ac73d5",
+    "controlsValidationSha256": "48d4fcf294da2b9da8bae390cc76078f6617821bf862a540a504119a075dbd1d",
+    "screenSha256": "1fc15b1889cd7e5b5fbf0f41d3d2d774e31f0b5c4eff37b85dd279f5ae1cf38b",
+    "repertoireValidationSha256": "ea3152c2dae0275852256904de487681f0866145e3acef22f344111bc74711c9"
+  },
+  "boundedNegative": {
+    "scope": "Scoreline bonus damage of 12 or 15, three-times Afterimage Ward reflection, and the root-527 policy screen",
+    "screenSelectionSha256": "9ee20b420799f343a8373e772b78da1e893fb9969c3c6be06ed0d6c83491f88b",
+    "randomBuildVow5WinRate": 0.078125,
+    "afterimageBestHeldoutWinRate": 0.296875,
+    "scorelineBestHeldoutWinRate": 0.296875,
+    "afterimageCreditedPolicies": 0,
+    "scorelineCreditedPolicies": 0,
+    "candidateAddedStalls": 0,
+    "candidateErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

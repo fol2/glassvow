@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v8",
+  "protocolSha256": "89b1af1de331e258bffb40d4ce288f6143a6c0f7119364b2c61f6e8ad956dbe3",
+  "decision": "reject",
+  "reason": "All package, control, reliability and non-Dusk-v5 route gates passed; uniform random policy sampling still produced no C2-viable Duskblade v5 route policy at the frozen maximum.",
+  "evidence": {
+    "separationDiscoverySha256": "2e0db346d4f0949be784d3f92d8e5be711af64b1193d6e60db4894275fa395e0",
+    "separationValidationSha256": "6e471143b284f3797f1e4bd9e5dc2c3bdf02151e98b405c51cda877259bc11a2",
+    "panelDiscoverySha256": "299473296528a21753f905adcdee688f2d167fb633e74f8f1204b5ebc2b30a17",
+    "panelValidationSha256": "2c84d3cd9a4ea4088d02fe21e9b8a139f3aaf833c1b415a40856604092c9534a",
+    "controlsDiscoverySha256": "47385914d9861be98f45c9ef6fb973cf2831454f703db71821a07ba7666e8536",
+    "controlsValidationSha256": "c943925df2e5661ec4be6b605b6071995fc3231c79d6e6528aacde174cd411c0",
+    "landscapeDiscoveryFirstLookSha256": "7604ad9aae103fc139cafba0a3b0d75582c84d2ff79e06805388a233fe8e59d0",
+    "landscapeDiscoveryMaximumSha256": "3e45dfb6236ce34a80e0ea694e42243f08af1863f3ab7ad439250603e5c8f433"
+  },
+  "boundedNegative": {
+    "clearGrids": ["ashwarden:v0", "ashwarden:v5", "duskblade:v0"],
+    "failedGrid": "duskblade:v5",
+    "duskbladeVow5BestPolicyRate": 0.3125,
+    "duskbladeVow5RandomBuildRate": 0.0859375,
+    "addedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

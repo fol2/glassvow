@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v35-acquisition",
+  "protocolSha256": "e21897cdda44c8eadd419f549a3b4113eff1cb0a6b8c293ab51d8c57d12ffed6",
+  "decision": "reject",
+  "reason": "The first whole-run control gate found one candidate-added Duskblade Vow-0 stall, so no repertoire screen was permitted.",
+  "evidence": {
+    "reusedFunctionalSeparationValidationSha256": "759d79e5d47d6a2aa250806c473f76a7f652d2158049373a79fce8ffc2e76c69",
+    "reusedPackagePanelValidationSha256": "f1f3e28f0a09c8cc17737e8a7d0397aee8ef149a38f95a5538e29b9ce9ac73d5",
+    "controlsDiscoverySha256": "141e0ae7fc6a0419acc75c9b9328dd42f71b5b0f728fe432821ba68acff523bb"
+  },
+  "boundedNegative": {
+    "scope": "Four-times package-completion reward priority with the V34 mechanics and combat policy",
+    "addedStallGrid": "duskblade:v0",
+    "addedStallArm": 1,
+    "addedStallSeed": 311025,
+    "addedStallEncounter": "sovereign",
+    "addedStallTurns": 30,
+    "randomBuildMovementClear": true,
+    "protectedSeedsUsed": false
+  }
+}

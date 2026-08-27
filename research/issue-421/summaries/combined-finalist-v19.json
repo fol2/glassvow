@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v19",
+  "protocolSha256": "2015081f294435c688da30b0ae45679b788932affd81c8c3d4a93cb2bb200851",
+  "decision": "reject",
+  "reason": "Doubled mediator payoff passed all local and control gates but produced no C2 endpoint after six route-valid CEM fits.",
+  "evidence": {
+    "separationDiscoverySha256": "860c7628731686b6160bd036f308a28b084ecd9a598b2fd5f9b4b3525006611c",
+    "separationValidationSha256": "be6492dfa15af41b4168f58eadbf6b2f56eee06d27eae31b4b2e1f86be229eba",
+    "panelDiscoverySha256": "5dfb21549ec504f5159146b41cca280cd0e2f0d0a86cc92ec8c17ddc5afd8725",
+    "panelValidationSha256": "7f8dc69169621d95f1e49948378265c8481986c36e69ab68cd0f49a05281fdb0",
+    "controlsDiscoverySha256": "911aae25a51fdcdae620bfe97f15aa5939678192ed90f2b53a9ddc927831a355",
+    "controlsValidationSha256": "0504814d36a6a860cc74f6f13ccfc80098d2b2604cc41133e3ab21ea97edcec0",
+    "cemAnalysisSha256": "660e60dfd691dee80cb7411d5716140daa0a166f3abd2a7429717166a9f50e10"
+  },
+  "boundedNegative": {
+    "randomBuildRate": 0.09375,
+    "afterimageBestPolicyRate": 0.265625,
+    "afterimageBestMargin": 0.171875,
+    "scorelineBestPolicyRate": 0.21875,
+    "scorelineBestMargin": 0.125,
+    "creditedPolicies": 0,
+    "cemHoldoutFaults": 0,
+    "finalValidationAddedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

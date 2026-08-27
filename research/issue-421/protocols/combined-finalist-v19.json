@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "question": "Does doubling only the Duskblade mediator payoff and Afterimage capacity close the observed C2 gaps without broad movement, reliability regression or endpoint collapse?",
+  "candidate": {
+    "contentSha256": "10dbcffe872984a73ccc715e2074d3c7583442a19f8c5998c308dab083cc5abd",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "fortify",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Keep the current-main card catalogue, reward pools and base effects unchanged.",
+      "Double the Scoreline conditional bonus.",
+      "Mirrorlight creates two Afterimage; double Warden's Edge conditional damage and Ward."
+    ],
+    "provenance": {
+      "rejectedV18bSummarySha256": "727113ec82153c5219f6292bf8c13e2155a21a11a831ec1ec50adc5bef22ad55",
+      "routeScreenSummarySha256": "320dbc3818104d5dc4aa2786f5d79b9a9a7b3644885bb8bd606e5f714882d49e"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "10dbcffe872984a73ccc715e2074d3c7583442a19f8c5998c308dab083cc5abd",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "b89cc080c24a01e183dd210687abf2a10fbdc63d0ff122b0d7a08f8134c12ff6",
+    "pilotSha256": "6c832e6bfcf0c6f015d1ac3e80c754a03fd60972672f1a4da1dd8c250b2cc6a9",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "43307a096539ddaf9fcd86fb7a0f3286b32d8705bea33915332270bf4af19130",
+    "cemSha256": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+    "cemSeedPacketSha256": "4cf56ca63c6b6d8f1fce0c78d70dfccbed02115cf160fef384daf87233578197",
+    "prototypePatchSha256": "02293def7187c4a65b9fad4d0705cde2570d84e0acf5c0977af3cefd4dc6a850"
+  },
+  "seedBases": {
+    "separationDiscovery": 191000,
+    "separationValidation": 192000,
+    "panelDiscovery": 193000,
+    "panelValidation": 194000,
+    "policyRootDiscovery": 492,
+    "policyRootValidation": 493,
+    "controlDiscovery": 195000,
+    "controlValidation": 196000,
+    "cemSamplerRoot": 490,
+    "cemRoot": 494,
+    "cemTrain": 197000,
+    "cemHoldout": 198000,
+    "cemFinalValidation": 199000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "191000-191127",
+      "validation": "192000-192127"
+    },
+    "panels": {
+      "discovery": "root 492, indices 0-127, seeds 193000-193127",
+      "validation": "root 493, indices 0-127, seeds 194000-194127"
+    },
+    "controls": {
+      "discovery": "195000-195127",
+      "validation": "196000-196127"
+    },
+    "cemTrain": "six route-valid Duskblade-v5 islands, generations 0-5, eight CRN seeds per generation, 197000-197047",
+    "cemHoldout": "all six final policies, 198000-198063",
+    "finalValidation": "all six frozen final policies, paired candidate/live, 199000-199063"
+  },
+  "cem": {
+    "islands": [6, 7, 8, 9, 10, 11],
+    "population": 16,
+    "elite": 4,
+    "maximumGenerations": 6,
+    "trainingSeedsPerGeneration": 8,
+    "holdoutSeeds": 64,
+    "seedPacketSamplerRoot": 490,
+    "assignedRoutes": {
+      "6": "dusk-afterimage-guard",
+      "7": "dusk-afterimage-guard",
+      "8": "dusk-afterimage-guard",
+      "9": "dusk-scoreline",
+      "10": "dusk-scoreline",
+      "11": "dusk-scoreline"
+    },
+    "seedPacket": "protocols/cem-v18-seeds.json"
+  },
+  "estimands": {
+    "functionalSeparation": "Every named diagonal lower 95% bound is at least 0.25 SD and every off-diagonal upper bound is below 0.25.",
+    "globalMovement": "Candidate-minus-live RandomBuild arm-2 point movement is at most 0.10 per grid.",
+    "routeViability": "At least two final policies per Dusk route activate its mediator and beat held-out RandomBuild arm 2 by at least 0.35.",
+    "retention": "Route-best rates remain within 0.10 and credited endpoint sets differ.",
+    "reliability": "No paired candidate-added stall/error and no CEM holdout fault.",
+    "vow5": "Every final-policy validation win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "cemTrainingRowsMaximum": 4608,
+    "cemHoldoutRows": 384,
+    "cemFinalValidationRowsPerContent": 384,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048
+  },
+  "successRule": "All local gates and controls admit; each Dusk route retains at least two distinct C2 endpoints with zero reliability regression and Vow-5 at most 0.90.",
+  "inconclusiveRule": "Only a non-decisive panel may extend once to 128. The six CEM islands and final rectangle are final.",
+  "stopRule": "Reject on a local gate, controls, fewer than two C2 endpoints per route, collapse, fault or Vow-5 above 0.90. Detector mutations remain forbidden until this gate passes.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

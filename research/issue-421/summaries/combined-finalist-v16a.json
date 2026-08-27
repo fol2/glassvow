@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v16a",
+  "protocolSha256": "df6e4b933e262289b17ce62cfd683287e93c481a399d9b9f061c15046d8e0964",
+  "decision": "reject",
+  "reason": "The unchanged card pool removed offer-path drift and all four local packages passed, but Duskblade-v0 RandomBuild reached the strict 0.50 ceiling at the 32-seed first look.",
+  "evidence": {
+    "separationDiscoverySha256": "5b50e4a52a355635b24052c0f6326f40d86ab07b39c729632f7a45c34841572b",
+    "separationValidationSha256": "e4b887a16e3f430ba2e2411b0442e56cdab7e253f7226e32a54300f182861b35",
+    "panelDiscoverySha256": "cba730fa539f29a4bbdf3aee345c96ebb72934168fe2974fabd420c3a723f635",
+    "panelValidationSha256": "5d25d317c28f47f7a0ec9ad29c024f24abf5c2901ea1855f3e307605af6bda54",
+    "controlsDiscoverySha256": "d2a47386a1204c8172300d3bf0651c58ac1e0d0a984be6388f1ce758a6aceea8"
+  },
+  "boundedNegative": {
+    "duskbladeVow0RandomBuildRate": 0.5,
+    "liveDuskbladeVow0RandomBuildWins": 14,
+    "candidateDuskbladeVow0RandomBuildWins": 16,
+    "candidateMinusLiveMovement": 0.0625,
+    "scorelineRescues": 1,
+    "afterimageRescues": 1,
+    "candidateAddedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

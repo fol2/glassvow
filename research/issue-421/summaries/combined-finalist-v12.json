@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v12",
+  "protocolSha256": "7e425da584e828db9f48365977a4a1f9c399be4dfd94c6c6211abbae8f42a999",
+  "decision": "reject",
+  "reason": "Starting with both Duskblade producers increased route activation but moved RandomBuild by 0.1328125 at Vow 5 and 0.15625 at Vow 0; neither route produced a policy with the required 0.35 margin over the candidate's own RandomBuild arm.",
+  "evidence": {
+    "analysisSha256": "4a42b3bb9143836b378639be3b17be985a1f085d9b5364f97c0ac91f217f653e",
+    "selectionSha256": "c76131f4797c84146b5db882b44febee1bff7a75fbbec311d89eb7c34daa88c3"
+  },
+  "boundedNegative": {
+    "afterimageBestPolicyRate": 0.296875,
+    "scorelineBestPolicyRate": 0.296875,
+    "candidateRandomBuildRate": 0.1640625,
+    "duskVow5RandomBuildMovement": 0.1328125,
+    "duskVow0RandomBuildMovement": 0.15625,
+    "addedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

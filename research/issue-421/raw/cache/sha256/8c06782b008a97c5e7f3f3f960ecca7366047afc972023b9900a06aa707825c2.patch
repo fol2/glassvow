@@ -1,0 +1,90 @@
+diff --git a/content/full-content.json b/content/full-content.json
+index 1fdf17c..9cfe648 100644
+--- a/content/full-content.json
++++ b/content/full-content.json
+@@ -140,6 +140,35 @@
+       "name": "Chisel",
+       "text": "Deal @4@ damage. Chip 1 extra Facet."
+     },
++    "fractureRhythm": {
++      "type": "power",
++      "rarity": "uncommon",
++      "cost": 1,
++      "target": "self",
++      "vfx": "void",
++      "effects": [
++        {
++          "kind": "status",
++          "who": "self",
++          "id": "shatterflow",
++          "n": 1
++        }
++      ],
++      "up": {
++        "cost": 0,
++        "effects": [
++          {
++            "kind": "status",
++            "who": "self",
++            "id": "shatterflow",
++            "n": 1
++          }
++        ],
++        "text": "Whenever you Shatter glass, gain 1 Energy and draw 2 cards."
++      },
++      "name": "Fracture Rhythm",
++      "text": "Whenever you Shatter glass, gain 1 Energy and draw 2 cards."
++    },
+     "firstSpark": {
+       "type": "skill",
+       "rarity": "starter",
+@@ -1724,6 +1753,7 @@
+       "cripple",
+       "warCry",
+       "fortify",
++      "fractureRhythm",
+       "bloodRite",
+       "empower",
+       "agility",
+@@ -1836,6 +1866,12 @@
+       "name": "Beacon",
+       "desc": "Attacks chip N extra Facet(s). Fades at end of turn."
+     },
++    "shatterflow": {
++      "icon": "↻",
++      "kind": "buff",
++      "name": "Fracture Rhythm",
++      "desc": "Each stack grants 1 Energy and draws 2 cards whenever glass Shatters."
++    },
+     "emberflow": {
+       "icon": "♥",
+       "kind": "buff",
+diff --git a/domain/rules/combat.gd b/domain/rules/combat.gd
+index 58c9b8c..f04d111 100644
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -693,6 +693,11 @@ func _shatter_enemy(run: RunState, cb: CombatState, e: EnemyCombatant) -> void:
+ 	cb.queue.append({"t": EventTypes.SHATTER, "idx": e.idx, "facetMax": e.facet_max})
+ 	add_status_enemy(cb, e, "vulnerable", 2)
+ 	gain_embers(run, cb, 2)
++	var flow: int = _sget(cb.player.statuses, "shatterflow")
++	if flow > 0:
++		cb.player.energy += flow
++		cb.queue.append({"t": EventTypes.ENERGY, "n": cb.player.energy})
++		draw_cards(run, cb, flow * 2)
+ 	if run.has_relic("prismCharm") and not cb.prism_procd:
+ 		cb.prism_procd = true
+ 		gain_embers(run, cb, 2)
+diff --git a/tools/balance_pilot.gd b/tools/balance_pilot.gd
+index 40bedc8..01b4647 100644
+--- a/tools/balance_pilot.gd
++++ b/tools/balance_pilot.gd
+@@ -292,7 +292,7 @@ static func card_score(d: Dictionary, aspect: int, card_id: String = "") -> floa
+ 	if str(d.get("type", "")) == "power":
+ 		score += _w("card", "power")
+ 	score += float(str(d.get("chip", 0))) * (_w("card", "chipDusk") if dusk else _w("card", "chipAsh"))
+-	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner"]:
++	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner", "fractureRhythm"]:
+ 		score += _w("card", "aspectBonus")
+ 	if not dusk and card_id in ["ashBite", "smother", "venomStrike", "toxicMist", "ashenChoir",
+ 			"catalyst", "virulence", "annihilate"]:

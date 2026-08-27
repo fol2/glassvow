@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "question": "Can the repository's existing multi-seed CEM fit a reproducible Duskblade-v5 policy repertoire for the exact v10 content where random screening did not generalise?",
+  "candidate": {
+    "contentSha256": "a086c3d44089ad50d45ba535ea6369f267bf7c69fe0394f58b3c69502bc274ad",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-poison",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "scoreline",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "mirrorEdge",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedV10RepertoireSha256": "ac84425ef219929c9dc9fd983e714a1ea53bbf2817e971363a4cf451c1bb1308"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "a086c3d44089ad50d45ba535ea6369f267bf7c69fe0394f58b3c69502bc274ad",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "88681d8fc04618f1a7f14e9c06b41efa77767a978b9c3a53fc19541d461e42bc",
+    "pilotSha256": "360967cea2c09ec3f60a7644ed97663fa4bdd27b314f86866fd0cba1cd88013b",
+    "probeSha256": "ac5356f20317e7a13b88290fee1eab7c0c6944730ede8082658f1bf1e5141680",
+    "researchBalanceSimSha256": "1f73de23ad6611052b012a7efb076cea6263a32a9d14b29d33e2134237dc25a5",
+    "cemSha256": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+    "cemSeedPacketSha256": "5ba28729e1b48fc60bb359e73a4078c65d6407c34a4fb5ca7584438a87184ee3",
+    "prototypePatchSha256": "7541de187f8883a588e48656db3d5b03a53e3d053d0c4f25af39873158b7ea51"
+  },
+  "seedBases": {
+    "controlValidation": 135000,
+    "cemSamplerRoot": 458,
+    "cemRoot": 463,
+    "cemTrain": 138000,
+    "cemHoldout": 139000,
+    "cemFinalValidation": 140000
+  },
+  "researchCohorts": {
+    "cemTrain": "six Duskblade-v5 islands, generations 0-5, eight CRN seeds per generation, 138000-138047",
+    "cemHoldout": "all six final policies, 139000-139063",
+    "finalValidation": "all six frozen final policies, paired candidate/live, 140000-140063"
+  },
+  "adoptedExactInputEvidence": {
+    "separationDiscoverySha256": "c1b4d7589340238e3578bb7d776296cc046d3f64520b2a07bfeb471300641b08",
+    "separationValidationSha256": "58289956210c2a76e6cd102f53366fc0c1eaeeb75f7746d8422ceb99c67c66bc",
+    "panelDiscoverySha256": "5fd764d69dd21c41cb39ac077acde65c86ceb5903263a0132fadf85be070cb75",
+    "panelValidationSha256": "15c9a2a66d3c2a19847267a08f53bac8276d76682d19bfb2dd5a6f6c90f80226",
+    "controlsDiscoverySha256": "4ee31a6f946b75e29051e573d1071085a14d69cba4a029d6893b7651ca2ee5a8",
+    "controlsValidationSha256": "84794d0304a98bd3fbaeb9b96fd0c771999637fafbfcc232965a86a5d2d0aa68",
+    "ashAndDuskV0LandscapeSha256": "3e45dfb6236ce34a80e0ea694e42243f08af1863f3ab7ad439250603e5c8f433"
+  },
+  "competingOptions": [
+    {
+      "id": "optimised-repertoire-exists",
+      "statement": "At least two independently fitted islands per route retain mediator activation and C2-viable held-out performance."
+    },
+    {
+      "id": "content-lacks-optimisable-v5-support",
+      "statement": "Multi-seed CEM cannot retain two route endpoints or causes reliability, collapse or ceiling failure."
+    }
+  ],
+  "cem": {
+    "islands": [6, 7, 8, 9, 10, 11],
+    "population": 16,
+    "elite": 4,
+    "maximumGenerations": 6,
+    "trainingSeedsPerGeneration": 8,
+    "holdoutSeeds": 64,
+    "assignedRoutes": {
+      "6": "dusk-afterimage-guard",
+      "7": "dusk-afterimage-guard",
+      "8": "dusk-afterimage-guard",
+      "9": "dusk-scoreline",
+      "10": "dusk-scoreline",
+      "11": "dusk-scoreline"
+    },
+    "seedPacket": "protocols/cem-v11-seeds.json"
+  },
+  "estimands": {
+    "optimisation": "Six independent existing-tool CEM islands maximise eight-seed generation win rate; no holdout or final-validation result feeds fitting.",
+    "routeViability": "For each assigned route, at least two final policies activate that mediator and exceed held-out RandomBuild arm 2 by at least 0.35 on fresh final-validation seeds.",
+    "retention": "At least two distinct final policies remain within 0.10 of the overall top, and route-best rates remain within 0.10.",
+    "reliability": "No CEM holdout simulator fault and no candidate-added stall or simulator error on paired final validation.",
+    "vow5": "Every final-policy validation win rate is at most 0.90."
+  },
+  "successRule": {
+    "routeViability": "At least two independently fitted final policies per assigned route meet activation and the 0.35 C2 margin.",
+    "retention": "Both assigned routes retain high-performing distinct endpoints without one-route collapse.",
+    "reliability": "No CEM holdout stall/error, no candidate-added final-validation stall, and zero simulator errors.",
+    "vow5": "All final-policy win rates are at most 0.90."
+  },
+  "budget": {
+    "cemTrainingRowsMaximum": 4608,
+    "cemHoldoutRows": 384,
+    "cemFinalValidationRowsPerContent": 384,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048
+  },
+  "cheapestDiscriminatingExperiment": "Run the existing mini-CEM shape for only six Duskblade-v5 islands from route-grounded starts, then freeze all six finals and evaluate one independent paired 64-seed rectangle.",
+  "inconclusiveRule": "The six-island CEM and 64-seed final rectangle are final for v11. No island replacement, extra generation, reselection or content change is allowed.",
+  "stopRule": "Reject if fewer than two policies per route meet held-out activation and C2, endpoints collapse, an added stall/error appears, or Vow-5 exceeds 0.90. Detector mutations remain forbidden until the repertoire passes.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

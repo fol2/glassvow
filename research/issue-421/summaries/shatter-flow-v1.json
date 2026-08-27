@@ -1,0 +1,26 @@
+{
+  "analysisSha256": {
+    "controlledDiscovery": "35c6a6ccdbb6437f533c7180fdb71630445b4bda92d0d52db9d4be65218d6c2f",
+    "controlledValidation": "8cdcbd4ae547980e21965ea203db0ad12ff6c41bafca805b646ba8a90602e876",
+    "panelDiscovery": "db16f6332768a41e84f642e7a25dc64a1b8fefb1096dc2b11bbd54279a30dc10"
+  },
+  "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE",
+  "finding": "The persistent Shatter-flow power passed both local Duskblade edges on discovery and held-out evidence while both Ashwarden controls stayed exactly zero. The discovery pilot panel decisively rejected it: Chisel's Duskblade activation upper 95% bound was -0.1457 SD and Annealing Rite's was 0.0164 SD. Ordinary Duskblade attacks already Shatter, so the power had a strong standalone effect and neither named producer was necessary; increasing its payoff would not repair the missing producer-consumer complementarity.",
+  "issue": 421,
+  "noFurtherRows": [
+    "No held-out panel rows were run after the decisive discovery rejection.",
+    "No whole-run rows were run.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "de4072694b8ac5ffee56455cc82e97390f69f9b25d30d585282d98f2e1628636",
+  "reliability": {
+    "addedStalls": 0,
+    "errors": 0
+  },
+  "researchRows": 1536,
+  "rootCause": "A generic payoff on Shatter can be activated by the baseline Duskblade deck, so factorial AB cannot identify the intended package. A later prototype must require an explicit producer-consumer handshake that neutral cards cannot activate.",
+  "runnerSha256": "d137cb30ee30b1a51e025bd5114b7430844eb35e71b01c1fb34302ebd87caca5",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_NEGATIVE"
+}

@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "question": "Which fresh independently sampled Vow-5 policies express the unchanged V25 Refract and Scoreline routes strongly enough for held-out endpoint validation?",
+  "candidate": {
+    "contentSha256": "6c4a4aab858bc96d35b5c755cab2acb62d1a11c44337e57235291755bb9a2d37",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "shatter",
+        "cardMetric": "shatter",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "deflect",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      }
+    },
+    "provenance": {
+      "rejectedStaleSelectionV25SummarySha256": "c6cad9a9f5d305febfdb0cf890b362de1326b85ebf5a12c9cdb9e8452c845a1f"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "6c4a4aab858bc96d35b5c755cab2acb62d1a11c44337e57235291755bb9a2d37",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "f082c4c7205eaf2b7a66ca38b9d4ae799f4220ffa20cc23b8f2f9c276459b5d4",
+    "pilotSha256": "073443448e64b352b34bf6e8319c7307678ffeb50ec9a3e98f0bd72d9e16d77a",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "237c6ab70e10868be84c384f59a8e5257b288cf05226ec3c088876c98268a87e",
+    "prototypePatchSha256": "df12d2a4cee0e0f23266806d37ad5b9dd6fccb3bc7a9a5a0b3880673f141e32f"
+  },
+  "seedBases": {
+    "repertoirePolicyRoot": 505,
+    "repertoireScreenSeed": 244000,
+    "repertoireValidationSeed": 245000,
+    "controlValidation": 246000
+  },
+  "researchCohorts": {
+    "screen": "root 505, policy indices 0-511, seeds 244000-244003, Duskblade Vow-5",
+    "validation": "selected route-active cells, seeds 245000-245063, paired candidate/live Duskblade Vow-5",
+    "controls": "246000-246063"
+  },
+  "budget": {
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "repertoireScreenPolicies": 512,
+    "repertoireScreenSeeds": 4,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireScreenRowsMaximum": 2048,
+    "repertoireValidationSeeds": 64,
+    "repertoireValidationRowsMaximumPerContent": 2048
+  },
+  "successRule": "Select eight fault-free, mediator-active cells per route, then admit only if each route has at least two held-out policies at least 0.35 above paired RandomBuild with distinct endpoint sets, retention within 0.10 and no added stall or error.",
+  "stopRule": "Reject if either route has fewer than eight screen cells or fewer than two held-out endpoints, if the route-best rates collapse, if endpoint sets are identical, or on any added reliability fault.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

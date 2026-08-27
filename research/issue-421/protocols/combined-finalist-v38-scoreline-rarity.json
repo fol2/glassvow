@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "question": "Does making Faultline rare remove Scoreline-driven RandomBuild movement while preserving planned acquisition and the admitted package mechanics?",
+  "candidate": {
+    "contentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "chisel",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "shatter",
+        "cardMetric": "shatter",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "defend",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "directDamage",
+        "cardMetric": "status:afterimage",
+        "cardMetricDirection": -1,
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Duskblade Chisel applies one Scoreline; rare Faultline consumes it for 12 or 15 bonus damage and completes the target's remaining Facets.",
+      "Duskblade Ward applies one Afterimage; Warden's Edge consumes it to deal damage equal to three times the current Ward.",
+      "The balance pilot gives a package-completing reward four times its sampled aspect weight; Ward receives that weight once in combat only when Warden's Edge is held and no Afterimage is active."
+    ],
+    "provenance": {
+      "rejectedV37SummarySha256": "9eb8f8948a76bee98eb4aae4168819dbfa97a100c07a12ae0c45b4148ce5bf09",
+      "localGateReuse": {
+        "reason": "V38 changes only Faultline rarity; fixed-deck combat definitions, combat rules and pilot combat scoring are byte-identical to V37.",
+        "functionalSeparationValidationSha256": "314dd360c3d384584752357bb44000d0b9929ce8ce044736545bcbc05d9d748b",
+        "packagePanelValidationSha256": "fbab7d76bac144479cc75402f07ef4da4fb2b23d403c82ccf5629696a82a4611"
+      }
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "69a828935bd4cde98e7d79509d11a13884452713690e3916f4805cb02334cf8f",
+    "probeSha256": "eff6d42396236a29749b9b971838991a187e6dea66bf73f184cde9b2d46b7cab",
+    "researchBalanceSimSha256": "229353ed36235fd60514459ea48267bc58fa3aaaf5a244f02d5b4e2c10d0dce4",
+    "prototypePatchSha256": "51eb958b79f71c11c61925b12e277f2a3e2adab8642b93f6091256230f977ee4"
+  },
+  "seedBases": {
+    "separationDiscovery": 331000,
+    "separationValidation": 332000,
+    "panelDiscovery": 333000,
+    "panelValidation": 334000,
+    "policyRootDiscovery": 537,
+    "policyRootValidation": 538,
+    "controlDiscovery": 335000,
+    "controlValidation": 336000,
+    "repertoirePolicyRoot": 539,
+    "repertoireScreenSeed": 337000,
+    "repertoireValidationSeed": 338000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "331000-331127",
+      "validation": "332000-332127"
+    },
+    "panels": {
+      "discovery": "root 537, indices 0-127, seeds 333000-333127",
+      "validation": "root 538, indices 0-127, seeds 334000-334127"
+    },
+    "controls": {
+      "discovery": "335000-335063",
+      "validation": "336000-336063"
+    },
+    "screen": "root 539, policy indices 0-511, seeds 337000-337003, Duskblade Vow-5",
+    "repertoireValidation": "selected route-active cells, seeds 338000-338063, paired candidate/live Duskblade Vow-5"
+  },
+  "estimands": {
+    "functionalSeparation": "Every named diagonal lower 95% bound is at least 0.25 SD and every off-diagonal upper bound is below 0.25.",
+    "globalMovement": "Candidate-minus-live RandomBuild arm-2 point movement is at most 0.10 per grid.",
+    "routeViability": "Each Dusk route has at least two held-out policies at least 0.35 above paired RandomBuild.",
+    "reliability": "No candidate-added stall or simulator error.",
+    "vow5": "Every selected-policy Vow-5 win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "repertoireScreenPolicies": 512,
+    "repertoireScreenSeeds": 4,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireScreenRowsMaximum": 2048,
+    "repertoireValidationSeeds": 64,
+    "repertoireValidationRowsMaximumPerContent": 2048
+  },
+  "successRule": "Reused local gates and both control splits admit, then each Dusk route retains two distinct Vow-5 endpoints with zero reliability regression and the Vow-5 ceiling.",
+  "inconclusiveRule": "A non-decisive discovery control may fill its frozen 64-seed cohort; the held-out control and route rectangles are final.",
+  "stopRule": "Reject on controls, fewer than eight active screen cells per route, fewer than two held-out endpoints, collapse, added fault or Vow-5 above 0.90.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

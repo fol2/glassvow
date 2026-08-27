@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v5",
+  "protocolSha256": "f7068a7789d0ff5ac454efa94eb9e4fd53575c41cf1b55127891a4ec7a4d4980",
+  "decision": "reject",
+  "reason": "The full discovery landscape found no Vow-5 policy with the required 0.35 RandomBuild margin for any route, and only one viable Duskblade v0 policy per route.",
+  "evidence": {
+    "separationDiscoverySha256": "543436b42a782a6004ed41a2e87fef2a028eace5501aa650fe32c14c5598c46d",
+    "separationValidationSha256": "7afe599616c0eb6e76f0f5236f67320c1f62296553cf96127a45b94c4db05b15",
+    "panelDiscoverySha256": "99df463a751edbb3d135c7ca353788766168e1e1fbd9f2a4e9a9a78a99217b55",
+    "panelValidationSha256": "c0d3b15ada9bf90ced08e7c57c30d399960a072a41e653098cf06584946472b3",
+    "controlsDiscoverySha256": "933d71fd29b9f70b04ded42723ae12eff98a0a2bc5cdcf5f0db7085afc849c4b",
+    "controlsValidationSha256": "eee198de847bd257432e5bdb644614dda5baa548abff02700ceaf4c2eec862f5",
+    "landscapeDiscoverySha256": "32cb9512b2bd0b03e43032c1b8c121280ec73da65d053b3943188f992d96e505"
+  },
+  "boundedNegative": {
+    "faults": 0,
+    "ashwardenVow5BestMargin": 0.296875,
+    "duskbladeVow5BestMargin": 0.296875,
+    "duskbladeVow0ViablePoliciesPerRoute": 1,
+    "protectedSeedsUsed": false
+  }
+}

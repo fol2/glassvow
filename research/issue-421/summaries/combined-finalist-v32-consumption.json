@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v32-consumption",
+  "protocolSha256": "6b1e6458c954030d7db4865025189d611f3483046f874280268929663355ce7e",
+  "decision": "inconclusive-stop",
+  "reason": "Causal Afterimage consumption reached ten witnesses with clear separation and duration, but its lower activation bound missed the target by 0.0026; the all-attack panel also made Bloodfire non-decisive.",
+  "evidence": {
+    "separationDiscoverySha256": "0332cda568af5cf031e5c33b4d4cf52fc112603a0610a2501ae45c2ea2f70f19",
+    "panelDiscovery32Sha256": "7b849beaea30ac38bc914d05fed30f847f50fa183131505f47b3e088da8eb001",
+    "panelDiscovery128Sha256": "35f00bdd407990e0363dcb58c74ec61498c9497b3b3a7faa906097152813fca3"
+  },
+  "boundedNegative": {
+    "scope": "One-times combo-aware setup priority and one all-attack panel base for every package",
+    "afterimageActivationP025": 0.24740427499725345,
+    "afterimageActivationPoint": 0.5442894049939576,
+    "afterimagePolicyWitnesses": 10,
+    "afterimageDurationP975": 0.140625,
+    "afterimageAddedStalls": 0,
+    "bloodfireActivationP025": 0.16758862450202885,
+    "protectedSeedsUsed": false
+  }
+}

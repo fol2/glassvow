@@ -1,0 +1,100 @@
+diff --git a/content/full-content.json b/content/full-content.json
+index 1fdf17c..704cca9 100644
+--- a/content/full-content.json
++++ b/content/full-content.json
+@@ -140,6 +140,37 @@
+       "name": "Chisel",
+       "text": "Deal @4@ damage. Chip 1 extra Facet."
+     },
++    "crackstep": {
++      "type": "attack",
++      "rarity": "common",
++      "cost": 1,
++      "target": "enemy",
++      "vfx": "slash",
++      "exhaust": true,
++      "effects": [
++        {
++          "kind": "special",
++          "id": "crackedTempo",
++          "n": 5,
++          "energy": 1,
++          "draw": 2
++        }
++      ],
++      "up": {
++        "effects": [
++          {
++            "kind": "special",
++            "id": "crackedTempo",
++            "n": 7,
++            "energy": 1,
++            "draw": 2
++          }
++        ],
++        "text": "Deal @7@ damage. Duskblade: against Cracked, refund 1 Energy and draw 2 cards. Kindle."
++      },
++      "name": "Crackstep",
++      "text": "Deal @5@ damage. Duskblade: against Cracked, refund 1 Energy and draw 2 cards. Kindle."
++    },
+     "firstSpark": {
+       "type": "skill",
+       "rarity": "starter",
+@@ -1709,7 +1740,8 @@
+       "brace",
+       "sidestep",
+       "preparation",
+-      "deflect"
++      "deflect",
++      "crackstep"
+     ],
+     "uncommon": [
+       "leechBlade",
+diff --git a/domain/rules/combat.gd b/domain/rules/combat.gd
+index 58c9b8c..7a77ac3 100644
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -16,6 +16,7 @@ var quests: QuestRules
+ const SPECIAL_IDS: Array[String] = [
+ 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
+ 	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance",
++	"crackedTempo",
+ ]
+ const POTION_IDS: Array[String] = [
+ 	"healing", "strength", "swift", "block", "fire", "venom", "energy",
+@@ -987,6 +988,13 @@ func _apply_special(
+ 		"shatterEcho":
+ 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
++		"crackedTempo":
++			var primed: bool = run.aspect == 0 and _sget(target.statuses, "vulnerable") > 0
++			hit_enemy(run, cb, target, _ji(fx["n"]), true, damage_mult)
++			if primed and not cb.over:
++				cb.player.energy += _ji(fx["energy"])
++				cb.queue.append({"t": EventTypes.ENERGY, "n": cb.player.energy})
++				draw_cards(run, cb, _ji(fx["draw"]))
+ 		"emberNova":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.embers, true, damage_mult)
+ 		"pyreTithe":
+@@ -1355,6 +1363,8 @@ func preview_play(
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + bonus), "times": 1})
+ 			elif sid == "momentum":
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
++			elif sid == "crackedTempo":
++				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"])), "times": 1})
+ 			elif sid == "doubleBlock":
+ 				block += p.block
+ 	var fx_chips: int = 0
+diff --git a/tools/balance_pilot.gd b/tools/balance_pilot.gd
+index 40bedc8..678e39e 100644
+--- a/tools/balance_pilot.gd
++++ b/tools/balance_pilot.gd
+@@ -292,7 +292,7 @@ static func card_score(d: Dictionary, aspect: int, card_id: String = "") -> floa
+ 	if str(d.get("type", "")) == "power":
+ 		score += _w("card", "power")
+ 	score += float(str(d.get("chip", 0))) * (_w("card", "chipDusk") if dusk else _w("card", "chipAsh"))
+-	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner"]:
++	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner", "crackstep"]:
+ 		score += _w("card", "aspectBonus")
+ 	if not dusk and card_id in ["ashBite", "smother", "venomStrike", "toxicMist", "ashenChoir",
+ 			"catalyst", "virulence", "annihilate"]:

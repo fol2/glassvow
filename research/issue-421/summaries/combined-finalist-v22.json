@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v22",
+  "protocolSha256": "a69516f85ec7cd8a9a70cc4eb3dd9dd4646ae8966eab221f425b66d279939fa5",
+  "decision": "reject",
+  "reason": "Dusk-core scaling made Scoreline locally distinct, but Afterimage's current-Ward reflection remained confounded by the base Fortify and Guarded Strike sequencing at the maximum panel.",
+  "evidence": {
+    "invalidSeparationDiscoverySha256": "90dd74c5f05011f3d09d51a6196a8390e8b7409b292960ecfee0b9bb2e67ee79",
+    "correctedSeparationDiscoverySha256": "81fed7a03c0f221eb1aea8320ab4b93677b5967930198fa50709583af9d207d8",
+    "panelDiscovery32Sha256": "da93162f11c50d7a4a80437457036a042a269e9a0c21b055c9b9786c36b840c5",
+    "panelDiscovery128Sha256": "ea906553c564356ec59a0fe2df0ae7a2b55aecfa505b938713970e4a7e738b01"
+  },
+  "boundedNegative": {
+    "scope": "Afterimage current-Ward reflection through the existing Fortify and Guarded Strike pair",
+    "afterimageActivationPoint": 0.33197354013818475,
+    "afterimageControlActivationPoint": 0.3083555366056404,
+    "afterimageAspectSeparationPoint": -0.0859375,
+    "afterimageAspectSeparationP025": -1.15625,
+    "afterimageAspectSeparationP975": 1.046875,
+    "afterimagePolicyWitnesses": 41,
+    "scorelineAspectSeparationP025": 0.796875,
+    "scorelinePolicyWitnesses": 101,
+    "protectedSeedsUsed": false
+  },
+  "researchCorrection": {
+    "fault": "The first separation plan omitted the preregistered eight-Ward setup because setupBlock was inserted into the wrong legacy plan builder.",
+    "disposition": "The append-only ledger retains the invalid rows; the corrected builder is covered by research.py self-check and the same frozen cohort was rerun once."
+  }
+}

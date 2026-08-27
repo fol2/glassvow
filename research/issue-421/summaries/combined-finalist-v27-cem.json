@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v27-cem",
+  "protocolSha256": "82e1a4d52108e9a73ea0a03c4a72bcae474106ce9c2cd40dd8a18f9e903d8973",
+  "decision": "reject",
+  "analysisSha256": "b267dd624f1d37bb301100371c963e6f1810db273a88cf1ceadd6c0dc704f848",
+  "finalValidationOutputSha256": "e67609b093daf8f5a6eefa299061bdbe1ff809758c4ef70c8269a88b2cd26a97",
+  "reason": "Six fresh CEM islands could not produce a retained Vow-5 endpoint; paired acquisition remained sparse even when mediator activation was high after acquisition.",
+  "boundedNegative": {
+    "scope": "Policy optimisation on the common and uncommon reward-pair acquisition path of unchanged V25 content",
+    "randomBuildRate": 0.078125,
+    "afterimageBestRate": 0.109375,
+    "scorelineBestRate": 0.28125,
+    "afterimagePairDecksPer64Minimum": 9,
+    "afterimagePairDecksPer64Maximum": 24,
+    "scorelinePairDecksPer64Minimum": 10,
+    "scorelinePairDecksPer64Maximum": 31,
+    "cemHoldoutFaults": 0,
+    "candidateAddedStalls": 0,
+    "candidateErrors": 0,
+    "protectedSeedsUsed": false
+  },
+  "nextBoundedStep": "Test the same consumers with existing Duskblade starter cards as mediator producers; do not add reward bias, new cards, fixed bonuses or charge grants."
+}

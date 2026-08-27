@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v11",
+  "protocolSha256": "e9cccba75dd93e9423746ee42bae68998b2c7fe5b0131c5ee2b5197c68155c6c",
+  "decision": "reject",
+  "reason": "Independent CEM islands and a fresh paired validation found no viable Duskblade Vow-5 policy for either route; reliability and control gates passed, so search tuning alone cannot admit the content.",
+  "evidence": {
+    "analysisSha256": "c8a341099f22bb4af6276d768e6413a8b9fe3109bde65bc8708ec2491e6e69fe",
+    "selectionSha256": "e7aa9a4f2c0ab643b6d506776979f359112dcd3cf8dffbdf0108e6ecfd5216d8",
+    "seedPacketSha256": "5ba28729e1b48fc60bb359e73a4078c65d6407c34a4fb5ca7584438a87184ee3"
+  },
+  "boundedNegative": {
+    "afterimageBestPolicyRate": 0.265625,
+    "scorelineBestPolicyRate": 0.109375,
+    "randomBuildRate": 0.0859375,
+    "candidateRescues": 30,
+    "candidateRegressions": 22,
+    "addedStalls": 0,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

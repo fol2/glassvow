@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "question": "Does one further Dusk-only mediator payout step close the exact v7 policy shortfall without RandomBuild or reliability regression?",
+  "candidate": {
+    "contentSha256": "765c2cdc07f6d773a7230dd830a7b4778bf7af5e72e191bfa8a912528c239a9c",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-poison",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "scoreline",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "mirrorEdge",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedV7LandscapeSha256": "692e8ae1d1985180b152712a9cb1f7592e7efcbb259d18dc3c92f98bde0a323e",
+      "v7DuskVow0Margin": 0.34375
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "765c2cdc07f6d773a7230dd830a7b4778bf7af5e72e191bfa8a912528c239a9c",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "88681d8fc04618f1a7f14e9c06b41efa77767a978b9c3a53fc19541d461e42bc",
+    "pilotSha256": "360967cea2c09ec3f60a7644ed97663fa4bdd27b314f86866fd0cba1cd88013b",
+    "probeSha256": "49e12cb300d35bca45332758b049e3cc8ab2f3776034c5a9ee2deeda7c12335f",
+    "researchBalanceSimSha256": "1f73de23ad6611052b012a7efb076cea6263a32a9d14b29d33e2134237dc25a5",
+    "prototypePatchSha256": "50543452faa8cbe836d9aac2683f2665ce7ef02d888ca84c7834ebd4e42b7659"
+  },
+  "seedBases": {
+    "separationDiscovery": 120000,
+    "separationValidation": 121000,
+    "panelDiscovery": 122000,
+    "panelValidation": 123000,
+    "policyRootDiscovery": 452,
+    "policyRootValidation": 453,
+    "controlDiscovery": 124000,
+    "controlValidation": 125000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "120000-120127",
+      "validation": "121000-121127"
+    },
+    "panels": {
+      "discovery": "root 452, indices 0-127, seeds 122000-122127",
+      "validation": "root 453, indices 0-127, seeds 123000-123127"
+    },
+    "controls": {
+      "discovery": "124000-124127",
+      "validation": "125000-125127"
+    },
+    "landscape": {
+      "discovery": "root 456, indices 0-127, seeds 126000-126015",
+      "validation": "root 457, indices 0-127, seeds 127000-127015"
+    }
+  },
+  "competingOptions": [
+    {
+      "id": "v8-admissible",
+      "statement": "Both Dusk routes gain a second viable policy while Ash routes, retention and all guardrails stay clear."
+    },
+    {
+      "id": "v8-unsafe-or-insufficient",
+      "statement": "A route remains underpowered or the Dusk-only payout causes RandomBuild movement, collapse or added reliability faults."
+    }
+  ],
+  "estimands": {
+    "functionalSeparation": "Named diagonal interaction lower 95% bound at least 0.25 SD; every off-diagonal upper bound below 0.25.",
+    "panelActivation": "Named consumer response in AB minus B, standardised by pooled consumer response; lower 95% bound at least 0.25 SD.",
+    "policySensitivity": "At least eight independent policies per package and split apply and consume the mediator with positive consumer activation.",
+    "reliability": "Paired candidate-minus-live added stalls by policy, aspect, vow and seed; any added stall or simulator error fails.",
+    "reachability": "Legacy rewards acquire, play and activate both components for at least two distinct policies per applicable aspect/vow and split.",
+    "policyViability": "Each route has at least two witness policies whose full-seed win rate exceeds RandomBuild arm 2 by at least 0.35.",
+    "retention": "Both route best-policy rates per grid are within 0.10 and their witness sets differ.",
+    "globalMovement": "Candidate-minus-live RandomBuild arm-2 point movement is at most 0.10 per grid; a bound-overlapping interval extends."
+  },
+  "successRule": {
+    "functionalSeparation": "All four diagonals and twelve off-diagonals pass discovery and held-out evidence.",
+    "packageActivation": "All four packages meet activation, witness, aspect-separation, reliability and duration gates in both splits.",
+    "globalMovement": "Every held-out RandomBuild movement is within 0.10.",
+    "reliability": "No candidate-added stall and zero candidate/live simulator errors.",
+    "reachability": "Both packages per aspect meet the policy witness rule in every grid and split.",
+    "c2": "RandomBuild arm 2 is below 0.50 and both route endpoints have at least two policies with a gap of at least 0.35.",
+    "retention": "Both route endpoints remain within 0.10 of the top and use distinct witness sets.",
+    "vow5": "Every top route-policy win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "landscapeRowsMaximumPerContentAndSplit": 8192,
+    "wholeRunRowsBeforePackagePass": 0
+  },
+  "cheapestDiscriminatingExperiment": "Run 32-pair separation and panels, paired 32-seed controls, then paired candidate/live 64-policy by 8-seed landscapes. Extend only non-fault shortfalls.",
+  "inconclusiveRule": "A threshold-overlapping control or non-fault route shortfall extends to the frozen maximum on the same cohort. At the maximum it rejects. No candidate, policy logic or estimand changes.",
+  "stopRule": "Reject immediately on functional-separation, activation, global-movement, candidate-added-stall, simulator-error, C2, retention or Vow-5 failure. Detector mutations remain forbidden until discovery and independent validation pass.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "budget": {
+    "controlledRowsMaximum": 1024,
+    "firstLookPairsPerArmAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "panelRowsMaximum": 1024,
+    "wholeRunRowsBeforePass": 0
+  },
+  "candidate": {
+    "consumer": "snapCut",
+    "package": "dusk-scoreline",
+    "producer": "scoreline",
+    "reachability": "Scoreline is in the common reward pool and Snap Cut is in the uncommon reward pool; neither requires a deed unlock.",
+    "shippingChangesAtThisStage": [],
+    "specification": {
+      "consumer": {
+        "baseDamage": 4,
+        "bonusDamage": 12,
+        "cost": 1,
+        "rarity": "uncommon",
+        "upgradeBaseDamage": 7,
+        "upgradeBonusDamage": 15
+      },
+      "marker": "scoreline",
+      "producer": {
+        "cost": 1,
+        "damage": 6,
+        "rarity": "common",
+        "stacks": 1,
+        "upgradeDamage": 9
+      }
+    }
+  },
+  "cheapestDiscriminatingExperiment": "Matched none/A/B/AB legal-combat damage contrasts for Scoreline and Snap Cut across base and upgraded card states, followed only on local success by a matched short pilot panel for Duskblade and the Ashwarden aspect control.",
+  "competingOptions": [
+    {
+      "id": "explicit-handshake-suffices",
+      "statement": "A marker that only Scoreline produces and Snap Cut consumes creates a practical Duskblade package that baseline cards cannot activate."
+    },
+    {
+      "id": "explicit-handshake-insufficient",
+      "statement": "The held-out local interaction or practical panel target is ruled out; reject the prototype without tuning its frozen values."
+    }
+  ],
+  "estimands": {
+    "bootstrap": "Matched seed-block percentile bootstrap with 5000 draws; discovery seed 42501 and validation seed 42502.",
+    "controlledEdge": "For direct damage, I = AB - A - B + none within every matched seed. Standardise I by the pooled population standard deviation of the four arm responses. An all-zero negative control is recorded as a degenerate zero interval; any other zero scale is an automatic rejection.",
+    "panelActivation": "For combat utility U = damage - hpLost, activation is U(AB) - max(U(A), U(B), U(none)) within every matched seed. Standardise by the pooled population standard deviation of all four arm utilities; a zero scale is an automatic rejection.",
+    "panelAspectSeparation": "Paired Duskblade activation minus Ashwarden activation on the same seed and arm decks.",
+    "panelDuration": "AB turns minus the minimum turns among A, B and none for matched rows that all win; any AB-only loss or capped combat counts as an added stall.",
+    "precisionUnit": "The seed is the resampling block. Upgrade states vary deterministically inside the frozen cohort."
+  },
+  "immutableInputs": {
+    "candidateContentSha256": "b57aebba81d27fa28711c4a2d6ae828e9ead051500071b1a3d24c4209b208b4d",
+    "combatRulesSha256": "09da4a7df3058c2d392fe461c22cf1a778380881583b94ee09ffbd2e0d2cf01c",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "pilotSha256": "03d2a5158ee39080dc7a89b82a2c9440dbebdabef61958f27e78890b6cb53b63",
+    "probeSha256": "63fd7e70d17a37861ed7d1ad5d07a29168287ce96071596a5c93059aedb07451",
+    "prototypePatchSha256": "1efbac548cf4f1dece10f93f747390c777dbcc6ec9afffffa9077ef3f4c69605",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "inconclusiveRule": "If an interval overlaps its practical target at 32 pairs, extend the same frozen cohort to 64 and then 128 pairs. At 128 pairs, an overlapping interval is inconclusive and the family stops without promotion.",
+  "noveltyBoundary": "This is the minimum structural response to the generic-Shatter failure: only the named producer creates the marker and only the named consumer spends it. No neutral card, implicit Facet chip or Shatter can activate the package.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  },
+  "question": "Can a minimal explicit producer-consumer handshake supply the missing second practical Duskblade package?",
+  "researchSeeds": {
+    "discovery": "68000-68127",
+    "validation": "69000-69127"
+  },
+  "schemaVersion": 1,
+  "stopRule": "Reject immediately when the held-out local interaction fails, a practical panel upper 95% bound is below 0.25 standard deviations, any error or added stall occurs, or the Ashwarden control is not functionally separable. Do not tune the frozen values and do not spend whole-run rows after rejection.",
+  "successRule": {
+    "aspectSeparation": "The held-out Duskblade package activation exceeds the Ashwarden control with a positive paired lower 95% bound.",
+    "duration": "The held-out package does not increase mean combat duration; upper 95% turn delta is at most 0.25 turns.",
+    "localEdge": "The Duskblade held-out lower 95% standardised direct-damage interaction is at least 0.25, while the Ashwarden upper bound stays below target.",
+    "panel": "The Duskblade held-out package activation lower 95% standardised bound is at least 0.25.",
+    "reliability": "Zero added errors and stalls on both splits."
+  }
+}

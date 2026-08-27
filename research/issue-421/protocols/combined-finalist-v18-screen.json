@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "question": "Which independently sampled policies actually express the two existing-card Duskblade mediators, so any optimiser starts from route-valid cells?",
+  "candidate": {
+    "contentSha256": "c2aab0d298e5a0ab8577b4a11784e851fe48dddb4618f7925e9df5ddde141db2",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "fortify",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "provenance": {
+      "rejectedV17SummarySha256": "361afed58fba45cb7ac33fea16cc4e1d9ed0b8b74336d0e8cd099adcde1e8aab"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "c2aab0d298e5a0ab8577b4a11784e851fe48dddb4618f7925e9df5ddde141db2",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "b89cc080c24a01e183dd210687abf2a10fbdc63d0ff122b0d7a08f8134c12ff6",
+    "pilotSha256": "6c832e6bfcf0c6f015d1ac3e80c754a03fd60972672f1a4da1dd8c250b2cc6a9",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "43307a096539ddaf9fcd86fb7a0f3286b32d8705bea33915332270bf4af19130",
+    "prototypePatchSha256": "cd32e1f5f213bcb50107b17b4b01303cc3c067561306a2b4f3cd06135d357fd5"
+  },
+  "seedBases": {
+    "repertoirePolicyRoot": 490,
+    "repertoireScreenSeed": 185000
+  },
+  "researchCohorts": {
+    "screen": "root 490, policy indices 0-511, seeds 185000-185003, Duskblade Vow-5"
+  },
+  "budget": {
+    "repertoireScreenPolicies": 512,
+    "repertoireScreenSeeds": 4,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireScreenRowsMaximum": 2048
+  },
+  "successRule": "Select eight fault-free, mediator-active policy cells per Duskblade route. Do not interpret four-seed win counts as acceptance.",
+  "stopRule": "Reject the current route identities if either route has fewer than eight active fault-free cells. Do not fit CEM from unlabelled or stale cells.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

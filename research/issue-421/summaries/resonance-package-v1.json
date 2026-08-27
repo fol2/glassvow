@@ -1,0 +1,25 @@
+{
+  "analysisSha256": {
+    "controlledDiscovery": "ca5b101b6fc06dba861c6283297620acdcbeea3d66b70b13c78dad0381d6d48f",
+    "controlledValidation": "26a545edac8864511aba3b0d0dcc847636b6ed4fb8246749392030656152d264",
+    "panelDiscovery": "3dce4b371a209d3253e827024fed2a9cecc1a415d6b625c2083271c965d45544"
+  },
+  "decision": "REJECT_EXISTING_RESONANCE_PACKAGE",
+  "finding": "Eclipse Slash and Shatterhymn each caused a large, independently reproduced local interaction with Resonant Lance, but neither pairing produced positive Duskblade package activation in the preregistered discovery pilot panel. The strongest Duskblade panel upper 95% bound was 0.0181 SD, below the 0.25-SD practical target.",
+  "issue": 421,
+  "noFurtherRows": [
+    "No held-out panel rows were run after the decisive discovery rejection.",
+    "No whole-run rows were run.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "13e04805bb42f1094c71965a9bbc576458de33f02552d7f5147e9f1cb95584ce",
+  "reliability": {
+    "addedStalls": 0,
+    "errors": 0
+  },
+  "researchRows": 1536,
+  "runnerSha256": "836e1d35951d7f2a415cdefc1da6b2216e144412b66eaa2e25571c9575b728a5",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_NEGATIVE"
+}

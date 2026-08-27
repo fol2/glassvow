@@ -1,0 +1,21 @@
+{
+  "analysisSha256": {
+    "functionalSeparationDiscovery": "943511ba81f5d19ca9a8df005730c9a8f311de73a00eab1711e052dc65ce4b7f",
+    "functionalSeparationValidation": "c2c96bea03f3b971924a53a54bf243b83232fe4551af32207cf445f4c5c0ed5c",
+    "policyPanelDiscovery128": "89adf16259619f88cf674fb3b5efd84db7d55369948e3eee583e3a5985b915ea"
+  },
+  "decision": "REJECT_EXACT_COMBINED_FINALIST_V2",
+  "finding": "Poison-Catalyst, Scoreline-Snap Cut and Afterimage-Warden's Edge all passed the frozen 128-policy discovery panel with strong mechanism activation, ample policy witnesses, zero target-aspect added non-wins and shorter combats. The retained hand-size package did not: despite 49 policy witnesses and a 0.75-turn average improvement, its consumer activation upper 95% bound was only 0.1982 SD against the required 0.25. The exact candidate therefore stopped before held-out whole-run or detector work.",
+  "issue": 421,
+  "limits": [
+    "This is a bounded negative for candidate content 50fe3f2618129a170f7390b5876ade530f2bc1ad0c300900005e5fb7fd584508 and its frozen protocol only.",
+    "The three admitted discovery packages still require held-out panel, legacy-economy, whole-run and detector evidence in any later exact candidate.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "bc212b5db52ceb6f49ae4133c6bd08c24315a230dbb6f834eabbfb412023621d",
+  "researchRows": 8192,
+  "runnerSha256": "3b812e4d7a9f7ef26f3473a5feff1d1c8358c29bb960baf4540eab9b8db4c21b",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_NEGATIVE"
+}

@@ -1,0 +1,124 @@
+{
+  "budget": {
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "firstLookPairsPerPackageAndSplit": 32,
+    "landscapeRowsMaximumPerContentAndSplit": 8192,
+    "maximumPairsPerArmAndSplit": 128,
+    "maximumPairsPerPackageAndSplit": 128,
+    "panelRowsMaximumPerSplit": 4096,
+    "wholeRunRowsBeforePackagePass": 0
+  },
+  "candidate": {
+    "contentSha256": "d1e725734176ed9dde0d7712fa5bb9c11142847277b9664a821053b6d63f88b5",
+    "packages": {
+      "ash-hand-size": {
+        "aspect": "ashwarden",
+        "consumer": "phantomBlades",
+        "mediator": "hand-size",
+        "producer": "preparation",
+        "requiresAspectSeparation": false,
+        "response": "directDamage"
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "consumer": "catalyst",
+        "mediator": "enemy-poison",
+        "producer": "toxicMist",
+        "requiresAspectSeparation": true,
+        "response": "poisonApplied"
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "producer": "scoreline",
+        "requiresAspectSeparation": true,
+        "response": "directDamage"
+      },
+      "dusk-ward-mirror": {
+        "aspect": "duskblade",
+        "consumer": "fortify",
+        "mediator": "player-block",
+        "producer": "mirrorEdge",
+        "requiresAspectSeparation": false,
+        "response": "blockGain"
+      }
+    },
+    "provenance": {
+      "ashNumericEvidenceContentSha256": "c7b1874467267931d71b66fa1dd753f6ab983ce2cd01d8e954c589ba4098eb06",
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "scorelineSummarySha256": "82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea",
+      "wardNumericEvidenceContentSha256": "0acbe2176743b1b705ef18876119f7e94734096f4a87ea4fb433020863ee0bbb"
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": []
+  },
+  "cheapestDiscriminatingExperiment": "First run a matched legal-combat producer-by-consumer interaction matrix and independent-policy short panels on the frozen combined content. Only if every package remains distinct and practically activatable may paired whole-run controls and legacy-reward landscapes run.",
+  "competingOptions": [
+    {
+      "id": "combined-finalist-admissible",
+      "statement": "The four packages remain causally distinct, practical, reachable and policy-sensitive together while existing whole-run guardrails stay green."
+    },
+    {
+      "id": "combined-finalist-confounded-or-unsafe",
+      "statement": "At least one package collapses, cross-activates, is unreachable, lacks policy witnesses or moves global/random difficulty materially; reject this exact combination without spending protected seeds."
+    }
+  ],
+  "estimands": {
+    "functionalSeparation": "For each consumer response, matched I = AB - A - B + none across every producer. Its named producer must have a lower 95% standardised interaction bound of at least 0.25; every off-diagonal producer upper bound must stay below 0.25.",
+    "globalMovement": "Paired candidate-minus-live arm-2 win-rate movement by aspect/vow, with a material absolute bound of 0.10. Package admission also requires the existing C2 absolute and gap rules, so broad no-skill power cannot substitute for route activation.",
+    "panelActivation": "For U = damage - hpLost, activation is U(AB) - max(U(A), U(B), U(none)) within each sampled policy/seed block, standardised by pooled arm utility.",
+    "policySensitivity": "A policy is a witness when all four matched arms complete, the package cards are played in AB, the named mediator fires and AB activation is positive. Require at least eight distinct policy witnesses per package and split.",
+    "reachability": "Under the legacy reward/economy path, a package is reached when a run acquires both components and records both played; the mechanism-specific event must also fire. Require at least two distinct policy witnesses per applicable aspect/vow and split, or a separately frozen deterministic acquisition-path proof.",
+    "reliability": "Errors and stalls are counted exactly; duration uses AB turns minus the minimum component-arm turns for all-win matched panels."
+  },
+  "immutableInputs": {
+    "candidateContentSha256": "d1e725734176ed9dde0d7712fa5bb9c11142847277b9664a821053b6d63f88b5",
+    "combatRulesSha256": "09da4a7df3058c2d392fe461c22cf1a778380881583b94ee09ffbd2e0d2cf01c",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "pilotSha256": "03d2a5158ee39080dc7a89b82a2c9440dbebdabef61958f27e78890b6cb53b63",
+    "probeSha256": "85f9b6534c767ba44ec6f5ea7f8fb822c72be9bdacf4f6669fe223662f2750b1",
+    "prototypePatchSha256": "8bc5b1f92b7c73c8d66a6212d0f9e35180d0ae4e11054bbf569dbe8b64cecca7",
+    "researchBalanceSimSha256": "a25f22c4aeb46c291325c590dab9d70d39dfc414436d2b8282ab89f1a7009a71",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "inconclusiveRule": "For an interval overlapping its threshold at 32 blocks, extend the same frozen cohort to 64 and then 128. At 128, stop this exact candidate as inconclusive. Never change candidate values after seeing these rows.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  },
+  "question": "Does the smallest four-package combined finalist preserve each causal strategy and current commercial guardrails under independent policies and the real legacy economy?",
+  "researchCohorts": {
+    "controls": {
+      "discovery": "74000-74127",
+      "validation": "75000-75127"
+    },
+    "landscape": {
+      "discoveryPolicies": "root 426, indices 0-127",
+      "discoverySeeds": "76000-76015",
+      "validationPolicies": "root 427, indices 0-127",
+      "validationSeeds": "77000-77015"
+    },
+    "panels": {
+      "discoveryPolicies": "root 428, indices 0-127",
+      "discoverySeeds": "72000-72127",
+      "validationPolicies": "root 429, indices 0-127",
+      "validationSeeds": "73000-73127"
+    }
+  },
+  "schemaVersion": 1,
+  "stopRule": "Reject the exact combination immediately after a decisive package, separation, reliability, C2, aspect-identity, Vow-5, reachability or global-movement failure. Do not run detector mutations until all four packages pass.",
+  "successRule": {
+    "aspectIdentity": "Duskblade retains Shatter and Scoreline expression without player Smolder application; Ashwarden retains Smolder expression without Shatter or Scoreline consumption.",
+    "c2": "For every aspect/vow grid, RandomBuild arm 2 win rate is below 0.50 and planned-minus-RandomBuild is at least 0.35.",
+    "duration": "Every package held-out panel duration upper 95% bound is at most 0.25 turns.",
+    "functionalSeparation": "All four named diagonal interactions pass and every cross-producer interaction is below target on discovery and held-out evidence.",
+    "globalMovement": "Every held-out arm-2 candidate-minus-live absolute win-rate delta is at most 0.10.",
+    "packageActivation": "Every package held-out activation lower 95% bound is at least 0.25 SD with zero added stalls/errors.",
+    "policySensitivity": "Every package has at least eight independent policy witnesses per split.",
+    "reachability": "Every package meets the legacy-economy witness rule in both splits or has a separately frozen deterministic acquisition proof.",
+    "vow5": "Every applicable held-out top viable-policy win rate is at most 0.90."
+  }
+}

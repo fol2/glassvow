@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "question": "Can six independently fitted CEM islands turn the fresh route-active V25 cells into two retained Vow-5 endpoints per Duskblade route without reliability or global-movement regression?",
+  "candidate": {
+    "contentSha256": "6c4a4aab858bc96d35b5c755cab2acb62d1a11c44337e57235291755bb9a2d37",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "shatter",
+        "cardMetric": "shatter",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "deflect",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "provenance": {
+      "v26ScreenSummarySha256": "277db836d8dee37c4689bcba34165da65aeb2f3612efa60f0bdd01e165af57b2",
+      "v26ScreenAnalysisSha256": "1ec71c641742be5714a62fb54daf1acd8af8cfc74421ca728c2ff164f491e35b",
+      "v26ScreenSelectionSha256": "20778908771afb8218c36898ceb5c43bcefc58d504b01e89929e302dda8fe7bc"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "6c4a4aab858bc96d35b5c755cab2acb62d1a11c44337e57235291755bb9a2d37",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "f082c4c7205eaf2b7a66ca38b9d4ae799f4220ffa20cc23b8f2f9c276459b5d4",
+    "pilotSha256": "073443448e64b352b34bf6e8319c7307678ffeb50ec9a3e98f0bd72d9e16d77a",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "237c6ab70e10868be84c384f59a8e5257b288cf05226ec3c088876c98268a87e",
+    "cemSha256": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+    "cemSeedPacketSha256": "952cfe2cba8403d5bfafea8b8b73e57fc5dc174c0a559c1f7060612c3b754a3f",
+    "prototypePatchSha256": "df12d2a4cee0e0f23266806d37ad5b9dd6fccb3bc7a9a5a0b3880673f141e32f"
+  },
+  "seedBases": {
+    "controlValidation": 250000,
+    "cemSamplerRoot": 505,
+    "cemRoot": 506,
+    "cemTrain": 247000,
+    "cemHoldout": 248000,
+    "cemFinalValidation": 249000
+  },
+  "researchCohorts": {
+    "cemTrain": "six unique route-valid Duskblade-v5 starts, generations 0-5, eight CRN seeds per generation, 247000-247047",
+    "cemHoldout": "all six final policies, 248000-248063",
+    "finalValidation": "all six frozen final policies, paired candidate/live, 249000-249063",
+    "controls": "250000-250127"
+  },
+  "cem": {
+    "islands": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "population": 16,
+    "elite": 4,
+    "maximumGenerations": 6,
+    "trainingSeedsPerGeneration": 8,
+    "holdoutSeeds": 64,
+    "seedPacketSamplerRoot": 505,
+    "assignedRoutes": {
+      "6": "dusk-afterimage-guard",
+      "7": "dusk-afterimage-guard",
+      "8": "dusk-afterimage-guard",
+      "9": "dusk-scoreline",
+      "10": "dusk-scoreline",
+      "11": "dusk-scoreline"
+    },
+    "seedPacket": "protocols/cem-v27-seeds.json"
+  },
+  "estimands": {
+    "routeViability": "At least two final policies per route activate the mediator and beat held-out RandomBuild arm 2 by at least 0.35.",
+    "retention": "Route-best rates remain within 0.10 and credited endpoint sets differ.",
+    "reliability": "No CEM holdout fault and no paired candidate-added stall or error.",
+    "vow5": "Every final-policy validation win rate is at most 0.90."
+  },
+  "budget": {
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "cemTrainingRowsMaximum": 4608,
+    "cemHoldoutRows": 384,
+    "cemFinalValidationRowsPerContent": 384,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048
+  },
+  "successRule": "Controls admit, then each route retains at least two independently fitted C2 endpoints, distinct endpoint sets, zero reliability regression and the Vow-5 ceiling.",
+  "inconclusiveRule": "The six islands and 64-seed final rectangle are final; do not replace starts, add generations or reselect after readout.",
+  "stopRule": "Reject on controls, fewer than two C2 endpoints per route, collapse, added fault or Vow-5 above 0.90. Detector mutations remain forbidden until this gate passes.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

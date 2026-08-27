@@ -1,0 +1,175 @@
+diff --git a/content/full-content.json b/content/full-content.json
+index 1fdf17c..4109f7f 100644
+--- a/content/full-content.json
++++ b/content/full-content.json
+@@ -140,6 +140,70 @@
+       "name": "Chisel",
+       "text": "Deal @4@ damage. Chip 1 extra Facet."
+     },
++    "scoreline": {
++      "type": "attack",
++      "rarity": "common",
++      "cost": 1,
++      "target": "enemy",
++      "vfx": "pierce",
++      "effects": [
++        {
++          "kind": "dmg",
++          "n": 6
++        },
++        {
++          "kind": "status",
++          "who": "target",
++          "id": "scoreline",
++          "n": 1
++        }
++      ],
++      "up": {
++        "effects": [
++          {
++            "kind": "dmg",
++            "n": 9
++          },
++          {
++            "kind": "status",
++            "who": "target",
++            "id": "scoreline",
++            "n": 1
++          }
++        ],
++        "text": "Deal @9@ damage. Duskblade: apply 1 Scoreline."
++      },
++      "name": "Scoreline",
++      "text": "Deal @6@ damage. Duskblade: apply 1 Scoreline."
++    },
++    "snapCut": {
++      "type": "attack",
++      "rarity": "uncommon",
++      "cost": 1,
++      "target": "enemy",
++      "vfx": "slash",
++      "effects": [
++        {
++          "kind": "special",
++          "id": "snapCut",
++          "n": 4,
++          "bonus": 12
++        }
++      ],
++      "up": {
++        "effects": [
++          {
++            "kind": "special",
++            "id": "snapCut",
++            "n": 7,
++            "bonus": 15
++          }
++        ],
++        "text": "Deal @7@ damage. Consume Scoreline to deal @15@ more."
++      },
++      "name": "Snap Cut",
++      "text": "Deal @4@ damage. Consume Scoreline to deal @12@ more."
++    },
+     "firstSpark": {
+       "type": "skill",
+       "rarity": "starter",
+@@ -1703,6 +1767,7 @@
+       "quickSlash",
+       "heavyBlow",
+       "cleave",
++      "scoreline",
+       "venomStrike",
+       "lunge",
+       "guardedStrike",
+@@ -1724,6 +1789,7 @@
+       "cripple",
+       "warCry",
+       "fortify",
++      "snapCut",
+       "bloodRite",
+       "empower",
+       "agility",
+@@ -1764,6 +1830,12 @@
+       "name": "Cracked",
+       "desc": "The glass is scored: takes 50% more attack damage. Wears off each turn."
+     },
++    "scoreline": {
++      "icon": "⌁",
++      "kind": "debuff",
++      "name": "Scoreline",
++      "desc": "A prepared fault. Snap Cut consumes one stack for bonus damage."
++    },
+     "weak": {
+       "icon": "↓",
+       "kind": "debuff",
+diff --git a/domain/rules/combat.gd b/domain/rules/combat.gd
+index 58c9b8c..2fdb1cc 100644
+--- a/domain/rules/combat.gd
++++ b/domain/rules/combat.gd
+@@ -16,6 +16,7 @@ var quests: QuestRules
+ const SPECIAL_IDS: Array[String] = [
+ 	"leech", "execute", "momentum", "doubleBlock", "phantom", "devour",
+ 	"pyreTithe", "catalyst", "shatterEcho", "flawless", "emberNova", "emberdance",
++	"snapCut",
+ ]
+ const POTION_IDS: Array[String] = [
+ 	"healing", "strength", "swift", "block", "fire", "venom", "energy",
+@@ -402,6 +403,8 @@ func add_status_enemy(
+ ) -> void:
+ 	if id == "poison" and _player_smolder_blocked(run):
+ 		return
++	if id == "scoreline" and run != null and run.aspect != 0:
++		return
+ 	_add_status(cb, e.statuses, e.idx, id, n)
+ 
+ 
+@@ -987,6 +990,12 @@ func _apply_special(
+ 		"shatterEcho":
+ 			var echo: int = 2 if target.staggered or _sget(target.statuses, "vulnerable") > 0 else 1
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * echo, true, damage_mult)
++		"snapCut":
++			var bonus: int = 0
++			if run.aspect == 0 and _sget(target.statuses, "scoreline") > 0:
++				bonus = _ji(fx.get("bonus", 0))
++				add_status_enemy(cb, target, "scoreline", -1, run)
++			hit_enemy(run, cb, target, _ji(fx["n"]) + bonus, true, damage_mult)
+ 		"emberNova":
+ 			hit_enemy(run, cb, target, _ji(fx["n"]) * cb.embers, true, damage_mult)
+ 		"pyreTithe":
+@@ -1357,6 +1366,11 @@ func preview_play(
+ 				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + inst.bonus), "times": 1})
+ 			elif sid == "doubleBlock":
+ 				block += p.block
++			elif sid == "snapCut":
++				var bonus: int = _ji(fx.get("bonus", 0)) \
++					if run != null and run.aspect == 0 and target != null \
++					and _sget(target.statuses, "scoreline") > 0 else 0
++				hits.append({"dmg": _preview_hit(p, target, _ji(fx["n"]) + bonus), "times": 1})
+ 	var fx_chips: int = 0
+ 	for fx_v: Variant in effects:
+ 		var fx: Dictionary = fx_v
+diff --git a/tools/balance_pilot.gd b/tools/balance_pilot.gd
+index 40bedc8..9e4f308 100644
+--- a/tools/balance_pilot.gd
++++ b/tools/balance_pilot.gd
+@@ -205,6 +205,10 @@ static func _target(game: GlassvowGame, card: CardInst, d: Dictionary) -> Varian
+ 					> int(float(str(stacked.statuses.get("poison", 0)))):
+ 				stacked = e
+ 		return stacked.idx
++	if game.run.aspect == 0 and _special_id(d) == "snapCut":
++		for e: EnemyCombatant in living:
++			if int(float(str(e.statuses.get("scoreline", 0)))) > 0:
++				return e.idx
+ 	if game.run.aspect == 1 and poison:
+ 		var highest: EnemyCombatant = living[0]
+ 		for e: EnemyCombatant in living:
+@@ -292,7 +296,8 @@ static func card_score(d: Dictionary, aspect: int, card_id: String = "") -> floa
+ 	if str(d.get("type", "")) == "power":
+ 		score += _w("card", "power")
+ 	score += float(str(d.get("chip", 0))) * (_w("card", "chipDusk") if dusk else _w("card", "chipAsh"))
+-	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak", "resonantLance", "executioner"]:
++	if dusk and card_id in ["eclipseSlash", "chisel", "warCry", "limitBreak",
++			"resonantLance", "executioner", "scoreline", "snapCut"]:
+ 		score += _w("card", "aspectBonus")
+ 	if not dusk and card_id in ["ashBite", "smother", "venomStrike", "toxicMist", "ashenChoir",
+ 			"catalyst", "virulence", "annihilate"]:

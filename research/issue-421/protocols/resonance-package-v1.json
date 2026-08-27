@@ -1,0 +1,65 @@
+{
+  "budget": {
+    "controlledRowsMaximum": 4096,
+    "firstLookPairsPerArmAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "panelRowsMaximum": 2048,
+    "wholeRunRowsBeforePass": 0
+  },
+  "candidate": {
+    "consumer": "resonantLance",
+    "deterministicAcquisition": "deed paneBreaker unlocks card:resonantLance after 15 shatters",
+    "package": "dusk-resonance",
+    "producers": [
+      "eclipseSlash",
+      "warCry"
+    ],
+    "shippingChangesAtThisStage": []
+  },
+  "cheapestDiscriminatingExperiment": "Matched none/A/B/AB legal-combat contrasts for eclipseSlash->resonantLance and warCry->resonantLance, followed only on local success by matched short pilot panels for Duskblade and the Ashwarden aspect control.",
+  "competingOptions": [
+    {
+      "id": "existing-resonance-suffices",
+      "statement": "The existing deed-unlocked Resonant Lance and existing Cracked producers form the missing second Duskblade package without a new runtime primitive."
+    },
+    {
+      "id": "existing-resonance-insufficient",
+      "statement": "The held-out practical interaction or panel target is ruled out; reject this option and choose a materially different evidence-backed mechanism inside issue #421."
+    }
+  ],
+  "immutableInputs": {
+    "combatRulesSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "issue524FindingSha256": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2",
+    "issue525FindingSha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c",
+    "pilotSha256": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+  },
+  "estimands": {
+    "bootstrap": "Matched seed-block percentile bootstrap with 5000 draws; discovery seed 42101 and validation seed 42102.",
+    "controlledEdge": "For directDamage, I = AB - A - B + none within every matched seed. Standardise I by the pooled population standard deviation of the four arm responses; a zero scale is an automatic rejection.",
+    "panelActivation": "For combat utility U = damage - hpLost, activation is U(AB) - max(U(A), U(B), U(none)) within every matched seed. Standardise by the pooled population standard deviation of all four arm utilities; a zero scale is an automatic rejection.",
+    "panelAspectSeparation": "Paired Duskblade activation minus Ashwarden activation on the same seed and arm decks.",
+    "panelDuration": "AB turns minus the minimum turns among A, B and none for matched rows that all win; any AB-only loss or capped combat counts as an added stall.",
+    "precisionUnit": "The seed is the resampling block. Exact repeated values remain evidence of deterministic reproducibility, not additional within-seed samples."
+  },
+  "inconclusiveRule": "If an interval overlaps the practical target at 32 pairs, extend the same frozen cohort to 64 and then 128 pairs. At 128 pairs, an overlapping interval is inconclusive and the family stops without promotion.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  },
+  "researchSeeds": {
+    "discovery": "60000-60127",
+    "validation": "61000-61127"
+  },
+  "schemaVersion": 1,
+  "stopRule": "Reject immediately when a held-out upper 95% bound is below 0.25 standard deviations, any error or added stall occurs, or the Ashwarden control is not functionally separable. Do not spend whole-run rows after rejection.",
+  "successRule": {
+    "aspectSeparation": "The held-out Duskblade package activation exceeds the Ashwarden control with a positive paired lower 95% bound.",
+    "duration": "The held-out package does not increase mean combat duration; upper 95% turn delta is at most 0.25 turns.",
+    "localEdges": "Both Duskblade edge held-out lower 95% standardised interaction bounds are at least 0.25.",
+    "panel": "Duskblade held-out package activation lower 95% standardised bound is at least 0.25.",
+    "reliability": "Zero added errors and stalls on both splits."
+  },
+  "question": "Can the existing deed-unlocked Resonant Lance supply the missing second Duskblade package without repeating the exhausted #525 Kindle/Branch family or adding a new primitive?"
+}

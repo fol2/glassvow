@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "question": "Does a twice-current-Ward Afterimage reflection give the Refract and Warden's Edge route decisive aspect separation and whole-run viability without global movement?",
+  "candidate": {
+    "contentSha256": "06ac3b52476e4cea28283048704e0978229154f7619bfe872754ba6f91ba8754",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "quickSlash",
+        "consumer": "executioner",
+        "mediator": "enemy-scoreline",
+        "response": "shatter",
+        "cardMetric": "shatter",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "deflect",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Flicker applies one Scoreline; Faultline consumes it to complete the target's remaining Facets.",
+      "Refract applies one Afterimage; Warden's Edge consumes it to reflect twice the current Ward as damage and Ward.",
+      "Mirrorlight retains only its current-main Ward doubling; card pools, base values and Energy remain unchanged."
+    ],
+    "provenance": {
+      "inconclusiveV23SummarySha256": "dac6f83e30a615e49562c62c20a0799c98762c552f15b432061276325d94ce5b",
+      "frozenSelectionAnalysisSha256": "4eab54321969ca28f2d9c8e9100126592704da9345f1489aaa93d35b116f2337",
+      "frozenSelectionSha256": "1b10e64bdbb91a3c95a958637e206f487e150d65fb7c14bbf15be0a416e4c46e"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "06ac3b52476e4cea28283048704e0978229154f7619bfe872754ba6f91ba8754",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "3ac09cffb7f2586d6660b9220707f73b04a095a9c72ddb4add8d29cbb466c77a",
+    "pilotSha256": "073443448e64b352b34bf6e8319c7307678ffeb50ec9a3e98f0bd72d9e16d77a",
+    "probeSha256": "9e40a0eb3a8d9d4a420194d6badcbb7e66dd982b2b8c2b824eb53179ff0ef435",
+    "researchBalanceSimSha256": "237c6ab70e10868be84c384f59a8e5257b288cf05226ec3c088876c98268a87e",
+    "prototypePatchSha256": "bb629488a3affbd1921d0423eeee96100855ede1f5bea55850fe1a1b15e38a1b"
+  },
+  "seedBases": {
+    "separationDiscovery": 228000,
+    "separationValidation": 229000,
+    "panelDiscovery": 230000,
+    "panelValidation": 231000,
+    "policyRootDiscovery": 501,
+    "policyRootValidation": 502,
+    "controlDiscovery": 232000,
+    "controlValidation": 233000,
+    "repertoireDiscoverySeed": 234000,
+    "repertoireValidationSeed": 235000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "228000-228127",
+      "validation": "229000-229127"
+    },
+    "panels": {
+      "discovery": "root 501, indices 0-127, seeds 230000-230127",
+      "validation": "root 502, indices 0-127, seeds 231000-231127"
+    },
+    "controls": {
+      "discovery": "232000-232063",
+      "validation": "233000-233063"
+    },
+    "repertoire": {
+      "discovery": "frozen root-490 selection, seeds 234000-234031, Duskblade vows 0 and 5",
+      "validation": "frozen root-490 selection, seeds 235000-235063, Duskblade vows 0 and 5"
+    }
+  },
+  "estimands": {
+    "functionalSeparation": "Every named diagonal lower 95% bound is at least 0.25 SD and every off-diagonal upper bound is below 0.25.",
+    "heldoutViability": "For each Dusk route and vow, at least two frozen policies activate the mediator and beat same-split RandomBuild by at least 0.35.",
+    "retention": "Route-best rates remain within 0.10 and credited policy sets differ.",
+    "reliability": "No paired candidate-added stall or simulator error.",
+    "vow5": "Every frozen-policy Vow-5 win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "repertoireDiscoverySeeds": 32,
+    "repertoireValidationSeeds": 64,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "repertoireValidationRowsMaximumPerContent": 2048
+  },
+  "successRule": "All local gates admit; both routes retain at least two distinct C2 policies under both vows in discovery and validation, with controls, reliability and Vow-5 green.",
+  "inconclusiveRule": "Only a non-decisive panel may extend once to 128. Frozen whole-run rectangles are final.",
+  "stopRule": "Reject on a local gate, either route/vow lacking two C2 policies, collapse, controls, added fault or Vow-5 above 0.90.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

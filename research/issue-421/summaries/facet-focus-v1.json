@@ -1,0 +1,28 @@
+{
+  "analysisSha256": {
+    "controlledDiscovery": "477c2362e3d3987210a14fe8c9b57300a1c5290ee84ae643807bad103df37818",
+    "controlledValidation": "f550053cf25453b54d8c134a909c90199aa2752a55b3b6a6eb9370b0c44f9800",
+    "panelDiscoveryMaximum": "94abe1cd39a38713fa730d2229da2cd2fac801726f7d77b04318caa64d173689"
+  },
+  "decision": "STOP_INCONCLUSIVE_PARTIAL_FACET_PROTOTYPE",
+  "finding": "The new Dusk-only partial-Facet payoff passed both local edges on discovery and held-out evidence while both Ashwarden controls stayed exactly zero. Its pilot panel was aspect-separated, stall-free and faster, but at the preregistered 128-seed maximum both Duskblade activation lower 95% bounds remained below the 0.25-SD target (Chisel 0.1168; Annealing Rite 0.1223). It is not promoted.",
+  "issue": 421,
+  "noFurtherRows": [
+    "No held-out panel rows were run after the maximum discovery cohort remained inconclusive.",
+    "No whole-run rows were run.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "30c208b2f43f0ca0e924774ae8d45332769ab75080ac6bd3df529b76742053ee",
+  "reliability": {
+    "addedStalls": 0,
+    "errors": 0,
+    "panelDurationUpper95Turns": -0.09375
+  },
+  "researchRows": {
+    "simulatorExecutions": 4608,
+    "uniqueEvidenceRows": 3072
+  },
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_INCONCLUSIVE"
+}

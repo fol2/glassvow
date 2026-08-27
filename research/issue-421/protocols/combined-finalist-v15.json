@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "question": "Does making Ashcloud's extra Bellows multiplier depend on a consumed Mistbound marker remove Ash random-build movement while preserving four causal packages and the conditional Dusk tempo candidate?",
+  "candidate": {
+    "contentSha256": "ff0329e67f8b98748864a68880688d25701a2b9c64081bf4bab160942469d9a5",
+    "packages": {
+      "ash-bloodfire-leech": {
+        "aspect": "ashwarden",
+        "producer": "bloodRite",
+        "consumer": "leechBlade",
+        "mediator": "player-bloodfire",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-mistbound",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "scoreline",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "mirrorEdge",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [
+      "Refund one Energy only when Snap Cut consumes Scoreline or Warden's Edge consumes Afterimage.",
+      "Keep Bellows at its live multiplier unless it consumes Mistbound applied by Ashcloud."
+    ],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedV11AnalysisSha256": "c8a341099f22bb4af6276d768e6413a8b9fe3109bde65bc8708ec2491e6e69fe",
+      "rejectedV14ControlsSha256": "112660a9b93f3cf875a2a2a86484a6c14fb6a03ff0fdee9c588c9117205233ff"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "ff0329e67f8b98748864a68880688d25701a2b9c64081bf4bab160942469d9a5",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "f62eedf5d35fdd28a9dbcb5a0a12b6e8971ed8534111c748fae1d94504f66b3d",
+    "pilotSha256": "360967cea2c09ec3f60a7644ed97663fa4bdd27b314f86866fd0cba1cd88013b",
+    "probeSha256": "ac5356f20317e7a13b88290fee1eab7c0c6944730ede8082658f1bf1e5141680",
+    "researchBalanceSimSha256": "34efaff875e9fdc0e97af040d2bb693ccf242bee60f3493409e556cc2604395e",
+    "cemSha256": "154fd167ed914e7bfc3b6abd8e45cac381b748f19a52f67d3ba10908049964af",
+    "cemSeedPacketSha256": "5ba28729e1b48fc60bb359e73a4078c65d6407c34a4fb5ca7584438a87184ee3",
+    "prototypePatchSha256": "63342c0374b5ea5f58afa824206733753d165387c24624b3dc48a6fa6293d4cb"
+  },
+  "seedBases": {
+    "separationDiscovery": 158000,
+    "separationValidation": 159000,
+    "panelDiscovery": 160000,
+    "panelValidation": 161000,
+    "policyRootDiscovery": 479,
+    "policyRootValidation": 480,
+    "controlDiscovery": 162000,
+    "controlValidation": 163000,
+    "cemSamplerRoot": 458,
+    "cemRoot": 481,
+    "cemTrain": 164000,
+    "cemHoldout": 165000,
+    "cemFinalValidation": 166000
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "158000-158127",
+      "validation": "159000-159127"
+    },
+    "panels": {
+      "discovery": "root 479, indices 0-127, seeds 160000-160127",
+      "validation": "root 480, indices 0-127, seeds 161000-161127"
+    },
+    "controls": {
+      "discovery": "162000-162127",
+      "validation": "163000-163127"
+    },
+    "cemTrain": "six Duskblade-v5 islands, generations 0-5, eight CRN seeds per generation, 164000-164047",
+    "cemHoldout": "all six final policies, 165000-165063",
+    "finalValidation": "all six frozen final policies, paired candidate/live, 166000-166063"
+  },
+  "priorMechanicEvidence": {
+    "separationDiscoverySha256": "c1b4d7589340238e3578bb7d776296cc046d3f64520b2a07bfeb471300641b08",
+    "separationValidationSha256": "58289956210c2a76e6cd102f53366fc0c1eaeeb75f7746d8422ceb99c67c66bc",
+    "panelDiscoverySha256": "5fd764d69dd21c41cb39ac077acde65c86ceb5903263a0132fadf85be070cb75",
+    "panelValidationSha256": "15c9a2a66d3c2a19847267a08f53bac8276d76682d19bfb2dd5a6f6c90f80226",
+    "controlsDiscoverySha256": "4ee31a6f946b75e29051e573d1071085a14d69cba4a029d6893b7651ca2ee5a8",
+    "controlsValidationSha256": "84794d0304a98bd3fbaeb9b96fd0c771999637fafbfcc232965a86a5d2d0aa68",
+    "scope": "Prior mediator mechanics remain context only. Mistbound changes Ash functional identity and the Dusk refund remains unadmitted, so v15 reruns every local and whole-run gate before promotion."
+  },
+  "competingOptions": [
+    {
+      "id": "mistbound-localises-ash-power",
+      "statement": "Mistbound preserves Ash package activation while removing random-build movement; all four packages and Dusk endpoints pass."
+    },
+    {
+      "id": "ash-power-remains-broad-or-packages-fail",
+      "statement": "Random-build movement persists, or functional separation, endpoints, reliability, retention or ceiling fails."
+    }
+  ],
+  "cem": {
+    "islands": [6, 7, 8, 9, 10, 11],
+    "population": 16,
+    "elite": 4,
+    "maximumGenerations": 6,
+    "trainingSeedsPerGeneration": 8,
+    "holdoutSeeds": 64,
+    "assignedRoutes": {
+      "6": "dusk-afterimage-guard",
+      "7": "dusk-afterimage-guard",
+      "8": "dusk-afterimage-guard",
+      "9": "dusk-scoreline",
+      "10": "dusk-scoreline",
+      "11": "dusk-scoreline"
+    },
+    "seedPacket": "protocols/cem-v11-seeds.json"
+  },
+  "estimands": {
+    "optimisation": "Six independent existing-tool CEM islands maximise eight-seed generation win rate; no holdout or final-validation result feeds fitting.",
+    "routeViability": "For each assigned route, at least two final policies activate that mediator and exceed held-out RandomBuild arm 2 by at least 0.35 on fresh final-validation seeds.",
+    "retention": "At least two distinct final policies remain within 0.10 of the overall top, and route-best rates remain within 0.10.",
+    "reliability": "No CEM holdout simulator fault and no candidate-added stall or simulator error on paired final validation.",
+    "vow5": "Every final-policy validation win rate is at most 0.90."
+  },
+  "successRule": {
+    "routeViability": "At least two independently fitted final policies per assigned route meet activation and the 0.35 C2 margin.",
+    "retention": "Both assigned routes retain high-performing distinct endpoints without one-route collapse.",
+    "reliability": "No CEM holdout stall/error, no candidate-added final-validation stall, and zero simulator errors.",
+    "vow5": "All final-policy win rates are at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "cemTrainingRowsMaximum": 4608,
+    "cemHoldoutRows": 384,
+    "cemFinalValidationRowsPerContent": 384,
+    "repertoireSelectedPoliciesPerRoute": 8,
+    "maximumPairsPerArmAndSplit": 128,
+    "controlRowsMaximumPerContentAndSplit": 2048
+  },
+  "cheapestDiscriminatingExperiment": "Run 32-pair scripted separation and policy panels first. If both continue, run their independent 32-pair validation; only an inconclusive policy panel may extend once to 128. Then run the existing six-island mini-CEM with fresh cohorts, paired final rectangle and broad-movement control.",
+  "inconclusiveRule": "Only a non-decisive policy-panel result may extend once from 32 to 128 pairs. The six-island CEM and 64-seed final rectangle are final for v15; no island replacement, extra generation, reselection or content change is allowed.",
+  "stopRule": "Reject if fewer than two policies per route meet held-out activation and C2, endpoints collapse, an added stall/error appears, or Vow-5 exceeds 0.90. Detector mutations remain forbidden until the repertoire passes.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

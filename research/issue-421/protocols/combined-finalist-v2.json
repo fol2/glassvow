@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "question": "Does the minimum revised four-package finalist preserve four distinct causal mechanisms under independent policies without the rejected Fortify route or a capped-damage activation proxy?",
+  "competingOptions": [
+    {
+      "id": "revised-finalist-admissible",
+      "statement": "Every named consumer gains a reproducible mechanism-level response from its producer, fires under independent policies, and remains non-inferior on reliability and duration."
+    },
+    {
+      "id": "revised-finalist-inactive-or-unsafe",
+      "statement": "At least one mechanism is confounded, lacks policy witnesses, crosses the aspect boundary, adds failures or materially lengthens combat; reject this exact candidate."
+    }
+  ],
+  "candidate": {
+    "contentSha256": "50fe3f2618129a170f7390b5876ade530f2bc1ad0c300900005e5fb7fd584508",
+    "packages": {
+      "ash-hand-size": {
+        "aspect": "ashwarden",
+        "producer": "preparation",
+        "consumer": "phantomBlades",
+        "mediator": "hand-size",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": false
+      },
+      "ash-poison-catalyst": {
+        "aspect": "ashwarden",
+        "producer": "toxicMist",
+        "consumer": "catalyst",
+        "mediator": "enemy-poison",
+        "response": "poisonApplied",
+        "cardMetric": "status:poison",
+        "requiresAspectSeparation": true
+      },
+      "dusk-scoreline": {
+        "aspect": "duskblade",
+        "producer": "scoreline",
+        "consumer": "snapCut",
+        "mediator": "enemy-scoreline",
+        "response": "directDamage",
+        "cardMetric": "damage",
+        "requiresAspectSeparation": true
+      },
+      "dusk-afterimage-guard": {
+        "aspect": "duskblade",
+        "producer": "mirrorEdge",
+        "consumer": "guardedStrike",
+        "mediator": "player-afterimage",
+        "response": "blockGain",
+        "cardMetric": "block",
+        "requiresAspectSeparation": true
+      }
+    },
+    "rewardPath": "legacy",
+    "shippingChangesAtThisStage": [],
+    "provenance": {
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "rejectedCombinedPanelSha256": "55434109c2329f1d60e996e8d0725602f8e0e9e595d6885c70ae4fd06f8d4cd4",
+      "scorelineSummarySha256": "82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "candidateContentSha256": "50fe3f2618129a170f7390b5876ade530f2bc1ad0c300900005e5fb7fd584508",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "97354f90ee9481ba47957ea39e29d9e8b22bb79bcbd05c6db1d10b9b17a177cb",
+    "pilotSha256": "56a10504e95457508d4b942e276ca4c0ede4b23e6cbba49a315d647c7cc0973e",
+    "probeSha256": "85f9b6534c767ba44ec6f5ea7f8fb822c72be9bdacf4f6669fe223662f2750b1",
+    "researchBalanceSimSha256": "9d06def4117dcc34344e06892abcdef7e467b265d91481ce2af88f91222254b7",
+    "prototypePatchSha256": "06fe57e4a05825b2b4a15f139d282c30a07f32a7a0c51d2ed6b2fdef92da7fc4"
+  },
+  "seedBases": {
+    "separationDiscovery": 78000,
+    "separationValidation": 79000,
+    "panelDiscovery": 80000,
+    "panelValidation": 81000,
+    "policyRootDiscovery": 430,
+    "policyRootValidation": 431
+  },
+  "researchCohorts": {
+    "controlledSeparation": {
+      "discovery": "78000-78127",
+      "validation": "79000-79127"
+    },
+    "panels": {
+      "discoveryPolicies": "root 430, indices 0-127",
+      "discoverySeeds": "80000-80127",
+      "validationPolicies": "root 431, indices 0-127",
+      "validationSeeds": "81000-81127"
+    },
+    "controls": {
+      "discovery": "82000-82127",
+      "validation": "83000-83127"
+    },
+    "landscape": {
+      "discoveryPolicies": "root 432, indices 0-127",
+      "discoverySeeds": "84000-84015",
+      "validationPolicies": "root 433, indices 0-127",
+      "validationSeeds": "85000-85015"
+    }
+  },
+  "estimands": {
+    "functionalSeparation": "For each consumer response, matched I = AB - A - B + none across every producer. Its named producer lower 95% standardised interaction bound must be at least 0.25; every off-diagonal upper bound must stay below 0.25.",
+    "panelActivation": "Within each independent-policy block, activation is the named consumer card response in AB minus B, standardised by pooled consumer response across all four arms. This measures the mechanism before enemy-HP capping can erase excess damage.",
+    "policySensitivity": "A policy is a witness when all arms complete, both package cards play in AB, the named mediator is applied and consumed, and consumer activation is positive.",
+    "reliability": "The package must add no non-win relative to any component arm. AB turns minus the fastest component arm has an upper 95% bound of at most 0.25 turns.",
+    "aspectSeparation": "Where required, target-aspect activation minus control-aspect activation has a lower 95% bound above zero.",
+    "reachability": "Under the unchanged legacy reward path, both components must be acquired, played and activate for at least two distinct policy witnesses per applicable aspect/vow and split, or pass a separately frozen deterministic acquisition proof.",
+    "globalMovement": "Held-out candidate-minus-live RandomBuild arm-2 win-rate movement is bounded to 0.10 per aspect/vow in addition to the existing C2 and Vow-5 rules."
+  },
+  "successRule": {
+    "functionalSeparation": "All four diagonal interactions pass and all twelve cross-producer interactions remain below target on discovery and held-out cohorts.",
+    "packageActivation": "Every package activation lower 95% bound is at least 0.25 SD in both splits.",
+    "policySensitivity": "Every package has at least eight independent policy witnesses per split.",
+    "aspectIdentity": "Scoreline and Afterimage remain Dusk-only; player Smolder remains Ash-only.",
+    "reliability": "Every package has zero added non-wins/errors and duration upper 95% bound at most 0.25 turns.",
+    "reachability": "Every package meets the legacy-economy witness rule in both splits or has a frozen deterministic acquisition proof.",
+    "globalMovement": "Every held-out RandomBuild candidate-minus-live absolute win-rate delta is at most 0.10.",
+    "c2": "For every aspect/vow grid, RandomBuild arm 2 win rate is below 0.50 and planned-minus-RandomBuild is at least 0.35.",
+    "vow5": "Every applicable held-out top viable-policy win rate is at most 0.90."
+  },
+  "budget": {
+    "firstLookPairsPerPackageAndSplit": 32,
+    "maximumPairsPerArmAndSplit": 128,
+    "maximumPairsPerPackageAndSplit": 128,
+    "controlledSeparationRowsMaximumPerSplit": 2048,
+    "panelRowsMaximumPerSplit": 4096,
+    "controlRowsMaximumPerContentAndSplit": 2048,
+    "landscapeRowsMaximumPerContentAndSplit": 8192,
+    "wholeRunRowsBeforePackagePass": 0
+  },
+  "cheapestDiscriminatingExperiment": "Run the legal-combat producer-by-consumer matrix, then one 32-policy mechanism-response panel. Whole-run and detector work remain forbidden until both discovery and held-out package gates pass.",
+  "inconclusiveRule": "If a 95% interval overlaps its threshold at 32 blocks, extend the same frozen cohort to 64 and then 128. At 128, stop this exact candidate as inconclusive. Do not alter values, policy logic or estimands after observing a cohort.",
+  "stopRule": "Reject this exact candidate immediately after a decisive package, separation, reliability, C2, aspect-identity, Vow-5, reachability or global-movement failure. Do not run detector mutations until all four packages pass.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "candidate": "combined-finalist-v13",
+  "protocolSha256": "410a017cf844432e641c3c4dd70b216f1d7bce829d5fb6fd3e9a20cc0b16047b",
+  "decision": "reject",
+  "reason": "Route-specific acquisition weights overfit training rewards but did not transfer: held-out rates were 0.03125-0.15625, fresh final rates peaked at 0.203125, and two candidate-only Duskblade-v0 stalls failed controls.",
+  "evidence": {
+    "analysisSha256": "904d7063589ea56d8c3790c998d6e128eeef25a35efc7cbc542c68987c26c343",
+    "selectionSha256": "458289443720431be93c8f38e90a741b93aee8f1e06a461a98feeaae74f79697"
+  },
+  "boundedNegative": {
+    "afterimageBestPolicyRate": 0.203125,
+    "scorelineBestPolicyRate": 0.203125,
+    "randomBuildRate": 0.109375,
+    "scorelineZeroActivationEndpointRate": 0.203125,
+    "candidateAddedControlStalls": 2,
+    "simulatorErrors": 0,
+    "protectedSeedsUsed": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "analysisSha256": {
+    "functionalSeparationDiscovery": "c2efc5e5fbc9893b3bb7551ca21cb1a664ad4b38fdb6e8d15e70ed0b5a6514cc",
+    "functionalSeparationValidation": "9d17fe2348d319dd4385197f49edd6c177f4c3463695b9d6f5b5ae8d521b1573",
+    "policyPanelDiscovery64": "233f31cfb931de95f1772bcc33d8b30749cb53633d5a1679e0f434652964547d",
+    "policyPanelValidation64": "59a3391c6a55c95543f466e59ba91d67c7440e8e2e337f18ae83a8c13849fb1c",
+    "wholeRunControlsDiscovery32": "e6ece926812f4e361b39305c4b578f696edb6d36779f61386387f2fc14efbaab"
+  },
+  "decision": "REJECT_EXACT_COMBINED_FINALIST_V4",
+  "finding": "All four packages again passed discovery and held-out causal and independent-policy panels, and three of four RandomBuild movement points were within 0.10. Whole-run controls nevertheless produced a candidate-only 30-turn Duskblade vow-5 stall where live completed with a loss, while Ashwarden vow-0 movement remained inconclusive around the negative 0.10 boundary. The exact candidate stopped before landscape work.",
+  "issue": 421,
+  "limits": [
+    "This is a bounded negative for candidate content 391a069217c11ac5cd93246e3634defccf483b2a52035131b618295e33c0f805 and its frozen pilot/protocol only.",
+    "Default arm 1 is not the top viable-policy estimand and must not substitute for landscape C2 in later analyses.",
+    "No protected acceptance or reserve seed was used."
+  ],
+  "protocolSha256": "d842cad995a1210dd9f2854fffefd021b7aa86d3f5337e5beb5722e3a1474162",
+  "researchRows": 9216,
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "status": "COMPLETE_BOUNDED_NEGATIVE"
+}
