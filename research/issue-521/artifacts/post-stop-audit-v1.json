@@ -1,0 +1,62 @@
+{
+  "decisionUnchanged": "STOP_BOUNDED_NEGATIVE",
+  "decisiveMatchedIdentityEvidence": {
+    "globalDifficultyComparator": {
+      "optimisedGlobalMeanDeltaVersusIdentity": -0.1767578125,
+      "pass": true,
+      "randomBuildWinDeltaVersusIdentity": -0.15625
+    },
+    "reliability": {
+      "identityStalls": 0,
+      "nativeStalls": {
+        "multiRoute": 11,
+        "randomRegression": 0,
+        "singleRoute": 99
+      },
+      "oldDuplicateStalls": {
+        "multiRoute": 24,
+        "randomRegression": 1,
+        "singleRoute": 129
+      },
+      "pass": false,
+      "stallTurn": 30
+    },
+    "routeSeparation": {
+      "multiGlobalMeanDeltaVersusIdentity": 0.564453125,
+      "multiMeanViablePolicies": 6.75,
+      "multiMinusSingleMeanViablePolicies": 0.0,
+      "pass": false,
+      "requiredDifferenceAtLeast": 1.0,
+      "singleGlobalMeanDeltaVersusIdentity": 0.5703125,
+      "singleMeanViablePolicies": 6.75
+    },
+    "selectiveRandomRegression": {
+      "optimisedGlobalMeanDeltaVersusIdentity": -0.0302734375,
+      "pass": false,
+      "randomBuildWinDeltaVersusIdentity": 0.0,
+      "required": {
+        "optimisedGlobalMeanDeltaAtLeast": -0.1,
+        "randomBuildWinDeltaAtMost": -0.15
+      }
+    }
+  },
+  "issue": 521,
+  "noAdditionalRows": true,
+  "quarantinedReadouts": {
+    "aspectIdentityCrossEventCount": {
+      "reason": "The zero-cross-event proxy was not the inherited signed application rule and was already non-zero in the reused live baseline; it is not used.",
+      "reusedBaselineCrossEvents": 102.0
+    },
+    "reusedIssue520BaselineIdentityComparison": {
+      "catalogueStructurallyEqualAfterRemovingExposure": true,
+      "focusedDirectIdentityCheck": "PASS",
+      "legacyCombatTraceCheck": "PASS (321 rows)",
+      "reason": "The identity candidate reserialised the complete catalogue in sorted dictionary order; after removing cardRewardExposure it is structurally equal to live content, but the full-catalogue order differs. The resulting whole-run comparison is confounded and is not used."
+    },
+    "vow5IdentityComparison": {
+      "reason": "This inherited the confounded full-catalogue identity comparison; the direct Vow-5 reward identity check passed and no diagnostic intervention is promotion-eligible."
+    }
+  },
+  "rawDecisionSha256": "2e0c07cb18d9a85650f64fc6d7dcdc24cdacf2ad7fe62077c72edafa4a45669a",
+  "schemaVersion": 1
+}

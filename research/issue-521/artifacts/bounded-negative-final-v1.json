@@ -1,0 +1,182 @@
+{
+  "conditioning": {
+    "selectiveRandomRegression": {
+      "globalDifficultyWrites": 0,
+      "weights": {
+        "common": {
+          "hex": 24.0
+        },
+        "rare": {
+          "hex": 24.0
+        },
+        "uncommon": {
+          "hex": 24.0
+        }
+      }
+    },
+    "separatedRoutes": {
+      "effectFactor": 1.9,
+      "groups": [
+        [
+          "heavyBlow",
+          "resonantLance"
+        ],
+        [
+          "venomStrike",
+          "toxicMist",
+          "catalyst"
+        ],
+        [
+          "quickSlash",
+          "deflect",
+          "regrowth"
+        ]
+      ],
+      "resonantLanceNote": "The exact #520 reveal-all diagnostic had four authored duplicate entries; the reveal adder did not add a fifth because the ID was already present.",
+      "weights": {
+        "common": {
+          "deflect": 5.0,
+          "heavyBlow": 5.0,
+          "quickSlash": 5.0,
+          "venomStrike": 5.0
+        },
+        "rare": {
+          "catalyst": 5.0,
+          "resonantLance": 4.0
+        },
+        "uncommon": {
+          "regrowth": 5.0,
+          "toxicMist": 5.0
+        }
+      }
+    },
+    "singleRoute": {
+      "effectFactor": 1.9,
+      "weights": {
+        "common": {
+          "deflect": 9.0,
+          "quickSlash": 9.0
+        },
+        "uncommon": {
+          "regrowth": 9.0
+        }
+      }
+    },
+    "source": {
+      "globalDifficultyCandidateSha256": "41a9f35c477a8dc6eab730bda3945f02cb7ce67ed6ac7d7eed6ff371b1e62eb1",
+      "multiDuplicateCandidateSha256": "6010a6bf2762b4e15daa37a290e88fb9124463382615638b540bce7d5fe3730f",
+      "randomDuplicateCandidateSha256": "f3b40018341cae81354094e3d8e4f863e2f017a4f6bf026334da24e8f2ca0b8d",
+      "scopeFindingSha256": "583cea411ce5a1612bd9cb530159a983136720e933877089239419b7cbe2662c",
+      "singleDuplicateCandidateSha256": "fe02f9a0414aa08c2069d08e8bda35a9960a169bcdb1ee38e92f37af4e44c6d0",
+      "structuralProtocolSha256": "39a84ddb401a7a514d202c15e3e86b9e3f6b7b54c6322ce3449b411a1f085fee"
+    }
+  },
+  "decisiveEvidence": {
+    "globalDifficultyComparator": {
+      "optimisedGlobalMeanDeltaVersusIdentity": -0.1767578125,
+      "pass": true,
+      "randomBuildWinDeltaVersusIdentity": -0.15625
+    },
+    "reliability": {
+      "identityStalls": 0,
+      "nativeStalls": {
+        "multiRoute": 11,
+        "randomRegression": 0,
+        "singleRoute": 99
+      },
+      "oldDuplicateStalls": {
+        "multiRoute": 24,
+        "randomRegression": 1,
+        "singleRoute": 129
+      },
+      "pass": false,
+      "stallTurn": 30
+    },
+    "routeSeparation": {
+      "multiGlobalMeanDeltaVersusIdentity": 0.564453125,
+      "multiMeanViablePolicies": 6.75,
+      "multiMinusSingleMeanViablePolicies": 0.0,
+      "pass": false,
+      "requiredDifferenceAtLeast": 1.0,
+      "singleGlobalMeanDeltaVersusIdentity": 0.5703125,
+      "singleMeanViablePolicies": 6.75
+    },
+    "selectiveRandomRegression": {
+      "optimisedGlobalMeanDeltaVersusIdentity": -0.0302734375,
+      "pass": false,
+      "randomBuildWinDeltaVersusIdentity": 0.0,
+      "required": {
+        "optimisedGlobalMeanDeltaAtLeast": -0.1,
+        "randomBuildWinDeltaAtMost": -0.15
+      }
+    }
+  },
+  "finding": "The exact #520-conditioned native exposure prototype neither selectively regressed RandomBuild nor separated single-route from multi-route viability, and route exposure retained additional 30-turn stalls. Detector admission was not attempted.",
+  "issue": 521,
+  "nonClaim": "This is bounded to the frozen conditioning, keyed-exponential-race-v1 sampler, v3 cohort, four grids and 20300-20315 research seeds. It does not show that native weighted exposure or autonomous balance is generally impossible.",
+  "quarantinedReadoutSha256": "810cb345b3e9431350ceacae856fb398f1b83b27359a2d5c2f75c1389fad6267",
+  "sampler": {
+    "algorithm": "keyed-exponential-race-v1",
+    "cardKey": "log(uniform) / finite non-negative effective weight; highest unselected key wins",
+    "cardLane": "card|rarity|card-id",
+    "failureRule": "invalid, non-finite, negative, all-zero, duplicate-base or under-supported explicit pools return no card reward",
+    "identityPath": "absent, empty or effective authored weight-one configuration calls the unchanged legacy reward function",
+    "outerCursorRule": "counter-based exposure draws never advance RunState; the existing stale-cursor contract remains unchanged",
+    "poolRule": "sample without replacement from the eligible reveal-gated effective rarity pool",
+    "rarityLane": "rarity|offer-index",
+    "uniformIdentity": "SHA-256(algorithm|outer-cursor|lane), first 52 bits plus one half ulp"
+  },
+  "schemaVersion": 1,
+  "shipping": {
+    "candidate": false,
+    "detector": false,
+    "productChanges": false
+  },
+  "successor": null,
+  "suite": {
+    "candidateFreezeSha256": "0cebd15c50c7e04904ee76dfe0a7d8bafb1acc7e527e142aa811921a1cab889a",
+    "godot": "4.7.2.stable.official.ed1daf0bf",
+    "grids": [
+      "duskblade:v0",
+      "duskblade:v5",
+      "ashwarden:v0",
+      "ashwarden:v5"
+    ],
+    "policies": "sixteen frozen #519 registered functional policies plus RandomBuild and RandomPlay",
+    "policyCohortSha256": "834de5668313914fec7dc8b3050a271d350fa30eb9a67bfe5f8f0ecbe72f01f5",
+    "seeds": [
+      20300,
+      20301,
+      20302,
+      20303,
+      20304,
+      20305,
+      20306,
+      20307,
+      20308,
+      20309,
+      20310,
+      20311,
+      20312,
+      20313,
+      20314,
+      20315
+    ],
+    "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142"
+  },
+  "testedSupport": {
+    "contentCandidatesSimulated": 5,
+    "effectiveWeights": "single neutral route 9; separated routes 5 except reveal-added resonantLance 4; Hex 24 in each rarity pool",
+    "newWholeRunRows": 5760,
+    "reusedBaselineRows": 1152,
+    "samplerMode": "eligible reveal-gated rarity pools, without replacement, fixed common-random-number uniforms"
+  },
+  "type": "bounded-negative",
+  "unspent": {
+    "acceptanceSeeds": 0,
+    "beamMctsRlRows": 0,
+    "fullSevenDirectionRows": 0,
+    "qdBoRows": 0,
+    "reserveSeeds": 0
+  }
+}

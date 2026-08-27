@@ -1,0 +1,323 @@
+diff --git a/content/content_db.gd b/content/content_db.gd
+index c5aff7a..2c7aad9 100644
+--- a/content/content_db.gd
++++ b/content/content_db.gd
+@@ -37,6 +37,8 @@ var theme_order: Array[String] = []
+ var acts: Array = []
+ var encounters: Array = []
+ var card_pools: Dictionary = {}
++## Optional research/runtime seam. `null` is the exact legacy reward path.
++var card_reward_exposure: Variant = null
+ var relic_pools: Dictionary = {}
+ var pool_gate_cards: Dictionary = {}
+ var pool_gate_relics: Dictionary = {}
+@@ -448,6 +450,7 @@ func apply_catalogue(root: Dictionary) -> void:
+ 	shop = _section(root, "shop")
+ 	shade_kits = _section(root, "shadeKits")
+ 	card_pools = _section(root, "cardPools")
++	card_reward_exposure = root.get("cardRewardExposure")
+ 	relic_pools = _section(root, "relicPools")
+ 	var gate: Dictionary = _section(root, "poolGate")
+ 	pool_gate_cards = gate.get("cards", {})
+diff --git a/domain/rules/rewards.gd b/domain/rules/rewards.gd
+index 55ecfc6..2ec67c2 100644
+--- a/domain/rules/rewards.gd
++++ b/domain/rules/rewards.gd
+@@ -20,6 +20,11 @@ var rarity_uncommon_only: bool = false
+ var gold_vow_mult: float = 1.0
+ var elite_relic_second: float = 0.0
+ 
++const EXPOSURE_ALGORITHM: String = "keyed-exponential-race-v1"
++const EXPOSURE_TIERS: Array[String] = ["common", "uncommon", "rare"]
++const EXPOSURE_KEYS: Array[String] = ["algorithm", "defaultWeight", "pools"]
++const EXPOSURE_UNIFORM_SCALE: float = 4503599627370496.0 # 2^52
++
+ 
+ func _init(content_db: ContentDB) -> void:
+ 	content = content_db
+@@ -123,12 +128,18 @@ func _rarity_cuts(kind: String) -> Vector2:
+ 
+ 
+ func _roll_card_reward(run: RunState, kind: String) -> Array:
++	var wanted: int = 3 + (1 if run.has_relic("seersOrb") else 0) \
++		+ _ji(_omen_mods(run).get("rewardChoiceBonus", 0))
++	if _exposure_is_identity(run):
++		return _roll_card_reward_legacy(run, kind, wanted)
++	return _roll_card_reward_weighted(run, kind, wanted)
++
++
++func _roll_card_reward_legacy(run: RunState, kind: String, wanted: int) -> Array:
+ 	# Detached chain: the web quirk discards these draws' cursor movement.
+ 	var crng: Rng = Rng.new(run.rng_state())
+ 	var out: Array = []  # may briefly hold one null from an empty-pool pick
+ 	var guard: Dictionary = {}
+-	var wanted: int = 3 + (1 if run.has_relic("seersOrb") else 0) \
+-		+ _ji(_omen_mods(run).get("rewardChoiceBonus", 0))
+ 	while out.size() < wanted and guard.size() < 40:
+ 		var pool_tier: String
+ 		if kind == "boss":
+@@ -154,6 +165,165 @@ func _roll_card_reward(run: RunState, kind: String) -> Array:
+ 	return cards
+ 
+ 
++## Efraimidis-Spirakis exponential keys, one counter-based uniform per
++## (cursor, rarity, card). Weights change scores, never the uniform definition.
++func _roll_card_reward_weighted(run: RunState, kind: String, wanted: int) -> Array:
++	var plan: Dictionary = _exposure_plan(run, wanted)
++	if not plan.get("ok", false):
++		push_error("RewardRules: refusing card reward exposure — %s" % str(plan.get("error", "invalid")))
++		return []
++	var cursor: int = run.rng_state()
++	var tiers: Array[String] = []
++	for offer: int in range(wanted):
++		if kind == "boss":
++			tiers.append("rare")
++			continue
++		var rarity_uniform: float = _exposure_uniform(cursor, "rarity|%d" % offer)
++		var cuts: Vector2 = _rarity_cuts(kind)
++		tiers.append("common" if rarity_uniform < cuts.x else (
++			"uncommon" if rarity_uniform < cuts.y else "rare"))
++	var selected: Dictionary = {}
++	var cards: Array[String] = []
++	var pools: Dictionary = plan["pools"]
++	for tier: String in tiers:
++		var weights: Dictionary = pools[tier]
++		var ids: Array = weights.keys()
++		ids.sort()
++		var best_id: String = ""
++		var best_score: float = -INF
++		for id_v: Variant in ids:
++			var id: String = str(id_v)
++			var weight: float = float(str(weights[id_v]))
++			if weight <= 0.0 or selected.has(id):
++				continue
++			var uniform: float = _exposure_uniform(cursor, "card|%s|%s" % [tier, id])
++			var score: float = log(uniform) / weight
++			if best_id.is_empty() or score > best_score \
++					or (is_equal_approx(score, best_score) and id < best_id):
++				best_id = id
++				best_score = score
++		if best_id.is_empty():
++			push_error("RewardRules: refusing under-supported weighted reward after cross-tier exclusion")
++			return []
++		selected[best_id] = true
++		cards.append(best_id)
++	return cards
++
++
++func _exposure_is_identity(run: RunState) -> bool:
++	var raw: Variant = content.card_reward_exposure
++	if raw == null:
++		return true
++	if typeof(raw) != TYPE_DICTIONARY:
++		return false
++	var config: Dictionary = raw
++	if config.is_empty():
++		return true
++	for key_v: Variant in config:
++		if typeof(key_v) != TYPE_STRING or not EXPOSURE_KEYS.has(str(key_v)):
++			return false
++	if str(config.get("algorithm", "")) != EXPOSURE_ALGORITHM:
++		return false
++	var default_v: Variant = config.get("defaultWeight", 1.0)
++	if not _valid_exposure_weight(default_v) or not is_equal_approx(float(str(default_v)), 1.0):
++		return false
++	var pools_v: Variant = config.get("pools", {})
++	if typeof(pools_v) != TYPE_DICTIONARY:
++		return false
++	var pools: Dictionary = pools_v
++	for tier_v: Variant in pools:
++		if typeof(tier_v) != TYPE_STRING:
++			return false
++		var tier: String = str(tier_v)
++		if not EXPOSURE_TIERS.has(tier) or typeof(pools[tier_v]) != TYPE_DICTIONARY:
++			return false
++		var authored: Array = content.card_pools.get(tier, [])
++		var overrides: Dictionary = pools[tier_v]
++		for id_v: Variant in overrides:
++			var weight_v: Variant = overrides[id_v]
++			if typeof(id_v) != TYPE_STRING or not authored.has(str(id_v)) \
++					or not _valid_exposure_weight(weight_v) \
++					or not is_equal_approx(float(str(weight_v)), 1.0):
++				return false
++	return true
++
++
++func _exposure_plan(run: RunState, wanted: int) -> Dictionary:
++	var raw: Variant = content.card_reward_exposure
++	if typeof(raw) != TYPE_DICTIONARY:
++		return _exposure_error("configuration must be a dictionary")
++	var config: Dictionary = raw
++	for key_v: Variant in config:
++		if typeof(key_v) != TYPE_STRING or not EXPOSURE_KEYS.has(str(key_v)):
++			return _exposure_error("unknown configuration key %s" % str(key_v))
++	if str(config.get("algorithm", "")) != EXPOSURE_ALGORITHM:
++		return _exposure_error("algorithm must be %s" % EXPOSURE_ALGORITHM)
++	var default_v: Variant = config.get("defaultWeight", 1.0)
++	if not _valid_exposure_weight(default_v):
++		return _exposure_error("defaultWeight must be finite and non-negative")
++	var default_weight: float = float(str(default_v))
++	var configured_v: Variant = config.get("pools", {})
++	if typeof(configured_v) != TYPE_DICTIONARY:
++		return _exposure_error("pools must be a dictionary")
++	var configured: Dictionary = configured_v
++	for tier_v: Variant in configured:
++		if typeof(tier_v) != TYPE_STRING or not EXPOSURE_TIERS.has(str(tier_v)):
++			return _exposure_error("unknown rarity pool %s" % str(tier_v))
++	var effective: Dictionary = {}
++	for tier: String in EXPOSURE_TIERS:
++		var base: Array = card_pool(run, tier)
++		var weights: Dictionary = {}
++		for id_v: Variant in base:
++			var id: String = str(id_v)
++			if weights.has(id):
++				return _exposure_error("legacy %s pool contains duplicate %s" % [tier, id])
++			weights[id] = default_weight
++		var overrides_v: Variant = configured.get(tier, {})
++		if typeof(overrides_v) != TYPE_DICTIONARY:
++			return _exposure_error("%s pool weights must be a dictionary" % tier)
++		var overrides: Dictionary = overrides_v
++		var ids: Array = overrides.keys()
++		ids.sort()
++		for id_v: Variant in ids:
++			if typeof(id_v) != TYPE_STRING:
++				return _exposure_error("%s pool has a non-string card id" % tier)
++			var id: String = str(id_v)
++			if not content.cards.has(id):
++				return _exposure_error("%s pool names unknown card %s" % [tier, id])
++			var weight_v: Variant = overrides[id_v]
++			if not _valid_exposure_weight(weight_v):
++				return _exposure_error("%s.%s weight must be finite and non-negative" % [tier, id])
++			if _pool_open(run, content.pool_gate_cards, id):
++				weights[id] = float(str(weight_v))
++		var support: int = 0
++		for weight_v: Variant in weights.values():
++			if float(str(weight_v)) > 0.0:
++				support += 1
++		if support == 0:
++			return _exposure_error("%s pool has zero effective support" % tier)
++		if support < wanted:
++			return _exposure_error("%s pool support %d is below offer size %d" % [tier, support, wanted])
++		effective[tier] = weights
++	return {"ok": true, "pools": effective}
++
++
++static func _valid_exposure_weight(value: Variant) -> bool:
++	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
++		return false
++	var number: float = float(str(value))
++	return is_finite(number) and number >= 0.0
++
++
++static func _exposure_error(message: String) -> Dictionary:
++	return {"ok": false, "error": message}
++
++
++static func _exposure_uniform(cursor: int, lane: String) -> float:
++	var token: String = "%s|%d|%s" % [EXPOSURE_ALGORITHM, cursor, lane]
++	var bits: int = token.sha256_text().substr(0, 13).hex_to_int()
++	return (float(bits) + 0.5) / EXPOSURE_UNIFORM_SCALE
++
++
+ func roll_boss_relics(run: RunState) -> Array[String]:
+ 	var available: Array[String] = []
+ 	for id_v: Variant in relic_pool(run, "boss"):
+diff --git a/tools/balance_pilot.gd b/tools/balance_pilot.gd
+index 40bedc8..0ca4d58 100644
+--- a/tools/balance_pilot.gd
++++ b/tools/balance_pilot.gd
+@@ -49,6 +49,15 @@ static func _wf(key: String) -> float:
+ 	return float(str(vector[key]))
+ static func _wi(key: String) -> int:
+ 	return int(_wf(key))
++static func _research() -> Dictionary:
++	if vector.is_empty():
++		apply_policy({})
++	var raw: Variant = vector.get("research", {})
++	return raw if typeof(raw) == TYPE_DICTIONARY else {}
++static func _rw(key: String, fallback: float) -> float:
++	return float(str(_research().get(key, fallback)))
++static func _ri(key: String, fallback: int) -> int:
++	return int(float(str(_research().get(key, fallback))))
+ static func accepts_card_reward(score: float) -> bool:
+ 	return score >= card_decline_threshold
+ static func remove_value(wscore: float) -> float:
+@@ -87,7 +96,7 @@ static func choose_node(map: WorldMap, run: RunState) -> int:
+ 	return best
+ static func play_turn(game: GlassvowGame) -> void:
+ 	_use_potions(game)
+-	if game.rules.can_use_art(game.run, game.cb):
++	if _wants_art(game, "early"):
+ 		game.apply({"t": "useArt"})
+ 	_play_cards(game)
+ 	if game.cb.over:
+@@ -95,9 +104,21 @@ static func play_turn(game: GlassvowGame) -> void:
+ 	var kindle: CardInst = worst_card(game.run, game.content, game.cb.hand, true)
+ 	if kindle != null:
+ 		game.apply({"t": "kindleFromHand", "uid": kindle.uid})
+-	if game.rules.can_use_art(game.run, game.cb):
++	if _wants_art(game, "late"):
+ 		game.apply({"t": "useArt"})
+ 	_play_cards(game) # Verdant Branch can draw from the kindle.
++static func _wants_art(game: GlassvowGame, phase: String) -> bool:
++	if not game.rules.can_use_art(game.run, game.cb):
++		return false
++	var research: Dictionary = _research()
++	if research.is_empty():
++		return true
++	if game.cb.turn < _ri("artMinTurn", 1):
++		return false
++	var hp_pct: float = float(game.cb.player.hp) / float(maxi(1, game.cb.player.max_hp))
++	if hp_pct > _rw("artMaxHpPct", 1.0):
++		return false
++	return phase == ("early" if _rw("artTiming", -1.0) < 0.0 else "late")
+ static func _play_cards(game: GlassvowGame) -> void:
+ 	if game.cb.over: return
+ 	for _guard: int in range(32):
+@@ -149,6 +170,12 @@ static func _pick_play(game: GlassvowGame) -> Dictionary:
+ 		if score > best_score:
+ 			best = {"uid": card.uid, "target": target}
+ 			best_score = score
++	if not best.is_empty() and not _research().is_empty():
++		if best_score < _rw("passScore", -1.0e30):
++			return {}
++		if game.cb.player.energy <= _ri("energyReserve", -1) \
++				and best_score < _rw("energyHoldScore", 1.0e30):
++			return {}
+ 	return best
+ static func _combat_score(game: GlassvowGame, card: CardInst, d: Dictionary, target: Variant,
+ 		preview: Dictionary, unblocked: int, dusk: bool) -> float:
+@@ -196,6 +223,23 @@ static func _target(game: GlassvowGame, card: CardInst, d: Dictionary) -> Varian
+ 	if str(d.get("target", "")) != "enemy":
+ 		return null
+ 	var living: Array[EnemyCombatant] = game.cb.living_enemies()
++	if not _research().is_empty():
++		var best_target: EnemyCombatant = living[0]
++		var best_score: float = -INF
++		for e: EnemyCombatant in living:
++			var hp_ratio: float = float(e.hp) / float(maxi(1, e.max_hp))
++			var score: float = _rw("targetLowHp", 0.0) * (1.0 - hp_ratio) \
++				+ _rw("targetHighHp", 0.0) * hp_ratio \
++				+ _rw("targetPoison", 0.0) * float(str(e.statuses.get("poison", 0)))
++			var preview_v: Variant = game.rules.preview_play(game.cb, card, e.idx, game.run)
++			if typeof(preview_v) == TYPE_DICTIONARY:
++				var preview: Dictionary = preview_v
++				if preview.get("willShatter", false):
++					score += _rw("targetShatter", 0.0)
++			if score > best_score:
++				best_target = e
++				best_score = score
++		return best_target.idx
+ 	var poison: bool = _has_effect(d, "status", "poison") \
+ 		or _has_effect(d, "special", "catalyst")
+ 	if _special_id(d) == "catalyst":
+@@ -253,6 +297,9 @@ static func _incoming(game: GlassvowGame) -> int:
+ 	return total
+ static func _use_potions(game: GlassvowGame) -> void:
+ 	var spend: bool = game.cb.kind != &"normal"
++	if not _research().is_empty():
++		var kind_rank: int = 0 if game.cb.kind == &"normal" else (1 if game.cb.kind == &"elite" else 2)
++		spend = kind_rank >= _ri("offensivePotionTier", 1)
+ 	for slot: int in range(game.run.player.potions.size()):
+ 		var id: String = game.run.player.potions[slot]
+ 		var use: bool = id == "healing" and game.cb.player.max_hp - game.cb.player.hp >= _wi("potionHealMissing")

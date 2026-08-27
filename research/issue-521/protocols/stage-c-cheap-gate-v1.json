@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "issue": 521,
+  "registeredAtUtc": "2026-08-27T10:05:11Z",
+  "freeze": {
+    "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotSha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "contentDbPrototypeSha256": "6332ca602daac7fbca6c72f82c2fa888ea2a75634d93e7cc705d255b40685594",
+    "rewardRulesPrototypeSha256": "3bfb548daa78928a7ad20f2616fc62aed000576351ab934fb61f9cd2f18c51a7",
+    "researchPilotSha256": "5fa70a1090ee53312c1d5c88ba14441da8ee559c25ed9c9797478fc95b281727",
+    "balanceSimSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "simBatchSha256": "b688a29f02530bc1a7de139638a4789347b36e746e42b858d774ea4e1837a749",
+    "policyCohortSha256": "834de5668313914fec7dc8b3050a271d350fa30eb9a67bfe5f8f0ecbe72f01f5",
+    "issue519LedgerSha256": "1597815c08909e619859507ca0841177d7883f7fa03b56c680d7d81f61567e9d",
+    "issue520LedgerSha256": "26cf346f02faf29c31be41cad9bee280e35b6382ddf236d6cc1bcd7a3f235fd6"
+  },
+  "mechanism": {
+    "algorithm": "keyed-exponential-race-v1",
+    "uniformIdentity": "SHA-256(algorithm|outer-cursor|lane), first 52 bits plus one half ulp",
+    "cardKey": "log(uniform) / finite non-negative effective weight; highest unselected key wins",
+    "rarityLane": "rarity|offer-index",
+    "cardLane": "card|rarity|card-id",
+    "identityPath": "absent, empty or effective authored weight-one configuration calls the unchanged legacy reward function",
+    "poolRule": "sample without replacement from the eligible reveal-gated effective rarity pool",
+    "failureRule": "invalid, non-finite, negative, all-zero, duplicate-base or under-supported explicit pools return no card reward",
+    "outerCursorRule": "counter-based exposure draws never advance RunState; the existing stale-cursor contract remains unchanged"
+  },
+  "conditioning": {
+    "source": {
+      "scopeFindingSha256": "583cea411ce5a1612bd9cb530159a983136720e933877089239419b7cbe2662c",
+      "structuralProtocolSha256": "39a84ddb401a7a514d202c15e3e86b9e3f6b7b54c6322ce3449b411a1f085fee",
+      "singleDuplicateCandidateSha256": "fe02f9a0414aa08c2069d08e8bda35a9960a169bcdb1ee38e92f37af4e44c6d0",
+      "multiDuplicateCandidateSha256": "6010a6bf2762b4e15daa37a290e88fb9124463382615638b540bce7d5fe3730f",
+      "randomDuplicateCandidateSha256": "f3b40018341cae81354094e3d8e4f863e2f017a4f6bf026334da24e8f2ca0b8d",
+      "globalDifficultyCandidateSha256": "41a9f35c477a8dc6eab730bda3945f02cb7ce67ed6ac7d7eed6ff371b1e62eb1"
+    },
+    "singleRoute": {
+      "effectFactor": 1.9,
+      "weights": {
+        "common": {"deflect": 9.0, "quickSlash": 9.0},
+        "uncommon": {"regrowth": 9.0}
+      }
+    },
+    "separatedRoutes": {
+      "effectFactor": 1.9,
+      "groups": [
+        ["heavyBlow", "resonantLance"],
+        ["venomStrike", "toxicMist", "catalyst"],
+        ["quickSlash", "deflect", "regrowth"]
+      ],
+      "weights": {
+        "common": {"deflect": 5.0, "heavyBlow": 5.0, "quickSlash": 5.0, "venomStrike": 5.0},
+        "rare": {"catalyst": 5.0, "resonantLance": 4.0},
+        "uncommon": {"regrowth": 5.0, "toxicMist": 5.0}
+      },
+      "resonantLanceNote": "The exact #520 reveal-all diagnostic had four authored duplicate entries; the reveal adder did not add a fifth because the ID was already present."
+    },
+    "selectiveRandomRegression": {
+      "globalDifficultyWrites": 0,
+      "weights": {
+        "common": {"hex": 24.0},
+        "rare": {"hex": 24.0},
+        "uncommon": {"hex": 24.0}
+      }
+    }
+  },
+  "cohort": {
+    "policies": "The frozen #520 v3 cohort: sixteen issue-519 registered functional policies plus RandomBuild and RandomPlay controls.",
+    "seeds": [20300, 20301, 20302, 20303, 20304, 20305, 20306, 20307, 20308, 20309, 20310, 20311, 20312, 20313, 20314, 20315],
+    "grids": ["duskblade:v0", "duskblade:v5", "ashwarden:v0", "ashwarden:v5"],
+    "reveals": "BalanceSim mature-three-act-no-side-state-v1 with every authored reveal ID open",
+    "forbiddenSeeds": "Acceptance 3000-5199 and reserve 5200-5399 remain unused."
+  },
+  "firstGate": {
+    "identityReplay": "The identity-config whole-run outputDigest must equal the reused live baseline for every policy, grid and seed.",
+    "selectiveRandomRegression": "Versus live baseline, RandomBuild win rate falls by at least 0.15 while the sixteen-policy global mean falls by no more than 0.10.",
+    "globalDifficultyComparator": "Versus live baseline, the exact global-difficulty intervention lowers the sixteen-policy global mean by at least 0.10 and does not satisfy selectiveRandomRegression.",
+    "routeSeparation": "Both native route interventions improve the sixteen-policy global mean, and multi-route minus single-route mean viable-policy count is at least 1.0.",
+    "viability": "Per grid, a policy is viable at observed win rate at least max(0.25, RandomBuild plus 0.15); report the four-grid mean.",
+    "reliability": "Every native intervention has zero additional non-win/loss outcomes or non-empty errors relative to identity control.",
+    "aspectIdentity": "Duskblade records no Smolder kills and Ashwarden records no shatters; identity replay must remain exact.",
+    "vow5": "Identity replay is exact in both Vow-5 grids. Diagnostic causal interventions are not promotion candidates and their Vow-5 rates are recorded, not silently admitted.",
+    "determinism": "The focused sampler mutation check passes and an identical complete simulation identity is served only from the content-addressed cache."
+  },
+  "conditionalFullSuite": {
+    "runOnlyIfFirstGatePasses": true,
+    "seeds": [20200, 20201, 20202, 20203, 20204, 20205, 20206, 20207, 20208, 20209, 20210, 20211, 20212, 20213, 20214, 20215],
+    "directions": [
+      "one-route-spike",
+      "several-separated-viable-routes",
+      "flat-overpowered-no-skill",
+      "random-build-viability-regression",
+      "aspect-identity-reversal",
+      "one-route-improved-no-global-movement",
+      "global-difficulty-no-route-differentiation"
+    ],
+    "admission": {
+      "heldOutDirectionalAccuracy": 0.85,
+      "heldOutRankSpearman": 0.7,
+      "minimumBalancedAccuracyGainOverOldNineCell": 0.1,
+      "minimumRankGainOverOldNineCell": 0.15,
+      "allSevenNamedDirectionsCorrect": true,
+      "calibrationSplitRetained": true
+    },
+    "stableExposureReplication": "The 20200-20215 full-suite panel is held separate from the 20300-20315 first gate."
+  },
+  "stop": "If any first-gate requirement fails, emit one bounded negative, spend zero full-suite or QD/BO rows, and create no successor."
+}

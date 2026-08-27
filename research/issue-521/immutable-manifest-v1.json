@@ -1,0 +1,27 @@
+{
+  "cacheObjectIdentitySetSha256": "9749f7f9a34bed5b4f2168ed4759352f39094cb11518b48e2fc312f8f952aa35",
+  "files": {
+    "artifacts/authoritative-reuse-v1.json": "7ae37aabe743f9c295c8dbb4d041efbe2b24ecdf443fc16c541887c149f5f1f1",
+    "artifacts/bounded-negative-final-v1.json": "ae29ebbf8f6a9c3660e0b47e00d2e107ca657345318c14103762c0299b20837d",
+    "artifacts/campaign-close-v1.json": "1f2cb8acc49626a9b03f871e8a0bce975693554325d442e3f179fb70ac5272a6",
+    "artifacts/cheap-gate-result-v1.json": "2e0c07cb18d9a85650f64fc6d7dcdc24cdacf2ad7fe62077c72edafa4a45669a",
+    "artifacts/ledger-integrity-v1.json": "e7b63897d10ea4e3411cb113a2a0734a8950d1684664bba037917490257a0877",
+    "artifacts/native-candidate-freeze-v1.json": "0cebd15c50c7e04904ee76dfe0a7d8bafb1acc7e527e142aa811921a1cab889a",
+    "artifacts/post-stop-audit-v1.json": "810cb345b3e9431350ceacae856fb398f1b83b27359a2d5c2f75c1389fad6267",
+    "artifacts/research-runtime-prototype-v1.patch": "afe1d85ae3dba02c9d7839f7fd60c7dc411e21280f01f09640fad114b236cde8",
+    "artifacts/source-freeze-v1.json": "05f74fa71684f84251d2b18510a55d74c5fc59aeeaf63a0628f9155c96c82098",
+    "ledger/experiments-v1.sqlite": "ac75cb864b5dee88c3dc4292fde2bebfc34cf0bce6e5dd26413aaba1739aab75",
+    "protocols/stage-c-cheap-gate-v1.json": "96742852b6556f3fbf1591e7c0863d753531d0ecdf1b53f1526d2bd724ec1669",
+    "summaries/campaign-close-report-v1.md": "010f54675048c9c5dc19786f9ce396275522311533f352da91c334e8b0c268f1",
+    "tools/campaign.py": "afc26a2c872773cb2e9d4e48c849f5deab1d26f08f74dedc3797ae5e7dd5bb46",
+    "tools/reward_exposure_check.gd": "68d40b47cf1fd8137cfaa93f8694f616a9d07eb39836c3b4f783efcf959caf70"
+  },
+  "issue": 521,
+  "output": {
+    "path": "/Users/jamesto/Research/glassvow-reward-exposure-521/artifacts/bounded-negative-final-v1.json",
+    "sha256": "ae29ebbf8f6a9c3660e0b47e00d2e107ca657345318c14103762c0299b20837d",
+    "type": "bounded-negative"
+  },
+  "schemaVersion": 1,
+  "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142"
+}

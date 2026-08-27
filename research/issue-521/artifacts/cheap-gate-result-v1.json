@@ -1,0 +1,268 @@
+{
+  "candidateFreezeSha256": "0cebd15c50c7e04904ee76dfe0a7d8bafb1acc7e527e142aa811921a1cab889a",
+  "decision": "STOP_BOUNDED_NEGATIVE",
+  "excludedIdentityIntersection": 0,
+  "issue": 521,
+  "metrics": {
+    "global-difficulty": {
+      "aspectIdentityCrossEvents": 58.0,
+      "globalMeanWin": 0.0087890625,
+      "gridMeanViablePolicyCount": 0.0,
+      "maximumObservedOptimisedVow5Win": 0.0,
+      "nonEmptyErrors": 0,
+      "perGrid": {
+        "ashwarden:v0": {
+          "meanWin": 0.00390625,
+          "randomBuildWin": 0.0,
+          "viablePolicyCount": 0
+        },
+        "ashwarden:v5": {
+          "meanWin": 0.0,
+          "randomBuildWin": 0.0,
+          "viablePolicyCount": 0
+        },
+        "duskblade:v0": {
+          "meanWin": 0.03125,
+          "randomBuildWin": 0.0,
+          "viablePolicyCount": 0
+        },
+        "duskblade:v5": {
+          "meanWin": 0.0,
+          "randomBuildWin": 0.0,
+          "viablePolicyCount": 0
+        }
+      },
+      "randomBuildWin": 0.0,
+      "randomPlayWin": 0.0,
+      "simulatorFaults": 0
+    },
+    "identity-control": {
+      "aspectIdentityCrossEvents": 105.0,
+      "globalMeanWin": 0.185546875,
+      "gridMeanViablePolicyCount": 3.25,
+      "maximumObservedOptimisedVow5Win": 0.25,
+      "nonEmptyErrors": 0,
+      "perGrid": {
+        "ashwarden:v0": {
+          "meanWin": 0.3046875,
+          "randomBuildWin": 0.1875,
+          "viablePolicyCount": 8
+        },
+        "ashwarden:v5": {
+          "meanWin": 0.08203125,
+          "randomBuildWin": 0.0,
+          "viablePolicyCount": 1
+        },
+        "duskblade:v0": {
+          "meanWin": 0.265625,
+          "randomBuildWin": 0.375,
+          "viablePolicyCount": 2
+        },
+        "duskblade:v5": {
+          "meanWin": 0.08984375,
+          "randomBuildWin": 0.0625,
+          "viablePolicyCount": 2
+        }
+      },
+      "randomBuildWin": 0.15625,
+      "randomPlayWin": 0.03125,
+      "simulatorFaults": 0
+    },
+    "live-baseline": {
+      "aspectIdentityCrossEvents": 102.0,
+      "globalMeanWin": 0.1904296875,
+      "gridMeanViablePolicyCount": 5.5,
+      "maximumObservedOptimisedVow5Win": 0.3125,
+      "nonEmptyErrors": 0,
+      "perGrid": {
+        "ashwarden:v0": {
+          "meanWin": 0.30078125,
+          "randomBuildWin": 0.0625,
+          "viablePolicyCount": 11
+        },
+        "ashwarden:v5": {
+          "meanWin": 0.09375,
+          "randomBuildWin": 0.0625,
+          "viablePolicyCount": 2
+        },
+        "duskblade:v0": {
+          "meanWin": 0.28515625,
+          "randomBuildWin": 0.125,
+          "viablePolicyCount": 8
+        },
+        "duskblade:v5": {
+          "meanWin": 0.08203125,
+          "randomBuildWin": 0.0,
+          "viablePolicyCount": 1
+        }
+      },
+      "randomBuildWin": 0.0625,
+      "randomPlayWin": 0.15625,
+      "simulatorFaults": 0
+    },
+    "multi-route-exposure": {
+      "aspectIdentityCrossEvents": 112.0,
+      "globalMeanWin": 0.75,
+      "gridMeanViablePolicyCount": 6.75,
+      "maximumObservedOptimisedVow5Win": 0.9375,
+      "nonEmptyErrors": 0,
+      "perGrid": {
+        "ashwarden:v0": {
+          "meanWin": 0.94921875,
+          "randomBuildWin": 0.9375,
+          "viablePolicyCount": 0
+        },
+        "ashwarden:v5": {
+          "meanWin": 0.7890625,
+          "randomBuildWin": 0.625,
+          "viablePolicyCount": 7
+        },
+        "duskblade:v0": {
+          "meanWin": 0.76953125,
+          "randomBuildWin": 0.4375,
+          "viablePolicyCount": 13
+        },
+        "duskblade:v5": {
+          "meanWin": 0.4921875,
+          "randomBuildWin": 0.375,
+          "viablePolicyCount": 7
+        }
+      },
+      "randomBuildWin": 0.59375,
+      "randomPlayWin": 0.453125,
+      "simulatorFaults": 11
+    },
+    "random-regression-exposure": {
+      "aspectIdentityCrossEvents": 88.0,
+      "globalMeanWin": 0.1552734375,
+      "gridMeanViablePolicyCount": 2.0,
+      "maximumObservedOptimisedVow5Win": 0.25,
+      "nonEmptyErrors": 0,
+      "perGrid": {
+        "ashwarden:v0": {
+          "meanWin": 0.26953125,
+          "randomBuildWin": 0.1875,
+          "viablePolicyCount": 5
+        },
+        "ashwarden:v5": {
+          "meanWin": 0.046875,
+          "randomBuildWin": 0.125,
+          "viablePolicyCount": 0
+        },
+        "duskblade:v0": {
+          "meanWin": 0.2265625,
+          "randomBuildWin": 0.25,
+          "viablePolicyCount": 2
+        },
+        "duskblade:v5": {
+          "meanWin": 0.078125,
+          "randomBuildWin": 0.0625,
+          "viablePolicyCount": 1
+        }
+      },
+      "randomBuildWin": 0.15625,
+      "randomPlayWin": 0.015625,
+      "simulatorFaults": 0
+    },
+    "single-route-exposure": {
+      "aspectIdentityCrossEvents": 117.0,
+      "globalMeanWin": 0.755859375,
+      "gridMeanViablePolicyCount": 6.75,
+      "maximumObservedOptimisedVow5Win": 1.0,
+      "nonEmptyErrors": 0,
+      "perGrid": {
+        "ashwarden:v0": {
+          "meanWin": 0.859375,
+          "randomBuildWin": 0.875,
+          "viablePolicyCount": 0
+        },
+        "ashwarden:v5": {
+          "meanWin": 0.78515625,
+          "randomBuildWin": 0.5,
+          "viablePolicyCount": 13
+        },
+        "duskblade:v0": {
+          "meanWin": 0.76953125,
+          "randomBuildWin": 0.8125,
+          "viablePolicyCount": 3
+        },
+        "duskblade:v5": {
+          "meanWin": 0.609375,
+          "randomBuildWin": 0.375,
+          "viablePolicyCount": 11
+        }
+      },
+      "randomBuildWin": 0.640625,
+      "randomPlayWin": 0.4375,
+      "simulatorFaults": 99
+    }
+  },
+  "pass": false,
+  "protocolSha256": "96742852b6556f3fbf1591e7c0863d753531d0ecdf1b53f1526d2bd724ec1669",
+  "rows": {
+    "fullSevenDirection": 0,
+    "newNativeGate": 5760,
+    "qdBo": 0,
+    "reusedIssue520": 1152
+  },
+  "schemaVersion": 1,
+  "witnesses": {
+    "aspectIdentity": {
+      "nativeCrossEvents": {
+        "identity-control": 105.0,
+        "multi-route-exposure": 112.0,
+        "random-regression-exposure": 88.0,
+        "single-route-exposure": 117.0
+      },
+      "pass": false
+    },
+    "globalDifficultyComparator": {
+      "optimisedGlobalMeanDelta": -0.181640625,
+      "pass": true,
+      "randomBuildWinDelta": -0.0625,
+      "satisfiesSelectiveRule": false
+    },
+    "identityReplay": {
+      "mismatches": 1112,
+      "pass": false
+    },
+    "reliability": {
+      "identityFaults": 0,
+      "nativeErrors": {
+        "identity-control": 0,
+        "multi-route-exposure": 0,
+        "random-regression-exposure": 0,
+        "single-route-exposure": 0
+      },
+      "nativeFaults": {
+        "identity-control": 0,
+        "multi-route-exposure": 11,
+        "random-regression-exposure": 0,
+        "single-route-exposure": 99
+      },
+      "pass": false
+    },
+    "routeSeparation": {
+      "multiGlobalMeanDelta": 0.5595703125,
+      "multiMinusSingleMeanViablePolicies": 0.0,
+      "pass": false,
+      "singleGlobalMeanDelta": 0.5654296875
+    },
+    "selectiveRandomRegression": {
+      "optimisedGlobalMeanDelta": -0.03515625,
+      "pass": false,
+      "randomBuildWinDelta": 0.09375
+    },
+    "targetedChecks": {
+      "legacyCombatTraces": "PASS (1 test; 4 traces; 321 rows)",
+      "nativeInvariants": "PASS",
+      "parse": "PASS (3 research-touched scripts)",
+      "pass": true
+    },
+    "vow5Identity": {
+      "baselineMaximumObserved": 0.3125,
+      "identityMaximumObserved": 0.25,
+      "pass": false
+    }
+  }
+}
