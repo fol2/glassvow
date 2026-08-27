@@ -51,7 +51,7 @@ The live save lineage is the v2 run/vigil pair. A breaking envelope or top-level
 
 ## 6. Risk-proportional verification
 
-`tools/ci_scope.py` is the CI selection authority. Pull requests parse changed GDScript through the shared explicit-path gate, run the complete discovered Godot suite for Godot-code changes, and add only the specialist checks justified by overlapping scopes. Main and manual runs execute every maintained check.
+`tools/ci_scope.py` is the CI selection authority. Pull requests parse changed GDScript through the shared explicit-path gate, run the complete discovered Godot suite for Godot-code changes, and add only the specialist checks justified by overlapping scopes. Main pushes reclassify their exact introduced tree diff; scheduled and manual runs execute every maintained check.
 
 During iteration, run the narrow deterministic check that answers the current question. Once a production Godot change is coherent, run the core final-candidate gate once before first push:
 

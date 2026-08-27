@@ -29,9 +29,56 @@ class ScopeFixtureTests(unittest.TestCase):
         self.assert_scopes(selection, "docs")
         self.assertTrue(selection.checks["run_doc_anchors"])
         self.assertTrue(selection.checks["run_benchmark_freeze"])
+        self.assertFalse(selection.checks["run_agent_contracts"])
         self.assertFalse(selection.checks["run_import_assets"])
         self.assertFalse(selection.checks["run_godot_tests"])
         self.assertFalse(selection.checks["run_map_assets"])
+
+    def test_agent_instruction_change_is_fast_and_specific(self) -> None:
+        selection = CI.classify_paths([
+            "AGENTS.md", ".claude/skills/glassvow-story/SKILL.md"])
+        self.assert_scopes(selection, "agent_config", "docs")
+        self.assertTrue(selection.checks["run_agent_contracts"])
+        self.assertTrue(selection.checks["run_doc_anchors"])
+        self.assertFalse(selection.checks["setup_godot"])
+        self.assertFalse(selection.checks["run_import_assets"])
+        self.assertFalse(selection.checks["run_godot_tests"])
+
+
+    def test_claude_entrypoint_is_agent_config_and_docs(self) -> None:
+        selection = CI.classify_paths(["CLAUDE.md"])
+        self.assert_scopes(selection, "agent_config", "docs")
+        self.assertTrue(selection.checks["run_agent_contracts"])
+        self.assertFalse(selection.checks["setup_godot"])
+
+    def test_copilot_instruction_is_not_ci_authority(self) -> None:
+        selection = CI.classify_paths([".github/copilot-instructions.md"])
+        self.assert_scopes(selection, "agent_config", "docs")
+        self.assertTrue(selection.checks["run_agent_contracts"])
+        self.assertFalse(selection.scopes["ci_infra"])
+        self.assertFalse(selection.checks["run_import_assets"])
+
+    def test_active_grok_workflow_is_agent_config(self) -> None:
+        selection = CI.classify_paths([
+            ".grok/workflows/studio-dcc-map-glb.rhai"])
+        self.assert_scopes(selection, "agent_config")
+        self.assertTrue(selection.checks["run_agent_contracts"])
+        self.assertFalse(selection.checks["run_import_assets"])
+
+    def test_grok_history_is_docs_not_active_automation(self) -> None:
+        selection = CI.classify_paths([
+            ".grok/history/first-paid-map-glb.rhai"])
+        self.assert_scopes(selection, "docs")
+        self.assertTrue(selection.checks["run_doc_anchors"])
+        self.assertFalse(selection.checks["run_agent_contracts"])
+        self.assertFalse(selection.checks["run_import_assets"])
+
+    def test_agent_checker_source_selects_only_agent_config(self) -> None:
+        selection = CI.classify_paths(["tools/check_agent_contracts.py"])
+        self.assert_scopes(selection, "agent_config")
+        self.assertTrue(selection.checks["run_agent_contracts"])
+        self.assertFalse(selection.checks["run_doc_anchors"])
+        self.assertFalse(selection.checks["run_import_assets"])
 
     def test_map_gdscript_and_map_test(self) -> None:
         paths = ["presentation/map/map_scene.gd", "tests/test_map_scene.gd"]
@@ -104,9 +151,7 @@ class ScopeFixtureTests(unittest.TestCase):
     def test_ci_authority_change_fails_closed_to_every_check(self) -> None:
         selection = CI.classify_paths([".github/workflows/ci.yml"])
         self.assert_scopes(selection, "ci_infra")
-        self.assertFalse(selection.checks["run_gdscript_parse"])
-        self.assertTrue(all(value for key, value in selection.checks.items()
-                            if key != "run_gdscript_parse"))
+        self.assertTrue(all(selection.checks.values()))
 
     def test_deleted_gdscript_is_not_parsed_but_keeps_godot_scope(self) -> None:
         path = "domain/removed.gd"
@@ -143,7 +188,7 @@ class ScopeFixtureTests(unittest.TestCase):
         self.assertIn("**SELECTED**", summary)
         self.assertIn("**SKIPPED**", summary)
 
-    def test_full_main_manual_selection_runs_every_check(self) -> None:
+    def test_full_scheduled_manual_selection_runs_every_check(self) -> None:
         selection = CI.full_selection()
         self.assertTrue(selection.full_gate)
         self.assertTrue(all(selection.scopes.values()))
@@ -155,23 +200,41 @@ class WorkflowContractTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.workflow = WORKFLOW.read_text(encoding="utf-8")
 
-    def test_only_main_push_pull_request_and_manual_dispatch_trigger(self) -> None:
+    def test_pr_main_daily_and_manual_triggers(self) -> None:
         self.assertIn("  pull_request:\n", self.workflow)
         self.assertIn("  push:\n    branches: [main]\n", self.workflow)
+        self.assertIn("  schedule:\n    - cron: '23 3 * * *'\n", self.workflow)
         self.assertIn("  workflow_dispatch:\n", self.workflow)
         self.assertNotIn("  push:\n  pull_request:", self.workflow)
 
-    def test_superseded_pr_runs_cancel_in_one_stable_group(self) -> None:
+    def test_only_superseded_pr_runs_share_a_stable_group(self) -> None:
         self.assertIn(
-            "group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}",
+            "group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}",
             self.workflow)
-        self.assertIn("cancel-in-progress: true", self.workflow)
+        self.assertNotIn("github.event_name }}-${{ github.ref }}", self.workflow)
+        self.assertIn(
+            "cancel-in-progress: ${{ github.event_name == 'pull_request' }}",
+            self.workflow)
+        self.assertNotIn("cancel-in-progress: true", self.workflow)
 
-    def test_pr_diff_is_merge_base_scoped_and_classifier_is_fail_closed(self) -> None:
-        self.assertIn('git diff --name-only --no-renames -z "$BASE_SHA...$HEAD_SHA"',
+    def test_pr_and_integrated_main_diffs_are_scoped_and_full_gate_remains(self) -> None:
+        self.assertIn(
+            'git diff --name-only --no-renames -z "$base_sha...$head_sha"',
+            self.workflow)
+        self.assertIn(
+            'git diff --name-only --no-renames -z "$base_sha" "$head_sha"',
+            self.workflow)
+        self.assertIn('classify_diff "$PR_BASE_SHA" "$PR_HEAD_SHA" merge-base',
                       self.workflow)
+        self.assertIn('classify_diff "$PUSH_BEFORE_SHA" "$PUSH_HEAD_SHA" tree',
+                      self.workflow)
+        self.assertIn('elif [[ "$EVENT_NAME" == "push" ]]', self.workflow)
         self.assertIn("--changed-paths-nul", self.workflow)
         self.assertIn("--full-gate", self.workflow)
+        self.assertIn(
+            "FULL_SCRIPT_PARSE: ${{ steps.scope.outputs.full_gate == 'true' || steps.scope.outputs.ci_infra == 'true' }}",
+            self.workflow)
+        self.assertIn('if [[ "$FULL_SCRIPT_PARSE" == "true" ]]', self.workflow)
         self.assertIn("tools/check_scripts.sh \"${scripts[@]}\"", self.workflow)
 
     def test_every_selection_output_controls_its_workflow_step(self) -> None:
@@ -183,6 +246,8 @@ class WorkflowContractTests(unittest.TestCase):
 
     def test_pre_change_full_gate_commands_remain_present(self) -> None:
         commands = (
+            "tests/test_agent_contracts.py",
+            "tools/check_agent_contracts.py",
             "tools/check_imports.sh",
             "tools/test_check_imports.sh",
             "tools/check_scripts.sh",

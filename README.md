@@ -4,7 +4,7 @@ Glassvow is a Godot 4.7.2+ roguelite deckbuilder. The project began as a port of
 
 ## Development
 
-Read `AGENTS.md` first. The repository uses a risk-proportional AI-SDLC: pure research is isolated from delivery, feature-branch pushes do not duplicate CI, pull requests run one audited scope-aware gate, and every push to `main` runs the complete maintained integration gate.
+Read `AGENTS.md` first. The repository uses a risk-proportional AI-SDLC: pure research is isolated from delivery, feature-branch pushes do not duplicate CI, pull requests run one audited scope-aware gate, and each push to `main` reclassifies the exact introduced tree diff on the integrated branch. CI-authority and unknown production inputs fail closed; daily scheduled and manual runs retain the complete maintained integration gate.
 
 To inspect the scope selection for a committed branch diff:
 

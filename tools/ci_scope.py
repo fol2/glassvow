@@ -20,6 +20,7 @@ SCOPE_NAMES = (
     "map_assets",
     "balance_ml",
     "locale_content",
+    "agent_config",
     "docs",
     "release_platform",
     "presentation",
@@ -40,6 +41,7 @@ class Check:
 
 CHECKS = (
     Check("run_scope_contract", "Test CI scope classifier", always=True),
+    Check("run_agent_contracts", "Check AI-SDLC agent contracts", ("agent_config",)),
     Check("setup_godot", "Setup Godot", (
         "godot_code", "map_code", "map_assets", "locale_content",
         "release_platform", "presentation", "conservative_core")),
@@ -176,7 +178,18 @@ def _scope_matches(path: str) -> set[str]:
             or locale_named_test):
         matches.add("locale_content")
 
-    if (_starts(lower, "docs/") or lower.endswith((".md", ".markdown"))
+    github_agent_instruction = (
+        lower == ".github/copilot-instructions.md"
+        or _starts(lower, ".github/instructions/"))
+    if (lower in {"agents.md", "claude.md"}
+            or github_agent_instruction
+            or _starts(lower, ".claude/", ".grok/workflows/", "docs/agents/")
+            or lower in {"tools/check_agent_contracts.py",
+                         "tests/test_agent_contracts.py"}):
+        matches.add("agent_config")
+
+    if (_starts(lower, "docs/", ".grok/history/")
+            or lower.endswith((".md", ".markdown"))
             or lower in {"license", "tools/check_anchors.py",
                          "tools/check_benchmark_freeze.py",
                          "tools/benchmark-citations.txt"}):
@@ -199,7 +212,7 @@ def _scope_matches(path: str) -> set[str]:
             or _starts(lower, "tools/live.", "tools/shot.")):
         matches.add("dev_tools")
 
-    if (_starts(lower, ".github/")
+    if ((_starts(lower, ".github/") and not github_agent_instruction)
             or lower in {"tools/ci_scope.py", "tests/test_ci_scope.py",
                          "tools/check_imports.sh", "tools/test_check_imports.sh",
                          "tools/check_scripts.sh", "tools/test_check_scripts.sh"}):
@@ -219,15 +232,15 @@ def _select_checks(
     for check in CHECKS:
         if full_gate:
             selected[check.key] = True
-            reasons[check.key] = "full main/manual integration gate"
+            reasons[check.key] = "full scheduled/manual integration gate"
+        elif force_all:
+            selected[check.key] = True
+            reasons[check.key] = "CI authority input changed; fail-closed full PR gate"
         elif check.changed_gdscript:
             selected[check.key] = bool(changed_gdscripts)
             reasons[check.key] = (
                 f"{len(changed_gdscripts)} changed GDScript file(s) remain at the PR head"
                 if changed_gdscripts else "no changed GDScript file remains at the PR head")
-        elif force_all:
-            selected[check.key] = True
-            reasons[check.key] = "CI authority input changed; fail-closed full PR gate"
         elif check.always:
             selected[check.key] = True
             reasons[check.key] = "selection authority is tested on every run"
@@ -294,7 +307,7 @@ def read_nul_paths(path: Path) -> tuple[str, ...]:
 
 
 def render_summary(selection: Selection) -> str:
-    mode = "full main/manual integration gate" if selection.full_gate else "scope-aware pull-request gate"
+    mode = "full scheduled/manual integration gate" if selection.full_gate else "scope-aware changed-path gate"
     coverage = (
         "GDScript mode: **discovered full sweep**."
         if selection.full_gate else

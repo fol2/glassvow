@@ -13,9 +13,11 @@ Narrative counterpart to `glassvow-godot`, which binds engine work. A task that 
 
 ## 2. Review states are binding
 
-- **[SETTLED]** — James decided it. Changing it requires reopening the decision with James, never a silent edit.
-- **[PROPOSED]** — draft canon. It may be rewritten, but downstream copy built on it is at risk until James confirms.
+- **[SETTLED]** — owner-decided canon. Changing it requires reopening that specific decision with the owner, never a silent edit.
+- **[PROPOSED]** — draft canon. It may be rewritten, but downstream copy cannot depend on it until the task contract explicitly promotes it or the owner settles the product-defining choice.
 - **[OPEN]** — no copy may lean on it.
+
+Routine copy constrained by settled canon does not require owner review. New settled canon, a contradiction between settled authorities, or materially different valid story directions absent from the bible are escalation conditions.
 
 ## 3. Foreshadow-ledger discipline
 
@@ -27,7 +29,7 @@ Every new or edited line enters `05-foreshadow-ledger.md` with its surface readi
 
 ## 4. Language pipeline
 
-zh-Hant is the source language: HK written register with 着/裏 orthography. English is a full rewrite, never a calque. Fable drafts and James reviews; copy enters `content/` or `locale/` only after that review.
+zh-Hant is the source language: HK written register with 着/裏 orthography. English is a full rewrite, never a calque. Fable drafts; the batch workflow then uses fresh-context agents for truth/matrix, vocabulary/orthography, voice, ladder/ledger, twist safety, and adversarial blocker verification. Copy enters `content/` or `locale/` when those checks and the task acceptance are decisive; owner escalation is reserved for the conditions in §2.
 
 ## 5. Voice sheets
 
@@ -39,9 +41,9 @@ Story may reinterpret any shipped image but never requires changing one. Unlocke
 
 ## 7. Drafting and promotion
 
-Mass copy is produced in batches per `04-delivery.md`: brief → draft against the bible → canon-lint pass → twist-safety pass → James review. The two review passes have distinct hypotheses and should not duplicate one another. The batch workflow lives at `.claude/workflows/story-draft.js`.
+Mass copy is produced in batches per `04-delivery.md`: brief → draft against the bible → canon lint (truth/matrix, vocabulary/orthography, voice, ladder/ledger) → twist safety → adversarial blocker verification → autonomous promotion or bounded owner escalation. Each pass has a distinct hypothesis and must not duplicate another. The batch workflow lives at `.claude/workflows/story-draft.js`.
 
-Drafts and alternatives are a bounded discovery loop. Keep them inside one batch; do not create an issue, branch, PR, or CI run for every candidate. Only selected copy and its ledger updates cross into the delivery loop.
+Drafts and alternatives are a bounded discovery loop. Keep them inside one batch; do not create an issue, branch, PR, CI run, or full context reload for every candidate. Only selected copy and its ledger updates cross into the delivery loop.
 
 When selected copy changes `content/`, `locale/`, or runtime scene files, normal scope-aware delivery applies. The story skill governs the words; `tools/ci_scope.py` selects the relevant locale/content and Godot checks from the actual PR diff.
 
@@ -59,5 +61,5 @@ The canon-lint and twist-safety passes enforce these rules line by line.
 3. The Keeper may mislead, never lie: every Keeper line is literally true under `00-truth.md`.
 4. No character may voice knowledge above their information-matrix row in `00-truth.md` §4.
 5. A line's reveal-ladder level may not exceed its channel's spoiler ceiling in `04-delivery.md`.
-6. Resolve contradictions from existing canon or take them to James; never patch them with new metaphysics invented inline.
+6. Resolve contradictions from existing canon or escalate the specific decision; never patch them with new metaphysics invented inline.
 7. Legend-drift is ledgered as drift: record both the false surface and the true mechanism.

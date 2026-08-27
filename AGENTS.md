@@ -34,6 +34,16 @@ Maximise decision quality and delivery speed while minimising context, compute, 
 - **Context:** on handoff or compaction, transfer the task capsule and exact failing command—not the full transcript.
 - **Automation:** use deterministic scripts for discovery, classification, mechanical checks, and evidence capture. Use model judgement for design, trade-offs, and review.
 
+## Autonomy by default
+
+Human escalation is the exception, not a routine stage. When the owner instruction or active issue is complete and permissions allow, the owner agent continues end-to-end: orient, plan, implement, validate, perform the risk-required independent review, batch-fix findings, open or update the PR, observe the relevant gates, merge, and delete the branch. A fully mechanical change with decisive deterministic proof does not spend tokens on a ceremonial model review. Stop before merge only when the task explicitly says so or repository policy blocks it.
+
+Do not ask a person to approve a routine plan, choose among materially equivalent candidates, reconfirm settled acceptance, repeat a green gate, or press the merge button. Escalate one concise decision only when decisive evidence cannot resolve a contradiction in binding authority, a breaking compatibility change, an irreversible external or regulated action, provider terms or credentials, a genuinely product-defining subjective choice absent from the SSOT, or an unavailable/inconclusive relevant gate.
+
+For semantic or policy changes, and for non-mechanical multi-file changes with interacting risks, delegate exactly one final-candidate review to `.claude/agents/ai-sdlc-reviewer.md`. Use it as a non-fork reviewer and provide only the task contract, base SHA, exact head SHA, active constraints, and already-produced deterministic evidence—not the author transcript or rationale. Record its exact-head verdict in the PR. If it returns `REQUEST_CHANGES`, batch-fix and review the new head once; if it returns `INCONCLUSIVE`, stop with the named missing evidence. The writing agent never uses the author identity to approve its own PR.
+
+Active agent-instruction changes must pass `tools/check_agent_contracts.py`. It is a fast structural regression gate, not a substitute for the independent semantic review required when model judgement changed the operating contract.
+
 ## Validation and evidence
 
 `tools/ci_scope.py` is the executable selection authority. It classifies the complete PR diff, permits overlapping scopes, fails closed on malformed or unknown production input, and records every selected and skipped check with its reason.
@@ -51,12 +61,12 @@ Maximise decision quality and delivery speed while minimising context, compute, 
 
   Add only the specialist checks required by the changed surface. Stage every new `.gd` file first because the full script sweep deliberately uses `git ls-files`.
 - Documentation-only and isolated balance/ML-tool changes do not inherit the Godot gate. Run their matching deterministic checks or self-tests.
-- Feature-branch pushes do not start a duplicate CI run. A PR update starts one scope-aware run and cancels its superseded run. Pushes to `main` and manual dispatches execute the complete maintained integration gate.
+- Feature-branch pushes do not start a duplicate CI run. A PR update starts one scope-aware run and cancels its superseded run. A push to `main` reclassifies the exact introduced tree diff and reruns only relevant checks on the integrated tree; unknown or CI-authority inputs fail closed. Scheduled and manual runs execute the complete maintained integration gate.
 - Component evidence workflows prove only their component contract and capture. They must not replay unrelated repository suites already owned by normal CI.
 
 Never grade `godot --check-only` by exit status; it can report parse failures on stderr while exiting zero. Use `tools/check_scripts.sh`. Do not substitute an unrelated green gate, weaken a test, or edit a golden merely to pass.
 
-Presentation, animation, VFX, audio-routing, and composition changes also require visual inspection at the affected reference shapes. Put deterministic gates upstream of noisy rendering, but never use numeric proof as an excuse not to inspect the running result.
+Presentation, animation, VFX, shader, camera, and composition changes require visual inspection at the affected reference shapes. Audio content or routing changes require actual playback or audition on an approved audio-capable evidence surface; waveform, spectrogram, metadata, and codec checks prove only technical properties. Put deterministic gates upstream of noisy rendering or playback, but never use numeric proof as an excuse not to inspect or audition the running result.
 
 Exact-head artifact packets are required only when the task, release protocol, or external evidence contract requires them. Ordinary changes need truthful final-head commands and results, not ceremonial evidence bundles.
 
@@ -75,7 +85,8 @@ Stop and surface a concrete blocker instead of weakening acceptance when work re
 
 ## Progressive-disclosure map
 
-- AI-SDLC, research promotion, CI scopes, evidence, and metrics: `docs/agents/ai-sdlc.md`
+- AI-SDLC, research promotion, CI scopes, autonomy, evidence, and metrics: `docs/agents/ai-sdlc.md`
+- Independent semantic review: `.claude/agents/ai-sdlc-reviewer.md`
 - Godot engine, architecture, saves, editing, and visual proof: `.claude/skills/glassvow-godot/SKILL.md`
 - Domain vocabulary lookup: `docs/agents/domain.md`
 - Issue ownership and research/delivery tracking: `docs/agents/issue-tracker.md`

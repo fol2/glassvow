@@ -1,6 +1,6 @@
 let meta = #{
     name: "studio-dcc-map-glb",
-    description: "Land one Studio (non-API) ordinary map GLB. Observed flow: .grok/workflows/studio-dcc-map-glb-flow.md. Drivers: tools/studio_image_to_glb.ts then tools/land_map_glb.py",
+    description: "Land one Studio (non-API) ordinary map GLB. Historical observed flow: .grok/history/studio-dcc-map-glb-flow.md. Drivers: tools/studio_image_to_glb.py then tools/land_map_glb.py",
     when_to_use: "When generating the next shipping map kit module from Studio credits. Scripts drive Chrome for Testing new Headless. Never the Tripo API.",
     phases: [
         #{ title: "Generate", detail: "python3 tools/studio_image_to_glb.py" },
@@ -35,6 +35,13 @@ fn glb_from(r) {
     trimmed(r.output.glb_path)
 }
 
+fn task_id_from(r) {
+    if r == () { return ""; }
+    if r.output == () { return ""; }
+    if r.output.task_id == () { return ""; }
+    trimmed(r.output.task_id)
+}
+
 fn is_ok(r) {
     if r == () { return false; }
     if !r.success { return false; }
@@ -66,6 +73,11 @@ if args != () && args.glb_path != () {
     found_glb = trimmed(args.glb_path);
 }
 
+let task_id = "";
+if args != () && args.task_id != () {
+    task_id = trimmed(args.task_id);
+}
+
 phase("Generate");
 if found_glb != "" {
     log("skip generate: " + found_glb);
@@ -87,10 +99,17 @@ if found_glb != "" {
     if is_ok(gen) {
         found_glb = glb_from(gen);
         if found_glb == "" { found_glb = tmp_glb; }
+        if task_id == "" { task_id = task_id_from(gen); }
     }
     if found_glb == "" {
-        await_user("user", "studio_smart_mesh.py did not write " + tmp_glb + ". Put a Studio (NOT API) Export GLB there and resume. Do not install DCC.");
-        found_glb = tmp_glb;
+        complete(#{
+            ok: false,
+            summary: "studio_image_to_glb.py did not produce the required Studio GLB; generation stopped fail-closed without a manual file handoff",
+            asset_id: asset_id,
+            concept_path: concept_path,
+            expected_glb_path: tmp_glb,
+            blocker: "Studio browser, provider access, credential, or generation command is unavailable or failed",
+        });
     }
 }
 
@@ -99,11 +118,8 @@ let land_prompt = "";
 land_prompt += "Repo /Users/jamesto/Coding/glassvow. HARD RULE: no Tripo API. Do not generate. ";
 land_prompt += "Run this exact command with run_terminal_command, cwd the repo root, then return its JSON: ";
 land_prompt += "python3 tools/land_map_glb.py --asset " + asset_id + " --src " + found_glb + " --concept " + concept_path + " --gates ";
-if args != () && args.task_id != () {
-    let tid = trimmed(args.task_id);
-    if tid != "" {
-        land_prompt += "--task-id " + tid + " ";
-    }
+if task_id != "" {
+    land_prompt += "--task-id " + task_id + " ";
 }
 land_prompt += "Do not browse. Do not read SKILL.md. Do not rewrite other provenance records by hand. ";
 land_prompt += "ok=true only if the command's JSON has ok true.";
@@ -120,7 +136,10 @@ report += "asset_id: " + asset_id + "\n";
 report += "concept: " + concept_path + "\n";
 report += "dest: " + dest_path + "\n";
 report += "source: " + found_glb + "\n";
-report += "driver: tools/studio_smart_mesh.py + tools/land_map_glb.py\n";
+report += "driver: tools/studio_image_to_glb.py + tools/land_map_glb.py\n";
+if task_id != "" {
+    report += "task_id: " + task_id + "\n";
+}
 if land != () && land.output != () {
     report += "land: " + trimmed(land.output.summary) + "\n";
 }
@@ -128,7 +147,7 @@ let report_path = write_scratch_file("report.md", report);
 if !is_ok(land) {
     complete(#{
         ok: false,
-        summary: "land_map_glb.py failed. Not pausing.",
+        summary: "land_map_glb.py failed; no production asset was accepted",
         asset_id: asset_id,
         dest_path: dest_path,
         path: report_path,
