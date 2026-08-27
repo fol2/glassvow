@@ -7,10 +7,15 @@ on:
       - '.github/workflows/waylight-tracer-evidence.yml'
       - 'presentation/map/map_waylight_tracer.gd'
       - 'tests/test_map_waylight_tracer.gd'
+      - 'tests/run_all.gd'
       - 'tools/capture_map_waylight_harness.gd'
 
 permissions:
   contents: read
+
+concurrency:
+  group: waylight-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   capture:
@@ -26,9 +31,31 @@ jobs:
           version: 4.7.2
           use-dotnet: false
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libgl1-mesa-dri
-      - run: tools/check_imports.sh
-      - run: tools/check_scripts.sh
-      - run: godot --headless -s res://tests/run_all.gd
+      - name: Import assets needed by the harness
+        run: tools/check_imports.sh
+      - name: Parse only the tracer evidence surface
+        run: |
+          tools/check_scripts.sh \
+            presentation/map/map_waylight_tracer.gd \
+            tests/test_map_waylight_tracer.gd \
+            tools/capture_map_waylight_harness.gd
+      - name: Prove malformed test filters fail closed
+        shell: bash
+        run: |
+          set +e
+          output="$(godot --headless -s res://tests/run_all.gd -- --tests=, 2>&1)"
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          if [[ "$status" -eq 0 ]]; then
+            echo "Malformed test filter unexpectedly passed." >&2
+            exit 1
+          fi
+          grep -Fq "requested test path may not be empty" <<<"$output"
+      - name: Run only the tracer contract test
+        run: |
+          godot --headless -s res://tests/run_all.gd -- \
+            --tests=res://tests/test_map_waylight_tracer.gd
       - name: Capture phone and pad route states
         run: |
           xvfb-run -a godot --path . --rendering-method gl_compatibility \

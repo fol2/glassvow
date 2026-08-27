@@ -1,201 +1,86 @@
-# Agent Contract — Glassvow Godot
+# Glassvow Agent Contract
 
-**Glassvow** (琉璃誓言) is a Godot 4.7.2+ roguelite deckbuilder, parallel-ported from a web original and, since 2026-08-16, **detached from it** — see THE REFERENCE below. The 18 files in `port_fixtures/` began as exports from that original and are now the port's own regression goldens, pinning its behaviour rather than the web's. The map system was always a deliberate redesign (horizontal "glassvow world" journey, not the vertical tower). Before beginning any implementation work, load `.claude/skills/glassvow-godot/SKILL.md` — it binds the engine contract, architecture boundaries, testing strategy, and stop conditions. Music and SFX generation additionally load `.claude/skills/glassvow-suno/SKILL.md` and `.claude/skills/glassvow-elevenlabs/SKILL.md`; write the row in `docs/music-ledger.md` or `docs/sfx-ledger.md` first.
+Glassvow (琉璃誓言) is a Godot 4.7.2+ roguelite deckbuilder. Since 2026-08-16 it is detached from the former web implementation: this repository owns its behaviour, content, and port-owned regression goldens. The commercial rubric, not historical web parity, is the product standard.
 
-## THE REFERENCE — detached 2026-08-16
+This file is the small execution kernel. Load deeper material only when the task needs it. `docs/agents/ai-sdlc.md` is the development-process single source of truth.
 
-**This port owns its content and its behaviour. Nothing parity-checks against the
-web original any more, and "the web did it differently" is not by itself an
-argument.** The standard is the commercial rubric (issue #157). The reference did
-its job — it got a deckbuilder from the browser into Godot — and development is
-now ahead of it, so continuing to benchmark against it would only hold the port
-back. See issue #317 for the decision and `docs/benchmark-divergence.md` for what
-was measured on the way out.
+## Authority and historical records
 
-**The 607 surviving `file:line` citations are frozen history, not instructions.**
-They explain 403 code sites and cost nothing to leave alone, and the commit they
-name cannot drift. Do not re-resolve them; roughly two thirds were written against
-the wrong tree anyway (see the incident below), so their provenance value is
-already part fiction. **Writing a new one is banned** — cite this port's own code,
-and `python3 tools/check_benchmark_freeze.py` will refuse a 608th.
+Use this precedence for current work:
 
-**Nothing serves `http://localhost:5190` any more, and no gate reads the
-checkout.** If you genuinely need to look at the original — which should be rare,
-and never to settle what this port ought to do:
+1. the user's instruction or active issue acceptance and non-goals;
+2. active product invariants, ADRs, and compatibility contracts for the affected surface;
+3. this file and the one relevant domain skill;
+4. `docs/agents/ai-sdlc.md` and the executable CI selection in `tools/ci_scope.py`.
 
-```bash
-# The pinned commit, in full. `%h` abbreviations lengthen as a repo grows.
-#   6e06911853ba8e26d05ac4db0a1ad119a6c2275a   2026-07-13, pre-Pixi
-git clone https://github.com/fol2/roguecardv2.git /tmp/rc2 \
-  && git -C /tmp/rc2 checkout 6e06911853ba8e26d05ac4db0a1ad119a6c2275a
-```
+Old status pages, review packets, evidence folders, handoffs, and `docs/session-ownership.md` may truthfully record commands, ownership, gates, or reference assumptions that applied at the time. They are historical evidence, not current default instructions, unless the active task explicitly binds that protocol. Preserve them instead of rewriting history.
 
-`~/Coding/roguecardv2-benchmark` may still sit on that commit locally, but do not
-treat it as durable: it is a **linked git worktree** of `~/Coding/roguecardv2`,
-not a standalone clone, so its 1.3 GB dies with its parent. The commit is an
-ancestor of that repo's `main`, so the clone recipe above always works and the
-disk is reclaimable whenever someone wants it back.
+## Start with the smallest sufficient context
 
-**`~/Coding/roguecardv2` was never the reference.** It is on `main`, tag
-`web-reference-v1` (`1343e1d`) — 284 commits ahead and **post-Pixi**, carrying
-`src/ui/combat-gl.js`, `#uigl`, `chromePulse` and a Pixi `artCast` that the pinned
-commit does not have. This contract itself once named that tag as the reference,
-and on 2026-07-26 the error produced three commits ported against code the
-benchmark does not contain (`e071e34`, `d367e44`, `806272c` — reverted or redone).
-Both trees are now equally not the standard, but the distinction still matters
-when reading a frozen citation: it tells you which of the two a line number was
-written against.
+1. Treat the user's instruction or the active GitHub issue as the task contract. A complete direct owner instruction does not need a mirror issue.
+2. Inspect the owned or changed surface and search before opening long documents. Read only matching sections of `CONCEPTS.md`, ADRs, solution notes, and skills.
+3. Load `.claude/skills/glassvow-godot/SKILL.md` only for Godot runtime, test, scene, resource, import, or visual work. Load the story, Suno, or ElevenLabs skill only when that domain is actually in scope.
+4. Keep one task capsule: goal, non-goals, active constraints, acceptance, decisions, current head/diff/evidence, and next action.
 
-**A function existing in the source is not evidence that it renders** — learned
-the same day, and the one rule here that outlives the reference entirely.
-`ring()` and `slashArc()` push particles with no `vx`/`vy` while the draw loop
-does `p.x += p.vx * dt` unconditionally, so their coordinates go NaN before they
-draw. They never appeared on screen at either commit, and a port of them would
-have been a port of nothing. Measure the running thing; do not infer from source.
+Do not preload the repository, repeat settled context, or commission overlapping agents to rediscover the same facts.
 
-## Verification (all from repo root)
+## AI-SDLC operating rule
 
-Research and issue-comment work has no branch, pull request, or CI run. Once
-implementation starts, run only the checks relevant to the files being changed
-while iterating. Immediately before the first push, run the complete block below
-once against the final candidate under the supported Godot version contract;
-publish that candidate rather than exploratory intermediate commits.
+Maximise decision quality and delivery speed while minimising context, compute, and feedback latency. “No compromise” means every material claim receives the cheapest decisive evidence that can falsify it; it does not mean running every unrelated check.
 
-```bash
-godot --version                          # must report 4.7.2 stable or later stable
-tools/check_imports.sh                   # asset import; fails on stderr ERRORs or process status
-tools/check_scripts.sh                   # per-file parse + warnings-as-errors gate
-godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0 (PASS)
-python3 tools/check_anchors.py           # doc file:line anchors still point where they claim
-python3 tools/check_benchmark_freeze.py  # no new citations into the detached reference
-```
+- **Discovery and research:** state the question, hypothesis or competing options, immutable inputs, cheapest discriminating experiment, budget, success/stop rule, and decision. Keep experiments out of production truth. Do not create a ticket, branch, PR, or CI run for every trial. Promote only a selected result into delivery.
+- **Delivery:** one owner, one independently mergeable outcome, one branch, one ordinary PR. Plan acceptance, affected surfaces, and proof once; implement the smallest complete change; batch review findings; avoid unrelated cleanup.
+- **Concurrency:** parallelise only independent work with separate branches and no shared mutable files or evidence. Never have multiple agents or machines mutate the same branch or worktree.
+- **Context:** on handoff or compaction, transfer the task capsule and exact failing command—not the full transcript.
+- **Automation:** use deterministic scripts for discovery, classification, mechanical checks, and evidence capture. Use model judgement for design, trade-offs, and review.
 
-Pull-request CI is scope-aware: it classifies the complete PR diff, parses only
-changed GDScript files, runs the discovered Godot suite for Godot-code changes,
-and records every selected and skipped check in the workflow summary. A
-feature-branch push does not create a second run. Pushes to `main` and manual
-dispatches run the complete CI check set and remain the milestone integration
-gate.
+## Validation and evidence
 
-**Why the parse gate is a script and not a one-line loop.** `godot --headless
---check-only -s FILE` writes its diagnostics to **stderr and exits 0 whatever it
-found**. Measured on 4.7.1 across four seeded error classes — a duplicate `var`
-in one scope, an unterminated string, `var x: int = "text"`, and an untyped
-`var x = 1` — the status was 0 on all four, so the `|| exit 1` loop that stood
-here until 2026-08-06 could not fail and never once caught a defect. What the
-tree was actually being protected by was `tests/run_all.gd`, and only as a side
-effect: a parse error makes `load()` return null and the run fail.
-`tools/check_scripts.sh` greps the stderr instead, which is the only signal
-`--check-only` gives, and both this gate and CI call that one script so the two
-cannot drift.
+`tools/ci_scope.py` is the executable selection authority. It classifies the complete PR diff, permits overlapping scopes, fails closed on malformed or unknown production input, and records every selected and skipped check with its reason.
 
-The default sweep deliberately uses `git ls-files`, so it protects tracked
-scripts only. Stage every new `.gd` file with an explicit path before running
-the full gate; an untracked script is outside both the local sweep and CI.
+- Research and issue-comment work has no branch, PR, or CI run.
+- During implementation, run the narrow deterministic check that answers the current question.
+- For a production Godot delivery, run the complete local core gate once on the coherent final candidate before the first push:
 
-Warnings-as-errors is not the broken half. `project.godot` sets
-`untyped_declaration`, `inferred_declaration`, `unsafe_cast` and
-`unsafe_call_argument` to level 2, and an untyped `var x = 1` really does print
-`Parse Error: Variable "x" has no static type. (Warning treated as error.)` —
-detected, and now enforced by the stderr grep rather than by the exit code.
+  ```bash
+  godot --version
+  tools/check_imports.sh
+  tools/check_scripts.sh
+  godot --headless -s res://tests/run_all.gd
+  ```
 
-**CI enforces all of them, and that is new.** `check_anchors.py` joined `ci.yml`
-on 2026-08-13, after main was found sitting on a drifted anchor — a
-`docs/solutions/` citation still naming the line `_capture_and_quit` had since
-moved off. The gate existed, ran locally, and exited 1 correctly; nothing called
-it before a merge, so it caught nothing for as long as everyone remembered to
-forget it.
+  Add only the specialist checks required by the changed surface. Stage every new `.gd` file first because the full script sweep deliberately uses `git ls-files`.
+- Documentation-only and isolated balance/ML-tool changes do not inherit the Godot gate. Run their matching deterministic checks or self-tests.
+- Feature-branch pushes do not start a duplicate CI run. A PR update starts one scope-aware run and cancels its superseded run. Pushes to `main` and manual dispatches execute the complete maintained integration gate.
+- Component evidence workflows prove only their component contract and capture. They must not replay unrelated repository suites already owned by normal CI.
 
-Until 2026-08-16 there was one hand-run exception, `check_web_anchors.py`, and
-**that is exactly why it is now deleted rather than kept.** It resolved citations
-against the benchmark checkout, so it returned **2 — "benchmark tree not found"**
-on every CI runner and inside every git worktree; putting it in CI would have
-painted the tree red for a reason unrelated to anchors, and special-casing that
-exit away would have turned a real gate into a no-op — the same disease as the
-`--check-only` loop above. With new citations banned outright, counting them is
-the whole of the job, and `check_benchmark_freeze.py` counts: no checkout, so it
-runs in CI, where the rule is actually broken. A gate that cannot run where the
-work lands is not a gate.
+Never grade `godot --check-only` by exit status; it can report parse failures on stderr while exiting zero. Use `tools/check_scripts.sh`. Do not substitute an unrelated green gate, weaken a test, or edit a golden merely to pass.
 
-Screenshots go through `tools/shot.sh` (one-off) or `tools/live.sh` (iteration
-loop) rather than a bare `godot` launch — see `docs/session-ownership.md` ›
-Organiser-owned files for why and for the two caveats.
+Presentation, animation, VFX, audio-routing, and composition changes also require visual inspection at the affected reference shapes. Put deterministic gates upstream of noisy rendering, but never use numeric proof as an excuse not to inspect the running result.
 
-## References
+Exact-head artifact packets are required only when the task, release protocol, or external evidence contract requires them. Ordinary changes need truthful final-head commands and results, not ceremonial evidence bundles.
 
-- **SKILL.md** — `.claude/skills/glassvow-godot/SKILL.md` — 10-section binding contract (engine pin, architecture, IDs, save compatibility, stop conditions).
-- **Commercial Game Delivery** — `docs/commercial-game-delivery.md` — engine-neutral policy (save versioning, determinism, content stability, performance gates).
-- **Fixtures** — `port_fixtures/` holds 18 **port-owned goldens**, read by 6 of the test files. Their immutability contract ended with the detachment (#317 D5): they pin this port's behaviour, so a deliberate behaviour change may update one, in its own commit, saying what changed and why. No port-side regeneration tool exists yet — it gets designed the first time a refactor actually needs one, never speculatively.
-- **Documented Solutions** — `docs/solutions/` — solved problems and conventions, by category, with YAML frontmatter (`module`, `tags`, `problem_type`). Relevant when implementing or debugging in a documented area.
-- **Developer Tools** — `docs/dev-tools.md` — the shared browser/CLI inventory and the binding creation and maintenance contract.
-- **Shared Vocabulary** — `CONCEPTS.md` — domain terms with project-specific meaning; relevant when orienting to an area or settling on names.
-- **Art Ledger** — `docs/art-ledger.md` — points at the upstream art bibles that govern every raster asset, and records the prompts for the few this port authored itself. Relevant before generating or replacing any asset under `assets/art/`.
-- **Music Ledger** — `docs/music-ledger.md` — stained-glass pack contract, owed Suno briefs, titles. Dispatch: `.claude/skills/glassvow-suno/SKILL.md`.
-- **SFX Ledger** — `docs/sfx-ledger.md` — ashglass pack contract, owed ElevenLabs briefs. Dispatch: `.claude/skills/glassvow-elevenlabs/SKILL.md`.
-- **Sentry operator access** — `docs/release-signing.md` › Sentry operator access — the 2026-08-21 full-access decision, macOS Keychain service, local environment loader, Glassvow-only operating boundary, and token-rotation procedure. Never put the token itself in this repository or in agent output.
+## Product invariants
 
-## Agent skills
+- No new citations into the detached web repository. Historical citations remain frozen; `tools/check_benchmark_freeze.py` enforces the boundary.
+- Measure running behaviour when the claim is visual or temporal; source presence alone is not proof that something renders.
+- `domain/` stays pure game logic. Commands enter through `GlassvowGame.apply`; presentation consumes events and never owns game truth. No global EventBus or manager singleton.
+- Internal IDs, seeded randomness, the v2 save lineage, and load validation remain stable. A breaking save change requires a new version and migration design.
+- `port_fixtures/` are port-owned goldens. A deliberate behaviour change may update them in an explicit commit explaining why; never silently regenerate them.
+- Never expose secrets. Sentry access remains Glassvow-bound as documented in `docs/release-signing.md`.
 
-### Issue tracker
+## Stop conditions
 
-Issues and specs live as GitHub issues. See `docs/agents/issue-tracker.md`.
+Stop and surface a concrete blocker instead of weakening acceptance when work requires a breaking save-schema or internal-ID change, native platform plugin integration, more than 600 additions plus deletions in one code file in one commit, an unavailable relevant gate, or a contradiction with an active architecture or product contract.
 
-### Triage labels
+## Progressive-disclosure map
 
-Canonical role names match the tracker strings (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context. See `docs/agents/domain.md`.
-
-## Cursor Cloud specific instructions
-
-The Cloud Agent environment boots with the toolchain already provisioned — `godot`
-(4.7.2.stable) on `PATH`, `zsh`, and the Python gate deps (`fonttools`, `Pillow`)
-— by an idempotent update script that also runs `godot --headless --import` to
-build the `.godot/` cache. You do **not** install Godot or those deps yourself; the
-script re-provisions any that a boot is missing. There is no `start` service. The
-verification gate is unchanged — run the four commands under **Verification** above.
-
-- **Grade the test suite by its exit code and `PASS (N tests)` line, not stderr.**
-  A headless run prints harmless `… leaked`, `RID … leaked`, and `Parameter
-  "material" is null` warnings from the dummy renderer (no GPU); the run still
-  exits 0. This is the same reasoning as the `--check-only` gate above: read the
-  signal that means failure, not the noise that always fires.
-
-- **Screen captures need a virtual display — the VM has no physical one.** Run the
-  capture wrappers under `xvfb-run` and force an on-screen window position:
-  `xvfb-run -a env GLASSVOW_SHOT_POSITION=0,0 tools/shot.sh <flags> --shot=/tmp/x.png`
-  (or drive Godot directly: `xvfb-run -a godot --path . --position 0,0 -- <flags>
-  --shot=/tmp/x.png`). `tools/shot.sh`'s default `-4000,-4000` is a macOS
-  off-screen workaround that does not apply here, and — per its own header — a
-  capture must never be `--headless`, or it hangs on a null viewport.
-
-- **`python3 tools/dev.py --open` (the browser front door at `127.0.0.1:8766`) is
-  optional and manual.** Its Interactive Web path needs Godot's 4.7.2
-  `web_nothreads_debug` export template, which the environment does not provision;
-  Native Proof and every headless check work without it.
-
-- **Audio: ElevenLabs needs the `sk_` secret, not the key ID; Suno has no API key.**
-  `ELEVENLABS_API_KEY` on the environment unlocks SFX (stdio MCP or REST
-  `/v1/sound-generation`). Music is the Suno Pro website — Custom +
-  Instrumental, paste the ledger brief, download mp3s. There is no
-  `SUNO_API_KEY`. AceDataCloud's token is a third-party wrapper, optional,
-  never a Suno secret. Project `.cursor/mcp.json` does not reach Cloud
-  Agents; a running agent cannot hot-load MCP. Boot a new one after Save.
-
-- **Sentry operator access is full-scope but Glassvow-bound.** On James's Mac,
-  source `~/.config/glassvow/sentry.sh`; it reads the token from macOS Keychain
-  service `codex-sentry-glassvow-full-access` and sets organization `pgnetwork`
-  plus project `glassvow`. Sentry Personal Tokens cannot be restricted to one
-  project, so the credential is technically organization-wide. Use it only for
-  Glassvow. Release exports report environment `export_release`, not `prod`;
-  pass that value explicitly when filtering issues or events. Possessing the
-  credential is capability, not standing authority for
-  an unrelated project or an unrequested production mutation. See
-  `docs/release-signing.md` › Sentry operator access.
-
-
----
-
-Created during M0 bootstrap (2026-07-24).
+- AI-SDLC, research promotion, CI scopes, evidence, and metrics: `docs/agents/ai-sdlc.md`
+- Godot engine, architecture, saves, editing, and visual proof: `.claude/skills/glassvow-godot/SKILL.md`
+- Domain vocabulary lookup: `docs/agents/domain.md`
+- Issue ownership and research/delivery tracking: `docs/agents/issue-tracker.md`
+- Commercial invariants: `docs/commercial-game-delivery.md`, `docs/commercial-rubric.md`, `docs/rc-bar.md`
+- Existing solved conventions: `docs/solutions/`
+- Tools and capture methods: `docs/dev-tools.md`
+- Reference detachment history: `docs/benchmark-divergence.md`, issue #317
+- Art, music, and SFX authority: `docs/art-ledger.md`, `docs/music-ledger.md`, `docs/sfx-ledger.md`

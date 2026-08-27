@@ -1,47 +1,34 @@
 ---
 name: glassvow-elevenlabs
-description: Generate Glassvow SFX with ElevenLabs sound-generation (MCP or official REST). Use when adding or replacing ashglass pack samples, unsealingSting, UI/combat one-shots, or wiring ElevenLabs MCP. Always read and update docs/sfx-ledger.md before shipping a file.
+description: Generate Glassvow SFX with ElevenLabs sound generation. Use only when adding or replacing ashglass pack samples, UI/combat one-shots, or related sound-generation wiring. Read and update docs/sfx-ledger.md before shipping.
 ---
 
 # Glassvow ElevenLabs SFX
 
-Ledger is law: `docs/sfx-ledger.md`. Cue ids, filenames, prompts, durations, and pack bumps live there. This skill is the dispatch path, not a second brief.
+The ledger is law: `docs/sfx-ledger.md`. Cue IDs, filenames, prompts, durations, and pack bumps live there. This skill is the dispatch path, not a second brief.
 
-SFX is **sound-generation**, never TTS. Do not use `https://api.elevenlabs.io/v1/mcp` (ElevenAgents / speech). Do not steal a music-bus slot.
+SFX uses sound generation, never TTS. Do not take a music-bus slot.
 
 ## 1. Read the owed row
 
-Open `docs/sfx-ledger.md`. Copy the cue, file stem, duration, and brief verbatim into the prompt. If the row is missing, write it first.
+Open only the matching row in `docs/sfx-ledger.md`. Copy the cue, file stem, duration, and brief verbatim into the prompt. If the row is missing, write it first.
 
-`SfxBus` loads `res://assets/audio/sfx/%s.mp3` with `%s` = the cue id. The file stem **is** the cue (`unsealingSting.mp3`, not kebab-case).
+`SfxBus` loads `res://assets/audio/sfx/%s.mp3`, where `%s` is the cue ID. The file stem is the cue (`unsealingSting.mp3`, not kebab-case).
 
-## 2. Generate
+## 2. Discovery loop
 
-Prefer MCP when this session actually has ElevenLabs tools. Otherwise official REST. Stop if `ELEVENLABS_API_KEY` is unset.
+Prefer the connected ElevenLabs sound-generation tool when available; otherwise use the official sound-generation REST endpoint. Stop when the required environment credential is absent. Never put credentials in the repository, prompts, logs, or generated evidence.
 
-Write candidates under `docs/design/<date>-<cue>/candidates/`, not straight into `assets/audio/sfx/`. Set `ELEVENLABS_MCP_BASE_PATH` to the workspace (`.cursor/mcp.json` already does). Default MCP output is `~/Desktop` and that path is wrong here.
+Write candidates under `docs/design/<date>-<cue>/candidates/`, not directly into `assets/audio/sfx/`. Match the prompt influence and duration governed by the ledger row. Playback remains one-shot.
 
-v1 pack used `prompt_influence` around 0.5–0.75 and requested durations of 0.5–1.4 s. Match the ledger row. `loop` stays false — playback is one-shot.
+Generate at least three distinct candidates. A sting that could pass for another governed cue is not a valid candidate.
 
-### MCP
+Candidate generation and comparison are one bounded research batch. Do not create an issue, branch, PR, CI run, or full repository context for every render. Record the actual generation parameters and decision once; only the selected candidate crosses into delivery.
 
-Official stdio server: `uvx elevenlabs-mcp` (see `.cursor/mcp.json`). Call the sound-generation tool with the ledger prompt, duration, and influence. Discard TTS / voice / agent tools.
+## 3. Delivery
 
-### REST (Cloud Agent fallback)
+James selects the candidate. Then make one coherent delivery change: chosen audio to `assets/audio/sfx/<cue>.mp3`; add the manifest row with the actual prompt, duration, influence, and usage; make the required pack bump without re-encoding the existing pack; and move the ledger row from Owed to shipped.
 
-```bash
-test -n "$ELEVENLABS_API_KEY"
-curl -fsS -X POST "https://api.elevenlabs.io/v1/sound-generation" \
-  -H "xi-api-key: $ELEVENLABS_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"text":"<ledger brief>","duration_seconds":1.5,"prompt_influence":0.65,"model_id":"eleven_text_to_sound_v2"}' \
-  --output docs/design/<date>-<cue>/candidates/<cue>-a.mp3
-```
+Run import and the affected playback or manifest checks locally. The PR's actual diff then activates the relevant scopes through `tools/ci_scope.py`; do not manually attach map, balance, locale, or evidence suites that cannot observe the SFX change.
 
-Make at least three candidates (`a`/`b`/`c`). A sting that could pass for `sealedDoor`, `roseWindow`, or `chip` is wrong — regenerate.
-
-## 3. Ship
-
-James picks. Then in **one commit**: chosen mp3 → `assets/audio/sfx/<cue>.mp3`, new row in `assets/audio/sfx/manifest.json` (prompt, duration, influence, usage), pack bump on `pack_id` (do not re-encode ashglass-v1), ledger row moved from Owed to shipped with the prompt that actually rendered. Run `godot --headless --import` so Godot mints `.import`; do not copy a sidecar.
-
-Missing sample: `SfxBus` warns. Do not substitute another cue.
+Godot creates the import sidecar; do not copy one. A missing sample must remain an explicit warning; never silently substitute another cue.

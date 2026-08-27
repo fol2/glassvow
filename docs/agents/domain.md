@@ -1,53 +1,25 @@
-# Domain Docs
+# Domain Documentation Consumption
 
-How the engineering skills should consume this repo's domain documentation when exploring the codebase.
+Use project vocabulary without preloading the whole knowledge base.
 
-## Before exploring, read these
+## Search before reading
 
-- **`CONCEPTS.md`** at the repo root — the live glossary of project-specific terms.
-- **`CONTEXT.md`** at the repo root, or
-- **`CONTEXT-MAP.md`** at the repo root if it exists — it points at one `CONTEXT.md` per context. Read each one relevant to the topic.
-- **`docs/adr/`** — read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
+1. Extract the exact domain terms, files, and behaviours named by the task.
+2. Search `CONCEPTS.md` for those terms and read only the matching sections plus nearby definitions needed to disambiguate them.
+3. Read a `CONTEXT.md`, `CONTEXT-MAP.md`, or ADR only when the changed surface or a found reference points to it.
+4. Search `docs/solutions/` by component, error, or behaviour before broad exploration.
+5. Stop once the task's acceptance, invariants, and vocabulary are resolved.
 
-If `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved. `CONCEPTS.md` already exists; treat it as the glossary until `CONTEXT.md` is created.
+Do not read all of `CONCEPTS.md`, every ADR, or historical design packets as an orientation ritual. Missing `CONTEXT.md`, `CONTEXT-MAP.md`, or `docs/adr/` is not a blocker; proceed silently and create documentation only when a real decision needs durable authority.
 
-## File structure
+## Use the governed vocabulary
 
-Single-context repo (this repo):
+Use the project term in issue titles, hypotheses, code, tests, and review. Do not drift to a synonym that `CONCEPTS.md` explicitly rejects. When a needed concept is absent, first decide whether the task is inventing unnecessary language. Add a term only after the project has accepted a genuine distinction.
 
-```
-/
-├── CONCEPTS.md
-├── CONTEXT.md
-├── docs/adr/
-│   ├── 0001-event-sourced-orders.md
-│   └── 0002-postgres-for-write-model.md
-└── src/
-```
+## Conflicts
 
-Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
+Surface a contradiction with an active ADR, commercial contract, or glossary definition explicitly. Do not silently override it and do not load unrelated documents in search of permission. The task must either conform, reopen the governing decision, or stop with a concrete blocker.
 
-```
-/
-├── CONTEXT-MAP.md
-├── docs/adr/                          ← system-wide decisions
-└── src/
-    ├── ordering/
-    │   ├── CONTEXT.md
-    │   └── docs/adr/                  ← context-specific decisions
-    └── billing/
-        ├── CONTEXT.md
-        └── docs/adr/
-```
+## Handoff capsule
 
-## Use the glossary's vocabulary
-
-When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, a test name), use the term as defined in `CONCEPTS.md` (and `CONTEXT.md` if it exists). Don't drift to synonyms the glossary explicitly avoids.
-
-If the concept you need isn't in the glossary yet, that's a signal — either you're inventing language the project doesn't use (reconsider) or there's a real gap (note it for `/domain-modeling`).
-
-## Flag ADR conflicts
-
-If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
-
-> _Contradicts ADR-0007 (event-sourced orders) — but worth reopening because…_
+A domain handoff contains only the relevant definitions, authoritative links or sections, decision, affected boundaries, exact head and evidence state, and unresolved question. It does not copy the full glossary or investigation transcript.

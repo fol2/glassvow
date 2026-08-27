@@ -1,45 +1,37 @@
-# Issue tracker: GitHub
+# Issue Tracker and Work Ownership
 
-Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
+GitHub issues hold durable specs, decisions, dependencies, and handoffs. Use `gh` inside a clone or the GitHub integration. Do not create tracker work merely to mirror a complete direct owner instruction.
 
-## Conventions
+## One outcome, one owner
 
-- **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.
-- **Read an issue**: `gh issue view <number> --comments`, filtering comments by `jq` and also fetching labels.
-- **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
-- **Comment on an issue**: `gh issue comment <number> --body "..."`
-- **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
-- **Close**: `gh issue close <number> --comment "..."`
+An independently mergeable delivery outcome gets one issue when durable tracking is needed, one assignee, one branch, and one ordinary PR. Claim an existing issue before mutating the repository. Do not create a second issue or PR because another machine or agent continues the same work.
 
-Infer the repo from `git remote -v` — `gh` does this automatically when run inside a clone.
+A concise delivery issue states outcome, non-goals, acceptance, active constraints, dependencies, and stop conditions. Implementation transcripts and repeated status summaries do not belong in the specification.
 
-## Pull requests as a triage surface
+## Research is not a ticket tree
 
-**PRs as a request surface: no.** _(Set to `yes` if this repo treats external PRs as feature requests; `/triage` reads this flag.)_
+A bounded research question may use one research issue containing its hypothesis, experiment budget, immutable inputs, evidence, stop rule, and decision. Individual runs are rows or artifacts under that issue—not child tickets and not PRs.
 
-When set to `yes`, PRs run through the same labels and states as issues, using the `gh pr` equivalents:
+Create a child issue only when the result is independently mergeable, independently owned, or genuinely blocks another delivery. Promotion from research creates or updates one delivery issue with the selected decision and reproducible acceptance; rejected exploration stays out of the delivery context.
 
-- **Read a PR**: `gh pr view <number> --comments` and `gh pr diff <number>` for the diff.
-- **List external PRs for triage**: `gh pr list --state open --json number,title,body,labels,author,authorAssociation,comments` then keep only `authorAssociation` of `CONTRIBUTOR`, `FIRST_TIME_CONTRIBUTOR`, or `NONE` (drop `OWNER`/`MEMBER`/`COLLABORATOR`).
-- **Comment / label / close**: `gh pr comment`, `gh pr edit --add-label`/`--remove-label`, `gh pr close`.
+## Dependencies and parallel work
 
-GitHub shares one number space across issues and PRs, so a bare `#42` may be either — resolve with `gh pr view 42` and fall back to `gh issue view 42`.
+Use GitHub's native issue dependency where available; otherwise put `Blocked by: #<n>` at the top. Parallelise only unblocked tasks with non-overlapping mutable surfaces. A dependency on unmerged code is not resolved by repeatedly rebasing several active tickets against one another.
 
-## When a skill says "publish to the issue tracker"
+Before opening a new branch, search open issues and PRs for the same outcome and files. When overlap is discovered, choose one authority, integrate the stronger completed work once, and close the duplicate route. Do not let two classifiers, contracts, or single sources of truth land side by side.
 
-Create a GitHub issue.
+Legacy `wayfinder:*` maps may remain useful for genuinely uncertain programmes, but do not create a map and child hierarchy for a normal feature or a handful of experiments.
 
-## When a skill says "fetch the relevant ticket"
+## Basic operations
 
-Run `gh issue view <number> --comments`.
+- Read an issue with comments and labels before work.
+- Claim with assignment as the first tracker write.
+- Comment only decisions, blockers, exact evidence, or handoff state that another session needs.
+- Close when acceptance is met or a documented stop decision is made.
+- Use the canonical triage labels in `docs/agents/triage-labels.md`.
 
-## Wayfinding operations
+GitHub shares one number space for issues and PRs; resolve an ambiguous `#n` before acting.
 
-Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
+## Pull request record
 
-- **Map**: a single issue labelled `wayfinder:map`, holding the Notes / Decisions-so-far / Fog body. `gh issue create --label wayfinder:map`.
-- **Child ticket**: an issue linked to the map as a GitHub sub-issue (`gh api` on the sub-issues endpoint). Where sub-issues aren't enabled, add the child to a task list in the map body and put `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`). Once claimed, the ticket is assigned to the driving dev.
-- **Blocking**: GitHub's **native issue dependencies** — the canonical, UI-visible representation. Add an edge with `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`, where `<blocker-db-id>` is the blocker's numeric **database id** (`gh api repos/<owner>/<repo>/issues/<n> --jq .id`, _not_ the `#number` or `node_id`). GitHub reports `issue_dependencies_summary.blocked_by` (open blockers only — the live gate). Where dependencies aren't available, fall back to a `Blocked by: #<n>, #<n>` line at the top of the child body. A ticket is unblocked when every blocker is closed.
-- **Frontier query**: list the map's open children (`gh issue list --state open`, scoped to the map's sub-issues / task list), drop any with an open blocker (`issue_dependencies_summary.blocked_by > 0`, or an open issue in the `Blocked by` line) or an assignee; first in map order wins.
-- **Claim**: `gh issue edit <n> --add-assignee @me` — the session's first write.
-- **Resolve**: `gh issue comment <n> --body "<answer>"`, then `gh issue close <n>`, then append a context pointer (gist + link) to the map's Decisions-so-far.
+The PR body is the compact integration record: outcome, key design choice, selected CI scopes, final-head commands and results, visual evidence when relevant, and residual risk. Do not paste full logs or duplicate the issue. Review findings should be concrete and batched; another loop is justified only by a new defect or invalidated evidence.
