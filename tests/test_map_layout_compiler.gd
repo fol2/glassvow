@@ -2,6 +2,7 @@ extends RefCounted
 ## #469 pure complete node-and-route compiler.
 
 const Binding = preload("res://domain/map_layout/map_layout_input_binding.gd")
+const Routes = preload("res://presentation/map/map_layout_compiler_routes.gd")
 
 @warning_ignore_start("unsafe_call_argument")
 
@@ -15,12 +16,157 @@ static func run(fails: Array[String]) -> void:
 	var quality: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
 		"res://docs/map/map-quality-v2.json"
 	))
+	_test_portal_geometry(fails, quality)
 	_test_complete_chain(fails, quality)
 	_test_layered_route_plan(fails, quality)
 	_test_crossing_detour(fails, quality)
 	_test_three_way_fanout_merge(fails, quality)
 	_test_bounded_local_substitution(fails, quality)
 	_test_production_graphs(fails, quality)
+
+
+static func _test_portal_geometry(fails: Array[String], quality: Dictionary) -> void:
+	var terminal_nodes: Array = [
+		_node("11,5", 11, 5), _node("11,6", 11, 6),
+		_node("12,5", 12, 5), _node("12,6", 12, 6),
+	]
+	var terminal_edges: Array = [
+		_edge("11,5", "12,6"), _edge("11,6", "12,5"),
+	]
+	var terminal_anchors: Dictionary = {
+		"11,5": [19.2904853820801, 0.0, 10.53537940979],
+		"11,6": [19.7616653442383, 0.0, 19.3748016357422],
+		"12,5": [25.0210494995117, 0.0, 14.6966638565063],
+		"12,6": [24.1751823425293, 0.0, 19.4752044677734],
+	}
+	var first_id: String = MapLayoutInput.edge_id("11,5", "12,6")
+	var second_id: String = MapLayoutInput.edge_id("11,6", "12,5")
+	var common: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["branch_fanout"]["common_departure_max_m"]
+	)
+	var old_first_target: Vector2 = _xz(terminal_anchors["12,6"]) \
+		- Vector2.RIGHT * common
+	var old_second_source: Vector2 = _xz(terminal_anchors["11,6"]) \
+		+ Vector2.RIGHT * common
+	var old_distance: float = old_first_target.distance_to(old_second_source)
+	var half_width: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["physical_half_width_m"]
+	)
+	_check(fails, is_equal_approx(old_distance, 2.415604485)
+			and old_distance < half_width * 2.0,
+		"restoring the old 1.0 m ports reproduces infeasible physical spacing")
+
+	var terminal_plan: Dictionary = Routes.route_plan(
+		terminal_nodes, terminal_edges, terminal_anchors, quality
+	)
+	var terminal_ports: Dictionary = terminal_plan.get("ports", {})
+	var first_port: Dictionary = terminal_ports.get(first_id, {})
+	var second_port: Dictionary = terminal_ports.get(second_id, {})
+	var governed_distance: float = INF
+	var first_target_v: Variant = first_port.get("target", null)
+	var second_source_v: Variant = second_port.get("source", null)
+	if first_target_v is Vector2 and second_source_v is Vector2:
+		var first_target: Vector2 = first_target_v
+		var second_source: Vector2 = second_source_v
+		governed_distance = first_target.distance_to(second_source)
+	_check(fails, is_equal_approx(governed_distance, 3.155114925)
+			and governed_distance >= half_width * 2.0 \
+				+ MapLayoutCanonical.float_value(
+					quality["geometry"]["road_corridor"]["world_clearance_m"]),
+		"#466 boundary ports make the recorded terminal pair feasible")
+	var changed_quality: Dictionary = quality.duplicate(true)
+	changed_quality["calibration"]["shipping_touch_waystone"][
+		"node_pair_half_extent_m"] = [0.57, 0.98]
+	var changed_plan: Dictionary = Routes.route_plan(
+		terminal_nodes, terminal_edges, terminal_anchors, changed_quality
+	)
+	_check(fails, is_equal_approx(MapLayoutCanonical.float_value(
+		changed_plan.get("ports", {}).get(first_id, {}).get("stub_m", INF)), 0.57),
+		"port length follows the current #466 polygon instead of a hardcoded 0.63 m")
+
+	var chain_nodes: Array = [_node("L", 2, 3), _node("N", 7, 3), _node("R", 12, 3)]
+	var chain_edges: Array = [_edge("L", "N"), _edge("N", "R")]
+	var chain_anchors: Dictionary = {
+		"L": [0.0, 0.0, 0.0], "N": [6.0, 0.0, 0.0], "R": [12.0, 0.0, 0.0],
+	}
+	var chain_plan: Dictionary = Routes.route_plan(
+		chain_nodes, chain_edges, chain_anchors, quality
+	)
+	var reservations: Dictionary = chain_plan.get("portal_reservations", {})
+	_check(fails, reservations.size() == chain_nodes.size(),
+		"one canonical swept portal reservation is emitted per node")
+	if not reservations.has("N"):
+		return
+	var anchor: Vector2 = _xz(chain_anchors["N"])
+	var access: Dictionary = chain_plan.get("diagnostics", {}).get(
+		"access_lengths", {}).get("N", {})
+	var incoming: float = MapLayoutCanonical.float_value(access.get("incoming_m", 0.0))
+	var outgoing: float = MapLayoutCanonical.float_value(access.get("outgoing_m", 0.0))
+	var reservation: PackedVector2Array = reservations["N"]
+	var required: PackedVector2Array = MapQualityEvaluator._node_world(
+		Vector3(anchor.x, 0.0, anchor.y), quality
+	)
+	required.append_array(Routes._segment_envelope(
+		anchor - Vector2.RIGHT * incoming, anchor, half_width, true, false
+	))
+	required.append_array(Routes._segment_envelope(
+		anchor, anchor + Vector2.RIGHT * outgoing, half_width, false, true
+	))
+	var contains_portal: bool = true
+	for point: Vector2 in required:
+		contains_portal = contains_portal \
+			and MapQualityEvaluator._signed_gap(point, reservation) \
+				<= MapSingleEdgeRouter.WORLD_EPSILON_M
+	var bounds: Rect2 = Routes._bounds(reservation)
+	_check(fails, contains_portal,
+		"the reservation contains the node polygon and complete physical access sweeps")
+	_check(fails, is_equal_approx(bounds.size.y * 0.5, maxf(0.98, half_width))
+			and not is_equal_approx(bounds.size.y * 0.5, 0.98 + half_width),
+		"portal Z uses max(node half Z, road half-width), not their sum")
+	var obstacles: Dictionary = Routes.route_obstacles(
+		chain_edges[0], chain_plan, {}, {},
+		{"hero_anchor_contract": {"protected_zones": {}}}, {"profiles": {}},
+		Routes.route_channel(chain_edges[0], chain_plan, 4.0)
+	)
+	_check(fails, obstacles.get("obstacle_ids", []) == ["node:R"],
+		"an edge omits only its own endpoint reservations and sees one obstacle per other node")
+
+	var base: PackedVector2Array = MapQualityEvaluator._node_world(
+		Vector3(anchor.x, 0.0, anchor.y), quality
+	)
+	var base_bounds: Rect2 = Routes._bounds(base)
+	var bare: PackedVector2Array = Routes._rectangle(
+		base_bounds.position.x - incoming, base_bounds.end.x + outgoing,
+		base_bounds.position.y, base_bounds.end.y
+	)
+	var route_radius: float = half_width + MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["world_clearance_m"]
+	)
+	var bare_bounds: Rect2 = Routes._bounds(bare)
+	var unrelated_x: float = bare_bounds.end.x + route_radius \
+		+ MapSingleEdgeRouter.WORLD_EPSILON_M * 2.0
+	var unrelated: Vector2 = Vector2(unrelated_x, anchor.y)
+	var bare_inflated: Array = MapSingleEdgeRouter.inflate_obstacles(
+		[{"id": "node:N", "polygon": bare}], route_radius
+	)
+	var swept_inflated: Array = MapSingleEdgeRouter.inflate_obstacles(
+		[{"id": "node:N", "polygon": reservation}], route_radius
+	)
+	var accepted: PackedVector2Array = Routes._segment_envelope(
+		unrelated + Vector2.UP, unrelated + Vector2.DOWN,
+		half_width, false, false
+	)
+	var accepted_inflated: Array = MapSingleEdgeRouter.inflate_obstacles(
+		[{"id": "edge:unrelated/s00", "polygon": accepted}], route_radius
+	)
+	var source_port: Vector2 = anchor + Vector2.RIGHT * outgoing
+	_check(fails, MapSingleEdgeRouter.segment_is_clear(
+			unrelated, unrelated, bare_inflated)
+			and not MapSingleEdgeRouter.segment_is_clear(
+				unrelated, unrelated, swept_inflated)
+			and not MapSingleEdgeRouter.segment_is_clear(
+				source_port, source_port, accepted_inflated),
+		"disabling the swept reservation admits an unrelated route that closes the endpoint")
 
 
 static func _test_complete_chain(fails: Array[String], quality: Dictionary) -> void:
@@ -97,12 +243,11 @@ static func _test_layered_route_plan(fails: Array[String], quality: Dictionary) 
 				MapLayoutInput.edge_id("A", "C"), MapLayoutInput.edge_id("B", "D"),
 			],
 		"route order and strict inversion components are canonical")
-	_check(fails, is_equal_approx(float(access.get("A", {}).get("outgoing_m", 0.0)), 1.0)
-			and is_equal_approx(float(access.get("C", {}).get("incoming_m", 0.0)), 1.0)
+	_check(fails, is_equal_approx(float(access.get("A", {}).get("outgoing_m", 0.0)), 0.63)
+			and is_equal_approx(float(access.get("C", {}).get("incoming_m", 0.0)), 0.63)
 			and MapLayoutCanonical.int_value(calls.get("normal", 0)) == edges.size()
-			and MapLayoutCanonical.int_value(calls.get("bypass", 0)) > 0
-			and sides.size() == 1,
-		"governed access lengths and one bounded pair bypass are reported: %s" \
+			and sides.size() <= MapLayoutCanonical.int_value(calls.get("bypass", 0)),
+		"boundary-derived access lengths and bounded route calls are reported: %s" \
 			% str({"access": access, "calls": calls, "sides": sides}))
 	if compiled.get("result", null) is MapLayoutResult:
 		var result: MapLayoutResult = compiled["result"]
@@ -111,7 +256,7 @@ static func _test_layered_route_plan(fails: Array[String], quality: Dictionary) 
 		var line: Array = first["centerline"]
 		_check(fails, line.size() >= 4
 				and _v3(line[0]).is_equal_approx(MapPinProjection.lattice_point(3, 2))
-				and is_equal_approx(_v3(line[1]).x - _v3(line[0]).x, 1.0),
+				and is_equal_approx(_v3(line[1]).x - _v3(line[0]).x, 0.63),
 			"the result prepends the straight governed source access stub")
 	var reordered_nodes: Array = nodes.duplicate(true)
 	var reordered_edges: Array = edges.duplicate(true)
@@ -408,3 +553,8 @@ static func _v3(value: Variant) -> Vector3:
 		MapLayoutCanonical.float_value(row[1]),
 		MapLayoutCanonical.float_value(row[2])
 	)
+
+
+static func _xz(value: Variant) -> Vector2:
+	var point: Vector3 = _v3(value)
+	return Vector2(point.x, point.z)

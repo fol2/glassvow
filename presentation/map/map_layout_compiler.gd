@@ -199,6 +199,8 @@ static func _build_attempt(input: MapLayoutInput, source: Dictionary,
 	var plan: Dictionary = _Routes.route_plan(
 		input.node_records(), input.edge_records(), anchors, quality
 	)
+	if plan.get("ok", false) != true:
+		return _attempt_failure(chosen_ids, [], plan.get("binding", {}))
 	var plan_diagnostics: Dictionary = plan["diagnostics"].duplicate(true)
 	var route_order: Array = plan["route_order"]
 	var routes: Dictionary = {}

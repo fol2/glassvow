@@ -23,6 +23,19 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 		quality["geometry"]["branch_fanout"]["common_departure_max_m"]
 	)
 	var epsilon: float = MapLayoutCanonical.float_value(quality["epsilon"]["world_m"])
+	if not is_finite(common) or common < 0.0 \
+			or not is_finite(epsilon) or epsilon < 0.0:
+		return _plan_failure("quality", "access limits must be finite and non-negative")
+	var node_polygons: Dictionary = {}
+	for node_id: String in MapLayoutCanonical.sorted_keys(nodes_by_id):
+		var base: PackedVector2Array = MapQualityEvaluator._node_world(
+			_v3(anchors[node_id]), quality
+		)
+		var canonical: Dictionary = MapAssetProfiles.canonical_polygon(base)
+		var points_v: Variant = canonical.get("points", PackedVector2Array())
+		if canonical.get("ok", false) != true or not (points_v is PackedVector2Array):
+			return _plan_failure(node_id, "#466 node-safety polygon is invalid")
+		node_polygons[node_id] = points_v
 	var ports: Dictionary = {}
 	for edge: Dictionary in order:
 		var edge_id: String = str(edge["id"])
@@ -30,8 +43,21 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 		var to_id: String = str(edge["to"])
 		var source: Vector2 = _xz(anchors[from_id])
 		var target: Vector2 = _xz(anchors[to_id])
-		var stub: float = minf(common, maxf(0.0,
-			(target.x - source.x - 2.0 * epsilon) * 0.5))
+		var source_bounds: Rect2 = _bounds(node_polygons[from_id])
+		var target_bounds: Rect2 = _bounds(node_polygons[to_id])
+		var source_extent: float = source_bounds.end.x - source.x
+		var target_extent: float = target.x - target_bounds.position.x
+		var forward: float = target.x - source.x
+		if not _finite_non_negative(source_extent) \
+				or not _finite_non_negative(target_extent) \
+				or not _finite_non_negative(forward):
+			return _plan_failure(edge_id,
+				"node-safety extents and forward distance must be finite and non-negative")
+		var stub: float = minf(common, minf(source_extent, minf(
+			target_extent, maxf(0.0, (forward - 2.0 * epsilon) * 0.5)
+		)))
+		if not _finite_non_negative(stub):
+			return _plan_failure(edge_id, "access stub is invalid")
 		ports[edge_id] = {
 			"source": source + Vector2.RIGHT * stub,
 			"target": target - Vector2.RIGHT * stub,
@@ -43,27 +69,32 @@ static func route_plan(nodes: Array, edges: Array, anchors: Dictionary,
 		access[to_id]["incoming_m"] = maxf(
 			MapLayoutCanonical.float_value(access[to_id]["incoming_m"]), stub
 		)
-	var footprints: Dictionary = {}
+	var half_width: float = MapLayoutCanonical.float_value(
+		quality["geometry"]["road_corridor"]["physical_half_width_m"]
+	)
+	if not is_finite(half_width) or half_width <= 0.0:
+		return _plan_failure("quality", "physical road half-width must be finite and positive")
+	var reservations: Dictionary = {}
 	for node_id: String in MapLayoutCanonical.sorted_keys(nodes_by_id):
-		var base: PackedVector2Array = MapQualityEvaluator._node_world(
-			_v3(anchors[node_id]), quality
-		)
-		var bounds: Rect2 = _bounds(base)
 		var incoming: float = MapLayoutCanonical.float_value(access[node_id]["incoming_m"])
 		var outgoing: float = MapLayoutCanonical.float_value(access[node_id]["outgoing_m"])
-		footprints[node_id] = _rectangle(
-			bounds.position.x - incoming, bounds.end.x + outgoing,
-			bounds.position.y, bounds.end.y
+		var reservation: PackedVector2Array = _portal_reservation(
+			node_polygons[node_id], _xz(anchors[node_id]), incoming, outgoing,
+			half_width, epsilon
 		)
+		if reservation.is_empty():
+			return _plan_failure(node_id, "swept portal reservation is invalid")
+		reservations[node_id] = reservation
 	var inversion: Dictionary = _inversion_components(order, nodes_by_id, anchors, epsilon)
 	var route_ids: Array[String] = []
 	for edge: Dictionary in order:
 		route_ids.append(str(edge["id"]))
 	return {
+		"ok": true,
 		"route_order": order,
 		"anchors": anchors,
 		"ports": ports,
-		"access_footprints": footprints,
+		"portal_reservations": reservations,
 		"components": inversion["components"],
 		"components_by_id": inversion["components_by_id"],
 		"edge_components": inversion["edge_components"],
@@ -144,13 +175,13 @@ static func route_obstacles(edge: Dictionary, plan: Dictionary,
 		heroes: Dictionary, accepted_routes: Dictionary, source: Dictionary,
 		assets: Dictionary, channel: PackedVector2Array) -> Dictionary:
 	var obstacles: Array[Dictionary] = []
-	var footprints: Dictionary = plan["access_footprints"]
-	for node_id: String in MapLayoutCanonical.sorted_keys(footprints):
+	var reservations: Dictionary = plan["portal_reservations"]
+	for node_id: String in MapLayoutCanonical.sorted_keys(reservations):
 		if node_id in [str(edge["from"]), str(edge["to"])]:
 			continue
 		obstacles.append({
 			"id": "node:%s" % node_id,
-			"polygon": footprints[node_id],
+			"polygon": reservations[node_id],
 		})
 	var profiles: Dictionary = assets["profiles"]
 	var profile_helper: MapAssetProfiles = MapAssetProfiles.new(
@@ -361,8 +392,8 @@ static func _bypass_sides(component: Dictionary, plan: Dictionary,
 	var local: Array[Dictionary] = []
 	for node_id_v: Variant in component["node_ids"]:
 		var node_id: String = str(node_id_v)
-		local.append({"id": "access:%s" % node_id,
-			"polygon": plan["access_footprints"][node_id]})
+		local.append({"id": "portal:%s" % node_id,
+			"polygon": plan["portal_reservations"][node_id]})
 	for obstacle: Dictionary in obstacles:
 		var entity: String = obstacle_entity(str(obstacle["id"]))
 		if str(plan["edge_components"].get(entity, "")) == str(component["id"]):
@@ -526,6 +557,36 @@ static func _segment_envelope(a: Vector2, b: Vector2,
 	return points_v
 
 
+static func _portal_reservation(base: PackedVector2Array, anchor: Vector2,
+		incoming: float, outgoing: float, half_width: float,
+		epsilon: float) -> PackedVector2Array:
+	if not is_finite(anchor.x) or not is_finite(anchor.y) \
+			or not _finite_non_negative(incoming) \
+			or not _finite_non_negative(outgoing) \
+			or not is_finite(half_width) or half_width <= 0.0 \
+			or not _finite_non_negative(epsilon):
+		return PackedVector2Array()
+	var vertices: PackedVector2Array = base.duplicate()
+	if incoming > epsilon:
+		vertices.append_array(_segment_envelope(
+			anchor - Vector2.RIGHT * incoming, anchor,
+			half_width, true, false
+		))
+	if outgoing > epsilon:
+		vertices.append_array(_segment_envelope(
+			anchor, anchor + Vector2.RIGHT * outgoing,
+			half_width, false, true
+		))
+	var hull: PackedVector2Array = Geometry2D.convex_hull(vertices)
+	if hull.size() > 1 and hull[0].is_equal_approx(hull[-1]):
+		hull.remove_at(hull.size() - 1)
+	var canonical: Dictionary = MapAssetProfiles.canonical_polygon(hull)
+	var points_v: Variant = canonical.get("points", PackedVector2Array())
+	if canonical.get("ok", false) != true or not (points_v is PackedVector2Array):
+		return PackedVector2Array()
+	return points_v
+
+
 static func _bounds(polygon: PackedVector2Array) -> Rect2:
 	var out: Rect2 = Rect2(polygon[0], Vector2.ZERO)
 	for point: Vector2 in polygon:
@@ -539,6 +600,10 @@ static func _rectangle(left: float, right: float,
 		Vector2(left, near), Vector2(left, far),
 		Vector2(right, far), Vector2(right, near),
 	])
+
+
+static func _finite_non_negative(value: float) -> bool:
+	return is_finite(value) and value >= 0.0
 
 
 static func _a3(point: Vector2) -> Array[float]:
@@ -555,6 +620,10 @@ static func _binding(kind: String, id: String, reason: String) -> Dictionary:
 		"reason": reason,
 		"details": {},
 	}
+
+
+static func _plan_failure(id: String, reason: String) -> Dictionary:
+	return {"ok": false, "binding": _binding("access_geometry", id, reason)}
 
 
 static func _v3(value: Variant) -> Vector3:
