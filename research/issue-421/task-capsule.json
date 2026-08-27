@@ -1,14 +1,27 @@
 {
+  "schemaVersion": 2,
+  "goal": "Validate a causal strategy detector, make the exact RC content pass it, merge the smallest complete delivery and record the exact merged-SHA P9 pass on issue #108.",
   "acceptanceAuthority": "https://github.com/fol2/glassvow/issues/421",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
   "activeConstraints": [
-    "Use the current issue #421 body as the task SSOT.",
-    "Treat issue #524 and #525 archives as immutable scientific evidence only.",
-    "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the final authorised boundary.",
-    "Keep research outside production truth with one append-only ledger and content-addressed cache.",
-    "Do not create a successor issue, active research branch, research PR or research CI run; the owner-authorised publication ref is an archive-only evidence carrier and is never merged.",
-    "Preserve save and internal-ID compatibility, deterministic RNG, content validity and commercial invariants.",
-    "A negative or inconclusive research experiment is not a human escalation point; continue with the next preregistered scientific option inside issue #421.",
-    "Do not select another candidate from adaptive V33-V38 comparisons; require common policies and simulation seeds for between-level causal claims."
+    "Continue issue #421 under its current body and the current-main AI-SDLC; do not restart the programme or create a successor.",
+    "Treat issue #524 and #525 only as immutable scientific evidence and do not repeat their exhausted research paths.",
+    "Treat Scoreline payoff and Afterimage payoff as separate causal factors; the active design has five factors, not the old four-factor description.",
+    "Use mechanism-blocked common-random-number designs before any wider joint design, with shared interference anchors and no rows spent merely to complete a Cartesian product.",
+    "Within every contrast use the same frozen policies, simulation seeds, baseline, first-look budget, estimator and stopping rule.",
+    "Before any new simulator observation, prove exact null path, RNG, policy and result identity for both research knobs and prove each affects only its intended mediator.",
+    "Freeze numeric row, wall-time and model-context ceilings plus success, futility and inconclusive rules before execution.",
+    "Do not add ML, RL or another optimiser unless the blocked experiment first identifies a policy-repertoire bottleneck and measured decision value justifies it.",
+    "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
+    "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
+    "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
+  ],
+  "nonGoals": [
+    "Do not tune a detector to live content.",
+    "Do not return to V39-style adaptive candidate-by-candidate tuning.",
+    "Do not repeat static-exposure, old-label, Cinder Cut or Kindle-damage searches.",
+    "Do not use human labels or calibration as research data.",
+    "Do not ship research scaffolding, caches, optimisers or an online policy."
   ],
   "authoritativeEvidence": {
     "issue524": {
@@ -17,66 +30,49 @@
       "usableResult": "Ashwarden hand-size-payoff admitted; nine local edge-aspect interactions retained; old labels rejected as causal ground truth."
     },
     "issue525": {
-      "archiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+      "archiveCommit": "7132e5e0d6e6dc196dda3ed90ad2be292608d6",
       "findingSha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c",
       "usableResult": "hand-size-payoff reproduced; ash-poison-catalyst and ward-mirror-edge are probe/panel promotable; the Kindle/Branch scalar, one-card and kindleDamage primitive ladder is exhausted."
     }
   },
   "currentIdentity": {
+    "godot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
-    "researchLedgerRecords": 412502,
-    "researchLedgerSha256": "78651f5d2b51b5f11bd4466500542643083e3def1c56a705463d3b323adcd493",
-    "researchRunnerSha256": "0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9",
-    "godot": "4.7.2.stable.official.ed1daf0bf",
-    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2"
+    "researchLedgerRecords": 447063,
+    "researchLedgerSha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "protectedSeedRows": 0
   },
   "decisions": [
     {
-      "decision": "Reject existing Resonant Lance as the missing second Duskblade package.",
-      "evidence": "summaries/resonance-package-v1.json",
-      "reason": "Both local interactions reproduced, but the discovery pilot panel ruled out the 0.25-SD practical activation target."
-    },
-    {
-      "decision": "Do not promote the partial-Facet Faultline prototype.",
-      "evidence": "summaries/facet-focus-v1.json",
-      "reason": "The aspect-specific local mechanism passed, but the 128-seed discovery panel remained below the required lower-bound threshold and stopped inconclusively."
-    },
-    {
-      "decision": "Reject the one-use Cracked tempo prototype.",
-      "evidence": "summaries/cracked-tempo-v1.json",
-      "reason": "Its local action-economy interaction reproduced, but both practical panel upper bounds were below target and duration missed."
-    },
-    {
-      "decision": "Reject the generic Shatter-flow prototype.",
-      "evidence": "summaries/shatter-flow-v1.json",
-      "reason": "Ordinary Duskblade attacks already Shatter, so the power had a strong standalone effect and the named producers added no practical complementarity."
-    },
-    {
-      "decision": "Admit the Scoreline and Snap Cut handshake at local and short-panel scope.",
-      "evidence": "summaries/scoreline-handshake-v1.json",
-      "reason": "Discovery and held-out cohorts passed Duskblade interaction, activation, aspect-separation, duration and reliability gates while the Ashwarden control stayed non-activating."
-    },
-    {
       "decision": "Freeze V38 and reject causal selection from the adaptive V33-V38 sequence.",
       "evidence": "summaries/post-v38-identification-v1.json",
-      "reason": "No one-lever pair used common policies and simulation seeds. Acquisition priority and rarity are path-invariant for fixed-deck local combat, but no between-level whole-run effect is identified."
+      "reason": "No one-lever pair used common policies and simulation seeds."
+    },
+    {
+      "decision": "Retain the 34,304-row five-factor experiment only as immutable pre-directive evidence.",
+      "evidence": "summaries/progress-pre-directive-factorial-v1.md",
+      "reason": "It completed before the owner required identity-safe knobs and a mechanism-blocked design; its recorded scalar-family closure is not the current decision."
+    },
+    {
+      "decision": "Retain the zero-row policy-signal audit without granting ML or RL authority.",
+      "evidence": "summaries/post-v38-policy-signal-v1.json",
+      "reason": "It found no held-out policy increment, but the tightened contract requires the blocked causal experiment to establish decision value first."
+    },
+    {
+      "decision": "Freeze new simulator observations at ledger sequence 447063.",
+      "evidence": "artifacts/ledger-freeze-pre-directive-v1.json",
+      "reason": "The current `_research421` insertion changes policy snapshot identity under explicit null settings."
     }
   ],
-  "goal": "Validate a causal strategy detector, make the exact RC content pass it, merge the smallest complete delivery and record the exact-SHA P9 pass on issue #108.",
-  "nextAction": "Preregister one common-random-number identification design that isolates mediator payoff, acquisition priority, Ward setup priority and rarity before selecting any further candidate; choose causal factorial, ML or RL only from measured decision value and continue to exclude protected seeds.",
-  "nonGoals": [
-    "Do not tune a detector to live content.",
-    "Do not repeat static-exposure, old-label, Cinder Cut or Kindle-damage searches.",
-    "Do not use human labels or calibration as research data.",
-    "Do not ship research scaffolding, caches, optimisers or an online policy."
-  ],
   "proofMap": {
-    "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
+    "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
+    "blockedExperiment": "Five-factor mechanism blocks share fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors estimate cross-package interference before any expansion.",
     "packageSupport": "Discovery and held-out interaction, panel activation, reachability, policy sensitivity, functional separation and reliability for two packages per aspect.",
-    "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108.",
-    "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review."
+    "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
+    "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
+    "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
-  "researchRoot": "/Users/jamesto/Research/glassvow-p9-421",
-  "schemaVersion": 1
+  "nextAction": "Repair the two research knobs outside the policy vector, run the zero-observation identity and mediator-isolation preflight, then freeze the five-factor mechanism-blocked CRN protocol and numeric ceilings before adding any simulator row.",
+  "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

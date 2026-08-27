@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "question": "Which of Scoreline payoff, Afterimage payoff, Ward setup priority, package-completion acquisition priority and Faultline rarity causally controls Duskblade package activation, policy sensitivity, RandomBuild movement and reliability under common policies and seeds?",
+  "decision": "Either select the lexicographically smallest scalar-family cell that reproduces every local and whole-run gate on independent splits, or bound this complete known-level scalar family negatively and move to a structurally different mechanism inside issue #421.",
+  "competingOptions": [
+    "At least one combination of the already-observed discrete levels produces two locally admitted, policy-sensitive Duskblade packages without broad RandomBuild movement or reliability regression.",
+    "No combination in the complete known-level scalar family meets those conditions on both independent splits."
+  ],
+  "methodDecision": {
+    "selected": "staged full-factorial common-random-number causal experiment",
+    "reason": "The five factors have a complete finite design of 48 cells and the decision requires causal factor isolation. Matched factorial contrasts answer that question directly with fewer assumptions and less compute than an optimiser.",
+    "mlDeferredUntil": "A selected mechanism passes causal factor identification but fixed sampled policies cannot express a reproducible repertoire.",
+    "rlDeferredUntil": "A selected mechanism and detector define a policy objective for which optimisation can change the candidate decision.",
+    "forbiddenSubstitution": "Neither ML nor RL may be used to infer causal factor effects from unmatched candidates or to choose a cell before this factorial's independent validation split."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "v38ContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "a011c590488cb836810f1952323579bb60f3388d2329f01b52a903a2ab1c2173",
+    "probeSha256": "b90712f8a37aaf5d7f3c3f9dfe6e88d48d9cf44ae1b9927ba8abfb4f2001d3df",
+    "balanceSimSha256": "229353ed36235fd60514459ea48267bc58fa3aaaf5a244f02d5b4e2c10d0dce4",
+    "runnerSha256": "9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97",
+    "ledgerSha256AtFreeze": "78651f5d2b51b5f11bd4466500542643083e3def1c56a705463d3b323adcd493",
+    "ledgerRecordsAtFreeze": 412502,
+    "ledgerLastSeqAtFreeze": 412502
+  },
+  "contentDerivation": {
+    "base": "The frozen V38 high-payoff rare content object.",
+    "scorelineLow": "Remove scorelineBonus from normal and upgraded Faultline while retaining Scoreline consumption and Facet completion.",
+    "scorelineHigh": "Use 12 normal and 15 upgraded Scoreline bonus damage.",
+    "afterimageLow": "Use an explicit reflection multiplier of 2 on normal and upgraded Warden's Edge.",
+    "afterimageHigh": "Use a reflection multiplier of 3 on normal and upgraded Warden's Edge.",
+    "rarity": "Set only Faultline rarity to uncommon or rare.",
+    "serialization": "Canonical UTF-8 JSON with sorted keys and one trailing newline; every object is content-addressed before any simulator row."
+  },
+  "contentVariants": {
+    "score-high__after-high__rarity-rare": "fb8bf18fe4053fc6e25eb15eba69208921d4fb1e8cfa5b530781c95b2a4c028f",
+    "score-high__after-high__rarity-uncommon": "17bad9d30dae579bf79b4740a46eb19d6306d85655b05630bb31ff8df9069f03",
+    "score-high__after-low__rarity-rare": "b66dd6edc7f47635b931e28329b75fbb12d29cf746e155f6b5fa0add0203c805",
+    "score-high__after-low__rarity-uncommon": "c5865ff3258fe99ac3ff0985c4393285b81463d5492b362ebe7761557da8b3f0",
+    "score-low__after-high__rarity-rare": "a01f02ee45a231daf7ef98cca49cf9029e2872e51e260e03c67fb16e012e8290",
+    "score-low__after-high__rarity-uncommon": "8ca0089d90448a114d74e518edf7f0a7c066bafb920f6ffa876550481d44e5a5",
+    "score-low__after-low__rarity-rare": "ced60018ff018b6938dd8489f8d1f6b69a89045a7644e6a39c36cac2a07b2f87",
+    "score-low__after-low__rarity-uncommon": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07"
+  },
+  "factorLevels": {
+    "scorelinePayoff": ["low", "high"],
+    "afterimagePayoff": ["low", "high"],
+    "wardSetupPriority": [0, 1, 2],
+    "acquisitionPriority": [2, 4],
+    "faultlineRarity": ["uncommon", "rare"]
+  },
+  "design": {
+    "local": "Scoreline low/high is crossed under fixed setup 0. Afterimage low/high is crossed with setup 0/1/2. Every cell uses the same 64 sampled policies, seeds, decks, enemies, aspects and four package arms within each split.",
+    "wholeRun": "The complete 2 x 2 x 3 x 2 x 2 design runs under common random numbers. Each cell receives the same four aspect-vow RandomBuild rectangles and the same Duskblade Vow-5 sampled-policy rectangle within a split.",
+    "liveComparator": "RandomBuild comparisons use live content under the same setup and acquisition configuration as the candidate cell.",
+    "independence": "Discovery and validation use disjoint simulation seeds and policy roots. A cell must pass both; no validation result changes a factor level or threshold.",
+    "causalReadout": "For every one-level contrast, per-CRN high-minus-low differences are averaged across matched contexts, clustered by common policy/seed unit and bootstrapped. Scoreline and Afterimage payoff are separate estimands."
+  },
+  "seedBases": {
+    "localDiscovery": 339000,
+    "localValidation": 340000,
+    "localPolicyRootDiscovery": 540,
+    "localPolicyRootValidation": 541,
+    "factorRandomDiscovery": 341000,
+    "factorRandomValidation": 342000,
+    "factorPolicyRootDiscovery": 542,
+    "factorPolicyRootValidation": 543,
+    "factorPolicySeedDiscovery": 343000,
+    "factorPolicySeedValidation": 344000
+  },
+  "budget": {
+    "localPairsPerSplit": 64,
+    "localCellsPerSplit": 8,
+    "localRowsPerSplit": 4096,
+    "factorCellsPerSplit": 48,
+    "factorRandomSeedsPerSplit": 32,
+    "factorPoliciesPerSplit": 32,
+    "factorPolicySeedsPerSplit": 4,
+    "factorCandidateRowsPerSplit": 12288,
+    "factorLiveRowsPerSplit": 768,
+    "maximumNewSimulatorRows": 34304,
+    "maximumWallTimeSeconds": 14400,
+    "protectedSeeds": 0
+  },
+  "localGate": {
+    "activation": "Target-aspect package activation bootstrap lower 95% bound is at least 0.25 SD.",
+    "policyWitnesses": "At least eight target-aspect policies activate and consume the named mediator.",
+    "aspectSeparation": "Target-minus-other-aspect activation bootstrap lower 95% bound is greater than zero.",
+    "duration": "AB-minus-best-single-arm turn delta bootstrap upper 95% bound is at most 0.25 turns.",
+    "reliability": "No package-added stall.",
+    "admission": "A Scoreline payoff or Afterimage-payoff/setup cell is eligible only if every local gate passes on both discovery and validation."
+  },
+  "wholeRunGate": {
+    "randomBuild": "For every aspect-vow grid, candidate arm-2 win rate is below 0.50, the paired candidate-minus-live point movement has absolute value at most 0.10, and there is no candidate-added stall or error.",
+    "policySensitivity": "Each Dusk package has at least eight active and eight inactive policy witnesses among the 32 fixed policy indices.",
+    "functionalSeparation": "Each Dusk package has at least two active policy indices not active for the other package.",
+    "reliability": "The policy panel has zero stalls and simulator errors.",
+    "vow5": "The Duskblade Vow-5 policy-panel win rate is at most 0.90.",
+    "admission": "Every whole-run gate passes on both discovery and validation."
+  },
+  "selectionRule": "Intersect local and whole-run admissions across both splits, then choose the first cell ordered by low Scoreline payoff, low Afterimage payoff, Ward setup 0/1/2, acquisition 2/4 and Faultline uncommon/rare. Outcome magnitude never breaks a tie.",
+  "successRule": "At least one cell passes every local and whole-run gate on both independent splits. Freeze the selected minimum for a new independent candidate-specific repertoire and detector protocol; these rows are not final RC acceptance.",
+  "stopRule": "If no cell passes, publish a bounded negative for the complete known-level scalar family. Do not add a V39 value, reuse these cohorts for another hypothesis or optimise the failed family; continue inside issue #421 with the cheapest structurally different evidence-backed mechanism.",
+  "inconclusiveRule": "A harness fault, immutable-input mismatch, incomplete CRN rectangle or wall-time exhaustion yields no content conclusion. Repair and preregister a new protocol identity before adding replacement rows. Statistical threshold misses are bounded negatives, not invitations to rerun.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

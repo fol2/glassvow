@@ -1,0 +1,74 @@
+{
+  "decision": "policy-grammar-insufficient",
+  "protocolSha256": "57da713afd2eb967700570350bf7f127a667c025a27eebcacba8299cb99d229c",
+  "routes": {
+    "afterimage": {
+      "bootstrapByValidationPolicy": {
+        "cellOnlyR2": {
+          "p025": -0.12352482484410486,
+          "p975": 0.036021304300808056,
+          "point": -0.004337498384099055
+        },
+        "fullR2": {
+          "p025": -0.645085930459563,
+          "p975": 0.10104773707205245,
+          "point": -0.24323226804419293
+        },
+        "policyIncrementR2": {
+          "p025": -0.6238336737473418,
+          "p975": 0.099050738343035,
+          "point": -0.23889476966009388
+        }
+      },
+      "cellCount": 48,
+      "clear": false,
+      "discoveryGroupedCvR2": {
+        "hist-gradient-boosting": -1.0439551447943762,
+        "ridge-1": -0.8296127580027878,
+        "ridge-10": -0.8121562911329148,
+        "ridge-100": -0.728341621786407
+      },
+      "featureCount": 653,
+      "heldoutCellOnlyR2": 0.0203605269557795,
+      "heldoutR2": -0.20432813878051714,
+      "policyGroupsPerSplit": 32,
+      "selectedModel": "ridge-100"
+    },
+    "scoreline": {
+      "bootstrapByValidationPolicy": {
+        "cellOnlyR2": {
+          "p025": -1.1546140268728107,
+          "p975": -0.10469400549825539,
+          "point": -0.4700841094506063
+        },
+        "fullR2": {
+          "p025": -1.7066439680821965,
+          "p975": -0.187858285769899,
+          "point": -0.7917146123220395
+        },
+        "policyIncrementR2": {
+          "p025": -0.8555206000069491,
+          "p975": 0.15579836526412696,
+          "point": -0.3216305028714332
+        }
+      },
+      "cellCount": 48,
+      "clear": false,
+      "discoveryGroupedCvR2": {
+        "hist-gradient-boosting": -0.829398761140946,
+        "ridge-1": -1.0199294560902579,
+        "ridge-10": -0.9826538292701338,
+        "ridge-100": -0.8257337153350673
+      },
+      "featureCount": 653,
+      "heldoutCellOnlyR2": -0.40023453097862083,
+      "heldoutR2": -0.6995958942997667,
+      "policyGroupsPerSplit": 32,
+      "selectedModel": "ridge-100"
+    }
+  },
+  "runnerSha256": "c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba",
+  "schemaVersion": 1,
+  "stage": "post-v38-policy-signal",
+  "target": "log1p of mean mediator consumptions over four seeds per policy-cell"
+}

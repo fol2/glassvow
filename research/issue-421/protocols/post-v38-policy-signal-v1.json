@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "question": "Did the 48-cell factorial fail policy sensitivity because the three-act ever-activated predicate saturated, or because the sampled policy grammar contains no independently predictable variation in Scoreline and Afterimage exploitation intensity?",
+  "competingOptions": [
+    "Policy vectors predict continuous mediator consumption on an independent policy root at the issue #421 R-squared threshold, so the binary ever-activated witness is the low-information surface.",
+    "Continuous mediator consumption is not predictably policy-sensitive under the frozen policy grammar, so the failing route requires a structurally different policy or mechanism grammar."
+  ],
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "factorialProtocolSha256": "9c53ef14c63b4981eedbb5b1aab315da5ad46d0cf45f174a52340d8d09427d01",
+    "factorialDiscoveryAnalysisSha256": "e35ba17561e2cc5e2cfb41b35c740483ce23f528fde3a25ea7634a72f2962ead",
+    "factorialValidationAnalysisSha256": "7752efbc2172d11fecf418ac6e81b3110a69da106ada8cbdd92a4277368ead54",
+    "factorialSummaryAnalysisSha256": "2d1d8ad7156e70d326f6c74214b3179fa1f5135c8fe199daaa44f9a4cc2a0c6c",
+    "policyObservationCount": 12288,
+    "runnerSha256": "c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba",
+    "numpyVersion": "1.26.4",
+    "sklearnVersion": "1.7.0",
+    "ledgerSha256AtFreeze": "7507cadb73441c847ecae12ed0ebddd8e620eb8069766d24d1323b30d6e31d87",
+    "ledgerRecordsAtFreeze": 447061,
+    "ledgerLastSeqAtFreeze": 447061
+  },
+  "dataset": {
+    "rows": "Only post-v38-factorial-policy observations bound to the frozen factorial protocol.",
+    "unit": "One policy index and factorial cell, aggregating the four common simulation seeds.",
+    "unitsPerSplit": 1536,
+    "policyGroupsPerSplit": 32,
+    "cellsPerPolicy": 48,
+    "discovery": "Policy root 542 only.",
+    "validation": "Independent policy root 543 only; never used for model or hyperparameter selection.",
+    "scorelineTarget": "log1p of the mean min(scorelineApplied, scorelineConsumed) count across the four seeds.",
+    "afterimageTarget": "log1p of the mean min(afterimageApplied, afterimageConsumed) count across the four seeds."
+  },
+  "features": {
+    "policy": "Every numeric sampled-policy leaf except the research421 experimental configuration, flattened in sorted path order.",
+    "cell": [
+      "Scoreline high-payoff indicator",
+      "Afterimage high-payoff indicator",
+      "Ward setup priority",
+      "acquisition priority",
+      "Faultline rare indicator"
+    ],
+    "interactions": "Every policy leaf multiplied by every cell factor.",
+    "cellOnlyBaseline": "The same selected model family fitted using only the five cell factors."
+  },
+  "modelSelection": {
+    "candidates": [
+      "standardised ridge regression with alpha 1",
+      "standardised ridge regression with alpha 10",
+      "standardised ridge regression with alpha 100",
+      "histogram gradient boosting with learning rate 0.05, 200 iterations, 15 leaves and L2 1"
+    ],
+    "selection": "For each route, choose the highest mean discovery R-squared under eight-fold GroupKFold by policy index. Exact ties prefer the earlier, simpler listed model.",
+    "fit": "Refit the selected model on all discovery policy groups, then predict validation once.",
+    "randomState": 421
+  },
+  "estimands": {
+    "mechanismActivationPrediction": "Held-out validation R-squared of the selected full policy-plus-cell model.",
+    "policyIncrement": "Full-model minus cell-only R-squared on validation, bootstrapped 5,000 times by resampling the 32 validation policy groups.",
+    "scope": "Predictive policy sensitivity only. This audit does not identify an individual policy weight as causal, admit a detector, select content or establish RC acceptance."
+  },
+  "budget": {
+    "newSimulatorRows": 0,
+    "protectedSeeds": 0,
+    "modelFitsMaximumPerRoute": 34,
+    "bootstrapResamplesPerRoute": 5000,
+    "maximumWallTimeSeconds": 600
+  },
+  "successRule": "A route has policy signal only when its one-shot held-out R-squared is at least 0.50 and the policy-increment bootstrap lower 95% bound is greater than zero. If both routes pass, conclude that the binary predicate saturated and preregister a continuous policy-sensitivity readout.",
+  "stopRule": "If either route misses, bound the current sampled policy grammar as insufficient for that route and continue with a structurally different policy or mechanism grammar. Do not add scalar levels, tune the model on validation or try another unregistered model.",
+  "inconclusiveRule": "A missing row, changed input hash, dependency drift, non-finite fit or incomplete policy-cell rectangle yields no content or grammar conclusion and requires a new protocol identity after repair.",
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

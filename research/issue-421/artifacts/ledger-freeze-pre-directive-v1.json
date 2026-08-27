@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "freezeUtc": "2026-08-27T23:21:12Z",
+  "reason": "Freeze all evidence produced before the owner tightened the common-random-number design. No later protocol may rewrite these rows as compliant evidence.",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2396471296,
+    "sha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "sqliteIntegrity": "ok",
+    "records": 447063,
+    "firstSequence": 1,
+    "lastSequence": 447063,
+    "observationRecords": 445824,
+    "protectedSeedRows": 0,
+    "publishedInGit": false
+  },
+  "deltaSinceV38Freeze": {
+    "startingRecords": 412502,
+    "endingRecords": 447063,
+    "addedRecords": 34561,
+    "addedObservationRecords": 34304,
+    "addedPlanRecords": 124,
+    "addedProbeRunRecords": 124,
+    "addedProtocolRecords": 2,
+    "addedAnalysisRecords": 6,
+    "addedSourceIdentityRecords": 1
+  },
+  "factorial": {
+    "protocolSha256": "9c53ef14c63b4981eedbb5b1aab315da5ad46d0cf45f174a52340d8d09427d01",
+    "runnerSha256": "9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97",
+    "observationRows": 34304,
+    "firstObservationSequence": 412507,
+    "lastObservationSequence": 447058,
+    "stages": {
+      "post-v38-factorial-local": {
+        "rows": 8192,
+        "seedMinimum": 339000,
+        "seedMaximum": 340063
+      },
+      "post-v38-factorial-live": {
+        "rows": 1536,
+        "seedMinimum": 341000,
+        "seedMaximum": 342031
+      },
+      "post-v38-factorial-random": {
+        "rows": 12288,
+        "seedMinimum": 341000,
+        "seedMaximum": 342031
+      },
+      "post-v38-factorial-policy": {
+        "rows": 12288,
+        "seedMinimum": 343000,
+        "seedMaximum": 344003
+      }
+    },
+    "rawArchive": "raw/post-v38-factorial-raw-v1.tar.gz",
+    "rawArchiveSha256": "13daeb13480580d59c355fe640d20c9f4498dc64b06705d16d2467b9f2a4cbba",
+    "rawArchiveObjects": 264
+  },
+  "policySignalAudit": {
+    "protocolSha256": "57da713afd2eb967700570350bf7f127a667c025a27eebcacba8299cb99d229c",
+    "runnerSha256": "c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba",
+    "newObservationRows": 0,
+    "analysisSha256": "b77a1dc505bd16eac6a6935bdfc9a814552c509e4f697b715e16114544ca6ebf"
+  },
+  "postDirectiveDisposition": {
+    "newObservationRowsAuthorised": false,
+    "factorialDecisionAcceptedAsCurrent": false,
+    "policySignalAuditAuthorisesMlOrRl": false,
+    "nextGate": "Prove exact null identity and intended-mediator isolation for both research knobs, then freeze the five-factor mechanism-blocked design and all numeric ceilings before any new simulator observation."
+  }
+}

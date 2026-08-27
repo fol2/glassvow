@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 2,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "V38 freeze through pre-directive five-factor CRN evidence",
+  "decision": "PRE_DIRECTIVE_EVIDENCE_FROZEN_IDENTITY_PREFLIGHT_REQUIRED",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-pre-directive-factorial-v1.md",
+    "progressReportSha256": "6efd6479752302f82192cb8425ae57591f570fd58b0b11bf601e694def6910b2",
+    "factorialProtocol": "protocols/post-v38-factorial-v1.json",
+    "factorialProtocolSha256": "9c53ef14c63b4981eedbb5b1aab315da5ad46d0cf45f174a52340d8d09427d01",
+    "factorialSummary": "summaries/post-v38-factorial-v1.json",
+    "factorialSummarySha256": "3244f38ca060c3257b6fb21846752e2887b8655d78a40575878c5891f2484795",
+    "policySignalProtocol": "protocols/post-v38-policy-signal-v1.json",
+    "policySignalProtocolSha256": "57da713afd2eb967700570350bf7f127a667c025a27eebcacba8299cb99d229c",
+    "policySignalSummary": "summaries/post-v38-policy-signal-v1.json",
+    "policySignalSummarySha256": "3281960a1ea51be16016f682faa644166e6b3353c12dee19962bdd51c98fc075",
+    "ledgerFreeze": "artifacts/ledger-freeze-pre-directive-v1.json",
+    "ledgerFreezeSha256": "ef99bdb256bc46826a648331303b31e02a73bd7a120c3e01a99c34f9737c9f2e",
+    "rawFactorialArchive": "raw/post-v38-factorial-raw-v1.tar.gz",
+    "rawFactorialArchiveSha256": "13daeb13480580d59c355fe640d20c9f4498dc64b06705d16d2467b9f2a4cbba",
+    "preDirectiveHarnessArchive": "raw/pre-directive-harness-v1.tar.gz",
+    "preDirectiveHarnessArchiveSha256": "a43d2386fef0366f6b01b3496b1a57e28a90dec4ebea4c72e4a1094b8506a66d"
+  },
+  "publicationContents": {
+    "payloadFiles": 328,
+    "protocolFiles": 51,
+    "summaryFiles": 50,
+    "rawFactorialObjects": 264,
+    "rawFactorialBytes": 17123562,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "f9037cc9f91341dd3f6557911c6fca8832e259acc9183a9cf72af7da07344324"
+  },
+  "localLedgerFreeze": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2396471296,
+    "sha256": "5dafd3dbee1ce90ee12a5cd8ed9fd2a29559775b8dd5cbc3051251e18a040833",
+    "sqliteIntegrity": "ok",
+    "records": 447063,
+    "factorialObservationRows": 34304,
+    "policySignalObservationRows": 0,
+    "protectedSeedRows": 0,
+    "publishedInGit": false
+  },
+  "preDirectiveHarness": {
+    "archive": "raw/pre-directive-harness-v1.tar.gz",
+    "archiveSha256": "a43d2386fef0366f6b01b3496b1a57e28a90dec4ebea4c72e4a1094b8506a66d",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "a011c590488cb836810f1952323579bb60f3388d2329f01b52a903a2ab1c2173",
+    "probeSha256": "b90712f8a37aaf5d7f3c3f9dfe6e88d48d9cf44ae1b9927ba8abfb4f2001d3df",
+    "balanceSimSha256": "229353ed36235fd60514459ea48267bc58fa3aaaf5a244f02d5b4e2c10d0dce4",
+    "factorialRunnerSha256": "9418a3419c4feecae84360a9ea4068b60157c239d0359bb265939d3c579cdf97",
+    "policySignalRunnerSha256": "c44dc0da9c06b27b4b38f82f7ad099dcacf6b22b4842f896c855c8d34a19e9ba"
+  },
+  "postDirectiveBoundary": {
+    "factorCount": 5,
+    "scorelineAndAfterimagePayoffsSeparate": true,
+    "newSimulatorRowsAuthorised": false,
+    "factorialDecisionAcceptedAsCurrent": false,
+    "policySignalAuditAuthorisesMlOrRl": false,
+    "requiredNextProof": "Exact null path, policy snapshot, RNG and result identity plus intended-mediator isolation for both research knobs, followed by a frozen mechanism-blocked CRN protocol."
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "c81bd84e314c0f0b3e04d95e07d7de649cc50745",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "omissions": [
+    "The 2.2 GB append-only SQLite ledger is hash-pinned locally but omitted from permanent Git history.",
+    "Unreferenced campaign cache objects, transient work outputs, duplicate source trees, generated imports and SQLite sidecars are not published.",
+    "The pre-directive harness is archived under research/issue-421/raw and is not applied to product paths."
+  ],
+  "github": {
+    "taskIssue": "https://github.com/fol2/glassvow/issues/421",
+    "releaseGateIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}
