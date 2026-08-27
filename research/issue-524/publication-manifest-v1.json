@@ -1,0 +1,56 @@
+{
+  "archive": {
+    "contents": [
+      "ledger/experiments-v1.sqlite",
+      "cache/sha256/*"
+    ],
+    "memberCount": 9,
+    "path": "raw/raw-evidence-v1.tar.gz",
+    "sha256": "f9aabdd36756bc59179946d21cec1a76c5a733d738999121d621826efee53986"
+  },
+  "branch": "research/issue-524-causal-slate-evidence",
+  "campaignManifestSha256": "f486ae4550cc06ceb96341eb78f2a53281bcea100bb493082d0e39243c515ebb",
+  "files": {
+    "README.md": "4c6e96e9b227fcbc51fae5cbfdb24982e47012d9d35477498b71b5f732f9567d",
+    "artifacts/authored-mechanism-graph-v1.json": "61ab0bd24964293df7ea610911a66a32d41850cdb71100d96566607884b3c5ec",
+    "artifacts/authority-and-source-freeze-v1.json": "9627d921edc4fce921821c32cd2a7d26e529941f52c1f60bf5d72995f6cf62e6",
+    "artifacts/campaign-close-v1.json": "f9bba48f34e1a00225b5f2dc5525f8c6c94157f7ede726b73ab58a926d97bd4b",
+    "artifacts/final-targeted-verification-v1.json": "b12ff65e21be6fe4032de90842aca97e17c948dad9deddf260450529955917b7",
+    "artifacts/ledger-integrity-v1.json": "cd7573e3882b901ba2894f09830b49141349a90110d2bec62f4919a49a79f1d1",
+    "artifacts/research-runtime-and-mediation-v1.patch": "4b09ca50124b573883902fd644c6cfd8e4ea3540ff1b276f83c43781b3a95dc1",
+    "artifacts/scope-insufficiency-finding-v1.json": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2",
+    "artifacts/stage-a-mediation-audit-v1.json": "f9408de4d65695ac67a6807991a076572208d1e9c0c84362ea17146e38fc555e",
+    "artifacts/stage-b-mechanism-package-gate-v1.json": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a",
+    "artifacts/targeted-checks-v1.json": "31710b6e79be4cc948bb4ead40a47f0b9584577f1dee6404e106e110143d6169",
+    "immutable-manifest-v1.json": "f486ae4550cc06ceb96341eb78f2a53281bcea100bb493082d0e39243c515ebb",
+    "protocols/preregistration-v1.json": "cc44e5a46d2604a2ed2fc63a2902676d714dd97a5b6e53be5c9e440777dd2388",
+    "raw/raw-evidence-v1.tar.gz": "f9aabdd36756bc59179946d21cec1a76c5a733d738999121d621826efee53986",
+    "summaries/campaign-close-v1.md": "f4925bb98baa6af998cde06ca51b09eba5637db7c665a58a11f8d0f875e0bcd2",
+    "summaries/issue-421-comment-v1.md": "c8b0476f8431647c9117fff36fbf1152e18c2dbf0ee33a8eace1e66d5ebb9687",
+    "summaries/issue-524-comment-v1.md": "24625f566336543d8edf9c478224c2c449db61ec5314ef610285ead8373fdc21",
+    "tools/campaign.py": "5f524966c81e404a7f812d2cc455ee15334e801cb9df34565f29e9a4c6511dab",
+    "tools/mechanism_probe.gd": "0c60d7f490ae468a8f4b64dbf67fa2b67d84c372fa9fa2d9bf9492493ca774e5",
+    "work/stage-b-controlled-output-v1.json": "f53368db00a6a47d862ac030406f65b67c1e878da88ecc20aaa0dbd386d4844b",
+    "work/stage-b-controlled-plan-v1.json": "e489a8c6bb75e774b18401d5e6e0bbea5989eb11bb68476cae016186a4064693",
+    "work/stage-b-microdeck-output-v1.json": "20f3f3551bfd3e1047038288eae456973a00be5fe7cb5a1f803e2efa0cb5bfb7",
+    "work/stage-b-microdeck-plan-v1.json": "f3ced443fb7b0daa20e121dc33273ee2fb0147249b4da880545f05e9a0b55324",
+    "work/stage-b-panel-output-v1.json": "73841d42e9d2ca02c8e49ed8d62552728983096221346441471c4c06b1f4548a",
+    "work/stage-b-panel-plan-v1.json": "61db7f8f37b4950a59083a14bd77c21f19516fb6149fcd660668feb236a5efc0"
+  },
+  "finalOutputSha256": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2",
+  "github": {
+    "campaignComment": "https://github.com/fol2/glassvow/issues/524#issuecomment-5438787562",
+    "campaignIssue": "https://github.com/fol2/glassvow/issues/524",
+    "parentComment": "https://github.com/fol2/glassvow/issues/421#issuecomment-5438787889",
+    "parentIssue": "https://github.com/fol2/glassvow/issues/421"
+  },
+  "issue": 524,
+  "omissions": [
+    "The detached runtime and mediation prototype is represented by its patch and is not applied to this branch.",
+    "Generated imports, duplicate source working copies and transient SQLite sidecars are not published."
+  ],
+  "purpose": "remote-review-only; do-not-merge",
+  "schemaVersion": 1,
+  "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+  "verdict": "SCOPE_INSUFFICIENT_AT_CAUSAL_MECHANISM_PACKAGE_GATE"
+}

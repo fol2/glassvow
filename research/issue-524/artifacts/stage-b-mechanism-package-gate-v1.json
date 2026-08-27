@@ -1,0 +1,3570 @@
+{
+  "admittedPackagesByAspect": {
+    "ashwarden": [
+      "hand-size-payoff"
+    ],
+    "duskblade": []
+  },
+  "admittedPackagesOverall": [
+    "hand-size-payoff"
+  ],
+  "authoredGraph": {
+    "candidateEdges": 582,
+    "cards": 61,
+    "relics": 31,
+    "testedEdges": 20
+  },
+  "budgetsUsed": {
+    "controlledProbeStates": 256,
+    "decisionChangingFullRunRows": 0,
+    "microDeckMainEffects": 128,
+    "microDeckPairEffects": 192,
+    "microDeckTripleEffects": 0,
+    "pairedShortPanelRows": 256
+  },
+  "controlled": {
+    "allInterventionRelevant": true,
+    "checks": {
+      "ash-poison-catalyst|toxicMist->catalyst|ashwarden": {
+        "delta": 8.0,
+        "pairedBootstrapP05": 8.0,
+        "pairedBootstrapP95": 8.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 4.0,
+        "standardisedDelta": 2.0
+      },
+      "ash-poison-catalyst|venomStrike->catalyst|ashwarden": {
+        "delta": 8.0,
+        "pairedBootstrapP05": 8.0,
+        "pairedBootstrapP95": 8.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 4.0,
+        "standardisedDelta": 2.0
+      },
+      "ash-venomous-attacks|virulence->flurry|ashwarden": {
+        "delta": 2.0,
+        "pairedBootstrapP05": 2.0,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 1.0,
+        "standardisedDelta": 2.0
+      },
+      "ash-venomous-attacks|virulence->twinFangs|ashwarden": {
+        "delta": 2.0,
+        "pairedBootstrapP05": 2.0,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 1.0,
+        "standardisedDelta": 2.0
+      },
+      "dusk-crack-payoff|warCry->executioner|duskblade": {
+        "delta": 13.0,
+        "pairedBootstrapP05": 13.0,
+        "pairedBootstrapP95": 13.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.5,
+        "standardisedDelta": 2.0
+      },
+      "dusk-crack-payoff|warCry->heavyBlow|duskblade": {
+        "delta": 6.0,
+        "pairedBootstrapP05": 6.0,
+        "pairedBootstrapP95": 6.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 3.0,
+        "standardisedDelta": 2.0
+      },
+      "dusk-shatter-relics|limitBreak->bellOfEndings|duskblade": {
+        "delta": 4.0,
+        "pairedBootstrapP05": 4.0,
+        "pairedBootstrapP95": 4.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 2.0,
+        "standardisedDelta": 2.0
+      },
+      "dusk-shatter-relics|limitBreak->prismCharm|duskblade": {
+        "delta": 2.0,
+        "pairedBootstrapP05": 2.0,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 1.0,
+        "standardisedDelta": 2.0
+      },
+      "ember-spend|tithe->emberdance|ashwarden": {
+        "delta": 18.0,
+        "pairedBootstrapP05": 18.0,
+        "pairedBootstrapP95": 18.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 9.0,
+        "standardisedDelta": 2.0
+      },
+      "ember-spend|tithe->emberdance|duskblade": {
+        "delta": 18.0,
+        "pairedBootstrapP05": 18.0,
+        "pairedBootstrapP95": 18.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 9.0,
+        "standardisedDelta": 2.0
+      },
+      "ember-spend|tithe->novaflare|ashwarden": {
+        "delta": 18.0,
+        "pairedBootstrapP05": 18.0,
+        "pairedBootstrapP95": 18.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 9.0,
+        "standardisedDelta": 2.0
+      },
+      "ember-spend|tithe->novaflare|duskblade": {
+        "delta": 18.0,
+        "pairedBootstrapP05": 18.0,
+        "pairedBootstrapP95": 18.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 9.0,
+        "standardisedDelta": 2.0
+      },
+      "hand-size-payoff|preparation->phantomBlades|ashwarden": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      },
+      "hand-size-payoff|preparation->phantomBlades|duskblade": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      },
+      "hand-size-payoff|surge->phantomBlades|ashwarden": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      },
+      "hand-size-payoff|surge->phantomBlades|duskblade": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      },
+      "healing-amplifier|leechBlade->sunBlossom|ashwarden": {
+        "delta": 2.0,
+        "pairedBootstrapP05": 2.0,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 1.0,
+        "standardisedDelta": 2.0
+      },
+      "healing-amplifier|leechBlade->sunBlossom|duskblade": {
+        "delta": 2.0,
+        "pairedBootstrapP05": 2.0,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 1.0,
+        "standardisedDelta": 2.0
+      },
+      "healing-amplifier|regrowth->sunBlossom|ashwarden": {
+        "delta": 1.0,
+        "pairedBootstrapP05": 1.0,
+        "pairedBootstrapP95": 1.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 0.5,
+        "standardisedDelta": 2.0
+      },
+      "healing-amplifier|regrowth->sunBlossom|duskblade": {
+        "delta": 1.0,
+        "pairedBootstrapP05": 1.0,
+        "pairedBootstrapP95": 1.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 0.5,
+        "standardisedDelta": 2.0
+      },
+      "kindle-draw|firstSpark->verdantBranch|ashwarden": {
+        "delta": 1.0,
+        "pairedBootstrapP05": 1.0,
+        "pairedBootstrapP95": 1.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 0.5,
+        "standardisedDelta": 2.0
+      },
+      "kindle-draw|firstSpark->verdantBranch|duskblade": {
+        "delta": 1.0,
+        "pairedBootstrapP05": 1.0,
+        "pairedBootstrapP95": 1.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 0.5,
+        "standardisedDelta": 2.0
+      },
+      "kindle-draw|offering->verdantBranch|ashwarden": {
+        "delta": 4.0,
+        "pairedBootstrapP05": 4.0,
+        "pairedBootstrapP95": 4.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 2.0,
+        "standardisedDelta": 2.0
+      },
+      "kindle-draw|offering->verdantBranch|duskblade": {
+        "delta": 4.0,
+        "pairedBootstrapP05": 4.0,
+        "pairedBootstrapP95": 4.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 2.0,
+        "standardisedDelta": 2.0
+      },
+      "strength-multihit|empower->flurry|ashwarden": {
+        "delta": 6.0,
+        "pairedBootstrapP05": 6.0,
+        "pairedBootstrapP95": 6.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 3.0,
+        "standardisedDelta": 2.0
+      },
+      "strength-multihit|empower->flurry|duskblade": {
+        "delta": 6.0,
+        "pairedBootstrapP05": 6.0,
+        "pairedBootstrapP95": 6.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 3.0,
+        "standardisedDelta": 2.0
+      },
+      "strength-multihit|empower->twinFangs|ashwarden": {
+        "delta": 4.0,
+        "pairedBootstrapP05": 4.0,
+        "pairedBootstrapP95": 4.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 2.0,
+        "standardisedDelta": 2.0
+      },
+      "strength-multihit|empower->twinFangs|duskblade": {
+        "delta": 4.0,
+        "pairedBootstrapP05": 4.0,
+        "pairedBootstrapP95": 4.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 2.0,
+        "standardisedDelta": 2.0
+      },
+      "ward-double|brace->fortify|ashwarden": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      },
+      "ward-double|brace->fortify|duskblade": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      },
+      "ward-double|bulwark->fortify|ashwarden": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      },
+      "ward-double|bulwark->fortify|duskblade": {
+        "delta": 12.0,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 4,
+        "pass": true,
+        "pooledScale": 6.0,
+        "standardisedDelta": 2.0
+      }
+    },
+    "edgeAspectChecks": 32,
+    "states": 256
+  },
+  "decision": "STOP_SCOPE_INSUFFICIENT",
+  "excludedIssue519Identities": 504,
+  "issue": 524,
+  "microdecks": {
+    "antagonisticEdgeAspects": [],
+    "checks": {
+      "ash-poison-catalyst|toxicMist->catalyst|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.0,
+        "extraTreesFanovaInteraction": 0.0,
+        "pairedBootstrapP05": -3.0,
+        "pairedBootstrapP95": 2.3333333333333335,
+        "pairs": 3,
+        "pooledScale": 11.995369476964388,
+        "ridgeInteractionCoefficient": 0.43027355951746704,
+        "standardisedDelta": 0.0
+      },
+      "ash-poison-catalyst|toxicMist->catalyst|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 12.0,
+        "extraTreesFanovaInteraction": 12.0,
+        "pairedBootstrapP05": 4.666666666666667,
+        "pairedBootstrapP95": 19.333333333333332,
+        "pairs": 3,
+        "pooledScale": 13.612698320155177,
+        "ridgeInteractionCoefficient": 0.7594901050669505,
+        "standardisedDelta": 0.8815298567391749
+      },
+      "ash-poison-catalyst|venomStrike->catalyst|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 10.666666666666666,
+        "extraTreesFanovaInteraction": 10.666666666666666,
+        "pairedBootstrapP05": 1.6666666666666667,
+        "pairedBootstrapP95": 19.666666666666668,
+        "pairs": 3,
+        "pooledScale": 13.674794331177344,
+        "ridgeInteractionCoefficient": 0.7076829910907715,
+        "standardisedDelta": 0.7800239190689393
+      },
+      "ash-poison-catalyst|venomStrike->catalyst|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 24.0,
+        "extraTreesFanovaInteraction": 24.0,
+        "pairedBootstrapP05": 12.333333333333334,
+        "pairedBootstrapP95": 35.666666666666664,
+        "pairs": 3,
+        "pooledScale": 18.204089894550865,
+        "ridgeInteractionCoefficient": 0.9232239408976987,
+        "standardisedDelta": 1.3183850518769442
+      },
+      "ash-venomous-attacks|virulence->flurry|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 1.3333333333333333,
+        "extraTreesFanovaInteraction": 1.3333333333333333,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 2.6666666666666665,
+        "pairs": 3,
+        "pooledScale": 6.91415617089718,
+        "ridgeInteractionCoefficient": 0.4128976319183969,
+        "standardisedDelta": 0.19284107856075805
+      },
+      "ash-venomous-attacks|virulence->flurry|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 1.3333333333333333,
+        "extraTreesFanovaInteraction": 1.3333333333333333,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 2.6666666666666665,
+        "pairs": 3,
+        "pooledScale": 7.408703590297623,
+        "ridgeInteractionCoefficient": 0.4288765660701868,
+        "standardisedDelta": 0.179968508266339
+      },
+      "ash-venomous-attacks|virulence->twinFangs|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -2.3333333333333335,
+        "extraTreesFanovaInteraction": -2.3333333333333335,
+        "pairedBootstrapP05": -4.333333333333333,
+        "pairedBootstrapP95": -0.3333333333333333,
+        "pairs": 3,
+        "pooledScale": 6.00173586001028,
+        "ridgeInteractionCoefficient": 0.14310375994128868,
+        "standardisedDelta": -0.3887764119844716
+      },
+      "ash-venomous-attacks|virulence->twinFangs|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -1.0,
+        "extraTreesFanovaInteraction": -1.0,
+        "pairedBootstrapP05": -3.3333333333333335,
+        "pairedBootstrapP95": 1.3333333333333333,
+        "pairs": 3,
+        "pooledScale": 6.933713931861401,
+        "ridgeInteractionCoefficient": 0.27507019805821625,
+        "standardisedDelta": -0.14422285225885334
+      },
+      "dusk-crack-payoff|warCry->executioner|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 5.333333333333333,
+        "extraTreesFanovaInteraction": 5.333333333333333,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 10.666666666666666,
+        "pairs": 3,
+        "pooledScale": 17.150477803515823,
+        "ridgeInteractionCoefficient": 0.11285305827287041,
+        "standardisedDelta": 0.3109728716852429
+      },
+      "dusk-crack-payoff|warCry->executioner|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 2.6666666666666665,
+        "extraTreesFanovaInteraction": 2.6666666666666665,
+        "pairedBootstrapP05": -3.6666666666666665,
+        "pairedBootstrapP95": 9.0,
+        "pairs": 3,
+        "pooledScale": 19.17898155099309,
+        "ridgeInteractionCoefficient": 0.0016819487745145054,
+        "standardisedDelta": 0.13904109869319867
+      },
+      "dusk-crack-payoff|warCry->heavyBlow|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.0,
+        "extraTreesFanovaInteraction": 0.0,
+        "pairedBootstrapP05": -3.0,
+        "pairedBootstrapP95": 3.0,
+        "pairs": 3,
+        "pooledScale": 15.890248582070704,
+        "ridgeInteractionCoefficient": -0.04872129875052018,
+        "standardisedDelta": 0.0
+      },
+      "dusk-crack-payoff|warCry->heavyBlow|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 1.0,
+        "extraTreesFanovaInteraction": 1.0,
+        "pairedBootstrapP05": -3.0,
+        "pairedBootstrapP95": 5.0,
+        "pairs": 3,
+        "pooledScale": 19.109879643786353,
+        "ridgeInteractionCoefficient": 0.008229149918652935,
+        "standardisedDelta": 0.052328953328869006
+      },
+      "dusk-shatter-relics|limitBreak->bellOfEndings|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -2.3333333333333335,
+        "extraTreesFanovaInteraction": -2.33333333333303,
+        "pairedBootstrapP05": -4.666666666666667,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 3,
+        "pooledScale": 4.639055219905593,
+        "ridgeInteractionCoefficient": -0.3294260865648229,
+        "standardisedDelta": -0.502975977376018
+      },
+      "dusk-shatter-relics|limitBreak->bellOfEndings|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -1.0,
+        "extraTreesFanovaInteraction": -0.9999999999999574,
+        "pairedBootstrapP05": -2.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 3,
+        "pooledScale": 4.125631264828854,
+        "ridgeInteractionCoefficient": -0.13194461738505828,
+        "standardisedDelta": -0.24238714897403307
+      },
+      "dusk-shatter-relics|limitBreak->prismCharm|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.6666666666666666,
+        "extraTreesFanovaInteraction": 0.6666666666666666,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 1.3333333333333333,
+        "pairs": 3,
+        "pooledScale": 2.0138409955990952,
+        "ridgeInteractionCoefficient": 0.5326044347618465,
+        "standardisedDelta": 0.3310423554409472
+      },
+      "dusk-shatter-relics|limitBreak->prismCharm|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.6666666666666666,
+        "extraTreesFanovaInteraction": 0.6666666666666666,
+        "pairedBootstrapP05": -0.6666666666666666,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 3,
+        "pooledScale": 2.3033791601808757,
+        "ridgeInteractionCoefficient": 0.4376459306204163,
+        "standardisedDelta": 0.2894298421169686
+      },
+      "ember-spend|tithe->emberdance|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 3.6666666666666665,
+        "extraTreesFanovaInteraction": 3.6666666666666665,
+        "pairedBootstrapP05": 0.6666666666666666,
+        "pairedBootstrapP95": 6.666666666666667,
+        "pairs": 3,
+        "pooledScale": 11.569536147429018,
+        "ridgeInteractionCoefficient": 0.47922014919688416,
+        "standardisedDelta": 0.31692425866887264
+      },
+      "ember-spend|tithe->emberdance|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 1.0,
+        "extraTreesFanovaInteraction": 1.0,
+        "pairedBootstrapP05": -8.666666666666666,
+        "pairedBootstrapP95": 10.666666666666666,
+        "pairs": 3,
+        "pooledScale": 11.825995377416087,
+        "ridgeInteractionCoefficient": 0.5206545299581753,
+        "standardisedDelta": 0.0845594783429126
+      },
+      "ember-spend|tithe->emberdance|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 8.666666666666666,
+        "extraTreesFanovaInteraction": 8.666666666666666,
+        "pairedBootstrapP05": -1.3333333333333333,
+        "pairedBootstrapP95": 18.666666666666668,
+        "pairs": 3,
+        "pooledScale": 8.112062349091971,
+        "ridgeInteractionCoefficient": 0.5815712124071573,
+        "standardisedDelta": 1.0683678568664816
+      },
+      "ember-spend|tithe->emberdance|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 3.6666666666666665,
+        "extraTreesFanovaInteraction": 3.6666666666666665,
+        "pairedBootstrapP05": -5.0,
+        "pairedBootstrapP95": 12.333333333333334,
+        "pairs": 3,
+        "pooledScale": 10.672849770432554,
+        "ridgeInteractionCoefficient": 0.5194821400062648,
+        "standardisedDelta": 0.3435508552574766
+      },
+      "ember-spend|tithe->novaflare|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -2.0,
+        "extraTreesFanovaInteraction": -2.0,
+        "pairedBootstrapP05": -6.0,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 3,
+        "pooledScale": 14.309088021254185,
+        "ridgeInteractionCoefficient": -0.45482035657773573,
+        "standardisedDelta": -0.13977131156292244
+      },
+      "ember-spend|tithe->novaflare|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 8.0,
+        "extraTreesFanovaInteraction": 8.0,
+        "pairedBootstrapP05": 4.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 3,
+        "pooledScale": 15.239750654128171,
+        "ridgeInteractionCoefficient": -0.15875291490115803,
+        "standardisedDelta": 0.5249429719398293
+      },
+      "ember-spend|tithe->novaflare|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -1.6666666666666667,
+        "extraTreesFanovaInteraction": -1.6666666666666667,
+        "pairedBootstrapP05": -4.0,
+        "pairedBootstrapP95": 0.6666666666666666,
+        "pairs": 3,
+        "pooledScale": 15.681508926829148,
+        "ridgeInteractionCoefficient": -0.045512818999087816,
+        "standardisedDelta": -0.10628228918807701
+      },
+      "ember-spend|tithe->novaflare|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 4.0,
+        "extraTreesFanovaInteraction": 4.0,
+        "pairedBootstrapP05": 1.0,
+        "pairedBootstrapP95": 7.0,
+        "pairs": 3,
+        "pooledScale": 17.507141400011598,
+        "ridgeInteractionCoefficient": -0.00829154726096443,
+        "standardisedDelta": 0.22847819119101592
+      },
+      "hand-size-payoff|preparation->phantomBlades|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 9.0,
+        "extraTreesFanovaInteraction": 9.0,
+        "pairedBootstrapP05": 6.0,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 3,
+        "pooledScale": 11.776565713313877,
+        "ridgeInteractionCoefficient": 0.4160120758166672,
+        "standardisedDelta": 0.7642295911298777
+      },
+      "hand-size-payoff|preparation->phantomBlades|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 7.0,
+        "extraTreesFanovaInteraction": 7.0,
+        "pairedBootstrapP05": 3.0,
+        "pairedBootstrapP95": 11.0,
+        "pairs": 3,
+        "pooledScale": 14.872373717735847,
+        "ridgeInteractionCoefficient": 0.17812849506517153,
+        "standardisedDelta": 0.4706713355146694
+      },
+      "hand-size-payoff|preparation->phantomBlades|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 3.0,
+        "extraTreesFanovaInteraction": 3.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 6.0,
+        "pairs": 3,
+        "pooledScale": 14.02453207775575,
+        "ridgeInteractionCoefficient": 0.08884201875880819,
+        "standardisedDelta": 0.2139108801182955
+      },
+      "hand-size-payoff|preparation->phantomBlades|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -1.3333333333333333,
+        "extraTreesFanovaInteraction": -1.3333333333333333,
+        "pairedBootstrapP05": -3.6666666666666665,
+        "pairedBootstrapP95": 1.0,
+        "pairs": 3,
+        "pooledScale": 18.82153022471871,
+        "ridgeInteractionCoefficient": -0.06255704721034747,
+        "standardisedDelta": -0.07084085711491399
+      },
+      "hand-size-payoff|surge->phantomBlades|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 4.0,
+        "extraTreesFanovaInteraction": 4.0,
+        "pairedBootstrapP05": 2.0,
+        "pairedBootstrapP95": 6.0,
+        "pairs": 3,
+        "pooledScale": 11.874342087037917,
+        "ridgeInteractionCoefficient": 0.11817293085933409,
+        "standardisedDelta": 0.3368607684266076
+      },
+      "hand-size-payoff|surge->phantomBlades|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 5.0,
+        "extraTreesFanovaInteraction": 5.0,
+        "pairedBootstrapP05": 1.0,
+        "pairedBootstrapP95": 9.0,
+        "pairs": 3,
+        "pooledScale": 15.056144924913548,
+        "ridgeInteractionCoefficient": 0.05222388111312371,
+        "standardisedDelta": 0.3320903209244786
+      },
+      "hand-size-payoff|surge->phantomBlades|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.6666666666666666,
+        "extraTreesFanovaInteraction": 0.6666666666666666,
+        "pairedBootstrapP05": -2.3333333333333335,
+        "pairedBootstrapP95": 3.6666666666666665,
+        "pairs": 3,
+        "pooledScale": 14.255603186895398,
+        "ridgeInteractionCoefficient": 0.011879878844085538,
+        "standardisedDelta": 0.04676523735449556
+      },
+      "hand-size-payoff|surge->phantomBlades|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.3333333333333333,
+        "extraTreesFanovaInteraction": 0.3333333333333333,
+        "pairedBootstrapP05": -3.0,
+        "pairedBootstrapP95": 3.6666666666666665,
+        "pairs": 3,
+        "pooledScale": 18.264073721075725,
+        "ridgeInteractionCoefficient": -0.025389170264039303,
+        "standardisedDelta": 0.018250765870961482
+      },
+      "healing-amplifier|leechBlade->sunBlossom|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 1.3333333333333333,
+        "extraTreesFanovaInteraction": 1.3333333333333333,
+        "pairedBootstrapP05": 0.6666666666666666,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 3,
+        "pooledScale": 2.4267032964268394,
+        "ridgeInteractionCoefficient": 0.6181225377691006,
+        "standardisedDelta": 0.549442255794756
+      },
+      "healing-amplifier|leechBlade->sunBlossom|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 2.6666666666666665,
+        "extraTreesFanovaInteraction": 2.6666666666666665,
+        "pairedBootstrapP05": 0.6666666666666666,
+        "pairedBootstrapP95": 4.666666666666667,
+        "pairs": 3,
+        "pooledScale": 5.676462121975467,
+        "ridgeInteractionCoefficient": 0.4375737764770855,
+        "standardisedDelta": 0.46977617561176277
+      },
+      "healing-amplifier|leechBlade->sunBlossom|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.0,
+        "extraTreesFanovaInteraction": 0.0,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 0.0,
+        "pairs": 3,
+        "pooledScale": 0.0,
+        "ridgeInteractionCoefficient": 0.0,
+        "standardisedDelta": 0.0
+      },
+      "healing-amplifier|leechBlade->sunBlossom|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 1.6666666666666667,
+        "extraTreesFanovaInteraction": 1.6666666666666667,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 3.3333333333333335,
+        "pairs": 3,
+        "pooledScale": 4.768967975941499,
+        "ridgeInteractionCoefficient": 0.3255252211108062,
+        "standardisedDelta": 0.3494816226644152
+      },
+      "healing-amplifier|regrowth->sunBlossom|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 2.6666666666666665,
+        "extraTreesFanovaInteraction": 2.6666666666666665,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 5.333333333333333,
+        "pairs": 3,
+        "pooledScale": 7.566372975210778,
+        "ridgeInteractionCoefficient": 0.3879644686542784,
+        "standardisedDelta": 0.3524365869093812
+      },
+      "healing-amplifier|regrowth->sunBlossom|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 3.3333333333333335,
+        "extraTreesFanovaInteraction": 3.3333333333333335,
+        "pairedBootstrapP05": 0.6666666666666666,
+        "pairedBootstrapP95": 6.0,
+        "pairs": 3,
+        "pooledScale": 10.362861037806542,
+        "ridgeInteractionCoefficient": 0.35564347119218254,
+        "standardisedDelta": 0.32166149108556263
+      },
+      "healing-amplifier|regrowth->sunBlossom|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.6666666666666666,
+        "extraTreesFanovaInteraction": 0.6666666666666666,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 1.3333333333333333,
+        "pairs": 3,
+        "pooledScale": 1.9075871903765995,
+        "ridgeInteractionCoefficient": 0.3255252211108062,
+        "standardisedDelta": 0.3494816226644152
+      },
+      "healing-amplifier|regrowth->sunBlossom|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 2.3333333333333335,
+        "extraTreesFanovaInteraction": 2.3333333333333335,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 4.666666666666667,
+        "pairs": 3,
+        "pooledScale": 7.34232403413403,
+        "ridgeInteractionCoefficient": 0.32236870408704715,
+        "standardisedDelta": 0.3177922034611664
+      },
+      "kindle-draw|firstSpark->verdantBranch|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 2.6666666666666665,
+        "extraTreesFanovaInteraction": 2.6666666666666665,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 5.333333333333333,
+        "pairs": 3,
+        "pooledScale": 6.890008869531463,
+        "ridgeInteractionCoefficient": 0.25750236058952225,
+        "standardisedDelta": 0.38703385106788785
+      },
+      "kindle-draw|firstSpark->verdantBranch|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 2.3333333333333335,
+        "extraTreesFanovaInteraction": 2.3333333333333335,
+        "pairedBootstrapP05": -0.6666666666666666,
+        "pairedBootstrapP95": 5.333333333333333,
+        "pairs": 3,
+        "pooledScale": 8.073877630977572,
+        "ridgeInteractionCoefficient": 0.16530810601265425,
+        "standardisedDelta": 0.2889978570372285
+      },
+      "kindle-draw|firstSpark->verdantBranch|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -0.6666666666666666,
+        "extraTreesFanovaInteraction": -0.6666666666666666,
+        "pairedBootstrapP05": -2.6666666666666665,
+        "pairedBootstrapP95": 1.3333333333333333,
+        "pairs": 3,
+        "pooledScale": 4.795831523312719,
+        "ridgeInteractionCoefficient": -0.03531292496127879,
+        "standardisedDelta": -0.13900960937138318
+      },
+      "kindle-draw|firstSpark->verdantBranch|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 2.0,
+        "extraTreesFanovaInteraction": 2.0,
+        "pairedBootstrapP05": 1.3333333333333333,
+        "pairedBootstrapP95": 2.6666666666666665,
+        "pairs": 3,
+        "pooledScale": 6.861729616746301,
+        "ridgeInteractionCoefficient": 0.30910103726022436,
+        "standardisedDelta": 0.2914717005343561
+      },
+      "kindle-draw|offering->verdantBranch|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -1.6666666666666667,
+        "extraTreesFanovaInteraction": -1.6666666666666667,
+        "pairedBootstrapP05": -6.666666666666667,
+        "pairedBootstrapP95": 3.3333333333333335,
+        "pairs": 3,
+        "pooledScale": 5.6044377257867914,
+        "ridgeInteractionCoefficient": -0.3230446941425463,
+        "standardisedDelta": -0.2973833858476299
+      },
+      "kindle-draw|offering->verdantBranch|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -2.0,
+        "extraTreesFanovaInteraction": -2.0,
+        "pairedBootstrapP05": -5.666666666666667,
+        "pairedBootstrapP95": 1.6666666666666667,
+        "pairs": 3,
+        "pooledScale": 7.630348761506398,
+        "ridgeInteractionCoefficient": -0.3033303196714329,
+        "standardisedDelta": -0.26211121699831136
+      },
+      "kindle-draw|offering->verdantBranch|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 3.3333333333333335,
+        "extraTreesFanovaInteraction": 3.3333333333333335,
+        "pairedBootstrapP05": 1.6666666666666667,
+        "pairedBootstrapP95": 5.0,
+        "pairs": 3,
+        "pooledScale": 4.642796092394707,
+        "ridgeInteractionCoefficient": 0.3213441758329392,
+        "standardisedDelta": 0.7179581586177382
+      },
+      "kindle-draw|offering->verdantBranch|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 2.0,
+        "extraTreesFanovaInteraction": 2.0,
+        "pairedBootstrapP05": 1.3333333333333333,
+        "pairedBootstrapP95": 2.6666666666666665,
+        "pairs": 3,
+        "pooledScale": 4.041451884327381,
+        "ridgeInteractionCoefficient": 0.38113099567471836,
+        "standardisedDelta": 0.4948716593053935
+      },
+      "strength-multihit|empower->flurry|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -2.6666666666666665,
+        "extraTreesFanovaInteraction": -2.6666666666666665,
+        "pairedBootstrapP05": -4.666666666666667,
+        "pairedBootstrapP95": -0.6666666666666666,
+        "pairs": 3,
+        "pooledScale": 13.572848714334889,
+        "ridgeInteractionCoefficient": -0.011883306590627559,
+        "standardisedDelta": -0.1964706689650406
+      },
+      "strength-multihit|empower->flurry|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.6666666666666666,
+        "extraTreesFanovaInteraction": 0.6666666666666666,
+        "pairedBootstrapP05": -3.3333333333333335,
+        "pairedBootstrapP95": 4.666666666666667,
+        "pairs": 3,
+        "pooledScale": 15.263427603989289,
+        "ridgeInteractionCoefficient": 0.04913706275279724,
+        "standardisedDelta": 0.04367738911359759
+      },
+      "strength-multihit|empower->flurry|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.6666666666666666,
+        "extraTreesFanovaInteraction": 0.6666666666666666,
+        "pairedBootstrapP05": -3.3333333333333335,
+        "pairedBootstrapP95": 4.666666666666667,
+        "pairs": 3,
+        "pooledScale": 15.723301886761007,
+        "ridgeInteractionCoefficient": -0.01384835940008315,
+        "standardisedDelta": 0.04239991520025439
+      },
+      "strength-multihit|empower->flurry|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -1.3333333333333333,
+        "extraTreesFanovaInteraction": -1.3333333333333333,
+        "pairedBootstrapP05": -3.3333333333333335,
+        "pairedBootstrapP95": 0.6666666666666666,
+        "pairs": 3,
+        "pooledScale": 18.524008445498207,
+        "ridgeInteractionCoefficient": -0.09142450955361926,
+        "standardisedDelta": -0.07197866148983355
+      },
+      "strength-multihit|empower->twinFangs|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": -0.6666666666666666,
+        "extraTreesFanovaInteraction": -0.6666666666666666,
+        "pairedBootstrapP05": -3.3333333333333335,
+        "pairedBootstrapP95": 2.0,
+        "pairs": 3,
+        "pooledScale": 13.303090701871586,
+        "ridgeInteractionCoefficient": 0.06971457803472936,
+        "standardisedDelta": -0.05011366768873301
+      },
+      "strength-multihit|empower->twinFangs|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 0.6666666666666666,
+        "extraTreesFanovaInteraction": 0.6666666666666666,
+        "pairedBootstrapP05": 0.0,
+        "pairedBootstrapP95": 1.3333333333333333,
+        "pairs": 3,
+        "pooledScale": 14.639178786925022,
+        "ridgeInteractionCoefficient": 0.09530324826476393,
+        "standardisedDelta": 0.04553989512458853
+      },
+      "strength-multihit|empower->twinFangs|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": false,
+        "controlledProbePass": true,
+        "delta": 3.6666666666666665,
+        "extraTreesFanovaInteraction": 3.6666666666666665,
+        "pairedBootstrapP05": -4.666666666666667,
+        "pairedBootstrapP95": 12.0,
+        "pairs": 3,
+        "pooledScale": 16.665624967445883,
+        "ridgeInteractionCoefficient": 0.050083775495084686,
+        "standardisedDelta": 0.22001375128919679
+      },
+      "strength-multihit|empower->twinFangs|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 12.666666666666666,
+        "extraTreesFanovaInteraction": 12.666666666666666,
+        "pairedBootstrapP05": 7.666666666666667,
+        "pairedBootstrapP95": 17.666666666666668,
+        "pairs": 3,
+        "pooledScale": 19.339079605813716,
+        "ridgeInteractionCoefficient": 0.23310646669936744,
+        "standardisedDelta": 0.6549777406603576
+      },
+      "ward-double|brace->fortify|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 26.333333333333332,
+        "extraTreesFanovaInteraction": 26.333333333333332,
+        "pairedBootstrapP05": 12.0,
+        "pairedBootstrapP95": 40.666666666666664,
+        "pairs": 3,
+        "pooledScale": 24.814170458743035,
+        "ridgeInteractionCoefficient": 0.824678371233206,
+        "standardisedDelta": 1.0612215861544159
+      },
+      "ward-double|brace->fortify|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 30.0,
+        "extraTreesFanovaInteraction": 30.0,
+        "pairedBootstrapP05": 17.666666666666668,
+        "pairedBootstrapP95": 42.333333333333336,
+        "pairs": 3,
+        "pooledScale": 30.43161733022636,
+        "ridgeInteractionCoefficient": 0.7910384907886928,
+        "standardisedDelta": 0.985816812641185
+      },
+      "ward-double|brace->fortify|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 33.333333333333336,
+        "extraTreesFanovaInteraction": 33.333333333333336,
+        "pairedBootstrapP05": 26.333333333333332,
+        "pairedBootstrapP95": 40.333333333333336,
+        "pairs": 3,
+        "pooledScale": 19.040891669130296,
+        "ridgeInteractionCoefficient": 1.0478297576563602,
+        "standardisedDelta": 1.7506182962730892
+      },
+      "ward-double|brace->fortify|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 33.333333333333336,
+        "extraTreesFanovaInteraction": 33.333333333333336,
+        "pairedBootstrapP05": 30.666666666666668,
+        "pairedBootstrapP95": 36.0,
+        "pairs": 3,
+        "pooledScale": 27.328251560122418,
+        "ridgeInteractionCoefficient": 0.8858846079520788,
+        "standardisedDelta": 1.2197389672002865
+      },
+      "ward-double|bulwark->fortify|ashwarden|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 9.0,
+        "extraTreesFanovaInteraction": 9.0,
+        "pairedBootstrapP05": 1.0,
+        "pairedBootstrapP95": 17.0,
+        "pairs": 3,
+        "pooledScale": 17.904647131091103,
+        "ridgeInteractionCoefficient": 0.6195454093156362,
+        "standardisedDelta": 0.5026627966530354
+      },
+      "ward-double|bulwark->fortify|ashwarden|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 37.666666666666664,
+        "extraTreesFanovaInteraction": 37.666666666666664,
+        "pairedBootstrapP05": 13.0,
+        "pairedBootstrapP95": 62.333333333333336,
+        "pairs": 3,
+        "pooledScale": 31.889021970299154,
+        "ridgeInteractionCoefficient": 0.8756426309587517,
+        "standardisedDelta": 1.1811797395902797
+      },
+      "ward-double|bulwark->fortify|duskblade|discovery": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 26.333333333333332,
+        "extraTreesFanovaInteraction": 26.333333333333332,
+        "pairedBootstrapP05": 22.666666666666668,
+        "pairedBootstrapP95": 30.0,
+        "pairs": 3,
+        "pooledScale": 16.65562134002278,
+        "ridgeInteractionCoefficient": 1.0078453382128634,
+        "standardisedDelta": 1.5810477913577083
+      },
+      "ward-double|bulwark->fortify|duskblade|heldOut": {
+        "antagonismPass": false,
+        "complementarityPass": true,
+        "controlledProbePass": true,
+        "delta": 28.666666666666668,
+        "extraTreesFanovaInteraction": 28.666666666666668,
+        "pairedBootstrapP05": 20.0,
+        "pairedBootstrapP95": 37.333333333333336,
+        "pairs": 3,
+        "pooledScale": 23.124061542519346,
+        "ridgeInteractionCoefficient": 0.9119812122382785,
+        "standardisedDelta": 1.239689948669089
+      }
+    },
+    "mainEffects": 64,
+    "model": {
+      "extraTrees": "256-tree contextual fANOVA sign check",
+      "ridge": "pooled edge-aspect fixed effects with shared L2 shrinkage"
+    },
+    "pairContrasts": 192,
+    "promotedEdgeAspects": [
+      "ash-poison-catalyst|venomStrike->catalyst|ashwarden",
+      "hand-size-payoff|preparation->phantomBlades|ashwarden",
+      "hand-size-payoff|surge->phantomBlades|ashwarden",
+      "healing-amplifier|leechBlade->sunBlossom|ashwarden",
+      "kindle-draw|offering->verdantBranch|duskblade",
+      "ward-double|brace->fortify|ashwarden",
+      "ward-double|brace->fortify|duskblade",
+      "ward-double|bulwark->fortify|ashwarden",
+      "ward-double|bulwark->fortify|duskblade"
+    ],
+    "rows": 768,
+    "tripleEffects": 0
+  },
+  "minimumPackageGateMet": false,
+  "packages": {
+    "ash-poison-catalyst": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": 35.5,
+              "pairedBootstrapP05": 20.5,
+              "pairedBootstrapP95": 48.5,
+              "pairs": 4,
+              "pooledScale": 30.032274306152708,
+              "standardisedDelta": 1.1820616593371724
+            },
+            "activationSet": [
+              "poisonApplied",
+              "poisonDamage"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": true,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": 0.4166666666666667,
+            "turns": {
+              "delta": -1.25,
+              "pairedBootstrapP05": -1.5,
+              "pairedBootstrapP95": -1.0,
+              "pairs": 4,
+              "pooledScale": 0.8569568250501305,
+              "standardisedDelta": -1.4586499149789456
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": true
+        }
+      },
+      "nodes": [
+        "venomStrike",
+        "toxicMist",
+        "catalyst"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "catalyst": {
+            "acquisitionProbability": 0.21875,
+            "inLegacyPool": true,
+            "offerProbability": 0.4548611111111111
+          },
+          "toxicMist": {
+            "acquisitionProbability": 0.21875,
+            "inLegacyPool": true,
+            "offerProbability": 0.5850694444444444
+          },
+          "venomStrike": {
+            "acquisitionProbability": 0.2881944444444444,
+            "inLegacyPool": true,
+            "offerProbability": 0.7378472222222222
+          }
+        },
+        "failClosedReason": "",
+        "minimumCardAcquisitionProbability": 0.21875,
+        "minimumCardOfferProbability": 0.4548611111111111,
+        "pass": true,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [],
+        "sourceRows": 1152
+      }
+    },
+    "ash-venomous-attacks": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": -2.5,
+              "pairedBootstrapP05": -8.25,
+              "pairedBootstrapP95": 3.5,
+              "pairs": 4,
+              "pooledScale": 18.25342433627181,
+              "standardisedDelta": -0.13696060278575736
+            },
+            "activationSet": [
+              "directDamage"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.08333333333333333,
+            "turns": {
+              "delta": 0.25,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.5,
+              "pairs": 4,
+              "pooledScale": 0.7806247497997998,
+              "standardisedDelta": 0.32025630761017426
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        }
+      },
+      "nodes": [
+        "virulence",
+        "twinFangs",
+        "flurry"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "flurry": {
+            "acquisitionProbability": 0.027777777777777776,
+            "inLegacyPool": true,
+            "offerProbability": 0.4904513888888889
+          },
+          "twinFangs": {
+            "acquisitionProbability": 0.03211805555555555,
+            "inLegacyPool": true,
+            "offerProbability": 0.7578125
+          },
+          "virulence": {
+            "acquisitionProbability": 0.20572916666666666,
+            "inLegacyPool": true,
+            "offerProbability": 0.484375
+          }
+        },
+        "failClosedReason": "card component below threshold",
+        "minimumCardAcquisitionProbability": 0.027777777777777776,
+        "minimumCardOfferProbability": 0.484375,
+        "pass": false,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [],
+        "sourceRows": 1152
+      }
+    },
+    "dusk-crack-payoff": {
+      "aspects": {
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": -1.25,
+              "pairedBootstrapP05": -3.0,
+              "pairedBootstrapP95": 0.5,
+              "pairs": 4,
+              "pooledScale": 24.07248169591162,
+              "standardisedDelta": -0.05192651159902202
+            },
+            "activationSet": [],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.0,
+            "turns": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.82915619758885,
+              "standardisedDelta": 0.0
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": true
+        }
+      },
+      "nodes": [
+        "warCry",
+        "executioner",
+        "heavyBlow"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "executioner": {
+            "acquisitionProbability": 0.2847222222222222,
+            "inLegacyPool": true,
+            "offerProbability": 0.4965277777777778
+          },
+          "heavyBlow": {
+            "acquisitionProbability": 0.14583333333333334,
+            "inLegacyPool": true,
+            "offerProbability": 0.8107638888888888
+          },
+          "warCry": {
+            "acquisitionProbability": 0.18229166666666666,
+            "inLegacyPool": true,
+            "offerProbability": 0.5138888888888888
+          }
+        },
+        "failClosedReason": "",
+        "minimumCardAcquisitionProbability": 0.14583333333333334,
+        "minimumCardOfferProbability": 0.4965277777777778,
+        "pass": true,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [],
+        "sourceRows": 1152
+      }
+    },
+    "dusk-shatter-relics": {
+      "aspects": {
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.5,
+              "standardisedDelta": 0.0
+            },
+            "activationSet": [
+              "emberGain"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": 0.18181818181818182,
+            "turns": {
+              "delta": -0.5,
+              "pairedBootstrapP05": -1.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.7071067811865476,
+              "standardisedDelta": -0.7071067811865475
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        }
+      },
+      "nodes": [
+        "limitBreak",
+        "prismCharm",
+        "bellOfEndings"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "limitBreak": {
+            "acquisitionProbability": 0.16493055555555555,
+            "inLegacyPool": true,
+            "offerProbability": 0.5295138888888888
+          }
+        },
+        "failClosedReason": "relic offer mediation was not instrumented",
+        "minimumCardAcquisitionProbability": 0.16493055555555555,
+        "minimumCardOfferProbability": 0.5295138888888888,
+        "pass": false,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [
+          "prismCharm",
+          "bellOfEndings"
+        ],
+        "sourceRows": 1152
+      }
+    },
+    "ember-spend": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": 7.5,
+              "pairedBootstrapP05": 6.5,
+              "pairedBootstrapP95": 8.5,
+              "pairs": 4,
+              "pooledScale": 4.205650960315181,
+              "standardisedDelta": 1.783314894833292
+            },
+            "activationSet": [
+              "draw",
+              "emberGain"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.16666666666666666,
+            "turns": {
+              "delta": 0.5,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 1.0,
+              "pairs": 4,
+              "pooledScale": 0.6614378277661477,
+              "standardisedDelta": 0.7559289460184544
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        },
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": 15.0,
+              "pairedBootstrapP05": 10.25,
+              "pairedBootstrapP95": 18.5,
+              "pairs": 4,
+              "pooledScale": 9.354143466934854,
+              "standardisedDelta": 1.6035674514745462
+            },
+            "activationSet": [
+              "blockGain",
+              "draw",
+              "emberGain"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.8181818181818182,
+            "turns": {
+              "delta": 2.25,
+              "pairedBootstrapP05": 1.5,
+              "pairedBootstrapP95": 3.0,
+              "pairs": 4,
+              "pooledScale": 1.6909686573085854,
+              "standardisedDelta": 1.3305982877182312
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        }
+      },
+      "nodes": [
+        "tithe",
+        "novaflare",
+        "emberdance"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "emberdance": {
+            "acquisitionProbability": 0.0,
+            "inLegacyPool": false,
+            "offerProbability": 0.0
+          },
+          "novaflare": {
+            "acquisitionProbability": 0.0,
+            "inLegacyPool": false,
+            "offerProbability": 0.0
+          },
+          "tithe": {
+            "acquisitionProbability": 0.0,
+            "inLegacyPool": false,
+            "offerProbability": 0.0
+          }
+        },
+        "failClosedReason": "card component below threshold",
+        "minimumCardAcquisitionProbability": 0.0,
+        "minimumCardOfferProbability": 0.0,
+        "pass": false,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [],
+        "sourceRows": 1152
+      }
+    },
+    "hand-size-payoff": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": 14.5,
+              "pairedBootstrapP05": 10.0,
+              "pairedBootstrapP95": 19.25,
+              "pairs": 4,
+              "pooledScale": 8.46684711093805,
+              "standardisedDelta": 1.7125619265367285
+            },
+            "activationSet": [
+              "directDamage",
+              "emberGain"
+            ],
+            "bothWithinPackageEdgesPass": true,
+            "packageAspectPass": true,
+            "panelPass": true,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": 0.3333333333333333,
+            "turns": {
+              "delta": -1.0,
+              "pairedBootstrapP05": -1.5,
+              "pairedBootstrapP95": -0.5,
+              "pairs": 4,
+              "pooledScale": 0.7071067811865476,
+              "standardisedDelta": -1.414213562373095
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": true,
+          "reachabilityPass": true
+        },
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": -4.0,
+              "pairedBootstrapP05": -7.25,
+              "pairedBootstrapP95": -0.5,
+              "pairs": 4,
+              "pooledScale": 23.263436977368585,
+              "standardisedDelta": -0.17194363859009001
+            },
+            "activationSet": [],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": 0.45454545454545453,
+            "turns": {
+              "delta": -1.25,
+              "pairedBootstrapP05": -1.5,
+              "pairedBootstrapP95": -1.0,
+              "pairs": 4,
+              "pooledScale": 0.9270248108869579,
+              "standardisedDelta": -1.348399724926484
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": true
+        }
+      },
+      "nodes": [
+        "preparation",
+        "surge",
+        "phantomBlades"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "phantomBlades": {
+            "acquisitionProbability": 0.1284722222222222,
+            "inLegacyPool": true,
+            "offerProbability": 0.4704861111111111
+          },
+          "preparation": {
+            "acquisitionProbability": 0.19791666666666666,
+            "inLegacyPool": true,
+            "offerProbability": 0.8402777777777778
+          },
+          "surge": {
+            "acquisitionProbability": 0.3142361111111111,
+            "inLegacyPool": true,
+            "offerProbability": 0.59375
+          }
+        },
+        "failClosedReason": "",
+        "minimumCardAcquisitionProbability": 0.1284722222222222,
+        "minimumCardOfferProbability": 0.4704861111111111,
+        "pass": true,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [],
+        "sourceRows": 1152
+      }
+    },
+    "healing-amplifier": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": 14.0,
+              "pairedBootstrapP05": 7.5,
+              "pairedBootstrapP95": 20.0,
+              "pairs": 4,
+              "pooledScale": 8.717797887081348,
+              "standardisedDelta": 1.6059101370939322
+            },
+            "activationSet": [
+              "draw",
+              "heal"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.3333333333333333,
+            "turns": {
+              "delta": 1.0,
+              "pairedBootstrapP05": 1.0,
+              "pairedBootstrapP95": 1.0,
+              "pairs": 4,
+              "pooledScale": 0.8660254037844386,
+              "standardisedDelta": 1.1547005383792517
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        },
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": 18.75,
+              "pairedBootstrapP05": 6.0,
+              "pairedBootstrapP95": 31.25,
+              "pairs": 4,
+              "pooledScale": 14.430328305343576,
+              "standardisedDelta": 1.299346737181083
+            },
+            "activationSet": [
+              "draw",
+              "heal"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.45454545454545453,
+            "turns": {
+              "delta": 1.25,
+              "pairedBootstrapP05": 1.0,
+              "pairedBootstrapP95": 1.75,
+              "pairs": 4,
+              "pooledScale": 1.1110243021644486,
+              "standardisedDelta": 1.125087900926024
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        }
+      },
+      "nodes": [
+        "regrowth",
+        "leechBlade",
+        "sunBlossom"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "leechBlade": {
+            "acquisitionProbability": 0.2864583333333333,
+            "inLegacyPool": true,
+            "offerProbability": 0.5625
+          },
+          "regrowth": {
+            "acquisitionProbability": 0.4913194444444444,
+            "inLegacyPool": true,
+            "offerProbability": 0.5911458333333334
+          }
+        },
+        "failClosedReason": "relic offer mediation was not instrumented",
+        "minimumCardAcquisitionProbability": 0.2864583333333333,
+        "minimumCardOfferProbability": 0.5625,
+        "pass": false,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [
+          "sunBlossom"
+        ],
+        "sourceRows": 1152
+      }
+    },
+    "kindle-draw": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": 1.5,
+              "pairedBootstrapP05": -4.25,
+              "pairedBootstrapP95": 7.25,
+              "pairs": 4,
+              "pooledScale": 4.387482193696061,
+              "standardisedDelta": 0.3418817293789138
+            },
+            "activationSet": [
+              "emberGain",
+              "poisonApplied",
+              "poisonDamage"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": 0.16666666666666666,
+            "turns": {
+              "delta": -0.5,
+              "pairedBootstrapP05": -1.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.6614378277661477,
+              "standardisedDelta": -0.7559289460184544
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        },
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": 6.0,
+              "pairedBootstrapP05": 5.0,
+              "pairedBootstrapP95": 7.25,
+              "pairs": 4,
+              "pooledScale": 5.673402858955108,
+              "standardisedDelta": 1.0575663581741563
+            },
+            "activationSet": [
+              "draw",
+              "emberGain"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.0,
+            "turns": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.82915619758885,
+              "standardisedDelta": 0.0
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        }
+      },
+      "nodes": [
+        "firstSpark",
+        "offering",
+        "verdantBranch"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "offering": {
+            "acquisitionProbability": 0.05381944444444445,
+            "inLegacyPool": true,
+            "offerProbability": 0.4453125
+          }
+        },
+        "failClosedReason": "relic offer mediation was not instrumented",
+        "minimumCardAcquisitionProbability": 0.05381944444444445,
+        "minimumCardOfferProbability": 0.4453125,
+        "pass": false,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [
+          "verdantBranch"
+        ],
+        "sourceRows": 1152
+      }
+    },
+    "strength-multihit": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": 23.25,
+              "pairedBootstrapP05": 14.25,
+              "pairedBootstrapP95": 33.5,
+              "pairs": 4,
+              "pooledScale": 15.917266568101446,
+              "standardisedDelta": 1.4606779311338238
+            },
+            "activationSet": [
+              "directDamage"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": 0.08333333333333333,
+            "turns": {
+              "delta": -0.25,
+              "pairedBootstrapP05": -0.75,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.7806247497997998,
+              "standardisedDelta": -0.32025630761017426
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        },
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": -1.25,
+              "pairedBootstrapP05": -4.25,
+              "pairedBootstrapP95": 2.0,
+              "pairs": 4,
+              "pooledScale": 23.33418897240699,
+              "standardisedDelta": -0.05356946416599877
+            },
+            "activationSet": [
+              "poisonApplied"
+            ],
+            "bothWithinPackageEdgesPass": false,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": 0.09090909090909091,
+            "turns": {
+              "delta": -0.25,
+              "pairedBootstrapP05": -0.5,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.6959705453537527,
+              "standardisedDelta": -0.3592106040535498
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        }
+      },
+      "nodes": [
+        "empower",
+        "twinFangs",
+        "flurry"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "empower": {
+            "acquisitionProbability": 0.4244791666666667,
+            "inLegacyPool": true,
+            "offerProbability": 0.5729166666666666
+          },
+          "flurry": {
+            "acquisitionProbability": 0.027777777777777776,
+            "inLegacyPool": true,
+            "offerProbability": 0.4904513888888889
+          },
+          "twinFangs": {
+            "acquisitionProbability": 0.03211805555555555,
+            "inLegacyPool": true,
+            "offerProbability": 0.7578125
+          }
+        },
+        "failClosedReason": "card component below threshold",
+        "minimumCardAcquisitionProbability": 0.027777777777777776,
+        "minimumCardOfferProbability": 0.4904513888888889,
+        "pass": false,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [],
+        "sourceRows": 1152
+      }
+    },
+    "ward-double": {
+      "aspects": {
+        "ashwarden": {
+          "heldOut": {
+            "activation": {
+              "delta": 2.0,
+              "pairedBootstrapP05": -6.0,
+              "pairedBootstrapP95": 10.0,
+              "pairs": 4,
+              "pooledScale": 14.00669482783144,
+              "standardisedDelta": 0.1427888609399828
+            },
+            "activationSet": [],
+            "bothWithinPackageEdgesPass": true,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -0.16666666666666666,
+            "turns": {
+              "delta": 0.5,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 1.0,
+              "pairs": 4,
+              "pooledScale": 0.9682458365518543,
+              "standardisedDelta": 0.5163977794943222
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        },
+        "duskblade": {
+          "heldOut": {
+            "activation": {
+              "delta": 67.0,
+              "pairedBootstrapP05": 22.75,
+              "pairedBootstrapP95": 110.0,
+              "pairs": 4,
+              "pooledScale": 48.979587585033826,
+              "standardisedDelta": 1.3679167854094485
+            },
+            "activationSet": [
+              "blockGain",
+              "draw",
+              "emberGain"
+            ],
+            "bothWithinPackageEdgesPass": true,
+            "packageAspectPass": false,
+            "panelPass": false,
+            "stall": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            },
+            "turnReductionFraction": -1.0909090909090908,
+            "turns": {
+              "delta": 3.0,
+              "pairedBootstrapP05": 1.75,
+              "pairedBootstrapP95": 4.25,
+              "pairs": 4,
+              "pooledScale": 2.331844763272204,
+              "standardisedDelta": 1.2865350418053536
+            },
+            "win": {
+              "delta": 0.0,
+              "pairedBootstrapP05": 0.0,
+              "pairedBootstrapP95": 0.0,
+              "pairs": 4,
+              "pooledScale": 0.0,
+              "standardisedDelta": 0.0
+            }
+          },
+          "pass": false,
+          "reachabilityPass": false
+        }
+      },
+      "nodes": [
+        "brace",
+        "bulwark",
+        "fortify"
+      ],
+      "reachability": {
+        "cardComponents": {
+          "brace": {
+            "acquisitionProbability": 0.046875,
+            "inLegacyPool": true,
+            "offerProbability": 0.8402777777777778
+          },
+          "bulwark": {
+            "acquisitionProbability": 0.2855902777777778,
+            "inLegacyPool": true,
+            "offerProbability": 0.5694444444444444
+          },
+          "fortify": {
+            "acquisitionProbability": 0.08246527777777778,
+            "inLegacyPool": true,
+            "offerProbability": 0.5182291666666666
+          }
+        },
+        "failClosedReason": "card component below threshold",
+        "minimumCardAcquisitionProbability": 0.046875,
+        "minimumCardOfferProbability": 0.5182291666666666,
+        "pass": false,
+        "profile": "mature-three-act-no-side-state-v1",
+        "relicComponentsWithoutOfferInstrumentation": [],
+        "sourceRows": 1152
+      }
+    }
+  },
+  "panels": {
+    "checks": {
+      "ash-poison-catalyst|ashwarden|discovery": {
+        "activation": {
+          "delta": 34.25,
+          "pairedBootstrapP05": 21.5,
+          "pairedBootstrapP95": 47.0,
+          "pairs": 4,
+          "pooledScale": 22.028036113099144,
+          "standardisedDelta": 1.554836746414855
+        },
+        "activationSet": [
+          "poisonApplied"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": true,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.35714285714285715,
+        "turns": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -2.25,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 1.2686114456365274,
+          "standardisedDelta": -0.9853292781642932
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ash-poison-catalyst|ashwarden|heldOut": {
+        "activation": {
+          "delta": 35.5,
+          "pairedBootstrapP05": 20.5,
+          "pairedBootstrapP95": 48.5,
+          "pairs": 4,
+          "pooledScale": 30.032274306152708,
+          "standardisedDelta": 1.1820616593371724
+        },
+        "activationSet": [
+          "poisonApplied",
+          "poisonDamage"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": true,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.4166666666666667,
+        "turns": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -1.5,
+          "pairedBootstrapP95": -1.0,
+          "pairs": 4,
+          "pooledScale": 0.8569568250501305,
+          "standardisedDelta": -1.4586499149789456
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ash-venomous-attacks|ashwarden|discovery": {
+        "activation": {
+          "delta": -11.0,
+          "pairedBootstrapP05": -18.5,
+          "pairedBootstrapP95": -4.0,
+          "pairs": 4,
+          "pooledScale": 7.741931283601011,
+          "standardisedDelta": -1.4208341041853785
+        },
+        "activationSet": [
+          "directDamage"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.0,
+        "turns": {
+          "delta": 0.0,
+          "pairedBootstrapP05": -0.5,
+          "pairedBootstrapP95": 0.5,
+          "pairs": 4,
+          "pooledScale": 1.3228756555322954,
+          "standardisedDelta": 0.0
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ash-venomous-attacks|ashwarden|heldOut": {
+        "activation": {
+          "delta": -2.5,
+          "pairedBootstrapP05": -8.25,
+          "pairedBootstrapP95": 3.5,
+          "pairs": 4,
+          "pooledScale": 18.25342433627181,
+          "standardisedDelta": -0.13696060278575736
+        },
+        "activationSet": [
+          "directDamage"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.08333333333333333,
+        "turns": {
+          "delta": 0.25,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.5,
+          "pairs": 4,
+          "pooledScale": 0.7806247497997998,
+          "standardisedDelta": 0.32025630761017426
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "dusk-crack-payoff|duskblade|discovery": {
+        "activation": {
+          "delta": 1.25,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 2.5,
+          "pairs": 4,
+          "pooledScale": 19.544420559330995,
+          "standardisedDelta": 0.06395687179394115
+        },
+        "activationSet": [],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.2,
+        "turns": {
+          "delta": -0.75,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": -0.5,
+          "pairs": 4,
+          "pooledScale": 1.2183492931011204,
+          "standardisedDelta": -0.6155870112510925
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "dusk-crack-payoff|duskblade|heldOut": {
+        "activation": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -3.0,
+          "pairedBootstrapP95": 0.5,
+          "pairs": 4,
+          "pooledScale": 24.07248169591162,
+          "standardisedDelta": -0.05192651159902202
+        },
+        "activationSet": [],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.0,
+        "turns": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.82915619758885,
+          "standardisedDelta": 0.0
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "dusk-shatter-relics|duskblade|discovery": {
+        "activation": {
+          "delta": 0.25,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 4,
+          "pooledScale": 0.5994789404140899,
+          "standardisedDelta": 0.41702882811414954
+        },
+        "activationSet": [
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.06666666666666667,
+        "turns": {
+          "delta": 0.25,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.75,
+          "pairs": 4,
+          "pooledScale": 1.165922381636102,
+          "standardisedDelta": 0.21442250696755896
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "dusk-shatter-relics|duskblade|heldOut": {
+        "activation": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.5,
+          "standardisedDelta": 0.0
+        },
+        "activationSet": [
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.18181818181818182,
+        "turns": {
+          "delta": -0.5,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.7071067811865476,
+          "standardisedDelta": -0.7071067811865475
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ember-spend|ashwarden|discovery": {
+        "activation": {
+          "delta": 6.75,
+          "pairedBootstrapP05": 4.75,
+          "pairedBootstrapP95": 9.0,
+          "pairs": 4,
+          "pooledScale": 4.284784125250653,
+          "standardisedDelta": 1.5753419081772613
+        },
+        "activationSet": [
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.0,
+        "turns": {
+          "delta": 0.0,
+          "pairedBootstrapP05": -0.5,
+          "pairedBootstrapP95": 0.5,
+          "pairs": 4,
+          "pooledScale": 1.3228756555322954,
+          "standardisedDelta": 0.0
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ember-spend|ashwarden|heldOut": {
+        "activation": {
+          "delta": 7.5,
+          "pairedBootstrapP05": 6.5,
+          "pairedBootstrapP95": 8.5,
+          "pairs": 4,
+          "pooledScale": 4.205650960315181,
+          "standardisedDelta": 1.783314894833292
+        },
+        "activationSet": [
+          "draw",
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.16666666666666666,
+        "turns": {
+          "delta": 0.5,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 1.0,
+          "pairs": 4,
+          "pooledScale": 0.6614378277661477,
+          "standardisedDelta": 0.7559289460184544
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ember-spend|duskblade|discovery": {
+        "activation": {
+          "delta": 19.25,
+          "pairedBootstrapP05": 11.5,
+          "pairedBootstrapP95": 26.5,
+          "pairs": 4,
+          "pooledScale": 12.746935906326666,
+          "standardisedDelta": 1.5101668464847053
+        },
+        "activationSet": [
+          "blockGain",
+          "draw",
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.7333333333333333,
+        "turns": {
+          "delta": 2.75,
+          "pairedBootstrapP05": 1.5,
+          "pairedBootstrapP95": 4.0,
+          "pairs": 4,
+          "pooledScale": 2.521780125229002,
+          "standardisedDelta": 1.0904995136125413
+        },
+        "win": {
+          "delta": -0.5,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.4330127018922193,
+          "standardisedDelta": -1.1547005383792517
+        }
+      },
+      "ember-spend|duskblade|heldOut": {
+        "activation": {
+          "delta": 15.0,
+          "pairedBootstrapP05": 10.25,
+          "pairedBootstrapP95": 18.5,
+          "pairs": 4,
+          "pooledScale": 9.354143466934854,
+          "standardisedDelta": 1.6035674514745462
+        },
+        "activationSet": [
+          "blockGain",
+          "draw",
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.8181818181818182,
+        "turns": {
+          "delta": 2.25,
+          "pairedBootstrapP05": 1.5,
+          "pairedBootstrapP95": 3.0,
+          "pairs": 4,
+          "pooledScale": 1.6909686573085854,
+          "standardisedDelta": 1.3305982877182312
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "hand-size-payoff|ashwarden|discovery": {
+        "activation": {
+          "delta": 19.5,
+          "pairedBootstrapP05": 15.0,
+          "pairedBootstrapP95": 24.0,
+          "pairs": 4,
+          "pooledScale": 11.691342951089922,
+          "standardisedDelta": 1.6679007776589188
+        },
+        "activationSet": [
+          "directDamage",
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": true,
+        "packageAspectPass": true,
+        "panelPass": true,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.35714285714285715,
+        "turns": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -2.0,
+          "pairedBootstrapP95": -0.5,
+          "pairs": 4,
+          "pooledScale": 1.3635890143294642,
+          "standardisedDelta": -0.9166984970282114
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "hand-size-payoff|ashwarden|heldOut": {
+        "activation": {
+          "delta": 14.5,
+          "pairedBootstrapP05": 10.0,
+          "pairedBootstrapP95": 19.25,
+          "pairs": 4,
+          "pooledScale": 8.46684711093805,
+          "standardisedDelta": 1.7125619265367285
+        },
+        "activationSet": [
+          "directDamage",
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": true,
+        "packageAspectPass": true,
+        "panelPass": true,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.3333333333333333,
+        "turns": {
+          "delta": -1.0,
+          "pairedBootstrapP05": -1.5,
+          "pairedBootstrapP95": -0.5,
+          "pairs": 4,
+          "pooledScale": 0.7071067811865476,
+          "standardisedDelta": -1.414213562373095
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "hand-size-payoff|duskblade|discovery": {
+        "activation": {
+          "delta": 1.75,
+          "pairedBootstrapP05": -1.75,
+          "pairedBootstrapP95": 5.0,
+          "pairs": 4,
+          "pooledScale": 18.54007483803666,
+          "standardisedDelta": 0.0943901259993684
+        },
+        "activationSet": [],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.4666666666666667,
+        "turns": {
+          "delta": -1.75,
+          "pairedBootstrapP05": -2.5,
+          "pairedBootstrapP95": -0.75,
+          "pairs": 4,
+          "pooledScale": 1.3635890143294642,
+          "standardisedDelta": -1.283377895839496
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "hand-size-payoff|duskblade|heldOut": {
+        "activation": {
+          "delta": -4.0,
+          "pairedBootstrapP05": -7.25,
+          "pairedBootstrapP95": -0.5,
+          "pairs": 4,
+          "pooledScale": 23.263436977368585,
+          "standardisedDelta": -0.17194363859009001
+        },
+        "activationSet": [],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.45454545454545453,
+        "turns": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -1.5,
+          "pairedBootstrapP95": -1.0,
+          "pairs": 4,
+          "pooledScale": 0.9270248108869579,
+          "standardisedDelta": -1.348399724926484
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "healing-amplifier|ashwarden|discovery": {
+        "activation": {
+          "delta": 15.25,
+          "pairedBootstrapP05": 9.25,
+          "pairedBootstrapP95": 21.0,
+          "pairs": 4,
+          "pooledScale": 9.082090893621357,
+          "standardisedDelta": 1.6791287577523104
+        },
+        "activationSet": [
+          "draw",
+          "heal"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.2857142857142857,
+        "turns": {
+          "delta": 1.0,
+          "pairedBootstrapP05": 1.0,
+          "pairedBootstrapP95": 1.0,
+          "pairs": 4,
+          "pooledScale": 1.5811388300841898,
+          "standardisedDelta": 0.6324555320336759
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "healing-amplifier|ashwarden|heldOut": {
+        "activation": {
+          "delta": 14.0,
+          "pairedBootstrapP05": 7.5,
+          "pairedBootstrapP95": 20.0,
+          "pairs": 4,
+          "pooledScale": 8.717797887081348,
+          "standardisedDelta": 1.6059101370939322
+        },
+        "activationSet": [
+          "draw",
+          "heal"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.3333333333333333,
+        "turns": {
+          "delta": 1.0,
+          "pairedBootstrapP05": 1.0,
+          "pairedBootstrapP95": 1.0,
+          "pairs": 4,
+          "pooledScale": 0.8660254037844386,
+          "standardisedDelta": 1.1547005383792517
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "healing-amplifier|duskblade|discovery": {
+        "activation": {
+          "delta": 22.75,
+          "pairedBootstrapP05": 11.25,
+          "pairedBootstrapP95": 36.0,
+          "pairs": 4,
+          "pooledScale": 14.840295650693756,
+          "standardisedDelta": 1.5329883268825901
+        },
+        "activationSet": [
+          "draw",
+          "heal"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.26666666666666666,
+        "turns": {
+          "delta": 1.0,
+          "pairedBootstrapP05": 1.0,
+          "pairedBootstrapP95": 1.0,
+          "pairs": 4,
+          "pooledScale": 1.3919410907075054,
+          "standardisedDelta": 0.7184212081070996
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "healing-amplifier|duskblade|heldOut": {
+        "activation": {
+          "delta": 18.75,
+          "pairedBootstrapP05": 6.0,
+          "pairedBootstrapP95": 31.25,
+          "pairs": 4,
+          "pooledScale": 14.430328305343576,
+          "standardisedDelta": 1.299346737181083
+        },
+        "activationSet": [
+          "draw",
+          "heal"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.45454545454545453,
+        "turns": {
+          "delta": 1.25,
+          "pairedBootstrapP05": 1.0,
+          "pairedBootstrapP95": 1.75,
+          "pairs": 4,
+          "pooledScale": 1.1110243021644486,
+          "standardisedDelta": 1.125087900926024
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "kindle-draw|ashwarden|discovery": {
+        "activation": {
+          "delta": -2.0,
+          "pairedBootstrapP05": -9.25,
+          "pairedBootstrapP95": 5.25,
+          "pairs": 4,
+          "pooledScale": 5.408326913195984,
+          "standardisedDelta": -0.3698001308168194
+        },
+        "activationSet": [
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.07142857142857142,
+        "turns": {
+          "delta": -0.25,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 1.4086784586980805,
+          "standardisedDelta": -0.17747130188322277
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "kindle-draw|ashwarden|heldOut": {
+        "activation": {
+          "delta": 1.5,
+          "pairedBootstrapP05": -4.25,
+          "pairedBootstrapP95": 7.25,
+          "pairs": 4,
+          "pooledScale": 4.387482193696061,
+          "standardisedDelta": 0.3418817293789138
+        },
+        "activationSet": [
+          "emberGain",
+          "poisonApplied",
+          "poisonDamage"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.16666666666666666,
+        "turns": {
+          "delta": -0.5,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.6614378277661477,
+          "standardisedDelta": -0.7559289460184544
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "kindle-draw|duskblade|discovery": {
+        "activation": {
+          "delta": -0.25,
+          "pairedBootstrapP05": -7.5,
+          "pairedBootstrapP95": 6.5,
+          "pairs": 4,
+          "pooledScale": 6.7256505261573025,
+          "standardisedDelta": -0.03717112553316644
+        },
+        "activationSet": [],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.2,
+        "turns": {
+          "delta": 0.75,
+          "pairedBootstrapP05": -0.5,
+          "pairedBootstrapP95": 2.0,
+          "pairs": 4,
+          "pooledScale": 1.899835519196333,
+          "standardisedDelta": 0.39477101697586137
+        },
+        "win": {
+          "delta": -0.25,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.33071891388307384,
+          "standardisedDelta": -0.7559289460184544
+        }
+      },
+      "kindle-draw|duskblade|heldOut": {
+        "activation": {
+          "delta": 6.0,
+          "pairedBootstrapP05": 5.0,
+          "pairedBootstrapP95": 7.25,
+          "pairs": 4,
+          "pooledScale": 5.673402858955108,
+          "standardisedDelta": 1.0575663581741563
+        },
+        "activationSet": [
+          "draw",
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.0,
+        "turns": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.82915619758885,
+          "standardisedDelta": 0.0
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "strength-multihit|ashwarden|discovery": {
+        "activation": {
+          "delta": 18.25,
+          "pairedBootstrapP05": 10.0,
+          "pairedBootstrapP95": 25.0,
+          "pairs": 4,
+          "pooledScale": 13.303547459230565,
+          "standardisedDelta": 1.3718145521657366
+        },
+        "activationSet": [
+          "directDamage"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": true,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.14285714285714285,
+        "turns": {
+          "delta": -0.5,
+          "pairedBootstrapP05": -1.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 1.299038105676658,
+          "standardisedDelta": -0.3849001794597505
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "strength-multihit|ashwarden|heldOut": {
+        "activation": {
+          "delta": 23.25,
+          "pairedBootstrapP05": 14.25,
+          "pairedBootstrapP95": 33.5,
+          "pairs": 4,
+          "pooledScale": 15.917266568101446,
+          "standardisedDelta": 1.4606779311338238
+        },
+        "activationSet": [
+          "directDamage"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.08333333333333333,
+        "turns": {
+          "delta": -0.25,
+          "pairedBootstrapP05": -0.75,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.7806247497997998,
+          "standardisedDelta": -0.32025630761017426
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "strength-multihit|duskblade|discovery": {
+        "activation": {
+          "delta": 3.25,
+          "pairedBootstrapP05": 0.5,
+          "pairedBootstrapP95": 6.0,
+          "pairs": 4,
+          "pooledScale": 19.37741920380524,
+          "standardisedDelta": 0.16772099348306307
+        },
+        "activationSet": [],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.3333333333333333,
+        "turns": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -2.0,
+          "pairedBootstrapP95": -0.5,
+          "pairs": 4,
+          "pooledScale": 1.165922381636102,
+          "standardisedDelta": -1.0721125348377947
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "strength-multihit|duskblade|heldOut": {
+        "activation": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -4.25,
+          "pairedBootstrapP95": 2.0,
+          "pairs": 4,
+          "pooledScale": 23.33418897240699,
+          "standardisedDelta": -0.05356946416599877
+        },
+        "activationSet": [
+          "poisonApplied"
+        ],
+        "bothWithinPackageEdgesPass": false,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": 0.09090909090909091,
+        "turns": {
+          "delta": -0.25,
+          "pairedBootstrapP05": -0.5,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.6959705453537527,
+          "standardisedDelta": -0.3592106040535498
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ward-double|ashwarden|discovery": {
+        "activation": {
+          "delta": -1.25,
+          "pairedBootstrapP05": -5.5,
+          "pairedBootstrapP95": 3.0,
+          "pairs": 4,
+          "pooledScale": 5.764926278800103,
+          "standardisedDelta": -0.2168284449008031
+        },
+        "activationSet": [
+          "directDamage",
+          "draw"
+        ],
+        "bothWithinPackageEdgesPass": true,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.21428571428571427,
+        "turns": {
+          "delta": 0.75,
+          "pairedBootstrapP05": 0.25,
+          "pairedBootstrapP95": 1.0,
+          "pairs": 4,
+          "pooledScale": 1.4523687548277813,
+          "standardisedDelta": 0.5163977794943223
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ward-double|ashwarden|heldOut": {
+        "activation": {
+          "delta": 2.0,
+          "pairedBootstrapP05": -6.0,
+          "pairedBootstrapP95": 10.0,
+          "pairs": 4,
+          "pooledScale": 14.00669482783144,
+          "standardisedDelta": 0.1427888609399828
+        },
+        "activationSet": [],
+        "bothWithinPackageEdgesPass": true,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -0.16666666666666666,
+        "turns": {
+          "delta": 0.5,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 1.0,
+          "pairs": 4,
+          "pooledScale": 0.9682458365518543,
+          "standardisedDelta": 0.5163977794943222
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ward-double|duskblade|discovery": {
+        "activation": {
+          "delta": 54.5,
+          "pairedBootstrapP05": 37.0,
+          "pairedBootstrapP95": 70.0,
+          "pairs": 4,
+          "pooledScale": 30.494876618868293,
+          "standardisedDelta": 1.7871854567950232
+        },
+        "activationSet": [
+          "blockGain",
+          "draw"
+        ],
+        "bothWithinPackageEdgesPass": true,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -1.2,
+        "turns": {
+          "delta": 4.5,
+          "pairedBootstrapP05": 1.75,
+          "pairedBootstrapP95": 7.25,
+          "pairs": 4,
+          "pooledScale": 3.968626966596886,
+          "standardisedDelta": 1.1338934190276817
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      },
+      "ward-double|duskblade|heldOut": {
+        "activation": {
+          "delta": 67.0,
+          "pairedBootstrapP05": 22.75,
+          "pairedBootstrapP95": 110.0,
+          "pairs": 4,
+          "pooledScale": 48.979587585033826,
+          "standardisedDelta": 1.3679167854094485
+        },
+        "activationSet": [
+          "blockGain",
+          "draw",
+          "emberGain"
+        ],
+        "bothWithinPackageEdgesPass": true,
+        "packageAspectPass": false,
+        "panelPass": false,
+        "stall": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        },
+        "turnReductionFraction": -1.0909090909090908,
+        "turns": {
+          "delta": 3.0,
+          "pairedBootstrapP05": 1.75,
+          "pairedBootstrapP95": 4.25,
+          "pairs": 4,
+          "pooledScale": 2.331844763272204,
+          "standardisedDelta": 1.2865350418053536
+        },
+        "win": {
+          "delta": 0.0,
+          "pairedBootstrapP05": 0.0,
+          "pairedBootstrapP95": 0.0,
+          "pairs": 4,
+          "pooledScale": 0.0,
+          "standardisedDelta": 0.0
+        }
+      }
+    },
+    "rows": 256
+  },
+  "quarantinedIssue521ReadoutsUsedForInference": [],
+  "schemaVersion": 1,
+  "separation": {
+    "activationJaccard": "not reached",
+    "crossPackageComplementarity": "not reached",
+    "reason": "fewer than three packages passed edge, panel and reachability gates"
+  },
+  "stage": "B"
+}

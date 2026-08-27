@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "issue": 524,
+  "registeredAtUtc": "2026-08-27T11:21:01Z",
+  "architecture": {
+    "owner": "one continuous GPT Sol Max session",
+    "host": "Apple M1 Max 64 GB arm64",
+    "researchRoot": "/Users/jamesto/Research/glassvow-causal-slate-524",
+    "sourceMode": "detached worktree",
+    "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+    "godot": "4.7.2.stable.official.ed1daf0bf",
+    "forbidden": [
+      "subagents",
+      "M4 or cloud compute",
+      "human labels or calibration",
+      "child issues",
+      "experiment or product branches",
+      "pull requests",
+      "GitHub Actions or product-wide CI",
+      "acceptance seeds 3000-5199",
+      "reserve seeds 5200-5399",
+      "LLM calls inside deterministic inner loops"
+    ]
+  },
+  "authorities": {
+    "issue514HistoricalRowsSha256": "64229a2f9e48055d9134ddf03fe625c21d2e24a8ef4729e42afe773016da9071",
+    "issue517ManifestSha256": "577d60eb25de16fbe7ad36bf01f2d212a92b0dc59a09ecbe197b013241bca283",
+    "issue519ManifestSha256": "3b28ec327e3bb19227103f9310145340b795cd3be76d321e5bd45ce1ea9294b2",
+    "issue520ManifestSha256": "35aa5d25de834a972caaa43a868d7799c0997fe4cfe1ed2f08340ed707656f71",
+    "issue521ManifestSha256": "eb188e0305eb0ec2cc09a0806bb5dc4262648c04969a39abab86a8b5917fa709",
+    "issue519RegisteredRows": 1474,
+    "issue519RegisteredIdentitySetSha256": "cc2efa7d60d26c4429d596b7dc81396df48bc29742870ffa955a2888de8bdb19",
+    "issue519PermanentlyExcludedRows": 504,
+    "issue519ExcludedIdentitySetSha256": "8c323817ef7d416c45732f8a097014aed1290cc4239f14f9d77bf8b6142d9f44",
+    "issue521QuarantinedReadoutSha256": "810cb345b3e9431350ceacae856fb398f1b83b27359a2d5c2f75c1389fad6267",
+    "exclusionRule": "The 504 issue-519 identities and the three readout classes named by the issue-521 quarantine are forbidden from selection, fitting, threshold choice and confirmatory inference."
+  },
+  "cohorts": {
+    "issue521Audit": {
+      "policies": "exact issue-520 v3 sixteen-policy cohort plus RandomBuild and RandomPlay controls",
+      "policyCohortSha256": "834de5668313914fec7dc8b3050a271d350fa30eb9a67bfe5f8f0ecbe72f01f5",
+      "seeds": [20300, 20301, 20302, 20303, 20304, 20305, 20306, 20307, 20308, 20309, 20310, 20311, 20312, 20313, 20314, 20315],
+      "grids": ["duskblade:v0", "duskblade:v5", "ashwarden:v0", "ashwarden:v5"],
+      "candidateCount": 5,
+      "registeredRows": 5760,
+      "split": "Sort the sixteen semantic policy hashes; even positions are discovery and odd positions are held-out. Even seeds are discovery and odd seeds are held-out. Controls are reported separately and never fitted."
+    },
+    "mechanismDiscoverySeeds": [22000, 22001, 22002, 22003, 22004, 22005, 22006, 22007],
+    "mechanismValidationSeeds": [22100, 22101, 22102, 22103, 22104, 22105, 22106, 22107],
+    "mutationDiscoverySeeds": [22200, 22201, 22202, 22203, 22204, 22205, 22206, 22207, 22208, 22209, 22210, 22211, 22212, 22213, 22214, 22215],
+    "mutationValidationSeeds": [22300, 22301, 22302, 22303, 22304, 22305, 22306, 22307, 22308, 22309, 22310, 22311, 22312, 22313, 22314, 22315],
+    "slateDiscoverySeeds": [22400, 22401, 22402, 22403, 22404, 22405, 22406, 22407],
+    "slateValidationSeeds": [22500, 22501, 22502, 22503, 22504, 22505, 22506, 22507, 22508, 22509, 22510, 22511, 22512, 22513, 22514, 22515],
+    "freshLocalSearchSeeds": [22600, 22601, 22602, 22603, 22604, 22605, 22606, 22607],
+    "finalResearchSeeds": [22700, 22701, 22702, 22703, 22704, 22705, 22706, 22707, 22708, 22709, 22710, 22711, 22712, 22713, 22714, 22715]
+  },
+  "stageA": {
+    "purpose": "Audit the exact issue-521 candidates without treating their labels as causal truth.",
+    "path": ["exposure", "offer", "pick", "accept-or-decline", "acquisition", "play", "mechanism-activation", "turns-or-stalls", "win-or-breadth"],
+    "instrumentationRule": "Observational counters may append to simulator output but may not change choices, card order, RNG calls, RunState cursor or outcomeDigest.",
+    "exactReplayRule": "Every new instrumented row must reproduce the issue-521 matched candidate outcomeDigest for the same candidate, policy, grid and seed, except the quarantined full-catalogue baseline comparison is not used.",
+    "interventionRelevance": {
+      "offerProbabilityDelta": 0.10,
+      "acquisitionProbabilityDelta": 0.05,
+      "mechanismActivationStandardisedDelta": 0.25,
+      "bootstrap": "paired policy-seed-grid bootstrap p05 must exceed zero in discovery and held-out splits"
+    },
+    "armSpecificity": {
+      "selectiveRandomBuild": "Target acquisition must rise by at least 0.20 in RandomBuild, by at most 0.05 in planned policies, RandomBuild win delta must be at most -0.15, and planned global-mean win delta must be at least -0.10.",
+      "routeClaim": "The claimed package must increase held-out acquisition and activation in planned policies by at least 0.05 and 0.25 standard deviations more than in RandomBuild."
+    },
+    "exclusion": {
+      "additionalStallsOrErrors": 0,
+      "globalMeanNuisanceTolerance": 0.05,
+      "unrelatedMechanismAbsoluteStandardisedDelta": 0.25
+    },
+    "decision": "Cards or old package labels failing any relevance, exclusion, arm-specificity or held-out check are not detector ground truth and are retained only as audited historical interventions."
+  },
+  "stageB": {
+    "authoredView": "All 61 cards, upgrades and 31 relics; aspect, rarity, cost, target, reveal reachability and authored effect producers/consumers. Outcomes are excluded from this view.",
+    "evidenceOrder": ["controlled legal probes", "micro-deck add-remove and pair-triple interventions", "paired short panels", "necessary full runs"],
+    "candidateEdgeRule": "Test authored producer-consumer, shared-resource, trigger, saturation and antagonism hypotheses; do not enumerate unsupported all-pairs.",
+    "budgets": {
+      "controlledProbeStates": 2048,
+      "microDeckMainEffects": 184,
+      "microDeckPairEffects": 192,
+      "microDeckTripleEffects": 48,
+      "pairedShortPanelRows": 4096,
+      "decisionChangingFullRunRows": 2304
+    },
+    "interactionAdmission": {
+      "positiveComplementarityStandardised": 0.25,
+      "negativeAntagonismStandardised": -0.25,
+      "bootstrap": "paired p05 above zero for complementarity or p95 below zero for antagonism on both discovery and held-out contexts",
+      "baseline": "hierarchical ridge interaction model plus exact pairwise Shapley-Taylor difference-in-differences; ExtraTrees fANOVA must agree in sign for promoted edges"
+    },
+    "packageAdmission": {
+      "withinPackagePositiveEdges": 2,
+      "heldOutActivationStandardisedGain": 0.25,
+      "heldOutTurnReductionFraction": 0.10,
+      "additionalStallsOrErrors": 0,
+      "betweenPackageActivationJaccardMaximum": 0.50,
+      "crossPackageComplementarityMaximum": 0.10,
+      "realEconomyOfferAndAcquisitionProbabilityMinimum": 0.05,
+      "minimumPackagesOverall": 3,
+      "minimumReachablePackagesPerAspect": 2
+    },
+    "utilityHubRule": "A card or relic with positive main effects in both aspects and positive links to at least half of admitted packages is a generic utility hub and cannot define a route.",
+    "stop": "If fewer than three separated packages, or fewer than two reachable packages in either aspect, pass held-out activation, reachability and stall-free viability, return the exact missing mechanism/package finding before Stage C."
+  },
+  "stageC": {
+    "directions": ["one-route-spike", "several-separated-viable-routes", "flat-overpowered-no-skill", "selective-RandomBuild-regression", "aspect-reversal", "route-specific-improvement", "global-difficulty-only"],
+    "method": "Constrained Gaussian-process or monotone Bayesian root-finding with common random numbers; transparent grid/bisection is the baseline.",
+    "budgets": {"partialEvaluations": 1024, "shortPanelRows": 8192, "fullRunRows": 4096},
+    "matching": {
+      "singleVersusSeveralGlobalMeanAbsoluteDelta": 0.03,
+      "singleVersusSeveralRandomBuildAbsoluteDelta": 0.03,
+      "meanTurnsAbsoluteDelta": 1.0,
+      "mediatedActivationMagnitudeRelativeDelta": 0.10,
+      "additionalStallsOrErrors": 0,
+      "selectiveRandomBuildWinDeltaMaximum": -0.15,
+      "selectivePlannedGlobalMeanDeltaMinimum": -0.10,
+      "severalMinusSingleMeanViablePoliciesMinimum": 1.0
+    },
+    "reproducibility": "All seven directions and nuisance matches must retain sign and tolerance under independent policies and mutationValidationSeeds.",
+    "stop": "If breadth cannot be isolated from global power, reliability or arm effects, stop without fitting detector thresholds."
+  },
+  "stageD": {
+    "detector": "exact functional-policy kernel with quality-weighted Vendi or effective-rank breadth, dominance concentration, distinct-policy regret and local-search retention",
+    "admission": {
+      "heldOutDirectionalAccuracy": 0.85,
+      "heldOutRankSpearman": 0.70,
+      "minimumBalancedAccuracyGainOverOldNineCell": 0.10,
+      "minimumRankGainOverOldNineCell": 0.15,
+      "allSevenNamedDirectionsCorrect": true,
+      "heldOutMechanismActivationPredictionR2": 0.50,
+      "localOptimisationCollapseRetentionAccuracy": 0.85,
+      "probeBootstrapSignAgreement": 0.90
+    },
+    "hardGuardrails": ["C2", "aspect identity", "Vow-5", "determinism", "zero added stalls or errors", "content validity"],
+    "stop": "Failure blocks every Stage E or F row and no successor is created."
+  },
+  "stageE": {
+    "families": ["legacy exact no-op", "issue-521 static weights", "interpretable contextual monotone rule", "contextual submodular or DPP slate"],
+    "context": ["aspect", "act", "deck and relic mechanism fingerprint", "acquisition decline removal and upgrade history", "route saturation and missing prerequisites", "reveal and rarity pool", "recent exposure"],
+    "forbiddenContext": ["hidden player identity", "human labels", "future RNG", "acceptance outcomes"],
+    "matchedCostRowsPerFamily": 2048,
+    "admission": "A contextual family must improve held-out detector utility by at least 0.02 relative and long-horizon win-or-breadth value by at least 0.02 absolute with paired bootstrap p05 above zero, while every hard guardrail passes.",
+    "escalation": "Functional causal BO, contextual bandits or SlateQ require a held-out residual value gap of at least 0.02 after the simpler families."
+  },
+  "stageF": {
+    "effectivePolicyDimensionAuthority": "issue-520 effective joint dimension 28, active-subspace rank 8 and coverage-complete 44-control policy instrument",
+    "shippingLeverAuthority": "issue-520 inventory of 726 numeric shipping levers and 205 diagnostic structural levers",
+    "maximumRegisteredWholeRunRows": 12000,
+    "methods": ["Sobol random baseline", "transparent ExtraTrees", "TPE or SMAC", "diagonal CEM", "CMA-ME or BOP-Elites", "sparse constrained functional causal BO"],
+    "roundAdmission": "Continue only for at least 0.02 relative archive-area progress, at least 0.01 nat information gain per registered row, a 0.20-0.80 feasibility decision, or a uniquely viable policy.",
+    "stop": "Three no-progress rounds, lower value of information than measured cost, or likely hard-guard regression."
+  },
+  "promotion": {
+    "maximumOutputs": 1,
+    "allowed": ["fully simulated product candidate", "validated detector contract", "precise scope-insufficiency finding"],
+    "negativeBoundaryRequired": true,
+    "automaticSuccessor": false,
+    "productMutationDuringResearch": false
+  }
+}

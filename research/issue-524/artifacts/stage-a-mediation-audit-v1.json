@@ -1,0 +1,2178 @@
+{
+  "audit": {
+    "global-difficulty": {
+      "historicalComparatorAdmitted": true,
+      "splits": {
+        "discovery": {
+          "plannedError": {
+            "baselineMean": 0.0,
+            "candidateMean": 0.0,
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 256,
+            "standardisedDelta": 0.0
+          },
+          "plannedStall": {
+            "baselineMean": 0.0,
+            "candidateMean": 0.0,
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 256,
+            "standardisedDelta": 0.0
+          },
+          "plannedWin": {
+            "baselineMean": 0.18359375,
+            "candidateMean": 0.0078125,
+            "delta": -0.17578125,
+            "pairedBootstrapP05": -0.21484375,
+            "pairedBootstrapP95": -0.13671875,
+            "pairs": 256,
+            "standardisedDelta": -0.5975221015802226
+          },
+          "randomBuildWin": {
+            "baselineMean": 0.15625,
+            "candidateMean": 0.0,
+            "delta": -0.15625,
+            "pairedBootstrapP05": -0.28125,
+            "pairedBootstrapP95": -0.0625,
+            "pairs": 32,
+            "standardisedDelta": -0.582222509739582
+          }
+        },
+        "heldOut": {
+          "plannedError": {
+            "baselineMean": 0.0,
+            "candidateMean": 0.0,
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 256,
+            "standardisedDelta": 0.0
+          },
+          "plannedStall": {
+            "baselineMean": 0.0,
+            "candidateMean": 0.0,
+            "delta": 0.0,
+            "pairedBootstrapP05": 0.0,
+            "pairedBootstrapP95": 0.0,
+            "pairs": 256,
+            "standardisedDelta": 0.0
+          },
+          "plannedWin": {
+            "baselineMean": 0.2109375,
+            "candidateMean": 0.0078125,
+            "delta": -0.203125,
+            "pairedBootstrapP05": -0.24609375,
+            "pairedBootstrapP95": -0.1640625,
+            "pairs": 256,
+            "standardisedDelta": -0.6508140266182866
+          },
+          "randomBuildWin": {
+            "baselineMean": 0.15625,
+            "candidateMean": 0.0,
+            "delta": -0.15625,
+            "pairedBootstrapP05": -0.25,
+            "pairedBootstrapP95": -0.0625,
+            "pairs": 32,
+            "standardisedDelta": -0.582222509739582
+          }
+        }
+      }
+    },
+    "multi-route-exposure": {
+      "groundTruthAdmitted": false,
+      "heldOutReproducible": false,
+      "splits": {
+        "discovery": {
+          "arms": {
+            "planned": {
+              "accept": {
+                "baselineMean": 2.79296875,
+                "candidateMean": 15.1875,
+                "delta": 12.39453125,
+                "pairedBootstrapP05": 11.7421875,
+                "pairedBootstrapP95": 13.09375,
+                "pairs": 256,
+                "standardisedDelta": 1.5055906650567887
+              },
+              "acquire": {
+                "baselineMean": 2.79296875,
+                "candidateMean": 15.1875,
+                "delta": 12.39453125,
+                "pairedBootstrapP05": 11.69140625,
+                "pairedBootstrapP95": 13.09765625,
+                "pairs": 256,
+                "standardisedDelta": 1.5055906650567887
+              },
+              "activation": {
+                "baselineMean": 162.125,
+                "candidateMean": 1974.1796875,
+                "delta": 1812.0546875,
+                "pairedBootstrapP05": 1675.796875,
+                "pairedBootstrapP95": 1954.92578125,
+                "pairs": 256,
+                "standardisedDelta": 1.346910002876916
+              },
+              "decline": {
+                "baselineMean": 0.52734375,
+                "candidateMean": 0.38671875,
+                "delta": -0.140625,
+                "pairedBootstrapP05": -0.2578125,
+                "pairedBootstrapP95": -0.01953125,
+                "pairs": 256,
+                "standardisedDelta": -0.13555020084990702
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.23585512911858297,
+                "candidateMean": 0.551804369973267,
+                "delta": 0.31594924085468395,
+                "pairedBootstrapP05": 0.3059719250156403,
+                "pairedBootstrapP95": 0.32630390413457794,
+                "pairs": 256,
+                "standardisedDelta": 1.8063898271418188
+              },
+              "pick": {
+                "baselineMean": 3.3203125,
+                "candidateMean": 15.57421875,
+                "delta": 12.25390625,
+                "pairedBootstrapP05": 11.5859375,
+                "pairedBootstrapP95": 12.90234375,
+                "pairs": 256,
+                "standardisedDelta": 1.4975206129952134
+              },
+              "play": {
+                "baselineMean": 21.546875,
+                "candidateMean": 105.12109375,
+                "delta": 83.57421875,
+                "pairedBootstrapP05": 76.3046875,
+                "pairedBootstrapP95": 90.93359375,
+                "pairs": 256,
+                "standardisedDelta": 1.2605057904686563
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.015625,
+                "delta": 0.015625,
+                "pairedBootstrapP05": 0.00390625,
+                "pairedBootstrapP95": 0.03125,
+                "pairs": 256,
+                "standardisedDelta": 0.17747130188322277
+              },
+              "turns": {
+                "baselineMean": 52.30859375,
+                "candidateMean": 73.8046875,
+                "delta": 21.49609375,
+                "pairedBootstrapP05": 17.203125,
+                "pairedBootstrapP95": 25.984375,
+                "pairs": 256,
+                "standardisedDelta": 0.588943850363144
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1039.71484375,
+                "candidateMean": 986.67578125,
+                "delta": -53.0390625,
+                "pairedBootstrapP05": -162.34375,
+                "pairedBootstrapP95": 59.80078125,
+                "pairs": 256,
+                "standardisedDelta": -0.055538209787809094
+              },
+              "win": {
+                "baselineMean": 0.18359375,
+                "candidateMean": 0.68359375,
+                "delta": 0.5,
+                "pairedBootstrapP05": 0.4375,
+                "pairedBootstrapP95": 0.55859375,
+                "pairs": 256,
+                "standardisedDelta": 1.0089379995427887
+              }
+            },
+            "randomBuild": {
+              "accept": {
+                "baselineMean": 2.96875,
+                "candidateMean": 10.1875,
+                "delta": 7.21875,
+                "pairedBootstrapP05": 5.90625,
+                "pairedBootstrapP95": 8.5625,
+                "pairs": 32,
+                "standardisedDelta": 1.3704975827355246
+              },
+              "acquire": {
+                "baselineMean": 2.96875,
+                "candidateMean": 10.1875,
+                "delta": 7.21875,
+                "pairedBootstrapP05": 5.84375,
+                "pairedBootstrapP95": 8.625,
+                "pairs": 32,
+                "standardisedDelta": 1.3704975827355246
+              },
+              "activation": {
+                "baselineMean": 197.875,
+                "candidateMean": 1572.78125,
+                "delta": 1374.90625,
+                "pairedBootstrapP05": 1027.28125,
+                "pairedBootstrapP95": 1745.34375,
+                "pairs": 32,
+                "standardisedDelta": 1.2234610915429727
+              },
+              "decline": {
+                "baselineMean": 0.4375,
+                "candidateMean": 1.4375,
+                "delta": 1.0,
+                "pairedBootstrapP05": 0.6875,
+                "pairedBootstrapP95": 1.3125,
+                "pairs": 32,
+                "standardisedDelta": 0.9191759833942816
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.23388267111171843,
+                "candidateMean": 0.5679621871013927,
+                "delta": 0.3340795159896743,
+                "pairedBootstrapP05": 0.30845938580466836,
+                "pairedBootstrapP95": 0.3611854636432654,
+                "pairs": 32,
+                "standardisedDelta": 1.8676483594588298
+              },
+              "pick": {
+                "baselineMean": 3.40625,
+                "candidateMean": 11.625,
+                "delta": 8.21875,
+                "pairedBootstrapP05": 6.875,
+                "pairedBootstrapP95": 9.65625,
+                "pairs": 32,
+                "standardisedDelta": 1.4280040104901415
+              },
+              "play": {
+                "baselineMean": 20.65625,
+                "candidateMean": 80.34375,
+                "delta": 59.6875,
+                "pairedBootstrapP05": 45.84375,
+                "pairedBootstrapP95": 73.3125,
+                "pairs": 32,
+                "standardisedDelta": 1.2433293881793925
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 51.9375,
+                "candidateMean": 58.90625,
+                "delta": 6.96875,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 14.5,
+                "pairs": 32,
+                "standardisedDelta": 0.299776203839085
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1281.0,
+                "candidateMean": 834.53125,
+                "delta": -446.46875,
+                "pairedBootstrapP05": -680.5,
+                "pairedBootstrapP95": -213.1875,
+                "pairs": 32,
+                "standardisedDelta": -0.5986821628081682
+              },
+              "win": {
+                "baselineMean": 0.15625,
+                "candidateMean": 0.625,
+                "delta": 0.46875,
+                "pairedBootstrapP05": 0.3125,
+                "pairedBootstrapP95": 0.59375,
+                "pairs": 32,
+                "standardisedDelta": 0.9607689228305228
+              }
+            },
+            "randomPlay": {
+              "accept": {
+                "baselineMean": 2.15625,
+                "candidateMean": 9.0,
+                "delta": 6.84375,
+                "pairedBootstrapP05": 5.4375,
+                "pairedBootstrapP95": 8.40625,
+                "pairs": 32,
+                "standardisedDelta": 1.3837015164137871
+              },
+              "acquire": {
+                "baselineMean": 2.15625,
+                "candidateMean": 9.0,
+                "delta": 6.84375,
+                "pairedBootstrapP05": 5.375,
+                "pairedBootstrapP95": 8.375,
+                "pairs": 32,
+                "standardisedDelta": 1.3837015164137871
+              },
+              "activation": {
+                "baselineMean": 101.78125,
+                "candidateMean": 1008.59375,
+                "delta": 906.8125,
+                "pairedBootstrapP05": 695.46875,
+                "pairedBootstrapP95": 1122.09375,
+                "pairs": 32,
+                "standardisedDelta": 1.3198384673813746
+              },
+              "decline": {
+                "baselineMean": 0.375,
+                "candidateMean": 1.28125,
+                "delta": 0.90625,
+                "pairedBootstrapP05": 0.4375,
+                "pairedBootstrapP95": 1.375,
+                "pairs": 32,
+                "standardisedDelta": 0.7513482874373728
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.21974881469241447,
+                "candidateMean": 0.5422837022166616,
+                "delta": 0.322534887524247,
+                "pairedBootstrapP05": 0.28716261281221844,
+                "pairedBootstrapP95": 0.3564523081086068,
+                "pairs": 32,
+                "standardisedDelta": 1.8118757802214416
+              },
+              "pick": {
+                "baselineMean": 2.53125,
+                "candidateMean": 10.28125,
+                "delta": 7.75,
+                "pairedBootstrapP05": 6.0625,
+                "pairedBootstrapP95": 9.40625,
+                "pairs": 32,
+                "standardisedDelta": 1.4122173323192075
+              },
+              "play": {
+                "baselineMean": 10.71875,
+                "candidateMean": 61.375,
+                "delta": 50.65625,
+                "pairedBootstrapP05": 38.75,
+                "pairedBootstrapP95": 63.53125,
+                "pairs": 32,
+                "standardisedDelta": 1.2774516923281778
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 43.625,
+                "candidateMean": 64.65625,
+                "delta": 21.03125,
+                "pairedBootstrapP05": 11.375,
+                "pairedBootstrapP95": 31.0625,
+                "pairs": 32,
+                "standardisedDelta": 0.772848926146122
+              },
+              "unrelatedActivation": {
+                "baselineMean": 833.03125,
+                "candidateMean": 1011.625,
+                "delta": 178.59375,
+                "pairedBootstrapP05": -56.5625,
+                "pairedBootstrapP95": 430.09375,
+                "pairs": 32,
+                "standardisedDelta": 0.2952891967624079
+              },
+              "win": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.4375,
+                "delta": 0.4375,
+                "pairedBootstrapP05": 0.28125,
+                "pairedBootstrapP95": 0.59375,
+                "pairs": 32,
+                "standardisedDelta": 1.0583005244258363
+              }
+            }
+          },
+          "checks": {
+            "armSpecificity": false,
+            "exclusion": false,
+            "interventionRelevance": true,
+            "pass": false
+          }
+        },
+        "heldOut": {
+          "arms": {
+            "planned": {
+              "accept": {
+                "baselineMean": 2.0546875,
+                "candidateMean": 15.11328125,
+                "delta": 13.05859375,
+                "pairedBootstrapP05": 12.47265625,
+                "pairedBootstrapP95": 13.65234375,
+                "pairs": 256,
+                "standardisedDelta": 1.640191947102832
+              },
+              "acquire": {
+                "baselineMean": 2.0546875,
+                "candidateMean": 15.11328125,
+                "delta": 13.05859375,
+                "pairedBootstrapP05": 12.49609375,
+                "pairedBootstrapP95": 13.66015625,
+                "pairs": 256,
+                "standardisedDelta": 1.640191947102832
+              },
+              "activation": {
+                "baselineMean": 150.23046875,
+                "candidateMean": 1991.0,
+                "delta": 1840.76953125,
+                "pairedBootstrapP05": 1716.6171875,
+                "pairedBootstrapP95": 1967.5078125,
+                "pairs": 256,
+                "standardisedDelta": 1.4558441253723353
+              },
+              "decline": {
+                "baselineMean": 1.06640625,
+                "candidateMean": 0.9921875,
+                "delta": -0.07421875,
+                "pairedBootstrapP05": -0.328125,
+                "pairedBootstrapP95": 0.19140625,
+                "pairs": 256,
+                "standardisedDelta": -0.040138399198800884
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.23209765861208934,
+                "candidateMean": 0.5506400728147043,
+                "delta": 0.318542414202615,
+                "pairedBootstrapP05": 0.30893315473888866,
+                "pairedBootstrapP95": 0.3278082821722198,
+                "pairs": 256,
+                "standardisedDelta": 1.8516285559525953
+              },
+              "pick": {
+                "baselineMean": 3.12109375,
+                "candidateMean": 16.10546875,
+                "delta": 12.984375,
+                "pairedBootstrapP05": 12.484375,
+                "pairedBootstrapP95": 13.5234375,
+                "pairs": 256,
+                "standardisedDelta": 1.6668226356386522
+              },
+              "play": {
+                "baselineMean": 19.79296875,
+                "candidateMean": 117.6171875,
+                "delta": 97.82421875,
+                "pairedBootstrapP05": 91.3828125,
+                "pairedBootstrapP95": 104.109375,
+                "pairs": 256,
+                "standardisedDelta": 1.4715419047815435
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 56.51953125,
+                "candidateMean": 82.890625,
+                "delta": 26.37109375,
+                "pairedBootstrapP05": 21.9765625,
+                "pairedBootstrapP95": 30.96484375,
+                "pairs": 256,
+                "standardisedDelta": 0.7179752040786581
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1381.4921875,
+                "candidateMean": 1323.80078125,
+                "delta": -57.69140625,
+                "pairedBootstrapP05": -189.5546875,
+                "pairedBootstrapP95": 76.4921875,
+                "pairs": 256,
+                "standardisedDelta": -0.05123704489653384
+              },
+              "win": {
+                "baselineMean": 0.2109375,
+                "candidateMean": 0.78125,
+                "delta": 0.5703125,
+                "pairedBootstrapP05": 0.515625,
+                "pairedBootstrapP95": 0.62109375,
+                "pairs": 256,
+                "standardisedDelta": 1.1406598107060646
+              }
+            },
+            "randomBuild": {
+              "accept": {
+                "baselineMean": 3.125,
+                "candidateMean": 10.625,
+                "delta": 7.5,
+                "pairedBootstrapP05": 6.125,
+                "pairedBootstrapP95": 8.78125,
+                "pairs": 32,
+                "standardisedDelta": 1.4985957244542187
+              },
+              "acquire": {
+                "baselineMean": 3.125,
+                "candidateMean": 10.625,
+                "delta": 7.5,
+                "pairedBootstrapP05": 6.125,
+                "pairedBootstrapP95": 8.90625,
+                "pairs": 32,
+                "standardisedDelta": 1.4985957244542187
+              },
+              "activation": {
+                "baselineMean": 229.34375,
+                "candidateMean": 1706.6875,
+                "delta": 1477.34375,
+                "pairedBootstrapP05": 1137.65625,
+                "pairedBootstrapP95": 1827.4375,
+                "pairs": 32,
+                "standardisedDelta": 1.3380225154877268
+              },
+              "decline": {
+                "baselineMean": 0.59375,
+                "candidateMean": 1.3125,
+                "delta": 0.71875,
+                "pairedBootstrapP05": 0.25,
+                "pairedBootstrapP95": 1.125,
+                "pairs": 32,
+                "standardisedDelta": 0.6394442031083626
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.22484246377208683,
+                "candidateMean": 0.5391413897283054,
+                "delta": 0.3142989259562185,
+                "pairedBootstrapP05": 0.2890402716010235,
+                "pairedBootstrapP95": 0.3369713679823895,
+                "pairs": 32,
+                "standardisedDelta": 1.9015621991903164
+              },
+              "pick": {
+                "baselineMean": 3.71875,
+                "candidateMean": 11.9375,
+                "delta": 8.21875,
+                "pairedBootstrapP05": 6.75,
+                "pairedBootstrapP95": 9.625,
+                "pairs": 32,
+                "standardisedDelta": 1.5588144861560893
+              },
+              "play": {
+                "baselineMean": 20.84375,
+                "candidateMean": 81.0625,
+                "delta": 60.21875,
+                "pairedBootstrapP05": 44.4375,
+                "pairedBootstrapP95": 75.125,
+                "pairs": 32,
+                "standardisedDelta": 1.3447533528067117
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 50.1875,
+                "candidateMean": 63.625,
+                "delta": 13.4375,
+                "pairedBootstrapP05": 3.28125,
+                "pairedBootstrapP95": 23.3125,
+                "pairs": 32,
+                "standardisedDelta": 0.6000865303430589
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1269.5625,
+                "candidateMean": 933.46875,
+                "delta": -336.09375,
+                "pairedBootstrapP05": -661.46875,
+                "pairedBootstrapP95": -24.65625,
+                "pairs": 32,
+                "standardisedDelta": -0.43794567733283896
+              },
+              "win": {
+                "baselineMean": 0.15625,
+                "candidateMean": 0.5625,
+                "delta": 0.40625,
+                "pairedBootstrapP05": 0.21875,
+                "pairedBootstrapP95": 0.59375,
+                "pairs": 32,
+                "standardisedDelta": 0.8466764917335869
+              }
+            },
+            "randomPlay": {
+              "accept": {
+                "baselineMean": 2.25,
+                "candidateMean": 9.59375,
+                "delta": 7.34375,
+                "pairedBootstrapP05": 6.0625,
+                "pairedBootstrapP95": 8.78125,
+                "pairs": 32,
+                "standardisedDelta": 1.4213023642435778
+              },
+              "acquire": {
+                "baselineMean": 2.25,
+                "candidateMean": 9.59375,
+                "delta": 7.34375,
+                "pairedBootstrapP05": 6.0,
+                "pairedBootstrapP95": 8.6875,
+                "pairs": 32,
+                "standardisedDelta": 1.4213023642435778
+              },
+              "activation": {
+                "baselineMean": 144.28125,
+                "candidateMean": 1060.21875,
+                "delta": 915.9375,
+                "pairedBootstrapP05": 690.78125,
+                "pairedBootstrapP95": 1161.71875,
+                "pairs": 32,
+                "standardisedDelta": 1.2406554253608486
+              },
+              "decline": {
+                "baselineMean": 0.34375,
+                "candidateMean": 1.21875,
+                "delta": 0.875,
+                "pairedBootstrapP05": 0.59375,
+                "pairedBootstrapP95": 1.1875,
+                "pairs": 32,
+                "standardisedDelta": 0.7980479840776074
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.22198539543344592,
+                "candidateMean": 0.5607963458851024,
+                "delta": 0.3388109504516565,
+                "pairedBootstrapP05": 0.31374825065867346,
+                "pairedBootstrapP95": 0.364362821434473,
+                "pairs": 32,
+                "standardisedDelta": 1.863082432068592
+              },
+              "pick": {
+                "baselineMean": 2.59375,
+                "candidateMean": 10.8125,
+                "delta": 8.21875,
+                "pairedBootstrapP05": 6.90625,
+                "pairedBootstrapP95": 9.6875,
+                "pairs": 32,
+                "standardisedDelta": 1.440501323133452
+              },
+              "play": {
+                "baselineMean": 17.625,
+                "candidateMean": 68.3125,
+                "delta": 50.6875,
+                "pairedBootstrapP05": 36.09375,
+                "pairedBootstrapP95": 65.5,
+                "pairs": 32,
+                "standardisedDelta": 1.10413048375861
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 50.1875,
+                "candidateMean": 69.1875,
+                "delta": 19.0,
+                "pairedBootstrapP05": 7.9375,
+                "pairedBootstrapP95": 30.28125,
+                "pairs": 32,
+                "standardisedDelta": 0.6599983560051038
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1006.5,
+                "candidateMean": 1135.28125,
+                "delta": 128.78125,
+                "pairedBootstrapP05": -115.75,
+                "pairedBootstrapP95": 384.125,
+                "pairs": 32,
+                "standardisedDelta": 0.21554082053456988
+              },
+              "win": {
+                "baselineMean": 0.0625,
+                "candidateMean": 0.46875,
+                "delta": 0.40625,
+                "pairedBootstrapP05": 0.25,
+                "pairedBootstrapP95": 0.5625,
+                "pairs": 32,
+                "standardisedDelta": 0.9198138789803925
+              }
+            }
+          },
+          "checks": {
+            "armSpecificity": false,
+            "exclusion": false,
+            "interventionRelevance": true,
+            "pass": false
+          }
+        }
+      },
+      "targets": [
+        "heavyBlow",
+        "resonantLance",
+        "venomStrike",
+        "toxicMist",
+        "catalyst",
+        "quickSlash",
+        "deflect",
+        "regrowth"
+      ]
+    },
+    "random-regression-exposure": {
+      "groundTruthAdmitted": false,
+      "heldOutReproducible": false,
+      "splits": {
+        "discovery": {
+          "arms": {
+            "planned": {
+              "accept": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "acquire": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "activation": {
+                "baselineMean": 7.91796875,
+                "candidateMean": 8.140625,
+                "delta": 0.22265625,
+                "pairedBootstrapP05": -0.57421875,
+                "pairedBootstrapP95": 1.0625,
+                "pairs": 256,
+                "standardisedDelta": 0.026270752144122576
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.30480466994895605,
+                "delta": 0.30480466994895605,
+                "pairedBootstrapP05": 0.3010852781344942,
+                "pairedBootstrapP95": 0.30854953030937143,
+                "pairs": 256,
+                "standardisedDelta": 1.9715637799260832
+              },
+              "pick": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "play": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 52.30859375,
+                "candidateMean": 46.68359375,
+                "delta": -5.625,
+                "pairedBootstrapP05": -9.06640625,
+                "pairedBootstrapP95": -2.1484375,
+                "pairs": 256,
+                "standardisedDelta": -0.18778752684765687
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1201.83984375,
+                "candidateMean": 1060.359375,
+                "delta": -141.48046875,
+                "pairedBootstrapP05": -279.1171875,
+                "pairedBootstrapP95": -13.0625,
+                "pairs": 256,
+                "standardisedDelta": -0.13192349063740008
+              },
+              "win": {
+                "baselineMean": 0.18359375,
+                "candidateMean": 0.12109375,
+                "delta": -0.0625,
+                "pairedBootstrapP05": -0.109375,
+                "pairedBootstrapP95": -0.015625,
+                "pairs": 256,
+                "standardisedDelta": -0.17392331807984004
+              }
+            },
+            "randomBuild": {
+              "accept": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "acquire": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "activation": {
+                "baselineMean": 10.09375,
+                "candidateMean": 9.4375,
+                "delta": -0.65625,
+                "pairedBootstrapP05": -3.9375,
+                "pairedBootstrapP95": 2.875,
+                "pairs": 32,
+                "standardisedDelta": -0.06410316439072429
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 4.0,
+                "delta": 4.0,
+                "pairedBootstrapP05": 3.25,
+                "pairedBootstrapP95": 4.75,
+                "pairs": 32,
+                "standardisedDelta": 1.492007693184502
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.3002007352846388,
+                "delta": 0.3002007352846388,
+                "pairedBootstrapP05": 0.2923896509438986,
+                "pairedBootstrapP95": 0.30779823035671494,
+                "pairs": 32,
+                "standardisedDelta": 1.9852020972590996
+              },
+              "pick": {
+                "baselineMean": 0.0,
+                "candidateMean": 4.0,
+                "delta": 4.0,
+                "pairedBootstrapP05": 3.3125,
+                "pairedBootstrapP95": 4.78125,
+                "pairs": 32,
+                "standardisedDelta": 1.492007693184502
+              },
+              "play": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 51.9375,
+                "candidateMean": 47.71875,
+                "delta": -4.21875,
+                "pairedBootstrapP05": -14.09375,
+                "pairedBootstrapP95": 5.0,
+                "pairs": 32,
+                "standardisedDelta": -0.16752916227148182
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1478.875,
+                "candidateMean": 1275.15625,
+                "delta": -203.71875,
+                "pairedBootstrapP05": -606.84375,
+                "pairedBootstrapP95": 218.46875,
+                "pairs": 32,
+                "standardisedDelta": -0.1935987658432875
+              },
+              "win": {
+                "baselineMean": 0.15625,
+                "candidateMean": 0.09375,
+                "delta": -0.0625,
+                "pairedBootstrapP05": -0.21875,
+                "pairedBootstrapP95": 0.09375,
+                "pairs": 32,
+                "standardisedDelta": -0.1889822365046136
+              }
+            },
+            "randomPlay": {
+              "accept": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "acquire": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "activation": {
+                "baselineMean": 7.65625,
+                "candidateMean": 7.3125,
+                "delta": -0.34375,
+                "pairedBootstrapP05": -2.0,
+                "pairedBootstrapP95": 1.25,
+                "pairs": 32,
+                "standardisedDelta": -0.03969289561116163
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 3.4375,
+                "delta": 3.4375,
+                "pairedBootstrapP05": 2.84375,
+                "pairedBootstrapP95": 4.0625,
+                "pairs": 32,
+                "standardisedDelta": 1.5162681069221111
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.2937413339933934,
+                "delta": 0.2937413339933934,
+                "pairedBootstrapP05": 0.28389692677531597,
+                "pairedBootstrapP95": 0.30301684409294,
+                "pairs": 32,
+                "standardisedDelta": 1.9749966475913692
+              },
+              "pick": {
+                "baselineMean": 0.0,
+                "candidateMean": 3.4375,
+                "delta": 3.4375,
+                "pairedBootstrapP05": 2.84375,
+                "pairedBootstrapP95": 4.0625,
+                "pairs": 32,
+                "standardisedDelta": 1.5162681069221111
+              },
+              "play": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 43.625,
+                "candidateMean": 39.78125,
+                "delta": -3.84375,
+                "pairedBootstrapP05": -10.65625,
+                "pairedBootstrapP95": 2.1875,
+                "pairs": 32,
+                "standardisedDelta": -0.1861232861689807
+              },
+              "unrelatedActivation": {
+                "baselineMean": 934.8125,
+                "candidateMean": 827.875,
+                "delta": -106.9375,
+                "pairedBootstrapP05": -312.53125,
+                "pairedBootstrapP95": 77.5625,
+                "pairs": 32,
+                "standardisedDelta": -0.18491194643273848
+              },
+              "win": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              }
+            }
+          },
+          "checks": {
+            "armSpecificity": false,
+            "exclusion": false,
+            "interventionRelevance": false,
+            "pass": false
+          }
+        },
+        "heldOut": {
+          "arms": {
+            "planned": {
+              "accept": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "acquire": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "activation": {
+                "baselineMean": 9.53515625,
+                "candidateMean": 9.85546875,
+                "delta": 0.3203125,
+                "pairedBootstrapP05": -0.546875,
+                "pairedBootstrapP95": 1.22265625,
+                "pairs": 256,
+                "standardisedDelta": 0.03588285051265885
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.2999491940700822,
+                "delta": 0.2999491940700822,
+                "pairedBootstrapP05": 0.29654968500340256,
+                "pairedBootstrapP95": 0.3034022972905324,
+                "pairs": 256,
+                "standardisedDelta": 1.9752705768671435
+              },
+              "pick": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "play": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 56.51953125,
+                "candidateMean": 57.546875,
+                "delta": 1.02734375,
+                "pairedBootstrapP05": -3.16015625,
+                "pairedBootstrapP95": 5.21875,
+                "pairs": 256,
+                "standardisedDelta": 0.03290711868982411
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1531.72265625,
+                "candidateMean": 1527.20703125,
+                "delta": -4.515625,
+                "pairedBootstrapP05": -164.92578125,
+                "pairedBootstrapP95": 151.60546875,
+                "pairs": 256,
+                "standardisedDelta": -0.0036486304484029683
+              },
+              "win": {
+                "baselineMean": 0.2109375,
+                "candidateMean": 0.171875,
+                "delta": -0.0390625,
+                "pairedBootstrapP05": -0.09375,
+                "pairedBootstrapP95": 0.015625,
+                "pairs": 256,
+                "standardisedDelta": -0.09929257812241654
+              }
+            },
+            "randomBuild": {
+              "accept": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "acquire": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "activation": {
+                "baselineMean": 6.5625,
+                "candidateMean": 9.84375,
+                "delta": 3.28125,
+                "pairedBootstrapP05": 1.125,
+                "pairedBootstrapP95": 5.71875,
+                "pairs": 32,
+                "standardisedDelta": 0.37158946844222573
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 4.90625,
+                "delta": 4.90625,
+                "pairedBootstrapP05": 4.25,
+                "pairedBootstrapP95": 5.59375,
+                "pairs": 32,
+                "standardisedDelta": 1.6588235166042247
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.29075339452783633,
+                "delta": 0.29075339452783633,
+                "pairedBootstrapP05": 0.2816193774655331,
+                "pairedBootstrapP95": 0.29987777450693587,
+                "pairs": 32,
+                "standardisedDelta": 1.977415301280517
+              },
+              "pick": {
+                "baselineMean": 0.0,
+                "candidateMean": 4.90625,
+                "delta": 4.90625,
+                "pairedBootstrapP05": 4.28125,
+                "pairedBootstrapP95": 5.625,
+                "pairs": 32,
+                "standardisedDelta": 1.6588235166042247
+              },
+              "play": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 50.1875,
+                "candidateMean": 49.90625,
+                "delta": -0.28125,
+                "pairedBootstrapP05": -9.53125,
+                "pairedBootstrapP95": 8.53125,
+                "pairs": 32,
+                "standardisedDelta": -0.01212892018655575
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1498.90625,
+                "candidateMean": 1365.5625,
+                "delta": -133.34375,
+                "pairedBootstrapP05": -578.75,
+                "pairedBootstrapP95": 282.875,
+                "pairs": 32,
+                "standardisedDelta": -0.12379586757203596
+              },
+              "win": {
+                "baselineMean": 0.15625,
+                "candidateMean": 0.21875,
+                "delta": 0.0625,
+                "pairedBootstrapP05": -0.09375,
+                "pairedBootstrapP95": 0.21875,
+                "pairs": 32,
+                "standardisedDelta": 0.16012815380508713
+              }
+            },
+            "randomPlay": {
+              "accept": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "acquire": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "activation": {
+                "baselineMean": 10.59375,
+                "candidateMean": 11.8125,
+                "delta": 1.21875,
+                "pairedBootstrapP05": -1.59375,
+                "pairedBootstrapP95": 3.96875,
+                "pairs": 32,
+                "standardisedDelta": 0.13422624217757162
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 3.5,
+                "delta": 3.5,
+                "pairedBootstrapP05": 2.75,
+                "pairedBootstrapP95": 4.3125,
+                "pairs": 32,
+                "standardisedDelta": 1.353431084663929
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.29544266129686936,
+                "delta": 0.29544266129686936,
+                "pairedBootstrapP05": 0.2835930485388264,
+                "pairedBootstrapP95": 0.30671126657531994,
+                "pairs": 32,
+                "standardisedDelta": 1.9652186037957529
+              },
+              "pick": {
+                "baselineMean": 0.0,
+                "candidateMean": 3.5,
+                "delta": 3.5,
+                "pairedBootstrapP05": 2.75,
+                "pairedBootstrapP95": 4.3125,
+                "pairs": 32,
+                "standardisedDelta": 1.353431084663929
+              },
+              "play": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 50.1875,
+                "candidateMean": 46.03125,
+                "delta": -4.15625,
+                "pairedBootstrapP05": -11.4375,
+                "pairedBootstrapP95": 3.3125,
+                "pairs": 32,
+                "standardisedDelta": -0.17790612477527318
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1150.78125,
+                "candidateMean": 1097.5625,
+                "delta": -53.21875,
+                "pairedBootstrapP05": -282.625,
+                "pairedBootstrapP95": 162.21875,
+                "pairs": 32,
+                "standardisedDelta": -0.07496356910466953
+              },
+              "win": {
+                "baselineMean": 0.0625,
+                "candidateMean": 0.03125,
+                "delta": -0.03125,
+                "pairedBootstrapP05": -0.125,
+                "pairedBootstrapP95": 0.0625,
+                "pairs": 32,
+                "standardisedDelta": -0.14784425419091457
+              }
+            }
+          },
+          "checks": {
+            "armSpecificity": false,
+            "exclusion": true,
+            "interventionRelevance": false,
+            "pass": false
+          }
+        }
+      },
+      "targets": [
+        "hex"
+      ]
+    },
+    "single-route-exposure": {
+      "groundTruthAdmitted": false,
+      "heldOutReproducible": false,
+      "splits": {
+        "discovery": {
+          "arms": {
+            "planned": {
+              "accept": {
+                "baselineMean": 1.19140625,
+                "candidateMean": 12.72265625,
+                "delta": 11.53125,
+                "pairedBootstrapP05": 10.9609375,
+                "pairedBootstrapP95": 12.09375,
+                "pairs": 256,
+                "standardisedDelta": 1.6318791938520838
+              },
+              "acquire": {
+                "baselineMean": 1.19140625,
+                "candidateMean": 12.72265625,
+                "delta": 11.53125,
+                "pairedBootstrapP05": 10.94921875,
+                "pairedBootstrapP95": 12.15234375,
+                "pairs": 256,
+                "standardisedDelta": 1.6318791938520838
+              },
+              "activation": {
+                "baselineMean": 39.29296875,
+                "candidateMean": 1324.2734375,
+                "delta": 1284.98046875,
+                "pairedBootstrapP05": 1180.46875,
+                "pairedBootstrapP95": 1382.37109375,
+                "pairs": 256,
+                "standardisedDelta": 1.354737339012866
+              },
+              "decline": {
+                "baselineMean": 0.36328125,
+                "candidateMean": 0.08203125,
+                "delta": -0.28125,
+                "pairedBootstrapP05": -0.36328125,
+                "pairedBootstrapP95": -0.203125,
+                "pairs": 256,
+                "standardisedDelta": -0.46585599816565465
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.11599794424099014,
+                "candidateMean": 0.3914156434153634,
+                "delta": 0.27541769917437325,
+                "pairedBootstrapP05": 0.2661064315401988,
+                "pairedBootstrapP95": 0.28465813193155715,
+                "pairs": 256,
+                "standardisedDelta": 1.7934285570192636
+              },
+              "pick": {
+                "baselineMean": 1.5546875,
+                "candidateMean": 12.8046875,
+                "delta": 11.25,
+                "pairedBootstrapP05": 10.66796875,
+                "pairedBootstrapP95": 11.80078125,
+                "pairs": 256,
+                "standardisedDelta": 1.6100504546674121
+              },
+              "play": {
+                "baselineMean": 9.484375,
+                "candidateMean": 133.45703125,
+                "delta": 123.97265625,
+                "pairedBootstrapP05": 115.0,
+                "pairedBootstrapP95": 133.140625,
+                "pairs": 256,
+                "standardisedDelta": 1.3897232801650234
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.1171875,
+                "delta": 0.1171875,
+                "pairedBootstrapP05": 0.0859375,
+                "pairedBootstrapP95": 0.15234375,
+                "pairs": 256,
+                "standardisedDelta": 0.4989615772799142
+              },
+              "turns": {
+                "baselineMean": 52.30859375,
+                "candidateMean": 121.30859375,
+                "delta": 69.0,
+                "pairedBootstrapP05": 63.0859375,
+                "pairedBootstrapP95": 74.99609375,
+                "pairs": 256,
+                "standardisedDelta": 1.252603014983734
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1162.546875,
+                "candidateMean": 2156.1484375,
+                "delta": 993.6015625,
+                "pairedBootstrapP05": 834.8125,
+                "pairedBootstrapP95": 1162.64453125,
+                "pairs": 256,
+                "standardisedDelta": 0.7909700302656235
+              },
+              "win": {
+                "baselineMean": 0.18359375,
+                "candidateMean": 0.7265625,
+                "delta": 0.54296875,
+                "pairedBootstrapP05": 0.484375,
+                "pairedBootstrapP95": 0.6015625,
+                "pairs": 256,
+                "standardisedDelta": 1.0903470019564856
+              }
+            },
+            "randomBuild": {
+              "accept": {
+                "baselineMean": 1.8125,
+                "candidateMean": 8.9375,
+                "delta": 7.125,
+                "pairedBootstrapP05": 5.90625,
+                "pairedBootstrapP95": 8.28125,
+                "pairs": 32,
+                "standardisedDelta": 1.4791479939068937
+              },
+              "acquire": {
+                "baselineMean": 1.8125,
+                "candidateMean": 8.9375,
+                "delta": 7.125,
+                "pairedBootstrapP05": 6.0,
+                "pairedBootstrapP95": 8.21875,
+                "pairs": 32,
+                "standardisedDelta": 1.4791479939068937
+              },
+              "activation": {
+                "baselineMean": 81.1875,
+                "candidateMean": 1160.59375,
+                "delta": 1079.40625,
+                "pairedBootstrapP05": 875.84375,
+                "pairedBootstrapP95": 1288.21875,
+                "pairs": 32,
+                "standardisedDelta": 1.4348780237584768
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.11299866095593168,
+                "candidateMean": 0.384241794191558,
+                "delta": 0.2712431332356263,
+                "pairedBootstrapP05": 0.2487627103869245,
+                "pairedBootstrapP95": 0.293665251154488,
+                "pairs": 32,
+                "standardisedDelta": 1.8346473829836711
+              },
+              "pick": {
+                "baselineMean": 1.8125,
+                "candidateMean": 8.9375,
+                "delta": 7.125,
+                "pairedBootstrapP05": 5.96875,
+                "pairedBootstrapP95": 8.3125,
+                "pairs": 32,
+                "standardisedDelta": 1.4791479939068937
+              },
+              "play": {
+                "baselineMean": 11.53125,
+                "candidateMean": 100.65625,
+                "delta": 89.125,
+                "pairedBootstrapP05": 71.125,
+                "pairedBootstrapP95": 106.59375,
+                "pairs": 32,
+                "standardisedDelta": 1.41369381428434
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0625,
+                "delta": 0.0625,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.15625,
+                "pairs": 32,
+                "standardisedDelta": 0.3592106040535498
+              },
+              "turns": {
+                "baselineMean": 51.9375,
+                "candidateMean": 86.46875,
+                "delta": 34.53125,
+                "pairedBootstrapP05": 23.0625,
+                "pairedBootstrapP95": 46.46875,
+                "pairs": 32,
+                "standardisedDelta": 0.9720585182775018
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1397.6875,
+                "candidateMean": 1628.03125,
+                "delta": 230.34375,
+                "pairedBootstrapP05": -65.71875,
+                "pairedBootstrapP95": 522.0,
+                "pairs": 32,
+                "standardisedDelta": 0.26645846090515357
+              },
+              "win": {
+                "baselineMean": 0.15625,
+                "candidateMean": 0.65625,
+                "delta": 0.5,
+                "pairedBootstrapP05": 0.3125,
+                "pairedBootstrapP95": 0.65625,
+                "pairs": 32,
+                "standardisedDelta": 1.0180556207612443
+              }
+            },
+            "randomPlay": {
+              "accept": {
+                "baselineMean": 0.96875,
+                "candidateMean": 7.4375,
+                "delta": 6.46875,
+                "pairedBootstrapP05": 5.28125,
+                "pairedBootstrapP95": 7.78125,
+                "pairs": 32,
+                "standardisedDelta": 1.4670247541716714
+              },
+              "acquire": {
+                "baselineMean": 0.96875,
+                "candidateMean": 7.4375,
+                "delta": 6.46875,
+                "pairedBootstrapP05": 5.21875,
+                "pairedBootstrapP95": 7.75,
+                "pairs": 32,
+                "standardisedDelta": 1.4670247541716714
+              },
+              "activation": {
+                "baselineMean": 37.0625,
+                "candidateMean": 851.6875,
+                "delta": 814.625,
+                "pairedBootstrapP05": 609.4375,
+                "pairedBootstrapP95": 1033.6875,
+                "pairs": 32,
+                "standardisedDelta": 1.2576622327280238
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.10712775864111997,
+                "candidateMean": 0.37660809736871903,
+                "delta": 0.2694803387275991,
+                "pairedBootstrapP05": 0.24602136561172278,
+                "pairedBootstrapP95": 0.2945923698456053,
+                "pairs": 32,
+                "standardisedDelta": 1.8253472529091057
+              },
+              "pick": {
+                "baselineMean": 0.96875,
+                "candidateMean": 7.4375,
+                "delta": 6.46875,
+                "pairedBootstrapP05": 5.25,
+                "pairedBootstrapP95": 7.71875,
+                "pairs": 32,
+                "standardisedDelta": 1.4670247541716714
+              },
+              "play": {
+                "baselineMean": 5.59375,
+                "candidateMean": 71.84375,
+                "delta": 66.25,
+                "pairedBootstrapP05": 49.3125,
+                "pairedBootstrapP95": 83.875,
+                "pairs": 32,
+                "standardisedDelta": 1.2520110285163064
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.03125,
+                "delta": 0.03125,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.09375,
+                "pairs": 32,
+                "standardisedDelta": 0.2519763153394848
+              },
+              "turns": {
+                "baselineMean": 43.625,
+                "candidateMean": 81.0625,
+                "delta": 37.4375,
+                "pairedBootstrapP05": 23.90625,
+                "pairedBootstrapP95": 50.46875,
+                "pairs": 32,
+                "standardisedDelta": 0.9792789386066015
+              },
+              "unrelatedActivation": {
+                "baselineMean": 897.75,
+                "candidateMean": 1454.6875,
+                "delta": 556.9375,
+                "pairedBootstrapP05": 247.03125,
+                "pairedBootstrapP95": 867.65625,
+                "pairs": 32,
+                "standardisedDelta": 0.7103016190298663
+              },
+              "win": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.40625,
+                "delta": 0.40625,
+                "pairedBootstrapP05": 0.28125,
+                "pairedBootstrapP95": 0.5625,
+                "pairs": 32,
+                "standardisedDelta": 1.0097563285948026
+              }
+            }
+          },
+          "checks": {
+            "armSpecificity": false,
+            "exclusion": false,
+            "interventionRelevance": true,
+            "pass": false
+          }
+        },
+        "heldOut": {
+          "arms": {
+            "planned": {
+              "accept": {
+                "baselineMean": 0.859375,
+                "candidateMean": 13.1484375,
+                "delta": 12.2890625,
+                "pairedBootstrapP05": 11.76171875,
+                "pairedBootstrapP95": 12.8359375,
+                "pairs": 256,
+                "standardisedDelta": 1.698074726883587
+              },
+              "acquire": {
+                "baselineMean": 0.859375,
+                "candidateMean": 13.1484375,
+                "delta": 12.2890625,
+                "pairedBootstrapP05": 11.7578125,
+                "pairedBootstrapP95": 12.828125,
+                "pairs": 256,
+                "standardisedDelta": 1.698074726883587
+              },
+              "activation": {
+                "baselineMean": 41.2890625,
+                "candidateMean": 1328.41796875,
+                "delta": 1287.12890625,
+                "pairedBootstrapP05": 1199.234375,
+                "pairedBootstrapP95": 1377.6640625,
+                "pairs": 256,
+                "standardisedDelta": 1.4556806364784856
+              },
+              "decline": {
+                "baselineMean": 0.7109375,
+                "candidateMean": 0.56640625,
+                "delta": -0.14453125,
+                "pairedBootstrapP05": -0.33203125,
+                "pairedBootstrapP95": 0.046875,
+                "pairs": 256,
+                "standardisedDelta": -0.11242734560515832
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 256,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.11461959039774902,
+                "candidateMean": 0.3878919699296471,
+                "delta": 0.27327237953189804,
+                "pairedBootstrapP05": 0.266008648866756,
+                "pairedBootstrapP95": 0.28096112332209694,
+                "pairs": 256,
+                "standardisedDelta": 1.8620966739371618
+              },
+              "pick": {
+                "baselineMean": 1.5703125,
+                "candidateMean": 13.71484375,
+                "delta": 12.14453125,
+                "pairedBootstrapP05": 11.6328125,
+                "pairedBootstrapP95": 12.66796875,
+                "pairs": 256,
+                "standardisedDelta": 1.710110728569174
+              },
+              "play": {
+                "baselineMean": 8.13671875,
+                "candidateMean": 139.9765625,
+                "delta": 131.83984375,
+                "pairedBootstrapP05": 124.0546875,
+                "pairedBootstrapP95": 139.48828125,
+                "pairs": 256,
+                "standardisedDelta": 1.5299178146329158
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0625,
+                "delta": 0.0625,
+                "pairedBootstrapP05": 0.0390625,
+                "pairedBootstrapP95": 0.08984375,
+                "pairs": 256,
+                "standardisedDelta": 0.3592106040535498
+              },
+              "turns": {
+                "baselineMean": 56.51953125,
+                "candidateMean": 128.6640625,
+                "delta": 72.14453125,
+                "pairedBootstrapP05": 67.05078125,
+                "pairedBootstrapP95": 77.38671875,
+                "pairs": 256,
+                "standardisedDelta": 1.357894574858212
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1490.43359375,
+                "candidateMean": 2671.171875,
+                "delta": 1180.73828125,
+                "pairedBootstrapP05": 1022.9453125,
+                "pairedBootstrapP95": 1339.61328125,
+                "pairs": 256,
+                "standardisedDelta": 0.8709536866154723
+              },
+              "win": {
+                "baselineMean": 0.2109375,
+                "candidateMean": 0.81640625,
+                "delta": 0.60546875,
+                "pairedBootstrapP05": 0.55078125,
+                "pairedBootstrapP95": 0.66015625,
+                "pairs": 256,
+                "standardisedDelta": 1.2113904512900917
+              }
+            },
+            "randomBuild": {
+              "accept": {
+                "baselineMean": 1.84375,
+                "candidateMean": 8.78125,
+                "delta": 6.9375,
+                "pairedBootstrapP05": 5.875,
+                "pairedBootstrapP95": 7.9375,
+                "pairs": 32,
+                "standardisedDelta": 1.5956776706986513
+              },
+              "acquire": {
+                "baselineMean": 1.84375,
+                "candidateMean": 8.78125,
+                "delta": 6.9375,
+                "pairedBootstrapP05": 5.9375,
+                "pairedBootstrapP95": 8.0,
+                "pairs": 32,
+                "standardisedDelta": 1.5956776706986513
+              },
+              "activation": {
+                "baselineMean": 89.625,
+                "candidateMean": 1140.3125,
+                "delta": 1050.6875,
+                "pairedBootstrapP05": 867.46875,
+                "pairedBootstrapP95": 1240.0625,
+                "pairs": 32,
+                "standardisedDelta": 1.5066423006865943
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.11939141179881668,
+                "candidateMean": 0.3875930023375725,
+                "delta": 0.2682015905387558,
+                "pairedBootstrapP05": 0.2555768330377695,
+                "pairedBootstrapP95": 0.28077914188411507,
+                "pairs": 32,
+                "standardisedDelta": 1.9256618360008568
+              },
+              "pick": {
+                "baselineMean": 1.84375,
+                "candidateMean": 8.78125,
+                "delta": 6.9375,
+                "pairedBootstrapP05": 5.875,
+                "pairedBootstrapP95": 7.96875,
+                "pairs": 32,
+                "standardisedDelta": 1.5956776706986513
+              },
+              "play": {
+                "baselineMean": 11.6875,
+                "candidateMean": 91.8125,
+                "delta": 80.125,
+                "pairedBootstrapP05": 65.5,
+                "pairedBootstrapP95": 94.40625,
+                "pairs": 32,
+                "standardisedDelta": 1.497990687892829
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 50.1875,
+                "candidateMean": 86.9375,
+                "delta": 36.75,
+                "pairedBootstrapP05": 26.5625,
+                "pairedBootstrapP95": 47.5,
+                "pairs": 32,
+                "standardisedDelta": 1.0937627915703854
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1409.28125,
+                "candidateMean": 1633.375,
+                "delta": 224.09375,
+                "pairedBootstrapP05": -90.875,
+                "pairedBootstrapP95": 531.625,
+                "pairs": 32,
+                "standardisedDelta": 0.23733434946622606
+              },
+              "win": {
+                "baselineMean": 0.15625,
+                "candidateMean": 0.625,
+                "delta": 0.46875,
+                "pairedBootstrapP05": 0.3125,
+                "pairedBootstrapP95": 0.625,
+                "pairs": 32,
+                "standardisedDelta": 0.9607689228305228
+              }
+            },
+            "randomPlay": {
+              "accept": {
+                "baselineMean": 1.15625,
+                "candidateMean": 7.78125,
+                "delta": 6.625,
+                "pairedBootstrapP05": 5.25,
+                "pairedBootstrapP95": 7.90625,
+                "pairs": 32,
+                "standardisedDelta": 1.4074965059445241
+              },
+              "acquire": {
+                "baselineMean": 1.15625,
+                "candidateMean": 7.78125,
+                "delta": 6.625,
+                "pairedBootstrapP05": 5.28125,
+                "pairedBootstrapP95": 7.9375,
+                "pairs": 32,
+                "standardisedDelta": 1.4074965059445241
+              },
+              "activation": {
+                "baselineMean": 71.0625,
+                "candidateMean": 1000.375,
+                "delta": 929.3125,
+                "pairedBootstrapP05": 665.8125,
+                "pairedBootstrapP95": 1225.25,
+                "pairs": 32,
+                "standardisedDelta": 1.1068839034232925
+              },
+              "decline": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "error": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "offerShare": {
+                "baselineMean": 0.10762262206595417,
+                "candidateMean": 0.3843278846694522,
+                "delta": 0.27670526260349804,
+                "pairedBootstrapP05": 0.2544860976298305,
+                "pairedBootstrapP95": 0.2988646604135063,
+                "pairs": 32,
+                "standardisedDelta": 1.8564440682412622
+              },
+              "pick": {
+                "baselineMean": 1.15625,
+                "candidateMean": 7.78125,
+                "delta": 6.625,
+                "pairedBootstrapP05": 5.28125,
+                "pairedBootstrapP95": 8.03125,
+                "pairs": 32,
+                "standardisedDelta": 1.4074965059445241
+              },
+              "play": {
+                "baselineMean": 11.0,
+                "candidateMean": 81.84375,
+                "delta": 70.84375,
+                "pairedBootstrapP05": 49.0,
+                "pairedBootstrapP95": 92.84375,
+                "pairs": 32,
+                "standardisedDelta": 1.0887376022205466
+              },
+              "stall": {
+                "baselineMean": 0.0,
+                "candidateMean": 0.0,
+                "delta": 0.0,
+                "pairedBootstrapP05": 0.0,
+                "pairedBootstrapP95": 0.0,
+                "pairs": 32,
+                "standardisedDelta": 0.0
+              },
+              "turns": {
+                "baselineMean": 50.1875,
+                "candidateMean": 78.15625,
+                "delta": 27.96875,
+                "pairedBootstrapP05": 14.15625,
+                "pairedBootstrapP95": 42.125,
+                "pairs": 32,
+                "standardisedDelta": 0.7685550412346484
+              },
+              "unrelatedActivation": {
+                "baselineMean": 1079.71875,
+                "candidateMean": 1484.40625,
+                "delta": 404.6875,
+                "pairedBootstrapP05": 107.40625,
+                "pairedBootstrapP95": 703.6875,
+                "pairs": 32,
+                "standardisedDelta": 0.5369468659033273
+              },
+              "win": {
+                "baselineMean": 0.0625,
+                "candidateMean": 0.46875,
+                "delta": 0.40625,
+                "pairedBootstrapP05": 0.21875,
+                "pairedBootstrapP95": 0.5625,
+                "pairs": 32,
+                "standardisedDelta": 0.9198138789803925
+              }
+            }
+          },
+          "checks": {
+            "armSpecificity": false,
+            "exclusion": false,
+            "interventionRelevance": true,
+            "pass": false
+          }
+        }
+      },
+      "targets": [
+        "quickSlash",
+        "deflect",
+        "regrowth"
+      ]
+    }
+  },
+  "candidateRows": {
+    "global-difficulty": 1152,
+    "identity-control": 1152,
+    "multi-route-exposure": 1152,
+    "random-regression-exposure": 1152,
+    "single-route-exposure": 1152
+  },
+  "decision": "PROCEED_TO_MECHANISM_GRAPH",
+  "excludedIssue519IdentityIntersection": 0,
+  "interpretation": "Failed issue-521 labels are not reused as causal ground truth; Stage B starts from authored semantics and controlled interventions.",
+  "issue": 524,
+  "oldPackageLabelsAdmitted": [],
+  "outcomeReplayMismatches": 0,
+  "quarantinedIssue521ReadoutsUsedForInference": [],
+  "schemaVersion": 1,
+  "stage": "A",
+  "totalNewRows": 5760
+}

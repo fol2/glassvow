@@ -1,0 +1,75 @@
+{
+  "cacheObjects": [
+    {
+      "bytes": 6232492,
+      "identitySha256": "0cf7b16f7ceba051441d897c7764382449e32e1a32a03e7dd18bb2c05ce62f9f",
+      "kind": "stage-a-mediation",
+      "relativePath": "cache/sha256/f0c2a3cd1d518d470664cd52b226834b4c084d78e377d4f76e76a7f079eca58f",
+      "sha256": "f0c2a3cd1d518d470664cd52b226834b4c084d78e377d4f76e76a7f079eca58f"
+    },
+    {
+      "bytes": 196969,
+      "identitySha256": "157edc49ecc31336cee98304766b21abd692e95cc89d4509f37e104fc95b6148",
+      "kind": "stage-b-panel",
+      "relativePath": "cache/sha256/73841d42e9d2ca02c8e49ed8d62552728983096221346441471c4c06b1f4548a",
+      "sha256": "73841d42e9d2ca02c8e49ed8d62552728983096221346441471c4c06b1f4548a"
+    },
+    {
+      "bytes": 172167,
+      "identitySha256": "383cc52525927cf3cd34617ef6590e0e9a5fffc8b8dee8f6957505337b49c726",
+      "kind": "stage-b-controlled",
+      "relativePath": "cache/sha256/f53368db00a6a47d862ac030406f65b67c1e878da88ecc20aaa0dbd386d4844b",
+      "sha256": "f53368db00a6a47d862ac030406f65b67c1e878da88ecc20aaa0dbd386d4844b"
+    },
+    {
+      "bytes": 6504041,
+      "identitySha256": "4731fb6c3f23a5ac99007fd32a16d2d6c12c4e4d4adb34cfb2a533f51386dd87",
+      "kind": "stage-a-mediation",
+      "relativePath": "cache/sha256/2a652a347eef4365d27b0c7c0a26f2c8b1d8cff044791f1fa7a4560043d301e8",
+      "sha256": "2a652a347eef4365d27b0c7c0a26f2c8b1d8cff044791f1fa7a4560043d301e8"
+    },
+    {
+      "bytes": 561544,
+      "identitySha256": "4aa21eaea9792b91121f2189936190ccabe9774dfdd18b34d734d0d5943b64b3",
+      "kind": "stage-b-microdeck",
+      "relativePath": "cache/sha256/20f3f3551bfd3e1047038288eae456973a00be5fe7cb5a1f803e2efa0cb5bfb7",
+      "sha256": "20f3f3551bfd3e1047038288eae456973a00be5fe7cb5a1f803e2efa0cb5bfb7"
+    },
+    {
+      "bytes": 8440808,
+      "identitySha256": "706c0b453afe9cdb3fcc4d7185fbcf85cc5940b208469435ed4d1dea7aa6b041",
+      "kind": "stage-a-mediation",
+      "relativePath": "cache/sha256/0a986b815be564f37bb3804ba7ff17d43ed1d21b5d6e66e0806aa854aaf3823f",
+      "sha256": "0a986b815be564f37bb3804ba7ff17d43ed1d21b5d6e66e0806aa854aaf3823f"
+    },
+    {
+      "bytes": 8374584,
+      "identitySha256": "bb9297110eb9cc4b866640e62373658233a9d7864ecea1f8f669b51c530c53b9",
+      "kind": "stage-a-mediation",
+      "relativePath": "cache/sha256/0003838868d7bcf1b53ac75b5bdd59d25f8460418512fe7281de177d7710cda1",
+      "sha256": "0003838868d7bcf1b53ac75b5bdd59d25f8460418512fe7281de177d7710cda1"
+    },
+    {
+      "bytes": 4239874,
+      "identitySha256": "c47a1eb417ec7f7aec2fa828d67bc4b2fdf1dd4c007ed432a1eaaded07d2ecaa",
+      "kind": "stage-a-mediation",
+      "relativePath": "cache/sha256/4c9a424493ae7d85ef1b7d05520b48b08ba4aa3368875482b787018df4953f44",
+      "sha256": "4c9a424493ae7d85ef1b7d05520b48b08ba4aa3368875482b787018df4953f44"
+    }
+  ],
+  "cacheObjectsVerified": 8,
+  "databaseSha256": "e021028a92cf42be968abdd048605509398d64fb3be63a94561e0518c6ce34b2",
+  "duplicateIdentityRows": 0,
+  "issue": 524,
+  "issue519Exclusions": 504,
+  "issue521Quarantines": 3,
+  "rowsByFidelity": {
+    "issue-524-stage-a-mediation-v1": 5760,
+    "issue-524-stage-b-controlled-v1": 256,
+    "issue-524-stage-b-microdeck-v1": 768,
+    "issue-524-stage-b-panel-v1": 256
+  },
+  "schemaVersion": 1,
+  "simRows": 7040,
+  "stageCOrLaterRows": 0
+}

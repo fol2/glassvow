@@ -1,0 +1,215 @@
+{
+  "admittedByAspect": {
+    "ashwarden": [
+      "hand-size-payoff"
+    ],
+    "duskblade": []
+  },
+  "admittedPackages": [
+    "hand-size-payoff"
+  ],
+  "authoredGraphSha256": "61ab0bd24964293df7ea610911a66a32d41850cdb71100d96566607884b3c5ec",
+  "automaticSuccessor": null,
+  "boundedTo": {
+    "budgetsUsed": {
+      "controlledProbeStates": 256,
+      "decisionChangingFullRunRows": 0,
+      "microDeckMainEffects": 128,
+      "microDeckPairEffects": 192,
+      "microDeckTripleEffects": 0,
+      "pairedShortPanelRows": 256
+    },
+    "fullRunRowsAddedAtStageB": 0,
+    "mediationGraph": "61 cards including upgrades, 31 relics, 582 authored candidate edges",
+    "methods": [
+      "controlled legal state interventions",
+      "matched-size A/B/AB micro-decks with common seeds",
+      "exact Shapley-Taylor difference-in-differences",
+      "pooled grouped ridge interaction signs",
+      "ExtraTrees fANOVA signs",
+      "paired short combat panels",
+      "legacy real-economy mediation reuse"
+    ],
+    "slateFamiliesTested": [],
+    "testedPackages": [
+      "ash-poison-catalyst",
+      "dusk-crack-payoff",
+      "strength-multihit",
+      "ward-double",
+      "ember-spend",
+      "hand-size-payoff",
+      "healing-amplifier",
+      "kindle-draw",
+      "ash-venomous-attacks",
+      "dusk-shatter-relics"
+    ],
+    "unreached": [
+      "matched causal mutations",
+      "detector calibration",
+      "held-out mutation recovery",
+      "contextual reward slates",
+      "functional causal BO",
+      "contextual bandits",
+      "SlateQ",
+      "QD/BO rows"
+    ]
+  },
+  "detectorContract": null,
+  "exclusions": {
+    "humanLabelsOrCalibration": false,
+    "issue519ResumeDriftIdentities": 504,
+    "issue521QuarantinedReadoutsUsed": []
+  },
+  "finding": "Within the frozen authored semantics, controlled probes, ten preregistered package families, 192 matched micro-deck pair contrasts and 256 paired short-panel rows, only the Ashwarden hand-size payoff package passed intervention, held-out interaction, panel and real-economy reachability gates. No Duskblade package passed.",
+  "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+  "issue": 524,
+  "kind": "precisely-bounded-negative-scope-finding",
+  "missingFromPreregisteredMinimum": {
+    "ashwarden": 1,
+    "duskblade": 2,
+    "overall": 2
+  },
+  "packageChecks": {
+    "ash-poison-catalyst": {
+      "ashwarden": {
+        "admitted": false,
+        "heldOutPanel": true,
+        "realEconomyReachability": true,
+        "withinPackageEdges": false
+      }
+    },
+    "ash-venomous-attacks": {
+      "ashwarden": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      }
+    },
+    "dusk-crack-payoff": {
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": true,
+        "withinPackageEdges": false
+      }
+    },
+    "dusk-shatter-relics": {
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      }
+    },
+    "ember-spend": {
+      "ashwarden": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      },
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      }
+    },
+    "hand-size-payoff": {
+      "ashwarden": {
+        "admitted": true,
+        "heldOutPanel": true,
+        "realEconomyReachability": true,
+        "withinPackageEdges": true
+      },
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": true,
+        "withinPackageEdges": false
+      }
+    },
+    "healing-amplifier": {
+      "ashwarden": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      },
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      }
+    },
+    "kindle-draw": {
+      "ashwarden": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      },
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      }
+    },
+    "strength-multihit": {
+      "ashwarden": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      },
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": false
+      }
+    },
+    "ward-double": {
+      "ashwarden": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": true
+      },
+      "duskblade": {
+        "admitted": false,
+        "heldOutPanel": false,
+        "realEconomyReachability": false,
+        "withinPackageEdges": true
+      }
+    }
+  },
+  "parent": 421,
+  "positiveLocalEvidence": {
+    "controlledAllRelevant": true,
+    "controlledEdgeAspectChecks": 32,
+    "heldOutPromotedEdgeAspects": [
+      "ash-poison-catalyst|venomStrike->catalyst|ashwarden",
+      "hand-size-payoff|preparation->phantomBlades|ashwarden",
+      "hand-size-payoff|surge->phantomBlades|ashwarden",
+      "healing-amplifier|leechBlade->sunBlossom|ashwarden",
+      "kindle-draw|offering->verdantBranch|duskblade",
+      "ward-double|brace->fortify|ashwarden",
+      "ward-double|brace->fortify|duskblade",
+      "ward-double|bulwark->fortify|ashwarden",
+      "ward-double|bulwark->fortify|duskblade"
+    ],
+    "interpretation": "Local mechanism truth did not establish enough separated route packages."
+  },
+  "productCandidate": null,
+  "protocolSha256": "cc44e5a46d2604a2ed2fc63a2902676d714dd97a5b6e53be5c9e440777dd2388",
+  "recommendedResearchAction": "do not create a successor",
+  "schemaVersion": 1,
+  "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+  "stageAMediationSha256": "f9408de4d65695ac67a6807991a076572208d1e9c0c84362ea17146e38fc555e",
+  "stageBGateSha256": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a",
+  "verdict": "SCOPE_INSUFFICIENT_AT_CAUSAL_MECHANISM_PACKAGE_GATE"
+}

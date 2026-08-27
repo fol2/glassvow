@@ -1,0 +1,27 @@
+{
+  "branchCreated": false,
+  "campaignProgramSha256": "5f524966c81e404a7f812d2cc455ee15334e801cb9df34565f29e9a4c6511dab",
+  "commitCreated": false,
+  "detachedWorktree": true,
+  "findingSha256": "acecbae3171e739aeae4fe71dde2d0635ce98c453c58400de9bde627b2368fa2",
+  "githubActionsRun": false,
+  "issue": 524,
+  "mechanismRunnerSha256": "0c60d7f490ae468a8f4b64dbf67fa2b67d84c372fa9fa2d9bf9492493ca774e5",
+  "parent": 421,
+  "pullRequestCreated": false,
+  "returned": {
+    "detectorContract": null,
+    "productCandidate": null,
+    "scopeFinding": "artifacts/scope-insufficiency-finding-v1.json"
+  },
+  "schemaVersion": 1,
+  "simRows": 7040,
+  "sourceCommit": "0f005282e8881d970da284f4868caedf60cc8142",
+  "stageARows": 5760,
+  "stageBGateSha256": "c7f12c85998b86a345d84c28593256676731733e605a38fbb57b46db777e313a",
+  "stageBRows": 1280,
+  "status": "COMPLETE_BOUNDED_NEGATIVE",
+  "successorCreated": false,
+  "verdict": "SCOPE_INSUFFICIENT_AT_CAUSAL_MECHANISM_PACKAGE_GATE",
+  "verificationSha256": "b12ff65e21be6fe4032de90842aca97e17c948dad9deddf260450529955917b7"
+}
