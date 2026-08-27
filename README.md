@@ -1,27 +1,30 @@
 # Glassvow / 琉璃誓言
 
-A Godot 4.7.2+ reimplementation of **Glassvow**, the web-based roguelite deckbuilder. This repo is a parallel port of the reference implementation frozen at [`web-reference-v1`](https://github.com/fol2/roguecardv2/tree/web-reference-v1) in the original roguecardv2 repository. The web engine is the executable specification; parity is proven against the JSON fixtures in `port_fixtures/`. One deliberate redesign: the map is a horizontally-traversed glassvow world, not the web version's vertical tower.
+Glassvow is a Godot 4.7.2+ roguelite deckbuilder. The project began as a port of a web game, but detached from that reference on 2026-08-16. This repository now owns its behaviour and content; the 18 files in `port_fixtures/` are port-owned regression goldens, and the commercial rubric is the product standard. The world map is a deliberate horizontal journey rather than the former vertical tower.
 
-## Verification
+## Development
+
+Read `AGENTS.md` first. The repository uses a risk-proportional AI-SDLC: pure research is isolated from delivery, feature-branch pushes do not duplicate CI, pull requests run one audited scope-aware gate, and every push to `main` runs the complete maintained integration gate.
+
+To inspect the scope selection for a committed branch diff:
 
 ```bash
-godot --version                          # must report 4.7.2 stable or later stable
-tools/check_imports.sh                   # import; fail on stderr ERRORs or process status
-tools/check_scripts.sh                   # tracked parse + warnings-as-errors gate
-godot --headless -s res://tests/run_all.gd   # run test suite; must exit 0
+git diff --name-only --no-renames -z origin/main...HEAD > /tmp/glassvow-ci-paths.zlist
+python3 -B tools/ci_scope.py \
+  --changed-paths-nul /tmp/glassvow-ci-paths.zlist \
+  --repository-root .
 ```
 
-The full script sweep uses `git ls-files`; stage new `.gd` files before running
-it. Use positional paths only when intentionally checking a narrower set.
+The classifier is deterministic, supports overlapping scopes, explains every selected and skipped check, and fails closed on malformed or unknown production input. Its focused fixtures live in `tests/test_ci_scope.py`.
 
-## Status
+During implementation, run the narrow deterministic check that answers the current question. For production Godot delivery, run import, the full tracked-script parse, and the discovered Godot suite once on the coherent final candidate before first push. Documentation and isolated balance/ML tooling run only their matching checks.
 
-**M0 scaffold** — project structure, minimal example scene, test harness, and CI template. Parity implementation begins at M1.
+## Architecture
 
-## Fixtures
+Pure game logic lives in `domain/`; `GlassvowGame.apply` is the command-to-event seam, and presentation never owns game truth. Internal IDs, seeded randomness, the v2 save lineage, and load validation are compatibility contracts. Deeper engine and editing guidance lives in `.claude/skills/glassvow-godot/SKILL.md`.
 
-The `port_fixtures/` directory contains test snapshots and traces generated from the reference web implementation via `roguecardv2/tools/capture-port-fixtures.mjs`. Fixtures are immutable — they are never edited in this repo; regeneration happens only in roguecardv2 and is pushed here via commits.
+## Delivery standard
 
----
+The active standard is `docs/commercial-rubric.md` and `docs/rc-bar.md`. Historical web-reference citations are frozen and no new ones may be added. The detachment decision and measurements are recorded in `docs/benchmark-divergence.md` and issue #317.
 
-Reference implementation: [fol2/roguecardv2](https://github.com/fol2/roguecardv2) @ web-reference-v1
+The development operating model is documented in `docs/agents/ai-sdlc.md`.

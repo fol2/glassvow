@@ -8,10 +8,15 @@ on:
       - 'tools/capture_build4_map_corpus.gd'
       - 'tools/capture_build4_map_corpus.sh'
       - 'tools/package_build4_map_corpus.py'
-      - 'docs/reviews/462/**'
 
 permissions:
   contents: read
+
+# The packet under docs/reviews/462 is evidence output, not a capture input.
+# Documentation edits use the normal docs gate and must not regenerate 168 frames.
+concurrency:
+  group: build4-map-corpus-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   capture:

@@ -1,36 +1,38 @@
 ---
 name: glassvow-suno
-description: Generate Glassvow music with Suno. Use when adding or replacing stained-glass pack tracks, act4Combat, act4Boss, BGM loops. Official path is the Suno Pro website — Suno has no public API key. Always read and update docs/music-ledger.md before shipping a file.
+description: Generate Glassvow music with Suno. Use only when adding or replacing stained-glass pack tracks, Act IV combat/boss cues, or BGM loops. Read and update docs/music-ledger.md before shipping a file.
 ---
 
-# Glassvow Suno music
+# Glassvow Suno Music
 
-Ledger is law: `docs/music-ledger.md`. Cue ids, filenames, titles, and pack bumps live there. This skill is the dispatch path, not a second brief.
+The ledger is law: `docs/music-ledger.md`. Cue IDs, filenames, titles, briefs, and pack bumps live there. This skill is the dispatch path, not a second brief.
 
-Direction: classical gothic stained-glass chamber music — dark panes, cold stone, a lantern kept lit. Instrumental only. No choir, no vocals, no climb, no brass fanfare unless the ledger row names one.
+Direction: classical gothic stained-glass chamber music—dark panes, cold stone, a lantern kept lit. Instrumental only. No choir, vocals, climb vocabulary, or brass fanfare unless the ledger row names one.
 
-**Suno has no self-serve API key.** v1 was composed in the Suno Pro website (July 2026) and ships untrimmed. That is still the official path. Cookie scrapers stay out. AceDataCloud is a third-party wrapper with its *own* token, not a Suno key — optional, below.
+The official generation path is the Suno Pro website. Do not invent an unofficial scraper. A third-party gateway is optional only when James explicitly accepts its quality and terms.
 
 ## 1. Read the owed row
 
-Open `docs/music-ledger.md`. Copy the cue, file, and brief verbatim into the style/prompt. If the row is missing, write it first.
+Open only the matching row in `docs/music-ledger.md`. Copy the cue, file, and brief verbatim into the generation prompt. If the row is missing, write it first.
 
-`MusicBus.FILES` maps cue → kebab-case stem (`act4Combat` → `act4-combat`). `assets/audio/music/manifest.json` is the credits title source. A `title` is display copy, not a pack bump.
+`MusicBus.FILES` maps cue to kebab-case stem (`act4Combat` → `act4-combat`). `assets/audio/music/manifest.json` is the credits-title source. A title is display copy, not a pack bump.
 
-## 2. Generate — Suno Pro website (official)
+## 2. Discovery loop
 
-1. Open [suno.com](https://suno.com), signed into the same **Pro** workspace that made v1.
-2. Create → **Custom**. Turn **Instrumental** on. Lyrics empty or `[Instrumental]`.
-3. Paste the ledger brief into the style field. Title can wait — credits titles are display copy in the manifest.
-4. Generate at least two candidates per cue. Act IV must not be a re-encode or retitle of an Act III file.
-5. Download the mp3 (audio, not the video). Drop them in `docs/design/<date>-<cue>/candidates/` or hand them to the agent. Do not write straight into `assets/audio/music/` until James picks.
+Use Suno Pro → Create → Custom, enable Instrumental, and leave lyrics empty or `[Instrumental]`. Generate at least two candidates for the cue. Act IV must not be a re-encode or retitle of an Act III file.
 
-## 3. Optional — AceDataCloud gateway (not Suno)
+Download audio, not video, into `docs/design/<date>-<cue>/candidates/`. Do not write candidates directly into `assets/audio/music/`.
 
-Only if James wants an unattended Cloud Agent to generate. Sign up at [platform.acedata.cloud](https://platform.acedata.cloud), open the Suno Audios service, **Credentials → Create**, and put *that* token on the Cloud Agent environment as `ACEDATACLOUD_API_TOKEN`. Register `https://suno.mcp.acedata.cloud/mcp` in the cursor.com/agents MCP dropdown. Their own docs say Suno does not officially provide an API; this wrapper simulates it. Quality and ToS are James's call. Do not invent a scrape client.
+Candidate generation and comparison are one bounded research batch. Do not create an issue, branch, PR, CI run, or full repository context for every render. Record the prompt and decision once; only the selected candidate crosses into delivery.
 
-## 4. Ship
+## 3. Optional third-party gateway
 
-James picks. Then in **one commit**: chosen mp3 → `assets/audio/music/<stem>.mp3`, `MusicBus.FILES` points at the new stem (drop any Act III alias), `assets/audio/music/manifest.json` gains the cue with James's title, pack bump (`stained-glass-v2` or a dated Act IV addendum — do not re-encode v1), ledger row moved from Owed to shipped with the prompt that actually rendered. Run `godot --headless --import` so Godot mints `.import`; do not copy a sidecar.
+Use an unattended third-party gateway only when James requests it. Its credential belongs to that provider, not Suno. Keep it in the agent environment, never in the repository, prompts, logs, or output. Do not build a scraping client.
 
-Godot sets `AudioStreamMP3.loop = true` at play. Do not pre-loop or re-encode the render to flatten bitrate.
+## 4. Delivery
+
+James selects the candidate. Then make one coherent delivery change: chosen audio to `assets/audio/music/<stem>.mp3`; update `MusicBus.FILES`; add the manifest row and selected title; make the required pack bump without re-encoding the existing pack; and move the ledger row from Owed to shipped with the prompt that actually rendered.
+
+Run import and the affected playback or manifest checks locally. The PR's actual diff then activates the relevant scopes through `tools/ci_scope.py`; do not manually attach map, balance, locale, or evidence suites that cannot observe the audio change.
+
+Godot creates the import sidecar; do not copy one. `AudioStreamMP3.loop = true` is applied at playback, so do not pre-loop or re-encode the render merely to flatten bitrate.
