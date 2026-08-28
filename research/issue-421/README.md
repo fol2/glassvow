@@ -9,7 +9,7 @@ V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
 and the post-directive knob proof, mechanism-blocked CRN first look,
 independent held-out confirmation, structural package-order work, hand-size
 reconciliation, Ash package admission, exact Ward whole-run rejection and the
-natural Shatterer's Crown effect closure. It
+natural Shatterer's Crown and Shatter-to-heavy-Attack capacity closures. It
 is a progress snapshot, not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -162,9 +162,25 @@ not a policy-selective repertoire discriminator. Both cells and the complete
 Crown family are closed without reinterpretation, another level or held-out
 spend.
 
+The first new structural source-and-capacity contract then closed a
+Shatter-to-heavy-Attack Energy relay before implementation. The exact source
+filter retained all six unlocked reward Attacks with printed cost at least 2.
+On the frozen 64-policy root-551 rectangle, 53 policies were robustly active
+and only one was robustly inactive against the fixed minimum of 16. The route
+is therefore another broad power opportunity rather than a repertoire split;
+its strict capacity-level viability proxy also failed. No research knob,
+simulator row, ledger row or protected seed was used, and the family may not be
+rescued by subsetting those six cards or weakening its gates.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-shatter-tempo-capacity-v1.md`](summaries/progress-post-directive-shatter-tempo-capacity-v1.md),
+[`protocols/post-v38-shatter-tempo-capacity-v1.json`](protocols/post-v38-shatter-tempo-capacity-v1.json)
+and
+[`summaries/post-v38-shatter-tempo-capacity-v1.json`](summaries/post-v38-shatter-tempo-capacity-v1.json)
+for the current zero-row source filter, frozen capacity contract and decisive
+broadness closure. Then read
 [`summaries/progress-post-directive-crown-effect-crn-v1.md`](summaries/progress-post-directive-crown-effect-crn-v1.md),
 [`protocols/post-v38-crown-effect-crn-v1.json`](protocols/post-v38-crown-effect-crn-v1.json),
 [`execution/post-v38-crown-effect-crn-v1.json`](execution/post-v38-crown-effect-crn-v1.json),

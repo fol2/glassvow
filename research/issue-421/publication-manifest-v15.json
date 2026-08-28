@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 15,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "zero-row Duskblade Shatter-to-heavy-Attack capacity closure",
+  "decision": "CLOSE_SHATTER_TEMPO_RELAY_WITHOUT_IMPLEMENTATION",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-shatter-tempo-capacity-v1.md",
+    "progressReportSha256": "e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a",
+    "protocol": "protocols/post-v38-shatter-tempo-capacity-v1.json",
+    "protocolSha256": "e9c413088d5ccef93b5d9c3793688ae0e14d3364cc7d8f7e854bbef92a1645d8",
+    "summary": "summaries/post-v38-shatter-tempo-capacity-v1.json",
+    "summarySha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388",
+    "runner": "tools/post_v38_shatter_tempo_capacity.py",
+    "runnerSha256": "95be635ce9230ab8ae5c62b2aca22c99268b8f8652210a3845cf2c4bd09e41eb",
+    "readmeSha256": "3cbc9f84ca5f6598cb2f47831786f396ea5cd2466badf5523d50a8ba646c809f",
+    "taskCapsuleSha256": "fe440ecec6f0711f413cdfd80e904047e79db6b6694c6fc7755534da696f1540"
+  },
+  "candidate": {
+    "id": "dusk-shatter-tempo-relay",
+    "producer": "one real Duskblade Shatter",
+    "consumer": "the next unlocked reward-pool Attack with printed cost at least 2",
+    "payoff": "one Energy saved only when the charge actually reduces effective cost",
+    "eligibleCards": [
+      "annihilate",
+      "heavyBlow",
+      "leechBlade",
+      "oblivionStrike",
+      "tempest",
+      "uppercut"
+    ],
+    "implementationStatus": "not implemented; capacity failed"
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "sourceReadyPolicies": 64,
+    "robustActivePolicies": 53,
+    "robustInactivePolicies": 1,
+    "minimumInactivePolicies": 16,
+    "ambiguousPolicies": 10,
+    "offeredPolicies": 64,
+    "acquiredPolicies": 63,
+    "distinctConsumedCards": 6,
+    "viableActivePolicies": 0,
+    "relayOnlyPolicies": 17,
+    "scorelineOnlyPolicies": 4,
+    "crossActivePolicies": 36,
+    "scorelineJaccard": 0.631578947368421,
+    "baselineFaultRows": 1,
+    "interpretation": "The exact relay consumer class is available to nearly every policy, so it is another broad power route rather than the missing policy-selective repertoire split. Its frozen capacity-level viability proxy also failed.",
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 5.880552374990657
+  },
+  "localLedgerFreeze": {
+    "records": 479853,
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 467,
+    "payloadFilesIndexed": 451,
+    "protocolFiles": 73,
+    "summaryFiles": 92,
+    "toolFiles": 30,
+    "newRawObjects": 0,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "e6611b36e83de9778c0198ccc4ecbac8247b6addc20f7782be490094259a5582"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "5fe650f08204a5e9c9763aa42164309e8ef73aa2",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Preregister another zero-row structural-capacity contract whose consumer is a narrower state/action sequence; do not implement or simulate until it passes.",
+  "omissions": [
+    "No gate, threshold, eligible card or policy classification was changed after the screen.",
+    "No research knob, runtime primitive, offer, acquisition, rarity, policy score or product content was changed.",
+    "No ML, RL, optimiser, PR, CI run, simulator row or protected seed was used."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}
