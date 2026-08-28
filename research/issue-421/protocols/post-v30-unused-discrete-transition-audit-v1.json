@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-source-complete-unused-discrete-transition-frontier",
+  "question": "After every frozen package, state and trigger closure is removed, which exact current-main combat-event transitions remain finite, discrete and unconsumed enough to justify one shared observation-identity contract?",
+  "scientificBasis": "Exact current-main defines 32 stable combat event identities. Partition every event once into fixed presentation/context, an admitted or closed family, a quarantined family, or an uncovered discrete transition. HIT_ENEMY already records the algebraic zero boundary between exact lethal and positive overkill, while RESHUFFLE records the exact draw-empty/discard-nonempty zone transition. These are observations, not proposed payoffs. The audit freezes the finite representations together so later evidence cannot choose a topology after reading support.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "c36179c0a5431a3e22507511c3b8437c3151583f0a1a6e73d46ea5642c80724b",
+    "taskCapsuleSha256": "b67c06d3da531f463b275469e39b76404103f1691645d5b6d70f85070622e0ed",
+    "sourceSha256": {
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/combat_state.gd": "605605900a816908278465a08c58de94cc5c395befead0cba169f28915db35ae",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "frontierScope": {
+    "included": "Every stable EventTypes constant and the exact current-main state transition that emits it. HIT_ENEMY terminal topology and the RESHUFFLE zone boundary are decomposed because their event payloads already expose exact discrete levels.",
+    "excluded": [
+      "presentation-only events as gameplay candidates",
+      "another scalar level, card subset, enemy subset, act subset or intent subset inside a closed family",
+      "the quarantined Shatter-to-Smolder-transfer frontier",
+      "a new event, persistent state, payoff, carrier, acquisition, policy score or product content",
+      "trace, cache, outcome or policy support",
+      "ML, RL, optimiser or adaptive candidate sequence"
+    ],
+    "claimBoundary": "This source-only audit may freeze a finite set of exact observations for one shared, separately preregistered trace-identity contract. It cannot select a candidate, establish support, add a factor or justify a product primitive."
+  },
+  "sourceAssertions": [
+    {
+      "id": "terminal hit payload owns exact lethal and overkill fields",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"dead\": (not handoff) and e.hp <= 0,\n\t\t\"killingBlow\": (not handoff) and e.hp <= 0 and loss > 0,\n\t\t\"overkill\": 0 if handoff else maxi(0, -e.hp),"
+    },
+    {
+      "id": "overkill derives from final signed HP",
+      "path": "domain/rules/combat.gd",
+      "contains": "var next_hp: int = e.hp - loss\n\tvar handoff: bool = next_hp <= 0 and _is_finale_handoff(e)"
+    },
+    {
+      "id": "finale handoff is not a killing blow",
+      "path": "domain/rules/combat.gd",
+      "contains": "if handoff:\n\t\tloss = maxi(0, e.hp - 1)\n\t\te.hp = 1"
+    },
+    {
+      "id": "poison hit events lack terminal hit topology",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"dead\": (not handoff) and e.hp <= 0,\n\t\t\t\t\"poison\": true,"
+    },
+    {
+      "id": "reshuffle requires empty draw and non-empty discard",
+      "path": "domain/rules/combat.gd",
+      "contains": "if cb.draw.is_empty():\n\t\t\tif cb.discard.is_empty():\n\t\t\t\tbreak"
+    },
+    {
+      "id": "reshuffle moves the complete discard and records its count",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.draw = cb.discard\n\t\t\tcb.discard = []\n\t\t\t_shuffle_cards(run.rng, cb.draw)\n\t\t\tcb.queue.append({\"t\": EventTypes.RESHUFFLE, \"n\": count})"
+    },
+    {
+      "id": "pilot recognises lethal card outcomes without exactness preference",
+      "path": "tools/balance_pilot.gd",
+      "contains": "if preview.get(\"lethal\", false):\n\t\tscore += _w(\"combat\", \"lethal\")"
+    },
+    {
+      "id": "exact preview exposes lethal but no overkill score",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"lethal\": target != null and target.hp - total_loss <= 0,"
+    },
+    {
+      "id": "stable terminal-hit event identity exists",
+      "path": "domain/events/event_types.gd",
+      "contains": "const HIT_ENEMY: StringName = &\"hitEnemy\""
+    },
+    {
+      "id": "stable reshuffle event identity exists",
+      "path": "domain/events/event_types.gd",
+      "contains": "const RESHUFFLE: StringName = &\"reshuffle\""
+    }
+  ],
+  "naturalRouteIdentity": {
+    "eventTypes": [
+      {"constant": "INTENT", "value": "intent"},
+      {"constant": "TURN", "value": "turn"},
+      {"constant": "ENERGY", "value": "energy"},
+      {"constant": "DRAW", "value": "draw"},
+      {"constant": "RESHUFFLE", "value": "reshuffle"},
+      {"constant": "PLAY", "value": "play"},
+      {"constant": "BLOCK_GAIN", "value": "blockGain"},
+      {"constant": "HIT_ENEMY", "value": "hitEnemy"},
+      {"constant": "HIT_PLAYER", "value": "hitPlayer"},
+      {"constant": "CHIP", "value": "chip"},
+      {"constant": "SHATTER", "value": "shatter"},
+      {"constant": "STAGGERED", "value": "staggered"},
+      {"constant": "DIE", "value": "die"},
+      {"constant": "EMBER", "value": "ember"},
+      {"constant": "STATUS", "value": "status"},
+      {"constant": "TO_DISCARD", "value": "toDiscard"},
+      {"constant": "EXHAUST", "value": "exhaust"},
+      {"constant": "KINDLE", "value": "kindle"},
+      {"constant": "ART", "value": "art"},
+      {"constant": "POTION", "value": "potion"},
+      {"constant": "DISCARD_HAND", "value": "discardHand"},
+      {"constant": "END_TURN", "value": "endTurn"},
+      {"constant": "ENEMY_ACT", "value": "enemyAct"},
+      {"constant": "SMOLDER_JUMP", "value": "smolderJump"},
+      {"constant": "HEAL", "value": "heal"},
+      {"constant": "POWER_CONSUMED", "value": "powerConsumed"},
+      {"constant": "RELIC_PROC", "value": "relicProc"},
+      {"constant": "VICTORY", "value": "victory"},
+      {"constant": "DEFEAT", "value": "defeat"},
+      {"constant": "BOSS_INTRO", "value": "bossIntro"},
+      {"constant": "VARIANT_DIALOGUE", "value": "variantDialogue"},
+      {"constant": "FINALE_HANDOFF", "value": "finaleHandoff"}
+    ],
+    "eventTypeCount": 32,
+    "authoredCards": 61,
+    "drawCards": ["deflect", "firstSpark", "preparation", "quickSlash", "sidestep", "surge", "tithe"],
+    "drawCardCount": 7,
+    "damageCards": ["annihilate", "ashBite", "chisel", "cleave", "devour", "eclipseSlash", "executioner", "flurry", "heavyBlow", "leechBlade", "lunge", "momentum", "novaflare", "oblivionStrike", "phantomBlades", "quakeblow", "quickSlash", "resonantLance", "shardstorm", "strike", "tempest", "twinFangs", "uppercut", "venomStrike"],
+    "damageCardCount": 24
+  },
+  "eventSurfaceCoverage": [
+    {
+      "id": "turn-resource-and-art",
+      "events": ["TURN", "ENERGY", "EMBER", "ART", "POTION", "END_TURN"],
+      "disposition": "closed-or-fixed-context",
+      "closureEvidence": ["turnState", "emberReserve", "hearth"],
+      "reason": "Turn Energy, Ember production/spend, Lantern Art and post-combat reserve consumption have exact decisions. Potion and turn-boundary emission are context, not an independently selectable package transition."
+    },
+    {
+      "id": "card-zone-and-play",
+      "events": ["DRAW", "PLAY", "TO_DISCARD", "EXHAUST", "KINDLE", "DISCARD_HAND", "POWER_CONSUMED"],
+      "disposition": "closed-admitted-or-universal",
+      "closureEvidence": ["actionGrammar", "ashPackage", "nativeGrammar"],
+      "reason": "Draw/hand size is admitted for Ash; Power, cycle and next-Attack setup are closed; Kindle/exhaust and universal card-terminal movement cannot be reopened as a Dusk primitive."
+    },
+    {
+      "id": "draw-pile-reshuffle",
+      "events": ["RESHUFFLE"],
+      "disposition": "uncovered-discrete-transition",
+      "closureEvidence": ["actionGrammar", "ashPackage"],
+      "reason": "The exact draw-empty/discard-nonempty boundary and seeded zone reset are not a draw-count, hand-size payoff or next-Attack setup bit. No prior decision names reshuffle itself."
+    },
+    {
+      "id": "defence-heal-and-status",
+      "events": ["BLOCK_GAIN", "HIT_PLAYER", "STATUS", "HEAL"],
+      "disposition": "closed-family-surface",
+      "closureEvidence": ["enemyWard", "weakMend", "fightQuality", "hearth"],
+      "reason": "Ward, HP-loss, effective recovery, Weak persistence and post-combat healing have exact closure or quarantine decisions. A generic STATUS event is not one mechanism."
+    },
+    {
+      "id": "facet-shatter-and-enemy-action",
+      "events": ["CHIP", "SHATTER", "STAGGERED", "INTENT", "ENEMY_ACT"],
+      "disposition": "closed-family-surface",
+      "closureEvidence": ["nativeGrammar", "shatterSuppression"],
+      "reason": "Facet/Shatter grammar and the complete damaging-intent suppression relation are closed. Intent/action emission alone is not a new payoff."
+    },
+    {
+      "id": "enemy-terminal-hit",
+      "events": ["HIT_ENEMY"],
+      "disposition": "uncovered-discrete-topology",
+      "closureEvidence": ["enemyWard", "nativeGrammar"],
+      "reason": "Ward absorption and positive-damage Facet logic are closed, but exact current-main deliberately records killingBlow and overkill. Exact lethal and positive excess are mutually exclusive algebraic terminal cells not named by prior evidence."
+    },
+    {
+      "id": "death-outcome-and-relic-dispatch",
+      "events": ["DIE", "SMOLDER_JUMP", "RELIC_PROC", "VICTORY", "DEFEAT"],
+      "disposition": "closed-quarantined-or-fixed-context",
+      "closureEvidence": ["deathChain", "fightQuality", "hearth", "shatterAftermath"],
+      "reason": "Non-final death economy and victory-quality triggers are closed; Hearth and Shatter-transfer attempts are quarantined at their caps. Generic relic dispatch and defeat are not state representations."
+    },
+    {
+      "id": "presentation-and-finale",
+      "events": ["BOSS_INTRO", "VARIANT_DIALOGUE", "FINALE_HANDOFF"],
+      "disposition": "fixed-product-context",
+      "closureEvidence": [],
+      "reason": "Dialogue and the Act-IV handoff are authored presentation/progression boundaries, not balance-package observations."
+    }
+  ],
+  "terminalHitPartition": [
+    {
+      "id": "non-terminal-hit",
+      "predicate": "killingBlow is false",
+      "disposition": "closed-or-non-event",
+      "reason": "Ordinary damage, Ward absorption and multi-hit/Fitchip effects map to closed families; no terminal transition occurred."
+    },
+    {
+      "id": "exact-lethal-terminal-hit",
+      "predicate": "killingBlow is true and overkill equals zero",
+      "disposition": "uncovered",
+      "reason": "Zero is the exact identity boundary between sufficient and excess resolved damage. It introduces no magnitude threshold."
+    },
+    {
+      "id": "positive-overkill-terminal-hit",
+      "predicate": "killingBlow is true and overkill is greater than zero",
+      "disposition": "uncovered",
+      "reason": "Positive excess is already computed and emitted by exact source. The observation adds no threshold beyond positivity."
+    },
+    {
+      "id": "finale-handoff",
+      "predicate": "finaleHandoff is true, dead and killingBlow are false and overkill is zero",
+      "disposition": "excluded-product-boundary",
+      "reason": "Act-IV handoff deliberately prevents a killing blow and cannot be counted as terminal-hit support."
+    },
+    {
+      "id": "poison-synthetic-hit",
+      "predicate": "poison is true and killingBlow/overkill are absent",
+      "disposition": "excluded-distinct-producer",
+      "reason": "Enemy-phase Smolder does not traverse hit_enemy and cannot be silently recoded into the terminal-hit topology."
+    }
+  ],
+  "selectedRepresentations": [
+    {
+      "id": "exact-lethal-terminal-hit",
+      "event": "HIT_ENEMY",
+      "exactPredicate": "The event owns killingBlow=true and integer overkill=0.",
+      "persistentStateAdded": false,
+      "payoff": null,
+      "carrier": null,
+      "capacityOnly": true
+    },
+    {
+      "id": "positive-overkill-terminal-hit",
+      "event": "HIT_ENEMY",
+      "exactPredicate": "The event owns killingBlow=true and integer overkill>0.",
+      "persistentStateAdded": false,
+      "payoff": null,
+      "carrier": null,
+      "capacityOnly": true
+    },
+    {
+      "id": "draw-pile-reshuffle",
+      "event": "RESHUFFLE",
+      "exactPredicate": "A RESHUFFLE event records positive n after the empty draw pile receives the complete non-empty discard and is seeded-shuffled.",
+      "persistentStateAdded": false,
+      "payoff": null,
+      "carrier": null,
+      "capacityOnly": true
+    }
+  ],
+  "observationBoundary": {
+    "sharedContract": "One later trace-identity protocol may append only terminalHits(fight,event,idx,amount,blocked,hpAfter,killingBlow,overkill) for canonical hit_enemy events and reshuffles(fight,event,n) for RESHUFFLE. Both observations use the same fixed cohort and no treatment level.",
+    "poisonRule": "A HIT_ENEMY event missing the canonical killingBlow or overkill keys is not a terminal-hit record; this producer distinction is frozen before instrumentation.",
+    "noCartesianExpansion": "The two arrays are passive projections of the same queue on the same rows. They do not create treatment cells or causal contrasts.",
+    "stopRule": "Any core, path, RNG, policy, result, prior-trace, event-correspondence or schema mismatch closes all three observations without repair."
+  },
+  "priorEvidence": {
+    "actionGrammar": {"path": "summaries/post-v38-action-grammar-inventory-v1.json", "sha256": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da", "decision": "close-one-bit-setup-action-grammar"},
+    "emberReserve": {"path": "summaries/post-v38-novaflare-nonreward-capacity-v1.json", "sha256": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23", "decision": "close-deed-unlocked-ember-reserve-damage-family"},
+    "hearth": {"path": "summaries/post-v30-hearth-qualified-crn-gate2-v1.json", "sha256": "e7de2bcb35a4252222b30f83b75d79fa05ef33d30d7b95f3b83651b4edbade20", "decision": "quarantine-hearth-gate2-control-identity-failure"},
+    "ashPackage": {"path": "summaries/post-v38-ash-package-pair-v1.json", "sha256": "af6424db4266531fadd7c7de07db0b46e028a4543604636ec1b13b819b2b7c1f", "decision": "admit-ash-hand-size-bloodfire-pair"},
+    "enemyWard": {"path": "summaries/post-v30-enemy-ward-identity-v1.json", "sha256": "2f522812a599d7b8add69971c0a5442814e50783c8b4a326bcdf182e9239c750", "decision": "close-enemy-ward-transition-on-identity-failure"},
+    "weakMend": {"path": "summaries/post-v38-weak-mend-identity-v1.json", "sha256": "252da79af4432e73319dc184e1eaebc33e6d46c188457628ca15f30a819afaf0", "decision": "close-weak-mend-persistence-on-identity-failure"},
+    "fightQuality": {"path": "summaries/post-v38-fight-quality-capacity-v1.json", "sha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746", "decision": "close-exact-equality-fight-quality-family"},
+    "nativeGrammar": {"path": "summaries/post-v38-native-dusk-grammar-coverage-v1.json", "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff", "decision": "freeze-one-uncovered-native-family-for-capacity"},
+    "shatterSuppression": {"path": "summaries/post-v30-shatter-action-suppression-capacity-v1.json", "sha256": "9a56bf08578cd47af6b78eed49ed321bba30c86e9058fd4cab8cb70aa6f15c3e", "decision": "close-damaging-intent-shatter-suppression-on-observability-gate"},
+    "deathChain": {"path": "summaries/post-v38-reapers-bell-capacity-v1.json", "sha256": "0c8ed919c183c0a8255bbec2c1c24d0c78818d39005d5d0b07224d69dfe3ff05", "decision": "close-reapers-bell-death-chain-family"},
+    "turnState": {"path": "summaries/post-v38-turn-state-economy-capacity-v1.json", "sha256": "7cd0edf36fcd011422ec99a94d84cc0a774307c1db6150fff3d830fdf1d7c842", "decision": "close-turn-state-action-economy-family"},
+    "shatterAftermath": {"path": "summaries/post-v30-shatter-aftermath-audit-v2.json", "sha256": "45cb0d034079bc781078819163ae19b6889d7819643a37597609b2ac9d878b7c", "decision": "record-shatter-aftermath-v2-inconclusive-at-cap"}
+  },
+  "budget": {
+    "maximumSourceFilesRead": 5,
+    "maximumCacheFilesRead": 0,
+    "maximumSupportRowsRead": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "All 32 event types are covered exactly once, the terminal partition is exhaustive, exactly the three frozen representations remain observable candidates, and every source, evidence and ledger identity passes within 30 seconds without reading support.",
+    "successAuthority": "Apply decision boundary 1 and freeze exactly the two terminal-hit cells plus reshuffle for one shared, separately preregistered observation-identity contract. Add no payoff, carrier, factor, policy mapping, causal row, ledger row, method or protected seed.",
+    "futility": "No finite unclosed discrete transition remains.",
+    "futilityAuthority": "Apply decision boundary 2 and close this event-transition frontier. Continue issue #421 only from another source-complete structural mechanism; do not invent an event or reopen a closed/quarantined family.",
+    "inconclusive": "Event coverage, partition, source, evidence or ledger identity fails, the frozen representation set changes, or execution exceeds 30 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive at cap without observing support, implementing telemetry, selecting a primitive, adding a row, using a method or protected seed."
+  }
+}

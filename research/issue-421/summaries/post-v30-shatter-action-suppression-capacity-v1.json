@@ -1,0 +1,123 @@
+{
+  "authority": "Apply decision boundary 2 and close the complete damaging-intent Shatter-suppression relation without telemetry repair, aggregate proxy, alternate cache, intent or enemy subset, factor, implementation or rerun. Continue issue #421 with the next source- and evidence-backed structural mechanism.",
+  "decision": "close-damaging-intent-shatter-suppression-on-observability-gate",
+  "decisionBoundary": 2,
+  "eligibleCache": {
+    "filesRead": 0,
+    "reason": "Source observability gate runs before cache access.",
+    "sha256": "bb19c9c3e41c08312cff6eb8bd9a62d8ca2fa88ed187e66a4d47af877b371a7c",
+    "supportRowsRead": 0
+  },
+  "eventParser": {
+    "failClosed": "Any missing field, malformed event index, invalid enemy idx, missing or ambiguous current intent, unknown enemy/move definition or aggregate proxy fails observability before support is read or counted.",
+    "joinConstruction": "Within each fight, sort INTENT and STAGGERED records by immutable queue event index. For each STAGGERED(fight,event,idx), require exactly one latest earlier INTENT for that idx, map idx to fights.enemies[idx], require the enemy and move definition to exist in exact current content, and classify damaging only when the move owns a dmg field.",
+    "poisonRule": "Only an actual STAGGERED event counts. Because exact enemy phase resolves lethal Smolder first, Shatter count, pre-phase stagger state or a dead enemy can never substitute for consumption.",
+    "requiredFields": [
+      "fights.enemies",
+      "trajectory.intents.fight",
+      "trajectory.intents.event",
+      "trajectory.intents.idx",
+      "trajectory.intents.move",
+      "trajectory.staggered.fight",
+      "trajectory.staggered.event",
+      "trajectory.staggered.idx"
+    ],
+    "rowActivation": "A row is active when at least one valid joined STAGGERED record classifies as a damaging authored intent."
+  },
+  "execution": {
+    "cacheFilesRead": 0,
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "newSimulatorObservationRows": 0,
+    "protectedSeedRows": 0,
+    "supportMetricsInspected": 0,
+    "traceFilesRead": 0,
+    "wallTimeSeconds": 6.88180624996312
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "missingRequiredFields": [
+    "trajectory.intents.event",
+    "trajectory.intents.fight",
+    "trajectory.intents.idx",
+    "trajectory.intents.move",
+    "trajectory.staggered.event",
+    "trajectory.staggered.fight",
+    "trajectory.staggered.idx"
+  ],
+  "outcomeClass": "futility",
+  "protocolSha256": "7a947f5bb9b70ce730c08d1c40356ea4f567c39094e68ba50bc5268d531f7843",
+  "registeredCapacityGates": {
+    "maximumAnchorJaccard": 0.55,
+    "maximumFaultRows": 1,
+    "minimumActivePolicies": 16,
+    "minimumAnchorOnlyPoliciesPerAnchor": 8,
+    "minimumCandidateOnlyPoliciesPerAnchor": 8,
+    "minimumDistinctEnemyIds": 4,
+    "minimumDistinctEnemyMovePairs": 4,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "provenance": "The 16 active and inactive, eight viable, separate eight-policy anchor and 0.55 overlap gates reuse the frozen 64-policy capacity scale. Four enemy/move and enemy-ID witnesses prevent a single encounter script from masquerading as a package. One baseline fault is the unchanged current-main reliability ceiling."
+  },
+  "runnerSha256": "ee64c297b43ce8f6c31c6256fdb2034c4bdcec00f12c387bf619ebf9d14730b1",
+  "schemaVersion": 1,
+  "selectedRelation": {
+    "acquisition": null,
+    "capacityOnly": true,
+    "carrier": null,
+    "exactPredicate": "Within one fight, an actual STAGGERED event for a living enemy idx follows that idx's current INTENT, and content[enemyId].moves[moveKey] contains dmg.",
+    "id": "enemy-phase-damaging-intent-skip",
+    "payoff": null
+  },
+  "sourceTraceProjection": {
+    "aliasFailure": "fights.shatters is an aggregate over every Shatter in the fight and fights.hpLost is the aggregate result of attacks, poison, defence and duration. Neither identifies an actual STAGGERED consumer, its enemy idx or the skipped move.",
+    "availableFields": [
+      "trajectory.plays.fight",
+      "trajectory.plays.event",
+      "trajectory.plays.id",
+      "trajectory.plays.uid",
+      "fights.act",
+      "fights.kind",
+      "fights.enemies",
+      "fights.result",
+      "fights.turns",
+      "fights.hpLost",
+      "fights.shatters",
+      "fights.smolderKills"
+    ],
+    "missingByConstruction": [
+      "trajectory.intents.fight",
+      "trajectory.intents.event",
+      "trajectory.intents.idx",
+      "trajectory.intents.move",
+      "trajectory.staggered.fight",
+      "trajectory.staggered.event",
+      "trajectory.staggered.idx"
+    ],
+    "schemaKeys": [
+      "capture",
+      "nodes",
+      "plays",
+      "cardRewards",
+      "bossRelics",
+      "arts",
+      "beaconAttacks",
+      "beaconChips"
+    ]
+  }
+}

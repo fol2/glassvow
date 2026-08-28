@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-source-complete-shatter-aftermath-frontier",
+  "question": "After every generic Shatter and tested Shatter-relic family is removed, does exact current-main contain one distinct authored Shatter-aftermath relation that can support a separate natural-capacity screen?",
+  "scientificBasis": "The exact _shatter_enemy function is a finite branch surface. Adamant suppresses the Shatter event; every realised Shatter emits the same base vulnerable and Ember outputs; Prism Charm and Bell of Endings are tested relic branches; and positive Smolder invokes the existing target-preserving transfer before enemy death. Only the last branch couples reward-pool Smolder production to Dusk-only Shatter without adding a payoff, carrier or state.",
+  "frontierScope": {
+    "included": "Every conditional and unconditional branch executed directly by exact current-main _shatter_enemy, plus the shared _jump_smolder function and exact natural poison-card routes.",
+    "excluded": [
+      "pre-Shatter Facet production, threshold or target topology",
+      "generic Shatter count, vulnerable, Ember or action-economy payoff",
+      "Shatterer's Crown, Prism Charm or Bell of Endings variation",
+      "death-triggered Smolder transfer as an independent family",
+      "poison magnitude, card subset, target policy or acquisition tuning",
+      "payoff, carrier, content mutation, telemetry, ML, RL or optimiser",
+      "trace, cache, outcome or policy support"
+    ],
+    "claimBoundary": "This source-only audit may select at most one exact existing relation for a separately preregistered zero-new-row upper-capacity screen. It cannot establish realised transfer, causal complementarity, package admission or product authority."
+  },
+  "aftermathBranchPartition": [
+    {
+      "id": "adamant-suppression",
+      "definition": "The first attempted pane break on an unspent Adamant enemy increments facet_max, emits adamantHold and returns before a SHATTER event or aftermath.",
+      "disposition": "excluded-non-shatter",
+      "closureEvidence": [],
+      "reason": "This is an opponent-authored suppression state and produces no realised Shatter package mediator."
+    },
+    {
+      "id": "unconditional-shatter-output",
+      "definition": "Every realised Shatter records the Shatter, staggers the enemy, applies two Vulnerable and grants two Embers.",
+      "disposition": "closed-alias",
+      "closureEvidence": ["genericShatter", "shatterTempo"],
+      "reason": "Another reward on all Shatters or their universal vulnerable/Ember output reopens the closed generic Shatter and Shatter-tempo families."
+    },
+    {
+      "id": "prism-first-proc",
+      "definition": "With Prism Charm and no earlier proc in the fight, the Shatter grants two additional Embers and consumes the fight-scoped proc.",
+      "disposition": "closed-immutable-evidence",
+      "closureEvidence": ["duskScreen"],
+      "reason": "Prism Charm is an exact tested #524 Shatter target recorded as excluded by the current-main Dusk source screen."
+    },
+    {
+      "id": "smolder-transfer",
+      "definition": "If the shattered enemy carries positive Smolder and another enemy remains alive, exact current-main removes that Smolder and invokes _jump_smolder before death; the seeded destination receives the same amount and SMOLDER_JUMP records from, to and n.",
+      "disposition": "uncovered",
+      "closureEvidence": [],
+      "reason": "This is an existing cross-mechanic state transfer, not a generic Shatter payoff, relic effect, threshold, same-target repeat or enemy-death reward."
+    },
+    {
+      "id": "bell-collateral-damage",
+      "definition": "With Bell of Endings, the Shatter deals four damage to every other living enemy after the base and Smolder branches.",
+      "disposition": "closed-immutable-evidence",
+      "closureEvidence": ["duskScreen"],
+      "reason": "Bell of Endings is an exact tested #524 Shatter target recorded as excluded by the current-main Dusk source screen."
+    }
+  ],
+  "selectedRelation": {
+    "id": "smolder-transfer",
+    "name": "Shatter-triggered Smolder transfer",
+    "exactPredicate": "A realised Dusk Shatter finds positive poison on the shattered enemy while at least one other enemy is alive, then invokes the existing _jump_smolder function from the Shatter branch.",
+    "existingEvent": "smolderJump(from,to,n)",
+    "existingNaturalProducers": ["venomStrike", "toxicMist", "annihilate"],
+    "payoff": null,
+    "carrier": null,
+    "acquisition": "unchanged shared combat-reward pools",
+    "persistentStateAdded": false,
+    "rngAdded": false,
+    "capacityOnly": true
+  },
+  "mechanisticInteractions": {
+    "sameCardRoute": "venomStrike and annihilate resolve their poison effects before play_card applies pending Facet chips, so an unblocked Dusk Attack can author poison and then Shatter within the same card resolution. This is a source possibility, not a support claim.",
+    "stagedRoute": "toxicMist applies Smolder without Attack chips and therefore requires a later Shatter-producing card.",
+    "deathAlias": "_on_enemy_death also invokes _jump_smolder. A later factor or trace must distinguish the Shatter call site and leave death transfer unchanged; this audit does not count generic death jumps as candidate activation.",
+    "rng": "_jump_smolder uses the run RNG only when at least one destination exists. Reproducibility remains seeded; a future null factor must preserve the call path exactly and no causal claim may ignore post-mediator RNG divergence.",
+    "anchors": "Scoreline and Afterimage remain separate fixed activation anchors. Neither payoff is present, varied or estimated here."
+  },
+  "naturalRouteIdentity": {
+    "rewardPoolPoisonCards": ["venomStrike", "toxicMist", "annihilate"],
+    "starterOnlyPoisonCards": ["ashBite", "smother"],
+    "deedUnlockPoisonCards": ["ashenChoir"],
+    "allPoisonCards": ["annihilate", "ashBite", "ashenChoir", "smother", "toxicMist", "venomStrike"],
+    "multiEnemyFormations": 22,
+    "formations": 54,
+    "maximumEnemies": 3
+  },
+  "priorEvidence": {
+    "genericShatter": {
+      "path": "summaries/shatter-flow-v1.json",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce",
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"
+    },
+    "shatterTempo": {
+      "path": "summaries/post-v38-shatter-tempo-capacity-v1.json",
+      "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388",
+      "decision": "close-shatter-tempo-relay-without-implementation"
+    },
+    "duskScreen": {
+      "path": "summaries/post-v38-dusk-mechanism-screen-v1.json",
+      "sha256": "9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64",
+      "decision": "close-dusk-shatter-threshold-crown-screen"
+    }
+  },
+  "sourceAssertions": [
+    {
+      "id": "Adamant suppresses the realised Shatter",
+      "path": "domain/rules/combat.gd",
+      "contains": "if e.flags.get(\"adamant\", false) and not e.flags.get(\"adamantSpent\", false):\n\t\te.flags[\"adamantSpent\"] = true\n\t\tcb.queue.append({\"t\": &\"adamantHold\", \"idx\": e.idx})\n\t\treturn"
+    },
+    {
+      "id": "base Shatter outputs are unconditional",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.SHATTER, \"idx\": e.idx, \"facetMax\": e.facet_max})\n\tadd_status_enemy(cb, e, \"vulnerable\", 2)\n\tgain_embers(run, cb, 2)"
+    },
+    {
+      "id": "Prism is a first-proc branch",
+      "path": "domain/rules/combat.gd",
+      "contains": "if run.has_relic(\"prismCharm\") and not cb.prism_procd:\n\t\tcb.prism_procd = true\n\t\tgain_embers(run, cb, 2)"
+    },
+    {
+      "id": "positive Smolder invokes transfer from Shatter",
+      "path": "domain/rules/combat.gd",
+      "contains": "var sm: int = _sget(e.statuses, \"poison\")\n\tif sm > 0:\n\t\tfor o: EnemyCombatant in cb.enemies:\n\t\t\tif o != e and o.hp > 0:\n\t\t\t\te.statuses.erase(\"poison\")\n\t\t\t\t_jump_smolder(run, cb, e, sm)"
+    },
+    {
+      "id": "Bell is the final conditional aftermath branch",
+      "path": "domain/rules/combat.gd",
+      "contains": "if run.has_relic(\"bellOfEndings\"):\n\t\t_proc(cb, \"bellOfEndings\")"
+    },
+    {
+      "id": "transfer preserves amount and records identities",
+      "path": "domain/rules/combat.gd",
+      "contains": "var to: EnemyCombatant = others[run.rng.pick_index(others.size())]\n\tadd_status_enemy(cb, to, \"poison\", amount)\n\tcb.queue.append({\"t\": EventTypes.SMOLDER_JUMP, \"from\": from.idx, \"to\": to.idx, \"n\": amount})"
+    },
+    {
+      "id": "death transfer remains a separate existing call site",
+      "path": "domain/rules/combat.gd",
+      "contains": "gain_embers(run, cb, 1)  # the fire inside spills to your lantern\n\t\t\t_jump_smolder(run, cb, e, smolder)"
+    },
+    {
+      "id": "pending Facet chips land after all card effects",
+      "path": "domain/rules/combat.gd",
+      "contains": "for fx_v: Variant in effects:\n\t\tif cb.over:\n\t\t\tbreak\n\t\tvar fx: Dictionary = fx_v\n\t\t_apply_effect(run, cb, inst, d, fx, target, seal_mult)\n\tif cb.pending_chips_active and not cb.over:"
+    },
+    {
+      "id": "deed card unlocks join the natural reward pool",
+      "path": "domain/rules/rewards.gd",
+      "contains": "if unlock.begins_with(\"card:\"):\n\t\t\tvar id: String = unlock.trim_prefix(\"card:\")"
+    },
+    {
+      "id": "Smolder jump has an existing stable event identity",
+      "path": "domain/events/event_types.gd",
+      "contains": "const SMOLDER_JUMP: StringName = &\"smolderJump\""
+    }
+  ],
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "The exact aftermath partition is complete, prior evidence closes every realised-Shatter branch except Smolder transfer, the natural route inventory matches source and all immutable identities pass within 30 seconds without reading support.",
+    "successAuthority": "Apply decision boundary 1 and freeze only Shatter-triggered Smolder transfer for one separately preregistered zero-new-row upper-capacity screen on exact current-default Dusk rows. Do not inspect support before that protocol is frozen, count death-only jumps, choose a payoff or carrier, add telemetry, simulate, implement, use a method or protected seed.",
+    "futility": "No unique unclosed exact aftermath relation remains.",
+    "futilityAuthority": "Apply decision boundary 2 and close the complete Shatter-aftermath frontier. Continue issue #421 only from another source-complete structural mechanism; do not vary a relic, generic Shatter output or poison magnitude.",
+    "inconclusive": "Any source, content, evidence, partition, ledger or wall-time identity fails.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive at cap without support access, telemetry, simulation, implementation or inference."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "a03025cc9df8cd2e31a0043b98fb1a6e984e937f3a70def1125b71e718d758b3",
+    "taskCapsuleSha256": "f8baa0c73d4be865110ef021c15fca885f771aeec3af137650fd06d59504127b",
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  }
+}

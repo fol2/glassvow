@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v30-skill-chip-capacity",
+  "question": "Does the complete current-main non-damaging Skill-chip producer class have sufficient natural policy repertoire for a distinct planned-Shatter line, or does exact evidence isolate a source-repertoire bottleneck before any new primitive is designed?",
+  "registrationStatus": "Frozen before reading the identity-safe trace for this question. Candidate construction uses exact source, the preserved H19 diagnosis and immutable family decisions only. No new card, payoff, carrier, telemetry, simulator row, ledger row, protected seed, ML, RL or optimiser is authorised.",
+  "hypothesis": {
+    "productEvidence": "The preserved H19 diagnosis states that a Dusk Skill-chip line is needed to raise planned Shatter without restoring the free connecting-Attack chip that made random attacks Shatter by default.",
+    "currentGrammar": "Exact current-main contains one non-damaging Skill with a direct chip effect: rare, exhausting Annealing Rite. A later Attack in the same fight is the cheapest permissive upper bound on planned continuation; it overstates shared target, surviving partial Facets, connecting damage and actual Shatter.",
+    "claimBoundary": "This audit can identify sufficient authored repertoire, a narrow source-repertoire bottleneck or futility. It cannot establish complementarity, choose a new producer or consumer, reopen generic Shatter or partial-Facet payoffs, or authorise implementation."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "dfba10b40c658fb7b1f6d7a9584a32ff2316694fdfcf3ddf5206d2573c525d84",
+    "taskCapsuleSha256": "d827e6246678c6cd7227978abd929f90f099082d267e1ba6dd35a78ef79d2b93",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    },
+    "fileSha256": {
+      "summaries/shatter-flow-v1.json": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce",
+      "summaries/facet-focus-v1.json": "fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241",
+      "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff"
+    }
+  },
+  "h19Evidence": {
+    "path": "docs/balance/2026-08-20-421-hypothesis-19.md",
+    "sha256": "f074220417e7bfcac8c623dad711657976606e817585a6e5cb811e1a7d5edb0b",
+    "use": "Immutable current-repository diagnosis only; its historical plan and adaptive path are not reconstructed."
+  },
+  "priorEvidence": {
+    "genericShatter": {
+      "path": "summaries/shatter-flow-v1.json",
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"
+    },
+    "partialFacet": {
+      "path": "summaries/facet-focus-v1.json",
+      "decision": "STOP_INCONCLUSIVE_PARTIAL_FACET_PROTOTYPE"
+    },
+    "nativeCoverage": {
+      "path": "summaries/post-v38-native-dusk-grammar-coverage-v1.json",
+      "decision": "freeze-one-uncovered-native-family-for-capacity"
+    }
+  },
+  "sourceCardSets": {
+    "skillChipProducers": ["limitBreak"],
+    "attacks": [
+      "annihilate", "ashBite", "chisel", "cleave", "devour", "eclipseSlash",
+      "executioner", "flurry", "guardedStrike", "heavyBlow", "leechBlade",
+      "lunge", "momentum", "novaflare", "oblivionStrike", "phantomBlades",
+      "quakeblow", "quickSlash", "resonantLance", "shardstorm", "strike",
+      "tempest", "twinFangs", "uppercut", "venomStrike"
+    ]
+  },
+  "factorDefinitions": {
+    "producerClass": {
+      "levels": ["exact-current-main"],
+      "definition": "Every authored card whose base type is Skill, whose base effects contain direct chip and contain no direct damage or damaging special."
+    },
+    "consumerClass": {
+      "levels": ["later-current-main-Attack"],
+      "definition": "Every authored Attack played later in the same fight after a producer. This is an upper-bound observation, not a causal factor."
+    },
+    "scorelinePayoff": {
+      "levels": ["fixed-separate-anchor"],
+      "definition": "No Scoreline payoff is varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": ["fixed-separate-anchor"],
+      "definition": "No Afterimage payoff is varied or estimated."
+    }
+  },
+  "designMatrix": {
+    "kind": "one cached current-main observation cell; not a factorial",
+    "cells": [
+      {
+        "id": "current-main-skill-chip-upper-capacity",
+        "producerClass": "exact-current-main",
+        "consumerClass": "later-current-main-Attack",
+        "cachedRows": 256,
+        "newRows": 0
+      }
+    ],
+    "causalContrasts": [],
+    "estimands": [
+      "robust policy count with producer before later Attack in at least two of four rows",
+      "exact-inactive policy count with no such route in four rows",
+      "viable robust policy count with at least one route row ending in a win",
+      "distinct observed producer-consumer pair count and two separate package-anchor overlaps"
+    ],
+    "aliasStructure": "Generic Shatter action economy and target-local partial-Facet payoffs remain closed. A later Attack is deliberately broad and can only overstate exact planned-Shatter opportunity, so failure is decisive while any pass or bottleneck authorises source-only design work at most."
+  },
+  "trace": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "runtime": "4.7.2.stable.official.ed1daf0bf",
+    "identity": "Identity-safe exact current-main co-hand trace; this audit reads only plays, outcome, error, policy and seed identity."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "The producer line and both anchors use the same frozen policies, seeds, baseline, trace and exact robustness rule."
+  },
+  "anchors": {
+    "scoreline": {
+      "definition": "Chisel before a later Faultline in one fight in at least two of four rows.",
+      "policies": [0, 7, 9, 10, 13, 14, 15, 17, 22, 23, 28, 31, 39, 41, 52, 56, 62, 63]
+    },
+    "afterimage": {
+      "definition": "Ward and Warden's Edge simultaneously held in at least two of four rows.",
+      "policies": [0, 5, 11, 12, 14, 18, 24, 25, 27, 30, 33, 35, 41, 43, 44, 55, 62]
+    }
+  },
+  "gates": {
+    "minimumProducerCards": 2,
+    "minimumPotentialActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumConsumerCards": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "minimumBottleneckActivePolicies": 8,
+    "minimumBottleneckViablePolicies": 4,
+    "provenance": "The standard gates reuse the frozen 64-policy capacity scale. The bottleneck gate is not a candidate threshold: it requires at least half the normal active and viable minima, full inactivity, consumer breadth, two-sided anchor separation and reliability before one missing source member can have measured design value."
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "budget": {
+    "maximumWallTimeSeconds": 30,
+    "maximumCachedObservationRowsRead": 256,
+    "maximumTraceFilesRead": 2,
+    "maximumContentFilesRead": 1,
+    "maximumPriorEvidenceFilesRead": 4,
+    "maximumGodotProcesses": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumModelContextTokens": 0
+  },
+  "decisionRules": {
+    "success": "Identify a source-repertoire bottleneck only when exact current-main has one producer, robust support is at least eight but below sixteen, viability is at least four, and the full inactivity, consumer-breadth, separate-anchor and reliability gates pass.",
+    "successAuthority": "Freeze only the measured finding that current authored Skill-chip breadth is the bottleneck. Authorise one separately preregistered zero-row source-complete grammar audit for the smallest additional deterministic Skill-chip producer representation. Do not choose a card, payoff, carrier, numeric level or acquisition path; do not add telemetry, simulate, implement, use a method or protected seed.",
+    "futility": "The bottleneck gate fails, including when the current line is too sparse, too broad, unviable, package-aliased or unreliable. A standard-capacity pass alone does not reopen generic Shatter or partial-Facet evidence.",
+    "futilityAuthority": "Close the complete current-main non-damaging Skill-chip line at the preregistered cap. Do not change Annealing Rite rarity, cost or chip value, subset later Attacks, reuse a generic Shatter or partial-Facet payoff, add a carrier or rerun this line. Continue issue #421 with a materially different evidence-backed grammar.",
+    "inconclusive": "Source, evidence, cache, ledger identity or the wall-time cap prevents the exact decision.",
+    "inconclusiveAuthority": "Record the audit as inconclusive at cap without repairing or rerunning it, selecting a representation, adding telemetry or rows, or using protected seeds. Continue from another independent structural grammar."
+  }
+}

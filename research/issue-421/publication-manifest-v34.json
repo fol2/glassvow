@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 34,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "parentArchiveHead": "b9a4c91c41cb8fbc189c0515e33b3b3dfa09ea26",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "Shatter aftermath and action-suppression stops, unused-transition inconclusive stop, enemy-status alias closure and Skill-chip capacity closure",
+  "decision": "CLOSE_OR_QUARANTINE_FIVE_SOURCE_GRAMMARS_AND_CONTINUE_ISSUE_421",
+  "authority": {
+    "taskSSOT": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+    "programmeContinuesInsideIssue421": true,
+    "successorTicket": null
+  },
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-v30-source-grammar-closures-v1.md",
+    "progressReportSha256": "222ddb5e4eef5881c0b6ddc888ca98131280af9c1405eae266a6e3e2cc6f9e4c",
+    "taskCapsuleSha256": "4089c6f37f0b9a2a23dfa12702fdc59490572edf158ecb4672120f1589fc640c",
+    "studies": {
+      "shatterAftermathV1": {
+        "runnerSha256": "a03025cc9df8cd2e31a0043b98fb1a6e984e937f3a70def1125b71e718d758b3",
+        "protocolSha256": "9e592d0dfbd99ac5651acfd89e5ce04fccc571acaec10495c95d6f9f989a59ca",
+        "summarySha256": "60dedd3807d5c5c4f79dd2ed6a5818edcc2ca620703a644be51ab8443bb4c5cc"
+      },
+      "shatterAftermathV2": {
+        "runnerSha256": "5f599177cca5115e19c26a9ce0a2cdd5599b5c28c803ac9d5c2dca4ffd5c96ad",
+        "protocolSha256": "5b634e1f259b3a5e72d3654f89f9a28548566f024205e00ff55778d68664a187",
+        "summarySha256": "45cb0d034079bc781078819163ae19b6889d7819643a37597609b2ac9d878b7c"
+      },
+      "shatterActionSuppressionAudit": {
+        "runnerSha256": "a867b2ca510e5612b3f56d0f63dd8539088569bd9602f8a9a3745de1a992df63",
+        "protocolSha256": "48bae65973969076998d0b97dfdc0216ab25a1652962716f858a099f61752dc4",
+        "summarySha256": "c2a5973cdf83509846e9b46e824bf9c8656692d9725fe9fab64ce4fda2fe65cd"
+      },
+      "shatterActionSuppressionCapacity": {
+        "runnerSha256": "ee64c297b43ce8f6c31c6256fdb2034c4bdcec00f12c387bf619ebf9d14730b1",
+        "protocolSha256": "7a947f5bb9b70ce730c08d1c40356ea4f567c39094e68ba50bc5268d531f7843",
+        "summarySha256": "9a56bf08578cd47af6b78eed49ed321bba30c86e9058fd4cab8cb70aa6f15c3e"
+      },
+      "unusedDiscreteTransition": {
+        "runnerSha256": "c36179c0a5431a3e22507511c3b8437c3151583f0a1a6e73d46ea5642c80724b",
+        "protocolSha256": "169fb241e556d9dd5729ae6bbbd5a6b541ab4ccb098cfa30435ed01ca0a1dc01",
+        "summarySha256": "a26063c374b21063674f72e49aee06be208f2c43a3d1055b1b18d9bd6e26155d"
+      },
+      "enemyStatusLattice": {
+        "runnerSha256": "7ac36233a6f29955fb57fd5cdd2065bd3ddc10bc1fb0cf15e2d60721c1351209",
+        "protocolSha256": "3587a244c0c82649368d85324440ab66a4b8210037085eebfed816979772e4ad",
+        "summarySha256": "addd1c79e733aeb55a2dd1458878d1b9509debabbe2e69e4b24283bcc0a72328"
+      },
+      "skillChipCapacity": {
+        "runnerSha256": "dfba10b40c658fb7b1f6d7a9584a32ff2316694fdfcf3ddf5206d2573c525d84",
+        "protocolSha256": "31618dd46dc6909dce99f5b7a76a1e0917bb7ea4c602aaa54613d13cd5767bda",
+        "summarySha256": "471317d70b827206b7ea0787ea91f53822e4a8bab0cbecf2082c85e8889e7eae"
+      }
+    }
+  },
+  "gateResults": {
+    "shatterAftermath": {
+      "decisionBoundary": 3,
+      "decision": "record-shatter-aftermath-v2-inconclusive-at-cap",
+      "v1Failure": "source-route-inventory schema mismatch",
+      "v2Failure": "immutable prior-evidence order mismatch",
+      "selectedRelation": null,
+      "newSimulatorRows": 0
+    },
+    "shatterActionSuppression": {
+      "decisionBoundary": 2,
+      "decision": "close-damaging-intent-shatter-suppression-on-observability-gate",
+      "missingRequiredFields": 7,
+      "cacheFilesRead": 0,
+      "newSimulatorRows": 0
+    },
+    "unusedDiscreteTransition": {
+      "decisionBoundary": 3,
+      "decision": "record-unused-discrete-transition-audit-inconclusive-at-cap",
+      "failure": "frozen source assertion identity mismatch",
+      "selectedRepresentations": 0,
+      "newSimulatorRows": 0
+    },
+    "enemyStatusLattice": {
+      "decisionBoundary": 2,
+      "decision": "close-cracked-dimmed-conjunction-as-closed-alias",
+      "cardsAudited": 61,
+      "jointConsumers": 0,
+      "newSimulatorRows": 0
+    },
+    "skillChipCapacity": {
+      "decisionBoundary": 2,
+      "decision": "close-current-skill-chip-line-at-cap",
+      "cachedRowsRead": 256,
+      "potentialActivePolicies": 12,
+      "exactInactivePolicies": 37,
+      "viablePolicies": 5,
+      "afterimageCandidateOnlyPolicies": 9,
+      "scorelineCandidateOnlyPolicies": 3,
+      "scorelineCandidateOnlyRequired": 8,
+      "newSimulatorRows": 0
+    }
+  },
+  "interpretationBoundary": {
+    "claim": "These decisions apply only to the exact frozen relations and gates. They do not establish that all Dusk mechanism grammar is exhausted.",
+    "forbidden": [
+      "run a third Shatter-aftermath correction",
+      "repair action-suppression observability or use aggregate proxies",
+      "correct or reinterpret the unused-transition audit",
+      "subset the closed Cracked or Dimmed families",
+      "retune Annealing Rite or add a Skill-chip producer",
+      "use protected seeds"
+    ],
+    "next": "Resume zero-row source-first narrowing from one materially independent Dusk state or zone grammar, freezing the finite grammar and aliases before support access."
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0,
+    "newLedgerRows": 0
+  },
+  "verification": {
+    "pythonCompile": "PASS for seven new deterministic runners",
+    "jsonParse": "PASS for fourteen new protocols and summaries plus the task capsule",
+    "sha256Index": "PASS (762/762)",
+    "sha256IndexSha256": "b11ce44d8ce3001e7d135b756bc6c4e295e1137ad2fbf9057b5b93c238bf3e7c",
+    "productGateClaim": null
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryExcludingPycache": 797,
+    "payloadFilesIndexed": 762,
+    "protocolFiles": 132,
+    "summaryFiles": 174,
+    "topLevelToolFiles": 92,
+    "newRunners": 7,
+    "newProtocols": 7,
+    "newSummaries": 8,
+    "newRawCacheObjects": 0,
+    "newSourceArchives": 0
+  },
+  "remoteHeadsBeforePublication": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "b9a4c91c41cb8fbc189c0515e33b3b3dfa09ea26",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "executionDisclosure": "This snapshot reads 256 already frozen observations only for the Skill-chip capacity screen. Every other newly archived decision is zero-row. No new simulator row, ledger write, protected seed, product mutation, ML, RL, optimiser or human label entered any decision.",
+  "archiveOnly": true,
+  "productPr": null,
+  "actionsRun": false,
+  "mainChanged": false
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "issue": 421,
+  "stage": "zero-row-source-complete-shatter-aftermath-frontier-schema-correction",
+  "question": "Does the unchanged v1 Shatter-aftermath partition select one exact unclosed relation after correcting only the observed deeds-container iteration?",
+  "correction": {
+    "observedBeforeSupport": "Exact current-main content.deeds is a keyed dictionary. V1 iterated the dictionary directly and received string keys where deed dictionaries were required.",
+    "onlyChange": "Iterate content.deeds.values() when constructing the deed-unlocked poison-card inventory.",
+    "unchanged": [
+      "source commit and file hashes",
+      "five-branch aftermath partition and order",
+      "smolder-transfer selected-relation hypothesis",
+      "natural-route expected values",
+      "prior evidence and source assertions",
+      "zero-row budget and 30-second wall cap",
+      "success, futility and inconclusive rules",
+      "no support, trace, cache, simulator, ledger or protected-seed access"
+    ],
+    "claimBoundary": "V1 remains immutable operationally inconclusive evidence. V2 may make only the source-partition decision that v1 preregistered; it cannot inspect support or alter a scientific choice."
+  },
+  "baseProtocol": {
+    "path": "protocols/post-v30-shatter-aftermath-audit-v1.json",
+    "sha256": "9e592d0dfbd99ac5651acfd89e5ce04fccc571acaec10495c95d6f9f989a59ca"
+  },
+  "baseFailure": {
+    "path": "summaries/post-v30-shatter-aftermath-audit-v1.json",
+    "sha256": "60dedd3807d5c5c4f79dd2ed6a5818edcc2ca620703a644be51ab8443bb4c5cc",
+    "decision": "record-shatter-aftermath-inconclusive-at-cap",
+    "supportMetricsInspected": 0,
+    "newSimulatorObservationRows": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python validates the exact v1 protocol and failure, applies only values() at the deeds inventory read, then owns the unchanged source/evidence/partition/ledger checks and stop/go.",
+    "successStop": "The corrected exact inventory matches the frozen v1 expectation and every unchanged identity passes within the v1 wall cap.",
+    "futilityStop": "The unchanged partition contains no unique uncovered relation.",
+    "inconclusiveStop": "Any corrected inventory, immutable source, evidence, partition, ledger or wall-time identity fails.",
+    "noRetry": "One v2 attempt. Do not further repair, recode or reinterpret the source audit."
+  },
+  "immutableInputs": {
+    "runnerSha256": "5f599177cca5115e19c26a9ce0a2cdd5599b5c28c803ac9d5c2dca4ffd5c96ad",
+    "taskCapsuleSha256": "c602f110e9c2b817f0206c61e66ed3cd5cad39b2e3942fbbc4530e2f1842a4e0"
+  }
+}

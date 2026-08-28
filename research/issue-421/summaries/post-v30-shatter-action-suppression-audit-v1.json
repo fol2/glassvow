@@ -1,0 +1,232 @@
+{
+  "actionSuppressionPartition": [
+    {
+      "closureEvidence": [
+        "genericShatter"
+      ],
+      "definition": "No realised Shatter writes staggered, combat ends first, ordinary damage kills the enemy, or enemy-phase Smolder kills it before the stagger branch; no STAGGERED action skip occurs.",
+      "disposition": "excluded-non-event",
+      "id": "no-enemy-phase-stagger-consumption",
+      "reason": "There is no enemy-action suppression mediator. Treating Shatter count or its unconditional outputs as sufficient would reopen the rejected generic family."
+    },
+    {
+      "closureEvidence": [
+        "reseamBreak",
+        "genericShatter"
+      ],
+      "definition": "A further realised Shatter writes true over an already-true boolean before enemy-phase consumption and therefore cannot suppress a second action.",
+      "disposition": "closed-alias",
+      "id": "additional-shatter-while-already-staggered",
+      "reason": "The boolean has no additional action-suppression state. Selecting repeat count or a harder pane would reopen the closed same-enemy reseam family."
+    },
+    {
+      "closureEvidence": [
+        "resonance",
+        "nativeGrammar"
+      ],
+      "definition": "Before enemy phase, Resonant Lance may read staggered as one of two conditions for its damage multiplier.",
+      "disposition": "closed-alias",
+      "id": "player-phase-stagger-reader",
+      "reason": "This is the exact rejected Resonant Lance shatterEcho package, not enemy-action suppression."
+    },
+    {
+      "closureEvidence": [
+        "genericShatter"
+      ],
+      "definition": "After Smolder, STAGGERED skips a current move with no authored dmg field.",
+      "disposition": "excluded-not-one-mediator",
+      "id": "enemy-phase-non-damaging-intent-skip",
+      "reason": "The 47 moves divide into block, heal, buff and debuff actions with four distinct effect signatures. Pooling them would invent one scalar outcome; this audit neither selects nor closes any separately justified member."
+    },
+    {
+      "closureEvidence": [
+        "genericShatter",
+        "resonance",
+        "shatterTempo",
+        "fightQuality"
+      ],
+      "definition": "After Smolder, STAGGERED consumes a living enemy's current authored move whose definition contains dmg, appends the move key to history and emits no ENEMY_ACT for that action.",
+      "disposition": "uncovered",
+      "id": "enemy-phase-damaging-intent-skip",
+      "reason": "This is an existing producer-consumer handshake between a Dusk-only realised Shatter and the downstream enemy action gate. It is not a new payoff after every Shatter, player-phase echo damage, player action economy or post-fight no-loss reward."
+    },
+    {
+      "closureEvidence": [],
+      "definition": "After either a skipped or executed action, Ritual gain and vulnerable/weak ticks still run.",
+      "disposition": "excluded-retained-state",
+      "id": "post-skip-status-ticks",
+      "reason": "These transitions are explicitly not suppressed by stagger and therefore are fixed downstream context, not part of the selected action gate."
+    }
+  ],
+  "authority": "Apply decision boundary 1 and freeze only enemy-phase-damaging-intent-skip for one separately preregistered zero-new-row observability and capacity screen. Do not open a trace before its parser and gates are frozen, implement a factor, add telemetry, simulate, add a ledger row, use a protected seed or claim a package.",
+  "cacheFilesRead": 0,
+  "decision": "freeze-damaging-intent-shatter-suppression-for-capacity-preregistration",
+  "decisionBoundary": 1,
+  "evidenceResults": {
+    "fightQuality": {
+      "decision": "close-exact-equality-fight-quality-family",
+      "sha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746"
+    },
+    "genericShatter": {
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce"
+    },
+    "nativeGrammar": {
+      "decision": "freeze-one-uncovered-native-family-for-capacity",
+      "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff"
+    },
+    "reseamBreak": {
+      "decision": "close-reseam-break-without-implementation",
+      "sha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4"
+    },
+    "resonance": {
+      "decision": "REJECT_EXISTING_RESONANCE_PACKAGE",
+      "sha256": "90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d"
+    },
+    "shatterTempo": {
+      "decision": "close-shatter-tempo-relay-without-implementation",
+      "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388"
+    }
+  },
+  "frontierScope": {
+    "claimBoundary": "This source-only audit may freeze at most one exact existing relation for a separate zero-new-row observability and upper-capacity preregistration. It cannot establish realised support, policy selectivity, causal benefit, complementarity, package admission, a research knob or product authority.",
+    "excluded": [
+      "Facet production, threshold, same-target reseam or cross-target topology",
+      "generic Shatter count, vulnerable, Ember, draw, Energy or global power",
+      "Resonant Lance damage echo or another player-phase stagger reader",
+      "poison transfer, enemy death, relic aftermath or fight-quality reward",
+      "pooling block, heal, buff and debuff moves into one non-damage scalar",
+      "card, enemy, act, formation, intent-label or damage-magnitude subset",
+      "payoff, carrier, acquisition, policy score, telemetry, ML, RL or optimiser",
+      "trace, cache, outcome or policy support"
+    ],
+    "included": "The complete lifecycle of the existing enemy-local staggered boolean from realised Shatter through player-phase readers, lethal pre-emption and enemy-phase consumption, partitioned by the exact authored current move's native damage/non-damage boundary."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "naturalRouteIdentity": {
+    "damagingIntentLabels": {
+      "attack": 56,
+      "attack_block": 11,
+      "attack_buff": 2,
+      "attack_debuff": 24
+    },
+    "damagingMoveDefinitions": 93,
+    "effectSignatures": {
+      "damaging:addCards+dmg": 1,
+      "damaging:block+dmg": 11,
+      "damaging:dmg": 38,
+      "damaging:dmg+fx": 23,
+      "damaging:dmg+heal": 2,
+      "damaging:dmg+ramp": 1,
+      "damaging:dmg+times": 17,
+      "non-damaging:block": 12,
+      "non-damaging:block+fx": 11,
+      "non-damaging:block+heal": 2,
+      "non-damaging:fx": 22
+    },
+    "enemies": 36,
+    "enemiesWithDamagingMove": 36,
+    "enemiesWithMixedMoves": [
+      "abyssalKnight",
+      "alphaFang",
+      "ashAcolyte",
+      "chaosHound",
+      "deepmaw",
+      "duskfang",
+      "eternalKeeper",
+      "gravewarden",
+      "heraldOfEnd",
+      "leviathan",
+      "mirelurker",
+      "obsidianGolem",
+      "rootheart",
+      "shade",
+      "shellback",
+      "siren",
+      "sovereign",
+      "sporeling",
+      "starCultist",
+      "thornling",
+      "tidecaller",
+      "uncarvedSelf",
+      "uncrossedSelf",
+      "unlitSelf",
+      "unobsidianSelf",
+      "unopenedSelf",
+      "unsunkSelf",
+      "unwalkedSelf",
+      "unwoodedSelf",
+      "voidColossus",
+      "voltEel",
+      "waylayer"
+    ],
+    "enemiesWithOnlyDamagingMoves": [
+      "drownedOne",
+      "gloomslime",
+      "voidWisp",
+      "watcherEye"
+    ],
+    "formations": 54,
+    "formationsWithDamagingCapableEnemy": 54,
+    "maximumEnemies": 3,
+    "moveDefinitions": 140,
+    "nonDamagingIntentLabels": {
+      "block": 13,
+      "buff": 19,
+      "debuff": 13,
+      "heal": 2
+    },
+    "nonDamagingMoveDefinitions": 47
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "48bae65973969076998d0b97dfdc0216ab25a1652962716f858a099f61752dc4",
+  "runnerSha256": "a867b2ca510e5612b3f56d0f63dd8539088569bd9602f8a9a3745de1a992df63",
+  "schemaVersion": 1,
+  "selectedRelation": {
+    "acquisition": null,
+    "actionScope": "The whole authored damaging action is suppressed, including any attached block, heal, status, ramp, repeat or add-card effect. Those signatures are fixed natural heterogeneity, not separately varied factors.",
+    "capacityOnly": true,
+    "carrier": null,
+    "exactPredicate": "In enemy phase after Smolder resolution, a living enemy enters the existing staggered branch and its current move definition has a dmg field; STAGGERED is emitted and ENEMY_ACT for that move is absent.",
+    "id": "enemy-phase-damaging-intent-skip",
+    "name": "Shatter interruption of a damaging authored intent",
+    "nativeBoundary": "preview_enemy_dmg is non-null for the current move",
+    "payoff": null,
+    "persistentStateAdded": false,
+    "rngAdded": false
+  },
+  "sourceIdentity": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "taskCapsuleSha256": "21fdbff9880b459c402f659c1ea6e9fd90b21ab04875572d85e24aa38bcea265"
+  },
+  "supportMetricsInspected": 0,
+  "traceFilesRead": 0,
+  "wallTimeSeconds": 14.671772624948062
+}

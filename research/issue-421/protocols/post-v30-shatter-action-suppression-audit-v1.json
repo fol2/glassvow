@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-row-source-complete-shatter-action-suppression-frontier",
+  "question": "After the unconditional Shatter state, repeated Shatter and Resonant Lance reader are removed, does exact current-main expose one canonical downstream Shatter consumer that is structurally distinct from every closed Dusk family?",
+  "scientificBasis": "A realised Dusk Shatter writes one enemy-local staggered boolean. Exact enemy-phase order first resolves lethal Smolder, then either consumes that boolean by emitting STAGGERED and skipping the already-authored current move, or executes the move. Exact source already defines a native binary boundary: preview_enemy_dmg returns null for a non-damaging intent and a damage forecast otherwise, and the current pilot removes staggered enemies from incoming-damage forecasts. This permits one source-defined damaging-authored-action suppression relation without inventing a payoff, threshold, card, intent label or optimiser.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "a867b2ca510e5612b3f56d0f63dd8539088569bd9602f8a9a3745de1a992df63",
+    "taskCapsuleSha256": "21fdbff9880b459c402f659c1ea6e9fd90b21ab04875572d85e24aa38bcea265",
+    "sourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/enemy_combatant.gd": "f689c34f580b70f798c2337feecf8a666eb69a378b2bd213161ba919e09776b7",
+      "domain/rules/enemy_ai.gd": "30a20a1f60b0c53ce7d68405ab5bde551e42820928a2a3d4925c52148e59c417",
+      "domain/events/event_types.gd": "445a68f3887baa87b2d666ab4c9d380fba6d9d56fffb1bef13e6016dbc83903a",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    }
+  },
+  "frontierScope": {
+    "included": "The complete lifecycle of the existing enemy-local staggered boolean from realised Shatter through player-phase readers, lethal pre-emption and enemy-phase consumption, partitioned by the exact authored current move's native damage/non-damage boundary.",
+    "excluded": [
+      "Facet production, threshold, same-target reseam or cross-target topology",
+      "generic Shatter count, vulnerable, Ember, draw, Energy or global power",
+      "Resonant Lance damage echo or another player-phase stagger reader",
+      "poison transfer, enemy death, relic aftermath or fight-quality reward",
+      "pooling block, heal, buff and debuff moves into one non-damage scalar",
+      "card, enemy, act, formation, intent-label or damage-magnitude subset",
+      "payoff, carrier, acquisition, policy score, telemetry, ML, RL or optimiser",
+      "trace, cache, outcome or policy support"
+    ],
+    "claimBoundary": "This source-only audit may freeze at most one exact existing relation for a separate zero-new-row observability and upper-capacity preregistration. It cannot establish realised support, policy selectivity, causal benefit, complementarity, package admission, a research knob or product authority."
+  },
+  "sourceAssertions": [
+    {
+      "id": "realised Shatter writes the enemy-local staggered state",
+      "path": "domain/rules/combat.gd",
+      "contains": "run.stats[\"shatters\"] = _ji(run.stats.get(\"shatters\", 0)) + 1\n\te.staggered = true\n\tcb.queue.append({\"t\": EventTypes.SHATTER, \"idx\": e.idx, \"facetMax\": e.facet_max})"
+    },
+    {
+      "id": "enemy death clears unconsumed stagger state",
+      "path": "domain/rules/combat.gd",
+      "contains": "e.statuses = {}\n\te.staggered = false\n\tcb.queue.append({\"t\": EventTypes.DIE, \"idx\": e.idx})"
+    },
+    {
+      "id": "lethal Smolder pre-empts stagger consumption",
+      "path": "domain/rules/combat.gd",
+      "contains": "if e.hp <= 0:\n\t\t\t\t_on_enemy_death(run, cb, e)\n\t\t\t\tcontinue\n\t\te.block = 0\n\t\tif e.staggered:"
+    },
+    {
+      "id": "stagger consumption skips the current authored move once",
+      "path": "domain/rules/combat.gd",
+      "contains": "e.staggered = false\n\t\t\te.last_moves.append(String(e.move_key))\n\t\t\tcb.queue.append({\"t\": EventTypes.STAGGERED, \"idx\": e.idx})\n\t\telse:\n\t\t\tvar mv: Dictionary = e.move()"
+    },
+    {
+      "id": "executed moves emit their authored identity",
+      "path": "domain/rules/combat.gd",
+      "contains": "\"t\": EventTypes.ENEMY_ACT,\n\t\t\t\t\"idx\": e.idx,\n\t\t\t\t\"move\": String(e.move_key),"
+    },
+    {
+      "id": "authored damage is a native move boundary",
+      "path": "domain/rules/combat.gd",
+      "contains": "var dmg_v: Variant = mv.get(\"dmg\")\n\tif dmg_v == null:\n\t\treturn null"
+    },
+    {
+      "id": "current pilot forecasts staggered incoming damage as absent",
+      "path": "tools/balance_pilot.gd",
+      "contains": "var e: EnemyCombatant = game.cb.enemies[i]\n\t\tif e.staggered:\n\t\t\tcontinue\n\t\tvar preview_v: Variant = game.rules.preview_enemy_dmg(game.cb, e, game.run)"
+    },
+    {
+      "id": "Resonant Lance is a separate player-phase reader",
+      "path": "domain/rules/combat.gd",
+      "contains": "var echo: int = 2 if target.staggered or _sget(target.statuses, \"vulnerable\") > 0 else 1"
+    },
+    {
+      "id": "post-action status ticks survive a staggered turn",
+      "path": "domain/rules/combat.gd",
+      "contains": "# Enemy end-of-action: ritual, debuff tick (a staggered turn still ticks)."
+    },
+    {
+      "id": "current move identity is stored on each enemy",
+      "path": "domain/state/enemy_combatant.gd",
+      "contains": "var move_key: StringName = &\"\""
+    },
+    {
+      "id": "intent event exposes enemy and move identity",
+      "path": "domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.INTENT, \"idx\": e.idx, \"move\": String(e.move_key)})"
+    },
+    {
+      "id": "stagger consumption has a stable event identity",
+      "path": "domain/events/event_types.gd",
+      "contains": "const STAGGERED: StringName = &\"staggered\""
+    }
+  ],
+  "naturalRouteIdentity": {
+    "damagingIntentLabels": {
+      "attack": 56,
+      "attack_block": 11,
+      "attack_buff": 2,
+      "attack_debuff": 24
+    },
+    "damagingMoveDefinitions": 93,
+    "effectSignatures": {
+      "damaging:addCards+dmg": 1,
+      "damaging:block+dmg": 11,
+      "damaging:dmg": 38,
+      "damaging:dmg+fx": 23,
+      "damaging:dmg+heal": 2,
+      "damaging:dmg+ramp": 1,
+      "damaging:dmg+times": 17,
+      "non-damaging:block": 12,
+      "non-damaging:block+fx": 11,
+      "non-damaging:block+heal": 2,
+      "non-damaging:fx": 22
+    },
+    "enemies": 36,
+    "enemiesWithDamagingMove": 36,
+    "enemiesWithMixedMoves": [
+      "abyssalKnight",
+      "alphaFang",
+      "ashAcolyte",
+      "chaosHound",
+      "deepmaw",
+      "duskfang",
+      "eternalKeeper",
+      "gravewarden",
+      "heraldOfEnd",
+      "leviathan",
+      "mirelurker",
+      "obsidianGolem",
+      "rootheart",
+      "shade",
+      "shellback",
+      "siren",
+      "sovereign",
+      "sporeling",
+      "starCultist",
+      "thornling",
+      "tidecaller",
+      "uncarvedSelf",
+      "uncrossedSelf",
+      "unlitSelf",
+      "unobsidianSelf",
+      "unopenedSelf",
+      "unsunkSelf",
+      "unwalkedSelf",
+      "unwoodedSelf",
+      "voidColossus",
+      "voltEel",
+      "waylayer"
+    ],
+    "enemiesWithOnlyDamagingMoves": [
+      "drownedOne",
+      "gloomslime",
+      "voidWisp",
+      "watcherEye"
+    ],
+    "formations": 54,
+    "formationsWithDamagingCapableEnemy": 54,
+    "maximumEnemies": 3,
+    "moveDefinitions": 140,
+    "nonDamagingIntentLabels": {
+      "block": 13,
+      "buff": 19,
+      "debuff": 13,
+      "heal": 2
+    },
+    "nonDamagingMoveDefinitions": 47
+  },
+  "priorEvidence": {
+    "genericShatter": {
+      "path": "summaries/shatter-flow-v1.json",
+      "sha256": "369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce",
+      "decision": "REJECT_GENERIC_SHATTER_FLOW_PROTOTYPE"
+    },
+    "resonance": {
+      "path": "summaries/resonance-package-v1.json",
+      "sha256": "90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d",
+      "decision": "REJECT_EXISTING_RESONANCE_PACKAGE"
+    },
+    "reseamBreak": {
+      "path": "summaries/post-v38-reseam-break-capacity-v1.json",
+      "sha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4",
+      "decision": "close-reseam-break-without-implementation"
+    },
+    "shatterTempo": {
+      "path": "summaries/post-v38-shatter-tempo-capacity-v1.json",
+      "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388",
+      "decision": "close-shatter-tempo-relay-without-implementation"
+    },
+    "nativeGrammar": {
+      "path": "summaries/post-v38-native-dusk-grammar-coverage-v1.json",
+      "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "decision": "freeze-one-uncovered-native-family-for-capacity"
+    },
+    "fightQuality": {
+      "path": "summaries/post-v38-fight-quality-capacity-v1.json",
+      "sha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746",
+      "decision": "close-exact-equality-fight-quality-family"
+    }
+  },
+  "actionSuppressionPartition": [
+    {
+      "id": "no-enemy-phase-stagger-consumption",
+      "definition": "No realised Shatter writes staggered, combat ends first, ordinary damage kills the enemy, or enemy-phase Smolder kills it before the stagger branch; no STAGGERED action skip occurs.",
+      "closureEvidence": ["genericShatter"],
+      "disposition": "excluded-non-event",
+      "reason": "There is no enemy-action suppression mediator. Treating Shatter count or its unconditional outputs as sufficient would reopen the rejected generic family."
+    },
+    {
+      "id": "additional-shatter-while-already-staggered",
+      "definition": "A further realised Shatter writes true over an already-true boolean before enemy-phase consumption and therefore cannot suppress a second action.",
+      "closureEvidence": ["reseamBreak", "genericShatter"],
+      "disposition": "closed-alias",
+      "reason": "The boolean has no additional action-suppression state. Selecting repeat count or a harder pane would reopen the closed same-enemy reseam family."
+    },
+    {
+      "id": "player-phase-stagger-reader",
+      "definition": "Before enemy phase, Resonant Lance may read staggered as one of two conditions for its damage multiplier.",
+      "closureEvidence": ["resonance", "nativeGrammar"],
+      "disposition": "closed-alias",
+      "reason": "This is the exact rejected Resonant Lance shatterEcho package, not enemy-action suppression."
+    },
+    {
+      "id": "enemy-phase-non-damaging-intent-skip",
+      "definition": "After Smolder, STAGGERED skips a current move with no authored dmg field.",
+      "closureEvidence": ["genericShatter"],
+      "disposition": "excluded-not-one-mediator",
+      "reason": "The 47 moves divide into block, heal, buff and debuff actions with four distinct effect signatures. Pooling them would invent one scalar outcome; this audit neither selects nor closes any separately justified member."
+    },
+    {
+      "id": "enemy-phase-damaging-intent-skip",
+      "definition": "After Smolder, STAGGERED consumes a living enemy's current authored move whose definition contains dmg, appends the move key to history and emits no ENEMY_ACT for that action.",
+      "closureEvidence": ["genericShatter", "resonance", "shatterTempo", "fightQuality"],
+      "disposition": "uncovered",
+      "reason": "This is an existing producer-consumer handshake between a Dusk-only realised Shatter and the downstream enemy action gate. It is not a new payoff after every Shatter, player-phase echo damage, player action economy or post-fight no-loss reward."
+    },
+    {
+      "id": "post-skip-status-ticks",
+      "definition": "After either a skipped or executed action, Ritual gain and vulnerable/weak ticks still run.",
+      "closureEvidence": [],
+      "disposition": "excluded-retained-state",
+      "reason": "These transitions are explicitly not suppressed by stagger and therefore are fixed downstream context, not part of the selected action gate."
+    }
+  ],
+  "selectedRelation": {
+    "id": "enemy-phase-damaging-intent-skip",
+    "name": "Shatter interruption of a damaging authored intent",
+    "exactPredicate": "In enemy phase after Smolder resolution, a living enemy enters the existing staggered branch and its current move definition has a dmg field; STAGGERED is emitted and ENEMY_ACT for that move is absent.",
+    "nativeBoundary": "preview_enemy_dmg is non-null for the current move",
+    "actionScope": "The whole authored damaging action is suppressed, including any attached block, heal, status, ramp, repeat or add-card effect. Those signatures are fixed natural heterogeneity, not separately varied factors.",
+    "persistentStateAdded": false,
+    "rngAdded": false,
+    "payoff": null,
+    "carrier": null,
+    "acquisition": null,
+    "capacityOnly": true
+  },
+  "mechanisticInteractions": {
+    "poisonPreemption": "Enemy-phase Smolder resolves first. A lethal tick removes the enemy and its stagger state, so only an actual STAGGERED event can establish consumption.",
+    "compoundMoves": "Fifty-five damaging moves include another authored effect or repetition. A later estimand must treat the whole action gate as the factor and report direct-damage forecast plus signature strata without claiming pure damage mediation.",
+    "multipleEnemies": "All 54 formations contain at least one damaging-capable enemy, but target choice can matter only in multi-enemy state. A later capacity screen must measure rather than assume policy selectivity.",
+    "playerDefence": "Player Ward, Weak, Vulnerable, Warding Charm and difficulty modifiers alter forecast damage but not the authored damage/non-damage boundary.",
+    "anchors": "Scoreline and Afterimage remain separate fixed activation anchors. Neither payoff is varied or estimated here."
+  },
+  "capacityEvidenceBoundary": {
+    "precondition": "A separate protocol must freeze the one eligible identity-safe current-main trace, exact INTENT-to-STAGGERED parser, poison/death exclusion, move-definition join, robust active/inactive/viable policy gates, separate Scoreline and Afterimage anchors, reliability, wall-time and all decision rules before opening any trace or cache.",
+    "observabilityRule": "If the eligible trace lacks enemy idx, move identity, turn/fight identity or actual STAGGERED consumption, stop at an observability boundary without adding or repairing telemetry.",
+    "causalBoundary": "No research factor is authorised by this audit. Only a successful capacity result may justify a separately preregistered, identity-proven consumer-local factor that leaves Shatter production, Resonant Lance, non-damaging skips, RNG and all unrelated state unchanged."
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "decisionRules": {
+    "success": "The six-cell lifecycle partition is source-complete with exactly one selected existing relation; all source, content, evidence and ledger identities pass without reading support, trace or cache, and execution finishes within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only enemy-phase-damaging-intent-skip for one separately preregistered zero-new-row observability and capacity screen. Do not open a trace before its parser and gates are frozen, implement a factor, add telemetry, simulate, add a ledger row, use a protected seed or claim a package.",
+    "futility": "No unique, canonical and unclosed downstream Shatter consumer remains.",
+    "futilityAuthority": "Apply decision boundary 2 and close this Shatter action-suppression frontier. Continue inside issue #421 from another source-complete structural mechanism; do not reopen generic Shatter, Resonant Lance, repeat Shatter or pool heterogeneous non-damage actions.",
+    "inconclusive": "Any partition, source, content, evidence or ledger identity fails, more than one relation is selected, or execution exceeds 30 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the audit inconclusive at cap without reading support, selecting a factor, adding telemetry, simulating, adding a row, using a method or protected seed."
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "decisionBoundary": 3,
+  "decision": "record-unused-discrete-transition-audit-inconclusive-at-cap",
+  "outcomeClass": "inconclusive",
+  "failure": "The frozen source assertion named 'exact preview exposes lethal but no overkill score' did not match exact current-main text.",
+  "failureStage": "source-assertion-identity",
+  "protocolSha256": "169fb241e556d9dd5729ae6bbbd5a6b541ab4ccb098cfa30435ed01ca0a1dc01",
+  "runnerSha256": "c36179c0a5431a3e22507511c3b8437c3151583f0a1a6e73d46ea5642c80724b",
+  "taskCapsuleSha256": "b67c06d3da531f463b275469e39b76404103f1691645d5b6d70f85070622e0ed",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "selectedRepresentations": [],
+  "scientificClaim": null,
+  "execution": {
+    "GodotProcesses": 0,
+    "traceFilesRead": 0,
+    "cacheFilesRead": 0,
+    "supportMetricsInspected": 0,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "maximumModelContextTokens": 0
+  },
+  "ledgerAfterFailure": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "authority": "Apply decision boundary 3 and quarantine this audit without selecting terminal-hit or reshuffle observations, implementing telemetry, inspecting support, adding a row, using a method or protected seed. Continue issue #421 from another independent source-complete structural family.",
+  "forbidden": [
+    "edit the frozen assertion and rerun v1",
+    "create a corrected v2 without new authority",
+    "infer terminal-hit or reshuffle source validity from the failed audit",
+    "implement the shared observation contract",
+    "inspect support for any proposed representation"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 2,
+  "issue": 421,
+  "decisionBoundary": 3,
+  "decision": "record-shatter-aftermath-v2-inconclusive-at-cap",
+  "outcomeClass": "inconclusive",
+  "failure": "The corrected route inventory passed, but the frozen exact-order evidence comparator expected Prism Charm before Bell of Endings while the immutable Dusk screen records Bell of Endings before Prism Charm.",
+  "failureStage": "prior-evidence-order-identity",
+  "protocolSha256": "5b634e1f259b3a5e72d3654f89f9a28548566f024205e00ff55778d68664a187",
+  "baseProtocolSha256": "9e592d0dfbd99ac5651acfd89e5ce04fccc571acaec10495c95d6f9f989a59ca",
+  "baseFailureSha256": "60dedd3807d5c5c4f79dd2ed6a5818edcc2ca620703a644be51ab8443bb4c5cc",
+  "runnerSha256": "5f599177cca5115e19c26a9ce0a2cdd5599b5c28c803ac9d5c2dca4ffd5c96ad",
+  "taskCapsuleSha256": "c602f110e9c2b817f0206c61e66ed3cd5cad39b2e3942fbbc4530e2f1842a4e0",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "correctedRouteInventoryPassed": true,
+  "expectedTestedRelicOrder": [
+    "relic:prismCharm",
+    "relic:bellOfEndings"
+  ],
+  "observedImmutableTestedRelicOrder": [
+    "relic:bellOfEndings",
+    "relic:prismCharm"
+  ],
+  "selectedRelation": null,
+  "execution": {
+    "GodotProcesses": 0,
+    "traceFilesRead": 0,
+    "cacheFilesRead": 0,
+    "supportMetricsInspected": 0,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "maximumModelContextTokens": 0
+  },
+  "ledgerAfterFailure": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "authority": "The v2 protocol permits one attempt and forbids further repair, recoding or reinterpretation. Quarantine this Shatter-aftermath frontier without a support or capacity claim and continue issue #421 from another independent source-complete structural mechanism.",
+  "forbidden": [
+    "sort or reorder the immutable evidence list",
+    "run a v3 Shatter-aftermath audit",
+    "inspect Smolder-transfer support",
+    "add telemetry or a causal factor for this frontier",
+    "infer a negative result for Smolder transfer"
+  ]
+}

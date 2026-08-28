@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v30-enemy-status-lattice-audit",
+  "question": "Does the exact four-cell enemy Cracked-by-Dimmed lattice contain a structurally distinct, naturally authored and unclosed joint consumer, or is its sole both-status route only an alias of exhausted Cracked and Dimmed families?",
+  "registrationStatus": "Frozen before the first decision execution. Exact current-main source was used only to construct the complete source inventory; no trace, cache, support metric, simulator observation, ledger mutation, protected seed, ML, RL or optimiser was read or used.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "7ac36233a6f29955fb57fd5cdd2065bd3ddc10bc1fb0cf15e2d60721c1351209",
+    "taskCapsuleSha256": "b51ec596b045f8bcfbf8bf158eada7eae7255af8ec75de16440b05e404591bd8",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    }
+  },
+  "factorDefinitions": {
+    "cracked": {
+      "off": "The selected living enemy has vulnerable <= 0.",
+      "on": "The selected living enemy has vulnerable > 0."
+    },
+    "dimmed": {
+      "off": "The same selected living enemy has weak <= 0.",
+      "on": "The same selected living enemy has weak > 0."
+    },
+    "designMatrix": [
+      {"cell": "neither", "cracked": "off", "dimmed": "off"},
+      {"cell": "cracked-only", "cracked": "on", "dimmed": "off"},
+      {"cell": "dimmed-only", "cracked": "off", "dimmed": "on"},
+      {"cell": "both", "cracked": "on", "dimmed": "on"}
+    ],
+    "estimands": [],
+    "mechanisticInteractions": [],
+    "payoffs": "No Scoreline, Afterimage, damage, action-economy, Facet, Shatter, healing, Ward or other payoff is constructed, varied or estimated."
+  },
+  "producerLattice": {
+    "neither": [
+      "aegis", "agility", "annihilate", "ashBite", "ashenChoir", "bastion",
+      "bloodRite", "brace", "bulwark", "burn", "catalyst", "chisel",
+      "cleave", "cripple", "defend", "deflect", "devour", "emberdance",
+      "empower", "executioner", "firstSpark", "flawlessForm", "flurry",
+      "fortify", "frenzy", "guardedStrike", "heavyBlow", "hex", "ironSkin",
+      "leechBlade", "limitBreak", "momentum", "nightSight", "novaflare",
+      "oblivionStrike", "offering", "phantomBlades", "preparation", "pyreheart",
+      "quakeblow", "quickSlash", "regrowth", "resonantLance", "risingLitany",
+      "shardstorm", "sidestep", "smother", "strike", "surge", "tempest",
+      "tithe", "toxicMist", "twinFangs", "unreadablePage", "venomStrike",
+      "virulence", "wound"
+    ],
+    "cracked-only": ["eclipseSlash"],
+    "dimmed-only": ["lunge", "uppercut"],
+    "both": ["warCry"]
+  },
+  "statusReadInventory": [
+    {"function": "damage_player", "status": "weak", "subject": "enemy", "expression": "if _sget(attacker.statuses, \"weak\") > 0:"},
+    {"function": "damage_player", "status": "vulnerable", "subject": "player", "expression": "if _sget(p.statuses, \"vulnerable\") > 0:"},
+    {"function": "hit_enemy", "status": "weak", "subject": "player", "expression": "if _sget(p.statuses, \"weak\") > 0:"},
+    {"function": "hit_enemy", "status": "vulnerable", "subject": "enemy", "expression": "if _sget(e.statuses, \"vulnerable\") > 0:"},
+    {"function": "_apply_special", "status": "vulnerable", "subject": "enemy", "expression": "if _sget(target.statuses, \"vulnerable\") > 0:"},
+    {"function": "_apply_special", "status": "vulnerable", "subject": "enemy", "expression": "var echo: int = 2 if target.staggered or _sget(target.statuses, \"vulnerable\") > 0 else 1"},
+    {"function": "end_turn", "status": "vulnerable", "subject": "enemy", "expression": "_tick_status(e.statuses, \"vulnerable\")"},
+    {"function": "end_turn", "status": "weak", "subject": "enemy", "expression": "_tick_status(e.statuses, \"weak\")"},
+    {"function": "preview_enemy_dmg", "status": "weak", "subject": "enemy", "expression": "if _sget(e.statuses, \"weak\") > 0:"},
+    {"function": "preview_enemy_dmg", "status": "vulnerable", "subject": "player", "expression": "if _sget(cb.player.statuses, \"vulnerable\") > 0:"},
+    {"function": "preview_play", "status": "vulnerable", "subject": "enemy", "expression": "if target != null and _sget(target.statuses, \"vulnerable\") > 0:"},
+    {"function": "_preview_hit", "status": "weak", "subject": "player", "expression": "if _sget(p.statuses, \"weak\") > 0:"},
+    {"function": "_preview_hit", "status": "vulnerable", "subject": "enemy", "expression": "if target != null and _sget(target.statuses, \"vulnerable\") > 0:"}
+  ],
+  "priorEvidence": {
+    "crackedTempo": {
+      "path": "summaries/cracked-tempo-v1.json",
+      "sha256": "fa2d279bd61bf6dd41cdc1585d5590241b0d881493b2cb498f9663d1539c6dd1",
+      "decision": "REJECT_CRACKED_TEMPO_PROTOTYPE"
+    },
+    "resonance": {
+      "path": "summaries/resonance-package-v1.json",
+      "sha256": "90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d",
+      "decision": "REJECT_EXISTING_RESONANCE_PACKAGE"
+    },
+    "dimmedFacet": {
+      "path": "summaries/post-v30-dimmed-facet-capacity-v1.json",
+      "sha256": "b72b84d97675eb87ead2cee9a138e533e731f6620af1ff2fcc5a5ce6d58fe649",
+      "decision": "close-dimmed-facet-primitive-family-at-cap"
+    },
+    "weakMend": {
+      "path": "summaries/post-v38-weak-mend-identity-v1.json",
+      "sha256": "252da79af4432e73319dc184e1eaebc33e6d46c188457628ca15f30a819afaf0",
+      "decision": "close-weak-mend-persistence-on-identity-failure"
+    },
+    "facetFocus": {
+      "path": "summaries/facet-focus-v1.json",
+      "sha256": "fa11d04c131e10206ad9797cdf40c61ee2e17ba050113d68741bf5b3d10e6241",
+      "decision": "STOP_INCONCLUSIVE_PARTIAL_FACET_PROTOTYPE"
+    }
+  },
+  "dimmedProtocol": {
+    "path": "protocols/post-v30-dimmed-facet-capacity-v1.json",
+    "sha256": "16d43f02ce033a0426e77e6da7521a2bff1b91b96814e960e584138c3f2f50b6"
+  },
+  "crackedProtocols": [
+    {"path": "protocols/cracked-tempo-v1.json", "sha256": "abe0147b3d18d0a58c1ca66595eb3b1d3e59e2b4e07083840d5ef4f1b1b26292"},
+    {"path": "protocols/resonance-package-v1.json", "sha256": "13e04805bb42f1094c71965a9bbc576458de33f02552d7f5147e9f1cb95584ce"}
+  ],
+  "aliasStructure": {
+    "neither": "No enemy Cracked or Dimmed condition exists.",
+    "cracked-only": "Eclipse Slash and every current enemy-Cracked consumer are covered by immutable Cracked tempo, Resonance and Facet evidence.",
+    "dimmed-only": "Dimming Cut, Ringing Blow and the target-Dimmed-to-Facet and weak-mend directions are closed without narrower producer, consumer or payoff variants.",
+    "both": "Shatterhymn is already a producer in both closed Cracked protocols and the complete closed Dimmed producer class. Current-main has no branch consuming both statuses on the same enemy. Reusing a closed payoff would be a forbidden subset; selecting a different payoff would be an unsupported invented mechanism rather than evidence-backed narrowing."
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "budget": {
+    "maximumWallTimeSeconds": 30,
+    "maximumSourceBlobsRead": 2,
+    "maximumPriorEvidenceFilesRead": 5,
+    "maximumClassProtocolFilesRead": 3,
+    "maximumTraceFilesRead": 0,
+    "maximumCacheFilesRead": 0,
+    "maximumSupportMetricsInspected": 0,
+    "maximumGodotProcesses": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumProtectedSeedRows": 0,
+    "maximumModelContextTokens": 0
+  },
+  "decisionRules": {
+    "futilityRule": "At boundary 2, close the complete Cracked-by-Dimmed conjunction when all four producer cells are complete, Shatterhymn is the sole both-status producer, it belongs to both closed source classes, current-main contains no joint enemy-status consumer and every same-payoff continuation is a forbidden narrower variant.",
+    "inconclusiveRule": "At boundary 3, record inconclusive and stop if source, evidence, ledger identity or the wall-time cap prevents the exact alias decision.",
+    "futilityAuthority": "Close the complete enemy Cracked-by-Dimmed conjunction as a closed-family alias. Do not subset Shatterhymn, combine sequential producers, reuse damage, action-economy, Facet, Shatter, healing or Ward payoffs, invent another payoff, inspect support, add telemetry, simulate, implement or rerun this lattice.",
+    "inconclusiveAuthority": "Record the lattice audit as inconclusive at cap. Select no representation, inspect no support, add no telemetry or row, and require new authority before repair or rerun."
+  }
+}

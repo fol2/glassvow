@@ -1,0 +1,281 @@
+{
+  "authority": "Close the complete current-main non-damaging Skill-chip line at the preregistered cap. Do not change Annealing Rite rarity, cost or chip value, subset later Attacks, reuse a generic Shatter or partial-Facet payoff, add a carrier or rerun this line. Continue issue #421 with a materially different evidence-backed grammar.",
+  "bottleneckGateResults": {
+    "afterimageSeparation": true,
+    "consumerBreadth": true,
+    "halfViability": true,
+    "inactive": true,
+    "nonzeroSelectiveSupport": true,
+    "reliability": true,
+    "scorelineSeparation": false,
+    "soleAuthoredProducer": true
+  },
+  "cachedObservationRowsRead": 256,
+  "counts": {
+    "ambiguousPolicies": 15,
+    "baselineFaultRows": 0,
+    "distinctConsumerCards": 20,
+    "distinctPairs": 20,
+    "distinctProducerCards": 1,
+    "exactInactivePolicies": 37,
+    "potentialActivePolicies": 12,
+    "viablePolicies": 5
+  },
+  "decision": "close-current-skill-chip-line-at-cap",
+  "decisionBoundary": 2,
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "observedPairs": [
+    [
+      "limitBreak",
+      "annihilate"
+    ],
+    [
+      "limitBreak",
+      "chisel"
+    ],
+    [
+      "limitBreak",
+      "cleave"
+    ],
+    [
+      "limitBreak",
+      "devour"
+    ],
+    [
+      "limitBreak",
+      "eclipseSlash"
+    ],
+    [
+      "limitBreak",
+      "executioner"
+    ],
+    [
+      "limitBreak",
+      "flurry"
+    ],
+    [
+      "limitBreak",
+      "guardedStrike"
+    ],
+    [
+      "limitBreak",
+      "heavyBlow"
+    ],
+    [
+      "limitBreak",
+      "leechBlade"
+    ],
+    [
+      "limitBreak",
+      "lunge"
+    ],
+    [
+      "limitBreak",
+      "momentum"
+    ],
+    [
+      "limitBreak",
+      "oblivionStrike"
+    ],
+    [
+      "limitBreak",
+      "phantomBlades"
+    ],
+    [
+      "limitBreak",
+      "quickSlash"
+    ],
+    [
+      "limitBreak",
+      "strike"
+    ],
+    [
+      "limitBreak",
+      "tempest"
+    ],
+    [
+      "limitBreak",
+      "twinFangs"
+    ],
+    [
+      "limitBreak",
+      "uppercut"
+    ],
+    [
+      "limitBreak",
+      "venomStrike"
+    ]
+  ],
+  "policySets": {
+    "ambiguous": [
+      3,
+      5,
+      11,
+      19,
+      20,
+      25,
+      27,
+      29,
+      32,
+      42,
+      44,
+      45,
+      47,
+      56,
+      61
+    ],
+    "exactInactive": [
+      0,
+      1,
+      2,
+      4,
+      6,
+      7,
+      8,
+      9,
+      12,
+      13,
+      15,
+      17,
+      18,
+      21,
+      22,
+      24,
+      26,
+      30,
+      33,
+      34,
+      36,
+      37,
+      38,
+      40,
+      43,
+      46,
+      49,
+      50,
+      51,
+      53,
+      54,
+      55,
+      57,
+      58,
+      59,
+      60,
+      62
+    ],
+    "potentialActive": [
+      10,
+      14,
+      16,
+      23,
+      28,
+      31,
+      35,
+      39,
+      41,
+      48,
+      52,
+      63
+    ],
+    "viable": [
+      14,
+      35,
+      39,
+      48,
+      63
+    ]
+  },
+  "protectedSeedRows": 0,
+  "protocolSha256": "31618dd46dc6909dce99f5b7a76a1e0917bb7ea4c602aaa54613d13cd5767bda",
+  "runnerSha256": "dfba10b40c658fb7b1f6d7a9584a32ff2316694fdfcf3ddf5206d2573c525d84",
+  "schemaVersion": 1,
+  "separation": {
+    "afterimage": {
+      "anchorOnlyPolicies": 14,
+      "candidateOnlyPolicies": 9,
+      "crossActivePolicies": 3,
+      "jaccard": 0.11538461538461539
+    },
+    "scoreline": {
+      "anchorOnlyPolicies": 9,
+      "candidateOnlyPolicies": 3,
+      "crossActivePolicies": 9,
+      "jaccard": 0.42857142857142855
+    }
+  },
+  "sourceCardSets": {
+    "attacks": [
+      "annihilate",
+      "ashBite",
+      "chisel",
+      "cleave",
+      "devour",
+      "eclipseSlash",
+      "executioner",
+      "flurry",
+      "guardedStrike",
+      "heavyBlow",
+      "leechBlade",
+      "lunge",
+      "momentum",
+      "novaflare",
+      "oblivionStrike",
+      "phantomBlades",
+      "quakeblow",
+      "quickSlash",
+      "resonantLance",
+      "shardstorm",
+      "strike",
+      "tempest",
+      "twinFangs",
+      "uppercut",
+      "venomStrike"
+    ],
+    "skillChipProducers": [
+      "limitBreak"
+    ]
+  },
+  "sourceIdentity": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    },
+    "taskCapsuleSha256": "d827e6246678c6cd7227978abd929f90f099082d267e1ba6dd35a78ef79d2b93"
+  },
+  "standardGateResults": {
+    "active": false,
+    "afterimageSeparation": true,
+    "consumerBreadth": true,
+    "inactive": true,
+    "reliability": true,
+    "scorelineSeparation": false,
+    "sourceBreadth": false,
+    "viable": false
+  },
+  "traceIdentity": {
+    "newRuntimeExecution": false,
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "rows": 256
+  },
+  "wallTimeSeconds": 6.452292250003666
+}

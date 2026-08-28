@@ -1,0 +1,213 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "zero-new-row-damaging-intent-shatter-suppression-capacity-observability",
+  "question": "Can the sole authorised immutable 4.7.2 current-default trace identify actual enemy-phase Shatter consumption of a damaging authored intent exactly enough to apply one frozen natural-capacity screen?",
+  "scientificBasis": "The selected relation requires an actual post-Smolder STAGGERED branch, not a Shatter count or inferred survival. Exact attribution needs the most recent prior INTENT for the same fight and enemy idx, its move key, the enemy ID at that idx and a current-content move definition carrying dmg. Aggregate fight Shatters and HP loss cannot distinguish a damaging action skip from a non-damaging skip, lethal pre-emption, repeated Shatter or ordinary defence. Observability therefore fails closed before support access.",
+  "selectedRelation": {
+    "id": "enemy-phase-damaging-intent-skip",
+    "exactPredicate": "Within one fight, an actual STAGGERED event for a living enemy idx follows that idx's current INTENT, and content[enemyId].moves[moveKey] contains dmg.",
+    "payoff": null,
+    "carrier": null,
+    "acquisition": null,
+    "capacityOnly": true
+  },
+  "eligibleEvidence": {
+    "cacheSha256": "bb19c9c3e41c08312cff6eb8bd9a62d8ca2fa88ed187e66a4d47af877b371a7c",
+    "rowSelection": "Only the 256 explicit-Flare rows from the immutable Lantern-Art capacity output. Beacon rows are excluded. The rows are the frozen policyRoot 421901, policy indices 0 through 63 and simulation seeds 421910 through 421913, Duskblade, Vow 5, exact source c4130163c7fb8edd865c0adc95732aae03e1bad2 and authored current-default Flare.",
+    "identityAuthority": "The Lantern trace-null sentinel proved the added fixed projection preserves omitted-versus-explicit-Flare complete identity. This screen adds no field and may not repair or reinterpret that projection.",
+    "forbidden": "Beacon rows, 4.7.1 outputs, failed-identity outputs, protected seeds, ledger endpoints, V30 adaptive evidence and every other cache object."
+  },
+  "sourceTraceProjection": {
+    "schemaKeys": [
+      "capture",
+      "nodes",
+      "plays",
+      "cardRewards",
+      "bossRelics",
+      "arts",
+      "beaconAttacks",
+      "beaconChips"
+    ],
+    "availableFields": [
+      "trajectory.plays.fight",
+      "trajectory.plays.event",
+      "trajectory.plays.id",
+      "trajectory.plays.uid",
+      "fights.act",
+      "fights.kind",
+      "fights.enemies",
+      "fights.result",
+      "fights.turns",
+      "fights.hpLost",
+      "fights.shatters",
+      "fights.smolderKills"
+    ],
+    "missingByConstruction": [
+      "trajectory.intents.fight",
+      "trajectory.intents.event",
+      "trajectory.intents.idx",
+      "trajectory.intents.move",
+      "trajectory.staggered.fight",
+      "trajectory.staggered.event",
+      "trajectory.staggered.idx"
+    ],
+    "aliasFailure": "fights.shatters is an aggregate over every Shatter in the fight and fights.hpLost is the aggregate result of attacks, poison, defence and duration. Neither identifies an actual STAGGERED consumer, its enemy idx or the skipped move."
+  },
+  "eventParser": {
+    "requiredFields": [
+      "fights.enemies",
+      "trajectory.intents.fight",
+      "trajectory.intents.event",
+      "trajectory.intents.idx",
+      "trajectory.intents.move",
+      "trajectory.staggered.fight",
+      "trajectory.staggered.event",
+      "trajectory.staggered.idx"
+    ],
+    "joinConstruction": "Within each fight, sort INTENT and STAGGERED records by immutable queue event index. For each STAGGERED(fight,event,idx), require exactly one latest earlier INTENT for that idx, map idx to fights.enemies[idx], require the enemy and move definition to exist in exact current content, and classify damaging only when the move owns a dmg field.",
+    "rowActivation": "A row is active when at least one valid joined STAGGERED record classifies as a damaging authored intent.",
+    "poisonRule": "Only an actual STAGGERED event counts. Because exact enemy phase resolves lethal Smolder first, Shatter count, pre-phase stagger state or a dead enemy can never substitute for consumption.",
+    "failClosed": "Any missing field, malformed event index, invalid enemy idx, missing or ambiguous current intent, unknown enemy/move definition or aggregate proxy fails observability before support is read or counted."
+  },
+  "cohort": {
+    "policyRoot": 421901,
+    "policyIndices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63],
+    "simulationSeeds": [421910, 421911, 421912, 421913],
+    "minimumRowsPerRobustPolicy": 2,
+    "identities": 256,
+    "aspect": "duskblade",
+    "vow": 5,
+    "baseline": "Exact current-main authored-default Flare only."
+  },
+  "anchors": {
+    "scoreline": {
+      "producer": "chisel",
+      "consumer": "executioner",
+      "definition": "A robust policy plays Chisel before a later Faultline in one fight in at least two of four eligible rows.",
+      "status": "Separate activation anchor only; Scoreline payoff is absent and no interference effect is estimated."
+    },
+    "afterimage": {
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "definition": "A robust policy plays Ward before a later Warden's Edge in one fight in at least two of four eligible rows.",
+      "status": "Separate activation anchor only; Afterimage payoff is absent and no interference effect is estimated."
+    }
+  },
+  "estimands": {
+    "activePolicy": "At least two of four rows activate the exact damaging-intent STAGGERED predicate.",
+    "exactInactivePolicy": "None of four rows activates the predicate.",
+    "viablePolicy": "An active policy has at least one winning row that activates the predicate.",
+    "moveBreadth": "Number of distinct exact enemyId/moveKey pairs suppressed across the eligible rectangle.",
+    "enemyBreadth": "Number of distinct enemy IDs with an active damaging-intent skip.",
+    "functionalSeparation": "Candidate-only, anchor-only, cross-active and Jaccard policy counts against Scoreline and Afterimage separately on the same rows.",
+    "reliability": "Count rows whose outcome is stall or error or whose error field is non-empty.",
+    "notEstimated": "No pure damage effect, attached-effect decomposition, causal effect, policy optimisation, detector, protected seed, product candidate or cross-package interference effect is estimated."
+  },
+  "gates": {
+    "minimumActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumDistinctEnemyMovePairs": 4,
+    "minimumDistinctEnemyIds": 4,
+    "minimumCandidateOnlyPoliciesPerAnchor": 8,
+    "minimumAnchorOnlyPoliciesPerAnchor": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumFaultRows": 1,
+    "provenance": "The 16 active and inactive, eight viable, separate eight-policy anchor and 0.55 overlap gates reuse the frozen 64-policy capacity scale. Four enemy/move and enemy-ID witnesses prevent a single encounter script from masquerading as a package. One baseline fault is the unchanged current-main reliability ceiling."
+  },
+  "stopping": {
+    "order": "Validate immutable source, evidence, ledger and exact trace projection. If any parser field is unavailable, stop at futility without opening the cache. Only a fully observable projection may open exactly one cache object and apply every gate at one fixed first look.",
+    "noRetry": "One attempt. Do not add telemetry, repair the trace, substitute aggregate Shatters or HP loss, infer skipped intent from enemy identity, inspect another cache, weaken a gate or rerun."
+  },
+  "budget": {
+    "maximumCacheFilesRead": 1,
+    "maximumSupportRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "decisionRules": {
+    "success": "The source projection supplies every exact parser field and the single eligible 256-row first look passes every support, inactivity, viability, breadth, separate-anchor and reliability gate.",
+    "successAuthority": "Apply decision boundary 1 and freeze only damaging-intent Shatter suppression for a separately preregistered consumer-local factor identity preflight. Do not choose a payoff, implement product content, add an unregistered row, use a method or protected seed.",
+    "futility": "The authorised trace projection cannot identify the exact predicate, or any fixed capacity gate fails.",
+    "futilityAuthority": "Apply decision boundary 2 and close the complete damaging-intent Shatter-suppression relation without telemetry repair, aggregate proxy, alternate cache, intent or enemy subset, factor, implementation or rerun. Continue issue #421 with the next source- and evidence-backed structural mechanism.",
+    "inconclusive": "An immutable input, cache identity, ledger identity or wall-time condition prevents the preregistered decision without an identified fixed failure.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the capacity screen inconclusive at cap without trace repair, cache substitution, row extension, factor implementation or inference."
+  },
+  "sourceAssertions": [
+    {
+      "id": "trace initialises only fixed projected arrays",
+      "path": "trace:tools/balance_sim.gd",
+      "contains": "_research_trace[\"nodes\"] = []\n\t\t_research_trace[\"plays\"] = []\n\t\t_research_trace[\"cardRewards\"] = []\n\t\t_research_trace[\"bossRelics\"] = []\n\t\t_research_trace[\"arts\"] = []\n\t\t_research_trace[\"beaconAttacks\"] = []\n\t\t_research_trace[\"beaconChips\"] = []"
+    },
+    {
+      "id": "play projection contains no enemy intent or stagger consumer",
+      "path": "trace:tools/balance_sim.gd",
+      "contains": "_trace_append(\"plays\", {\"fight\": fight_index, \"event\": event_index,\n\t\t\t\t\"id\": last_play, \"uid\": _ji(event.get(\"uid\", -1))})"
+    },
+    {
+      "id": "fight projection exposes only aggregate Shatters and HP loss",
+      "path": "trace:tools/balance_sim.gd",
+      "contains": "\"hpLost\": game.cb.hp_lost,\n\t\t\"shatters\": int(float(str(game.run.stats.get(\"shatters\", 0)))) - shatters_before"
+    },
+    {
+      "id": "whole-run probe returns only frozen trajectory",
+      "path": "trace:tools/research_421_lantern_art_identity_probe.gd",
+      "contains": "row[\"trajectory\"] = trace"
+    },
+    {
+      "id": "current-main intent event owns enemy and move identity",
+      "path": "main:domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.INTENT, \"idx\": e.idx, \"move\": String(e.move_key)})"
+    },
+    {
+      "id": "current-main stagger event owns enemy identity",
+      "path": "main:domain/rules/combat.gd",
+      "contains": "cb.queue.append({\"t\": EventTypes.STAGGERED, \"idx\": e.idx})"
+    }
+  ],
+  "priorEvidence": {
+    "actionSuppression": {
+      "path": "summaries/post-v30-shatter-action-suppression-audit-v1.json",
+      "sha256": "c2a5973cdf83509846e9b46e824bf9c8656692d9725fe9fab64ce4fda2fe65cd",
+      "decision": "freeze-damaging-intent-shatter-suppression-for-capacity-preregistration"
+    },
+    "lanternCapacity": {
+      "path": "summaries/post-v30-lantern-art-capacity-v1.json",
+      "sha256": "b029910d7f776f114a814885c2804f160c325d88b460b8f732c341ed9e619c1f",
+      "decision": "close-lantern-art-family-at-cap"
+    },
+    "traceProjection": {
+      "path": "summaries/post-v30-shatter-card-capacity-v1.json",
+      "sha256": "d8ed3a2e09e0c21d89665eafaa65c8e8716c9bba0a6b82b8fe4b6a83f1639db5",
+      "decision": "close-multi-enemy-card-shatter-on-observability-gate"
+    }
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "ee64c297b43ce8f6c31c6256fdb2034c4bdcec00f12c387bf619ebf9d14730b1",
+    "taskCapsuleSha256": "08f581f54c008df6bab3d1e697351909124de008e7ed30bb53967412b2ef1d92",
+    "eligibleCacheSha256": "bb19c9c3e41c08312cff6eb8bd9a62d8ca2fa88ed187e66a4d47af877b371a7c",
+    "currentMainSourceSha256": {
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1"
+    },
+    "traceSourceSha256": {
+      "tools/balance_sim.gd": "29bdad3cd816fe40a0302aa75149281d9bd8bf27483260ae7722139a23534ed3",
+      "tools/research_421_lantern_art_identity_probe.gd": "5dd5cddff8cb6307a59278c6b0bf494f20292c52d11e30dc740463005bb8a235",
+      "tools/research_421_lantern_art_identity_probe.gd.uid": "773eb8a034c563a79743160b6965f8cc000690219a7663f1ceffbbe910d44743"
+    }
+  },
+  "ledgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  }
+}

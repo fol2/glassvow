@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "decisionBoundary": 3,
+  "decision": "record-shatter-aftermath-inconclusive-at-cap",
+  "outcomeClass": "inconclusive",
+  "failure": "The frozen runner iterated content.deeds as an array of dictionaries, but exact current-main stores deeds as a keyed dictionary. Python raised AttributeError before route inventory, evidence, ledger or support evaluation.",
+  "failureStage": "source-route-inventory",
+  "protocolSha256": "9e592d0dfbd99ac5651acfd89e5ce04fccc571acaec10495c95d6f9f989a59ca",
+  "runnerSha256": "a03025cc9df8cd2e31a0043b98fb1a6e984e937f3a70def1125b71e718d758b3",
+  "taskCapsuleSha256": "f8baa0c73d4be865110ef021c15fca885f771aeec3af137650fd06d59504127b",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "observedSchema": {
+    "content.deedsType": "object",
+    "content.deedKeys": [
+      "ashSermon",
+      "darkWalker",
+      "firstDawn",
+      "hundredShards",
+      "lanternFed",
+      "paneBreaker",
+      "spendthrift",
+      "untouched"
+    ]
+  },
+  "execution": {
+    "GodotProcesses": 0,
+    "traceFilesRead": 0,
+    "cacheFilesRead": 0,
+    "supportMetricsInspected": 0,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "maximumModelContextTokens": 0
+  },
+  "ledgerAfterFailure": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "authority": "Apply decision boundary 3 and record the audit inconclusive at cap without support access, telemetry, simulation, implementation or inference.",
+  "versionedCorrectionBoundary": "Because no support, policy count, trace, cache, simulator row or ledger endpoint was read, a separately frozen v2 may correct only dictionary iteration to values() while preserving the exact branch partition, selected-relation hypothesis, source inputs, prior evidence, budget and decision thresholds. V1 remains immutable and is not reinterpreted as a scientific result."
+}
