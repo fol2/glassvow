@@ -8,9 +8,10 @@ This directory publishes reviewable evidence from the active scientific issue
 V38 freeze, the zero-row identifiability audit, the pre-directive experiment,
 and the post-directive knob proof, mechanism-blocked CRN first look,
 independent held-out confirmation, structural package-order work, hand-size
-reconciliation, Ash package admission, exact Ward whole-run rejection and the
-natural Shatterer's Crown and Shatter-to-heavy-Attack capacity closures. It
-is a progress snapshot, not detector admission, product promotion or a P9
+reconciliation, Ash package admission, exact Ward whole-run rejection, the
+natural Shatterer's Crown and Shatter-to-heavy-Attack closures, and the exact
+same-instance Honing Edge policy-repertoire test. It is a progress snapshot,
+not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
 and is not intended to enter `main`.
@@ -172,9 +173,43 @@ its strict capacity-level viability proxy also failed. No research knob,
 simulator row, ledger row or protected seed was used, and the family may not be
 rescued by subsetting those six cards or weakening its gates.
 
+Two narrower Shatter/Honing directions are now closed as well. Same-enemy
+reseam break was active for 51/64 policies and inactive for only one, so it was
+another broad Shatter route. Aggregate Honing Edge repeat capacity reached the
+16-policy minimum but produced only five Honing-only identities against eight.
+That shortfall identified a concrete policy alias: Honing Edge and Faultline
+both used `special.execute`.
+
+A preregistered 515-observation CRN experiment then tested exactly one binary
+remap to the already sampled `special.shatterEchoDusk` field. Focused null,
+policy, score, invalid-level and all 256 cached-current path/RNG/result
+identities passed. Exact same-fight, same-`CardInst.uid` repeat support moved
+only from 13 to 14 policies, below 16, and Honing-only support moved from five
+to seven, below eight. Although five newly repeat-active policies were
+Scoreline-inactive in both arms, both absolute gates failed. Decision boundary
+2 therefore closes the remap and complete Honing repeat family without payoff
+implementation or tuning.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-momentum-preference-capacity-v1.md`](summaries/progress-post-directive-momentum-preference-capacity-v1.md),
+[`protocols/post-v38-momentum-preference-capacity-v1.json`](protocols/post-v38-momentum-preference-capacity-v1.json),
+[`execution/post-v38-momentum-preference-capacity-v1.json`](execution/post-v38-momentum-preference-capacity-v1.json),
+[`summaries/post-v38-momentum-preference-capacity-v1.json`](summaries/post-v38-momentum-preference-capacity-v1.json),
+[`artifacts/ledger-freeze-momentum-preference-capacity-v1.json`](artifacts/ledger-freeze-momentum-preference-capacity-v1.json),
+[`raw/post-directive-momentum-preference-capacity-raw-v1.tar.gz`](raw/post-directive-momentum-preference-capacity-raw-v1.tar.gz)
+and
+[`raw/post-directive-momentum-preference-capacity-harness-v1.tar.gz`](raw/post-directive-momentum-preference-capacity-harness-v1.tar.gz)
+for the current factor definition, identity proof, exact-repeat telemetry,
+decision and complete content-addressed evidence. The immediately preceding
+zero-row narrowing is in
+[`protocols/post-v38-reseam-break-capacity-v1.json`](protocols/post-v38-reseam-break-capacity-v1.json),
+[`summaries/post-v38-reseam-break-capacity-v1.json`](summaries/post-v38-reseam-break-capacity-v1.json),
+[`protocols/post-v38-honing-repeat-capacity-v1.json`](protocols/post-v38-honing-repeat-capacity-v1.json)
+and
+[`summaries/post-v38-honing-repeat-capacity-v1.json`](summaries/post-v38-honing-repeat-capacity-v1.json).
+Then read
 [`summaries/progress-post-directive-shatter-tempo-capacity-v1.md`](summaries/progress-post-directive-shatter-tempo-capacity-v1.md),
 [`protocols/post-v38-shatter-tempo-capacity-v1.json`](protocols/post-v38-shatter-tempo-capacity-v1.json)
 and

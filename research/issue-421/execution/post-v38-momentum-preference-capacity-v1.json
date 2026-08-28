@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "protocolSha256": "ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+  "baseline": {
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "surface": {
+    "planSha256": "cec2989ed76a8769c187c4c7c23abf10770fde2f4e00c2f32944a93ba6288754",
+    "outputSha256": "20e18de1b5e02ae6b41dbab85e62ea13ac71fc14ae75d292b27b75f8a85bf96b",
+    "rows": 3
+  },
+  "invalidLevelPlanSha256": "8d6d41a557891fc2eb1acf20ece1bd9600ef1be19f682e5897d9dcb44aa2faf4",
+  "telemetry": {
+    "planSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "outputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "rows": 512,
+    "policyRoot": 551,
+    "policyCount": 64,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "arms": ["current", "remap"]
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "decision": "close-momentum-remap-and-honing-repeat-family",
+    "currentExactRepeatActivePolicies": 13,
+    "remapExactRepeatActivePolicies": 14,
+    "minimumExactRepeatActivePolicies": 16,
+    "currentHoningOnlyPolicies": 5,
+    "remapHoningOnlyPolicies": 7,
+    "minimumHoningOnlyPolicies": 8,
+    "novelSeparatedPolicies": 5,
+    "minimumNovelSeparatedPolicies": 3,
+    "newSimulatorObservationRows": 515,
+    "newLedgerRows": 519,
+    "wallTimeSeconds": 27.027261000010185,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0
+  },
+  "summarySha256": "fdc51ca09f103f53528afb4f3b641a0c330db3dff1935287e1981b40a2dfd73b"
+}

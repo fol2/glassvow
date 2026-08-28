@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-momentum-preference-capacity",
+  "question": "Does one identity-safe binary remap of Honing Edge's existing policy preference produce enough exact same-instance repeats, inactive controls and Scoreline-separated policy identities to justify implementing only the preregistered Honing Edge repeat payoff for a later causal CRN experiment?",
+  "scientificTrigger": {
+    "observedBottleneck": "The frozen zero-row Honing Edge screen passed capacity, inactivity and natural-reachability gates but produced only 5 Honing-only policy identities against the preregistered minimum of 8.",
+    "rootCause": "BalancePilot._special_value maps both execute and momentum to the same immutable policy field, special.execute, so the two acquisition and action preferences cannot vary independently.",
+    "measuredDecisionValue": "Exactly 3 additional Scoreline-independent Honing identities are needed to reach the unchanged minimum of 8.",
+    "boundedResponse": "Reuse special.shatterEchoDusk as the binary remapped Momentum preference. Resonant Lance already owns that field but is absent from every frozen natural reward pool, so no new policy dimension, model, optimiser, ML or RL method is introduced."
+  },
+  "competingOptions": [
+    "authorise only the disabled Honing repeat payoff identity preflight when every frozen gate passes",
+    "close the policy remap and Honing repeat family and continue with the next evidence-backed structural mechanism inside issue #421",
+    "record an inconclusive result at the preregistered cap"
+  ],
+  "factorDefinitions": {
+    "momentumPolicyPreference": {
+      "type": "binary research-only policy mapping",
+      "levels": [0, 1],
+      "level0": "Current path: Duskblade Honing Edge uses the immutable special.execute value for reward and combat scoring.",
+      "level1": "Remapped path: Duskblade Honing Edge alone uses the same policy identity's immutable special.shatterEchoDusk value for reward and combat scoring.",
+      "intendedMediator": "Only Honing Edge's Duskblade pilot score. The factor changes no card definition, payoff, game rule, offer, rarity, policy snapshot, seed, RNG call or Ashwarden card score.",
+      "claimBoundary": "This is a policy-repertoire capacity factor, not product content and not the Honing repeat payoff. Whole-run path divergence after a changed Honing choice is an intended downstream consequence but supports no payoff or balance claim."
+    }
+  },
+  "fixedResearchSettings": {
+    "wardSetupPriority": 1,
+    "acquisitionPriority": 4,
+    "packageOrder": 0,
+    "policyPackageOrder": 0,
+    "shatterersCrownFacetThreshold": 1,
+    "shatterersCrownFervor": 1
+  },
+  "fixedCausalFactors": {
+    "honingEdgeRepeatPayoff": "Fixed at 0 and not implemented. No repeat chip, damage, Energy, Ward, draw, healing or status effect exists in any row.",
+    "scorelinePayoff": "A separate causal concept fixed by the exact baseline content and combat-rule SHAs; it is never varied or estimated here.",
+    "afterimagePayoff": "A separate causal concept fixed independently by the exact baseline content and combat-rule SHAs; it is never varied or estimated here.",
+    "acquisitionPriority": "Fixed at 4 in both arms.",
+    "faultlineRarity": "Fixed by the baseline content SHA in both arms.",
+    "wardSetupPriority": "Fixed at 1 in both arms.",
+    "otherResearchKnobs": "Every registered research knob is fixed at its null setting in both arms."
+  },
+  "designMatrix": {
+    "current": {
+      "momentumPolicyPreference": 0
+    },
+    "remap": {
+      "momentumPolicyPreference": 1
+    }
+  },
+  "anchors": {
+    "omittedSurface": "The factor is omitted so BalancePilot must resolve its registered level-0 default.",
+    "explicitCurrent": "The shared explicit level-0 anchor must exactly equal the omitted surface and every cached current-main whole-run result after trace-only fields are removed.",
+    "remap": "The sole non-null cell changes only the registered Honing Edge Duskblade pilot score on the focused surface.",
+    "scorelineRoute": "Within each arm, an exact Scoreline-route proxy requires Chisel to be played before Faultline in the same fight. This shared anchor detects cross-package interference without varying Scoreline payoff.",
+    "frozenBaseline": "The cached root-551 current-main rectangle owns baseline path, RNG, result, policy, content, first-look cohort and one pre-existing fault identity."
+  },
+  "interactionAndAlias": {
+    "mechanisticallyJustifiedInteractions": "None. Exactly one binary factor varies, so no interaction term or joint cell exists.",
+    "aliasStructure": "Level 0 deliberately aliases Honing Edge and Faultline through special.execute. Level 1 removes only that policy-preference alias by assigning Honing Edge the already sampled special.shatterEchoDusk field. Policy identity and simulation seed are CRN blocks, not factors.",
+    "crossPackageInterference": "The exact Scoreline-route set is measured in both arms. Decision value counts only newly repeat-active policies that are Scoreline-route inactive in both arms, so losing a Scoreline identity cannot manufacture the required gain.",
+    "expansion": "No Cartesian expansion, joint payoff cell or optional row is authorised. Any measured interference is reported; it does not unlock additional cells in this stage."
+  },
+  "identityPreflight": {
+    "surface": "One frozen policy is evaluated with omitted, explicit-current and remap settings. Omitted and explicit-current outputs must be exact. Remap must preserve the policy snapshot, execute preference, every Ashwarden score and every Duskblade score except Honing Edge; the Honing score delta must exactly equal the registered preference delta.",
+    "wholeRun": "All 256 explicit-current traced rows, after removing trajectory and row-label metadata, must exactly equal the frozen cached current-main path, RNG and result. The resolved policy snapshot must be exact between current and remap inside every policy-seed block.",
+    "telemetry": "Every observed play must carry non-negative fight, event and CardInst uid identities. Telemetry is observation-only and is absent unless captureTrace is true.",
+    "invalidLevel": "Level 2 must fail closed with exit 2, no output and an unregistered-level diagnostic.",
+    "authority": "The 512-row telemetry rectangle executes only after focused null identity, factor isolation and invalid-level rejection all pass."
+  },
+  "surfaceCase": {
+    "policyIndex": 2,
+    "seed": 347100,
+    "selection": "Frozen before execution because root-551 policy 2 has distinct cached special.execute and special.shatterEchoDusk values, making a no-op or wrong-field remap observable without selecting on a simulator endpoint."
+  },
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward/economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "minimumRowsPerRobustPolicy": 2,
+    "policyIdentity": "Policy.sample_range root 551 at the exact policy index; both arms reuse the identical resolved policy snapshot.",
+    "simulationIdentity": "Both arms reuse the exact simulation seed inside every CRN block.",
+    "cohortRule": "The complete existing 64-policy by four-seed first-look cohort is used in both arms. No identity is added, removed, replaced or selected after execution."
+  },
+  "mediatorDefinitions": {
+    "exactRepeatRow": "At least two play events for card id momentum have the same fight identity and the same CardInst uid.",
+    "exactRepeatActivePolicy": "At least two of four frozen rows are exact-repeat rows.",
+    "exactRepeatInactivePolicy": "None of the four frozen rows is an exact-repeat row.",
+    "scorelineRouteRow": "Within one fight, a Chisel play event precedes a later Faultline play event. This is a route proxy only; no Scoreline payoff effect is claimed.",
+    "scorelineRouteActivePolicy": "At least two of four frozen rows are Scoreline-route rows.",
+    "honingOnlyPolicy": "An exact-repeat-active policy that is not Scoreline-route active in the same arm.",
+    "novelSeparatedPolicy": "A policy that becomes exact-repeat active only under the remap and is not Scoreline-route active under either arm.",
+    "naturalOfferPolicy": "At least one frozen row records a natural Honing Edge offer.",
+    "naturalAcquisitionPolicy": "At least one frozen row ends with Honing Edge in the deck."
+  },
+  "estimands": {
+    "unit": "Policy identity, with four fixed simulation seeds providing the preregistered two-of-four robustness rule.",
+    "primary": "Exact counts and identities of remap exact-repeat-active and exact-repeat-inactive policies.",
+    "separation": "Exact Honing-only count and Jaccard overlap between exact-repeat-active and Scoreline-route-active policy sets in each arm.",
+    "decisionValue": "Exact count of novel separated policies. The success boundary is the measured three-identity deficit from the prior frozen screen.",
+    "interference": "Exact lost and gained Scoreline-route policy identities between current and remap.",
+    "reliability": "Exact policy-seed fault identities in each arm.",
+    "notEstimated": "No Honing payoff effect, Scoreline payoff effect, Afterimage payoff effect, protected-seed endpoint, RandomBuild endpoint, detector score, win-rate effect or product balance effect is estimated."
+  },
+  "estimator": {
+    "construction": "Deterministic grouping by arm, policy index, simulation seed, fight and CardInst uid followed by exact set arithmetic.",
+    "model": "None. There is no fitted model, bootstrap, optimiser, ML or RL component.",
+    "firstLook": "One fixed complete rectangle after the preflight. No sequential peek, promising-cell extension, cohort replacement or optional row.",
+    "stopping": "Stop at the first complete fixed look and apply the frozen success, futility or inconclusive rule."
+  },
+  "gates": {
+    "minimumExactRepeatActivePolicies": 16,
+    "minimumExactRepeatInactivePolicies": 16,
+    "minimumOfferedPolicies": 8,
+    "minimumAcquiredPolicies": 8,
+    "minimumHoningOnlyPolicies": 8,
+    "maximumScorelineJaccard": 0.75,
+    "minimumNovelSeparatedPolicies": 3,
+    "minimumScorelineRoutePolicies": 8,
+    "maximumAddedFaultIdentities": 0,
+    "provenance": "The 16 active/16 inactive and eight reachability/separation minima reuse the frozen 64-policy first-look support scale. The 0.75 overlap ceiling is unchanged. The three-policy decision-value minimum is exactly the observed shortfall, not a tuned threshold. Zero added fault identities is the frozen reliability boundary."
+  },
+  "budget": {
+    "surfaceObservationRows": 3,
+    "invalidLevelInvocations": 1,
+    "telemetryObservationRows": 512,
+    "maximumNewSimulatorObservationRows": 515,
+    "maximumNewLedgerRows": 519,
+    "maximumWallTimeSeconds": 900,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Every identity, exact-repeat capacity, inactivity, natural-reachability, separation, independent decision-value, Scoreline-anchor and reliability gate passes at the complete first look.",
+    "successAuthority": "Implement only the disabled binary Honing Edge same-instance repeat payoff and its focused mediator surface, then preregister an equal-cohort CRN payoff experiment before any payoff row. Keep momentumPolicyPreference fixed at level 1 in every later payoff contrast. Do not promote content, spend protected seeds, add a second policy remap or introduce ML, RL or an optimiser.",
+    "futility": "Any frozen gate fails at the complete first look.",
+    "futilityAuthority": "Close the momentum remap and Honing repeat family without payoff implementation. Continue with the next source- and evidence-backed structural Duskblade mechanism inside issue #421; do not tune a preference mapping, support threshold, cohort, payoff or overlap boundary.",
+    "inconclusive": "The exact engine, immutable inputs or complete fixed rectangle cannot produce a decision before the numeric row or wall-time cap.",
+    "inconclusiveAuthority": "Record the inconclusive result at the preregistered cap. Do not extend, replace cohorts, tune thresholds, implement the payoff or spend protected seeds."
+  },
+  "methodBoundary": "Deterministic Python constructs all candidates and rows, invokes the exact Godot 4.7.1 simulator, uses the append-only content-addressed cache and ledger, computes exact sets and selects the stop decision. No model context is used during execution or decision, and no human label, ML, RL, optimiser or adaptive candidate-by-candidate tuning enters the experiment.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "baselineContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "76bb23bedc9d2b5631c954cb7a0f7715e3f55e2b65d3a195da6307f75e1363e7",
+    "pilotSha256": "0c63d17e6d743bb1af925c45a9d494ecac263e310195522dbe0b8c149cf36104",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "balanceSimSha256": "9f0ae71382b4f86a45f5d974f19c46d00c305c09c44737dd282d74a7351cacba",
+    "probeSha256": "54b522d26af5f69ccdc6479f9049664a92fcdd81e363a897e7b6660f06943233",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "runnerSha256": "c3d87254121e3f14188a8574e81764211822134f813867eaf2988eeb3b67e465"
+  },
+  "priorEvidence": {
+    "honingCapacity": {
+      "path": "summaries/post-v38-honing-repeat-capacity-v1.json",
+      "sha256": "090cf43a35e7cedf850e4f52f3adec5019423f92bc040c0453c43d6a591882c4",
+      "decision": "close-honing-repeat-without-implementation"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "records": 479853,
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

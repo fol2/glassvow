@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-reseam-break-capacity",
+  "question": "Does frozen current-main behaviour contain enough exact, reproducible and Scoreline-separated same-enemy re-Shatter capacity to justify implementing one binary Duskblade research mediator?",
+  "competingOptions": [
+    "authorise only the exact reseam-break mediator below for identity preflight",
+    "close this mediator without implementation and continue to another evidence-backed structural mechanism inside issue #421",
+    "record an inconclusive result at the frozen cap"
+  ],
+  "candidate": {
+    "id": "dusk-reseam-break",
+    "factor": "reseamBreakEnergy",
+    "levels": [0, 1],
+    "producer": "The first real Duskblade Shatter of a specific living enemy in the current combat.",
+    "consumer": "The second real Shatter of that same enemy in that combat, after its first reseam has increased facet_max by one.",
+    "payoff": "At level 1, gain exactly 1 immediately usable Energy on that enemy's second Shatter only; at level 0, do nothing. Further Shatters of that enemy add no reward.",
+    "scope": "Duskblade only, once per enemy per combat. Adamant Hold is not a Shatter and cannot count. The factor changes no facet threshold, chip, damage, Ward, draw, healing, status, card, offer, acquisition, rarity, policy score or RNG call.",
+    "mechanisticJustification": "Current main anneals an enemy after its first true Shatter by increasing facet_max. A second Shatter of the same enemy therefore identifies policies that deliberately overcome a harder reseamed pane, a narrower state/action sequence than the already closed broad Shatter-threshold and heavy-Attack families.",
+    "structuralSeparation": "The state machine contains neither Chisel nor Faultline, does not read Scoreline, Ward, Afterimage or Kindle, and cannot fire for Ashwarden.",
+    "productBoundary": "The research factor has no product ownership or acquisition path. If causal evidence later selects it, the smallest deterministic product carrier and its real reachability require a separate frozen admission test.",
+    "claimBoundary": "A capacity pass authorises only implementation and omitted/null path, RNG and result identity plus focused mediator isolation. It is not causal activation, complementarity, outcome benefit, content admission or product scope."
+  },
+  "witnessDefinitions": {
+    "exactActiveRow": "At least one fight has exactly one enemy identity and at least two recorded Shatters. Every Shatter in such a fight necessarily belongs to that enemy.",
+    "possibleActiveRow": "At least one fight has at least two recorded Shatters, regardless of enemy count.",
+    "robustExactActivePolicy": "At least two of four frozen rows are exact-active rows.",
+    "exactInactivePolicy": "None of the four frozen rows is even a possible-active row. This is sufficient to prove that no same-enemy re-Shatter occurred.",
+    "ambiguousPolicy": "Every remaining policy, including multi-enemy fights whose aggregate Shatter count cannot identify the target and one-of-four exact witnesses.",
+    "successfulFightWitness": "An exact witness in a fight whose recorded result is win. This is only a local capacity check; whole-run viability remains a later causal gate.",
+    "selectionTiming": "Definitions, two-of-four robustness and every gate are frozen before witness counts are read. Ambiguous policies may not be reclassified after the result."
+  },
+  "closedDirections": [
+    "the Shatter-to-heavy-Attack Energy relay and any subset of its six eligible cards",
+    "Shatterer's Crown offer, threshold and Fervor families",
+    "Afterimage payoff and package-order variants",
+    "Ward and Kindle families",
+    "the immutable issue #524 and issue #525 exhausted paths"
+  ],
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward/economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [346596, 346597, 346598, 346599],
+    "policyRows": 256,
+    "minimumRowsPerRobustPolicy": 2,
+    "scorelineCapacityProxy": "At least two frozen rows play both Chisel and Faultline. This is only a necessary non-alias proxy; exact Scoreline causal admission remains owned by prior held-out evidence."
+  },
+  "gates": {
+    "minimumSourceReadyPolicies": 16,
+    "minimumActivePolicies": 16,
+    "minimumInactivePolicies": 16,
+    "minimumSuccessfulFightActivePolicies": 8,
+    "minimumWitnessActs": 2,
+    "minimumReseamOnlyPolicies": 8,
+    "maximumScorelineJaccard": 0.75,
+    "provenance": "The 16 active/16 inactive and eight successful/separation minima reuse the frozen 64-policy first-look support scale. Two acts reject a one-encounter artefact, and the unchanged Jaccard ceiling rejects a near-alias of Scoreline."
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "Every frozen source, exact active, exact inactive, successful-fight, act-breadth and Scoreline-separation gate passes.",
+    "successAuthority": "Implement only the exact binary reseamBreakEnergy research factor and prove omitted/null path, RNG and result identity plus factor isolation before any causal row. Then preregister a mediator-first CRN experiment with fixed policies, seeds, baseline, estimator, caps and stop rules.",
+    "futility": "Any frozen gate fails.",
+    "futilityAuthority": "Close reseam-break without implementation or simulator spend and continue with the next evidence-backed structural mechanism inside issue #421. Do not change the threshold, include multi-enemy ambiguous rows or retune the payoff.",
+    "inconclusive": "The deterministic screen reaches the frozen wall-time cap before a decision.",
+    "inconclusiveAuthority": "Record the inconclusive result at the cap without implementation or simulator spend."
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "combatRulesSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "runnerSha256": "51b7e8efdc9c4b57050b625caf51837d434d49cd1947bb45b3e30f8908aee8fc"
+  },
+  "priorEvidence": {
+    "exactComplementarity": {
+      "path": "cache/sha256/1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29.json",
+      "sha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
+      "decision": "reject-candidate-close-scalar-family-continue-structurally"
+    },
+    "heavyRelayCapacity": {
+      "path": "summaries/post-v38-shatter-tempo-capacity-v1.json",
+      "sha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388",
+      "decision": "close-shatter-tempo-relay-without-implementation"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "records": 479853,
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

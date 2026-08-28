@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 16,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "exact Honing repeat and identity-safe policy-remap closure",
+  "decision": "CLOSE_MOMENTUM_REMAP_AND_HONING_REPEAT_FAMILY",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-momentum-preference-capacity-v1.md",
+    "progressReportSha256": "2f89780384bfda06c4fdb3625c0c553c7672c64f55bd3481fcffb2863a3f01c6",
+    "protocol": "protocols/post-v38-momentum-preference-capacity-v1.json",
+    "protocolSha256": "ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc",
+    "execution": "execution/post-v38-momentum-preference-capacity-v1.json",
+    "executionSha256": "d49a0048bb9a4ee3ae03cb91327abedf6a57241e37acb68b90b30fc1bef0d4c0",
+    "summary": "summaries/post-v38-momentum-preference-capacity-v1.json",
+    "summarySha256": "fdc51ca09f103f53528afb4f3b641a0c330db3dff1935287e1981b40a2dfd73b",
+    "ledgerFreeze": "artifacts/ledger-freeze-momentum-preference-capacity-v1.json",
+    "ledgerFreezeSha256": "8e4c3070d7f3dede3baeb59928b7ffcca944d34c5154aad152e4415ffc8dc0cc",
+    "runner": "tools/post_v38_momentum_preference_capacity.py",
+    "runnerSha256": "c3d87254121e3f14188a8574e81764211822134f813867eaf2988eeb3b67e465",
+    "raw": "raw/post-directive-momentum-preference-capacity-raw-v1.tar.gz",
+    "rawSha256": "30cba4ecf2f4782afbf7900817b95734b7f4db6066d1afe5885a4029858fd16b",
+    "harness": "raw/post-directive-momentum-preference-capacity-harness-v1.tar.gz",
+    "harnessSha256": "c2c224fd10d79d93d5f9ad11c5dcbab050f2dd0c5bc2d35d8343adc05e5f40c6",
+    "readmeSha256": "3fbac62cbea53a1c6cfaf2250e62a13eb9bea81495806abd06311c6077e3e38a",
+    "taskCapsuleSha256": "0f74a3ccef4d1904fe44a8d09f35169129c608ca31ae806c83f36c630200c0de"
+  },
+  "precedingOutputs": {
+    "reseamBreak": {
+      "protocol": "protocols/post-v38-reseam-break-capacity-v1.json",
+      "protocolSha256": "b7bb4e534c75c36d65faf9d50eab9fa57cfabcd6b3098c99dce71ba7d2fe3f15",
+      "summary": "summaries/post-v38-reseam-break-capacity-v1.json",
+      "summarySha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4",
+      "runner": "tools/post_v38_reseam_break_capacity.py",
+      "runnerSha256": "51b7e8efdc9c4b57050b625caf51837d434d49cd1947bb45b3e30f8908aee8fc",
+      "decision": "close-reseam-break-without-implementation"
+    },
+    "honingUpperCapacity": {
+      "protocol": "protocols/post-v38-honing-repeat-capacity-v1.json",
+      "protocolSha256": "de389e1b27684ae5894333a90656e02e93f5b94781a5aa01ad577e13cb5bce71",
+      "summary": "summaries/post-v38-honing-repeat-capacity-v1.json",
+      "summarySha256": "090cf43a35e7cedf850e4f52f3adec5019423f92bc040c0453c43d6a591882c4",
+      "runner": "tools/post_v38_honing_repeat_capacity.py",
+      "runnerSha256": "056a39f640daed585b216ceef958a3f13d31b2f1272a14a1c2309840ae2799a3",
+      "decision": "close-honing-repeat-without-implementation"
+    }
+  },
+  "factor": {
+    "name": "momentumPolicyPreference",
+    "levels": [0, 1],
+    "current": "Honing Edge uses special.execute",
+    "remap": "Honing Edge alone uses special.shatterEchoDusk",
+    "implementationStatus": "research-only remap tested and closed; Honing repeat payoff not implemented"
+  },
+  "result": {
+    "decisionBoundary": 2,
+    "identityPreflight": "PASS",
+    "currentExactRepeatActivePolicies": 13,
+    "remapExactRepeatActivePolicies": 14,
+    "minimumExactRepeatActivePolicies": 16,
+    "currentExactRepeatInactivePolicies": 40,
+    "remapExactRepeatInactivePolicies": 34,
+    "minimumExactRepeatInactivePolicies": 16,
+    "currentHoningOnlyPolicies": 5,
+    "remapHoningOnlyPolicies": 7,
+    "minimumHoningOnlyPolicies": 8,
+    "novelSeparatedPolicies": 5,
+    "minimumNovelSeparatedPolicies": 3,
+    "remapScorelineRoutePolicies": 32,
+    "addedFaultIdentities": 0,
+    "interpretation": "The remap had independently measured repertoire value but still failed both preregistered absolute support gates. The complete Honing repeat family is closed rather than tuned.",
+    "newSimulatorObservationRows": 515,
+    "newLedgerRows": 519,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 27.027261000010185
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 482,
+    "payloadFilesIndexed": 465,
+    "protocolFiles": 76,
+    "summaryFiles": 96,
+    "toolFiles": 33,
+    "newRawObjects": 2,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "98ab64167c52c173a176aef0fee7225948bbcbfb557e685a3ad64453b3568d73"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "aed48f51fedcb66edc75e600bd31f01bd2e09bbb",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Preregister the next smallest source-backed Duskblade state/action mediator with a zero-row capacity screen. Do not return to reseam break, Honing repeat, another policy remap or any previously closed family.",
+  "omissions": [
+    "No payoff, product content, rarity, acquisition factor, detector, ML, RL or optimiser was added.",
+    "No gate, cohort, policy identity, simulation seed, estimator or stopping rule changed after execution began.",
+    "No held-out, reserve or protected seed was used.",
+    "No product PR, CI run, acceptance claim or #108 receipt was created."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

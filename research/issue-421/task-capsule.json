@@ -18,6 +18,8 @@
     "The Shatterer's Crown guaranteed boss-offer route is closed by the frozen source-and-policy screen; do not implement its offer knob or weaken its one-policy shortfall.",
     "The natural Shatterer's Crown effect family is closed by preregistered CRN decision boundary 2: its strong threshold effect was broad across exposed policies and failed the fixed inactive-policy gate; do not remove Fervor, add a level or reinterpret it as a strategy package.",
     "The Shatter-to-heavy-Attack tempo relay is closed by zero-row capacity decision boundary 2: 53 of 64 policies were robustly active and only one was robustly inactive against the fixed minimum of 16; do not subset its six cards or weaken its gates.",
+    "Same-enemy reseam break is closed by zero-row capacity decision boundary 2: 51 of 64 policies were robustly active and only one was inactive; do not retune its threshold or payoff.",
+    "The complete Honing Edge same-instance repeat family is closed by exact CRN decision boundary 2: the identity-safe preference remap reached only 14 exact-active and seven Honing-only policies against fixed minima of 16 and eight; do not try another mapping, threshold, cohort or payoff.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -47,8 +49,8 @@
     "archivedExperimentGodot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
-    "researchLedgerRecords": 479853,
-    "researchLedgerSha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "researchLedgerRecords": 480372,
+    "researchLedgerSha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
     "protectedSeedRows": 0,
     "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
     "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
@@ -85,7 +87,13 @@
     "crownEffectCrnSummarySha256": "7b7a11a1f78f42dcdf7f8a1ccd2515c9ddb10b066ade66a04f66f486b4aafa14",
     "crownEffectCrnAuditSha256": "e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd",
     "shatterTempoCapacityProtocolSha256": "e9c413088d5ccef93b5d9c3793688ae0e14d3364cc7d8f7e854bbef92a1645d8",
-    "shatterTempoCapacitySummarySha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388"
+    "shatterTempoCapacitySummarySha256": "8f6c7162454a0aad69d051c4ad409ea185006fcb41396b705e90fce510400388",
+    "reseamBreakCapacityProtocolSha256": "b7bb4e534c75c36d65faf9d50eab9fa57cfabcd6b3098c99dce71ba7d2fe3f15",
+    "reseamBreakCapacitySummarySha256": "5c9046438a41b996ced634013e7e5d3d7c79abd63d288af98f9e8b051b8fbab4",
+    "honingRepeatCapacityProtocolSha256": "de389e1b27684ae5894333a90656e02e93f5b94781a5aa01ad577e13cb5bce71",
+    "honingRepeatCapacitySummarySha256": "090cf43a35e7cedf850e4f52f3adec5019423f92bc040c0453c43d6a591882c4",
+    "momentumPreferenceCapacityProtocolSha256": "ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc",
+    "momentumPreferenceCapacitySummarySha256": "fdc51ca09f103f53528afb4f3b641a0c330db3dff1935287e1981b40a2dfd73b"
   },
   "decisions": [
     {
@@ -192,18 +200,33 @@
       "decision": "Close the Shatter-to-heavy-Attack tempo relay without implementation or simulator spend.",
       "evidence": "summaries/post-v38-shatter-tempo-capacity-v1.json",
       "reason": "On the frozen 64-policy root-551 current-main rectangle, all 64 policies were robustly Shatter-ready and all six eligible reward Attacks were consumed, but 53 policies were robustly active and only one was robustly inactive against the fixed minimum of 16. The relay is another broad power route rather than a selective repertoire split; its strict capacity-level viability proxy also failed. The ledger remained byte-identical and no simulator row was added."
+    },
+    {
+      "decision": "Close same-enemy reseam break without implementation or simulator spend.",
+      "evidence": "summaries/post-v38-reseam-break-capacity-v1.json",
+      "reason": "The exact same-enemy second-Shatter source contract was active for 51 of 64 policies and inactive for only one against the fixed minimum of 16. It is another broad Shatter behaviour, not a selective repertoire split."
+    },
+    {
+      "decision": "Close the aggregate Honing repeat screen and test only its measured policy alias.",
+      "evidence": "summaries/post-v38-honing-repeat-capacity-v1.json",
+      "reason": "Aggregate repeat capacity and inactivity passed at 16 and 34 policies, but only five were Honing-only against the fixed minimum of eight. Source inspection isolated the shared special.execute preference as the bounded policy-repertoire bottleneck."
+    },
+    {
+      "decision": "Close the identity-safe Momentum preference remap and complete Honing repeat family.",
+      "evidence": "summaries/post-v38-momentum-preference-capacity-v1.json",
+      "reason": "Exact null, score, policy, path, RNG, result and telemetry identities passed on the complete 515-observation CRN first look. The remap produced five novel Scoreline-independent identities but reached only 14 exact-repeat-active and seven Honing-only policies against fixed minima of 16 and eight, so both absolute support gates failed."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown and the separate Shatter-to-heavy-Attack relay both failed frozen inactive-policy gates as broad power routes. Prior Dusk Scoreline complementarity remains evidence; materially different confirmed Dusk support remains outstanding.",
+    "packageSupport": "Ash hand-size and Bloodfire are admitted from immutable local complementarity plus an exact current-main, equal-cohort whole-run support audit. The exact #525 Ward packet and every Dusk edge retained by immutable #524 are closed. Shatterer's Crown, the Shatter-to-heavy-Attack relay, reseam break and the exact Honing repeat family all failed frozen repertoire gates. Prior Dusk Scoreline complementarity remains evidence; materially different confirmed Dusk support remains outstanding.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Preregister the next smallest deterministic Duskblade structural mediator whose consumer is a selective state/action sequence, beginning with a zero-row source-and-capacity contract before implementation or simulator spend. Do not return to the closed heavy-Attack relay, Crown, Ward, Kindle, Afterimage, the tested #524 packages, #517/#519, ML/RL, protected seeds or adaptive candidate tuning.",
+  "nextAction": "Preregister the next smallest deterministic Duskblade structural mediator whose consumer is a selective state/action sequence, beginning with a zero-row source-and-capacity contract before implementation or simulator spend. Do not return to the closed heavy-Attack relay, reseam break, Honing repeat, Crown, Ward, Kindle, Afterimage, the tested #524 packages, #517/#519, ML/RL, protected seeds or adaptive candidate tuning.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "protocolSha256": "ac2202a945a88d2067eb55cb51e93e541653cb541aba73f7a965b935296214dc",
+  "executionManifestSha256": "d49a0048bb9a4ee3ae03cb91327abedf6a57241e37acb68b90b30fc1bef0d4c0",
+  "decision": "close-momentum-remap-and-honing-repeat-family",
+  "decisionBoundary": 2,
+  "before": {
+    "records": 479853,
+    "firstSequence": 1,
+    "lastSequence": 479853,
+    "sha256": "2d4ee63ac8cd83664972da376b6a9bab09ebf741020ef159297a5a50a7bd4d2b",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "afterExecution": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "newRecords": 519,
+  "newSimulatorObservationRows": 515,
+  "newPlanRecords": 2,
+  "newProbeRunRecords": 2,
+  "protectedSeedRows": 0,
+  "authority": "Both absolute repertoire gates failed at the frozen first look. Close the preference remap and complete Honing repeat family; no payoff implementation, threshold change, cohort extension, protected seed or further mapping is authorised."
+}
