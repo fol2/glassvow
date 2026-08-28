@@ -1,0 +1,82 @@
+{
+  "authority": "Freeze the default-Flare versus explicit-Beacon Lantern-Art factor as identity-safe and preregister its next evidence-backed capacity block before any enabled Beacon whole-run. The next block must keep common frozen policy and seed identities, baseline, estimator and stop rules, treat Scoreline and Afterimage as separate fixed interference anchors, and add no ML/RL or optimiser.",
+  "decision": "lantern-art-identity-green-authorise-capacity-preregistration",
+  "decisionBoundary": 1,
+  "directControls": {
+    "mappingMismatchRows": 0,
+    "rngMismatchRows": 0,
+    "rows": 6
+  },
+  "execution": {
+    "GodotProcesses": 2,
+    "causalEndpointsInspected": 0,
+    "causalFits": 0,
+    "causalRows": 0,
+    "directExecutions": 6,
+    "enabledBeaconWholeRunRows": 0,
+    "manifests": {
+      "direct": {
+        "outputSha256": "6c26156b3c02d5bab648513fd0f66341f73a1c7e997c15df6856217cd35313cb",
+        "planSha256": "0d72358282137248c6889efac9a211983c1dacbe667f58b79fc26e43a383db82"
+      },
+      "wholeRuns": {
+        "outputSha256": "f80b812e785f38099d3606c4a460cf6548da163d467c2ca03b1b9493605e1911",
+        "planSha256": "4ec21da52b524b611bf98acc2905a852995e65cc9dd59a0ac4b8f6055d00e466"
+      }
+    },
+    "maximumModelContextTokens": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "wallTimeSeconds": 2.6799139169743285,
+    "wholeRunIdentityObservationRows": 32
+  },
+  "failure": "",
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "outcomeClass": "success",
+  "protocolSha256": "8363a56baa1b0d98f8136e64fdce2a6da619f07c85f4f4efce27c977335b850d",
+  "schemaVersion": 1,
+  "sourceIdentity": {
+    "balanceSimSha256": "4ed8607c309ec39dfe0b1c312bb028ee2af6e975339f620f377a25bcb2ce5170",
+    "combatRulesSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "56215bd0298d6dcd6aea83ce894e3f792b637d36234a23c02e0d3ea4717cc3be",
+    "probeUidSha256": "773eb8a034c563a79743160b6965f8cc000690219a7663f1ceffbbe910d44743",
+    "repertoireAuditProtocolSha256": "450a3c5c5ec74393ec15e9ade38a9376a6f79992243b18445fa4509f48666d92",
+    "repertoireAuditSummarySha256": "842ce1e18aa49bf4209c58594e094f2ed9e30ed49a52a9bddd524ba00ad5ccfe",
+    "runnerSha256": "98b7aec9ff8e19e1d4b8905a6789eae7b29375ee9213f3488e953c7c050dbbd2",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "taskCapsuleSha256": "7e9af7a37ae5d0dadf9b47aa83eba68e53ee7ea00ebe0d0a6b3ade6132227074"
+  },
+  "wholeRunIdentity": {
+    "completeMismatchRows": 0,
+    "identities": 16,
+    "outcomes": {
+      "loss": 15,
+      "win": 1
+    },
+    "pathMismatchRows": 0,
+    "policyMismatchRows": 0,
+    "reliabilityFaultRows": 0,
+    "resultMismatchRows": 0,
+    "rngMismatchRows": 0
+  }
+}

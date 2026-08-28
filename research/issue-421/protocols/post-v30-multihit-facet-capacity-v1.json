@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v30-multihit-facet-capacity",
+  "question": "Does the complete exact-current-main class of multi-hit Attack cards have enough broad, inactive, viable and separately identifiable natural play capacity to justify one identity-only preflight of an extra-Facet-per-extra-unblocked-hit primitive?",
+  "registrationDisclosure": "This is a declared retrospective zero-new-row deterministic capacity audit, not a blinded preregistration. The boolean-hit source alias selected the complete times-greater-than-one Attack class before its support was calculated. One interactive deterministic preview occurred before this file was materialised; therefore the full source-derived class, legacy 64-policy gates, frozen trace and no-adaptation rule are disclosed and immutable here. No simulator row, fit, candidate level, subset or protected endpoint was inspected or created by execution.",
+  "scientificBasis": {
+    "observedGap": "Exact combat source records whether an Attack produced any unblocked damage as a boolean per target and awards the implicit Facet chip once after the whole card resolves. Exact content independently defines four normal-and-upgraded Attacks with a damage effect whose times field exceeds one. Their additional unblocked hits are therefore aliased by the current implicit-chip mediator.",
+    "completeClassRule": "Select every card whose base type is attack and whose base and upgraded effects each contain kind=dmg with integer times greater than one. No card ID, rarity, target mode, observed support or endpoint may add or remove a member.",
+    "necessaryCapacity": "A policy can respond to the primitive only if it naturally plays at least one member of the complete class. Whole-run play is deliberately permissive: it does not prove that multiple hits were unblocked, survived target death, created extra Facet progress or changed an outcome.",
+    "methodBoundary": "No candidate implementation, content edit, telemetry, simulator, causal contrast, fit, optimiser, ML or RL enters this audit."
+  },
+  "sourceClass": {
+    "cardIds": [
+      "flurry",
+      "shardstorm",
+      "tempest",
+      "twinFangs"
+    ],
+    "facetAliasSentinels": [
+      {
+        "text": "An attack card that draws unblocked blood earns its facet chip (once per card).",
+        "count": 1
+      },
+      {
+        "text": "var rec: Dictionary = cb.pending_chips.get(e.idx, {\"hit\": false, \"extra\": 0})",
+        "count": 2
+      },
+      {
+        "text": "rec[\"hit\"] = true",
+        "count": 1
+      },
+      {
+        "text": "var hit_flag: bool = rec[\"hit\"]",
+        "count": 1
+      },
+      {
+        "text": "var n: int = (per if hit_flag else 0) + extra",
+        "count": 1
+      }
+    ],
+    "conditionalPrimitive": "Only if every capacity gate passes, one research-only identity preflight may count each unblocked damage hit from a multi-hit Attack and add exactly one implicit Facet chip per additional unblocked hit to that same target after card resolution. Authored chip, Beacon, target selection, damage, other cards and all payoffs remain unchanged. The explicit null must be byte-for-byte path, RNG, policy and result identical to pristine current main."
+  },
+  "trace": {
+    "planSha256": "c79ffa3e1018f8b9173d3c140546aac051a11d3562a699ec8c9817825cc3455a",
+    "outputSha256": "14da39f7625bd6a6b211c1d14442773cce548a06ae181d09974acc53ce3207cc",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "legacyEngineIdentity": "4.7.1-stable (official)",
+    "selectionRule": "Read the complete immutable 64-policy by four-seed exact-current-main V5 output once. The old engine identity is disclosed and this audit makes only a deterministic necessary-exposure claim; every future runtime row would require the qualified exact 4.7.2 host packet."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "aspect": "duskblade",
+    "vow": 5,
+    "identity": "The same complete frozen policy and seed rectangle supplies candidate exposure, viability, both anchors and reliability."
+  },
+  "definitions": {
+    "potentialActivePolicy": "At least two of four frozen rows play one or more cards in the complete source-derived class.",
+    "exactInactivePolicy": "None of the four frozen rows plays any card in the complete source-derived class.",
+    "ambiguousPolicy": "Neither potential-active nor exact-inactive.",
+    "viablePolicy": "A potential-active policy has at least one candidate-exposed row whose whole-run outcome is win.",
+    "sourceBreadth": "At least two distinct source-class cards each have at least one robustly active policy. This is a breadth sentinel, not authority to drop an unsupported class member."
+  },
+  "design": {
+    "type": "zero-row necessary-condition capacity audit; not a factorial, causal contrast or optimisation",
+    "matrix": [
+      {
+        "block": "complete multi-hit Attack exposure",
+        "rows": 256
+      },
+      {
+        "block": "Scoreline co-play anchor",
+        "rows": 256
+      },
+      {
+        "block": "Afterimage co-play anchor",
+        "rows": 256
+      }
+    ],
+    "sharedIdentity": "All three blocks reuse the identical baseline, policy identities, seed identities, whole-run cohort, estimator and stopping rule.",
+    "noCartesianExpansion": "No factor varies and no joint cell exists. Rows are read once; nothing is spent to complete a Cartesian product."
+  },
+  "factorDefinitions": {
+    "multiHitExtraFacet": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "conditionalNextLevels": [
+        "explicit-null",
+        "one-extra-implicit-Facet-chip-per-extra-unblocked-hit"
+      ],
+      "status": "Fixed here. Conditional levels are authorised only if every capacity gate passes."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied, bundled or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied, bundled or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "status": "Fixed; no acquisition intervention is used."
+    }
+  },
+  "anchors": {
+    "scoreline": {
+      "definition": "A robust policy has positive Chisel-play and Executioner-play counts in the same whole run in at least two of four rows.",
+      "activePolicies": 24,
+      "status": "Separate permissive co-play overlap anchor only; no order, Facet state, Scoreline payoff or interaction is inferred."
+    },
+    "afterimage": {
+      "definition": "A robust policy has positive Defend-play and Guarded Strike-play counts in the same whole run in at least two of four rows.",
+      "activePolicies": 19,
+      "status": "Separate permissive co-play overlap anchor only; no simultaneous Ward state, Warden's Edge, Afterimage payoff or interaction is inferred."
+    }
+  },
+  "interactionsAndAliases": {
+    "notEstimated": "No causal interaction is estimated. Candidate-only, anchor-only, cross-active and Jaccard statistics are necessary decision-value screens against Scoreline and Afterimage separately.",
+    "hitAlias": "A play witness does not distinguish blocked hits, enemy death during repeats, multi-target fan-out or the current one-chip result; it is an upper bound on mediator opportunity.",
+    "familyBoundary": "This direct Attack-hit-to-Facet primitive is not the closed recovery-then-repeated-hit sequence, heavy-attack relay, Scoreline, Afterimage, Ward, Kindle, Hearth, weak-mend, action-economy, payoff-scalar or acquisition-priority family.",
+    "classAlias": "All four exact class members remain one indivisible mechanism family. No rarity, target, hit-count, support, outcome or named-card subgroup may be selected after this look."
+  },
+  "estimands": {
+    "primary": "Exact robust potential-active, exact-inactive, ambiguous and viable policy counts and identities for the complete source class.",
+    "sourceBreadth": "For every exact class member: robust-active policies, exact-inactive policies and played rows.",
+    "separation": "Candidate-only, anchor-only, cross-active and Jaccard counts against Scoreline and Afterimage separately.",
+    "reliability": "Exact stall or error row count.",
+    "notEstimated": "No unblocked-hit count, extra chip, Shatter, Scoreline, Afterimage, payoff, causal effect, interaction, detector, duration, product balance or protected endpoint is estimated."
+  },
+  "gates": {
+    "minimumPotentialActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumRobustlyActiveSourceCards": 2,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy support and inactivity minima, eight-policy viability and two-sided separation minima, 0.55 overlap ceiling and one-fault ceiling are the already-frozen 64-policy capacity scale. Two robustly active source cards prevents a one-card mechanism claim without permitting class selection. No gate changed after the disclosed preview."
+  },
+  "factorDisposition": {
+    "candidate": "None is implemented, simulated or promoted in this audit.",
+    "scorelineAndAfterimage": "Scoreline payoff and Afterimage payoff remain separate fixed causal factors and separate overlap anchors.",
+    "closedFamilies": "No Ward, Kindle, Afterimage, Scoreline, Hearth, recovery-repeated-hit, heavy-attack relay, weak-mend, payoff-scalar or acquisition-priority closure is reopened.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or adaptive policy method is used or authorised; no remaining policy-repertoire bottleneck is identified here.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies source commit and hashes, derives the complete class from content, proves the boolean Facet alias from frozen source sentinels, verifies trace and ledger identity, and owns all counts and stop/go.",
+    "firstLook": "The complete cached rectangle is the sole formal look. No simulator, repair, threshold change, card subset, candidate level or rerun exists.",
+    "successStop": "Stop only if every support, inactivity, viability, breadth, separation and reliability gate passes.",
+    "futilityStop": "Stop at the first completed audit when any gate fails. Close the complete family without testing a subset, changing robust support, adding a level or implementing the primitive.",
+    "inconclusiveStop": "Record inconclusive at the 30-second cap if the completed deterministic decision is unavailable."
+  },
+  "decisionRules": {
+    "success": "Every gate passes.",
+    "successAuthority": "Apply decision boundary 1 and freeze only the exact binary extra-Facet-per-extra-unblocked-hit primitive for one separately preregistered exact-4.7.2 explicit-null and focused-mediator identity preflight. Do not construct a causal candidate, vary a payoff, add ML/RL/optimisation or use protected seeds.",
+    "futility": "Any gate fails.",
+    "futilityAuthority": "Apply decision boundary 2 and close the complete multi-hit extra-Facet alias-fracture family. Do not select a card subset, alter the robust threshold, add a payoff or carrier, implement or rerun it. Continue issue #421 with the next materially different source-and-evidence-backed structural mechanism.",
+    "inconclusive": "The completed deterministic decision is unavailable at the cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record this family inconclusive at the cap without implementation, simulation, repair, a new method or protected seeds."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8"
+    },
+    "fileSha256": {
+      "post_v38_competing_structural_options.py": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "summaries/post-v38-source-complete-exhaustion-audit-v1.json": "e782f220dfa44bee544322e8108c342e20a51cbb6baf85bf3f3b9e065be886bb",
+      "task-capsule.json": "3ecbdcc182c85e4d55e63d7577c5cb97a87631f7840d50607586551de4ebf19b"
+    },
+    "runnerSha256": "564ed449ac8ae0e7809dfd9bdec235feb47736c85d8ab60669e3262482393f87"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "artSignatures": {
+    "ashfall": {
+      "cost": 3,
+      "effects": [
+        {
+          "id": "poison",
+          "kind": "status",
+          "n": 6,
+          "who": "allEnemies"
+        },
+        {
+          "kind": "block",
+          "n": 5
+        }
+      ]
+    },
+    "beacon": {
+      "cost": 2,
+      "effects": [
+        {
+          "id": "beacon",
+          "kind": "status",
+          "n": 1,
+          "who": "self"
+        }
+      ]
+    },
+    "emberveil": {
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "block",
+          "n": 12
+        }
+      ]
+    },
+    "flare": {
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 9
+        }
+      ]
+    },
+    "mendglass": {
+      "cost": 4,
+      "effects": [
+        {
+          "kind": "heal",
+          "n": 8
+        }
+      ]
+    },
+    "stoke": {
+      "cost": 4,
+      "effects": [
+        {
+          "kind": "energy",
+          "n": 1
+        },
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ]
+    }
+  },
+  "authority": "Apply decision boundary 1 and freeze only default Flare versus explicit Beacon as a live-product Lantern-Art factor for one separately preregistered exact-4.7.2 identity preflight with fresh non-protected identities. Prove omitted and explicit Flare exact path, RNG, policy and result identity and direct authored mapping for Flare and Beacon before any enabled whole-run. Do not add ML/RL, vary another Art, infer complementarity or run a causal endpoint.",
+  "cachedObservationRowsRead": 0,
+  "decision": "freeze-beacon-art-factor-for-identity-preflight",
+  "decisionBoundary": 1,
+  "factorDisposition": {
+    "additionalMethod": "The source pass identifies a policy-repertoire factor omission but does not by itself justify ML, RL or an optimiser. Use the deterministic existing Art choice first; add a method only if later comparable evidence measures decision value that this factor cannot resolve.",
+    "candidate": "No product or research candidate is built or simulated.",
+    "closedFamilies": "No Ward, recovery, action-economy, Smolder, Hearth, multi-hit, Dimmed-Facet or other excluded Art is reopened.",
+    "identityPreflight": "At most the explicit Flare null and explicit Beacon factor may receive a fresh exact-4.7.2 direct-control and null whole-run identity protocol.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "liveRoute": {
+    "allSelectableArts": [
+      "ashfall",
+      "beacon",
+      "emberveil",
+      "flare",
+      "mendglass",
+      "stoke"
+    ],
+    "defaultDuskArt": "flare",
+    "deterministicChoice": true,
+    "directDuskCoreAlternativeArts": [
+      "beacon"
+    ],
+    "unlockThreshold": {
+      "runsPlayed": 1
+    }
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "450a3c5c5ec74393ec15e9ade38a9376a6f79992243b18445fa4509f48666d92",
+  "runnerSha256": "b2b7c75fe1a99dcb81d34c9bfe0b0700b7b894ebeb51afb0c5cf756ec43db0e1",
+  "schemaVersion": 1,
+  "selectedArt": "beacon",
+  "simulatorGap": {
+    "aspectDefaultArtOnly": true,
+    "automaticArtUse": true,
+    "failureClass": "policy-repertoire-factor-omission",
+    "lamplighterHardDisabled": true,
+    "planArtOverride": false,
+    "policyArtSelector": false
+  },
+  "sourceIdentity": {
+    "commit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sha256": {
+      "application/main.gd": "8ad9523cf04dcf5f6eb6d675c94102aa3d035f7ad53132e84c4a59349c41350e",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    }
+  },
+  "wallTimeSeconds": 5.814688125043176
+}

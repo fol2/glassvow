@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v30-lantern-art-repertoire-audit",
+  "question": "Does exact live current-main expose a deterministic, policy-selectable Lantern-Art factor that the research simulator removes, and does exactly one non-default Art directly couple to the Dusk Facet core strongly enough to receive an identity-only preflight?",
+  "scientificBasis": {
+    "scopeCorrection": "The immutable native-grammar audit correctly described its frozen simulator baseline as automatic default-Art context, but its source universe did not include the live application Lamplighter selection route. Preserve that audit. This wider exact-RC audit asks whether the player-selectable route is absent from research rather than reclassifying a prior endpoint.",
+    "decisionValue": "Issue #421 must bind detector and package evidence to exact shipped product behaviour and requires real reachability or one deterministic acquisition path. A live product factor available after a fixed one-run reveal can change which strategy repertoire is evaluated; hard-disabling it in every research policy is therefore decision-relevant if exact source proves the route.",
+    "policyBottleneckTest": "A policy-repertoire factor omission exists only when the live route offers all authored Arts deterministically, exact research construction fixes the aspect default with no plan or policy override, and BalancePilot automatically consumes the fixed Art. No outcome or qualitative preference enters this test.",
+    "methodBoundary": "This audit adds no Art policy, candidate, row, simulator execution, model, ML, RL or optimiser. A source pass authorises only a separately preregistered plan-level identity preflight."
+  },
+  "liveRoute": {
+    "unlockThreshold": {
+      "runsPlayed": 1
+    },
+    "newRunSentinels": [
+      "\"lamplighter\": _vigil.unlocks.has(\"lamplighter\")"
+    ],
+    "screenSentinels": [
+      "content.arts",
+      "game.run.art"
+    ],
+    "confirmSentinels": [
+      "content.arts.has(String(art_id))",
+      "game.run.art = art_id"
+    ],
+    "reachabilityClaim": "After exactly one completed run reveals lamplighter, every new live run reaches one deterministic screen containing every current content.arts entry and confirmation writes the chosen Art ID to the run. Boon offer randomness is separate and is not part of the Art choice."
+  },
+  "artSignatures": {
+    "ashfall": {
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "status",
+          "who": "allEnemies",
+          "id": "poison",
+          "n": 6
+        },
+        {
+          "kind": "block",
+          "n": 5
+        }
+      ]
+    },
+    "beacon": {
+      "cost": 2,
+      "effects": [
+        {
+          "kind": "status",
+          "who": "self",
+          "id": "beacon",
+          "n": 1
+        }
+      ]
+    },
+    "emberveil": {
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "block",
+          "n": 12
+        }
+      ]
+    },
+    "flare": {
+      "cost": 3,
+      "effects": [
+        {
+          "kind": "dmg",
+          "n": 9
+        }
+      ]
+    },
+    "mendglass": {
+      "cost": 4,
+      "effects": [
+        {
+          "kind": "heal",
+          "n": 8
+        }
+      ]
+    },
+    "stoke": {
+      "cost": 4,
+      "effects": [
+        {
+          "kind": "energy",
+          "n": 1
+        },
+        {
+          "kind": "draw",
+          "n": 2
+        }
+      ]
+    }
+  },
+  "selectionRule": {
+    "universe": "Every exact current-main Art other than Duskblade's authored default.",
+    "directDuskCoreFilter": "Select an Art only when its exact authored effect applies a positive self Beacon status, and exact combat consumes Beacon directly in the implicit Attack Facet-chip arithmetic.",
+    "expectedDirectDuskCoreArts": [
+      "beacon"
+    ],
+    "beaconConsumerSentinel": "per = 1 + _ji(d.get(\"chip\", 0)) + _sget(p.statuses, \"beacon\")",
+    "excludedWithoutNegativeClaim": {
+      "flare": "authored Dusk default and baseline comparator",
+      "ashfall": "direct Ash Smolder/Ward route; not a Dusk-core selector",
+      "emberveil": "Ward-only and inside the closed Ward/Afterimage family",
+      "mendglass": "generic healing and inside closed recovery families",
+      "stoke": "generic Energy/draw and inside closed action-economy grammar"
+    },
+    "noOutcomeSelection": "No cache, policy support, win, Shatter, duration, detector or protected endpoint is read. Exactly one source-selected direct Dusk-core alternative may continue."
+  },
+  "simulatorGap": {
+    "defaultArtSentinel": "rs.art = StringName(str(cp.get(\"art\", \"flare\")))",
+    "disabledLamplighterSentinel": "\"unlocks\": [\"aspect2\"], \"quests\": {}, \"shards\": [], \"lamplighter\": false",
+    "automaticUseSentinels": [
+      "if game.rules.can_use_art(game.run, game.cb):",
+      "game.apply({\"t\": \"useArt\"})"
+    ],
+    "absenceContract": "RunState.new_run has no profile Art override; BalanceSim neither sets run.art nor admits a plan Art; BalancePilot and its policy schema have no Art selector while still automatically using the fixed Art.",
+    "failureClassIfExact": "policy-repertoire-factor-omission"
+  },
+  "design": {
+    "type": "zero-row exact-source and product/research-route coverage audit; not a factorial, causal contrast or optimiser",
+    "matrix": [
+      {
+        "block": "live unlock and Art-selection path",
+        "sourceFiles": 2
+      },
+      {
+        "block": "authored Art and Dusk-core consumer coverage",
+        "sourceFiles": 2
+      },
+      {
+        "block": "research simulator and policy omission",
+        "sourceFiles": 3
+      }
+    ],
+    "noCartesianExpansion": "No factor varies, no row executes and no joint cell exists."
+  },
+  "factorDefinitions": {
+    "lanternArt": {
+      "levels": [
+        "source-only-current-main"
+      ],
+      "conditionalIdentityLevels": [
+        "omitted-aspect-default-flare",
+        "explicit-flare-null",
+        "explicit-beacon"
+      ],
+      "status": "Only the source identity is evaluated here. The three plan-level identities are authorised only after a source pass and require a separate exact-4.7.2 protocol before execution."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied, bundled or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied, bundled or estimated."
+    },
+    "lamplighterUnlock": {
+      "levels": [
+        "one-run-revealed-live-route"
+      ],
+      "status": "Exact deterministic reachability context, not an experimental treatment."
+    }
+  },
+  "interactionsAndAliases": {
+    "beaconPackage": "Selecting Beacon changes the exact authored Art package from Flare: Ember cost, Art effect and the resulting turn-scoped implicit-chip mediator. A later causal contrast must name the whole Art-selection package and must not attribute its effect to one component without mediator evidence.",
+    "boonAlias": "The live screen also requires a boon choice, but every Art is independently selectable on the same screen. A research Art override isolates only the Art factor and cannot claim to replay boon-offer RNG or the complete UI route.",
+    "automaticUseAlias": "Fixed-Art simulation plus automatic use is not policy selection. Variation in later exploitation can establish policy sensitivity only after comparable whole-run evidence; source reachability alone cannot.",
+    "separatePayoffs": "Scoreline and Afterimage remain separate fixed factors. Beacon is not folded into either and this is not an old four-factor design."
+  },
+  "estimands": {
+    "primary": "Exact existence and identity of a live deterministic Art-selection route omitted from the research policy repertoire.",
+    "selection": "Exact count and identity of non-default Arts whose authored effect directly enters the Dusk Facet core.",
+    "reachability": "Exact reveal threshold and live all-Art choice/write path.",
+    "notEstimated": "No Art use, Beacon activation, Attack, chip, Shatter, complementarity, policy sensitivity, payoff, interaction, duration, RandomBuild, detector, protected seed or product balance endpoint is estimated."
+  },
+  "factorDisposition": {
+    "candidate": "No product or research candidate is built or simulated.",
+    "identityPreflight": "At most the explicit Flare null and explicit Beacon factor may receive a fresh exact-4.7.2 direct-control and null whole-run identity protocol.",
+    "additionalMethod": "The source pass identifies a policy-repertoire factor omission but does not by itself justify ML, RL or an optimiser. Use the deterministic existing Art choice first; add a method only if later comparable evidence measures decision value that this factor cannot resolve.",
+    "closedFamilies": "No Ward, recovery, action-economy, Smolder, Hearth, multi-hit, Dimmed-Facet or other excluded Art is reopened.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "budget": {
+    "maximumSourceFilesRead": 7,
+    "maximumCachedObservationRowsRead": 0,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies exact source and evidence hashes, derives Art signatures and the sole direct Dusk-core alternative, proves live reachability and research omission, verifies ledger identity and owns stop/go.",
+    "firstLook": "One source-complete audit. No cache, simulator, row, candidate scoring, qualitative Art ranking or rerun exists.",
+    "successStop": "Stop when the live route and simulator omission are exact and exactly one non-default Art passes the direct Dusk-core filter.",
+    "futilityStop": "Stop and close the Art route when no Art passes the filter.",
+    "inconclusiveStop": "Stop at the cap when multiple Arts pass, an exact source/evidence identity is unavailable or the audit exceeds 30 seconds."
+  },
+  "decisionRules": {
+    "success": "The live deterministic route, one-run reveal, all-Art choice, fixed research default, absent research selector, automatic use and exactly one direct Dusk-core alternative are all exact.",
+    "successAuthority": "Apply decision boundary 1 and freeze only default Flare versus explicit Beacon as a live-product Lantern-Art factor for one separately preregistered exact-4.7.2 identity preflight with fresh non-protected identities. Prove omitted and explicit Flare exact path, RNG, policy and result identity and direct authored mapping for Flare and Beacon before any enabled whole-run. Do not add ML/RL, vary another Art, infer complementarity or run a causal endpoint.",
+    "futility": "No non-default Art passes the exact direct Dusk-core filter.",
+    "futilityAuthority": "Apply decision boundary 2 and close the live Art route without a preflight. Continue issue #421 with a materially different evidence-backed mechanism; do not choose an excluded Art by preference or alter its effects.",
+    "inconclusive": "Multiple Arts pass, an exact input is unavailable or the audit cannot decide before the cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the route inconclusive without choosing an Art, implementation, simulation, method or protected seed."
+  },
+  "priorEvidence": {
+    "nativeGrammar": {
+      "path": "summaries/post-v38-native-dusk-grammar-coverage-v1.json",
+      "sha256": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "preservation": "Immutable simulator-scope decision; not edited or reinterpreted."
+    },
+    "latestClosedPrimitive": {
+      "path": "summaries/post-v30-dimmed-facet-capacity-v1.json",
+      "sha256": "b72b84d97675eb87ead2cee9a138e533e731f6620af1ff2fcc5a5ce6d58fe649"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "application/main.gd": "8ad9523cf04dcf5f6eb6d675c94102aa3d035f7ad53132e84c4a59349c41350e",
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "fileSha256": {
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "summaries/post-v30-dimmed-facet-capacity-v1.json": "b72b84d97675eb87ead2cee9a138e533e731f6620af1ff2fcc5a5ce6d58fe649",
+      "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "task-capsule.json": "d65631f3e5dcf61a8bf9e4dd85818a17f5748272e23f26fc4ac05bfb80c8c4ab"
+    },
+    "runnerSha256": "b2b7c75fe1a99dcb81d34c9bfe0b0700b7b894ebeb51afb0c5cf756ec43db0e1"
+  }
+}

@@ -1,0 +1,537 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v30-lantern-art-identity",
+  "question": "Does the smallest exact-current-main Lantern-Art research factor preserve omitted-versus-explicit-Flare path, RNG, policy and result identity, while direct controls map Flare, Beacon and Beacon's existing Dusk Facet mediator exactly before any enabled Beacon whole-run?",
+  "authority": {
+    "task": "https://github.com/fol2/glassvow/issues/421",
+    "controllingDelta": "https://github.com/fol2/glassvow/issues/421#issuecomment-5453573232",
+    "repertoireAudit": "summaries/post-v30-lantern-art-repertoire-audit-v1.json"
+  },
+  "scientificBasis": {
+    "factorGap": "Exact live current-main exposes a deterministic all-Art choice after one completed run. Exact research fixes Duskblade to authored-default Flare and has no plan or policy Art selector while automatically using the fixed Art.",
+    "selectedAlternative": "Beacon is the sole non-default Art whose authored effect directly enters the existing Dusk implicit-Facet arithmetic. Selection used source only and no outcome.",
+    "identityQuestion": "The explicit Flare setting must be a semantic and trajectory null. Direct Beacon execution is confined to controlled combat states and must change only the authored Ember cost, self Beacon status and its existing Dusk-only unblocked-Attack Facet mediator.",
+    "notCausal": "No enabled Beacon whole-run, causal endpoint, package claim, candidate, product mutation, model, ML, RL, optimiser, Scoreline factor or Afterimage factor is present."
+  },
+  "factorDefinitions": {
+    "lanternArt": {
+      "wholeRunIdentityLevels": [
+        "omitted-authored-default-flare",
+        "explicit-flare-null"
+      ],
+      "directControlLevels": [
+        "no-art-use",
+        "flare",
+        "beacon"
+      ],
+      "enabledWholeRunLevels": [],
+      "researchKnob": "One optional StringName passed after current simulator construction. It accepts only omitted, flare or beacon and writes run.art after new_run without reading or advancing RNG."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed factor; not varied, bundled or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed factor; not varied, bundled or estimated."
+    }
+  },
+  "interactionsAndAliases": {
+    "wholeRun": "Only omitted versus explicit Flare is evaluated, so there is no Art effect contrast or interaction estimand.",
+    "directBeacon": "Beacon changes the whole authored Art package relative to Flare: Ember cost and effect. The attack controls isolate the already-authored Beacon-status consumer, not a whole-run Art payoff.",
+    "automaticUse": "BalancePilot's automatic Art use is unchanged. This preflight proves a factor encoding, not a policy selector or live UI replay.",
+    "boonAndUnlock": "The deterministic live Lamplighter choice was source-proved separately. This research override does not replay boon offers, profile persistence or UI events and claims no identity for them."
+  },
+  "identityCohort": {
+    "freshness": "A read-only pre-freeze search found zero exact policyRoot 421801, seed 421810 or seed 421811 values in the append-only ledger and existing protocols or summaries.",
+    "policyRoot": 421801,
+    "policyIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "simulationSeeds": [
+      421810,
+      421811
+    ],
+    "identities": 16,
+    "aspect": "duskblade",
+    "vow": 0,
+    "baseline": "Exact current-main content at source c4130163c7fb8edd865c0adc95732aae03e1bad2."
+  },
+  "directControls": [
+    {
+      "input": {
+        "id": "flare-authored-map",
+        "kind": "art",
+        "seed": 421820,
+        "aspect": "duskblade",
+        "art": "flare",
+        "block": 0
+      },
+      "expected": {
+        "id": "flare-authored-map",
+        "kind": "art",
+        "aspect": "duskblade",
+        "art": "flare",
+        "canUse": false,
+        "embersBefore": 4,
+        "embersAfter": 1,
+        "hpBefore": [
+          240,
+          240
+        ],
+        "hpAfter": [
+          231,
+          231
+        ],
+        "playerStatuses": {},
+        "events": [
+          {
+            "t": "ember",
+            "n": -3,
+            "total": 1
+          },
+          {
+            "t": "art",
+            "id": "flare"
+          },
+          {
+            "t": "hitEnemy",
+            "idx": 0,
+            "amount": 9,
+            "blocked": 0,
+            "hpAfter": 231,
+            "dead": false,
+            "killingBlow": false,
+            "overkill": 0
+          },
+          {
+            "t": "hitEnemy",
+            "idx": 1,
+            "amount": 9,
+            "blocked": 0,
+            "hpAfter": 231,
+            "dead": false,
+            "killingBlow": false,
+            "overkill": 0
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "beacon-authored-map",
+        "kind": "art",
+        "seed": 421821,
+        "aspect": "duskblade",
+        "art": "beacon",
+        "block": 0
+      },
+      "expected": {
+        "id": "beacon-authored-map",
+        "kind": "art",
+        "aspect": "duskblade",
+        "art": "beacon",
+        "canUse": false,
+        "embersBefore": 4,
+        "embersAfter": 2,
+        "hpBefore": [
+          240,
+          240
+        ],
+        "hpAfter": [
+          240,
+          240
+        ],
+        "playerStatuses": {
+          "beacon": 1
+        },
+        "events": [
+          {
+            "t": "ember",
+            "n": -2,
+            "total": 2
+          },
+          {
+            "t": "art",
+            "id": "beacon"
+          },
+          {
+            "t": "status",
+            "who": "player",
+            "id": "beacon",
+            "n": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "dusk-unblocked-no-art",
+        "kind": "attack",
+        "seed": 421822,
+        "aspect": "duskblade",
+        "art": "",
+        "useArt": false,
+        "block": 0
+      },
+      "expected": {
+        "id": "dusk-unblocked-no-art",
+        "kind": "attack",
+        "aspect": "duskblade",
+        "art": "",
+        "artUsed": false,
+        "blockBefore": 0,
+        "blockAfter": 0,
+        "hpBefore": 240,
+        "hpAfter": 234,
+        "chips": 1,
+        "facetMax": 8,
+        "embers": 4,
+        "playerStatuses": {},
+        "playReturned": true,
+        "artEvents": [],
+        "attackEvents": [
+          {
+            "t": "play",
+            "uid": 11,
+            "id": "strike",
+            "targetIdx": 0
+          },
+          {
+            "t": "energy",
+            "n": 2
+          },
+          {
+            "t": "hitEnemy",
+            "idx": 0,
+            "amount": 6,
+            "blocked": 0,
+            "hpAfter": 234,
+            "dead": false,
+            "killingBlow": false,
+            "overkill": 0
+          },
+          {
+            "t": "chip",
+            "idx": 0,
+            "n": 1,
+            "chips": 1,
+            "facetMax": 8
+          },
+          {
+            "t": "toDiscard",
+            "uid": 11
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "dusk-unblocked-beacon",
+        "kind": "attack",
+        "seed": 421823,
+        "aspect": "duskblade",
+        "art": "beacon",
+        "useArt": true,
+        "block": 0
+      },
+      "expected": {
+        "id": "dusk-unblocked-beacon",
+        "kind": "attack",
+        "aspect": "duskblade",
+        "art": "beacon",
+        "artUsed": true,
+        "blockBefore": 0,
+        "blockAfter": 0,
+        "hpBefore": 240,
+        "hpAfter": 234,
+        "chips": 2,
+        "facetMax": 8,
+        "embers": 2,
+        "playerStatuses": {
+          "beacon": 1
+        },
+        "playReturned": true,
+        "artEvents": [
+          {
+            "t": "ember",
+            "n": -2,
+            "total": 2
+          },
+          {
+            "t": "art",
+            "id": "beacon"
+          },
+          {
+            "t": "status",
+            "who": "player",
+            "id": "beacon",
+            "n": 1
+          }
+        ],
+        "attackEvents": [
+          {
+            "t": "play",
+            "uid": 11,
+            "id": "strike",
+            "targetIdx": 0
+          },
+          {
+            "t": "energy",
+            "n": 2
+          },
+          {
+            "t": "hitEnemy",
+            "idx": 0,
+            "amount": 6,
+            "blocked": 0,
+            "hpAfter": 234,
+            "dead": false,
+            "killingBlow": false,
+            "overkill": 0
+          },
+          {
+            "t": "chip",
+            "idx": 0,
+            "n": 2,
+            "chips": 2,
+            "facetMax": 8
+          },
+          {
+            "t": "toDiscard",
+            "uid": 11
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "dusk-blocked-beacon",
+        "kind": "attack",
+        "seed": 421824,
+        "aspect": "duskblade",
+        "art": "beacon",
+        "useArt": true,
+        "block": 6
+      },
+      "expected": {
+        "id": "dusk-blocked-beacon",
+        "kind": "attack",
+        "aspect": "duskblade",
+        "art": "beacon",
+        "artUsed": true,
+        "blockBefore": 6,
+        "blockAfter": 0,
+        "hpBefore": 240,
+        "hpAfter": 240,
+        "chips": 0,
+        "facetMax": 8,
+        "embers": 2,
+        "playerStatuses": {
+          "beacon": 1
+        },
+        "playReturned": true,
+        "artEvents": [
+          {
+            "t": "ember",
+            "n": -2,
+            "total": 2
+          },
+          {
+            "t": "art",
+            "id": "beacon"
+          },
+          {
+            "t": "status",
+            "who": "player",
+            "id": "beacon",
+            "n": 1
+          }
+        ],
+        "attackEvents": [
+          {
+            "t": "play",
+            "uid": 11,
+            "id": "strike",
+            "targetIdx": 0
+          },
+          {
+            "t": "energy",
+            "n": 2
+          },
+          {
+            "t": "hitEnemy",
+            "idx": 0,
+            "amount": 0,
+            "blocked": 6,
+            "hpAfter": 240,
+            "dead": false,
+            "killingBlow": false,
+            "overkill": 0
+          },
+          {
+            "t": "toDiscard",
+            "uid": 11
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "id": "ash-unblocked-beacon",
+        "kind": "attack",
+        "seed": 421825,
+        "aspect": "ashwarden",
+        "art": "beacon",
+        "useArt": true,
+        "block": 0
+      },
+      "expected": {
+        "id": "ash-unblocked-beacon",
+        "kind": "attack",
+        "aspect": "ashwarden",
+        "art": "beacon",
+        "artUsed": true,
+        "blockBefore": 0,
+        "blockAfter": 0,
+        "hpBefore": 240,
+        "hpAfter": 234,
+        "chips": 0,
+        "facetMax": 8,
+        "embers": 2,
+        "playerStatuses": {
+          "beacon": 1
+        },
+        "playReturned": true,
+        "artEvents": [
+          {
+            "t": "ember",
+            "n": -2,
+            "total": 2
+          },
+          {
+            "t": "art",
+            "id": "beacon"
+          },
+          {
+            "t": "status",
+            "who": "player",
+            "id": "beacon",
+            "n": 1
+          }
+        ],
+        "attackEvents": [
+          {
+            "t": "play",
+            "uid": 11,
+            "id": "strike",
+            "targetIdx": 0
+          },
+          {
+            "t": "energy",
+            "n": 2
+          },
+          {
+            "t": "hitEnemy",
+            "idx": 0,
+            "amount": 6,
+            "blocked": 0,
+            "hpAfter": 234,
+            "dead": false,
+            "killingBlow": false,
+            "overkill": 0
+          },
+          {
+            "t": "toDiscard",
+            "uid": 11
+          }
+        ]
+      }
+    }
+  ],
+  "estimands": {
+    "primary": "Exact complete-row identity of omitted authored-default Flare versus explicit Flare on 16 fresh common policy-seed identities.",
+    "path": "Exact identity of captured node sequence, card-play sequence, card reward choices and boss-relic choices.",
+    "direct": "Exact authored Flare and Beacon command/event/state maps and the existing unblocked Dusk, blocked Dusk and Ash Facet-consumer boundaries.",
+    "notEstimated": "No Beacon whole-run outcome, detector score, Shatter rate, policy sensitivity, complementarity, package payoff, Scoreline interaction or Afterimage interaction."
+  },
+  "gates": {
+    "directMapping": "All six direct rows, excluding only their numeric RNG cursor values, must equal their frozen expected dictionaries exactly.",
+    "directRng": "Every direct row must preserve its post-setup RNG cursor exactly.",
+    "wholeRun": "After removing only plan labels id and arm, every omitted and explicit-Flare row must be exactly equal, including trajectory, RNG, policy, outcome, error, HP, gold, deck, fights, relics and economy.",
+    "reliability": "Neither whole-run arm may produce an error outcome or non-empty error field. Win, loss and deterministic 30-turn stall are identity outcomes and are reported without selection.",
+    "scope": "The probe rejects Beacon as a whole-run arm. Exactly zero enabled Beacon whole-run, causal or protected-seed rows may execute."
+  },
+  "budget": {
+    "directExecutions": 6,
+    "wholeRunIdentities": 16,
+    "maximumWholeRunIdentityObservationRows": 32,
+    "maximumGodotProcesses": 2,
+    "maximumNewLedgerRows": 0,
+    "maximumEnabledBeaconWholeRunRows": 0,
+    "maximumCausalRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0,
+    "attempts": 1
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python constructs both plans, launches the exact qualified binary, caches content-addressed plans and outputs, compares every direct and paired whole-run row and owns the decision.",
+    "firstLook": "One direct process followed only if green by one paired null whole-run process. No enabled Beacon whole-run exists in either plan.",
+    "successStop": "Stop when all direct maps and every complete whole-run null identity are exact with zero reliability, ledger or protected-seed fault.",
+    "futilityStop": "Stop and close the Lantern-Art research factor on any direct map, null path, RNG, policy, result, reliability, schema or probe failure. Do not repair or rerun.",
+    "inconclusiveStop": "Stop at decision boundary 3 on timeout, wall-time cap or ledger drift without changing the protocol, cohort or rows."
+  },
+  "decisionRules": {
+    "success": "Every direct and whole-run gate passes exactly within all numeric ceilings.",
+    "successAuthority": "Freeze the default-Flare versus explicit-Beacon Lantern-Art factor as identity-safe and preregister its next evidence-backed capacity block before any enabled Beacon whole-run. The next block must keep common frozen policy and seed identities, baseline, estimator and stop rules, treat Scoreline and Afterimage as separate fixed interference anchors, and add no ML/RL or optimiser.",
+    "futility": "Any direct map, null identity, reliability, schema, source or probe gate fails within the cap.",
+    "futilityAuthority": "Apply decision boundary 2 and close this Lantern-Art factor without repair, rerun, alternate Art, policy selector, causal endpoint or product mutation. Continue issue #421 with the next evidence-backed structural mechanism.",
+    "inconclusive": "The exact run cannot decide before the wall-time cap or ledger identity changes.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the identity preflight inconclusive at its preregistered cap. Do not run an enabled Art row, alter identities or infer a mechanism claim.",
+    "noRetry": "This is the single authorised identity attempt. Do not edit expected maps, cohort, source, protocol or runner after execution to obtain a different result."
+  },
+  "runtimeHost": {
+    "binary": "/Applications/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "binarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "host": "Apple M1 Max 64 GB arm64 Darwin",
+    "issue456HostPacketSha256": "d9800f55ff11e3f9035e4292a9a1440ad4514e8954264b7a942615830cf11792",
+    "canonicalFingerprintHash": "27a837c0481b368c5b789097e57415a07fb97e8db64a8924fbca58ac07b1d3c8"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+    "balanceSimSha256": "4ed8607c309ec39dfe0b1c312bb028ee2af6e975339f620f377a25bcb2ce5170",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "56215bd0298d6dcd6aea83ce894e3f792b637d36234a23c02e0d3ea4717cc3be",
+    "probeUidSha256": "773eb8a034c563a79743160b6965f8cc000690219a7663f1ceffbbe910d44743",
+    "runnerSha256": "98b7aec9ff8e19e1d4b8905a6789eae7b29375ee9213f3488e953c7c050dbbd2",
+    "repertoireAuditProtocolSha256": "450a3c5c5ec74393ec15e9ade38a9376a6f79992243b18445fa4509f48666d92",
+    "repertoireAuditSummarySha256": "842ce1e18aa49bf4209c58594e094f2ed9e30ed49a52a9bddd524ba00ad5ccfe",
+    "taskCapsuleSha256": "7e9af7a37ae5d0dadf9b47aa83eba68e53ee7ea00ebe0d0a6b3ade6132227074"
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}
