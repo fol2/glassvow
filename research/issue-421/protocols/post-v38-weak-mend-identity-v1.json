@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-weak-mend-identity",
+  "question": "Does the sole zero-row-selected weak-mend-persistence knob preserve the complete frozen current-main path at null and alter only existing Weak on living enemies after a successful in-combat heal when enabled?",
+  "scientificBasis": {
+    "selection": "The complete preregistered competing-options audit selected weak-mend-persistence as its only eligible structural option: 17 active, 23 exact-inactive and eight viable policies, all nine weak-source and recovery-card pairs, and separate two-sided Scoreline and Afterimage support.",
+    "closedAlternatives": "Voluntary-loss-recovery failed at six active and three viable policies. Recovery-repeated-hit failed at 15 active policies. Their frozen failures may not be subsetted, reordered, retuned or reopened.",
+    "minimality": "Reuse Emberheart ownership, the shared successful-heal law, existing Weak state, living-enemy filtering and existing STATUS events. Add one dormant-by-default integer field lookup in CombatRules.heal_player. Add no state, event type, policy hook, optimiser, payoff, card, relic or product text.",
+    "claimBoundary": "This is exact-null and direct-mediator identity evidence only. It cannot establish natural activation, acquisition, policy selection, complementarity, balance value, detector performance, product feasibility or acceptance."
+  },
+  "candidate": {
+    "id": "weak-mend-persistence",
+    "carrier": "emberHeart",
+    "primitive": "After each successful in-combat player heal, add exactly one Weak to every living enemy that already has positive Weak.",
+    "implementationSite": "CombatRules.heal_player after the existing positive-heal event and before its return.",
+    "observation": "Focused controls read existing enemy status dictionaries and the existing HEAL and STATUS event queue directly. Whole-run identity reuses the previously identity-proved TURN, DRAW, PLAY, KINDLE, node, reward and boss-relic trace without adding telemetry.",
+    "excluded": [
+      "post-combat healing where CombatState is null",
+      "zero actual healing",
+      "dead enemies",
+      "living enemies without existing Weak",
+      "runs without Emberheart"
+    ]
+  },
+  "factorDefinitions": {
+    "emberHeartWeakMend": {
+      "type": "research-only binary deterministic content factor",
+      "levels": [
+        0,
+        1
+      ],
+      "null": 0,
+      "nullEncodings": [
+        "field omitted",
+        "field present as integer zero"
+      ],
+      "enabled": "Integer one adds one Weak, through the existing status law, to each living enemy whose Weak is already positive after and only after actual in-combat healing is positive and Emberheart is owned.",
+      "intendedMediator": "Duration of already-present enemy Weak after successful in-combat healing.",
+      "forbiddenDirectEffects": "No HP amount, heal eligibility, enemy HP, non-Weak status, dead enemy, non-Weak enemy, post-combat heal, action path, card choice, reward choice, policy, RNG, Scoreline, Afterimage, acquisition or result may change directly.",
+      "trustBoundary": "Deterministic content construction accepts only integer 0 or 1; -1 and 2 must fail before Godot execution."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "fixed": "Separate causal factor. No Scoreline payoff, Faultline scalar or related carrier varies in this preflight."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "fixed": "Separate causal factor. No Afterimage payoff, Warden's Edge scalar or related carrier varies in this preflight."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "fixed": "The exact frozen reward policy is unchanged."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "current-uncommon"
+      ],
+      "fixed": "Fixed and not estimated."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "fixed": "The exact frozen combat policy is unchanged."
+    }
+  },
+  "designMatrix": {
+    "wholeRunNull": [
+      {
+        "arm": "frozen-current-main-anchor",
+        "emberHeartWeakMend": "unavailable",
+        "rows": 256,
+        "execution": "reused"
+      },
+      {
+        "arm": "prototype-omitted-null",
+        "emberHeartWeakMend": "omitted",
+        "rows": 256,
+        "execution": "new identity replay"
+      },
+      {
+        "arm": "prototype-explicit-zero-null",
+        "emberHeartWeakMend": 0,
+        "rows": 256,
+        "execution": "new identity replay"
+      }
+    ],
+    "focusedMediator": [
+      {
+        "arm": "omitted",
+        "emberHeartWeakMend": "omitted",
+        "surfaces": 4
+      },
+      {
+        "arm": "explicit-zero",
+        "emberHeartWeakMend": 0,
+        "surfaces": 4
+      },
+      {
+        "arm": "enabled",
+        "emberHeartWeakMend": 1,
+        "surfaces": 4
+      }
+    ]
+  },
+  "designMeaning": "This is a one-factor identity preflight, not the old four-factor design and not a causal factorial. Omitted and zero are intentional null aliases. Enabled occurs only on four fixed direct-mediator surfaces and never in a whole-run cell.",
+  "anchors": {
+    "wholeRun": "The exact identity-proved 64-policy by four-seed Duskblade Vow-5 co-hand trace. It freezes ordered nodes, turns, draws, plays, kindles, card rewards, boss relics, final RNG, resolved policy, package events and results.",
+    "eligibleControl": "Emberheart owned; player at 10 of 20 HP; heal three; living Weak-2 and Weak-1 enemies, one living non-Weak enemy and one dead Weak-4 enemy.",
+    "noRelicControl": "Ashwarden without Emberheart on the same state; enabled content must be exact-null.",
+    "noEffectiveHealControl": "Emberheart owned at full HP on the same enemy state; actual heal zero must be exact-null.",
+    "postCombatControl": "Emberheart owned; CombatState is null; run HP heals by three while the constructed combat state and queue remain exact-null."
+  },
+  "estimands": {
+    "nullPathIdentity": "For each of 256 frozen policy-seed identities and each new null encoding, exact canonical equality of the complete row, including the ordered trajectory.",
+    "nullEncodingIdentity": "Exact canonical equality between omitted and explicit-zero rows for all 256 identities and all four focused surfaces.",
+    "rngIdentity": "Exact final RNG cursor equality across anchor, omitted and explicit-zero for all identities.",
+    "policyIdentity": "Exact resolved policy snapshot equality across anchor, omitted and explicit-zero for all identities.",
+    "directMediator": "Enabled minus explicit-zero on the eligible surface is exactly two existing Weak stacks incremented by one and exactly two corresponding existing STATUS events, while healed HP, RNG, living non-Weak, dead Weak and every other field remain exact.",
+    "negativeControls": "Enabled is exact-null without Emberheart, without positive actual healing and when CombatState is null.",
+    "notEstimated": "No whole-run enabled effect, natural activation count, payoff, acquisition effect, causal interaction, complementarity, policy repertoire, balance endpoint, detector endpoint or product endpoint."
+  },
+  "mechanisticallyJustifiedInteractions": [
+    "emberHeartWeakMend x recovery-card acquisition is mechanistically possible because an in-combat heal must occur; acquisition is fixed here.",
+    "emberHeartWeakMend x Weak setup is mechanistically possible because positive enemy Weak must pre-exist; setup policy is fixed here.",
+    "Scoreline payoff and Afterimage payoff remain distinct possible interference packages. Neither is varied, pooled or estimated here; any later shared anchor must measure decision value before a joint cell is allowed."
+  ],
+  "aliasStructure": {
+    "nullAlias": "Field omitted and integer zero intentionally encode the same null path. Exact equality is the identity estimand.",
+    "focusedIsolation": "The enabled eligible surface is stripped only by reversing the two +1 Weak changes and removing their two STATUS events; all remaining fields must equal explicit zero.",
+    "noOutcomeAlias": "There is no enabled whole-run cell, so mediator activation cannot be aliased with policy selection, acquisition or outcome.",
+    "packageSeparation": "Scoreline and Afterimage are separate fixed factors and cannot be described as one payoff factor or as part of an old four-factor design."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "rowsPerNullArm": 256,
+    "identity": "Both null arms replay every frozen policy index and simulation seed once in the same policy-major, seed-minor order. No identity may be selected, removed, replaced or added."
+  },
+  "contentLevels": {
+    "omittedSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "zeroSha256": "421cda3004c06ec1a75655f002344224b92a444a20863390949991f3b93b06e4",
+    "enabledSha256": "fbfa265fc130727e088ed7a5b9234df5f787b68e65a401443f25f4966d7d4d9f",
+    "construction": "Deterministic canonical JSON made from exact current-main content by adding only relics.emberHeart.weakMend as integer zero or one."
+  },
+  "frozenPath": {
+    "name": "identity-proved co-hand current-main trace",
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "rows": 256,
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da"
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "combatRulesSha256": "ca24f5c99253321dfd55e7f80c5a3fe283dd8766683c7b00a1ed64da8eba291c",
+    "balanceSimSha256": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+    "pilotSha256": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+    "policySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "probeSha256": "3736dbb211aaef65ab2525705ad706c6695dd11dada3153de72bef512847b36d",
+    "probeUidSha256": "26ca3ea57e7aa1a9e0e4d30a110dbb5cac982d1ddcc4a5bd5f36a76638ec12a8",
+    "researchCoreSha256": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+    "identityHelperSha256": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+    "runnerSha256": "698751c3344975107aa9148db6a7822a84adcc36ed626bafe049194565153806"
+  },
+  "frozenEvidence": {
+    "task-capsule.json": "f686e08b325d5ee18e147cf690a773b8fbbd6882019cb8019789eaf306774ef0",
+    "protocols/post-v38-competing-structural-options-v1.json": "2140a7337a9027ceafca1e82b71cb01f3c7f2ed4f6c1eb95af3b2ab2916c9dfe",
+    "summaries/post-v38-competing-structural-options-v1.json": "bb744b8247a050b68936062f09204b1ef53554a0164b21fe1b309cdd7d8293b4",
+    "protocols/post-v38-cohand-telemetry-identity-v1.json": "f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc",
+    "summaries/post-v38-cohand-telemetry-identity-v1.json": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "cache/sha256/867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458.json": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "cache/sha256/d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e.json": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e"
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "godotProcessExecutions": 5,
+    "controlledSurfaceExecutions": 12,
+    "wholeRunNullRows": 512,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 300,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python owns content construction, invalid-level rejection, complete plan construction, process execution, content-addressed caching, exact comparison and the stop/go decision.",
+    "order": "Reject invalid levels first. Execute all 12 cheap focused controls. Only if every control passes, execute the complete 256-row omitted-null arm and complete 256-row explicit-zero arm. Compare both to the same frozen anchor.",
+    "firstLook": "The fixed controls and two complete null arms are the only look. Stop at the first failed stage. There is no repair, rerun, reserve, row replacement, adaptive continuation or enabled whole-run cell.",
+    "stagedConstraint": "The cheap direct-mediator stage may advance only to whole-run null identity. Whole-run null identity may advance only to a separately preregistered causal first look. No endpoint is claimed from an arm that was not comparably evaluated."
+  },
+  "decisionRules": {
+    "success": "Both invalid levels fail before execution; all 12 focused controls equal their exact expected state and event packets; omitted and explicit zero are exact; enabled changes only the two eligible living pre-existing Weak stacks by +1 and emits only their two existing STATUS events; all 512 null replay rows exactly equal the same frozen path, RNG, policy and result; the exact 4.7.1 binary is used; elapsed time is at most 300 seconds; and the ledger remains byte-identical.",
+    "successAuthority": "Apply decision boundary 1. Freeze exactly the binary weak-mend-persistence primitive and direct existing-status observation for one separately preregistered mechanism-blocked, equal-cohort CRN first look. Begin with cheap activation and mediator evidence; add whole-run or shared Scoreline/Afterimage interference cells only if measured decision value justifies them. Add no product candidate, protected seed, ML, RL or optimiser.",
+    "futility": "Any focused expected-state, null encoding, intended-mediator isolation, path, RNG, policy, result, row-count or ledger identity check fails after execution is available.",
+    "futilityAuthority": "Apply decision boundary 2. Close weak-mend-persistence without repair or rerun and continue with the next evidence-backed structural mechanism inside issue #421. Add no causal row, product candidate, protected seed, ML, RL or optimiser.",
+    "inconclusive": "An immutable input is unavailable, the exact binary cannot execute, a process or cache is unavailable, or the complete decision is unavailable at 300 seconds.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the identity preflight inconclusive at the preregistered cap. Add no repair, rerun, causal row, candidate, method or protected seed."
+  },
+  "factorDisposition": {
+    "candidate": "No product candidate is constructed, simulated, frozen or promoted.",
+    "scorelinePayoff": "Separate, fixed and absent.",
+    "afterimagePayoff": "Separate, fixed and absent.",
+    "ponytailKnobs": "Exactly one non-null research knob exists in this structural preflight. The prior two-knob design is not reused or renamed.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy remap is used or authorised."
+  },
+  "forbidden": [
+    "any balance, complementarity, detector, acceptance or product claim",
+    "any enabled whole-run treatment cell in this preflight",
+    "any Scoreline or Afterimage payoff variation or pooled-payoff description",
+    "describing this as the old four-factor design",
+    "changing the primitive, field, level, cohort, anchor, estimator, trace, expected control, threshold or stopping rule after execution begins",
+    "adding a payoff, acquisition priority, rarity level, Ward setup priority, policy mapping, ML, RL or optimiser",
+    "using protected acceptance seeds 3000-5199 or reserve seeds 5200-5399",
+    "writing a plan, run or observation to the append-only research ledger",
+    "returning to adaptive candidate-by-candidate tuning"
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "affixOrder": {
+    "explicitZero": [
+      "adamant",
+      "cinderVeined",
+      "emberFat",
+      "fervent",
+      "veiled",
+      "vitrified"
+    ],
+    "omitted": [
+      "vitrified",
+      "cinderVeined",
+      "adamant",
+      "emberFat",
+      "veiled",
+      "fervent"
+    ]
+  },
+  "combatRulesSha256": "ca24f5c99253321dfd55e7f80c5a3fe283dd8766683c7b00a1ed64da8eba291c",
+  "decision": "Preserve preregistered decision boundary 2. The focused primitive isolation passed, but weak-mend-persistence is closed without constructor repair or rerun.",
+  "dictionaryOrderDifferenceCount": 737,
+  "dictionaryOrderDifferenceExamples": [
+    "$",
+    "arts",
+    "arts.ashfall",
+    "arts.ashfall.effects[0]",
+    "arts.flare",
+    "arts.stoke",
+    "arts.emberveil",
+    "arts.beacon",
+    "arts.beacon.effects[0]",
+    "arts.mendglass",
+    "acts[0]",
+    "acts[0].theme",
+    "acts[1]",
+    "acts[1].theme",
+    "acts[2]",
+    "acts[2].theme",
+    "acts[3]",
+    "acts[3].theme",
+    "potions",
+    "potions.energy"
+  ],
+  "failureClass": "candidate-content-construction-order-alias",
+  "finding": "Canonical JSON construction sorted every dictionary. Although the sole semantic value delta was emberHeart.weakMend=0, the serialised order of path-sensitive catalogues, including affixes, changed. The explicit-zero arm therefore did not encode the frozen null path.",
+  "identitySummarySha256": "252da79af4432e73319dc184e1eaebc33e6d46c188457628ca15f30a819afaf0",
+  "issue": 421,
+  "kind": "zero-row-read-only-diagnostic",
+  "newLedgerRows": 0,
+  "newSimulatorRows": 0,
+  "pathSensitiveSource": "CombatRules.start_combat selects affixes from content.affixes.keys() in insertion order.",
+  "protectedSeeds": 0,
+  "recomputedIdentity": {
+    "firstMismatchChangedFields": [
+      "deck",
+      "deckIds",
+      "economy",
+      "fights",
+      "gold",
+      "goldEarned",
+      "packageEvents",
+      "relics",
+      "rng",
+      "trajectory"
+    ],
+    "firstMismatchRowIndex": 0,
+    "firstTrajectoryDifferences": {
+      "bossRelics": {
+        "index": 0,
+        "omitted": null,
+        "zero": null
+      },
+      "cardRewards": {
+        "index": 3,
+        "omitted": {
+          "accepted": true,
+          "chosen": "uppercut",
+          "offered": [
+            "uppercut",
+            "heavyBlow",
+            "fortify"
+          ]
+        },
+        "zero": {
+          "accepted": true,
+          "chosen": "executioner",
+          "offered": [
+            "guardedStrike",
+            "sidestep",
+            "executioner"
+          ]
+        }
+      },
+      "draws": {
+        "index": 17,
+        "omitted": {
+          "event": 44,
+          "fight": 1,
+          "id": "defend",
+          "uid": 7
+        },
+        "zero": {
+          "event": 39,
+          "fight": 1,
+          "id": "defend",
+          "uid": 7
+        }
+      },
+      "kindles": {
+        "index": 1,
+        "omitted": {
+          "event": 32,
+          "fight": 1,
+          "id": "defend",
+          "uid": 6
+        },
+        "zero": {
+          "event": 29,
+          "fight": 1,
+          "id": "defend",
+          "uid": 6
+        }
+      },
+      "nodes": {
+        "index": 15,
+        "omitted": null,
+        "zero": null
+      },
+      "plays": {
+        "index": 2,
+        "omitted": {
+          "event": 21,
+          "fight": 0,
+          "id": "strike",
+          "uid": 3
+        },
+        "zero": {
+          "event": 18,
+          "fight": 0,
+          "id": "strike",
+          "uid": 3
+        }
+      },
+      "turns": {
+        "index": 3,
+        "omitted": {
+          "event": 42,
+          "fight": 1,
+          "n": 2
+        },
+        "zero": {
+          "event": 37,
+          "fight": 1,
+          "n": 2
+        }
+      }
+    },
+    "mismatchRows": 255,
+    "pairedRows": 256,
+    "rngMismatchRows": 243,
+    "trajectoryMismatchRows": 255
+  },
+  "schemaVersion": 1,
+  "semanticContentDeltaAfterRemovingFactor": 0,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "weakMendLevel": 0
+}

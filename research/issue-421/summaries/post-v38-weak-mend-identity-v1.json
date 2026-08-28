@@ -1,0 +1,73 @@
+{
+  "authority": "Apply decision boundary 2. Close weak-mend-persistence without repair or rerun and continue with the next evidence-backed structural mechanism inside issue #421. Add no causal row, product candidate, protected seed, ML, RL or optimiser.",
+  "cacheObjects": {
+    "enabledContentSha256": "fbfa265fc130727e088ed7a5b9234df5f787b68e65a401443f25f4966d7d4d9f",
+    "enabledControlsOutputSha256": "7a488717c4e96a7bb938a9569bafd1f588b31fa3ed027e6053c368cef6e3cb7d",
+    "enabledControlsPlanSha256": "dff3f7e6103cca5d520714bfd310063a3306992372b3f3f77eb08f8d4e6e325a",
+    "explicitZeroContentSha256": "421cda3004c06ec1a75655f002344224b92a444a20863390949991f3b93b06e4",
+    "omittedControlsOutputSha256": "3610d50f24b5d6d0c1643e85c659369b382b195490b8109340dfbbe731c66c1a",
+    "omittedControlsPlanSha256": "ffd2615442578cc8d094af5a65f5da1fcf2a2a9843baf9109b376edf5af599c6",
+    "omittedWholeOutputSha256": "d60e7d4a1e306e4faf7ae45c8aa2e2e40311515bbd67970389cae8e72c8cb29f",
+    "omittedWholePlanSha256": "e25ec08ebae87b6b938b69a14564a160e766b86e2ab175cb464c9851bba7c8f5",
+    "zeroControlsOutputSha256": "37d133f18f5388924fa12765f3e04fe341bc5e54db1de92f2d0bba3687498fbe",
+    "zeroControlsPlanSha256": "8179c91d672ba8224df094c95c84ba069bde1821b696e3cdc0441361dcf74263",
+    "zeroWholeOutputSha256": "d47a7f26d7c636a89b99cdd4acd07079f9a66a35be33b67dbdcdb88a94b89d50",
+    "zeroWholePlanSha256": "2af4dcc277ac7d1dd77ec43c376154de5568b286a4b4b72a8360ae7bf164d55d"
+  },
+  "controlFaults": [],
+  "controlledSurfaceExecutions": 12,
+  "controls": {
+    "eligibleUntouchedDeadWeak": 1,
+    "eligibleUntouchedNonWeak": 1,
+    "eligibleWeakExtensions": 2,
+    "enabledNonMediatorMismatchControls": 0,
+    "omittedZeroMismatchControls": 0
+  },
+  "decision": "close-weak-mend-persistence-on-identity-failure",
+  "decisionBoundary": 2,
+  "executionError": "",
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy remap is used or authorised.",
+    "afterimagePayoff": "Separate, fixed and absent.",
+    "candidate": "No product candidate is constructed, simulated, frozen or promoted.",
+    "ponytailKnobs": "Exactly one non-null research knob exists in this structural preflight. The prior two-knob design is not reused or renamed.",
+    "scorelinePayoff": "Separate, fixed and absent."
+  },
+  "godotVersion": "4.7.1.stable.official.a13da4feb",
+  "identity": {
+    "omittedAnchorMismatchRows": 0,
+    "omittedZeroMismatchRows": 255,
+    "policyMismatchRows": 0,
+    "rngMismatchRows": 243,
+    "trajectoryMismatchRows": 255,
+    "zeroAnchorMismatchRows": 255
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newScientificSimulatorObservationRows": 0,
+  "outcomeClass": "futility",
+  "protectedSeedRows": 0,
+  "protocolSha256": "7b3187b411d8151fed77076c852c989f9e75497ca5355b2486de789c5c4f5c92",
+  "runnerSha256": "698751c3344975107aa9148db6a7822a84adcc36ed626bafe049194565153806",
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "wallTimeSeconds": 20.02337508299388,
+  "wholeRunNullRows": 512
+}

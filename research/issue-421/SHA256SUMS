@@ -77,6 +77,7 @@ a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d  ./protocols/po
 9a920164dfdde25edcf4cffdde58a434edbb54853a13d4313757a5c1abcca90a  ./protocols/post-v38-cohand-observability-v1.json
 998c5fbbe4506d61e111239af34df46193e59cf6f030898b4a7496a7c4eabe9d  ./protocols/post-v38-cohand-opportunity-decomposition-v1.json
 f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc  ./protocols/post-v38-cohand-telemetry-identity-v1.json
+2140a7337a9027ceafca1e82b71cb01f3c7f2ed4f6c1eb95af3b2ab2916c9dfe  ./protocols/post-v38-competing-structural-options-v1.json
 ca03b6ea0efe8d6da71399e70fd04be8d6ba4e1517fb6736cc36b01864fae31f  ./protocols/post-v38-crown-effect-crn-v1.json
 aef67c53827e9491b107578d3899c4e5ee2c11ea46a6d84b13ce0682cc9af710  ./protocols/post-v38-current-main-order-topology-v1.json
 d744eb0d2f2b70d04c46ade5f8bba233ce2934135fa77199d0bdd9a5df1fb64d  ./protocols/post-v38-draw-opportunity-decomposition-v1.json
@@ -125,6 +126,7 @@ e9c413088d5ccef93b5d9c3793688ae0e14d3364cc7d8f7e854bbef92a1645d8  ./protocols/po
 210491fd49f2c64e5166d9fef260ee2fa264e803304a3445bec917f61ffaa956  ./protocols/post-v38-turn-state-economy-capacity-v1.json
 eab3d8a629f48751665950c5fabdc968e1296ac026f3305b70ad3f952ef5966f  ./protocols/post-v38-upgrade-telemetry-identity-v1.json
 bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa  ./protocols/post-v38-ward-whole-run-discovery-v1.json
+7b3187b411d8151fed77076c852c989f9e75497ca5355b2486de789c5c4f5c92  ./protocols/post-v38-weak-mend-identity-v1.json
 13e04805bb42f1094c71965a9bbc576458de33f02552d7f5147e9f1cb95584ce  ./protocols/resonance-package-v1.json
 cfc90844c253dfbf0bf67823d4f231240e9fa9684915b8ae7bcdfb9ba739ec77  ./protocols/scoreline-handshake-v1.json
 de4072694b8ac5ffee56455cc82e97390f69f9b25d30d585282d98f2e1628636  ./protocols/shatter-flow-v1.json
@@ -145,6 +147,9 @@ cb0404f653c981e4d340b18c2bd3d66e82df38f734c1910d503d95e34aee9b3b  ./prototype-en
 466cbec317bb04a6325408e02f60dbceb9530726c845499cbdc7f93e5e9b7cd4  ./prototype-upgrade-telemetry-current-main/tools/balance_sim.gd
 eeeb20f870eb6b18ef8e454ed67912b39f09d9cb2e63965c98481e4ec6414905  ./prototype-upgrade-telemetry-current-main/tools/research_421_upgrade_probe.gd
 c72465e054c4bcc4f63d1407656db0f4521d3504a832545e85410352c9212ecb  ./prototype-upgrade-telemetry-current-main/tools/research_421_upgrade_probe.gd.uid
+01fdd087351f5edb476b624a913a0253250c8d94ab0dcb7d0e715756f1dbeee8  ./prototype-weak-mend-current-main/domain/rules/combat-weak-mend-edit.json
+3736dbb211aaef65ab2525705ad706c6695dd11dada3153de72bef512847b36d  ./prototype-weak-mend-current-main/tools/research_421_weak_mend_probe.gd
+26ca3ea57e7aa1a9e0e4d30a110dbb5cac982d1ddcc4a5bd5f36a76638ec12a8  ./prototype-weak-mend-current-main/tools/research_421_weak_mend_probe.gd.uid
 0aacecf001f44ffa557a868e63a28117d223d51c411ceef547a61a81acca3e76  ./prototype/content/full-content.json
 d77cf86b8f7e965cce9cb3cbad85d79f498aae3505f9eab0b1c9775018eb2e70  ./prototype/domain/rules/combat.gd
 213c3153916e4dbb323f660e3774874f8c144dc0a549735ea7d606cc7d7c9ae7  ./prototype/tools/balance_pilot.gd
@@ -395,6 +400,7 @@ c87f02a756a64cef31faaaff658f67ef74c91319eabc875d97000a7cf892e21d  ./raw/post-dir
 fdc9b618cd1417a9aa3b99a63c74034918e5c1000a77dd5f48fc58c84d6d4175  ./raw/post-directive-policy-package-order-harness-v1.tar.gz
 9e6740dc2e0e377c349d476b272809c2931e80e1e244c22779211df41557cb07  ./raw/post-directive-policy-package-order-raw-v1.tar.gz
 5a95a5564b64a8839b1152e3665b2a1f57d294dbfb8ab9060d165268f7bd01aa  ./raw/post-directive-ward-whole-run-discovery-raw-v1.tar.gz
+a05daca39e1f604d53fedd394ca33e7d3f3f855cef8083a200cf82105803dc1c  ./raw/post-directive-weak-mend-identity-raw-v1.tar.gz
 13daeb13480580d59c355fe640d20c9f4498dc64b06705d16d2467b9f2a4cbba  ./raw/post-v38-factorial-raw-v1.tar.gz
 a43d2386fef0366f6b01b3496b1a57e28a90dec4ebea4c72e4a1094b8506a66d  ./raw/pre-directive-harness-v1.tar.gz
 be7a12aa0d2c09c58670aaff0b5e0bd5378d0662d42761a3b58b64009dba5ceb  ./summaries/combined-finalist-v1.json
@@ -446,6 +452,7 @@ f6ec487ae5f4135dd2b29ca0b3b1877d812d8416a4444a6b681c04bceac6b6e1  ./summaries/po
 2d3c3b8ce091bf8fc9560d6204d7e37cb2b1e4b9a960f32f29f533cd7625b7d4  ./summaries/post-v38-cohand-observability-v1.json
 f2f29b3902d0d7cff438cedc73ee91148213a52a9b4d32247290e60f718ac821  ./summaries/post-v38-cohand-opportunity-decomposition-v1.json
 3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da  ./summaries/post-v38-cohand-telemetry-identity-v1.json
+bb744b8247a050b68936062f09204b1ef53554a0164b21fe1b309cdd7d8293b4  ./summaries/post-v38-competing-structural-options-v1.json
 e8de4178d6f0dfe8546a1057f0b51822556fc12a7dcc672d6916e019ecd4f1dd  ./summaries/post-v38-crown-effect-crn-v1-audit.json
 7b7a11a1f78f42dcdf7f8a1ccd2515c9ddb10b066ade66a04f66f486b4aafa14  ./summaries/post-v38-crown-effect-crn-v1.json
 9ae19bbdddb5b36cbfd5114bfef57a863a677b0eac7009b6be560939a09721f3  ./summaries/post-v38-current-main-order-topology-v1.json
@@ -503,8 +510,11 @@ cb3cab9e9671f82964eb8b398531f25775ff28d0c91b985763085cdc839998fb  ./summaries/po
 8d1bd92252d68bdf3d6dd42661248d78560644dc2f9705310e7b71e152f08382  ./summaries/post-v38-upgrade-telemetry-identity-v2-audit.json
 45add46363f5a11baaf84e8cc79092a3c162b92597b6424e1af5b3f376e8338b  ./summaries/post-v38-ward-whole-run-discovery-v1-audit.json
 62fbd2b3bb903bf41ffa4ed6f151884b0807376293eddf249c676ed05b8105e8  ./summaries/post-v38-ward-whole-run-discovery-v1.json
+3bd7eb6d3ee460479f30a65dee1be7453de27ff81c3d70d2f7930b38e257013a  ./summaries/post-v38-weak-mend-identity-diagnostic-v1.json
+252da79af4432e73319dc184e1eaebc33e6d46c188457628ca15f30a819afaf0  ./summaries/post-v38-weak-mend-identity-v1.json
 325db4ca19d4e3ca3c090c573a2fcb348f5acde4b624c5e8e280eaf213d1def6  ./summaries/progress-post-directive-blocked-crn-v2.md
 c78e55c9623acc10ac7b54e1ad5c50f9b5a7915a54411909563b556613d31772  ./summaries/progress-post-directive-cohand-energy-closure-v1.md
+74c41d899007430ed72438314273e6ee6d9d62918fdf3ca673419bf2d0062270  ./summaries/progress-post-directive-competing-options-weak-mend-closure-v1.md
 4e116aa416c3c873018ce4bb242d1984d379afd1dd81fde16a8c3e9381afa150  ./summaries/progress-post-directive-crown-effect-crn-v1.md
 b8b47314dabb61f22fb77f92c2d5e421857330e23f3e81bb27fea8075611014e  ./summaries/progress-post-directive-current-main-trace-v1.md
 e03ef16b219fc05d266b1d97a8a005153caecb7216308ebaf51903bf61efe6be  ./summaries/progress-post-directive-dusk-mechanism-screen-v1.md
@@ -533,7 +543,7 @@ e922767610253d42b6330cd97047acbedfb2400d7d8fe8b37dce251ca24a507a  ./summaries/pr
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-13a7b432ac048ae68660be059b647675a9a259a85f6effc152b8f8223df663e3  ./task-capsule.json
+27fadd505b279d5427f6533bd4b5f4fe31128022d735652fca671b256dfc4f3d  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d  ./tools/post_v38_action_grammar_inventory.py
 0f6bb1288a9a25de9f0b55356b1f6fc4df0ea40917403a1a477f8f8823097542  ./tools/post_v38_ash_package_pair.py
@@ -541,6 +551,7 @@ a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb  ./tools/post_v
 c31d8b7e53b5cc2d9bab7d26100de35d74b519abfb5355b78340b60eaa8f9ea4  ./tools/post_v38_cohand_observability.py
 371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c  ./tools/post_v38_cohand_opportunity_decomposition.py
 53baead2ef8b85f65b7594e2c141849423a95a2114a32319c1f121ef27069e47  ./tools/post_v38_cohand_telemetry_identity.py
+531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040  ./tools/post_v38_competing_structural_options.py
 d024df9beb7f1a261751de7a2c203906b3615cee0fcd6bd0c722d61976804b5c  ./tools/post_v38_crown_effect_crn.py
 7e7fa21212bfa32392f31afbfb5230356de395a349bc6e61a8248edc582ff3a4  ./tools/post_v38_crown_effect_crn_audit.py
 65279eff4c1651f5aee5a1dd7d617551fd88d8cabb03c50d106153362679b944  ./tools/post_v38_current_main_order_topology.py
@@ -595,4 +606,6 @@ c285cd0d84ad6fa82deac6180ea3d611b4a6c57ae423d784aa9a149b2328fac2  ./tools/post_v
 dbcca1478f624ebf97aaf014b145338a3dcbcce9a71275906efdd0513787a521  ./tools/post_v38_upgrade_telemetry_identity_audit_v2.py
 0d7dca792d968d1bfcfc28d1428f4071c0822a2e64372a67043773c2991547a0  ./tools/post_v38_ward_whole_run_discovery.py
 c28afa712e3eab5587aba75cf922b0cc039dc5c69205ad123c814061b379a5a1  ./tools/post_v38_ward_whole_run_discovery_audit.py
+698751c3344975107aa9148db6a7822a84adcc36ed626bafe049194565153806  ./tools/post_v38_weak_mend_identity.py
+35ba8e8ee487af59677945a6cd6c2be346e9d78fafc8ed7d5408b5bb2453a28c  ./tools/post_v38_weak_mend_identity_diagnostic.py
 78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80  ./tools/research.py

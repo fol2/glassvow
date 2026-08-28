@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "target": "domain/rules/combat.gd",
+  "baseSha256": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+  "resultSha256": "ca24f5c99253321dfd55e7f80c5a3fe283dd8766683c7b00a1ed64da8eba291c",
+  "occurrencesRequired": 1,
+  "replace": {
+    "before": "\t\tvar healed: int = cb.player.hp - before\n\t\tif healed > 0:\n\t\t\tcb.queue.append({\"t\": EventTypes.HEAL, \"who\": \"player\", \"n\": healed})\n\t\treturn healed",
+    "after": "\t\tvar healed: int = cb.player.hp - before\n\t\tif healed > 0:\n\t\t\tcb.queue.append({\"t\": EventTypes.HEAL, \"who\": \"player\", \"n\": healed})\n\t\t\tif run.has_relic(\"emberHeart\"):\n\t\t\t\tvar weak_mend: int = _ji(content.relic(&\"emberHeart\").get(\"weakMend\", 0))\n\t\t\t\tif weak_mend > 0:\n\t\t\t\t\tfor enemy: EnemyCombatant in cb.living_enemies():\n\t\t\t\t\t\tif _sget(enemy.statuses, \"weak\") > 0:\n\t\t\t\t\t\t\tadd_status_enemy(cb, enemy, \"weak\", weak_mend, run)\n\t\treturn healed"
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 28,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "parentArchiveHead": "bd0558c09e1180ad7c8d37c5032780cb8ab47950",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "complete competing-options selection and fail-closed weak-mend identity",
+  "decision": "CLOSE_WEAK_MEND_PERSISTENCE_ON_IDENTITY_FAILURE",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-competing-options-weak-mend-closure-v1.md",
+    "progressReportSha256": "74c41d899007430ed72438314273e6ee6d9d62918fdf3ca673419bf2d0062270",
+    "competingOptionsProtocol": "protocols/post-v38-competing-structural-options-v1.json",
+    "competingOptionsProtocolSha256": "2140a7337a9027ceafca1e82b71cb01f3c7f2ed4f6c1eb95af3b2ab2916c9dfe",
+    "competingOptionsSummary": "summaries/post-v38-competing-structural-options-v1.json",
+    "competingOptionsSummarySha256": "bb744b8247a050b68936062f09204b1ef53554a0164b21fe1b309cdd7d8293b4",
+    "competingOptionsRunner": "tools/post_v38_competing_structural_options.py",
+    "competingOptionsRunnerSha256": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+    "weakMendProtocol": "protocols/post-v38-weak-mend-identity-v1.json",
+    "weakMendProtocolSha256": "7b3187b411d8151fed77076c852c989f9e75497ca5355b2486de789c5c4f5c92",
+    "weakMendSummary": "summaries/post-v38-weak-mend-identity-v1.json",
+    "weakMendSummarySha256": "252da79af4432e73319dc184e1eaebc33e6d46c188457628ca15f30a819afaf0",
+    "weakMendRunner": "tools/post_v38_weak_mend_identity.py",
+    "weakMendRunnerSha256": "698751c3344975107aa9148db6a7822a84adcc36ed626bafe049194565153806",
+    "weakMendDiagnostic": "summaries/post-v38-weak-mend-identity-diagnostic-v1.json",
+    "weakMendDiagnosticSha256": "3bd7eb6d3ee460479f30a65dee1be7453de27ff81c3d70d2f7930b38e257013a",
+    "weakMendDiagnosticRunner": "tools/post_v38_weak_mend_identity_diagnostic.py",
+    "weakMendDiagnosticRunnerSha256": "35ba8e8ee487af59677945a6cd6c2be346e9d78fafc8ed7d5408b5bb2453a28c",
+    "prototypeEdit": "prototype-weak-mend-current-main/domain/rules/combat-weak-mend-edit.json",
+    "prototypeEditSha256": "01fdd087351f5edb476b624a913a0253250c8d94ab0dcb7d0e715756f1dbeee8",
+    "prototypeProbe": "prototype-weak-mend-current-main/tools/research_421_weak_mend_probe.gd",
+    "prototypeProbeSha256": "3736dbb211aaef65ab2525705ad706c6695dd11dada3153de72bef512847b36d",
+    "prototypeProbeUidSha256": "26ca3ea57e7aa1a9e0e4d30a110dbb5cac982d1ddcc4a5bd5f36a76638ec12a8",
+    "rawIdentityObjects": "raw/post-directive-weak-mend-identity-raw-v1.tar.gz",
+    "rawIdentityObjectsSha256": "a05daca39e1f604d53fedd394ca33e7d3f3f855cef8083a200cf82105803dc1c",
+    "rawIdentityObjectCount": 15,
+    "taskCapsuleSha256": "27fadd505b279d5427f6533bd4b5f4fe31128022d735652fca671b256dfc4f3d"
+  },
+  "competingOptionsResult": {
+    "decisionBoundary": 1,
+    "decision": "freeze-weak-mend-persistence-for-identity-preflight",
+    "newSimulatorRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "eligibleOptions": [
+      "weak-mend-persistence"
+    ],
+    "options": {
+      "voluntary-loss-recovery": {
+        "activePolicies": 6,
+        "exactInactivePolicies": 45,
+        "viablePolicies": 3,
+        "eligible": false
+      },
+      "weak-mend-persistence": {
+        "activePolicies": 17,
+        "exactInactivePolicies": 23,
+        "viablePolicies": 8,
+        "sourcePairs": 9,
+        "scorelineCandidateOnlyPolicies": 11,
+        "scorelineAnchorOnlyPolicies": 12,
+        "afterimageCandidateOnlyPolicies": 12,
+        "afterimageAnchorOnlyPolicies": 12,
+        "eligible": true
+      },
+      "recovery-repeated-hit": {
+        "activePolicies": 15,
+        "exactInactivePolicies": 26,
+        "viablePolicies": 8,
+        "eligible": false
+      }
+    }
+  },
+  "weakMendIdentityResult": {
+    "decisionBoundary": 2,
+    "decision": "close-weak-mend-persistence-on-identity-failure",
+    "controlledSurfaceExecutions": 12,
+    "controlFaults": 0,
+    "eligibleWeakExtensions": 2,
+    "eligibleUntouchedNonWeak": 1,
+    "eligibleUntouchedDeadWeak": 1,
+    "omittedZeroMismatchControls": 0,
+    "enabledNonMediatorMismatchControls": 0,
+    "wholeRunNullRows": 512,
+    "omittedAnchorMismatchRows": 0,
+    "zeroAnchorMismatchRows": 255,
+    "omittedZeroMismatchRows": 255,
+    "rngMismatchRows": 243,
+    "policyMismatchRows": 0,
+    "trajectoryMismatchRows": 255,
+    "wallTimeSeconds": 20.02337508299388,
+    "maximumWallTimeSeconds": 300,
+    "newScientificSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "protectedSeedRows": 0,
+    "repairOrRerun": false
+  },
+  "diagnosticResult": {
+    "kind": "zero-row-read-only-diagnostic",
+    "failureClass": "candidate-content-construction-order-alias",
+    "semanticContentDeltaAfterRemovingFactor": 0,
+    "dictionaryOrderDifferenceCount": 737,
+    "pathSensitiveCatalogue": "affixes",
+    "pathSensitiveConsumer": "CombatRules.start_combat content.affixes.keys()",
+    "finding": "Canonical content construction sorted path-sensitive dictionaries. The focused primitive was isolated, but explicit zero did not reproduce the frozen serialised content path. The diagnosis does not waive decision boundary 2."
+  },
+  "factorContract": {
+    "design": "one-factor identity preflight with direct controls and two aliased null encodings; not a causal factorial and not the old four-factor design",
+    "emberHeartWeakMend": "integer binary factor with omitted and zero null aliases; enabled only on fixed direct controls",
+    "scorelinePayoff": "separate fixed absent-current-main causal factor; not varied or estimated",
+    "afterimagePayoff": "separate fixed absent-current-main causal factor; not varied or estimated",
+    "acquisitionPriority": "fixed pristine-current-main",
+    "faultlineRarity": "fixed current-uncommon",
+    "wardSetupPriority": "fixed pristine-current-main",
+    "interactions": "Weak-mend can interact mechanistically with recovery acquisition and Weak setup, but neither varied. Scoreline and Afterimage interference remains separate and unestimated.",
+    "aliases": "omitted and explicit zero intentionally alias the null; the identity failure prevents causal interpretation"
+  },
+  "interpretationBoundary": {
+    "focusedControls": "Direct controls prove only that the prototype branch changed the intended existing Weak mediator under the fixed surface.",
+    "nullFailure": "The explicit-zero whole-run path was not identity-safe, so no enabled whole-run, causal, complementarity, detector or product claim exists.",
+    "constructorDiagnosis": "The measured constructor alias explains the failure but cannot authorise a repair or rerun after the frozen first look.",
+    "authority": "Close weak-mend-persistence. Run only a zero-row source-complete exhaustion audit before considering another structural mechanism."
+  },
+  "reproductionIdentity": {
+    "godot": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "currentMainContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "explicitZeroContentSha256": "421cda3004c06ec1a75655f002344224b92a444a20863390949991f3b93b06e4",
+    "enabledContentSha256": "fbfa265fc130727e088ed7a5b9234df5f787b68e65a401443f25f4966d7d4d9f",
+    "prototypeCombatRulesSha256": "ca24f5c99253321dfd55e7f80c5a3fe283dd8766683c7b00a1ed64da8eba291c",
+    "identitySafeTraceBalanceSimSha256": "7f82177d3c71e3a0cc56f820f017cfab6ec99173caf326486209034d60dbb5fd",
+    "frozenAnchorPlanSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "frozenAnchorOutputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "omittedWholePlanSha256": "e25ec08ebae87b6b938b69a14564a160e766b86e2ab175cb464c9851bba7c8f5",
+    "omittedWholeOutputSha256": "d60e7d4a1e306e4faf7ae45c8aa2e2e40311515bbd67970389cae8e72c8cb29f",
+    "zeroWholePlanSha256": "2af4dcc277ac7d1dd77ec43c376154de5568b286a4b4b72a8360ae7bf164d55d",
+    "zeroWholeOutputSha256": "d47a7f26d7c636a89b99cdd4acd07079f9a66a35be33b67dbdcdb88a94b89d50"
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0,
+    "newLedgerRows": 0
+  },
+  "executionDisclosure": "The zero-row competing-options audit ran once. The weak-mend preflight rejected two invalid levels, executed its fixed 12 direct controls, then its two fixed 256-row null arms once under the frozen 300-second cap. Deterministic Python owned content construction, plan construction, simulation, caching, exact comparisons and stop/go. The failed null was not repaired or rerun. The diagnostic read only completed objects. No enabled whole-run cell, causal row, model, human label, optimiser, ML, RL, adaptive tuning or protected seed entered execution or decision.",
+  "verification": {
+    "sha256Index": "PASS (611/611)",
+    "anchors": "PASS",
+    "pythonCompile": "PASS",
+    "jsonParse": "PASS",
+    "diffCheck": "PASS",
+    "rawArchive": "PASS (15 content-addressed objects; 2,504,136 compressed bytes)",
+    "prototypeGodotParse": {
+      "sourceWorktree": "PASS for CombatRules, the reused trace-enabled BalanceSim and the weak-mend probe under exact Godot 4.7.1 before execution",
+      "archiveEdit": "PASS: unique exact-snippet replacement on the source commit reconstructs CombatRules SHA ca24f5c99253321dfd55e7f80c5a3fe283dd8766683c7b00a1ed64da8eba291c",
+      "archiveProbe": "SHA-identical to the executed source-worktree probe"
+    },
+    "benchmarkFreeze": {
+      "exitCode": 1,
+      "reportedPath": "research/issue-421/prototype/domain/rules/combat.gd",
+      "mainCensusCount": 0,
+      "previousEvidenceHeadCount": 2,
+      "v28Count": 2,
+      "branchRelativeDelta": 0,
+      "interpretation": "The archive-only prototype already carried two frozen historical citations at the prior remote evidence head. V28 adds no citation relative to that evidence branch. This known archive-only result is disclosed and is not claimed as a product gate pass."
+    }
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 640,
+    "payloadFilesIndexed": 611,
+    "protocolFiles": 105,
+    "summaryFiles": 140,
+    "toolFiles": 65,
+    "rawArchiveFiles": 17,
+    "newRawObjects": 15,
+    "newRawCompressedBytes": 2504136,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "859c8e6dea7216cd88e92f0d1e18b871e480e752b04b56f702386f087a863197"
+  },
+  "remoteHeadsBeforePublication": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "bd0558c09e1180ad7c8d37c5032780cb8ab47950",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "issueBodySha256": "3a0b39ceca35c54610dcf5e7e67710e3bd501a4bd76399075511ef8734a390b4",
+  "archiveOnly": true,
+  "productPr": null,
+  "actionsRun": false,
+  "mainChanged": false
+}

@@ -1,0 +1,619 @@
+{
+  "anchors": {
+    "afterimage": [
+      0,
+      5,
+      11,
+      12,
+      14,
+      18,
+      24,
+      25,
+      27,
+      30,
+      33,
+      35,
+      41,
+      43,
+      44,
+      55,
+      62
+    ],
+    "scoreline": [
+      0,
+      7,
+      9,
+      10,
+      13,
+      14,
+      15,
+      17,
+      22,
+      23,
+      28,
+      31,
+      39,
+      41,
+      52,
+      56,
+      62,
+      63
+    ]
+  },
+  "assessments": [
+    {
+      "counts": {
+        "ambiguousPolicies": 13,
+        "baselineFaultRows": 0,
+        "distinctConsumerCards": 3,
+        "distinctPairs": 3,
+        "distinctProducerCards": 1,
+        "exactInactivePolicies": 45,
+        "potentialActivePolicies": 6,
+        "viablePolicies": 3
+      },
+      "definition": {
+        "claimBoundary": "The play sequence is a permissive capacity upper bound. It does not prove self damage survived, healing occurred or the primitive activated.",
+        "consumerSet": "recovery",
+        "id": "voluntary-loss-recovery",
+        "minimumDistinctConsumerCards": 2,
+        "minimumDistinctPairs": 2,
+        "minimumDistinctProducerCards": 1,
+        "producerSet": "selfLoss",
+        "rowOpportunity": "Within one fight, Blood for Oil is played before a later current card whose authored effect can heal the player in combat.",
+        "smallestPrimitiveIfSelected": "With Emberheart, the next successful in-combat heal after source=self HP loss restores one additional HP and clears the mark.",
+        "stateRepresentation": "A source=self HP-loss mark followed by a successful in-combat heal."
+      },
+      "eligible": false,
+      "gateResults": {
+        "active": false,
+        "afterimageSeparation": false,
+        "inactive": true,
+        "reliability": true,
+        "scorelineSeparation": false,
+        "sourceBreadth": true,
+        "viable": false
+      },
+      "id": "voluntary-loss-recovery",
+      "policySets": {
+        "ambiguous": [
+          2,
+          4,
+          7,
+          19,
+          21,
+          31,
+          40,
+          52,
+          53,
+          54,
+          56,
+          58,
+          63
+        ],
+        "exactInactive": [
+          0,
+          1,
+          3,
+          5,
+          6,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          18,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          30,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          55,
+          57,
+          59,
+          60,
+          62
+        ],
+        "potentialActive": [
+          14,
+          20,
+          29,
+          39,
+          51,
+          61
+        ],
+        "viable": [
+          29,
+          39,
+          61
+        ]
+      },
+      "separation": {
+        "afterimage": {
+          "anchorOnlyPolicies": 16,
+          "candidateOnlyPolicies": 5,
+          "crossActivePolicies": 1,
+          "jaccard": 0.045454545454545456
+        },
+        "scoreline": {
+          "anchorOnlyPolicies": 16,
+          "candidateOnlyPolicies": 4,
+          "crossActivePolicies": 2,
+          "jaccard": 0.09090909090909091
+        }
+      },
+      "sourceBreadth": {
+        "consumerCards": [
+          "devour",
+          "leechBlade",
+          "regrowth"
+        ],
+        "pairs": [
+          [
+            "bloodRite",
+            "devour"
+          ],
+          [
+            "bloodRite",
+            "leechBlade"
+          ],
+          [
+            "bloodRite",
+            "regrowth"
+          ]
+        ],
+        "producerCards": [
+          "bloodRite"
+        ]
+      }
+    },
+    {
+      "counts": {
+        "ambiguousPolicies": 24,
+        "baselineFaultRows": 0,
+        "distinctConsumerCards": 3,
+        "distinctPairs": 9,
+        "distinctProducerCards": 3,
+        "exactInactivePolicies": 23,
+        "potentialActivePolicies": 17,
+        "viablePolicies": 8
+      },
+      "definition": {
+        "claimBoundary": "The play sequence is a permissive capacity upper bound. It does not prove Weak remained present, healing occurred or the primitive activated.",
+        "consumerSet": "recovery",
+        "id": "weak-mend-persistence",
+        "minimumDistinctConsumerCards": 2,
+        "minimumDistinctPairs": 4,
+        "minimumDistinctProducerCards": 2,
+        "producerSet": "weak",
+        "rowOpportunity": "Within one fight, a current Weak-applying card is played before a later current card whose authored effect can heal the player in combat.",
+        "smallestPrimitiveIfSelected": "With Emberheart, each successful in-combat heal adds exactly one Weak to every living enemy that is already Weak.",
+        "stateRepresentation": "Existing enemy Weak plus a later successful in-combat heal; no new persistent state is required."
+      },
+      "eligible": true,
+      "gateResults": {
+        "active": true,
+        "afterimageSeparation": true,
+        "inactive": true,
+        "reliability": true,
+        "scorelineSeparation": true,
+        "sourceBreadth": true,
+        "viable": true
+      },
+      "id": "weak-mend-persistence",
+      "policySets": {
+        "ambiguous": [
+          0,
+          2,
+          8,
+          13,
+          14,
+          18,
+          19,
+          20,
+          21,
+          26,
+          33,
+          40,
+          41,
+          42,
+          43,
+          49,
+          52,
+          54,
+          55,
+          56,
+          57,
+          58,
+          60,
+          63
+        ],
+        "exactInactive": [
+          1,
+          3,
+          6,
+          7,
+          10,
+          12,
+          15,
+          16,
+          17,
+          24,
+          27,
+          32,
+          34,
+          36,
+          37,
+          44,
+          45,
+          46,
+          47,
+          50,
+          51,
+          53,
+          62
+        ],
+        "potentialActive": [
+          4,
+          5,
+          9,
+          11,
+          22,
+          23,
+          25,
+          28,
+          29,
+          30,
+          31,
+          35,
+          38,
+          39,
+          48,
+          59,
+          61
+        ],
+        "viable": [
+          5,
+          29,
+          35,
+          38,
+          39,
+          48,
+          59,
+          61
+        ]
+      },
+      "separation": {
+        "afterimage": {
+          "anchorOnlyPolicies": 12,
+          "candidateOnlyPolicies": 12,
+          "crossActivePolicies": 5,
+          "jaccard": 0.1724137931034483
+        },
+        "scoreline": {
+          "anchorOnlyPolicies": 12,
+          "candidateOnlyPolicies": 11,
+          "crossActivePolicies": 6,
+          "jaccard": 0.20689655172413793
+        }
+      },
+      "sourceBreadth": {
+        "consumerCards": [
+          "devour",
+          "leechBlade",
+          "regrowth"
+        ],
+        "pairs": [
+          [
+            "lunge",
+            "devour"
+          ],
+          [
+            "lunge",
+            "leechBlade"
+          ],
+          [
+            "lunge",
+            "regrowth"
+          ],
+          [
+            "uppercut",
+            "devour"
+          ],
+          [
+            "uppercut",
+            "leechBlade"
+          ],
+          [
+            "uppercut",
+            "regrowth"
+          ],
+          [
+            "warCry",
+            "devour"
+          ],
+          [
+            "warCry",
+            "leechBlade"
+          ],
+          [
+            "warCry",
+            "regrowth"
+          ]
+        ],
+        "producerCards": [
+          "lunge",
+          "uppercut",
+          "warCry"
+        ]
+      }
+    },
+    {
+      "counts": {
+        "ambiguousPolicies": 23,
+        "baselineFaultRows": 0,
+        "distinctConsumerCards": 3,
+        "distinctPairs": 8,
+        "distinctProducerCards": 3,
+        "exactInactivePolicies": 26,
+        "potentialActivePolicies": 15,
+        "viablePolicies": 8
+      },
+      "definition": {
+        "claimBoundary": "The play sequence is a permissive capacity upper bound. It does not prove healing occurred or a primed Attack was legal and selected.",
+        "consumerSet": "repeatedHit",
+        "id": "recovery-repeated-hit",
+        "minimumDistinctConsumerCards": 2,
+        "minimumDistinctPairs": 4,
+        "minimumDistinctProducerCards": 2,
+        "producerSet": "recovery",
+        "rowOpportunity": "Within one fight, a current card whose authored effect can heal is played before a later Attack with an authored dmg times value greater than one.",
+        "smallestPrimitiveIfSelected": "With Emberheart, a successful in-combat heal adds one damage to each authored hit of the next repeated-hit Attack, then clears the mark.",
+        "stateRepresentation": "A successful in-combat heal primes one later explicit repeated-hit Attack."
+      },
+      "eligible": false,
+      "gateResults": {
+        "active": false,
+        "afterimageSeparation": true,
+        "inactive": true,
+        "reliability": true,
+        "scorelineSeparation": true,
+        "sourceBreadth": true,
+        "viable": true
+      },
+      "id": "recovery-repeated-hit",
+      "policySets": {
+        "ambiguous": [
+          0,
+          4,
+          6,
+          8,
+          9,
+          10,
+          12,
+          13,
+          20,
+          21,
+          25,
+          28,
+          31,
+          33,
+          36,
+          38,
+          42,
+          43,
+          47,
+          50,
+          53,
+          54,
+          55
+        ],
+        "exactInactive": [
+          1,
+          2,
+          3,
+          7,
+          11,
+          14,
+          16,
+          17,
+          23,
+          24,
+          27,
+          30,
+          32,
+          34,
+          37,
+          40,
+          41,
+          44,
+          49,
+          51,
+          52,
+          57,
+          58,
+          60,
+          61,
+          62
+        ],
+        "potentialActive": [
+          5,
+          15,
+          18,
+          19,
+          22,
+          26,
+          29,
+          35,
+          39,
+          45,
+          46,
+          48,
+          56,
+          59,
+          63
+        ],
+        "viable": [
+          5,
+          18,
+          29,
+          35,
+          45,
+          48,
+          59,
+          63
+        ]
+      },
+      "separation": {
+        "afterimage": {
+          "anchorOnlyPolicies": 14,
+          "candidateOnlyPolicies": 12,
+          "crossActivePolicies": 3,
+          "jaccard": 0.10344827586206896
+        },
+        "scoreline": {
+          "anchorOnlyPolicies": 13,
+          "candidateOnlyPolicies": 10,
+          "crossActivePolicies": 5,
+          "jaccard": 0.17857142857142858
+        }
+      },
+      "sourceBreadth": {
+        "consumerCards": [
+          "flurry",
+          "tempest",
+          "twinFangs"
+        ],
+        "pairs": [
+          [
+            "devour",
+            "tempest"
+          ],
+          [
+            "devour",
+            "twinFangs"
+          ],
+          [
+            "leechBlade",
+            "flurry"
+          ],
+          [
+            "leechBlade",
+            "tempest"
+          ],
+          [
+            "leechBlade",
+            "twinFangs"
+          ],
+          [
+            "regrowth",
+            "flurry"
+          ],
+          [
+            "regrowth",
+            "tempest"
+          ],
+          [
+            "regrowth",
+            "twinFangs"
+          ]
+        ],
+        "producerCards": [
+          "devour",
+          "leechBlade",
+          "regrowth"
+        ]
+      }
+    }
+  ],
+  "authority": "Apply decision boundary 1 and freeze only the uniquely eligible smallest primitive for one separately preregistered exact-null and focused-mediator identity preflight. Do not add a causal row, payoff level, acquisition knob, policy mapping, ML, RL, optimiser or protected seed.",
+  "cachedObservationRowsRead": 256,
+  "decision": "freeze-weak-mend-persistence-for-identity-preflight",
+  "decisionBoundary": 1,
+  "eligibleOptions": [
+    "weak-mend-persistence"
+  ],
+  "factorDisposition": {
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy mapping is used or authorised. This audit cannot authorise one because it does not observe legal-action or policy-selection causation.",
+    "candidate": "None is implemented, simulated or promoted. The smallest primitive text belongs only to its frozen option and becomes preflight scope only after unique eligibility.",
+    "payoffs": "Scoreline and Afterimage remain separate, fixed and absent at current-main research-payoff levels.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "outcomeClass": "success",
+  "protectedSeedRows": 0,
+  "protocolSha256": "2140a7337a9027ceafca1e82b71cb01f3c7f2ed4f6c1eb95af3b2ab2916c9dfe",
+  "runnerSha256": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+  "schemaVersion": 1,
+  "selectedOption": "weak-mend-persistence",
+  "sourceCardSets": {
+    "recovery": [
+      "devour",
+      "leechBlade",
+      "regrowth"
+    ],
+    "repeatedHit": [
+      "flurry",
+      "shardstorm",
+      "tempest",
+      "twinFangs"
+    ],
+    "selfLoss": [
+      "bloodRite"
+    ],
+    "weak": [
+      "lunge",
+      "uppercut",
+      "warCry"
+    ]
+  },
+  "traceIdentity": {
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "pathRngPolicyResultExact": true,
+    "rows": 256
+  },
+  "wallTimeSeconds": 13.336317208013497
+}

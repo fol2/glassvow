@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Which, if any, of the three source-complete unclosed Duskblade structural options has uniquely sufficient robust policy capacity, exact inactivity, viability and separate Scoreline and Afterimage support to justify one identity-only primitive preflight?",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "runnerSha256": "531e25962d726c93527613d6baa1038379aed26b22835b7a2e9d0f6c34aff040",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47"
+    },
+    "fileSha256": {
+      "task-capsule.json": "13a7b432ac048ae68660be059b647675a9a259a85f6effc152b8f8223df663e3",
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_cohand_opportunity_decomposition.py": "371c32e7bd20e02d55227df3b9452cc3c49331e5f84684d6f2f188164d64827c",
+      "summaries/post-v38-native-dusk-grammar-coverage-v1.json": "df39713ac1a8472958177a5c60023d10775a148bea90972dcfc5f29b3b5ae7ff",
+      "summaries/post-v38-action-grammar-inventory-v1.json": "4eeda4d020539996106ea674d17acd7d0804a8181583c2cf4e856946febca3da",
+      "summaries/post-v38-power-cycle-capacity-v1.json": "bf3e927846079cf8e032ed82aac79be48a4249a02cbc49ea03a471fdde82ecd1",
+      "summaries/post-v38-novaflare-nonreward-capacity-v1.json": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23",
+      "summaries/post-v38-mirror-oath-identity-v1.json": "fc894063c063ebb5e3216ab5d6015762ea89c33587261bdbd0f9677eb948c585",
+      "protocols/post-v38-cohand-telemetry-identity-v1.json": "f651c220bfbbbd24d3fdec3b707209187c2192d0a40c0e8fe06255963b3377cc",
+      "summaries/post-v38-cohand-telemetry-identity-v1.json": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+      "summaries/post-v38-cohand-opportunity-decomposition-v1.json": "f2f29b3902d0d7cff438cedc73ee91148213a52a9b4d32247290e60f718ac821",
+      "summaries/post-v38-energy-telemetry-identity-v1.json": "b030035cedc3551aadb80158270c7fe636f6990d2278651ab80969348afdb846"
+    }
+  },
+  "trace": {
+    "planSha256": "867ae5c9e41fc1b84fc0b8d30146359a69d3331cac24a9a76e84b34caed50458",
+    "outputSha256": "d5b34580d415a9ca1c4664c3a095b69a52ef56e7f16858f5ac10775ee6ee276e",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "identitySummarySha256": "3154d18acbda84bdbec225d3e5695932d5b31797c5eae04c1f02157611c4a8da",
+    "selectionRule": "Read the complete sole 256-row co-hand-telemetry explicit-null arm. No row, policy or seed is selected by an endpoint."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "minimumRowsPerRobustPolicy": 2,
+    "rows": 256,
+    "identity": "Every option and both package anchors reuse the exact same identity-proved current-main policy and seed rectangle. No simulator executes and no identity is added, removed, replaced or reprioritised."
+  },
+  "sourceCardSets": {
+    "selfLoss": [
+      "bloodRite"
+    ],
+    "recovery": [
+      "devour",
+      "leechBlade",
+      "regrowth"
+    ],
+    "weak": [
+      "lunge",
+      "uppercut",
+      "warCry"
+    ],
+    "repeatedHit": [
+      "flurry",
+      "shardstorm",
+      "tempest",
+      "twinFangs"
+    ]
+  },
+  "catalogueBoundary": {
+    "construction": "The catalogue is the source-complete difference between current-main combat effects and the closed Ward, Kindle, carrier, trigger, Shatter, vulnerable/execute, one-bit action and action-economy families. It retains only three distinct state couplings whose complete current card substrates are directly observable in the frozen trace.",
+    "excludedAliases": {
+      "facetShatterEmber": "Closed by the current native-grammar and subsequent acquisition evidence.",
+      "vulnerableExecute": "Weak-mend changes only an existing defensive debuff after healing; it adds no conditional damage, execute, vulnerable, Facet or Scoreline effect.",
+      "wardAfterimage": "No option reads or changes Ward, block, Afterimage, Warden's Edge or a defensive damage reflection.",
+      "oneBitActionGrammar": "No option is a Power, draw, Energy or cycle bit that modifies the next Attack. Generic card-type alternation is excluded rather than screened.",
+      "carrierAndAcquisition": "The current Duskblade starter Emberheart is the fixed guaranteed carrier for any later primitive. No offer, reward score, rarity, shop, event or policy-acquisition factor is introduced.",
+      "ashHandSize": "Repeated-hit is restricted to authored dmg effects with times greater than one. Phantom Blades is excluded because its hand-size multiplier belongs to the admitted Ash hand-size package, not this Dusk catalogue.",
+      "fightQualityAndVictory": "No option reads a victory, perfect-fight, elite, turn-count, encounter-kind or HP threshold trigger."
+    },
+    "cap": "These three options are evaluated once. A failure does not permit a card subset, order reversal, threshold variant, alternative payoff, added carrier or further Cartesian catalogue."
+  },
+  "options": [
+    {
+      "id": "voluntary-loss-recovery",
+      "producerSet": "selfLoss",
+      "consumerSet": "recovery",
+      "rowOpportunity": "Within one fight, Blood for Oil is played before a later current card whose authored effect can heal the player in combat.",
+      "stateRepresentation": "A source=self HP-loss mark followed by a successful in-combat heal.",
+      "smallestPrimitiveIfSelected": "With Emberheart, the next successful in-combat heal after source=self HP loss restores one additional HP and clears the mark.",
+      "minimumDistinctProducerCards": 1,
+      "minimumDistinctConsumerCards": 2,
+      "minimumDistinctPairs": 2,
+      "claimBoundary": "The play sequence is a permissive capacity upper bound. It does not prove self damage survived, healing occurred or the primitive activated."
+    },
+    {
+      "id": "weak-mend-persistence",
+      "producerSet": "weak",
+      "consumerSet": "recovery",
+      "rowOpportunity": "Within one fight, a current Weak-applying card is played before a later current card whose authored effect can heal the player in combat.",
+      "stateRepresentation": "Existing enemy Weak plus a later successful in-combat heal; no new persistent state is required.",
+      "smallestPrimitiveIfSelected": "With Emberheart, each successful in-combat heal adds exactly one Weak to every living enemy that is already Weak.",
+      "minimumDistinctProducerCards": 2,
+      "minimumDistinctConsumerCards": 2,
+      "minimumDistinctPairs": 4,
+      "claimBoundary": "The play sequence is a permissive capacity upper bound. It does not prove Weak remained present, healing occurred or the primitive activated."
+    },
+    {
+      "id": "recovery-repeated-hit",
+      "producerSet": "recovery",
+      "consumerSet": "repeatedHit",
+      "rowOpportunity": "Within one fight, a current card whose authored effect can heal is played before a later Attack with an authored dmg times value greater than one.",
+      "stateRepresentation": "A successful in-combat heal primes one later explicit repeated-hit Attack.",
+      "smallestPrimitiveIfSelected": "With Emberheart, a successful in-combat heal adds one damage to each authored hit of the next repeated-hit Attack, then clears the mark.",
+      "minimumDistinctProducerCards": 2,
+      "minimumDistinctConsumerCards": 2,
+      "minimumDistinctPairs": 4,
+      "claimBoundary": "The play sequence is a permissive capacity upper bound. It does not prove healing occurred or a primed Attack was legal and selected."
+    }
+  ],
+  "design": {
+    "type": "zero-row mechanism-blocked competing-options audit; not a factorial, causal contrast, candidate optimisation or payoff search",
+    "matrix": [
+      {
+        "block": "voluntary-loss-recovery",
+        "rows": 256,
+        "observation": "ordered same-fight source-card opportunity"
+      },
+      {
+        "block": "weak-mend-persistence",
+        "rows": 256,
+        "observation": "ordered same-fight source-card opportunity"
+      },
+      {
+        "block": "recovery-repeated-hit",
+        "rows": 256,
+        "observation": "ordered same-fight source-card opportunity"
+      },
+      {
+        "block": "Scoreline anchor",
+        "rows": 256,
+        "observation": "Chisel before later Faultline"
+      },
+      {
+        "block": "Afterimage anchor",
+        "rows": 256,
+        "observation": "simultaneous Ward and Warden's Edge co-hand"
+      }
+    ],
+    "sharedAnchor": "All blocks are repeated deterministic observations on the same complete current-main trace, policies, seeds, baseline, estimator and stop rule.",
+    "noCartesianExpansion": "No factor is varied and no joint cell exists. The same cached rows are read once; rows are not spent to complete a product."
+  },
+  "factorDefinitions": {
+    "scorelinePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "absent-current-main"
+      ],
+      "status": "Separate fixed causal factor; not varied or estimated."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "pristine-current-main"
+      ],
+      "status": "Fixed exact reward and shop policy; Emberheart is already the Duskblade starter relic."
+    },
+    "structuralOption": {
+      "levels": [
+        "voluntary-loss-recovery",
+        "weak-mend-persistence",
+        "recovery-repeated-hit"
+      ],
+      "status": "Three frozen necessary-condition observations, not implemented causal factors."
+    }
+  },
+  "anchors": {
+    "scoreline": {
+      "definition": "A robust policy plays Chisel before a later Faultline in one fight in at least two of four frozen rows.",
+      "activePolicies": 18,
+      "status": "Separate overlap anchor only; no Scoreline payoff or interaction is estimated."
+    },
+    "afterimage": {
+      "definition": "A robust policy simultaneously holds Ward and Warden's Edge in at least two of four frozen rows.",
+      "activePolicies": 17,
+      "status": "Separate conservative overlap anchor only; no Ward order, Afterimage payoff or interaction is estimated."
+    }
+  },
+  "interactionsAndAliases": {
+    "notEstimated": "No interaction or causal effect is estimated. Candidate-only, anchor-only and Jaccard counts are shared-anchor decision-value screens, not interaction coefficients.",
+    "opportunityAlias": "Ordered card play establishes only an upper bound. Current telemetry does not identify successful healing, surviving Weak, source=self damage or enabled primitive activation.",
+    "selectionRule": "Exactly one option must pass every frozen gate. No ranking, weighted score, tie-break, model fit or qualitative preference may choose among zero or multiple eligible options.",
+    "nextEvidence": "A uniquely eligible option may receive one separately preregistered exact-null and focused-mediator identity preflight. It receives no causal row, payoff claim or product authority from this audit."
+  },
+  "estimands": {
+    "primary": "For each frozen option, the exact robust potential-active, exact-inactive, ambiguous and viable policy counts.",
+    "sourceBreadth": "Exact distinct producer cards, consumer cards and ordered source-card pairs observed anywhere in the complete trace.",
+    "separation": "Candidate-only, anchor-only, cross-active and Jaccard counts against Scoreline and Afterimage separately.",
+    "reliability": "Exact stall or error row count.",
+    "notEstimated": "No actual heal, Weak extension, self-loss mark, repeated-hit bonus, causal effect, complementarity, acquisition effect, payoff, detector result, RandomBuild movement, duration, product balance, ML, RL or optimisation endpoint is estimated."
+  },
+  "gates": {
+    "minimumPotentialActivePolicies": 16,
+    "minimumExactInactivePolicies": 16,
+    "minimumViablePolicies": 8,
+    "minimumCandidateOnlyPolicies": 8,
+    "minimumAnchorOnlyPolicies": 8,
+    "maximumAnchorJaccard": 0.55,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "The 16-policy support and inactivity minima, eight-policy viability and separate-anchor minima, 0.55 overlap ceiling and one-fault ceiling reuse the existing frozen 64-policy capacity scale without result-dependent weakening."
+  },
+  "factorDisposition": {
+    "candidate": "None is implemented, simulated or promoted. The smallest primitive text belongs only to its frozen option and becomes preflight scope only after unique eligibility.",
+    "payoffs": "Scoreline and Afterimage remain separate, fixed and absent at current-main research-payoff levels.",
+    "additionalMethod": "No ML, RL, optimiser, fitted model or policy mapping is used or authorised. This audit cannot authorise one because it does not observe legal-action or policy-selection causation.",
+    "protectedSeeds": "Acceptance seeds 3000-5199 and reserve seeds 5200-5399 remain unused."
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 256,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "executionAndStopping": {
+    "construction": "Deterministic Python verifies every frozen source, helper, evidence and cache identity; derives the complete card sets from current source; maps the full plan to output; evaluates all three options and both anchors once; and owns the unique-pass decision.",
+    "firstLook": "The complete 64-policy by four-seed cached trace is the only look. No simulator, row, repair, subset, threshold, reverse order, new option or rerun exists.",
+    "successStop": "Stop only when exactly one option passes every gate within 30 seconds.",
+    "futilityStop": "Stop and close this catalogue when no option passes every gate.",
+    "inconclusiveStop": "Stop at the cap if more than one option passes, any frozen input is unavailable or the exact decision exceeds 30 seconds."
+  },
+  "decisionRules": {
+    "success": "Exactly one option passes every frozen gate and all immutable-input, trace, source and ledger checks pass within 30 seconds.",
+    "successAuthority": "Apply decision boundary 1 and freeze only the uniquely eligible smallest primitive for one separately preregistered exact-null and focused-mediator identity preflight. Do not add a causal row, payoff level, acquisition knob, policy mapping, ML, RL, optimiser or protected seed.",
+    "futility": "No option passes every frozen gate at the complete cohort.",
+    "futilityAuthority": "Apply decision boundary 2 and close this complete competing-option catalogue at the preregistered cap. Continue inside issue #421 only from a different evidence-backed structural mechanism; do not subset a card set, reverse order, add a payoff, carrier or threshold, or repeat this catalogue.",
+    "inconclusive": "More than one option passes or an exact decision is unavailable at the cap.",
+    "inconclusiveAuthority": "Apply decision boundary 3 and record the competing-option result inconclusive at the cap. Do not rank, tie-break, add a row, modify an option, choose a candidate, add a method or use protected seeds."
+  }
+}
