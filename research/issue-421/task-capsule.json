@@ -33,6 +33,10 @@
     "The complete removal-refinement trigger family is closed by zero-row decision boundary 2: it had 32 robust-active and 14 viable policies but only eight exact-inactive policies, and only four removal-only identities against Afterimage. Do not subset routes, weaken gates, tune removal policy, invent a payoff, add a carrier or rerun the cohort.",
     "The complete elite-victory trigger family is closed by zero-row decision boundary 2: 63 policies were robust-active, none was exact-inactive, every Scoreline identity was active and only one Afterimage identity was inactive. Do not replace victory with entry, subset encounters or acts, tune route weights, alter elite rewards, invent a payoff, add a carrier or rerun.",
     "The complete exact-equality fight-quality family is closed by zero-row decision boundary 2: no-HP-loss victory was active for 63 policies with none inactive, while one-turn victory was active for only four with zero viable. Do not add encounter-kind subsets, relaxed thresholds, conjunctions, package filters, payoffs, carriers or reruns.",
+    "The complete zero-row observability catalogue selected upgrade completion as the only one of eleven frozen transition surfaces passing the unclosed, gap, two-path, direct-control, four-field and single-hook gates. It authorised identity preflight only, not a payoff, factorial, candidate or additional method.",
+    "The observability protocol incorrectly described row.deck as retaining terminal upgrade flags. Exact source shows that it is an integer deck size with no per-card upgrade detail. Preserve the original audit; the correction strengthens the gap and changes no selection, gate or authority.",
+    "The minimal current-main upgrade telemetry implementation is closed by preregistered identity decision boundary 2: explicit-null and enabled arms were pairwise exact, but each differed from the reused baseline in 223 of 256 identities. Do not repair, rerun or use its 512 rows for capacity, package, payoff, causal or product claims.",
+    "The reused root-551 baseline is the current-content arm of the Ward research experiment, executed with research-modified Pilot and BalanceSim blobs. It is valid only for contrasts that froze those implementations and is not pristine current-main simulator identity evidence. Preserve the v1 diagnostic defect; the v2 audit supersedes only its interpretation.",
     "At the next decision boundary freeze at most one candidate, close the scalar family and continue structurally inside #421, or record inconclusive at the preregistered cap.",
     "Do not use acceptance seeds 3000-5199 or reserve seeds 5200-5399 before the authorised final exact-SHA boundary.",
     "Keep research outside production truth; do not create a research PR, run product CI, or merge the archive-only evidence branch."
@@ -134,7 +138,17 @@
     "eliteVictoryCapacityProtocolSha256": "2eec98bd7d41d7ff60540a56f1c35aea35109a80de5a37cb2dc9ddd416c009a4",
     "eliteVictoryCapacitySummarySha256": "609dcb2d5595ff4f2505755b005c56d098ef50ee1b2c3743aa2a9d4ccf28f2da",
     "fightQualityCapacityProtocolSha256": "dbf01b88b3a13ebf92469ec551be59f45742812d23703231afb12cb3dd271c7a",
-    "fightQualityCapacitySummarySha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746"
+    "fightQualityCapacitySummarySha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746",
+    "observabilityGapProtocolSha256": "3d0ea49acbf0b89b22d2bdca791ff8167f89453c6ec040d1995b93e7b9111c53",
+    "observabilityGapSummarySha256": "c0e3445cc797a9149c56dab21be75814fc1e0c39e98457a9196160951f3230e7",
+    "upgradeTelemetryIdentityProtocolSha256": "eab3d8a629f48751665950c5fabdc968e1296ac026f3305b70ad3f952ef5966f",
+    "upgradeTelemetryIdentitySummarySha256": "2a1d2a9c251846ac07bed519ce76e31fd7761fbd7ff7f1905383f143d78206da",
+    "upgradeTelemetryIdentityPlanSha256": "cc1d510e007e83d3bc8691742fd1eaea9541eda0b0f2614d4922a60210740fed",
+    "upgradeTelemetryIdentityOutputSha256": "197c23feac491c3faf0261421e37b9535b72fe855bc29f2e53ea09685ef0388a",
+    "upgradeTelemetryIdentityDiagnosticV1Sha256": "cb3cab9e9671f82964eb8b398531f25775ff28d0c91b985763085cdc839998fb",
+    "upgradeTelemetryIdentityAuditV2Sha256": "8d1bd92252d68bdf3d6dd42661248d78560644dc2f9705310e7b71e152f08382",
+    "upgradeTelemetryResearchSimulatorSha256": "466cbec317bb04a6325408e02f60dbceb9530726c845499cbdc7f93e5e9b7cd4",
+    "pristineCurrentMainSimulatorSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
   },
   "decisions": [
     {
@@ -326,6 +340,16 @@
       "decision": "Close the complete exact-equality fight-quality trigger family without implementation or simulator spend.",
       "evidence": "summaries/post-v38-fight-quality-capacity-v1.json",
       "reason": "The two source-complete predicates were evaluated together once. No-HP-loss victory was robustly active for 63 policies and inactive for none; one-turn victory was robustly active for four and viable for none. Both failed separate package-support gates, and all post-hoc kind, threshold and conjunction variants were preregistered closed."
+    },
+    {
+      "decision": "Select only upgrade completion for a minimal identity-safe telemetry preflight.",
+      "evidence": "summaries/post-v38-observability-gap-audit-v1.json",
+      "reason": "It was the sole one of eleven source-complete transition surfaces to pass every frozen zero-row observability, path, policy-control, telemetry and hook gate. No payoff, candidate or additional method was authorised."
+    },
+    {
+      "decision": "Reject upgrade telemetry and close this observation implementation without repair or rerun.",
+      "evidence": "summaries/post-v38-upgrade-telemetry-identity-v1.json",
+      "reason": "The explicit-null and enabled arms were pairwise exact, but each differed from the reused baseline in 223 of 256 identities. A zero-row audit established that the baseline used research-modified Pilot and simulator blobs and was not pristine current-main simulator identity evidence."
     }
   ],
   "proofMap": {
@@ -338,6 +362,6 @@
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Freeze one bounded audit of the remaining current-main state grammar and missing telemetry surfaces before another candidate. It must quantify whether any additional deterministic method has decision value for the measured active/inactive/viable/package-independent repertoire bottleneck. Do not add ML/RL or an optimiser without that rule, and do not reopen elite victory, fight-quality variants, removal refinement, Mirror Oath, any closed native family, #524/#525 history, #517/#519, protected seeds or adaptive candidate tuning.",
+  "nextAction": "Freeze one bounded zero-row provenance and authority audit before another simulator row. It must distinguish frozen research-simulator contrast evidence from pristine current-main simulator identity evidence, preserve every completed decision boundary, and identify at most one structurally valid next boundary. Do not repair or rerun upgrade telemetry, add ML/RL or an optimiser, reopen any closed family, reconstruct #524/#525, use protected seeds or return to adaptive candidate tuning.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

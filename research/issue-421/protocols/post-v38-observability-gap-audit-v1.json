@@ -1,0 +1,848 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-observability-gap-audit",
+  "question": "Which, if any, single remaining current-main policy-controlled transition has an unclosed observability gap, at least two natural completion paths and one minimal deterministic observation hook, so that identity-safe telemetry has measured decision value before another simulator row?",
+  "competingOptions": [
+    "freeze at most one eligible transition surface for identity-safe observation-only telemetry",
+    "close this complete current-main missing-telemetry catalogue and continue with the next evidence-backed structural mechanism inside issue #421",
+    "record the audit as inconclusive at the preregistered cap"
+  ],
+  "scientificBasis": {
+    "measuredBottleneck": "Removal refinement was broad and Afterimage-aliased; elite victory and no-HP-loss victory were near-universal; one-turn victory was too sparse. The missing discriminator must retain robust active, exact inactive, viable and package-independent policy identities on one frozen cohort.",
+    "catalogueBeforeBehaviour": "The catalogue is the exhaustive state-changing and policy-choice boundary of the immutable whole-run simulator after excluding surfaces already fully represented by the exact trace schema. It is frozen from source structure before any activation, target-card or outcome aggregate is read.",
+    "mechanicalCounts": "Completion paths, direct policy controls, telemetry fields and deterministic hooks are explicit finite lists. Deterministic code derives every gate count from list length; no manually copied numeric surface count can steer selection.",
+    "cheapestDiscriminatingEvidence": "Reuse only the 256 explicit-current trace rows already proved exactly identical to the 256 current-main baseline rows after observation labels are removed. The audit reads schema keys, not behavioural event counts, and opens no simulator process.",
+    "claimBoundary": "Selection authorises observation-only identity preflight, not a trigger, payoff, carrier, content candidate, package, detector claim, causal effect, ML, RL or optimiser."
+  },
+  "catalogueBoundary": {
+    "included": [
+      "rest heal or upgrade",
+      "event choice and every state-changing event result",
+      "combat, event and shop card acquisition",
+      "combat, event, shop and treasure non-boss relic acquisition",
+      "combat, event and shop potion acquisition plus combat use",
+      "event and shop removal",
+      "shop purchase",
+      "unlit map entry",
+      "the reachable alternative set at map choice"
+    ],
+    "excludedFullyObserved": {
+      "selectedMapNodes": "trajectory.nodes",
+      "combatCardPlays": "trajectory.plays",
+      "combatCardRewards": "trajectory.cardRewards",
+      "bossRelicChoices": "trajectory.bossRelics",
+      "fightResults": "row.fights",
+      "terminalDeckAndUpFlags": "row.deck",
+      "terminalRelics": "row.relics",
+      "goldHpAndActEconomy": "row.gold, row.goldEarned, row.hp, row.maxHp and row.economy"
+    },
+    "profileExclusions": "The frozen mature-three-act-no-side-state simulator profile uses all reveals, no quests and no cross-run side state. Boon, quest and vigil-only transitions are outside this immutable cohort rather than silently omitted.",
+    "partialObservationRule": "A terminal state field is not a complete event surface when it cannot identify completion source, time, multiplicity or an event later erased by removal. Partial observations are recorded but do not defeat an event-level observability gap."
+  },
+  "catalogueSourceAssertions": {
+    "tools/balance_sim.gd": [
+      "for _act: int in range(3):",
+      "if node.is_combat():",
+      "_claim_rewards(game, game.gen_combat_rewards",
+      "match node.type:",
+      "\"event\": _resolve_event(game)",
+      "\"shop\": _resolve_shop(game)",
+      "\"treasure\": _claim_treasure(game)",
+      "roll_boss_relics(run)"
+    ],
+    "domain/rules/rewards.gd": [
+      "elif op.has(\"addCard\"):",
+      "elif op.has(\"addRelic\"):",
+      "elif op.has(\"potion\"):",
+      "elif op.get(\"pickRemove\", false):",
+      "elif op.get(\"pickUpgrade\", false):",
+      "elif op.get(\"pickDuplicate\", false):",
+      "elif op.has(\"pickCard\"):"
+    ]
+  },
+  "surfaces": [
+    {
+      "id": "upgrade-completion",
+      "mediator": "An existing owned card changes from up=false to up=true after the policy selects an upgrade at a healthy rest or an upgrade event.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "upgrades"
+      },
+      "existingPartialObservations": [
+        "row.deck retains only terminal up flags",
+        "trajectory.nodes retains visited rest and event nodes"
+      ],
+      "completionPaths": [
+        "healthy-rest",
+        "upgrade-event"
+      ],
+      "directPolicyControls": [
+        "restHpPct",
+        "route.restLow, route.restOk and route.event",
+        "card score weights selecting the upgrade target"
+      ],
+      "telemetryFields": [
+        "source",
+        "act",
+        "uid",
+        "id"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._upgrade_best successful completion"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "static func _upgrade_best(game: GlassvowGame) -> void:",
+          "\"upgrade\": _upgrade_best(game)",
+          "_upgrade_best(game)",
+          "best.up = true"
+        ],
+        "tools/balance_policy.gd": [
+          "\"restHpPct\":",
+          "\"route\":",
+          "\"card\":"
+        ]
+      }
+    },
+    {
+      "id": "rest-heal",
+      "mediator": "A rest choice restores HP rather than completing an upgrade.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "restActions"
+      },
+      "existingPartialObservations": [
+        "terminal hp and economy snapshots do not identify individual rest healing"
+      ],
+      "completionPaths": [
+        "low-hp-rest"
+      ],
+      "directPolicyControls": [
+        "restHpPct",
+        "route.restLow and route.restOk"
+      ],
+      "telemetryFields": [
+        "act",
+        "amount",
+        "hpBefore",
+        "hpAfter"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._resolve_safe_node rest-heal branch"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "Pilot._wi(\"restHpPct\")",
+          "game.rewards.rest_heal_fraction(game.run)",
+          "game.run.player.hp = mini"
+        ]
+      }
+    },
+    {
+      "id": "event-duplicate",
+      "mediator": "An event duplicates the policy's current best owned card, preserving its upgrade state.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "duplicates"
+      },
+      "existingPartialObservations": [
+        "terminal deck multiplicity cannot prove an event duplicate rather than another acquisition"
+      ],
+      "completionPaths": [
+        "duplicate-event"
+      ],
+      "directPolicyControls": [
+        "route.event",
+        "card score weights selecting the source card"
+      ],
+      "telemetryFields": [
+        "act",
+        "eventId",
+        "sourceUid",
+        "newUid",
+        "id"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._resolve_event duplicate completion"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "\"duplicate\":",
+          "Pilot.best_card(game.run, game.content, game.run.player.deck)",
+          "source.id, source.up"
+        ]
+      }
+    },
+    {
+      "id": "event-choice",
+      "mediator": "The policy chooses one authored event option using the current deterministic event score.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "eventChoices"
+      },
+      "existingPartialObservations": [
+        "selected downstream state may not identify the chosen authored option"
+      ],
+      "completionPaths": [
+        "event"
+      ],
+      "directPolicyControls": [
+        "route.event",
+        "shopMinRatio",
+        "card score weights",
+        "relic score weights"
+      ],
+      "telemetryFields": [
+        "act",
+        "eventId",
+        "choiceIndex",
+        "score"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._resolve_event selected choice"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "var score: float = _event_choice_score(game, row)",
+          "choice = row",
+          "var ops: Array = choice.get(\"ops\", [])"
+        ]
+      }
+    },
+    {
+      "id": "card-acquisition-lifecycle",
+      "mediator": "A card enters the owned deck from combat reward, event or shop.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "cardAcquisitions"
+      },
+      "existingPartialObservations": [
+        "trajectory.cardRewards fully represents combat reward choices only",
+        "terminal deck cannot identify acquisition source or cards later removed"
+      ],
+      "completionPaths": [
+        "combat-reward",
+        "event",
+        "shop"
+      ],
+      "directPolicyControls": [
+        "route.event and route.shop",
+        "card score weights",
+        "cardDecline",
+        "shopMinRatio and shop gold thresholds"
+      ],
+      "telemetryFields": [
+        "source",
+        "act",
+        "uid",
+        "id"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._claim_rewards card append",
+        "BalanceSim._resolve_event card append",
+        "BalanceSim._resolve_shop card append"
+      ],
+      "priorClosureAliases": [
+        "novaflareNonrewardClosure"
+      ],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "Pilot.accepts_card_reward(score)",
+          "\"card\":",
+          "category == \"cards\"",
+          "CardInst.new(game.run.next_uid()"
+        ],
+        "tools/balance_policy.gd": [
+          "\"cardDecline\":",
+          "\"card\":"
+        ]
+      }
+    },
+    {
+      "id": "non-boss-relic-acquisition",
+      "mediator": "A non-boss relic enters the run from combat reward, event, shop or treasure.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "relicAcquisitions"
+      },
+      "existingPartialObservations": [
+        "trajectory.bossRelics fully represents boss offers and choices only",
+        "terminal relic ownership cannot identify non-boss acquisition source or time"
+      ],
+      "completionPaths": [
+        "combat-reward",
+        "event",
+        "shop",
+        "treasure"
+      ],
+      "directPolicyControls": [
+        "route.event, route.shop and route.treasure",
+        "relic score weights",
+        "relic rarity, fallback and aspect bonus weights",
+        "shopMinRatio and shop gold thresholds"
+      ],
+      "telemetryFields": [
+        "source",
+        "act",
+        "id"
+      ],
+      "deterministicHooks": [
+        "Rewards.gain_relic"
+      ],
+      "priorClosureAliases": [
+        "duskRelicScreenClosure",
+        "executionersSealClosure"
+      ],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "game.rewards.gain_relic(game.run, str(relic_v))",
+          "category == \"relics\"",
+          "static func _claim_treasure(game: GlassvowGame) -> void:"
+        ],
+        "domain/rules/rewards.gd": [
+          "elif op.has(\"addRelic\"):",
+          "gain_relic(run, str(relic_v))",
+          "func claim_treasure(run: RunState) -> Dictionary:"
+        ],
+        "tools/balance_policy.gd": [
+          "\"relics\":",
+          "\"relicRarity\":",
+          "\"relicFallback\":"
+        ]
+      }
+    },
+    {
+      "id": "potion-lifecycle",
+      "mediator": "A potion enters a free slot from combat reward, event or shop and may later be consumed in combat.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "potionEvents"
+      },
+      "existingPartialObservations": [
+        "terminal potion slots omit consumed potions and acquisition source"
+      ],
+      "completionPaths": [
+        "combat-reward",
+        "event",
+        "shop",
+        "combat-use"
+      ],
+      "directPolicyControls": [
+        "route.event and route.shop",
+        "potionHealMissing",
+        "potionShopDefault and potionHealing",
+        "shopMinRatio and shop gold thresholds"
+      ],
+      "telemetryFields": [
+        "event",
+        "source",
+        "act",
+        "id",
+        "slot",
+        "decision"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._claim_rewards potion assignment",
+        "Rewards.apply_event_ops potion assignment",
+        "BalanceSim._resolve_shop potion assignment",
+        "BalancePilot._use_potions consumption"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "var potion_v: Variant = rewards.get(\"potion\")",
+          "category == \"potions\""
+        ],
+        "domain/rules/rewards.gd": [
+          "elif op.has(\"potion\"):",
+          "run.player.potions[slot] = potion_id"
+        ],
+        "tools/balance_pilot.gd": [
+          "static func _use_potions(game: GlassvowGame) -> void:",
+          "game.apply({\"t\": \"usePotion\""
+        ],
+        "domain/rules/combat.gd": [
+          "func use_potion(run: RunState, cb: CombatState, slot: int",
+          "run.player.potions[slot] = \"\""
+        ]
+      }
+    },
+    {
+      "id": "removal-completion",
+      "mediator": "One owned card is removed at a shop or event.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "removals"
+      },
+      "existingPartialObservations": [
+        "packageEvents records selected shop and shrine removal routes but not exact card identity"
+      ],
+      "completionPaths": [
+        "event",
+        "shop"
+      ],
+      "directPolicyControls": [
+        "route.event and route.shop",
+        "removalAppetite",
+        "removalMinCopies",
+        "shopMinRatio and shop gold thresholds"
+      ],
+      "telemetryFields": [
+        "source",
+        "act",
+        "uid",
+        "id"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._resolve_event removal",
+        "BalanceSim._resolve_shop removal"
+      ],
+      "priorClosureAliases": [
+        "removalClosure"
+      ],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "\"remove\":",
+          "game.run.player.deck.erase(worst)",
+          "category == \"remove\"",
+          "game.run.player.deck.erase(remove)"
+        ],
+        "tools/balance_policy.gd": [
+          "\"removalAppetite\":",
+          "\"removalMinCopies\":"
+        ]
+      }
+    },
+    {
+      "id": "shop-purchase",
+      "mediator": "The policy completes one card, relic, potion or removal purchase.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "shopPurchases"
+      },
+      "existingPartialObservations": [
+        "packageEvents records shop visits and removals but not all completed purchases"
+      ],
+      "completionPaths": [
+        "shop"
+      ],
+      "directPolicyControls": [
+        "route.shop",
+        "shopGoldLow and shopGoldHigh",
+        "shopMinRatio",
+        "card, relic, potion and removal choice weights"
+      ],
+      "telemetryFields": [
+        "act",
+        "category",
+        "id",
+        "price"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._resolve_shop completed buy"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "static func _resolve_shop(game: GlassvowGame) -> void:",
+          "var buys: Array[Dictionary] = Pilot.choose_shop",
+          "game.run.player.gold -= price",
+          "var category: String = str(buy[\"category\"])"
+        ],
+        "tools/balance_policy.gd": [
+          "\"shopGoldHigh\":",
+          "\"shopGoldLow\":",
+          "\"shopMinRatio\":"
+        ]
+      }
+    },
+    {
+      "id": "unlit-entry",
+      "mediator": "The selected map node is unlit and pays its deterministic bounty on entry.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "unlitNodes"
+      },
+      "existingPartialObservations": [
+        "terminal gold includes the bounty but does not identify an unlit entry"
+      ],
+      "completionPaths": [
+        "map-entry"
+      ],
+      "directPolicyControls": [],
+      "telemetryFields": [
+        "act",
+        "nodeId",
+        "bounty"
+      ],
+      "deterministicHooks": [
+        "BalanceSim._enter_node unlit branch"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_sim.gd": [
+          "if node.unlit:",
+          "run.stats[\"unlitVisited\"]",
+          "run.player.gold += bounty"
+        ],
+        "domain/state/map_node.gd": [
+          "var unlit: bool = false"
+        ]
+      }
+    },
+    {
+      "id": "reachable-choice-set",
+      "mediator": "The policy receives the exact set of reachable map alternatives before choosing one node.",
+      "requiredObservation": {
+        "container": "trajectory",
+        "key": "reachableChoices"
+      },
+      "existingPartialObservations": [
+        "trajectory.nodes records the selected node but not the alternatives"
+      ],
+      "completionPaths": [
+        "map-choice"
+      ],
+      "directPolicyControls": [
+        "route weights"
+      ],
+      "telemetryFields": [
+        "act",
+        "currentNode",
+        "reachable",
+        "chosen"
+      ],
+      "deterministicHooks": [
+        "BalancePilot.choose_node"
+      ],
+      "priorClosureAliases": [],
+      "sourceAssertions": {
+        "tools/balance_pilot.gd": [
+          "static func choose_node(map: WorldMap, run: RunState) -> int:",
+          "for i: int in map.reachable():"
+        ],
+        "domain/state/world_map.gd": [
+          "func reachable() -> Array[int]:"
+        ]
+      }
+    }
+  ],
+  "eligibilityGates": {
+    "minimumCompletionPaths": 2,
+    "minimumDirectPolicyControls": 2,
+    "maximumTelemetryFields": 4,
+    "maximumDeterministicHooks": 1,
+    "provenance": "Two natural paths prevent a single authored route from masquerading as a repertoire; two direct controls permit policy sensitivity; four fields are the exact minimal source, act and card identity envelope; one append hook is the identity-risk ceiling. All thresholds were frozen before behavioural counts and apply to every surface."
+  },
+  "expectedEligibleSurfaces": [
+    "upgrade-completion"
+  ],
+  "factorDefinitions": {
+    "observationSurface": {
+      "levels": [
+        "absent",
+        "observation-only"
+      ],
+      "absent": "Exact current-main output with no new event field.",
+      "observation-only": "Append only the selected four-field event at its exact successful completion; no state, choice, queue, RNG or result change.",
+      "status": "Fixed absent in every cached row. This audit may authorise identity preflight only."
+    },
+    "upgradePayoff": {
+      "levels": [
+        "absent"
+      ],
+      "absent": "No payoff, magnitude, consumer, carrier or content definition exists."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact frozen Scoreline payoff and Faultline path.",
+      "status": "A separate causal factor fixed throughout and never bundled with Afterimage or observation."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact frozen Warden's Edge Afterimage payoff.",
+      "status": "A separate causal factor fixed independently from Scoreline and observation."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact frozen root-551 policy identities and natural reward/economy path."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact baseline Faultline definition."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact current/null Ward setup path; no structural intervention."
+    }
+  },
+  "designMatrix": {
+    "kind": "one immutable source-and-trace-schema audit cell; not a factorial and not a causal experiment",
+    "cells": [
+      {
+        "id": "current-main-schema",
+        "cachedBaselineRows": 256,
+        "cachedTraceRows": 256,
+        "newRows": 0,
+        "observationSurface": "absent",
+        "upgradePayoff": "absent",
+        "scorelinePayoff": "current",
+        "afterimagePayoff": "current",
+        "acquisitionPriority": "current",
+        "faultlineRarity": "current",
+        "wardSetupPriority": "current"
+      }
+    ],
+    "causalContrasts": [],
+    "anchors": [
+      "exact current-main source commit and blob hashes",
+      "exact baseline-versus-trace path, RNG, policy and result identity",
+      "31 exact Scoreline-route policy identities",
+      "54 exact Afterimage-route policy identities",
+      "zero protected-seed and zero new-ledger-row identity"
+    ],
+    "expansionRule": "A selected surface may receive only null-identity and focused mediator-isolation proof under a separate preregistration. No payoff, candidate, simulator row or joint cell is authorised. A later mechanism-blocked CRN must keep policies, simulation seeds, baseline, first-look budget, estimator and stopping rule equal and may add cross-package cells only after measured interference has decision value."
+  },
+  "mechanisticInteractionsAndAliases": {
+    "mechanisticallyJustifiedFutureInteractions": [
+      "upgrade completion x a future upgrade payoff, because a payoff can occur only after a completed upgrade",
+      "upgrade completion x card acquisition policy, because the owned upgradeable set determines the target",
+      "upgrade completion x Scoreline use and upgrade completion x Afterimage use, because upgrading an anchor card may alter package activity"
+    ],
+    "notEstimated": "No interaction is estimated in this audit. Scoreline and Afterimage remain separate fixed factors with separate anchors.",
+    "catalogueAliases": "Card acquisition is aliased to the closed existing-grammar acquisition iterations; non-boss relic acquisition is aliased to the completed exact current Dusk-favoured relic inventory and closures; removal is aliased to its complete two-route closure. Their source surfaces remain listed so aliasing cannot hide an omitted eligible path.",
+    "partialObservationAliases": "Terminal deck up flags can undercount upgrades later removed and cannot distinguish rest from event or original upgrade from an upgraded duplicate. They cannot support source-specific or completion-count claims.",
+    "staging": "Schema evidence may advance at most one observation surface to identity proof. No whole-run endpoint can be claimed for a factor that was not comparably evaluated on one frozen cohort."
+  },
+  "sharedAnchors": {
+    "scoreline": {
+      "definition": "Chisel precedes a later Faultline in the same fight in at least two of four rows.",
+      "policies": [
+        0,
+        2,
+        3,
+        7,
+        10,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        20,
+        23,
+        28,
+        29,
+        31,
+        32,
+        33,
+        35,
+        39,
+        40,
+        49,
+        51,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        61
+      ]
+    },
+    "afterimage": {
+      "definition": "Positive afterimageGuardDamage is recorded in at least two of four rows.",
+      "policies": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        37,
+        38,
+        39,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        62,
+        63
+      ]
+    }
+  },
+  "estimands": {
+    "unit": "One finite source-defined transition surface on the exact current-main simulator and exact current trace schema.",
+    "primary": "The exact six-gate eligibility vector for every catalogued surface and the lexicographically deterministic at-most-one selected surface after field count, hook count and ID ordering.",
+    "catalogue": "Exact source path, direct policy control, telemetry field, deterministic hook and prior-closure-alias lists for every remaining gap.",
+    "methodDecisionValue": "Exact count of unaliased policy-controlled surfaces, exact count already fully trace-observed, and whether the separate numeric additional-method rule passes.",
+    "notEstimated": "No behavioural activation, target-card frequency, outcome, causal payoff, package interaction, RandomBuild, Ashwarden, detector, protected seed, product candidate or held-out endpoint is estimated."
+  },
+  "estimator": {
+    "method": "Deterministic immutable-source substring assertions, exact cache identity, exact trace-schema key sets, list-length arithmetic and frozen lexicographic selection.",
+    "model": "None. No bootstrap, fitted model, optimiser, ML or RL component is used.",
+    "firstLook": "All surfaces, source assertions, aliases, lists, gates, order and expected eligible set are frozen before execution. The runner reads no behavioural event count.",
+    "stopping": "Select at most one eligible surface; close the catalogue when none is eligible; otherwise record inconclusive only at the numeric cap."
+  },
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward/economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "traceEvidence": {
+    "name": "identity-proved explicit-current arm from the Momentum preference CRN rectangle",
+    "planSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "outputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "currentRows": 256,
+    "identityRule": "Every explicit-current row must equal its cached baseline path, RNG, policy and result exactly after trajectory and arm-label fields are removed before schema keys are read."
+  },
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "identity": "The audit reuses the exact complete rectangle. No policy or seed is added, removed, selected or replaced."
+  },
+  "additionalMethodDecisionValue": {
+    "minimumUnresolvedSurfaces": 2,
+    "minimumTraceObservedSurfaces": 2,
+    "rule": "ML, RL or another optimiser can be considered only if no deterministic surface is eligible and at least two unaliased policy-controlled surfaces plus two fully trace-observed unaliased surfaces remain. Passing this rule would authorise only a separate preregistration, never execution here.",
+    "expectedAuthority": false
+  },
+  "budget": {
+    "maximumCachedObservationRowsRead": 512,
+    "maximumNewSimulatorObservationRows": 0,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "One or more surfaces pass unclosed, observability-gap, path-breadth, direct-policy-control, minimal-telemetry and single-hook gates; select exactly the first after ascending telemetry-field count, hook count and ID.",
+    "successAuthority": "Freeze only the selected surface for a separate current-main identity-safe telemetry preregistration. First prove omitted and explicit-null exact path, RNG, policy, state and result identity on all 256 identities, then prove focused positive and negative controls affect only the intended observation. Implement no payoff or content and add no simulator row before that proof.",
+    "futility": "No catalogued surface passes every frozen gate.",
+    "futilityAuthority": "Close this complete current-main missing-telemetry catalogue and continue with the next evidence-backed structural mechanism inside issue #421. Do not subset a route, add a field, relax a gate, reopen an alias or rerun.",
+    "inconclusive": "Immutable source, evidence, ledger or deterministic audit cannot complete before the wall-time cap.",
+    "inconclusiveAuthority": "Record the inconclusive result at the cap without implementation, simulator spend, trace extension, payoff, carrier, ML/RL or protected seeds."
+  },
+  "methodBoundary": "Deterministic Python owns immutable-input validation, catalogue checking, schema identity, list-derived counts, eligibility, selection and stop/go. Issue #524 and #525 remain immutable scientific evidence only and are not reconstructed. No human label, model context, optimiser, ML, RL, behavioural aggregate or adaptive candidate iteration enters execution.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "domain/rules/combat.gd": "3adb0e063a536bf249d3b5d9524427facf1398304206da59d97594d3fff246e8",
+      "domain/rules/rewards.gd": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+      "domain/state/card_inst.gd": "e624df08e953accce132e5438a83e7018b6896098cd88504753e400c96a16f4d",
+      "domain/state/map_node.gd": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed",
+      "domain/state/run_state.gd": "3f50a87adf0aa265c1ed536cd1677f99976a2acca6d6071ebc35c6f4b081ff19",
+      "domain/state/world_map.gd": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "helperSha256": {
+      "post_v38_action_grammar_inventory.py": "87540fcd4903444658db14a8494d0ab8e5847f92a71f236a59f2b9c94564873d",
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_removal_refinement_capacity.py": "99aabde5dc66f3c3947f14da56429fd6ea5314fe504f8ad9a64825712406442e",
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80"
+    },
+    "runnerSha256": "027a7e9b83056c0e8353f2a7f72b0584e42c5f2597b3afd76daa59d76aa9fe54"
+  },
+  "priorEvidence": {
+    "fightQualityClosure": {
+      "path": "summaries/post-v38-fight-quality-capacity-v1.json",
+      "sha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746",
+      "decision": "close-exact-equality-fight-quality-family"
+    },
+    "removalClosure": {
+      "path": "summaries/post-v38-removal-refinement-capacity-v1.json",
+      "sha256": "ea92533f960e22d06cd00f20867038f8dbe12c12cae1c05d86857e6889e14db0",
+      "decision": "close-removal-refinement-trigger-family"
+    },
+    "duskRelicScreenClosure": {
+      "path": "summaries/post-v38-dusk-mechanism-screen-v1.json",
+      "sha256": "9ba14ec9a63ecb9a8e7cafa9b4edc0b5def546755c25e57234ee15dc251b2a64",
+      "decision": "close-dusk-shatter-threshold-crown-screen"
+    },
+    "executionersSealClosure": {
+      "path": "summaries/post-v38-executioners-seal-capacity-v1.json",
+      "sha256": "897f0b4c9b07df07cbc445eaedbc8bdd34ec8d22d9171448f48a28f6d9e8a0a4",
+      "decision": "close-executioners-seal-cadence-family"
+    },
+    "novaflareNonrewardClosure": {
+      "path": "summaries/post-v38-novaflare-nonreward-capacity-v1.json",
+      "sha256": "53c2e858dbb59e6258eea0fdb11cabcc8e89b959df6455f41494fe63f1b57e23",
+      "decision": "close-deed-unlocked-ember-reserve-damage-family"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

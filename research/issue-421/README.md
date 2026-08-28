@@ -662,3 +662,32 @@ Executioner's Seal, reward overchip and Reaper's Bell directions. The next
 bounded step is a zero-row source-and-capacity contract for a materially
 different structural mechanism. Detector admission, promotion and protected
 seeds remain outstanding and unauthorised.
+
+## V25 observability and identity closure
+
+The complete zero-row observability audit selected `upgrade-completion` as the
+only one of eleven frozen transition surfaces eligible for a minimal telemetry
+preflight. The original audit's statement that `row.deck` retained terminal
+upgrade flags was wrong: it is an integer deck size. The immutable audit is
+preserved, and the correction was frozen before the preflight. It strengthens
+the gap and changes neither selection nor authority.
+
+The once-only 512-row preflight used exact Godot 4.7.1 and matched 64 policy
+identities across four frozen seeds in explicit-null and enabled arms. Those two
+arms were pairwise exact, emitted valid rest/event observations and satisfied
+their focused controls. Both nevertheless differed from the reused baseline in
+223 of 256 identities, so the frozen futility rule rejected the implementation
+without repair or rerun.
+
+A read-only audit-of-audit established that the baseline was the current-content
+arm of the earlier Ward experiment, executed with research-modified Pilot and
+simulator blobs. It remains valid for contrasts that fixed those implementations
+but is not pristine current-main simulator identity evidence. The first
+diagnostic's contradictory narrower interpretation is also preserved and is
+superseded only by the v2 provenance interpretation.
+
+No capacity, payoff, package, causal or product claim follows. ML, RL, an
+optimiser, protected seeds and adaptive tuning remain unauthorised. The next
+step is a bounded zero-row provenance and authority audit before another
+simulator row. See
+`summaries/progress-post-directive-observability-identity-closure-v1.md`.

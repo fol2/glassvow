@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-upgrade-telemetry-identity",
+  "question": "Does the sole selected upgrade-completion observation surface preserve exact current-main path, RNG, policy, state and result under both explicit null and enabled telemetry, while emitting only the intended four-field event at successful healthy-rest or upgrade-event completion?",
+  "competingOptions": [
+    "freeze the four-field upgrade telemetry as identity-safe and use only its cached enabled arm for a separately preregistered necessary-capacity screen",
+    "reject the telemetry when any exact identity, schema, reliability or mediator-isolation rule fails",
+    "record identity coverage as inconclusive at the fixed cohort or wall-time cap"
+  ],
+  "scientificBasis": {
+    "selectionAuthority": "The immutable zero-row observability audit selected upgrade-completion as the only one of eleven complete current-main transition surfaces passing unclosed, two-path, policy-control, four-field and single-hook gates.",
+    "sourceCorrection": "That audit protocol incorrectly described row.deck as retaining terminal upgrade flags. Exact source and all frozen baseline rows show row.deck is only an integer deck size and no terminal upgrade detail exists. This conservative correction strengthens the observability gap and cannot change the selected surface, gate arithmetic or method authority.",
+    "nullIdentity": "The explicit-null arm passes capture_upgrades=false at the new trailing optional argument. The enabled arm differs only by capture_upgrades=true. Both arms use the exact same policy identities, simulation seed identities, content, baseline, estimator and first-look budget.",
+    "mediatorIsolation": "The observation append exists only after the existing best.up=true completion in BalanceSim._upgrade_best. Its two callers supply the fixed source labels rest and event. No RNG, choice, queue, state or payoff call is added.",
+    "claimBoundary": "This is instrumentation identity and coverage proof only. It cannot identify upgrade activity capacity, a payoff, causal effect, package interaction, candidate, detector or product result."
+  },
+  "sourceCorrection": {
+    "protocolPath": "protocols/post-v38-observability-gap-audit-v1.json",
+    "incorrectClaim": "row.deck retains terminal upgrade flags",
+    "correctContract": "BalanceSim._result writes deck as run.player.deck.size(); the baseline and trace rows contain no terminal per-card upgrade detail.",
+    "impactRule": "The correction changes no surface list, path/control/field/hook count, closure alias, eligibility result, selected surface or ML/RL authority. Preserve the original protocol and summary; do not rerun the audit."
+  },
+  "factorDefinitions": {
+    "upgradeTelemetry": {
+      "levels": [
+        "explicit-null",
+        "enabled"
+      ],
+      "explicit-null": "Pass capture_upgrades=false at the new trailing optional argument. Emit no trajectory field.",
+      "enabled": "Pass capture_upgrades=true. Emit trajectory.upgrades as an ordered list of exact source, act, uid and id dictionaries after successful existing upgrades only.",
+      "status": "The sole varied factor in this identity experiment."
+    },
+    "upgradePayoff": {
+      "levels": [
+        "absent"
+      ],
+      "absent": "No payoff, magnitude, consumer, carrier or content definition exists.",
+      "status": "Separate prospective causal factor; never inferred from telemetry."
+    },
+    "scorelinePayoff": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact frozen Scoreline payoff and Faultline path.",
+      "status": "Separate fixed causal factor, never bundled with Afterimage or telemetry."
+    },
+    "afterimagePayoff": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact frozen Warden's Edge Afterimage payoff.",
+      "status": "Separate fixed causal factor, independently anchored from Scoreline."
+    },
+    "acquisitionPriority": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact frozen root-551 policy identities and natural reward/economy path."
+    },
+    "faultlineRarity": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact baseline Faultline definition."
+    },
+    "wardSetupPriority": {
+      "levels": [
+        "current"
+      ],
+      "current": "Exact current/null Ward setup path; the previously proved Ponytail research knob remains fixed."
+    }
+  },
+  "designMatrix": {
+    "kind": "paired common-random-number instrumentation identity block; not a payoff factorial and not a causal endpoint experiment",
+    "blocks": [
+      {
+        "id": "explicit-null",
+        "upgradeTelemetry": "explicit-null",
+        "policyIdentities": 64,
+        "simulationSeedsPerPolicy": 4,
+        "rows": 256
+      },
+      {
+        "id": "enabled",
+        "upgradeTelemetry": "enabled",
+        "policyIdentities": 64,
+        "simulationSeedsPerPolicy": 4,
+        "rows": 256
+      }
+    ],
+    "sharedFixedLevels": {
+      "upgradePayoff": "absent",
+      "scorelinePayoff": "current",
+      "afterimagePayoff": "current",
+      "acquisitionPriority": "current",
+      "faultlineRarity": "current",
+      "wardSetupPriority": "current"
+    },
+    "causalContrasts": [],
+    "identityContrasts": [
+      "explicit-null versus the exact cached current-main row at each policy and seed identity",
+      "enabled after removing trajectory versus the exact cached current-main row at each policy and seed identity",
+      "explicit-null versus enabled after removing trajectory at each policy and seed identity"
+    ],
+    "anchors": [
+      "256 exact cached current-main Duskblade Vow-5 rows",
+      "31 exact Scoreline-route policy identities, fixed and not analysed here",
+      "54 exact Afterimage-route policy identities, fixed independently and not analysed here",
+      "zero new ledger rows and zero protected-seed rows"
+    ],
+    "expansionRule": "No cohort, seed, source, field, hook or row may be added after the first look. Success authorises only a separate cached necessary-capacity preregistration. No payoff or joint cell is authorised."
+  },
+  "armOrder": [
+    "explicit-null",
+    "enabled"
+  ],
+  "cohort": {
+    "policyRoot": 551,
+    "policyCount": 64,
+    "aspect": "duskblade",
+    "vow": 5,
+    "simulationSeeds": [
+      346596,
+      346597,
+      346598,
+      346599
+    ],
+    "identity": "Both arms use the exact complete 64 by four current-main first-look rectangle. No identity is added, removed, selected or replaced."
+  },
+  "sharedAnchors": {
+    "scoreline": {
+      "definition": "Chisel precedes a later Faultline in the same fight in at least two of four frozen rows.",
+      "policies": [
+        0,
+        2,
+        3,
+        7,
+        10,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        20,
+        23,
+        28,
+        29,
+        31,
+        32,
+        33,
+        35,
+        39,
+        40,
+        49,
+        51,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        61
+      ]
+    },
+    "afterimage": {
+      "definition": "Positive afterimageGuardDamage occurs in at least two of four frozen rows.",
+      "policies": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        37,
+        38,
+        39,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        62,
+        63
+      ]
+    }
+  },
+  "mechanisticInteractionsAndAliases": {
+    "futureInteractions": [
+      "upgrade completion x a future upgrade payoff, because a payoff can occur only after completion",
+      "upgrade completion x acquisition priority, because the owned upgradeable set determines the selected target",
+      "upgrade completion x Scoreline use and upgrade completion x Afterimage use, because the upgraded card may belong to either separately anchored package"
+    ],
+    "notEstimated": "No interaction or payoff is estimated. Scoreline and Afterimage remain separate fixed factors.",
+    "terminalStateAlias": "Deck size, deck IDs and terminal outcome cannot identify upgrade source, time, multiplicity, later removal or upgraded duplication. They are not substituted for the selected event surface.",
+    "sourceLabelAlias": "Rest and event labels distinguish the two exact completion callers only. They do not identify why the policy reached the node or imply a causal source effect.",
+    "staging": "Identity evidence may move to a cached mediator-capacity screen. It cannot support whole-run claims for a payoff or endpoint never comparably evaluated."
+  },
+  "estimands": {
+    "unit": "One exact policy identity and simulation seed pair, matched across current-main baseline, explicit-null and enabled telemetry.",
+    "primary": "Exact row mismatch counts for explicit-null versus baseline, enabled without observation versus baseline and explicit-null versus enabled without observation.",
+    "nullSurface": "Exact count of explicit-null rows that unexpectedly contain a trajectory field.",
+    "isolation": "Exact event-schema faults, duplicate per-row UID faults and counts by the two source labels.",
+    "coverage": "Exact enabled rows with no events and exact event counts from rest and event, used only as positive and negative identity controls.",
+    "reliability": "Exact cached baseline stall or error count.",
+    "notEstimated": "No robust activation, inactive capacity, viability, package separation, causal payoff, effect size, RandomBuild, Ashwarden, detector, protected seed or product endpoint is estimated."
+  },
+  "estimator": {
+    "method": "Deterministic exact JSON canonical equality after removing only id, stage, arm, policyRoot, policyIndex and trajectory; exact four-field schema checks; exact source and UID validation.",
+    "model": "None. No bootstrap, fitted model, optimiser, ML or RL component is used.",
+    "firstLook": "The two complete arms execute once in frozen order from one content-addressed plan. Source coverage is read only after all identities, code hashes, baseline and ledger are verified.",
+    "stopping": "Freeze telemetry only if every exact identity and isolation gate passes and the fixed cohort contains both positive sources plus one empty negative control; reject an identity or isolation failure; otherwise record inconclusive at the fixed cap."
+  },
+  "gates": {
+    "maximumIdentityMismatchRows": 0,
+    "maximumNullTraceRows": 0,
+    "maximumSchemaFaults": 0,
+    "minimumEventsPerSource": 1,
+    "minimumEmptyEnabledRows": 1,
+    "maximumBaselineFaultRows": 1,
+    "provenance": "Identity and schema permit zero discrepancy. One natural event from each exact caller and one empty enabled row are the minimum focused positive and negative controls; they do not estimate prevalence. One baseline fault is the immutable cached current-main rectangle."
+  },
+  "baseline": {
+    "name": "current-main root-551 Duskblade Vow-5 natural reward/economy rectangle",
+    "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "outputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf"
+  },
+  "budget": {
+    "maximumNewSimulatorObservationRows": 512,
+    "maximumNewLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "All 768 baseline/null/enabled identity comparisons are exact after removing observation and labels; explicit null emits no trajectory; enabled events have the exact schema and valid existing upgradeable card identity with no repeated UID; both source controls and one empty negative control occur; reliability and every immutable-input gate pass before the wall-time cap.",
+    "successAuthority": "Freeze exactly trajectory.upgrades with source, act, uid and id for a separate preregistered necessary-capacity analysis of this cached enabled arm. Add no payoff, carrier, content, policy filter, cohort, simulator row, ML/RL or optimiser. That analysis must separately compare Scoreline and Afterimage anchors before any causal CRN.",
+    "futility": "Any exact identity, null-surface, event-schema, duplicate-UID or reliability gate fails.",
+    "futilityAuthority": "Reject upgrade telemetry as not identity-safe, preserve the failed artefact and close this observation implementation without repair or rerun. Continue inside issue #421 at the next preregistered structural decision boundary.",
+    "inconclusive": "The fixed cohort lacks either exact source positive control or an empty negative control, or execution exceeds the wall-time cap.",
+    "inconclusiveAuthority": "Record the identity preflight as inconclusive at the cap. Do not add a seed, row, source path, telemetry field, repair, payoff, ML/RL or rerun."
+  },
+  "methodBoundary": "Deterministic GDScript owns current-main simulation and observation; deterministic Python owns plan construction, cache, exact matching, schema checks and stop/go. The two Ponytail research knobs remain bound to their prior exact identity and isolation proof and are fixed here. Issue #524 and #525 are immutable evidence only and are not reconstructed. No model context, human label, optimiser, ML, RL or adaptive tuning enters execution.",
+  "sourceAssertions": {
+    "tools/balance_sim.gd": [
+      "capture_upgrades: bool = false",
+      "_capture_upgrades = capture_upgrades",
+      "_upgrade_best(game, \"rest\")",
+      "\"upgrade\": _upgrade_best(game, \"event\")",
+      "best.up = true",
+      "_upgrade_trace.append({\"source\": source, \"act\": game.run.act,",
+      "row[\"trajectory\"] = {\"upgrades\": _upgrade_trace.duplicate(true)}",
+      "\"deck\": run.player.deck.size()"
+    ],
+    "tools/research_421_upgrade_probe.gd": [
+      "if arm not in [\"explicit-null\", \"enabled\"]:",
+      "arm == \"enabled\"",
+      "Policy.sample_range(",
+      "Sim.simulate("
+    ]
+  },
+  "preExecutionVerification": {
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "assetImport": "PASS",
+    "focusedScripts": "scripts OK (2 checked)",
+    "diffCheck": "PASS",
+    "simulatorRowsBeforeProtocol": 0
+  },
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "sourceStatus": [
+      " M tools/balance_sim.gd",
+      "?? tools/research_421_upgrade_probe.gd",
+      "?? tools/research_421_upgrade_probe.gd.uid"
+    ],
+    "sourceSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "466cbec317bb04a6325408e02f60dbceb9530726c845499cbdc7f93e5e9b7cd4",
+      "tools/research_421_upgrade_probe.gd": "eeeb20f870eb6b18ef8e454ed67912b39f09d9cb2e63965c98481e4ec6414905",
+      "tools/research_421_upgrade_probe.gd.uid": "c72465e054c4bcc4f63d1407656db0f4521d3504a832545e85410352c9212ecb"
+    },
+    "currentMainBlobSha256": {
+      "content/full-content.json": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "tools/balance_pilot.gd": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "tools/balance_policy.gd": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+      "tools/balance_sim.gd": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06"
+    },
+    "helperSha256": {
+      "post_v38_knob_identity.py": "b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b",
+      "post_v38_observability_gap_audit.py": "027a7e9b83056c0e8353f2a7f72b0584e42c5f2597b3afd76daa59d76aa9fe54",
+      "protocols/post-v38-observability-gap-audit-v1.json": "3d0ea49acbf0b89b22d2bdca791ff8167f89453c6ec040d1995b93e7b9111c53",
+      "research.py": "78d121a84085e72ce463426ce027fda00b1d860e67df0f88d1fe91e48f4afd80"
+    },
+    "runnerSha256": "c285cd0d84ad6fa82deac6180ea3d611b4a6c57ae423d784aa9a149b2328fac2",
+    "godotPath": "/Users/jamesto/Research/glassvow-p9-421/toolchains/godot-4.7.1/godot",
+    "godotVersion": "4.7.1.stable.official.a13da4feb",
+    "godotSha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f"
+  },
+  "priorEvidence": {
+    "observabilitySelection": {
+      "path": "summaries/post-v38-observability-gap-audit-v1.json",
+      "sha256": "c0e3445cc797a9149c56dab21be75814fc1e0c39e98457a9196160951f3230e7",
+      "decision": "freeze-upgrade-completion-for-identity-safe-telemetry"
+    },
+    "ponytailKnobIdentity": {
+      "path": "summaries/post-v38-knob-identity-v2.json",
+      "sha256": "26075a5319ab8e0320e933a9e1d9223fd1ffe48ee587cbdf50c6127064c58aa0",
+      "decision": "knobs-identity-safe"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  }
+}

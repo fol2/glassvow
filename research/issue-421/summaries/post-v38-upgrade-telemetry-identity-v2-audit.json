@@ -1,0 +1,84 @@
+{
+  "baselineProvenance": {
+    "declaredBaseline": {
+      "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "name": "current-main live content",
+      "researchSettings": {}
+    },
+    "planSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "protocol": "protocols/post-v38-ward-whole-run-discovery-v1.json",
+    "protocolSha256": "bfc892c8c1c931294b38309319524cbeed455fd56eecf4a479b5642b565798aa",
+    "runnerSha256": "0c1353a3ef8526afeb1a206d30985f9fd11e864dd925360738ac20e9fa13304e",
+    "sourceComparison": {
+      "contentSha256Equal": true,
+      "currentMainPilotSha256": "4ff5934fc03af84e9d0c8fb285a91c6b7d5dfcab180b88825b1e75bb47ea6c47",
+      "currentMainSimulatorSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+      "historicalResearchPilotSha256": "58462de3c9ccadfd36410912c1b4f8bf025df2c41069366756b9cf022a2fe658",
+      "historicalResearchSimulatorSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+      "pilotBlobSha256Equal": false,
+      "policyBlobSha256Equal": true,
+      "simulatorBlobSha256Equal": false
+    }
+  },
+  "decisionBoundaryUnchanged": 2,
+  "decisionUnchanged": "reject-upgrade-telemetry-as-not-identity-safe",
+  "identityRows": 256,
+  "interpretation": "The old cache is valid evidence for contrasts that froze its research simulator and policy implementation, but it is not a pristine current-main simulator identity anchor. The upgrade telemetry remains rejected under its protocol; no repair, rerun, capacity analysis, payoff or product claim is authorised.",
+  "issue": 421,
+  "kind": "post-execution-audit-of-audit",
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "observed": {
+    "nonPackageObservationMismatchRows": 198,
+    "outcomeTransitions": {
+      "loss->loss": 224,
+      "loss->win": 8,
+      "stall->loss": 1,
+      "win->loss": 15,
+      "win->win": 8
+    },
+    "pairedNullEnabledMismatchRows": 0,
+    "policyVectorMismatchRows": 0,
+    "rngMismatchRows": 186,
+    "topLevelDifferenceRowCounts": {
+      "deck": 149,
+      "deckIds": 193,
+      "economy": 86,
+      "fights": 195,
+      "gold": 166,
+      "goldEarned": 166,
+      "hp": 30,
+      "maxHp": 69,
+      "outcome": 24,
+      "packageEvents": 223,
+      "relics": 153,
+      "rng": 186
+    }
+  },
+  "protectedSeedRows": 0,
+  "rootCause": "The reused baseline is the current-main content arm of the frozen Ward research experiment, executed with research-modified Pilot and BalanceSim blobs. The new explicit-null and enabled arms use exact current-main Pilot and policy blobs plus the isolated telemetry patch. Their identical pair does not make either equal to the older research simulator. The strict preregistered baseline identity therefore fails on genuine path, RNG, deck, fight and outcome differences.",
+  "runnerSha256": "dbcca1478f624ebf97aaf014b145338a3dcbcce9a71275906efdd0513787a521",
+  "schemaVersion": 2,
+  "v1DiagnosticDefect": {
+    "claim": "All non-package-observation fields and the null/enabled pair are exact in this post-execution diagnostic. This does not reverse or weaken the preregistered boundary-2 decision and grants no repair, rerun, capacity analysis, payoff or product authority.",
+    "contradictingOwnCount": 198,
+    "disposition": "Preserve v1 unchanged; this v2 audit supersedes only its root-cause interpretation and grants no decision authority."
+  }
+}

@@ -1,0 +1,749 @@
+{
+  "additionalMethodDecisionValue": {
+    "optimiserOrMlRlAuthorised": false,
+    "reason": "A deterministic minimal telemetry surface is eligible; no fitted method is needed or authorised.",
+    "traceObservedUnclosedSurfaces": 0,
+    "unresolvedPolicyControlledSurfaces": 6
+  },
+  "assessments": [
+    {
+      "derivedCounts": {
+        "completionPaths": 2,
+        "deterministicHooks": 1,
+        "directPolicyControls": 3,
+        "telemetryFields": 4
+      },
+      "eligible": true,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": true,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "healthy-rest",
+          "upgrade-event"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._upgrade_best successful completion"
+        ],
+        "directPolicyControls": [
+          "restHpPct",
+          "route.restLow, route.restOk and route.event",
+          "card score weights selecting the upgrade target"
+        ],
+        "existingPartialObservations": [
+          "row.deck retains only terminal up flags",
+          "trajectory.nodes retains visited rest and event nodes"
+        ],
+        "id": "upgrade-completion",
+        "mediator": "An existing owned card changes from up=false to up=true after the policy selects an upgrade at a healthy rest or an upgrade event.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "upgrades"
+        },
+        "sourceAssertions": {
+          "tools/balance_policy.gd": [
+            "\"restHpPct\":",
+            "\"route\":",
+            "\"card\":"
+          ],
+          "tools/balance_sim.gd": [
+            "static func _upgrade_best(game: GlassvowGame) -> void:",
+            "\"upgrade\": _upgrade_best(game)",
+            "_upgrade_best(game)",
+            "best.up = true"
+          ]
+        },
+        "telemetryFields": [
+          "source",
+          "act",
+          "uid",
+          "id"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 1,
+        "deterministicHooks": 1,
+        "directPolicyControls": 2,
+        "telemetryFields": 4
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": false,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "low-hp-rest"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._resolve_safe_node rest-heal branch"
+        ],
+        "directPolicyControls": [
+          "restHpPct",
+          "route.restLow and route.restOk"
+        ],
+        "existingPartialObservations": [
+          "terminal hp and economy snapshots do not identify individual rest healing"
+        ],
+        "id": "rest-heal",
+        "mediator": "A rest choice restores HP rather than completing an upgrade.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "restActions"
+        },
+        "sourceAssertions": {
+          "tools/balance_sim.gd": [
+            "Pilot._wi(\"restHpPct\")",
+            "game.rewards.rest_heal_fraction(game.run)",
+            "game.run.player.hp = mini"
+          ]
+        },
+        "telemetryFields": [
+          "act",
+          "amount",
+          "hpBefore",
+          "hpAfter"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 1,
+        "deterministicHooks": 1,
+        "directPolicyControls": 2,
+        "telemetryFields": 5
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": false,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": false,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "duplicate-event"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._resolve_event duplicate completion"
+        ],
+        "directPolicyControls": [
+          "route.event",
+          "card score weights selecting the source card"
+        ],
+        "existingPartialObservations": [
+          "terminal deck multiplicity cannot prove an event duplicate rather than another acquisition"
+        ],
+        "id": "event-duplicate",
+        "mediator": "An event duplicates the policy's current best owned card, preserving its upgrade state.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "duplicates"
+        },
+        "sourceAssertions": {
+          "tools/balance_sim.gd": [
+            "\"duplicate\":",
+            "Pilot.best_card(game.run, game.content, game.run.player.deck)",
+            "source.id, source.up"
+          ]
+        },
+        "telemetryFields": [
+          "act",
+          "eventId",
+          "sourceUid",
+          "newUid",
+          "id"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 1,
+        "deterministicHooks": 1,
+        "directPolicyControls": 4,
+        "telemetryFields": 4
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": false,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "event"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._resolve_event selected choice"
+        ],
+        "directPolicyControls": [
+          "route.event",
+          "shopMinRatio",
+          "card score weights",
+          "relic score weights"
+        ],
+        "existingPartialObservations": [
+          "selected downstream state may not identify the chosen authored option"
+        ],
+        "id": "event-choice",
+        "mediator": "The policy chooses one authored event option using the current deterministic event score.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "eventChoices"
+        },
+        "sourceAssertions": {
+          "tools/balance_sim.gd": [
+            "var score: float = _event_choice_score(game, row)",
+            "choice = row",
+            "var ops: Array = choice.get(\"ops\", [])"
+          ]
+        },
+        "telemetryFields": [
+          "act",
+          "eventId",
+          "choiceIndex",
+          "score"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 3,
+        "deterministicHooks": 3,
+        "directPolicyControls": 4,
+        "telemetryFields": 4
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": false,
+        "sourcePathBreadth": true,
+        "unclosed": false
+      },
+      "surface": {
+        "completionPaths": [
+          "combat-reward",
+          "event",
+          "shop"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._claim_rewards card append",
+          "BalanceSim._resolve_event card append",
+          "BalanceSim._resolve_shop card append"
+        ],
+        "directPolicyControls": [
+          "route.event and route.shop",
+          "card score weights",
+          "cardDecline",
+          "shopMinRatio and shop gold thresholds"
+        ],
+        "existingPartialObservations": [
+          "trajectory.cardRewards fully represents combat reward choices only",
+          "terminal deck cannot identify acquisition source or cards later removed"
+        ],
+        "id": "card-acquisition-lifecycle",
+        "mediator": "A card enters the owned deck from combat reward, event or shop.",
+        "priorClosureAliases": [
+          "novaflareNonrewardClosure"
+        ],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "cardAcquisitions"
+        },
+        "sourceAssertions": {
+          "tools/balance_policy.gd": [
+            "\"cardDecline\":",
+            "\"card\":"
+          ],
+          "tools/balance_sim.gd": [
+            "Pilot.accepts_card_reward(score)",
+            "\"card\":",
+            "category == \"cards\"",
+            "CardInst.new(game.run.next_uid()"
+          ]
+        },
+        "telemetryFields": [
+          "source",
+          "act",
+          "uid",
+          "id"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 4,
+        "deterministicHooks": 1,
+        "directPolicyControls": 4,
+        "telemetryFields": 3
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": true,
+        "unclosed": false
+      },
+      "surface": {
+        "completionPaths": [
+          "combat-reward",
+          "event",
+          "shop",
+          "treasure"
+        ],
+        "deterministicHooks": [
+          "Rewards.gain_relic"
+        ],
+        "directPolicyControls": [
+          "route.event, route.shop and route.treasure",
+          "relic score weights",
+          "relic rarity, fallback and aspect bonus weights",
+          "shopMinRatio and shop gold thresholds"
+        ],
+        "existingPartialObservations": [
+          "trajectory.bossRelics fully represents boss offers and choices only",
+          "terminal relic ownership cannot identify non-boss acquisition source or time"
+        ],
+        "id": "non-boss-relic-acquisition",
+        "mediator": "A non-boss relic enters the run from combat reward, event, shop or treasure.",
+        "priorClosureAliases": [
+          "duskRelicScreenClosure",
+          "executionersSealClosure"
+        ],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "relicAcquisitions"
+        },
+        "sourceAssertions": {
+          "domain/rules/rewards.gd": [
+            "elif op.has(\"addRelic\"):",
+            "gain_relic(run, str(relic_v))",
+            "func claim_treasure(run: RunState) -> Dictionary:"
+          ],
+          "tools/balance_policy.gd": [
+            "\"relics\":",
+            "\"relicRarity\":",
+            "\"relicFallback\":"
+          ],
+          "tools/balance_sim.gd": [
+            "game.rewards.gain_relic(game.run, str(relic_v))",
+            "category == \"relics\"",
+            "static func _claim_treasure(game: GlassvowGame) -> void:"
+          ]
+        },
+        "telemetryFields": [
+          "source",
+          "act",
+          "id"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 4,
+        "deterministicHooks": 4,
+        "directPolicyControls": 4,
+        "telemetryFields": 6
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": false,
+        "observabilityGap": true,
+        "singleHook": false,
+        "sourcePathBreadth": true,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "combat-reward",
+          "event",
+          "shop",
+          "combat-use"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._claim_rewards potion assignment",
+          "Rewards.apply_event_ops potion assignment",
+          "BalanceSim._resolve_shop potion assignment",
+          "BalancePilot._use_potions consumption"
+        ],
+        "directPolicyControls": [
+          "route.event and route.shop",
+          "potionHealMissing",
+          "potionShopDefault and potionHealing",
+          "shopMinRatio and shop gold thresholds"
+        ],
+        "existingPartialObservations": [
+          "terminal potion slots omit consumed potions and acquisition source"
+        ],
+        "id": "potion-lifecycle",
+        "mediator": "A potion enters a free slot from combat reward, event or shop and may later be consumed in combat.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "potionEvents"
+        },
+        "sourceAssertions": {
+          "domain/rules/combat.gd": [
+            "func use_potion(run: RunState, cb: CombatState, slot: int",
+            "run.player.potions[slot] = \"\""
+          ],
+          "domain/rules/rewards.gd": [
+            "elif op.has(\"potion\"):",
+            "run.player.potions[slot] = potion_id"
+          ],
+          "tools/balance_pilot.gd": [
+            "static func _use_potions(game: GlassvowGame) -> void:",
+            "game.apply({\"t\": \"usePotion\""
+          ],
+          "tools/balance_sim.gd": [
+            "var potion_v: Variant = rewards.get(\"potion\")",
+            "category == \"potions\""
+          ]
+        },
+        "telemetryFields": [
+          "event",
+          "source",
+          "act",
+          "id",
+          "slot",
+          "decision"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 2,
+        "deterministicHooks": 2,
+        "directPolicyControls": 4,
+        "telemetryFields": 4
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": false,
+        "sourcePathBreadth": true,
+        "unclosed": false
+      },
+      "surface": {
+        "completionPaths": [
+          "event",
+          "shop"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._resolve_event removal",
+          "BalanceSim._resolve_shop removal"
+        ],
+        "directPolicyControls": [
+          "route.event and route.shop",
+          "removalAppetite",
+          "removalMinCopies",
+          "shopMinRatio and shop gold thresholds"
+        ],
+        "existingPartialObservations": [
+          "packageEvents records selected shop and shrine removal routes but not exact card identity"
+        ],
+        "id": "removal-completion",
+        "mediator": "One owned card is removed at a shop or event.",
+        "priorClosureAliases": [
+          "removalClosure"
+        ],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "removals"
+        },
+        "sourceAssertions": {
+          "tools/balance_policy.gd": [
+            "\"removalAppetite\":",
+            "\"removalMinCopies\":"
+          ],
+          "tools/balance_sim.gd": [
+            "\"remove\":",
+            "game.run.player.deck.erase(worst)",
+            "category == \"remove\"",
+            "game.run.player.deck.erase(remove)"
+          ]
+        },
+        "telemetryFields": [
+          "source",
+          "act",
+          "uid",
+          "id"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 1,
+        "deterministicHooks": 1,
+        "directPolicyControls": 4,
+        "telemetryFields": 4
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": true,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": false,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "shop"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._resolve_shop completed buy"
+        ],
+        "directPolicyControls": [
+          "route.shop",
+          "shopGoldLow and shopGoldHigh",
+          "shopMinRatio",
+          "card, relic, potion and removal choice weights"
+        ],
+        "existingPartialObservations": [
+          "packageEvents records shop visits and removals but not all completed purchases"
+        ],
+        "id": "shop-purchase",
+        "mediator": "The policy completes one card, relic, potion or removal purchase.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "shopPurchases"
+        },
+        "sourceAssertions": {
+          "tools/balance_policy.gd": [
+            "\"shopGoldHigh\":",
+            "\"shopGoldLow\":",
+            "\"shopMinRatio\":"
+          ],
+          "tools/balance_sim.gd": [
+            "static func _resolve_shop(game: GlassvowGame) -> void:",
+            "var buys: Array[Dictionary] = Pilot.choose_shop",
+            "game.run.player.gold -= price",
+            "var category: String = str(buy[\"category\"])"
+          ]
+        },
+        "telemetryFields": [
+          "act",
+          "category",
+          "id",
+          "price"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 1,
+        "deterministicHooks": 1,
+        "directPolicyControls": 0,
+        "telemetryFields": 3
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": false,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": false,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "map-entry"
+        ],
+        "deterministicHooks": [
+          "BalanceSim._enter_node unlit branch"
+        ],
+        "directPolicyControls": [],
+        "existingPartialObservations": [
+          "terminal gold includes the bounty but does not identify an unlit entry"
+        ],
+        "id": "unlit-entry",
+        "mediator": "The selected map node is unlit and pays its deterministic bounty on entry.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "unlitNodes"
+        },
+        "sourceAssertions": {
+          "domain/state/map_node.gd": [
+            "var unlit: bool = false"
+          ],
+          "tools/balance_sim.gd": [
+            "if node.unlit:",
+            "run.stats[\"unlitVisited\"]",
+            "run.player.gold += bounty"
+          ]
+        },
+        "telemetryFields": [
+          "act",
+          "nodeId",
+          "bounty"
+        ]
+      },
+      "traceObserved": false
+    },
+    {
+      "derivedCounts": {
+        "completionPaths": 1,
+        "deterministicHooks": 1,
+        "directPolicyControls": 1,
+        "telemetryFields": 4
+      },
+      "eligible": false,
+      "gateResults": {
+        "directPolicyControl": false,
+        "minimalTelemetry": true,
+        "observabilityGap": true,
+        "singleHook": true,
+        "sourcePathBreadth": false,
+        "unclosed": true
+      },
+      "surface": {
+        "completionPaths": [
+          "map-choice"
+        ],
+        "deterministicHooks": [
+          "BalancePilot.choose_node"
+        ],
+        "directPolicyControls": [
+          "route weights"
+        ],
+        "existingPartialObservations": [
+          "trajectory.nodes records the selected node but not the alternatives"
+        ],
+        "id": "reachable-choice-set",
+        "mediator": "The policy receives the exact set of reachable map alternatives before choosing one node.",
+        "priorClosureAliases": [],
+        "requiredObservation": {
+          "container": "trajectory",
+          "key": "reachableChoices"
+        },
+        "sourceAssertions": {
+          "domain/state/world_map.gd": [
+            "func reachable() -> Array[int]:"
+          ],
+          "tools/balance_pilot.gd": [
+            "static func choose_node(map: WorldMap, run: RunState) -> int:",
+            "for i: int in map.reachable():"
+          ]
+        },
+        "telemetryFields": [
+          "act",
+          "currentNode",
+          "reachable",
+          "chosen"
+        ]
+      },
+      "traceObserved": false
+    }
+  ],
+  "authority": "Freeze only the selected surface for a separate current-main identity-safe telemetry preregistration. First prove omitted and explicit-null exact path, RNG, policy, state and result identity on all 256 identities, then prove focused positive and negative controls affect only the intended observation. Implement no payoff or content and add no simulator row before that proof.",
+  "decision": "freeze-upgrade-completion-for-identity-safe-telemetry",
+  "decisionBoundary": 1,
+  "eligibleSurfaces": [
+    "upgrade-completion"
+  ],
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 0,
+  "protectedSeedRows": 0,
+  "protocolSha256": "3d0ea49acbf0b89b22d2bdca791ff8167f89453c6ec040d1995b93e7b9111c53",
+  "runnerSha256": "027a7e9b83056c0e8353f2a7f72b0584e42c5f2597b3afd76daa59d76aa9fe54",
+  "schemaVersion": 1,
+  "selectedSurface": "upgrade-completion",
+  "traceIdentity": {
+    "pathRngPolicyResultExact": true,
+    "rows": 256
+  },
+  "traceSchema": {
+    "catalogueSurfacesFullyObserved": [],
+    "packageEventKeyCount": 156,
+    "rowKeys": [
+      "arm",
+      "aspect",
+      "deck",
+      "deckIds",
+      "economy",
+      "error",
+      "fights",
+      "gold",
+      "goldEarned",
+      "hp",
+      "id",
+      "maxHp",
+      "outcome",
+      "packageEvents",
+      "policy",
+      "policyIndex",
+      "policyRoot",
+      "relics",
+      "rng",
+      "seed",
+      "stage",
+      "trajectory",
+      "vow"
+    ],
+    "trajectoryKeys": [
+      "bossRelics",
+      "capture",
+      "cardRewards",
+      "nodes",
+      "plays"
+    ]
+  },
+  "wallTimeSeconds": 6.4772895000642166
+}

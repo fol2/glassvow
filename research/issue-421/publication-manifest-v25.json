@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 25,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "preregistered observability selection and failed current-main telemetry identity preflight",
+  "decision": "REJECT_UPGRADE_TELEMETRY_IDENTITY",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-observability-identity-closure-v1.md",
+    "progressReportSha256": "0ce18625b5ed190f29bd18c85ad758ea9f124170f9eafb15862fe12c607789a9",
+    "observabilityProtocol": "protocols/post-v38-observability-gap-audit-v1.json",
+    "observabilityProtocolSha256": "3d0ea49acbf0b89b22d2bdca791ff8167f89453c6ec040d1995b93e7b9111c53",
+    "observabilitySummary": "summaries/post-v38-observability-gap-audit-v1.json",
+    "observabilitySummarySha256": "c0e3445cc797a9149c56dab21be75814fc1e0c39e98457a9196160951f3230e7",
+    "observabilityRunner": "tools/post_v38_observability_gap_audit.py",
+    "observabilityRunnerSha256": "027a7e9b83056c0e8353f2a7f72b0584e42c5f2597b3afd76daa59d76aa9fe54",
+    "identityProtocol": "protocols/post-v38-upgrade-telemetry-identity-v1.json",
+    "identityProtocolSha256": "eab3d8a629f48751665950c5fabdc968e1296ac026f3305b70ad3f952ef5966f",
+    "identitySummary": "summaries/post-v38-upgrade-telemetry-identity-v1.json",
+    "identitySummarySha256": "2a1d2a9c251846ac07bed519ce76e31fd7761fbd7ff7f1905383f143d78206da",
+    "identityRunner": "tools/post_v38_upgrade_telemetry_identity.py",
+    "identityRunnerSha256": "c285cd0d84ad6fa82deac6180ea3d611b4a6c57ae423d784aa9a149b2328fac2",
+    "diagnosticV1": "summaries/post-v38-upgrade-telemetry-identity-v1-audit.json",
+    "diagnosticV1Sha256": "cb3cab9e9671f82964eb8b398531f25775ff28d0c91b985763085cdc839998fb",
+    "auditV2": "summaries/post-v38-upgrade-telemetry-identity-v2-audit.json",
+    "auditV2Sha256": "8d1bd92252d68bdf3d6dd42661248d78560644dc2f9705310e7b71e152f08382",
+    "readmeSha256": "f722f780560263ecb6fd8c4986fa63b19fe827ae0352ab2acd44d95c90aa0224",
+    "taskCapsuleSha256": "46f6540d4444723296bfb3fa85a7c495a56977039b84b3388eb20b369369eaf1"
+  },
+  "observabilityResult": {
+    "decisionBoundary": 1,
+    "decision": "freeze-upgrade-completion-for-identity-safe-telemetry",
+    "cataloguedSurfaces": 11,
+    "eligibleSurfaces": ["upgrade-completion"],
+    "selectedSurface": "upgrade-completion",
+    "selectedCounts": {
+      "completionPaths": 2,
+      "directPolicyControls": 3,
+      "telemetryFields": 4,
+      "deterministicHooks": 1
+    },
+    "cachedRowsReadAtMost": 512,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "wallTimeSeconds": 6.4772895000642166,
+    "maximumWallTimeSeconds": 30,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0,
+    "additionalMethodAuthorised": false
+  },
+  "sourceCorrection": {
+    "incorrectClaim": "row.deck retains terminal upgrade flags",
+    "exactContract": "row.deck is an integer deck size and no terminal per-card upgrade detail is emitted",
+    "disposition": "Preserve the original protocol and summary. The correction was frozen in the identity protocol before execution, strengthens the observability gap and changes no gate, selection or authority."
+  },
+  "identityResult": {
+    "decisionBoundary": 2,
+    "decision": "reject-upgrade-telemetry-as-not-identity-safe",
+    "rowsPerArm": 256,
+    "newSimulatorObservationRows": 512,
+    "newLedgerRows": 0,
+    "explicitNullVersusBaselineMismatchRows": 223,
+    "enabledWithoutObservationVersusBaselineMismatchRows": 223,
+    "pairedNullEnabledMismatchRows": 0,
+    "explicitNullUnexpectedTraceRows": 0,
+    "telemetryEvents": 374,
+    "restEvents": 302,
+    "eventEvents": 72,
+    "emptyEnabledRows": 76,
+    "schemaFaults": 0,
+    "baselineFaultRows": 1,
+    "maximumBaselineFaultRows": 1,
+    "wallTimeSeconds": 25.091679000062868,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokens": 0,
+    "protectedSeedRows": 0,
+    "authority": "Close this implementation without repair, rerun, capacity screen, payoff or product claim."
+  },
+  "provenanceAudit": {
+    "v1DiagnosticDefect": "The preserved v1 diagnostic claimed all non-package fields were exact while its own count reported 198 non-package mismatch rows.",
+    "v2Supersession": "The v2 audit supersedes only the root-cause interpretation and grants no decision authority.",
+    "nonPackageObservationMismatchRows": 198,
+    "rngMismatchRows": 186,
+    "policyVectorMismatchRows": 0,
+    "pairedNullEnabledMismatchRows": 0,
+    "outcomeDifferenceRows": 24,
+    "rootCause": "The reused baseline is the current-content arm of the Ward research experiment, executed with research-modified Pilot and BalanceSim blobs. It is not a pristine current-main simulator identity anchor."
+  },
+  "factorContract": {
+    "design": "identity preflight with two matched telemetry arms and one immutable cached baseline; not a factorial",
+    "scorelinePayoff": "separate fixed current factor; not varied or estimated",
+    "afterimagePayoff": "separate fixed current factor; not varied or estimated",
+    "candidatePayoff": "absent",
+    "interactions": "none estimated",
+    "aliases": "the observability catalogue froze prior-closure aliases before selection"
+  },
+  "reproductionIdentity": {
+    "godot": "4.7.1.stable.official.a13da4feb",
+    "godotBinarySha256": "ecc8da2d60100102cfca6e833d3860d7436b46ae062fa072ce89a6c95d664a3f",
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "currentMainContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "pristineCurrentMainBalanceSimSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "telemetryBalanceSimSha256": "466cbec317bb04a6325408e02f60dbceb9530726c845499cbdc7f93e5e9b7cd4",
+    "probeSha256": "eeeb20f870eb6b18ef8e454ed67912b39f09d9cb2e63965c98481e4ec6414905",
+    "probeUidSha256": "c72465e054c4bcc4f63d1407656db0f4521d3504a832545e85410352c9212ecb",
+    "baselinePlanSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "baselineOutputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf",
+    "identityPlanSha256": "cc1d510e007e83d3bc8691742fd1eaea9541eda0b0f2614d4922a60210740fed",
+    "identityOutputSha256": "197c23feac491c3faf0261421e37b9535b72fe855bc29f2e53ea09685ef0388a"
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "executionDisclosure": "The zero-row audit and the 512-row identity preflight each executed once under their frozen budgets and stop rules. Deterministic Python owned construction, cache, exact matching and stop/go; exact Godot owned only the preregistered simulator arms. No model, human label, optimiser, ML, RL, adaptive tuning or protected seed entered execution or decision.",
+  "verification": {
+    "sha256Index": "PASS (538/538)",
+    "anchors": "PASS",
+    "pythonCompile": "PASS",
+    "diffCheck": "PASS",
+    "benchmarkFreeze": {
+      "exitCode": 1,
+      "reportedPath": "research/issue-421/prototype/domain/rules/combat.gd",
+      "mainCensusCount": 0,
+      "evidenceBranchHeadCount": 2,
+      "v25Count": 2,
+      "branchRelativeDelta": 0,
+      "interpretation": "The archive-only prototype already carried two frozen historical citations at the prior remote evidence head. V25 adds no citation relative to that evidence branch. This known archive-only result is disclosed and is not claimed as a product gate pass."
+    }
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 564,
+    "payloadFilesIndexed": 538,
+    "protocolFiles": 92,
+    "summaryFiles": 123,
+    "toolFiles": 51,
+    "newRawObjects": 4,
+    "newRawBytes": 8973401,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "75861f9d5ed43f17f483021613bbf9feb24ff8470c49244ecf596d55826397d3"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "d0b06c26fd5052cabf4632aca9afe1d3735a3d42",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Freeze one zero-row provenance and authority audit before another simulator row. Preserve every completed boundary and classify frozen research-simulator contrast evidence separately from pristine current-main identity evidence. Select at most one evidence-backed structural boundary; do not repair or rerun upgrade telemetry, add ML/RL, reopen closed families or use protected seeds.",
+  "omissions": [
+    "No payoff, content candidate, detector, product source or RC content was created.",
+    "No Scoreline and Afterimage payoff factors were bundled or varied.",
+    "No identity failure was waived, repaired, rerun or converted into a capacity claim.",
+    "No #524/#525 plan, exhausted path, ML, RL, optimiser or adaptive candidate sequence was reconstructed.",
+    "No product PR, CI run, acceptance claim, protected-seed result or #108 receipt was produced."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "authority": "Reject upgrade telemetry as not identity-safe, preserve the failed artefact and close this observation implementation without repair or rerun. Continue inside issue #421 at the next preregistered structural decision boundary.",
+  "decision": "reject-upgrade-telemetry-as-not-identity-safe",
+  "decisionBoundary": 2,
+  "identity": {
+    "enabledWithoutObservationVersusBaselineMismatchRows": 223,
+    "explicitNullUnexpectedTraceRows": 0,
+    "explicitNullVersusBaselineMismatchRows": 223,
+    "mismatchExamples": {
+      "enabled": [
+        "p0-s346596",
+        "p0-s346597",
+        "p0-s346598",
+        "p0-s346599",
+        "p1-s346596",
+        "p1-s346597",
+        "p1-s346598",
+        "p1-s346599"
+      ],
+      "explicitNull": [
+        "p0-s346596",
+        "p0-s346597",
+        "p0-s346598",
+        "p0-s346599",
+        "p1-s346596",
+        "p1-s346597",
+        "p1-s346598",
+        "p1-s346599"
+      ],
+      "nullTrace": [],
+      "paired": []
+    },
+    "pairedMismatchRows": 0,
+    "pathRngPolicyStateResultExact": false,
+    "rowsPerArm": 256
+  },
+  "issue": 421,
+  "ledgerAfter": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "ledgerBefore": {
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "protectedSeedRows": 0,
+    "records": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok"
+  },
+  "maximumModelContextTokens": 0,
+  "mediatorIsolation": {
+    "emptyEnabledRows": 76,
+    "eventSchema": [
+      "source",
+      "act",
+      "uid",
+      "id"
+    ],
+    "onlySuccessfulExistingUpgradeHook": true,
+    "schemaFaultExamples": [],
+    "schemaFaults": 0,
+    "sourceCounts": {
+      "event": 72,
+      "rest": 302
+    },
+    "telemetryEvents": 374
+  },
+  "newLedgerRows": 0,
+  "newSimulatorObservationRows": 512,
+  "outputSha256": "197c23feac491c3faf0261421e37b9535b72fe855bc29f2e53ea09685ef0388a",
+  "planSha256": "cc1d510e007e83d3bc8691742fd1eaea9541eda0b0f2614d4922a60210740fed",
+  "protectedSeedRows": 0,
+  "protocolSha256": "eab3d8a629f48751665950c5fabdc968e1296ac026f3305b70ad3f952ef5966f",
+  "reliability": {
+    "baselineFaultRows": 1,
+    "maximumBaselineFaultRows": 1,
+    "pass": true
+  },
+  "runnerSha256": "c285cd0d84ad6fa82deac6180ea3d611b4a6c57ae423d784aa9a149b2328fac2",
+  "schemaVersion": 1,
+  "sourceCorrection": {
+    "impact": "The correction strengthens the selected observability gap and changes no eligibility gate, selected surface or method authority.",
+    "incorrectClaim": "row.deck retains terminal upgrade flags",
+    "observedContract": "row.deck is an integer deck size; no terminal upgrade detail exists",
+    "originalAuditPreserved": true
+  },
+  "wallTimeSeconds": 25.091679000062868
+}
