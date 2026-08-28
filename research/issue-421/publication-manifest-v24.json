@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 24,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "preregistered zero-row elite-victory and exact-equality fight-quality closures",
+  "decision": "CLOSE_ROUTE_AND_EXACT_FIGHT_QUALITY_FAMILIES",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-route-fight-quality-closures-v1.md",
+    "progressReportSha256": "36bae4fc86748479d378dc17380c130f4d7482508b538d393495046edaf7c818",
+    "eliteProtocol": "protocols/post-v38-elite-victory-capacity-v1.json",
+    "eliteProtocolSha256": "2eec98bd7d41d7ff60540a56f1c35aea35109a80de5a37cb2dc9ddd416c009a4",
+    "eliteSummary": "summaries/post-v38-elite-victory-capacity-v1.json",
+    "eliteSummarySha256": "609dcb2d5595ff4f2505755b005c56d098ef50ee1b2c3743aa2a9d4ccf28f2da",
+    "eliteRunner": "tools/post_v38_elite_victory_capacity.py",
+    "eliteRunnerSha256": "eddf087a2112e9f150af0d68029e72e04303da6eea50a96050aba11ebfb353ab",
+    "fightQualityProtocol": "protocols/post-v38-fight-quality-capacity-v1.json",
+    "fightQualityProtocolSha256": "dbf01b88b3a13ebf92469ec551be59f45742812d23703231afb12cb3dd271c7a",
+    "fightQualitySummary": "summaries/post-v38-fight-quality-capacity-v1.json",
+    "fightQualitySummarySha256": "4332f3ad1cf49d44cb25860626ffc6d5b978b12644482a0108d310fdc8178746",
+    "fightQualityRunner": "tools/post_v38_fight_quality_capacity.py",
+    "fightQualityRunnerSha256": "c017b9db746c22ddd5fa004274f6e16f7741962a8754433841db42ceacf7d8c2",
+    "readmeSha256": "ee40144db4d74ed8418a9d382bfcd314f1e9eeb9fb03e0803ff1d7c37c9c3327",
+    "taskCapsuleSha256": "6d69bc887de56505958616a45cf5ce7ac5e1aa374162f170e2709d99455aecb0"
+  },
+  "eliteVictoryResult": {
+    "decisionBoundary": 2,
+    "decision": "close-elite-victory-trigger-family",
+    "selectedCandidate": null,
+    "counts": {
+      "robustOpportunityPolicies": 63,
+      "robustActivePolicies": 63,
+      "exactInactivePolicies": 0,
+      "ambiguousPolicies": 1,
+      "viableRobustActivePolicies": 22,
+      "opportunityRows": 212,
+      "activeRows": 206,
+      "observedEliteActs": [1, 2, 3],
+      "baselineFaultRows": 1
+    },
+    "failedGates": [
+      "inactiveCapacity",
+      "scorelineSeparation",
+      "afterimageSeparation"
+    ],
+    "scorelineSeparation": {
+      "eliteOnlyPolicies": 32,
+      "scorelineOnlyPolicies": 0,
+      "crossActivePolicies": 31,
+      "jaccard": 0.49206349206349204
+    },
+    "afterimageSeparation": {
+      "eliteOnlyPolicies": 10,
+      "afterimageOnlyPolicies": 1,
+      "crossActivePolicies": 53,
+      "jaccard": 0.828125
+    },
+    "wallTimeSeconds": 6.645771250012331
+  },
+  "fightQualityResult": {
+    "decisionBoundary": 2,
+    "decision": "close-exact-equality-fight-quality-family",
+    "selectedCandidate": null,
+    "passingCandidates": [],
+    "noHpLossVictory": {
+      "robustOpportunityPolicies": 64,
+      "robustActivePolicies": 63,
+      "exactInactivePolicies": 0,
+      "ambiguousPolicies": 1,
+      "viableRobustActivePolicies": 22,
+      "activeRows": 182,
+      "observedFightKinds": ["boss", "elite", "normal"],
+      "failedGates": ["inactiveCapacity", "scorelineSeparation", "afterimageSeparation"],
+      "scorelineOnlyPolicies": 1,
+      "afterimageOnlyPolicies": 1,
+      "afterimageJaccard": 0.828125
+    },
+    "oneTurnVictory": {
+      "robustOpportunityPolicies": 64,
+      "robustActivePolicies": 4,
+      "exactInactivePolicies": 34,
+      "ambiguousPolicies": 26,
+      "viableRobustActivePolicies": 0,
+      "activeRows": 34,
+      "observedFightKinds": ["normal"],
+      "failedGates": ["activeCapacity", "viability", "scorelineSeparation", "afterimageSeparation"],
+      "candidateOnlyAgainstScoreline": 2,
+      "candidateOnlyAgainstAfterimage": 1
+    },
+    "wallTimeSeconds": 6.135743708000518
+  },
+  "measuredBottleneck": {
+    "definition": "A remaining mechanism must simultaneously retain robust active, exact inactive, viable and package-independent policy identities on one frozen cohort.",
+    "removalRefinement": "32 robust-active, eight exact-inactive and four removal-only against Afterimage",
+    "eliteVictory": "63 robust-active, zero exact-inactive and zero Scoreline-only",
+    "noHpLossVictory": "63 robust-active, zero exact-inactive and one anchor-only identity for each package",
+    "oneTurnVictory": "four robust-active and zero viable",
+    "methodAuthority": "This repeated measured failure does not by itself authorise ML, RL, an optimiser or a payoff. Freeze one bounded remaining-state and missing-telemetry audit with a numeric decision-value rule before another candidate or method."
+  },
+  "factorContract": {
+    "eliteDesign": "one immutable observational cell; not a factorial",
+    "fightQualityDesign": "two separate complete exact-equality blocks on one immutable observational cell; not a factorial",
+    "scorelinePayoff": "separate fixed current factor in both screens",
+    "afterimagePayoff": "separate fixed current factor in both screens",
+    "candidatePayoffs": "separate and fixed absent; no magnitude, consumer, carrier or content definition exists",
+    "prohibitedRescues": "elite entry/reward and act/kind subsets; fight-kind subsets, relaxed thresholds and predicate conjunctions; policy or package filters; reruns"
+  },
+  "reproductionIdentity": {
+    "godotUsed": false,
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "currentMainContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+    "balanceSimSha256": "b169e2588e2ea65b75b94ee94b8e129c2c3ac8a0d5f7076224521a204623cd06",
+    "worldMapSha256": "b3f1beb4db34933fc7de0c2562749fbd9465f74c7d74bb1bd2c3598b0e984fe5",
+    "mapNodeSha256": "f3947e2a476b037f1b76b843caa7ff5bd80019c28031350a7692b8144aa5ebed",
+    "rewardsSha256": "fe69d19ecf6448aad71b466d9beee1716e1957fe277a62c5bacf8daba3c7ac83",
+    "balancePolicySha256": "8eeeb1d3289bbab7fb033e6f175b9d2adcbb2944292c097ad09f79419e162026",
+    "baselinePlanSha256": "bf8c76c05d363115c4f6f28f480f11c0504012e19bda7d26fe0cbcc54d1ad67f",
+    "baselineOutputSha256": "110a70a2df530ab1ef6d2f992bda7d6041a02ccf18a9d2a683aaded140da02bf",
+    "tracePlanSha256": "4983c07159961f57ef033670e6f06e2b82b52134e808f199d7aa067a190b4a69",
+    "traceOutputSha256": "ac86dac85f5398e6c8e4d63ef10cf5d57d85739f9cc62fb1ffdf1b9b21b06ed2",
+    "traceRowsValidatedPerScreen": 256,
+    "pathRngPolicyResultExact": true
+  },
+  "localLedgerFreeze": {
+    "records": 480372,
+    "firstSequence": 1,
+    "lastSequence": 480372,
+    "sha256": "4563f536f6a57e97ac7a5b51129f3967806e5bd445088547f0c874b1cd77b2e0",
+    "sqliteIntegrity": "ok",
+    "protectedSeedRows": 0
+  },
+  "executionDisclosure": "Both protocols froze source predicates, aliases, candidates, order, shared cohort, separate package anchors, thresholds, row/wall/model-context ceilings and all three decision rules before their aggregates were read. Each deterministic first look validated 256 trace rows against 256 baseline rows, opened no Godot process, added no simulator or ledger row, used no model context during execution and decision, and was not rerun.",
+  "verification": {
+    "sha256Index": "PASS (520/520)",
+    "anchors": "PASS",
+    "pythonCompile": "PASS",
+    "diffCheck": "PASS",
+    "benchmarkFreeze": {
+      "exitCode": 1,
+      "reportedPath": "research/issue-421/prototype/domain/rules/combat.gd",
+      "mainCensusCount": 0,
+      "evidenceBranchHeadCount": 2,
+      "v24Count": 2,
+      "branchRelativeDelta": 0,
+      "interpretation": "The archive-only prototype already carried the two frozen historical citations at the prior remote evidence head. V24 adds no citation relative to that evidence branch. This known archive-only result is disclosed and is not claimed as a product gate pass."
+    }
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 545,
+    "payloadFilesIndexed": 520,
+    "protocolFiles": 90,
+    "summaryFiles": 118,
+    "toolFiles": 47,
+    "newRawObjects": 0,
+    "newRawBytes": 0,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "356a0c1420b338cf80b59c5a55ca8fd4f0868c0bf166d4f6c70695c88ebf7618"
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "1846fe0a5a55d4b5a5722dc0b56133eb08dcaa0c",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "nextAction": "Freeze one bounded audit of the remaining current-main state grammar and missing telemetry surfaces with a numeric decision-value rule before another candidate or method. Do not reopen elite victory, exact fight-quality variants, removal refinement or Mirror Oath, and do not add ML/RL, protected seeds or adaptive tuning.",
+  "omissions": [
+    "No trigger, payoff, carrier, content change, simulator observation or ledger record was created.",
+    "No Scoreline payoff and Afterimage payoff were bundled; both remained separate fixed factors with separate anchors.",
+    "No elite or fight-quality rescue variant was added and neither cohort was rerun.",
+    "No #524/#525 plan, ML, RL, optimiser or exhausted research path was reconstructed.",
+    "No product PR, CI run, acceptance claim, protected-seed result or #108 receipt was produced."
+  ],
+  "github": {
+    "issue": "https://github.com/fol2/glassvow/issues/421",
+    "receiptIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

@@ -15,7 +15,8 @@ setup-grammar closures, the existing Executioner's Seal cadence screen, the
 complete reward-Attack overchip screen, the Reaper's Bell death-chain screen,
 the remaining turn-state action-economy closure, the exact native grammar audit
 and the complete Novaflare acquisition, Mirror Oath identity and
-removal-refinement capacity closures. It is a progress snapshot,
+removal-refinement, elite-victory and exact fight-quality capacity closures. It
+is a progress snapshot,
 not detector admission, product promotion or a P9
 receipt. The branch is a
 remote evidence carrier only: it has no pull request, triggers no product CI
@@ -269,9 +270,25 @@ exact-inactive policies against 16. It also had only four removal-only policies
 against the separate Afterimage anchor minimum of eight. No route subset,
 policy retune, payoff, carrier or rerun is authorised.
 
+Two further zero-row screens close the remaining immediately observable route
+and exact fight-quality surfaces. Elite victory and no-HP-loss victory were
+near-universal at 63 robust-active policies with zero exact-inactive policies;
+one-turn victory had only four robust-active and zero viable policies. Every
+candidate also failed at least one separate Scoreline/Afterimage two-sided
+support gate. Elite entry/reward variants, encounter-kind subsets, relaxed
+thresholds and fight-quality conjunctions were forbidden before execution and
+remain closed.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-route-fight-quality-closures-v1.md`](summaries/progress-post-directive-route-fight-quality-closures-v1.md),
+[`protocols/post-v38-elite-victory-capacity-v1.json`](protocols/post-v38-elite-victory-capacity-v1.json),
+[`summaries/post-v38-elite-victory-capacity-v1.json`](summaries/post-v38-elite-victory-capacity-v1.json),
+[`protocols/post-v38-fight-quality-capacity-v1.json`](protocols/post-v38-fight-quality-capacity-v1.json)
+and
+[`summaries/post-v38-fight-quality-capacity-v1.json`](summaries/post-v38-fight-quality-capacity-v1.json)
+for the latest route and fight-quality closures. Then read
 [`summaries/progress-post-directive-removal-refinement-closure-v1.md`](summaries/progress-post-directive-removal-refinement-closure-v1.md),
 [`protocols/post-v38-removal-refinement-capacity-v1.json`](protocols/post-v38-removal-refinement-capacity-v1.json)
 and
