@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 2,
+  "issue": 421,
+  "question": "Do independently sampled within-aspect payoff preferences and the frozen root-550 reward/economy outcomes contain enough measured acquisition and activation capacity to justify implementing one deterministic package-commitment research knob?",
+  "revision": "Inherit the exact v1 mechanism, factor definitions, levels, preference rule, alias structure, cohort, estimands, gates, budget and stopping rules. Remove only the documentary bytes field from the runtime ledger equality object after v1 stopped at that assertion before any estimand.",
+  "sourceEvidenceProtocol": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+  "retrospectiveScope": "This is a declared retrospective, zero-new-row necessary-capacity screen over the immutable root-550 structural-null policy rectangle. Its strict-retention oracle removes non-preferred activation without claiming that an unexecuted intervention would retain preferred activation or whole-run outcomes. A pass authorises only implementation and identity preflight; it cannot admit a causal package, detector or product result.",
+  "designInheritance": {
+    "protocol": "protocols/post-v38-package-commitment-capacity-v1.json",
+    "sha256": "3fede567018740c1208ea9f736a508dd5895979d89301c386e9862f886c41985",
+    "onlyCorrection": "Delete ledgerFreeze.bytes from the equality object; retain its value as immutable documentary evidence in v1."
+  },
+  "immutableEvidence": {
+    "revision1Protocol": {
+      "path": "protocols/post-v38-package-commitment-capacity-v1.json",
+      "sha256": "3fede567018740c1208ea9f736a508dd5895979d89301c386e9862f886c41985"
+    },
+    "revision1InconclusiveSummary": {
+      "path": "summaries/post-v38-package-commitment-capacity-v1.json",
+      "sha256": "5219b2c613e11bc467518f872fe892f6e9d28daa4c05fbe54fe4ea05ed2592dd"
+    },
+    "packageOrderHeldoutProtocol": {
+      "path": "protocols/post-v38-package-order-heldout-v1.json",
+      "sha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e"
+    },
+    "packageOrderHeldoutSummary": {
+      "path": "summaries/post-v38-package-order-heldout-v1.json",
+      "sha256": "853df2c3988270f3d1236b51177b85d014b92e200bad52fc05a66059a3985070"
+    },
+    "packageOrderHeldoutAudit": {
+      "path": "summaries/post-v38-package-order-heldout-v1-audit.json",
+      "sha256": "77361eb742de4c916c0ffc7e764f46af5df7ee610d0156740819c21daa5df8a6"
+    },
+    "policyPackageOrderDecisionProtocol": {
+      "path": "protocols/post-v38-policy-package-order-decision-value-v2.json",
+      "sha256": "ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c"
+    },
+    "policyPackageOrderDecisionSummary": {
+      "path": "summaries/post-v38-policy-package-order-decision-value-v2.json",
+      "sha256": "1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e"
+    },
+    "policySnapshotHelper": {
+      "path": "post_v38_policy_package_order_decision_value_v2.py",
+      "sha256": "7c8a4d0ff8e4cab1c2ea65a94db438c40a211ae5c026c87845c244eb7d708d18"
+    },
+    "exactCurrentMainToolchain": {
+      "path": "artifacts/godot-4.7.1-toolchain-v1.json",
+      "sha256": "0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b"
+    }
+  },
+  "immutableInputs": {
+    "runnerSha256": "006e0a7c9adbd97525608ac5d0e77a517c986121389499f9ab941f268d3d8689",
+    "entrypointSha256": "d888748c8bb7481bd52464d2053136a607bd93c2da16267cdf1abe3d06082b1e"
+  },
+  "ledgerFreeze": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "cohort": {
+    "policyRoot": 550,
+    "policyIdentities": 128,
+    "policySimulationSeeds": [
+      346528,
+      346529,
+      346530,
+      346531
+    ],
+    "aspects": [
+      "duskblade",
+      "ashwarden"
+    ],
+    "contentArm": "structuralNull",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0,
+      "packageOrder": 0
+    }
+  },
+  "packages": {
+    "dusk-scoreline": {
+      "aspect": "duskblade",
+      "producer": "chisel",
+      "consumer": "executioner",
+      "consumedMetric": "scorelineConsumed",
+      "gatedRewardIds": [
+        "executioner"
+      ],
+      "preference": {
+        "group": "special",
+        "key": "execute",
+        "normaliser": 13.0
+      }
+    },
+    "dusk-afterimage-guard": {
+      "aspect": "duskblade",
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "consumedMetric": "afterimageConsumed",
+      "gatedRewardIds": [
+        "guardedStrike"
+      ],
+      "preference": {
+        "group": "special",
+        "key": "doubleBlock",
+        "normaliser": 9.0
+      }
+    },
+    "ash-bloodfire-leech": {
+      "aspect": "ashwarden",
+      "producer": "bloodRite",
+      "consumer": "leechBlade",
+      "consumedMetric": "bloodfireConsumed",
+      "gatedRewardIds": [
+        "bloodRite",
+        "leechBlade"
+      ],
+      "preference": {
+        "group": "special",
+        "key": "leech",
+        "normaliser": 12.0
+      }
+    },
+    "ash-poison-catalyst": {
+      "aspect": "ashwarden",
+      "producer": "toxicMist",
+      "consumer": "catalyst",
+      "consumedMetric": "mistboundConsumedByCatalyst",
+      "gatedRewardIds": [
+        "toxicMist",
+        "catalyst"
+      ],
+      "preference": {
+        "group": "special",
+        "key": "catalystAsh",
+        "normaliser": 30.0
+      }
+    }
+  },
+  "aspectPackages": {
+    "duskblade": [
+      "dusk-scoreline",
+      "dusk-afterimage-guard"
+    ],
+    "ashwarden": [
+      "ash-bloodfire-leech",
+      "ash-poison-catalyst"
+    ]
+  },
+  "estimands": {
+    "preferenceSupport": "For each package, count root-550 policy identities for which its separately normalised payoff preference is the unique within-aspect maximum; report ties or invalid values without a fitted tie-break.",
+    "strictRetentionSensitivityOracle": "For each package, intersect its observed structural-null active-policy set with its preferred-policy set. Count the intersection as active and all other root-550 identities as inactive. This is a necessary no-interference retention oracle, not a causal intervention estimate.",
+    "preferredReachability": "Within each package's preferred identities, count policies with its final producer-consumer pair in a final deck and policies with the registered consumer event while that final pair is present.",
+    "measuredCrossPackageInterference": "Within each package's preferred identities, count policies where both within-aspect packages are active under the structural null. Also report non-preferred gated reward cards offered and acquired; do not infer an unobserved alternative choice.",
+    "assignmentIdentity": "SHA-256 of the canonical package-to-sorted-policy-index assignment."
+  },
+  "gates": {
+    "minimumPreferredAndNonPreferredPolicies": 32,
+    "minimumActiveAndInactivePolicies": 32,
+    "minimumReachablePolicies": 16,
+    "minimumCrossActivePolicies": 8,
+    "provenance": "The 32/32 sensitivity, 16 reachability and eight within-aspect separation minima are inherited unchanged from the frozen package-order held-out protocol. No new outcome-fitted cut-off is introduced."
+  },
+  "budget": {
+    "sourceStructuralNullRows": 1536,
+    "sourcePolicyRows": 1024,
+    "newSimulatorObservationRows": 0,
+    "newLedgerRows": 0,
+    "maximumWallTimeSeconds": 120,
+    "maximumModelContextTokensDuringExecution": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "success": "There are no preference ties or invalid values; every package has at least 32 preferred and 32 non-preferred identities; every strict-retention oracle has at least 32 active and 32 inactive identities; every preferred package has at least 16 final-pair and 16 consumer-reached identities; and every preference direction contains at least eight observed cross-active identities.",
+    "futility": "Any preference-support, strict-retention sensitivity, preferred reachability or measured cross-package-interference gate fails.",
+    "inconclusive": "Any immutable hash, ledger identity, complete rectangle, exact policy identity, numeric input or wall-time assertion fails before the deterministic decision.",
+    "successAuthority": "Authorise implementation of exactly the preregistered binary policyPackageCommitment research knob and an exact null/intended-mediator identity preflight. Do not authorise simulator rows until identity passes; do not authorise changed normalisers, another grammar, ML/RL, detector admission, product promotion or protected seeds.",
+    "futilityAuthority": "Close the normalised-payoff package-commitment grammar without implementation or simulator spend and continue to the next evidence-backed structural mechanism inside issue #421. Do not retune its normalisers or assignment rule.",
+    "inconclusiveAuthority": "Record no scientific decision and run no simulator row until the immutable evidence fault is resolved."
+  }
+}

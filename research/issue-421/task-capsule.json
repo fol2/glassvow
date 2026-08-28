@@ -31,7 +31,7 @@
       "usableResult": "Ashwarden hand-size-payoff admitted; nine local edge-aspect interactions retained; old labels rejected as causal ground truth."
     },
     "issue525": {
-      "archiveCommit": "7132e5e0d6e6dc196dda3ed90ad2be292608d6",
+      "archiveCommit": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
       "findingSha256": "46b10157cbc1d9abb60a2a2a5a68cbffe8b601088842cb6f7f02dae65953fa1c",
       "usableResult": "hand-size-payoff reproduced; ash-poison-catalyst and ward-mirror-edge are probe/panel promotable; the Kindle/Branch scalar, one-card and kindleDamage primitive ladder is exhausted."
     }
@@ -60,7 +60,9 @@
     "packageOrderHeldoutAnalysisSha256": "1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393",
     "policyPackageOrderIdentityProtocolSha256": "6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc",
     "policyPackageOrderDecisionValueProtocolSha256": "ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c",
-    "policyPackageOrderDecisionValueSummarySha256": "1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e"
+    "policyPackageOrderDecisionValueSummarySha256": "1e2e9c5cac149136d5be7d3d3c03e089ab07fa6e43ec33d5da15bbf2c85e713e",
+    "packageCommitmentCapacityProtocolSha256": "928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5",
+    "packageCommitmentCapacitySummarySha256": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2"
   },
   "decisions": [
     {
@@ -127,18 +129,23 @@
       "decision": "Close the positive-median policy-package-order grammar without a simulator row and continue with acquisition commitment.",
       "evidence": "summaries/post-v38-policy-package-order-decision-value-v2.json",
       "reason": "Poison was active at both observed endpoints for 109 of 128 policies, bounding any endpoint-selection grammar to at most 19 inactive against the fixed minimum of 32. The no-interference splice also left only 30 Scoreline-inactive policies and six Ash Bloodfire-only policies. No beneficial cross-package interference or threshold retune is assumed."
+    },
+    {
+      "decision": "Close the normalised-payoff package-commitment grammar without implementation or simulator spend.",
+      "evidence": "summaries/post-v38-package-commitment-capacity-v2.json",
+      "reason": "Scoreline, Afterimage and Poison cleared every necessary-capacity gate, but Bloodfire had only 20 active preferred policies against the fixed minimum of 32. Revision 1's ledger-schema inconclusive is retained; revision 2 changed only that pre-estimand wiring field. The four normalisers and assignment rule cannot be retuned."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size is retained from immutable #524/#525 evidence. All four registered packages pass discovery and independent local complementarity, and reachability is green; both universal and positive-median order grammars fail whole-run policy sensitivity through acquisition saturation.",
+    "packageSupport": "Ash hand-size is retained from immutable #524/#525 evidence. Current Scoreline, Afterimage and Poison directions have discovery and independent local complementarity, reachability and measured whole-run capacity; Bloodfire is not acceptance-mandated and fails the normalised-payoff strict-retention gate.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
   "toolchainBoundary": "Resolved with the isolated official Godot 4.7.1.stable.official.a13da4feb binary. Its release SHA-512 and codesign are verified, every new execution is pinned to it, and a frozen pre-change identity plan replayed row-exactly against the archived 4.7.2 evidence.",
-  "nextAction": "Preregister a zero-row audit of whether within-aspect payoff preferences and the frozen reward/economy traces contain enough acquisition and activation capacity for deterministic package commitment. Implement only if that measured screen passes, then prove exact null and intended-mediator identity before any new simulator row. Do not repeat #517 or #519, reopen scalar or package-order selection, add ML/RL, spend protected seeds or promote product content.",
+  "nextAction": "Hash-reconcile immutable #524/#525 hand-size package definitions against the exact current live and frozen candidate content, then preregister a zero-row whole-run hand-size-versus-Poison support and interference audit. Use that inventory before selecting one materially different Duskblade structure. Do not rescue Bloodfire, retune package commitment, repeat #517/#519/#525, add ML/RL, spend protected seeds or promote product content.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

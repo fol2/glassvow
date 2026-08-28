@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-package-commitment-capacity-v1",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2582220800,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125
+  },
+  "capacityAudit": {
+    "protocolV1Sha256": "3fede567018740c1208ea9f736a508dd5895979d89301c386e9862f886c41985",
+    "revision1": "inconclusive-ledger-schema-before-estimands",
+    "protocolV2Sha256": "928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5",
+    "summaryV2Sha256": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2",
+    "decision": "close-normalised-payoff-package-commitment-without-implementation",
+    "simulatorObservationRows": 0
+  },
+  "protectedSeeds": {
+    "acceptanceRange": "3000-5199",
+    "acceptanceObservationRows": 0,
+    "reserveRange": "5200-5399",
+    "reserveObservationRows": 0
+  },
+  "publication": {
+    "sqlitePublishedInGit": false,
+    "reason": "The multi-gigabyte append-only ledger remains local and hash-pinned; this stage reused immutable evidence without writing a row."
+  }
+}

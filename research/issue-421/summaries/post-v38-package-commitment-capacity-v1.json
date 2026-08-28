@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "decisionBoundary": 3,
+  "decision": "inconclusive-ledger-schema-before-estimands",
+  "protocolSha256": "3fede567018740c1208ea9f736a508dd5895979d89301c386e9862f886c41985",
+  "runnerSha256": "006e0a7c9adbd97525608ac5d0e77a517c986121389499f9ab941f268d3d8689",
+  "faultType": "RuntimeError",
+  "fault": "The frozen ledger object included a documentary bytes field, while the exact ledger_identity helper returns only SHA-256, records, sequence bounds, protected rows and SQLite integrity.",
+  "faultBoundary": "The process stopped at the first ledger identity assertion before reading the structural-null rectangle, policy snapshots, preference assignments, activation sets or any estimand.",
+  "estimandsComputed": false,
+  "newSimulatorObservationRows": 0,
+  "newLedgerRows": 0,
+  "protectedSeedRows": 0,
+  "ledger": {
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "authority": "Record no scientific decision from v1. A corrected zero-row revision may remove only the non-runtime bytes field from the ledger equality object while inheriting the exact mechanism, evidence, estimands, gates, budget and stopping rules."
+}

@@ -95,9 +95,24 @@ and six Ash Bloodfire-only policies. Both producer-first grammars are closed;
 the next discriminator is acquisition commitment, starting with a zero-row
 capacity audit rather than an implemented guess.
 
+That audit has now closed the normalised-payoff commitment grammar without an
+implementation or simulator row. Scoreline, Afterimage and Poison cleared all
+necessary capacity gates, but Bloodfire had only 20 active preferred policies
+against the frozen minimum of 32. Its 31 final-pair reachable policies cannot
+establish the missing activation causally. The next step therefore reconciles
+the already admitted Ashwarden hand-size package from immutable #524/#525
+evidence before selecting a materially different Duskblade structure; Bloodfire
+is not an acceptance-mandated package.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-package-commitment-capacity-v1.md`](summaries/progress-post-directive-package-commitment-capacity-v1.md),
+[`protocols/post-v38-package-commitment-capacity-v2.json`](protocols/post-v38-package-commitment-capacity-v2.json)
+and
+[`summaries/post-v38-package-commitment-capacity-v2.json`](summaries/post-v38-package-commitment-capacity-v2.json)
+for the current zero-row capacity closure. Protocol v1 and its inconclusive
+summary retain the pre-estimand ledger-schema fault. Then read
 [`summaries/progress-post-directive-policy-package-order-v1.md`](summaries/progress-post-directive-policy-package-order-v1.md),
 [`protocols/post-v38-policy-package-order-identity-v1.json`](protocols/post-v38-policy-package-order-identity-v1.json),
 [`summaries/post-v38-policy-package-order-identity-v1.json`](summaries/post-v38-policy-package-order-identity-v1.json),
@@ -257,6 +272,12 @@ before an estimand because of its recorded harness fault; the corrected audit
 closed the positive-median grammar. The ledger therefore remains byte-identical
 at 478,125 records, and no protected seed has been used.
 
+The normalised-payoff package-commitment capacity audit also added zero
+observations. Revision 1 stopped at its first ledger-schema assertion before an
+estimand; revision 2 inherited the complete scientific design and closed the
+grammar because Bloodfire retained only 20 active preferred policies. The
+ledger again remains byte-identical.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -283,20 +304,22 @@ at 478,125 records, and no protected seed has been used.
 - package-order held-out analysis SHA-256: `1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393`
 - policy-package-order identity protocol SHA-256: `6c406f831b0db224a7c9478a24f831b4e5a835bd71d611567a3b9380118f0bbc`
 - policy-package-order decision-value protocol SHA-256: `ba5ddf6949c7cecad598b0bebe53355fd6e6fc476e1c5442f6a6acd9ac460a5c`
+- package-commitment capacity protocol SHA-256: `928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5`
+- package-commitment capacity summary SHA-256: `ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
-- `research/issue-421-p9-recovery-evidence`: `5dd80aa542d581e43f2875ce50f62eb50603cf1b`
+- `research/issue-421-p9-recovery-evidence`: `c563cade956a5087d2b1f0d4aa8d64096489924d`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
 - `work/421-landscape-retune`: `ad4b99b1538d7200e9b228051a029e554e9b9912`
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
-Research is continuing under #421 after closing both producer-first grammars.
-The scalar family remains closed; no successor or second scalar candidate is
-authorised. Acquisition commitment must first show retrospective capacity and
-then exact null identity before any new simulation. Detector admission,
-promotion and protected seeds remain outstanding and unauthorised at this
-snapshot.
+Research is continuing under #421 after closing both producer-first grammars
+and the normalised-payoff commitment grammar. The scalar family remains closed;
+no successor or second scalar candidate is authorised. Immutable hand-size
+evidence must now be reconciled with the exact current content and whole-run
+package inventory before another structure is selected. Detector admission,
+promotion and protected seeds remain outstanding and unauthorised.

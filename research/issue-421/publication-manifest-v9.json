@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 9,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "normalised-payoff package-commitment zero-row capacity closure",
+  "decision": "PACKAGE_COMMITMENT_CAPACITY_FAILED_BLOODFIRE_NO_IMPLEMENTATION_NO_SIMULATOR_ROWS",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-package-commitment-capacity-v1.md",
+    "progressReportSha256": "2d0468cc6a96956594bc9a5ab069fe01a24cdfc1bb6ca0f4670fdeb5a62e445d",
+    "protocolV1": "protocols/post-v38-package-commitment-capacity-v1.json",
+    "protocolV1Sha256": "3fede567018740c1208ea9f736a508dd5895979d89301c386e9862f886c41985",
+    "runner": "tools/post_v38_package_commitment_capacity.py",
+    "runnerSha256": "006e0a7c9adbd97525608ac5d0e77a517c986121389499f9ab941f268d3d8689",
+    "summaryV1": "summaries/post-v38-package-commitment-capacity-v1.json",
+    "summaryV1Sha256": "5219b2c613e11bc467518f872fe892f6e9d28daa4c05fbe54fe4ea05ed2592dd",
+    "protocolV2": "protocols/post-v38-package-commitment-capacity-v2.json",
+    "protocolV2Sha256": "928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5",
+    "correctedEntrypoint": "tools/post_v38_package_commitment_capacity_v2.py",
+    "correctedEntrypointSha256": "d888748c8bb7481bd52464d2053136a607bd93c2da16267cdf1abe3d06082b1e",
+    "summaryV2": "summaries/post-v38-package-commitment-capacity-v2.json",
+    "summaryV2Sha256": "ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2",
+    "ledgerFreeze": "artifacts/ledger-freeze-package-commitment-capacity-v1.json",
+    "ledgerFreezeSha256": "1e9695f4e2e263211d3b2a5f254e23bcdcd15ee5e5a7be4cd1255fc5dbd7c47d"
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 416,
+    "payloadFilesIndexed": 406,
+    "protocolFiles": 65,
+    "summaryFiles": 76,
+    "artifactFiles": 10,
+    "toolFiles": 20,
+    "newRawObjects": 0,
+    "rawArchive": null,
+    "rawArchiveReason": "The audit reused immutable ledger rows read-only and produced no new plan, simulator output or cache object.",
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "429261a47b48e2e1101cf9faf528177f3f6a87ba4d0f19c90d7f40d3abbf0da2"
+  },
+  "localLedgerFreeze": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2582220800,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "records": 478125,
+    "newSimulatorObservationRows": 0,
+    "protectedSeedRows": 0,
+    "publishedInGit": false
+  },
+  "revisionBoundary": {
+    "revision1Decision": "inconclusive-ledger-schema-before-estimands",
+    "revision1EstimandsComputed": false,
+    "revision1Fault": "The documentary bytes field was present in the frozen ledger object but absent from the runtime ledger_identity schema.",
+    "onlyRevision2Correction": "Remove ledgerFreeze.bytes from runtime equality.",
+    "inheritedDesignExact": true,
+    "changedQuestionCohortPackagesEstimandsGatesBudgetOrDecisionRules": false
+  },
+  "capacityResult": {
+    "policyIdentities": 128,
+    "preferenceAssignmentSha256": "a08e19429de07b47e9a3d247db687798544f02f3799900cd13902394a64c9644",
+    "tiesOrInvalidPolicies": 0,
+    "packages": {
+      "dusk-scoreline": {
+        "preferred": 61,
+        "activeWhenPreferred": 45,
+        "reachable": 53,
+        "consumed": 45,
+        "crossActive": 21,
+        "clear": true
+      },
+      "dusk-afterimage-guard": {
+        "preferred": 67,
+        "activeWhenPreferred": 57,
+        "reachable": 59,
+        "consumed": 57,
+        "crossActive": 41,
+        "clear": true
+      },
+      "ash-bloodfire-leech": {
+        "preferred": 53,
+        "activeWhenPreferred": 20,
+        "reachable": 31,
+        "consumed": 20,
+        "crossActive": 16,
+        "clear": false
+      },
+      "ash-poison-catalyst": {
+        "preferred": 75,
+        "activeWhenPreferred": 67,
+        "reachable": 70,
+        "consumed": 67,
+        "crossActive": 15,
+        "clear": true
+      }
+    },
+    "fixedActiveMinimum": 32,
+    "decisionBoundary": 2,
+    "decision": "close-normalised-payoff-package-commitment-without-implementation",
+    "implementationAuthorised": false,
+    "simulatorRowsSpent": 0
+  },
+  "mechanisticNarrowing": {
+    "supported": "Separate Scoreline, Afterimage and Poison preference directions have measured support, reachability, retained activation and cross-package interference capacity.",
+    "failed": "Bloodfire has only 20 active preferred policies; suppressing the observed non-preferred package cannot causally supply the missing activation.",
+    "nextAction": "Reconcile the immutable admitted Ashwarden hand-size package against exact current content and the existing whole-run inventory before selecting a materially different Duskblade structure.",
+    "mlOrRl": "Not authorised; no remaining policy-repertoire bottleneck has yet shown measured decision value for an additional method."
+  },
+  "postSnapshotBoundary": {
+    "scalarFamilyClosed": true,
+    "universalPackageOrderClosed": true,
+    "positiveMedianPackageOrderClosed": true,
+    "normalisedPayoffCommitmentClosed": true,
+    "bloodfireRescueAuthorised": false,
+    "handSizeReconciliationAuthorised": true,
+    "newSimulatorRowsAuthorised": false,
+    "mlOrRlAuthorised": false,
+    "detectorAdmissionAuthorised": false,
+    "productPromotionAuthorised": false,
+    "acceptanceSeedsAuthorised": false,
+    "reserveSeedsAuthorised": false,
+    "p9ReceiptAuthorised": false
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "c563cade956a5087d2b1f0d4aa8d64096489924d",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "provenanceCorrection": {
+    "issue525ExactBranchHead": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "issue421BodyValue": "7132e5e0d6e6dc196dda3ed90ad2be292608d6",
+    "reason": "The issue-body value has only 38 characters and does not resolve as a Git revision; the exact immutable evidence branch head was verified with git ls-remote and local cat-file."
+  },
+  "omissions": [
+    "The 2.6 GB append-only SQLite ledger is hash-pinned locally but omitted from permanent Git history.",
+    "No raw archive is needed because this audit created no simulator plan, output or cache object.",
+    "Research programs remain under research/issue-421/tools and are not applied to product paths.",
+    "No hand-size reconciliation result, new structural candidate, detector admission, protected-seed result, product pull request, CI result, merge or P9 receipt exists at this snapshot."
+  ],
+  "github": {
+    "taskIssue": "https://github.com/fol2/glassvow/issues/421",
+    "releaseGateIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}

@@ -1,8 +1,9 @@
-d739a5ceea9332bcaa400ca1c060e345107af5068ee0ce514a606c0765f6a016  ./README.md
+71937e8c917a6897152256eb6657f28d35575d9a08f6fe273ab131cdd60a71ca  ./README.md
 0d06b45fe5be03b1a48c6c970103b235e4c47fbacc308dcbd539b7e480771a5b  ./artifacts/godot-4.7.1-toolchain-v1.json
 d0452a96d6fc25094059e337e112dffede04984928e7893b097429ee3a008e5d  ./artifacts/ledger-freeze-blocked-crn-v2.json
 3c5b8be1d532d93180ae40e7d96cbdcc9a8242f626ba89b9c915cd18a6b2678c  ./artifacts/ledger-freeze-exact-complementarity-v1.json
 15cffdec02dc9117236afd8a5869e9c5550e4a8ff86ead53366c435c89d9e8ec  ./artifacts/ledger-freeze-heldout-confirmation-v1.json
+1e9695f4e2e263211d3b2a5f254e23bcdcd15ee5e5a7be4cd1255fc5dbd7c47d  ./artifacts/ledger-freeze-package-commitment-capacity-v1.json
 c97aa1d00477d34f47d08b35f5a119e1ae8c6d134122c011ee60d64de53a0c2d  ./artifacts/ledger-freeze-package-order-discovery-v1.json
 80d4c1fa2a7053a0f4535f9bce28824f0198d52416d784744dded190649b3bb1  ./artifacts/ledger-freeze-package-order-heldout-v1.json
 3006ef8b7537e1024827cf86f5b2e3f5c159f113c884d70e42c47527fc8974c2  ./artifacts/ledger-freeze-policy-package-order-v1.json
@@ -66,6 +67,8 @@ d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0  ./protocols/po
 5a4fdfd9c24331430d08b239fd4c62edb884c16728e6e09afe15909b137eb3c1  ./protocols/post-v38-identification-v1.json
 7fe3302debb072e6bcd0276dea16e7ee26c58f08006c9778a4265892696af401  ./protocols/post-v38-knob-identity-v1.json
 3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff  ./protocols/post-v38-knob-identity-v2.json
+3fede567018740c1208ea9f736a508dd5895979d89301c386e9862f886c41985  ./protocols/post-v38-package-commitment-capacity-v1.json
+928f1e84ffa6b8975f978e2e2224a1f15d28bebee39f9df9d0e04b4a7638c0b5  ./protocols/post-v38-package-commitment-capacity-v2.json
 134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd  ./protocols/post-v38-package-order-discovery-v1.json
 4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e  ./protocols/post-v38-package-order-heldout-v1.json
 47974f7effa559dad1acc6d5ff97acb30486ffe45733bf5ee032ffec728f121a  ./protocols/post-v38-package-order-identity-v1.json
@@ -357,6 +360,8 @@ bd7c13a74851d7e9410d2eb7dc6748eb7d35397567d0b5d2ced1f0062d40f4f6  ./summaries/po
 7541976e28e1bfb70f422b109cc4e965e1961883ad5eb42ce93af8554afe9c63  ./summaries/post-v38-identification-v1.json
 1ecf612b7243068cf227386439b2b3e7dc153411444c2c0087077b3698e88904  ./summaries/post-v38-knob-identity-v1.json
 26075a5319ab8e0320e933a9e1d9223fd1ffe48ee587cbdf50c6127064c58aa0  ./summaries/post-v38-knob-identity-v2.json
+5219b2c613e11bc467518f872fe892f6e9d28daa4c05fbe54fe4ea05ed2592dd  ./summaries/post-v38-package-commitment-capacity-v1.json
+ebd909bbd23bc403e18894637dcb3041d1c4a240bb0e2464ae5eaa39b55cb4f2  ./summaries/post-v38-package-commitment-capacity-v2.json
 a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e  ./summaries/post-v38-package-order-discovery-v1-audit.json
 0a09fd5108d1e1313657966b72cad435e9081a0b4f389793979d7365acd31f09  ./summaries/post-v38-package-order-discovery-v1.json
 77361eb742de4c916c0ffc7e764f46af5df7ee610d0156740819c21daa5df8a6  ./summaries/post-v38-package-order-heldout-v1-audit.json
@@ -369,6 +374,7 @@ a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e  ./summaries/po
 325db4ca19d4e3ca3c090c573a2fcb348f5acde4b624c5e8e280eaf213d1def6  ./summaries/progress-post-directive-blocked-crn-v2.md
 06cd14c5e49ad5bc9a9fa676039f3869816340c9fce23d2ffba94b6e7ab39439  ./summaries/progress-post-directive-exact-complementarity-v1.md
 dc7de373d7a4acbf76ddf760198ec7ce63a9a2c8c7c45b7df14dfb9cea70dee4  ./summaries/progress-post-directive-heldout-v1.md
+2d0468cc6a96956594bc9a5ab069fe01a24cdfc1bb6ca0f4670fdeb5a62e445d  ./summaries/progress-post-directive-package-commitment-capacity-v1.md
 b4ce5a1e17a93a2b07a2c90306d9f1b31f422c2626e23a65ca0003c294d49810  ./summaries/progress-post-directive-package-order-discovery-v1.md
 3b07dadb223868a6271922aba193a901b885427269d8d337dab5ddfc83195bc8  ./summaries/progress-post-directive-package-order-heldout-v1.md
 e7ee3155905b4418448a04cdfe277f224ee008880a9cd42c191bbaee15142ef1  ./summaries/progress-post-directive-policy-package-order-v1.md
@@ -377,7 +383,7 @@ e7ee3155905b4418448a04cdfe277f224ee008880a9cd42c191bbaee15142ef1  ./summaries/pr
 90eb3c12f86bdabd6e2a01387ec108d199f686b46f90fa983b1c9e11cac2a74d  ./summaries/resonance-package-v1.json
 82df397f2a3f7b60465cdab0ca925a1c9173e1bee4aa613d0960149a4a47b4ea  ./summaries/scoreline-handshake-v1.json
 369251de0cb8cd901d68c2b5457384e19088c586d62b1be1084e69c2f70be6ce  ./summaries/shatter-flow-v1.json
-ba23095206a02794957fbf017f9d3b2889a83661be4955ddeb81a9e01ae465b9  ./task-capsule.json
+419bcaf3b6a68f3234f0c04c383dbdf53b4f59d3416a90220775f6b238e35c82  ./task-capsule.json
 6eb56ed83e4ef28d46e9913554fac9438163993d8c6a8eb7c9a4e6771eff012a  ./tools/identify_v33_v38.py
 a6435cc05f13042ee9132de90a40d11a61716b56d116b729aff92faad5a152cb  ./tools/post_v38_blocked_crn.py
 ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb  ./tools/post_v38_exact_complementarity.py
@@ -386,6 +392,8 @@ ca4a2beb6e026ff7fa26029c156cdd2156b1e4991c075209f3abc5a373f7269d  ./tools/post_v
 a6b06e4491b872e14b3a053c48a8859784d3f0a12bf5db973d6589cfd0036048  ./tools/post_v38_heldout_confirmation.py
 b1c5025f1c2c112535179666104270c06f65dc3024608e602a70b37f2a635c2b  ./tools/post_v38_knob_identity.py
 e1b4983f6d2d0b8a5608dc099430c32e54ddd689a7797415a3f17f7f7127f7c8  ./tools/post_v38_knob_identity_v2.py
+006e0a7c9adbd97525608ac5d0e77a517c986121389499f9ab941f268d3d8689  ./tools/post_v38_package_commitment_capacity.py
+d888748c8bb7481bd52464d2053136a607bd93c2da16267cdf1abe3d06082b1e  ./tools/post_v38_package_commitment_capacity_v2.py
 68022202c526e74ec5893879f26b993484259365854e610e66ce62a795c52990  ./tools/post_v38_package_order_discovery.py
 d3bdb9012f37552a2fdf6f8026692dc1a5258bc980813f3baf33dfa56a31ec8c  ./tools/post_v38_package_order_discovery_audit.py
 963a1dcde4a39fd4aac4be359f5f27d726639a51202174119670cd1bceaf72a1  ./tools/post_v38_package_order_heldout.py
