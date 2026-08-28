@@ -1,0 +1,66 @@
+{
+  "allRowsAndDecisionRecomputed": true,
+  "analysisSha256": "1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393",
+  "auditRunnerSha256": "9f96bbe99a9b0d3bf77d61ac7158a61fcc0611ab0f406848cb834cf1c0b72454",
+  "authority": "Close this package-order grammar and continue structurally inside issue #421 without selecting another scalar cell.",
+  "decision": "package-order-heldout-audit-pass",
+  "decisionBoundary": 2,
+  "failedFunctionalSeparation": {
+    "ashwarden": {
+      "ash-bloodfire-leechOnly": 6,
+      "ash-poison-catalystOnly": 82,
+      "clear": false
+    }
+  },
+  "failedPackageSensitivityOrReachability": {
+    "ash-poison-catalyst": {
+      "active": 113,
+      "consumerReachedWithFinalPair": 113,
+      "finalPairReachable": 113,
+      "inactive": 15,
+      "reachabilityClear": true,
+      "sensitivityClear": false
+    },
+    "dusk-afterimage-guard": {
+      "active": 97,
+      "consumerReachedWithFinalPair": 97,
+      "finalPairReachable": 97,
+      "inactive": 31,
+      "reachabilityClear": true,
+      "sensitivityClear": false
+    },
+    "dusk-scoreline": {
+      "active": 99,
+      "consumerReachedWithFinalPair": 99,
+      "finalPairReachable": 104,
+      "inactive": 29,
+      "reachabilityClear": true,
+      "sensitivityClear": false
+    }
+  },
+  "heldoutDecision": "reject-structural-candidate-close-package-order",
+  "ledger": {
+    "firstSequence": 1,
+    "lastSequence": 478125,
+    "protectedSeedRows": 0,
+    "records": 478125,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok"
+  },
+  "liveGuardrailsClear": true,
+  "localAfterimageStructuralGain": {
+    "p025": 0.5078125,
+    "p975": 0.7578125,
+    "point": 0.6328125,
+    "scale": 1.0
+  },
+  "localAllPackagesClear": true,
+  "policyIdentityClear": true,
+  "protectedSeedRows": 0,
+  "protocolSha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+  "rows": 9728,
+  "runnerSha256": "963a1dcde4a39fd4aac4be359f5f27d726639a51202174119670cd1bceaf72a1",
+  "schemaVersion": 1,
+  "structuralNullGuardrailsClear": true,
+  "summaryFileSha256": "853df2c3988270f3d1236b51177b85d014b92e200bad52fc05a66059a3985070"
+}

@@ -40,8 +40,8 @@
     "godot": "4.7.2.stable.official.ed1daf0bf",
     "liveContentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
     "researchContentSha256": "e475482c76a405814dba4638860bb799f610a220fcde5d931c78d1a447e18f48",
-    "researchLedgerRecords": 468385,
-    "researchLedgerSha256": "3e462d0285570812f49d2f0daa06d9505f6d9c99da6d35accb1833d7a30db616",
+    "researchLedgerRecords": 478125,
+    "researchLedgerSha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
     "protectedSeedRows": 0,
     "knobIdentityProtocolSha256": "3b9ea0b105df0afbae7986a60af0d58091bec5877631440f1f43d3de2970b8ff",
     "blockedCrnProtocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
@@ -53,7 +53,9 @@
     "exactComplementarityAnalysisSha256": "1f8842167634225587f54e298f67b84510e48fafc5374dcc28c64c141e604a29",
     "packageOrderIdentityProtocolSha256": "47974f7effa559dad1acc6d5ff97acb30486ffe45733bf5ee032ffec728f121a",
     "packageOrderDiscoveryProtocolSha256": "134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd",
-    "packageOrderDiscoveryAnalysisSha256": "4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f"
+    "packageOrderDiscoveryAnalysisSha256": "4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f",
+    "packageOrderHeldoutProtocolSha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+    "packageOrderHeldoutAnalysisSha256": "1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393"
   },
   "decisions": [
     {
@@ -105,17 +107,23 @@
       "decision": "Freeze exactly one structural candidate for independent held-out confirmation.",
       "evidence": "summaries/post-v38-package-order-discovery-v1-audit.json",
       "reason": "All four packages cleared on one equal 64-policy cohort with zero faults. Afterimage improved from 5 to 31 witnesses and its matched structural-gain interval was [0.438, 0.828]. Only Scoreline triggered the preregistered interference expansion, so 768 optional rows remained unspent."
+    },
+    {
+      "decision": "Reject and close the universal package-order grammar; continue with a policy-selective structural mechanism.",
+      "evidence": "summaries/post-v38-package-order-heldout-v1-audit.json",
+      "reason": "Independent local complementarity reproduced for all packages and every identity, reachability, reliability, RandomBuild, Vow-5 and duration gate passed. Whole-run activation saturated across independently sampled policies, leaving only 15 Poison-inactive, 31 Afterimage-inactive, 29 Scoreline-inactive and 6 Ash Bloodfire-only witnesses."
     }
   ],
   "proofMap": {
     "knobIdentity": "Exact paired null replays compare policy snapshot, action path, RNG cursor and full result; focused non-null checks prove only the intended mediator changes.",
     "blockedExperiment": "Five-factor mechanism blocks shared fixed policies, seeds, baseline, first look, estimator and stop rule; shared anchors rejected optional expansion and froze one candidate.",
     "heldOutConfirmation": "Root-546 policies and disjoint simulation seeds reproduced proportionally scaled repertoire, reachability, separation, reliability, RandomBuild and duration gates for the one frozen candidate against the same live baseline.",
-    "packageSupport": "Ash hand-size is retained from immutable #524/#525 evidence. All four registered packages now pass the exact structural discovery panel; independent held-out complementarity and whole-run activation/reachability remain required before detector calibration.",
+    "packageSupport": "Ash hand-size is retained from immutable #524/#525 evidence. All four registered packages pass discovery and independent local complementarity, and reachability is green; a universal order grammar fails independent whole-run policy sensitivity through route saturation.",
     "detector": "Seven matched causal directions plus held-out accuracy, rank, old-detector gain, activation prediction, retention and bootstrap gates from issue #421.",
     "shipping": "Current scope-aware deterministic gates plus one independent exact-head AI-SDLC review.",
     "receipt": "Final protected-seed protocol bound to the exact merged product and content SHA, posted to issue #108 without impersonating James's release signature."
   },
-  "nextAction": "Preregister an independent policy/seed cohort and confirm exact structural-candidate complementarity plus whole-run activation, reachability, repertoire sensitivity and guardrails. Do not change the candidate, reopen scalar selection, add ML/RL, spend protected seeds or promote product content.",
+  "toolchainBoundary": "Archived executions report Godot 4.7.2.stable.official.ed1daf0bf; current-main requires exact Godot 4.7.1.stable. Do not execute more GDScript or simulator rows until the current-main pin is available.",
+  "nextAction": "Restore exact Godot 4.7.1, then preregister the smallest policy-selective sequencing mechanism using existing package-payoff preference dimensions, with exact null identity and controlled high/low preference surfaces before new rows. Do not repeat #517 latent whole-run geometry or the #519 matched-cost kernel/QD race, reopen scalar selection, spend protected seeds or promote product content.",
   "researchRoot": "/Users/jamesto/Research/glassvow-p9-421"
 }

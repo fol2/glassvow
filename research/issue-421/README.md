@@ -75,9 +75,23 @@ interference gate, so only its missing null cells were completed. The run
 stopped at 3,328 of 4,096 possible rows and froze exactly one structural
 candidate for independent held-out confirmation.
 
+That candidate is now rejected on independent held-out evidence. All four local
+causal packages reproduced, and whole-run identity, reachability, reliability,
+RandomBuild, Vow-5 and duration stayed green. The failure was policy-repertoire
+saturation: Poison left only 15 inactive policies, Afterimage 31 and Scoreline
+29, while Ash had only 6 Bloodfire-only policies. The universal producer-first
+grammar is therefore closed. The next discriminator must make setup commitment
+policy-selective without repeating the exhausted #517 latent whole-run geometry
+or #519 matched-cost functional-kernel/QD race.
+
 ## Reading order
 
 Start with
+[`summaries/progress-post-directive-package-order-heldout-v1.md`](summaries/progress-post-directive-package-order-heldout-v1.md),
+[`protocols/post-v38-package-order-heldout-v1.json`](protocols/post-v38-package-order-heldout-v1.json)
+and
+[`summaries/post-v38-package-order-heldout-v1-audit.json`](summaries/post-v38-package-order-heldout-v1-audit.json)
+for the current bounded negative and exact failed whole-run gate. Then read
 [`summaries/progress-post-directive-package-order-discovery-v1.md`](summaries/progress-post-directive-package-order-discovery-v1.md),
 [`protocols/post-v38-package-order-identity-v1.json`](protocols/post-v38-package-order-identity-v1.json),
 [`protocols/post-v38-package-order-discovery-v1.json`](protocols/post-v38-package-order-discovery-v1.json)
@@ -211,6 +225,12 @@ The identity preflight added zero observations. The staged discovery added
 3,328 observations, spent one of three optional 384-row expansions and used
 zero acceptance or reserve rows.
 
+After independent package-order held-out confirmation the ledger is
+2,582,220,800 bytes with 478,125 records and SHA-256
+`5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739`.
+The staged protocol added 9,728 observations and zero acceptance or reserve
+rows. Its boundary-2 result closes the universal package-order grammar.
+
 ## Frozen identities
 
 - source and archive base: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
@@ -231,17 +251,21 @@ zero acceptance or reserve rows.
 - package-order identity protocol SHA-256: `47974f7effa559dad1acc6d5ff97acb30486ffe45733bf5ee032ffec728f121a`
 - package-order discovery protocol SHA-256: `134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd`
 - package-order discovery analysis SHA-256: `4e6f7e53f853ca44040a7851940717cc3fa8d612741ec8f53ed89c53ea31138f`
+- package-order held-out protocol SHA-256: `4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e`
+- package-order held-out analysis SHA-256: `1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393`
 
 ## Remote heads at publication preparation
 
 - `origin/main`: `c4130163c7fb8edd865c0adc95732aae03e1bad2`
+- `research/issue-421-p9-recovery-evidence`: `8b5fd3433cfa1fe8ddc0561e22abe0dee81c44a7`
 - `research/issue-524-causal-slate-evidence`: `f305b95d9e1d173e5d8150289afab9688c0ea7f0`
 - `research/issue-525-mechanism-package-synthesis-evidence`: `7132e5e0d6e6e6dc196dda3ed90ad2be292608d6`
 - `work/421-h34`: `4a94d155400162289a84f416336ff407f55b3cf6`
 - `work/421-landscape-retune`: `ad4b99b1538d7200e9b228051a029e554e9b9912`
 - `work/421-s009-exam`: `b30b290813d88109c5b9bc34354babefdc406f8d`
 
-Research is continuing under #421 with exactly one frozen structural candidate.
-The scalar family remains closed; no successor or second scalar candidate is
-authorised. Independent held-out confirmation, detector admission, promotion
-and protected seeds remain outstanding and unauthorised at this snapshot.
+Research is continuing under #421 after closing the universal structural
+candidate. The scalar family remains closed; no successor or second scalar
+candidate is authorised. Policy-selective sequencing, detector admission,
+promotion and protected seeds remain outstanding and unauthorised at this
+snapshot.

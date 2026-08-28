@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "question": "Does the one frozen package-order structural candidate reproduce its local causal package set and whole-run activation, reachability, policy sensitivity, functional separation and guardrails on independent identities?",
+  "scope": "This protocol independently confirms strategy-package support only. It does not calibrate or admit the seven-direction detector, optimise an RC, promote product code/content or authorise protected seeds.",
+  "method": "One staged, non-adaptive held-out protocol. Stage one gives all four packages the same new 128-policy packageOrder-on none/A/B/AB target/control rectangle and gives Afterimage the complete matched null rectangle. Only a preregistered local success runs stage two, where one new 128-policy whole-run cohort compares the exact structural candidate, its exact same-content packageOrder null and live baseline on complete shared CRN rectangles.",
+  "immutableInputs": {
+    "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "combatRulesSha256": "04ff42e2e758f3515c482394451c28e3511797334321aa185305ae36f9dbb6ac",
+    "pilotSha256": "e40a0d87ce6613468d3c1ac993cbe4d0b44a9be1c44df332c2f0dd8178cdf1e1",
+    "balanceSimSha256": "45a3d3b95f53f89ab4444e45da32ba7f691090518d74706823e44478a2e55777",
+    "probeSha256": "a7f614f1b26e7f8f578305a0d3fbe20d0f6d1cc84eee8323a614faaa3d8a9044",
+    "researchCoreSha256": "0480163456dc6693e90d5f87163918d8452e4dd5c2c822c60543ab03efe3d6a9",
+    "discoveryRunnerSha256": "68022202c526e74ec5893879f26b993484259365854e610e66ce62a795c52990",
+    "localAnalysisRunnerSha256": "ab3abe3331b5830f979958703ae2b4e82a71cf7af8460e73bf6958e2d67b57fb",
+    "wholeRunAnalysisRunnerSha256": "a6b06e4491b872e14b3a053c48a8859784d3f0a12bf5db973d6589cfd0036048",
+    "runnerSha256": "963a1dcde4a39fd4aac4be359f5f27d726639a51202174119670cd1bceaf72a1"
+  },
+  "entryGates": {
+    "packageOrderIdentity": {
+      "path": "summaries/post-v38-package-order-identity-v1.json",
+      "sha256": "190e57b2ce109bd037115011299d870c071a6da3255e1f064b76c4034e2e3587",
+      "decision": "package-order-identity-safe"
+    },
+    "discoverySummary": {
+      "path": "summaries/post-v38-package-order-discovery-v1.json",
+      "sha256": "0a09fd5108d1e1313657966b72cad435e9081a0b4f389793979d7365acd31f09",
+      "decision": "freeze-one-structural-candidate-for-independent-heldout-confirmation"
+    },
+    "discoveryAudit": {
+      "path": "summaries/post-v38-package-order-discovery-v1-audit.json",
+      "sha256": "a520a17d524ec46e2468e1dedf757bbd8636906b7a7cc3660aa28cd7daa0210e",
+      "decision": "package-order-discovery-audit-pass"
+    }
+  },
+  "ledgerFreeze": {
+    "sha256": "3e462d0285570812f49d2f0daa06d9505f6d9c99da6d35accb1833d7a30db616",
+    "records": 468385,
+    "firstSequence": 1,
+    "lastSequence": 468385,
+    "protectedSeedRows": 0,
+    "sqliteIntegrity": "ok"
+  },
+  "structuralCandidate": {
+    "id": "fixed-substrate-Q2-W0__package-order-1",
+    "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "research421": {
+      "acquisitionPriority": 2,
+      "wardSetupPriority": 0
+    },
+    "packageOrderLevel": 1,
+    "selectionAuthority": "Exactly this one candidate was frozen by discovery protocol 134d908c9db8998413e3c9858f3b9a9a09deb125ca779a23218a7a923ca549dd. No value, package, grammar or scalar cell may change."
+  },
+  "wholeRunArms": {
+    "structuralCandidate": {
+      "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+      "research421": {
+        "acquisitionPriority": 2,
+        "wardSetupPriority": 0,
+        "packageOrder": 1
+      }
+    },
+    "structuralNull": {
+      "contentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+      "research421": {
+        "acquisitionPriority": 2,
+        "wardSetupPriority": 0,
+        "packageOrder": 0
+      }
+    },
+    "liveBaseline": {
+      "contentSha256": "a0d608a5142d2e3aab799cdf33d3163922b402c2aaf2a895e46e096399b56cf1",
+      "research421": {
+        "acquisitionPriority": 4,
+        "wardSetupPriority": 1,
+        "packageOrder": 0
+      }
+    }
+  },
+  "packages": {
+    "ash-bloodfire-leech": {
+      "aspect": "ashwarden",
+      "producer": "bloodRite",
+      "consumer": "leechBlade",
+      "mediator": "player-bloodfire",
+      "cardMetric": "damage",
+      "cardMetricDirection": 1,
+      "appliedMetric": "bloodfireApplied",
+      "consumedMetric": "bloodfireConsumed"
+    },
+    "ash-poison-catalyst": {
+      "aspect": "ashwarden",
+      "producer": "toxicMist",
+      "consumer": "catalyst",
+      "mediator": "enemy-mistbound",
+      "cardMetric": "status:poison",
+      "cardMetricDirection": 1,
+      "appliedMetric": "mistboundAppliedByToxicMist",
+      "consumedMetric": "mistboundConsumedByCatalyst"
+    },
+    "dusk-afterimage-guard": {
+      "aspect": "duskblade",
+      "producer": "defend",
+      "consumer": "guardedStrike",
+      "mediator": "player-afterimage",
+      "cardMetric": "status:afterimage",
+      "cardMetricDirection": -1,
+      "appliedMetric": "afterimageApplied",
+      "consumedMetric": "afterimageConsumed"
+    },
+    "dusk-scoreline": {
+      "aspect": "duskblade",
+      "producer": "chisel",
+      "consumer": "executioner",
+      "mediator": "enemy-scoreline",
+      "cardMetric": "shatter",
+      "cardMetricDirection": 1,
+      "appliedMetric": "scorelineApplied",
+      "consumedMetric": "scorelineConsumed"
+    }
+  },
+  "admissionSet": {
+    "requiredDuskPackages": [
+      "dusk-afterimage-guard",
+      "dusk-scoreline"
+    ],
+    "supplementalAshPackages": [
+      "ash-bloodfire-leech",
+      "ash-poison-catalyst"
+    ],
+    "minimumSupplementalAshPackages": 1,
+    "immutableAdmittedAshPackage": {
+      "id": "ash-hand-size-payoff",
+      "issue524ArchiveCommit": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+      "issue525ArchiveCommit": "7132e5e0d6e6dc196dda3ed90ad2be292608d6",
+      "relevantCardPairSha256": "727d621094927ded47c39c69d6375813f01115276505f1666fdb344dbbbcf1ea",
+      "use": "Immutable scientific admission and independent reproduction evidence only. No historical path is reconstructed or rerun."
+    },
+    "successSet": "Both Dusk packages and at least one supplemental Ash package clear independent local and whole-run gates. Alongside immutable hand-size-payoff, this supplies at least two packages for each aspect before detector calibration."
+  },
+  "causalFactors": {
+    "scorelinePayoff": {"level": "low", "role": "fixed; separate from Afterimage payoff"},
+    "afterimagePayoff": {"level": "low", "role": "fixed; separate from Scoreline payoff"},
+    "acquisitionPriority": {"level": 2, "role": "fixed substrate"},
+    "wardSetupPriority": {"level": 0, "role": "fixed substrate"},
+    "faultlineRarity": {"level": "uncommon", "role": "fixed substrate"},
+    "producerPresence": {"levels": ["absent", "present"]},
+    "consumerPresence": {"levels": ["absent", "present"]},
+    "aspect": {"levels": ["package-target", "other-control"]},
+    "packageOrder": {"levels": [0, 1]},
+    "contentArm": {
+      "levels": ["structural-candidate", "same-content-structural-null", "live-baseline"],
+      "role": "whole-run CRN block; candidate-minus-null isolates package order, while candidate-minus-live measures the complete frozen packet against product truth"
+    },
+    "package": {
+      "levels": [
+        "ash-bloodfire-leech",
+        "ash-poison-catalyst",
+        "dusk-afterimage-guard",
+        "dusk-scoreline"
+      ],
+      "blocking": "Each package retains its own deck and response metric; no pooled package main effect is estimated."
+    }
+  },
+  "localDesignMatrix": {
+    "none": {"producerPresence": "absent", "consumerPresence": "absent"},
+    "A": {"producerPresence": "present", "consumerPresence": "absent"},
+    "B": {"producerPresence": "absent", "consumerPresence": "present"},
+    "AB": {"producerPresence": "present", "consumerPresence": "present"},
+    "packageOrderOn": "All four packages receive every arm in target and control aspects on all 128 identities.",
+    "afterimageOrderOff": "Afterimage receives every arm in target and control aspects on those same 128 identities.",
+    "aliasStructure": "On cells support each package complementarity estimand once. Only Afterimage is fully crossed with packageOrder and only it supports a held-out structural interaction. Fixed payoff, acquisition, rarity and Ward settings are not estimated."
+  },
+  "wholeRunDesignMatrix": {
+    "arms": ["structuralCandidate", "structuralNull", "liveBaseline"],
+    "grids": [
+      "RandomBuild duskblade v0",
+      "RandomBuild duskblade v5",
+      "RandomBuild ashwarden v0",
+      "RandomBuild ashwarden v5",
+      "sampled-policy duskblade v5",
+      "sampled-policy ashwarden v5"
+    ],
+    "aliasStructure": "All three arms use identical policy snapshots and simulation seeds. Candidate-minus-null identifies the structural grammar on whole-run endpoints. Candidate-minus-live measures the complete candidate packet and cannot attribute content and structure separately. Every reported endpoint has a complete matched rectangle."
+  },
+  "cohort": {
+    "policyIdentity": {
+      "root": 549,
+      "firstIndex": 0,
+      "lastIndex": 127,
+      "count": 128
+    },
+    "researchSeeds": {
+      "first": 346192,
+      "last": 346319,
+      "count": 128
+    },
+    "commonRandomNumbers": "Within every local packageOrder or arm contrast, policy root, policy index, seed, enemy, deck, content, estimator and stopping rule are identical.",
+    "independence": "Root 549 and seeds 346192-346319 are disjoint from discovery root 548 and every earlier local cohort."
+  },
+  "cohorts": {
+    "policyIdentity": {
+      "root": 550,
+      "firstIndex": 0,
+      "lastIndex": 127,
+      "count": 128
+    },
+    "policySimulationSeeds": {
+      "first": 346528,
+      "last": 346531,
+      "count": 4
+    },
+    "randomBuildSeeds": {
+      "first": 346400,
+      "last": 346527,
+      "count": 128
+    },
+    "policyGrids": ["duskblade:v5", "ashwarden:v5"],
+    "randomBuildGrids": [
+      "duskblade:v0",
+      "duskblade:v5",
+      "ashwarden:v0",
+      "ashwarden:v5"
+    ],
+    "commonRandomNumbers": "All three content arms use the same policy identities, policy simulation seeds and RandomBuild identities on every complete grid.",
+    "independence": "Root 550, seeds 346400-346531 and canonical policy snapshots must be disjoint from the frozen root-545 and root-546 whole-run cohorts, and are numerically disjoint from discovery and local held-out identities."
+  },
+  "excludedWholeRunPolicyCohorts": [
+    {
+      "protocolSha256": "a27eaf916c61bef5d227c6224cf3b94042094269eaeb08a46c7100278bd84d2d",
+      "root": 545,
+      "count": 64
+    },
+    {
+      "protocolSha256": "d8496263dbaab0534cf44702e9ea1078c952b87c145b5c04b3492085d6f15be0",
+      "root": 546,
+      "count": 128
+    }
+  ],
+  "estimands": {
+    "localConditionalProducerEffect": "Within package and aspect at packageOrder 1, consumer-card response AB minus B.",
+    "localProducerConsumerInteraction": "Within package and aspect at packageOrder 1, AB minus A minus B plus none.",
+    "localTargetMinusControl": "Target-aspect interaction minus matched other-aspect interaction.",
+    "heldoutAfterimageStructuralGain": "PackageOrder 1 minus 0 of Afterimage target-minus-control interaction on each matched local identity.",
+    "wholeRunActivation": "A policy is active only when its final deck contains both registered cards and at least one of its four simulations records registered application and consumption.",
+    "wholeRunFunctionalSeparation": "Within each aspect, candidate policies active for each package and inactive for the other package.",
+    "wholeRunCandidateMinusNull": "Paired structural-candidate minus same-content structural-null RandomBuild win and mean combat duration on every grid; activation-set gains and losses are descriptive mechanistic evidence.",
+    "wholeRunCandidateMinusLive": "Paired structural-candidate minus live RandomBuild win and mean combat duration on every grid."
+  },
+  "estimator": {
+    "localUnit": "The root-549 policy-index and seed identity.",
+    "wholeRunActivationUnit": "The root-550 policy identity aggregated over the same four simulation seeds.",
+    "wholeRunSafetyUnit": "RandomBuild seed or aspect-policy-seed identity, paired across all three content arms.",
+    "standardisation": "Local package contrasts use the population standard deviation of all target-aspect arm responses; structural gain and duration remain raw.",
+    "bootstrap": "Exactly 5000 deterministic paired bootstrap resamples with a fresh random.Random(421) stream per estimand.",
+    "bootstrapSeed": 421,
+    "multiplicity": "No endpoint, package, threshold, cohort, arm, stage gate or bootstrap seed may change after the first observation."
+  },
+  "gates": {
+    "minimumStandardisedComplementarity": 0.25,
+    "minimumMechanismWitnesses": 16,
+    "minimumActiveAndInactivePolicies": 32,
+    "minimumExclusivePolicies": 8,
+    "minimumReachablePolicies": 16,
+    "randomBuildWinCeiling": 0.5,
+    "maximumAbsoluteRandomBuildMovement": 0.1,
+    "vow5PolicyWinCeiling": 0.9,
+    "durationUpperBound": 0.25,
+    "localAdmission": "Both Dusk packages and at least one supplemental Ash package clear conditional, interaction, target-control, witness, fault and duration gates; Afterimage structural-gain lower bound is greater than zero.",
+    "activation": "Every package has at least 32 active and 32 inactive held-out policies.",
+    "functionalSeparation": "Within each aspect, at least eight candidate policies activate each package without activating the other.",
+    "reachability": "At least sixteen candidate policies acquire each final pair and record its consumer event through the reward/economy path.",
+    "reliability": "Zero candidate faults and zero candidate-added faults against both live and structural null on all policy and RandomBuild grids.",
+    "wholeRunAdmission": "Identity, activation, separation, reachability, reliability, RandomBuild, Vow-5 and duration gates pass against the complete matched live and structural-null rectangles."
+  },
+  "budget": {
+    "localPackages": 4,
+    "localPolicySeedIdentities": 128,
+    "localPackageOrderOnRows": 4096,
+    "localAfterimageOrderOffRows": 1024,
+    "localSimulatorObservationRows": 5120,
+    "wholeRunArms": 3,
+    "wholeRunRowsPerArm": 1536,
+    "wholeRunRandomBuildRowsPerArm": 512,
+    "wholeRunPolicyRowsPerArm": 1024,
+    "wholeRunSimulatorObservationRows": 4608,
+    "maximumNewSimulatorObservationRows": 9728,
+    "bootstrapResamples": 5000,
+    "maximumWallTimeSeconds": 7200,
+    "maximumModelContextTokensDuringExecutionAndDecision": 0,
+    "protectedSeeds": 0
+  },
+  "decisionRules": {
+    "localSuccess": "Every registered local success-set gate passes. Continue exactly once to the frozen whole-run stage.",
+    "localFutility": "A required Dusk package decisively fails, too many supplemental Ash packages decisively fail, or Afterimage structural-gain upper bound is not greater than zero. Stop at 5,120 rows, reject packageOrder and continue with the next evidence-backed structural mechanism inside #421.",
+    "localInconclusive": "Local success is not met without a registered decisive failure. Stop at 5,120 rows and record inconclusive without whole-run rows.",
+    "success": "Local held-out passes, then all frozen whole-run identity, package and guardrail gates pass against both live and structural null. Admit the structural package set for detector construction.",
+    "futility": "Any fixed whole-run identity, activation, separation, reachability, reliability, RandomBuild or Vow-5 gate fails, or a duration interval lies wholly above 0.25. Reject packageOrder and continue with the next evidence-backed structural mechanism inside #421.",
+    "inconclusive": "Only a duration interval is missing or straddles 0.25, or execution reaches an immutable-input, incomplete-rectangle, cache, engine, harness, row-cap or wall-cap fault. Record inconclusive at the cap and do not rerun or extend.",
+    "successAuthority": "The independently reproduced strategy-package support set may enter preregistered seven-direction detector construction. This does not admit that detector, optimise or promote an RC, or authorise protected seeds.",
+    "futilityAuthority": "Close this package-order grammar and continue structurally inside issue #421 without selecting another scalar cell.",
+    "inconclusiveAuthority": "Stop at decision boundary 3. Do not add rows, alter the candidate or rerun."
+  },
+  "stoppingRule": "Run the 5,120-row local stage once. Run all 4,608 whole-run rows only after deterministic local boundary 1. Then take exactly one final decision. No optional expansion, candidate change or cohort extension exists.",
+  "deterministicOwnership": "post_v38_package_order_heldout.py alone constructs every row, invokes simulation and cache, audits policy identity, fits endpoints, enforces stage and global caps and selects the decision with zero model-context tokens.",
+  "methodBoundary": {
+    "ml": "Not authorised for package confirmation.",
+    "rl": "Not authorised for package confirmation.",
+    "adaptiveTuning": "Alternative scalar cells, a second structural candidate, package-specific support, changed cohorts, new endpoints and V39-style tuning are forbidden."
+  },
+  "protectedSeedsExcluded": {
+    "acceptance": "3000-5199",
+    "reserve": "5200-5399"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "issue": 421,
+  "stage": "post-v38-package-order-heldout-v1",
+  "ledger": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2582220800,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "records": 478125,
+    "firstSequence": 1,
+    "lastSequence": 478125
+  },
+  "packageOrderHeldout": {
+    "protocolSha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+    "analysisSha256": "1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393",
+    "auditSha256": "77361eb742de4c916c0ffc7e764f46af5df7ee610d0156740819c21daa5df8a6",
+    "localSimulatorObservationRows": 5120,
+    "wholeRunSimulatorObservationRows": 4608,
+    "simulatorObservationRows": 9728,
+    "decision": "reject-structural-candidate-close-package-order"
+  },
+  "protectedSeeds": {
+    "acceptanceRange": "3000-5199",
+    "acceptanceObservationRows": 0,
+    "reserveRange": "5200-5399",
+    "reserveObservationRows": 0
+  },
+  "publication": {
+    "sqlitePublishedInGit": false,
+    "reason": "The multi-gigabyte append-only ledger remains local and hash-pinned; content-addressed plans, outputs and decision objects are archived remotely."
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 7,
+  "issue": 421,
+  "purpose": "remote-review-only; active-progress-snapshot; do-not-merge",
+  "branch": "research/issue-421-p9-recovery-evidence",
+  "sourceCommit": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+  "snapshot": "independent package-order held-out confirmation and universal-grammar closure",
+  "decision": "UNIVERSAL_PACKAGE_ORDER_REJECTED_POLICY_REPERTOIRE_SATURATION",
+  "primaryOutputs": {
+    "progressReport": "summaries/progress-post-directive-package-order-heldout-v1.md",
+    "progressReportSha256": "3b07dadb223868a6271922aba193a901b885427269d8d337dab5ddfc83195bc8",
+    "protocol": "protocols/post-v38-package-order-heldout-v1.json",
+    "protocolSha256": "4b13f4c053b87ebcc21f78dc1623d8b3bd406c14dce41c07124dbef3e9b56d2e",
+    "executionManifest": "execution/post-v38-package-order-heldout-v1.json",
+    "executionManifestSha256": "676bd6706dad347440b770aea0fd60e0093fa943270ee8d6d86590323a1336fb",
+    "runner": "tools/post_v38_package_order_heldout.py",
+    "runnerSha256": "963a1dcde4a39fd4aac4be359f5f27d726639a51202174119670cd1bceaf72a1",
+    "summary": "summaries/post-v38-package-order-heldout-v1.json",
+    "summaryFileSha256": "853df2c3988270f3d1236b51177b85d014b92e200bad52fc05a66059a3985070",
+    "summaryCanonicalSha256": "973d65e9ddb982d538ddf3b91dc7f8ab22748c1092898d1dc97c58f723f4b82c",
+    "analysisSha256": "1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393",
+    "auditRunner": "tools/post_v38_package_order_heldout_audit.py",
+    "auditRunnerSha256": "9f96bbe99a9b0d3bf77d61ac7158a61fcc0611ab0f406848cb834cf1c0b72454",
+    "audit": "summaries/post-v38-package-order-heldout-v1-audit.json",
+    "auditSha256": "77361eb742de4c916c0ffc7e764f46af5df7ee610d0156740819c21daa5df8a6",
+    "ledgerFreeze": "artifacts/ledger-freeze-package-order-heldout-v1.json",
+    "ledgerFreezeSha256": "80d4c1fa2a7053a0f4535f9bce28824f0198d52416d784744dded190649b3bb1",
+    "rawArchive": "raw/post-directive-package-order-heldout-raw-v1.tar.gz",
+    "rawArchiveSha256": "234a005b61320426d1135e704b2e4a5391d293d95775c98e739a96132a398766"
+  },
+  "publicationContents": {
+    "filesInResearchDirectoryAfterManifest": 392,
+    "payloadFilesIndexed": 384,
+    "protocolFiles": 60,
+    "summaryFiles": 69,
+    "heldoutRawObjects": 12,
+    "heldoutRawUncompressedBytes": 41380741,
+    "heldoutRawArchiveBytes": 3216191,
+    "sha256Index": "SHA256SUMS",
+    "sha256IndexSha256": "02fee8ebadccc6d07e9f1cc0802f0cfe7466d4d56761dfd82ea0d425950b4e32"
+  },
+  "localLedgerFreeze": {
+    "path": "/Users/jamesto/Research/glassvow-p9-421/ledger/research.sqlite",
+    "bytes": 2582220800,
+    "sha256": "5fdba3a8e7dd90b584d279ddda6d1def07ff66b8abfbcf099ff9a5a9677ca739",
+    "sqliteIntegrity": "ok",
+    "records": 478125,
+    "localHeldoutObservationRows": 5120,
+    "wholeRunHeldoutObservationRows": 4608,
+    "heldoutObservationRows": 9728,
+    "protectedSeedRows": 0,
+    "publishedInGit": false
+  },
+  "independentHeldout": {
+    "candidateId": "fixed-substrate-Q2-W0__package-order-1",
+    "candidateContentSha256": "765d9efd639fe3507d92ea2f7515b3ed92afd15166925a6db2f8934e3a777f07",
+    "localPolicyRoot": 549,
+    "wholeRunPolicyRoot": 550,
+    "policyIdentitiesPerStage": 128,
+    "rows": 9728,
+    "localPackagesClear": [
+      "ash-bloodfire-leech",
+      "ash-poison-catalyst",
+      "dusk-afterimage-guard",
+      "dusk-scoreline"
+    ],
+    "afterimageOffWitnesses": 2,
+    "afterimageOnWitnesses": 64,
+    "afterimageStructuralGain95": [0.5078125, 0.7578125],
+    "wholeRunActiveInactive": {
+      "ash-bloodfire-leech": [37, 91],
+      "ash-poison-catalyst": [113, 15],
+      "dusk-afterimage-guard": [97, 31],
+      "dusk-scoreline": [99, 29]
+    },
+    "wholeRunExclusive": {
+      "ash-bloodfire-leech": 6,
+      "ash-poison-catalyst": 82,
+      "dusk-afterimage-guard": 22,
+      "dusk-scoreline": 24
+    },
+    "policyIdentityClear": true,
+    "reachabilityClear": true,
+    "liveGuardrailsClear": true,
+    "structuralNullGuardrailsClear": true,
+    "decision": "reject-structural-candidate-close-package-order",
+    "analysisSha256": "1d855508351e2b9d16efadece99c6ed86a331127e00fc43dcd092f6b20769393",
+    "productPromotionAuthorised": false
+  },
+  "toolchainBoundary": {
+    "executionGodot": "4.7.2.stable.official.ed1daf0bf",
+    "currentMainRequiredGodot": "4.7.1.stable",
+    "status": "archived-as-scientific-evidence; no further GDScript or simulator execution until exact current-main engine is available"
+  },
+  "mechanisticNarrowing": {
+    "supported": "All four local causal packages, reachability, identity, reliability, RandomBuild, Vow-5 and duration reproduced independently.",
+    "failed": "The universal producer-first grammar saturated Poison, Afterimage and Scoreline activation and left too few Bloodfire-only policies.",
+    "nextAction": "Test one identity-safe package-specific sequencing condition using existing sampled payoff preferences, only after restoring Godot 4.7.1.",
+    "mlOrRl": "Deferred; the measured repertoire bottleneck has a cheaper deterministic discriminator before another method is justified."
+  },
+  "postSnapshotBoundary": {
+    "universalPackageOrderClosed": true,
+    "alternativeScalarCellsAuthorised": false,
+    "scalarFamilyClosed": true,
+    "policySelectiveIdentityPreflightAuthorisedAfterExactToolchain": true,
+    "newSimulatorRowsAuthorisedBeforeIdentityProof": false,
+    "mlOrRlAuthorised": false,
+    "detectorAdmissionAuthorised": false,
+    "productPromotionAuthorised": false,
+    "acceptanceSeedsAuthorised": false,
+    "reserveSeedsAuthorised": false,
+    "p9ReceiptAuthorised": false
+  },
+  "remoteHeadsAtPreparation": {
+    "origin/main": "c4130163c7fb8edd865c0adc95732aae03e1bad2",
+    "research/issue-421-p9-recovery-evidence": "8b5fd3433cfa1fe8ddc0561e22abe0dee81c44a7",
+    "research/issue-524-causal-slate-evidence": "f305b95d9e1d173e5d8150289afab9688c0ea7f0",
+    "research/issue-525-mechanism-package-synthesis-evidence": "7132e5e0d6e6e6dc196dda3ed90ad2be292608d6",
+    "work/421-h34": "4a94d155400162289a84f416336ff407f55b3cf6",
+    "work/421-landscape-retune": "ad4b99b1538d7200e9b228051a029e554e9b9912",
+    "work/421-s009-exam": "b30b290813d88109c5b9bc34354babefdc406f8d"
+  },
+  "omissions": [
+    "The 2.6 GB append-only SQLite ledger is hash-pinned locally but omitted from permanent Git history.",
+    "Unreferenced cache objects, transient work outputs, generated imports and SQLite sidecars are not published.",
+    "Research programs remain under research/issue-421/tools and are not applied to product paths.",
+    "No policy-selective identity result, detector admission, protected-seed result, product pull request, CI result, merge or P9 receipt exists at this snapshot."
+  ],
+  "github": {
+    "taskIssue": "https://github.com/fol2/glassvow/issues/421",
+    "releaseGateIssue": "https://github.com/fol2/glassvow/issues/108"
+  }
+}
